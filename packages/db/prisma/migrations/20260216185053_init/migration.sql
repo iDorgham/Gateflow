@@ -1,3 +1,15 @@
+-- CreateEnum
+CREATE TYPE "Plan" AS ENUM ('FREE', 'PRO', 'ENTERPRISE');
+
+-- CreateEnum
+CREATE TYPE "UserRole" AS ENUM ('ADMIN', 'TENANT_ADMIN', 'TENANT_USER', 'VISITOR');
+
+-- CreateEnum
+CREATE TYPE "QRCodeType" AS ENUM ('SINGLE', 'RECURRING', 'PERMANENT');
+
+-- CreateEnum
+CREATE TYPE "ScanStatus" AS ENUM ('SUCCESS', 'FAILED', 'EXPIRED', 'MAX_USES_REACHED', 'INACTIVE');
+
 -- CreateTable
 CREATE TABLE "Organization" (
     "id" TEXT NOT NULL,
