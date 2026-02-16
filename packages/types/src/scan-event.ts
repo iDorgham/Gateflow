@@ -3,17 +3,20 @@ import { ScanStatus } from './scan-log';
 
 export const ScanEventSchema = z.object({
   id: z.string(),
+  scanUuid: z.string().uuid(),
   qrCode: z.string(),
   gateId: z.string(),
   scannedAt: z.string().datetime(),
   status: z.nativeEnum(ScanStatus),
   retryCount: z.number().int().min(0),
+  deviceId: z.string().optional(),
 });
 
 export type ScanEvent = z.infer<typeof ScanEventSchema>;
 
 export const QueuedScanSchema = z.object({
   id: z.string(),
+  scanUuid: z.string().uuid(),
   qrCode: z.string(),
   gateId: z.string(),
   scannedAt: z.string().datetime(),
@@ -46,6 +49,15 @@ export const BulkScanRequestSchema = z.object({
 });
 
 export type BulkScanRequest = z.infer<typeof BulkScanRequestSchema>;
+
+export const AuditTrailEntrySchema = z.object({
+  timestamp: z.string().datetime(),
+  action: z.string(),
+  resolvedBy: z.enum(['lww', 'server', 'client']),
+  details: z.record(z.unknown()),
+});
+
+export type AuditTrailEntry = z.infer<typeof AuditTrailEntrySchema>;
 
 export const BulkScanResponseSchema = z.object({
   success: z.boolean(),

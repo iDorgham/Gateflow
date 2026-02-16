@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "expo start",
     "build": "expo build",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "test": "jest --forceExit"
   },
   "dependencies": {
     "@gate-access/types": "*",

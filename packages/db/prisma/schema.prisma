@@ -85,21 +85,25 @@ model QRCode {
 }
 
 model ScanLog {
-  id        String    @id @default(cuid())
+  id        String     @id @default(cuid())
+  scanUuid  String?    @unique
   status    ScanStatus
-  scannedAt DateTime  @default(now())
-  user      User?     @relation(fields: [userId], references: [id])
+  scannedAt DateTime   @default(now())
+  user      User?      @relation(fields: [userId], references: [id])
   userId    String?
-  gate      Gate      @relation(fields: [gateId], references: [id], onDelete: Cascade)
+  gate      Gate       @relation(fields: [gateId], references: [id], onDelete: Cascade)
   gateId    String
-  qrCode    QRCode    @relation(fields: [qrCodeId], references: [id], onDelete: Cascade)
+  qrCode    QRCode     @relation(fields: [qrCodeId], references: [id], onDelete: Cascade)
   qrCodeId  String
+  deviceId  String?
   auditNotes Json?
+  auditTrail Json[]
 
   @@index([gateId])
   @@index([qrCodeId])
   @@index([userId])
   @@index([scannedAt])
+  @@index([qrCodeId, scannedAt])
 }
 
 enum Plan {

@@ -87,8 +87,8 @@ Max retries: 10
 
 | Item | Status | Notes |
 |------|--------|-------|
-| SHA-256 key derivation | ⚠️ TODO | Currently uses simple hash; needs PBKDF2 |
-| Salt for key derivation | ⚠️ TODO | No salt; vulnerable to rainbow tables |
+| PBKDF2 key derivation | ✅ Done | PBKDF2(JWT, salt, 100k iterations, 256-bit) via crypto-js |
+| Per-user salt | ✅ Done | Random 16-byte salt stored in expo-secure-store |
 | Key rotation | ⚠️ TODO | No rotation mechanism |
 | IV management | ⚠️ TODO | crypto-js handles internally but not explicit |
 | Perfect forward secrecy | ⚠️ TODO | Not implemented |
@@ -97,6 +97,8 @@ Max retries: 10
 
 | Item | Status | Notes |
 |------|--------|-------|
+| scanUuid dedup | ✅ Done | Unique UUID per scan for idempotency + composite lookup |
+| Equal-timestamp tie-breaker | ✅ Done | Server authoritative on equal scannedAt |
 | Real conflict merging | ⚠️ TODO | Simple LWW only; no field-level merge |
 | Deleted record handling | ⚠️ TODO | Not handled |
 | Partial updates | ⚠️ TODO | Full record replacement only |
@@ -105,9 +107,9 @@ Max retries: 10
 
 | Item | Status | Notes |
 |------|--------|-------|
-| Audit log schema | ⚠️ TODO | Basic JSON field; needs structured table |
+| Audit log schema | ✅ Done | `auditTrail Json[]` on ScanLog with structured entries |
 | Tamper detection | ⚠️ TODO | No HMAC signing |
-| Sync audit trail | ⚠️ TODO | Not fully implemented |
+| Sync audit trail | ✅ Done | Each sync resolution/creation appends to auditTrail |
 
 ### Offline Validation
 

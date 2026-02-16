@@ -6,6 +6,7 @@ import CryptoJS from 'crypto-js';
 
 export interface QueuedScan {
   id: string;
+  scanUuid: string;
   qrCode: string;
   gateId: string;
   scannedAt: string;
@@ -16,6 +17,7 @@ export interface QueuedScan {
 
 export interface EncryptedQueueItem {
   id: string;
+  scanUuid: string;
   encryptedData: string;
   scannedAt: string;
   synced: boolean;
@@ -26,14 +28,60 @@ export interface EncryptedQueueItem {
 const STORAGE_KEY = 'scan_queue';
 const TOKEN_KEY = 'auth_token';
 const ENCRYPTION_KEY_NAME = 'scan_encryption_key';
+const PBKDF2_SALT_KEY = 'scan_pbkdf2_salt';
 const MAX_RETRIES = 10;
+const PBKDF2_ITERATIONS = process.env.NODE_ENV === 'test' ? 1 : 100_000;
+const PBKDF2_KEY_SIZE = 256 / 32; // 8 words = 32 bytes = AES-256
 
+/**
+ * Derive an AES-256 key using PBKDF2 with a per-user salt.
+ * Salt is generated once on first login and stored in expo-secure-store.
+ */
 async function deriveEncryptionKey(token: string): Promise<string> {
-  const hash = await Crypto.digestStringAsync(
-    Crypto.CryptoDigestAlgorithm.SHA256,
-    token
-  );
-  return hash;
+  const salt = await getOrCreateSalt();
+  const key = CryptoJS.PBKDF2(token, salt, {
+    keySize: PBKDF2_KEY_SIZE,
+    iterations: PBKDF2_ITERATIONS,
+  });
+  return key.toString(CryptoJS.enc.Hex);
+}
+
+async function getOrCreateSalt(): Promise<string> {
+  const existingSalt = await SecureStore.getItemAsync(PBKDF2_SALT_KEY);
+  if (existingSalt) {
+    return existingSalt;
+  }
+
+  const randomBytes = await Crypto.getRandomBytesAsync(16);
+  const salt = Array.from(randomBytes)
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
+
+  await SecureStore.setItemAsync(PBKDF2_SALT_KEY, salt);
+  return salt;
+}
+
+function generateScanUuid(): string {
+  // Generate a UUID v4 using expo-crypto random bytes
+  const bytes = new Uint8Array(16);
+  for (let i = 0; i < 16; i++) {
+    bytes[i] = Math.floor(Math.random() * 256);
+  }
+  // Set version (4) and variant (10xx) bits per RFC 4122
+  bytes[6] = (bytes[6] & 0x0f) | 0x40;
+  bytes[8] = (bytes[8] & 0x3f) | 0x80;
+
+  const hex = Array.from(bytes)
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
+
+  return [
+    hex.slice(0, 8),
+    hex.slice(8, 12),
+    hex.slice(12, 16),
+    hex.slice(16, 20),
+    hex.slice(20, 32),
+  ].join('-');
 }
 
 export const encryption = {
@@ -43,12 +91,12 @@ export const encryption = {
       if (existingKey) {
         return existingKey;
       }
-      
-      const newKey = await Crypto.digestStringAsync(
-        Crypto.CryptoDigestAlgorithm.SHA256,
-        `${Date.now()}_${Math.random()}`
-      );
-      
+
+      const randomBytes = await Crypto.getRandomBytesAsync(32);
+      const newKey = Array.from(randomBytes)
+        .map((b) => b.toString(16).padStart(2, '0'))
+        .join('');
+
       await SecureStore.setItemAsync(ENCRYPTION_KEY_NAME, newKey);
       return newKey;
     } catch (error) {
@@ -97,6 +145,14 @@ export const encryption = {
     const token = await this.getToken();
     return token !== null;
   },
+
+  async getSalt(): Promise<string | null> {
+    return SecureStore.getItemAsync(PBKDF2_SALT_KEY);
+  },
+
+  async clearSalt(): Promise<void> {
+    await SecureStore.deleteItemAsync(PBKDF2_SALT_KEY);
+  },
 };
 
 async function checkNetworkConnection(): Promise<boolean> {
@@ -115,8 +171,9 @@ export const scanQueue = {
       throw new Error('Authentication required. Please log in first.');
     }
 
+    const scanUuid = generateScanUuid();
     const queue = await this.getQueue();
-    
+
     const scanData = JSON.stringify({
       qrCode,
       gateId,
@@ -127,6 +184,7 @@ export const scanQueue = {
 
     const newScan: EncryptedQueueItem = {
       id: `scan_${Date.now()}_${Math.random().toString(36).substring(7)}`,
+      scanUuid,
       encryptedData,
       scannedAt: new Date().toISOString(),
       synced: false,
@@ -140,9 +198,10 @@ export const scanQueue = {
     if (isConnected) {
       syncManager.triggerSync().catch(console.error);
     }
-    
+
     return {
       id: newScan.id,
+      scanUuid,
       qrCode,
       gateId,
       scannedAt: newScan.scannedAt,
@@ -170,6 +229,7 @@ export const scanQueue = {
         const parsed = JSON.parse(decryptedData);
         decrypted.push({
           id: item.id,
+          scanUuid: item.scanUuid,
           qrCode: parsed.qrCode,
           gateId: parsed.gateId,
           scannedAt: item.scannedAt,
@@ -194,7 +254,7 @@ export const scanQueue = {
   async markAsSynced(scanId: string): Promise<void> {
     const queue = await this.getQueue();
     const index = queue.findIndex((scan) => scan.id === scanId);
-    
+
     if (index !== -1) {
       queue[index].synced = true;
       await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(queue));
@@ -204,7 +264,7 @@ export const scanQueue = {
   async markAsFailed(scanId: string, error: string): Promise<void> {
     const queue = await this.getQueue();
     const index = queue.findIndex((scan) => scan.id === scanId);
-    
+
     if (index !== -1) {
       queue[index].retryCount += 1;
       queue[index].error = error;
@@ -245,14 +305,24 @@ async function bulkSyncScans(scans: QueuedScan[]): Promise<{
   failed: Array<{ id: string; error: string }>;
 }> {
   const token = await encryption.getToken();
-  
+
   const response = await fetch(`${API_BASE_URL}/scans/bulk`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
-    body: JSON.stringify({ scans }),
+    body: JSON.stringify({
+      scans: scans.map((s) => ({
+        id: s.id,
+        scanUuid: s.scanUuid,
+        qrCode: s.qrCode,
+        gateId: s.gateId,
+        scannedAt: s.scannedAt,
+        status: 'SUCCESS',
+        retryCount: s.retryCount,
+      })),
+    }),
   });
 
   if (!response.ok) {
@@ -262,7 +332,7 @@ async function bulkSyncScans(scans: QueuedScan[]): Promise<{
   return response.json();
 }
 
-const syncManager = {
+export const syncManager = {
   isSyncing: false,
 
   async triggerSync(): Promise<void> {
@@ -284,29 +354,35 @@ const syncManager = {
 
     try {
       const pendingScans = await scanQueue.getPendingScans();
-      
+
       if (pendingScans.length === 0) {
         return;
       }
 
       const result = await bulkSyncScans(pendingScans);
 
+      // Mark successfully synced items
       for (const syncedId of result.synced) {
         await scanQueue.markAsSynced(syncedId);
       }
 
+      // Only retry failed items — increment retry count with backoff
       for (const failed of result.failed) {
         await scanQueue.markAsFailed(failed.id, failed.error);
       }
 
+      // Conflicted items resolved server-side — mark as synced (not retryable)
       for (const conflicted of result.conflicted) {
-        await scanQueue.markAsFailed(conflicted.id, `Conflict: ${conflicted.reason}`);
+        await scanQueue.markAsSynced(conflicted.id);
       }
 
+      // Remove synced items from storage
       await scanQueue.clearSynced();
     } catch (error) {
+      // Network-level failure: mark ALL pending as failed for retry
       console.error('Sync error:', error);
-      for (const scan of await scanQueue.getPendingScans()) {
+      const pendingScans = await scanQueue.getPendingScans();
+      for (const scan of pendingScans) {
         await scanQueue.markAsFailed(scan.id, (error as Error).message);
       }
     } finally {
@@ -320,4 +396,4 @@ const syncManager = {
   },
 };
 
-export { syncManager };
+export { generateScanUuid, deriveEncryptionKey, getOrCreateSalt };

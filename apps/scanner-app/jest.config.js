@@ -6,14 +6,12 @@ module.exports = {
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   transform: {
     '^.+\\.tsx?$': ['ts-jest', {
+      isolatedModules: true,
       tsconfig: {
         module: 'commonjs',
         esModuleInterop: true,
         target: 'es2019'
       }
     }]
-  },
-  testEnvironmentOptions: {
-    customExportConditions: ['node', 'node-addons']
   }
 };
