@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "incremental": true,
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@gate-access/ui": ["packages/ui/src"],
+      "@gate-access/api-client": ["packages/api-client/src"],
+      "@gate-access/types": ["packages/types/src"],
+      "@gate-access/i18n": ["packages/i18n/src"],
+      "@gate-access/config": ["packages/config"]
+    }
+  },
+  "exclude": ["node_modules", "dist", ".next", "build"]
+}

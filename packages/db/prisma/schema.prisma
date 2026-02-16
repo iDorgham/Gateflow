@@ -1,0 +1,129 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Organization {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  domain    String?  @unique
+  plan      Plan     @default(FREE)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+
+  users     User[]
+  gates     Gate[]
+  qrCodes   QRCode[]
+
+  @@index([deletedAt])
+}
+
+model User {
+  id           String        @id @default(cuid())
+  email        String        @unique
+  name         String
+  passwordHash String
+  role         UserRole
+  organization Organization? @relation(fields: [organizationId], references: [id])
+  organizationId String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  deletedAt    DateTime?
+
+  scanLogs ScanLog[]
+
+  @@index([organizationId])
+  @@index([deletedAt])
+}
+
+model Gate {
+  id           String        @id @default(cuid())
+  name         String
+  location     String
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId String
+  isActive     Boolean       @default(true)
+  lastAccessedAt DateTime?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  deletedAt    DateTime?
+
+  scanLogs ScanLog[]
+  qrCodes  QRCode[]
+
+  @@index([organizationId])
+  @@index([deletedAt])
+}
+
+model QRCode {
+  id           String        @id @default(cuid())
+  code         String        @unique
+  type         QRCodeType
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId String
+  gate         Gate?         @relation(fields: [gateId], references: [id])
+  gateId       String?
+  maxUses      Int?
+  currentUses  Int           @default(0)
+  expiresAt    DateTime?
+  isActive     Boolean       @default(true)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  deletedAt    DateTime?
+
+  scanLogs ScanLog[]
+
+  @@index([organizationId])
+  @@index([gateId])
+  @@index([deletedAt])
+}
+
+model ScanLog {
+  id        String    @id @default(cuid())
+  status    ScanStatus
+  scannedAt DateTime  @default(now())
+  user      User?     @relation(fields: [userId], references: [id])
+  userId    String?
+  gate      Gate      @relation(fields: [gateId], references: [id], onDelete: Cascade)
+  gateId    String
+  qrCode    QRCode    @relation(fields: [qrCodeId], references: [id], onDelete: Cascade)
+  qrCodeId  String
+
+  @@index([gateId])
+  @@index([qrCodeId])
+  @@index([userId])
+  @@index([scannedAt])
+}
+
+enum Plan {
+  FREE
+  PRO
+  ENTERPRISE
+}
+
+enum UserRole {
+  ADMIN
+  TENANT_ADMIN
+  TENANT_USER
+  VISITOR
+}
+
+enum QRCodeType {
+  SINGLE
+  RECURRING
+  PERMANENT
+}
+
+enum ScanStatus {
+  SUCCESS
+  FAILED
+  EXPIRED
+  MAX_USES_REACHED
+  INACTIVE
+}

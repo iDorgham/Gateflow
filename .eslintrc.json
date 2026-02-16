@@ -1,0 +1,11 @@
+{
+  "root": true,
+  "extends": [
+    "@gate-access/config/eslint",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "ignorePatterns": ["**/dist/**", "**/.next/**", "**/node_modules/**"],
+  "rules": {
+    "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }]
+  }
+}

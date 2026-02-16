@@ -1,0 +1,14 @@
+{
+  "common": {
+    "appName": "Gate Access",
+    "loading": "Loading...",
+    "error": "An error occurred"
+  },
+  "nav": {
+    "home": "Home",
+    "dashboard": "Dashboard",
+    "admin": "Admin",
+    "login": "Login",
+    "logout": "Logout"
+  }
+}
