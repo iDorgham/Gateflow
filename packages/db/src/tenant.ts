@@ -1,4 +1,5 @@
 import { prisma } from './client';
+import type { Prisma } from '@prisma/client';
 
 export type OrganizationContext = {
   organizationId: string | null;
@@ -20,9 +21,11 @@ export function clearOrganizationContext(): void {
   organizationContext.organizationId = null;
 }
 
-const defaultInclude = {
-  organization: true,
-};
+function getOrgFilter(): Prisma.StringFilter | undefined {
+  const orgId = organizationContext.organizationId;
+  if (!orgId) return undefined;
+  return { equals: orgId };
+}
 
 export const db = {
   ...prisma,
@@ -44,25 +47,31 @@ export const db = {
     ...prisma.user,
     findFirst: async (...args: Parameters<typeof prisma.user.findFirst>) => {
       const [query, ...rest] = args;
+      const orgFilter = getOrgFilter();
+      if (!orgFilter) return prisma.user.findFirst(...args);
       const where = {
         ...query?.where,
-        organizationId: organizationContext.organizationId,
+        organizationId: orgFilter,
       };
       return prisma.user.findFirst({ ...query, where }, ...rest);
     },
     findMany: async (...args: Parameters<typeof prisma.user.findMany>) => {
       const [query, ...rest] = args;
+      const orgFilter = getOrgFilter();
+      if (!orgFilter) return prisma.user.findMany(...args);
       const where = {
         ...query?.where,
-        organizationId: organizationContext.organizationId,
+        organizationId: orgFilter,
       };
       return prisma.user.findMany({ ...query, where }, ...rest);
     },
     count: async (...args: Parameters<typeof prisma.user.count>) => {
       const [query, ...rest] = args;
+      const orgFilter = getOrgFilter();
+      if (!orgFilter) return prisma.user.count(...args);
       const where = {
         ...query?.where,
-        organizationId: organizationContext.organizationId,
+        organizationId: orgFilter,
       };
       return prisma.user.count({ ...query, where }, ...rest);
     },
@@ -72,40 +81,33 @@ export const db = {
     ...prisma.gate,
     findFirst: async (...args: Parameters<typeof prisma.gate.findFirst>) => {
       const [query, ...rest] = args;
+      const orgFilter = getOrgFilter();
+      if (!orgFilter) return prisma.gate.findFirst(...args);
       const where = {
         ...query?.where,
-        organizationId: organizationContext.organizationId,
+        organizationId: orgFilter,
       };
       return prisma.gate.findFirst({ ...query, where }, ...rest);
     },
     findMany: async (...args: Parameters<typeof prisma.gate.findMany>) => {
       const [query, ...rest] = args;
+      const orgFilter = getOrgFilter();
+      if (!orgFilter) return prisma.gate.findMany(...args);
       const where = {
         ...query?.where,
-        organizationId: organizationContext.organizationId,
+        organizationId: orgFilter,
       };
       return prisma.gate.findMany({ ...query, where }, ...rest);
     },
     count: async (...args: Parameters<typeof prisma.gate.count>) => {
       const [query, ...rest] = args;
+      const orgFilter = getOrgFilter();
+      if (!orgFilter) return prisma.gate.count(...args);
       const where = {
         ...query?.where,
-        organizationId: organizationContext.organizationId,
+        organizationId: orgFilter,
       };
       return prisma.gate.count({ ...query, where }, ...rest);
-    },
-    create: async (...args: Parameters<typeof prisma.gate.create>) => {
-      const [data, ...rest] = args;
-      return prisma.gate.create(
-        {
-          ...data,
-          data: {
-            ...data.data,
-            organizationId: data.data.organizationId ?? organizationContext.organizationId ?? '',
-          },
-        },
-        ...rest
-      );
     },
   },
 
@@ -113,40 +115,33 @@ export const db = {
     ...prisma.qRCode,
     findFirst: async (...args: Parameters<typeof prisma.qRCode.findFirst>) => {
       const [query, ...rest] = args;
+      const orgFilter = getOrgFilter();
+      if (!orgFilter) return prisma.qRCode.findFirst(...args);
       const where = {
         ...query?.where,
-        organizationId: organizationContext.organizationId,
+        organizationId: orgFilter,
       };
       return prisma.qRCode.findFirst({ ...query, where }, ...rest);
     },
     findMany: async (...args: Parameters<typeof prisma.qRCode.findMany>) => {
       const [query, ...rest] = args;
+      const orgFilter = getOrgFilter();
+      if (!orgFilter) return prisma.qRCode.findMany(...args);
       const where = {
         ...query?.where,
-        organizationId: organizationContext.organizationId,
+        organizationId: orgFilter,
       };
       return prisma.qRCode.findMany({ ...query, where }, ...rest);
     },
     count: async (...args: Parameters<typeof prisma.qRCode.count>) => {
       const [query, ...rest] = args;
+      const orgFilter = getOrgFilter();
+      if (!orgFilter) return prisma.qRCode.count(...args);
       const where = {
         ...query?.where,
-        organizationId: organizationContext.organizationId,
+        organizationId: orgFilter,
       };
       return prisma.qRCode.count({ ...query, where }, ...rest);
-    },
-    create: async (...args: Parameters<typeof prisma.qRCode.create>) => {
-      const [data, ...rest] = args;
-      return prisma.qRCode.create(
-        {
-          ...data,
-          data: {
-            ...data.data,
-            organizationId: data.data.organizationId ?? organizationContext.organizationId ?? '',
-          },
-        },
-        ...rest
-      );
     },
   },
 
@@ -154,29 +149,27 @@ export const db = {
     ...prisma.scanLog,
     findMany: async (...args: Parameters<typeof prisma.scanLog.findMany>) => {
       const [query, ...rest] = args;
-      if (organizationContext.organizationId) {
-        const where = {
-          ...query?.where,
-          gate: {
-            organizationId: organizationContext.organizationId,
-          },
-        };
-        return prisma.scanLog.findMany({ ...query, where }, ...rest);
-      }
-      return prisma.scanLog.findMany(...args);
+      const orgId = organizationContext.organizationId;
+      if (!orgId) return prisma.scanLog.findMany(...args);
+      const where = {
+        ...query?.where,
+        gate: {
+          organizationId: orgId,
+        },
+      };
+      return prisma.scanLog.findMany({ ...query, where }, ...rest);
     },
     count: async (...args: Parameters<typeof prisma.scanLog.count>) => {
       const [query, ...rest] = args;
-      if (organizationContext.organizationId) {
-        const where = {
-          ...query?.where,
-          gate: {
-            organizationId: organizationContext.organizationId,
-          },
-        };
-        return prisma.scanLog.count({ ...query, where }, ...rest);
-      }
-      return prisma.scanLog.count(...args);
+      const orgId = organizationContext.organizationId;
+      if (!orgId) return prisma.scanLog.count(...args);
+      const where = {
+        ...query?.where,
+        gate: {
+          organizationId: orgId,
+        },
+      };
+      return prisma.scanLog.count({ ...query, where }, ...rest);
     },
   },
 };

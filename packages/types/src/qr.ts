@@ -1,3 +1,7 @@
+import type { Organization } from './organization';
+import type { Gate } from './gate';
+import type { ScanLog } from './scan-log';
+
 export enum QRCodeType {
   SINGLE = 'SINGLE',
   RECURRING = 'RECURRING',
@@ -26,7 +30,3 @@ export interface QRCodeWithRelations extends QRCode {
 }
 
 export type QRCodeTypeType = keyof typeof QRCodeType;
-
-import type { Organization } from './organization';
-import type { Gate } from './gate';
-import type { ScanLog } from './scan-log';

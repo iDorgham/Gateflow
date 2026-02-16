@@ -1,3 +1,7 @@
+import type { User } from './user';
+import type { Gate } from './gate';
+import type { QRCode } from './qr';
+
 export enum Plan {
   FREE = 'FREE',
   PRO = 'PRO',
@@ -20,7 +24,3 @@ export interface OrganizationWithRelations extends Organization {
   gates?: Gate[];
   qrCodes?: QRCode[];
 }
-
-import type { User } from './user';
-import type { Gate } from './gate';
-import type { QRCode } from './qr';

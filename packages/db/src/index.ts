@@ -1,5 +1,7 @@
 export * from '@prisma/client';
-export { prisma, db, default as prismaClient } from './client';
+export { prisma } from './client';
+export { db } from './client';
+export { default as prismaClient } from './client';
 export {
   setOrganizationContext,
   getOrganizationContext,

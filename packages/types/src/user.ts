@@ -1,3 +1,5 @@
+import type { Organization } from './organization';
+
 export enum UserRole {
   ADMIN = 'ADMIN',
   TENANT_ADMIN = 'TENANT_ADMIN',

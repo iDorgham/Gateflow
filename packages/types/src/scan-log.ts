@@ -1,3 +1,7 @@
+import type { User } from './user';
+import type { Gate } from './gate';
+import type { QRCode } from './qr';
+
 export enum ScanStatus {
   SUCCESS = 'SUCCESS',
   FAILED = 'FAILED',
@@ -22,7 +26,3 @@ export interface ScanLogWithRelations extends ScanLog {
 }
 
 export type ScanStatusType = keyof typeof ScanStatus;
-
-import type { User } from './user';
-import type { Gate } from './gate';
-import type { QRCode } from './qr';

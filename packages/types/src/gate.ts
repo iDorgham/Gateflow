@@ -1,3 +1,7 @@
+import type { Organization } from './organization';
+import type { QRCode } from './qr';
+import type { ScanLog } from './scan-log';
+
 export interface Gate {
   id: string;
   name: string;
@@ -15,7 +19,3 @@ export interface GateWithRelations extends Gate {
   qrCodes?: QRCode[];
   scanLogs?: ScanLog[];
 }
-
-import type { Organization } from './organization';
-import type { QRCode } from './qr';
-import type { ScanLog } from './scan-log';
