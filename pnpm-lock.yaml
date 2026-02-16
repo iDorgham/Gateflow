@@ -114,6 +114,9 @@ importers:
 
   apps/scanner-app:
     dependencies:
+      '@gate-access/types':
+        specifier: '*'
+        version: link:../../packages/types
       '@react-native-async-storage/async-storage':
         specifier: ^1.21.0
         version: 1.24.0(react-native@0.73.0)
@@ -123,6 +126,9 @@ importers:
       expo-crypto:
         specifier: ~12.8.0
         version: 12.8.1(expo@50.0.21)
+      expo-network:
+        specifier: ~5.8.0
+        version: 5.8.0(expo@50.0.21)
       expo-secure-store:
         specifier: ~12.8.1
         version: 12.8.1(expo@50.0.21)
@@ -4961,6 +4967,14 @@ packages:
     resolution: {integrity: sha512-+W+A/jYJdWzA43KEAixhoArEb0EzTsS6T3tObYkZ1EHk8LaBT3hnFant52CnFTeVY4pqv4mgutBua2UQQMAWFA==}
     dependencies:
       invariant: 2.2.4
+    dev: false
+
+  /expo-network@5.8.0(expo@50.0.21):
+    resolution: {integrity: sha512-mTtyqRgLKvXWB+xCoY5WMtRrpVqYmcXWz3YbyN+X0HRGqXg7a+UYOXeKlxrkwBiadsElhmfMeaj1UpmW79Zw/w==}
+    peerDependencies:
+      expo: '*'
+    dependencies:
+      expo: 50.0.21(@babel/core@7.29.0)(@react-native/babel-preset@0.84.0)(react-native@0.73.0)(react@18.2.0)
     dev: false
 
   /expo-secure-store@12.8.1(expo@50.0.21):

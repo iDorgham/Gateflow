@@ -8,9 +8,11 @@
     "lint": "expo lint"
   },
   "dependencies": {
+    "@gate-access/types": "*",
     "@react-native-async-storage/async-storage": "^1.21.0",
     "expo": "~50.0.0",
     "expo-crypto": "~12.8.0",
+    "expo-network": "~5.8.0",
     "expo-secure-store": "~12.8.1",
     "react": "18.2.0",
     "react-native": "0.73.0"

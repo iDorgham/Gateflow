@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as SecureStore from 'expo-secure-store';
 import * as Crypto from 'expo-crypto';
+import * as Network from 'expo-network';
 
 export interface QueuedScan {
   id: string;
@@ -9,11 +10,13 @@ export interface QueuedScan {
   scannedAt: string;
   synced: boolean;
   retryCount: number;
+  error?: string;
 }
 
 const STORAGE_KEY = 'scan_queue';
 const TOKEN_KEY = 'auth_token';
 const ENCRYPTION_KEY_NAME = 'scan_encryption_key';
+const MAX_RETRIES = 10;
 
 export const encryption = {
   async getOrCreateKey(): Promise<string> {
@@ -23,12 +26,12 @@ export const encryption = {
         return existingKey;
       }
       
-      const newKey = Crypto.digestStringAsync(
+      const newKey = await Crypto.digestStringAsync(
         Crypto.CryptoDigestAlgorithm.SHA256,
         `${Date.now()}_${Math.random()}`
       );
       
-      await SecureStore.setItemAsync(ENCRYPTION_KEY_NAME, await newKey);
+      await SecureStore.setItemAsync(ENCRYPTION_KEY_NAME, newKey);
       return newKey;
     } catch (error) {
       console.error('Failed to get/create encryption key:', error);
@@ -59,10 +62,29 @@ export const encryption = {
   async clearToken(): Promise<void> {
     await SecureStore.deleteItemAsync(TOKEN_KEY);
   },
+
+  async isAuthenticated(): Promise<boolean> {
+    const token = await this.getToken();
+    return token !== null;
+  },
 };
+
+async function checkNetworkConnection(): Promise<boolean> {
+  try {
+    const networkState = await Network.getNetworkStateAsync();
+    return networkState.isConnected ?? false;
+  } catch {
+    return false;
+  }
+}
 
 export const scanQueue = {
   async addScan(qrCode: string, gateId: string): Promise<QueuedScan> {
+    const isAuth = await encryption.isAuthenticated();
+    if (!isAuth) {
+      throw new Error('Authentication required. Please log in first.');
+    }
+
     const queue = await this.getQueue();
     
     const newScan: QueuedScan = {
@@ -76,6 +98,11 @@ export const scanQueue = {
 
     queue.push(newScan);
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(queue));
+
+    const isConnected = await checkNetworkConnection();
+    if (isConnected) {
+      syncManager.triggerSync().catch(console.error);
+    }
     
     return newScan;
   },
@@ -105,19 +132,29 @@ export const scanQueue = {
     }
   },
 
-  async incrementRetry(scanId: string): Promise<void> {
+  async markAsFailed(scanId: string, error: string): Promise<void> {
     const queue = await this.getQueue();
     const index = queue.findIndex((scan) => scan.id === scanId);
     
     if (index !== -1) {
       queue[index].retryCount += 1;
+      queue[index].error = error;
+      if (queue[index].retryCount >= MAX_RETRIES) {
+        queue[index].synced = true;
+        queue[index].error = 'Max retries exceeded';
+      }
       await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(queue));
     }
   },
 
   async getPendingScans(): Promise<QueuedScan[]> {
     const queue = await this.getQueue();
-    return queue.filter((scan) => !scan.synced);
+    return queue.filter((scan) => !scan.synced && scan.retryCount < MAX_RETRIES);
+  },
+
+  async getFailedScans(): Promise<QueuedScan[]> {
+    const queue = await this.getQueue();
+    return queue.filter((scan) => scan.synced && scan.error === 'Max retries exceeded');
   },
 
   async clearQueue(): Promise<void> {
@@ -130,3 +167,80 @@ export const scanQueue = {
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(pending));
   },
 };
+
+const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:3000/api';
+
+async function bulkSyncScans(scans: QueuedScan[]): Promise<{ synced: string[]; failed: Array<{ id: string; error: string }> }> {
+  const token = await encryption.getToken();
+  
+  const response = await fetch(`${API_BASE_URL}/scans/bulk`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+    body: JSON.stringify({ scans }),
+  });
+
+  if (!response.ok) {
+    throw new Error(`Sync failed: ${response.status}`);
+  }
+
+  return response.json();
+}
+
+const syncManager = {
+  isSyncing: false,
+
+  async triggerSync(): Promise<void> {
+    if (this.isSyncing) {
+      return;
+    }
+
+    const isConnected = await checkNetworkConnection();
+    if (!isConnected) {
+      return;
+    }
+
+    const isAuth = await encryption.isAuthenticated();
+    if (!isAuth) {
+      return;
+    }
+
+    this.isSyncing = true;
+
+    try {
+      const pendingScans = await scanQueue.getPendingScans();
+      
+      if (pendingScans.length === 0) {
+        return;
+      }
+
+      const result = await bulkSyncScans(pendingScans);
+
+      for (const syncedId of result.synced) {
+        await scanQueue.markAsSynced(syncedId);
+      }
+
+      for (const failed of result.failed) {
+        await scanQueue.markAsFailed(failed.id, failed.error);
+      }
+
+      await scanQueue.clearSynced();
+    } catch (error) {
+      console.error('Sync error:', error);
+      for (const scan of await scanQueue.getPendingScans()) {
+        await scanQueue.markAsFailed(scan.id, (error as Error).message);
+      }
+    } finally {
+      this.isSyncing = false;
+    }
+  },
+
+  getRetryDelay(retryCount: number): number {
+    const delays = [0, 5000, 30000, 120000, 300000, 600000];
+    return delays[Math.min(retryCount, delays.length - 1)];
+  },
+};
+
+export { syncManager };
