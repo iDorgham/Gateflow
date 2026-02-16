@@ -50,6 +50,10 @@ export type BulkScanRequest = z.infer<typeof BulkScanRequestSchema>;
 export const BulkScanResponseSchema = z.object({
   success: z.boolean(),
   synced: z.array(z.string()),
+  conflicted: z.array(z.object({
+    id: z.string(),
+    reason: z.string(),
+  })),
   failed: z.array(z.object({
     id: z.string(),
     error: z.string(),

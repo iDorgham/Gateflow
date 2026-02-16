@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@gate-access/db": "*",
     "@gate-access/types": "*",
     "next": "^14.0.0",
     "react": "^18.2.0",

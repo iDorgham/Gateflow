@@ -94,6 +94,7 @@ model ScanLog {
   gateId    String
   qrCode    QRCode    @relation(fields: [qrCodeId], references: [id], onDelete: Cascade)
   qrCodeId  String
+  auditNotes Json?
 
   @@index([gateId])
   @@index([qrCodeId])
