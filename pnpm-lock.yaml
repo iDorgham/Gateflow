@@ -33,6 +33,9 @@ importers:
 
   apps/admin-dashboard:
     dependencies:
+      '@gate-access/types':
+        specifier: '*'
+        version: link:../../packages/types
       next:
         specifier: ^14.0.0
         version: 14.2.35(react-dom@18.3.1)(react@18.2.0)
@@ -58,6 +61,9 @@ importers:
 
   apps/client-dashboard:
     dependencies:
+      '@gate-access/types':
+        specifier: '*'
+        version: link:../../packages/types
       next:
         specifier: ^14.0.0
         version: 14.2.35(react-dom@18.3.1)(react@18.2.0)
@@ -108,9 +114,18 @@ importers:
 
   apps/scanner-app:
     dependencies:
+      '@react-native-async-storage/async-storage':
+        specifier: ^1.21.0
+        version: 1.24.0(react-native@0.73.0)
       expo:
         specifier: ~50.0.0
         version: 50.0.21(@babel/core@7.29.0)(@react-native/babel-preset@0.84.0)(react-native@0.73.0)(react@18.2.0)
+      expo-crypto:
+        specifier: ~12.8.0
+        version: 12.8.1(expo@50.0.21)
+      expo-secure-store:
+        specifier: ~12.8.1
+        version: 12.8.1(expo@50.0.21)
       react:
         specifier: 18.2.0
         version: 18.2.0
@@ -2455,6 +2470,15 @@ packages:
     resolution: {integrity: sha512-pHhpQdr1UPFpt+zFfnPazhulaZYCUqeIcPpJViYoq9R+D/yw4fjE+CtnsnKzPYm0ddUbeXUzjGVGIRVgPDCk4Q==}
     dependencies:
       '@prisma/debug': 5.22.0
+
+  /@react-native-async-storage/async-storage@1.24.0(react-native@0.73.0):
+    resolution: {integrity: sha512-W4/vbwUOYOjco0x3toB8QCr7EjIP6nE9G7o8PMguvvjYT5Awg09lyV4enACRx4s++PPulBiBSjL0KTFx2u0Z/g==}
+    peerDependencies:
+      react-native: ^0.0.0-0 || >=0.60 <1.0
+    dependencies:
+      merge-options: 3.0.4
+      react-native: 0.73.0(@babel/core@7.29.0)(@babel/preset-env@7.29.0)(react@18.2.0)
+    dev: false
 
   /@react-native-community/cli-clean@12.1.1:
     resolution: {integrity: sha512-lbEQJ9xO8DmNbES7nFcGIQC0Q15e9q1zwKfkN2ty2eM93ZTFqYzOwsddlNoRN9FO7diakMWoWgielhcfcIeIrQ==}
@@ -4885,6 +4909,15 @@ packages:
       - supports-color
     dev: false
 
+  /expo-crypto@12.8.1(expo@50.0.21):
+    resolution: {integrity: sha512-EJEzmfBUSkGfALTlZRKUbh1RMKF7mWI12vkhO2w6bhGO4bjgGB8XzUHgLfrvSjphDFMx/lwaR6bAQDmXKO9UkQ==}
+    peerDependencies:
+      expo: '*'
+    dependencies:
+      base64-js: 1.5.1
+      expo: 50.0.21(@babel/core@7.29.0)(@react-native/babel-preset@0.84.0)(react-native@0.73.0)(react@18.2.0)
+    dev: false
+
   /expo-file-system@16.0.9(expo@50.0.21):
     resolution: {integrity: sha512-3gRPvKVv7/Y7AdD9eHMIdfg5YbUn2zbwKofjsloTI5sEC57SLUFJtbLvUCz9Pk63DaSQ7WIE1JM0EASyvuPbuw==}
     peerDependencies:
@@ -4928,6 +4961,14 @@ packages:
     resolution: {integrity: sha512-+W+A/jYJdWzA43KEAixhoArEb0EzTsS6T3tObYkZ1EHk8LaBT3hnFant52CnFTeVY4pqv4mgutBua2UQQMAWFA==}
     dependencies:
       invariant: 2.2.4
+    dev: false
+
+  /expo-secure-store@12.8.1(expo@50.0.21):
+    resolution: {integrity: sha512-Ju3jmkHby4w7rIzdYAt9kQyQ7HhHJ0qRaiQOInknhOLIltftHjEgF4I1UmzKc7P5RCfGNmVbEH729Pncp/sHXQ==}
+    peerDependencies:
+      expo: '*'
+    dependencies:
+      expo: 50.0.21(@babel/core@7.29.0)(@react-native/babel-preset@0.84.0)(react-native@0.73.0)(react@18.2.0)
     dev: false
 
   /expo@50.0.21(@babel/core@7.29.0)(@react-native/babel-preset@0.84.0)(react-native@0.73.0)(react@18.2.0):
@@ -5967,6 +6008,11 @@ packages:
     resolution: {integrity: sha512-Fd4gABb+ycGAmKou8eMftCupSir5lRxqf4aD/vd0cD2qc4HL07OjCeuHMr8Ro4CoMaeCKDB0/ECBOVWjTwUvPQ==}
     engines: {node: '>=8'}
 
+  /is-plain-obj@2.1.0:
+    resolution: {integrity: sha512-YWnfyRwxL/+SsrWYfOpUtz5b3YD+nyfkHvjbcanzk8zgyO4ASD67uVMRt8k5bM4lLMDnXfriRhOpemw+NfT1eA==}
+    engines: {node: '>=8'}
+    dev: false
+
   /is-plain-object@2.0.4:
     resolution: {integrity: sha512-h5PpgXkWitc38BBMYawTYMWJHFZJVnBquFE57xFpjB8pJFiF6gZ+bU+WyI/yqXiFR5mdLsgYNaPe8uao6Uv9Og==}
     engines: {node: '>=0.10.0'}
@@ -6621,6 +6667,13 @@ packages:
 
   /memory-cache@0.2.0:
     resolution: {integrity: sha512-OcjA+jzjOYzKmKS6IQVALHLVz+rNTMPoJvCztFaZxwG14wtAW7VRZjwTQu06vKCYOxh4jVnik7ya0SXTB0W+xA==}
+    dev: false
+
+  /merge-options@3.0.4:
+    resolution: {integrity: sha512-2Sug1+knBjkaMsMgf1ctR1Ujx+Ayku4EdJN4Z+C2+JzoeF7A3OZ9KM2GY0CpQS51NR61LTurMJrRKPhSs3ZRTQ==}
+    engines: {node: '>=10'}
+    dependencies:
+      is-plain-obj: 2.1.0
     dev: false
 
   /merge-stream@2.0.0:
