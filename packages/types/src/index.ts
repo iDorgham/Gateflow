@@ -4,4 +4,7 @@ export * from './gate';
 export * from './qr';
 export * from './scan-log';
 export * from './scan-event';
+export * from './qr-payload';
+export * from './qr-signing';
+export * from './qr-validate';
 export * from './auth';
