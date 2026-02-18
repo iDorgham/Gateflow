@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "lib": [
+      "ES2020",
+      "DOM",
+      "DOM.Iterable"
+    ],
     "module": "ESNext",
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
@@ -15,12 +19,27 @@
     "jsx": "react-native",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "@gate-access/ui": ["../../packages/ui/src"],
-      "@gate-access/types": ["../../packages/types/src"],
-      "@gate-access/api-client": ["../../packages/api-client/src"]
+      "@/*": [
+        "src/*"
+      ],
+      "@gate-access/ui": [
+        "../../packages/ui/src"
+      ],
+      "@gate-access/types": [
+        "../../packages/types/src"
+      ],
+      "@gate-access/api-client": [
+        "../../packages/api-client/src"
+      ]
     }
   },
-  "include": ["src/**/*", "../../packages/ui/src/**/*"],
-  "exclude": ["node_modules", "dist"]
+  "include": [
+    "src/**/*",
+    "../../packages/ui/src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ],
+  "extends": "expo/tsconfig.base"
 }

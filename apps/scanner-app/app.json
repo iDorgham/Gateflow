@@ -1,0 +1,32 @@
+{
+  "expo": {
+    "name": "scanner-app",
+    "slug": "scanner-app",
+    "version": "0.1.0",
+    "description": "Expo / React Native mobile scanner app for QR code scanning.",
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "android": {
+      "package": "com.gateflow.scanner"
+    },
+    "ios": {
+      "bundleIdentifier": "com.gateflow.scanner"
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "GateFlow needs camera access to scan QR codes."
+        }
+      ],
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "GateFlow uses your location to record where scans occur."
+        }
+      ]
+    ]
+  }
+}
