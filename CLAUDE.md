@@ -283,7 +283,7 @@ src/
     ├── HistoryTab.tsx            # Scan history display
     ├── QueueStatus.tsx           # Offline queue status
     ├── SettingsTab.tsx           # App settings
-    └── SupervisorOverride.tsx    # Override flow (planned)
+    └── SupervisorOverride.tsx    # Override flow (PIN modal, force-override, server audit log)
 ```
 
 **Key features:**
@@ -411,9 +411,9 @@ export async function GET(request: NextRequest) {
 | Live analytics dashboard             | ✅     |
 | Webhooks + API keys                  | ✅     |
 | CSRF, rate limiting, encryption      | ✅     |
-| Supervisor override (scanner)        | ❌     |
+| Supervisor override (scanner)        | ✅     |
 | Advanced analytics                   | ❌     |
-| Admin dashboard (basic)              | ⚠️     |
+| Admin dashboard (basic)              | ✅     |
 | Marketing site polish                | ❌     |
 
 ### Phase 2 — Resident Portal (Q3-Q4 2026)
