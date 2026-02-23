@@ -5,6 +5,32 @@ import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 import { randomBytes } from 'crypto';
 import * as argon2 from 'argon2';
+import {
+  Users,
+  Search,
+  Key,
+  Trash2,
+  ShieldCheck,
+  ShieldAlert,
+  Building2,
+  Filter,
+  X,
+  UserPlus,
+  KeyRound,
+  ArrowRight,
+  Shield,
+} from 'lucide-react';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Badge,
+  Button,
+  Input,
+  cn,
+} from '@gate-access/ui';
+import Link from 'next/link';
 
 export const metadata = { title: 'Users' };
 
@@ -12,7 +38,7 @@ export const metadata = { title: 'Users' };
 
 async function resetPassword(formData: FormData) {
   'use server';
-  requireAdmin();
+  await requireAdmin();
   const id = formData.get('id') as string;
   if (!id) return;
 
@@ -21,8 +47,6 @@ async function resetPassword(formData: FormData) {
 
   await prisma.user.update({ where: { id }, data: { passwordHash } });
 
-  // Flash the temp password via a short-lived cookie (httpOnly=false so we
-  // can read it server-side on redirect, then immediately delete it)
   cookies().set('_pwflash', JSON.stringify({ id, pw: tempPassword }), {
     path: '/',
     maxAge: 120,
@@ -35,7 +59,7 @@ async function resetPassword(formData: FormData) {
 
 async function toggleSuspendUser(formData: FormData) {
   'use server';
-  requireAdmin();
+  await requireAdmin();
   const id = formData.get('id') as string;
   const current = formData.get('deletedAt') as string;
   if (!id) return;
@@ -57,7 +81,7 @@ export default async function UsersPage({
 }: {
   searchParams: SearchParams;
 }) {
-  requireAdmin();
+  await requireAdmin();
 
   const search = searchParams.q?.trim() ?? '';
   const roleFilter = searchParams.role ?? '';
@@ -106,174 +130,231 @@ export default async function UsersPage({
   }
 
   return (
-    <div className="max-w-6xl space-y-5">
-      <div className="flex items-center justify-between">
+    <div className="space-y-8">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Users</h1>
-          <p className="text-sm text-slate-500">
-            {users.length} result{users.length !== 1 ? 's' : ''}
-          </p>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">Users</h1>
+          <p className="text-muted-foreground mt-1">Manage global platform users, roles, and security.</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Badge variant="outline" className="bg-violet-50 dark:bg-violet-900/20 text-violet-700 dark:text-violet-300 border-violet-100 dark:border-violet-800 px-3 py-1 font-bold">
+            {users.length} Active Users
+          </Badge>
         </div>
       </div>
 
       {/* ── Password reset flash ─────────────────────────────────────────────── */}
       {pwFlash && (
-        <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm">
-          <p className="font-semibold text-amber-800">Temporary password set</p>
-          <p className="mt-1 text-amber-700">
-            Share this securely with the user — it won&apos;t be shown again:
-          </p>
-          <code className="mt-2 block rounded-lg bg-amber-100 px-4 py-2.5 font-mono text-base font-bold tracking-wider text-amber-900">
-            {pwFlash.pw}
-          </code>
-        </div>
+        <Card className="border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20 shadow-lg shadow-amber-500/10 animate-in fade-in slide-in-from-top-4 duration-500">
+          <CardHeader className="pb-3 border-b border-amber-100/50 dark:border-amber-800/50">
+            <div className="flex items-center gap-2 text-amber-800 dark:text-amber-300">
+              <KeyRound className="h-5 w-5" />
+              <CardTitle className="text-base font-bold">Temporary Password Generated</CardTitle>
+            </div>
+          </CardHeader>
+          <CardContent className="pt-4 space-y-3">
+            <p className="text-sm text-amber-700 dark:text-amber-400 font-medium">
+              Share this securely with the user. It won&apos;t be shown again for security reasons:
+            </p>
+            <div className="relative group">
+              <code className="block w-full rounded-xl bg-amber-100/80 dark:bg-amber-900/40 border border-amber-200 dark:border-amber-700 px-6 py-4 font-mono text-xl font-black tracking-[0.2em] text-amber-950 dark:text-amber-200 text-center shadow-inner group-hover:bg-amber-100 dark:group-hover:bg-amber-900/60 transition-colors">
+                {pwFlash.pw}
+              </code>
+              <Badge className="absolute -top-2 -right-1 bg-amber-800 text-white font-bold text-[10px] tracking-widest uppercase">
+                EXPIRES IN 2 MIN
+              </Badge>
+            </div>
+          </CardContent>
+        </Card>
       )}
 
       {/* ── Filters ──────────────────────────────────────────────────────────── */}
-      <form method="GET" className="flex flex-wrap gap-3">
-        <input
-          name="q"
-          defaultValue={search}
-          placeholder="Search by name or email…"
-          className="rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-        />
-        <select
-          name="role"
-          defaultValue={roleFilter}
-          className="rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
-        >
-          <option value="">All roles</option>
-          {ROLES.map((r) => (
-            <option key={r} value={r}>
-              {r.replace('_', ' ')}
-            </option>
-          ))}
-        </select>
-        <select
-          name="status"
-          defaultValue={statusFilter}
-          className="rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
-        >
-          <option value="all">All statuses</option>
-          <option value="active">Active</option>
-          <option value="suspended">Suspended</option>
-        </select>
-        <button
-          type="submit"
-          className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
-        >
-          Filter
-        </button>
-        <a
-          href="/users"
-          className="rounded-lg border border-slate-300 px-4 py-2 text-sm text-slate-600 hover:bg-slate-50"
-        >
-          Clear
-        </a>
-      </form>
+      <Card className="shadow-sm">
+        <CardContent className="p-4">
+          <form method="GET" className="flex flex-wrap items-center gap-3">
+            <div className="relative flex-1 min-w-[240px]">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                name="q"
+                defaultValue={search}
+                placeholder="Search by name or email..."
+                className="pl-9 h-10"
+              />
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <Filter className="h-4 w-4 text-muted-foreground" />
+              <select
+                name="role"
+                defaultValue={roleFilter}
+                className="h-10 rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring/20 font-medium"
+              >
+                <option value="">All Roles</option>
+                {ROLES.map((r) => (
+                  <option key={r} value={r}>
+                    {r.replace('_', ' ')}
+                  </option>
+                ))}
+              </select>
+              <select
+                name="status"
+                defaultValue={statusFilter}
+                className="h-10 rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring/20 font-medium"
+              >
+                <option value="all">All Status</option>
+                <option value="active">Active</option>
+                <option value="suspended">Suspended</option>
+              </select>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Button type="submit" size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold">
+                Filter
+              </Button>
+              <Button variant="outline" size="sm" asChild className="font-bold">
+                <Link href="/users">
+                  <X className="h-3.5 w-3.5 mr-1.5" />
+                  Clear
+                </Link>
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
 
       {/* ── Table ────────────────────────────────────────────────────────────── */}
-      <div className="rounded-xl border bg-white overflow-hidden">
-        <table className="w-full text-sm">
-          <thead className="bg-slate-50 text-xs font-medium text-slate-500">
-            <tr>
-              <th className="px-5 py-3 text-left">User</th>
-              <th className="px-5 py-3 text-left">Organization</th>
-              <th className="px-5 py-3 text-left">Role</th>
-              <th className="px-5 py-3 text-left">Joined</th>
-              <th className="px-5 py-3 text-left">Status</th>
-              <th className="px-5 py-3 text-left">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y">
-            {users.length === 0 ? (
-              <tr>
-                <td colSpan={6} className="px-5 py-10 text-center text-slate-400">
-                  No users found.
-                </td>
-              </tr>
-            ) : (
-              users.map((user) => {
-                const suspended = user.deletedAt !== null;
-                const isFlash = pwFlash?.id === user.id;
-                return (
-                  <tr
-                    key={user.id}
-                    className={`hover:bg-slate-50 ${suspended ? 'opacity-60' : ''} ${
-                      isFlash ? 'bg-amber-50' : ''
-                    }`}
-                  >
-                    <td className="px-5 py-3">
-                      <p className="font-medium text-slate-900">{user.name}</p>
-                      <p className="text-xs text-slate-400">{user.email}</p>
-                    </td>
-                    <td className="px-5 py-3">
-                      {user.organization ? (
-                        <div>
-                          <p className="text-slate-700">{user.organization.name}</p>
-                          <PlanBadge plan={user.organization.plan} />
-                        </div>
-                      ) : (
-                        <span className="text-slate-400 italic text-xs">No org</span>
-                      )}
-                    </td>
-                    <td className="px-5 py-3">
-                      <RoleBadge role={user.role} />
-                    </td>
-                    <td className="px-5 py-3 text-slate-500 text-xs">
-                      {user.createdAt.toLocaleDateString()}
-                    </td>
-                    <td className="px-5 py-3">
-                      <span
-                        className={`rounded-full px-2 py-0.5 text-xs font-medium ${
-                          suspended
-                            ? 'bg-red-100 text-red-700'
-                            : 'bg-green-100 text-green-700'
-                        }`}
-                      >
-                        {suspended ? 'Suspended' : 'Active'}
-                      </span>
-                    </td>
-                    <td className="px-5 py-3">
-                      <div className="flex flex-wrap items-center gap-2">
-                        {/* Reset password */}
-                        <form action={resetPassword}>
-                          <input type="hidden" name="id" value={user.id} />
-                          <button
-                            type="submit"
-                            className="rounded border border-slate-300 bg-white px-2 py-1 text-xs text-slate-700 hover:bg-slate-50"
-                          >
-                            Reset Password
-                          </button>
-                        </form>
-
-                        {/* Suspend / Activate */}
-                        <form action={toggleSuspendUser}>
-                          <input type="hidden" name="id" value={user.id} />
-                          <input
-                            type="hidden"
-                            name="deletedAt"
-                            value={String(user.deletedAt)}
-                          />
-                          <button
-                            type="submit"
-                            className={`rounded border px-2 py-1 text-xs ${
-                              suspended
-                                ? 'border-green-300 bg-green-50 text-green-700 hover:bg-green-100'
-                                : 'border-red-200 bg-red-50 text-red-700 hover:bg-red-100'
-                            }`}
-                          >
-                            {suspended ? 'Activate' : 'Suspend'}
-                          </button>
-                        </form>
+      <Card className="shadow-md overflow-hidden">
+        <CardContent className="p-0">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-muted/50 text-muted-foreground text-[10px] font-bold uppercase tracking-widest border-b border-border">
+                  <th className="px-6 py-4 text-left">User Identity</th>
+                  <th className="px-6 py-4 text-left">Affiliation</th>
+                  <th className="px-6 py-4 text-center">Security Role</th>
+                  <th className="px-6 py-4 text-left">Status</th>
+                  <th className="px-6 py-4 text-right">Protection Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {users.length === 0 ? (
+                  <tr>
+                    <td colSpan={5} className="px-6 py-12 text-center">
+                      <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                        <Users className="h-8 w-8 opacity-20" />
+                        <p className="font-medium">No system users found matching your criteria.</p>
                       </div>
                     </td>
                   </tr>
-                );
-              })
-            )}
-          </tbody>
-        </table>
+                ) : (
+                  users.map((user) => {
+                    const suspended = user.deletedAt !== null;
+                    const isFlash = pwFlash?.id === user.id;
+                    return (
+                      <tr key={user.id} className={cn(
+                        "group transition-colors",
+                        suspended ? "bg-muted/30 opacity-75" : isFlash ? "bg-amber-50/50 dark:bg-amber-900/10" : "hover:bg-primary/5"
+                      )}>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-3">
+                            <div className={cn(
+                              "flex h-9 w-9 items-center justify-center rounded-full font-bold text-[10px] uppercase shadow-sm transition-transform group-hover:scale-110",
+                              suspended ? "bg-muted text-muted-foreground" : "bg-foreground text-background"
+                            )}>
+                              {user.name.split(' ').map(n => n[0]).join('').substring(0, 2)}
+                            </div>
+                            <div>
+                              <p className="font-bold text-foreground leading-none">{user.name}</p>
+                              <p className="text-xs text-muted-foreground mt-1">{user.email}</p>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          {user.organization ? (
+                            <div className="flex flex-col gap-1">
+                              <p className="text-foreground font-bold text-xs">{user.organization.name}</p>
+                              <Badge variant="secondary" className={cn(
+                                "w-fit text-[9px] font-bold uppercase tracking-tight h-4 px-1.5",
+                                user.organization.plan === 'ENTERPRISE' ? "bg-violet-50 dark:bg-violet-900/20 text-violet-700 dark:text-violet-300" :
+                                user.organization.plan === 'PRO' ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300" :
+                                "bg-muted text-muted-foreground"
+                              )}>
+                                {user.organization.plan}
+                              </Badge>
+                            </div>
+                          ) : (
+                            <span className="text-[10px] font-bold text-muted-foreground italic uppercase tracking-wider">Platform Resident</span>
+                          )}
+                        </td>
+                        <td className="px-6 py-4 text-center">
+                          <RoleBadge role={user.role} />
+                        </td>
+                        <td className="px-6 py-4">
+                          <Badge className={cn(
+                            "border-none rounded-sm px-2 py-0.5 text-[10px] font-bold tracking-tight uppercase shadow-sm",
+                            suspended ? "bg-amber-100 dark:bg-amber-900/30 text-amber-900 dark:text-amber-300" : "bg-emerald-500 text-white"
+                          )}>
+                            {suspended ? (
+                              <span className="flex items-center gap-1">
+                                <ShieldAlert className="h-2.5 w-2.5" />
+                                Suspended
+                              </span>
+                            ) : (
+                              <span className="flex items-center gap-1">
+                                <ShieldCheck className="h-2.5 w-2.5" />
+                                Active
+                              </span>
+                            )}
+                          </Badge>
+                        </td>
+                        <td className="px-6 py-4 text-right">
+                          <div className="flex items-center justify-end gap-2 translate-x-2 group-hover:translate-x-0 transition-transform">
+                            {/* Reset password */}
+                            <form action={resetPassword}>
+                              <input type="hidden" name="id" value={user.id} />
+                              <Button
+                                type="submit"
+                                variant="outline"
+                                size="sm"
+                                className="h-8 px-3 text-[11px] font-bold opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap"
+                              >
+                                <KeyRound className="h-3 w-3 mr-1.5" />
+                                Reset Key
+                              </Button>
+                            </form>
+
+                            {suspended ? (
+                              <form action={toggleSuspendUser}>
+                                <input type="hidden" name="id" value={user.id} />
+                                <input type="hidden" name="deletedAt" value={String(user.deletedAt)} />
+                                <Button type="submit" size="sm" variant="outline" className="h-8 border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-[11px] font-bold shadow-sm">
+                                  Restore
+                                </Button>
+                              </form>
+                            ) : (
+                              <form action={toggleSuspendUser}>
+                                <input type="hidden" name="id" value={user.id} />
+                                <input type="hidden" name="deletedAt" value={String(user.deletedAt)} />
+                                <Button type="submit" size="sm" variant="outline" className="h-8 border-red-100 dark:border-red-800 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 text-[11px] font-bold shadow-sm">
+                                  Restrict
+                                </Button>
+                              </form>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
+        </CardContent>
+      </Card>
+      
+      <div className="flex items-center gap-2 text-[11px] font-medium text-muted-foreground px-1">
+        <Shield className="h-3 w-3" />
+        <p>System displays up to 200 recent records. Database audit logs track all identity changes.</p>
       </div>
     </div>
   );
@@ -283,35 +364,20 @@ export default async function UsersPage({
 
 function RoleBadge({ role }: { role: string }) {
   const styles: Record<string, string> = {
-    ADMIN: 'bg-red-100 text-red-700',
-    TENANT_ADMIN: 'bg-orange-100 text-orange-700',
-    TENANT_USER: 'bg-blue-100 text-blue-700',
-    VISITOR: 'bg-slate-100 text-slate-600',
+    ADMIN: 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800 shadow-red-100/50',
+    TENANT_ADMIN: 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 border-orange-200 dark:border-orange-800 shadow-orange-100/50',
+    TENANT_USER: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800 shadow-blue-100/50',
+    VISITOR: 'bg-muted text-muted-foreground border-border shadow-muted/50',
   };
   return (
-    <span
-      className={`rounded-full px-2 py-0.5 text-xs font-medium ${
+    <Badge
+      variant="outline"
+      className={cn(
+        "text-[10px] font-bold uppercase tracking-wider px-2 h-5 border shadow-sm",
         styles[role] ?? styles.VISITOR
-      }`}
+      )}
     >
       {role.replace('_', ' ')}
-    </span>
-  );
-}
-
-function PlanBadge({ plan }: { plan: string }) {
-  const styles: Record<string, string> = {
-    FREE: 'bg-slate-100 text-slate-700',
-    PRO: 'bg-blue-100 text-blue-700',
-    ENTERPRISE: 'bg-violet-100 text-violet-700',
-  };
-  return (
-    <span
-      className={`mt-0.5 inline-block rounded-full px-2 py-0.5 text-[10px] font-medium ${
-        styles[plan] ?? styles.FREE
-      }`}
-    >
-      {plan}
-    </span>
+    </Badge>
   );
 }

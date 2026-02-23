@@ -1,6 +1,9 @@
 import type { Metadata } from 'next';
+import { ThemeProvider } from 'next-themes';
 import './globals.css';
 import { Sidebar } from '../components/Sidebar';
+import { ThemeToggle } from '../components/ThemeToggle';
+import { Badge, Avatar, AvatarFallback } from '@gate-access/ui';
 
 export const metadata: Metadata = {
   title: { default: 'GateFlow Admin', template: '%s | GateFlow Admin' },
@@ -9,31 +12,40 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className="bg-slate-50 text-slate-900 antialiased">
-        <div className="flex h-screen overflow-hidden">
-          {/* Sidebar — not shown on login page; middleware handles redirect */}
-          <Sidebar />
+    <html lang="en" suppressHydrationWarning>
+      <body className="bg-background text-foreground antialiased">
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+          <div className="flex h-screen overflow-hidden">
+            {/* Sidebar — not shown on login page; middleware handles redirect */}
+            <Sidebar />
 
-          {/* Main content */}
-          <div className="flex flex-1 flex-col overflow-hidden">
-            {/* Top bar */}
-            <header className="flex h-16 shrink-0 items-center justify-between border-b bg-white px-6">
-              <div />
-              <div className="flex items-center gap-3">
-                <span className="rounded-full bg-red-100 px-2.5 py-1 text-xs font-semibold text-red-700">
-                  Super Admin
-                </span>
-                <div className="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center text-xs font-bold text-white">
-                  SA
+            {/* Main content */}
+            <div className="flex flex-1 flex-col overflow-hidden">
+              {/* Top bar */}
+              <header className="flex h-16 shrink-0 items-center justify-between border-b border-border bg-card px-6 shadow-sm">
+                <div />
+                <div className="flex items-center gap-3">
+                  <ThemeToggle />
+                  <Badge variant="outline" className="bg-red-500/10 text-red-600 dark:text-red-400 border-red-500/20 hover:bg-red-500/20 transition-colors">
+                    Super Admin
+                  </Badge>
+                  <Avatar className="h-9 w-9 border-2 border-border shadow-sm">
+                    <AvatarFallback className="bg-primary text-primary-foreground text-[10px] font-bold">
+                      SA
+                    </AvatarFallback>
+                  </Avatar>
                 </div>
-              </div>
-            </header>
+              </header>
 
-            {/* Page content */}
-            <main className="flex-1 overflow-y-auto p-6">{children}</main>
+              {/* Page content */}
+              <main className="flex-1 overflow-y-auto p-6 bg-background">
+                <div className="mx-auto max-w-7xl">
+                  {children}
+                </div>
+              </main>
+            </div>
           </div>
-        </div>
+        </ThemeProvider>
       </body>
     </html>
   );

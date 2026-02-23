@@ -11,6 +11,8 @@ import type {
   GateCount,
   HeatmapCell,
   RoleCount,
+  QRTypeCount,
+  GateSuccessRate,
 } from './analytics-charts';
 
 export const metadata = { title: 'Analytics' };
@@ -52,6 +54,13 @@ function parseDateRange(
   return { dateFrom: df, dateTo: now, label: 'Last 7 days' };
 }
 
+function calcTrend(current: number, prior: number): { pct: number; dir: 'up' | 'down' | 'flat' } {
+  if (prior === 0 && current === 0) return { pct: 0, dir: 'flat' };
+  if (prior === 0) return { pct: 100, dir: 'up' };
+  const pct = Math.round(((current - prior) / prior) * 100);
+  return { pct: Math.abs(pct), dir: pct > 0 ? 'up' : pct < 0 ? 'down' : 'flat' };
+}
+
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 type SearchParams = { range?: string; from?: string; to?: string };
@@ -79,6 +88,7 @@ export default async function AnalyticsPage({
     : { organizationId: orgId };
 
   const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+  const sixtyDaysAgo = new Date(Date.now() - 60 * 24 * 60 * 60 * 1000);
 
   // Build days array
   const dayMs = 24 * 60 * 60 * 1000;
@@ -101,6 +111,11 @@ export default async function AnalyticsPage({
     totalScans30d,
     heatmapRaw,
     roleBreakdown,
+    prevSuccessRate30d,
+    prevTotalScans30d,
+    deniedCount30d,
+    qrTypeBreakdownRaw,
+    gateSuccessRatesRaw,
   ] = await Promise.all([
     // Daily scans
     Promise.all(
@@ -201,10 +216,95 @@ export default async function AnalyticsPage({
       }
       return Array.from(roleCounts.entries()).map(([role, count]) => ({ role, count }));
     })(),
+
+    // Prior 30d success rate (60–30 days ago, for trend comparison)
+    prisma.scanLog.count({
+      where: { qrCode: qrFilter, status: 'SUCCESS', scannedAt: { gte: sixtyDaysAgo, lt: thirtyDaysAgo } },
+    }),
+    prisma.scanLog.count({
+      where: { qrCode: qrFilter, scannedAt: { gte: sixtyDaysAgo, lt: thirtyDaysAgo } },
+    }),
+
+    // Denied scans (30d)
+    prisma.scanLog.count({
+      where: { qrCode: qrFilter, status: 'DENIED', scannedAt: { gte: thirtyDaysAgo } },
+    }),
+
+    // QR type breakdown for selected range
+    (async () => {
+      type QRTypeRow = { type: string; count: bigint };
+      if (projectId) {
+        return prisma.$queryRaw<QRTypeRow[]>`
+          SELECT qr."type", COUNT(*)::bigint AS count
+          FROM "ScanLog" sl
+          JOIN "QRCode" qr ON sl."qrCodeId" = qr.id
+          WHERE qr."organizationId" = ${orgId}
+            AND qr."projectId" = ${projectId}
+            AND sl."scannedAt" >= ${dateFrom}
+            AND sl."scannedAt" <= ${dateTo}
+          GROUP BY qr."type"
+        `;
+      }
+      return prisma.$queryRaw<QRTypeRow[]>`
+        SELECT qr."type", COUNT(*)::bigint AS count
+        FROM "ScanLog" sl
+        JOIN "QRCode" qr ON sl."qrCodeId" = qr.id
+        WHERE qr."organizationId" = ${orgId}
+          AND sl."scannedAt" >= ${dateFrom}
+          AND sl."scannedAt" <= ${dateTo}
+        GROUP BY qr."type"
+      `;
+    })(),
+
+    // Per-gate success rates for selected range
+    (async () => {
+      type GateRow = { name: string; successes: bigint; total: bigint };
+      if (projectId) {
+        return prisma.$queryRaw<GateRow[]>`
+          SELECT g.name,
+            COUNT(*) FILTER (WHERE sl.status = 'SUCCESS')::bigint AS successes,
+            COUNT(*)::bigint AS total
+          FROM "ScanLog" sl
+          JOIN "QRCode" qr ON sl."qrCodeId" = qr.id
+          JOIN "Gate" g ON sl."gateId" = g.id
+          WHERE qr."organizationId" = ${orgId}
+            AND qr."projectId" = ${projectId}
+            AND g."deletedAt" IS NULL
+            AND sl."scannedAt" >= ${dateFrom}
+            AND sl."scannedAt" <= ${dateTo}
+          GROUP BY g.id, g.name
+          ORDER BY total DESC
+          LIMIT 10
+        `;
+      }
+      return prisma.$queryRaw<GateRow[]>`
+        SELECT g.name,
+          COUNT(*) FILTER (WHERE sl.status = 'SUCCESS')::bigint AS successes,
+          COUNT(*)::bigint AS total
+        FROM "ScanLog" sl
+        JOIN "QRCode" qr ON sl."qrCodeId" = qr.id
+        JOIN "Gate" g ON sl."gateId" = g.id
+        WHERE qr."organizationId" = ${orgId}
+          AND g."deletedAt" IS NULL
+          AND sl."scannedAt" >= ${dateFrom}
+          AND sl."scannedAt" <= ${dateTo}
+        GROUP BY g.id, g.name
+        ORDER BY total DESC
+        LIMIT 10
+      `;
+    })(),
   ]);
 
   const successRatePct =
     totalScans30d > 0 ? Math.round((successRate30d / totalScans30d) * 100) : 0;
+  const prevSuccessRatePct =
+    prevTotalScans30d > 0 ? Math.round((prevSuccessRate30d / prevTotalScans30d) * 100) : 0;
+
+  const totalScansInRange = dailyCountsRaw.reduce((sum, d) => sum + d.count, 0);
+  const avgScansPerDay = totalDays > 0 ? Math.round(totalScansInRange / totalDays) : 0;
+
+  const successRateTrend = calcTrend(successRatePct, prevSuccessRatePct);
+  const totalScansTrend = calcTrend(totalScans30d, prevTotalScans30d);
 
   // Serialise for client component
   const daily: DailyCount[] = dailyCountsRaw.map(({ date, count }) => ({
@@ -229,6 +329,26 @@ export default async function AnalyticsPage({
       count: typeof r.count === 'bigint' ? Number(r.count) : r.count,
     })
   );
+
+  const qrTypeBreakdown: QRTypeCount[] = (qrTypeBreakdownRaw as { type: string; count: bigint | number }[]).map(
+    (r) => ({
+      type: r.type,
+      count: typeof r.count === 'bigint' ? Number(r.count) : r.count,
+    })
+  );
+
+  const gateSuccessRates: GateSuccessRate[] = (
+    gateSuccessRatesRaw as { name: string; successes: bigint | number; total: bigint | number }[]
+  ).map((r) => {
+    const successes = typeof r.successes === 'bigint' ? Number(r.successes) : r.successes;
+    const total = typeof r.total === 'bigint' ? Number(r.total) : r.total;
+    return {
+      name: r.name,
+      successes,
+      total,
+      rate: total > 0 ? Math.round((successes / total) * 100) : 0,
+    };
+  });
 
   const currentRange = searchParams.range ?? '7d';
   const currentFrom = searchParams.from ?? '';
@@ -301,7 +421,8 @@ export default async function AnalyticsPage({
       </span>
 
       {/* KPI cards */}
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        {/* Success Rate */}
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-slate-500">Success Rate (30d)</CardTitle>
@@ -311,8 +432,11 @@ export default async function AnalyticsPage({
             <div className="mt-2 h-2 overflow-hidden rounded bg-slate-100 dark:bg-slate-700">
               <div className="h-full rounded bg-green-500" style={{ width: `${successRatePct}%` }} />
             </div>
+            <TrendBadge dir={successRateTrend.dir} pct={successRateTrend.pct} suffix="vs prev 30d" />
           </CardContent>
         </Card>
+
+        {/* Total Scans */}
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-slate-500">Total Scans (30d)</CardTitle>
@@ -320,8 +444,24 @@ export default async function AnalyticsPage({
           <CardContent>
             <div className="text-3xl font-bold text-slate-900 dark:text-white">{totalScans30d.toLocaleString()}</div>
             <p className="mt-1 text-xs text-slate-400">{successRate30d.toLocaleString()} successful</p>
+            <TrendBadge dir={totalScansTrend.dir} pct={totalScansTrend.pct} suffix="vs prev 30d" />
           </CardContent>
         </Card>
+
+        {/* Avg Scans / Day */}
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium text-slate-500">Avg Scans / Day</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-3xl font-bold text-blue-600">{avgScansPerDay.toLocaleString()}</div>
+            <p className="mt-1 text-xs text-slate-400">
+              {totalScansInRange.toLocaleString()} over {totalDays}d
+            </p>
+          </CardContent>
+        </Card>
+
+        {/* Active Gates */}
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium text-slate-500">Active Gates</CardTitle>
@@ -329,6 +469,19 @@ export default async function AnalyticsPage({
           <CardContent>
             <div className="text-3xl font-bold text-slate-900 dark:text-white">{topGates.length}</div>
             <p className="mt-1 text-xs text-slate-400">with scan activity</p>
+          </CardContent>
+        </Card>
+
+        {/* Denied / Overrides */}
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium text-slate-500">Denied (30d)</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className={`text-3xl font-bold ${deniedCount30d > 0 ? 'text-red-600' : 'text-slate-900 dark:text-white'}`}>
+              {deniedCount30d.toLocaleString()}
+            </div>
+            <p className="mt-1 text-xs text-slate-400">operator overrides</p>
           </CardContent>
         </Card>
       </div>
@@ -340,8 +493,32 @@ export default async function AnalyticsPage({
         topGates={topGates}
         heatmap={heatmap}
         roleBreakdown={roleBreakdown}
+        qrTypeBreakdown={qrTypeBreakdown}
+        gateSuccessRates={gateSuccessRates}
         dateLabel={dateLabel}
       />
     </div>
+  );
+}
+
+// ─── Trend badge ──────────────────────────────────────────────────────────────
+
+function TrendBadge({
+  dir,
+  pct,
+  suffix,
+}: {
+  dir: 'up' | 'down' | 'flat';
+  pct: number;
+  suffix: string;
+}) {
+  if (dir === 'flat') {
+    return <p className="mt-1 text-xs text-slate-400">— {suffix}</p>;
+  }
+  const isUp = dir === 'up';
+  return (
+    <p className={`mt-1 text-xs font-medium ${isUp ? 'text-green-600' : 'text-red-500'}`}>
+      {isUp ? '↑' : '↓'} {pct}% {suffix}
+    </p>
   );
 }

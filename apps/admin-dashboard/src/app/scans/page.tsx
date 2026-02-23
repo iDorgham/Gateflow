@@ -1,5 +1,34 @@
 import { requireAdmin } from '../../lib/admin-auth';
 import { prisma } from '@gate-access/db';
+import {
+  ScanLine,
+  Search,
+  Calendar,
+  Filter,
+  ArrowUpRight,
+  CheckCircle2,
+  XCircle,
+  AlertCircle,
+  Clock,
+  Building2,
+  ChevronLeft,
+  ChevronRight,
+  Monitor,
+  Smartphone,
+  Shield,
+  X,
+} from 'lucide-react';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Badge,
+  Button,
+  Input,
+  cn,
+} from '@gate-access/ui';
+import Link from 'next/link';
 
 export const metadata = { title: 'Scan Logs' };
 
@@ -13,19 +42,12 @@ interface SearchParams {
 
 const PAGE_SIZE = 50;
 
-const STATUS_STYLES: Record<string, string> = {
-  SUCCESS: 'bg-green-100 text-green-700',
-  DENIED: 'bg-red-100 text-red-700',
-  FAILED: 'bg-orange-100 text-orange-700',
-  PENDING: 'bg-yellow-100 text-yellow-700',
-};
-
 export default async function AdminScansPage({
   searchParams,
 }: {
   searchParams: SearchParams;
 }) {
-  requireAdmin();
+  await requireAdmin();
 
   const page = Math.max(1, parseInt(searchParams.page ?? '1', 10));
   const skip = (page - 1) * PAGE_SIZE;
@@ -36,7 +58,7 @@ export default async function AdminScansPage({
   const toDate = searchParams.to ? new Date(searchParams.to + 'T23:59:59') : undefined;
 
   // Build where clause
-  const where: Record<string, unknown> = {};
+  const where: any = {};
   if (statusFilter) where.status = statusFilter;
   if (fromDate || toDate) {
     where.scannedAt = {
@@ -67,7 +89,7 @@ export default async function AdminScansPage({
           select: {
             type: true,
             code: true,
-            organization: { select: { name: true } },
+            organization: { select: { id: true, name: true } },
           },
         },
         user: { select: { name: true, email: true } },
@@ -78,148 +100,245 @@ export default async function AdminScansPage({
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
   return (
-    <div className="max-w-7xl space-y-5">
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900">Scan Logs</h1>
-        <p className="text-sm text-slate-500">{total.toLocaleString()} total records</p>
+    <div className="space-y-8">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">Scan Logs</h1>
+          <p className="text-muted-foreground mt-1">Global audit trail for all entry and exit attempts.</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Badge variant="outline" className="bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300 border-emerald-100 dark:border-emerald-800 px-3 py-1 font-bold">
+            {total.toLocaleString()} Total Records
+          </Badge>
+        </div>
       </div>
 
       {/* ── Filters ───────────────────────────────────────────────────────── */}
-      <form method="GET" className="flex flex-wrap gap-3">
-        <input
-          name="org"
-          defaultValue={orgFilter}
-          placeholder="Filter by org name…"
-          className="rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-        />
-        <select
-          name="status"
-          defaultValue={statusFilter}
-          className="rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
-        >
-          <option value="">All statuses</option>
-          {['SUCCESS', 'DENIED', 'FAILED', 'PENDING'].map((s) => (
-            <option key={s} value={s}>{s}</option>
-          ))}
-        </select>
-        <input
-          type="date"
-          name="from"
-          defaultValue={searchParams.from ?? ''}
-          className="rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
-        />
-        <input
-          type="date"
-          name="to"
-          defaultValue={searchParams.to ?? ''}
-          className="rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
-        />
-        <button
-          type="submit"
-          className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
-        >
-          Filter
-        </button>
-        <a
-          href="/scans"
-          className="rounded-lg border border-slate-300 px-4 py-2 text-sm text-slate-600 hover:bg-slate-50"
-        >
-          Clear
-        </a>
-      </form>
+      <Card className="shadow-sm">
+        <CardContent className="p-4">
+          <form method="GET" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-4 items-end">
+            <div className="space-y-1.5 xl:col-span-2">
+              <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">Organization</label>
+              <div className="relative">
+                <Building2 className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  name="org"
+                  defaultValue={orgFilter}
+                  placeholder="Filter by organization..."
+                  className="pl-9 h-10"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">Status</label>
+              <select
+                name="status"
+                defaultValue={statusFilter}
+                className="w-full h-10 rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring/20"
+              >
+                <option value="">All Statuses</option>
+                {['SUCCESS', 'DENIED', 'FAILED', 'PENDING'].map((s) => (
+                  <option key={s} value={s}>{s}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">From</label>
+              <Input
+                type="date"
+                name="from"
+                defaultValue={searchParams.from ?? ''}
+                className="h-10"
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground ml-1">To</label>
+              <Input
+                type="date"
+                name="to"
+                defaultValue={searchParams.to ?? ''}
+                className="h-10"
+              />
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Button type="submit" size="sm" className="h-10 bg-primary hover:bg-primary/90 text-primary-foreground font-bold flex-1">
+                <Search className="h-4 w-4 mr-2" />
+                Search
+              </Button>
+              <Button variant="outline" size="sm" asChild className="h-10 px-3">
+                <Link href="/scans">
+                  <X className="h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
 
       {/* ── Table ─────────────────────────────────────────────────────────── */}
-      <div className="rounded-xl border bg-white overflow-hidden">
-        <table className="w-full text-sm">
-          <thead className="bg-slate-50 text-xs font-medium text-slate-500">
-            <tr>
-              <th className="px-5 py-3 text-left">Scan UUID</th>
-              <th className="px-5 py-3 text-left">Organization</th>
-              <th className="px-5 py-3 text-left">Gate</th>
-              <th className="px-5 py-3 text-left">QR Label</th>
-              <th className="px-5 py-3 text-left">Scanned By</th>
-              <th className="px-5 py-3 text-left">Status</th>
-              <th className="px-5 py-3 text-left">Time</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y">
-            {scans.length === 0 ? (
-              <tr>
-                <td colSpan={7} className="px-5 py-10 text-center text-slate-400">
-                  No scan logs found.
-                </td>
-              </tr>
-            ) : (
-              scans.map((scan) => (
-                <tr key={scan.id} className="hover:bg-slate-50">
-                  <td className="px-5 py-3 font-mono text-xs text-slate-500">
-                    {scan.scanUuid?.slice(0, 16) ?? scan.id.slice(0, 16)}…
-                  </td>
-                  <td className="px-5 py-3 font-medium text-slate-800">
-                    {scan.qrCode?.organization?.name ?? <span className="text-slate-400 italic">—</span>}
-                  </td>
-                  <td className="px-5 py-3 text-slate-600">
-                    {scan.gate?.name ?? <span className="text-slate-400 italic">—</span>}
-                  </td>
-                  <td className="px-5 py-3 text-slate-600">
-                    <span className="font-medium">{scan.qrCode?.type ?? '—'}</span>
-                    <span className="ml-1 font-mono text-xs text-slate-400">
-                      {scan.qrCode?.code?.slice(0, 12)}…
-                    </span>
-                  </td>
-                  <td className="px-5 py-3">
-                    {scan.user ? (
-                      <div>
-                        <p className="text-slate-700">{scan.user.name}</p>
-                        <p className="text-xs text-slate-400">{scan.user.email}</p>
-                      </div>
-                    ) : (
-                      <span className="text-slate-400 italic text-xs">Scanner</span>
-                    )}
-                  </td>
-                  <td className="px-5 py-3">
-                    <span
-                      className={`rounded-full px-2 py-0.5 text-xs font-medium ${STATUS_STYLES[scan.status] ?? 'bg-slate-100 text-slate-600'}`}
-                    >
-                      {scan.status}
-                    </span>
-                  </td>
-                  <td className="px-5 py-3 text-xs text-slate-500 whitespace-nowrap">
-                    {scan.scannedAt.toLocaleString()}
-                  </td>
+      <Card className="shadow-md overflow-hidden">
+        <CardContent className="p-0">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-muted/50 text-muted-foreground text-[10px] font-bold uppercase tracking-widest border-b border-border">
+                  <th className="px-6 py-4 text-left">Identity & Device</th>
+                  <th className="px-6 py-4 text-left">Logistics</th>
+                  <th className="px-6 py-4 text-left">Credential</th>
+                  <th className="px-6 py-4 text-left">Status</th>
+                  <th className="px-6 py-4 text-right">Timestamp</th>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {scans.length === 0 ? (
+                  <tr>
+                    <td colSpan={5} className="px-6 py-12 text-center">
+                      <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                        <ScanLine className="h-8 w-8 opacity-20" />
+                        <p className="font-medium">No system scans found matching your criteria.</p>
+                      </div>
+                    </td>
+                  </tr>
+                ) : (
+                  scans.map((scan) => (
+                    <tr key={scan.id} className="group hover:bg-primary/5 transition-colors">
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-3">
+                          <div className={cn(
+                            "flex h-9 w-9 items-center justify-center rounded-lg shadow-sm transition-transform group-hover:scale-110",
+                            scan.user ? "bg-foreground text-background" : "bg-muted text-muted-foreground"
+                          )}>
+                            {scan.user ? <Smartphone className="h-4 w-4" /> : <Monitor className="h-4 w-4" />}
+                          </div>
+                          <div>
+                            <p className="font-bold text-foreground leading-none">
+                              {scan.user?.name ?? 'Anonymous Scanner'}
+                            </p>
+                            <p className="text-[10px] font-mono text-muted-foreground mt-1 uppercase">
+                              ID: {scan.scanUuid?.slice(0, 8) ?? scan.id.slice(0, 8)}
+                            </p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex flex-col gap-1">
+                          <p className="text-foreground font-bold text-xs">
+                            {scan.qrCode?.organization?.name ?? 'System Master'}
+                          </p>
+                          <div className="flex items-center gap-1.5 text-[10px] font-medium text-muted-foreground">
+                            <span className="inline-block w-1 h-3 bg-primary/20 rounded-full" />
+                            {scan.gate?.name ?? 'Admin Portal'}
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-2">
+                          <Badge variant="secondary" className="bg-muted text-foreground border-none font-bold text-[9px] tracking-tight h-5">
+                            {scan.qrCode?.type ?? 'DIRECT'}
+                          </Badge>
+                          <span className="font-mono text-[10px] text-muted-foreground">
+                            {scan.qrCode?.code?.slice(0, 12)}…
+                          </span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4">
+                        <ScanStatusBadge status={scan.status} />
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <p className="text-xs font-bold text-foreground">{scan.scannedAt.toLocaleDateString()}</p>
+                        <p className="text-[10px] text-muted-foreground font-medium">
+                          {scan.scannedAt.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </p>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </CardContent>
+      </Card>
 
       {/* ── Pagination ────────────────────────────────────────────────────── */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-between text-sm">
-          <p className="text-slate-500">
-            Page {page} of {totalPages} · {total.toLocaleString()} total
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 px-1">
+          <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">
+            Page {page} <span className="text-border mx-2">/</span> {totalPages}
           </p>
           <div className="flex gap-2">
-            {page > 1 && (
-              <a
-                href={`/scans?${new URLSearchParams({ ...searchParams, page: String(page - 1) })}`}
-                className="rounded-lg border border-slate-300 px-3 py-1.5 text-slate-600 hover:bg-slate-50"
-              >
-                ← Previous
-              </a>
-            )}
-            {page < totalPages && (
-              <a
-                href={`/scans?${new URLSearchParams({ ...searchParams, page: String(page + 1) })}`}
-                className="rounded-lg border border-slate-300 px-3 py-1.5 text-slate-600 hover:bg-slate-50"
-              >
-                Next →
-              </a>
-            )}
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={page <= 1}
+              asChild={page > 1}
+              className="h-9 font-bold text-[11px] uppercase tracking-wider"
+            >
+              {page > 1 ? (
+                <Link href={`/scans?${new URLSearchParams({ ...searchParams, page: String(page - 1) })}`}>
+                  <ChevronLeft className="h-4 w-4 mr-1.5" />
+                  Prev
+                </Link>
+              ) : (
+                <span>
+                  <ChevronLeft className="h-4 w-4 mr-1.5" />
+                  Prev
+                </span>
+              )}
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              disabled={page >= totalPages}
+              asChild={page < totalPages}
+              className="h-9 font-bold text-[11px] uppercase tracking-wider"
+            >
+              {page < totalPages ? (
+                <Link href={`/scans?${new URLSearchParams({ ...searchParams, page: String(page + 1) })}`}>
+                  Next
+                  <ChevronRight className="h-4 w-4 ml-1.5" />
+                </Link>
+              ) : (
+                <span>
+                  Next
+                  <ChevronRight className="h-4 w-4 ml-1.5" />
+                </span>
+              )}
+            </Button>
           </div>
         </div>
       )}
+
+      <div className="flex items-center gap-2 text-[11px] font-medium text-muted-foreground px-1">
+        <Shield className="h-3 w-3" />
+        <p>Immutable audit logs. Real-time capture of all platform logistics and security events.</p>
+      </div>
     </div>
+  );
+}
+
+function ScanStatusBadge({ status }: { status: string }) {
+  const styles: Record<string, { bg: string, text: string, icon: any }> = {
+    SUCCESS: { bg: 'bg-emerald-500', text: 'text-white', icon: CheckCircle2 },
+    DENIED: { bg: 'bg-red-500', text: 'text-white', icon: XCircle },
+    FAILED: { bg: 'bg-amber-500', text: 'text-white', icon: AlertCircle },
+    PENDING: { bg: 'bg-blue-500', text: 'text-white', icon: Clock },
+  };
+
+  const current = styles[status] || { bg: 'bg-muted', text: 'text-muted-foreground', icon: Clock };
+  const Icon = current.icon;
+
+  return (
+    <Badge className={cn(
+      "border-none rounded-sm px-2 py-0.5 text-[10px] font-bold tracking-tight uppercase shadow-sm flex items-center gap-1.5",
+      current.bg,
+      current.text
+    )}>
+      <Icon className="h-2.5 w-2.5" />
+      {status}
+    </Badge>
   );
 }

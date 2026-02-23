@@ -70,7 +70,7 @@ export async function POST(
     details: { reason, operatorId: claims.sub },
   };
 
-  const existingTrail = Array.isArray(scanLog.auditTrail) ? (scanLog.auditTrail as AuditEntry[]) : [];
+  const existingTrail = Array.isArray(scanLog.auditTrail) ? (scanLog.auditTrail as unknown as AuditEntry[]) : [];
 
   await prisma.scanLog.update({
     where: { id: scanId },

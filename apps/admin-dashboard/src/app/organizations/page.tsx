@@ -1,6 +1,30 @@
 import { requireAdmin } from '../../lib/admin-auth';
 import { prisma } from '@gate-access/db';
 import { revalidatePath } from 'next/cache';
+import {
+  Building2,
+  Search,
+  Users,
+  QrCode,
+  ScanLine,
+  MoreHorizontal,
+  X,
+  Filter,
+  ArrowRight,
+  ShieldAlert,
+  ShieldCheck,
+} from 'lucide-react';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Badge,
+  Button,
+  Input,
+  cn,
+} from '@gate-access/ui';
+import Link from 'next/link';
 
 export const metadata = { title: 'Organizations' };
 
@@ -8,7 +32,7 @@ export const metadata = { title: 'Organizations' };
 
 async function changePlan(formData: FormData) {
   'use server';
-  requireAdmin();
+  await requireAdmin();
   const id = formData.get('id') as string;
   const plan = formData.get('plan') as 'FREE' | 'PRO' | 'ENTERPRISE';
   if (!id || !plan) return;
@@ -18,7 +42,7 @@ async function changePlan(formData: FormData) {
 
 async function suspendOrg(formData: FormData) {
   'use server';
-  requireAdmin();
+  await requireAdmin();
   const id = formData.get('id') as string;
   if (!id) return;
   await prisma.organization.update({ where: { id }, data: { deletedAt: new Date() } });
@@ -27,7 +51,7 @@ async function suspendOrg(formData: FormData) {
 
 async function activateOrg(formData: FormData) {
   'use server';
-  requireAdmin();
+  await requireAdmin();
   const id = formData.get('id') as string;
   if (!id) return;
   await prisma.organization.update({ where: { id }, data: { deletedAt: null } });
@@ -45,7 +69,7 @@ export default async function OrganizationsPage({
 }: {
   searchParams: SearchParams;
 }) {
-  requireAdmin();
+  await requireAdmin();
 
   const search = searchParams.q?.trim() ?? '';
   const planFilter = searchParams.plan ?? '';
@@ -98,170 +122,209 @@ export default async function OrganizationsPage({
   }
 
   return (
-    <div className="max-w-6xl space-y-5">
-      <div className="flex items-center justify-between">
+    <div className="space-y-8">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Organizations</h1>
-          <p className="text-sm text-slate-500">{orgs.length} result{orgs.length !== 1 ? 's' : ''}</p>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">Organizations</h1>
+          <p className="text-muted-foreground mt-1">Manage platform tenants, billing plans, and status.</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Badge variant="outline" className="bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border-blue-100 dark:border-blue-800 px-3 py-1">
+            {orgs.length} Total Organizations
+          </Badge>
         </div>
       </div>
 
       {/* ── Filters ──────────────────────────────────────────────────────────── */}
-      <form method="GET" className="flex flex-wrap gap-3">
-        <input
-          name="q"
-          defaultValue={search}
-          placeholder="Search by name…"
-          className="rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
-        />
-        <select
-          name="plan"
-          defaultValue={planFilter}
-          className="rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
-        >
-          <option value="">All plans</option>
-          {PLANS.map((p) => <option key={p} value={p}>{p}</option>)}
-        </select>
-        <select
-          name="status"
-          defaultValue={statusFilter}
-          className="rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
-        >
-          <option value="all">All statuses</option>
-          <option value="active">Active</option>
-          <option value="suspended">Suspended</option>
-        </select>
-        <button
-          type="submit"
-          className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700"
-        >
-          Filter
-        </button>
-        <a
-          href="/organizations"
-          className="rounded-lg border border-slate-300 px-4 py-2 text-sm text-slate-600 hover:bg-slate-50"
-        >
-          Clear
-        </a>
-      </form>
+      <Card className="shadow-sm">
+        <CardContent className="p-4">
+          <form method="GET" className="flex flex-wrap items-center gap-3">
+            <div className="relative flex-1 min-w-[240px]">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                name="q"
+                defaultValue={search}
+                placeholder="Search by organization name..."
+                className="pl-9 h-10"
+              />
+            </div>
+            
+            <div className="flex items-center gap-2">
+              <Filter className="h-4 w-4 text-muted-foreground" />
+              <select
+                name="plan"
+                defaultValue={planFilter}
+                className="h-10 rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring/20"
+              >
+                <option value="">All Plans</option>
+                {PLANS.map((p) => <option key={p} value={p}>{p}</option>)}
+              </select>
+              <select
+                name="status"
+                defaultValue={statusFilter}
+                className="h-10 rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring/20"
+              >
+                <option value="all">All Status</option>
+                <option value="active">Active</option>
+                <option value="suspended">Suspended</option>
+              </select>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Button type="submit" size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground">
+                Filter
+              </Button>
+              <Button variant="outline" size="sm" asChild>
+                <Link href="/organizations">
+                  <X className="h-3.5 w-3.5 mr-1.5" />
+                  Clear
+                </Link>
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
 
       {/* ── Table ────────────────────────────────────────────────────────────── */}
-      <div className="rounded-xl border bg-white overflow-hidden">
-        <table className="w-full text-sm">
-          <thead className="bg-slate-50 text-xs font-medium text-slate-500">
-            <tr>
-              <th className="px-5 py-3 text-left">Organization</th>
-              <th className="px-5 py-3 text-left">Plan</th>
-              <th className="px-5 py-3 text-right">Users</th>
-              <th className="px-5 py-3 text-right">QR Codes</th>
-              <th className="px-5 py-3 text-right">Scans (30d)</th>
-              <th className="px-5 py-3 text-left">Status</th>
-              <th className="px-5 py-3 text-left">Actions</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y">
-            {orgs.length === 0 ? (
-              <tr>
-                <td colSpan={7} className="px-5 py-10 text-center text-slate-400">
-                  No organizations found.
-                </td>
-              </tr>
-            ) : (
-              orgs.map((org) => {
-                const suspended = org.deletedAt !== null;
-                return (
-                  <tr key={org.id} className={`hover:bg-slate-50 ${suspended ? 'opacity-60' : ''}`}>
-                    <td className="px-5 py-3">
-                      <p className="font-medium text-slate-900">{org.name}</p>
-                      <p className="text-xs text-slate-400">{org.email}</p>
-                    </td>
-                    <td className="px-5 py-3">
-                      <PlanBadge plan={org.plan} />
-                    </td>
-                    <td className="px-5 py-3 text-right text-slate-700">
-                      {org._count.users}
-                    </td>
-                    <td className="px-5 py-3 text-right text-slate-700">
-                      {org._count.qrCodes}
-                    </td>
-                    <td className="px-5 py-3 text-right text-slate-700">
-                      {(orgScanMap.get(org.id) ?? 0).toLocaleString()}
-                    </td>
-                    <td className="px-5 py-3">
-                      <span
-                        className={`rounded-full px-2 py-0.5 text-xs font-medium ${
-                          suspended
-                            ? 'bg-red-100 text-red-700'
-                            : 'bg-green-100 text-green-700'
-                        }`}
-                      >
-                        {suspended ? 'Suspended' : 'Active'}
-                      </span>
-                    </td>
-                    <td className="px-5 py-3">
-                      <div className="flex flex-wrap items-center gap-2">
-                        {/* Change plan */}
-                        <form action={changePlan} className="flex items-center gap-1">
-                          <input type="hidden" name="id" value={org.id} />
-                          <select
-                            name="plan"
-                            defaultValue={org.plan}
-                            className="rounded border border-slate-300 px-1.5 py-1 text-xs"
-                          >
-                            {PLANS.map((p) => <option key={p}>{p}</option>)}
-                          </select>
-                          <button
-                            type="submit"
-                            className="rounded bg-slate-800 px-2 py-1 text-xs text-white hover:bg-slate-700"
-                          >
-                            Set
-                          </button>
-                        </form>
-
-                        {/* Suspend / Activate */}
-                        {suspended ? (
-                          <form action={activateOrg}>
-                            <input type="hidden" name="id" value={org.id} />
-                            <button
-                              type="submit"
-                              className="rounded border border-green-300 bg-green-50 px-2 py-1 text-xs text-green-700 hover:bg-green-100"
-                            >
-                              Activate
-                            </button>
-                          </form>
-                        ) : (
-                          <form action={suspendOrg}>
-                            <input type="hidden" name="id" value={org.id} />
-                            <button
-                              type="submit"
-                              className="rounded border border-red-200 bg-red-50 px-2 py-1 text-xs text-red-700 hover:bg-red-100"
-                            >
-                              Suspend
-                            </button>
-                          </form>
-                        )}
+      <Card className="shadow-md overflow-hidden">
+        <CardContent className="p-0">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="bg-muted/50 text-muted-foreground text-[10px] font-bold uppercase tracking-widest border-b border-border">
+                  <th className="px-6 py-4 text-left">Organization</th>
+                  <th className="px-6 py-4 text-left">Plan</th>
+                  <th className="px-6 py-4 text-center">Metrics</th>
+                  <th className="px-6 py-4 text-left">Status</th>
+                  <th className="px-6 py-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {orgs.length === 0 ? (
+                  <tr>
+                    <td colSpan={5} className="px-6 py-12 text-center">
+                      <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                        <Building2 className="h-8 w-8 opacity-20" />
+                        <p className="font-medium">No organizations found matching your criteria.</p>
                       </div>
                     </td>
                   </tr>
-                );
-              })
-            )}
-          </tbody>
-        </table>
+                ) : (
+                  orgs.map((org) => {
+                    const suspended = org.deletedAt !== null;
+                    return (
+                      <tr key={org.id} className={cn(
+                        "group transition-colors",
+                        suspended ? "bg-muted/30 opacity-75" : "hover:bg-primary/5"
+                      )}>
+                        <td className="px-6 py-4 min-w-[200px]">
+                          <div className="flex items-center gap-3">
+                            <div className={cn(
+                              "flex h-9 w-9 items-center justify-center rounded-lg font-bold text-xs uppercase transition-transform group-hover:scale-110 shadow-sm",
+                              suspended ? "bg-muted text-muted-foreground" : "bg-primary text-primary-foreground shadow-primary/20"
+                            )}>
+                              {org.name.substring(0, 2)}
+                            </div>
+                            <div>
+                              <p className="font-bold text-foreground leading-none">{org.name}</p>
+                              <p className="text-xs text-muted-foreground mt-1">{org.email}</p>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <Badge variant="outline" className={cn(
+                            "text-[10px] font-bold uppercase tracking-wider",
+                            org.plan === 'ENTERPRISE' ? "bg-violet-50 dark:bg-violet-900/20 text-violet-700 dark:text-violet-300 border-violet-100 dark:border-violet-800" :
+                            org.plan === 'PRO' ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border-blue-100 dark:border-blue-800" :
+                            "bg-muted text-muted-foreground border-border"
+                          )}>
+                            {org.plan}
+                          </Badge>
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex items-center justify-center gap-4">
+                            <div className="flex flex-col items-center" title="Total Users">
+                              <Users className="h-3 w-3 text-muted-foreground mb-1" />
+                              <span className="text-[11px] font-bold text-foreground">{org._count.users}</span>
+                            </div>
+                            <div className="flex flex-col items-center" title="QR Codes">
+                              <QrCode className="h-3 w-3 text-muted-foreground mb-1" />
+                              <span className="text-[11px] font-bold text-foreground">{org._count.qrCodes}</span>
+                            </div>
+                            <div className="flex flex-col items-center" title="Scans (Last 30 days)">
+                              <ScanLine className="h-3 w-3 text-muted-foreground mb-1" />
+                              <span className="text-[11px] font-bold text-foreground">{(orgScanMap.get(org.id) ?? 0).toLocaleString()}</span>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <Badge className={cn(
+                            "border-none rounded-sm px-2 py-0.5 text-[10px] font-bold tracking-tight uppercase shadow-sm",
+                            suspended ? "bg-amber-100 dark:bg-amber-900/30 text-amber-900 dark:text-amber-300" : "bg-emerald-500 text-white"
+                          )}>
+                            {suspended ? (
+                              <span className="flex items-center gap-1">
+                                <ShieldAlert className="h-2.5 w-2.5" />
+                                Suspended
+                              </span>
+                            ) : (
+                              <span className="flex items-center gap-1">
+                                <ShieldCheck className="h-2.5 w-2.5" />
+                                Active
+                              </span>
+                            )}
+                          </Badge>
+                        </td>
+                        <td className="px-6 py-4 text-right">
+                          <div className="flex items-center justify-end gap-3 translate-x-2 group-hover:translate-x-0 transition-transform">
+                            {/* Fast Actions */}
+                            <form action={changePlan} className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                              <input type="hidden" name="id" value={org.id} />
+                              <select
+                                name="plan"
+                                defaultValue={org.plan}
+                                className="h-7 rounded border border-input bg-background px-1.5 py-0 text-[10px] font-bold text-foreground focus:outline-none"
+                              >
+                                {PLANS.map((p) => <option key={p} value={p}>{p}</option>)}
+                              </select>
+                              <Button type="submit" size="sm" variant="ghost" className="h-7 px-2 text-[10px] font-bold text-primary hover:text-primary/80 hover:bg-primary/10">
+                                Apply
+                              </Button>
+                            </form>
+
+                            <div className="w-[1px] h-4 bg-border hidden group-hover:block" />
+
+                            {suspended ? (
+                              <form action={activateOrg}>
+                                <input type="hidden" name="id" value={org.id} />
+                                <Button type="submit" size="sm" variant="outline" className="h-8 border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-[11px] font-bold shadow-sm">
+                                  Restore
+                                </Button>
+                              </form>
+                            ) : (
+                              <form action={suspendOrg}>
+                                <input type="hidden" name="id" value={org.id} />
+                                <Button type="submit" size="sm" variant="outline" className="h-8 border-red-100 dark:border-red-800 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 text-[11px] font-bold shadow-sm">
+                                  Suspend
+                                </Button>
+                              </form>
+                            )}
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
+        </CardContent>
+      </Card>
+      
+      <div className="flex justify-between items-center text-[11px] font-medium text-muted-foreground px-1">
+        <p>Sorted by creation date (descending)</p>
+        <p>Metrics sync: Every 30 minutes</p>
       </div>
     </div>
-  );
-}
-
-function PlanBadge({ plan }: { plan: string }) {
-  const styles: Record<string, string> = {
-    FREE: 'bg-slate-100 text-slate-700',
-    PRO: 'bg-blue-100 text-blue-700',
-    ENTERPRISE: 'bg-violet-100 text-violet-700',
-  };
-  return (
-    <span className={`rounded-full px-2 py-0.5 text-xs font-semibold ${styles[plan] ?? styles.FREE}`}>
-      {plan}
-    </span>
   );
 }
