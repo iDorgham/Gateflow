@@ -3,8 +3,9 @@ import { getValidatedProjectId } from '@/lib/project-cookie';
 import { prisma } from '@gate-access/db';
 import { redirect } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@gate-access/ui';
-import { AnalyticsCharts } from './analytics-charts';
+import dynamic from 'next/dynamic';
 import { PrintButton } from './print-button';
+const AnalyticsCharts = dynamic(() => import('./analytics-charts').then(mod => mod.AnalyticsCharts), { ssr: false });
 import type {
   DailyCount,
   StatusCount,
@@ -117,20 +118,46 @@ export default async function AnalyticsPage({
     qrTypeBreakdownRaw,
     gateSuccessRatesRaw,
   ] = await Promise.all([
-    // Daily scans
-    Promise.all(
-      days.map(async (dayStart) => {
-        const dayEnd = new Date(dayStart);
-        dayEnd.setDate(dayEnd.getDate() + 1);
-        const count = await prisma.scanLog.count({
-          where: {
-            qrCode: qrFilter,
-            scannedAt: { gte: dayStart, lt: dayEnd },
-          },
-        });
-        return { date: dayStart, count };
-      })
-    ),
+    // Daily scans (Optimized raw GROUP BY query)
+    (async () => {
+      type DailyRow = { day: Date; count: bigint };
+      let rows: DailyRow[];
+      if (projectId) {
+        rows = await prisma.$queryRaw<DailyRow[]>`
+          SELECT DATE(sl."scannedAt") AS day, COUNT(*)::bigint AS count
+          FROM "ScanLog" sl
+          JOIN "QRCode" qr ON sl."qrCodeId" = qr.id
+          WHERE qr."organizationId" = ${orgId}
+            AND qr."projectId" = ${projectId}
+            AND sl."scannedAt" >= ${dateFrom}
+            AND sl."scannedAt" <= ${dateTo}
+          GROUP BY day
+        `;
+      } else {
+        rows = await prisma.$queryRaw<DailyRow[]>`
+          SELECT DATE(sl."scannedAt") AS day, COUNT(*)::bigint AS count
+          FROM "ScanLog" sl
+          JOIN "QRCode" qr ON sl."qrCodeId" = qr.id
+          WHERE qr."organizationId" = ${orgId}
+            AND sl."scannedAt" >= ${dateFrom}
+            AND sl."scannedAt" <= ${dateTo}
+          GROUP BY day
+        `;
+      }
+      
+      const countsMap = new Map();
+      for (const r of rows) {
+        countsMap.set(new Date(r.day).toISOString().split('T')[0], Number(r.count));
+      }
+
+      return days.map(dayStart => {
+        const dateStr = dayStart.toISOString().split('T')[0];
+        return {
+          date: dayStart,
+          count: countsMap.get(dateStr) ?? 0
+        };
+      });
+    })(),
 
     // Status breakdown (30d)
     prisma.scanLog.groupBy({

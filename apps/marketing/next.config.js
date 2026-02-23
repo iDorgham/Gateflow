@@ -8,7 +8,7 @@ const securityHeaders = [
 ];
 
 const nextConfig = {
-  transpilePackages: ['@gate-access/types', '@gate-access/ui', '@gate-access/db'],
+  transpilePackages: ['@gate-access/ui'],
   async headers() {
     return [{ source: '/(.*)', headers: securityHeaders }];
   },
@@ -16,7 +16,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '**', // Update this based on actual image sources (e.g. your S3 bucket or CDN)
+        hostname: '**',
       },
     ],
   },

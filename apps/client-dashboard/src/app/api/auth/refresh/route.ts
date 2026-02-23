@@ -11,11 +11,29 @@ import {
 } from '../../../../lib/auth';
 import { CSRF_COOKIE, generateCsrfToken } from '../../../../lib/csrf';
 import { castUserRole } from '@/lib/types';
+import { checkRateLimit } from '../../../../lib/rate-limit';
 
 const SECURE = process.env.NODE_ENV === 'production';
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
+    const ip = request.ip ?? request.headers.get('x-forwarded-for') ?? 'unknown';
+    const rl = checkRateLimit(`refresh:${ip}`, 20, 60_000); // 20 requests per minute
+    
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { success: false, message: 'Too many refresh attempts. Please try again later.' },
+        {
+          status: 429,
+          headers: {
+            'Retry-After': Math.ceil(rl.retryAfterMs / 1000).toString(),
+            'X-RateLimit-Limit': rl.limit.toString(),
+            'X-RateLimit-Remaining': rl.remaining.toString(),
+          },
+        }
+      );
+    }
+
     const body = await request.json();
 
     const validation = RefreshTokenPayloadSchema.safeParse(body);
@@ -117,7 +135,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     // Refresh CSRF cookie
     response.cookies.set(CSRF_COOKIE, csrfToken, {
-      httpOnly: true,
+      httpOnly: false,
       secure: SECURE,
       sameSite: 'strict',
       maxAge: 60 * 60 * 24, // 24 hours

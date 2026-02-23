@@ -12,8 +12,8 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.28.6",
-    "@expo/vector-icons": "^15.0.3",
-    "@gate-access/types": "*",
+    "@expo/vector-icons": "^15.1.1",
+    "@gate-access/types": "^0.1.0",
     "@gate-access/ui": "workspace:^",
     "@react-native-async-storage/async-storage": "2.2.0",
     "buffer": "^6.0.3",

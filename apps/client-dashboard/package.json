@@ -10,8 +10,8 @@
     "test": "jest --forceExit"
   },
   "dependencies": {
-    "@gate-access/db": "*",
-    "@gate-access/types": "*",
+    "@gate-access/db": "^0.1.0",
+    "@gate-access/types": "^0.1.0",
     "@gate-access/ui": "workspace:^",
     "@hugeicons/core-free-icons": "^3.1.1",
     "@hugeicons/react": "^1.1.5",
@@ -19,30 +19,30 @@
     "@types/crypto-js": "^4.2.2",
     "@upstash/redis": "^1.36.2",
     "argon2": "^0.44.0",
-    "clsx": "^2.1.0",
+    "clsx": "^2.1.1",
     "crypto-js": "^4.2.0",
     "jose": "4.15.9",
     "lucide-react": "^0.344.0",
-    "next": "^14.0.0",
+    "next": "^14.2.35",
     "next-themes": "^0.4.6",
-    "nodemailer": "^6.9.0",
+    "nodemailer": "^6.10.1",
     "qrcode": "^1.5.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-qr-code": "^2.0.18",
-    "recharts": "^2.12.7",
+    "recharts": "^2.15.4",
     "sonner": "^1.7.4",
-    "tailwind-merge": "^2.2.1"
+    "tailwind-merge": "^2.6.1"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",
-    "@types/node": "^20.0.0",
-    "@types/nodemailer": "^6.4.14",
-    "@types/qrcode": "^1.5.5",
-    "@types/react": "^18.2.0",
-    "@types/react-dom": "^18.2.0",
+    "@types/node": "^20.19.33",
+    "@types/nodemailer": "^6.4.23",
+    "@types/qrcode": "^1.5.6",
+    "@types/react": "^18.3.28",
+    "@types/react-dom": "^18.3.7",
     "jest": "^30.2.0",
     "ts-jest": "^29.4.6",
-    "typescript": "^5.0.0"
+    "typescript": "^5.9.3"
   }
 }

@@ -5,6 +5,7 @@ import {
 } from '@gate-access/types';
 import { prisma, type Prisma } from '@gate-access/db';
 import { getAuditTrail } from '@/lib/types';
+import { requireAuth, isNextResponse } from '@/lib/require-auth';
 
 interface ConflictResult {
   id: string;
@@ -33,6 +34,9 @@ function makeAuditEntry(
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
+    const authResult = await requireAuth(request);
+    if (isNextResponse(authResult)) return authResult;
+
     const body = await request.json();
 
     const validation = BulkScanRequestSchema.safeParse(body);
