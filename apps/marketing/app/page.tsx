@@ -444,13 +444,21 @@ function Security() {
         </div>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {items.map((item) => (
-            <div key={item.title} className="rounded-2xl bg-slate-900 dark:bg-slate-800 p-7">
+            <div
+              key={item.title}
+              className="group rounded-2xl border border-slate-100 dark:border-slate-700 bg-white dark:bg-slate-800 p-7 shadow-sm transition-all hover:-translate-y-1 hover:shadow-xl"
+            >
               <span className="text-3xl">{item.icon}</span>
-              <h3 className="mt-4 text-base font-bold text-white">{item.title}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-slate-400">{item.desc}</p>
+              <h3 className="mt-4 text-base font-bold text-slate-900 dark:text-white">
+                {item.title}
+              </h3>
+              <p className="mt-2 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+                {item.desc}
+              </p>
             </div>
           ))}
         </div>
+
       </div>
     </section>
   );

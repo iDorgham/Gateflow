@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "expo start --lan -c",
+    "dev": "EXPO_OFFLINE=1 expo start --lan -c",
     "build": "expo build",
     "lint": "expo lint",
     "test": "jest --forceExit",

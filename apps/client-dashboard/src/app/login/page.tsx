@@ -13,21 +13,22 @@ import {
   CardHeader,
   CardTitle,
 } from '@gate-access/ui';
-import { AlertCircle, Eye, EyeOff, LogIn, ShieldCheck } from 'lucide-react';
+import { AlertCircle, Eye, EyeOff, ArrowRight, Loader2, ShieldCheck } from 'lucide-react';
 
 function SubmitButton() {
   const { pending } = useFormStatus();
   return (
-    <Button type="submit" className="w-full gap-2" disabled={pending}>
+    <Button 
+      type="submit" 
+      className="w-full h-12 text-sm font-black uppercase tracking-widest shadow-xl shadow-primary/20 hover:shadow-primary/30 active:scale-[0.98] transition-all duration-300 hover:translate-y-[-1px]" 
+      disabled={pending}
+    >
       {pending ? (
-        <>
-          <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
-          Signing in…
-        </>
+        <Loader2 className="h-5 w-5 animate-spin" />
       ) : (
         <>
-          <LogIn className="h-4 w-4" aria-hidden="true" />
-          Sign in
+          Sign in to Dashboard
+          <ArrowRight className="ml-2 h-4 w-4" />
         </>
       )}
     </Button>
@@ -39,73 +40,88 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-50 via-white to-blue-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 px-4">
-      <div className="w-full max-w-md space-y-6">
-        {/* Brand mark */}
-        <div className="text-center">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-600 shadow-lg shadow-blue-600/30">
-            <ShieldCheck className="h-7 w-7 text-white" aria-hidden="true" />
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-indigo-50 dark:from-zinc-950 dark:via-zinc-900 dark:to-zinc-950 px-4">
+      {/* Decorative background elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-[20%] right-[10%] w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px] dark:bg-primary/10" />
+        <div className="absolute bottom-[20%] left-[10%] w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[100px] dark:bg-blue-500/10" />
+      </div>
+
+      <div className="w-full max-w-sm relative z-10">
+        <div className="text-center mb-10 space-y-3">
+          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-primary text-white shadow-2xl shadow-primary/40 ring-4 ring-background transition-transform hover:scale-105 duration-300">
+            <ShieldCheck className="h-9 w-9" />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">GateFlow</h1>
-          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">QR Access Control Platform</p>
+          <div className="space-y-1">
+            <h1 className="text-3xl font-black tracking-tight text-foreground">
+              GateFlow <span className="text-primary font-medium opacity-90">Client</span>
+            </h1>
+            <p className="text-sm text-muted-foreground font-semibold uppercase tracking-[0.3em] opacity-60">
+              Access & Security Management
+            </p>
+          </div>
         </div>
 
-        <Card className="shadow-xl shadow-slate-200/60 dark:shadow-black/30">
-          <CardHeader className="pb-4">
-            <CardTitle className="text-lg">Sign in to your account</CardTitle>
-            <CardDescription>Enter your credentials to access the dashboard</CardDescription>
+        <Card className="border-border/40 shadow-2xl shadow-slate-200/50 dark:shadow-black/60 backdrop-blur-xl bg-card/80 transition-all duration-500">
+          <CardHeader className="pb-6 pt-8 px-8">
+            <CardTitle className="text-xl font-bold">Sign In</CardTitle>
+            <CardDescription className="text-muted-foreground">
+              Welcome back. Enter your credentials to access your dashboard.
+            </CardDescription>
           </CardHeader>
-          <CardContent>
-            <form action={formAction} className="space-y-4">
+          
+          <CardContent className="px-8 pb-8">
+            <form action={formAction} className="space-y-6">
               {state?.error && (
-                <div className="flex items-start gap-2.5 rounded-lg border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/30 px-3 py-2.5 text-sm text-red-700 dark:text-red-400">
-                  <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
-                  <span>{state.error}</span>
+                <div className="rounded-xl border border-destructive/20 bg-destructive/5 px-4 py-3 text-sm text-destructive font-semibold flex items-center gap-2">
+                  <div className="h-1.5 w-1.5 rounded-full bg-destructive animate-pulse" />
+                  {state.error}
                 </div>
               )}
 
-              <div className="space-y-1.5">
-                <Label htmlFor="email">Email address</Label>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="you@example.com"
-                  autoComplete="email"
-                  required
-                  className="h-10"
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="password">Password</Label>
-                  <a href="#" className="text-xs text-blue-600 hover:text-blue-700 hover:underline">
-                    Forgot password?
-                  </a>
-                </div>
-                <div className="relative">
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="email" className="text-xs font-bold uppercase tracking-widest text-muted-foreground/90">
+                    Email Address
+                  </Label>
                   <Input
-                    id="password"
-                    name="password"
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder="••••••••"
-                    autoComplete="current-password"
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder="you@company.com"
+                    autoComplete="email"
                     required
-                    className="h-10 pr-10"
+                    className="h-12 bg-background/50 border-border/60 focus:ring-primary/20 focus:border-primary transition-all duration-300 pl-4"
                   />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword((v) => !v)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 focus-visible:outline-none"
-                    aria-label={showPassword ? 'Hide password' : 'Show password'}
-                  >
-                    {showPassword ? (
-                      <EyeOff className="h-4 w-4" aria-hidden="true" />
-                    ) : (
-                      <Eye className="h-4 w-4" aria-hidden="true" />
-                    )}
-                  </button>
+                </div>
+
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="password" className="text-xs font-bold uppercase tracking-widest text-muted-foreground/90">
+                      Password
+                    </Label>
+                    <a href="#" className="text-[10px] font-bold uppercase tracking-widest text-primary hover:opacity-80 transition-opacity">
+                      Forgot?
+                    </a>
+                  </div>
+                  <div className="relative group">
+                    <Input
+                      id="password"
+                      name="password"
+                      type={showPassword ? 'text' : 'password'}
+                      placeholder="••••••••"
+                      autoComplete="current-password"
+                      required
+                      className="h-12 bg-background/50 border-border/60 focus:ring-primary/20 focus:border-primary transition-all duration-300 pl-4 pr-12"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword((v) => !v)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground/50 hover:text-primary transition-colors focus:outline-none"
+                    >
+                      {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -114,9 +130,14 @@ export default function LoginPage() {
           </CardContent>
         </Card>
 
-        <p className="text-center text-xs text-slate-400">
-          © {new Date().getFullYear()} GateFlow. All rights reserved.
-        </p>
+        <div className="mt-8 text-center space-y-4">
+          <p className="text-[10px] text-muted-foreground/40 font-bold uppercase tracking-[0.3em] leading-relaxed max-w-[280px] mx-auto">
+            Authorized personnel only. Sessions are encrypted and audited.
+          </p>
+          <p className="text-[10px] text-muted-foreground/20 font-medium">
+            © {new Date().getFullYear()} GateFlow Ecosystem
+          </p>
+        </div>
       </div>
     </div>
   );

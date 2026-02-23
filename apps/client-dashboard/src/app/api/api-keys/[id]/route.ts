@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma } from '@gate-access/db';
+import { revalidatePath } from 'next/cache';
+
 
 type RouteContext = { params: { id: string } };
 
@@ -26,7 +28,9 @@ export async function DELETE(
 
     await prisma.apiKey.delete({ where: { id: params.id } });
 
+    revalidatePath('/dashboard/settings');
     return NextResponse.json({ success: true });
+
   } catch (err) {
     console.error('DELETE /api/api-keys/[id] error:', err);
     return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });

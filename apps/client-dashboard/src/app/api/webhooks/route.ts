@@ -4,6 +4,8 @@ import { randomBytes } from 'crypto';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma } from '@gate-access/db';
 import { encryptField, decryptField } from '@/lib/encryption';
+import { revalidatePath } from 'next/cache';
+
 
 const ALL_EVENTS = [
   'QR_CREATED',
@@ -136,11 +138,13 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       },
     });
 
+    revalidatePath('/dashboard/settings');
     // Return the secret in the creation response only (never again)
     return NextResponse.json(
       { success: true, data: { ...webhook, secret } },
       { status: 201 }
     );
+
   } catch (err) {
     console.error('POST /api/webhooks error:', err);
     return NextResponse.json(

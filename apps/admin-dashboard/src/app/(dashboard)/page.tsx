@@ -1,5 +1,5 @@
 import { prisma } from '@gate-access/db';
-import { requireAdmin } from '../lib/admin-auth';
+import { requireAdmin } from '../../lib/admin-auth';
 import {
   Building2,
   Users,

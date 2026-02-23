@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "expo start --port 8082",
+    "dev": "EXPO_OFFLINE=1 expo start --port 8082",
     "build": "expo build",
     "lint": "expo lint",
     "android": "expo run:android",

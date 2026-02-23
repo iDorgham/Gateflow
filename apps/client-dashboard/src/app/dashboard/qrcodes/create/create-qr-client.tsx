@@ -93,7 +93,8 @@ export function CreateQRClient({
         type,
         gateId: gateId || null,
         maxUses: showMaxUses ? parseInt(maxUses) : null,
-        expiresAt: showExpiry && expiresAt ? new Date(expiresAt).toISOString() : null,
+        expiresAt:
+          showExpiry && expiresAt ? new Date(expiresAt).toISOString() : null,
       });
 
       if (result?.success) {
@@ -121,7 +122,9 @@ export function CreateQRClient({
   function downloadSVG() {
     const svg = qrRef.current?.querySelector('svg');
     if (!svg) return;
-    const blob = new Blob([new XMLSerializer().serializeToString(svg)], { type: 'image/svg+xml' });
+    const blob = new Blob([new XMLSerializer().serializeToString(svg)], {
+      type: 'image/svg+xml',
+    });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -156,7 +159,7 @@ export function CreateQRClient({
           URL.revokeObjectURL(url);
         },
         'image/jpeg',
-        0.95,
+        0.95
       );
     };
     img.src = `data:image/svg+xml;base64,${btoa(unescape(encodeURIComponent(svgData)))}`;
@@ -181,14 +184,26 @@ export function CreateQRClient({
         </CardHeader>
         <CardContent className="space-y-4">
           {/* QR display — compact because it encodes a short URL */}
-          <div ref={qrRef} className="flex justify-center rounded-xl border border-slate-200 dark:border-slate-700 bg-white p-6 shadow-sm">
-            <QRCode value={qrValue} size={200} bgColor="#ffffff" fgColor="#0f172a" level="L" />
+          <div
+            ref={qrRef}
+            className="flex justify-center rounded-xl border border-slate-200 dark:border-slate-700 bg-white p-6 shadow-sm"
+          >
+            <QRCode
+              value={qrValue}
+              size={200}
+              bgColor="#ffffff"
+              fgColor="#0f172a"
+              level="L"
+            />
           </div>
 
           {/* Short URL label */}
           {created.shortUrl ? (
             <div className="flex items-center gap-2 rounded-lg border border-blue-100 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20 px-3 py-2">
-              <Link2 className="h-3.5 w-3.5 shrink-0 text-blue-500" aria-hidden="true" />
+              <Link2
+                className="h-3.5 w-3.5 shrink-0 text-blue-500"
+                aria-hidden="true"
+              />
               <span className="min-w-0 flex-1 truncate font-mono text-xs text-blue-700 dark:text-blue-400">
                 {created.shortUrl}
               </span>
@@ -208,7 +223,10 @@ export function CreateQRClient({
             <Button onClick={copy} variant="outline" className="flex-1 gap-2">
               {copied ? (
                 <>
-                  <Check className="h-4 w-4 text-green-600" aria-hidden="true" />
+                  <Check
+                    className="h-4 w-4 text-green-600"
+                    aria-hidden="true"
+                  />
                   Copied!
                 </>
               ) : (
@@ -218,11 +236,19 @@ export function CreateQRClient({
                 </>
               )}
             </Button>
-            <Button onClick={downloadSVG} variant="outline" className="flex-1 gap-2">
+            <Button
+              onClick={downloadSVG}
+              variant="outline"
+              className="flex-1 gap-2"
+            >
               <Download className="h-4 w-4" aria-hidden="true" />
               Download SVG
             </Button>
-            <Button onClick={downloadJPG} variant="outline" className="flex-1 gap-2">
+            <Button
+              onClick={downloadJPG}
+              variant="outline"
+              className="flex-1 gap-2"
+            >
               <ImageDown className="h-4 w-4" aria-hidden="true" />
               Download JPG
             </Button>
@@ -250,7 +276,11 @@ export function CreateQRClient({
           </div>
 
           <div className="flex gap-2 border-t pt-4">
-            <Button onClick={() => setCreated(null)} variant="outline" className="flex-1 gap-2">
+            <Button
+              onClick={() => setCreated(null)}
+              variant="outline"
+              className="flex-1 gap-2"
+            >
               <ListRestart className="h-4 w-4" aria-hidden="true" />
               Create another
             </Button>
@@ -268,7 +298,8 @@ export function CreateQRClient({
       <CardHeader>
         <CardTitle className="text-base">QR Code Details</CardTitle>
         <CardDescription>
-          The QR payload is signed server-side — the signing secret never reaches your browser.
+          The QR payload is signed server-side — the signing secret never
+          reaches your browser.
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -281,13 +312,17 @@ export function CreateQRClient({
 
         {/* Project indicator */}
         <div className="flex items-center gap-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2">
-          <span className="text-xs text-slate-500 dark:text-slate-400">Project:</span>
+          <span className="text-xs text-slate-500 dark:text-slate-400">
+            Project:
+          </span>
           {currentProject ? (
             <span className="rounded-full bg-indigo-100 dark:bg-indigo-900/30 px-2 py-0.5 text-xs font-medium text-indigo-700 dark:text-indigo-400">
               {currentProject.name}
             </span>
           ) : (
-            <span className="text-xs italic text-slate-400">None (All Projects mode)</span>
+            <span className="text-xs italic text-slate-400">
+              None (All Projects mode)
+            </span>
           )}
         </div>
 
@@ -296,13 +331,29 @@ export function CreateQRClient({
           <Label>QR Code Type</Label>
           <div className="grid grid-cols-3 gap-2">
             {[
-              { value: QRCodeType.SINGLE, label: 'Single Use', desc: 'One scan only', icon: QrCode },
-              { value: QRCodeType.RECURRING, label: 'Recurring', desc: 'Limited uses', icon: RefreshCw },
-              { value: QRCodeType.PERMANENT, label: 'Permanent', desc: 'Unlimited', icon: Infinity },
+              {
+                value: QRCodeType.SINGLE,
+                label: 'Single Use',
+                desc: 'One scan only',
+                icon: QrCode,
+              },
+              {
+                value: QRCodeType.RECURRING,
+                label: 'Recurring',
+                desc: 'Limited uses',
+                icon: RefreshCw,
+              },
+              {
+                value: QRCodeType.PERMANENT,
+                label: 'Permanent',
+                desc: 'Unlimited',
+                icon: Infinity,
+              },
             ].map((t) => {
               const Icon = t.icon;
               return (
                 <button
+                  type="button"
                   key={t.value}
                   onClick={() => setType(t.value)}
                   className={`rounded-xl border p-3 text-left text-sm transition-colors ${
@@ -315,7 +366,9 @@ export function CreateQRClient({
                     className={`mb-1.5 h-4 w-4 ${type === t.value ? 'text-blue-600' : 'text-slate-400'}`}
                     aria-hidden="true"
                   />
-                  <div className={`font-medium ${type === t.value ? 'text-blue-700 dark:text-blue-400' : 'text-slate-700 dark:text-slate-300'}`}>
+                  <div
+                    className={`font-medium ${type === t.value ? 'text-blue-700 dark:text-blue-400' : 'text-slate-700 dark:text-slate-300'}`}
+                  >
                     {t.label}
                   </div>
                   <div className="text-xs text-slate-500">{t.desc}</div>

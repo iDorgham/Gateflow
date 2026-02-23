@@ -47,7 +47,8 @@ export async function updateWorkspaceSettingsAction(data: { name: string; email:
       },
     });
 
-    revalidatePath('/dashboard/workspace/settings');
+    revalidatePath('/dashboard/settings');
+
     return { success: true };
   } catch (error: any) {
     console.error('Server Action Error - updateWorkspaceSettingsAction:', error);

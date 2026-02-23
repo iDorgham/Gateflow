@@ -1,4 +1,4 @@
-import { requireAdmin } from '../../lib/admin-auth';
+import { requireAdmin } from '../../../lib/admin-auth';
 import { prisma } from '@gate-access/db';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';

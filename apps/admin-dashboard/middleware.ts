@@ -1,15 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createHash } from 'crypto';
 
 const COOKIE_NAME = 'admin_session';
 const PUBLIC_PATHS = ['/login', '/api/admin/login'];
 
-function expectedToken(): string {
+async function expectedToken(): Promise<string> {
   const key = process.env.ADMIN_ACCESS_KEY ?? 'dev-admin-key-change-in-production';
-  return createHash('sha256').update(key).digest('hex');
+  const data = new TextEncoder().encode(key);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
 }
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // Allow public paths and Next.js internals
@@ -22,7 +24,8 @@ export function middleware(request: NextRequest) {
   }
 
   const session = request.cookies.get(COOKIE_NAME)?.value;
-  if (session !== expectedToken()) {
+  const expected = await expectedToken();
+  if (session !== expected) {
     const loginUrl = request.nextUrl.clone();
     loginUrl.pathname = '/login';
     loginUrl.search = '';
@@ -35,3 +38,4 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
 };
+

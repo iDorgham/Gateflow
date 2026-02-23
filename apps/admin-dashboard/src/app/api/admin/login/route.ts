@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createHash } from 'crypto';
 import { cookies } from 'next/headers';
+import { createHash } from 'crypto';
 
 const COOKIE_NAME = 'admin_session';
 const SECURE = process.env.NODE_ENV === 'production';
+
+function sha256(message: string) {
+  return createHash('sha256').update(message).digest('hex');
+}
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
@@ -16,15 +20,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     const expectedKey = process.env.ADMIN_ACCESS_KEY ?? 'dev-admin-key-change-in-production';
     if (key !== expectedKey) {
-      // Constant-time comparison via sha256 to avoid timing attacks
-      const received = createHash('sha256').update(key).digest('hex');
-      const expected = createHash('sha256').update(expectedKey).digest('hex');
+      const received = sha256(key);
+      const expected = sha256(expectedKey);
       if (received !== expected) {
         return NextResponse.json({ success: false, message: 'Invalid access key.' }, { status: 401 });
       }
     }
 
-    const sessionToken = createHash('sha256').update(expectedKey).digest('hex');
+    const sessionToken = sha256(expectedKey);
     cookies().set(COOKIE_NAME, sessionToken, {
       httpOnly: true,
       secure: SECURE,
@@ -34,12 +37,15 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     });
 
     return NextResponse.json({ success: true });
-  } catch {
+  } catch (e: any) {
+    console.error('Login Error:', e);
     return NextResponse.json({ success: false, message: 'Server error.' }, { status: 500 });
   }
 }
+
 
 export async function DELETE(): Promise<NextResponse> {
   cookies().delete(COOKIE_NAME);
   return NextResponse.json({ success: true });
 }
+

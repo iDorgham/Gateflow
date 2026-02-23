@@ -3,6 +3,8 @@
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma } from '@gate-access/db';
 import { verifyPassword, hashPassword } from '@/lib/auth';
+import { revalidatePath } from 'next/cache';
+
 
 type ActionResult = { success: boolean; error?: string };
 
@@ -13,8 +15,10 @@ export async function updateProfile(userId: string, name: string): Promise<Actio
     if (!name.trim()) return { success: false, error: 'Name cannot be empty.' };
 
     await prisma.user.update({ where: { id: userId }, data: { name: name.trim() } });
+    revalidatePath('/dashboard/settings');
     console.log(`updateProfile: Success - Updated name for user ${userId}`);
     return { success: true };
+
   } catch (error) {
     console.error('updateProfile: Unexpected error:', error);
     return { success: false, error: 'An unexpected error occurred.' };

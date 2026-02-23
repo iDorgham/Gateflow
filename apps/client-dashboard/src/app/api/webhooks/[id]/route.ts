@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma } from '@gate-access/db';
+import { revalidatePath } from 'next/cache';
+
 
 const ALL_EVENTS = [
   'QR_CREATED',
@@ -57,7 +59,9 @@ export async function PATCH(request: NextRequest, { params }: RouteContext): Pro
       select: { id: true, url: true, events: true, isActive: true },
     });
 
+    revalidatePath('/dashboard/settings');
     return NextResponse.json({ success: true, data: updated });
+
   } catch (err) {
     console.error('PATCH /api/webhooks/[id] error:', err);
     return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
@@ -85,7 +89,9 @@ export async function DELETE(_request: NextRequest, { params }: RouteContext): P
       data: { deletedAt: new Date(), isActive: false },
     });
 
+    revalidatePath('/dashboard/settings');
     return NextResponse.json({ success: true });
+
   } catch (err) {
     console.error('DELETE /api/webhooks/[id] error:', err);
     return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });

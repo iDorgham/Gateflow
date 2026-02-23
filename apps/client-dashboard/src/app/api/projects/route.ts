@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@gate-access/db';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { z } from 'zod';
+import { revalidatePath } from 'next/cache';
+
 
 const CreateProjectSchema = z.object({
   name: z.string().min(1).max(100),
@@ -41,5 +43,7 @@ export async function POST(request: NextRequest) {
     },
   });
 
+  revalidatePath('/dashboard/settings');
   return NextResponse.json({ project }, { status: 201 });
 }
+

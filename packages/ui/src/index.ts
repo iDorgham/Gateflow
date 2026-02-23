@@ -43,7 +43,9 @@ export * from './components/resident-portal/open-qr-card';
 export * from './components/resident-portal/access-rule-selector';
 export * from './components/ui/toast';
 export * from './components/ui/textarea';
+export * from './components/ui/tabs';
 export * from './components/ui/sheet';
+
 
 export { cn } from './lib/utils';
 export * from './tokens';
