@@ -8,7 +8,7 @@ const securityHeaders = [
 ];
 
 const nextConfig = {
-  transpilePackages: ['@gate-access/ui'],
+  transpilePackages: ['@gate-access/ui', '@gate-access/i18n'],
   async headers() {
     return [{ source: '/(.*)', headers: securityHeaders }];
   },

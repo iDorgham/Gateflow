@@ -1,0 +1,38 @@
+{
+  "hero": {
+    "headline": "GateFlow Resources",
+    "subHeadline": "Everything you need to successfully deploy, integrate, and manage our zero-trust access platform."
+  },
+  "categories": {
+    "documentation": {
+      "title": "Documentation",
+      "description": "Comprehensive guides to help you set up and manage your gates, users, and organization limits."
+    },
+    "api": {
+      "title": "API Reference",
+      "description": "Detailed documentation for integrating GateFlow into your own mobile apps or property management systems."
+    },
+    "blog": {
+      "title": "Security Blog",
+      "description": "Insights on modern security infrastructure, access control trends, and engineering updates."
+    },
+    "casestudies": {
+      "title": "Case Studies",
+      "description": "Read how leading compounds and event organizers completely eliminated gate queues."
+    }
+  },
+  "cta": {
+    "title": "Need hands-on help?",
+    "description": "Our implementation engineers are available for priority support and custom integrations for Enterprise customers."
+  },
+  "ui": {
+    "knowledgeBaseTitle": "Knowledge ",
+    "knowledgeBaseTitleSpan": "Base",
+    "readMore": "Read More",
+    "chatWithSupport": "Chat with Support",
+    "tags": {
+      "comingSoon": "Coming Soon",
+      "phase2": "Phase 2"
+    }
+  }
+}

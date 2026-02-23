@@ -1,0 +1,20 @@
+{
+  "banner": {
+    "message": "We use cookies to improve your experience and for platform analytics.",
+    "accept": "Accept All",
+    "reject": "Reject All",
+    "settings": "Cookie Settings"
+  },
+  "settings": {
+    "title": "Cookie Preferences",
+    "essential": {
+      "title": "Essential Cookies",
+      "description": "Required for authentication and localization routing."
+    },
+    "analytics": {
+      "title": "Analytics Cookies",
+      "description": "Helping us understand how our site is used."
+    },
+    "save": "Save Preferences"
+  }
+}

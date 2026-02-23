@@ -1,0 +1,136 @@
+{
+  "index": {
+    "hero": {
+      "headline": "Tailored Trust for Every Industry",
+      "subHeadline": "GateFlow’s infrastructure is flexible enough to handle the unique security nuances of any gated physical space."
+    }
+  },
+  "compounds": {
+    "title": "Residential Compounds",
+    "subtitle": "Security meets convenience for compound management.",
+    "description": "Empower your residents with the new Resident Portal, stop unauthorized contractor entry, and end gate bottleneck frustration.",
+    "bulletPoints": [
+      "Resident Whitelist",
+      "Visitor Pre-authorization",
+      "Delivery Window Logs",
+      "Guard Performance Stats"
+    ],
+    "benefits": {
+      "title": "Why GateFlow for Compounds?",
+      "items": {
+        "residents": {
+          "title": "Resident Portal",
+          "description": "Let owners manage their guests independently with strict compound management quotas."
+        },
+        "trades": {
+          "title": "Contractor Tracking",
+          "description": "Issue recurring QR codes limited by time-of-day for maids, drivers, and maintenance."
+        },
+        "complaints": {
+          "title": "End Complaints",
+          "description": "Stop holding up VIP residents because security is busy writing down ID numbers."
+        }
+      }
+    }
+  },
+  "schools": {
+    "title": "Private Schools",
+    "subtitle": "Unbreakable perimeter security for educational campuses.",
+    "description": "Track every pickup and dropoff with precision, managing student release securely across multiple gates.",
+    "bulletPoints": [
+      "Parent Pickup QR",
+      "Staff Attendance",
+      "Contractor Management",
+      "Emergency Lockdown Log"
+    ],
+    "benefits": {
+      "title": "Why GateFlow for Schools?",
+      "items": {
+        "pickup": {
+          "title": "Secure Pickup",
+          "description": "QR validation prevents unauthorized individuals from collecting students."
+        },
+        "audit": {
+          "title": "Full Audit Log",
+          "description": "Know exactly when a parent entered and exited during incidents or disputes."
+        },
+        "offline": {
+          "title": "Network Resilient",
+          "description": "The morning rush must proceed. Offline mode ensures gates stay fast regardless of WiFi connection."
+        }
+      }
+    }
+  },
+  "events": {
+    "title": "Mass Events",
+    "subtitle": "Lightning-fast access for high-volume crowds.",
+    "description": "From corporate exhibitions to massive concerts, handle tens of thousands of scans an hour with zero downtime.",
+    "bulletPoints": [
+      "High-speed Ticket Scan",
+      "100% Offline Mode",
+      "Single-use QR logic",
+      "Entry/Exit Re-sync"
+    ],
+    "benefits": {
+      "title": "Why GateFlow for Events?",
+      "items": {
+        "speed": {
+          "title": "Rapid Scanning",
+          "description": "Achieve high throughput scanning with our highly optimized camera pipeline."
+        },
+        "fraud": {
+          "title": "Stop Ticket Fraud",
+          "description": "Signed QR codes and local DB syncing prevent identical tickets from entering twice."
+        },
+        "reports": {
+          "title": "Live Reports",
+          "description": "View exact attendance counts by gate in real-time."
+        }
+      }
+    }
+  },
+  "clubs": {
+    "title": "Exclusive Clubs & Marinas",
+    "subtitle": "Discrete, high-end guest management.",
+    "description": "Provide a premium check-in experience while enforcing strict seasonal membership and guest pass quotas.",
+    "bulletPoints": [
+      "Member Tier Sync",
+      "Guest Quota Control",
+      "Facility specific gates",
+      "Reception Tablet App"
+    ],
+    "benefits": {
+      "title": "Why GateFlow for Clubs?",
+      "items": {
+        "vip": {
+          "title": "VIP Quotas",
+          "description": "Allocate varying guest pass limits based on membership tiers."
+        },
+        "discreet": {
+          "title": "Discreet Scanning",
+          "description": "Avoid interrogating high-net-worth individuals at the door with seamless QR validation."
+        },
+        "revocation": {
+          "title": "Instant Revocation",
+          "description": "Revoke access for bounced memberships globally in under a second."
+        }
+      }
+    }
+  },
+  "cta": "Get Started with GateFlow",
+  "ui": {
+    "configureFor": "Configure for your",
+    "liveOperations": "Live Operations",
+    "systemOnline": "System Online",
+    "coreInfrastructure": {
+      "title": "Core Infrastructure",
+      "description": "All solutions share our hardened core infrastructure, ensuring maximum reliability and security regardless of vertical.",
+      "features": {
+        "security": { "title": "Enterprise Security", "description": "HMAC-signed QR and AES-256 data encryption at rest." },
+        "sync": { "title": "Instant Sync", "description": "Real-time audit log synchronization between all gates." },
+        "mobile": { "title": "Mobile Native", "description": "Guard-optimized apps for tablets and mobile devices." },
+        "whitelabel": { "title": "White-label Ready", "description": "Custom branding for developers and property managers." }
+      }
+    }
+  }
+}

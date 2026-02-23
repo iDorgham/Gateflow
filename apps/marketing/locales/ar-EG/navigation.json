@@ -1,0 +1,65 @@
+{
+  "header": {
+    "logo": "جيت فلو",
+    "menu": {
+      "product": "المنتج",
+      "solutions": "الحلول",
+      "pricing": "الأسعار",
+      "resources": "الموارد",
+      "contact": "اتصل بنا"
+    },
+    "actions": {
+      "signIn": "تسجيل الدخول",
+      "getStarted": "ابدأ الآن",
+      "language": "اللغة",
+      "theme": "تبديل المظهر"
+    },
+    "dropdowns": {
+      "product": {
+        "features": { "label": "المميزات", "desc": "تحكم آمن بالبوابات" },
+        "security": { "label": "الأمان", "desc": "حماية بمستوى المؤسسات" }
+      },
+      "solutions": {
+        "compounds": { "label": "المجمعات", "desc": "أمن المناطق السكنية" },
+        "schools": { "label": "المدارس", "desc": "سلامة الحرم المدرسي" },
+        "events": { "label": "الفعاليات", "desc": "إدارة وصول الحشود" },
+        "clubs": { "label": "الأندية", "desc": "التحقق من الأعضاء" }
+      }
+    }
+  },
+  "footer": {
+    "brand": {
+      "tagline": "وصول آمن ومبسط.",
+      "description": "بنية تحتية رقمية رائدة للبوابات الذكية، مصممة خصيصاً لمنطقة الشرق الأوسط.",
+      "madeIn": "صنع بـ ♥ في مصر"
+    },
+    "columns": {
+      "product": "المنتج",
+      "solutions": "الحلول",
+      "company": "الشركة",
+      "legal": "قانوني"
+    },
+    "links": {
+      "features": "المميزات",
+      "scannerApp": "تطبيق الماسح",
+      "pricing": "الأسعار",
+      "adminPortal": "لوحة التحكم",
+      "compounds": "المجمعات السكنية",
+      "schools": "المدارس",
+      "events": "الفعاليات",
+      "clubs": "الأندية",
+      "about": "من نحن",
+      "contact": "اتصل بنا",
+      "careers": "الوظائف",
+      "blog": "المدونة",
+      "privacy": "سياسة الخصوصية",
+      "terms": "شروط الخدمة",
+      "security": "الأمان",
+      "cookies": "سياسة ملفات تعريف الارتباط"
+    }
+  },
+  "mobile": {
+    "menu": "القائمة",
+    "close": "إغلاق القائمة"
+  }
+}

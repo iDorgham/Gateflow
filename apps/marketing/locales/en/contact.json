@@ -1,0 +1,75 @@
+{
+  "hero": {
+    "headline": "Get in touch with GateFlow",
+    "subHeadline": "Whether you're looking for an enterprise volume discount or just need help setting up your first gate, our team is ready to assist."
+  },
+  "info": {
+    "title": "Contact Information",
+    "email": "hello@gateflow.io",
+    "emailLabel": "Email Us",
+    "phone": "+20 100 000 0000",
+    "phoneLabel": "Call Us",
+    "location": "New Cairo, Egypt",
+    "locationLabel": "Headquarters",
+    "social": "Follow Us"
+  },
+  "form": {
+    "title": "Send us a message",
+    "placeholders": {
+      "name": "e.g. Ahmed Hassan",
+      "email": "ahmed@example.com",
+      "company": "e.g. Palm Hills",
+      "message": "How can we help you secure your space?"
+    },
+    "newsletter": "Subscribe to our newsletter for security insights and product updates.",
+    "labels": {
+      "name": "Full Name",
+      "email": "Work Email",
+      "phone": "Phone / WhatsApp",
+      "org": "Organization",
+      "facilityType": "Facility Type",
+      "message": "Message"
+    },
+    "options": {
+      "compound": "Gated Compound",
+      "school": "School / University",
+      "event": "Event Venue",
+      "club": "Club / Marina",
+      "other": "Other"
+    },
+    "status": {
+      "successTitle": "Message Sent Successfully!",
+      "successDesc": "Thank you for reaching out. Our team in Cairo will review your request and get back to you within 24 hours.",
+      "sendAnother": "Send another message",
+      "sendingText": "Sending Request...",
+      "sendText": "Send Message"
+    },
+    "privacyPrefix": "By clicking send, you agree to our ",
+    "privacyLink": "Privacy Policy",
+    "success": "Thank you! Your message has been sent successfully. We will get back to you shortly.",
+    "error": "Something went wrong. Please try sending your message again later."
+  },
+  "cards": {
+    "whatsapp": {
+      "title": "WhatsApp Strategy",
+      "detail": "+20 100 000 0000",
+      "desc": "Fastest for support and quick quotes.",
+      "linkBtn": "Open WhatsApp →"
+    },
+    "email": {
+      "title": "Official Link",
+      "detail": "hello@gateflow.io",
+      "desc": "For formal inquiries and partnerships."
+    },
+    "sales": {
+      "title": "Sales Office (Egypt)",
+      "detail": "+20 2 0000 0000",
+      "desc": "Sun–Thu, 9am – 5pm Cairo Time."
+    },
+    "regional": {
+      "title": "Regional Presence",
+      "cairo": { "name": "Cairo (HQ)", "desc": "New Cairo Business District, Egypt" },
+      "dubai": { "name": "Dubai", "desc": "Business Bay, United Arab Emirates" }
+    }
+  }
+}

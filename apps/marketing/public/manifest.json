@@ -1,0 +1,36 @@
+{
+  "name": "GateFlow — Smart QR Access Control",
+  "short_name": "GateFlow",
+  "description": "Modern QR-based access control for the MENA region.",
+  "start_url": "/en",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3b82f6",
+  "icons": [
+    {
+      "src": "/icons/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "dir": "ltr",
+  "lang": "en",
+  "shortcuts": [
+    {
+      "name": "Solutions",
+      "url": "/en/solutions",
+      "description": "View Industry Solutions"
+    },
+    {
+      "name": "Pricing",
+      "url": "/en/pricing",
+      "description": "View Pricing Tiers"
+    }
+  ]
+}

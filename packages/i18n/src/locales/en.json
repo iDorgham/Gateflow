@@ -1,14 +1,52 @@
 {
   "common": {
-    "appName": "Gate Access",
-    "loading": "Loading...",
-    "error": "An error occurred"
+    "appName": "GateFlow",
+    "getStarted": "Get Started",
+    "signIn": "Sign In",
+    "learnMore": "Learn More",
+    "contactSales": "Contact Sales",
+    "allRightsReserved": "All rights reserved.",
+    "madeWithLove": "Securely developed in Egypt."
   },
   "nav": {
-    "home": "Home",
-    "dashboard": "Dashboard",
-    "admin": "Admin",
-    "login": "Login",
-    "logout": "Logout"
+    "product": "Product",
+    "solutions": "Solutions",
+    "pricing": "Pricing",
+    "resources": "Resources",
+    "contact": "Contact",
+    "features": "Features",
+    "security": "Security",
+    "changelog": "Changelog",
+    "compounds": "Compounds",
+    "schools": "Schools",
+    "events": "Events",
+    "clubs": "Clubs",
+    "valueProp": "Value Proposition",
+    "securityFirst": "Security First"
+  },
+  "solutions": {
+    "compoundsTitle": "Gated Compounds",
+    "compoundsDesc": "Manage resident passes, contractor permits, and delivery windows across multiple gates — all from one dashboard.",
+    "schoolsTitle": "Schools & Universities",
+    "schoolsDesc": "Issue parent pickup QR codes, restrict contractor access after hours, and get a full audit of who entered your campus today.",
+    "eventsTitle": "Events & Venues",
+    "eventsDesc": "Scan 2,000 tickets per hour offline without WiFi. Prevent reprints with HMAC-signed, single-use QR codes.",
+    "clubsTitle": "Clubs & Marinas",
+    "clubsDesc": "Differentiate member tiers, limit guest quota per member, and give receptionists a lightweight tablet app."
+  },
+  "pricing": {
+    "title": "Simple, transparent pricing",
+    "subtitle": "Prices in EGP & AED. No per-gate fees. No hidden charges. Cancel any time.",
+    "starter": "Starter",
+    "pro": "Pro",
+    "enterprise": "Enterprise"
+  },
+  "home": {
+    "heroTitle": "Managing gate security has never been easier.",
+    "heroSubTitle": "End-to-end visitor access and gate security in a single solution. Empower your security team with the platform designed to keep unauthorized guests out.",
+    "problemTitle": "Built for every access-controlled venue",
+    "problemSubTitle": "Whether you manage a compound of 500 villas or a beach club with 3,000 members, GateFlow adapts to your workflow.",
+    "ctaTitle": "Ready to secure your compound?",
+    "ctaEmailPlaceholder": "Enter your work email"
   }
 }

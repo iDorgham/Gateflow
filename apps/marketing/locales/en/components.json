@@ -1,0 +1,50 @@
+{
+  "trustBar": {
+    "title": "Trusted by"
+  },
+  "alerts": {
+    "success": "Success",
+    "error": "Error",
+    "warning": "Warning",
+    "info": "Info"
+  },
+  "badges": {
+    "new": "New",
+    "popular": "Popular",
+    "comingSoon": "Coming Soon"
+  },
+  "cookieBanner": {
+    "title": "We use cookies",
+    "desc": "We use essential cookies to make our site work, and optional analytics cookies to improve your experience.",
+    "learnMore": "Learn more",
+    "essential": "Essential only",
+    "acceptAll": "Accept all"
+  },
+  "chatWidget": {
+    "header": "GateFlow Help",
+    "onlineStatus": "Online",
+    "placeholder": "Ask a question...",
+    "botWelcome": "Hi! I'm GateFlow's help assistant. How can I help you today?",
+    "botFallback": "Thanks for your question! Our team will get back to you shortly. For immediate help, visit our Help Center or email hello@gateflow.io.",
+    "ariaOpen": "Open help chat",
+    "ariaClose": "Close chat",
+    "faqs": [
+      {
+        "q": "How does offline scanning work?",
+        "a": "GateFlow's scanner app queues scans locally with AES-256 encryption when offline. Once reconnected, it automatically syncs to the dashboard with deduplication. No scan is ever lost."
+      },
+      {
+        "q": "Can I try GateFlow for free?",
+        "a": "Yes! Our Starter plan is free for up to 1 gate and 500 scans/month — no credit card needed. Visit our pricing page to compare plans."
+      },
+      {
+        "q": "How many gates can I manage?",
+        "a": "Starter: 1 gate. Pro: up to 10 gates. Enterprise: unlimited gates. You can also add individual gates for a monthly add-on fee."
+      },
+      {
+        "q": "Is my data secure?",
+        "a": "All QR codes are HMAC-SHA256 signed. Offline data uses AES-256 encryption. API access uses short-lived JWT tokens (15-min expiry) with rotation. We follow zero-trust principles throughout."
+      }
+    ]
+  }
+}

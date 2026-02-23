@@ -3,23 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send, Zap } from 'lucide-react';
 
-const QUICK_QUESTIONS = [
-  'How does offline scanning work?',
-  'Can I try GateFlow for free?',
-  'How many gates can I manage?',
-  'Is my data secure?',
-];
-
-const AUTO_REPLIES: Record<string, string> = {
-  'How does offline scanning work?':
-    "GateFlow's scanner app queues scans locally with AES-256 encryption when offline. Once reconnected, it automatically syncs to the dashboard with deduplication. No scan is ever lost.",
-  'Can I try GateFlow for free?':
-    'Yes! Our Starter plan is free for up to 1 gate and 500 scans/month — no credit card needed. Visit our pricing page to compare plans.',
-  'How many gates can I manage?':
-    'Starter: 1 gate. Pro: up to 10 gates. Enterprise: unlimited gates. You can also add individual gates for a monthly add-on fee.',
-  'Is my data secure?':
-    'All QR codes are HMAC-SHA256 signed. Offline data uses AES-256 encryption. API access uses short-lived JWT tokens (15-min expiry) with rotation. We follow zero-trust principles throughout.',
-};
+import { useTranslation } from '../hooks/use-translation';
 
 interface Message {
   id: number;
@@ -29,11 +13,13 @@ interface Message {
 
 export function ChatWidget() {
   const [open, setOpen] = useState(false);
+  const { t, dict } = useTranslation('components');
+  
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 0,
       role: 'bot',
-      text: "Hi! I'm GateFlow's help assistant. How can I help you today?",
+      text: t('chatWidget.botWelcome'),
     },
   ]);
   const [input, setInput] = useState('');
@@ -53,9 +39,10 @@ export function ChatWidget() {
     setInput('');
     setTyping(true);
     setTimeout(() => {
-      const reply =
-        AUTO_REPLIES[trimmed] ??
-        'Thanks for your question! Our team will get back to you shortly. For immediate help, visit our Help Center or email hello@gateflow.io.';
+      const faqs = dict.chatWidget?.faqs || [];
+      const replyObj = faqs.find((f: any) => f.q === trimmed);
+      const reply = replyObj?.a ?? t('chatWidget.botFallback');
+      
       setMessages((m) => [...m, { id: Date.now() + 1, role: 'bot', text: reply }]);
       setTyping(false);
     }, 700 + Math.random() * 500);
@@ -69,7 +56,7 @@ export function ChatWidget() {
         className={`fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-indigo-700 text-white shadow-lg shadow-indigo-600/30 hover:bg-indigo-600 hover:scale-105 transition-all duration-200 ${
           open ? 'opacity-0 pointer-events-none scale-90' : 'opacity-100 scale-100'
         }`}
-        aria-label="Open help chat"
+        aria-label={t('chatWidget.ariaOpen')}
       >
         <MessageCircle size={24} />
       </button>
@@ -87,16 +74,16 @@ export function ChatWidget() {
             <Zap size={15} className="text-white" />
           </div>
           <div className="flex-1">
-            <p className="text-sm font-bold text-white">GateFlow Help</p>
+            <p className="text-sm font-bold text-white">{t('chatWidget.header')}</p>
             <p className="text-xs text-indigo-200 flex items-center gap-1.5">
               <span className="h-1.5 w-1.5 rounded-full bg-green-400 inline-block" />
-              Online
+              {t('chatWidget.onlineStatus')}
             </p>
           </div>
           <button
             onClick={() => setOpen(false)}
             className="rounded-lg p-1.5 text-indigo-200 hover:bg-white/10 transition-colors"
-            aria-label="Close chat"
+            aria-label={t('chatWidget.ariaClose')}
           >
             <X size={15} />
           </button>
@@ -142,7 +129,7 @@ export function ChatWidget() {
         {/* Quick questions */}
         {messages.length <= 2 && !typing && (
           <div className="px-4 pb-2 flex flex-wrap gap-1.5">
-            {QUICK_QUESTIONS.map((q) => (
+            {(dict.chatWidget?.faqs || []).map((faq: any) => faq.q).map((q: string) => (
               <button
                 key={q}
                 onClick={() => send(q)}
@@ -166,7 +153,7 @@ export function ChatWidget() {
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Ask a question..."
+              placeholder={t('chatWidget.placeholder')}
               className="flex-1 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-2 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
             />
             <button

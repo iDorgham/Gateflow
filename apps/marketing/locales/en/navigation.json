@@ -1,0 +1,65 @@
+{
+  "header": {
+    "logo": "GateFlow",
+    "menu": {
+      "product": "Product",
+      "solutions": "Solutions",
+      "pricing": "Pricing",
+      "resources": "Resources",
+      "contact": "Contact"
+    },
+    "actions": {
+      "signIn": "Sign In",
+      "getStarted": "Get Started",
+      "language": "Language",
+      "theme": "Toggle theme"
+    },
+    "dropdowns": {
+      "product": {
+        "features": { "label": "Features", "desc": "Secure QR access control" },
+        "security": { "label": "Security", "desc": "Enterprise-grade protection" }
+      },
+      "solutions": {
+        "compounds": { "label": "Compounds", "desc": "Residential security" },
+        "schools": { "label": "Schools", "desc": "Campus safety" },
+        "events": { "label": "Events", "desc": "Access management" },
+        "clubs": { "label": "Clubs", "desc": "Member validation" }
+      }
+    }
+  },
+  "footer": {
+    "brand": {
+      "tagline": "Secure Access, Simplified.",
+      "description": "Zero-trust digital gate infrastructure for physical spaces across the MENA region.",
+      "madeIn": "Made with ♥ in Egypt"
+    },
+    "columns": {
+      "product": "Product",
+      "solutions": "Solutions",
+      "company": "Company",
+      "legal": "Legal"
+    },
+    "links": {
+      "features": "Features",
+      "scannerApp": "Scanner App",
+      "pricing": "Pricing",
+      "adminPortal": "Admin Portal",
+      "compounds": "Compounds",
+      "schools": "Schools",
+      "events": "Events",
+      "clubs": "Clubs",
+      "about": "About Us",
+      "contact": "Contact",
+      "careers": "Careers",
+      "blog": "Blog",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service",
+      "security": "Security",
+      "cookies": "Cookie Policy"
+    }
+  },
+  "mobile": {
+    "menu": "Menu",
+    "close": "Close menu"
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "hero": {
+    "headline": {
+      "prefix": "Zero-Trust Access for",
+      "highlight": "Modern Spaces"
+    },
+    "subHeadline": "Replace chaotic guest lists and insecure WhatsApp messages with Stripe-level gate infrastructure. Built specifically for physical spaces across Egypt & the GCC.",
+    "primaryCta": "Start Free Trial",
+    "secondaryCta": "Book a Demo"
+  },
+  "trust": {
+    "badge": "Trusted by leading communities",
+    "compounds": "50+ Compounds",
+    "schools": "20+ Schools",
+    "events": "1M+ Scans"
+  },
+  "problems": {
+    "title": "The Problem with Traditional Access",
+    "items": {
+      "chaos": {
+        "title": "WhatsApp Chaos",
+        "description": "Sending screenshots and typing names manually leads to human error and security gaps."
+      },
+      "queues": {
+        "title": "Long Gate Queues",
+        "description": "Manual verification slows down entry, causing frustration for residents and guests."
+      },
+      "blindspots": {
+        "title": "Security Blindspots",
+        "description": "No real-time logs mean you can't verify who entered, when, or who approved them."
+      }
+    }
+  },
+  "features": {
+    "title": "Enterprise-Grade Gate Infrastructure",
+    "items": {
+      "qr": {
+        "title": "Dynamic QR Access",
+        "description": "Cryptographically signed QR codes that cannot be screenshotted or shared securely."
+      },
+      "offline": {
+        "title": "Offline-First Scanning",
+        "description": "Gates operate flawlessly even when the internet goes down, syncing automatically when online."
+      },
+      "analytics": {
+        "title": "Real-Time Intelligence",
+        "description": "Monitor gate traffic, track peak hours, and export detailed audit logs instantly."
+      },
+      "portal": {
+        "title": "Resident Portal",
+        "description": "Empower residents to manage their own guests with strict quota enforcement."
+      }
+    }
+  },
+  "cta": {
+    "headline": "Ready to digitize your gate?",
+    "subHeadline": "Join the modern spaces upgrading their security infrastructure with GateFlow.",
+    "button": "Get Started Today",
+    "noCreditCard": "No credit card required. Free starter plan available.",
+    "emailPlaceholder": "name@company.com"
+  },
+  "securityGrid": {
+    "subtitle": "Security First",
+    "title": "Zero-Trust Access Control",
+    "description": "GateFlow is built on the same security principles used in global banking applications.",
+    "items": {
+      "hmac": {
+        "title": "HMAC-SHA256 Signed QR",
+        "description": "Every QR code is cryptographically signed. Reprints and fakes are rejected immediately — even offline."
+      },
+      "rbac": {
+        "title": "Role-Based Access Control",
+        "description": "Assign TENANT_ADMIN, TENANT_USER, and VISITOR roles. Every API action is scoped to the authenticated organization."
+      },
+      "aes": {
+        "title": "AES-256 Offline Encryption",
+        "description": "Scans queued while offline are encrypted at rest with AES-256 + PBKDF2 key derivation. Zero data leaks."
+      },
+      "audit": {
+        "title": "Full Audit Trail",
+        "description": "Every scan, override, and admin action is permanently logged with timestamps, gate IDs, and operator identity."
+      },
+      "jwt": {
+        "title": "Zero-Knowledge Tokens",
+        "description": "JWT access tokens rotate on use, with instant revocation on logout or detected anomaly."
+      },
+      "monitoring": {
+        "title": "Real-time Monitoring",
+        "description": "Live dashboard with instant sync from all scanners. Monitor your perimeter security from anywhere."
+      }
+    }
+  }
+}
+

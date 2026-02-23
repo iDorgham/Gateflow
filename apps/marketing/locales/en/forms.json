@@ -1,0 +1,23 @@
+{
+  "placeholders": {
+    "selectOption": "Select an option",
+    "typeHere": "Type here..."
+  },
+  "validation": {
+    "required": "This field is required",
+    "email": "Please enter a valid email address",
+    "phone": "Please enter a valid phone number",
+    "minLength": "Must be at least {{count}} characters",
+    "maxLength": "Must be no more than {{count}} characters"
+  },
+  "actions": {
+    "submit": "Submit Form",
+    "cancel": "Cancel",
+    "reset": "Reset Form",
+    "loading": "Processing..."
+  },
+  "messages": {
+    "success": "Your form has been submitted successfully.",
+    "error": "There was an error submitting your form. Please try again."
+  }
+}

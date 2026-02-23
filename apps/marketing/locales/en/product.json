@@ -1,0 +1,73 @@
+{
+  "hero": {
+    "headline": "The Most Advanced Access Platform",
+    "subHeadline": "Explore how GateFlow integrates military-grade cryptographic security with an elegant, lightning-fast user experience to transform physical gated entry."
+  },
+  "features": {
+    "title": "Platform Capabilities",
+    "items": {
+      "scanner": {
+        "title": "Native Mobile Scanner",
+        "description": "Process QR codes in under 100ms. Optimized for low-end tablets and smartphones used by security staff."
+      },
+      "hmac": {
+        "title": "Signed QR Logic",
+        "description": "Prevent ticket duplication and fakes. All codes are cryptographically signed with HMAC-SHA256."
+      },
+      "offline": {
+        "title": "Offline Sync Queue",
+        "description": "Internet down? No problem. All scans are queued locally and synced automatically when connection restores."
+      },
+      "hardware": {
+        "title": "Hardware Agnostic",
+        "description": "Use any Android or iOS device. No need for expensive, proprietary gate hardware."
+      },
+      "audit": {
+        "title": "Live Audit Log",
+        "description": "Full visibility of all entries, denials, and guest details in a real-time dashboard."
+      },
+      "api": {
+        "title": "Developer API",
+        "description": "Connect GateFlow to your proprietary resident apps or booking systems with ease."
+      }
+    }
+  },
+  "deepDives": {
+    "title": "Built with modern tech for 24/7 reliability",
+    "items": {
+      "edge": {
+        "title": "Edge Processing",
+        "description": "Verification happens locally on the device, ensuring zero lag at the gate."
+      },
+      "cloud": {
+        "title": "Cloud Native",
+        "description": "Built on scalable infrastructure to handle thousands of concurrent scans."
+      },
+      "region": {
+        "title": "Region Optimized",
+        "description": "Data residency options for Egypt and the Gulf to meet compliance."
+      }
+    },
+    "code": {
+      "verifying": "// Verifying Signed QR Code",
+      "authorized": "status: \"AUTHORIZED\"",
+      "queued": "syncStatus: \"QUEUED\"",
+      "processed": "// Processed in 42ms"
+    }
+  },
+  "security": {
+    "title": "Built for Absolute Security",
+    "description": "We don’t compromise on trust. GateFlow utilizes industry-standard encryption, rate-limiting, and Zero-Trust methodologies across the stack.",
+    "list": [
+      "Argon2id Password Hashing",
+      "Double-Submit CSRF Protection",
+      "Encrypted Webhook Secrets",
+      "Immutable Audit Logs"
+    ]
+  },
+  "cta": {
+    "headline": "Ready to see it in action?",
+    "buttonDemo": "Book a Demo",
+    "buttonPricing": "View Pricing"
+  }
+}

@@ -3,8 +3,9 @@
 @tailwind utilities;
 
 /*
- * GateFlow Design System
- * shadcn/ui · Zinc base · Mira (compact) style · Inter font
+ * GateFlow Design System 2026
+ * shadcn/ui · Zinc base · Mira (compact) style
+ * Fonts: Inter (EN) · IBM Plex Sans Arabic (AR)
  */
 
 @layer base {
@@ -45,23 +46,12 @@
     --warning-foreground: 240 5.9% 10%;
     --info: 217 91% 60%;
     --info-foreground: 0 0% 98%;
-    --danger: 0 84.2% 60.2%;
-    --danger-foreground: 0 0% 98%;
 
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-
-    --sidebar: 0 0% 98%;
-    --sidebar-foreground: 240 5.9% 10%;
-    --sidebar-primary: 240 5.9% 10%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 95.9%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 240 5.9% 90%;
-    --sidebar-ring: 240 5.2% 33.9%;
   }
 
   .dark {
@@ -99,23 +89,12 @@
     --warning-foreground: 36 45% 15%;
     --info: 217 91% 60%;
     --info-foreground: 0 0% 98%;
-    --danger: 0 62.8% 30.6%;
-    --danger-foreground: 0 0% 98%;
 
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
-
-    --sidebar: 240 5.9% 10%;
-    --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 224 76% 48%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 240 3.8% 46.1%;
   }
 }
 
@@ -130,40 +109,26 @@
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
+  
+  /* Arabic Font Handling */
+  [dir="rtl"] body {
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+  }
 }
 
-/* Prose styles for blog post content */
-.prose-gateflow h2 {
-  @apply text-2xl font-extrabold mt-10 mb-4;
-  color: hsl(var(--foreground));
+/* 2026 Micro-animations */
+.animate-in {
+  animation: in 0.3s ease-out;
 }
-.prose-gateflow h3 {
-  @apply text-xl font-bold mt-8 mb-3;
-  color: hsl(var(--foreground));
+
+@keyframes in {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-.prose-gateflow p {
-  @apply text-base leading-8 mb-5;
-  color: hsl(var(--muted-foreground));
+
+/* Glassmorphism utility */
+.glass {
+  @apply bg-background/60 backdrop-blur-md border-border/50;
 }
-.prose-gateflow ul {
-  @apply list-disc pl-6 space-y-2 mb-5;
-  color: hsl(var(--muted-foreground));
-}
-.prose-gateflow code {
-  @apply px-1.5 py-0.5 rounded text-sm font-mono;
-  background-color: hsl(var(--muted));
-  color: hsl(var(--foreground));
-}
-.prose-gateflow pre {
-  @apply rounded-lg p-5 overflow-x-auto mb-6 text-sm font-mono leading-7;
-  background-color: hsl(240 5.9% 10%);
-  color: hsl(0 0% 98%);
-}
-.prose-gateflow a {
-  @apply underline underline-offset-2;
-  color: hsl(var(--primary));
-}
-.prose-gateflow a:hover {
-  opacity: 0.8;
-}
+
 

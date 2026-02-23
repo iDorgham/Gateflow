@@ -1,0 +1,17 @@
+{
+  "default": {
+    "title": "GateFlow — Smart Access Control for Egypt & Gulf",
+    "description": "Modern QR-based access control for gated communities, schools, events, and clubs across Egypt and the Gulf. Real-time monitoring, offline scanning, and full audit logs."
+  },
+  "pricing": {
+    "title": "Pricing | GateFlow",
+    "description": "Simple, transparent pricing for gate access control. Choose the plan that fits your community, school, or event size."
+  },
+  "contact": {
+    "title": "Contact Us | GateFlow",
+    "description": "Get in touch with the GateFlow team for enterprise deployments, custom integrations, or general security inquiries."
+  },
+  "openGraph": {
+    "siteName": "GateFlow"
+  }
+}

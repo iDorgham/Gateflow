@@ -1,0 +1,128 @@
+{
+  "layout": {
+    "lastUpdated": "Last Updated:"
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "lastUpdatedValue": "February 23, 2026",
+    "s1": {
+      "title": "Introduction",
+      "p": "At GateFlow, we take your privacy and the security of your facility's data seriously. This Privacy Policy explains how we collect, use, and protect information when you use our marketing website and services."
+    },
+    "s2": {
+      "title": "Information We Collect",
+      "h3_1": "1. Information Provided by You",
+      "p1": "This includes information you provide when you fill out our contact form, request a demo, or sign up for our services (e.g., name, email address, phone number, company name).",
+      "h3_2": "2. Usage Data",
+      "p2": "We collect information about how you interact with our website, such as your IP address, browser type, and the pages you visit."
+    },
+    "s3": {
+      "title": "How We Use Information",
+      "l1": "To provide and maintain our services.",
+      "l2": "To communicate with you regarding your inquiries or service updates.",
+      "l3": "To improve our website performance and user experience.",
+      "l4": "To comply with legal obligations and security audits."
+    },
+    "s4": {
+      "title": "Data Residency",
+      "p": "For our enterprise customers in the MENA region, we offer data residency options in Egypt, UAE, and KSA to comply with local data protection regulations."
+    },
+    "s5": {
+      "title": "Security",
+      "p": "We implement enterprise-grade security measures, including HMAC-signed data and AES-256 encryption, to protect your data from unauthorized access."
+    },
+    "s6": {
+      "title": "Contact Us",
+      "p": "If you have any questions about this Privacy Policy, please contact us at hello@gateflow.io."
+    }
+  },
+  "terms": {
+    "title": "Terms of Service",
+    "lastUpdatedValue": "February 23, 2026",
+    "s1": {
+      "title": "1. Acceptance of Terms",
+      "p": "By accessing or using the GateFlow services, you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our services."
+    },
+    "s2": {
+      "title": "2. Service Description",
+      "p": "GateFlow provides a QR-based access control management platform, including mobile scanning applications and cloud-based administration dashboards."
+    },
+    "s3": {
+      "title": "3. Use of Service",
+      "l1": "You are responsible for maintaining the confidentiality of your account credentials.",
+      "l2": "You agree to use the service only for lawful purposes related to facility security management.",
+      "l3": "You must not attempt to circumvent any security measures or cryptographic protections implemented by the service."
+    },
+    "s4": {
+      "title": "4. Pricing and Payment",
+      "p": "Service fees are billed according to the plan selected (Starter, Pro, or Enterprise). Failure to pay may result in service suspension."
+    },
+    "s5": {
+      "title": "5. Limitation of Liability",
+      "p": "GateFlow is not liable for any security breaches resulting from improper gate hardware installation or compromised user credentials at the organization level."
+    },
+    "s6": {
+      "title": "6. Modifications",
+      "p": "We reserve the right to modify these terms at any time. Continued use of the service constitutes acceptance of the updated terms."
+    }
+  },
+  "security": {
+    "title": "Security Infrastructure",
+    "lastUpdatedValue": "February 23, 2026",
+    "intro": " GateFlow is built on a zero-trust architecture. We prioritize the integrity of your perimeter access through enterprise-grade cryptographic standards and hardened cloud infrastructure.",
+    "cards": {
+      "aes": {
+        "title": "AES-256 Encryption",
+        "desc": "All data at rest is encrypted using AES-256 with PBKDF2 key derivation. Sensitive resident data is never stored in plain text."
+      },
+      "hmac": {
+        "title": "HMAC-SHA256 Signing",
+        "desc": "QR codes are cryptographically signed. Any modification to a ticket results in an immediate denial at the gate."
+      }
+    },
+    "s1": {
+      "title": "Infrastructure Security",
+      "l1_strong": "Cloud Security:",
+      "l1_text": " Our servers are hosted in SOC2 Type II compliant data centers.",
+      "l2_strong": "Data Residency:",
+      "l2_text": " Regional data hosting available for Egyptian and Gulf customers.",
+      "l3_strong": "Network Protection:",
+      "l3_text": " DDoS mitigation and web application firewalls (WAF) protect all API endpoints."
+    },
+    "s2": {
+      "title": "Application Security",
+      "p": "Our scanner app is designed for offline-first resilience. Even if the network is compromised or down, the gate logic remains secure as it validates signatures locally on the hardware."
+    },
+    "s3": {
+      "title": "Compliance & Audits",
+      "p": "GateFlow generates permanent, tamper-proof audit logs for every scan and administrative action. We support regular security reviews for our Enterprise partners."
+    }
+  },
+  "cookies": {
+    "title": "Cookie Policy",
+    "lastUpdatedValue": "February 23, 2026",
+    "s1": {
+      "title": "What are cookies?",
+      "p": "Cookies are small text files that are placed on your device by websites that you visit. They are widely used to make websites work, or work more efficiently, as well as to provide information to the owners of the site."
+    },
+    "s2": {
+      "title": "How we use cookies",
+      "p": "GateFlow uses cookies for the following purposes:",
+      "l1_strong": "Essential Cookies:",
+      "l1_text": " Necessary for the website to function, such as authentication and language preference persistence.",
+      "l2_strong": "Performance Cookies:",
+      "l2_text": " Help us understand how visitors interact with our website by collecting and reporting information anonymously.",
+      "l3_strong": "Preference Cookies:",
+      "l3_text": " Allow the website to remember choices you made in the past, like what language you prefer."
+    },
+    "s3": {
+      "title": "Managing cookies",
+      "p_start": "Most web browsers allow some control of most cookies through the browser settings. To find out more about cookies, including how to see what cookies have been set, visit ",
+      "p_end": "."
+    },
+    "s4": {
+      "title": "Updates to this policy",
+      "p": "We may update our Cookie Policy from time to time. We encourage you to periodically review this page for the latest information on our cookie practices."
+    }
+  }
+}

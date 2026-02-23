@@ -1,0 +1,122 @@
+{
+  "hero": {
+    "headline": "Simple, Transparent Pricing",
+    "subHeadline": "Secure your space with predictable costs. Choose the tier that matches your monthly scan volume."
+  },
+  "billing": {
+    "monthly": "Monthly",
+    "annual": "Annually",
+    "discount": "Save 20%"
+  },
+  "tiers": {
+    "starter": {
+      "name": "Starter",
+      "description": "Perfect for single gates and small communities.",
+      "price": {
+        "monthly": "EGP 799",
+        "annual": "EGP 499",
+        "period": "/mo"
+      },
+      "features": [
+        "Up to 5,000 scans/mo",
+        "3 Team Members",
+        "1 Branch/Location",
+        "Basic Analytics",
+        "Email Support"
+      ],
+      "notIncluded": ["Offline Scanning", "Webhooks/API", "Bulk Upload"],
+      "cta": "Start Free Trial"
+    },
+    "pro": {
+      "name": "Professional",
+      "description": "For high-traffic schools and busy compounds.",
+      "badge": "Most Popular",
+      "price": {
+        "monthly": "EGP 2,999",
+        "annual": "EGP 1,999",
+        "period": "/mo"
+      },
+      "features": [
+        "Up to 50,000 scans/mo",
+        "10 Team Members",
+        "Up to 5 Branches",
+        "Advanced Analytics & Export",
+        "Webhooks & API Access",
+        "Priority Support"
+      ],
+      "notIncluded": ["Custom Branding", "SLA Guarantee"],
+      "cta": "Start Free Trial"
+    },
+    "enterprise": {
+      "name": "Enterprise",
+      "description": "Custom limits for mass events and stadium access.",
+      "price": {
+        "custom": "Custom"
+      },
+      "features": [
+        "Unlimited scans/mo",
+        "Unlimited Team Members",
+        "Unlimited Branches",
+        "White-label Options",
+        "Dedicated Account Manager",
+        "24/7 Phone Support & SLA"
+      ],
+      "notIncluded": [],
+      "cta": "Contact Sales"
+    }
+  },
+  "comparison": {
+    "title": "Compare Plans",
+    "rows": {
+      "scans": "Monthly Scans",
+      "locations": "Branches / Locations",
+      "users": "Admin Users",
+      "offline": "Offline Scanning",
+      "hmac": "HMAC-SHA256 Signatures",
+      "residentPortal": "Resident Portal Hub",
+      "api": "REST API & Webhooks",
+      "support": "Support Level"
+    }
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "questions": {
+      "q1": {
+        "question": "What happens if we exceed our monthly scan limit?",
+        "answer": "Scanning will never stop at the gate. If you exceed your limit, we simply bill you for the overage at the end of the month, or prompt you to upgrade if it becomes a regular occurrence."
+      },
+      "q2": {
+        "question": "Is the Scanner App included in the price?",
+        "answer": "Yes, unlimited downloads of the Scanner App for your security team are included in all tiers."
+      },
+      "q3": {
+        "question": "Do you need special hardware?",
+        "answer": "No! Our Scanner App works on any standard Android smartphone, saving you thousands in proprietary hardware costs."
+      },
+      "q4": {
+        "question": "Can I integrate GateFlow with my existing property management software?",
+        "answer": "Absolutely. The Pro and Enterprise tiers include full API access and webhooks for seamless integration."
+      }
+    }
+  },
+  "ui": {
+    "transparentPricing": "Transparent Local Pricing",
+    "currencyInfo": "EGP / AED Currency",
+    "fawryAccepted": "Fawry Accepted",
+    "cancelAnytime": "Cancel Anytime",
+    "recommended": "Recommended",
+    "startFreeTrial": "Start Free Trial",
+    "contactSales": "Contact Sales"
+  },
+  "comparisonMini": {
+    "title": "Everything you need for secure access",
+    "features": {
+      "signedQr": { "title": "Signed QR Codes", "description": "Prevent fraud with HMAC-signed tickets." },
+      "offlineFirst": { "title": "Offline First", "description": "Scan even when the gate WiFi goes down." },
+      "liveAnalytics": { "title": "Live Analytics", "description": "Track every entry in real-time." },
+      "multiGate": { "title": "Multi-Gate Support", "description": "Scale from 1 gate to 100+ gates." },
+      "webhookSync": { "title": "Webhook Sync", "description": "Integrate with your own resident apps." },
+      "arabicSupport": { "title": "Arabic Support", "description": "Full RTL UI for guards and residents." }
+    }
+  }
+}
