@@ -1,9 +1,11 @@
 import * as SecureStore from 'expo-secure-store';
-import { decodeJwt } from 'jose';
+import JWT from 'expo-jwt';
 
 const ACCESS_TOKEN_KEY = 'auth_token';
 const REFRESH_TOKEN_KEY = 'auth_refresh_token';
-const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:3000/api';
+const CSRF_TOKEN_KEY = 'csrf_token';
+const API_BASE_URL =
+  process.env.EXPO_PUBLIC_API_URL || 'http://localhost:3001/api';
 
 // Buffer before actual expiry to trigger refresh (60 seconds)
 const EXPIRY_BUFFER_MS = 60_000;
@@ -22,11 +24,26 @@ export async function storeTokens(tokens: AuthTokens): Promise<void> {
 }
 
 /**
+ * Store CSRF token after login.
+ */
+export async function storeCsrfToken(token: string): Promise<void> {
+  await SecureStore.setItemAsync(CSRF_TOKEN_KEY, token);
+}
+
+/**
+ * Get CSRF token.
+ */
+export async function getCsrfToken(): Promise<string | null> {
+  return SecureStore.getItemAsync(CSRF_TOKEN_KEY);
+}
+
+/**
  * Clear all stored tokens (logout).
  */
 export async function clearTokens(): Promise<void> {
   await SecureStore.deleteItemAsync(ACCESS_TOKEN_KEY);
   await SecureStore.deleteItemAsync(REFRESH_TOKEN_KEY);
+  await SecureStore.deleteItemAsync(CSRF_TOKEN_KEY);
 }
 
 /**
@@ -62,7 +79,10 @@ export async function getValidAccessToken(): Promise<string | null> {
  */
 function isTokenExpired(token: string): boolean {
   try {
-    const payload = decodeJwt(token);
+    // null key → skip signature verification, just parse the payload claims.
+    // JWT.decode still throws TokenExpired if exp is already past, which the
+    // catch below handles. We also apply our own early-refresh buffer below.
+    const payload = JWT.decode(token, null);
     if (!payload.exp) return true;
     const expiresAtMs = payload.exp * 1000;
     return Date.now() >= expiresAtMs - EXPIRY_BUFFER_MS;
@@ -73,24 +93,59 @@ function isTokenExpired(token: string): boolean {
 
 /**
  * Call the refresh endpoint to get new tokens.
+ * Handles token rotation - stores new refresh token.
+ * Returns null on failure, including token reuse detection.
  */
 async function refreshTokens(refreshToken: string): Promise<AuthTokens | null> {
   try {
+    const csrfToken = await getCsrfToken();
+
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    };
+    if (csrfToken) {
+      headers['x-csrf-token'] = csrfToken;
+    }
+
     const response = await fetch(`${API_BASE_URL}/auth/refresh`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers,
       body: JSON.stringify({ refreshToken }),
+      credentials: 'include',
     });
 
-    if (!response.ok) return null;
-
     const data = await response.json();
-    if (!data.success || !data.data) return null;
 
-    return {
+    // Handle token reuse detection - clear all tokens
+    if (!response.ok || !data.success) {
+      if (
+        data.message?.includes('revoked') ||
+        data.message?.includes('reuse')
+      ) {
+        // Token reuse detected - clear all sessions
+        await clearTokens();
+      }
+      return null;
+    }
+
+    const newTokens = {
       accessToken: data.data.accessToken,
       refreshToken: data.data.refreshToken,
     };
+
+    // Store new tokens (rotation)
+    await storeTokens(newTokens);
+
+    // Extract and store new CSRF token if present
+    const setCookie = response.headers.get('set-cookie');
+    if (setCookie) {
+      const csrfMatch = setCookie.match(/gf_csrf_token=([^;]+)/);
+      if (csrfMatch) {
+        await storeCsrfToken(decodeURIComponent(csrfMatch[1]));
+      }
+    }
+
+    return newTokens;
   } catch {
     return null;
   }
@@ -108,6 +163,7 @@ export async function login(
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
+      credentials: 'include',
     });
 
     const data = await response.json();
@@ -119,6 +175,15 @@ export async function login(
       accessToken: data.data.accessToken,
       refreshToken: data.data.refreshToken,
     });
+
+    // Extract and store CSRF token from cookie
+    const cookies = response.headers.get('set-cookie');
+    if (cookies) {
+      const csrfMatch = cookies.match(/gf_csrf_token=([^;]+)/);
+      if (csrfMatch) {
+        await storeCsrfToken(decodeURIComponent(csrfMatch[1]));
+      }
+    }
 
     return { success: true };
   } catch (error) {

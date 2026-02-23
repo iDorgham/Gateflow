@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from 'react';
 import { cn } from '../../lib/utils';
 import { X } from 'lucide-react';
@@ -10,12 +12,27 @@ export interface ToastProps {
   onClose?: (id: string) => void;
 }
 
-const Toast = React.forwardRef<HTMLDivElement, ToastProps & React.HTMLAttributes<HTMLDivElement>>(
-  ({ className, variant = 'default', title, description, onClose, id, ...props }, ref) => {
+const Toast = React.forwardRef<
+  HTMLDivElement,
+  ToastProps & React.HTMLAttributes<HTMLDivElement>
+>(
+  (
+    {
+      className,
+      variant = 'default',
+      title,
+      description,
+      onClose,
+      id,
+      ...props
+    },
+    ref
+  ) => {
     const variantStyles = {
       default: 'bg-background border',
       success: 'bg-green-500 text-white border-green-600',
-      destructive: 'bg-destructive text-destructive-foreground border-destructive',
+      destructive:
+        'bg-destructive text-destructive-foreground border-destructive',
     };
 
     return (
@@ -30,7 +47,9 @@ const Toast = React.forwardRef<HTMLDivElement, ToastProps & React.HTMLAttributes
       >
         <div className="flex flex-col space-y-1">
           {title && <div className="text-sm font-semibold">{title}</div>}
-          {description && <div className="text-sm opacity-90">{description}</div>}
+          {description && (
+            <div className="text-sm opacity-90">{description}</div>
+          )}
         </div>
         {onClose && (
           <button

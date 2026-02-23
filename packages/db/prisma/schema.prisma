@@ -20,8 +20,25 @@ model Organization {
   users     User[]
   gates     Gate[]
   qrCodes   QRCode[]
+  webhooks  Webhook[]
+  apiKeys   ApiKey[]
+  projects  Project[]
 
   @@index([deletedAt])
+}
+
+model Project {
+  id             String       @id @default(cuid())
+  name           String
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  gates          Gate[]
+  qrCodes        QRCode[]
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  deletedAt      DateTime?
+
+  @@index([organizationId])
 }
 
 model User {
@@ -36,7 +53,8 @@ model User {
   updatedAt    DateTime      @updatedAt
   deletedAt    DateTime?
 
-  scanLogs ScanLog[]
+  scanLogs      ScanLog[]
+  refreshTokens RefreshToken[]
 
   @@index([organizationId])
   @@index([deletedAt])
@@ -45,9 +63,11 @@ model User {
 model Gate {
   id           String        @id @default(cuid())
   name         String
-  location     String
+  location     String?
   organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId String
+  project      Project?      @relation(fields: [projectId], references: [id])
+  projectId    String?
   isActive     Boolean       @default(true)
   lastAccessedAt DateTime?
   createdAt    DateTime      @default(now())
@@ -58,6 +78,7 @@ model Gate {
   qrCodes  QRCode[]
 
   @@index([organizationId])
+  @@index([projectId])
   @@index([deletedAt])
 }
 
@@ -67,6 +88,8 @@ model QRCode {
   type         QRCodeType
   organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId String
+  project      Project?      @relation(fields: [projectId], references: [id])
+  projectId    String?
   gate         Gate?         @relation(fields: [gateId], references: [id])
   gateId       String?
   maxUses      Int?
@@ -80,6 +103,7 @@ model QRCode {
   scanLogs ScanLog[]
 
   @@index([organizationId])
+  @@index([projectId])
   @@index([gateId])
   @@index([deletedAt])
 }
@@ -104,6 +128,55 @@ model ScanLog {
   @@index([userId])
   @@index([scannedAt])
   @@index([qrCodeId, scannedAt])
+}
+
+model RefreshToken {
+  id        String    @id @default(cuid())
+  token     String    @unique
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime  @default(now())
+  revokedAt DateTime?
+
+  @@index([userId])
+  @@index([token])
+  @@index([expiresAt])
+}
+
+model Webhook {
+  id             String         @id @default(cuid())
+  url            String
+  events         WebhookEvent[]
+  secret         String
+  isActive       Boolean        @default(true)
+  organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId String
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  deletedAt      DateTime?
+
+  deliveries WebhookDelivery[]
+
+  @@index([organizationId])
+  @@index([deletedAt])
+}
+
+model WebhookDelivery {
+  id            String                @id @default(cuid())
+  webhook       Webhook               @relation(fields: [webhookId], references: [id], onDelete: Cascade)
+  webhookId     String
+  event         WebhookEvent
+  payload       Json
+  status        WebhookDeliveryStatus
+  statusCode    Int?
+  responseBody  String?
+  attemptCount  Int                   @default(0)
+  lastAttemptAt DateTime?
+  createdAt     DateTime              @default(now())
+
+  @@index([webhookId])
+  @@index([createdAt])
 }
 
 enum Plan {
@@ -131,4 +204,62 @@ enum ScanStatus {
   EXPIRED
   MAX_USES_REACHED
   INACTIVE
+  DENIED
+}
+
+enum WebhookEvent {
+  QR_CREATED
+  QR_SCANNED
+  QR_REVOKED
+  QR_EXPIRED
+  SCAN_SUCCESS
+  SCAN_FAILED
+}
+
+enum WebhookDeliveryStatus {
+  PENDING
+  RETRYING
+  SUCCESS
+  FAILED
+}
+
+model ApiKey {
+  id             String     @id @default(cuid())
+  name           String
+  keyHash        String     @unique
+  keyPrefix      String
+  scopes         ApiScope[]
+  lastUsedAt     DateTime?
+  expiresAt      DateTime?
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId String
+  createdAt      DateTime   @default(now())
+  createdBy      String
+
+  @@index([organizationId])
+  @@index([keyHash])
+}
+
+enum ApiScope {
+  QR_CREATE
+  QR_READ
+  QR_VALIDATE
+  SCANS_READ
+  ANALYTICS_READ
+  WEBHOOK_WRITE
+}
+
+model QrShortLink {
+  id             String    @id @default(cuid())
+  shortId        String    @unique
+  fullPayload    String
+  qrId           String
+  organizationId String
+  projectId      String?
+  createdAt      DateTime  @default(now())
+  expiresAt      DateTime?
+
+  @@index([shortId])
+  @@index([organizationId])
+  @@index([qrId])
 }

@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { BulkScanRequestSchema, BulkScanResponseSchema } from '@gate-access/types';
-import { prisma } from '@gate-access/db';
+import {
+  BulkScanRequestSchema,
+  BulkScanResponseSchema,
+} from '@gate-access/types';
+import { prisma, type Prisma } from '@gate-access/db';
+import { getAuditTrail } from '@/lib/types';
 
 interface ConflictResult {
   id: string;
@@ -93,7 +97,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
               });
 
               // Preserve existing auditTrail and append new entry
-              const existingTrail = (existingScan as unknown as { auditTrail: unknown[] }).auditTrail ?? [];
+              const existingTrail = getAuditTrail(existingScan);
 
               await tx.scanLog.update({
                 where: { id: existingScan.id },
@@ -102,7 +106,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
                   status: scan.status,
                   scanUuid: scan.scanUuid,
                   deviceId: scan.deviceId ?? null,
-                  auditTrail: [...existingTrail, auditEntry],
+                  auditTrail: [
+                    ...existingTrail,
+                    auditEntry,
+                  ] as unknown as Prisma.JsonArray,
                   auditNotes: null, // Deprecated: migrated to auditTrail
                 },
               });
@@ -115,29 +122,34 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
             } else {
               // Equal or existing is newer — server authoritative, keep existing
               const auditEntry = makeAuditEntry('sync_resolve', 'server', {
-                strategy: incomingTime === existingTime
-                  ? 'equal_timestamp_server_wins'
-                  : 'lww_existing_wins',
+                strategy:
+                  incomingTime === existingTime
+                    ? 'equal_timestamp_server_wins'
+                    : 'lww_existing_wins',
                 existingScanId: existingScan.id,
                 existingScannedAt: existingScan.scannedAt.toISOString(),
                 incomingScannedAt: scan.scannedAt,
                 incomingScanUuid: scan.scanUuid,
               });
 
-              const existingTrail = (existingScan as unknown as { auditTrail: unknown[] }).auditTrail ?? [];
+              const existingTrail = getAuditTrail(existingScan);
 
               await tx.scanLog.update({
                 where: { id: existingScan.id },
                 data: {
-                  auditTrail: [...existingTrail, auditEntry],
+                  auditTrail: [
+                    ...existingTrail,
+                    auditEntry,
+                  ] as unknown as Prisma.JsonArray,
                 },
               });
 
               conflicted.push({
                 id: scan.id,
-                reason: incomingTime === existingTime
-                  ? 'Equal timestamp - server authoritative, kept existing'
-                  : 'LWW resolved - existing record newer',
+                reason:
+                  incomingTime === existingTime
+                    ? 'Equal timestamp - server authoritative, kept existing'
+                    : 'LWW resolved - existing record newer',
               });
             }
           } else {
@@ -168,7 +180,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
                 qrCodeId: qrCodeRecord.id,
                 gateId: scan.gateId,
                 deviceId: scan.deviceId ?? null,
-                auditTrail: [auditEntry],
+                auditTrail: [auditEntry] as unknown as Prisma.JsonArray,
               },
             });
             synced.push(scan.id);

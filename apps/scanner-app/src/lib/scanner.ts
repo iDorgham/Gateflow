@@ -4,7 +4,7 @@ import { getValidAccessToken } from './auth-client';
 import { scanQueue } from './offline-queue';
 import type { QRPayload } from '@gate-access/types';
 
-const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:3000/api';
+const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:3001/api';
 
 export interface LocationContext {
   latitude: number;
@@ -25,18 +25,25 @@ export interface ScanResult {
  * Validate a locally-verified QR code against the server.
  *
  * Precondition: the QR string has already passed verifyScanQR() locally.
- * Falls back to optimistic local acceptance + offline queue when network is
- * unavailable or the access token cannot be refreshed.
+ * Falls back to optimistic local acceptance + offline queue ONLY for true
+ * network/server failures (5xx, connection refused).
+ *
+ * 4xx responses are treated as server rejections (invalid QR, wrong org, etc.)
+ * and surfaced as rejected results — they are NOT queued offline.
+ *
+ * @param gateId Optional gate ID from the gate selector; used in scanContext
+ *               and as the queue gateId for offline syncing.
  */
 export async function validateOnServer(
   qrPayload: string,
   localPayload: QRPayload,
   location?: LocationContext,
+  gateId?: string,
 ): Promise<ScanResult> {
   const token = await getValidAccessToken();
 
   if (!token) {
-    await enqueueOfflineScan(qrPayload, localPayload);
+    await enqueueOfflineScan(qrPayload, localPayload, gateId);
     await haptic(Haptics.NotificationFeedbackType.Warning);
     return {
       status: 'accepted',
@@ -59,17 +66,37 @@ export async function validateOnServer(
         scanContext: {
           deviceId,
           ...(location ? { location } : {}),
+          ...(gateId ? { gateId } : {}),
         },
       }),
     });
 
     if (!response.ok) {
-      await enqueueOfflineScan(qrPayload, localPayload);
-      await haptic(Haptics.NotificationFeedbackType.Warning);
+      // 5xx → true server error; queue for later retry
+      if (response.status >= 500) {
+        await enqueueOfflineScan(qrPayload, localPayload, gateId);
+        await haptic(Haptics.NotificationFeedbackType.Warning);
+        return {
+          status: 'accepted',
+          message: `Server error (${response.status}) — queued for sync`,
+          offline: true,
+        };
+      }
+
+      // 4xx → server explicitly rejected this QR (wrong org, expired, not found, etc.)
+      // Do NOT queue offline; surface the rejection to the operator.
+      let body: { reason?: string; message?: string } = {};
+      try {
+        body = await response.json();
+      } catch {
+        // response body may be empty
+      }
+      await haptic(Haptics.NotificationFeedbackType.Error);
       return {
-        status: 'accepted',
-        message: `Server unavailable (${response.status}) — queued for sync`,
-        offline: true,
+        status: 'rejected',
+        reason: body.reason,
+        message: body.message ?? serverReasonMessage(body.reason ?? ''),
+        offline: false,
       };
     }
 
@@ -93,7 +120,8 @@ export async function validateOnServer(
       offline: false,
     };
   } catch {
-    await enqueueOfflineScan(qrPayload, localPayload);
+    // Network-level failure (no connection, DNS failure, timeout)
+    await enqueueOfflineScan(qrPayload, localPayload, gateId);
     await haptic(Haptics.NotificationFeedbackType.Warning);
     return {
       status: 'accepted',
@@ -108,9 +136,11 @@ export async function validateOnServer(
 async function enqueueOfflineScan(
   qrPayload: string,
   localPayload: QRPayload,
+  gateId?: string,
 ): Promise<void> {
   try {
-    await scanQueue.addScan(qrPayload, localPayload.organizationId);
+    // Use the selected gateId when available; fall back to organizationId
+    await scanQueue.addScan(qrPayload, gateId ?? localPayload.organizationId);
   } catch {
     // Queue throws if the user is not authenticated — silently ignore.
   }
@@ -138,11 +168,12 @@ function serverReasonMessage(reason: string): string {
     inactive: 'QR code is not active',
     invalid_signature: 'Invalid QR code',
     malformed_payload: 'Corrupted QR payload',
-    not_found: 'QR code not found',
+    not_found: 'QR code not found in system',
     wrong_org: 'QR code belongs to a different organization',
     rate_limited: 'Too many scans — try again later',
     unauthorized: 'Authentication required',
     internal_error: 'Server error — please retry',
+    invalid_format: 'No gate assigned for this QR code',
   };
   return map[reason] ?? 'Access denied';
 }

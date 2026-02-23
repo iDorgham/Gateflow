@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "expo start",
+    "dev": "expo start --lan -c",
     "build": "expo build",
     "lint": "expo lint",
     "test": "jest --forceExit",
@@ -12,7 +12,9 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.28.6",
+    "@expo/vector-icons": "^15.0.3",
     "@gate-access/types": "*",
+    "@gate-access/ui": "workspace:^",
     "@react-native-async-storage/async-storage": "2.2.0",
     "buffer": "^6.0.3",
     "crypto-js": "^4.2.0",
@@ -24,6 +26,7 @@
     "expo-jwt": "^1.8.2",
     "expo-location": "~19.0.8",
     "expo-network": "~8.0.8",
+    "expo-router": "~6.0.23",
     "expo-secure-store": "~15.0.8",
     "react": "19.1.0",
     "react-native": "0.81.5"

@@ -6,7 +6,7 @@ export const QRValidateRequestSchema = z.object({
     .object({
       gateId: z.string().optional(),
       deviceId: z.string().optional(),
-      location: z.record(z.unknown()).optional(),
+      location: z.record(z.string(), z.unknown()).optional(),
     })
     .optional(),
 });

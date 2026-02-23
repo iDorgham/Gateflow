@@ -26,7 +26,9 @@
         {
           "locationWhenInUsePermission": "GateFlow uses your location to record where scans occur."
         }
-      ]
+      ],
+      "expo-router",
+      "expo-secure-store"
     ]
   }
 }

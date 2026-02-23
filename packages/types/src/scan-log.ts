@@ -8,6 +8,7 @@ export enum ScanStatus {
   EXPIRED = 'EXPIRED',
   MAX_USES_REACHED = 'MAX_USES_REACHED',
   INACTIVE = 'INACTIVE',
+  DENIED = 'DENIED',
 }
 
 export interface ScanLog {

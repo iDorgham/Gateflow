@@ -3,10 +3,10 @@ import type { Config } from 'tailwindcss';
 const config: Config = {
   darkMode: ['class'],
   content: [
-    './apps/marketing/**/*.{js,ts,jsx,tsx}',
-    './apps/client-dashboard/**/*.{js,ts,jsx,tsx}',
-    './apps/admin-dashboard/**/*.{js,ts,jsx,tsx}',
-    './packages/ui/src/**/*.{ts,tsx}',
+    './apps/marketing/**/*.{js,ts,jsx,tsx,mdx}',
+    './apps/client-dashboard/**/*.{js,ts,jsx,tsx,mdx}',
+    './apps/admin-dashboard/**/*.{js,ts,jsx,tsx,mdx}',
+    '../../packages/ui/src/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {

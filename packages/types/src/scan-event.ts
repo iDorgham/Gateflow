@@ -54,7 +54,7 @@ export const AuditTrailEntrySchema = z.object({
   timestamp: z.string().datetime(),
   action: z.string(),
   resolvedBy: z.enum(['lww', 'server', 'client']),
-  details: z.record(z.unknown()),
+  details: z.record(z.string(), z.unknown()),
 });
 
 export type AuditTrailEntry = z.infer<typeof AuditTrailEntrySchema>;
