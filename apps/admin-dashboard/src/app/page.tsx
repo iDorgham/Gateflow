@@ -89,10 +89,9 @@ export default async function AdminOverviewPage() {
               <tr
                 key={org.id}
                 className="hover:bg-slate-50 cursor-pointer"
-                onClick={() => { window.location.href = `/organizations?q=${encodeURIComponent(org.name)}`; }}
               >
                 <td className="px-5 py-3 font-medium text-slate-900 hover:text-blue-600 hover:underline">
-                  <a href={`/organizations?q=${encodeURIComponent(org.name)}`} onClick={(e) => e.stopPropagation()}>
+                  <a href={`/organizations?q=${encodeURIComponent(org.name)}`}>
                     {org.name}
                   </a>
                 </td>
