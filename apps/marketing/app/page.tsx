@@ -7,6 +7,8 @@ export default function HomePage() {
       <TrustBar />
       <FeatureOne />
       <FeatureTwo />
+      <UseCases />
+      <Security />
       <Testimonials />
       <BottomCTA />
     </main>
@@ -263,6 +265,133 @@ function Testimonials() {
                  </div>
                </div>
              </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── Use Cases ────────────────────────────────────────────────────────────────
+
+function UseCases() {
+  const cases = [
+    {
+      icon: '🏘️',
+      title: 'Gated Compounds',
+      desc: 'Manage resident passes, contractor permits, and delivery windows across multiple gates — all from one dashboard.',
+      stat: '3,200+ compounds globally',
+    },
+    {
+      icon: '🏫',
+      title: 'Schools & Universities',
+      desc: "Issue parent pickup QR codes, restrict contractor access after hours, and get a full audit of who entered your campus today.",
+      stat: '<100 ms per scan',
+    },
+    {
+      icon: '🎪',
+      title: 'Events & Venues',
+      desc: 'Scan 2,000 tickets per hour offline without WiFi. Prevent reprints with HMAC-signed, single-use QR codes.',
+      stat: 'Works 100% offline',
+    },
+    {
+      icon: '🏖️',
+      title: 'Clubs & Marinas',
+      desc: 'Differentiate member tiers, limit guest quota per member, and give receptionists a lightweight tablet app.',
+      stat: 'Unlimited gates per plan',
+    },
+  ];
+
+  return (
+    <section id="use-cases" className="px-6 py-24 sm:py-32 bg-slate-50/50">
+      <div className="mx-auto max-w-7xl">
+        <div className="text-center mb-16">
+          <p className="text-sm font-bold uppercase tracking-widest text-indigo-600 mb-3">USE CASES</p>
+          <h2 className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
+            Built for every access-controlled venue
+          </h2>
+          <p className="mt-4 text-lg text-slate-500 max-w-2xl mx-auto">
+            Whether you manage a compound of 500 villas or a beach club with 3,000 members, GateFlow adapts to your workflow.
+          </p>
+        </div>
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          {cases.map((c) => (
+            <div key={c.title} className="group rounded-2xl bg-white border border-slate-100 p-7 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all">
+              <span className="text-4xl">{c.icon}</span>
+              <h3 className="mt-4 text-lg font-bold text-slate-900">{c.title}</h3>
+              <p className="mt-2 text-sm text-slate-500 leading-relaxed">{c.desc}</p>
+              <p className="mt-4 text-xs font-bold text-indigo-600 bg-indigo-50 inline-block rounded-full px-3 py-1">{c.stat}</p>
+            </div>
+          ))}
+        </div>
+        <div className="mt-10 text-center">
+          <Link
+            href="/contact"
+            className="rounded-xl bg-indigo-700 px-8 py-4 text-base font-bold text-white shadow-lg shadow-indigo-600/30 hover:bg-indigo-600 hover:-translate-y-0.5 transition-all"
+          >
+            Tell us about your facility →
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── Security ─────────────────────────────────────────────────────────────────
+
+function Security() {
+  const items = [
+    {
+      icon: '🔐',
+      title: 'HMAC-SHA256 Signed QR',
+      desc: 'Every QR code is cryptographically signed. Reprints and fakes are rejected immediately — even offline.',
+    },
+    {
+      icon: '🛡️',
+      title: 'Role-Based Access Control',
+      desc: 'Assign TENANT_ADMIN, TENANT_USER, and VISITOR roles. Every API action is scoped to the authenticated organization.',
+    },
+    {
+      icon: '🔒',
+      title: 'AES-256 Offline Storage',
+      desc: 'Scans queued while offline are encrypted at rest with AES-256 + PBKDF2 key derivation. Nothing sensitive ever hits disk unprotected.',
+    },
+    {
+      icon: '📋',
+      title: 'Full Audit Trail',
+      desc: 'Every scan, override, and admin action is permanently logged with timestamps, gate IDs, and operator identity.',
+    },
+    {
+      icon: '🔄',
+      title: 'Token Rotation',
+      desc: 'JWT access tokens expire in 15 minutes. Refresh tokens rotate on use, with revocation on logout or detected anomaly.',
+    },
+    {
+      icon: '🚧',
+      title: 'Rate Limiting & CSRF',
+      desc: 'All login and API routes are rate-limited via Redis. Every mutating request is protected by the double-submit CSRF pattern.',
+    },
+  ];
+
+  return (
+    <section id="security" className="px-6 py-24 sm:py-32">
+      <div className="mx-auto max-w-7xl">
+        <div className="text-center mb-16">
+          <p className="text-sm font-bold uppercase tracking-widest text-indigo-600 mb-3">SECURITY</p>
+          <h2 className="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
+            Zero-trust from the ground up
+          </h2>
+          <p className="mt-4 text-lg text-slate-500 max-w-2xl mx-auto">
+            GateFlow is built on the same security principles used in banking applications. Your access data is never an afterthought.
+          </p>
+        </div>
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {items.map((item) => (
+            <div key={item.title} className="rounded-2xl bg-slate-900 p-7 text-white">
+              <span className="text-3xl">{item.icon}</span>
+              <h3 className="mt-4 text-base font-bold text-white">{item.title}</h3>
+              <p className="mt-2 text-sm text-slate-400 leading-relaxed">{item.desc}</p>
+            </div>
           ))}
         </div>
       </div>

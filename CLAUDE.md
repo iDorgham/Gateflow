@@ -414,7 +414,7 @@ export async function GET(request: NextRequest) {
 | Supervisor override (scanner)        | ✅     |
 | Advanced analytics                   | ❌     |
 | Admin dashboard (basic)              | ✅     |
-| Marketing site polish                | ❌     |
+| Marketing site polish                | ✅     |
 
 ### Phase 2 — Resident Portal (Q3-Q4 2026)
 The Resident Portal introduces a new `RESIDENT` role allowing unit owners to self-manage visitor QR codes with quota limits based on unit type. See `docs/PRD_v5.0.md` and `docs/RESIDENT_PORTAL_SPEC.md` for full spec.

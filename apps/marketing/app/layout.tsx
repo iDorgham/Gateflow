@@ -54,7 +54,7 @@ function Nav() {
             href="/#use-cases"
             className="text-sm font-semibold text-slate-600 hover:text-indigo-700 transition-colors"
           >
-            Template <span className="text-[10px] text-slate-400 font-normal ml-0.5 align-middle">▼</span>
+            Use Cases <span className="text-[10px] text-slate-400 font-normal ml-0.5 align-middle">▼</span>
           </Link>
           <Link
             href="/pricing"
@@ -66,14 +66,14 @@ function Nav() {
             href="/contact"
             className="text-sm font-semibold text-slate-600 hover:text-indigo-700 transition-colors"
           >
-            Blog
+            Contact
           </Link>
         </nav>
 
         {/* CTA */}
         <div className="flex items-center gap-5">
           <Link
-            href="http://localhost:3001/login"
+            href={`${process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3001'}/login`}
             className="hidden text-sm font-semibold text-slate-600 hover:text-indigo-700 md:block transition-colors"
           >
             Sign In
