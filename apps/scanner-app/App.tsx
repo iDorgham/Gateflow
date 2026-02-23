@@ -515,8 +515,8 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
       const rejectReason = lastRejectedResult.current?.reason;
       getValidAccessToken().then((token) => {
         if (!token) return;
-        const apiBase = process.env.EXPO_PUBLIC_API_URL ?? '';
-        fetch(`${apiBase}/api/override/log`, {
+        const apiBase = process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:3001/api';
+        fetch(`${apiBase}/override/log`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

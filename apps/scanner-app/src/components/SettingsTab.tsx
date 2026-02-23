@@ -9,12 +9,16 @@ import {
   StyleSheet,
   Switch,
   Text,
+  TextInput,
   View,
 } from 'react-native';
+import * as SecureStore from 'expo-secure-store';
 import { getPreferences, setPreference, type AppPreferences } from '../lib/preferences';
 import { clearHistory } from '../lib/scan-history';
 import { scanQueue } from '../lib/offline-queue';
 import { clearNonceCache } from '../lib/qr-verify';
+
+const SUPERVISOR_PIN_KEY = 'supervisor_pin';
 
 const TOP_OFFSET = Platform.OS === 'android'
   ? (StatusBar.currentHeight ?? 24) + 20
@@ -123,6 +127,23 @@ export function SettingsTab({ onLogout }: SettingsTabProps) {
   const [isClearingHistory, setIsClearingHistory] = useState(false);
   const [isClearingNonce, setIsClearingNonce] = useState(false);
 
+  // ── Supervisor PIN state ────────────────────────────────────────────────
+  const [pinConfigured, setPinConfigured] = useState<boolean>(false);
+  const [showPinInput, setShowPinInput] = useState<'set' | 'change' | null>(null);
+  const [pinValue, setPinValue] = useState('');
+  const [pinConfirm, setPinConfirm] = useState('');
+  const [pinError, setPinError] = useState('');
+  const [pinBusy, setPinBusy] = useState(false);
+
+  const refreshPinStatus = useCallback(async () => {
+    try {
+      const stored = await SecureStore.getItemAsync(SUPERVISOR_PIN_KEY);
+      setPinConfigured(stored !== null);
+    } catch {
+      setPinConfigured(false);
+    }
+  }, []);
+
   const loadPrefs = useCallback(async () => {
     const p = await getPreferences();
     setPrefs(p);
@@ -131,7 +152,8 @@ export function SettingsTab({ onLogout }: SettingsTabProps) {
 
   useEffect(() => {
     loadPrefs();
-  }, [loadPrefs]);
+    refreshPinStatus();
+  }, [loadPrefs, refreshPinStatus]);
 
   async function toggle<K extends keyof AppPreferences>(key: K, value: AppPreferences[K]) {
     setPrefs((prev) => ({ ...prev, [key]: value }));
@@ -206,6 +228,71 @@ export function SettingsTab({ onLogout }: SettingsTabProps) {
               Alert.alert('Error', 'Failed to clear nonce cache. Please try again.');
             } finally {
               setIsClearingNonce(false);
+            }
+          },
+        },
+      ],
+    );
+  };
+
+  // ── Supervisor PIN handlers ─────────────────────────────────────────────
+
+  const openSetPin = () => {
+    setPinValue('');
+    setPinConfirm('');
+    setPinError('');
+    setShowPinInput('set');
+  };
+
+  const openChangePin = () => {
+    setPinValue('');
+    setPinConfirm('');
+    setPinError('');
+    setShowPinInput('change');
+  };
+
+  const handleSavePin = async () => {
+    if (pinValue.length < 4 || pinValue.length > 6) {
+      setPinError('PIN must be 4–6 digits.');
+      return;
+    }
+    if (!/^\d+$/.test(pinValue)) {
+      setPinError('PIN must contain digits only.');
+      return;
+    }
+    if (pinValue !== pinConfirm) {
+      setPinError('PINs do not match.');
+      return;
+    }
+    setPinBusy(true);
+    try {
+      await SecureStore.setItemAsync(SUPERVISOR_PIN_KEY, pinValue);
+      setPinConfigured(true);
+      setShowPinInput(null);
+      Alert.alert('PIN Saved', 'Supervisor PIN has been saved securely on this device.');
+    } catch {
+      setPinError('Failed to save PIN. Please try again.');
+    } finally {
+      setPinBusy(false);
+    }
+  };
+
+  const handleClearPin = () => {
+    Alert.alert(
+      'Remove Supervisor PIN',
+      'This will remove the supervisor PIN from this device. Override requests will only be possible via force-override (fully logged).',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Remove PIN',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await SecureStore.deleteItemAsync(SUPERVISOR_PIN_KEY);
+              setPinConfigured(false);
+              Alert.alert('PIN Removed', 'Supervisor PIN has been removed from this device.');
+            } catch {
+              Alert.alert('Error', 'Failed to remove PIN. Please try again.');
             }
           },
         },
@@ -290,6 +377,83 @@ export function SettingsTab({ onLogout }: SettingsTabProps) {
               busy={isClearingNonce}
               danger
             />
+          </Section>
+
+          {/* Supervisor PIN */}
+          <Section title="Supervisor Override PIN">
+            {showPinInput ? (
+              <View style={s.pinInputBlock}>
+                <Text style={s.pinInputLabel}>
+                  {showPinInput === 'set' ? 'Set a new supervisor PIN (4–6 digits):' : 'Change supervisor PIN (4–6 digits):'}
+                </Text>
+                <TextInput
+                  style={s.pinInput}
+                  value={pinValue}
+                  onChangeText={(t) => { setPinValue(t.replace(/[^0-9]/g, '')); setPinError(''); }}
+                  placeholder="New PIN"
+                  placeholderTextColor="#475569"
+                  secureTextEntry
+                  keyboardType="number-pad"
+                  maxLength={6}
+                />
+                <TextInput
+                  style={[s.pinInput, { marginTop: 8 }]}
+                  value={pinConfirm}
+                  onChangeText={(t) => { setPinConfirm(t.replace(/[^0-9]/g, '')); setPinError(''); }}
+                  placeholder="Confirm PIN"
+                  placeholderTextColor="#475569"
+                  secureTextEntry
+                  keyboardType="number-pad"
+                  maxLength={6}
+                />
+                {!!pinError && <Text style={s.pinError}>{pinError}</Text>}
+                <View style={s.pinBtnRow}>
+                  <Pressable style={[s.pinBtn, s.pinBtnCancel]} onPress={() => setShowPinInput(null)}>
+                    <Text style={s.pinBtnCancelText}>Cancel</Text>
+                  </Pressable>
+                  <Pressable style={[s.pinBtn, s.pinBtnSave]} onPress={handleSavePin} disabled={pinBusy}>
+                    {pinBusy
+                      ? <ActivityIndicator size="small" color="#fff" />
+                      : <Text style={s.pinBtnSaveText}>Save PIN</Text>
+                    }
+                  </Pressable>
+                </View>
+              </View>
+            ) : (
+              <>
+                <View style={s.row}>
+                  <View style={s.rowText}>
+                    <Text style={s.rowLabel}>Supervisor PIN</Text>
+                    <Text style={s.rowSub}>
+                      {pinConfigured ? '✅ PIN configured on this device' : '⚠ No PIN set — only force-override available'}
+                    </Text>
+                  </View>
+                </View>
+                <Divider />
+                {pinConfigured ? (
+                  <>
+                    <ActionRow
+                      label="Change PIN"
+                      sub="Update the supervisor PIN"
+                      onPress={openChangePin}
+                    />
+                    <Divider />
+                    <ActionRow
+                      label="Remove PIN"
+                      sub="Delete PIN from this device"
+                      onPress={handleClearPin}
+                      danger
+                    />
+                  </>
+                ) : (
+                  <ActionRow
+                    label="Set Supervisor PIN"
+                    sub="Required for authenticated overrides"
+                    onPress={openSetPin}
+                  />
+                )}
+              </>
+            )}
           </Section>
 
           {/* Account */}
@@ -427,5 +591,61 @@ const s = StyleSheet.create({
     color: '#334155',
     textAlign: 'center',
     marginTop: 8,
+  },
+
+  // Supervisor PIN input
+  pinInputBlock: {
+    padding: 18,
+    gap: 4,
+  },
+  pinInputLabel: {
+    fontSize: 13,
+    color: '#94a3b8',
+    marginBottom: 10,
+  },
+  pinInput: {
+    backgroundColor: '#1e293b',
+    borderWidth: 1,
+    borderColor: '#334155',
+    borderRadius: 10,
+    paddingVertical: 11,
+    paddingHorizontal: 14,
+    fontSize: 16,
+    color: '#f1f5f9',
+    letterSpacing: 4,
+  },
+  pinError: {
+    fontSize: 13,
+    color: '#fca5a5',
+    marginTop: 6,
+  },
+  pinBtnRow: {
+    flexDirection: 'row',
+    gap: 10,
+    marginTop: 14,
+  },
+  pinBtn: {
+    flex: 1,
+    paddingVertical: 12,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  pinBtnCancel: {
+    backgroundColor: '#1e293b',
+    borderWidth: 1,
+    borderColor: '#334155',
+  },
+  pinBtnCancelText: {
+    color: '#94a3b8',
+    fontWeight: '600',
+    fontSize: 14,
+  },
+  pinBtnSave: {
+    backgroundColor: '#2563eb',
+  },
+  pinBtnSaveText: {
+    color: '#fff',
+    fontWeight: '600',
+    fontSize: 14,
   },
 });
