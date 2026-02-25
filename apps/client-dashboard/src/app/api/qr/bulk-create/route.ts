@@ -21,6 +21,25 @@ const BulkCreateRequestSchema = z.object({
 });
 
 type BulkItem = z.infer<typeof BulkCreateItemSchema>;
+type QRTypeKey = 'SINGLE' | 'RECURRING' | 'PERMANENT';
+
+function toTypesQRCodeType(t: QRTypeKey): QRCodeType {
+  const map: Record<QRTypeKey, QRCodeType> = {
+    SINGLE: QRCodeType.SINGLE,
+    RECURRING: QRCodeType.RECURRING,
+    PERMANENT: QRCodeType.PERMANENT,
+  };
+  return map[t];
+}
+
+function toPrismaQRCodeType(t: QRTypeKey): PrismaQRCodeType {
+  const map: Record<QRTypeKey, PrismaQRCodeType> = {
+    SINGLE: PrismaQRCodeType.SINGLE,
+    RECURRING: PrismaQRCodeType.RECURRING,
+    PERMANENT: PrismaQRCodeType.PERMANENT,
+  };
+  return map[t];
+}
 
 interface ValidatedItem {
   original: BulkItem;
@@ -127,7 +146,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
           {
             qrId,
             organizationId: claims.orgId,
-            type: item.type as unknown as QRCodeType,
+            type: toTypesQRCodeType(item.type),
             maxUses: resolvedMaxUses,
             expiresAt,
             issuedAt: new Date().toISOString(),
@@ -162,7 +181,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
           await tx.qRCode.create({
             data: {
               code: v.qrString,
-              type: v.original.type as unknown as PrismaQRCodeType,
+              type: toPrismaQRCodeType(v.original.type),
               organizationId: claims.orgId!,
               gateId: v.gateId,
               maxUses: v.resolvedMaxUses,

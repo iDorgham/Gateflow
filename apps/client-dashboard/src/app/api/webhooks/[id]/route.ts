@@ -4,6 +4,8 @@ import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma } from '@gate-access/db';
 import { revalidatePath } from 'next/cache';
 
+export const dynamic = 'force-dynamic';
+
 
 const ALL_EVENTS = [
   'QR_CREATED',

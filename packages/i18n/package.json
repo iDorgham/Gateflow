@@ -7,7 +7,7 @@
   "exports": {
     ".": "./src/index.ts",
     "./en": "./src/locales/en.json",
-    "./ar": "./src/locales/ar.json"
+    "./ar": "./src/locales/ar-EG.json"
   },
   "scripts": {
     "lint": "eslint src/",

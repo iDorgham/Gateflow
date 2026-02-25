@@ -56,11 +56,15 @@ export async function getCsrfTokenServer(): Promise<string | null> {
 }
 
 /**
- * Generate a secure CSRF token (server-side)
+ * Generate a secure CSRF token.
+ * Uses Web Crypto API (available in both Node.js 18+ and browser).
  */
 export function generateCsrfToken(): string {
-  const crypto = require('crypto');
-  return crypto.randomBytes(32).toString('hex');
+  const arr = new Uint8Array(32);
+  globalThis.crypto.getRandomValues(arr);
+  return Array.from(arr)
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
 }
 
 export { CSRF_COOKIE, CSRF_HEADER };

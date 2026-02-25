@@ -61,12 +61,9 @@ async function getOrCreateSalt(): Promise<string> {
   return salt;
 }
 
-function generateScanUuid(): string {
-  // Generate a UUID v4 using expo-crypto random bytes
-  const bytes = new Uint8Array(16);
-  for (let i = 0; i < 16; i++) {
-    bytes[i] = Math.floor(Math.random() * 256);
-  }
+async function generateScanUuid(): Promise<string> {
+  // Generate a cryptographically secure UUID v4 using expo-crypto
+  const bytes = await Crypto.getRandomBytesAsync(16);
   // Set version (4) and variant (10xx) bits per RFC 4122
   bytes[6] = (bytes[6] & 0x0f) | 0x40;
   bytes[8] = (bytes[8] & 0x3f) | 0x80;
@@ -171,7 +168,7 @@ export const scanQueue = {
       throw new Error('Authentication required. Please log in first.');
     }
 
-    const scanUuid = generateScanUuid();
+    const scanUuid = await generateScanUuid();
     const queue = await this.getQueue();
 
     const scanData = JSON.stringify({
@@ -182,8 +179,12 @@ export const scanQueue = {
 
     const encryptedData = await encryption.encrypt(scanData);
 
+    const idBytes = await Crypto.getRandomBytesAsync(4);
+    const idSuffix = Array.from(idBytes)
+      .map((b) => b.toString(16).padStart(2, '0'))
+      .join('');
     const newScan: EncryptedQueueItem = {
-      id: `scan_${Date.now()}_${Math.random().toString(36).substring(7)}`,
+      id: `scan_${Date.now()}_${idSuffix}`,
       scanUuid,
       encryptedData,
       scannedAt: new Date().toISOString(),
@@ -329,7 +330,11 @@ async function bulkSyncScans(scans: QueuedScan[]): Promise<{
     throw new Error(`Sync failed: ${response.status}`);
   }
 
-  return response.json();
+  try {
+    return await response.json();
+  } catch {
+    throw new Error(`Sync failed: server returned non-JSON response (status ${response.status})`);
+  }
 }
 
 export const syncManager = {

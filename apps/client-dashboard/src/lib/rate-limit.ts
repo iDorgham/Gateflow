@@ -1,149 +1,176 @@
 /**
- * Redis-backed rate limiter with fallback to in-memory.
+ * Redis-backed rate limiter using @upstash/ratelimit (sliding window).
  *
- * Supports multi-instance deployments via shared Redis.
- * Falls back to in-memory if Redis is unavailable (dev mode).
+ * Falls back to an in-memory sliding window when Redis is not configured
+ * (development / local environments). In production, UPSTASH_REDIS_REST_URL
+ * and UPSTASH_REDIS_REST_TOKEN must be set.
  *
- * Window: configurable, default 60s, default ceiling: 100 requests per key.
+ * Public API (async):
+ *   await checkRateLimit(key, max?, windowMs?) → RateLimitResult
+ *
+ * Multi-instance safe: all replicas share the same Redis counters.
  */
 
+import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
+
+// ─── Constants ────────────────────────────────────────────────────────────────
 
 export const RATE_LIMIT_WINDOW_MS = 60_000;
 export const RATE_LIMIT_MAX = 100;
+
+// ─── Types ────────────────────────────────────────────────────────────────────
 
 export interface RateLimitResult {
   allowed: boolean;
   limit: number;
   remaining: number;
+  /** Milliseconds until the client may retry (0 when allowed). */
   retryAfterMs: number;
 }
 
-// In-memory fallback store
-const _memoryStore = new Map<string, number[]>();
+// ─── Module-level singletons ──────────────────────────────────────────────────
 
 let _redis: Redis | null = null;
-let _useRedis = false;
 let _initialized = false;
 
-// Auto-initialize Redis on first use
-function _ensureInitialized(): void {
+/** Cache Ratelimit instances keyed by "max:windowSec" to avoid re-creating per request. */
+const _limiterCache = new Map<string, Ratelimit>();
+
+/** In-memory sliding-window store: key → array of timestamps (fallback only). */
+const _memoryStore = new Map<string, number[]>();
+
+// ─── Initialization ───────────────────────────────────────────────────────────
+
+function ensureInitialized(): void {
   if (_initialized) return;
   _initialized = true;
-  initRedisRateLimiter();
-}
 
-// Initialize Redis connection (call once at startup)
-export function initRedisRateLimiter(): void {
-  const redisUrl = process.env.UPSTASH_REDIS_REST_URL;
-  const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = process.env.UPSTASH_REDIS_REST_URL;
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
 
-  if (redisUrl && redisToken) {
-    _redis = new Redis({
-      url: redisUrl,
-      token: redisToken,
-    });
-    _useRedis = true;
-    console.log('[rate-limit] Using Upstash Redis for rate limiting');
+  if (url && token) {
+    _redis = new Redis({ url, token });
+    if (process.env.NODE_ENV !== 'test') {
+      console.log('[rate-limit] Upstash Redis connected — multi-instance rate limiting active');
+    }
   } else {
-    console.warn(
-      '[rate-limit] No Redis config — using in-memory fallback (not scalable)'
-    );
+    if (process.env.NODE_ENV !== 'test') {
+      console.warn(
+        '[rate-limit] UPSTASH_REDIS_REST_URL / TOKEN not set — ' +
+          'falling back to in-memory rate limiting (not scalable across instances)',
+      );
+    }
   }
 }
 
-// Check if Redis is configured
-export function isUsingRedis(): boolean {
-  return _useRedis;
+/** Returns (or creates and caches) a Ratelimit instance for the given config. */
+function getLimiter(max: number, windowMs: number): Ratelimit {
+  const windowSec = Math.ceil(windowMs / 1000);
+  const key = `${max}:${windowSec}`;
+
+  let limiter = _limiterCache.get(key);
+  if (!limiter) {
+    limiter = new Ratelimit({
+      redis: _redis!,
+      limiter: Ratelimit.slidingWindow(max, `${windowSec} s`),
+      prefix: '@gateflow/rl',
+    });
+    _limiterCache.set(key, limiter);
+  }
+  return limiter;
 }
 
+// ─── Public API ───────────────────────────────────────────────────────────────
+
 /**
- * Check and record a request for `key`.
+ * Record and check a request for `key`.
+ * Returns whether the request is allowed and metadata for rate-limit headers.
  *
- * @param key      Unique per-subject identifier (e.g. `userId`, IP address).
- * @param max      Override the default ceiling.
- * @param windowMs Override the default window.
+ * @param key      Unique per-subject identifier (e.g. `login:${ip}`, `validate:${userId}`).
+ * @param max      Maximum requests per window (default: 100).
+ * @param windowMs Window duration in milliseconds (default: 60 000).
  */
-export function checkRateLimit(
+export async function checkRateLimit(
   key: string,
   max = RATE_LIMIT_MAX,
-  windowMs = RATE_LIMIT_WINDOW_MS
-): RateLimitResult {
-  _ensureInitialized();
+  windowMs = RATE_LIMIT_WINDOW_MS,
+): Promise<RateLimitResult> {
+  ensureInitialized();
 
-  if (_useRedis && _redis) {
-    return checkRateLimitRedis(key, max, windowMs);
-  }
-  return checkRateLimitMemory(key, max, windowMs);
-}
-
-/**
- * Redis-backed rate limiting using Upstash sliding window.
- */
-function checkRateLimitRedis(
-  key: string,
-  max: number,
-  windowMs: number
-): RateLimitResult {
-  const redisKey = `ratelimit:${key}`;
-  const now = Date.now();
-  const windowStart = now - windowMs;
-
-  try {
-    // Use Redis pipeline for atomic operations
-    const pipeline = _redis!.pipeline();
-
-    // Remove old entries outside the window
-    pipeline.zremrangebyscore(redisKey, 0, windowStart);
-
-    // Count current requests in window
-    pipeline.zcard(redisKey);
-
-    // Add current request
-    pipeline.zadd(redisKey, { score: now, member: `${now}:${Math.random()}` });
-
-    // Set expiry on the key
-    pipeline.expire(redisKey, Math.ceil(windowMs / 1000));
-
-    const results = pipeline.exec();
-    const currentCount = results?.[1] as number;
-
-    if (currentCount >= max) {
-      // Rate limited
+  if (_redis !== null) {
+    try {
+      const { success, limit, remaining, reset } = await getLimiter(max, windowMs).limit(key);
       return {
-        allowed: false,
-        limit: max,
-        remaining: 0,
-        retryAfterMs: windowMs,
+        allowed: success,
+        limit,
+        remaining,
+        // `reset` is a Unix timestamp in milliseconds (Upstash Ratelimit v2)
+        retryAfterMs: success ? 0 : Math.max(0, reset - Date.now()),
       };
+    } catch (err) {
+      console.error('[rate-limit] Redis error — falling back to in-memory:', err);
+      // Graceful degradation: use in-memory on Redis failure
     }
-
-    return {
-      allowed: true,
-      limit: max,
-      remaining: max - currentCount - 1,
-      retryAfterMs: 0,
-    };
-  } catch (error) {
-    console.error('[rate-limit] Redis error, falling back to memory:', error);
-    return checkRateLimitMemory(key, max, windowMs);
   }
+
+  return memoryRateLimit(key, max, windowMs);
+}
+
+/** Check without incrementing (read-only status). */
+export async function getRateLimitStatus(
+  key: string,
+  max = RATE_LIMIT_MAX,
+  windowMs = RATE_LIMIT_WINDOW_MS,
+): Promise<RateLimitResult> {
+  ensureInitialized();
+
+  if (_redis !== null) {
+    try {
+      // The @upstash/ratelimit library doesn't expose a read-only check,
+      // so we use the raw Redis ZCARD on the key it would create.
+      const redisKey = `@gateflow/rl:${key}`;
+      const count = (await _redis.zcard(redisKey)) as number;
+      return {
+        allowed: count < max,
+        limit: max,
+        remaining: Math.max(0, max - count),
+        retryAfterMs: count >= max ? windowMs : 0,
+      };
+    } catch {
+      /* fall through */
+    }
+  }
+
+  const timestamps = (_memoryStore.get(key) ?? []).filter((t) => t > Date.now() - windowMs);
+  return {
+    allowed: timestamps.length < max,
+    limit: max,
+    remaining: Math.max(0, max - timestamps.length),
+    retryAfterMs: timestamps.length >= max ? Math.max(0, timestamps[0] + windowMs - Date.now()) : 0,
+  };
+}
+
+/** @returns true when Redis is configured and reachable. */
+export function isUsingRedis(): boolean {
+  ensureInitialized();
+  return _redis !== null;
 }
 
 /**
- * In-memory sliding window rate limiter (fallback).
+ * Legacy no-op kept for backward compatibility.
+ * Initialization is now lazy and automatic.
  */
-function checkRateLimitMemory(
-  key: string,
-  max: number,
-  windowMs: number
-): RateLimitResult {
+export function initRedisRateLimiter(): void {
+  ensureInitialized();
+}
+
+// ─── In-memory sliding window (fallback / dev / test) ────────────────────────
+
+function memoryRateLimit(key: string, max: number, windowMs: number): RateLimitResult {
   const now = Date.now();
   const windowStart = now - windowMs;
-
-  const timestamps = (_memoryStore.get(key) ?? []).filter(
-    (t) => t > windowStart
-  );
+  const timestamps = (_memoryStore.get(key) ?? []).filter((t) => t > windowStart);
 
   if (timestamps.length >= max) {
     const retryAfterMs = Math.max(0, timestamps[0] + windowMs - now);
@@ -152,46 +179,13 @@ function checkRateLimitMemory(
 
   timestamps.push(now);
   _memoryStore.set(key, timestamps);
-
-  return {
-    allowed: true,
-    limit: max,
-    remaining: max - timestamps.length,
-    retryAfterMs: 0,
-  };
+  return { allowed: true, limit: max, remaining: max - timestamps.length, retryAfterMs: 0 };
 }
 
-/**
- * Reset all rate-limit state (for testing).
- */
+/** Reset all in-memory state. Used in tests only. */
 export function _resetRateLimitStore(): void {
   _memoryStore.clear();
-}
-
-/**
- * Get current rate limit status without incrementing (for display).
- */
-export async function getRateLimitStatus(
-  key: string,
-  max = RATE_LIMIT_MAX,
-  windowMs = RATE_LIMIT_WINDOW_MS
-): Promise<RateLimitResult> {
-  if (_useRedis && _redis) {
-    const redisKey = `ratelimit:${key}`;
-    const now = Date.now();
-    const windowStart = now - windowMs;
-
-    try {
-      const currentCount = await _redis.zcard(redisKey);
-      return {
-        allowed: currentCount < max,
-        limit: max,
-        remaining: Math.max(0, max - currentCount),
-        retryAfterMs: currentCount >= max ? windowMs : 0,
-      };
-    } catch {
-      return checkRateLimitMemory(key, max, windowMs);
-    }
-  }
-  return checkRateLimitMemory(key, max, windowMs);
+  _limiterCache.clear();
+  _redis = null;
+  _initialized = false;
 }

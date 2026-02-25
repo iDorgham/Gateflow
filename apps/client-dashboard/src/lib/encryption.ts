@@ -1,26 +1,53 @@
 /**
- * Field-level encryption utilities for sensitive data
+ * Field-level encryption utilities — AES-256-GCM
  *
- * Uses AES-256-GCM with a master key from environment variables
+ * Storage format: "enc:v1:" + base64(IV[12] + GCM-tag[16] + ciphertext)
+ *
+ * The "enc:v1:" prefix lets callers distinguish encrypted values from
+ * plaintext at a glance without attempting a decryption trial.
+ *
+ * Backward compatibility: decryptField() accepts old values that lack the
+ * prefix (created before this prefix was introduced).
  */
 
 import { createCipheriv, createDecipheriv, randomBytes } from 'crypto';
 
+// ─── Format prefix ────────────────────────────────────────────────────────────
+
+export const ENCRYPTED_PREFIX = 'enc:v1:';
+
+// ─── Master key ───────────────────────────────────────────────────────────────
+
 const RAW_KEY = process.env.ENCRYPTION_MASTER_KEY;
 
 if (!RAW_KEY) {
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error(
+      '[encryption] ENCRYPTION_MASTER_KEY must be set in production. ' +
+        'Generate one with: openssl rand -hex 32',
+    );
+  }
   console.warn(
-    '[encryption] ENCRYPTION_MASTER_KEY not set - using fallback (not secure for production)'
+    '[encryption] ENCRYPTION_MASTER_KEY not set — using all-zero fallback key. ' +
+      'This is INSECURE outside local development.',
   );
 }
 
-// Ensure key is exactly 32 bytes (256 bits)
-function getMasterKey(): Buffer {
-  // 64 hex chars = 32 bytes fallback for dev
-  const keyHex = RAW_KEY || '0000000000000000000000000000000000000000000000000000000000000000';
+/**
+ * Parse and cache the master key once at module load.
+ * Expected value: 64 hex characters (= 32 bytes / 256 bits).
+ */
+function buildMasterKey(): Buffer {
+  const keyHex =
+    RAW_KEY ?? '0000000000000000000000000000000000000000000000000000000000000000';
   let key = Buffer.from(keyHex, 'hex');
   if (key.length !== 32) {
-    // Pad or truncate to 32 bytes if the env var is misconfigured
+    // Pad or truncate misconfigured keys — never silently accept a weak key in prod
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error(
+        `[encryption] ENCRYPTION_MASTER_KEY must be exactly 64 hex characters (got ${key.length * 2}).`,
+      );
+    }
     const padded = Buffer.alloc(32);
     key.copy(padded);
     key = padded;
@@ -28,56 +55,67 @@ function getMasterKey(): Buffer {
   return key;
 }
 
+const MASTER_KEY: Buffer = buildMasterKey();
+
+// ─── Public helpers ───────────────────────────────────────────────────────────
+
 /**
- * Encrypt a plaintext value
+ * Encrypt a plaintext string.
+ * Returns a string with the "enc:v1:" prefix so it is unambiguously
+ * identifiable as an encrypted value.
  */
 export function encryptField(plaintext: string): string {
-  const key = getMasterKey();
-  const iv = randomBytes(12); // GCM standard IV length
-  const cipher = createCipheriv('aes-256-gcm', key, iv);
-  
-  const encrypted = Buffer.concat([
-    cipher.update(plaintext, 'utf8'),
-    cipher.final(),
-  ]);
-  const tag = cipher.getAuthTag();
-  
-  // Pack as: IV (12 bytes) + Tag (16 bytes) + Ciphertext
-  return Buffer.concat([iv, tag, encrypted]).toString('base64');
+  const iv = randomBytes(12); // 96-bit GCM IV
+  const cipher = createCipheriv('aes-256-gcm', MASTER_KEY, iv);
+
+  const encrypted = Buffer.concat([cipher.update(plaintext, 'utf8'), cipher.final()]);
+  const tag = cipher.getAuthTag(); // 128-bit authentication tag
+
+  // Layout: IV (12 B) | Tag (16 B) | Ciphertext (N B)
+  return ENCRYPTED_PREFIX + Buffer.concat([iv, tag, encrypted]).toString('base64');
 }
 
 /**
- * Decrypt an encrypted value
+ * Decrypt a value produced by encryptField().
+ * Also accepts old values that lack the "enc:v1:" prefix (backward compat).
  */
-export function decryptField(ciphertextBase64: string): string {
-  const key = getMasterKey();
-  const data = Buffer.from(ciphertextBase64, 'base64');
-  
-  // Extract parts: IV (12), Tag (16), Ciphertext (rest)
+export function decryptField(value: string): string {
+  const b64 = value.startsWith(ENCRYPTED_PREFIX)
+    ? value.slice(ENCRYPTED_PREFIX.length)
+    : value; // backward compat: old format had no prefix
+
+  const data = Buffer.from(b64, 'base64');
+
   if (data.length < 28) {
-    throw new Error('Decryption failed - invalid data format');
+    throw new Error('[encryption] Decryption failed — data too short (invalid format)');
   }
-  
+
   const iv = data.subarray(0, 12);
   const tag = data.subarray(12, 28);
-  const encrypted = data.subarray(28);
-  
-  const decipher = createDecipheriv('aes-256-gcm', key, iv);
+  const ciphertext = data.subarray(28);
+
+  const decipher = createDecipheriv('aes-256-gcm', MASTER_KEY, iv);
   decipher.setAuthTag(tag);
-  
+
   try {
-    const decrypted = Buffer.concat([
-      decipher.update(encrypted),
-      decipher.final(),
-    ]);
+    const decrypted = Buffer.concat([decipher.update(ciphertext), decipher.final()]);
     return decrypted.toString('utf8');
-  } catch (error) {
-    throw new Error('Decryption failed - invalid key or corrupted data');
+  } catch {
+    throw new Error('[encryption] Decryption failed — wrong key or corrupted data');
   }
 }
 
 /**
- * Generate a random secret
+ * Returns true when the value was produced by encryptField() with the
+ * current "enc:v1:" prefix.  Values lacking the prefix are either plaintext
+ * or were encrypted before the prefix convention was introduced.
+ */
+export function isEncryptedField(value: string): boolean {
+  return value.startsWith(ENCRYPTED_PREFIX);
+}
+
+/**
+ * Generate a cryptographically random hex secret (e.g. for webhook signing).
  */
 export function generateSecret(): string {
   return randomBytes(32).toString('hex');

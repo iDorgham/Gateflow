@@ -25,17 +25,17 @@ export async function BottomCTA({ locale }: { locale: Locale }) {
               </p>
             </div>
 
-            <div className="bg-background/50 backdrop-blur p-2 rounded-2xl border flex flex-col sm:flex-row gap-2">
+            <div className="bg-background/50 backdrop-blur p-1.5 rounded-2xl border flex flex-col sm:flex-row gap-2">
                <input 
                 type="email" 
                 placeholder={t('cta.emailPlaceholder')}
                 className="flex-1 bg-transparent px-6 py-4 outline-none font-medium placeholder:text-muted-foreground text-foreground"
                />
-               <Button size="lg" className="h-full rounded-xl px-8 font-bold transition-colors" asChild>
-                  <I18nLink locale={locale} href="/contact">
-                    {tc('buttons.getStarted')}
-                  </I18nLink>
-               </Button>
+                <Button size="lg" className="h-12 sm:h-auto rounded-xl px-8 font-bold transition-colors shrink-0" asChild>
+                   <I18nLink locale={locale} href="/contact">
+                     {tc('buttons.getStarted')}
+                   </I18nLink>
+                </Button>
             </div>
           </div>
         </div>

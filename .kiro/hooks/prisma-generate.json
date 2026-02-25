@@ -1,0 +1,13 @@
+{
+  "name": "Prisma Generate on Schema Change",
+  "version": "1.0.0",
+  "description": "Automatically regenerate Prisma client when schema.prisma is modified",
+  "when": {
+    "type": "fileEdited",
+    "patterns": ["packages/db/prisma/schema.prisma"]
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "cd packages/db && npx prisma generate"
+  }
+}

@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { cn } from '../../lib/utils';
 import { ChevronRight, Circle } from 'lucide-react';
+import { Slot } from '@radix-ui/react-slot';
 
 interface DropdownMenuContextValue {
   open: boolean;
@@ -73,13 +74,14 @@ DropdownMenu.displayName = 'DropdownMenu';
 const DropdownMenuTrigger = React.forwardRef<
   HTMLButtonElement,
   React.ButtonHTMLAttributes<HTMLButtonElement> & { asChild?: boolean }
->(({ className, asChild: _asChild, onClick, ...props }, ref) => {
+>(({ className, asChild = false, onClick, ...props }, ref) => {
   const { open, setOpen } = useDropdownMenu();
+  const Comp = asChild ? Slot : 'button';
   return (
-    <button
+    <Comp
       ref={ref}
-      className={cn('', className)}
-      onClick={(e) => {
+      className={className}
+      onClick={(e: any) => {
         setOpen(!open);
         onClick?.(e);
       }}

@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { requireAuth, isNextResponse } from '@/lib/require-auth';
 import { prisma } from '@gate-access/db';
 
+export const dynamic = 'force-dynamic';
+
 const MAX_RECENT = 100;
 
 /**

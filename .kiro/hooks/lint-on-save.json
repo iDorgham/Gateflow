@@ -1,0 +1,13 @@
+{
+  "name": "Lint on Save",
+  "version": "1.0.0",
+  "description": "Automatically run ESLint when TypeScript or JavaScript files are saved",
+  "when": {
+    "type": "fileEdited",
+    "patterns": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx"]
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "pnpm turbo lint --filter='{./apps/*,./packages/*}' --continue"
+  }
+}

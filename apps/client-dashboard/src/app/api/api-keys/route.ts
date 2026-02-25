@@ -3,6 +3,8 @@ import { z } from 'zod';
 import { randomBytes, createHash } from 'crypto';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma } from '@gate-access/db';
+
+export const dynamic = 'force-dynamic';
 import { revalidatePath } from 'next/cache';
 
 

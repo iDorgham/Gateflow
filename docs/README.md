@@ -17,6 +17,11 @@ Welcome to the central repository for GateFlow documentation. This directory ser
 - [Deployment Guide](./DEPLOYMENT_GUIDE.md) - Vercel and Expo Application Services (EAS) deployment processes.
 - [Environment Variables](./ENVIRONMENT_VARIABLES.md) - API keys, secrets tracking, and structural configurations.
 
+## 🤖 AI Workflow (Skills / Subagents / Rules)
+- [AI Skills, Subagents, and Rules](./AI_SKILLS_SUBAGENTS_RULES.md) - How to use AI effectively in this repo (skills, subagents, non-negotiable rules).
+- [Suggested Improvements and Functions Map](./SUGGESTED_IMPROVEMENTS_AND_FUNCTIONS.md) - Consolidated “what we’re building” map + prioritized improvements.
+- [All Tasks & Backlog](./ALL_TASKS_BACKLOG.md) - Single backlog of MVP launch tasks, Phase 2 work (Resident Portal/Mobile), and platform improvements.
+
 ## 🛡 Operations & Quality
 - [Security Overview](./SECURITY_OVERVIEW.md) - Strict user roles (RBAC), data encryptions, and token validations.
 - [MVP Done Checklist](./MVP_DONE_CHECKLIST.md) - Macro milestone tracking and phase completions.

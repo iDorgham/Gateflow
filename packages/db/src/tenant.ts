@@ -5,6 +5,13 @@ export type OrganizationContext = {
   organizationId: string | null;
 };
 
+// WARNING: This is module-level mutable state shared across all requests in the same
+// Node.js process. Under concurrent Server Component rendering, one request's
+// setOrganizationContext() can bleed into another's DB queries before
+// clearOrganizationContext() runs.
+//
+// Callers MUST call clearOrganizationContext() in a finally block.
+// For a safer alternative, consider Node.js AsyncLocalStorage.
 const organizationContext: OrganizationContext = {
   organizationId: null,
 };

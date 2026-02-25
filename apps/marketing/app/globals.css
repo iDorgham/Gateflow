@@ -5,7 +5,7 @@
 /*
  * GateFlow Design System 2026
  * shadcn/ui · Zinc base · Mira (compact) style
- * Fonts: Inter (EN) · IBM Plex Sans Arabic (AR)
+ * Fonts: Inter (EN) · Cairo (AR)
  */
 
 @layer base {
@@ -108,11 +108,6 @@
   body {
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
-  }
-  
-  /* Arabic Font Handling */
-  [dir="rtl"] body {
-    font-family: 'IBM Plex Sans Arabic', sans-serif;
   }
 }
 

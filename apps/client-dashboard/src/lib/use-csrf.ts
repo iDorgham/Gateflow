@@ -1,21 +1,19 @@
 'use client';
 
 /**
- * CSRF Hook for client components
- *
- * Provides CSRF token for form submissions
+ * CSRF Hook for client components.
+ * For fetch calls outside React components, use csrfFetch() from ./csrf instead.
  */
 
 import { useEffect, useState } from 'react';
 
 const CSRF_COOKIE = 'gf_csrf_token';
-const CSRF_HEADER = 'x-csrf-token';
+export const CSRF_HEADER = 'x-csrf-token';
 
 export function useCsrf() {
   const [csrfToken, setCsrfToken] = useState<string | null>(null);
 
   useEffect(() => {
-    // Read CSRF token from cookie on mount
     const match = document.cookie.match(
       new RegExp('(^| )' + CSRF_COOKIE + '=([^;]+)')
     );
@@ -24,7 +22,6 @@ export function useCsrf() {
     }
   }, []);
 
-  // Refresh CSRF token from cookie
   const refreshCsrf = () => {
     const newMatch = document.cookie.match(
       new RegExp('(^| )' + CSRF_COOKIE + '=([^;]+)')
@@ -35,27 +32,4 @@ export function useCsrf() {
   };
 
   return { csrfToken, refreshCsrf, CSRF_HEADER };
-}
-
-/**
- * Fetch wrapper that automatically adds CSRF token
- */
-export async function csrfFetch(
-  url: string,
-  options: RequestInit = {}
-): Promise<Response> {
-  const { csrfToken, CSRF_HEADER } = useCsrf();
-
-  const headers = new Headers(options.headers);
-  headers.set('Content-Type', 'application/json');
-
-  if (csrfToken) {
-    headers.set(CSRF_HEADER, csrfToken);
-  }
-
-  return fetch(url, {
-    ...options,
-    headers,
-    credentials: 'include',
-  });
 }

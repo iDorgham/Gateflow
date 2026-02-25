@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { cn } from '../lib/utils';
 import { Sheet, SheetContent, SheetTrigger, Button, Avatar, AvatarFallback, AvatarImage } from '@gate-access/ui';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface SidebarItem {
   title: string;
@@ -14,6 +15,7 @@ interface SidebarProps {
   items: SidebarItem[];
   className?: string;
   onClick?: () => void;
+  isCollapsed?: boolean;
 }
 
 interface NavbarProps {
@@ -36,7 +38,7 @@ interface DashboardLayoutProps {
   className?: string;
 }
 
-function Sidebar({ items, className, onClick }: SidebarProps) {
+function Sidebar({ items, className, onClick, isCollapsed }: SidebarProps) {
   return (
     <aside className={cn('flex flex-col gap-2 p-4', className)}>
       {items.map((item) => (
@@ -44,13 +46,15 @@ function Sidebar({ items, className, onClick }: SidebarProps) {
           key={item.href}
           href={item.href}
           onClick={onClick}
+          title={isCollapsed ? item.title : undefined}
           className={cn(
-            'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
-            'hover:bg-accent hover:text-accent-foreground'
+            'flex items-center gap-3 rounded-lg py-2 text-sm font-medium transition-colors',
+            'hover:bg-accent hover:text-accent-foreground',
+            isCollapsed ? 'justify-center px-0 w-10 mx-auto' : 'px-3'
           )}
         >
           {item.icon}
-          {item.title}
+          {!isCollapsed && <span>{item.title}</span>}
         </a>
       ))}
     </aside>
@@ -168,15 +172,45 @@ function DashboardLayout({
   className,
 }: DashboardLayoutProps) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [isCollapsed, setIsCollapsed] = React.useState(false);
 
   return (
-    <div className="flex min-h-screen w-full bg-background">
-      <div className="hidden md:block md:w-64 md:flex-shrink-0">
-        <div className="flex h-full flex-col border-r bg-card">
-          <div className="flex h-16 items-center border-b px-6">
-            <span className="text-lg font-semibold">Gate Access</span>
+    <div className="flex min-h-screen w-full bg-background overflow-hidden">
+      <div 
+        className={cn(
+          "hidden md:block h-screen transition-all duration-300 flex-shrink-0 border-r bg-card",
+          isCollapsed ? "w-20" : "w-64"
+        )}
+      >
+        <div className="flex h-full flex-col">
+          <div className={cn("flex h-16shrink-0 items-center border-b px-6 h-16", isCollapsed ? "justify-center px-0" : "")}>
+            {!isCollapsed ? (
+              <span className="text-lg font-semibold">Gate Access</span>
+            ) : (
+              <span className="text-lg font-bold">G</span>
+            )}
           </div>
-          <Sidebar items={sidebarItems} className="flex-1 overflow-y-auto" />
+          <Sidebar items={sidebarItems} isCollapsed={isCollapsed} className="flex-1 overflow-y-auto" />
+          
+          <div className={cn("mt-auto shrink-0 border-t p-4 flex flex-col gap-2", isCollapsed && "items-center px-2")}>
+            <button
+              onClick={() => setIsCollapsed(!isCollapsed)}
+              className={cn(
+                "group flex items-center gap-3 rounded-xl py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-all duration-200",
+                isCollapsed ? "justify-center w-10 px-0" : "w-full px-4"
+              )}
+              title={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
+            >
+              {isCollapsed ? (
+                <ChevronRight className="h-[17px] w-[17px] shrink-0" />
+              ) : (
+                <>
+                  <ChevronLeft className="h-[17px] w-[17px] shrink-0" />
+                  <span>Collapse</span>
+                </>
+              )}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -196,9 +230,9 @@ function DashboardLayout({
         </SheetContent>
       </Sheet>
 
-      <div className="flex flex-1 flex-col">
+      <div className="flex flex-1 flex-col overflow-hidden h-screen">
         <Navbar user={user} onMenuClick={() => setMobileOpen(true)} />
-        <main className="flex-1 p-4 md:p-6">{children}</main>
+        <main className="flex-1 overflow-y-auto p-4 md:p-6">{children}</main>
       </div>
     </div>
   );

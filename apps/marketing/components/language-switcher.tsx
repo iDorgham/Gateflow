@@ -24,7 +24,7 @@ export function LanguageSwitcher({ currentLocale }: { currentLocale: Locale }) {
 
   const localeLabels: Record<Locale, string> = {
     en: 'English',
-    'ar-EG': 'العربية (مصر)',
+    'ar-EG': 'العربية',
   };
 
   return (

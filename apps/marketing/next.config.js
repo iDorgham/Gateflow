@@ -13,11 +13,12 @@ const nextConfig = {
     return [{ source: '/(.*)', headers: securityHeaders }];
   },
   images: {
+    // Restrict to known image sources. Add specific hostnames as needed
+    // rather than using the insecure wildcard '**'.
     remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**',
-      },
+      { protocol: 'https', hostname: 'images.unsplash.com' },
+      { protocol: 'https', hostname: 'avatars.githubusercontent.com' },
+      { protocol: 'https', hostname: 'lh3.googleusercontent.com' },
     ],
   },
 };

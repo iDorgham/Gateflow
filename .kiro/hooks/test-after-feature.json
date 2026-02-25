@@ -1,0 +1,13 @@
+{
+  "name": "Run Tests After Feature Implementation",
+  "version": "1.0.0",
+  "description": "Automatically run tests after completing a task",
+  "when": {
+    "type": "postTaskExecution"
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "pnpm turbo test --filter='{./apps/*,./packages/*}' --continue",
+    "timeout": 120
+  }
+}

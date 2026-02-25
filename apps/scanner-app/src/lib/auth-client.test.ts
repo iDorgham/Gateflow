@@ -200,6 +200,72 @@ describe('getValidAccessToken()', () => {
   });
 });
 
+// ─── 2b. getValidAccessToken() — concurrent refresh deduplication ─────────────
+
+describe('getValidAccessToken() — concurrent deduplication', () => {
+  it('makes exactly one network request when called concurrently with an expired token', async () => {
+    // Both concurrent calls will see the same expired access token and the
+    // same refresh token.  Only one fetch should be sent to the server.
+    mockGetItem.mockImplementation(async (key: string) => {
+      if (key === 'auth_token') return ACCESS_TOKEN;
+      if (key === 'auth_refresh_token') return REFRESH_TOKEN;
+      return null;
+    });
+    mockJwtDecode.mockReturnValue({ exp: PAST_EXP });
+
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      headers: { get: jest.fn().mockReturnValue(null) },
+      json: () =>
+        Promise.resolve({
+          success: true,
+          data: { accessToken: NEW_ACCESS_TOKEN, refreshToken: NEW_REFRESH_TOKEN },
+        }),
+    });
+
+    const [token1, token2] = await Promise.all([
+      getValidAccessToken(),
+      getValidAccessToken(),
+    ]);
+
+    expect(token1).toBe(NEW_ACCESS_TOKEN);
+    expect(token2).toBe(NEW_ACCESS_TOKEN);
+    // Only one network request despite two concurrent calls.
+    expect(global.fetch).toHaveBeenCalledTimes(1);
+    // Both calls store the rotated tokens.
+    expect(mockSetItem).toHaveBeenCalledWith('auth_token', NEW_ACCESS_TOKEN);
+    expect(mockSetItem).toHaveBeenCalledWith('auth_refresh_token', NEW_REFRESH_TOKEN);
+  });
+
+  it('returns null for all concurrent callers when refresh fails', async () => {
+    mockGetItem.mockImplementation(async (key: string) => {
+      if (key === 'auth_token') return ACCESS_TOKEN;
+      if (key === 'auth_refresh_token') return REFRESH_TOKEN;
+      return null;
+    });
+    mockJwtDecode.mockReturnValue({ exp: PAST_EXP });
+
+    (global.fetch as jest.Mock).mockResolvedValue({
+      ok: false,
+      headers: { get: jest.fn().mockReturnValue(null) },
+      json: () => Promise.resolve({ success: false, message: 'Refresh token expired' }),
+    });
+
+    const [token1, token2] = await Promise.all([
+      getValidAccessToken(),
+      getValidAccessToken(),
+    ]);
+
+    expect(token1).toBeNull();
+    expect(token2).toBeNull();
+    // Still only one network request.
+    expect(global.fetch).toHaveBeenCalledTimes(1);
+    // Both callers cleared tokens on failure.
+    expect(mockDeleteItem).toHaveBeenCalledWith('auth_token');
+    expect(mockDeleteItem).toHaveBeenCalledWith('auth_refresh_token');
+  });
+});
+
 // ─── 3. logout() ─────────────────────────────────────────────────────────────
 
 describe('logout()', () => {

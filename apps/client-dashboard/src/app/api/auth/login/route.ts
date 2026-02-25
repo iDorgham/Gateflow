@@ -16,7 +16,7 @@ const SECURE = process.env.NODE_ENV === 'production';
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const ip = request.ip ?? request.headers.get('x-forwarded-for') ?? 'unknown';
-    const rl = checkRateLimit(`login:${ip}`, 10, 60_000); // 10 requests per minute
+    const rl = await checkRateLimit(`login:${ip}`, 10, 60_000); // 10 requests per minute
     
     if (!rl.allowed) {
       return NextResponse.json(

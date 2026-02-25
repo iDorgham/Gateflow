@@ -1,0 +1,12 @@
+{
+  "name": "Type Check Before Build",
+  "version": "1.0.0",
+  "description": "Run TypeScript type checking when build is requested",
+  "when": {
+    "type": "promptSubmit"
+  },
+  "then": {
+    "type": "runCommand",
+    "command": "if echo \"$PROMPT\" | grep -qi 'build'; then pnpm turbo typecheck; fi"
+  }
+}

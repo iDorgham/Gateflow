@@ -5,13 +5,20 @@ import { UserRole } from '@gate-access/types';
 
 // ─── Configuration ────────────────────────────────────────────────────────────
 
-const JWT_SECRET = new TextEncoder().encode(
-  process.env.NEXTAUTH_SECRET || process.env.JWT_SECRET
-);
+const _jwtSecret = process.env.NEXTAUTH_SECRET ?? process.env.JWT_SECRET;
 
-if (!process.env.NEXTAUTH_SECRET && !process.env.JWT_SECRET) {
-  console.warn('[auth] No JWT secret configured — using fallback is INSECURE in production');
+if (!_jwtSecret || _jwtSecret.length < 32) {
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error(
+      '[auth] NEXTAUTH_SECRET is missing or shorter than 32 characters. ' +
+      'Set NEXTAUTH_SECRET to a random 64-char string before deploying.'
+    );
+  } else {
+    console.warn('[auth] NEXTAUTH_SECRET not set — using insecure fallback. Set it in .env.local');
+  }
 }
+
+const JWT_SECRET = new TextEncoder().encode(_jwtSecret ?? 'dev-insecure-fallback-change-me');
 
 const ACCESS_TOKEN_EXPIRY = '15m';
 const REFRESH_TOKEN_EXPIRY_DAYS = 30;

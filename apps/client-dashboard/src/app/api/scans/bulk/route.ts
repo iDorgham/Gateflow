@@ -6,6 +6,7 @@ import {
 import { prisma, type Prisma } from '@gate-access/db';
 import { getAuditTrail } from '@/lib/types';
 import { requireAuth, isNextResponse } from '@/lib/require-auth';
+import { checkRateLimit } from '@/lib/rate-limit';
 
 interface ConflictResult {
   id: string;
@@ -36,6 +37,22 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const authResult = await requireAuth(request);
     if (isNextResponse(authResult)) return authResult;
+
+    // Rate limit: 30 bulk-sync requests per minute per user
+    const rl = await checkRateLimit(`bulk:${authResult.sub}`, 30, 60_000);
+    if (!rl.allowed) {
+      return NextResponse.json(
+        { success: false, message: 'Too many sync requests. Please try again later.' },
+        {
+          status: 429,
+          headers: {
+            'Retry-After': String(Math.ceil(rl.retryAfterMs / 1000)),
+            'X-RateLimit-Limit': String(rl.limit),
+            'X-RateLimit-Remaining': '0',
+          },
+        },
+      );
+    }
 
     const body = await request.json();
 

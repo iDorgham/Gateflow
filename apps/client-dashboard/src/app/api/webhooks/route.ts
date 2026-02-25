@@ -6,6 +6,8 @@ import { prisma } from '@gate-access/db';
 import { encryptField, decryptField } from '@/lib/encryption';
 import { revalidatePath } from 'next/cache';
 
+export const dynamic = 'force-dynamic';
+
 
 const ALL_EVENTS = [
   'QR_CREATED',

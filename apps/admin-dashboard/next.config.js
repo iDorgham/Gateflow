@@ -12,12 +12,8 @@ const nextConfig = {
     return [{ source: '/(.*)', headers: securityHeaders }];
   },
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**',
-      },
-    ],
+    // No remote images needed in the admin dashboard.
+    remotePatterns: [],
   },
 };
 

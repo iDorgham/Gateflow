@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { cn } from '../../lib/utils';
+import { Slot } from '@radix-ui/react-slot';
 
 interface SheetContextValue {
   open: boolean;
@@ -41,13 +42,14 @@ Sheet.displayName = 'Sheet';
 const SheetTrigger = React.forwardRef<
   HTMLButtonElement,
   React.ButtonHTMLAttributes<HTMLButtonElement> & { asChild?: boolean }
->(({ className, asChild: _asChild, onClick, ...props }, ref) => {
+>(({ className, asChild = false, onClick, ...props }, ref) => {
   const { open, setOpen } = useSheet();
+  const Comp = asChild ? Slot : 'button';
   return (
-    <button
+    <Comp
       ref={ref}
-      className={cn('', className)}
-      onClick={(e) => {
+      className={className}
+      onClick={(e: any) => {
         setOpen(!open);
         onClick?.(e);
       }}

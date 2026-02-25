@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.28.6",
+    "@expo-google-fonts/cairo": "^0.4.2",
     "@expo/vector-icons": "^15.1.1",
     "@gate-access/types": "^0.1.0",
     "@gate-access/ui": "workspace:^",
@@ -22,6 +23,7 @@
     "expo-camera": "~17.0.10",
     "expo-crypto": "~15.0.8",
     "expo-device": "~8.0.10",
+    "expo-font": "^14.0.11",
     "expo-haptics": "~15.0.8",
     "expo-jwt": "^1.8.2",
     "expo-location": "~19.0.8",

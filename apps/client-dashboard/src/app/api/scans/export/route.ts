@@ -3,6 +3,8 @@ import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma } from '@gate-access/db';
 import type { ScanStatus } from '@gate-access/db';
 
+export const dynamic = 'force-dynamic';
+
 const VALID_STATUSES = new Set<string>([
   'SUCCESS',
   'FAILED',
@@ -12,13 +14,16 @@ const VALID_STATUSES = new Set<string>([
   'DENIED',
 ]);
 
-// Escape a single CSV cell value
+// Escape a single CSV cell value.
+// Prefixes formula-injection trigger characters to prevent CSV injection.
+// See OWASP: https://owasp.org/www-community/attacks/CSV_Injection
 function csvCell(value: string | null | undefined): string {
   const s = value ?? '';
-  if (s.includes(',') || s.includes('"') || s.includes('\n')) {
-    return `"${s.replace(/"/g, '""')}"`;
+  const sanitized = /^[=+\-@\t\r]/.test(s) ? `'${s}` : s;
+  if (sanitized.includes(',') || sanitized.includes('"') || sanitized.includes('\n')) {
+    return `"${sanitized.replace(/"/g, '""')}"`;
   }
-  return s;
+  return sanitized;
 }
 
 function buildRow(cells: (string | null | undefined)[]): string {

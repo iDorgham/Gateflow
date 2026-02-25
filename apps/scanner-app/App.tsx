@@ -31,6 +31,14 @@ import { HistoryTab } from './src/components/HistoryTab';
 import { SettingsTab } from './src/components/SettingsTab';
 import { addHistoryEntry } from './src/lib/scan-history';
 import { getPreferences } from './src/lib/preferences';
+import { 
+  useFonts, 
+  Cairo_300Light,
+  Cairo_400Regular,
+  Cairo_500Medium,
+  Cairo_600SemiBold,
+  Cairo_700Bold 
+} from '@expo-google-fonts/cairo';
 
 /** Shared HMAC secret provisioned via .env: EXPO_PUBLIC_QR_SECRET=<32+ chars> */
 const QR_SECRET = process.env.EXPO_PUBLIC_QR_SECRET ?? '';
@@ -93,6 +101,17 @@ function Viewfinder({ processing }: { processing: boolean }) {
 
 export default function App() {
   const [appPhase, setAppPhase] = useState<AppPhase>('initializing');
+  const [fontsLoaded] = useFonts({
+    Cairo_300Light,
+    Cairo_400Regular,
+    Cairo_500Medium,
+    Cairo_600SemiBold,
+    Cairo_700Bold,
+  });
+
+  if (!fontsLoaded) {
+    return null;
+  }
 
   // On mount: check SecureStore for a valid (or refreshable) token.
   // If found → skip login and go straight to scanner.
@@ -1013,7 +1032,7 @@ const styles = StyleSheet.create({
   },
   scannerHeader: {
     fontSize: 20,
-    fontWeight: '700',
+    fontFamily: 'Cairo_700Bold',
     color: '#fff',
     letterSpacing: 0.3,
     textShadowColor: 'rgba(0,0,0,0.6)',
@@ -1022,6 +1041,7 @@ const styles = StyleSheet.create({
   },
   scannerHint: {
     fontSize: 14,
+    fontFamily: 'Cairo_400Regular',
     color: '#cbd5e1',
     textAlign: 'center',
     paddingHorizontal: 24,
@@ -1055,7 +1075,7 @@ const styles = StyleSheet.create({
   topBarBtnText: {
     color: '#e2e8f0',
     fontSize: 13,
-    fontWeight: '500',
+    fontFamily: 'Cairo_500Medium',
   },
   logoutButton: {
     backgroundColor: 'rgba(0,0,0,0.6)',
@@ -1070,7 +1090,7 @@ const styles = StyleSheet.create({
   logoutText: {
     color: '#e2e8f0',
     fontSize: 13,
-    fontWeight: '500',
+    fontFamily: 'Cairo_500Medium',
   },
 
   // ── Feedback layers (processing + result) ─────────────────────────────────
@@ -1088,11 +1108,12 @@ const styles = StyleSheet.create({
   },
   feedbackTitle: {
     fontSize: 28,
-    fontWeight: '700',
+    fontFamily: 'Cairo_700Bold',
     color: '#fff',
   },
   feedbackSub: {
     fontSize: 16,
+    fontFamily: 'Cairo_400Regular',
     color: '#f1f5f9',
     textAlign: 'center',
     paddingHorizontal: 40,
@@ -1114,7 +1135,7 @@ const styles = StyleSheet.create({
   },
   overrideButtonText: {
     fontSize: 15,
-    fontWeight: '600',
+    fontFamily: 'Cairo_600SemiBold',
     color: '#fde68a',
   },
   scanAgainButton: {
@@ -1128,7 +1149,7 @@ const styles = StyleSheet.create({
   },
   scanAgainText: {
     fontSize: 17,
-    fontWeight: '600',
+    fontFamily: 'Cairo_600SemiBold',
     color: '#fff',
   },
 
@@ -1280,7 +1301,7 @@ const decision = StyleSheet.create({
   },
   btnLabel: {
     fontSize: 16,
-    fontWeight: '700',
+    fontFamily: 'Cairo_700Bold',
     color: '#f1f5f9',
     letterSpacing: 0.3,
   },

@@ -21,7 +21,17 @@ const SECURE = process.env.NODE_ENV === 'production';
 
 /** Returns the expected cookie value for the configured access key. */
 export function expectedSessionToken(): string {
-  const key = process.env.ADMIN_ACCESS_KEY ?? 'dev-admin-key-change-in-production';
+  const key = process.env.ADMIN_ACCESS_KEY;
+  if (!key || key.length < 32) {
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error(
+        '[admin-auth] ADMIN_ACCESS_KEY is missing or too short. ' +
+        'Set it to a random 64-char string before deploying.'
+      );
+    }
+    // Dev-only fallback — never reachable in production
+    return createHash('sha256').update('dev-admin-key-change-in-production').digest('hex');
+  }
   return createHash('sha256').update(key).digest('hex');
 }
 

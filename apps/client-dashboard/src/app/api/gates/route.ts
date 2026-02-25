@@ -3,6 +3,8 @@ import { z } from 'zod';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma } from '@gate-access/db';
 
+export const dynamic = 'force-dynamic';
+
 // ─── GET /api/gates ───────────────────────────────────────────────────────────
 // Returns all gates for the authenticated org with live stats.
 // Intended for external consumers (scanner app, mobile) and the 30-s auto-refresh.
@@ -70,7 +72,7 @@ export async function GET(): Promise<NextResponse> {
 
 const CreateGateSchema = z.object({
   name: z.string().min(1, 'Name is required').max(100),
-  location: z.string().min(1, 'Location is required').max(200),
+  location: z.string().max(200).optional(),
 });
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
@@ -100,7 +102,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const gate = await prisma.gate.create({
       data: {
         name: name.trim(),
-        location: location.trim(),
+        location: location?.trim() ?? null,
         organizationId: claims.orgId,
         isActive: true,
       },

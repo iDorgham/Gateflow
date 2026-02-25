@@ -13,3 +13,8 @@ coverage
 .idea
 *.tsbuildinfo
 .expo
+.claude
+.cursor
+.vscode
+trash
+qrcodes

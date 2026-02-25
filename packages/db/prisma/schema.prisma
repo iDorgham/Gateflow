@@ -11,6 +11,7 @@ model Organization {
   id        String   @id @default(cuid())
   name      String
   email     String   @unique
+  logoUrl   String?
   domain    String?  @unique
   plan      Plan     @default(FREE)
   createdAt DateTime @default(now())
@@ -23,6 +24,8 @@ model Organization {
   webhooks  Webhook[]
   apiKeys   ApiKey[]
   projects  Project[]
+  contacts  Contact[]
+  units     Unit[]
 
   @@index([deletedAt])
 }
@@ -30,10 +33,17 @@ model Organization {
 model Project {
   id             String       @id @default(cuid())
   name           String
+  description    String?
+  logoUrl        String?
+  coverUrl       String?
+  website        String?
+  socialMedia    Json?
+  location       String?
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   gates          Gate[]
   qrCodes        QRCode[]
+  units          Unit[]
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
   deletedAt      DateTime?
@@ -45,6 +55,8 @@ model User {
   id           String        @id @default(cuid())
   email        String        @unique
   name         String
+  avatarUrl    String?
+  bio          String?
   passwordHash String
   role         UserRole
   organization Organization? @relation(fields: [organizationId], references: [id])
@@ -262,4 +274,66 @@ model QrShortLink {
   @@index([shortId])
   @@index([organizationId])
   @@index([qrId])
+}
+
+model Contact {
+  id             String        @id @default(cuid())
+  firstName      String
+  lastName       String
+  birthday       DateTime?
+  company        String?
+  phone          String?
+  email          String?
+  organization   Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId String
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  deletedAt      DateTime?
+
+  units ContactUnit[]
+
+  @@index([organizationId])
+  @@index([deletedAt])
+}
+
+model Unit {
+  id             String        @id @default(cuid())
+  name           String
+  type           UnitType
+  qrQuota        Int
+  organization   Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId String
+  project        Project?      @relation(fields: [projectId], references: [id])
+  projectId      String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  deletedAt      DateTime?
+
+  contacts ContactUnit[]
+
+  @@index([organizationId])
+  @@index([projectId])
+  @@index([deletedAt])
+}
+
+model ContactUnit {
+  contactId String
+  unitId    String
+  contact   Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  unit      Unit    @relation(fields: [unitId], references: [id], onDelete: Cascade)
+
+  @@id([contactId, unitId])
+  @@index([contactId])
+  @@index([unitId])
+}
+
+enum UnitType {
+  STUDIO
+  ONE_BR
+  TWO_BR
+  THREE_BR
+  FOUR_BR
+  VILLA
+  PENTHOUSE
+  COMMERCIAL
 }

@@ -7,7 +7,7 @@ const CSRF_TOKEN_KEY = 'csrf_token';
 const API_BASE_URL =
   process.env.EXPO_PUBLIC_API_URL || 'http://localhost:3001/api';
 
-// Buffer before actual expiry to trigger refresh (60 seconds)
+// Trigger refresh this many ms before the token actually expires
 const EXPIRY_BUFFER_MS = 60_000;
 
 export interface AuthTokens {
@@ -15,8 +15,10 @@ export interface AuthTokens {
   refreshToken: string;
 }
 
+// ─── Token storage ────────────────────────────────────────────────────────────
+
 /**
- * Store both tokens securely after login.
+ * Store both tokens securely after login or rotation.
  */
 export async function storeTokens(tokens: AuthTokens): Promise<void> {
   await SecureStore.setItemAsync(ACCESS_TOKEN_KEY, tokens.accessToken);
@@ -24,7 +26,7 @@ export async function storeTokens(tokens: AuthTokens): Promise<void> {
 }
 
 /**
- * Store CSRF token after login.
+ * Store CSRF token after login or rotation.
  */
 export async function storeCsrfToken(token: string): Promise<void> {
   await SecureStore.setItemAsync(CSRF_TOKEN_KEY, token);
@@ -38,7 +40,7 @@ export async function getCsrfToken(): Promise<string | null> {
 }
 
 /**
- * Clear all stored tokens (logout).
+ * Clear all stored tokens (logout or session revocation).
  */
 export async function clearTokens(): Promise<void> {
   await SecureStore.deleteItemAsync(ACCESS_TOKEN_KEY);
@@ -46,57 +48,90 @@ export async function clearTokens(): Promise<void> {
   await SecureStore.deleteItemAsync(CSRF_TOKEN_KEY);
 }
 
+// ─── Concurrency guard ────────────────────────────────────────────────────────
+
 /**
- * Get a valid access token, refreshing if expired.
- * Returns null if not authenticated or refresh fails.
+ * At most one refresh network request is allowed in-flight at a time.
+ *
+ * Problem without this: when multiple API calls fire simultaneously and the
+ * access token is expired, every one of them calls refreshTokens() with the
+ * same old refresh token.  The server's reuse-detection logic then sees the
+ * second (duplicate) request as a replay attack and revokes ALL sessions,
+ * logging the user out.
+ *
+ * Solution: the first caller creates the promise and every subsequent caller
+ * that arrives while the refresh is in progress receives the same promise.
+ * The network request is made exactly once.
+ */
+let _refreshInFlight: Promise<AuthTokens | null> | null = null;
+
+function deduplicatedRefresh(refreshToken: string): Promise<AuthTokens | null> {
+  if (_refreshInFlight !== null) {
+    // Another refresh is already underway — wait for its result.
+    return _refreshInFlight;
+  }
+  _refreshInFlight = doRefresh(refreshToken).finally(() => {
+    _refreshInFlight = null;
+  });
+  return _refreshInFlight;
+}
+
+// ─── Main public API ──────────────────────────────────────────────────────────
+
+/**
+ * Return a valid access token, triggering a rotation if the stored token is
+ * expired (or within EXPIRY_BUFFER_MS of expiry).
+ *
+ * Returns null if the user is not authenticated or if token rotation fails,
+ * in which case all stored tokens are cleared and the user must re-login.
  */
 export async function getValidAccessToken(): Promise<string | null> {
   const accessToken = await SecureStore.getItemAsync(ACCESS_TOKEN_KEY);
   if (!accessToken) return null;
 
-  // Check if token is expired (or about to expire)
   if (!isTokenExpired(accessToken)) {
     return accessToken;
   }
 
-  // Try to refresh
   const refreshToken = await SecureStore.getItemAsync(REFRESH_TOKEN_KEY);
   if (!refreshToken) return null;
 
-  const newTokens = await refreshTokens(refreshToken);
+  const newTokens = await deduplicatedRefresh(refreshToken);
   if (!newTokens) {
-    // Refresh failed — clear tokens, user must re-login
     await clearTokens();
     return null;
   }
 
+  // Store the rotated tokens (idempotent — multiple concurrent callers all
+  // store the same values returned by the single in-flight request).
   await storeTokens(newTokens);
   return newTokens.accessToken;
 }
 
+// ─── Internal helpers ─────────────────────────────────────────────────────────
+
 /**
  * Check if a JWT access token is expired (with buffer).
+ * Signature is NOT verified — we only need the exp claim.
  */
 function isTokenExpired(token: string): boolean {
   try {
-    // null key → skip signature verification, just parse the payload claims.
-    // JWT.decode still throws TokenExpired if exp is already past, which the
-    // catch below handles. We also apply our own early-refresh buffer below.
     const payload = JWT.decode(token, null);
     if (!payload.exp) return true;
-    const expiresAtMs = payload.exp * 1000;
-    return Date.now() >= expiresAtMs - EXPIRY_BUFFER_MS;
+    return Date.now() >= payload.exp * 1000 - EXPIRY_BUFFER_MS;
   } catch {
     return true;
   }
 }
 
 /**
- * Call the refresh endpoint to get new tokens.
- * Handles token rotation - stores new refresh token.
- * Returns null on failure, including token reuse detection.
+ * Call the refresh endpoint and return the new token pair on success.
+ * Returns null on any failure (network error, 4xx, 5xx).
+ *
+ * On reuse detection (server revokes all sessions) the local tokens are also
+ * cleared so the user is prompted to re-login immediately.
  */
-async function refreshTokens(refreshToken: string): Promise<AuthTokens | null> {
+async function doRefresh(refreshToken: string): Promise<AuthTokens | null> {
   try {
     const csrfToken = await getCsrfToken();
 
@@ -116,30 +151,27 @@ async function refreshTokens(refreshToken: string): Promise<AuthTokens | null> {
 
     const data = await response.json();
 
-    // Handle token reuse detection - clear all tokens
     if (!response.ok || !data.success) {
+      // If the server detected token reuse it will have revoked every session.
+      // Mirror that locally so the UI can redirect to login immediately.
       if (
-        data.message?.includes('revoked') ||
-        data.message?.includes('reuse')
+        typeof data.message === 'string' &&
+        (data.message.includes('revoked') || data.message.includes('reuse'))
       ) {
-        // Token reuse detected - clear all sessions
         await clearTokens();
       }
       return null;
     }
 
-    const newTokens = {
+    const newTokens: AuthTokens = {
       accessToken: data.data.accessToken,
       refreshToken: data.data.refreshToken,
     };
 
-    // Store new tokens (rotation)
-    await storeTokens(newTokens);
-
-    // Extract and store new CSRF token if present
-    const setCookie = response.headers.get('set-cookie');
-    if (setCookie) {
-      const csrfMatch = setCookie.match(/gf_csrf_token=([^;]+)/);
+    // The server rotates the CSRF token on each refresh — update SecureStore.
+    const setCookieHeader = response.headers.get('set-cookie');
+    if (setCookieHeader) {
+      const csrfMatch = setCookieHeader.match(/gf_csrf_token=([^;]+)/);
       if (csrfMatch) {
         await storeCsrfToken(decodeURIComponent(csrfMatch[1]));
       }
@@ -151,12 +183,14 @@ async function refreshTokens(refreshToken: string): Promise<AuthTokens | null> {
   }
 }
 
+// ─── Login / logout ───────────────────────────────────────────────────────────
+
 /**
- * Login via the auth API and store tokens.
+ * Authenticate with email + password and store the issued tokens.
  */
 export async function login(
   email: string,
-  password: string
+  password: string,
 ): Promise<{ success: boolean; error?: string }> {
   try {
     const response = await fetch(`${API_BASE_URL}/auth/login`, {
@@ -176,7 +210,7 @@ export async function login(
       refreshToken: data.data.refreshToken,
     });
 
-    // Extract and store CSRF token from cookie
+    // Extract and store CSRF token from Set-Cookie header.
     const cookies = response.headers.get('set-cookie');
     if (cookies) {
       const csrfMatch = cookies.match(/gf_csrf_token=([^;]+)/);
@@ -192,12 +226,11 @@ export async function login(
 }
 
 /**
- * Logout: revoke refresh token on server and clear local storage.
+ * Revoke the refresh token on the server (best-effort) and clear local state.
  */
 export async function logout(): Promise<void> {
   const refreshToken = await SecureStore.getItemAsync(REFRESH_TOKEN_KEY);
   if (refreshToken) {
-    // Best-effort server revocation
     fetch(`${API_BASE_URL}/auth/logout`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

@@ -91,7 +91,7 @@ export function Nav({ locale }: { locale: Locale }) {
           <LanguageSwitcher currentLocale={locale} />
           <ThemeToggle />
           
-          <div className="hidden lg:flex items-center gap-2 ml-2">
+          <div className="hidden lg:flex items-center gap-4 ml-4">
             <Button variant="ghost" asChild>
               <Link href="https://app.gateflow.com/login">{t('header.actions.signIn')}</Link>
             </Button>

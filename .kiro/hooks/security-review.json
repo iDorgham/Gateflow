@@ -1,0 +1,13 @@
+{
+  "name": "Security Review on API Changes",
+  "version": "1.0.0",
+  "description": "Review security implications when API routes are modified",
+  "when": {
+    "type": "fileEdited",
+    "patterns": ["**/api/**/*.ts", "**/api/**/*.tsx"]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Review this API route change for security issues: 1) Is authentication validated? 2) Is rate limiting applied? 3) Is input validated with Zod? 4) Are queries scoped by organizationId? 5) Is CSRF protection included for state-changing operations? 6) Are proper error codes returned?"
+  }
+}

@@ -387,17 +387,17 @@ describe('Encryption Failure Fallback', () => {
 });
 
 describe('Scan UUID Generation', () => {
-  it('should generate valid UUID v4 format', () => {
-    const uuid = generateScanUuid();
+  it('should generate valid UUID v4 format', async () => {
+    const uuid = await generateScanUuid();
     const uuidRegex =
       /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
     expect(uuid).toMatch(uuidRegex);
   });
 
-  it('should generate unique UUIDs', () => {
+  it('should generate unique UUIDs', async () => {
     const uuids = new Set<string>();
     for (let i = 0; i < 100; i++) {
-      uuids.add(generateScanUuid());
+      uuids.add(await generateScanUuid());
     }
     expect(uuids.size).toBe(100);
   });

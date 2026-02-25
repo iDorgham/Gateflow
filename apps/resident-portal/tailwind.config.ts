@@ -13,6 +13,10 @@ const config: Config = {
     extend: {
       colors: tokens.colors,
       borderRadius: tokens.borderRadius,
+      fontFamily: {
+        sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
+        arabic: ['var(--font-cairo)', 'system-ui', 'sans-serif'],
+      },
     },
   },
   plugins: [],

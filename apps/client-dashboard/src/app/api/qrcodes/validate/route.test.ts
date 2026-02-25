@@ -15,6 +15,7 @@ process.env.QR_SIGNING_SECRET = 'test-qr-signing-secret-that-is-at-least-32-char
 import { signQRPayload, type QRPayload, QRCodeType } from '@gate-access/types';
 import { signAccessToken } from '../../../../lib/auth';
 import { UserRole } from '@gate-access/types';
+import type { RateLimitResult } from '../../../../lib/rate-limit';
 
 // ─── Prisma mock ──────────────────────────────────────────────────────────────
 
@@ -54,17 +55,13 @@ jest.mock('@gate-access/db', () => ({
 
 // ─── Rate-limiter mock (allow all by default; override per test) ───────────────
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const mockCheckRateLimit = jest.fn<any, any[]>(() => ({
-  allowed: true,
-  limit: 100,
-  remaining: 99,
-  retryAfterMs: 0,
-}));
+const mockCheckRateLimit = jest.fn<Promise<RateLimitResult>, [string, number?, number?]>(() =>
+  Promise.resolve({ allowed: true, limit: 100, remaining: 99, retryAfterMs: 0 }),
+);
 
 jest.mock('../../../../lib/rate-limit', () => ({
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  checkRateLimit: (...args: any[]) => mockCheckRateLimit(...args),
+  checkRateLimit: (key: string, max?: number, windowMs?: number) =>
+    mockCheckRateLimit(key, max, windowMs),
   RATE_LIMIT_MAX: 100,
   RATE_LIMIT_WINDOW_MS: 60_000,
 }));
@@ -130,7 +127,7 @@ describe('POST /api/qrcodes/validate', () => {
     jest.clearAllMocks();
 
     // Default: rate limiter allows the request.
-    mockCheckRateLimit.mockReturnValue({ allowed: true, limit: 100, remaining: 99, retryAfterMs: 0 });
+    mockCheckRateLimit.mockResolvedValue({ allowed: true, limit: 100, remaining: 99, retryAfterMs: 0 });
 
     // Default: DB returns a healthy QR record.
     mockFindUnique.mockResolvedValue({ ...mockQRCode });
@@ -157,7 +154,7 @@ describe('POST /api/qrcodes/validate', () => {
   // ── Rate limiting ─────────────────────────────────────────────────────────
 
   it('returns 429 with Retry-After when rate limit is exceeded', async () => {
-    mockCheckRateLimit.mockReturnValue({ allowed: false, limit: 100, remaining: 0, retryAfterMs: 30_000 });
+    mockCheckRateLimit.mockResolvedValue({ allowed: false, limit: 100, remaining: 0, retryAfterMs: 30_000 });
 
     const auth = await makeAuthHeader();
     const res = await POST(makeRequest({ qrPayload: 'anything' }, auth));
@@ -175,7 +172,7 @@ describe('POST /api/qrcodes/validate', () => {
     const auth = await makeAuthHeader();
     const signed = signQRPayload(makePayload(), QR_SECRET);
     await POST(makeRequest({ qrPayload: signed, scanContext: { gateId: 'gate_test_789' } }, auth));
-    expect(mockCheckRateLimit).toHaveBeenCalledWith('validate:user_1');
+    expect(mockCheckRateLimit.mock.calls[0][0]).toBe('validate:user_1');
   });
 
   // ── Signature / format ────────────────────────────────────────────────────

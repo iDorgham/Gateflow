@@ -14,9 +14,16 @@ import { checkRateLimit } from '../../../../lib/rate-limit';
 const QR_SIGNING_SECRET = process.env.QR_SIGNING_SECRET ?? '';
 
 if (!QR_SIGNING_SECRET || QR_SIGNING_SECRET.length < 32) {
-  console.warn(
-    '[qr/validate] QR_SIGNING_SECRET is missing or shorter than 32 characters — insecure in production',
-  );
+  if (process.env.NODE_ENV === 'production') {
+    throw new Error(
+      '[qr/validate] QR_SIGNING_SECRET is missing or shorter than 32 characters. ' +
+      'Set QR_SIGNING_SECRET to a random 64-char string before deploying.'
+    );
+  } else {
+    console.warn(
+      '[qr/validate] QR_SIGNING_SECRET is missing or shorter than 32 characters — insecure in production',
+    );
+  }
 }
 
 // ─── Reason mapping ───────────────────────────────────────────────────────────
@@ -83,7 +90,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const claims = authResult;
 
     // Step 2 — Rate limit: 100 req/min per authenticated user.
-    const rl = checkRateLimit(`validate:${claims.sub}`);
+    const rl = await checkRateLimit(`validate:${claims.sub}`);
     if (!rl.allowed) {
       const body: QRValidateResponse = {
         status: 'rejected',

@@ -20,6 +20,14 @@ import {
   History,
   QrCode,
 } from 'lucide-react-native';
+import { 
+  useFonts, 
+  Cairo_300Light,
+  Cairo_400Regular,
+  Cairo_500Medium,
+  Cairo_600SemiBold,
+  Cairo_700Bold 
+} from '@expo-google-fonts/cairo';
 
 // Placeholder component for icons
 const Icon = ({
@@ -45,6 +53,17 @@ const Icon = ({
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('home');
+  const [fontsLoaded] = useFonts({
+    Cairo_300Light,
+    Cairo_400Regular,
+    Cairo_500Medium,
+    Cairo_600SemiBold,
+    Cairo_700Bold,
+  });
+
+  if (!fontsLoaded) {
+    return null;
+  }
 
   const renderHome = () => (
     <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
@@ -238,7 +257,7 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     fontSize: nativeTokens.typography.xl.fontSize,
-    fontWeight: '700',
+    fontFamily: 'Cairo_700Bold',
     color: nativeTokens.colors.foreground,
   },
   content: {
@@ -268,11 +287,12 @@ const styles = StyleSheet.create({
   },
   unitNumber: {
     fontSize: nativeTokens.typography.base.fontSize,
-    fontWeight: '600',
+    fontFamily: 'Cairo_600SemiBold',
     color: nativeTokens.colors.foreground,
   },
   unitType: {
     fontSize: nativeTokens.typography.sm.fontSize,
+    fontFamily: 'Cairo_400Regular',
     color: nativeTokens.colors.mutedForeground,
   },
   unitStatus: {
@@ -288,12 +308,12 @@ const styles = StyleSheet.create({
   },
   statusValue: {
     fontSize: nativeTokens.typography.sm.fontSize,
-    fontWeight: '500',
+    fontFamily: 'Cairo_500Medium',
     color: nativeTokens.colors.success,
   },
   sectionTitle: {
     fontSize: nativeTokens.typography.base.fontSize,
-    fontWeight: '600',
+    fontFamily: 'Cairo_600SemiBold',
     color: nativeTokens.colors.foreground,
     marginBottom: nativeTokens.spacing.md,
   },
@@ -310,7 +330,7 @@ const styles = StyleSheet.create({
   },
   quotaText: {
     fontSize: nativeTokens.typography['2xl'].fontSize,
-    fontWeight: '700',
+    fontFamily: 'Cairo_700Bold',
     color: nativeTokens.colors.foreground,
   },
   quotaSubtext: {
@@ -340,7 +360,7 @@ const styles = StyleSheet.create({
   },
   actionText: {
     fontSize: nativeTokens.typography.base.fontSize,
-    fontWeight: '600',
+    fontFamily: 'Cairo_600SemiBold',
     color: nativeTokens.colors.primaryForeground,
   },
   listCard: {
@@ -381,7 +401,7 @@ const styles = StyleSheet.create({
   },
   visitorName: {
     fontSize: nativeTokens.typography.base.fontSize,
-    fontWeight: '500',
+    fontFamily: 'Cairo_500Medium',
     color: nativeTokens.colors.foreground,
   },
   visitorTime: {
@@ -397,7 +417,7 @@ const styles = StyleSheet.create({
   statusBadgeText: {
     fontSize: nativeTokens.typography.xs.fontSize,
     color: nativeTokens.colors.success,
-    fontWeight: '500',
+    fontFamily: 'Cairo_500Medium',
   },
   recurringBadge: {
     backgroundColor: nativeTokens.colors.secondary,

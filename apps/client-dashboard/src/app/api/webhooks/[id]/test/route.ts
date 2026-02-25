@@ -3,6 +3,7 @@ import { getSessionClaims } from '@/lib/auth-cookies';
 import { testWebhookDelivery } from '@/lib/webhook-delivery';
 
 type RouteContext = { params: { id: string } };
+export const dynamic = 'force-dynamic';
 
 // ─── POST /api/webhooks/[id]/test ─────────────────────────────────────────────
 // Sends a single test delivery and returns the result synchronously.

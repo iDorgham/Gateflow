@@ -1,0 +1,13 @@
+{
+  "name": "Multi-Tenant Query Check",
+  "version": "1.0.0",
+  "description": "Verify multi-tenant scoping when Prisma queries are added",
+  "when": {
+    "type": "preToolUse",
+    "toolTypes": ["write"]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "If this code contains Prisma queries, verify: 1) All queries include organizationId in where clause, 2) All queries filter deletedAt: null, 3) No hard deletes are used (only soft deletes). If no Prisma queries, proceed without comment."
+  }
+}

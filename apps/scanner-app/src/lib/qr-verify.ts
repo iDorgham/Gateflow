@@ -50,7 +50,7 @@ async function getNonceCache(): Promise<string[]> {
 
 async function isNonceReused(nonce: string): Promise<boolean> {
   const cache = await getNonceCache();
-  return cache.includes(nonce);
+  return new Set(cache).has(nonce);
 }
 
 async function recordNonce(nonce: string): Promise<void> {
