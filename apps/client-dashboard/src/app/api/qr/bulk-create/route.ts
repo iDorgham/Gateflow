@@ -166,7 +166,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       validItems.push({ original: item, index: i, gateId, expiresAt, resolvedMaxUses, qrId, qrString });
     }
 
-    // Phase 2: persist valid items in a single transaction
+    // Phase 2: persist valid items efficiently using createMany
     const created: Array<{
       index: number;
       qrId: string;
@@ -176,28 +176,27 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }> = [];
 
     if (validItems.length > 0) {
-      await prisma.$transaction(async (tx) => {
-        for (const v of validItems) {
-          await tx.qRCode.create({
-            data: {
-              code: v.qrString,
-              type: toPrismaQRCodeType(v.original.type),
-              organizationId: claims.orgId!,
-              gateId: v.gateId,
-              maxUses: v.resolvedMaxUses,
-              expiresAt: v.expiresAt ? new Date(v.expiresAt) : null,
-              isActive: true,
-            },
-          });
-          created.push({
-            index: v.index,
-            qrId: v.qrId,
-            qrString: v.qrString,
-            name: v.original.name,
-            email: v.original.email,
-          });
-        }
+      await prisma.qRCode.createMany({
+        data: validItems.map((v) => ({
+          code: v.qrString,
+          type: toPrismaQRCodeType(v.original.type),
+          organizationId: claims.orgId!,
+          gateId: v.gateId,
+          maxUses: v.resolvedMaxUses,
+          expiresAt: v.expiresAt ? new Date(v.expiresAt) : null,
+          isActive: true,
+        })),
       });
+
+      for (const v of validItems) {
+        created.push({
+          index: v.index,
+          qrId: v.qrId,
+          qrString: v.qrString,
+          name: v.original.name,
+          email: v.original.email,
+        });
+      }
     }
 
     return NextResponse.json({
