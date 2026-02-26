@@ -127,17 +127,17 @@ export async function getRateLimitStatus(
 
   if (_redis !== null) {
     try {
-      // The @upstash/ratelimit library doesn't expose a read-only check,
-      // so we use the raw Redis ZCARD on the key it would create.
-      const redisKey = `@gateflow/rl:${key}`;
-      const count = (await _redis.zcard(redisKey)) as number;
+      const limiter = getLimiter(max, windowMs);
+      const { remaining, reset } = await limiter.getRemaining(key);
+
       return {
-        allowed: count < max,
+        allowed: remaining > 0,
         limit: max,
-        remaining: Math.max(0, max - count),
-        retryAfterMs: count >= max ? windowMs : 0,
+        remaining,
+        retryAfterMs: remaining > 0 ? 0 : Math.max(0, reset - Date.now()),
       };
-    } catch {
+    } catch (err) {
+      console.error('[rate-limit] Redis error in getRateLimitStatus — falling back to in-memory:', err);
       /* fall through */
     }
   }
