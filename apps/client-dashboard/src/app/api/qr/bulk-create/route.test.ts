@@ -19,7 +19,7 @@ process.env.QR_SIGNING_SECRET = 'test-qr-signing-secret-that-is-at-least-32-char
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
 const mockGetSessionClaims = jest.fn();
-const mockQRCodeCreate = jest.fn();
+const mockQRCodeCreateMany = jest.fn();
 const mockGateFindMany = jest.fn();
 const mockTransaction = jest.fn();
 
@@ -31,6 +31,9 @@ jest.mock('@gate-access/db', () => ({
   prisma: {
     gate: {
       findMany: (...args: unknown[]) => mockGateFindMany(...args),
+    },
+    qRCode: {
+      createMany: (...args: unknown[]) => mockQRCodeCreateMany(...args),
     },
     $transaction: (fn: (tx: unknown) => Promise<unknown>) => mockTransaction(fn),
   },
@@ -61,12 +64,6 @@ function makeRequest(body: unknown): NextRequest {
 const ORG_ID = 'org_test_456';
 const SESSION_CLAIMS = { orgId: ORG_ID, sub: 'user_1', email: 'test@test.com', role: 'TENANT_ADMIN' };
 
-function makeTx() {
-  return {
-    qRCode: { create: (...args: unknown[]) => mockQRCodeCreate(...args) },
-  };
-}
-
 // ─── Lazy route import (after mocks) ──────────────────────────────────────────
 
 let POST: (req: NextRequest) => Promise<Response>;
@@ -82,10 +79,7 @@ beforeEach(() => {
   jest.clearAllMocks();
   mockGetSessionClaims.mockResolvedValue(SESSION_CLAIMS);
   mockGateFindMany.mockResolvedValue([]);
-  mockQRCodeCreate.mockResolvedValue({ id: 'qr_new' });
-  mockTransaction.mockImplementation(async (fn: (tx: unknown) => Promise<unknown>) =>
-    fn(makeTx()),
-  );
+  mockQRCodeCreateMany.mockResolvedValue({ count: 1 });
 });
 
 // ─── Tests ────────────────────────────────────────────────────────────────────
@@ -165,7 +159,15 @@ describe('POST /api/qr/bulk-create', () => {
     expect(data.success).toBe(true);
     expect(data.data.totalCreated).toBe(2);
     expect(data.data.totalErrors).toBe(0);
-    expect(mockQRCodeCreate).toHaveBeenCalledTimes(2);
+    expect(mockQRCodeCreateMany).toHaveBeenCalledTimes(1);
+    expect(mockQRCodeCreateMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.arrayContaining([
+          expect.objectContaining({ code: expect.any(String) }),
+          expect.objectContaining({ code: expect.any(String) }),
+        ]),
+      }),
+    );
   });
 
   // ── Gate resolution ──────────────────────────────────────────────────────────
@@ -179,8 +181,12 @@ describe('POST /api/qr/bulk-create', () => {
     const data = await res.json();
 
     expect(data.data.totalCreated).toBe(1);
-    expect(mockQRCodeCreate).toHaveBeenCalledWith(
-      expect.objectContaining({ data: expect.objectContaining({ gateId: 'gate_1' }) }),
+    expect(mockQRCodeCreateMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.arrayContaining([
+          expect.objectContaining({ gateId: 'gate_1' }),
+        ]),
+      }),
     );
   });
 
@@ -234,9 +240,11 @@ describe('POST /api/qr/bulk-create', () => {
     const data = await res.json();
 
     expect(data.data.totalCreated).toBe(1);
-    expect(mockQRCodeCreate).toHaveBeenCalledWith(
+    expect(mockQRCodeCreateMany).toHaveBeenCalledWith(
       expect.objectContaining({
-        data: expect.objectContaining({ expiresAt: null, maxUses: null }),
+        data: expect.arrayContaining([
+          expect.objectContaining({ expiresAt: null, maxUses: null }),
+        ]),
       }),
     );
   });
