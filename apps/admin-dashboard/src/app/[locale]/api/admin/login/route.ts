@@ -18,7 +18,12 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       return NextResponse.json({ success: false, message: 'Access key required.' }, { status: 400 });
     }
 
-    const expectedKey = process.env.ADMIN_ACCESS_KEY ?? 'dev-admin-key-change-in-production';
+    const expectedKey = process.env.ADMIN_ACCESS_KEY;
+
+    if (!expectedKey) {
+      console.error('Server Error: ADMIN_ACCESS_KEY is not set.');
+      return NextResponse.json({ success: false, message: 'Server configuration error.' }, { status: 500 });
+    }
     if (key !== expectedKey) {
       const received = sha256(key);
       const expected = sha256(expectedKey);

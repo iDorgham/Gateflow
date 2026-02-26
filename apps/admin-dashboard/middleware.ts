@@ -4,7 +4,10 @@ const COOKIE_NAME = 'admin_session';
 const PUBLIC_PATHS = ['/login', '/api/admin/login'];
 
 async function expectedToken(): Promise<string> {
-  const key = process.env.ADMIN_ACCESS_KEY ?? 'dev-admin-key-change-in-production';
+  const key = process.env.ADMIN_ACCESS_KEY;
+  if (!key) {
+    throw new Error('Server Error: ADMIN_ACCESS_KEY is not set.');
+  }
   const data = new TextEncoder().encode(key);
   const hashBuffer = await crypto.subtle.digest('SHA-256', data);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
