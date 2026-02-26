@@ -118,6 +118,7 @@ model QRCode {
   @@index([projectId])
   @@index([gateId])
   @@index([deletedAt])
+  @@index([expiresAt])
 }
 
 model ScanLog {
