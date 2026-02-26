@@ -5,7 +5,6 @@ import type { QRCode } from './qr';
 export enum Plan {
   FREE = 'FREE',
   PRO = 'PRO',
-  ENTERPRISE = 'ENTERPRISE',
 }
 
 export interface Organization {

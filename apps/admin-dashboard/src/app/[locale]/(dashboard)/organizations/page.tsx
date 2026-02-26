@@ -36,7 +36,7 @@ async function changePlan(formData: FormData) {
   'use server';
   await requireAdmin();
   const id = formData.get('id') as string;
-  const plan = formData.get('plan') as 'FREE' | 'PRO' | 'ENTERPRISE';
+  const plan = formData.get('plan') as 'FREE' | 'PRO';
   if (!id || !plan) return;
   await prisma.organization.update({ where: { id }, data: { plan } });
   revalidatePath('/organizations');
@@ -62,7 +62,7 @@ async function activateOrg(formData: FormData) {
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
-const PLANS = ['FREE', 'PRO', 'ENTERPRISE'] as const;
+const PLANS = ['FREE', 'PRO'] as const;
 
 interface SearchParams { q?: string; plan?: string; status?: string }
 
@@ -83,7 +83,7 @@ export default async function OrganizationsPage({
   const orgs = await prisma.organization.findMany({
     where: {
       ...(search ? { name: { contains: search, mode: 'insensitive' } } : {}),
-      ...(planFilter ? { plan: planFilter as 'FREE' | 'PRO' | 'ENTERPRISE' } : {}),
+      ...(planFilter ? { plan: planFilter as 'FREE' | 'PRO' } : {}),
       ...(statusFilter === 'active'
         ? { deletedAt: null }
         : statusFilter === 'suspended'
@@ -239,7 +239,6 @@ export default async function OrganizationsPage({
                         <td className="px-6 py-4">
                           <Badge variant="outline" className={cn(
                             "text-[10px] font-bold uppercase tracking-wider",
-                            org.plan === 'ENTERPRISE' ? "bg-violet-50 dark:bg-violet-900/20 text-violet-700 dark:text-violet-300 border-violet-100 dark:border-violet-800" :
                             org.plan === 'PRO' ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border-blue-100 dark:border-blue-800" :
                             "bg-muted text-muted-foreground border-border"
                           )}>

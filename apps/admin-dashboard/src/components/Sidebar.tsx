@@ -93,7 +93,7 @@ export function Sidebar() {
       <div className={cn("flex h-16 shrink-0 items-center border-b border-sidebar-border px-6", isCollapsed ? "justify-center px-0" : "justify-between")}>
         <Link href="/" className="flex items-center gap-3">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-[13px] font-bold text-primary-foreground shadow-[0_0_15px_rgba(37,99,235,0.3)]">
-            G
+            GF
           </div>
           {!isCollapsed && (
             <div className="flex flex-col">

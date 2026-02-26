@@ -26,6 +26,7 @@ model Organization {
   projects  Project[]
   contacts  Contact[]
   units     Unit[]
+  roles     Role[]
 
   @@index([deletedAt])
 }
@@ -51,6 +52,21 @@ model Project {
   @@index([organizationId])
 }
 
+model Role {
+  id             String        @id @default(cuid())
+  name           String
+  description    String?
+  permissions    Json          // Map of permission keys to booleans
+  isBuiltIn      Boolean       @default(false)
+  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId String?
+  users          User[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@index([organizationId])
+}
+
 model User {
   id           String        @id @default(cuid())
   email        String        @unique
@@ -58,7 +74,8 @@ model User {
   avatarUrl    String?
   bio          String?
   passwordHash String
-  role         UserRole
+  role         Role          @relation(fields: [roleId], references: [id])
+  roleId       String
   organization Organization? @relation(fields: [organizationId], references: [id])
   organizationId String?
   createdAt    DateTime      @default(now())
@@ -69,6 +86,7 @@ model User {
   refreshTokens RefreshToken[]
 
   @@index([organizationId])
+  @@index([roleId])
   @@index([deletedAt])
 }
 
@@ -195,14 +213,6 @@ model WebhookDelivery {
 enum Plan {
   FREE
   PRO
-  ENTERPRISE
-}
-
-enum UserRole {
-  ADMIN
-  TENANT_ADMIN
-  TENANT_USER
-  VISITOR
 }
 
 enum QRCodeType {

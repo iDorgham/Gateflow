@@ -35,11 +35,6 @@ const PLAN_INFO = {
     features: ['20 Secured Gates', 'Unlimited QR Codes', 'Extended Analytics', 'API & Webhooks', 'Priority Support'],
     accent: 'blue',
   },
-  ENTERPRISE: {
-    description: 'Bespoke security for global enterprise deployments.',
-    features: ['Unlimited Gates', 'Dedicated Infrastructure', 'SLA Guarantees', 'Deep Integrations', '24/7 Phone Support'],
-    accent: 'violet'
-  },
 };
 
 const MOCK_INVOICES = [
@@ -56,7 +51,6 @@ export function BillingTab({ org, gateCount, qrCount }: BillingTabProps) {
   const limits = {
     FREE: { gates: 3, qr: 100 },
     PRO: { gates: 20, qr: 1000000 },
-    ENTERPRISE: { gates: Infinity, qr: Infinity },
   }[planName] || { gates: 3, qr: 100 };
 
   const [isPending, startTransition] = useTransition();
@@ -109,9 +103,11 @@ export function BillingTab({ org, gateCount, qrCount }: BillingTabProps) {
             {t('settings.billing.activePlan', 'Active Subscription')}
           </div>
           <div className="space-y-1">
-            <h1 className="text-4xl font-black tracking-tight text-foreground uppercase">{org.plan}</h1>
+            <h1 className="text-4xl font-black tracking-tight text-foreground uppercase">
+              {t(`settings.workspace.plans.${planName}.label`, org.plan)}
+            </h1>
             <p className="text-muted-foreground max-w-md">
-              {t(`settings.billing.plans.${planName}.description`, plan.description)}
+              {t(`settings.workspace.plans.${planName}.description`, plan.description)}
             </p>
           </div>
         </div>
@@ -143,7 +139,7 @@ export function BillingTab({ org, gateCount, qrCount }: BillingTabProps) {
             <CardContent className="space-y-6 px-6 pb-8">
               <div className="space-y-3">
                 <div className="flex items-center justify-between text-[11px] font-bold uppercase tracking-widest">
-                  <span className="text-muted-foreground">{t('settings.billing.activeGates', 'Gates')}</span>
+                  <span className="text-muted-foreground">{t('sidebar.gates', 'Gates')}</span>
                   <span className="text-foreground">{gateCount} / {limits.gates === Infinity ? '∞' : limits.gates}</span>
                 </div>
                 <div className="h-2 w-full overflow-hidden rounded-full bg-muted border border-border/50">
@@ -156,7 +152,7 @@ export function BillingTab({ org, gateCount, qrCount }: BillingTabProps) {
 
               <div className="space-y-3">
                 <div className="flex items-center justify-between text-[11px] font-bold uppercase tracking-widest">
-                  <span className="text-muted-foreground">{t('settings.billing.messages', 'Monthly QRs')}</span>
+                  <span className="text-muted-foreground">{t('sidebar.qrCodes', 'QR Codes')}</span>
                   <span className="text-foreground">{qrCount} / {limits.qr === Infinity ? '∞' : limits.qr}</span>
                 </div>
                 <div className="h-2 w-full overflow-hidden rounded-full bg-muted border border-border/50">

@@ -326,7 +326,7 @@
       "title": "Admins",
       "subtitle": "Manage super-admin users who have platform-level access.",
       "twoLayerAuth": "Two-layer Admin Auth",
-      "twoLayerAuthDesc": "This admin dashboard is protected by <1>ADMIN_ACCESS_KEY</1> (env var). ADMIN-role users below are platform super-admins who can access the client dashboard with elevated privileges. They are different from the dashboard login key.",
+      "twoLayerAuthDesc": "This admin dashboard is protected by <1>ADMIN_ACCESS_KEY</1> (env var). ADMIN-role users below are platform super-admins who can access the main dashboard with elevated privileges. They are different from the dashboard login key.",
       "tempPasswordGen": "Temporary Password Generated",
       "shareSecurely": "Share this securely. It won't be shown again:",
       "expiresIn": "EXPIRES IN 2 MIN",
@@ -361,8 +361,7 @@
     "title": "Simple, transparent pricing",
     "subtitle": "Prices in EGP & AED. No per-gate fees. No hidden charges. Cancel any time.",
     "starter": "Starter",
-    "pro": "Pro",
-    "enterprise": "Enterprise"
+    "pro": "Pro"
   },
   "home": {
     "heroTitle": "Managing gate security has never been easier.",
@@ -422,7 +421,7 @@
       "collapse": "Collapse Sidebar",
       "activeProject": "Active Project",
       "allProjects": "All Projects",
-      "branding": "Client"
+      "branding": "Dashboard"
     },
     "settings": {
       "title": "System Control",
@@ -512,10 +511,6 @@
           "PRO": {
             "label": "Pro",
             "description": "Up to 20 gates · Unlimited QR codes"
-          },
-          "ENTERPRISE": {
-            "label": "Enterprise",
-            "description": "Unlimited everything · Dedicated support"
           }
         },
         "success": {
@@ -535,8 +530,7 @@
         "deprovision": "Deprovision Node",
         "deprovisionDesc": "Permanently purge all telemetry, projects, and access keys. This action cannot be reversed.",
         "purge": "Purge Node",
-        "temporalData": "Temporal Benchmarks",
-        "upgradeInsight": "Enterprise nodes unlock high-frequency scan APIs, bespoke SLAs, and advanced data residency controls."
+        "temporalData": "Temporal Benchmarks"
       },
       "projects": {
         "title": "Project Management",
@@ -650,8 +644,7 @@
           "networkError": "Network error"
         },
         "confirmRevoke": "Revoke this webhook? Event streams will be terminated immediately.",
-        "promptUrl": "Enter the Webhook URL (must start with https://):",
-        "performance": "Live Delivery Telemetry"
+        "promptUrl": "Enter the Webhook URL (must start with https://):"
       },
       "general": {
         "title": "Node Configuration",
@@ -723,10 +716,6 @@
           "PRO": {
             "description": "Advanced features for growing venues and festivals.",
             "features": ["20 Secured Gates", "Unlimited QR Codes", "Extended Analytics", "API & Webhooks", "Priority Support"]
-          },
-          "ENTERPRISE": {
-            "description": "Bespoke security for global enterprise deployments.",
-            "features": ["Unlimited Gates", "Dedicated Infrastructure", "SLA Guarantees", "Deep Integrations", "24/7 Phone Support"]
           }
         }
       }

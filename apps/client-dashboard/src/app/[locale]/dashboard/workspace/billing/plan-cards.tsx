@@ -80,11 +80,7 @@ export function PlanCards({ plans, currentPlan }: PlanCardsProps) {
                 variant={isCurrent ? 'outline' : 'default'}
                 disabled={isCurrent}
                 onClick={() => {
-                  if (plan.name === 'ENTERPRISE') {
-                    window.location.href = 'mailto:sales@gateflow.io';
-                  } else {
-                    alert(`Stripe integration coming soon. Contact sales@gateflow.io to upgrade.`);
-                  }
+                  alert(`Stripe integration coming soon. Contact sales@gateflow.io to upgrade.`);
                 }}
               >
                 {isCurrent ? 'Current plan' : isUpgrade ? 'Upgrade' : 'Downgrade'}

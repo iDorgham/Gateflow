@@ -1,57 +1,16 @@
-export type Permission =
-  | 'gates:manage'
-  | 'qr:create'
-  | 'qr:manage'
-  | 'scans:view'
-  | 'scans:override'
-  | 'workspace:manage'
-  | 'roles:manage'
-  | 'users:manage'
-  | 'analytics:view'
-  | 'projects:manage'
-  | 'units:manage'
-  | 'contacts:manage';
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
 
-export interface Role {
-  id: string;
-  name: string;
-  description?: string | null;
-  permissions: Record<Permission, boolean>;
-  isBuiltIn: boolean;
-  organizationId?: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-export interface User {
-  id: string;
-  email: string;
-  name: string;
-  avatarUrl?: string | null;
-  bio?: string | null;
-  passwordHash: string;
-  roleId: string;
-  role: Role;
-  organizationId: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt: Date | null;
-}
-
-export interface UserWithOrganization extends User {
-  organization?: Organization | null;
-}
-
-export const BUILT_IN_ROLES = {
+const BUILT_IN_ROLES = {
   SUPER_ADMIN: 'Super Admin',
   ORG_ADMIN: 'Organization Admin',
   SECURITY_MANAGER: 'Security Manager',
   GATE_OPERATOR: 'Gate Operator',
   RESIDENT: 'Resident',
-} as const;
+};
 
-export const DEFAULT_PERMISSIONS: Record<string, Record<Permission, boolean>> = {
-  [BUILT_IN_ROLES.SUPER_ADMIN]: {
+const DEFAULT_PERMISSIONS = {
+  'Super Admin': {
     'gates:manage': true,
     'qr:create': true,
     'qr:manage': true,
@@ -65,7 +24,7 @@ export const DEFAULT_PERMISSIONS: Record<string, Record<Permission, boolean>> = 
     'units:manage': true,
     'contacts:manage': true,
   },
-  [BUILT_IN_ROLES.ORG_ADMIN]: {
+  'Organization Admin': {
     'gates:manage': true,
     'qr:create': true,
     'qr:manage': true,
@@ -79,7 +38,7 @@ export const DEFAULT_PERMISSIONS: Record<string, Record<Permission, boolean>> = 
     'units:manage': true,
     'contacts:manage': true,
   },
-  [BUILT_IN_ROLES.SECURITY_MANAGER]: {
+  'Security Manager': {
     'gates:manage': true,
     'qr:create': false,
     'qr:manage': false,
@@ -93,7 +52,7 @@ export const DEFAULT_PERMISSIONS: Record<string, Record<Permission, boolean>> = 
     'units:manage': false,
     'contacts:manage': false,
   },
-  [BUILT_IN_ROLES.GATE_OPERATOR]: {
+  'Gate Operator': {
     'gates:manage': false,
     'qr:create': false,
     'qr:manage': false,
@@ -107,7 +66,7 @@ export const DEFAULT_PERMISSIONS: Record<string, Record<Permission, boolean>> = 
     'units:manage': false,
     'contacts:manage': false,
   },
-  [BUILT_IN_ROLES.RESIDENT]: {
+  'Resident': {
     'gates:manage': false,
     'qr:create': true,
     'qr:manage': true,
@@ -122,3 +81,38 @@ export const DEFAULT_PERMISSIONS: Record<string, Record<Permission, boolean>> = 
     'contacts:manage': false,
   },
 };
+
+async function seedRoles() {
+  console.log('Seeding built-in roles (JS)...');
+
+  for (const [key, name] of Object.entries(BUILT_IN_ROLES)) {
+    const permissions = DEFAULT_PERMISSIONS[name];
+    
+    await prisma.role.upsert({
+      where: { id: `builtin-${key.toLowerCase().replace(/_/g, '-')}` },
+      update: {
+        name,
+        permissions,
+        isBuiltIn: true,
+      },
+      create: {
+        id: `builtin-${key.toLowerCase().replace(/_/g, '-')}`,
+        name,
+        permissions,
+        isBuiltIn: true,
+      },
+    });
+    console.log(`- Role "${name}" seeded.`);
+  }
+
+  console.log('Built-in roles seeding completed.');
+}
+
+seedRoles()
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });

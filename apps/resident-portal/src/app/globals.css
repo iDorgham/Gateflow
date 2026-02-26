@@ -120,6 +120,9 @@
 }
 
 @layer base {
+  html {
+    zoom: 0.95;
+  }
   * {
     @apply border-border;
   }

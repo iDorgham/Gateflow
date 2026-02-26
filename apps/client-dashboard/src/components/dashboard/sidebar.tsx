@@ -23,39 +23,50 @@ import {
 import { cn, Button } from '@gate-access/ui';
 import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
+import { ThemeToggle } from './theme-toggle';
+import { LanguageSwitcher } from '../language-switcher';
+
+import { Permission } from '@gate-access/types';
 
 interface NavItem {
   label: string;
   href: string;
   icon: any;
   exact?: boolean;
+  permission?: Permission;
 }
 
-const getNavGroups = (t: TFunction) => {
+const getNavGroups = (t: TFunction, permissions: Record<string, boolean>) => {
+  const hasPerm = (p?: Permission) => !p || permissions[p] === true;
+
   const WORKSPACE_NAV: NavItem[] = [
     {
       label: t('sidebar.projects', 'Projects'),
       href: '/dashboard/projects',
       icon: Layers,
+      permission: 'projects:manage' as Permission,
     },
     {
       label: t('sidebar.gates', 'Gates'),
       href: '/dashboard/gates',
       icon: Shield,
+      permission: 'gates:manage' as Permission,
     },
     {
       label: t('sidebar.contacts', 'Contacts'),
       href: '/dashboard/residents/contacts',
       icon: Contact2,
       exact: false,
+      permission: 'contacts:manage' as Permission,
     },
     {
       label: t('sidebar.units', 'Units'),
       href: '/dashboard/residents/units',
       icon: Building,
       exact: false,
+      permission: 'units:manage' as Permission,
     },
-  ];
+  ].filter(item => hasPerm(item.permission));
 
   const MAIN_NAV: NavItem[] = [
     {
@@ -68,24 +79,30 @@ const getNavGroups = (t: TFunction) => {
       label: t('sidebar.qrCodes', 'QR Codes'),
       href: '/dashboard/qrcodes',
       icon: QrCode,
+      permission: 'qr:create' as Permission, // or qr:manage
     },
     {
       label: t('sidebar.scanLogs', 'Scan Logs'),
       href: '/dashboard/scans',
       icon: ScanLine,
+      permission: 'scans:view' as Permission,
     },
     {
       label: t('sidebar.analytics', 'Analytics'),
       href: '/dashboard/analytics',
       icon: BarChart3,
+      permission: 'analytics:view' as Permission,
     },
-  ];
+  ].filter(item => hasPerm(item.permission));
 
-  return [
+  const groups = [
     { label: t('sidebar.operations', 'Operations'), items: MAIN_NAV },
     { label: t('sidebar.workspace', 'Workspace'), items: WORKSPACE_NAV },
   ];
+
+  return groups.filter(g => g.items.length > 0);
 };
+
 interface SidebarProps {
   org: {
     id: string;
@@ -101,6 +118,7 @@ interface SidebarProps {
   isCollapsed: boolean;
   onToggleCollapse: () => void;
   hideGates?: boolean;
+  permissions?: Record<string, boolean>;
 }
 
 export function Sidebar({
@@ -111,13 +129,14 @@ export function Sidebar({
   isCollapsed,
   onToggleCollapse,
   hideGates,
+  permissions = {},
 }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const { t } = useTranslation('dashboard');
 
-  let groups = getNavGroups(t);
+  let groups = getNavGroups(t, permissions);
 
   if (hideGates) {
     groups = groups.map(group => {
@@ -149,7 +168,7 @@ export function Sidebar({
       >
         <Link href="/dashboard" className="flex items-center gap-3">
           <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary text-[13px] font-bold text-primary-foreground shadow-[0_0_15px_rgba(37,99,235,0.3)]">
-            G
+            GF
           </div>
           {!isCollapsed && (
             <div className="flex flex-col">
@@ -170,15 +189,9 @@ export function Sidebar({
       <div className={cn('py-4 space-y-4', isCollapsed ? 'px-2' : 'px-3')}>
         {org && !isCollapsed && (
           <div className="px-3 py-2 rounded-xl bg-sidebar-accent/50 border border-sidebar-border/50">
-            <div className="flex items-center gap-2 mb-1">
+            <div className="flex items-center gap-2">
               <Building2 className="h-3.5 w-3.5 text-muted-foreground" />
               <span className="text-xs font-bold truncate">{org.name}</span>
-            </div>
-            <div className="flex items-center gap-1.5">
-              <span className="h-1.5 w-1.5 rounded-full bg-blue-500 animate-pulse" />
-              <span className="text-[10px] font-black uppercase tracking-widest opacity-60">
-                {org.plan} {t('common:pricing.plan', 'Plan')}
-              </span>
             </div>
           </div>
         )}
@@ -252,22 +265,26 @@ export function Sidebar({
           isCollapsed ? 'px-2' : 'px-3'
         )}
       >
-        <div className="flex flex-col">
-          <Link
-            href={`/${locale}/dashboard/settings?tab=profile`}
-            title={isCollapsed ? t('sidebar.settings', 'Settings') : undefined}
-            className={cn(
-              'group flex items-center gap-3 rounded-xl text-sm font-medium text-slate-400 hover:bg-sidebar-accent hover:text-slate-200 transition-all duration-200',
-              isCollapsed ? 'justify-center w-10 h-10 px-0' : 'flex-1 px-4 py-3'
-            )}
-          >
-            <Settings className="h-[17px] w-[17px] text-slate-500 group-hover:text-slate-200 transition-colors shrink-0" />
+        <div className="flex flex-col gap-2">
+          <div className={cn("flex items-center", isCollapsed ? "justify-center" : "gap-2 px-1")}>
+            <Link
+              href={`/${locale}/dashboard/settings?tab=profile`}
+              title={t('sidebar.settings', 'Settings')}
+              className={cn(
+                'group flex items-center justify-center rounded-xl text-sm font-medium text-slate-400 hover:bg-sidebar-accent hover:text-slate-200 transition-all duration-200',
+                'w-10 h-10'
+              )}
+            >
+              <Settings className="h-[17px] w-[17px] text-slate-500 group-hover:text-slate-200 transition-colors shrink-0" />
+            </Link>
+
             {!isCollapsed && (
-              <span className="truncate">
-                {t('sidebar.settings', 'Settings')}
-              </span>
+              <div className="flex items-center gap-1 animate-in fade-in slide-in-from-left-2 duration-300">
+                <LanguageSwitcher currentLocale={locale as any} />
+                <ThemeToggle />
+              </div>
             )}
-          </Link>
+          </div>
 
           <Link
             href={`/${locale}/logout`}
@@ -294,7 +311,7 @@ export function Sidebar({
             onClick={onToggleCollapse}
             className={cn(
               "absolute -right-3 flex h-6 w-6 items-center justify-center rounded-full border border-sidebar-border bg-sidebar hover:bg-sidebar-accent shadow-sm group",
-              isCollapsed ? "top-[calc(100%-3rem)]" : "bottom-[62px]"
+              isCollapsed ? "top-[calc(100%-24px)]" : "bottom-[38px]"
             )}
             title={isCollapsed ? t('sidebar.expand', 'Expand Sidebar') : t('sidebar.collapse', 'Collapse Sidebar')}
           >

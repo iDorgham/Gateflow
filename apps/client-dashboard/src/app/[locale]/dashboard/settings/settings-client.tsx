@@ -98,6 +98,17 @@ interface SettingsWebhook {
   deliveries: SettingsWebhookDelivery[];
 }
 
+interface SettingsRole {
+  id: string;
+  name: string;
+  description?: string | null;
+  permissions: Record<string, boolean>;
+  isBuiltIn: boolean;
+  userCount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
 interface SettingsBilling {
   gateCount: number;
   qrCount: number;
@@ -111,7 +122,10 @@ interface SettingsClientProps {
   webhooks: SettingsWebhook[];
   teamMembers: SettingsUser[];
   billing: SettingsBilling;
+  roles: SettingsRole[];
   currentUserId: string;
+  canManageRoles?: boolean;
+  canManageUsers?: boolean;
 }
 
 export function SettingsClient(props: SettingsClientProps) {
@@ -143,7 +157,7 @@ export function SettingsClient(props: SettingsClientProps) {
     { id: 'workspace', label: t('settings.tabs.workspace', 'Workspace'), icon: Building2, component: <WorkspaceTab org={props.org} /> },
     { id: 'projects', label: t('settings.tabs.projects', 'Projects'), icon: FolderKanban, component: <ProjectsTab projects={props.projects as any} /> },
     { id: 'team', label: t('settings.tabs.team', 'Team'), icon: Users, component: <TeamTab members={props.teamMembers} currentUserId={props.currentUserId} /> },
-    { id: 'roles', label: t('settings.tabs.roles', 'Roles'), icon: ShieldAlert, component: <RolesTab /> },
+    { id: 'roles', label: t('settings.tabs.roles', 'Roles'), icon: ShieldAlert, component: <RolesTab roles={props.roles} canManageRoles={props.canManageRoles} /> },
     { id: 'notifications', label: t('settings.tabs.notifications', 'Notifications'), icon: Bell, component: <NotificationsTab /> },
     { id: 'billing', label: t('settings.tabs.billing', 'Billing'), icon: CreditCard, component: <BillingTab org={props.org} gateCount={props.billing.gateCount} qrCount={props.billing.qrCount} /> },
     { id: 'api-keys', label: t('settings.tabs.apiKeys', 'API Keys'), icon: KeyRound, component: <ApiKeysTab initialKeys={props.apiKeys} /> },

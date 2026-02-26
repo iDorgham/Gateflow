@@ -125,7 +125,7 @@ export default async function RootLayout({
         <I18nProvider locale={params.locale} dictionaries={dictionaries}>
           <Providers>
           <Nav locale={params.locale} />
-          <main className="relative flex min-h-screen flex-col">
+          <main className="relative flex min-h-[105.3vh] flex-col">
             {children}
           </main>
           <Footer locale={params.locale} />

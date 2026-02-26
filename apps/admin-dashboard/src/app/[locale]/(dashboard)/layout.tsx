@@ -18,7 +18,7 @@ export default function DashboardLayout({
   }
   return (
     <TranslationsProvider>
-      <div className="flex h-screen overflow-hidden">
+      <div className="flex h-[105.3vh] overflow-hidden">
         {/* Sidebar */}
         <Sidebar />
 
@@ -43,7 +43,7 @@ export default function DashboardLayout({
 
         {/* Page content */}
         <main className="flex-1 overflow-y-auto p-6 bg-background relative z-0">
-          <div className="mx-auto max-w-7xl">
+          <div className="w-full">
             {children}
           </div>
         </main>

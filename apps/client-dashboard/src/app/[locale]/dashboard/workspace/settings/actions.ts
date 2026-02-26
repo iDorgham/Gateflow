@@ -66,3 +66,96 @@ export async function updateWorkspaceSettingsAction(data: { name: string; email:
     return { success: false, message: 'An internal server error occurred while saving.' };
   }
 }
+const RoleSchema = z.object({
+  name: z.string().min(1, 'Role name is required').max(50),
+  description: z.string().max(200).optional().nullable(),
+  permissions: z.record(z.string(), z.boolean()),
+});
+
+export async function createRoleAction(data: { name: string; description?: string | null; permissions: Record<string, boolean> }) {
+  try {
+    const claims = await getSessionClaims();
+    if (!claims?.orgId || !claims.permissions['roles:manage']) {
+      return { success: false, message: 'Unauthorized' };
+    }
+
+    const validation = RoleSchema.safeParse(data);
+    if (!validation.success) {
+      return { success: false, message: 'Invalid data provided' };
+    }
+
+    await prisma.role.create({
+      data: {
+        ...validation.data,
+        organizationId: claims.orgId,
+        isBuiltIn: false,
+      },
+    });
+
+    revalidatePath('/dashboard/workspace/settings');
+    return { success: true };
+  } catch (error: any) {
+    console.error('Server Action Error - createRoleAction:', error);
+    return { success: false, message: 'Failed to create role' };
+  }
+}
+
+export async function updateRoleAction(id: string, data: { name: string; description?: string | null; permissions: Record<string, boolean> }) {
+  try {
+    const claims = await getSessionClaims();
+    if (!claims?.orgId || !claims.permissions['roles:manage']) {
+      return { success: false, message: 'Unauthorized' };
+    }
+
+    const role = await prisma.role.findUnique({ where: { id } });
+    if (!role || role.organizationId !== claims.orgId || role.isBuiltIn) {
+      return { success: false, message: 'Role not found or cannot be edited' };
+    }
+
+    const validation = RoleSchema.safeParse(data);
+    if (!validation.success) {
+      return { success: false, message: 'Invalid data provided' };
+    }
+
+    await prisma.role.update({
+      where: { id },
+      data: validation.data,
+    });
+
+    revalidatePath('/dashboard/workspace/settings');
+    return { success: true };
+  } catch (error: any) {
+    console.error('Server Action Error - updateRoleAction:', error);
+    return { success: false, message: 'Failed to update role' };
+  }
+}
+
+export async function deleteRoleAction(id: string) {
+  try {
+    const claims = await getSessionClaims();
+    if (!claims?.orgId || !claims.permissions['roles:manage']) {
+      return { success: false, message: 'Unauthorized' };
+    }
+
+    const role = await prisma.role.findUnique({
+      where: { id },
+      include: { _count: { select: { users: true } } },
+    });
+
+    if (!role || role.organizationId !== claims.orgId || role.isBuiltIn) {
+      return { success: false, message: 'Role not found or cannot be deleted' };
+    }
+
+    if (role._count.users > 0) {
+      return { success: false, message: 'Cannot delete a role that is assigned to users' };
+    }
+
+    await prisma.role.delete({ where: { id } });
+
+    revalidatePath('/dashboard/workspace/settings');
+    return { success: true };
+  } catch (error: any) {
+    console.error('Server Action Error - deleteRoleAction:', error);
+    return { success: false, message: 'Failed to delete role' };
+  }
+}

@@ -60,6 +60,7 @@ export interface DashboardShellProps {
   locale: Locale;
   children: React.ReactNode;
   hideGates?: boolean;
+  permissions?: Record<string, boolean>;
 }
 
 export function DashboardShell({
@@ -70,6 +71,7 @@ export function DashboardShell({
   locale,
   children,
   hideGates,
+  permissions,
 }: DashboardShellProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -125,7 +127,7 @@ export function DashboardShell({
   };
 
   return (
-    <div className="flex h-screen overflow-hidden bg-background">
+    <div className="flex h-[105.3vh] overflow-hidden bg-background">
       {/* Desktop Sidebar */}
       <div
         className={cn(
@@ -141,6 +143,7 @@ export function DashboardShell({
           isCollapsed={isCollapsed}
           onToggleCollapse={() => setIsCollapsed(!isCollapsed)}
           hideGates={hideGates}
+          permissions={permissions}
         />
       </div>
 
@@ -159,6 +162,7 @@ export function DashboardShell({
             isCollapsed={false}
             onToggleCollapse={() => setMobileOpen(false)}
             hideGates={hideGates}
+            permissions={permissions}
           />
         </SheetContent>
       </Sheet>
@@ -262,8 +266,6 @@ export function DashboardShell({
                 )}
               </DropdownMenuContent>
             </DropdownMenu>
-            <LanguageSwitcher currentLocale={locale} />
-            <ThemeToggle />
             <div className="h-8 w-[1px] bg-border mx-1" />
             <Link
               href={`/${locale}/dashboard/settings?tab=profile`}
@@ -289,12 +291,7 @@ export function DashboardShell({
         {/* Page content */}
         <main className="flex-1 overflow-y-auto p-4 md:p-8 bg-slate-50/50 dark:bg-transparent">
           <div
-            className={cn(
-              'animate-in fade-in slide-in-from-bottom-2 duration-500',
-              pathname.includes('/settings')
-                ? 'max-w-none w-full'
-                : 'mx-auto max-w-7xl'
-            )}
+            className="animate-in fade-in slide-in-from-bottom-2 duration-500 w-full"
           >
             <ProjectFilterProvider
               currentProjectId={currentProjectId}

@@ -9,10 +9,10 @@ export default async function DashboardLayout({
   children,
   params
 }: { 
-  children: React.ReactNode;
+  children: React.ReactNode; 
   params: { locale: Locale };
 }) {
-  const { user, org } = await requireAuth();
+  const { user, org, claims } = await requireAuth();
 
   let projects: { id: string; name: string }[] = [];
   let currentProjectId: string | null = null;
@@ -42,12 +42,18 @@ export default async function DashboardLayout({
 
   return (
     <DashboardShell
-      user={{ id: user.id, name: user.name, email: user.email, role: user.role }}
+      user={{ 
+        id: user.id, 
+        name: user.name, 
+        email: user.email, 
+        role: claims.roleName || user.role 
+      }}
       org={org ? { id: org.id, name: org.name, plan: org.plan } : null}
       projects={projects}
       currentProjectId={currentProjectId}
       locale={params.locale}
       hideGates={hideGates}
+      permissions={claims.permissions as Record<string, boolean>}
     >
       {children}
     </DashboardShell>

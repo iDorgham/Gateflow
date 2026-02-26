@@ -1,7 +1,7 @@
 import { SignJWT, jwtVerify, type JWTPayload } from 'jose';
 import * as argon2 from 'argon2';
-import { randomBytes, randomUUID } from 'crypto';
-import { UserRole } from '@gate-access/types';
+import { randomBytes } from 'crypto';
+import { Permission } from '@gate-access/types';
 
 // ─── Configuration ────────────────────────────────────────────────────────────
 
@@ -28,7 +28,9 @@ const REFRESH_TOKEN_EXPIRY_DAYS = 30;
 export interface AccessTokenClaims extends JWTPayload {
   sub: string;         // userId
   email: string;
-  role: UserRole;
+  roleId: string;
+  roleName: string;
+  permissions: Record<Permission, boolean>;
   orgId: string | null; // organizationId
 }
 
@@ -38,11 +40,13 @@ export async function signAccessToken(
   userId: string,
   email: string,
   orgId: string | null,
-  role: UserRole
+  role: { id: string; name: string; permissions: any }
 ): Promise<string> {
   return new SignJWT({
     email,
-    role,
+    roleId: role.id,
+    roleName: role.name,
+    permissions: role.permissions as Record<Permission, boolean>,
     orgId,
   } satisfies Omit<AccessTokenClaims, 'sub' | 'iat' | 'exp'>)
     .setProtectedHeader({ alg: 'HS256', typ: 'JWT' })
@@ -61,11 +65,22 @@ export async function verifyAccessToken(token: string): Promise<AccessTokenClaim
   });
 
   // Validate required claims
-  if (!payload.sub || !payload.email || !payload.role) {
+  if (!payload.sub || !payload.email || !payload.roleId || !payload.permissions) {
     throw new Error('Invalid token claims: missing required fields');
   }
 
   return payload as AccessTokenClaims;
+}
+
+/**
+ * Utility to check if a user has a specific permission.
+ */
+export function hasPermission(
+  claims: AccessTokenClaims | null,
+  permission: Permission
+): boolean {
+  if (!claims || !claims.permissions) return false;
+  return !!claims.permissions[permission];
 }
 
 // ─── Refresh Token ────────────────────────────────────────────────────────────

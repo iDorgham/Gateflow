@@ -25,7 +25,7 @@ async function main() {
     create: {
       name: 'Selena Development',
       email: 'admin@selenadev.com',
-      plan: 'ENTERPRISE',
+      plan: 'PRO',
     },
   });
 

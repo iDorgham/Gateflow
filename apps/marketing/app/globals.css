@@ -104,6 +104,7 @@
   }
   html {
     @apply scroll-smooth;
+    zoom: 0.95;
   }
   body {
     @apply bg-background text-foreground antialiased;

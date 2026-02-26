@@ -9,11 +9,19 @@ export default async function SettingsPage() {
   const claims = await getSessionClaims();
   if (!claims?.orgId) redirect('/login');
 
-  const [user, org, projects, apiKeys, webhooks, teamMembers, counts] = await Promise.all([
+  const [user, org, projects, apiKeys, webhooks, teamMembers, counts, roles] = await Promise.all([
     // Profile
     prisma.user.findFirst({
       where: { id: claims.sub, deletedAt: null },
-      select: { id: true, name: true, email: true, role: true, avatarUrl: true, bio: true, createdAt: true },
+      select: { 
+        id: true, 
+        name: true, 
+        email: true, 
+        role: { select: { id: true, name: true, permissions: true } }, 
+        avatarUrl: true, 
+        bio: true, 
+        createdAt: true 
+      },
     }),
     // Workspace
     prisma.organization.findFirst({
@@ -63,26 +71,50 @@ export default async function SettingsPage() {
           take: 5,
         },
       },
-    }),
+    }) as any,
     // Team
     prisma.user.findMany({
       where: { organizationId: claims.orgId, deletedAt: null },
-      select: { id: true, name: true, email: true, role: true, createdAt: true },
+      select: { 
+        id: true, 
+        name: true, 
+        email: true, 
+        role: { select: { id: true, name: true } }, 
+        createdAt: true 
+      },
       orderBy: { createdAt: 'asc' },
-    }),
+    }) as any,
     // Billing stats
     Promise.all([
       prisma.gate.count({ where: { organizationId: claims.orgId } }),
       prisma.qRCode.count({ where: { organizationId: claims.orgId } }),
     ]),
+    // Roles
+    (prisma as any).role.findMany({
+      where: {
+        OR: [
+          { isBuiltIn: true },
+          { organizationId: claims.orgId }
+        ]
+      },
+      include: {
+        _count: { select: { users: true } }
+      },
+      orderBy: { createdAt: 'asc' }
+    })
   ]);
 
   if (!user || !org) redirect('/login');
+
+  const userPermissions = user.role.permissions as Record<string, boolean>;
+  const canManageRoles = userPermissions['roles:manage'] === true;
+  const canManageUsers = userPermissions['users:manage'] === true;
 
   return (
     <SettingsClient
       user={{
         ...user,
+        role: user.role.name,
         avatarUrl: user.avatarUrl ?? null,
         bio: user.bio ?? null,
         createdAt: user.createdAt.toISOString(),
@@ -125,13 +157,23 @@ export default async function SettingsPage() {
       }))}
       teamMembers={teamMembers.map(m => ({
         ...m,
+        role: m.role.name,
         createdAt: m.createdAt.toISOString(),
       }))}
       billing={{
         gateCount: counts[0],
         qrCount: counts[1],
       }}
+      roles={roles.map(r => ({
+        ...r,
+        permissions: r.permissions as Record<string, boolean>,
+        createdAt: r.createdAt.toISOString(),
+        updatedAt: r.updatedAt.toISOString(),
+        userCount: r._count.users
+      }))}
       currentUserId={claims.sub}
+      canManageRoles={canManageRoles}
+      canManageUsers={canManageUsers}
     />
   );
 }
