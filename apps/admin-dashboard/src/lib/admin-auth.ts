@@ -23,14 +23,10 @@ const SECURE = process.env.NODE_ENV === 'production';
 export function expectedSessionToken(): string {
   const key = process.env.ADMIN_ACCESS_KEY;
   if (!key || key.length < 32) {
-    if (process.env.NODE_ENV === 'production') {
-      throw new Error(
-        '[admin-auth] ADMIN_ACCESS_KEY is missing or too short. ' +
-        'Set it to a random 64-char string before deploying.'
-      );
-    }
-    // Dev-only fallback — never reachable in production
-    return createHash('sha256').update('dev-admin-key-change-in-production').digest('hex');
+    throw new Error(
+      '[admin-auth] ADMIN_ACCESS_KEY is missing or too short. ' +
+      'Set it to a random string (at least 32 chars) in your .env file.'
+    );
   }
   return createHash('sha256').update(key).digest('hex');
 }
