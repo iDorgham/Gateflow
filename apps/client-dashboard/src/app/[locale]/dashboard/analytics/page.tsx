@@ -4,7 +4,7 @@ import { prisma } from '@gate-access/db';
 import { redirect } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@gate-access/ui';
 import dynamic from 'next/dynamic';
-import { getTranslation } from '@/lib/i18n';
+import { getTranslation, type TranslationFunction } from '@/lib/i18n';
 import { Locale } from '@/lib/i18n-config';
 import { PrintButton } from './print-button';
 const AnalyticsCharts = dynamic(() => import('./analytics-charts').then(mod => mod.AnalyticsCharts), { ssr: false });
@@ -23,7 +23,7 @@ export const metadata = { title: 'Analytics' };
 // ─── Date range helpers ────────────────────────────────────────────────────────
 
 function parseDateRange(
-  t: any,
+  t: TranslationFunction,
   locale: string,
   range?: string,
   from?: string,

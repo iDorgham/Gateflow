@@ -17,11 +17,21 @@ export const fetchTranslations = async (locale: string) => {
   }
 };
 
+export type TranslationFunction = (
+  key: string,
+  options?: {
+    returnObjects?: boolean;
+    defaultValue?: string;
+    count?: number;
+    [key: string]: any;
+  }
+) => any;
+
 export async function getTranslation(locale: Locale, namespace: string) {
   const fullDict = await fetchTranslations(locale);
   const dict = fullDict[namespace] || {};
 
-  const t = (key: string, options?: { returnObjects?: boolean, [key: string]: any }): any => {
+  const t: TranslationFunction = (key, options) => {
     const text = key.split('.').reduce((obj, k) => (obj || {})[k], dict);
     
     let result = text;
