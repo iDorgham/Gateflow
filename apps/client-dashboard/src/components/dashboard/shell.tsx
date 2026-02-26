@@ -11,6 +11,7 @@ import { LanguageSwitcher } from '../language-switcher';
 import { GlobalSearch } from './global-search';
 import { AIAssistant } from './ai-assistant';
 import { ProjectFilterProvider } from '@/context/ProjectFilterContext';
+import { getCsrfToken } from '@/lib/csrf';
 import { Locale } from '@/lib/i18n-config';
 import {
   Avatar,
@@ -107,9 +108,14 @@ export function DashboardShell({
 
   const handleProjectSwitch = (projectId: string) => {
     const val = projectId === 'all' ? 'all' : projectId;
+    const csrfToken = getCsrfToken() || '';
+
     fetch('/api/project/switch', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        'x-csrf-token': csrfToken
+      },
       body: JSON.stringify({ projectId: val }),
     }).then(() => {
       startTransition(() => {

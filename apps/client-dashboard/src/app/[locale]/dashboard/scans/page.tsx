@@ -229,7 +229,8 @@ export default async function ScansPage({
   const exportParams = new URLSearchParams();
   if (rawStatus) exportParams.set('status', rawStatus);
   if (gateFilter) exportParams.set('gate', gateFilter);
-  if (urlProjectParam) exportParams.set('project', urlProjectParam);
+  // Fix: Use effectiveProjectId instead of raw URL param to ensure export respects cookie filter
+  exportParams.set('project', effectiveProjectId ?? 'all');
   if (qFilter) exportParams.set('q', qFilter);
   if (searchParams.dateFrom) exportParams.set('dateFrom', searchParams.dateFrom);
   if (searchParams.dateTo) exportParams.set('dateTo', searchParams.dateTo);
