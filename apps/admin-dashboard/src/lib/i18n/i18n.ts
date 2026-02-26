@@ -4,6 +4,11 @@ import { Locale, i18n, LOCALE_COOKIE, isRtl } from './i18n-config';
 export { i18n, LOCALE_COOKIE, isRtl };
 export type { Locale };
 
+export type TranslationFunction = (
+  key: string,
+  options?: { returnObjects?: boolean; [key: string]: any }
+) => any;
+
 const dictionaries = {
   en: () => import('@gate-access/i18n/en').then((module) => module.default),
   'ar-EG': () => import('@gate-access/i18n/ar').then((module) => module.default),
@@ -21,7 +26,7 @@ export async function getTranslation(locale: Locale, namespace: string) {
   const fullDict = await fetchTranslations(locale);
   const dict = (fullDict as Record<string, any>)[namespace] || {};
 
-  const t = (key: string, options?: { returnObjects?: boolean, [key: string]: any }): any => {
+  const t: TranslationFunction = (key, options) => {
     let text = key.split('.').reduce((obj, k) => (obj || {})[k], dict);
     
     if (options && options.count !== undefined && text && typeof text === 'object' && !Array.isArray(text)) {

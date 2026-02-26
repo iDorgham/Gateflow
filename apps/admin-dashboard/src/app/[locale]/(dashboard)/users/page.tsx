@@ -1,5 +1,5 @@
 import { requireAdmin } from '@/lib/admin-auth';
-import { getTranslation } from '@/lib/i18n/i18n';
+import { getTranslation, TranslationFunction } from '@/lib/i18n/i18n';
 import { Locale } from '@/lib/i18n/i18n-config';
 import { prisma } from '@gate-access/db';
 import { revalidatePath } from 'next/cache';
@@ -367,7 +367,7 @@ export default async function UsersPage({
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
-function RoleBadge({ role, t }: { role: string; t: any }) {
+function RoleBadge({ role, t }: { role: string; t: TranslationFunction }) {
   const styles: Record<string, string> = {
     ADMIN: 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800 shadow-red-100/50',
     TENANT_ADMIN: 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 border-orange-200 dark:border-orange-800 shadow-orange-100/50',
@@ -382,7 +382,7 @@ function RoleBadge({ role, t }: { role: string; t: any }) {
         styles[role] ?? styles.VISITOR
       )}
     >
-      {t(`roles.${role}`, role.replace('_', ' '))}
+      {t(`roles.${role}`)}
     </Badge>
   );
 }
