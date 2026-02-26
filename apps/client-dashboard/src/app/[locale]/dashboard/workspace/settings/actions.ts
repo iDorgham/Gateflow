@@ -11,15 +11,11 @@ const SettingsSchema = z.object({
   domain: z.string().max(100).nullable().optional(),
 });
 
-import { Prisma } from '@gate-access/db';
-
 export async function updateWorkspaceSettingsAction(data: { name: string; email: string; domain?: string | null }) {
   try {
     const claims = await getSessionClaims();
-    console.log('[DEBUG action] Settings update hit. Claims parsed:', claims);
     
     if (!claims?.orgId) {
-      console.log('[DEBUG action] Bouncing as Unauthorized. OrgId missing.');
       return { success: false, message: 'Unauthorized' };
     }
 
