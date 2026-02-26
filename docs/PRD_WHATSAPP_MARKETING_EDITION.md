@@ -1,4 +1,4 @@
-# GateFlow: Comprehensive PRD (Marketing & WhatsApp Edition)
+# GateFlow: Omni-Channel Marketing & Visitor Access PRD
 
 ## 1. Executive Summary
 GateFlow is evolving from a pure security/access management system into a **Marketing-First Access Platform**. By leveraging high-intent scan data and WhatsApp-based delivery, GateFlow allows organizations to turn gate visits into actionable marketing opportunities.
@@ -14,24 +14,32 @@ As of the current sprint, the platform has achieved **98% MVP completion**.
 
 ---
 
-## 3. The New Vision: WhatsApp-Driven Marketing
+## 3. The New Vision: Omni-Channel Marketing
 
 ### 3.1 Concept: "QR as a Link"
-Instead of sending a static QR image that is "blind" to tracking, GateFlow will generate unique, trackable **Visitor Access Links**.
+Instead of sending a static QR image, GateFlow generates unique, trackable **Visitor Access Links** delivered via WhatsApp, Email, or SMS.
 
-### 3.2 User Workflow
-1. **Admin Generation**: Staff generates an access request for a visitor via the Client Dashboard.
-2. **WhatsApp Delivery**: The system automatically sends a pre-configured WhatsApp message containing a unique link (e.g., `gate.flow/v/xyz789`).
-3. **Visitor Landing Page**:
-   - Visitor clicks the link and arrives at a mobile-optimized landing page.
-   - The landing page displays the active QR code for the gate.
-   - **Marketing Capture**: The system logs the visit, captures device info, and supports Meta/Google tracking pixels.
-4. **Gate Access**: The visitor scans the QR from their phone screen at the gate.
+### 3.2 Delivery Channels & Workflows
+#### A) WhatsApp (Primary)
+- **Workflow**: Staff/Resident selects a contact -> System generates link -> Direct share to WhatsApp.
+- **Value**: High engagement, instant delivery.
 
-### 3.3 Marketing Value Proposition
-- **High-Intent Lead Capture**: Anyone opening the QR link is physically present at the venue, representing a high-value lead.
-- **Retargeting Integration**: Support for Facebook/Meta pixels on the landing page allows for immediate retargeting for on-site offers.
-- **CRM Integration**: Linking gate scans to WhatsApp profiles for personalized follow-up (e.g., "Thank you for visiting! Here is 10% off your next session").
+#### B) Email (Direct/Marketing)
+- **Workflow**: System sends a branded email template with the access link.
+- **Value**: Supports longer-form marketing content, rich media, and traditional UTM tracking.
+
+#### C) SMS (Transactional)
+- **Workflow**: Automated SMS delivery for high-priority or offline-capable access.
+- **Value**: 98% open rates; essential for visitors without data plans.
+
+### 3.3 Native Mobile Integration (Resident & Mobile App)
+- **Contact Picker**: The Mobile App and Resident Portal must integrate with native OS Contact APIs (iOS/Android) to allow users to quickly select phone numbers or emails from their address book.
+- **Native Sharing**: Leverage native share sheets to cross-post access links across any installed communication app.
+
+### 3.4 Marketing Capture & Tracking
+- **Visitor Landing Page**: Mobile-optimized page hosting the dynamic QR.
+- **Capture**: Logs device fingerprint, captures intent, and supports Meta/Google pixels for remarketing.
+- **CRM Loop**: Feedback loop into the CRM when a link is opened vs. scanned.
 
 ---
 
@@ -57,7 +65,9 @@ Instead of sending a static QR image that is "blind" to tracking, GateFlow will 
 |-------|---------|--------|
 | **Current** | Core Security & Dashboard | **Delivered** |
 | **P0** | QR Link Landing Page | To Do |
-| **P0** | WhatsApp Share Utility | To Do |
-| **P1** | Visitor Link Tracking | To Do |
-| **P2** | Meta Pixel Integration | To Do |
-| **P3** | WhatsApp API Automation | To Do |
+| **P0** | WhatsApp/Email Direct Share | To Do |
+| **P1** | Mobile Contact Picker (Native) | To Do |
+| **P1** | Visitor Tracking (Open/Scan) | To Do |
+| **P2** | Meta/Google Pixel Integration | To Do |
+| **P2** | SMS Integration (Twilio/AWS) | To Do |
+| **P3** | Automation Bridge (Webhook/Zapier) | To Do |
