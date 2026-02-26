@@ -23,16 +23,43 @@ import {
   PopoverContent,
 } from '@gate-access/ui';
 
+interface SearchContact {
+  id: string;
+  name: string;
+  email: string | null;
+}
+
+interface SearchUnit {
+  id: string;
+  identifier: string;
+  type: string;
+}
+
+interface SearchQR {
+  id: string;
+  code: string;
+  guestName: string;
+  status: string;
+}
+
+interface SearchGate {
+  id: string;
+  name: string;
+  status: string;
+}
+
+interface SearchResults {
+  contacts: SearchContact[];
+  units: SearchUnit[];
+  qrs: SearchQR[];
+  gates: SearchGate[];
+}
+
 export function GlobalSearch({ locale }: { locale: string }) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [debouncedQuery, setDebouncedQuery] = useState('');
-  const [results, setResults] = useState<{
-    contacts: any[];
-    units: any[];
-    qrs: any[];
-    gates: any[];
-  } | null>(null);
+  const [results, setResults] = useState<SearchResults | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
