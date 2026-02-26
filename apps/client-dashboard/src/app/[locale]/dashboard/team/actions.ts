@@ -2,7 +2,7 @@
 
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma } from '@gate-access/db';
-import { hashPassword } from '@/lib/auth';
+import { hashPassword, generateTemporaryPassword } from '@/lib/auth';
 import { UserRole } from '@gate-access/db';
 
 type MemberResult = {
@@ -31,7 +31,7 @@ export async function inviteMember(
 
     // In production: send an invitation email with a temp password link.
     // For now: create the user with a random temporary password.
-    const tempPassword = Math.random().toString(36).slice(2, 14) + 'Aa1!';
+    const tempPassword = generateTemporaryPassword();
     const passwordHash = await hashPassword(tempPassword);
 
     const member = await prisma.user.create({
