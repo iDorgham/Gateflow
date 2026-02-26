@@ -606,35 +606,3 @@ export function GatesList({
   );
 }
 
-// ─── Backward-compat exports (kept so any other pages don't break) ────────────
-
-export function GateActions({ gateId, isActive }: { gateId: string; isActive: boolean }) {
-  const { t } = useTranslation('dashboard');
-  const [isPending, startTransition] = useTransition();
-  const router = useRouter();
-  function toggle() {
-    startTransition(async () => {
-      await toggleGate(gateId, !isActive);
-      router.refresh();
-    });
-  }
-  return (
-    <Button variant="ghost" size="sm" className={isActive ? 'text-slate-500' : 'text-green-600'} onClick={toggle} disabled={isPending}>
-      {isActive ? t('gates.menu.deactivate', 'Deactivate') : t('gates.menu.activate', 'Activate')}
-    </Button>
-  );
-}
-
-export function AddGateButton({ orgId }: { orgId: string }) {
-  const { t } = useTranslation('dashboard');
-  const [showAdd, setShowAdd] = useState(false);
-  return (
-    <>
-      <Button onClick={() => setShowAdd(true)} className="gap-2">
-        <Plus className="h-4 w-4" aria-hidden="true" />
-        {t('gates.addGate', 'New Gate')}
-      </Button>
-      {showAdd && <AddGateModal orgId={orgId} onClose={() => setShowAdd(false)} />}
-    </>
-  );
-}
