@@ -115,60 +115,95 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    const scans = await prisma.scanLog.findMany({
-      where,
-      orderBy: { scannedAt: 'desc' },
-      include: {
-        qrCode: {
-          select: {
-            code: true,
-            type: true,
-            project: { select: { name: true } },
+    // Generator function for batched fetching
+    async function* scanGenerator() {
+      const BATCH_SIZE = 1000;
+      let cursor: string | undefined;
+
+      while (true) {
+        const batch = await prisma.scanLog.findMany({
+          take: BATCH_SIZE,
+          skip: cursor ? 1 : 0,
+          cursor: cursor ? { id: cursor } : undefined,
+          where,
+          orderBy: [
+            { scannedAt: 'desc' },
+            { id: 'desc' }, // Stable sort for cursor pagination
+          ],
+          include: {
+            qrCode: {
+              select: {
+                code: true,
+                type: true,
+                project: { select: { name: true } },
+              },
+            },
+            gate: { select: { name: true } },
+            user: { select: { name: true, email: true } },
           },
-        },
-        gate: { select: { name: true } },
-        user: { select: { name: true, email: true } },
+        });
+
+        if (batch.length === 0) break;
+
+        for (const scan of batch) {
+          yield scan;
+        }
+
+        if (batch.length < BATCH_SIZE) break;
+        cursor = batch[batch.length - 1].id;
+      }
+    }
+
+    const iterator = scanGenerator();
+    const encoder = new TextEncoder();
+
+    const stream = new ReadableStream({
+      async start(controller) {
+        // Enqueue CSV Header
+        const header = buildRow([
+          'Scan ID',
+          'Scan UUID',
+          'Date/Time (UTC)',
+          'Status',
+          'Project',
+          'QR Code',
+          'QR Type',
+          'Gate',
+          'Operator Name',
+          'Operator Email',
+          'Device ID',
+        ]);
+        controller.enqueue(encoder.encode(header + '\r\n'));
+
+        try {
+          for await (const s of iterator) {
+            const row = buildRow([
+              s.id,
+              s.scanUuid ?? '',
+              s.scannedAt.toISOString(),
+              s.status,
+              s.qrCode?.project?.name ?? '',
+              s.qrCode?.code ?? '',
+              s.qrCode?.type ?? '',
+              s.gate?.name ?? '',
+              s.user?.name ?? '',
+              s.user?.email ?? '',
+              s.deviceId ?? '',
+            ]);
+            controller.enqueue(encoder.encode(row + '\r\n'));
+          }
+          controller.close();
+        } catch (e) {
+          controller.error(e);
+        }
       },
     });
-
-    // Build CSV
-    const header = buildRow([
-      'Scan ID',
-      'Scan UUID',
-      'Date/Time (UTC)',
-      'Status',
-      'Project',
-      'QR Code',
-      'QR Type',
-      'Gate',
-      'Operator Name',
-      'Operator Email',
-      'Device ID',
-    ]);
-
-    const rows = scans.map((s) =>
-      buildRow([
-        s.id,
-        s.scanUuid ?? '',
-        s.scannedAt.toISOString(),
-        s.status,
-        s.qrCode?.project?.name ?? '',
-        s.qrCode?.code ?? '',
-        s.qrCode?.type ?? '',
-        s.gate?.name ?? '',
-        s.user?.name ?? '',
-        s.user?.email ?? '',
-        s.deviceId ?? '',
-      ]),
-    );
-
-    const csv = [header, ...rows].join('\r\n');
 
     const today = new Date().toISOString().slice(0, 10);
     const suffix = projectFilter ? `_${projectFilter.slice(0, 8)}` : '';
     const filename = `scans_export_${today}${suffix}.csv`;
 
-    return new NextResponse(csv, {
+    return new NextResponse(stream, {
       status: 200,
       headers: {
         'Content-Type': 'text/csv; charset=utf-8',
@@ -176,6 +211,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         'Cache-Control': 'no-store',
       },
     });
+
   } catch (error) {
     console.error('Scans export error:', error);
     return NextResponse.json(
