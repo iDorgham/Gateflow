@@ -1,5 +1,8 @@
 # GateFlow Plan Directory
 
+> [!IMPORTANT]
+> **Start Here:** [**MASTER_PLAN.md**](./MASTER_PLAN.md) — The central hub for project status, roadmap, and documentation.
+
 This directory contains the structured plan for GateFlow development and operations.
 
 ## 📁 Subdirectories
