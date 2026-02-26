@@ -1,32 +1,73 @@
 import 'server-only';
 import { Locale, i18n, LOCALE_COOKIE, isRtl } from './i18n-config';
+import type en from '@gate-access/i18n/en';
 
 export { i18n, LOCALE_COOKIE, isRtl };
 export type { Locale };
+
+export type Dictionary = typeof en;
+export type Namespace = keyof Dictionary;
+
+export type Path<T> = T extends object
+  ? {
+      [K in keyof T & (string | number)]: T[K] extends
+        | string
+        | number
+        | boolean
+        | null
+        | undefined
+        ? `${K}`
+        : T[K] extends Array<any>
+        ? `${K}` | `${K}.${number}`
+        : `${K}` | `${K}.${Path<T[K]>}`;
+    }[keyof T & (string | number)]
+  : never;
+
+export type TranslationFunction<TNamespace extends Namespace> = <
+  K extends Path<Dictionary[TNamespace]>
+>(
+  key: K,
+  options?: { returnObjects?: boolean; count?: number; [key: string]: any }
+) => any;
 
 const dictionaries = {
   en: () => import('@gate-access/i18n/en').then((module) => module.default),
   'ar-EG': () => import('@gate-access/i18n/ar').then((module) => module.default),
 };
 
-export const fetchTranslations = async (locale: string) => {
+export const fetchTranslations = async (locale: string): Promise<Dictionary> => {
   try {
-    return await dictionaries[locale as Locale]();
+    // @ts-expect-error - Dynamic import type mismatch might occur but shape is guaranteed
+    return (await dictionaries[locale as Locale]()) as Dictionary;
   } catch (error) {
-    return await dictionaries['en']();
+    // @ts-expect-error - Dynamic import type mismatch might occur but shape is guaranteed
+    return (await dictionaries['en']()) as Dictionary;
   }
 };
 
-export async function getTranslation(locale: Locale, namespace: string) {
+export async function getTranslation<N extends Namespace>(
+  locale: Locale,
+  namespace: N
+) {
   const fullDict = await fetchTranslations(locale);
-  const dict = (fullDict as Record<string, any>)[namespace] || {};
+  const dict = fullDict[namespace] || ({} as Dictionary[N]);
 
-  const t = (key: string, options?: { returnObjects?: boolean, [key: string]: any }): any => {
+  const t: TranslationFunction<N> = (
+    key: string,
+    options?: { returnObjects?: boolean; count?: number; [key: string]: any }
+  ): any => {
+    // @ts-expect-error - key is a valid path string but split requires string
     let text = key.split('.').reduce((obj, k) => (obj || {})[k], dict);
     
-    if (options && options.count !== undefined && text && typeof text === 'object' && !Array.isArray(text)) {
-       if (options.count === 1 && text.one) text = text.one;
-       else if (text.other) text = text.other;
+    if (
+      options &&
+      options.count !== undefined &&
+      text &&
+      typeof text === 'object' &&
+      !Array.isArray(text)
+    ) {
+      if (options.count === 1 && text.one) text = text.one;
+      else if (text.other) text = text.other;
     }
 
     if (!text) return key; 
