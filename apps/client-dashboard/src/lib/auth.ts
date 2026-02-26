@@ -74,6 +74,11 @@ export function generateRefreshToken(): string {
   return randomBytes(48).toString('base64url');
 }
 
+export function generateTemporaryPassword(): string {
+  // 9 bytes * 8 bits = 72 bits. 72 / 6 = 12 base64 chars.
+  return randomBytes(9).toString('base64url') + 'Aa1!';
+}
+
 export function getRefreshTokenExpiry(): Date {
   return new Date(Date.now() + REFRESH_TOKEN_EXPIRY_DAYS * 24 * 60 * 60 * 1000);
 }
