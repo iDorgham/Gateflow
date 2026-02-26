@@ -625,16 +625,3 @@ export function GateActions({ gateId, isActive }: { gateId: string; isActive: bo
   );
 }
 
-export function AddGateButton({ orgId }: { orgId: string }) {
-  const { t } = useTranslation('dashboard');
-  const [showAdd, setShowAdd] = useState(false);
-  return (
-    <>
-      <Button onClick={() => setShowAdd(true)} className="gap-2">
-        <Plus className="h-4 w-4" aria-hidden="true" />
-        {t('gates.addGate', 'New Gate')}
-      </Button>
-      {showAdd && <AddGateModal orgId={orgId} onClose={() => setShowAdd(false)} />}
-    </>
-  );
-}
