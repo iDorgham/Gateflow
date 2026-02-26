@@ -11,10 +11,13 @@ const ARGON2_OPTIONS = {
   raw: false,
 };
 
+// Use environment variable for password or default to a safe value for dev
+const DEFAULT_PASSWORD = process.env.SEED_PASSWORD || 'password123';
+
 async function main() {
   console.log('🌱 Starting Dev Seed...');
 
-  const passwordHash = await argon2.hash('password123', ARGON2_OPTIONS);
+  const passwordHash = await argon2.hash(DEFAULT_PASSWORD, ARGON2_OPTIONS);
 
   const org = await prisma.organization.upsert({
     where: { email: 'admin@selenadev.com' },
@@ -71,7 +74,8 @@ async function main() {
   console.log('✅ Created Organization:', org.name);
   console.log('✅ Created Admin User 1:', user.email);
   console.log('✅ Created Admin User 2:', user2.email);
-  console.log('🔑 Password: password123');
+  // Security: Do not log cleartext password
+  console.log('🔑 Password: [HIDDEN] (check SEED_PASSWORD env var or default)');
   console.log('🌱 Dev Seed completed!');
 }
 
