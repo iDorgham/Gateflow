@@ -106,9 +106,9 @@ export const apiClient = {
 };
 
 export const auth = {
-  setToken: AuthTokenManager.setToken,
-  getToken: AuthTokenManager.getToken,
-  clearToken: AuthTokenManager.clearToken,
+  setToken: (token: string | null) => AuthTokenManager.setToken(token),
+  getToken: () => AuthTokenManager.getToken(),
+  clearToken: () => AuthTokenManager.clearToken(),
   isAuthenticated: (): boolean => {
     return AuthTokenManager.getToken() !== null;
   },
