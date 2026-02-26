@@ -1,26 +1,22 @@
 /**
  * Admin authentication helpers.
  *
- * Strategy: single ADMIN_ACCESS_KEY environment variable (a long random
- * secret set at deploy time). When the admin enters it on the login page,
- * the server stores sha256(key) in an httpOnly cookie. On every request the
- * middleware compares the cookie against sha256(env key).
- *
- * No JWT libraries required — standard Node.js crypto is sufficient for
- * an internal single-admin tool.
+ * Strategy: single ADMIN_ACCESS_KEY environment variable.
+ * When the admin enters it on the login page, the server generates a signed session token.
+ * On every request the middleware verifies the token signature and expiration.
  */
 
-import { createHash } from 'crypto';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { generateSessionToken, verifySessionToken } from './admin-session';
 
 const COOKIE_NAME = 'admin_session';
 const SECURE = process.env.NODE_ENV === 'production';
 
 // ─── Public helpers ───────────────────────────────────────────────────────────
 
-/** Returns the expected cookie value for the configured access key. */
-export function expectedSessionToken(): string {
+/** Returns the secret key for signing sessions. */
+function getSecret(): string {
   const key = process.env.ADMIN_ACCESS_KEY;
   if (!key || key.length < 32) {
     if (process.env.NODE_ENV === 'production') {
@@ -29,10 +25,10 @@ export function expectedSessionToken(): string {
         'Set it to a random 64-char string before deploying.'
       );
     }
-    // Dev-only fallback — never reachable in production
-    return createHash('sha256').update('dev-admin-key-change-in-production').digest('hex');
+    // Dev-only fallback — never reachable in production if configured correctly
+    return 'dev-admin-key-change-in-production';
   }
-  return createHash('sha256').update(key).digest('hex');
+  return key;
 }
 
 /** True if the request's admin_session cookie is valid. */
@@ -40,7 +36,10 @@ export function isAdminAuthenticated(): boolean {
   try {
     const jar = cookies();
     const sessionCookie = jar.get(COOKIE_NAME)?.value;
-    return sessionCookie === expectedSessionToken();
+    if (!sessionCookie) return false;
+
+    const payload = verifySessionToken(sessionCookie, getSecret());
+    return !!payload;
   } catch {
     return false;
   }
@@ -58,7 +57,8 @@ export function requireAdmin(): void {
 
 /** Sets the admin session cookie. */
 export function setAdminSession(): void {
-  cookies().set(COOKIE_NAME, expectedSessionToken(), {
+  const token = generateSessionToken(getSecret());
+  cookies().set(COOKIE_NAME, token, {
     httpOnly: true,
     secure: SECURE,
     sameSite: 'lax',
