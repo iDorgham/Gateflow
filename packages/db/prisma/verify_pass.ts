@@ -13,7 +13,6 @@ async function main() {
   }
   
   console.log('Found user:', user.email);
-  console.log('Hash in DB:', user.passwordHash);
   
   const password = 'password123';
   const isValid = await argon2.verify(user.passwordHash, password);
