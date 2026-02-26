@@ -29,13 +29,17 @@ This document centralizes **all known tasks** across MVP launch, Phase 2 (Reside
 
 ### 1.2 Security / Auth / Multi‑Project Correctness
 
-3. 🟡 **Fix CSRF on ProjectSwitcher**
+3. ✅ **Fix ThemeToggle hydration mismatch**
+   - Resolved in both Client and Admin dashboard login pages.
+4. ✅ **Standardize "Add Contact" button text**
+   - Replaced "Contact" and "New Contact" with "Add Contact" in residents module.
+5. 🟡 **Fix CSRF on ProjectSwitcher**
    - Ensure `/api/project/switch` POST in client-dashboard includes and validates CSRF token.
-4. 🟡 **Enforce auth on supervisor override API**
+6. 🟡 **Enforce auth on supervisor override API**
    - Require valid Bearer token on the scanner override endpoint.
-5. 🟡 **Scope scan log export by project**
+7. 🟡 **Scope scan log export by project**
    - Add `projectId` filtering to scans export endpoint.
-6. 🟠 **Harden project caching**
+8. 🟠 **Harden project caching**
    - Review `getValidatedProjectId` (and related helpers) to avoid stale `deletedAt` / project ID caching issues.
 
 ### 1.3 UX / Navigation / Admin Panel
