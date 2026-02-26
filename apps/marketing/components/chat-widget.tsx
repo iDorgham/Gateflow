@@ -5,6 +5,19 @@ import { MessageCircle, X, Send, Zap } from 'lucide-react';
 
 import { useTranslation } from '../hooks/use-translation';
 
+interface FAQ {
+  q: string;
+  a: string;
+}
+
+interface ComponentsDictionary {
+  chatWidget?: {
+    faqs?: FAQ[];
+    [key: string]: any;
+  };
+  [key: string]: any;
+}
+
 interface Message {
   id: number;
   role: 'user' | 'bot';
@@ -14,6 +27,7 @@ interface Message {
 export function ChatWidget() {
   const [open, setOpen] = useState(false);
   const { t, dict } = useTranslation('components');
+  const componentsDict = dict as ComponentsDictionary;
   
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -39,8 +53,8 @@ export function ChatWidget() {
     setInput('');
     setTyping(true);
     setTimeout(() => {
-      const faqs = dict.chatWidget?.faqs || [];
-      const replyObj = faqs.find((f: any) => f.q === trimmed);
+      const faqs = componentsDict.chatWidget?.faqs || [];
+      const replyObj = faqs.find((f) => f.q === trimmed);
       const reply = replyObj?.a ?? t('chatWidget.botFallback');
       
       setMessages((m) => [...m, { id: Date.now() + 1, role: 'bot', text: reply }]);
@@ -129,7 +143,7 @@ export function ChatWidget() {
         {/* Quick questions */}
         {messages.length <= 2 && !typing && (
           <div className="px-4 pb-2 flex flex-wrap gap-1.5">
-            {(dict.chatWidget?.faqs || []).map((faq: any) => faq.q).map((q: string) => (
+            {(componentsDict.chatWidget?.faqs || []).map((faq) => faq.q).map((q: string) => (
               <button
                 key={q}
                 onClick={() => send(q)}
