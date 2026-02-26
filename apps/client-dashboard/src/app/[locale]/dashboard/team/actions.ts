@@ -1,5 +1,6 @@
 'use server';
 
+import { logger } from '@/lib/logger';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma } from '@gate-access/db';
 import { hashPassword, generateTemporaryPassword } from '@/lib/auth';
@@ -45,13 +46,13 @@ export async function inviteMember(
       select: { id: true, name: true, email: true, role: true, createdAt: true },
     });
 
-    console.log(`inviteMember: Success - Invited ${email} as ${role} to org ${claims.orgId}`);
+    logger.info(`inviteMember: Success - Invited ${email} as ${role} to org ${claims.orgId}`);
     return {
       success: true,
       member: { ...member, createdAt: member.createdAt.toISOString() },
     };
   } catch (error) {
-    console.error('inviteMember: Unexpected error:', error);
+    logger.error('inviteMember: Unexpected error:', error);
     return { success: false, error: 'An unexpected error occurred.' };
   }
 }
@@ -68,10 +69,10 @@ export async function removeMember(memberId: string): Promise<SimpleResult> {
     if (!member) return { success: false, error: 'Member not found.' };
 
     await prisma.user.update({ where: { id: memberId }, data: { deletedAt: new Date() } });
-    console.log(`removeMember: Success - Removed user ${memberId} from org ${claims.orgId}`);
+    logger.info(`removeMember: Success - Removed user ${memberId} from org ${claims.orgId}`);
     return { success: true };
   } catch (error) {
-    console.error('removeMember: Unexpected error:', error);
+    logger.error('removeMember: Unexpected error:', error);
     return { success: false, error: 'An unexpected error occurred.' };
   }
 }
@@ -89,10 +90,10 @@ export async function changeRole(memberId: string, newRole: string): Promise<Sim
     if (!member) return { success: false, error: 'Member not found.' };
 
     await prisma.user.update({ where: { id: memberId }, data: { role: newRole as UserRole } });
-    console.log(`changeRole: Success - Changed user ${memberId} role to ${newRole} in org ${claims.orgId}`);
+    logger.info(`changeRole: Success - Changed user ${memberId} role to ${newRole} in org ${claims.orgId}`);
     return { success: true };
   } catch (error) {
-    console.error('changeRole: Unexpected error:', error);
+    logger.error('changeRole: Unexpected error:', error);
     return { success: false, error: 'An unexpected error occurred.' };
   }
 }
