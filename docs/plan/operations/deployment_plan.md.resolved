@@ -1,0 +1,82 @@
+# GateFlow Initial Deployment Strategy
+
+This document outlines the proposed deployment architecture for the GateFlow monorepo. The goal is to maximize performance, automate CI/CD pipelines, and ensure secure infrastructure for a premium SaaS platform.
+
+## 🏗️ Monorepo Architecture Overview
+
+GateFlow is built as a Turborepo comprising:
+- **3 Web Applications** (Next.js 14 App Router): `marketing`, `client-dashboard`, `admin-dashboard`
+- **2 Mobile Applications** (React Native / Expo): `scanner-app`, `resident-mobile`
+- **Shared Packages**: `@gate-access/db` (Prisma), `@gate-access/ui`, `@gate-access/i18n`, etc.
+- **External Dependencies**: PostgreSQL Database, Upstash Redis
+
+---
+
+## 🚀 Web Applications (Next.js)
+
+**Recommended Provider:** [Vercel](https://vercel.com/)
+Vercel is the creator of Next.js and Turborepo, offering first-class caching, edge middleware (used heavily for GateFlow's i18n & CSRF), and zero-config CI/CD.
+
+### Setup Steps:
+1. **Import Monorepo**: Connect the GitHub repository to Vercel.
+2. **Create 3 Vercel Projects**:
+   - `gateflow-marketing` → Root Directory: `apps/marketing`
+   - `gateflow-client` → Root Directory: `apps/client-dashboard`
+   - `gateflow-admin` → Root Directory: `apps/admin-dashboard`
+3. **Environment Variables**:
+   Configure `.env` variables securely in the Vercel dashboard:
+   - `DATABASE_URL` (Connection pool URL)
+   - `DIRECT_URL` (Direct database connection for Prisma migrations)
+   - `UPSTASH_REDIS_REST_URL` & `UPSTASH_REDIS_REST_TOKEN`
+   - Secrets: `QR_SIGNING_SECRET`, `JWT_SECRET`, etc.
+   > *Note: Rotate the `QR_SIGNING_SECRET` from the current test environment before production.*
+4. **Custom Domains**:
+   - `gateflow.com` (Marketing)
+   - `app.gateflow.com` (Client Dashboard)
+   - `admin.gateflow.com` (Internal Admin)
+
+---
+
+## 🗄️ Database & Caching Layer
+
+**Primary Database (PostgreSQL)**
+**Recommended Providers:** [Supabase](https://supabase.com/) or [Neon](https://neon.tech/)
+- Excellent serverless Postgres support that pairs cleanly with Prisma and Vercel edge functions.
+- Provides built-in connection pooling (PgBouncer) necessary for serverless environments.
+
+**Key-Value Store / Rate Limiting (Redis)**
+**Recommended Provider:** [Upstash](https://upstash.com/)
+- It's already integrated via `@upstash/ratelimit`. The REST-based API is perfect for Next.js edge runtimes.
+
+---
+
+## 📱 Mobile Applications (React Native)
+
+**Recommended CI/CD:** [Expo Application Services (EAS)](https://expo.dev/eas)
+The mobile apps (`scanner-app` and `resident-mobile`) handle hardware interaction (camera via `expo-camera`, secure storage via `expo-secure-store`).
+
+### Setup Steps:
+1. **Initialize EAS**: Run `eas build:configure` in each mobile app directory to generate `eas.json`.
+2. **Environment Profiles**: Define "development", "preview", and "production" profiles in `eas.json` pointing to their respective API backend URLs.
+3. **App Signing**: Let EAS handle Android Keystores and Apple Developer Certificates.
+4. **OTA Updates**: Setup EAS Update for pushing bug fixes and UI updates to user devices without requiring App Store reviews.
+
+---
+
+## 🔒 Security & Performance Considerations (Pre-Flight)
+
+Based on the [Security & Performance Audit](file:///Users/Dorgham/Documents/Work/Devleopment/Gate-Access/docs/SECURITY_PERFORMANCE_AUDIT.md), these items must be addressed during deployment routing:
+
+1. **Vercel Edge Network / WAF**: Utilize Vercel's caching layer to serve the translated frontend artifacts for the marketing site rapidly.
+2. **Reverse Proxy (Optional)**: Provide an API gateway pattern if isolating internal tools from the public internet. However, since all traffic runs through Next.js server actions and API routes, basic perimeter security exists.
+3. **CORS / Headers**: Ensure HTTP Security Headers are strictly enforced at the Vercel Edge level (via `next.config.js`).
+
+---
+
+## 📋 Next Phases
+
+If you approve this architecture, the execution steps are:
+1. Provision Neon/Supabase Postgres DB and run `prisma migrate deploy`.
+2. Connect the Vercel projects and set the required environment bindings.
+3. Trigger the initial Vercel production build for the 3 web apps.
+4. Configure EAS profiles for the mobile builds.
