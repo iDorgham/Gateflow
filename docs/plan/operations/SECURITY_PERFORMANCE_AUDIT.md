@@ -30,7 +30,7 @@
 
 **File:** `packages/types/test_qr.js:7`  
 ```js
-const secret = "dOiCNwP+3pzjJTJQPsd0LGoDw85QvhQOywj7sccaBiCpvAVBIXLdsrG89DoKLCXK";
+const secret = "[REDACTED]";
 ```
 
 This is the **same value** as `QR_SIGNING_SECRET` in `.env`. This file is committed to Git.
