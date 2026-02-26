@@ -9,6 +9,7 @@
     "./client": "./src/client.ts"
   },
   "scripts": {
+    "test": "bun test --preload ./src/setup.ts",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
