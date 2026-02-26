@@ -535,6 +535,9 @@ npx prisma studio          # Open Prisma Studio
 - All docs in `/docs` directory
 - CLAUDE.md for AI assistant guidance
 - DEVELOPMENT_GUIDE.md for setup
+- 📄 [Security Audit Log Spec](file:///Users/Dorgham/Documents/Work/Devleopment/Gate-Access/docs/SECURITY_AUDIT_LOGS.md)
+- 📄 [Marketing & WhatsApp PRD](file:///Users/Dorgham/Documents/Work/Devleopment/Gate-Access/docs/PRD_WHATSAPP_MARKETING_EDITION.md)
+- 📄 [Testing Blueprint](file:///Users/Dorgham/Documents/Work/Devleopment/Gate-Access/docs/TESTING_BLUEPRINT.md)
 
 ### Key Contacts
 - Product questions: Refer to PRD_v5.0.md
