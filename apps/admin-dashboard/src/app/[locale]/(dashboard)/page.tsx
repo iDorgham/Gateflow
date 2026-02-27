@@ -45,7 +45,7 @@ export default async function AdminOverviewPage({ params: { locale } }: { params
     prisma.organization.count(),
     prisma.organization.count({ where: { deletedAt: null } }),
     prisma.user.count({ where: { deletedAt: null } }),
-    prisma.user.count({ where: { role: { in: ['ADMIN', 'TENANT_ADMIN'] }, deletedAt: null } }),
+    prisma.user.count({ where: { role: { name: { in: ['ADMIN', 'TENANT_ADMIN'] } }, deletedAt: null } }),
     prisma.scanLog.count({ where: { scannedAt: { gte: todayStart } } }),
     prisma.scanLog.count({ where: { scannedAt: { gte: weekStart } } }),
     prisma.scanLog.count({ where: { scannedAt: { gte: monthStart } } }),
@@ -158,7 +158,6 @@ export default async function AdminOverviewPage({ params: { locale } }: { params
                       <td className="px-5 py-4">
                         <Badge variant="secondary" className={cn(
                           "text-[10px] font-bold uppercase tracking-wider",
-                          org.plan === 'ENTERPRISE' ? "bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-300 border-violet-200 dark:border-violet-800" :
                           org.plan === 'PRO' ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 border-blue-200 dark:border-blue-800" :
                           "bg-muted text-muted-foreground border-border"
                         )}>

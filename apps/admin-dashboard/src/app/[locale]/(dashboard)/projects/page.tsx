@@ -295,9 +295,7 @@ function PlanBadge({ plan }: { plan: string }) {
       variant="secondary"
       className={cn(
         'w-fit text-[9px] font-bold uppercase tracking-tight h-4 px-1.5',
-        plan === 'ENTERPRISE'
-          ? 'bg-violet-50 dark:bg-violet-900/20 text-violet-700 dark:text-violet-300'
-          : plan === 'PRO'
+        plan === 'PRO'
           ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
           : 'bg-muted text-muted-foreground'
       )}

@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { UserRole } from './user';
 
 export const LoginPayloadSchema = z.object({
   email: z.string().email(),

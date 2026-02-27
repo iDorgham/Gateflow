@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "EXPO_OFFLINE=1 expo start --port 8082",
-    "build": "expo build",
+    "build": "expo export",
     "lint": "expo lint",
     "android": "expo run:android",
     "ios": "expo run:ios"

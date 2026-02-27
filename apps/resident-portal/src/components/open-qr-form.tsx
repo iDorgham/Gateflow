@@ -35,11 +35,11 @@ export function OpenQRForm({ unitId }: { unitId: string }) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          ...formData,
           unitId,
           isOpenQR: true,
           visitorName: 'Open Access Pass',
           accessType: 'DATERANGE',
-          ...formData,
         }),
       });
 

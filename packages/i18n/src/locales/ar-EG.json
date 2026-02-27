@@ -294,7 +294,10 @@
       "event": "الحدث",
       "endpoint": "الرابط",
       "attempts": "المحاولات",
-      "lastAttempt": "آخر محاولة"
+      "lastAttempt": "آخر محاولة",
+      "qrCodes": "أكواد QR",
+      "apiKeys": "مفاتيح API",
+      "webhooks": "الـ Webhooks"
     },
     "settings": {
       "title": "إعدادات المنصة",

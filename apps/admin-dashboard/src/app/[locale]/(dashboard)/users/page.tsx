@@ -102,7 +102,7 @@ export default async function UsersPage({
             ],
           }
         : {}),
-      ...(roleFilter ? { role: roleFilter as (typeof ROLES)[number] } : {}),
+      ...(roleFilter ? { role: { name: roleFilter } } : {}),
       ...(statusFilter === 'active'
         ? { deletedAt: null }
         : statusFilter === 'suspended'
@@ -280,8 +280,7 @@ export default async function UsersPage({
                               <p className="text-foreground font-bold text-xs">{user.organization.name}</p>
                               <Badge variant="secondary" className={cn(
                                 "w-fit text-[9px] font-bold uppercase tracking-tight h-4 px-1.5",
-                                user.organization.plan === 'ENTERPRISE' ? "bg-violet-50 dark:bg-violet-900/20 text-violet-700 dark:text-violet-300" :
-                                user.organization.plan === 'PRO' ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300" :
+                                user.organization?.plan === 'PRO' ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300" :
                                 "bg-muted text-muted-foreground"
                               )}>
                                 {user.organization.plan}
@@ -292,7 +291,7 @@ export default async function UsersPage({
                           )}
                         </td>
                         <td className="px-6 py-4 text-center">
-                          <RoleBadge role={user.role} t={t} />
+                          <RoleBadge role={user.role?.name ?? 'USER'} t={t} />
                         </td>
                         <td className="px-6 py-4">
                           <Badge className={cn(

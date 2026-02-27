@@ -126,7 +126,6 @@ export default async function AnalyticsPage({
   return (
     <div className="space-y-8">
       <div>
-      <div>
         <h1 className="text-3xl font-bold tracking-tight text-foreground">{t('analytics.title')}</h1>
         <p className="text-muted-foreground mt-1">{t('analytics.subtitle')}</p>
       </div>
@@ -287,7 +286,6 @@ export default async function AnalyticsPage({
             {[
               { plan: 'FREE', color: 'bg-muted', label: 'bg-muted text-muted-foreground' },
               { plan: 'PRO', color: 'bg-blue-500', label: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300' },
-              { plan: 'ENTERPRISE', color: 'bg-violet-500', label: 'bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300' },
             ].map(({ plan, color, label }) => {
               const count = planMap[plan] ?? 0;
               const pct = Math.round((count / totalOrgs) * 100);

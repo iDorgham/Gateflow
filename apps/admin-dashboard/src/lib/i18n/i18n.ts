@@ -37,10 +37,8 @@ const dictionaries = {
 
 export const fetchTranslations = async (locale: string): Promise<Dictionary> => {
   try {
-    // @ts-expect-error - Dynamic import type mismatch might occur but shape is guaranteed
     return (await dictionaries[locale as Locale]()) as Dictionary;
   } catch (error) {
-    // @ts-expect-error - Dynamic import type mismatch might occur but shape is guaranteed
     return (await dictionaries['en']()) as Dictionary;
   }
 };
@@ -64,21 +62,24 @@ export async function getTranslation<N extends Namespace>(
       options.count !== undefined &&
       text &&
       typeof text === 'object' &&
-      !Array.isArray(text)
+      !Array.isArray(text) &&
+      ('one' in text || 'other' in text)
     ) {
-      if (options.count === 1 && text.one) text = text.one;
-      else if (text.other) text = text.other;
+      const pluralObj = text as { one?: string; other?: string };
+      text = ((options.count === 1 && pluralObj.one ? pluralObj.one : pluralObj.other) ?? text) as typeof text;
     }
 
     if (!text) return key; 
     if (typeof text !== 'string' && !options?.returnObjects) return key;
 
     if (options && typeof text === 'string') {
+      let str: string = text;
       Object.keys(options).forEach((v) => {
         if (v !== 'returnObjects') {
-          text = text.replace(new RegExp(`{{${v}}}`, 'g'), String(options[v]));
+          str = str.replace(new RegExp(`{{${v}}}`, 'g'), String(options[v]));
         }
       });
+      return str;
     }
     return text;
   };

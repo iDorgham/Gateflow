@@ -247,7 +247,8 @@ export default async function AnalyticsPage({
       const roleMap = new Map(users.map((u) => [u.id, u.role]));
       const roleCounts = new Map<string, number>();
       for (const g of groups) {
-        const role = roleMap.get(g.userId!) ?? 'UNKNOWN';
+        const roleObj = roleMap.get(g.userId!);
+        const role = roleObj ? (typeof roleObj === 'object' ? roleObj.name : String(roleObj)) : 'UNKNOWN';
         roleCounts.set(role, (roleCounts.get(role) ?? 0) + g._count);
       }
       return Array.from(roleCounts.entries()).map(([role, count]) => ({ role, count }));

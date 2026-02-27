@@ -43,10 +43,26 @@ async function createAdmin(formData: FormData) {
 
   const passwordHash = await argon2.hash(password);
 
+  let adminRole = await prisma.role.findFirst({
+    where: { name: 'ADMIN', organizationId: null },
+  });
+  if (!adminRole) {
+    const { BUILT_IN_ROLES, DEFAULT_PERMISSIONS } = await import('@gate-access/types');
+    adminRole = await prisma.role.create({
+      data: {
+        id: 'role-admin',
+        name: 'ADMIN',
+        description: 'Platform super-admin',
+        isBuiltIn: true,
+        permissions: DEFAULT_PERMISSIONS[BUILT_IN_ROLES.SUPER_ADMIN],
+      },
+    });
+  }
+
   await prisma.user.upsert({
     where: { email },
-    create: { name, email, passwordHash, role: 'ADMIN' },
-    update: { name, passwordHash, role: 'ADMIN', deletedAt: null },
+    create: { name, email, passwordHash, roleId: adminRole.id },
+    update: { name, passwordHash, roleId: adminRole.id, deletedAt: null },
   });
   revalidatePath('/admins');
   redirect('/admins');
@@ -95,7 +111,7 @@ export default async function AdminsPage({
   const { t } = await getTranslation(locale, 'admin');
 
   const admins = await prisma.user.findMany({
-    where: { role: 'ADMIN' },
+    where: { role: { name: 'ADMIN', organizationId: null } },
     orderBy: { createdAt: 'asc' },
     select: {
       id: true,

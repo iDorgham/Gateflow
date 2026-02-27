@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "EXPO_OFFLINE=1 expo start --lan -c",
-    "build": "expo build",
+    "build": "expo export",
     "lint": "expo lint",
     "test": "jest --forceExit",
     "android": "expo run:android",

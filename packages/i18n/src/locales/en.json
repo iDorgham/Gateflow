@@ -293,7 +293,10 @@
       "event": "Event",
       "endpoint": "Endpoint",
       "attempts": "Attempts",
-      "lastAttempt": "Last Attempt"
+      "lastAttempt": "Last Attempt",
+      "qrCodes": "QR Codes",
+      "apiKeys": "API Keys",
+      "webhooks": "Webhooks"
     },
     "settings": {
       "title": "Platform Settings",

@@ -88,10 +88,10 @@ export default async function MonitoringPage({
     { label: t('nav.organizations'), count: orgCount, icon: Building2, color: 'text-blue-600 bg-blue-500/10' },
     { label: t('nav.users'), count: userCount, icon: Users, color: 'text-violet-600 bg-violet-500/10' },
     { label: t('nav.gates'), count: gateCount, icon: DoorOpen, color: 'text-emerald-600 bg-emerald-500/10' },
-    { label: t('dashboard.qrCodes'), count: qrCount, icon: QrCode, color: 'text-amber-600 bg-amber-500/10' },
+    { label: t('monitoring.qrCodes'), count: qrCount, icon: QrCode, color: 'text-amber-600 bg-amber-500/10' },
     { label: t('scans.title'), count: scanCount, icon: ScanLine, color: 'text-rose-600 bg-rose-500/10' },
-    { label: t('dashboard.apiKeys'), count: apiKeyCount, icon: Key, color: 'text-slate-600 bg-slate-500/10' },
-    { label: t('dashboard.webhooks'), count: webhookCount, icon: Globe, color: 'text-cyan-600 bg-cyan-500/10' },
+    { label: t('monitoring.apiKeys'), count: apiKeyCount, icon: Key, color: 'text-slate-600 bg-slate-500/10' },
+    { label: t('monitoring.webhooks'), count: webhookCount, icon: Globe, color: 'text-cyan-600 bg-cyan-500/10' },
   ];
 
   const lastScanAge = lastScan

@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowLeft, Share2, Download, Trash2, ShieldInfo } from 'lucide-react';
+import { ArrowLeft, Share2, Download, Trash2, Shield } from 'lucide-react';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma } from '@gate-access/db';
 import { Button, Badge } from '@gate-access/ui';
@@ -63,7 +63,7 @@ export default async function VisitorDetailPage({ params }: { params: { id: stri
         <div className="w-full space-y-6">
           <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm space-y-4">
             <h2 className="font-bold text-slate-900 flex items-center gap-2">
-              <ShieldInfo className="h-5 w-5 text-blue-600" />
+              <Shield className="h-5 w-5 text-blue-600" />
               Access Information
             </h2>
             <div className="grid grid-cols-2 gap-4">
