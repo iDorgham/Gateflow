@@ -17,6 +17,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
+  // Security: Only TENANT_ADMIN, TENANT_USER, or VISITOR (Scanner) can log overrides
+  // Residents should not be able to log overrides for themselves.
+  if (claims.role === 'RESIDENT') {
+    return NextResponse.json({ error: 'Forbidden: Residents cannot log overrides' }, { status: 403 });
+  }
+
   const body = await request.json();
   const parsed = OverrideLogSchema.safeParse(body);
   if (!parsed.success) {

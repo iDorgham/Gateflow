@@ -5,7 +5,7 @@ import {
   type QRValidateResponse,
   type QRRejectReason,
 } from '@gate-access/types';
-import { prisma, setOrganizationContext, clearOrganizationContext } from '@gate-access/db';
+import { prisma, setOrganizationContext, clearOrganizationContext, isAccessAllowed } from '@gate-access/db';
 import { requireAuth, isNextResponse } from '../../../../lib/require-auth';
 import { checkRateLimit } from '../../../../lib/rate-limit';
 
@@ -145,7 +145,16 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     // Step 7 — DB lookup: record must exist.
-    const qrCode = await prisma.qRCode.findUnique({ where: { id: payload.qrId } });
+    const qrCode = await prisma.qRCode.findUnique({ 
+      where: { id: payload.qrId },
+      include: {
+        visitorQR: {
+          include: {
+            accessRule: true,
+          },
+        },
+      },
+    });
 
     if (!qrCode) {
       return json<QRValidateResponse>(
@@ -210,6 +219,36 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         }
         break;
 
+      case 'VISITOR':
+      case 'OPEN':
+        if (qrCode.visitorQR?.accessRule) {
+          const access = isAccessAllowed(qrCode.visitorQR.accessRule);
+          if (!access.allowed) {
+            await logRejection(qrCode.id, 'denied', scanContext, claims.sub);
+            return json<QRValidateResponse>(
+              {
+                status: 'rejected',
+                reason: 'denied',
+                message: access.reason || 'Access denied based on resident rules',
+              },
+              403,
+            );
+          }
+        }
+        // Also check maxUses if applicable (e.g. for ONETIME visitor QRs)
+        if (qrCode.maxUses !== null && qrCode.currentUses >= qrCode.maxUses) {
+          await logRejection(qrCode.id, 'max_uses_reached', scanContext, claims.sub);
+          return json<QRValidateResponse>(
+            {
+              status: 'rejected',
+              reason: 'max_uses_reached',
+              message: 'Visitor QR max uses reached',
+            },
+            403,
+          );
+        }
+        break;
+
       case 'PERMANENT':
         // No usage limit.
         break;
@@ -240,14 +279,25 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     const scanLog = await prisma.$transaction(async (tx) => {
       // Re-read inside the transaction to prevent races.
-      const fresh = await tx.qRCode.findUnique({ where: { id: qrCode.id } });
+      const fresh = await tx.qRCode.findUnique({ 
+        where: { id: qrCode.id },
+        include: { visitorQR: { include: { accessRule: true } } }
+      });
       if (!fresh) throw new Error('QR code disappeared during transaction');
+
+      // Re-check logic for VISITOR/OPEN as well
+      if (fresh.type === 'VISITOR' || fresh.type === 'OPEN') {
+        if (fresh.visitorQR?.accessRule) {
+          const access = isAccessAllowed(fresh.visitorQR.accessRule);
+          if (!access.allowed) throw new UsageLimitError(access.reason || 'Access denied');
+        }
+      }
 
       if (fresh.type === 'SINGLE' && fresh.currentUses >= 1) {
         throw new UsageLimitError('Single-use QR code already scanned');
       }
       if (
-        fresh.type === 'RECURRING' &&
+        (fresh.type === 'RECURRING' || fresh.type === 'VISITOR' || fresh.type === 'OPEN') &&
         fresh.maxUses !== null &&
         fresh.currentUses >= fresh.maxUses
       ) {
@@ -305,11 +355,12 @@ function json<T>(data: T, status: number): NextResponse {
   return NextResponse.json(data, { status });
 }
 
-const REJECTION_STATUS_MAP: Record<string, 'EXPIRED' | 'MAX_USES_REACHED' | 'INACTIVE' | 'FAILED'> =
+const REJECTION_STATUS_MAP: Record<string, 'EXPIRED' | 'MAX_USES_REACHED' | 'INACTIVE' | 'FAILED' | 'DENIED'> =
   {
     expired: 'EXPIRED',
     max_uses_reached: 'MAX_USES_REACHED',
     inactive: 'INACTIVE',
+    denied: 'DENIED',
   };
 
 /**

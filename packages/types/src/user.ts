@@ -1,3 +1,4 @@
+import { Organization } from './organization';
 export type Permission =
   | 'gates:manage'
   | 'qr:create'

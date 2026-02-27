@@ -10,7 +10,7 @@ import {
   getRefreshTokenExpiry,
 } from '../../../../lib/auth';
 import { CSRF_COOKIE, generateCsrfToken } from '../../../../lib/csrf';
-import { castUserRole } from '@/lib/types';
+// import { castUserRole } from '@/lib/types';
 import { checkRateLimit } from '../../../../lib/rate-limit';
 
 const SECURE = process.env.NODE_ENV === 'production';
@@ -60,7 +60,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     // Step 1 — Look up the token with its owner.
     const storedToken = await prisma.refreshToken.findUnique({
       where: { token: refreshToken },
-      include: { user: true },
+      include: { user: { include: { role: true } } },
     });
 
     if (!storedToken) {
@@ -159,7 +159,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       user.id,
       user.email,
       user.organizationId,
-      castUserRole(user.role),
+      user.role,
     );
 
     const tokenResponse = {

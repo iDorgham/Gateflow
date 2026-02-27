@@ -1,6 +1,8 @@
 import { PrismaClient } from '@prisma/client';
 import * as argon2 from 'argon2';
 
+import { BUILT_IN_ROLES, DEFAULT_PERMISSIONS } from '@gate-access/types';
+
 const prisma = new PrismaClient();
 
 const ARGON2_OPTIONS = {
@@ -29,18 +31,33 @@ async function main() {
     },
   });
 
+  // Create/Upsert Roles (Use non-empty update to force permissions sync)
+  const tenantAdminRole = await prisma.role.upsert({
+    where: { id: 'role-tenant-admin' },
+    update: {
+      permissions: DEFAULT_PERMISSIONS[BUILT_IN_ROLES.ORG_ADMIN],
+    },
+    create: {
+      id: 'role-tenant-admin',
+      name: 'TENANT_ADMIN',
+      description: 'Administrative access for an organization',
+      isBuiltIn: true,
+      permissions: DEFAULT_PERMISSIONS[BUILT_IN_ROLES.ORG_ADMIN],
+    },
+  });
+
   const user = await prisma.user.upsert({
     where: { email: 'admin@example.com' },
     update: {
       passwordHash,
       organizationId: org.id,
-      role: 'TENANT_ADMIN',
+      roleId: tenantAdminRole.id,
     },
     create: {
       email: 'admin@example.com',
       name: 'Admin User',
       passwordHash,
-      role: 'TENANT_ADMIN',
+      roleId: tenantAdminRole.id,
       organizationId: org.id,
     },
   });
@@ -50,13 +67,13 @@ async function main() {
     update: {
       passwordHash,
       organizationId: org.id,
-      role: 'TENANT_ADMIN',
+      roleId: tenantAdminRole.id,
     },
     create: {
       email: 'admin@selenadev.com',
       name: 'Selena Admin',
       passwordHash,
-      role: 'TENANT_ADMIN',
+      roleId: tenantAdminRole.id,
       organizationId: org.id,
     },
   });

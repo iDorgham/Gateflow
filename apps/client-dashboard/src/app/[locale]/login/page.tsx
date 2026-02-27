@@ -27,6 +27,12 @@ import {
   Moon,
   Globe,
   Check,
+  Home,
+  QrCode,
+  ScanLine,
+  Users,
+  Shield,
+  Settings,
 } from 'lucide-react';
 import type { Locale } from '@/lib/i18n-config';
 
@@ -141,10 +147,24 @@ export default function LoginPage() {
   const [state, formAction] = useFormState(loginAction, null);
   const [showPassword, setShowPassword] = useState(false);
   const [errorKey, setErrorKey] = useState(0);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const router = useRouter();
 
   const pathname = usePathname();
   const locale = (pathname.split('/')[1] ?? 'en') as Locale;
   const isRtl = locale === 'ar-EG';
+
+  // Watch for success
+  useEffect(() => {
+    if (state?.success) {
+      setIsSuccess(true);
+      // Wait for animation, then redirect
+      const timer = setTimeout(() => {
+        router.push(`/${state.locale || locale}/dashboard`);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [state?.success, state?.locale, locale, router]);
 
   // Increment errorKey whenever a new error appears so shake fires
   const prevError = useState(state?.error)[0];
@@ -154,32 +174,29 @@ export default function LoginPage() {
     }
   }, [state?.error]);
 
+  const successIcons = (
+    <>
+      <Home className="h-5 w-5 text-muted-foreground/40" />
+      <QrCode className="h-5 w-5 text-muted-foreground/40" />
+      <ScanLine className="h-5 w-5 text-muted-foreground/40" />
+      <Users className="h-5 w-5 text-muted-foreground/40" />
+      <Shield className="h-5 w-5 text-muted-foreground/40" />
+      <div className="mt-12">
+        <Settings className="h-5 w-5 text-muted-foreground/40" />
+      </div>
+    </>
+  );
+
   return (
     <LoginShell
       variant="client"
       topRight={<LoginControls locale={locale} />}
       errorKey={errorKey}
-      footerExtra={
-        <p className="text-[10px] text-muted-foreground/40 font-medium">
-          Don&apos;t have an account?{' '}
-          <a
-            href="mailto:support@gateflow.io"
-            className="underline underline-offset-2 hover:text-muted-foreground/70 transition-colors"
-          >
-            Contact support
-          </a>
-        </p>
-      }
+      isSuccess={isSuccess}
+      successIcons={successIcons}
     >
-      <Card className="border-border/40 shadow-2xl shadow-slate-200/50 dark:shadow-black/60 backdrop-blur-xl bg-card/80 transition-all duration-500">
-        <CardHeader className="pb-6 pt-8 px-8">
-          <CardTitle className="text-xl font-bold">Welcome back</CardTitle>
-          <CardDescription className="text-muted-foreground">
-            Sign in to access your dashboard
-          </CardDescription>
-        </CardHeader>
-
-        <CardContent className="px-8 pb-8">
+      <Card className="border-none shadow-none bg-transparent">
+        <CardContent className="px-0 pb-0">
           <form action={formAction} className="space-y-6" dir={isRtl ? 'rtl' : 'ltr'}>
             {state?.error && (
               <div className="rounded-xl border border-destructive/20 bg-destructive/5 px-4 py-3 text-sm text-destructive font-semibold flex items-center gap-2">
@@ -255,6 +272,18 @@ export default function LoginPage() {
             </div>
 
             <SubmitButton isRtl={isRtl} />
+
+            <div className="mt-6 pt-2 text-center">
+              <p className="text-[10px] text-muted-foreground/60 font-medium">
+                {isRtl ? 'ليس لديك حساب؟' : "Don't have an account?"}{' '}
+                <a
+                  href="mailto:support@gateflow.io"
+                  className="text-primary font-bold underline underline-offset-4 hover:opacity-80 transition-opacity"
+                >
+                  {isRtl ? 'اتصل بالدعم' : 'Contact support'}
+                </a>
+              </p>
+            </div>
           </form>
         </CardContent>
       </Card>

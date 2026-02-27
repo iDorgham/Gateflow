@@ -18,6 +18,10 @@ export interface LoginShellProps {
    * Pass 0 or omit to disable shake.
    */
   errorKey?: number;
+  /** True when transition to dashboard should start */
+  isSuccess?: boolean;
+  /** Icons to fade in during the transition */
+  successIcons?: React.ReactNode;
 }
 
 export function LoginShell({
@@ -26,11 +30,15 @@ export function LoginShell({
   topRight,
   footerExtra,
   errorKey = 0,
+  isSuccess = false,
+  successIcons,
 }: LoginShellProps) {
   const isAdmin = variant === 'admin';
   const [shaking, setShaking] = React.useState(false);
+  const [isMounted, setIsMounted] = React.useState(false);
 
   React.useEffect(() => {
+    setIsMounted(true);
     if (errorKey > 0) {
       setShaking(true);
       const t = setTimeout(() => setShaking(false), 520);
@@ -39,92 +47,117 @@ export function LoginShell({
   }, [errorKey]);
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-indigo-50 dark:from-zinc-950 dark:via-zinc-900 dark:to-zinc-950 px-4">
-      {/* Decorative blurs */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden>
-        <div
-          className={cn(
-            'absolute top-[20%] w-[500px] h-[500px] rounded-full blur-[100px]',
-            'ltr:right-[10%] rtl:left-[10%]',
-            isAdmin
-              ? 'bg-blue-500/5 dark:bg-blue-500/10'
-              : 'bg-primary/5 dark:bg-primary/10'
-          )}
-        />
-        <div
-          className={cn(
-            'absolute bottom-[20%] w-[500px] h-[500px] rounded-full blur-[100px]',
-            'ltr:left-[10%] rtl:right-[10%]',
-            isAdmin
-              ? 'bg-indigo-500/5 dark:bg-indigo-500/10'
-              : 'bg-blue-500/5 dark:bg-blue-500/10'
-          )}
-        />
-      </div>
+    <div className="fixed inset-0 z-[100] bg-zinc-50 dark:bg-zinc-950 overflow-hidden flex items-stretch">
+      {/* Simplified Background Layer */}
+      <div className="absolute inset-0 z-0 bg-zinc-50 dark:bg-zinc-950 pointer-events-none" />
 
-      {/* Top-right (top-left in RTL) controls */}
-      {topRight && (
-        <div className="absolute top-4 ltr:right-4 rtl:left-4 flex items-center gap-1 z-20">
-          {topRight}
+      {/* Foreground Layer: Sliding Auth Panel - Animates width on success */}
+      <div 
+        className={cn(
+          "relative z-10 w-full flex flex-col justify-between p-6 md:p-12 lg:p-16 transition-all duration-700 ease-in-out transform-gpu",
+          isAdmin ? "bg-white/80 dark:bg-zinc-950/80" : "bg-white/95 dark:bg-zinc-950/95", // Slightly more solid during transition
+          "backdrop-blur-2xl border-r border-border/50 shadow-2xl",
+          isMounted && !isSuccess ? "w-full md:w-[480px] translate-x-0" : "",
+          isMounted && isSuccess ? "w-[80px] md:w-20 translate-x-0 px-4 md:px-0" : "",
+          !isMounted && "-translate-x-full"
+        )}
+      >
+        {/* Top Controls - Logo and Text */}
+        <div className={cn(
+          "flex items-center transition-all duration-700 delay-300 transform-gpu mb-8",
+          isMounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+        )}>
+          <div className={cn(
+            "flex items-center gap-3 transition-all duration-500",
+            isSuccess && "w-full justify-center gap-0"
+          )}>
+            <div
+              className={cn(
+                'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-white shadow-lg transition-transform hover:scale-105 duration-300',
+                isAdmin ? 'bg-blue-600' : 'bg-primary'
+              )}
+            >
+              {isAdmin ? <Shield className="h-6 w-6" /> : <ShieldCheck className="h-6 w-6" />}
+            </div>
+            <span className={cn(
+              "text-xl font-bold tracking-tight text-foreground whitespace-nowrap overflow-hidden transition-all duration-500",
+              isSuccess ? "w-0 opacity-0 ml-0" : "w-auto opacity-100"
+            )}>
+              GateFlow
+            </span>
+          </div>
         </div>
-      )}
 
-      {/* Main content */}
-      <div className="w-full max-w-sm relative z-10">
-        {/* Logo + branding */}
-        <div className="text-center mb-10 space-y-3">
+        {/* Auth Content */}
+        <div className="flex-1 flex flex-col justify-center py-12">
+          {/* Main Form content - Fades out on success */}
           <div
             className={cn(
-              'mx-auto flex h-16 w-16 items-center justify-center rounded-2xl text-white shadow-2xl ring-4 ring-background transition-transform hover:scale-105 duration-300',
-              isAdmin
-                ? 'bg-[#2563eb] shadow-blue-500/40'
-                : 'bg-primary shadow-primary/40'
+              'w-full max-w-sm mx-auto transition-all duration-700 delay-500 transform-gpu',
+              isMounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8",
+              shaking && 'animate-[shake_0.5s_ease-in-out]',
+              isSuccess && "opacity-0 -translate-y-12 pointer-events-none delay-[0ms]"
             )}
           >
-            {isAdmin ? (
-              <Shield className="h-9 w-9" />
-            ) : (
-              <ShieldCheck className="h-9 w-9" />
-            )}
+            <div className="mb-10 text-center md:text-left">
+              <h1 className="text-4xl font-extrabold tracking-tight text-foreground leading-tight">
+                {isAdmin ? 'Admin Console' : 'Welcome Back'}
+              </h1>
+              <p className="mt-4 text-lg text-muted-foreground font-medium">
+                {isAdmin 
+                  ? 'Access the secure command center' 
+                  : 'Manage your access control from anywhere'}
+              </p>
+            </div>
+            {children}
           </div>
-          <div className="space-y-1">
-            <h1 className="text-3xl font-black tracking-tight text-foreground">
-              GateFlow{' '}
-              <span
-                className={cn(
-                  'font-medium opacity-90',
-                  isAdmin ? 'text-[#2563eb]' : 'text-primary'
-                )}
-              >
-                {isAdmin ? 'Admin' : 'Client'}
-              </span>
-            </h1>
-            <p className="text-sm text-muted-foreground font-semibold uppercase tracking-[0.3em] opacity-60">
-              {isAdmin ? 'Security Control Center' : 'Access & Security Management'}
-            </p>
-          </div>
-        </div>
 
-        {/* Card wrapper — shakes on error */}
-        <div
-          className={cn(
-            'transition-transform',
-            shaking && 'animate-[shake_0.5s_ease-in-out]'
+          {/* Success Icons - Fades in up only when isSuccess is true */}
+          {isSuccess && (
+            <div className="absolute inset-0 flex flex-col items-center justify-center pt-20">
+              <div className="flex flex-col items-center gap-8 animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-300 fill-mode-both">
+                {successIcons}
+              </div>
+            </div>
           )}
-        >
-          {children}
         </div>
 
-        {/* Footer */}
-        <div className="mt-8 text-center space-y-3">
-          <p className="text-[10px] text-muted-foreground/40 font-bold uppercase tracking-[0.3em] leading-relaxed max-w-[280px] mx-auto">
-            Authorized personnel only. Sessions are encrypted and audited.
-          </p>
-          {footerExtra}
-          <p className="text-[10px] text-muted-foreground/20 font-medium">
-            © {new Date().getFullYear()} GateFlow Ecosystem
-          </p>
-        </div>
+        {/* Footer - Fades in */}
+        {footerExtra && (
+          <div className={cn(
+            "mt-auto pt-8 transition-all duration-700 delay-700 transform-gpu",
+            isMounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+          )}>
+            {footerExtra}
+          </div>
+        )}
+
+      </div>
+
+      {/* Outer elements - Positioned relative to viewport - Fades out on success */}
+      <div className={cn(
+        "fixed top-6 right-6 z-[110] transition-all duration-500",
+        isMounted && !isSuccess ? "opacity-100" : "opacity-0 pointer-events-none"
+      )}>
+        {topRight}
+      </div>
+
+      <div className={cn(
+        "fixed bottom-6 left-6 z-[110] transition-all duration-500 flex items-center gap-3 text-[11px] text-muted-foreground/50",
+        isMounted && !isSuccess ? "opacity-100" : "opacity-0 pointer-events-none"
+      )}>
+        <span className="font-medium whitespace-nowrap">© {new Date().getFullYear()} GateFlow Inc.</span>
+      </div>
+
+      <div className={cn(
+        "fixed bottom-6 right-6 z-[110] transition-all duration-500 flex items-center gap-6 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/40",
+        isMounted && !isSuccess ? "opacity-100" : "opacity-0 pointer-events-none"
+      )}>
+        <button className="hover:text-primary transition-colors">Support</button>
+        <button className="hover:text-primary transition-colors">Contact Us</button>
+        <div className="h-3 w-[1px] bg-border/40" />
+        <button className="hover:text-primary transition-colors">Terms</button>
+        <button className="hover:text-primary transition-colors">Privacy</button>
       </div>
     </div>
   );

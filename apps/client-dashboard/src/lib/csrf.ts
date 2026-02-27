@@ -1,3 +1,5 @@
+import { NextRequest } from 'next/server';
+
 /**
  * CSRF Token utilities for client-side
  *
@@ -65,6 +67,17 @@ export function generateCsrfToken(): string {
   return Array.from(arr)
     .map((b) => b.toString(16).padStart(2, '0'))
     .join('');
+}
+
+/**
+ * Validate CSRF token from request
+ */
+export async function validateCsrfToken(request: NextRequest): Promise<boolean> {
+  const headerToken = request.headers.get(CSRF_HEADER);
+  const cookieToken = request.cookies.get(CSRF_COOKIE)?.value;
+
+  if (!headerToken || !cookieToken) return false;
+  return headerToken === cookieToken;
 }
 
 export { CSRF_COOKIE, CSRF_HEADER };

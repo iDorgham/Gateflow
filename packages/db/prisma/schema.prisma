@@ -27,6 +27,7 @@ model Organization {
   contacts  Contact[]
   units     Unit[]
   roles     Role[]
+  residentLimits ResidentLimit[]
 
   @@index([deletedAt])
 }
@@ -84,6 +85,7 @@ model User {
 
   scanLogs      ScanLog[]
   refreshTokens RefreshToken[]
+  unit          Unit?
 
   @@index([organizationId])
   @@index([roleId])
@@ -130,7 +132,8 @@ model QRCode {
   updatedAt    DateTime      @updatedAt
   deletedAt    DateTime?
 
-  scanLogs ScanLog[]
+  scanLogs  ScanLog[]
+  visitorQR VisitorQR?
 
   @@index([organizationId])
   @@index([projectId])
@@ -219,6 +222,8 @@ enum QRCodeType {
   SINGLE
   RECURRING
   PERMANENT
+  VISITOR
+  OPEN
 }
 
 enum ScanStatus {
@@ -309,21 +314,28 @@ model Contact {
 
 model Unit {
   id             String        @id @default(cuid())
-  name           String
+  name           String        // Matches unitNumber from spec
   type           UnitType
-  qrQuota        Int
+  qrQuota        Int?          // Optional, falls back to organization defaults
   organization   Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId String
   project        Project?      @relation(fields: [projectId], references: [id])
   projectId      String?
+  building       String?
+  user           User?         @relation(fields: [userId], references: [id])
+  userId         String?       @unique // Linked resident user
+  isActive       Boolean       @default(true)
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
   deletedAt      DateTime?
 
-  contacts ContactUnit[]
+  contacts   ContactUnit[]
+  visitorQRs VisitorQR[]
 
+  @@unique([organizationId, name])
   @@index([organizationId])
   @@index([projectId])
+  @@index([userId])
   @@index([deletedAt])
 }
 
@@ -338,6 +350,50 @@ model ContactUnit {
   @@index([unitId])
 }
 
+model VisitorQR {
+  id              String        @id @default(cuid())
+  qrCode          QRCode        @relation(fields: [qrCodeId], references: [id], onDelete: Cascade)
+  qrCodeId        String        @unique
+  unit            Unit          @relation(fields: [unitId], references: [id], onDelete: Cascade)
+  unitId          String
+  visitorName     String?       // Optional - null for Open QR
+  visitorPhone    String?       // Optional
+  visitorEmail    String?       // Optional
+  isOpenQR        Boolean       @default(false) // Open QR - no name required
+  accessRule      AccessRule?   @relation(fields: [accessRuleId], references: [id])
+  accessRuleId    String?       @unique
+  createdBy       String        // userId of resident
+  createdAt       DateTime      @default(now())
+
+  @@index([unitId])
+  @@index([createdBy])
+}
+
+model AccessRule {
+  id              String            @id @default(cuid())
+  type            AccessRuleType    // ONETIME, DATERANGE, RECURRING
+  startDate       DateTime?
+  endDate         DateTime?
+  recurringDays   Int[]            // Days of week (0-6, Sunday=0)
+  startTime       String?           // "09:00" format
+  endTime         String?           // "22:00" format
+  visitorQR       VisitorQR?
+
+  @@index([startDate])
+}
+
+model ResidentLimit {
+  id              String   @id @default(cuid())
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId  String
+  unitType        UnitType
+  monthlyQuota    Int      // Max visitors per month
+  canCreateOpenQR Boolean @default(false) // Whether unit type can create Open QR
+  createdAt       DateTime @default(now())
+
+  @@unique([organizationId, unitType])
+}
+
 enum UnitType {
   STUDIO
   ONE_BR
@@ -347,4 +403,11 @@ enum UnitType {
   VILLA
   PENTHOUSE
   COMMERCIAL
+}
+
+enum AccessRuleType {
+  ONETIME       // Single use, specific date
+  DATERANGE    // Multiple uses within date range
+  RECURRING    // Recurring access (daily/weekly)
+  PERMANENT    // No time limits (Open QR default)
 }

@@ -192,24 +192,6 @@ export default async function DashboardPage({ params }: { params: { locale: Loca
         ))}
       </div>
 
-      {/* Quick actions */}
-      <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-        {[
-          { label: t('overview.quickActions.viewQrs', { defaultValue: 'View QR Codes' }), href: '/dashboard/qrcodes', icon: QrCode },
-          { label: t('overview.quickActions.scanLogs', { defaultValue: 'Scan Logs' }), href: '/dashboard/scans', icon: ScanLine },
-          { label: t('overview.quickActions.manageGates', { defaultValue: 'Manage Gates' }), href: '/dashboard/gates', icon: Shield },
-          { label: t('overview.quickActions.analytics', { defaultValue: 'Analytics' }), href: '/dashboard/analytics', icon: BarChart3 },
-        ].map(({ label, href, icon: Icon }) => (
-          <Link
-            key={href}
-            href={href}
-            className="flex items-center gap-2.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-3 text-sm font-medium text-slate-700 dark:text-slate-300 shadow-sm transition-colors hover:border-blue-200 dark:hover:border-blue-800 hover:bg-blue-50 dark:hover:bg-blue-900/20 hover:text-blue-700 dark:hover:text-blue-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
-          >
-            <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />
-            {label}
-          </Link>
-        ))}
-      </div>
 
       {/* Recent scan activity */}
       <Card>

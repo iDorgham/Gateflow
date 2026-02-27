@@ -36,7 +36,7 @@ export const AuthUserSchema = z.object({
   id: z.string(),
   email: z.string().email(),
   name: z.string(),
-  role: z.nativeEnum(UserRole),
+  role: z.string(), // UserRole is a type, not an enum
   organizationId: z.string().nullable(),
 });
 
@@ -45,7 +45,7 @@ export type AuthUser = z.infer<typeof AuthUserSchema>;
 export const JwtPayloadSchema = z.object({
   sub: z.string(),
   email: z.string().email(),
-  role: z.nativeEnum(UserRole),
+  role: z.string(), // UserRole is a type, not an enum
   organizationId: z.string().nullable(),
   iat: z.number(),
   exp: z.number(),

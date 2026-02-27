@@ -20,7 +20,18 @@ import {
   Building2,
   Layers,
 } from 'lucide-react';
-import { cn, Button } from '@gate-access/ui';
+import {
+  Avatar,
+  AvatarFallback,
+  cn,
+  Button,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@gate-access/ui';
 import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
 import { ThemeToggle } from './theme-toggle';
@@ -39,34 +50,7 @@ interface NavItem {
 const getNavGroups = (t: TFunction, permissions: Record<string, boolean>) => {
   const hasPerm = (p?: Permission) => !p || permissions[p] === true;
 
-  const WORKSPACE_NAV: NavItem[] = [
-    {
-      label: t('sidebar.projects', 'Projects'),
-      href: '/dashboard/projects',
-      icon: Layers,
-      permission: 'projects:manage' as Permission,
-    },
-    {
-      label: t('sidebar.gates', 'Gates'),
-      href: '/dashboard/gates',
-      icon: Shield,
-      permission: 'gates:manage' as Permission,
-    },
-    {
-      label: t('sidebar.contacts', 'Contacts'),
-      href: '/dashboard/residents/contacts',
-      icon: Contact2,
-      exact: false,
-      permission: 'contacts:manage' as Permission,
-    },
-    {
-      label: t('sidebar.units', 'Units'),
-      href: '/dashboard/residents/units',
-      icon: Building,
-      exact: false,
-      permission: 'units:manage' as Permission,
-    },
-  ].filter(item => hasPerm(item.permission));
+  const WORKSPACE_NAV: NavItem[] = [];
 
   const MAIN_NAV: NavItem[] = [
     {
@@ -97,13 +81,18 @@ const getNavGroups = (t: TFunction, permissions: Record<string, boolean>) => {
 
   const groups = [
     { label: t('sidebar.operations', 'Operations'), items: MAIN_NAV },
-    { label: t('sidebar.workspace', 'Workspace'), items: WORKSPACE_NAV },
   ];
 
   return groups.filter(g => g.items.length > 0);
 };
 
 interface SidebarProps {
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    role: string;
+  };
   org: {
     id: string;
     name: string;
@@ -122,6 +111,7 @@ interface SidebarProps {
 }
 
 export function Sidebar({
+  user,
   org,
   projects,
   currentProjectId,
@@ -136,61 +126,45 @@ export function Sidebar({
   const [isPending, startTransition] = useTransition();
   const { t } = useTranslation('dashboard');
 
-  let groups = getNavGroups(t, permissions);
+  const [hoveredLabel, setHoveredLabel] = useState<string | null>(null);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
-  if (hideGates) {
-    groups = groups.map(group => {
-      if (group.label === t('sidebar.workspace', 'Workspace')) {
-        return {
-          ...group,
-          items: group.items.filter(item => !item.href.includes('/gates'))
-        };
-      }
-      return group;
-    });
+  const handleMouseMove = (e: React.MouseEvent) => {
+    setMousePos({ x: e.clientX, y: e.clientY });
+  };
+
+  let groups = getNavGroups(t, permissions);
+  
+  if (process.env.NODE_ENV === 'development') {
+    console.log('[DEBUG] Sidebar Permissions:', permissions);
+    console.log('[DEBUG] Nav Groups Count:', groups.length);
   }
 
   const NAV_GROUPS = groups;
 
+  const initials = user.name
+    .split(' ')
+    .filter(Boolean)
+    .map((n) => n[0])
+    .join('')
+    .slice(0, 2);
+
   return (
     <div
       className={cn(
-        'flex h-full flex-col bg-sidebar text-sidebar-foreground border-r border-sidebar-border shadow-xl relative z-20 transition-all duration-300 ease-in-out',
+        'flex h-full flex-col bg-sidebar text-sidebar-foreground border-r border-sidebar-border shadow-xl relative z-20 transition-all duration-300 ease-in-out select-none',
         isCollapsed ? 'w-20' : 'w-64'
       )}
+      onMouseMove={handleMouseMove}
     >
-      {/* Brand */}
-      <div
-        className={cn(
-          'flex h-16 shrink-0 items-center border-b border-sidebar-border',
-          isCollapsed ? 'justify-center px-0' : 'justify-between px-6'
-        )}
-      >
-        <Link href="/dashboard" className="flex items-center gap-3">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-primary text-[13px] font-bold text-primary-foreground shadow-[0_0_15px_rgba(37,99,235,0.3)]">
-            GF
-          </div>
-          {!isCollapsed && (
-            <div className="flex flex-col">
-              <span className="text-lg font-bold tracking-tight text-sidebar-foreground uppercase">
-                {t('common:appName', 'GateFlow')}
-              </span>
-            </div>
-          )}
-        </Link>
-        {!isCollapsed && (
-          <div className="flex items-center justify-center h-5 w-5 rounded-full bg-sidebar-accent border border-sidebar-border">
-            <ShieldCheck className="h-3 w-3 text-blue-400" />
-          </div>
-        )}
-      </div>
+      {/* Brand - Removed (now in Header) */}
 
       {/* Org & Project Context */}
       <div className={cn('py-4 space-y-4', isCollapsed ? 'px-2' : 'px-3')}>
         {org && !isCollapsed && (
           <div className="px-3 py-2 rounded-xl bg-sidebar-accent/50 border border-sidebar-border/50">
             <div className="flex items-center gap-2">
-              <Building2 className="h-3.5 w-3.5 text-muted-foreground" />
+              <Building2 className="h-4 w-4 text-muted-foreground" />
               <span className="text-xs font-bold truncate">{org.name}</span>
             </div>
           </div>
@@ -199,8 +173,10 @@ export function Sidebar({
           <div
             className="flex justify-center py-2"
             title={`${org.name} (${org.plan})`}
+            onMouseEnter={() => setHoveredLabel(`${org.name} (${org.plan})`)}
+            onMouseLeave={() => setHoveredLabel(null)}
           >
-            <Building2 className="h-5 w-5 text-blue-400" />
+            <Building2 className="h-6 w-6 text-blue-400" />
           </div>
         )}
       </div>
@@ -227,28 +203,29 @@ export function Sidebar({
                   <Link
                     key={item.href}
                     href={localizedHref}
-                    title={isCollapsed ? item.label : undefined}
+                    onMouseEnter={() => isCollapsed && setHoveredLabel(item.label)}
+                    onMouseLeave={() => setHoveredLabel(null)}
                     className={cn(
                       'group relative flex items-center gap-3 rounded-xl transition-all duration-200',
-                      isCollapsed ? 'justify-center p-3' : 'px-3.5 py-2.5',
+                      isCollapsed ? 'justify-center p-3' : 'px-3.5 py-3',
                       active
                         ? 'bg-primary/10 text-sidebar-foreground shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]'
                         : 'text-slate-400 hover:bg-sidebar-accent hover:text-slate-200'
                     )}
                   >
                     {active && (
-                      <span className="absolute left-0 top-1/2 h-5 w-1 -translate-y-1/2 rounded-full bg-primary shadow-[0_0_10px_rgba(59,130,246,0.6)]" />
+                      <span className="absolute left-0 top-1/2 h-6 w-1 -translate-y-1/2 rounded-full bg-primary shadow-[0_0_10px_rgba(59,130,246,0.6)]" />
                     )}
                     <Icon
                       className={cn(
-                        'h-[17px] w-[17px] transition-all duration-300 shrink-0',
+                        'h-5 w-5 transition-all duration-300 shrink-0',
                         active
                           ? 'text-blue-400 scale-110'
                           : 'text-slate-500 group-hover:scale-110 group-hover:text-slate-300'
                       )}
                     />
                     {!isCollapsed && (
-                      <span className="flex-1 truncate">{item.label}</span>
+                      <span className="flex-1 truncate text-sm font-medium">{item.label}</span>
                     )}
                   </Link>
                 );
@@ -258,67 +235,103 @@ export function Sidebar({
         ))}
       </nav>
 
-      {/* Footer / Sign Out */}
+      {/* Footer / User Profile */}
       <div
         className={cn(
-          'mt-auto shrink-0 p-3',
-          isCollapsed ? 'px-2' : 'px-3'
+          'mt-auto shrink-0 p-3 flex flex-col gap-4 border-t border-sidebar-border/50',
+          isCollapsed ? 'items-center' : 'px-4'
         )}
       >
-        <div className="flex flex-col gap-2">
-          <div className={cn("flex items-center", isCollapsed ? "justify-center" : "gap-2 px-1")}>
-            <Link
-              href={`/${locale}/dashboard/settings?tab=profile`}
-              title={t('sidebar.settings', 'Settings')}
-              className={cn(
-                'group flex items-center justify-center rounded-xl text-sm font-medium text-slate-400 hover:bg-sidebar-accent hover:text-slate-200 transition-all duration-200',
-                'w-10 h-10'
-              )}
-            >
-              <Settings className="h-[17px] w-[17px] text-slate-500 group-hover:text-slate-200 transition-colors shrink-0" />
-            </Link>
+        <div className={cn("flex items-center w-full", isCollapsed ? "justify-center" : "justify-between")}>
+          <div className="flex items-center gap-3">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <div 
+                  className="group relative cursor-pointer outline-none"
+                  onMouseEnter={() => isCollapsed && setHoveredLabel(t('sidebar.profile', 'Profile'))}
+                  onMouseLeave={() => setHoveredLabel(null)}
+                >
+                  <Avatar className="h-9 w-9 border-2 border-sidebar-border hover:border-primary transition-all">
+                    <AvatarFallback className="bg-primary text-primary-foreground text-[10px] font-bold">
+                      {initials}
+                    </AvatarFallback>
+                  </Avatar>
+                  {isCollapsed && (
+                    <div className="absolute -bottom-1 -right-1 h-3 w-3 rounded-full border-2 border-sidebar bg-green-500" />
+                  )}
+                </div>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent side={isCollapsed ? "right" : "top"} align="end" className="w-56" sideOffset={12}>
+                <DropdownMenuLabel className="font-normal">
+                  <div className="flex flex-col space-y-1">
+                    <p className="text-sm font-bold leading-none">{user.name}</p>
+                    <p className="text-xs leading-none text-muted-foreground">
+                      {user.email}
+                    </p>
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem asChild>
+                  <Link href={`/${locale}/dashboard/settings?tab=profile`} className="cursor-pointer w-full">
+                    <Building className="mr-2 h-4 w-4" />
+                    <span>{t('sidebar.profile', 'Profile')}</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href={`/${locale}/dashboard/settings`} className="cursor-pointer w-full">
+                    <Settings className="mr-2 h-4 w-4" />
+                    <span>{t('sidebar.settings', 'Settings')}</span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem 
+                  className="text-red-500 focus:text-red-500 cursor-pointer"
+                  onClick={() => router.push(`/${locale}/logout`)}
+                >
+                  <Power className="mr-2 h-4 w-4" />
+                  <span>{t('sidebar.signout', 'Sign out')}</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
 
             {!isCollapsed && (
-              <div className="flex items-center gap-1 animate-in fade-in slide-in-from-left-2 duration-300">
-                <LanguageSwitcher currentLocale={locale as any} />
-                <ThemeToggle />
+              <div className="flex flex-col truncate">
+                <span className="text-xs font-bold text-foreground truncate">{user.name}</span>
+                <span className="text-[10px] text-muted-foreground truncate uppercase tracking-tighter">
+                  {user.role.toLowerCase().replace('_', ' ')}
+                </span>
               </div>
             )}
           </div>
+        </div>
 
-          <Link
-            href={`/${locale}/logout`}
-            title={
-              isCollapsed
-                ? t('nav.signOut', { ns: 'admin', defaultValue: 'Sign out' })
-                : undefined
-            }
-            className={cn(
-              'group flex items-center gap-3 rounded-xl text-sm font-medium text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition-all duration-200 border-t border-sidebar-border pt-3 mt-1 rounded-t-none',
-              isCollapsed ? 'justify-center w-10 h-10 px-0 pt-0 mt-0 border-t-0' : 'flex-1 px-4 py-3'
-            )}
-          >
-            <Power className="h-[17px] w-[17px] text-slate-500 group-hover:text-red-400 transition-colors shrink-0" />
-            {!isCollapsed && (
-              <span className="truncate">
-                {t('nav.signOut', { ns: 'admin', defaultValue: 'Sign out' })}
-              </span>
-            )}
-          </Link>
-          
-          {/* Collapse Button aligned with right edge of sidebar, vertically aligned with separator */}
+        <div className={cn("flex items-center justify-center pt-2", isCollapsed ? "flex-col" : "w-full")}>
+          {/* Collapse Button */}
           <button
             onClick={onToggleCollapse}
             className={cn(
-              "absolute -right-3 flex h-6 w-6 items-center justify-center rounded-full border border-sidebar-border bg-sidebar hover:bg-sidebar-accent shadow-sm group",
-              isCollapsed ? "top-[calc(100%-24px)]" : "bottom-[38px]"
+              "flex h-8 w-8 items-center justify-center rounded-lg border border-sidebar-border bg-sidebar/50 hover:bg-sidebar-accent shadow-sm group transition-all"
             )}
-            title={isCollapsed ? t('sidebar.expand', 'Expand Sidebar') : t('sidebar.collapse', 'Collapse Sidebar')}
+            onMouseEnter={() => isCollapsed && setHoveredLabel(isCollapsed ? t('sidebar.expand', 'Expand') : t('sidebar.collapse', 'Collapse'))}
+            onMouseLeave={() => setHoveredLabel(null)}
           >
-            <ChevronLeft className={cn("h-3 w-3 text-slate-500 transition-transform group-hover:text-slate-200", isCollapsed && "rotate-180")} />
+            <ChevronLeft className={cn("h-4 w-4 text-slate-500 transition-transform group-hover:text-slate-200", isCollapsed && "rotate-180")} />
           </button>
         </div>
       </div>
+
+      {/* Photoshop-style Floating Label */}
+      {hoveredLabel && (
+        <div
+          className="fixed z-[9999] pointer-events-none px-2 py-1 bg-primary text-primary-foreground text-[10px] font-bold rounded shadow-xl whitespace-nowrap animate-in fade-in zoom-in-95 duration-100"
+          style={{
+            left: mousePos.x + 12,
+            top: mousePos.y - 12,
+          }}
+        >
+          {hoveredLabel}
+        </div>
+      )}
     </div>
   );
 }

@@ -3,7 +3,7 @@ import { prisma } from '@gate-access/db';
 import { getSessionClaims } from '../../../../lib/auth-cookies';
 import { z } from 'zod';
 import { signAccessToken } from '../../../../lib/auth';
-import { castUserRole } from '@/lib/types';
+// import { castUserRole } from '@/lib/types';
 import { cookies } from 'next/headers';
 
 const OnboardingCompleteSchema = z.object({
@@ -38,6 +38,13 @@ export async function POST(request: NextRequest) {
     }
 
     const { name, orgName, orgEmail } = validation.data;
+    const tenantAdminRole = await prisma.role.findFirst({
+      where: { name: 'TENANT_ADMIN' },
+    });
+
+    if (!tenantAdminRole) {
+      throw new Error('TENANT_ADMIN role not found');
+    }
 
     // 1. Transaction to create org, default project, and update user
     const { org, user, defaultProject } = await prisma.$transaction(async (tx) => {
@@ -63,8 +70,9 @@ export async function POST(request: NextRequest) {
         data: {
           name: name,
           organizationId: org.id,
-          role: 'TENANT_ADMIN',
+          roleId: tenantAdminRole.id,
         },
+        include: { role: true },
       });
 
       return { org, user, defaultProject };
@@ -75,7 +83,7 @@ export async function POST(request: NextRequest) {
       user.id,
       user.email,
       user.organizationId, // Now has the org.id
-      castUserRole(user.role)
+      user.role
     );
 
     const response = NextResponse.json({

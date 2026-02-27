@@ -31,10 +31,11 @@ export function LanguageSwitcher({ currentLocale }: { currentLocale: Locale }) {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button
-          className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-9 w-9 text-muted-foreground hover:text-foreground"
+          className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-[10px] font-bold ring-offset-background transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-7 px-2 text-primary-foreground/80"
           aria-label="Toggle language"
         >
-          <Languages className="h-[1.2rem] w-[1.2rem]" />
+          <Languages className="h-3 w-3" />
+          <span>{currentLocale === 'ar-EG' ? 'العربية' : 'English'}</span>
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

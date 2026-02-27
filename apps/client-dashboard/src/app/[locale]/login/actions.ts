@@ -10,14 +10,14 @@ import {
   getRefreshTokenExpiry,
 } from '@/lib/auth';
 import { setAuthCookies } from '@/lib/auth-cookies';
-import { UserRole } from '@gate-access/db';
+// import { UserRole } from '@gate-access/db';
 import { CSRF_COOKIE, generateCsrfToken } from '@/lib/csrf';
-import { castUserRole } from '@/lib/types';
+// import { castUserRole } from '@/lib/types';
 import { LOCALE_COOKIE, i18n } from '@/lib/i18n-config';
 
 const SECURE = process.env.NODE_ENV === 'production';
 
-export type LoginState = { error: string } | null;
+export type LoginState = { error?: string; success?: boolean; locale?: string } | null;
 
 export async function loginAction(
   _prevState: LoginState,
@@ -61,7 +61,7 @@ export async function loginAction(
       user.id,
       user.email,
       user.organizationId,
-      castUserRole(user.role)
+      user.role
     ),
     Promise.resolve(generateRefreshToken()),
   ]);
@@ -93,5 +93,5 @@ export async function loginAction(
   const localeCookie = cookies().get(LOCALE_COOKIE)?.value;
   const locale = i18n.locales.includes(localeCookie as any) ? localeCookie : i18n.defaultLocale;
 
-  redirect(`/${locale}/dashboard`);
+  return { success: true, locale };
 }

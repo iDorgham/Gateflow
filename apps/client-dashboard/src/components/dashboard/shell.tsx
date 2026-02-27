@@ -9,6 +9,7 @@ import { Sidebar } from './sidebar';
 import { ThemeToggle } from './theme-toggle';
 import { LanguageSwitcher } from '../language-switcher';
 import { GlobalSearch } from './global-search';
+import { SidePanel } from './side-panel';
 import { AIAssistant } from './ai-assistant';
 import { ProjectFilterProvider } from '@/context/ProjectFilterContext';
 import { getCsrfToken } from '@/lib/csrf';
@@ -33,8 +34,10 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronsUpDown,
+  Sparkles,
 } from 'lucide-react';
 import { cn } from '@gate-access/ui';
+import { useTranslation } from 'react-i18next';
 
 interface ExpiredQR {
   id: string;
@@ -63,6 +66,40 @@ export interface DashboardShellProps {
   permissions?: Record<string, boolean>;
 }
 
+function MiniHeader({ locale }: { locale: string }) {
+  const [time, setTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => setTime(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const dateStr = time.toLocaleDateString(locale === 'ar' ? 'ar-EG' : 'en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
+
+  const timeStr = time.toLocaleTimeString(locale === 'ar' ? 'ar-EG' : 'en-US', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  });
+
+  return (
+    <div className="bg-primary px-4 py-1 flex justify-between items-center text-[10px] text-primary-foreground font-medium z-40">
+      <div className="flex items-center gap-4 opacity-90 tracking-wide" suppressHydrationWarning>
+        <span className="uppercase" suppressHydrationWarning>{dateStr}</span>
+        <span className="font-mono tabular-nums" suppressHydrationWarning>{timeStr}</span>
+      </div>
+      <div className="flex items-center gap-2">
+        <LanguageSwitcher currentLocale={locale as any} />
+      </div>
+    </div>
+  );
+}
+
 export function DashboardShell({
   user,
   org,
@@ -74,11 +111,15 @@ export function DashboardShell({
   permissions,
 }: DashboardShellProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
+  const [isSidePanelOpen, setIsSidePanelOpen] = useState(false);
+  const [sidePanelTab, setSidePanelTab] = useState<'assistant' | 'notifications'>('assistant');
   const [expiredQRs, setExpiredQRs] = useState<ExpiredQR[]>([]);
   const pathname = usePathname();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
+
+  const { t } = useTranslation('dashboard');
 
   // Close mobile nav on route change
   useEffect(() => {
@@ -127,50 +168,11 @@ export function DashboardShell({
   };
 
   return (
-    <div className="flex h-[105.3vh] overflow-hidden bg-background">
-      {/* Desktop Sidebar */}
-      <div
-        className={cn(
-          'hidden md:flex h-full shrink-0 transition-all duration-300 ease-in-out',
-          isCollapsed ? 'w-20' : 'w-64'
-        )}
-      >
-        <Sidebar
-          org={org}
-          projects={projects}
-          currentProjectId={currentProjectId}
-          locale={locale}
-          isCollapsed={isCollapsed}
-          onToggleCollapse={() => setIsCollapsed(!isCollapsed)}
-          hideGates={hideGates}
-          permissions={permissions}
-        />
-      </div>
-
-      {/* Mobile Sidebar */}
-      <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-        <SheetContent
-          side="left"
-          className="p-0 border-0 w-64"
-          aria-label="Mobile navigation"
-        >
-          <Sidebar
-            org={org}
-            projects={projects}
-            currentProjectId={currentProjectId}
-            locale={locale}
-            isCollapsed={false}
-            onToggleCollapse={() => setMobileOpen(false)}
-            hideGates={hideGates}
-            permissions={permissions}
-          />
-        </SheetContent>
-      </Sheet>
-
-      {/* Main content */}
-      <div className="flex flex-1 flex-col overflow-hidden">
-        {/* Top bar */}
-        <header className="flex h-16 shrink-0 items-center justify-between border-b border-border bg-card px-4 md:px-6 shadow-sm">
+    <div className="flex flex-col h-screen overflow-hidden bg-background">
+      <MiniHeader locale={locale} />
+      {/* Top bar - Now above everything */}
+      <header className="flex h-16 shrink-0 items-center justify-between border-b border-border bg-card px-4 md:px-6 shadow-sm z-30">
+        <div className="flex items-center gap-8">
           <div className="flex items-center gap-4">
             <Button
               variant="ghost"
@@ -184,13 +186,13 @@ export function DashboardShell({
               <GlobalSearch locale={locale} />
             </div>
 
-            {/* Project Switcher in Header */}
+            {/* Project Switcher */}
             {projects.length > 0 && (
-              <div className="hidden sm:flex items-center gap-2 ml-4 relative">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground opacity-60">
+              <div className="hidden sm:flex items-center gap-2 relative">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground opacity-60 line-clamp-1">
                   Project
                 </span>
-                <div className="relative w-48">
+                <div className="relative w-40">
                   <select
                     value={currentProjectId ?? 'all'}
                     onChange={(e) => handleProjectSwitch(e.target.value)}
@@ -209,89 +211,82 @@ export function DashboardShell({
               </div>
             )}
           </div>
+        </div>
 
-          <div className="flex items-center gap-3">
-            <div className="sm:hidden flex items-center">
-              <GlobalSearch locale={locale} />
-            </div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="relative text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  <Bell className="h-[17px] w-[17px]" />
-                  {expiredQRs.length > 0 && (
-                    <span className="absolute -top-0.5 -right-0.5 h-2 w-2 rounded-full bg-red-500" />
-                  )}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-72">
-                <DropdownMenuLabel>Notifications</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                {expiredQRs.length === 0 ? (
-                  <div className="px-2 py-3 text-center text-sm text-muted-foreground">
-                    No new notifications
-                  </div>
-                ) : (
-                  <>
-                    {expiredQRs.map((qr) => (
-                      <DropdownMenuItem key={qr.id} asChild>
-                        <Link
-                          href={`/${locale}/dashboard/qrcodes?q=${encodeURIComponent(qr.code)}`}
-                          className="flex flex-col items-start gap-0.5 cursor-pointer"
-                        >
-                          <span className="font-mono text-xs font-medium">
-                            {qr.code}
-                          </span>
-                          <span className="text-[11px] text-muted-foreground">
-                            Expired{' '}
-                            {new Date(qr.expiresAt).toLocaleDateString()}
-                            {qr.gateName ? ` · ${qr.gateName}` : ''}
-                          </span>
-                        </Link>
-                      </DropdownMenuItem>
-                    ))}
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem asChild>
-                      <Link
-                        href={`/${locale}/dashboard/qrcodes`}
-                        className="text-xs text-center w-full justify-center cursor-pointer"
-                      >
-                        View all QR codes
-                      </Link>
-                    </DropdownMenuItem>
-                  </>
-                )}
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <div className="h-8 w-[1px] bg-border mx-1" />
-            <Link
-              href={`/${locale}/dashboard/settings?tab=profile`}
-              className="flex items-center gap-3 pl-1 group hover:opacity-80 transition-opacity"
-            >
-              <div className="hidden sm:flex flex-col items-end">
-                <span className="text-xs font-bold text-foreground leading-none group-hover:text-primary transition-colors">
-                  {user.name}
-                </span>
-                <span className="text-[10px] font-medium text-muted-foreground mt-1 capitalize">
-                  {user.role.toLowerCase().replace('_', ' ')}
-                </span>
-              </div>
-              <Avatar className="h-9 w-9 border-2 border-border shadow-sm ring-1 ring-primary/5 group-hover:ring-primary/20 transition-all">
-                <AvatarFallback className="bg-primary text-primary-foreground text-[10px] font-bold">
-                  {initials}
-                </AvatarFallback>
-              </Avatar>
-            </Link>
+        <div className="flex items-center gap-3">
+          <div className="sm:hidden flex items-center">
+            <GlobalSearch locale={locale} />
           </div>
-        </header>
+          
+          <div className="h-8 w-[1px] bg-border mx-1" />
+          <div className="h-8 w-[1px] bg-border mx-1" />
+          <Button
+            variant="ghost"
+            size="icon"
+            className={cn(
+              'relative text-muted-foreground hover:text-foreground transition-colors',
+              isSidePanelOpen && sidePanelTab === 'assistant' && 'text-primary bg-primary/10'
+            )}
+            onClick={() => {
+              if (isSidePanelOpen && sidePanelTab === 'assistant') {
+                setIsSidePanelOpen(false);
+              } else {
+                setSidePanelTab('assistant');
+                setIsSidePanelOpen(true);
+              }
+            }}
+          >
+            <Sparkles className="h-[17px] w-[17px]" />
+          </Button>
+        </div>
+      </header>
+
+      <div className="flex flex-1 overflow-hidden">
+        {/* Desktop Sidebar */}
+        <div
+          className={cn(
+            'hidden md:flex h-full shrink-0 transition-all duration-300 ease-in-out',
+            isCollapsed ? 'w-20' : 'w-64'
+          )}
+        >
+          <Sidebar
+            user={user}
+            org={org}
+            projects={projects}
+            currentProjectId={currentProjectId}
+            locale={locale}
+            isCollapsed={isCollapsed}
+            onToggleCollapse={() => setIsCollapsed(!isCollapsed)}
+            hideGates={hideGates}
+            permissions={permissions}
+          />
+        </div>
+
+        {/* Mobile Sidebar */}
+        <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+          <SheetContent
+            side="left"
+            className="p-0 border-0 w-64"
+            aria-label="Mobile navigation"
+          >
+            <Sidebar
+              user={user}
+              org={org}
+              projects={projects}
+              currentProjectId={currentProjectId}
+              locale={locale}
+              isCollapsed={false}
+              onToggleCollapse={() => setMobileOpen(false)}
+              hideGates={hideGates}
+              permissions={permissions}
+            />
+          </SheetContent>
+        </Sheet>
 
         {/* Page content */}
-        <main className="flex-1 overflow-y-auto p-4 md:p-8 bg-slate-50/50 dark:bg-transparent">
+        <main className="flex-1 overflow-y-auto p-4 md:p-8 bg-slate-50/50 dark:bg-transparent flex flex-col">
           <div
-            className="animate-in fade-in slide-in-from-bottom-2 duration-500 w-full"
+            className="animate-in fade-in slide-in-from-bottom-2 duration-500 w-full flex-1 flex flex-col"
           >
             <ProjectFilterProvider
               currentProjectId={currentProjectId}
@@ -301,10 +296,79 @@ export function DashboardShell({
             </ProjectFilterProvider>
           </div>
         </main>
+
+        <SidePanel 
+          locale={locale} 
+          isOpen={isSidePanelOpen} 
+          onToggle={() => setIsSidePanelOpen(!isSidePanelOpen)}
+          activeTab={sidePanelTab}
+          onTabChange={setSidePanelTab}
+          notificationsCount={expiredQRs.length}
+          notificationsContent={
+            <div className="flex flex-col h-full bg-card">
+              <div className="flex shrink-0 items-center justify-between border-b border-border px-4 py-3 bg-muted/30">
+                <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+                  {locale === 'ar' ? 'التنبيهات الأخيرة' : 'Recent Notifications'}
+                </span>
+                {expiredQRs.length > 0 && (
+                  <span className="text-[10px] bg-red-500 text-white px-1.5 py-0.5 rounded-full font-bold">
+                    {expiredQRs.length}
+                  </span>
+                )}
+              </div>
+              <div className="flex-1 overflow-y-auto p-4 space-y-3">
+                {expiredQRs.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center py-12 text-center opacity-40">
+                    <Bell className="h-12 w-12 mb-3" />
+                    <p className="text-sm font-medium">
+                      {locale === 'ar' ? 'لا توجد تنبيهات جديدة' : 'No new notifications'}
+                    </p>
+                  </div>
+                ) : (
+                  expiredQRs.map((qr) => (
+                    <Link
+                      key={qr.id}
+                      href={`/${locale}/dashboard/qrcodes?q=${encodeURIComponent(qr.code)}`}
+                      className="block group p-3 rounded-xl border border-border bg-card transition-all hover:border-primary/20 hover:bg-primary/5 hover:shadow-sm"
+                    >
+                      <div className="flex items-start justify-between">
+                        <div className="space-y-1">
+                          <p className="font-mono text-xs font-bold text-foreground">
+                            {qr.code}
+                          </p>
+                          <p className="text-[11px] text-muted-foreground leading-tight">
+                            {locale === 'ar' ? 'انتهت صلاحية الرمز في' : 'QR code expired on'}{' '}
+                            <span className="font-medium text-foreground/70">
+                              {new Date(qr.expiresAt).toLocaleDateString(locale === 'ar' ? 'ar-EG' : 'en-US')}
+                            </span>
+                            {qr.gateName && (
+                              <>
+                                <br />
+                                <span>@ {qr.gateName}</span>
+                              </>
+                            )}
+                          </p>
+                        </div>
+                        <div className="h-2 w-2 rounded-full bg-red-400 opacity-60 group-hover:opacity-100" />
+                      </div>
+                    </Link>
+                  ))
+                )}
+                <Link
+                  href={`/${locale}/dashboard/qrcodes`}
+                  className="block w-full py-2 text-center text-[10px] font-bold uppercase tracking-widest text-primary hover:underline transition-all mt-4"
+                >
+                  {locale === 'ar' ? 'عرض جميع رموز QR' : 'View All QR Codes'}
+                </Link>
+              </div>
+            </div>
+          }
+        >
+          <AIAssistant locale={locale} />
+        </SidePanel>
       </div>
 
       <Toaster position="bottom-right" richColors />
-      <AIAssistant locale={locale} />
     </div>
   );
 }

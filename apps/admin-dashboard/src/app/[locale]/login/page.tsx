@@ -179,17 +179,8 @@ export default function AdminLoginPage() {
         ) : null
       }
     >
-      <Card className="border-border/40 shadow-2xl shadow-slate-200/50 dark:shadow-black/60 backdrop-blur-xl bg-card/80 transition-all duration-500">
-        <CardHeader className="pb-6 pt-8 px-8">
-          <CardTitle className="text-xl font-bold">
-            {isRtl ? 'مرحباً بعودتك' : 'Welcome back'}
-          </CardTitle>
-          <CardDescription className="text-muted-foreground">
-            {isRtl ? 'أدخل مفتاح التفويض للمتابعة' : 'Sign in to access your dashboard'}
-          </CardDescription>
-        </CardHeader>
-
-        <CardContent className="px-8 pb-8">
+      <Card className="border-none shadow-none bg-transparent">
+        <CardContent className="px-0 pb-0">
           <form onSubmit={handleSubmit} className="space-y-6" dir={isRtl ? 'rtl' : 'ltr'}>
             {error && (
               <div className="rounded-xl border border-destructive/20 bg-destructive/5 px-4 py-3 text-sm text-destructive font-semibold flex items-center gap-2">

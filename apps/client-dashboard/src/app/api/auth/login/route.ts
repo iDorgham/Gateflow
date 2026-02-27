@@ -8,7 +8,7 @@ import {
   getRefreshTokenExpiry,
 } from '../../../../lib/auth';
 import { CSRF_COOKIE, generateCsrfToken } from '../../../../lib/csrf';
-import { castUserRole } from '@/lib/types';
+// import { castUserRole } from '@/lib/types';
 import { checkRateLimit } from '../../../../lib/rate-limit';
 
 const SECURE = process.env.NODE_ENV === 'production';
@@ -51,6 +51,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     // Find user (not soft-deleted)
     const user = await prisma.user.findFirst({
       where: { email, deletedAt: null },
+      include: { role: true },
     });
 
     if (!user) {
@@ -78,7 +79,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       user.id,
       user.email,
       user.organizationId,
-      castUserRole(user.role)
+      user.role
     );
 
     // Issue refresh token and store in DB
