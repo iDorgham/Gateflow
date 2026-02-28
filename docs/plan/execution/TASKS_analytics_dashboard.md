@@ -17,9 +17,9 @@ Checklist for **PLAN_analytics_dashboard**. Use with `/dev` and phase prompts.
 - [x] **1.6** "Open in Analytics" on Contacts/Units
 - [x] **1.7** "Apply to Contacts/Units" on dashboard
 - [x] **1.8** i18n for new strings
-- [ ] **1.9** Lint, typecheck, tests pass; committed
+- [x] **1.9** Lint, typecheck, tests pass; committed
 
-**Status:** In progress (1.9 pending git commit)
+**Status:** Complete
 
 ---
 
