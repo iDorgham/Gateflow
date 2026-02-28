@@ -9,6 +9,9 @@ export const QRValidateRequestSchema = z.object({
       location: z.record(z.string(), z.unknown()).optional(),
       latitude: z.number().min(-90).max(90).optional(),
       longitude: z.number().min(-180).max(180).optional(),
+      visitorName: z.string().max(200).optional(),
+      visitorPhone: z.string().max(50).optional(),
+      visitorIdNumber: z.string().max(100).optional(),
     })
     .optional(),
 });
@@ -31,6 +34,7 @@ export const QRValidateRejectReason = z.enum([
   'internal_error',
   'denied',
   'not_on_location',
+  'blocked_watchlist',
 ]);
 
 export type QRValidateRejectReason = z.infer<typeof QRValidateRejectReason>;

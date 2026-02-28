@@ -8,9 +8,9 @@
 
 | Item | Status |
 |------|--------|
-| **Plan** | core_security_v6 (Phases 1–4 done, 5–6 remaining) |
-| **Next phase** | **Phase 5** — Watchlists, incidents & guard accountability |
-| **Last completed** | Phase 4 — Location rule (optional) |
+| **Plan** | core_security_v6 (Phases 1–5 done, Phase 6 remaining) |
+| **Next phase** | **Phase 6** — Visitor identity levels & privacy/retention |
+| **Last completed** | Phase 5 — Watchlists, incidents & guard accountability |
 | **Branch** | master (keep pushed and clean before starting loop) |
 
 ---

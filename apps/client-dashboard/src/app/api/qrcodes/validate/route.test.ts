@@ -84,6 +84,7 @@ const mockQRCode = {
 const mockFindUnique = jest.fn();
 const mockGateFindFirst = jest.fn();
 const mockScanLogCreate = jest.fn();
+const mockIncidentCreate = jest.fn().mockResolvedValue({ id: 'incident_1' });
 const mockTransaction = jest.fn();
 
 jest.mock('@gate-access/db', () => ({
@@ -96,6 +97,9 @@ jest.mock('@gate-access/db', () => ({
     },
     scanLog: {
       create: (...args: unknown[]) => mockScanLogCreate(...args),
+    },
+    incident: {
+      create: (...args: unknown[]) => mockIncidentCreate(...args),
     },
     $transaction: (fn: (tx: unknown) => Promise<unknown>) => mockTransaction(fn),
   },

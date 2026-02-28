@@ -12,6 +12,7 @@ import {
   getUserAssignedGateIds,
 } from '@/lib/gate-assignment';
 import { checkLocationForGate } from '@/lib/location';
+import { getActiveWatchlist, findWatchlistMatch } from '@/lib/watchlist';
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
@@ -76,6 +77,37 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       return true;
     });
 
+    // Watchlist: reject scans whose visitor identity matches org watchlist; create incidents.
+    const watchlistFailed: Array<{ id: string; error: string }> = [];
+    let scansForSync = scansPassingLocation;
+    if (orgId) {
+      const entries = await getActiveWatchlist(orgId);
+      scansForSync = scansPassingLocation.filter((scan) => {
+        const visitor = {
+          name: scan.visitorName ?? null,
+          phone: scan.visitorPhone ?? null,
+          idNumber: scan.visitorIdNumber ?? null,
+        };
+        if (!visitor.name && !visitor.phone && !visitor.idNumber) return true;
+        const match = findWatchlistMatch(entries, visitor);
+        if (match) {
+          watchlistFailed.push({ id: scan.id, error: 'Blocked person on security list.' });
+          void prisma.incident.create({
+            data: {
+              organizationId: orgId,
+              gateId: scan.gateId,
+              userId: authResult.sub ?? null,
+              reason: 'watchlist_match',
+              status: 'UNDER_REVIEW',
+              notes: `Watchlist entry ${match.entryId} matched on ${match.matchedField} (bulk sync).`,
+            },
+          }).catch((err) => console.error('[scans/bulk] Failed to create watchlist incident:', err));
+          return false;
+        }
+        return true;
+      });
+    }
+
     // Gate–account assignment: when org uses assignments, operator must be assigned to every gate in the batch.
     if (orgId) {
       const hasAny = await orgHasAssignments(orgId);
@@ -84,7 +116,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
           authResult.sub,
           orgId
         );
-        const gateIdsInBatch = new Set(scansPassingLocation.map((s) => s.gateId));
+        const gateIdsInBatch = new Set(scansForSync.map((s) => s.gateId));
         const unassigned = Array.from(gateIdsInBatch).filter(
           (id) => !assignedGateIds.has(id)
         );
@@ -122,14 +154,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     const results = await prisma.$transaction(async (tx) => {
-      return processBulkScans(scansPassingLocation, tx);
+      return processBulkScans(scansForSync, tx);
     });
 
     const response = {
       success: true,
       synced: results.synced,
       conflicted: results.conflicted,
-      failed: [...locationFailed, ...results.failed],
+      failed: [...locationFailed, ...watchlistFailed, ...results.failed],
     };
 
     return NextResponse.json({

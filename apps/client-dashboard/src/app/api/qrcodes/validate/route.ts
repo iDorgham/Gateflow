@@ -10,6 +10,7 @@ import { requireAuth, isNextResponse } from '../../../../lib/require-auth';
 import { checkRateLimit } from '../../../../lib/rate-limit';
 import { checkGateAssignment } from '../../../../lib/gate-assignment';
 import { checkLocationForGate } from '../../../../lib/location';
+import { getActiveWatchlist, findWatchlistMatch } from '../../../../lib/watchlist';
 
 // ─── Configuration ────────────────────────────────────────────────────────────
 
@@ -302,6 +303,39 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
             status: 'rejected',
             reason: 'not_on_location',
             message: msg,
+          },
+          403,
+        );
+      }
+    }
+
+    // Step 11d — Watchlist: if scanContext has visitor identity, check org watchlist; on match reject and create incident.
+    const visitorName = scanContext?.visitorName ?? null;
+    const visitorPhone = scanContext?.visitorPhone ?? null;
+    const visitorIdNumber = scanContext?.visitorIdNumber ?? null;
+    if (claims.orgId && (visitorName || visitorPhone || visitorIdNumber)) {
+      const entries = await getActiveWatchlist(claims.orgId);
+      const match = findWatchlistMatch(entries, {
+        name: visitorName,
+        phone: visitorPhone,
+        idNumber: visitorIdNumber,
+      });
+      if (match) {
+        await prisma.incident.create({
+          data: {
+            organizationId: claims.orgId,
+            gateId,
+            userId: claims.sub,
+            reason: 'watchlist_match',
+            status: 'UNDER_REVIEW',
+            notes: `Watchlist entry ${match.entryId} matched on ${match.matchedField}.`,
+          },
+        });
+        return json<QRValidateResponse>(
+          {
+            status: 'rejected',
+            reason: 'blocked_watchlist',
+            message: 'Blocked person on security list.',
           },
           403,
         );

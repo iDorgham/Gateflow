@@ -72,17 +72,17 @@ Checklist for **PLAN_core_security_v6**. Use with `/dev` and **PROGRESS_DASHBOAR
 **Prompt:** `PROMPT_core_security_v6_phase_5.md`  
 **Role:** SECURITY
 
-- [ ] **5.1** Load security context (gf-security, CONTRACTS, 00-gateflow-core)
-- [ ] **5.2** Schema: WatchlistEntry (organizationId, name, idNumber?, phone?, notes?, deletedAt, createdBy?); Incident (organizationId, gateId, operatorId, scanLogId?, reason, status, notes?); indexes; optional Shift; migration
-- [ ] **5.3** Watchlist API: GET list, POST add, DELETE/PATCH soft-delete; auth, org scope, permission (Security Manager / Org Admin)
-- [ ] **5.4** Incident API: POST create, GET list (filter gate/status/from/to), PATCH update status; org-scoped, permission-gated
-- [ ] **5.5** Scan integration: load active watchlist; compare scan payload (name, phone, idNumber) to entries; on match: 403 “Blocked person on security list”, create Incident (watchlist_match), no ScanLog
-- [ ] **5.6** Dashboard: watchlist management (add/remove/list); incident queue (list, filter gate/status/date, mark resolved/escalated)
-- [ ] **5.7** Tests: watchlist CRUD; scan with matching identity → 403 + incident created; incident list org-only; no cross-org leak
-- [ ] **5.8** Soft deletes: watchlist entries use deletedAt; reads filter deletedAt: null
-- [ ] **5.9** Quality: `pnpm turbo build`, `pnpm turbo test`, lint, typecheck; committed and pushed
+- [x] **5.1** Load security context (gf-security, CONTRACTS, 00-gateflow-core)
+- [x] **5.2** Schema: WatchlistEntry (organizationId, name, idNumber?, phone?, notes?, deletedAt, createdBy?); Incident (organizationId, gateId, operatorId, scanLogId?, reason, status, notes?); indexes; optional Shift; migration
+- [x] **5.3** Watchlist API: GET list, POST add, DELETE/PATCH soft-delete; auth, org scope, permission (Security Manager / Org Admin)
+- [x] **5.4** Incident API: POST create, GET list (filter gate/status/from/to), PATCH update status; org-scoped, permission-gated
+- [x] **5.5** Scan integration: load active watchlist; compare scan payload (name, phone, idNumber) to entries; on match: 403 “Blocked person on security list”, create Incident (watchlist_match), no ScanLog
+- [x] **5.6** Dashboard: watchlist management (add/remove/list); incident queue (list, filter gate/status/date, mark resolved/escalated)
+- [x] **5.7** Tests: watchlist CRUD; scan with matching identity → 403 + incident created; incident list org-only; no cross-org leak
+- [x] **5.8** Soft deletes: watchlist entries use deletedAt; reads filter deletedAt: null
+- [x] **5.9** Quality: `pnpm turbo build`, `pnpm turbo test`, lint, typecheck; committed and pushed
 
-**Status:** Not started
+**Status:** Done
 
 ---
 
@@ -114,7 +114,7 @@ Checklist for **PLAN_core_security_v6**. Use with `/dev` and **PROGRESS_DASHBOAR
 | 2     | Done        | —                  |
 | 3     | Done        | —                  |
 | 4     | Done        | —                  |
-| 5     | Not started | After Phase 4      |
+| 5     | Done        | —                  |
 | 6     | Not started | After Phase 5      |
 
 ---

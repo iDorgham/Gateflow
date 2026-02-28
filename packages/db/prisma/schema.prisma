@@ -18,17 +18,19 @@ model Organization {
   updatedAt DateTime @updatedAt
   deletedAt DateTime?
 
-  users           User[]
-  gates           Gate[]
-  gateAssignments GateAssignment[]
-  qrCodes         QRCode[]
-  webhooks        Webhook[]
-  apiKeys         ApiKey[]
-  projects        Project[]
-  contacts        Contact[]
-  units           Unit[]
-  roles           Role[]
-  residentLimits  ResidentLimit[]
+  users            User[]
+  gates            Gate[]
+  gateAssignments  GateAssignment[]
+  qrCodes          QRCode[]
+  webhooks         Webhook[]
+  apiKeys          ApiKey[]
+  projects         Project[]
+  contacts         Contact[]
+  units            Unit[]
+  roles            Role[]
+  residentLimits   ResidentLimit[]
+  watchlistEntries WatchlistEntry[]
+  incidents        Incident[]
 
   @@index([deletedAt])
 }
@@ -88,6 +90,7 @@ model User {
   refreshTokens   RefreshToken[]
   unit            Unit?
   gateAssignments GateAssignment[]
+  incidents       Incident[]
 
   @@index([organizationId])
   @@index([roleId])
@@ -134,10 +137,50 @@ model Gate {
   scanLogs        ScanLog[]
   qrCodes         QRCode[]
   gateAssignments GateAssignment[]
+  incidents       Incident[]
 
   @@index([organizationId])
   @@index([projectId])
   @@index([deletedAt])
+}
+
+model WatchlistEntry {
+  id             String       @id @default(cuid())
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId String
+  name           String
+  idNumber       String?
+  phone          String?
+  notes          String?
+  createdBy      String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  deletedAt      DateTime?
+
+  @@index([organizationId])
+  @@index([deletedAt])
+}
+
+model Incident {
+  id             String       @id @default(cuid())
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId String
+  gate           Gate         @relation(fields: [gateId], references: [id], onDelete: Cascade)
+  gateId         String
+  user           User?        @relation(fields: [userId], references: [id])
+  userId         String?
+  scanLog        ScanLog?     @relation(fields: [scanLogId], references: [id])
+  scanLogId      String?
+  reason         String
+  status         IncidentStatus @default(UNDER_REVIEW)
+  notes          String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([organizationId])
+  @@index([gateId])
+  @@index([status])
+  @@index([createdAt])
 }
 
 model QRCode {
@@ -182,6 +225,7 @@ model ScanLog {
   deviceId  String?
   auditNotes Json?
   auditTrail Json[]
+  incidents Incident[]
 
   @@index([gateId])
   @@index([qrCodeId])
@@ -259,6 +303,12 @@ enum ScanStatus {
   MAX_USES_REACHED
   INACTIVE
   DENIED
+}
+
+enum IncidentStatus {
+  UNDER_REVIEW
+  RESOLVED
+  ESCALATED
 }
 
 enum WebhookEvent {

@@ -78,6 +78,18 @@ const getNavGroups = (t: TFunction, permissions: Record<string, boolean>) => {
       icon: Users,
       permission: 'gates:manage' as Permission,
     },
+    {
+      label: t('sidebar.watchlist', 'Watchlist'),
+      href: '/dashboard/team/watchlist',
+      icon: ShieldCheck,
+      permission: 'gates:manage' as Permission,
+    },
+    {
+      label: t('sidebar.incidents', 'Incidents'),
+      href: '/dashboard/team/incidents',
+      icon: ShieldCheck,
+      permission: 'gates:manage' as Permission,
+    },
   ].filter(item => hasPerm(item.permission));
 
   const groups = [

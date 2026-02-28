@@ -176,6 +176,7 @@ function serverReasonMessage(reason: string): string {
     invalid_format: 'No gate assigned for this QR code',
     denied: 'You are not allowed to scan at this gate',
     not_on_location: 'Scanning is only allowed at the gate location. Enable device location or move closer to the gate.',
+    blocked_watchlist: 'Blocked person on security list.',
   };
   return map[reason] ?? 'Access denied';
 }
