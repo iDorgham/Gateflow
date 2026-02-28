@@ -9,13 +9,14 @@
   },
   "scripts": {
     "lint": "eslint src/",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc -p tsconfig.json"
   },
   "dependencies": {
     "zod": "^4.3.6",
     "crypto-js": "^4.2.0"
   },
   "devDependencies": {
+    "@gate-access/config": "workspace:*",
     "@types/crypto-js": "^4.2.2",
     "typescript": "^5.9.3"
   }

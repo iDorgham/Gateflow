@@ -1,45 +1,32 @@
 /**
- * Type utilities for bridging Prisma-generated types with application types
+ * Type utilities for bridging role types with application types
  */
 
-import type { UserRole as PrismaUserRoleEnum } from '@gate-access/db';
-import { UserRole } from '@gate-access/types';
-
-/**
- * Type to handle Prisma UserRole to Application UserRole conversion
- * Both are string enums with the same values, but TypeScript doesn't know this
- */
-export type AppUserRole = PrismaUserRoleEnum;
+/** Known role names (Role.name from Prisma) */
+export type AppUserRole = 'ADMIN' | 'TENANT_ADMIN' | 'TENANT_USER' | 'VISITOR' | 'RESIDENT';
 
 /**
- * Convert Prisma UserRole to Application UserRole
+ * Validate that a string is a valid AppUserRole
  */
-export function toUserRole(prismaRole: PrismaUserRoleEnum): UserRole {
-  return prismaRole as UserRole;
-}
-
-/**
- * Validate that a string is a valid UserRole
- */
-export function isUserRole(value: unknown): value is UserRole {
+export function isUserRole(value: unknown): value is AppUserRole {
   return (
     typeof value === 'string' &&
     (value === 'ADMIN' ||
       value === 'TENANT_ADMIN' ||
       value === 'TENANT_USER' ||
-      value === 'VISITOR')
+      value === 'VISITOR' ||
+      value === 'RESIDENT')
   );
 }
 
 /**
- * Safe cast from Prisma role to application role
- * Use this when you've verified the role is valid
+ * Safe cast from role string to AppUserRole
  */
-export function castUserRole(prismaRole: PrismaUserRoleEnum): UserRole {
-  if (!isUserRole(prismaRole)) {
-    throw new Error(`Invalid user role: ${prismaRole}`);
+export function castUserRole(role: string): AppUserRole {
+  if (!isUserRole(role)) {
+    throw new Error(`Invalid user role: ${role}`);
   }
-  return prismaRole;
+  return role;
 }
 
 /**

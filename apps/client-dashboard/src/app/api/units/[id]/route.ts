@@ -12,6 +12,7 @@ const UpdateUnitSchema = z.object({
   qrQuota: z.number().int().positive().optional(),
   projectId: z.string().optional().nullable(),
   contactIds: z.array(z.string()).optional(),
+  userId: z.string().optional().nullable(), // Link/unlink resident (User with RESIDENT role)
 });
 
 export async function PATCH(
@@ -46,7 +47,41 @@ export async function PATCH(
       );
     }
 
-    const { contactIds, ...fields } = validation.data;
+    const { contactIds, userId, ...fields } = validation.data;
+
+    // Validate userId when linking: user must exist, have RESIDENT role, belong to org, and not be linked to another unit
+    if (userId !== undefined && userId !== null) {
+      const resident = await prisma.user.findFirst({
+        where: {
+          id: userId,
+          organizationId: claims.orgId,
+          deletedAt: null,
+          role: { name: { equals: 'RESIDENT', mode: 'insensitive' } },
+        },
+        select: { id: true },
+      });
+      if (!resident) {
+        return NextResponse.json(
+          { success: false, message: 'User not found or does not have RESIDENT role in this organization' },
+          { status: 400 }
+        );
+      }
+      // Enforce one unit per resident: no other unit in this org can have this userId
+      const otherUnit = await prisma.unit.findFirst({
+        where: {
+          userId,
+          id: { not: params.id },
+          organizationId: claims.orgId,
+          deletedAt: null,
+        },
+      });
+      if (otherUnit) {
+        return NextResponse.json(
+          { success: false, message: 'This resident is already linked to another unit' },
+          { status: 400 }
+        );
+      }
+    }
 
     const updated = await prisma.$transaction(async (tx) => {
       if (contactIds !== undefined) {
@@ -65,6 +100,7 @@ export async function PATCH(
           ...(fields.type !== undefined ? { type: fields.type } : {}),
           ...(fields.qrQuota !== undefined ? { qrQuota: fields.qrQuota } : {}),
           ...(fields.projectId !== undefined ? { projectId: fields.projectId ?? null } : {}),
+          ...(userId !== undefined ? { userId: userId ?? null } : {}),
         },
         include: {
           contacts: {
@@ -73,6 +109,7 @@ export async function PATCH(
             },
           },
           project: { select: { id: true, name: true } },
+          user: { select: { id: true, name: true, email: true } },
         },
       });
     });
@@ -86,6 +123,10 @@ export async function PATCH(
         qrQuota: updated.qrQuota,
         projectId: updated.projectId,
         projectName: updated.project?.name ?? null,
+        userId: updated.user?.id ?? null,
+        user: updated.user
+          ? { id: updated.user.id, name: updated.user.name, email: updated.user.email }
+          : null,
         contacts: updated.contacts.map((cu) => ({
           id: cu.contact.id,
           firstName: cu.contact.firstName,

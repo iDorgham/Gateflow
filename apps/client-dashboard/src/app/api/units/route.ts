@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { getSessionClaims } from '@/lib/auth-cookies';
+import { requireAuth, isNextResponse } from '@/lib/require-auth';
 import { prisma } from '@gate-access/db';
+import { UnitType } from '@gate-access/db';
 
 export const dynamic = 'force-dynamic';
-import { UnitType } from '@gate-access/db';
 
 const UNIT_QUOTA_DEFAULTS: Record<UnitType, number> = {
   STUDIO: 3,
@@ -17,24 +17,64 @@ const UNIT_QUOTA_DEFAULTS: Record<UnitType, number> = {
   COMMERCIAL: 5,
 };
 
+const GetUnitsQuerySchema = z.object({
+  projectId: z.string().optional(),
+  format: z.enum(['json', 'csv']).optional(),
+  search: z.string().optional(),
+  isActive: z
+    .string()
+    .optional()
+    .transform((val) =>
+      val === 'false' ? false : val === 'true' ? true : undefined
+    ),
+});
+
 // ─── GET /api/units ───────────────────────────────────────────────────────────
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
+  const auth = await requireAuth(request);
+  if (isNextResponse(auth)) return auth;
+
+  const orgId = auth.orgId;
+  if (!orgId) {
+    return NextResponse.json(
+      { success: false, message: 'Unauthorized' },
+      { status: 401 }
+    );
+  }
+
   try {
-    const claims = await getSessionClaims();
-    if (!claims?.orgId) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+    const { searchParams } = new URL(request.url);
+    const rawQuery = Object.fromEntries(searchParams.entries());
+
+    const validation = GetUnitsQuerySchema.safeParse(rawQuery);
+    if (!validation.success) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Invalid query parameters',
+          error: validation.error.flatten(),
+        },
+        { status: 400 }
+      );
     }
 
-    const { searchParams } = new URL(request.url);
-    const projectId = searchParams.get('projectId');
-    const format = searchParams.get('format');
+    const { projectId, format, search, isActive } = validation.data;
 
     const units = await prisma.unit.findMany({
       where: {
-        organizationId: claims.orgId,
+        organizationId: orgId,
         deletedAt: null,
         ...(projectId ? { projectId } : {}),
+        ...(isActive !== undefined ? { isActive } : {}),
+        ...(search
+          ? {
+              OR: [
+                { name: { contains: search, mode: 'insensitive' } },
+                { building: { contains: search, mode: 'insensitive' } },
+              ],
+            }
+          : {}),
       },
       include: {
         contacts: {
@@ -43,6 +83,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
           },
         },
         project: { select: { id: true, name: true } },
+        user: { select: { id: true, name: true, email: true } },
       },
       orderBy: { name: 'asc' },
     });
@@ -56,7 +97,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
             u.type,
             u.qrQuota,
             u.project?.name ?? '',
-            u.contacts.map((cu) => `${cu.contact.firstName} ${cu.contact.lastName}`).join('; '),
+            u.contacts
+              .map((cu) => `${cu.contact.firstName} ${cu.contact.lastName}`)
+              .join('; '),
           ]
             .map((v) => `"${String(v).replace(/"/g, '""')}"`)
             .join(',')
@@ -78,6 +121,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       qrQuota: u.qrQuota,
       projectId: u.projectId,
       projectName: u.project?.name ?? null,
+      userId: u.user?.id ?? null,
+      user: u.user
+        ? { id: u.user.id, name: u.user.name, email: u.user.email }
+        : null,
       contacts: u.contacts.map((cu) => ({
         id: cu.contact.id,
         firstName: cu.contact.firstName,
@@ -88,7 +135,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ success: true, data });
   } catch (error) {
     console.error('GET /api/units error:', error);
-    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }
 
@@ -103,23 +153,36 @@ const CreateUnitSchema = z.object({
 });
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
-  try {
-    const claims = await getSessionClaims();
-    if (!claims?.orgId) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
-    }
+  const auth = await requireAuth(request);
+  if (isNextResponse(auth)) return auth;
 
+  const orgId = auth.orgId;
+  if (!orgId) {
+    return NextResponse.json(
+      { success: false, message: 'Unauthorized' },
+      { status: 401 }
+    );
+  }
+
+  try {
     let body: unknown;
     try {
       body = await request.json();
     } catch {
-      return NextResponse.json({ success: false, message: 'Invalid JSON body' }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: 'Invalid JSON body' },
+        { status: 400 }
+      );
     }
 
     const validation = CreateUnitSchema.safeParse(body);
     if (!validation.success) {
       return NextResponse.json(
-        { success: false, message: 'Invalid request body', error: validation.error.flatten() },
+        {
+          success: false,
+          message: 'Invalid request body',
+          error: validation.error.flatten(),
+        },
         { status: 400 }
       );
     }
@@ -132,7 +195,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         name: name.trim(),
         type,
         qrQuota: quota,
-        organizationId: claims.orgId,
+        organizationId: orgId,
         projectId: projectId ?? null,
         contacts: contactIds?.length
           ? { create: contactIds.map((contactId) => ({ contactId })) }
@@ -148,24 +211,30 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       },
     });
 
-    return NextResponse.json({
-      success: true,
-      data: {
-        id: unit.id,
-        name: unit.name,
-        type: unit.type,
-        qrQuota: unit.qrQuota,
-        projectId: unit.projectId,
-        projectName: unit.project?.name ?? null,
-        contacts: unit.contacts.map((cu) => ({
-          id: cu.contact.id,
-          firstName: cu.contact.firstName,
-          lastName: cu.contact.lastName,
-        })),
+    return NextResponse.json(
+      {
+        success: true,
+        data: {
+          id: unit.id,
+          name: unit.name,
+          type: unit.type,
+          qrQuota: unit.qrQuota,
+          projectId: unit.projectId,
+          projectName: unit.project?.name ?? null,
+          contacts: unit.contacts.map((cu) => ({
+            id: cu.contact.id,
+            firstName: cu.contact.firstName,
+            lastName: cu.contact.lastName,
+          })),
+        },
       },
-    }, { status: 201 });
+      { status: 201 }
+    );
   } catch (error) {
     console.error('POST /api/units error:', error);
-    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }

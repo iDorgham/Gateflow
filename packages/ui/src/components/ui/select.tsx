@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { cn } from '../../lib/utils';
-import { Check } from 'lucide-react';
 
 const Select = React.forwardRef<
   HTMLSelectElement,

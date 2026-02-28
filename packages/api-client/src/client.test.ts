@@ -1,4 +1,4 @@
-import { describe, test, expect, mock, beforeEach, afterEach } from "bun:test";
+/* eslint-disable @typescript-eslint/no-explicit-any -- test mocks */
 import { apiClient, auth } from "./client";
 
 describe("apiClient", () => {
@@ -7,7 +7,7 @@ describe("apiClient", () => {
   beforeEach(() => {
     auth.clearToken();
     // Default mock implementation
-    global.fetch = mock(() =>
+    global.fetch = jest.fn(() =>
       Promise.resolve(new Response(JSON.stringify({
         success: true,
         data: { id: 1, name: "Test" }
@@ -17,7 +17,7 @@ describe("apiClient", () => {
 
   afterEach(() => {
     global.fetch = originalFetch;
-    mock.restore();
+    jest.restoreAllMocks();
   });
 
   test("GET request sends correct method and headers", async () => {
@@ -35,7 +35,7 @@ describe("apiClient", () => {
 
   test("POST request sends correct body", async () => {
     const payload = { name: "New User" };
-    const response = await apiClient.post("/users", payload);
+    await apiClient.post("/users", payload);
 
     expect(global.fetch).toHaveBeenCalledTimes(1);
     const [url, options] = (global.fetch as any).mock.calls[0];
@@ -77,7 +77,7 @@ describe("apiClient", () => {
 
   test("ApiError is thrown on non-ok response", async () => {
     // Override fetch implementation for this test
-    global.fetch = mock(() => {
+    global.fetch = jest.fn(() => {
       return Promise.resolve(new Response(JSON.stringify({
         message: "Forbidden",
         code: "FORBIDDEN"
@@ -98,7 +98,7 @@ describe("apiClient", () => {
 
   test("Network error is propagated", async () => {
     // Override fetch implementation for this test
-    global.fetch = mock(() => Promise.reject(new Error("Network Error")));
+    global.fetch = jest.fn(() => Promise.reject(new Error("Network Error")));
 
     let caughtError: any;
     try {

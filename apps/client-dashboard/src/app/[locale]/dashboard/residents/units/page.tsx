@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useTransition } from 'react';
+import { useState, useEffect, useTransition, useCallback } from 'react';
 import { toast } from 'sonner';
 import {
   Button,
@@ -30,6 +30,7 @@ import {
   Pencil,
   Trash2,
   Building,
+  UserPlus,
 } from 'lucide-react';
 
 type UnitType =
@@ -75,6 +76,12 @@ interface Project {
   name: string;
 }
 
+interface LinkedUser {
+  id: string;
+  name: string;
+  email: string;
+}
+
 interface Unit {
   id: string;
   name: string;
@@ -83,6 +90,8 @@ interface Unit {
   projectId: string | null;
   projectName: string | null;
   contacts: Contact[];
+  userId?: string | null;
+  user?: LinkedUser | null;
 }
 
 const emptyForm = () => ({
@@ -93,32 +102,44 @@ const emptyForm = () => ({
   contactIds: [] as string[],
 });
 
+interface ResidentUser {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+}
+
 export default function UnitsPage() {
   const [units, setUnits] = useState<Unit[]>([]);
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
+  const [residents, setResidents] = useState<ResidentUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<Unit | null>(null);
   const [form, setForm] = useState(emptyForm());
   const [deleteTarget, setDeleteTarget] = useState<Unit | null>(null);
+  const [linkTarget, setLinkTarget] = useState<Unit | null>(null);
+  const [linkUserId, setLinkUserId] = useState<string>('');
   const [isPending, startTransition] = useTransition();
   const { t } = useTranslation('dashboard');
 
   const UNIT_TYPE_LABELS = getUnitTypeLabels(t);
 
-  async function load() {
+  const load = useCallback(async () => {
     setLoading(true);
     try {
-      const [uRes, cRes, pRes] = await Promise.all([
+      const [uRes, cRes, pRes, residentsRes] = await Promise.all([
         fetch('/api/units'),
         fetch('/api/contacts'),
         fetch('/api/projects'),
+        fetch('/api/users?role=RESIDENT'),
       ]);
       const uJson = await uRes.json();
       const cJson = await cRes.json();
       const pJson = await pRes.json();
+      const rJson = await residentsRes.json();
       if (uJson.success) setUnits(uJson.data);
       if (cJson.success)
         setContacts(
@@ -129,16 +150,17 @@ export default function UnitsPage() {
           }))
         );
       if (pJson.projects) setProjects(pJson.projects);
+      if (rJson.success) setResidents(rJson.data);
     } catch {
       toast.error(t('units.errors.loadFailed', 'Failed to load units'));
     } finally {
       setLoading(false);
     }
-  }
+  }, [t]);
 
   useEffect(() => {
     load();
-  }, []);
+  }, [load]);
 
   function openCreate() {
     setEditing(null);
@@ -207,6 +229,31 @@ export default function UnitsPage() {
         load();
       } catch (err: unknown) {
         toast.error(err instanceof Error ? err.message : t('units.errors.saveFailed', 'Failed to save unit'));
+      }
+    });
+  }
+
+  function doLinkResident() {
+    if (!linkTarget) return;
+    startTransition(async () => {
+      try {
+        const res = await fetch(`/api/units/${linkTarget.id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ userId: linkUserId || null }),
+        });
+        const json = await res.json();
+        if (!json.success) throw new Error(json.message);
+        toast.success(
+          linkUserId
+            ? t('units.linkResident', 'Resident linked')
+            : t('units.unlinkResident', 'Resident unlinked')
+        );
+        setLinkTarget(null);
+        setLinkUserId('');
+        load();
+      } catch (err: unknown) {
+        toast.error(err instanceof Error ? err.message : t('units.errors.saveFailed', 'Failed to save'));
       }
     });
   }
@@ -340,6 +387,7 @@ export default function UnitsPage() {
               <TableHead>{t('units.table.name', 'Unit Name')}</TableHead>
               <TableHead>{t('units.table.type', 'Type')}</TableHead>
               <TableHead>{t('units.table.residents', 'Residents')}</TableHead>
+              <TableHead>{t('units.table.linkedResident', 'Linked Resident')}</TableHead>
               <TableHead>{t('units.table.qrQuota', 'QR Quota')}</TableHead>
               <TableHead>{t('units.table.project', 'Project')}</TableHead>
               <TableHead className="w-24">{t('units.table.actions', 'Actions')}</TableHead>
@@ -349,7 +397,7 @@ export default function UnitsPage() {
             {loading ? (
               Array.from({ length: 5 }).map((_, i) => (
                 <TableRow key={i}>
-                  {Array.from({ length: 6 }).map((_, j) => (
+                  {Array.from({ length: 7 }).map((_, j) => (
                     <TableCell key={j}>
                       <Skeleton className="h-4 w-full" />
                     </TableCell>
@@ -358,7 +406,7 @@ export default function UnitsPage() {
               ))
             ) : filtered.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className="text-center py-12">
+                <TableCell colSpan={7} className="text-center py-12">
                   <div className="flex flex-col items-center gap-2 text-muted-foreground">
                     <Building className="h-8 w-8 opacity-30" />
                     <span className="text-sm">
@@ -389,6 +437,15 @@ export default function UnitsPage() {
                       )}
                     </span>
                   </TableCell>
+                  <TableCell>
+                    <span className="text-sm">
+                      {u.user ? (
+                        <span title={u.user.email}>{u.user.name}</span>
+                      ) : (
+                        <span className="text-muted-foreground">{t('units.noResidentLinked', '—')}</span>
+                      )}
+                    </span>
+                  </TableCell>
                   <TableCell className="font-mono text-sm">
                     {u.qrQuota}
                   </TableCell>
@@ -397,6 +454,18 @@ export default function UnitsPage() {
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-1">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-7 w-7"
+                        title={t('units.linkResident', 'Link Resident')}
+                        onClick={() => {
+                          setLinkTarget(u);
+                          setLinkUserId(u.userId ?? '');
+                        }}
+                      >
+                        <UserPlus className="h-3.5 w-3.5" />
+                      </Button>
                       <Button
                         variant="ghost"
                         size="icon"
@@ -524,6 +593,47 @@ export default function UnitsPage() {
                   : editing
                     ? t('units.success.updated', 'Save changes')
                     : t('common.create', 'Create')}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
+
+      {/* Link Resident Dialog */}
+      {linkTarget && (
+        <Dialog open={!!linkTarget} onOpenChange={(open) => !open && setLinkTarget(null)}>
+          <DialogContent className="max-w-sm">
+            <DialogHeader>
+              <DialogTitle>{t('units.linkResident', 'Link Resident')} — {linkTarget.name}</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4 py-2">
+              <div className="space-y-1.5">
+                <Label htmlFor="linkResident">{t('units.residentLinked', 'Linked Resident')}</Label>
+                <Select
+                  id="linkResident"
+                  value={linkUserId}
+                  onChange={(e) => setLinkUserId(e.target.value)}
+                >
+                  <option value="">{t('units.noResidentLinked', 'No resident linked')}</option>
+                  {residents.map((r) => (
+                    <option key={r.id} value={r.id}>
+                      {r.name} ({r.email})
+                    </option>
+                  ))}
+                </Select>
+                {residents.length === 0 && (
+                  <p className="text-xs text-muted-foreground">
+                    {t('units.noResidentsAvailable', 'No RESIDENT users in this organization. Invite one from Team settings.')}
+                  </p>
+                )}
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setLinkTarget(null)}>
+                {t('common.cancel', 'Cancel')}
+              </Button>
+              <Button onClick={doLinkResident} disabled={isPending}>
+                {isPending ? t('modal.actions.saving', 'Saving…') : t('common.save', 'Save')}
               </Button>
             </DialogFooter>
           </DialogContent>

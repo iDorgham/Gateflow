@@ -4,16 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useChat, type Message } from 'ai/react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import {
-  MessageCircle,
-  X,
-  Send,
-  Bot,
-  User,
-  Loader2,
-  Trash2,
-  Sparkles,
-} from 'lucide-react';
+import { Send, Bot, User, Loader2, Trash2, Sparkles } from 'lucide-react';
 import { cn } from '@gate-access/ui';
 import { Button } from '@gate-access/ui';
 import type { Locale } from '@/lib/i18n-config';
@@ -26,14 +17,15 @@ const WELCOME_EN: Message = {
   id: 'welcome',
   role: 'assistant',
   content:
-    "Hi! I can create projects, units, QR codes, and more. What would you like to do?",
+    'Hi! I can create projects, units, QR codes, and more. What would you like to do?',
   createdAt: new Date(0),
 };
 
 const WELCOME_AR: Message = {
   id: 'welcome',
   role: 'assistant',
-  content: 'مرحباً! يمكنني إنشاء مشاريع ووحدات ورموز QR والمزيد. بماذا يمكنني مساعدتك؟',
+  content:
+    'مرحباً! يمكنني إنشاء مشاريع ووحدات ورموز QR والمزيد. بماذا يمكنني مساعدتك؟',
   createdAt: new Date(0),
 };
 
@@ -97,19 +89,28 @@ export function AIAssistant({ locale }: AIAssistantProps) {
     setHydrated(true);
   }, [isRtl]);
 
-  const { messages, input, handleInputChange, handleSubmit, isLoading, setMessages, append } =
-    useChat({
-      api: '/api/ai/assistant',
-      initialMessages: hydrated ? storedMessages : [isRtl ? WELCOME_AR : WELCOME_EN],
-      onFinish: (message) => {
-        console.log('AI Assistant: Finished', message);
-        router.refresh();
-      },
-      onError: (err) => {
-        console.error('AI Assistant: Error', err);
-        toast.error(err.message ?? (isRtl ? 'حدث خطأ' : 'Assistant error'));
-      },
-    });
+  const {
+    messages,
+    input,
+    handleInputChange,
+    handleSubmit,
+    isLoading,
+    setMessages,
+    append,
+  } = useChat({
+    api: '/api/ai/assistant',
+    initialMessages: hydrated
+      ? storedMessages
+      : [isRtl ? WELCOME_AR : WELCOME_EN],
+    onFinish: (message) => {
+      console.log('AI Assistant: Finished', message);
+      router.refresh();
+    },
+    onError: (err) => {
+      console.error('AI Assistant: Error', err);
+      toast.error(err.message ?? (isRtl ? 'حدث خطأ' : 'Assistant error'));
+    },
+  });
 
   useEffect(() => {
     console.log('AI Assistant: Messages updated', messages);
@@ -163,10 +164,7 @@ export function AIAssistant({ locale }: AIAssistantProps) {
   const hasOnlyWelcome = messages.length === 1 && messages[0]?.id === 'welcome';
 
   return (
-    <div
-      className="flex h-full flex-col bg-card"
-      dir={isRtl ? 'rtl' : 'ltr'}
-    >
+    <div className="flex h-full flex-col bg-card" dir={isRtl ? 'rtl' : 'ltr'}>
       {/* Header Info */}
       <div className="flex shrink-0 items-center justify-between border-b border-border px-4 py-3 bg-muted/30">
         <div className="flex items-center gap-2.5">
@@ -178,7 +176,9 @@ export function AIAssistant({ locale }: AIAssistantProps) {
               {isRtl ? 'مساعد GateFlow' : 'GateFlow Assistant'}
             </p>
             <p className="mt-1 text-[10px] text-muted-foreground">
-              {isRtl ? 'اسألني أي شيء عن مشروعك' : 'Ask me anything about your project'}
+              {isRtl
+                ? 'اسألني أي شيء عن مشروعك'
+                : 'Ask me anything about your project'}
             </p>
           </div>
         </div>
@@ -209,8 +209,8 @@ export function AIAssistant({ locale }: AIAssistantProps) {
                     ? 'flex-row'
                     : 'flex-row-reverse'
                   : isRtl
-                  ? 'flex-row-reverse'
-                  : 'flex-row'
+                    ? 'flex-row-reverse'
+                    : 'flex-row'
               )}
             >
               <div
@@ -309,9 +309,7 @@ export function AIAssistant({ locale }: AIAssistantProps) {
             value={input}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
-            placeholder={
-              isRtl ? 'اسأل شيئاً...' : 'Ask something...'
-            }
+            placeholder={isRtl ? 'اسأل شيئاً...' : 'Ask something...'}
             rows={1}
             disabled={isLoading}
             className="flex-1 resize-none rounded-xl border border-border bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-50 shadow-sm transition-all"

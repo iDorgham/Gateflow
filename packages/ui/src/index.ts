@@ -23,6 +23,8 @@ export * from './components/ui/toast';
 export * from './components/ui/textarea';
 export * from './components/ui/tabs';
 export * from './components/ui/sheet';
+export * from './components/ui/scroll-area';
+export * from './components/ui/collapsible';
 
 export * from './components/auth/login-shell';
 export { cn } from './lib/utils';

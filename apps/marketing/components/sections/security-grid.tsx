@@ -1,4 +1,11 @@
-import { Shield, Lock, FileText, UserCheck, RefreshCw, BarChart3 } from 'lucide-react';
+import {
+  Shield,
+  Lock,
+  FileText,
+  UserCheck,
+  RefreshCw,
+  BarChart3,
+} from 'lucide-react';
 import { getTranslation } from '../../lib/i18n/get-translation';
 import type { Locale } from '../../i18n-config';
 
@@ -39,10 +46,15 @@ export async function SecurityGrid({ locale }: { locale: Locale }) {
   ];
 
   return (
-    <section id="security" className="py-24 lg:py-32 bg-background relative overflow-hidden">
+    <section
+      id="security"
+      className="py-24 lg:py-32 bg-background relative overflow-hidden"
+    >
       <div className="container px-6 mx-auto">
         <div className="max-w-2xl mx-auto text-center mb-16 lg:mb-24">
-          <h2 className="text-sm font-bold uppercase tracking-[0.3em] text-primary mb-4">{t('securityGrid.subtitle')}</h2>
+          <h2 className="text-sm font-bold uppercase tracking-[0.3em] text-primary mb-4">
+            {t('securityGrid.subtitle')}
+          </h2>
           <p className="text-4xl lg:text-5xl font-black tracking-tight mb-6">
             {t('securityGrid.title')}
           </p>
@@ -52,9 +64,9 @@ export async function SecurityGrid({ locale }: { locale: Locale }) {
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {securityItems.map((item, i) => (
-            <div 
-              key={item.title} 
+          {securityItems.map((item, _i) => (
+            <div
+              key={item.title}
               className="group p-8 rounded-2xl border bg-card hover:border-primary/50 transition-all duration-300 hover:shadow-2xl hover:shadow-primary/5 hover:-translate-y-1"
             >
               <div className="h-12 w-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary mb-6 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">

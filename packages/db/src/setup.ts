@@ -1,6 +1,6 @@
-import { mock } from "bun:test";
+/* eslint-disable @typescript-eslint/no-explicit-any -- test mock */
 
-const PrismaClientMock = class {
+class PrismaClientMock {
   user: any;
   organization: any;
   gate: any;
@@ -14,13 +14,11 @@ const PrismaClientMock = class {
     this.qRCode = { findFirst: () => {}, findMany: () => {}, count: () => {} };
     this.scanLog = { findMany: () => {}, count: () => {} };
   }
-};
+}
 
-mock.module("@prisma/client", () => {
-  return {
-    PrismaClient: PrismaClientMock,
-    Prisma: {
-      StringFilter: {}
-    }
-  };
-});
+jest.mock('@prisma/client', () => ({
+  PrismaClient: PrismaClientMock,
+  Prisma: {
+    StringFilter: {},
+  },
+}));

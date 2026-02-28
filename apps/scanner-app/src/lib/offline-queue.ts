@@ -279,12 +279,16 @@ export const scanQueue = {
 
   async getPendingScans(): Promise<QueuedScan[]> {
     const decrypted = await this.getDecryptedQueue();
-    return decrypted.filter((scan) => !scan.synced && scan.retryCount < MAX_RETRIES);
+    return decrypted.filter(
+      (scan) => !scan.synced && scan.retryCount < MAX_RETRIES
+    );
   },
 
   async getFailedScans(): Promise<QueuedScan[]> {
     const decrypted = await this.getDecryptedQueue();
-    return decrypted.filter((scan) => scan.synced && scan.error === 'Max retries exceeded');
+    return decrypted.filter(
+      (scan) => scan.synced && scan.error === 'Max retries exceeded'
+    );
   },
 
   async clearQueue(): Promise<void> {
@@ -298,7 +302,8 @@ export const scanQueue = {
   },
 };
 
-const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:3001/api';
+const API_BASE_URL =
+  process.env.EXPO_PUBLIC_API_URL || 'http://localhost:3001/api';
 
 async function bulkSyncScans(scans: QueuedScan[]): Promise<{
   synced: string[];
@@ -333,7 +338,9 @@ async function bulkSyncScans(scans: QueuedScan[]): Promise<{
   try {
     return await response.json();
   } catch {
-    throw new Error(`Sync failed: server returned non-JSON response (status ${response.status})`);
+    throw new Error(
+      `Sync failed: server returned non-JSON response (status ${response.status})`
+    );
   }
 }
 

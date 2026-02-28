@@ -48,7 +48,7 @@ export async function processBulkScans(
   const scanUuids = scans
     .map((s) => s.scanUuid)
     .filter((uuid): uuid is string => !!uuid);
-  const qrCodes = [...new Set(scans.map((s) => s.qrCode))];
+  const qrCodes = Array.from(new Set(scans.map((s) => s.qrCode)));
 
   // 2. Bulk Fetch Data
   const [existingByUuid, qrCodesWithLatest] = await Promise.all([
@@ -147,16 +147,17 @@ export async function processBulkScans(
           incomingScanUuid: scan.scanUuid,
         });
 
-        const newAuditTrail = [
+        const newAuditTrailEntries: AuditTrailEntry[] = [
           ...existingScan.auditTrail,
           auditEntry,
-        ] as unknown as Prisma.JsonArray;
+        ];
+        const newAuditTrailJson = newAuditTrailEntries as unknown as Prisma.JsonArray;
 
         // Update In-Memory State
         state.latestScan = {
           id: existingScan.id, // Preserve ID if it was from DB
           scannedAt: new Date(scan.scannedAt),
-          auditTrail: newAuditTrail as any[],
+          auditTrail: newAuditTrailEntries,
         };
 
         // Prepare Operation
@@ -168,7 +169,7 @@ export async function processBulkScans(
              status: scan.status,
              scanUuid: scan.scanUuid ?? undefined,
              deviceId: scan.deviceId ?? null,
-             auditTrail: newAuditTrail,
+             auditTrail: newAuditTrailJson,
            };
         } else if (existingScan.id) {
            // We are updating an existing DB record
@@ -179,7 +180,7 @@ export async function processBulkScans(
                status: scan.status,
                scanUuid: scan.scanUuid ?? undefined,
                deviceId: scan.deviceId ?? null,
-               auditTrail: newAuditTrail,
+               auditTrail: newAuditTrailJson,
                auditNotes: null,
              }
            };
@@ -203,31 +204,32 @@ export async function processBulkScans(
           incomingScanUuid: scan.scanUuid,
         });
 
-        const newAuditTrail = [
+        const newAuditTrailEntries: AuditTrailEntry[] = [
           ...existingScan.auditTrail,
           auditEntry,
-        ] as unknown as Prisma.JsonArray;
+        ];
+        const newAuditTrailJson = newAuditTrailEntries as unknown as Prisma.JsonArray;
 
         // Update In-Memory Audit Trail Only
         state.latestScan = {
           ...existingScan,
-          auditTrail: newAuditTrail as any[],
+          auditTrail: newAuditTrailEntries,
         };
 
         if (state.pendingCreate) {
-          state.pendingCreate.auditTrail = newAuditTrail;
+          state.pendingCreate.auditTrail = newAuditTrailJson;
         } else if (existingScan.id) {
           // If we already have a pending update, merge logic?
           // If server wins, we basically keep existing fields but append audit trail.
           // If we had a pending update (LWW from earlier), we keep that update but append this audit trail.
           if (state.pendingUpdate) {
-            state.pendingUpdate.data.auditTrail = newAuditTrail;
+            state.pendingUpdate.data.auditTrail = newAuditTrailJson;
           } else {
             // New update just for audit trail
             state.pendingUpdate = {
               id: existingScan.id,
               data: {
-                auditTrail: newAuditTrail,
+                auditTrail: newAuditTrailJson,
               }
             };
           }
@@ -249,12 +251,13 @@ export async function processBulkScans(
         deviceId: scan.deviceId ?? null,
       });
 
-      const auditTrail = [auditEntry] as unknown as Prisma.JsonArray;
+      const auditTrailEntries: AuditTrailEntry[] = [auditEntry];
+      const auditTrailJson = auditTrailEntries as unknown as Prisma.JsonArray;
 
       // Update State
       state.latestScan = {
         scannedAt: new Date(scan.scannedAt),
-        auditTrail: auditTrail as any[],
+        auditTrail: auditTrailEntries,
       };
 
       state.pendingCreate = {
@@ -264,7 +267,7 @@ export async function processBulkScans(
         qrCodeId: state.qrCodeId,
         gateId: scan.gateId,
         deviceId: scan.deviceId ?? null,
-        auditTrail: auditTrail,
+        auditTrail: auditTrailJson,
       };
 
       synced.push(scan.id);

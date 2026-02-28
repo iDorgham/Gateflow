@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useTransition } from 'react';
+import { useState, useEffect, useTransition, useCallback } from 'react';
 import { toast } from 'sonner';
 import {
   Button,
@@ -61,7 +61,7 @@ export default function ContactsPage() {
   const [isPending, startTransition] = useTransition();
   const { t } = useTranslation('dashboard');
 
-  async function load() {
+  const load = useCallback(async () => {
     setLoading(true);
     try {
       const [cRes, uRes] = await Promise.all([
@@ -77,9 +77,9 @@ export default function ContactsPage() {
     } finally {
       setLoading(false);
     }
-  }
+  }, [t]);
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => { load(); }, [load]);
 
   function openCreate() {
     setEditing(null);

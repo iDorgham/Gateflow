@@ -6,7 +6,8 @@ export type { Locale };
 
 const dictionaries = {
   en: () => import('@gate-access/i18n/en').then((module) => module.default),
-  'ar-EG': () => import('@gate-access/i18n/ar').then((module) => module.default),
+  'ar-EG': () =>
+    import('@gate-access/i18n/ar').then((module) => module.default),
 };
 
 export const fetchTranslations = async (locale: string) => {
@@ -23,8 +24,10 @@ export type TranslationFunction = (
     returnObjects?: boolean;
     defaultValue?: string;
     count?: number;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [key: string]: any;
   }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ) => any;
 
 export async function getTranslation(locale: Locale, namespace: string) {
@@ -33,21 +36,31 @@ export async function getTranslation(locale: Locale, namespace: string) {
 
   const t: TranslationFunction = (key, options) => {
     const text = key.split('.').reduce((obj, k) => (obj || {})[k], dict);
-    
+
     let result = text;
-    if (options && options.count !== undefined && text && typeof text === 'object' && !Array.isArray(text)) {
-       if (options.count === 1 && text.one) result = text.one;
-       else if (text.other) result = text.other;
+    if (
+      options &&
+      options.count !== undefined &&
+      text &&
+      typeof text === 'object' &&
+      !Array.isArray(text)
+    ) {
+      if (options.count === 1 && text.one) result = text.one;
+      else if (text.other) result = text.other;
     }
 
-    if (!result) return options?.defaultValue ?? key; 
-    if (typeof result !== 'string' && !options?.returnObjects) return options?.defaultValue ?? key;
+    if (!result) return options?.defaultValue ?? key;
+    if (typeof result !== 'string' && !options?.returnObjects)
+      return options?.defaultValue ?? key;
 
     let finalStr = result;
     if (options && typeof finalStr === 'string') {
       Object.keys(options).forEach((v) => {
         if (v !== 'returnObjects' && v !== 'defaultValue') {
-          finalStr = finalStr.replace(new RegExp(`{{${v}}}`, 'g'), String(options[v]));
+          finalStr = finalStr.replace(
+            new RegExp(`{{${v}}}`, 'g'),
+            String(options[v])
+          );
         }
       });
     }

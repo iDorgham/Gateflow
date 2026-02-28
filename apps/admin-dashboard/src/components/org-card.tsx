@@ -1,8 +1,17 @@
-import * as React from "react";
-import { Building, Users, MapPin, MoreVertical } from "lucide-react";
-import { useTranslation } from "react-i18next";
+import * as React from 'react';
+import { Users, MapPin, MoreVertical } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
-import { Card, CardContent, CardHeader, Button, Badge, Avatar, AvatarFallback, AvatarImage } from "@gate-access/ui";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  Button,
+  Badge,
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '@gate-access/ui';
 
 export interface OrgCardProps {
   id: string;
@@ -10,7 +19,7 @@ export interface OrgCardProps {
   logoUrl?: string;
   location: string;
   memberCount: number;
-  status: "active" | "suspended" | "pending";
+  status: 'active' | 'suspended' | 'pending';
   onManage?: () => void;
 }
 
@@ -42,7 +51,12 @@ export function OrgCard({
             </div>
           </div>
         </div>
-        <Button variant="ghost" size="icon" className="h-8 w-8 ltr:-mr-2 rtl:-ml-2" onClick={onManage}>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8 ltr:-mr-2 rtl:-ml-2"
+          onClick={onManage}
+        >
           <MoreVertical className="h-4 w-4" />
         </Button>
       </CardHeader>
@@ -53,10 +67,18 @@ export function OrgCard({
             {memberCount.toLocaleString()} {t('admin.organizations.users')}
           </div>
           <Badge
-            variant={status === "active" ? "default" : status === "suspended" ? "destructive" : "secondary"}
+            variant={
+              status === 'active'
+                ? 'default'
+                : status === 'suspended'
+                  ? 'destructive'
+                  : 'secondary'
+            }
             className="capitalize"
           >
-            {t(`admin.organizations.status${status.charAt(0).toUpperCase() + status.slice(1)}`)}
+            {t(
+              `admin.organizations.status${status.charAt(0).toUpperCase() + status.slice(1)}`
+            )}
           </Badge>
         </div>
       </CardContent>

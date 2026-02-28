@@ -1,3 +1,4 @@
+import { describe, it, expect, jest, beforeEach } from '@jest/globals';
 import CryptoJS from 'crypto-js';
 
 const mockAsyncStore: Record<string, string> = {};
@@ -14,7 +15,7 @@ jest.mock('@react-native-async-storage/async-storage', () => ({
   }),
 }));
 
-import { signQRPayload, verifyQRSignature, type QRPayload } from '@gate-access/types';
+import { signQRPayload, verifyQRSignature, type QRPayload, QRCodeType } from '@gate-access/types';
 import { verifyScanQR, clearNonceCache } from './qr-verify';
 
 const TEST_SECRET = 'test-secret-that-is-at-least-32-chars-long!!';
@@ -23,7 +24,7 @@ function makePayload(overrides?: Partial<QRPayload>): QRPayload {
   return {
     qrId: 'cltest123',
     organizationId: 'clorg456',
-    type: 'SINGLE' as const,
+    type: QRCodeType.SINGLE,
     maxUses: 1,
     expiresAt: new Date(Date.now() + 3600_000).toISOString(), // +1 hour
     issuedAt: new Date().toISOString(),
@@ -147,7 +148,7 @@ describe('verifyQRSignature', () => {
   });
 
   it('should accept a QR with no expiration (null expiresAt)', () => {
-    const payload = makePayload({ expiresAt: null, type: 'PERMANENT' as const });
+    const payload = makePayload({ expiresAt: null, type: QRCodeType.PERMANENT });
     const signed = signQRPayload(payload, TEST_SECRET);
 
     const result = verifyQRSignature(signed, TEST_SECRET);

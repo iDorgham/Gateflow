@@ -4,7 +4,6 @@ import { logger } from '@/lib/logger';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma } from '@gate-access/db';
 import { hashPassword, generateTemporaryPassword } from '@/lib/auth';
-import { UserRole } from '@gate-access/db';
 
 type MemberResult = {
   success: boolean;
@@ -14,7 +13,7 @@ type MemberResult = {
 
 type SimpleResult = { success: boolean; error?: string };
 
-const ALLOWED_ROLES = new Set(['TENANT_ADMIN', 'TENANT_USER', 'VISITOR']);
+const ALLOWED_ROLES = new Set(['TENANT_ADMIN', 'TENANT_USER', 'VISITOR', 'RESIDENT']);
 
 export async function inviteMember(
   email: string,
@@ -35,21 +34,29 @@ export async function inviteMember(
     const tempPassword = generateTemporaryPassword();
     const passwordHash = await hashPassword(tempPassword);
 
+    const roleRecord = await prisma.role.findFirst({
+      where: {
+        name: { equals: role, mode: 'insensitive' },
+        OR: [{ organizationId: claims.orgId }, { organizationId: null }],
+      },
+    });
+    if (!roleRecord) return { success: false, error: 'Role not found.' };
+
     const member = await prisma.user.create({
       data: {
         email,
         name,
-        role: role as UserRole,
+        roleId: roleRecord.id,
         passwordHash,
         organizationId: claims.orgId,
       },
-      select: { id: true, name: true, email: true, role: true, createdAt: true },
+      select: { id: true, name: true, email: true, role: { select: { name: true } }, createdAt: true },
     });
 
     logger.info(`inviteMember: Success - Invited ${email} as ${role} to org ${claims.orgId}`);
     return {
       success: true,
-      member: { ...member, createdAt: member.createdAt.toISOString() },
+      member: { ...member, role: member.role.name, createdAt: member.createdAt.toISOString() },
     };
   } catch (error) {
     logger.error('inviteMember: Unexpected error:', error);
@@ -89,7 +96,14 @@ export async function changeRole(memberId: string, newRole: string): Promise<Sim
     });
     if (!member) return { success: false, error: 'Member not found.' };
 
-    await prisma.user.update({ where: { id: memberId }, data: { role: newRole as UserRole } });
+    const newRoleRecord = await prisma.role.findFirst({
+      where: {
+        name: { equals: newRole, mode: 'insensitive' },
+        OR: [{ organizationId: claims.orgId }, { organizationId: null }],
+      },
+    });
+    if (!newRoleRecord) return { success: false, error: 'Role not found.' };
+    await prisma.user.update({ where: { id: memberId }, data: { roleId: newRoleRecord.id } });
     logger.info(`changeRole: Success - Changed user ${memberId} role to ${newRole} in org ${claims.orgId}`);
     return { success: true };
   } catch (error) {

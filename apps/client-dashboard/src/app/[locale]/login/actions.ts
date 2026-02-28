@@ -1,6 +1,5 @@
 'use server';
 
-import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
 import { prisma } from '@gate-access/db';
 import {
@@ -17,7 +16,11 @@ import { LOCALE_COOKIE, i18n } from '@/lib/i18n-config';
 
 const SECURE = process.env.NODE_ENV === 'production';
 
-export type LoginState = { error?: string; success?: boolean; locale?: string } | null;
+export type LoginState = {
+  error?: string;
+  success?: boolean;
+  locale?: string;
+} | null;
 
 export async function loginAction(
   _prevState: LoginState,
@@ -57,12 +60,7 @@ export async function loginAction(
 
   // Issue tokens
   const [accessToken, refreshToken] = await Promise.all([
-    signAccessToken(
-      user.id,
-      user.email,
-      user.organizationId,
-      user.role
-    ),
+    signAccessToken(user.id, user.email, user.organizationId, user.role),
     Promise.resolve(generateRefreshToken()),
   ]);
 
@@ -91,7 +89,10 @@ export async function loginAction(
   });
 
   const localeCookie = cookies().get(LOCALE_COOKIE)?.value;
-  const locale = i18n.locales.includes(localeCookie as any) ? localeCookie : i18n.defaultLocale;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const locale = i18n.locales.includes(localeCookie as any)
+    ? (localeCookie as (typeof i18n.locales)[number])
+    : i18n.defaultLocale;
 
   return { success: true, locale };
 }

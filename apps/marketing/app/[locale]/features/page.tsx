@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { getTranslation } from '../../../lib/i18n/get-translation';
 import type { Locale } from '../../../i18n-config';
-import { Zap, Shield, Smartphone, Globe, Cpu, Cloud, Lock, BarChart3, Users, AppWindow } from 'lucide-react';
+import { Zap, Shield, Smartphone, Globe, Cpu, Cloud, Lock, BarChart3 } from 'lucide-react';
 import { Button } from '@gate-access/ui';
 import { I18nLink } from '../../../components/i18n-link';
 

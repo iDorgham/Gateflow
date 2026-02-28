@@ -2,7 +2,15 @@
 
 import * as React from 'react';
 import { cn } from '../lib/utils';
-import { Sheet, SheetContent, SheetTrigger, Button, Avatar, AvatarFallback, AvatarImage } from '@gate-access/ui';
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  Button,
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '@gate-access/ui';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface SidebarItem {
@@ -35,7 +43,6 @@ interface DashboardLayoutProps {
     email?: string;
     image?: string;
   };
-  className?: string;
 }
 
 function Sidebar({ items, className, onClick, isCollapsed }: SidebarProps) {
@@ -169,37 +176,50 @@ function DashboardLayout({
   children,
   sidebarItems = [],
   user,
-  className,
 }: DashboardLayoutProps) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isCollapsed, setIsCollapsed] = React.useState(false);
 
   return (
     <div className="flex min-h-screen w-full bg-background overflow-hidden">
-      <div 
+      <div
         className={cn(
-          "hidden md:block h-screen transition-all duration-300 flex-shrink-0 border-r bg-card",
-          isCollapsed ? "w-20" : "w-64"
+          'hidden md:block h-screen transition-all duration-300 flex-shrink-0 border-r bg-card',
+          isCollapsed ? 'w-20' : 'w-64'
         )}
       >
         <div className="flex h-full flex-col">
-          <div className={cn("flex h-16shrink-0 items-center border-b px-6 h-16", isCollapsed ? "justify-center px-0" : "")}>
+          <div
+            className={cn(
+              'flex h-16shrink-0 items-center border-b px-6 h-16',
+              isCollapsed ? 'justify-center px-0' : ''
+            )}
+          >
             {!isCollapsed ? (
               <span className="text-lg font-semibold">Gate Access</span>
             ) : (
               <span className="text-lg font-bold">G</span>
             )}
           </div>
-          <Sidebar items={sidebarItems} isCollapsed={isCollapsed} className="flex-1 overflow-y-auto" />
-          
-          <div className={cn("mt-auto shrink-0 border-t p-4 flex flex-col gap-2", isCollapsed && "items-center px-2")}>
+          <Sidebar
+            items={sidebarItems}
+            isCollapsed={isCollapsed}
+            className="flex-1 overflow-y-auto"
+          />
+
+          <div
+            className={cn(
+              'mt-auto shrink-0 border-t p-4 flex flex-col gap-2',
+              isCollapsed && 'items-center px-2'
+            )}
+          >
             <button
               onClick={() => setIsCollapsed(!isCollapsed)}
               className={cn(
-                "group flex items-center gap-3 rounded-xl py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-all duration-200",
-                isCollapsed ? "justify-center w-10 px-0" : "w-full px-4"
+                'group flex items-center gap-3 rounded-xl py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-all duration-200',
+                isCollapsed ? 'justify-center w-10 px-0' : 'w-full px-4'
               )}
-              title={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
+              title={isCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
             >
               {isCollapsed ? (
                 <ChevronRight className="h-[17px] w-[17px] shrink-0" />

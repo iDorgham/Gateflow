@@ -6,7 +6,6 @@ import { useTransition } from 'react';
 import Link from 'next/link';
 import { Sidebar } from './sidebar';
 
-import { ThemeToggle } from './theme-toggle';
 import { LanguageSwitcher } from '../language-switcher';
 import { GlobalSearch } from './global-search';
 import { SidePanel } from './side-panel';
@@ -15,29 +14,17 @@ import { ProjectFilterProvider } from '@/context/ProjectFilterContext';
 import { getCsrfToken } from '@/lib/csrf';
 import { Locale } from '@/lib/i18n-config';
 import {
-  Avatar,
-  AvatarFallback,
-  Sheet,
   SheetContent,
   Button,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
+  Sheet,
 } from '@gate-access/ui';
-import { Toaster } from 'sonner';
 import {
-  Menu,
   Bell,
-  ChevronLeft,
-  ChevronRight,
-  ChevronsUpDown,
   Sparkles,
+  Menu,
+  ChevronsUpDown,
 } from 'lucide-react';
 import { cn } from '@gate-access/ui';
-import { useTranslation } from 'react-i18next';
 
 interface ExpiredQR {
   id: string;
@@ -66,7 +53,7 @@ export interface DashboardShellProps {
   permissions?: Record<string, boolean>;
 }
 
-function MiniHeader({ locale }: { locale: string }) {
+function MiniHeader({ locale }: { locale: Locale }) {
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {
@@ -74,14 +61,14 @@ function MiniHeader({ locale }: { locale: string }) {
     return () => clearInterval(timer);
   }, []);
 
-  const dateStr = time.toLocaleDateString(locale === 'ar' ? 'ar-EG' : 'en-US', {
+  const dateStr = time.toLocaleDateString(locale === 'ar-EG' ? 'ar-EG' : 'en-US', {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
     day: 'numeric',
   });
 
-  const timeStr = time.toLocaleTimeString(locale === 'ar' ? 'ar-EG' : 'en-US', {
+  const timeStr = time.toLocaleTimeString(locale === 'ar-EG' ? 'ar-EG' : 'en-US', {
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
@@ -94,7 +81,7 @@ function MiniHeader({ locale }: { locale: string }) {
         <span className="font-mono tabular-nums" suppressHydrationWarning>{timeStr}</span>
       </div>
       <div className="flex items-center gap-2">
-        <LanguageSwitcher currentLocale={locale as any} />
+        <LanguageSwitcher currentLocale={locale} variant="mini" />
       </div>
     </div>
   );
@@ -119,8 +106,6 @@ export function DashboardShell({
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
-  const { t } = useTranslation('dashboard');
-
   // Close mobile nav on route change
   useEffect(() => {
     setMobileOpen(false);
@@ -142,12 +127,6 @@ export function DashboardShell({
     fetchExpiredQRs();
   }, [fetchExpiredQRs]);
 
-  const initials = user.name
-    .split(' ')
-    .filter(Boolean)
-    .map((n) => n[0])
-    .join('')
-    .slice(0, 2);
 
   const handleProjectSwitch = (projectId: string) => {
     const val = projectId === 'all' ? 'all' : projectId;
@@ -168,81 +147,12 @@ export function DashboardShell({
   };
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden bg-background">
+    <div className="flex h-screen flex-col overflow-hidden bg-background">
+      {/* Global mini header spanning sidebar + content */}
       <MiniHeader locale={locale} />
-      {/* Top bar - Now above everything */}
-      <header className="flex h-16 shrink-0 items-center justify-between border-b border-border bg-card px-4 md:px-6 shadow-sm z-30">
-        <div className="flex items-center gap-8">
-          <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden"
-              onClick={() => setMobileOpen(true)}
-            >
-              <Menu className="h-5 w-5" />
-            </Button>
-            <div className="hidden md:flex flex-1 max-w-md">
-              <GlobalSearch locale={locale} />
-            </div>
 
-            {/* Project Switcher */}
-            {projects.length > 0 && (
-              <div className="hidden sm:flex items-center gap-2 relative">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground opacity-60 line-clamp-1">
-                  Project
-                </span>
-                <div className="relative w-40">
-                  <select
-                    value={currentProjectId ?? 'all'}
-                    onChange={(e) => handleProjectSwitch(e.target.value)}
-                    disabled={isPending}
-                    className="w-full appearance-none rounded-md bg-secondary/50 border border-border/50 text-xs font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer disabled:opacity-50 transition-all hover:bg-secondary px-3 py-1.5 h-8"
-                  >
-                    <option value="all">All Projects</option>
-                    {projects.map((p) => (
-                      <option key={p.id} value={p.id}>
-                        {p.name}
-                      </option>
-                    ))}
-                  </select>
-                  <ChevronsUpDown className="pointer-events-none absolute right-2.5 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground opacity-50" />
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <div className="sm:hidden flex items-center">
-            <GlobalSearch locale={locale} />
-          </div>
-          
-          <div className="h-8 w-[1px] bg-border mx-1" />
-          <div className="h-8 w-[1px] bg-border mx-1" />
-          <Button
-            variant="ghost"
-            size="icon"
-            className={cn(
-              'relative text-muted-foreground hover:text-foreground transition-colors',
-              isSidePanelOpen && sidePanelTab === 'assistant' && 'text-primary bg-primary/10'
-            )}
-            onClick={() => {
-              if (isSidePanelOpen && sidePanelTab === 'assistant') {
-                setIsSidePanelOpen(false);
-              } else {
-                setSidePanelTab('assistant');
-                setIsSidePanelOpen(true);
-              }
-            }}
-          >
-            <Sparkles className="h-[17px] w-[17px]" />
-          </Button>
-        </div>
-      </header>
-
-      <div className="flex flex-1 overflow-hidden">
-        {/* Desktop Sidebar */}
+      <div className="flex flex-1 min-h-0 overflow-hidden">
+        {/* Left sidebar - matches content height below mini header */}
         <div
           className={cn(
             'hidden md:flex h-full shrink-0 transition-all duration-300 ease-in-out',
@@ -262,6 +172,75 @@ export function DashboardShell({
           />
         </div>
 
+        {/* Right side: main header + content */}
+        <div className="flex flex-1 min-h-0 flex-col min-w-0 overflow-hidden">
+          {/* Top bar */}
+          <header className="flex h-16 shrink-0 items-center justify-between border-b border-sidebar-border bg-sidebar text-sidebar-foreground px-4 md:px-6 shadow-sm z-30">
+            <div className="flex items-center gap-6">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="md:hidden"
+                onClick={() => setMobileOpen(true)}
+              >
+                <Menu className="h-5 w-5" />
+              </Button>
+              <div className="hidden md:flex flex-1 max-w-md">
+                <GlobalSearch locale={locale} />
+              </div>
+
+              {/* Project Switcher */}
+              {projects.length > 0 && (
+                <div className="hidden sm:flex items-center gap-2 relative">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground opacity-60 line-clamp-1">
+                    Project
+                  </span>
+                  <div className="relative w-40">
+                    <select
+                      value={currentProjectId ?? 'all'}
+                      onChange={(e) => handleProjectSwitch(e.target.value)}
+                      disabled={isPending}
+                      className="w-full appearance-none rounded-md bg-secondary/50 border border-border/50 text-xs font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer disabled:opacity-50 transition-all hover:bg-secondary px-3 py-1.5 h-8"
+                    >
+                      <option value="all">All Projects</option>
+                      {projects.map((p) => (
+                        <option key={p.id} value={p.id}>
+                          {p.name}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronsUpDown className="pointer-events-none absolute right-2.5 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground opacity-50" />
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="flex items-center gap-3">
+              <div className="sm:hidden flex items-center">
+                <GlobalSearch locale={locale} />
+              </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                className={cn(
+                  'relative text-muted-foreground hover:text-foreground transition-colors',
+                  isSidePanelOpen && sidePanelTab === 'assistant' && 'text-primary bg-primary/10'
+                )}
+                onClick={() => {
+                  if (isSidePanelOpen && sidePanelTab === 'assistant') {
+                    setIsSidePanelOpen(false);
+                  } else {
+                    setSidePanelTab('assistant');
+                    setIsSidePanelOpen(true);
+                  }
+                }}
+              >
+                <Sparkles className="h-[17px] w-[17px]" />
+              </Button>
+            </div>
+          </header>
+
+        <div className="flex flex-1 min-h-0 overflow-hidden">
         {/* Mobile Sidebar */}
         <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
           <SheetContent
@@ -284,7 +263,7 @@ export function DashboardShell({
         </Sheet>
 
         {/* Page content */}
-        <main className="flex-1 overflow-y-auto p-4 md:p-8 bg-slate-50/50 dark:bg-transparent flex flex-col">
+        <main className="flex-1 min-h-0 overflow-y-auto p-4 md:p-8 bg-slate-50/50 dark:bg-transparent flex flex-col">
           <div
             className="animate-in fade-in slide-in-from-bottom-2 duration-500 w-full flex-1 flex flex-col"
           >
@@ -297,7 +276,7 @@ export function DashboardShell({
           </div>
         </main>
 
-        <SidePanel 
+          <SidePanel 
           locale={locale} 
           isOpen={isSidePanelOpen} 
           onToggle={() => setIsSidePanelOpen(!isSidePanelOpen)}
@@ -305,10 +284,10 @@ export function DashboardShell({
           onTabChange={setSidePanelTab}
           notificationsCount={expiredQRs.length}
           notificationsContent={
-            <div className="flex flex-col h-full bg-card">
-              <div className="flex shrink-0 items-center justify-between border-b border-border px-4 py-3 bg-muted/30">
+            <div className="flex flex-col h-full bg-sidebar text-sidebar-foreground">
+              <div className="flex shrink-0 items-center justify-between border-b border-sidebar-border px-4 py-3 bg-sidebar">
                 <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                  {locale === 'ar' ? 'التنبيهات الأخيرة' : 'Recent Notifications'}
+                  {locale === 'ar-EG' ? 'التنبيهات الأخيرة' : 'Recent Notifications'}
                 </span>
                 {expiredQRs.length > 0 && (
                   <span className="text-[10px] bg-red-500 text-white px-1.5 py-0.5 rounded-full font-bold">
@@ -321,7 +300,7 @@ export function DashboardShell({
                   <div className="flex flex-col items-center justify-center py-12 text-center opacity-40">
                     <Bell className="h-12 w-12 mb-3" />
                     <p className="text-sm font-medium">
-                      {locale === 'ar' ? 'لا توجد تنبيهات جديدة' : 'No new notifications'}
+                      {locale === 'ar-EG' ? 'لا توجد تنبيهات جديدة' : 'No new notifications'}
                     </p>
                   </div>
                 ) : (
@@ -337,9 +316,9 @@ export function DashboardShell({
                             {qr.code}
                           </p>
                           <p className="text-[11px] text-muted-foreground leading-tight">
-                            {locale === 'ar' ? 'انتهت صلاحية الرمز في' : 'QR code expired on'}{' '}
+                            {locale === 'ar-EG' ? 'انتهت صلاحية الرمز في' : 'QR code expired on'}{' '}
                             <span className="font-medium text-foreground/70">
-                              {new Date(qr.expiresAt).toLocaleDateString(locale === 'ar' ? 'ar-EG' : 'en-US')}
+                              {new Date(qr.expiresAt).toLocaleDateString(locale === 'ar-EG' ? 'ar-EG' : 'en-US')}
                             </span>
                             {qr.gateName && (
                               <>
@@ -358,7 +337,7 @@ export function DashboardShell({
                   href={`/${locale}/dashboard/qrcodes`}
                   className="block w-full py-2 text-center text-[10px] font-bold uppercase tracking-widest text-primary hover:underline transition-all mt-4"
                 >
-                  {locale === 'ar' ? 'عرض جميع رموز QR' : 'View All QR Codes'}
+                  {locale === 'ar-EG' ? 'عرض جميع رموز QR' : 'View All QR Codes'}
                 </Link>
               </div>
             </div>
@@ -366,9 +345,9 @@ export function DashboardShell({
         >
           <AIAssistant locale={locale} />
         </SidePanel>
+        </div>
+        </div>
       </div>
-
-      <Toaster position="bottom-right" richColors />
     </div>
   );
 }

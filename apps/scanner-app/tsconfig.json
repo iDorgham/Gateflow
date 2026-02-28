@@ -31,7 +31,10 @@
       "@gate-access/api-client": [
         "../../packages/api-client/src"
       ]
-    }
+    },
+    "types": [
+      "jest"
+    ]
   },
   "include": [
     "src/**/*",

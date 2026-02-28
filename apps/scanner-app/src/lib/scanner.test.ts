@@ -1,3 +1,6 @@
+import { describe, it, expect, jest, beforeEach } from '@jest/globals';
+import { QRCodeType } from '@gate-access/types';
+
 /**
  * Unit tests for validateOnServer()
  *
@@ -55,7 +58,7 @@ const mockAddScan = scanQueue.addScan as jest.MockedFunction<typeof scanQueue.ad
 const VALID_PAYLOAD: QRPayload = {
   qrId: 'cltest123',
   organizationId: 'clorg456',
-  type: 'SINGLE' as const,
+  type: QRCodeType.SINGLE,
   maxUses: 1,
   expiresAt: new Date(Date.now() + 3_600_000).toISOString(),
   issuedAt: new Date().toISOString(),

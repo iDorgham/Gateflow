@@ -11,14 +11,18 @@ if (!_jwtSecret || _jwtSecret.length < 32) {
   if (process.env.NODE_ENV === 'production') {
     throw new Error(
       '[auth] NEXTAUTH_SECRET is missing or shorter than 32 characters. ' +
-      'Set NEXTAUTH_SECRET to a random 64-char string before deploying.'
+        'Set NEXTAUTH_SECRET to a random 64-char string before deploying.'
     );
   } else {
-    console.warn('[auth] NEXTAUTH_SECRET not set — using insecure fallback. Set it in .env.local');
+    console.warn(
+      '[auth] NEXTAUTH_SECRET not set — using insecure fallback. Set it in .env.local'
+    );
   }
 }
 
-const JWT_SECRET = new TextEncoder().encode(_jwtSecret ?? 'dev-insecure-fallback-change-me');
+const JWT_SECRET = new TextEncoder().encode(
+  _jwtSecret ?? 'dev-insecure-fallback-change-me'
+);
 
 const ACCESS_TOKEN_EXPIRY = '15m';
 const REFRESH_TOKEN_EXPIRY_DAYS = 30;
@@ -26,7 +30,7 @@ const REFRESH_TOKEN_EXPIRY_DAYS = 30;
 // ─── JWT Claims ───────────────────────────────────────────────────────────────
 
 export interface AccessTokenClaims extends JWTPayload {
-  sub: string;         // userId
+  sub: string; // userId
   email: string;
   roleId: string;
   roleName: string;
@@ -40,7 +44,7 @@ export async function signAccessToken(
   userId: string,
   email: string,
   orgId: string | null,
-  role: { id: string; name: string; permissions: any }
+  role: { id: string; name: string; permissions: Record<string, boolean> }
 ): Promise<string> {
   return new SignJWT({
     email,
@@ -58,14 +62,21 @@ export async function signAccessToken(
     .sign(JWT_SECRET);
 }
 
-export async function verifyAccessToken(token: string): Promise<AccessTokenClaims> {
+export async function verifyAccessToken(
+  token: string
+): Promise<AccessTokenClaims> {
   const { payload } = await jwtVerify(token, JWT_SECRET, {
     issuer: 'gateflow',
     audience: 'gateflow-api',
   });
 
   // Validate required claims
-  if (!payload.sub || !payload.email || !payload.roleId || !payload.permissions) {
+  if (
+    !payload.sub ||
+    !payload.email ||
+    !payload.roleId ||
+    !payload.permissions
+  ) {
     throw new Error('Invalid token claims: missing required fields');
   }
 
@@ -102,8 +113,8 @@ export function getRefreshTokenExpiry(): Date {
 
 const ARGON2_OPTIONS: argon2.Options & { raw: false } = {
   type: argon2.argon2id,
-  memoryCost: 65536,   // 64 MiB
-  timeCost: 3,         // 3 iterations
+  memoryCost: 65536, // 64 MiB
+  timeCost: 3, // 3 iterations
   parallelism: 4,
   raw: false,
 };

@@ -54,9 +54,9 @@ export function LoginShell({
       {/* Foreground Layer: Sliding Auth Panel - Animates width on success */}
       <div 
         className={cn(
-          "relative z-10 w-full flex flex-col justify-between p-6 md:p-12 lg:p-16 transition-all duration-700 ease-in-out transform-gpu",
+          "relative z-10 w-full flex flex-col justify-between pt-0 transition-all duration-700 ease-in-out transform-gpu",
           isAdmin ? "bg-white/80 dark:bg-zinc-950/80" : "bg-white/95 dark:bg-zinc-950/95", // Slightly more solid during transition
-          "backdrop-blur-2xl border-r border-border/50 shadow-2xl",
+          "backdrop-blur-2xl border-r border-border/50 shadow-2xl p-6 md:p-12 lg:p-16 pt-0",
           isMounted && !isSuccess ? "w-full md:w-[480px] translate-x-0" : "",
           isMounted && isSuccess ? "w-[80px] md:w-20 translate-x-0 px-4 md:px-0" : "",
           !isMounted && "-translate-x-full"
@@ -64,23 +64,23 @@ export function LoginShell({
       >
         {/* Top Controls - Logo and Text */}
         <div className={cn(
-          "flex items-center transition-all duration-700 delay-300 transform-gpu mb-8",
+          "flex items-center transition-all duration-700 delay-300 transform-gpu mb-8 border-b border-border/50 h-20 shrink-0 -mx-6 md:-mx-12 lg:-mx-16 px-6 md:px-12 lg:px-16",
           isMounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
         )}>
           <div className={cn(
-            "flex items-center gap-3 transition-all duration-500",
+            "flex items-center gap-4 transition-all duration-500",
             isSuccess && "w-full justify-center gap-0"
           )}>
             <div
               className={cn(
-                'flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-white shadow-lg transition-transform hover:scale-105 duration-300',
+                'flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white shadow-lg transition-transform hover:scale-105 duration-300',
                 isAdmin ? 'bg-blue-600' : 'bg-primary'
               )}
             >
-              {isAdmin ? <Shield className="h-6 w-6" /> : <ShieldCheck className="h-6 w-6" />}
+              {isAdmin ? <Shield className="h-6 w-6" /> : <ShieldCheck className="h-7 w-7" />}
             </div>
             <span className={cn(
-              "text-xl font-bold tracking-tight text-foreground whitespace-nowrap overflow-hidden transition-all duration-500",
+              "text-2xl font-black tracking-tight text-foreground whitespace-nowrap overflow-hidden transition-all duration-500",
               isSuccess ? "w-0 opacity-0 ml-0" : "w-auto opacity-100"
             )}>
               GateFlow

@@ -1,18 +1,29 @@
-import { mock } from "bun:test";
+jest.mock('next/server', () => {
+  class MockNextRequest {
+    url: string;
+    init: any;
 
-mock.module("next/server", () => ({
-  NextRequest: class {
-    constructor(public url: string, public init: any) {}
-    json() { return JSON.parse(this.init.body); }
-  },
-  NextResponse: {
-    json: (body: any, init: any) => ({
-      status: init?.status || 200,
-      json: async () => body,
-      headers: new Map(Object.entries(init?.headers || {})),
-    })
+    constructor(url: string, init: any) {
+      this.url = url;
+      this.init = init;
+    }
+
+    async json() {
+      return JSON.parse(this.init.body);
+    }
   }
-}));
+
+  return {
+    NextRequest: MockNextRequest,
+    NextResponse: {
+      json: (body: any, init?: any) => ({
+        status: init?.status || 200,
+        json: async () => body,
+        headers: new Map(Object.entries(init?.headers || {})),
+      }),
+    },
+  };
+});
 
 /**
  * Unit tests for POST /api/scans/bulk (Integration with processBulkScans)

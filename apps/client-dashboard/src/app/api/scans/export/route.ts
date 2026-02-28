@@ -116,7 +116,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     }
 
     // Generator function for batched fetching
-    async function* scanGenerator() {
+    const scanGenerator = async function* () {
       const BATCH_SIZE = 1000;
       let cursor: string | undefined;
 
@@ -152,7 +152,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         if (batch.length < BATCH_SIZE) break;
         cursor = batch[batch.length - 1].id;
       }
-    }
+    };
 
     const iterator = scanGenerator();
     const encoder = new TextEncoder();

@@ -1,6 +1,6 @@
 import type { Config } from 'tailwindcss';
 
-// @ts-ignore – relative import for jiti
+// @ts-expect-error – relative import for jiti
 import { tokens } from '../ui/src/tokens';
 
 const config: Config = {

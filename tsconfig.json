@@ -21,7 +21,8 @@
       "@gate-access/types": ["packages/types/src"],
       "@gate-access/i18n": ["packages/i18n/src"],
       "@gate-access/config": ["packages/config"]
-    }
+    },
+    "types": ["jest"]
   },
   "exclude": ["node_modules", "dist", ".next", "build"]
 }

@@ -1,30 +1,25 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
   LayoutDashboard,
   QrCode,
   ScanLine,
-  Shield,
   BarChart3,
   Settings,
   Power,
-  ChevronsUpDown,
   ShieldCheck,
   ChevronLeft,
-  ChevronRight,
-  Contact2,
   Building,
-  Building2,
   Layers,
+  CreditCard,
 } from 'lucide-react';
 import {
   Avatar,
   AvatarFallback,
   cn,
-  Button,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -35,14 +30,13 @@ import {
 import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
 import { ThemeToggle } from './theme-toggle';
-import { LanguageSwitcher } from '../language-switcher';
 
 import { Permission } from '@gate-access/types';
 
 interface NavItem {
   label: string;
   href: string;
-  icon: any;
+  icon: React.ElementType;
   exact?: boolean;
   permission?: Permission;
 }
@@ -50,7 +44,7 @@ interface NavItem {
 const getNavGroups = (t: TFunction, permissions: Record<string, boolean>) => {
   const hasPerm = (p?: Permission) => !p || permissions[p] === true;
 
-  const WORKSPACE_NAV: NavItem[] = [];
+  // No workspace-specific nav items for now
 
   const MAIN_NAV: NavItem[] = [
     {
@@ -113,17 +107,16 @@ interface SidebarProps {
 export function Sidebar({
   user,
   org,
-  projects,
-  currentProjectId,
+  projects: _projects,
+  currentProjectId: _currentProjectId,
   locale,
   isCollapsed,
   onToggleCollapse,
-  hideGates,
+  hideGates: _hideGates,
   permissions = {},
 }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
   const { t } = useTranslation('dashboard');
 
   const [hoveredLabel, setHoveredLabel] = useState<string | null>(null);
@@ -133,7 +126,7 @@ export function Sidebar({
     setMousePos({ x: e.clientX, y: e.clientY });
   };
 
-  let groups = getNavGroups(t, permissions);
+  const groups = getNavGroups(t, permissions);
   
   if (process.env.NODE_ENV === 'development') {
     console.log('[DEBUG] Sidebar Permissions:', permissions);
@@ -152,33 +145,22 @@ export function Sidebar({
   return (
     <div
       className={cn(
-        'flex h-full flex-col bg-sidebar text-sidebar-foreground border-r border-sidebar-border shadow-xl relative z-20 transition-all duration-300 ease-in-out select-none',
+        'flex h-full flex-col bg-sidebar text-sidebar-foreground border-r border-sidebar-border relative z-20 transition-all duration-300 ease-in-out select-none',
         isCollapsed ? 'w-20' : 'w-64'
       )}
       onMouseMove={handleMouseMove}
     >
-      {/* Brand - Removed (now in Header) */}
-
-      {/* Org & Project Context */}
-      <div className={cn('py-4 space-y-4', isCollapsed ? 'px-2' : 'px-3')}>
-        {org && !isCollapsed && (
-          <div className="px-3 py-2 rounded-xl bg-sidebar-accent/50 border border-sidebar-border/50">
-            <div className="flex items-center gap-2">
-              <Building2 className="h-4 w-4 text-muted-foreground" />
-              <span className="text-xs font-bold truncate">{org.name}</span>
-            </div>
-          </div>
-        )}
-        {org && isCollapsed && (
-          <div
-            className="flex justify-center py-2"
-            title={`${org.name} (${org.plan})`}
-            onMouseEnter={() => setHoveredLabel(`${org.name} (${org.plan})`)}
-            onMouseLeave={() => setHoveredLabel(null)}
-          >
-            <Building2 className="h-6 w-6 text-blue-400" />
-          </div>
-        )}
+      {/* GateFlow Logo */}
+      <div className={cn(
+        'shrink-0 border-b border-sidebar-border/50 flex items-center justify-center',
+        'h-20 w-20' // 1:1 Square with same width as collapsed side panel (w-20 = 80px)
+      )}>
+        <Link
+          href={`/${locale}/dashboard`}
+          className="flex items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-lg h-12 w-12 transition-transform hover:scale-105"
+        >
+          <ShieldCheck className="h-7 w-7" />
+        </Link>
       </div>
 
       {/* Navigation */}
@@ -261,36 +243,82 @@ export function Sidebar({
                   )}
                 </div>
               </DropdownMenuTrigger>
-              <DropdownMenuContent side={isCollapsed ? "right" : "top"} align="end" className="w-56" sideOffset={12}>
-                <DropdownMenuLabel className="font-normal">
-                  <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-bold leading-none">{user.name}</p>
-                    <p className="text-xs leading-none text-muted-foreground">
+              <DropdownMenuContent
+                align={isCollapsed ? 'start' : 'end'}
+                side="top"
+                className="w-64 p-2 rounded-2xl border-sidebar-border bg-sidebar shadow-2xl animate-in fade-in zoom-in-95"
+                sideOffset={12}
+              >
+                <DropdownMenuLabel className="p-3 mb-1">
+                  <div className="flex flex-col space-y-1.5">
+                    <p className="text-sm font-bold leading-none text-foreground">{user.name}</p>
+                    <p className="text-xs leading-none text-muted-foreground font-medium">
                       {user.email}
                     </p>
+                    {org && (
+                      <div className="mt-2 inline-flex items-center gap-1.5 rounded-lg bg-primary/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-primary w-fit">
+                        <Layers className="h-3 w-3" />
+                        <span>
+                          {org.plan}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem asChild>
-                  <Link href={`/${locale}/dashboard/settings?tab=profile`} className="cursor-pointer w-full">
-                    <Building className="mr-2 h-4 w-4" />
-                    <span>{t('sidebar.profile', 'Profile')}</span>
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href={`/${locale}/dashboard/settings`} className="cursor-pointer w-full">
-                    <Settings className="mr-2 h-4 w-4" />
-                    <span>{t('sidebar.settings', 'Settings')}</span>
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem 
-                  className="text-red-500 focus:text-red-500 cursor-pointer"
-                  onClick={() => router.push(`/${locale}/logout`)}
-                >
-                  <Power className="mr-2 h-4 w-4" />
-                  <span>{t('sidebar.signout', 'Sign out')}</span>
-                </DropdownMenuItem>
+                <DropdownMenuSeparator className="bg-sidebar-border/50 mx-1" />
+                <div className="p-1">
+                  <DropdownMenuItem asChild>
+                    <Link
+                      href={`/${locale}/dashboard/settings?tab=profile`}
+                      className="flex w-full items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer hover:bg-sidebar-accent transition-colors"
+                    >
+                      <Building className="h-4 w-4 text-slate-400" />
+                      <span className="text-sm font-medium">{t('sidebar.profile', 'Profile')}</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link
+                      href={`/${locale}/dashboard/settings`}
+                      className="flex w-full items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer hover:bg-sidebar-accent transition-colors"
+                    >
+                      <Settings className="h-4 w-4 text-slate-400" />
+                      <span className="text-sm font-medium">{t('sidebar.settings', 'Settings')}</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link
+                      href={`/${locale}/dashboard/settings?tab=billing`}
+                      className="flex w-full items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer hover:bg-sidebar-accent transition-colors"
+                    >
+                      <CreditCard className="h-4 w-4 text-slate-400" />
+                      <span className="text-sm font-medium">{t('sidebar.billing', 'Billing & payments')}</span>
+                    </Link>
+                  </DropdownMenuItem>
+                </div>
+                <DropdownMenuSeparator className="bg-sidebar-border/50 mx-1" />
+                <div className="p-1">
+                  <DropdownMenuItem className="flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl hover:bg-sidebar-accent transition-colors">
+                    <div className="flex flex-col">
+                      <span className="text-xs font-bold">
+                        {t('sidebar.appearance', 'Appearance')}
+                      </span>
+                      <span className="text-[10px] text-muted-foreground font-medium">
+                        {t('sidebar.appearanceDescription', 'Light / Dark mode')}
+                      </span>
+                    </div>
+                    <ThemeToggle />
+                  </DropdownMenuItem>
+                </div>
+                <DropdownMenuSeparator className="bg-sidebar-border/50 mx-1" />
+                <div className="p-1">
+                  <DropdownMenuItem 
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-red-400 focus:text-red-400 focus:bg-red-400/10 cursor-pointer transition-colors"
+                    onClick={() => router.push(`/${locale}/logout`)}
+                  >
+                    <Power className="h-4 w-4" />
+                    <span className="text-sm font-bold">{t('sidebar.signout', 'Sign out')}</span>
+                  </DropdownMenuItem>
+                </div>
               </DropdownMenuContent>
             </DropdownMenu>
 

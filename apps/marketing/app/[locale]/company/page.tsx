@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Link from 'next/link';
 import { MapPin, Mail, Briefcase, Newspaper } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -105,7 +104,7 @@ export default function CompanyPage() {
             ABOUT GATEFLOW
           </p>
           <h1 className="text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-6xl">
-            We built what we needed but couldn't find
+            We built what we needed but couldn&apos;t find
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-slate-500 dark:text-slate-400">
             GateFlow was founded by people who managed actual gates — and lived the daily reality of
@@ -283,7 +282,7 @@ export default function CompanyPage() {
             ))}
           </div>
           <p className="mt-6 text-sm text-slate-500 dark:text-slate-400">
-            Don't see your role?{' '}
+            Don&apos;t see your role?{' '}
             <a href="mailto:careers@gateflow.io" className="text-indigo-600 hover:underline">
               Send us your CV anyway.
             </a>

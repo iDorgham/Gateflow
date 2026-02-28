@@ -27,6 +27,7 @@ export const QRValidateRejectReason = z.enum([
   'unauthorized',
   'rate_limited',
   'internal_error',
+  'denied',
 ]);
 
 export type QRValidateRejectReason = z.infer<typeof QRValidateRejectReason>;

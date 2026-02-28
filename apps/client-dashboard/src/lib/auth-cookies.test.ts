@@ -1,77 +1,69 @@
-import { describe, it, expect, mock, beforeEach } from 'bun:test';
+// Test file for auth-cookies
 
-// Define the inner mock objects
 const mockCookiesObj = {
-  set: mock(),
-  delete: mock(),
-  get: mock(),
+  set: jest.fn(),
+  delete: jest.fn(),
+  get: jest.fn(),
 };
 
 const mockHeadersObj = {
-  get: mock(),
+  get: jest.fn(),
 };
 
-// Define the mock functions that return the objects
-const mockCookiesFn = mock(() => mockCookiesObj);
-const mockHeadersFn = mock(() => mockHeadersObj);
-
-// Mock the modules
-mock.module('next/headers', () => ({
-  cookies: mockCookiesFn,
-  headers: mockHeadersFn,
+jest.mock('next/headers', () => ({
+  cookies: jest.fn(() => mockCookiesObj),
+  headers: jest.fn(() => mockHeadersObj),
 }));
 
-const mockVerifyAccessToken = mock();
-mock.module('./auth', () => ({
+const mockVerifyAccessToken = jest.fn();
+jest.mock('./auth', () => ({
   verifyAccessToken: mockVerifyAccessToken,
 }));
 
-// Import under test
-const { setAuthCookies, clearAuthCookies, getRefreshToken, getSessionClaims } = await import('./auth-cookies');
-
 describe('auth-cookies', () => {
   beforeEach(() => {
-    // Reset inner mocks
     mockCookiesObj.set.mockClear();
     mockCookiesObj.delete.mockClear();
     mockCookiesObj.get.mockClear();
     mockHeadersObj.get.mockClear();
-
-    // Reset factory mocks to default behavior
-    mockCookiesFn.mockClear();
-    mockCookiesFn.mockImplementation(() => mockCookiesObj);
-
-    mockHeadersFn.mockClear();
-    mockHeadersFn.mockImplementation(() => mockHeadersObj);
-
     mockVerifyAccessToken.mockClear();
   });
 
   describe('setAuthCookies', () => {
-    it('sets access and refresh tokens with correct options', () => {
+    it('sets access and refresh tokens with correct options', async () => {
+      const { setAuthCookies } = await import('./auth-cookies');
       const accessToken = 'access-token';
       const refreshToken = 'refresh-token';
 
       setAuthCookies(accessToken, refreshToken);
 
       expect(mockCookiesObj.set).toHaveBeenCalledTimes(2);
-      expect(mockCookiesObj.set).toHaveBeenCalledWith('gf_access_token', accessToken, expect.objectContaining({
-        httpOnly: true,
-        sameSite: 'lax',
-        path: '/',
-        maxAge: 60 * 15,
-      }));
-      expect(mockCookiesObj.set).toHaveBeenCalledWith('gf_refresh_token', refreshToken, expect.objectContaining({
-        httpOnly: true,
-        sameSite: 'lax',
-        path: '/',
-        maxAge: 60 * 60 * 24 * 30,
-      }));
+      expect(mockCookiesObj.set).toHaveBeenCalledWith(
+        'gf_access_token',
+        accessToken,
+        expect.objectContaining({
+          httpOnly: true,
+          sameSite: 'lax',
+          path: '/',
+          maxAge: 60 * 15,
+        })
+      );
+      expect(mockCookiesObj.set).toHaveBeenCalledWith(
+        'gf_refresh_token',
+        refreshToken,
+        expect.objectContaining({
+          httpOnly: true,
+          sameSite: 'lax',
+          path: '/',
+          maxAge: 60 * 60 * 24 * 30,
+        })
+      );
     });
   });
 
   describe('clearAuthCookies', () => {
-    it('deletes access, refresh, and csrf tokens', () => {
+    it('deletes access, refresh, and csrf tokens', async () => {
+      const { clearAuthCookies } = await import('./auth-cookies');
       clearAuthCookies();
 
       expect(mockCookiesObj.delete).toHaveBeenCalledTimes(3);
@@ -82,7 +74,8 @@ describe('auth-cookies', () => {
   });
 
   describe('getRefreshToken', () => {
-    it('returns refresh token value if present', () => {
+    it('returns refresh token value if present', async () => {
+      const { getRefreshToken } = await import('./auth-cookies');
       mockCookiesObj.get.mockReturnValue({ value: 'refresh-token-value' });
 
       const result = getRefreshToken();
@@ -91,7 +84,8 @@ describe('auth-cookies', () => {
       expect(result).toBe('refresh-token-value');
     });
 
-    it('returns undefined if refresh token is missing', () => {
+    it('returns undefined if refresh token is missing', async () => {
+      const { getRefreshToken } = await import('./auth-cookies');
       mockCookiesObj.get.mockReturnValue(undefined);
 
       const result = getRefreshToken();
@@ -110,6 +104,7 @@ describe('auth-cookies', () => {
     };
 
     it('returns claims from valid Authorization header', async () => {
+      const { getSessionClaims } = await import('./auth-cookies');
       mockHeadersObj.get.mockImplementation((key: string) => {
         if (key.toLowerCase() === 'authorization') return 'Bearer valid-token';
         return null;
@@ -124,9 +119,10 @@ describe('auth-cookies', () => {
     });
 
     it('returns null if Authorization header is invalid format', async () => {
+      const { getSessionClaims } = await import('./auth-cookies');
       mockHeadersObj.get.mockImplementation((key: string) => {
-          if (key.toLowerCase() === 'authorization') return 'InvalidToken';
-          return null;
+        if (key.toLowerCase() === 'authorization') return 'InvalidToken';
+        return null;
       });
 
       const result = await getSessionClaims();
@@ -136,9 +132,11 @@ describe('auth-cookies', () => {
     });
 
     it('returns null if verifyAccessToken fails for header token', async () => {
+      const { getSessionClaims } = await import('./auth-cookies');
       mockHeadersObj.get.mockImplementation((key: string) => {
-          if (key.toLowerCase() === 'authorization') return 'Bearer invalid-token';
-          return null;
+        if (key.toLowerCase() === 'authorization')
+          return 'Bearer invalid-token';
+        return null;
       });
       mockVerifyAccessToken.mockRejectedValue(new Error('Invalid token'));
 
@@ -149,10 +147,11 @@ describe('auth-cookies', () => {
     });
 
     it('returns claims from valid cookie if header is missing', async () => {
+      const { getSessionClaims } = await import('./auth-cookies');
       mockHeadersObj.get.mockReturnValue(null);
       mockCookiesObj.get.mockImplementation((key: string) => {
-          if (key === 'gf_access_token') return { value: 'valid-cookie-token' };
-          return undefined;
+        if (key === 'gf_access_token') return { value: 'valid-cookie-token' };
+        return undefined;
       });
       mockVerifyAccessToken.mockResolvedValue(validClaims);
 
@@ -164,6 +163,7 @@ describe('auth-cookies', () => {
     });
 
     it('returns null if cookie is missing', async () => {
+      const { getSessionClaims } = await import('./auth-cookies');
       mockHeadersObj.get.mockReturnValue(null);
       mockCookiesObj.get.mockReturnValue(undefined);
 
@@ -173,10 +173,11 @@ describe('auth-cookies', () => {
     });
 
     it('returns null if verifyAccessToken fails for cookie token', async () => {
+      const { getSessionClaims } = await import('./auth-cookies');
       mockHeadersObj.get.mockReturnValue(null);
       mockCookiesObj.get.mockImplementation((key: string) => {
-          if (key === 'gf_access_token') return { value: 'invalid-cookie-token' };
-          return undefined;
+        if (key === 'gf_access_token') return { value: 'invalid-cookie-token' };
+        return undefined;
       });
       mockVerifyAccessToken.mockRejectedValue(new Error('Invalid token'));
 
@@ -186,25 +187,35 @@ describe('auth-cookies', () => {
     });
 
     it('handles headers() throwing error (e.g. outside request context)', async () => {
-      mockHeadersFn.mockImplementation(() => { throw new Error('headers() error'); });
+      const { getSessionClaims } = await import('./auth-cookies');
+      const originalHeaders = require('next/headers').headers;
+      require('next/headers').headers = jest.fn(() => {
+        throw new Error('headers() error');
+      });
       mockCookiesObj.get.mockImplementation((key: string) => {
-          if (key === 'gf_access_token') return { value: 'valid-cookie-token' };
-          return undefined;
+        if (key === 'gf_access_token') return { value: 'valid-cookie-token' };
+        return undefined;
       });
       mockVerifyAccessToken.mockResolvedValue(validClaims);
 
       const result = await getSessionClaims();
 
+      require('next/headers').headers = originalHeaders;
       expect(result).toEqual(validClaims);
     });
 
     it('handles cookies() throwing error', async () => {
-       mockHeadersObj.get.mockReturnValue(null);
-       mockCookiesFn.mockImplementation(() => { throw new Error('cookies() error'); });
+      const { getSessionClaims } = await import('./auth-cookies');
+      mockHeadersObj.get.mockReturnValue(null);
+      const originalCookies = require('next/headers').cookies;
+      require('next/headers').cookies = jest.fn(() => {
+        throw new Error('cookies() error');
+      });
 
-       const result = await getSessionClaims();
+      const result = await getSessionClaims();
 
-       expect(result).toBeNull();
+      require('next/headers').cookies = originalCookies;
+      expect(result).toBeNull();
     });
   });
 });

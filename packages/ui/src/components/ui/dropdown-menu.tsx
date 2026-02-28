@@ -2,7 +2,6 @@
 
 import * as React from 'react';
 import { cn } from '../../lib/utils';
-import { ChevronRight, Circle } from 'lucide-react';
 import { Slot } from '@radix-ui/react-slot';
 
 interface DropdownMenuContextValue {
@@ -57,9 +56,9 @@ const DropdownMenu = React.forwardRef<
     <DropdownMenuContext.Provider value={value}>
       <div
         ref={(node) => {
-          (containerRef as any).current = node;
+          (containerRef as React.MutableRefObject<HTMLDivElement | null>).current = node;
           if (typeof ref === 'function') ref(node);
-          else if (ref) (ref as any).current = node;
+          else if (ref && 'current' in ref) (ref as React.MutableRefObject<HTMLDivElement | null>).current = node;
         }}
         className={cn('relative inline-block', className)}
         {...props}
@@ -81,7 +80,7 @@ const DropdownMenuTrigger = React.forwardRef<
     <Comp
       ref={ref}
       className={className}
-      onClick={(e: any) => {
+      onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
         setOpen(!open);
         onClick?.(e);
       }}
@@ -93,20 +92,58 @@ DropdownMenuTrigger.displayName = 'DropdownMenuTrigger';
 
 const DropdownMenuContent = React.forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & { align?: 'start' | 'center' | 'end'; sideOffset?: number }
->(({ className, align = 'end', sideOffset: _sideOffset, ...props }, ref) => {
+  React.HTMLAttributes<HTMLDivElement> & {
+    align?: 'start' | 'center' | 'end';
+    side?: 'top' | 'bottom' | 'left' | 'right';
+    sideOffset?: number;
+  }
+>(({ className, align = 'end', side = 'bottom', sideOffset = 8, style, ...props }, ref) => {
   const { open } = useDropdownMenu();
 
   if (!open) return null;
+
+  const isVertical = side === 'top' || side === 'bottom';
+
+  const sideClass =
+    side === 'bottom'
+      ? 'top-full'
+      : side === 'top'
+        ? 'bottom-full'
+        : side === 'right'
+          ? 'left-full'
+          : 'right-full';
+
+  const alignClass = isVertical
+    ? align === 'start'
+      ? 'left-0'
+      : align === 'center'
+        ? 'left-1/2 -translate-x-1/2'
+        : 'right-0'
+    : align === 'start'
+      ? 'top-0'
+      : align === 'center'
+        ? 'top-1/2 -translate-y-1/2'
+        : 'bottom-0';
+
+  const offsetStyle: React.CSSProperties =
+    side === 'bottom'
+      ? { marginTop: sideOffset }
+      : side === 'top'
+        ? { marginBottom: sideOffset }
+        : side === 'right'
+          ? { marginLeft: sideOffset }
+          : { marginRight: sideOffset };
 
   return (
     <div
       ref={ref}
       className={cn(
         'absolute z-50 min-w-[8rem] overflow-hidden rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-1 text-slate-950 dark:text-slate-100 shadow-md animate-in fade-in zoom-in-95',
-        align === 'end' ? 'right-0 mt-2' : 'left-0 mt-2',
+        sideClass,
+        alignClass,
         className
       )}
+      style={{ ...offsetStyle, ...style }}
       {...props}
     />
   );

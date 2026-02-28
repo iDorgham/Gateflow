@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Clock, CalendarDays, Ban } from "lucide-react";
 
-import { Card, RadioGroup, RadioGroupItem, Label, cn } from "@gate-access/ui";
+import { RadioGroup, RadioGroupItem, Label, cn } from "@gate-access/ui";
 
 export type AccessRule = "always" | "schedule" | "blocked";
 

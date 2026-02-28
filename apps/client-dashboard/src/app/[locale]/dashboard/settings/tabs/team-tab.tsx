@@ -5,30 +5,20 @@ import {
   Button,
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
-  CardTitle,
   Avatar,
   AvatarFallback,
-  AvatarImage,
   Badge,
-  Table,
 } from '@gate-access/ui';
 import { 
   Users, 
   UserPlus, 
   Trash2, 
   Mail, 
-  Shield, 
   ShieldCheck, 
   Clock, 
-  MoreVertical, 
   ShieldAlert,
-  Fingerprint,
-  ChevronRight,
   Info,
-  CheckCircle2,
-  Save
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
@@ -46,6 +36,7 @@ const ROLE_PERMISSIONS: Record<string, { icon: any; color: string }> = {
   OWNER: { icon: ShieldAlert, color: 'border-amber-500/30 text-amber-500 bg-amber-500/5' },
   WORKSPACE_ADMIN: { icon: ShieldCheck, color: 'border-primary/30 text-primary bg-primary/5' },
   TENANT_USER: { icon: Users, color: 'border-border text-muted-foreground bg-muted/10' },
+  RESIDENT: { icon: Users, color: 'border-emerald-500/30 text-emerald-500 bg-emerald-500/5' },
 };
 export function TeamTab({ members, currentUserId }: { members: TeamMember[]; currentUserId: string }) {
   const { t } = useTranslation('dashboard');

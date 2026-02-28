@@ -2,13 +2,11 @@
 
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
-import { Calendar, Clock, Users, Shield, AlertCircle, Info } from 'lucide-react';
+import { Users, Shield, AlertCircle, Info } from 'lucide-react';
 import { 
   Button, 
   Input, 
   Label, 
-  Card, 
-  Switch,
 } from '@gate-access/ui';
 
 export function OpenQRForm({ unitId }: { unitId: string }) {
@@ -51,8 +49,8 @@ export function OpenQRForm({ unitId }: { unitId: string }) {
 
       router.push(`/visitors/${data.id}`);
       router.refresh();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setLoading(false);
     }

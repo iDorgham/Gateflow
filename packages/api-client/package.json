@@ -10,9 +10,10 @@
   },
   "scripts": {
     "lint": "eslint src/",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc -p tsconfig.json"
   },
   "devDependencies": {
+    "@gate-access/config": "workspace:*",
     "typescript": "^5.9.3"
   }
 }

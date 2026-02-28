@@ -10,7 +10,7 @@
   },
   "scripts": {
     "lint": "eslint src/",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc -p tsconfig.json"
   },
   "peerDependencies": {
     "react": "^18.2.0",
@@ -24,6 +24,8 @@
     "@radix-ui/react-slot": "^1.2.4",
     "@radix-ui/react-switch": "^1.2.6",
     "@radix-ui/react-tabs": "^1.1.13",
+    "@radix-ui/react-scroll-area": "^1.2.2",
+    "@radix-ui/react-collapsible": "^1.1.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
@@ -31,6 +33,7 @@
     "tailwind-merge": "^2.6.1"
   },
   "devDependencies": {
+    "@gate-access/config": "workspace:*",
     "@types/react": "^18.3.28",
     "@types/react-dom": "^18.3.7",
     "autoprefixer": "^10.4.24",

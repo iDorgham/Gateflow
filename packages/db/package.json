@@ -18,7 +18,7 @@
     "db:migrate:create": "prisma migrate dev --create-only",
     "db:studio": "prisma studio",
     "lint": "eslint src/",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc -p tsconfig.json"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
@@ -26,6 +26,7 @@
     "date-fns": "^4.1.0"
   },
   "devDependencies": {
+    "@gate-access/config": "workspace:*",
     "prisma": "^5.22.0",
     "tsx": "^4.7.1",
     "typescript": "^5.9.3"

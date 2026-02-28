@@ -2,18 +2,14 @@
 
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
-import { Calendar, Clock, User, Phone, Mail, Check, AlertCircle } from 'lucide-react';
+import { User, Phone, Mail, AlertCircle } from 'lucide-react';
 import { 
   Button, 
   Input, 
   Label, 
-  Card, 
-  RadioGroup, 
-  RadioGroupItem,
   Tabs,
   TabsList,
   TabsTrigger,
-  TabsContent,
 } from '@gate-access/ui';
 
 export function VisitorForm({ unitId }: { unitId: string }) {
@@ -55,8 +51,8 @@ export function VisitorForm({ unitId }: { unitId: string }) {
 
       router.push(`/visitors/${data.id}`);
       router.refresh();
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setLoading(false);
     }
@@ -124,7 +120,7 @@ export function VisitorForm({ unitId }: { unitId: string }) {
         <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider">Access Rules</h3>
         <Tabs 
           value={formData.accessType} 
-          onValueChange={(val) => setFormData({ ...formData, accessType: val as any })}
+          onValueChange={(val) => setFormData({ ...formData, accessType: val as 'ONETIME' | 'DATERANGE' | 'RECURRING' })}
           className="w-full"
         >
           <TabsList className="grid grid-cols-3 w-full">

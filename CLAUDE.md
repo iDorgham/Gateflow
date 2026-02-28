@@ -40,6 +40,8 @@ Gate-Access/
 ## Essential Commands
 
 ```bash
+# Slash commands (Cursor): /ready (pre-dev), /run, /run all, /guide, /plan, /github, etc.
+
 # Install dependencies (pnpm ONLY — never npm or yarn)
 pnpm install
 
@@ -431,6 +433,7 @@ The Resident Portal introduces a new `RESIDENT` role allowing unit owners to sel
 
 | File | Description |
 |------|-------------|
+| `.cursor/commands/` | **Slash commands** — /run, /guide, /plan, /prompt, /github |
 | `docs/PRD_v5.0.md` | **Current** product requirements (5 apps, resident portal) |
 | `docs/PROJECT_STRUCTURE.md` | Detailed structure reference |
 | `docs/DEVELOPMENT_GUIDE.md` | Local setup and workspace guide |

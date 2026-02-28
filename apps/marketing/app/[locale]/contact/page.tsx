@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { getTranslation } from '../../../lib/i18n/get-translation';
 import type { Locale } from '../../../i18n-config';
 import { ContactForm } from '../../../components/contact-form';
-import { MessageSquare, Mail, Phone, MapPin, Globe } from 'lucide-react';
+import { MessageSquare, Mail, Phone, MapPin } from 'lucide-react';
 
 export async function generateMetadata({ params: { locale } }: { params: { locale: Locale } }): Promise<Metadata> {
   const { t } = await getTranslation(locale, 'navigation');

@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
 
   // Security: Only TENANT_ADMIN, TENANT_USER, or VISITOR (Scanner) can log overrides
   // Residents should not be able to log overrides for themselves.
-  if (claims.role === 'RESIDENT') {
+  if (claims.roleName?.toUpperCase() === 'RESIDENT') {
     return NextResponse.json({ error: 'Forbidden: Residents cannot log overrides' }, { status: 403 });
   }
 

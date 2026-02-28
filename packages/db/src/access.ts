@@ -1,5 +1,5 @@
-import { AccessRule, AccessRuleType } from '@prisma/client';
-import { format, parse, isWithinInterval, getDay } from 'date-fns';
+import { AccessRule } from '@prisma/client';
+import { format, getDay } from 'date-fns';
 
 export function isAccessAllowed(rule: AccessRule, now: Date = new Date()): { allowed: boolean; reason?: string } {
   const { type, startDate, endDate, recurringDays, startTime, endTime } = rule;

@@ -1,34 +1,27 @@
-import { describe, it, expect, mock, beforeEach } from 'bun:test';
-
-// Define mocks
-const mockSendMail = mock(() => Promise.resolve());
-const mockCreateTransport = mock(() => ({
-  sendMail: mockSendMail,
-}));
-
-// Mock nodemailer - this needs to happen before importing the module under test
-mock.module('nodemailer', () => {
-  return {
-    createTransport: mockCreateTransport,
-    default: {
-        createTransport: mockCreateTransport
-    }
-  };
-});
-
 describe('getTransporter', () => {
-  // Use let to store the imported module
   let emailModule: any;
+  let mockCreateTransport: any;
+  let mockSendMail: any;
 
   beforeEach(async () => {
-    // Dynamic import to ensure mock is applied
+    jest.resetModules();
+    mockSendMail = jest.fn(() => Promise.resolve());
+    mockCreateTransport = jest.fn(() => ({
+      sendMail: mockSendMail,
+    }));
+
+    jest.doMock('nodemailer', () => ({
+      createTransport: mockCreateTransport,
+      default: {
+        createTransport: mockCreateTransport,
+      },
+    }));
+
     emailModule = await import('./email');
-    emailModule.resetTransporter();
     process.env.SMTP_HOST = 'smtp.example.com';
     process.env.SMTP_PORT = '587';
     process.env.SMTP_USER = 'user';
     process.env.SMTP_PASS = 'pass';
-    // Clear mock calls
     mockCreateTransport.mockClear();
   });
 
@@ -53,14 +46,18 @@ describe('getTransporter', () => {
 
   it('should throw error if config is missing', () => {
     delete process.env.SMTP_HOST;
-    expect(() => emailModule.getTransporter()).toThrow('SMTP_HOST, SMTP_USER, and SMTP_PASS must be configured');
+    expect(() => emailModule.getTransporter()).toThrow(
+      'SMTP_HOST, SMTP_USER, and SMTP_PASS must be configured'
+    );
   });
 });
 
 describe('buildEmailHtml', () => {
   let emailModule: any;
+
   beforeEach(async () => {
-     emailModule = await import('./email');
+    jest.resetModules();
+    emailModule = await import('./email');
   });
 
   it('should generate HTML with recipient name and org name', () => {

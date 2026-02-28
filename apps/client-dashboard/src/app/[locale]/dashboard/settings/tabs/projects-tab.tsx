@@ -74,7 +74,7 @@ export function ProjectsTab({ projects: initial }: { projects: Project[] }) {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editName, setEditName] = useState('');
   const [isRenaming, setIsRenaming] = useState(false);
-  
+
   // Safe Delete State
   const [projectToDelete, setProjectToDelete] = useState<Project | null>(null);
   const [deleteConfirmationText, setDeleteConfirmationText] = useState('');
@@ -86,8 +86,6 @@ export function ProjectsTab({ projects: initial }: { projects: Project[] }) {
     });
   };
 
-
-
   const handleRename = async (id: string) => {
     if (!editName.trim()) return;
     setIsRenaming(true);
@@ -96,9 +94,13 @@ export function ProjectsTab({ projects: initial }: { projects: Project[] }) {
         method: 'PATCH',
         body: JSON.stringify({ name: editName.trim() }),
       });
-      
+
       let data = {};
-      try { data = await res.json(); } catch(e) {}
+      try {
+        data = await res.json();
+      } catch (e) {
+        // Ignore JSON parse errors from non-JSON responses
+      }
 
       if (res.ok) {
         setProjects((prev) =>
@@ -118,7 +120,12 @@ export function ProjectsTab({ projects: initial }: { projects: Project[] }) {
       }
     } catch (error: any) {
       console.error('[Rename Error]', error);
-      toast.error(t('settings.projects.errors.networkError', 'Network error. Please check connection.'));
+      toast.error(
+        t(
+          'settings.projects.errors.networkError',
+          'Network error. Please check connection.'
+        )
+      );
     } finally {
       setIsRenaming(false);
     }
@@ -128,14 +135,20 @@ export function ProjectsTab({ projects: initial }: { projects: Project[] }) {
     if (!projectToDelete) return;
     setIsDeleting(true);
     try {
-      const res = await csrfFetch(`/api/projects/${projectToDelete.id}`, { method: 'DELETE' });
-      
+      const res = await csrfFetch(`/api/projects/${projectToDelete.id}`, {
+        method: 'DELETE',
+      });
+
       let data = {};
-      try { data = await res.json(); } catch(e) {}
+      try {
+        data = await res.json();
+      } catch (e) {}
 
       if (res.ok) {
         setProjects((prev) => prev.filter((p) => p.id !== projectToDelete.id));
-        toast.success(t('settings.projects.success.purged', 'Project purged gracefully.'));
+        toast.success(
+          t('settings.projects.success.purged', 'Project purged gracefully.')
+        );
         setProjectToDelete(null);
         setDeleteConfirmationText('');
         refreshProjects();
@@ -143,12 +156,20 @@ export function ProjectsTab({ projects: initial }: { projects: Project[] }) {
         toast.error(
           (data as any).message ||
             (data as any).error ||
-            t('settings.projects.errors.deleteFailed', 'Failed to delete project')
+            t(
+              'settings.projects.errors.deleteFailed',
+              'Failed to delete project'
+            )
         );
       }
     } catch (error: any) {
       console.error('[Delete Error]', error);
-      toast.error(t('settings.projects.errors.networkError', 'Network error. Please check connection.'));
+      toast.error(
+        t(
+          'settings.projects.errors.networkError',
+          'Network error. Please check connection.'
+        )
+      );
     } finally {
       setIsDeleting(false);
     }
@@ -180,7 +201,11 @@ export function ProjectsTab({ projects: initial }: { projects: Project[] }) {
         )}
       </div>
 
-      <ProjectWizard open={showCreate} onOpenChange={setShowCreate} onSuccess={refreshProjects} />
+      <ProjectWizard
+        open={showCreate}
+        onOpenChange={setShowCreate}
+        onSuccess={refreshProjects}
+      />
 
       <div className="flex flex-col space-y-6">
         {projects.length === 0 ? (
@@ -202,7 +227,8 @@ export function ProjectsTab({ projects: initial }: { projects: Project[] }) {
                 className="mt-8 rounded-xl font-bold bg-primary text-primary-foreground gap-2 shadow-sm"
                 onClick={() => setShowCreate(true)}
               >
-                <Plus className="h-4 w-4" /> {t('settings.projects.newProject', 'New Project')}
+                <Plus className="h-4 w-4" />{' '}
+                {t('settings.projects.newProject', 'New Project')}
               </Button>
             </CardContent>
           </Card>
@@ -215,7 +241,11 @@ export function ProjectsTab({ projects: initial }: { projects: Project[] }) {
               {/* Image Section */}
               <div className="relative h-48 sm:h-auto sm:w-1/3 shrink-0 overflow-hidden bg-muted/30">
                 {project.coverUrl ? (
-                  <img src={project.coverUrl} alt={`${project.name} cover`} className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                  <img
+                    src={project.coverUrl}
+                    alt={`${project.name} cover`}
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
                 ) : (
                   <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-muted flex items-center justify-center">
                     <Layers className="h-12 w-12 text-primary/20" />
@@ -223,7 +253,11 @@ export function ProjectsTab({ projects: initial }: { projects: Project[] }) {
                 )}
                 {project.logoUrl && (
                   <div className="absolute bottom-4 left-4 h-16 w-16 rounded-2xl border-4 border-background bg-background shadow-lg overflow-hidden flex items-center justify-center">
-                    <img src={project.logoUrl} alt={`${project.name} logo`} className="h-full w-full object-cover" />
+                    <img
+                      src={project.logoUrl}
+                      alt={`${project.name} logo`}
+                      className="h-full w-full object-cover"
+                    />
                   </div>
                 )}
               </div>
@@ -246,8 +280,16 @@ export function ProjectsTab({ projects: initial }: { projects: Project[] }) {
                             disabled={isRenaming}
                             className="w-full max-w-md h-10 rounded-xl border border-primary/20 px-3 py-1 text-base font-bold focus:outline-none bg-background focus:ring-4 focus:ring-primary/10 shadow-sm"
                           />
-                          <button onClick={() => handleRename(project.id)} disabled={isRenaming} className="h-10 w-10 flex items-center justify-center rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shadow-sm">
-                            {isRenaming ? <Loader2 className="h-4 w-4 animate-spin" /> : <Check className="h-4 w-4" />}
+                          <button
+                            onClick={() => handleRename(project.id)}
+                            disabled={isRenaming}
+                            className="h-10 w-10 flex items-center justify-center rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shadow-sm"
+                          >
+                            {isRenaming ? (
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                            ) : (
+                              <Check className="h-4 w-4" />
+                            )}
                           </button>
                         </div>
                       ) : (
@@ -262,20 +304,22 @@ export function ProjectsTab({ projects: initial }: { projects: Project[] }) {
                           )}
                         </div>
                       )}
-                      
+
                       <div className="flex items-center gap-4 mt-4">
-                          <div className="flex items-center gap-1.5">
-                            <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse" />
-                            <CardDescription className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-                              {t('settings.projects.est', {
-                                date: new Date(project.createdAt).toLocaleDateString(
-                                  undefined,
-                                  { month: 'short', year: 'numeric' }
-                                ),
-                                defaultValue: `Est. ${new Date(project.createdAt).toLocaleDateString(undefined, { month: 'short', year: 'numeric' })}`,
-                              })}
-                            </CardDescription>
-                          </div>
+                        <div className="flex items-center gap-1.5">
+                          <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse" />
+                          <CardDescription className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                            {t('settings.projects.est', {
+                              date: new Date(
+                                project.createdAt
+                              ).toLocaleDateString(undefined, {
+                                month: 'short',
+                                year: 'numeric',
+                              }),
+                              defaultValue: `Est. ${new Date(project.createdAt).toLocaleDateString(undefined, { month: 'short', year: 'numeric' })}`,
+                            })}
+                          </CardDescription>
+                        </div>
                       </div>
                     </div>
 
@@ -321,18 +365,26 @@ export function ProjectsTab({ projects: initial }: { projects: Project[] }) {
                           <ScrollText className="h-4 w-4" />
                         </div>
                         <div className="flex flex-col">
-                          <span className="text-xl font-black text-foreground leading-none">{project._count.gates}</span>
-                          <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground/80 mt-1">{t('settings.projects.gates', 'Gates')}</span>
+                          <span className="text-xl font-black text-foreground leading-none">
+                            {project._count.gates}
+                          </span>
+                          <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground/80 mt-1">
+                            {t('settings.projects.gates', 'Gates')}
+                          </span>
                         </div>
                       </div>
-                      
+
                       <div className="flex items-center gap-3 bg-card border border-border rounded-xl p-3 px-4 shadow-sm group-hover:border-primary/20 transition-colors w-full sm:w-auto">
                         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
                           <QrCode className="h-4 w-4" />
                         </div>
                         <div className="flex flex-col">
-                          <span className="text-xl font-black text-foreground leading-none">{project._count.qrCodes}</span>
-                          <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground/80 mt-1">{t('settings.projects.keys', 'Keys')}</span>
+                          <span className="text-xl font-black text-foreground leading-none">
+                            {project._count.qrCodes}
+                          </span>
+                          <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground/80 mt-1">
+                            {t('settings.projects.keys', 'Keys')}
+                          </span>
                         </div>
                       </div>
 
@@ -341,8 +393,12 @@ export function ProjectsTab({ projects: initial }: { projects: Project[] }) {
                           <Building className="h-4 w-4" />
                         </div>
                         <div className="flex flex-col">
-                          <span className="text-xl font-black text-foreground leading-none">{project._count.units}</span>
-                          <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground/80 mt-1">Units</span>
+                          <span className="text-xl font-black text-foreground leading-none">
+                            {project._count.units}
+                          </span>
+                          <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground/80 mt-1">
+                            Units
+                          </span>
                         </div>
                       </div>
 
@@ -351,15 +407,25 @@ export function ProjectsTab({ projects: initial }: { projects: Project[] }) {
                           <Users className="h-4 w-4" />
                         </div>
                         <div className="flex flex-col">
-                          <span className="text-xl font-black text-foreground leading-none">{project._count.contacts}</span>
-                          <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground/80 mt-1">Contacts</span>
+                          <span className="text-xl font-black text-foreground leading-none">
+                            {project._count.contacts}
+                          </span>
+                          <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground/80 mt-1">
+                            Contacts
+                          </span>
                         </div>
                       </div>
                     </div>
 
                     <div className="w-full xl:w-auto shrink-0">
-                      <Button asChild className="w-full xl:w-auto px-8 rounded-xl font-black uppercase tracking-widest text-[10px] h-12 shadow-[0_0_20px_-5px_rgba(14,165,233,0)] hover:shadow-primary/30 transition-all group/btn">
-                        <a href={`/dashboard/projects/${project.id}`} className="flex items-center justify-center gap-2">
+                      <Button
+                        asChild
+                        className="w-full xl:w-auto px-8 rounded-xl font-black uppercase tracking-widest text-[10px] h-12 shadow-[0_0_20px_-5px_rgba(14,165,233,0)] hover:shadow-primary/30 transition-all group/btn"
+                      >
+                        <a
+                          href={`/dashboard/projects/${project.id}`}
+                          className="flex items-center justify-center gap-2"
+                        >
                           {t('settings.projects.accessNode', 'Dashboard')}
                           <ArrowRight className="h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
                         </a>
@@ -374,8 +440,8 @@ export function ProjectsTab({ projects: initial }: { projects: Project[] }) {
       </div>
 
       {/* Safe Delete Confirmation Modal */}
-      <Dialog 
-        open={!!projectToDelete} 
+      <Dialog
+        open={!!projectToDelete}
         onOpenChange={(open) => !open && setProjectToDelete(null)}
       >
         <DialogContent className="sm:max-w-md rounded-2xl border-border bg-background p-0 overflow-hidden">
@@ -383,16 +449,23 @@ export function ProjectsTab({ projects: initial }: { projects: Project[] }) {
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-destructive/20 mb-4 ring-8 ring-destructive/5">
               <Trash2 className="h-8 w-8 text-destructive" />
             </div>
-            <DialogTitle className="text-xl font-black text-foreground mb-2">Delete Project</DialogTitle>
+            <DialogTitle className="text-xl font-black text-foreground mb-2">
+              Delete Project
+            </DialogTitle>
             <DialogDescription className="text-sm font-medium text-muted-foreground/80 max-w-xs mx-auto">
-              This action cannot be undone. All unlinked gates and related resources will lose categorization.
+              This action cannot be undone. All unlinked gates and related
+              resources will lose categorization.
             </DialogDescription>
           </div>
-          
+
           <div className="p-6 space-y-4">
             <div className="space-y-2 text-center">
               <Label className="text-sm font-bold text-foreground">
-                Type <span className="text-destructive select-all font-mono bg-destructive/10 px-1.5 py-0.5 rounded">{projectToDelete?.name} delete</span> to confirm.
+                Type{' '}
+                <span className="text-destructive select-all font-mono bg-destructive/10 px-1.5 py-0.5 rounded">
+                  {projectToDelete?.name} delete
+                </span>{' '}
+                to confirm.
               </Label>
               <Input
                 value={deleteConfirmationText}
@@ -402,19 +475,32 @@ export function ProjectsTab({ projects: initial }: { projects: Project[] }) {
                 autoComplete="off"
               />
             </div>
-            
+
             <div className="flex gap-3 pt-4">
-              <Button type="button" variant="outline" className="flex-1 rounded-xl h-12 font-bold" onClick={() => setProjectToDelete(null)} disabled={isDeleting}>
+              <Button
+                type="button"
+                variant="outline"
+                className="flex-1 rounded-xl h-12 font-bold"
+                onClick={() => setProjectToDelete(null)}
+                disabled={isDeleting}
+              >
                 Cancel
               </Button>
-              <Button 
-                type="button" 
-                variant="destructive" 
-                className="flex-1 rounded-xl h-12 font-black tracking-wide" 
-                disabled={deleteConfirmationText !== `${projectToDelete?.name} delete` || isDeleting}
+              <Button
+                type="button"
+                variant="destructive"
+                className="flex-1 rounded-xl h-12 font-black tracking-wide"
+                disabled={
+                  deleteConfirmationText !==
+                    `${projectToDelete?.name} delete` || isDeleting
+                }
                 onClick={executeDelete}
               >
-                {isDeleting ? <Loader2 className="h-5 w-5 animate-spin mx-auto" /> : 'Delete'}
+                {isDeleting ? (
+                  <Loader2 className="h-5 w-5 animate-spin mx-auto" />
+                ) : (
+                  'Delete'
+                )}
               </Button>
             </div>
           </div>

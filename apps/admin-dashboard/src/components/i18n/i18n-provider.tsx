@@ -5,42 +5,42 @@ import { I18nextProvider } from 'react-i18next';
 import i18next from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { i18n, type Locale } from '@/lib/i18n/i18n-config';
+import enTranslations from '@gate-access/i18n/en';
+import arTranslations from '@gate-access/i18n/ar';
 
 // Pre-define translations for the client bundle. Only importing what's needed.
 const translations = {
-  en: { 
-    common: require('@gate-access/i18n/en').common,
-    nav: require('@gate-access/i18n/en').nav,
-    admin: require('@gate-access/i18n/en').admin,
-    dashboard: require('@gate-access/i18n/en').dashboard,
+  en: {
+    common: enTranslations.common,
+    nav: enTranslations.nav,
+    admin: enTranslations.admin,
+    dashboard: enTranslations.dashboard,
   },
-  'ar-EG': { 
-    common: require('@gate-access/i18n/ar').common,
-    nav: require('@gate-access/i18n/ar').nav,
-    admin: require('@gate-access/i18n/ar').admin,
-    dashboard: require('@gate-access/i18n/ar').dashboard,
+  'ar-EG': {
+    common: arTranslations.common,
+    nav: arTranslations.nav,
+    admin: arTranslations.admin,
+    dashboard: arTranslations.dashboard,
   },
 };
 
-i18next
-  .use(initReactI18next)
-  .init({
-    resources: translations,
-    lng: i18n.defaultLocale,
-    fallbackLng: i18n.defaultLocale,
-    supportedLngs: i18n.locales,
-    ns: ['common', 'nav', 'admin', 'dashboard'],
-    defaultNS: 'common',
-    interpolation: {
-      escapeValue: false, // react already safes from xss
-    },
-  });
+i18next.use(initReactI18next).init({
+  resources: translations,
+  lng: i18n.defaultLocale,
+  fallbackLng: i18n.defaultLocale,
+  supportedLngs: i18n.locales,
+  ns: ['common', 'nav', 'admin', 'dashboard'],
+  defaultNS: 'common',
+  interpolation: {
+    escapeValue: false, // react already safes from xss
+  },
+});
 
-export function I18nProvider({ 
-  children, 
-  locale 
-}: { 
-  children: React.ReactNode; 
+export function I18nProvider({
+  children,
+  locale,
+}: {
+  children: React.ReactNode;
   locale: Locale;
 }) {
   const [mounted, setMounted] = useState(false);

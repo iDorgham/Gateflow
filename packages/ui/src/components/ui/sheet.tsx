@@ -49,7 +49,7 @@ const SheetTrigger = React.forwardRef<
     <Comp
       ref={ref}
       className={className}
-      onClick={(e: any) => {
+      onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
         setOpen(!open);
         onClick?.(e);
       }}

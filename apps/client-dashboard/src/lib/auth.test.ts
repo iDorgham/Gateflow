@@ -1,3 +1,7 @@
+// Unmock jose and uncrypto to use real crypto for JWT tests
+jest.unmock('jose');
+jest.unmock('uncrypto');
+
 import {
   signAccessToken,
   verifyAccessToken,
@@ -7,16 +11,26 @@ import {
   getRefreshTokenExpiry,
   REFRESH_TOKEN_EXPIRY_DAYS,
 } from './auth';
-import { UserRole } from '@gate-access/types';
+import {
+  UserRole,
+  DEFAULT_PERMISSIONS,
+  BUILT_IN_ROLES,
+} from '@gate-access/types';
 
 // Set env before import resolves
 process.env.NEXTAUTH_SECRET = 'test-jwt-secret-must-be-long-enough-for-hmac256';
+
+const mockRole = (name: string) => ({
+  id: `role-${name}`,
+  name,
+  permissions: DEFAULT_PERMISSIONS[BUILT_IN_ROLES.ORG_ADMIN] ?? {},
+});
 
 describe('Access Token (JWT)', () => {
   const userId = 'cluser123';
   const email = 'test@example.com';
   const orgId = 'clorg456';
-  const role = UserRole.TENANT_ADMIN;
+  const role = mockRole(UserRole.TENANT_ADMIN);
 
   it('should sign and verify a valid access token', async () => {
     const token = await signAccessToken(userId, email, orgId, role);
@@ -27,13 +41,18 @@ describe('Access Token (JWT)', () => {
     expect(claims.sub).toBe(userId);
     expect(claims.email).toBe(email);
     expect(claims.orgId).toBe(orgId);
-    expect(claims.role).toBe(role);
+    expect(claims.roleName).toBe(role.name);
     expect(claims.iat).toBeDefined();
     expect(claims.exp).toBeDefined();
   });
 
   it('should include orgId as null for users without org', async () => {
-    const token = await signAccessToken(userId, email, null, UserRole.ADMIN);
+    const token = await signAccessToken(
+      userId,
+      email,
+      null,
+      mockRole(UserRole.ADMIN)
+    );
     const claims = await verifyAccessToken(token);
     expect(claims.orgId).toBeNull();
   });
@@ -48,13 +67,23 @@ describe('Access Token (JWT)', () => {
   it('should reject a token signed with different secret', async () => {
     // Save and swap secret
     const originalSecret = process.env.NEXTAUTH_SECRET;
-    process.env.NEXTAUTH_SECRET = 'secret-A-must-be-long-enough-for-hmac256-test';
+    process.env.NEXTAUTH_SECRET =
+      'secret-A-must-be-long-enough-for-hmac256-test';
 
     // We need to re-import to get fresh secret, but since it's already cached,
     // we test by creating a token string that looks valid but has wrong signature
     const fakeToken = [
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',
-      btoa(JSON.stringify({ sub: userId, email, role, orgId, iat: 0, exp: 999999999999 })),
+      btoa(
+        JSON.stringify({
+          sub: userId,
+          email,
+          role,
+          orgId,
+          iat: 0,
+          exp: 999999999999,
+        })
+      ),
       'invalid_signature_here',
     ].join('.');
 
@@ -109,7 +138,8 @@ describe('Refresh Token', () => {
 
   it('should set expiry 30 days from now', () => {
     const expiry = getRefreshTokenExpiry();
-    const expectedMs = Date.now() + REFRESH_TOKEN_EXPIRY_DAYS * 24 * 60 * 60 * 1000;
+    const expectedMs =
+      Date.now() + REFRESH_TOKEN_EXPIRY_DAYS * 24 * 60 * 60 * 1000;
 
     // Allow 1 second tolerance
     expect(Math.abs(expiry.getTime() - expectedMs)).toBeLessThan(1000);

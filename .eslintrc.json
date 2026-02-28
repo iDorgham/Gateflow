@@ -1,11 +1,1 @@
-{
-  "root": true,
-  "extends": [
-    "@gate-access/config/eslint",
-    "plugin:@typescript-eslint/recommended"
-  ],
-  "ignorePatterns": ["**/dist/**", "**/.next/**", "**/node_modules/**"],
-  "rules": {
-    "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }]
-  }
-}
+{"root":true,"extends":["./packages/config/eslintrc.cjs","plugin:@typescript-eslint/recommended"],"ignorePatterns":["**/dist/**","**/.next/**","**/node_modules/**"],"rules":{"@typescript-eslint/no-unused-vars":["warn",{"argsIgnorePattern":"^_"}],"@typescript-eslint/no-explicit-any":"warn","@typescript-eslint/no-var-requires":"warn","prefer-const":"warn","no-empty":"warn"}}

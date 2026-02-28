@@ -1005,6 +1005,7 @@
         "name": "Unit Name",
         "type": "Type",
         "residents": "Residents",
+        "linkedResident": "Linked Resident",
         "qrQuota": "QR Quota",
         "project": "Project",
         "actions": "Actions"
@@ -1028,6 +1029,11 @@
         "PENTHOUSE": "Penthouse",
         "COMMERCIAL": "Commercial"
       },
+      "linkResident": "Link Resident",
+      "unlinkResident": "Resident unlinked",
+      "noResidentLinked": "—",
+      "residentLinked": "Linked Resident",
+      "noResidentsAvailable": "No RESIDENT users in this organization. Invite one from Team settings.",
       "empty": "No units yet. Add your first unit.",
       "noMatch": "No units match your search",
       "success": {
@@ -1050,6 +1056,11 @@
       "expiredQRs": "Expired QR Codes",
       "noNotifications": "No new notifications",
       "viewAll": "View all QR codes"
+    },
+    "resident": {
+      "noUnitLinked": "No unit linked to your account",
+      "noUnitLinkedDesc": "Your account has the Resident role but is not linked to any unit yet. Please contact your organization administrator to link your account to a unit from the Units page.",
+      "backToLogin": "Back to login"
     }
   }
 }

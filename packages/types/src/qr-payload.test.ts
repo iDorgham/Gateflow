@@ -1,5 +1,3 @@
-import { describe, it, expect } from 'bun:test';
-import { z } from 'zod';
 import { QRPayloadSchema, SignedQRStringSchema } from './qr-payload';
 import { QRCodeType } from './qr';
 
@@ -29,12 +27,12 @@ describe('QRPayloadSchema', () => {
   });
 
   it('rejects invalid qrId (missing)', () => {
-    const { qrId, ...invalid } = validPayload;
+    const invalid = Object.fromEntries(Object.entries(validPayload).filter(([k]) => k !== 'qrId'));
     expect(QRPayloadSchema.safeParse(invalid).success).toBe(false);
   });
 
   it('rejects invalid organizationId (missing)', () => {
-    const { organizationId, ...invalid } = validPayload;
+    const invalid = Object.fromEntries(Object.entries(validPayload).filter(([k]) => k !== 'organizationId'));
     expect(QRPayloadSchema.safeParse(invalid).success).toBe(false);
   });
 

@@ -1,40 +1,36 @@
-import { describe, it, expect, mock, beforeEach, afterEach } from "bun:test";
-
 // Define mocks for Prisma methods
 const mockPrisma = {
   user: {
-    findFirst: mock(() => Promise.resolve(null)),
-    findMany: mock(() => Promise.resolve([])),
-    count: mock(() => Promise.resolve(0)),
+    findFirst: jest.fn(() => Promise.resolve(null)),
+    findMany: jest.fn(() => Promise.resolve([])),
+    count: jest.fn(() => Promise.resolve(0)),
   },
   organization: {
-    findFirst: mock(() => Promise.resolve(null)),
-    findUnique: mock(() => Promise.resolve(null)),
-    findMany: mock(() => Promise.resolve([])),
+    findFirst: jest.fn(() => Promise.resolve(null)),
+    findUnique: jest.fn(() => Promise.resolve(null)),
+    findMany: jest.fn(() => Promise.resolve([])),
   },
   gate: {
-    findFirst: mock(() => Promise.resolve(null)),
-    findMany: mock(() => Promise.resolve([])),
-    count: mock(() => Promise.resolve(0)),
+    findFirst: jest.fn(() => Promise.resolve(null)),
+    findMany: jest.fn(() => Promise.resolve([])),
+    count: jest.fn(() => Promise.resolve(0)),
   },
   qRCode: {
-    findFirst: mock(() => Promise.resolve(null)),
-    findMany: mock(() => Promise.resolve([])),
-    count: mock(() => Promise.resolve(0)),
+    findFirst: jest.fn(() => Promise.resolve(null)),
+    findMany: jest.fn(() => Promise.resolve([])),
+    count: jest.fn(() => Promise.resolve(0)),
   },
   scanLog: {
-    findMany: mock(() => Promise.resolve([])),
-    count: mock(() => Promise.resolve(0)),
+    findMany: jest.fn(() => Promise.resolve([])),
+    count: jest.fn(() => Promise.resolve(0)),
   },
 };
 
 // Mock the ./client module
-mock.module("./client", () => {
-  return {
-    prisma: mockPrisma,
-    db: mockPrisma, // Assuming db export is just prisma in client.ts
-  };
-});
+jest.mock('./client', () => ({
+  prisma: mockPrisma,
+  db: mockPrisma, // Assuming db export is just prisma in client.ts
+}));
 
 // Import the module under test AFTER mocking
 import { setOrganizationContext, getOrganizationContext, clearOrganizationContext, db } from "./tenant";
@@ -43,9 +39,11 @@ describe("Organization Context Isolation", () => {
   beforeEach(() => {
     clearOrganizationContext();
     // Reset mocks
-    Object.values(mockPrisma).forEach((model: any) => {
-      Object.values(model).forEach((fn: any) => {
-        if (fn.mock) fn.mockClear();
+    Object.values(mockPrisma).forEach((model) => {
+      Object.values(model).forEach((fn) => {
+        if (typeof fn === 'function') {
+          (fn as jest.Mock).mockClear();
+        }
       });
     });
   });

@@ -1,9 +1,16 @@
+import { redirect } from 'next/navigation';
 import { requireAuth } from '@/lib/dashboard-auth';
 import { getValidatedProjectId } from '@/lib/project-cookie';
 import { prisma } from '@gate-access/db';
 import { DashboardShell } from '@/components/dashboard/shell';
+// Alternative: use DashboardLayout for Linear/Vercel-style UI (mini header, command search, collapsible sidebars, AI+Tasks right panel):
+// import { DashboardLayout } from '@/components/dashboard/dashboard-layout';
 
 import { Locale } from '@/lib/i18n';
+
+function getRoleName(user: { role: { name: string } | string }): string {
+  return typeof user.role === 'object' ? user.role.name : user.role;
+}
 
 export default async function DashboardLayout({ 
   children,
@@ -13,6 +20,18 @@ export default async function DashboardLayout({
   params: { locale: Locale };
 }) {
   const { user, org, claims } = await requireAuth();
+
+  // RESIDENT guard: require linked unit to access dashboard
+  const roleName = claims.roleName ?? getRoleName(user);
+  if (roleName?.toUpperCase() === 'RESIDENT') {
+    const unit = await prisma.unit.findFirst({
+      where: { userId: user.id, deletedAt: null },
+      select: { id: true },
+    });
+    if (!unit) {
+      redirect(`/${params.locale}/no-unit-linked`);
+    }
+  }
 
   let projects: { id: string; name: string }[] = [];
   let currentProjectId: string | null = null;
@@ -40,6 +59,7 @@ export default async function DashboardLayout({
     hideGates = dbProjects.length > 0 && dbProjects.every(p => p._count.gates <= 1);
   }
 
+  // To use the new DashboardLayout (mini header, ⌘K search, collapsible sidebars, AI+Tasks panel), replace DashboardShell with DashboardLayout and pass the same props.
   return (
     <DashboardShell
       user={{ 

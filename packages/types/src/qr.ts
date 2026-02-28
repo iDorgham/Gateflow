@@ -6,6 +6,8 @@ export enum QRCodeType {
   SINGLE = 'SINGLE',
   RECURRING = 'RECURRING',
   PERMANENT = 'PERMANENT',
+  VISITOR = 'VISITOR',
+  OPEN = 'OPEN',
 }
 
 export interface QRCode {

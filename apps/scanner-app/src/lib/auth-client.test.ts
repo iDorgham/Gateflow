@@ -1,3 +1,5 @@
+import { describe, it, expect, jest, beforeEach } from '@jest/globals';
+
 /**
  * Unit tests for auth-client.ts
  *

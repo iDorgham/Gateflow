@@ -11,16 +11,27 @@
     "dev": "turbo dev",
     "lint": "turbo lint",
     "test": "turbo test",
-    "typecheck": "turbo typecheck"
+    "typecheck": "turbo typecheck",
+    "preflight": "turbo lint && turbo typecheck && turbo test",
+    "db:generate": "pnpm --filter @gate-access/db db:generate",
+    "db:studio": "pnpm --filter @gate-access/db db:studio",
+    "dev:client": "turbo dev --filter=client-dashboard",
+    "dev:admin": "turbo dev --filter=admin-dashboard",
+    "dev:scanner": "turbo dev --filter=scanner-app",
+    "dev:marketing": "turbo dev --filter=marketing"
   },
   "devDependencies": {
+    "@gate-access/config": "workspace:*",
     "@turbo/gen": "^1.13.4",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^20.19.33",
     "autoprefixer": "^10.4.24",
     "eslint": "^8.57.1",
     "prettier": "^3.8.1",
     "tailwindcss": "^3.4.19",
+    "tsx": "^4.7.0",
     "turbo": "^1.13.4",
-    "typescript": "^5.9.3"
+    "typescript": "5.3.3"
   },
   "packageManager": "pnpm@8.15.0",
   "engines": {

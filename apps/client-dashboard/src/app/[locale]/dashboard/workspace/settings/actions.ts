@@ -86,7 +86,9 @@ export async function createRoleAction(data: { name: string; description?: strin
 
     await prisma.role.create({
       data: {
-        ...validation.data,
+        name: validation.data.name,
+        description: validation.data.description ?? null,
+        permissions: validation.data.permissions,
         organizationId: claims.orgId,
         isBuiltIn: false,
       },

@@ -1,4 +1,15 @@
 import { Organization } from './organization';
+/** Role name constants for JWT/auth (matches Role.name in DB) */
+export const UserRole = {
+  ADMIN: 'ADMIN',
+  TENANT_ADMIN: 'TENANT_ADMIN',
+  TENANT_USER: 'TENANT_USER',
+  VISITOR: 'VISITOR',
+  RESIDENT: 'RESIDENT',
+} as const;
+
+export type UserRoleType = (typeof UserRole)[keyof typeof UserRole];
+
 export type Permission =
   | 'gates:manage'
   | 'qr:create'

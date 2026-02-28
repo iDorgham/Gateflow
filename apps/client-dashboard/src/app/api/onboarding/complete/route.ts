@@ -3,8 +3,6 @@ import { prisma } from '@gate-access/db';
 import { getSessionClaims } from '../../../../lib/auth-cookies';
 import { z } from 'zod';
 import { signAccessToken } from '../../../../lib/auth';
-// import { castUserRole } from '@/lib/types';
-import { cookies } from 'next/headers';
 
 const OnboardingCompleteSchema = z.object({
   name: z.string().min(2),
@@ -32,7 +30,11 @@ export async function POST(request: NextRequest) {
     if (!validation.success) {
       console.error('Validation Error:', validation.error.flatten());
       return NextResponse.json(
-        { success: false, message: 'Invalid request data', errors: validation.error.flatten() },
+        {
+          success: false,
+          message: 'Invalid request data',
+          errors: validation.error.flatten(),
+        },
         { status: 400 }
       );
     }
@@ -47,36 +49,38 @@ export async function POST(request: NextRequest) {
     }
 
     // 1. Transaction to create org, default project, and update user
-    const { org, user, defaultProject } = await prisma.$transaction(async (tx) => {
-      // Create organization
-      const org = await tx.organization.create({
-        data: {
-          name: orgName,
-          email: orgEmail,
-        },
-      });
+    const { org, user, defaultProject } = await prisma.$transaction(
+      async (tx) => {
+        // Create organization
+        const org = await tx.organization.create({
+          data: {
+            name: orgName,
+            email: orgEmail,
+          },
+        });
 
-      // Create default project for this org
-      const defaultProject = await tx.project.create({
-        data: {
-          name: orgName,
-          organizationId: org.id,
-        },
-      });
+        // Create default project for this org
+        const defaultProject = await tx.project.create({
+          data: {
+            name: orgName,
+            organizationId: org.id,
+          },
+        });
 
-      // Update user
-      const user = await tx.user.update({
-        where: { id: claims.sub },
-        data: {
-          name: name,
-          organizationId: org.id,
-          roleId: tenantAdminRole.id,
-        },
-        include: { role: true },
-      });
+        // Update user
+        const user = await tx.user.update({
+          where: { id: claims.sub },
+          data: {
+            name: name,
+            organizationId: org.id,
+            roleId: tenantAdminRole.id,
+          },
+          include: { role: true },
+        });
 
-      return { org, user, defaultProject };
-    });
+        return { org, user, defaultProject };
+      }
+    );
 
     // 2. Rotate access token to include the new orgId
     const newAccessToken = await signAccessToken(

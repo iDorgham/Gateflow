@@ -1,4 +1,6 @@
-// @ts-ignore
+import { describe, it, expect, jest, beforeEach } from '@jest/globals';
+
+// @ts-expect-error - Jest mock for global fetch
 global.fetch = jest.fn().mockImplementation(() =>
   Promise.resolve({
     ok: true,
@@ -6,14 +8,14 @@ global.fetch = jest.fn().mockImplementation(() =>
   })
 );
 
-import CryptoJS from 'crypto-js';
-
 const MOCK_TOKEN = 'mock_jwt_token_12345';
 
 const mockStore: Record<string, string> = {};
 
 jest.mock('expo-secure-store', () => ({
-  getItemAsync: jest.fn((key: string) => Promise.resolve(mockStore[key] ?? null)),
+  getItemAsync: jest.fn((key: string) =>
+    Promise.resolve(mockStore[key] ?? null)
+  ),
   setItemAsync: jest.fn((key: string, value: string) => {
     mockStore[key] = value;
     return Promise.resolve();
@@ -24,43 +26,88 @@ jest.mock('expo-secure-store', () => ({
   }),
 }));
 
-jest.mock('expo-crypto', () => ({
-  digestStringAsync: jest.fn((_algorithm: string, text: string) =>
-    Promise.resolve(`hashed_${text}`)
-  ),
-  getRandomBytesAsync: jest.fn((byteCount: number) => {
-    // Return deterministic but non-zero bytes for salt testing
-    const arr = new Uint8Array(byteCount);
-    for (let i = 0; i < byteCount; i++) {
-      arr[i] = (i + 1) % 256;
-    }
-    return Promise.resolve(arr);
-  }),
-  CryptoDigestAlgorithm: {
-    SHA256: 'SHA256',
-    SHA384: 'SHA384',
-    SHA512: 'SHA512',
-  },
-}));
+jest.mock('expo-crypto', () => {
+  // Keep randomness deterministic but vary per call so UUID uniqueness
+  // and key-derivation tests remain meaningful.
+  let callCounter = 0;
+
+  return {
+    digestStringAsync: jest.fn((_algorithm: string, text: string) =>
+      Promise.resolve(`hashed_${text}`)
+    ),
+    getRandomBytesAsync: jest.fn((byteCount: number) => {
+      callCounter += 1;
+      const arr = new Uint8Array(byteCount);
+      for (let i = 0; i < byteCount; i++) {
+        // Simple deterministic pattern that changes on each call.
+        arr[i] = (i + callCounter) % 256;
+      }
+      return Promise.resolve(arr);
+    }),
+    CryptoDigestAlgorithm: {
+      SHA256: 'SHA256',
+      SHA384: 'SHA384',
+      SHA512: 'SHA512',
+    },
+  };
+});
 
 const mockAsyncStore: Record<string, string> = {};
+let operationQueue: Array<() => void> = [];
 
-jest.mock('@react-native-async-storage/async-storage', () => {
-  return {
-    getItem: jest.fn((key: string) => Promise.resolve().then(() => mockAsyncStore[key] ?? null)),
-    setItem: jest.fn((key: string, value: string) => {
+function flushOperations(): Promise<void> {
+  return new Promise<void>((resolve) => {
+    const run = () => {
+      if (operationQueue.length > 0) {
+        const op = operationQueue.shift()!;
+        op();
+        if (operationQueue.length > 0) {
+          setImmediate(run);
+        } else {
+          resolve();
+        }
+      } else {
+        resolve();
+      }
+    };
+    run();
+  });
+}
+
+const asyncStorageMock = {
+  getItem: jest.fn(async (key: string): Promise<string | null> => {
+    let result: string | null = null;
+    operationQueue.push(() => {
+      result = mockAsyncStore[key] ?? null;
+    });
+    await flushOperations();
+    return result!;
+  }),
+  setItem: jest.fn(async (key: string, value: string): Promise<void> => {
+    operationQueue.push(() => {
       mockAsyncStore[key] = value;
-      return Promise.resolve();
-    }),
-    removeItem: jest.fn((key: string) => {
+    });
+    await flushOperations();
+  }),
+  removeItem: jest.fn(async (key: string): Promise<void> => {
+    operationQueue.push(() => {
       delete mockAsyncStore[key];
-      return Promise.resolve();
-    }),
-    clear: jest.fn(() => {
+    });
+    await flushOperations();
+  }),
+  clear: jest.fn(async (): Promise<void> => {
+    operationQueue.push(() => {
       Object.keys(mockAsyncStore).forEach((key) => delete mockAsyncStore[key]);
-      return Promise.resolve();
-    }),
-  };
+    });
+    await flushOperations();
+  }),
+};
+
+jest.mock('@react-native-async-storage/async-storage', () => asyncStorageMock);
+
+beforeEach(() => {
+  operationQueue = [];
+  Object.keys(mockAsyncStore).forEach((key) => delete mockAsyncStore[key]);
 });
 
 jest.mock('expo-network', () => ({
