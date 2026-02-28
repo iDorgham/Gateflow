@@ -18,6 +18,15 @@ model Organization {
   updatedAt DateTime @updatedAt
   deletedAt DateTime?
 
+  /// Visitor identity level: 0=name/phone only, 1=ID photo capture, 2=ID OCR (stub)
+  requiredIdentityLevel     Int       @default(0)
+  scanLogRetentionMonths    Int?      /// null = keep indefinitely
+  visitorHistoryRetentionMonths Int?
+  idArtifactRetentionMonths Int?
+  incidentRetentionMonths   Int?
+  maskResidentNameOnLandingPage Boolean @default(false)
+  showUnitOnLandingPage     Boolean   @default(true)
+
   users            User[]
   gates            Gate[]
   gateAssignments  GateAssignment[]
@@ -31,6 +40,7 @@ model Organization {
   residentLimits   ResidentLimit[]
   watchlistEntries WatchlistEntry[]
   incidents        Incident[]
+  scanAttachments  ScanAttachment[]
 
   @@index([deletedAt])
 }
@@ -130,6 +140,8 @@ model Gate {
   longitude            Float?
   locationRadiusMeters Int?
   locationEnforced     Boolean?  @default(false)
+  /// 0/1/2; null = use org default
+  requiredIdentityLevel Int?
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   deletedAt    DateTime?
@@ -176,11 +188,29 @@ model Incident {
   notes          String?
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
+  attachments    ScanAttachment[]
 
   @@index([organizationId])
   @@index([gateId])
   @@index([status])
   @@index([createdAt])
+}
+
+model ScanAttachment {
+  id             String       @id @default(cuid())
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId String
+  scanLog        ScanLog?     @relation(fields: [scanLogId], references: [id], onDelete: Cascade)
+  scanLogId      String?
+  incident       Incident?    @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+  incidentId     String?
+  type           String       /// id_front, id_back, etc.
+  contentBase64  String?      /// MVP: base64 image; future: storage key
+  createdAt      DateTime     @default(now())
+
+  @@index([organizationId])
+  @@index([scanLogId])
+  @@index([incidentId])
 }
 
 model QRCode {
@@ -226,6 +256,7 @@ model ScanLog {
   auditNotes Json?
   auditTrail Json[]
   incidents Incident[]
+  attachments ScanAttachment[]
 
   @@index([gateId])
   @@index([qrCodeId])
@@ -376,6 +407,7 @@ model Contact {
   company        String?
   phone          String?
   email          String?
+  avatarUrl      String?
   organization   Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId String
   createdAt      DateTime      @default(now())
@@ -392,6 +424,7 @@ model Unit {
   id             String        @id @default(cuid())
   name           String        // Matches unitNumber from spec
   type           UnitType
+  sizeSqm        Int?          // Unit size in square meters
   qrQuota        Int?          // Optional, falls back to organization defaults
   organization   Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId String

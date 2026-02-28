@@ -19,6 +19,9 @@ import {
   DialogFooter,
   Badge,
   Skeleton,
+  Avatar,
+  AvatarImage,
+  AvatarFallback,
 } from '@gate-access/ui';
 import { useTranslation } from 'react-i18next';
 import { Plus, Upload, Download, Search, Pencil, Trash2, Users } from 'lucide-react';
@@ -36,6 +39,7 @@ interface Contact {
   company: string | null;
   phone: string | null;
   email: string | null;
+  avatarUrl?: string | null;
   units: Unit[];
 }
 
@@ -250,6 +254,7 @@ export default function ContactsPage() {
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead className="w-14">{t('contacts.table.avatar', '')}</TableHead>
               <TableHead>{t('contacts.table.firstName', 'First Name')}</TableHead>
               <TableHead>{t('contacts.table.lastName', 'Last Name')}</TableHead>
               <TableHead>{t('contacts.table.birthday', 'Birthday')}</TableHead>
@@ -264,14 +269,14 @@ export default function ContactsPage() {
             {loading ? (
               Array.from({ length: 5 }).map((_, i) => (
                 <TableRow key={i}>
-                  {Array.from({ length: 8 }).map((_, j) => (
+                  {Array.from({ length: 9 }).map((_, j) => (
                     <TableCell key={j}><Skeleton className="h-4 w-full" /></TableCell>
                   ))}
                 </TableRow>
               ))
             ) : filtered.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={8} className="text-center py-12">
+                <TableCell colSpan={9} className="text-center py-12">
                   <div className="flex flex-col items-center gap-2 text-muted-foreground">
                     <Users className="h-8 w-8 opacity-30" />
                     <span className="text-sm">{search ? t('contacts.noMatch', 'No contacts match your search') : t('contacts.empty', 'No contacts yet. Add your first contact.')}</span>
@@ -281,6 +286,17 @@ export default function ContactsPage() {
             ) : (
               filtered.map((c) => (
                 <TableRow key={c.id}>
+                  <TableCell className="w-14">
+                    <Avatar className="h-9 w-9">
+                      {c.avatarUrl ? (
+                        <AvatarImage src={c.avatarUrl} alt={`${c.firstName} ${c.lastName}`} />
+                      ) : null}
+                      <AvatarFallback className="text-xs bg-muted">
+                        {c.firstName.charAt(0)}
+                        {c.lastName.charAt(0)}
+                      </AvatarFallback>
+                    </Avatar>
+                  </TableCell>
                   <TableCell className="font-medium">{c.firstName}</TableCell>
                   <TableCell>{c.lastName}</TableCell>
                   <TableCell className="text-sm text-muted-foreground">{c.birthday ?? '—'}</TableCell>

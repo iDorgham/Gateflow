@@ -20,6 +20,7 @@ import { verifyScanQR } from './src/lib/qr-verify';
 import { validateOnServer, type ScanResult, type LocationContext } from './src/lib/scanner';
 import { login, logout, getValidAccessToken } from './src/lib/auth-client';
 import { SupervisorOverride } from './src/components/SupervisorOverride';
+import { IDCaptureModal } from './src/components/IDCaptureModal';
 import { QueueStatus } from './src/components/QueueStatus';
 import {
   GateSelector,
@@ -64,6 +65,7 @@ type AppPhase = 'initializing' | 'login' | 'scanner';
 type ScannerPhase =
   | { phase: 'scanning' }
   | { phase: 'processing' }
+  | { phase: 'id_capture'; result: ScanResult }
   | { phase: 'decision'; result: ScanResult }
   | { phase: 'result'; result: ScanResult };
 
@@ -505,8 +507,12 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
     // Store qrData for history in case operator makes a decision
     lastRejectedQRData.current = qrData;
 
-    // Online success with scanId → show Pass/Deny decision dialog
-    setUi({ phase: 'decision', result });
+    const effectiveIdentityLevel = selectedGate?.requiredIdentityLevel ?? 0;
+    if (effectiveIdentityLevel >= 1 && result.scanId) {
+      setUi({ phase: 'id_capture', result });
+    } else {
+      setUi({ phase: 'decision', result });
+    }
   };
 
   // ── Supervisor override ───────────────────────────────────────────────────
@@ -607,7 +613,7 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
           {/* Decorative overlay — non-interactive */}
           <View style={styles.overlay} pointerEvents="none">
             <Text style={styles.scannerHeader}>GateFlow Scanner</Text>
-            <Viewfinder processing={ui.phase === 'processing' || ui.phase === 'decision'} />
+            <Viewfinder processing={ui.phase === 'processing' || ui.phase === 'decision' || ui.phase === 'id_capture'} />
             <Text style={styles.scannerHint}>
               {selectedGate ? `Gate: ${selectedGate.name}` : 'Select a gate to begin scanning'}
             </Text>
@@ -648,6 +654,16 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
               )}
             </Pressable>
           </View>
+
+          {/* ID capture (when gate requires identity level 1+) */}
+          {ui.phase === 'id_capture' && (
+            <IDCaptureModal
+              visible
+              scanLogId={ui.result.scanId!}
+              onSuccess={() => setUi({ phase: 'decision', result: ui.result })}
+              required
+            />
+          )}
 
           {/* Processing spinner */}
           {ui.phase === 'processing' && (

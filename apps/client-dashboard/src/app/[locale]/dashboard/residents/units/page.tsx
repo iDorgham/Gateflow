@@ -86,6 +86,7 @@ interface Unit {
   id: string;
   name: string;
   type: UnitType;
+  sizeSqm: number | null;
   qrQuota: number;
   projectId: string | null;
   projectName: string | null;
@@ -97,6 +98,7 @@ interface Unit {
 const emptyForm = () => ({
   name: '',
   type: 'STUDIO' as UnitType,
+  sizeSqm: null as number | null,
   qrQuota: 3,
   projectId: '',
   contactIds: [] as string[],
@@ -173,6 +175,7 @@ export default function UnitsPage() {
     setForm({
       name: unit.name,
       type: unit.type,
+      sizeSqm: unit.sizeSqm ?? null,
       qrQuota: unit.qrQuota,
       projectId: unit.projectId ?? '',
       contactIds: unit.contacts.map((c) => c.id),
@@ -207,6 +210,7 @@ export default function UnitsPage() {
         const payload = {
           name: form.name,
           type: form.type,
+          sizeSqm: form.sizeSqm ?? null,
           qrQuota: form.qrQuota,
           projectId: form.projectId || null,
           contactIds: form.contactIds,
@@ -386,6 +390,7 @@ export default function UnitsPage() {
             <TableRow>
               <TableHead>{t('units.table.name', 'Unit Name')}</TableHead>
               <TableHead>{t('units.table.type', 'Type')}</TableHead>
+              <TableHead>{t('units.table.size', 'Size')}</TableHead>
               <TableHead>{t('units.table.residents', 'Residents')}</TableHead>
               <TableHead>{t('units.table.linkedResident', 'Linked Resident')}</TableHead>
               <TableHead>{t('units.table.qrQuota', 'QR Quota')}</TableHead>
@@ -397,7 +402,7 @@ export default function UnitsPage() {
             {loading ? (
               Array.from({ length: 5 }).map((_, i) => (
                 <TableRow key={i}>
-                  {Array.from({ length: 7 }).map((_, j) => (
+                  {Array.from({ length: 8 }).map((_, j) => (
                     <TableCell key={j}>
                       <Skeleton className="h-4 w-full" />
                     </TableCell>
@@ -406,7 +411,7 @@ export default function UnitsPage() {
               ))
             ) : filtered.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={7} className="text-center py-12">
+                <TableCell colSpan={8} className="text-center py-12">
                   <div className="flex flex-col items-center gap-2 text-muted-foreground">
                     <Building className="h-8 w-8 opacity-30" />
                     <span className="text-sm">
@@ -425,6 +430,9 @@ export default function UnitsPage() {
                     <Badge variant="outline" className="text-xs">
                       {UNIT_TYPE_LABELS[u.type]}
                     </Badge>
+                  </TableCell>
+                  <TableCell className="text-sm text-muted-foreground">
+                    {u.sizeSqm != null ? `${u.sizeSqm} m²` : '—'}
                   </TableCell>
                   <TableCell>
                     <span className="text-sm">
@@ -526,6 +534,20 @@ export default function UnitsPage() {
                     </button>
                   ))}
                 </div>
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="sizeSqm">{t('units.form.sizeSqm', 'Size (m²)')}</Label>
+                <Input
+                  id="sizeSqm"
+                  type="number"
+                  min="1"
+                  placeholder={t('units.form.sizeSqmPlaceholder', 'Optional')}
+                  value={form.sizeSqm ?? ''}
+                  onChange={(e) => {
+                    const v = e.target.value;
+                    setForm({ ...form, sizeSqm: v === '' ? null : parseInt(v, 10) || null });
+                  }}
+                />
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="qrQuota">{t('units.form.qrQuota', 'QR Quota')}</Label>

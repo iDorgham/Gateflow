@@ -91,18 +91,18 @@ Checklist for **PLAN_core_security_v6**. Use with `/dev` and **PROGRESS_DASHBOAR
 **Prompt:** `PROMPT_core_security_v6_phase_6.md`  
 **Role:** SECURITY / MOBILE
 
-- [ ] **6.1** Load security context (gf-security, CONTRACTS, 00-gateflow-core)
-- [ ] **6.2** Identity level config: `requiredIdentityLevel` (0/1/2) on Organization or Gate; migration; default 0; dashboard/settings UI (auth, org scope)
-- [ ] **6.3** Artifact storage: table or storage keys for ID images (e.g. ScanAttachment/IncidentAttachment); POST attach, GET retrieve; org-scoped; no cross-org access
-- [ ] **6.4** Scanner Level 1 flow: when level 1 required, prompt ID capture; send image to backend; backend stores artifact, links to scan/incident; Level 2 stub if needed
-- [ ] **6.5** Retention settings: org-level (scanLogRetentionMonths, visitorHistoryRetentionMonths, idArtifactRetentionMonths, incidentRetentionMonths); dashboard form; document behavior + placeholder cleanup job/script
-- [ ] **6.6** Resident toggles (minimal): e.g. maskResidentNameOnLandingPage, showUnitOnLandingPage; expose in resident/org settings
-- [ ] **6.7** Tests: identity level 1 enforcement; artifact upload and org-scoped retrieval; cross-org GET fails; retention config read/write
-- [ ] **6.8** Docs: SECURITY_OVERVIEW (and PRD-aligned) for identity levels, artifact access, retention
-- [ ] **6.9** SuperDesign (optional): if scanner ID-capture adds new screens, run design draft first
-- [ ] **6.10** Quality: `pnpm turbo build`, `pnpm turbo test`, lint, typecheck; committed and pushed
+- [x] **6.1** Load security context (gf-security, CONTRACTS, 00-gateflow-core)
+- [x] **6.2** Identity level config: `requiredIdentityLevel` (0/1/2) on Organization or Gate; migration; default 0; dashboard/settings UI (auth, org scope)
+- [x] **6.3** Artifact storage: table or storage keys for ID images (e.g. ScanAttachment/IncidentAttachment); POST attach, GET retrieve; org-scoped; no cross-org access
+- [x] **6.4** Scanner Level 1 flow: when level 1 required, prompt ID capture; send image to backend; backend stores artifact, links to scan/incident; Level 2 stub if needed
+- [x] **6.5** Retention settings: org-level (scanLogRetentionMonths, visitorHistoryRetentionMonths, idArtifactRetentionMonths, incidentRetentionMonths); dashboard form; document behavior + placeholder cleanup job/script
+- [x] **6.6** Resident toggles (minimal): e.g. maskResidentNameOnLandingPage, showUnitOnLandingPage; expose in resident/org settings
+- [x] **6.7** Tests: identity level 1 enforcement; artifact upload and org-scoped retrieval; cross-org GET fails; retention config read/write
+- [x] **6.8** Docs: SECURITY_OVERVIEW (and PRD-aligned) for identity levels, artifact access, retention
+- [x] **6.9** SuperDesign (optional): if scanner ID-capture adds new screens, run design draft first
+- [x] **6.10** Quality: `pnpm turbo build`, `pnpm turbo test`, lint, typecheck; committed and pushed
 
-**Status:** Not started
+**Status:** Done
 
 ---
 
@@ -115,7 +115,7 @@ Checklist for **PLAN_core_security_v6**. Use with `/dev` and **PROGRESS_DASHBOAR
 | 3     | Done        | —                  |
 | 4     | Done        | —                  |
 | 5     | Done        | —                  |
-| 6     | Not started | After Phase 5      |
+| 6     | Done        | —                  |
 
 ---
 

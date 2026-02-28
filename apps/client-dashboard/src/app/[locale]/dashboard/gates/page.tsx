@@ -63,6 +63,7 @@ export default async function GatesPage({ params }: { params: { locale: Locale }
     longitude: gate.longitude ?? null,
     locationRadiusMeters: gate.locationRadiusMeters ?? null,
     locationEnforced: gate.locationEnforced ?? false,
+    requiredIdentityLevel: gate.requiredIdentityLevel ?? null,
   }));
 
   return (

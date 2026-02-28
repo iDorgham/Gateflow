@@ -75,6 +75,7 @@ export async function updateGate(
     longitude?: number | null;
     locationRadiusMeters?: number | null;
     locationEnforced?: boolean | null;
+    requiredIdentityLevel?: number | null;
   },
 ): Promise<Result> {
   try {
@@ -96,6 +97,7 @@ export async function updateGate(
       if (options.longitude !== undefined) data.longitude = options.longitude;
       if (options.locationRadiusMeters !== undefined) data.locationRadiusMeters = options.locationRadiusMeters;
       if (options.locationEnforced !== undefined) data.locationEnforced = options.locationEnforced;
+      if (options.requiredIdentityLevel !== undefined) data.requiredIdentityLevel = options.requiredIdentityLevel;
     }
 
     await prisma.gate.update({ where: { id: gateId }, data });

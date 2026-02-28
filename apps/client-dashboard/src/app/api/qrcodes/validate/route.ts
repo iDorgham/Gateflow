@@ -110,10 +110,20 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       });
     }
 
-    // Step 3 — Set tenant context for downstream DB helpers.
-    if (claims.orgId) {
-      setOrganizationContext({ organizationId: claims.orgId });
+    // Step 2.5 — Require organization (fail-closed: no org = no validate).
+    if (!claims.orgId) {
+      return json<QRValidateResponse>(
+        {
+          status: 'rejected',
+          reason: 'wrong_org',
+          message: 'Organization context required to validate QR codes',
+        },
+        403,
+      );
     }
+
+    // Step 3 — Set tenant context for downstream DB helpers.
+    setOrganizationContext({ organizationId: claims.orgId });
 
     // Step 4 — Parse & validate request body.
     const body = await request.json();
@@ -136,7 +146,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const payload = sigResult.payload;
 
     // Step 6 — Tenant isolation: QR orgId must match token orgId.
-    if (claims.orgId && payload.organizationId !== claims.orgId) {
+    if (payload.organizationId !== claims.orgId) {
       return json<QRValidateResponse>(
         {
           status: 'rejected',
@@ -167,7 +177,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     // Defense-in-depth: re-verify org on the DB row (prevents payload/DB desync).
-    if (claims.orgId && qrCode.organizationId !== claims.orgId) {
+    if (qrCode.organizationId !== claims.orgId) {
       return json<QRValidateResponse>(
         {
           status: 'rejected',
@@ -281,7 +291,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     // Step 11c — Location rule: when gate has locationEnforced, require device location within radius.
     const gateForLocation = await prisma.gate.findFirst({
-      where: { id: gateId, organizationId: claims.orgId ?? '', deletedAt: null },
+      where: { id: gateId, organizationId: claims.orgId, deletedAt: null },
       select: {
         latitude: true,
         longitude: true,
@@ -313,7 +323,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const visitorName = scanContext?.visitorName ?? null;
     const visitorPhone = scanContext?.visitorPhone ?? null;
     const visitorIdNumber = scanContext?.visitorIdNumber ?? null;
-    if (claims.orgId && (visitorName || visitorPhone || visitorIdNumber)) {
+    if (visitorName || visitorPhone || visitorIdNumber) {
       const entries = await getActiveWatchlist(claims.orgId);
       const match = findWatchlistMatch(entries, {
         name: visitorName,

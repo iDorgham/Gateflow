@@ -2,7 +2,7 @@
 
 import { useState, useTransition, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button, Input, Label, Checkbox } from '@gate-access/ui';
+import { Button, Input, Label, Checkbox, Select } from '@gate-access/ui';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
@@ -35,6 +35,7 @@ export interface GateWithStats {
   longitude?: number | null;
   locationRadiusMeters?: number | null;
   locationEnforced?: boolean | null;
+  requiredIdentityLevel?: number | null;
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -185,6 +186,9 @@ function EditGateModal({ gate, onClose }: { gate: GateWithStats; onClose: () => 
     gate.locationRadiusMeters != null ? String(gate.locationRadiusMeters) : ''
   );
   const [locationEnforced, setLocationEnforced] = useState<boolean>(gate.locationEnforced ?? false);
+  const [requiredIdentityLevel, setRequiredIdentityLevel] = useState<string>(
+    gate.requiredIdentityLevel != null ? String(gate.requiredIdentityLevel) : 'org'
+  );
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
@@ -200,11 +204,13 @@ function EditGateModal({ gate, onClose }: { gate: GateWithStats; onClose: () => 
       return setError(t('gates.modal.fields.locationRuleRequired', 'When location rule is on, latitude, longitude and radius (meters) are required.'));
     }
     startTransition(async () => {
+      const identityLevel = requiredIdentityLevel === 'org' ? null : parseInt(requiredIdentityLevel, 10);
       const result = await updateGate(gate.id, name.trim(), location.trim(), {
         latitude: lat ?? null,
         longitude: lon ?? null,
         locationRadiusMeters: radius ?? null,
         locationEnforced: locationEnforced ? true : false,
+        requiredIdentityLevel: identityLevel,
       });
       if (result?.success) {
         toast.success(t('gates.messages.updated', 'Gate updated'));
@@ -299,6 +305,21 @@ function EditGateModal({ gate, onClose }: { gate: GateWithStats; onClose: () => 
                 </div>
               </div>
             )}
+          </div>
+          <div className="border-t border-slate-200 dark:border-slate-700 pt-4 space-y-2">
+            <Label htmlFor="edit-identity">{t('gates.modal.fields.identityLevel', 'Visitor identity level')}</Label>
+            <Select
+              id="edit-identity"
+              value={requiredIdentityLevel}
+              onChange={(e) => setRequiredIdentityLevel(e.target.value)}
+              className="h-10"
+            >
+              <option value="org">{t('gates.modal.fields.identityLevelOrg', 'Use org default')}</option>
+              <option value="0">{t('gates.modal.fields.identityLevel0', 'Level 0 — Name & phone only')}</option>
+              <option value="1">{t('gates.modal.fields.identityLevel1', 'Level 1 — ID photo capture')}</option>
+              <option value="2">{t('gates.modal.fields.identityLevel2', 'Level 2 — ID OCR (coming soon)')}</option>
+            </Select>
+            <p className="text-xs text-slate-500">{t('gates.modal.fields.identityLevelHint', 'When Level 1+, scanner will prompt for ID capture after scan.')}</p>
           </div>
         </div>
         <div className="mt-6 flex gap-2">

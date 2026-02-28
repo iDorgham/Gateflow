@@ -12,6 +12,7 @@ const UpdateContactSchema = z.object({
   company: z.string().max(100).optional().nullable(),
   phone: z.string().max(30).optional().nullable(),
   email: z.string().email().optional().nullable(),
+  avatarUrl: z.string().url().optional().nullable(),
   unitIds: z.array(z.string()).optional(),
 });
 
@@ -68,6 +69,7 @@ export async function PATCH(
           ...(fields.company !== undefined ? { company: fields.company?.trim() ?? null } : {}),
           ...(fields.phone !== undefined ? { phone: fields.phone?.trim() ?? null } : {}),
           ...(fields.email !== undefined ? { email: fields.email?.trim() ?? null } : {}),
+          ...(fields.avatarUrl !== undefined ? { avatarUrl: fields.avatarUrl?.trim() ?? null } : {}),
         },
         include: {
           units: { include: { unit: { select: { id: true, name: true } } } },
@@ -85,6 +87,7 @@ export async function PATCH(
         company: updated.company,
         phone: updated.phone,
         email: updated.email,
+        avatarUrl: updated.avatarUrl ?? null,
         units: updated.units.map((cu) => ({ id: cu.unit.id, name: cu.unit.name })),
       },
     });

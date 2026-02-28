@@ -10,13 +10,12 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
   Badge,
+  Select,
+  Checkbox,
 } from '@gate-access/ui';
-import { updateWorkspaceSettingsAction } from '../../workspace/settings/actions';
-import { useTranslation, Trans } from 'react-i18next';
+import { updateWorkspaceSettingsAction, updateRetentionAndPrivacyAction } from '../../workspace/settings/actions';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { 
   Building2, 
@@ -26,10 +25,12 @@ import {
   ExternalLink, 
   AlertTriangle,
   Upload,
-  Copy,
   Info,
   Calendar,
-  Cloud
+  Cloud,
+  Shield,
+  Lock,
+  User
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -41,6 +42,13 @@ interface OrgData {
   plan: string;
   logoUrl?: string | null;
   createdAt: string;
+  requiredIdentityLevel?: number;
+  scanLogRetentionMonths?: number | null;
+  visitorHistoryRetentionMonths?: number | null;
+  idArtifactRetentionMonths?: number | null;
+  incidentRetentionMonths?: number | null;
+  maskResidentNameOnLandingPage?: boolean;
+  showUnitOnLandingPage?: boolean;
 }
 
 const PLAN_THEMES: Record<string, { badge: string; border: string; bg: string; text: string }> = {
@@ -64,6 +72,19 @@ const PLAN_THEMES: Record<string, { badge: string; border: string; bg: string; t
   }
 };
 
+const IDENTITY_LEVELS = [
+  { value: 0, label: 'Level 0 — Name & phone only' },
+  { value: 1, label: 'Level 1 — ID photo capture' },
+  { value: 2, label: 'Level 2 — ID OCR (coming soon)' },
+] as const;
+
+const RETENTION_OPTIONS = [
+  { value: 'indefinite', label: 'Keep indefinitely' },
+  { value: '6', label: '6 months' },
+  { value: '12', label: '12 months' },
+  { value: '24', label: '24 months' },
+];
+
 export function WorkspaceTab({ org }: { org: OrgData }) {
   const { t } = useTranslation('dashboard');
   const [name, setName] = useState(org.name);
@@ -72,6 +93,25 @@ export function WorkspaceTab({ org }: { org: OrgData }) {
   const [isPending, startTransition] = useTransition();
   const [isUploading, setIsUploading] = useState(false);
   const logoInputRef = useRef<HTMLInputElement>(null);
+
+  const [requiredIdentityLevel, setRequiredIdentityLevel] = useState(org.requiredIdentityLevel ?? 0);
+  const [scanLogRetentionMonths, setScanLogRetentionMonths] = useState<string>(
+    org.scanLogRetentionMonths != null ? String(org.scanLogRetentionMonths) : ''
+  );
+  const [visitorHistoryRetentionMonths, setVisitorHistoryRetentionMonths] = useState<string>(
+    org.visitorHistoryRetentionMonths != null ? String(org.visitorHistoryRetentionMonths) : ''
+  );
+  const [idArtifactRetentionMonths, setIdArtifactRetentionMonths] = useState<string>(
+    org.idArtifactRetentionMonths != null ? String(org.idArtifactRetentionMonths) : ''
+  );
+  const [incidentRetentionMonths, setIncidentRetentionMonths] = useState<string>(
+    org.incidentRetentionMonths != null ? String(org.incidentRetentionMonths) : ''
+  );
+  const [maskResidentNameOnLandingPage, setMaskResidentNameOnLandingPage] = useState(
+    org.maskResidentNameOnLandingPage ?? false
+  );
+  const [showUnitOnLandingPage, setShowUnitOnLandingPage] = useState(org.showUnitOnLandingPage ?? true);
+  const [retentionPending, setRetentionPending] = useState(false);
 
   const planTheme = PLAN_THEMES[org.plan] || PLAN_THEMES.FREE;
 
@@ -104,6 +144,23 @@ export function WorkspaceTab({ org }: { org: OrgData }) {
       }, 1500);
     }
   };
+
+  function handleSaveRetention() {
+    setRetentionPending(true);
+    updateRetentionAndPrivacyAction({
+      requiredIdentityLevel,
+      scanLogRetentionMonths: scanLogRetentionMonths ? parseInt(scanLogRetentionMonths, 10) : null,
+      visitorHistoryRetentionMonths: visitorHistoryRetentionMonths ? parseInt(visitorHistoryRetentionMonths, 10) : null,
+      idArtifactRetentionMonths: idArtifactRetentionMonths ? parseInt(idArtifactRetentionMonths, 10) : null,
+      incidentRetentionMonths: incidentRetentionMonths ? parseInt(incidentRetentionMonths, 10) : null,
+      maskResidentNameOnLandingPage,
+      showUnitOnLandingPage,
+    }).then((res) => {
+      setRetentionPending(false);
+      if (res.success) toast.success(t('settings.workspace.success.settingsSaved', 'Settings saved.'));
+      else toast.error(res.message || t('common.errors.generic', 'Operation failed.'));
+    });
+  }
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -197,6 +254,125 @@ export function WorkspaceTab({ org }: { org: OrgData }) {
                         {t('settings.workspace.domainNotice', 'Connect a custom SSL-secured domain to fully white-label your QR codes, guest portals, and automated communications.')}
                     </p>
                 </div>
+            </CardContent>
+          </Card>
+
+          {/* Privacy & Data Retention */}
+          <Card className="rounded-2xl border border-border bg-card shadow-sm overflow-hidden">
+            <CardHeader className="pb-4 pt-6 px-8 border-b border-border/50 bg-muted/5">
+              <CardTitle className="text-base font-bold uppercase tracking-tight flex items-center gap-2">
+                <Shield className="h-4 w-4 text-primary" />
+                {t('settings.workspace.privacyRetention', 'Privacy & Data Retention')}
+              </CardTitle>
+              <CardDescription className="text-xs">
+                {t('settings.workspace.privacyRetentionDesc', 'Visitor identity levels, retention policies, and resident-facing options. After X months, data is eligible for deletion per policy.')}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="p-8 space-y-8">
+              <div className="space-y-4">
+                <Label htmlFor="identity-level" className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60">
+                  {t('settings.workspace.identityLevel', 'Default visitor identity level')}
+                </Label>
+                <Select
+                  id="identity-level"
+                  value={String(requiredIdentityLevel)}
+                  onChange={(e) => setRequiredIdentityLevel(parseInt(e.target.value, 10))}
+                  className="h-11 rounded-xl"
+                >
+                  {IDENTITY_LEVELS.map((l) => (
+                    <option key={l.value} value={l.value}>{l.label}</option>
+                  ))}
+                </Select>
+                <p className="text-[10px] text-muted-foreground">
+                  {t('settings.workspace.identityLevelHint', 'Gates can override. Level 1 requires ID photo capture at scan.')}
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <Label className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60">
+                    {t('settings.workspace.scanLogRetention', 'Scan log retention (months)')}
+                  </Label>
+                  <Select
+                    id="scan-log-retention"
+                    value={scanLogRetentionMonths || 'indefinite'}
+                    onChange={(e) => setScanLogRetentionMonths(e.target.value === 'indefinite' ? '' : e.target.value)}
+                    className="h-11 rounded-xl"
+                  >
+                    {RETENTION_OPTIONS.map((o) => (
+                      <option key={o.value} value={o.value}>{o.label}</option>
+                    ))}
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="incident-retention" className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60">
+                    {t('settings.workspace.incidentRetention', 'Incident retention (months)')}
+                  </Label>
+                  <Select id="incident-retention" value={incidentRetentionMonths || 'indefinite'} onChange={(e) => setIncidentRetentionMonths(e.target.value === 'indefinite' ? '' : e.target.value)} className="h-11">
+                    {RETENTION_OPTIONS.map((o) => (
+                      <option key={o.value} value={o.value}>{o.label}</option>
+                    ))}
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="artifact-retention" className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60">
+                    {t('settings.workspace.idArtifactRetention', 'ID artifact retention (months)')}
+                  </Label>
+                  <Select id="artifact-retention" value={idArtifactRetentionMonths || 'indefinite'} onChange={(e) => setIdArtifactRetentionMonths(e.target.value === 'indefinite' ? '' : e.target.value)} className="h-11">
+                    {RETENTION_OPTIONS.map((o) => (
+                      <option key={o.value} value={o.value}>{o.label}</option>
+                    ))}
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="visitor-retention" className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60">
+                    {t('settings.workspace.visitorHistoryRetention', 'Visitor history retention (months)')}
+                  </Label>
+                  <Select id="visitor-retention" value={visitorHistoryRetentionMonths || 'indefinite'} onChange={(e) => setVisitorHistoryRetentionMonths(e.target.value === 'indefinite' ? '' : e.target.value)} className="h-11">
+                    {RETENTION_OPTIONS.map((o) => (
+                      <option key={o.value} value={o.value}>{o.label}</option>
+                    ))}
+                  </Select>
+                </div>
+              </div>
+
+              <div className="border-t border-border pt-6 space-y-4">
+                <Label className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60 flex items-center gap-2">
+                  <User className="h-3.5 w-3.5" />
+                  {t('settings.workspace.residentOptions', 'Resident-facing options')}
+                </Label>
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-center gap-2">
+                    <Checkbox
+                      id="maskResidentName"
+                      checked={maskResidentNameOnLandingPage}
+                      onCheckedChange={(c) => setMaskResidentNameOnLandingPage(!!c)}
+                    />
+                    <Label htmlFor="maskResidentName" className="cursor-pointer text-sm">
+                      {t('settings.workspace.maskResidentName', 'Mask resident name on guest landing page')}
+                    </Label>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Checkbox
+                      id="showUnitOnLanding"
+                      checked={showUnitOnLandingPage}
+                      onCheckedChange={(c) => setShowUnitOnLandingPage(!!c)}
+                    />
+                    <Label htmlFor="showUnitOnLanding" className="cursor-pointer text-sm">
+                      {t('settings.workspace.showUnitOnLanding', 'Show unit number on guest landing page')}
+                    </Label>
+                  </div>
+                </div>
+              </div>
+
+              <Button
+                onClick={handleSaveRetention}
+                disabled={retentionPending}
+                className="rounded-xl h-10 px-6 font-bold uppercase tracking-widest text-[10px] gap-2"
+              >
+                {retentionPending ? <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" /> : <Lock className="h-3.5 w-3.5" />}
+                {t('common.save', 'Save')}
+              </Button>
             </CardContent>
           </Card>
 

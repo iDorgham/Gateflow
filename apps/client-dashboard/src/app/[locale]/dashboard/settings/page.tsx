@@ -26,7 +26,22 @@ export default async function SettingsPage() {
     // Workspace
     prisma.organization.findFirst({
       where: { id: claims.orgId, deletedAt: null },
-      select: { id: true, name: true, email: true, domain: true, plan: true, logoUrl: true, createdAt: true },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        domain: true,
+        plan: true,
+        logoUrl: true,
+        createdAt: true,
+        requiredIdentityLevel: true,
+        scanLogRetentionMonths: true,
+        visitorHistoryRetentionMonths: true,
+        idArtifactRetentionMonths: true,
+        incidentRetentionMonths: true,
+        maskResidentNameOnLandingPage: true,
+        showUnitOnLandingPage: true,
+      },
     }),
     // Projects
     prisma.project.findMany({
@@ -124,6 +139,13 @@ export default async function SettingsPage() {
         logoUrl: org.logoUrl ?? null,
         domain: org.domain ?? '',
         createdAt: org.createdAt.toISOString(),
+        requiredIdentityLevel: org.requiredIdentityLevel ?? 0,
+        scanLogRetentionMonths: org.scanLogRetentionMonths ?? null,
+        visitorHistoryRetentionMonths: org.visitorHistoryRetentionMonths ?? null,
+        idArtifactRetentionMonths: org.idArtifactRetentionMonths ?? null,
+        incidentRetentionMonths: org.incidentRetentionMonths ?? null,
+        maskResidentNameOnLandingPage: org.maskResidentNameOnLandingPage ?? false,
+        showUnitOnLandingPage: org.showUnitOnLandingPage ?? true,
       }}
       projects={projects.map(p => {
         const uniqueContacts = new Set(

@@ -5,6 +5,9 @@
 
 import { prisma } from '@gate-access/db';
 
+/** Minimum digits for suffix match: avoids false positives from short substrings (e.g. "12" matching many numbers). */
+const MIN_PHONE_SUFFIX_DIGITS = 4;
+
 function normalize(s: string): string {
   return s.trim().toLowerCase().replace(/\s+/g, ' ');
 }
@@ -44,7 +47,11 @@ export function findWatchlistMatch(
     if (e.name && vName && normalize(e.name) === vName) return { entryId: e.id, matchedField: 'name' };
     if (e.phone && vPhone) {
       const ePhone = e.phone.replace(/\D/g, '');
-      if (ePhone === vPhone || ePhone.endsWith(vPhone) || vPhone.endsWith(ePhone)) return { entryId: e.id, matchedField: 'phone' };
+      // Exact match always allowed.
+      if (ePhone === vPhone) return { entryId: e.id, matchedField: 'phone' };
+      // Suffix match only when visitor supplied a meaningful suffix (last N digits): entry ends with visitor digits.
+      // Never use vPhone.endsWith(ePhone) — that would block legitimate users when a short watchlist entry matches many numbers.
+      if (vPhone.length >= MIN_PHONE_SUFFIX_DIGITS && ePhone.endsWith(vPhone)) return { entryId: e.id, matchedField: 'phone' };
     }
     if (e.idNumber && vId && normalize(e.idNumber) === vId) return { entryId: e.id, matchedField: 'idNumber' };
   }

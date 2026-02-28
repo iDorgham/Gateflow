@@ -9,6 +9,7 @@ import { UnitType } from '@gate-access/db';
 const UpdateUnitSchema = z.object({
   name: z.string().min(1).max(100).optional(),
   type: z.nativeEnum(UnitType).optional(),
+  sizeSqm: z.number().int().positive().optional().nullable(),
   qrQuota: z.number().int().positive().optional(),
   projectId: z.string().optional().nullable(),
   contactIds: z.array(z.string()).optional(),
@@ -98,6 +99,7 @@ export async function PATCH(
         data: {
           ...(fields.name !== undefined ? { name: fields.name.trim() } : {}),
           ...(fields.type !== undefined ? { type: fields.type } : {}),
+          ...(fields.sizeSqm !== undefined ? { sizeSqm: fields.sizeSqm ?? null } : {}),
           ...(fields.qrQuota !== undefined ? { qrQuota: fields.qrQuota } : {}),
           ...(fields.projectId !== undefined ? { projectId: fields.projectId ?? null } : {}),
           ...(userId !== undefined ? { userId: userId ?? null } : {}),
@@ -120,6 +122,7 @@ export async function PATCH(
         id: updated.id,
         name: updated.name,
         type: updated.type,
+        sizeSqm: updated.sizeSqm ?? null,
         qrQuota: updated.qrQuota,
         projectId: updated.projectId,
         projectName: updated.project?.name ?? null,

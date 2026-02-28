@@ -66,6 +66,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       company: c.company,
       phone: c.phone,
       email: c.email,
+      avatarUrl: c.avatarUrl ?? null,
       units: c.units.map((cu) => ({ id: cu.unit.id, name: cu.unit.name })),
     }));
 
@@ -85,6 +86,7 @@ const CreateContactSchema = z.object({
   company: z.string().max(100).optional().nullable(),
   phone: z.string().max(30).optional().nullable(),
   email: z.string().email().optional().nullable(),
+  avatarUrl: z.string().url().optional().nullable(),
   unitIds: z.array(z.string()).optional(),
 });
 
@@ -110,7 +112,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    const { firstName, lastName, birthday, company, phone, email, unitIds } = validation.data;
+    const { firstName, lastName, birthday, company, phone, email, avatarUrl, unitIds } = validation.data;
 
     const contact = await prisma.contact.create({
       data: {
@@ -120,6 +122,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         company: company?.trim() ?? null,
         phone: phone?.trim() ?? null,
         email: email?.trim() ?? null,
+        avatarUrl: avatarUrl?.trim() ?? null,
         organizationId: claims.orgId,
         units: unitIds?.length
           ? { create: unitIds.map((unitId) => ({ unitId })) }
@@ -140,6 +143,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         company: contact.company,
         phone: contact.phone,
         email: contact.email,
+        avatarUrl: contact.avatarUrl ?? null,
         units: contact.units.map((cu) => ({ id: cu.unit.id, name: cu.unit.name })),
       },
     }, { status: 201 });
