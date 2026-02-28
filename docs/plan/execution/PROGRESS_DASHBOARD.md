@@ -8,9 +8,9 @@
 
 | Item | Status |
 |------|--------|
-| **Plan** | core_security_v6 (Phases 1–3 done, 4–6 remaining) |
-| **Next phase** | **Phase 4** — Location rule (optional) |
-| **Last completed** | Phase 3 — Gate-assignment dashboard UI + scanner UX |
+| **Plan** | core_security_v6 (Phases 1–4 done, 5–6 remaining) |
+| **Next phase** | **Phase 5** — Watchlists, incidents & guard accountability |
+| **Last completed** | Phase 4 — Location rule (optional) |
 | **Branch** | master (keep pushed and clean before starting loop) |
 
 ---

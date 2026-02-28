@@ -50,8 +50,10 @@ jest.mock('@/lib/rate-limit', () => ({
   checkRateLimit: (...args: unknown[]) => mockCheckRateLimit(...args),
 }));
 
+const mockGateFindMany = jest.fn().mockResolvedValue([]);
 jest.mock('@gate-access/db', () => ({
   prisma: {
+    gate: { findMany: (...args: unknown[]) => mockGateFindMany(...args) },
     $transaction: (fn: (tx: unknown) => Promise<unknown>) => fn('mockTx'),
   },
 }));

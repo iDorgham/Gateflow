@@ -9,6 +9,7 @@ import { prisma, setOrganizationContext, clearOrganizationContext, isAccessAllow
 import { requireAuth, isNextResponse } from '../../../../lib/require-auth';
 import { checkRateLimit } from '../../../../lib/rate-limit';
 import { checkGateAssignment } from '../../../../lib/gate-assignment';
+import { checkLocationForGate } from '../../../../lib/location';
 
 // ─── Configuration ────────────────────────────────────────────────────────────
 
@@ -275,6 +276,36 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         { status: 'rejected', reason: 'denied', message: assignmentError },
         403,
       );
+    }
+
+    // Step 11c — Location rule: when gate has locationEnforced, require device location within radius.
+    const gateForLocation = await prisma.gate.findFirst({
+      where: { id: gateId, organizationId: claims.orgId ?? '', deletedAt: null },
+      select: {
+        latitude: true,
+        longitude: true,
+        locationRadiusMeters: true,
+        locationEnforced: true,
+      },
+    });
+    if (gateForLocation) {
+      const loc = scanContext;
+      const lat = loc?.latitude ?? (loc?.location && typeof (loc.location as { latitude?: number }).latitude === 'number' ? (loc.location as { latitude: number }).latitude : null);
+      const lon = loc?.longitude ?? (loc?.location && typeof (loc.location as { longitude?: number }).longitude === 'number' ? (loc.location as { longitude: number }).longitude : null);
+      const deviceLocation =
+        lat != null && lon != null ? { latitude: lat, longitude: lon } : null;
+      const locationResult = checkLocationForGate(gateForLocation, deviceLocation);
+      if (!locationResult.allowed) {
+        const msg = 'message' in locationResult ? locationResult.message : 'Scan only allowed at gate location.';
+        return json<QRValidateResponse>(
+          {
+            status: 'rejected',
+            reason: 'not_on_location',
+            message: msg,
+          },
+          403,
+        );
+      }
     }
 
     // Step 12 — Atomic transaction: re-check usage (TOCTOU guard), increment, log.

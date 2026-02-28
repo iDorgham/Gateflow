@@ -123,6 +123,10 @@ model Gate {
   projectId    String?
   isActive     Boolean       @default(true)
   lastAccessedAt DateTime?
+  latitude             Float?
+  longitude            Float?
+  locationRadiusMeters Int?
+  locationEnforced     Boolean?  @default(false)
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   deletedAt    DateTime?

@@ -11,6 +11,7 @@ import {
   orgHasAssignments,
   getUserAssignedGateIds,
 } from '@/lib/gate-assignment';
+import { checkLocationForGate } from '@/lib/location';
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
@@ -40,9 +41,42 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     const { scans } = validation.data;
+    const orgId = authResult.orgId;
+
+    // Location rule: when a gate has locationEnforced, reject scans without valid location or outside radius.
+    const gateIds = Array.from(new Set(scans.map((s) => s.gateId)));
+    const gates =
+      gateIds.length > 0 && orgId
+        ? await prisma.gate.findMany({
+            where: { id: { in: gateIds }, organizationId: orgId, deletedAt: null },
+            select: {
+              id: true,
+              latitude: true,
+              longitude: true,
+              locationRadiusMeters: true,
+              locationEnforced: true,
+            },
+          })
+        : [];
+    const gateMap = new Map(gates.map((g) => [g.id, g]));
+    const locationFailed: Array<{ id: string; error: string }> = [];
+    const scansPassingLocation = scans.filter((scan) => {
+      const gate = gateMap.get(scan.gateId);
+      if (!gate) return true; // Gate not in org or missing — let processBulkScans or downstream handle
+      const deviceLocation =
+        scan.latitude != null && scan.longitude != null
+          ? { latitude: scan.latitude, longitude: scan.longitude }
+          : null;
+      const result = checkLocationForGate(gate, deviceLocation);
+      if (!result.allowed) {
+        const errMsg = 'message' in result ? result.message : 'Scan only allowed at gate location.';
+        locationFailed.push({ id: scan.id, error: errMsg });
+        return false;
+      }
+      return true;
+    });
 
     // Gate–account assignment: when org uses assignments, operator must be assigned to every gate in the batch.
-    const orgId = authResult.orgId;
     if (orgId) {
       const hasAny = await orgHasAssignments(orgId);
       if (hasAny) {
@@ -50,7 +84,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
           authResult.sub,
           orgId
         );
-        const gateIdsInBatch = new Set(scans.map((s) => s.gateId));
+        const gateIdsInBatch = new Set(scansPassingLocation.map((s) => s.gateId));
         const unassigned = Array.from(gateIdsInBatch).filter(
           (id) => !assignedGateIds.has(id)
         );
@@ -88,14 +122,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     const results = await prisma.$transaction(async (tx) => {
-      return processBulkScans(scans, tx);
+      return processBulkScans(scansPassingLocation, tx);
     });
 
     const response = {
       success: true,
       synced: results.synced,
       conflicted: results.conflicted,
-      failed: results.failed,
+      failed: [...locationFailed, ...results.failed],
     };
 
     return NextResponse.json({

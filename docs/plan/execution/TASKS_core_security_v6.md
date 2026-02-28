@@ -53,17 +53,17 @@ Checklist for **PLAN_core_security_v6**. Use with `/dev` and **PROGRESS_DASHBOAR
 **Prompt:** `PROMPT_core_security_v6_phase_4.md`  
 **Role:** SECURITY
 
-- [ ] **4.1** Load security context (gf-security, CONTRACTS, 00-gateflow-core)
-- [ ] **4.2** Schema: add to Gate (or org): `latitude`, `longitude` (Float?), `locationRadiusMeters` (Int?), `locationEnforced` (Boolean? default false); migration
-- [ ] **4.3** Dashboard config: gate (or org) settings for coordinates, radius, enable/disable; auth + org scope
-- [ ] **4.4** API: scan + bulk-sync accept optional `latitude`/`longitude`; Zod validate; when `locationEnforced` true: require location, reject if missing or beyond radius (Haversine); clear error messages
-- [ ] **4.5** Scanner: request location permission; send lat/long in scan payload; show clear error when API rejects due to location
-- [ ] **4.6** Tests: inside radius → success; outside radius → rejected; no location when rule on → rejected; rule off → no enforcement
-- [ ] **4.7** Docs: update SECURITY_OVERVIEW (and scanner ops) for location rule, opt-in, “location unavailable” behavior
-- [ ] **4.8** Org scoping: all config and enforcement remain org-scoped
-- [ ] **4.9** Quality: `pnpm turbo build`, `pnpm turbo test`, lint, typecheck; committed and pushed
+- [x] **4.1** Load security context (gf-security, CONTRACTS, 00-gateflow-core)
+- [x] **4.2** Schema: add to Gate (or org): `latitude`, `longitude` (Float?), `locationRadiusMeters` (Int?), `locationEnforced` (Boolean? default false); migration
+- [x] **4.3** Dashboard config: gate (or org) settings for coordinates, radius, enable/disable; auth + org scope
+- [x] **4.4** API: scan + bulk-sync accept optional `latitude`/`longitude`; Zod validate; when `locationEnforced` true: require location, reject if missing or beyond radius (Haversine); clear error messages
+- [x] **4.5** Scanner: request location permission; send lat/long in scan payload; show clear error when API rejects due to location
+- [x] **4.6** Tests: inside radius → success; outside radius → rejected; no location when rule on → rejected; rule off → no enforcement
+- [x] **4.7** Docs: update SECURITY_OVERVIEW (and scanner ops) for location rule, opt-in, “location unavailable” behavior
+- [x] **4.8** Org scoping: all config and enforcement remain org-scoped
+- [x] **4.9** Quality: `pnpm turbo build`, `pnpm turbo test`, lint, typecheck; committed and pushed
 
-**Status:** Not started
+**Status:** Done
 
 ---
 
@@ -113,7 +113,7 @@ Checklist for **PLAN_core_security_v6**. Use with `/dev` and **PROGRESS_DASHBOAR
 | 1     | Done        | —                  |
 | 2     | Done        | —                  |
 | 3     | Done        | —                  |
-| 4     | Not started | Run `/dev` Phase 4 |
+| 4     | Done        | —                  |
 | 5     | Not started | After Phase 4      |
 | 6     | Not started | After Phase 5      |
 

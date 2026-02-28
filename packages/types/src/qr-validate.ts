@@ -7,6 +7,8 @@ export const QRValidateRequestSchema = z.object({
       gateId: z.string().optional(),
       deviceId: z.string().optional(),
       location: z.record(z.string(), z.unknown()).optional(),
+      latitude: z.number().min(-90).max(90).optional(),
+      longitude: z.number().min(-180).max(180).optional(),
     })
     .optional(),
 });
@@ -28,6 +30,7 @@ export const QRValidateRejectReason = z.enum([
   'rate_limited',
   'internal_error',
   'denied',
+  'not_on_location',
 ]);
 
 export type QRValidateRejectReason = z.infer<typeof QRValidateRejectReason>;

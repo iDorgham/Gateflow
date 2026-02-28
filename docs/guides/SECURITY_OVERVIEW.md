@@ -162,9 +162,11 @@ GateFlow adds a policy layer for scans:
   - APIs reject scans for gates the operator is not assigned to.
 
 - **Location rule (optional):**
-  - If enabled at org/gate level, scans must be performed near the gate coordinates (within configured radius).
-  - Scanner sends device location in scan context; server enforces distance.
-  - Errors are explicit (e.g., “Scan only allowed at gate location”).
+  - **Opt-in:** Enforcement is per gate; when `locationEnforced` is false, scans are not rejected for location.
+  - **Config:** Each gate can set latitude, longitude, and radius (meters). When enabled, the server accepts a scan only if the device location is within the radius (Haversine distance).
+  - **Scanner:** Sends device latitude/longitude in scan context when available (permissions and UX considered). If the API rejects due to location, the scanner shows a clear message (e.g. “Scanning is only allowed at the gate location. Enable device location or move closer to the gate.”).
+  - **Location unavailable or denied:** When the rule is on and the device does not send location (user denied permission or unavailable), the scan is **rejected** with a clear error; the scan is not queued for later sync as a success. Bulk-sync rejects individual scans that fail the location check for their gate.
+  - **APIs:** Single-scan validate (`POST /api/qrcodes/validate`) and bulk-sync (`POST /api/scans/bulk`) both enforce the location rule when the gate has it enabled; rejection reason is `not_on_location`.
 
 - **Gate hours & policies (future in v6 roadmap):**
   - Per‑gate operating hours and access rules (e.g. deliveries only during the day).

@@ -82,6 +82,7 @@ const mockQRCode = {
 };
 
 const mockFindUnique = jest.fn();
+const mockGateFindFirst = jest.fn();
 const mockScanLogCreate = jest.fn();
 const mockTransaction = jest.fn();
 
@@ -89,6 +90,9 @@ jest.mock('@gate-access/db', () => ({
   prisma: {
     qRCode: {
       findUnique: (...args: unknown[]) => mockFindUnique(...args),
+    },
+    gate: {
+      findFirst: (...args: unknown[]) => mockGateFindFirst(...args),
     },
     scanLog: {
       create: (...args: unknown[]) => mockScanLogCreate(...args),
@@ -188,6 +192,14 @@ describe.skip('POST /api/qrcodes/validate', () => {
 
     // Default: gate-assignment check passes (user allowed to scan at this gate).
     mockCheckGateAssignment.mockResolvedValue(null);
+
+    // Default: gate has no location rule (locationEnforced false).
+    mockGateFindFirst.mockResolvedValue({
+      latitude: null,
+      longitude: null,
+      locationRadiusMeters: null,
+      locationEnforced: false,
+    });
 
     // Default: DB returns a healthy QR record.
     mockFindUnique.mockResolvedValue({ ...mockQRCode });
@@ -495,5 +507,101 @@ describe.skip('POST /api/qrcodes/validate', () => {
 
     expect(res.status).toBe(400);
     expect(data.reason).toBe('invalid_format');
+  });
+
+  // ── Location rule ───────────────────────────────────────────────────────────
+
+  it('accepts scan when location rule is off (no location sent)', async () => {
+    mockGateFindFirst.mockResolvedValue({
+      latitude: 24.7136,
+      longitude: 46.6753,
+      locationRadiusMeters: 50,
+      locationEnforced: false,
+    });
+
+    const auth = await makeAuthHeader();
+    const signed = signQRPayload(makePayload(), QR_SECRET);
+    const res = await POST(
+      makeRequest({ qrPayload: signed, scanContext: { gateId: 'gate_test_789' } }, auth),
+    );
+    const data = await res.json();
+
+    expect(res.status).toBe(200);
+    expect(data.status).toBe('accepted');
+  });
+
+  it('rejects with not_on_location when location rule is on and no device location sent', async () => {
+    mockGateFindFirst.mockResolvedValue({
+      latitude: 24.7136,
+      longitude: 46.6753,
+      locationRadiusMeters: 50,
+      locationEnforced: true,
+    });
+
+    const auth = await makeAuthHeader();
+    const signed = signQRPayload(makePayload(), QR_SECRET);
+    const res = await POST(
+      makeRequest({ qrPayload: signed, scanContext: { gateId: 'gate_test_789' } }, auth),
+    );
+    const data = await res.json();
+
+    expect(res.status).toBe(403);
+    expect(data.status).toBe('rejected');
+    expect(data.reason).toBe('not_on_location');
+    expect(data.message).toMatch(/only allowed at gate location|Enable device location/i);
+  });
+
+  it('accepts scan when location rule is on and device is within radius', async () => {
+    mockGateFindFirst.mockResolvedValue({
+      latitude: 24.7136,
+      longitude: 46.6753,
+      locationRadiusMeters: 500,
+      locationEnforced: true,
+    });
+
+    const auth = await makeAuthHeader();
+    const signed = signQRPayload(makePayload(), QR_SECRET);
+    const res = await POST(
+      makeRequest({
+        qrPayload: signed,
+        scanContext: {
+          gateId: 'gate_test_789',
+          latitude: 24.714,
+          longitude: 46.676,
+        },
+      }, auth),
+    );
+    const data = await res.json();
+
+    expect(res.status).toBe(200);
+    expect(data.status).toBe('accepted');
+  });
+
+  it('rejects with not_on_location when location rule is on and device is outside radius', async () => {
+    mockGateFindFirst.mockResolvedValue({
+      latitude: 24.7136,
+      longitude: 46.6753,
+      locationRadiusMeters: 50,
+      locationEnforced: true,
+    });
+
+    const auth = await makeAuthHeader();
+    const signed = signQRPayload(makePayload(), QR_SECRET);
+    const res = await POST(
+      makeRequest({
+        qrPayload: signed,
+        scanContext: {
+          gateId: 'gate_test_789',
+          latitude: 30.0,
+          longitude: 31.0,
+        },
+      }, auth),
+    );
+    const data = await res.json();
+
+    expect(res.status).toBe(403);
+    expect(data.status).toBe('rejected');
+    expect(data.reason).toBe('not_on_location');
+    expect(data.message).toMatch(/only allowed at gate location|Move closer/i);
   });
 });
