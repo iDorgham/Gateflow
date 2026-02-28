@@ -234,16 +234,25 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       sortByVisitMetric
         ? [...data].sort((a, b) => {
             const dir = sortDir === 'desc' ? -1 : 1;
+            if (sort === 'lastVisitInRange') {
+              const aMissing = !a.lastVisitInRange;
+              const bMissing = !b.lastVisitInRange;
+              // Keep null/empty values at the end for both sort directions.
+              if (aMissing && bMissing) return 0;
+              if (aMissing) return 1;
+              if (bMissing) return -1;
+              return a.lastVisitInRange < b.lastVisitInRange
+                ? -dir
+                : a.lastVisitInRange > b.lastVisitInRange
+                  ? dir
+                  : 0;
+            }
             const aVal =
-              sort === 'lastVisitInRange'
-                ? (a.lastVisitInRange ?? '')
-                : sort === 'passesInRange'
+              sort === 'passesInRange'
                   ? (a.passesInRange ?? 0)
                   : (a.visitsInRange ?? 0);
             const bVal =
-              sort === 'lastVisitInRange'
-                ? (b.lastVisitInRange ?? '')
-                : sort === 'passesInRange'
+              sort === 'passesInRange'
                   ? (b.passesInRange ?? 0)
                   : (b.visitsInRange ?? 0);
             return aVal < bVal ? -dir : aVal > bVal ? dir : 0;
