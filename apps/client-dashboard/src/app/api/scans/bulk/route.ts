@@ -7,7 +7,10 @@ import { prisma } from '@gate-access/db';
 import { requireAuth, isNextResponse } from '@/lib/require-auth';
 import { checkRateLimit } from '@/lib/rate-limit';
 import { processBulkScans } from '@/lib/scans/bulk-sync';
-import { orgHasAssignments, getUserAssignedGateIds } from '@/lib/gate-assignment';
+import {
+  orgHasAssignments,
+  getUserAssignedGateIds,
+} from '@/lib/gate-assignment';
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
@@ -18,7 +21,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     try {
       body = await request.json();
     } catch {
-      return NextResponse.json({ success: false, message: 'Invalid JSON' }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: 'Invalid JSON' },
+        { status: 400 }
+      );
     }
 
     const validation = BulkScanRequestSchema.safeParse(body);
@@ -40,14 +46,20 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     if (orgId) {
       const hasAny = await orgHasAssignments(orgId);
       if (hasAny) {
-        const assignedGateIds = await getUserAssignedGateIds(authResult.sub, orgId);
+        const assignedGateIds = await getUserAssignedGateIds(
+          authResult.sub,
+          orgId
+        );
         const gateIdsInBatch = new Set(scans.map((s) => s.gateId));
-        const unassigned = [...gateIdsInBatch].filter((id) => !assignedGateIds.has(id));
+        const unassigned = Array.from(gateIdsInBatch).filter(
+          (id) => !assignedGateIds.has(id)
+        );
         if (unassigned.length > 0) {
           return NextResponse.json(
             {
               success: false,
-              message: 'You are not allowed to scan at one or more gates in this batch.',
+              message:
+                'You are not allowed to scan at one or more gates in this batch.',
               unassignedGateIds: unassigned,
             },
             { status: 403 }
@@ -60,7 +72,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const rl = await checkRateLimit(`bulk:${authResult.sub}`, 30, 60_000);
     if (!rl.allowed) {
       return NextResponse.json(
-        { success: false, message: 'Too many sync requests. Please try again later.' },
+        {
+          success: false,
+          message: 'Too many sync requests. Please try again later.',
+        },
         {
           status: 429,
           headers: {
@@ -68,7 +83,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
             'X-RateLimit-Limit': String(rl.limit),
             'X-RateLimit-Remaining': '0',
           },
-        },
+        }
       );
     }
 

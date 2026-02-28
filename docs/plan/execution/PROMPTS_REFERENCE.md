@@ -48,6 +48,7 @@ So the plan is created with security awareness, and each phase prompt explicitly
 
 **Additional constraints**
 - Prefer small, testable phases executable in one focused session.
+- **Preferred tool** in phase prompts may be set to **Cursor** (default), **Claude CLI**, **Gemini CLI**, **OpenCode CLI**, **Kiro CLI**, **Kilo CLI**, **Qwen CLI**, or **Multi-CLI**. Use Kiro CLI, Kilo CLI, or Qwen CLI when the phase is best run from that terminal CLI (e.g. free-tier agentic coding, large context). See `docs/guides/TOOL_AND_CLI_REFERENCE.md` and `.cursor/skills/multi-cli-cursor-workflow/SKILL.md`.
 - Add **Multi-CLI** only for phases that are complex or high-risk (per gf-planner and `AI_SKILLS_SUBAGENTS_RULES.md`).
 - Add **SuperDesign** only for phases that add or change UI.
 - Ensure acceptance criteria for security-related phases include checks for org scoping, soft deletes, QR signing, and (where relevant) auth/CSRF/rate limiting.

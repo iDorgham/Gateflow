@@ -13,7 +13,7 @@ GateFlow uses a shared set of docs, rules, skills, and agents across Cursor, CLI
   - `/ship`: Run remaining phases for a plan sequentially (internally chaining `/dev`), enforcing tests and quality gates.
   - `/guide`: Workspace guide — “what should I do now?”, next steps, recommended, critical, improvements; uses `.cursor/skills/gf-guide/SKILL.md` and can run in super‑power mode (follow plan, use hierarchy, run checks). Rule `.cursor/rules/02-gateflow-guide.mdc` adds pre‑flight before tasks and optional post‑task summary.
 - **Supporting commands** (defined in `.cursor/commands/` and documented in `.cursor/rules/01-gateflow-ai-workflow.mdc` and `docs/plan/guidelines/DEVELOPMENT_WORKFLOWS.md`):
-  - `/ready` (pre‑dev checks), `/github` (branch/commit/push), `/docs`, `/test`, `/perf`, `/security`, `/dept`, `/clis`, `/automate`.
+  - `/ready` (pre‑dev checks), `/github` (branch/commit/push), `/docs`, `/test`, `/perf`, `/security`, `/dept`, `/clis`, **`/clis team <seo|refactor|audit>`** (predefined CLI teams; see `docs/plan/learning/CLI_TEAMS.md`), `/automate`.
 
 **Primary references**
 
@@ -116,7 +116,7 @@ GateFlow uses a **subagent hierarchy** so every phase has a clear owner role sha
 
 ## 5. Multi‑IDE Adapter Guidance (Kiro, Antigravity, CLIs)
 
-**Tool and CLI choice:** For which task to use which tool (Cursor IDE, Claude CLI, Gemini CLI, Opencode CLI), see **`docs/guides/TOOL_AND_CLI_REFERENCE.md`**. It defines strengths, weaknesses, and a task-to-tool matrix for accurate suggestions and best results. The workspace guide (gf-guide) uses this reference when recommending a tool or CLI.
+**Tool and CLI choice:** The tool set includes **Cursor IDE**, **Claude CLI**, **Gemini CLI**, **Opencode CLI**, **Kiro CLI**, **Kilo CLI**, and **Qwen CLI**. For which task to use which tool (and for model/plan info), see **`docs/guides/TOOL_AND_CLI_REFERENCE.md`**. It defines strengths, weaknesses, a task-to-tool matrix, and user tools & plans for accurate suggestions and best results. The workspace guide (gf-guide) uses this reference when recommending a tool or CLI.
 
 Other tools should **not** re‑implement planning logic. Instead, they should treat these docs as the source of truth:
 

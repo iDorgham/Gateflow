@@ -40,6 +40,22 @@ When you say things like “I prefer short answers” or “always give me copy-
 
 ---
 
+## CLIs & plans (My tools)
+
+Tools and plans the guide can suggest when they match the task. Update this list if your setup changes.
+
+| Tool | Model / plan |
+|------|----------------|
+| **Kiro CLI** | qwen3-coder-next (free) |
+| **Kilo CLI** | MiniMax M2.5 (free) |
+| **Qwen CLI** | Qwen3 Coder 480B (free) |
+| **Cursor IDE** | $20 plan |
+| **Gemini CLI** (Antigravity) | $20 plan |
+| **Opencode CLI** | free |
+| **Claude CLI** | $20 plan |
+
+---
+
 ## Notes (free-form)
 
 Use this space for anything else you want the guide to remember (e.g. “I work mainly on client-dashboard,” “I prefer branch names like feat/xxx,” “Always mention PROMPTS_REFERENCE.md when talking about /plan”).

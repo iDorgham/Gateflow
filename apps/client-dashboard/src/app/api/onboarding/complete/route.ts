@@ -87,7 +87,11 @@ export async function POST(request: NextRequest) {
       user.id,
       user.email,
       user.organizationId, // Now has the org.id
-      user.role
+      {
+        id: user.role.id,
+        name: user.role.name,
+        permissions: user.role.permissions as Record<string, boolean>,
+      }
     );
 
     const response = NextResponse.json({

@@ -36,7 +36,10 @@ import { validateApiKey } from './api-key-auth';
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 function makeRequest(headers: Record<string, string> = {}): NextRequest {
-  return new NextRequest('http://localhost/api/test', { method: 'GET', headers });
+  return new NextRequest('http://localhost/api/test', {
+    method: 'GET',
+    headers,
+  });
 }
 
 const RAW_KEY = 'gf_test_api_key_0123456789abcdef';
@@ -67,21 +70,40 @@ describe('validateApiKey()', () => {
     const result = await validateApiKey(makeRequest());
 
     expect(result.success).toBe(false);
-    if (!result.success) expect(result.status).toBe(401);
+    const failure = result as {
+      success: false;
+      status: number;
+      message: string;
+    };
+    expect(failure.status).toBe(401);
   });
 
   it('returns 401 when Authorization header is not Bearer scheme', async () => {
-    const result = await validateApiKey(makeRequest({ authorization: 'Basic dGVzdA==' }));
+    const result = await validateApiKey(
+      makeRequest({ authorization: 'Basic dGVzdA==' })
+    );
 
     expect(result.success).toBe(false);
-    if (!result.success) expect(result.status).toBe(401);
+    const failure = result as {
+      success: false;
+      status: number;
+      message: string;
+    };
+    expect(failure.status).toBe(401);
   });
 
   it('returns 401 when the key value after Bearer is empty', async () => {
-    const result = await validateApiKey(makeRequest({ authorization: 'Bearer ' }));
+    const result = await validateApiKey(
+      makeRequest({ authorization: 'Bearer ' })
+    );
 
     expect(result.success).toBe(false);
-    if (!result.success) expect(result.status).toBe(401);
+    const failure = result as {
+      success: false;
+      status: number;
+      message: string;
+    };
+    expect(failure.status).toBe(401);
   });
 
   // ── DB lookup ───────────────────────────────────────────────────────────────
@@ -92,17 +114,24 @@ describe('validateApiKey()', () => {
     await validateApiKey(makeRequest({ authorization: `Bearer ${RAW_KEY}` }));
 
     expect(mockApiFindUnique).toHaveBeenCalledWith(
-      expect.objectContaining({ where: { keyHash: KEY_HASH } }),
+      expect.objectContaining({ where: { keyHash: KEY_HASH } })
     );
   });
 
   it('returns 401 when key hash is not found in the database', async () => {
     mockApiFindUnique.mockResolvedValue(null);
 
-    const result = await validateApiKey(makeRequest({ authorization: `Bearer ${RAW_KEY}` }));
+    const result = await validateApiKey(
+      makeRequest({ authorization: `Bearer ${RAW_KEY}` })
+    );
 
     expect(result.success).toBe(false);
-    if (!result.success) expect(result.status).toBe(401);
+    const failure = result as {
+      success: false;
+      status: number;
+      message: string;
+    };
+    expect(failure.status).toBe(401);
   });
 
   // ── Expiry ──────────────────────────────────────────────────────────────────
@@ -113,19 +142,26 @@ describe('validateApiKey()', () => {
       expiresAt: new Date(Date.now() - 1_000),
     });
 
-    const result = await validateApiKey(makeRequest({ authorization: `Bearer ${RAW_KEY}` }));
+    const result = await validateApiKey(
+      makeRequest({ authorization: `Bearer ${RAW_KEY}` })
+    );
 
     expect(result.success).toBe(false);
-    if (!result.success) {
-      expect(result.status).toBe(401);
-      expect(result.message).toMatch(/expired/i);
-    }
+    const failure = result as {
+      success: false;
+      status: number;
+      message: string;
+    };
+    expect(failure.status).toBe(401);
+    expect(failure.message).toMatch(/expired/i);
   });
 
   it('accepts a key whose expiresAt is exactly null (no expiry)', async () => {
     mockApiFindUnique.mockResolvedValue({ ...validKey, expiresAt: null });
 
-    const result = await validateApiKey(makeRequest({ authorization: `Bearer ${RAW_KEY}` }));
+    const result = await validateApiKey(
+      makeRequest({ authorization: `Bearer ${RAW_KEY}` })
+    );
 
     expect(result.success).toBe(true);
   });
@@ -137,17 +173,24 @@ describe('validateApiKey()', () => {
 
     const result = await validateApiKey(
       makeRequest({ authorization: `Bearer ${RAW_KEY}` }),
-      'SCAN_WRITE' as ApiScope,
+      'SCAN_WRITE' as ApiScope
     );
 
     expect(result.success).toBe(false);
-    if (!result.success) expect(result.status).toBe(403);
+    const failure = result as {
+      success: false;
+      status: number;
+      message: string;
+    };
+    expect(failure.status).toBe(403);
   });
 
   it('succeeds when no scope is required', async () => {
     mockApiFindUnique.mockResolvedValue(validKey);
 
-    const result = await validateApiKey(makeRequest({ authorization: `Bearer ${RAW_KEY}` }));
+    const result = await validateApiKey(
+      makeRequest({ authorization: `Bearer ${RAW_KEY}` })
+    );
 
     expect(result.success).toBe(true);
     if (result.success) {
@@ -161,7 +204,7 @@ describe('validateApiKey()', () => {
 
     const result = await validateApiKey(
       makeRequest({ authorization: `Bearer ${RAW_KEY}` }),
-      'QR_READ' as ApiScope,
+      'QR_READ' as ApiScope
     );
 
     expect(result.success).toBe(true);
@@ -181,7 +224,7 @@ describe('validateApiKey()', () => {
       expect.objectContaining({
         where: { id: KEY_ID },
         data: { lastUsedAt: expect.any(Date) },
-      }),
+      })
     );
   });
 });

@@ -28,12 +28,16 @@ class TokenAlreadyConsumedError extends Error {
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
-    const ip = request.ip ?? request.headers.get('x-forwarded-for') ?? 'unknown';
+    const ip =
+      request.ip ?? request.headers.get('x-forwarded-for') ?? 'unknown';
     const rl = await checkRateLimit(`refresh:${ip}`, 20, 60_000);
 
     if (!rl.allowed) {
       return NextResponse.json(
-        { success: false, message: 'Too many refresh attempts. Please try again later.' },
+        {
+          success: false,
+          message: 'Too many refresh attempts. Please try again later.',
+        },
         {
           status: 429,
           headers: {
@@ -41,7 +45,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
             'X-RateLimit-Limit': rl.limit.toString(),
             'X-RateLimit-Remaining': rl.remaining.toString(),
           },
-        },
+        }
       );
     }
 
@@ -51,7 +55,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     if (!validation.success) {
       return NextResponse.json(
         { success: false, message: 'Invalid request body' },
-        { status: 400 },
+        { status: 400 }
       );
     }
 
@@ -66,7 +70,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     if (!storedToken) {
       return NextResponse.json(
         { success: false, message: 'Invalid refresh token' },
-        { status: 401 },
+        { status: 401 }
       );
     }
 
@@ -79,8 +83,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         data: { revokedAt: new Date() },
       });
       return NextResponse.json(
-        { success: false, message: 'Token reuse detected — all sessions revoked' },
-        { status: 401 },
+        {
+          success: false,
+          message: 'Token reuse detected — all sessions revoked',
+        },
+        { status: 401 }
       );
     }
 
@@ -92,7 +99,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       });
       return NextResponse.json(
         { success: false, message: 'Refresh token expired' },
-        { status: 401 },
+        { status: 401 }
       );
     }
 
@@ -101,7 +108,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     if (user.deletedAt) {
       return NextResponse.json(
         { success: false, message: 'Account deactivated' },
-        { status: 401 },
+        { status: 401 }
       );
     }
 
@@ -147,8 +154,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     } catch (err) {
       if (err instanceof TokenAlreadyConsumedError) {
         return NextResponse.json(
-          { success: false, message: 'Token reuse detected — all sessions revoked' },
-          { status: 401 },
+          {
+            success: false,
+            message: 'Token reuse detected — all sessions revoked',
+          },
+          { status: 401 }
         );
       }
       throw err; // re-throw to the outer catch → 500
@@ -159,7 +169,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       user.id,
       user.email,
       user.organizationId,
-      user.role,
+      {
+        id: user.role.id,
+        name: user.role.name,
+        permissions: user.role.permissions as Record<string, boolean>,
+      }
     );
 
     const tokenResponse = {
@@ -189,7 +203,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     console.error('Refresh error:', error);
     return NextResponse.json(
       { success: false, message: 'Internal server error' },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

@@ -15,12 +15,16 @@ const SECURE = process.env.NODE_ENV === 'production';
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
-    const ip = request.ip ?? request.headers.get('x-forwarded-for') ?? 'unknown';
+    const ip =
+      request.ip ?? request.headers.get('x-forwarded-for') ?? 'unknown';
     const rl = await checkRateLimit(`login:${ip}`, 10, 60_000); // 10 requests per minute
-    
+
     if (!rl.allowed) {
       return NextResponse.json(
-        { success: false, message: 'Too many login attempts. Please try again later.' },
+        {
+          success: false,
+          message: 'Too many login attempts. Please try again later.',
+        },
         {
           status: 429,
           headers: {
@@ -79,7 +83,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       user.id,
       user.email,
       user.organizationId,
-      user.role
+      {
+        id: user.role.id,
+        name: user.role.name,
+        permissions: user.role.permissions as Record<string, boolean>,
+      }
     );
 
     // Issue refresh token and store in DB
