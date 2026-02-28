@@ -112,7 +112,12 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const now = new Date();
     const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000);
 
-    const [totalVisits, successCount, deniedCount, heatmapRaw, lastHourCount] = await Promise.all([
+    const attributedFilter = {
+      ...scanFilter,
+      qrCode: { ...scanFilter.qrCode, utmCampaign: { not: null } },
+    };
+
+    const [totalVisits, successCount, deniedCount, heatmapRaw, lastHourCount, attributedScans] = await Promise.all([
       prisma.scanLog.count({ where: scanFilter }),
       prisma.scanLog.count({ where: { ...scanFilter, status: 'SUCCESS' } }),
       prisma.scanLog.count({ where: { ...scanFilter, status: 'DENIED' } }),
@@ -123,6 +128,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
           scannedAt: { gte: oneHourAgo, lte: now },
         },
       }),
+      prisma.scanLog.count({ where: attributedFilter }),
     ]);
 
     const passRate = totalVisits > 0 ? Math.round((successCount / totalVisits) * 100) : 0;
@@ -152,7 +158,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       peakHour,
       uniqueVisitors: -1,
       deniedCount,
-      attributedScans: 0,
+      attributedScans,
       lastHourCount,
       hourlyAvg,
     };

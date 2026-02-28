@@ -7,3 +7,8 @@ export { AnalyticsApplyFiltersButton } from './AnalyticsApplyFiltersButton';
 export { AnalyticsHeatmapChart } from './AnalyticsHeatmapChart';
 export { AnalyticsAnomalyCards } from './AnalyticsAnomalyCards';
 export { AnalyticsOperatorLeaderboard } from './AnalyticsOperatorLeaderboard';
+export { AnalyticsFunnelChart } from './AnalyticsFunnelChart';
+export { AnalyticsCampaignBarChart } from './AnalyticsCampaignBarChart';
+export { AnalyticsPersonaPie } from './AnalyticsPersonaPie';
+export { AnalyticsROIWidget } from './AnalyticsROIWidget';
+export { AnalyticsAudienceExportButton } from './AnalyticsAudienceExportButton';

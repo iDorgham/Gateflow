@@ -41,17 +41,17 @@ Checklist for **PLAN_analytics_dashboard**. Use with `/dev` and phase prompts.
 
 ## Phase 3 — Marketing View Depth
 
-- [ ] **3.1** UTM schema on QRCode (if needed)
-- [ ] **3.2** `/api/analytics/funnel` endpoint
-- [ ] **3.3** `/api/analytics/campaigns` endpoint
-- [ ] **3.4** Funnel chart
-- [ ] **3.5** Campaign bar chart
-- [ ] **3.6** Persona/tag pie (stub)
-- [ ] **3.7** ROI calculator widget
-- [ ] **3.8** Audience export (CSV, injection-safe)
-- [ ] **3.9** Lint, typecheck, tests pass; committed
+- [x] **3.1** UTM schema on QRCode (if needed)
+- [x] **3.2** `/api/analytics/funnel` endpoint
+- [x] **3.3** `/api/analytics/campaigns` endpoint
+- [x] **3.4** Funnel chart
+- [x] **3.5** Campaign bar chart
+- [x] **3.6** Persona/tag pie (stub)
+- [x] **3.7** ROI calculator widget
+- [x] **3.8** Audience export (CSV, injection-safe)
+- [x] **3.9** Lint, typecheck, tests pass; committed
 
-**Status:** Not started
+**Status:** Complete
 
 ---
 

@@ -6,11 +6,15 @@ import {
   AnalyticsFilterBar,
   AnalyticsModeToggle,
   AnalyticsKPICards,
-  AnalyticsChartPlaceholder,
   AnalyticsApplyFiltersButton,
   AnalyticsHeatmapChart,
   AnalyticsAnomalyCards,
   AnalyticsOperatorLeaderboard,
+  AnalyticsFunnelChart,
+  AnalyticsCampaignBarChart,
+  AnalyticsPersonaPie,
+  AnalyticsROIWidget,
+  AnalyticsAudienceExportButton,
   type KPIData,
 } from '@/components/dashboard/analytics';
 import { useAnalyticsFilters, useAnalyticsSummary } from '@/lib/analytics';
@@ -40,10 +44,11 @@ export function AnalyticsClient({ kpiData, gates = [] }: AnalyticsClientProps) {
     : kpiData;
 
   const isSecurity = filters.mode === 'security';
+  const attributedScans = kpiDataToUse?.attributedScans ?? 0;
 
   return (
     <div className="space-y-6">
-      {/* Header: title, mode toggle, print */}
+      {/* Header: title, mode toggle, export (Marketing), print */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
@@ -54,6 +59,9 @@ export function AnalyticsClient({ kpiData, gates = [] }: AnalyticsClientProps) {
           </p>
         </div>
         <div className="flex items-center gap-3">
+          {!isSecurity && (
+            <AnalyticsAudienceExportButton filters={filters} />
+          )}
           <AnalyticsModeToggle mode={filters.mode} onModeChange={setMode} />
           <PrintButton />
         </div>
@@ -72,7 +80,7 @@ export function AnalyticsClient({ kpiData, gates = [] }: AnalyticsClientProps) {
       {/* Anomaly cards (Security mode only) */}
       {isSecurity && <AnalyticsAnomalyCards summary={summary ?? undefined} />}
 
-      {/* Main charts: 60/40 split */}
+      {/* Main charts: Security = heatmap + leaderboard; Marketing = funnel + campaign bar + ROI + persona */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
         {isSecurity ? (
           <>
@@ -86,10 +94,14 @@ export function AnalyticsClient({ kpiData, gates = [] }: AnalyticsClientProps) {
         ) : (
           <>
             <div className="lg:col-span-7">
-              <AnalyticsChartPlaceholder mode={filters.mode} className="min-h-[320px]" />
+              <AnalyticsFunnelChart filters={filters} className="min-h-[320px]" />
             </div>
-            <div className="lg:col-span-5">
-              <AnalyticsChartPlaceholder mode={filters.mode} className="min-h-[280px]" />
+            <div className="lg:col-span-5 space-y-4">
+              <AnalyticsCampaignBarChart filters={filters} className="min-h-[200px]" />
+              <AnalyticsROIWidget attributedScans={attributedScans} />
+            </div>
+            <div className="lg:col-span-12 lg:col-start-1">
+              <AnalyticsPersonaPie className="min-h-[200px]" />
             </div>
           </>
         )}
