@@ -6,8 +6,14 @@ import { prisma } from '@gate-access/db';
 export const dynamic = 'force-dynamic';
 
 const QuerySchema = z.object({
-  dateFrom: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-  dateTo: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  dateFrom: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
+  dateTo: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
   projectId: z.string().optional().default(''),
   gateId: z.string().optional().default(''),
   unitType: z.string().optional().default(''),
@@ -25,7 +31,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized' },
+        { status: 401 }
+      );
     }
     const orgId = claims.orgId;
 
@@ -40,10 +49,14 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     });
 
     if (!parsed.success) {
-      return NextResponse.json({ success: false, message: 'Invalid query params' }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: 'Invalid query params' },
+        { status: 400 }
+      );
     }
 
-    const { dateFrom, dateTo, projectId, gateId, unitType, search } = parsed.data;
+    const { dateFrom, dateTo, projectId, gateId, unitType, search } =
+      parsed.data;
 
     if (projectId) {
       const proj = await prisma.project.findFirst({
@@ -51,7 +64,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         select: { id: true },
       });
       if (!proj) {
-        return NextResponse.json({ success: false, message: 'Invalid project' }, { status: 400 });
+        return NextResponse.json(
+          { success: false, message: 'Invalid project' },
+          { status: 400 }
+        );
       }
     }
     if (gateId) {
@@ -66,7 +82,12 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       });
       if (!gate) {
         return NextResponse.json(
-          { success: false, message: projectId ? 'Gate must belong to the selected project' : 'Invalid gate' },
+          {
+            success: false,
+            message: projectId
+              ? 'Gate must belong to the selected project'
+              : 'Invalid gate',
+          },
           { status: 400 }
         );
       }
@@ -78,7 +99,20 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
             units: {
               some: {
                 unit: {
-                  ...(unitType ? { type: unitType as 'STUDIO' | 'ONE_BR' | 'TWO_BR' | 'THREE_BR' | 'FOUR_BR' | 'VILLA' | 'PENTHOUSE' | 'COMMERCIAL' } : {}),
+                  organizationId: orgId,
+                  ...(unitType
+                    ? {
+                        type: unitType as
+                          | 'STUDIO'
+                          | 'ONE_BR'
+                          | 'TWO_BR'
+                          | 'THREE_BR'
+                          | 'FOUR_BR'
+                          | 'VILLA'
+                          | 'PENTHOUSE'
+                          | 'COMMERCIAL',
+                      }
+                    : {}),
                   ...(projectId ? { projectId } : {}),
                 },
               },
@@ -93,11 +127,36 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       ...(search?.trim()
         ? {
             OR: [
-              { firstName: { contains: search.trim(), mode: 'insensitive' as const } },
-              { lastName: { contains: search.trim(), mode: 'insensitive' as const } },
-              { email: { contains: search.trim(), mode: 'insensitive' as const } },
-              { company: { contains: search.trim(), mode: 'insensitive' as const } },
-              { phone: { contains: search.trim(), mode: 'insensitive' as const } },
+              {
+                firstName: {
+                  contains: search.trim(),
+                  mode: 'insensitive' as const,
+                },
+              },
+              {
+                lastName: {
+                  contains: search.trim(),
+                  mode: 'insensitive' as const,
+                },
+              },
+              {
+                email: {
+                  contains: search.trim(),
+                  mode: 'insensitive' as const,
+                },
+              },
+              {
+                company: {
+                  contains: search.trim(),
+                  mode: 'insensitive' as const,
+                },
+              },
+              {
+                phone: {
+                  contains: search.trim(),
+                  mode: 'insensitive' as const,
+                },
+              },
             ],
           }
         : {}),
@@ -111,7 +170,15 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       orderBy: [{ lastName: 'asc' }, { firstName: 'asc' }],
     });
 
-    const header = ['First Name', 'Last Name', 'Birthday', 'Company', 'Phone', 'Email', 'Units'];
+    const header = [
+      'First Name',
+      'Last Name',
+      'Birthday',
+      'Company',
+      'Phone',
+      'Email',
+      'Units',
+    ];
     const rows = contacts.map((c) =>
       [
         c.firstName,
@@ -121,7 +188,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         c.phone ?? '',
         c.email ?? '',
         c.units.map((cu) => cu.unit.name).join('; '),
-      ].map(escapeCsvCell).join(',')
+      ]
+        .map(escapeCsvCell)
+        .join(',')
     );
 
     const csv = [header.map(escapeCsvCell).join(','), ...rows].join('\n');
@@ -129,11 +198,15 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     return new NextResponse(csv, {
       headers: {
         'Content-Type': 'text/csv; charset=utf-8',
-        'Content-Disposition': 'attachment; filename="analytics-audience-export.csv"',
+        'Content-Disposition':
+          'attachment; filename="analytics-audience-export.csv"',
       },
     });
   } catch (error) {
     console.error('GET /api/analytics/export error:', error);
-    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }

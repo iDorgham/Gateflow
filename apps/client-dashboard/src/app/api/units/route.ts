@@ -34,15 +34,37 @@ const GetUnitsQuerySchema = z.object({
     .transform((val) =>
       val === 'false' ? false : val === 'true' ? true : undefined
     ),
-  from: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-  to: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  from: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
+  to: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
   unitType: z.string().optional(),
   gateId: z.string().optional(),
   contactId: z.string().optional(),
-  sort: z.enum(['name', 'type', 'visitsInRange', 'passesInRange', 'lastVisitInRange']).optional(),
+  sort: z
+    .enum([
+      'name',
+      'type',
+      'visitsInRange',
+      'passesInRange',
+      'lastVisitInRange',
+    ])
+    .optional(),
   sortDir: z.enum(['asc', 'desc']).optional(),
-  page: z.string().optional().transform((s) => Math.max(1, parseInt(s ?? '1', 10) || 1)),
-  pageSize: z.string().optional().transform((s) => Math.min(100, Math.max(1, parseInt(s ?? '25', 10) || 25))),
+  page: z
+    .string()
+    .optional()
+    .transform((s) => Math.max(1, parseInt(s ?? '1', 10) || 1)),
+  pageSize: z
+    .string()
+    .optional()
+    .transform((s) =>
+      Math.min(100, Math.max(1, parseInt(s ?? '25', 10) || 25))
+    ),
 });
 
 // ─── GET /api/units ───────────────────────────────────────────────────────────
@@ -100,7 +122,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         select: { id: true },
       });
       if (!gate) {
-        return NextResponse.json({ success: false, message: 'Invalid gateId' }, { status: 400 });
+        return NextResponse.json(
+          { success: false, message: 'Invalid gateId' },
+          { status: 400 }
+        );
       }
     }
 
@@ -123,7 +148,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     const dir = sortDir === 'desc' ? 'desc' : 'asc';
     const sortByVisitMetric =
-      sort === 'visitsInRange' || sort === 'passesInRange' || sort === 'lastVisitInRange';
+      sort === 'visitsInRange' ||
+      sort === 'passesInRange' ||
+      sort === 'lastVisitInRange';
     const orderBy =
       sort === 'type'
         ? [{ type: dir }, { name: 'asc' }]
@@ -137,21 +164,29 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         include: {
           contacts: {
             include: {
-              contact: { select: { id: true, firstName: true, lastName: true } },
+              contact: {
+                select: { id: true, firstName: true, lastName: true },
+              },
             },
           },
           project: { select: { id: true, name: true } },
           user: { select: { id: true, name: true, email: true } },
         },
-        orderBy: orderBy as Parameters<typeof prisma.unit.findMany>[0]['orderBy'],
-        ...(sortByVisitMetric ? {} : { skip: (page - 1) * pageSize, take: pageSize }),
+        orderBy: orderBy as Parameters<
+          typeof prisma.unit.findMany
+        >[0]['orderBy'],
+        ...(sortByVisitMetric
+          ? {}
+          : { skip: (page - 1) * pageSize, take: pageSize }),
       }),
       prisma.unit.count({ where }),
     ]);
 
     if (format === 'csv') {
       const rows = [
-        ['Name', 'Type', 'QR Quota', 'Project', 'Residents'].map(escapeCsvCell).join(','),
+        ['Name', 'Type', 'QR Quota', 'Project', 'Residents']
+          .map(escapeCsvCell)
+          .join(','),
         ...units.map((u) =>
           [
             u.name,
@@ -175,27 +210,41 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       });
     }
 
-    let unitAggregates: Map<string, { visitsInRange: number; lastVisitInRange: string | null }> = new Map();
+    let unitAggregates: Map<
+      string,
+      { visitsInRange: number; lastVisitInRange: string | null }
+    > = new Map();
     if (dateFrom && dateTo) {
       try {
-        const gateCondition = gateId ? Prisma.sql`AND sl."gateId" = ${gateId}` : Prisma.empty;
+        const gateCondition = gateId
+          ? Prisma.sql`AND sl."gateId" = ${gateId}`
+          : Prisma.empty;
         const aggRows = await prisma.$queryRaw<
-          { unitId: string; visitsInRange: number; lastVisitInRange: Date | null }[]
+          {
+            unitId: string;
+            visitsInRange: number;
+            lastVisitInRange: Date | null;
+          }[]
         >`
           SELECT vqr."unitId", COUNT(*)::int AS "visitsInRange", MAX(sl."scannedAt") AS "lastVisitInRange"
           FROM "ScanLog" sl
           JOIN "QRCode" qr ON sl."qrCodeId" = qr.id
           JOIN "VisitorQR" vqr ON vqr."qrCodeId" = qr.id
+          JOIN "Unit" u ON vqr."unitId" = u.id
           WHERE sl.status = 'SUCCESS'
             AND sl."scannedAt" >= ${dateFrom} AND sl."scannedAt" <= ${dateTo}
             AND qr."organizationId" = ${orgId} AND qr."deletedAt" IS NULL
+            AND u."organizationId" = ${orgId}
             ${gateCondition}
           GROUP BY vqr."unitId"
         `;
         unitAggregates = new Map(
           aggRows.map((r) => [
             r.unitId,
-            { visitsInRange: r.visitsInRange, lastVisitInRange: r.lastVisitInRange?.toISOString() ?? null },
+            {
+              visitsInRange: r.visitsInRange,
+              lastVisitInRange: r.lastVisitInRange?.toISOString() ?? null,
+            },
           ])
         );
       } catch {
@@ -229,34 +278,33 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       };
     });
 
-    const sorted =
-      sortByVisitMetric
-        ? [...data].sort((a, b) => {
-            const dir = sortDir === 'desc' ? -1 : 1;
-            if (sort === 'lastVisitInRange') {
-              const aMissing = !a.lastVisitInRange;
-              const bMissing = !b.lastVisitInRange;
-              // Keep null/empty values at the end for both sort directions.
-              if (aMissing && bMissing) return 0;
-              if (aMissing) return 1;
-              if (bMissing) return -1;
-              return a.lastVisitInRange < b.lastVisitInRange
-                ? -dir
-                : a.lastVisitInRange > b.lastVisitInRange
-                  ? dir
-                  : 0;
-            }
-            const aVal =
-              sort === 'passesInRange'
-                  ? (a.passesInRange ?? 0)
-                  : (a.visitsInRange ?? 0);
-            const bVal =
-              sort === 'passesInRange'
-                  ? (b.passesInRange ?? 0)
-                  : (b.visitsInRange ?? 0);
-            return aVal < bVal ? -dir : aVal > bVal ? dir : 0;
-          })
-        : data;
+    const sorted = sortByVisitMetric
+      ? [...data].sort((a, b) => {
+          const dir = sortDir === 'desc' ? -1 : 1;
+          if (sort === 'lastVisitInRange') {
+            const aMissing = !a.lastVisitInRange;
+            const bMissing = !b.lastVisitInRange;
+            // Keep null/empty values at the end for both sort directions.
+            if (aMissing && bMissing) return 0;
+            if (aMissing) return 1;
+            if (bMissing) return -1;
+            return a.lastVisitInRange < b.lastVisitInRange
+              ? -dir
+              : a.lastVisitInRange > b.lastVisitInRange
+                ? dir
+                : 0;
+          }
+          const aVal =
+            sort === 'passesInRange'
+              ? (a.passesInRange ?? 0)
+              : (a.visitsInRange ?? 0);
+          const bVal =
+            sort === 'passesInRange'
+              ? (b.passesInRange ?? 0)
+              : (b.visitsInRange ?? 0);
+          return aVal < bVal ? -dir : aVal > bVal ? dir : 0;
+        })
+      : data;
 
     const paged = sortByVisitMetric
       ? sorted.slice((page - 1) * pageSize, page * pageSize)
@@ -324,7 +372,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    const { name, type, sizeSqm, qrQuota, projectId, contactIds } = validation.data;
+    const { name, type, sizeSqm, qrQuota, projectId, contactIds } =
+      validation.data;
     const quota = qrQuota ?? UNIT_QUOTA_DEFAULTS[type];
 
     const unit = await prisma.unit.create({
