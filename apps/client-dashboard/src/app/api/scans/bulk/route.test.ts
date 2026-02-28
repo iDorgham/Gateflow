@@ -58,9 +58,15 @@ jest.mock('@gate-access/db', () => ({
 
 jest.mock('@gate-access/types', () => jest.requireActual('@gate-access/types'));
 
-// Mock the new library function
 jest.mock('@/lib/scans/bulk-sync', () => ({
   processBulkScans: (...args: unknown[]) => mockProcessBulkScans(...args),
+}));
+
+const mockOrgHasAssignments = jest.fn();
+const mockGetUserAssignedGateIds = jest.fn();
+jest.mock('@/lib/gate-assignment', () => ({
+  orgHasAssignments: (...args: unknown[]) => mockOrgHasAssignments(...args),
+  getUserAssignedGateIds: (...args: unknown[]) => mockGetUserAssignedGateIds(...args),
 }));
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -100,6 +106,7 @@ beforeEach(() => {
   mockRequireAuth.mockResolvedValue(AUTH_CLAIMS);
   mockCheckRateLimit.mockResolvedValue({ allowed: true, limit: 30, remaining: 29, retryAfterMs: 0 });
   mockProcessBulkScans.mockResolvedValue({ synced: [], conflicted: [], failed: [] });
+  mockOrgHasAssignments.mockResolvedValue(false); // no assignments by default
 });
 
 describe('POST /api/scans/bulk', () => {
@@ -138,5 +145,19 @@ describe('POST /api/scans/bulk', () => {
     expect(mockProcessBulkScans).toHaveBeenCalledWith(expect.any(Array), 'mockTx');
     expect(data.data.synced).toContain('local_id_1');
     expect(data.data.conflicted[0].id).toBe('local_id_2');
+  });
+
+  it('returns 403 when org has assignments and user scans at unassigned gate', async () => {
+    mockOrgHasAssignments.mockResolvedValue(true);
+    mockGetUserAssignedGateIds.mockResolvedValue(new Set(['gate_1']));
+    const res = await POST(makeRequest({
+      scans: [makeScan({ gateId: 'gate_1' }), makeScan({ gateId: 'gate_2' })]
+    }));
+    const data = await res.json();
+
+    expect(res.status).toBe(403);
+    expect(data.message).toMatch(/not allowed to scan at one or more gates/);
+    expect(data.unassignedGateIds).toContain('gate_2');
+    expect(mockProcessBulkScans).not.toHaveBeenCalled();
   });
 });

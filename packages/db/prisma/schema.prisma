@@ -18,16 +18,17 @@ model Organization {
   updatedAt DateTime @updatedAt
   deletedAt DateTime?
 
-  users     User[]
-  gates     Gate[]
-  qrCodes   QRCode[]
-  webhooks  Webhook[]
-  apiKeys   ApiKey[]
-  projects  Project[]
-  contacts  Contact[]
-  units     Unit[]
-  roles     Role[]
-  residentLimits ResidentLimit[]
+  users           User[]
+  gates           Gate[]
+  gateAssignments GateAssignment[]
+  qrCodes         QRCode[]
+  webhooks        Webhook[]
+  apiKeys         ApiKey[]
+  projects        Project[]
+  contacts        Contact[]
+  units           Unit[]
+  roles           Role[]
+  residentLimits  ResidentLimit[]
 
   @@index([deletedAt])
 }
@@ -83,12 +84,32 @@ model User {
   updatedAt    DateTime      @updatedAt
   deletedAt    DateTime?
 
-  scanLogs      ScanLog[]
-  refreshTokens RefreshToken[]
-  unit          Unit?
+  scanLogs        ScanLog[]
+  refreshTokens   RefreshToken[]
+  unit            Unit?
+  gateAssignments GateAssignment[]
 
   @@index([organizationId])
   @@index([roleId])
+  @@index([deletedAt])
+}
+
+model GateAssignment {
+  id             String       @id @default(cuid())
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId         String
+  gate           Gate         @relation(fields: [gateId], references: [id], onDelete: Cascade)
+  gateId         String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  deletedAt      DateTime?
+
+  @@unique([userId, gateId])
+  @@index([organizationId])
+  @@index([userId])
+  @@index([gateId])
   @@index([deletedAt])
 }
 
@@ -106,8 +127,9 @@ model Gate {
   updatedAt    DateTime      @updatedAt
   deletedAt    DateTime?
 
-  scanLogs ScanLog[]
-  qrCodes  QRCode[]
+  scanLogs        ScanLog[]
+  qrCodes         QRCode[]
+  gateAssignments GateAssignment[]
 
   @@index([organizationId])
   @@index([projectId])

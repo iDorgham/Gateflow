@@ -92,18 +92,26 @@ export function GateSelector({
         throw new Error('Not authenticated');
       }
 
-      const res = await fetch(`${API_BASE_URL}/gates`, {
+      // Use assigned-gates endpoint: when org uses gate assignments, only assigned gates are returned.
+      const res = await fetch(`${API_BASE_URL}/gates/assigned`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
-      const json = (await res.json()) as { success: boolean; data: Gate[] };
+      const json = (await res.json()) as {
+        success: boolean;
+        data: Gate[];
+        assignedOnly?: boolean;
+      };
 
       if (!json.success) throw new Error('API error');
 
       const activeGates = json.data.filter((g) => g.isActive);
       setGates(activeGates);
+      if (json.assignedOnly && activeGates.length === 0) {
+        setLoadError('You have no gates assigned. Contact your admin to get access.');
+      }
 
       // Update cache
       await AsyncStorage.setItem(GATE_LIST_KEY, JSON.stringify(activeGates));
@@ -210,7 +218,9 @@ export function GateSelector({
                 }
                 ListEmptyComponent={
                   <Text style={s.emptyText}>
-                    No active gates found. Check that your account has gates configured.
+                    {loadError && loadError.includes('no gates assigned')
+                      ? loadError
+                      : 'No active gates found. Check that your account has gates configured.'}
                   </Text>
                 }
                 ItemSeparatorComponent={() => <View style={s.separator} />}

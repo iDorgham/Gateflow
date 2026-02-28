@@ -8,6 +8,7 @@ import {
 import { prisma, setOrganizationContext, clearOrganizationContext, isAccessAllowed } from '@gate-access/db';
 import { requireAuth, isNextResponse } from '../../../../lib/require-auth';
 import { checkRateLimit } from '../../../../lib/rate-limit';
+import { checkGateAssignment } from '../../../../lib/gate-assignment';
 
 // ─── Configuration ────────────────────────────────────────────────────────────
 
@@ -264,6 +265,15 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
           message: 'No gate ID provided and QR code has no default gate',
         },
         400,
+      );
+    }
+
+    // Step 11b — Gate–account assignment: when org uses assignments, operator must be assigned to this gate.
+    const assignmentError = await checkGateAssignment(claims, gateId);
+    if (assignmentError) {
+      return json<QRValidateResponse>(
+        { status: 'rejected', reason: 'denied', message: assignmentError },
+        403,
       );
     }
 

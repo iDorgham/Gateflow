@@ -113,6 +113,11 @@ jest.mock('../../../../lib/rate-limit', () => ({
   RATE_LIMIT_WINDOW_MS: 60_000,
 }));
 
+const mockCheckGateAssignment = jest.fn();
+jest.mock('../../../../lib/gate-assignment', () => ({
+  checkGateAssignment: (...args: unknown[]) => mockCheckGateAssignment(...args),
+}));
+
 // ─── Test helpers ─────────────────────────────────────────────────────────────
 
 const QR_SECRET = process.env.QR_SIGNING_SECRET!;
@@ -180,6 +185,9 @@ describe.skip('POST /api/qrcodes/validate', () => {
 
     // Default: rate limiter allows the request.
     mockCheckRateLimit.mockResolvedValue({ allowed: true, limit: 100, remaining: 99, retryAfterMs: 0 });
+
+    // Default: gate-assignment check passes (user allowed to scan at this gate).
+    mockCheckGateAssignment.mockResolvedValue(null);
 
     // Default: DB returns a healthy QR record.
     mockFindUnique.mockResolvedValue({ ...mockQRCode });
@@ -305,6 +313,21 @@ describe.skip('POST /api/qrcodes/validate', () => {
 
     expect(res.status).toBe(403);
     expect(data.reason).toBe('wrong_org');
+  });
+
+  it('rejects when operator is not assigned to the gate (gate–account assignment)', async () => {
+    mockCheckGateAssignment.mockResolvedValue('You are not allowed to scan at this gate.');
+
+    const auth = await makeAuthHeader();
+    const signed = signQRPayload(makePayload(), QR_SECRET);
+    const res = await POST(
+      makeRequest({ qrPayload: signed, scanContext: { gateId: 'gate_test_789' } }, auth),
+    );
+    const data = await res.json();
+
+    expect(res.status).toBe(403);
+    expect(data.reason).toBe('denied');
+    expect(data.message).toMatch(/not allowed to scan at this gate/);
   });
 
   // ── Not found ─────────────────────────────────────────────────────────────
