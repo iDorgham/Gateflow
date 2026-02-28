@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect, useTransition, useCallback } from 'react';
+import Link from 'next/link';
+import { useParams, useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 import {
   Button,
@@ -24,7 +26,8 @@ import {
   AvatarFallback,
 } from '@gate-access/ui';
 import { useTranslation } from 'react-i18next';
-import { Plus, Upload, Download, Search, Pencil, Trash2, Users } from 'lucide-react';
+import { Plus, Upload, Download, Search, Pencil, Trash2, Users, ChartLine } from 'lucide-react';
+import { buildAnalyticsUrl } from '@/lib/analytics';
 
 interface Unit {
   id: string;
@@ -54,6 +57,9 @@ const emptyForm = () => ({
 });
 
 export default function ContactsPage() {
+  const params = useParams();
+  const searchParams = useSearchParams();
+  const locale = (params?.locale as string) || 'en';
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [units, setUnits] = useState<Unit[]>([]);
   const [loading, setLoading] = useState(true);
@@ -64,6 +70,11 @@ export default function ContactsPage() {
   const [deleteTarget, setDeleteTarget] = useState<Contact | null>(null);
   const [isPending, startTransition] = useTransition();
   const { t } = useTranslation('dashboard');
+
+  useEffect(() => {
+    const q = searchParams.get('search');
+    if (q != null) setSearch(q);
+  }, [searchParams]);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -225,6 +236,11 @@ export default function ContactsPage() {
           <p className="text-sm text-muted-foreground">{t('contacts.description', 'Manage resident and visitor contacts for your organization.')}</p>
         </div>
         <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" asChild>
+            <Link href={buildAnalyticsUrl(locale, { search })}>
+              <ChartLine className="h-4 w-4 mr-1" /> {t('analytics.openInAnalytics', 'Open in Analytics Dashboard')}
+            </Link>
+          </Button>
           <Button variant="outline" size="sm" onClick={exportCSV}>
             <Download className="h-4 w-4 mr-1" /> {t('contacts.exportCsv', 'Export CSV')}
           </Button>

@@ -9,17 +9,17 @@ Checklist for **PLAN_analytics_dashboard**. Use with `/dev` and phase prompts.
 
 ## Phase 1 — Core Dashboard Shell
 
-- [ ] **1.1** Shared filter schema + `useAnalyticsFilters` hook
-- [ ] **1.2** `AnalyticsFilterBar` component
-- [ ] **1.3** `AnalyticsModeToggle` component
-- [ ] **1.4** KPI card components (4–6 cards)
-- [ ] **1.5** Refactored layout (12-col desktop, stacked mobile)
-- [ ] **1.6** "Open in Analytics" on Contacts/Units
-- [ ] **1.7** "Apply to Contacts/Units" on dashboard
-- [ ] **1.8** i18n for new strings
+- [x] **1.1** Shared filter schema + `useAnalyticsFilters` hook
+- [x] **1.2** `AnalyticsFilterBar` component
+- [x] **1.3** `AnalyticsModeToggle` component
+- [x] **1.4** KPI card components (4–6 cards)
+- [x] **1.5** Refactored layout (12-col desktop, stacked mobile)
+- [x] **1.6** "Open in Analytics" on Contacts/Units
+- [x] **1.7** "Apply to Contacts/Units" on dashboard
+- [x] **1.8** i18n for new strings
 - [ ] **1.9** Lint, typecheck, tests pass; committed
 
-**Status:** Not started
+**Status:** In progress (1.9 pending git commit)
 
 ---
 

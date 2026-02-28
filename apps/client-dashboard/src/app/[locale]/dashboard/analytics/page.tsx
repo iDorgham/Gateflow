@@ -2,21 +2,9 @@ import { getSessionClaims } from '@/lib/auth-cookies';
 import { getValidatedProjectId } from '@/lib/project-cookie';
 import { prisma } from '@gate-access/db';
 import { redirect } from 'next/navigation';
-import { Card, CardContent, CardHeader, CardTitle } from '@gate-access/ui';
-import dynamic from 'next/dynamic';
 import { getTranslation, type TranslationFunction } from '@/lib/i18n';
 import { Locale } from '@/lib/i18n-config';
-import { PrintButton } from './print-button';
-const AnalyticsCharts = dynamic(() => import('./analytics-charts').then(mod => mod.AnalyticsCharts), { ssr: false });
-import type {
-  DailyCount,
-  StatusCount,
-  GateCount,
-  HeatmapCell,
-  RoleCount,
-  QRTypeCount,
-  GateSuccessRate,
-} from './analytics-charts';
+import { AnalyticsClient } from './analytics-client';
 
 export const metadata = { title: 'Analytics' };
 
@@ -59,16 +47,18 @@ function parseDateRange(
   return { dateFrom: df, dateTo: now, label: t('analytics.range7d') };
 }
 
-function calcTrend(current: number, prior: number): { pct: number; dir: 'up' | 'down' | 'flat' } {
-  if (prior === 0 && current === 0) return { pct: 0, dir: 'flat' };
-  if (prior === 0) return { pct: 100, dir: 'up' };
-  const pct = Math.round(((current - prior) / prior) * 100);
-  return { pct: Math.abs(pct), dir: pct > 0 ? 'up' : pct < 0 ? 'down' : 'flat' };
-}
-
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
-type SearchParams = { range?: string; from?: string; to?: string };
+type SearchParams = {
+  range?: string;
+  from?: string;
+  to?: string;
+  projectId?: string;
+  gateId?: string;
+  unitType?: string;
+  search?: string;
+  mode?: string;
+};
 
 export default async function AnalyticsPage({
   params,
@@ -82,9 +72,17 @@ export default async function AnalyticsPage({
   if (!claims?.orgId) redirect('/login');
 
   const orgId = claims.orgId;
-  const projectId = await getValidatedProjectId(orgId);
+  const cookieProjectId = await getValidatedProjectId(orgId);
+  let projectId: string | null = cookieProjectId;
+  if (searchParams.projectId) {
+    const valid = await prisma.project.findFirst({
+      where: { id: searchParams.projectId, organizationId: orgId, deletedAt: null },
+      select: { id: true },
+    });
+    if (valid) projectId = valid.id;
+  }
 
-  const { dateFrom, dateTo, label: dateLabel } = parseDateRange(
+  const { dateFrom, dateTo } = parseDateRange(
     t,
     params.locale,
     searchParams.range,
@@ -115,17 +113,18 @@ export default async function AnalyticsPage({
 
   const [
     dailyCountsRaw,
-    statusBreakdown,
-    topGatesRaw,
+    _statusBreakdown,
+    _topGatesRaw,
     successRate30d,
     totalScans30d,
     heatmapRaw,
-    roleBreakdown,
-    prevSuccessRate30d,
-    prevTotalScans30d,
+    _roleBreakdown,
+    _prevSuccessRate30d,
+    _prevTotalScans30d,
     deniedCount30d,
-    qrTypeBreakdownRaw,
-    gateSuccessRatesRaw,
+    _qrTypeBreakdownRaw,
+    _gateSuccessRatesRaw,
+    gatesForFilter,
   ] = await Promise.all([
     // Daily scans (Optimized raw GROUP BY query)
     (async () => {
@@ -227,8 +226,8 @@ export default async function AnalyticsPage({
       `;
     })(),
 
-    // Role breakdown
-    (async (): Promise<RoleCount[]> => {
+    // Role breakdown (reserved for Phase 2)
+    (async () => {
       const groups = await prisma.scanLog.groupBy({
         by: ['userId'],
         where: {
@@ -330,232 +329,46 @@ export default async function AnalyticsPage({
         LIMIT 10
       `;
     })(),
+
+    // Gates for filter bar
+    prisma.gate.findMany({
+      where: { organizationId: orgId, deletedAt: null, ...(projectId ? { projectId } : {}) },
+      select: { id: true, name: true },
+      orderBy: { name: 'asc' },
+    }),
   ]);
 
   const successRatePct =
     totalScans30d > 0 ? Math.round((successRate30d / totalScans30d) * 100) : 0;
-  const prevSuccessRatePct =
-    prevTotalScans30d > 0 ? Math.round((prevSuccessRate30d / prevTotalScans30d) * 100) : 0;
 
-  const totalScansInRange = dailyCountsRaw.reduce((sum, d) => sum + d.count, 0);
-  const avgScansPerDay = totalDays > 0 ? Math.round(totalScansInRange / totalDays) : 0;
-
-  const successRateTrend = calcTrend(successRatePct, prevSuccessRatePct);
-  const totalScansTrend = calcTrend(totalScans30d, prevTotalScans30d);
-
-  // Serialise for client component
-  const daily: DailyCount[] = dailyCountsRaw.map(({ date, count }) => ({
-    date: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-    count,
-  }));
-
-  const statusBreakdownSer: StatusCount[] = statusBreakdown.map((s) => ({
-    status: s.status,
-    _count: s._count,
-  }));
-
-  const topGates: GateCount[] = topGatesRaw.map((g) => ({
-    name: g.name,
-    scans: g._count.scanLogs,
-  }));
-
-  const heatmap: HeatmapCell[] = (heatmapRaw as { dow: number; hour: number; count: bigint | number }[]).map(
-    (r) => ({
-      dow: r.dow,
-      hour: r.hour,
-      count: typeof r.count === 'bigint' ? Number(r.count) : r.count,
-    })
-  );
-
-  const qrTypeBreakdown: QRTypeCount[] = (qrTypeBreakdownRaw as { type: string; count: bigint | number }[]).map(
-    (r) => ({
-      type: r.type,
-      count: typeof r.count === 'bigint' ? Number(r.count) : r.count,
-    })
-  );
-
-  const gateSuccessRates: GateSuccessRate[] = (
-    gateSuccessRatesRaw as { name: string; successes: bigint | number; total: bigint | number }[]
-  ).map((r) => {
-    const successes = typeof r.successes === 'bigint' ? Number(r.successes) : r.successes;
-    const total = typeof r.total === 'bigint' ? Number(r.total) : r.total;
-    return {
-      name: r.name,
-      successes,
-      total,
-      rate: total > 0 ? Math.round((successes / total) * 100) : 0,
-    };
-  });
-
-  const currentRange = searchParams.range ?? '7d';
-  const currentFrom = searchParams.from ?? '';
-  const currentTo = searchParams.to ?? '';
-
-  return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">{t('analytics.title')}</h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400">
-            {t('analytics.subtitle')}
-          </p>
-        </div>
-
-        {/* Date range controls + print */}
-        <div className="no-print flex flex-wrap items-center gap-2 shrink-0">
-          <form method="GET" className="flex flex-wrap items-center gap-2">
-            {(['7d', '30d'] as const).map((r) => (
-              <button
-                key={r}
-                name="range"
-                value={r}
-                type="submit"
-                className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
-                  currentRange === r
-                    ? 'bg-blue-600 text-white'
-                    : 'border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700'
-                }`}
-              >
-                {t(`analytics.range${r}`)}
-              </button>
-            ))}
-
-            <div className="flex items-center gap-1">
-              <input
-                type="date"
-                name="from"
-                defaultValue={currentFrom}
-                aria-label={t('analytics.fromDate')}
-                className="h-8 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 px-2 text-xs text-slate-900 dark:text-white focus:border-blue-500 focus:outline-none"
-              />
-              <span className="text-xs text-slate-400">–</span>
-              <input
-                type="date"
-                name="to"
-                defaultValue={currentTo}
-                aria-label={t('analytics.toDate')}
-                className="h-8 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 px-2 text-xs text-slate-900 dark:text-white focus:border-blue-500 focus:outline-none"
-              />
-              <button
-                type="submit"
-                name="range"
-                value="custom"
-                className="h-8 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 text-xs font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700"
-              >
-                {t('analytics.apply')}
-              </button>
-            </div>
-          </form>
-
-          <PrintButton />
-        </div>
-      </div>
-
-      {/* Date label badge */}
-      <span className="no-print inline-block rounded-full border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-1 text-xs font-medium text-slate-500 dark:text-slate-400 shadow-sm">
-        {dateLabel}
-      </span>
-
-      {/* KPI cards */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-        {/* Success Rate */}
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-slate-500">{t('analytics.successRate30d')}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-green-600">{successRatePct}%</div>
-            <div className="mt-2 h-2 overflow-hidden rounded bg-slate-100 dark:bg-slate-700">
-              <div className="h-full rounded bg-green-500" style={{ width: `${successRatePct}%` }} />
-            </div>
-            <TrendBadge dir={successRateTrend.dir} pct={successRateTrend.pct} suffix={t('analytics.vsPrev30d')} />
-          </CardContent>
-        </Card>
-
-        {/* Total Scans */}
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-slate-500">{t('analytics.totalScans30d')}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-slate-900 dark:text-white">{totalScans30d.toLocaleString(params.locale)}</div>
-            <p className="mt-1 text-xs text-slate-400">{successRate30d.toLocaleString(params.locale)} {t('analytics.successful')}</p>
-            <TrendBadge dir={totalScansTrend.dir} pct={totalScansTrend.pct} suffix={t('analytics.vsPrev30d')} />
-          </CardContent>
-        </Card>
-
-        {/* Avg Scans / Day */}
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-slate-500">{t('analytics.avgScansDay')}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-blue-600">{avgScansPerDay.toLocaleString(params.locale)}</div>
-            <p className="mt-1 text-xs text-slate-400">
-              {totalScansInRange.toLocaleString(params.locale)} {t('analytics.over')} {totalDays} {t('analytics.days')}
-            </p>
-          </CardContent>
-        </Card>
-
-        {/* Active Gates */}
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-slate-500">{t('analytics.activeGates')}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-slate-900 dark:text-white">{topGates.length}</div>
-            <p className="mt-1 text-xs text-slate-400">{t('analytics.withScanActivity')}</p>
-          </CardContent>
-        </Card>
-
-        {/* Denied / Overrides */}
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-slate-500">{t('analytics.denied30d')}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className={`text-3xl font-bold ${deniedCount30d > 0 ? 'text-red-600' : 'text-slate-900 dark:text-white'}`}>
-              {deniedCount30d.toLocaleString(params.locale)}
-            </div>
-            <p className="mt-1 text-xs text-slate-400">{t('analytics.operatorOverrides')}</p>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Recharts charts */}
-      <AnalyticsCharts
-        daily={daily}
-        statusBreakdown={statusBreakdownSer}
-        topGates={topGates}
-        heatmap={heatmap}
-        roleBreakdown={roleBreakdown}
-        qrTypeBreakdown={qrTypeBreakdown}
-        gateSuccessRates={gateSuccessRates}
-        dateLabel={dateLabel}
-      />
-    </div>
-  );
-}
-
-// ─── Trend badge ──────────────────────────────────────────────────────────────
-
-function TrendBadge({
-  dir,
-  pct,
-  suffix,
-}: {
-  dir: 'up' | 'down' | 'flat';
-  pct: number;
-  suffix: string;
-}) {
-  if (dir === 'flat') {
-    return <p className="mt-1 text-xs text-slate-400">— {suffix}</p>;
+  // Peak hour: aggregate heatmap by hour, find max
+  const heatmapRows = heatmapRaw as { dow: number; hour: number; count: bigint | number }[];
+  const hourCounts = new Map<number, number>();
+  for (const r of heatmapRows) {
+    const count = typeof r.count === 'bigint' ? Number(r.count) : r.count;
+    hourCounts.set(r.hour, (hourCounts.get(r.hour) ?? 0) + count);
   }
-  const isUp = dir === 'up';
+  let peakHour = -1;
+  let maxCount = 0;
+  for (const [h, c] of hourCounts) {
+    if (c > maxCount) {
+      maxCount = c;
+      peakHour = h;
+    }
+  }
+
+  const kpiData = {
+    totalVisits: totalScans30d,
+    passRate: successRatePct,
+    peakHour,
+    uniqueVisitors: -1,
+    deniedScans: deniedCount30d,
+    attributedScans: -1,
+  };
+
+  const gates = gatesForFilter.map((g) => ({ id: g.id, name: g.name }));
+
   return (
-    <p className={`mt-1 text-xs font-medium ${isUp ? 'text-green-600' : 'text-red-500'}`}>
-      {isUp ? '↑' : '↓'} {pct}% {suffix}
-    </p>
+    <AnalyticsClient kpiData={kpiData} gates={gates} />
   );
 }

@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useEffect, useTransition, useCallback } from 'react';
+import Link from 'next/link';
+import { useParams, useSearchParams } from 'next/navigation';
 import { toast } from 'sonner';
 import {
   Button,
@@ -31,7 +33,9 @@ import {
   Trash2,
   Building,
   UserPlus,
+  ChartLine,
 } from 'lucide-react';
+import { buildAnalyticsUrl } from '@/lib/analytics';
 
 type UnitType =
   | 'STUDIO'
@@ -112,6 +116,9 @@ interface ResidentUser {
 }
 
 export default function UnitsPage() {
+  const params = useParams();
+  const searchParams = useSearchParams();
+  const locale = (params?.locale as string) || 'en';
   const [units, setUnits] = useState<Unit[]>([]);
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
@@ -128,6 +135,11 @@ export default function UnitsPage() {
   const { t } = useTranslation('dashboard');
 
   const UNIT_TYPE_LABELS = getUnitTypeLabels(t);
+
+  useEffect(() => {
+    const q = searchParams.get('search');
+    if (q != null) setSearch(q);
+  }, [searchParams]);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -352,6 +364,11 @@ export default function UnitsPage() {
           </p>
         </div>
         <div className="flex items-center gap-2">
+          <Button variant="outline" size="sm" asChild>
+            <Link href={buildAnalyticsUrl(locale, { search })}>
+              <ChartLine className="h-4 w-4 mr-1" /> {t('analytics.openInAnalytics', 'Open in Analytics Dashboard')}
+            </Link>
+          </Button>
           <Button variant="outline" size="sm" onClick={exportCSV}>
             <Download className="h-4 w-4 mr-1" /> {t('units.exportCsv', 'Export CSV')}
           </Button>
