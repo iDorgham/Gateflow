@@ -25,17 +25,17 @@ Checklist for **PLAN_analytics_dashboard**. Use with `/dev` and phase prompts.
 
 ## Phase 2 — Security View Depth
 
-- [ ] **2.1** `/api/analytics/heatmap` endpoint
-- [ ] **2.2** `/api/analytics/summary` endpoint
-- [ ] **2.3** `/api/analytics/operators` endpoint
-- [ ] **2.4** Heatmap chart component
-- [ ] **2.5** Threat/anomaly cards
-- [ ] **2.6** Operator leaderboard
-- [ ] **2.7** Short-polling for KPIs
-- [ ] **2.8** Redis caching for heatmap (optional)
-- [ ] **2.9** Lint, typecheck, tests pass; committed
+- [x] **2.1** `/api/analytics/heatmap` endpoint
+- [x] **2.2** `/api/analytics/summary` endpoint
+- [x] **2.3** `/api/analytics/operators` endpoint
+- [x] **2.4** Heatmap chart component
+- [x] **2.5** Threat/anomaly cards
+- [x] **2.6** Operator leaderboard
+- [x] **2.7** Short-polling for KPIs
+- [x] **2.8** Redis caching for heatmap (optional)
+- [x] **2.9** Lint, typecheck, tests pass; committed
 
-**Status:** Not started
+**Status:** Complete
 
 ---
 

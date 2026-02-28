@@ -210,9 +210,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         email: c.email,
         avatarUrl: c.avatarUrl ?? null,
         units: c.units.map((cu) => ({ id: cu.unit.id, name: cu.unit.name })),
-        tags: 'contactTags' in c && Array.isArray((c as { contactTags: { tag: { id: string; name: string; color: string | null } }[] }).contactTags)
-          ? (c as { contactTags: { tag: { id: string; name: string; color: string | null } }[] }).contactTags.map((ct) => ({ id: ct.tag.id, name: ct.tag.name, color: ct.tag.color }))
-          : [],
+        tags: c.contactTags.map((ct) => ({ id: ct.tag.id, name: ct.tag.name, color: ct.tag.color })),
         visitsInRange,
         passesInRange: visitsInRange,
         lastVisitInRange,
@@ -224,9 +222,17 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         ? [...data].sort((a, b) => {
             const dir = sortDir === 'desc' ? -1 : 1;
             const aVal =
-              sort === 'lastVisitInRange' ? (a.lastVisitInRange ?? '') : (a.visitsInRange ?? 0);
+              sort === 'lastVisitInRange'
+                ? (a.lastVisitInRange ?? '')
+                : sort === 'passesInRange'
+                  ? (a.passesInRange ?? 0)
+                  : (a.visitsInRange ?? 0);
             const bVal =
-              sort === 'lastVisitInRange' ? (b.lastVisitInRange ?? '') : (b.visitsInRange ?? 0);
+              sort === 'lastVisitInRange'
+                ? (b.lastVisitInRange ?? '')
+                : sort === 'passesInRange'
+                  ? (b.passesInRange ?? 0)
+                  : (b.visitsInRange ?? 0);
             return aVal < bVal ? -dir : aVal > bVal ? dir : 0;
           })
         : data;

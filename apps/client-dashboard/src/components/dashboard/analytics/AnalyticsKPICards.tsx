@@ -21,8 +21,12 @@ export function AnalyticsKPICards({ data }: AnalyticsKPICardsProps) {
 
   const totalVisits = data?.totalVisits ?? 0;
   const denied = data?.deniedScans ?? 0;
-  const successful = totalVisits - denied;
-  const passRate = totalVisits > 0 ? Math.round((successful / totalVisits) * 100) : 0;
+  const passRate =
+    typeof data?.passRate === 'number' && data.passRate >= 0 && data.passRate <= 100
+      ? Math.round(data.passRate)
+      : totalVisits > 0
+        ? Math.round(((totalVisits - denied) / totalVisits) * 100)
+        : 0;
   const peakHour = data?.peakHour ?? 0;
   const uniqueVisitors = data?.uniqueVisitors ?? 0;
   const attributedScans = data?.attributedScans ?? 0;

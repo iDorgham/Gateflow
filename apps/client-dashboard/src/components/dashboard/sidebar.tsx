@@ -201,7 +201,7 @@ export function Sidebar({
           href={`/${locale}/dashboard`}
           className="flex items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-lg h-12 w-12 transition-transform hover:scale-105"
         >
-          <ShieldCheckIcon className="h-7 w-7" weight="fill" />
+          <ShieldCheckIcon size={28} className="h-7 w-7" weight="fill" />
         </Link>
       </div>
 

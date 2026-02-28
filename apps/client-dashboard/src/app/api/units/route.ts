@@ -223,9 +223,17 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         ? [...data].sort((a, b) => {
             const dir = sortDir === 'desc' ? -1 : 1;
             const aVal =
-              sort === 'lastVisitInRange' ? (a.lastVisitInRange ?? '') : (a.visitsInRange ?? 0);
+              sort === 'lastVisitInRange'
+                ? (a.lastVisitInRange ?? '')
+                : sort === 'passesInRange'
+                  ? (a.passesInRange ?? 0)
+                  : (a.visitsInRange ?? 0);
             const bVal =
-              sort === 'lastVisitInRange' ? (b.lastVisitInRange ?? '') : (b.visitsInRange ?? 0);
+              sort === 'lastVisitInRange'
+                ? (b.lastVisitInRange ?? '')
+                : sort === 'passesInRange'
+                  ? (b.passesInRange ?? 0)
+                  : (b.visitsInRange ?? 0);
             return aVal < bVal ? -dir : aVal > bVal ? dir : 0;
           })
         : data;
