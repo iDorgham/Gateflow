@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useTransition, useCallback } from 'react';
 import Link from 'next/link';
-import { useParams, useSearchParams } from 'next/navigation';
+import { useParams, useSearchParams, useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import {
   Button,
@@ -28,14 +28,34 @@ import {
   Plus,
   Upload,
   Download,
-  Search,
   Pencil,
   Trash2,
   Building,
   UserPlus,
-  ChartLine,
+  BarChart3,
+  ChevronLeft,
+  ChevronRight,
+  Columns,
 } from 'lucide-react';
 import { buildAnalyticsUrl } from '@/lib/analytics';
+import {
+  mergeFilters,
+  parseResidentsFiltersFromSearchParams,
+  residentsFiltersToSearchParams,
+  type ResidentsFilters,
+} from '@/lib/residents/residents-filters';
+import { useUnits, type UnitRow } from '@/lib/residents/use-units';
+import { ResidentsFilterBar } from '@/components/dashboard/residents/ResidentsFilterBar';
+import { TableCustomizerModal } from '@/components/dashboard/residents/TableCustomizerModal';
+import { ViewContactsModal } from '@/components/dashboard/residents/ViewContactsModal';
+import {
+  getDefaultTableView,
+  UNITS_COLUMN_IDS,
+  UNITS_PINNED,
+  PRESET_VIEWS,
+  type TableViewState,
+} from '@/lib/residents/table-views';
+import { useUserPreferences } from '@/lib/residents/use-user-preferences';
 
 type UnitType =
   | 'STUDIO'
@@ -86,18 +106,7 @@ interface LinkedUser {
   email: string;
 }
 
-interface Unit {
-  id: string;
-  name: string;
-  type: UnitType;
-  sizeSqm: number | null;
-  qrQuota: number;
-  projectId: string | null;
-  projectName: string | null;
-  contacts: Contact[];
-  userId?: string | null;
-  user?: LinkedUser | null;
-}
+type Unit = UnitRow;
 
 const emptyForm = () => ({
   name: '',
@@ -118,63 +127,121 @@ interface ResidentUser {
 export default function UnitsPage() {
   const params = useParams();
   const searchParams = useSearchParams();
+  const router = useRouter();
   const locale = (params?.locale as string) || 'en';
-  const [units, setUnits] = useState<Unit[]>([]);
+  const [filters, setFilters] = useState<ResidentsFilters>(() => {
+    const parsed = parseResidentsFiltersFromSearchParams(searchParams);
+    return mergeFilters(parsed);
+  });
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [projects, setProjects] = useState<Project[]>([]);
   const [residents, setResidents] = useState<ResidentUser[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState('');
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<Unit | null>(null);
   const [form, setForm] = useState(emptyForm());
   const [deleteTarget, setDeleteTarget] = useState<Unit | null>(null);
   const [linkTarget, setLinkTarget] = useState<Unit | null>(null);
   const [linkUserId, setLinkUserId] = useState<string>('');
+  const [customizerOpen, setCustomizerOpen] = useState(false);
+  const [viewContactsFor, setViewContactsFor] = useState<Unit | null>(null);
   const [isPending, startTransition] = useTransition();
   const { t } = useTranslation('dashboard');
 
-  const UNIT_TYPE_LABELS = getUnitTypeLabels(t);
+  const { preferences, updatePreferences } = useUserPreferences();
+  const savedTableView = (preferences.tableViews?.units ?? {}) as TableViewState;
+  const defaultView = getDefaultTableView(UNITS_COLUMN_IDS, UNITS_PINNED);
+  const [tableView, setTableView] = useState<TableViewState>(() => ({
+    columnOrder: savedTableView.columnOrder?.length ? savedTableView.columnOrder : defaultView.columnOrder,
+    columnVisibility: Object.keys(savedTableView.columnVisibility ?? {}).length
+      ? { ...defaultView.columnVisibility, ...savedTableView.columnVisibility }
+      : defaultView.columnVisibility,
+  }));
 
   useEffect(() => {
-    const q = searchParams.get('search');
-    if (q != null) setSearch(q);
+    const order = savedTableView.columnOrder;
+    const vis = savedTableView.columnVisibility;
+    if (order?.length) {
+      setTableView((prev) => ({
+        columnOrder: order,
+        columnVisibility: { ...defaultView.columnVisibility, ...vis },
+      }));
+    }
+  }, [preferences.tableViews?.units]);
+
+  const unitColumns = [
+    { id: 'name', label: t('units.table.name', 'Unit ID'), canHide: false },
+    { id: 'type', label: t('units.table.type', 'Type'), canHide: true },
+    { id: 'size', label: t('units.table.size', 'Size'), canHide: true },
+    { id: 'residents', label: t('units.table.residents', 'Residents'), canHide: true },
+    { id: 'linkedResident', label: t('units.table.linkedResident', 'Linked Resident'), canHide: true },
+    { id: 'qrQuota', label: t('units.table.qrQuota', 'QR Quota'), canHide: true },
+    { id: 'project', label: t('units.table.project', 'Project'), canHide: true },
+    { id: 'visitsInRange', label: t('units.table.visitsInRange', 'Visits'), canHide: true },
+    { id: 'lastVisitInRange', label: t('units.table.lastVisitInRange', 'Last visit'), canHide: true },
+    { id: 'linkedContactCount', label: t('units.table.linkedContactCount', 'Contacts'), canHide: true },
+    { id: 'actions', label: t('units.table.actions', 'Actions'), canHide: false },
+  ];
+  const visibleColumns = tableView.columnOrder
+    .filter((id) => tableView.columnVisibility[id] !== false && unitColumns.some((c) => c.id === id))
+    .map((id) => unitColumns.find((c) => c.id === id)!)
+    .filter(Boolean);
+
+  const UNIT_TYPE_LABELS = getUnitTypeLabels(t);
+  const { data, isLoading, refetch } = useUnits(filters);
+  const units = data?.data ?? [];
+  const total = data?.total ?? 0;
+  const page = data?.page ?? 1;
+  const pageSize = data?.pageSize ?? 25;
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+
+  useEffect(() => {
+    const parsed = parseResidentsFiltersFromSearchParams(searchParams);
+    setFilters((prev) => ({ ...prev, ...parsed }));
   }, [searchParams]);
 
-  const load = useCallback(async () => {
-    setLoading(true);
-    try {
-      const [uRes, cRes, pRes, residentsRes] = await Promise.all([
-        fetch('/api/units'),
-        fetch('/api/contacts'),
-        fetch('/api/projects'),
-        fetch('/api/users?role=RESIDENT'),
-      ]);
-      const uJson = await uRes.json();
-      const cJson = await cRes.json();
-      const pJson = await pRes.json();
-      const rJson = await residentsRes.json();
-      if (uJson.success) setUnits(uJson.data);
-      if (cJson.success)
-        setContacts(
-          cJson.data.map((c: Contact) => ({
-            id: c.id,
-            firstName: c.firstName,
-            lastName: c.lastName,
-          }))
-        );
-      if (pJson.projects) setProjects(pJson.projects);
-      if (rJson.success) setResidents(rJson.data);
-    } catch {
-      toast.error(t('units.errors.loadFailed', 'Failed to load units'));
-    } finally {
-      setLoading(false);
-    }
-  }, [t]);
+  const updateFiltersAndUrl = useCallback(
+    (updates: Partial<ResidentsFilters>) => {
+      setFilters((prev) => {
+        const next = { ...prev, ...updates };
+        const sp = residentsFiltersToSearchParams(next);
+        const query = sp.toString();
+        router.replace(`/${locale}/dashboard/residents/units${query ? `?${query}` : ''}`, { scroll: false });
+        return next;
+      });
+    },
+    [locale, router]
+  );
 
   useEffect(() => {
-    load();
-  }, [load]);
+    let cancelled = false;
+    Promise.all([
+      fetch('/api/contacts'),
+      fetch('/api/projects'),
+      fetch('/api/users?role=RESIDENT'),
+    ])
+      .then(async ([cRes, pRes, residentsRes]) => {
+        const cJson = await cRes.json();
+        const pJson = await pRes.json();
+        const rJson = await residentsRes.json();
+        if (!cancelled && cJson.success) {
+          setContacts(
+            cJson.data.map((c: Contact) => ({
+              id: c.id,
+              firstName: c.firstName,
+              lastName: c.lastName,
+            }))
+          );
+        }
+        if (!cancelled && pJson.projects) setProjects(pJson.projects);
+        if (!cancelled && rJson.success) setResidents(rJson.data);
+      })
+      .catch(() => {
+        if (!cancelled) toast.error(t('units.errors.loadFailed', 'Failed to load'));
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [t]);
 
   function openCreate() {
     setEditing(null);
@@ -186,7 +253,7 @@ export default function UnitsPage() {
     setEditing(unit);
     setForm({
       name: unit.name,
-      type: unit.type,
+      type: unit.type as UnitType,
       sizeSqm: unit.sizeSqm ?? null,
       qrQuota: unit.qrQuota,
       projectId: unit.projectId ?? '',
@@ -242,7 +309,7 @@ export default function UnitsPage() {
         if (!json.success) throw new Error(json.message);
         toast.success(editing ? t('units.success.updated', 'Unit updated') : t('units.success.created', 'Unit created'));
         setDialogOpen(false);
-        load();
+        refetch();
       } catch (err: unknown) {
         toast.error(err instanceof Error ? err.message : t('units.errors.saveFailed', 'Failed to save unit'));
       }
@@ -267,7 +334,7 @@ export default function UnitsPage() {
         );
         setLinkTarget(null);
         setLinkUserId('');
-        load();
+        refetch();
       } catch (err: unknown) {
         toast.error(err instanceof Error ? err.message : t('units.errors.saveFailed', 'Failed to save'));
       }
@@ -285,7 +352,7 @@ export default function UnitsPage() {
         if (!json.success) throw new Error(json.message);
         toast.success(t('units.success.deleted', 'Unit deleted'));
         setDeleteTarget(null);
-        load();
+        refetch();
       } catch (err: unknown) {
         toast.error(
           err instanceof Error ? err.message : t('units.errors.deleteFailed', 'Failed to delete unit')
@@ -296,7 +363,15 @@ export default function UnitsPage() {
 
   async function exportCSV() {
     try {
-      const res = await fetch('/api/units?format=csv');
+      const sp = new URLSearchParams();
+      sp.set('format', 'csv');
+      if (filters.from) sp.set('from', filters.from);
+      if (filters.to) sp.set('to', filters.to);
+      if (filters.search) sp.set('search', filters.search);
+      if (filters.unitType) sp.set('unitType', filters.unitType);
+      if (filters.projectId) sp.set('projectId', filters.projectId);
+      if (filters.gateId) sp.set('gateId', filters.gateId);
+      const res = await fetch(`/api/units?${sp.toString()}`);
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -339,20 +414,11 @@ export default function UnitsPage() {
         }
       }
       toast.success(t('units.success.imported', { count: imported, defaultValue: `Imported ${imported} units` }));
-      load();
+      refetch();
     };
     reader.readAsText(file);
     e.target.value = '';
   }
-
-  const filtered = units.filter((u) => {
-    const q = search.toLowerCase();
-    return (
-      u.name.toLowerCase().includes(q) ||
-      UNIT_TYPE_LABELS[u.type].toLowerCase().includes(q) ||
-      (u.projectName ?? '').toLowerCase().includes(q)
-    );
-  });
 
   return (
     <div className="space-y-6">
@@ -365,9 +431,12 @@ export default function UnitsPage() {
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" asChild>
-            <Link href={buildAnalyticsUrl(locale, { search })}>
-              <ChartLine className="h-4 w-4 mr-1" /> {t('analytics.openInAnalytics', 'Open in Analytics Dashboard')}
+            <Link href={buildAnalyticsUrl(locale, { search: filters.search })}>
+              <BarChart3 className="h-4 w-4 mr-1" /> {t('analytics.openInAnalytics', 'Open in Analytics Dashboard')}
             </Link>
+          </Button>
+          <Button variant="outline" size="sm" onClick={() => setCustomizerOpen(true)}>
+            <Columns className="h-4 w-4 mr-1" /> {t('residents.customizeColumns', 'Customize columns')}
           </Button>
           <Button variant="outline" size="sm" onClick={exportCSV}>
             <Download className="h-4 w-4 mr-1" /> {t('units.exportCsv', 'Export CSV')}
@@ -391,48 +460,82 @@ export default function UnitsPage() {
         </div>
       </div>
 
-      <div className="relative max-w-sm">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <Input
-          placeholder={t('units.searchPlaceholder', 'Search units…')}
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="pl-9"
+      {filters.contactId && (
+        <div className="flex items-center gap-2">
+          <Badge variant="secondary">
+            {t('residents.viewingContact', 'Viewing contact')}
+          </Badge>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => updateFiltersAndUrl({ contactId: '' })}
+          >
+            {t('residents.clearContactFilter', 'Clear')}
+          </Button>
+        </div>
+      )}
+
+      <ResidentsFilterBar filters={filters} onFiltersChange={updateFiltersAndUrl} />
+
+      {viewContactsFor && (
+        <ViewContactsModal
+          open={!!viewContactsFor}
+          onOpenChange={(open) => !open && setViewContactsFor(null)}
+          unitName={viewContactsFor.name}
+          contacts={viewContactsFor.contacts.map((c) => ({ id: c.id, firstName: c.firstName, lastName: c.lastName }))}
+          locale={locale}
+          unitId={viewContactsFor.id}
         />
-      </div>
+      )}
+
+      <TableCustomizerModal
+        open={customizerOpen}
+        onOpenChange={setCustomizerOpen}
+        columns={unitColumns}
+        view={tableView}
+        onSave={(view) => {
+          setTableView(view);
+          updatePreferences({ tableViews: { units: view } }).catch(() =>
+            toast.error(t('residents.saveViewFailed', 'Failed to save column preferences'))
+          );
+        }}
+        getPresetVisibility={(preset) => PRESET_VIEWS[preset] ?? {}}
+      />
 
       <div className="rounded-lg border bg-card">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>{t('units.table.name', 'Unit Name')}</TableHead>
-              <TableHead>{t('units.table.type', 'Type')}</TableHead>
-              <TableHead>{t('units.table.size', 'Size')}</TableHead>
-              <TableHead>{t('units.table.residents', 'Residents')}</TableHead>
-              <TableHead>{t('units.table.linkedResident', 'Linked Resident')}</TableHead>
-              <TableHead>{t('units.table.qrQuota', 'QR Quota')}</TableHead>
-              <TableHead>{t('units.table.project', 'Project')}</TableHead>
-              <TableHead className="w-24">{t('units.table.actions', 'Actions')}</TableHead>
+              {visibleColumns.map((col) => (
+                <TableHead
+                  key={col.id}
+                  className={
+                    col.id === 'actions' ? 'w-24' : col.id === 'visitsInRange' || col.id === 'lastVisitInRange' || col.id === 'linkedContactCount' ? 'text-right' : ''
+                  }
+                >
+                  {col.label}
+                </TableHead>
+              ))}
             </TableRow>
           </TableHeader>
           <TableBody>
-            {loading ? (
+            {isLoading ? (
               Array.from({ length: 5 }).map((_, i) => (
                 <TableRow key={i}>
-                  {Array.from({ length: 8 }).map((_, j) => (
+                  {visibleColumns.map((_, j) => (
                     <TableCell key={j}>
                       <Skeleton className="h-4 w-full" />
                     </TableCell>
                   ))}
                 </TableRow>
               ))
-            ) : filtered.length === 0 ? (
+            ) : units.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={8} className="text-center py-12">
+                <TableCell colSpan={visibleColumns.length} className="text-center py-12">
                   <div className="flex flex-col items-center gap-2 text-muted-foreground">
                     <Building className="h-8 w-8 opacity-30" />
                     <span className="text-sm">
-                      {search
+                      {filters.search
                         ? t('units.noMatch', 'No units match your search')
                         : t('units.empty', 'No units yet. Add your first unit.')}
                     </span>
@@ -440,80 +543,98 @@ export default function UnitsPage() {
                 </TableCell>
               </TableRow>
             ) : (
-              filtered.map((u) => (
+              units.map((u) => (
                 <TableRow key={u.id}>
-                  <TableCell className="font-medium">{u.name}</TableCell>
-                  <TableCell>
-                    <Badge variant="outline" className="text-xs">
-                      {UNIT_TYPE_LABELS[u.type]}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-sm text-muted-foreground">
-                    {u.sizeSqm != null ? `${u.sizeSqm} m²` : '—'}
-                  </TableCell>
-                  <TableCell>
-                    <span className="text-sm">
-                      {u.contacts.length === 0 ? (
-                        <span className="text-muted-foreground">—</span>
-                      ) : (
-                        u.contacts
-                          .map((c) => `${c.firstName} ${c.lastName}`)
-                          .join(', ')
-                      )}
-                    </span>
-                  </TableCell>
-                  <TableCell>
-                    <span className="text-sm">
-                      {u.user ? (
-                        <span title={u.user.email}>{u.user.name}</span>
-                      ) : (
-                        <span className="text-muted-foreground">{t('units.noResidentLinked', '—')}</span>
-                      )}
-                    </span>
-                  </TableCell>
-                  <TableCell className="font-mono text-sm">
-                    {u.qrQuota}
-                  </TableCell>
-                  <TableCell className="text-sm text-muted-foreground">
-                    {u.projectName ?? '—'}
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-1">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-7 w-7"
-                        title={t('units.linkResident', 'Link Resident')}
-                        onClick={() => {
-                          setLinkTarget(u);
-                          setLinkUserId(u.userId ?? '');
-                        }}
-                      >
-                        <UserPlus className="h-3.5 w-3.5" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-7 w-7"
-                        onClick={() => openEdit(u)}
-                      >
-                        <Pencil className="h-3.5 w-3.5" />
-                      </Button>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-7 w-7 text-destructive hover:text-destructive"
-                        onClick={() => setDeleteTarget(u)}
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                      </Button>
-                    </div>
-                  </TableCell>
+                  {visibleColumns.map((col) => {
+                    if (col.id === 'name')
+                      return (
+                        <TableCell key={col.id} className="font-medium">
+                          <span className="mr-2">{u.name}</span>
+                          {u.linkedContactCount === 0 && u.visitsInRange === 0 && (
+                            <Badge variant="outline" className="text-xs text-amber-600 border-amber-400">
+                              {t('units.potentialVacancy', 'Potential vacancy')}
+                            </Badge>
+                          )}
+                        </TableCell>
+                      );
+                    if (col.id === 'type') return <TableCell key={col.id}><Badge variant="outline" className="text-xs">{UNIT_TYPE_LABELS[u.type as UnitType]}</Badge></TableCell>;
+                    if (col.id === 'size') return <TableCell key={col.id} className="text-sm text-muted-foreground">{u.sizeSqm != null ? `${u.sizeSqm} m²` : '—'}</TableCell>;
+                    if (col.id === 'residents')
+                      return (
+                        <TableCell key={col.id}>
+                          <span className="text-sm">
+                            {u.contacts.length === 0 ? (
+                              <span className="text-muted-foreground">—</span>
+                            ) : (
+                              <>
+                                {u.contacts.map((c) => (
+                                  <Badge
+                                    key={c.id}
+                                    variant="secondary"
+                                    className="text-xs cursor-pointer mr-1 hover:bg-secondary/80"
+                                    onClick={() => setViewContactsFor(u)}
+                                  >
+                                    {c.firstName} {c.lastName}
+                                  </Badge>
+                                ))}
+                              </>
+                            )}
+                          </span>
+                        </TableCell>
+                      );
+                    if (col.id === 'linkedResident') return <TableCell key={col.id}><span className="text-sm">{u.user ? <span title={u.user.email}>{u.user.name}</span> : <span className="text-muted-foreground">{t('units.noResidentLinked', '—')}</span>}</span></TableCell>;
+                    if (col.id === 'qrQuota') return <TableCell key={col.id} className="font-mono text-sm">{u.qrQuota}</TableCell>;
+                    if (col.id === 'project') return <TableCell key={col.id} className="text-sm text-muted-foreground">{u.projectName ?? '—'}</TableCell>;
+                    if (col.id === 'visitsInRange') return <TableCell key={col.id} className="text-right tabular-nums">{u.visitsInRange ?? 0}</TableCell>;
+                    if (col.id === 'lastVisitInRange') return <TableCell key={col.id} className="text-right text-sm text-muted-foreground">{u.lastVisitInRange ? new Date(u.lastVisitInRange).toLocaleDateString(undefined, { dateStyle: 'short' }) : '—'}</TableCell>;
+                    if (col.id === 'linkedContactCount') return <TableCell key={col.id} className="text-right tabular-nums">{u.linkedContactCount ?? 0}</TableCell>;
+                    if (col.id === 'actions')
+                      return (
+                        <TableCell key={col.id}>
+                          <div className="flex items-center gap-1">
+                            <Button variant="ghost" size="icon" className="h-7 w-7" title={t('units.linkResident', 'Link Resident')} onClick={() => { setLinkTarget(u); setLinkUserId(u.userId ?? ''); }}><UserPlus className="h-3.5 w-3.5" /></Button>
+                            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => openEdit(u)}><Pencil className="h-3.5 w-3.5" /></Button>
+                            <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive hover:text-destructive" onClick={() => setDeleteTarget(u)}><Trash2 className="h-3.5 w-3.5" /></Button>
+                          </div>
+                        </TableCell>
+                      );
+                    return <TableCell key={col.id}>—</TableCell>;
+                  })}
                 </TableRow>
               ))
             )}
           </TableBody>
         </Table>
+        {totalPages > 1 && (
+          <div className="flex items-center justify-between border-t px-4 py-2">
+            <p className="text-sm text-muted-foreground">
+              {t('units.paginationSummary', {
+                from: (page - 1) * pageSize + 1,
+                to: Math.min(page * pageSize, total),
+                total,
+                defaultValue: `Showing ${(page - 1) * pageSize + 1}-${Math.min(page * pageSize, total)} of ${total}`,
+              })}
+            </p>
+            <div className="flex gap-1">
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={page <= 1}
+                onClick={() => updateFiltersAndUrl({ page: page - 1 })}
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={page >= totalPages}
+                onClick={() => updateFiltersAndUrl({ page: page + 1 })}
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Create / Edit Dialog */}

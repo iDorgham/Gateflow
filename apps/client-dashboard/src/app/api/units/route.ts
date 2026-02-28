@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { requireAuth, isNextResponse } from '@/lib/require-auth';
-import { prisma } from '@gate-access/db';
+import { prisma, Prisma } from '@gate-access/db';
 import { UnitType } from '@gate-access/db';
 
 export const dynamic = 'force-dynamic';
@@ -27,6 +27,15 @@ const GetUnitsQuerySchema = z.object({
     .transform((val) =>
       val === 'false' ? false : val === 'true' ? true : undefined
     ),
+  from: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  to: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  unitType: z.string().optional(),
+  gateId: z.string().optional(),
+  contactId: z.string().optional(),
+  sort: z.enum(['name', 'type', 'visitsInRange', 'passesInRange', 'lastVisitInRange']).optional(),
+  sortDir: z.enum(['asc', 'desc']).optional(),
+  page: z.string().optional().transform((s) => Math.max(1, parseInt(s ?? '1', 10) || 1)),
+  pageSize: z.string().optional().transform((s) => Math.min(100, Math.max(1, parseInt(s ?? '25', 10) || 25))),
 });
 
 // ─── GET /api/units ───────────────────────────────────────────────────────────
@@ -59,34 +68,79 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    const { projectId, format, search, isActive } = validation.data;
+    const {
+      projectId,
+      format,
+      search,
+      isActive,
+      from,
+      to,
+      unitType,
+      gateId,
+      contactId,
+      sort,
+      sortDir,
+      page,
+      pageSize,
+    } = validation.data;
 
-    const units = await prisma.unit.findMany({
-      where: {
-        organizationId: orgId,
-        deletedAt: null,
-        ...(projectId ? { projectId } : {}),
-        ...(isActive !== undefined ? { isActive } : {}),
-        ...(search
-          ? {
-              OR: [
-                { name: { contains: search, mode: 'insensitive' } },
-                { building: { contains: search, mode: 'insensitive' } },
-              ],
-            }
-          : {}),
-      },
-      include: {
-        contacts: {
-          include: {
-            contact: { select: { id: true, firstName: true, lastName: true } },
+    const dateFrom = from ? new Date(from + 'T00:00:00.000Z') : null;
+    const dateTo = to ? new Date(to + 'T23:59:59.999Z') : null;
+
+    if (gateId) {
+      const gate = await prisma.gate.findFirst({
+        where: { id: gateId, organizationId: orgId, deletedAt: null },
+        select: { id: true },
+      });
+      if (!gate) {
+        return NextResponse.json({ success: false, message: 'Invalid gateId' }, { status: 400 });
+      }
+    }
+
+    const where = {
+      organizationId: orgId,
+      deletedAt: null,
+      ...(projectId ? { projectId } : {}),
+      ...(isActive !== undefined ? { isActive } : {}),
+      ...(unitType ? { type: unitType as UnitType } : {}),
+      ...(contactId ? { contacts: { some: { contactId } } } : {}),
+      ...(search
+        ? {
+            OR: [
+              { name: { contains: search, mode: 'insensitive' as const } },
+              { building: { contains: search, mode: 'insensitive' as const } },
+            ],
+          }
+        : {}),
+    };
+
+    const dir = sortDir === 'desc' ? 'desc' : 'asc';
+    const sortByVisitMetric =
+      sort === 'visitsInRange' || sort === 'passesInRange' || sort === 'lastVisitInRange';
+    const orderBy =
+      sort === 'type'
+        ? [{ type: dir }, { name: 'asc' }]
+        : sortByVisitMetric
+          ? [{ name: 'asc' }]
+          : [{ name: dir }];
+
+    const [units, total] = await Promise.all([
+      prisma.unit.findMany({
+        where,
+        include: {
+          contacts: {
+            include: {
+              contact: { select: { id: true, firstName: true, lastName: true } },
+            },
           },
+          project: { select: { id: true, name: true } },
+          user: { select: { id: true, name: true, email: true } },
         },
-        project: { select: { id: true, name: true } },
-        user: { select: { id: true, name: true, email: true } },
-      },
-      orderBy: { name: 'asc' },
-    });
+        orderBy: orderBy as Parameters<typeof prisma.unit.findMany>[0]['orderBy'],
+        ...(sortByVisitMetric ? {} : { skip: (page - 1) * pageSize, take: pageSize }),
+      }),
+      prisma.unit.count({ where }),
+    ]);
 
     if (format === 'csv') {
       const rows = [
@@ -114,26 +168,79 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       });
     }
 
-    const data = units.map((u) => ({
-      id: u.id,
-      name: u.name,
-      type: u.type,
-      sizeSqm: u.sizeSqm ?? null,
-      qrQuota: u.qrQuota,
-      projectId: u.projectId,
-      projectName: u.project?.name ?? null,
-      userId: u.user?.id ?? null,
-      user: u.user
-        ? { id: u.user.id, name: u.user.name, email: u.user.email }
-        : null,
-      contacts: u.contacts.map((cu) => ({
-        id: cu.contact.id,
-        firstName: cu.contact.firstName,
-        lastName: cu.contact.lastName,
-      })),
-    }));
+    let unitAggregates: Map<string, { visitsInRange: number; lastVisitInRange: string | null }> = new Map();
+    if (dateFrom && dateTo) {
+      const gateCondition = gateId ? Prisma.sql`AND sl."gateId" = ${gateId}` : Prisma.empty;
+      const aggRows = await prisma.$queryRaw<
+        { unitId: string; visitsInRange: number; lastVisitInRange: Date | null }[]
+      >`
+        SELECT vqr."unitId", COUNT(*)::int AS "visitsInRange", MAX(sl."scannedAt") AS "lastVisitInRange"
+        FROM "ScanLog" sl
+        JOIN "QRCode" qr ON sl."qrCodeId" = qr.id
+        JOIN "VisitorQR" vqr ON vqr."qrCodeId" = qr.id
+        WHERE sl.status = 'SUCCESS'
+          AND sl."scannedAt" >= ${dateFrom} AND sl."scannedAt" <= ${dateTo}
+          AND qr."organizationId" = ${orgId} AND qr."deletedAt" IS NULL
+          ${gateCondition}
+        GROUP BY vqr."unitId"
+      `;
+      unitAggregates = new Map(
+        aggRows.map((r) => [
+          r.unitId,
+          { visitsInRange: r.visitsInRange, lastVisitInRange: r.lastVisitInRange?.toISOString() ?? null },
+        ])
+      );
+    }
 
-    return NextResponse.json({ success: true, data });
+    const data = units.map((u) => {
+      const agg = unitAggregates.get(u.id);
+      return {
+        id: u.id,
+        name: u.name,
+        type: u.type,
+        sizeSqm: u.sizeSqm ?? null,
+        qrQuota: u.qrQuota,
+        projectId: u.projectId,
+        projectName: u.project?.name ?? null,
+        userId: u.user?.id ?? null,
+        user: u.user
+          ? { id: u.user.id, name: u.user.name, email: u.user.email }
+          : null,
+        contacts: u.contacts.map((cu) => ({
+          id: cu.contact.id,
+          firstName: cu.contact.firstName,
+          lastName: cu.contact.lastName,
+        })),
+        visitsInRange: agg?.visitsInRange ?? 0,
+        passesInRange: agg?.visitsInRange ?? 0,
+        lastVisitInRange: agg?.lastVisitInRange ?? null,
+        linkedContactCount: u.contacts.length,
+      };
+    });
+
+    const sorted =
+      sortByVisitMetric
+        ? [...data].sort((a, b) => {
+            const dir = sortDir === 'desc' ? -1 : 1;
+            const aVal =
+              sort === 'lastVisitInRange' ? (a.lastVisitInRange ?? '') : (a.visitsInRange ?? 0);
+            const bVal =
+              sort === 'lastVisitInRange' ? (b.lastVisitInRange ?? '') : (b.visitsInRange ?? 0);
+            return aVal < bVal ? -dir : aVal > bVal ? dir : 0;
+          })
+        : data;
+
+    const paged = sortByVisitMetric
+      ? sorted.slice((page - 1) * pageSize, page * pageSize)
+      : sorted;
+
+    return NextResponse.json({
+      success: true,
+      data: paged,
+      total,
+      page,
+      pageSize,
+    });
   } catch (error) {
     console.error('GET /api/units error:', error);
     return NextResponse.json(

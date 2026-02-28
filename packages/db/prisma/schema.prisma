@@ -36,6 +36,7 @@ model Organization {
   projects         Project[]
   contacts         Contact[]
   units            Unit[]
+  tags             Tag[]
   roles            Role[]
   residentLimits   ResidentLimit[]
   watchlistEntries WatchlistEntry[]
@@ -92,6 +93,7 @@ model User {
   roleId       String
   organization Organization? @relation(fields: [organizationId], references: [id])
   organizationId String?
+  preferences  Json?         /// e.g. { tableViews: { contacts: {...}, units: {...} } }
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   deletedAt    DateTime?
@@ -399,6 +401,34 @@ model QrShortLink {
   @@index([qrId])
 }
 
+model Tag {
+  id             String    @id @default(cuid())
+  name           String
+  color          String?   // e.g. #3b82f6
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId String
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  deletedAt      DateTime?
+
+  contacts ContactTag[]
+
+  @@unique([organizationId, name])
+  @@index([organizationId])
+  @@index([deletedAt])
+}
+
+model ContactTag {
+  contactId String
+  tagId     String
+  contact   Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([contactId, tagId])
+  @@index([contactId])
+  @@index([tagId])
+}
+
 model Contact {
   id             String        @id @default(cuid())
   firstName      String
@@ -414,7 +444,8 @@ model Contact {
   updatedAt      DateTime      @updatedAt
   deletedAt      DateTime?
 
-  units ContactUnit[]
+  units     ContactUnit[]
+  contactTags ContactTag[]
 
   @@index([organizationId])
   @@index([deletedAt])
