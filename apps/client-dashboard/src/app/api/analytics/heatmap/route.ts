@@ -40,7 +40,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const dateFromDate = new Date(dateFrom + 'T00:00:00.000Z');
     const dateToDate = new Date(dateTo + 'T23:59:59.999Z');
 
-    // Validate projectId and gateId belong to org
+    // Validate projectId and gateId belong to org; when both provided, gate must belong to project
     if (projectId) {
       const proj = await prisma.project.findFirst({
         where: { id: projectId, organizationId: orgId, deletedAt: null },
@@ -52,11 +52,19 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     }
     if (gateId) {
       const gate = await prisma.gate.findFirst({
-        where: { id: gateId, organizationId: orgId, deletedAt: null },
+        where: {
+          id: gateId,
+          organizationId: orgId,
+          deletedAt: null,
+          ...(projectId ? { projectId } : {}),
+        },
         select: { id: true },
       });
       if (!gate) {
-        return NextResponse.json({ success: false, message: 'Invalid gate' }, { status: 400 });
+        return NextResponse.json(
+          { success: false, message: projectId ? 'Gate must belong to the selected project' : 'Invalid gate' },
+          { status: 400 }
+        );
       }
     }
 

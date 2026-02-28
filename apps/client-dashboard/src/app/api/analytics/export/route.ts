@@ -56,11 +56,19 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     }
     if (gateId) {
       const gate = await prisma.gate.findFirst({
-        where: { id: gateId, organizationId: orgId, deletedAt: null },
+        where: {
+          id: gateId,
+          organizationId: orgId,
+          deletedAt: null,
+          ...(projectId ? { projectId } : {}),
+        },
         select: { id: true },
       });
       if (!gate) {
-        return NextResponse.json({ success: false, message: 'Invalid gate' }, { status: 400 });
+        return NextResponse.json(
+          { success: false, message: projectId ? 'Gate must belong to the selected project' : 'Invalid gate' },
+          { status: 400 }
+        );
       }
     }
 
