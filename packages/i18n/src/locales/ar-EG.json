@@ -419,6 +419,7 @@
       "qrCodes": "أكواد QR",
       "scanLogs": "سجلات المسح",
       "gates": "البوابات",
+      "gateAssignments": "تعيين البوابات",
       "analytics": "التحليلات",
       "settings": "الإعدادات",
       "expand": "توسيع القائمة",
@@ -848,6 +849,36 @@
         "createFailed": "فشل إنشاء البوابة.",
         "updateFailed": "فشل تحديث البوابة.",
         "deleteFailed": "فشل حذف البوابة."
+      }
+    },
+    "gateAssignments": {
+      "title": "تعيين البوابات",
+      "description": "عيّن أعضاء الفريق إلى بوابات محددة حتى يتمكنوا من المسح عند تلك البوابات فقط.",
+      "assignTitle": "تعيين مستخدم للبوابات",
+      "assignDescription": "اختر عضواً من الفريق وواحدة أو أكثر من البوابات للسماح بالمسح عندها.",
+      "userLabel": "المستخدم",
+      "selectUser": "اختر مستخدماً…",
+      "gatesLabel": "البوابات",
+      "selectGates": "اختر البوابات…",
+      "assignButton": "تعيين",
+      "tableTitle": "التعيينات الحالية",
+      "tableDescription": "المستخدمون والبوابات التي يمكنهم المسح عندها.",
+      "tableUser": "المستخدم",
+      "tableGate": "البوابة",
+      "tableActions": "إجراءات",
+      "unassign": "إلغاء التعيين",
+      "noAssignments": "لا توجد تعيينات بعد. استخدم النموذج أعلاه لتعيين المستخدمين على البوابات.",
+      "validation": {
+        "selectUserAndGates": "اختر مستخدماً وواحدة على الأقل من البوابات."
+      },
+      "success": {
+        "assigned": "تمت إضافة التعيينات.",
+        "unassigned": "تمت إزالة التعيين."
+      },
+      "errors": {
+        "load": "فشل تحميل البيانات.",
+        "assignFailed": "فشل التعيين.",
+        "unassignFailed": "فشل إلغاء التعيين."
       }
     },
     "scans": {

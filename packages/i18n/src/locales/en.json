@@ -418,6 +418,7 @@
       "qrCodes": "QR Codes",
       "scanLogs": "Scan Logs",
       "gates": "Gates",
+      "gateAssignments": "Gate assignments",
       "analytics": "Analytics",
       "settings": "Settings",
       "expand": "Expand Sidebar",
@@ -841,6 +842,36 @@
         "createFailed": "Failed to create gate.",
         "updateFailed": "Failed to update gate.",
         "deleteFailed": "Failed to delete gate."
+      }
+    },
+    "gateAssignments": {
+      "title": "Gate assignments",
+      "description": "Assign team members to specific gates so they can scan only at those gates.",
+      "assignTitle": "Assign user to gates",
+      "assignDescription": "Select a team member and one or more gates to allow scanning at those gates.",
+      "userLabel": "User",
+      "selectUser": "Select a user…",
+      "gatesLabel": "Gates",
+      "selectGates": "Select gates…",
+      "assignButton": "Assign",
+      "tableTitle": "Current assignments",
+      "tableDescription": "Users and the gates they can scan at.",
+      "tableUser": "User",
+      "tableGate": "Gate",
+      "tableActions": "Actions",
+      "unassign": "Unassign",
+      "noAssignments": "No assignments yet. Use the form above to assign users to gates.",
+      "validation": {
+        "selectUserAndGates": "Select a user and at least one gate."
+      },
+      "success": {
+        "assigned": "Assignments added.",
+        "unassigned": "Assignment removed."
+      },
+      "errors": {
+        "load": "Failed to load data.",
+        "assignFailed": "Assign failed.",
+        "unassignFailed": "Unassign failed."
       }
     },
     "scans": {

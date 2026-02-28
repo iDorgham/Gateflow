@@ -110,7 +110,7 @@ export function GateSelector({
       const activeGates = json.data.filter((g) => g.isActive);
       setGates(activeGates);
       if (json.assignedOnly && activeGates.length === 0) {
-        setLoadError('You have no gates assigned. Contact your admin to get access.');
+        setLoadError('No gates assigned. Contact your administrator.');
       }
 
       // Update cache
@@ -218,7 +218,7 @@ export function GateSelector({
                 }
                 ListEmptyComponent={
                   <Text style={s.emptyText}>
-                    {loadError && loadError.includes('no gates assigned')
+                    {loadError && (loadError.includes('No gates assigned') || loadError.includes('no gates assigned'))
                       ? loadError
                       : 'No active gates found. Check that your account has gates configured.'}
                   </Text>

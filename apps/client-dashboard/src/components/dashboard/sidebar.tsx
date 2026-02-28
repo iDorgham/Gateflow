@@ -15,6 +15,7 @@ import {
   Building,
   Layers,
   CreditCard,
+  Users,
 } from 'lucide-react';
 import {
   Avatar,
@@ -70,6 +71,12 @@ const getNavGroups = (t: TFunction, permissions: Record<string, boolean>) => {
       href: '/dashboard/analytics',
       icon: BarChart3,
       permission: 'analytics:view' as Permission,
+    },
+    {
+      label: t('sidebar.gateAssignments', 'Gate assignments'),
+      href: '/dashboard/team/gate-assignments',
+      icon: Users,
+      permission: 'gates:manage' as Permission,
     },
   ].filter(item => hasPerm(item.permission));
 
