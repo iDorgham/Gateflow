@@ -400,7 +400,7 @@ export default function UnitsPage() {
         const unitType = type.toUpperCase().replace(' ', '_') as UnitType;
         if (!Object.keys(UNIT_QUOTA_DEFAULTS).includes(unitType)) continue;
         try {
-          await fetch('/api/units', {
+          const res = await fetch('/api/units', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -409,7 +409,8 @@ export default function UnitsPage() {
               qrQuota: parseInt(qrQuota) || UNIT_QUOTA_DEFAULTS[unitType],
             }),
           });
-          imported++;
+          const json = await res.json();
+          if (res.ok && json.success) imported++;
         } catch {
           /* skip */
         }

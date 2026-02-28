@@ -306,7 +306,7 @@ export default function ContactsPage() {
         const [firstName, lastName, birthday, company, phone, email] = cols;
         if (!firstName || !lastName) continue;
         try {
-          await fetch('/api/contacts', {
+          const res = await fetch('/api/contacts', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -318,7 +318,8 @@ export default function ContactsPage() {
               email: email || null,
             }),
           });
-          imported++;
+          const json = await res.json();
+          if (res.ok && json.success) imported++;
         } catch {
           /* skip */
         }
