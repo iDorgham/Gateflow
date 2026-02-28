@@ -175,14 +175,14 @@ export default async function AnalyticsPage({
       _count: true,
     }),
 
-    // Top 10 gates
+    // Top 10 gates (explicit select so DBs without optional columns still work)
     prisma.gate.findMany({
       where: {
         organizationId: orgId,
         deletedAt: null,
         ...(projectId ? { projectId } : {}),
       },
-      include: { _count: { select: { scanLogs: true } } },
+      select: { id: true, name: true, _count: { select: { scanLogs: true } } },
       orderBy: { scanLogs: { _count: 'desc' } },
       take: 10,
     }),
