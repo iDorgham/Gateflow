@@ -5,7 +5,9 @@
 **Primary product spec:** `docs/PRD_v6.0.md` (Sections 8, 11–14)  
 **Security context:** `.cursor/skills/gf-security/SKILL.md`, `docs/guides/SECURITY_OVERVIEW.md`, `.cursor/rules/00-gateflow-core.mdc`, `.cursor/contracts/CONTRACTS.md`  
 **Owner:** Security + Product + Engineering  
-**Status:** Not started  
+**Status:** In progress (Phases 1–3 done; 4–6 remaining)  
+**Progress dashboard:** `docs/plan/execution/PROGRESS_DASHBOARD.md`  
+**Task checklist:** `docs/plan/execution/TASKS_core_security_v6.md`
 
 ---
 
