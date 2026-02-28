@@ -35,11 +35,14 @@ export interface Gate {
   name: string;
   location: string;
   isActive: boolean;
+  requiredIdentityLevel?: number | null;
 }
 
 export interface SelectedGate {
   id: string;
   name: string;
+  /** 0/1/2; when null, use org default (passed separately) */
+  requiredIdentityLevel?: number | null;
 }
 
 export interface GateSelectorProps {
@@ -103,11 +106,15 @@ export function GateSelector({
         success: boolean;
         data: Gate[];
         assignedOnly?: boolean;
+        orgDefaultIdentityLevel?: number;
       };
 
       if (!json.success) throw new Error('API error');
 
-      const activeGates = json.data.filter((g) => g.isActive);
+      const activeGates = json.data.filter((g) => g.isActive).map((g) => ({
+        ...g,
+        requiredIdentityLevel: g.requiredIdentityLevel ?? json.orgDefaultIdentityLevel ?? 0,
+      }));
       setGates(activeGates);
       if (json.assignedOnly && activeGates.length === 0) {
         setLoadError('No gates assigned. Contact your administrator.');
@@ -142,7 +149,9 @@ export function GateSelector({
   }, [visible, loadGates]);
 
   const handleSelect = async (gate: Gate | null) => {
-    const next = gate ? { id: gate.id, name: gate.name } : null;
+    const next = gate
+      ? { id: gate.id, name: gate.name, requiredIdentityLevel: gate.requiredIdentityLevel ?? null }
+      : null;
     await saveSelectedGate(next);
     onSelect(next);
     onClose();

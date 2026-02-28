@@ -70,6 +70,13 @@ export async function updateGate(
   gateId: string,
   name: string,
   location: string,
+  options?: {
+    latitude?: number | null;
+    longitude?: number | null;
+    locationRadiusMeters?: number | null;
+    locationEnforced?: boolean | null;
+    requiredIdentityLevel?: number | null;
+  },
 ): Promise<Result> {
   try {
     const claims = await getSessionClaims();
@@ -81,10 +88,19 @@ export async function updateGate(
     });
     if (!gate) return { success: false, error: 'Gate not found.' };
 
-    await prisma.gate.update({
-      where: { id: gateId },
-      data: { name: name.trim(), location: location.trim() || null },
-    });
+    const data: Parameters<typeof prisma.gate.update>[0]['data'] = {
+      name: name.trim(),
+      location: location.trim() || null,
+    };
+    if (options) {
+      if (options.latitude !== undefined) data.latitude = options.latitude;
+      if (options.longitude !== undefined) data.longitude = options.longitude;
+      if (options.locationRadiusMeters !== undefined) data.locationRadiusMeters = options.locationRadiusMeters;
+      if (options.locationEnforced !== undefined) data.locationEnforced = options.locationEnforced;
+      if (options.requiredIdentityLevel !== undefined) data.requiredIdentityLevel = options.requiredIdentityLevel;
+    }
+
+    await prisma.gate.update({ where: { id: gateId }, data });
     return { success: true };
   } catch (error) {
     console.error('updateGate: Unexpected error:', error);

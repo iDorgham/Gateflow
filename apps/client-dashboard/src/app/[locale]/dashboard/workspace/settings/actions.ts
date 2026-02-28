@@ -11,6 +11,16 @@ const SettingsSchema = z.object({
   domain: z.string().max(100).nullable().optional(),
 });
 
+const RetentionSchema = z.object({
+  requiredIdentityLevel: z.number().int().min(0).max(2).optional(),
+  scanLogRetentionMonths: z.number().int().min(1).max(120).nullable().optional(),
+  visitorHistoryRetentionMonths: z.number().int().min(1).max(120).nullable().optional(),
+  idArtifactRetentionMonths: z.number().int().min(1).max(120).nullable().optional(),
+  incidentRetentionMonths: z.number().int().min(1).max(120).nullable().optional(),
+  maskResidentNameOnLandingPage: z.boolean().optional(),
+  showUnitOnLandingPage: z.boolean().optional(),
+});
+
 export async function updateWorkspaceSettingsAction(data: { name: string; email: string; domain?: string | null }) {
   try {
     const claims = await getSessionClaims();
@@ -66,6 +76,53 @@ export async function updateWorkspaceSettingsAction(data: { name: string; email:
     return { success: false, message: 'An internal server error occurred while saving.' };
   }
 }
+
+export async function updateRetentionAndPrivacyAction(data: {
+  requiredIdentityLevel?: number;
+  scanLogRetentionMonths?: number | null;
+  visitorHistoryRetentionMonths?: number | null;
+  idArtifactRetentionMonths?: number | null;
+  incidentRetentionMonths?: number | null;
+  maskResidentNameOnLandingPage?: boolean;
+  showUnitOnLandingPage?: boolean;
+}) {
+  try {
+    const claims = await getSessionClaims();
+    if (!claims?.orgId) return { success: false, message: 'Unauthorized' };
+    if (!claims.permissions?.['workspace:manage'] && !claims.permissions?.['gates:manage']) {
+      return { success: false, message: 'Permission required to change retention settings' };
+    }
+
+    const validation = RetentionSchema.safeParse(data);
+    if (!validation.success) return { success: false, message: 'Invalid data provided' };
+
+    const org = await prisma.organization.findFirst({
+      where: { id: claims.orgId, deletedAt: null },
+    });
+    if (!org) return { success: false, message: 'Organization not found' };
+
+    const update: Record<string, unknown> = {};
+    if (data.requiredIdentityLevel !== undefined) update.requiredIdentityLevel = data.requiredIdentityLevel;
+    if (data.scanLogRetentionMonths !== undefined) update.scanLogRetentionMonths = data.scanLogRetentionMonths;
+    if (data.visitorHistoryRetentionMonths !== undefined) update.visitorHistoryRetentionMonths = data.visitorHistoryRetentionMonths;
+    if (data.idArtifactRetentionMonths !== undefined) update.idArtifactRetentionMonths = data.idArtifactRetentionMonths;
+    if (data.incidentRetentionMonths !== undefined) update.incidentRetentionMonths = data.incidentRetentionMonths;
+    if (data.maskResidentNameOnLandingPage !== undefined) update.maskResidentNameOnLandingPage = data.maskResidentNameOnLandingPage;
+    if (data.showUnitOnLandingPage !== undefined) update.showUnitOnLandingPage = data.showUnitOnLandingPage;
+
+    await prisma.organization.update({
+      where: { id: claims.orgId },
+      data: update as Parameters<typeof prisma.organization.update>[0]['data'],
+    });
+
+    revalidatePath('/dashboard/settings');
+    return { success: true };
+  } catch (error) {
+    console.error('Server Action Error - updateRetentionAndPrivacyAction:', error);
+    return { success: false, message: 'An internal server error occurred.' };
+  }
+}
+
 const RoleSchema = z.object({
   name: z.string().min(1, 'Role name is required').max(50),
   description: z.string().max(200).optional().nullable(),

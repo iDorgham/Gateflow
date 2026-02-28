@@ -57,6 +57,10 @@ export async function GET(): Promise<NextResponse> {
         totalScans: gate._count.scanLogs,
         scansToday,
         isActiveToday,
+        latitude: gate.latitude ?? null,
+        longitude: gate.longitude ?? null,
+        locationRadiusMeters: gate.locationRadiusMeters ?? null,
+        locationEnforced: gate.locationEnforced ?? false,
       };
     });
 
@@ -130,6 +134,10 @@ const UpdateGateSchema = z.object({
   name: z.string().min(1).max(100).optional(),
   location: z.string().min(1).max(200).optional(),
   isActive: z.boolean().optional(),
+  latitude: z.number().min(-90).max(90).nullable().optional(),
+  longitude: z.number().min(-180).max(180).nullable().optional(),
+  locationRadiusMeters: z.number().int().min(1).max(100_000).nullable().optional(),
+  locationEnforced: z.boolean().nullable().optional(),
 });
 
 export async function PATCH(request: NextRequest): Promise<NextResponse> {
@@ -154,7 +162,7 @@ export async function PATCH(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    const { id, name, location, isActive } = validation.data;
+    const { id, name, location, isActive, latitude, longitude, locationRadiusMeters, locationEnforced } = validation.data;
 
     const existing = await prisma.gate.findFirst({
       where: { id, organizationId: claims.orgId, deletedAt: null },
@@ -163,14 +171,28 @@ export async function PATCH(request: NextRequest): Promise<NextResponse> {
       return NextResponse.json({ success: false, message: 'Gate not found' }, { status: 404 });
     }
 
+    const updateData: Record<string, unknown> = {};
+    if (name !== undefined) updateData.name = name.trim();
+    if (location !== undefined) updateData.location = location.trim();
+    if (isActive !== undefined) updateData.isActive = isActive;
+    if (latitude !== undefined) updateData.latitude = latitude;
+    if (longitude !== undefined) updateData.longitude = longitude;
+    if (locationRadiusMeters !== undefined) updateData.locationRadiusMeters = locationRadiusMeters;
+    if (locationEnforced !== undefined) updateData.locationEnforced = locationEnforced;
+
     const updated = await prisma.gate.update({
       where: { id },
-      data: {
-        ...(name !== undefined ? { name: name.trim() } : {}),
-        ...(location !== undefined ? { location: location.trim() } : {}),
-        ...(isActive !== undefined ? { isActive } : {}),
+      data: updateData,
+      select: {
+        id: true,
+        name: true,
+        location: true,
+        isActive: true,
+        latitude: true,
+        longitude: true,
+        locationRadiusMeters: true,
+        locationEnforced: true,
       },
-      select: { id: true, name: true, location: true, isActive: true },
     });
 
     return NextResponse.json({ success: true, data: updated });

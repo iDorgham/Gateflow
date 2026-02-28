@@ -9,6 +9,8 @@ import { prisma, setOrganizationContext, clearOrganizationContext, isAccessAllow
 import { requireAuth, isNextResponse } from '../../../../lib/require-auth';
 import { checkRateLimit } from '../../../../lib/rate-limit';
 import { checkGateAssignment } from '../../../../lib/gate-assignment';
+import { checkLocationForGate } from '../../../../lib/location';
+import { getActiveWatchlist, findWatchlistMatch } from '../../../../lib/watchlist';
 
 // ─── Configuration ────────────────────────────────────────────────────────────
 
@@ -108,10 +110,20 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       });
     }
 
-    // Step 3 — Set tenant context for downstream DB helpers.
-    if (claims.orgId) {
-      setOrganizationContext({ organizationId: claims.orgId });
+    // Step 2.5 — Require organization (fail-closed: no org = no validate).
+    if (!claims.orgId) {
+      return json<QRValidateResponse>(
+        {
+          status: 'rejected',
+          reason: 'wrong_org',
+          message: 'Organization context required to validate QR codes',
+        },
+        403,
+      );
     }
+
+    // Step 3 — Set tenant context for downstream DB helpers.
+    setOrganizationContext({ organizationId: claims.orgId });
 
     // Step 4 — Parse & validate request body.
     const body = await request.json();
@@ -134,7 +146,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const payload = sigResult.payload;
 
     // Step 6 — Tenant isolation: QR orgId must match token orgId.
-    if (claims.orgId && payload.organizationId !== claims.orgId) {
+    if (payload.organizationId !== claims.orgId) {
       return json<QRValidateResponse>(
         {
           status: 'rejected',
@@ -165,7 +177,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     // Defense-in-depth: re-verify org on the DB row (prevents payload/DB desync).
-    if (claims.orgId && qrCode.organizationId !== claims.orgId) {
+    if (qrCode.organizationId !== claims.orgId) {
       return json<QRValidateResponse>(
         {
           status: 'rejected',
@@ -275,6 +287,69 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         { status: 'rejected', reason: 'denied', message: assignmentError },
         403,
       );
+    }
+
+    // Step 11c — Location rule: when gate has locationEnforced, require device location within radius.
+    const gateForLocation = await prisma.gate.findFirst({
+      where: { id: gateId, organizationId: claims.orgId, deletedAt: null },
+      select: {
+        latitude: true,
+        longitude: true,
+        locationRadiusMeters: true,
+        locationEnforced: true,
+      },
+    });
+    if (gateForLocation) {
+      const loc = scanContext;
+      const lat = loc?.latitude ?? (loc?.location && typeof (loc.location as { latitude?: number }).latitude === 'number' ? (loc.location as { latitude: number }).latitude : null);
+      const lon = loc?.longitude ?? (loc?.location && typeof (loc.location as { longitude?: number }).longitude === 'number' ? (loc.location as { longitude: number }).longitude : null);
+      const deviceLocation =
+        lat != null && lon != null ? { latitude: lat, longitude: lon } : null;
+      const locationResult = checkLocationForGate(gateForLocation, deviceLocation);
+      if (!locationResult.allowed) {
+        const msg = 'message' in locationResult ? locationResult.message : 'Scan only allowed at gate location.';
+        return json<QRValidateResponse>(
+          {
+            status: 'rejected',
+            reason: 'not_on_location',
+            message: msg,
+          },
+          403,
+        );
+      }
+    }
+
+    // Step 11d — Watchlist: if scanContext has visitor identity, check org watchlist; on match reject and create incident.
+    const visitorName = scanContext?.visitorName ?? null;
+    const visitorPhone = scanContext?.visitorPhone ?? null;
+    const visitorIdNumber = scanContext?.visitorIdNumber ?? null;
+    if (visitorName || visitorPhone || visitorIdNumber) {
+      const entries = await getActiveWatchlist(claims.orgId);
+      const match = findWatchlistMatch(entries, {
+        name: visitorName,
+        phone: visitorPhone,
+        idNumber: visitorIdNumber,
+      });
+      if (match) {
+        await prisma.incident.create({
+          data: {
+            organizationId: claims.orgId,
+            gateId,
+            userId: claims.sub,
+            reason: 'watchlist_match',
+            status: 'UNDER_REVIEW',
+            notes: `Watchlist entry ${match.entryId} matched on ${match.matchedField}.`,
+          },
+        });
+        return json<QRValidateResponse>(
+          {
+            status: 'rejected',
+            reason: 'blocked_watchlist',
+            message: 'Blocked person on security list.',
+          },
+          403,
+        );
+      }
     }
 
     // Step 12 — Atomic transaction: re-check usage (TOCTOU guard), increment, log.

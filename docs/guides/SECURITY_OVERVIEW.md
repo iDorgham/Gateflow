@@ -92,18 +92,20 @@ GateFlow v6 formalizes visitor identity levels:
 |---------|-----------------------------------------------------------------|---------------------------------------|
 | Level 0 | Basic details only: name + phone                                | Casual guests, low‑risk events        |
 | Level 1 | ID photo capture at gate (front/back), stored with the scan    | Contractors, vendors, long‑term stays |
-| Level 2 | ID OCR + matching (name/ID number vs invite data)              | High‑security compounds, sensitive orgs |
+| Level 2 | ID OCR + matching (name/ID number vs invite data) — stub       | High‑security compounds (coming soon) |
 
 Configuration:
 
-- Per‑tenant default.
-- Per‑gate overrides (e.g. main gate Level 2, side gate Level 1).
-- Optionally per project or scenario (events vs resident invites).
+- **Org default:** `Organization.requiredIdentityLevel` (0/1/2). Default 0.
+- **Gate override:** `Gate.requiredIdentityLevel` (null = use org default).
+- Scanner app: when level ≥ 1, prompts guard for ID capture after successful scan; uploads to `/api/artifacts`.
 
-Artifacts (ID images, OCR text) are:
+Artifacts (ID images, OCR text):
 
-- Attached to `ScanLog`/incident records.
-- Subject to tenant‑level data retention policies (see §7.2).
+- Stored in `ScanAttachment` model; linked to `ScanLog` or `Incident`.
+- API: `POST /api/artifacts` (attach), `GET /api/artifacts/[id]` (retrieve).
+- **Access control:** Org‑scoped; retrieval denied for other orgs. Requires `gates:manage`.
+- Subject to tenant‑level retention (see §7.2).
 
 ---
 
@@ -162,9 +164,11 @@ GateFlow adds a policy layer for scans:
   - APIs reject scans for gates the operator is not assigned to.
 
 - **Location rule (optional):**
-  - If enabled at org/gate level, scans must be performed near the gate coordinates (within configured radius).
-  - Scanner sends device location in scan context; server enforces distance.
-  - Errors are explicit (e.g., “Scan only allowed at gate location”).
+  - **Opt-in:** Enforcement is per gate; when `locationEnforced` is false, scans are not rejected for location.
+  - **Config:** Each gate can set latitude, longitude, and radius (meters). When enabled, the server accepts a scan only if the device location is within the radius (Haversine distance).
+  - **Scanner:** Sends device latitude/longitude in scan context when available (permissions and UX considered). If the API rejects due to location, the scanner shows a clear message (e.g. “Scanning is only allowed at the gate location. Enable device location or move closer to the gate.”).
+  - **Location unavailable or denied:** When the rule is on and the device does not send location (user denied permission or unavailable), the scan is **rejected** with a clear error; the scan is not queued for later sync as a success. Bulk-sync rejects individual scans that fail the location check for their gate.
+  - **APIs:** Single-scan validate (`POST /api/qrcodes/validate`) and bulk-sync (`POST /api/scans/bulk`) both enforce the location rule when the gate has it enabled; rejection reason is `not_on_location`.
 
 - **Gate hours & policies (future in v6 roadmap):**
   - Per‑gate operating hours and access rules (e.g. deliveries only during the day).
@@ -178,20 +182,20 @@ Implementation details are in `PRD_v6.0.md` (Scanner Rules & Gate–Account Assi
 
 ### 7.1 Resident & Visitor Privacy
 
-- Residents control:
-  - Whether guests see full name vs initials.
-  - Whether QR landing pages expose unit number and navigation links.
-  - Notification preferences (on scan, on arrival, quiet hours).
+- **Org settings:** `maskResidentNameOnLandingPage`, `showUnitOnLandingPage`.
+  - Dashboard: Settings → Workspace → Privacy & Data Retention.
+  - Applied on resident portal/landing when rendering guest‑facing content.
 - Tenants configure:
-  - Required identity level by gate.
-  - Whether guest ID capture is enabled and how it is used.
+  - Required identity level by gate (org default + per‑gate override).
+  - Retention for scan logs, visitor history, ID artifacts, incidents.
 
 ### 7.2 Data Retention
 
-- Tenant‑level settings for:
-  - Scan log retention (e.g. 6/12/24 months).
-  - Visitor history retention per resident.
-  - Retention for sensitive artifacts (ID images, incident attachments).
+- Tenant‑level settings in `Organization`:
+  - `scanLogRetentionMonths`, `visitorHistoryRetentionMonths`, `idArtifactRetentionMonths`, `incidentRetentionMonths`.
+  - Null = keep indefinitely. Values 1–120 months.
+- Dashboard: Settings → Workspace → Privacy & Data Retention.
+- **Cleanup:** A scheduled job or manual script should delete/anonymize data older than retention. Placeholder: `packages/db/scripts/retention-cleanup.ts` (to be implemented). Document: "After X months, data is eligible for deletion per org policy."
 - Future: legal hold flags on specific incidents/visitors to prevent automatic deletion.
 
 ---

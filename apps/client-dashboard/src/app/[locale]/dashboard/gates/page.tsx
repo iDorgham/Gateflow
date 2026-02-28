@@ -59,6 +59,11 @@ export default async function GatesPage({ params }: { params: { locale: Locale }
     isActiveToday: gate.lastAccessedAt != null && gate.lastAccessedAt >= todayStart,
     _count: gate._count,
     projectName: gate.project?.name ?? null,
+    latitude: gate.latitude ?? null,
+    longitude: gate.longitude ?? null,
+    locationRadiusMeters: gate.locationRadiusMeters ?? null,
+    locationEnforced: gate.locationEnforced ?? false,
+    requiredIdentityLevel: gate.requiredIdentityLevel ?? null,
   }));
 
   return (

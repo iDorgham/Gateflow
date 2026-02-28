@@ -10,6 +10,11 @@ export const ScanEventSchema = z.object({
   status: z.nativeEnum(ScanStatus),
   retryCount: z.number().int().min(0),
   deviceId: z.string().optional(),
+  latitude: z.number().min(-90).max(90).optional(),
+  longitude: z.number().min(-180).max(180).optional(),
+  visitorName: z.string().max(200).optional(),
+  visitorPhone: z.string().max(50).optional(),
+  visitorIdNumber: z.string().max(100).optional(),
 });
 
 export type ScanEvent = z.infer<typeof ScanEventSchema>;

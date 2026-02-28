@@ -22,6 +22,12 @@ export async function GET(): Promise<NextResponse> {
 
     const orgId = claims.orgId;
     const todayStart = new Date();
+
+    const org = await prisma.organization.findFirst({
+      where: { id: orgId, deletedAt: null },
+      select: { requiredIdentityLevel: true },
+    });
+    const orgDefaultIdentityLevel = org?.requiredIdentityLevel ?? 0;
     todayStart.setHours(0, 0, 0, 0);
 
     const hasAnyAssignments = await orgHasAssignments(orgId);
@@ -80,6 +86,7 @@ export async function GET(): Promise<NextResponse> {
         totalScans: gate._count.scanLogs,
         scansToday,
         isActiveToday,
+        requiredIdentityLevel: gate.requiredIdentityLevel ?? null,
       };
     });
 
@@ -87,6 +94,7 @@ export async function GET(): Promise<NextResponse> {
       success: true,
       data,
       assignedOnly: hasAnyAssignments,
+      orgDefaultIdentityLevel,
     });
   } catch (err) {
     console.error('GET /api/gates/assigned error:', err);

@@ -118,6 +118,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       id: u.id,
       name: u.name,
       type: u.type,
+      sizeSqm: u.sizeSqm ?? null,
       qrQuota: u.qrQuota,
       projectId: u.projectId,
       projectName: u.project?.name ?? null,
@@ -147,6 +148,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 const CreateUnitSchema = z.object({
   name: z.string().min(1, 'Name is required').max(100),
   type: z.nativeEnum(UnitType),
+  sizeSqm: z.number().int().positive().optional().nullable(),
   qrQuota: z.number().int().positive().optional(),
   projectId: z.string().optional().nullable(),
   contactIds: z.array(z.string()).optional(),
@@ -187,13 +189,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    const { name, type, qrQuota, projectId, contactIds } = validation.data;
+    const { name, type, sizeSqm, qrQuota, projectId, contactIds } = validation.data;
     const quota = qrQuota ?? UNIT_QUOTA_DEFAULTS[type];
 
     const unit = await prisma.unit.create({
       data: {
         name: name.trim(),
         type,
+        sizeSqm: sizeSqm ?? null,
         qrQuota: quota,
         organizationId: orgId,
         projectId: projectId ?? null,
@@ -218,6 +221,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
           id: unit.id,
           name: unit.name,
           type: unit.type,
+          sizeSqm: unit.sizeSqm ?? null,
           qrQuota: unit.qrQuota,
           projectId: unit.projectId,
           projectName: unit.project?.name ?? null,

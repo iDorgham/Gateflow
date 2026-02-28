@@ -2,7 +2,7 @@
 
 import { useState, useTransition, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button, Input, Label } from '@gate-access/ui';
+import { Button, Input, Label, Checkbox, Select } from '@gate-access/ui';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
@@ -31,6 +31,11 @@ export interface GateWithStats {
   isActiveToday: boolean;
   _count: { qrCodes: number; scanLogs: number };
   projectName: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
+  locationRadiusMeters?: number | null;
+  locationEnforced?: boolean | null;
+  requiredIdentityLevel?: number | null;
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -174,7 +179,16 @@ function AddGateModal({ orgId, onClose }: { orgId: string; onClose: () => void }
 function EditGateModal({ gate, onClose }: { gate: GateWithStats; onClose: () => void }) {
   const { t } = useTranslation('dashboard');
   const [name, setName] = useState(gate.name);
-  const [location, setLocation] = useState(gate.location);
+  const [location, setLocation] = useState(gate.location ?? '');
+  const [latitude, setLatitude] = useState<string>(gate.latitude != null ? String(gate.latitude) : '');
+  const [longitude, setLongitude] = useState<string>(gate.longitude != null ? String(gate.longitude) : '');
+  const [locationRadiusMeters, setLocationRadiusMeters] = useState<string>(
+    gate.locationRadiusMeters != null ? String(gate.locationRadiusMeters) : ''
+  );
+  const [locationEnforced, setLocationEnforced] = useState<boolean>(gate.locationEnforced ?? false);
+  const [requiredIdentityLevel, setRequiredIdentityLevel] = useState<string>(
+    gate.requiredIdentityLevel != null ? String(gate.requiredIdentityLevel) : 'org'
+  );
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
@@ -183,8 +197,21 @@ function EditGateModal({ gate, onClose }: { gate: GateWithStats; onClose: () => 
     if (!name.trim()) {
       return setError(t('gates.modal.fields.nameRequired', 'Gate name is required.'));
     }
+    const lat = latitude.trim() ? parseFloat(latitude) : null;
+    const lon = longitude.trim() ? parseFloat(longitude) : null;
+    const radius = locationRadiusMeters.trim() ? parseInt(locationRadiusMeters, 10) : null;
+    if (locationEnforced && (lat == null || lon == null || radius == null || radius < 1)) {
+      return setError(t('gates.modal.fields.locationRuleRequired', 'When location rule is on, latitude, longitude and radius (meters) are required.'));
+    }
     startTransition(async () => {
-      const result = await updateGate(gate.id, name.trim(), location.trim());
+      const identityLevel = requiredIdentityLevel === 'org' ? null : parseInt(requiredIdentityLevel, 10);
+      const result = await updateGate(gate.id, name.trim(), location.trim(), {
+        latitude: lat ?? null,
+        longitude: lon ?? null,
+        locationRadiusMeters: radius ?? null,
+        locationEnforced: locationEnforced ? true : false,
+        requiredIdentityLevel: identityLevel,
+      });
       if (result?.success) {
         toast.success(t('gates.messages.updated', 'Gate updated'));
         onClose();
@@ -197,7 +224,7 @@ function EditGateModal({ gate, onClose }: { gate: GateWithStats; onClose: () => 
 
   return (
     <Modal onClose={onClose}>
-      <div className="p-6">
+      <div className="p-6 max-h-[90vh] overflow-y-auto">
         <h2 className="mb-1 text-lg font-semibold text-slate-900 dark:text-white">{t('gates.modal.edit.title', 'Edit Gate')}</h2>
         <p className="mb-5 text-sm text-slate-500 dark:text-slate-400">{t('gates.modal.edit.desc', 'Update gate name or location.')}</p>
         {error && (
@@ -228,6 +255,71 @@ function EditGateModal({ gate, onClose }: { gate: GateWithStats; onClose: () => 
               onChange={(e) => setLocation(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && submit()}
             />
+          </div>
+          <div className="border-t border-slate-200 dark:border-slate-700 pt-4 space-y-3">
+            <div className="flex items-center gap-2">
+              <Checkbox
+                id="edit-location-enforced"
+                checked={locationEnforced}
+                onChange={(e) => setLocationEnforced(e.target.checked)}
+              />
+              <Label htmlFor="edit-location-enforced" className="cursor-pointer">
+                {t('gates.modal.fields.locationEnforced', 'Enable location rule (scan only at gate)')}
+              </Label>
+            </div>
+            {locationEnforced && (
+              <div className="grid grid-cols-3 gap-2">
+                <div className="space-y-1">
+                  <Label htmlFor="edit-lat">{t('gates.modal.fields.latitude', 'Latitude')}</Label>
+                  <Input
+                    id="edit-lat"
+                    type="number"
+                    step="any"
+                    placeholder="e.g. 24.7136"
+                    value={latitude}
+                    onChange={(e) => setLatitude(e.target.value)}
+                  />
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor="edit-lon">{t('gates.modal.fields.longitude', 'Longitude')}</Label>
+                  <Input
+                    id="edit-lon"
+                    type="number"
+                    step="any"
+                    placeholder="e.g. 46.6753"
+                    value={longitude}
+                    onChange={(e) => setLongitude(e.target.value)}
+                  />
+                </div>
+                <div className="space-y-1">
+                  <Label htmlFor="edit-radius">{t('gates.modal.fields.locationRadius', 'Radius (m)')}</Label>
+                  <Input
+                    id="edit-radius"
+                    type="number"
+                    min={1}
+                    max={100000}
+                    placeholder="50"
+                    value={locationRadiusMeters}
+                    onChange={(e) => setLocationRadiusMeters(e.target.value)}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="border-t border-slate-200 dark:border-slate-700 pt-4 space-y-2">
+            <Label htmlFor="edit-identity">{t('gates.modal.fields.identityLevel', 'Visitor identity level')}</Label>
+            <Select
+              id="edit-identity"
+              value={requiredIdentityLevel}
+              onChange={(e) => setRequiredIdentityLevel(e.target.value)}
+              className="h-10"
+            >
+              <option value="org">{t('gates.modal.fields.identityLevelOrg', 'Use org default')}</option>
+              <option value="0">{t('gates.modal.fields.identityLevel0', 'Level 0 — Name & phone only')}</option>
+              <option value="1">{t('gates.modal.fields.identityLevel1', 'Level 1 — ID photo capture')}</option>
+              <option value="2">{t('gates.modal.fields.identityLevel2', 'Level 2 — ID OCR (coming soon)')}</option>
+            </Select>
+            <p className="text-xs text-slate-500">{t('gates.modal.fields.identityLevelHint', 'When Level 1+, scanner will prompt for ID capture after scan.')}</p>
           </div>
         </div>
         <div className="mt-6 flex gap-2">
