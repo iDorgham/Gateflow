@@ -25,14 +25,28 @@ export async function requireAuth(): Promise<DashboardSession> {
   const claims = await getSessionClaims();
   if (!claims) redirect('/login');
 
-  const user = await prisma.user
+  const userRow = await prisma.user
     .findFirst({
       where: { id: claims.sub, deletedAt: null },
-      select: { id: true, name: true, email: true, role: true, organizationId: true },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        role: { select: { name: true } },
+        organizationId: true,
+      },
     })
     .catch(() => null);
 
-  if (!user) redirect('/login');
+  if (!userRow) redirect('/login');
+
+  const user: DashboardSession['user'] = {
+    id: userRow.id,
+    name: userRow.name,
+    email: userRow.email,
+    role: userRow.role.name,
+    organizationId: userRow.organizationId,
+  };
 
   let org: DashboardSession['org'] = null;
   if (user.organizationId) {

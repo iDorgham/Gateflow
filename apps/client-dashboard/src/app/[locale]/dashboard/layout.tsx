@@ -66,7 +66,7 @@ export default async function DashboardLayout({
         id: user.id, 
         name: user.name, 
         email: user.email, 
-        role: claims.roleName || user.role 
+        role: claims.roleName ?? getRoleName(user) 
       }}
       org={org ? { id: org.id, name: org.name, plan: org.plan } : null}
       projects={projects}
