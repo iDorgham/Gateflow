@@ -350,7 +350,7 @@ export default async function AnalyticsPage({
   }
   let peakHour = -1;
   let maxCount = 0;
-  for (const [h, c] of hourCounts) {
+  for (const [h, c] of Array.from(hourCounts.entries())) {
     if (c > maxCount) {
       maxCount = c;
       peakHour = h;

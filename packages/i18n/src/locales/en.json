@@ -998,12 +998,42 @@
       "applyFiltersTo": "Apply filters to",
       "applyToContacts": "Contacts",
       "applyToUnits": "Units",
-      "openInAnalytics": "Open in Analytics Dashboard"
+      "openInAnalytics": "Open in Analytics Dashboard",
+      "loading": "Loading…",
+      "anomalyDeniedHigh": "High denial rate",
+      "anomalyDeniedDesc": "{{pct}}% of scans were denied (threshold 5%).",
+      "anomalySpikeDetected": "Scan spike detected",
+      "anomalySpikeDesc": "Last hour ({{count}}) > 2× hourly avg ({{avg}}).",
+      "operatorLeaderboard": "Top Operators",
+      "noOperators": "No operator data in this period."
     },
     "residents": {
       "title": "Residents",
       "contacts": "Contacts",
-      "units": "Units"
+      "units": "Units",
+      "customizeColumns": "Customize columns",
+      "viewingUnit": "Viewing unit",
+      "clearUnitFilter": "Clear",
+      "viewingContact": "Viewing contact",
+      "clearContactFilter": "Clear",
+      "viewUnits": "View units",
+      "viewInUnitsPage": "View in Units page",
+      "viewInContactsPage": "View in Contacts page",
+      "unitsForContact": "Units for {{name}}",
+      "contactsForUnit": "Contacts for {{name}}",
+      "noUnitsLinked": "No units linked.",
+      "noContactsLinked": "No contacts linked.",
+      "filterByTag": "Filter by tag",
+      "allTags": "All tags",
+      "applyColumns": "Apply",
+      "moveUp": "Move up",
+      "moveDown": "Move down",
+      "saveViewFailed": "Failed to save column preferences",
+      "preset": {
+        "Default": "Default",
+        "Marketing": "Marketing",
+        "Security": "Security"
+      }
     },
     "contacts": {
       "title": "Contacts",
@@ -1014,15 +1044,21 @@
       "exportCsv": "Export CSV",
       "searchPlaceholder": "Search contacts…",
       "table": {
+        "avatar": "",
         "firstName": "First Name",
         "lastName": "Last Name",
         "birthday": "Birthday",
         "company": "Company",
         "phone": "Phone",
         "email": "Email",
+        "tags": "Tags",
         "units": "Units",
+        "visitsInRange": "Visits",
+        "lastVisitInRange": "Last visit",
         "actions": "Actions"
       },
+      "paginationSummary": "Showing {{from}}-{{to}} of {{total}}",
+      "confirmDeleteDescription": "Are you sure you want to delete {{name}}? This action cannot be undone.",
       "form": {
         "firstName": "First Name",
         "lastName": "Last Name",
@@ -1058,14 +1094,20 @@
       "exportCsv": "Export CSV",
       "searchPlaceholder": "Search units…",
       "table": {
-        "name": "Unit Name",
+        "name": "Unit ID",
         "type": "Type",
+        "size": "Size",
         "residents": "Residents",
         "linkedResident": "Linked Resident",
         "qrQuota": "QR Quota",
         "project": "Project",
+        "visitsInRange": "Visits",
+        "lastVisitInRange": "Last visit",
+        "linkedContactCount": "Contacts",
         "actions": "Actions"
       },
+      "paginationSummary": "Showing {{from}}-{{to}} of {{total}}",
+      "potentialVacancy": "Potential vacancy",
       "form": {
         "name": "Unit Name / Number",
         "namePlaceholder": "e.g. Villa 12, Apt 4B",

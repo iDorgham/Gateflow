@@ -1010,12 +1010,42 @@
       "applyFiltersTo": "تطبيق الفلاتر على",
       "applyToContacts": "جهات الاتصال",
       "applyToUnits": "الوحدات",
-      "openInAnalytics": "فتح في لوحة التحليلات"
+      "openInAnalytics": "فتح في لوحة التحليلات",
+      "loading": "جاري التحميل…",
+      "anomalyDeniedHigh": "معدل رفض مرتفع",
+      "anomalyDeniedDesc": "{{pct}}% من المسحات مرفوضة (الحد 5%).",
+      "anomalySpikeDetected": "ارتفاع مفاجئ في المسحات",
+      "anomalySpikeDesc": "الساعة الأخيرة ({{count}}) > 2× المتوسط الساعي ({{avg}}).",
+      "operatorLeaderboard": "أفضل المشغلين",
+      "noOperators": "لا توجد بيانات مشغلين في هذه الفترة."
     },
     "residents": {
       "title": "السكان",
       "contacts": "جهات الاتصال",
-      "units": "الوحدات"
+      "units": "الوحدات",
+      "customizeColumns": "تخصيص الأعمدة",
+      "viewingUnit": "عرض الوحدة",
+      "clearUnitFilter": "مسح",
+      "viewingContact": "عرض جهة الاتصال",
+      "clearContactFilter": "مسح",
+      "viewUnits": "عرض الوحدات",
+      "viewInUnitsPage": "عرض في صفحة الوحدات",
+      "viewInContactsPage": "عرض في صفحة جهات الاتصال",
+      "unitsForContact": "الوحدات لـ {{name}}",
+      "contactsForUnit": "جهات الاتصال للوحدة {{name}}",
+      "noUnitsLinked": "لا توجد وحدات مرتبطة.",
+      "noContactsLinked": "لا توجد جهات اتصال مرتبطة.",
+      "filterByTag": "تصفية حسب الوسم",
+      "allTags": "جميع الوسوم",
+      "applyColumns": "تطبيق",
+      "moveUp": "تحريك لأعلى",
+      "moveDown": "تحريك لأسفل",
+      "saveViewFailed": "فشل حفظ تفضيلات الأعمدة",
+      "preset": {
+        "Default": "افتراضي",
+        "Marketing": "تسويق",
+        "Security": "أمان"
+      }
     },
     "contacts": {
       "title": "جهات الاتصال",
@@ -1026,15 +1056,21 @@
       "exportCsv": "تصدير CSV",
       "searchPlaceholder": "البحث في جهات الاتصال…",
       "table": {
+        "avatar": "",
         "firstName": "الاسم الأول",
         "lastName": "اسم العائلة",
         "birthday": "تاريخ الميلاد",
         "company": "الشركة",
         "phone": "الهاتف",
         "email": "البريد الإلكتروني",
+        "tags": "الوسوم",
         "units": "الوحدات",
+        "visitsInRange": "الزيارات",
+        "lastVisitInRange": "آخر زيارة",
         "actions": "الإجراءات"
       },
+      "paginationSummary": "عرض {{from}}-{{to}} من {{total}}",
+      "confirmDeleteDescription": "هل أنت متأكد من حذف {{name}}؟ لا يمكن التراجع عن هذا الإجراء.",
       "form": {
         "firstName": "الاسم الأول",
         "lastName": "اسم العائلة",
@@ -1070,14 +1106,20 @@
       "exportCsv": "تصدير CSV",
       "searchPlaceholder": "البحث في الوحدات…",
       "table": {
-        "name": "اسم الوحدة",
+        "name": "رقم الوحدة",
         "type": "النوع",
+        "size": "المساحة",
         "residents": "السكان",
         "linkedResident": "المقيم المرتبط",
         "qrQuota": "حصة QR",
         "project": "المشروع",
+        "visitsInRange": "الزيارات",
+        "lastVisitInRange": "آخر زيارة",
+        "linkedContactCount": "جهات الاتصال",
         "actions": "الإجراءات"
       },
+      "paginationSummary": "عرض {{from}}-{{to}} من {{total}}",
+      "potentialVacancy": "شاغر محتمل",
       "form": {
         "name": "اسم/رقم الوحدة",
         "namePlaceholder": "مثل: فيلا 12، شقة 4ب",

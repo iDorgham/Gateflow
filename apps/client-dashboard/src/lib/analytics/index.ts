@@ -8,4 +8,5 @@ export {
   type DateRangePreset,
 } from './analytics-filters';
 export { useAnalyticsFilters } from './use-analytics-filters';
+export { useAnalyticsSummary, type SummaryData } from './use-analytics-summary';
 export { buildAnalyticsUrl, buildContactsUrl, buildUnitsUrl } from './build-analytics-url';

@@ -8,9 +8,12 @@ import {
   AnalyticsKPICards,
   AnalyticsChartPlaceholder,
   AnalyticsApplyFiltersButton,
+  AnalyticsHeatmapChart,
+  AnalyticsAnomalyCards,
+  AnalyticsOperatorLeaderboard,
   type KPIData,
 } from '@/components/dashboard/analytics';
-import { useAnalyticsFilters } from '@/lib/analytics';
+import { useAnalyticsFilters, useAnalyticsSummary } from '@/lib/analytics';
 import { PrintButton } from './print-button';
 
 interface AnalyticsClientProps {
@@ -23,6 +26,20 @@ export function AnalyticsClient({ kpiData, gates = [] }: AnalyticsClientProps) {
   const { t } = useTranslation('dashboard');
   const locale = (params?.locale as string) || 'en';
   const { filters, updateFilters, setMode } = useAnalyticsFilters();
+  const { data: summary } = useAnalyticsSummary(filters, true);
+
+  const kpiDataToUse = summary
+    ? {
+        totalVisits: summary.totalVisits,
+        passRate: summary.passRate,
+        peakHour: summary.peakHour,
+        uniqueVisitors: summary.uniqueVisitors,
+        deniedScans: summary.deniedCount,
+        attributedScans: summary.attributedScans,
+      }
+    : kpiData;
+
+  const isSecurity = filters.mode === 'security';
 
   return (
     <div className="space-y-6">
@@ -49,17 +66,33 @@ export function AnalyticsClient({ kpiData, gates = [] }: AnalyticsClientProps) {
         gates={gates}
       />
 
-      {/* KPI row */}
-      <AnalyticsKPICards data={kpiData} />
+      {/* KPI row (short-polled via summary) */}
+      <AnalyticsKPICards data={kpiDataToUse} />
+
+      {/* Anomaly cards (Security mode only) */}
+      {isSecurity && <AnalyticsAnomalyCards summary={summary ?? undefined} />}
 
       {/* Main charts: 60/40 split */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
-        <div className="lg:col-span-7">
-          <AnalyticsChartPlaceholder mode={filters.mode} className="min-h-[320px]" />
-        </div>
-        <div className="lg:col-span-5">
-          <AnalyticsChartPlaceholder mode={filters.mode} className="min-h-[280px]" />
-        </div>
+        {isSecurity ? (
+          <>
+            <div className="lg:col-span-7">
+              <AnalyticsHeatmapChart filters={filters} className="min-h-[320px]" />
+            </div>
+            <div className="lg:col-span-5">
+              <AnalyticsOperatorLeaderboard filters={filters} className="min-h-[280px]" />
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="lg:col-span-7">
+              <AnalyticsChartPlaceholder mode={filters.mode} className="min-h-[320px]" />
+            </div>
+            <div className="lg:col-span-5">
+              <AnalyticsChartPlaceholder mode={filters.mode} className="min-h-[280px]" />
+            </div>
+          </>
+        )}
       </div>
 
       {/* Apply filters to Contacts/Units */}
