@@ -17,6 +17,13 @@ const UNIT_QUOTA_DEFAULTS: Record<UnitType, number> = {
   COMMERCIAL: 5,
 };
 
+/** Escape CSV cell to prevent formula injection (prefix = + - @ with ') */
+function escapeCsvCell(value: string): string {
+  const s = String(value).replace(/"/g, '""');
+  if (/^[=+\-@\t]/.test(s)) return `'${s}'`;
+  return `"${s}"`;
+}
+
 const GetUnitsQuerySchema = z.object({
   projectId: z.string().optional(),
   format: z.enum(['json', 'csv']).optional(),
@@ -144,18 +151,18 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     if (format === 'csv') {
       const rows = [
-        ['Name', 'Type', 'QR Quota', 'Project', 'Residents'].join(','),
+        ['Name', 'Type', 'QR Quota', 'Project', 'Residents'].map(escapeCsvCell).join(','),
         ...units.map((u) =>
           [
             u.name,
             u.type,
-            u.qrQuota,
+            String(u.qrQuota),
             u.project?.name ?? '',
             u.contacts
               .map((cu) => `${cu.contact.firstName} ${cu.contact.lastName}`)
               .join('; '),
           ]
-            .map((v) => `"${String(v).replace(/"/g, '""')}"`)
+            .map((v) => escapeCsvCell(v))
             .join(',')
         ),
       ].join('\n');
@@ -170,26 +177,30 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     let unitAggregates: Map<string, { visitsInRange: number; lastVisitInRange: string | null }> = new Map();
     if (dateFrom && dateTo) {
-      const gateCondition = gateId ? Prisma.sql`AND sl."gateId" = ${gateId}` : Prisma.empty;
-      const aggRows = await prisma.$queryRaw<
-        { unitId: string; visitsInRange: number; lastVisitInRange: Date | null }[]
-      >`
-        SELECT vqr."unitId", COUNT(*)::int AS "visitsInRange", MAX(sl."scannedAt") AS "lastVisitInRange"
-        FROM "ScanLog" sl
-        JOIN "QRCode" qr ON sl."qrCodeId" = qr.id
-        JOIN "VisitorQR" vqr ON vqr."qrCodeId" = qr.id
-        WHERE sl.status = 'SUCCESS'
-          AND sl."scannedAt" >= ${dateFrom} AND sl."scannedAt" <= ${dateTo}
-          AND qr."organizationId" = ${orgId} AND qr."deletedAt" IS NULL
-          ${gateCondition}
-        GROUP BY vqr."unitId"
-      `;
-      unitAggregates = new Map(
-        aggRows.map((r) => [
-          r.unitId,
-          { visitsInRange: r.visitsInRange, lastVisitInRange: r.lastVisitInRange?.toISOString() ?? null },
-        ])
-      );
+      try {
+        const gateCondition = gateId ? Prisma.sql`AND sl."gateId" = ${gateId}` : Prisma.empty;
+        const aggRows = await prisma.$queryRaw<
+          { unitId: string; visitsInRange: number; lastVisitInRange: Date | null }[]
+        >`
+          SELECT vqr."unitId", COUNT(*)::int AS "visitsInRange", MAX(sl."scannedAt") AS "lastVisitInRange"
+          FROM "ScanLog" sl
+          JOIN "QRCode" qr ON sl."qrCodeId" = qr.id
+          JOIN "VisitorQR" vqr ON vqr."qrCodeId" = qr.id
+          WHERE sl.status = 'SUCCESS'
+            AND sl."scannedAt" >= ${dateFrom} AND sl."scannedAt" <= ${dateTo}
+            AND qr."organizationId" = ${orgId} AND qr."deletedAt" IS NULL
+            ${gateCondition}
+          GROUP BY vqr."unitId"
+        `;
+        unitAggregates = new Map(
+          aggRows.map((r) => [
+            r.unitId,
+            { visitsInRange: r.visitsInRange, lastVisitInRange: r.lastVisitInRange?.toISOString() ?? null },
+          ])
+        );
+      } catch {
+        // VisitorQR table may not exist yet (e.g. before Phase 2 migration); leave aggregates empty
+      }
     }
 
     const data = units.map((u) => {
