@@ -16,7 +16,7 @@ Checklist for **PLAN_residents_analytics**. Use with `/dev` and phase prompts.
 - [x] **1.5** Extend `GET /api/units` filters + range aggregates
 - [x] **1.6** Implement tags APIs (CRUD + contact tag assign/remove + bulk)
 - [x] **1.7** Implement `GET/PATCH /api/users/me/preferences`
-- [ ] **1.8** Lint, typecheck, tests pass; committed
+- [x] **1.8** Lint, typecheck, tests pass; committed
 
 **Status:** In progress (blocked on migration creation/application)
 
