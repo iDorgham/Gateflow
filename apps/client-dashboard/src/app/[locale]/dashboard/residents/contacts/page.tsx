@@ -8,6 +8,8 @@ import {
   Button,
   Input,
   Label,
+  Select,
+  Checkbox,
   Table,
   TableBody,
   TableCell,
@@ -27,6 +29,13 @@ import {
 } from '@gate-access/ui';
 import { useTranslation } from 'react-i18next';
 import {
+  type ColumnDef,
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
+import { useQueryClient, useMutation } from '@tanstack/react-query';
+import {
   Plus,
   Upload,
   Download,
@@ -37,6 +46,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Columns,
+  Eye,
 } from 'lucide-react';
 import { buildAnalyticsUrl } from '@/lib/analytics';
 import {
@@ -89,6 +99,8 @@ export default function ContactsPage() {
   const [deleteTarget, setDeleteTarget] = useState<ContactRow | null>(null);
   const [customizerOpen, setCustomizerOpen] = useState(false);
   const [viewUnitsFor, setViewUnitsFor] = useState<ContactRow | null>(null);
+  const [selectedContactIds, setSelectedContactIds] = useState<string[]>([]);
+  const [bulkTagId, setBulkTagId] = useState('');
   const [isPending, startTransition] = useTransition();
   const { t } = useTranslation('dashboard');
 
@@ -132,7 +144,111 @@ export default function ContactsPage() {
     };
   }, []);
 
+  const queryClient = useQueryClient();
+
+  const addTagMutation = useMutation({
+    mutationFn: async ({
+      contactId,
+      tagId,
+    }: {
+      contactId: string;
+      tagId: string;
+    }) => {
+      const res = await fetch(`/api/contacts/${contactId}/tags`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tagIds: [tagId] }),
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) throw new Error(json.message || 'Failed to add tag');
+    },
+    onMutate: async ({ contactId, tagId }) => {
+      const tag = tagOptions.find((t) => t.id === tagId);
+      if (!tag) return undefined;
+      await queryClient.cancelQueries({ queryKey: ['contacts', filters] });
+      const previous = queryClient.getQueryData<{
+        success: boolean;
+        data: ContactRow[];
+        total?: number;
+        page?: number;
+        pageSize?: number;
+      }>(['contacts', filters]);
+      if (!previous?.data) return { previous };
+      queryClient.setQueryData(['contacts', filters], {
+        ...previous,
+        data: previous.data.map((c) =>
+          c.id === contactId
+            ? {
+                ...c,
+                tags: [
+                  ...(c.tags ?? []),
+                  { id: tag.id, name: tag.name, color: tag.color },
+                ],
+              }
+            : c
+        ),
+      });
+      return { previous };
+    },
+    onError: (_err, _vars, ctx) => {
+      if (ctx?.previous)
+        queryClient.setQueryData(['contacts', filters], ctx.previous);
+      toast.error(t('residents.tagUpdateFailed', 'Failed to update tags'));
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['contacts'] });
+    },
+  });
+
+  const removeTagMutation = useMutation({
+    mutationFn: async ({
+      contactId,
+      tagId,
+    }: {
+      contactId: string;
+      tagId: string;
+    }) => {
+      const res = await fetch(`/api/contacts/${contactId}/tags`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tagId }),
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success)
+        throw new Error(json.message || 'Failed to remove tag');
+    },
+    onMutate: async ({ contactId, tagId }) => {
+      await queryClient.cancelQueries({ queryKey: ['contacts', filters] });
+      const previous = queryClient.getQueryData<{
+        success: boolean;
+        data: ContactRow[];
+        total?: number;
+        page?: number;
+        pageSize?: number;
+      }>(['contacts', filters]);
+      if (!previous?.data) return { previous };
+      queryClient.setQueryData(['contacts', filters], {
+        ...previous,
+        data: previous.data.map((c) =>
+          c.id === contactId
+            ? { ...c, tags: (c.tags ?? []).filter((t) => t.id !== tagId) }
+            : c
+        ),
+      });
+      return { previous };
+    },
+    onError: (_err, _vars, ctx) => {
+      if (ctx?.previous)
+        queryClient.setQueryData(['contacts', filters], ctx.previous);
+      toast.error(t('residents.tagUpdateFailed', 'Failed to update tags'));
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['contacts'] });
+    },
+  });
+
   const contactColumns = [
+    { id: 'select', label: '', canHide: false },
     { id: 'avatar', label: t('contacts.table.avatar', ''), canHide: false },
     {
       id: 'firstName',
@@ -164,6 +280,11 @@ export default function ContactsPage() {
       canHide: true,
     },
     {
+      id: 'passesInRange',
+      label: t('contacts.table.passesInRange', 'Passes'),
+      canHide: true,
+    },
+    {
       id: 'lastVisitInRange',
       label: t('contacts.table.lastVisitInRange', 'Last visit'),
       canHide: true,
@@ -182,6 +303,219 @@ export default function ContactsPage() {
     )
     .map((id) => contactColumns.find((c) => c.id === id)!)
     .filter(Boolean);
+  const renderContactCell = (columnId: string, c: ContactRow) => {
+      if (columnId === 'select')
+        return (
+          <TableCell key={columnId} className="w-10">
+            <Checkbox
+              checked={selectedContactIds.includes(c.id)}
+              onChange={(e) => toggleContactSelection(c.id, e.target.checked)}
+              aria-label={t('residents.selectRow', 'Select row')}
+            />
+          </TableCell>
+        );
+      if (columnId === 'avatar')
+        return (
+          <TableCell key={columnId} className="w-14">
+            <Avatar className="h-9 w-9">
+              {c.avatarUrl ? (
+                <AvatarImage src={c.avatarUrl} alt={`${c.firstName} ${c.lastName}`} />
+              ) : null}
+              <AvatarFallback className="text-xs bg-muted">
+                {c.firstName.charAt(0)}
+                {c.lastName.charAt(0)}
+              </AvatarFallback>
+            </Avatar>
+          </TableCell>
+        );
+      if (columnId === 'firstName')
+        return (
+          <TableCell key={columnId} className="font-medium">
+            {c.firstName}
+          </TableCell>
+        );
+      if (columnId === 'lastName')
+        return <TableCell key={columnId}>{c.lastName}</TableCell>;
+      if (columnId === 'birthday')
+        return (
+          <TableCell key={columnId} className="text-sm text-muted-foreground">
+            {c.birthday ?? '—'}
+          </TableCell>
+        );
+      if (columnId === 'company')
+        return (
+          <TableCell key={columnId} className="text-sm">
+            {c.company ?? '—'}
+          </TableCell>
+        );
+      if (columnId === 'phone')
+        return (
+          <TableCell key={columnId} className="text-sm font-mono">
+            {c.phone ?? '—'}
+          </TableCell>
+        );
+      if (columnId === 'email')
+        return (
+          <TableCell key={columnId} className="text-sm">
+            {c.email ?? '—'}
+          </TableCell>
+        );
+      if (columnId === 'tags')
+        return (
+          <TableCell key={columnId}>
+            <div className="flex flex-wrap gap-1">
+              {(c.tags ?? []).length === 0 ? (
+                <span className="text-xs text-muted-foreground">—</span>
+              ) : (
+                (c.tags ?? []).map((tag) => (
+                  <Badge
+                    key={tag.id}
+                    variant="secondary"
+                    className="text-xs cursor-pointer"
+                    style={
+                      tag.color
+                        ? {
+                            backgroundColor: tag.color,
+                            color: '#fff',
+                            border: 'none',
+                          }
+                        : undefined
+                    }
+                    onClick={() =>
+                      removeTagMutation.mutate({
+                        contactId: c.id,
+                        tagId: tag.id,
+                      })
+                    }
+                    title={t('residents.clickToRemoveTag', 'Click to remove')}
+                  >
+                    {tag.name}
+                  </Badge>
+                ))
+              )}
+              <Select
+                value=""
+                onChange={(e) => {
+                  const tagId = e.target.value;
+                  if (tagId)
+                    addTagMutation.mutate({ contactId: c.id, tagId });
+                  e.target.value = '';
+                }}
+                className="h-7 w-[120px] text-xs"
+              >
+                <option value="">{t('residents.addTag', 'Add tag')}</option>
+                {tagOptions
+                  .filter(
+                    (tag) => !(c.tags ?? []).some((assigned) => assigned.id === tag.id)
+                  )
+                  .map((tag) => (
+                    <option key={tag.id} value={tag.id}>
+                      {tag.name}
+                    </option>
+                  ))}
+              </Select>
+            </div>
+          </TableCell>
+        );
+      if (columnId === 'units')
+        return (
+          <TableCell key={columnId}>
+            <div className="flex flex-wrap gap-1 items-center">
+              {c.units.length === 0 ? (
+                <span className="text-xs text-muted-foreground">—</span>
+              ) : (
+                c.units.map((u) => (
+                  <Badge
+                    key={u.id}
+                    variant="secondary"
+                    className="text-xs cursor-pointer hover:bg-secondary/80"
+                    onClick={() => setViewUnitsFor(c)}
+                  >
+                    {u.name}
+                  </Badge>
+                ))
+              )}
+            </div>
+          </TableCell>
+        );
+      if (columnId === 'visitsInRange')
+        return (
+          <TableCell key={columnId} className="text-right tabular-nums">
+            {c.visitsInRange ?? 0}
+          </TableCell>
+        );
+      if (columnId === 'passesInRange')
+        return (
+          <TableCell key={columnId} className="text-right tabular-nums">
+            {c.passesInRange ?? 0}
+          </TableCell>
+        );
+      if (columnId === 'lastVisitInRange')
+        return (
+          <TableCell key={columnId} className="text-right text-sm text-muted-foreground">
+            {c.lastVisitInRange
+              ? new Date(c.lastVisitInRange).toLocaleDateString(undefined, {
+                  dateStyle: 'short',
+                })
+              : '—'}
+          </TableCell>
+        );
+      if (columnId === 'actions')
+        return (
+          <TableCell key={columnId}>
+            <div className="flex items-center gap-1">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-7 w-7"
+                onClick={() => setViewUnitsFor(c)}
+                title={t('residents.viewUnits', 'View units')}
+              >
+                <Eye className="h-3.5 w-3.5" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-7 w-7"
+                onClick={() => openEdit(c)}
+              >
+                <Pencil className="h-3.5 w-3.5" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-7 w-7 text-destructive hover:text-destructive"
+                onClick={() => confirmDelete(c)}
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+              </Button>
+            </div>
+          </TableCell>
+        );
+      return <TableCell key={columnId}>—</TableCell>;
+  };
+  const reactTableColumns = visibleColumns.map((col) => {
+    const def: ColumnDef<ContactRow> = {
+      id: col.id,
+      header: () =>
+        col.id === 'select' ? (
+          <Checkbox
+            checked={allSelected}
+            onChange={(e) => toggleSelectAll(e.target.checked)}
+            aria-label={t('residents.selectAll', 'Select all')}
+          />
+        ) : (
+          col.label
+        ),
+      cell: ({ row }) => renderContactCell(col.id, row.original),
+    };
+    return def;
+  });
+  const contactsTable = useReactTable({
+    data: contacts,
+    columns: reactTableColumns,
+    getCoreRowModel: getCoreRowModel(),
+  });
 
   const { data, isLoading, refetch } = useContacts(filters);
   const contacts = data?.data ?? [];
@@ -189,6 +523,8 @@ export default function ContactsPage() {
   const page = data?.page ?? 1;
   const pageSize = data?.pageSize ?? 25;
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const allSelected =
+    contacts.length > 0 && contacts.every((c) => selectedContactIds.includes(c.id));
 
   useEffect(() => {
     const parsed = parseResidentsFiltersFromSearchParams(searchParams);
@@ -333,6 +669,41 @@ export default function ContactsPage() {
     });
   }
 
+  function toggleContactSelection(contactId: string, checked: boolean) {
+    setSelectedContactIds((prev) =>
+      checked ? [...new Set([...prev, contactId])] : prev.filter((id) => id !== contactId)
+    );
+  }
+
+  function toggleSelectAll(checked: boolean) {
+    setSelectedContactIds(checked ? contacts.map((c) => c.id) : []);
+  }
+
+  async function applyBulkTagAction(action: 'add' | 'remove') {
+    if (!bulkTagId || selectedContactIds.length === 0) return;
+    try {
+      const res = await fetch('/api/contacts/tags/bulk', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contactIds: selectedContactIds,
+          tagIds: [bulkTagId],
+          action,
+        }),
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) throw new Error(json.message || 'Bulk tag update failed');
+      toast.success(
+        action === 'add'
+          ? t('residents.bulkTagAdded', 'Tag added to selected contacts')
+          : t('residents.bulkTagRemoved', 'Tag removed from selected contacts')
+      );
+      await refetch();
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : t('residents.bulkTagFailed', 'Bulk tag update failed'));
+    }
+  }
+
   async function exportCSV() {
     try {
       const sp = new URLSearchParams();
@@ -474,6 +845,45 @@ export default function ContactsPage() {
         tags={tagOptions}
       />
 
+      {contacts.length > 0 && (
+        <div className="flex items-center gap-2 rounded-lg border bg-muted/20 px-3 py-2">
+          <Select
+            value={bulkTagId}
+            onChange={(e) => setBulkTagId(e.target.value)}
+            className="w-[220px]"
+          >
+            <option value="">{t('residents.selectTag', 'Select tag')}</option>
+            {tagOptions.map((tag) => (
+              <option key={tag.id} value={tag.id}>
+                {tag.name}
+              </option>
+            ))}
+          </Select>
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={!bulkTagId || selectedContactIds.length === 0}
+            onClick={() => applyBulkTagAction('add')}
+          >
+            {t('residents.addTagToSelected', 'Add tag to selected')}
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={!bulkTagId || selectedContactIds.length === 0}
+            onClick={() => applyBulkTagAction('remove')}
+          >
+            {t('residents.removeTagFromSelected', 'Remove tag from selected')}
+          </Button>
+          <span className="text-xs text-muted-foreground">
+            {t('residents.selectedCount', {
+              count: selectedContactIds.length,
+              defaultValue: `${selectedContactIds.length} selected`,
+            })}
+          </span>
+        </div>
+      )}
+
       <TableCustomizerModal
         open={customizerOpen}
         onOpenChange={setCustomizerOpen}
@@ -493,25 +903,36 @@ export default function ContactsPage() {
       <div className="rounded-lg border bg-card">
         <Table>
           <TableHeader>
-            <TableRow>
-              {visibleColumns.map((col) => (
-                <TableHead
-                  key={col.id}
-                  className={
-                    col.id === 'avatar'
-                      ? 'w-14'
-                      : col.id === 'actions'
-                        ? 'w-24'
-                        : col.id === 'visitsInRange' ||
-                            col.id === 'lastVisitInRange'
-                          ? 'text-right'
-                          : ''
-                  }
-                >
-                  {col.label}
-                </TableHead>
-              ))}
-            </TableRow>
+            {contactsTable.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  const columnId = header.column.id;
+                  return (
+                    <TableHead
+                      key={header.id}
+                      className={
+                        columnId === 'avatar'
+                          ? 'w-14'
+                          : columnId === 'actions'
+                            ? 'w-24'
+                            : columnId === 'visitsInRange' ||
+                                columnId === 'passesInRange' ||
+                                columnId === 'lastVisitInRange'
+                              ? 'text-right'
+                              : ''
+                      }
+                    >
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
+                  );
+                })}
+              </TableRow>
+            ))}
           </TableHeader>
           <TableBody>
             {isLoading ? (
@@ -544,163 +965,11 @@ export default function ContactsPage() {
                 </TableCell>
               </TableRow>
             ) : (
-              contacts.map((c) => (
-                <TableRow key={c.id}>
-                  {visibleColumns.map((col) => {
-                    if (col.id === 'avatar')
-                      return (
-                        <TableCell key={col.id} className="w-14">
-                          <Avatar className="h-9 w-9">
-                            {c.avatarUrl ? (
-                              <AvatarImage
-                                src={c.avatarUrl}
-                                alt={`${c.firstName} ${c.lastName}`}
-                              />
-                            ) : null}
-                            <AvatarFallback className="text-xs bg-muted">
-                              {c.firstName.charAt(0)}
-                              {c.lastName.charAt(0)}
-                            </AvatarFallback>
-                          </Avatar>
-                        </TableCell>
-                      );
-                    if (col.id === 'firstName')
-                      return (
-                        <TableCell key={col.id} className="font-medium">
-                          {c.firstName}
-                        </TableCell>
-                      );
-                    if (col.id === 'lastName')
-                      return <TableCell key={col.id}>{c.lastName}</TableCell>;
-                    if (col.id === 'birthday')
-                      return (
-                        <TableCell
-                          key={col.id}
-                          className="text-sm text-muted-foreground"
-                        >
-                          {c.birthday ?? '—'}
-                        </TableCell>
-                      );
-                    if (col.id === 'company')
-                      return (
-                        <TableCell key={col.id} className="text-sm">
-                          {c.company ?? '—'}
-                        </TableCell>
-                      );
-                    if (col.id === 'phone')
-                      return (
-                        <TableCell key={col.id} className="text-sm font-mono">
-                          {c.phone ?? '—'}
-                        </TableCell>
-                      );
-                    if (col.id === 'email')
-                      return (
-                        <TableCell key={col.id} className="text-sm">
-                          {c.email ?? '—'}
-                        </TableCell>
-                      );
-                    if (col.id === 'tags')
-                      return (
-                        <TableCell key={col.id}>
-                          <div className="flex flex-wrap gap-1">
-                            {(c.tags ?? []).length === 0 ? (
-                              <span className="text-xs text-muted-foreground">
-                                —
-                              </span>
-                            ) : (
-                              (c.tags ?? []).map((tag) => (
-                                <Badge
-                                  key={tag.id}
-                                  variant="secondary"
-                                  className="text-xs"
-                                  style={
-                                    tag.color
-                                      ? {
-                                          backgroundColor: tag.color,
-                                          color: '#fff',
-                                          border: 'none',
-                                        }
-                                      : undefined
-                                  }
-                                >
-                                  {tag.name}
-                                </Badge>
-                              ))
-                            )}
-                          </div>
-                        </TableCell>
-                      );
-                    if (col.id === 'units')
-                      return (
-                        <TableCell key={col.id}>
-                          <div className="flex flex-wrap gap-1 items-center">
-                            {c.units.length === 0 ? (
-                              <span className="text-xs text-muted-foreground">
-                                —
-                              </span>
-                            ) : (
-                              c.units.map((u) => (
-                                <Badge
-                                  key={u.id}
-                                  variant="secondary"
-                                  className="text-xs cursor-pointer hover:bg-secondary/80"
-                                  onClick={() => setViewUnitsFor(c)}
-                                >
-                                  {u.name}
-                                </Badge>
-                              ))
-                            )}
-                          </div>
-                        </TableCell>
-                      );
-                    if (col.id === 'visitsInRange')
-                      return (
-                        <TableCell
-                          key={col.id}
-                          className="text-right tabular-nums"
-                        >
-                          {c.visitsInRange ?? 0}
-                        </TableCell>
-                      );
-                    if (col.id === 'lastVisitInRange')
-                      return (
-                        <TableCell
-                          key={col.id}
-                          className="text-right text-sm text-muted-foreground"
-                        >
-                          {c.lastVisitInRange
-                            ? new Date(c.lastVisitInRange).toLocaleDateString(
-                                undefined,
-                                { dateStyle: 'short' }
-                              )
-                            : '—'}
-                        </TableCell>
-                      );
-                    if (col.id === 'actions')
-                      return (
-                        <TableCell key={col.id}>
-                          <div className="flex items-center gap-1">
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-7 w-7"
-                              onClick={() => openEdit(c)}
-                            >
-                              <Pencil className="h-3.5 w-3.5" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-7 w-7 text-destructive hover:text-destructive"
-                              onClick={() => confirmDelete(c)}
-                            >
-                              <Trash2 className="h-3.5 w-3.5" />
-                            </Button>
-                          </div>
-                        </TableCell>
-                      );
-                    return <TableCell key={col.id}>—</TableCell>;
-                  })}
+              contactsTable.getRowModel().rows.map((row) => (
+                <TableRow key={row.id}>
+                  {row.getVisibleCells().map((cell) =>
+                    flexRender(cell.column.columnDef.cell, cell.getContext())
+                  )}
                 </TableRow>
               ))
             )}

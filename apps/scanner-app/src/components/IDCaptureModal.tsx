@@ -11,7 +11,6 @@ import {
   Pressable,
   StyleSheet,
   ActivityIndicator,
-  Alert,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { getValidAccessToken } from '../lib/auth-client';

@@ -15,6 +15,7 @@ interface FunnelStage {
 
 interface AnalyticsFunnelChartProps {
   filters: AnalyticsFilters;
+  locale?: string;
   className?: string;
 }
 
@@ -29,7 +30,7 @@ function buildFunnelUrl(filters: AnalyticsFilters): string {
   return `/api/analytics/funnel?${sp.toString()}`;
 }
 
-export function AnalyticsFunnelChart({ filters, className }: AnalyticsFunnelChartProps) {
+export function AnalyticsFunnelChart({ filters, locale: _locale, className }: AnalyticsFunnelChartProps) {
   const { t } = useTranslation('dashboard');
   const [stages, setStages] = useState<FunnelStage[]>([]);
   const [loading, setLoading] = useState(true);

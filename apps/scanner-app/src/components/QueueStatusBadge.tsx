@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Users, AlertCircle } from 'lucide-react-native';
-import { nativeTokens } from '@gate-access/ui';
+import { nativeTokens } from '@gate-access/ui/tokens';
 
 export interface QueueStatusBadgeProps {
   queueSize: number;

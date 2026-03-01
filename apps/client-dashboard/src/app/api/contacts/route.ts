@@ -15,6 +15,14 @@ function escapeCsvCell(value: string): string {
 const GetContactsQuerySchema = z.object({
   unitId: z.string().optional(),
   format: z.enum(['json', 'csv']).optional(),
+  dateFrom: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
+  dateTo: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
   from: z
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/)
@@ -70,12 +78,15 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const parsed = GetContactsQuerySchema.safeParse({
       unitId: searchParams.get('unitId') ?? undefined,
       format: searchParams.get('format') ?? undefined,
+      dateFrom: searchParams.get('dateFrom') ?? undefined,
+      dateTo: searchParams.get('dateTo') ?? undefined,
       from: searchParams.get('from') ?? undefined,
       to: searchParams.get('to') ?? undefined,
       search: searchParams.get('search') ?? undefined,
       unitType: searchParams.get('unitType') ?? undefined,
       gateId: searchParams.get('gateId') ?? undefined,
       projectId: searchParams.get('projectId') ?? undefined,
+      tagIds: searchParams.get('tagIds') ?? undefined,
       sort: searchParams.get('sort') ?? undefined,
       sortDir: searchParams.get('sortDir') ?? undefined,
       page: searchParams.get('page') ?? undefined,
@@ -95,6 +106,8 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const {
       unitId,
       format,
+      dateFrom,
+      dateTo,
       from,
       to,
       search,
@@ -108,8 +121,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       pageSize,
     } = parsed.data;
 
-    const dateFrom = from ? new Date(from + 'T00:00:00.000Z') : null;
-    const dateTo = to ? new Date(to + 'T23:59:59.999Z') : null;
+    const fromDate = dateFrom ?? from;
+    const toDate = dateTo ?? to;
+    const dateFromValue = fromDate ? new Date(fromDate + 'T00:00:00.000Z') : null;
+    const dateToValue = toDate ? new Date(toDate + 'T23:59:59.999Z') : null;
 
     if (projectId) {
       const proj = await prisma.project.findFirst({
@@ -280,7 +295,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         lastVisitInRange: string | null;
       }
     > = new Map();
-    if (dateFrom && dateTo) {
+    if (dateFromValue && dateToValue) {
       try {
         const gateCondition = gateId
           ? Prisma.sql`AND sl."gateId" = ${gateId}`
@@ -301,7 +316,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
           JOIN "QRCode" qr ON sl."qrCodeId" = qr.id
           JOIN "VisitorQR" vqr ON vqr."qrCodeId" = qr.id
           JOIN "Unit" u ON vqr."unitId" = u.id
-          WHERE sl."scannedAt" >= ${dateFrom} AND sl."scannedAt" <= ${dateTo}
+          WHERE sl."scannedAt" >= ${dateFromValue} AND sl."scannedAt" <= ${dateToValue}
             AND qr."organizationId" = ${orgId} AND qr."deletedAt" IS NULL
             AND u."organizationId" = ${orgId}
             ${gateCondition}

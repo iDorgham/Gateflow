@@ -116,6 +116,7 @@ export const nativeTokens = {
     secondaryForeground: '#18181b',
     muted: '#f4f4f5',           // zinc-100
     mutedForeground: '#71717a', // zinc-500
+    neutral: '#71717a',        // alias for mutedForeground
     accent: '#f4f4f5',
     accentForeground: '#18181b',
     destructive: '#ef4444',     // red-500
@@ -179,6 +180,13 @@ export const nativeTokens = {
       shadowOpacity: 0.1,
       shadowRadius: 15,
       elevation: 5,
+    },
+    xl: {
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 12 },
+      shadowOpacity: 0.15,
+      shadowRadius: 20,
+      elevation: 8,
     },
   },
   typography: {

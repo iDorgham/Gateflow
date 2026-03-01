@@ -8,6 +8,13 @@
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
+const DEFAULT_CONTACT_TAGS = [
+  { name: 'family', color: '#22c55e' },
+  { name: 'maid', color: '#3b82f6' },
+  { name: 'driver', color: '#a855f7' },
+  { name: 'prospect', color: '#f59e0b' },
+  { name: 'agent', color: '#ef4444' },
+] as const;
 
 async function main() {
   console.log('🌱 Starting seed: Create default projects...');
@@ -45,6 +52,19 @@ async function main() {
       `  ✅ Created default project "${project.name}" for org "${org.name}"`
     );
   }
+
+  // Seed default contact tags per organization (idempotent via unique [organizationId, name]).
+  for (const org of organizations) {
+    await prisma.tag.createMany({
+      data: DEFAULT_CONTACT_TAGS.map((tag) => ({
+        organizationId: org.id,
+        name: tag.name,
+        color: tag.color,
+      })),
+      skipDuplicates: true,
+    });
+  }
+  console.log('✅ Seeded default contact tags for all organizations');
 
   // Handle unassigned gates and QR codes
   // Assign them to the default "Main" project for each org

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Modal, TouchableOpacity, TextInput } from 'react-native';
 import { KeyRound } from 'lucide-react-native';
-import { nativeTokens } from '@gate-access/ui';
+import { nativeTokens } from '@gate-access/ui/tokens';
 
 export interface SupervisorOverrideModalProps {
   visible: boolean;

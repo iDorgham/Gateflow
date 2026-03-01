@@ -40,7 +40,9 @@ export const UNITS_COLUMN_IDS = [
   'qrQuota',
   'project',
   'visitsInRange',
+  'passesInRange',
   'lastVisitInRange',
+  'tagSummary',
   'linkedContactCount',
   'actions',
 ] as const;

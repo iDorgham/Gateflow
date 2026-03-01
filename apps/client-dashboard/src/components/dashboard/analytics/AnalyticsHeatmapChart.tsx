@@ -16,6 +16,7 @@ interface HeatmapCell {
 
 interface AnalyticsHeatmapChartProps {
   filters: AnalyticsFilters;
+  locale?: string;
   className?: string;
 }
 
@@ -28,7 +29,7 @@ function buildHeatmapUrl(filters: AnalyticsFilters): string {
   return `/api/analytics/heatmap?${sp.toString()}`;
 }
 
-export function AnalyticsHeatmapChart({ filters, className }: AnalyticsHeatmapChartProps) {
+export function AnalyticsHeatmapChart({ filters, locale: _locale, className }: AnalyticsHeatmapChartProps) {
   const { t } = useTranslation('dashboard');
   const [data, setData] = useState<HeatmapCell[]>([]);
   const [loading, setLoading] = useState(true);

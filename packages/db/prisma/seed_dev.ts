@@ -15,6 +15,13 @@ const ARGON2_OPTIONS = {
 
 // Use environment variable for password or default to a safe value for dev
 const DEFAULT_PASSWORD = process.env.SEED_PASSWORD || 'password123';
+const DEFAULT_CONTACT_TAGS = [
+  { name: 'family', color: '#22c55e' },
+  { name: 'maid', color: '#3b82f6' },
+  { name: 'driver', color: '#a855f7' },
+  { name: 'prospect', color: '#f59e0b' },
+  { name: 'agent', color: '#ef4444' },
+] as const;
 
 async function main() {
   console.log('🌱 Starting Dev Seed...');
@@ -86,6 +93,15 @@ async function main() {
       name: 'Main Project',
       organizationId: org.id,
     },
+  });
+
+  await prisma.tag.createMany({
+    data: DEFAULT_CONTACT_TAGS.map((tag) => ({
+      organizationId: org.id,
+      name: tag.name,
+      color: tag.color,
+    })),
+    skipDuplicates: true,
   });
 
   console.log('✅ Created Organization:', org.name);
