@@ -5,7 +5,7 @@
 **Primary product spec:** `docs/PRD_v6.0.md` (Client Dashboard, Analytics, Marketing Suite)  
 **Related plans:** Compound seed plan (Section 12 analytics phases); existing analytics at `apps/client-dashboard/src/app/[locale]/dashboard/analytics/`  
 **Owner:** Product + Engineering  
-**Status:** Not started  
+**Status:** Complete (all phases done)  
 **Estimated total:** 8–10 weeks across 4 phases  
 **Task checklist:** `docs/plan/execution/TASKS_analytics_dashboard.md`
 

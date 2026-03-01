@@ -346,7 +346,7 @@ export function WorkspaceTab({ org }: { org: OrgData }) {
                     <Checkbox
                       id="maskResidentName"
                       checked={maskResidentNameOnLandingPage}
-                      onCheckedChange={(c) => setMaskResidentNameOnLandingPage(!!c)}
+                      onChange={(e) => setMaskResidentNameOnLandingPage(e.target.checked)}
                     />
                     <Label htmlFor="maskResidentName" className="cursor-pointer text-sm">
                       {t('settings.workspace.maskResidentName', 'Mask resident name on guest landing page')}
@@ -356,7 +356,7 @@ export function WorkspaceTab({ org }: { org: OrgData }) {
                     <Checkbox
                       id="showUnitOnLanding"
                       checked={showUnitOnLandingPage}
-                      onCheckedChange={(c) => setShowUnitOnLandingPage(!!c)}
+                      onChange={(e) => setShowUnitOnLandingPage(e.target.checked)}
                     />
                     <Label htmlFor="showUnitOnLanding" className="cursor-pointer text-sm">
                       {t('settings.workspace.showUnitOnLanding', 'Show unit number on guest landing page')}

@@ -32,7 +32,9 @@ export async function getCached<T>(key: string): Promise<T | null> {
   if (!_redis) return null;
   try {
     const raw = await _redis.get(key);
-    return raw ? (JSON.parse(raw) as T) : null;
+    if (raw == null) return null;
+    if (typeof raw === 'string') return JSON.parse(raw) as T;
+    return raw as T;
   } catch {
     return null;
   }

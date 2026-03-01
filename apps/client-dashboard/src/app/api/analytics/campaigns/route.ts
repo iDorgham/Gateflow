@@ -68,11 +68,16 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       ORDER BY total DESC
     `);
 
-    const campaigns: CampaignRow[] = raw.map((r) => ({
-      name: r.name,
-      scans: Number(r.total),
-      passRate: r.total > 0n ? Math.round((Number(r.success) / Number(r.total)) * 100) : 0,
-    }));
+    const campaigns: CampaignRow[] = raw.map((r) => {
+      const totalScans = Number(r.total);
+      const successScans = Number(r.success);
+
+      return {
+        name: r.name,
+        scans: totalScans,
+        passRate: totalScans > 0 ? Math.round((successScans / totalScans) * 100) : 0,
+      };
+    });
 
     return NextResponse.json({ success: true, data: { campaigns } });
   } catch (error) {

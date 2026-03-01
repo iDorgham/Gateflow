@@ -5,6 +5,8 @@ import { SettingsClient } from './settings-client';
 
 export const metadata = { title: 'Settings | GateFlow' };
 
+type SettingsOrg = Parameters<typeof SettingsClient>[0]['org'];
+
 export default async function SettingsPage() {
   const claims = await getSessionClaims();
   if (!claims?.orgId) redirect('/login');
@@ -124,6 +126,22 @@ export default async function SettingsPage() {
   const userPermissions = user.role.permissions as Record<string, boolean>;
   const canManageRoles = userPermissions['roles:manage'] === true;
   const canManageUsers = userPermissions['users:manage'] === true;
+  const settingsOrg: SettingsOrg = {
+    id: org.id,
+    name: org.name,
+    email: org.email,
+    logoUrl: org.logoUrl ?? null,
+    domain: org.domain ?? '',
+    plan: org.plan,
+    createdAt: org.createdAt.toISOString(),
+    requiredIdentityLevel: Number(org.requiredIdentityLevel ?? 0),
+    scanLogRetentionMonths: org.scanLogRetentionMonths ?? null,
+    visitorHistoryRetentionMonths: org.visitorHistoryRetentionMonths ?? null,
+    idArtifactRetentionMonths: org.idArtifactRetentionMonths ?? null,
+    incidentRetentionMonths: org.incidentRetentionMonths ?? null,
+    maskResidentNameOnLandingPage: org.maskResidentNameOnLandingPage ?? false,
+    showUnitOnLandingPage: org.showUnitOnLandingPage ?? true,
+  };
 
   return (
     <SettingsClient
@@ -134,19 +152,7 @@ export default async function SettingsPage() {
         bio: user.bio ?? null,
         createdAt: user.createdAt.toISOString(),
       }}
-      org={{
-        ...org,
-        logoUrl: org.logoUrl ?? null,
-        domain: org.domain ?? '',
-        createdAt: org.createdAt.toISOString(),
-        requiredIdentityLevel: org.requiredIdentityLevel ?? 0,
-        scanLogRetentionMonths: org.scanLogRetentionMonths ?? null,
-        visitorHistoryRetentionMonths: org.visitorHistoryRetentionMonths ?? null,
-        idArtifactRetentionMonths: org.idArtifactRetentionMonths ?? null,
-        incidentRetentionMonths: org.incidentRetentionMonths ?? null,
-        maskResidentNameOnLandingPage: org.maskResidentNameOnLandingPage ?? false,
-        showUnitOnLandingPage: org.showUnitOnLandingPage ?? true,
-      }}
+      org={settingsOrg}
       projects={projects.map(p => {
         const uniqueContacts = new Set(
           p.units.flatMap((u) => u.contacts.map((c) => c.contactId))
