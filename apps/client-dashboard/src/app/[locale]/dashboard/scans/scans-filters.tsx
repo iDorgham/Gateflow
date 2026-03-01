@@ -29,15 +29,6 @@ const STATUSES = [
   'DENIED',
 ] as const;
 
-const STATUS_LABELS: Record<string, string> = {
-  SUCCESS: 'Success',
-  FAILED: 'Failed',
-  EXPIRED: 'Expired',
-  MAX_USES_REACHED: 'Max Uses',
-  INACTIVE: 'Inactive',
-  DENIED: 'Denied',
-};
-
 const STATUS_CHIP: Record<string, string> = {
   SUCCESS: 'bg-green-100 text-green-700 border-green-200',
   FAILED: 'bg-red-100 text-red-700 border-red-200',

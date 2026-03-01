@@ -21,6 +21,24 @@ const RetentionSchema = z.object({
   showUnitOnLandingPage: z.boolean().optional(),
 });
 
+function getErrorCode(error: unknown): string | undefined {
+  if (typeof error === 'object' && error !== null && 'code' in error) {
+    const value = (error as { code?: unknown }).code;
+    return typeof value === 'string' ? value : undefined;
+  }
+  return undefined;
+}
+
+function getErrorTarget(error: unknown): unknown {
+  if (typeof error === 'object' && error !== null && 'meta' in error) {
+    const meta = (error as { meta?: unknown }).meta;
+    if (typeof meta === 'object' && meta !== null && 'target' in meta) {
+      return (meta as { target?: unknown }).target;
+    }
+  }
+  return undefined;
+}
+
 export async function updateWorkspaceSettingsAction(data: { name: string; email: string; domain?: string | null }) {
   try {
     const claims = await getSessionClaims();
@@ -56,13 +74,13 @@ export async function updateWorkspaceSettingsAction(data: { name: string; email:
     revalidatePath('/dashboard/settings');
 
     return { success: true };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Server Action Error - updateWorkspaceSettingsAction:', error);
     
     // Catch unique constraint failures (usually domain or email already taken)
     // Avoid 'instanceof Prisma...' checks as they can fail across monorepo boundaries
-    if (error && error.code === 'P2002') {
-      const target = error.meta?.target;
+    if (getErrorCode(error) === 'P2002') {
+      const target = getErrorTarget(error);
       const targetStr = Array.isArray(target) ? target.join(',') : String(target || '');
       
       if (targetStr.includes('domain')) {
@@ -153,7 +171,7 @@ export async function createRoleAction(data: { name: string; description?: strin
 
     revalidatePath('/dashboard/workspace/settings');
     return { success: true };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Server Action Error - createRoleAction:', error);
     return { success: false, message: 'Failed to create role' };
   }
@@ -183,7 +201,7 @@ export async function updateRoleAction(id: string, data: { name: string; descrip
 
     revalidatePath('/dashboard/workspace/settings');
     return { success: true };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Server Action Error - updateRoleAction:', error);
     return { success: false, message: 'Failed to update role' };
   }
@@ -213,7 +231,7 @@ export async function deleteRoleAction(id: string) {
 
     revalidatePath('/dashboard/workspace/settings');
     return { success: true };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Server Action Error - deleteRoleAction:', error);
     return { success: false, message: 'Failed to delete role' };
   }

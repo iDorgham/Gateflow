@@ -7,12 +7,11 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-  Button,
   Badge,
 } from '@gate-access/ui';
 import { PlanCards } from './plan-cards';
 import { WorkspacePageLayout, SidebarSection } from '@/components/dashboard/workspace-page-layout';
-import { CreditCard, Zap, BarChart3, BarChart, Activity } from 'lucide-react';
+import { CreditCard, Activity } from 'lucide-react';
 
 interface BillingClientProps {
   org: {

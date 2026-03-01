@@ -13,7 +13,8 @@ process.env.NEXTAUTH_SECRET = 'test-jwt-secret-must-be-long-enough-for-hmac256';
 process.env.QR_SIGNING_SECRET = 'test-qr-signing-secret-that-is-at-least-32-chars!!';
 
 import { signQRPayload, type QRPayload, QRCodeType } from '@gate-access/types';
-import { signAccessToken, verifyAccessToken } from '../../../../lib/auth';
+import crypto from 'crypto';
+import { signAccessToken } from '../../../../lib/auth';
 import { UserRole, DEFAULT_PERMISSIONS, BUILT_IN_ROLES } from '@gate-access/types';
 import type { RateLimitResult } from '../../../../lib/rate-limit';
 
@@ -29,7 +30,6 @@ const mockVerifyAccessToken = jest.fn().mockResolvedValue({
 
 jest.mock('../../../../lib/auth', () => ({
   signAccessToken: jest.fn().mockImplementation(async (userId, email, orgId, role) => {
-    const crypto = require('crypto');
     const header = { alg: 'HS256', typ: 'JWT' };
     const payload = {
       sub: userId,

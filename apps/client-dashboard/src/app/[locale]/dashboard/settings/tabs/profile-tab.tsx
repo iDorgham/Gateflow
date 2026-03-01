@@ -20,18 +20,15 @@ import { updateProfile, changePassword } from '../../profile/actions';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { 
-  CalendarDays, 
   Lock, 
   Save, 
   Shield, 
   User, 
-  Camera, 
   Mail, 
   AtSign,
   Fingerprint,
   Upload
 } from 'lucide-react';
-import { cn } from '@/lib/utils';
 
 interface ProfileUser {
   id: string;

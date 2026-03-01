@@ -1,7 +1,7 @@
 describe('getTransporter', () => {
-  let emailModule: any;
-  let mockCreateTransport: any;
-  let mockSendMail: any;
+  let emailModule: typeof import('./email');
+  let mockCreateTransport: jest.Mock;
+  let mockSendMail: jest.Mock;
 
   beforeEach(async () => {
     jest.resetModules();
@@ -53,7 +53,7 @@ describe('getTransporter', () => {
 });
 
 describe('buildEmailHtml', () => {
-  let emailModule: any;
+  let emailModule: typeof import('./email');
 
   beforeEach(async () => {
     jest.resetModules();

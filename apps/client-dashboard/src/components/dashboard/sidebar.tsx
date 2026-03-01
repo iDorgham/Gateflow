@@ -4,19 +4,24 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
-  LayoutDashboard,
-  QrCode,
-  ScanLine,
-  BarChart3,
-  Settings,
-  Power,
-  ShieldCheck,
-  ChevronLeft,
-  Building,
-  Layers,
-  CreditCard,
-  Users,
-} from 'lucide-react';
+  SquaresFourIcon,
+  QrCodeIcon,
+  ScanIcon,
+  ChartLineUpIcon,
+  DoorOpenIcon,
+  BuildingsIcon,
+  AddressBookIcon,
+  UsersFourIcon,
+  ListChecksIcon,
+  WarningIcon,
+  ShieldCheckIcon,
+  CaretLeftIcon,
+  BuildingIcon,
+  StackIcon,
+  CreditCardIcon,
+  GearIcon,
+  PowerIcon,
+} from '@phosphor-icons/react';
 import {
   Avatar,
   AvatarFallback,
@@ -51,43 +56,61 @@ const getNavGroups = (t: TFunction, permissions: Record<string, boolean>) => {
     {
       label: t('sidebar.overview', 'Overview'),
       href: '/dashboard',
-      icon: LayoutDashboard,
+      icon: SquaresFourIcon,
       exact: true,
     },
     {
       label: t('sidebar.qrCodes', 'QR Codes'),
       href: '/dashboard/qrcodes',
-      icon: QrCode,
-      permission: 'qr:create' as Permission, // or qr:manage
+      icon: QrCodeIcon,
+      permission: 'qr:create' as Permission,
     },
     {
       label: t('sidebar.scanLogs', 'Scan Logs'),
       href: '/dashboard/scans',
-      icon: ScanLine,
+      icon: ScanIcon,
       permission: 'scans:view' as Permission,
     },
     {
       label: t('sidebar.analytics', 'Analytics'),
       href: '/dashboard/analytics',
-      icon: BarChart3,
+      icon: ChartLineUpIcon,
       permission: 'analytics:view' as Permission,
+    },
+    {
+      label: t('sidebar.gates', 'Gates'),
+      href: '/dashboard/gates',
+      icon: DoorOpenIcon,
+      permission: 'gates:manage' as Permission,
+    },
+    {
+      label: t('sidebar.units', 'Units'),
+      href: '/dashboard/residents/units',
+      icon: BuildingsIcon,
+      permission: 'gates:manage' as Permission,
+    },
+    {
+      label: t('sidebar.contacts', 'Contacts'),
+      href: '/dashboard/residents/contacts',
+      icon: AddressBookIcon,
+      permission: 'gates:manage' as Permission,
     },
     {
       label: t('sidebar.gateAssignments', 'Gate assignments'),
       href: '/dashboard/team/gate-assignments',
-      icon: Users,
+      icon: UsersFourIcon,
       permission: 'gates:manage' as Permission,
     },
     {
       label: t('sidebar.watchlist', 'Watchlist'),
       href: '/dashboard/team/watchlist',
-      icon: ShieldCheck,
+      icon: ListChecksIcon,
       permission: 'gates:manage' as Permission,
     },
     {
       label: t('sidebar.incidents', 'Incidents'),
       href: '/dashboard/team/incidents',
-      icon: ShieldCheck,
+      icon: WarningIcon,
       permission: 'gates:manage' as Permission,
     },
   ].filter(item => hasPerm(item.permission));
@@ -178,7 +201,7 @@ export function Sidebar({
           href={`/${locale}/dashboard`}
           className="flex items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-lg h-12 w-12 transition-transform hover:scale-105"
         >
-          <ShieldCheck className="h-7 w-7" />
+          <ShieldCheckIcon size={28} className="h-7 w-7" weight="fill" />
         </Link>
       </div>
 
@@ -218,8 +241,10 @@ export function Sidebar({
                       <span className="absolute left-0 top-1/2 h-6 w-1 -translate-y-1/2 rounded-full bg-primary shadow-[0_0_10px_rgba(59,130,246,0.6)]" />
                     )}
                     <Icon
+                      size={20}
+                      weight="regular"
                       className={cn(
-                        'h-5 w-5 transition-all duration-300 shrink-0',
+                        'transition-all duration-300 shrink-0',
                         active
                           ? 'text-blue-400 scale-110'
                           : 'text-slate-500 group-hover:scale-110 group-hover:text-slate-300'
@@ -276,7 +301,7 @@ export function Sidebar({
                     </p>
                     {org && (
                       <div className="mt-2 inline-flex items-center gap-1.5 rounded-lg bg-primary/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-primary w-fit">
-                        <Layers className="h-3 w-3" />
+                        <StackIcon className="h-3 w-3" />
                         <span>
                           {org.plan}
                         </span>
@@ -291,7 +316,7 @@ export function Sidebar({
                       href={`/${locale}/dashboard/settings?tab=profile`}
                       className="flex w-full items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer hover:bg-sidebar-accent transition-colors"
                     >
-                      <Building className="h-4 w-4 text-slate-400" />
+                      <BuildingIcon className="h-4 w-4 text-slate-400" />
                       <span className="text-sm font-medium">{t('sidebar.profile', 'Profile')}</span>
                     </Link>
                   </DropdownMenuItem>
@@ -300,7 +325,7 @@ export function Sidebar({
                       href={`/${locale}/dashboard/settings`}
                       className="flex w-full items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer hover:bg-sidebar-accent transition-colors"
                     >
-                      <Settings className="h-4 w-4 text-slate-400" />
+                      <GearIcon className="h-4 w-4 text-slate-400" />
                       <span className="text-sm font-medium">{t('sidebar.settings', 'Settings')}</span>
                     </Link>
                   </DropdownMenuItem>
@@ -309,7 +334,7 @@ export function Sidebar({
                       href={`/${locale}/dashboard/settings?tab=billing`}
                       className="flex w-full items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer hover:bg-sidebar-accent transition-colors"
                     >
-                      <CreditCard className="h-4 w-4 text-slate-400" />
+                      <CreditCardIcon className="h-4 w-4 text-slate-400" />
                       <span className="text-sm font-medium">{t('sidebar.billing', 'Billing & payments')}</span>
                     </Link>
                   </DropdownMenuItem>
@@ -334,7 +359,7 @@ export function Sidebar({
                     className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-red-400 focus:text-red-400 focus:bg-red-400/10 cursor-pointer transition-colors"
                     onClick={() => router.push(`/${locale}/logout`)}
                   >
-                    <Power className="h-4 w-4" />
+                    <PowerIcon className="h-4 w-4" />
                     <span className="text-sm font-bold">{t('sidebar.signout', 'Sign out')}</span>
                   </DropdownMenuItem>
                 </div>
@@ -362,7 +387,7 @@ export function Sidebar({
             onMouseEnter={() => isCollapsed && setHoveredLabel(isCollapsed ? t('sidebar.expand', 'Expand') : t('sidebar.collapse', 'Collapse'))}
             onMouseLeave={() => setHoveredLabel(null)}
           >
-            <ChevronLeft className={cn("h-4 w-4 text-slate-500 transition-transform group-hover:text-slate-200", isCollapsed && "rotate-180")} />
+            <CaretLeftIcon className={cn("h-4 w-4 text-slate-500 transition-transform group-hover:text-slate-200", isCollapsed && "rotate-180")} />
           </button>
         </div>
       </div>

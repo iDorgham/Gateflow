@@ -4,24 +4,19 @@ import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 import { cn } from '@/lib/utils';
-import { 
-  Tabs, 
-  TabsList, 
-  TabsTrigger, 
-  TabsContent 
-} from '@gate-access/ui';
-import { 
-  User, 
-  Building2, 
-  Layers, 
-  KeyRound, 
-  Webhook, 
-  CreditCard, 
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@gate-access/ui';
+import {
+  User,
+  Building2,
+  Layers,
+  KeyRound,
+  Webhook,
+  CreditCard,
   Users,
   Settings2,
   Bell,
   ShieldAlert,
-  FolderKanban
+  FolderKanban,
 } from 'lucide-react';
 
 // Import Tabs
@@ -55,6 +50,13 @@ interface SettingsOrg {
   domain: string;
   plan: string;
   createdAt: string;
+  requiredIdentityLevel: number;
+  scanLogRetentionMonths: number | null;
+  visitorHistoryRetentionMonths: number | null;
+  idArtifactRetentionMonths: number | null;
+  incidentRetentionMonths: number | null;
+  maskResidentNameOnLandingPage: boolean;
+  showUnitOnLandingPage: boolean;
 }
 
 interface SettingsProject {
@@ -133,7 +135,7 @@ export function SettingsClient(props: SettingsClientProps) {
   const { t } = useTranslation('dashboard');
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  
+
   const initialTab = searchParams.get('tab') || 'general';
   const [activeTab, setActiveTab] = useState(initialTab);
 
@@ -142,7 +144,7 @@ export function SettingsClient(props: SettingsClientProps) {
     if (tab && tab !== activeTab) {
       setActiveTab(tab);
     }
-  }, [searchParams]);
+  }, [searchParams, activeTab]);
 
   const handleTabChange = (value: string) => {
     setActiveTab(value);
@@ -152,51 +154,127 @@ export function SettingsClient(props: SettingsClientProps) {
   };
 
   const TABS = [
-    { id: 'general', label: t('settings.tabs.general', 'General'), icon: Settings2, component: <GeneralTab /> },
-    { id: 'profile', label: t('settings.tabs.profile', 'Profile'), icon: User, component: <ProfileTab user={props.user} /> },
-    { id: 'workspace', label: t('settings.tabs.workspace', 'Workspace'), icon: Building2, component: <WorkspaceTab org={props.org} /> },
-    { id: 'projects', label: t('settings.tabs.projects', 'Projects'), icon: FolderKanban, component: <ProjectsTab projects={props.projects as any} /> },
-    { id: 'team', label: t('settings.tabs.team', 'Team'), icon: Users, component: <TeamTab members={props.teamMembers} currentUserId={props.currentUserId} /> },
-    { id: 'roles', label: t('settings.tabs.roles', 'Roles'), icon: ShieldAlert, component: <RolesTab roles={props.roles} canManageRoles={props.canManageRoles} /> },
-    { id: 'notifications', label: t('settings.tabs.notifications', 'Notifications'), icon: Bell, component: <NotificationsTab /> },
-    { id: 'billing', label: t('settings.tabs.billing', 'Billing'), icon: CreditCard, component: <BillingTab org={props.org} gateCount={props.billing.gateCount} qrCount={props.billing.qrCount} /> },
-    { id: 'api-keys', label: t('settings.tabs.apiKeys', 'API Keys'), icon: KeyRound, component: <ApiKeysTab initialKeys={props.apiKeys} /> },
-    { id: 'webhooks', label: t('settings.tabs.webhooks', 'Webhooks'), icon: Webhook, component: <WebhooksTab initialWebhooks={props.webhooks as any} /> },
-    { id: 'integrations', label: t('settings.tabs.integrations', 'Integrations'), icon: Layers, component: <IntegrationsTab /> },
+    {
+      id: 'general',
+      label: t('settings.tabs.general', 'General'),
+      icon: Settings2,
+      component: <GeneralTab />,
+    },
+    {
+      id: 'profile',
+      label: t('settings.tabs.profile', 'Profile'),
+      icon: User,
+      component: <ProfileTab user={props.user} />,
+    },
+    {
+      id: 'workspace',
+      label: t('settings.tabs.workspace', 'Workspace'),
+      icon: Building2,
+      component: <WorkspaceTab org={props.org} />,
+    },
+    {
+      id: 'projects',
+      label: t('settings.tabs.projects', 'Projects'),
+      icon: FolderKanban,
+      component: <ProjectsTab projects={props.projects} />,
+    },
+    {
+      id: 'team',
+      label: t('settings.tabs.team', 'Team'),
+      icon: Users,
+      component: (
+        <TeamTab
+          members={props.teamMembers}
+          currentUserId={props.currentUserId}
+        />
+      ),
+    },
+    {
+      id: 'roles',
+      label: t('settings.tabs.roles', 'Roles'),
+      icon: ShieldAlert,
+      component: (
+        <RolesTab roles={props.roles} canManageRoles={props.canManageRoles} />
+      ),
+    },
+    {
+      id: 'notifications',
+      label: t('settings.tabs.notifications', 'Notifications'),
+      icon: Bell,
+      component: <NotificationsTab />,
+    },
+    {
+      id: 'billing',
+      label: t('settings.tabs.billing', 'Billing'),
+      icon: CreditCard,
+      component: (
+        <BillingTab
+          org={props.org}
+          gateCount={props.billing.gateCount}
+          qrCount={props.billing.qrCount}
+        />
+      ),
+    },
+    {
+      id: 'api-keys',
+      label: t('settings.tabs.apiKeys', 'API Keys'),
+      icon: KeyRound,
+      component: <ApiKeysTab initialKeys={props.apiKeys} />,
+    },
+    {
+      id: 'webhooks',
+      label: t('settings.tabs.webhooks', 'Webhooks'),
+      icon: Webhook,
+      component: <WebhooksTab initialWebhooks={props.webhooks} />,
+    },
+    {
+      id: 'integrations',
+      label: t('settings.tabs.integrations', 'Integrations'),
+      icon: Layers,
+      component: <IntegrationsTab />,
+    },
   ];
 
   return (
     <div className="space-y-6 pb-20">
       <div className="flex flex-col gap-1 border-b border-border pb-6">
         <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
-                <Settings2 className="h-5 w-5 text-primary" />
-            </div>
-            <h1 className="text-2xl font-bold tracking-tight text-foreground uppercase">{t('settings.title', 'Settings')}</h1>
+          <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
+            <Settings2 className="h-5 w-5 text-primary" />
+          </div>
+          <h1 className="text-2xl font-bold tracking-tight text-foreground uppercase">
+            {t('settings.title', 'Settings')}
+          </h1>
         </div>
         <p className="text-sm text-muted-foreground">
-            <Trans 
-              t={t} 
-              i18nKey="settings.description" 
-              values={{ orgName: props.org.name }}
-              defaults="Global configuration and administrative nodes for <1>{{orgName}}</1>."
-              components={[<span key="org" className="text-primary font-semibold" />]}
-            />
+          <Trans
+            t={t}
+            i18nKey="settings.description"
+            values={{ orgName: props.org.name }}
+            defaults="Global configuration and administrative nodes for <1>{{orgName}}</1>."
+            components={[
+              <span key="org" className="text-primary font-semibold" />,
+            ]}
+          />
         </p>
       </div>
 
-      <Tabs 
-        value={activeTab} 
-        onValueChange={handleTabChange} 
+      <Tabs
+        value={activeTab}
+        onValueChange={handleTabChange}
         className="w-full"
-        dir={searchParams.get('locale') === 'ar-EG' || pathname.includes('/ar-EG') ? 'rtl' : 'ltr'}
+        dir={
+          searchParams.get('locale') === 'ar-EG' || pathname.includes('/ar-EG')
+            ? 'rtl'
+            : 'ltr'
+        }
       >
         <TabsList className="w-full flex justify-start overflow-x-auto h-auto mb-6 p-1 bg-transparent border-b border-border rounded-none gap-2">
           {TABS.map((tab) => {
             const Icon = tab.icon;
             return (
-              <TabsTrigger 
-                key={tab.id} 
+              <TabsTrigger
+                key={tab.id}
                 value={tab.id}
                 className="flex items-center gap-2 whitespace-nowrap px-4 py-2 border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none transition-all"
               >
@@ -208,11 +286,14 @@ export function SettingsClient(props: SettingsClientProps) {
         </TabsList>
 
         {TABS.map((tab) => (
-          <TabsContent 
-            key={tab.id} 
-            value={tab.id} 
-            forceMount 
-            className={cn("mt-0 outline-none", activeTab !== tab.id && "hidden")}
+          <TabsContent
+            key={tab.id}
+            value={tab.id}
+            forceMount
+            className={cn(
+              'mt-0 outline-none',
+              activeTab !== tab.id && 'hidden'
+            )}
           >
             {tab.component}
           </TabsContent>

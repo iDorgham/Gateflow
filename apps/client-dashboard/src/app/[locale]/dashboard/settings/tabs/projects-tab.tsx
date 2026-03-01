@@ -9,44 +9,29 @@ import {
   CardTitle,
   CardDescription,
   Button,
-  Badge,
   Label,
   Input,
-  Textarea,
   Dialog,
   DialogContent,
-  DialogHeader,
   DialogTitle,
   DialogDescription,
-  Tabs,
-  TabsList,
-  TabsTrigger,
-  TabsContent,
 } from '@gate-access/ui';
 import {
   Plus,
   Pencil,
   Trash2,
   Check,
-  X,
   Loader2,
   QrCode,
   ScrollText,
   Layers,
-  Settings2,
-  ExternalLink,
-  Info,
-  HelpCircle,
   ArrowRight,
   Building,
   Users,
-  Image as ImageIcon,
-  Link2,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { csrfFetch } from '@/lib/csrf';
-import { cn } from '@/lib/utils';
 import { ProjectWizard } from '@/components/project-wizard';
 
 interface Project {
@@ -63,6 +48,11 @@ interface Project {
     units: number;
     contacts: number;
   };
+}
+
+interface ApiErrorPayload {
+  message?: string;
+  error?: string;
 }
 
 export function ProjectsTab({ projects: initial }: { projects: Project[] }) {
@@ -95,10 +85,10 @@ export function ProjectsTab({ projects: initial }: { projects: Project[] }) {
         body: JSON.stringify({ name: editName.trim() }),
       });
 
-      let data = {};
+      let data: ApiErrorPayload = {};
       try {
-        data = await res.json();
-      } catch (e) {
+        data = (await res.json()) as ApiErrorPayload;
+      } catch {
         // Ignore JSON parse errors from non-JSON responses
       }
 
@@ -113,12 +103,12 @@ export function ProjectsTab({ projects: initial }: { projects: Project[] }) {
         refreshProjects();
       } else {
         toast.error(
-          (data as any).message ||
-            (data as any).error ||
+          data.message ||
+            data.error ||
             t('settings.projects.errors.renameFailed', 'Failed to rename')
         );
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('[Rename Error]', error);
       toast.error(
         t(
@@ -139,10 +129,12 @@ export function ProjectsTab({ projects: initial }: { projects: Project[] }) {
         method: 'DELETE',
       });
 
-      let data = {};
+      let data: ApiErrorPayload = {};
       try {
-        data = await res.json();
-      } catch (e) {}
+        data = (await res.json()) as ApiErrorPayload;
+      } catch {
+        // Ignore JSON parse errors from non-JSON responses
+      }
 
       if (res.ok) {
         setProjects((prev) => prev.filter((p) => p.id !== projectToDelete.id));
@@ -154,15 +146,15 @@ export function ProjectsTab({ projects: initial }: { projects: Project[] }) {
         refreshProjects();
       } else {
         toast.error(
-          (data as any).message ||
-            (data as any).error ||
+          data.message ||
+            data.error ||
             t(
               'settings.projects.errors.deleteFailed',
               'Failed to delete project'
             )
         );
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('[Delete Error]', error);
       toast.error(
         t(

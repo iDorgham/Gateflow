@@ -15,12 +15,9 @@ import {
   Plus, 
   Trash2, 
   Copy, 
-  Check, 
   Clock, 
   ShieldCheck, 
-  User, 
   Loader2, 
-  AlertCircle,
   ExternalLink,
   ShieldAlert,
   Zap,
@@ -29,7 +26,6 @@ import {
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { csrfFetch } from '@/lib/csrf';
-import { cn } from '@/lib/utils';
 
 export interface ApiKeyRow {
   id: string;
