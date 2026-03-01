@@ -8,6 +8,8 @@ import {
   Button,
   Input,
   Label,
+  Select,
+  Checkbox,
   Table,
   TableBody,
   TableCell,
@@ -37,6 +39,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Columns,
+  Eye,
 } from 'lucide-react';
 import { buildAnalyticsUrl } from '@/lib/analytics';
 import {
@@ -89,6 +92,8 @@ export default function ContactsPage() {
   const [deleteTarget, setDeleteTarget] = useState<ContactRow | null>(null);
   const [customizerOpen, setCustomizerOpen] = useState(false);
   const [viewUnitsFor, setViewUnitsFor] = useState<ContactRow | null>(null);
+  const [selectedContactIds, setSelectedContactIds] = useState<string[]>([]);
+  const [bulkTagId, setBulkTagId] = useState('');
   const [isPending, startTransition] = useTransition();
   const { t } = useTranslation('dashboard');
 
@@ -133,6 +138,7 @@ export default function ContactsPage() {
   }, []);
 
   const contactColumns = [
+    { id: 'select', label: '', canHide: false },
     { id: 'avatar', label: t('contacts.table.avatar', ''), canHide: false },
     {
       id: 'firstName',
@@ -164,6 +170,11 @@ export default function ContactsPage() {
       canHide: true,
     },
     {
+      id: 'passesInRange',
+      label: t('contacts.table.passesInRange', 'Passes'),
+      canHide: true,
+    },
+    {
       id: 'lastVisitInRange',
       label: t('contacts.table.lastVisitInRange', 'Last visit'),
       canHide: true,
@@ -189,6 +200,8 @@ export default function ContactsPage() {
   const page = data?.page ?? 1;
   const pageSize = data?.pageSize ?? 25;
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const allSelected =
+    contacts.length > 0 && contacts.every((c) => selectedContactIds.includes(c.id));
 
   useEffect(() => {
     const parsed = parseResidentsFiltersFromSearchParams(searchParams);
@@ -333,6 +346,72 @@ export default function ContactsPage() {
     });
   }
 
+  function toggleContactSelection(contactId: string, checked: boolean) {
+    setSelectedContactIds((prev) =>
+      checked ? [...new Set([...prev, contactId])] : prev.filter((id) => id !== contactId)
+    );
+  }
+
+  function toggleSelectAll(checked: boolean) {
+    setSelectedContactIds(checked ? contacts.map((c) => c.id) : []);
+  }
+
+  async function addTagToContact(contactId: string, tagId: string) {
+    if (!tagId) return;
+    try {
+      const res = await fetch(`/api/contacts/${contactId}/tags`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tagIds: [tagId] }),
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) throw new Error(json.message || 'Failed to add tag');
+      await refetch();
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : t('residents.tagUpdateFailed', 'Failed to update tags'));
+    }
+  }
+
+  async function removeTagFromContact(contactId: string, tagId: string) {
+    try {
+      const res = await fetch(`/api/contacts/${contactId}/tags`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tagId }),
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) throw new Error(json.message || 'Failed to remove tag');
+      await refetch();
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : t('residents.tagUpdateFailed', 'Failed to update tags'));
+    }
+  }
+
+  async function applyBulkTagAction(action: 'add' | 'remove') {
+    if (!bulkTagId || selectedContactIds.length === 0) return;
+    try {
+      const res = await fetch('/api/contacts/tags/bulk', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contactIds: selectedContactIds,
+          tagIds: [bulkTagId],
+          action,
+        }),
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) throw new Error(json.message || 'Bulk tag update failed');
+      toast.success(
+        action === 'add'
+          ? t('residents.bulkTagAdded', 'Tag added to selected contacts')
+          : t('residents.bulkTagRemoved', 'Tag removed from selected contacts')
+      );
+      await refetch();
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : t('residents.bulkTagFailed', 'Bulk tag update failed'));
+    }
+  }
+
   async function exportCSV() {
     try {
       const sp = new URLSearchParams();
@@ -474,6 +553,45 @@ export default function ContactsPage() {
         tags={tagOptions}
       />
 
+      {contacts.length > 0 && (
+        <div className="flex items-center gap-2 rounded-lg border bg-muted/20 px-3 py-2">
+          <Select
+            value={bulkTagId}
+            onChange={(e) => setBulkTagId(e.target.value)}
+            className="w-[220px]"
+          >
+            <option value="">{t('residents.selectTag', 'Select tag')}</option>
+            {tagOptions.map((tag) => (
+              <option key={tag.id} value={tag.id}>
+                {tag.name}
+              </option>
+            ))}
+          </Select>
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={!bulkTagId || selectedContactIds.length === 0}
+            onClick={() => applyBulkTagAction('add')}
+          >
+            {t('residents.addTagToSelected', 'Add tag to selected')}
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={!bulkTagId || selectedContactIds.length === 0}
+            onClick={() => applyBulkTagAction('remove')}
+          >
+            {t('residents.removeTagFromSelected', 'Remove tag from selected')}
+          </Button>
+          <span className="text-xs text-muted-foreground">
+            {t('residents.selectedCount', {
+              count: selectedContactIds.length,
+              defaultValue: `${selectedContactIds.length} selected`,
+            })}
+          </span>
+        </div>
+      )}
+
       <TableCustomizerModal
         open={customizerOpen}
         onOpenChange={setCustomizerOpen}
@@ -503,12 +621,21 @@ export default function ContactsPage() {
                       : col.id === 'actions'
                         ? 'w-24'
                         : col.id === 'visitsInRange' ||
+                            col.id === 'passesInRange' ||
                             col.id === 'lastVisitInRange'
                           ? 'text-right'
                           : ''
                   }
                 >
-                  {col.label}
+                  {col.id === 'select' ? (
+                    <Checkbox
+                      checked={allSelected}
+                      onChange={(e) => toggleSelectAll(e.target.checked)}
+                      aria-label={t('residents.selectAll', 'Select all')}
+                    />
+                  ) : (
+                    col.label
+                  )}
                 </TableHead>
               ))}
             </TableRow>
@@ -547,6 +674,18 @@ export default function ContactsPage() {
               contacts.map((c) => (
                 <TableRow key={c.id}>
                   {visibleColumns.map((col) => {
+                    if (col.id === 'select')
+                      return (
+                        <TableCell key={col.id} className="w-10">
+                          <Checkbox
+                            checked={selectedContactIds.includes(c.id)}
+                            onChange={(e) =>
+                              toggleContactSelection(c.id, e.target.checked)
+                            }
+                            aria-label={t('residents.selectRow', 'Select row')}
+                          />
+                        </TableCell>
+                      );
                     if (col.id === 'avatar')
                       return (
                         <TableCell key={col.id} className="w-14">
@@ -612,7 +751,7 @@ export default function ContactsPage() {
                                 <Badge
                                   key={tag.id}
                                   variant="secondary"
-                                  className="text-xs"
+                                  className="text-xs cursor-pointer"
                                   style={
                                     tag.color
                                       ? {
@@ -622,11 +761,30 @@ export default function ContactsPage() {
                                         }
                                       : undefined
                                   }
+                                  onClick={() => removeTagFromContact(c.id, tag.id)}
+                                  title={t('residents.clickToRemoveTag', 'Click to remove')}
                                 >
                                   {tag.name}
                                 </Badge>
                               ))
                             )}
+                            <Select
+                              value=""
+                              onChange={(e) => addTagToContact(c.id, e.target.value)}
+                              className="h-7 w-[120px] text-xs"
+                            >
+                              <option value="">{t('residents.addTag', 'Add tag')}</option>
+                              {tagOptions
+                                .filter(
+                                  (tag) =>
+                                    !(c.tags ?? []).some((assigned) => assigned.id === tag.id)
+                                )
+                                .map((tag) => (
+                                  <option key={tag.id} value={tag.id}>
+                                    {tag.name}
+                                  </option>
+                                ))}
+                            </Select>
                           </div>
                         </TableCell>
                       );
@@ -662,6 +820,15 @@ export default function ContactsPage() {
                           {c.visitsInRange ?? 0}
                         </TableCell>
                       );
+                    if (col.id === 'passesInRange')
+                      return (
+                        <TableCell
+                          key={col.id}
+                          className="text-right tabular-nums"
+                        >
+                          {c.passesInRange ?? 0}
+                        </TableCell>
+                      );
                     if (col.id === 'lastVisitInRange')
                       return (
                         <TableCell
@@ -680,6 +847,15 @@ export default function ContactsPage() {
                       return (
                         <TableCell key={col.id}>
                           <div className="flex items-center gap-1">
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-7 w-7"
+                              onClick={() => setViewUnitsFor(c)}
+                              title={t('residents.viewUnits', 'View units')}
+                            >
+                              <Eye className="h-3.5 w-3.5" />
+                            </Button>
                             <Button
                               variant="ghost"
                               size="icon"
