@@ -56,15 +56,15 @@ Checklist for **PLAN_residents_analytics**. Use with `/dev` and phase prompts.
 
 ## Phase 4 — Analytics Depth & Filter Sync
 
-- [ ] **4.1** Align Analytics URL filter schema with Contacts/Units
-- [ ] **4.2** Ensure "Apply to Contacts/Units" forwards full filter state
-- [ ] **4.3** Add/verify Marketing view placeholders (funnel, persona pie, ROI)
-- [ ] **4.4** (Optional) Add Redis caching for analytics summary/heatmap
-- [ ] **4.5** (If cached) Document keys/TTLs in `CACHE_STRATEGY.md`
-- [ ] **4.6** Verify RTL behavior for Analytics charts/tooltips/labels
-- [ ] **4.7** Lint, typecheck, tests pass; committed
+- [x] **4.1** Align Analytics URL filter schema with Contacts/Units
+- [x] **4.2** Ensure "Apply to Contacts/Units" forwards full filter state
+- [x] **4.3** Add/verify Marketing view placeholders (funnel, persona pie, ROI)
+- [x] **4.4** (Optional) Add Redis caching for analytics summary/heatmap — skipped
+- [x] **4.5** (If cached) Document keys/TTLs in `CACHE_STRATEGY.md` — N/A
+- [x] **4.6** Verify RTL behavior for Analytics charts/tooltips/labels
+- [x] **4.7** Lint, typecheck, tests pass; committed
 
-**Status:** Not started
+**Status:** Done
 
 ---
 

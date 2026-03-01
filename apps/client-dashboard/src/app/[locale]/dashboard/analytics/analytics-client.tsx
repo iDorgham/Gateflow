@@ -90,23 +90,23 @@ export function AnalyticsClient({ kpiData, gates = [] }: AnalyticsClientProps) {
       <div ref={chartsRef} className="grid grid-cols-1 gap-4 lg:grid-cols-12">
         {isSecurity ? (
           <>
-            <div className="lg:col-span-7">
-              <AnalyticsHeatmapChart filters={filters} className="min-h-[320px]" />
+            <div className="lg:col-span-7" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+              <AnalyticsHeatmapChart filters={filters} locale={locale} className="min-h-[320px]" />
             </div>
-            <div className="lg:col-span-5">
+            <div className="lg:col-span-5" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
               <AnalyticsOperatorLeaderboard filters={filters} className="min-h-[280px]" />
             </div>
           </>
         ) : (
           <>
-            <div className="lg:col-span-7">
-              <AnalyticsFunnelChart filters={filters} className="min-h-[320px]" />
+            <div className="lg:col-span-7" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+              <AnalyticsFunnelChart filters={filters} locale={locale} className="min-h-[320px]" />
             </div>
-            <div className="lg:col-span-5 space-y-4">
+            <div className="lg:col-span-5 space-y-4" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
               <AnalyticsCampaignBarChart filters={filters} className="min-h-[200px]" />
               <AnalyticsROIWidget attributedScans={attributedScans} />
             </div>
-            <div className="lg:col-span-12 lg:col-start-1">
+            <div className="lg:col-span-12 lg:col-start-1" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
               <AnalyticsPersonaPie className="min-h-[200px]" />
             </div>
           </>

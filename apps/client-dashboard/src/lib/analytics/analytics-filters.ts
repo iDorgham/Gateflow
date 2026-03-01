@@ -14,6 +14,7 @@ export interface AnalyticsFilters {
   gateId: string;
   unitType: string;
   search: string;
+  tagIds: string;
   mode: AnalyticsMode;
 }
 
@@ -35,20 +36,21 @@ export function getDefaultFilters(): AnalyticsFilters {
     gateId: '',
     unitType: '',
     search: '',
+    tagIds: '',
     mode: DEFAULT_MODE,
   };
 }
 
-/** Parse URL search params into AnalyticsFilters */
+/** Parse URL search params into AnalyticsFilters. Supports dateFrom/dateTo as aliases for from/to. */
 export function parseFiltersFromSearchParams(params: URLSearchParams): Partial<AnalyticsFilters> {
   const filters: Partial<AnalyticsFilters> = {};
   const range = params.get('range');
   if (range === '7d' || range === '30d' || range === 'custom') {
     filters.range = range;
   }
-  const from = params.get('from');
+  const from = params.get('from') ?? params.get('dateFrom');
   if (from) filters.from = from;
-  const to = params.get('to');
+  const to = params.get('to') ?? params.get('dateTo');
   if (to) filters.to = to;
   const projectId = params.get('projectId');
   if (projectId) filters.projectId = projectId;
@@ -58,6 +60,8 @@ export function parseFiltersFromSearchParams(params: URLSearchParams): Partial<A
   if (unitType) filters.unitType = unitType;
   const search = params.get('search');
   if (search) filters.search = search;
+  const tagIds = params.get('tagIds');
+  if (tagIds) filters.tagIds = tagIds;
   const mode = params.get('mode');
   if (mode === 'security' || mode === 'marketing') {
     filters.mode = mode;
@@ -75,6 +79,7 @@ export function buildSearchParams(filters: Partial<AnalyticsFilters>): URLSearch
   if (filters.gateId) sp.set('gateId', filters.gateId);
   if (filters.unitType) sp.set('unitType', filters.unitType);
   if (filters.search) sp.set('search', filters.search);
+  if (filters.tagIds) sp.set('tagIds', filters.tagIds);
   if (filters.mode && filters.mode !== 'security') sp.set('mode', filters.mode);
   return sp;
 }

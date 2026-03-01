@@ -12,25 +12,28 @@ export interface ResidentsUrlFilters extends Partial<AnalyticsFilters> {
   contactId?: string;
 }
 
-/** Build contacts page URL with analytics-compatible filter params and optional unitId */
+/** Build contacts page URL with full analytics filter state and optional unitId */
 export function buildContactsUrl(locale: string, filters: ResidentsUrlFilters): string {
   const params = new URLSearchParams();
   if (filters.search) params.set('search', filters.search);
   if (filters.unitType) params.set('unitType', filters.unitType);
   if (filters.projectId) params.set('projectId', filters.projectId);
+  if (filters.gateId) params.set('gateId', filters.gateId);
   if (filters.from) params.set('from', filters.from);
   if (filters.to) params.set('to', filters.to);
+  if (filters.tagIds) params.set('tagIds', filters.tagIds);
   if (filters.unitId) params.set('unitId', filters.unitId);
   const query = params.toString();
   return `/${locale}/dashboard/residents/contacts${query ? `?${query}` : ''}`;
 }
 
-/** Build units page URL with analytics-compatible filter params and optional contactId */
+/** Build units page URL with full analytics filter state and optional contactId */
 export function buildUnitsUrl(locale: string, filters: ResidentsUrlFilters): string {
   const params = new URLSearchParams();
   if (filters.search) params.set('search', filters.search);
   if (filters.unitType) params.set('unitType', filters.unitType);
   if (filters.projectId) params.set('projectId', filters.projectId);
+  if (filters.gateId) params.set('gateId', filters.gateId);
   if (filters.from) params.set('from', filters.from);
   if (filters.to) params.set('to', filters.to);
   if (filters.contactId) params.set('contactId', filters.contactId);
