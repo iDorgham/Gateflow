@@ -72,5 +72,6 @@ export function useUnits(filters: ResidentsFilters) {
     queryKey: ['units', filters],
     queryFn: () => fetchUnits(filters),
     staleTime: 60 * 1000,
+    gcTime: 5 * 60 * 1000,
   });
 }

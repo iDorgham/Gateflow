@@ -70,5 +70,6 @@ export function useContacts(filters: ResidentsFilters) {
     queryKey: ['contacts', filters],
     queryFn: () => fetchContacts(filters),
     staleTime: 60 * 1000,
+    gcTime: 5 * 60 * 1000,
   });
 }

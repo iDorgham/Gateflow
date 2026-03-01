@@ -34,6 +34,7 @@ import {
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
+import { useQueryClient, useMutation } from '@tanstack/react-query';
 import {
   Plus,
   Upload,
@@ -142,6 +143,109 @@ export default function ContactsPage() {
       cancelled = true;
     };
   }, []);
+
+  const queryClient = useQueryClient();
+
+  const addTagMutation = useMutation({
+    mutationFn: async ({
+      contactId,
+      tagId,
+    }: {
+      contactId: string;
+      tagId: string;
+    }) => {
+      const res = await fetch(`/api/contacts/${contactId}/tags`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tagIds: [tagId] }),
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) throw new Error(json.message || 'Failed to add tag');
+    },
+    onMutate: async ({ contactId, tagId }) => {
+      const tag = tagOptions.find((t) => t.id === tagId);
+      if (!tag) return undefined;
+      await queryClient.cancelQueries({ queryKey: ['contacts', filters] });
+      const previous = queryClient.getQueryData<{
+        success: boolean;
+        data: ContactRow[];
+        total?: number;
+        page?: number;
+        pageSize?: number;
+      }>(['contacts', filters]);
+      if (!previous?.data) return { previous };
+      queryClient.setQueryData(['contacts', filters], {
+        ...previous,
+        data: previous.data.map((c) =>
+          c.id === contactId
+            ? {
+                ...c,
+                tags: [
+                  ...(c.tags ?? []),
+                  { id: tag.id, name: tag.name, color: tag.color },
+                ],
+              }
+            : c
+        ),
+      });
+      return { previous };
+    },
+    onError: (_err, _vars, ctx) => {
+      if (ctx?.previous)
+        queryClient.setQueryData(['contacts', filters], ctx.previous);
+      toast.error(t('residents.tagUpdateFailed', 'Failed to update tags'));
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['contacts'] });
+    },
+  });
+
+  const removeTagMutation = useMutation({
+    mutationFn: async ({
+      contactId,
+      tagId,
+    }: {
+      contactId: string;
+      tagId: string;
+    }) => {
+      const res = await fetch(`/api/contacts/${contactId}/tags`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tagId }),
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success)
+        throw new Error(json.message || 'Failed to remove tag');
+    },
+    onMutate: async ({ contactId, tagId }) => {
+      await queryClient.cancelQueries({ queryKey: ['contacts', filters] });
+      const previous = queryClient.getQueryData<{
+        success: boolean;
+        data: ContactRow[];
+        total?: number;
+        page?: number;
+        pageSize?: number;
+      }>(['contacts', filters]);
+      if (!previous?.data) return { previous };
+      queryClient.setQueryData(['contacts', filters], {
+        ...previous,
+        data: previous.data.map((c) =>
+          c.id === contactId
+            ? { ...c, tags: (c.tags ?? []).filter((t) => t.id !== tagId) }
+            : c
+        ),
+      });
+      return { previous };
+    },
+    onError: (_err, _vars, ctx) => {
+      if (ctx?.previous)
+        queryClient.setQueryData(['contacts', filters], ctx.previous);
+      toast.error(t('residents.tagUpdateFailed', 'Failed to update tags'));
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['contacts'] });
+    },
+  });
 
   const contactColumns = [
     { id: 'select', label: '', canHide: false },
@@ -277,7 +381,12 @@ export default function ContactsPage() {
                           }
                         : undefined
                     }
-                    onClick={() => removeTagFromContact(c.id, tag.id)}
+                    onClick={() =>
+                      removeTagMutation.mutate({
+                        contactId: c.id,
+                        tagId: tag.id,
+                      })
+                    }
                     title={t('residents.clickToRemoveTag', 'Click to remove')}
                   >
                     {tag.name}
@@ -286,7 +395,12 @@ export default function ContactsPage() {
               )}
               <Select
                 value=""
-                onChange={(e) => addTagToContact(c.id, e.target.value)}
+                onChange={(e) => {
+                  const tagId = e.target.value;
+                  if (tagId)
+                    addTagMutation.mutate({ contactId: c.id, tagId });
+                  e.target.value = '';
+                }}
                 className="h-7 w-[120px] text-xs"
               >
                 <option value="">{t('residents.addTag', 'Add tag')}</option>
@@ -563,37 +677,6 @@ export default function ContactsPage() {
 
   function toggleSelectAll(checked: boolean) {
     setSelectedContactIds(checked ? contacts.map((c) => c.id) : []);
-  }
-
-  async function addTagToContact(contactId: string, tagId: string) {
-    if (!tagId) return;
-    try {
-      const res = await fetch(`/api/contacts/${contactId}/tags`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tagIds: [tagId] }),
-      });
-      const json = await res.json();
-      if (!res.ok || !json.success) throw new Error(json.message || 'Failed to add tag');
-      await refetch();
-    } catch (err: unknown) {
-      toast.error(err instanceof Error ? err.message : t('residents.tagUpdateFailed', 'Failed to update tags'));
-    }
-  }
-
-  async function removeTagFromContact(contactId: string, tagId: string) {
-    try {
-      const res = await fetch(`/api/contacts/${contactId}/tags`, {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tagId }),
-      });
-      const json = await res.json();
-      if (!res.ok || !json.success) throw new Error(json.message || 'Failed to remove tag');
-      await refetch();
-    } catch (err: unknown) {
-      toast.error(err instanceof Error ? err.message : t('residents.tagUpdateFailed', 'Failed to update tags'));
-    }
   }
 
   async function applyBulkTagAction(action: 'add' | 'remove') {

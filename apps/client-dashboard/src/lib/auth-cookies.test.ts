@@ -188,9 +188,7 @@ describe('auth-cookies', () => {
     });
 
     it('handles headers() throwing error (e.g. outside request context)', async () => {
-      const { getSessionClaims } = await import('./auth-cookies');
-      const originalHeaders = nextHeaders.headers;
-      (nextHeaders as unknown as { headers: typeof nextHeaders.headers }).headers = jest.fn(() => {
+      (nextHeaders.headers as jest.Mock).mockImplementationOnce(() => {
         throw new Error('headers() error');
       });
       mockCookiesObj.get.mockImplementation((key: string) => {
@@ -199,23 +197,21 @@ describe('auth-cookies', () => {
       });
       mockVerifyAccessToken.mockResolvedValue(validClaims);
 
+      const { getSessionClaims } = await import('./auth-cookies');
       const result = await getSessionClaims();
 
-      (nextHeaders as unknown as { headers: typeof nextHeaders.headers }).headers = originalHeaders;
       expect(result).toEqual(validClaims);
     });
 
     it('handles cookies() throwing error', async () => {
-      const { getSessionClaims } = await import('./auth-cookies');
       mockHeadersObj.get.mockReturnValue(null);
-      const originalCookies = nextHeaders.cookies;
-      (nextHeaders as unknown as { cookies: typeof nextHeaders.cookies }).cookies = jest.fn(() => {
+      (nextHeaders.cookies as jest.Mock).mockImplementationOnce(() => {
         throw new Error('cookies() error');
       });
 
+      const { getSessionClaims } = await import('./auth-cookies');
       const result = await getSessionClaims();
 
-      (nextHeaders as unknown as { cookies: typeof nextHeaders.cookies }).cookies = originalCookies;
       expect(result).toBeNull();
     });
   });

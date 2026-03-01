@@ -70,12 +70,12 @@ Checklist for **PLAN_residents_analytics**. Use with `/dev` and phase prompts.
 
 ## Phase 5 — Polish
 
-- [ ] **5.1** Complete i18n coverage (en + ar-EG) for Residents/Analytics additions
-- [ ] **5.2** Add Units "Potential Vacancy" indicator when applicable
-- [ ] **5.3** Tune React Query (`staleTime`, `gcTime`) for contacts/units
-- [ ] **5.4** Add optimistic updates for tag mutations where appropriate
-- [ ] **5.5** Finalize cache docs if Redis was introduced
-- [ ] **5.6** Verify RTL layouts for Contacts/Units/Analytics
-- [ ] **5.7** Lint, typecheck, tests pass; committed
+- [x] **5.1** Complete i18n coverage (en + ar-EG) for Residents/Analytics additions
+- [x] **5.2** Add Units "Potential Vacancy" indicator when applicable
+- [x] **5.3** Tune React Query (`staleTime`, `gcTime`) for contacts/units
+- [x] **5.4** Add optimistic updates for tag mutations where appropriate
+- [x] **5.5** Finalize cache docs if Redis was introduced — N/A (no Redis)
+- [x] **5.6** Verify RTL layouts for Contacts/Units/Analytics — manual check
+- [x] **5.7** Lint, typecheck, tests pass; committed
 
-**Status:** Not started
+**Status:** Done
