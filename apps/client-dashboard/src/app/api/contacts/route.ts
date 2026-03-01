@@ -274,7 +274,11 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     let unitAggregates: Map<
       string,
-      { visitsInRange: number; lastVisitInRange: string | null }
+      {
+        visitsInRange: number;
+        passesInRange: number;
+        lastVisitInRange: string | null;
+      }
     > = new Map();
     if (dateFrom && dateTo) {
       try {
@@ -285,16 +289,19 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
           {
             unitId: string;
             visitsInRange: number;
+            passesInRange: number;
             lastVisitInRange: Date | null;
           }[]
         >`
-          SELECT vqr."unitId", COUNT(*)::int AS "visitsInRange", MAX(sl."scannedAt") AS "lastVisitInRange"
+          SELECT vqr."unitId", 
+            COUNT(*) FILTER (WHERE sl.status = 'SUCCESS')::int AS "visitsInRange",
+            COUNT(*)::int AS "passesInRange",
+            MAX(sl."scannedAt") AS "lastVisitInRange"
           FROM "ScanLog" sl
           JOIN "QRCode" qr ON sl."qrCodeId" = qr.id
           JOIN "VisitorQR" vqr ON vqr."qrCodeId" = qr.id
           JOIN "Unit" u ON vqr."unitId" = u.id
-          WHERE sl.status = 'SUCCESS'
-            AND sl."scannedAt" >= ${dateFrom} AND sl."scannedAt" <= ${dateTo}
+          WHERE sl."scannedAt" >= ${dateFrom} AND sl."scannedAt" <= ${dateTo}
             AND qr."organizationId" = ${orgId} AND qr."deletedAt" IS NULL
             AND u."organizationId" = ${orgId}
             ${gateCondition}
@@ -305,6 +312,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
             r.unitId,
             {
               visitsInRange: r.visitsInRange,
+              passesInRange: r.passesInRange,
               lastVisitInRange: r.lastVisitInRange?.toISOString() ?? null,
             },
           ])
@@ -317,11 +325,13 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const data = contacts.map((c) => {
       const unitIds = c.units.map((cu) => cu.unit.id);
       let visitsInRange = 0;
+      let passesInRange = 0;
       let lastVisitInRange: string | null = null;
       for (const uid of unitIds) {
         const agg = unitAggregates.get(uid);
         if (agg) {
           visitsInRange += agg.visitsInRange;
+          passesInRange += agg.passesInRange;
           if (
             agg.lastVisitInRange &&
             (!lastVisitInRange || agg.lastVisitInRange > lastVisitInRange)
@@ -346,7 +356,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
           color: ct.tag.color,
         })),
         visitsInRange,
-        passesInRange: visitsInRange,
+        passesInRange,
         lastVisitInRange,
       };
     });
@@ -379,13 +389,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         })
       : data;
 
-    const paged = sortByVisitMetric
-      ? sorted.slice((page - 1) * pageSize, page * pageSize)
-      : sorted;
-
     return NextResponse.json({
       success: true,
-      data: paged,
+      data,
       total,
       page,
       pageSize,

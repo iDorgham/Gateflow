@@ -192,7 +192,7 @@ export default function ContactsPage() {
 
   useEffect(() => {
     const parsed = parseResidentsFiltersFromSearchParams(searchParams);
-    setFilters(parsed);
+    setFilters(mergeFilters(parsed));
   }, [searchParams]);
 
   const updateFiltersAndUrl = useCallback(
