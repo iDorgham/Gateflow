@@ -285,7 +285,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       };
     });
 
-    const sorted = sortByVisitMetric
+    const sortedData = sortByVisitMetric
       ? [...data].sort((a, b) => {
           const dir = sortDir === 'desc' ? -1 : 1;
           if (sort === 'lastVisitInRange') {
@@ -315,7 +315,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     return NextResponse.json({
       success: true,
-      data,
+      data: sortedData,
       total,
       page,
       pageSize,

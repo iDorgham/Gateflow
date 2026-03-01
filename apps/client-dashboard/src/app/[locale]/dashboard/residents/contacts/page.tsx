@@ -110,12 +110,12 @@ export default function ContactsPage() {
     const vis = savedTableView.columnVisibility;
     if (order?.length) {
       const base = getDefaultTableView(CONTACTS_COLUMN_IDS, CONTACTS_PINNED);
-      setTableView((prev) => ({
+      setTableView({
         columnOrder: order,
         columnVisibility: { ...base.columnVisibility, ...vis },
-      }));
+      });
     }
-  }, [preferences.tableViews?.contacts]);
+  }, [savedTableView.columnOrder, savedTableView.columnVisibility]);
 
   const [tagOptions, setTagOptions] = useState<
     { id: string; name: string; color: string | null }[]

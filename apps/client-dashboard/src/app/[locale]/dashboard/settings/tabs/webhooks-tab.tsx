@@ -5,9 +5,7 @@ import {
   Button,
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
-  CardTitle,
   Badge,
   Switch,
 } from '@gate-access/ui';
@@ -16,20 +14,17 @@ import {
   Plus, 
   Trash2, 
   Activity, 
-  Globe, 
   CheckCircle2, 
   XCircle, 
   Clock, 
-  ChevronRight, 
   Loader2, 
-  AlertCircle,
   ExternalLink,
   Signal,
   ArrowUpRight,
   Info
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { csrfFetch } from '@/lib/csrf';
 import { cn } from '@/lib/utils';
 

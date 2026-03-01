@@ -1,8 +1,7 @@
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { getValidatedProjectId } from '@/lib/project-cookie';
 import { prisma } from '@gate-access/db';
-import { redirect } from 'next/navigation';
-import { getTranslation, Locale, i18n, isRtl } from '@/lib/i18n';
+import { getTranslation, Locale, isRtl } from '@/lib/i18n';
 import { Card, CardContent } from '@gate-access/ui';
 import { ScansFilters } from './scans-filters';
 import type { ScanStatus } from '@gate-access/db';
@@ -31,9 +30,6 @@ const VALID_STATUSES = new Set([
   'DENIED',
 ]);
 const VALID_SORT_COLS = new Set(['scannedAt', 'status', 'gate']);
-
-type SortColumn = 'scannedAt' | 'status' | 'gate';
-type SortOrder = 'asc' | 'desc';
 
 function cn(...classes: (string | false | undefined)[]) {
   return classes.filter(Boolean).join(' ');

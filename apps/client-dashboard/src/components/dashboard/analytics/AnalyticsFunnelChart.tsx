@@ -55,6 +55,9 @@ export function AnalyticsFunnelChart({ filters, className }: AnalyticsFunnelChar
       .finally(() => {
         if (!cancelled) setLoading(false);
       });
+    return () => {
+      cancelled = true;
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps -- refetch when filter params change
   }, [filters.from, filters.to, filters.projectId]);
 

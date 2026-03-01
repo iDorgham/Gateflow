@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { processBulkScans, type ScanInput } from './bulk-sync';
 
 type MockTx = {

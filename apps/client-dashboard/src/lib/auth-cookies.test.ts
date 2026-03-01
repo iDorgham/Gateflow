@@ -1,4 +1,5 @@
 // Test file for auth-cookies
+import * as nextHeaders from 'next/headers';
 
 const mockCookiesObj = {
   set: jest.fn(),
@@ -188,8 +189,8 @@ describe('auth-cookies', () => {
 
     it('handles headers() throwing error (e.g. outside request context)', async () => {
       const { getSessionClaims } = await import('./auth-cookies');
-      const originalHeaders = require('next/headers').headers;
-      require('next/headers').headers = jest.fn(() => {
+      const originalHeaders = nextHeaders.headers;
+      (nextHeaders as unknown as { headers: typeof nextHeaders.headers }).headers = jest.fn(() => {
         throw new Error('headers() error');
       });
       mockCookiesObj.get.mockImplementation((key: string) => {
@@ -200,21 +201,21 @@ describe('auth-cookies', () => {
 
       const result = await getSessionClaims();
 
-      require('next/headers').headers = originalHeaders;
+      (nextHeaders as unknown as { headers: typeof nextHeaders.headers }).headers = originalHeaders;
       expect(result).toEqual(validClaims);
     });
 
     it('handles cookies() throwing error', async () => {
       const { getSessionClaims } = await import('./auth-cookies');
       mockHeadersObj.get.mockReturnValue(null);
-      const originalCookies = require('next/headers').cookies;
-      require('next/headers').cookies = jest.fn(() => {
+      const originalCookies = nextHeaders.cookies;
+      (nextHeaders as unknown as { cookies: typeof nextHeaders.cookies }).cookies = jest.fn(() => {
         throw new Error('cookies() error');
       });
 
       const result = await getSessionClaims();
 
-      require('next/headers').cookies = originalCookies;
+      (nextHeaders as unknown as { cookies: typeof nextHeaders.cookies }).cookies = originalCookies;
       expect(result).toBeNull();
     });
   });

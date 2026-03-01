@@ -15,12 +15,9 @@ import {
 } from '@gate-access/ui';
 import { 
   ShieldAlert, 
-  ShieldCheck, 
   Users, 
-  UserPlus, 
   CheckCircle2,
   Save,
-  Info,
   Trash2,
   Edit2,
   Plus

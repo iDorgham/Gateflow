@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useTransition } from 'react';
+import React, { useTransition } from 'react';
 import {
   Card,
   CardContent,
@@ -10,8 +10,7 @@ import {
   Button,
   Badge,
 } from '@gate-access/ui';
-import { CreditCard, Zap, Activity, ShieldCheck, Star, Calendar, Download, Save, Info } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { CreditCard, Zap, Activity, Star, Calendar, Download, Save, Info } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 

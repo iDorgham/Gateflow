@@ -24,6 +24,7 @@ import {
   Skeleton,
 } from '@gate-access/ui';
 import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import {
   Plus,
   Upload,
@@ -67,7 +68,7 @@ type UnitType =
   | 'PENTHOUSE'
   | 'COMMERCIAL';
 
-const getUnitTypeLabels = (t: any): Record<UnitType, string> => ({
+const getUnitTypeLabels = (t: TFunction): Record<UnitType, string> => ({
   STUDIO: t('units.types.STUDIO', 'Studio'),
   ONE_BR: t('units.types.ONE_BR', '1 Bedroom'),
   TWO_BR: t('units.types.TWO_BR', '2 Bedrooms'),
@@ -98,12 +99,6 @@ interface Contact {
 interface Project {
   id: string;
   name: string;
-}
-
-interface LinkedUser {
-  id: string;
-  name: string;
-  email: string;
 }
 
 type Unit = UnitRow;
@@ -165,12 +160,12 @@ export default function UnitsPage() {
     const vis = savedTableView.columnVisibility;
     if (order?.length) {
       const base = getDefaultTableView(UNITS_COLUMN_IDS, UNITS_PINNED);
-      setTableView((prev) => ({
+      setTableView({
         columnOrder: order,
         columnVisibility: { ...base.columnVisibility, ...vis },
-      }));
+      });
     }
-  }, [preferences.tableViews?.units]);
+  }, [savedTableView.columnOrder, savedTableView.columnVisibility]);
 
   const unitColumns = [
     { id: 'name', label: t('units.table.name', 'Unit ID'), canHide: false },

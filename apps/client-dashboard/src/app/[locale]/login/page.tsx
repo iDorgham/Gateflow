@@ -1,7 +1,7 @@
 'use client';
 
 import { useFormState, useFormStatus } from 'react-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTheme } from 'next-themes';
 import { loginAction } from './actions';
@@ -11,9 +11,6 @@ import {
   Label,
   Card,
   CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
   LoginShell,
   cn,
 } from '@gate-access/ui';
@@ -149,6 +146,7 @@ export default function LoginPage() {
   const [errorKey, setErrorKey] = useState(0);
   const [isSuccess, setIsSuccess] = useState(false);
   const router = useRouter();
+  const previousErrorRef = useRef<string | undefined>(undefined);
 
   const pathname = usePathname();
   const locale = (pathname.split('/')[1] ?? 'en') as Locale;
@@ -167,11 +165,11 @@ export default function LoginPage() {
   }, [state?.success, state?.locale, locale, router]);
 
   // Increment errorKey whenever a new error appears so shake fires
-  const prevError = useState(state?.error)[0];
   useEffect(() => {
-    if (state?.error && state.error !== prevError) {
+    if (state?.error && state.error !== previousErrorRef.current) {
       setErrorKey((k) => k + 1);
     }
+    previousErrorRef.current = state?.error;
   }, [state?.error]);
 
   const successIcons = (

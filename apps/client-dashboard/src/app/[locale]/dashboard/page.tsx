@@ -11,7 +11,6 @@ import {
   Users,
   TrendingUp,
   ArrowRight,
-  BarChart3,
   Plus,
 } from 'lucide-react';
 

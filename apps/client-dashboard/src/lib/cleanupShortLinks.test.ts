@@ -1,8 +1,14 @@
 import { deleteExpiredShortLinks } from './cleanupShortLinks';
 import { PrismaClient } from '@gate-access/db';
 
+interface MockPrisma {
+  qrShortLink: {
+    deleteMany: jest.Mock;
+  };
+}
+
 describe('deleteExpiredShortLinks', () => {
-  let mockPrisma: any;
+  let mockPrisma: MockPrisma;
 
   beforeEach(() => {
     mockPrisma = {

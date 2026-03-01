@@ -2,7 +2,6 @@
 
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import Image from 'next/image';
 import {
   Card,
   CardContent,
@@ -10,28 +9,17 @@ import {
   CardTitle,
   CardDescription,
   Button,
-  Badge,
   Label,
   Input,
-  Textarea,
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogHeader,
   DialogTitle,
-  DialogFooter,
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
 } from '@gate-access/ui';
 import {
-  FolderKanban,
   Plus,
-  Pencil,
   Trash2,
   Check,
-  X,
   Loader2,
   QrCode,
   ScrollText,
@@ -40,13 +28,11 @@ import {
   ExternalLink,
   Info,
   HelpCircle,
-  Image as ImageIcon,
   Link2,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { csrfFetch } from '@/lib/csrf';
-import { cn } from '@/lib/utils';
 import {
   WorkspacePageLayout,
   SidebarSection,
@@ -62,6 +48,11 @@ interface Project {
   website?: string | null;
   createdAt: Date;
   _count: { gates: number; qrCodes: number; units: number; contacts: number };
+}
+
+interface ApiErrorPayload {
+  message?: string;
+  error?: string;
 }
 
 export function ProjectsClient({ projects: initial }: { projects: Project[] }) {
@@ -94,9 +85,9 @@ export function ProjectsClient({ projects: initial }: { projects: Project[] }) {
         body: JSON.stringify({ name: editName.trim() }),
       });
 
-      let data = {};
+      let data: ApiErrorPayload = {};
       try {
-        data = await res.json();
+        data = (await res.json()) as ApiErrorPayload;
       } catch (e) {
         // Ignore JSON parse errors from non-JSON responses
       }
@@ -112,15 +103,15 @@ export function ProjectsClient({ projects: initial }: { projects: Project[] }) {
         refreshProjects();
       } else {
         toast.error(
-          (data as any).message ??
-            (data as any).error ??
+          data.message ??
+            data.error ??
             t(
               'settings.projects.errors.renameFailed',
               'Failed to rename project'
             )
         );
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('[Rename Error]', error);
       toast.error(
         t(
@@ -141,9 +132,9 @@ export function ProjectsClient({ projects: initial }: { projects: Project[] }) {
         method: 'DELETE',
       });
 
-      let data = {};
+      let data: ApiErrorPayload = {};
       try {
-        data = await res.json();
+        data = (await res.json()) as ApiErrorPayload;
       } catch (e) {
         // Ignore JSON parse errors from non-JSON responses
       }
@@ -158,15 +149,15 @@ export function ProjectsClient({ projects: initial }: { projects: Project[] }) {
         refreshProjects();
       } else {
         toast.error(
-          (data as any).message ??
-            (data as any).error ??
+          data.message ??
+            data.error ??
             t(
               'settings.projects.errors.deleteFailed',
               'Failed to delete project'
             )
         );
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('[Delete Error]', error);
       toast.error(
         t(

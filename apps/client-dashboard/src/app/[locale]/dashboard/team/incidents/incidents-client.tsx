@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useTransition } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Button } from '@gate-access/ui';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
@@ -23,7 +23,7 @@ export function IncidentsClient() {
   const [statusFilter, setStatusFilter] = useState<string>('');
   const [isPending, setIsPending] = useState<string | null>(null);
 
-  function load() {
+  const load = useCallback(() => {
     setLoading(true);
     const params = new URLSearchParams();
     if (statusFilter) params.set('status', statusFilter);
@@ -34,11 +34,11 @@ export function IncidentsClient() {
       })
       .catch(() => toast.error(t('incidents.loadError', 'Failed to load incidents')))
       .finally(() => setLoading(false));
-  }
+  }, [statusFilter, t]);
 
   useEffect(() => {
     load();
-  }, [statusFilter]);
+  }, [load]);
 
   function updateStatus(id: string, status: string) {
     setIsPending(id);

@@ -86,7 +86,7 @@ export default async function SettingsPage() {
           take: 5,
         },
       },
-    }) as any,
+    }),
     // Team
     prisma.user.findMany({
       where: { organizationId: claims.orgId, deletedAt: null },
@@ -98,14 +98,14 @@ export default async function SettingsPage() {
         createdAt: true 
       },
       orderBy: { createdAt: 'asc' },
-    }) as any,
+    }),
     // Billing stats
     Promise.all([
       prisma.gate.count({ where: { organizationId: claims.orgId } }),
       prisma.qRCode.count({ where: { organizationId: claims.orgId } }),
     ]),
     // Roles
-    (prisma as any).role.findMany({
+    prisma.role.findMany({
       where: {
         OR: [
           { isBuiltIn: true },

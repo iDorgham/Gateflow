@@ -86,7 +86,7 @@ export function ResidentsFilterBar({
       }
     }
     loadGates();
-  }, [initialGates.length]);
+  }, [initialGates]);
 
   const handleRangePreset = (preset: '7d' | '30d') => {
     const now = new Date();

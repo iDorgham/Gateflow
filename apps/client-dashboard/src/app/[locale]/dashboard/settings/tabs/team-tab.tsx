@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import {
   Button,
   Card,
@@ -20,6 +19,7 @@ import {
   ShieldAlert,
   Info,
 } from 'lucide-react';
+import type { LucideIcon } from 'lucide-react';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { cn } from '@/lib/utils';
@@ -32,7 +32,7 @@ interface TeamMember {
   createdAt: string;
 }
 
-const ROLE_PERMISSIONS: Record<string, { icon: any; color: string }> = {
+const ROLE_PERMISSIONS: Record<string, { icon: LucideIcon; color: string }> = {
   OWNER: { icon: ShieldAlert, color: 'border-amber-500/30 text-amber-500 bg-amber-500/5' },
   WORKSPACE_ADMIN: { icon: ShieldCheck, color: 'border-primary/30 text-primary bg-primary/5' },
   TENANT_USER: { icon: Users, color: 'border-border text-muted-foreground bg-muted/10' },
@@ -40,7 +40,6 @@ const ROLE_PERMISSIONS: Record<string, { icon: any; color: string }> = {
 };
 export function TeamTab({ members, currentUserId }: { members: TeamMember[]; currentUserId: string }) {
   const { t } = useTranslation('dashboard');
-  const [showRolesEditor, setShowRolesEditor] = useState(false);
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">

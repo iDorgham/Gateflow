@@ -55,7 +55,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    const { dateFrom, dateTo, projectId, gateId, unitType, search } =
+    const { projectId, gateId, unitType, search } =
       parsed.data;
 
     if (projectId) {

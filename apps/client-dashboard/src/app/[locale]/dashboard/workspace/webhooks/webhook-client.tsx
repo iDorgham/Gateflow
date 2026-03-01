@@ -14,7 +14,7 @@ import {
 } from '@gate-access/ui';
 import { csrfFetch } from '@/lib/csrf';
 import { cn } from '@/lib/utils';
-import { AlertCircle, Check, Link2, MoreHorizontal, Plus, Terminal, Trash2, X, Activity, ShieldCheck, HelpCircle } from 'lucide-react';
+import { Link2, MoreHorizontal, Plus, Terminal, X, Activity, ShieldCheck, HelpCircle } from 'lucide-react';
 import { WorkspacePageLayout, SidebarSection } from '@/components/dashboard/workspace-page-layout';
 
 // ─── Constants & Types ────────────────────────────────────────────────────────

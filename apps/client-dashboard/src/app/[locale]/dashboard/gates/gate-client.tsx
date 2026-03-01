@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Button, Input, Label, Checkbox, Select } from '@gate-access/ui';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import { cn } from '@/lib/utils';
 import { toggleGate, createGate, updateGate, deleteGate } from './actions';
 import {
@@ -40,7 +41,7 @@ export interface GateWithStats {
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function formatRelative(date: Date, t: any): string {
+function formatRelative(date: Date, t: TFunction): string {
   const diffMs = Date.now() - date.getTime();
   const diffMins = Math.floor(diffMs / 60_000);
   const diffHours = Math.floor(diffMins / 60);

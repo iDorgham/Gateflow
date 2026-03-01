@@ -68,7 +68,7 @@ export const PRESET_VIEWS: Record<string, Record<string, boolean>> = {
   },
 };
 
-export function getDefaultTableView(columnIds: readonly string[], pinned: Set<string>): TableViewState {
+export function getDefaultTableView(columnIds: readonly string[], _pinned: Set<string>): TableViewState {
   const columnOrder = [...columnIds];
   const columnVisibility: Record<string, boolean> = {};
   for (const id of columnIds) {

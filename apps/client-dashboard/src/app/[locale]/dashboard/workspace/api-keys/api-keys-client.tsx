@@ -14,7 +14,6 @@ import {
 } from '@gate-access/ui';
 import { csrfFetch } from '@/lib/csrf';
 import { cn } from '@/lib/utils';
-import { toast } from 'sonner';
 import { AlertCircle, Check, Copy, KeyRound, Plus, Trash2, X, Lock, RefreshCw, Zap, ShieldAlert } from 'lucide-react';
 import { WorkspacePageLayout, SidebarSection } from '@/components/dashboard/workspace-page-layout';
 

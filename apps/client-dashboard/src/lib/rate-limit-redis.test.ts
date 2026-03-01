@@ -35,7 +35,7 @@ describe('getRateLimitStatus (Redis)', () => {
     }));
 
     // We also need to mock slidingWindow static method since it's called
-    (Ratelimit as any).slidingWindow = jest.fn();
+    (Ratelimit as unknown as { slidingWindow: jest.Mock }).slidingWindow = jest.fn();
 
     await getRateLimitStatus('user:123', 10, 60000);
 

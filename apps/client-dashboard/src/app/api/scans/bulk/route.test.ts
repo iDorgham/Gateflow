@@ -1,9 +1,9 @@
 jest.mock('next/server', () => {
   class MockNextRequest {
     url: string;
-    init: any;
+    init: { body: string };
 
-    constructor(url: string, init: any) {
+    constructor(url: string, init: { body: string }) {
       this.url = url;
       this.init = init;
     }
@@ -16,7 +16,7 @@ jest.mock('next/server', () => {
   return {
     NextRequest: MockNextRequest,
     NextResponse: {
-      json: (body: any, init?: any) => ({
+      json: (body: unknown, init?: { status?: number; headers?: Record<string, string> }) => ({
         status: init?.status || 200,
         json: async () => body,
         headers: new Map(Object.entries(init?.headers || {})),
