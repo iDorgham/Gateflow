@@ -31,7 +31,7 @@ Checklist for **PLAN_residents_analytics**. Use with `/dev` and phase prompts.
 - [x] **2.5** Add tag column inline add/remove + bulk tag actions
 - [x] **2.6** Add contacts table customizer (order/visibility) + persist view
 - [x] **2.7** Add "View Units" row action modal/sheet
-- [ ] **2.8** i18n/RTL for new Contacts UI strings
+- [x] **2.8** i18n/RTL for new Contacts UI strings
 - [ ] **2.9** Lint, typecheck, tests pass; committed
 
 **Status:** In progress
