@@ -38,6 +38,7 @@ export function AnalyticsFilterBar({
 }: AnalyticsFilterBarProps) {
   const { t } = useTranslation('dashboard');
   const { projects, currentProjectId } = useProjectFilter();
+  const [mobileOpen, setMobileOpen] = useState(false);
   const [customFrom, setCustomFrom] = useState(filters.from);
   const [customTo, setCustomTo] = useState(filters.to);
   const [gates, setGates] = useState<Gate[]>(initialGates);
@@ -122,128 +123,155 @@ export function AnalyticsFilterBar({
   return (
     <div
       className={cn(
-        'flex flex-wrap items-center gap-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 p-3',
+        'rounded-xl border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-900/50',
         className
       )}
     >
-      {/* Date range presets */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center justify-between sm:hidden">
         <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
-          {t('analytics.filterDateRange', 'Date range')}
+          {t('analytics.filters', 'Filters')}
         </span>
         <Button
-          variant={filters.range === '7d' ? 'secondary' : 'ghost'}
+          type="button"
           size="sm"
-          onClick={() => handleRangePreset('7d')}
+          variant="ghost"
+          className="min-h-11 px-3"
+          onClick={() => setMobileOpen((v) => !v)}
+          aria-expanded={mobileOpen}
         >
-          {t('analytics.range7d', 'Last 7 days')}
-        </Button>
-        <Button
-          variant={filters.range === '30d' ? 'secondary' : 'ghost'}
-          size="sm"
-          onClick={() => handleRangePreset('30d')}
-        >
-          {t('analytics.range30d', 'Last 30 days')}
+          {mobileOpen
+            ? t('analytics.hideFilters', 'Hide filters')
+            : t('analytics.showFilters', 'Show filters')}
         </Button>
       </div>
 
-      {/* Custom range */}
-      {filters.range === 'custom' && (
-        <div className="flex items-center gap-2">
-          <Input
-            type="date"
-            value={customFrom}
-            onChange={(e) => setCustomFrom(e.target.value)}
-            className="w-[140px]"
-            aria-label={t('analytics.fromDate', 'From date')}
-          />
-          <Input
-            type="date"
-            value={customTo}
-            onChange={(e) => setCustomTo(e.target.value)}
-            className="w-[140px]"
-            aria-label={t('analytics.toDate', 'To date')}
-          />
-          <Button size="sm" onClick={handleCustomDateApply}>
-            {t('analytics.apply', 'Apply')}
+      <div
+        className={cn(
+          'mt-3 hidden flex-wrap items-center gap-3 sm:mt-0 sm:flex',
+          mobileOpen && 'flex'
+        )}
+      >
+        {/* Date range presets */}
+        <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto">
+          <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
+            {t('analytics.filterDateRange', 'Date range')}
+          </span>
+          <Button
+            variant={filters.range === '7d' ? 'secondary' : 'ghost'}
+            size="sm"
+            className="min-h-11"
+            onClick={() => handleRangePreset('7d')}
+          >
+            {t('analytics.range7d', 'Last 7 days')}
+          </Button>
+          <Button
+            variant={filters.range === '30d' ? 'secondary' : 'ghost'}
+            size="sm"
+            className="min-h-11"
+            onClick={() => handleRangePreset('30d')}
+          >
+            {t('analytics.range30d', 'Last 30 days')}
           </Button>
         </div>
-      )}
 
-      {/* Project */}
-      {projects.length > 0 && (
-        <div className="flex items-center gap-2">
-          <label htmlFor="analytics-project" className="text-sm font-medium text-slate-600 dark:text-slate-400 sr-only">
-            {t('analytics.filterProject', 'Project')}
+        {/* Custom range */}
+        {filters.range === 'custom' && (
+          <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto">
+            <Input
+              type="date"
+              value={customFrom}
+              onChange={(e) => setCustomFrom(e.target.value)}
+              className="min-h-11 w-full sm:w-[160px]"
+              aria-label={t('analytics.fromDate', 'From date')}
+            />
+            <Input
+              type="date"
+              value={customTo}
+              onChange={(e) => setCustomTo(e.target.value)}
+              className="min-h-11 w-full sm:w-[160px]"
+              aria-label={t('analytics.toDate', 'To date')}
+            />
+            <Button size="sm" className="min-h-11 w-full sm:w-auto" onClick={handleCustomDateApply}>
+              {t('analytics.apply', 'Apply')}
+            </Button>
+          </div>
+        )}
+
+        {/* Project */}
+        {projects.length > 0 && (
+          <div className="flex w-full items-center gap-2 sm:w-auto">
+            <label htmlFor="analytics-project" className="sr-only text-sm font-medium text-slate-600 dark:text-slate-400">
+              {t('analytics.filterProject', 'Project')}
+            </label>
+            <Select
+              id="analytics-project"
+              value={projectValue}
+              onChange={(e) => onFiltersChange({ projectId: e.target.value })}
+              className="min-h-11 w-full sm:w-[180px]"
+            >
+              <option value="">{t('analytics.filterAllProjects', 'All projects')}</option>
+              {projects.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.name}
+                </option>
+              ))}
+            </Select>
+          </div>
+        )}
+
+        {/* Gate */}
+        {gates.length > 0 && (
+          <div className="flex w-full items-center gap-2 sm:w-auto">
+            <label htmlFor="analytics-gate" className="sr-only text-sm font-medium text-slate-600 dark:text-slate-400">
+              {t('analytics.filterGate', 'Gate')}
+            </label>
+            <Select
+              id="analytics-gate"
+              value={filters.gateId}
+              onChange={(e) => onFiltersChange({ gateId: e.target.value })}
+              className="min-h-11 w-full sm:w-[160px]"
+            >
+              <option value="">{t('analytics.filterAllGates', 'All gates')}</option>
+              {gates.map((g) => (
+                <option key={g.id} value={g.id}>
+                  {g.name}
+                </option>
+              ))}
+            </Select>
+          </div>
+        )}
+
+        {/* Unit type */}
+        <div className="flex w-full items-center gap-2 sm:w-auto">
+          <label htmlFor="analytics-unittype" className="sr-only text-sm font-medium text-slate-600 dark:text-slate-400">
+            {t('analytics.filterUnitType', 'Unit type')}
           </label>
           <Select
-            id="analytics-project"
-            value={projectValue}
-            onChange={(e) => onFiltersChange({ projectId: e.target.value })}
-            className="w-[180px]"
+            id="analytics-unittype"
+            value={filters.unitType}
+            onChange={(e) => onFiltersChange({ unitType: e.target.value })}
+            className="min-h-11 w-full sm:w-[160px]"
           >
-            <option value="">{t('analytics.filterAllProjects', 'All projects')}</option>
-            {projects.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.name}
+            <option value="">{t('analytics.filterAllUnitTypes', 'All unit types')}</option>
+            {UNIT_TYPES.map((u) => (
+              <option key={u} value={u}>
+                {unitTypeLabels[u] ?? u}
               </option>
             ))}
           </Select>
         </div>
-      )}
 
-      {/* Gate */}
-      {gates.length > 0 && (
-        <div className="flex items-center gap-2">
-          <label htmlFor="analytics-gate" className="text-sm font-medium text-slate-600 dark:text-slate-400 sr-only">
-            {t('analytics.filterGate', 'Gate')}
-          </label>
-          <Select
-            id="analytics-gate"
-            value={filters.gateId}
-            onChange={(e) => onFiltersChange({ gateId: e.target.value })}
-            className="w-[160px]"
-          >
-            <option value="">{t('analytics.filterAllGates', 'All gates')}</option>
-            {gates.map((g) => (
-              <option key={g.id} value={g.id}>
-                {g.name}
-              </option>
-            ))}
-          </Select>
+        {/* Search */}
+        <div className="flex w-full items-center gap-2 sm:w-auto">
+          <Input
+            type="search"
+            placeholder={t('analytics.filterSearchPlaceholder', 'Search…')}
+            value={searchInput}
+            onChange={(e) => handleSearchChange(e.target.value)}
+            className="min-h-11 w-full sm:w-[180px]"
+            aria-label={t('analytics.filterSearch', 'Search')}
+          />
         </div>
-      )}
-
-      {/* Unit type */}
-      <div className="flex items-center gap-2">
-        <label htmlFor="analytics-unittype" className="text-sm font-medium text-slate-600 dark:text-slate-400 sr-only">
-          {t('analytics.filterUnitType', 'Unit type')}
-        </label>
-        <Select
-          id="analytics-unittype"
-          value={filters.unitType}
-          onChange={(e) => onFiltersChange({ unitType: e.target.value })}
-          className="w-[160px]"
-        >
-          <option value="">{t('analytics.filterAllUnitTypes', 'All unit types')}</option>
-          {UNIT_TYPES.map((u) => (
-            <option key={u} value={u}>
-              {unitTypeLabels[u] ?? u}
-            </option>
-          ))}
-        </Select>
-      </div>
-
-      {/* Search */}
-      <div className="flex items-center gap-2">
-        <Input
-          type="search"
-          placeholder={t('analytics.filterSearchPlaceholder', 'Search…')}
-          value={searchInput}
-          onChange={(e) => handleSearchChange(e.target.value)}
-          className="w-[180px]"
-          aria-label={t('analytics.filterSearch', 'Search')}
-        />
       </div>
     </div>
   );

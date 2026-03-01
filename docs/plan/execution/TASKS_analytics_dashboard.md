@@ -57,12 +57,12 @@ Checklist for **PLAN_analytics_dashboard**. Use with `/dev` and phase prompts.
 
 ## Phase 4 — Polish & Real-time
 
-- [ ] **4.1** WebSocket for live KPIs (or short-polling fallback)
-- [ ] **4.2** Export chart as PNG
-- [ ] **4.3** Shareable URL (copy link)
-- [ ] **4.4** Mobile optimizations
-- [ ] **4.5** Performance tuning (load, filter→chart targets)
-- [ ] **4.6** CACHE_STRATEGY docs
-- [ ] **4.7** Lint, typecheck, tests pass; committed
+- [x] **4.1** WebSocket for live KPIs (or short-polling fallback)
+- [x] **4.2** Export chart as PNG
+- [x] **4.3** Shareable URL (copy link)
+- [x] **4.4** Mobile optimizations
+- [x] **4.5** Performance tuning (load, filter→chart targets)
+- [x] **4.6** CACHE_STRATEGY docs
+- [x] **4.7** Lint, typecheck, tests pass; committed
 
-**Status:** Not started
+**Status:** Done

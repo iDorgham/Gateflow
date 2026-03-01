@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import type { AnalyticsFilters } from './analytics-filters';
 
 export interface SummaryData {
@@ -24,37 +24,31 @@ function buildSummaryUrl(filters: AnalyticsFilters): string {
 }
 
 const POLL_INTERVAL_MS = 45_000;
+const STALE_TIME_MS = 60_000;
+
+async function fetchSummary(filters: AnalyticsFilters): Promise<SummaryData> {
+  const res = await fetch(buildSummaryUrl(filters), { credentials: 'include' });
+  const json = await res.json();
+  if (!res.ok || !json.success || !json.data) {
+    throw new Error(json.message ?? 'Failed to load summary');
+  }
+  return json.data;
+}
 
 export function useAnalyticsSummary(filters: AnalyticsFilters, enabled: boolean) {
-  const [data, setData] = useState<SummaryData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const query = useQuery({
+    queryKey: ['analytics', 'summary', filters.from, filters.to, filters.projectId, filters.gateId],
+    queryFn: () => fetchSummary(filters),
+    enabled,
+    staleTime: STALE_TIME_MS,
+    refetchInterval: enabled ? POLL_INTERVAL_MS : false,
+    refetchOnWindowFocus: true,
+  });
 
-  const fetchSummary = useCallback(async () => {
-    try {
-      const res = await fetch(buildSummaryUrl(filters), { credentials: 'include' });
-      const json = await res.json();
-      if (json.success && json.data) {
-        setData(json.data);
-        setError(null);
-      } else {
-        setError(json.message ?? 'Failed to load summary');
-      }
-    } catch (err) {
-      setError((err as Error)?.message ?? 'Network error');
-    } finally {
-      setLoading(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- only refetch when API params change
-  }, [filters.from, filters.to, filters.projectId, filters.gateId]);
-
-  useEffect(() => {
-    if (!enabled) return;
-    setLoading(true);
-    fetchSummary();
-    const id = setInterval(fetchSummary, POLL_INTERVAL_MS);
-    return () => clearInterval(id);
-  }, [enabled, fetchSummary]);
-
-  return { data, loading, error, refetch: fetchSummary };
+  return {
+    data: query.data ?? null,
+    loading: query.isLoading,
+    error: query.error ? (query.error as Error).message : null,
+    refetch: () => query.refetch(),
+  };
 }

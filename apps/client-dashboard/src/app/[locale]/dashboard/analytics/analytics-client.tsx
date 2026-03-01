@@ -1,5 +1,6 @@
 'use client';
 
+import { useRef } from 'react';
 import { useParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import {
@@ -19,6 +20,8 @@ import {
 } from '@/components/dashboard/analytics';
 import { useAnalyticsFilters, useAnalyticsSummary } from '@/lib/analytics';
 import { PrintButton } from './print-button';
+import { ExportChartButton } from './export-chart-button';
+import { CopyLinkButton } from './copy-link-button';
 
 interface AnalyticsClientProps {
   kpiData?: Partial<KPIData>;
@@ -26,6 +29,7 @@ interface AnalyticsClientProps {
 }
 
 export function AnalyticsClient({ kpiData, gates = [] }: AnalyticsClientProps) {
+  const chartsRef = useRef<HTMLDivElement>(null);
   const params = useParams();
   const { t } = useTranslation('dashboard');
   const locale = (params?.locale as string) || 'en';
@@ -58,10 +62,12 @@ export function AnalyticsClient({ kpiData, gates = [] }: AnalyticsClientProps) {
             {t('analytics.subtitle')}
           </p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:justify-end">
           {!isSecurity && (
             <AnalyticsAudienceExportButton filters={filters} />
           )}
+          <ExportChartButton targetRef={chartsRef} />
+          <CopyLinkButton />
           <AnalyticsModeToggle mode={filters.mode} onModeChange={setMode} />
           <PrintButton />
         </div>
@@ -81,7 +87,7 @@ export function AnalyticsClient({ kpiData, gates = [] }: AnalyticsClientProps) {
       {isSecurity && <AnalyticsAnomalyCards summary={summary ?? undefined} />}
 
       {/* Main charts: Security = heatmap + leaderboard; Marketing = funnel + campaign bar + ROI + persona */}
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
+      <div ref={chartsRef} className="grid grid-cols-1 gap-4 lg:grid-cols-12">
         {isSecurity ? (
           <>
             <div className="lg:col-span-7">
