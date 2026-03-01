@@ -2,7 +2,7 @@
 
 **Initiative:** residents_analytics  
 **Source:** [IDEA_residents_analytics.md](../context/IDEA_residents_analytics.md); RMS docs (Analytics, Contacts, Units)  
-**Status:** Not started  
+**Status:** Done (Phases 1–5 complete)  
 **Estimated:** 5 phases
 
 ---
