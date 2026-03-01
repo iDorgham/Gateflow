@@ -27,14 +27,14 @@ Checklist for **PLAN_residents_analytics**. Use with `/dev` and phase prompts.
 - [x] **2.1** Add React Query + React Table deps in `client-dashboard`
 - [x] **2.2** Build shared `ResidentsFilterBar` with URL sync
 - [x] **2.3** Create `useContacts(filters)` hook
-- [ ] **2.4** Refactor Contacts table with React Table columns + aggregates
+- [x] **2.4** Refactor Contacts table with React Table columns + aggregates
 - [x] **2.5** Add tag column inline add/remove + bulk tag actions
 - [x] **2.6** Add contacts table customizer (order/visibility) + persist view
 - [x] **2.7** Add "View Units" row action modal/sheet
 - [x] **2.8** i18n/RTL for new Contacts UI strings
-- [ ] **2.9** Lint, typecheck, tests pass; committed
+- [x] **2.9** Lint, typecheck, tests pass; committed
 
-**Status:** In progress
+**Status:** Done
 
 ---
 
