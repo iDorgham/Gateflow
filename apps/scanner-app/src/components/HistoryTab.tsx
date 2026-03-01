@@ -3,7 +3,6 @@ import {
   ActivityIndicator,
   FlatList,
   Platform,
-  Pressable,
   RefreshControl,
   StatusBar,
   StyleSheet,

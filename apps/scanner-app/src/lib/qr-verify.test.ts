@@ -1,5 +1,4 @@
 import { describe, it, expect, jest, beforeEach } from '@jest/globals';
-import CryptoJS from 'crypto-js';
 
 const mockAsyncStore: Record<string, string> = {};
 

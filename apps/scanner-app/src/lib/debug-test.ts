@@ -1,4 +1,4 @@
-import { describe, it, expect, jest, beforeEach } from '@jest/globals';
+import { describe, it, jest, beforeEach } from '@jest/globals';
 
 // @ts-expect-error - Jest mock for global fetch
 global.fetch = jest.fn().mockImplementation(() =>
@@ -77,7 +77,7 @@ jest.mock('./offline-queue', () => {
   };
 });
 
-import { encryption, scanQueue } from './offline-queue';
+import { scanQueue } from './offline-queue';
 
 function clearMockStore() {
   Object.keys(mockStore).forEach((key) => delete mockStore[key]);
@@ -99,7 +99,7 @@ describe('DEBUG: markAsFailed after 10 retries', () => {
     for (let i = 0; i < 10; i++) {
       await scanQueue.markAsFailed(scan.id, `Error ${i}`);
       console.log(`After markAsFailed ${i+1}:`);
-      const queue = await (scanQueue as any).getQueue();
+      const queue = await (scanQueue as { getQueue: () => Promise<Array<{ retryCount?: number; synced?: boolean; error?: string }>> }).getQueue();
       console.log('  retryCount:', queue[0]?.retryCount, 'synced:', queue[0]?.synced, 'error:', queue[0]?.error);
     }
 
