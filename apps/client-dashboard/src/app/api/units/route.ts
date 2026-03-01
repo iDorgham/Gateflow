@@ -177,7 +177,12 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
           contacts: {
             include: {
               contact: {
-                select: { id: true, firstName: true, lastName: true },
+                include: {
+                  contactTags: {
+                    where: { tag: { deletedAt: null } },
+                    include: { tag: { select: { name: true } } },
+                  },
+                },
               },
             },
           },
@@ -293,6 +298,19 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     const data = units.map((u) => {
       const agg = unitAggregates.get(u.id);
+      const tagCounts: Record<string, number> = {};
+      for (const cu of u.contacts) {
+        for (const ct of cu.contact.contactTags ?? []) {
+          const name = ct.tag?.name;
+          if (name) tagCounts[name] = (tagCounts[name] ?? 0) + 1;
+        }
+      }
+      const tagSummary =
+        Object.keys(tagCounts).length === 0
+          ? null
+          : Object.entries(tagCounts)
+              .map(([name, count]) => `${count} ${name}`)
+              .join(', ');
       return {
         id: u.id,
         name: u.name,
@@ -315,6 +333,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         lastVisitInRange: agg?.lastVisitInRange ?? null,
         linkedContactCount: u.contacts.length,
         potentialVacancy: (vacancySuccessCounts.get(u.id) ?? 0) === 0,
+        tagSummary,
       };
     });
 

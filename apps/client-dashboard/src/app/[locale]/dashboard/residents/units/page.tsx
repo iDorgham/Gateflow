@@ -37,7 +37,14 @@ import {
   ChevronLeft,
   ChevronRight,
   Columns,
+  Eye,
 } from 'lucide-react';
+import {
+  type ColumnDef,
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from '@tanstack/react-table';
 import { buildAnalyticsUrl } from '@/lib/analytics';
 import {
   mergeFilters,
@@ -197,8 +204,18 @@ export default function UnitsPage() {
       canHide: true,
     },
     {
+      id: 'passesInRange',
+      label: t('units.table.passesInRange', 'Passes'),
+      canHide: true,
+    },
+    {
       id: 'lastVisitInRange',
       label: t('units.table.lastVisitInRange', 'Last visit'),
+      canHide: true,
+    },
+    {
+      id: 'tagSummary',
+      label: t('units.table.tagSummary', 'Tag summary'),
       canHide: true,
     },
     {
@@ -228,6 +245,183 @@ export default function UnitsPage() {
   const page = data?.page ?? 1;
   const pageSize = data?.pageSize ?? 25;
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
+
+  const renderUnitCell = (columnId: string, u: Unit) => {
+    if (columnId === 'name')
+      return (
+        <TableCell key={columnId} className="font-medium">
+          <span className="mr-2">{u.name}</span>
+          {u.potentialVacancy && (
+            <Badge
+              variant="outline"
+              className="text-xs text-amber-600 border-amber-400"
+            >
+              {t('units.potentialVacancy', 'Potential vacancy')}
+            </Badge>
+          )}
+        </TableCell>
+      );
+    if (columnId === 'type')
+      return (
+        <TableCell key={columnId}>
+          <Badge variant="outline" className="text-xs">
+            {UNIT_TYPE_LABELS[u.type as UnitType]}
+          </Badge>
+        </TableCell>
+      );
+    if (columnId === 'size')
+      return (
+        <TableCell key={columnId} className="text-sm text-muted-foreground">
+          {u.sizeSqm != null ? `${u.sizeSqm} m²` : '—'}
+        </TableCell>
+      );
+    if (columnId === 'residents')
+      return (
+        <TableCell key={columnId}>
+          <span className="text-sm">
+            {u.contacts.length === 0 ? (
+              <span className="text-muted-foreground">—</span>
+            ) : (
+              <>
+                {u.contacts.map((c) => (
+                  <Badge
+                    key={c.id}
+                    variant="secondary"
+                    className="text-xs cursor-pointer mr-1 hover:bg-secondary/80"
+                    onClick={() => setViewContactsFor(u)}
+                  >
+                    {c.firstName} {c.lastName}
+                  </Badge>
+                ))}
+              </>
+            )}
+          </span>
+        </TableCell>
+      );
+    if (columnId === 'linkedResident')
+      return (
+        <TableCell key={columnId}>
+          <span className="text-sm">
+            {u.user ? (
+              <span title={u.user.email}>{u.user.name}</span>
+            ) : (
+              <span className="text-muted-foreground">
+                {t('units.noResidentLinked', '—')}
+              </span>
+            )}
+          </span>
+        </TableCell>
+      );
+    if (columnId === 'qrQuota')
+      return (
+        <TableCell key={columnId} className="font-mono text-sm">
+          {u.qrQuota}
+        </TableCell>
+      );
+    if (columnId === 'project')
+      return (
+        <TableCell key={columnId} className="text-sm text-muted-foreground">
+          {u.projectName ?? '—'}
+        </TableCell>
+      );
+    if (columnId === 'visitsInRange')
+      return (
+        <TableCell key={columnId} className="text-right tabular-nums">
+          {u.visitsInRange ?? 0}
+        </TableCell>
+      );
+    if (columnId === 'passesInRange')
+      return (
+        <TableCell key={columnId} className="text-right tabular-nums">
+          {u.passesInRange ?? 0}
+        </TableCell>
+      );
+    if (columnId === 'lastVisitInRange')
+      return (
+        <TableCell
+          key={columnId}
+          className="text-right text-sm text-muted-foreground"
+        >
+          {u.lastVisitInRange
+            ? new Date(u.lastVisitInRange).toLocaleDateString(undefined, {
+                dateStyle: 'short',
+              })
+            : '—'}
+        </TableCell>
+      );
+    if (columnId === 'tagSummary')
+      return (
+        <TableCell key={columnId} className="text-sm text-muted-foreground">
+          {u.tagSummary ?? '—'}
+        </TableCell>
+      );
+    if (columnId === 'linkedContactCount')
+      return (
+        <TableCell key={columnId} className="text-right tabular-nums">
+          {u.linkedContactCount ?? 0}
+        </TableCell>
+      );
+    if (columnId === 'actions')
+      return (
+        <TableCell key={columnId}>
+          <div className="flex items-center gap-1">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-7 w-7"
+              title={t('residents.viewContacts', 'View contacts')}
+              onClick={() => setViewContactsFor(u)}
+            >
+              <Eye className="h-3.5 w-3.5" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-7 w-7"
+              title={t('units.linkResident', 'Link Resident')}
+              onClick={() => {
+                setLinkTarget(u);
+                setLinkUserId(u.userId ?? '');
+              }}
+            >
+              <UserPlus className="h-3.5 w-3.5" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-7 w-7"
+              onClick={() => openEdit(u)}
+            >
+              <Pencil className="h-3.5 w-3.5" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-7 w-7 text-destructive hover:text-destructive"
+              onClick={() => setDeleteTarget(u)}
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+            </Button>
+          </div>
+        </TableCell>
+      );
+    return <TableCell key={columnId}>—</TableCell>;
+  };
+
+  const reactTableColumns = visibleColumns.map((col) => {
+    const def: ColumnDef<Unit> = {
+      id: col.id,
+      header: () => col.label,
+      cell: ({ row }) => renderUnitCell(col.id, row.original),
+    };
+    return def;
+  });
+
+  const unitsTable = useReactTable({
+    data: units,
+    columns: reactTableColumns,
+    getCoreRowModel: getCoreRowModel(),
+  });
 
   useEffect(() => {
     const parsed = parseResidentsFiltersFromSearchParams(searchParams);
@@ -584,24 +778,35 @@ export default function UnitsPage() {
       <div className="rounded-lg border bg-card">
         <Table>
           <TableHeader>
-            <TableRow>
-              {visibleColumns.map((col) => (
-                <TableHead
-                  key={col.id}
-                  className={
-                    col.id === 'actions'
-                      ? 'w-24'
-                      : col.id === 'visitsInRange' ||
-                          col.id === 'lastVisitInRange' ||
-                          col.id === 'linkedContactCount'
-                        ? 'text-right'
-                        : ''
-                  }
-                >
-                  {col.label}
-                </TableHead>
-              ))}
-            </TableRow>
+            {unitsTable.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  const columnId = header.column.id;
+                  return (
+                    <TableHead
+                      key={header.id}
+                      className={
+                        columnId === 'actions'
+                          ? 'w-24'
+                          : columnId === 'visitsInRange' ||
+                              columnId === 'passesInRange' ||
+                              columnId === 'lastVisitInRange' ||
+                              columnId === 'linkedContactCount'
+                            ? 'text-right'
+                            : ''
+                      }
+                    >
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
+                  );
+                })}
+              </TableRow>
+            ))}
           </TableHeader>
           <TableBody>
             {isLoading ? (
@@ -634,165 +839,11 @@ export default function UnitsPage() {
                 </TableCell>
               </TableRow>
             ) : (
-              units.map((u) => (
-                <TableRow key={u.id}>
-                  {visibleColumns.map((col) => {
-                    if (col.id === 'name')
-                      return (
-                        <TableCell key={col.id} className="font-medium">
-                          <span className="mr-2">{u.name}</span>
-                          {u.linkedContactCount === 0 &&
-                            u.visitsInRange === 0 && (
-                              <Badge
-                                variant="outline"
-                                className="text-xs text-amber-600 border-amber-400"
-                              >
-                                {t(
-                                  'units.potentialVacancy',
-                                  'Potential vacancy'
-                                )}
-                              </Badge>
-                            )}
-                        </TableCell>
-                      );
-                    if (col.id === 'type')
-                      return (
-                        <TableCell key={col.id}>
-                          <Badge variant="outline" className="text-xs">
-                            {UNIT_TYPE_LABELS[u.type as UnitType]}
-                          </Badge>
-                        </TableCell>
-                      );
-                    if (col.id === 'size')
-                      return (
-                        <TableCell
-                          key={col.id}
-                          className="text-sm text-muted-foreground"
-                        >
-                          {u.sizeSqm != null ? `${u.sizeSqm} m²` : '—'}
-                        </TableCell>
-                      );
-                    if (col.id === 'residents')
-                      return (
-                        <TableCell key={col.id}>
-                          <span className="text-sm">
-                            {u.contacts.length === 0 ? (
-                              <span className="text-muted-foreground">—</span>
-                            ) : (
-                              <>
-                                {u.contacts.map((c) => (
-                                  <Badge
-                                    key={c.id}
-                                    variant="secondary"
-                                    className="text-xs cursor-pointer mr-1 hover:bg-secondary/80"
-                                    onClick={() => setViewContactsFor(u)}
-                                  >
-                                    {c.firstName} {c.lastName}
-                                  </Badge>
-                                ))}
-                              </>
-                            )}
-                          </span>
-                        </TableCell>
-                      );
-                    if (col.id === 'linkedResident')
-                      return (
-                        <TableCell key={col.id}>
-                          <span className="text-sm">
-                            {u.user ? (
-                              <span title={u.user.email}>{u.user.name}</span>
-                            ) : (
-                              <span className="text-muted-foreground">
-                                {t('units.noResidentLinked', '—')}
-                              </span>
-                            )}
-                          </span>
-                        </TableCell>
-                      );
-                    if (col.id === 'qrQuota')
-                      return (
-                        <TableCell key={col.id} className="font-mono text-sm">
-                          {u.qrQuota}
-                        </TableCell>
-                      );
-                    if (col.id === 'project')
-                      return (
-                        <TableCell
-                          key={col.id}
-                          className="text-sm text-muted-foreground"
-                        >
-                          {u.projectName ?? '—'}
-                        </TableCell>
-                      );
-                    if (col.id === 'visitsInRange')
-                      return (
-                        <TableCell
-                          key={col.id}
-                          className="text-right tabular-nums"
-                        >
-                          {u.visitsInRange ?? 0}
-                        </TableCell>
-                      );
-                    if (col.id === 'lastVisitInRange')
-                      return (
-                        <TableCell
-                          key={col.id}
-                          className="text-right text-sm text-muted-foreground"
-                        >
-                          {u.lastVisitInRange
-                            ? new Date(u.lastVisitInRange).toLocaleDateString(
-                                undefined,
-                                { dateStyle: 'short' }
-                              )
-                            : '—'}
-                        </TableCell>
-                      );
-                    if (col.id === 'linkedContactCount')
-                      return (
-                        <TableCell
-                          key={col.id}
-                          className="text-right tabular-nums"
-                        >
-                          {u.linkedContactCount ?? 0}
-                        </TableCell>
-                      );
-                    if (col.id === 'actions')
-                      return (
-                        <TableCell key={col.id}>
-                          <div className="flex items-center gap-1">
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-7 w-7"
-                              title={t('units.linkResident', 'Link Resident')}
-                              onClick={() => {
-                                setLinkTarget(u);
-                                setLinkUserId(u.userId ?? '');
-                              }}
-                            >
-                              <UserPlus className="h-3.5 w-3.5" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-7 w-7"
-                              onClick={() => openEdit(u)}
-                            >
-                              <Pencil className="h-3.5 w-3.5" />
-                            </Button>
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="h-7 w-7 text-destructive hover:text-destructive"
-                              onClick={() => setDeleteTarget(u)}
-                            >
-                              <Trash2 className="h-3.5 w-3.5" />
-                            </Button>
-                          </div>
-                        </TableCell>
-                      );
-                    return <TableCell key={col.id}>—</TableCell>;
-                  })}
+              unitsTable.getRowModel().rows.map((row) => (
+                <TableRow key={row.id}>
+                  {row.getVisibleCells().map((cell) =>
+                    flexRender(cell.column.columnDef.cell, cell.getContext())
+                  )}
                 </TableRow>
               ))
             )}

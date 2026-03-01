@@ -1029,6 +1029,7 @@
       "viewingContact": "عرض جهة الاتصال",
       "clearContactFilter": "مسح",
       "viewUnits": "عرض الوحدات",
+      "viewContacts": "عرض جهات الاتصال",
       "viewInUnitsPage": "عرض في صفحة الوحدات",
       "viewInContactsPage": "عرض في صفحة جهات الاتصال",
       "unitsForContact": "الوحدات لـ {{name}}",
@@ -1127,7 +1128,9 @@
         "qrQuota": "حصة QR",
         "project": "المشروع",
         "visitsInRange": "الزيارات",
+        "passesInRange": "المرور",
         "lastVisitInRange": "آخر زيارة",
+        "tagSummary": "ملخص الوسوم",
         "linkedContactCount": "جهات الاتصال",
         "actions": "الإجراءات"
       },

@@ -40,17 +40,17 @@ Checklist for **PLAN_residents_analytics**. Use with `/dev` and phase prompts.
 
 ## Phase 3 — Units: Table, Customizer, Inter-Page
 
-- [ ] **3.1** Create `useUnits(filters)` hook
-- [ ] **3.2** Refactor Units page with React Table + ResidentsFilterBar
-- [ ] **3.3** Update UI terminology to "Unit ID" (label only)
-- [ ] **3.4** Add units aggregates columns + tag summary + linked contact count
-- [ ] **3.5** Add units table customizer + persist view
-- [ ] **3.6** Add "View Contacts" row action modal/sheet
-- [ ] **3.7** Support URL sync for `unitId` and `contactId` flows
-- [ ] **3.8** Ensure build URL helpers include `unitId` / `contactId`
-- [ ] **3.9** Lint, typecheck, tests pass; committed
+- [x] **3.1** Create `useUnits(filters)` hook
+- [x] **3.2** Refactor Units page with React Table + ResidentsFilterBar
+- [x] **3.3** Update UI terminology to "Unit ID" (label only)
+- [x] **3.4** Add units aggregates columns + tag summary + linked contact count
+- [x] **3.5** Add units table customizer + persist view
+- [x] **3.6** Add "View Contacts" row action modal/sheet
+- [x] **3.7** Support URL sync for `unitId` and `contactId` flows
+- [x] **3.8** Ensure build URL helpers include `unitId` / `contactId`
+- [x] **3.9** Lint, typecheck, tests pass; committed
 
-**Status:** Not started
+**Status:** Done
 
 ---
 
