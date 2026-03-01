@@ -148,10 +148,13 @@ export default function UnitsPage() {
   const { t } = useTranslation('dashboard');
 
   const { preferences, updatePreferences } = useUserPreferences();
-  const savedTableView = (preferences.tableViews?.units ?? {}) as TableViewState;
+  const savedTableView = (preferences.tableViews?.units ??
+    {}) as TableViewState;
   const defaultView = getDefaultTableView(UNITS_COLUMN_IDS, UNITS_PINNED);
   const [tableView, setTableView] = useState<TableViewState>(() => ({
-    columnOrder: savedTableView.columnOrder?.length ? savedTableView.columnOrder : defaultView.columnOrder,
+    columnOrder: savedTableView.columnOrder?.length
+      ? savedTableView.columnOrder
+      : defaultView.columnOrder,
     columnVisibility: Object.keys(savedTableView.columnVisibility ?? {}).length
       ? { ...defaultView.columnVisibility, ...savedTableView.columnVisibility }
       : defaultView.columnVisibility,
@@ -173,17 +176,53 @@ export default function UnitsPage() {
     { id: 'name', label: t('units.table.name', 'Unit ID'), canHide: false },
     { id: 'type', label: t('units.table.type', 'Type'), canHide: true },
     { id: 'size', label: t('units.table.size', 'Size'), canHide: true },
-    { id: 'residents', label: t('units.table.residents', 'Residents'), canHide: true },
-    { id: 'linkedResident', label: t('units.table.linkedResident', 'Linked Resident'), canHide: true },
-    { id: 'qrQuota', label: t('units.table.qrQuota', 'QR Quota'), canHide: true },
-    { id: 'project', label: t('units.table.project', 'Project'), canHide: true },
-    { id: 'visitsInRange', label: t('units.table.visitsInRange', 'Visits'), canHide: true },
-    { id: 'lastVisitInRange', label: t('units.table.lastVisitInRange', 'Last visit'), canHide: true },
-    { id: 'linkedContactCount', label: t('units.table.linkedContactCount', 'Contacts'), canHide: true },
-    { id: 'actions', label: t('units.table.actions', 'Actions'), canHide: false },
+    {
+      id: 'residents',
+      label: t('units.table.residents', 'Residents'),
+      canHide: true,
+    },
+    {
+      id: 'linkedResident',
+      label: t('units.table.linkedResident', 'Linked Resident'),
+      canHide: true,
+    },
+    {
+      id: 'qrQuota',
+      label: t('units.table.qrQuota', 'QR Quota'),
+      canHide: true,
+    },
+    {
+      id: 'project',
+      label: t('units.table.project', 'Project'),
+      canHide: true,
+    },
+    {
+      id: 'visitsInRange',
+      label: t('units.table.visitsInRange', 'Visits'),
+      canHide: true,
+    },
+    {
+      id: 'lastVisitInRange',
+      label: t('units.table.lastVisitInRange', 'Last visit'),
+      canHide: true,
+    },
+    {
+      id: 'linkedContactCount',
+      label: t('units.table.linkedContactCount', 'Contacts'),
+      canHide: true,
+    },
+    {
+      id: 'actions',
+      label: t('units.table.actions', 'Actions'),
+      canHide: false,
+    },
   ];
   const visibleColumns = tableView.columnOrder
-    .filter((id) => tableView.columnVisibility[id] !== false && unitColumns.some((c) => c.id === id))
+    .filter(
+      (id) =>
+        tableView.columnVisibility[id] !== false &&
+        unitColumns.some((c) => c.id === id)
+    )
     .map((id) => unitColumns.find((c) => c.id === id)!)
     .filter(Boolean);
 
@@ -197,7 +236,7 @@ export default function UnitsPage() {
 
   useEffect(() => {
     const parsed = parseResidentsFiltersFromSearchParams(searchParams);
-    setFilters((prev) => ({ ...prev, ...parsed }));
+    setFilters(parsed);
   }, [searchParams]);
 
   const updateFiltersAndUrl = useCallback(
@@ -206,7 +245,10 @@ export default function UnitsPage() {
         const next = { ...prev, ...updates };
         const sp = residentsFiltersToSearchParams(next);
         const query = sp.toString();
-        router.replace(`/${locale}/dashboard/residents/units${query ? `?${query}` : ''}`, { scroll: false });
+        router.replace(
+          `/${locale}/dashboard/residents/units${query ? `?${query}` : ''}`,
+          { scroll: false }
+        );
         return next;
       });
     },
@@ -237,7 +279,8 @@ export default function UnitsPage() {
         if (!cancelled && rJson.success) setResidents(rJson.data);
       })
       .catch(() => {
-        if (!cancelled) toast.error(t('units.errors.loadFailed', 'Failed to load'));
+        if (!cancelled)
+          toast.error(t('units.errors.loadFailed', 'Failed to load'));
       });
     return () => {
       cancelled = true;
@@ -308,11 +351,19 @@ export default function UnitsPage() {
             });
         const json = await res.json();
         if (!json.success) throw new Error(json.message);
-        toast.success(editing ? t('units.success.updated', 'Unit updated') : t('units.success.created', 'Unit created'));
+        toast.success(
+          editing
+            ? t('units.success.updated', 'Unit updated')
+            : t('units.success.created', 'Unit created')
+        );
         setDialogOpen(false);
         refetch();
       } catch (err: unknown) {
-        toast.error(err instanceof Error ? err.message : t('units.errors.saveFailed', 'Failed to save unit'));
+        toast.error(
+          err instanceof Error
+            ? err.message
+            : t('units.errors.saveFailed', 'Failed to save unit')
+        );
       }
     });
   }
@@ -337,7 +388,11 @@ export default function UnitsPage() {
         setLinkUserId('');
         refetch();
       } catch (err: unknown) {
-        toast.error(err instanceof Error ? err.message : t('units.errors.saveFailed', 'Failed to save'));
+        toast.error(
+          err instanceof Error
+            ? err.message
+            : t('units.errors.saveFailed', 'Failed to save')
+        );
       }
     });
   }
@@ -356,7 +411,9 @@ export default function UnitsPage() {
         refetch();
       } catch (err: unknown) {
         toast.error(
-          err instanceof Error ? err.message : t('units.errors.deleteFailed', 'Failed to delete unit')
+          err instanceof Error
+            ? err.message
+            : t('units.errors.deleteFailed', 'Failed to delete unit')
         );
       }
     });
@@ -415,7 +472,12 @@ export default function UnitsPage() {
           /* skip */
         }
       }
-      toast.success(t('units.success.imported', { count: imported, defaultValue: `Imported ${imported} units` }));
+      toast.success(
+        t('units.success.imported', {
+          count: imported,
+          defaultValue: `Imported ${imported} units`,
+        })
+      );
       refetch();
     };
     reader.readAsText(file);
@@ -428,25 +490,36 @@ export default function UnitsPage() {
         <div>
           <h1 className="text-2xl font-bold">{t('units.title', 'Units')}</h1>
           <p className="text-sm text-muted-foreground">
-            {t('units.description', 'Manage residential and commercial units with QR quotas.')}
+            {t(
+              'units.description',
+              'Manage residential and commercial units with QR quotas.'
+            )}
           </p>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" asChild>
             <Link href={buildAnalyticsUrl(locale, { search: filters.search })}>
-              <BarChart3 className="h-4 w-4 mr-1" /> {t('analytics.openInAnalytics', 'Open in Analytics Dashboard')}
+              <BarChart3 className="h-4 w-4 mr-1" />{' '}
+              {t('analytics.openInAnalytics', 'Open in Analytics Dashboard')}
             </Link>
           </Button>
-          <Button variant="outline" size="sm" onClick={() => setCustomizerOpen(true)}>
-            <Columns className="h-4 w-4 mr-1" /> {t('residents.customizeColumns', 'Customize columns')}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setCustomizerOpen(true)}
+          >
+            <Columns className="h-4 w-4 mr-1" />{' '}
+            {t('residents.customizeColumns', 'Customize columns')}
           </Button>
           <Button variant="outline" size="sm" onClick={exportCSV}>
-            <Download className="h-4 w-4 mr-1" /> {t('units.exportCsv', 'Export CSV')}
+            <Download className="h-4 w-4 mr-1" />{' '}
+            {t('units.exportCsv', 'Export CSV')}
           </Button>
           <label className="cursor-pointer">
             <Button variant="outline" size="sm" asChild>
               <span>
-                <Upload className="h-4 w-4 mr-1" /> {t('units.importCsv', 'Import CSV')}
+                <Upload className="h-4 w-4 mr-1" />{' '}
+                {t('units.importCsv', 'Import CSV')}
               </span>
             </Button>
             <input
@@ -477,14 +550,21 @@ export default function UnitsPage() {
         </div>
       )}
 
-      <ResidentsFilterBar filters={filters} onFiltersChange={updateFiltersAndUrl} />
+      <ResidentsFilterBar
+        filters={filters}
+        onFiltersChange={updateFiltersAndUrl}
+      />
 
       {viewContactsFor && (
         <ViewContactsModal
           open={!!viewContactsFor}
           onOpenChange={(open) => !open && setViewContactsFor(null)}
           unitName={viewContactsFor.name}
-          contacts={viewContactsFor.contacts.map((c) => ({ id: c.id, firstName: c.firstName, lastName: c.lastName }))}
+          contacts={viewContactsFor.contacts.map((c) => ({
+            id: c.id,
+            firstName: c.firstName,
+            lastName: c.lastName,
+          }))}
           locale={locale}
           unitId={viewContactsFor.id}
         />
@@ -498,7 +578,9 @@ export default function UnitsPage() {
         onSave={(view) => {
           setTableView(view);
           updatePreferences({ tableViews: { units: view } }).catch(() =>
-            toast.error(t('residents.saveViewFailed', 'Failed to save column preferences'))
+            toast.error(
+              t('residents.saveViewFailed', 'Failed to save column preferences')
+            )
           );
         }}
         getPresetVisibility={(preset) => PRESET_VIEWS[preset] ?? {}}
@@ -512,7 +594,13 @@ export default function UnitsPage() {
                 <TableHead
                   key={col.id}
                   className={
-                    col.id === 'actions' ? 'w-24' : col.id === 'visitsInRange' || col.id === 'lastVisitInRange' || col.id === 'linkedContactCount' ? 'text-right' : ''
+                    col.id === 'actions'
+                      ? 'w-24'
+                      : col.id === 'visitsInRange' ||
+                          col.id === 'lastVisitInRange' ||
+                          col.id === 'linkedContactCount'
+                        ? 'text-right'
+                        : ''
                   }
                 >
                   {col.label}
@@ -533,13 +621,19 @@ export default function UnitsPage() {
               ))
             ) : units.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={visibleColumns.length} className="text-center py-12">
+                <TableCell
+                  colSpan={visibleColumns.length}
+                  className="text-center py-12"
+                >
                   <div className="flex flex-col items-center gap-2 text-muted-foreground">
                     <Building className="h-8 w-8 opacity-30" />
                     <span className="text-sm">
                       {filters.search
                         ? t('units.noMatch', 'No units match your search')
-                        : t('units.empty', 'No units yet. Add your first unit.')}
+                        : t(
+                            'units.empty',
+                            'No units yet. Add your first unit.'
+                          )}
                     </span>
                   </div>
                 </TableCell>
@@ -552,15 +646,37 @@ export default function UnitsPage() {
                       return (
                         <TableCell key={col.id} className="font-medium">
                           <span className="mr-2">{u.name}</span>
-                          {u.linkedContactCount === 0 && u.visitsInRange === 0 && (
-                            <Badge variant="outline" className="text-xs text-amber-600 border-amber-400">
-                              {t('units.potentialVacancy', 'Potential vacancy')}
-                            </Badge>
-                          )}
+                          {u.linkedContactCount === 0 &&
+                            u.visitsInRange === 0 && (
+                              <Badge
+                                variant="outline"
+                                className="text-xs text-amber-600 border-amber-400"
+                              >
+                                {t(
+                                  'units.potentialVacancy',
+                                  'Potential vacancy'
+                                )}
+                              </Badge>
+                            )}
                         </TableCell>
                       );
-                    if (col.id === 'type') return <TableCell key={col.id}><Badge variant="outline" className="text-xs">{UNIT_TYPE_LABELS[u.type as UnitType]}</Badge></TableCell>;
-                    if (col.id === 'size') return <TableCell key={col.id} className="text-sm text-muted-foreground">{u.sizeSqm != null ? `${u.sizeSqm} m²` : '—'}</TableCell>;
+                    if (col.id === 'type')
+                      return (
+                        <TableCell key={col.id}>
+                          <Badge variant="outline" className="text-xs">
+                            {UNIT_TYPE_LABELS[u.type as UnitType]}
+                          </Badge>
+                        </TableCell>
+                      );
+                    if (col.id === 'size')
+                      return (
+                        <TableCell
+                          key={col.id}
+                          className="text-sm text-muted-foreground"
+                        >
+                          {u.sizeSqm != null ? `${u.sizeSqm} m²` : '—'}
+                        </TableCell>
+                      );
                     if (col.id === 'residents')
                       return (
                         <TableCell key={col.id}>
@@ -584,19 +700,99 @@ export default function UnitsPage() {
                           </span>
                         </TableCell>
                       );
-                    if (col.id === 'linkedResident') return <TableCell key={col.id}><span className="text-sm">{u.user ? <span title={u.user.email}>{u.user.name}</span> : <span className="text-muted-foreground">{t('units.noResidentLinked', '—')}</span>}</span></TableCell>;
-                    if (col.id === 'qrQuota') return <TableCell key={col.id} className="font-mono text-sm">{u.qrQuota}</TableCell>;
-                    if (col.id === 'project') return <TableCell key={col.id} className="text-sm text-muted-foreground">{u.projectName ?? '—'}</TableCell>;
-                    if (col.id === 'visitsInRange') return <TableCell key={col.id} className="text-right tabular-nums">{u.visitsInRange ?? 0}</TableCell>;
-                    if (col.id === 'lastVisitInRange') return <TableCell key={col.id} className="text-right text-sm text-muted-foreground">{u.lastVisitInRange ? new Date(u.lastVisitInRange).toLocaleDateString(undefined, { dateStyle: 'short' }) : '—'}</TableCell>;
-                    if (col.id === 'linkedContactCount') return <TableCell key={col.id} className="text-right tabular-nums">{u.linkedContactCount ?? 0}</TableCell>;
+                    if (col.id === 'linkedResident')
+                      return (
+                        <TableCell key={col.id}>
+                          <span className="text-sm">
+                            {u.user ? (
+                              <span title={u.user.email}>{u.user.name}</span>
+                            ) : (
+                              <span className="text-muted-foreground">
+                                {t('units.noResidentLinked', '—')}
+                              </span>
+                            )}
+                          </span>
+                        </TableCell>
+                      );
+                    if (col.id === 'qrQuota')
+                      return (
+                        <TableCell key={col.id} className="font-mono text-sm">
+                          {u.qrQuota}
+                        </TableCell>
+                      );
+                    if (col.id === 'project')
+                      return (
+                        <TableCell
+                          key={col.id}
+                          className="text-sm text-muted-foreground"
+                        >
+                          {u.projectName ?? '—'}
+                        </TableCell>
+                      );
+                    if (col.id === 'visitsInRange')
+                      return (
+                        <TableCell
+                          key={col.id}
+                          className="text-right tabular-nums"
+                        >
+                          {u.visitsInRange ?? 0}
+                        </TableCell>
+                      );
+                    if (col.id === 'lastVisitInRange')
+                      return (
+                        <TableCell
+                          key={col.id}
+                          className="text-right text-sm text-muted-foreground"
+                        >
+                          {u.lastVisitInRange
+                            ? new Date(u.lastVisitInRange).toLocaleDateString(
+                                undefined,
+                                { dateStyle: 'short' }
+                              )
+                            : '—'}
+                        </TableCell>
+                      );
+                    if (col.id === 'linkedContactCount')
+                      return (
+                        <TableCell
+                          key={col.id}
+                          className="text-right tabular-nums"
+                        >
+                          {u.linkedContactCount ?? 0}
+                        </TableCell>
+                      );
                     if (col.id === 'actions')
                       return (
                         <TableCell key={col.id}>
                           <div className="flex items-center gap-1">
-                            <Button variant="ghost" size="icon" className="h-7 w-7" title={t('units.linkResident', 'Link Resident')} onClick={() => { setLinkTarget(u); setLinkUserId(u.userId ?? ''); }}><UserPlus className="h-3.5 w-3.5" /></Button>
-                            <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => openEdit(u)}><Pencil className="h-3.5 w-3.5" /></Button>
-                            <Button variant="ghost" size="icon" className="h-7 w-7 text-destructive hover:text-destructive" onClick={() => setDeleteTarget(u)}><Trash2 className="h-3.5 w-3.5" /></Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-7 w-7"
+                              title={t('units.linkResident', 'Link Resident')}
+                              onClick={() => {
+                                setLinkTarget(u);
+                                setLinkUserId(u.userId ?? '');
+                              }}
+                            >
+                              <UserPlus className="h-3.5 w-3.5" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-7 w-7"
+                              onClick={() => openEdit(u)}
+                            >
+                              <Pencil className="h-3.5 w-3.5" />
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="h-7 w-7 text-destructive hover:text-destructive"
+                              onClick={() => setDeleteTarget(u)}
+                            >
+                              <Trash2 className="h-3.5 w-3.5" />
+                            </Button>
                           </div>
                         </TableCell>
                       );
@@ -644,14 +840,23 @@ export default function UnitsPage() {
         <Dialog>
           <DialogContent className="max-w-lg">
             <DialogHeader>
-              <DialogTitle>{editing ? t('units.editUnit', 'Edit Unit') : t('units.addUnit', 'Unit')}</DialogTitle>
+              <DialogTitle>
+                {editing
+                  ? t('units.editUnit', 'Edit Unit')
+                  : t('units.addUnit', 'Unit')}
+              </DialogTitle>
             </DialogHeader>
             <div className="space-y-4 py-2">
               <div className="space-y-1.5">
-                <Label htmlFor="unitName">{t('units.form.name', 'Unit Name / Number')} *</Label>
+                <Label htmlFor="unitName">
+                  {t('units.form.name', 'Unit Name / Number')} *
+                </Label>
                 <Input
                   id="unitName"
-                  placeholder={t('units.form.namePlaceholder', 'e.g. Villa 12, Apt 4B')}
+                  placeholder={t(
+                    'units.form.namePlaceholder',
+                    'e.g. Villa 12, Apt 4B'
+                  )}
                   value={form.name}
                   onChange={(e) => setForm({ ...form, name: e.target.value })}
                 />
@@ -676,7 +881,9 @@ export default function UnitsPage() {
                 </div>
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="sizeSqm">{t('units.form.sizeSqm', 'Size (m²)')}</Label>
+                <Label htmlFor="sizeSqm">
+                  {t('units.form.sizeSqm', 'Size (m²)')}
+                </Label>
                 <Input
                   id="sizeSqm"
                   type="number"
@@ -685,12 +892,17 @@ export default function UnitsPage() {
                   value={form.sizeSqm ?? ''}
                   onChange={(e) => {
                     const v = e.target.value;
-                    setForm({ ...form, sizeSqm: v === '' ? null : parseInt(v, 10) || null });
+                    setForm({
+                      ...form,
+                      sizeSqm: v === '' ? null : parseInt(v, 10) || null,
+                    });
                   }}
                 />
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="qrQuota">{t('units.form.qrQuota', 'QR Quota')}</Label>
+                <Label htmlFor="qrQuota">
+                  {t('units.form.qrQuota', 'QR Quota')}
+                </Label>
                 <Input
                   id="qrQuota"
                   type="number"
@@ -701,12 +913,18 @@ export default function UnitsPage() {
                   }
                 />
                 <p className="text-xs text-muted-foreground">
-                  {t('units.form.quotaDefault', { type: UNIT_TYPE_LABELS[form.type], count: UNIT_QUOTA_DEFAULTS[form.type], defaultValue: `Default for ${UNIT_TYPE_LABELS[form.type]}: ${UNIT_QUOTA_DEFAULTS[form.type]}` })}
+                  {t('units.form.quotaDefault', {
+                    type: UNIT_TYPE_LABELS[form.type],
+                    count: UNIT_QUOTA_DEFAULTS[form.type],
+                    defaultValue: `Default for ${UNIT_TYPE_LABELS[form.type]}: ${UNIT_QUOTA_DEFAULTS[form.type]}`,
+                  })}
                 </p>
               </div>
               {projects.length > 0 && (
                 <div className="space-y-1.5">
-                  <Label htmlFor="projectId">{t('units.form.project', 'Project')}</Label>
+                  <Label htmlFor="projectId">
+                    {t('units.form.project', 'Project')}
+                  </Label>
                   <Select
                     id="projectId"
                     value={form.projectId}
@@ -714,7 +932,9 @@ export default function UnitsPage() {
                       setForm({ ...form, projectId: e.target.value })
                     }
                   >
-                    <option value="">{t('sidebar.allProjects', 'No Project')}</option>
+                    <option value="">
+                      {t('sidebar.allProjects', 'No Project')}
+                    </option>
                     {projects.map((p) => (
                       <option key={p.id} value={p.id}>
                         {p.name}
@@ -725,7 +945,9 @@ export default function UnitsPage() {
               )}
               {contacts.length > 0 && (
                 <div className="space-y-1.5">
-                  <Label>{t('units.form.linkedResidents', 'Linked Residents')}</Label>
+                  <Label>
+                    {t('units.form.linkedResidents', 'Linked Residents')}
+                  </Label>
                   <div className="flex flex-wrap gap-2 rounded-lg border p-3 max-h-32 overflow-y-auto">
                     {contacts.map((c) => (
                       <button
@@ -763,20 +985,29 @@ export default function UnitsPage() {
 
       {/* Link Resident Dialog */}
       {linkTarget && (
-        <Dialog open={!!linkTarget} onOpenChange={(open) => !open && setLinkTarget(null)}>
+        <Dialog
+          open={!!linkTarget}
+          onOpenChange={(open) => !open && setLinkTarget(null)}
+        >
           <DialogContent className="max-w-sm">
             <DialogHeader>
-              <DialogTitle>{t('units.linkResident', 'Link Resident')} — {linkTarget.name}</DialogTitle>
+              <DialogTitle>
+                {t('units.linkResident', 'Link Resident')} — {linkTarget.name}
+              </DialogTitle>
             </DialogHeader>
             <div className="space-y-4 py-2">
               <div className="space-y-1.5">
-                <Label htmlFor="linkResident">{t('units.residentLinked', 'Linked Resident')}</Label>
+                <Label htmlFor="linkResident">
+                  {t('units.residentLinked', 'Linked Resident')}
+                </Label>
                 <Select
                   id="linkResident"
                   value={linkUserId}
                   onChange={(e) => setLinkUserId(e.target.value)}
                 >
-                  <option value="">{t('units.noResidentLinked', 'No resident linked')}</option>
+                  <option value="">
+                    {t('units.noResidentLinked', 'No resident linked')}
+                  </option>
                   {residents.map((r) => (
                     <option key={r.id} value={r.id}>
                       {r.name} ({r.email})
@@ -785,7 +1016,10 @@ export default function UnitsPage() {
                 </Select>
                 {residents.length === 0 && (
                   <p className="text-xs text-muted-foreground">
-                    {t('units.noResidentsAvailable', 'No RESIDENT users in this organization. Invite one from Team settings.')}
+                    {t(
+                      'units.noResidentsAvailable',
+                      'No RESIDENT users in this organization. Invite one from Team settings.'
+                    )}
                   </p>
                 )}
               </div>
@@ -795,7 +1029,9 @@ export default function UnitsPage() {
                 {t('common.cancel', 'Cancel')}
               </Button>
               <Button onClick={doLinkResident} disabled={isPending}>
-                {isPending ? t('modal.actions.saving', 'Saving…') : t('common.save', 'Save')}
+                {isPending
+                  ? t('modal.actions.saving', 'Saving…')
+                  : t('common.save', 'Save')}
               </Button>
             </DialogFooter>
           </DialogContent>
@@ -807,10 +1043,18 @@ export default function UnitsPage() {
         <Dialog>
           <DialogContent className="max-w-sm">
             <DialogHeader>
-              <DialogTitle>{t('units.confirmDelete', { name: deleteTarget.name, defaultValue: 'Delete Unit?' })}</DialogTitle>
+              <DialogTitle>
+                {t('units.confirmDelete', {
+                  name: deleteTarget.name,
+                  defaultValue: 'Delete Unit?',
+                })}
+              </DialogTitle>
             </DialogHeader>
             <p className="text-sm text-muted-foreground">
-              {t('units.confirmDelete', { name: deleteTarget.name, defaultValue: `Are you sure you want to delete unit ${deleteTarget.name}? This action cannot be undone.` })}
+              {t('units.confirmDelete', {
+                name: deleteTarget.name,
+                defaultValue: `Are you sure you want to delete unit ${deleteTarget.name}? This action cannot be undone.`,
+              })}
             </p>
             <DialogFooter>
               <Button variant="outline" onClick={() => setDeleteTarget(null)}>
@@ -821,7 +1065,9 @@ export default function UnitsPage() {
                 onClick={doDelete}
                 disabled={isPending}
               >
-                {isPending ? t('modal.actions.deleting', 'Deleting…') : t('common.delete', 'Delete')}
+                {isPending
+                  ? t('modal.actions.deleting', 'Deleting…')
+                  : t('common.delete', 'Delete')}
               </Button>
             </DialogFooter>
           </DialogContent>
