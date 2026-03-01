@@ -28,6 +28,14 @@ const GetUnitsQuerySchema = z.object({
   projectId: z.string().optional(),
   format: z.enum(['json', 'csv']).optional(),
   search: z.string().optional(),
+  dateFrom: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
+  dateTo: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
   isActive: z
     .string()
     .optional()
@@ -102,6 +110,8 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       format,
       search,
       isActive,
+      dateFrom,
+      dateTo,
       from,
       to,
       unitType,
@@ -113,8 +123,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       pageSize,
     } = validation.data;
 
-    const dateFrom = from ? new Date(from + 'T00:00:00.000Z') : null;
-    const dateTo = to ? new Date(to + 'T23:59:59.999Z') : null;
+    const fromDate = dateFrom ?? from;
+    const toDate = dateTo ?? to;
+    const dateFromValue = fromDate ? new Date(fromDate + 'T00:00:00.000Z') : null;
+    const dateToValue = toDate ? new Date(toDate + 'T23:59:59.999Z') : null;
 
     if (gateId) {
       const gate = await prisma.gate.findFirst({
@@ -217,7 +229,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         lastVisitInRange: string | null;
       }
     > = new Map();
-    if (dateFrom && dateTo) {
+    if (dateFromValue && dateToValue) {
       try {
         const gateCondition = gateId
           ? Prisma.sql`AND sl."gateId" = ${gateId}`
@@ -238,7 +250,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
           JOIN "QRCode" qr ON sl."qrCodeId" = qr.id
           JOIN "VisitorQR" vqr ON vqr."qrCodeId" = qr.id
           JOIN "Unit" u ON vqr."unitId" = u.id
-          WHERE sl."scannedAt" >= ${dateFrom} AND sl."scannedAt" <= ${dateTo}
+          WHERE sl."scannedAt" >= ${dateFromValue} AND sl."scannedAt" <= ${dateToValue}
             AND qr."organizationId" = ${orgId} AND qr."deletedAt" IS NULL
             AND u."organizationId" = ${orgId}
             ${gateCondition}
@@ -257,6 +269,26 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       } catch {
         // VisitorQR table may not exist yet (e.g. before Phase 2 migration); leave aggregates empty
       }
+    }
+
+    let vacancySuccessCounts: Map<string, number> = new Map();
+    try {
+      const vacancyCutoff = new Date(Date.now() - 60 * 24 * 60 * 60 * 1000);
+      const rows = await prisma.$queryRaw<{ unitId: string; successCount: number }[]>`
+        SELECT vqr."unitId",
+          COUNT(*) FILTER (WHERE sl.status = 'SUCCESS')::int AS "successCount"
+        FROM "ScanLog" sl
+        JOIN "QRCode" qr ON sl."qrCodeId" = qr.id
+        JOIN "VisitorQR" vqr ON vqr."qrCodeId" = qr.id
+        JOIN "Unit" u ON vqr."unitId" = u.id
+        WHERE sl."scannedAt" >= ${vacancyCutoff}
+          AND qr."organizationId" = ${orgId} AND qr."deletedAt" IS NULL
+          AND u."organizationId" = ${orgId}
+        GROUP BY vqr."unitId"
+      `;
+      vacancySuccessCounts = new Map(rows.map((r) => [r.unitId, r.successCount]));
+    } catch {
+      // VisitorQR may be unavailable in older DBs; omit vacancy flag in that case.
     }
 
     const data = units.map((u) => {
@@ -282,6 +314,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         passesInRange: agg?.passesInRange ?? 0,
         lastVisitInRange: agg?.lastVisitInRange ?? null,
         linkedContactCount: u.contacts.length,
+        potentialVacancy: (vacancySuccessCounts.get(u.id) ?? 0) === 0,
       };
     });
 

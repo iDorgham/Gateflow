@@ -9,16 +9,16 @@ Checklist for **PLAN_residents_analytics**. Use with `/dev` and phase prompts.
 
 ## Phase 1 — Schema & API Aggregates
 
-- [ ] **1.1** Prisma schema: `Tag`, `ContactTag`, `User.preferences`
+- [x] **1.1** Prisma schema: `Tag`, `ContactTag`, `User.preferences`
 - [ ] **1.2** Migration created and applied
-- [ ] **1.3** Seed predefined tags per organization
-- [ ] **1.4** Extend `GET /api/contacts` filters + range aggregates
-- [ ] **1.5** Extend `GET /api/units` filters + range aggregates
-- [ ] **1.6** Implement tags APIs (CRUD + contact tag assign/remove + bulk)
-- [ ] **1.7** Implement `GET/PATCH /api/users/me/preferences`
+- [x] **1.3** Seed predefined tags per organization
+- [x] **1.4** Extend `GET /api/contacts` filters + range aggregates
+- [x] **1.5** Extend `GET /api/units` filters + range aggregates
+- [x] **1.6** Implement tags APIs (CRUD + contact tag assign/remove + bulk)
+- [x] **1.7** Implement `GET/PATCH /api/users/me/preferences`
 - [ ] **1.8** Lint, typecheck, tests pass; committed
 
-**Status:** Not started
+**Status:** In progress (blocked on migration creation/application)
 
 ---
 
