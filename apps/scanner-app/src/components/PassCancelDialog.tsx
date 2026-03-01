@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Modal, TouchableOpacity } from 'react-native';
-import { nativeTokens } from '@gate-access/ui';
+import { nativeTokens } from '@gate-access/ui/tokens';
 import { AlertCircle } from 'lucide-react-native';
 
 export interface PassCancelDialogProps {

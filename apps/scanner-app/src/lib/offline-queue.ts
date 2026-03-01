@@ -117,13 +117,21 @@ export const encryption = {
   },
 
   async decrypt(encryptedData: string): Promise<string> {
-    const key = await this.getOrDeriveKey();
-    const bytes = CryptoJS.AES.decrypt(encryptedData, key);
-    const decrypted = bytes.toString(CryptoJS.enc.Utf8);
-    if (!decrypted) {
-      throw new Error('Decryption failed - invalid key or corrupted data');
+    try {
+      const key = await this.getOrDeriveKey();
+      const bytes = CryptoJS.AES.decrypt(encryptedData, key);
+      const decrypted = bytes.toString(CryptoJS.enc.Utf8);
+      if (!decrypted) {
+        throw new Error('Decryption failed - invalid key or corrupted data');
+      }
+      return decrypted;
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      if (msg.includes('Malformed UTF-8') || msg.includes('Decryption failed')) {
+        throw new Error('Decryption failed - invalid key or corrupted data');
+      }
+      throw err;
     }
-    return decrypted;
   },
 
   async storeToken(token: string): Promise<void> {

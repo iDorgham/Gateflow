@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import { nativeTokens } from '@gate-access/ui/src/tokens';
+import { useEffect, useRef, useState, lazy, Suspense } from 'react';
+import { nativeTokens } from '@gate-access/ui/tokens';
 import {
   ActivityIndicator,
   Dimensions,
@@ -19,27 +19,27 @@ import * as Haptics from 'expo-haptics';
 import { verifyScanQR } from './src/lib/qr-verify';
 import { validateOnServer, type ScanResult, type LocationContext } from './src/lib/scanner';
 import { login, logout, getValidAccessToken } from './src/lib/auth-client';
-import { SupervisorOverride } from './src/components/SupervisorOverride';
 import { IDCaptureModal } from './src/components/IDCaptureModal';
-import { QueueStatus } from './src/components/QueueStatus';
-import {
-  GateSelector,
-  loadSelectedGate,
-  saveSelectedGate,
-  type SelectedGate,
-} from './src/components/GateSelector';
-import { HistoryTab } from './src/components/HistoryTab';
-import { SettingsTab } from './src/components/SettingsTab';
+import { loadSelectedGate, saveSelectedGate, type SelectedGate } from './src/components/GateSelector';
+
+const GateSelector = lazy(() =>
+  import('./src/components/GateSelector').then((m) => ({ default: m.GateSelector }))
+);
+const QueueStatus = lazy(() =>
+  import('./src/components/QueueStatus').then((m) => ({ default: m.QueueStatus }))
+);
+const SupervisorOverride = lazy(() =>
+  import('./src/components/SupervisorOverride').then((m) => ({ default: m.SupervisorOverride }))
+);
+const HistoryTab = lazy(() =>
+  import('./src/components/HistoryTab').then((m) => ({ default: m.HistoryTab }))
+);
+const SettingsTab = lazy(() =>
+  import('./src/components/SettingsTab').then((m) => ({ default: m.SettingsTab }))
+);
 import { addHistoryEntry } from './src/lib/scan-history';
 import { getPreferences } from './src/lib/preferences';
-import { 
-  useFonts, 
-  Cairo_300Light,
-  Cairo_400Regular,
-  Cairo_500Medium,
-  Cairo_600SemiBold,
-  Cairo_700Bold 
-} from '@expo-google-fonts/cairo';
+import { useFonts, Cairo_400Regular, Cairo_600SemiBold, Cairo_700Bold } from '@expo-google-fonts/cairo';
 
 /** Shared HMAC secret provisioned via .env: EXPO_PUBLIC_QR_SECRET=<32+ chars> */
 const QR_SECRET = process.env.EXPO_PUBLIC_QR_SECRET ?? '';
@@ -104,9 +104,7 @@ function Viewfinder({ processing }: { processing: boolean }) {
 export default function App() {
   const [appPhase, setAppPhase] = useState<AppPhase>('initializing');
   const [fontsLoaded] = useFonts({
-    Cairo_300Light,
     Cairo_400Regular,
-    Cairo_500Medium,
     Cairo_600SemiBold,
     Cairo_700Bold,
   });
@@ -697,31 +695,54 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
         </>
       )}
 
-      {activeTab === 'history' && <HistoryTab />}
+      {activeTab === 'history' && (
+        <Suspense fallback={
+          <View style={[StyleSheet.absoluteFill, styles.center, { backgroundColor: '#0f172a' }]}>
+            <ActivityIndicator size="large" color="#3b82f6" />
+          </View>
+        }>
+          <HistoryTab />
+        </Suspense>
+      )}
 
       {activeTab === 'settings' && (
-        <SettingsTab onLogout={handleLogout} />
+        <Suspense fallback={
+          <View style={[StyleSheet.absoluteFill, styles.center, { backgroundColor: '#0f172a' }]}>
+            <ActivityIndicator size="large" color="#3b82f6" />
+          </View>
+        }>
+          <SettingsTab onLogout={handleLogout} />
+        </Suspense>
       )}
 
       {/* ── Modals ────────────────────────────────────────────────────────── */}
 
-      <GateSelector
-        visible={showGateSelector}
-        selectedGate={selectedGate}
-        onSelect={handleGateSelect}
-        onClose={() => setShowGateSelector(false)}
-      />
+      {showGateSelector && (
+        <Suspense fallback={null}>
+          <GateSelector
+            visible
+            selectedGate={selectedGate}
+            onSelect={handleGateSelect}
+            onClose={() => setShowGateSelector(false)}
+          />
+        </Suspense>
+      )}
 
-      <QueueStatus
-        visible={showQueueStatus}
-        onClose={() => setShowQueueStatus(false)}
-      />
+      {showQueueStatus && (
+        <Suspense fallback={null}>
+          <QueueStatus visible onClose={() => setShowQueueStatus(false)} />
+        </Suspense>
+      )}
 
-      <SupervisorOverride
-        visible={showOverride}
-        onGranted={(supervisorAuth, reason) => handleOverrideGranted(supervisorAuth, reason)}
-        onCancel={handleOverrideCancel}
-      />
+      {showOverride && (
+        <Suspense fallback={null}>
+          <SupervisorOverride
+            visible
+            onGranted={(supervisorAuth, reason) => handleOverrideGranted(supervisorAuth, reason)}
+            onCancel={handleOverrideCancel}
+          />
+        </Suspense>
+      )}
 
       {/* ── Bottom navigation ────────────────────────────────────────────── */}
       <View style={styles.bottomNav} pointerEvents="box-none">
@@ -1091,7 +1112,7 @@ const styles = StyleSheet.create({
   topBarBtnText: {
     color: '#e2e8f0',
     fontSize: 13,
-    fontFamily: 'Cairo_500Medium',
+    fontFamily: 'Cairo_400Regular',
   },
   logoutButton: {
     backgroundColor: 'rgba(0,0,0,0.6)',
@@ -1106,7 +1127,7 @@ const styles = StyleSheet.create({
   logoutText: {
     color: '#e2e8f0',
     fontSize: 13,
-    fontFamily: 'Cairo_500Medium',
+    fontFamily: 'Cairo_400Regular',
   },
 
   // ── Feedback layers (processing + result) ─────────────────────────────────
