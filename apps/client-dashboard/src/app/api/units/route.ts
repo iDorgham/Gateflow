@@ -175,9 +175,8 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         orderBy: orderBy as Parameters<
           typeof prisma.unit.findMany
         >[0]['orderBy'],
-        ...(sortByVisitMetric
-          ? {}
-          : { skip: (page - 1) * pageSize, take: pageSize }),
+        skip: (page - 1) * pageSize,
+        take: pageSize,
       }),
       prisma.unit.count({ where }),
     ]);
