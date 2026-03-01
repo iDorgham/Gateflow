@@ -10,23 +10,26 @@ Lightweight tally by task category. Update when reviewing the usage log (e.g. we
 
 | Task type | Gemini | Opencode | Kiro | Kilo | Qwen | Best for |
 |-----------|--------|----------|------|------|------|----------|
-| Schema / DB / Prisma | | | | | | |
-| Refactor / TDD | | | | | | |
-| Content / SEO draft | | | | | | |
-| Quick structural check | | | | | | |
-| Free-tier agentic | | | | | | |
+| Schema / DB / Prisma | 0/0/0 | 0/0/0 | 0/0/0 | 0/0/0 | 0/0/0 | Gemini |
+| Refactor / TDD | 0/0/0 | 0/0/0 | 0/0/0 | 0/0/0 | 0/0/0 | Opencode |
+| Content / SEO draft | 0/0/0 | 0/0/0 | 0/0/0 | 0/0/0 | 0/0/0 | Kiro or Qwen |
+| Quick structural check | 0/0/0 | 0/0/0 | 0/0/0 | 0/0/0 | 0/0/0 | Gemini |
+| Free-tier agentic | 0/0/0 | 0/0/0 | 0/0/0 | 0/0/0 | 0/0/0 | Kiro or Qwen |
+| Free-tier fast terminal tasks | 0/0/0 | 0/0/0 | 0/0/0 | 0/0/0 | 0/0/0 | Kilo or Kiro |
+| Docs sync from code | 0/0/0 | 0/0/0 | 0/0/0 | 0/0/0 | 0/0/0 | Opencode |
+| CI / headless automation | 0/0/0 | 0/0/0 | 0/0/0 | 0/0/0 | 0/0/0 | Opencode (Claude escalation) |
 
-*(Fill in counts or "—" as you log; "Best for" = recommended tool for that row.)*
+*(Counts are `wins/partials/fails`. Current rows are baseline defaults from `TOOL_AND_CLI_REFERENCE.md` until real usage rows are logged in `CLI_USAGE_AND_RESULTS.md`.)*
 
 ---
 
 ## Per-tool notes (best-for, avoid-when, recent wins/failures)
 
-- **Gemini CLI** — Best for: large context, schema/DB, quick second opinion. Avoid when: highest first-pass correctness required. Notes: |
-- **Opencode CLI** — Best for: refactors, TDD, docs-from-code. Avoid when: deep security prose. Notes: |
-- **Kiro CLI** — Best for: free agentic, 262K context. Avoid when: Claude-level audit. Notes: |
-- **Kilo CLI** — Best for: free fast terminal, SWE-bench-style tasks. Avoid when: very large context. Notes: |
-- **Qwen CLI** — Best for: free agentic, 256K–1M context, curation/humanize. Avoid when: escalation-only audit. Notes: |
+- **Gemini CLI** — Best for: schema/DB/Prisma, quick structural checks, large-context fast second opinion. Avoid when: highest first-pass correctness is mandatory. Notes: baseline default; add evidence rows as logs accumulate.
+- **Opencode CLI** — Best for: refactor/TDD, docs-from-code, batch code generation, terminal-first implementation loops. Avoid when: deep security or architecture writeups are required. Notes: baseline default; add evidence rows as logs accumulate.
+- **Kiro CLI** — Best for: free-tier agentic coding, large-context terminal flows, cost-aware multi-step tasks. Avoid when: escalation-level audit depth is needed. Notes: baseline default; pair with Qwen/Kilo when quotas are tight.
+- **Kilo CLI** — Best for: free fast terminal tasks, quick implementation loops, cost-efficient iterative checks. Avoid when: very large context or long architectural reasoning is needed. Notes: baseline default; strongest as a speed-first free option.
+- **Qwen CLI** — Best for: free-tier agentic coding with very large context, tool-use heavy terminal workflows, curation passes. Avoid when: escalation-only security/architecture audit is needed. Notes: baseline default; good alternative to Kiro for long contexts.
 
 ---
 
@@ -36,7 +39,7 @@ Claude is used only for the **hardest** tasks (security audit, architecture deep
 
 | Date | Task / phase | Outcome | Notes |
 |------|--------------|---------|-------|
-| | | | |
+| *(add rows when Claude CLI is used for escalation tasks)* | | | |
 
 ---
 
@@ -46,5 +49,9 @@ When the guide or an agent suggests a CLI, prefer the tool listed here for that 
 
 - **Schema / DB / Prisma** — *(from scoreboard or default: Gemini)*
 - **Refactor / TDD** — *(from scoreboard or default: Opencode)*
-- **Content / SEO** — *(from scoreboard or default: Kiro or Qwen for draft/curate)*
+- **Content / SEO** — *(from scoreboard or default: Kiro or Qwen for draft/curate; Opencode for docs sync)*
+- **Quick structural check / second opinion** — *(from scoreboard or default: Gemini)*
+- **Free-tier agentic (large context)** — *(from scoreboard or default: Kiro or Qwen)*
+- **Free-tier fast terminal tasks** — *(from scoreboard or default: Kilo or Kiro)*
+- **CI / headless automation** — *(from scoreboard or default: Opencode; Claude for hard escalation only)*
 - **Security / architecture (hardest)** — **Claude** (escalation-only; not in competition)

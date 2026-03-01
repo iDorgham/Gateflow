@@ -16,8 +16,18 @@
 
 ## Current status (edit below)
 
-| CLI        | Usage / status | At 80%+? |
-|------------|----------------|----------|
-| Claude CLI |                |          |
-| Gemini CLI |                |          |
-| Cursor     |                |          |
+| CLI | Limit / quota reference | 80% threshold | Current usage | At 80%+? | Last checked |
+|-----|--------------------------|---------------|---------------|----------|--------------|
+| Claude CLI | Pro daily ops (typically ~50-190/day; plan-dependent) | 40/50, 80/100, 152/190 | Unknown | Unknown | 2026-03-01 |
+| Gemini CLI | Account quota (plan/provider dependent; often req/day based) | 80% of daily cap | Unknown | Unknown | 2026-03-01 |
+| Cursor | Plan/rate-limit based usage budget | 80% of plan quota | Unknown | Unknown | 2026-03-01 |
+| Opencode CLI | Free tier | n/a | n/a | n/a | 2026-03-01 |
+| Kiro CLI | Free tier | n/a | n/a | n/a | 2026-03-01 |
+| Kilo CLI | Free tier | n/a | n/a | n/a | 2026-03-01 |
+| Qwen CLI | Free tier | n/a | n/a | n/a | 2026-03-01 |
+
+### Notes
+
+- Fill `Current usage` from provider dashboards when available (e.g. `42/50 today`).
+- Once a paid tool reaches 80%+, agents should avoid it unless you explicitly approve.
+- Free-tier tools are tracked for awareness, but they do not trigger the paid-quota block rule.
