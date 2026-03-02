@@ -87,17 +87,15 @@
 
 ## Phase 5 — Create QR, Overview & Shell
 
-**Status:** Pending  
+**Status:** Done  
+**Completed:** 2026-03-02  
 
-- [ ] Add or fix /dashboard/qrcodes and /dashboard/qrcodes/create routes
-- [ ] Overview uses semantic tokens
-- [ ] Sidebar and shell use semantic tokens
-- [ ] `pnpm preflight` passes
+- [x] /dashboard/qrcodes and /dashboard/qrcodes/create routes exist (verified)
+- [x] Overview uses semantic tokens (STATUS_COLORS, StatCard, page header, recent activity)
+- [x] Sidebar and shell use semantic tokens (slate→muted, green→success, red→destructive)
+- [x] `pnpm preflight` passes
 
-**Files to touch:**
-- `apps/client-dashboard/src/app/[locale]/dashboard/qrcodes/page.tsx` (if new)
-- `apps/client-dashboard/src/app/[locale]/dashboard/qrcodes/create/page.tsx` (if new)
+**Files changed:**
 - `apps/client-dashboard/src/app/[locale]/dashboard/page.tsx`
 - `apps/client-dashboard/src/components/dashboard/sidebar.tsx`
 - `apps/client-dashboard/src/components/dashboard/shell.tsx`
-- `apps/client-dashboard/src/components/dashboard/dashboard-layout.tsx`

@@ -210,7 +210,7 @@ export function Sidebar({
         {NAV_GROUPS.map((group) => (
           <div key={group.label}>
             {!isCollapsed && (
-              <p className="mb-2 px-3 text-[9px] font-black uppercase tracking-[0.25em] text-slate-500 opacity-70">
+              <p className="mb-2 px-3 text-[9px] font-black uppercase tracking-[0.25em] text-muted-foreground opacity-70">
                 {group.label}
               </p>
             )}
@@ -283,7 +283,7 @@ export function Sidebar({
                     </AvatarFallback>
                   </Avatar>
                   {isCollapsed && (
-                    <div className="absolute -bottom-1 -right-1 h-3 w-3 rounded-full border-2 border-sidebar bg-green-500" />
+                    <div className="absolute -bottom-1 -right-1 h-3 w-3 rounded-full border-2 border-sidebar bg-success" />
                   )}
                 </div>
               </DropdownMenuTrigger>
@@ -316,7 +316,7 @@ export function Sidebar({
                       href={`/${locale}/dashboard/settings?tab=profile`}
                       className="flex w-full items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer hover:bg-sidebar-accent transition-colors"
                     >
-                      <BuildingIcon className="h-4 w-4 text-slate-400" />
+                      <BuildingIcon className="h-4 w-4 text-muted-foreground" />
                       <span className="text-sm font-medium">{t('sidebar.profile', 'Profile')}</span>
                     </Link>
                   </DropdownMenuItem>
@@ -325,7 +325,7 @@ export function Sidebar({
                       href={`/${locale}/dashboard/settings`}
                       className="flex w-full items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer hover:bg-sidebar-accent transition-colors"
                     >
-                      <GearIcon className="h-4 w-4 text-slate-400" />
+                      <GearIcon className="h-4 w-4 text-muted-foreground" />
                       <span className="text-sm font-medium">{t('sidebar.settings', 'Settings')}</span>
                     </Link>
                   </DropdownMenuItem>
@@ -334,7 +334,7 @@ export function Sidebar({
                       href={`/${locale}/dashboard/settings?tab=billing`}
                       className="flex w-full items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer hover:bg-sidebar-accent transition-colors"
                     >
-                      <CreditCardIcon className="h-4 w-4 text-slate-400" />
+                      <CreditCardIcon className="h-4 w-4 text-muted-foreground" />
                       <span className="text-sm font-medium">{t('sidebar.billing', 'Billing & payments')}</span>
                     </Link>
                   </DropdownMenuItem>
@@ -356,7 +356,7 @@ export function Sidebar({
                 <DropdownMenuSeparator className="bg-sidebar-border/50 mx-1" />
                 <div className="p-1">
                   <DropdownMenuItem 
-                    className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-red-400 focus:text-red-400 focus:bg-red-400/10 cursor-pointer transition-colors"
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-destructive focus:text-destructive focus:bg-destructive/10 cursor-pointer transition-colors"
                     onClick={() => router.push(`/${locale}/logout`)}
                   >
                     <PowerIcon className="h-4 w-4" />
@@ -387,7 +387,7 @@ export function Sidebar({
             onMouseEnter={() => isCollapsed && setHoveredLabel(isCollapsed ? t('sidebar.expand', 'Expand') : t('sidebar.collapse', 'Collapse'))}
             onMouseLeave={() => setHoveredLabel(null)}
           >
-            <CaretLeftIcon className={cn("h-4 w-4 text-slate-500 transition-transform group-hover:text-slate-200", isCollapsed && "rotate-180")} />
+            <CaretLeftIcon className={cn("h-4 w-4 text-muted-foreground transition-transform group-hover:text-foreground", isCollapsed && "rotate-180")} />
           </button>
         </div>
       </div>

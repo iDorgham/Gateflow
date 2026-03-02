@@ -20,12 +20,12 @@ export async function generateMetadata({ params }: { params: { locale: Locale } 
 }
 
 const STATUS_COLORS: Record<string, { bg: string; text: string; dot: string }> = {
-  SUCCESS: { bg: 'bg-green-50 dark:bg-green-900/30', text: 'text-green-700 dark:text-green-400', dot: 'bg-green-500' },
-  FAILED: { bg: 'bg-red-50 dark:bg-red-900/30', text: 'text-red-700 dark:text-red-400', dot: 'bg-red-500' },
-  EXPIRED: { bg: 'bg-amber-50 dark:bg-amber-900/30', text: 'text-amber-700 dark:text-amber-400', dot: 'bg-amber-500' },
-  MAX_USES_REACHED: { bg: 'bg-orange-50 dark:bg-orange-900/30', text: 'text-orange-700 dark:text-orange-400', dot: 'bg-orange-500' },
-  INACTIVE: { bg: 'bg-slate-50 dark:bg-slate-800', text: 'text-slate-600 dark:text-slate-400', dot: 'bg-slate-400' },
-  DENIED: { bg: 'bg-rose-50 dark:bg-rose-900/30', text: 'text-rose-700 dark:text-rose-400', dot: 'bg-rose-500' },
+  SUCCESS: { bg: 'bg-success/10', text: 'text-success', dot: 'bg-success' },
+  FAILED: { bg: 'bg-destructive/10', text: 'text-destructive', dot: 'bg-destructive' },
+  EXPIRED: { bg: 'bg-warning/10', text: 'text-warning', dot: 'bg-warning' },
+  MAX_USES_REACHED: { bg: 'bg-primary/10', text: 'text-primary', dot: 'bg-primary' },
+  INACTIVE: { bg: 'bg-muted', text: 'text-muted-foreground', dot: 'bg-muted-foreground' },
+  DENIED: { bg: 'bg-destructive/10', text: 'text-destructive', dot: 'bg-destructive' },
 };
 
 function cn(...classes: (string | false | undefined)[]) {
@@ -56,11 +56,11 @@ function StatCard({
   valueColor,
 }: StatCardProps) {
   return (
-    <Link href={href} className="group block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-xl">
-      <Card className="transition-shadow hover:shadow-md">
+    <Link href={href} className="group block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-xl">
+      <Card className="border border-border bg-card transition-shadow hover:shadow-md">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-sm font-medium text-slate-500 dark:text-slate-400">{title}</CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">{title}</CardTitle>
             <div className={cn('flex h-9 w-9 items-center justify-center rounded-lg', iconBg)}>
               <Icon className={cn('h-4.5 w-4.5', iconColor)} aria-hidden="true" />
             </div>
@@ -72,10 +72,10 @@ function StatCard({
               <p className={cn('text-3xl font-bold tabular-nums', valueColor)}>
                 {typeof value === 'number' ? value.toLocaleString() : value}
               </p>
-              <p className="mt-1 text-xs text-slate-400">{sub}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{sub}</p>
             </div>
             <ArrowRight
-              className="h-4 w-4 text-slate-300 transition-transform group-hover:translate-x-0.5 group-hover:text-slate-400"
+              className="h-4 w-4 text-muted-foreground/60 transition-transform group-hover:translate-x-0.5 group-hover:text-muted-foreground"
               aria-hidden="true"
             />
           </div>
@@ -125,9 +125,9 @@ export default async function DashboardPage({ params }: { params: { locale: Loca
       sub: t('overview.sub.activeQRs', { defaultValue: 'Across all gates' }),
       icon: QrCode,
       href: '/dashboard/qrcodes',
-      iconBg: 'bg-blue-50 dark:bg-blue-900/30',
-      iconColor: 'text-blue-600',
-      valueColor: 'text-blue-600',
+      iconBg: 'bg-primary/10',
+      iconColor: 'text-primary',
+      valueColor: 'text-primary',
     },
     {
       title: t('overview.scansToday', { defaultValue: 'Scans Today' }),
@@ -135,9 +135,9 @@ export default async function DashboardPage({ params }: { params: { locale: Loca
       sub: t('overview.sub.scansToday', { defaultValue: 'Last 24 hours' }),
       icon: ScanLine,
       href: '/dashboard/scans',
-      iconBg: 'bg-green-50 dark:bg-green-900/30',
-      iconColor: 'text-green-600',
-      valueColor: 'text-green-600',
+      iconBg: 'bg-success/10',
+      iconColor: 'text-success',
+      valueColor: 'text-success',
     },
     {
       title: t('overview.activeGates', { defaultValue: 'Active Gates' }),
@@ -145,9 +145,9 @@ export default async function DashboardPage({ params }: { params: { locale: Loca
       sub: t('overview.sub.activeGates', { defaultValue: 'Currently operational' }),
       icon: Shield,
       href: '/dashboard/gates',
-      iconBg: 'bg-violet-50 dark:bg-violet-900/30',
-      iconColor: 'text-violet-600',
-      valueColor: 'text-violet-600',
+      iconBg: 'bg-chart-2/10',
+      iconColor: 'text-chart-2',
+      valueColor: 'text-chart-2',
     },
     {
       title: t('overview.teamMembers', { defaultValue: 'Team Members' }),
@@ -155,9 +155,9 @@ export default async function DashboardPage({ params }: { params: { locale: Loca
       sub: t('overview.sub.teamMembers', { defaultValue: 'In your organization' }),
       icon: Users,
       href: '/dashboard/team',
-      iconBg: 'bg-orange-50 dark:bg-orange-900/30',
-      iconColor: 'text-orange-600',
-      valueColor: 'text-orange-600',
+      iconBg: 'bg-warning/10',
+      iconColor: 'text-warning',
+      valueColor: 'text-warning',
     },
   ];
 
@@ -166,8 +166,8 @@ export default async function DashboardPage({ params }: { params: { locale: Loca
       {/* Page header */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">{t('overview.title', { defaultValue: 'Dashboard' })}</h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400">
+          <h1 className="text-2xl font-bold text-foreground">{t('overview.title', { defaultValue: 'Dashboard' })}</h1>
+          <p className="text-sm text-muted-foreground">
             {new Date().toLocaleDateString(params.locale, {
               weekday: 'long',
               year: 'numeric',
@@ -201,7 +201,7 @@ export default async function DashboardPage({ params }: { params: { locale: Loca
               <CardTitle className="text-base">{t('overview.recentActivity', { defaultValue: 'Recent Scan Activity' })}</CardTitle>
             </div>
             <Button variant="ghost" size="sm" asChild>
-              <Link href="/dashboard/scans" className="text-blue-600 hover:text-blue-700">
+              <Link href="/dashboard/scans" className="text-primary hover:text-primary/80">
                 {t('overview.viewAll', { defaultValue: 'View all' })}
                 <ArrowRight className="ml-1 h-3.5 w-3.5" aria-hidden="true" />
               </Link>
@@ -210,10 +210,10 @@ export default async function DashboardPage({ params }: { params: { locale: Loca
         </CardHeader>
         <CardContent className="pt-0">
           {recentScans.length === 0 ? (
-            <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 py-10 text-center">
-              <ScanLine className="mb-3 h-10 w-10 text-slate-300 dark:text-slate-600" aria-hidden="true" />
-              <p className="text-sm font-medium text-slate-600 dark:text-slate-400">{t('overview.noScans', { defaultValue: 'No scans yet' })}</p>
-              <p className="mt-1 text-xs text-slate-400">
+            <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-border bg-muted/30 py-10 text-center">
+              <ScanLine className="mb-3 h-10 w-10 text-muted-foreground/40" aria-hidden="true" />
+              <p className="text-sm font-medium text-foreground">{t('overview.noScans', { defaultValue: 'No scans yet' })}</p>
+              <p className="mt-1 text-xs text-muted-foreground">
                 {t('overview.noScansDesc', { defaultValue: 'Create and share a QR code to see access activity here.' })}
               </p>
               <Button variant="outline" size="sm" asChild className="mt-4">
@@ -221,7 +221,7 @@ export default async function DashboardPage({ params }: { params: { locale: Loca
               </Button>
             </div>
           ) : (
-            <div className="divide-y divide-slate-100 dark:divide-slate-800" role="list" aria-label="Recent scans">
+            <div className="divide-y divide-border" role="list" aria-label="Recent scans">
               {recentScans.map((scan) => {
                 const style = STATUS_COLORS[scan.status] ?? STATUS_COLORS.INACTIVE;
                 return (
@@ -249,19 +249,19 @@ export default async function DashboardPage({ params }: { params: { locale: Loca
                       </span>
 
                       {/* QR code */}
-                      <span className="truncate font-mono text-xs text-slate-400" title={scan.qrCode?.code}>
+                      <span className="truncate font-mono text-xs text-muted-foreground" title={scan.qrCode?.code}>
                         {scan.qrCode?.code?.slice(0, 18)}…
                       </span>
 
                       {/* Gate */}
                       {scan.gate?.name && (
-                        <span className="hidden truncate text-slate-500 sm:block">
+                        <span className="hidden truncate text-muted-foreground sm:block">
                           @ {scan.gate.name}
                         </span>
                       )}
                     </div>
                      <time
-                      className="shrink-0 text-xs text-slate-400"
+                      className="shrink-0 text-xs text-muted-foreground"
                       dateTime={new Date(scan.scannedAt).toISOString()}
                     >
                       {new Date(scan.scannedAt).toLocaleTimeString(params.locale, {

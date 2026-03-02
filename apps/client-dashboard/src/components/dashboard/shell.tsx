@@ -263,7 +263,7 @@ export function DashboardShell({
         </Sheet>
 
         {/* Page content */}
-        <main className="flex-1 min-h-0 overflow-y-auto p-4 md:p-8 bg-slate-50/50 dark:bg-transparent flex flex-col">
+        <main className="flex-1 min-h-0 overflow-y-auto p-4 md:p-8 bg-muted/20 flex flex-col">
           <div
             className="animate-in fade-in slide-in-from-bottom-2 duration-500 w-full flex-1 flex flex-col"
           >
@@ -290,7 +290,7 @@ export function DashboardShell({
                   {locale === 'ar-EG' ? 'التنبيهات الأخيرة' : 'Recent Notifications'}
                 </span>
                 {expiredQRs.length > 0 && (
-                  <span className="text-[10px] bg-red-500 text-white px-1.5 py-0.5 rounded-full font-bold">
+                  <span className="text-[10px] bg-destructive text-destructive-foreground px-1.5 py-0.5 rounded-full font-bold">
                     {expiredQRs.length}
                   </span>
                 )}
@@ -328,7 +328,7 @@ export function DashboardShell({
                             )}
                           </p>
                         </div>
-                        <div className="h-2 w-2 rounded-full bg-red-400 opacity-60 group-hover:opacity-100" />
+                        <div className="h-2 w-2 rounded-full bg-destructive opacity-60 group-hover:opacity-100" />
                       </div>
                     </Link>
                   ))
