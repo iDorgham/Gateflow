@@ -1,7 +1,10 @@
 import { getSessionClaims } from '@/lib/auth-cookies';
+import { getTranslation, Locale } from '@/lib/i18n';
 import { prisma } from '@gate-access/db';
+import { Card, CardContent, CardHeader } from '@gate-access/ui';
 import { redirect, notFound } from 'next/navigation';
-import { Locale } from '@/lib/i18n';
+import Image from 'next/image';
+import { MapPin } from 'lucide-react';
 
 export async function generateMetadata({
   params,
@@ -26,8 +29,9 @@ export default async function ProjectDetailPage({
   const claims = await getSessionClaims();
   if (!claims?.orgId) redirect('/login');
 
-  const { projectId } = params;
+  const { projectId, locale } = params;
   const orgId = claims.orgId;
+  const { t } = await getTranslation(locale, 'dashboard');
 
   const now = new Date();
   const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
@@ -90,24 +94,71 @@ export default async function ProjectDetailPage({
     access7d: scans7d,
     access30d: scans30d,
   };
+  // Phase 3 will render aggregates + recentLogs (KPIs, gate logs)
+  void { aggregates, recentLogs };
+
+  const coverUrl = project.coverUrl;
+  const hasValidCover = coverUrl && coverUrl.startsWith('https://');
 
   return (
-    <div className="space-y-6 p-6">
-      <h1 className="text-2xl font-bold text-foreground">{project.name}</h1>
-      <p className="text-sm text-muted-foreground">Phase 1 data layer — minimal UI</p>
-      <pre className="rounded-lg bg-muted/30 p-4 text-xs overflow-auto max-h-96">
-        {JSON.stringify(
-          {
-            project: { id: project.id, name: project.name, location: project.location },
-            gatesCount: project.gates.length,
-            unitsCount: project.units.length,
-            aggregates,
-            recentLogsCount: recentLogs.length,
-          },
-          null,
-          2
+    <div className="space-y-0 -mx-4 md:-mx-8 -mt-4 md:-mt-8">
+      {/* Hero — full-width, distinct from settings tab cards */}
+      <section className="relative h-48 sm:h-56 md:h-64 lg:h-72 w-full overflow-hidden">
+        {hasValidCover ? (
+          <Image
+            src={coverUrl}
+            alt=""
+            fill
+            className="object-cover"
+            sizes="100vw"
+            priority
+          />
+        ) : (
+          <div
+            className="absolute inset-0 bg-gradient-to-br from-primary/15 via-muted/50 to-primary/10"
+            aria-hidden
+          />
         )}
-      </pre>
+        {/* Overlay for text contrast */}
+        <div
+          className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/40 to-transparent"
+          aria-hidden
+        />
+        <div className="absolute inset-0 flex flex-col justify-end p-4 md:p-6 lg:p-8">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground drop-shadow-sm">
+            {project.name}
+          </h1>
+          {project.location && (
+            <div className="mt-2 flex items-center gap-2 text-muted-foreground">
+              <MapPin className="h-4 w-4 shrink-0" aria-hidden />
+              <span className="text-sm font-medium">{project.location}</span>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Content — padded, below hero */}
+      <div className="p-4 md:p-8 space-y-6">
+        {/* Description — Card, distinct from settings form UI */}
+        <Card className="border border-border bg-card rounded-xl shadow-sm">
+          <CardHeader className="pb-2">
+            <h2 className="text-lg font-semibold text-foreground">
+              {t('projectDetail.about', 'About')}
+            </h2>
+          </CardHeader>
+          <CardContent className="pt-0">
+            {project.description ? (
+              <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-wrap">
+                {project.description}
+              </p>
+            ) : (
+              <p className="text-sm text-muted-foreground italic">
+                {t('projectDetail.noDescription', 'No description yet.')}
+              </p>
+            )}
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

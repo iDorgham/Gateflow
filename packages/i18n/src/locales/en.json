@@ -417,6 +417,11 @@
         "DENIED": "Denied"
       }
     },
+    "projectDetail": {
+      "location": "Location",
+      "about": "About",
+      "noDescription": "No description yet."
+    },
     "sidebar": {
       "operations": "Operations",
       "workspace": "Workspace",

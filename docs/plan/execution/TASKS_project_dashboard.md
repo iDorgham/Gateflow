@@ -23,12 +23,13 @@
 
 ## Phase 2 — Project Detail Page Shell
 
-**Status:** Pending  
+**Status:** Done  
+**Completed:** 2026-03-02  
 
-- [ ] Hero section (cover image, fallback)
-- [ ] Title, location, description
-- [ ] Semantic tokens only
-- [ ] `pnpm preflight` passes
+- [x] Hero section (cover image, fallback)
+- [x] Title, location, description
+- [x] Semantic tokens only
+- [x] `pnpm preflight` passes
 
 **Files to touch:**
 - `apps/client-dashboard/src/app/[locale]/dashboard/projects/[projectId]/page.tsx`
