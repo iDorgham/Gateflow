@@ -376,7 +376,7 @@ export default function ContactsPage() {
                       tag.color
                         ? {
                             backgroundColor: tag.color,
-                            color: '#fff',
+                            color: 'hsl(var(--primary-foreground))',
                             border: 'none',
                           }
                         : undefined

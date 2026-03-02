@@ -51,7 +51,7 @@ export function ViewContactsModal({
           ) : (
             <ul className="space-y-2">
               {contacts.map((c) => (
-                <li key={c.id} className="rounded-lg border px-3 py-2 font-medium">
+                <li key={c.id} className="rounded-lg border border-border px-3 py-2 font-medium">
                   {c.firstName} {c.lastName}
                 </li>
               ))}

@@ -52,13 +52,14 @@
 
 ## Phase 3 — Contacts Page
 
-**Status:** Pending  
+**Status:** Done  
+**Completed:** 2026-03-02  
 
-- [ ] Audit contacts page and ViewContactsModal for hardcoded hex
-- [ ] Replace with semantic tokens
-- [ ] `pnpm preflight` passes
+- [x] Audit contacts page and ViewContactsModal for hardcoded hex
+- [x] Replace with semantic tokens (tag badge color; ViewContactsModal border-border)
+- [x] `pnpm preflight` passes
 
-**Files to touch:**
+**Files changed:**
 - `apps/client-dashboard/src/app/[locale]/dashboard/residents/contacts/page.tsx`
 - `apps/client-dashboard/src/components/dashboard/residents/ViewContactsModal.tsx`
 
