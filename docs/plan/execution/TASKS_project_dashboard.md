@@ -74,12 +74,13 @@
 
 ## Phase 5 — Edit Panel (Shared Component)
 
-**Status:** Pending  
+**Status:** Done  
+**Completed:** 2026-03-02  
 
-- [ ] Create EditPanel component (overlay + panel, Save/Quit only)
-- [ ] RTL support (slide from left)
-- [ ] Semantic tokens only
-- [ ] `pnpm preflight` passes
+- [x] Create EditPanel component (overlay + panel, Save/Quit only)
+- [x] RTL support (slide from left; auto-detect from document.dir or isRtl prop)
+- [x] Semantic tokens only
+- [x] `pnpm preflight` passes
 
 **Files to touch:**
 - `apps/client-dashboard/src/components/dashboard/EditPanel.tsx`

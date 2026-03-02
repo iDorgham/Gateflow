@@ -1,10 +1,24 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Button, ScrollArea } from '@gate-access/ui';
 import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+
+/** Returns true when document is RTL (dir="rtl") */
+function useDocumentRtl(): boolean {
+  const [isRtl, setIsRtl] = useState(false);
+  useEffect(() => {
+    const el = document.documentElement;
+    const check = () => setIsRtl(el.getAttribute('dir') === 'rtl');
+    check();
+    const obs = new MutationObserver(check);
+    obs.observe(el, { attributes: true, attributeFilter: ['dir'] });
+    return () => obs.disconnect();
+  }, []);
+  return isRtl;
+}
 
 export interface EditPanelProps {
   /** Whether the panel is open */
@@ -35,9 +49,12 @@ export function EditPanel({
   onSave,
   saveLabel = 'Save',
   isSaving = false,
-  isRtl = false,
+  isRtl: isRtlProp,
   headerExtra,
 }: EditPanelProps) {
+  const docRtl = useDocumentRtl();
+  const isRtl = isRtlProp ?? docRtl;
+
   useEffect(() => {
     if (open) {
       document.body.style.overflow = 'hidden';
@@ -91,7 +108,7 @@ export function EditPanel({
     >
       {/* Overlay: dim + block interaction, no close on click */}
       <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        className="absolute inset-0 bg-foreground/50 backdrop-blur-sm"
         onClick={handleOverlayClick}
         aria-hidden="true"
       />
