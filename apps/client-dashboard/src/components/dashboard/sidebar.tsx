@@ -234,11 +234,11 @@ export function Sidebar({
                       isCollapsed ? 'justify-center p-3' : 'px-3.5 py-3',
                       active
                         ? 'bg-primary/10 text-sidebar-foreground shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]'
-                        : 'text-slate-400 hover:bg-sidebar-accent hover:text-slate-200'
+                        : 'text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground'
                     )}
                   >
                     {active && (
-                      <span className="absolute left-0 top-1/2 h-6 w-1 -translate-y-1/2 rounded-full bg-primary shadow-[0_0_10px_rgba(59,130,246,0.6)]" />
+                      <span className="absolute left-0 top-1/2 h-6 w-1 -translate-y-1/2 rounded-full bg-primary shadow-[0_0_10px_hsl(var(--primary)/0.6)]" />
                     )}
                     <Icon
                       size={20}
@@ -246,8 +246,8 @@ export function Sidebar({
                       className={cn(
                         'transition-all duration-300 shrink-0',
                         active
-                          ? 'text-blue-400 scale-110'
-                          : 'text-slate-500 group-hover:scale-110 group-hover:text-slate-300'
+                          ? 'text-primary scale-110'
+                          : 'text-muted-foreground group-hover:scale-110 group-hover:text-foreground'
                       )}
                     />
                     {!isCollapsed && (

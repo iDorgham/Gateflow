@@ -1,31 +1,48 @@
 'use client';
 
 import * as React from 'react';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { ShieldCheck, Shield } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
+const SPRING_BALANCED = { type: 'spring' as const, stiffness: 160, damping: 24 };
+const SIDEBAR_WIDTH = 96; // ~80–100px
+const STAGGER = 0.07;
+
 export interface LoginShellProps {
-  /** 'client' uses ShieldCheck + primary color; 'admin' uses Shield + blue */
+  /** 'client' uses ShieldCheck; 'admin' uses Shield */
   variant?: 'client' | 'admin';
-  /** Card content (the form) */
+  /** Name displayed beside logo (e.g. "GateFlow", "Admin") */
+  appName?: string;
+  /** Main heading above the form */
+  heading?: string;
+  /** Subtitle below the heading */
+  subtitle?: string;
+  /** Form content */
   children: React.ReactNode;
-  /** Slot rendered in top-right corner (language + theme controls) */
+  /** Top-right slot (language + theme) */
   topRight?: React.ReactNode;
-  /** Additional footer content (dev keys, support links) */
   footerExtra?: React.ReactNode;
-  /**
-   * Increment this integer whenever a new error occurs to trigger a shake.
-   * Pass 0 or omit to disable shake.
-   */
+  /** Increment to trigger error shake */
   errorKey?: number;
-  /** True when transition to dashboard should start */
+  /** True when post-login collapse should run */
   isSuccess?: boolean;
-  /** Icons to fade in during the transition */
+  /** Icons shown in collapsed sidebar after success */
   successIcons?: React.ReactNode;
 }
 
+const DEFAULT_CLIENT_HEADING = 'Sign in';
+const DEFAULT_CLIENT_SUBTITLE =
+  'Manage gates, QR codes, and scans from anywhere. Zero-trust digital access.';
+const DEFAULT_ADMIN_HEADING = 'Admin Portal';
+const DEFAULT_ADMIN_SUBTITLE =
+  'Secure access for platform operators. Use your organization access key.';
+
 export function LoginShell({
   variant = 'client',
+  appName,
+  heading,
+  subtitle,
   children,
   topRight,
   footerExtra,
@@ -34,11 +51,21 @@ export function LoginShell({
   successIcons,
 }: LoginShellProps) {
   const isAdmin = variant === 'admin';
+  const displayName = appName ?? (isAdmin ? 'Admin' : 'GateFlow');
+  const displayHeading =
+    heading ?? (isAdmin ? DEFAULT_ADMIN_HEADING : DEFAULT_CLIENT_HEADING);
+  const displaySubtitle =
+    subtitle ?? (isAdmin ? DEFAULT_ADMIN_SUBTITLE : DEFAULT_CLIENT_SUBTITLE);
+  const reduceMotion = useReducedMotion();
   const [shaking, setShaking] = React.useState(false);
-  const [isMounted, setIsMounted] = React.useState(false);
+  const [mounted, setMounted] = React.useState(false);
+  const [dir, setDir] = React.useState<'ltr' | 'rtl'>('ltr');
 
   React.useEffect(() => {
-    setIsMounted(true);
+    setMounted(true);
+    setDir((typeof document !== 'undefined' && document.documentElement.getAttribute('dir') === 'rtl') ? 'rtl' : 'ltr');
+  }, []);
+  React.useEffect(() => {
     if (errorKey > 0) {
       setShaking(true);
       const t = setTimeout(() => setShaking(false), 520);
@@ -46,118 +73,157 @@ export function LoginShell({
     }
   }, [errorKey]);
 
+  const transition = reduceMotion
+    ? { duration: 0.05 }
+    : SPRING_BALANCED;
+
   return (
-    <div className="fixed inset-0 z-[100] bg-zinc-50 dark:bg-zinc-950 overflow-hidden flex items-stretch">
-      {/* Simplified Background Layer */}
-      <div className="absolute inset-0 z-0 bg-zinc-50 dark:bg-zinc-950 pointer-events-none" />
-
-      {/* Foreground Layer: Sliding Auth Panel - Animates width on success */}
-      <div 
+    <div className="fixed inset-0 z-[100] flex overflow-hidden bg-background">
+      {/* Left panel: sign-in → collapsed sidebar */}
+      <motion.aside
+        layout
+        layoutId="gate-signin-panel"
         className={cn(
-          "relative z-10 w-full flex flex-col justify-between pt-0 transition-all duration-700 ease-in-out transform-gpu",
-          isAdmin ? "bg-white/80 dark:bg-zinc-950/80" : "bg-white/95 dark:bg-zinc-950/95", // Slightly more solid during transition
-          "backdrop-blur-2xl border-r border-border/50 shadow-2xl p-6 md:p-12 lg:p-16 pt-0",
-          isMounted && !isSuccess ? "w-full md:w-[480px] translate-x-0" : "",
-          isMounted && isSuccess ? "w-[80px] md:w-20 translate-x-0 px-4 md:px-0" : "",
-          !isMounted && "-translate-x-full"
+          'relative z-10 flex shrink-0 flex-col bg-background',
+          'border-r border-border/50'
         )}
+        initial={false}
+        animate={{
+          width: isSuccess ? SIDEBAR_WIDTH : '50%',
+        }}
+        transition={transition}
+        style={{ minWidth: isSuccess ? SIDEBAR_WIDTH : undefined }}
       >
-        {/* Top Controls - Logo and Text */}
-        <div className={cn(
-          "flex items-center transition-all duration-700 delay-300 transform-gpu mb-8 border-b border-border/50 h-20 shrink-0 -mx-6 md:-mx-12 lg:-mx-16 px-6 md:px-12 lg:px-16",
-          isMounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-        )}>
-          <div className={cn(
-            "flex items-center gap-4 transition-all duration-500",
-            isSuccess && "w-full justify-center gap-0"
-          )}>
-            <div
-              className={cn(
-                'flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-white shadow-lg transition-transform hover:scale-105 duration-300',
-                isAdmin ? 'bg-blue-600' : 'bg-primary'
-              )}
-            >
-              {isAdmin ? <Shield className="h-6 w-6" /> : <ShieldCheck className="h-7 w-7" />}
-            </div>
-            <span className={cn(
-              "text-2xl font-black tracking-tight text-foreground whitespace-nowrap overflow-hidden transition-all duration-500",
-              isSuccess ? "w-0 opacity-0 ml-0" : "w-auto opacity-100"
-            )}>
-              GateFlow
-            </span>
-          </div>
-        </div>
-
-        {/* Auth Content */}
-        <div className="flex-1 flex flex-col justify-center py-12">
-          {/* Main Form content - Fades out on success */}
+        {/* Logo + app name — slide out and fade on success */}
+        <motion.div
+          className="flex items-center justify-start gap-4 pt-6 pl-6 text-left"
+          initial={false}
+          animate={{
+            opacity: isSuccess ? 0 : 1,
+            x: isSuccess ? (dir === 'rtl' ? 80 : -80) : 0,
+          }}
+          transition={{ duration: reduceMotion ? 0.05 : 0.35 }}
+          style={{ willChange: isSuccess ? 'transform, opacity' : undefined }}
+        >
           <div
             className={cn(
-              'w-full max-w-sm mx-auto transition-all duration-700 delay-500 transform-gpu',
-              isMounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8",
-              shaking && 'animate-[shake_0.5s_ease-in-out]',
-              isSuccess && "opacity-0 -translate-y-12 pointer-events-none delay-[0ms]"
+              'flex h-11 w-11 shrink-0 items-center justify-center rounded-xl text-primary-foreground shadow-lg',
+              'bg-primary'
             )}
           >
-            <div className="mb-10 text-center md:text-left">
-              <h1 className="text-4xl font-extrabold tracking-tight text-foreground leading-tight">
-                {isAdmin ? 'Admin Console' : 'Welcome Back'}
-              </h1>
-              <p className="mt-4 text-lg text-muted-foreground font-medium">
-                {isAdmin 
-                  ? 'Access the secure command center' 
-                  : 'Manage your access control from anywhere'}
-              </p>
-            </div>
-            {children}
+            {isAdmin ? <Shield className="h-6 w-6" /> : <ShieldCheck className="h-7 w-7" />}
           </div>
+          <span className="text-2xl font-black tracking-tight text-muted-foreground whitespace-nowrap">
+            {displayName}
+          </span>
+        </motion.div>
 
-          {/* Success Icons - Fades in up only when isSuccess is true */}
-          {isSuccess && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center pt-20">
-              <div className="flex flex-col items-center gap-8 animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-300 fill-mode-both">
-                {successIcons}
-              </div>
+        {/* Form area: right-aligned, 300px */}
+        <div className="flex flex-1 flex-col justify-center pe-[60px] pt-8">
+          <div className="flex w-full justify-end">
+            <div className="w-full max-w-[300px]">
+              <AnimatePresence mode="wait">
+                {!isSuccess && (
+                  <motion.div
+                    key="form"
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -12 }}
+                    transition={{ duration: reduceMotion ? 0.05 : 0.25 }}
+                    className={cn(
+                      'transition-transform duration-300',
+                      shaking && 'animate-[shake_0.5s_ease-in-out]'
+                    )}
+                  >
+                    <div className="mb-8">
+                      <h1 className="text-2xl font-black tracking-tight text-primary">
+                        {displayHeading}
+                      </h1>
+                      <p className="mt-1 text-sm text-muted-foreground">
+                        {displaySubtitle}
+                      </p>
+                    </div>
+                    {children}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Success: sidebar icons with stagger */}
+              <AnimatePresence>
+                {isSuccess && successIcons && (
+                  <motion.div
+                    key="success-icons"
+                    className="flex flex-col items-center gap-6 pt-4"
+                    initial="hidden"
+                    animate="visible"
+                    variants={{
+                      visible: {
+                        transition: {
+                          staggerChildren: reduceMotion ? 0 : STAGGER,
+                          delayChildren: reduceMotion ? 0 : 0.2,
+                        },
+                      },
+                      hidden: {},
+                    }}
+                  >
+                    {React.Children.map(successIcons, (child, i) => (
+                      <motion.div
+                        key={i}
+                        variants={{
+                          hidden: { opacity: 0, scale: 0.95, y: 8 },
+                          visible: {
+                            opacity: 1,
+                            scale: 1,
+                            y: 0,
+                            transition: reduceMotion ? { duration: 0.05 } : {},
+                          },
+                        }}
+                      >
+                        {child}
+                      </motion.div>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
-          )}
+          </div>
         </div>
 
-        {/* Footer - Fades in */}
-        {footerExtra && (
-          <div className={cn(
-            "mt-auto pt-8 transition-all duration-700 delay-700 transform-gpu",
-            isMounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-          )}>
-            {footerExtra}
-          </div>
+        {footerExtra && !isSuccess && (
+          <div className="pb-6 ps-6 pe-6">{footerExtra}</div>
         )}
+      </motion.aside>
 
+      {/* Right panel: accent layer fades out to reveal bg-background */}
+      <div className="relative flex-1 min-w-0 bg-background">
+        <motion.div
+          className="absolute inset-0 bg-[hsl(var(--login-accent,19_100%_46%))]"
+          initial={false}
+          animate={{ opacity: isSuccess ? 0 : 1 }}
+          transition={{ duration: reduceMotion ? 0.05 : 0.4, delay: isSuccess ? 0.25 : 0 }}
+          style={{ willChange: isSuccess ? 'opacity' : undefined }}
+          aria-hidden
+        />
       </div>
 
-      {/* Outer elements - Positioned relative to viewport - Fades out on success */}
-      <div className={cn(
-        "fixed top-6 right-6 z-[110] transition-all duration-500",
-        isMounted && !isSuccess ? "opacity-100" : "opacity-0 pointer-events-none"
-      )}>
+      {/* Top-right: language + theme (overlay) */}
+      <div
+        className={cn(
+          'fixed top-6 end-6 z-[110] transition-opacity duration-300',
+          mounted && !isSuccess ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        )}
+      >
         {topRight}
       </div>
 
-      <div className={cn(
-        "fixed bottom-6 left-6 z-[110] transition-all duration-500 flex items-center gap-3 text-[11px] text-muted-foreground/50",
-        isMounted && !isSuccess ? "opacity-100" : "opacity-0 pointer-events-none"
-      )}>
-        <span className="font-medium whitespace-nowrap">© {new Date().getFullYear()} GateFlow Inc.</span>
-      </div>
-
-      <div className={cn(
-        "fixed bottom-6 right-6 z-[110] transition-all duration-500 flex items-center gap-6 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/40",
-        isMounted && !isSuccess ? "opacity-100" : "opacity-0 pointer-events-none"
-      )}>
-        <button className="hover:text-primary transition-colors">Support</button>
-        <button className="hover:text-primary transition-colors">Contact Us</button>
-        <div className="h-3 w-[1px] bg-border/40" />
-        <button className="hover:text-primary transition-colors">Terms</button>
-        <button className="hover:text-primary transition-colors">Privacy</button>
+      {/* Footer copyright */}
+      <div
+        className={cn(
+          'fixed bottom-6 start-6 z-[110] text-[11px] text-muted-foreground/50 font-medium transition-opacity duration-300',
+          mounted && !isSuccess ? 'opacity-100' : 'opacity-0 pointer-events-none'
+        )}
+      >
+        <span className="whitespace-nowrap">© {new Date().getFullYear()} GateFlow Inc.</span>
       </div>
     </div>
   );

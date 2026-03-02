@@ -15,12 +15,14 @@ const translations = {
     nav: enTranslations.nav,
     admin: enTranslations.admin,
     dashboard: enTranslations.dashboard,
+    login: enTranslations.login,
   },
   'ar-EG': {
     common: arTranslations.common,
     nav: arTranslations.nav,
     admin: arTranslations.admin,
     dashboard: arTranslations.dashboard,
+    login: arTranslations.login,
   },
 };
 
@@ -29,7 +31,7 @@ i18next.use(initReactI18next).init({
   lng: i18n.defaultLocale,
   fallbackLng: i18n.defaultLocale,
   supportedLngs: i18n.locales,
-  ns: ['common', 'nav', 'admin', 'dashboard'],
+  ns: ['common', 'nav', 'admin', 'dashboard', 'login'],
   defaultNS: 'common',
   interpolation: {
     escapeValue: false, // react already safes from xss

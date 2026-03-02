@@ -18,6 +18,7 @@
     "react-dom": "^18.2.0"
   },
   "dependencies": {
+    "framer-motion": "^11.11.17",
     "@hugeicons/core-free-icons": "^3.1.1",
     "@hugeicons/react": "^1.1.5",
     "@radix-ui/react-popover": "^1.1.15",

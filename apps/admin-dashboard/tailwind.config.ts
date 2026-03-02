@@ -18,6 +18,12 @@ const config: Config = {
         arabic: ['var(--font-cairo)', 'system-ui', 'sans-serif'],
       },
       keyframes: {
+        'particle-float': {
+          '0%, 100%': { transform: 'translate(0, 0)', opacity: '0.6' },
+          '25%': { transform: 'translate(4px, -6px)', opacity: '0.4' },
+          '50%': { transform: 'translate(-3px, 4px)', opacity: '0.7' },
+          '75%': { transform: 'translate(5px, 3px)', opacity: '0.5' },
+        },
         shake: {
           '0%, 100%': { transform: 'translateX(0)' },
           '15%': { transform: 'translateX(-6px)' },
@@ -30,6 +36,7 @@ const config: Config = {
       },
       animation: {
         shake: 'shake 0.5s ease-in-out',
+        'particle-float': 'particle-float 16s ease-in-out infinite',
       },
     },
   },

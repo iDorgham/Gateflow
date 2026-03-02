@@ -18,6 +18,7 @@
     "@hugeicons/react": "^1.1.5",
     "argon2": "^0.44.0",
     "clsx": "^2.1.1",
+    "framer-motion": "^11.11.17",
     "i18next": "^23.16.8",
     "lucide-react": "^0.344.0",
     "negotiator": "^1.0.0",

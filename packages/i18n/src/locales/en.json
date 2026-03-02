@@ -1,4 +1,13 @@
 {
+  "login": {
+    "heading": "Sign in",
+    "subtitle": "Manage gates, QR codes, and scans from anywhere. Zero-trust digital access.",
+    "adminHeading": "Admin Portal",
+    "adminSubtitle": "Secure access for platform operators. Use your organization access key.",
+    "adminDevKeyHint": "Need the dev key?\nHover over the copy icon in the top-right corner.",
+    "copyKey": "Copy key",
+    "copied": "Copied"
+  },
   "common": {
     "appName": "GateFlow",
     "getStarted": "Get Started",

@@ -494,6 +494,16 @@ export default function ContactsPage() {
         );
       return <TableCell key={columnId}>—</TableCell>;
   };
+
+  const { data, isLoading, refetch } = useContacts(filters);
+  const contacts = data?.data ?? [];
+  const total = data?.total ?? 0;
+  const page = data?.page ?? 1;
+  const pageSize = data?.pageSize ?? 25;
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const allSelected =
+    contacts.length > 0 && contacts.every((c) => selectedContactIds.includes(c.id));
+
   const reactTableColumns = visibleColumns.map((col) => {
     const def: ColumnDef<ContactRow> = {
       id: col.id,
@@ -516,15 +526,6 @@ export default function ContactsPage() {
     columns: reactTableColumns,
     getCoreRowModel: getCoreRowModel(),
   });
-
-  const { data, isLoading, refetch } = useContacts(filters);
-  const contacts = data?.data ?? [];
-  const total = data?.total ?? 0;
-  const page = data?.page ?? 1;
-  const pageSize = data?.pageSize ?? 25;
-  const totalPages = Math.max(1, Math.ceil(total / pageSize));
-  const allSelected =
-    contacts.length > 0 && contacts.every((c) => selectedContactIds.includes(c.id));
 
   useEffect(() => {
     const parsed = parseResidentsFiltersFromSearchParams(searchParams);
@@ -671,7 +672,7 @@ export default function ContactsPage() {
 
   function toggleContactSelection(contactId: string, checked: boolean) {
     setSelectedContactIds((prev) =>
-      checked ? [...new Set([...prev, contactId])] : prev.filter((id) => id !== contactId)
+      checked ? Array.from(new Set([...prev, contactId])) : prev.filter((id) => id !== contactId)
     );
   }
 

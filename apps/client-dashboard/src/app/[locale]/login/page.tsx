@@ -4,6 +4,7 @@ import { useFormState, useFormStatus } from 'react-dom';
 import { useState, useEffect, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTheme } from 'next-themes';
+import { useTranslation } from 'react-i18next';
 import { loginAction } from './actions';
 import {
   Button,
@@ -123,7 +124,7 @@ function SubmitButton({ isRtl }: { isRtl: boolean }) {
   return (
     <Button
       type="submit"
-      className="w-full h-12 text-sm font-black uppercase tracking-widest shadow-xl shadow-primary/20 hover:shadow-primary/30 active:scale-[0.98] transition-all duration-300 hover:translate-y-[-1px]"
+      className="w-full h-12 text-sm font-black uppercase tracking-widest shadow-xl shadow-primary/20 hover:shadow-primary/30 active:scale-[0.98] transition-all duration-300 hover:translate-y-[-1px] bg-primary hover:bg-primary/95"
       disabled={pending}
     >
       {pending ? (
@@ -141,6 +142,7 @@ function SubmitButton({ isRtl }: { isRtl: boolean }) {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function LoginPage() {
+  const { t } = useTranslation('login');
   const [state, formAction] = useFormState(loginAction, null);
   const [showPassword, setShowPassword] = useState(false);
   const [errorKey, setErrorKey] = useState(0);
@@ -188,6 +190,9 @@ export default function LoginPage() {
   return (
     <LoginShell
       variant="client"
+      appName="GateFlow"
+      heading={t('heading', 'Sign in')}
+      subtitle={t('subtitle', 'Manage gates, QR codes, and scans from anywhere. Zero-trust digital access.')}
       topRight={<LoginControls locale={locale} />}
       errorKey={errorKey}
       isSuccess={isSuccess}
@@ -232,7 +237,7 @@ export default function LoginPage() {
                   </Label>
                   <a
                     href="#"
-                    className="text-[10px] font-bold uppercase tracking-widest text-primary hover:opacity-80 transition-opacity"
+                    className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground hover:opacity-80 transition-opacity"
                     tabIndex={-1}
                   >
                     {isRtl ? 'نسيت كلمة المرور؟' : 'Forgot password?'}
@@ -276,7 +281,7 @@ export default function LoginPage() {
                 {isRtl ? 'ليس لديك حساب؟' : "Don't have an account?"}{' '}
                 <a
                   href="mailto:support@gateflow.io"
-                  className="text-primary font-bold underline underline-offset-4 hover:opacity-80 transition-opacity"
+                  className="text-muted-foreground font-bold underline underline-offset-4 hover:opacity-80 transition-opacity"
                 >
                   {isRtl ? 'اتصل بالدعم' : 'Contact support'}
                 </a>

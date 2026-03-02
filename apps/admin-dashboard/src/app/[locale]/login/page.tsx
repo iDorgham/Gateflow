@@ -3,12 +3,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTheme } from 'next-themes';
+import { useTranslation } from 'react-i18next';
 import {
   Card,
   CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
   Button,
   Input,
   Label,
@@ -25,6 +23,7 @@ import {
   Moon,
   Globe,
   Check,
+  Copy,
 } from 'lucide-react';
 import type { Locale } from '@/lib/i18n/i18n-config';
 
@@ -111,13 +110,31 @@ function LoginControls({ locale }: { locale: Locale }) {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function AdminLoginPage() {
+  const { t } = useTranslation('login');
   const [key, setKey] = useState('');
   const [showKey, setShowKey] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [errorKey, setErrorKey] = useState(0);
+  const [copied, setCopied] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
+
+  const DEV_KEY = 'dev-admin-key-change-in-production';
+
+  async function handleCopyDevKey() {
+    try {
+      await navigator.clipboard.writeText(DEV_KEY);
+      setKey(DEV_KEY);
+      setError('');
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      // fallback: fill input
+      setKey(DEV_KEY);
+      setError('');
+    }
+  }
 
   const pathname = usePathname();
   const locale = (pathname.split('/')[1] ?? 'en') as Locale;
@@ -156,28 +173,40 @@ export default function AdminLoginPage() {
   return (
     <LoginShell
       variant="admin"
-      topRight={<LoginControls locale={locale} />}
-      errorKey={errorKey}
-      footerExtra={
-        process.env.NODE_ENV !== 'production' ? (
-          <div className="p-3 rounded-xl bg-orange-500/5 border border-orange-500/10 dark:bg-orange-500/10 dark:border-orange-500/20">
-            <p className="text-[10px] text-orange-600/60 dark:text-orange-400/50 font-bold uppercase tracking-widest mb-1.5 flex items-center justify-center gap-2">
-              <span className="h-1 w-1 rounded-full bg-orange-500" />
-              Developer Access
-              <span className="h-1 w-1 rounded-full bg-orange-500" />
-            </p>
-            <code
-              className="text-xs font-mono text-orange-600 dark:text-orange-400 opacity-80 select-all cursor-pointer hover:opacity-100 transition-opacity"
-              onClick={() => {
-                setKey('dev-admin-key-change-in-production');
-                setError('');
-              }}
+      appName="Admin"
+      heading={t('adminHeading', 'Admin Portal')}
+      subtitle={t('adminSubtitle', 'Secure access for platform operators. Use your organization access key.')}
+      topRight={
+        <div className="flex items-center gap-1">
+          {process.env.NODE_ENV !== 'production' && (
+            <div
+              className={cn(
+                'group flex items-center gap-1.5 rounded-lg px-2 py-1.5 transition-colors',
+                'text-muted-foreground hover:bg-black/5 dark:hover:bg-white/10 hover:text-foreground',
+                isRtl && 'flex-row-reverse'
+              )}
             >
-              dev-admin-key-change-in-production
-            </code>
-          </div>
-        ) : null
+              <button
+                type="button"
+                onClick={handleCopyDevKey}
+                className="rounded-lg p-1.5 text-muted-foreground hover:bg-black/5 dark:hover:bg-white/10 hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                aria-label={copied ? t('copied', 'Copied') : t('copyKey', 'Copy key')}
+              >
+                {copied ? (
+                  <Check className="h-3.5 w-3.5 text-success" />
+                ) : (
+                  <Copy className="h-3.5 w-3.5" />
+                )}
+              </button>
+              <span className="max-w-0 overflow-hidden opacity-0 text-xs font-medium whitespace-nowrap transition-all duration-200 group-hover:max-w-[120px] group-hover:opacity-100">
+                {copied ? t('copied', 'Copied') : t('copyKey', 'Copy key')}
+              </span>
+            </div>
+          )}
+          <LoginControls locale={locale} />
+        </div>
       }
+      errorKey={errorKey}
     >
       <Card className="border-none shadow-none bg-transparent">
         <CardContent className="px-0 pb-0">
@@ -225,6 +254,12 @@ export default function AdminLoginPage() {
                 </button>
               </div>
             </div>
+
+            {process.env.NODE_ENV !== 'production' && (
+              <p className="text-xs text-muted-foreground/80 whitespace-pre-line">
+                {t('adminDevKeyHint', 'Need the dev key?\nHover over the copy icon in the top-right corner.')}
+              </p>
+            )}
 
             <Button
               type="submit"
