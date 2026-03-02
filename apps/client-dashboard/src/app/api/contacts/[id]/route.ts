@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { getSessionClaims } from '@/lib/auth-cookies';
-import { prisma } from '@gate-access/db';
+import { prisma, ContactSource } from '@gate-access/db';
 
 // ─── PATCH /api/contacts/[id] ─────────────────────────────────────────────────
 
@@ -13,6 +13,10 @@ const UpdateContactSchema = z.object({
   phone: z.string().max(30).optional().nullable(),
   email: z.string().email().optional().nullable(),
   avatarUrl: z.string().url().optional().nullable(),
+  jobTitle: z.string().max(100).optional().nullable(),
+  source: z.nativeEnum(ContactSource).optional().nullable(),
+  companyWebsite: z.string().url().optional().nullable(),
+  notes: z.string().max(2000).optional().nullable(),
   unitIds: z.array(z.string()).optional(),
 });
 
@@ -70,6 +74,10 @@ export async function PATCH(
           ...(fields.phone !== undefined ? { phone: fields.phone?.trim() ?? null } : {}),
           ...(fields.email !== undefined ? { email: fields.email?.trim() ?? null } : {}),
           ...(fields.avatarUrl !== undefined ? { avatarUrl: fields.avatarUrl?.trim() ?? null } : {}),
+          ...(fields.jobTitle !== undefined ? { jobTitle: fields.jobTitle?.trim() ?? null } : {}),
+          ...(fields.source !== undefined ? { source: fields.source ?? null } : {}),
+          ...(fields.companyWebsite !== undefined ? { companyWebsite: fields.companyWebsite?.trim() ?? null } : {}),
+          ...(fields.notes !== undefined ? { notes: fields.notes?.trim() ?? null } : {}),
         },
         include: {
           units: { include: { unit: { select: { id: true, name: true } } } },
@@ -88,6 +96,10 @@ export async function PATCH(
         phone: updated.phone,
         email: updated.email,
         avatarUrl: updated.avatarUrl ?? null,
+        jobTitle: updated.jobTitle ?? null,
+        source: updated.source ?? null,
+        companyWebsite: updated.companyWebsite ?? null,
+        notes: updated.notes ?? null,
         units: updated.units.map((cu) => ({ id: cu.unit.id, name: cu.unit.name })),
       },
     });

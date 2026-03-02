@@ -17,8 +17,13 @@ Use this role when implementing in Cursor or when invoking CLIs for this phase.
 
 ### Preferred tool
 
-- [x] Cursor (default)
-- [ ] Claude CLI — for final security review of table/export/bulk APIs
+- [ ] Cursor (default)
+- [x] **Claude CLI** — security audit of table/export/bulk APIs (per GUIDE_PREFERENCES.md)
+- [ ] Gemini CLI
+- [ ] OpenCode CLI
+- [ ] Multi-CLI
+
+**Tool note:** Security audit: Claude CLI; polish, performance, responsive: Cursor. Cursor applies and verifies.
 
 ### Context
 

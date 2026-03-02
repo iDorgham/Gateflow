@@ -45,6 +45,8 @@ interface Project {
   logoUrl?: string | null;
   coverUrl?: string | null;
   website?: string | null;
+  externalUrl?: string | null;
+  gateMode?: 'SINGLE' | 'MULTI' | null;
 }
 
 interface User {

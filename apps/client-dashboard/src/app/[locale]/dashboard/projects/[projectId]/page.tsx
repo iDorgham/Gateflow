@@ -152,6 +152,8 @@ export default async function ProjectDetailPage({
           logoUrl: project.logoUrl,
           coverUrl: project.coverUrl,
           website: project.website,
+          externalUrl: project.externalUrl,
+          gateMode: project.gateMode,
         }}
         gates={project.gates}
         aggregates={aggregates}

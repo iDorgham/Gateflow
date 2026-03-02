@@ -23,7 +23,11 @@ Use this role when implementing in Cursor or when invoking CLIs for this phase.
 
 ### Preferred tool
 
-- [x] Cursor (default)
+- [x] **Cursor (default)** — header layout, settings split, profile (per GUIDE_PREFERENCES.md)
+- [ ] Claude CLI
+- [ ] Gemini CLI
+- [ ] OpenCode CLI
+- [ ] Multi-CLI
 
 ### Context
 

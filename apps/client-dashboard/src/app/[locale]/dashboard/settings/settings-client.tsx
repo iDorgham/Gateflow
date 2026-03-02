@@ -6,12 +6,10 @@ import { useTranslation, Trans } from 'react-i18next';
 import { cn } from '@/lib/utils';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@gate-access/ui';
 import {
-  User,
   Building2,
   Layers,
   KeyRound,
   Webhook,
-  CreditCard,
   Users,
   Settings2,
   Bell,
@@ -19,12 +17,10 @@ import {
   FolderKanban,
 } from 'lucide-react';
 
-// Import Tabs
-import { ProfileTab } from './tabs/profile-tab';
+// Import Tabs (Profile & Billing are user settings — avatar menu)
 import { WorkspaceTab } from './tabs/workspace-tab';
 import { ApiKeysTab } from './tabs/api-keys-tab';
 import { WebhooksTab } from './tabs/webhooks-tab';
-import { BillingTab } from './tabs/billing-tab';
 import { TeamTab } from './tabs/team-tab';
 import { GeneralTab } from './tabs/general-tab';
 import { IntegrationsTab } from './tabs/integrations-tab';
@@ -136,7 +132,9 @@ export function SettingsClient(props: SettingsClientProps) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
-  const initialTab = searchParams.get('tab') || 'general';
+  const tabParam = searchParams.get('tab') || 'general';
+  const validIds = ['general', 'workspace', 'projects', 'team', 'roles', 'notifications', 'api-keys', 'webhooks', 'integrations'];
+  const initialTab = validIds.includes(tabParam) ? tabParam : 'general';
   const [activeTab, setActiveTab] = useState(initialTab);
 
   useEffect(() => {
@@ -153,18 +151,13 @@ export function SettingsClient(props: SettingsClientProps) {
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
+  // GateFlow system settings only; Profile and Billing are under avatar menu (user settings).
   const TABS = [
     {
       id: 'general',
       label: t('settings.tabs.general', 'General'),
       icon: Settings2,
       component: <GeneralTab />,
-    },
-    {
-      id: 'profile',
-      label: t('settings.tabs.profile', 'Profile'),
-      icon: User,
-      component: <ProfileTab user={props.user} />,
     },
     {
       id: 'workspace',
@@ -202,18 +195,6 @@ export function SettingsClient(props: SettingsClientProps) {
       label: t('settings.tabs.notifications', 'Notifications'),
       icon: Bell,
       component: <NotificationsTab />,
-    },
-    {
-      id: 'billing',
-      label: t('settings.tabs.billing', 'Billing'),
-      icon: CreditCard,
-      component: (
-        <BillingTab
-          org={props.org}
-          gateCount={props.billing.gateCount}
-          qrCount={props.billing.qrCount}
-        />
-      ),
     },
     {
       id: 'api-keys',

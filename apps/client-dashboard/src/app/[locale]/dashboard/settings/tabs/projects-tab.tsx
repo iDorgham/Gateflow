@@ -42,6 +42,7 @@ interface Project {
   description?: string | null;
   logoUrl?: string | null;
   coverUrl?: string | null;
+  location?: string | null;
   website?: string | null;
   createdAt: Date;
   _count: {
@@ -333,6 +334,12 @@ export function ProjectsTab({
                               {project.description}
                             </p>
                           )}
+                          {project.location && (
+                            <p className="mt-2 text-xs font-semibold text-muted-foreground/80 flex items-center gap-1">
+                              <span className="inline-block h-1.5 w-1.5 rounded-full bg-primary/60" />
+                              <span className="truncate">{project.location}</span>
+                            </p>
+                          )}
                         </div>
                       )}
 
@@ -429,6 +436,9 @@ export function ProjectsTab({
                           </span>
                           <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground/80 mt-1">
                             Units
+                          </span>
+                          <span className="text-[9px] font-semibold tracking-[0.12em] text-muted-foreground/80">
+                            {project._count.contacts} contacts
                           </span>
                         </div>
                       </div>

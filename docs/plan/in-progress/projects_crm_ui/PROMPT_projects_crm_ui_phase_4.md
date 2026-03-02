@@ -22,7 +22,13 @@ Use this role when implementing in Cursor or when invoking CLIs for this phase.
 
 ### Preferred tool
 
-- [x] Cursor (default)
+- [x] **Cursor (default)** — project edit UX, gates & team UI (per GUIDE_PREFERENCES.md)
+- [ ] Claude CLI — use for API/assignment endpoints if doing backend first; Cursor does UI
+- [ ] Gemini CLI
+- [ ] OpenCode CLI
+- [ ] Multi-CLI
+
+**Tool note:** Backend/API parts: prefer Claude CLI; UI: Cursor. Cursor applies and verifies all changes.
 
 ### Context
 
@@ -64,29 +70,30 @@ Turn the project edit experience into a **project CRM hub**, where admins can:
 ### Steps (ordered)
 
 1. Load `react`, `gf-architecture`, `gf-api`, and `gf-design-guide`; review current `ProjectDetailActions`, `ProjectDetailContent`, `GatesCardWithEdit`, and `EditPanel`.
-2. Design the **project edit panel layout**:
+2. For any **API or gate-assignment changes**, run **Claude CLI** with this phase prompt to propose and review the backend changes (routes, payloads, validation, org scope) before you apply them in Cursor. Keep Cursor as the place where you actually edit files and run preflight.
+3. Design the **project edit panel layout**:
    - Group sections for “Basics”, “Branding & Media” (logo, cover, gallery), “Advanced data (CSV imports)”, and “Gates & team”.
-3. Implement advanced project fields:
+4. Implement advanced project fields:
    - Wire existing `logoUrl`, `coverUrl`, `website`, `location`, and new `gallery`/`externalUrl` fields into the edit UI.
    - Ensure PATCH requests to `/api/projects/[id]` are updated to accept and validate these fields.
-4. Enhance CSV flows in the project context:
+5. Enhance CSV flows in the project context:
    - Add UI in the project panel to:
      - Link to existing CSV import for contacts/units with clear scoping copy, or
      - Provide upload controls that reuse existing endpoints while passing project info where supported.
    - Make sure user feedback (toasts, counts) reflects that imports are **project-related**.
-5. Implement gate mode toggle:
+6. Implement gate mode toggle:
    - Add a simple control to set project gate mode (single vs multi).
    - In the UI:
      - Single-gate: emphasize a single gate row; treat label as “Gate” and hide unnecessary name fields where safe.
      - Multi-gate: allow adding/removing gate rows with names, reusing existing gate creation/edit actions.
    - Ensure changes are persisted via project or gate APIs without breaking prior behavior.
-6. Integrate team assignments:
+7. Integrate team assignments:
    - Reuse `gateAssignments` data already loaded in `projects/[projectId]/page.tsx`.
    - Build a per-gate list of assigned users with the ability to add/remove assignments, reusing the gate-assignment API (no new security rules).
-7. Add minimal integration or component tests:
+8. Add minimal integration or component tests:
    - Save flow for project edit with new fields.
    - Assign/unassign team members to gates and confirm UI reflects changes.
-8. Run:
+9. Run:
    - `pnpm turbo lint --filter=client-dashboard`
    - `pnpm turbo typecheck --filter=client-dashboard`
    - `pnpm turbo test --filter=client-dashboard`

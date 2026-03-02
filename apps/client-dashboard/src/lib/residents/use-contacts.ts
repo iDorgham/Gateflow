@@ -23,6 +23,10 @@ export interface ContactRow {
   phone: string | null;
   email: string | null;
   avatarUrl: string | null;
+  jobTitle: string | null;
+  companyWebsite: string | null;
+  source: string | null;
+  notes: string | null;
   units: ContactUnit[];
   tags?: ContactTag[];
   visitsInRange: number;

@@ -56,6 +56,22 @@ Tools and plans the guide can suggest when they match the task. Update this list
 
 ---
 
+## Claude vs Cursor (who does what, by their powers)
+
+Use this split for **projects_crm_ui** and similar work. Cursor remains **master** (orchestrates, applies, verifies); Claude CLI is used for tasks that match its strengths.
+
+| Do with **Claude CLI** | Do with **Cursor IDE** |
+|------------------------|-------------------------|
+| **Backend & APIs** — New/updated API routes, request validation, org scoping, soft deletes, pagination/sort/filter params. | **UI & layout** — Pages, components, EditPanel, header, sidebar, theme toggle, forms, TanStack Table wiring in the app. |
+| **Security & correctness** — Auth checks, RBAC, export/bulk auth, audit logging, CONTRACTS compliance. | **Visual iteration** — Inline edits, live diffs, new components, layout tweaks, responsive behavior. |
+| **Multi-file backend refactors** — Touching many API files or shared server logic. | **Exploring & navigating** — Codebase discovery, small–medium edits, fixing lint/type errors in UI. |
+| **Phase 1** (CRM data model & API extensions), **Phase 9** (sorting, pagination server-side), **Phase 10** (export endpoint, bulk actions, audit). | **Phases 2, 3, 5, 6, 7, 8, 11** — Project page, Contacts/Units UI, header/settings split, TanStack Table base, column reorder, filtering UI, applying pattern to Contacts/Units. |
+| **Phase 12** — Security audit of table/export/bulk APIs (Claude primary); polish/performance can stay in Cursor. | **Orchestration** — `/plan`, `/dev`, `/ship`, running phase prompts, preflight, subagents (explore, shell, browser-use). |
+
+**Rule:** For any phase that has both backend and frontend, use **Claude for the API/security parts** and **Cursor for the UI parts**; Cursor applies and verifies all changes (preflight, tests).
+
+---
+
 ## Notes (free-form)
 
 - **Canonical plan:** Treat **projects_crm_ui** as the single initiative for client-dashboard CRM, dashboard, palette, and advanced-tables work; avoid ad-hoc work outside it.

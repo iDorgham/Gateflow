@@ -17,8 +17,13 @@ Use this role when implementing in Cursor or when invoking CLIs for this phase.
 
 ### Preferred tool
 
-- [x] Cursor (default)
-- [ ] Claude CLI — for security review of export and bulk-delete endpoints
+- [ ] Cursor (default)
+- [x] **Claude CLI** — export endpoint, bulk-delete, audit logging, security (per GUIDE_PREFERENCES.md)
+- [ ] Gemini CLI
+- [ ] OpenCode CLI
+- [ ] Multi-CLI
+
+**Tool note:** Backend/export/bulk/audit: Claude CLI; table toolbar & checkboxes: Cursor. Cursor applies and verifies.
 
 ### Context
 

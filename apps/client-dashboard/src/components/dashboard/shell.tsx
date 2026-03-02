@@ -25,6 +25,8 @@ import {
   ChevronsUpDown,
 } from 'lucide-react';
 import { cn } from '@gate-access/ui';
+import { ThemeToggle } from './theme-toggle';
+import { HeaderUserMenu } from './header-user-menu';
 
 interface ExpiredQR {
   id: string;
@@ -141,7 +143,11 @@ export function DashboardShell({
       body: JSON.stringify({ projectId: val }),
     }).then(() => {
       startTransition(() => {
-        router.refresh();
+        if (val === 'all') {
+          router.push(`/${locale}/dashboard`);
+        } else {
+          router.push(`/${locale}/dashboard/projects/${projectId}`);
+        }
       });
     });
   };
@@ -215,7 +221,7 @@ export function DashboardShell({
               )}
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               <div className="sm:hidden flex items-center">
                 <GlobalSearch locale={locale} />
               </div>
@@ -237,6 +243,12 @@ export function DashboardShell({
               >
                 <Sparkles className="h-[17px] w-[17px]" />
               </Button>
+              <ThemeToggle />
+              <HeaderUserMenu
+                user={user}
+                org={org}
+                locale={locale}
+              />
             </div>
           </header>
 

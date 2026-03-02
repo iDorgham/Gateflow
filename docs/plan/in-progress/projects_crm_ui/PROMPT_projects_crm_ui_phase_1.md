@@ -8,10 +8,11 @@ Use this role when implementing in Cursor or when invoking CLIs for this phase.
 
 ### Skills to load
 
-- [ ] gf-database — Prisma, migrations, queries  
-- [ ] gf-api — API routes, validation, rate limiting  
-- [ ] gf-architecture — monorepo, conventions  
-- [ ] gf-testing — Jest, test patterns
+- [x] gf-database — Prisma, migrations, queries  
+- [x] gf-api — API routes, validation, rate limiting  
+- [x] gf-security — org scope, CONTRACTS.md, multi-tenant  
+- [x] gf-architecture — monorepo, conventions  
+- [x] gf-testing — Jest, test patterns
 
 ### MCP to use
 
@@ -22,11 +23,13 @@ Use this role when implementing in Cursor or when invoking CLIs for this phase.
 
 ### Preferred tool
 
-- [x] Cursor (default)
-- [ ] Claude CLI
+- [ ] Cursor (default)
+- [x] **Claude CLI** — backend & APIs, multi-file route updates, correctness (per GUIDE_PREFERENCES.md)
 - [ ] Gemini CLI
 - [ ] OpenCode CLI
 - [ ] Multi-CLI
+
+**Tool note:** Use Claude CLI for API/schema work; Cursor applies changes and runs preflight/tests.
 
 ### Context
 

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@gate-access/db';
+import { prisma, GateMode } from '@gate-access/db';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
@@ -14,6 +14,9 @@ const CreateProjectSchema = z.object({
   socialMedia: z.any().optional(),
   logoUrl: z.string().url().optional().or(z.literal('')),
   coverUrl: z.string().url().optional().or(z.literal('')),
+  externalUrl: z.string().url().max(500).optional().or(z.literal('')),
+  galleryJson: z.array(z.string().url()).max(20).optional(),
+  gateMode: z.nativeEnum(GateMode).optional(),
 });
 
 export async function GET() {
@@ -25,7 +28,23 @@ export async function GET() {
   const projects = await prisma.project.findMany({
     where: { organizationId: claims.orgId, deletedAt: null },
     orderBy: { createdAt: 'asc' },
-    include: { _count: { select: { gates: true, qrCodes: true } } },
+    select: {
+      id: true,
+      name: true,
+      description: true,
+      logoUrl: true,
+      coverUrl: true,
+      website: true,
+      socialMedia: true,
+      location: true,
+      externalUrl: true,
+      galleryJson: true,
+      gateMode: true,
+      organizationId: true,
+      createdAt: true,
+      updatedAt: true,
+      _count: { select: { gates: true, qrCodes: true } },
+    },
   });
 
   return NextResponse.json({ projects });
@@ -52,6 +71,9 @@ export async function POST(request: NextRequest) {
         socialMedia: parsed.data.socialMedia || null,
         logoUrl: parsed.data.logoUrl || null,
         coverUrl: parsed.data.coverUrl || null,
+        externalUrl: parsed.data.externalUrl || null,
+        galleryJson: parsed.data.galleryJson ?? null,
+        gateMode: parsed.data.gateMode ?? GateMode.MULTI,
         organizationId: claims.orgId,
       },
     });

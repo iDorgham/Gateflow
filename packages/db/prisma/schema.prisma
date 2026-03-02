@@ -55,6 +55,9 @@ model Project {
   website        String?
   socialMedia    Json?
   location       String?
+  galleryJson    Json?        /// Array of image URL strings for the project gallery
+  externalUrl    String?      /// External marketing / landing-page URL (distinct from website)
+  gateMode       GateMode     @default(MULTI)
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   gates          Gate[]
@@ -432,7 +435,7 @@ model ContactTag {
 }
 
 model Contact {
-  id             String        @id @default(cuid())
+  id             String         @id @default(cuid())
   firstName      String
   lastName       String
   birthday       DateTime?
@@ -440,13 +443,17 @@ model Contact {
   phone          String?
   email          String?
   avatarUrl      String?
-  organization   Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  jobTitle       String?        /// Job title / role at the company
+  source         ContactSource? /// How the contact entered the system
+  companyWebsite String?        /// Company or personal website URL
+  notes          String?        /// Free-text notes about the contact
+  organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId String
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
   deletedAt      DateTime?
 
-  units     ContactUnit[]
+  units       ContactUnit[]
   contactTags ContactTag[]
 
   @@index([organizationId])
@@ -552,4 +559,19 @@ enum AccessRuleType {
   DATERANGE    // Multiple uses within date range
   RECURRING    // Recurring access (daily/weekly)
   PERMANENT    // No time limits (Open QR default)
+}
+
+/// How a Contact was originally added to the system
+enum ContactSource {
+  MANUAL    // Added by hand via the dashboard
+  IMPORT    // Bulk-imported from CSV / external source
+  QR_SCAN   // Derived from a gate scan event
+  REFERRAL  // Referred by another contact
+  OTHER
+}
+
+/// Whether a Project is configured for a single gate or multiple gates
+enum GateMode {
+  SINGLE // Project has one primary gate
+  MULTI  // Project has multiple gates (default)
 }

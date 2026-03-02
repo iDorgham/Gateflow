@@ -27,7 +27,8 @@ import {
   Mail, 
   AtSign,
   Fingerprint,
-  Upload
+  Upload,
+  Phone,
 } from 'lucide-react';
 
 interface ProfileUser {
@@ -38,6 +39,10 @@ interface ProfileUser {
   avatarUrl?: string | null;
   bio?: string | null;
   createdAt: string;
+  phone?: string | null;
+  company?: string | null;
+  website?: string | null;
+  socialLinks?: string | null;
 }
 
 export function ProfileTab({ user: initialUser }: { user: ProfileUser }) {
@@ -48,6 +53,10 @@ export function ProfileTab({ user: initialUser }: { user: ProfileUser }) {
   // Lifted from UpdateProfileCard
   const [name, setName] = useState(initialUser.name);
   const [bio, setBio] = useState(initialUser.bio || '');
+  const [phone, setPhone] = useState(initialUser.phone ?? '');
+  const [company, setCompany] = useState(initialUser.company ?? '');
+  const [website, setWebsite] = useState(initialUser.website ?? '');
+  const [socialLinks, setSocialLinks] = useState(initialUser.socialLinks ?? '');
   const [isPending, startTransition] = useTransition();
 
   const hasChanges = name.trim() !== initialUser.name || (bio.trim() || null) !== (initialUser.bio || null);
@@ -144,6 +153,74 @@ export function ProfileTab({ user: initialUser }: { user: ProfileUser }) {
               bio={bio} 
               setBio={setBio} 
             />
+
+            {/* Contact & links (UI ready; persist when backend supports) */}
+            <Card className="rounded-2xl border border-border shadow-sm bg-card overflow-hidden">
+              <CardHeader className="pb-4 pt-6 px-8 border-b border-border/50 bg-muted/5">
+                <CardTitle className="text-base font-bold uppercase tracking-tight flex items-center gap-2">
+                  <Phone className="h-4 w-4 text-primary" />
+                  {t('settings.profile.contactAndLinks', 'Contact & links')}
+                </CardTitle>
+                <CardDescription className="text-xs">
+                  {t('settings.profile.contactAndLinksDesc', 'Phone, company, website and social links. Saved when supported by your account.')}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="p-8 space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-3">
+                    <Label htmlFor="profile-phone" className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60">
+                      {t('settings.profile.phone', 'Phone')}
+                    </Label>
+                    <Input
+                      id="profile-phone"
+                      type="tel"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder={t('settings.profile.phonePlaceholder', 'Your phone number')}
+                      className="h-11 rounded-xl border-border/50 bg-background/50 focus:ring-primary/20"
+                    />
+                  </div>
+                  <div className="space-y-3">
+                    <Label htmlFor="profile-company" className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60">
+                      {t('settings.profile.company', 'Company')}
+                    </Label>
+                    <Input
+                      id="profile-company"
+                      value={company}
+                      onChange={(e) => setCompany(e.target.value)}
+                      placeholder={t('settings.profile.companyPlaceholder', 'Company or organization')}
+                      className="h-11 rounded-xl border-border/50 bg-background/50 focus:ring-primary/20"
+                    />
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  <Label htmlFor="profile-website" className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60">
+                    {t('settings.profile.website', 'Website')}
+                  </Label>
+                  <Input
+                    id="profile-website"
+                    type="url"
+                    value={website}
+                    onChange={(e) => setWebsite(e.target.value)}
+                    placeholder="https://"
+                    className="h-11 rounded-xl border-border/50 bg-background/50 focus:ring-primary/20"
+                  />
+                </div>
+                <div className="space-y-3">
+                  <Label htmlFor="profile-social" className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60">
+                    {t('settings.profile.socialLinks', 'Social / profile links')}
+                  </Label>
+                  <Input
+                    id="profile-social"
+                    type="url"
+                    value={socialLinks}
+                    onChange={(e) => setSocialLinks(e.target.value)}
+                    placeholder={t('settings.profile.socialPlaceholder', 'LinkedIn, Twitter, etc.')}
+                    className="h-11 rounded-xl border-border/50 bg-background/50 focus:ring-primary/20"
+                  />
+                </div>
+              </CardContent>
+            </Card>
             
             {/* Security */}
             <Card className="rounded-2xl border border-border shadow-sm bg-card overflow-hidden">

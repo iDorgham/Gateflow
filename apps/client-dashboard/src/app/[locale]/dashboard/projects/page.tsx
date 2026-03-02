@@ -30,6 +30,11 @@ export default async function ProjectsPage() {
     return {
       id: p.id,
       name: p.name,
+      description: p.description,
+      location: p.location,
+      logoUrl: p.logoUrl,
+      coverUrl: p.coverUrl,
+      website: p.website,
       createdAt: p.createdAt,
       _count: {
         gates: p._count.gates,

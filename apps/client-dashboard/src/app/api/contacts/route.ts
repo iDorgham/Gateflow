@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { getSessionClaims } from '@/lib/auth-cookies';
-import { prisma, Prisma } from '@gate-access/db';
+import { prisma, Prisma, ContactSource } from '@gate-access/db';
 
 export const dynamic = 'force-dynamic';
 
@@ -364,6 +364,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         phone: c.phone,
         email: c.email,
         avatarUrl: c.avatarUrl ?? null,
+        jobTitle: c.jobTitle ?? null,
+        source: c.source ?? null,
+        companyWebsite: c.companyWebsite ?? null,
+        notes: c.notes ?? null,
         units: c.units.map((cu) => ({ id: cu.unit.id, name: cu.unit.name })),
         tags: c.contactTags.map((ct) => ({
           id: ct.tag.id,
@@ -430,6 +434,10 @@ const CreateContactSchema = z.object({
   phone: z.string().max(30).optional().nullable(),
   email: z.string().email().optional().nullable(),
   avatarUrl: z.string().url().optional().nullable(),
+  jobTitle: z.string().max(100).optional().nullable(),
+  source: z.nativeEnum(ContactSource).optional().nullable(),
+  companyWebsite: z.string().url().optional().nullable(),
+  notes: z.string().max(2000).optional().nullable(),
   unitIds: z.array(z.string()).optional(),
 });
 
@@ -473,6 +481,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       phone,
       email,
       avatarUrl,
+      jobTitle,
+      source,
+      companyWebsite,
+      notes,
       unitIds,
     } = validation.data;
 
@@ -485,6 +497,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         phone: phone?.trim() ?? null,
         email: email?.trim() ?? null,
         avatarUrl: avatarUrl?.trim() ?? null,
+        jobTitle: jobTitle?.trim() ?? null,
+        source: source ?? null,
+        companyWebsite: companyWebsite?.trim() ?? null,
+        notes: notes?.trim() ?? null,
         organizationId: claims.orgId,
         units: unitIds?.length
           ? { create: unitIds.map((unitId) => ({ unitId })) }
@@ -507,6 +523,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
           phone: contact.phone,
           email: contact.email,
           avatarUrl: contact.avatarUrl ?? null,
+          jobTitle: contact.jobTitle ?? null,
+          source: contact.source ?? null,
+          companyWebsite: contact.companyWebsite ?? null,
+          notes: contact.notes ?? null,
           units: contact.units.map((cu) => ({
             id: cu.unit.id,
             name: cu.unit.name,

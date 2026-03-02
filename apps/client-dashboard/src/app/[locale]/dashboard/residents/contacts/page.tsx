@@ -26,6 +26,7 @@ import {
   Avatar,
   AvatarImage,
   AvatarFallback,
+  Textarea,
 } from '@gate-access/ui';
 import { useTranslation } from 'react-i18next';
 import {
@@ -80,6 +81,11 @@ const emptyForm = () => ({
   company: '',
   phone: '',
   email: '',
+  avatarUrl: '',
+  jobTitle: '',
+  companyWebsite: '',
+  source: '',
+  notes: '',
   unitIds: [] as string[],
 });
 
@@ -582,6 +588,11 @@ export default function ContactsPage() {
       company: contact.company ?? '',
       phone: contact.phone ?? '',
       email: contact.email ?? '',
+      avatarUrl: contact.avatarUrl ?? '',
+      jobTitle: contact.jobTitle ?? '',
+      companyWebsite: contact.companyWebsite ?? '',
+      source: (contact.source as string | null) ?? '',
+      notes: contact.notes ?? '',
       unitIds: contact.units.map((u) => u.id),
     });
     setDialogOpen(true);
@@ -612,6 +623,11 @@ export default function ContactsPage() {
           company: form.company || null,
           phone: form.phone || null,
           email: form.email || null,
+          avatarUrl: form.avatarUrl || null,
+          jobTitle: form.jobTitle || null,
+          companyWebsite: form.companyWebsite || null,
+          source: form.source || null,
+          notes: form.notes || null,
           unitIds: form.unitIds,
         };
         const res = editing
@@ -1010,7 +1026,7 @@ export default function ContactsPage() {
 
       {dialogOpen && (
         <Dialog>
-          <DialogContent className="max-w-lg">
+          <DialogContent className="max-w-2xl">
             <DialogHeader>
               <DialogTitle>
                 {editing
@@ -1018,8 +1034,9 @@ export default function ContactsPage() {
                   : t('contacts.addContact', 'Add Contact')}
               </DialogTitle>
             </DialogHeader>
-            <div className="space-y-4 py-2">
-              <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-6 py-2">
+              {/* Identity */}
+              <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                   <Label htmlFor="firstName">
                     {t('contacts.form.firstName', 'First Name')} *
@@ -1045,7 +1062,8 @@ export default function ContactsPage() {
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-3">
+              {/* Personal & Work */}
+              <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                   <Label htmlFor="birthday">
                     {t('contacts.form.birthday', 'Birthday')}
@@ -1072,7 +1090,8 @@ export default function ContactsPage() {
                   />
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-3">
+              {/* Contact details */}
+              <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                   <Label htmlFor="phone">
                     {t('contacts.form.phone', 'Phone')}
@@ -1098,6 +1117,107 @@ export default function ContactsPage() {
                     }
                   />
                 </div>
+              </div>
+              {/* CRM fields */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <Label htmlFor="jobTitle">
+                    {t('contacts.form.jobTitle', 'Job title')}
+                  </Label>
+                  <Input
+                    id="jobTitle"
+                    value={form.jobTitle}
+                    onChange={(e) =>
+                      setForm({ ...form, jobTitle: e.target.value })
+                    }
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="source">
+                    {t('contacts.form.source', 'Source')}
+                  </Label>
+                  <NativeSelect
+                    id="source"
+                    value={form.source}
+                    onChange={(e) =>
+                      setForm({ ...form, source: e.target.value })
+                    }
+                  >
+                    <option value="">
+                      {t('contacts.form.sourcePlaceholder', 'Select source')}
+                    </option>
+                    <option value="MANUAL">
+                      {t('contacts.form.source.manual', 'Manual')}
+                    </option>
+                    <option value="IMPORT">
+                      {t('contacts.form.source.import', 'Import')}
+                    </option>
+                    <option value="QR_SCAN">
+                      {t('contacts.form.source.qrScan', 'QR scan')}
+                    </option>
+                    <option value="REFERRAL">
+                      {t('contacts.form.source.referral', 'Referral')}
+                    </option>
+                    <option value="OTHER">
+                      {t('contacts.form.source.other', 'Other')}
+                    </option>
+                  </NativeSelect>
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <Label htmlFor="avatarUrl">
+                    {t('contacts.form.avatarUrl', 'Avatar URL')}
+                  </Label>
+                  <Input
+                    id="avatarUrl"
+                    value={form.avatarUrl}
+                    onChange={(e) =>
+                      setForm({ ...form, avatarUrl: e.target.value })
+                    }
+                    placeholder="https://..."
+                  />
+                  {form.avatarUrl && (
+                    <div className="mt-2 inline-flex items-center gap-2 rounded-lg border border-border bg-muted/40 px-2 py-1">
+                      <Avatar className="h-8 w-8">
+                        <AvatarImage src={form.avatarUrl} alt="" />
+                        <AvatarFallback>
+                          {form.firstName.slice(0, 1)}
+                          {form.lastName.slice(0, 1)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <span className="text-xs text-muted-foreground">
+                        {t('contacts.form.avatarPreview', 'Preview')}
+                      </span>
+                    </div>
+                  )}
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="companyWebsite">
+                    {t('contacts.form.companyWebsite', 'Company website')}
+                  </Label>
+                  <Input
+                    id="companyWebsite"
+                    value={form.companyWebsite}
+                    onChange={(e) =>
+                      setForm({ ...form, companyWebsite: e.target.value })
+                    }
+                    placeholder="https://example.com"
+                  />
+                </div>
+              </div>
+              <div className="space-y-1.5">
+                <Label htmlFor="notes">
+                  {t('contacts.form.notes', 'Notes')}
+                </Label>
+                <Textarea
+                  id="notes"
+                  value={form.notes}
+                  onChange={(e) =>
+                    setForm({ ...form, notes: e.target.value })
+                  }
+                  rows={3}
+                />
               </div>
               {units.length > 0 && (
                 <div className="space-y-1.5">

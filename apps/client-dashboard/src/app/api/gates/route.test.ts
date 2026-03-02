@@ -4,6 +4,7 @@
  * Phase 1 (core_security_v6): Asserts that tenant-scoped data is not returned
  * for another org and that soft-deleted entities are excluded from reads.
  */
+export {};
 
 const mockGetSessionClaims = jest.fn();
 jest.mock('@/lib/auth-cookies', () => ({

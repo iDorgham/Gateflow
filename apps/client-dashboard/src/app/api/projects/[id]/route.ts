@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@gate-access/db';
+import { prisma, GateMode } from '@gate-access/db';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { z } from 'zod';
 import { revalidatePath } from 'next/cache';
@@ -12,6 +12,9 @@ const UpdateProjectSchema = z.object({
   logoUrl: z.string().url().optional().nullable(),
   coverUrl: z.string().url().optional().nullable(),
   website: z.string().url().optional().nullable(),
+  externalUrl: z.string().url().max(500).optional().nullable(),
+  galleryJson: z.array(z.string().url()).max(20).optional().nullable(),
+  gateMode: z.nativeEnum(GateMode).optional(),
 });
 
 export async function PATCH(
@@ -45,6 +48,9 @@ export async function PATCH(
     if (parsed.data.logoUrl !== undefined) data.logoUrl = parsed.data.logoUrl;
     if (parsed.data.coverUrl !== undefined) data.coverUrl = parsed.data.coverUrl;
     if (parsed.data.website !== undefined) data.website = parsed.data.website;
+    if (parsed.data.externalUrl !== undefined) data.externalUrl = parsed.data.externalUrl;
+    if (parsed.data.galleryJson !== undefined) data.galleryJson = parsed.data.galleryJson ?? null;
+    if (parsed.data.gateMode !== undefined) data.gateMode = parsed.data.gateMode;
 
     const updated = await prisma.project.update({
       where: { id },
@@ -52,6 +58,7 @@ export async function PATCH(
     });
 
     revalidatePath('/dashboard/settings');
+    revalidatePath('/dashboard/projects');
     return NextResponse.json({ project: updated });
 
   } catch (error) {

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import {
   SquaresFourIcon,
   QrCodeIcon,
@@ -16,26 +16,12 @@ import {
   WarningIcon,
   ShieldCheckIcon,
   CaretLeftIcon,
-  BuildingIcon,
   StackIcon,
-  CreditCardIcon,
-  GearIcon,
-  PowerIcon,
 } from '@phosphor-icons/react';
-import {
-  Avatar,
-  AvatarFallback,
-  cn,
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@gate-access/ui';
+import { cn } from '@gate-access/ui';
 import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
-import { ThemeToggle } from './theme-toggle';
+import { User as UserIcon } from '@phosphor-icons/react';
 
 import { Permission } from '@gate-access/types';
 
@@ -152,8 +138,8 @@ interface SidebarProps {
 }
 
 export function Sidebar({
-  user,
-  org,
+  user: _user,
+  org: _org,
   projects: _projects,
   currentProjectId: _currentProjectId,
   locale,
@@ -163,7 +149,6 @@ export function Sidebar({
   permissions = {},
 }: SidebarProps) {
   const pathname = usePathname();
-  const router = useRouter();
   const { t } = useTranslation('dashboard');
 
   const [hoveredLabel, setHoveredLabel] = useState<string | null>(null);
@@ -181,13 +166,6 @@ export function Sidebar({
   }
 
   const NAV_GROUPS = groups;
-
-  const initials = user.name
-    .split(' ')
-    .filter(Boolean)
-    .map((n) => n[0])
-    .join('')
-    .slice(0, 2);
 
   return (
     <div
@@ -266,133 +244,36 @@ export function Sidebar({
         ))}
       </nav>
 
-      {/* Footer / User Profile */}
+      {/* Footer: Profile link + Collapse (avatar menu lives in header) */}
       <div
         className={cn(
-          'mt-auto shrink-0 p-3 flex flex-col gap-4 border-t border-sidebar-border/50',
+          'mt-auto shrink-0 p-3 flex flex-col gap-3 border-t border-sidebar-border/50',
           isCollapsed ? 'items-center' : 'px-4'
         )}
       >
-        <div className={cn("flex items-center w-full", isCollapsed ? "justify-center" : "justify-between")}>
-          <div className="flex items-center gap-3">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <div 
-                  className="group relative cursor-pointer outline-none"
-                  onMouseEnter={() => isCollapsed && setHoveredLabel(t('sidebar.profile', 'Profile'))}
-                  onMouseLeave={() => setHoveredLabel(null)}
-                >
-                  <Avatar className="h-9 w-9 border-2 border-sidebar-border hover:border-primary transition-all">
-                    <AvatarFallback className="bg-primary text-primary-foreground text-[10px] font-bold">
-                      {initials}
-                    </AvatarFallback>
-                  </Avatar>
-                  {isCollapsed && (
-                    <div className="absolute -bottom-1 -right-1 h-3 w-3 rounded-full border-2 border-sidebar bg-success" />
-                  )}
-                </div>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align={isCollapsed ? 'start' : 'end'}
-                side="top"
-                className="w-64 p-2 rounded-2xl border-sidebar-border bg-sidebar shadow-2xl animate-in fade-in zoom-in-95"
-                sideOffset={12}
-              >
-                <DropdownMenuLabel className="p-3 mb-1">
-                  <div className="flex flex-col space-y-1.5">
-                    <p className="text-sm font-bold leading-none text-foreground">{user.name}</p>
-                    <p className="text-xs leading-none text-muted-foreground font-medium">
-                      {user.email}
-                    </p>
-                    {org && (
-                      <div className="mt-2 inline-flex items-center gap-1.5 rounded-lg bg-primary/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-primary w-fit">
-                        <StackIcon className="h-3 w-3" />
-                        <span>
-                          {org.plan}
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                </DropdownMenuLabel>
-                <DropdownMenuSeparator className="bg-sidebar-border/50 mx-1" />
-                <div className="p-1">
-                  <DropdownMenuItem asChild>
-                    <Link
-                      href={`/${locale}/dashboard/settings?tab=profile`}
-                      className="flex w-full items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer hover:bg-sidebar-accent transition-colors"
-                    >
-                      <BuildingIcon className="h-4 w-4 text-muted-foreground" />
-                      <span className="text-sm font-medium">{t('sidebar.profile', 'Profile')}</span>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link
-                      href={`/${locale}/dashboard/settings`}
-                      className="flex w-full items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer hover:bg-sidebar-accent transition-colors"
-                    >
-                      <GearIcon className="h-4 w-4 text-muted-foreground" />
-                      <span className="text-sm font-medium">{t('sidebar.settings', 'Settings')}</span>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem asChild>
-                    <Link
-                      href={`/${locale}/dashboard/settings?tab=billing`}
-                      className="flex w-full items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer hover:bg-sidebar-accent transition-colors"
-                    >
-                      <CreditCardIcon className="h-4 w-4 text-muted-foreground" />
-                      <span className="text-sm font-medium">{t('sidebar.billing', 'Billing & payments')}</span>
-                    </Link>
-                  </DropdownMenuItem>
-                </div>
-                <DropdownMenuSeparator className="bg-sidebar-border/50 mx-1" />
-                <div className="p-1">
-                  <DropdownMenuItem className="flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl hover:bg-sidebar-accent transition-colors">
-                    <div className="flex flex-col">
-                      <span className="text-xs font-bold">
-                        {t('sidebar.appearance', 'Appearance')}
-                      </span>
-                      <span className="text-[10px] text-muted-foreground font-medium">
-                        {t('sidebar.appearanceDescription', 'Light / Dark mode')}
-                      </span>
-                    </div>
-                    <ThemeToggle />
-                  </DropdownMenuItem>
-                </div>
-                <DropdownMenuSeparator className="bg-sidebar-border/50 mx-1" />
-                <div className="p-1">
-                  <DropdownMenuItem 
-                    className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-destructive focus:text-destructive focus:bg-destructive/10 cursor-pointer transition-colors"
-                    onClick={() => router.push(`/${locale}/logout`)}
-                  >
-                    <PowerIcon className="h-4 w-4" />
-                    <span className="text-sm font-bold">{t('sidebar.signout', 'Sign out')}</span>
-                  </DropdownMenuItem>
-                </div>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            {!isCollapsed && (
-              <div className="flex flex-col truncate">
-                <span className="text-xs font-bold text-foreground truncate">{user.name}</span>
-                <span className="text-[10px] text-muted-foreground truncate uppercase tracking-tighter">
-                  {user.role.toLowerCase().replace('_', ' ')}
-                </span>
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className={cn("flex items-center justify-center pt-2", isCollapsed ? "flex-col" : "w-full")}>
-          {/* Collapse Button */}
+        <Link
+          href={`/${locale}/dashboard/profile`}
+          onMouseEnter={() => isCollapsed && setHoveredLabel(t('sidebar.profile', 'Profile'))}
+          onMouseLeave={() => setHoveredLabel(null)}
+          className={cn(
+            'group flex items-center gap-3 rounded-xl transition-all text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground',
+            isCollapsed ? 'justify-center p-3' : 'px-3.5 py-3'
+          )}
+        >
+          <UserIcon size={20} weight="regular" className="shrink-0 text-muted-foreground group-hover:text-foreground" />
+          {!isCollapsed && (
+            <span className="flex-1 truncate text-sm font-medium">{t('sidebar.profile', 'Profile')}</span>
+          )}
+        </Link>
+        <div className={cn('flex items-center justify-center', isCollapsed ? 'flex-col' : 'w-full')}>
           <button
+            type="button"
             onClick={onToggleCollapse}
-            className={cn(
-              "flex h-8 w-8 items-center justify-center rounded-lg border border-sidebar-border bg-sidebar/50 hover:bg-sidebar-accent shadow-sm group transition-all"
-            )}
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-sidebar-border bg-sidebar/50 hover:bg-sidebar-accent shadow-sm group transition-all"
             onMouseEnter={() => isCollapsed && setHoveredLabel(isCollapsed ? t('sidebar.expand', 'Expand') : t('sidebar.collapse', 'Collapse'))}
             onMouseLeave={() => setHoveredLabel(null)}
           >
-            <CaretLeftIcon className={cn("h-4 w-4 text-muted-foreground transition-transform group-hover:text-foreground", isCollapsed && "rotate-180")} />
+            <CaretLeftIcon className={cn('h-4 w-4 text-muted-foreground transition-transform group-hover:text-foreground', isCollapsed && 'rotate-180')} />
           </button>
         </div>
       </div>

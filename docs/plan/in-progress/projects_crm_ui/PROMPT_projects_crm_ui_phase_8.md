@@ -17,8 +17,13 @@ Use this role when implementing in Cursor or when invoking CLIs for this phase.
 
 ### Preferred tool
 
-- [x] Cursor (default)
-- [ ] Claude CLI — for API security review if needed
+- [x] **Cursor (default)** — filter UI, date range, filter bar (per GUIDE_PREFERENCES.md)
+- [ ] Claude CLI — for API/security review of filter params if needed
+- [ ] Gemini CLI
+- [ ] OpenCode CLI
+- [ ] Multi-CLI
+
+**Tool note:** API/filter params: Claude CLI optional; UI: Cursor. Cursor applies and verifies.
 
 ### Context
 
@@ -43,8 +48,8 @@ Add **advanced filtering** for the QR Codes table: global search, per-column fil
 
 ### Steps (ordered)
 
-1. Load `gf-security` and `gf-api`; ensure GET list route validates all query params with Zod and applies org scope.
-2. Extend QR codes list API to accept and apply `search`, `createdFrom`/`createdTo`, `expiresFrom`/`expiresTo`, `lastScanFrom`/`lastScanTo` (or equivalent); keep `limit`/`offset`.
+1. Load `gf-security` and `gf-api`; for the API work in this phase, run **Claude CLI** with this prompt to design and review the filter/query params (Zod validation, org scope, `deletedAt: null`) before you apply changes in Cursor.
+2. Extend QR codes list API to accept and apply `search`, `createdFrom`/`createdTo`, `expiresFrom`/`expiresTo`, `lastScanFrom`/`lastScanTo` (or equivalent); keep `limit`/`offset`, following the Claude-reviewed contract.
 3. Add filter UI: global search (debounced), date range inputs in a popover or filter bar; use @gate-access/ui components.
 4. Wire filter state to data fetch (e.g. useSWR key includes filter params); table updates when filters change.
 5. Add unit or integration tests for API: filter params are applied and org scope is enforced.

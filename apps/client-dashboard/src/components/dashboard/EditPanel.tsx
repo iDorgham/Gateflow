@@ -116,7 +116,7 @@ export function EditPanel({
       {/* Panel: slide from right (or left in RTL) */}
       <div
         className={cn(
-          'relative z-10 flex w-full max-w-xl flex-col border-border bg-card shadow-xl',
+          'relative z-10 flex w-full max-w-2xl flex-col border-border bg-card shadow-xl',
           'animate-in duration-300',
           isRtl ? 'slide-in-from-left border-r' : 'slide-in-from-right border-l',
           isRtl ? 'ml-0 mr-auto' : 'ml-auto mr-0'

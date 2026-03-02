@@ -17,7 +17,13 @@ Use this role when implementing in Cursor or when invoking CLIs for this phase.
 
 ### Preferred tool
 
-- [x] Cursor (default)
+- [ ] Cursor (default)
+- [x] **Claude CLI** — sort/pagination API, allowlisted params, org scope (per GUIDE_PREFERENCES.md)
+- [ ] Gemini CLI
+- [ ] OpenCode CLI
+- [ ] Multi-CLI
+
+**Tool note:** Backend (sort, pagination API): Claude CLI; UI wiring: Cursor. Cursor applies and verifies.
 
 ### Context
 
