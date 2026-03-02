@@ -31,6 +31,7 @@ model Organization {
   gates            Gate[]
   gateAssignments  GateAssignment[]
   qrCodes          QRCode[]
+  auditLogs        AuditLog[]
   webhooks         Webhook[]
   apiKeys          ApiKey[]
   projects         Project[]
@@ -102,6 +103,7 @@ model User {
   deletedAt    DateTime?
 
   scanLogs        ScanLog[]
+  auditLogs       AuditLog[]
   refreshTokens   RefreshToken[]
   unit            Unit?
   gateAssignments GateAssignment[]
@@ -270,6 +272,24 @@ model ScanLog {
   @@index([userId])
   @@index([scannedAt])
   @@index([qrCodeId, scannedAt])
+}
+
+model AuditLog {
+  id             String       @id @default(cuid())
+  action         String
+  entityType     String
+  entityId       String?
+  metadata       Json?
+  createdAt      DateTime     @default(now())
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId String
+  user           User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+  userId         String?
+
+  @@index([organizationId])
+  @@index([userId])
+  @@index([createdAt])
 }
 
 model RefreshToken {
