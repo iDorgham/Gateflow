@@ -16,7 +16,6 @@ import { ThemeToggle } from './theme-toggle';
 import {
   Building,
   CreditCard,
-  GearIcon,
   PowerIcon,
   ShieldCheckIcon,
   StackIcon,

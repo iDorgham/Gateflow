@@ -5,11 +5,13 @@
 
 ## Phases
 
-- [ ] **Phase 1: Layout & Navigation**
-  - [ ] Create `settings-layout.tsx`
-  - [ ] Implement desktop sidebar & mobile tabs
-  - [ ] Add global search bar UI
-  - [ ] Verify responsive behavior
+- [x] **Phase 1: Layout & Navigation**
+  - [x] Create `settings-layout.tsx`
+  - [x] Implement desktop sidebar & mobile tabs
+  - [x] Add global search bar UI
+  - [x] Verify responsive behavior
+
+
 
 - [ ] **Phase 2: Core Tabs (General & Workspace)**
   - [ ] Build General tab (theme, language)
