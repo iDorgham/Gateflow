@@ -120,12 +120,12 @@
 
 ## Phase 11 — Apply table pattern to Contacts & Units
 
-**Status:** Not started  
+**Status:** Done  
 
-- [ ] Contacts table: same pattern (reorder, filter, sort, pagination, export, bulk) with Contacts columns.
-- [ ] Units table: same pattern with Units columns.
-- [ ] APIs extended for list/export/bulk where needed; org scope and auth on all.
-- [ ] `pnpm preflight` passes.
+- [x] Contacts table: same pattern (reorder, filter, sort, pagination, export, bulk) with Contacts columns.
+- [x] Units table: same pattern with Units columns.
+- [x] APIs extended for list/export/bulk where needed; org scope and auth on all.
+- [x] `pnpm preflight` passes.
 
 ---
 

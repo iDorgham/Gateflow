@@ -17,6 +17,7 @@ export interface TableViewState {
 }
 
 export const CONTACTS_COLUMN_IDS = [
+  'select',
   'avatar',
   'firstName',
   'lastName',
@@ -32,6 +33,7 @@ export const CONTACTS_COLUMN_IDS = [
 ] as const;
 
 export const UNITS_COLUMN_IDS = [
+  'select',
   'name',
   'type',
   'size',
@@ -48,8 +50,8 @@ export const UNITS_COLUMN_IDS = [
 ] as const;
 
 /** Columns that cannot be hidden (id/name) */
-export const CONTACTS_PINNED = new Set(['avatar', 'firstName', 'lastName', 'actions']);
-export const UNITS_PINNED = new Set(['name', 'actions']);
+export const CONTACTS_PINNED = new Set(['select', 'avatar', 'firstName', 'lastName', 'actions']);
+export const UNITS_PINNED = new Set(['select', 'name', 'actions']);
 
 export const PRESET_VIEWS: Record<string, Record<string, boolean>> = {
   Default: {}, // all visible

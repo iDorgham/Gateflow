@@ -103,6 +103,7 @@ export default function ContactsPage() {
   const [editing, setEditing] = useState<ContactRow | null>(null);
   const [form, setForm] = useState(emptyForm());
   const [deleteTarget, setDeleteTarget] = useState<ContactRow | null>(null);
+  const [bulkDeleteConfirmOpen, setBulkDeleteConfirmOpen] = useState(false);
   const [customizerOpen, setCustomizerOpen] = useState(false);
   const [viewUnitsFor, setViewUnitsFor] = useState<ContactRow | null>(null);
   const [selectedContactIds, setSelectedContactIds] = useState<string[]>([]);
@@ -744,6 +745,66 @@ export default function ContactsPage() {
     }
   }
 
+  function exportSelectedCSV() {
+    if (selectedContactIds.length === 0) return;
+    const toExport = contacts.filter((c) => selectedContactIds.includes(c.id));
+    const escape = (v: string) => {
+      const s = String(v).replace(/"/g, '""');
+      if (/^[=+\-@\t]/.test(s)) return `'${s}'`;
+      return `"${s}"`;
+    };
+    const header = ['First Name', 'Last Name', 'Birthday', 'Company', 'Phone', 'Email', 'Units'].map(escape).join(',');
+    const rows = toExport.map((c) =>
+      [
+        c.firstName,
+        c.lastName,
+        c.birthday ?? '',
+        c.company ?? '',
+        c.phone ?? '',
+        c.email ?? '',
+        c.units.map((u) => u.name).join('; '),
+      ]
+        .map((v) => escape(String(v)))
+        .join(',')
+    );
+    const csv = [header, ...rows].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'contacts-selected.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  async function doBulkDelete() {
+    if (selectedContactIds.length === 0) return;
+    startTransition(async () => {
+      try {
+        const res = await fetch('/api/contacts/bulk-delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ids: selectedContactIds }),
+        });
+        const json = await res.json();
+        if (!json.success) throw new Error(json.message);
+        toast.success(
+          t('residents.bulkDeleteSuccess', {
+            count: selectedContactIds.length,
+            defaultValue: `Deleted ${selectedContactIds.length} contact(s)`,
+          })
+        );
+        setBulkDeleteConfirmOpen(false);
+        setSelectedContactIds([]);
+        refetch();
+      } catch (err: unknown) {
+        toast.error(
+          err instanceof Error ? err.message : t('residents.bulkDeleteFailed', 'Bulk delete failed')
+        );
+      }
+    });
+  }
+
   function importCSV(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -863,7 +924,7 @@ export default function ContactsPage() {
       />
 
       {contacts.length > 0 && (
-        <div className="flex items-center gap-2 rounded-lg border bg-muted/20 px-3 py-2">
+        <div className="flex flex-wrap items-center gap-2 rounded-lg border bg-muted/20 px-3 py-2">
           <NativeSelect
             value={bulkTagId}
             onChange={(e) => setBulkTagId(e.target.value)}
@@ -891,6 +952,25 @@ export default function ContactsPage() {
             onClick={() => applyBulkTagAction('remove')}
           >
             {t('residents.removeTagFromSelected', 'Remove tag from selected')}
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={selectedContactIds.length === 0}
+            onClick={exportSelectedCSV}
+          >
+            <Download className="h-3.5 w-3.5 mr-1" />
+            {t('residents.exportSelected', 'Export selected')}
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            className="text-destructive hover:text-destructive"
+            disabled={selectedContactIds.length === 0}
+            onClick={() => setBulkDeleteConfirmOpen(true)}
+          >
+            <Trash2 className="h-3.5 w-3.5 mr-1" />
+            {t('residents.bulkDelete', 'Delete selected')}
           </Button>
           <span className="text-xs text-muted-foreground">
             {t('residents.selectedCount', {
@@ -1294,6 +1374,38 @@ export default function ContactsPage() {
               <Button
                 variant="destructive"
                 onClick={doDelete}
+                disabled={isPending}
+              >
+                {isPending
+                  ? t('modal.actions.deleting', 'Deleting…')
+                  : t('common.delete', 'Delete')}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
+
+      {bulkDeleteConfirmOpen && (
+        <Dialog open={bulkDeleteConfirmOpen} onOpenChange={setBulkDeleteConfirmOpen}>
+          <DialogContent className="max-w-sm">
+            <DialogHeader>
+              <DialogTitle>
+                {t('residents.deleteSelectedConfirmTitle', 'Delete selected contacts?')}
+              </DialogTitle>
+            </DialogHeader>
+            <p className="text-sm text-muted-foreground">
+              {t('residents.deleteSelectedConfirm', {
+                count: selectedContactIds.length,
+                defaultValue: `Are you sure you want to delete ${selectedContactIds.length} contact(s)? This action cannot be undone.`,
+              })}
+            </p>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setBulkDeleteConfirmOpen(false)}>
+                {t('common.cancel', 'Cancel')}
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={doBulkDelete}
                 disabled={isPending}
               >
                 {isPending

@@ -9,6 +9,7 @@ import {
   Input,
   Label,
   NativeSelect,
+  Checkbox,
   Table,
   TableBody,
   TableCell,
@@ -142,6 +143,8 @@ export default function UnitsPage() {
   const [editing, setEditing] = useState<Unit | null>(null);
   const [form, setForm] = useState(emptyForm());
   const [deleteTarget, setDeleteTarget] = useState<Unit | null>(null);
+  const [bulkDeleteConfirmOpen, setBulkDeleteConfirmOpen] = useState(false);
+  const [selectedUnitIds, setSelectedUnitIds] = useState<string[]>([]);
   const [linkTarget, setLinkTarget] = useState<Unit | null>(null);
   const [linkUserId, setLinkUserId] = useState<string>('');
   const [customizerOpen, setCustomizerOpen] = useState(false);
@@ -175,6 +178,7 @@ export default function UnitsPage() {
   }, [savedTableView.columnOrder, savedTableView.columnVisibility]);
 
   const unitColumns = [
+    { id: 'select', label: '', canHide: false },
     { id: 'name', label: t('units.table.name', 'Unit ID'), canHide: false },
     { id: 'type', label: t('units.table.type', 'Type'), canHide: true },
     { id: 'size', label: t('units.table.size', 'Size'), canHide: true },
@@ -245,8 +249,25 @@ export default function UnitsPage() {
   const page = data?.page ?? 1;
   const pageSize = data?.pageSize ?? 25;
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const allUnitsSelected =
+    units.length > 0 && units.every((u) => selectedUnitIds.includes(u.id));
 
   const renderUnitCell = (columnId: string, u: Unit) => {
+    if (columnId === 'select')
+      return (
+        <TableCell key={columnId} className="w-10">
+          <Checkbox
+            checked={selectedUnitIds.includes(u.id)}
+            onChange={(e) => {
+              const checked = e.target.checked;
+              setSelectedUnitIds((prev) =>
+                checked ? [...prev, u.id] : prev.filter((id) => id !== u.id)
+              );
+            }}
+            aria-label={t('residents.selectRow', 'Select row')}
+          />
+        </TableCell>
+      );
     if (columnId === 'name')
       return (
         <TableCell key={columnId} className="font-medium">
@@ -411,7 +432,18 @@ export default function UnitsPage() {
   const reactTableColumns = visibleColumns.map((col) => {
     const def: ColumnDef<Unit> = {
       id: col.id,
-      header: () => col.label,
+      header: () =>
+        col.id === 'select' ? (
+          <Checkbox
+            checked={allUnitsSelected}
+            onChange={(e) => {
+              setSelectedUnitIds(e.target.checked ? units.map((u) => u.id) : []);
+            }}
+            aria-label={t('residents.selectAll', 'Select all')}
+          />
+        ) : (
+          col.label
+        ),
       cell: ({ row }) => renderUnitCell(col.id, row.original),
     };
     return def;
@@ -631,6 +663,64 @@ export default function UnitsPage() {
     }
   }
 
+  function exportSelectedCSV() {
+    if (selectedUnitIds.length === 0) return;
+    const toExport = units.filter((u) => selectedUnitIds.includes(u.id));
+    const escape = (v: string) => {
+      const s = String(v).replace(/"/g, '""');
+      if (/^[=+\-@\t]/.test(s)) return `'${s}'`;
+      return `"${s}"`;
+    };
+    const header = ['Name', 'Type', 'QR Quota', 'Project', 'Residents'].map(escape).join(',');
+    const rows = toExport.map((u) =>
+      [
+        u.name,
+        u.type,
+        String(u.qrQuota),
+        u.projectName ?? '',
+        u.contacts.map((c) => `${c.firstName} ${c.lastName}`).join('; '),
+      ]
+        .map((v) => escape(String(v)))
+        .join(',')
+    );
+    const csv = [header, ...rows].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'units-selected.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  async function doBulkDelete() {
+    if (selectedUnitIds.length === 0) return;
+    startTransition(async () => {
+      try {
+        const res = await fetch('/api/units/bulk-delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ids: selectedUnitIds }),
+        });
+        const json = await res.json();
+        if (!json.success) throw new Error(json.message);
+        toast.success(
+          t('residents.bulkDeleteSuccess', {
+            count: selectedUnitIds.length,
+            defaultValue: `Deleted ${selectedUnitIds.length} unit(s)`,
+          })
+        );
+        setBulkDeleteConfirmOpen(false);
+        setSelectedUnitIds([]);
+        refetch();
+      } catch (err: unknown) {
+        toast.error(
+          err instanceof Error ? err.message : t('residents.bulkDeleteFailed', 'Bulk delete failed')
+        );
+      }
+    });
+  }
+
   function importCSV(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -744,6 +834,36 @@ export default function UnitsPage() {
         onFiltersChange={updateFiltersAndUrl}
       />
 
+      {units.length > 0 && (
+        <div className="flex flex-wrap items-center gap-2 rounded-lg border bg-muted/20 px-3 py-2">
+          <Button
+            variant="outline"
+            size="sm"
+            disabled={selectedUnitIds.length === 0}
+            onClick={exportSelectedCSV}
+          >
+            <Download className="h-3.5 w-3.5 mr-1" />
+            {t('residents.exportSelected', 'Export selected')}
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            className="text-destructive hover:text-destructive"
+            disabled={selectedUnitIds.length === 0}
+            onClick={() => setBulkDeleteConfirmOpen(true)}
+          >
+            <Trash2 className="h-3.5 w-3.5 mr-1" />
+            {t('residents.bulkDelete', 'Delete selected')}
+          </Button>
+          <span className="text-xs text-muted-foreground">
+            {t('residents.selectedCount', {
+              count: selectedUnitIds.length,
+              defaultValue: `${selectedUnitIds.length} selected`,
+            })}
+          </span>
+        </div>
+      )}
+
       {viewContactsFor && (
         <ViewContactsModal
           open={!!viewContactsFor}
@@ -786,9 +906,11 @@ export default function UnitsPage() {
                     <TableHead
                       key={header.id}
                       className={
-                        columnId === 'actions'
-                          ? 'w-24'
-                          : columnId === 'visitsInRange' ||
+                        columnId === 'select'
+                          ? 'w-10'
+                          : columnId === 'actions'
+                            ? 'w-24'
+                            : columnId === 'visitsInRange' ||
                               columnId === 'passesInRange' ||
                               columnId === 'lastVisitInRange' ||
                               columnId === 'linkedContactCount'
@@ -1109,6 +1231,38 @@ export default function UnitsPage() {
               <Button
                 variant="destructive"
                 onClick={doDelete}
+                disabled={isPending}
+              >
+                {isPending
+                  ? t('modal.actions.deleting', 'Deleting…')
+                  : t('common.delete', 'Delete')}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
+
+      {bulkDeleteConfirmOpen && (
+        <Dialog open={bulkDeleteConfirmOpen} onOpenChange={setBulkDeleteConfirmOpen}>
+          <DialogContent className="max-w-sm">
+            <DialogHeader>
+              <DialogTitle>
+                {t('residents.deleteSelectedConfirmTitleUnits', 'Delete selected units?')}
+              </DialogTitle>
+            </DialogHeader>
+            <p className="text-sm text-muted-foreground">
+              {t('residents.deleteSelectedConfirmUnits', {
+                count: selectedUnitIds.length,
+                defaultValue: `Are you sure you want to delete ${selectedUnitIds.length} unit(s)? This action cannot be undone.`,
+              })}
+            </p>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setBulkDeleteConfirmOpen(false)}>
+                {t('common.cancel', 'Cancel')}
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={doBulkDelete}
                 disabled={isPending}
               >
                 {isPending
