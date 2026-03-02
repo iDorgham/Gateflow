@@ -140,7 +140,7 @@
 
 @layer base {
   html {
-    zoom: 0.85;
+    zoom: 1;
   }
   * {
     @apply border-border;

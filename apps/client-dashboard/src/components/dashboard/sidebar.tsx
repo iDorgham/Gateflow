@@ -60,13 +60,30 @@ const getNavGroups = (t: TFunction, permissions: Record<string, boolean>) => {
       exact: true,
     },
     {
+      label: t('sidebar.projects', 'Projects'),
+      href: '/dashboard/projects',
+      icon: StackIcon,
+    },
+    {
+      label: t('sidebar.contacts', 'Contacts'),
+      href: '/dashboard/residents/contacts',
+      icon: AddressBookIcon,
+      permission: 'gates:manage' as Permission,
+    },
+    {
+      label: t('sidebar.units', 'Units'),
+      href: '/dashboard/residents/units',
+      icon: BuildingsIcon,
+      permission: 'gates:manage' as Permission,
+    },
+    {
       label: t('sidebar.qrCodes', 'QR Codes'),
       href: '/dashboard/qrcodes',
       icon: QrCodeIcon,
       permission: 'qr:create' as Permission,
     },
     {
-      label: t('sidebar.scanLogs', 'Scan Logs'),
+      label: t('sidebar.accessLogs', 'Access logs'),
       href: '/dashboard/scans',
       icon: ScanIcon,
       permission: 'scans:view' as Permission,
@@ -78,33 +95,21 @@ const getNavGroups = (t: TFunction, permissions: Record<string, boolean>) => {
       permission: 'analytics:view' as Permission,
     },
     {
+      label: t('sidebar.watchlist', 'Watchlist'),
+      href: '/dashboard/team/watchlist',
+      icon: ListChecksIcon,
+      permission: 'gates:manage' as Permission,
+    },
+    {
       label: t('sidebar.gates', 'Gates'),
       href: '/dashboard/gates',
       icon: DoorOpenIcon,
       permission: 'gates:manage' as Permission,
     },
     {
-      label: t('sidebar.units', 'Units'),
-      href: '/dashboard/residents/units',
-      icon: BuildingsIcon,
-      permission: 'gates:manage' as Permission,
-    },
-    {
-      label: t('sidebar.contacts', 'Contacts'),
-      href: '/dashboard/residents/contacts',
-      icon: AddressBookIcon,
-      permission: 'gates:manage' as Permission,
-    },
-    {
       label: t('sidebar.gateAssignments', 'Gate assignments'),
       href: '/dashboard/team/gate-assignments',
       icon: UsersFourIcon,
-      permission: 'gates:manage' as Permission,
-    },
-    {
-      label: t('sidebar.watchlist', 'Watchlist'),
-      href: '/dashboard/team/watchlist',
-      icon: ListChecksIcon,
       permission: 'gates:manage' as Permission,
     },
     {

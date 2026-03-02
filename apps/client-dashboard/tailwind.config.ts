@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss';
+import animate from 'tailwindcss-animate';
 
 // @ts-ignore – relative import for jiti (Tailwind's TS loader)
 import { tokens } from '../../packages/ui/src/tokens';
@@ -40,7 +41,7 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [animate],
 };
 
 export default config;
