@@ -52,7 +52,7 @@ export function ViewUnitsModal({
           ) : (
             <ul className="space-y-2">
               {units.map((u) => (
-                <li key={u.id} className="flex items-center justify-between rounded-lg border px-3 py-2">
+                <li key={u.id} className="flex items-center justify-between rounded-lg border border-border px-3 py-2">
                   <span className="font-medium">{u.name}</span>
                   {u.type && (
                     <Badge variant="outline" className="text-xs">

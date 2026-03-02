@@ -34,17 +34,19 @@
 
 ## Phase 2 — Units Page
 
-**Status:** Pending  
+**Status:** Done  
+**Completed:** 2026-03-02  
 
-- [ ] Audit units page and ViewUnitsModal for hardcoded hex
-- [ ] Replace with semantic tokens
-- [ ] ResidentsFilterBar uses tokens (shared with contacts)
-- [ ] `pnpm preflight` passes
+- [x] Audit units page and ViewUnitsModal for hardcoded colors
+- [x] Replace with semantic tokens (potential vacancy badge: text-warning, border-warning/50)
+- [x] ResidentsFilterBar uses tokens (shared with contacts)
+- [x] `pnpm preflight` passes
 
-**Files to touch:**
+**Files changed:**
 - `apps/client-dashboard/src/app/[locale]/dashboard/residents/units/page.tsx`
 - `apps/client-dashboard/src/components/dashboard/residents/ViewUnitsModal.tsx`
-- `apps/client-dashboard/src/components/dashboard/residents/ResidentsFilterBar.tsx` (if needed)
+- `apps/client-dashboard/src/components/dashboard/residents/ResidentsFilterBar.tsx`
+- `apps/client-dashboard/src/components/dashboard/residents/TableCustomizerModal.tsx`
 
 ---
 

@@ -254,7 +254,7 @@ export default function UnitsPage() {
           {u.potentialVacancy && (
             <Badge
               variant="outline"
-              className="text-xs text-amber-600 border-amber-400"
+              className="text-xs text-warning border-warning/50"
             >
               {t('units.potentialVacancy', 'Potential vacancy')}
             </Badge>

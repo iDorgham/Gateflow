@@ -135,12 +135,12 @@ export function ResidentsFilterBar({
   return (
     <div
       className={cn(
-        'flex flex-wrap items-center gap-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/50 p-3',
+        'flex flex-wrap items-center gap-3 rounded-xl border border-border bg-card p-3',
         className
       )}
     >
       <div className="flex items-center gap-2">
-        <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
+        <span className="text-sm font-medium text-foreground">
           {t('analytics.filterDateRange', 'Date range')}
         </span>
         <Button
@@ -181,7 +181,7 @@ export function ResidentsFilterBar({
 
       {projects.length > 0 && (
         <div className="flex items-center gap-2">
-          <label className="text-sm font-medium text-slate-600 dark:text-slate-400 sr-only">
+          <label className="text-sm font-medium text-foreground sr-only">
             {t('analytics.filterProject', 'Project')}
           </label>
           <Select
@@ -201,7 +201,7 @@ export function ResidentsFilterBar({
 
       {gates.length > 0 && (
         <div className="flex items-center gap-2">
-          <label className="text-sm font-medium text-slate-600 dark:text-slate-400 sr-only">
+          <label className="text-sm font-medium text-foreground sr-only">
             {t('analytics.filterGate', 'Gate')}
           </label>
           <Select
@@ -220,7 +220,7 @@ export function ResidentsFilterBar({
       )}
 
       <div className="flex items-center gap-2">
-        <label className="text-sm font-medium text-slate-600 dark:text-slate-400 sr-only">
+        <label className="text-sm font-medium text-foreground sr-only">
           {t('analytics.filterUnitType', 'Unit type')}
         </label>
         <Select
@@ -248,7 +248,7 @@ export function ResidentsFilterBar({
 
       {tags.length > 0 && (
         <div className="flex items-center gap-2">
-          <label className="text-sm font-medium text-slate-600 dark:text-slate-400 sr-only">
+          <label className="text-sm font-medium text-foreground sr-only">
             {t('residents.filterByTag', 'Filter by tag')}
           </label>
           <Select

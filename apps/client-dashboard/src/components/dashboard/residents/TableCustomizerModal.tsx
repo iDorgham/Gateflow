@@ -112,7 +112,7 @@ export function TableCustomizerModal({
               return (
                 <div
                   key={id}
-                  className="flex items-center gap-2 rounded-lg border p-2"
+                  className="flex items-center gap-2 rounded-lg border border-border p-2"
                 >
                   <span className="text-muted-foreground" aria-hidden>
                     <GripVertical className="h-4 w-4" />
