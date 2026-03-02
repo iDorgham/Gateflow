@@ -20,12 +20,12 @@ export function AnalyticsChartPlaceholder({ mode, className }: AnalyticsChartPla
   return (
     <div
       className={cn(
-        'flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-900/30 min-h-[280px]',
+        'flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-border bg-muted min-h-[280px]',
         className
       )}
     >
-      <p className="text-sm font-medium text-slate-500 dark:text-slate-400">{label}</p>
-      <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
+      <p className="text-sm font-medium text-muted-foreground">{label}</p>
+      <p className="mt-1 text-xs text-muted-foreground">
         {t('analytics.placeholderComingSoon', 'Coming in Phase 2')}
       </p>
     </div>

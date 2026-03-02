@@ -29,7 +29,7 @@ export function AnalyticsApplyFiltersButton({ locale, filters, className }: Anal
       >
         {t('analytics.applyToContacts', 'Contacts')}
       </Link>
-      <span className="text-slate-400">|</span>
+      <span className="text-muted-foreground">|</span>
       <Link
         href={unitsHref}
         className="text-sm font-medium text-primary hover:underline"

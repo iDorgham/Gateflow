@@ -23,7 +23,7 @@ export function ExportChartButton({ targetRef }: ExportChartButtonProps) {
       const canvas = await html2canvas(targetRef.current, {
         useCORS: true,
         scale: Math.min(window.devicePixelRatio || 1, 2),
-        backgroundColor: '#ffffff',
+        backgroundColor: 'hsl(var(--background))',
       });
 
       const link = document.createElement('a');
@@ -40,7 +40,7 @@ export function ExportChartButton({ targetRef }: ExportChartButtonProps) {
     <button
       type="button"
       onClick={onExport}
-      className="no-print inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-600 transition-colors hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
+      className="no-print inline-flex min-h-11 items-center gap-1.5 rounded-lg border border-border bg-background px-3 py-2 text-xs font-medium text-foreground transition-colors hover:bg-muted"
       aria-label={t('analytics.exportChart', 'Export chart')}
     >
       <Download className="h-3.5 w-3.5" aria-hidden="true" />

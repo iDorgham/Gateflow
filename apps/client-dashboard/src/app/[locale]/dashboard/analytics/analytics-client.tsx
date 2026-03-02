@@ -55,10 +55,10 @@ export function AnalyticsClient({ kpiData, gates = [] }: AnalyticsClientProps) {
       {/* Header: title, mode toggle, export (Marketing), print */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
+          <h1 className="text-2xl font-bold text-foreground">
             {t('analytics.title')}
           </h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400">
+          <p className="text-sm text-muted-foreground">
             {t('analytics.subtitle')}
           </p>
         </div>

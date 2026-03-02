@@ -85,7 +85,7 @@ export function AnalyticsHeatmapChart({ filters, locale: _locale, className }: A
               {Array.from({ length: 24 }, (_, h) => (
                 <div
                   key={h}
-                  className="flex-1 text-center text-[9px] text-slate-400"
+                  className="flex-1 text-center text-[9px] text-muted-foreground"
                   style={{ minWidth: 18 }}
                 >
                   {h % 4 === 0 ? t('analytics.hourLabel', { h }) : ''}
@@ -94,7 +94,7 @@ export function AnalyticsHeatmapChart({ filters, locale: _locale, className }: A
             </div>
             {DOW_LABELS.map((dayKey, dow) => (
               <div key={dow} className="flex items-center">
-                <div className="w-10 shrink-0 pr-2 text-right text-[10px] text-slate-500">
+                <div className="w-10 shrink-0 pr-2 text-right text-[10px] text-muted-foreground">
                   {t(`analytics.daysOfWeek.${dayKey}`)}
                 </div>
                 {Array.from({ length: 24 }, (_, hour) => {
@@ -115,8 +115,8 @@ export function AnalyticsHeatmapChart({ filters, locale: _locale, className }: A
                         height: 16,
                         backgroundColor:
                           intensity > 0
-                            ? `rgba(59,130,246,${Math.max(0.08, intensity)})`
-                            : '#f1f5f9',
+                            ? `rgba(var(--primary-rgb),${Math.max(0.08, intensity)})`
+                            : 'hsl(var(--muted))',
                       }}
                     />
                   );

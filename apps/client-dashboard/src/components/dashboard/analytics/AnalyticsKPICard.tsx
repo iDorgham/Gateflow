@@ -20,8 +20,8 @@ export function AnalyticsKPICard({ title, value, trend, className }: AnalyticsKP
             <span
               className={cn(
                 'text-sm font-medium',
-                trend.dir === 'up' && 'text-green-600 dark:text-green-400',
-                trend.dir === 'down' && 'text-rose-600 dark:text-rose-400'
+                trend.dir === 'up' && 'text-success',
+                trend.dir === 'down' && 'text-destructive'
               )}
             >
               {trend.dir === 'up' ? '+' : '-'}{trend.pct}%

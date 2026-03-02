@@ -78,12 +78,12 @@ export function AnalyticsOperatorLeaderboard({ filters, className }: AnalyticsOp
         ) : (
           <ul className="space-y-2">
             {data.map((op, i) => (
-              <li key={op.userId} className="flex items-center justify-between rounded-md px-2 py-1.5 hover:bg-slate-50 dark:hover:bg-slate-800/50">
+              <li key={op.userId} className="flex items-center justify-between rounded-md px-2 py-1.5 hover:bg-muted">
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-medium text-slate-400 w-5">{i + 1}.</span>
                   <span className="text-sm font-medium">{op.name || op.email || 'Unknown'}</span>
                 </div>
-                <span className="text-sm font-medium text-slate-600 dark:text-slate-400">{op.scanCount.toLocaleString()}</span>
+                <span className="text-sm font-medium text-foreground">{op.scanCount.toLocaleString()}</span>
               </li>
             ))}
           </ul>

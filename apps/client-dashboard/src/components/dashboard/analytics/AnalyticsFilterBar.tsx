@@ -123,12 +123,12 @@ export function AnalyticsFilterBar({
   return (
     <div
       className={cn(
-        'rounded-xl border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-900/50',
+        'rounded-xl border border-border bg-card p-3',
         className
       )}
     >
       <div className="flex items-center justify-between sm:hidden">
-        <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
+        <span className="text-sm font-medium text-foreground">
           {t('analytics.filters', 'Filters')}
         </span>
         <Button
@@ -153,7 +153,7 @@ export function AnalyticsFilterBar({
       >
         {/* Date range presets */}
         <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto">
-          <span className="text-sm font-medium text-slate-600 dark:text-slate-400">
+          <span className="text-sm font-medium text-foreground">
             {t('analytics.filterDateRange', 'Date range')}
           </span>
           <Button
@@ -200,7 +200,7 @@ export function AnalyticsFilterBar({
         {/* Project */}
         {projects.length > 0 && (
           <div className="flex w-full items-center gap-2 sm:w-auto">
-            <label htmlFor="analytics-project" className="sr-only text-sm font-medium text-slate-600 dark:text-slate-400">
+            <label htmlFor="analytics-project" className="sr-only text-sm font-medium text-foreground">
               {t('analytics.filterProject', 'Project')}
             </label>
             <Select
@@ -222,7 +222,7 @@ export function AnalyticsFilterBar({
         {/* Gate */}
         {gates.length > 0 && (
           <div className="flex w-full items-center gap-2 sm:w-auto">
-            <label htmlFor="analytics-gate" className="sr-only text-sm font-medium text-slate-600 dark:text-slate-400">
+            <label htmlFor="analytics-gate" className="sr-only text-sm font-medium text-foreground">
               {t('analytics.filterGate', 'Gate')}
             </label>
             <Select
@@ -243,7 +243,7 @@ export function AnalyticsFilterBar({
 
         {/* Unit type */}
         <div className="flex w-full items-center gap-2 sm:w-auto">
-          <label htmlFor="analytics-unittype" className="sr-only text-sm font-medium text-slate-600 dark:text-slate-400">
+          <label htmlFor="analytics-unittype" className="sr-only text-sm font-medium text-foreground">
             {t('analytics.filterUnitType', 'Unit type')}
           </label>
           <Select
