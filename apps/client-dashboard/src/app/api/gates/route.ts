@@ -94,6 +94,8 @@ export async function GET(request?: NextRequest): Promise<NextResponse> {
 const CreateGateSchema = z.object({
   name: z.string().min(1, 'Name is required').max(100),
   location: z.string().max(200).optional(),
+  projectId: z.string().optional().nullable(),
+  isActive: z.boolean().optional(),
 });
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
@@ -118,14 +120,25 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    const { name, location } = validation.data;
+    const { name, location, projectId, isActive } = validation.data;
+
+    if (projectId) {
+      const project = await prisma.project.findFirst({
+        where: { id: projectId, organizationId: claims.orgId, deletedAt: null },
+        select: { id: true },
+      });
+      if (!project) {
+        return NextResponse.json({ success: false, message: 'Project not found' }, { status: 404 });
+      }
+    }
 
     const gate = await prisma.gate.create({
       data: {
         name: name.trim(),
         location: location?.trim() ?? null,
         organizationId: claims.orgId,
-        isActive: true,
+        projectId: projectId ?? null,
+        isActive: isActive ?? true,
       },
       select: {
         id: true,

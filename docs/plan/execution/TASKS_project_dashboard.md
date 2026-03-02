@@ -89,23 +89,25 @@
 
 ## Phase 6 — Edit Panel + Project Page
 
-**Status:** Pending  
+**Status:** Done  
+**Completed:** 2026-03-02  
 
-- [ ] Edit project (PATCH)
-- [ ] Add contact (POST)
-- [ ] Add unit (POST, projectId from context)
-- [ ] Add/Edit gate (POST, PATCH; projectId in create)
-- [ ] Manage gate assignments (assign/unassign users to gates)
-- [ ] Add/Edit watchlist entry (POST; PATCH if added)
-- [ ] Search in panel (optional)
-- [ ] Permission checks (gates:manage for assignments, watchlist)
-- [ ] `pnpm preflight` passes
+- [x] Edit project (PATCH)
+- [x] Add contact (POST)
+- [x] Add unit (POST, projectId from context)
+- [x] Add/Edit gate (POST, PATCH; projectId in create)
+- [x] Manage gate assignments (assign/unassign users to gates)
+- [x] Add/Edit watchlist entry (POST; PATCH if added)
+- [ ] Search in panel (optional — deferred)
+- [x] Permission checks (gates:manage for assignments, watchlist)
+- [x] `pnpm preflight` passes
 
 **Files to touch:**
 - `apps/client-dashboard/src/app/[locale]/dashboard/projects/[projectId]/page.tsx`
-- Form components or inline forms for each entity
-- `apps/client-dashboard/src/app/api/gates/route.ts` (projectId in create)
-- `apps/client-dashboard/src/app/api/watchlist/route.ts` (PATCH if added)
+- `apps/client-dashboard/src/components/dashboard/project-detail/` (ProjectDetailActions, ProjectDetailContent, GatesCardWithEdit)
+- `apps/client-dashboard/src/app/api/projects/[id]/route.ts` (extended PATCH schema)
+- `apps/client-dashboard/src/app/api/gates/route.ts` (projectId, isActive in create)
+- `apps/client-dashboard/src/app/api/watchlist/[id]/route.ts` (new PATCH)
 
 ---
 

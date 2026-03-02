@@ -7,6 +7,11 @@ import { revalidatePath } from 'next/cache';
 
 const UpdateProjectSchema = z.object({
   name: z.string().min(1).max(100),
+  description: z.string().max(2000).optional().nullable(),
+  location: z.string().max(200).optional().nullable(),
+  logoUrl: z.string().url().optional().nullable(),
+  coverUrl: z.string().url().optional().nullable(),
+  website: z.string().url().optional().nullable(),
 });
 
 export async function PATCH(
@@ -34,9 +39,16 @@ export async function PATCH(
       return NextResponse.json({ error: 'Invalid request', details: parsed.error.flatten() }, { status: 400 });
     }
 
+    const data: Record<string, unknown> = { name: parsed.data.name };
+    if (parsed.data.description !== undefined) data.description = parsed.data.description;
+    if (parsed.data.location !== undefined) data.location = parsed.data.location;
+    if (parsed.data.logoUrl !== undefined) data.logoUrl = parsed.data.logoUrl;
+    if (parsed.data.coverUrl !== undefined) data.coverUrl = parsed.data.coverUrl;
+    if (parsed.data.website !== undefined) data.website = parsed.data.website;
+
     const updated = await prisma.project.update({
       where: { id },
-      data: { name: parsed.data.name },
+      data,
     });
 
     revalidatePath('/dashboard/settings');
