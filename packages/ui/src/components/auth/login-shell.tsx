@@ -4,6 +4,7 @@ import * as React from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { ShieldCheck, Shield } from 'lucide-react';
 import { cn } from '../../lib/utils';
+import { SquaresBackground } from './squares-background';
 
 const SPRING_BALANCED = { type: 'spring' as const, stiffness: 160, damping: 24 };
 const SIDEBAR_WIDTH = 96; // ~80–100px
@@ -194,16 +195,27 @@ export function LoginShell({
         )}
       </motion.aside>
 
-      {/* Right panel: accent layer fades out to reveal bg-background */}
-      <div className="relative flex-1 min-w-0 bg-background">
+      {/* Right panel: accent layer + animated grid, fades out to reveal bg-background */}
+      <div className="relative flex-1 min-w-0 bg-background overflow-hidden">
         <motion.div
-          className="absolute inset-0 bg-[hsl(var(--login-accent,19_100%_46%))]"
+          className="absolute inset-0"
           initial={false}
           animate={{ opacity: isSuccess ? 0 : 1 }}
           transition={{ duration: reduceMotion ? 0.05 : 0.4, delay: isSuccess ? 0.25 : 0 }}
           style={{ willChange: isSuccess ? 'opacity' : undefined }}
           aria-hidden
-        />
+        >
+          <div className="absolute inset-0 bg-[hsl(var(--login-accent,19_100%_46%))]" />
+          <SquaresBackground
+            speed={0.5}
+            squareSize={40}
+            direction="diagonal"
+            reducedMotion={!!reduceMotion}
+            borderColor="rgba(2, 0, 53, 0.35)"
+            hoverFillColor="rgba(2, 0, 53, 0.45)"
+            vignetteColor="rgba(2, 0, 53, 0.15)"
+          />
+        </motion.div>
       </div>
 
       {/* Top-right: language + theme (overlay) */}

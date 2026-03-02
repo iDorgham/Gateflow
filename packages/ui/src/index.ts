@@ -27,5 +27,6 @@ export * from './components/ui/scroll-area';
 export * from './components/ui/collapsible';
 
 export * from './components/auth/login-shell';
+export * from './components/auth/squares-background';
 export { cn } from './lib/utils';
 export * from './tokens';
