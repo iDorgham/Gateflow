@@ -461,6 +461,24 @@
       "allProjects": "All Projects",
       "branding": "Dashboard"
     },
+    "common": {
+      "retry": "Retry",
+      "cancel": "Cancel",
+      "create": "Create",
+      "save": "Save",
+      "delete": "Delete",
+      "refresh": "Refresh",
+      "export": "Export",
+      "page": "Page",
+      "asc": "Asc",
+      "desc": "Desc",
+      "sort": "Sort",
+      "clear": "Clear",
+      "selectAll": "Select all",
+      "selectRow": "Select row",
+      "pageSize": "Page size",
+      "deleting": "Deleting..."
+    },
     "settings": {
       "title": "System Control",
       "description": "Global configuration and administrative nodes for <1>{{orgName}}</1>.",

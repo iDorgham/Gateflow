@@ -502,7 +502,7 @@ export default function ContactsPage() {
       return <TableCell key={columnId}>—</TableCell>;
   };
 
-  const { data, isLoading, refetch } = useContacts(filters);
+  const { data, isLoading, isError, error, isFetching, refetch } = useContacts(filters);
   const contacts = data?.data ?? [];
   const total = data?.total ?? 0;
   const page = data?.page ?? 1;
@@ -997,8 +997,18 @@ export default function ContactsPage() {
         getPresetVisibility={(preset) => PRESET_VIEWS[preset] ?? {}}
       />
 
-      <div className="rounded-lg border bg-card">
-        <Table>
+      {isError ? (
+        <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-6 text-center">
+          <p className="text-sm font-medium text-destructive">
+            {error?.message ?? t('contacts.errors.loadFailed', 'Failed to load contacts')}
+          </p>
+          <Button variant="outline" size="sm" className="mt-4" onClick={() => refetch()}>
+            {t('common.retry', 'Retry')}
+          </Button>
+        </div>
+      ) : (
+      <div className={`rounded-lg border bg-card overflow-x-auto ${isFetching && !isLoading ? 'opacity-70 transition-opacity' : ''}`}>
+        <Table className="min-w-[800px]">
           <TableHeader>
             {contactsTable.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -1103,6 +1113,7 @@ export default function ContactsPage() {
           </div>
         )}
       </div>
+      )}
 
       {dialogOpen && (
         <Dialog>

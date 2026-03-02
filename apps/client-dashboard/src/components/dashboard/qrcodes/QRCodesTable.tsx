@@ -34,6 +34,7 @@ const STATUS_BADGE: Record<string, { variant?: 'default' | 'secondary' | 'destru
 interface QRCodesTableProps {
   data: QRCodeRow[];
   isLoading: boolean;
+  isFetching?: boolean;
   error: Error | null;
   onRefresh: () => void;
   locale: string;
@@ -48,6 +49,7 @@ interface QRCodesTableProps {
 export function QRCodesTable({
   data,
   isLoading,
+  isFetching = false,
   error,
   onRefresh,
   locale,
@@ -347,8 +349,8 @@ export function QRCodesTable({
 
   return (
     <div className="space-y-4">
-      <div className="rounded-xl border border-border overflow-hidden bg-card">
-        <Table>
+      <div className={`rounded-xl border border-border overflow-x-auto overflow-hidden bg-card relative ${isFetching ? 'opacity-80 transition-opacity' : ''}`}>
+        <Table className="min-w-[700px]">
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>

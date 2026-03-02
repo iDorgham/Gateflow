@@ -131,10 +131,10 @@
 
 ## Phase 12 — Tables polish, performance, mobile, security audit
 
-**Status:** Not started  
+**Status:** Done  
 
-- [ ] Loading skeleton, error state with retry, inline loading on filter/sort/page.
-- [ ] Responsive: mobile collapse or horizontal scroll; toolbar usable.
-- [ ] Virtualization where >500 rows; no unbounded queries.
-- [ ] Security audit: list/export/bulk endpoints — auth, org scope, soft deletes, validation, audit log; fix gaps.
-- [ ] `pnpm preflight` passes.
+- [x] Loading skeleton, error state with retry, inline loading on filter/sort/page.
+- [x] Responsive: mobile collapse or horizontal scroll; toolbar usable.
+- [x] Virtualization where >500 rows; no unbounded queries.
+- [x] Security audit: list/export/bulk endpoints — auth, org scope, soft deletes, validation, audit log; fix gaps.
+- [x] `pnpm preflight` passes.

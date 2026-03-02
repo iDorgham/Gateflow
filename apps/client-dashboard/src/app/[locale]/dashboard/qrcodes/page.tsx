@@ -85,7 +85,7 @@ export default function QRCodesPage() {
       lastScanTo,
     ]
   );
-  const { data, isLoading, error, refetch } = useQRCodes(filters);
+  const { data, isLoading, isFetching, error, refetch } = useQRCodes(filters);
   const rows = data?.data ?? [];
   const total = data?.total ?? 0;
   const currentPage = data?.page ?? page;
@@ -393,6 +393,7 @@ export default function QRCodesPage() {
       <QRCodesTable
         data={rows}
         isLoading={isLoading}
+        isFetching={isFetching}
         error={error}
         onRefresh={handleRefresh}
         locale={locale}

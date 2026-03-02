@@ -243,7 +243,7 @@ export default function UnitsPage() {
     .filter(Boolean);
 
   const UNIT_TYPE_LABELS = getUnitTypeLabels(t);
-  const { data, isLoading, refetch } = useUnits(filters);
+  const { data, isLoading, isError, error, isFetching, refetch } = useUnits(filters);
   const units = data?.data ?? [];
   const total = data?.total ?? 0;
   const page = data?.page ?? 1;
@@ -895,8 +895,18 @@ export default function UnitsPage() {
         getPresetVisibility={(preset) => PRESET_VIEWS[preset] ?? {}}
       />
 
-      <div className="rounded-lg border bg-card">
-        <Table>
+      {isError ? (
+        <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-6 text-center">
+          <p className="text-sm font-medium text-destructive">
+            {error?.message ?? t('units.errors.loadFailed', 'Failed to load units')}
+          </p>
+          <Button variant="outline" size="sm" className="mt-4" onClick={() => refetch()}>
+            {t('common.retry', 'Retry')}
+          </Button>
+        </div>
+      ) : (
+      <div className={`rounded-lg border bg-card overflow-x-auto ${isFetching && !isLoading ? 'opacity-70 transition-opacity' : ''}`}>
+        <Table className="min-w-[800px]">
           <TableHeader>
             {unitsTable.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
@@ -1002,6 +1012,7 @@ export default function UnitsPage() {
           </div>
         )}
       </div>
+      )}
 
       {/* Create / Edit Dialog */}
       {dialogOpen && (

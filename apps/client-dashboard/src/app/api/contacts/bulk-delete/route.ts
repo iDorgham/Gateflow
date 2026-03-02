@@ -74,6 +74,16 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       data: { deletedAt: new Date() },
     });
 
+    await prisma.auditLog.create({
+      data: {
+        organizationId: orgId,
+        userId: claims.sub ?? null,
+        action: 'CONTACTS_BULK_DELETE',
+        entityType: 'Contact',
+        metadata: { idsCount: ids.length, idsSample: ids.slice(0, 50) },
+      },
+    });
+
     return NextResponse.json({
       success: true,
       deleted: ids.length,
