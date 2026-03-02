@@ -13,10 +13,11 @@
 
 
 
-- [ ] **Phase 2: Core Tabs (General & Workspace)**
-  - [ ] Build General tab (theme, language)
-  - [ ] Build Workspace tab (branding, upload)
-  - [ ] Integrate with organization API
+- [x] **Phase 2: Core Tabs (General & Workspace)**
+  - [x] Build General tab (theme, language)
+  - [x] Build Workspace tab (branding, upload)
+  - [x] Integrate with organization API
+
 
 - [ ] **Phase 3: Project & Resource Mapping**
   - [ ] Implement Project CRUD API
