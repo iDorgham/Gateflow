@@ -7,13 +7,14 @@
 
 ## Phase 1 — Project Detail Data Layer
 
-**Status:** Pending  
+**Status:** Done  
+**Completed:** 2026-03-02  
 
-- [ ] Create `[projectId]/page.tsx` route
-- [ ] Implement project query with org scope
-- [ ] Add aggregates (contacts, unit types, QR/access metrics)
-- [ ] Fetch recent scan logs
-- [ ] `pnpm preflight` passes
+- [x] Create `[projectId]/page.tsx` route
+- [x] Implement project query with org scope
+- [x] Add aggregates (contacts, unit types, QR/access metrics)
+- [x] Fetch recent scan logs
+- [x] `pnpm preflight` passes
 
 **Files to touch:**
 - `apps/client-dashboard/src/app/[locale]/dashboard/projects/[projectId]/page.tsx` (new)
