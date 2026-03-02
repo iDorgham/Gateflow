@@ -231,7 +231,7 @@ export function BillingTab({ org, gateCount, qrCount }: BillingTabProps) {
                         <td className="px-8 py-5 text-xs font-bold text-muted-foreground/80 uppercase">{inv.date}</td>
                         <td className="px-8 py-5 text-sm font-black text-foreground">{inv.amount}</td>
                         <td className="px-8 py-5">
-                          <Badge className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-none shadow-none font-bold text-[9px] uppercase tracking-widest px-2.5 py-0.5 rounded-full">
+                          <Badge className="bg-success/10 text-success border-none shadow-none font-bold text-[9px] uppercase tracking-widest px-2.5 py-0.5 rounded-full">
                             {inv.status}
                           </Badge>
                         </td>

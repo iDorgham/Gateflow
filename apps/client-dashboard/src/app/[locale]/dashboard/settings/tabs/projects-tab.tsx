@@ -330,7 +330,7 @@ export function ProjectsTab({ projects: initial }: { projects: Project[] }) {
                         }}
                       >
                         {editingId === project.id ? (
-                          <Check className="h-4 w-4 text-emerald-500" />
+                          <Check className="h-4 w-4 text-success" />
                         ) : (
                           <Pencil className="h-4 w-4" />
                         )}
@@ -338,7 +338,7 @@ export function ProjectsTab({ projects: initial }: { projects: Project[] }) {
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-9 w-9 rounded-xl bg-background/50 backdrop-blur-sm text-muted-foreground hover:bg-destructive shadow-[0_0_15px_-3px_rgba(239,68,68,0)] hover:shadow-destructive/30 hover:text-destructive-foreground hover:border-destructive transition-all border border-border/50"
+                        className="h-9 w-9 rounded-xl bg-background/50 backdrop-blur-sm text-muted-foreground hover:bg-destructive shadow-none hover:shadow-destructive/30 hover:text-destructive-foreground hover:border-destructive transition-all border border-border/50"
                         onClick={() => {
                           setProjectToDelete(project);
                           setDeleteConfirmationText('');
@@ -353,7 +353,7 @@ export function ProjectsTab({ projects: initial }: { projects: Project[] }) {
                   <div className="flex flex-col xl:flex-row items-end justify-between gap-6">
                     <div className="flex flex-wrap items-center gap-3 w-full xl:w-auto">
                       <div className="flex items-center gap-3 bg-card border border-border rounded-xl p-3 px-4 shadow-sm group-hover:border-primary/20 transition-colors w-full sm:w-auto">
-                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-500">
+                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-success/10 text-success">
                           <ScrollText className="h-4 w-4" />
                         </div>
                         <div className="flex flex-col">
@@ -380,8 +380,8 @@ export function ProjectsTab({ projects: initial }: { projects: Project[] }) {
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-3 bg-card border border-border rounded-xl p-3 px-4 shadow-sm group-hover:border-blue-500/20 transition-colors w-full sm:w-auto">
-                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-500/10 text-blue-500">
+                      <div className="flex items-center gap-3 bg-card border border-border rounded-xl p-3 px-4 shadow-sm group-hover:border-chart-2/20 transition-colors w-full sm:w-auto">
+                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-chart-2/10 text-chart-2">
                           <Building className="h-4 w-4" />
                         </div>
                         <div className="flex flex-col">
@@ -394,8 +394,8 @@ export function ProjectsTab({ projects: initial }: { projects: Project[] }) {
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-3 bg-card border border-border rounded-xl p-3 px-4 shadow-sm group-hover:border-amber-500/20 transition-colors w-full sm:w-auto">
-                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-500/10 text-amber-500">
+                      <div className="flex items-center gap-3 bg-card border border-border rounded-xl p-3 px-4 shadow-sm group-hover:border-warning/20 transition-colors w-full sm:w-auto">
+                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-warning/10 text-warning">
                           <Users className="h-4 w-4" />
                         </div>
                         <div className="flex flex-col">
@@ -412,7 +412,7 @@ export function ProjectsTab({ projects: initial }: { projects: Project[] }) {
                     <div className="w-full xl:w-auto shrink-0">
                       <Button
                         asChild
-                        className="w-full xl:w-auto px-8 rounded-xl font-black uppercase tracking-widest text-[10px] h-12 shadow-[0_0_20px_-5px_rgba(14,165,233,0)] hover:shadow-primary/30 transition-all group/btn"
+                        className="w-full xl:w-auto px-8 rounded-xl font-black uppercase tracking-widest text-[10px] h-12 shadow-none hover:shadow-primary/30 transition-all group/btn"
                       >
                         <a
                           href={`/dashboard/projects/${project.id}`}

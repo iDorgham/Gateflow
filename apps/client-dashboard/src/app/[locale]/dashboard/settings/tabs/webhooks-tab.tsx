@@ -181,7 +181,7 @@ export function WebhooksTab({ initialWebhooks }: { initialWebhooks: WebhookRow[]
                     <div className="min-w-0 space-y-1">
                       <div className="flex items-center gap-3">
                         <h3 className="text-lg font-black text-foreground truncate uppercase tracking-tight">{wh.url}</h3>
-                        <Badge variant="outline" className="h-5 rounded-full px-2 text-[8px] font-black uppercase border-emerald-500/20 text-emerald-500 bg-emerald-500/5">SSL SECURED</Badge>
+                        <Badge variant="outline" className="h-5 rounded-full px-2 text-[8px] font-black uppercase border-success/20 text-success bg-success/5">SSL SECURED</Badge>
                       </div>
                       <div className="flex items-center gap-4">
                         <Badge variant="outline" className="text-[9px] font-black uppercase border-border bg-muted/50 py-0.5 px-3 tracking-widest">
@@ -234,8 +234,8 @@ export function WebhooksTab({ initialWebhooks }: { initialWebhooks: WebhookRow[]
                            <div className="flex items-center gap-4">
                             <div className={cn(
                                  "h-9 w-9 rounded-lg flex items-center justify-center transition-transform group-hover/row:scale-110",
-                                 delivery.status === 'SUCCESS' ? 'bg-emerald-500/10 text-emerald-500' : 
-                                 delivery.status === 'RETRYING' ? 'bg-amber-500/10 text-amber-500' :
+                                 delivery.status === 'SUCCESS' ? 'bg-success/10 text-success' : 
+                                 delivery.status === 'RETRYING' ? 'bg-warning/10 text-warning' :
                                  'bg-destructive/10 text-destructive'
                              )}>
                                {delivery.status === 'SUCCESS' ? <CheckCircle2 className="h-5 w-5" /> : 
@@ -254,8 +254,8 @@ export function WebhooksTab({ initialWebhooks }: { initialWebhooks: WebhookRow[]
                              <div className="text-right rtl:text-left">
                                <span className={cn(
                                    "text-[10px] font-black uppercase tracking-widest block",
-                                   delivery.status === 'SUCCESS' ? 'text-emerald-500' : 
-                                   delivery.status === 'RETRYING' ? 'text-amber-500' :
+                                   delivery.status === 'SUCCESS' ? 'text-success' : 
+                                   delivery.status === 'RETRYING' ? 'text-warning' :
                                    'text-destructive'
                                )}>
                                  {delivery.status === 'RETRYING' ? t('common.retrying', 'Retrying') : (delivery.statusCode || 'ERROR')}

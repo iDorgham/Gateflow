@@ -154,7 +154,7 @@ export function ApiKeysTab({ initialKeys }: { initialKeys: ApiKeyRow[] }) {
                 {t('settings.apiKeys.copyToken', 'Copy Secret')}
               </Button>
             </div>
-            <div className="mt-6 flex items-center gap-3 p-4 rounded-lg bg-amber-500/5 border border-amber-500/10 text-[10px] font-black uppercase tracking-widest text-amber-600">
+            <div className="mt-6 flex items-center gap-3 p-4 rounded-lg bg-warning/5 border border-warning/10 text-[10px] font-black uppercase tracking-widest text-warning">
                 <ShieldAlert className="h-4 w-4" />
                 {t('settings.apiKeys.vaultWarning', 'Leakage of this token compromises your workspace integrity.')}
             </div>
@@ -202,7 +202,7 @@ export function ApiKeysTab({ initialKeys }: { initialKeys: ApiKeyRow[] }) {
                         <div className="flex flex-col gap-1">
                           <span className="font-black text-foreground uppercase tracking-tight text-sm flex items-center gap-2">
                              {k.name}
-                             <Zap className="h-3 w-3 text-emerald-500" />
+                             <Zap className="h-3 w-3 text-success" />
                           </span>
                           <span className="text-[9px] font-bold text-muted-foreground/40 flex items-center gap-1.5 uppercase tracking-widest">
                             <Clock className="h-3 w-3" />
@@ -228,8 +228,8 @@ export function ApiKeysTab({ initialKeys }: { initialKeys: ApiKeyRow[] }) {
                         {k.lastUsedAt ? (
                           <div className="flex flex-col">
                              <span className="text-[11px] font-black text-foreground uppercase tracking-tight">{new Date(k.lastUsedAt).toLocaleDateString()}</span>
-                             <span className="text-[8px] uppercase font-black text-emerald-500 tracking-widest flex items-center gap-1">
-                                <div className="h-1 w-1 rounded-full bg-emerald-500 animate-pulse" />
+                             <span className="text-[8px] uppercase font-black text-success tracking-widest flex items-center gap-1">
+                                <div className="h-1 w-1 rounded-full bg-success animate-pulse" />
                                 Optimal
                              </span>
                            </div>

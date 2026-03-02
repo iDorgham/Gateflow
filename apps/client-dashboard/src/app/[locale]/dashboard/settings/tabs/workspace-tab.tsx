@@ -237,7 +237,7 @@ export function WorkspaceTab({ org }: { org: OrgData }) {
                     <div className="flex items-center justify-between">
                         <Label className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60">{t('settings.workspace.whiteLabel', 'White-Label Domain Infrastructure')}</Label>
                         {org.plan !== 'ENTERPRISE' && (
-                            <Badge variant="outline" className="text-[8px] font-black tracking-widest border-amber-500/20 text-amber-500 uppercase bg-amber-500/5">Enterprise Only</Badge>
+                            <Badge variant="outline" className="text-[8px] font-black tracking-widest border-warning/20 text-warning uppercase bg-warning/5">Enterprise Only</Badge>
                         )}
                     </div>
                     <div className="relative group">
@@ -424,7 +424,7 @@ export function WorkspaceTab({ org }: { org: OrgData }) {
                         </div>
                         <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest">
                             <span className="text-muted-foreground/60">Uptime Metric</span>
-                            <span className="text-emerald-500">99.99%</span>
+                            <span className="text-success">99.99%</span>
                         </div>
                         <div className="flex justify-between items-center text-[10px] font-bold uppercase tracking-widest">
                             <span className="text-muted-foreground/60">Geo-Region</span>

@@ -33,10 +33,10 @@ interface TeamMember {
 }
 
 const ROLE_PERMISSIONS: Record<string, { icon: LucideIcon; color: string }> = {
-  OWNER: { icon: ShieldAlert, color: 'border-amber-500/30 text-amber-500 bg-amber-500/5' },
+  OWNER: { icon: ShieldAlert, color: 'border-warning/30 text-warning bg-warning/5' },
   WORKSPACE_ADMIN: { icon: ShieldCheck, color: 'border-primary/30 text-primary bg-primary/5' },
   TENANT_USER: { icon: Users, color: 'border-border text-muted-foreground bg-muted/10' },
-  RESIDENT: { icon: Users, color: 'border-emerald-500/30 text-emerald-500 bg-emerald-500/5' },
+  RESIDENT: { icon: Users, color: 'border-success/30 text-success bg-success/5' },
 };
 export function TeamTab({ members, currentUserId }: { members: TeamMember[]; currentUserId: string }) {
   const { t } = useTranslation('dashboard');

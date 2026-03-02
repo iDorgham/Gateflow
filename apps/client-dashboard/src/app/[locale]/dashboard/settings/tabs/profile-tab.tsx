@@ -189,10 +189,10 @@ export function ProfileTab({ user: initialUser }: { user: ProfileUser }) {
                              </div>
                         </div>
                         <div className="flex items-center gap-3 p-3 rounded-lg hover:bg-muted/30 transition-colors cursor-pointer group">
-                             <Shield className="h-4 w-4 text-muted-foreground/40 group-hover:text-emerald-500 transition-colors" />
+                             <Shield className="h-4 w-4 text-muted-foreground/40 group-hover:text-success transition-colors" />
                              <div className="flex flex-col">
                                 <span className="text-[10px] font-bold uppercase tracking-widest text-foreground">2FA Status</span>
-                                <span className="text-[9px] text-emerald-500 uppercase font-black">Secured via HMAC</span>
+                                <span className="text-[9px] text-success uppercase font-black">Secured via HMAC</span>
                              </div>
                         </div>
                     </div>

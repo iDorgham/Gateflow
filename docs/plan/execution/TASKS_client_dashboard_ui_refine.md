@@ -67,16 +67,21 @@
 
 ## Phase 4 — Settings Page & Tabs
 
-**Status:** Pending  
+**Status:** Done  
+**Completed:** 2026-03-02  
 
-- [ ] Audit settings-client and all 11 tabs for hardcoded hex
-- [ ] Replace with semantic tokens
-- [ ] `pnpm preflight` passes
+- [x] Audit settings-client and all 11 tabs for hardcoded hex
+- [x] Replace with semantic tokens (amber→warning, emerald→success, blue→chart-2, rgba shadows→shadow-none/hover variants)
+- [x] `pnpm preflight` passes
 
-**Files to touch:**
-- `apps/client-dashboard/src/app/[locale]/dashboard/settings/page.tsx`
-- `apps/client-dashboard/src/app/[locale]/dashboard/settings/settings-client.tsx`
-- `apps/client-dashboard/src/app/[locale]/dashboard/settings/tabs/*.tsx`
+**Files changed:**
+- `apps/client-dashboard/src/app/[locale]/dashboard/settings/tabs/api-keys-tab.tsx`
+- `apps/client-dashboard/src/app/[locale]/dashboard/settings/tabs/team-tab.tsx`
+- `apps/client-dashboard/src/app/[locale]/dashboard/settings/tabs/webhooks-tab.tsx`
+- `apps/client-dashboard/src/app/[locale]/dashboard/settings/tabs/workspace-tab.tsx`
+- `apps/client-dashboard/src/app/[locale]/dashboard/settings/tabs/projects-tab.tsx`
+- `apps/client-dashboard/src/app/[locale]/dashboard/settings/tabs/profile-tab.tsx`
+- `apps/client-dashboard/src/app/[locale]/dashboard/settings/tabs/billing-tab.tsx`
 
 ---
 
