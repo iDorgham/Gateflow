@@ -1,10 +1,31 @@
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { getTranslation, Locale } from '@/lib/i18n';
 import { prisma } from '@gate-access/db';
-import { Card, CardContent, CardHeader } from '@gate-access/ui';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  Badge,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@gate-access/ui';
 import { redirect, notFound } from 'next/navigation';
 import Image from 'next/image';
-import { MapPin } from 'lucide-react';
+import { MapPin, Users, QrCode, DoorOpen, ScrollText, Shield } from 'lucide-react';
+import Link from 'next/link';
+
+const SCAN_STATUS_STYLES: Record<string, string> = {
+  SUCCESS: 'bg-success/20 text-success',
+  FAILED: 'bg-destructive/20 text-destructive',
+  EXPIRED: 'bg-warning/20 text-warning',
+  MAX_USES_REACHED: 'bg-warning/20 text-warning',
+  INACTIVE: 'bg-muted text-muted-foreground',
+  DENIED: 'bg-destructive/20 text-destructive',
+};
 
 export async function generateMetadata({
   params,
@@ -94,15 +115,21 @@ export default async function ProjectDetailPage({
     access7d: scans7d,
     access30d: scans30d,
   };
-  // Phase 3 will render aggregates + recentLogs (KPIs, gate logs)
-  void { aggregates, recentLogs };
+
+  const teamUsers = Array.from(
+    new Map(
+      project.gates.flatMap((g) =>
+        g.gateAssignments.map((a) => [a.user.id, a.user])
+      )
+    ).values()
+  );
 
   const coverUrl = project.coverUrl;
   const hasValidCover = coverUrl && coverUrl.startsWith('https://');
 
   return (
     <div className="space-y-0 -mx-4 md:-mx-8 -mt-4 md:-mt-8">
-      {/* Hero — full-width, distinct from settings tab cards */}
+      {/* Hero */}
       <section className="relative h-48 sm:h-56 md:h-64 lg:h-72 w-full overflow-hidden">
         {hasValidCover ? (
           <Image
@@ -119,7 +146,6 @@ export default async function ProjectDetailPage({
             aria-hidden
           />
         )}
-        {/* Overlay for text contrast */}
         <div
           className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/40 to-transparent"
           aria-hidden
@@ -137,9 +163,8 @@ export default async function ProjectDetailPage({
         </div>
       </section>
 
-      {/* Content — padded, below hero */}
       <div className="p-4 md:p-8 space-y-6">
-        {/* Description — Card, distinct from settings form UI */}
+        {/* Description */}
         <Card className="border border-border bg-card rounded-xl shadow-sm">
           <CardHeader className="pb-2">
             <h2 className="text-lg font-semibold text-foreground">
@@ -155,6 +180,225 @@ export default async function ProjectDetailPage({
               <p className="text-sm text-muted-foreground italic">
                 {t('projectDetail.noDescription', 'No description yet.')}
               </p>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* KPI cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <Card className="border border-border bg-card rounded-xl shadow-sm">
+            <CardContent className="p-4 flex items-center gap-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                <Users className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-foreground">{aggregates.contactsCount}</p>
+                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  {t('projectDetail.contacts', 'Contacts')}
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="border border-border bg-card rounded-xl shadow-sm">
+            <CardContent className="p-4 flex items-center gap-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-chart-2/20 text-chart-2">
+                <DoorOpen className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-foreground">
+                  {aggregates.unitTypes.length}
+                </p>
+                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  {t('projectDetail.unitTypes', 'Unit types')}
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="border border-border bg-card rounded-xl shadow-sm">
+            <CardContent className="p-4 flex items-center gap-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-success/20 text-success">
+                <QrCode className="h-5 w-5" />
+              </div>
+              <div>
+                <p className="text-2xl font-bold text-foreground">{aggregates.qrCount}</p>
+                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  {t('projectDetail.qrCodes', 'QR Codes')}
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+          <Card className="border border-border bg-card rounded-xl shadow-sm">
+            <CardContent className="p-4 flex items-center gap-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-info/20 text-info">
+                <ScrollText className="h-5 w-5" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-2xl font-bold text-foreground">
+                  {aggregates.access30d}
+                </p>
+                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  {t('projectDetail.access30d', 'Access (30d)')}
+                </p>
+                <p className="text-[10px] text-muted-foreground mt-0.5">
+                  1d: {aggregates.access1d} · 7d: {aggregates.access7d}
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Gates + Team + Shift placeholder row */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Gates */}
+          <Card className="border border-border bg-card rounded-xl shadow-sm">
+            <CardHeader className="pb-2">
+              <h2 className="text-lg font-semibold text-foreground">
+                {t('projectDetail.gates', 'Gates')}
+              </h2>
+            </CardHeader>
+            <CardContent className="pt-0">
+              {project.gates.length === 0 ? (
+                <p className="text-sm text-muted-foreground">
+                  {t('projectDetail.noGates', 'No gates')}
+                </p>
+              ) : (
+                <ul className="space-y-3">
+                  {project.gates.map((gate) => (
+                    <li
+                      key={gate.id}
+                      className="flex items-center justify-between rounded-lg border border-border bg-muted/30 px-3 py-2"
+                    >
+                      <div>
+                        <p className="font-medium text-foreground">{gate.name}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {t('projectDetail.lastAccess', 'Last access')}:{' '}
+                          {gate.lastAccessedAt
+                            ? new Date(gate.lastAccessedAt).toLocaleString(locale)
+                            : '—'}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Badge
+                          className={`text-[10px] ${
+                            gate.isActive
+                              ? 'bg-success/20 text-success border-success/30'
+                              : 'bg-muted text-muted-foreground'
+                          }`}
+                        >
+                          {gate.isActive ? 'Active' : 'Inactive'}
+                        </Badge>
+                        <span className="text-xs text-muted-foreground">
+                          {gate._count.qrCodes} QR
+                        </span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Team */}
+          <Card className="border border-border bg-card rounded-xl shadow-sm">
+            <CardHeader className="pb-2 flex flex-row items-center justify-between">
+              <h2 className="text-lg font-semibold text-foreground">
+                {t('projectDetail.team', 'Team')}
+              </h2>
+              <Link
+                href={`/${locale}/dashboard/team/gate-assignments?project=${projectId}`}
+                className="text-xs font-medium text-primary hover:underline"
+              >
+                Manage
+              </Link>
+            </CardHeader>
+            <CardContent className="pt-0">
+              {teamUsers.length === 0 ? (
+                <p className="text-sm text-muted-foreground">
+                  {t('projectDetail.noTeam', 'No team assigned')}
+                </p>
+              ) : (
+                <ul className="space-y-2">
+                  {teamUsers.map((user) => (
+                    <li
+                      key={user.id}
+                      className="text-sm text-foreground"
+                    >
+                      <span className="font-medium">{user.name ?? '—'}</span>
+                      {user.email && (
+                        <span className="text-muted-foreground ml-1">({user.email})</span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Shift placeholder */}
+          <Card className="border border-border bg-card rounded-xl shadow-sm">
+            <CardHeader className="pb-2">
+              <h2 className="text-lg font-semibold text-foreground">
+                {t('projectDetail.shiftStatus', 'Shift status')}
+              </h2>
+            </CardHeader>
+            <CardContent className="pt-0">
+              <div className="flex items-center gap-2 text-muted-foreground">
+                <Shield className="h-5 w-5 shrink-0" />
+                <span>{t('projectDetail.shiftPlaceholder', '—')}</span>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Gate logs */}
+        <Card className="border border-border bg-card rounded-xl shadow-sm">
+          <CardHeader className="pb-2">
+            <h2 className="text-lg font-semibold text-foreground">
+              {t('projectDetail.gateLogs', 'Recent access logs')}
+            </h2>
+          </CardHeader>
+          <CardContent className="pt-0">
+            {recentLogs.length === 0 ? (
+              <p className="text-sm text-muted-foreground py-4">
+                {t('projectDetail.noLogs', 'No scans yet')}
+              </p>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="text-muted-foreground">Gate</TableHead>
+                    <TableHead className="text-muted-foreground">QR Code</TableHead>
+                    <TableHead className="text-muted-foreground">Time</TableHead>
+                    <TableHead className="text-muted-foreground">Status</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {recentLogs.map((log) => (
+                    <TableRow key={log.id}>
+                      <TableCell className="font-medium text-foreground">
+                        {log.gate.name}
+                      </TableCell>
+                      <TableCell className="font-mono text-xs text-muted-foreground">
+                        {log.qrCode.code?.slice(0, 16)}…
+                      </TableCell>
+                      <TableCell className="text-muted-foreground text-sm">
+                        {new Date(log.scannedAt).toLocaleString(locale)}
+                      </TableCell>
+                      <TableCell>
+                        <Badge
+                          className={`text-[10px] ${
+                            SCAN_STATUS_STYLES[log.status] ?? 'bg-muted text-muted-foreground'
+                          }`}
+                        >
+                          {t(`overview.scanStatus.${log.status}`, {
+                            defaultValue: log.status.replace(/_/g, ' '),
+                          })}
+                        </Badge>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             )}
           </CardContent>
         </Card>

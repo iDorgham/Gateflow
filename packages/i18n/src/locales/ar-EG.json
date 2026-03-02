@@ -421,7 +421,22 @@
     "projectDetail": {
       "location": "الموقع",
       "about": "نبذة",
-      "noDescription": "لا يوجد وصف بعد."
+      "noDescription": "لا يوجد وصف بعد.",
+      "contacts": "جهات الاتصال",
+      "unitTypes": "أنواع الوحدات",
+      "qrCodes": "رموز QR",
+      "access1d": "الوصول (24 ساعة)",
+      "access7d": "الوصول (7 أيام)",
+      "access30d": "الوصول (30 يوم)",
+      "gates": "البوابات",
+      "team": "الفريق",
+      "gateLogs": "سجلات الوصول الأخيرة",
+      "noGates": "لا توجد بوابات",
+      "noTeam": "لم يتم تعيين فريق",
+      "noLogs": "لا توجد مسوح بعد",
+      "lastAccess": "آخر وصول",
+      "shiftStatus": "حالة الوردية",
+      "shiftPlaceholder": "—"
     },
     "sidebar": {
       "operations": "العمليات",

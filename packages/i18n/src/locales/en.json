@@ -420,7 +420,22 @@
     "projectDetail": {
       "location": "Location",
       "about": "About",
-      "noDescription": "No description yet."
+      "noDescription": "No description yet.",
+      "contacts": "Contacts",
+      "unitTypes": "Unit types",
+      "qrCodes": "QR Codes",
+      "access1d": "Access (24h)",
+      "access7d": "Access (7d)",
+      "access30d": "Access (30d)",
+      "gates": "Gates",
+      "team": "Team",
+      "gateLogs": "Recent access logs",
+      "noGates": "No gates",
+      "noTeam": "No team assigned",
+      "noLogs": "No scans yet",
+      "lastAccess": "Last access",
+      "shiftStatus": "Shift status",
+      "shiftPlaceholder": "—"
     },
     "sidebar": {
       "operations": "Operations",

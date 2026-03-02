@@ -38,14 +38,15 @@
 
 ## Phase 3 — KPIs, Gates, Team & Logs
 
-**Status:** Pending  
+**Status:** Done  
+**Completed:** 2026-03-02  
 
-- [ ] KPI cards (contacts, unit types, QR/access metrics)
-- [ ] Gates list
-- [ ] Team section
-- [ ] Gate logs table
-- [ ] Security shift placeholder
-- [ ] `pnpm preflight` passes
+- [x] KPI cards (contacts, unit types, QR/access metrics)
+- [x] Gates list
+- [x] Team section
+- [x] Gate logs table
+- [x] Security shift placeholder
+- [x] `pnpm preflight` passes
 
 **Files to touch:**
 - `apps/client-dashboard/src/app/[locale]/dashboard/projects/[projectId]/page.tsx`
