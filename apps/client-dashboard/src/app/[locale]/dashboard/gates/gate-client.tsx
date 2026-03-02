@@ -2,7 +2,7 @@
 
 import { useState, useTransition, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button, Input, Label, Checkbox, Select } from '@gate-access/ui';
+import { Button, Input, Label, Checkbox, NativeSelect } from '@gate-access/ui';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
@@ -309,7 +309,7 @@ function EditGateModal({ gate, onClose }: { gate: GateWithStats; onClose: () => 
           </div>
           <div className="border-t border-slate-200 dark:border-slate-700 pt-4 space-y-2">
             <Label htmlFor="edit-identity">{t('gates.modal.fields.identityLevel', 'Visitor identity level')}</Label>
-            <Select
+            <NativeSelect
               id="edit-identity"
               value={requiredIdentityLevel}
               onChange={(e) => setRequiredIdentityLevel(e.target.value)}
@@ -319,7 +319,7 @@ function EditGateModal({ gate, onClose }: { gate: GateWithStats; onClose: () => 
               <option value="0">{t('gates.modal.fields.identityLevel0', 'Level 0 — Name & phone only')}</option>
               <option value="1">{t('gates.modal.fields.identityLevel1', 'Level 1 — ID photo capture')}</option>
               <option value="2">{t('gates.modal.fields.identityLevel2', 'Level 2 — ID OCR (coming soon)')}</option>
-            </Select>
+            </NativeSelect>
             <p className="text-xs text-slate-500">{t('gates.modal.fields.identityLevelHint', 'When Level 1+, scanner will prompt for ID capture after scan.')}</p>
           </div>
         </div>

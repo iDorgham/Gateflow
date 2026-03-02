@@ -1,15 +1,24 @@
 # GateFlow Plan Folder (Docs v2)
 
-The `docs/plan/` folder is the **planning workspace** for GateFlow. It is populated exclusively via `/idea`, `/plan`, `/dev`, and `/ship` flows.
+The `docs/plan/` folder is the **planning workspace** for GateFlow. Use **`/man`** as the one-command orchestrator.
 
-## Structure
+## Structure (Task Manager)
 
 ```text
 docs/plan/
-  context/     # Ideas and initiative briefs (IDEA_<slug>.md)
-  execution/   # Plans and phase prompts (PLAN_<slug>.md, PROMPT_<slug>_phase_<N>.md)
-  learning/    # Cross-initiative patterns, incidents, and decisions
+  backlog/       # Raw tasks, ideas (ALL_TASKS_BACKLOG.md)
+  context/       # Refined initiatives (IDEA_<slug>.md)
+  planning/      # Draft plans — /plan creates here
+  planned/       # Approved plans — ready for /dev
+  in-progress/   # Plans being developed
+  done/          # Completed plans
+  execution/     # Legacy (backward compatible)
+  learning/      # Patterns, incidents, decisions
 ```
+
+**Flow:** Backlog → Context → Planning → Planned → In Progress → Done
+
+See **`docs/plan/PLAN_LIFECYCLE.md`** and **`docs/plan/ONE_MAN_CODE.md`** (One Man Code: `/man`, `/man tasks`, `/man settings`).
 
 ### context/
 
@@ -18,13 +27,17 @@ docs/plan/
 
 Created via `/idea`.
 
-### execution/
+### Plan lifecycle (planning | planned | in-progress | done)
 
-- `PLAN_<slug>.md` — phased plan for an initiative.
-- `PROMPT_<slug>_phase_<N>.md` — pro prompts for each phase, based on `.cursor/templates/TEMPLATE_PROMPT_phase.md`.
-- Example: `PLAN_docs_v2_refresh.md`.
+- **planning/** — Draft plans. `/plan` creates `planning/<slug>/` with `PLAN_<slug>.md`, `PROMPT_<slug>_phase_<N>.md`, `TASKS_<slug>.md`.
+- **planned/** — When you approve a plan, run `/plan ready <slug>` to move it here.
+- **in-progress/** — `/dev` moves a plan from `planned/` when starting a phase.
+- **done/** — `/dev` moves a plan here when the last phase is complete.
 
-Created via `/plan` (plans) and `/dev` (phase prompts).
+### execution/ (legacy)
+
+- Flat structure: `PLAN_<slug>.md`, `PROMPT_<slug>_phase_<N>.md`, `TASKS_<slug>.md`.
+- Still supported for backward compatibility. New plans use the lifecycle folders.
 
 ### learning/
 
@@ -37,9 +50,9 @@ Created via `/plan` (plans) and `/dev` (phase prompts).
 ## How to use with Cursor
 
 1. Run `/idea` with a short description (e.g. “Core security v6 hardening”).
-2. `/plan` on the resulting IDEA file to create `PLAN_<slug>.md` and identify phases.
-3. For each phase, generate a `PROMPT_<slug>_phase_<N>.md` using `.cursor/templates/TEMPLATE_PROMPT_phase.md`.
-4. Run `/dev` with the phase prompt to implement and update docs/code.
+2. `/plan` on the resulting IDEA file to create `planning/<slug>/PLAN_<slug>.md` and phase prompts.
+3. When the plan is ready, run `/plan ready <slug>` to move it to `planned/`.
+4. Run `/dev` to implement phases; `/dev` moves the plan to `in-progress/` when starting and to `done/` when finished.
 
 Capture patterns, incidents, and decisions in `learning/` as you go.
 

@@ -1,6 +1,6 @@
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { hasPermission } from '@/lib/auth';
-import { getTranslation, Locale } from '@/lib/i18n';
+import { Locale } from '@/lib/i18n';
 import { prisma } from '@gate-access/db';
 import { redirect, notFound } from 'next/navigation';
 import Image from 'next/image';
@@ -32,7 +32,6 @@ export default async function ProjectDetailPage({
 
   const { projectId, locale } = params;
   const orgId = claims.orgId;
-  const { t } = await getTranslation(locale, 'dashboard');
 
   const now = new Date();
   const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
@@ -85,7 +84,7 @@ export default async function ProjectDetailPage({
   const uniqueContacts = new Set(
     project.units.flatMap((u) => u.contacts.map((c) => c.contactId))
   );
-  const unitTypes = [...new Set(project.units.map((u) => u.type))];
+  const unitTypes = Array.from(new Set(project.units.map((u) => u.type)));
 
   const aggregates = {
     contactsCount: uniqueContacts.size,
@@ -160,7 +159,6 @@ export default async function ProjectDetailPage({
         recentLogs={recentLogs}
         locale={locale}
         canManageGates={canManageGates}
-        t={t}
       />
     </div>
   );

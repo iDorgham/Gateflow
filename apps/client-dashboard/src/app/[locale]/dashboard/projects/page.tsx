@@ -43,7 +43,10 @@ export default async function ProjectsPage() {
 
   return (
     <div className="space-y-6">
-      <ProjectsTab projects={projectsWithCounts} />
+      <ProjectsTab
+        projects={projectsWithCounts}
+        allowCreateWhenEmpty={false}
+      />
     </div>
   );
 }

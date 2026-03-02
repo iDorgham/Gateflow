@@ -8,7 +8,7 @@ import {
   Button,
   Input,
   Label,
-  Select,
+  NativeSelect,
   Checkbox,
   Table,
   TableBody,
@@ -393,7 +393,7 @@ export default function ContactsPage() {
                   </Badge>
                 ))
               )}
-              <Select
+              <NativeSelect
                 value=""
                 onChange={(e) => {
                   const tagId = e.target.value;
@@ -413,7 +413,7 @@ export default function ContactsPage() {
                       {tag.name}
                     </option>
                   ))}
-              </Select>
+              </NativeSelect>
             </div>
           </TableCell>
         );
@@ -848,7 +848,7 @@ export default function ContactsPage() {
 
       {contacts.length > 0 && (
         <div className="flex items-center gap-2 rounded-lg border bg-muted/20 px-3 py-2">
-          <Select
+          <NativeSelect
             value={bulkTagId}
             onChange={(e) => setBulkTagId(e.target.value)}
             className="w-[220px]"
@@ -859,7 +859,7 @@ export default function ContactsPage() {
                 {tag.name}
               </option>
             ))}
-          </Select>
+          </NativeSelect>
           <Button
             variant="outline"
             size="sm"

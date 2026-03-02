@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { cn, Button, Input, Select } from '@gate-access/ui';
+import { cn, Button, Input, NativeSelect } from '@gate-access/ui';
 import { useProjectFilter } from '@/context/ProjectFilterContext';
 import type { ResidentsFilters } from '@/lib/residents/residents-filters';
 
@@ -184,7 +184,7 @@ export function ResidentsFilterBar({
           <label className="text-sm font-medium text-foreground sr-only">
             {t('analytics.filterProject', 'Project')}
           </label>
-          <Select
+          <NativeSelect
             value={projectValue}
             onChange={(e) => onFiltersChange({ projectId: e.target.value, page: 1 })}
             className="w-[180px]"
@@ -195,7 +195,7 @@ export function ResidentsFilterBar({
                 {p.name}
               </option>
             ))}
-          </Select>
+          </NativeSelect>
         </div>
       )}
 
@@ -204,7 +204,7 @@ export function ResidentsFilterBar({
           <label className="text-sm font-medium text-foreground sr-only">
             {t('analytics.filterGate', 'Gate')}
           </label>
-          <Select
+          <NativeSelect
             value={filters.gateId}
             onChange={(e) => onFiltersChange({ gateId: e.target.value, page: 1 })}
             className="w-[160px]"
@@ -215,7 +215,7 @@ export function ResidentsFilterBar({
                 {g.name}
               </option>
             ))}
-          </Select>
+          </NativeSelect>
         </div>
       )}
 
@@ -223,7 +223,7 @@ export function ResidentsFilterBar({
         <label className="text-sm font-medium text-foreground sr-only">
           {t('analytics.filterUnitType', 'Unit type')}
         </label>
-        <Select
+        <NativeSelect
           value={filters.unitType}
           onChange={(e) => onFiltersChange({ unitType: e.target.value, page: 1 })}
           className="w-[160px]"
@@ -234,7 +234,7 @@ export function ResidentsFilterBar({
               {unitTypeLabels[u] ?? u}
             </option>
           ))}
-        </Select>
+        </NativeSelect>
       </div>
 
       <Input
@@ -251,7 +251,7 @@ export function ResidentsFilterBar({
           <label className="text-sm font-medium text-foreground sr-only">
             {t('residents.filterByTag', 'Filter by tag')}
           </label>
-          <Select
+          <NativeSelect
             value={filters.tagIds || ''}
             onChange={(e) => {
               const val = e.target.value;
@@ -265,7 +265,7 @@ export function ResidentsFilterBar({
                 {tag.name}
               </option>
             ))}
-          </Select>
+          </NativeSelect>
         </div>
       )}
     </div>

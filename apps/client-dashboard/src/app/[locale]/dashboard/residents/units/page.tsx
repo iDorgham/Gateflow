@@ -8,7 +8,7 @@ import {
   Button,
   Input,
   Label,
-  Select,
+  NativeSelect,
   Table,
   TableBody,
   TableCell,
@@ -971,7 +971,7 @@ export default function UnitsPage() {
                   <Label htmlFor="projectId">
                     {t('units.form.project', 'Project')}
                   </Label>
-                  <Select
+                  <NativeSelect
                     id="projectId"
                     value={form.projectId}
                     onChange={(e) =>
@@ -986,7 +986,7 @@ export default function UnitsPage() {
                         {p.name}
                       </option>
                     ))}
-                  </Select>
+                  </NativeSelect>
                 </div>
               )}
               {contacts.length > 0 && (
@@ -1046,7 +1046,7 @@ export default function UnitsPage() {
                 <Label htmlFor="linkResident">
                   {t('units.residentLinked', 'Linked Resident')}
                 </Label>
-                <Select
+                <NativeSelect
                   id="linkResident"
                   value={linkUserId}
                   onChange={(e) => setLinkUserId(e.target.value)}
@@ -1059,7 +1059,7 @@ export default function UnitsPage() {
                       {r.name} ({r.email})
                     </option>
                   ))}
-                </Select>
+                </NativeSelect>
                 {residents.length === 0 && (
                   <p className="text-xs text-muted-foreground">
                     {t(

@@ -6,9 +6,10 @@ GateFlow uses a shared set of docs, rules, skills, and agents across Cursor, CLI
 
 ## 1. Master Commands & Flows (Cursor)
 
-- **Visible slash commands (Cursor)**: `/idea`, `/plan`, `/dev`, `/ship`, `/guide`
+- **Visible slash commands (Cursor)**: `/man`, `/idea`, `/plan`, `/dev`, `/ship`, `/guide`
+  - **`/man`** (One Man): One command, seven domains (Code, Brand, SaaS, Marketing, Business, Content, Copywrite). Subcommands give more power: `tasks`, `settings`, `mindset` (change profile), `inspire`, `run`, `ship`, `status`. See `docs/plan/ONE_MAN_CODE.md` and `.cursor/skills/one-man/SKILL.md`.
   - `/idea`: Refine goals and capture context into `docs/plan/context/IDEA_<slug>.md` and backlog entries in `docs/plan/backlog/ALL_TASKS_BACKLOG.md`.
-  - `/plan`: Turn an idea/backlog section into a phased plan in `docs/plan/execution/PLAN_<slug>.md` and per‑phase prompts in `docs/plan/execution/PROMPT_<slug>_phase_<N>.md`.
+  - `/plan`: Turn an idea/backlog section into a phased plan in `docs/plan/planning/<slug>/`; use `/plan ready <slug>` to move to `planned/` when approved.
   - `/dev`: Implement **one phase** end‑to‑end using its `PROMPT_<slug>_phase_<N>.md` file (code, tests, lint/typecheck, git).
   - `/ship`: Run remaining phases for a plan sequentially (internally chaining `/dev`), enforcing tests and quality gates.
   - `/guide`: Workspace guide — “what should I do now?”, next steps, recommended, critical, improvements; uses `.cursor/skills/gf-guide/SKILL.md` and can run in super‑power mode (follow plan, use hierarchy, run checks). Rule `.cursor/rules/02-gateflow-guide.mdc` adds pre‑flight before tasks and optional post‑task summary.
@@ -27,9 +28,13 @@ GateFlow uses a shared set of docs, rules, skills, and agents across Cursor, CLI
 
 GateFlow development is organized as **phased plans** with one pro prompt per phase.
 
-- **Plan files**
-  - `docs/plan/execution/PLAN_<slug>.md` — ordered phases with scope, deliverables, and test criteria.
-  - `docs/plan/execution/PROMPT_<slug>_phase_<N>.md` — executable pro prompt for phase N.
+- **Plan files** (lifecycle: `docs/plan/PLAN_LIFECYCLE.md`; enhancements: `docs/plan/PLANNING_ENHANCEMENTS.md`)
+  - `planning/<slug>/` — draft plans (created by `/plan`).
+  - `planned/<slug>/` — approved, ready for `/dev` (via `/plan ready <slug>`).
+  - `in-progress/<slug>/` — actively being developed (moved by `/dev` when starting).
+  - `done/<slug>/` — completed (moved by `/dev` when last phase done).
+  - `PLAN_<slug>.md`, `PROMPT_<slug>_phase_<N>.md`, `TASKS_<slug>.md` — plan bundle in each folder.
+  - Legacy: `docs/plan/execution/` still supported for backward compatibility.
 - **Template & workflow**
   - `docs/plan/guidelines/PHASED_DEVELOPMENT_WORKFLOW.md` — end‑to‑end phased workflow (plan → prompts → execute → test → enhance).
   - `docs/plan/guidelines/AI_SKILLS_SUBAGENTS_RULES.md` — skills and subagent rules.

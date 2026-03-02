@@ -94,6 +94,8 @@ pnpm install
 pnpm turbo dev
 ```
 
+**One Man workflow:** In Cursor, use **`/man`** for the One Man workflow — task manager, domains (Code, Brand, SaaS, Marketing, Business, Content, Copywrite), and subcommands to finish tasks faster and easier. Use `/man mindset` to change profile.
+
 ### Development Ports
 - **Marketing**: 3000
 - **Client Dashboard**: 3001

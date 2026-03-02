@@ -29,6 +29,7 @@ import {
   ArrowRight,
   Building,
   Users,
+  Settings,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
@@ -56,7 +57,14 @@ interface ApiErrorPayload {
   error?: string;
 }
 
-export function ProjectsTab({ projects: initial }: { projects: Project[] }) {
+export function ProjectsTab({
+  projects: initial,
+  allowCreateWhenEmpty = true,
+}: {
+  projects: Project[];
+  /** When false and projects empty, show CTA to Settings instead of New Project (first-project flow). */
+  allowCreateWhenEmpty?: boolean;
+}) {
   const router = useRouter();
   const params = useParams();
   const locale = (params?.locale as string) ?? 'en';
@@ -184,7 +192,7 @@ export function ProjectsTab({ projects: initial }: { projects: Project[] }) {
             )}
           </p>
         </div>
-        {!showCreate && (
+        {!showCreate && (allowCreateWhenEmpty || projects.length > 0) && (
           <Button
             onClick={() => setShowCreate(true)}
             disabled={isPending}
@@ -212,19 +220,42 @@ export function ProjectsTab({ projects: initial }: { projects: Project[] }) {
               <p className="text-lg font-bold text-foreground uppercase tracking-tight">
                 {t('settings.projects.systemEmpty', 'No Projects')}
               </p>
-              <p className="mt-1 text-xs text-muted-foreground max-w-[200px] mx-auto">
-                {t(
-                  'settings.projects.emptyDesc',
-                  'No active projects detected. Create a project to start organizing your gates.'
-                )}
+              <p className="mt-1 text-xs text-muted-foreground max-w-[260px] mx-auto">
+                {allowCreateWhenEmpty
+                  ? t(
+                      'settings.projects.firstProjectEmptyDesc',
+                      'Create your first project and add gates to get started.'
+                    )
+                  : t(
+                      'settings.projects.firstProjectCTA',
+                      'Create your first project in Settings to get started.'
+                    )}
               </p>
-              <Button
-                className="mt-8 rounded-xl font-bold bg-primary text-primary-foreground gap-2 shadow-sm"
-                onClick={() => setShowCreate(true)}
-              >
-                <Plus className="h-4 w-4" />{' '}
-                {t('settings.projects.newProject', 'New Project')}
-              </Button>
+              {allowCreateWhenEmpty ? (
+                <Button
+                  className="mt-8 rounded-xl font-bold bg-primary text-primary-foreground gap-2 shadow-sm"
+                  onClick={() => setShowCreate(true)}
+                >
+                  <Plus className="h-4 w-4" />{' '}
+                  {t('settings.projects.newProject', 'New Project')}
+                </Button>
+              ) : (
+                <Button
+                  asChild
+                  className="mt-8 rounded-xl font-bold bg-primary text-primary-foreground gap-2 shadow-sm"
+                >
+                  <Link
+                    href={`/${locale}/dashboard/settings?tab=projects`}
+                    className="inline-flex items-center justify-center gap-2"
+                  >
+                    <Settings className="h-4 w-4" />
+                    {t(
+                      'settings.projects.createFirstInSettings',
+                      'Create your first project in Settings'
+                    )}
+                  </Link>
+                </Button>
+              )}
             </CardContent>
           </Card>
         ) : (

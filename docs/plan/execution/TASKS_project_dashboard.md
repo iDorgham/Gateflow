@@ -1,7 +1,7 @@
 # TASKS_project_dashboard
 
 **Plan:** `PLAN_project_dashboard.md`  
-**Status:** Not started  
+**Status:** Phases 1–7 done (synced with `feat/real-estate-palette`); Phase 8 pending  
 
 ---
 
@@ -113,17 +113,19 @@
 
 ## Phase 7 — Projects Settings Tab (First Project + Gates)
 
-**Status:** Pending  
+**Status:** Done  
+**Completed:** 2026-03-02  
 
-- [ ] Settings Projects tab = only place for first project (redirect /dashboard/projects when 0 projects)
-- [ ] Project + gates combined wizard in Settings Projects tab
-- [ ] Create project and add gates in same flow
-- [ ] `pnpm preflight` passes
+- [x] Settings Projects tab = only place for first project (/dashboard/projects with 0 projects shows CTA to Settings)
+- [x] Project + gates combined wizard in Settings Projects tab (ProjectWizard already has gates step)
+- [x] Create project and add gates in same flow (wizard API)
+- [x] `pnpm preflight` passes
 
-**Files to touch:**
+**Files touched:**
 - `apps/client-dashboard/src/app/[locale]/dashboard/settings/tabs/projects-tab.tsx`
-- `apps/client-dashboard/src/components/project-wizard.tsx`
 - `apps/client-dashboard/src/app/[locale]/dashboard/projects/page.tsx`
+- `packages/i18n/src/locales/en.json`
+- `packages/i18n/src/locales/ar-EG.json`
 
 ---
 

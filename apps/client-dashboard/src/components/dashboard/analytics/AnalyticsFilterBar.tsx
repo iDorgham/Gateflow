@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { cn, Button, Input, Select } from '@gate-access/ui';
+import { cn, Button, Input, NativeSelect } from '@gate-access/ui';
 import { useProjectFilter } from '@/context/ProjectFilterContext';
 import type { AnalyticsFilters, DateRangePreset } from '@/lib/analytics/analytics-filters';
 
@@ -203,7 +203,7 @@ export function AnalyticsFilterBar({
             <label htmlFor="analytics-project" className="sr-only text-sm font-medium text-foreground">
               {t('analytics.filterProject', 'Project')}
             </label>
-            <Select
+            <NativeSelect
               id="analytics-project"
               value={projectValue}
               onChange={(e) => onFiltersChange({ projectId: e.target.value })}
@@ -215,7 +215,7 @@ export function AnalyticsFilterBar({
                   {p.name}
                 </option>
               ))}
-            </Select>
+            </NativeSelect>
           </div>
         )}
 
@@ -225,7 +225,7 @@ export function AnalyticsFilterBar({
             <label htmlFor="analytics-gate" className="sr-only text-sm font-medium text-foreground">
               {t('analytics.filterGate', 'Gate')}
             </label>
-            <Select
+            <NativeSelect
               id="analytics-gate"
               value={filters.gateId}
               onChange={(e) => onFiltersChange({ gateId: e.target.value })}
@@ -237,7 +237,7 @@ export function AnalyticsFilterBar({
                   {g.name}
                 </option>
               ))}
-            </Select>
+            </NativeSelect>
           </div>
         )}
 
@@ -246,7 +246,7 @@ export function AnalyticsFilterBar({
           <label htmlFor="analytics-unittype" className="sr-only text-sm font-medium text-foreground">
             {t('analytics.filterUnitType', 'Unit type')}
           </label>
-          <Select
+          <NativeSelect
             id="analytics-unittype"
             value={filters.unitType}
             onChange={(e) => onFiltersChange({ unitType: e.target.value })}
@@ -258,7 +258,7 @@ export function AnalyticsFilterBar({
                 {unitTypeLabels[u] ?? u}
               </option>
             ))}
-          </Select>
+          </NativeSelect>
         </div>
 
         {/* Search */}

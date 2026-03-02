@@ -9,7 +9,7 @@ import {
   CardTitle,
   Button,
   Label,
-  Select,
+  NativeSelect,
 } from '@gate-access/ui';
 import { 
   Monitor, 
@@ -132,20 +132,20 @@ export function GeneralTab() {
               <Label className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60">{t('settings.general.language', 'Preferred Language')}</Label>
               <div className="relative group">
                 <Languages className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/40 group-focus-within:text-primary transition-colors" />
-                <Select 
+                <NativeSelect 
                   defaultValue={i18n.language}
                   className="pl-11 h-11 rounded-xl border-border/50 bg-background/50 focus:ring-primary/20"
                 >
                   <option value="en-US">English (United States)</option>
                   <option value="ar-EG">العربية (Egypt)</option>
-                </Select>
+                </NativeSelect>
               </div>
             </div>
             <div className="space-y-3">
               <Label className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60">{t('settings.general.timezone', 'System Timezone')}</Label>
               <div className="relative group">
                 <Clock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/40 group-focus-within:text-primary transition-colors" />
-                <Select 
+                <NativeSelect 
                   defaultValue="UTC+2"
                   className="pl-11 h-11 rounded-xl border-border/50 bg-background/50 focus:ring-primary/20"
                 >
@@ -153,7 +153,7 @@ export function GeneralTab() {
                   <option value="UTC+2">UTC+2 (Cairo)</option>
                   <option value="UTC+3">UTC+3 (Riyadh)</option>
                   <option value="UTC-5">UTC-5 (New York)</option>
-                </Select>
+                </NativeSelect>
               </div>
             </div>
           </div>

@@ -11,7 +11,7 @@ import {
   CardHeader,
   CardTitle,
   Badge,
-  Select,
+  NativeSelect,
   Checkbox,
 } from '@gate-access/ui';
 import { updateWorkspaceSettingsAction, updateRetentionAndPrivacyAction } from '../../workspace/settings/actions';
@@ -273,7 +273,7 @@ export function WorkspaceTab({ org }: { org: OrgData }) {
                 <Label htmlFor="identity-level" className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60">
                   {t('settings.workspace.identityLevel', 'Default visitor identity level')}
                 </Label>
-                <Select
+                <NativeSelect
                   id="identity-level"
                   value={String(requiredIdentityLevel)}
                   onChange={(e) => setRequiredIdentityLevel(parseInt(e.target.value, 10))}
@@ -282,7 +282,7 @@ export function WorkspaceTab({ org }: { org: OrgData }) {
                   {IDENTITY_LEVELS.map((l) => (
                     <option key={l.value} value={l.value}>{l.label}</option>
                   ))}
-                </Select>
+                </NativeSelect>
                 <p className="text-[10px] text-muted-foreground">
                   {t('settings.workspace.identityLevelHint', 'Gates can override. Level 1 requires ID photo capture at scan.')}
                 </p>
@@ -293,7 +293,7 @@ export function WorkspaceTab({ org }: { org: OrgData }) {
                   <Label className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60">
                     {t('settings.workspace.scanLogRetention', 'Scan log retention (months)')}
                   </Label>
-                  <Select
+                  <NativeSelect
                     id="scan-log-retention"
                     value={scanLogRetentionMonths || 'indefinite'}
                     onChange={(e) => setScanLogRetentionMonths(e.target.value === 'indefinite' ? '' : e.target.value)}
@@ -302,37 +302,37 @@ export function WorkspaceTab({ org }: { org: OrgData }) {
                     {RETENTION_OPTIONS.map((o) => (
                       <option key={o.value} value={o.value}>{o.label}</option>
                     ))}
-                  </Select>
+                  </NativeSelect>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="incident-retention" className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60">
                     {t('settings.workspace.incidentRetention', 'Incident retention (months)')}
                   </Label>
-                  <Select id="incident-retention" value={incidentRetentionMonths || 'indefinite'} onChange={(e) => setIncidentRetentionMonths(e.target.value === 'indefinite' ? '' : e.target.value)} className="h-11">
+                  <NativeSelect id="incident-retention" value={incidentRetentionMonths || 'indefinite'} onChange={(e) => setIncidentRetentionMonths(e.target.value === 'indefinite' ? '' : e.target.value)} className="h-11">
                     {RETENTION_OPTIONS.map((o) => (
                       <option key={o.value} value={o.value}>{o.label}</option>
                     ))}
-                  </Select>
+                  </NativeSelect>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="artifact-retention" className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60">
                     {t('settings.workspace.idArtifactRetention', 'ID artifact retention (months)')}
                   </Label>
-                  <Select id="artifact-retention" value={idArtifactRetentionMonths || 'indefinite'} onChange={(e) => setIdArtifactRetentionMonths(e.target.value === 'indefinite' ? '' : e.target.value)} className="h-11">
+                  <NativeSelect id="artifact-retention" value={idArtifactRetentionMonths || 'indefinite'} onChange={(e) => setIdArtifactRetentionMonths(e.target.value === 'indefinite' ? '' : e.target.value)} className="h-11">
                     {RETENTION_OPTIONS.map((o) => (
                       <option key={o.value} value={o.value}>{o.label}</option>
                     ))}
-                  </Select>
+                  </NativeSelect>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="visitor-retention" className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60">
                     {t('settings.workspace.visitorHistoryRetention', 'Visitor history retention (months)')}
                   </Label>
-                  <Select id="visitor-retention" value={visitorHistoryRetentionMonths || 'indefinite'} onChange={(e) => setVisitorHistoryRetentionMonths(e.target.value === 'indefinite' ? '' : e.target.value)} className="h-11">
+                  <NativeSelect id="visitor-retention" value={visitorHistoryRetentionMonths || 'indefinite'} onChange={(e) => setVisitorHistoryRetentionMonths(e.target.value === 'indefinite' ? '' : e.target.value)} className="h-11">
                     {RETENTION_OPTIONS.map((o) => (
                       <option key={o.value} value={o.value}>{o.label}</option>
                     ))}
-                  </Select>
+                  </NativeSelect>
                 </div>
               </div>
 

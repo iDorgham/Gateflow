@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Card,
   CardContent,
@@ -75,7 +76,6 @@ interface ProjectDetailContentProps {
   recentLogs: ScanLog[];
   locale: string;
   canManageGates: boolean;
-  t: (key: string, fallback?: string) => string;
 }
 
 export function ProjectDetailContent({
@@ -86,8 +86,8 @@ export function ProjectDetailContent({
   recentLogs,
   locale,
   canManageGates,
-  t,
 }: ProjectDetailContentProps) {
+  const { t } = useTranslation('dashboard');
   const actionsRef = useRef<ProjectDetailActionsRef>(null);
 
   return (
