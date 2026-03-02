@@ -15,6 +15,8 @@ const UpdateProjectSchema = z.object({
   externalUrl: z.string().url().max(500).optional().nullable(),
   galleryJson: z.array(z.string().url()).max(20).optional().nullable(),
   gateMode: z.nativeEnum(GateMode).optional(),
+  gateIds: z.array(z.string()).optional(),
+  unitIds: z.array(z.string()).optional(),
 });
 
 export async function PATCH(
@@ -52,9 +54,47 @@ export async function PATCH(
     if (parsed.data.galleryJson !== undefined) data.galleryJson = parsed.data.galleryJson ?? null;
     if (parsed.data.gateMode !== undefined) data.gateMode = parsed.data.gateMode;
 
-    const updated = await prisma.project.update({
-      where: { id },
-      data,
+    const updated = await prisma.$transaction(async (tx) => {
+      const project = await tx.project.update({
+        where: { id },
+        data,
+      });
+
+      // Update gate assignments if provided
+      if (parsed.data.gateIds !== undefined) {
+        // Disassociate gates currently linked to this project but not in the new list
+        await tx.gate.updateMany({
+          where: { projectId: id, organizationId: claims.orgId, NOT: { id: { in: parsed.data.gateIds } } },
+          data: { projectId: null },
+        });
+        
+        // Associate new gates
+        if (parsed.data.gateIds.length > 0) {
+          await tx.gate.updateMany({
+            where: { id: { in: parsed.data.gateIds }, organizationId: claims.orgId },
+            data: { projectId: id },
+          });
+        }
+      }
+
+      // Update unit assignments if provided
+      if (parsed.data.unitIds !== undefined) {
+        // Disassociate units currently linked to this project but not in the new list
+        await tx.unit.updateMany({
+          where: { projectId: id, organizationId: claims.orgId, NOT: { id: { in: parsed.data.unitIds } } },
+          data: { projectId: null },
+        });
+
+        // Associate new units
+        if (parsed.data.unitIds.length > 0) {
+          await tx.unit.updateMany({
+            where: { id: { in: parsed.data.unitIds }, organizationId: claims.orgId },
+            data: { projectId: id },
+          });
+        }
+      }
+
+      return project;
     });
 
     revalidatePath('/dashboard/settings');

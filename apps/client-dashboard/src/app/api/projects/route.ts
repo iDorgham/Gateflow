@@ -17,6 +17,8 @@ const CreateProjectSchema = z.object({
   externalUrl: z.string().url().max(500).optional().or(z.literal('')),
   galleryJson: z.array(z.string().url()).max(20).optional(),
   gateMode: z.nativeEnum(GateMode).optional(),
+  gateIds: z.array(z.string()).optional(),
+  unitIds: z.array(z.string()).optional(),
 });
 
 export async function GET() {
@@ -43,7 +45,7 @@ export async function GET() {
       organizationId: true,
       createdAt: true,
       updatedAt: true,
-      _count: { select: { gates: true, qrCodes: true } },
+      _count: { select: { gates: true, qrCodes: true, units: true } },
     },
   });
 
@@ -61,7 +63,6 @@ export async function POST(request: NextRequest) {
   if (!parsed.success) {
     return NextResponse.json({ error: 'Invalid request', details: parsed.error.flatten() }, { status: 400 });
   }
-
   const project = await prisma.$transaction(async (tx) => {
     const newProject = await tx.project.create({
       data: {
@@ -78,13 +79,30 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    await tx.gate.create({
-      data: {
-        name: 'Main Gate',
-        organizationId: claims.orgId,
-        projectId: newProject.id,
-      },
-    });
+    // Link gates if provided
+    if (parsed.data.gateIds && parsed.data.gateIds.length > 0) {
+      await tx.gate.updateMany({
+        where: { id: { in: parsed.data.gateIds }, organizationId: claims.orgId },
+        data: { projectId: newProject.id },
+      });
+    } else {
+      // Default: create a Main Gate if no gates provided (original logic)
+      await tx.gate.create({
+        data: {
+          name: 'Main Gate',
+          organizationId: claims.orgId,
+          projectId: newProject.id,
+        },
+      });
+    }
+
+    // Link units if provided
+    if (parsed.data.unitIds && parsed.data.unitIds.length > 0) {
+      await tx.unit.updateMany({
+        where: { id: { in: parsed.data.unitIds }, organizationId: claims.orgId },
+        data: { projectId: newProject.id },
+      });
+    }
 
     return newProject;
   });
