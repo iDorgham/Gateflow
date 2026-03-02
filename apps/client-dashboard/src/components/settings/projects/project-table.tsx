@@ -1,6 +1,5 @@
 'use client';
 
-import { useState } from 'react';
 import {
   Table,
   TableBody,
@@ -39,7 +38,6 @@ interface ProjectTableProps {
 
 export function ProjectTable({ projects }: ProjectTableProps) {
   const { t } = useTranslation('dashboard');
-  const [editingProject, setEditingProject] = useState<Project | null>(null);
 
   const handleDelete = async (id: string) => {
     if (!confirm(t('projects.deleteConfirm', 'Are you sure you want to delete this project?'))) return;

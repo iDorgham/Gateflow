@@ -4,7 +4,7 @@ import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma, GateMode } from '@gate-access/db';
 import { revalidatePath } from 'next/cache';
 
-type Result<T = any> = { success: boolean; data?: T; error?: string };
+type Result<T = unknown> = { success: boolean; data?: T; error?: string };
 
 export async function createProject(
   name: string,
