@@ -44,7 +44,11 @@ interface AssignmentRow {
   createdAt: string;
 }
 
-export function GateAssignmentsClient() {
+interface GateAssignmentsClientProps {
+  projectId?: string;
+}
+
+export function GateAssignmentsClient({ projectId }: GateAssignmentsClientProps) {
   const { t } = useTranslation('dashboard');
   const [gates, setGates] = useState<Gate[]>([]);
   const [users, setUsers] = useState<OrgUser[]>([]);
@@ -59,11 +63,15 @@ export function GateAssignmentsClient() {
   const fetchData = useCallback(async () => {
     setLoadError(null);
     setLoading(true);
+    const gatesUrl = projectId ? `/api/gates?project=${encodeURIComponent(projectId)}` : '/api/gates';
+    const assignmentsUrl = projectId
+      ? `/api/gates/assignments?project=${encodeURIComponent(projectId)}`
+      : '/api/gates/assignments';
     try {
       const [gatesRes, usersRes, assignmentsRes] = await Promise.all([
-        fetch('/api/gates'),
+        fetch(gatesUrl),
         fetch('/api/users'),
-        fetch('/api/gates/assignments'),
+        fetch(assignmentsUrl),
       ]);
 
       const [gatesJson, usersJson, assignmentsJson] = await Promise.all([
@@ -93,7 +101,7 @@ export function GateAssignmentsClient() {
     } finally {
       setLoading(false);
     }
-  }, [t]);
+  }, [t, projectId]);
 
   useEffect(() => {
     fetchData();

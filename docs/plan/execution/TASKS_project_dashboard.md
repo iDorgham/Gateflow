@@ -55,13 +55,14 @@
 
 ## Phase 4 — Navigation & Integration
 
-**Status:** Pending  
+**Status:** Done  
+**Completed:** 2026-03-02  
 
-- [ ] Projects list links to detail
-- [ ] Settings projects tab links to detail
-- [ ] "Manage gate assignments" CTA on project detail
-- [ ] Gate assignments project filter (optional)
-- [ ] `pnpm preflight` passes
+- [x] Projects list links to detail
+- [x] Settings projects tab links to detail
+- [x] "Manage gate assignments" CTA on project detail
+- [x] Gate assignments project filter (optional)
+- [x] `pnpm preflight` passes
 
 **Files to touch:**
 - `apps/client-dashboard/src/app/[locale]/dashboard/projects/page.tsx`

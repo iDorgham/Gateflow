@@ -436,7 +436,9 @@
       "noLogs": "لا توجد مسوح بعد",
       "lastAccess": "آخر وصول",
       "shiftStatus": "حالة الوردية",
-      "shiftPlaceholder": "—"
+      "shiftPlaceholder": "—",
+      "manageAssignments": "إدارة تعيينات البوابات",
+      "manage": "إدارة"
     },
     "sidebar": {
       "operations": "العمليات",

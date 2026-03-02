@@ -11,8 +11,9 @@ const ASSIGN_PERMISSION: Permission = 'gates:manage';
 
 // ─── GET /api/gates/assignments ─────────────────────────────────────────────────
 // List gate assignments for the org (active only). Requires gates:manage.
+// Query: ?project= — optional projectId to filter assignments by gate.projectId.
 
-export async function GET(): Promise<NextResponse> {
+export async function GET(request?: NextRequest): Promise<NextResponse> {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {
@@ -22,8 +23,22 @@ export async function GET(): Promise<NextResponse> {
       return NextResponse.json({ success: false, message: 'Forbidden' }, { status: 403 });
     }
 
+    const rawProjectId = request?.nextUrl?.searchParams?.get('project') ?? undefined;
+    let projectId: string | undefined;
+    if (rawProjectId) {
+      const project = await prisma.project.findFirst({
+        where: { id: rawProjectId, organizationId: claims.orgId, deletedAt: null },
+        select: { id: true },
+      });
+      if (project) projectId = project.id;
+    }
+
     const assignments = await prisma.gateAssignment.findMany({
-      where: { organizationId: claims.orgId, deletedAt: null },
+      where: {
+        organizationId: claims.orgId,
+        deletedAt: null,
+        ...(projectId ? { gate: { projectId } } : {}),
+      },
       include: {
         user: { select: { id: true, email: true, name: true } },
         gate: { select: { id: true, name: true, location: true } },

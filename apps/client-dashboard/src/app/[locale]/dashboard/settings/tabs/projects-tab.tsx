@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import {
   Card,
   CardContent,
@@ -16,6 +16,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from '@gate-access/ui';
+import Link from 'next/link';
 import {
   Plus,
   Pencil,
@@ -57,6 +58,8 @@ interface ApiErrorPayload {
 
 export function ProjectsTab({ projects: initial }: { projects: Project[] }) {
   const router = useRouter();
+  const params = useParams();
+  const locale = (params?.locale as string) ?? 'en';
   const { t } = useTranslation('dashboard');
   const [isPending, startTransition] = useTransition();
   const [projects, setProjects] = useState(initial);
@@ -286,9 +289,14 @@ export function ProjectsTab({ projects: initial }: { projects: Project[] }) {
                         </div>
                       ) : (
                         <div>
-                          <CardTitle className="truncate text-3xl font-black text-foreground group-hover:text-primary transition-colors tracking-tight">
-                            {project.name}
-                          </CardTitle>
+                          <Link
+                            href={`/${locale}/dashboard/projects/${project.id}`}
+                            className="block focus:outline-none focus:ring-2 focus:ring-primary/20 rounded"
+                          >
+                            <CardTitle className="truncate text-3xl font-black text-foreground group-hover:text-primary transition-colors tracking-tight">
+                              {project.name}
+                            </CardTitle>
+                          </Link>
                           {project.description && (
                             <p className="mt-2 text-sm font-medium text-muted-foreground/80 line-clamp-2 pr-8 leading-relaxed">
                               {project.description}
@@ -415,7 +423,7 @@ export function ProjectsTab({ projects: initial }: { projects: Project[] }) {
                         className="w-full xl:w-auto px-8 rounded-xl font-black uppercase tracking-widest text-[10px] h-12 shadow-none hover:shadow-primary/30 transition-all group/btn"
                       >
                         <a
-                          href={`/dashboard/projects/${project.id}`}
+                          href={`/${locale}/dashboard/projects/${project.id}`}
                           className="flex items-center justify-center gap-2"
                         >
                           {t('settings.projects.accessNode', 'Dashboard')}

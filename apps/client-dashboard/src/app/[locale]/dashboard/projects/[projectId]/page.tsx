@@ -6,6 +6,7 @@ import {
   CardContent,
   CardHeader,
   Badge,
+  Button,
   Table,
   TableBody,
   TableCell,
@@ -15,7 +16,7 @@ import {
 } from '@gate-access/ui';
 import { redirect, notFound } from 'next/navigation';
 import Image from 'next/image';
-import { MapPin, Users, QrCode, DoorOpen, ScrollText, Shield } from 'lucide-react';
+import { MapPin, Users, QrCode, DoorOpen, ScrollText, Shield, UsersRound } from 'lucide-react';
 import Link from 'next/link';
 
 const SCAN_STATUS_STYLES: Record<string, string> = {
@@ -164,6 +165,19 @@ export default async function ProjectDetailPage({
       </section>
 
       <div className="p-4 md:p-8 space-y-6">
+        {/* Manage gate assignments CTA */}
+        <div className="flex justify-end">
+          <Button asChild className="gap-2 rounded-xl font-medium">
+            <Link
+              href={`/${locale}/dashboard/team/gate-assignments?project=${projectId}`}
+              className="inline-flex items-center"
+            >
+              <UsersRound className="h-4 w-4" />
+              {t('projectDetail.manageAssignments', 'Manage gate assignments')}
+            </Link>
+          </Button>
+        </div>
+
         {/* Description */}
         <Card className="border border-border bg-card rounded-xl shadow-sm">
           <CardHeader className="pb-2">
@@ -308,7 +322,7 @@ export default async function ProjectDetailPage({
                 href={`/${locale}/dashboard/team/gate-assignments?project=${projectId}`}
                 className="text-xs font-medium text-primary hover:underline"
               >
-                Manage
+                {t('projectDetail.manage', 'Manage')}
               </Link>
             </CardHeader>
             <CardContent className="pt-0">

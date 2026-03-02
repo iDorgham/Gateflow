@@ -435,7 +435,9 @@
       "noLogs": "No scans yet",
       "lastAccess": "Last access",
       "shiftStatus": "Shift status",
-      "shiftPlaceholder": "—"
+      "shiftPlaceholder": "—",
+      "manageAssignments": "Manage gate assignments",
+      "manage": "Manage"
     },
     "sidebar": {
       "operations": "Operations",

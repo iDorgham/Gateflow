@@ -9,7 +9,13 @@ export async function generateMetadata({ params }: { params: { locale: Locale } 
   return { title: t('gateAssignments.title', { defaultValue: 'Gate assignments' }) };
 }
 
-export default async function GateAssignmentsPage({ params }: { params: { locale: Locale } }) {
+export default async function GateAssignmentsPage({
+  params,
+  searchParams,
+}: {
+  params: { locale: Locale };
+  searchParams: { project?: string };
+}) {
   const claims = await getSessionClaims();
   if (!claims?.orgId) redirect(`/${params.locale}/login`);
   if (!hasPermission(claims, 'gates:manage')) {
@@ -17,6 +23,7 @@ export default async function GateAssignmentsPage({ params }: { params: { locale
   }
 
   const { t } = await getTranslation(params.locale, 'dashboard');
+  const projectId = searchParams?.project ?? undefined;
 
   return (
     <div className="space-y-6">
@@ -28,7 +35,7 @@ export default async function GateAssignmentsPage({ params }: { params: { locale
           {t('gateAssignments.description', { defaultValue: 'Assign team members to specific gates so they can scan only at those gates.' })}
         </p>
       </div>
-      <GateAssignmentsClient />
+      <GateAssignmentsClient projectId={projectId} />
     </div>
   );
 }

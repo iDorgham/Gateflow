@@ -7,9 +7,10 @@ export const dynamic = 'force-dynamic';
 
 // ─── GET /api/gates ───────────────────────────────────────────────────────────
 // Returns all gates for the authenticated org with live stats.
+// Query: ?project= — optional projectId to filter gates by project.
 // Intended for external consumers (scanner app, mobile) and the 30-s auto-refresh.
 
-export async function GET(): Promise<NextResponse> {
+export async function GET(request?: NextRequest): Promise<NextResponse> {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {
@@ -17,13 +18,28 @@ export async function GET(): Promise<NextResponse> {
     }
 
     const orgId = claims.orgId;
+    const rawProjectId = request?.nextUrl?.searchParams?.get('project') ?? undefined;
+    let projectId: string | undefined;
+    if (rawProjectId) {
+      const project = await prisma.project.findFirst({
+        where: { id: rawProjectId, organizationId: orgId, deletedAt: null },
+        select: { id: true },
+      });
+      if (project) projectId = project.id;
+    }
 
     const todayStart = new Date();
     todayStart.setHours(0, 0, 0, 0);
 
+    const gateWhere = {
+      organizationId: orgId,
+      deletedAt: null,
+      ...(projectId ? { projectId } : {}),
+    };
+
     const [gates, scansTodayGroups] = await Promise.all([
       prisma.gate.findMany({
-        where: { organizationId: orgId, deletedAt: null },
+        where: gateWhere,
         orderBy: { createdAt: 'desc' },
         include: {
           _count: { select: { qrCodes: true, scanLogs: true } },
@@ -50,6 +66,7 @@ export async function GET(): Promise<NextResponse> {
         id: gate.id,
         name: gate.name,
         location: gate.location,
+        projectId: gate.projectId ?? null,
         isActive: gate.isActive,
         lastAccessedAt: gate.lastAccessedAt?.toISOString() ?? null,
         createdAt: gate.createdAt.toISOString(),
