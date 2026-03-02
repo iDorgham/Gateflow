@@ -17,6 +17,7 @@ import {
   ShieldCheckIcon,
   CaretLeftIcon,
   StackIcon,
+  GearIcon,
 } from '@phosphor-icons/react';
 import { cn } from '@gate-access/ui';
 import { useTranslation } from 'react-i18next';
@@ -251,6 +252,20 @@ export function Sidebar({
           isCollapsed ? 'items-center' : 'px-4'
         )}
       >
+        <Link
+          href={`/${locale}/dashboard/settings`}
+          onMouseEnter={() => isCollapsed && setHoveredLabel(t('sidebar.settings', 'Settings'))}
+          onMouseLeave={() => setHoveredLabel(null)}
+          className={cn(
+            'group flex items-center gap-3 rounded-xl transition-all text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground',
+            isCollapsed ? 'justify-center p-3' : 'px-3.5 py-3'
+          )}
+        >
+          <GearIcon size={20} weight="regular" className="shrink-0 text-muted-foreground group-hover:text-foreground" />
+          {!isCollapsed && (
+            <span className="flex-1 truncate text-sm font-medium">{t('sidebar.settings', 'Settings')}</span>
+          )}
+        </Link>
         <Link
           href={`/${locale}/dashboard/profile`}
           onMouseEnter={() => isCollapsed && setHoveredLabel(t('sidebar.profile', 'Profile'))}

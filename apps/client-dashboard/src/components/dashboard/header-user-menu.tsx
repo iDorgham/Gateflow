@@ -109,15 +109,7 @@ export function HeaderUserMenu({ user, org, locale }: HeaderUserMenuProps) {
               <span className="text-sm font-medium">{t('sidebar.billing', 'Billing & payments')}</span>
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <Link
-              href={`${base}/settings`}
-              className="flex w-full items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer hover:bg-sidebar-accent transition-colors"
-            >
-              <GearIcon className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm font-medium">{t('sidebar.settings', 'GateFlow settings')}</span>
-            </Link>
-          </DropdownMenuItem>
+
           <DropdownMenuItem asChild>
             <Link
               href={`${base}/settings`}
