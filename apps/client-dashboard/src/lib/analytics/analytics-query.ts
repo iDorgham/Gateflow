@@ -45,10 +45,13 @@ export function buildScanLogWhere(
   };
 }
 
+/** Input shape accepted for validation (Zod output or equivalent) */
+export type AnalyticsQueryInput = AnalyticsQuery;
+
 /** Validate projectId and gateId belong to org; return validated context or null with error message */
 export async function validateAnalyticsQuery(
   orgId: string,
-  parsed: { dateFrom: string; dateTo: string; projectId?: string; gateId?: string; unitType?: string }
+  parsed: AnalyticsQueryInput
 ): Promise<{ ok: true; ctx: ValidatedAnalyticsContext } | { ok: false; message: string }> {
   const { dateFrom, dateTo, projectId = '', gateId = '', unitType = '' } = parsed;
   const dateFromDate = new Date(dateFrom + 'T00:00:00.000Z');

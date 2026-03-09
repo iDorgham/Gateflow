@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@gate-access/ui';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription, Skeleton } from '@gate-access/ui';
 import { cn } from '@gate-access/ui';
 import type { AnalyticsFilters } from '@/lib/analytics/analytics-filters';
 
@@ -71,9 +71,7 @@ export function AnalyticsHeatmapChart({ filters, locale: _locale, className }: A
       </CardHeader>
       <CardContent className="overflow-x-auto">
         {loading ? (
-          <div className="flex min-h-[220px] items-center justify-center text-sm text-muted-foreground">
-            {t('analytics.loading', 'Loading…')}
-          </div>
+          <Skeleton className="min-h-[220px] w-full rounded-md" />
         ) : error ? (
           <div className="flex min-h-[220px] items-center justify-center text-sm text-destructive">
             {error}

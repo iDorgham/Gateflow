@@ -16,6 +16,9 @@ import {
   AnalyticsPersonaPie,
   AnalyticsROIWidget,
   AnalyticsAudienceExportButton,
+  TotalVisitsChart,
+  TopGatesChart,
+  ScanOutcomeChart,
   type KPIData,
 } from '@/components/dashboard/analytics';
 import { useAnalyticsFilters, useAnalyticsSummary } from '@/lib/analytics';
@@ -91,10 +94,20 @@ export function AnalyticsClient({ kpiData, gates = [] }: AnalyticsClientProps) {
         ref={chartsRef}
         className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
       >
+        {/* Total Visits Over Time — shown in both modes */}
+        <div className="md:col-span-2" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+          <TotalVisitsChart filters={filters} />
+        </div>
         {isSecurity ? (
           <>
             <div className="md:col-span-2 min-h-[320px]" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
               <AnalyticsHeatmapChart filters={filters} locale={locale} className="min-h-[320px]" />
+            </div>
+            <div className="min-h-[280px]" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+              <TopGatesChart filters={filters} />
+            </div>
+            <div className="min-h-[280px]" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+              <ScanOutcomeChart filters={filters} />
             </div>
             <div className="min-h-[280px]" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
               <AnalyticsOperatorLeaderboard filters={filters} className="min-h-[280px]" />
@@ -104,6 +117,12 @@ export function AnalyticsClient({ kpiData, gates = [] }: AnalyticsClientProps) {
           <>
             <div className="md:col-span-2 min-h-[320px]" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
               <AnalyticsFunnelChart filters={filters} locale={locale} className="min-h-[320px]" />
+            </div>
+            <div className="min-h-[280px]" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+              <TopGatesChart filters={filters} />
+            </div>
+            <div className="min-h-[280px]" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+              <ScanOutcomeChart filters={filters} />
             </div>
             <div className="space-y-4 min-h-[200px]" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
               <AnalyticsCampaignBarChart filters={filters} className="min-h-[200px]" />

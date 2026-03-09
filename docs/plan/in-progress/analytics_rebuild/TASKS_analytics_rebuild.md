@@ -34,13 +34,13 @@ Checklist for **PLAN_analytics_rebuild**. Use with `/dev` and phase prompts.
 
 ## Phase 3 — Core Charts (Batch 1)
 
-- [ ] **3.1** Total Visits Over Time (area/line)
-- [ ] **3.2** Peak Hours Heatmap enhancement (brand colors)
-- [ ] **3.3** Top Gates (donut/horizontal bar)
-- [ ] **3.4** Scan Outcome (stacked bar + gauge)
-- [ ] **3.5** Lint, typecheck pass
+- [x] **3.1** Total Visits Over Time (area/line)
+- [x] **3.2** Peak Hours Heatmap enhancement (brand colors, Skeleton loading)
+- [x] **3.3** Top Gates (horizontal bar)
+- [x] **3.4** Scan Outcome (horizontal bar by status + pass rate)
+- [x] **3.5** Lint, typecheck pass (analytics code; API validation types fixed)
 
-**Status:** Pending
+**Status:** Complete
 
 ---
 

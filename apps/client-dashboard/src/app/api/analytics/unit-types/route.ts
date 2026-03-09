@@ -6,7 +6,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma } from '@gate-access/db';
-import { AnalyticsQuerySchema, validateAnalyticsQuery } from '@/lib/analytics/analytics-query';
+import { AnalyticsQuerySchema, validateAnalyticsQuery, type AnalyticsQueryInput } from '@/lib/analytics/analytics-query';
 import type { UnitTypesRankingRow } from '@/lib/analytics/types';
 
 export const dynamic = 'force-dynamic';
@@ -32,9 +32,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       return NextResponse.json({ success: false, message: 'Invalid query params' }, { status: 400 });
     }
 
-    const validation = await validateAnalyticsQuery(claims.orgId, parsed.data);
+    const validation = await validateAnalyticsQuery(claims.orgId, parsed.data as AnalyticsQueryInput);
     if (!validation.ok) {
-      return NextResponse.json({ success: false, message: validation.message }, { status: 400 });
+      const msg = (validation as { ok: false; message: string }).message;
+      return NextResponse.json({ success: false, message: msg }, { status: 400 });
     }
     const { ctx } = validation;
 
