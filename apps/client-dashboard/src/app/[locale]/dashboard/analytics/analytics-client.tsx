@@ -86,27 +86,30 @@ export function AnalyticsClient({ kpiData, gates = [] }: AnalyticsClientProps) {
       {/* Anomaly cards (Security mode only) */}
       {isSecurity && <AnalyticsAnomalyCards summary={summary ?? undefined} />}
 
-      {/* Main charts: Security = heatmap + leaderboard; Marketing = funnel + campaign bar + ROI + persona */}
-      <div ref={chartsRef} className="grid grid-cols-1 gap-4 lg:grid-cols-12">
+      {/* Main charts: responsive grid (1/2/3/4 cols); wide charts use col-span-2 or col-span-full */}
+      <div
+        ref={chartsRef}
+        className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+      >
         {isSecurity ? (
           <>
-            <div className="lg:col-span-7" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+            <div className="md:col-span-2 min-h-[320px]" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
               <AnalyticsHeatmapChart filters={filters} locale={locale} className="min-h-[320px]" />
             </div>
-            <div className="lg:col-span-5" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+            <div className="min-h-[280px]" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
               <AnalyticsOperatorLeaderboard filters={filters} className="min-h-[280px]" />
             </div>
           </>
         ) : (
           <>
-            <div className="lg:col-span-7" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+            <div className="md:col-span-2 min-h-[320px]" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
               <AnalyticsFunnelChart filters={filters} locale={locale} className="min-h-[320px]" />
             </div>
-            <div className="lg:col-span-5 space-y-4" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+            <div className="space-y-4 min-h-[200px]" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
               <AnalyticsCampaignBarChart filters={filters} className="min-h-[200px]" />
               <AnalyticsROIWidget attributedScans={attributedScans} />
             </div>
-            <div className="lg:col-span-12 lg:col-start-1" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+            <div className="col-span-full min-h-[200px]" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
               <AnalyticsPersonaPie className="min-h-[200px]" />
             </div>
           </>

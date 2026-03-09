@@ -1,3 +1,4 @@
+export { AnalyticsChartCard } from './AnalyticsChartCard';
 export { AnalyticsFilterBar } from './AnalyticsFilterBar';
 export { AnalyticsModeToggle } from './AnalyticsModeToggle';
 export { AnalyticsKPICards, type KPIData } from './AnalyticsKPICards';
