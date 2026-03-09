@@ -17,6 +17,18 @@ export {
   CHART_SEMANTIC,
   getChartColor,
 } from './chart-colors';
+export type {
+  VisitsOverTimePoint,
+  TopGatesRow,
+  ScanOutcomeRow,
+  PeakDaysRow,
+  UnitTypesRankingRow,
+  VisitorTypeRow,
+  IncidentsByGateRow,
+  IncidentsByOperatorRow,
+  TopUnitsRow,
+  QuotaUsageRow,
+} from './types';
 export { useAnalyticsFilters } from './use-analytics-filters';
 export { useAnalyticsSummary, type SummaryData } from './use-analytics-summary';
 export { buildAnalyticsUrl, buildContactsUrl, buildUnitsUrl } from './build-analytics-url';
