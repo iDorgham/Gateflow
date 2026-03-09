@@ -1,0 +1,413 @@
+/**
+ * GateFlow Login 2026 — Prototype Styles
+ * Mobile-first; breakpoints: 320px → 768px → 1024px → 1440px.
+ * Import login-2026-tokens.css or define variables in :root (see spec).
+ */
+
+/* ─── Design tokens (inline for standalone prototype) ──────────────────────── */
+:root {
+  --login-accent: #EB4A00;
+  --login-accent-rgb: 235, 74, 0;
+  --login-base: #020E73;
+  --login-base-rgb: 2, 14, 115;
+  --login-neutral: #E6E6E6;
+  --login-surface: #FFFFFF;
+  --login-text-on-accent: #FFFFFF;
+  --login-text-primary: #020E73;
+  --login-text-muted: rgba(2, 14, 115, 0.6);
+  --login-border: rgba(2, 14, 115, 0.12);
+  --login-focus-glow: rgba(235, 74, 0, 0.2);
+  --login-mesh-overlay: rgba(2, 14, 115, 0.05);
+  --login-radius: 0.5rem;
+  --login-radius-lg: 0.75rem;
+  --login-space-md: 1rem;
+  --login-space-lg: 1.5rem;
+  --login-space-xl: 2rem;
+  --login-space-2xl: 3rem;
+  --login-card-padding: 2rem;
+  --login-max-width-form: 400px;
+  --login-touch-min: 44px;
+  --login-duration-normal: 200ms;
+  --login-duration-entrance: 350ms;
+  --login-ease-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --login-shadow-card: 0 4px 24px rgba(2, 14, 115, 0.08);
+  --login-shadow-button: 0 4px 14px rgba(235, 74, 0, 0.25);
+  --login-shadow-button-hover: 0 6px 20px rgba(235, 74, 0, 0.35);
+  --login-shadow-focus: 0 0 0 3px var(--login-focus-glow);
+}
+
+/* ─── KEYFRAMES (Animation definitions) ──────────────────────────────────── */
+
+/*
+ * login-entrance: Page/card entrance.
+ * Fade-in + slide-up over 300–400ms ease-out for 2026 smooth load.
+ */
+@keyframes login-entrance {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/*
+ * login-logo-float: Logo/brand mark subtle floating + opacity pulse.
+ * 6s loop, continuous; use for brand mark only. Disable when prefers-reduced-motion.
+ */
+@keyframes login-logo-float {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-4px);
+    opacity: 0.92;
+  }
+}
+
+/*
+ * login-spinner: Loading spinner rotation.
+ * Smooth 360° rotation for form submission state.
+ */
+@keyframes login-spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/*
+ * login-shimmer: Optional gradient bar accent animation.
+ * Left-to-right shimmer for decorative accent line.
+ */
+@keyframes login-shimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+/* ─── Base & layout ───────────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: system-ui, -apple-system, sans-serif;
+  background: var(--login-neutral);
+  color: var(--login-text-primary);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--login-space-lg);
+  /* Geometric mesh: subtle pattern in primary base at 5% */
+  background-image:
+    radial-gradient(circle at 20% 30%, var(--login-mesh-overlay) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, var(--login-mesh-overlay) 0%, transparent 50%),
+    var(--login-neutral);
+}
+
+/* Reduced motion: shorten or disable animations */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ─── Shell & card ────────────────────────────────────────────────────────── */
+.login-shell {
+  width: 100%;
+  max-width: var(--login-max-width-form);
+  animation: login-entrance var(--login-duration-entrance) var(--login-ease-out) both;
+}
+
+.login-card {
+  background: var(--login-surface);
+  border-radius: var(--login-radius-lg);
+  box-shadow: var(--login-shadow-card);
+  padding: var(--login-card-padding);
+  border: 1px solid var(--login-border);
+  /* Glass-morphism (optional; enable where supported) */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Decorative accent bar: gradient line using #EB4A00 */
+.login-accent-bar {
+  height: 4px;
+  width: 64px;
+  margin-bottom: var(--login-space-lg);
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--login-base), var(--login-accent));
+  animation: login-shimmer 3s ease-in-out infinite;
+  background-size: 200% 100%;
+}
+
+/* ─── Logo ────────────────────────────────────────────────────────────────── */
+.login-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--login-radius);
+  background: var(--login-base);
+  color: var(--login-text-on-accent);
+  font-weight: 800;
+  font-size: 1.25rem;
+  margin-bottom: var(--login-space-lg);
+  animation: login-logo-float 6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .login-logo {
+    animation: none;
+  }
+}
+
+/* ─── Typography ──────────────────────────────────────────────────────────── */
+.login-headline {
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin: 0 0 0.25rem 0;
+  color: var(--login-text-primary);
+  letter-spacing: -0.02em;
+}
+
+.login-subtitle {
+  font-size: 0.9375rem;
+  color: var(--login-text-muted);
+  margin: 0 0 var(--login-space-xl) 0;
+  line-height: 1.45;
+}
+
+/* ─── Form ────────────────────────────────────────────────────────────────── */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--login-space-lg);
+}
+
+.login-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.login-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--login-text-muted);
+}
+
+.login-input {
+  min-height: var(--login-touch-min);
+  padding: 0 1rem;
+  font-size: 1rem;
+  border: 1px solid var(--login-border);
+  border-radius: var(--login-radius);
+  background: var(--login-surface);
+  color: var(--login-text-primary);
+  transition: transform 0.2s var(--login-ease-out), box-shadow 0.2s var(--login-ease-out), border-color 0.2s var(--login-ease-out);
+}
+
+.login-input::placeholder {
+  color: var(--login-text-muted);
+}
+
+/* Input focus: scale 1.02 + border glow #EB4A00 20% */
+.login-input:focus {
+  outline: none;
+  transform: scale(1.02);
+  border-color: var(--login-accent);
+  box-shadow: var(--login-shadow-focus);
+}
+
+.login-input-wrapper {
+  position: relative;
+}
+
+.login-input-wrapper .login-toggle-password {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  min-width: var(--login-touch-min);
+  min-height: var(--login-touch-min);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--login-text-muted);
+  cursor: pointer;
+  border-radius: var(--login-radius);
+  transition: color 0.2s var(--login-ease-out);
+}
+
+.login-toggle-password:hover {
+  color: var(--login-accent);
+}
+
+.login-toggle-password:focus-visible {
+  outline: none;
+  box-shadow: var(--login-shadow-focus);
+}
+
+/* ─── Remember me ─────────────────────────────────────────────────────────── */
+.login-remember {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: var(--login-touch-min);
+}
+
+.login-remember input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--login-accent);
+  cursor: pointer;
+}
+
+.login-remember label {
+  font-size: 0.875rem;
+  color: var(--login-text-muted);
+  cursor: pointer;
+}
+
+/* ─── Primary button (Sign In) ─────────────────────────────────────────────── */
+.login-btn-primary {
+  min-height: var(--login-touch-min);
+  width: 100%;
+  padding: 0 1.5rem;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--login-text-on-accent);
+  background: linear-gradient(135deg, var(--login-base), var(--login-accent));
+  border: none;
+  border-radius: var(--login-radius);
+  cursor: pointer;
+  box-shadow: var(--login-shadow-button);
+  transition: all 0.2s var(--login-ease-out);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.login-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--login-shadow-button-hover);
+  background: linear-gradient(135deg, var(--login-accent), var(--login-base));
+}
+
+.login-btn-primary:focus-visible {
+  outline: none;
+  box-shadow: var(--login-shadow-focus);
+}
+
+.login-btn-primary:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.login-btn-primary .spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: login-spinner 0.8s linear infinite;
+}
+
+/* ─── Links ───────────────────────────────────────────────────────────────── */
+.login-links {
+  text-align: center;
+  margin-top: var(--login-space-xl);
+  padding-top: var(--login-space-lg);
+  border-top: 1px solid var(--login-border);
+}
+
+.login-link {
+  font-size: 0.875rem;
+  color: var(--login-text-muted);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s var(--login-ease-out);
+  display: inline-block;
+  min-height: var(--login-touch-min);
+  line-height: var(--login-touch-min);
+  padding: 0 0.25rem;
+}
+
+.login-link:hover {
+  color: var(--login-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.login-link-forgot {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.25rem;
+}
+
+/* ─── Footer ──────────────────────────────────────────────────────────────── */
+.login-footer {
+  margin-top: var(--login-space-2xl);
+  font-size: 0.75rem;
+  color: var(--login-text-muted);
+  text-align: center;
+}
+
+.login-footer a {
+  color: var(--login-text-muted);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.login-footer a:hover {
+  color: var(--login-accent);
+}
+
+/* ─── Desktop: optional auto-width button ─────────────────────────────────── */
+@media (min-width: 768px) {
+  .login-btn-primary {
+    width: auto;
+    min-width: 160px;
+  }
+}
+
+@media (min-width: 1024px) {
+  body {
+    padding: var(--login-space-2xl);
+  }
+  .login-card {
+    padding: 2.5rem;
+  }
+}

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="GateFlow — Sign in to the resident management dashboard" />
+  <title>Sign in — GateFlow</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="login-shell">
+    <main class="login-card" role="main">
+      <!-- Brand mark with subtle float animation -->
+      <div class="login-logo" aria-hidden="true">G</div>
+      <div class="login-accent-bar" aria-hidden="true"></div>
+
+      <h1 class="login-headline">Sign in</h1>
+      <p class="login-subtitle">
+        Manage gates, QR codes, and scans from anywhere. Zero-trust digital access.
+      </p>
+
+      <form class="login-form" action="#" method="post" aria-label="Sign in form">
+        <div class="login-field-group">
+          <label class="login-label" for="email">Email Address</label>
+          <input
+            class="login-input"
+            id="email"
+            name="email"
+            type="email"
+            placeholder="you@company.com"
+            autocomplete="email"
+            required
+            aria-required="true"
+          />
+        </div>
+
+        <div class="login-field-group">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <label class="login-label" for="password">Password</label>
+            <a href="#" class="login-link login-link-forgot">Forgot password?</a>
+          </div>
+          <div class="login-input-wrapper">
+            <input
+              class="login-input"
+              id="password"
+              name="password"
+              type="password"
+              placeholder="••••••••"
+              autocomplete="current-password"
+              required
+              aria-required="true"
+            />
+            <button
+              type="button"
+              class="login-toggle-password"
+              aria-label="Show password"
+              title="Show password"
+            >
+              Show
+            </button>
+          </div>
+        </div>
+
+        <div class="login-remember">
+          <input type="checkbox" id="remember" name="remember" />
+          <label for="remember">Remember me</label>
+        </div>
+
+        <button type="submit" class="login-btn-primary">
+          Sign In
+        </button>
+      </form>
+
+      <div class="login-links">
+        <p style="margin: 0 0 0.5rem 0; font-size: 0.75rem; color: var(--login-text-muted);">
+          Don't have an account?
+        </p>
+        <a href="mailto:support@gateflow.io" class="login-link">Contact Support</a>
+        <span style="color: var(--login-border); margin: 0 0.5rem;">·</span>
+        <a href="#" class="login-link">System Status</a>
+      </div>
+    </main>
+
+    <footer class="login-footer">
+      © 2026 GateFlow Inc.
+    </footer>
+  </div>
+
+  <script>
+    // Demo: password visibility toggle
+    document.querySelector('.login-toggle-password').addEventListener('click', function () {
+      const input = document.getElementById('password');
+      const btn = this;
+      if (input.type === 'password') {
+        input.type = 'text';
+        btn.textContent = 'Hide';
+        btn.setAttribute('aria-label', 'Hide password');
+      } else {
+        input.type = 'password';
+        btn.textContent = 'Show';
+        btn.setAttribute('aria-label', 'Show password');
+      }
+    });
+    // Demo: loading state on submit
+    document.querySelector('.login-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const btn = this.querySelector('.login-btn-primary');
+      const orig = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = '<span class="spinner"></span> Signing in…';
+      setTimeout(function () {
+        btn.disabled = false;
+        btn.innerHTML = orig;
+      }, 2000);
+    });
+  </script>
+</body>
+</html>

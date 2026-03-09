@@ -1,0 +1,75 @@
+/**
+ * GateFlow Login 2026 — Design Tokens
+ * Use these CSS variables for the 2026 dashboard login page.
+ * Dark-mode ready: duplicate under .dark or [data-theme="dark"] when needed.
+ */
+
+:root {
+  /* ─── Colors (STRICT palette) ───────────────────────────────────────────── */
+  --login-accent: #EB4A00;           /* Primary accent: CTAs, focus, highlights */
+  --login-accent-rgb: 235, 74, 0;
+  --login-base: #020E73;             /* Deep navy: header, primary text */
+  --login-base-rgb: 2, 14, 115;
+  --login-neutral: #E6E6E6;          /* Light gray: cards, dividers, secondary bg */
+  --login-neutral-rgb: 230, 230, 230;
+  --login-surface: #FFFFFF;          /* Card and form backgrounds */
+  --login-surface-rgb: 255, 255, 255;
+  --login-text-on-accent: #FFFFFF;
+  --login-text-on-base: #FFFFFF;
+  --login-text-primary: #020E73;     /* Text on light backgrounds */
+  --login-text-muted: rgba(2, 14, 115, 0.6);
+  --login-border: rgba(2, 14, 115, 0.12);
+  --login-focus-glow: rgba(235, 74, 0, 0.2);
+  --login-mesh-overlay: rgba(2, 14, 115, 0.05);
+
+  /* ─── Spacing ───────────────────────────────────────────────────────────── */
+  --login-radius: 0.5rem;
+  --login-radius-lg: 0.75rem;
+  --login-space-xs: 0.25rem;
+  --login-space-sm: 0.5rem;
+  --login-space-md: 1rem;
+  --login-space-lg: 1.5rem;
+  --login-space-xl: 2rem;
+  --login-space-2xl: 3rem;
+  --login-card-padding: 2rem;
+  --login-max-width-form: 400px;
+  --login-touch-min: 44px;
+
+  /* ─── Typography ────────────────────────────────────────────────────────── */
+  --login-font-sans: system-ui, -apple-system, sans-serif;
+  --login-heading-size: 1.75rem;
+  --login-heading-weight: 800;
+  --login-body-size: 0.9375rem;
+  --login-label-size: 0.75rem;
+  --login-label-weight: 700;
+  --login-link-size: 0.875rem;
+
+  /* ─── Transitions & easing ────────────────────────────────────────────────── */
+  --login-duration-fast: 150ms;
+  --login-duration-normal: 200ms;
+  --login-duration-entrance: 350ms;
+  --login-ease-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --login-ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* ─── Shadows ───────────────────────────────────────────────────────────── */
+  --login-shadow-card: 0 4px 24px rgba(2, 14, 115, 0.08);
+  --login-shadow-button: 0 4px 14px rgba(235, 74, 0, 0.25);
+  --login-shadow-button-hover: 0 6px 20px rgba(235, 74, 0, 0.35);
+  --login-shadow-focus: 0 0 0 3px var(--login-focus-glow);
+
+  /* ─── Z-index ───────────────────────────────────────────────────────────── */
+  --login-z-base: 0;
+  --login-z-card: 1;
+  --login-z-controls: 10;
+  --login-z-modal: 100;
+}
+
+/* Dark mode placeholder (expand when theme is implemented) */
+.dark,
+[data-theme="dark"] {
+  --login-surface: #0f172a;
+  --login-text-primary: #f1f5f9;
+  --login-text-muted: rgba(241, 245, 249, 0.6);
+  --login-border: rgba(255, 255, 255, 0.1);
+  --login-mesh-overlay: rgba(235, 74, 0, 0.05);
+}

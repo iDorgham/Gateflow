@@ -38,7 +38,7 @@ import {
   Cairo_600SemiBold, 
   Cairo_700Bold 
 } from '@expo-google-fonts/cairo';
-import { nativeTokens } from '@gate-access/ui/src/tokens';
+import { nativeTokens } from '@gate-access/ui/tokens';
 import { login, logout, getValidAccessToken } from './src/lib/auth-client';
 import { apiRequest } from './src/lib/api-client';
 import { format } from 'date-fns';
