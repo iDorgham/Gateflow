@@ -58,14 +58,14 @@ Checklist for **PLAN_analytics_rebuild**. Use with `/dev` and phase prompts.
 
 ## Phase 5 — Extended Charts
 
-- [ ] **5.1** Incidents by Gate/Operator
-- [ ] **5.2** Resident Quota Usage (or stub)
-- [ ] **5.3** Peak Days (radar/grouped bar)
-- [ ] **5.4** UTM Attribution (funnel/bar)
-- [ ] **5.5** Stretch: Dwell Time, QR trends, Expired QR, Gate by Shift (optional)
-- [ ] **5.6** Lint, typecheck pass
+- [x] **5.1** Incidents by Gate/Operator (column bar, groupBy=gate)
+- [x] **5.2** Resident Quota Usage (stub: progress bars when data; “Coming soon” when empty)
+- [x] **5.3** Peak Days (grouped bar by day of week)
+- [x] **5.4** UTM Attribution (horizontal bar from campaigns API)
+- [x] **5.5** Stretch: skipped (optional)
+- [x] **5.6** Lint, typecheck pass
 
-**Status:** Pending
+**Status:** Complete
 
 ---
 

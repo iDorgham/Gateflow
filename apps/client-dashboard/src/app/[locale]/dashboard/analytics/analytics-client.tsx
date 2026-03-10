@@ -23,6 +23,10 @@ import {
   UnitTypesRankingChart,
   VisitorTypeChart,
   TopUnitsChart,
+  IncidentsChart,
+  ResidentQuotaChart,
+  PeakDaysChart,
+  UTMAttributionChart,
   type KPIData,
 } from '@/components/dashboard/analytics';
 import { useAnalyticsFilters, useAnalyticsSummary } from '@/lib/analytics';
@@ -149,6 +153,19 @@ export function AnalyticsClient({ kpiData, gates = [] }: AnalyticsClientProps) {
         </div>
         <div className="min-h-[280px]" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
           <TopUnitsChart filters={filters} />
+        </div>
+        {/* Phase 5 — Incidents, Quota, Peak Days, UTM (both modes) */}
+        <div className="min-h-[280px]" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+          <IncidentsChart filters={filters} groupBy="gate" />
+        </div>
+        <div className="min-h-[280px]" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+          <ResidentQuotaChart filters={filters} />
+        </div>
+        <div className="min-h-[280px]" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+          <PeakDaysChart filters={filters} />
+        </div>
+        <div className="min-h-[280px]" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+          <UTMAttributionChart filters={filters} />
         </div>
       </div>
 
