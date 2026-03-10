@@ -11,7 +11,7 @@ interface AnalyticsKPICardProps {
 
 export function AnalyticsKPICard({ title, value, trend, className }: AnalyticsKPICardProps) {
   return (
-    <Card className={cn('shrink-0 min-w-[140px]', className)}>
+    <Card className={cn('h-full', className)}>
       <CardContent className="p-4">
         <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{title}</p>
         <div className="mt-1 flex items-baseline gap-2">

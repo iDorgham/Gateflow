@@ -62,7 +62,7 @@ export function AnalyticsClient({ kpiData, gates = [] }: AnalyticsClientProps) {
   const attributedScans = kpiDataToUse?.attributedScans ?? 0;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header: title, mode toggle, export (Marketing), print */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
@@ -97,18 +97,18 @@ export function AnalyticsClient({ kpiData, gates = [] }: AnalyticsClientProps) {
       {/* Anomaly cards (Security mode only) */}
       {isSecurity && <AnalyticsAnomalyCards summary={summary ?? undefined} />}
 
-      {/* Main charts: responsive grid (1/2/3/4 cols); wide charts use col-span-2 or col-span-full */}
+      {/* Main charts: responsive grid (1/2/3 cols); wide charts use col-span-2 or col-span-3 */}
       <div
         ref={chartsRef}
-        className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+        className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
       >
         {/* Total Visits Over Time — shown in both modes */}
-        <div className="md:col-span-2" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+        <div className="md:col-span-2 lg:col-span-3" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
           <TotalVisitsChart filters={filters} />
         </div>
         {isSecurity ? (
           <>
-            <div className="md:col-span-2 min-h-[320px]" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+            <div className="md:col-span-2 lg:col-span-3 min-h-[320px]" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
               <AnalyticsHeatmapChart filters={filters} locale={locale} className="min-h-[320px]" />
             </div>
             <div className="min-h-[280px]" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
@@ -123,7 +123,7 @@ export function AnalyticsClient({ kpiData, gates = [] }: AnalyticsClientProps) {
           </>
         ) : (
           <>
-            <div className="md:col-span-2 min-h-[320px]" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+            <div className="md:col-span-2 lg:col-span-3 min-h-[320px]" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
               <AnalyticsFunnelChart filters={filters} locale={locale} className="min-h-[320px]" />
             </div>
             <div className="min-h-[280px]" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
@@ -136,13 +136,13 @@ export function AnalyticsClient({ kpiData, gates = [] }: AnalyticsClientProps) {
               <AnalyticsCampaignBarChart filters={filters} className="min-h-[200px]" />
               <AnalyticsROIWidget attributedScans={attributedScans} />
             </div>
-            <div className="col-span-full min-h-[200px]" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+            <div className="col-span-full lg:col-span-3 min-h-[200px]" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
               <AnalyticsPersonaPie className="min-h-[200px]" />
             </div>
           </>
         )}
         {/* Phase 4 — New vs Returning, Unit Types, Visitor Type, Top Units (both modes) */}
-        <div className="md:col-span-2 min-h-[280px]" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+        <div className="md:col-span-2 lg:col-span-3 min-h-[280px]" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
           <NewVsReturningChart filters={filters} />
         </div>
         <div className="min-h-[280px]" dir={locale === 'ar' ? 'rtl' : 'ltr'}>

@@ -32,7 +32,7 @@ export function AnalyticsKPICards({ data }: AnalyticsKPICardsProps) {
   const attributedScans = data?.attributedScans ?? 0;
 
   return (
-    <div className="flex flex-wrap gap-3 overflow-x-auto pb-2">
+    <div className="grid grid-cols-2 gap-3 pb-2 sm:grid-cols-3 lg:grid-cols-6">
       <AnalyticsKPICard
         title={t('analytics.kpiTotalVisits', 'Total Visits')}
         value={totalVisits.toLocaleString()}
