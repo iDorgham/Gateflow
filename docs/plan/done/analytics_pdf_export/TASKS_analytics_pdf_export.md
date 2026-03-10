@@ -21,5 +21,5 @@ Last updated: 2026-03-10
 - [x] Make PDF labels i18n-aware (EN/AR)
 - [x] Run `pnpm turbo lint --filter=client-dashboard`
 - [x] Run `pnpm --filter=client-dashboard test`
-- [ ] Commit + push
+- [x] Commit + push
 
