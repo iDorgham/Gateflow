@@ -169,6 +169,11 @@ export function AnalyticsClient({ kpiData, gates = [] }: AnalyticsClientProps) {
         </div>
       </div>
 
+      {/* Export CSV at bottom (filter-scoped) */}
+      <div className="flex flex-wrap items-center justify-end gap-2 border-t pt-4">
+        <AnalyticsAudienceExportButton filters={filters} labelKey="analytics.exportCsv" />
+      </div>
+
       {/* Apply filters to Contacts/Units */}
       <AnalyticsApplyFiltersButton locale={locale} filters={filters} />
     </div>

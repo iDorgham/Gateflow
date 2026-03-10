@@ -9,6 +9,8 @@ import type { AnalyticsFilters } from '@/lib/analytics/analytics-filters';
 interface AnalyticsAudienceExportButtonProps {
   filters: AnalyticsFilters;
   className?: string;
+  /** i18n key for button label (default: analytics.exportAudience) */
+  labelKey?: string;
 }
 
 function buildExportUrl(filters: AnalyticsFilters): string {
@@ -22,7 +24,11 @@ function buildExportUrl(filters: AnalyticsFilters): string {
   return `/api/analytics/export?${sp.toString()}`;
 }
 
-export function AnalyticsAudienceExportButton({ filters, className }: AnalyticsAudienceExportButtonProps) {
+export function AnalyticsAudienceExportButton({
+  filters,
+  className,
+  labelKey = 'analytics.exportAudience',
+}: AnalyticsAudienceExportButtonProps) {
   const { t } = useTranslation('dashboard');
   const [loading, setLoading] = useState(false);
 
@@ -54,7 +60,7 @@ export function AnalyticsAudienceExportButton({ filters, className }: AnalyticsA
       className={className}
     >
       <Download className="h-4 w-4 mr-1" />
-      {loading ? t('analytics.exporting', 'Exporting…') : t('analytics.exportAudience', 'Export audience')}
+      {loading ? t('analytics.exporting', 'Exporting…') : t(labelKey, 'Export')}
     </Button>
   );
 }

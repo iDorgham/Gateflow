@@ -71,10 +71,10 @@ Checklist for **PLAN_analytics_rebuild**. Use with `/dev` and phase prompts.
 
 ## Phase 6 — Polish & Export
 
-- [ ] **6.1** RTL/i18n for all new chart labels and titles
-- [ ] **6.2** Loading/error/empty states per chart
-- [ ] **6.3** CSV export at bottom; dark mode check
-- [ ] **6.4** Responsive/mobile pass; tests
-- [ ] **6.5** Lint, typecheck, test pass
+- [x] **6.1** RTL/i18n for all new chart labels and titles (en + ar)
+- [x] **6.2** Loading/error/empty states per chart (already in place)
+- [x] **6.3** CSV export at bottom; dark mode (theme vars)
+- [x] **6.4** Responsive grid; analytics-filters unit tests
+- [x] **6.5** Lint and test pass (typecheck: pre-existing elsewhere)
 
-**Status:** Pending
+**Status:** Complete
