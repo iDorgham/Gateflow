@@ -19,6 +19,7 @@ export {
 } from './chart-colors';
 export type {
   VisitsOverTimePoint,
+  NewVsReturningPoint,
   TopGatesRow,
   ScanOutcomeRow,
   PeakDaysRow,

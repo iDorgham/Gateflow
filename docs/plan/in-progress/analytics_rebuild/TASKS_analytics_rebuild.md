@@ -46,13 +46,13 @@ Checklist for **PLAN_analytics_rebuild**. Use with `/dev` and phase prompts.
 
 ## Phase 4 — Core Charts (Batch 2)
 
-- [ ] **4.1** New vs Returning (stacked area/bar)
-- [ ] **4.2** Unit Types ranking (horizontal bar)
-- [ ] **4.3** Visitor Type distribution (donut/treemap)
-- [ ] **4.4** Top Active Units (horizontal bar, top 10)
-- [ ] **4.5** Lint, typecheck pass
+- [x] **4.1** New vs Returning (stacked area; stub API 60/40 split)
+- [x] **4.2** Unit Types ranking (horizontal bar)
+- [x] **4.3** Visitor Type distribution (donut)
+- [x] **4.4** Top Active Units (horizontal bar, top 10)
+- [x] **4.5** Lint, typecheck pass
 
-**Status:** Pending
+**Status:** Complete
 
 ---
 

@@ -9,6 +9,13 @@ export interface VisitsOverTimePoint {
   count: number;
 }
 
+/** New vs Returning: stacked series by date (stub until first-scan tracking exists) */
+export interface NewVsReturningPoint {
+  date: string;
+  newCount: number;
+  returningCount: number;
+}
+
 /** Top gates by traffic */
 export interface TopGatesRow {
   gateId: string;

@@ -19,6 +19,10 @@ import {
   TotalVisitsChart,
   TopGatesChart,
   ScanOutcomeChart,
+  NewVsReturningChart,
+  UnitTypesRankingChart,
+  VisitorTypeChart,
+  TopUnitsChart,
   type KPIData,
 } from '@/components/dashboard/analytics';
 import { useAnalyticsFilters, useAnalyticsSummary } from '@/lib/analytics';
@@ -133,6 +137,19 @@ export function AnalyticsClient({ kpiData, gates = [] }: AnalyticsClientProps) {
             </div>
           </>
         )}
+        {/* Phase 4 — New vs Returning, Unit Types, Visitor Type, Top Units (both modes) */}
+        <div className="md:col-span-2 min-h-[280px]" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+          <NewVsReturningChart filters={filters} />
+        </div>
+        <div className="min-h-[280px]" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+          <UnitTypesRankingChart filters={filters} />
+        </div>
+        <div className="min-h-[280px]" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+          <VisitorTypeChart filters={filters} />
+        </div>
+        <div className="min-h-[280px]" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+          <TopUnitsChart filters={filters} />
+        </div>
       </div>
 
       {/* Apply filters to Contacts/Units */}
