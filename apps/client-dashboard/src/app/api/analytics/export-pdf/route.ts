@@ -15,6 +15,49 @@ import {
 
 export const dynamic = 'force-dynamic';
 
+type PdfLocale = 'en' | 'ar';
+
+function parsePdfLocale(value: string | null): PdfLocale {
+  return value === 'ar' ? 'ar' : 'en';
+}
+
+function t(locale: PdfLocale, key: string): string {
+  const dict: Record<PdfLocale, Record<string, string>> = {
+    en: {
+      reportTitle: 'GateFlow Analytics Report',
+      workspace: 'Workspace',
+      dateRange: 'Date range',
+      keyMetrics: 'Key metrics',
+      totalVisits: 'Total visits',
+      passRate: 'Pass rate',
+      peakHour: 'Peak hour',
+      deniedScans: 'Denied scans',
+      attributedScans: 'Attributed scans',
+      visitsOverTime: 'Visits over time',
+      scans: 'scans',
+      moreDays: '… and {{count}} more days',
+      generatedAt: 'Generated at {{value}}',
+    },
+    ar: {
+      reportTitle: 'تقرير تحليلات GateFlow',
+      workspace: 'مساحة العمل',
+      dateRange: 'نطاق التاريخ',
+      keyMetrics: 'المؤشرات الرئيسية',
+      totalVisits: 'إجمالي الزيارات',
+      passRate: 'معدل النجاح',
+      peakHour: 'ساعة الذروة',
+      deniedScans: 'المسحات المرفوضة',
+      attributedScans: 'المسحات المنسوبة',
+      visitsOverTime: 'الزيارات بمرور الوقت',
+      scans: 'مسحات',
+      moreDays: '… و {{count}} يومًا إضافيًا',
+      generatedAt: 'تم الإنشاء في {{value}}',
+    },
+  };
+
+  return dict[locale][key] ?? key;
+}
+
 interface SummaryMetrics {
   totalVisits: number;
   passRate: number;
@@ -27,7 +70,7 @@ type VisitsRow = { date: string; count: bigint };
 
 async function fetchSummary(
   orgId: string,
-  ctx: Awaited<ReturnType<typeof validateAnalyticsQuery>> extends { ok: true; ctx: infer C } ? C : never
+  ctx: import('@/lib/analytics/analytics-query').ValidatedAnalyticsContext
 ): Promise<SummaryMetrics> {
   const { dateFromDate, dateToDate, projectId, gateId } = ctx;
 
@@ -79,7 +122,7 @@ async function fetchSummary(
 
 async function fetchVisitsSeries(
   orgId: string,
-  ctx: Awaited<ReturnType<typeof validateAnalyticsQuery>> extends { ok: true; ctx: infer C } ? C : never
+  ctx: import('@/lib/analytics/analytics-query').ValidatedAnalyticsContext
 ): Promise<{ date: string; count: number }[]> {
   const { projectId, gateId, dateFromDate, dateToDate } = ctx;
 
@@ -152,6 +195,7 @@ async function fetchVisitsSeries(
 }
 
 function createPdfBuffer(
+  locale: PdfLocale,
   orgName: string,
   dateFrom: string,
   dateTo: string,
@@ -169,42 +213,53 @@ function createPdfBuffer(
     doc.on('error', (err) => reject(err));
 
     // Header
-    doc.fontSize(18).text('GateFlow Analytics Report', { align: 'left' });
+    doc.fontSize(18).text(t(locale, 'reportTitle'), {
+      align: locale === 'ar' ? 'right' : 'left',
+    });
     doc.moveDown(0.5);
     doc.fontSize(10).fillColor('#555555');
-    doc.text(`Workspace: ${orgName}`);
-    doc.text(`Date range: ${dateFrom} → ${dateTo}`);
+    doc.text(`${t(locale, 'workspace')}: ${orgName}`);
+    doc.text(`${t(locale, 'dateRange')}: ${dateFrom} → ${dateTo}`);
     doc.moveDown(1);
 
     // KPI section
-    doc.fontSize(12).fillColor('#000000').text('Key metrics', { underline: true });
+    doc
+      .fontSize(12)
+      .fillColor('#000000')
+      .text(t(locale, 'keyMetrics'), { underline: true });
     doc.moveDown(0.5);
     doc.fontSize(10);
-    doc.text(`Total visits: ${summary.totalVisits.toLocaleString()}`);
-    doc.text(`Pass rate: ${summary.passRate}%`);
-    doc.text(`Peak hour: ${summary.peakHour >= 0 ? summary.peakHour + 'h' : '—'}`);
-    doc.text(`Denied scans: ${summary.deniedCount.toLocaleString()}`);
-    doc.text(`Attributed scans: ${summary.attributedScans.toLocaleString()}`);
+    doc.text(`${t(locale, 'totalVisits')}: ${summary.totalVisits.toLocaleString()}`);
+    doc.text(`${t(locale, 'passRate')}: ${summary.passRate}%`);
+    doc.text(
+      `${t(locale, 'peakHour')}: ${summary.peakHour >= 0 ? summary.peakHour + 'h' : '—'}`
+    );
+    doc.text(`${t(locale, 'deniedScans')}: ${summary.deniedCount.toLocaleString()}`);
+    doc.text(`${t(locale, 'attributedScans')}: ${summary.attributedScans.toLocaleString()}`);
     doc.moveDown(1);
 
     // Visits over time (simple table)
-    doc.fontSize(12).text('Visits over time', { underline: true });
+    doc.fontSize(12).text(t(locale, 'visitsOverTime'), { underline: true });
     doc.moveDown(0.5);
     doc.fontSize(9);
     const maxRows = 31;
     const rows = visits.slice(0, maxRows);
     rows.forEach((row) => {
-      doc.text(`${row.date}: ${row.count.toLocaleString()} scans`);
+      doc.text(`${row.date}: ${row.count.toLocaleString()} ${t(locale, 'scans')}`);
     });
     if (visits.length > maxRows) {
-      doc.text(`… and ${visits.length - maxRows} more days`, { oblique: true });
+      doc.text(
+        t(locale, 'moreDays').replace('{{count}}', String(visits.length - maxRows)),
+        { oblique: true }
+      );
     }
 
     // Footer
     doc.moveDown(2);
     doc.fontSize(8).fillColor('#777777');
+    const nowIso = new Date().toISOString();
     doc.text(
-      `Generated at ${new Date().toISOString()}`,
+      t(locale, 'generatedAt').replace('{{value}}', nowIso),
       50,
       doc.page.height - 50,
       { align: 'left' }
@@ -222,6 +277,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     }
 
     const { searchParams } = new URL(request.url);
+    const locale = parsePdfLocale(searchParams.get('locale'));
     const parsed = AnalyticsQuerySchema.safeParse({
       dateFrom: searchParams.get('dateFrom') ?? '',
       dateTo: searchParams.get('dateTo') ?? '',
@@ -256,6 +312,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     ]);
 
     const buffer = await createPdfBuffer(
+      locale,
       org?.name ?? 'Workspace',
       ctx.dateFrom,
       ctx.dateTo,

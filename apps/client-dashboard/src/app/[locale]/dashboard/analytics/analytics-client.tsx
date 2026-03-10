@@ -78,7 +78,7 @@ export function AnalyticsClient({ kpiData, gates = [] }: AnalyticsClientProps) {
           {!isSecurity && (
             <AnalyticsAudienceExportButton filters={filters} />
           )}
-          <AnalyticsPDFExportButton filters={filters} />
+          <AnalyticsPDFExportButton filters={filters} locale={locale} />
           <ExportChartButton targetRef={chartsRef} />
           <CopyLinkButton />
           <AnalyticsModeToggle mode={filters.mode} onModeChange={setMode} />
@@ -174,7 +174,7 @@ export function AnalyticsClient({ kpiData, gates = [] }: AnalyticsClientProps) {
       {/* Export at bottom (filter-scoped) */}
       <div className="flex flex-wrap items-center justify-end gap-2 border-t pt-4">
         <AnalyticsAudienceExportButton filters={filters} labelKey="analytics.exportCsv" />
-        <AnalyticsPDFExportButton filters={filters} />
+        <AnalyticsPDFExportButton filters={filters} locale={locale} />
       </div>
 
       {/* Apply filters to Contacts/Units */}
