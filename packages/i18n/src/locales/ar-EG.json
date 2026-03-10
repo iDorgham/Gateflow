@@ -1094,6 +1094,7 @@
       "utmAttributionDesc": "المسحات حسب حملة UTM.",
       "noCampaignData": "لا توجد بيانات حملة UTM في هذا النطاق",
       "exportCsv": "تصدير CSV",
+      "exportPdf": "تصدير PDF",
       "exporting": "جاري التصدير…",
       "exportAudience": "تصدير الجمهور"
     },

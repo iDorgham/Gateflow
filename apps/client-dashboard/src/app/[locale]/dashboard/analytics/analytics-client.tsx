@@ -16,6 +16,7 @@ import {
   AnalyticsPersonaPie,
   AnalyticsROIWidget,
   AnalyticsAudienceExportButton,
+  AnalyticsPDFExportButton,
   TotalVisitsChart,
   TopGatesChart,
   ScanOutcomeChart,
@@ -77,6 +78,7 @@ export function AnalyticsClient({ kpiData, gates = [] }: AnalyticsClientProps) {
           {!isSecurity && (
             <AnalyticsAudienceExportButton filters={filters} />
           )}
+          <AnalyticsPDFExportButton filters={filters} />
           <ExportChartButton targetRef={chartsRef} />
           <CopyLinkButton />
           <AnalyticsModeToggle mode={filters.mode} onModeChange={setMode} />
@@ -169,9 +171,10 @@ export function AnalyticsClient({ kpiData, gates = [] }: AnalyticsClientProps) {
         </div>
       </div>
 
-      {/* Export CSV at bottom (filter-scoped) */}
+      {/* Export at bottom (filter-scoped) */}
       <div className="flex flex-wrap items-center justify-end gap-2 border-t pt-4">
         <AnalyticsAudienceExportButton filters={filters} labelKey="analytics.exportCsv" />
+        <AnalyticsPDFExportButton filters={filters} />
       </div>
 
       {/* Apply filters to Contacts/Units */}

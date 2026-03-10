@@ -1082,6 +1082,7 @@
       "utmAttributionDesc": "Scans by UTM campaign.",
       "noCampaignData": "No UTM campaign data in this range",
       "exportCsv": "Export CSV",
+      "exportPdf": "Export PDF",
       "exporting": "Exporting…",
       "exportAudience": "Export audience"
     },

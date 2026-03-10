@@ -24,3 +24,4 @@ export { AnalyticsCampaignBarChart } from './AnalyticsCampaignBarChart';
 export { AnalyticsPersonaPie } from './AnalyticsPersonaPie';
 export { AnalyticsROIWidget } from './AnalyticsROIWidget';
 export { AnalyticsAudienceExportButton } from './AnalyticsAudienceExportButton';
+export { AnalyticsPDFExportButton } from './AnalyticsPDFExportButton';
