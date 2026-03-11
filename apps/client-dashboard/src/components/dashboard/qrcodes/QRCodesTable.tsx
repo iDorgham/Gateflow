@@ -158,7 +158,7 @@ export function QRCodesTable({
       },
       {
         id: 'status',
-        header: () => t('qrcodes.status', 'Status'),
+        header: () => t('qrcodes.table.status', 'Status'),
         cell: ({ row }) => {
           const status = row.original.status;
           const badge = STATUS_BADGE[status] ?? STATUS_BADGE.INACTIVE;
