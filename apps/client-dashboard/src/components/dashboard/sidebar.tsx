@@ -266,18 +266,19 @@ export function Sidebar({
             <span className="flex-1 truncate text-sm font-medium">{t('sidebar.settings', 'Settings')}</span>
           )}
         </Link>
-        <div className={cn('flex items-center justify-center', isCollapsed ? 'flex-col' : 'w-full')}>
-          <button
-            type="button"
-            onClick={onToggleCollapse}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-sidebar-border bg-sidebar/50 hover:bg-sidebar-accent shadow-sm group transition-all"
-            onMouseEnter={() => isCollapsed && setHoveredLabel(isCollapsed ? t('sidebar.expand', 'Expand') : t('sidebar.collapse', 'Collapse'))}
-            onMouseLeave={() => setHoveredLabel(null)}
-          >
-            <CaretLeftIcon className={cn('h-4 w-4 text-muted-foreground transition-transform group-hover:text-foreground', isCollapsed && 'rotate-180')} />
-          </button>
-        </div>
       </div>
+
+      {/* Collapse toggle — floats on the right edge of the sidebar */}
+      <button
+        type="button"
+        onClick={onToggleCollapse}
+        className="absolute bottom-10 -right-3 z-50 flex h-6 w-6 items-center justify-center rounded-full border border-sidebar-border bg-sidebar shadow-sm hover:bg-sidebar-accent transition-all group"
+        onMouseEnter={() => setHoveredLabel(isCollapsed ? t('sidebar.expand', 'Expand') : t('sidebar.collapse', 'Collapse'))}
+        onMouseLeave={() => setHoveredLabel(null)}
+        aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+      >
+        <CaretLeftIcon className={cn('h-3.5 w-3.5 text-muted-foreground transition-transform group-hover:text-foreground', isCollapsed && 'rotate-180')} />
+      </button>
 
       {/* Photoshop-style Floating Label */}
       {hoveredLabel && (
