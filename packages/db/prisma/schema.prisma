@@ -122,6 +122,10 @@ model GateAssignment {
   gateId         String
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId String
+  /// Optional shift start time (HH:mm, 24h). When set, assignment is valid from this time of day.
+  shiftStart     String?
+  /// Optional shift end time (HH:mm, 24h). When set, assignment is valid until this time of day.
+  shiftEnd       String?
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
   deletedAt      DateTime?

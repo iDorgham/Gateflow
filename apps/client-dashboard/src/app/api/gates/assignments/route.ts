@@ -52,6 +52,8 @@ export async function GET(request?: NextRequest): Promise<NextResponse> {
       user: a.user,
       gateId: a.gateId,
       gate: a.gate,
+      shiftStart: a.shiftStart ?? null,
+      shiftEnd: a.shiftEnd ?? null,
       createdAt: a.createdAt.toISOString(),
     }));
 
@@ -65,9 +67,14 @@ export async function GET(request?: NextRequest): Promise<NextResponse> {
 // ─── POST /api/gates/assignments ────────────────────────────────────────────────
 // Assign a user to one or more gates. User and gates must belong to the same org.
 
+// Optional shift time HH:mm (24h)
+const timeString = z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/).optional();
+
 const AssignSchema = z.object({
   userId: z.string().min(1),
   gateIds: z.array(z.string().min(1)).min(1).max(100),
+  shiftStart: timeString,
+  shiftEnd: timeString,
 });
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
@@ -95,7 +102,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    const { userId, gateIds } = parsed.data;
+    const { userId, gateIds, shiftStart, shiftEnd } = parsed.data;
     const orgId = claims.orgId;
 
     // Ensure user belongs to org
@@ -130,14 +137,25 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         if (existing.deletedAt) {
           await prisma.gateAssignment.update({
             where: { id: existing.id },
-            data: { deletedAt: null, updatedAt: new Date() },
+            data: {
+              deletedAt: null,
+              updatedAt: new Date(),
+              shiftStart: shiftStart ?? undefined,
+              shiftEnd: shiftEnd ?? undefined,
+            },
           });
           created.push({ id: existing.id, userId, gateId });
         }
         // else already active, skip
       } else {
         const a = await prisma.gateAssignment.create({
-          data: { userId, gateId, organizationId: orgId },
+          data: {
+            userId,
+            gateId,
+            organizationId: orgId,
+            shiftStart: shiftStart ?? undefined,
+            shiftEnd: shiftEnd ?? undefined,
+          },
         });
         created.push({ id: a.id, userId, gateId });
       }

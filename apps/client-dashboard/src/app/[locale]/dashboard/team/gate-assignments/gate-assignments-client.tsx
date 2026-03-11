@@ -41,6 +41,8 @@ interface AssignmentRow {
   user: { id: string; name: string | null; email: string };
   gateId: string;
   gate: { id: string; name: string; location: string | null };
+  shiftStart: string | null;
+  shiftEnd: string | null;
   createdAt: string;
 }
 
@@ -57,6 +59,8 @@ export function GateAssignmentsClient({ projectId }: GateAssignmentsClientProps)
   const [loadError, setLoadError] = useState<string | null>(null);
   const [selectedUserId, setSelectedUserId] = useState<string>('');
   const [selectedGateIds, setSelectedGateIds] = useState<string[]>([]);
+  const [shiftStart, setShiftStart] = useState<string>('');
+  const [shiftEnd, setShiftEnd] = useState<string>('');
   const [assignPending, setAssignPending] = useState(false);
   const [unassigningId, setUnassigningId] = useState<string | null>(null);
 
@@ -114,15 +118,23 @@ export function GateAssignmentsClient({ projectId }: GateAssignmentsClientProps)
     }
     setAssignPending(true);
     try {
+      const payload: { userId: string; gateIds: string[]; shiftStart?: string; shiftEnd?: string } = {
+        userId: selectedUserId,
+        gateIds: selectedGateIds,
+      };
+      if (shiftStart.trim()) payload.shiftStart = shiftStart.trim();
+      if (shiftEnd.trim()) payload.shiftEnd = shiftEnd.trim();
       const res = await csrfFetch('/api/gates/assignments', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: selectedUserId, gateIds: selectedGateIds }),
+        body: JSON.stringify(payload),
       });
       const data = await res.json();
       if (res.ok && data.success) {
         toast.success(t('gateAssignments.success.assigned', 'Assignments added.'));
         setSelectedGateIds([]);
+        setShiftStart('');
+        setShiftEnd('');
         await fetchData();
       } else {
         toast.error(data.message || t('gateAssignments.errors.assignFailed', 'Assign failed.'));
@@ -208,6 +220,28 @@ export function GateAssignmentsClient({ projectId }: GateAssignmentsClientProps)
               placeholder={t('gateAssignments.selectGates', 'Select gates…')}
             />
           </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="shift-start">{t('gateAssignments.shiftStart', 'Shift start (optional)')}</Label>
+              <input
+                id="shift-start"
+                type="time"
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                value={shiftStart}
+                onChange={(e) => setShiftStart(e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="shift-end">{t('gateAssignments.shiftEnd', 'Shift end (optional)')}</Label>
+              <input
+                id="shift-end"
+                type="time"
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                value={shiftEnd}
+                onChange={(e) => setShiftEnd(e.target.value)}
+              />
+            </div>
+          </div>
           <Button
             onClick={handleAssign}
             disabled={assignPending || !selectedUserId || selectedGateIds.length === 0}
@@ -237,6 +271,7 @@ export function GateAssignmentsClient({ projectId }: GateAssignmentsClientProps)
                 <TableRow>
                   <TableHead>{t('gateAssignments.tableUser', 'User')}</TableHead>
                   <TableHead>{t('gateAssignments.tableGate', 'Gate')}</TableHead>
+                  <TableHead>{t('gateAssignments.tableShift', 'Shift')}</TableHead>
                   <TableHead className="w-[100px]">{t('gateAssignments.tableActions', 'Actions')}</TableHead>
                 </TableRow>
               </TableHeader>
@@ -250,6 +285,15 @@ export function GateAssignmentsClient({ projectId }: GateAssignmentsClientProps)
                     </TableCell>
                     <TableCell>
                       {row.gate.location ? `${row.gate.name} (${row.gate.location})` : row.gate.name}
+                    </TableCell>
+                    <TableCell className="text-muted-foreground text-sm">
+                      {row.shiftStart && row.shiftEnd
+                        ? `${row.shiftStart} – ${row.shiftEnd}`
+                        : row.shiftStart
+                          ? row.shiftStart
+                          : row.shiftEnd
+                            ? `– ${row.shiftEnd}`
+                            : '—'}
                     </TableCell>
                     <TableCell>
                       <Button
