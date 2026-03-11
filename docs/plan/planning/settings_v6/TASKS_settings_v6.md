@@ -19,10 +19,10 @@
   - [x] Integrate with organization API
 
 
-- [ ] **Phase 3: Project & Resource Mapping**
-  - [ ] Implement Project CRUD API
-  - [ ] Build project table & mapping sheets
-  - [ ] Verify organization isolation
+- [x] **Phase 3: Project & Resource Mapping**
+  - [x] Implement Project CRUD API
+  - [x] Build project table & mapping sheets
+  - [x] Verify organization isolation
 
 - [ ] **Phase 4: Units & Residents Quotas**
   - [ ] Build Unit Type management
