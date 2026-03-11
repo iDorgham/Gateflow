@@ -22,7 +22,7 @@ import {
 } from '@gate-access/ui';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
-import { upsertResidentLimit } from '../../app/[locale]/dashboard/settings/residents/actions';
+import { upsertResidentLimit } from '../../../app/[locale]/dashboard/settings/residents/actions';
 import { UnitType } from '@gate-access/db';
 import { Pencil, Info } from 'lucide-react';
 

@@ -26,8 +26,8 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-  toast,
 } from '@gate-access/ui';
+import { toast } from 'sonner';
 import { Globe, Moon, Sun, Monitor, Clock, Calendar } from 'lucide-react';
 
 const generalSchema = z.object({

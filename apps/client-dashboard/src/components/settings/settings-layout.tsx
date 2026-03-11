@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   User,
   Building,
-  Stack,
+  Layers,
   Users,
   ShieldCheck,
   DoorOpen,
@@ -30,7 +30,7 @@ interface SettingsTab {
 const SETTINGS_TABS: SettingsTab[] = [
   { id: 'general', label: 'General', icon: User, href: '/dashboard/settings' },
   { id: 'workspace', label: 'Workspace', icon: Building, href: '/dashboard/settings/workspace' },
-  { id: 'projects', label: 'Projects', icon: Stack, href: '/dashboard/settings/projects' },
+  { id: 'projects', label: 'Projects', icon: Layers, href: '/dashboard/settings/projects' },
   { id: 'residents', label: 'Units & Residents', icon: LayoutGrid, href: '/dashboard/settings/residents' },
   { id: 'team', label: 'Team', icon: Users, href: '/dashboard/settings/team' },
   { id: 'rbac', label: 'Roles & Permissions', icon: ShieldCheck, href: '/dashboard/settings/rbac' },
@@ -103,7 +103,7 @@ export function SettingsLayout({ children }: { children: React.ReactNode }) {
 
         {/* Mobile Horizontal Tabs */}
         <div className="lg:hidden">
-          <ScrollArea className="w-full pb-3" orientation="horizontal">
+          <ScrollArea className="w-full pb-3">
             <div className="flex gap-2">
               {SETTINGS_TABS.map((tab) => {
                 const isActive = activeTab.id === tab.id;

@@ -119,7 +119,7 @@ export function PermissionMatrix({ permissions, onChange, disabled }: Permission
                   <Checkbox 
                     id={`perm-${perm.id}`}
                     checked={permissions[perm.id] || false}
-                    onCheckedChange={() => togglePermission(perm.id)}
+                    onChange={() => togglePermission(perm.id)}
                     disabled={disabled}
                     className="mt-0.5"
                   />

@@ -19,12 +19,12 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-  toast,
   Separator,
   Avatar,
   AvatarFallback,
   AvatarImage,
 } from '@gate-access/ui';
+import { toast } from 'sonner';
 import { 
   Building2, 
   Mail, 

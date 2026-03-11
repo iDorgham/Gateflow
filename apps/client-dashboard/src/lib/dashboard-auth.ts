@@ -17,6 +17,8 @@ export interface DashboardSession {
     name: string;
     email: string;
     plan: string;
+    maskResidentNameOnLandingPage: boolean;
+    showUnitOnLandingPage: boolean;
   } | null;
 }
 
@@ -53,7 +55,14 @@ export async function requireAuth(): Promise<DashboardSession> {
     org = await prisma.organization
       .findFirst({
         where: { id: user.organizationId, deletedAt: null },
-        select: { id: true, name: true, email: true, plan: true },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          plan: true,
+          maskResidentNameOnLandingPage: true,
+          showUnitOnLandingPage: true,
+        },
       })
       .catch(() => null);
   }

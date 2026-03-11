@@ -16,7 +16,7 @@ import {
 } from '@gate-access/ui';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
-import { updateResidentDefaults } from '../../app/[locale]/dashboard/settings/residents/actions';
+import { updateResidentDefaults } from '../../../app/[locale]/dashboard/settings/residents/actions';
 import { Shield, Eye, EyeOff } from 'lucide-react';
 
 const residentSettingsSchema = z.object({

@@ -322,7 +322,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     const filename = `analytics-${ctx.dateFrom}-to-${ctx.dateTo}.pdf`;
 
-    return new NextResponse(buffer, {
+    return new NextResponse(buffer as any, {
       status: 200,
       headers: {
         'Content-Type': 'application/pdf',

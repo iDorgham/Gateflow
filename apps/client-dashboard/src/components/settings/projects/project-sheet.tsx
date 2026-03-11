@@ -19,7 +19,7 @@ import {
 } from '@gate-access/ui';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
-import { createProject, updateProject, getResources } from '../../app/[locale]/dashboard/settings/projects/actions';
+import { createProject, updateProject, getResources } from '@/app/[locale]/dashboard/settings/projects/actions';
 import { GateMode } from '@gate-access/db';
 import { useRouter } from 'next/navigation';
 

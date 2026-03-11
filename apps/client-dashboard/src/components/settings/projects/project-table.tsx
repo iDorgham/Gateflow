@@ -17,7 +17,7 @@ import {
 import { MoreHorizontal, Pencil, Trash2, Layers, DoorOpen, LayoutGrid } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { ProjectSheet } from './project-sheet';
-import { deleteProject } from '../../app/[locale]/dashboard/settings/projects/actions';
+import { deleteProject } from '../../../app/[locale]/dashboard/settings/projects/actions';
 import { toast } from 'sonner';
 
 interface Project {
