@@ -190,18 +190,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       ? {
           OR: [
             { code: { contains: search.trim(), mode: 'insensitive' as const } },
-            {
-              utmSource: {
-                contains: search.trim(),
-                mode: 'insensitive' as const,
-              },
-            },
-            {
-              utmCampaign: {
-                contains: search.trim(),
-                mode: 'insensitive' as const,
-              },
-            },
+            { utmSource: { contains: search.trim(), mode: 'insensitive' as const } },
+            { utmCampaign: { contains: search.trim(), mode: 'insensitive' as const } },
+            { guestName: { contains: search.trim(), mode: 'insensitive' as const } },
+            { guestEmail: { contains: search.trim(), mode: 'insensitive' as const } },
           ],
         }
       : {};
@@ -283,6 +275,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         lastScanAt: lastScan?.scannedAt.toISOString() ?? null,
         gateName: qr.gate?.name ?? null,
         projectName: qr.project?.name ?? null,
+        guestName: qr.guestName ?? null,
+        guestEmail: qr.guestEmail ?? null,
+        guestPhone: qr.guestPhone ?? null,
+        contactId: qr.contactId ?? null,
       };
     });
 

@@ -265,6 +265,10 @@ model QRCode {
   isActive     Boolean       @default(true)
   utmCampaign  String?
   utmSource    String?
+  guestName    String?
+  guestEmail   String?
+  guestPhone   String?
+  contactId    String?       /// Optional reference to Contact.id (no enforced FK for migration atomicity)
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   deletedAt    DateTime?

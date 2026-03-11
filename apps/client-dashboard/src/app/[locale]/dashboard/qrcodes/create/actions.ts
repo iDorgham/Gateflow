@@ -16,6 +16,10 @@ interface CreateInput {
   gateId: string | null;
   maxUses: number | null;
   expiresAt: string | null;
+  guestName?: string | null;
+  guestEmail?: string | null;
+  guestPhone?: string | null;
+  contactId?: string | null;
 }
 
 type CreateResult = {
@@ -100,6 +104,10 @@ export async function createQRCode(input: CreateInput): Promise<CreateResult> {
         maxUses: resolvedMaxUses,
         expiresAt: input.expiresAt ? new Date(input.expiresAt) : null,
         isActive: true,
+        guestName: input.guestName ?? null,
+        guestEmail: input.guestEmail ?? null,
+        guestPhone: input.guestPhone ?? null,
+        contactId: input.contactId ?? null,
       },
     });
 
