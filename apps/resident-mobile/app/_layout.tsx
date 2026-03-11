@@ -23,6 +23,12 @@ export default function RootLayout() {
             title: 'Sign in',
           }}
         />
+        <Stack.Screen
+          name="visitors/[id]"
+          options={{
+            title: 'Visitor pass',
+          }}
+        />
       </Stack>
       <StatusBar style="dark" />
     </>

@@ -1,5 +1,7 @@
-import { Text, View, Pressable, StyleSheet } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Text, View, Pressable, StyleSheet, ActivityIndicator } from 'react-native';
 import { router } from 'expo-router';
+import { getValidAccessToken, logout } from '../lib/auth-client';
 
 // GateFlow design tokens (zinc palette)
 const colors = {
@@ -15,6 +17,30 @@ const colors = {
 };
 
 export default function HomeScreen() {
+  const [checking, setChecking] = useState(true);
+
+  useEffect(() => {
+    getValidAccessToken().then((token) => {
+      setChecking(false);
+      if (!token) {
+        router.replace('/login');
+      }
+    });
+  }, []);
+
+  const handleSignInDifferent = () => {
+    logout();
+    router.push('/login');
+  };
+
+  if (checking) {
+    return (
+      <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator size="large" color={colors.accent} />
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.card}>
@@ -31,7 +57,7 @@ export default function HomeScreen() {
         </Pressable>
 
         <Pressable
-          onPress={() => router.push('/login')}
+          onPress={handleSignInDifferent}
           style={({ pressed }) => [styles.secondaryButton, pressed && styles.secondaryButtonPressed]}
         >
           <Text style={styles.secondaryButtonText}>Sign in with a different account</Text>
