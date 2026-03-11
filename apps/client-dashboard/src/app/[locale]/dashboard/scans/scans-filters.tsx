@@ -3,6 +3,8 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Layers, DoorOpen, User } from 'lucide-react';
+import { FilterBar } from '@/components/dashboard/filter-bar';
 
 export interface Gate {
   id: string;
@@ -39,8 +41,8 @@ const STATUS_CHIP: Record<string, string> = {
 };
 
 const inputCls =
-  'w-full rounded-md border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-2 text-sm text-slate-900 dark:text-white placeholder-slate-400 ' +
-  'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500';
+  'w-full rounded-xl border border-border bg-card px-3 py-2 text-xs text-foreground placeholder-muted-foreground ' +
+  'focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring h-9';
 
 interface Props {
   gates: Gate[];
@@ -157,36 +159,24 @@ export function ScansFilters({
 
   return (
     <div className="space-y-4">
-      {/* Filter grid — row 1: text search + up-to-4 dropdowns */}
-      <div className={`grid gap-3 sm:grid-cols-2 ${hasProjects ? 'lg:grid-cols-5' : 'lg:grid-cols-4'}`}>
-        {/* QR search */}
-        <div className="relative">
-          <input
-            type="text"
-            placeholder={t('scans.filters.searchPlaceholder', { defaultValue: 'Search QR code…' })}
-            value={q}
-            onChange={(e) => {
-              setQ(e.target.value);
-              debounced(debounceQ, 'q', e.target.value);
-            }}
-            className={inputCls}
-          />
-          {q && (
-            <button
-              onClick={() => { setQ(''); navigate({ q: '' }); }}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
-              aria-label="Clear search"
-            >
-              ×
-            </button>
-          )}
-        </div>
+      {/* Filter bar — row 1: search + dropdowns */}
+      <FilterBar>
+        <FilterBar.Search
+          placeholder={t('scans.filters.searchPlaceholder', { defaultValue: 'Search QR code…' })}
+          value={q}
+          onChange={(e) => {
+            setQ(e.target.value);
+            debounced(debounceQ, 'q', e.target.value);
+          }}
+          containerClassName="flex-1 min-w-[160px]"
+        />
 
-        {/* Status */}
-        <select
+        <FilterBar.Divider />
+
+        <FilterBar.Select
           value={currentStatus}
           onChange={(e) => immediate('status', e.target.value)}
-          className={inputCls}
+          icon={<Layers />}
         >
           <option value="">{t('scans.filters.allStatuses', { defaultValue: 'All statuses' })}</option>
           {STATUSES.map((s) => (
@@ -194,14 +184,12 @@ export function ScansFilters({
               {t(`scans.status.${s}`, { defaultValue: s.replace(/_/g, ' ') })}
             </option>
           ))}
-        </select>
+        </FilterBar.Select>
 
-        {/* Project — only shown when the org has projects */}
         {hasProjects && (
-          <select
+          <FilterBar.Select
             value={currentProjectId}
             onChange={(e) => immediate('project', e.target.value)}
-            className={inputCls}
             aria-label={t('scans.filters.allProjects', { defaultValue: 'All projects' })}
           >
             <option value="all">{t('scans.filters.allProjects', { defaultValue: 'All projects' })}</option>
@@ -210,14 +198,13 @@ export function ScansFilters({
                 {p.name}
               </option>
             ))}
-          </select>
+          </FilterBar.Select>
         )}
 
-        {/* Gate */}
-        <select
+        <FilterBar.Select
           value={currentGate}
           onChange={(e) => immediate('gate', e.target.value)}
-          className={inputCls}
+          icon={<DoorOpen />}
         >
           <option value="">{t('scans.filters.allGates', { defaultValue: 'All gates' })}</option>
           {gates.map((g) => (
@@ -225,13 +212,12 @@ export function ScansFilters({
               {g.name}
             </option>
           ))}
-        </select>
+        </FilterBar.Select>
 
-        {/* Operator */}
-        <select
+        <FilterBar.Select
           value={currentUserId}
           onChange={(e) => immediate('userId', e.target.value)}
-          className={inputCls}
+          icon={<User />}
         >
           <option value="">{t('scans.filters.allOperators', { defaultValue: 'All operators' })}</option>
           {operators.map((u) => (
@@ -239,8 +225,8 @@ export function ScansFilters({
               {u.name}
             </option>
           ))}
-        </select>
-      </div>
+        </FilterBar.Select>
+      </FilterBar>
 
       {/* Second row: dates + device */}
       <div className="grid gap-3 sm:grid-cols-3">

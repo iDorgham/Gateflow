@@ -14,10 +14,11 @@ import {
   NativeSelect,
 } from '@gate-access/ui';
 import { useTranslation } from 'react-i18next';
-import { ChevronLeft, ChevronRight, Download, Plus, RefreshCw, Search, Trash2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Download, Plus, RefreshCw, Trash2 } from 'lucide-react';
 import { useQRCodes } from '@/lib/qrcodes/use-qrcodes';
 import { QRCodesTable } from '@/components/dashboard/qrcodes/QRCodesTable';
 import { PageHeader } from '@/components/dashboard/page-header';
+import { FilterBar } from '@/components/dashboard/filter-bar';
 import { toast } from 'sonner';
 
 type SortBy =
@@ -165,21 +166,20 @@ export default function QRCodesPage() {
         }
       />
 
-      {/* Filter bar (Phase 8): search + date ranges */}
+      {/* Filter bar: search + date ranges */}
       <div className="flex flex-col gap-3">
-        <div className="relative flex-1 max-w-sm">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
+        <FilterBar>
+          <FilterBar.Search
             placeholder={t('qrcodes.searchPlaceholder', 'Search codes...')}
-            className="pl-9"
             value={search}
             onChange={(e) => {
               setPage(1);
               setSearch(e.target.value);
             }}
             aria-label={t('qrcodes.search', 'Search')}
+            containerClassName="max-w-sm"
           />
-        </div>
+        </FilterBar>
         <div className="flex flex-wrap items-center gap-2">
           <div className="rounded-xl border border-border bg-card px-3 py-2 flex items-center gap-2">
             <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
