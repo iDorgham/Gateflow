@@ -34,13 +34,15 @@ Server/runtime:
 | `QR_SIGNING_SECRET`   | Yes      | HMAC-SHA256 key for QR payload signing        |
 | `UPSTASH_REDIS_REST_URL`   | Yes (prod) | Redis REST URL for rate limiting       |
 | `UPSTASH_REDIS_REST_TOKEN` | Yes (prod) | Redis token for rate limiting         |
+| `ANTHROPIC_API_KEY`        | Yes (AI assistant) | Anthropic API key for `/api/ai/assistant` (returns 503 if missing) |
 
 Public (browser-consumable, `NEXT_PUBLIC_*`):
 
-| Variable                | Required | Description                                   |
-|-------------------------|----------|-----------------------------------------------|
-| `NEXT_PUBLIC_API_URL`   | Yes      | Public API base URL used by frontend          |
-| `NEXT_PUBLIC_APP_URL`   | Yes      | Public app URL (used in links, redirects)     |
+| Variable                      | Required | Description                                   |
+|-------------------------------|----------|-----------------------------------------------|
+| `NEXT_PUBLIC_API_URL`         | Yes      | Public API base URL used by frontend          |
+| `NEXT_PUBLIC_APP_URL`         | Yes      | Public app URL (used in QR short links, redirects) |
+| `NEXT_PUBLIC_DEFAULT_ORG_ID`  | No       | Pre-fills org ID in the test QR generator page |
 
 ---
 
@@ -48,14 +50,16 @@ Public (browser-consumable, `NEXT_PUBLIC_*`):
 
 Expo/React Native environment:
 
-| Variable              | Required | Description                                    |
-|-----------------------|----------|------------------------------------------------|
-| `EXPO_PUBLIC_API_URL` | Yes      | Base URL of the client-dashboard API           |
+| Variable                  | Required | Description                                    |
+|---------------------------|----------|------------------------------------------------|
+| `EXPO_PUBLIC_API_URL`     | Yes      | Base URL of the client-dashboard API           |
+| `EXPO_PUBLIC_QR_SECRET`   | Yes      | Shared HMAC secret for offline QR verification (same value as `QR_SIGNING_SECRET`) |
 
 Scanner-specific notes:
 
-- QR signing key and crypto secrets are provisioned into the app via build‑time configuration (not documented here to avoid leaking patterns).
+- `EXPO_PUBLIC_QR_SECRET` must match `QR_SIGNING_SECRET` on the server — they share the same signing key.
 - Tokens must be stored in **SecureStore** (never plain AsyncStorage).
+- Offline scan queue is AES-256 encrypted using a PBKDF2-derived key.
 
 ---
 

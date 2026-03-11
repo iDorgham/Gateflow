@@ -46,10 +46,17 @@ pnpm turbo dev
 pnpm turbo dev --filter=client-dashboard
 pnpm turbo dev --filter=scanner-app
 pnpm turbo dev --filter=marketing
-# resident-portal, admin-dashboard, etc. follow the same pattern
+# resident-portal, admin-dashboard follow the same pattern
 ```
 
-See `CLAUDE.md` for full port mapping and commands.
+### 2.3 Dev Ports
+
+| App | Port | Start command |
+|---|---|---|
+| `marketing` | 3000 | `next dev -p 3000` |
+| `client-dashboard` | 3001 | `next dev -p 3001 -H 0.0.0.0` |
+| `admin-dashboard` | 3002 | `next dev -p 3002` |
+| `scanner-app` | 8081 | `expo start --lan -c` (Metro bundler) |
 
 ---
 
@@ -111,10 +118,13 @@ GateFlow uses a phased workflow orchestrated by Cursor and CLIs (Claude, Gemini,
 
 ### 5.1 Master Slash Commands (Cursor)
 
-- `/idea` — Capture and refine initiatives into `docs/plan/context/IDEA_<slug>.md`.
-- `/plan` — Turn an idea into multi‑phase `PLAN_<slug>.md` + per‑phase prompts.
-- `/dev` — Implement **one phase** using its prompt (code, tests, docs, git).
-- `/ship` — Run all remaining phases for a plan sequentially.
+| Command | Purpose |
+|---|---|
+| `/idea` | Capture and refine initiatives into `docs/plan/context/IDEA_<slug>.md` |
+| `/plan` | Turn an idea into multi-phase `PLAN_<slug>.md` + per-phase prompts |
+| `/dev` | Implement **one phase** end-to-end (code, tests, docs, git) |
+| `/ship` | Run all remaining phases for a plan sequentially |
+| `/guide` | Workspace guide — what to do next, active plan, recommended actions |
 
 Supporting commands (see `.cursor/rules/01-gateflow-ai-workflow.mdc` and legacy guidelines in `docs/archive/plan-legacy/guidelines`):
 
@@ -122,9 +132,13 @@ Supporting commands (see `.cursor/rules/01-gateflow-ai-workflow.mdc` and legacy 
 
 ### 5.2 Plan & Prompt Files
 
-- Ideas: `docs/plan/context/IDEA_<slug>.md`
-- Plans: `docs/plan/execution/PLAN_<slug>.md`
-- Phase prompts: `docs/plan/execution/PROMPT_<slug>_phase_<N>.md`
+| File | Location |
+|---|---|
+| Initiative ideas | `docs/plan/context/IDEA_<slug>.md` |
+| Active plans + prompts | `docs/plan/planning/<slug>/PLAN_<slug>.md` |
+| Phase prompts | `docs/plan/planning/<slug>/PROMPT_<slug>_phase_<N>.md` |
+| Phase task checklist | `docs/plan/planning/<slug>/TASKS_<slug>.md` |
+| Completed plans | `docs/plan/done/<slug>/` |
 
 Template & skills:
 

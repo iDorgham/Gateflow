@@ -64,7 +64,23 @@ If QR signing or `scanUuid` behavior regresses, overall system integrity is at r
 
 ---
 
-## 3. RBAC & Permissions
+## 3. Key Invariants
+
+The following invariants are **non-negotiable**. Any code that violates them must be treated as a hard error, not a style issue.
+
+| # | Invariant | Where enforced |
+|---|---|---|
+| 1 | Every tenant query **must** include `organizationId` scope | Contracts, core rules |
+| 2 | Soft deletes only — filter `deletedAt: null`, never hard-delete tenant data | Contracts, schema |
+| 3 | QR payloads **must** be HMAC-SHA256 signed (`QR_SIGNING_SECRET`) | QR create/validate routes |
+| 4 | Tokens stored in **secure cookies** (web) or **SecureStore** (mobile) — never `localStorage` | Auth helpers, scanner app |
+| 5 | `scanUuid` is the deduplication key for scan sync — contract must not change | Offline queue, bulk sync |
+| 6 | Security-critical env vars fail closed if missing (refuse to start) | Auth, QR, Redis helpers |
+| 7 | No direct DB access from mobile apps — all flows go through the API layer | Architecture constraint |
+
+---
+
+## 4. RBAC & Permissions
 
 RBAC is enforced via:
 
@@ -84,7 +100,7 @@ Custom roles allow tenants to define narrower roles, but **never** to grant more
 
 ---
 
-## 4. Visitor Identity & Trust (v6)
+## 5. Visitor Identity & Trust (v6)
 
 GateFlow v6 formalizes visitor identity levels:
 
@@ -109,7 +125,7 @@ Artifacts (ID images, OCR text):
 
 ---
 
-## 5. Watchlists, Guard Shifts & Incidents
+## 6. Watchlists, Guard Shifts & Incidents
 
 ### 5.1 Watchlists & Blocklists
 
@@ -154,7 +170,7 @@ Incidents:
 
 ---
 
-## 6. Scanner Policies & Gate Controls
+## 7. Scanner Policies & Gate Controls
 
 GateFlow adds a policy layer for scans:
 
@@ -178,7 +194,7 @@ Implementation details are in `PRD_v6.0.md` (Scanner Rules & Gate–Account Assi
 
 ---
 
-## 7. Privacy, Retention & Compliance
+## 8. Privacy, Retention & Compliance
 
 ### 7.1 Resident & Visitor Privacy
 
@@ -200,7 +216,7 @@ Implementation details are in `PRD_v6.0.md` (Scanner Rules & Gate–Account Assi
 
 ---
 
-## 8. Secure Development Practices
+## 9. Secure Development Practices
 
 - **Package management:** pnpm only (no npm/yarn).
 - **Static analysis & dependencies:**

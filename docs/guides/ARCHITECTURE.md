@@ -159,6 +159,6 @@ Shared packages encapsulate cross-cutting concerns (DB, types, UI, config, i18n,
 
 For deeper details on security and performance, see:
 
-- `docs/guides/SECURITY_OVERVIEW.md` (to be generated).
+- `docs/guides/SECURITY_OVERVIEW.md`
 - Archived audits in `docs/archive/plan-legacy/operations/SECURITY_PERFORMANCE_AUDIT.md`.
 
