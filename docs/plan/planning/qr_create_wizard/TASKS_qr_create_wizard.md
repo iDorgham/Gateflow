@@ -5,12 +5,12 @@
 
 ## Phases
 
-- [ ] **Phase 1: Schema & API — Guest Metadata**
-  - [ ] Add `guestName`, `guestEmail`, `guestPhone`, `contactId` to `QRCode` model
-  - [ ] `prisma db push` applied
-  - [ ] POST `/api/qrcodes` accepts and persists guest fields
-  - [ ] GET `/api/qrcodes` returns guest fields
-  - [ ] `createQRCode()` action updated
+- [x] **Phase 1: Schema & API — Guest Metadata**
+  - [x] Add `guestName`, `guestEmail`, `guestPhone`, `contactId` to `QRCode` model
+  - [x] `prisma db push` applied
+  - [x] POST `/api/qrcodes` accepts and persists guest fields
+  - [x] GET `/api/qrcodes` returns guest fields
+  - [x] `createQRCode()` action updated
 
 - [ ] **Phase 2: Wizard Shell & Steps 1–2**
   - [ ] `StepIndicator` component (4 steps, animated active pill)
