@@ -169,39 +169,49 @@ export function AIAssistant({ locale }: AIAssistantProps) {
 
   return (
     <div className="flex h-full flex-col bg-card" dir={isRtl ? 'rtl' : 'ltr'}>
-      {/* Header */}
-      <div className="flex shrink-0 items-center justify-between border-b border-border px-4 py-3 bg-muted/20">
-        <div className="flex items-center gap-2.5">
-          <div className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
-            <Sparkles className="h-4.5 w-4.5" />
-          </div>
-          <div>
-            <div className="flex items-center gap-1.5">
-              <p className="text-xs font-black uppercase tracking-tight leading-none">
+
+      {/* Messages */}
+      <div className="flex-1 space-y-5 overflow-y-auto px-4 py-4">
+
+        {/* Premium welcome card — shown only when no real conversation yet */}
+        {hasOnlyWelcome && !isLoading && (
+          <div className="rounded-2xl bg-muted/20 p-6 text-center">
+            <div className="flex justify-center mb-4">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                <Sparkles className="h-8 w-8" />
+              </div>
+            </div>
+            <div className="flex items-center justify-center gap-1.5 mb-1">
+              <p className="text-sm font-black uppercase tracking-tight">
                 {isRtl ? 'مساعد GateFlow' : 'GateFlow Assistant'}
               </p>
               <span className="rounded-md bg-muted px-1.5 py-0.5 text-[9px] font-bold text-muted-foreground uppercase tracking-wider">
                 Gemini
               </span>
             </div>
-            <p className="mt-1 text-[10px] text-muted-foreground">
+            <p className="text-xs text-muted-foreground mb-5">
               {isRtl ? 'اسألني أي شيء عن نظامك' : 'Ask me anything about your system'}
             </p>
+            <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-2">
+              {isRtl ? 'اقتراحات' : 'Get Started'}
+            </p>
+            <div className="flex flex-wrap gap-2 justify-center">
+              {prompts.map((p) => (
+                <button
+                  key={p}
+                  onClick={() => sendExample(p)}
+                  className="rounded-xl border border-border bg-background px-3 py-2 text-xs text-muted-foreground transition-all hover:border-primary/30 hover:bg-primary/5 hover:text-foreground hover:shadow-md active:scale-95"
+                >
+                  {p}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
-        <button
-          onClick={clearChat}
-          className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-          title={isRtl ? 'مسح المحادثة' : 'Clear conversation'}
-          aria-label={isRtl ? 'مسح المحادثة' : 'Clear conversation'}
-        >
-          <RotateCcw className="h-3.5 w-3.5" />
-        </button>
-      </div>
+        )}
 
-      {/* Messages */}
-      <div className="flex-1 space-y-4 overflow-y-auto px-4 py-4">
-        {messages.map((message) => {
+        {/* Message bubbles — skip welcome message, show real messages */}
+        {!hasOnlyWelcome && messages.map((message) => {
+          if (message.id === 'welcome') return null;
           const isUser = message.role === 'user';
           const text = msgText(message.content);
           const msgRtl = isArabic(text);
@@ -213,38 +223,28 @@ export function AIAssistant({ locale }: AIAssistantProps) {
               className={cn(
                 'flex items-end gap-2',
                 isUser
-                  ? isRtl
-                    ? 'flex-row'
-                    : 'flex-row-reverse'
-                  : isRtl
-                    ? 'flex-row-reverse'
-                    : 'flex-row'
+                  ? isRtl ? 'flex-row' : 'flex-row-reverse'
+                  : isRtl ? 'flex-row-reverse' : 'flex-row'
               )}
             >
               <div
                 className={cn(
-                  'flex h-6 w-6 shrink-0 items-center justify-center rounded-full',
+                  'flex h-8 w-8 shrink-0 items-center justify-center rounded-full',
                   isUser ? 'bg-primary' : 'bg-muted'
                 )}
               >
                 {isUser ? (
-                  <User className="h-3 w-3 text-primary-foreground" />
+                  <User className="h-4 w-4 text-primary-foreground" />
                 ) : (
-                  <Bot className="h-3 w-3 text-muted-foreground" />
+                  <Bot className="h-4 w-4 text-muted-foreground" />
                 )}
               </div>
               <div
                 className={cn(
                   'max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed shadow-sm',
                   isUser
-                    ? cn(
-                        'bg-primary text-primary-foreground',
-                        isRtl ? 'rounded-bl-sm' : 'rounded-br-sm'
-                      )
-                    : cn(
-                        'bg-muted/50 text-foreground border border-border/50',
-                        isRtl ? 'rounded-br-sm' : 'rounded-bl-sm'
-                      )
+                    ? cn('bg-primary text-primary-foreground', isRtl ? 'rounded-bl-sm' : 'rounded-br-sm')
+                    : cn('bg-muted/50 text-foreground border border-border/50', isRtl ? 'rounded-br-sm' : 'rounded-bl-sm')
                 )}
                 dir={msgRtl ? 'rtl' : 'ltr'}
               >
@@ -256,14 +256,9 @@ export function AIAssistant({ locale }: AIAssistantProps) {
 
         {/* Typing indicator */}
         {isLoading && (
-          <div
-            className={cn(
-              'flex items-end gap-2',
-              isRtl ? 'flex-row-reverse' : 'flex-row'
-            )}
-          >
-            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-muted">
-              <Bot className="h-3 w-3 text-muted-foreground" />
+          <div className={cn('flex items-end gap-2', isRtl ? 'flex-row-reverse' : 'flex-row')}>
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-muted">
+              <Bot className="h-4 w-4 text-muted-foreground" />
             </div>
             <div
               className={cn(
@@ -278,28 +273,22 @@ export function AIAssistant({ locale }: AIAssistantProps) {
           </div>
         )}
 
-        {/* Example prompts */}
-        {hasOnlyWelcome && !isLoading && (
-          <div className="mt-2 flex flex-col gap-2">
-            <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground px-1">
-              {isRtl ? 'اقتراحات' : 'Get Started'}
-            </p>
-            <div className="flex flex-wrap gap-2">
-              {prompts.map((p) => (
-                <button
-                  key={p}
-                  onClick={() => sendExample(p)}
-                  className="rounded-xl border border-border bg-background px-3 py-2 text-xs text-muted-foreground transition-all hover:border-primary/30 hover:bg-primary/5 hover:text-foreground hover:shadow-md active:scale-95"
-                >
-                  {p}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-
         <div ref={messagesEndRef} />
       </div>
+
+      {/* Clear conversation — only when conversation has started */}
+      {!hasOnlyWelcome && (
+        <div className={cn('shrink-0 flex px-4 pb-1', isRtl ? 'justify-start' : 'justify-end')}>
+          <button
+            onClick={clearChat}
+            className="flex items-center gap-1 rounded-lg px-2 py-1 text-[10px] text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            title={isRtl ? 'مسح المحادثة' : 'Clear conversation'}
+          >
+            <RotateCcw className="h-3 w-3" />
+            {isRtl ? 'مسح' : 'Clear'}
+          </button>
+        </div>
+      )}
 
       {/* Input */}
       <form
@@ -307,12 +296,7 @@ export function AIAssistant({ locale }: AIAssistantProps) {
         onSubmit={handleSubmit}
         className="shrink-0 border-t border-border p-4 bg-muted/10"
       >
-        <div
-          className={cn(
-            'flex items-end gap-2',
-            isRtl ? 'flex-row-reverse' : 'flex-row'
-          )}
-        >
+        <div className={cn('flex items-end gap-2', isRtl ? 'flex-row-reverse' : 'flex-row')}>
           <textarea
             value={input}
             onChange={handleInputChange}
@@ -320,10 +304,10 @@ export function AIAssistant({ locale }: AIAssistantProps) {
             placeholder={isRtl ? 'اسأل شيئاً...' : 'Ask something...'}
             rows={1}
             disabled={isLoading}
-            className="flex-1 resize-none rounded-xl border border-border bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-50 shadow-sm transition-all"
+            className="flex-1 resize-none rounded-2xl border border-border bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-50 shadow-sm transition-all"
             style={{
               direction: isRtl ? 'rtl' : 'ltr',
-              minHeight: '42px',
+              minHeight: '48px',
               maxHeight: '120px',
             }}
           />
@@ -331,7 +315,7 @@ export function AIAssistant({ locale }: AIAssistantProps) {
             type="submit"
             size="icon"
             disabled={isLoading || !input.trim()}
-            className="h-[42px] w-[42px] shrink-0 rounded-xl shadow-sm transition-transform active:scale-95"
+            className="h-11 w-11 shrink-0 rounded-2xl shadow-sm transition-transform active:scale-95"
           >
             {isLoading ? (
               <Loader2 className="h-4 w-4 animate-spin" />

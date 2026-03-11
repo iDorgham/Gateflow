@@ -144,7 +144,7 @@ export function TeamChat({ currentUserId }: TeamChatProps) {
                 {/* Avatar */}
                 {!isMe && (
                   <div
-                    className="h-7 w-7 shrink-0 rounded-full bg-primary/10 flex items-center justify-center text-[10px] font-black text-primary"
+                    className="h-8 w-8 shrink-0 rounded-full bg-primary/10 flex items-center justify-center text-[10px] font-black text-primary"
                     title={msg.user.name}
                     aria-hidden="true"
                   >
@@ -199,7 +199,7 @@ export function TeamChat({ currentUserId }: TeamChatProps) {
             onChange={(e) => setNewMessage(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Message the team…"
-            className="h-9 rounded-xl text-xs flex-1"
+            className="h-9 rounded-2xl text-xs flex-1"
             disabled={isPending}
           />
           <Button

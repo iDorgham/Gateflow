@@ -120,8 +120,8 @@ export function TasksPanel() {
         <div className="flex items-center gap-2">
           <ClipboardList className="h-4 w-4 text-primary" aria-hidden="true" />
           <span className="text-xs font-black uppercase tracking-widest">Tasks</span>
-          {tasks.length > 0 && (
-            <Badge variant="outline" className="text-[9px] font-black px-1.5 py-0 border-border bg-muted/50">
+          {tasks.filter((t) => t.status !== 'DONE').length > 0 && (
+            <Badge variant="outline" className="text-[9px] font-black px-1.5 py-0 border-primary/20 bg-primary/10 text-primary">
               {tasks.filter((t) => t.status !== 'DONE').length} open
             </Badge>
           )}
@@ -170,7 +170,7 @@ export function TasksPanel() {
             <div
               key={task.id}
               className={cn(
-                'group flex items-start gap-2.5 rounded-xl border p-3 transition-all',
+                'group flex items-start gap-2.5 rounded-xl border p-3 transition-all min-h-[44px]',
                 task.status === 'DONE'
                   ? 'border-border/50 bg-muted/20 opacity-60'
                   : 'border-border bg-card hover:border-primary/20 hover:bg-primary/5'
