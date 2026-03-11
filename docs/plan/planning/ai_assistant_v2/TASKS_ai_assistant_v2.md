@@ -19,13 +19,13 @@
   - [x] System prompt updated with all tools
   - [x] Typecheck passes
 
-- [ ] **Phase 3: Tasks Tab**
-  - [ ] Task model + TaskStatus enum in schema (prisma db push)
-  - [ ] GET/POST/PATCH/DELETE /api/tasks
-  - [ ] tasks-panel.tsx with filter + list + checkbox toggle + add form
-  - [ ] createTask AI tool
-  - [ ] Side panel: AI | Tasks tabs
-  - [ ] Typecheck and tests pass
+- [x] **Phase 3: Tasks Tab**
+  - [x] Task model + TaskStatus enum in schema (prisma db push)
+  - [x] GET/POST/PATCH/DELETE /api/tasks
+  - [x] tasks-panel.tsx with filter + list + checkbox toggle + add form
+  - [x] createTask AI tool
+  - [x] Side panel: AI | Tasks tabs
+  - [x] Typecheck and tests pass
 
 - [ ] **Phase 4: Team Chat Tab**
   - [ ] ChatMessage model in schema (prisma db push)
