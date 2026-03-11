@@ -19,11 +19,11 @@
   - [x] All applied pages use space-y-6 section spacing
   - [x] Lint + typecheck pass
 
-- [ ] **Phase 3: Unified FilterBar Component**
-  - [ ] FilterBar container + DatePresets + Select + Search + Divider
-  - [ ] Applied to QR Codes and Scans pages
-  - [ ] Pill date presets match analytics style
-  - [ ] Lint passes
+- [x] **Phase 3: Unified FilterBar Component**
+  - [x] FilterBar container + DatePresets + Select + Search + Divider
+  - [x] Applied to QR Codes and Scans pages
+  - [x] Pill date presets match analytics style
+  - [x] Lint passes
 
 - [ ] **Phase 4: AI Panel + Side Panel Refinement**
   - [ ] Side panel tabs h-10, px-4, active indicator
