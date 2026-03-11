@@ -30,6 +30,8 @@ model Organization {
   scannerConfig             Json?
   /// Integration config: { gtmId, hubspotPortalId, googleAnalyticsId, ... }
   integrationConfig         Json?
+  /// Notification config: { channels: { email, sms, push }, events: { scanSuccess, scanFailed, ... } }
+  notificationConfig        Json?
 
   users            User[]
   gates            Gate[]
