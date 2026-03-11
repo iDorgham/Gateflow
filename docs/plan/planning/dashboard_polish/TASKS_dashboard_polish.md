@@ -13,11 +13,11 @@
   - [x] Theme toggle already in user dropdown menu
   - [x] Lint passes
 
-- [ ] **Phase 2: Unified PageHeader + Spacing**
-  - [ ] PageHeader component (title, subtitle, badge, actions)
-  - [ ] Applied to: QR Codes, Access Logs, Analytics, Gates
-  - [ ] All applied pages use space-y-6 section spacing
-  - [ ] Lint + typecheck pass
+- [x] **Phase 2: Unified PageHeader + Spacing**
+  - [x] PageHeader component (title, subtitle, badge, actions)
+  - [x] Applied to: QR Codes, Access Logs, Analytics, Gates
+  - [x] All applied pages use space-y-6 section spacing
+  - [x] Lint + typecheck pass
 
 - [ ] **Phase 3: Unified FilterBar Component**
   - [ ] FilterBar container + DatePresets + Select + Search + Divider
