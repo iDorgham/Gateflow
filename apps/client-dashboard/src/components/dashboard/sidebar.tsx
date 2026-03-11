@@ -22,7 +22,7 @@ import {
 import { cn } from '@gate-access/ui';
 import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
-import { User as UserIcon } from '@phosphor-icons/react';
+
 
 import { Permission } from '@gate-access/types';
 
@@ -39,76 +39,34 @@ const getNavGroups = (t: TFunction, permissions: Record<string, boolean>) => {
 
   // No workspace-specific nav items for now
 
-  const MAIN_NAV: NavItem[] = [
-    {
-      label: t('sidebar.overview', 'Overview'),
-      href: '/dashboard',
-      icon: SquaresFourIcon,
-      exact: true,
-    },
-    {
-      label: t('sidebar.projects', 'Projects'),
-      href: '/dashboard/projects',
-      icon: StackIcon,
-    },
-    {
-      label: t('sidebar.contacts', 'Contacts'),
-      href: '/dashboard/residents/contacts',
-      icon: AddressBookIcon,
-      permission: 'gates:manage' as Permission,
-    },
-    {
-      label: t('sidebar.units', 'Units'),
-      href: '/dashboard/residents/units',
-      icon: BuildingsIcon,
-      permission: 'gates:manage' as Permission,
-    },
-    {
-      label: t('sidebar.qrCodes', 'QR Codes'),
-      href: '/dashboard/qrcodes',
-      icon: QrCodeIcon,
-      permission: 'qr:create' as Permission,
-    },
-    {
-      label: t('sidebar.accessLogs', 'Access logs'),
-      href: '/dashboard/scans',
-      icon: ScanIcon,
-      permission: 'scans:view' as Permission,
-    },
-    {
-      label: t('sidebar.analytics', 'Analytics'),
-      href: '/dashboard/analytics',
-      icon: ChartLineUpIcon,
-      permission: 'analytics:view' as Permission,
-    },
-    {
-      label: t('sidebar.watchlist', 'Watchlist'),
-      href: '/dashboard/team/watchlist',
-      icon: ListChecksIcon,
-      permission: 'gates:manage' as Permission,
-    },
-    {
-      label: t('sidebar.gates', 'Gates'),
-      href: '/dashboard/gates',
-      icon: DoorOpenIcon,
-      permission: 'gates:manage' as Permission,
-    },
-    {
-      label: t('sidebar.gateAssignments', 'Gate assignments'),
-      href: '/dashboard/team/gate-assignments',
-      icon: UsersFourIcon,
-      permission: 'gates:manage' as Permission,
-    },
-    {
-      label: t('sidebar.incidents', 'Incidents'),
-      href: '/dashboard/team/incidents',
-      icon: WarningIcon,
-      permission: 'gates:manage' as Permission,
-    },
+  const WORKSPACE_NAV: NavItem[] = [
+    { label: t('sidebar.overview', 'Overview'), href: '/dashboard', icon: SquaresFourIcon, exact: true },
+    { label: t('sidebar.projects', 'Projects'), href: '/dashboard/projects', icon: StackIcon },
+    { label: t('sidebar.analytics', 'Analytics'), href: '/dashboard/analytics', icon: ChartLineUpIcon, permission: 'analytics:view' as Permission },
+  ].filter(item => hasPerm(item.permission));
+
+  const RESIDENTS_NAV: NavItem[] = [
+    { label: t('sidebar.contacts', 'Contacts'), href: '/dashboard/residents/contacts', icon: AddressBookIcon, permission: 'gates:manage' as Permission },
+    { label: t('sidebar.units', 'Units'), href: '/dashboard/residents/units', icon: BuildingsIcon, permission: 'gates:manage' as Permission },
+  ].filter(item => hasPerm(item.permission));
+
+  const ACCESS_CONTROL_NAV: NavItem[] = [
+    { label: t('sidebar.qrCodes', 'QR Codes'), href: '/dashboard/qrcodes', icon: QrCodeIcon, permission: 'qr:create' as Permission },
+    { label: t('sidebar.accessLogs', 'Access logs'), href: '/dashboard/scans', icon: ScanIcon, permission: 'scans:view' as Permission },
+    { label: t('sidebar.gates', 'Gates'), href: '/dashboard/gates', icon: DoorOpenIcon, permission: 'gates:manage' as Permission },
+    { label: t('sidebar.gateAssignments', 'Gate assignments'), href: '/dashboard/team/gate-assignments', icon: UsersFourIcon, permission: 'gates:manage' as Permission },
+  ].filter(item => hasPerm(item.permission));
+
+  const SECURITY_NAV: NavItem[] = [
+    { label: t('sidebar.watchlist', 'Watchlist'), href: '/dashboard/team/watchlist', icon: ListChecksIcon, permission: 'gates:manage' as Permission },
+    { label: t('sidebar.incidents', 'Incidents'), href: '/dashboard/team/incidents', icon: WarningIcon, permission: 'gates:manage' as Permission },
   ].filter(item => hasPerm(item.permission));
 
   const groups = [
-    { label: t('sidebar.operations', 'Operations'), items: MAIN_NAV },
+    { label: t('sidebar.groupWorkspace', 'Workspace'), items: WORKSPACE_NAV },
+    { label: t('sidebar.groupResidents', 'Residents'), items: RESIDENTS_NAV },
+    { label: t('sidebar.groupAccessControl', 'Access Control'), items: ACCESS_CONTROL_NAV },
+    { label: t('sidebar.groupSecurity', 'Security'), items: SECURITY_NAV },
   ];
 
   return groups.filter(g => g.items.length > 0);
@@ -190,11 +148,18 @@ export function Sidebar({
       </div>
 
       {/* Navigation */}
-      <nav className="flex-1 overflow-y-auto px-3 py-2 space-y-6">
-        {NAV_GROUPS.map((group) => (
+      <nav className="flex-1 overflow-y-auto px-3 py-2 space-y-1">
+        {NAV_GROUPS.map((group, idx) => (
           <div key={group.label}>
+            {/* Divider between groups when collapsed; label when expanded */}
+            {idx > 0 && isCollapsed && (
+              <div className="h-px bg-sidebar-border/30 mx-2 my-2" />
+            )}
             {!isCollapsed && (
-              <p className="mb-2 px-3 text-[9px] font-black uppercase tracking-[0.25em] text-muted-foreground opacity-70">
+              <p className={cn(
+                'px-3 text-[9px] font-black uppercase tracking-[0.25em] text-muted-foreground/50 mb-1',
+                idx === 0 ? 'pt-2' : 'pt-5'
+              )}>
                 {group.label}
               </p>
             )}

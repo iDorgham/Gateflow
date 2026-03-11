@@ -24,7 +24,6 @@ import {
   ChevronsUpDown,
 } from 'lucide-react';
 import { cn } from '@gate-access/ui';
-import { ThemeToggle } from './theme-toggle';
 import { HeaderUserMenu } from './header-user-menu';
 
 interface ExpiredQR {
@@ -238,7 +237,6 @@ export function DashboardShell({
               >
                 <Sparkles className="h-[17px] w-[17px]" />
               </Button>
-              <ThemeToggle />
               <HeaderUserMenu
                 user={user}
                 org={org}
