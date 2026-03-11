@@ -1,40 +1,31 @@
 import Link from 'next/link';
 import { ArrowLeft, History, CheckCircle2, XCircle, Clock } from 'lucide-react';
-import { getSessionClaims } from '@/lib/auth-cookies';
-import { prisma } from '@gate-access/db';
 import { format } from 'date-fns';
 
-export default async function HistoryPage() {
-  const claims = await getSessionClaims();
-  const userId = claims?.sub || 'dev-resident-id';
+interface ResidentHistoryItem {
+  id: string;
+  status: 'SUCCESS' | 'FAILED' | 'EXPIRED' | 'MAX_USES_REACHED' | 'INACTIVE' | 'DENIED';
+  scannedAt: string;
+  gateName: string;
+  visitorName: string;
+}
 
-  const unit = await prisma.unit.findFirst({
-    where: { userId, deletedAt: null },
+async function fetchHistory(): Promise<ResidentHistoryItem[]> {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL ?? ''}/resident/history`, {
+    cache: 'no-store',
   });
-
-  if (!unit) {
-    return null;
+  if (!res.ok) {
+    return [];
   }
+  const json = await res.json();
+  if (!json?.success || !Array.isArray(json.data)) {
+    return [];
+  }
+  return json.data as ResidentHistoryItem[];
+}
 
-  const scans = await prisma.scanLog.findMany({
-    where: {
-      qrCode: {
-        visitorQR: {
-          unitId: unit.id,
-        },
-      },
-    },
-    include: {
-      qrCode: {
-        include: {
-          visitorQR: true,
-        },
-      },
-      gate: true,
-    },
-    orderBy: { scannedAt: 'desc' },
-    take: 50,
-  });
+export default async function HistoryPage() {
+  const scans = await fetchHistory();
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -69,16 +60,16 @@ export default async function HistoryPage() {
                 <div className="flex-1">
                   <div className="flex items-center justify-between mb-1">
                     <p className="font-semibold text-slate-900">
-                      {scan.qrCode.visitorQR?.visitorName || 'Open Access QR'}
+                      {scan.visitorName}
                     </p>
                     <span className="text-[10px] font-medium text-slate-400 uppercase">
                       {format(new Date(scan.scannedAt), 'HH:mm')}
                     </span>
                   </div>
-                  <p className="text-sm text-slate-600">
-                    Entered through{' '}
-                    <span className="font-medium text-slate-900">{scan.gate.name}</span>
-                  </p>
+                    <p className="text-sm text-slate-600">
+                      Entered through{' '}
+                      <span className="font-medium text-slate-900">{scan.gateName}</span>
+                    </p>
                   <p className="text-xs text-slate-400 mt-1 flex items-center gap-1">
                     <Clock className="h-3 w-3" />
                     {format(new Date(scan.scannedAt), 'MMM dd, yyyy')}
