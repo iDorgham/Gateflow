@@ -1,0 +1,38 @@
+# TASKS: AI Assistant v2
+
+**Plan**: [PLAN_ai_assistant_v2.md](PLAN_ai_assistant_v2.md)
+**Status**: Ready
+
+## Phases
+
+- [ ] **Phase 1: Header Notifications + AI Panel Refine**
+  - [ ] NotificationDropdown component (bell icon + expired QR list)
+  - [ ] Bell in header replaces side panel notifications tab
+  - [ ] Side panel renders AI chat directly (no tabs yet)
+  - [ ] AI assistant UI polish (whitespace-pre-wrap, Gemini badge, clear icon)
+  - [ ] Lint passes
+
+- [ ] **Phase 2: Expanded AI Tools**
+  - [ ] `createQR` — real QR signing + Prisma create, supports count (QR sets)
+  - [ ] `getOrgStats` — real Prisma counts (replaces stub)
+  - [ ] `listProjects`, `listGates`, `listContacts`, `listRecentScans`, `listUnits`
+  - [ ] System prompt updated with all tools
+  - [ ] Typecheck passes
+
+- [ ] **Phase 3: Tasks Tab**
+  - [ ] Task model + TaskStatus enum in schema (prisma db push)
+  - [ ] GET/POST/PATCH/DELETE /api/tasks
+  - [ ] tasks-panel.tsx with filter + list + checkbox toggle + add form
+  - [ ] createTask AI tool
+  - [ ] Side panel: AI | Tasks tabs
+  - [ ] Typecheck and tests pass
+
+- [ ] **Phase 4: Team Chat Tab**
+  - [ ] ChatMessage model in schema (prisma db push)
+  - [ ] GET/POST /api/chat
+  - [ ] team-chat.tsx with bubble UI + 10s polling + send form
+  - [ ] Side panel: AI | Tasks | Chat tabs
+  - [ ] Typecheck and lint pass
+
+---
+*Created: 2026-03-11*
