@@ -15,12 +15,12 @@
   - [x] All mutations use csrfFetch
   - [x] Lint passes
 
-- [ ] **Phase 2: Stats Row, Sorting & Server Search**
-  - [ ] Stats row (Total, This Month, Last Added)
-  - [ ] Column sorting (Name, Added)
-  - [ ] "Added by" attribution
-  - [ ] Server-side search (?search= param on GET /api/watchlist)
-  - [ ] Typecheck and lint pass
+- [x] **Phase 2: Stats Row, Sorting & Server Search**
+  - [x] Stats row (Total, This Month, Last Added)
+  - [x] Column sorting (Name, Added)
+  - [x] "Added by" attribution
+  - [x] Server-side search (?search= param on GET /api/watchlist)
+  - [x] Typecheck and lint pass
 
 ---
 *Created: 2026-03-11*
