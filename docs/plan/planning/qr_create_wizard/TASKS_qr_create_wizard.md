@@ -1,0 +1,30 @@
+# TASKS: QR Create Wizard — Guest Details & UI Refinement
+
+**Plan**: [PLAN_qr_create_wizard.md](PLAN_qr_create_wizard.md)
+**Status**: Planning Approved / Ready
+
+## Phases
+
+- [ ] **Phase 1: Schema & API — Guest Metadata**
+  - [ ] Add `guestName`, `guestEmail`, `guestPhone`, `contactId` to `QRCode` model
+  - [ ] `prisma db push` applied
+  - [ ] POST `/api/qrcodes` accepts and persists guest fields
+  - [ ] GET `/api/qrcodes` returns guest fields
+  - [ ] `createQRCode()` action updated
+
+- [ ] **Phase 2: Wizard Shell & Steps 1–2**
+  - [ ] `StepIndicator` component (4 steps, animated active pill)
+  - [ ] Step 1: type selection cards (SINGLE / RECURRING / PERMANENT)
+  - [ ] Step 2: gate selector + expiry + max uses
+  - [ ] `AnimatePresence` slide transitions between steps
+  - [ ] Steps 3–4 placeholders
+
+- [ ] **Phase 3: Steps 3–4, Guest Details & Review**
+  - [ ] Step 3: contact picker (search + auto-fill) + manual entry + skip
+  - [ ] Step 4: summary card + generate + inline QR display + send email pre-filled
+  - [ ] `page.tsx` passes contacts from Prisma
+  - [ ] Guest fields persisted to DB
+  - [ ] Lint and typecheck pass
+
+---
+*Created: 2026-03-11*
