@@ -12,12 +12,12 @@
   - [x] AI assistant UI polish (whitespace-pre-wrap, Gemini badge, clear icon)
   - [x] Lint passes
 
-- [ ] **Phase 2: Expanded AI Tools**
-  - [ ] `createQR` — real QR signing + Prisma create, supports count (QR sets)
-  - [ ] `getOrgStats` — real Prisma counts (replaces stub)
-  - [ ] `listProjects`, `listGates`, `listContacts`, `listRecentScans`, `listUnits`
-  - [ ] System prompt updated with all tools
-  - [ ] Typecheck passes
+- [x] **Phase 2: Expanded AI Tools**
+  - [x] `createQR` — real QR signing + Prisma create, supports count (QR sets)
+  - [x] `getOrgStats` — real Prisma counts (replaces stub)
+  - [x] `listProjects`, `listGates`, `listContacts`, `listRecentScans`, `listUnits`
+  - [x] System prompt updated with all tools
+  - [x] Typecheck passes
 
 - [ ] **Phase 3: Tasks Tab**
   - [ ] Task model + TaskStatus enum in schema (prisma db push)
