@@ -13,12 +13,12 @@
   - [x] Failed audit is non-fatal (export still returns CSV)
   - [x] Tests pass
 
-- [ ] **Phase 2: QR Table Density & Preferences (#39)**
-  - [ ] Density toggle in toolbar (Compact / Default / Comfortable)
-  - [ ] Preferences route extended with `tableViews.qrcodes`
-  - [ ] Column order read from preferences API (fallback to localStorage)
-  - [ ] Column order changes written to preferences API
-  - [ ] Lint passes
+- [x] **Phase 2: QR Table Density & Preferences (#39)**
+  - [x] Density toggle in toolbar (Compact / Default / Comfortable)
+  - [x] Preferences route extended with `tableViews.qrcodes`
+  - [x] Column order read from preferences API (fallback to localStorage)
+  - [x] Column order changes written to preferences API
+  - [x] Lint passes
 
 ---
 *Created: 2026-03-11*
