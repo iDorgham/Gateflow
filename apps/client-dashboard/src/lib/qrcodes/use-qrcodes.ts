@@ -16,6 +16,10 @@ export interface QRCodeRow {
   lastScanAt: string | null;
   gateName: string | null;
   projectName: string | null;
+  guestName: string | null;
+  guestEmail: string | null;
+  guestPhone: string | null;
+  contactId: string | null;
 }
 
 interface QRCodesFilters {

@@ -121,14 +121,29 @@ export function QRCodesTable({
       {
         id: 'code',
         header: () => t('qrcodes.code', 'Code'),
-        cell: ({ row }) => (
-          <Link
-            href={`/${locale}/dashboard/qrcodes?q=${encodeURIComponent(row.original.code)}`}
-            className="font-mono text-xs font-bold text-primary hover:underline"
-          >
-            {row.original.code}
-          </Link>
-        ),
+        cell: ({ row }) => {
+          const code = row.original.code;
+          // Truncate long signed payloads; short legacy codes display in full
+          const display = code.length > 28
+            ? `${code.slice(0, 14)}…${code.slice(-6)}`
+            : code;
+          return (
+            <div className="space-y-0.5">
+              <Link
+                href={`/${locale}/dashboard/qrcodes?q=${encodeURIComponent(code)}`}
+                className="font-mono text-xs font-bold text-primary hover:underline"
+                title={code}
+              >
+                {display}
+              </Link>
+              {row.original.guestName && (
+                <p className="text-[10px] text-muted-foreground truncate max-w-[140px]">
+                  {row.original.guestName}
+                </p>
+              )}
+            </div>
+          );
+        },
       },
       {
         id: 'type',
