@@ -2,17 +2,9 @@ import { useState, useEffect } from 'react';
 import { Text, View, TextInput, Pressable, StyleSheet, ActivityIndicator, KeyboardAvoidingView, Platform } from 'react-native';
 import { router } from 'expo-router';
 import { login as doLogin, getValidAccessToken } from '../lib/auth-client';
+import { theme } from '../lib/theme';
 
-const colors = {
-  background: '#f4f4f5',
-  surface: '#ffffff',
-  foreground: '#18181b',
-  muted: '#71717a',
-  border: '#e4e4e7',
-  accent: '#3b82f6',
-  accentFg: '#ffffff',
-  error: '#dc2626',
-};
+const { colors, spacing, borderRadius, shadows, typography } = theme;
 
 export default function LoginScreen() {
   const [email, setEmail] = useState('');
@@ -49,7 +41,7 @@ export default function LoginScreen() {
   if (checkingSession) {
     return (
       <View style={[styles.container, styles.centered]}>
-        <ActivityIndicator size="large" color={colors.accent} />
+        <ActivityIndicator size="large" color={colors.primary} />
       </View>
     );
   }
@@ -96,7 +88,7 @@ export default function LoginScreen() {
           disabled={loading}
         >
           {loading ? (
-            <ActivityIndicator color={colors.accentFg} />
+            <ActivityIndicator color={colors.primaryForeground} />
           ) : (
             <Text style={styles.primaryButtonText}>Sign in</Text>
           )}
@@ -110,22 +102,18 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
-    padding: 20,
-    paddingTop: 24,
+    padding: spacing.xl,
+    paddingTop: spacing['2xl'],
   },
   centered: {
     justifyContent: 'center',
     alignItems: 'center',
   },
   card: {
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: 24,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 3,
+    backgroundColor: colors.card,
+    borderRadius: borderRadius.xl,
+    padding: spacing['2xl'],
+    ...shadows.md,
   },
   title: {
     fontSize: 22,
@@ -134,16 +122,16 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   subtitle: {
-    fontSize: 16,
-    lineHeight: 24,
-    color: colors.muted,
+    fontSize: typography.base.fontSize,
+    lineHeight: typography.base.lineHeight,
+    color: colors.mutedForeground,
     marginBottom: 24,
   },
   input: {
     height: 48,
     borderWidth: 1.5,
     borderColor: colors.border,
-    borderRadius: 12,
+    borderRadius: borderRadius.xl,
     paddingHorizontal: 16,
     fontSize: 16,
     color: colors.foreground,
@@ -151,13 +139,13 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 14,
-    color: colors.error,
+    color: colors.danger,
     marginBottom: 12,
   },
   primaryButton: {
     height: 52,
-    borderRadius: 12,
-    backgroundColor: colors.accent,
+    borderRadius: borderRadius.xl,
+    backgroundColor: colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 8,
@@ -168,6 +156,6 @@ const styles = StyleSheet.create({
   primaryButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: colors.accentFg,
+    color: colors.primaryForeground,
   },
 });

@@ -200,4 +200,55 @@ export const nativeTokens = {
   },
 };
 
+/**
+ * React-Native tokens aligned with the web "Real Estate Palette".
+ *
+ * Source of truth (web): `apps/client-dashboard/src/app/globals.css`
+ * - Kimchi (accent): #ED4B00
+ * - Midnight Blue (foreground/dark bg): #020035
+ * - Dark Royalty (muted-foreground): #02066F
+ * - Deep Sea (info): #2000B1
+ * - Anti-Flash White (background): #F2F3F4
+ * - Lace Cap (muted/secondary): #EBEAED
+ */
+export const nativeTokensRealEstate = {
+  ...nativeTokens,
+  colors: {
+    ...nativeTokens.colors,
+    // Base palette
+    background: '#F2F3F4',
+    foreground: '#020035',
+    card: '#F2F3F4',
+    cardForeground: '#020035',
+    primary: '#ED4B00',
+    primaryForeground: '#FFFFFF',
+    secondary: '#EBEAED',
+    secondaryForeground: '#020035',
+    muted: '#EBEAED',
+    mutedForeground: '#02066F',
+    neutral: '#02066F',
+    accent: '#EBEAED',
+    accentForeground: '#020035',
+    border: '#DEDDE3',
+    input: '#DEDDE3',
+    ring: '#ED4B00',
+
+    // Extended semantic
+    success: '#16A34A',
+    successForeground: '#F2F3F4',
+    warning: '#F59E0B',
+    warningForeground: '#020035',
+    info: '#2000B1',
+    infoForeground: '#F2F3F4',
+    danger: '#DC2626',
+    dangerForeground: '#F2F3F4',
+
+    // Optional dark surfaces (useful for headers/nav)
+    sidebar: '#020035',
+    sidebarForeground: '#F2F3F4',
+    sidebarAccent: '#02066F',
+    sidebarBorder: '#02066F',
+  },
+};
+
 export type DesignTokens = typeof tokens;

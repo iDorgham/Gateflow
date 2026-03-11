@@ -1,17 +1,23 @@
 import { useEffect, useState } from 'react';
-import { Text, View, StyleSheet, FlatList, Pressable, ActivityIndicator, RefreshControl } from 'react-native';
+import {
+  Text,
+  View,
+  StyleSheet,
+  FlatList,
+  Pressable,
+  ActivityIndicator,
+  RefreshControl,
+} from 'react-native';
 import { router } from 'expo-router';
-import { residentFetch } from '../lib/api';
-import { getCachedVisitorsList, setCachedVisitorsList, type CachedVisitor } from '../lib/qr-cache';
+import { residentFetch } from '../../../lib/api';
+import {
+  getCachedVisitorsList,
+  setCachedVisitorsList,
+  type CachedVisitor,
+} from '../../../lib/qr-cache';
+import { theme } from '../../../lib/theme';
 
-const colors = {
-  background: '#f4f4f5',
-  surface: '#ffffff',
-  foreground: '#18181b',
-  muted: '#71717a',
-  border: '#e4e4e7',
-  accent: '#3b82f6',
-};
+const { colors, spacing, borderRadius, shadows, typography } = theme;
 
 export default function QRsScreen() {
   const [visitors, setVisitors] = useState<CachedVisitor[]>([]);
@@ -30,16 +36,18 @@ export default function QRsScreen() {
         router.replace('/login');
         return;
       }
-      const data = (await res.json()) as { success?: boolean; data?: CachedVisitor[] };
+      const data = (await res.json()) as {
+        success?: boolean;
+        data?: CachedVisitor[];
+        message?: string;
+      };
       if (!res.ok || !data.success) {
         const cached = await getCachedVisitorsList();
         if (cached?.length) {
           setVisitors(cached);
           setFromCache(true);
         } else {
-          setError(data && typeof (data as { message?: string }).message === 'string'
-            ? (data as { message: string }).message
-            : 'Failed to load visitor passes');
+          setError(data.message ?? 'Failed to load visitor passes');
         }
         return;
       }
@@ -75,7 +83,7 @@ export default function QRsScreen() {
   if (loading && visitors.length === 0) {
     return (
       <View style={[styles.container, styles.centered]}>
-        <ActivityIndicator size="large" color={colors.accent} />
+        <ActivityIndicator size="large" color={colors.primary} />
       </View>
     );
   }
@@ -84,7 +92,9 @@ export default function QRsScreen() {
     <View style={styles.container}>
       {fromCache ? (
         <View style={styles.banner}>
-          <Text style={styles.bannerText}>Showing cached passes (offline or last load)</Text>
+          <Text style={styles.bannerText}>
+            Showing cached passes (offline or last load)
+          </Text>
         </View>
       ) : null}
       {error != null && visitors.length === 0 ? (
@@ -99,28 +109,40 @@ export default function QRsScreen() {
           data={visitors}
           keyExtractor={(item) => item.id}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.accent} />
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              tintColor={colors.primary}
+            />
           }
           contentContainerStyle={styles.listContent}
           ListEmptyComponent={
             <View style={styles.card}>
               <Text style={styles.emptyText}>No visitor passes yet.</Text>
-              <Text style={styles.emptySubtext}>Create passes in the resident portal to see them here.</Text>
+              <Text style={styles.emptySubtext}>
+                Create passes in the resident portal to see them here.
+              </Text>
             </View>
           }
           renderItem={({ item }) => (
             <Pressable
-              style={({ pressed }) => [styles.card, styles.listCard, pressed && styles.listCardPressed]}
+              style={({ pressed }) => [
+                styles.card,
+                styles.listCard,
+                pressed && styles.listCardPressed,
+              ]}
               onPress={() => router.push(`/visitors/${item.id}`)}
             >
               <Text style={styles.cardTitle} numberOfLines={1}>
-                {item.visitorName ?? (item.isOpenQR ? 'Open QR' : 'Visitor pass')}
+                {item.visitorName ??
+                  (item.isOpenQR ? 'Open QR' : 'Visitor pass')}
               </Text>
               {item.unit?.name ? (
                 <Text style={styles.cardSubtext}>{item.unit.name}</Text>
               ) : null}
               <Text style={styles.cardMeta}>
-                {item.isOpenQR ? 'Open' : 'One-time'} • {new Date(item.createdAt).toLocaleDateString()}
+                {item.isOpenQR ? 'Open' : 'One-time'} •{' '}
+                {new Date(item.createdAt).toLocaleDateString()}
               </Text>
             </Pressable>
           )}
@@ -134,8 +156,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
-    paddingHorizontal: 20,
-    paddingTop: 16,
+    paddingHorizontal: spacing.xl,
+    paddingTop: spacing.lg,
   },
   centered: {
     justifyContent: 'center',
@@ -143,27 +165,24 @@ const styles = StyleSheet.create({
   },
   banner: {
     backgroundColor: '#fef3c7',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 12,
+    padding: spacing.lg,
+    borderRadius: borderRadius.lg,
+    marginBottom: spacing.lg,
   },
   bannerText: {
-    fontSize: 14,
+    fontSize: typography.sm.fontSize,
+    lineHeight: typography.sm.lineHeight,
     color: '#92400e',
   },
   listContent: {
-    paddingBottom: 24,
+    paddingBottom: spacing['2xl'],
   },
   card: {
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: 20,
-    marginBottom: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 2,
+    backgroundColor: colors.card,
+    borderRadius: borderRadius.xl,
+    padding: spacing.xl,
+    marginBottom: spacing.lg,
+    ...shadows.sm,
   },
   listCard: {},
   listCardPressed: {
@@ -176,13 +195,14 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   cardSubtext: {
-    fontSize: 14,
-    color: colors.muted,
+    fontSize: typography.sm.fontSize,
+    lineHeight: typography.sm.lineHeight,
+    color: colors.mutedForeground,
     marginBottom: 4,
   },
   cardMeta: {
     fontSize: 13,
-    color: colors.muted,
+    color: colors.mutedForeground,
   },
   emptyText: {
     fontSize: 17,
@@ -191,24 +211,27 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   emptySubtext: {
-    fontSize: 14,
-    color: colors.muted,
+    fontSize: typography.sm.fontSize,
+    lineHeight: typography.sm.lineHeight,
+    color: colors.mutedForeground,
   },
   errorText: {
     fontSize: 15,
-    color: '#dc2626',
-    marginBottom: 12,
+    color: colors.danger,
+    marginBottom: spacing.lg,
   },
   retryButton: {
     alignSelf: 'flex-start',
     paddingVertical: 10,
     paddingHorizontal: 20,
-    backgroundColor: colors.accent,
-    borderRadius: 10,
+    backgroundColor: colors.primary,
+    borderRadius: borderRadius.xl,
   },
   retryButtonText: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#fff',
+    color: colors.primaryForeground,
   },
 });
+
+

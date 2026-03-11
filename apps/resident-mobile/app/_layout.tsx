@@ -8,13 +8,13 @@ export default function RootLayout() {
         <Stack.Screen
           name="index"
           options={{
-            title: 'GateFlow Resident',
+            headerShown: false,
           }}
         />
         <Stack.Screen
-          name="qrs"
+          name="(tabs)"
           options={{
-            title: 'My visitor QRs',
+            headerShown: false,
           }}
         />
         <Stack.Screen

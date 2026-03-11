@@ -13,16 +13,9 @@ import {
 import { router, useLocalSearchParams } from 'expo-router';
 import { residentFetch } from '../../lib/api';
 import { getCachedVisitor, setCachedVisitor, type CachedVisitor } from '../../lib/qr-cache';
+import { theme } from '../../lib/theme';
 
-const colors = {
-  background: '#f4f4f5',
-  surface: '#ffffff',
-  foreground: '#18181b',
-  muted: '#71717a',
-  border: '#e4e4e7',
-  accent: '#3b82f6',
-  accentFg: '#ffffff',
-};
+const { colors, spacing, borderRadius, shadows } = theme;
 
 export default function VisitorDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -106,7 +99,7 @@ export default function VisitorDetailScreen() {
   if (loading && !visitor) {
     return (
       <View style={[styles.container, styles.centered]}>
-        <ActivityIndicator size="large" color={colors.accent} />
+        <ActivityIndicator size="large" color={colors.primary} />
       </View>
     );
   }
@@ -164,9 +157,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
   scrollContent: {
-    padding: 20,
-    paddingTop: 16,
-    paddingBottom: 32,
+    padding: spacing.xl,
+    paddingTop: spacing.lg,
+    paddingBottom: spacing['3xl'],
   },
   centered: {
     justifyContent: 'center',
@@ -174,23 +167,19 @@ const styles = StyleSheet.create({
   },
   banner: {
     backgroundColor: '#fef3c7',
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 12,
+    padding: spacing.lg,
+    borderRadius: borderRadius.lg,
+    marginBottom: spacing.lg,
   },
   bannerText: {
     fontSize: 14,
     color: '#92400e',
   },
   card: {
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    padding: 24,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 3,
+    backgroundColor: colors.card,
+    borderRadius: borderRadius.xl,
+    padding: spacing['2xl'],
+    ...shadows.md,
   },
   title: {
     fontSize: 22,
@@ -200,19 +189,19 @@ const styles = StyleSheet.create({
   },
   subtext: {
     fontSize: 16,
-    color: colors.muted,
+    color: colors.mutedForeground,
     marginBottom: 20,
   },
   codeBlock: {
-    backgroundColor: colors.background,
-    borderRadius: 10,
-    padding: 16,
-    marginBottom: 20,
+    backgroundColor: colors.muted,
+    borderRadius: borderRadius.xl,
+    padding: spacing.xl,
+    marginBottom: spacing.xl,
   },
   codeLabel: {
     fontSize: 12,
     fontWeight: '600',
-    color: colors.muted,
+    color: colors.mutedForeground,
     marginBottom: 8,
     textTransform: 'uppercase',
   },
@@ -223,8 +212,8 @@ const styles = StyleSheet.create({
   },
   shareButton: {
     height: 52,
-    borderRadius: 12,
-    backgroundColor: colors.accent,
+    borderRadius: borderRadius.xl,
+    backgroundColor: colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -234,22 +223,22 @@ const styles = StyleSheet.create({
   shareButtonText: {
     fontSize: 16,
     fontWeight: '600',
-    color: colors.accentFg,
+    color: colors.primaryForeground,
   },
   errorText: {
     fontSize: 16,
-    color: '#dc2626',
-    marginBottom: 16,
+    color: colors.danger,
+    marginBottom: spacing.xl,
   },
   backButton: {
     paddingVertical: 10,
     paddingHorizontal: 20,
-    backgroundColor: colors.accent,
-    borderRadius: 10,
+    backgroundColor: colors.primary,
+    borderRadius: borderRadius.xl,
   },
   backButtonText: {
     fontSize: 15,
     fontWeight: '600',
-    color: colors.accentFg,
+    color: colors.primaryForeground,
   },
 });
