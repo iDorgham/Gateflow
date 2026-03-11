@@ -19,12 +19,12 @@
   - [x] `AnimatePresence` slide transitions between steps
   - [x] Steps 3–4 placeholders
 
-- [ ] **Phase 3: Steps 3–4, Guest Details & Review**
-  - [ ] Step 3: contact picker (search + auto-fill) + manual entry + skip
-  - [ ] Step 4: summary card + generate + inline QR display + send email pre-filled
-  - [ ] `page.tsx` passes contacts from Prisma
-  - [ ] Guest fields persisted to DB
-  - [ ] Lint and typecheck pass
+- [x] **Phase 3: Steps 3–4, Guest Details & Review**
+  - [x] Step 3: contact picker (search + auto-fill) + manual entry + skip
+  - [x] Step 4: summary card + generate + inline QR display + send email pre-filled
+  - [x] `page.tsx` passes contacts from Prisma
+  - [x] Guest fields persisted to DB
+  - [x] Lint and typecheck pass
 
 ---
 *Created: 2026-03-11*
