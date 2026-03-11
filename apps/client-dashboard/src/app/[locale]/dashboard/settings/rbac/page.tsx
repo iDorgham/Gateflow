@@ -1,15 +1,25 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@gate-access/ui';
+import { requireAuth } from '@/lib/dashboard-auth';
+import { getRoles } from '../team/actions';
+import { RoleDashboard } from '@/components/settings/team/role-dashboard';
 
-export default function RBACSettings() {
+export default async function RBACSettings() {
+  const { claims } = await requireAuth();
+
+  const rolesResult = await getRoles();
+  const roles = (rolesResult.data ?? []) as Parameters<typeof RoleDashboard>[0]['roles'];
+
+  const canManageRoles = !!(claims.permissions?.['roles:manage']);
+
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Roles & Permissions</CardTitle>
-        <CardDescription>Configure granular access control for your team.</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <p className="text-sm text-muted-foreground italic">Phase 5: Implementation of permission matrix and session management.</p>
-      </CardContent>
-    </Card>
+    <div className="space-y-6">
+      <div className="flex flex-col gap-1">
+        <h1 className="text-xl font-black uppercase tracking-tight">Roles & Permissions</h1>
+        <p className="text-sm text-muted-foreground">
+          Configure granular access control for your team. Custom roles override built-in defaults.
+        </p>
+      </div>
+
+      <RoleDashboard roles={roles} canManageRoles={canManageRoles} />
+    </div>
   );
 }

@@ -43,6 +43,7 @@ model Organization {
   watchlistEntries WatchlistEntry[]
   incidents        Incident[]
   scanAttachments  ScanAttachment[]
+  invitations      Invitation[]
 
   @@index([deletedAt])
 }
@@ -80,6 +81,7 @@ model Role {
   organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId String?
   users          User[]
+  invitations    Invitation[]
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
 
@@ -112,6 +114,23 @@ model User {
   @@index([organizationId])
   @@index([roleId])
   @@index([deletedAt])
+}
+
+model Invitation {
+  id             String       @id @default(cuid())
+  email          String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId String
+  role           Role         @relation(fields: [roleId], references: [id])
+  roleId         String
+  token          String       @unique
+  acceptedAt     DateTime?
+  expiresAt      DateTime
+  createdAt      DateTime     @default(now())
+
+  @@unique([email, organizationId])
+  @@index([organizationId])
+  @@index([token])
 }
 
 model GateAssignment {
