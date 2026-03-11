@@ -51,6 +51,7 @@ model Organization {
   scanAttachments  ScanAttachment[]
   invitations      Invitation[]
   tasks            Task[]
+  chatMessages     ChatMessage[]
 
   @@index([deletedAt])
 }
@@ -117,6 +118,7 @@ model User {
   unit            Unit?
   gateAssignments GateAssignment[]
   incidents       Incident[]
+  chatMessages    ChatMessage[]
 
   @@index([organizationId])
   @@index([roleId])
@@ -162,6 +164,19 @@ enum TaskStatus {
   TODO
   IN_PROGRESS
   DONE
+}
+
+model ChatMessage {
+  id             String       @id @default(cuid())
+  content        String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId String
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt      DateTime     @default(now())
+
+  @@index([organizationId])
+  @@index([createdAt])
 }
 
 model GateAssignment {

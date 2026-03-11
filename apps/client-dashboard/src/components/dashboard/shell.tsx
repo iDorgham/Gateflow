@@ -287,6 +287,7 @@ export function DashboardShell({
             locale={locale}
             isOpen={isSidePanelOpen}
             onToggle={() => setIsSidePanelOpen((v) => !v)}
+            currentUserId={user.id}
           >
             <AIAssistant locale={locale} />
           </SidePanel>
