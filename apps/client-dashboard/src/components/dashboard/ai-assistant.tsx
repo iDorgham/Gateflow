@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useChat, type Message } from 'ai/react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { Send, Bot, User, Loader2, Trash2, Sparkles } from 'lucide-react';
+import { Send, Bot, User, Loader2, RotateCcw, Sparkles } from 'lucide-react';
 import { cn } from '@gate-access/ui';
 import { Button } from '@gate-access/ui';
 import type { Locale } from '@/lib/i18n-config';
@@ -165,20 +165,23 @@ export function AIAssistant({ locale }: AIAssistantProps) {
 
   return (
     <div className="flex h-full flex-col bg-card" dir={isRtl ? 'rtl' : 'ltr'}>
-      {/* Header Info */}
-      <div className="flex shrink-0 items-center justify-between border-b border-border px-4 py-3 bg-muted/30">
+      {/* Header */}
+      <div className="flex shrink-0 items-center justify-between border-b border-border px-4 py-3 bg-muted/20">
         <div className="flex items-center gap-2.5">
-          <div className="relative flex h-8 w-8 items-center justify-center rounded-xl bg-primary/10 text-primary">
-            <Sparkles className="h-4 w-4" />
+          <div className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
+            <Sparkles className="h-4.5 w-4.5" />
           </div>
           <div>
-            <p className="text-xs font-bold leading-none">
-              {isRtl ? 'مساعد GateFlow' : 'GateFlow Assistant'}
-            </p>
+            <div className="flex items-center gap-1.5">
+              <p className="text-xs font-black uppercase tracking-tight leading-none">
+                {isRtl ? 'مساعد GateFlow' : 'GateFlow Assistant'}
+              </p>
+              <span className="rounded-md bg-muted px-1.5 py-0.5 text-[9px] font-bold text-muted-foreground uppercase tracking-wider">
+                Gemini
+              </span>
+            </div>
             <p className="mt-1 text-[10px] text-muted-foreground">
-              {isRtl
-                ? 'اسألني أي شيء عن مشروعك'
-                : 'Ask me anything about your project'}
+              {isRtl ? 'اسألني أي شيء عن نظامك' : 'Ask me anything about your system'}
             </p>
           </div>
         </div>
@@ -186,8 +189,9 @@ export function AIAssistant({ locale }: AIAssistantProps) {
           onClick={clearChat}
           className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
           title={isRtl ? 'مسح المحادثة' : 'Clear conversation'}
+          aria-label={isRtl ? 'مسح المحادثة' : 'Clear conversation'}
         >
-          <Trash2 className="h-3.5 w-3.5" />
+          <RotateCcw className="h-3.5 w-3.5" />
         </button>
       </div>
 
@@ -240,7 +244,7 @@ export function AIAssistant({ locale }: AIAssistantProps) {
                 )}
                 dir={msgRtl ? 'rtl' : 'ltr'}
               >
-                {text}
+                <span className="whitespace-pre-wrap">{text}</span>
               </div>
             </div>
           );
@@ -281,7 +285,7 @@ export function AIAssistant({ locale }: AIAssistantProps) {
                 <button
                   key={p}
                   onClick={() => sendExample(p)}
-                  className="rounded-xl border border-border bg-background px-3 py-2 text-xs text-muted-foreground transition-all hover:border-primary/30 hover:bg-primary/5 hover:text-foreground hover:shadow-sm"
+                  className="rounded-xl border border-border bg-background px-3 py-2 text-xs text-muted-foreground transition-all hover:border-primary/30 hover:bg-primary/5 hover:text-foreground hover:shadow-md active:scale-95"
                 >
                   {p}
                 </button>
