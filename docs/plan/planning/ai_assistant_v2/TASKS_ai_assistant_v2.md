@@ -27,12 +27,12 @@
   - [x] Side panel: AI | Tasks tabs
   - [x] Typecheck and tests pass
 
-- [ ] **Phase 4: Team Chat Tab**
-  - [ ] ChatMessage model in schema (prisma db push)
-  - [ ] GET/POST /api/chat
-  - [ ] team-chat.tsx with bubble UI + 10s polling + send form
-  - [ ] Side panel: AI | Tasks | Chat tabs
-  - [ ] Typecheck and lint pass
+- [x] **Phase 4: Team Chat Tab**
+  - [x] ChatMessage model in schema (prisma db push)
+  - [x] GET/POST /api/chat
+  - [x] team-chat.tsx with bubble UI + 10s polling + send form
+  - [x] Side panel: AI | Tasks | Chat tabs
+  - [x] Typecheck and lint pass
 
 ---
 *Created: 2026-03-11*
