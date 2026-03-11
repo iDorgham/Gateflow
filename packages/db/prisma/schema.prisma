@@ -28,6 +28,8 @@ model Organization {
   showUnitOnLandingPage     Boolean   @default(true)
   /// Global scanner config: { offlineModeEnabled, vibrationEnabled, soundEnabled, allowOverride }
   scannerConfig             Json?
+  /// Integration config: { gtmId, hubspotPortalId, googleAnalyticsId, ... }
+  integrationConfig         Json?
 
   users            User[]
   gates            Gate[]
