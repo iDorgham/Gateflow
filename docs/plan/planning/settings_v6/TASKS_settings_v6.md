@@ -39,10 +39,10 @@
   - [x] Create scanner rule configuration
   - [x] Sync rules with backend
 
-- [ ] **Phase 7: Connectivity**
-  - [ ] Build API Key management
-  - [ ] Implement Webhook setup
-  - [ ] Create integration cards
+- [x] **Phase 7: Connectivity**
+  - [x] Build API Key management
+  - [x] Implement Webhook setup
+  - [x] Create integration cards
 
 - [ ] **Phase 8: Notifications & Hardening**
   - [ ] Build notification preferences
