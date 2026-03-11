@@ -2,20 +2,21 @@
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
+export type TableDensity = 'compact' | 'default' | 'comfortable';
+
+interface TableViewState {
+  columnOrder?: string[];
+  columnVisibility?: Record<string, boolean>;
+  activeView?: string;
+  density?: TableDensity;
+  savedViews?: Record<string, { columnOrder?: string[]; columnVisibility?: Record<string, boolean> }>;
+}
+
 export interface UserPreferences {
   tableViews?: {
-    contacts?: {
-      columnOrder?: string[];
-      columnVisibility?: Record<string, boolean>;
-      activeView?: string;
-      savedViews?: Record<string, { columnOrder?: string[]; columnVisibility?: Record<string, boolean> }>;
-    };
-    units?: {
-      columnOrder?: string[];
-      columnVisibility?: Record<string, boolean>;
-      activeView?: string;
-      savedViews?: Record<string, { columnOrder?: string[]; columnVisibility?: Record<string, boolean> }>;
-    };
+    contacts?: TableViewState;
+    units?: TableViewState;
+    qrcodes?: TableViewState;
   };
 }
 

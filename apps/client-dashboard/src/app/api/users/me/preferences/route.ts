@@ -9,6 +9,7 @@ const TableViewSchema = z.object({
   columnOrder: z.array(z.string()).optional(),
   columnVisibility: z.record(z.string(), z.boolean()).optional(),
   activeView: z.string().optional(),
+  density: z.enum(['compact', 'default', 'comfortable']).optional(),
   savedViews: z
     .record(
       z.string(),
@@ -25,6 +26,7 @@ const PatchPreferencesSchema = z.object({
     .object({
       contacts: TableViewSchema.optional(),
       units: TableViewSchema.optional(),
+      qrcodes: TableViewSchema.optional(),
     })
     .optional(),
 });

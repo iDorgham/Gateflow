@@ -242,7 +242,8 @@ describe('GET /api/contacts — CRM fields in list response', () => {
 // ─── GET CSV audit log tests ───────────────────────────────────────────────────
 
 describe('GET /api/contacts?format=csv — audit logging', () => {
-  let GET: (req: unknown) => Promise<{ status: number; headers?: Record<string, string>; text?: () => Promise<string> }>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let GET: (req: unknown) => Promise<any>;
 
   beforeAll(async () => {
     const mod = await import('./route');

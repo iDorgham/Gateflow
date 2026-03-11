@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import {
   type ColumnDef,
@@ -19,10 +19,12 @@ import {
   Badge,
   Checkbox,
   Skeleton,
+  cn,
 } from '@gate-access/ui';
 import { useTranslation } from 'react-i18next';
-import { ArrowUpDown, GripVertical, RefreshCw } from 'lucide-react';
+import { ArrowUpDown, GripVertical, RefreshCw, AlignJustify, List, LayoutList } from 'lucide-react';
 import type { QRCodeRow } from '@/lib/qrcodes/use-qrcodes';
+import { useUserPreferences, type TableDensity } from '@/lib/residents/use-user-preferences';
 
 const STATUS_BADGE: Record<string, { variant?: 'default' | 'secondary' | 'destructive' | 'outline'; className?: string }> = {
   ACTIVE: { className: 'bg-success/10 text-success border-success/20' },
@@ -46,6 +48,18 @@ interface QRCodesTableProps {
   onToggleAllOnPage: (checked: boolean, idsOnPage: string[]) => void;
 }
 
+const DENSITY_CELL_CLASS: Record<TableDensity, string> = {
+  compact: 'py-1',
+  default: 'py-2',
+  comfortable: 'py-3',
+};
+
+const DENSITY_OPTIONS: { value: TableDensity; label: string; icon: React.ReactNode }[] = [
+  { value: 'compact', label: 'Compact', icon: <List className="h-3.5 w-3.5" /> },
+  { value: 'default', label: 'Default', icon: <AlignJustify className="h-3.5 w-3.5" /> },
+  { value: 'comfortable', label: 'Comfortable', icon: <LayoutList className="h-3.5 w-3.5" /> },
+];
+
 export function QRCodesTable({
   data,
   isLoading,
@@ -61,6 +75,24 @@ export function QRCodesTable({
   onToggleAllOnPage,
 }: QRCodesTableProps) {
   const { t } = useTranslation('dashboard');
+  const { preferences, updatePreferences } = useUserPreferences();
+  const [density, setDensity] = useState<TableDensity>('default');
+
+  // Sync density from preferences once loaded
+  useEffect(() => {
+    const saved = preferences?.tableViews?.qrcodes?.density;
+    if (saved) setDensity(saved);
+  }, [preferences?.tableViews?.qrcodes?.density]);
+
+  const handleDensityChange = useCallback(
+    (next: TableDensity) => {
+      setDensity(next);
+      updatePreferences({ tableViews: { qrcodes: { density: next } } }).catch(() => {
+        // non-fatal
+      });
+    },
+    [updatePreferences]
+  );
 
   const allSelectedOnPage =
     data.length > 0 && data.every((r) => selectedIds.includes(r.id));
@@ -232,8 +264,18 @@ export function QRCodesTable({
     }
   };
 
-  // Load saved column order from localStorage on mount
+  // Load saved column order: preferences API first, then localStorage fallback
   useEffect(() => {
+    const prefsOrder = preferences?.tableViews?.qrcodes?.columnOrder;
+    if (prefsOrder && prefsOrder.length > 0) {
+      const valid = prefsOrder.filter((id) => baseOrder.includes(id));
+      const normalized = valid.includes('select') ? valid : ['select', ...valid.filter((id) => id !== 'select')];
+      if (normalized.length === baseOrder.length && normalized[0] === 'select') {
+        setColumnOrder(normalized);
+        return;
+      }
+    }
+    // Fallback to localStorage
     if (typeof window === 'undefined') return;
     try {
       const raw = window.localStorage.getItem('client-dashboard.qrcodes.columns');
@@ -241,28 +283,30 @@ export function QRCodesTable({
       const parsed = JSON.parse(raw) as string[] | null;
       if (!Array.isArray(parsed)) return;
       const valid = parsed.filter((id) => baseOrder.includes(id));
-      const normalized =
-        valid.includes('select') ? valid : ['select', ...valid.filter((id) => id !== 'select')];
+      const normalized = valid.includes('select') ? valid : ['select', ...valid.filter((id) => id !== 'select')];
       if (normalized.length === baseOrder.length && normalized[0] === 'select') {
         setColumnOrder(normalized);
       }
     } catch {
       // ignore parse errors
     }
-  }, [baseOrder]);
+  // Only run when preferences or baseOrder first load — not on every column change
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [preferences?.tableViews?.qrcodes?.columnOrder, baseOrder]);
 
-  // Persist column order to localStorage
+  // Persist column order to preferences API + localStorage fallback
   useEffect(() => {
-    if (typeof window === 'undefined') return;
     if (!columnOrder || columnOrder.length === 0) return;
-    const normalized =
-      columnOrder[0] === 'select'
-        ? columnOrder
-        : ['select', ...columnOrder.filter((id) => id !== 'select')];
-    window.localStorage.setItem(
-      'client-dashboard.qrcodes.columns',
-      JSON.stringify(normalized)
-    );
+    const normalized = columnOrder[0] === 'select'
+      ? columnOrder
+      : ['select', ...columnOrder.filter((id) => id !== 'select')];
+    // Write to preferences API (fire-and-forget)
+    updatePreferences({ tableViews: { qrcodes: { columnOrder: normalized } } }).catch(() => {});
+    // Keep localStorage as fallback for offline/non-auth scenarios
+    if (typeof window !== 'undefined') {
+      window.localStorage.setItem('client-dashboard.qrcodes.columns', JSON.stringify(normalized));
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [columnOrder]);
 
   const columns = useMemo(
@@ -349,6 +393,28 @@ export function QRCodesTable({
 
   return (
     <div className="space-y-4">
+      {/* Density toolbar */}
+      <div className="flex items-center justify-end gap-1" aria-label="Table density">
+        {DENSITY_OPTIONS.map((opt) => (
+          <button
+            key={opt.value}
+            type="button"
+            onClick={() => handleDensityChange(opt.value)}
+            title={opt.label}
+            aria-pressed={density === opt.value}
+            className={cn(
+              'flex items-center gap-1 px-2.5 py-1.5 rounded-lg border text-xs font-bold transition-all',
+              density === opt.value
+                ? 'bg-primary/10 border-primary/30 text-primary'
+                : 'border-border text-muted-foreground hover:bg-muted/50'
+            )}
+          >
+            {opt.icon}
+            <span className="hidden sm:inline">{opt.label}</span>
+          </button>
+        ))}
+      </div>
+
       <div className={`rounded-xl border border-border overflow-x-auto overflow-hidden bg-card relative ${isFetching ? 'opacity-80 transition-opacity' : ''}`}>
         <Table className="min-w-[700px]">
           <TableHeader>
@@ -425,7 +491,7 @@ export function QRCodesTable({
               table.getRowModel().rows.map((row) => (
                 <TableRow key={row.id}>
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
+                    <TableCell key={cell.id} className={DENSITY_CELL_CLASS[density]}>
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
