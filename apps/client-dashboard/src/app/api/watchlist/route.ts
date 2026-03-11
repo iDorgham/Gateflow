@@ -21,7 +21,7 @@ const AddEntrySchema = z.object({
   notes: z.string().max(500).optional(),
 });
 
-export async function GET(): Promise<NextResponse> {
+export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {
@@ -31,8 +31,21 @@ export async function GET(): Promise<NextResponse> {
       return NextResponse.json({ success: false, message: 'Forbidden' }, { status: 403 });
     }
 
+    const url = new URL(request.url);
+    const search = url.searchParams.get('search')?.trim() || undefined;
+
     const entries = await prisma.watchlistEntry.findMany({
-      where: { organizationId: claims.orgId, deletedAt: null },
+      where: {
+        organizationId: claims.orgId,
+        deletedAt: null,
+        ...(search ? {
+          OR: [
+            { name: { contains: search, mode: 'insensitive' } },
+            { phone: { contains: search, mode: 'insensitive' } },
+            { idNumber: { contains: search, mode: 'insensitive' } },
+          ],
+        } : {}),
+      },
       orderBy: { createdAt: 'desc' },
       select: {
         id: true,

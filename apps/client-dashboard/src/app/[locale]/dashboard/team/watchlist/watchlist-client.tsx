@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useTransition, useMemo } from 'react';
+import { useState, useEffect, useTransition, useMemo, useRef } from 'react';
 import {
   Button,
   Input,
@@ -23,6 +23,7 @@ import {
   SheetTitle,
   SheetDescription,
   SheetFooter,
+  cn,
 } from '@gate-access/ui';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
@@ -36,6 +37,13 @@ import {
   Phone,
   CreditCard,
   StickyNote,
+  ArrowUpDown,
+  ArrowUp,
+  ArrowDown,
+  CalendarDays,
+  Clock,
+  ShieldCheck,
+  Users,
 } from 'lucide-react';
 import { csrfFetch } from '@/lib/csrf';
 
@@ -71,6 +79,20 @@ function EmptyState({ isFiltered }: { isFiltered: boolean }) {
   );
 }
 
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function relativeTime(iso: string): string {
+  const diff = Date.now() - new Date(iso).getTime();
+  const mins = Math.floor(diff / 60_000);
+  const hours = Math.floor(mins / 60);
+  const days = Math.floor(hours / 24);
+  if (mins < 1) return 'just now';
+  if (mins < 60) return `${mins}m ago`;
+  if (hours < 24) return `${hours}h ago`;
+  if (days === 1) return 'yesterday';
+  return `${days}d ago`;
+}
+
 // ─── Main Component ───────────────────────────────────────────────────────────
 
 export function WatchlistClient() {
@@ -80,6 +102,15 @@ export function WatchlistClient() {
   const [entries, setEntries] = useState<Entry[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
+  const [searchLoading, setSearchLoading] = useState(false);
+  const searchTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Stats (computed from the initial full load, not from search results)
+  const [stats, setStats] = useState({ total: 0, thisMonth: 0, lastAdded: null as string | null });
+
+  // Sort state
+  const [sortBy, setSortBy] = useState<'name' | 'createdAt'>('createdAt');
+  const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc');
 
   // Sheet state (add / edit)
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -95,30 +126,85 @@ export function WatchlistClient() {
   const [confirmText, setConfirmText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
 
-  // ── Load entries ────────────────────────────────────────────────────────────
+  // ── Load all entries on mount (also updates stats) ──────────────────────────
+
+  function computeStats(data: Entry[]) {
+    const now = new Date();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    setStats({
+      total: data.length,
+      thisMonth: data.filter((e) => new Date(e.createdAt) >= startOfMonth).length,
+      lastAdded: data.length > 0 ? data[0].createdAt : null,
+    });
+  }
 
   useEffect(() => {
     fetch('/api/watchlist')
       .then((r) => r.json())
       .then((res: { success: boolean; data?: Entry[] }) => {
-        if (res.success && res.data) setEntries(res.data);
+        if (res.success && res.data) {
+          setEntries(res.data);
+          computeStats(res.data);
+        }
       })
       .catch(() => toast.error(t('watchlist.loadError', 'Failed to load watchlist')))
       .finally(() => setLoading(false));
-  }, [t]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  // ── Filtered entries (client-side) ──────────────────────────────────────────
+  // ── Server-side search (debounced 300ms) ────────────────────────────────────
 
-  const filtered = useMemo(() => {
-    if (!search.trim()) return entries;
-    const q = search.toLowerCase();
-    return entries.filter(
-      (e) =>
-        e.name.toLowerCase().includes(q) ||
-        (e.phone ?? '').toLowerCase().includes(q) ||
-        (e.idNumber ?? '').toLowerCase().includes(q)
-    );
-  }, [entries, search]);
+  useEffect(() => {
+    if (searchTimerRef.current) clearTimeout(searchTimerRef.current);
+    searchTimerRef.current = setTimeout(() => {
+      const q = search.trim();
+      setSearchLoading(true);
+      const url = q ? `/api/watchlist?search=${encodeURIComponent(q)}` : '/api/watchlist';
+      fetch(url)
+        .then((r) => r.json())
+        .then((res: { success: boolean; data?: Entry[] }) => {
+          if (res.success && res.data) {
+            setEntries(res.data);
+            // Re-compute stats only when no search active (to keep totals accurate)
+            if (!q) computeStats(res.data);
+          }
+        })
+        .catch(() => {/* silent */})
+        .finally(() => setSearchLoading(false));
+    }, 300);
+    return () => { if (searchTimerRef.current) clearTimeout(searchTimerRef.current); };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search]);
+
+  // ── Sorted entries ──────────────────────────────────────────────────────────
+
+  const sorted = useMemo(() => {
+    const copy = [...entries];
+    copy.sort((a, b) => {
+      const cmp =
+        sortBy === 'name'
+          ? a.name.localeCompare(b.name)
+          : new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+      return sortDir === 'asc' ? cmp : -cmp;
+    });
+    return copy;
+  }, [entries, sortBy, sortDir]);
+
+  function toggleSort(col: 'name' | 'createdAt') {
+    if (sortBy === col) {
+      setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortBy(col);
+      setSortDir(col === 'name' ? 'asc' : 'desc');
+    }
+  }
+
+  function SortIcon({ col }: { col: 'name' | 'createdAt' }) {
+    if (sortBy !== col) return <ArrowUpDown className="h-3 w-3 ml-1 text-muted-foreground/40" />;
+    return sortDir === 'asc'
+      ? <ArrowUp className="h-3 w-3 ml-1 text-primary" />
+      : <ArrowDown className="h-3 w-3 ml-1 text-primary" />;
+  }
 
   // ── Sheet helpers ───────────────────────────────────────────────────────────
 
@@ -230,7 +316,7 @@ export function WatchlistClient() {
           </div>
           {!loading && (
             <Badge variant="outline" className="font-black text-sm px-2.5 py-1 border-destructive/30 bg-destructive/5 text-destructive shrink-0">
-              {entries.length}
+              {stats.total}
             </Badge>
           )}
         </div>
@@ -243,6 +329,35 @@ export function WatchlistClient() {
         </Button>
       </div>
 
+      {/* Stats row */}
+      {!loading && (
+        <div className="grid grid-cols-3 gap-3">
+          <div className="rounded-2xl border border-border bg-card p-4 flex flex-col gap-1">
+            <div className="flex items-center gap-1.5 text-muted-foreground mb-1">
+              <Users className="h-3.5 w-3.5" />
+              <span className="text-[10px] font-bold uppercase tracking-widest">Total</span>
+            </div>
+            <p className="text-2xl font-black text-foreground">{stats.total}</p>
+          </div>
+          <div className="rounded-2xl border border-border bg-card p-4 flex flex-col gap-1">
+            <div className="flex items-center gap-1.5 text-muted-foreground mb-1">
+              <CalendarDays className="h-3.5 w-3.5" />
+              <span className="text-[10px] font-bold uppercase tracking-widest">This Month</span>
+            </div>
+            <p className="text-2xl font-black text-foreground">{stats.thisMonth}</p>
+          </div>
+          <div className="rounded-2xl border border-border bg-card p-4 flex flex-col gap-1">
+            <div className="flex items-center gap-1.5 text-muted-foreground mb-1">
+              <Clock className="h-3.5 w-3.5" />
+              <span className="text-[10px] font-bold uppercase tracking-widest">Last Added</span>
+            </div>
+            <p className="text-sm font-black text-foreground">
+              {stats.lastAdded ? relativeTime(stats.lastAdded) : '—'}
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Search */}
       <div className="relative max-w-sm">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" aria-hidden="true" />
@@ -253,6 +368,9 @@ export function WatchlistClient() {
           className="pl-9 h-10 rounded-xl"
           aria-label={t('watchlist.search', 'Search watchlist')}
         />
+        {searchLoading && (
+          <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin text-muted-foreground/50" />
+        )}
       </div>
 
       {/* Table / loading / empty */}
@@ -260,26 +378,55 @@ export function WatchlistClient() {
         <div className="flex justify-center py-20">
           <Loader2 className="h-8 w-8 animate-spin text-muted-foreground/50" />
         </div>
-      ) : filtered.length === 0 ? (
+      ) : sorted.length === 0 ? (
         <EmptyState isFiltered={!!search.trim()} />
       ) : (
         <div className="rounded-2xl border border-border bg-card overflow-hidden">
           <Table>
             <TableHeader>
               <TableRow className="bg-muted/50">
-                <TableHead className="font-bold text-[10px] uppercase tracking-[0.2em]">Name</TableHead>
+                <TableHead
+                  className="font-bold text-[10px] uppercase tracking-[0.2em] cursor-pointer select-none hover:text-foreground"
+                  onClick={() => toggleSort('name')}
+                >
+                  <span className="inline-flex items-center">
+                    Name <SortIcon col="name" />
+                  </span>
+                </TableHead>
                 <TableHead className="font-bold text-[10px] uppercase tracking-[0.2em]">Phone</TableHead>
                 <TableHead className="font-bold text-[10px] uppercase tracking-[0.2em]">ID Number</TableHead>
                 <TableHead className="font-bold text-[10px] uppercase tracking-[0.2em]">Notes</TableHead>
-                <TableHead className="font-bold text-[10px] uppercase tracking-[0.2em]">Added</TableHead>
+                <TableHead
+                  className="font-bold text-[10px] uppercase tracking-[0.2em] cursor-pointer select-none hover:text-foreground"
+                  onClick={() => toggleSort('createdAt')}
+                >
+                  <span className="inline-flex items-center">
+                    Added <SortIcon col="createdAt" />
+                  </span>
+                </TableHead>
                 <TableHead className="text-right font-bold text-[10px] uppercase tracking-[0.2em]">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filtered.map((entry) => (
+              {sorted.map((entry) => (
                 <TableRow key={entry.id} className="group hover:bg-muted/30 transition-colors border-b border-border/20 last:border-0">
                   <TableCell>
-                    <span className="font-bold text-foreground">{entry.name}</span>
+                    <div className="flex flex-col gap-0.5">
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-bold text-foreground">{entry.name}</span>
+                        {entry.idNumber && (
+                          <Badge variant="outline" className="text-[9px] font-bold px-1.5 py-0 border-amber-300/50 bg-amber-50 text-amber-700 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-700/40">
+                            <ShieldCheck className="h-2.5 w-2.5 mr-0.5" />
+                            ID Verified
+                          </Badge>
+                        )}
+                      </div>
+                      {entry.createdBy && (
+                        <span className="text-[10px] text-muted-foreground/60">
+                          by {entry.createdBy.length > 16 ? `${entry.createdBy.slice(0, 16)}…` : entry.createdBy}
+                        </span>
+                      )}
+                    </div>
                   </TableCell>
                   <TableCell>
                     {entry.phone ? (
@@ -312,11 +459,18 @@ export function WatchlistClient() {
                     )}
                   </TableCell>
                   <TableCell className="text-xs text-muted-foreground">
-                    {new Date(entry.createdAt).toLocaleDateString(undefined, {
-                      month: 'short',
-                      day: 'numeric',
-                      year: 'numeric',
-                    })}
+                    <div className="flex flex-col gap-0.5">
+                      <span>
+                        {new Date(entry.createdAt).toLocaleDateString(undefined, {
+                          month: 'short',
+                          day: 'numeric',
+                          year: 'numeric',
+                        })}
+                      </span>
+                      <span className={cn('text-[10px]', entry.createdBy ? 'text-muted-foreground/50' : 'hidden')}>
+                        {relativeTime(entry.createdAt)}
+                      </span>
+                    </div>
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
