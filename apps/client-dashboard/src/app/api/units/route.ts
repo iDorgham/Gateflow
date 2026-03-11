@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import { requireAuth, isNextResponse } from '@/lib/require-auth';
+import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma, Prisma } from '@gate-access/db';
 import { UnitType } from '@gate-access/db';
 
@@ -78,8 +78,13 @@ const GetUnitsQuerySchema = z.object({
 // ─── GET /api/units ───────────────────────────────────────────────────────────
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
-  const auth = await requireAuth(request);
-  if (isNextResponse(auth)) return auth;
+  const auth = await getSessionClaims();
+  if (!auth) {
+    return NextResponse.json(
+      { success: false, message: 'Missing or invalid Authorization header' },
+      { status: 401 }
+    );
+  }
 
   const orgId = auth.orgId;
   if (!orgId) {
@@ -125,7 +130,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     const fromDate = dateFrom ?? from;
     const toDate = dateTo ?? to;
-    const dateFromValue = fromDate ? new Date(fromDate + 'T00:00:00.000Z') : null;
+    const dateFromValue = fromDate
+      ? new Date(fromDate + 'T00:00:00.000Z')
+      : null;
     const dateToValue = toDate ? new Date(toDate + 'T23:59:59.999Z') : null;
 
     if (gateId) {
@@ -279,7 +286,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     let vacancySuccessCounts: Map<string, number> = new Map();
     try {
       const vacancyCutoff = new Date(Date.now() - 60 * 24 * 60 * 60 * 1000);
-      const rows = await prisma.$queryRaw<{ unitId: string; successCount: number }[]>`
+      const rows = await prisma.$queryRaw<
+        { unitId: string; successCount: number }[]
+      >`
         SELECT vqr."unitId",
           COUNT(*) FILTER (WHERE sl.status = 'SUCCESS')::int AS "successCount"
         FROM "ScanLog" sl
@@ -291,7 +300,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
           AND u."organizationId" = ${orgId}
         GROUP BY vqr."unitId"
       `;
-      vacancySuccessCounts = new Map(rows.map((r) => [r.unitId, r.successCount]));
+      vacancySuccessCounts = new Map(
+        rows.map((r) => [r.unitId, r.successCount])
+      );
     } catch {
       // VisitorQR may be unavailable in older DBs; omit vacancy flag in that case.
     }
@@ -393,8 +404,13 @@ const CreateUnitSchema = z.object({
 });
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
-  const auth = await requireAuth(request);
-  if (isNextResponse(auth)) return auth;
+  const auth = await getSessionClaims();
+  if (!auth) {
+    return NextResponse.json(
+      { success: false, message: 'Missing or invalid Authorization header' },
+      { status: 401 }
+    );
+  }
 
   const orgId = auth.orgId;
   if (!orgId) {
