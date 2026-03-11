@@ -160,15 +160,18 @@ export async function deleteProject(projectId: string): Promise<Result> {
   }
 }
 
-export async function getResources(orgId: string) {
+export async function getResources(_orgId?: string) {
   try {
+    const claims = await getSessionClaims();
+    if (!claims?.orgId) return { gates: [], units: [] };
+
     const [gates, units] = await Promise.all([
       prisma.gate.findMany({
-        where: { organizationId: orgId, deletedAt: null },
+        where: { organizationId: claims.orgId, deletedAt: null },
         select: { id: true, name: true, projectId: true },
       }),
       prisma.unit.findMany({
-        where: { organizationId: orgId, deletedAt: null },
+        where: { organizationId: claims.orgId, deletedAt: null },
         select: { id: true, name: true, projectId: true },
       }),
     ]);
