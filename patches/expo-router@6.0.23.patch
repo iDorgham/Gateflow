@@ -1,0 +1,75 @@
+diff --git a/ios/LinkPreview/LinkPreviewNativeNavigation.mm b/ios/LinkPreview/LinkPreviewNativeNavigation.mm
+index f20d57629c74bcf3a95be7a49c306c4fa66b8dad..31e6756ef943f6a014c0a61d848dba9fac207e31 100644
+--- a/ios/LinkPreview/LinkPreviewNativeNavigation.mm
++++ b/ios/LinkPreview/LinkPreviewNativeNavigation.mm
+@@ -17,26 +17,26 @@
+   return NO;
+ }
+ 
+-+ (BOOL)isRNSBottomTabsScreenComponentView:(UIView *)view {
+++ (BOOL)isRNSTabsScreenComponentView:(UIView *)view {
+   if (view != nil) {
+-    return [view isKindOfClass:[RNSBottomTabsScreenComponentView class]];
++    return [view isKindOfClass:[RNSTabsScreenComponentView class]];
+   }
+ 
+   return NO;
+ }
+ 
+-+ (BOOL)isRNSBottomTabsHostComponentView:(UIView *)view {
+++ (BOOL)isRNSTabsHostComponentView:(UIView *)view {
+   if (view != nil) {
+-    return [view isKindOfClass:[RNSBottomTabsHostComponentView class]];
++    return [view isKindOfClass:[RNSTabsHostComponentView class]];
+   }
+ 
+   return NO;
+ }
+ 
+ + (nullable UITabBarController *)getBottomTabControllerFromView:(UIView *)view {
+-  if ([view isKindOfClass:[RNSBottomTabsScreenComponentView class]]) {
+-    RNSBottomTabsScreenComponentView *bottomTabsView =
+-        (RNSBottomTabsScreenComponentView *)view;
++  if ([view isKindOfClass:[RNSTabsScreenComponentView class]]) {
++    RNSTabsScreenComponentView *bottomTabsView =
++        (RNSTabsScreenComponentView *)view;
+     UIViewController *reactVC = [bottomTabsView reactViewController];
+     if (reactVC != nil &&
+         [reactVC.tabBarController isKindOfClass:[RNSTabBarController class]]) {
+@@ -45,9 +45,9 @@
+       return tabBarController;
+     }
+   }
+-  if ([view isKindOfClass:[RNSBottomTabsHostComponentView class]]) {
+-    RNSBottomTabsHostComponentView *bottomTabsView =
+-        (RNSBottomTabsHostComponentView *)view;
++  if ([view isKindOfClass:[RNSTabsHostComponentView class]]) {
++    RNSTabsHostComponentView *bottomTabsView =
++        (RNSTabsHostComponentView *)view;
+     return [bottomTabsView controller];
+   }
+   return nil;
+@@ -58,8 +58,8 @@
+   if (controller != nil) {
+     for (UIViewController *subcontroller in controller.viewControllers) {
+       if ([subcontroller.view
+-              isKindOfClass:[RNSBottomTabsScreenComponentView class]]) {
+-        if (((RNSBottomTabsScreenComponentView *)subcontroller.view).tabKey ==
++              isKindOfClass:[RNSTabsScreenComponentView class]]) {
++        if (((RNSTabsScreenComponentView *)subcontroller.view).tabKey ==
+             key) {
+           return subcontroller.view;
+         }
+@@ -96,9 +96,9 @@
+ 
+ + (nonnull NSString *)getTabKey:(UIView *)view {
+   if (view != nil &&
+-      [view isKindOfClass:[RNSBottomTabsScreenComponentView class]]) {
+-    RNSBottomTabsScreenComponentView *tabScreenView =
+-        (RNSBottomTabsScreenComponentView *)view;
++      [view isKindOfClass:[RNSTabsScreenComponentView class]]) {
++    RNSTabsScreenComponentView *tabScreenView =
++        (RNSTabsScreenComponentView *)view;
+     return tabScreenView.tabKey;
+   }
+   return @"";
