@@ -5,12 +5,12 @@
 
 ## Phases
 
-- [ ] **Phase 1: Header Notifications + AI Panel Refine**
-  - [ ] NotificationDropdown component (bell icon + expired QR list)
-  - [ ] Bell in header replaces side panel notifications tab
-  - [ ] Side panel renders AI chat directly (no tabs yet)
-  - [ ] AI assistant UI polish (whitespace-pre-wrap, Gemini badge, clear icon)
-  - [ ] Lint passes
+- [x] **Phase 1: Header Notifications + AI Panel Refine**
+  - [x] NotificationDropdown component (bell icon + expired QR list)
+  - [x] Bell in header replaces side panel notifications tab
+  - [x] Side panel renders AI chat directly (no tabs yet)
+  - [x] AI assistant UI polish (whitespace-pre-wrap, Gemini badge, clear icon)
+  - [x] Lint passes
 
 - [ ] **Phase 2: Expanded AI Tools**
   - [ ] `createQR` — real QR signing + Prisma create, supports count (QR sets)
