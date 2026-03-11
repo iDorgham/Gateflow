@@ -29,10 +29,10 @@
   - [x] Implement resident defaults
   - [x] Create quota progress bars
 
-- [ ] **Phase 5: Team & RBAC**
-  - [ ] Build Team roster table
-  - [ ] Create granular permission matrix
-  - [ ] Implement session revocation
+- [x] **Phase 5: Team & RBAC**
+  - [x] Build Team roster table
+  - [x] Create granular permission matrix
+  - [x] Implement session revocation
 
 - [ ] **Phase 6: Gates & Scanners**
   - [ ] Build Gate management table
