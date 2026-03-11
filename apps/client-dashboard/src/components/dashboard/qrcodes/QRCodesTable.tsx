@@ -33,6 +33,13 @@ const STATUS_BADGE: Record<string, { variant?: 'default' | 'secondary' | 'destru
   MAX_USES_REACHED: { className: 'bg-primary/10 text-primary border-primary/20' },
 };
 
+const STATUS_LABEL: Record<string, string> = {
+  ACTIVE: 'Active',
+  INACTIVE: 'Inactive',
+  EXPIRED: 'Expired',
+  MAX_USES_REACHED: 'Max Uses',
+};
+
 interface QRCodesTableProps {
   data: QRCodeRow[];
   isLoading: boolean;
@@ -157,7 +164,7 @@ export function QRCodesTable({
           const badge = STATUS_BADGE[status] ?? STATUS_BADGE.INACTIVE;
           return (
             <Badge variant="outline" className={badge.className ?? 'bg-muted'}>
-              {t(`qrcodes.statuses.${status}`, status)}
+              {STATUS_LABEL[status] ?? status}
             </Badge>
           );
         },
