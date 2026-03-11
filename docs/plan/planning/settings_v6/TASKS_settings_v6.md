@@ -24,10 +24,10 @@
   - [x] Build project table & mapping sheets
   - [x] Verify organization isolation
 
-- [ ] **Phase 4: Units & Residents Quotas**
-  - [ ] Build Unit Type management
-  - [ ] Implement resident defaults
-  - [ ] Create quota progress bars
+- [x] **Phase 4: Units & Residents Quotas**
+  - [x] Build Unit Type management
+  - [x] Implement resident defaults
+  - [x] Create quota progress bars
 
 - [ ] **Phase 5: Team & RBAC**
   - [ ] Build Team roster table
