@@ -10,11 +10,11 @@
   - [x] `docs/PRD_v6.0.md` scanned — one historical v5 ref at line 735 (correct, not stale)
   - [x] Archive boundary confirmed — plan-legacy + root-legacy, no duplication
 
-- [ ] **Phase 2: Core Guides v2 — Review & Update**
-  - [ ] `ARCHITECTURE.md` — all 6 apps, 6 packages, QR lifecycle accurate
-  - [ ] `SECURITY_OVERVIEW.md` — key invariants section present
-  - [ ] `DEVELOPMENT_GUIDE.md` — ports + slash commands listed
-  - [ ] `ENVIRONMENT_VARIABLES.md` — includes ANTHROPIC_API_KEY
+- [x] **Phase 2: Core Guides v2 — Review & Update**
+  - [x] `ARCHITECTURE.md` — stale "(to be generated)" ref removed; all 6 apps + 6 packages accurate
+  - [x] `SECURITY_OVERVIEW.md` — "Key invariants" table (7 invariants) added as section 3
+  - [x] `DEVELOPMENT_GUIDE.md` — dev ports table + /guide command added; plan file paths corrected
+  - [x] `ENVIRONMENT_VARIABLES.md` — ANTHROPIC_API_KEY, EXPO_PUBLIC_QR_SECRET, NEXT_PUBLIC_DEFAULT_ORG_ID added
 
 - [ ] **Phase 3: Plan Folder Cleanup & Alignment**
   - [ ] Completed plans moved from `planning/` → `done/`
