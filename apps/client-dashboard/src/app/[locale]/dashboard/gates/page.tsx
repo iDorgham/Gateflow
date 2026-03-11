@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation';
 import { getTranslation, Locale } from '@/lib/i18n';
 import { AutoRefresh, GatesList } from './gate-client';
 import type { GateWithStats } from './gate-client';
+import { PageHeader } from '@/components/dashboard/page-header';
 
 export async function generateMetadata({ params }: { params: { locale: Locale } }) {
   const { t } = await getTranslation(params.locale, 'dashboard');
@@ -71,13 +72,10 @@ export default async function GatesPage({ params }: { params: { locale: Locale }
       {/* Auto-refresh — fires router.refresh() every 30 s */}
       <AutoRefresh />
 
-      {/* Page header */}
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">{t('gates.title', { defaultValue: 'Gates' })}</h1>
-        <p className="text-sm text-slate-500 dark:text-slate-400">
-          {t('gates.description', { defaultValue: 'Manage physical and logical access points for your organisation.' })}
-        </p>
-      </div>
+      <PageHeader
+        title={t('gates.title', { defaultValue: 'Gates' })}
+        subtitle={t('gates.description', { defaultValue: 'Manage physical and logical access points for your organisation.' })}
+      />
 
       {/* Gate list (client component for modals + state) */}
       <GatesList gates={gatesWithStats} orgId={orgId} isAllProjects={isAllProjects} />

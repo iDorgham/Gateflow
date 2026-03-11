@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ChevronRight, Download, Plus, RefreshCw, Search, Trash2 } from 'lucide-react';
 import { useQRCodes } from '@/lib/qrcodes/use-qrcodes';
 import { QRCodesTable } from '@/components/dashboard/qrcodes/QRCodesTable';
+import { PageHeader } from '@/components/dashboard/page-header';
 import { toast } from 'sonner';
 
 type SortBy =
@@ -151,22 +152,18 @@ export default function QRCodesPage() {
 
   return (
     <div className="space-y-6 pb-20">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-foreground uppercase">
-            {t('qrcodes.title', 'QR Codes')}
-          </h1>
-          <p className="text-sm text-muted-foreground mt-1">
-            {t('qrcodes.description', 'Manage and track access QR codes.')}
-          </p>
-        </div>
-        <Link href={`/${locale}/dashboard/qrcodes/create`}>
-          <Button className="gap-2">
-            <Plus className="h-4 w-4" />
-            {t('qrcodes.create', 'Create QR Code')}
-          </Button>
-        </Link>
-      </div>
+      <PageHeader
+        title={t('qrcodes.title', 'QR Codes')}
+        subtitle={t('qrcodes.description', 'Manage and track access QR codes.')}
+        actions={
+          <Link href={`/${locale}/dashboard/qrcodes/create`}>
+            <Button className="gap-2">
+              <Plus className="h-4 w-4" />
+              {t('qrcodes.create', 'Create QR Code')}
+            </Button>
+          </Link>
+        }
+      />
 
       {/* Filter bar (Phase 8): search + date ranges */}
       <div className="flex flex-col gap-3">

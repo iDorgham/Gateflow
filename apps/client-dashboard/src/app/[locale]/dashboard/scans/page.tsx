@@ -4,6 +4,7 @@ import { prisma } from '@gate-access/db';
 import { getTranslation, Locale, isRtl } from '@/lib/i18n';
 import { Card, CardContent } from '@gate-access/ui';
 import { ScansFilters } from './scans-filters';
+import { PageHeader } from '@/components/dashboard/page-header';
 import type { ScanStatus } from '@gate-access/db';
 import type { Prisma } from '@gate-access/db';
 
@@ -236,13 +237,10 @@ export default async function ScansPage({
 
   return (
     <div className="space-y-6">
-      {/* Page header */}
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">{t('scans.title', { defaultValue: 'Scan Logs' })}</h1>
-        <p className="text-sm text-slate-500 dark:text-slate-400">
-          {t('scans.description', { defaultValue: 'Full audit trail of all access attempts for your organisation.' })}
-        </p>
-      </div>
+      <PageHeader
+        title={t('scans.title', { defaultValue: 'Access Logs' })}
+        subtitle={t('scans.description', { defaultValue: 'Full audit trail of all access attempts for your organisation.' })}
+      />
 
       {/* Filters */}
       <ScansFilters
