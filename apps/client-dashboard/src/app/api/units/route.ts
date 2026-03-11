@@ -225,6 +225,33 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         ),
       ].join('\n');
 
+      // Audit log — non-fatal: export still returns even if log write fails
+      try {
+        await prisma.auditLog.create({
+          data: {
+            organizationId: orgId,
+            userId: auth.sub ?? null,
+            action: 'UNITS_EXPORT',
+            entityType: 'Unit',
+            metadata: {
+              rowCount: units.length,
+              filters: {
+                search: search ?? null,
+                projectId: projectId ?? null,
+                unitType: unitType ?? null,
+                gateId: gateId ?? null,
+                contactId: contactId ?? null,
+                isActive: isActive ?? null,
+                dateFrom: fromDate ?? null,
+                dateTo: toDate ?? null,
+              },
+            },
+          },
+        });
+      } catch (auditErr) {
+        console.error('[units CSV] audit log failed (non-fatal):', auditErr);
+      }
+
       return new NextResponse(rows, {
         headers: {
           'Content-Type': 'text/csv',

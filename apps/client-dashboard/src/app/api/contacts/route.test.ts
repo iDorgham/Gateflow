@@ -24,14 +24,22 @@ jest.mock('next/server', () => {
     }
   }
 
+  class MockNextResponse {
+    status: number;
+    private _body: unknown;
+    constructor(body: unknown, init?: { status?: number; headers?: Record<string, string> }) {
+      this._body = body;
+      this.status = init?.status ?? 200;
+    }
+    async json() { return this._body; }
+    static json(body: unknown, init?: { status?: number }) {
+      return new MockNextResponse(body, { status: init?.status ?? 200 });
+    }
+  }
+
   return {
     NextRequest: MockNextRequest,
-    NextResponse: {
-      json: (body: unknown, init?: { status?: number }) => ({
-        status: init?.status ?? 200,
-        json: async () => body,
-      }),
-    },
+    NextResponse: MockNextResponse,
   };
 });
 
@@ -47,6 +55,7 @@ const mockContactFindMany = jest.fn();
 const mockContactCount = jest.fn();
 const mockProjectFindFirst = jest.fn();
 const mockGateFindFirst = jest.fn();
+const mockAuditLogCreate = jest.fn();
 jest.mock('@gate-access/db', () => ({
   prisma: {
     contact: {
@@ -59,6 +68,9 @@ jest.mock('@gate-access/db', () => ({
     },
     gate: {
       findFirst: (...args: unknown[]) => mockGateFindFirst(...args),
+    },
+    auditLog: {
+      create: (...args: unknown[]) => mockAuditLogCreate(...args),
     },
     $queryRaw: jest.fn().mockResolvedValue([]),
   },
@@ -224,5 +236,94 @@ describe('GET /api/contacts — CRM fields in list response', () => {
     const findManyCall = mockContactFindMany.mock.calls[0][0];
     expect(findManyCall.where.organizationId).toBe(orgId);
     expect(findManyCall.where.deletedAt).toBeNull();
+  });
+});
+
+// ─── GET CSV audit log tests ───────────────────────────────────────────────────
+
+describe('GET /api/contacts?format=csv — audit logging', () => {
+  let GET: (req: unknown) => Promise<{ status: number; headers?: Record<string, string>; text?: () => Promise<string> }>;
+
+  beforeAll(async () => {
+    const mod = await import('./route');
+    GET = mod.GET as typeof GET;
+  });
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    mockAuditLogCreate.mockResolvedValue({});
+    mockContactFindMany.mockResolvedValue([
+      {
+        id: 'c_1',
+        firstName: 'Alice',
+        lastName: 'Smith',
+        birthday: null,
+        company: 'Acme',
+        phone: null,
+        email: 'alice@example.com',
+        jobTitle: null,
+        source: null,
+        companyWebsite: null,
+        notes: null,
+        units: [],
+        contactTags: [],
+      },
+    ]);
+    mockContactCount.mockResolvedValue(1);
+    mockProjectFindFirst.mockResolvedValue(null);
+    mockGateFindFirst.mockResolvedValue(null);
+  });
+
+  it('creates CONTACTS_EXPORT audit log on CSV export', async () => {
+    const orgId = 'org_csv_audit_1';
+    mockGetSessionClaims.mockResolvedValue({ orgId, sub: 'u_1', email: 'a@b.com' });
+
+    const req = makeGetRequest('?format=csv');
+    const res = await GET(req);
+
+    // Should succeed (CSV response)
+    expect(res.status).toBe(200);
+
+    // Audit log must be created with correct fields
+    expect(mockAuditLogCreate).toHaveBeenCalledTimes(1);
+    const auditCall = mockAuditLogCreate.mock.calls[0][0];
+    expect(auditCall.data.organizationId).toBe(orgId);
+    expect(auditCall.data.action).toBe('CONTACTS_EXPORT');
+    expect(auditCall.data.entityType).toBe('Contact');
+    expect(typeof auditCall.data.metadata.rowCount).toBe('number');
+  });
+
+  it('does NOT create audit log for JSON requests', async () => {
+    mockGetSessionClaims.mockResolvedValue({ orgId: 'org_csv_audit_2', sub: 'u_2', email: 'b@c.com' });
+
+    const req = makeGetRequest('?format=json');
+    await GET(req);
+
+    expect(mockAuditLogCreate).not.toHaveBeenCalled();
+  });
+
+  it('returns 401 and no audit log when unauthenticated', async () => {
+    mockGetSessionClaims.mockResolvedValue(null);
+
+    const req = makeGetRequest('?format=csv');
+    const res = await GET(req);
+
+    expect(res.status).toBe(401);
+    expect(mockAuditLogCreate).not.toHaveBeenCalled();
+  });
+
+  it('metadata does not contain raw PII (names, emails)', async () => {
+    const orgId = 'org_csv_audit_3';
+    mockGetSessionClaims.mockResolvedValue({ orgId, sub: 'u_3', email: 'c@d.com' });
+
+    await GET(makeGetRequest('?format=csv&search=alice'));
+
+    const auditCall = mockAuditLogCreate.mock.calls[0][0];
+    const meta = auditCall.data.metadata;
+    // Only scalar filter values — no contact objects
+    expect(meta.rowCount).toBeDefined();
+    expect(meta.filters).toBeDefined();
+    expect(JSON.stringify(meta)).not.toContain('Alice');
+    expect(JSON.stringify(meta)).not.toContain('alice@example.com');
   });
 });
