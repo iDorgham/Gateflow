@@ -136,11 +136,6 @@ export function QRCodesTable({
               >
                 {display}
               </Link>
-              {row.original.guestName && (
-                <p className="text-[10px] text-muted-foreground truncate max-w-[140px]">
-                  {row.original.guestName}
-                </p>
-              )}
             </div>
           );
         },
@@ -231,6 +226,27 @@ export function QRCodesTable({
         id: 'projectName',
         header: () => t('qrcodes.project', 'Project'),
         cell: ({ row }) => row.original.projectName ?? '—',
+      },
+      {
+        id: 'guestName',
+        header: () => t('qrcodes.guestName', 'Name'),
+        cell: ({ row }) => (
+          <span className="text-sm">{row.original.guestName ?? '—'}</span>
+        ),
+      },
+      {
+        id: 'guestEmail',
+        header: () => t('qrcodes.guestEmail', 'Email'),
+        cell: ({ row }) => (
+          <span className="text-sm font-mono text-xs">{row.original.guestEmail ?? '—'}</span>
+        ),
+      },
+      {
+        id: 'guestPhone',
+        header: () => t('qrcodes.guestPhone', 'Phone'),
+        cell: ({ row }) => (
+          <span className="text-sm">{row.original.guestPhone ?? '—'}</span>
+        ),
       },
     ];
   }, [
