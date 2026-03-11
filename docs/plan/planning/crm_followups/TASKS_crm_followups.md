@@ -6,12 +6,12 @@
 
 ## Phases
 
-- [ ] **Phase 1: Export Audit Logging (#40)**
-  - [ ] `AuditLog` created on contacts CSV export (`CONTACTS_EXPORT`)
-  - [ ] `AuditLog` created on units CSV export (`UNITS_EXPORT`)
-  - [ ] Metadata: rowCount + filter scalars only, no PII
-  - [ ] Failed audit is non-fatal (export still returns CSV)
-  - [ ] Tests pass
+- [x] **Phase 1: Export Audit Logging (#40)**
+  - [x] `AuditLog` created on contacts CSV export (`CONTACTS_EXPORT`)
+  - [x] `AuditLog` created on units CSV export (`UNITS_EXPORT`)
+  - [x] Metadata: rowCount + filter scalars only, no PII
+  - [x] Failed audit is non-fatal (export still returns CSV)
+  - [x] Tests pass
 
 - [ ] **Phase 2: QR Table Density & Preferences (#39)**
   - [ ] Density toggle in toolbar (Compact / Default / Comfortable)
