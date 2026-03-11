@@ -44,10 +44,10 @@
   - [x] Implement Webhook setup
   - [x] Create integration cards
 
-- [ ] **Phase 8: Notifications & Hardening**
-  - [ ] Build notification preferences
-  - [ ] Implement template preview
-  - [ ] Perform accessibility audit
+- [x] **Phase 8: Notifications & Hardening**
+  - [x] Build notification preferences
+  - [x] Implement template preview
+  - [x] Perform accessibility audit
 
 - [ ] **Phase 9: Danger Zone & Final Verification**
   - [ ] Build high-risk action cards (cooldowns)
