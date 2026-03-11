@@ -12,12 +12,12 @@
   - [x] GET `/api/qrcodes` returns guest fields
   - [x] `createQRCode()` action updated
 
-- [ ] **Phase 2: Wizard Shell & Steps 1–2**
-  - [ ] `StepIndicator` component (4 steps, animated active pill)
-  - [ ] Step 1: type selection cards (SINGLE / RECURRING / PERMANENT)
-  - [ ] Step 2: gate selector + expiry + max uses
-  - [ ] `AnimatePresence` slide transitions between steps
-  - [ ] Steps 3–4 placeholders
+- [x] **Phase 2: Wizard Shell & Steps 1–2**
+  - [x] `StepIndicator` component (4 steps, animated active pill)
+  - [x] Step 1: type selection cards (SINGLE / RECURRING / PERMANENT)
+  - [x] Step 2: gate selector + expiry + max uses
+  - [x] `AnimatePresence` slide transitions between steps
+  - [x] Steps 3–4 placeholders
 
 - [ ] **Phase 3: Steps 3–4, Guest Details & Review**
   - [ ] Step 3: contact picker (search + auto-fill) + manual entry + skip
