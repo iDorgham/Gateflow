@@ -34,10 +34,10 @@
   - [x] Create granular permission matrix
   - [x] Implement session revocation
 
-- [ ] **Phase 6: Gates & Scanners**
-  - [ ] Build Gate management table
-  - [ ] Create scanner rule configuration
-  - [ ] Sync rules with backend
+- [x] **Phase 6: Gates & Scanners**
+  - [x] Build Gate management table
+  - [x] Create scanner rule configuration
+  - [x] Sync rules with backend
 
 - [ ] **Phase 7: Connectivity**
   - [ ] Build API Key management
