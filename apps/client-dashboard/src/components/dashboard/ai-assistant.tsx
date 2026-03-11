@@ -56,14 +56,18 @@ function loadMessages(isRtl: boolean): Message[] {
 // ─── Example prompts ──────────────────────────────────────────────────────────
 
 const EXAMPLE_PROMPTS_EN = [
-  'Show me project stats',
+  'Show organization stats',
+  'Create 3 single-use QR codes',
   'List recent scans',
+  'List all contacts',
   'Create a new project',
 ];
 
 const EXAMPLE_PROMPTS_AR = [
-  'عرض إحصائيات المشروع',
+  'عرض إحصائيات المنظمة',
+  'إنشاء 3 رموز QR للاستخدام مرة واحدة',
   'أحدث عمليات المسح',
+  'قائمة جهات الاتصال',
   'إنشاء مشروع جديد',
 ];
 
