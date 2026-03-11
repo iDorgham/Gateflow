@@ -25,13 +25,13 @@
   - [x] Pill date presets match analytics style
   - [x] Lint passes
 
-- [ ] **Phase 4: AI Panel + Side Panel Refinement**
-  - [ ] Side panel tabs h-10, px-4, active indicator
-  - [ ] AI panel: no duplicate header, welcome card in message area
-  - [ ] Message avatars h-8 w-8
-  - [ ] Input rounded-2xl min-h-[48px]
-  - [ ] Tasks row min-h-[44px], Chat avatar h-8 w-8
-  - [ ] Lint + typecheck pass
+- [x] **Phase 4: AI Panel + Side Panel Refinement**
+  - [x] Side panel tabs h-10, px-4, active indicator
+  - [x] AI panel: no duplicate header, welcome card in message area
+  - [x] Message avatars h-8 w-8
+  - [x] Input rounded-2xl min-h-[48px]
+  - [x] Tasks row min-h-[44px], Chat avatar h-8 w-8
+  - [x] Lint + typecheck pass
 
 ---
 *Created: 2026-03-11*
