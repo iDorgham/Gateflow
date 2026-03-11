@@ -27,9 +27,13 @@ import {
   Infinity,
   Link2,
   ListRestart,
+  Phone,
   QrCode,
   RefreshCw,
+  Search,
   Send,
+  SkipForward,
+  User,
 } from 'lucide-react';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -352,57 +356,349 @@ function Step2({
   );
 }
 
-// ─── Steps 3 & 4 placeholders (Phase 3) ──────────────────────────────────────
+// ─── Step 3: Guest Details ────────────────────────────────────────────────────
 
-function Step3Placeholder({ onBack, onNext }: { onBack: () => void; onNext: () => void }) {
+function Step3({
+  contacts,
+  guestMode,
+  setGuestMode,
+  selectedContactId,
+  setSelectedContactId,
+  guestName,
+  setGuestName,
+  guestEmail,
+  setGuestEmail,
+  guestPhone,
+  setGuestPhone,
+  onBack,
+  onNext,
+}: {
+  contacts: Contact[];
+  guestMode: 'contact' | 'manual';
+  setGuestMode: (m: 'contact' | 'manual') => void;
+  selectedContactId: string;
+  setSelectedContactId: (id: string) => void;
+  guestName: string;
+  setGuestName: (v: string) => void;
+  guestEmail: string;
+  setGuestEmail: (v: string) => void;
+  guestPhone: string;
+  setGuestPhone: (v: string) => void;
+  onBack: () => void;
+  onNext: () => void;
+}) {
+  const [search, setSearch] = useState('');
+
+  const filtered = contacts.filter((c) => {
+    const q = search.toLowerCase();
+    return (
+      c.firstName.toLowerCase().includes(q) ||
+      c.lastName.toLowerCase().includes(q) ||
+      (c.email ?? '').toLowerCase().includes(q)
+    );
+  });
+
+  const selectedContact = contacts.find((c) => c.id === selectedContactId) ?? null;
+
+  function selectContact(c: Contact) {
+    setSelectedContactId(c.id);
+    setGuestName(`${c.firstName} ${c.lastName}`);
+    setGuestEmail(c.email ?? '');
+    setGuestPhone(c.phone ?? '');
+    setSearch(`${c.firstName} ${c.lastName}`);
+  }
+
+  function getInitials(c: Contact) {
+    return `${c.firstName[0] ?? ''}${c.lastName[0] ?? ''}`.toUpperCase();
+  }
+
   return (
     <div className="space-y-6">
       <div>
         <h2 className="text-lg font-black uppercase tracking-tight">Guest Details</h2>
-        <p className="text-sm text-muted-foreground mt-1">Link this QR to a guest or contact.</p>
+        <p className="text-sm text-muted-foreground mt-1">
+          Optionally link this code to a guest. You can skip this step.
+        </p>
       </div>
-      <div className="h-40 rounded-2xl border-2 border-dashed border-border flex items-center justify-center text-muted-foreground/50 text-sm italic">
-        Guest details — coming in Phase 3
+
+      {/* Mode toggle */}
+      <div className="flex rounded-xl border border-border overflow-hidden">
+        <button
+          type="button"
+          onClick={() => setGuestMode('contact')}
+          aria-pressed={guestMode === 'contact'}
+          className={cn(
+            'flex-1 flex items-center justify-center gap-2 py-2.5 text-xs font-black uppercase tracking-widest transition-colors border-r border-border',
+            guestMode === 'contact' ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-muted/30'
+          )}
+        >
+          <User className="h-3.5 w-3.5" aria-hidden="true" />
+          From Contact
+        </button>
+        <button
+          type="button"
+          onClick={() => setGuestMode('manual')}
+          aria-pressed={guestMode === 'manual'}
+          className={cn(
+            'flex-1 flex items-center justify-center gap-2 py-2.5 text-xs font-black uppercase tracking-widest transition-colors',
+            guestMode === 'manual' ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-muted/30'
+          )}
+        >
+          <QrCode className="h-3.5 w-3.5" aria-hidden="true" />
+          Manual Entry
+        </button>
       </div>
-      <div className="flex gap-3">
-        <Button variant="outline" onClick={onBack} className="flex-1 h-12 gap-2 font-bold uppercase tracking-widest text-[11px]">
-          <ChevronLeft className="h-4 w-4" />Back
+
+      {/* From Contact mode */}
+      {guestMode === 'contact' && (
+        <div className="space-y-3">
+          {contacts.length === 0 ? (
+            <p className="text-sm text-muted-foreground italic text-center py-6">
+              No contacts in this workspace. Use manual entry or skip.
+            </p>
+          ) : (
+            <>
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                <input
+                  type="text"
+                  placeholder="Search by name or email…"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  aria-label="Search contacts"
+                  className="w-full h-11 pl-9 pr-3 rounded-xl border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all"
+                />
+              </div>
+
+              <div className="max-h-52 overflow-y-auto rounded-xl border border-border divide-y divide-border/50" role="listbox" aria-label="Contacts">
+                {filtered.length === 0 ? (
+                  <p className="text-center text-xs text-muted-foreground py-4 italic">No contacts match</p>
+                ) : (
+                  filtered.map((c) => (
+                    <button
+                      key={c.id}
+                      type="button"
+                      role="option"
+                      aria-selected={selectedContactId === c.id}
+                      onClick={() => selectContact(c)}
+                      className={cn(
+                        'w-full flex items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-muted/30',
+                        selectedContactId === c.id && 'bg-primary/5 border-l-2 border-l-primary'
+                      )}
+                    >
+                      {/* Initials avatar */}
+                      <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                        <span className="text-xs font-black text-primary">{getInitials(c)}</span>
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-bold text-foreground truncate">{c.firstName} {c.lastName}</p>
+                        <div className="flex items-center gap-3 mt-0.5">
+                          {c.email && <span className="text-[11px] text-muted-foreground truncate">{c.email}</span>}
+                          {c.phone && (
+                            <span className="text-[11px] text-muted-foreground flex items-center gap-0.5 shrink-0">
+                              <Phone className="h-2.5 w-2.5" aria-hidden="true" />{c.phone}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      {selectedContactId === c.id && (
+                        <Check className="h-4 w-4 text-primary shrink-0" aria-hidden="true" />
+                      )}
+                    </button>
+                  ))
+                )}
+              </div>
+
+              {selectedContact && (
+                <div className="flex items-center gap-2 px-3 py-2 rounded-xl border border-primary/20 bg-primary/5">
+                  <CheckCircle2 className="h-4 w-4 text-primary shrink-0" aria-hidden="true" />
+                  <span className="text-xs font-bold text-primary truncate">
+                    {selectedContact.firstName} {selectedContact.lastName}
+                    {selectedContact.email && ` · ${selectedContact.email}`}
+                  </span>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      )}
+
+      {/* Manual mode */}
+      {guestMode === 'manual' && (
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="guest-name" className="text-[11px] font-black uppercase tracking-widest text-muted-foreground">
+              Guest Name
+            </Label>
+            <Input
+              id="guest-name"
+              value={guestName}
+              onChange={(e) => setGuestName(e.target.value)}
+              placeholder="e.g. John Smith"
+              className="h-11 rounded-xl font-medium"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="guest-email" className="text-[11px] font-black uppercase tracking-widest text-muted-foreground">
+              Email Address
+            </Label>
+            <Input
+              id="guest-email"
+              type="email"
+              value={guestEmail}
+              onChange={(e) => setGuestEmail(e.target.value)}
+              placeholder="guest@example.com"
+              className="h-11 rounded-xl font-medium"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="guest-phone" className="text-[11px] font-black uppercase tracking-widest text-muted-foreground">
+              Phone (optional)
+            </Label>
+            <Input
+              id="guest-phone"
+              type="tel"
+              value={guestPhone}
+              onChange={(e) => setGuestPhone(e.target.value)}
+              placeholder="+971 50 000 0000"
+              className="h-11 rounded-xl font-medium"
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Navigation */}
+      <div className="flex gap-3 pt-2">
+        <Button variant="outline" onClick={onBack} className="h-12 px-5 gap-1.5 font-bold uppercase tracking-widest text-[11px] rounded-xl">
+          <ChevronLeft className="h-4 w-4" aria-hidden="true" />Back
         </Button>
-        <Button onClick={onNext} className="flex-1 h-12 gap-2 font-black uppercase tracking-widest text-[11px]">
-          Continue <ChevronRight className="h-4 w-4" />
+        <Button
+          variant="outline"
+          onClick={() => {
+            // Clear guest data on skip
+            setSelectedContactId('');
+            setGuestName('');
+            setGuestEmail('');
+            setGuestPhone('');
+            onNext();
+          }}
+          className="h-12 px-5 gap-1.5 font-bold uppercase tracking-widest text-[11px] rounded-xl text-muted-foreground"
+        >
+          <SkipForward className="h-4 w-4" aria-hidden="true" />Skip
+        </Button>
+        <Button onClick={onNext} className="flex-1 h-12 gap-2 font-black uppercase tracking-widest text-[11px] rounded-xl">
+          Continue <ChevronRight className="h-4 w-4" aria-hidden="true" />
         </Button>
       </div>
     </div>
   );
 }
 
-function Step4Placeholder({
+// ─── Step 4: Review & Generate ────────────────────────────────────────────────
+
+const QR_TYPE_LABELS: Record<string, string> = {
+  SINGLE: 'Single Use',
+  RECURRING: 'Recurring',
+  PERMANENT: 'Permanent',
+};
+
+function SummaryRow({ label, value }: { label: string; value: React.ReactNode }) {
+  return (
+    <div className="flex items-start justify-between gap-4 py-3 border-b border-border/50 last:border-0">
+      <span className="text-[11px] font-black uppercase tracking-widest text-muted-foreground shrink-0">{label}</span>
+      <span className="text-sm font-bold text-foreground text-right">{value}</span>
+    </div>
+  );
+}
+
+function Step4({
+  type,
+  gateId,
+  gates,
+  expiresAt,
+  maxUses,
+  guestName,
+  guestEmail,
+  currentProject,
+  error,
+  isPending,
   onBack,
   onSubmit,
-  isPending,
 }: {
+  type: QRCodeType;
+  gateId: string;
+  gates: Gate[];
+  expiresAt: string;
+  maxUses: string;
+  guestName: string;
+  guestEmail: string;
+  currentProject: Project | null;
+  error: string | null;
+  isPending: boolean;
   onBack: () => void;
   onSubmit: () => void;
-  isPending: boolean;
 }) {
+  const gateName = gateId ? (gates.find((g) => g.id === gateId)?.name ?? 'Unknown') : 'Any gate';
+  const typeLabel = QR_TYPE_LABELS[type] ?? type;
+  const expiryLabel =
+    type === QRCodeType.PERMANENT
+      ? 'Never'
+      : expiresAt
+      ? new Date(expiresAt).toLocaleString()
+      : 'No expiry';
+
   return (
     <div className="space-y-6">
       <div>
         <h2 className="text-lg font-black uppercase tracking-tight">Review & Generate</h2>
-        <p className="text-sm text-muted-foreground mt-1">Confirm your choices and generate the QR code.</p>
+        <p className="text-sm text-muted-foreground mt-1">Confirm your choices before generating the QR code.</p>
       </div>
-      <div className="h-24 rounded-2xl border-2 border-dashed border-border flex items-center justify-center text-muted-foreground/50 text-sm italic">
-        Summary card — coming in Phase 3
+
+      {/* Summary card */}
+      <div className="rounded-2xl border border-border bg-card/50 px-5 py-2">
+        <SummaryRow
+          label="Access Type"
+          value={
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-black uppercase tracking-wider text-primary">
+              {typeLabel}
+            </span>
+          }
+        />
+        {currentProject && (
+          <SummaryRow label="Project" value={currentProject.name} />
+        )}
+        <SummaryRow label="Gate" value={gateName} />
+        <SummaryRow label="Expires" value={expiryLabel} />
+        {type === QRCodeType.RECURRING && (
+          <SummaryRow label="Max Uses" value={maxUses} />
+        )}
+        <SummaryRow
+          label="Guest"
+          value={
+            guestName || guestEmail
+              ? <span>{guestName && <span className="block">{guestName}</span>}{guestEmail && <span className="block text-muted-foreground text-xs">{guestEmail}</span>}</span>
+              : <span className="text-muted-foreground/60 italic font-normal">Anonymous</span>
+          }
+        />
       </div>
-      <div className="flex gap-3">
-        <Button variant="outline" onClick={onBack} className="flex-1 h-12 gap-2 font-bold uppercase tracking-widest text-[11px]" disabled={isPending}>
-          <ChevronLeft className="h-4 w-4" />Back
+
+      {error && (
+        <p role="alert" className="text-sm text-destructive font-medium px-1">{error}</p>
+      )}
+
+      <div className="flex gap-3 pt-2">
+        <Button variant="outline" onClick={onBack} disabled={isPending} className="h-12 px-5 gap-1.5 font-bold uppercase tracking-widest text-[11px] rounded-xl">
+          <ChevronLeft className="h-4 w-4" aria-hidden="true" />Back
         </Button>
-        <Button onClick={onSubmit} disabled={isPending} className="flex-1 h-12 gap-2 font-black uppercase tracking-widest text-[11px]">
+        <Button
+          onClick={onSubmit}
+          disabled={isPending}
+          className="flex-1 h-12 gap-2 font-black uppercase tracking-widest text-[11px] rounded-xl"
+        >
           {isPending ? (
             <><span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />Generating…</>
           ) : (
-            <><QrCode className="h-4 w-4" aria-hidden="true" />Generate QR</>
+            <><QrCode className="h-4 w-4" aria-hidden="true" />Generate QR Code</>
           )}
         </Button>
       </div>
@@ -552,15 +848,13 @@ export function CreateQRClient({
   organizationId,
   gates,
   currentProject,
-  contacts: _contacts, // passed through; will be used in Phase 3 (Step 3 guest picker)
+  contacts,
 }: {
   organizationId: string;
   gates: Gate[];
   currentProject: Project | null;
   contacts: Contact[];
 }) {
-  // _contacts will be used in Phase 3 for the guest contact picker
-  void _contacts;
   // Wizard step (1–4)
   const [step, setStep] = useState(1);
   const [direction, setDirection] = useState(1); // 1 = forward, -1 = backward
@@ -593,13 +887,6 @@ export function CreateQRClient({
   // Navigation helpers
   const goForward = () => { setDirection(1); setStep((s) => s + 1); };
   const goBack = () => { setDirection(-1); setStep((s) => s - 1); };
-
-  // Suppress unused variable warnings — these will be wired in Phase 3
-  void visitorMode; void setVisitorMode;
-  void selectedContactId; void setSelectedContactId;
-  void guestName; void setGuestName;
-  void guestEmail; void setGuestEmail;
-  void guestPhone; void setGuestPhone;
 
   const showMaxUses = type === QRCodeType.RECURRING;
   const showExpiry = type !== QRCodeType.PERMANENT;
@@ -792,10 +1079,37 @@ export function CreateQRClient({
               />
             )}
             {step === 3 && (
-              <Step3Placeholder onBack={goBack} onNext={goForward} />
+              <Step3
+                contacts={contacts}
+                guestMode={visitorMode}
+                setGuestMode={setVisitorMode}
+                selectedContactId={selectedContactId}
+                setSelectedContactId={setSelectedContactId}
+                guestName={guestName}
+                setGuestName={setGuestName}
+                guestEmail={guestEmail}
+                setGuestEmail={setGuestEmail}
+                guestPhone={guestPhone}
+                setGuestPhone={setGuestPhone}
+                onBack={goBack}
+                onNext={goForward}
+              />
             )}
             {step === 4 && (
-              <Step4Placeholder onBack={goBack} onSubmit={submit} isPending={isPending} />
+              <Step4
+                type={type}
+                gateId={gateId}
+                gates={gates}
+                expiresAt={expiresAt}
+                maxUses={maxUses}
+                guestName={guestName}
+                guestEmail={guestEmail}
+                currentProject={currentProject}
+                error={error}
+                isPending={isPending}
+                onBack={goBack}
+                onSubmit={submit}
+              />
             )}
           </motion.div>
         </AnimatePresence>
