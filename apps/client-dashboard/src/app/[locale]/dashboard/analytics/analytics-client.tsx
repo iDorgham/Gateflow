@@ -82,17 +82,22 @@ export function AnalyticsClient({ kpiData, gates = [] }: AnalyticsClientProps) {
     <div className="space-y-6">
 
       {/* ── Page header ──────────────────────────────────────────────────────── */}
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <h1 className="text-xl font-black uppercase tracking-tight text-foreground">
-            {t('analytics.title', 'Analytics')}
-          </h1>
-          <p className="text-sm text-muted-foreground mt-0.5">
-            {t('analytics.subtitle', 'Track access patterns, security events, and visitor trends.')}
-          </p>
-        </div>
-        <div className="flex flex-wrap items-center gap-2 sm:justify-end shrink-0">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        {/* Title + mode toggle (co-located — mode defines the page purpose) */}
+        <div className="flex items-center gap-4">
+          <div>
+            <h1 className="text-xl font-black uppercase tracking-tight text-foreground">
+              {t('analytics.title', 'Analytics')}
+            </h1>
+            <p className="text-sm text-muted-foreground mt-0.5">
+              {t('analytics.subtitle', 'Track access patterns, security events, and visitor trends.')}
+            </p>
+          </div>
           <AnalyticsModeToggle mode={filters.mode} onModeChange={setMode} />
+        </div>
+
+        {/* Secondary actions — export, share, print */}
+        <div className="flex items-center gap-1.5 shrink-0">
           {!isSecurity && <AnalyticsAudienceExportButton filters={filters} />}
           <AnalyticsPDFExportButton filters={filters} locale={locale} />
           <ExportChartButton targetRef={chartsRef} />
