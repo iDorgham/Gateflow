@@ -5,13 +5,13 @@
 
 ## Phases
 
-- [ ] **Phase 1: Sidebar Groups + Remove Theme Toggle**
-  - [ ] 4 nav groups: Workspace / Residents / Access Control / Security
-  - [ ] Group label style: 9px font-black uppercase tracking-widest
-  - [ ] Collapsed state: dividers instead of labels
-  - [ ] ThemeToggle removed from header
-  - [ ] Theme toggle added to user dropdown menu
-  - [ ] Lint passes
+- [x] **Phase 1: Sidebar Groups + Remove Theme Toggle**
+  - [x] 4 nav groups: Workspace / Residents / Access Control / Security
+  - [x] Group label style: 9px font-black uppercase tracking-widest
+  - [x] Collapsed state: dividers instead of labels
+  - [x] ThemeToggle removed from header
+  - [x] Theme toggle already in user dropdown menu
+  - [x] Lint passes
 
 - [ ] **Phase 2: Unified PageHeader + Spacing**
   - [ ] PageHeader component (title, subtitle, badge, actions)
