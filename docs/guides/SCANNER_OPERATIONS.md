@@ -41,17 +41,24 @@ Operator sees clear status:
 
 When network is unavailable:
 
-- Scanner still verifies signatures offline.
-- Each successful or failed scan is written into an **encrypted queue**:
-  - Payload includes `scanUuid`, QR data, gateId (or orgId fallback), and timestamp.
+- Scanner still verifies QR signatures locally (HMAC-SHA256 using `EXPO_PUBLIC_QR_SECRET`).
+- Each scan is written into an **encrypted offline queue**:
+  - Encryption: **AES-256**, key derived via **PBKDF2** from device-specific seed.
+  - Payload: `scanUuid`, QR data, `gateId` (or `orgId` fallback), timestamp, device context.
 - When connectivity returns:
-  - Queue syncs to backend via bulk endpoint.
-  - Server deduplicates using `scanUuid` and processes scans idempotently.
+  - Queue syncs to backend via `POST /api/scans/bulk`.
+  - Server applies **Last Write Wins (LWW)** conflict resolution.
+  - `scanUuid` is the deduplication key — duplicate entries from the same scan are discarded.
+
+Implementation reference: `apps/scanner-app/src/lib/offline-queue.ts`.
+
+**Watchlist matching in offline mode:** Scans queued offline are checked against the watchlist on sync. If a match is found during sync, the scan log is marked with a watchlist flag and a security alert is raised — operators are notified next time the app comes online.
 
 Operators should:
 
-- Monitor queue status UI (e.g., pending count).
+- Monitor queue status UI (pending count badge).
 - Keep device powered and online periodically to ensure timely sync.
+- Be aware that watchlist blocks may surface after sync for previously offline scans.
 
 ---
 
@@ -105,20 +112,30 @@ Operators must:
 
 ---
 
-## 6. Watchlists & Blocked Identities
+## 6. Watchlist Matching
 
-When a tenant maintains watchlists/blocklists:
+### How it works
 
-- Scanner checks every scan (and, optionally, plate) against watchlist entries.
-- On match:
-  - App shows a **hard stop** with reason (“Blocked person on security list”).
-  - An incident is created automatically.
-- Overrides for watchlisted entries should be disabled or highly restricted.
+Watchlist checking is **server-side**, not on-device:
 
-Supervisors manage watchlists in the dashboard:
+1. Scanner submits a scan to `POST /api/qrcodes/validate`.
+2. Backend checks the QR payload (visitor name, phone, ID number) against the org's active `WatchlistEntry` records.
+3. If a match is found, the validate response includes `watchlistMatch: true` and the scan is flagged.
+4. Scanner shows a **hard stop**: “Blocked person on security list.”
+5. An incident is automatically created in the system.
 
-- Only authorized roles (e.g. Security Manager, Org Admin) can add/remove entries.
-- Every change is tracked in audit logs.
+For offline scans, the watchlist check runs at sync time (`POST /api/scans/bulk`), with the same result.
+
+### Supervisor responsibility
+
+Supervisors manage watchlists in the client-dashboard (`/dashboard/team/watchlist`):
+
+- Only authorized roles (Security Manager, Org Admin) can add/edit/remove entries.
+- Entries matched on: **name**, **phone**, or **ID number** (case-insensitive, partial contains).
+- Every change is audit-logged with who made the change and when.
+- Stats row shows: Total entries, Added This Month, Last Added timestamp.
+
+Overrides for watchlisted visitors should be restricted or entirely disabled depending on tenant policy.
 
 ---
 

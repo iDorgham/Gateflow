@@ -70,3 +70,49 @@ Copy this block for each new decision:
   - `docs/plan/learning/patterns.md`
   - `docs/plan/learning/incidents.md`
 
+---
+
+## 2026-03-11 Decisions
+
+### `PageHeader` Extracted as Shared Component (dashboard_polish phase 2)
+
+- **Date:** 2026-03-11
+- **Plan / Phase:** `dashboard_polish` — Phase 2: Unified PageHeader + Spacing
+- **Status:** Accepted
+- **Context:** Each dashboard page had its own h1 styling (`text-2xl font-bold text-slate-900` or `text-2xl font-bold tracking-tight`) that was inconsistent across pages.
+- **Decision:** Create `components/dashboard/page-header.tsx` as a shared component with `title`, `subtitle`, `badge`, and `actions` props. Apply to QR Codes, Access Logs, Gates, and Analytics pages. Title style: `text-xl font-black uppercase tracking-tight`.
+- **Consequences:**
+  - Single style definition for all page titles — consistent visual hierarchy.
+  - New pages must use `PageHeader` to stay consistent; old pages can be migrated incrementally.
+- **References:**
+  - `apps/client-dashboard/src/components/dashboard/page-header.tsx`
+
+### `FilterBar` Composable Sub-components over Monolithic Filter (dashboard_polish phase 3)
+
+- **Date:** 2026-03-11
+- **Plan / Phase:** `dashboard_polish` — Phase 3: Unified FilterBar Component
+- **Status:** Accepted
+- **Context:** QR Codes and Scans pages each had hand-rolled filter UIs with inconsistent styling, heights, and icon patterns.
+- **Decision:** Build `FilterBar` as a namespace with sub-components (`FilterBar.Search`, `FilterBar.Select`, `FilterBar.DatePresets`, `FilterBar.Divider`) rather than a single monolithic prop-driven component. Each sub-component is self-contained and composable.
+- **Consequences:**
+  - Filter areas can be built from primitives without negotiating a complex prop API.
+  - Individual sub-components can be dropped into any layout without the full `FilterBar` container.
+  - Slightly more boilerplate per page vs a single `<FilterBar filters={...} />` — accepted trade-off for flexibility.
+- **References:**
+  - `apps/client-dashboard/src/components/dashboard/filter-bar.tsx`
+
+### `done/` / `planning/` Split for Plan Lifecycle (docs_v2_refresh phase 3)
+
+- **Date:** 2026-03-11
+- **Plan / Phase:** `docs_v2_refresh` — Phase 3: Plan Folder Cleanup
+- **Status:** Accepted
+- **Context:** Completed plan folders (`dashboard_polish`, `watchlist_ui`, etc.) were still sitting in `planning/` alongside the active plan, making it hard to see what was in-flight vs done.
+- **Decision:** After all phases of a plan are complete, move the folder from `planning/<slug>/` to `done/<slug>/` via `git mv`. `planning/` should only contain active/upcoming plans.
+- **Consequences:**
+  - `/guide` and humans can see at a glance what's active (planning/) vs historical (done/).
+  - Done plans remain searchable as a prompt and pattern archive.
+  - Requires one manual `git mv` step per plan completion — low overhead.
+- **References:**
+  - `docs/plan/README.md`
+  - `docs/plan/planning/docs_v2_refresh/TASKS_docs_v2_refresh.md`
+

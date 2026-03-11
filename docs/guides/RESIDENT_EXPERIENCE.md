@@ -1,7 +1,10 @@
 # Resident Experience Guide (Docs v2)
 
-**Version:** 1.0  
-**Aligned with:** `docs/PRD_v6.0.md` (Resident Portal & Mobile, Resident Mobile Enhancement Plan)  
+**Version:** 1.0
+**Aligned with:** `docs/PRD_v6.0.md` (Resident Portal & Mobile, Resident Mobile Enhancement Plan)
+
+> **Status: Planned — Q3–Q4 2026**
+> The Resident Portal (`apps/resident-portal`) and Resident Mobile (`apps/resident-mobile`) are **Phase 2** features. The data models (`Unit`, `VisitorQR`, `AccessRule`, `ResidentLimit`) are defined in `packages/db/prisma/schema.prisma` but the apps are not yet built. This guide describes the intended experience as a product specification.
 
 ---
 

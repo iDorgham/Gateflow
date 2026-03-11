@@ -49,3 +49,42 @@ This file captures recurring patterns and best practices discovered while execut
 - **Description:** Jest's `testEnvironment: 'node'` does not fully support the Web `Request` API. Mock `next/server` at the test-file level with a `MockNextRequest` class that implements `.json()` via `JSON.parse(this._body)`. Use `jest.requireMock('next/server').NextRequest` to construct request objects inside tests.
 - **When to apply:** Any test file that calls a Next.js App Router handler whose POST body is read via `request.json()`.
 
+---
+
+## Dashboard UI Patterns
+
+### Pattern 5 — Shared `PageHeader` Component for All Dashboard Pages
+
+- **Initiative:** `dashboard_polish`
+- **Context:** Phase 2
+- **Description:** Extract the page title + subtitle + badge + actions block into a single `PageHeader` component (`components/dashboard/page-header.tsx`). Use `text-xl font-black uppercase tracking-tight` for the title — never define it per-page. Pages wrap content in `<div className="space-y-6">` for consistent section spacing.
+- **When to apply:** Every new dashboard page that has a title, subtitle, or top-level action buttons.
+
+### Pattern 6 — Composable `FilterBar` Sub-components
+
+- **Initiative:** `dashboard_polish`
+- **Context:** Phase 3
+- **Description:** Define filter UIs as composable primitives on a `FilterBar` namespace (`FilterBar.Search`, `FilterBar.Select`, `FilterBar.DatePresets`, `FilterBar.Divider`) rather than per-page implementations. The container uses `rounded-2xl border bg-card px-4 py-3 flex flex-wrap gap-2`. Sub-components use `h-9 rounded-xl` for consistent control height.
+- **When to apply:** Any page with search, sort, or date filter controls.
+
+### Pattern 7 — Server-Side Search with 300ms Debounce
+
+- **Initiative:** `watchlist_ui`
+- **Context:** Phase 2
+- **Description:** For scalability, push search/filter to the server rather than filtering a client-side array. Use a `useRef`-based debounce timer (300ms) — not `useDebounce` hook — to limit API calls. The search input controls local state immediately; the fetch fires after debounce. A loading indicator appears in the search input while the request is in flight.
+- **When to apply:** Any page where the data set may grow large enough to make client-side filtering unreliable (watchlist, contacts, QR codes, etc.).
+
+### Pattern 8 — Stats Computed from Full Load, Not Search Results
+
+- **Initiative:** `watchlist_ui`
+- **Context:** Phase 2
+- **Description:** When a page has a stats row (total, this month, last added), compute stats from the initial full-fetch result and store them separately. Do not recompute stats from the search-filtered result — users expect stats to reflect totals, not the current search scope.
+- **When to apply:** Any page that shows aggregate stats alongside a searchable/filterable table.
+
+### Pattern 9 — Plan Folder Lifecycle: `planning/` → `done/`
+
+- **Initiative:** `docs_v2_refresh`
+- **Context:** Phase 3
+- **Description:** When all phases in a plan are complete, move the plan folder from `docs/plan/planning/<slug>/` to `docs/plan/done/<slug>/` using `git mv`. This keeps `planning/` clean (only active work) and gives `done/` value as a searchable archive of patterns and prompts. Workflow files (ONE_MAN_*.md, lifecycle guides) belong in `docs/plan/guides/`, not the root.
+- **When to apply:** After marking the last phase of any plan as complete in TASKS_<slug>.md.
+
