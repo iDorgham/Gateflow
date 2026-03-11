@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { randomUUID } from 'crypto';
 import { init as initCuid2 } from '@paralleldrive/cuid2';
 import { type NextRequest } from 'next/server';
-import { prisma, UnitType, QRCodeType as PrismaQRCodeType } from '@gate-access/db';
+import { prisma, UnitType, QRCodeType as PrismaQRCodeType, TaskStatus } from '@gate-access/db';
 import { signQRPayload, QRCodeType } from '@gate-access/types';
 import { getSessionClaims } from '@/lib/auth-cookies';
 
@@ -126,6 +126,7 @@ Available tools and what they do:
 - createQR: Create 1–20 signed QR access codes (supports SINGLE/RECURRING/PERMANENT types).
 - createProject: Create a new project with optional named gates.
 - createUnit: Create a residential unit (apartment, villa, etc.).
+- createTask: Create a task for the team (title, description, due date).
 - getOrgStats: Get real-time counts: projects, gates, QR codes, contacts, units, scans.
 - listProjects: List all projects with gate and unit counts.
 - listGates: List active gates (optionally filter by project).
@@ -371,6 +372,31 @@ Rules:
               take: 20,
             });
             return { success: true, units };
+          },
+        }),
+
+        // ── createTask ────────────────────────────────────────────────────────
+        createTask: tool({
+          description: 'Create a task for the organization team.',
+          parameters: z.object({
+            title: z.string().min(1).max(200).describe('Task title'),
+            description: z.string().optional().describe('Optional task description'),
+            dueDate: z.string().optional().describe('Optional due date (ISO format, e.g. 2026-04-01)'),
+          }),
+          execute: async ({ title, description, dueDate }) => {
+            log('createTask', { title });
+            const task = await prisma.task.create({
+              data: {
+                title,
+                description: description ?? null,
+                dueDate: dueDate ? new Date(dueDate) : null,
+                organizationId: claims.orgId,
+                createdBy: claims.sub ?? null,
+                status: TaskStatus.TODO,
+              },
+              select: { id: true, title: true, status: true },
+            });
+            return { success: true, task };
           },
         }),
       },

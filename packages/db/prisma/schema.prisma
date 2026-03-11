@@ -50,6 +50,7 @@ model Organization {
   incidents        Incident[]
   scanAttachments  ScanAttachment[]
   invitations      Invitation[]
+  tasks            Task[]
 
   @@index([deletedAt])
 }
@@ -137,6 +138,30 @@ model Invitation {
   @@unique([email, organizationId])
   @@index([organizationId])
   @@index([token])
+}
+
+model Task {
+  id             String      @id @default(cuid())
+  title          String
+  description    String?
+  status         TaskStatus  @default(TODO)
+  dueDate        DateTime?
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId String
+  createdBy      String?
+  assignedTo     String?
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  deletedAt      DateTime?
+
+  @@index([organizationId])
+  @@index([deletedAt])
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  DONE
 }
 
 model GateAssignment {
