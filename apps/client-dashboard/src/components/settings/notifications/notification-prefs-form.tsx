@@ -15,7 +15,7 @@ import {
 import { Mail, MessageSquare, Smartphone, Bell, ShieldAlert, QrCode, UserPlus, CheckCircle2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { csrfFetch } from '@/lib/csrf';
-import type { NotificationConfig } from '@/app/api/notification-prefs/route';
+import type { NotificationConfig } from '@/lib/notifications/types';
 
 interface NotificationPrefsFormProps {
   initialConfig: NotificationConfig;

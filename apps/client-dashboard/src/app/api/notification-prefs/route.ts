@@ -1,40 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
 import { prisma } from '@gate-access/db';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { revalidatePath } from 'next/cache';
+import { NotificationConfigSchema, DEFAULT_NOTIFICATION_CONFIG } from '@/lib/notifications/types';
 
 export const dynamic = 'force-dynamic';
-
-const ChannelsSchema = z.object({
-  email: z.boolean(),
-  sms: z.boolean(),
-  push: z.boolean(),
-});
-
-const NotificationConfigSchema = z.object({
-  channels: ChannelsSchema,
-  events: z.object({
-    scanSuccess: z.boolean(),
-    scanFailed: z.boolean(),
-    qrExpired: z.boolean(),
-    newMember: z.boolean(),
-    systemAlerts: z.boolean(),
-  }),
-});
-
-export type NotificationConfig = z.infer<typeof NotificationConfigSchema>;
-
-export const DEFAULT_NOTIFICATION_CONFIG: NotificationConfig = {
-  channels: { email: true, sms: false, push: true },
-  events: {
-    scanSuccess: false,
-    scanFailed: true,
-    qrExpired: true,
-    newMember: true,
-    systemAlerts: true,
-  },
-};
 
 /** GET /api/notification-prefs */
 export async function GET() {

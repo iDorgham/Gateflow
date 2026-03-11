@@ -1,15 +1,20 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@gate-access/ui';
+import { requireAuth } from '@/lib/dashboard-auth';
+import { DangerZone } from '@/components/settings/danger/danger-zone';
 
-export default function DangerSettings() {
+export default async function DangerSettings() {
+  const { org } = await requireAuth();
+  if (!org) return null;
+
   return (
-    <Card className="border-destructive/50">
-      <CardHeader>
-        <CardTitle className="text-destructive">Danger Zone</CardTitle>
-        <CardDescription>High-stakes actions for your workspace.</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <p className="text-sm text-muted-foreground italic">Phase 9: Implementation of workspace deletion and bulk reset flows.</p>
-      </CardContent>
-    </Card>
+    <div className="space-y-6">
+      <div className="flex flex-col gap-1">
+        <h1 className="text-xl font-black uppercase tracking-tight text-destructive">Danger Zone</h1>
+        <p className="text-sm text-muted-foreground">
+          Irreversible actions for your workspace. All operations are logged in your audit trail.
+        </p>
+      </div>
+
+      <DangerZone orgName={org.name} />
+    </div>
   );
 }

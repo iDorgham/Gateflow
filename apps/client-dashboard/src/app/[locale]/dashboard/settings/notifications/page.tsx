@@ -2,8 +2,8 @@ import { requireAuth } from '@/lib/dashboard-auth';
 import { prisma } from '@gate-access/db';
 import { NotificationPrefsForm } from '@/components/settings/notifications/notification-prefs-form';
 import { TemplatePreviewer } from '@/components/settings/notifications/template-previewer';
-import type { NotificationConfig } from '@/app/api/notification-prefs/route';
-import { DEFAULT_NOTIFICATION_CONFIG } from '@/app/api/notification-prefs/route';
+import type { NotificationConfig } from '@/lib/notifications/types';
+import { DEFAULT_NOTIFICATION_CONFIG } from '@/lib/notifications/types';
 
 export default async function NotificationsSettings() {
   const { org } = await requireAuth();
