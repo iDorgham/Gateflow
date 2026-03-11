@@ -21,11 +21,11 @@
   - [x] 11 workflow files moved to `docs/plan/guides/` (ONE_MAN_*.md, PLAN_LIFECYCLE, PLANNING_ENHANCEMENTS, VIBE_CODER_WORKFLOW, MAN_WORKFLOW)
   - [x] `docs/plan/README.md` fully rewritten with accurate directory map and workflow
 
-- [ ] **Phase 4: Extended Guides Review & Learning Docs Curation**
-  - [ ] `SCANNER_OPERATIONS.md` — watchlist matching + offline mode covered
-  - [ ] `RESIDENT_EXPERIENCE.md` — Phase 2 items clearly marked "Planned"
-  - [ ] `patterns.md` — ≥ 5 entries
-  - [ ] `decisions.md` — ≥ 3 entries
+- [x] **Phase 4: Extended Guides Review & Learning Docs Curation**
+  - [x] `SCANNER_OPERATIONS.md` — offline mode expanded (AES-256, PBKDF2, LWW, scanUuid); watchlist matching section added (server-side flow)
+  - [x] `RESIDENT_EXPERIENCE.md` — "Status: Planned — Q3–Q4 2026" banner added
+  - [x] `patterns.md` — 9 entries (5 new: PageHeader, FilterBar, server search, stats load, plan lifecycle)
+  - [x] `decisions.md` — 5 entries (3 new: PageHeader, FilterBar, done/planning split)
 
 ---
 *Created: 2026-03-11*
