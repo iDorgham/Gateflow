@@ -26,6 +26,8 @@ model Organization {
   incidentRetentionMonths   Int?
   maskResidentNameOnLandingPage Boolean @default(false)
   showUnitOnLandingPage     Boolean   @default(true)
+  /// Global scanner config: { offlineModeEnabled, vibrationEnabled, soundEnabled, allowOverride }
+  scannerConfig             Json?
 
   users            User[]
   gates            Gate[]
