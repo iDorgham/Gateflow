@@ -16,10 +16,10 @@
   - [x] `DEVELOPMENT_GUIDE.md` — dev ports table + /guide command added; plan file paths corrected
   - [x] `ENVIRONMENT_VARIABLES.md` — ANTHROPIC_API_KEY, EXPO_PUBLIC_QR_SECRET, NEXT_PUBLIC_DEFAULT_ORG_ID added
 
-- [ ] **Phase 3: Plan Folder Cleanup & Alignment**
-  - [ ] Completed plans moved from `planning/` → `done/`
-  - [ ] ONE_MAN_*.md workflow files moved out of `docs/plan/` root
-  - [ ] `docs/plan/README.md` updated with accurate directory map
+- [x] **Phase 3: Plan Folder Cleanup & Alignment**
+  - [x] 5 completed plans moved from `planning/` → `done/` (ai_assistant_v2, crm_followups, dashboard_polish, qr_create_wizard, watchlist_ui)
+  - [x] 11 workflow files moved to `docs/plan/guides/` (ONE_MAN_*.md, PLAN_LIFECYCLE, PLANNING_ENHANCEMENTS, VIBE_CODER_WORKFLOW, MAN_WORKFLOW)
+  - [x] `docs/plan/README.md` fully rewritten with accurate directory map and workflow
 
 - [ ] **Phase 4: Extended Guides Review & Learning Docs Curation**
   - [ ] `SCANNER_OPERATIONS.md` — watchlist matching + offline mode covered
