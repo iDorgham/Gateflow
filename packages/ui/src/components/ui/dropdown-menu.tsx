@@ -152,8 +152,12 @@ DropdownMenuContent.displayName = 'DropdownMenuContent';
 
 const DropdownMenuItem = React.forwardRef<
   HTMLDivElement,
-  React.HTMLAttributes<HTMLDivElement> & { inset?: boolean; asChild?: boolean }
->(({ className, inset, onClick, ...props }, ref) => {
+  React.HTMLAttributes<HTMLDivElement> & {
+    inset?: boolean;
+    asChild?: boolean;
+    disabled?: boolean;
+  }
+>(({ className, inset, onClick, disabled, ...props }, ref) => {
   const { setOpen } = useDropdownMenu();
   return (
     <div
@@ -163,7 +167,11 @@ const DropdownMenuItem = React.forwardRef<
         inset && 'pl-8',
         className
       )}
+      data-disabled={disabled ? '' : undefined}
       onClick={(e) => {
+        if (disabled) {
+          return;
+        }
         setOpen(false);
         onClick?.(e);
       }}

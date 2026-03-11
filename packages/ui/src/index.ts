@@ -25,6 +25,8 @@ export * from './components/ui/tabs';
 export * from './components/ui/sheet';
 export * from './components/ui/scroll-area';
 export * from './components/ui/collapsible';
+export * from './components/ui/form';
+export * from './components/ui/tooltip';
 
 export * from './components/auth/login-shell';
 export * from './components/auth/squares-background';
