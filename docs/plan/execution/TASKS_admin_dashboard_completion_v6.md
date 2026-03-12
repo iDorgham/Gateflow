@@ -35,12 +35,13 @@
   - [x] Security: cannot deactivate ADMIN role users; cannot elevate to ADMIN via PATCH
   - [x] Lint + typecheck pass
 
-- [ ] **Phase 5: Admin AI Assistant**
-  - [ ] `ai`, `@ai-sdk/anthropic`, `zod` installed
-  - [ ] AI assistant API route with 5 platform tools
-  - [ ] `AdminAIAssistant` component
-  - [ ] Side panel AI tab wired up
-  - [ ] Lint + typecheck pass
+- [x] **Phase 5: Admin AI Assistant**
+  - [x] `ai`, `@ai-sdk/google`, `zod` installed (using Gemini, consistent with client-dashboard)
+  - [x] AI route with 5 tools: getPlatformMetrics, listRecentOrgs, getOrgStats, listRecentScans, searchUsers
+  - [x] `AdminAIAssistant` component — welcome card, messages, typing indicator, clear button
+  - [x] Side panel AI tab wired up (replaced placeholder)
+  - [x] Returns 503 if GEMINI_API_KEY missing; 401 if not admin
+  - [x] Lint + typecheck pass
 
 - [ ] **Phase 6: Finance & Plans / Billing**
   - [ ] Finance nav item in sidebar
