@@ -40,6 +40,7 @@ model Organization {
   auditLogs        AuditLog[]
   webhooks         Webhook[]
   apiKeys          ApiKey[]
+  adminAuthKeys    AdminAuthorizationKey[]
   projects         Project[]
   contacts         Contact[]
   units            Unit[]
@@ -473,6 +474,28 @@ model ApiKey {
 
   @@index([organizationId])
   @@index([keyHash])
+}
+
+model AdminAuthorizationKey {
+  id             String     @id @default(cuid())
+  name           String
+  keyHash        String     @unique
+  keyPrefix      String
+  type           AdminAuthKeyType
+  organizationId String?
+  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  lastUsedAt     DateTime?
+  expiresAt      DateTime?
+  createdAt      DateTime   @default(now())
+  createdBy      String
+
+  @@index([organizationId])
+  @@index([keyHash])
+}
+
+enum AdminAuthKeyType {
+  ADMIN
+  SERVICE
 }
 
 enum ApiScope {

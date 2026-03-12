@@ -77,38 +77,39 @@ cd packages/db && npx prisma studio          # Open Prisma Studio
 
 ## Development Ports
 
-| App              | Port | Start Command                        |
-|------------------|------|--------------------------------------|
-| Marketing        | 3000 | `next dev -p 3000`                   |
-| Client Dashboard | 3001 | `next dev -p 3001 -H 0.0.0.0`        |
-| Admin Dashboard  | 3002 | `next dev -p 3002`                   |
-| Scanner App      | 8081 | `expo start --lan -c` (Metro bundler)|
+| App              | Port | Start Command                         |
+| ---------------- | ---- | ------------------------------------- |
+| Marketing        | 3000 | `next dev -p 3000`                    |
+| Client Dashboard | 3001 | `next dev -p 3001 -H 0.0.0.0`         |
+| Admin Dashboard  | 3002 | `next dev -p 3002`                    |
+| Scanner App      | 8081 | `expo start --lan -c` (Metro bundler) |
 
 ---
 
 ## Tech Stack
 
-| Layer            | Technology                       | Version  |
-|------------------|----------------------------------|----------|
-| Web Frontend     | Next.js App Router               | 14.x     |
-| Mobile           | Expo / React Native              | SDK 54   |
-| Database         | PostgreSQL                       | 15+      |
-| ORM              | Prisma                           | 5.x      |
-| Auth             | JWT (`jose`) + Argon2id          | Latest   |
-| Package Manager  | pnpm                             | 8.x      |
-| Build System     | Turborepo                        | 2.x      |
-| UI Components    | Custom (shadcn/ui-style)         | —        |
-| QR Signing       | HMAC-SHA256 (`crypto-js`)        | Latest   |
-| Offline Crypto   | AES-256 + PBKDF2 (`crypto-js`)   | Latest   |
-| Rate Limiting    | Upstash Redis                    | Latest   |
-| Offline Storage  | AsyncStorage + SecureStore       | —        |
-| Testing          | Jest + ts-jest                   | 29/30.x  |
+| Layer           | Technology                     | Version |
+| --------------- | ------------------------------ | ------- |
+| Web Frontend    | Next.js App Router             | 14.x    |
+| Mobile          | Expo / React Native            | SDK 54  |
+| Database        | PostgreSQL                     | 15+     |
+| ORM             | Prisma                         | 5.x     |
+| Auth            | JWT (`jose`) + Argon2id        | Latest  |
+| Package Manager | pnpm                           | 8.x     |
+| Build System    | Turborepo                      | 2.x     |
+| UI Components   | Custom (shadcn/ui-style)       | —       |
+| QR Signing      | HMAC-SHA256 (`crypto-js`)      | Latest  |
+| Offline Crypto  | AES-256 + PBKDF2 (`crypto-js`) | Latest  |
+| Rate Limiting   | Upstash Redis                  | Latest  |
+| Offline Storage | AsyncStorage + SecureStore     | —       |
+| Testing         | Jest + ts-jest                 | 29/30.x |
 
 ---
 
 ## Authentication & Security
 
 ### JWT Tokens
+
 - **Access tokens**: 15-minute expiry, signed with HS256
 - **Refresh tokens**: 30-day expiry, stored in DB with rotation
 - **Issuer/Audience**: `gateflow` / `gateflow-api`
@@ -116,24 +117,28 @@ cd packages/db && npx prisma studio          # Open Prisma Studio
 - Auth utility: `apps/client-dashboard/src/lib/auth.ts`
 
 ### Password Hashing
+
 - **Algorithm**: Argon2id (`argon2` package)
 - **Parameters**: `t=3, m=65536, p=4`
 
 ### RBAC Roles (`UserRole` enum)
-| Role          | Access                                          |
-|---------------|-------------------------------------------------|
-| `ADMIN`       | Platform admin (admin-dashboard)                |
-| `TENANT_ADMIN`| Full client-dashboard access                    |
-| `TENANT_USER` | Limited client-dashboard access                 |
-| `VISITOR`     | Scanner app only                                |
-| `RESIDENT`    | Resident portal (planned Phase 2)               |
+
+| Role           | Access                            |
+| -------------- | --------------------------------- |
+| `ADMIN`        | Platform admin (admin-dashboard)  |
+| `TENANT_ADMIN` | Full client-dashboard access      |
+| `TENANT_USER`  | Limited client-dashboard access   |
+| `VISITOR`      | Scanner app only                  |
+| `RESIDENT`     | Resident portal (planned Phase 2) |
 
 ### API Key Auth
+
 - Keys are stored as **SHA-256 hashes** (never plaintext) in the `ApiKey` model
 - Keys support scoped permissions via `ApiScope` enum
 - Middleware: `apps/client-dashboard/src/lib/api-key-auth.ts`
 
 ### Security Measures
+
 - **CSRF**: Double-submit cookie pattern (`src/lib/csrf.ts`)
 - **Rate limiting**: Upstash Redis, multi-instance safe (`src/lib/rate-limit.ts`)
 - **Field encryption**: AES-256 for webhook secrets (`src/lib/encryption.ts`)
@@ -148,20 +153,21 @@ All database work lives in `packages/db/prisma/schema.prisma`.
 
 ### Core Models
 
-| Model             | Purpose                              | Key Relations                              |
-|-------------------|--------------------------------------|--------------------------------------------|
-| `Organization`    | Multi-tenant root entity             | Users, Gates, QRCodes, Webhooks, ApiKeys   |
-| `Project`         | Sub-grouping within an org           | Organization, Gates, QRCodes               |
-| `User`            | Authenticated user                   | Organization, ScanLogs, RefreshTokens      |
-| `Gate`            | Physical access point                | Organization, Project, ScanLogs, QRCodes  |
-| `QRCode`          | Generated access code                | Organization, Project, Gate, ScanLogs      |
-| `ScanLog`         | Immutable audit record per scan      | User, Gate, QRCode                         |
-| `RefreshToken`    | JWT refresh token (rotation)         | User                                       |
-| `Webhook`         | Event notification endpoint          | Organization, WebhookDeliveries            |
-| `WebhookDelivery` | Individual webhook delivery attempt  | Webhook                                    |
-| `ApiKey`          | Programmatic API access              | Organization                               |
+| Model             | Purpose                             | Key Relations                            |
+| ----------------- | ----------------------------------- | ---------------------------------------- |
+| `Organization`    | Multi-tenant root entity            | Users, Gates, QRCodes, Webhooks, ApiKeys |
+| `Project`         | Sub-grouping within an org          | Organization, Gates, QRCodes             |
+| `User`            | Authenticated user                  | Organization, ScanLogs, RefreshTokens    |
+| `Gate`            | Physical access point               | Organization, Project, ScanLogs, QRCodes |
+| `QRCode`          | Generated access code               | Organization, Project, Gate, ScanLogs    |
+| `ScanLog`         | Immutable audit record per scan     | User, Gate, QRCode                       |
+| `RefreshToken`    | JWT refresh token (rotation)        | User                                     |
+| `Webhook`         | Event notification endpoint         | Organization, WebhookDeliveries          |
+| `WebhookDelivery` | Individual webhook delivery attempt | Webhook                                  |
+| `ApiKey`          | Programmatic API access             | Organization                             |
 
 ### Conventions
+
 - **IDs**: `cuid()` via `@default(cuid())`
 - **Soft deletes**: All mutable entities have `deletedAt DateTime?` — always filter `where: { deletedAt: null }`
 - **Timestamps**: `createdAt @default(now())` + `updatedAt @updatedAt` on all models
@@ -169,6 +175,7 @@ All database work lives in `packages/db/prisma/schema.prisma`.
 - **Multi-tenancy**: Every query must scope by `organizationId` — row-level tenant isolation
 
 ### Key Enums
+
 ```
 Plan:                 FREE | PRO | ENTERPRISE
 UserRole:             ADMIN | TENANT_ADMIN | TENANT_USER | VISITOR
@@ -184,30 +191,36 @@ ApiScope:             (see schema)
 ## Shared Packages
 
 ### `@gate-access/db`
+
 - Entry: `packages/db/src/index.ts`
 - Exports: Prisma client instance, all model types
 - Use: `import { prisma } from '@gate-access/db'`
 
 ### `@gate-access/types`
+
 - Entry: `packages/types/src/index.ts`
 - Contains: `auth`, `gate`, `organization`, `qr-payload`, `qr-signing`, `qr-validate`, `qr`, `scan-event`, `scan-log`, `user`
 - Use: `import { UserRole } from '@gate-access/types'`
 
 ### `@gate-access/ui`
+
 - Entry: `packages/ui/src/index.ts`
 - 16 components: Avatar, Badge, Button, Card, Checkbox, Dialog, DropdownMenu, Input, Label, Select, Separator, Sheet, Skeleton, Table, Textarea, Toast
 - Design tokens: `packages/ui/src/tokens.ts`
 - Use: `import { Button } from '@gate-access/ui'`
 
 ### `@gate-access/api-client`
+
 - Shared fetch utilities with JWT auth
 - Use for cross-app API calls from client-side code
 
 ### `@gate-access/i18n`
+
 - Arabic/English (AR/EN) internationalization support
 - Required for MENA market support
 
 ### `@gate-access/config`
+
 - Shared ESLint and TypeScript base configurations
 
 ---
@@ -289,6 +302,7 @@ src/
 ```
 
 **Key features:**
+
 - **Offline-first**: Scans queued locally with AES-256 encryption when offline
 - **PBKDF2 key derivation** for offline encryption keys
 - **LWW (Last Write Wins)** sync conflict resolution
@@ -303,6 +317,7 @@ src/
 Tests use **Jest + ts-jest** with `testEnvironment: 'node'`.
 
 ### Running Tests
+
 ```bash
 # All tests via Turborepo
 pnpm turbo test
@@ -316,6 +331,7 @@ npx jest --watch
 ```
 
 ### Test File Conventions
+
 - Test files: `*.test.ts` (co-located with source in `src/`)
 - Pattern: `**/*.test.ts`
 - Scanner app tests: `offline-queue.test.ts`, `qr-verify.test.ts`, `scanner.test.ts`, `auth-client.test.ts`
@@ -328,11 +344,13 @@ npx jest --watch
 Copy `.env.example` to `.env.local` in each app before running.
 
 ### Global
+
 ```env
 DATABASE_URL="postgresql://user:password@host:port/gateflow"
 ```
 
 ### Client Dashboard (`apps/client-dashboard/.env.local`)
+
 ```env
 DATABASE_URL=
 NEXTAUTH_SECRET=           # JWT signing secret (required)
@@ -345,6 +363,7 @@ UPSTASH_REDIS_REST_TOKEN=  # Rate limiting
 ```
 
 ### Scanner App (`apps/scanner-app/.env`)
+
 ```env
 EXPO_PUBLIC_API_URL=       # Backend API endpoint
 ```
@@ -356,6 +375,7 @@ EXPO_PUBLIC_API_URL=       # Backend API endpoint
 ## Code Conventions
 
 ### TypeScript
+
 - **Strict mode** enabled globally (`"strict": true`)
 - **Target**: ES2020
 - **Module resolution**: `bundler` for web apps
@@ -365,13 +385,18 @@ EXPO_PUBLIC_API_URL=       # Backend API endpoint
   - `@gate-access/api-client` → `packages/api-client/src`
 
 ### API Route Pattern (Next.js App Router)
+
 ```ts
 // Always validate auth first
 import { requireAuth } from '@/lib/require-auth';
 
 export async function GET(request: NextRequest) {
   const auth = await requireAuth(request);
-  if (!auth.success) return NextResponse.json({ message: auth.message }, { status: auth.status });
+  if (!auth.success)
+    return NextResponse.json(
+      { message: auth.message },
+      { status: auth.status }
+    );
 
   // Always scope queries by orgId (multi-tenant)
   const data = await prisma.someModel.findMany({
@@ -381,11 +406,13 @@ export async function GET(request: NextRequest) {
 ```
 
 ### Database Queries
+
 - Always filter `deletedAt: null` — all deletions are soft deletes
 - Always scope by `organizationId` for tenant isolation
 - Use `prisma.model.findUnique` for single records, `findMany` with explicit `where`
 
 ### QR Code Flow
+
 1. Generated with HMAC-SHA256 signature in client-dashboard
 2. Distributed via email or displayed in UI
 3. Scanner app verifies signature offline using shared secret
@@ -393,6 +420,7 @@ export async function GET(request: NextRequest) {
 5. Synced to backend via bulk sync endpoint when online
 
 ### Git Workflow
+
 - Feature branches: `feat/feature-name` from `main`
 - Pre-commit hooks: format (Prettier) + lint (ESLint)
 - Ensure Turborepo build passes before PR
@@ -401,51 +429,57 @@ export async function GET(request: NextRequest) {
 
 ## Project Status & Roadmap
 
-### MVP Status (~75% complete)
-| Feature                              | Status |
-|--------------------------------------|--------|
-| Organization CRUD                    | ✅     |
-| JWT auth (Argon2id + token rotation) | ✅     |
-| Single & bulk CSV QR creation        | ✅     |
-| Gate management                      | ✅     |
-| Mobile scanner (offline-capable)     | ✅     |
-| RBAC (roles + permissions)           | ✅     |
-| Live analytics dashboard             | ✅     |
-| Webhooks + API keys                  | ✅     |
-| CSRF, rate limiting, encryption      | ✅     |
-| Supervisor override (scanner)        | ✅     |
-| Advanced analytics                   | ✅     |
-| Admin dashboard (basic)              | ✅     |
-| Marketing site — full platform       | ✅     |
+### MVP Status (~78% complete)
+
+| Feature                                           | Status |
+| ------------------------------------------------- | ------ |
+| Organization CRUD                                 | ✅     |
+| JWT auth (Argon2id + token rotation)              | ✅     |
+| Single & bulk CSV QR creation                     | ✅     |
+| Gate management                                   | ✅     |
+| Mobile scanner (offline-capable)                  | ✅     |
+| Scanner App 5 tabs (Scan/Today/Log/Chat/Settings) | ✅     |
+| RBAC (roles + permissions)                        | ✅     |
+| Live analytics dashboard                          | ✅     |
+| Webhooks + API keys                               | ✅     |
+| Admin Authorization Keys                          | ✅     |
+| Resident Portal (Web)                             | ✅     |
+| CSRF, rate limiting, encryption                   | ✅     |
+| Supervisor override (scanner)                     | ✅     |
+| Advanced analytics                                | ✅     |
+| Admin dashboard                                   | ✅     |
+| Marketing site — full platform                    | ✅     |
 
 ### Phase 2 — Resident Portal (Q3-Q4 2026)
-The Resident Portal introduces a new `RESIDENT` role allowing unit owners to self-manage visitor QR codes with quota limits based on unit type. See `docs/PRD_v5.0.md` and `docs/RESIDENT_PORTAL_SPEC.md` for full spec.
 
-**New models** (to be added to Prisma schema):
-- `Unit` — residential unit linked to an org and user
-- `VisitorQR` — visitor QR created by resident
-- `AccessRule` — time-based access constraints (one-time, date range, recurring, permanent)
-- `ResidentLimit` — per-org quota config by unit type
+The Resident Portal is now live with:
+
+- Visitor pass management
+- Quota tracking
+- Profile page
+- Notifications settings
+
+**Resident Mobile App** — Planned for Phase 2
 
 ---
 
 ## Documentation Index
 
-| File | Description |
-|------|-------------|
-| `.cursor/commands/` | **Slash commands** — /run, /guide, /plan, /prompt, /github |
-| `docs/PRD_v5.0.md` | **Current** product requirements (5 apps, resident portal) |
-| `docs/PROJECT_STRUCTURE.md` | Detailed structure reference |
-| `docs/DEVELOPMENT_GUIDE.md` | Local setup and workspace guide |
-| `docs/ENVIRONMENT_VARIABLES.md` | All env vars across all apps |
-| `docs/SECURITY_OVERVIEW.md` | Security architecture overview |
-| `docs/DEPLOYMENT_GUIDE.md` | Deployment instructions |
-| `docs/RESIDENT_PORTAL_SPEC.md` | Resident portal detailed spec |
-| `docs/DESIGN_TOKENS.md` | Design system tokens |
-| `docs/UI_COMPONENT_LIBRARY.md` | Shared UI component docs |
-| `docs/MVP_DONE_CHECKLIST.md` | MVP completion tracking |
-| `docs/PHASE_2_ROADMAP.md` | Phase 2 feature roadmap |
-| `docs/APP_DESIGN_DOCS.md` | Application design documentation |
+| File                            | Description                                                |
+| ------------------------------- | ---------------------------------------------------------- |
+| `.cursor/commands/`             | **Slash commands** — /run, /guide, /plan, /prompt, /github |
+| `docs/PRD_v5.0.md`              | **Current** product requirements (5 apps, resident portal) |
+| `docs/PROJECT_STRUCTURE.md`     | Detailed structure reference                               |
+| `docs/DEVELOPMENT_GUIDE.md`     | Local setup and workspace guide                            |
+| `docs/ENVIRONMENT_VARIABLES.md` | All env vars across all apps                               |
+| `docs/SECURITY_OVERVIEW.md`     | Security architecture overview                             |
+| `docs/DEPLOYMENT_GUIDE.md`      | Deployment instructions                                    |
+| `docs/RESIDENT_PORTAL_SPEC.md`  | Resident portal detailed spec                              |
+| `docs/DESIGN_TOKENS.md`         | Design system tokens                                       |
+| `docs/UI_COMPONENT_LIBRARY.md`  | Shared UI component docs                                   |
+| `docs/MVP_DONE_CHECKLIST.md`    | MVP completion tracking                                    |
+| `docs/PHASE_2_ROADMAP.md`       | Phase 2 feature roadmap                                    |
+| `docs/APP_DESIGN_DOCS.md`       | Application design documentation                           |
 
 ---
 

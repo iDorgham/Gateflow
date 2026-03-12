@@ -21,6 +21,7 @@ import {
   ChevronLeft,
   ChevronRight,
   CreditCard,
+  KeyRound,
 } from 'lucide-react';
 import { cn } from '@gate-access/ui';
 
@@ -41,8 +42,17 @@ const getNavGroups = (t: any): NavGroup[] => [
   {
     label: t('admin:nav.platform', 'Platform'),
     items: [
-      { href: '/', label: t('admin:nav.overview'), icon: LayoutDashboard, exact: true },
-      { href: '/organizations', label: t('admin:nav.organizations'), icon: Building2 },
+      {
+        href: '/',
+        label: t('admin:nav.overview'),
+        icon: LayoutDashboard,
+        exact: true,
+      },
+      {
+        href: '/organizations',
+        label: t('admin:nav.organizations'),
+        icon: Building2,
+      },
       { href: '/users', label: t('admin:nav.users'), icon: Users },
       { href: '/projects', label: t('admin:nav.projects'), icon: FolderOpen },
       { href: '/gates', label: t('admin:nav.gates'), icon: DoorOpen },
@@ -59,13 +69,22 @@ const getNavGroups = (t: any): NavGroup[] => [
   {
     label: t('admin:nav.revenue', 'Revenue'),
     items: [
-      { href: '/finance', label: t('admin:nav.finance', 'Finance'), icon: CreditCard },
+      {
+        href: '/finance',
+        label: t('admin:nav.finance', 'Finance'),
+        icon: CreditCard,
+      },
     ],
   },
   {
     label: t('admin:nav.system', 'System'),
     items: [
       { href: '/monitoring', label: t('admin:nav.monitoring'), icon: Activity },
+      {
+        href: '/authorization-keys',
+        label: t('admin:nav.authKeys', 'Auth Keys'),
+        icon: KeyRound,
+      },
       { href: '/settings', label: t('admin:nav.settings'), icon: Settings },
       { href: '/admins', label: t('admin:nav.admins'), icon: Shield },
     ],
@@ -90,22 +109,31 @@ export function Sidebar() {
   }
 
   return (
-    <div 
+    <div
       className={cn(
-        "flex h-full flex-col bg-sidebar text-sidebar-foreground border-r border-sidebar-border transition-all duration-300",
-        isCollapsed ? "w-20" : "w-64"
+        'flex h-full flex-col bg-sidebar text-sidebar-foreground border-r border-sidebar-border transition-all duration-300',
+        isCollapsed ? 'w-20' : 'w-64'
       )}
     >
       {/* Logo */}
-      <div className={cn("flex h-16 shrink-0 items-center border-b border-sidebar-border px-6", isCollapsed ? "justify-center px-0" : "justify-between")}>
+      <div
+        className={cn(
+          'flex h-16 shrink-0 items-center border-b border-sidebar-border px-6',
+          isCollapsed ? 'justify-center px-0' : 'justify-between'
+        )}
+      >
         <Link href="/" className="flex items-center gap-3">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-[13px] font-bold text-primary-foreground shadow-[0_0_15px_rgba(37,99,235,0.3)]">
             GF
           </div>
           {!isCollapsed && (
             <div className="flex flex-col">
-              <span className="text-sm font-bold tracking-tight text-sidebar-foreground uppercase">GateFlow</span>
-              <span className="text-[9px] font-bold text-blue-400 tracking-[0.2em] uppercase">Control</span>
+              <span className="text-sm font-bold tracking-tight text-sidebar-foreground uppercase">
+                GateFlow
+              </span>
+              <span className="text-[9px] font-bold text-blue-400 tracking-[0.2em] uppercase">
+                Control
+              </span>
             </div>
           )}
         </Link>
@@ -125,13 +153,17 @@ export function Sidebar() {
                 {group.label}
               </p>
             )}
-            <div className={cn("space-y-0.5", isCollapsed && "flex flex-col items-center")}>
+            <div
+              className={cn(
+                'space-y-0.5',
+                isCollapsed && 'flex flex-col items-center'
+              )}
+            >
               {group.items.map((item) => {
                 const itemHref = `${localePrefix}${item.href === '/' ? '' : item.href}`;
-                const active =
-                  item.exact
-                    ? pathname === itemHref || pathname === `${itemHref}/`
-                    : pathname.startsWith(itemHref);
+                const active = item.exact
+                  ? pathname === itemHref || pathname === `${itemHref}/`
+                  : pathname.startsWith(itemHref);
                 const Icon = item.icon;
 
                 return (
@@ -158,7 +190,9 @@ export function Sidebar() {
                           : 'text-slate-500 group-hover:scale-110 group-hover:text-slate-300'
                       )}
                     />
-                    {!isCollapsed && <span className="flex-1 truncate">{item.label}</span>}
+                    {!isCollapsed && (
+                      <span className="flex-1 truncate">{item.label}</span>
+                    )}
                   </Link>
                 );
               })}
@@ -168,28 +202,44 @@ export function Sidebar() {
       </nav>
 
       {/* Footer / Sign out */}
-      <div className={cn("mt-auto shrink-0 border-t border-sidebar-border p-3", isCollapsed ? "px-2" : "px-3")}>
-        <div className={cn("flex items-center gap-2", isCollapsed ? "flex-col" : "flex-row")}>
+      <div
+        className={cn(
+          'mt-auto shrink-0 border-t border-sidebar-border p-3',
+          isCollapsed ? 'px-2' : 'px-3'
+        )}
+      >
+        <div
+          className={cn(
+            'flex items-center gap-2',
+            isCollapsed ? 'flex-col' : 'flex-row'
+          )}
+        >
           <button
             onClick={handleSignOut}
             disabled={signingOut}
             className={cn(
-              "group flex items-center gap-3 rounded-xl transition-all duration-200 disabled:opacity-50 text-sm font-medium text-slate-400 hover:bg-red-500/10 hover:text-red-400",
-              isCollapsed ? "justify-center w-10 h-10 px-0" : "flex-1 px-4 py-3"
+              'group flex items-center gap-3 rounded-xl transition-all duration-200 disabled:opacity-50 text-sm font-medium text-slate-400 hover:bg-red-500/10 hover:text-red-400',
+              isCollapsed ? 'justify-center w-10 h-10 px-0' : 'flex-1 px-4 py-3'
             )}
             title={isCollapsed ? t('admin:nav.signOut', 'Sign out') : undefined}
           >
             <LogOut className="h-[17px] w-[17px] text-slate-500 group-hover:text-red-400 transition-colors shrink-0 rtl:rotate-180" />
-            {!isCollapsed && <span className="truncate">{signingOut ? '...' : t('admin:nav.signOut', 'Sign out')}</span>}
+            {!isCollapsed && (
+              <span className="truncate">
+                {signingOut ? '...' : t('admin:nav.signOut', 'Sign out')}
+              </span>
+            )}
           </button>
 
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
             className={cn(
-              "group flex items-center justify-center rounded-xl transition-all duration-200 text-slate-400 hover:bg-sidebar-accent hover:text-slate-200",
-              isCollapsed ? "w-10 h-10" : "w-12 h-12"
+              'group flex items-center justify-center rounded-xl transition-all duration-200 text-slate-400 hover:bg-sidebar-accent hover:text-slate-200',
+              isCollapsed ? 'w-10 h-10' : 'w-12 h-12'
             )}
-            title={isCollapsed ? t('admin:nav.expand') : t('admin:nav.collapse')}
+            title={
+              isCollapsed ? t('admin:nav.expand') : t('admin:nav.collapse')
+            }
           >
             {isCollapsed ? (
               <ChevronRight className="h-[18px] w-[18px] text-slate-500 group-hover:text-slate-200 transition-colors shrink-0 rtl:rotate-180" />

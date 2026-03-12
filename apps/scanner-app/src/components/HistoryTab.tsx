@@ -9,11 +9,14 @@ import {
   Text,
   View,
 } from 'react-native';
-import { getHistory, type HistoryEntry, type ScanOutcome } from '../lib/scan-history';
+import {
+  getHistory,
+  type HistoryEntry,
+  type ScanOutcome,
+} from '../lib/scan-history';
 
-const TOP_OFFSET = Platform.OS === 'android'
-  ? (StatusBar.currentHeight ?? 24) + 20
-  : 60;
+const TOP_OFFSET =
+  Platform.OS === 'android' ? (StatusBar.currentHeight ?? 24) + 20 : 60;
 
 // ─── Outcome badge config ─────────────────────────────────────────────────────
 
@@ -21,10 +24,30 @@ const OUTCOME_CONFIG: Record<
   ScanOutcome,
   { label: string; bg: string; text: string; icon: string }
 > = {
-  pass:     { label: 'Pass',     bg: 'rgba(22,163,74,0.18)',   text: '#4ade80', icon: '✓' },
-  deny:     { label: 'Deny',     bg: 'rgba(220,38,38,0.18)',   text: '#f87171', icon: '✗' },
-  offline:  { label: 'Offline',  bg: 'rgba(245,158,11,0.18)', text: '#fbbf24', icon: '⚡' },
-  rejected: { label: 'Rejected', bg: 'rgba(100,116,139,0.22)', text: '#94a3b8', icon: '✗' },
+  pass: {
+    label: 'Pass',
+    bg: 'rgba(22,163,74,0.18)',
+    text: '#4ade80',
+    icon: '✓',
+  },
+  deny: {
+    label: 'Deny',
+    bg: 'rgba(220,38,38,0.18)',
+    text: '#f87171',
+    icon: '✗',
+  },
+  offline: {
+    label: 'Offline',
+    bg: 'rgba(245,158,11,0.18)',
+    text: '#fbbf24',
+    icon: '⚡',
+  },
+  rejected: {
+    label: 'Rejected',
+    bg: 'rgba(100,116,139,0.22)',
+    text: '#94a3b8',
+    icon: '✗',
+  },
 };
 
 // ─── Date grouping helpers ────────────────────────────────────────────────────
@@ -41,7 +64,11 @@ function dayLabel(key: string): string {
 
   if (dayKey(today.toISOString()) === key) return 'Today';
   if (dayKey(yesterday.toISOString()) === key) return 'Yesterday';
-  return d.toLocaleDateString([], { weekday: 'short', month: 'short', day: 'numeric' });
+  return d.toLocaleDateString([], {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+  });
 }
 
 // ─── List item ────────────────────────────────────────────────────────────────
@@ -116,7 +143,7 @@ function buildRows(entries: HistoryEntry[]): ListRow[] {
 
 // ─── Main component ───────────────────────────────────────────────────────────
 
-export function HistoryTab() {
+export function LogTab() {
   const [entries, setEntries] = useState<HistoryEntry[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -144,9 +171,11 @@ export function HistoryTab() {
     <View style={s.root}>
       {/* Header */}
       <View style={s.header}>
-        <Text style={s.title}>Scan History</Text>
+        <Text style={s.title}>Scan Log</Text>
         {entries.length > 0 && (
-          <Text style={s.count}>{entries.length} scan{entries.length !== 1 ? 's' : ''}</Text>
+          <Text style={s.count}>
+            {entries.length} scan{entries.length !== 1 ? 's' : ''}
+          </Text>
         )}
       </View>
 

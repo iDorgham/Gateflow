@@ -4,7 +4,10 @@ const securityHeaders = [
   { key: 'X-Frame-Options', value: 'DENY' },
   { key: 'X-XSS-Protection', value: '1; mode=block' },
   { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-  { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+  {
+    key: 'Permissions-Policy',
+    value: 'camera=(), microphone=(), geolocation=()',
+  },
 ];
 
 const nextConfig = {
@@ -16,6 +19,14 @@ const nextConfig = {
   ],
   async headers() {
     return [{ source: '/(.*)', headers: securityHeaders }];
+  },
+  async rewrites() {
+    return [
+      {
+        source: '/api/resident/:path*',
+        destination: 'http://localhost:3001/api/resident/:path*',
+      },
+    ];
   },
   images: {
     remotePatterns: [

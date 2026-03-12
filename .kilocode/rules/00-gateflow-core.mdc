@@ -1,0 +1,36 @@
+---
+description: GateFlow core repo rules (must follow)
+globs: *
+alwaysApply: true
+---
+
+# GateFlow — Core Rules
+
+## Package manager
+
+- Use **pnpm only** (never npm or yarn). Prefer root scripts: `pnpm dev`, `pnpm build`, `pnpm lint`, `pnpm test`, `pnpm typecheck`.
+
+## Monorepo imports
+
+- Prefer workspace packages: `@gate-access/db`, `@gate-access/types`, `@gate-access/ui`, `@gate-access/api-client`, `@gate-access/i18n`.
+- Avoid duplicating shared utilities in apps if a package already provides them (e.g. `cn()` from `@gate-access/ui`).
+
+## Multi-tenancy & soft deletes
+
+- Any DB query touching tenant data MUST include **`organizationId` scoping**.
+- Always filter soft deletes with **`deletedAt: null`** where applicable. Hard deletes are not used.
+
+## Auth & token handling
+
+- Access tokens are short-lived; always support refresh/rotation flows.
+- Never store tokens in `localStorage`. Use secure cookies (web) or SecureStore (mobile).
+
+## QR security & scanner invariants
+
+- All QR payloads must be **HMAC-SHA256 signed**. Never generate unsigned QRs.
+- Do not break offline sync dedup contract: **`scanUuid`** is the deduplication key across scans.
+
+## Secrets
+
+- Never commit `.env` / `.env.local`. Commit only `.env.example` with placeholder keys.
+- For security-critical env vars (JWT secrets, QR signing secret, DB URL, Redis keys), prefer **fail-closed** behavior (throw/refuse to start) over unsafe defaults.

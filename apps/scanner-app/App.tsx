@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, lazy, Suspense } from 'react';
-import { nativeTokens } from '@gate-access/ui/tokens';
+import { nativeTokens } from '@gate-access/ui/src/tokens';
 import {
   ActivityIndicator,
   Dimensions,
@@ -13,33 +13,69 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import { CameraView, useCameraPermissions, type BarcodeScanningResult } from 'expo-camera';
-import { useForegroundPermissions, getLastKnownPositionAsync } from 'expo-location';
+import {
+  CameraView,
+  useCameraPermissions,
+  type BarcodeScanningResult,
+} from 'expo-camera';
+import {
+  useForegroundPermissions,
+  getLastKnownPositionAsync,
+} from 'expo-location';
 import * as Haptics from 'expo-haptics';
 import { verifyScanQR } from './src/lib/qr-verify';
-import { validateOnServer, type ScanResult, type LocationContext } from './src/lib/scanner';
+import {
+  validateOnServer,
+  type ScanResult,
+  type LocationContext,
+} from './src/lib/scanner';
 import { login, logout, getValidAccessToken } from './src/lib/auth-client';
 import { IDCaptureModal } from './src/components/IDCaptureModal';
-import { loadSelectedGate, saveSelectedGate, type SelectedGate } from './src/components/GateSelector';
+import {
+  loadSelectedGate,
+  saveSelectedGate,
+  type SelectedGate,
+} from './src/components/GateSelector';
 
 const GateSelector = lazy(() =>
-  import('./src/components/GateSelector').then((m) => ({ default: m.GateSelector }))
+  import('./src/components/GateSelector').then((m) => ({
+    default: m.GateSelector,
+  }))
 );
 const QueueStatus = lazy(() =>
-  import('./src/components/QueueStatus').then((m) => ({ default: m.QueueStatus }))
+  import('./src/components/QueueStatus').then((m) => ({
+    default: m.QueueStatus,
+  }))
 );
 const SupervisorOverride = lazy(() =>
-  import('./src/components/SupervisorOverride').then((m) => ({ default: m.SupervisorOverride }))
+  import('./src/components/SupervisorOverride').then((m) => ({
+    default: m.SupervisorOverride,
+  }))
 );
-const HistoryTab = lazy(() =>
-  import('./src/components/HistoryTab').then((m) => ({ default: m.HistoryTab }))
+const LogTab = lazy(() =>
+  import('./src/components/HistoryTab').then((m) => ({ default: m.LogTab }))
+);
+const TodayVisitsTab = lazy(() =>
+  import('./src/components/TodayVisitsTab').then((m) => ({
+    default: m.TodayVisitsTab,
+  }))
+);
+const ChatTab = lazy(() =>
+  import('./src/components/ChatTab').then((m) => ({ default: m.ChatTab }))
 );
 const SettingsTab = lazy(() =>
-  import('./src/components/SettingsTab').then((m) => ({ default: m.SettingsTab }))
+  import('./src/components/SettingsTab').then((m) => ({
+    default: m.SettingsTab,
+  }))
 );
 import { addHistoryEntry } from './src/lib/scan-history';
 import { getPreferences } from './src/lib/preferences';
-import { useFonts, Cairo_400Regular, Cairo_600SemiBold, Cairo_700Bold } from '@expo-google-fonts/cairo';
+import {
+  useFonts,
+  Cairo_400Regular,
+  Cairo_600SemiBold,
+  Cairo_700Bold,
+} from '@expo-google-fonts/cairo';
 
 /** Shared HMAC secret provisioned via .env: EXPO_PUBLIC_QR_SECRET=<32+ chars> */
 const QR_SECRET = process.env.EXPO_PUBLIC_QR_SECRET ?? '';
@@ -76,24 +112,136 @@ function Viewfinder({ processing }: { processing: boolean }) {
   return (
     <View style={{ width: FRAME_SIZE, height: FRAME_SIZE }}>
       {/* Top-left */}
-      <View style={{ position: 'absolute', top: 0, left: 0, width: CORNER_LEN, height: CORNER_LEN }}>
-        <View style={{ position: 'absolute', top: 0, left: 0, width: CORNER_LEN, height: CORNER_W, backgroundColor: c, borderTopLeftRadius: 2 }} />
-        <View style={{ position: 'absolute', top: 0, left: 0, width: CORNER_W, height: CORNER_LEN, backgroundColor: c, borderTopLeftRadius: 2 }} />
+      <View
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: CORNER_LEN,
+          height: CORNER_LEN,
+        }}
+      >
+        <View
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: CORNER_LEN,
+            height: CORNER_W,
+            backgroundColor: c,
+            borderTopLeftRadius: 2,
+          }}
+        />
+        <View
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: CORNER_W,
+            height: CORNER_LEN,
+            backgroundColor: c,
+            borderTopLeftRadius: 2,
+          }}
+        />
       </View>
       {/* Top-right */}
-      <View style={{ position: 'absolute', top: 0, right: 0, width: CORNER_LEN, height: CORNER_LEN }}>
-        <View style={{ position: 'absolute', top: 0, right: 0, width: CORNER_LEN, height: CORNER_W, backgroundColor: c, borderTopRightRadius: 2 }} />
-        <View style={{ position: 'absolute', top: 0, right: 0, width: CORNER_W, height: CORNER_LEN, backgroundColor: c, borderTopRightRadius: 2 }} />
+      <View
+        style={{
+          position: 'absolute',
+          top: 0,
+          right: 0,
+          width: CORNER_LEN,
+          height: CORNER_LEN,
+        }}
+      >
+        <View
+          style={{
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            width: CORNER_LEN,
+            height: CORNER_W,
+            backgroundColor: c,
+            borderTopRightRadius: 2,
+          }}
+        />
+        <View
+          style={{
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            width: CORNER_W,
+            height: CORNER_LEN,
+            backgroundColor: c,
+            borderTopRightRadius: 2,
+          }}
+        />
       </View>
       {/* Bottom-left */}
-      <View style={{ position: 'absolute', bottom: 0, left: 0, width: CORNER_LEN, height: CORNER_LEN }}>
-        <View style={{ position: 'absolute', bottom: 0, left: 0, width: CORNER_LEN, height: CORNER_W, backgroundColor: c, borderBottomLeftRadius: 2 }} />
-        <View style={{ position: 'absolute', bottom: 0, left: 0, width: CORNER_W, height: CORNER_LEN, backgroundColor: c, borderBottomLeftRadius: 2 }} />
+      <View
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          width: CORNER_LEN,
+          height: CORNER_LEN,
+        }}
+      >
+        <View
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            width: CORNER_LEN,
+            height: CORNER_W,
+            backgroundColor: c,
+            borderBottomLeftRadius: 2,
+          }}
+        />
+        <View
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            width: CORNER_W,
+            height: CORNER_LEN,
+            backgroundColor: c,
+            borderBottomLeftRadius: 2,
+          }}
+        />
       </View>
       {/* Bottom-right */}
-      <View style={{ position: 'absolute', bottom: 0, right: 0, width: CORNER_LEN, height: CORNER_LEN }}>
-        <View style={{ position: 'absolute', bottom: 0, right: 0, width: CORNER_LEN, height: CORNER_W, backgroundColor: c, borderBottomRightRadius: 2 }} />
-        <View style={{ position: 'absolute', bottom: 0, right: 0, width: CORNER_W, height: CORNER_LEN, backgroundColor: c, borderBottomRightRadius: 2 }} />
+      <View
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          right: 0,
+          width: CORNER_LEN,
+          height: CORNER_LEN,
+        }}
+      >
+        <View
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            right: 0,
+            width: CORNER_LEN,
+            height: CORNER_W,
+            backgroundColor: c,
+            borderBottomRightRadius: 2,
+          }}
+        />
+        <View
+          style={{
+            position: 'absolute',
+            bottom: 0,
+            right: 0,
+            width: CORNER_W,
+            height: CORNER_LEN,
+            backgroundColor: c,
+            borderBottomRightRadius: 2,
+          }}
+        />
       </View>
     </View>
   );
@@ -135,7 +283,11 @@ export default function App() {
         <View style={styles.splashLogo}>
           <View style={styles.splashInner} />
         </View>
-        <ActivityIndicator size="large" color="#3b82f6" style={{ marginTop: 32 }} />
+        <ActivityIndicator
+          size="large"
+          color="#3b82f6"
+          style={{ marginTop: 32 }}
+        />
         <Text style={styles.initBrand}>GateFlow</Text>
         <Text style={styles.initSub}>SCANNER</Text>
       </View>
@@ -204,7 +356,10 @@ function LoginScreen({ onSuccess }: { onSuccess: () => void }) {
             <TextInput
               style={styles.fieldInput}
               value={email}
-              onChangeText={(t) => { setEmail(t); clearError(); }}
+              onChangeText={(t) => {
+                setEmail(t);
+                clearError();
+              }}
               placeholder="operator@company.com"
               placeholderTextColor="#475569"
               autoCapitalize="none"
@@ -218,7 +373,10 @@ function LoginScreen({ onSuccess }: { onSuccess: () => void }) {
             <TextInput
               style={styles.fieldInput}
               value={password}
-              onChangeText={(t) => { setPassword(t); clearError(); }}
+              onChangeText={(t) => {
+                setPassword(t);
+                clearError();
+              }}
               placeholder="••••••••"
               placeholderTextColor="#475569"
               secureTextEntry
@@ -274,7 +432,9 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
   const [showOverride, setShowOverride] = useState(false);
 
   // ── Tab state ─────────────────────────────────────────────────────────────
-  const [activeTab, setActiveTab] = useState<'scan' | 'history' | 'settings'>('scan');
+  const [activeTab, setActiveTab] = useState<
+    'scanner' | 'today' | 'log' | 'chat' | 'settings'
+  >('scanner');
 
   const lastScanAt = useRef<number>(0);
   const resultTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -358,7 +518,8 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
     // Fire-and-forget: update ScanLog status to DENIED on server
     if (result.scanId) {
       const scanId = result.scanId;
-      const apiBase = process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:3001/api';
+      const apiBase =
+        process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:3001/api';
       getValidAccessToken()
         .then((token) => {
           if (!token) return;
@@ -371,7 +532,9 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
             body: JSON.stringify({ reason: 'operator_denied' }),
           });
         })
-        .catch(() => { /* non-fatal — scan was already logged as SUCCESS */ });
+        .catch(() => {
+          /* non-fatal — scan was already logged as SUCCESS */
+        });
     }
 
     addHistoryEntry({
@@ -404,10 +567,19 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
     }
 
     setUi({ phase: 'processing' });
-    __DEV__ && console.debug('[Scanner] Scan started — gate:', selectedGate.id, 'data prefix:', data.slice(0, 40));
+    __DEV__ &&
+      console.debug(
+        '[Scanner] Scan started — gate:',
+        selectedGate.id,
+        'data prefix:',
+        data.slice(0, 40)
+      );
 
     // Load preferences (non-blocking; falls back to defaults on error)
-    const prefs = await getPreferences().catch(() => ({ hapticsEnabled: true, locationEnabled: true }));
+    const prefs = await getPreferences().catch(() => ({
+      hapticsEnabled: true,
+      locationEnabled: true,
+    }));
 
     // Step 0 — If the QR encodes a short URL (/s/{shortId}), resolve it to
     //          the full signed payload before local verification.
@@ -416,24 +588,40 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
       __DEV__ && console.debug('[Scanner] Resolving short URL:', data);
       try {
         const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), SHORT_URL_RESOLVE_TIMEOUT_MS);
+        const timeoutId = setTimeout(
+          () => controller.abort(),
+          SHORT_URL_RESOLVE_TIMEOUT_MS
+        );
         const res = await fetch(data, { signal: controller.signal });
         clearTimeout(timeoutId);
 
         if (!res.ok) {
-          __DEV__ && console.debug('[Scanner] Short URL resolve failed — status:', res.status);
+          __DEV__ &&
+            console.debug(
+              '[Scanner] Short URL resolve failed — status:',
+              res.status
+            );
           const result: ScanResult = {
             status: 'rejected',
             reason: 'not_found',
             message: 'QR link not found or expired',
             offline: false,
           };
-          addHistoryEntry({ outcome: 'rejected', qrPrefix: data.slice(0, 24), gateName: selectedGate.name, message: result.message }).catch(() => {});
+          addHistoryEntry({
+            outcome: 'rejected',
+            qrPrefix: data.slice(0, 24),
+            gateName: selectedGate.name,
+            message: result.message,
+          }).catch(() => {});
           showResult(result);
           return;
         }
         qrData = (await res.text()).trim();
-        __DEV__ && console.debug('[Scanner] Short URL resolved — payload prefix:', qrData.slice(0, 40));
+        __DEV__ &&
+          console.debug(
+            '[Scanner] Short URL resolved — payload prefix:',
+            qrData.slice(0, 40)
+          );
       } catch {
         const result: ScanResult = {
           status: 'rejected',
@@ -441,7 +629,12 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
           message: 'Could not resolve QR link — check connection',
           offline: false,
         };
-        addHistoryEntry({ outcome: 'rejected', qrPrefix: data.slice(0, 24), gateName: selectedGate.name, message: result.message }).catch(() => {});
+        addHistoryEntry({
+          outcome: 'rejected',
+          qrPrefix: data.slice(0, 24),
+          gateName: selectedGate.name,
+          message: result.message,
+        }).catch(() => {});
         showResult(result);
         return;
       }
@@ -449,7 +642,11 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
 
     // Step 1 — Local: signature + expiry + nonce replay
     const local = await verifyScanQR(qrData, QR_SECRET);
-    __DEV__ && console.debug('[Scanner] Local verify:', local.valid ? 'PASS' : `FAIL (${local.reason})`);
+    __DEV__ &&
+      console.debug(
+        '[Scanner] Local verify:',
+        local.valid ? 'PASS' : `FAIL (${local.reason})`
+      );
     if (!local.valid) {
       const result: ScanResult = {
         status: 'rejected',
@@ -459,8 +656,14 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
       };
       lastRejectedResult.current = result;
       lastRejectedQRData.current = qrData;
-      addHistoryEntry({ outcome: 'rejected', qrPrefix: qrData.slice(0, 24), gateName: selectedGate.name, message: result.message }).catch(() => {});
-      if (prefs.hapticsEnabled) haptic(Haptics.NotificationFeedbackType.Error).catch(() => {});
+      addHistoryEntry({
+        outcome: 'rejected',
+        qrPrefix: qrData.slice(0, 24),
+        gateName: selectedGate.name,
+        message: result.message,
+      }).catch(() => {});
+      if (prefs.hapticsEnabled)
+        haptic(Haptics.NotificationFeedbackType.Error).catch(() => {});
       showResult(result);
       return;
     }
@@ -477,27 +680,60 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
             accuracy: pos.coords.accuracy,
           };
         }
-      } catch { /* unavailable */ }
+      } catch {
+        /* unavailable */
+      }
     }
 
     // Step 3 — Server validation with offline fallback
-    __DEV__ && console.debug('[Scanner] Calling validateOnServer — gate:', selectedGate.id, 'location:', !!location);
-    const result = await validateOnServer(qrData, local.payload, location, selectedGate.id);
-    __DEV__ && console.debug('[Scanner] Server result:', result.status, 'scanId:', result.scanId, 'offline:', result.offline);
+    __DEV__ &&
+      console.debug(
+        '[Scanner] Calling validateOnServer — gate:',
+        selectedGate.id,
+        'location:',
+        !!location
+      );
+    const result = await validateOnServer(
+      qrData,
+      local.payload,
+      location,
+      selectedGate.id
+    );
+    __DEV__ &&
+      console.debug(
+        '[Scanner] Server result:',
+        result.status,
+        'scanId:',
+        result.scanId,
+        'offline:',
+        result.offline
+      );
 
     if (result.status === 'rejected') {
       lastRejectedResult.current = result;
       lastRejectedQRData.current = qrData;
-      addHistoryEntry({ outcome: 'rejected', qrPrefix: qrData.slice(0, 24), gateName: selectedGate.name, message: result.message }).catch(() => {});
-      if (prefs.hapticsEnabled) haptic(Haptics.NotificationFeedbackType.Error).catch(() => {});
+      addHistoryEntry({
+        outcome: 'rejected',
+        qrPrefix: qrData.slice(0, 24),
+        gateName: selectedGate.name,
+        message: result.message,
+      }).catch(() => {});
+      if (prefs.hapticsEnabled)
+        haptic(Haptics.NotificationFeedbackType.Error).catch(() => {});
       showResult(result);
       return;
     }
 
     // Offline / no scanId → record as offline and show result directly
     if (result.offline || !result.scanId) {
-      addHistoryEntry({ outcome: 'offline', qrPrefix: qrData.slice(0, 24), gateName: selectedGate.name, message: result.message }).catch(() => {});
-      if (prefs.hapticsEnabled) haptic(Haptics.NotificationFeedbackType.Warning).catch(() => {});
+      addHistoryEntry({
+        outcome: 'offline',
+        qrPrefix: qrData.slice(0, 24),
+        gateName: selectedGate.name,
+        message: result.message,
+      }).catch(() => {});
+      if (prefs.hapticsEnabled)
+        haptic(Haptics.NotificationFeedbackType.Warning).catch(() => {});
       showResult(result);
       return;
     }
@@ -536,24 +772,29 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
       const qrData = lastRejectedQRData.current;
       const gateId = selectedGate.id;
       const rejectReason = lastRejectedResult.current?.reason;
-      getValidAccessToken().then((token) => {
-        if (!token) return;
-        const apiBase = process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:3001/api';
-        fetch(`${apiBase}/override/log`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            gateId,
-            qrCode: qrData,
-            reason,
-            supervisorAuth,
-            rejectReason,
-          }),
-        }).catch(() => { /* non-fatal — local log already recorded */ });
-      }).catch(() => {});
+      getValidAccessToken()
+        .then((token) => {
+          if (!token) return;
+          const apiBase =
+            process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:3001/api';
+          fetch(`${apiBase}/override/log`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              gateId,
+              qrCode: qrData,
+              reason,
+              supervisorAuth,
+              rejectReason,
+            }),
+          }).catch(() => {
+            /* non-fatal — local log already recorded */
+          });
+        })
+        .catch(() => {});
     }
   };
 
@@ -584,7 +825,9 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
           <Text style={styles.permIconText}>⬡</Text>
         </View>
         <Text style={styles.permTitle}>Camera Access Required</Text>
-        <Text style={styles.permSub}>GateFlow needs your camera to scan QR codes.</Text>
+        <Text style={styles.permSub}>
+          GateFlow needs your camera to scan QR codes.
+        </Text>
         <Pressable style={styles.permButton} onPress={requestPermission}>
           <Text style={styles.permButtonText}>Grant Permission</Text>
         </Pressable>
@@ -596,24 +839,38 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
 
   return (
     <View style={styles.root}>
-      <StatusBar barStyle="light-content" translucent backgroundColor="transparent" />
+      <StatusBar
+        barStyle="light-content"
+        translucent
+        backgroundColor="transparent"
+      />
 
-      {activeTab === 'scan' && (
+      {activeTab === 'scanner' && (
         <>
           {/* Live camera feed */}
           <CameraView
             style={StyleSheet.absoluteFill}
             facing="back"
             barcodeScannerSettings={{ barcodeTypes: ['qr'] }}
-            onBarcodeScanned={ui.phase === 'scanning' ? onBarcodeScanned : undefined}
+            onBarcodeScanned={
+              ui.phase === 'scanning' ? onBarcodeScanned : undefined
+            }
           />
 
           {/* Decorative overlay — non-interactive */}
           <View style={styles.overlay} pointerEvents="none">
             <Text style={styles.scannerHeader}>GateFlow Scanner</Text>
-            <Viewfinder processing={ui.phase === 'processing' || ui.phase === 'decision' || ui.phase === 'id_capture'} />
+            <Viewfinder
+              processing={
+                ui.phase === 'processing' ||
+                ui.phase === 'decision' ||
+                ui.phase === 'id_capture'
+              }
+            />
             <Text style={styles.scannerHint}>
-              {selectedGate ? `Gate: ${selectedGate.name}` : 'Select a gate to begin scanning'}
+              {selectedGate
+                ? `Gate: ${selectedGate.name}`
+                : 'Select a gate to begin scanning'}
             </Text>
           </View>
 
@@ -634,7 +891,7 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
               style={styles.topBarBtn}
               onPress={() => setShowQueueStatus(true)}
             >
-              <Text style={styles.topBarBtnText}>⇅  Queue</Text>
+              <Text style={styles.topBarBtnText}>⇅ Queue</Text>
             </Pressable>
           </View>
 
@@ -695,22 +952,74 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
         </>
       )}
 
-      {activeTab === 'history' && (
-        <Suspense fallback={
-          <View style={[StyleSheet.absoluteFill, styles.center, { backgroundColor: '#0f172a' }]}>
-            <ActivityIndicator size="large" color="#3b82f6" />
-          </View>
-        }>
-          <HistoryTab />
+      {activeTab === 'log' && (
+        <Suspense
+          fallback={
+            <View
+              style={[
+                StyleSheet.absoluteFill,
+                styles.center,
+                { backgroundColor: '#0f172a' },
+              ]}
+            >
+              <ActivityIndicator size="large" color="#3b82f6" />
+            </View>
+          }
+        >
+          <LogTab />
+        </Suspense>
+      )}
+
+      {activeTab === 'today' && (
+        <Suspense
+          fallback={
+            <View
+              style={[
+                StyleSheet.absoluteFill,
+                styles.center,
+                { backgroundColor: '#0f172a' },
+              ]}
+            >
+              <ActivityIndicator size="large" color="#3b82f6" />
+            </View>
+          }
+        >
+          <TodayVisitsTab />
+        </Suspense>
+      )}
+
+      {activeTab === 'chat' && (
+        <Suspense
+          fallback={
+            <View
+              style={[
+                StyleSheet.absoluteFill,
+                styles.center,
+                { backgroundColor: '#0f172a' },
+              ]}
+            >
+              <ActivityIndicator size="large" color="#3b82f6" />
+            </View>
+          }
+        >
+          <ChatTab />
         </Suspense>
       )}
 
       {activeTab === 'settings' && (
-        <Suspense fallback={
-          <View style={[StyleSheet.absoluteFill, styles.center, { backgroundColor: '#0f172a' }]}>
-            <ActivityIndicator size="large" color="#3b82f6" />
-          </View>
-        }>
+        <Suspense
+          fallback={
+            <View
+              style={[
+                StyleSheet.absoluteFill,
+                styles.center,
+                { backgroundColor: '#0f172a' },
+              ]}
+            >
+              <ActivityIndicator size="large" color="#3b82f6" />
+            </View>
+          }
+        >
           <SettingsTab onLogout={handleLogout} />
         </Suspense>
       )}
@@ -738,7 +1047,9 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
         <Suspense fallback={null}>
           <SupervisorOverride
             visible
-            onGranted={(supervisorAuth, reason) => handleOverrideGranted(supervisorAuth, reason)}
+            onGranted={(supervisorAuth, reason) =>
+              handleOverrideGranted(supervisorAuth, reason)
+            }
             onCancel={handleOverrideCancel}
           />
         </Suspense>
@@ -746,31 +1057,125 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
 
       {/* ── Bottom navigation ────────────────────────────────────────────── */}
       <View style={styles.bottomNav} pointerEvents="box-none">
-        {/* Scan */}
+        {/* Scanner */}
         <Pressable
-          style={[styles.navTab, activeTab === 'scan' && styles.navTabActive]}
-          onPress={() => setActiveTab('scan')}
+          style={[
+            styles.navTab,
+            activeTab === 'scanner' && styles.navTabActive,
+          ]}
+          onPress={() => setActiveTab('scanner')}
         >
-          <Text style={[styles.navTabIcon, activeTab === 'scan' && styles.navTabIconActive]}>⬡</Text>
-          <Text style={[styles.navTabLabel, activeTab === 'scan' && styles.navTabLabelActive]}>Scan</Text>
+          <Text
+            style={[
+              styles.navTabIcon,
+              activeTab === 'scanner' && styles.navTabIconActive,
+            ]}
+          >
+            ⬡
+          </Text>
+          <Text
+            style={[
+              styles.navTabLabel,
+              activeTab === 'scanner' && styles.navTabLabelActive,
+            ]}
+          >
+            Scan
+          </Text>
         </Pressable>
 
-        {/* History */}
+        {/* Today */}
         <Pressable
-          style={[styles.navTab, activeTab === 'history' && styles.navTabActive]}
-          onPress={() => setActiveTab('history')}
+          style={[styles.navTab, activeTab === 'today' && styles.navTabActive]}
+          onPress={() => setActiveTab('today')}
         >
-          <Text style={[styles.navTabIcon, activeTab === 'history' && styles.navTabIconActive]}>≡</Text>
-          <Text style={[styles.navTabLabel, activeTab === 'history' && styles.navTabLabelActive]}>History</Text>
+          <Text
+            style={[
+              styles.navTabIcon,
+              activeTab === 'today' && styles.navTabIconActive,
+            ]}
+          >
+            📅
+          </Text>
+          <Text
+            style={[
+              styles.navTabLabel,
+              activeTab === 'today' && styles.navTabLabelActive,
+            ]}
+          >
+            Today
+          </Text>
+        </Pressable>
+
+        {/* Log */}
+        <Pressable
+          style={[styles.navTab, activeTab === 'log' && styles.navTabActive]}
+          onPress={() => setActiveTab('log')}
+        >
+          <Text
+            style={[
+              styles.navTabIcon,
+              activeTab === 'log' && styles.navTabIconActive,
+            ]}
+          >
+            ≡
+          </Text>
+          <Text
+            style={[
+              styles.navTabLabel,
+              activeTab === 'log' && styles.navTabLabelActive,
+            ]}
+          >
+            Log
+          </Text>
+        </Pressable>
+
+        {/* Chat */}
+        <Pressable
+          style={[styles.navTab, activeTab === 'chat' && styles.navTabActive]}
+          onPress={() => setActiveTab('chat')}
+        >
+          <Text
+            style={[
+              styles.navTabIcon,
+              activeTab === 'chat' && styles.navTabIconActive,
+            ]}
+          >
+            💬
+          </Text>
+          <Text
+            style={[
+              styles.navTabLabel,
+              activeTab === 'chat' && styles.navTabLabelActive,
+            ]}
+          >
+            Chat
+          </Text>
         </Pressable>
 
         {/* Settings */}
         <Pressable
-          style={[styles.navTab, activeTab === 'settings' && styles.navTabActive]}
+          style={[
+            styles.navTab,
+            activeTab === 'settings' && styles.navTabActive,
+          ]}
           onPress={() => setActiveTab('settings')}
         >
-          <Text style={[styles.navTabIcon, activeTab === 'settings' && styles.navTabIconActive]}>⚙</Text>
-          <Text style={[styles.navTabLabel, activeTab === 'settings' && styles.navTabLabelActive]}>Settings</Text>
+          <Text
+            style={[
+              styles.navTabIcon,
+              activeTab === 'settings' && styles.navTabIconActive,
+            ]}
+          >
+            ⚙
+          </Text>
+          <Text
+            style={[
+              styles.navTabLabel,
+              activeTab === 'settings' && styles.navTabLabelActive,
+            ]}
+          >
+            Settings
+          </Text>
         </Pressable>
       </View>
     </View>
@@ -798,10 +1203,14 @@ function DecisionDialog({
       <Text style={styles.feedbackTitle}>Approve Entry?</Text>
 
       {!!result.message && (
-        <Text style={[styles.feedbackSub, { color: '#cbd5e1' }]}>{result.message}</Text>
+        <Text style={[styles.feedbackSub, { color: '#cbd5e1' }]}>
+          {result.message}
+        </Text>
       )}
 
-      <Text style={decision.hint}>QR code verified — operator decision required</Text>
+      <Text style={decision.hint}>
+        QR code verified — operator decision required
+      </Text>
 
       {/* Action buttons */}
       <View style={decision.buttonRow}>
@@ -889,7 +1298,9 @@ function localRejectMessage(reason: string): string {
 async function haptic(type: Haptics.NotificationFeedbackType): Promise<void> {
   try {
     await Haptics.notificationAsync(type);
-  } catch { /* simulators don't support haptics */ }
+  } catch {
+    /* simulators don't support haptics */
+  }
 }
 
 // ─── Styles ───────────────────────────────────────────────────────────────────
@@ -898,9 +1309,8 @@ const { width } = Dimensions.get('window');
 const FRAME_SIZE = width * 0.65;
 
 // Dynamic top offset: respects Android status bar height
-const TOP_OFFSET = Platform.OS === 'android'
-  ? (StatusBar.currentHeight ?? 24) + 20
-  : 60;
+const TOP_OFFSET =
+  Platform.OS === 'android' ? (StatusBar.currentHeight ?? 24) + 20 : 60;
 
 const styles = StyleSheet.create({
   // ── Shared ────────────────────────────────────────────────────────────────
