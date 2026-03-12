@@ -50,12 +50,13 @@
   - [x] BillingPlaceholder with "Coming Q4 2026" badge and feature list
   - [x] Lint + typecheck pass
 
-- [ ] **Phase 7: Server Health Monitoring**
-  - [ ] Health API route (DB + Redis + metrics)
-  - [ ] Monitoring page with 30s polling
-  - [ ] `ServiceStatusCard` component
-  - [ ] Redis graceful degradation when unconfigured
-  - [ ] Lint + typecheck pass
+- [x] **Phase 7: Server Health Monitoring**
+  - [x] Health API route: DB latency, Redis ping, scan metrics, error rate, uptime
+  - [x] `MonitoringClient` polls every 30s, shows last-updated timestamp + spinner
+  - [x] `ServiceStatusCard` — colored dot, latency badge, ok/error/unconfigured states
+  - [x] `LiveMetricsGrid` — 4-col metric cards with highlight colors
+  - [x] Redis shows "unconfigured" (amber) when env vars absent
+  - [x] Lint + typecheck pass
 
 - [ ] **Phase 8: Settings + Admins Management**
   - [ ] Settings page (platform info, compliance placeholder, session info)
