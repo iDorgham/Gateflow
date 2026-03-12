@@ -25,7 +25,7 @@ Before and during implementation you **must**:
 3. **Respect** `.cursor/contracts/CONTRACTS.md` as the authoritative invariant list.
 
 Additional references:
-- `docs/PRD_v6.0.md` (Section 13 — Scanner Rules).
+- `docs/PRD_v7.0.md` (Section 13 — Scanner Rules).
 - Phase 2 deliverables: assignment API and scanner enforcement. Do not change API contract or enforcement logic; only add UI and refine scanner UX.
 
 ---

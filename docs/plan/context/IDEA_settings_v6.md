@@ -24,4 +24,4 @@ Rebuild the Settings Page in GateFlow's Client Dashboard into an enterprise-grad
 - Shared UI: `@gate-access/ui`
 
 ## Context
-Based on `PRD_v6.0.md` and legacy settings implementation.
+Based on `PRD_v7.0.md` and legacy settings implementation.

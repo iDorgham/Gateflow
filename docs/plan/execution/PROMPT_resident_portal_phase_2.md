@@ -33,7 +33,7 @@ Load these skills when implementing (from `.cursor/skills/`):
 - **Apps**: `apps/resident-portal` (new), `apps/client-dashboard` (reference for auth patterns)
 - **Packages**: `@gate-access/ui`, `@gate-access/api-client`, `@gate-access/i18n`, `@gate-access/types`
 - **Rules**: pnpm only; reuse existing auth helpers (JWT, cookies) and RBAC patterns from client-dashboard; RESIDENT users must be properly scoped by `organizationId`.
-- **Refs**: `CLAUDE.md`, `docs/PRD_v6.0.md` sections 3.5 and 4; `apps/client-dashboard/src/app/login/`, `apps/client-dashboard/src/lib/auth.ts`
+- **Refs**: `CLAUDE.md`, `docs/PRD_v7.0.md` sections 3.5 and 4; `apps/client-dashboard/src/app/login/`, `apps/client-dashboard/src/lib/auth.ts`
 
 ### Goal
 

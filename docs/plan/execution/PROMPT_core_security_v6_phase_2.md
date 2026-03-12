@@ -25,7 +25,7 @@ Before and during implementation you **must**:
 3. **Respect** `.cursor/contracts/CONTRACTS.md` as the authoritative invariant list (multi-tenancy, soft deletes, QR security, authentication, input validation, secrets, API route security).
 
 Additional references:
-- `docs/PRD_v6.0.md` (Section 13 — Scanner Rules and Gate–Account Assignment).
+- `docs/PRD_v7.0.md` (Section 13 — Scanner Rules and Gate–Account Assignment).
 - `docs/guides/SECURITY_OVERVIEW.md`.
 - `packages/db/prisma/schema.prisma`; `apps/client-dashboard/src/app/api/`; scanner scan/bulk-sync flows.
 

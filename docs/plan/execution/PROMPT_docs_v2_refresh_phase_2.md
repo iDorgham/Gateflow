@@ -9,7 +9,7 @@ CONTENT / DX
 ## Context
 - **Project**: GateFlow Docs v2
 - **Refs**:
-  - `docs/PRD_v6.0.md` — canonical truth
+  - `docs/PRD_v7.0.md` — canonical truth
   - `docs/guides/ARCHITECTURE.md` (164 lines)
   - `docs/guides/SECURITY_OVERVIEW.md` (220 lines)
   - `docs/guides/DEVELOPMENT_GUIDE.md` (171 lines)
@@ -17,7 +17,7 @@ CONTENT / DX
   - `CLAUDE.md` — authoritative stack/env var list
 
 ## Goal
-Ensure the 4 core guides are accurate, internally consistent with `PRD_v6.0.md`, and useful to a new contributor. Fill gaps, fix stale references, keep each guide concise.
+Ensure the 4 core guides are accurate, internally consistent with `PRD_v7.0.md`, and useful to a new contributor. Fill gaps, fix stale references, keep each guide concise.
 
 ## Scope (in)
 - **`ARCHITECTURE.md`**:

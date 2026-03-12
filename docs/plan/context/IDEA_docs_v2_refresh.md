@@ -3,7 +3,7 @@
 **Owner:** Product + Engineering  
 **Created:** 2026-02-27  
 **Status:** Draft (Idea captured)  
-**Primary reference:** `docs/PRD_v6.0.md` (canonical PRD v6)  
+**Primary reference:** `docs/PRD_v7.0.md` (canonical PRD v6)  
 
 ---
 
@@ -12,7 +12,7 @@
 The current `docs/` and legacy `docs/plan/**` tree grew organically over early MVP phases. As a result:
 
 - Important information is **duplicated or split** across multiple PRDs and specs.
-- Some documents are **out of date** relative to `PRD_v6.0.md`.
+- Some documents are **out of date** relative to `PRD_v7.0.md`.
 - The planning folder mixes **historical artifacts** (phase-1 MVP, resident portal v1, marketing experiments) with current work.
 - New contributors struggle to find:
   - “What is the current truth?” (PRD, security rules, flows).
@@ -29,7 +29,7 @@ We need a **Docs v2** set that is:
 ## 2. Goals
 
 1. **Single canonical product spec**
-   - `docs/PRD_v6.0.md` is the only PRD for GateFlow core (plus archived historical PRDs).
+   - `docs/PRD_v7.0.md` is the only PRD for GateFlow core (plus archived historical PRDs).
 
 2. **Clean, navigable docs tree**
    - `docs/` contains a small set of high-signal guides:
@@ -57,7 +57,7 @@ We need a **Docs v2** set that is:
 ### 3.1 In scope
 
 - **Docs root cleanup**
-  - Keep: `docs/PRD_v6.0.md`.
+  - Keep: `docs/PRD_v7.0.md`.
   - Create: `docs/guides/` with a small, curated set:
     - `ARCHITECTURE.md`
     - `SECURITY_OVERVIEW.md`
@@ -73,7 +73,7 @@ We need a **Docs v2** set that is:
 
 - **Cursor flows alignment**
   - Ensure `/idea`, `/plan`, `/dev`, `/ship` flows:
-    - Read `PRD_v6.0.md` and `docs/plan/context/*` as canonical product + initiative context.
+    - Read `PRD_v7.0.md` and `docs/plan/context/*` as canonical product + initiative context.
     - Write to `docs/plan/execution/*` using existing templates and new skills (e.g. `pro-prd-writer`).
 
 ### 3.2 Out of scope (Docs v2 idea only)
@@ -87,7 +87,7 @@ We need a **Docs v2** set that is:
 
 ```text
 docs/
-  PRD_v6.0.md                  # Canonical PRD
+  PRD_v7.0.md                  # Canonical PRD
   guides/
     ARCHITECTURE.md
     SECURITY_OVERVIEW.md
@@ -114,7 +114,7 @@ docs/
 
 - **Findability**
   - A new engineer can answer:
-    - “What is GateFlow?” by reading `PRD_v6.0.md` and `ARCHITECTURE.md`.
+    - “What is GateFlow?” by reading `PRD_v7.0.md` and `ARCHITECTURE.md`.
     - “How do I run/dev/test?” by reading `DEVELOPMENT_GUIDE.md`.
     - “What are the security invariants?” by reading `SECURITY_OVERVIEW.md` + `.cursor/rules/*`.
 

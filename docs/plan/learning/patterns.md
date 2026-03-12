@@ -16,7 +16,7 @@ This file captures recurring patterns and best practices discovered while execut
 
 - **Initiative:** `docs_v2_refresh`
 - **Context:** Phase 1 (baseline & archive cleanup)
-- **Description:** Keep one canonical PRD (`docs/PRD_v6.0.md`) and archive older versions/specs under `docs/archive/**`. Only ever update the canonical spec going forward.
+- **Description:** Keep one canonical PRD (`docs/PRD_v7.0.md`) and archive older versions/specs under `docs/archive/**`. Only ever update the canonical spec going forward.
 - **When to apply:** Whenever introducing a new major version of a spec; never keep multiple competing “current” PRD files.
 
 ---

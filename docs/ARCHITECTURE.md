@@ -1,7 +1,7 @@
 # GateFlow Architecture Guide (Docs v2)
 
 **Version:** 1.0  
-**Aligned with:** `docs/PRD_v6.0.md`  
+**Aligned with:** `docs/PRD_v7.0.md`  
 
 ---
 
@@ -131,7 +131,7 @@ GateFlow v6 adds:
 - **Visitor identity levels:** ID capture and OCR tiers for high‑security tenants.
 - **Watchlists & guard shifts/incidents:** Operational tooling for security teams.
 
-These are described in detail in `PRD_v6.0.md` Sections 13–14.
+These are described in detail in `PRD_v7.0.md` Sections 13–14.
 
 ---
 

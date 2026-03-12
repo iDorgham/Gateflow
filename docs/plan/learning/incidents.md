@@ -16,10 +16,10 @@ This file logs notable incidents or failures in planning or documentation flows.
 ### Incident 1 — Duplicate PRD v6.0 Locations
 
 - **Initiative:** `docs_v2_refresh` — Phase 1  
-- **What went wrong:** For a short period, `PRD_v6.0.md` existed both at `docs/` and under `docs/archive/plan-legacy/phase-1-mvp/specs/` without clearly marking the root file as canonical.
+- **What went wrong:** For a short period, `PRD_v7.0.md` existed both at `docs/` and under `docs/archive/plan-legacy/phase-1-mvp/specs/` without clearly marking the root file as canonical.
 - **Root cause:** Transition from legacy docs to Docs v2 while keeping history intact; initial structure was not immediately clarified.
 - **Follow-up actions:**
-  - Mark root `docs/PRD_v6.0.md` as canonical in its header.
+  - Mark root `docs/PRD_v7.0.md` as canonical in its header.
   - Add `docs/README.md` to explain the new structure and archive location.
 
 # GateFlow — Incidents & Post‑mortems

@@ -1,15 +1,18 @@
 # GateFlow Docs v2 Overview
 
-This `docs/` folder is the **v2 documentation set**, aligned with the canonical product spec in `PRD_v6.0.md`.
+This `docs/` folder is the **v2 documentation set**, aligned with the canonical product spec in `PRD_v7.0.md`.
 
 ## What to read first
 
-- **Product requirements:** [`PRD_v6.0.md`](PRD_v6.0.md)
-  The single source of truth for GateFlow v6 — apps, features, security, resident portal/mobile, scanner rules, and marketing suite.
+- **Product requirements:** [`PRD_v7.0.md`](PRD_v7.0.md)
+  The single source of truth for GateFlow v7 — all 6 apps, complete feature set, security, resident portal/mobile, scanner rules, real-time updates, and marketing suite.
+
+- **Progress dashboard:** [`PROJECT_PROGRESS_DASHBOARD.md`](PROJECT_PROGRESS_DASHBOARD.md)
+  Current status (95% MVP complete), phase roadmap, app status, and recent activity.
 
 - **Plans & initiatives:** [`docs/plan/`](plan/)
   - `plan/context/` — initiative ideas (`IDEA_*.md`)
-  - `plan/planning/` — active plans being executed (`PLAN_*.md`, `PROMPT_*_phase_*.md`, `TASKS_*.md`)
+  - `plan/execution/` — active and completed plans (`PLAN_*.md`, `PROMPT_*_phase_*.md`, `TASKS_*.md`)
   - `plan/done/` — completed plans (all phases passed)
   - `plan/learning/` — cross-phase patterns, incidents, decisions, CLI tracking
 
@@ -39,7 +42,13 @@ Treat these as **historical reference only**.
 
 ## Contributing to docs
 
-- **Product changes** → update `PRD_v6.0.md` (use the `pro-prd-writer` skill for large sections).
+- **Product changes** → update `PRD_v7.0.md` (use the `pro-prd-writer` skill for large sections).
 - **New initiatives** → `/idea` to capture → `/plan` to phase → `/dev` to execute. Outputs land in `docs/plan/`.
 - **Guide updates** → edit the relevant file in `docs/guides/`. Keep guides concise; link to PRD rather than duplicate it.
 - **Learning captures** → append to `docs/plan/learning/{patterns,incidents,decisions}.md` after significant phases.
+
+---
+
+**Version:** 7.0  
+**Last Updated:** March 12, 2026  
+**Status:** Living Documentation

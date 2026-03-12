@@ -1,7 +1,7 @@
 # Scanner Operations Guide (Docs v2)
 
 **Version:** 1.0  
-**Aligned with:** `docs/PRD_v6.0.md` (Scanner App, Scanner Rules, Visitor Identity, Watchlists)  
+**Aligned with:** `docs/PRD_v7.0.md` (Scanner App, Scanner Rules, Visitor Identity, Watchlists)  
 
 ---
 
@@ -189,5 +189,5 @@ Supervisors handle incidents via dashboard:
   - Attempt to scan away from the gate when a location rule is enabled.
   - Override failures without valid reasons.
 
-This guide should be kept in sync with `PRD_v6.0.md` as scanner features evolve.
+This guide should be kept in sync with `PRD_v7.0.md` as scanner features evolve.
 

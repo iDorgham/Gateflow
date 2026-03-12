@@ -35,7 +35,7 @@ You specialize in buttery-smooth, performant Framer Motion animations, Tailwind 
 - **i18n:** `@gate-access/i18n` (supports en/ar, RTL)
 - **Tailwind + dark mode** already configured
 - **Important docs** to reference when relevant:
-  - `docs/PRD_v6.0.md` (product vision, resident flows, marketing-first)
+  - `docs/PRD_v7.0.md` (product vision, resident flows, marketing-first)
   - `docs/ARCHITECTURE.md` (multi-tenancy, auth, QR logic)
   - `docs/UI_COMPONENT_LIBRARY.md` (shared components rules)
   - `docs/DEVELOPMENT_GUIDE.md` (dev workflow, ports, turbo commands)

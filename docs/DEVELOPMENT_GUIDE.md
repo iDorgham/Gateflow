@@ -1,7 +1,7 @@
 # GateFlow Development Guide (Docs v2)
 
 **Version:** 1.0  
-**Aligned with:** `docs/PRD_v6.0.md`, `CLAUDE.md`, `GATEFLOW_CONFIG.md`  
+**Aligned with:** `docs/PRD_v7.0.md`, `CLAUDE.md`, `GATEFLOW_CONFIG.md`  
 
 ---
 
@@ -177,7 +177,7 @@ Key points (see `CLAUDE.md` and core rules for full list):
 
 ## 7. Where to Look for More
 
-- **Product spec:** `docs/PRD_v6.0.md`
+- **Product spec:** `docs/PRD_v7.0.md`
 - **Security:** `docs/guides/SECURITY_OVERVIEW.md`, `.cursor/rules/00-gateflow-core.mdc`, `.cursor/contracts/CONTRACTS.md`
 - **Architecture:** `docs/guides/ARCHITECTURE.md`
 - **Environment variables:** `docs/guides/ENVIRONMENT_VARIABLES.md`

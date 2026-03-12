@@ -12,7 +12,7 @@ CONTENT / DX
   - `docs/guides/SCANNER_OPERATIONS.md` — exists
   - `docs/guides/RESIDENT_EXPERIENCE.md` — exists
   - `docs/plan/learning/patterns.md`, `incidents.md`, `decisions.md` — exist but may be sparse
-  - `docs/PRD_v6.0.md` — canonical source for Phase 2 features
+  - `docs/PRD_v7.0.md` — canonical source for Phase 2 features
 
 ## Goal
 Review and update the two extended guides so they accurately reflect PRD v6. Curate the learning docs with at least the top patterns and decisions from the project so far.
@@ -24,7 +24,7 @@ Review and update the two extended guides so they accurately reflect PRD v6. Cur
   - Add a **"Offline mode"** summary: AES-256 queue, PBKDF2 key, LWW sync, scanUuid dedup.
 - **`RESIDENT_EXPERIENCE.md`**:
   - Mark Phase 2 (Resident Portal) items as "Planned — Q3–Q4 2026" clearly.
-  - Confirm the `Unit`, `VisitorQR`, `AccessRule`, `ResidentLimit` data models described match the schema plan in `PRD_v6.0.md`.
+  - Confirm the `Unit`, `VisitorQR`, `AccessRule`, `ResidentLimit` data models described match the schema plan in `PRD_v7.0.md`.
   - Remove any sections that describe features not yet started as if they were complete.
 - **`docs/plan/learning/patterns.md`**:
   - Add at least 5 cross-cutting patterns discovered during dashboard_polish, watchlist_ui, crm_followups. Examples:

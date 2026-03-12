@@ -59,6 +59,63 @@
     "noCreditCard": "No credit card required. Free starter plan available.",
     "emailPlaceholder": "name@company.com"
   },
+  "stats": {
+    "scanTime": "Average scan time",
+    "offline": "Offline capable",
+    "qrCodes": "QR codes generated",
+    "uptime": "Uptime guarantee"
+  },
+  "howItWorks": {
+    "badge": "How It Works",
+    "title": "From QR to Gate in 3 Steps",
+    "step1": {
+      "title": "Create a Pass",
+      "desc": "Residents generate a secure QR code for their guest in seconds via the app or web portal."
+    },
+    "step2": {
+      "title": "Guest Scans",
+      "desc": "The guest shows the QR at the gate. Guards scan it with our mobile app — works offline."
+    },
+    "step3": {
+      "title": "You Get Notified",
+      "desc": "Receive instant notification when your guest arrives. Complete audit trail logged automatically."
+    }
+  },
+  "testimonials": {
+    "badge": "What Our Customers Say",
+    "title": "Trusted by Industry Leaders",
+    "palmHills": {
+      "quote": "GateFlow reduced our gate wait times by 60% and gave residents complete visibility over who visits their homes.",
+      "author": "Ahmed Hassan",
+      "role": "Head of Operations"
+    },
+    "eventManager": {
+      "quote": "We process 50,000+ visitor scans during our annual exhibitions. GateFlow handles it flawlessly.",
+      "author": "Sarah Al-Masri",
+      "role": "Event Director"
+    },
+    "security": {
+      "quote": "Finally, a system that gives us real-time audit trails. Security has never been this transparent.",
+      "author": "Mohamed Khaled",
+      "role": "Security Manager"
+    }
+  },
+  "comparison": {
+    "badge": "Why GateFlow",
+    "title": "Compare the Options",
+    "features_col": "Features",
+    "paper": "Paper Log",
+    "features": {
+      "offline": "Works offline",
+      "analytics": "Real-time analytics",
+      "qrCodes": "QR code generation",
+      "auditLog": "Full audit trail",
+      "residentPortal": "Resident self-service",
+      "pushNotifications": "Push notifications",
+      "multiGate": "Multiple gates",
+      "apiAccess": "API integration"
+    }
+  },
   "securityGrid": {
     "subtitle": "Security First",
     "title": "Zero-Trust Access Control",
@@ -91,4 +148,3 @@
     }
   }
 }
-

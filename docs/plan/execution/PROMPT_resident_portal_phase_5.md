@@ -31,7 +31,7 @@ Load these skills when implementing (from `.cursor/skills/`):
   - Tokens must be stored in SecureStore, not AsyncStorage.  
   - No direct DB access from mobile; use resident APIs created in previous phases.  
   - Offline-friendly QR display is important (cache recent QRs).
-- **Refs**: `apps/scanner-app` for mobile auth/storage patterns, `docs/PRD_v6.0.md` section 14 (Resident Mobile Enhancement Plan)
+- **Refs**: `apps/scanner-app` for mobile auth/storage patterns, `docs/PRD_v7.0.md` section 14 (Resident Mobile Enhancement Plan)
 
 ### Goal
 

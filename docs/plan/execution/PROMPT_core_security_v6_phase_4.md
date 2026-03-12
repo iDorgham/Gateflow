@@ -25,7 +25,7 @@ Before and during implementation you **must**:
 3. **Respect** `.cursor/contracts/CONTRACTS.md` as the authoritative invariant list.
 
 Additional references:
-- `docs/PRD_v6.0.md` (Section 13.2–13.3 — Location rule, “Not on Location” behavior).
+- `docs/PRD_v7.0.md` (Section 13.2–13.3 — Location rule, “Not on Location” behavior).
 - `docs/guides/SECURITY_OVERVIEW.md` (Section 6 — Scanner policies).
 - Phase 2 gate–account assignment (scanner is already gate-aware).
 

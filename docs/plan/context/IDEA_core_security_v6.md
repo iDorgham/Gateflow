@@ -4,7 +4,7 @@
 **Created:** 2026-02-27  
 **Status:** Draft (Idea captured)  
 **Primary references:**  
-- `docs/PRD_v6.0.md` (Sections 8, 11–14)  
+- `docs/PRD_v7.0.md` (Sections 8, 11–14)  
 - `docs/guides/SECURITY_OVERVIEW.md`  
 - `.cursor/rules/00-gateflow-core.mdc`  
 - `.cursor/rules/gateflow-security.mdc`  
@@ -16,7 +16,7 @@
 
 GateFlow already has strong **core security invariants** (multi-tenancy, soft deletes, QR signing, auth contracts), but the **v6 security surface** is only partially realized in product behavior:
 
-- **Scanner rules & policies** (gate–account assignment, location rules, gate hours) are specified in `PRD_v6.0.md` and `SECURITY_OVERVIEW.md`, but not yet implemented end-to-end across API, DB, and scanner UX.
+- **Scanner rules & policies** (gate–account assignment, location rules, gate hours) are specified in `PRD_v7.0.md` and `SECURITY_OVERVIEW.md`, but not yet implemented end-to-end across API, DB, and scanner UX.
 - **Visitor identity levels** (Level 0–2 with ID capture/OCR) are described at a product level, but do not yet exist as first-class configuration and flows for tenants and guards.
 - **Watchlists/blocklists and incidents** are defined conceptually (person/vehicle watchlists, guard shifts, incident workflows), but there is no cohesive implementation that security teams can rely on day-to-day.
 - **Privacy & retention controls** for sensitive security artifacts (ID images, incidents, watchlist data) are outlined, but not wired into actual configuration, storage, and deletion behavior.
@@ -46,7 +46,7 @@ This idea defines a focused **core_security_v6** initiative to close the gap bet
    - Provide person (and future vehicle) watchlists with hard-stop behavior, automatic incident creation, and guard shift tracking, consistent with PRD v6 and security docs.
 
 5. **Align implementation with contracts, rules, and docs**
-   - Ensure `.cursor/rules/*`, `.cursor/contracts/CONTRACTS.md`, `SECURITY_OVERVIEW.md`, and `PRD_v6.0.md` all describe the same security reality, backed by tests and audit-logs.
+   - Ensure `.cursor/rules/*`, `.cursor/contracts/CONTRACTS.md`, `SECURITY_OVERVIEW.md`, and `PRD_v7.0.md` all describe the same security reality, backed by tests and audit-logs.
 
 ---
 
@@ -74,7 +74,7 @@ This idea defines a focused **core_security_v6** initiative to close the gap bet
   - Audit logs for watchlist changes, incident state changes, and critical security actions.
 
 - **Docs & contracts alignment**
-  - Keep `PRD_v6.0.md` (security-related sections), `SECURITY_OVERVIEW.md`, `.cursor/rules/*`, and `CONTRACTS.md` synchronized with the implementation as phases ship.
+  - Keep `PRD_v7.0.md` (security-related sections), `SECURITY_OVERVIEW.md`, `.cursor/rules/*`, and `CONTRACTS.md` synchronized with the implementation as phases ship.
 
 ### 3.2 Out of scope (for this idea)
 
@@ -130,7 +130,7 @@ Exact phasing and naming will be decided in `PLAN_core_security_v6.md`, but this
 
 - **Contracts and docs are aligned and test-backed**
   - No new or modified API route that touches tenant data violates multi-tenancy, soft delete, QR, auth, or validation contracts.
-  - Security-related sections of `PRD_v6.0.md` and `SECURITY_OVERVIEW.md` are kept in sync with shipped behavior.
+  - Security-related sections of `PRD_v7.0.md` and `SECURITY_OVERVIEW.md` are kept in sync with shipped behavior.
   - There is targeted test coverage for scanner rules, identity levels, and watchlist/incidents flows.
 
 - **Privacy & retention are explicit, not implicit**
@@ -165,7 +165,7 @@ Exact phasing and naming will be decided in `PLAN_core_security_v6.md`, but this
 
 1. Use `/plan` on this IDEA to create `PLAN_core_security_v6.md`, grouping work into phased tracks (A–E) with clear roles (SECURITY, Backend, Mobile, QA) and acceptance criteria.
 2. For each phase, generate `PROMPT_core_security_v6_phase_<N>.md` under `docs/plan/execution/` that:
-   - References `PRD_v6.0.md`, `SECURITY_OVERVIEW.md`, `.cursor/rules/*`, and `CONTRACTS.md`.
+   - References `PRD_v7.0.md`, `SECURITY_OVERVIEW.md`, `.cursor/rules/*`, and `CONTRACTS.md`.
    - Sets **Primary role: SECURITY** where appropriate.
    - Includes explicit gates for tests, lint, typecheck, and security validation.
 3. Execute phases via `/dev`, using:

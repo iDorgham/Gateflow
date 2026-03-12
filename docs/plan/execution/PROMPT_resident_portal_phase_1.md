@@ -34,7 +34,7 @@ Load these skills when implementing (from `.cursor/skills/`):
 - **Project**: GateFlow — Zero-Trust digital gate platform (Turborepo, pnpm)
 - **Packages**: `@gate-access/db`, `@gate-access/types`
 - **Rules**: pnpm only; multi-tenant (`organizationId`); soft deletes (`deletedAt: null` where applicable); QR HMAC-SHA256; no secrets in git
-- **Refs**: `CLAUDE.md`, `docs/PRD_v6.0.md` section 4 (Resident Portal), `packages/db/prisma/schema.prisma`
+- **Refs**: `CLAUDE.md`, `docs/PRD_v7.0.md` section 4 (Resident Portal), `packages/db/prisma/schema.prisma`
 
 ### Goal
 

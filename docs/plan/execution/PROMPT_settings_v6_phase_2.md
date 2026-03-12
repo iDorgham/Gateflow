@@ -11,7 +11,7 @@ FRONTEND
 - **Apps**: client-dashboard (3001)
 - **Packages**: ui, i18n, db
 - **Rules**: Organization scoping; soft deletes; pnpm only.
-- **Refs**: `docs/plan/planning/settings_v6/PLAN_settings_v6.md`, `docs/PRD_v6.0.md`
+- **Refs**: `docs/plan/planning/settings_v6/PLAN_settings_v6.md`, `docs/PRD_v7.0.md`
 
 ## Goal
 Implement General and Workspace settings tabs with support for themes, language, and white-label branding.

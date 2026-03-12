@@ -11,7 +11,7 @@ FRONTEND
 - **Apps**: client-dashboard
 - **Packages**: ui, api-client, db
 - **Rules**: Multi-tenant scoping.
-- **Refs**: `docs/PRD_v6.0.md` Section: Resident Portal & Quotas.
+- **Refs**: `docs/PRD_v7.0.md` Section: Resident Portal & Quotas.
 
 ## Goal
 Implement the Units & Residents tab with specialized quota management and resident defaults.

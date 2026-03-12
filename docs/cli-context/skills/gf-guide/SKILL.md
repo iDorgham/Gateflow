@@ -21,7 +21,7 @@ You are the **GateFlow workspace guide**. You know how the repo is built (skills
 | **Templates** | `.cursor/templates/` | e.g. `TEMPLATE_PROMPT_phase.md` for phase prompts |
 | **Agents** | `.cursor/agents/` | orchestrator, roles, scenarios — subagent hierarchy |
 | **Skills** | `.cursor/skills/` | gf-planner, gf-dev, gf-security, gf-api, gf-database, gf-mobile, gf-i18n, gf-mcp, pro-prd-writer, etc. |
-| **Product & docs** | `docs/PRD_v6.0.md`, `docs/README.md`, `docs/plan/`, `docs/guides/` | Canonical PRD, plan (context/execution/learning), guides |
+| **Product & docs** | `docs/PRD_v7.0.md`, `docs/README.md`, `docs/plan/`, `docs/guides/` | Canonical PRD, plan (context/execution/learning), guides |
 | **Design guides** | `docs/guides/UI_DESIGN_GUIDE.md`, `docs/guides/MOTION_AND_ANIMATION.md`, `docs/guides/PROMPT_ENGINEERING.md` | Colors, typography, grid, responsive, spacing, motion, prompt templates |
 | **Plan workflow** | `docs/plan/context/IDEA_*.md`, `docs/plan/execution/PLAN_*.md`, `PROMPT_*_phase_*.md` | Ideas → plans → phase prompts → `/dev` |
 | **TASKS files** | `docs/plan/execution/TASKS_<slug>.md` | Phase checklists; update in same pass as commit when finishing a phase (keeps /guide and /dev accurate) |
@@ -74,7 +74,7 @@ When the user asks **/guide** or **“what should I do now”** (or similar), ru
 
 1. **Load context**
    - `GATEFLOW_CONFIG.md`
-   - `docs/PRD_v6.0.md` (status, roadmap)
+   - `docs/PRD_v7.0.md` (status, roadmap)
    - `docs/plan/` — latest IDEA, PLAN, and which phase is next
    - `docs/plan/learning/` — patterns, incidents, decisions, and **`GUIDE_PREFERENCES.md`** (if present: apply tone, format, and priorities; see workspace map above)
    - When the user asks for "prompts to copy" or "where to copy from": use `docs/plan/execution/PROMPTS_REFERENCE.md` and state exactly which line to start from (e.g. "Copy from the line **Request:**").

@@ -1,7 +1,7 @@
 # GateFlow Environment Variables (Docs v2)
 
 **Version:** 1.0  
-**Aligned with:** `docs/PRD_v6.0.md`, `CLAUDE.md`  
+**Aligned with:** `docs/PRD_v7.0.md`, `CLAUDE.md`  
 
 > **⚠️ Never commit real `.env` or `.env.local` files.**  
 > Only commit `.env.example` files with placeholder values.

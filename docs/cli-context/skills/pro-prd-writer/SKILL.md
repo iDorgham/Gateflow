@@ -29,13 +29,13 @@ If the work touches:
    - Keep language business- and user-focused; leave API shapes and schemas to tech specs unless they are critical contracts.
 
 2. **Single source of truth**
-   - Ensure there is **one canonical PRD per scope** (e.g. `PRD_v6.0.md` for GateFlow core).
+   - Ensure there is **one canonical PRD per scope** (e.g. `PRD_v7.0.md` for GateFlow core).
    - Older versions become explicit references (e.g. “Previous PRD v5.0; baseline for MVP features”).
 
 3. **Tight alignment with reality**
    - Before editing, skim:
      - `CLAUDE.md`
-     - `docs/plan/phase-1-mvp/specs/PRD_v5.0.md` and current `PRD_v6.0.md`
+     - `docs/plan/phase-1-mvp/specs/PRD_v5.0.md` and current `PRD_v7.0.md`
      - `docs/plan/context/GATEFLOW_CONFIG.md`
    - Make sure the PRD doesn’t contradict current architecture, security rules, or known roadmap.
 
@@ -150,7 +150,7 @@ When this skill is active, follow this checklist:
 
 When asked to “update PRD” or “add to PRD”:
 
-- Propose **clean, ready-to-paste markdown** sections that match the existing style of `PRD_v6.0.md`.
+- Propose **clean, ready-to-paste markdown** sections that match the existing style of `PRD_v7.0.md`.
 - When editing directly, make focused, coherent changes (no half-updated tables).
 - Where appropriate, suggest associated roadmap changes so product and engineering see the impact immediately.
 

@@ -179,10 +179,20 @@ export function ContactForm({ dict }: { dict: any }) {
       </Button>
 
       <p className="mt-6 text-center text-xs text-muted-foreground">
-        {dict.form.privacyPrefix} <a href="#" className="underline">{dict.form.privacyLink}</a>.
+        {dict.form.privacyPrefix}{' '}
+        <a href="#" className="underline">
+          {dict.form.privacyLink}
+        </a>
+        .
       </p>
-      
-      <input type="checkbox" name="honeypot" style={{ display: 'none' }} tabIndex={-1} autoComplete="off" />
+
+      <input
+        type="checkbox"
+        name="honeypot"
+        style={{ display: 'none' }}
+        tabIndex={-1}
+        autoComplete="off"
+      />
     </form>
   );
 }

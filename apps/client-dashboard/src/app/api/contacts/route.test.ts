@@ -27,11 +27,16 @@ jest.mock('next/server', () => {
   class MockNextResponse {
     status: number;
     private _body: unknown;
-    constructor(body: unknown, init?: { status?: number; headers?: Record<string, string> }) {
+    constructor(
+      body: unknown,
+      init?: { status?: number; headers?: Record<string, string> }
+    ) {
       this._body = body;
       this.status = init?.status ?? 200;
     }
-    async json() { return this._body; }
+    async json() {
+      return this._body;
+    }
     static json(body: unknown, init?: { status?: number }) {
       return new MockNextResponse(body, { status: init?.status ?? 200 });
     }
@@ -82,6 +87,16 @@ jest.mock('@gate-access/db', () => ({
     REFERRAL: 'REFERRAL',
     OTHER: 'OTHER',
   },
+  EventType: {
+    QR_CREATED: 'QR_CREATED',
+    QR_UPDATED: 'QR_UPDATED',
+    QR_DELETED: 'QR_DELETED',
+    SCAN_RECORDED: 'SCAN_RECORDED',
+    CONTACT_CREATED: 'CONTACT_CREATED',
+    CONTACT_UPDATED: 'CONTACT_UPDATED',
+    VISITOR_QR_CREATED: 'VISITOR_QR_CREATED',
+    VISITOR_QR_DELETED: 'VISITOR_QR_DELETED',
+  },
 }));
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -102,7 +117,9 @@ function makeGetRequest(qs = '') {
 // ─── POST tests ───────────────────────────────────────────────────────────────
 
 describe('POST /api/contacts — CRM fields', () => {
-  let POST: (req: unknown) => Promise<{ status: number; json: () => Promise<unknown> }>;
+  let POST: (
+    req: unknown
+  ) => Promise<{ status: number; json: () => Promise<unknown> }>;
 
   beforeAll(async () => {
     const mod = await import('./route');
@@ -113,14 +130,20 @@ describe('POST /api/contacts — CRM fields', () => {
 
   it('returns 401 when no session', async () => {
     mockGetSessionClaims.mockResolvedValue(null);
-    const res = await POST(makePostRequest({ firstName: 'Ali', lastName: 'Hassan' }));
+    const res = await POST(
+      makePostRequest({ firstName: 'Ali', lastName: 'Hassan' })
+    );
     expect(res.status).toBe(401);
     expect(mockContactCreate).not.toHaveBeenCalled();
   });
 
   it('persists new CRM fields and returns them in response', async () => {
     const orgId = 'org_crm_1';
-    mockGetSessionClaims.mockResolvedValue({ orgId, sub: 'u1', email: 'a@b.com' });
+    mockGetSessionClaims.mockResolvedValue({
+      orgId,
+      sub: 'u1',
+      email: 'a@b.com',
+    });
 
     const createdContact = {
       id: 'c_1',
@@ -153,7 +176,10 @@ describe('POST /api/contacts — CRM fields', () => {
     );
 
     expect(res.status).toBe(201);
-    const body = await res.json() as { success: boolean; data: Record<string, unknown> };
+    const body = (await res.json()) as {
+      success: boolean;
+      data: Record<string, unknown>;
+    };
     expect(body.success).toBe(true);
     expect(body.data.jobTitle).toBe('Engineering Manager');
     expect(body.data.source).toBe('MANUAL');
@@ -166,10 +192,18 @@ describe('POST /api/contacts — CRM fields', () => {
   });
 
   it('returns 400 when source value is invalid', async () => {
-    mockGetSessionClaims.mockResolvedValue({ orgId: 'org_1', sub: 'u1', email: 'a@b.com' });
+    mockGetSessionClaims.mockResolvedValue({
+      orgId: 'org_1',
+      sub: 'u1',
+      email: 'a@b.com',
+    });
 
     const res = await POST(
-      makePostRequest({ firstName: 'X', lastName: 'Y', source: 'UNKNOWN_SOURCE' })
+      makePostRequest({
+        firstName: 'X',
+        lastName: 'Y',
+        source: 'UNKNOWN_SOURCE',
+      })
     );
 
     expect(res.status).toBe(400);
@@ -177,10 +211,18 @@ describe('POST /api/contacts — CRM fields', () => {
   });
 
   it('returns 400 when companyWebsite is not a valid URL', async () => {
-    mockGetSessionClaims.mockResolvedValue({ orgId: 'org_1', sub: 'u1', email: 'a@b.com' });
+    mockGetSessionClaims.mockResolvedValue({
+      orgId: 'org_1',
+      sub: 'u1',
+      email: 'a@b.com',
+    });
 
     const res = await POST(
-      makePostRequest({ firstName: 'X', lastName: 'Y', companyWebsite: 'not-a-url' })
+      makePostRequest({
+        firstName: 'X',
+        lastName: 'Y',
+        companyWebsite: 'not-a-url',
+      })
     );
 
     expect(res.status).toBe(400);
@@ -191,7 +233,9 @@ describe('POST /api/contacts — CRM fields', () => {
 // ─── GET tests ────────────────────────────────────────────────────────────────
 
 describe('GET /api/contacts — CRM fields in list response', () => {
-  let GET: (req: unknown) => Promise<{ status: number; json: () => Promise<unknown> }>;
+  let GET: (
+    req: unknown
+  ) => Promise<{ status: number; json: () => Promise<unknown> }>;
 
   beforeAll(async () => {
     const mod = await import('./route');
@@ -202,7 +246,11 @@ describe('GET /api/contacts — CRM fields in list response', () => {
 
   it('includes CRM fields in returned contact objects', async () => {
     const orgId = 'org_crm_2';
-    mockGetSessionClaims.mockResolvedValue({ orgId, sub: 'u1', email: 'a@b.com' });
+    mockGetSessionClaims.mockResolvedValue({
+      orgId,
+      sub: 'u1',
+      email: 'a@b.com',
+    });
 
     const contactRow = {
       id: 'c_2',
@@ -226,7 +274,10 @@ describe('GET /api/contacts — CRM fields in list response', () => {
     const res = await GET(makeGetRequest());
     expect(res.status).toBe(200);
 
-    const body = await res.json() as { success: boolean; data: Array<Record<string, unknown>> };
+    const body = (await res.json()) as {
+      success: boolean;
+      data: Array<Record<string, unknown>>;
+    };
     expect(body.success).toBe(true);
     expect(body.data[0].jobTitle).toBe('Property Manager');
     expect(body.data[0].source).toBe('IMPORT');
@@ -277,7 +328,11 @@ describe('GET /api/contacts?format=csv — audit logging', () => {
 
   it('creates CONTACTS_EXPORT audit log on CSV export', async () => {
     const orgId = 'org_csv_audit_1';
-    mockGetSessionClaims.mockResolvedValue({ orgId, sub: 'u_1', email: 'a@b.com' });
+    mockGetSessionClaims.mockResolvedValue({
+      orgId,
+      sub: 'u_1',
+      email: 'a@b.com',
+    });
 
     const req = makeGetRequest('?format=csv');
     const res = await GET(req);
@@ -295,7 +350,11 @@ describe('GET /api/contacts?format=csv — audit logging', () => {
   });
 
   it('does NOT create audit log for JSON requests', async () => {
-    mockGetSessionClaims.mockResolvedValue({ orgId: 'org_csv_audit_2', sub: 'u_2', email: 'b@c.com' });
+    mockGetSessionClaims.mockResolvedValue({
+      orgId: 'org_csv_audit_2',
+      sub: 'u_2',
+      email: 'b@c.com',
+    });
 
     const req = makeGetRequest('?format=json');
     await GET(req);
@@ -315,7 +374,11 @@ describe('GET /api/contacts?format=csv — audit logging', () => {
 
   it('metadata does not contain raw PII (names, emails)', async () => {
     const orgId = 'org_csv_audit_3';
-    mockGetSessionClaims.mockResolvedValue({ orgId, sub: 'u_3', email: 'c@d.com' });
+    mockGetSessionClaims.mockResolvedValue({
+      orgId,
+      sub: 'u_3',
+      email: 'c@d.com',
+    });
 
     await GET(makeGetRequest('?format=csv&search=alice'));
 

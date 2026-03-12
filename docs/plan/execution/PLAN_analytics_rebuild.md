@@ -2,7 +2,7 @@
 
 **Initiative:** analytics_rebuild  
 **Source:** `docs/plan/context/IDEA_analytics_rebuild.md`  
-**Primary product spec:** `docs/PRD_v6.0.md` (Client Dashboard, Analytics)  
+**Primary product spec:** `docs/PRD_v7.0.md` (Client Dashboard, Analytics)  
 **Related:** Existing analytics at `apps/client-dashboard/src/app/[locale]/dashboard/analytics/`, execution `PLAN_analytics_dashboard` (done)  
 **Owner:** Product + Engineering  
 **Status:** Draft (planning) — use `/plan ready analytics_rebuild` when approved  

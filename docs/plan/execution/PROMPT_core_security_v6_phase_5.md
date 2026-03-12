@@ -25,7 +25,7 @@ Before and during implementation you **must**:
 3. **Respect** `.cursor/contracts/CONTRACTS.md` as the authoritative invariant list.
 
 Additional references:
-- `docs/PRD_v6.0.md` (Section 13.5 Watchlists & Blocklists, 13.6 Guard Shifts & Incidents).
+- `docs/PRD_v7.0.md` (Section 13.5 Watchlists & Blocklists, 13.6 Guard Shifts & Incidents).
 - `docs/guides/SECURITY_OVERVIEW.md` (Section 5).
 - Phase 2 scan path (gate-aware); bulk-sync and single-scan endpoints.
 

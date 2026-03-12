@@ -18,9 +18,9 @@ This file records important decisions made during planning and documentation wor
 
 - **Date:** 2026‑02‑27  
 - **Initiative:** `docs_v2_refresh` — Phase 1  
-- **Decision:** Move all legacy `docs/plan/**` content to `docs/archive/plan-legacy/**` and keep `docs/PRD_v6.0.md` as the single canonical PRD at the root.
+- **Decision:** Move all legacy `docs/plan/**` content to `docs/archive/plan-legacy/**` and keep `docs/PRD_v7.0.md` as the single canonical PRD at the root.
 - **Alternatives considered:**
-  - Keep `PRD_v6.0.md` under `docs/plan/phase-1-mvp/specs/`.
+  - Keep `PRD_v7.0.md` under `docs/plan/phase-1-mvp/specs/`.
   - Keep multiple PRD versions side by side in `docs/`.
 - **Rationale:**
   - Reduces confusion for new contributors.

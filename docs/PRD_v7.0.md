@@ -1585,7 +1585,7 @@ logger.info('QR code created', {
 
 ### 17.1 Previous Versions
 
-- **PRD v6.0** — `docs/PRD_v6.0.md`
+- **PRD v6.0** — `docs/PRD_v7.0.md`
 - **PRD v5.0** — `docs/plan/phase-1-mvp/specs/PRD_v5.0.md`
 
 ### 17.2 Related Documents

@@ -1,6 +1,6 @@
 /** @type {import('jest').Config} */
 const config = {
-  testEnvironment: 'node',
+  testEnvironment: '<rootDir>/custom-jest-environment.js',
   transform: {
     '^.+\\.tsx?$': ['ts-jest', { tsconfig: { moduleResolution: 'node' } }],
   },

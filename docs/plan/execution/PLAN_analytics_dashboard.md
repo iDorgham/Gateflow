@@ -2,7 +2,7 @@
 
 **Initiative:** analytics_dashboard  
 **Source:** User spec — Analytics Dashboard Vision (dual-mode, filter inheritance, KPI cards, heatmap, funnel, Recharts)  
-**Primary product spec:** `docs/PRD_v6.0.md` (Client Dashboard, Analytics, Marketing Suite)  
+**Primary product spec:** `docs/PRD_v7.0.md` (Client Dashboard, Analytics, Marketing Suite)  
 **Related plans:** Compound seed plan (Section 12 analytics phases); existing analytics at `apps/client-dashboard/src/app/[locale]/dashboard/analytics/`  
 **Owner:** Product + Engineering  
 **Status:** Complete (all phases done)  

@@ -21,7 +21,7 @@
 - **Project**: GateFlow (Turborepo, pnpm)
 - **Phase 1–2**: Dashboard shell, Security heatmap, KPIs, operator leaderboard
 - **Schema**: ScanLog, QRCode — **UTM fields may not exist**; add `utmCampaign`, `utmSource` to QRCode (or JSON metadata) if needed for attribution
-- **Refs**: `PLAN_analytics_dashboard.md`, `docs/PRD_v6.0.md` (Marketing Suite)
+- **Refs**: `PLAN_analytics_dashboard.md`, `docs/PRD_v7.0.md` (Marketing Suite)
 
 ---
 

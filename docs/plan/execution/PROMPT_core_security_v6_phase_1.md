@@ -26,7 +26,7 @@ Before and during implementation you **must**:
 3. **Respect** `.cursor/contracts/CONTRACTS.md` as the authoritative invariant list (multi-tenancy, soft deletes, QR security, authentication, input validation, secrets, API route security, SECURITY specialist phases).
 
 Additional references:
-- `docs/PRD_v6.0.md` (Section 8 — Security & Compliance).
+- `docs/PRD_v7.0.md` (Section 8 — Security & Compliance).
 - `docs/guides/SECURITY_OVERVIEW.md`.
 - `apps/client-dashboard/src/lib/require-auth.ts`, `apps/client-dashboard/src/app/api/`.
 

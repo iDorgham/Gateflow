@@ -2,7 +2,7 @@
 
 **Initiative:** core_security_v6  
 **Source idea:** `docs/plan/context/IDEA_core_security_v6.md`  
-**Primary product spec:** `docs/PRD_v6.0.md` (Sections 8, 11–14)  
+**Primary product spec:** `docs/PRD_v7.0.md` (Sections 8, 11–14)  
 **Security context:** `.cursor/skills/gf-security/SKILL.md`, `docs/guides/SECURITY_OVERVIEW.md`, `.cursor/rules/00-gateflow-core.mdc`, `.cursor/contracts/CONTRACTS.md`  
 **Owner:** Security + Product + Engineering  
 **Status:** Complete (Phases 1–6 done)  
@@ -196,7 +196,7 @@
 
 **Docs & contracts:**
 - `docs/plan/context/IDEA_core_security_v6.md`
-- `docs/PRD_v6.0.md` (Sections 8, 11–14)
+- `docs/PRD_v7.0.md` (Sections 8, 11–14)
 - `docs/guides/SECURITY_OVERVIEW.md`
 - `.cursor/rules/00-gateflow-core.mdc`
 - `.cursor/rules/gateflow-security.mdc`

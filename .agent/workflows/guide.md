@@ -11,7 +11,7 @@ Use `/guide` to get a clear picture of what to do next, what’s recommended, wh
 
 1. **Loads context**
    - `GATEFLOW_CONFIG.md` — commands, plans, security, agents, skills.
-   - `docs/PRD_v6.0.md` — product status and roadmap.
+   - `docs/PRD_v7.0.md` — product status and roadmap.
    - `docs/plan/` — ideas, plans, phase prompts, learning (patterns, incidents, decisions).
 
 2. **Assesses state**

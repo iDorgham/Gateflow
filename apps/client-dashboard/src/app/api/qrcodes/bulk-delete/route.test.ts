@@ -50,6 +50,16 @@ jest.mock('@gate-access/db', () => ({
     qRCode: { updateMany: (...args: unknown[]) => mockUpdateMany(...args) },
     auditLog: { create: (...args: unknown[]) => mockAuditCreate(...args) },
   },
+  EventType: {
+    QR_CREATED: 'QR_CREATED',
+    QR_UPDATED: 'QR_UPDATED',
+    QR_DELETED: 'QR_DELETED',
+    SCAN_RECORDED: 'SCAN_RECORDED',
+    CONTACT_CREATED: 'CONTACT_CREATED',
+    CONTACT_UPDATED: 'CONTACT_UPDATED',
+    VISITOR_QR_CREATED: 'VISITOR_QR_CREATED',
+    VISITOR_QR_DELETED: 'VISITOR_QR_DELETED',
+  },
 }));
 
 function makePostRequest(body: unknown) {
@@ -61,7 +71,9 @@ function makePostRequest(body: unknown) {
 }
 
 describe('POST /api/qrcodes/bulk-delete', () => {
-  let POST: (req: unknown) => Promise<{ status: number; json: () => Promise<unknown> }>;
+  let POST: (
+    req: unknown
+  ) => Promise<{ status: number; json: () => Promise<unknown> }>;
 
   beforeAll(async () => {
     const mod = await import('./route');
@@ -100,4 +112,3 @@ describe('POST /api/qrcodes/bulk-delete', () => {
     expect(json.deletedCount).toBe(2);
   });
 });
-

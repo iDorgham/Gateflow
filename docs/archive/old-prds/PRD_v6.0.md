@@ -739,7 +739,7 @@ This section captures the **Resident Mobile Enhancement Plan**: contact-based sh
 - **Previous PRD:** `docs/plan/phase-1-mvp/specs/PRD_v5.0.md` — baseline for MVP features.
 - **Marketing Draft (Archived):** `docs/# GateFlow — Product Requirements Docume.md` — detailed marketing-first v6 draft; now treated as supporting context only.
 - **Resident Mobile Enhancement Plan:** See Section 14 (and `.cursor/plans/resident_mobile_enhancement_*.plan.md` for full plan artifact).
-- **Current Canonical PRD:** `docs/plan/phase-1-mvp/specs/PRD_v6.0.md` (this document).
+- **Current Canonical PRD:** `docs/plan/phase-1-mvp/specs/PRD_v7.0.md` (this document).
 
 ---
 

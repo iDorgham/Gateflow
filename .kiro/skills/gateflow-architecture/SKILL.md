@@ -63,9 +63,11 @@ npx prisma studio
 
 ## Key Files to Reference
 - `CLAUDE.md` - Full AI assistant guide
-- `docs/PROJECT_STRUCTURE.md` - Detailed architecture
-- `docs/DEVELOPMENT_GUIDE.md` - Setup instructions
-- `packages/db/prisma/schema.prisma` - Database schema
+- `docs/PRD_v7.0.md` - Complete product requirements
+- `docs/PROJECT_PROGRESS_DASHBOARD.md` - Current status (95% complete)
+- `docs/guides/ARCHITECTURE.md` - Detailed architecture
+- `docs/guides/DEVELOPMENT_GUIDE.md` - Setup instructions
+- `packages/db/prisma/schema.prisma` - Database schema (30 models)
 - `turbo.json` - Build pipeline configuration
 
 ## Common Patterns

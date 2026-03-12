@@ -25,7 +25,7 @@ Before and during implementation you **must**:
 3. **Respect** `.cursor/contracts/CONTRACTS.md` as the authoritative invariant list.
 
 Additional references:
-- `docs/PRD_v6.0.md` (Section 13.4 Visitor Identity & Trust Levels; Section 8 Security & Compliance; resident privacy, data retention).
+- `docs/PRD_v7.0.md` (Section 13.4 Visitor Identity & Trust Levels; Section 8 Security & Compliance; resident privacy, data retention).
 - `docs/guides/SECURITY_OVERVIEW.md` (Section 4, 7).
 - Phase 5 incidents (artifacts can attach to incident or scan).
 

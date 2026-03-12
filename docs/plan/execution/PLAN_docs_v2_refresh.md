@@ -2,7 +2,7 @@
 
 **Initiative:** Docs v2 refresh  
 **Source idea:** `docs/plan/context/IDEA_docs_v2_refresh.md`  
-**Primary product spec:** `docs/PRD_v6.0.md`  
+**Primary product spec:** `docs/PRD_v7.0.md`  
 **Owner:** Product + Engineering  
 **Status:** Not started  
 
@@ -10,7 +10,7 @@
 
 ## 1. Objectives
 
-- Make `docs/PRD_v6.0.md` the **single canonical PRD**.
+- Make `docs/PRD_v7.0.md` the **single canonical PRD**.
 - Replace the ad‑hoc docs tree with a **small, high-signal set** of guides aligned to PRD v6.
 - Rebuild `docs/plan/` so it is **exclusively driven** by `/idea`, `/plan`, `/dev`, `/ship` flows and shared templates.
 - Highlight GateFlow’s value as a **must‑have security tool** for gated communities in the docs set (visitor identity, guard accountability, scanner policies, resident safety).
@@ -34,24 +34,24 @@ Each phase is expected to be small enough to run as a single `/dev` execution wh
 
 **Scope:**
 
-- Confirm `docs/PRD_v6.0.md` content matches archived `docs/archive/plan-legacy/phase-1-mvp/specs/PRD_v6.0.md`.
+- Confirm `docs/PRD_v7.0.md` content matches archived `docs/archive/plan-legacy/phase-1-mvp/specs/PRD_v7.0.md`.
 - Ensure **all legacy planning docs** live under `docs/archive/plan-legacy/**`.
 - Keep `docs/plan/` present but logically empty of old content (only new IDEA/PLAN/PROMPT files going forward).
 
 **Key tasks:**
 
-- [ ] Validate that `docs/PRD_v6.0.md` is complete and consistent (no TODOs or dangling references to v5 as “current”).
+- [ ] Validate that `docs/PRD_v7.0.md` is complete and consistent (no TODOs or dangling references to v5 as “current”).
 - [ ] Confirm `docs/archive/plan-legacy/**` contains all prior `docs/plan/**` content.
 - [ ] Verify `docs/plan/` contains only:
   - `context/IDEA_docs_v2_refresh.md` (this initiative).
   - Any newly created PLAN/PROMPT files (from this plan).
 - [ ] Add or update a very small `docs/README.md` that:
-  - Points to `PRD_v6.0.md` as the canonical spec.
+  - Points to `PRD_v7.0.md` as the canonical spec.
   - Briefly explains that legacy docs are under `docs/archive/**`.
 
 **Acceptance criteria:**
 
-- There is **exactly one** canonical PRD file referenced as current: `docs/PRD_v6.0.md`.
+- There is **exactly one** canonical PRD file referenced as current: `docs/PRD_v7.0.md`.
 - Old docs are preserved under `docs/archive/**` and no longer mixed with v2 docs.
 - New contributors can see from `docs/README.md` where to start.
 
@@ -70,7 +70,7 @@ Each phase is expected to be small enough to run as a single `/dev` execution wh
 
 **Approach:**
 
-- Use `PRD_v6.0.md`, `CLAUDE.md`, `GATEFLOW_CONFIG.md`, and relevant archived docs as input only.
+- Use `PRD_v7.0.md`, `CLAUDE.md`, `GATEFLOW_CONFIG.md`, and relevant archived docs as input only.
 - Apply the `content-creation` and `pro-prd-writer` skills for language and structure.
 - Keep each guide concise and scannable (tables, sections, no duplication of PRD).
 
@@ -91,7 +91,7 @@ Each phase is expected to be small enough to run as a single `/dev` execution wh
 
 **Acceptance criteria:**
 
-- All four guides exist, pass basic lint/format checks, and are internally consistent with `PRD_v6.0.md`.
+- All four guides exist, pass basic lint/format checks, and are internally consistent with `PRD_v7.0.md`.
 - No guide duplicates PRD text unnecessarily; they summarize and point back to PRD where needed.
 
 ---
@@ -181,7 +181,7 @@ docs/plan/
 
 **Dependencies:**
 
-- Canonical product spec: `docs/PRD_v6.0.md`.
+- Canonical product spec: `docs/PRD_v7.0.md`.
 - Security and core rules:
   - `.cursor/rules/00-gateflow-core.mdc`
   - `.cursor/rules/gateflow-security.mdc`

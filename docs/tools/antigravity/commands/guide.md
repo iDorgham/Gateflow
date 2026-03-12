@@ -25,7 +25,7 @@ Copy this prompt into Antigravity (or Gemini CLI) to get the same "what should I
 
 **Context to load (read these files):**
 - `GATEFLOW_CONFIG.md` (repo root) — commands, plans, security, agents, skills
-- `docs/PRD_v6.0.md` — product status and roadmap
+- `docs/PRD_v7.0.md` — product status and roadmap
 - `docs/plan/` — latest IDEA, PLAN, and which phase is next
 - `docs/plan/learning/GUIDE_PREFERENCES.md` (if present) — user preferences
 - `docs/guides/TOOL_AND_CLI_REFERENCE.md` — task-to-tool matrix for CLI suggestions

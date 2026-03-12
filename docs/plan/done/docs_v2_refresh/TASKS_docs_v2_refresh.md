@@ -7,7 +7,7 @@
 
 - [x] **Phase 1: Baseline Audit & README Update**
   - [x] `docs/README.md` updated — remove "upcoming" block, list all current guides
-  - [x] `docs/PRD_v6.0.md` scanned — one historical v5 ref at line 735 (correct, not stale)
+  - [x] `docs/PRD_v7.0.md` scanned — one historical v5 ref at line 735 (correct, not stale)
   - [x] Archive boundary confirmed — plan-legacy + root-legacy, no duplication
 
 - [x] **Phase 2: Core Guides v2 — Review & Update**

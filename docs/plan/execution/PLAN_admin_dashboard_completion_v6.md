@@ -178,14 +178,14 @@
 
 ### Phase 9 — Polish + Tests + PRD Update
 
-**Goal:** Visual polish (consistent design tokens, dark mode, spacing), add `typecheck` script, basic tests for all API routes and key components, update `docs/PRD_v6.0.md` admin dashboard status.
+**Goal:** Visual polish (consistent design tokens, dark mode, spacing), add `typecheck` script, basic tests for all API routes and key components, update `docs/PRD_v7.0.md` admin dashboard status.
 
 **Key files:**
 - `package.json` — add `typecheck` script + Jest config
 - All pages — consistent `PageHeader`, `space-y-6` section spacing
 - `src/app/[locale]/(dashboard)/layout.tsx` — final layout adjustments
 - `*.test.ts` — API route tests for health, organizations, users, analytics
-- `docs/PRD_v6.0.md` — update admin dashboard completion %
+- `docs/PRD_v7.0.md` — update admin dashboard completion %
 
 **Acceptance:** `pnpm turbo typecheck --filter=admin-dashboard` passes; `pnpm turbo test --filter=admin-dashboard` passes; all pages visually consistent; PRD updated.
 
