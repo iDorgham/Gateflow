@@ -20,6 +20,7 @@ import {
   Shield,
   ChevronLeft,
   ChevronRight,
+  CreditCard,
 } from 'lucide-react';
 import { cn } from '@gate-access/ui';
 
@@ -53,6 +54,12 @@ const getNavGroups = (t: any): NavGroup[] => [
       { href: '/analytics', label: t('admin:nav.analytics'), icon: BarChart3 },
       { href: '/scans', label: t('admin:nav.scans'), icon: ScanLine },
       { href: '/audit-logs', label: t('admin:nav.audit'), icon: ScrollText },
+    ],
+  },
+  {
+    label: t('admin:nav.revenue', 'Revenue'),
+    items: [
+      { href: '/finance', label: t('admin:nav.finance', 'Finance'), icon: CreditCard },
     ],
   },
   {
