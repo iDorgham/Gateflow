@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma, ContactSource } from '@gate-access/db';
+import { emitEvent, EventType } from '@/lib/realtime/emit-event';
 
 // ─── PATCH /api/contacts/[id] ─────────────────────────────────────────────────
 
@@ -84,6 +85,8 @@ export async function PATCH(
         },
       });
     });
+
+    emitEvent(claims.orgId, EventType.CONTACT_UPDATED, { contactId: updated.id }).catch(() => {});
 
     return NextResponse.json({
       success: true,

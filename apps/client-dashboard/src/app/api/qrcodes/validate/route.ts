@@ -11,6 +11,7 @@ import { checkRateLimit } from '../../../../lib/rate-limit';
 import { checkGateAssignment } from '../../../../lib/gate-assignment';
 import { checkLocationForGate } from '../../../../lib/location';
 import { getActiveWatchlist, findWatchlistMatch } from '../../../../lib/watchlist';
+import { emitEvent, EventType } from '../../../../lib/realtime/emit-event';
 
 // ─── Configuration ────────────────────────────────────────────────────────────
 
@@ -409,6 +410,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       });
     });
 
+    emitEvent(claims.orgId, EventType.SCAN_RECORDED, { scanId: scanLog.id, gateId, qrCodeId: qrCode.id }).catch(() => {});
     return json<QRValidateResponse>({ status: 'accepted', scanId: scanLog.id }, 200);
   } catch (error) {
     if (error instanceof UsageLimitError) {

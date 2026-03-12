@@ -7,6 +7,7 @@ import { getValidatedProjectId } from '@/lib/project-cookie';
 import { prisma } from '@gate-access/db';
 import { signQRPayload, QRCodeType } from '@gate-access/types';
 import { QRCodeType as PrismaQRCodeType } from '@gate-access/db';
+import { emitEvent, EventType } from '@/lib/realtime/emit-event';
 
 const createId = initCuid2({ length: 8 });
 
@@ -140,6 +141,7 @@ export async function createQRCode(input: CreateInput): Promise<CreateResult> {
     }
 
     console.log(`createQRCode: Created ${input.type} QR ${qrId} for org ${input.organizationId} → shortId ${shortId}`);
+    emitEvent(input.organizationId, EventType.QR_CREATED, { qrId }).catch(() => {});
     return { success: true, qrString, qrId, shortUrl };
   } catch (error) {
     console.error('createQRCode: Unexpected error:', error);

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma, Prisma, ContactSource } from '@gate-access/db';
+import { emitEvent, EventType } from '@/lib/realtime/emit-event';
 
 export const dynamic = 'force-dynamic';
 
@@ -536,6 +537,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         units: { include: { unit: { select: { id: true, name: true } } } },
       },
     });
+
+    emitEvent(claims.orgId, EventType.CONTACT_CREATED, { contactId: contact.id }).catch(() => {});
 
     return NextResponse.json(
       {

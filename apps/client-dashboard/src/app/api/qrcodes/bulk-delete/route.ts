@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma } from '@gate-access/db';
 import { checkRateLimit } from '@/lib/rate-limit';
+import { emitEvent, EventType } from '@/lib/realtime/emit-event';
 
 export const dynamic = 'force-dynamic';
 
@@ -82,6 +83,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         },
       },
     });
+
+    emitEvent(orgId, EventType.QR_DELETED, { count: result.count, idsSample: ids.slice(0, 10) }).catch(() => {});
 
     return NextResponse.json({
       success: true,

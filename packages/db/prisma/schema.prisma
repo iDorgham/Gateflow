@@ -53,6 +53,7 @@ model Organization {
   invitations      Invitation[]
   tasks            Task[]
   chatMessages     ChatMessage[]
+  eventLogs        EventLog[]
 
   @@index([deletedAt])
 }
@@ -690,4 +691,30 @@ enum ContactSource {
 enum GateMode {
   SINGLE // Project has one primary gate
   MULTI  // Project has multiple gates (default)
+}
+
+// ─── Real-time event log (SSE / live-update infrastructure) ──────────────────
+
+enum EventType {
+  QR_CREATED
+  QR_UPDATED
+  QR_DELETED
+  SCAN_RECORDED
+  CONTACT_CREATED
+  CONTACT_UPDATED
+  VISITOR_QR_CREATED
+  VISITOR_QR_DELETED
+}
+
+/// Append-only log of org-scoped mutation events, consumed by the SSE stream.
+/// Rows are pruned after 24 h — no soft-delete needed.
+model EventLog {
+  id             String       @id @default(cuid())
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId String
+  type           EventType
+  payload        Json         @default("{}")
+  createdAt      DateTime     @default(now())
+
+  @@index([organizationId, createdAt])
 }
