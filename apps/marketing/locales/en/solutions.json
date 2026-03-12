@@ -2,13 +2,22 @@
   "index": {
     "hero": {
       "headline": "Tailored Trust for Every Industry",
-      "subHeadline": "GateFlow’s infrastructure is flexible enough to handle the unique security nuances of any gated physical space."
+      "subHeadline": "GateFlow's infrastructure is flexible enough to handle the unique security nuances of any gated physical space."
     }
   },
   "compounds": {
     "title": "Residential Compounds",
     "subtitle": "Security meets convenience for compound management.",
-    "description": "Empower your residents with the new Resident Portal, stop unauthorized contractor entry, and end gate bottleneck frustration.",
+    "description": "Give every resident full control over who enters their home — while giving management complete visibility and an unbreakable audit trail.",
+    "hero": {
+      "headline": "Give every resident control. Keep every gate secure.",
+      "sub": "Replace paper logbooks and WhatsApp chaos with cryptographically-signed visitor passes, resident self-service, and real-time audit logs."
+    },
+    "painPoints": [
+      "Manual paper logbook — error-prone, impossible to audit",
+      "WhatsApp QR screenshots shared freely, no expiry control",
+      "Management has zero visibility into gate activity"
+    ],
     "bulletPoints": [
       "Resident Whitelist",
       "Visitor Pre-authorization",
@@ -19,52 +28,39 @@
       "title": "Why GateFlow for Compounds?",
       "items": {
         "residents": {
-          "title": "Resident Portal",
-          "description": "Let owners manage their guests independently with strict compound management quotas."
+          "title": "Resident self-service visitor QRs",
+          "description": "Residents create time-limited, signed visitor passes directly from the app or portal — without calling management."
         },
         "trades": {
-          "title": "Contractor Tracking",
-          "description": "Issue recurring QR codes limited by time-of-day for maids, drivers, and maintenance."
+          "title": "Unit-based access quotas",
+          "description": "Set monthly visitor limits per unit type. The system enforces them automatically, eliminating disputes."
         },
         "complaints": {
-          "title": "End Complaints",
-          "description": "Stop holding up VIP residents because security is busy writing down ID numbers."
+          "title": "Full audit log + analytics",
+          "description": "Every entry is logged with timestamp, gate, QR code, and operator identity. Export to CSV in one click."
         }
       }
-    }
-  },
-  "schools": {
-    "title": "Private Schools",
-    "subtitle": "Unbreakable perimeter security for educational campuses.",
-    "description": "Track every pickup and dropoff with precision, managing student release securely across multiple gates.",
-    "bulletPoints": [
-      "Parent Pickup QR",
-      "Staff Attendance",
-      "Contractor Management",
-      "Emergency Lockdown Log"
-    ],
-    "benefits": {
-      "title": "Why GateFlow for Schools?",
-      "items": {
-        "pickup": {
-          "title": "Secure Pickup",
-          "description": "QR validation prevents unauthorized individuals from collecting students."
-        },
-        "audit": {
-          "title": "Full Audit Log",
-          "description": "Know exactly when a parent entered and exited during incidents or disputes."
-        },
-        "offline": {
-          "title": "Network Resilient",
-          "description": "The morning rush must proceed. Offline mode ensures gates stay fast regardless of WiFi connection."
-        }
-      }
-    }
+    },
+    "quote": {
+      "text": "We eliminated our paper logbook and now have a real-time view of every entry. Residents love the app.",
+      "author": "Ahmed Hassan",
+      "role": "Property Manager, Palm Hills Compound"
+    },
+    "seePricing": "See Pricing"
   },
   "events": {
     "title": "Mass Events",
     "subtitle": "Lightning-fast access for high-volume crowds.",
-    "description": "From corporate exhibitions to massive concerts, handle tens of thousands of scans an hour with zero downtime.",
+    "description": "From ticket list to gate control in minutes. Handle tens of thousands of scans per hour with zero downtime — even offline.",
+    "hero": {
+      "headline": "From ticket list to gate control — in minutes.",
+      "sub": "Upload your guest list via CSV, generate signed QR passes instantly, and scan offline with no internet dependency."
+    },
+    "painPoints": [
+      "Long entry queues from manual ID and ticket checks",
+      "No offline backup when the internet drops at peak time",
+      "Zero post-event data on actual attendance or gate throughput"
+    ],
     "bulletPoints": [
       "High-speed Ticket Scan",
       "100% Offline Mode",
@@ -75,24 +71,39 @@
       "title": "Why GateFlow for Events?",
       "items": {
         "speed": {
-          "title": "Rapid Scanning",
-          "description": "Achieve high throughput scanning with our highly optimized camera pipeline."
+          "title": "Bulk CSV QR generation",
+          "description": "Upload a guest list and generate thousands of signed, single-use QR passes in under 60 seconds."
         },
         "fraud": {
-          "title": "Stop Ticket Fraud",
-          "description": "Signed QR codes and local DB syncing prevent identical tickets from entering twice."
+          "title": "100% offline scanning",
+          "description": "Scanners queue offline using AES-256 encrypted local storage. Sync automatically when connectivity returns."
         },
         "reports": {
-          "title": "Live Reports",
-          "description": "View exact attendance counts by gate in real-time."
+          "title": "Post-event analytics export",
+          "description": "Download detailed scan logs by gate, hour, and QR code type. Prove attendance numbers to sponsors."
         }
       }
-    }
+    },
+    "quote": {
+      "text": "We scanned 2,000 guests in 90 minutes with zero queue. The offline mode saved us when the venue WiFi died.",
+      "author": "Sarah Al-Masri",
+      "role": "Event Director, Cairo Tech Summit"
+    },
+    "seePricing": "See Pricing"
   },
   "clubs": {
     "title": "Exclusive Clubs & Marinas",
     "subtitle": "Discrete, high-end guest management.",
-    "description": "Provide a premium check-in experience while enforcing strict seasonal membership and guest pass quotas.",
+    "description": "Membership access that runs itself. Enforce recurring schedules, track every visit per member, and prevent card sharing.",
+    "hero": {
+      "headline": "Membership access that runs itself.",
+      "sub": "HMAC-signed membership QRs that enforce time windows, prevent sharing, and give your operations team a per-member audit trail."
+    },
+    "painPoints": [
+      "Lost or shared membership cards with no way to invalidate them",
+      "No way to restrict access to specific days or time windows",
+      "No visibility into who actually came — or how often"
+    ],
     "bulletPoints": [
       "Member Tier Sync",
       "Guest Quota Control",
@@ -103,19 +114,68 @@
       "title": "Why GateFlow for Clubs?",
       "items": {
         "vip": {
-          "title": "VIP Quotas",
-          "description": "Allocate varying guest pass limits based on membership tiers."
+          "title": "Recurring access schedules",
+          "description": "Configure day-of-week and time-window restrictions per membership tier. The gate enforces them automatically."
         },
         "discreet": {
-          "title": "Discreet Scanning",
-          "description": "Avoid interrogating high-net-worth individuals at the door with seamless QR validation."
+          "title": "HMAC-signed membership QR",
+          "description": "Every QR is cryptographically signed and bound to a member. Forwarding it to a friend does not work."
         },
         "revocation": {
-          "title": "Instant Revocation",
-          "description": "Revoke access for bounced memberships globally in under a second."
+          "title": "Per-member scan history",
+          "description": "See exactly when each member visited, which gate, and how many guests they brought — per day or month."
         }
       }
-    }
+    },
+    "quote": {
+      "text": "Members love the QR pass on their phone. We love the audit trail — we finally know who's actually using their membership.",
+      "author": "Operations Manager",
+      "role": "Operations Manager, Club 24"
+    },
+    "seePricing": "See Pricing"
+  },
+  "schools": {
+    "title": "Private Schools",
+    "subtitle": "Unbreakable perimeter security for educational campuses.",
+    "description": "Every parent pre-approved. Every entry recorded. Give the gate team a process that works — without burdening admin staff.",
+    "hero": {
+      "headline": "Every parent pre-approved. Every entry recorded.",
+      "sub": "Issue QR passes per pickup. Guard-only scanner role. Immutable audit log. No unknown visitors at the gate — ever."
+    },
+    "painPoints": [
+      "Unknown visitors showing up at the gate with no pre-approval",
+      "Guards overwhelmed — writing IDs by hand, creating bottlenecks",
+      "No permanent record of who entered, when, or who authorized it"
+    ],
+    "bulletPoints": [
+      "Parent Pickup QR",
+      "Staff Attendance",
+      "Contractor Management",
+      "Emergency Lockdown Log"
+    ],
+    "benefits": {
+      "title": "Why GateFlow for Schools?",
+      "items": {
+        "pickup": {
+          "title": "Parent pre-approval flow",
+          "description": "Admin creates a visitor QR per authorized pickup person. The guard scans — GateFlow does the rest."
+        },
+        "audit": {
+          "title": "Guard-only scanner role",
+          "description": "Gate operators get scanner-only access. No admin panel, no sensitive data — just scan and proceed."
+        },
+        "offline": {
+          "title": "Immutable audit log",
+          "description": "Every entry is permanently timestamped with gate ID, QR code, and operator. Exportable for incident reports."
+        }
+      }
+    },
+    "quote": {
+      "text": "The gate team finally has a process that doesn't depend on memory. We haven't had an unauthorized entry since launch.",
+      "author": "Head of Security",
+      "role": "Head of Security, Cairo International School"
+    },
+    "seePricing": "See Pricing"
   },
   "cta": "Get Started with GateFlow",
   "ui": {

@@ -7,7 +7,7 @@ import { GraduationCap } from 'lucide-react';
 export async function generateMetadata({ params: { locale } }: { params: { locale: Locale } }): Promise<Metadata> {
   const { t } = await getTranslation(locale, 'solutions');
   return {
-    title: `${t('schools.title')} | GateFlow`,
+    title: `${t('schools.hero.headline')} | GateFlow`,
     description: t('schools.description'),
   };
 }
@@ -18,17 +18,24 @@ export default async function SchoolsPage({ params: { locale } }: { params: { lo
   return (
     <SolutionLayout
       locale={locale}
-      title={t('schools.title')}
+      title={t('schools.hero.headline')}
       subtitle={t('schools.subtitle')}
-      description={t('schools.description')}
+      description={t('schools.hero.sub')}
       icon={<GraduationCap />}
-      ctaText={`${t('ui.configureFor')} ${t('schools.title')}`}
-      features={t('schools.bulletPoints', { returnObjects: true }) as unknown as string[]}
+      ctaText={t('cta')}
+      secondaryCtaText={t('schools.seePricing')}
+      painPoints={t('schools.painPoints', { returnObjects: true }) as string[]}
+      features={t('schools.bulletPoints', { returnObjects: true }) as string[]}
       benefits={[
         { title: t('schools.benefits.items.pickup.title'), desc: t('schools.benefits.items.pickup.description') },
         { title: t('schools.benefits.items.audit.title'), desc: t('schools.benefits.items.audit.description') },
         { title: t('schools.benefits.items.offline.title'), desc: t('schools.benefits.items.offline.description') },
       ]}
+      quote={{
+        text: t('schools.quote.text'),
+        author: t('schools.quote.author'),
+        role: t('schools.quote.role'),
+      }}
     />
   );
 }
