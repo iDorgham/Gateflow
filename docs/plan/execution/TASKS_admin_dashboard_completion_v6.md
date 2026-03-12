@@ -58,10 +58,11 @@
   - [x] Redis shows "unconfigured" (amber) when env vars absent
   - [x] Lint + typecheck pass
 
-- [ ] **Phase 8: Settings + Admins Management**
-  - [ ] Settings page (platform info, compliance placeholder, session info)
-  - [ ] Admins page (key fingerprint, session management, security checklist)
-  - [ ] Lint + typecheck pass
+- [x] **Phase 8: Settings + Admins Management**
+  - [x] Settings page: PageHeader + CompliancePlaceholder (SOC2/GDPR, "Coming Q4 2026")
+  - [x] Admins page: PageHeader + key fingerprint card + security checklist (6 items, ✓/○)
+  - [x] Key fingerprint shows first 8 chars of SHA-256 hash; key length check vs 32 chars
+  - [x] Lint + typecheck pass
 
 - [ ] **Phase 9: Polish + Tests + PRD Update**
   - [ ] `PageHeader` on all pages
