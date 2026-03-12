@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { Text, View, TextInput, Pressable, StyleSheet, ActivityIndicator, KeyboardAvoidingView, Platform } from 'react-native';
 import { router } from 'expo-router';
 import { login as doLogin, getValidAccessToken } from '../lib/auth-client';
-import { registerForPushNotificationsAsync } from '../lib/push-notifications';
 import { theme } from '../lib/theme';
 
 const { colors, spacing, borderRadius, shadows, typography } = theme;
@@ -33,8 +32,6 @@ export default function LoginScreen() {
     const result = await doLogin(email.trim(), password);
     setLoading(false);
     if (result.success) {
-      // Register push token after login (fire-and-forget — never block navigation)
-      registerForPushNotificationsAsync().catch(() => {});
       router.replace('/');
     } else {
       setError(result.error ?? 'Login failed');

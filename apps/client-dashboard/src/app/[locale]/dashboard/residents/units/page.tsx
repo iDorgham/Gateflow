@@ -118,6 +118,8 @@ const emptyForm = () => ({
   qrQuota: 3,
   projectId: '',
   contactIds: [] as string[],
+  lat: null as number | null,
+  lng: null as number | null,
 });
 
 interface ResidentUser {
@@ -523,6 +525,8 @@ export default function UnitsPage() {
       qrQuota: unit.qrQuota,
       projectId: unit.projectId ?? '',
       contactIds: unit.contacts.map((c) => c.id),
+      lat: unit.lat ?? null,
+      lng: unit.lng ?? null,
     });
     setDialogOpen(true);
   }
@@ -558,6 +562,8 @@ export default function UnitsPage() {
           qrQuota: form.qrQuota,
           projectId: form.projectId || null,
           contactIds: form.contactIds,
+          lat: form.lat ?? null,
+          lng: form.lng ?? null,
         };
         const res = editing
           ? await fetch(`/api/units/${editing.id}`, {
@@ -1077,6 +1083,40 @@ export default function UnitsPage() {
                     });
                   }}
                 />
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="space-y-1.5">
+                  <Label htmlFor="unitLat">
+                    {t('units.form.lat', 'Latitude')}
+                  </Label>
+                  <Input
+                    id="unitLat"
+                    type="number"
+                    step="any"
+                    placeholder={t('units.form.latPlaceholder', 'e.g. 25.276987')}
+                    value={form.lat ?? ''}
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      setForm({ ...form, lat: v === '' ? null : parseFloat(v) || null });
+                    }}
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="unitLng">
+                    {t('units.form.lng', 'Longitude')}
+                  </Label>
+                  <Input
+                    id="unitLng"
+                    type="number"
+                    step="any"
+                    placeholder={t('units.form.lngPlaceholder', 'e.g. 55.296249')}
+                    value={form.lng ?? ''}
+                    onChange={(e) => {
+                      const v = e.target.value;
+                      setForm({ ...form, lng: v === '' ? null : parseFloat(v) || null });
+                    }}
+                  />
+                </div>
               </div>
               <div className="space-y-1.5">
                 <Label htmlFor="qrQuota">

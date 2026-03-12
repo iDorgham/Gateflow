@@ -8,9 +8,9 @@ import {
   Share,
   ScrollView,
   Alert,
+  Platform,
 } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
-import QRCode from 'react-native-qrcode-svg';
 import { residentFetch } from '../../lib/api';
 import { getCachedVisitor, setCachedVisitor, type CachedVisitor } from '../../lib/qr-cache';
 import { theme } from '../../lib/theme';
@@ -118,6 +118,7 @@ export default function VisitorDetailScreen() {
   if (!visitor) return null;
 
   const qrCode = visitor.qrCode?.code ?? '';
+  const displayCode = qrCode.length > 80 ? `${qrCode.slice(0, 80)}…` : qrCode;
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.scrollContent}>
@@ -133,19 +134,12 @@ export default function VisitorDetailScreen() {
         {visitor.unit?.name ? (
           <Text style={styles.subtext}>{visitor.unit.name}</Text>
         ) : null}
-
-        {/* QR code image */}
-        {qrCode ? (
-          <View style={styles.qrContainer}>
-            <QRCode
-              value={qrCode}
-              size={220}
-              color={colors.foreground}
-              backgroundColor={colors.card}
-            />
-          </View>
-        ) : null}
-
+        <View style={styles.codeBlock}>
+          <Text style={styles.codeLabel}>Pass code</Text>
+          <Text style={styles.codeText} selectable>
+            {displayCode}
+          </Text>
+        </View>
         <Pressable
           onPress={handleShare}
           style={({ pressed }) => [styles.shareButton, pressed && styles.shareButtonPressed]}
@@ -198,10 +192,23 @@ const styles = StyleSheet.create({
     color: colors.mutedForeground,
     marginBottom: 20,
   },
-  qrContainer: {
-    alignItems: 'center',
-    paddingVertical: spacing.xl,
+  codeBlock: {
+    backgroundColor: colors.muted,
+    borderRadius: borderRadius.xl,
+    padding: spacing.xl,
     marginBottom: spacing.xl,
+  },
+  codeLabel: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: colors.mutedForeground,
+    marginBottom: 8,
+    textTransform: 'uppercase',
+  },
+  codeText: {
+    fontSize: 14,
+    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
+    color: colors.foreground,
   },
   shareButton: {
     height: 52,

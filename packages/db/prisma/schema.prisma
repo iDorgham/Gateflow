@@ -26,12 +26,6 @@ model Organization {
   incidentRetentionMonths   Int?
   maskResidentNameOnLandingPage Boolean @default(false)
   showUnitOnLandingPage     Boolean   @default(true)
-  /// Global scanner config: { offlineModeEnabled, vibrationEnabled, soundEnabled, allowOverride }
-  scannerConfig             Json?
-  /// Integration config: { gtmId, hubspotPortalId, googleAnalyticsId, ... }
-  integrationConfig         Json?
-  /// Notification config: { channels: { email, sms, push }, events: { scanSuccess, scanFailed, ... } }
-  notificationConfig        Json?
 
   users            User[]
   gates            Gate[]
@@ -40,7 +34,6 @@ model Organization {
   auditLogs        AuditLog[]
   webhooks         Webhook[]
   apiKeys          ApiKey[]
-  adminAuthKeys    AdminAuthorizationKey[]
   projects         Project[]
   contacts         Contact[]
   units            Unit[]
@@ -50,9 +43,6 @@ model Organization {
   watchlistEntries WatchlistEntry[]
   incidents        Incident[]
   scanAttachments  ScanAttachment[]
-  invitations      Invitation[]
-  tasks            Task[]
-  chatMessages     ChatMessage[]
   eventLogs        EventLog[]
 
   @@index([deletedAt])
@@ -91,7 +81,6 @@ model Role {
   organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId String?
   users          User[]
-  invitations    Invitation[]
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
 
@@ -120,65 +109,10 @@ model User {
   unit            Unit?
   gateAssignments GateAssignment[]
   incidents       Incident[]
-  chatMessages    ChatMessage[]
 
   @@index([organizationId])
   @@index([roleId])
   @@index([deletedAt])
-}
-
-model Invitation {
-  id             String       @id @default(cuid())
-  email          String
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  organizationId String
-  role           Role         @relation(fields: [roleId], references: [id])
-  roleId         String
-  token          String       @unique
-  acceptedAt     DateTime?
-  expiresAt      DateTime
-  createdAt      DateTime     @default(now())
-
-  @@unique([email, organizationId])
-  @@index([organizationId])
-  @@index([token])
-}
-
-model Task {
-  id             String      @id @default(cuid())
-  title          String
-  description    String?
-  status         TaskStatus  @default(TODO)
-  dueDate        DateTime?
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  organizationId String
-  createdBy      String?
-  assignedTo     String?
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
-  deletedAt      DateTime?
-
-  @@index([organizationId])
-  @@index([deletedAt])
-}
-
-enum TaskStatus {
-  TODO
-  IN_PROGRESS
-  DONE
-}
-
-model ChatMessage {
-  id             String       @id @default(cuid())
-  content        String
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  organizationId String
-  userId         String
-  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt      DateTime     @default(now())
-
-  @@index([organizationId])
-  @@index([createdAt])
 }
 
 model GateAssignment {
@@ -477,28 +411,6 @@ model ApiKey {
 
   @@index([organizationId])
   @@index([keyHash])
-}
-
-model AdminAuthorizationKey {
-  id             String     @id @default(cuid())
-  name           String
-  keyHash        String     @unique
-  keyPrefix      String
-  type           AdminAuthKeyType
-  organizationId String?
-  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  lastUsedAt     DateTime?
-  expiresAt      DateTime?
-  createdAt      DateTime   @default(now())
-  createdBy      String
-
-  @@index([organizationId])
-  @@index([keyHash])
-}
-
-enum AdminAuthKeyType {
-  ADMIN
-  SERVICE
 }
 
 enum ApiScope {

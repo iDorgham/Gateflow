@@ -24,6 +24,8 @@ export interface UnitRow {
   passesInRange: number;
   lastVisitInRange: string | null;
   linkedContactCount: number;
+  lat: number | null;
+  lng: number | null;
   potentialVacancy?: boolean;
   tagSummary?: string | null;
 }

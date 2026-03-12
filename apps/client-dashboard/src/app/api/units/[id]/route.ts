@@ -14,6 +14,8 @@ const UpdateUnitSchema = z.object({
   projectId: z.string().optional().nullable(),
   contactIds: z.array(z.string()).optional(),
   userId: z.string().optional().nullable(), // Link/unlink resident (User with RESIDENT role)
+  lat: z.number().min(-90).max(90).optional().nullable(),
+  lng: z.number().min(-180).max(180).optional().nullable(),
 });
 
 export async function PATCH(
@@ -48,7 +50,7 @@ export async function PATCH(
       );
     }
 
-    const { contactIds, userId, ...fields } = validation.data;
+    const { contactIds, userId, lat, lng, ...fields } = validation.data;
 
     // Validate userId when linking: user must exist, have RESIDENT role, belong to org, and not be linked to another unit
     if (userId !== undefined && userId !== null) {
@@ -103,6 +105,8 @@ export async function PATCH(
           ...(fields.qrQuota !== undefined ? { qrQuota: fields.qrQuota } : {}),
           ...(fields.projectId !== undefined ? { projectId: fields.projectId ?? null } : {}),
           ...(userId !== undefined ? { userId: userId ?? null } : {}),
+          ...(lat !== undefined ? { lat: lat ?? null } : {}),
+          ...(lng !== undefined ? { lng: lng ?? null } : {}),
         },
         include: {
           contacts: {

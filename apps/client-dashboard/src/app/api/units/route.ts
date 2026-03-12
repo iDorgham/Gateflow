@@ -366,6 +366,8 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
           firstName: cu.contact.firstName,
           lastName: cu.contact.lastName,
         })),
+        lat: u.lat ?? null,
+        lng: u.lng ?? null,
         visitsInRange: agg?.visitsInRange ?? 0,
         passesInRange: agg?.passesInRange ?? 0,
         lastVisitInRange: agg?.lastVisitInRange ?? null,
