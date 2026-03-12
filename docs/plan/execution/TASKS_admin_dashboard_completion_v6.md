@@ -5,12 +5,13 @@
 
 ## Phases
 
-- [ ] **Phase 1: Shell Upgrade + Admin Side Panel**
-  - [ ] `AdminShell` component wraps layout
-  - [ ] `AdminSidePanel` with AI/Logs/Chat stub tabs
-  - [ ] `PageHeader` component copied and applied to overview
-  - [ ] `h-screen` replaces `h-[105.3vh]`
-  - [ ] Lint + typecheck pass
+- [x] **Phase 1: Shell Upgrade + Admin Side Panel**
+  - [x] `AdminShell` component wraps layout
+  - [x] `AdminSidePanel` with AI/Logs/Chat stub tabs (h-10 tabs, ChevronRight collapse, X close)
+  - [x] `PageHeader` component applied to overview page
+  - [x] `h-screen` replaces `h-[105.3vh]`
+  - [x] `typecheck` script added to package.json
+  - [x] Lint + typecheck pass
 
 - [ ] **Phase 2: Platform Analytics Charts**
   - [ ] `recharts` installed
