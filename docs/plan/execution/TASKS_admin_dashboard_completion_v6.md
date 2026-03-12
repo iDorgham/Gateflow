@@ -43,12 +43,12 @@
   - [x] Returns 503 if GEMINI_API_KEY missing; 401 if not admin
   - [x] Lint + typecheck pass
 
-- [ ] **Phase 6: Finance & Plans / Billing**
-  - [ ] Finance nav item in sidebar
-  - [ ] Finance page with MRR, subscriptions table, plan chart
-  - [ ] Finance API route
-  - [ ] Stripe placeholder section
-  - [ ] Lint + typecheck pass
+- [x] **Phase 6: Finance & Plans / Billing**
+  - [x] Finance nav item in sidebar (Revenue group with CreditCard icon)
+  - [x] Finance page: 3 KPI cards (MRR, PRO count, FREE count) + PlanTrendChart + SubscriptionTable
+  - [x] Finance API route with MRR calculation (FREE=$0, PRO=$99)
+  - [x] BillingPlaceholder with "Coming Q4 2026" badge and feature list
+  - [x] Lint + typecheck pass
 
 - [ ] **Phase 7: Server Health Monitoring**
   - [ ] Health API route (DB + Redis + metrics)
