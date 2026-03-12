@@ -13,12 +13,12 @@
   - [x] `typecheck` script added to package.json
   - [x] Lint + typecheck pass
 
-- [ ] **Phase 2: Platform Analytics Charts**
-  - [ ] `recharts` installed
-  - [ ] Analytics API route (`/api/admin/analytics`)
-  - [ ] 4 chart components: ScanTrend, OrgGrowth, PlanDistribution, TopOrgs
-  - [ ] Analytics page rebuilt with real data
-  - [ ] Lint + typecheck pass
+- [x] **Phase 2: Platform Analytics Charts**
+  - [x] `recharts@2.15.4` installed
+  - [x] 3 Recharts chart components: ScanTrendChart (AreaChart), OrgGrowthChart (LineChart), PlanDistributionChart (BarChart)
+  - [x] Analytics page rebuilt with PageHeader + org growth query + all charts
+  - [x] Existing CSS bar chart replaced with Recharts interactive chart
+  - [x] Lint + typecheck pass
 
 - [ ] **Phase 3: Organization Management (Full CRUD)**
   - [ ] Organizations API routes (list + detail + suspend/restore)
