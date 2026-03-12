@@ -71,26 +71,16 @@
   - [x] 5 API test files, 10 test cases — all pass (`pnpm test`)
   - [x] Analytics API route created (`/api/admin/analytics`)
   - [x] `PRD_v7.0.md` admin dashboard updated to ~85%, feature table updated
-  - [x] Lint + typecheck + test all pass
-  - [ ] **Tests blocked by Node.js 25 compatibility issue** (known issue with jest-environment-node, see below)
+  - [x] Lint + typecheck + test all pass ✅
 
 ---
 
-### ⚠️ Node.js 25 Compatibility Issue
+### ✅ Tests Verified Working
 
-**Problem:** Running tests with Node.js 25.x fails with:
+**Node.js 20** is now set as the default. All tests pass:
 
-```
-SecurityError: Cannot initialize local storage without a `--localstorage-file` path
-```
-
-**Cause:** Node.js 25 changed how localStorage works in the test environment, which breaks jest-environment-node.
-
-**Solution:** Either:
-
-1. Use Node.js 20 LTS (recommended)
-2. Wait for Jest to release a fix
-3. Skip tests until resolved
+- Test Suites: 5 passed
+- Tests: 10 passed
 
 ---
 
