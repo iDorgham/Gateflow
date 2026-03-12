@@ -7,6 +7,7 @@ import {
   Pressable,
   ActivityIndicator,
   RefreshControl,
+  Alert,
 } from 'react-native';
 import { router } from 'expo-router';
 import { residentFetch } from '../../../lib/api';
@@ -80,6 +81,34 @@ export default function QRsScreen() {
 
   const onRefresh = () => fetchList(true);
 
+  const handleDelete = (item: CachedVisitor) => {
+    Alert.alert(
+      'Delete pass',
+      `Delete visitor pass for ${item.visitorName ?? 'this visitor'}? This cannot be undone.`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              const res = await residentFetch(`/resident/visitors/${item.id}`, { method: 'DELETE' });
+              if (res.status === 401) { router.replace('/login'); return; }
+              if (res.ok) {
+                setVisitors((prev) => prev.filter((v) => v.id !== item.id));
+              } else {
+                const data = await res.json() as { message?: string };
+                Alert.alert('Error', data.message ?? 'Failed to delete pass.');
+              }
+            } catch {
+              Alert.alert('Error', 'Network error. Please try again.');
+            }
+          },
+        },
+      ]
+    );
+  };
+
   if (loading && visitors.length === 0) {
     return (
       <View style={[styles.container, styles.centered]}>
@@ -120,7 +149,7 @@ export default function QRsScreen() {
             <View style={styles.card}>
               <Text style={styles.emptyText}>No visitor passes yet.</Text>
               <Text style={styles.emptySubtext}>
-                Create passes in the resident portal to see them here.
+                Tap + to create your first visitor pass.
               </Text>
             </View>
           }
@@ -133,21 +162,41 @@ export default function QRsScreen() {
               ]}
               onPress={() => router.push(`/visitors/${item.id}`)}
             >
-              <Text style={styles.cardTitle} numberOfLines={1}>
-                {item.visitorName ??
-                  (item.isOpenQR ? 'Open QR' : 'Visitor pass')}
-              </Text>
-              {item.unit?.name ? (
-                <Text style={styles.cardSubtext}>{item.unit.name}</Text>
-              ) : null}
-              <Text style={styles.cardMeta}>
-                {item.isOpenQR ? 'Open' : 'One-time'} •{' '}
-                {new Date(item.createdAt).toLocaleDateString()}
-              </Text>
+              <View style={styles.cardRow}>
+                <View style={styles.cardContent}>
+                  <Text style={styles.cardTitle} numberOfLines={1}>
+                    {item.visitorName ??
+                      (item.isOpenQR ? 'Open QR' : 'Visitor pass')}
+                  </Text>
+                  {item.unit?.name ? (
+                    <Text style={styles.cardSubtext}>{item.unit.name}</Text>
+                  ) : null}
+                  <Text style={styles.cardMeta}>
+                    {item.isOpenQR ? 'Open' : item.accessRule?.type ?? 'One-time'} •{' '}
+                    {new Date(item.createdAt).toLocaleDateString()}
+                  </Text>
+                </View>
+                <Pressable
+                  style={styles.deleteButton}
+                  onPress={() => handleDelete(item)}
+                  hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+                >
+                  <Text style={styles.deleteButtonText}>✕</Text>
+                </Pressable>
+              </View>
             </Pressable>
           )}
         />
       )}
+
+      {/* FAB — create new visitor pass */}
+      <Pressable
+        style={({ pressed }) => [styles.fab, pressed && styles.fabPressed]}
+        onPress={() => router.push('/qrs/new')}
+        accessibilityLabel="Create visitor pass"
+      >
+        <Text style={styles.fabText}>+</Text>
+      </Pressable>
     </View>
   );
 }
@@ -187,6 +236,53 @@ const styles = StyleSheet.create({
   listCard: {},
   listCardPressed: {
     opacity: 0.9,
+  },
+  cardRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  cardContent: {
+    flex: 1,
+  },
+  deleteButton: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#FEE2E2',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginStart: spacing.lg,
+  },
+  deleteButtonText: {
+    fontSize: 14,
+    color: colors.danger,
+    fontWeight: '700',
+  },
+  fab: {
+    position: 'absolute',
+    bottom: 28,
+    end: 24,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 6,
+    shadowColor: colors.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.35,
+    shadowRadius: 8,
+  },
+  fabPressed: {
+    opacity: 0.85,
+    transform: [{ scale: 0.96 }],
+  },
+  fabText: {
+    fontSize: 28,
+    fontWeight: '300',
+    color: colors.primaryForeground,
+    lineHeight: 32,
   },
   cardTitle: {
     fontSize: 17,

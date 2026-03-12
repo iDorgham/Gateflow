@@ -20,7 +20,7 @@ function PushNotificationInitializer({
         }
 
         const { registerForPushNotificationsAsync } =
-          await import('./lib/push-notifications');
+          await import('../lib/push-notifications');
         await registerForPushNotificationsAsync();
       } catch (error) {
         console.log('Push notifications not available:', error);
@@ -65,6 +65,13 @@ export default function RootLayout() {
           name="visitors/[id]"
           options={{
             title: 'Visitor pass',
+          }}
+        />
+        <Stack.Screen
+          name="qrs/new"
+          options={{
+            title: 'New visitor pass',
+            presentation: 'modal',
           }}
         />
       </Stack>

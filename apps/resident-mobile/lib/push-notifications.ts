@@ -61,7 +61,8 @@ export async function registerForPushNotificationsAsync(): Promise<
 
 async function sendPushTokenToServer(pushToken: string) {
   try {
-    const deviceId = await Device.getDeviceIdAsync();
+    const deviceType = await Device.getDeviceTypeAsync();
+    const deviceId = `${deviceType}-${Platform.OS}`;
     await residentFetch('/resident/push-token', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
