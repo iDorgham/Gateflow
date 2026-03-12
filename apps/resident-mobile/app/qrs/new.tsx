@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Text,
   View,
@@ -10,9 +10,12 @@ import {
   Alert,
   KeyboardAvoidingView,
   Platform,
+  Share,
 } from 'react-native';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
+import * as Sharing from 'expo-sharing';
 import { residentFetch } from '../../lib/api';
+import { ContactPickerButton } from '../../components/ContactPickerButton';
 import { theme } from '../../lib/theme';
 
 const { colors, spacing, borderRadius, shadows } = theme;
@@ -27,13 +30,22 @@ const ACCESS_TYPES: { key: AccessType; label: string; description: string }[] = 
 ];
 
 export default function CreateQRScreen() {
-  const [visitorName, setVisitorName] = useState('');
-  const [visitorPhone, setVisitorPhone] = useState('');
+  // Pre-fill params from contact picker
+  const params = useLocalSearchParams<{ prefillName?: string; prefillPhone?: string }>();
+
+  const [visitorName, setVisitorName] = useState(params.prefillName ?? '');
+  const [visitorPhone, setVisitorPhone] = useState(params.prefillPhone ?? '');
   const [accessType, setAccessType] = useState<AccessType>('ONETIME');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Sync if navigated back from contact-picker with params
+  useEffect(() => {
+    if (params.prefillName) setVisitorName(params.prefillName);
+    if (params.prefillPhone) setVisitorPhone(params.prefillPhone);
+  }, [params.prefillName, params.prefillPhone]);
 
   const validate = (): string | null => {
     if (!visitorName.trim()) return 'Visitor name is required.';
@@ -86,16 +98,27 @@ export default function CreateQRScreen() {
       });
       if (res.status === 401) { router.replace('/login'); return; }
 
-      const data = await res.json() as { success?: boolean; message?: string };
+      const data = await res.json() as { success?: boolean; message?: string; data?: { qrCode?: { code?: string } } };
       if (!res.ok || !data.success) {
         setError(data.message ?? 'Failed to create visitor pass.');
         setLoading(false);
         return;
       }
 
-      Alert.alert('Pass created', `Visitor pass for ${visitorName.trim()} is ready.`, [
-        { text: 'OK', onPress: () => router.back() },
-      ]);
+      // Try to share the QR link via OS share sheet
+      const qrCode = data.data?.qrCode?.code;
+      const shareMessage = `Your gate pass for ${visitorName.trim()} is ready.\n\n${qrCode ?? ''}`;
+      const canShare = await Sharing.isAvailableAsync();
+
+      if (canShare && qrCode) {
+        try {
+          await Share.share({ message: shareMessage, title: 'Visitor pass' });
+        } catch {
+          // share dismissed or unavailable — continue
+        }
+      }
+
+      router.back();
     } catch {
       setError('Network error. Please try again.');
     } finally {
@@ -114,6 +137,17 @@ export default function CreateQRScreen() {
         keyboardShouldPersistTaps="handled"
       >
         <Text style={styles.sectionLabel}>Visitor details</Text>
+
+        {/* Contact picker — navigates to full picker screen */}
+        <ContactPickerButton
+          onContactSelected={(name, phone) => {
+            setVisitorName(name);
+            setVisitorPhone(phone);
+          }}
+          onFallback={() => {
+            // Permission denied — user stays in manual entry mode
+          }}
+        />
 
         <View style={styles.fieldGroup}>
           <Text style={styles.label}>Name *</Text>

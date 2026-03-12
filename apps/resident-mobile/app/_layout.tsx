@@ -74,6 +74,13 @@ export default function RootLayout() {
             presentation: 'modal',
           }}
         />
+        <Stack.Screen
+          name="contact-picker"
+          options={{
+            title: 'Select contact',
+            presentation: 'modal',
+          }}
+        />
       </Stack>
       <StatusBar style="dark" />
     </PushNotificationInitializer>

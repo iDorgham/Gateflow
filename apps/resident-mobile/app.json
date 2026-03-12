@@ -14,13 +14,17 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.gateflow-resident"
+      "bundleIdentifier": "com.anonymous.gateflow-resident",
+      "infoPlist": {
+        "NSContactsUsageDescription": "GateFlow uses your contacts to quickly fill in visitor details when creating a guest pass."
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#0f172a"
-      }
+      },
+      "permissions": ["android.permission.READ_CONTACTS"]
     },
     "web": {
       "bundler": "metro",
