@@ -1,7 +1,9 @@
-import { Stack } from 'expo-router';
+import { Stack, router } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import * as Notifications from 'expo-notifications';
 import { getValidAccessToken } from '../lib/auth-client';
+import { registerForPushNotificationsAsync } from '../lib/push-notifications';
 
 function PushNotificationInitializer({
   children,
@@ -9,6 +11,7 @@ function PushNotificationInitializer({
   children: React.ReactNode;
 }) {
   const [ready, setReady] = useState(false);
+  const responseListenerRef = useRef<Notifications.Subscription | null>(null);
 
   useEffect(() => {
     async function initPush() {
@@ -19,8 +22,6 @@ function PushNotificationInitializer({
           return;
         }
 
-        const { registerForPushNotificationsAsync } =
-          await import('../lib/push-notifications');
         await registerForPushNotificationsAsync();
       } catch (error) {
         console.log('Push notifications not available:', error);
@@ -30,6 +31,16 @@ function PushNotificationInitializer({
     }
 
     initPush();
+
+    // Deep link: tapping a notification opens the History tab
+    responseListenerRef.current =
+      Notifications.addNotificationResponseReceivedListener(() => {
+        router.push('/(tabs)/history');
+      });
+
+    return () => {
+      responseListenerRef.current?.remove();
+    };
   }, []);
 
   if (!ready) {

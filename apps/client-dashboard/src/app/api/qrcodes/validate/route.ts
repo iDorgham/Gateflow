@@ -411,6 +411,12 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     });
 
     emitEvent(claims.orgId, EventType.SCAN_RECORDED, { scanId: scanLog.id, gateId, qrCodeId: qrCode.id }).catch(() => {});
+
+    // If this is a VisitorQR, notify the resident via Expo Push (fire-and-forget)
+    if (qrCode.visitorQR) {
+      notifyResidentOfVisitorScan(qrCode.visitorQR, gateId, claims.orgId).catch(() => {});
+    }
+
     return json<QRValidateResponse>({ status: 'accepted', scanId: scanLog.id }, 200);
   } catch (error) {
     if (error instanceof UsageLimitError) {
@@ -449,6 +455,59 @@ const REJECTION_STATUS_MAP: Record<string, 'EXPIRED' | 'MAX_USES_REACHED' | 'INA
     inactive: 'INACTIVE',
     denied: 'DENIED',
   };
+
+/**
+ * Send an Expo Push notification to the resident who owns a VisitorQR.
+ * Best-effort: never throws, never blocks the scan response.
+ */
+async function notifyResidentOfVisitorScan(
+  visitorQR: { unitId: string; visitorName?: string | null; createdBy: string },
+  gateId: string,
+  orgId: string,
+): Promise<void> {
+  try {
+    // Resolve resident user and their push token
+    const unit = await prisma.unit.findFirst({
+      where: { id: visitorQR.unitId, organizationId: orgId, deletedAt: null },
+      include: { user: { select: { id: true, preferences: true } } },
+    });
+    if (!unit?.user) return;
+
+    const prefs = unit.user.preferences as Record<string, unknown> | null;
+    const expoPushToken = typeof prefs?.expoPushToken === 'string' ? prefs.expoPushToken : null;
+    if (!expoPushToken) return;
+
+    // Resolve gate name for the notification body
+    const gate = await prisma.gate.findFirst({
+      where: { id: gateId, organizationId: orgId, deletedAt: null },
+      select: { name: true },
+    });
+    const gateName = gate?.name ?? 'the gate';
+    const visitorName = visitorQR.visitorName ?? 'Your visitor';
+
+    // Send via Expo Push API (HTTPS, fire-and-forget)
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000);
+    try {
+      await fetch('https://exp.host/--/api/v2/push/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          to: expoPushToken,
+          title: 'Visitor arrived',
+          body: `${visitorName} just scanned in at ${gateName}`,
+          data: { type: 'visitor_scan', visitorQRId: visitorQR.createdBy },
+          sound: 'default',
+        }),
+        signal: controller.signal,
+      });
+    } finally {
+      clearTimeout(timeout);
+    }
+  } catch (err) {
+    console.error('[qr/validate] Expo push failed (non-fatal):', err);
+  }
+}
 
 /**
  * Append a rejection ScanLog entry for forensics / audit trail.
