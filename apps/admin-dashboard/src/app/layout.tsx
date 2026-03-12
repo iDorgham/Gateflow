@@ -3,6 +3,7 @@ import { ThemeProvider } from 'next-themes';
 import { Inter, Cairo } from 'next/font/google';
 import { I18nProvider } from '@/components/i18n/i18n-provider';
 import { Locale, isRtl } from '@/lib/i18n/i18n-config';
+import { Toaster } from 'sonner';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -33,6 +34,7 @@ export default function RootLayout({
         <I18nProvider locale={params.locale}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             {children}
+            <Toaster richColors position="top-right" />
           </ThemeProvider>
         </I18nProvider>
       </body>
