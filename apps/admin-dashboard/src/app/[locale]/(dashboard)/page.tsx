@@ -20,6 +20,7 @@ import {
   cn,
 } from '@gate-access/ui';
 import Link from 'next/link';
+import { PageHeader } from '@/components/page-header';
 
 export const metadata = { title: 'Overview' };
 
@@ -95,11 +96,11 @@ export default async function AdminOverviewPage({ params: { locale } }: { params
   ];
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">{t('overview.title')}</h1>
-        <p className="text-muted-foreground mt-1">{t('overview.subtitle')}</p>
-      </div>
+    <div className="space-y-6">
+      <PageHeader
+        title={t('overview.title')}
+        subtitle={t('overview.subtitle')}
+      />
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {stats.map((stat) => (
