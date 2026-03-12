@@ -13,6 +13,7 @@ import { NotificationDropdown } from './notification-dropdown';
 import { ProjectFilterProvider } from '@/context/ProjectFilterContext';
 import { getCsrfToken } from '@/lib/csrf';
 import { Locale } from '@/lib/i18n-config';
+import { useRealtimeEvents } from '@/lib/realtime/use-realtime-events';
 import {
   SheetContent,
   Button,
@@ -101,6 +102,10 @@ export function DashboardShell({
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [isSidePanelOpen, setIsSidePanelOpen] = useState(false);
   const [expiredQRs, setExpiredQRs] = useState<ExpiredQR[]>([]);
+
+  // Open a single SSE connection for this tab; invalidates TanStack Query
+  // caches on org-scoped events so all pages stay live without page reloads.
+  useRealtimeEvents();
   const pathname = usePathname();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();

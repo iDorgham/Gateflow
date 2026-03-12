@@ -75,5 +75,9 @@ export function useQRCodes(filters: QRCodesFilters) {
     queryFn: () => fetchQRCodes(filters),
     staleTime: 30 * 1000,
     gcTime: 5 * 60 * 1000,
+    // Fallback polling: ensures data is never more than 30 s stale
+    // if the SSE connection drops. SSE invalidation is the primary path.
+    refetchInterval: 30 * 1000,
+    refetchOnWindowFocus: true,
   });
 }

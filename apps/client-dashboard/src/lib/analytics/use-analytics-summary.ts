@@ -23,7 +23,7 @@ function buildSummaryUrl(filters: AnalyticsFilters): string {
   return `/api/analytics/summary?${sp.toString()}`;
 }
 
-const POLL_INTERVAL_MS = 45_000;
+const POLL_INTERVAL_MS = 20_000;
 const STALE_TIME_MS = 60_000;
 
 async function fetchSummary(filters: AnalyticsFilters): Promise<SummaryData> {
