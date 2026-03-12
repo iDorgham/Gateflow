@@ -13,6 +13,8 @@ import {
   AlertCircle,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, Badge, cn } from '@gate-access/ui';
+import { PageHeader } from '@/components/page-header';
+import { CompliancePlaceholder } from '@/components/settings/CompliancePlaceholder';
 
 export const metadata = { title: 'Settings' };
 
@@ -107,35 +109,33 @@ export default async function SettingsPage({
   const missingCount = sections.flatMap((s) => s.items).filter((i) => !i.ok).length;
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">{t('settings.title')}</h1>
-          <p className="text-muted-foreground mt-1">
-            {t('settings.subtitle')}
-          </p>
-        </div>
-        <Badge
-          className={cn(
-            'font-bold text-[11px] px-3 py-1.5',
-            missingCount === 0
-              ? 'bg-emerald-500 text-white border-none'
-              : 'bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-700'
-          )}
-        >
-          {missingCount === 0 ? (
-            <span className="flex items-center gap-1.5">
-              <CheckCircle2 className="h-3.5 w-3.5" />
-              {t('settings.allConfigPresent')}
-            </span>
-          ) : (
-            <span className="flex items-center gap-1.5">
-              <AlertCircle className="h-3.5 w-3.5" />
-              {missingCount === 1 ? t('settings.missingConfig', { count: missingCount }) : t('settings.missingConfigs', { count: missingCount })}
-            </span>
-          )}
-        </Badge>
-      </div>
+    <div className="space-y-6">
+      <PageHeader
+        title={t('settings.title')}
+        subtitle={t('settings.subtitle')}
+        badge={
+          <Badge
+            className={cn(
+              'font-bold text-[11px] px-2.5 py-1',
+              missingCount === 0
+                ? 'bg-emerald-500 text-white border-none'
+                : 'bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-700'
+            )}
+          >
+            {missingCount === 0 ? (
+              <span className="flex items-center gap-1.5">
+                <CheckCircle2 className="h-3.5 w-3.5" />
+                {t('settings.allConfigPresent')}
+              </span>
+            ) : (
+              <span className="flex items-center gap-1.5">
+                <AlertCircle className="h-3.5 w-3.5" />
+                {missingCount === 1 ? t('settings.missingConfig', { count: missingCount }) : t('settings.missingConfigs', { count: missingCount })}
+              </span>
+            )}
+          </Badge>
+        }
+      />
 
       <div className="grid gap-6 lg:grid-cols-2">
         {sections.map((section) => {
@@ -192,6 +192,9 @@ export default async function SettingsPage({
           );
         })}
       </div>
+
+      {/* Compliance placeholder */}
+      <CompliancePlaceholder />
 
       <div className="rounded-xl border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/10 p-4">
         <div className="flex items-start gap-3">

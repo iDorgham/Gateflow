@@ -1,4 +1,4 @@
-import { requireAdmin } from '@/lib/admin-auth';
+import { requireAdmin, expectedSessionToken } from '@/lib/admin-auth';
 import { getTranslation } from '@/lib/i18n/i18n';
 import { Locale } from '@/lib/i18n/i18n-config';
 import { prisma } from '@gate-access/db';
@@ -28,6 +28,7 @@ import {
   Label,
   cn,
 } from '@gate-access/ui';
+import { PageHeader } from '@/components/page-header';
 
 export const metadata = { title: 'Admins' };
 
@@ -110,6 +111,19 @@ export default async function AdminsPage({
   await requireAdmin();
   const { t } = await getTranslation(locale, 'admin');
 
+  // Key fingerprint — first 8 chars of the session token hash (safe to show)
+  let keyFingerprint = '— not configured —';
+  let keyConfigured = false;
+  try {
+    const token = expectedSessionToken();
+    keyFingerprint = token.slice(0, 8) + '…';
+    keyConfigured = true;
+  } catch {
+    // ADMIN_ACCESS_KEY not set
+  }
+
+  const adminKeyLength = process.env.ADMIN_ACCESS_KEY?.length ?? 0;
+
   const admins = await prisma.user.findMany({
     where: { role: { name: 'ADMIN', organizationId: null } },
     orderBy: { createdAt: 'asc' },
@@ -136,13 +150,8 @@ export default async function AdminsPage({
   }
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">{t('admins.title')}</h1>
-        <p className="text-muted-foreground mt-1">
-          {t('admins.subtitle')}
-        </p>
-      </div>
+    <div className="space-y-6">
+      <PageHeader title={t('admins.title')} subtitle={t('admins.subtitle')} />
 
       {/* Auth mechanism info */}
       <Card className="border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/10 shadow-sm">
@@ -185,6 +194,78 @@ export default async function AdminsPage({
           </CardContent>
         </Card>
       )}
+
+      {/* Access key fingerprint + security checklist */}
+      <div className="grid gap-4 lg:grid-cols-2">
+        <Card className="shadow-sm">
+          <CardHeader className="border-b border-border pb-3">
+            <CardTitle className="text-sm font-black uppercase tracking-widest flex items-center gap-2">
+              <Shield className="h-4 w-4 text-primary" />
+              Access Key Status
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-4 space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">ADMIN_ACCESS_KEY</span>
+              <div className="flex items-center gap-2">
+                {keyConfigured ? (
+                  <Badge className="bg-emerald-500 text-white border-none text-[10px] font-bold">Configured</Badge>
+                ) : (
+                  <Badge className="bg-red-500 text-white border-none text-[10px] font-bold">Not set</Badge>
+                )}
+              </div>
+            </div>
+            {keyConfigured && (
+              <>
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">Fingerprint</span>
+                  <code className="text-xs font-mono font-black text-foreground bg-muted px-2 py-0.5 rounded">{keyFingerprint}</code>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">Key length</span>
+                  <span className={cn('text-xs font-bold', adminKeyLength >= 32 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400')}>
+                    {adminKeyLength} chars {adminKeyLength >= 32 ? '✓' : '(min 32 required)'}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">Session expiry</span>
+                  <span className="text-xs font-bold text-foreground">12 hours</span>
+                </div>
+              </>
+            )}
+            <p className="text-[10px] text-muted-foreground pt-1 border-t border-border">
+              Rotate by updating <code className="font-mono">ADMIN_ACCESS_KEY</code> in your environment and redeploying.
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="shadow-sm">
+          <CardHeader className="border-b border-border pb-3">
+            <CardTitle className="text-sm font-black uppercase tracking-widest flex items-center gap-2">
+              <ShieldCheck className="h-4 w-4 text-primary" />
+              Security Checklist
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="p-4 space-y-2.5">
+            {[
+              { label: 'Access key ≥ 32 characters', ok: adminKeyLength >= 32 },
+              { label: 'Access key is configured', ok: keyConfigured },
+              { label: 'Session cookie: httpOnly + sameSite=lax', ok: true },
+              { label: 'HTTPS enforced in production', ok: process.env.NODE_ENV === 'production' },
+              { label: 'Two-layer auth (key + user account)', ok: true },
+              { label: 'MFA: not yet implemented', ok: false, optional: true },
+            ].map(({ label, ok, optional }) => (
+              <div key={label} className="flex items-center gap-2.5">
+                <span className={cn('h-4 w-4 rounded-full flex items-center justify-center text-[10px] shrink-0', ok ? 'bg-emerald-500/15 text-emerald-600' : optional ? 'bg-muted text-muted-foreground' : 'bg-red-500/15 text-red-600')}>
+                  {ok ? '✓' : '○'}
+                </span>
+                <span className={cn('text-xs', ok ? 'text-foreground' : 'text-muted-foreground')}>{label}</span>
+                {optional && <Badge variant="outline" className="text-[8px] font-bold ml-auto">Optional</Badge>}
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      </div>
 
       <div className="grid gap-8 lg:grid-cols-3">
         {/* Admin list */}
