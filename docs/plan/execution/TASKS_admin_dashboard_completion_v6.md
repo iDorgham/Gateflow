@@ -20,12 +20,13 @@
   - [x] Existing CSS bar chart replaced with Recharts interactive chart
   - [x] Lint + typecheck pass
 
-- [ ] **Phase 3: Organization Management (Full CRUD)**
-  - [ ] Organizations API routes (list + detail + suspend/restore)
-  - [ ] `OrgTable` component
-  - [ ] `OrgDetailSheet` component
-  - [ ] Search + filter + pagination working
-  - [ ] Lint + typecheck pass
+- [x] **Phase 3: Organization Management (Full CRUD)**
+  - [x] Organizations API routes: GET list + GET detail + PATCH (suspend/restore/plan change)
+  - [x] `OrgsClient` client component with clickable table rows
+  - [x] `OrgDetailSheet` — stats (users, gates, QR codes, total scans, this month), suspend/restore
+  - [x] Search + plan filter + status filter working (server-side)
+  - [x] `sonner` Toaster added to root layout
+  - [x] Lint + typecheck pass
 
 - [ ] **Phase 4: Global User Management**
   - [ ] Users API routes (list + detail + role change + deactivate)
