@@ -28,12 +28,12 @@
   - [x] `sonner` Toaster added to root layout
   - [x] Lint + typecheck pass
 
-- [ ] **Phase 4: Global User Management**
-  - [ ] Users API routes (list + detail + role change + deactivate)
-  - [ ] `UserTable` component
-  - [ ] `UserDetailSheet` component
-  - [ ] Security: admin cannot deactivate themselves
-  - [ ] Lint + typecheck pass
+- [x] **Phase 4: Global User Management**
+  - [x] Users API routes: GET list + GET detail + PATCH (deactivate/reactivate/role change)
+  - [x] `UsersClient` wrapper with clickable table rows + filters (search, role, status)
+  - [x] `UserDetailSheet` — scan stats, role change select, deactivate/reactivate
+  - [x] Security: cannot deactivate ADMIN role users; cannot elevate to ADMIN via PATCH
+  - [x] Lint + typecheck pass
 
 - [ ] **Phase 5: Admin AI Assistant**
   - [ ] `ai`, `@ai-sdk/anthropic`, `zod` installed
