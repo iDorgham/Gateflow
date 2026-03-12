@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma } from '@gate-access/db';
+import { emitEvent, EventType } from '@/lib/realtime/emit-event';
 
 export async function GET(
   _request: NextRequest,
@@ -80,6 +81,11 @@ export async function DELETE(
         deletedAt: new Date(),
       },
     });
+
+    // Emit event so client dashboards update in real time
+    if (claims.orgId) {
+      emitEvent(claims.orgId, EventType.VISITOR_QR_DELETED, { qrId: visitorQR.qrCodeId }).catch(() => {});
+    }
 
     return NextResponse.json({
       success: true,

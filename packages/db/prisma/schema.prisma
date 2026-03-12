@@ -588,6 +588,8 @@ model Unit {
   project        Project?      @relation(fields: [projectId], references: [id])
   projectId      String?
   building       String?
+  lat            Float?        /// Unit latitude for GPS guest guide
+  lng            Float?        /// Unit longitude for GPS guest guide
   user           User?         @relation(fields: [userId], references: [id])
   userId         String?       @unique // Linked resident user
   isActive       Boolean       @default(true)

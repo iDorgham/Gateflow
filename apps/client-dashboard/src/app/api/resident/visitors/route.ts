@@ -5,6 +5,7 @@ import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma, QRCodeType as PrismaQRCodeType, AccessRuleType } from '@gate-access/db';
 import { signQRPayload, QRCodeType } from '@gate-access/types';
 import { checkAndConsumeQuota, canCreateOpenQR } from '@gate-access/db/quota';
+import { emitEvent, EventType } from '@/lib/realtime/emit-event';
 
 export const dynamic = 'force-dynamic';
 
@@ -188,6 +189,8 @@ export async function POST(request: NextRequest) {
         },
       });
     });
+
+    emitEvent(claims.orgId!, EventType.VISITOR_QR_CREATED, { qrId: visitor.qrCodeId }).catch(() => {});
 
     return NextResponse.json({
       success: true,
