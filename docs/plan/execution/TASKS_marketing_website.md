@@ -6,7 +6,7 @@
 
 | Phase | Title | Status |
 |---|---|---|
-| 1 | Homepage: conversion sections | pending |
+| 1 | Homepage: conversion sections | complete ✅ |
 | 2 | Solutions pages: vertical content | pending |
 | 3 | Blog: MDX infra + 4 launch posts | pending |
 | 4 | Contact form backend (Resend) | pending |
