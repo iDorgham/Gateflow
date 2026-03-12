@@ -2,6 +2,7 @@
 
 import { useTransition, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useQueryClient } from '@tanstack/react-query';
 import { Button } from '@gate-access/ui';
 import { toast } from 'sonner';
 import { toggleQRActive, deleteQR } from './actions';
@@ -21,6 +22,7 @@ export function QRCodeActions({
   const [isPending, startTransition] = useTransition();
   const [copied, setCopied] = useState(false);
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   function copy() {
     navigator.clipboard
@@ -46,18 +48,30 @@ export function QRCodeActions({
   }
 
   function remove() {
-    if (
-      !window.confirm(
-        'Delete this QR code? This cannot be undone.',
-      )
-    )
-      return;
+    if (!window.confirm('Delete this QR code? This cannot be undone.')) return;
+
+    // Optimistic: remove row from all ['qrcodes', *] caches immediately
+    const snapshot = queryClient.getQueriesData<{ data: unknown[]; total?: number }>({ queryKey: ['qrcodes'] });
+    queryClient.setQueriesData<{ data: unknown[]; total?: number }>(
+      { queryKey: ['qrcodes'] },
+      (old) => {
+        if (!old?.data) return old;
+        return {
+          ...old,
+          data: old.data.filter((qr) => (qr as { id: string }).id !== qrId),
+          total: Math.max(0, (old.total ?? 1) - 1),
+        };
+      }
+    );
+
     startTransition(async () => {
       try {
         await deleteQR(qrId);
         toast.success('QR code deleted');
         router.refresh();
       } catch {
+        // Rollback optimistic update on error
+        snapshot.forEach(([key, value]) => queryClient.setQueryData(key, value));
         toast.error('Failed to delete QR code');
       }
     });

@@ -15,6 +15,7 @@ import {
 } from '@gate-access/ui';
 import { useTranslation } from 'react-i18next';
 import { ChevronLeft, ChevronRight, Download, Plus, RefreshCw, Trash2 } from 'lucide-react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useQRCodes } from '@/lib/qrcodes/use-qrcodes';
 import { QRCodesTable } from '@/components/dashboard/qrcodes/QRCodesTable';
 import { PageHeader } from '@/components/dashboard/page-header';
@@ -87,6 +88,7 @@ export default function QRCodesPage() {
       lastScanTo,
     ]
   );
+  const queryClient = useQueryClient();
   const { data, isLoading, isFetching, error, refetch } = useQRCodes(filters);
   const rows = data?.data ?? [];
   const total = data?.total ?? 0;
@@ -128,6 +130,19 @@ export default function QRCodesPage() {
 
   const deleteSelected = useCallback(() => {
     if (selectedIds.length === 0) return;
+
+    // Optimistic: snapshot current cache and remove selected rows immediately
+    const toDelete = new Set(selectedIds);
+    const snapshot = queryClient.getQueriesData<{ data: unknown[]; total?: number }>({ queryKey: ['qrcodes'] });
+    queryClient.setQueriesData<{ data: unknown[]; total?: number }>(
+      { queryKey: ['qrcodes'] },
+      (old) => {
+        if (!old?.data) return old;
+        const filtered = old.data.filter((qr) => !toDelete.has((qr as { id: string }).id));
+        return { ...old, data: filtered, total: Math.max(0, (old.total ?? 0) - (old.data.length - filtered.length)) };
+      }
+    );
+
     startTransition(async () => {
       try {
         const res = await fetch('/api/qrcodes/bulk-delete', {
@@ -144,12 +159,14 @@ export default function QRCodesPage() {
         );
         setSelectedIds([]);
         setDeleteOpen(false);
-        refetch();
+        refetch(); // sync with server truth
       } catch (e) {
+        // Rollback optimistic update on error
+        snapshot.forEach(([key, value]) => queryClient.setQueryData(key, value));
         toast.error(e instanceof Error ? e.message : 'Bulk delete failed');
       }
     });
-  }, [selectedIds, refetch, t]);
+  }, [selectedIds, refetch, t, queryClient]);
 
   return (
     <div className="space-y-6 pb-20">
