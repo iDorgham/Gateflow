@@ -24,6 +24,7 @@ import {
   cn,
 } from '@gate-access/ui';
 import Link from 'next/link';
+import { PageHeader } from '@/components/page-header';
 
 export const metadata = { title: 'Projects' };
 
@@ -95,25 +96,12 @@ export default async function ProjectsPage({
   ]);
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">{t('projects.title')}</h1>
-          <p className="text-muted-foreground mt-1">
-            {t('projects.subtitle')}
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <Badge variant="outline" className="bg-violet-50 dark:bg-violet-900/20 text-violet-700 dark:text-violet-300 border-violet-100 dark:border-violet-800 px-3 py-1 font-bold">
-            {t('projects.activeProjects', { count: totalActive })}
-          </Badge>
-          {totalArchived > 0 && (
-            <Badge variant="outline" className="bg-muted text-muted-foreground px-3 py-1 font-bold">
-              {t('projects.archivedProjects', { count: totalArchived })}
-            </Badge>
-          )}
-        </div>
-      </div>
+    <div className="space-y-6">
+      <PageHeader
+        title={t('projects.title')}
+        subtitle={t('projects.subtitle')}
+        badge={<Badge variant="outline" className="bg-violet-50 dark:bg-violet-900/20 text-violet-700 dark:text-violet-300 border-violet-100 dark:border-violet-800 font-bold text-xs">{t('projects.activeProjects', { count: totalActive })}</Badge>}
+      />
 
       {/* Filters */}
       <Card className="shadow-sm">

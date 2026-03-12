@@ -37,7 +37,7 @@ GateFlow consists of **5 interconnected applications**:
 
 | #   | App                   | Purpose                    | Users               | Status  |
 | --- | --------------------- | -------------------------- | ------------------- | ------- |
-| 1   | **Admin Dashboard**   | Super admin management     | Platform operators  | ~15%    |
+| 1   | **Admin Dashboard**   | Super admin management     | Platform operators  | ~85%    |
 | 2   | **Client Dashboard**  | Property/Org management    | Admins, managers    | ~80%    |
 | 3   | **Scanner App**       | Gate scanning              | Security/operators  | ~90%    |
 | 4   | **Marketing Website** | Public marketing           | Prospects           | ~20%    |
@@ -87,14 +87,18 @@ GateFlow consists of **5 interconnected applications**:
 
 ### 3.1 Admin Dashboard (apps/admin-dashboard)
 
-| Feature                  | Priority | Status |
-| ------------------------ | -------- | ------ |
-| Organization management  | P0       | ~50%   |
-| User management (global) | P0       | ~30%   |
-| System-wide analytics    | P1       | ~20%   |
-| Billing management       | P1       | 0%     |
-| Platform settings        | P2       | 0%     |
-| Compliance reporting     | P2       | 0%     |
+| Feature                     | Priority | Status                                   |
+| --------------------------- | -------- | ---------------------------------------- |
+| Organization management     | P0       | ✅ Done (list + detail sheet + suspend)  |
+| User management (global)    | P0       | ✅ Done (cross-org, role change, deactivate) |
+| System-wide analytics       | P1       | ✅ Done (Recharts: scans, orgs, plans)   |
+| AI assistant panel          | P1       | ✅ Done (Gemini + 5 admin tools)         |
+| Finance / billing overview  | P1       | ✅ Done (MRR estimate, Stripe placeholder) |
+| Server health monitoring    | P1       | ✅ Done (live 30s polling, DB/Redis)     |
+| Platform settings           | P2       | ✅ Done (env config, security checklist) |
+| Compliance reporting        | P2       | Placeholder (Coming Q4 2026)             |
+| Stripe real integration     | P2       | Not started                              |
+| MFA for admin               | P3       | Not started                              |
 
 ### 3.2 Client Dashboard (apps/client-dashboard)
 

@@ -32,6 +32,7 @@ import {
   cn,
 } from '@gate-access/ui';
 import Link from 'next/link';
+import { PageHeader } from '@/components/page-header';
 
 export const metadata = { title: 'Scan Logs' };
 
@@ -109,18 +110,12 @@ export default async function AdminScansPage({
   const totalPages = Math.ceil(total / PAGE_SIZE);
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">{t('scans.title')}</h1>
-          <p className="text-muted-foreground mt-1">{t('scans.subtitle')}</p>
-        </div>
-        <div className="flex items-center gap-2">
-          <Badge variant="outline" className="bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300 border-emerald-100 dark:border-emerald-800 px-3 py-1 font-bold">
-            {t('scans.totalRecords', { count: total })}
-          </Badge>
-        </div>
-      </div>
+    <div className="space-y-6">
+      <PageHeader
+        title={t('scans.title')}
+        subtitle={t('scans.subtitle')}
+        badge={<Badge variant="outline" className="bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300 border-emerald-100 dark:border-emerald-800 font-bold text-xs">{t('scans.totalRecords', { count: total })}</Badge>}
+      />
 
       {/* ── Filters ───────────────────────────────────────────────────────── */}
       <Card className="shadow-sm">

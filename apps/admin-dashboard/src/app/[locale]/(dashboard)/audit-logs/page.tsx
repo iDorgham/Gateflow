@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { Card, CardContent, Badge, Button, Input, cn } from '@gate-access/ui';
 import Link from 'next/link';
+import { PageHeader } from '@/components/page-header';
 
 export const metadata = { title: 'Audit Logs' };
 
@@ -109,26 +110,20 @@ export default async function AuditLogsPage({
   const exportUrl = `/api/admin/audit-logs/export?${new URLSearchParams(currentParams)}`;
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">{t('auditLogs.title')}</h1>
-          <p className="text-muted-foreground mt-1">
-            {t('auditLogs.subtitle')}
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <Badge variant="outline" className="bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300 border-emerald-100 dark:border-emerald-800 px-3 py-1 font-bold">
-            {t('auditLogs.records', { count: total })}
-          </Badge>
-          <Button variant="outline" size="sm" asChild className="font-bold gap-1.5">
+    <div className="space-y-6">
+      <PageHeader
+        title={t('auditLogs.title')}
+        subtitle={t('auditLogs.subtitle')}
+        badge={<Badge variant="outline" className="bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300 border-emerald-100 dark:border-emerald-800 font-bold text-xs">{t('auditLogs.records', { count: total })}</Badge>}
+        actions={
+          <Button variant="outline" size="sm" asChild className="font-bold gap-1.5 h-9 rounded-xl">
             <a href={exportUrl} download>
               <Download className="h-3.5 w-3.5" />
               {t('auditLogs.exportCsv')}
             </a>
           </Button>
-        </div>
-      </div>
+        }
+      />
 
       {/* Filters */}
       <Card className="shadow-sm">

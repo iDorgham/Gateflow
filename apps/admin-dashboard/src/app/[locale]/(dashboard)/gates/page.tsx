@@ -25,6 +25,7 @@ import {
   cn,
 } from '@gate-access/ui';
 import Link from 'next/link';
+import { PageHeader } from '@/components/page-header';
 
 export const metadata = { title: 'Gates' };
 
@@ -111,30 +112,12 @@ export default async function GatesPage({
   ]);
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">{t('gates.title')}</h1>
-          <p className="text-muted-foreground mt-1">
-            {t('gates.subtitle')}
-          </p>
-        </div>
-        <div className="flex items-center gap-2 flex-wrap">
-          <Badge variant="outline" className="bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300 border-emerald-100 dark:border-emerald-800 px-3 py-1 font-bold">
-            {t('gates.activeGates', { count: totalActive })}
-          </Badge>
-          {totalInactive > 0 && (
-            <Badge variant="outline" className="bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-300 border-amber-100 dark:border-amber-800 px-3 py-1 font-bold">
-              {t('gates.inactiveGates', { count: totalInactive })}
-            </Badge>
-          )}
-          {totalDeleted > 0 && (
-            <Badge variant="outline" className="bg-muted text-muted-foreground px-3 py-1 font-bold">
-              {t('gates.deletedGates', { count: totalDeleted })}
-            </Badge>
-          )}
-        </div>
-      </div>
+    <div className="space-y-6">
+      <PageHeader
+        title={t('gates.title')}
+        subtitle={t('gates.subtitle')}
+        badge={<Badge variant="outline" className="bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300 border-emerald-100 dark:border-emerald-800 font-bold text-xs">{t('gates.activeGates', { count: totalActive })}</Badge>}
+      />
 
       {/* Filters */}
       <Card className="shadow-sm">
