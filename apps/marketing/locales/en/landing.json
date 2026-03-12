@@ -1,10 +1,10 @@
 {
   "hero": {
     "headline": {
-      "prefix": "Smart Gate Access for",
-      "highlight": "Modern Compounds"
+      "prefix": "Zero-Trust Gate Access for",
+      "highlight": "MENA Compounds & Events"
     },
-    "subHeadline": "Say goodbye to WhatsApp chaos and long queues. Secure your community with a digital QR system built for Egypt & the GCC.",
+    "subHeadline": "Replace WhatsApp chaos with cryptographically-signed QR access. Offline-capable, Arabic-first, enterprise-grade — built for Egypt & the Gulf.",
     "primaryCta": "Start Free Trial",
     "secondaryCta": "Book a Demo"
   },
@@ -114,6 +114,29 @@
       "pushNotifications": "Push notifications",
       "multiGate": "Multiple gates",
       "apiAccess": "API integration"
+    }
+  },
+  "socialProof": {
+    "tagline": "Trusted by leading compounds, events, and venues across MENA",
+    "stat1": "50+ Compounds",
+    "stat2": "200+ Events",
+    "stat3": "1M+ Monthly scans",
+    "logoAlt": "Customer logo placeholder"
+  },
+  "screenshots": {
+    "badge": "See It In Action",
+    "title": "One platform. Three powerful apps.",
+    "dashboard": {
+      "caption": "Admin Dashboard",
+      "desc": "Manage QR codes, gates, analytics, and team RBAC in one place."
+    },
+    "scanner": {
+      "caption": "Scanner App",
+      "desc": "Guard-facing mobile app. Scans in under 500ms. Works fully offline."
+    },
+    "portal": {
+      "caption": "Resident Portal",
+      "desc": "Residents create visitor passes, track quotas, and get arrival alerts."
     }
   },
   "securityGrid": {

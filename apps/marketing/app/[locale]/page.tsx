@@ -5,10 +5,12 @@ import { TrustBar } from '../../components/sections/trust-bar';
 import { SecurityGrid } from '../../components/sections/security-grid';
 import { BottomCTA } from '../../components/sections/bottom-cta';
 import { StatsSection } from '../../components/sections/stats-section';
+import { SocialProof } from '../../components/sections/social-proof';
 import { HowItWorksSection } from '../../components/sections/how-it-works';
+import { ProductScreenshots } from '../../components/sections/product-screenshots';
 import { TestimonialsSection } from '../../components/sections/testimonials';
 import { ComparisonSection } from '../../components/sections/comparison';
-import { Shield, Zap, Smartphone, BarChart3, CheckCircle2 } from 'lucide-react';
+import { Shield, Zap, Smartphone, BarChart3 } from 'lucide-react';
 
 export default async function HomePage({
   params: { locale },
@@ -22,6 +24,9 @@ export default async function HomePage({
       <Hero locale={locale} />
       <TrustBar locale={locale} />
       <StatsSection locale={locale} />
+      <SocialProof locale={locale} />
+      <HowItWorksSection locale={locale} />
+      <ProductScreenshots locale={locale} />
 
       {/* Problem/Solution Section */}
       <section className="py-24 bg-muted/20">
@@ -60,7 +65,6 @@ export default async function HomePage({
         </div>
       </section>
 
-      <HowItWorksSection locale={locale} />
       <TestimonialsSection locale={locale} />
       <ComparisonSection locale={locale} />
       <SecurityGrid locale={locale} />
