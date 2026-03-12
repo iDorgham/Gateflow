@@ -3,6 +3,7 @@
 import { cn, Tabs, TabsList, TabsTrigger, TabsContent, Button } from '@gate-access/ui';
 import { Sparkles, ScrollText, MessageSquare, X, ChevronRight } from 'lucide-react';
 import type { Locale } from '@/lib/i18n/i18n-config';
+import { AdminAIAssistant } from './admin-ai-assistant';
 
 interface AdminSidePanelProps {
   locale: Locale;
@@ -73,21 +74,9 @@ export function AdminSidePanel({ locale: _locale, isOpen, onToggle }: AdminSideP
             </Button>
           </div>
 
-          {/* AI tab — placeholder until Phase 5 */}
+          {/* AI tab — live assistant */}
           <TabsContent value="ai" className="flex-1 overflow-hidden m-0">
-            <div className="flex h-full flex-col items-center justify-center gap-3 p-6 text-center">
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                <Sparkles className="h-7 w-7" />
-              </div>
-              <div>
-                <p className="text-sm font-black uppercase tracking-tight text-foreground">
-                  GateFlow Admin AI
-                </p>
-                <p className="text-xs text-muted-foreground mt-0.5">
-                  Platform assistant — coming in Phase 5
-                </p>
-              </div>
-            </div>
+            <AdminAIAssistant locale={_locale} />
           </TabsContent>
 
           {/* Logs tab — placeholder */}
