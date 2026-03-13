@@ -16,7 +16,7 @@
   <a href="https://github.com/iDorgham/Gateflow/network/members">
     <img src="https://img.shields.io/github/forks/iDorgham/Gateflow?style=social" alt="Forks">
   </a>
-  <img src="https://img.shields.io/badge/Status-95%25%20MVP-brightgreen" alt="Status">
+  <img src="https://img.shields.io/badge/Status-100%25%20MVP-brightgreen" alt="Status">
   <img src="https://img.shields.io/badge/Security-Strict-blue" alt="Security">
   <a href="https://twitter.com/intent/tweet?text=Check+out+GateFlow+-+Zero-Trust+Digital+Gate+Infrastructure+Platform&url=https%3A%2F%2Fgithub.com%2FiDorgham%2FGateflow">
     <img src="https://img.shields.io/badge/Tweet-Share-blue" alt="Tweet">
@@ -52,15 +52,15 @@ GateFlow is a **next-generation digital gate infrastructure platform** designed 
 
 ## 🎯 Who is it for?
 
-| Persona | Description |
-| ------- | ----------- |
-| **Property Managers** | Compound managers who need secure, auditable visitor access |
-| **Event Organizers** | Wedding planners, corporate event managers who need reliable gate control |
-| **Security Heads** | Supervisors who need live visibility and operator accountability |
-| **Gate Operators** | Security guards who need fast, reliable scanning with offline support |
-| **Residents** | Unit owners who want self-service guest management |
+| Persona                    | Description                                                                  |
+| -------------------------- | ---------------------------------------------------------------------------- |
+| **Property Managers**      | Compound managers who need secure, auditable visitor access                  |
+| **Event Organizers**       | Wedding planners, corporate event managers who need reliable gate control    |
+| **Security Heads**         | Supervisors who need live visibility and operator accountability             |
+| **Gate Operators**         | Security guards who need fast, reliable scanning with offline support        |
+| **Residents**              | Unit owners who want self-service guest management                           |
 | **Real Estate Developers** | Marketing teams who need attribution between digital ads and physical visits |
-| **Developers** | IT teams who need REST API and webhook integrations |
+| **Developers**             | IT teams who need REST API and webhook integrations                          |
 
 ### Target Industries
 
@@ -78,16 +78,16 @@ GateFlow is a **next-generation digital gate infrastructure platform** designed 
 
 ### Before GateFlow
 
-| Pain Point | Consequence |
-| ---------- |-------------|
-| **Paper guest books** | Lost records, illegible handwriting, no searchability |
-| **WhatsApp QR chaos** | Screenshots, expired codes, no verification |
-| **No real-time visibility** | Security breaches go unnoticed |
-| **Manual tracking** | Time-consuming, error-prone |
-| **No audit trail** | Disputes cannot be resolved |
-| **Weak team separation** | No role-based access control |
-| **No marketing attribution** | Cannot track visitor sources |
-| **No offline capability** | Internet down = gates stop working |
+| Pain Point                   | Consequence                                           |
+| ---------------------------- | ----------------------------------------------------- |
+| **Paper guest books**        | Lost records, illegible handwriting, no searchability |
+| **WhatsApp QR chaos**        | Screenshots, expired codes, no verification           |
+| **No real-time visibility**  | Security breaches go unnoticed                        |
+| **Manual tracking**          | Time-consuming, error-prone                           |
+| **No audit trail**           | Disputes cannot be resolved                           |
+| **Weak team separation**     | No role-based access control                          |
+| **No marketing attribution** | Cannot track visitor sources                          |
+| **No offline capability**    | Internet down = gates stop working                    |
 
 ### After GateFlow
 
@@ -97,7 +97,7 @@ GateFlow is a **next-generation digital gate infrastructure platform** designed 
 ✅ **Complete audit trail** — Full history for disputes and compliance  
 ✅ **Role-based access** — Granular permissions for every team member  
 ✅ **Marketing-first** — UTM tracking, Meta Pixel, CRM webhooks  
-✅ **Resident self-service** — Guests create their own passes  
+✅ **Resident self-service** — Guests create their own passes
 
 ---
 
@@ -143,24 +143,24 @@ GateFlow is a **next-generation digital gate infrastructure platform** designed 
 
 ## 💻 Tech Stack
 
-| Category | Technology |
-|----------|------------|
-| **Web Frontend** | Next.js 14 (App Router) |
-| **Mobile (Scanner)** | Expo SDK 54 / React Native |
-| **Mobile (Resident)** | Expo SDK 54 / React Native |
-| **Database** | PostgreSQL 15+ |
-| **ORM** | Prisma 5 |
-| **Authentication** | JWT (jose) + Argon2id |
-| **Package Manager** | pnpm 8+ |
-| **Build System** | Turborepo 2 |
-| **UI Components** | Custom (shadcn/ui-style) + Tailwind CSS |
-| **QR Signing** | HMAC-SHA256 (crypto-js) |
-| **Offline Storage** | AES-256 + PBKDF2 |
-| **Rate Limiting** | Upstash Redis |
-| **Real-Time** | Server-Sent Events (SSE) |
-| **Push Notifications** | Expo Push |
-| **Testing** | Jest + ts-jest |
-| **i18n** | Arabic (RTL) + English |
+| Category               | Technology                              |
+| ---------------------- | --------------------------------------- |
+| **Web Frontend**       | Next.js 14 (App Router)                 |
+| **Mobile (Scanner)**   | Expo SDK 54 / React Native              |
+| **Mobile (Resident)**  | Expo SDK 54 / React Native              |
+| **Database**           | PostgreSQL 15+                          |
+| **ORM**                | Prisma 5                                |
+| **Authentication**     | JWT (jose) + Argon2id                   |
+| **Package Manager**    | pnpm 8+                                 |
+| **Build System**       | Turborepo 2                             |
+| **UI Components**      | Custom (shadcn/ui-style) + Tailwind CSS |
+| **QR Signing**         | HMAC-SHA256 (crypto-js)                 |
+| **Offline Storage**    | AES-256 + PBKDF2                        |
+| **Rate Limiting**      | Upstash Redis                           |
+| **Real-Time**          | Server-Sent Events (SSE)                |
+| **Push Notifications** | Expo Push                               |
+| **Testing**            | Jest + ts-jest                          |
+| **i18n**               | Arabic (RTL) + English                  |
 
 ### Shared Packages
 
@@ -198,14 +198,14 @@ Gateflow/
 
 ## 📱 The 6-App Ecosystem
 
-| # | App | Purpose | Users | Status |
-|---|-----|---------|-------|--------|
-| 1 | **Client Dashboard** | Main SaaS portal for property management | Admins, managers | ✅ 95% |
-| 2 | **Admin Dashboard** | Super-admin platform management | Platform operators | ✅ 95% |
-| 3 | **Scanner App** | Gate scanning with offline support | Security/operators | ✅ 100% |
-| 4 | **Marketing Site** | Public-facing lead generation | Prospects | ✅ 90% |
-| 5 | **Resident Portal** | Self-service guest management | Unit owners/renters | ✅ 95% |
-| 6 | **Resident Mobile** | Native mobile app for residents | Unit owners/renters | 🔄 60% |
+| #   | App                  | Purpose                                  | Users               | Status  |
+| --- | -------------------- | ---------------------------------------- | ------------------- | ------- |
+| 1   | **Client Dashboard** | Main SaaS portal for property management | Admins, managers    | ✅ 95%  |
+| 2   | **Admin Dashboard**  | Super-admin platform management          | Platform operators  | ✅ 95%  |
+| 3   | **Scanner App**      | Gate scanning with offline support       | Security/operators  | ✅ 100% |
+| 4   | **Marketing Site**   | Public-facing lead generation            | Prospects           | ✅ 90%  |
+| 5   | **Resident Portal**  | Self-service guest management            | Unit owners/renters | ✅ 95%  |
+| 6   | **Resident Mobile**  | Native mobile app for residents          | Unit owners/renters | 🔄 60%  |
 
 ---
 
@@ -256,13 +256,13 @@ pnpm turbo dev
 
 ### Development Ports
 
-| App | Port | Command |
-|-----|------|---------|
-| Marketing Site | 3000 | `pnpm turbo dev --filter=marketing` |
+| App              | Port | Command                                    |
+| ---------------- | ---- | ------------------------------------------ |
+| Marketing Site   | 3000 | `pnpm turbo dev --filter=marketing`        |
 | Client Dashboard | 3001 | `pnpm turbo dev --filter=client-dashboard` |
-| Admin Dashboard | 3002 | `pnpm turbo dev --filter=admin-dashboard` |
-| Resident Portal | 3003 | `pnpm turbo dev --filter=resident-portal` |
-| Scanner App | 8081 | `cd apps/scanner-app && npx expo start` |
+| Admin Dashboard  | 3002 | `pnpm turbo dev --filter=admin-dashboard`  |
+| Resident Portal  | 3003 | `pnpm turbo dev --filter=resident-portal`  |
+| Scanner App      | 8081 | `cd apps/scanner-app && npx expo start`    |
 
 ### Common Commands
 
@@ -292,13 +292,13 @@ pnpm turbo typecheck
 
 > **Start here:** [Documentation Hub](./docs/README.md)
 
-| Document | Description |
-|----------|-------------|
-| [PRD v7.0](./docs/PRD_v7.0.md) | Complete product requirements |
-| [Project Progress](./docs/PROJECT_PROGRESS_DASHBOARD.md) | MVP completion status |
-| [Development Guide](./docs/DEVELOPMENT_GUIDE.md) | Local setup and workspace |
-| [Security Overview](./docs/SECURITY_OVERVIEW.md) | Security architecture |
-| [API Reference](./docs/PRD_v7.0.md#11-api-reference) | REST API documentation |
+| Document                                                 | Description                   |
+| -------------------------------------------------------- | ----------------------------- |
+| [PRD v7.0](./docs/PRD_v7.0.md)                           | Complete product requirements |
+| [Project Progress](./docs/PROJECT_PROGRESS_DASHBOARD.md) | MVP completion status         |
+| [Development Guide](./docs/DEVELOPMENT_GUIDE.md)         | Local setup and workspace     |
+| [Security Overview](./docs/SECURITY_OVERVIEW.md)         | Security architecture         |
+| [API Reference](./docs/PRD_v7.0.md#11-api-reference)     | REST API documentation        |
 
 ---
 

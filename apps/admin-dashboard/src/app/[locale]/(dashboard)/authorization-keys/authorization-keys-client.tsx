@@ -88,15 +88,20 @@ export function AuthKeysClient() {
   function createKey(
     name: string,
     type: 'admin' | 'service',
-    expiresAt: string | null
+    expiresAt: string | null,
+    organizationId?: string
   ) {
     setError('');
     startCreate(async () => {
       try {
+        const payload: any = { name, type, expiresAt };
+        if (type === 'service' && organizationId) {
+          payload.organizationId = organizationId;
+        }
         const res = await fetch('/api/admin/authorization-keys', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, type, expiresAt }),
+          body: JSON.stringify(payload),
         });
 
         if (!res.ok) {
@@ -457,7 +462,8 @@ function CreateAuthKeyModal({
   onSubmit: (
     name: string,
     type: 'admin' | 'service',
-    expiresAt: string | null
+    expiresAt: string | null,
+    organizationId?: string
   ) => void;
   onClose: () => void;
   isPending: boolean;
@@ -465,14 +471,20 @@ function CreateAuthKeyModal({
   const [name, setName] = useState('');
   const [type, setType] = useState<'admin' | 'service'>('admin');
   const [expiresAt, setExpiresAt] = useState('');
+  const [organizationId, setOrganizationId] = useState('');
   const [nameError, setNameError] = useState('');
+  const [orgError, setOrgError] = useState('');
 
   function handleSubmit() {
     if (!name.trim()) {
       setNameError('Key name is required.');
       return;
     }
-    onSubmit(name.trim(), type, expiresAt || null);
+    if (type === 'service' && !organizationId.trim()) {
+      setOrgError('Organization is required for service keys.');
+      return;
+    }
+    onSubmit(name.trim(), type, expiresAt || null, organizationId.trim() || undefined);
   }
 
   const minDate = new Date(Date.now() + 86_400_000).toISOString().slice(0, 10);
@@ -592,6 +604,30 @@ function CreateAuthKeyModal({
               </label>
             </div>
           </div>
+
+          {type === 'service' && (
+            <div className="space-y-2">
+              <Label
+                htmlFor="organizationId"
+                className="text-sm font-semibold text-slate-700 dark:text-slate-300"
+              >
+                Organization
+              </Label>
+              <Input
+                id="organizationId"
+                placeholder="Enter organization ID"
+                value={organizationId}
+                onChange={(e) => {
+                  setOrganizationId(e.target.value);
+                  setOrgError('');
+                }}
+                className="rounded-lg border-slate-200 focus:ring-blue-500/20"
+              />
+              {orgError && (
+                <p className="text-xs font-medium text-red-600">{orgError}</p>
+              )}
+            </div>
+          )}
 
           <div className="space-y-2">
             <Label
