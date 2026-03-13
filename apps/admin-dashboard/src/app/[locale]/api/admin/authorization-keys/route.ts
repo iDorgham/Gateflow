@@ -80,7 +80,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
   try {
     const body = await request.json();
-    const { name, type, expiresAt, organizationId } = body;
+    let { name, type, expiresAt, organizationId } = body;
 
     if (!name || !type) {
       return NextResponse.json(
@@ -89,7 +89,9 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    if (type === 'service' && !organizationId) {
+    type = type.toUpperCase();
+
+    if (type === 'SERVICE' && !organizationId) {
       return NextResponse.json(
         {
           success: false,
@@ -110,7 +112,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         keyHash,
         keyPrefix,
         expiresAt: expiresAt ? new Date(expiresAt) : null,
-        organizationId: type === 'service' ? organizationId : null,
+        organizationId: type === 'SERVICE' ? organizationId : null,
         createdBy: 'admin',
       },
       select: {

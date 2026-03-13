@@ -94,7 +94,7 @@ export function AuthKeysClient() {
     setError('');
     startCreate(async () => {
       try {
-        const payload: any = { name, type, expiresAt };
+        const payload: any = { name, type: type.toUpperCase(), expiresAt };
         if (type === 'service' && organizationId) {
           payload.organizationId = organizationId;
         }
