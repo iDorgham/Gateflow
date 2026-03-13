@@ -19,17 +19,24 @@
     "db:studio": "prisma studio",
     "seed:compounds": "npx tsx prisma/seed-compounds.ts",
     "lint": "eslint src/",
-    "typecheck": "tsc -p tsconfig.json"
+    "typecheck": "tsc -p tsconfig.json",
+    "postinstall": "prisma generate",
+    "build": "prisma generate"
   },
   "dependencies": {
-    "@prisma/client": "^5.22.0",
     "@gate-access/types": "workspace:*",
+    "@prisma/adapter-pg": "^7.5.0",
+    "@prisma/client": "^5.22.0",
+    "argon2": "^0.41.1",
     "date-fns": "^4.1.0",
+    "dotenv": "^17.3.1",
     "faker": "^5.5.3",
-    "argon2": "^0.41.1"
+    "pg": "^8.20.0"
   },
   "devDependencies": {
     "@gate-access/config": "workspace:*",
+    "@types/node": "^20.19.33",
+    "@types/pg": "^8.18.0",
     "prisma": "^5.22.0",
     "tsx": "^4.7.1",
     "typescript": "^5.9.3"
