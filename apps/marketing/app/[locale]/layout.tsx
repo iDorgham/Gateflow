@@ -18,7 +18,7 @@ const cairo = Cairo({
   display: 'swap'
 });
 
-import { OrganizationJsonLd } from '../../components/json-ld';
+import { OrganizationJsonLd, WebSiteJsonLd } from '../../components/json-ld';
 
 export async function generateStaticParams() {
   return i18n.locales.map((locale) => ({ locale }));
@@ -67,8 +67,9 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/',
     languages: {
-      'en-US': '/en',
-      'ar-EG': '/ar-EG',
+      'en': `${BASE_URL}/en`,
+      'ar': `${BASE_URL}/ar-EG`,
+      'x-default': `${BASE_URL}/en`,
     },
   },
   icons: {
@@ -116,6 +117,7 @@ export default async function RootLayout({
     <html lang={params.locale} dir={isRtl ? 'rtl' : 'ltr'} suppressHydrationWarning>
       <head>
         <OrganizationJsonLd locale={params.locale} />
+        <WebSiteJsonLd locale={params.locale} />
         <meta name="theme-color" content="#3b82f6" />
         <link rel="manifest" href="/manifest.json" />
       </head>

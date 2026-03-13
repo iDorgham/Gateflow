@@ -52,12 +52,48 @@ const PLANS = (t: any) => [
   },
 ];
 
+const PRICING_FAQ_JSON_LD = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'Is GateFlow free to start?',
+      acceptedAnswer: { '@type': 'Answer', text: 'Yes. The Starter plan is permanently free — not a trial. It supports 1 gate and up to 500 scans per month with no credit card required.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'Can I upgrade or downgrade my plan at any time?',
+      acceptedAnswer: { '@type': 'Answer', text: 'Yes. Upgrades take effect immediately. Downgrades take effect at the end of the current billing cycle.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'What happens if I exceed my scan limit on the Starter plan?',
+      acceptedAnswer: { '@type': 'Answer', text: "On Starter (500 scans/month), scanning continues but you'll see a warning in the dashboard. We don't hard-block access — but you'll be prompted to upgrade. Pro and Enterprise have no scan limits." },
+    },
+    {
+      '@type': 'Question',
+      name: 'Do you offer annual billing discounts?',
+      acceptedAnswer: { '@type': 'Answer', text: 'Yes — annual plans include a 17% discount compared to monthly billing. Contact us to switch to annual.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'Is there a contract or long-term commitment required?',
+      acceptedAnswer: { '@type': 'Answer', text: 'No. Monthly plans can be cancelled at any time. Enterprise contracts are available for organizations that need SLAs and custom terms.' },
+    },
+  ],
+};
+
 export default async function PricingPage({ params: { locale } }: { params: { locale: Locale } }) {
   const { t } = await getTranslation(locale, 'pricing');
   const plans = PLANS(t);
 
   return (
     <div className="flex flex-col w-full pb-24">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(PRICING_FAQ_JSON_LD) }}
+      />
       {/* Header */}
       <section className="pt-20 pb-16 text-center container px-6">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/5 border border-primary/10 text-primary text-xs font-bold uppercase tracking-widest mb-6">

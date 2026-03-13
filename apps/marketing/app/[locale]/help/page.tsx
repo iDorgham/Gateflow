@@ -4,6 +4,93 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { ChevronDown, Search, MessageCircle, BookOpen, Zap } from 'lucide-react';
 
+const FAQ_JSON_LD = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'How do I create a visitor QR code?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Go to QR Codes → New QR Code. Enter the visitor name, email, select a gate and QR type (SINGLE, RECURRING, or PERMANENT), then click Generate. The QR code can be emailed directly to the visitor.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What happens if the scanner has no internet?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'The scanner app verifies QR signatures locally using the pre-loaded signing key. Scans are queued in AES-256 encrypted local storage and automatically synced when connectivity returns. No scan is ever lost.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Can residents manage their own visitors?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. The Resident Portal allows residents to create visitor QR codes, set access rules, and track quota usage. They can share QR links directly from their phone without contacting security.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How are QR codes secured against tampering?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Every QR code is signed with HMAC-SHA256 using a secret only your organization holds. A screenshot or photocopy of a SINGLE-use QR will be rejected after the first scan because the server marks it as used.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'What roles are available in GateFlow?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'GateFlow has five roles: Platform Admin (Anthropic-managed), Tenant Admin (full client dashboard access), Tenant User (limited access), Visitor (scanner app only), and Resident (resident portal). Roles are assigned per organization.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How do I export scan history?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Go to Scans → Export. Select a date range, filter by gate or QR type, and download a CSV. The export includes all scan metadata: timestamp, gate, QR code ID, status, and operator.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Can I set time-limited access for recurring visitors?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. RECURRING QR codes support access rules including day-of-week and time-of-day restrictions. For example, you can create a QR valid only on weekdays between 8am and 6pm.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'Is GateFlow available in Arabic?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Yes. GateFlow fully supports Arabic (AR-EG) with a right-to-left interface across the admin dashboard, client dashboard, marketing site, and scanner app.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: 'How do webhooks work?',
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'GateFlow sends HTTP POST requests to your configured endpoint on selected events (e.g., scan.success, qrcode.created). Each delivery is logged with status and retry history. Webhook secrets use AES-256 encryption.',
+      },
+    },
+    {
+      '@type': 'Question',
+      name: "What's the difference between Starter, Pro, and Enterprise?",
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: 'Starter is free: 1 gate, 500 scans/month, basic analytics. Pro ($49/month): unlimited gates, unlimited scans, bulk QR, webhooks, advanced analytics. Enterprise: custom pricing, SLA, dedicated support, custom integrations.',
+      },
+    },
+  ],
+};
+
 // ─── Data ──────────────────────────────────────────────────────────────────────
 
 const FAQ_SECTIONS = [
@@ -147,6 +234,10 @@ export default function HelpPage() {
 
   return (
     <main>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_JSON_LD) }}
+      />
       {/* Hero */}
       <section className="px-6 pb-12 pt-24 sm:pt-32">
         <div className="mx-auto max-w-3xl text-center">
