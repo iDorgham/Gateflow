@@ -141,9 +141,13 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       },
     });
   } catch (error) {
-    console.error('Error creating auth key:', error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error('Error creating auth key:', errorMessage);
+    if (error instanceof Error && error.stack) {
+      console.error(error.stack);
+    }
     return NextResponse.json(
-      { success: false, message: 'Failed to create authorization key' },
+      { success: false, message: `Failed to create authorization key: ${errorMessage}` },
       { status: 500 }
     );
   }
