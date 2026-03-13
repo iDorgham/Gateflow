@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { TFunction } from 'i18next';
 import {
   LayoutDashboard,
   Building2,
@@ -38,7 +39,7 @@ interface NavGroup {
 }
 
 // To support i18n safely within the component
-const getNavGroups = (t: any): NavGroup[] => [
+const getNavGroups = (t: TFunction): NavGroup[] => [
   {
     label: t('admin:nav.platform', 'Platform'),
     items: [

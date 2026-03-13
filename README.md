@@ -152,6 +152,8 @@ GateFlow consists of **6 interconnected applications** working together:
 - 🏢 **Multi-Project Support** — Organize by compound, event, or campaign
 - 👤 **Contacts (CRM)** — Full visitor relationship management with tags
 - 🏠 **Units & Residents** — Unit-based resident system with quota tracking
+- 🧬 **Advanced Seeding Matrix** — Realistic data ecosystem generation for stress testing
+- 🤖 **AI Admin Assistant** — Gemini-powered natural language platform management
 
 <br>
 

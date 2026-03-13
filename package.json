@@ -23,6 +23,7 @@
   "devDependencies": {
     "@gate-access/config": "workspace:*",
     "@turbo/gen": "^1.13.4",
+    "@types/faker": "5.5.3",
     "@types/jest": "^30.0.0",
     "@types/node": "^20.19.33",
     "autoprefixer": "^10.4.24",
@@ -39,6 +40,7 @@
   },
   "dependencies": {
     "argon2": "^0.44.0",
+    "faker": "5.5.3",
     "zod": "^4.3.6"
   },
   "pnpm": {

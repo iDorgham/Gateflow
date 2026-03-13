@@ -4,7 +4,17 @@
 
 ## Open Initiatives
 
-*(None currently active in the master backlog. Check `docs/plan/planning/` for upcoming work.)*
+### advanced_seeding_v2 — Ultra-Advanced Seeding Matrix (v2)
+**IDEA:** `docs/plan/context/IDEA_advanced_seeding_v2.md`
+**Status:** 🔄 In Progress
+**Target:** Q3 2026
+
+- [x] Phase 1 — Core Engine & Scenario Architecture
+- [x] Phase 2 — Temporal Realism & "Rush Hour" Algorithm
+- [x] Phase 3 — High-Volume CRM & RBAC Stress
+- [x] Phase 4 — Marketing & Security Intelligence
+- [x] Phase 5 — CLI Wrapper & Validation
+
 
 ---
 

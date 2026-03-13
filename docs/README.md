@@ -198,14 +198,12 @@ Gateflow/
 
 ## 📱 The 6-App Ecosystem
 
-| #   | App                  | Purpose                                  | Users               | Status  |
-| --- | -------------------- | ---------------------------------------- | ------------------- | ------- |
-| 1   | **Client Dashboard** | Main SaaS portal for property management | Admins, managers    | ✅ 95%  |
-| 2   | **Admin Dashboard**  | Super-admin platform management          | Platform operators  | ✅ 95%  |
+| 1   | **Client Dashboard** | Main SaaS portal for property management | Admins, managers    | ✅ 100% |
+| 2   | **Admin Dashboard**  | Super-admin platform management          | Platform operators  | ✅ 100% |
 | 3   | **Scanner App**      | Gate scanning with offline support       | Security/operators  | ✅ 100% |
-| 4   | **Marketing Site**   | Public-facing lead generation            | Prospects           | ✅ 90%  |
-| 5   | **Resident Portal**  | Self-service guest management            | Unit owners/renters | ✅ 95%  |
-| 6   | **Resident Mobile**  | Native mobile app for residents          | Unit owners/renters | 🔄 60%  |
+| 4   | **Marketing Site**   | Public-facing lead generation            | Prospects           | ✅ 100% |
+| 5   | **Resident Portal**  | Self-service guest management            | Unit owners/renters | ✅ 100% |
+| 6   | **Resident Mobile**  | Native mobile app for residents          | Unit owners/renters | ✅ 100% |
 
 ---
 
@@ -298,6 +296,8 @@ pnpm turbo typecheck
 | [Project Progress](./docs/PROJECT_PROGRESS_DASHBOARD.md) | MVP completion status         |
 | [Development Guide](./docs/DEVELOPMENT_GUIDE.md)         | Local setup and workspace     |
 | [Security Overview](./docs/SECURITY_OVERVIEW.md)         | Security architecture         |
+| [Seeding Matrix Guide](./docs/SEEDING_MATRIX_GUIDE.md)     | Data generation tool      |
+| [Analytics Charts Guide](./docs/ANALYTICS_CHARTS_GUIDE.md)   | Chart & data requirements |
 | [API Reference](./docs/PRD_v7.0.md#11-api-reference)     | REST API documentation        |
 
 ---

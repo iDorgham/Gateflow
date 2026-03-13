@@ -24,7 +24,9 @@
   "dependencies": {
     "@prisma/client": "^5.22.0",
     "@gate-access/types": "workspace:*",
-    "date-fns": "^4.1.0"
+    "date-fns": "^4.1.0",
+    "faker": "^5.5.3",
+    "argon2": "^0.41.1"
   },
   "devDependencies": {
     "@gate-access/config": "workspace:*",

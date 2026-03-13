@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Status-95%25-green" alt="Status">
+  <img src="https://img.shields.io/badge/Status-100%25-brightgreen" alt="Status">
   <img src="https://img.shields.io/badge/Framework-Next.js%2014-blue" alt="Framework">
   <img src="https://img.shields.io/badge/Type-Platform%20Admin-blue" alt="Type">
 </p>
@@ -52,11 +52,11 @@ The **GateFlow Admin Dashboard** is the super-admin panel for platform operators
 
 | Tool | Description |
 |------|-------------|
-| **Org Analyzer** | Analyze organization data |
-| **User Insights** | User behavior analysis |
-| **Security Audit** | Security recommendations |
-| **Billing Assistant** | Subscription help |
-| **System Health** | Health diagnostics |
+| **Platform Metrics** | Real-time tracking of orgs, users, and global scan activity |
+| **Entity Analyzer** | Deep-dive analysis of specific organizations, users, or projects |
+| **Seeding Matrix** | Natural language execution of complex data generation blueprints |
+| **Security Audit** | AI-driven review of access logs and system anomalies |
+| **System Health** | Gemini-powered interpretation of live DB and Redis health |
 
 ---
 
