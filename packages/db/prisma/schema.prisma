@@ -8,55 +8,54 @@ datasource db {
 }
 
 model Organization {
-  id        String   @id @default(cuid())
-  name      String
-  email     String   @unique
-  logoUrl   String?
-  domain    String?  @unique
-  plan      Plan     @default(FREE)
-  stripeCustomerId String? @unique
-  stripeSubscriptionId String? @unique
-  planExpiresAt DateTime?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  deletedAt DateTime?
-
+  id                            String                  @id @default(cuid())
+  name                          String
+  email                         String                  @unique
+  domain                        String?                 @unique
+  plan                          Plan                    @default(FREE)
+  createdAt                     DateTime                @default(now())
+  updatedAt                     DateTime                @updatedAt
+  deletedAt                     DateTime?
+  logoUrl                       String?
   /// Visitor identity level: 0=name/phone only, 1=ID photo capture, 2=ID OCR (stub)
-  requiredIdentityLevel     Int       @default(0)
-  scanLogRetentionMonths    Int?      /// null = keep indefinitely
+  requiredIdentityLevel         Int                     @default(0)
+  /// null = keep indefinitely
+  scanLogRetentionMonths        Int?
   visitorHistoryRetentionMonths Int?
-  idArtifactRetentionMonths Int?
-  incidentRetentionMonths   Int?
-  maskResidentNameOnLandingPage Boolean @default(false)
-  showUnitOnLandingPage     Boolean   @default(true)
-  /// Global scanner config: { offlineModeEnabled, vibrationEnabled, soundEnabled, allowOverride }
-  scannerConfig             Json?
+  idArtifactRetentionMonths     Int?
+  incidentRetentionMonths       Int?
+  maskResidentNameOnLandingPage Boolean                 @default(false)
+  showUnitOnLandingPage         Boolean                 @default(true)
+  planExpiresAt                 DateTime?
+  stripeCustomerId              String?                 @unique
+  stripeSubscriptionId          String?                 @unique
   /// Integration config: { gtmId, hubspotPortalId, googleAnalyticsId, ... }
-  integrationConfig         Json?
+  integrationConfig             Json?
   /// Notification config: { channels: { email, sms, push }, events: { scanSuccess, scanFailed, ... } }
-  notificationConfig        Json?
-
-  users            User[]
-  gates            Gate[]
-  gateAssignments  GateAssignment[]
-  qrCodes          QRCode[]
-  auditLogs        AuditLog[]
-  webhooks         Webhook[]
-  apiKeys          ApiKey[]
-  adminAuthKeys    AdminAuthorizationKey[]
-  projects         Project[]
-  contacts         Contact[]
-  units            Unit[]
-  tags             Tag[]
-  roles            Role[]
-  residentLimits   ResidentLimit[]
-  watchlistEntries WatchlistEntry[]
-  incidents        Incident[]
-  scanAttachments  ScanAttachment[]
-  invitations      Invitation[]
-  tasks            Task[]
-  chatMessages     ChatMessage[]
-  eventLogs        EventLog[]
+  notificationConfig            Json?
+  /// Global scanner config: { offlineModeEnabled, vibrationEnabled, soundEnabled, allowOverride }
+  scannerConfig                 Json?
+  adminAuthKeys                 AdminAuthorizationKey[]
+  apiKeys                       ApiKey[]
+  auditLogs                     AuditLog[]
+  chatMessages                  ChatMessage[]
+  contacts                      Contact[]
+  eventLogs                     EventLog[]
+  gates                         Gate[]
+  gateAssignments               GateAssignment[]
+  incidents                     Incident[]
+  invitations                   Invitation[]
+  projects                      Project[]
+  qrCodes                       QRCode[]
+  residentLimits                ResidentLimit[]
+  roles                         Role[]
+  scanAttachments               ScanAttachment[]
+  tags                          Tag[]
+  tasks                         Task[]
+  units                         Unit[]
+  users                         User[]
+  watchlistEntries              WatchlistEntry[]
+  webhooks                      Webhook[]
 
   @@index([deletedAt])
 }
@@ -64,23 +63,25 @@ model Organization {
 model Project {
   id             String       @id @default(cuid())
   name           String
-  description    String?
-  logoUrl        String?
-  coverUrl       String?
-  website        String?
-  socialMedia    Json?
-  location       String?
-  galleryJson    Json?        /// Array of image URL strings for the project gallery
-  externalUrl    String?      /// External marketing / landing-page URL (distinct from website)
-  gateMode       GateMode     @default(MULTI)
   organizationId String
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  gates          Gate[]
-  qrCodes        QRCode[]
-  units          Unit[]
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
   deletedAt      DateTime?
+  coverUrl       String?
+  description    String?
+  location       String?
+  logoUrl        String?
+  socialMedia    Json?
+  website        String?
+  /// Array of image URL strings for the project gallery
+  galleryJson    Json?
+  /// External marketing / landing-page URL (distinct from website)
+  externalUrl    String?
+  gateMode       GateMode     @default(MULTI)
+  gates          Gate[]
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  qrCodes        QRCode[]
+  units          Unit[]
 
   @@index([organizationId])
 }
@@ -89,41 +90,41 @@ model Role {
   id             String        @id @default(cuid())
   name           String
   description    String?
-  permissions    Json          // Map of permission keys to booleans
+  permissions    Json
   isBuiltIn      Boolean       @default(false)
-  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId String?
-  users          User[]
-  invitations    Invitation[]
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
+  invitations    Invitation[]
+  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  users          User[]
 
   @@index([organizationId])
 }
 
 model User {
-  id           String        @id @default(cuid())
-  email        String        @unique
-  name         String
-  avatarUrl    String?
-  bio          String?
-  passwordHash String
-  role         Role          @relation(fields: [roleId], references: [id])
-  roleId       String
-  organization Organization? @relation(fields: [organizationId], references: [id])
-  organizationId String?
-  preferences  Json?         /// e.g. { tableViews: { contacts: {...}, units: {...} } }
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  deletedAt    DateTime?
-
-  scanLogs        ScanLog[]
+  id              String           @id @default(cuid())
+  email           String           @unique
+  name            String
+  passwordHash    String
+  organizationId  String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  deletedAt       DateTime?
+  avatarUrl       String?
+  bio             String?
+  /// e.g. { tableViews: { contacts: {...}, units: {...} } }
+  preferences     Json?
+  roleId          String
   auditLogs       AuditLog[]
-  refreshTokens   RefreshToken[]
-  unit            Unit?
+  chatMessages    ChatMessage[]
   gateAssignments GateAssignment[]
   incidents       Incident[]
-  chatMessages    ChatMessage[]
+  refreshTokens   RefreshToken[]
+  scanLogs        ScanLog[]
+  unit            Unit?
+  organization    Organization?    @relation(fields: [organizationId], references: [id])
+  role            Role             @relation(fields: [roleId], references: [id])
 
   @@index([organizationId])
   @@index([roleId])
@@ -133,14 +134,14 @@ model User {
 model Invitation {
   id             String       @id @default(cuid())
   email          String
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId String
-  role           Role         @relation(fields: [roleId], references: [id])
   roleId         String
   token          String       @unique
   acceptedAt     DateTime?
   expiresAt      DateTime
   createdAt      DateTime     @default(now())
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  role           Role         @relation(fields: [roleId], references: [id])
 
   @@unique([email, organizationId])
   @@index([organizationId])
@@ -148,37 +149,31 @@ model Invitation {
 }
 
 model Task {
-  id             String      @id @default(cuid())
+  id             String       @id @default(cuid())
   title          String
   description    String?
-  status         TaskStatus  @default(TODO)
+  status         TaskStatus   @default(TODO)
   dueDate        DateTime?
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId String
   createdBy      String?
   assignedTo     String?
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
   deletedAt      DateTime?
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
   @@index([organizationId])
   @@index([deletedAt])
 }
 
-enum TaskStatus {
-  TODO
-  IN_PROGRESS
-  DONE
-}
-
 model ChatMessage {
   id             String       @id @default(cuid())
   content        String
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId String
   userId         String
-  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt      DateTime     @default(now())
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([organizationId])
   @@index([createdAt])
@@ -186,19 +181,19 @@ model ChatMessage {
 
 model GateAssignment {
   id             String       @id @default(cuid())
-  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId         String
-  gate           Gate         @relation(fields: [gateId], references: [id], onDelete: Cascade)
   gateId         String
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  deletedAt      DateTime?
   /// Optional shift start time (HH:mm, 24h). When set, assignment is valid from this time of day.
   shiftStart     String?
   /// Optional shift end time (HH:mm, 24h). When set, assignment is valid until this time of day.
   shiftEnd       String?
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  deletedAt      DateTime?
+  gate           Gate         @relation(fields: [gateId], references: [id], onDelete: Cascade)
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, gateId])
   @@index([organizationId])
@@ -208,29 +203,28 @@ model GateAssignment {
 }
 
 model Gate {
-  id           String        @id @default(cuid())
-  name         String
-  location     String?
-  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  organizationId String
-  project      Project?      @relation(fields: [projectId], references: [id])
-  projectId    String?
-  isActive     Boolean       @default(true)
-  lastAccessedAt DateTime?
-  latitude             Float?
-  longitude            Float?
-  locationRadiusMeters Int?
-  locationEnforced     Boolean?  @default(false)
+  id                    String           @id @default(cuid())
+  name                  String
+  location              String?
+  organizationId        String
+  isActive              Boolean          @default(true)
+  lastAccessedAt        DateTime?
+  createdAt             DateTime         @default(now())
+  updatedAt             DateTime         @updatedAt
+  deletedAt             DateTime?
+  projectId             String?
+  latitude              Float?
+  longitude             Float?
+  locationRadiusMeters  Int?
+  locationEnforced      Boolean?         @default(false)
   /// 0/1/2; null = use org default
   requiredIdentityLevel Int?
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  deletedAt    DateTime?
-
-  scanLogs        ScanLog[]
-  qrCodes         QRCode[]
-  gateAssignments GateAssignment[]
-  incidents       Incident[]
+  organization          Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  project               Project?         @relation(fields: [projectId], references: [id])
+  gateAssignments       GateAssignment[]
+  incidents             Incident[]
+  qrCodes               QRCode[]
+  scanLogs              ScanLog[]
 
   @@index([organizationId])
   @@index([projectId])
@@ -239,7 +233,6 @@ model Gate {
 
 model WatchlistEntry {
   id             String       @id @default(cuid())
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId String
   name           String
   idNumber       String?
@@ -249,26 +242,27 @@ model WatchlistEntry {
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
   deletedAt      DateTime?
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
   @@index([organizationId])
   @@index([deletedAt])
 }
 
 model Incident {
-  id             String       @id @default(cuid())
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  id             String           @id @default(cuid())
   organizationId String
-  gate           Gate         @relation(fields: [gateId], references: [id], onDelete: Cascade)
   gateId         String
-  user           User?        @relation(fields: [userId], references: [id])
   userId         String?
-  scanLog        ScanLog?     @relation(fields: [scanLogId], references: [id])
   scanLogId      String?
   reason         String
-  status         IncidentStatus @default(UNDER_REVIEW)
+  status         IncidentStatus   @default(UNDER_REVIEW)
   notes          String?
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+  gate           Gate             @relation(fields: [gateId], references: [id], onDelete: Cascade)
+  organization   Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  scanLog        ScanLog?         @relation(fields: [scanLogId], references: [id])
+  user           User?            @relation(fields: [userId], references: [id])
   attachments    ScanAttachment[]
 
   @@index([organizationId])
@@ -279,15 +273,17 @@ model Incident {
 
 model ScanAttachment {
   id             String       @id @default(cuid())
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId String
-  scanLog        ScanLog?     @relation(fields: [scanLogId], references: [id], onDelete: Cascade)
   scanLogId      String?
-  incident       Incident?    @relation(fields: [incidentId], references: [id], onDelete: Cascade)
   incidentId     String?
-  type           String       /// id_front, id_back, etc.
-  contentBase64  String?      /// MVP: base64 image; future: storage key
+  /// id_front, id_back, etc.
+  type           String
+  /// MVP: base64 image; future: storage key
+  contentBase64  String?
   createdAt      DateTime     @default(now())
+  incident       Incident?    @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  scanLog        ScanLog?     @relation(fields: [scanLogId], references: [id], onDelete: Cascade)
 
   @@index([organizationId])
   @@index([scanLogId])
@@ -295,31 +291,31 @@ model ScanAttachment {
 }
 
 model QRCode {
-  id           String        @id @default(cuid())
-  code         String        @unique
-  type         QRCodeType
-  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  id             String       @id @default(cuid())
+  code           String       @unique
+  type           QRCodeType
   organizationId String
-  project      Project?      @relation(fields: [projectId], references: [id])
-  projectId    String?
-  gate         Gate?         @relation(fields: [gateId], references: [id])
-  gateId       String?
-  maxUses      Int?
-  currentUses  Int           @default(0)
-  expiresAt    DateTime?
-  isActive     Boolean       @default(true)
-  utmCampaign  String?
-  utmSource    String?
-  guestName    String?
-  guestEmail   String?
-  guestPhone   String?
-  contactId    String?       /// Optional reference to Contact.id (no enforced FK for migration atomicity)
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
-  deletedAt    DateTime?
-
-  scanLogs  ScanLog[]
-  visitorQR VisitorQR?
+  gateId         String?
+  maxUses        Int?
+  currentUses    Int          @default(0)
+  expiresAt      DateTime?
+  isActive       Boolean      @default(true)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  deletedAt      DateTime?
+  projectId      String?
+  utmCampaign    String?
+  utmSource      String?
+  /// Optional reference to Contact.id (no enforced FK for migration atomicity)
+  contactId      String?
+  guestEmail     String?
+  guestName      String?
+  guestPhone     String?
+  gate           Gate?        @relation(fields: [gateId], references: [id])
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  project        Project?     @relation(fields: [projectId], references: [id])
+  scanLogs       ScanLog[]
+  visitorQR      VisitorQR?
 
   @@index([organizationId])
   @@index([projectId])
@@ -329,23 +325,23 @@ model QRCode {
 }
 
 model ScanLog {
-  id        String     @id @default(cuid())
-  scanUuid  String?    @unique
-  status    ScanStatus
-  scannedAt DateTime   @default(now())
-  user      User?      @relation(fields: [userId], references: [id])
-  userId    String?
-  gate      Gate       @relation(fields: [gateId], references: [id], onDelete: Cascade)
-  gateId    String
-  qrCode    QRCode     @relation(fields: [qrCodeId], references: [id], onDelete: Cascade)
-  qrCodeId  String
-  deviceId  String?
-  auditNotes Json?
-  auditTrail Json[]
-  incidents Incident[]
-  attachments ScanAttachment[]
+  id                String           @id @default(cuid())
+  status            ScanStatus
+  scannedAt         DateTime         @default(now())
+  userId            String?
+  gateId            String
+  qrCodeId          String
+  scanUuid          String?          @unique
+  deviceId          String?
+  auditTrail        Json[]
+  auditNotes        Json?
   /// Set when the resident receives an "I've arrived" push for this scan (idempotency guard)
   arrivalNotifiedAt DateTime?
+  incidents         Incident[]
+  attachments       ScanAttachment[]
+  gate              Gate             @relation(fields: [gateId], references: [id], onDelete: Cascade)
+  qrCode            QRCode           @relation(fields: [qrCodeId], references: [id], onDelete: Cascade)
+  user              User?            @relation(fields: [userId], references: [id])
 
   @@index([gateId])
   @@index([qrCodeId])
@@ -361,11 +357,10 @@ model AuditLog {
   entityId       String?
   metadata       Json?
   createdAt      DateTime     @default(now())
-
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId String
-  user           User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
   userId         String?
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user           User?        @relation(fields: [userId], references: [id])
 
   @@index([organizationId])
   @@index([userId])
@@ -375,11 +370,11 @@ model AuditLog {
 model RefreshToken {
   id        String    @id @default(cuid())
   token     String    @unique
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    String
   expiresAt DateTime
   createdAt DateTime  @default(now())
   revokedAt DateTime?
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([token])
@@ -387,18 +382,17 @@ model RefreshToken {
 }
 
 model Webhook {
-  id             String         @id @default(cuid())
+  id             String            @id @default(cuid())
   url            String
   events         WebhookEvent[]
   secret         String
-  isActive       Boolean        @default(true)
-  organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  isActive       Boolean           @default(true)
   organizationId String
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
   deletedAt      DateTime?
-
-  deliveries WebhookDelivery[]
+  organization   Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  deliveries     WebhookDelivery[]
 
   @@index([organizationId])
   @@index([deletedAt])
@@ -406,7 +400,6 @@ model Webhook {
 
 model WebhookDelivery {
   id            String                @id @default(cuid())
-  webhook       Webhook               @relation(fields: [webhookId], references: [id], onDelete: Cascade)
   webhookId     String
   event         WebhookEvent
   payload       Json
@@ -416,9 +409,220 @@ model WebhookDelivery {
   attemptCount  Int                   @default(0)
   lastAttemptAt DateTime?
   createdAt     DateTime              @default(now())
+  webhook       Webhook               @relation(fields: [webhookId], references: [id], onDelete: Cascade)
 
   @@index([webhookId])
   @@index([createdAt])
+}
+
+model ApiKey {
+  id             String       @id @default(cuid())
+  name           String
+  keyHash        String       @unique
+  keyPrefix      String
+  scopes         ApiScope[]
+  lastUsedAt     DateTime?
+  expiresAt      DateTime?
+  organizationId String
+  createdAt      DateTime     @default(now())
+  createdBy      String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([keyHash])
+}
+
+model AdminAuthorizationKey {
+  id             String           @id @default(cuid())
+  name           String
+  keyHash        String           @unique
+  keyPrefix      String
+  type           AdminAuthKeyType
+  organizationId String?
+  lastUsedAt     DateTime?
+  expiresAt      DateTime?
+  createdAt      DateTime         @default(now())
+  createdBy      String
+  organization   Organization?    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([keyHash])
+}
+
+model QrShortLink {
+  id             String    @id @default(cuid())
+  shortId        String    @unique
+  fullPayload    String
+  createdAt      DateTime  @default(now())
+  expiresAt      DateTime?
+  qrId           String
+  organizationId String
+  projectId      String?
+
+  @@index([shortId])
+  @@index([organizationId])
+  @@index([qrId])
+}
+
+model Tag {
+  id             String       @id @default(cuid())
+  name           String
+  color          String?
+  organizationId String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  deletedAt      DateTime?
+  contacts       ContactTag[]
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, name])
+  @@index([organizationId])
+  @@index([deletedAt])
+}
+
+model ContactTag {
+  contactId String
+  tagId     String
+  contact   Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([contactId, tagId])
+  @@index([contactId])
+  @@index([tagId])
+}
+
+model Contact {
+  id             String         @id @default(cuid())
+  firstName      String
+  lastName       String
+  birthday       DateTime?
+  company        String?
+  phone          String?
+  email          String?
+  organizationId String
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  deletedAt      DateTime?
+  avatarUrl      String?
+  /// Job title / role at the company
+  jobTitle       String?
+  /// How the contact entered the system
+  source         ContactSource?
+  /// Company or personal website URL
+  companyWebsite String?
+  /// Free-text notes about the contact
+  notes          String?
+  organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  contactTags    ContactTag[]
+  units          ContactUnit[]
+
+  @@index([organizationId])
+  @@index([deletedAt])
+}
+
+model Unit {
+  id             String        @id @default(cuid())
+  name           String
+  type           UnitType
+  qrQuota        Int?
+  organizationId String
+  projectId      String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  deletedAt      DateTime?
+  sizeSqm        Int?
+  building       String?
+  isActive       Boolean       @default(true)
+  userId         String?       @unique
+  /// Unit latitude for GPS guest guide
+  lat            Float?
+  /// Unit longitude for GPS guest guide
+  lng            Float?
+  contacts       ContactUnit[]
+  organization   Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  project        Project?      @relation(fields: [projectId], references: [id])
+  user           User?         @relation(fields: [userId], references: [id])
+  visitorQRs     VisitorQR[]
+
+  @@unique([organizationId, name])
+  @@index([organizationId])
+  @@index([projectId])
+  @@index([userId])
+  @@index([deletedAt])
+}
+
+model ContactUnit {
+  contactId String
+  unitId    String
+  contact   Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  unit      Unit    @relation(fields: [unitId], references: [id], onDelete: Cascade)
+
+  @@id([contactId, unitId])
+  @@index([contactId])
+  @@index([unitId])
+}
+
+model VisitorQR {
+  id           String      @id @default(cuid())
+  qrCodeId     String      @unique
+  unitId       String
+  visitorName  String?
+  visitorPhone String?
+  visitorEmail String?
+  isOpenQR     Boolean     @default(false)
+  accessRuleId String?     @unique
+  createdBy    String
+  createdAt    DateTime    @default(now())
+  accessRule   AccessRule? @relation(fields: [accessRuleId], references: [id])
+  qrCode       QRCode      @relation(fields: [qrCodeId], references: [id], onDelete: Cascade)
+  unit         Unit        @relation(fields: [unitId], references: [id], onDelete: Cascade)
+
+  @@index([unitId])
+  @@index([createdBy])
+}
+
+model AccessRule {
+  id            String         @id @default(cuid())
+  type          AccessRuleType
+  startDate     DateTime?
+  endDate       DateTime?
+  recurringDays Int[]
+  startTime     String?
+  endTime       String?
+  visitorQR     VisitorQR?
+
+  @@index([startDate])
+}
+
+model ResidentLimit {
+  id              String       @id @default(cuid())
+  organizationId  String
+  unitType        UnitType
+  monthlyQuota    Int
+  canCreateOpenQR Boolean      @default(false)
+  createdAt       DateTime     @default(now())
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, unitType])
+}
+
+/// Append-only log of org-scoped mutation events, consumed by the SSE stream.
+/// Rows are pruned after 24 h — no soft-delete needed.
+model EventLog {
+  id             String       @id @default(cuid())
+  organizationId String
+  type           EventType
+  payload        Json         @default("{}")
+  createdAt      DateTime     @default(now())
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId, createdAt])
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  DONE
 }
 
 enum Plan {
@@ -466,40 +670,6 @@ enum WebhookDeliveryStatus {
   FAILED
 }
 
-model ApiKey {
-  id             String     @id @default(cuid())
-  name           String
-  keyHash        String     @unique
-  keyPrefix      String
-  scopes         ApiScope[]
-  lastUsedAt     DateTime?
-  expiresAt      DateTime?
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  organizationId String
-  createdAt      DateTime   @default(now())
-  createdBy      String
-
-  @@index([organizationId])
-  @@index([keyHash])
-}
-
-model AdminAuthorizationKey {
-  id             String     @id @default(cuid())
-  name           String
-  keyHash        String     @unique
-  keyPrefix      String
-  type           AdminAuthKeyType
-  organizationId String?
-  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  lastUsedAt     DateTime?
-  expiresAt      DateTime?
-  createdAt      DateTime   @default(now())
-  createdBy      String
-
-  @@index([organizationId])
-  @@index([keyHash])
-}
-
 enum AdminAuthKeyType {
   ADMIN
   SERVICE
@@ -514,160 +684,6 @@ enum ApiScope {
   WEBHOOK_WRITE
 }
 
-model QrShortLink {
-  id             String    @id @default(cuid())
-  shortId        String    @unique
-  fullPayload    String
-  qrId           String
-  organizationId String
-  projectId      String?
-  createdAt      DateTime  @default(now())
-  expiresAt      DateTime?
-
-  @@index([shortId])
-  @@index([organizationId])
-  @@index([qrId])
-}
-
-model Tag {
-  id             String    @id @default(cuid())
-  name           String
-  color          String?   // e.g. #3b82f6
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  organizationId String
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
-  deletedAt      DateTime?
-
-  contacts ContactTag[]
-
-  @@unique([organizationId, name])
-  @@index([organizationId])
-  @@index([deletedAt])
-}
-
-model ContactTag {
-  contactId String
-  tagId     String
-  contact   Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
-  tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
-
-  @@id([contactId, tagId])
-  @@index([contactId])
-  @@index([tagId])
-}
-
-model Contact {
-  id             String         @id @default(cuid())
-  firstName      String
-  lastName       String
-  birthday       DateTime?
-  company        String?
-  phone          String?
-  email          String?
-  avatarUrl      String?
-  jobTitle       String?        /// Job title / role at the company
-  source         ContactSource? /// How the contact entered the system
-  companyWebsite String?        /// Company or personal website URL
-  notes          String?        /// Free-text notes about the contact
-  organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  organizationId String
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
-  deletedAt      DateTime?
-
-  units       ContactUnit[]
-  contactTags ContactTag[]
-
-  @@index([organizationId])
-  @@index([deletedAt])
-}
-
-model Unit {
-  id             String        @id @default(cuid())
-  name           String        // Matches unitNumber from spec
-  type           UnitType
-  sizeSqm        Int?          // Unit size in square meters
-  qrQuota        Int?          // Optional, falls back to organization defaults
-  organization   Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  organizationId String
-  project        Project?      @relation(fields: [projectId], references: [id])
-  projectId      String?
-  building       String?
-  lat            Float?        /// Unit latitude for GPS guest guide
-  lng            Float?        /// Unit longitude for GPS guest guide
-  user           User?         @relation(fields: [userId], references: [id])
-  userId         String?       @unique // Linked resident user
-  isActive       Boolean       @default(true)
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
-  deletedAt      DateTime?
-
-  contacts   ContactUnit[]
-  visitorQRs VisitorQR[]
-
-  @@unique([organizationId, name])
-  @@index([organizationId])
-  @@index([projectId])
-  @@index([userId])
-  @@index([deletedAt])
-}
-
-model ContactUnit {
-  contactId String
-  unitId    String
-  contact   Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
-  unit      Unit    @relation(fields: [unitId], references: [id], onDelete: Cascade)
-
-  @@id([contactId, unitId])
-  @@index([contactId])
-  @@index([unitId])
-}
-
-model VisitorQR {
-  id              String        @id @default(cuid())
-  qrCode          QRCode        @relation(fields: [qrCodeId], references: [id], onDelete: Cascade)
-  qrCodeId        String        @unique
-  unit            Unit          @relation(fields: [unitId], references: [id], onDelete: Cascade)
-  unitId          String
-  visitorName     String?       // Optional - null for Open QR
-  visitorPhone    String?       // Optional
-  visitorEmail    String?       // Optional
-  isOpenQR        Boolean       @default(false) // Open QR - no name required
-  accessRule      AccessRule?   @relation(fields: [accessRuleId], references: [id])
-  accessRuleId    String?       @unique
-  createdBy       String        // userId of resident
-  createdAt       DateTime      @default(now())
-
-  @@index([unitId])
-  @@index([createdBy])
-}
-
-model AccessRule {
-  id              String            @id @default(cuid())
-  type            AccessRuleType    // ONETIME, DATERANGE, RECURRING
-  startDate       DateTime?
-  endDate         DateTime?
-  recurringDays   Int[]            // Days of week (0-6, Sunday=0)
-  startTime       String?           // "09:00" format
-  endTime         String?           // "22:00" format
-  visitorQR       VisitorQR?
-
-  @@index([startDate])
-}
-
-model ResidentLimit {
-  id              String   @id @default(cuid())
-  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  organizationId  String
-  unitType        UnitType
-  monthlyQuota    Int      // Max visitors per month
-  canCreateOpenQR Boolean @default(false) // Whether unit type can create Open QR
-  createdAt       DateTime @default(now())
-
-  @@unique([organizationId, unitType])
-}
-
 enum UnitType {
   STUDIO
   ONE_BR
@@ -680,28 +696,26 @@ enum UnitType {
 }
 
 enum AccessRuleType {
-  ONETIME       // Single use, specific date
-  DATERANGE    // Multiple uses within date range
-  RECURRING    // Recurring access (daily/weekly)
-  PERMANENT    // No time limits (Open QR default)
+  ONETIME
+  DATERANGE
+  RECURRING
+  PERMANENT
 }
 
 /// How a Contact was originally added to the system
 enum ContactSource {
-  MANUAL    // Added by hand via the dashboard
-  IMPORT    // Bulk-imported from CSV / external source
-  QR_SCAN   // Derived from a gate scan event
-  REFERRAL  // Referred by another contact
+  MANUAL
+  IMPORT
+  QR_SCAN
+  REFERRAL
   OTHER
 }
 
 /// Whether a Project is configured for a single gate or multiple gates
 enum GateMode {
-  SINGLE // Project has one primary gate
-  MULTI  // Project has multiple gates (default)
+  SINGLE
+  MULTI
 }
-
-// ─── Real-time event log (SSE / live-update infrastructure) ──────────────────
 
 enum EventType {
   QR_CREATED
@@ -712,17 +726,4 @@ enum EventType {
   CONTACT_UPDATED
   VISITOR_QR_CREATED
   VISITOR_QR_DELETED
-}
-
-/// Append-only log of org-scoped mutation events, consumed by the SSE stream.
-/// Rows are pruned after 24 h — no soft-delete needed.
-model EventLog {
-  id             String       @id @default(cuid())
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  organizationId String
-  type           EventType
-  payload        Json         @default("{}")
-  createdAt      DateTime     @default(now())
-
-  @@index([organizationId, createdAt])
 }

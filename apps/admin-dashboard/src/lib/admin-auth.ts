@@ -43,6 +43,52 @@ export function isAdminAuthenticated(): boolean {
 }
 
 /**
+ * Checks authentication for API route handlers.
+ * Accepts either:
+ *   1. A valid admin_session cookie (browser sessions), OR
+ *   2. An `Authorization: Bearer <key>` header validated against
+ *      the AdminAuthorizationKey table in the database.
+ *
+ * Returns true if authenticated, false otherwise.
+ */
+export async function isAdminAuthorized(request: Request): Promise<boolean> {
+  // 1. Cookie-based session (browser)
+  if (isAdminAuthenticated()) return true;
+
+  // 2. Bearer token (programmatic API access)
+  const authHeader = request.headers.get('authorization') ?? '';
+  if (!authHeader.startsWith('Bearer ')) return false;
+
+  const token = authHeader.slice(7).trim();
+  if (!token) return false;
+
+  const tokenHash = createHash('sha256').update(token).digest('hex');
+
+  try {
+    const { prisma } = await import('@gate-access/db');
+    const keyRecord = await prisma.adminAuthorizationKey.findUnique({
+      where: { keyHash: tokenHash },
+      select: { id: true, expiresAt: true },
+    });
+
+    if (!keyRecord) return false;
+
+    // Check expiry
+    if (keyRecord.expiresAt && keyRecord.expiresAt <= new Date()) return false;
+
+    // Update lastUsedAt (fire-and-forget)
+    void prisma.adminAuthorizationKey.update({
+      where: { id: keyRecord.id },
+      data: { lastUsedAt: new Date() },
+    });
+
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
  * Use at the top of every admin server component / action.
  * Redirects to /login if the session is invalid.
  */

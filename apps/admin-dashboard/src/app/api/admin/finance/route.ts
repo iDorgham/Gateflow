@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { isAdminAuthenticated } from '@/lib/admin-auth';
+import { isAdminAuthorized } from '@/lib/admin-auth';
 import { prisma } from '@gate-access/db';
 
 export const dynamic = 'force-dynamic';
@@ -11,8 +11,8 @@ const PLAN_PRICES: Record<string, number> = {
   ENTERPRISE: 499,
 };
 
-export async function GET(_request: NextRequest): Promise<NextResponse> {
-  if (!isAdminAuthenticated()) {
+export async function GET(request: NextRequest): Promise<NextResponse> {
+  if (!(await isAdminAuthorized(request))) {
     return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
   }
 

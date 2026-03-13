@@ -2,14 +2,14 @@ import { streamText, tool } from 'ai';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { z } from 'zod';
 import { type NextRequest } from 'next/server';
-import { isAdminAuthenticated } from '@/lib/admin-auth';
+import { isAdminAuthorized } from '@/lib/admin-auth';
 import { prisma } from '@gate-access/db';
 
 export const runtime = 'nodejs';
 export const maxDuration = 30;
 
 export async function POST(request: NextRequest) {
-  if (!isAdminAuthenticated()) {
+  if (!(await isAdminAuthorized(request))) {
     return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
   }
 

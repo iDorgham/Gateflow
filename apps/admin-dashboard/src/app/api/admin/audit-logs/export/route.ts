@@ -1,19 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createHash } from 'crypto';
 import { prisma } from '@gate-access/db';
-
-const COOKIE_NAME = 'admin_session';
-
-function expectedToken(): string {
-  const key = process.env.ADMIN_ACCESS_KEY;
-  if (!key) {
-    if (process.env.NODE_ENV === 'production') {
-      throw new Error('[admin/export] ADMIN_ACCESS_KEY is not set');
-    }
-    return createHash('sha256').update('dev-admin-key-change-in-production').digest('hex');
-  }
-  return createHash('sha256').update(key).digest('hex');
-}
+import { isAdminAuthorized } from '@/lib/admin-auth';
 
 function escapeCSV(value: unknown): string {
   if (value === null || value === undefined) return '';
@@ -28,8 +15,7 @@ function escapeCSV(value: unknown): string {
 }
 
 export async function GET(request: NextRequest) {
-  const session = request.cookies.get(COOKIE_NAME)?.value;
-  if (session !== expectedToken()) {
+  if (!(await isAdminAuthorized(request))) {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 });
   }
 
