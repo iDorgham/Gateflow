@@ -19,6 +19,7 @@ const cairo = Cairo({
 });
 
 import { OrganizationJsonLd, WebSiteJsonLd } from '../../components/json-ld';
+import { MarketingScripts } from '../../src/components/MarketingScripts';
 
 export async function generateStaticParams() {
   return i18n.locales.map((locale) => ({ locale }));
@@ -120,6 +121,10 @@ export default async function RootLayout({
         <WebSiteJsonLd locale={params.locale} />
         <meta name="theme-color" content="#3b82f6" />
         <link rel="manifest" href="/manifest.json" />
+        <MarketingScripts
+          metaPixelId={process.env.NEXT_PUBLIC_META_PIXEL_ID}
+          ga4MeasurementId={process.env.NEXT_PUBLIC_GA4_MEASUREMENT_ID}
+        />
       </head>
       <body
         className={`${inter.variable} ${cairo.variable} ${isRtl ? 'font-arabic' : 'font-sans'} antialiased selection:bg-primary/10 selection:text-primary transition-colors duration-300`}

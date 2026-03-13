@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma, Prisma, ContactSource } from '@gate-access/db';
 import { emitEvent, EventType } from '@/lib/realtime/emit-event';
+import { triggerContactCreatedWebhook } from '@/lib/crm-webhooks';
 
 export const dynamic = 'force-dynamic';
 
@@ -539,6 +540,19 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     });
 
     emitEvent(claims.orgId, EventType.CONTACT_CREATED, { contactId: contact.id }).catch(() => {});
+
+    // Trigger CRM webhooks for marketing attribution
+    triggerContactCreatedWebhook(
+      claims.orgId,
+      {
+        id: contact.id,
+        firstName: contact.firstName,
+        lastName: contact.lastName,
+        email: contact.email,
+        phone: contact.phone,
+        source: contact.source,
+      }
+    ).catch(() => {});
 
     return NextResponse.json(
       {
