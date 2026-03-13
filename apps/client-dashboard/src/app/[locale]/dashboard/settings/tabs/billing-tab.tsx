@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useTransition } from 'react';
+import React, { useState } from 'react';
 import {
   Card,
   CardContent,
@@ -10,14 +10,16 @@ import {
   Button,
   Badge,
 } from '@gate-access/ui';
-import { CreditCard, Zap, Activity, Star, Calendar, Download, Save, Info } from 'lucide-react';
+import { CreditCard, Zap, Activity, Star, Calendar, Download, Save, Info, Loader2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
+import { PlanCards } from '../../workspace/billing/plan-cards';
 
 interface BillingTabProps {
   org: {
     name: string;
     plan: string;
+    stripeCustomerId?: string | null;
   };
   gateCount: number;
   qrCount: number;
@@ -34,7 +36,45 @@ const PLAN_INFO = {
     features: ['20 Secured Gates', 'Unlimited QR Codes', 'Extended Analytics', 'API & Webhooks', 'Priority Support'],
     accent: 'blue',
   },
+  ENTERPRISE: {
+    description: 'Bespoke infrastructure for large-scale operations.',
+    features: ['Unlimited Secured Gates', 'Unlimited QR Codes', 'White-label Options', 'Dedicated Support', 'Custom Integrations'],
+    accent: 'violet',
+  }
 };
+
+const PLANS_FOR_CARDS = [
+  {
+    name: 'FREE',
+    price: '$0',
+    period: 'forever',
+    features: ['3 gates', '100 QR codes/month', 'Basic support'],
+  },
+  {
+    name: 'PRO',
+    price: '$49',
+    period: 'per month',
+    features: [
+      '20 gates',
+      'Unlimited QR codes',
+      'Extended analytics',
+      'API & Webhooks',
+      'Priority support',
+    ],
+  },
+  {
+    name: 'ENTERPRISE',
+    price: 'Custom',
+    period: '',
+    features: [
+      'Unlimited gates',
+      'Unlimited everything',
+      'SSO / SAML',
+      'Dedicated support',
+      'SLA guarantee',
+    ],
+  },
+];
 
 const MOCK_INVOICES = [
   { id: 'INV-2026-001', date: 'Feb 01, 2026', amount: '$49.00', status: 'Paid' },
@@ -44,26 +84,67 @@ const MOCK_INVOICES = [
 
 export function BillingTab({ org, gateCount, qrCount }: BillingTabProps) {
   const { t } = useTranslation('dashboard');
+  const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
+  const [isPortalLoading, setIsPortalLoading] = useState(false);
+
   const planName = org.plan as keyof typeof PLAN_INFO;
   const plan = PLAN_INFO[planName] || PLAN_INFO.FREE;
 
   const limits = {
     FREE: { gates: 3, qr: 100 },
     PRO: { gates: 20, qr: 1000000 },
+    ENTERPRISE: { gates: Infinity, qr: Infinity },
   }[planName] || { gates: 3, qr: 100 };
 
-  const [isPending, startTransition] = useTransition();
+  const handleUpgrade = async (pName: string) => {
+    setLoadingPlan(pName);
+    try {
+      const res = await fetch('/api/workspace/billing/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ plan: pName }),
+      });
 
-  function handleSave() {
-    startTransition(async () => {
-      // Simulate saving
-      await new Promise(resolve => setTimeout(resolve, 800));
-      toast.success(t('settings.billing.success.saved', 'Billing preferences saved.'));
-    });
-  }
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to start checkout');
+
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } catch (err: any) {
+      console.error('Upgrade error:', err);
+      toast.error(err.message || 'Something went wrong');
+      setLoadingPlan(null);
+    }
+  };
+
+  const handleManageBilling = async () => {
+    if (!org.stripeCustomerId) {
+      toast.error('No billing record found. Please subscribe to a plan first.');
+      return;
+    }
+
+    setIsPortalLoading(true);
+    try {
+      const res = await fetch('/api/workspace/billing/portal', {
+        method: 'POST',
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to open billing portal');
+
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } catch (err: any) {
+      console.error('Portal error:', err);
+      toast.error(err.message || 'Something went wrong');
+      setIsPortalLoading(false);
+    }
+  };
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500 pb-10">
       {/* Unified Header */}
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8 pb-8 border-b border-border/50">
         <div className="flex items-center gap-6">
@@ -81,12 +162,6 @@ export function BillingTab({ org, gateCount, qrCount }: BillingTabProps) {
               </span>
             </div>
           </div>
-        </div>
-        <div className="flex items-center gap-3">
-          <Button size="sm" onClick={handleSave} disabled={isPending} className="px-8 h-11 rounded-xl bg-primary shadow-lg shadow-primary/10 hover:-translate-y-0.5 transition-all text-xs font-bold uppercase tracking-widest gap-2">
-            {isPending ? <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" /> : <Save className="h-4 w-4" />}
-            {t('common.saveChanges', 'Save Settings')}
-          </Button>
         </div>
       </div>
 
@@ -119,11 +194,29 @@ export function BillingTab({ org, gateCount, qrCount }: BillingTabProps) {
               March 01, 2026
             </div>
           </div>
-          <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold uppercase tracking-widest text-xs h-11 rounded-xl shadow-lg shadow-primary/20">
-            {t('settings.billing.upgradePlan', 'Upgrade Subscription')}
-          </Button>
+          {org.stripeCustomerId && (
+            <Button 
+              onClick={handleManageBilling}
+              disabled={isPortalLoading}
+              className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold uppercase tracking-widest text-xs h-11 rounded-xl shadow-lg shadow-primary/20"
+            >
+              {isPortalLoading && <Loader2 className="h-3 w-3 animate-spin mr-2" />}
+              {t('settings.billing.manageSubscription', 'Manage Subscription')}
+            </Button>
+          )}
         </div>
       </Card>
+
+      {/* Plan Cards */}
+      <div className="space-y-4">
+        <h2 className="text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Available Plans</h2>
+        <PlanCards 
+          plans={PLANS_FOR_CARDS} 
+          currentPlan={org.plan} 
+          onUpgrade={handleUpgrade}
+          loadingPlan={loadingPlan}
+        />
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Left Column: Quick Actions & Usage */}
@@ -161,13 +254,6 @@ export function BillingTab({ org, gateCount, qrCount }: BillingTabProps) {
                   />
                 </div>
               </div>
-
-              <div className="pt-4 border-t border-border/50">
-                <Button variant="ghost" className="w-full justify-between text-xs font-bold uppercase tracking-widest h-10 hover:bg-primary/5 hover:text-primary transition-colors">
-                  {t('settings.billing.detailedAnalytics', 'Detailed Usage Logs')}
-                  <Activity className="h-4 w-4" />
-                </Button>
-              </div>
             </CardContent>
           </Card>
 
@@ -181,16 +267,28 @@ export function BillingTab({ org, gateCount, qrCount }: BillingTabProps) {
             <CardContent className="px-6 pb-6">
               <div className="flex items-center gap-4 p-4 rounded-xl bg-muted/30 border border-border/50 relative group cursor-pointer hover:border-primary/20 transition-all">
                 <div className="flex h-10 w-14 shrink-0 items-center justify-center rounded-lg bg-card border border-border font-black text-[10px] text-muted-foreground italic shadow-sm">
-                  VISA
+                  {org.stripeCustomerId ? 'STRIPE' : 'NONE'}
                 </div>
                 <div className="min-w-0">
-                  <p className="text-sm font-bold text-foreground">•••• 4242</p>
-                  <p className="text-[10px] text-muted-foreground font-semibold uppercase tracking-widest">Exp 12/26</p>
+                  <p className="text-sm font-bold text-foreground">
+                    {org.stripeCustomerId ? 'Active Account' : 'No Account'}
+                  </p>
+                  <p className="text-[10px] text-muted-foreground font-semibold uppercase tracking-widest">
+                    {org.stripeCustomerId ? 'Managed via portal' : 'Subscribe to start'}
+                  </p>
                 </div>
               </div>
-              <Button variant="outline" className="mt-4 w-full rounded-xl font-bold uppercase tracking-widest text-[10px] h-10 border-border transition-all hover:bg-secondary">
-                {t('settings.billing.managePayment', 'Update Billing Node')}
-              </Button>
+              {org.stripeCustomerId && (
+                <Button 
+                  variant="outline" 
+                  onClick={handleManageBilling}
+                  disabled={isPortalLoading}
+                  className="mt-4 w-full rounded-xl font-bold uppercase tracking-widest text-[10px] h-10 border-border transition-all hover:bg-secondary"
+                >
+                  {isPortalLoading && <Loader2 className="h-3 w-3 animate-spin mr-2" />}
+                  {t('settings.billing.managePayment', 'Update Billing Node')}
+                </Button>
+              )}
             </CardContent>
           </Card>
         </div>
@@ -207,43 +305,23 @@ export function BillingTab({ org, gateCount, qrCount }: BillingTabProps) {
                   {t('settings.billing.invoicesDesc', 'Download and review your transactional records.')}
                 </CardDescription>
               </div>
-              <Button variant="outline" size="sm" className="hidden sm:flex rounded-lg font-bold uppercase tracking-widest text-[10px] gap-2 h-9">
-                <Download className="h-3.5 w-3.5" />
-                {t('settings.billing.exportAll', 'Export CSV')}
-              </Button>
+              {org.stripeCustomerId && (
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={handleManageBilling}
+                  className="hidden sm:flex rounded-lg font-bold uppercase tracking-widest text-[10px] gap-2 h-9"
+                >
+                  <Download className="h-3.5 w-3.5" />
+                  {t('settings.billing.viewInStripe', 'View in Stripe')}
+                </Button>
+              )}
             </CardHeader>
             <CardContent className="p-0 flex-1">
-              <div className="overflow-x-auto h-full">
-                <table className="w-full text-left rtl:text-right border-collapse">
-                  <thead className="bg-muted/30 text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground border-b border-border/50">
-                    <tr>
-                      <th className="px-8 py-4">{t('settings.billing.ref', 'Invoice ID')}</th>
-                      <th className="px-8 py-4">{t('settings.billing.date', 'Date')}</th>
-                      <th className="px-8 py-4">{t('settings.billing.amount', 'Amount')}</th>
-                      <th className="px-8 py-4">{t('settings.billing.status', 'Status')}</th>
-                      <th className="px-8 py-4 text-right rtl:text-left">{t('settings.billing.action', 'Action')}</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-border/50">
-                    {MOCK_INVOICES.map((inv) => (
-                      <tr key={inv.id} className="group hover:bg-muted/20 transition-all">
-                        <td className="px-8 py-5 font-mono text-[11px] font-semibold text-muted-foreground">{inv.id}</td>
-                        <td className="px-8 py-5 text-xs font-bold text-muted-foreground/80 uppercase">{inv.date}</td>
-                        <td className="px-8 py-5 text-sm font-black text-foreground">{inv.amount}</td>
-                        <td className="px-8 py-5">
-                          <Badge className="bg-success/10 text-success border-none shadow-none font-bold text-[9px] uppercase tracking-widest px-2.5 py-0.5 rounded-full">
-                            {inv.status}
-                          </Badge>
-                        </td>
-                        <td className="px-8 py-5 text-right rtl:text-left">
-                          <Button variant="ghost" size="sm" className="font-bold uppercase tracking-widest text-[10px] text-primary hover:bg-primary/10 rounded-lg h-8">
-                            {t('settings.billing.download', 'PDF')}
-                          </Button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              <div className="flex items-center justify-center h-40 text-muted-foreground text-sm font-medium italic">
+                {org.stripeCustomerId 
+                  ? 'Invoice history is managed in the Stripe Customer Portal.'
+                  : 'No invoice history found.'}
               </div>
             </CardContent>
           </Card>

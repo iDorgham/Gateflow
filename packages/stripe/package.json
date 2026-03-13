@@ -1,0 +1,19 @@
+{
+  "name": "@gate-access/stripe",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "lint": "eslint src/",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "stripe": "^17.7.0"
+  },
+  "devDependencies": {
+    "@gate-access/config": "workspace:*",
+    "@gate-access/types": "workspace:*",
+    "typescript": "^5.9.3"
+  }
+}

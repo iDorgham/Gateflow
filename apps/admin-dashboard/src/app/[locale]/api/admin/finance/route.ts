@@ -4,10 +4,11 @@ import { prisma } from '@gate-access/db';
 
 export const dynamic = 'force-dynamic';
 
-// Plan prices (placeholder values — replace with Stripe data when integrated)
+// Plan prices (placeholder values — TODO: Replace with real Stripe data via API)
 const PLAN_PRICES: Record<string, number> = {
   FREE: 0,
-  PRO: 99,
+  PRO: 49,
+  ENTERPRISE: 499,
 };
 
 export async function GET(_request: NextRequest): Promise<NextResponse> {

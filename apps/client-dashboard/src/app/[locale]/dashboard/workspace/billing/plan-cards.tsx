@@ -20,9 +20,11 @@ interface Plan {
 interface PlanCardsProps {
   plans: Plan[];
   currentPlan: string;
+  onUpgrade: (planName: string) => Promise<void>;
+  loadingPlan?: string | null;
 }
 
-export function PlanCards({ plans, currentPlan }: PlanCardsProps) {
+export function PlanCards({ plans, currentPlan, onUpgrade, loadingPlan }: PlanCardsProps) {
   const currentPlanIndex = plans.findIndex((p) => p.name === currentPlan);
 
   return (
@@ -30,6 +32,7 @@ export function PlanCards({ plans, currentPlan }: PlanCardsProps) {
       {plans.map((plan, i) => {
         const isCurrent = plan.name === currentPlan;
         const isUpgrade = i > currentPlanIndex;
+        const isLoading = loadingPlan === plan.name;
         
         return (
           <Card
@@ -77,12 +80,16 @@ export function PlanCards({ plans, currentPlan }: PlanCardsProps) {
                     : "bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 dark:hover:bg-white text-white dark:text-slate-900"
                 )}
                 variant={isCurrent ? 'outline' : 'default'}
-                disabled={isCurrent}
-                onClick={() => {
-                  alert(`Stripe integration coming soon. Contact sales@gateflow.io to upgrade.`);
-                }}
+                disabled={isCurrent || !!loadingPlan}
+                onClick={() => onUpgrade(plan.name)}
               >
-                {isCurrent ? 'Current plan' : isUpgrade ? 'Upgrade' : 'Downgrade'}
+                {isLoading 
+                  ? 'Processing...' 
+                  : isCurrent 
+                    ? 'Current plan' 
+                    : isUpgrade 
+                      ? 'Upgrade' 
+                      : 'Downgrade'}
               </Button>
             </CardContent>
           </Card>

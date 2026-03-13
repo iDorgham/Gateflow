@@ -15,6 +15,7 @@ import {
   Bell,
   ShieldAlert,
   FolderKanban,
+  CreditCard,
 } from 'lucide-react';
 
 // Import Tabs (Profile & Billing are user settings — avatar menu)
@@ -27,6 +28,7 @@ import { IntegrationsTab } from './tabs/integrations-tab';
 import { NotificationsTab } from './tabs/notifications-tab';
 import { RolesTab } from './tabs/roles-tab';
 import { ProjectsTab } from './tabs/projects-tab';
+import { BillingTab } from './tabs/billing-tab';
 
 interface SettingsUser {
   id: string;
@@ -45,6 +47,7 @@ interface SettingsOrg {
   logoUrl?: string | null;
   domain: string;
   plan: string;
+  stripeCustomerId?: string | null;
   createdAt: string;
   requiredIdentityLevel: number;
   scanLogRetentionMonths: number | null;
@@ -133,7 +136,18 @@ export function SettingsClient(props: SettingsClientProps) {
   const pathname = usePathname();
 
   const tabParam = searchParams.get('tab') || 'general';
-  const validIds = ['general', 'workspace', 'projects', 'team', 'roles', 'notifications', 'api-keys', 'webhooks', 'integrations'];
+  const validIds = [
+    'general',
+    'workspace',
+    'projects',
+    'team',
+    'roles',
+    'notifications',
+    'api-keys',
+    'webhooks',
+    'integrations',
+    'billing',
+  ];
   const initialTab = validIds.includes(tabParam) ? tabParam : 'general';
   const [activeTab, setActiveTab] = useState(initialTab);
 
@@ -151,7 +165,6 @@ export function SettingsClient(props: SettingsClientProps) {
     router.replace(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
-  // GateFlow system settings only; Profile and Billing are under avatar menu (user settings).
   const TABS = [
     {
       id: 'general',
@@ -213,6 +226,18 @@ export function SettingsClient(props: SettingsClientProps) {
       label: t('settings.tabs.integrations', 'Integrations'),
       icon: Layers,
       component: <IntegrationsTab />,
+    },
+    {
+      id: 'billing',
+      label: t('settings.tabs.billing', 'Billing'),
+      icon: CreditCard,
+      component: (
+        <BillingTab
+          org={props.org}
+          gateCount={props.billing.gateCount}
+          qrCount={props.billing.qrCount}
+        />
+      ),
     },
   ];
 

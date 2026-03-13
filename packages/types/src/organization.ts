@@ -5,6 +5,7 @@ import type { QRCode } from './qr';
 export enum Plan {
   FREE = 'FREE',
   PRO = 'PRO',
+  ENTERPRISE = 'ENTERPRISE',
 }
 
 export interface Organization {
@@ -13,6 +14,9 @@ export interface Organization {
   email: string;
   domain: string | null;
   plan: Plan;
+  stripeCustomerId: string | null;
+  stripeSubscriptionId: string | null;
+  planExpiresAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date | null;

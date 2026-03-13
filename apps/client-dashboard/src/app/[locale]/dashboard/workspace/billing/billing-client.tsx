@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Card,
   CardContent,
@@ -11,12 +11,14 @@ import {
 } from '@gate-access/ui';
 import { PlanCards } from './plan-cards';
 import { WorkspacePageLayout, SidebarSection } from '@/components/dashboard/workspace-page-layout';
-import { CreditCard, Activity } from 'lucide-react';
+import { CreditCard, Activity, Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface BillingClientProps {
   org: {
     name: string;
     plan: string;
+    stripeCustomerId?: string | null;
   };
   gateCount: number;
   qrCount: number;
@@ -64,11 +66,61 @@ const MOCK_INVOICES = [
 ];
 
 export function BillingClient({ org, gateCount, qrCount }: BillingClientProps) {
+  const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
+  const [isPortalLoading, setIsPortalLoading] = useState(false);
+
   const limits = {
     FREE: { gates: 3, qr: 100 },
     PRO: { gates: 20, qr: 1000000 },
     ENTERPRISE: { gates: Infinity, qr: Infinity },
   }[org.plan as 'FREE' | 'PRO' | 'ENTERPRISE'] || { gates: 3, qr: 100 };
+
+  const handleUpgrade = async (planName: string) => {
+    setLoadingPlan(planName);
+    try {
+      const res = await fetch('/api/workspace/billing/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ plan: planName }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to start checkout');
+
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } catch (err: any) {
+      console.error('Upgrade error:', err);
+      toast.error(err.message || 'Something went wrong');
+      setLoadingPlan(null);
+    }
+  };
+
+  const handleManageBilling = async () => {
+    if (!org.stripeCustomerId) {
+      toast.error('No billing record found. Please subscribe to a plan first.');
+      return;
+    }
+
+    setIsPortalLoading(true);
+    try {
+      const res = await fetch('/api/workspace/billing/portal', {
+        method: 'POST',
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to open billing portal');
+
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } catch (err: any) {
+      console.error('Portal error:', err);
+      toast.error(err.message || 'Something went wrong');
+      setIsPortalLoading(false);
+    }
+  };
 
   const sidebar = (
     <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
@@ -108,18 +160,31 @@ export function BillingClient({ org, gateCount, qrCount }: BillingClientProps) {
 
       <SidebarSection title="Payment Method" icon={CreditCard}>
         <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 shadow-sm ring-1 ring-slate-100/50 dark:ring-slate-700/50">
-          <div className="flex items-center gap-3">
-             <div className="h-8 w-12 rounded bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 flex items-center justify-center font-bold text-[10px] text-slate-400">
-                VISA
-             </div>
-             <div>
-               <p className="text-xs font-bold text-slate-900 dark:text-white">•••• 4242</p>
-               <p className="text-[10px] text-slate-500 font-medium">Expires 12/26</p>
-             </div>
-          </div>
-          <button className="mt-4 w-full gap-2 rounded-xl text-[11px] font-bold border border-slate-200 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 py-2 transition-colors dark:text-slate-300">
-            Update method
-          </button>
+          {org.stripeCustomerId ? (
+            <>
+              <div className="flex items-center gap-3">
+                 <div className="h-8 w-12 rounded bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 flex items-center justify-center font-bold text-[10px] text-slate-400">
+                    STRIPE
+                 </div>
+                 <div>
+                   <p className="text-xs font-bold text-slate-900 dark:text-white">Active Account</p>
+                   <p className="text-[10px] text-slate-500 font-medium">Managed via portal</p>
+                 </div>
+              </div>
+              <button 
+                onClick={handleManageBilling}
+                disabled={isPortalLoading}
+                className="mt-4 w-full flex items-center justify-center gap-2 rounded-xl text-[11px] font-bold border border-slate-200 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 py-2 transition-colors dark:text-slate-300 disabled:opacity-50"
+              >
+                {isPortalLoading && <Loader2 className="h-3 w-3 animate-spin" />}
+                Manage in Stripe
+              </button>
+            </>
+          ) : (
+            <p className="text-xs text-slate-500 font-medium text-center py-2">
+              No active subscription yet.
+            </p>
+          )}
         </div>
       </SidebarSection>
     </div>
@@ -161,56 +226,29 @@ export function BillingClient({ org, gateCount, qrCount }: BillingClientProps) {
             <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-medium">
               {org.plan === 'FREE'
                 ? 'You are on the free plan. Upgrade to unlock more features.'
-                : `Your ${org.plan} subscription renews monthly.`}
+                : `Your ${org.plan} subscription is active.`}
             </p>
           </CardContent>
         </Card>
 
         {/* Plan cards */}
-        <PlanCards plans={PLANS} currentPlan={org.plan} />
+        <PlanCards 
+          plans={PLANS} 
+          currentPlan={org.plan} 
+          onUpgrade={handleUpgrade}
+          loadingPlan={loadingPlan}
+        />
 
-        {/* Invoice history */}
-        {org.plan !== 'FREE' && (
-          <Card className="rounded-2xl border-slate-200 dark:border-slate-700 shadow-sm overflow-hidden">
-            <CardHeader className="pb-4 border-b border-slate-100 dark:border-slate-700">
-              <CardTitle className="text-lg font-bold">Invoice History</CardTitle>
-              <CardDescription className="text-slate-500">Download receipts for your records.</CardDescription>
-            </CardHeader>
-            <CardContent className="p-0">
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm">
-                  <thead>
-                    <tr className="bg-slate-50/50 dark:bg-slate-800/50 text-left text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-                      <th className="px-6 py-3">Invoice</th>
-                      <th className="px-6 py-3">Date</th>
-                      <th className="px-6 py-3">Amount</th>
-                      <th className="px-6 py-3">Status</th>
-                      <th className="px-6 py-3 text-right">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
-                    {MOCK_INVOICES.map((inv) => (
-                      <tr key={inv.id} className="group hover:bg-slate-50/50 dark:hover:bg-slate-800/50 transition-colors">
-                        <td className="px-6 py-4 font-mono text-xs font-bold text-slate-900 dark:text-white">{inv.id}</td>
-                        <td className="px-6 py-4 text-slate-600 dark:text-slate-400 font-medium">{inv.date}</td>
-                        <td className="px-6 py-4 text-slate-900 dark:text-white font-bold">{inv.amount}</td>
-                        <td className="px-6 py-4">
-                          <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-bold text-green-700 shadow-sm">
-                            {inv.status}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 text-right">
-                          <button className="text-xs font-bold text-blue-600 hover:text-blue-700 transition-colors">
-                            Download
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </CardContent>
-          </Card>
+        {/* Invoice history - Hide if FREE, or redirect to portal if PRO */}
+        {org.plan !== 'FREE' && org.stripeCustomerId && (
+          <div className="flex justify-center py-4">
+            <button 
+              onClick={handleManageBilling}
+              className="text-sm font-bold text-blue-600 hover:text-blue-700 transition-colors flex items-center gap-2"
+            >
+              View Invoice History in Stripe Portal
+            </button>
+          </div>
         )}
       </div>
     </WorkspacePageLayout>

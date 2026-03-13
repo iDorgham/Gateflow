@@ -17,6 +17,7 @@ import {
   Trash2,
   Search,
   LayoutGrid,
+  CreditCard,
 } from 'lucide-react';
 import { cn, ScrollArea, Input } from '@gate-access/ui';
 
@@ -38,6 +39,7 @@ const SETTINGS_TABS: SettingsTab[] = [
   { id: 'notifications', label: 'Notifications', icon: Bell, href: '/dashboard/settings/notifications' },
   { id: 'api', label: 'API & Webhooks', icon: Code, href: '/dashboard/settings/api' },
   { id: 'integrations', label: 'Integrations', icon: Globe, href: '/dashboard/settings/integrations' },
+  { id: 'billing', label: 'Billing & Quotas', icon: CreditCard, href: '/dashboard/settings/billing' },
   { id: 'danger', label: 'Danger Zone', icon: Trash2, href: '/dashboard/settings/danger' },
 ];
 

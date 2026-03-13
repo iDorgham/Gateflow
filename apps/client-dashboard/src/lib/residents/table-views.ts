@@ -49,9 +49,26 @@ export const UNITS_COLUMN_IDS = [
   'actions',
 ] as const;
 
+export const QR_COLUMN_IDS = [
+  'select',
+  'guestName',
+  'guestPhone',
+  'guestEmail',
+  'code',
+  'type',
+  'status',
+  'createdAt',
+  'expiresAt',
+  'scansCount',
+  'lastScanAt',
+  'gateName',
+  'projectName',
+] as const;
+
 /** Columns that cannot be hidden (id/name) */
 export const CONTACTS_PINNED = new Set(['select', 'avatar', 'firstName', 'lastName', 'actions']);
 export const UNITS_PINNED = new Set(['select', 'name', 'actions']);
+export const QR_PINNED = new Set(['select', 'code']);
 
 export const PRESET_VIEWS: Record<string, Record<string, boolean>> = {
   Default: {}, // all visible
