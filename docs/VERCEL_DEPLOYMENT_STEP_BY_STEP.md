@@ -63,5 +63,10 @@ If this is a fresh database:
 ### **"pnpm not found"**
 - **Fix**: Ensure you have a `packageManager` field in your root `package.json` pointing to `pnpm`. (This is already set in GateFlow).
 
+### **"ERR_PNPM_OUTDATED_LOCKFILE"**
+- **Cause**: The `pnpm-lock.yaml` file is out of sync with one of the `package.json` files in the monorepo.
+- **Fix**: Run `pnpm install` on your local machine to update the lockfile, then commit and push the updated `pnpm-lock.yaml`.
+- **Tip**: Vercel runs in a "frozen-lockfile" mode by default, meaning it will fail if the lockfile isn't perfectly matched. Always ensure your local lockfile is committed after adding or removing dependencies.
+
 ### **Stripe/Secret Key Errors**
 - **Fix**: Ensure `STRIPE_SECRET_KEY` and other required secrets are set in the Vercel Dashboard for that specific project.
