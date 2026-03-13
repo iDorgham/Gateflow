@@ -1290,8 +1290,8 @@ model EventLog {
 **Setup:**
 ```bash
 # Clone repository
-git clone https://github.com/iDorgham/Gate-Access.git
-cd Gate-Access
+git clone https://github.com/iDorgham/Gateflow.git
+cd Gateflow
 
 # Install dependencies
 pnpm install

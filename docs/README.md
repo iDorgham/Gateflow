@@ -10,15 +10,15 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/iDorgham/Gate-Access/stargazers">
-    <img src="https://img.shields.io/github/stars/iDorgham/Gate-Access?style=social" alt="Stars">
+  <a href="https://github.com/iDorgham/Gateflow/stargazers">
+    <img src="https://img.shields.io/github/stars/iDorgham/Gateflow?style=social" alt="Stars">
   </a>
-  <a href="https://github.com/iDorgham/Gate-Access/network/members">
-    <img src="https://img.shields.io/github/forks/iDorgham/Gate-Access?style=social" alt="Forks">
+  <a href="https://github.com/iDorgham/Gateflow/network/members">
+    <img src="https://img.shields.io/github/forks/iDorgham/Gateflow?style=social" alt="Forks">
   </a>
   <img src="https://img.shields.io/badge/Status-95%25%20MVP-brightgreen" alt="Status">
   <img src="https://img.shields.io/badge/Security-Strict-blue" alt="Security">
-  <a href="https://twitter.com/intent/tweet?text=Check+out+GateFlow+-+Zero-Trust+Digital+Gate+Infrastructure+Platform&url=https%3A%2F%2Fgithub.com%2FiDorgham%2FGate-Access">
+  <a href="https://twitter.com/intent/tweet?text=Check+out+GateFlow+-+Zero-Trust+Digital+Gate+Infrastructure+Platform&url=https%3A%2F%2Fgithub.com%2FiDorgham%2FGateflow">
     <img src="https://img.shields.io/badge/Tweet-Share-blue" alt="Tweet">
   </a>
 </p>
@@ -175,7 +175,7 @@ GateFlow is a **next-generation digital gate infrastructure platform** designed 
 ## 🏗️ Architecture
 
 ```
-Gate-Access/
+Gateflow/
 ├── apps/
 │   ├── admin-dashboard/      # Super admin panel — Next.js 14, port 3002
 │   ├── client-dashboard/    # Main SaaS portal — Next.js 14, port 3001
@@ -236,8 +236,8 @@ GateFlow follows **zero-trust** security principles:
 
 ```bash
 # Clone the repository
-git clone https://github.com/iDorgham/Gate-Access.git
-cd Gate-Access
+git clone https://github.com/iDorgham/Gateflow.git
+cd Gateflow
 
 # Install dependencies
 pnpm install

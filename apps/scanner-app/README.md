@@ -243,5 +243,5 @@ MIT License — see [../../LICENSE](../../LICENSE) for details.
 
 <p align="center">
   <strong>Part of the GateFlow Ecosystem</strong><br>
-  <a href="https://gateflow.io">Website</a> • <a href="https://github.com/iDorgham/Gate-Access">GitHub</a>
+  <a href="https://gateflow.io">Website</a> • <a href="https://github.com/iDorgham/Gateflow">GitHub</a>
 </p>
