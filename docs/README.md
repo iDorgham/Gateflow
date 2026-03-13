@@ -324,7 +324,7 @@ MIT License — see [LICENSE](./LICENSE) for details.
 
 <p align="center">
   <strong>Built with ❤️ for secure physical spaces in the MENA region</strong><br>
-  <a href="https://gateflow.io">Website</a> • 
+  <a href="https://gateflow.site">Website</a> • 
   <a href="https://twitter.com/gateflow">Twitter</a> • 
-  <a href="mailto:hello@gateflow.io">Contact</a>
+  <a href="mailto:hello@gateflow.site">Contact</a>
 </p>

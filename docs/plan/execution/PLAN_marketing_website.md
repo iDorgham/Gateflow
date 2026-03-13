@@ -134,7 +134,7 @@
 - Honeypot field (`website` hidden input — reject if filled)
 - In-memory rate limiter: max 3 submissions per IP per hour
 - On success: send notification email to `CONTACT_NOTIFY_EMAIL` + auto-reply to submitter
-- Graceful degradation: if `RESEND_API_KEY` missing → log + return 503 with "contact@gateflow.io" fallback message
+- Graceful degradation: if `RESEND_API_KEY` missing → log + return 503 with "contact@gateflow.site" fallback message
 - Add `RESEND_API_KEY` and `CONTACT_NOTIFY_EMAIL` to `apps/marketing/.env.example`
 - Update contact form component to POST to `/api/contact`, show success/error states
 

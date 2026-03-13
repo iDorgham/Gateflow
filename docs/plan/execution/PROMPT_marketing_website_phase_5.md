@@ -41,9 +41,9 @@ Each OG image: 1200×630px, dark background, GateFlow logo text, page title, tag
 
 **hreflang** — add to `app/[locale]/layout.tsx`:
 ```html
-<link rel="alternate" hreflang="en" href="https://gateflow.io/en{pathname}" />
-<link rel="alternate" hreflang="ar" href="https://gateflow.io/ar-EG{pathname}" />
-<link rel="alternate" hreflang="x-default" href="https://gateflow.io/en{pathname}" />
+<link rel="alternate" hreflang="en" href="https://gateflow.site/en{pathname}" />
+<link rel="alternate" hreflang="ar" href="https://gateflow.site/ar-EG{pathname}" />
+<link rel="alternate" hreflang="x-default" href="https://gateflow.site/en{pathname}" />
 ```
 
 **`company/page.tsx`** — full content:

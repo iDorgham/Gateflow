@@ -48,14 +48,14 @@ Logic:
    - Body (HTML): all form fields formatted
 5. **Send auto-reply** to submitter's email:
    - Subject: `We received your message — GateFlow`
-   - Body: warm confirmation, expected response time (1–2 business days), contact@gateflow.io fallback
-6. **Graceful degradation**: if `RESEND_API_KEY` is not set → return `{ ok: false, fallback: 'contact@gateflow.io' }` with status 503
+   - Body: warm confirmation, expected response time (1–2 business days), contact@gateflow.site fallback
+6. **Graceful degradation**: if `RESEND_API_KEY` is not set → return `{ ok: false, fallback: 'contact@gateflow.site' }` with status 503
 
 **Environment variables** — add to `apps/marketing/.env.example`:
 ```
 RESEND_API_KEY=re_...
-CONTACT_NOTIFY_EMAIL=team@gateflow.io
-CONTACT_FROM_EMAIL=noreply@gateflow.io
+CONTACT_NOTIFY_EMAIL=team@gateflow.site
+CONTACT_FROM_EMAIL=noreply@gateflow.site
 ```
 
 **Update `components/contact-form.tsx`**:
@@ -63,7 +63,7 @@ CONTACT_FROM_EMAIL=noreply@gateflow.io
 - On submit: `fetch('/api/contact', { method: 'POST', body: JSON.stringify(formData) })`
 - Show loading state during request
 - Success state: "Thanks, {name}! We'll be in touch within 1–2 business days."
-- Error state: show error message; if 503 + fallback email, show "Email us directly at contact@gateflow.io"
+- Error state: show error message; if 503 + fallback email, show "Email us directly at contact@gateflow.site"
 - Add hidden `<input name="website" tabIndex={-1} />` honeypot field (aria-hidden, visually hidden with CSS)
 - Add plan interest dropdown: Starter / Pro / Enterprise / Not sure yet
 

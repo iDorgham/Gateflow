@@ -110,7 +110,7 @@ The Marketing Suite provides comprehensive tracking and attribution capabilities
 │                    Marketing Suite Flow                          │
 │                                                                  │
 │  1. Visitor arrives with UTM params                              │
-│     https://gateflow.io?utm_source=facebook&utm_campaign=...    │
+│     https://gateflow.site?utm_source=facebook&utm_campaign=...    │
 │                                                                  │
 │  2. UTM params stored in sessionStorage                          │
 │     extractUTMParams() → storeUTMParams()                        │
@@ -310,12 +310,12 @@ ORDER BY qr_scans DESC;
 
 **With UTM parameters:**
 ```
-https://gateflow.io?utm_source=facebook&utm_campaign=summer_2026&utm_medium=cpc
+https://gateflow.site?utm_source=facebook&utm_campaign=summer_2026&utm_medium=cpc
 ```
 
 **QR landing page:**
 ```
-https://gateflow.io/s/abc123?utm_source=email&utm_campaign=newsletter
+https://gateflow.site/s/abc123?utm_source=email&utm_campaign=newsletter
 ```
 
 ---
