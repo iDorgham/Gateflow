@@ -11,4 +11,4 @@
 | 3 | Contact picker + share sheet | complete ✅ |
 | 4 | Push notifications: token + scan event | complete ✅ |
 | 5 | GPS guide + arrival notification | complete ✅ |
-| 6 | History tab, Settings, RTL polish, tests | pending |
+| 6 | History tab, Settings, RTL polish, tests | complete ✅ |
