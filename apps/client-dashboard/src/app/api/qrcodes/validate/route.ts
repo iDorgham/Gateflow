@@ -475,7 +475,8 @@ async function notifyResidentOfVisitorScan(
 
     const prefs = unit.user.preferences as Record<string, unknown> | null;
     const expoPushToken = typeof prefs?.expoPushToken === 'string' ? prefs.expoPushToken : null;
-    if (!expoPushToken) return;
+    const notifyScan = prefs?.notifyScan !== false; // default true
+    if (!expoPushToken || !notifyScan) return;
 
     // Resolve gate name for the notification body
     const gate = await prisma.gate.findFirst({

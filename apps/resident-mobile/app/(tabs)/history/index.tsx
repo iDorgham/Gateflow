@@ -1,11 +1,88 @@
-import { View, Text, StyleSheet, ActivityIndicator, FlatList, RefreshControl } from 'react-native';
-import { useEffect, useState } from 'react';
+import { View, Text, StyleSheet, FlatList, RefreshControl, Animated } from 'react-native';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { router } from 'expo-router';
 import { residentFetch } from '../../../lib/api';
 import { theme } from '../../../lib/theme';
 import { getCachedHistory, setCachedHistory, type ResidentHistoryItem } from '../../../lib/history-cache';
 
 const { colors, spacing, borderRadius, shadows, typography } = theme;
+
+// ─── Status Badge ────────────────────────────────────────────────────────────
+
+const STATUS_COLORS: Record<string, { bg: string; text: string; label: string }> = {
+  SUCCESS:         { bg: '#d1fae5', text: '#065f46', label: 'Admitted' },
+  DENIED:          { bg: '#fee2e2', text: '#991b1b', label: 'Denied' },
+  FAILED:          { bg: '#fee2e2', text: '#991b1b', label: 'Failed' },
+  EXPIRED:         { bg: '#fef3c7', text: '#92400e', label: 'Expired' },
+  MAX_USES_REACHED:{ bg: '#fef3c7', text: '#92400e', label: 'Limit Reached' },
+  INACTIVE:        { bg: '#f3f4f6', text: '#6b7280', label: 'Inactive' },
+};
+
+function StatusBadge({ status }: { status: string }) {
+  const cfg = STATUS_COLORS[status] ?? { bg: '#f3f4f6', text: '#6b7280', label: status };
+  return (
+    <View style={[styles.badge, { backgroundColor: cfg.bg }]}>
+      <Text style={[styles.badgeText, { color: cfg.text }]}>{cfg.label}</Text>
+    </View>
+  );
+}
+
+// ─── Skeleton ────────────────────────────────────────────────────────────────
+
+function SkeletonCard() {
+  const opacity = useRef(new Animated.Value(0.4)).current;
+
+  useEffect(() => {
+    const anim = Animated.loop(
+      Animated.sequence([
+        Animated.timing(opacity, { toValue: 1, duration: 700, useNativeDriver: true }),
+        Animated.timing(opacity, { toValue: 0.4, duration: 700, useNativeDriver: true }),
+      ])
+    );
+    anim.start();
+    return () => anim.stop();
+  }, [opacity]);
+
+  return (
+    <Animated.View style={[styles.card, { opacity }]}>
+      <View style={styles.skeletonTitle} />
+      <View style={styles.skeletonMeta} />
+    </Animated.View>
+  );
+}
+
+// ─── Date grouping helpers ────────────────────────────────────────────────────
+
+function toDateLabel(iso: string): string {
+  const d = new Date(iso);
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const itemDay = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  const diff = today.getTime() - itemDay.getTime();
+  if (diff === 0) return 'Today';
+  if (diff === 86_400_000) return 'Yesterday';
+  return d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' });
+}
+
+type ListRow =
+  | { kind: 'header'; date: string; key: string }
+  | { kind: 'item'; item: ResidentHistoryItem; key: string };
+
+function buildListRows(rows: ResidentHistoryItem[]): ListRow[] {
+  const result: ListRow[] = [];
+  let lastDate = '';
+  for (const item of rows) {
+    const date = toDateLabel(item.scannedAt);
+    if (date !== lastDate) {
+      result.push({ kind: 'header', date, key: `header-${date}` });
+      lastDate = date;
+    }
+    result.push({ kind: 'item', item, key: item.id });
+  }
+  return result;
+}
+
+// ─── Screen ──────────────────────────────────────────────────────────────────
 
 export default function HistoryScreen() {
   const [rows, setRows] = useState<ResidentHistoryItem[]>([]);
@@ -76,14 +153,14 @@ export default function HistoryScreen() {
     }
   };
 
-  useEffect(() => {
-    load();
-  }, []);
+  useEffect(() => { load(); }, []);
+
+  const listRows = useMemo(() => buildListRows(rows), [rows]);
 
   if (loading && rows.length === 0) {
     return (
-      <View style={[styles.container, styles.centered]}>
-        <ActivityIndicator size="large" color={colors.primary} />
+      <View style={styles.container}>
+        {[0, 1, 2].map((i) => <SkeletonCard key={i} />)}
       </View>
     );
   }
@@ -92,13 +169,13 @@ export default function HistoryScreen() {
     <View style={styles.container}>
       {fromCache ? (
         <View style={styles.banner}>
-          <Text style={styles.bannerText}>Showing cached history (offline or last load)</Text>
+          <Text style={styles.bannerText}>Showing cached history (offline)</Text>
         </View>
       ) : null}
       {error ? <Text style={styles.errorText}>{error}</Text> : null}
       <FlatList
-        data={rows}
-        keyExtractor={(item) => item.id}
+        data={listRows}
+        keyExtractor={(row) => row.key}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={() => load(true)} tintColor={colors.primary} />
         }
@@ -106,19 +183,28 @@ export default function HistoryScreen() {
         ListEmptyComponent={
           <View style={styles.card}>
             <Text style={styles.emptyText}>No history yet.</Text>
-            <Text style={styles.emptySubtext}>Scans of your visitor passes will show up here.</Text>
+            <Text style={styles.emptySubtext}>Scans of your visitor passes will appear here.</Text>
           </View>
         }
-        renderItem={({ item }) => (
-          <View style={styles.card}>
-            <Text style={styles.cardTitle} numberOfLines={1}>
-              {item.visitorName}
-            </Text>
-            <Text style={styles.cardMeta}>
-              {new Date(item.scannedAt).toLocaleString()} • {item.gateName}
-            </Text>
-          </View>
-        )}
+        renderItem={({ item: row }) => {
+          if (row.kind === 'header') {
+            return <Text style={styles.dateHeader}>{row.date}</Text>;
+          }
+          const { item } = row;
+          return (
+            <View style={styles.card}>
+              <View style={styles.cardRow}>
+                <Text style={styles.cardTitle} numberOfLines={1}>{item.visitorName}</Text>
+                <StatusBadge status={item.status} />
+              </View>
+              <Text style={styles.cardMeta}>
+                {new Date(item.scannedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                {' • '}
+                {item.gateName}
+              </Text>
+            </View>
+          );
+        }}
       />
     </View>
   );
@@ -130,10 +216,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
     paddingHorizontal: spacing.xl,
     paddingTop: spacing.lg,
-  },
-  centered: {
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   listContent: {
     paddingBottom: spacing['2xl'],
@@ -149,6 +231,16 @@ const styles = StyleSheet.create({
     lineHeight: typography.sm.lineHeight,
     color: '#92400e',
   },
+  dateHeader: {
+    fontSize: typography.sm.fontSize,
+    lineHeight: typography.sm.lineHeight,
+    fontWeight: '700',
+    color: colors.mutedForeground,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+    marginBottom: spacing.sm,
+    marginTop: spacing.lg,
+  },
   card: {
     backgroundColor: colors.card,
     borderRadius: borderRadius.xl,
@@ -156,15 +248,31 @@ const styles = StyleSheet.create({
     marginBottom: spacing.lg,
     ...shadows.sm,
   },
+  cardRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 4,
+  },
   cardTitle: {
     fontSize: 17,
     fontWeight: '600',
     color: colors.foreground,
-    marginBottom: 4,
+    flex: 1,
+    marginRight: spacing.sm,
   },
   cardMeta: {
     fontSize: 13,
     color: colors.mutedForeground,
+  },
+  badge: {
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 99,
+  },
+  badgeText: {
+    fontSize: 11,
+    fontWeight: '700',
   },
   emptyText: {
     fontSize: 17,
@@ -181,5 +289,19 @@ const styles = StyleSheet.create({
     color: colors.danger,
     marginBottom: spacing.lg,
   },
+  skeletonTitle: {
+    height: 16,
+    width: '60%',
+    backgroundColor: colors.mutedForeground,
+    borderRadius: 4,
+    marginBottom: 10,
+    opacity: 0.2,
+  },
+  skeletonMeta: {
+    height: 12,
+    width: '40%',
+    backgroundColor: colors.mutedForeground,
+    borderRadius: 4,
+    opacity: 0.15,
+  },
 });
-

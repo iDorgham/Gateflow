@@ -63,11 +63,12 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       data: { arrivalNotifiedAt: new Date() },
     });
 
-    // Send Expo push to resident if token available
+    // Send Expo push to resident if token available and preference enabled
     const prefs = (resident.preferences ?? {}) as Record<string, unknown>;
     const expoPushToken = typeof prefs.expoPushToken === 'string' ? prefs.expoPushToken : null;
+    const notifyArrival = prefs.notifyArrival !== false; // default true
 
-    if (expoPushToken) {
+    if (expoPushToken && notifyArrival) {
       const visitorName = visitorQR.visitorName ?? 'Your visitor';
       const controller = new AbortController();
       const timeout = setTimeout(() => controller.abort(), 5000);

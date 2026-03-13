@@ -1,18 +1,58 @@
-import { useMemo, useState } from 'react';
-import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { useEffect, useMemo, useState } from 'react';
+import { Alert, Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
 import { router } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { logout } from '../../../lib/auth-client';
+import { residentFetch } from '../../../lib/api';
 import { theme } from '../../../lib/theme';
 
 const { colors, spacing, borderRadius, shadows, typography } = theme;
 
+const APP_VERSION = '0.1.0';
+const KEY_NOTIFY_SCAN    = 'resident_notify_scan_v1';
+const KEY_NOTIFY_ARRIVAL = 'resident_notify_arrival_v1';
+
 export default function SettingsScreen() {
-  const [logoutPending, setLogoutPending] = useState(false);
+  const [logoutPending, setLogoutPending]     = useState(false);
+  const [notifyScan, setNotifyScan]           = useState(true);
+  const [notifyArrival, setNotifyArrival]     = useState(true);
+  const [prefsSaving, setPrefsSaving]         = useState(false);
+
+  // Load saved prefs on mount
+  useEffect(() => {
+    AsyncStorage.multiGet([KEY_NOTIFY_SCAN, KEY_NOTIFY_ARRIVAL]).then((pairs) => {
+      for (const [key, val] of pairs) {
+        if (val === null) continue;
+        if (key === KEY_NOTIFY_SCAN)    setNotifyScan(val === 'true');
+        if (key === KEY_NOTIFY_ARRIVAL) setNotifyArrival(val === 'true');
+      }
+    }).catch(() => {});
+  }, []);
 
   const apiBase = useMemo(() => {
     const base = process.env.EXPO_PUBLIC_API_URL;
     return base && base.trim() ? base.trim().replace(/\/$/, '') : 'http://localhost:3001';
   }, []);
+
+  const toggleNotifyScan = async (value: boolean) => {
+    setNotifyScan(value);
+    await AsyncStorage.setItem(KEY_NOTIFY_SCAN, String(value)).catch(() => {});
+    setPrefsSaving(true);
+    residentFetch('/resident/push-token', {
+      method: 'POST',
+      body: JSON.stringify({ notifyScan: value }),
+    }).catch(() => {}).finally(() => setPrefsSaving(false));
+  };
+
+  const toggleNotifyArrival = async (value: boolean) => {
+    setNotifyArrival(value);
+    await AsyncStorage.setItem(KEY_NOTIFY_ARRIVAL, String(value)).catch(() => {});
+    setPrefsSaving(true);
+    residentFetch('/resident/push-token', {
+      method: 'POST',
+      body: JSON.stringify({ notifyArrival: value }),
+    }).catch(() => {}).finally(() => setPrefsSaving(false));
+  };
 
   const handleLogout = () => {
     Alert.alert('Log out', 'Are you sure you want to log out?', [
@@ -32,6 +72,30 @@ export default function SettingsScreen() {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+
+      {/* Notifications */}
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Notifications</Text>
+        <View style={styles.card}>
+          <ToggleRow
+            label="Visitor scan alerts"
+            description="Notify when your visitor's QR is scanned at the gate"
+            value={notifyScan}
+            onValueChange={toggleNotifyScan}
+            disabled={prefsSaving}
+          />
+          <View style={styles.divider} />
+          <ToggleRow
+            label="Arrival notifications"
+            description={"Notify when a visitor taps \"I've arrived\""}
+            value={notifyArrival}
+            onValueChange={toggleNotifyArrival}
+            disabled={prefsSaving}
+          />
+        </View>
+      </View>
+
+      {/* Account */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Account</Text>
         <View style={styles.card}>
@@ -52,24 +116,16 @@ export default function SettingsScreen() {
         </Pressable>
       </View>
 
+      {/* App info */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Appearance</Text>
+        <Text style={styles.sectionTitle}>About</Text>
         <View style={styles.card}>
-          <Text style={styles.rowLabel}>Theme</Text>
-          <Text style={styles.rowValue}>Real Estate Palette</Text>
-          <Text style={styles.hint}>Dark mode toggle can be added later.</Text>
+          <Text style={styles.rowLabel}>Version</Text>
+          <Text style={styles.rowValue}>{APP_VERSION}</Text>
         </View>
       </View>
 
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Language</Text>
-        <View style={styles.card}>
-          <Text style={styles.rowLabel}>App language</Text>
-          <Text style={styles.rowValue}>English</Text>
-          <Text style={styles.hint}>Arabic support can be wired to @gate-access/i18n later.</Text>
-        </View>
-      </View>
-
+      {/* Debug */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Debug</Text>
         <View style={styles.card}>
@@ -78,7 +134,38 @@ export default function SettingsScreen() {
           <Text style={styles.hint}>Set via EXPO_PUBLIC_API_URL in resident-mobile .env.local</Text>
         </View>
       </View>
+
     </ScrollView>
+  );
+}
+
+function ToggleRow({
+  label,
+  description,
+  value,
+  onValueChange,
+  disabled,
+}: {
+  label: string;
+  description: string;
+  value: boolean;
+  onValueChange: (v: boolean) => void;
+  disabled: boolean;
+}) {
+  return (
+    <View style={styles.toggleRow}>
+      <View style={styles.toggleLabelWrap}>
+        <Text style={styles.toggleLabel}>{label}</Text>
+        <Text style={styles.toggleDesc}>{description}</Text>
+      </View>
+      <Switch
+        value={value}
+        onValueChange={onValueChange}
+        disabled={disabled}
+        trackColor={{ false: '#d1d5db', true: colors.primary }}
+        thumbColor="#ffffff"
+      />
+    </View>
   );
 }
 
@@ -111,6 +198,11 @@ const styles = StyleSheet.create({
     marginBottom: spacing.lg,
     ...shadows.sm,
   },
+  divider: {
+    height: 1,
+    backgroundColor: colors.border ?? '#e5e7eb',
+    marginVertical: spacing.lg,
+  },
   rowLabel: {
     fontSize: typography.sm.fontSize,
     lineHeight: typography.sm.lineHeight,
@@ -135,6 +227,27 @@ const styles = StyleSheet.create({
     color: colors.mutedForeground,
     marginTop: spacing.sm,
   },
+  toggleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: spacing.lg,
+  },
+  toggleLabelWrap: {
+    flex: 1,
+  },
+  toggleLabel: {
+    fontSize: typography.base.fontSize,
+    lineHeight: typography.base.lineHeight,
+    fontWeight: '600',
+    color: colors.foreground,
+    marginBottom: 2,
+  },
+  toggleDesc: {
+    fontSize: typography.sm.fontSize,
+    lineHeight: typography.sm.lineHeight,
+    color: colors.mutedForeground,
+  },
   button: {
     height: 52,
     borderRadius: borderRadius.xl,
@@ -157,4 +270,3 @@ const styles = StyleSheet.create({
     color: colors.dangerForeground,
   },
 });
-
