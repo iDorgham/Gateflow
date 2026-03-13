@@ -4,6 +4,7 @@ import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma, Prisma, ContactSource } from '@gate-access/db';
 import { emitEvent, EventType } from '@/lib/realtime/emit-event';
 import { triggerContactCreatedWebhook } from '@/lib/crm-webhooks';
+import { checkRateLimit } from '@/lib/rate-limit';
 
 export const dynamic = 'force-dynamic';
 
@@ -15,6 +16,10 @@ function escapeCsvCell(value: string): string {
 }
 
 const GetContactsQuerySchema = z.object({
+  ids: z
+    .string()
+    .optional()
+    .transform((s) => (s ? s.split(',').map((x) => x.trim()).filter(Boolean) : undefined)),
   unitId: z.string().optional(),
   format: z.enum(['json', 'csv']).optional(),
   dateFrom: z
@@ -78,6 +83,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     const { searchParams } = new URL(request.url);
     const parsed = GetContactsQuerySchema.safeParse({
+      ids: searchParams.get('ids') ?? undefined,
       unitId: searchParams.get('unitId') ?? undefined,
       format: searchParams.get('format') ?? undefined,
       dateFrom: searchParams.get('dateFrom') ?? undefined,
@@ -106,6 +112,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     }
 
     const {
+      ids,
       unitId,
       format,
       dateFrom,
@@ -122,6 +129,17 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       page,
       pageSize,
     } = parsed.data;
+
+    if (format === 'csv') {
+      // Rate limit CSV exports (user-scoped)
+      const rl = await checkRateLimit(`contacts-export:${claims.sub}`, 20, 60_000);
+      if (!rl.allowed) {
+        return NextResponse.json(
+          { success: false, message: 'Too many export requests. Please retry shortly.' },
+          { status: 429 }
+        );
+      }
+    }
 
     const fromDate = dateFrom ?? from;
     const toDate = dateTo ?? to;
@@ -185,6 +203,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       deletedAt: null,
       ...unitFilter,
       ...tagFilter,
+      ...(ids?.length ? { id: { in: ids } } : {}),
       ...(search?.trim()
         ? {
             OR: [
@@ -247,8 +266,8 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         orderBy: orderBy as Parameters<
           typeof prisma.contact.findMany
         >[0]['orderBy'],
-        skip: (page - 1) * pageSize,
-        take: pageSize,
+        skip: format === 'csv' ? 0 : (page - 1) * pageSize,
+        take: format === 'csv' ? 10_000 : pageSize,
       }),
       prisma.contact.count({ where }),
     ]);
@@ -291,6 +310,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
             entityType: 'Contact',
             metadata: {
               rowCount: contacts.length,
+              idsCount: ids?.length ?? null,
               filters: {
                 search: search ?? null,
                 unitId: unitId ?? null,
@@ -299,6 +319,8 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
                 gateId: gateId ?? null,
                 dateFrom: fromDate ?? null,
                 dateTo: toDate ?? null,
+                sortBy: sort ?? 'firstName',
+                sortDir: sortDir ?? 'asc',
               },
             },
           },

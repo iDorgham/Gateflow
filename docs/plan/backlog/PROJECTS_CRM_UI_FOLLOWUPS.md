@@ -2,9 +2,9 @@
 
 Optional improvements from **PR #38** (feat/projects-crm-ui → master). Refine into phases via `/plan` if prioritised.
 
-| Item | GitHub issue |
-|------|--------------|
-| 1. Export audit logging (Contacts & Units) | [#40](https://github.com/iDorgham/Gateflow/issues/40) |
+| Item | Status |
+|------|--------|
+| 1. Export audit logging (Contacts & Units) | ✅ Complete |
 | 2. QR Codes — density toggles & saved views | [#39](https://github.com/iDorgham/Gateflow/issues/39) |
 
 ---

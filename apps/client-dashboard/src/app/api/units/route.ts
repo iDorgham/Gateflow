@@ -3,6 +3,7 @@ import { z } from 'zod';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma, Prisma } from '@gate-access/db';
 import { UnitType } from '@gate-access/db';
+import { checkRateLimit } from '@/lib/rate-limit';
 
 export const dynamic = 'force-dynamic';
 
@@ -25,6 +26,10 @@ function escapeCsvCell(value: string): string {
 }
 
 const GetUnitsQuerySchema = z.object({
+  ids: z
+    .string()
+    .optional()
+    .transform((s) => (s ? s.split(',').map((x) => x.trim()).filter(Boolean) : undefined)),
   projectId: z.string().optional(),
   format: z.enum(['json', 'csv']).optional(),
   search: z.string().optional(),
@@ -111,6 +116,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     }
 
     const {
+      ids,
       projectId,
       format,
       search,
@@ -127,6 +133,17 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       page,
       pageSize,
     } = validation.data;
+
+    if (format === 'csv') {
+      // Rate limit CSV exports (user-scoped)
+      const rl = await checkRateLimit(`units-export:${auth.sub}`, 20, 60_000);
+      if (!rl.allowed) {
+        return NextResponse.json(
+          { success: false, message: 'Too many export requests. Please retry shortly.' },
+          { status: 429 }
+        );
+      }
+    }
 
     const fromDate = dateFrom ?? from;
     const toDate = dateTo ?? to;
@@ -151,6 +168,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const where = {
       organizationId: orgId,
       deletedAt: null,
+      ...(ids?.length ? { id: { in: ids } } : {}),
       ...(projectId ? { projectId } : {}),
       ...(isActive !== undefined ? { isActive } : {}),
       ...(unitType ? { type: unitType as UnitType } : {}),
@@ -199,8 +217,8 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         orderBy: orderBy as Parameters<
           typeof prisma.unit.findMany
         >[0]['orderBy'],
-        skip: (page - 1) * pageSize,
-        take: pageSize,
+        skip: format === 'csv' ? 0 : (page - 1) * pageSize,
+        take: format === 'csv' ? 10_000 : pageSize,
       }),
       prisma.unit.count({ where }),
     ]);
@@ -235,6 +253,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
             entityType: 'Unit',
             metadata: {
               rowCount: units.length,
+              idsCount: ids?.length ?? null,
               filters: {
                 search: search ?? null,
                 projectId: projectId ?? null,
@@ -244,6 +263,8 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
                 isActive: isActive ?? null,
                 dateFrom: fromDate ?? null,
                 dateTo: toDate ?? null,
+                sort: sort ?? 'name',
+                sortDir: sortDir ?? 'asc',
               },
             },
           },
