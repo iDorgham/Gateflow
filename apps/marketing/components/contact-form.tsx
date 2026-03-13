@@ -9,6 +9,7 @@ export function ContactForm({ dict }: { dict: any }) {
     'idle'
   );
   const [errorMessage, setErrorMessage] = useState('');
+  const [submittedName, setSubmittedName] = useState('');
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -16,15 +17,15 @@ export function ContactForm({ dict }: { dict: any }) {
     setErrorMessage('');
 
     const formData = new FormData(e.currentTarget);
+    const name = (formData.get('name') as string) ?? '';
     const data = {
-      name: formData.get('name'),
+      name,
       email: formData.get('email'),
       phone: formData.get('phone') || undefined,
-      company: formData.get('org') || undefined,
+      company: formData.get('company') || undefined,
       message: formData.get('message'),
-      planInterest: formData.get('type')
-        ? mapFacilityToPlan(formData.get('type') as string)
-        : undefined,
+      planInterest: formData.get('planInterest') || undefined,
+      website: formData.get('website') || undefined,
     };
 
     try {
@@ -36,30 +37,21 @@ export function ContactForm({ dict }: { dict: any }) {
 
       const json = await res.json();
 
-      if (json.success) {
+      if (json.ok) {
+        setSubmittedName(name);
         setStatus('sent');
+      } else if (json.fallback) {
+        setStatus('error');
+        setErrorMessage(
+          `${dict.form.status.fallbackPrefix ?? 'Please email us directly at'} ${json.fallback}`
+        );
       } else {
         setStatus('error');
-        setErrorMessage(json.message || 'Something went wrong');
+        setErrorMessage(json.message || dict.form.error || 'Something went wrong');
       }
     } catch {
       setStatus('error');
-      setErrorMessage('Network error. Please try again.');
-    }
-  }
-
-  function mapFacilityToPlan(facility: string): string {
-    switch (facility) {
-      case 'compound':
-        return 'ENTERPRISE';
-      case 'school':
-        return 'PRO';
-      case 'event':
-        return 'PRO';
-      case 'club':
-        return 'PRO';
-      default:
-        return 'FREE';
+      setErrorMessage(dict.form.error || 'Network error. Please try again.');
     }
   }
 
@@ -86,7 +78,9 @@ export function ContactForm({ dict }: { dict: any }) {
           {dict.form.status.successTitle}
         </h2>
         <p className="text-muted-foreground mb-8">
-          {dict.form.status.successDesc}
+          {submittedName
+            ? `${dict.form.status.successDesc} ${submittedName}!`
+            : dict.form.status.successDesc}
         </p>
         <Button onClick={() => setStatus('idle')} variant="outline">
           {dict.form.status.sendAnother}
@@ -100,11 +94,22 @@ export function ContactForm({ dict }: { dict: any }) {
       onSubmit={handleSubmit}
       className="bg-card border rounded-3xl p-8 lg:p-10 shadow-2xl shadow-primary/5"
     >
+      {/* Honeypot — hidden from real users, catches bots */}
+      <input
+        type="text"
+        name="website"
+        tabIndex={-1}
+        aria-hidden="true"
+        autoComplete="off"
+        style={{ position: 'absolute', left: '-9999px', opacity: 0, height: 0 }}
+      />
+
       <div className="grid sm:grid-cols-2 gap-6 mb-8">
         <div className="space-y-2">
           <Label htmlFor="name">{dict.form.labels.name}</Label>
           <Input
             id="name"
+            name="name"
             placeholder={dict.form.placeholders.name}
             required
             className="h-12 rounded-xl"
@@ -114,6 +119,7 @@ export function ContactForm({ dict }: { dict: any }) {
           <Label htmlFor="email">{dict.form.labels.email}</Label>
           <Input
             id="email"
+            name="email"
             type="email"
             placeholder={dict.form.placeholders.email}
             required
@@ -124,35 +130,39 @@ export function ContactForm({ dict }: { dict: any }) {
           <Label htmlFor="phone">{dict.form.labels.phone}</Label>
           <Input
             id="phone"
+            name="phone"
             placeholder="+20 100 000 0000"
             className="h-12 rounded-xl"
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="org">{dict.form.labels.org}</Label>
+          <Label htmlFor="company">{dict.form.labels.org}</Label>
           <Input
-            id="org"
+            id="company"
+            name="company"
             placeholder={dict.form.placeholders.company}
+            required
             className="h-12 rounded-xl"
           />
         </div>
         <div className="sm:col-span-2 space-y-2">
-          <Label htmlFor="type">{dict.form.labels.facilityType}</Label>
+          <Label htmlFor="planInterest">{dict.form.labels.planInterest}</Label>
           <select
-            id="type"
-            className="flex h-12 w-full rounded-xl border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+            id="planInterest"
+            name="planInterest"
+            className="flex h-12 w-full rounded-xl border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           >
-            <option>{dict.form.options.compound}</option>
-            <option>{dict.form.options.school}</option>
-            <option>{dict.form.options.event}</option>
-            <option>{dict.form.options.club}</option>
-            <option>{dict.form.options.other}</option>
+            <option value="starter">{dict.form.options.starter}</option>
+            <option value="pro">{dict.form.options.pro}</option>
+            <option value="enterprise">{dict.form.options.enterprise}</option>
+            <option value="unsure">{dict.form.options.unsure}</option>
           </select>
         </div>
         <div className="sm:col-span-2 space-y-2">
           <Label htmlFor="message">{dict.form.labels.message}</Label>
           <Textarea
             id="message"
+            name="message"
             placeholder={dict.form.placeholders.message}
             className="min-h-[120px] rounded-xl"
             required
@@ -185,14 +195,6 @@ export function ContactForm({ dict }: { dict: any }) {
         </a>
         .
       </p>
-
-      <input
-        type="checkbox"
-        name="honeypot"
-        style={{ display: 'none' }}
-        tabIndex={-1}
-        autoComplete="off"
-      />
     </form>
   );
 }

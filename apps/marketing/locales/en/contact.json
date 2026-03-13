@@ -27,22 +27,22 @@
       "email": "Work Email",
       "phone": "Phone / WhatsApp",
       "org": "Organization",
-      "facilityType": "Facility Type",
+      "planInterest": "Plan Interest",
       "message": "Message"
     },
     "options": {
-      "compound": "Gated Compound",
-      "school": "School / University",
-      "event": "Event Venue",
-      "club": "Club / Marina",
-      "other": "Other"
+      "starter": "Starter",
+      "pro": "Pro",
+      "enterprise": "Enterprise",
+      "unsure": "Not sure yet"
     },
     "status": {
       "successTitle": "Message Sent Successfully!",
-      "successDesc": "Thank you for reaching out. Our team in Cairo will review your request and get back to you within 24 hours.",
+      "successDesc": "Thanks for reaching out. We'll be in touch within 1–2 business days,",
       "sendAnother": "Send another message",
-      "sendingText": "Sending Request...",
-      "sendText": "Send Message"
+      "sendingText": "Sending...",
+      "sendText": "Send Message",
+      "fallbackPrefix": "Please email us directly at"
     },
     "privacyPrefix": "By clicking send, you agree to our ",
     "privacyLink": "Privacy Policy",
