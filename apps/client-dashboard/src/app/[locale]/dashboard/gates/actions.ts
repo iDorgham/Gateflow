@@ -6,7 +6,10 @@ import { prisma } from '@gate-access/db';
 
 type Result = { success: boolean; error?: string };
 
-export async function toggleGate(gateId: string, active: boolean): Promise<Result> {
+export async function toggleGate(
+  gateId: string,
+  active: boolean
+): Promise<Result> {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {
@@ -22,7 +25,10 @@ export async function toggleGate(gateId: string, active: boolean): Promise<Resul
       return { success: false, error: 'Gate not found.' };
     }
 
-    await prisma.gate.update({ where: { id: gateId }, data: { isActive: active } });
+    await prisma.gate.update({
+      where: { id: gateId },
+      data: { isActive: active },
+    });
     return { success: true };
   } catch (error) {
     console.error('toggleGate: Unexpected error:', error);
@@ -33,13 +39,15 @@ export async function toggleGate(gateId: string, active: boolean): Promise<Resul
 export async function createGate(
   orgId: string,
   name: string,
-  location: string,
+  location: string
 ): Promise<Result> {
   try {
     const claims = await getSessionClaims();
 
     if (!claims?.orgId || claims.orgId !== orgId) {
-      console.error(`createGate: Unauthorized. Claims orgId: ${claims?.orgId}, requested orgId: ${orgId}`);
+      console.error(
+        `createGate: Unauthorized. Claims orgId: ${claims?.orgId}, requested orgId: ${orgId}`
+      );
       return { success: false, error: 'Unauthorized.' };
     }
 
@@ -58,7 +66,7 @@ export async function createGate(
         isActive: true,
       },
     });
-    
+
     return { success: true };
   } catch (error) {
     console.error('createGate: Unexpected error:', error);
@@ -76,31 +84,38 @@ export async function updateGate(
     locationRadiusMeters?: number | null;
     locationEnforced?: boolean | null;
     requiredIdentityLevel?: number | null;
-  },
+  }
 ): Promise<Result> {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) return { success: false, error: 'Unauthorized.' };
-    if (!name.trim()) return { success: false, error: 'Gate name is required.' };
+    if (!name.trim())
+      return { success: false, error: 'Gate name is required.' };
 
     const gate = await prisma.gate.findFirst({
       where: { id: gateId, organizationId: claims.orgId, deletedAt: null },
     });
     if (!gate) return { success: false, error: 'Gate not found.' };
 
-    const data: Parameters<typeof prisma.gate.update>[0]['data'] = {
+    const data: Record<string, unknown> = {
       name: name.trim(),
       location: location.trim() || null,
     };
     if (options) {
       if (options.latitude !== undefined) data.latitude = options.latitude;
       if (options.longitude !== undefined) data.longitude = options.longitude;
-      if (options.locationRadiusMeters !== undefined) data.locationRadiusMeters = options.locationRadiusMeters;
-      if (options.locationEnforced !== undefined) data.locationEnforced = options.locationEnforced;
-      if (options.requiredIdentityLevel !== undefined) data.requiredIdentityLevel = options.requiredIdentityLevel;
+      if (options.locationRadiusMeters !== undefined)
+        data.locationRadiusMeters = options.locationRadiusMeters;
+      if (options.locationEnforced !== undefined)
+        data.locationEnforced = options.locationEnforced;
+      if (options.requiredIdentityLevel !== undefined)
+        data.requiredIdentityLevel = options.requiredIdentityLevel;
     }
 
-    await prisma.gate.update({ where: { id: gateId }, data });
+    await prisma.gate.update({
+      where: { id: gateId },
+      data: data as Parameters<typeof prisma.gate.update>[0]['data'],
+    });
     return { success: true };
   } catch (error) {
     console.error('updateGate: Unexpected error:', error);
