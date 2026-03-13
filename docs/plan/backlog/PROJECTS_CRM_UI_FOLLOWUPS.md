@@ -5,7 +5,7 @@ Optional improvements from **PR #38** (feat/projects-crm-ui → master). Refine 
 | Item | Status |
 |------|--------|
 | 1. Export audit logging (Contacts & Units) | ✅ Complete |
-| 2. QR Codes — density toggles & saved views | [#39](https://github.com/iDorgham/Gateflow/issues/39) |
+| 2. QR Codes — density toggles & saved views | ✅ Complete |
 
 ---
 

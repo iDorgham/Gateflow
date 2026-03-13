@@ -14,7 +14,7 @@ import {
   NativeSelect,
 } from '@gate-access/ui';
 import { useTranslation } from 'react-i18next';
-import { ChevronLeft, ChevronRight, Download, Plus, RefreshCw, Trash2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Download, Plus, RefreshCw, Trash2, Columns } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useQRCodes } from '@/lib/qrcodes/use-qrcodes';
 import { QRCodesTable } from '@/components/dashboard/qrcodes/QRCodesTable';
@@ -43,6 +43,7 @@ export default function QRCodesPage() {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const [customizerOpen, setCustomizerOpen] = useState(false);
 
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
@@ -185,18 +186,29 @@ export default function QRCodesPage() {
 
       {/* Filter bar: search + date ranges */}
       <div className="flex flex-col gap-3">
-        <FilterBar>
-          <FilterBar.Search
-            placeholder={t('qrcodes.searchPlaceholder', 'Search codes...')}
-            value={search}
-            onChange={(e) => {
-              setPage(1);
-              setSearch(e.target.value);
-            }}
-            aria-label={t('qrcodes.search', 'Search')}
-            containerClassName="max-w-sm"
-          />
-        </FilterBar>
+        <div className="flex items-center justify-between gap-4">
+          <FilterBar className="flex-1">
+            <FilterBar.Search
+              placeholder={t('qrcodes.searchPlaceholder', 'Search codes...')}
+              value={search}
+              onChange={(e) => {
+                setPage(1);
+                setSearch(e.target.value);
+              }}
+              aria-label={t('qrcodes.search', 'Search')}
+              containerClassName="max-w-sm"
+            />
+          </FilterBar>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setCustomizerOpen(true)}
+            className="hidden sm:flex h-10 rounded-xl font-bold uppercase tracking-widest text-[10px] gap-2 px-4"
+          >
+            <Columns className="h-3.5 w-3.5" />
+            {t('residents.columns', 'Columns')}
+          </Button>
+        </div>
         <div className="flex flex-wrap items-center gap-2">
           <div className="rounded-xl border border-border bg-card px-3 py-2 flex items-center gap-2">
             <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
@@ -431,6 +443,8 @@ export default function QRCodesPage() {
             return prev.filter((id) => !set.has(id));
           });
         }}
+        customizerOpen={customizerOpen}
+        onCustomizerOpenChange={setCustomizerOpen}
       />
 
       <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
