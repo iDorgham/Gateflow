@@ -16,28 +16,29 @@ import { createCipheriv, createDecipheriv, randomBytes } from 'crypto';
 
 export const ENCRYPTED_PREFIX = 'enc:v1:';
 
-// ─── Master key ───────────────────────────────────────────────────────────────
-
 const RAW_KEY = process.env.ENCRYPTION_MASTER_KEY;
-
-if (!RAW_KEY) {
-  if (process.env.NODE_ENV === 'production') {
-    throw new Error(
-      '[encryption] ENCRYPTION_MASTER_KEY must be set in production. ' +
-        'Generate one with: openssl rand -hex 32',
-    );
-  }
-  console.warn(
-    '[encryption] ENCRYPTION_MASTER_KEY not set — using all-zero fallback key. ' +
-      'This is INSECURE outside local development.',
-  );
-}
+let cachedMasterKey: Buffer | null = null;
 
 /**
- * Parse and cache the master key once at module load.
+ * Parse and cache the master key lazily.
  * Expected value: 64 hex characters (= 32 bytes / 256 bits).
  */
-function buildMasterKey(): Buffer {
+function getMasterKey(): Buffer {
+  if (cachedMasterKey) return cachedMasterKey;
+
+  if (!RAW_KEY) {
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error(
+        '[encryption] ENCRYPTION_MASTER_KEY must be set in production. ' +
+          'Generate one with: openssl rand -hex 32',
+      );
+    }
+    console.warn(
+      '[encryption] ENCRYPTION_MASTER_KEY not set — using all-zero fallback key. ' +
+        'This is INSECURE outside local development.',
+    );
+  }
+
   const keyHex =
     RAW_KEY ?? '0000000000000000000000000000000000000000000000000000000000000000';
   let key = Buffer.from(keyHex, 'hex');
@@ -52,10 +53,10 @@ function buildMasterKey(): Buffer {
     key.copy(padded);
     key = padded;
   }
+  
+  cachedMasterKey = key;
   return key;
 }
-
-const MASTER_KEY: Buffer = buildMasterKey();
 
 // ─── Public helpers ───────────────────────────────────────────────────────────
 
@@ -66,7 +67,7 @@ const MASTER_KEY: Buffer = buildMasterKey();
  */
 export function encryptField(plaintext: string): string {
   const iv = randomBytes(12); // 96-bit GCM IV
-  const cipher = createCipheriv('aes-256-gcm', MASTER_KEY, iv);
+  const cipher = createCipheriv('aes-256-gcm', getMasterKey(), iv);
 
   const encrypted = Buffer.concat([cipher.update(plaintext, 'utf8'), cipher.final()]);
   const tag = cipher.getAuthTag(); // 128-bit authentication tag
@@ -94,7 +95,7 @@ export function decryptField(value: string): string {
   const tag = data.subarray(12, 28);
   const ciphertext = data.subarray(28);
 
-  const decipher = createDecipheriv('aes-256-gcm', MASTER_KEY, iv);
+  const decipher = createDecipheriv('aes-256-gcm', getMasterKey(), iv);
   decipher.setAuthTag(tag);
 
   try {
