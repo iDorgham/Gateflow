@@ -97,24 +97,19 @@ export async function updateGate(
     });
     if (!gate) return { success: false, error: 'Gate not found.' };
 
-    const data: Record<string, unknown> = {
+    const data = {
       name: name.trim(),
       location: location.trim() || null,
+      ...(options?.latitude !== undefined && { latitude: options.latitude }),
+      ...(options?.longitude !== undefined && { longitude: options.longitude }),
+      ...(options?.locationRadiusMeters !== undefined && { locationRadiusMeters: options.locationRadiusMeters }),
+      ...(options?.locationEnforced !== undefined && { locationEnforced: options.locationEnforced }),
+      ...(options?.requiredIdentityLevel !== undefined && { requiredIdentityLevel: options.requiredIdentityLevel }),
     };
-    if (options) {
-      if (options.latitude !== undefined) data.latitude = options.latitude;
-      if (options.longitude !== undefined) data.longitude = options.longitude;
-      if (options.locationRadiusMeters !== undefined)
-        data.locationRadiusMeters = options.locationRadiusMeters;
-      if (options.locationEnforced !== undefined)
-        data.locationEnforced = options.locationEnforced;
-      if (options.requiredIdentityLevel !== undefined)
-        data.requiredIdentityLevel = options.requiredIdentityLevel;
-    }
 
     await prisma.gate.update({
       where: { id: gateId },
-      data: data as Parameters<typeof prisma.gate.update>[0]['data'],
+      data,
     });
     return { success: true };
   } catch (error) {
