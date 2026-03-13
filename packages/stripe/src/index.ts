@@ -1,21 +1,26 @@
 import Stripe from 'stripe';
 import { Plan } from '@gate-access/types';
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-02-24.acacia',
-  typescript: true,
-});
+let stripeInstance: Stripe | null = null;
 
 /**
  * Get Stripe client instance.
- * Ensures the secret key is present.
+ * Ensures the secret key is present and lazily initializes the client.
  */
 export function getStripeClient() {
   const secretKey = process.env.STRIPE_SECRET_KEY;
   if (!secretKey) {
     throw new Error('STRIPE_SECRET_KEY is not defined in environment variables');
   }
-  return stripe;
+  
+  if (!stripeInstance) {
+    stripeInstance = new Stripe(secretKey, {
+      apiVersion: '2025-02-24.acacia',
+      typescript: true,
+    });
+  }
+  
+  return stripeInstance;
 }
 
 /**
@@ -51,7 +56,7 @@ export function verifyStripeSignature(payload: string | Buffer, signature: strin
   if (!webhookSecret) {
     throw new Error('STRIPE_WEBHOOK_SECRET is not defined');
   }
-  return stripe.webhooks.constructEvent(payload, signature, webhookSecret);
+  return getStripeClient().webhooks.constructEvent(payload, signature, webhookSecret);
 }
 
 export * from 'stripe';

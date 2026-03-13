@@ -4,7 +4,6 @@ import { z } from 'zod';
 import { type NextRequest } from 'next/server';
 import { isAdminAuthorized } from '@/lib/admin-auth';
 import { prisma } from '@gate-access/db';
-import { executeSeedMatrix } from '@/lib/seed-service';
 
 export const runtime = 'nodejs';
 export const maxDuration = 30;
@@ -155,27 +154,6 @@ Never make up data — use tools to fetch real information.`,
         },
       }),
 
-      runSeedingMatrix: tool({
-        description: 'Auto-generates dummy data for testing environments based on natural language commands.',
-        parameters: z.object({
-          scope: z.enum(['new', 'existingOrg', 'existingProject']).describe('Create an entirely new ecosystem, or add to existing org/project.'),
-          targetOrgId: z.string().nullable().optional().describe('ID of the existing org to seed into, if scope is existingOrg.'),
-          targetProjectId: z.string().nullable().optional().describe('ID of the existing project to seed into, if scope is existingProject.'),
-          orgCount: z.number().optional().describe('Number of new organizations to create (if scope is new).'),
-          projectsPerOrg: z.number().optional().describe('Number of projects per organization.'),
-          buildingsPerProject: z.number().optional().describe('Number of buildings/towers per project.'),
-          unitsPerBuilding: z.number().optional().describe('Number of units per building.'),
-          scansPerOrg: z.number().optional().describe('Total number of dummy scans to generate.'),
-        }),
-        execute: async (args) => {
-          try {
-            const { results } = await executeSeedMatrix(args);
-            return { success: true, results };
-          } catch (e) {
-            return { success: false, error: e instanceof Error ? e.message : String(e) };
-          }
-        },
-      }),
     },
   });
 
