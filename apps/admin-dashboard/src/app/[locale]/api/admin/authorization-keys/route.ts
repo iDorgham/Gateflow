@@ -105,6 +105,15 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const keyHash = hashKey(key);
     const keyPrefix = key.slice(0, 15) + '...';
 
+    console.log('Creating auth key with data:', {
+      name,
+      type,
+      keyHash: keyHash.slice(0, 20) + '...',
+      keyPrefix,
+      organizationId: type === 'SERVICE' ? organizationId : null,
+      createdBy: 'admin',
+    });
+
     const created = await prisma.adminAuthorizationKey.create({
       data: {
         name,
@@ -124,6 +133,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         createdAt: true,
       },
     });
+
+    console.log('✅ Key created successfully:', created.id);
 
     return NextResponse.json({
       success: true,
