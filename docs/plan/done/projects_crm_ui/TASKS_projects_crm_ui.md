@@ -9,13 +9,13 @@
 
 ## Phase 1 — CRM data model & API extensions
 
-**Status:** Not started  
+**Status:** Done
 
-- [ ] Extend Prisma schema for Contacts, Projects, and any supporting models.
-- [ ] Generate and apply Prisma migration(s).
-- [ ] Update API routes for contacts, projects, units, and gates to accept new fields.
-- [ ] Update shared types as needed.
-- [ ] `pnpm preflight` (lint + typecheck + tests for client-dashboard/db/types) passes.
+- [x] Extend Prisma schema for Contacts, Projects, and any supporting models.
+- [x] Generate and apply Prisma migration(s).
+- [x] Update API routes for contacts, projects, units, and gates to accept new fields.
+- [x] Update shared types as needed.
+- [x] `pnpm preflight` (lint + typecheck + tests for client-dashboard/db/types) passes.
 
 ---
 
