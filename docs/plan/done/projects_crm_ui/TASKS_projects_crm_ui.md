@@ -33,13 +33,13 @@
 
 ## Phase 3 — Advanced CRM-style Contacts & Units UI
 
-**Status:** Not started  
+**Status:** Done
 
-- [ ] Add CRM fields (job title, source, notes, avatar, etc.) to contact forms.
-- [ ] Improve unit tagging UX in the contact form.
-- [ ] Ensure Units/Contacts tables stay in sync for relationships.
-- [ ] Widen and refine the edit/right panel layout for CRM data.
-- [ ] `pnpm preflight` passes.
+- [x] Add CRM fields (job title, source, notes, avatar, etc.) to contact forms.
+- [x] Improve unit tagging UX in the contact form.
+- [x] Ensure Units/Contacts tables stay in sync for relationships.
+- [x] Widen and refine the edit/right panel layout for CRM data.
+- [x] `pnpm preflight` passes.
 
 ---
 

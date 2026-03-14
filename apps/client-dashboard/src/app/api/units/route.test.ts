@@ -175,3 +175,63 @@ describe('GET /api/units?format=csv — audit logging', () => {
     expect(JSON.stringify(meta.filters)).not.toContain('101');
   });
 });
+
+describe('POST /api/units — CRM fields', () => {
+  let POST: (req: unknown) => Promise<{ status: number; json: () => Promise<unknown> }>;
+
+  beforeAll(async () => {
+    const mod = await import('./route');
+    POST = mod.POST as typeof POST;
+  });
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  function makePostRequest(body: unknown) {
+    const { NextRequest } = jest.requireMock('next/server');
+    return new NextRequest('http://localhost/api/units', {
+      method: 'POST',
+      body: JSON.stringify(body),
+    });
+  }
+
+  it('persists name, type, and new location fields', async () => {
+    const orgId = 'org_units_post_1';
+    mockGetSessionClaims.mockResolvedValue({ orgId, sub: 'u_1', email: 'a@b.com' });
+
+    const mockUnitCreate = jest.fn().mockResolvedValue({
+      id: 'u_new',
+      name: 'Villa 55',
+      type: 'VILLA',
+      sizeSqm: 500,
+      qrQuota: 20,
+      projectId: 'p_1',
+      lat: 25.1,
+      lng: 55.2,
+      contacts: [],
+      project: { id: 'p_1', name: 'Al Ghadeer' },
+    });
+
+    const { prisma: mockPrisma } = jest.requireMock('@gate-access/db');
+    mockPrisma.unit.create = mockUnitCreate;
+
+    const res = await POST(makePostRequest({
+      name: 'Villa 55',
+      type: 'VILLA',
+      sizeSqm: 500,
+      projectId: 'p_1',
+      lat: 25.1,
+      lng: 55.2,
+    }));
+
+    expect(res.status).toBe(201);
+    const body: any = await res.json();
+    expect(body.success).toBe(true);
+    expect(mockUnitCreate).toHaveBeenCalled();
+    const createData = mockUnitCreate.mock.calls[0][0].data;
+    expect(createData.lat).toBe(25.1);
+    expect(createData.lng).toBe(55.2);
+    expect(createData.organizationId).toBe(orgId);
+  });
+});

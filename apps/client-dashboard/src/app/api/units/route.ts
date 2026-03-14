@@ -451,6 +451,8 @@ const CreateUnitSchema = z.object({
   qrQuota: z.number().int().positive().optional(),
   projectId: z.string().optional().nullable(),
   contactIds: z.array(z.string()).optional(),
+  lat: z.number().min(-90).max(90).optional().nullable(),
+  lng: z.number().min(-180).max(180).optional().nullable(),
 });
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
@@ -493,7 +495,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    const { name, type, sizeSqm, qrQuota, projectId, contactIds } =
+    const { name, type, sizeSqm, qrQuota, projectId, contactIds, lat, lng } =
       validation.data;
     const quota = qrQuota ?? UNIT_QUOTA_DEFAULTS[type];
 
@@ -505,6 +507,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         qrQuota: quota,
         organizationId: orgId,
         projectId: projectId ?? null,
+        lat: lat ?? null,
+        lng: lng ?? null,
         contacts: contactIds?.length
           ? { create: contactIds.map((contactId) => ({ contactId })) }
           : undefined,

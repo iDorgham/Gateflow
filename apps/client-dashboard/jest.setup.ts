@@ -1,3 +1,4 @@
+// @ts-nocheck
 const { TextEncoder, TextDecoder } = require('util');
 
 global.TextEncoder = TextEncoder;
@@ -78,6 +79,19 @@ jest.mock('next/headers', () => ({
   headers: jest.fn(() => ({
     get: jest.fn(),
   })),
+}));
+
+jest.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string, defaultValue?: string) => defaultValue || key,
+    i18n: {
+      changeLanguage: () => new Promise(() => {}),
+    },
+  }),
+  initReactI18next: {
+    type: '3rdParty',
+    init: () => {},
+  },
 }));
 
 global.jest = jest;

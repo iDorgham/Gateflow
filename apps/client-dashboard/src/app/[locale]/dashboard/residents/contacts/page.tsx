@@ -48,6 +48,8 @@ import {
   ChevronRight,
   Columns,
   Eye,
+  Building,
+  Check,
 } from 'lucide-react';
 import { buildAnalyticsUrl } from '@/lib/analytics';
 import {
@@ -60,6 +62,8 @@ import { useContacts, type ContactRow } from '@/lib/residents/use-contacts';
 import { ResidentsFilterBar } from '@/components/dashboard/residents/ResidentsFilterBar';
 import { TableCustomizerModal } from '@/components/dashboard/residents/TableCustomizerModal';
 import { ViewUnitsModal } from '@/components/dashboard/residents/ViewUnitsModal';
+import { EditPanel } from '@/components/dashboard/EditPanel';
+import { cn } from '@/lib/utils';
 import {
   getDefaultTableView,
   CONTACTS_COLUMN_IDS,
@@ -1116,238 +1120,276 @@ export default function ContactsPage() {
       )}
 
       {dialogOpen && (
-        <Dialog>
-          <DialogContent className="max-w-2xl">
-            <DialogHeader>
-              <DialogTitle>
-                {editing
-                  ? t('contacts.editContact', 'Edit Contact')
-                  : t('contacts.addContact', 'Add Contact')}
-              </DialogTitle>
-            </DialogHeader>
-            <div className="space-y-6 py-2">
-              {/* Identity */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <Label htmlFor="firstName">
-                    {t('contacts.form.firstName', 'First Name')} *
-                  </Label>
-                  <Input
-                    id="firstName"
-                    value={form.firstName}
-                    onChange={(e) =>
-                      setForm({ ...form, firstName: e.target.value })
-                    }
-                  />
+        <EditPanel
+          open={dialogOpen}
+          onOpenChange={setDialogOpen}
+          title={
+            editing
+              ? t('contacts.edit', 'Edit Resident Profile')
+              : t('contacts.new', 'Add Resident Profile')
+          }
+          onSave={save}
+          isSaving={isPending}
+          saveLabel={editing ? t('common.save', 'Save Changes') : t('common.create', 'Create Resident')}
+          headerExtra={
+            editing && (
+              <Badge variant="outline" className="mr-2 border-primary/20 bg-primary/5 text-primary lowercase font-medium">
+                ID: {editing.id.slice(0, 8)}
+              </Badge>
+            )
+          }
+        >
+          <div className="space-y-10 py-2">
+            {/* Identity Section */}
+            <section className="space-y-6">
+              <div className="flex items-center gap-2 border-b border-border pb-2">
+                <div className="h-4 w-1 bg-primary rounded-full" />
+                <h3 className="text-sm font-black uppercase tracking-widest text-foreground/70">
+                  {t('contacts.form.identity', 'Identity & Contact')}
+                </h3>
+              </div>
+              
+              <div className="flex flex-col sm:flex-row gap-8">
+                <div className="flex flex-col items-center gap-4 shrink-0">
+                  <div className="relative group">
+                    <Avatar className="h-24 w-24 ring-4 ring-primary/5 shadow-md border border-border transition-all duration-300 group-hover:scale-105">
+                      <AvatarImage src={form.avatarUrl} alt="" className="object-cover" />
+                      <AvatarFallback className="text-2xl font-black bg-muted text-muted-foreground/40">
+                        {form.firstName.slice(0, 1)}
+                        {form.lastName.slice(0, 1)}
+                      </AvatarFallback>
+                    </Avatar>
+                  </div>
+                  <div className="space-y-2 w-full max-w-[140px]">
+                    <Label htmlFor="avatarUrl" className="text-[10px] uppercase font-bold text-center block text-muted-foreground tracking-widest">
+                      {t('contacts.form.photo', 'Photo URL')}
+                    </Label>
+                    <Input
+                      id="avatarUrl"
+                      value={form.avatarUrl}
+                      onChange={(e) => setForm({ ...form, avatarUrl: e.target.value })}
+                      placeholder="https://..."
+                      className="h-8 text-[10px] text-center rounded-lg border-primary/10 bg-muted/30 focus:bg-background transition-colors"
+                    />
+                  </div>
                 </div>
-                <div className="space-y-1.5">
-                  <Label htmlFor="lastName">
-                    {t('contacts.form.lastName', 'Last Name')} *
-                  </Label>
-                  <Input
-                    id="lastName"
-                    value={form.lastName}
-                    onChange={(e) =>
-                      setForm({ ...form, lastName: e.target.value })
-                    }
-                  />
+
+                <div className="flex-1 space-y-5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                      <Label htmlFor="firstName" className="text-[10px] font-black uppercase tracking-widest text-foreground/50 ml-1">
+                        {t('contacts.form.firstName', 'First Name')} *
+                      </Label>
+                      <Input
+                        id="firstName"
+                        value={form.firstName}
+                        onChange={(e) => setForm({ ...form, firstName: e.target.value })}
+                        className="rounded-xl border-border bg-background focus:ring-4 focus:ring-primary/10 transition-all font-semibold"
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label htmlFor="lastName" className="text-[10px] font-black uppercase tracking-widest text-foreground/50 ml-1">
+                        {t('contacts.form.lastName', 'Last Name')} *
+                      </Label>
+                      <Input
+                        id="lastName"
+                        value={form.lastName}
+                        onChange={(e) => setForm({ ...form, lastName: e.target.value })}
+                        className="rounded-xl border-border bg-background focus:ring-4 focus:ring-primary/10 transition-all font-semibold"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-1.5">
+                      <Label htmlFor="email" className="text-[10px] font-black uppercase tracking-widest text-foreground/50 ml-1">
+                        {t('contacts.form.email', 'Email Address')}
+                      </Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        value={form.email}
+                        onChange={(e) => setForm({ ...form, email: e.target.value })}
+                        className="rounded-xl border-border bg-background font-medium"
+                      />
+                    </div>
+                    <div className="space-y-1.5">
+                      <Label htmlFor="phone" className="text-[10px] font-black uppercase tracking-widest text-foreground/50 ml-1">
+                        {t('contacts.form.phone', 'Phone Number')}
+                      </Label>
+                      <Input
+                        id="phone"
+                        value={form.phone}
+                        onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                        className="rounded-xl border-border bg-background font-mono text-sm"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-1.5 max-w-[200px]">
+                    <Label htmlFor="birthday" className="text-[10px] font-black uppercase tracking-widest text-foreground/50 ml-1">
+                      {t('contacts.form.birthday', 'Birthdate')}
+                    </Label>
+                    <Input
+                      id="birthday"
+                      type="date"
+                      value={form.birthday}
+                      onChange={(e) => setForm({ ...form, birthday: e.target.value })}
+                      className="rounded-xl border-border bg-background"
+                    />
+                  </div>
                 </div>
               </div>
-              {/* Personal & Work */}
-              <div className="grid grid-cols-2 gap-4">
+            </section>
+
+            {/* Work & Source Section */}
+            <section className="space-y-6">
+              <div className="flex items-center gap-2 border-b border-border pb-2">
+                <div className="h-4 w-1 bg-blue-500 rounded-full" />
+                <h3 className="text-sm font-black uppercase tracking-widest text-foreground/70">
+                  {t('contacts.form.professional', 'Work & Source')}
+                </h3>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="space-y-1.5">
-                  <Label htmlFor="birthday">
-                    {t('contacts.form.birthday', 'Birthday')}
+                  <Label htmlFor="jobTitle" className="text-[10px] font-black uppercase tracking-widest text-foreground/50 ml-1">
+                    {t('contacts.form.jobTitle', 'Job Title')}
                   </Label>
                   <Input
-                    id="birthday"
-                    type="date"
-                    value={form.birthday}
-                    onChange={(e) =>
-                      setForm({ ...form, birthday: e.target.value })
-                    }
+                    id="jobTitle"
+                    value={form.jobTitle}
+                    onChange={(e) => setForm({ ...form, jobTitle: e.target.value })}
+                    className="rounded-xl font-medium"
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <Label htmlFor="company">
+                  <Label htmlFor="company" className="text-[10px] font-black uppercase tracking-widest text-foreground/50 ml-1">
                     {t('contacts.form.company', 'Company')}
                   </Label>
                   <Input
                     id="company"
                     value={form.company}
-                    onChange={(e) =>
-                      setForm({ ...form, company: e.target.value })
-                    }
+                    onChange={(e) => setForm({ ...form, company: e.target.value })}
+                    className="rounded-xl font-medium"
                   />
                 </div>
               </div>
-              {/* Contact details */}
-              <div className="grid grid-cols-2 gap-4">
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="space-y-1.5">
-                  <Label htmlFor="phone">
-                    {t('contacts.form.phone', 'Phone')}
-                  </Label>
-                  <Input
-                    id="phone"
-                    value={form.phone}
-                    onChange={(e) =>
-                      setForm({ ...form, phone: e.target.value })
-                    }
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <Label htmlFor="email">
-                    {t('contacts.form.email', 'Email')}
-                  </Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={form.email}
-                    onChange={(e) =>
-                      setForm({ ...form, email: e.target.value })
-                    }
-                  />
-                </div>
-              </div>
-              {/* CRM fields */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <Label htmlFor="jobTitle">
-                    {t('contacts.form.jobTitle', 'Job title')}
-                  </Label>
-                  <Input
-                    id="jobTitle"
-                    value={form.jobTitle}
-                    onChange={(e) =>
-                      setForm({ ...form, jobTitle: e.target.value })
-                    }
-                  />
-                </div>
-                <div className="space-y-1.5">
-                  <Label htmlFor="source">
-                    {t('contacts.form.source', 'Source')}
-                  </Label>
-                  <NativeSelect
-                    id="source"
-                    value={form.source}
-                    onChange={(e) =>
-                      setForm({ ...form, source: e.target.value })
-                    }
-                  >
-                    <option value="">
-                      {t('contacts.form.sourcePlaceholder', 'Select source')}
-                    </option>
-                    <option value="MANUAL">
-                      {t('contacts.form.source.manual', 'Manual')}
-                    </option>
-                    <option value="IMPORT">
-                      {t('contacts.form.source.import', 'Import')}
-                    </option>
-                    <option value="QR_SCAN">
-                      {t('contacts.form.source.qrScan', 'QR scan')}
-                    </option>
-                    <option value="REFERRAL">
-                      {t('contacts.form.source.referral', 'Referral')}
-                    </option>
-                    <option value="OTHER">
-                      {t('contacts.form.source.other', 'Other')}
-                    </option>
-                  </NativeSelect>
-                </div>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <Label htmlFor="avatarUrl">
-                    {t('contacts.form.avatarUrl', 'Avatar URL')}
-                  </Label>
-                  <Input
-                    id="avatarUrl"
-                    value={form.avatarUrl}
-                    onChange={(e) =>
-                      setForm({ ...form, avatarUrl: e.target.value })
-                    }
-                    placeholder="https://..."
-                  />
-                  {form.avatarUrl && (
-                    <div className="mt-2 inline-flex items-center gap-2 rounded-lg border border-border bg-muted/40 px-2 py-1">
-                      <Avatar className="h-8 w-8">
-                        <AvatarImage src={form.avatarUrl} alt="" />
-                        <AvatarFallback>
-                          {form.firstName.slice(0, 1)}
-                          {form.lastName.slice(0, 1)}
-                        </AvatarFallback>
-                      </Avatar>
-                      <span className="text-xs text-muted-foreground">
-                        {t('contacts.form.avatarPreview', 'Preview')}
-                      </span>
-                    </div>
-                  )}
-                </div>
-                <div className="space-y-1.5">
-                  <Label htmlFor="companyWebsite">
-                    {t('contacts.form.companyWebsite', 'Company website')}
+                  <Label htmlFor="companyWebsite" className="text-[10px] font-black uppercase tracking-widest text-foreground/50 ml-1">
+                    {t('contacts.form.companyWebsite', 'Company Website')}
                   </Label>
                   <Input
                     id="companyWebsite"
                     value={form.companyWebsite}
-                    onChange={(e) =>
-                      setForm({ ...form, companyWebsite: e.target.value })
-                    }
-                    placeholder="https://example.com"
+                    onChange={(e) => setForm({ ...form, companyWebsite: e.target.value })}
+                    placeholder="https://..."
+                    className="rounded-xl font-mono text-sm"
                   />
                 </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="source" className="text-[10px] font-black uppercase tracking-widest text-foreground/50 ml-1">
+                    {t('contacts.form.source', 'Resident Source')}
+                  </Label>
+                  <NativeSelect
+                    id="source"
+                    value={form.source}
+                    onChange={(e) => setForm({ ...form, source: e.target.value })}
+                    className="rounded-xl h-10 font-medium"
+                  >
+                    <option value="">{t('contacts.form.sourcePlaceholder', 'Select source')}</option>
+                    <option value="MANUAL">Manual Entry</option>
+                    <option value="IMPORT">CSV Import</option>
+                    <option value="QR_SCAN">QR Scan On-site</option>
+                    <option value="REFERRAL">Member Referral</option>
+                    <option value="CAMPAIGN">Marketing Campaign</option>
+                    <option value="OTHER">Other</option>
+                  </NativeSelect>
+                </div>
+              </div>
+            </section>
+
+            {/* Units & Tags Section */}
+            <section className="space-y-6">
+              <div className="flex items-center gap-2 border-b border-border pb-2">
+                <div className="h-4 w-1 bg-emerald-500 rounded-full" />
+                <h3 className="text-sm font-black uppercase tracking-widest text-foreground/70">
+                  {t('contacts.form.groups', 'Units & Assets')}
+                </h3>
+              </div>
+
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <Label className="text-[10px] font-black uppercase tracking-widest text-foreground/50 ml-1">
+                    {t('contacts.form.linkedUnits', 'Linked Property Units')}
+                  </Label>
+                  <Badge variant="outline" className="text-[9px] font-bold uppercase tracking-tighter bg-muted/40">
+                    {form.unitIds.length} {t('contacts.form.selected', 'Selected')}
+                  </Badge>
+                </div>
+                
+                <div className="rounded-2xl border border-border bg-muted/10 p-5">
+                  {units.length === 0 ? (
+                    <div className="text-center py-6">
+                      <p className="text-xs text-muted-foreground italic">
+                        {t('contacts.form.noUnits', 'No units available in this workspace.')}
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-56 overflow-y-auto pr-2 scrollbar-thin">
+                      {units.map((u) => {
+                        const isSelected = form.unitIds.includes(u.id);
+                        return (
+                          <button
+                            key={u.id}
+                            type="button"
+                            onClick={() => handleUnitToggle(u.id)}
+                            className={cn(
+                              "flex items-center gap-2 rounded-xl px-3 py-2 text-xs font-bold border transition-all duration-200 text-left",
+                              isSelected 
+                                ? "bg-primary text-primary-foreground border-primary shadow-sm scale-[1.02]" 
+                                : "bg-card text-foreground border-border hover:border-primary/30 hover:bg-muted/50"
+                            )}
+                          >
+                            <Building className={cn("h-3.5 w-3.5 shrink-0", isSelected ? "text-primary-foreground/70" : "text-muted-foreground/50")} />
+                            <span className="truncate flex-1">{u.name}</span>
+                            {isSelected && <Check className="h-3 w-3 shrink-0 ml-auto" />}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                  <p className="mt-4 text-[10px] text-muted-foreground italic leading-relaxed">
+                    {t('contacts.form.unitTip', 'Select one or more units to associate this resident with specific properties in your database.')}
+                  </p>
+                </div>
+              </div>
+            </section>
+
+            {/* Notes Section */}
+            <section className="space-y-4 pb-4">
+              <div className="flex items-center gap-2 border-b border-border pb-2">
+                <div className="h-4 w-1 bg-amber-500 rounded-full" />
+                <h3 className="text-sm font-black uppercase tracking-widest text-foreground/70">
+                  {t('contacts.form.extra', 'Notes & Narrative')}
+                </h3>
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="notes">
-                  {t('contacts.form.notes', 'Notes')}
-                </Label>
+                <Label htmlFor="notes" className="sr-only">Notes</Label>
                 <Textarea
                   id="notes"
                   value={form.notes}
-                  onChange={(e) =>
-                    setForm({ ...form, notes: e.target.value })
-                  }
-                  rows={3}
+                  onChange={(e) => setForm({ ...form, notes: e.target.value })}
+                  placeholder={t('contacts.form.notesPlaceholder', 'Enter internal private notes or resident history here…')}
+                  rows={4}
+                  className="rounded-2xl border-border bg-background focus:ring-4 focus:ring-primary/10 transition-all text-sm leading-relaxed p-4"
                 />
               </div>
-              {units.length > 0 && (
-                <div className="space-y-1.5">
-                  <Label>
-                    {t('contacts.form.linkedUnits', 'Linked Units')}
-                  </Label>
-                  <div className="flex flex-wrap gap-2 rounded-lg border p-3 max-h-32 overflow-y-auto">
-                    {units.map((u) => (
-                      <button
-                        key={u.id}
-                        type="button"
-                        onClick={() => handleUnitToggle(u.id)}
-                        className={`rounded-full px-3 py-1 text-xs font-medium border transition-colors ${
-                          form.unitIds.includes(u.id)
-                            ? 'bg-primary text-primary-foreground border-primary'
-                            : 'bg-muted text-muted-foreground border-transparent hover:border-primary/40'
-                        }`}
-                      >
-                        {u.name}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setDialogOpen(false)}>
-                {t('common.cancel', 'Cancel')}
-              </Button>
-              <Button onClick={save} disabled={isPending}>
-                {isPending
-                  ? t('modal.actions.saving', 'Saving…')
-                  : editing
-                    ? t('contacts.success.updated', 'Save changes')
-                    : t('common.create', 'Create')}
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+            </section>
+          </div>
+        </EditPanel>
       )}
 
       {viewUnitsFor && (

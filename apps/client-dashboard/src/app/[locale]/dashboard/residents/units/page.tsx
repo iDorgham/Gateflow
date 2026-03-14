@@ -39,6 +39,7 @@ import {
   ChevronRight,
   Columns,
   Eye,
+  Check,
 } from 'lucide-react';
 import {
   type ColumnDef,
@@ -57,6 +58,8 @@ import { useUnits, type UnitRow } from '@/lib/residents/use-units';
 import { ResidentsFilterBar } from '@/components/dashboard/residents/ResidentsFilterBar';
 import { TableCustomizerModal } from '@/components/dashboard/residents/TableCustomizerModal';
 import { ViewContactsModal } from '@/components/dashboard/residents/ViewContactsModal';
+import { EditPanel } from '@/components/dashboard/EditPanel';
+import { cn } from '@/lib/utils';
 import {
   getDefaultTableView,
   UNITS_COLUMN_IDS,
@@ -1020,186 +1023,244 @@ export default function UnitsPage() {
       </div>
       )}
 
-      {/* Create / Edit Dialog */}
+      {/* Create / Edit Panel */}
       {dialogOpen && (
-        <Dialog>
-          <DialogContent className="max-w-lg">
-            <DialogHeader>
-              <DialogTitle>
-                {editing
-                  ? t('units.editUnit', 'Edit Unit')
-                  : t('units.addUnit', 'Unit')}
-              </DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4 py-2">
-              <div className="space-y-1.5">
-                <Label htmlFor="unitName">
-                  {t('units.form.name', 'Unit Name / Number')} *
-                </Label>
-                <Input
-                  id="unitName"
-                  placeholder={t(
-                    'units.form.namePlaceholder',
-                    'e.g. Villa 12, Apt 4B'
-                  )}
-                  value={form.name}
-                  onChange={(e) => setForm({ ...form, name: e.target.value })}
-                />
+        <EditPanel
+          open={dialogOpen}
+          onOpenChange={setDialogOpen}
+          title={
+            editing
+              ? t('units.edit', 'Edit Unit Details')
+              : t('units.new', 'Create New Property Unit')
+          }
+          onSave={save}
+          isSaving={isPending}
+          saveLabel={editing ? t('common.save', 'Save Changes') : t('common.create', 'Create Unit')}
+          headerExtra={
+            editing && (
+              <Badge variant="outline" className="mr-2 border-primary/20 bg-primary/5 text-primary lowercase font-medium">
+                ID: {editing.id.slice(0, 8)}
+              </Badge>
+            )
+          }
+        >
+          <div className="space-y-10 py-2">
+            {/* Base Information */}
+            <section className="space-y-6">
+              <div className="flex items-center gap-2 border-b border-border pb-2">
+                <div className="h-4 w-1 bg-primary rounded-full" />
+                <h3 className="text-sm font-black uppercase tracking-widest text-foreground/70">
+                  {t('units.form.basics', 'General Information')}
+                </h3>
               </div>
-              <div className="space-y-1.5">
-                <Label>{t('units.form.type', 'Type')} *</Label>
-                <div className="grid grid-cols-4 gap-2">
-                  {(Object.keys(UNIT_TYPE_LABELS) as UnitType[]).map((type) => (
-                    <button
-                      key={type}
-                      type="button"
-                      onClick={() => handleTypeChange(type)}
-                      className={`rounded-lg border p-2 text-xs text-center transition-colors ${
-                        form.type === type
-                          ? 'border-primary bg-primary/10 text-primary font-medium'
-                          : 'border-border hover:border-primary/40 text-muted-foreground hover:bg-muted'
-                      }`}
-                    >
-                      {UNIT_TYPE_LABELS[type]}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="sizeSqm">
-                  {t('units.form.sizeSqm', 'Size (m²)')}
-                </Label>
-                <Input
-                  id="sizeSqm"
-                  type="number"
-                  min="1"
-                  placeholder={t('units.form.sizeSqmPlaceholder', 'Optional')}
-                  value={form.sizeSqm ?? ''}
-                  onChange={(e) => {
-                    const v = e.target.value;
-                    setForm({
-                      ...form,
-                      sizeSqm: v === '' ? null : parseInt(v, 10) || null,
-                    });
-                  }}
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-3">
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="space-y-1.5">
-                  <Label htmlFor="unitLat">
-                    {t('units.form.lat', 'Latitude')}
+                  <Label htmlFor="unitName" className="text-[10px] font-black uppercase tracking-widest text-foreground/50 ml-1">
+                    {t('units.form.name', 'Unit Identification')} *
                   </Label>
                   <Input
-                    id="unitLat"
-                    type="number"
-                    step="any"
-                    placeholder={t('units.form.latPlaceholder', 'e.g. 25.276987')}
-                    value={form.lat ?? ''}
-                    onChange={(e) => {
-                      const v = e.target.value;
-                      setForm({ ...form, lat: v === '' ? null : parseFloat(v) || null });
-                    }}
+                    id="unitName"
+                    placeholder={t('units.form.namePlaceholder', 'e.g. Villa 12, Apt 4B')}
+                    value={form.name}
+                    onChange={(e) => setForm({ ...form, name: e.target.value })}
+                    className="rounded-xl border-border bg-background focus:ring-4 focus:ring-primary/10 transition-all font-bold text-lg"
                   />
                 </div>
                 <div className="space-y-1.5">
-                  <Label htmlFor="unitLng">
-                    {t('units.form.lng', 'Longitude')}
+                  <Label htmlFor="sizeSqm" className="text-[10px] font-black uppercase tracking-widest text-foreground/50 ml-1">
+                    {t('units.form.sizeSqm', 'Surface Area (m²)')}
                   </Label>
                   <Input
-                    id="unitLng"
+                    id="sizeSqm"
                     type="number"
-                    step="any"
-                    placeholder={t('units.form.lngPlaceholder', 'e.g. 55.296249')}
-                    value={form.lng ?? ''}
+                    min="1"
+                    placeholder={t('units.form.sizeSqmPlaceholder', 'Optional')}
+                    value={form.sizeSqm ?? ''}
                     onChange={(e) => {
                       const v = e.target.value;
-                      setForm({ ...form, lng: v === '' ? null : parseFloat(v) || null });
+                      setForm({
+                        ...form,
+                        sizeSqm: v === '' ? null : parseInt(v, 10) || null,
+                      });
                     }}
+                    className="rounded-xl font-medium"
                   />
                 </div>
               </div>
-              <div className="space-y-1.5">
-                <Label htmlFor="qrQuota">
-                  {t('units.form.qrQuota', 'QR Quota')}
+
+              <div className="space-y-3">
+                <Label className="text-[10px] font-black uppercase tracking-widest text-foreground/50 ml-1">
+                  {t('units.form.type', 'Property Classification')} *
                 </Label>
-                <Input
-                  id="qrQuota"
-                  type="number"
-                  min="1"
-                  value={form.qrQuota}
-                  onChange={(e) =>
-                    setForm({ ...form, qrQuota: parseInt(e.target.value) || 1 })
-                  }
-                />
-                <p className="text-xs text-muted-foreground">
-                  {t('units.form.quotaDefault', {
-                    type: UNIT_TYPE_LABELS[form.type],
-                    count: UNIT_QUOTA_DEFAULTS[form.type],
-                    defaultValue: `Default for ${UNIT_TYPE_LABELS[form.type]}: ${UNIT_QUOTA_DEFAULTS[form.type]}`,
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  {(Object.keys(UNIT_TYPE_LABELS) as UnitType[]).map((type) => {
+                    const isSelected = form.type === type;
+                    return (
+                      <button
+                        key={type}
+                        type="button"
+                        onClick={() => handleTypeChange(type)}
+                        className={cn(
+                          "rounded-xl border px-3 py-2.5 text-[11px] font-black tracking-tight transition-all duration-200 uppercase",
+                          isSelected
+                            ? "border-primary bg-primary text-primary-foreground shadow-md scale-[1.02]"
+                            : "border-border bg-card text-muted-foreground hover:border-primary/40 hover:bg-muted/50"
+                        )}
+                      >
+                        {UNIT_TYPE_LABELS[type]}
+                      </button>
+                    );
                   })}
-                </p>
+                </div>
               </div>
-              {projects.length > 0 && (
+            </section>
+
+            {/* Quota & Location */}
+            <section className="space-y-6">
+              <div className="flex items-center gap-2 border-b border-border pb-2">
+                <div className="h-4 w-1 bg-blue-500 rounded-full" />
+                <h3 className="text-sm font-black uppercase tracking-widest text-foreground/70">
+                  {t('units.form.access', 'Access & Location')}
+                </h3>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                <div className="space-y-3">
+                  <Label htmlFor="qrQuota" className="text-[10px] font-black uppercase tracking-widest text-foreground/50 ml-1">
+                    {t('units.form.qrQuota', 'QR Access Quota')}
+                  </Label>
+                  <div className="flex items-center gap-4">
+                    <Input
+                      id="qrQuota"
+                      type="number"
+                      min="1"
+                      value={form.qrQuota}
+                      onChange={(e) => setForm({ ...form, qrQuota: parseInt(e.target.value) || 1 })}
+                      className="rounded-xl font-black text-center w-24 h-12 text-xl border-primary/20 shadow-inner bg-muted/20"
+                    />
+                    <div className="flex-1 space-y-1">
+                      <p className="text-[10px] font-bold text-muted-foreground uppercase leading-tight">
+                        {t('units.form.quotaHint', 'Total simultaneous valid guest passes.')}
+                      </p>
+                      <p className="text-[9px] text-primary/60 italic">
+                        {t('units.form.quotaDefault', {
+                          type: UNIT_TYPE_LABELS[form.type],
+                          count: UNIT_QUOTA_DEFAULTS[form.type],
+                          defaultValue: `Standard for ${UNIT_TYPE_LABELS[form.type]}: ${UNIT_QUOTA_DEFAULTS[form.type]}`,
+                        })}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-1.5 flex flex-col justify-end">
+                  <Label className="text-[10px] font-black uppercase tracking-widest text-foreground/50 ml-1 mb-1">
+                    {t('units.form.coordinates', 'Geographic Coordinates')}
+                  </Label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <Input
+                      id="unitLat"
+                      type="number"
+                      step="any"
+                      placeholder="Lat..."
+                      value={form.lat ?? ''}
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        setForm({ ...form, lat: v === '' ? null : parseFloat(v) || null });
+                      }}
+                      className="rounded-xl font-mono text-[11px] h-9 bg-muted/10"
+                    />
+                    <Input
+                      id="unitLng"
+                      type="number"
+                      step="any"
+                      placeholder="Lng..."
+                      value={form.lng ?? ''}
+                      onChange={(e) => {
+                        const v = e.target.value;
+                        setForm({ ...form, lng: v === '' ? null : parseFloat(v) || null });
+                      }}
+                      className="rounded-xl font-mono text-[11px] h-9 bg-muted/10"
+                    />
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* Project & Linkage */}
+            <section className="space-y-6">
+              <div className="flex items-center gap-2 border-b border-border pb-2">
+                <div className="h-4 w-1 bg-emerald-500 rounded-full" />
+                <h3 className="text-sm font-black uppercase tracking-widest text-foreground/70">
+                  {t('units.form.linkage', 'Project & Residents')}
+                </h3>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
                 <div className="space-y-1.5">
-                  <Label htmlFor="projectId">
-                    {t('units.form.project', 'Project')}
+                  <Label htmlFor="projectId" className="text-[10px] font-black uppercase tracking-widest text-foreground/50 ml-1">
+                    {t('units.form.project', 'Associated Project')}
                   </Label>
                   <NativeSelect
                     id="projectId"
                     value={form.projectId}
-                    onChange={(e) =>
-                      setForm({ ...form, projectId: e.target.value })
-                    }
+                    onChange={(e) => setForm({ ...form, projectId: e.target.value })}
+                    className="rounded-xl h-11 font-semibold"
                   >
-                    <option value="">
-                      {t('sidebar.allProjects', 'No Project')}
-                    </option>
+                    <option value="">{t('sidebar.allProjects', 'Unassigned / Individual')}</option>
                     {projects.map((p) => (
-                      <option key={p.id} value={p.id}>
-                        {p.name}
-                      </option>
+                      <option key={p.id} value={p.id}>{p.name}</option>
                     ))}
                   </NativeSelect>
+                  <p className="text-[9px] text-muted-foreground italic px-1">
+                    {t('units.form.projectTip', 'Units can belong to a master development project for simplified filtering.')}
+                  </p>
                 </div>
-              )}
-              {contacts.length > 0 && (
-                <div className="space-y-1.5">
-                  <Label>
-                    {t('units.form.linkedResidents', 'Linked Residents')}
-                  </Label>
-                  <div className="flex flex-wrap gap-2 rounded-lg border p-3 max-h-32 overflow-y-auto">
-                    {contacts.map((c) => (
-                      <button
-                        key={c.id}
-                        type="button"
-                        onClick={() => handleContactToggle(c.id)}
-                        className={`rounded-full px-3 py-1 text-xs font-medium border transition-colors ${
-                          form.contactIds.includes(c.id)
-                            ? 'bg-primary text-primary-foreground border-primary'
-                            : 'bg-muted text-muted-foreground border-transparent hover:border-primary/40'
-                        }`}
-                      >
-                        {c.firstName} {c.lastName}
-                      </button>
-                    ))}
+
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-[10px] font-black uppercase tracking-widest text-foreground/50 ml-1">
+                      {t('units.form.linkedResidents', 'Primary Resident Contacts')}
+                    </Label>
+                    <Badge variant="secondary" className="text-[9px] font-bold px-1.5 h-4 bg-muted/50 border-none">
+                      {form.contactIds.length}
+                    </Badge>
+                  </div>
+                  <div className="rounded-2xl border border-border bg-muted/5 p-4 max-h-48 overflow-y-auto pr-2 scrollbar-thin">
+                    {contacts.length === 0 ? (
+                      <p className="text-xs text-muted-foreground italic text-center py-4">
+                        {t('units.form.noContacts', 'No contacts registered yet.')}
+                      </p>
+                    ) : (
+                      <div className="flex flex-wrap gap-2">
+                        {contacts.map((c) => {
+                          const isSelected = form.contactIds.includes(c.id);
+                          return (
+                            <button
+                              key={c.id}
+                              type="button"
+                              onClick={() => handleContactToggle(c.id)}
+                              className={cn(
+                                "flex items-center gap-2 rounded-lg px-2.5 py-1.5 text-[11px] font-bold border transition-all duration-200",
+                                isSelected 
+                                  ? "bg-emerald-500 text-white border-emerald-600 shadow-sm" 
+                                  : "bg-card text-foreground border-border hover:border-emerald-500/30 hover:bg-muted/50"
+                              )}
+                            >
+                              {c.firstName} {c.lastName}
+                              {isSelected && <Check className="h-3 w-3 ml-0.5" />}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
                   </div>
                 </div>
-              )}
-            </div>
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setDialogOpen(false)}>
-                {t('common.cancel', 'Cancel')}
-              </Button>
-              <Button onClick={save} disabled={isPending}>
-                {isPending
-                  ? t('modal.actions.saving', 'Saving…')
-                  : editing
-                    ? t('units.success.updated', 'Save changes')
-                    : t('common.create', 'Create')}
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+              </div>
+            </section>
+          </div>
+        </EditPanel>
       )}
 
       {/* Link Resident Dialog */}
