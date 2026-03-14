@@ -22,6 +22,7 @@ import {
 import { cn } from '@gate-access/ui';
 import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
+import { HeaderUserMenu } from './header-user-menu';
 
 
 import { Permission } from '@gate-access/types';
@@ -97,8 +98,8 @@ interface SidebarProps {
 }
 
 export function Sidebar({
-  user: _user,
-  org: _org,
+  user,
+  org,
   projects: _projects,
   currentProjectId: _currentProjectId,
   locale,
@@ -210,34 +211,42 @@ export function Sidebar({
         ))}
       </nav>
 
-      {/* Footer: Profile link + Collapse (avatar menu lives in header) */}
+      {/* Footer: Profile link + Collapse */}
       <div
         className={cn(
-          'mt-auto shrink-0 p-3 flex flex-col gap-3 border-t border-sidebar-border/50',
-          isCollapsed ? 'items-center' : 'px-4'
+          'mt-auto shrink-0 p-3 flex flex-col gap-2 border-t border-sidebar-border/50',
+          isCollapsed ? 'items-center' : 'px-3'
         )}
       >
+        <HeaderUserMenu 
+            user={user} 
+            org={org} 
+            locale={locale} 
+            variant="sidebar" 
+            isCollapsed={isCollapsed} 
+        />
+        
         <Link
           href={`/${locale}/dashboard/settings`}
           onMouseEnter={() => isCollapsed && setHoveredLabel(t('sidebar.settings', 'Settings'))}
           onMouseLeave={() => setHoveredLabel(null)}
           className={cn(
             'group flex items-center gap-3 rounded-xl transition-all text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground',
-            isCollapsed ? 'justify-center p-3' : 'px-3.5 py-3'
+            isCollapsed ? 'justify-center p-3' : 'px-3.5 py-2.5'
           )}
         >
           <GearIcon size={20} weight="regular" className="shrink-0 text-muted-foreground group-hover:text-foreground" />
           {!isCollapsed && (
-            <span className="flex-1 truncate text-sm font-medium">{t('sidebar.settings', 'Settings')}</span>
+            <span className="flex-1 truncate text-[11px] font-bold uppercase tracking-wider">{t('sidebar.settings', 'Settings')}</span>
           )}
         </Link>
       </div>
 
-      {/* Collapse toggle — floats on the right edge of the sidebar */}
+      {/* Collapse toggle — floats on the right edge of the sidebar, positioned "out down" */}
       <button
         type="button"
         onClick={onToggleCollapse}
-        className="absolute bottom-10 -right-3 z-50 flex h-6 w-6 items-center justify-center rounded-full border border-sidebar-border bg-sidebar shadow-sm hover:bg-sidebar-accent transition-all group"
+        className="absolute bottom-4 -right-3 z-50 flex h-6 w-6 items-center justify-center rounded-full border border-sidebar-border bg-sidebar shadow-sm hover:bg-sidebar-accent transition-all group"
         onMouseEnter={() => setHoveredLabel(isCollapsed ? t('sidebar.expand', 'Expand') : t('sidebar.collapse', 'Collapse'))}
         onMouseLeave={() => setHoveredLabel(null)}
         aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}

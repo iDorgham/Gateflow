@@ -58,13 +58,33 @@ Flat plan files for backward compatibility. New plans use `planning/<slug>/`.
 ```
 /idea "description"         → creates context/IDEA_<slug>.md
 /plan <slug>                → creates planning/<slug>/ with PLAN + PROMPT + TASKS
-/dev <slug> <N>             → executes phase N; mark done in TASKS
+/plan ready <slug>          → moves planning/<slug>/ → planned/<slug>/
+/dev <slug> <N>             → executes phase N; moves to in-progress/, then done/
+/ship <slug>                → executes all remaining phases end-to-end
 /guide                      → shows active plan, next phase, recommendations
+/man                        → one-command orchestrator + task manager
+/clis-team seo|refactor|audit → run a multi-CLI team for a task
 ```
 
-When all phases in a plan are complete, move the folder:
-```bash
-git mv docs/plan/planning/<slug> docs/plan/done/<slug>
+## Kiro Hooks (Commands)
+
+All commands are available as Kiro hooks in `.kiro/hooks/`:
+
+| Hook file | Command | Purpose |
+|-----------|---------|---------|
+| `cmd-idea.json` | `/idea` | Capture & refine initiative |
+| `cmd-plan.json` | `/plan` | Create phased plan + prompts |
+| `cmd-dev.json` | `/dev` | Execute one phase |
+| `cmd-ship.json` | `/ship` | Execute all phases |
+| `cmd-man.json` | `/man` | Orchestrator + task manager |
+| `cmd-guide.json` | `/guide` | Workspace status report |
+| `cmd-clis-team.json` | `/clis-team` | Multi-CLI team runner |
+
+## Plan Lifecycle
+
+```
+planning/<slug>/  →  planned/<slug>/  →  in-progress/<slug>/  →  done/<slug>/
+   (/plan)           (/plan ready)         (/dev starts)          (/dev last phase)
 ```
 
 ---

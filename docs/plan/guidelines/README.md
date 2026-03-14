@@ -1,6 +1,10 @@
-and # Cursor Templates
+# GateFlow Guidelines
 
-Reusable templates for GateFlow AI workflows. Fill placeholders and save outputs to their target locations.
+Reusable templates and guides for GateFlow AI workflows. Fill placeholders and save outputs to their target locations.
+
+## 🗺️ Start Here
+
+- **[KIRO_GUIDE.md](./KIRO_GUIDE.md)** — Complete Kiro workflow reference (commands, templates, subagents, invariants)
 
 ## Templates
 

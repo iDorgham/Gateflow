@@ -107,34 +107,28 @@ export function GlobalSearch({ locale }: { locale: string }) {
   };
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          className="relative h-9 w-full justify-start rounded-lg bg-secondary/50 text-sm font-normal text-muted-foreground shadow-none sm:pr-12 md:w-[300px] lg:w-[400px] border-border/50 hover:bg-secondary transition-colors"
-        >
-          <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
-          <span className="hidden lg:inline-flex">Search workspace...</span>
-          <span className="inline-flex lg:hidden">Search...</span>
-          <kbd className="pointer-events-none absolute right-[0.3rem] top-[0.3rem] hidden h-6 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
-            <span className="text-xs">⌘</span>K
-          </kbd>
-        </Button>
-      </PopoverTrigger>
-
-      <PopoverContent
-        className="w-[calc(100vw-2rem)] sm:w-[300px] md:w-[400px] p-0 shadow-2xl rounded-xl border border-border/60"
-        align="start"
-        sideOffset={8}
-      >
-        <Command className="[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:font-medium [&_[cmdk-group-heading]]:text-muted-foreground [&_[cmdk-group]:not([hidden])_~[cmdk-group]]:pt-0 [&_[cmdk-group]]:px-2 [&_[cmdk-input-wrapper]_svg]:h-5 [&_[cmdk-input-wrapper]_svg]:w-5 [&_[cmdk-input]]:h-12 [&_[cmdk-item]]:px-2 [&_[cmdk-item]]:py-3 [&_[cmdk-item]_svg]:h-4 [&_[cmdk-item]_svg]:w-4">
-          <CommandInput
-            placeholder="Search contacts, units, QRs..."
-            value={query}
-            onValueChange={setQuery}
-            autoFocus
-          />
-          <CommandList className="max-h-[50vh] sm:max-h-[400px]">
+    <div className="relative w-full md:w-[300px] lg:w-[400px]">
+      <Command className="border border-border/50 rounded-lg overflow-visible bg-transparent">
+        <CommandInput
+          placeholder="Search workspace..."
+          value={query}
+          onValueChange={(v) => {
+            setQuery(v);
+            if (!open && v.trim()) setOpen(true);
+          }}
+          onFocus={() => {
+            if (query.trim()) setOpen(true);
+          }}
+          onBlur={() => {
+            // small delay so clicks on the dropdown list register
+            setTimeout(() => setOpen(false), 200);
+          }}
+          className="h-9 outline-none border-none bg-secondary/50 focus:bg-secondary focus:ring-0 transition-colors w-full"
+        />
+        
+        {open && (
+          <div className="absolute top-full left-0 right-0 z-50 mt-2 bg-popover rounded-xl border border-border/60 shadow-2xl overflow-hidden">
+            <CommandList className="max-h-[50vh] sm:max-h-[400px]">
             <CommandEmpty>
               {loading ? (
                 <div className="flex items-center justify-center py-6 text-sm text-muted-foreground">
@@ -230,8 +224,9 @@ export function GlobalSearch({ locale }: { locale: string }) {
               </>
             )}
           </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
+          </div>
+        )}
+      </Command>
+    </div>
   );
 }

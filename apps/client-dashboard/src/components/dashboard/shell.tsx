@@ -25,7 +25,7 @@ import {
   ChevronsUpDown,
 } from 'lucide-react';
 import { cn } from '@gate-access/ui';
-import { HeaderUserMenu } from './header-user-menu';
+import { ThemeToggle } from './theme-toggle';
 
 interface ExpiredQR {
   id: string;
@@ -54,39 +54,6 @@ export interface DashboardShellProps {
   permissions?: Record<string, boolean>;
 }
 
-function MiniHeader({ locale }: { locale: Locale }) {
-  const [time, setTime] = useState(new Date());
-
-  useEffect(() => {
-    const timer = setInterval(() => setTime(new Date()), 1000);
-    return () => clearInterval(timer);
-  }, []);
-
-  const dateStr = time.toLocaleDateString(locale === 'ar-EG' ? 'ar-EG' : 'en-US', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-
-  const timeStr = time.toLocaleTimeString(locale === 'ar-EG' ? 'ar-EG' : 'en-US', {
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-  });
-
-  return (
-    <div className="bg-primary px-4 py-1 flex justify-between items-center text-[10px] text-primary-foreground font-medium z-40">
-      <div className="flex items-center gap-4 opacity-90 tracking-wide" suppressHydrationWarning>
-        <span className="uppercase" suppressHydrationWarning>{dateStr}</span>
-        <span className="font-mono tabular-nums" suppressHydrationWarning>{timeStr}</span>
-      </div>
-      <div className="flex items-center gap-2">
-        <LanguageSwitcher currentLocale={locale} variant="mini" />
-      </div>
-    </div>
-  );
-}
 
 export function DashboardShell({
   user,
@@ -156,8 +123,70 @@ export function DashboardShell({
 
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-background">
-      {/* Global mini header spanning sidebar + content */}
-      <MiniHeader locale={locale} />
+      {/* Top bar spanning full width */}
+      <header className="flex h-16 shrink-0 items-center justify-between border-b border-sidebar-border bg-sidebar text-sidebar-foreground px-4 md:px-6 shadow-sm z-30">
+        <div className="flex items-center gap-6">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden"
+            onClick={() => setMobileOpen(true)}
+          >
+            <Menu className="h-5 w-5" />
+          </Button>
+          <div className="hidden md:flex flex-1 max-w-md">
+            <GlobalSearch locale={locale} />
+          </div>
+
+          {/* Project Switcher */}
+          {projects.length > 0 && (
+            <div className="hidden sm:flex items-center gap-2 relative">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground opacity-60 line-clamp-1">
+                Project
+              </span>
+              <div className="relative w-40">
+                <select
+                  value={currentProjectId ?? 'all'}
+                  onChange={(e) => handleProjectSwitch(e.target.value)}
+                  disabled={isPending}
+                  className="w-full appearance-none rounded-md bg-secondary/50 border border-border/50 text-xs font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer disabled:opacity-50 transition-all hover:bg-secondary px-3 py-1.5 h-8"
+                >
+                  <option value="all">All Projects</option>
+                  {projects.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.name}
+                    </option>
+                  ))}
+                </select>
+                <ChevronsUpDown className="pointer-events-none absolute right-2.5 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground opacity-50" />
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="flex items-center gap-2">
+          <div className="sm:hidden flex items-center">
+            <GlobalSearch locale={locale} />
+          </div>
+          {/* Notification bell (header) */}
+          <NotificationDropdown items={expiredQRs} locale={locale} />
+          {/* AI Assistant toggle */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className={cn(
+              'relative text-muted-foreground hover:text-foreground transition-colors',
+              isSidePanelOpen && 'text-primary bg-primary/10'
+            )}
+            onClick={() => setIsSidePanelOpen((v) => !v)}
+            aria-label="Toggle AI Assistant"
+          >
+            <Sparkles className="h-[17px] w-[17px]" />
+          </Button>
+          <LanguageSwitcher currentLocale={locale} variant="mini" />
+          <ThemeToggle />
+        </div>
+      </header>
 
       <div className="flex flex-1 min-h-0 overflow-hidden">
         {/* Left sidebar - matches content height below mini header */}
@@ -180,77 +209,8 @@ export function DashboardShell({
           />
         </div>
 
-        {/* Right side: main header + content */}
+        {/* Right side: content */}
         <div className="flex flex-1 min-h-0 flex-col min-w-0 overflow-hidden">
-          {/* Top bar */}
-          <header className="flex h-16 shrink-0 items-center justify-between border-b border-sidebar-border bg-sidebar text-sidebar-foreground px-4 md:px-6 shadow-sm z-30">
-            <div className="flex items-center gap-6">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="md:hidden"
-                onClick={() => setMobileOpen(true)}
-              >
-                <Menu className="h-5 w-5" />
-              </Button>
-              <div className="hidden md:flex flex-1 max-w-md">
-                <GlobalSearch locale={locale} />
-              </div>
-
-              {/* Project Switcher */}
-              {projects.length > 0 && (
-                <div className="hidden sm:flex items-center gap-2 relative">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground opacity-60 line-clamp-1">
-                    Project
-                  </span>
-                  <div className="relative w-40">
-                    <select
-                      value={currentProjectId ?? 'all'}
-                      onChange={(e) => handleProjectSwitch(e.target.value)}
-                      disabled={isPending}
-                      className="w-full appearance-none rounded-md bg-secondary/50 border border-border/50 text-xs font-bold text-foreground focus:outline-none focus:ring-2 focus:ring-primary/20 cursor-pointer disabled:opacity-50 transition-all hover:bg-secondary px-3 py-1.5 h-8"
-                    >
-                      <option value="all">All Projects</option>
-                      {projects.map((p) => (
-                        <option key={p.id} value={p.id}>
-                          {p.name}
-                        </option>
-                      ))}
-                    </select>
-                    <ChevronsUpDown className="pointer-events-none absolute right-2.5 top-1/2 h-3 w-3 -translate-y-1/2 text-muted-foreground opacity-50" />
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <div className="flex items-center gap-2">
-              <div className="sm:hidden flex items-center">
-                <GlobalSearch locale={locale} />
-              </div>
-              {/* Notification bell (header) */}
-              <NotificationDropdown items={expiredQRs} locale={locale} />
-              {/* AI Assistant toggle */}
-              <Button
-                variant="ghost"
-                size="icon"
-                className={cn(
-                  'relative text-muted-foreground hover:text-foreground transition-colors',
-                  isSidePanelOpen && 'text-primary bg-primary/10'
-                )}
-                onClick={() => setIsSidePanelOpen((v) => !v)}
-                aria-label="Toggle AI Assistant"
-              >
-                <Sparkles className="h-[17px] w-[17px]" />
-              </Button>
-              <HeaderUserMenu
-                user={user}
-                org={org}
-                locale={locale}
-              />
-            </div>
-          </header>
-
-        <div className="flex flex-1 min-h-0 overflow-hidden">
         {/* Mobile Sidebar */}
         <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
           <SheetContent
@@ -294,7 +254,6 @@ export function DashboardShell({
           >
             <AIAssistant locale={locale} />
           </SidePanel>
-        </div>
         </div>
       </div>
     </div>

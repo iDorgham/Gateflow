@@ -15,9 +15,11 @@ import {
   TableRow,
 } from '@gate-access/ui';
 import Link from 'next/link';
-import { Users, DoorOpen, QrCode, ScrollText, Shield } from 'lucide-react';
+import { Users, DoorOpen, QrCode, ScrollText, Shield, Search, Building, User } from 'lucide-react';
 import { ProjectDetailActions, type ProjectDetailActionsRef } from './ProjectDetailActions';
 import { GatesCardWithEdit } from './GatesCardWithEdit';
+import { useState } from 'react';
+import { Input } from '@gate-access/ui';
 
 const SCAN_STATUS_STYLES: Record<string, string> = {
   SUCCESS: 'bg-success/20 text-success',
@@ -64,9 +66,27 @@ interface ScanLog {
   status: string;
 }
 
+interface Unit {
+  id: string;
+  name: string;
+  type: string;
+  building: string | null;
+  contactsCount: number;
+}
+
+interface Contact {
+  id: string;
+  name: string;
+  email: string | null;
+  phone: string | null;
+  avatarUrl: string | null;
+}
+
 interface ProjectDetailContentProps {
   project: Project;
   gates: Gate[];
+  units: Unit[];
+  contacts: Contact[];
   aggregates: {
     contactsCount: number;
     unitTypes: string[];
@@ -84,6 +104,8 @@ interface ProjectDetailContentProps {
 export function ProjectDetailContent({
   project,
   gates,
+  units,
+  contacts,
   aggregates,
   teamUsers,
   recentLogs,
@@ -92,6 +114,20 @@ export function ProjectDetailContent({
 }: ProjectDetailContentProps) {
   const { t } = useTranslation('dashboard');
   const actionsRef = useRef<ProjectDetailActionsRef>(null);
+
+  const [contactSearch, setContactSearch] = useState('');
+  const [unitSearch, setUnitSearch] = useState('');
+
+  const filteredContacts = contacts.filter(c => 
+    c.name.toLowerCase().includes(contactSearch.toLowerCase()) ||
+    c.email?.toLowerCase().includes(contactSearch.toLowerCase()) ||
+    c.phone?.includes(contactSearch)
+  ).slice(0, 10);
+
+  const filteredUnits = units.filter(u => 
+    u.name.toLowerCase().includes(unitSearch.toLowerCase()) ||
+    u.building?.toLowerCase().includes(unitSearch.toLowerCase())
+  ).slice(0, 10);
 
   return (
     <div className="p-4 md:p-8 space-y-6">
@@ -267,6 +303,96 @@ export function ProjectDetailContent({
               <Shield className="h-5 w-5 shrink-0" />
               <span>{t('projectDetail.shiftPlaceholder', '—')}</span>
             </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Units List */}
+        <Card className="border border-border bg-card rounded-xl shadow-sm">
+          <CardHeader className="pb-2 space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
+                <Building className="h-5 w-5 text-primary" />
+                {t('projectDetail.units', 'Units')}
+              </h2>
+              <span className="text-xs text-muted-foreground">{units.length} total</span>
+            </div>
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/50" />
+              <Input
+                placeholder={t('common.search', 'Search...')}
+                value={unitSearch}
+                onChange={(e) => setUnitSearch(e.target.value)}
+                className="pl-9 h-9 border-border/50 bg-muted/20"
+              />
+            </div>
+          </CardHeader>
+          <CardContent>
+            {filteredUnits.length === 0 ? (
+              <p className="text-sm text-muted-foreground py-4 text-center">{t('common.noResults', 'No results found')}</p>
+            ) : (
+              <div className="space-y-2">
+                {filteredUnits.map((unit) => (
+                  <div key={unit.id} className="flex items-center justify-between p-3 rounded-lg border border-border/50 hover:bg-muted/30 transition-colors">
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-foreground truncate">{unit.name}</p>
+                      <p className="text-[10px] text-muted-foreground uppercase tracking-wider">
+                        {unit.building ? `${unit.building} · ` : ''}{unit.type}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                       <Badge variant="secondary" className="text-[10px]">{unit.contactsCount} {t('projectDetail.contacts', 'Contacts')}</Badge>
+                    </div>
+                  </div>
+                ))}
+                {units.length > 10 && !unitSearch && <p className="text-[10px] text-center text-muted-foreground pt-2">Showing first 10 units</p>}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Contacts List */}
+        <Card className="border border-border bg-card rounded-xl shadow-sm">
+          <CardHeader className="pb-2 space-y-4">
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg font-semibold text-foreground flex items-center gap-2">
+                <User className="h-5 w-5 text-primary" />
+                {t('projectDetail.contacts', 'Contacts')}
+              </h2>
+              <span className="text-xs text-muted-foreground">{contacts.length} total</span>
+            </div>
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/50" />
+              <Input
+                placeholder={t('common.search', 'Search...')}
+                value={contactSearch}
+                onChange={(e) => setContactSearch(e.target.value)}
+                className="pl-9 h-9 border-border/50 bg-muted/20"
+              />
+            </div>
+          </CardHeader>
+          <CardContent>
+            {filteredContacts.length === 0 ? (
+              <p className="text-sm text-muted-foreground py-4 text-center">{t('common.noResults', 'No results found')}</p>
+            ) : (
+              <div className="space-y-2">
+                {filteredContacts.map((contact) => (
+                  <div key={contact.id} className="flex items-center gap-3 p-3 rounded-lg border border-border/50 hover:bg-muted/30 transition-colors">
+                    <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs">
+                      {contact.avatarUrl ? <img src={contact.avatarUrl} className="h-full w-full rounded-full object-cover" /> : contact.name.slice(0, 2).toUpperCase()}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-medium text-foreground truncate">{contact.name}</p>
+                      <p className="text-[10px] text-muted-foreground truncate">
+                        {contact.email || contact.phone || '—'}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+                {contacts.length > 10 && !contactSearch && <p className="text-[10px] text-center text-muted-foreground pt-2">Showing first 10 contacts</p>}
+              </div>
+            )}
           </CardContent>
         </Card>
       </div>

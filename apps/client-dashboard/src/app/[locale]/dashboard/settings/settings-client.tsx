@@ -23,7 +23,6 @@ import { WorkspaceTab } from './tabs/workspace-tab';
 import { ApiKeysTab } from './tabs/api-keys-tab';
 import { WebhooksTab } from './tabs/webhooks-tab';
 import { TeamTab } from './tabs/team-tab';
-import { GeneralTab } from './tabs/general-tab';
 import { IntegrationsTab } from './tabs/integrations-tab';
 import { NotificationsTab } from './tabs/notifications-tab';
 import { RolesTab } from './tabs/roles-tab';
@@ -135,9 +134,8 @@ export function SettingsClient(props: SettingsClientProps) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
 
-  const tabParam = searchParams.get('tab') || 'general';
+  const tabParam = searchParams.get('tab') || 'workspace';
   const validIds = [
-    'general',
     'workspace',
     'projects',
     'team',
@@ -148,7 +146,7 @@ export function SettingsClient(props: SettingsClientProps) {
     'integrations',
     'billing',
   ];
-  const initialTab = validIds.includes(tabParam) ? tabParam : 'general';
+  const initialTab = validIds.includes(tabParam) ? tabParam : 'workspace';
   const [activeTab, setActiveTab] = useState(initialTab);
 
   useEffect(() => {
@@ -166,12 +164,6 @@ export function SettingsClient(props: SettingsClientProps) {
   };
 
   const TABS = [
-    {
-      id: 'general',
-      label: t('settings.tabs.general', 'General'),
-      icon: Settings2,
-      component: <GeneralTab />,
-    },
     {
       id: 'workspace',
       label: t('settings.tabs.workspace', 'Workspace'),
@@ -246,18 +238,18 @@ export function SettingsClient(props: SettingsClientProps) {
       <div className="flex flex-col gap-1 border-b border-border pb-6">
         <div className="flex items-center gap-3">
           <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
-            <Settings2 className="h-5 w-5 text-primary" />
+            <Building2 className="h-5 w-5 text-primary" />
           </div>
           <h1 className="text-2xl font-bold tracking-tight text-foreground uppercase">
-            {t('settings.title', 'Settings')}
+            {t('settings.gateflowTitle', 'GateFlow Setup')}
           </h1>
         </div>
         <p className="text-sm text-muted-foreground">
           <Trans
             t={t}
-            i18nKey="settings.description"
+            i18nKey="settings.gateflowDescription"
             values={{ orgName: props.org.name }}
-            defaults="Global configuration and administrative nodes for <1>{{orgName}}</1>."
+            defaults="Core operational parameters and administrative nodes for <1>{{orgName}}</1>."
             components={[
               <span key="org" className="text-primary font-semibold" />,
             ]}

@@ -54,7 +54,22 @@ export default async function ProjectDetailPage({
         },
         units: {
           where: { deletedAt: null },
-          include: { contacts: { select: { contactId: true } } },
+          include: { 
+            contacts: { 
+              include: { 
+                contact: {
+                  select: {
+                    id: true,
+                    firstName: true,
+                    lastName: true,
+                    email: true,
+                    phone: true,
+                    avatarUrl: true,
+                  }
+                }
+              }
+            } 
+          },
         },
         qrCodes: { where: { deletedAt: null }, select: { id: true } },
       },
@@ -81,14 +96,24 @@ export default async function ProjectDetailPage({
 
   if (!project) notFound();
 
-  const uniqueContacts = new Set(
-    project.units.flatMap((u) => u.contacts.map((c) => c.contactId))
+  const allContacts = project.units.flatMap((u) => 
+    u.contacts.map((c) => ({
+      ...c.contact,
+      name: `${c.contact.firstName} ${c.contact.lastName}`,
+    }))
   );
-  const unitTypes = Array.from(new Set(project.units.map((u) => u.type)));
+  const contacts = Array.from(new Map(allContacts.map((c) => [c.id, c])).values());
+
+  const units = project.units.map(u => ({
+    id: u.id,
+    name: u.name,
+    type: u.type,
+    building: u.building,
+    contactsCount: u.contacts.length,
+  }));
 
   const aggregates = {
-    contactsCount: uniqueContacts.size,
-    unitTypes,
+    contactsCount: contacts.length,
     qrCount: project.qrCodes.length,
     access1d: scans1d,
     access7d: scans7d,
@@ -169,7 +194,12 @@ export default async function ProjectDetailPage({
           gateMode: project.gateMode,
         }}
         gates={project.gates}
-        aggregates={aggregates}
+        units={units}
+        contacts={contacts}
+        aggregates={{
+            ...aggregates,
+            unitTypes: Array.from(new Set(units.map(u => u.type))),
+        }}
         teamUsers={teamUsers}
         recentLogs={recentLogs}
         locale={locale}

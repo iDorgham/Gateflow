@@ -8,17 +8,38 @@ import { revalidatePath } from 'next/cache';
 
 type ActionResult = { success: boolean; error?: string };
 
-export async function updateProfile(userId: string, name: string): Promise<ActionResult> {
+export async function updateProfile(
+  userId: string,
+  data: {
+    name: string;
+    bio?: string | null;
+    phone?: string | null;
+    company?: string | null;
+    website?: string | null;
+    socialLinks?: string | null;
+  }
+): Promise<ActionResult> {
   try {
     const claims = await getSessionClaims();
     if (!claims || claims.sub !== userId) return { success: false, error: 'Unauthorized.' };
-    if (!name.trim()) return { success: false, error: 'Name cannot be empty.' };
+    if (!data.name.trim()) return { success: false, error: 'Name cannot be empty.' };
 
-    await prisma.user.update({ where: { id: userId }, data: { name: name.trim() } });
+    await prisma.user.update({
+      where: { id: userId },
+      data: {
+        name: data.name.trim(),
+        bio: data.bio ?? null,
+        phone: data.phone ?? null,
+        company: data.company ?? null,
+        website: data.website ?? null,
+        socialLinks: data.socialLinks ?? null,
+      },
+    });
+
     revalidatePath('/dashboard/settings');
-    console.log(`updateProfile: Success - Updated name for user ${userId}`);
+    revalidatePath('/dashboard/profile');
+    console.log(`updateProfile: Success - Updated profile for user ${userId}`);
     return { success: true };
-
   } catch (error) {
     console.error('updateProfile: Unexpected error:', error);
     return { success: false, error: 'An unexpected error occurred.' };

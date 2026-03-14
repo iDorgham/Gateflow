@@ -52,8 +52,10 @@
 
 ---
 
-## Phase 5 — CRM Polish & Search (Next)
-**Status: Pending**
-- [ ] Add project-level search/filtering for units/contacts sub-lists.
-- [ ] Implement layout & settings split in project sidebar.
-- [ ] `pnpm preflight` passes.
+## Phase 5 — CRM Polish & Search
+**Status: Done**
+- [x] Add project-level search/filtering for units/contacts sub-lists.
+- [x] Refine header layout (Avatar & Theme switch at top-right).
+- [x] Splitting Settings UX: Profile (User) vs GateFlow Setup (System).
+- [x] Enhance Profile Page with bio, phone, company, social links & regional preferences.
+- [x] `pnpm preflight` passes.

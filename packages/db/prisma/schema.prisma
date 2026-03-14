@@ -113,6 +113,10 @@ model User {
   deletedAt       DateTime?
   avatarUrl       String?
   bio             String?
+  phone           String?
+  company         String?
+  website         String?
+  socialLinks     String?
   /// e.g. { tableViews: { contacts: {...}, units: {...} } }
   preferences     Json?
   roleId          String

@@ -1,6 +1,8 @@
 'use client';
 
+import { cn } from '@gate-access/ui';
 import Link from 'next/link';
+
 import { useRouter } from 'next/navigation';
 import {
   Avatar,
@@ -27,9 +29,17 @@ interface HeaderUserMenuProps {
   user: { id: string; name: string; email: string; role: string };
   org: { id: string; name: string; plan: string } | null;
   locale: string;
+  variant?: 'header' | 'sidebar';
+  isCollapsed?: boolean;
 }
 
-export function HeaderUserMenu({ user, org, locale }: HeaderUserMenuProps) {
+export function HeaderUserMenu({ 
+  user, 
+  org, 
+  locale, 
+  variant = 'header',
+  isCollapsed = false 
+}: HeaderUserMenuProps) {
   const router = useRouter();
   const { t } = useTranslation('dashboard');
 
@@ -48,19 +58,42 @@ export function HeaderUserMenu({ user, org, locale }: HeaderUserMenuProps) {
       <DropdownMenuTrigger asChild>
         <button
           type="button"
-          className="flex items-center gap-2 rounded-xl p-1.5 outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 hover:bg-sidebar-accent transition-colors"
+          className={cn(
+            "flex items-center outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-all",
+            variant === 'header' 
+              ? "gap-2 rounded-xl p-1.5 hover:bg-sidebar-accent" 
+              : cn(
+                  "w-full rounded-2xl hover:bg-sidebar-accent/50 group",
+                  isCollapsed ? "justify-center p-2" : "gap-3 p-3 text-left"
+                )
+          )}
           aria-label={t('sidebar.profile', 'Profile menu')}
         >
-          <Avatar className="h-9 w-9 border-2 border-sidebar-border hover:border-primary/50 transition-all">
-            <AvatarFallback className="bg-primary text-primary-foreground text-[10px] font-bold">
+          <Avatar className={cn(
+            "border-2 border-sidebar-border transition-all",
+            variant === 'header' ? "h-9 w-9 hover:border-primary/50" : "h-10 w-10 group-hover:border-primary/50"
+          )}>
+            <AvatarFallback className="bg-primary text-primary-foreground text-[10px] font-bold uppercase tracking-wider">
               {initials}
             </AvatarFallback>
           </Avatar>
+          
+          {variant === 'sidebar' && !isCollapsed && (
+            <div className="flex-1 min-w-0 flex flex-col items-start">
+              <span className="text-xs font-bold text-foreground truncate w-full tracking-tight">
+                {user.name}
+              </span>
+              <span className="text-[10px] font-medium text-muted-foreground truncate w-full uppercase tracking-widest opacity-60">
+                {user.role.toLowerCase().replace('_', ' ')}
+              </span>
+            </div>
+          )}
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        align="end"
-        sideOffset={8}
+        align={variant === 'header' ? 'end' : 'start'}
+        side={variant === 'header' ? 'bottom' : 'right'}
+        sideOffset={variant === 'header' ? 8 : 12}
         className="w-64 p-2 rounded-2xl border-sidebar-border bg-sidebar text-sidebar-foreground shadow-2xl animate-in fade-in zoom-in-95"
       >
         <DropdownMenuLabel className="p-3 mb-1">
@@ -101,36 +134,12 @@ export function HeaderUserMenu({ user, org, locale }: HeaderUserMenuProps) {
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link
-              href={`${base}/workspace/billing`}
+              href={`${base}/settings?tab=billing`}
               className="flex w-full items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer hover:bg-sidebar-accent transition-colors"
             >
               <CreditCard className="h-4 w-4 text-muted-foreground" />
               <span className="text-sm font-medium">{t('sidebar.billing', 'Billing & payments')}</span>
             </Link>
-          </DropdownMenuItem>
-
-          <DropdownMenuItem asChild>
-            <Link
-              href={`${base}/settings`}
-              className="flex w-full items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer hover:bg-sidebar-accent transition-colors"
-            >
-              <ShieldCheckIcon className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm font-medium">{t('sidebar.security', 'Security')}</span>
-            </Link>
-          </DropdownMenuItem>
-        </div>
-        <DropdownMenuSeparator className="bg-sidebar-border/50 mx-1" />
-        <div className="p-1">
-          <DropdownMenuItem className="flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl hover:bg-sidebar-accent transition-colors">
-            <div className="flex flex-col">
-              <span className="text-xs font-bold">
-                {t('sidebar.appearance', 'Appearance')}
-              </span>
-              <span className="text-[10px] text-muted-foreground font-medium">
-                {t('sidebar.appearanceDescription', 'Light / Dark mode')}
-              </span>
-            </div>
-            <ThemeToggle />
           </DropdownMenuItem>
         </div>
         <DropdownMenuSeparator className="bg-sidebar-border/50 mx-1" />

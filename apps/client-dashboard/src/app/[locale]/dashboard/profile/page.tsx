@@ -18,6 +18,10 @@ export default async function ProfilePage() {
       role: { select: { name: true } },
       avatarUrl: true,
       bio: true,
+      phone: true,
+      company: true,
+      website: true,
+      socialLinks: true,
       createdAt: true,
     },
   });
@@ -42,6 +46,10 @@ export default async function ProfilePage() {
           role: user.role.name,
           avatarUrl: user.avatarUrl ?? null,
           bio: user.bio ?? null,
+          phone: user.phone ?? null,
+          company: user.company ?? null,
+          website: user.website ?? null,
+          socialLinks: user.socialLinks ?? null,
           createdAt: user.createdAt.toISOString(),
         }}
       />
