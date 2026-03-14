@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { useTransition } from 'react';
 import {
   LayoutDashboard,
   QrCode,
@@ -44,12 +45,20 @@ import {
   TabsContent,
   TabsList,
   TabsTrigger,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from '@gate-access/ui';
 import { GlobalSearch } from './global-search';
 import { AIAssistant } from './ai-assistant';
 import { ThemeToggle } from './theme-toggle';
 import { ProjectFilterProvider } from '@/context/ProjectFilterContext';
 import { Locale } from '@/lib/i18n-config';
+import { useRealtimeEvents } from '@/lib/realtime/use-realtime-events';
+import { getCsrfToken } from '@/lib/csrf';
+import { ChevronsUpDown } from 'lucide-react';
 
 export interface DashboardLayoutProps {
   user: { id: string; name: string; email: string; role: string };
@@ -129,7 +138,19 @@ function MiniHeader({ user, locale }: { user: DashboardLayoutProps['user']; loca
   );
 }
 
-function SearchHeader({ locale }: { locale: Locale }) {
+function SearchHeader({ 
+  locale, 
+  projects, 
+  currentProjectId,
+  handleProjectSwitch,
+  isPending
+}: { 
+  locale: Locale;
+  projects: { id: string; name: string }[];
+  currentProjectId: string | null;
+  handleProjectSwitch: (id: string) => void;
+  isPending: boolean;
+}) {
   return (
     <div
       className="flex h-12 shrink-0 items-center gap-3 border-b border-border bg-background/95 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/80"
@@ -138,6 +159,33 @@ function SearchHeader({ locale }: { locale: Locale }) {
       <div className="flex flex-1 items-center max-w-xl">
         <GlobalSearch locale={locale} />
       </div>
+      
+      {/* Project Switcher */}
+      {projects.length > 0 && (
+        <div className="hidden sm:flex items-center gap-2">
+          <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground opacity-60 px-1">
+            Project
+          </span>
+          <Select
+            value={currentProjectId ?? 'all'}
+            onValueChange={handleProjectSwitch}
+            disabled={isPending}
+          >
+            <SelectTrigger className="h-8 w-[160px] bg-secondary/30 border-none text-xs font-bold hover:bg-secondary/50">
+              <SelectValue placeholder="Select Project" />
+            </SelectTrigger>
+            <SelectContent align="end">
+              <SelectItem value="all" className="text-xs font-medium">All Projects</SelectItem>
+              {projects.map((p) => (
+                <SelectItem key={p.id} value={p.id} className="text-xs font-medium">
+                  {p.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      )}
+
       <kbd className="hidden sm:inline-flex h-6 select-none items-center gap-0.5 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground" aria-hidden>
         <span>⌘</span>K
       </kbd>
@@ -474,7 +522,33 @@ export function DashboardLayout({
   children,
   permissions: _permissions,
 }: DashboardLayoutProps) {
+  useRealtimeEvents();
   const [leftCollapsed, setLeftCollapsed] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+
+  const handleProjectSwitch = (projectId: string) => {
+    const val = projectId === 'all' ? 'all' : projectId;
+    const csrfToken = getCsrfToken() || '';
+
+    fetch('/api/project/switch', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-csrf-token': csrfToken
+      },
+      body: JSON.stringify({ projectId: val }),
+    }).then(() => {
+      startTransition(() => {
+        if (val === 'all') {
+          router.push(`/${locale}/dashboard`);
+        } else {
+          router.push(`/${locale}/dashboard/projects/${projectId}`);
+        }
+      });
+    });
+  };
+  
   const [rightOpen, setRightOpen] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const isRtl = locale === 'ar-EG';
@@ -492,12 +566,24 @@ export function DashboardLayout({
               <Menu className="h-5 w-5" />
             </Button>
             <div className="flex-1 min-w-0">
-              <SearchHeader locale={locale} />
+              <SearchHeader 
+                locale={locale} 
+                projects={projects}
+                currentProjectId={currentProjectId}
+                handleProjectSwitch={handleProjectSwitch}
+                isPending={isPending}
+              />
             </div>
           </div>
 
           <div className="hidden md:block sticky top-0 z-20">
-            <SearchHeader locale={locale} />
+            <SearchHeader 
+              locale={locale} 
+              projects={projects}
+              currentProjectId={currentProjectId}
+              handleProjectSwitch={handleProjectSwitch}
+              isPending={isPending}
+            />
           </div>
 
           <main className="flex-1 min-h-0 overflow-y-auto p-4 md:p-6 lg:p-8 bg-muted/20" role="main">

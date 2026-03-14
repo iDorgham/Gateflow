@@ -21,13 +21,13 @@
 
 ## Phase 2 — Project page under Projects & header project switching
 
-**Status:** Partially done (see TASKS_project_dashboard Phases 1–4)  
+**Status:** Done
 
-- [ ] Ensure Projects cards link correctly to project detail.
-- [ ] Enhance Projects cards to show logo, cover, description, location, and key counts.
-- [ ] Wire header project selector to navigate/update the project dashboard.
-- [ ] Verify analytics/residents filters behave correctly when project changes.
-- [ ] `pnpm preflight` passes.
+- [x] Ensure Projects cards link correctly to project detail.
+- [x] Enhance Projects cards to show logo, cover, description, location, and key counts.
+- [x] Wire header project selector to navigate/update the project dashboard.
+- [x] Verify analytics/residents filters behave correctly when project changes.
+- [x] `pnpm preflight` passes.
 
 ---
 

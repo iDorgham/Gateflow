@@ -30,6 +30,7 @@ import {
   Building,
   Users,
   Settings,
+  MapPin,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
@@ -335,8 +336,8 @@ export function ProjectsTab({
                             </p>
                           )}
                           {project.location && (
-                            <p className="mt-2 text-xs font-semibold text-muted-foreground/80 flex items-center gap-1">
-                              <span className="inline-block h-1.5 w-1.5 rounded-full bg-primary/60" />
+                            <p className="mt-2 text-xs font-semibold text-muted-foreground/80 flex items-center gap-1.5 bg-muted/30 w-fit px-2 py-0.5 rounded-full">
+                              <MapPin className="h-3 w-3 text-primary/60" />
                               <span className="truncate">{project.location}</span>
                             </p>
                           )}
@@ -346,7 +347,7 @@ export function ProjectsTab({
                       <div className="flex items-center gap-4 mt-4">
                         <div className="flex items-center gap-1.5">
                           <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse" />
-                          <CardDescription className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                          <CardDescription className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">
                             {t('settings.projects.est', {
                               date: new Date(
                                 project.createdAt
@@ -399,7 +400,7 @@ export function ProjectsTab({
                   <div className="flex flex-col xl:flex-row items-end justify-between gap-6">
                     <div className="flex flex-wrap items-center gap-3 w-full xl:w-auto">
                       <div className="flex items-center gap-3 bg-card border border-border rounded-xl p-3 px-4 shadow-sm group-hover:border-primary/20 transition-colors w-full sm:w-auto">
-                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-success/10 text-success">
+                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-500">
                           <ScrollText className="h-4 w-4" />
                         </div>
                         <div className="flex flex-col">
@@ -426,25 +427,27 @@ export function ProjectsTab({
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-3 bg-card border border-border rounded-xl p-3 px-4 shadow-sm group-hover:border-chart-2/20 transition-colors w-full sm:w-auto">
-                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-chart-2/10 text-chart-2">
+                      <div className="flex items-center gap-3 bg-card border border-border rounded-xl p-3 px-4 shadow-sm group-hover:border-blue-500/20 transition-colors w-full sm:w-auto">
+                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-500/10 text-blue-500">
                           <Building className="h-4 w-4" />
                         </div>
                         <div className="flex flex-col">
-                          <span className="text-xl font-black text-foreground leading-none">
-                            {project._count.units}
-                          </span>
+                          <div className="flex items-baseline gap-1.5">
+                            <span className="text-xl font-black text-foreground leading-none">
+                              {project._count.units}
+                            </span>
+                            <span className="text-[9px] font-bold text-muted-foreground/60">
+                              / {(project as any)._count.unitTypes || 1} types
+                            </span>
+                          </div>
                           <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground/80 mt-1">
                             Units
-                          </span>
-                          <span className="text-[9px] font-semibold tracking-[0.12em] text-muted-foreground/80">
-                            {project._count.contacts} contacts
                           </span>
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-3 bg-card border border-border rounded-xl p-3 px-4 shadow-sm group-hover:border-warning/20 transition-colors w-full sm:w-auto">
-                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-warning/10 text-warning">
+                      <div className="flex items-center gap-3 bg-card border border-border rounded-xl p-3 px-4 shadow-sm group-hover:border-orange-500/20 transition-colors w-full sm:w-auto">
+                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-orange-500/10 text-orange-500">
                           <Users className="h-4 w-4" />
                         </div>
                         <div className="flex flex-col">

@@ -2,9 +2,7 @@ import { redirect } from 'next/navigation';
 import { requireAuth } from '@/lib/dashboard-auth';
 import { getValidatedProjectId } from '@/lib/project-cookie';
 import { prisma } from '@gate-access/db';
-import { DashboardShell } from '@/components/dashboard/shell';
-// Alternative: use DashboardLayout for Linear/Vercel-style UI (mini header, command search, collapsible sidebars, AI+Tasks right panel):
-// import { DashboardLayout } from '@/components/dashboard/dashboard-layout';
+import { DashboardLayout as DashboardLayoutClient } from '@/components/dashboard/dashboard-layout';
 
 import { Locale } from '@/lib/i18n';
 
@@ -61,7 +59,7 @@ export default async function DashboardLayout({
 
   // To use the new DashboardLayout (mini header, ⌘K search, collapsible sidebars, AI+Tasks panel), replace DashboardShell with DashboardLayout and pass the same props.
   return (
-    <DashboardShell
+    <DashboardLayoutClient
       user={{ 
         id: user.id, 
         name: user.name, 
@@ -72,10 +70,9 @@ export default async function DashboardLayout({
       projects={projects}
       currentProjectId={currentProjectId}
       locale={params.locale}
-      hideGates={hideGates}
       permissions={claims.permissions as Record<string, boolean>}
     >
       {children}
-    </DashboardShell>
+    </DashboardLayoutClient>
   );
 }
