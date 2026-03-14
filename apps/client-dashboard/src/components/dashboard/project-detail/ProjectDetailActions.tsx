@@ -55,6 +55,9 @@ interface Project {
   logoUrl?: string | null;
   coverUrl?: string | null;
   website?: string | null;
+  externalUrl?: string | null;
+  galleryJson?: string[] | null;
+  gateMode?: 'SINGLE' | 'MULTI' | null;
 }
 
 export interface ProjectDetailActionsRef {
@@ -102,6 +105,9 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
     logoUrl: project.logoUrl ?? '',
     coverUrl: project.coverUrl ?? '',
     website: project.website ?? '',
+    externalUrl: project.externalUrl ?? '',
+    galleryJson: project.galleryJson ?? [] as string[],
+    gateMode: project.gateMode ?? ('SINGLE' as const),
   });
 
   // Form state: contact
@@ -163,6 +169,9 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
         logoUrl: project.logoUrl ?? '',
         coverUrl: project.coverUrl ?? '',
         website: project.website ?? '',
+        externalUrl: project.externalUrl ?? '',
+        galleryJson: project.galleryJson ?? [] as string[],
+        gateMode: project.gateMode ?? 'SINGLE',
       });
     } else if (mode === 'contact') {
       setContactForm({ firstName: '', lastName: '', email: '', phone: '', company: '' });
@@ -225,6 +234,9 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
           logoUrl: projForm.logoUrl || null,
           coverUrl: projForm.coverUrl || null,
           website: projForm.website || null,
+          externalUrl: projForm.externalUrl || null,
+          galleryJson: projForm.galleryJson.length > 0 ? projForm.galleryJson : null,
+          gateMode: projForm.gateMode,
         }),
       });
       const data = await res.json();
@@ -449,65 +461,276 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
           title: 'Edit project',
           onSave: handleSaveProject,
           children: (
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor="proj-name" className="text-foreground">
-                  Name
-                </Label>
-                <Input
-                  id="proj-name"
-                  value={projForm.name}
-                  onChange={(e) => setProjForm((p) => ({ ...p, name: e.target.value }))}
-                  className="mt-1 border-border bg-background text-foreground"
-                />
-              </div>
-              <div>
-                <Label htmlFor="proj-desc" className="text-foreground">
-                  Description
-                </Label>
-                <textarea
-                  id="proj-desc"
-                  value={projForm.description}
-                  onChange={(e) => setProjForm((p) => ({ ...p, description: e.target.value }))}
-                  className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-foreground"
-                  rows={3}
-                />
-              </div>
-              <div>
-                <Label htmlFor="proj-location" className="text-foreground">
-                  Location
-                </Label>
-                <Input
-                  id="proj-location"
-                  value={projForm.location}
-                  onChange={(e) => setProjForm((p) => ({ ...p, location: e.target.value }))}
-                  className="mt-1 border-border bg-background text-foreground"
-                />
-              </div>
-              <div>
-                <Label htmlFor="proj-cover" className="text-foreground">
-                  Cover URL
-                </Label>
-                <Input
-                  id="proj-cover"
-                  type="url"
-                  value={projForm.coverUrl}
-                  onChange={(e) => setProjForm((p) => ({ ...p, coverUrl: e.target.value }))}
-                  className="mt-1 border-border bg-background text-foreground"
-                />
-              </div>
-              <div>
-                <Label htmlFor="proj-website" className="text-foreground">
-                  Website
-                </Label>
-                <Input
-                  id="proj-website"
-                  type="url"
-                  value={projForm.website}
-                  onChange={(e) => setProjForm((p) => ({ ...p, website: e.target.value }))}
-                  className="mt-1 border-border bg-background text-foreground"
-                />
-              </div>
+            <div className="space-y-6">
+              {/* Basics */}
+              <section className="space-y-4 rounded-lg border border-border p-4">
+                <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-tight">Project Basics</h3>
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="proj-name" className="text-foreground">
+                      Name
+                    </Label>
+                    <Input
+                      id="proj-name"
+                      value={projForm.name}
+                      onChange={(e) => setProjForm((p) => ({ ...p, name: e.target.value }))}
+                      className="mt-1 border-border bg-background text-foreground"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="proj-desc" className="text-foreground">
+                      Description
+                    </Label>
+                    <textarea
+                      id="proj-desc"
+                      value={projForm.description}
+                      onChange={(e) => setProjForm((p) => ({ ...p, description: e.target.value }))}
+                      className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-foreground text-sm"
+                      rows={3}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="proj-location" className="text-foreground">
+                      Location
+                    </Label>
+                    <Input
+                      id="proj-location"
+                      value={projForm.location}
+                      onChange={(e) => setProjForm((p) => ({ ...p, location: e.target.value }))}
+                      className="mt-1 border-border bg-background text-foreground"
+                    />
+                  </div>
+                </div>
+              </section>
+
+              {/* Branding & Media */}
+              <section className="space-y-4 rounded-lg border border-border p-4">
+                <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-tight">Branding & Media</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="proj-logo" className="text-foreground">
+                      Logo URL
+                    </Label>
+                    <Input
+                      id="proj-logo"
+                      type="url"
+                      value={projForm.logoUrl}
+                      onChange={(e) => setProjForm((p) => ({ ...p, logoUrl: e.target.value }))}
+                      className="mt-1 border-border bg-background text-foreground h-9"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="proj-cover" className="text-foreground">
+                      Cover URL
+                    </Label>
+                    <Input
+                      id="proj-cover"
+                      type="url"
+                      value={projForm.coverUrl}
+                      onChange={(e) => setProjForm((p) => ({ ...p, coverUrl: e.target.value }))}
+                      className="mt-1 border-border bg-background text-foreground h-9"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <Label htmlFor="proj-website" className="text-foreground">
+                    Website
+                  </Label>
+                  <Input
+                    id="proj-website"
+                    type="url"
+                    value={projForm.website}
+                    onChange={(e) => setProjForm((p) => ({ ...p, website: e.target.value }))}
+                    className="mt-1 border-border bg-background text-foreground"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="proj-external" className="text-foreground">
+                    External Link
+                  </Label>
+                  <Input
+                    id="proj-external"
+                    type="url"
+                    value={projForm.externalUrl}
+                    onChange={(e) => setProjForm((p) => ({ ...p, externalUrl: e.target.value }))}
+                    className="mt-1 border-border bg-background text-foreground"
+                    placeholder="e.g. Booking page or Info portal"
+                  />
+                </div>
+                <div>
+                  <Label className="text-foreground">Gallery</Label>
+                  <div className="mt-1 space-y-2">
+                    {projForm.galleryJson.map((url, idx) => (
+                      <div key={idx} className="flex gap-2 items-center">
+                        <Input
+                          value={url}
+                          readOnly
+                          className="flex-1 bg-muted/50 border-border text-xs h-8"
+                        />
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="text-destructive h-8 px-2"
+                          onClick={() => {
+                            const next = [...projForm.galleryJson];
+                            next.splice(idx, 1);
+                            setProjForm((p) => ({ ...p, galleryJson: next }));
+                          }}
+                        >
+                          Remove
+                        </Button>
+                      </div>
+                    ))}
+                    <div className="flex gap-2">
+                      <Input
+                        id="new-gallery-url"
+                        placeholder="Add image URL..."
+                        className="flex-1 border-border h-9"
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            const val = e.currentTarget.value;
+                            if (val && !projForm.galleryJson.includes(val)) {
+                              setProjForm((p) => ({ ...p, galleryJson: [...projForm.galleryJson, val] }));
+                              e.currentTarget.value = '';
+                            }
+                          }
+                        }}
+                      />
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        className="h-9"
+                        onClick={() => {
+                          const input = document.getElementById('new-gallery-url') as HTMLInputElement;
+                          if (input.value && !projForm.galleryJson.includes(input.value)) {
+                            setProjForm((p) => ({ ...p, galleryJson: [...projForm.galleryJson, input.value] }));
+                            input.value = '';
+                          }
+                        }}
+                      >
+                        Add
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              {/* System Settings */}
+              <section className="space-y-4 rounded-lg border border-border p-4">
+                <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-tight">System Settings</h3>
+                <div>
+                  <Label htmlFor="gate-mode" className="text-foreground">Gate Topology</Label>
+                  <Select
+                    value={projForm.gateMode}
+                    onValueChange={(v) => setProjForm((p) => ({ ...p, gateMode: v as 'SINGLE' | 'MULTI' }))}
+                  >
+                    <SelectTrigger id="gate-mode" className="mt-1 border-border bg-background text-foreground">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="SINGLE">Single Gate (Default)</SelectItem>
+                      <SelectItem value="MULTI">Multi-Gate Hierarchy</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <p className="mt-2 text-[11px] text-muted-foreground leading-tight">
+                    Single Gate ignores sub-gate names in most views. Multi-Gate allows distinct names and assignments for multiple entries.
+                  </p>
+                </div>
+              </section>
+
+              {/* Data Import */}
+              <section className="space-y-4 rounded-lg border border-border p-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-tight">Bulk Data Import</h3>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="space-y-2">
+                    <Label className="text-xs text-muted-foreground">Units CSV</Label>
+                    <div className="relative">
+                      <Input
+                        type="file"
+                        accept=".csv"
+                        className="text-xs pr-10 curser-pointer h-9 file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
+                        onChange={async (e) => {
+                          const file = e.target.files?.[0];
+                          if (!file) return;
+                          toast.loading('Importing units...', { id: 'import-units' });
+                          const reader = new FileReader();
+                          reader.onload = async (ev) => {
+                            const text = ev.target?.result as string;
+                            const lines = text.split('\n').slice(1).filter(Boolean);
+                            let imported = 0;
+                            for (const line of lines) {
+                              const cols = line.split(',').map((c) => c.replace(/^"|"$/g, '').trim());
+                              const [name, type, qrQuota] = cols;
+                              if (!name || !type) continue;
+                              try {
+                                const res = await csrfFetch('/api/units', {
+                                  method: 'POST',
+                                  body: JSON.stringify({
+                                    name,
+                                    type: type.toUpperCase().replace(' ', '_'),
+                                    qrQuota: parseInt(qrQuota) || 10,
+                                    projectId: project.id,
+                                  }),
+                                });
+                                if (res.ok) imported++;
+                              } catch {}
+                            }
+                            toast.success(`Imported ${imported} units to ${project.name}`, { id: 'import-units' });
+                            e.target.value = '';
+                          };
+                          reader.readAsText(file);
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label className="text-xs text-muted-foreground">Contacts CSV</Label>
+                    <div className="relative">
+                      <Input
+                        type="file"
+                        accept=".csv"
+                        className="text-xs pr-10 curser-pointer h-9 file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
+                        onChange={async (e) => {
+                          const file = e.target.files?.[0];
+                          if (!file) return;
+                          toast.loading('Importing contacts...', { id: 'import-contacts' });
+                          const reader = new FileReader();
+                          reader.onload = async (ev) => {
+                            const text = ev.target?.result as string;
+                            const lines = text.split('\n').slice(1).filter(Boolean);
+                            let imported = 0;
+                            for (const line of lines) {
+                              const cols = line.split(',').map((c) => c.replace(/^"|"$/g, '').trim());
+                              if (cols.length < 2) continue;
+                              try {
+                                const res = await csrfFetch('/api/contacts', {
+                                  method: 'POST',
+                                  body: JSON.stringify({
+                                    firstName: cols[0],
+                                    lastName: cols[1],
+                                    email: cols[2] || undefined,
+                                    phone: cols[3] || undefined,
+                                  }),
+                                });
+                                if (res.ok) imported++;
+                              } catch {}
+                            }
+                            toast.success(`Imported ${imported} contacts`, { id: 'import-contacts' });
+                            e.target.value = '';
+                          };
+                          reader.readAsText(file);
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <p className="text-[10px] text-muted-foreground italic">
+                  Note: CSV format should be Name,Type,Quota for Units; and FirstName,LastName,Email,Phone for Contacts.
+                </p>
+              </section>
             </div>
           ),
         };

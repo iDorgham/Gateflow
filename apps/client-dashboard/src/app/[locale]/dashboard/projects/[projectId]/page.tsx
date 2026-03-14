@@ -131,9 +131,21 @@ export default async function ProjectDetailPage({
           aria-hidden
         />
         <div className="absolute inset-0 flex flex-col justify-end p-4 md:p-6 lg:p-8">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground drop-shadow-sm">
-            {project.name}
-          </h1>
+          <div className="flex items-center gap-4">
+            {project.logoUrl && (
+              <div className="relative h-12 w-12 sm:h-16 sm:w-16 flex-shrink-0 overflow-hidden rounded-lg border-2 border-background/50 bg-background shadow-sm">
+                <Image
+                  src={project.logoUrl}
+                  alt={`${project.name} logo`}
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            )}
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground drop-shadow-sm">
+              {project.name}
+            </h1>
+          </div>
           {project.location && (
             <div className="mt-2 flex items-center gap-2 text-muted-foreground">
               <MapPin className="h-4 w-4 shrink-0" aria-hidden />
@@ -153,6 +165,7 @@ export default async function ProjectDetailPage({
           coverUrl: project.coverUrl,
           website: project.website,
           externalUrl: project.externalUrl,
+          galleryJson: project.galleryJson as string[] | null,
           gateMode: project.gateMode,
         }}
         gates={project.gates}

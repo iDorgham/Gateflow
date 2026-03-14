@@ -46,6 +46,7 @@ interface Project {
   coverUrl?: string | null;
   website?: string | null;
   externalUrl?: string | null;
+  galleryJson?: string[] | null;
   gateMode?: 'SINGLE' | 'MULTI' | null;
 }
 
@@ -133,6 +134,28 @@ export function ProjectDetailContent({
           )}
         </CardContent>
       </Card>
+
+      {/* Gallery */}
+      {project.galleryJson && project.galleryJson.length > 0 && (
+        <Card className="border border-border bg-card rounded-xl shadow-sm overflow-hidden">
+          <CardHeader className="pb-2">
+            <h2 className="text-lg font-semibold text-foreground">{t('projectDetail.gallery', 'Gallery')}</h2>
+          </CardHeader>
+          <CardContent className="pt-0">
+            <div className="flex gap-4 overflow-x-auto pb-4 pt-2 -mx-1 px-1">
+              {project.galleryJson.map((url, idx) => (
+                <div key={idx} className="relative h-40 w-64 shrink-0 rounded-lg overflow-hidden border border-border bg-muted group">
+                  <img
+                    src={url}
+                    alt={`${project.name} gallery image ${idx + 1}`}
+                    className="h-full w-full object-cover transition-transform group-hover:scale-105"
+                  />
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* KPIs */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
