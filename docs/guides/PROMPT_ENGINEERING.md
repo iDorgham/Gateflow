@@ -121,11 +121,11 @@ All copy-paste prompts live in `docs/plan/execution/PROMPTS_REFERENCE.md`. When 
 
 | Resource | Path |
 |----------|------|
-| Phase template | `.cursor/templates/TEMPLATE_PROMPT_phase.md` |
+| Phase template | `.antigravity/templates/TEMPLATE_PROMPT_phase.md` |
 | Pro prompts | `docs/plan/execution/PROMPTS_REFERENCE.md` |
 | Subagent hierarchy | `docs/archive/plan-legacy/guidelines/SUBAGENT_HIERARCHY.md` |
 | Tool reference | `docs/guides/TOOL_AND_CLI_REFERENCE.md` |
-| gf-planner | `.cursor/skills/gf-planner/SKILL.md` |
+| gf-planner | `.antigravity/skills/gf-planner/SKILL.md` |
 
 ---
 

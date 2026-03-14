@@ -149,7 +149,7 @@ Before shipping animated UI:
 | Resource | Path |
 |----------|------|
 | Tailwind animation | [Tailwind docs — animation](https://tailwindcss.com/docs/animation) |
-| gf-creative-ui-animation | `.cursor/skills/gf-creative-ui-animation/SKILL.md` |
+| gf-creative-ui-animation | `.antigravity/skills/gf-creative-ui-animation/SKILL.md` |
 | UI Design Guide | `docs/guides/UI_DESIGN_GUIDE.md` |
 | gf-uiux-animator (Framer Motion) | `docs/cli-context/skills/gf-uiux-animator/SKILL.md` — advanced layout morphs |
 

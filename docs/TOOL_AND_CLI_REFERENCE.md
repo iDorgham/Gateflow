@@ -2,7 +2,7 @@
 
 This document is the **canonical reference** for choosing **Cursor IDE**, **Claude CLI**, **Gemini CLI**, **Opencode CLI**, **Kiro CLI**, **Kilo CLI**, or **Qwen CLI** so the workspace guide (`/guide`, gf-guide) and phase prompts can suggest the right tool for each task and get the best results.
 
-**Used by:** `.cursor/skills/gf-guide/SKILL.md` — when recommending next steps or suggesting a CLI, the guide should check this reference for accurate task-to-tool mapping.
+**Used by:** `.antigravity/skills/gf-guide/SKILL.md` — when recommending next steps or suggesting a CLI, the guide should check this reference for accurate task-to-tool mapping.
 
 ---
 
@@ -263,7 +263,7 @@ When recommending a tool or CLI:
 ## 11. Recording results and limits (for agents and /guide)
 
 - **Recording:** After any task or phase executed **with a CLI**, add one row to the log table in `docs/plan/learning/CLI_USAGE_AND_RESULTS.md`: Date | CLI | Task/phase | Outcome (success/partial/fail) | Notes. Keep entries short. This enables future dissection and better tool choice.
-- **Limits:** Load **`.cursor/skills/gf-cli-limits/SKILL.md`** when suggesting or using a CLI. **80% rule:** If a CLI has reached **80% or more** of its limit, **agents and commands must NOT use that CLI** without the user's explicit permission. If "near limit" or "prefer free today", suggest **Kiro CLI**, **Kilo CLI**, **Qwen CLI**, or **Opencode CLI** (or Cursor) instead when the matrix allows.
+- **Limits:** Load **`.antigravity/skills/gf-cli-limits/SKILL.md`** when suggesting or using a CLI. **80% rule:** If a CLI has reached **80% or more** of its limit, **agents and commands must NOT use that CLI** without the user's explicit permission. If "near limit" or "prefer free today", suggest **Kiro CLI**, **Kilo CLI**, **Qwen CLI**, or **Opencode CLI** (or Cursor) instead when the matrix allows.
 
 ---
 

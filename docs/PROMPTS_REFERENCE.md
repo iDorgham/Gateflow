@@ -11,8 +11,8 @@ Reusable, copy-paste prompts for Cursor chat.
 ```
 Run /plan with gf-security loaded, using `docs/plan/context/IDEA_core_security_v6.md`.
 It should produce `PLAN_core_security_v6.md` and all `PROMPT_core_security_v6_phase_N.md` files.
-In every phase prompt's Context section, require loading `.cursor/skills/gf-security/SKILL.md`
-and respecting `.cursor/rules/00-gateflow-core.mdc` and `.cursor/contracts/CONTRACTS.md` during implementation.
+In every phase prompt's Context section, require loading `.antigravity/skills/gf-security/SKILL.md`
+and respecting `.antigravity/rules/00-gateflow-core.mdc` and `.antigravity/contracts/CONTRACTS.md` during implementation.
 ```
 
 **Full prompt** (use the copy button on the block below):
@@ -24,31 +24,31 @@ and respecting `.cursor/rules/00-gateflow-core.mdc` and `.cursor/contracts/CONTR
 
 **Input**
 - **Source idea:** `docs/plan/context/IDEA_core_security_v6.md`
-- **Planning skill:** `.cursor/skills/gf-planner/SKILL.md`
-- **Security context:** Load `.cursor/skills/gf-security/SKILL.md` before and during planning so the plan and every phase prompt are written with the GateFlow security model in mind (auth, RBAC, multi-tenancy, QR signing, API checklist, soft deletes).
+- **Planning skill:** `.antigravity/skills/gf-planner/SKILL.md`
+- **Security context:** Load `.antigravity/skills/gf-security/SKILL.md` before and during planning so the plan and every phase prompt are written with the GateFlow security model in mind (auth, RBAC, multi-tenancy, QR signing, API checklist, soft deletes).
 
 **Outputs**
 1. **Plan:** `docs/plan/execution/PLAN_core_security_v6.md`
    - Ordered phases with Scope, Deliverables, Depends on, and Test criteria.
    - Each phase must have a **Primary role** from `docs/plan/guidelines/SUBAGENT_HIERARCHY.md` (use **SECURITY** where the phase is security-critical).
-   - Use `docs/plan/guidelines/PHASED_DEVELOPMENT_WORKFLOW.md` and `.cursor/templates/TEMPLATE_PROMPT_phase.md` for structure.
+   - Use `docs/plan/guidelines/PHASED_DEVELOPMENT_WORKFLOW.md` and `.antigravity/templates/TEMPLATE_PROMPT_phase.md` for structure.
 
 2. **Phase prompts:** One file per phase, e.g. `PROMPT_core_security_v6_phase_1.md`, `PROMPT_core_security_v6_phase_2.md`, …
-   - Each must be based on `.cursor/templates/TEMPLATE_PROMPT_phase.md`.
+   - Each must be based on `.antigravity/templates/TEMPLATE_PROMPT_phase.md`.
    - Each must include concrete Steps, Scope (in/out), and Acceptance criteria (including lint/typecheck/tests for affected workspaces).
 
 **Mandatory in every phase prompt (Context)**
 In the **Context** section of every `PROMPT_core_security_v6_phase_N.md`, require that whoever executes the phase (e.g. via `/dev`):
 
-- Load `.cursor/skills/gf-security/SKILL.md` at the start of implementation.
-- Respect `.cursor/rules/00-gateflow-core.mdc` (pnpm, multi-tenancy, soft deletes, QR signing, auth, secrets).
-- Respect `.cursor/contracts/CONTRACTS.md` as the authoritative invariant list.
+- Load `.antigravity/skills/gf-security/SKILL.md` at the start of implementation.
+- Respect `.antigravity/rules/00-gateflow-core.mdc` (pnpm, multi-tenancy, soft deletes, QR signing, auth, secrets).
+- Respect `.antigravity/contracts/CONTRACTS.md` as the authoritative invariant list.
 
 So the plan is created with security awareness, and each phase prompt explicitly instructs executors to load gf-security and the core rules and contracts when implementing that phase.
 
 **Additional constraints**
 - Prefer small, testable phases executable in one focused session.
-- **Preferred tool** in phase prompts may be set to **Cursor** (default), **Claude CLI**, **Gemini CLI**, **OpenCode CLI**, **Kiro CLI**, **Kilo CLI**, **Qwen CLI**, or **Multi-CLI**. Use Kiro CLI, Kilo CLI, or Qwen CLI when the phase is best run from that terminal CLI (e.g. free-tier agentic coding, large context). See `docs/guides/TOOL_AND_CLI_REFERENCE.md` and `.cursor/skills/multi-cli-cursor-workflow/SKILL.md`.
+- **Preferred tool** in phase prompts may be set to **Cursor** (default), **Claude CLI**, **Gemini CLI**, **OpenCode CLI**, **Kiro CLI**, **Kilo CLI**, **Qwen CLI**, or **Multi-CLI**. Use Kiro CLI, Kilo CLI, or Qwen CLI when the phase is best run from that terminal CLI (e.g. free-tier agentic coding, large context). See `docs/guides/TOOL_AND_CLI_REFERENCE.md` and `.antigravity/skills/multi-cli-cursor-workflow/SKILL.md`.
 - Add **Multi-CLI** only for phases that are complex or high-risk (per gf-planner and `AI_SKILLS_SUBAGENTS_RULES.md`).
 - Add **SuperDesign** only for phases that add or change UI.
 - Ensure acceptance criteria for security-related phases include checks for org scoping, soft deletes, QR signing, and (where relevant) auth/CSRF/rate limiting.
@@ -108,7 +108,7 @@ Run this to implement **one** phase. Replace `<slug>` and `<N>` with the plan sl
 **Steps:**
 1. Run ready checks: git status and `pnpm preflight`; stop if preflight fails and report the first error.
 2. Load the phase prompt: `docs/plan/execution/PROMPT_<slug>_phase_<N>.md` (e.g. PROMPT_core_security_v6_phase_1.md).
-3. Load the prompt’s **Context** requirements: gf-security SKILL, `.cursor/rules/00-gateflow-core.mdc`, `.cursor/contracts/CONTRACTS.md`.
+3. Load the prompt’s **Context** requirements: gf-security SKILL, `.antigravity/rules/00-gateflow-core.mdc`, `.antigravity/contracts/CONTRACTS.md`.
 4. Implement the phase following the prompt’s **Steps** and **Scope (in/out)**. Use the **Primary role** and **Preferred tool** from the prompt.
 5. Run acceptance checks: `pnpm turbo lint`, `pnpm turbo typecheck`, `pnpm turbo test` for affected workspaces (or `pnpm preflight`). Fix until all pass.
 6. When all acceptance criteria are met, run the git workflow: add, commit with conventional message (e.g. `feat(core_security_v6): phase 1 — core invariants & enforcement hardening`), pull --rebase origin main, push.
@@ -126,7 +126,7 @@ Copy this to run **phase 1** of the core_security_v6 plan (Core Invariants & Enf
 **Request:** Execute phase 1 of core_security_v6. Use `docs/plan/execution/PROMPT_core_security_v6_phase_1.md` as the single source of truth.
 
 1. **Ready:** Check git status; run `pnpm preflight`. If anything fails, report and stop.
-2. **Load security context:** Read `.cursor/skills/gf-security/SKILL.md`, `.cursor/contracts/CONTRACTS.md`, `.cursor/rules/00-gateflow-core.mdc`.
+2. **Load security context:** Read `.antigravity/skills/gf-security/SKILL.md`, `.antigravity/contracts/CONTRACTS.md`, `.antigravity/rules/00-gateflow-core.mdc`.
 3. **Implement** the phase per the prompt: audit API routes for auth/org/soft-delete/validation; add or extend tests for org scoping, soft deletes, and (where relevant) QR/scanUuid; document findings.
 4. **Verify:** Run `pnpm turbo test --filter=client-dashboard` and `--filter=scanner-app`; run `pnpm turbo lint` and `pnpm turbo typecheck` for touched workspaces. Fix until all pass.
 5. **Git:** When all acceptance criteria are satisfied, commit with message like `feat(core_security_v6): phase 1 — core invariants & enforcement hardening`, then pull --rebase and push.
@@ -215,12 +215,12 @@ Use to generate /plan, /dev, or CLI prompts from a short description. Command fi
 **Command:** Prompt writer
 
 **Request:** Write a pro prompt for GateFlow from the user's short description below. Output one of:
-- A **phase prompt** (for /plan or /dev) — use `.cursor/templates/TEMPLATE_PROMPT_phase.md` structure.
+- A **phase prompt** (for /plan or /dev) — use `.antigravity/templates/TEMPLATE_PROMPT_phase.md` structure.
 - A **CLI prompt** (for Claude/Gemini/Opencode/Kiro/Kilo/Qwen) — include the correct role prefix from `docs/guides/PROMPT_ENGINEERING.md`.
 
 **Context to load:**
 - `docs/guides/PROMPT_ENGINEERING.md`
-- `.cursor/templates/TEMPLATE_PROMPT_phase.md`
+- `.antigravity/templates/TEMPLATE_PROMPT_phase.md`
 - `docs/archive/plan-legacy/guidelines/SUBAGENT_HIERARCHY.md`
 
 **User description (replace with your input):**
@@ -243,11 +243,11 @@ Use for a single, professional prompt to implement identical sign-in layout and 
 **Request:** Implement unified sign-in pages for admin and client dashboards with a full-screen split layout and a simple, smooth post-login “gate” collapse animation. Keep animations minimal and purposeful.
 
 **Skills to load (in order):**
-1. `.cursor/skills/gf-design-guide/SKILL.md` — layout, tokens, spacing, RTL
+1. `.antigravity/skills/gf-design-guide/SKILL.md` — layout, tokens, spacing, RTL
 2. `docs/guides/UI_DESIGN_GUIDE.md` — colors, typography, grid
-3. `.cursor/skills/gf-creative-ui-animation/SKILL.md` — motion principles, reduced-motion
+3. `.antigravity/skills/gf-creative-ui-animation/SKILL.md` — motion principles, reduced-motion
 4. `docs/guides/MOTION_AND_ANIMATION.md` — duration, transform/opacity, checklist
-5. `.cursor/skills/gf-uiux-animator/SKILL.md` — Framer Motion layout morphs, spring presets
+5. `.antigravity/skills/gf-uiux-animator/SKILL.md` — Framer Motion layout morphs, spring presets
 
 **Primary role:** FRONTEND  
 **Preferred tool:** Cursor

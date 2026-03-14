@@ -6,7 +6,7 @@ This file defines the foundational mandates and custom commands for Gemini CLI i
 
 ## custom Commands
 
-Gemini CLI supports the following slash commands by following the workflows defined in `.claude/commands/` and `docs/plan/`:
+Gemini CLI supports the following slash commands by following the workflows defined in `.antigravity/workflows/` and `docs/plan/`:
 
 ### `/idea [<slug>]`
 **Purpose:** Capture and refine initiatives into `IDEA_<slug>.md` and backlog entries.
@@ -42,7 +42,7 @@ Gemini CLI supports the following slash commands by following the workflows defi
   - `run`/`go`: Execute the next step in the current domain.
   - `ship <slug>`: Ship a plan to completion.
 - **Workflow:**
-  1. Load `.cursor/skills/one-man/SKILL.md`.
+  1. Load `.antigravity/skills/one-man/SKILL.md`.
   2. Scan project state (backlog, git, plans).
   3. Execute based on the subcommand or recommend the next action.
 

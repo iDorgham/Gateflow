@@ -126,7 +126,7 @@ GateFlow uses a phased workflow orchestrated by Cursor and CLIs (Claude, Gemini,
 | `/ship` | Run all remaining phases for a plan sequentially |
 | `/guide` | Workspace guide — what to do next, active plan, recommended actions |
 
-Supporting commands (see `.cursor/rules/01-gateflow-ai-workflow.mdc` and legacy guidelines in `docs/archive/plan-legacy/guidelines`):
+Supporting commands (see `.antigravity/rules/01-gateflow-ai-workflow.mdc` and legacy guidelines in `docs/archive/plan-legacy/guidelines`):
 
 - `/ready` (pre‑dev checks), `/github` (branch/commit/push), `/test`, `/docs`, `/security`, `/perf`, `/clis`, `/automate`.
 
@@ -143,9 +143,9 @@ Supporting commands (see `.cursor/rules/01-gateflow-ai-workflow.mdc` and legacy 
 Template & skills:
 
 - `docs/archive/plan-legacy/execution/TEMPLATE_PROMPT_phase.md` (template; may be moved into `docs/plan/`).
-- `.cursor/skills/gf-planner/SKILL.md` — planning and phase prompts.
-- `.cursor/skills/gf-dev/SKILL.md` — implementation workflow.
-- `.cursor/skills/pro-prd-writer/SKILL.md` — PRD and docs alignment.
+- `.antigravity/skills/gf-planner/SKILL.md` — planning and phase prompts.
+- `.antigravity/skills/gf-dev/SKILL.md` — implementation workflow.
+- `.antigravity/skills/pro-prd-writer/SKILL.md` — PRD and docs alignment.
 
 ### 5.3 Phase Definition of Done
 
@@ -178,7 +178,7 @@ Key points (see `CLAUDE.md` and core rules for full list):
 ## 7. Where to Look for More
 
 - **Product spec:** `docs/PRD_v7.0.md`
-- **Security:** `docs/guides/SECURITY_OVERVIEW.md`, `.cursor/rules/00-gateflow-core.mdc`, `.cursor/contracts/CONTRACTS.md`
+- **Security:** `docs/guides/SECURITY_OVERVIEW.md`, `.antigravity/rules/00-gateflow-core.mdc`, `.antigravity/contracts/CONTRACTS.md`
 - **Architecture:** `docs/guides/ARCHITECTURE.md`
 - **Environment variables:** `docs/guides/ENVIRONMENT_VARIABLES.md`
 - **Legacy guidance & patterns:** `docs/archive/plan-legacy/**`

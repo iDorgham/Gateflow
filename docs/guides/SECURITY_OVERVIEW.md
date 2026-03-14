@@ -1,7 +1,7 @@
 # GateFlow Security Overview (Docs v2)
 
 **Version:** 1.0  
-**Aligned with:** `docs/PRD_v7.0.md`, `.cursor/rules/00-gateflow-core.mdc`, `.cursor/contracts/CONTRACTS.md`  
+**Aligned with:** `docs/PRD_v7.0.md`, `.antigravity/rules/00-gateflow-core.mdc`, `.antigravity/contracts/CONTRACTS.md`  
 
 ---
 
@@ -16,8 +16,8 @@ GateFlow is a **zero‑trust digital gate infrastructure** for gated communities
 This guide is a high‑level companion to:
 
 - `PRD_v7.0.md` (Sections 8, 11–14).
-- `.cursor/rules/00-gateflow-core.mdc` and `.cursor/rules/gateflow-security.mdc`.
-- `.cursor/contracts/CONTRACTS.md`.
+- `.antigravity/rules/00-gateflow-core.mdc` and `.antigravity/rules/gateflow-security.mdc`.
+- `.antigravity/contracts/CONTRACTS.md`.
 
 ---
 
@@ -229,8 +229,8 @@ Implementation details are in `PRD_v7.0.md` (Scanner Rules & Gate–Account Assi
 When modifying auth, RBAC, QR flows, scanner sync, or tenant‑scoped APIs:
 
 - Always load:
-  - `.cursor/skills/gf-security/SKILL.md`
-  - `.cursor/contracts/CONTRACTS.md`
-  - `.cursor/rules/00-gateflow-core.mdc`
+  - `.antigravity/skills/gf-security/SKILL.md`
+  - `.antigravity/contracts/CONTRACTS.md`
+  - `.antigravity/rules/00-gateflow-core.mdc`
 - Treat violations of these invariants as **hard errors**, not stylistic issues.
 

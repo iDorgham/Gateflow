@@ -467,7 +467,7 @@ The Resident Portal is now live with:
 
 | File                            | Description                                                |
 | ------------------------------- | ---------------------------------------------------------- |
-| `.cursor/commands/`             | **Slash commands** — /run, /guide, /plan, /prompt, /github |
+| `.antigravity/workflows/`             | **Slash commands** — /run, /guide, /plan, /prompt, /github |
 | `docs/PRD_v5.0.md`              | **Current** product requirements (5 apps, resident portal) |
 | `docs/PROJECT_STRUCTURE.md`     | Detailed structure reference                               |
 | `docs/DEVELOPMENT_GUIDE.md`     | Local setup and workspace guide                            |
