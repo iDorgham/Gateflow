@@ -44,7 +44,7 @@ export const tokens = {
       DEFAULT: 'hsl(var(--card))',
       foreground: 'hsl(var(--card-foreground))',
     },
-    // Extended semantic (project-specific)
+    // Extended semantic (Atlassian)
     success: {
       DEFAULT: 'hsl(var(--success))',
       foreground: 'hsl(var(--success-foreground))',
@@ -61,7 +61,7 @@ export const tokens = {
       DEFAULT: 'hsl(var(--danger))',
       foreground: 'hsl(var(--danger-foreground))',
     },
-    // Sidebar (dark panel)
+    // Sidebar (Atlassian Blue or Dark Neutral)
     sidebar: {
       DEFAULT: 'hsl(var(--sidebar))',
       foreground: 'hsl(var(--sidebar-foreground))',
@@ -72,7 +72,7 @@ export const tokens = {
       border: 'hsl(var(--sidebar-border))',
       ring: 'hsl(var(--sidebar-ring))',
     },
-    // Chart palette
+    // Chart palette (Atlassian multi-color)
     chart: {
       1: 'hsl(var(--chart-1))',
       2: 'hsl(var(--chart-2))',
@@ -92,54 +92,60 @@ export const tokens = {
 
 export const nativeTokens = {
   colors: {
-    // Zinc scale
-    zinc50: '#fafafa',
-    zinc100: '#f4f4f5',
-    zinc200: '#e4e4e7',
-    zinc300: '#d4d4d8',
-    zinc400: '#a1a1aa',
-    zinc500: '#71717a',
-    zinc600: '#52525b',
-    zinc700: '#3f3f46',
-    zinc800: '#27272a',
-    zinc900: '#18181b',
-    zinc950: '#09090b',
+    // Atlassian Neutral scale
+    neutral10: '#FFFFFF',
+    neutral20: '#F4F5F7',
+    neutral30: '#EBECF0',
+    neutral40: '#DFE1E6',
+    neutral50: '#C1C7D0',
+    neutral60: '#A5ADBA',
+    neutral70: '#97A0AF',
+    neutral80: '#8993A4',
+    neutral90: '#7A869A',
+    neutral100: '#6B778C',
+    neutral200: '#5E6C84',
+    neutral300: '#505F79',
+    neutral400: '#42526E',
+    neutral500: '#344563',
+    neutral600: '#253858',
+    neutral700: '#172B4D',
+    neutral800: '#091E42',
 
     // Semantic
-    background: '#ffffff',
-    foreground: '#18181b',      // zinc-900
-    card: '#ffffff',
-    cardForeground: '#18181b',
-    primary: '#18181b',         // zinc-900
-    primaryForeground: '#fafafa', // zinc-50
-    secondary: '#f4f4f5',       // zinc-100
-    secondaryForeground: '#18181b',
-    muted: '#f4f4f5',           // zinc-100
-    mutedForeground: '#71717a', // zinc-500
-    neutral: '#71717a',        // alias for mutedForeground
-    accent: '#f4f4f5',
-    accentForeground: '#18181b',
-    destructive: '#ef4444',     // red-500
-    destructiveForeground: '#fafafa',
-    border: '#e4e4e7',          // zinc-200
-    input: '#e4e4e7',
-    ring: '#a1a1aa',            // zinc-400
+    background: '#FFFFFF',
+    foreground: '#172B4D',      // Neutral 700
+    card: '#FFFFFF',
+    cardForeground: '#172B4D',
+    primary: '#0052CC',         // Atlassian Blue
+    primaryForeground: '#FFFFFF',
+    secondary: '#EBECF0',       // Neutral 30
+    secondaryForeground: '#42526E',
+    muted: '#F4F5F7',           // Neutral 20
+    mutedForeground: '#6B778C', // Neutral 100
+    neutral: '#6B778C',
+    accent: '#DEEBFF',          // Blue 50
+    accentForeground: '#0052CC',
+    destructive: '#DE350B',     // Red
+    destructiveForeground: '#FFFFFF',
+    border: '#DFE1E6',          // Neutral 40
+    input: '#DFE1E6',
+    ring: '#4C9AFF',            // Blue 200
 
     // Extended semantic
-    success: '#22c55e',
-    successForeground: '#fafafa',
-    warning: '#f59e0b',
-    warningForeground: '#18181b',
-    info: '#3b82f6',
-    infoForeground: '#fafafa',
-    danger: '#ef4444',
-    dangerForeground: '#fafafa',
+    success: '#36B37E',
+    successForeground: '#FFFFFF',
+    warning: '#FFAB00',
+    warningForeground: '#172B4D',
+    info: '#00B8D9',
+    infoForeground: '#FFFFFF',
+    danger: '#FF5630',
+    dangerForeground: '#FFFFFF',
 
-    // Sidebar (dark)
-    sidebar: '#18181b',
-    sidebarForeground: '#fafafa',
-    sidebarAccent: '#27272a',
-    sidebarBorder: '#27272a',
+    // Sidebar (Atlassian Blue)
+    sidebar: '#0747A6',
+    sidebarForeground: '#DEEBFF',
+    sidebarAccent: '#0052CC',
+    sidebarBorder: '#0052CC',
   },
   spacing: {
     xs: 4,

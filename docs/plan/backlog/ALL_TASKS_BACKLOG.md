@@ -15,6 +15,18 @@
 - [x] Phase 4 — Marketing & Security Intelligence
 - [x] Phase 5 — CLI Wrapper & Validation
 
+### atlassian_ui_remake — Atlassian Design System UI Remake
+**IDEA:** `docs/plan/context/IDEA_atlassian_ui_remake.md`
+**Status:** 🏗️ Planning
+**Target:** Q4 2026
+
+- [ ] Phase 1 — Foundation: Design Tokens & Theme Engine
+- [ ] Phase 2 — Public Realm: Marketing & Auth Flows
+- [ ] Phase 3 — Client Dashboard: Navigation & Shell
+- [ ] Phase 4 — Client Dashboard: Feature Modules
+- [ ] Phase 5 — Admin Dashboard: Platform Management
+- [ ] Phase 6 — Polish & Global Audit
+
 
 ---
 
