@@ -20,12 +20,29 @@
 **Status:** 🏗️ Planning
 **Target:** Q4 2026
 
-- [ ] Phase 1 — Foundation: Design Tokens & Theme Engine
-- [ ] Phase 2 — Public Realm: Marketing & Auth Flows
-- [ ] Phase 3 — Client Dashboard: Navigation & Shell
+- [x] Phase 1 — Foundation: Design Tokens & Theme Engine
+- [x] Phase 2 — Public Realm: Marketing & Auth Flows
+- [x] Phase 3 — Client Dashboard: Navigation & Shell
 - [ ] Phase 4 — Client Dashboard: Feature Modules
 - [ ] Phase 5 — Admin Dashboard: Platform Management
 - [ ] Phase 6 — Polish & Global Audit
+
+### gateai — GateFlow Intelligent Operations Agent
+**IDEA:** `docs/plan/context/IDEA_gateai.md`
+**Status:** 🔄 In Progress
+**Target:** Q3 2026
+
+- [x] Phase 0 — Ready & /ai Page Scaffold
+- [ ] Phase 1 — Basic Read-Only Chat + Gemini 1.5 Flash Hello World
+- [ ] Phase 2 — Scoped Context Injection + Simple Real Q&A
+- [ ] Phase 3 — Inline Recharts Visuals from Analytics
+- [ ] Phase 4 — One-Shot Report Generation (PDF/CSV)
+- [ ] Phase 5 — Scheduling Engine Skeleton + AiTask Model
+- [ ] Phase 6 — Mutation Safety Layer + Confirmation UX
+- [ ] Phase 7 — Bulk QR Creation Agent – MVP
+- [ ] Phase 8 — Feedback, Usage Tracking, Rate Limiting & Polish
+- [ ] Phase 9 — Resident Portal / Mobile Mini-Version
+- [ ] Phase 10 — Hardening, Red-Teaming & Monitoring
 
 
 ---
