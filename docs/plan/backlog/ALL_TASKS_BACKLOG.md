@@ -34,7 +34,7 @@
 
 - [x] Phase 0 — Ready & /ai Page Scaffold
 - [x] Phase 1 — Basic Read-Only Chat + Gemini 1.5 Flash Hello World
-- [ ] Phase 2 — Scoped Context Injection + Simple Real Q&A
+- [x] Phase 2 — Scoped Context Injection + Simple Real Q&A
 - [ ] Phase 3 — Inline Recharts Visuals from Analytics
 - [ ] Phase 4 — One-Shot Report Generation (PDF/CSV)
 - [ ] Phase 5 — Scheduling Engine Skeleton + AiTask Model
