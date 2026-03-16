@@ -7,13 +7,13 @@
 - [x] Add i18n keys for sidebar groups and labels
 - [x] Verify layout and branding ("mediaBubble AI")
 
-## Phase 1: Basic Read-Only Chat + Gemini 1.5 Flash Hello World 🔄
-- [ ] Create `/api/ai/chat/route.ts` with Gemini integration
-- [ ] Implement `useChat` hook in AI Hub page
-- [ ] Implement streaming UI response
-- [ ] Verify basic "Hello World" from AI
+## Phase 1: Basic Read-Only Chat + Gemini 1.5 Flash Hello World ✅
+- [x] Create `/api/ai/chat/route.ts` with Gemini integration
+- [x] Implement `useChat` hook in AI Hub page
+- [x] Implement streaming UI response
+- [x] Verify basic "Hello World" from AI
 
-## Phase 2: Scoped Context Injection + Simple Real Q&A [ ]
+## Phase 2: Scoped Context Injection + Simple Real Q&A 🔄
 - [ ] Implement prompt engineering for organization context
 - [ ] Create data gathering helpers for project/gate stats
 - [ ] Verify AI can answer "How many gates in this project?"

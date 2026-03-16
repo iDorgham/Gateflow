@@ -2,6 +2,7 @@
 
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useChat } from 'ai/react';
 import { 
   Card, 
   CardContent, 
@@ -11,10 +12,39 @@ import {
   cn
 } from '@gate-access/ui';
 import { Sparkles, Brain, BarChart3, FileText, QrCode } from 'lucide-react';
+import { ChatPanel } from '@/components/dashboard/ai/ChatPanel';
 
 export default function GateAIPage() {
   const { t, i18n } = useTranslation('dashboard');
   const isRtl = i18n.language === 'ar';
+  const [showChat, setShowChat] = React.useState(false);
+
+  const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
+    api: '/api/ai/chat',
+  });
+
+  if (showChat) {
+    return (
+      <div className="flex flex-col gap-6 p-6 h-[calc(100vh-120px)] max-w-5xl mx-auto w-full">
+        <div className="flex justify-between items-center">
+          <h1 className="text-2xl font-bold text-[var(--ds-text-discovery,#403294)]">
+            {t('ai.hubTitle', 'GateAI Hub')}
+          </h1>
+          <Button variant="ghost" size="sm" onClick={() => setShowChat(false)}>
+            {t('ai.backToInfo', 'Back to Overview')}
+          </Button>
+        </div>
+        <ChatPanel 
+          messages={messages} 
+          input={input} 
+          handleInputChange={handleInputChange} 
+          handleSubmit={handleSubmit} 
+          isLoading={isLoading} 
+          isRtl={isRtl}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-6 p-6">
@@ -33,7 +63,12 @@ export default function GateAIPage() {
             {t('ai.welcomeDesc', 'Streamline your property operations with natural language. Ask questions about scans, generate reports, or create bulk QRs in seconds.')}
           </p>
           <div className="flex gap-3 mt-2">
-            <Button variant="discovery" size="lg" className="shadow-lg">
+            <Button 
+              variant="discovery" 
+              size="lg" 
+              className="shadow-lg"
+              onClick={() => setShowChat(true)}
+            >
               {t('ai.getStarted', 'Get Started')}
             </Button>
             <Button variant="discovery-subtle" size="lg">
@@ -90,12 +125,15 @@ export default function GateAIPage() {
         </Card>
       </div>
 
-      {/* Coming Soon Alert */}
+      {/* Dynamic Status Alert */}
       <div className="rounded-lg border border-[var(--ds-border-discovery,#998DD9)] bg-[var(--ds-background-discovery-subtle,#EAE6FF)]/20 p-4">
         <div className="flex items-center gap-3">
           <Sparkles className="h-5 w-5 text-[var(--ds-text-discovery,#403294)]" />
           <p className="text-sm font-medium text-[var(--ds-text-discovery,#403294)]">
-            {t('ai.comingSoon', 'Phase 1 development is underway. Read-only intelligence will be available in the next update.')}
+            {showChat 
+              ? t('ai.phase1Active', 'GateAI Phase 1 is now active. You are communicating with Gemini 1.5 Flash.')
+              : t('ai.readyToChat', 'GateAI is ready to help. Click "Get Started" to initiate a secure session.')
+            }
           </p>
         </div>
       </div>

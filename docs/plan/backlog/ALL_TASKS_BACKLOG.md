@@ -33,7 +33,7 @@
 **Target:** Q3 2026
 
 - [x] Phase 0 — Ready & /ai Page Scaffold
-- [ ] Phase 1 — Basic Read-Only Chat + Gemini 1.5 Flash Hello World
+- [x] Phase 1 — Basic Read-Only Chat + Gemini 1.5 Flash Hello World
 - [ ] Phase 2 — Scoped Context Injection + Simple Real Q&A
 - [ ] Phase 3 — Inline Recharts Visuals from Analytics
 - [ ] Phase 4 — One-Shot Report Generation (PDF/CSV)
