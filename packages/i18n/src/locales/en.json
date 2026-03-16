@@ -817,7 +817,14 @@
         "capReportingDesc": "Generate custom PDF and CSV reports on the fly. Schedule them for daily or weekly delivery to your inbox.",
         "capBulkQR": "Bulk QR Operations",
         "capBulkQRDesc": "Create hundreds of QR codes by simply describing your intent. Tag and assign rules with a single sentence.",
-        "comingSoon": "Phase 1 development is underway. Read-only intelligence will be available in the next update."
+        "comingSoon": "Phase 1 development is underway. Read-only intelligence will be available in the next update.",
+        "chatError": "Failed to connect to GateAI. Please check your credentials or try again later.",
+        "quotaError": "Gemini API quota exceeded. Please try again in a few minutes or upgrade your plan.",
+        "thinking": "GateAI is thinking...",
+        "backToInfo": "Back to Overview",
+        "hubTitle": "GateAI Hub",
+        "phase1Active": "GateAI Phase 1 is now active. You are communicating with Gemini 1.5 Flash.",
+        "readyToChat": "GateAI is ready to help. Click \"Get Started\" to initiate a secure session."
       },
       "table": {
         "code": "Code",

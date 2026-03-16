@@ -1,64 +1,157 @@
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
-import { streamText } from 'ai';
+import { streamText, StreamData } from 'ai';
 import { requireAuth } from '@/lib/dashboard-auth';
 import { getOrganizationContext } from '@/lib/ai/context-providers';
+import { checkRateLimit } from '@/lib/rate-limit';
+import { AiActionService } from '@/lib/ai/ai-action-service';
 
-// Allow streaming responses up to 30 seconds
-export const maxDuration = 30;
+// Allow streaming responses up to 60 seconds
+export const maxDuration = 60;
 
 export async function POST(req: Request) {
+  const data = new StreamData();
+  
   try {
-    // 1. Authenticate and verify organization
-    const session = await requireAuth();
+    console.log('>>> [GateAI] [STEP 1] Incoming request');
+
+    // 1. Authenticate
+    const session = await requireAuth().catch(err => {
+      console.error('>>> [GateAI] [FAIL 1] Auth Error:', err);
+      throw err;
+    });
+
     if (!session || !session.user.organizationId) {
+      console.warn('>>> [GateAI] [FAIL 1.5] 401 Unauthorized');
       return new Response('Unauthorized', { status: 401 });
+    }
+
+    // 2. Rate Limiting
+    const rateLimit = await checkRateLimit(`ai-chat:${session.user.id}`, 20, 60_000);
+    if (!rateLimit.allowed) {
+      return new Response(
+        JSON.stringify({ error: "ai.rateLimit" }),
+        { status: 429, headers: { 'Content-Type': 'application/json' } }
+      );
     }
 
     const { messages } = await req.json();
 
-    // 2. Fetch real-time data context for the organization (Resilient)
-    const orgContext = await getOrganizationContext(session.user.organizationId);
-
-    // 3. Initialize the Gemini provider with the explicit API key from environment
-    const google = createGoogleGenerativeAI({
-      apiKey: process.env.GEMINI_API_KEY,
+    // 3. Fetch context
+    const orgContext = await getOrganizationContext(session.user.organizationId).catch(() => {
+      return null;
     });
-    
-    // Use Gemini 2.0 Flash (as verified available in this environment)
-    const model = google('gemini-2.0-flash');
 
-    // 4. Enhanced System prompt for GateAI (data-aware)
-    const systemPrompt = `You are GateAI, an intelligent operations agent for GateFlow.
-You are helping staff in the organization: ${session.org?.name || 'GateFlow'}.
-Your role is to provide factual answers and operational assistance based on the data provided below.
+    // 4. Interaction Log Entry
+    const lastUserMessage = messages?.[messages.length - 1]?.content || '';
+    const actionLog = await AiActionService.createAction({
+      organizationId: session.user.organizationId,
+      userId: session.user.id,
+      actionType: 'CHAT',
+      prompt: lastUserMessage,
+      status: 'EXECUTED',
+    });
 
-### Organization Context (Real-time Snapshot):
-${orgContext ? JSON.stringify(orgContext, null, 2) : 'No data available.'}
+    // Append actionId to stream data for the frontend
+    data.append({ actionId: actionLog.id });
 
-### Operational Guidelines:
-1. Use the data in the context above to answer factual questions (e.g., scan counts, active gates, project names).
-2. If data is unavailable or the answer isn't in the context, politely state that you don't have that specific information yet.
-3. You are currently in "Read-only" mode. You can explain how GateFlow works and report on data, but you cannot perform actions (mutations) yet.
-4. If asked to perform an action (e.g., "create a QR" or "delete a project"), politely explain that mutation capabilities are coming in future phases.
-5. Your tone is helpful, professional, and efficient. 
-6. Speak in the user's language (supported: Arabic, English).`;
+    // 5. Initialize Gemini
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      return new Response('Missing API Key', { status: 500 });
+    }
 
-    // 5. Stream the text back to the client
+    const google = createGoogleGenerativeAI({ apiKey });
+    const model = google("gemini-flash-latest", {
+      structuredOutputs: false,
+    });
+
+    // 6. Stream the response
     const result = streamText({
       model,
-      system: systemPrompt,
       messages,
+      system: `You are GateAI, an intelligent operations agent for GateFlow.
+Organization: ${orgContext?.orgName || 'GateFlow'}.
+
+### Guidelines:
+1. Answer questions based ONLY on the data context provided.
+2. If info is missing, say you don't know.
+3. You can suggest charts when analytics data is requested. To render a chart, output a JSON block like this:
+   \`\`\`json
+   {
+     "type": "chart",
+     "chartType": "bar" | "line" | "pie",
+     "title": "Title of the chart",
+     "data": [{"label": "Jan", "value": 100}, {"label": "Feb", "value": 150}],
+     "xAxisKey": "label",
+     "yAxisKey": "value"
+   }
+   \`\`\`
+4. You can generate reports when requested. To offer a report download, output a JSON block like this:
+   \`\`\`json
+   {
+     "type": "report",
+     "reportType": "pdf" | "csv",
+     "title": "Description of the report",
+     "params": {
+       "dateFrom": "YYYY-MM-DD",
+       "dateTo": "YYYY-MM-DD",
+       "projectId": "...",
+       "gateId": "...",
+       "unitType": "...",
+       "search": "..."
+     }
+   }
+   \`\`\`
+5. You can schedule tasks (like recurring reports). To schedule a task, output a JSON block like this:
+   \`\`\`json
+   {
+     "type": "schedule",
+     "taskType": "report",
+     "title": "Weekly Analytics Summary",
+     "cron": "weekly" | "daily" | "0 0 * * 0",
+     "params": {
+       "reportType": "pdf" | "csv",
+       "projectId": "...",
+       "gateId": "..."
+     }
+   }
+   \`\`\`
+6. CRITICAL: For any action that modifies data (scheduling, creating, deleting), you MUST FIRST propose it using a "confirm" block. DO NOT provide the "schedule" block directly unless it's just a summary of what's already been done.
+   \`\`\`json
+   {
+     "type": "confirm",
+     "actionType": "SCHEDULE_TASK" | "BULK_QR_CREATE",
+     "title": "...",
+     "description": "...",
+     "intentJson": {
+       // For SCHEDULE_TASK:
+       "title": "...", "cron": "...", "params": { ... }
+       // For BULK_QR_CREATE:
+       "count": number, "type": "WORKER" | "VIRTUAL" | "PHYSICAL", "validFrom": "ISO string", "validUntil": "ISO string", "tag": "...", "assignTo": "...", "projectId": "...", "gateId": "..."
+     }
+   }
+   \`\`\`
+8. You can now perform limited actions like generating reports, scheduling tasks, and creating bulk QR codes. Answer concisely.`,
+      onFinish: async (finish) => {
+        if (finish.usage) {
+          await AiActionService.recordUsage(actionLog.id, {
+            promptTokens: finish.usage.promptTokens,
+            completionTokens: finish.usage.completionTokens,
+            totalTokens: finish.usage.totalTokens,
+          }).catch(err => console.error(">>> [GateAI] Usage log failed:", err));
+        }
+        data.close();
+      },
+      onError: (error) => {
+        console.error(">>> [GateAI] [STREAM ERROR]", error);
+        data.close();
+      }
     });
 
-    return result.toDataStreamResponse();
+    return result.toDataStreamResponse({ data });
   } catch (error: any) {
-    console.error('[GateAI] API Error:', error);
-    
-    // Specialize error messages for the user
-    if (error.status === 429 || error.message?.includes('429') || error.message?.includes('Resource has been exhausted')) {
-      return new Response('Quota exceeded: The AI is currently at its free-tier limit. Please try again in a few minutes.', { status: 429 });
-    }
-    
-    return new Response(`AI Assistant Error: ${error.message || 'Unknown error'}`, { status: 500 });
+    data.close();
+    const errorMessage = error?.message || "Internal Server Error";
+    return new Response(JSON.stringify({ error: "ai.chatError", details: errorMessage }), { status: 500 });
   }
 }

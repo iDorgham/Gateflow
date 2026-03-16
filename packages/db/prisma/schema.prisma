@@ -56,6 +56,8 @@ model Organization {
   users                         User[]
   watchlistEntries              WatchlistEntry[]
   webhooks                      Webhook[]
+  aiTasks                       AiTask[]
+  aiActionLogs                  AiActionLog[]
 
   @@index([deletedAt])
 }
@@ -126,6 +128,7 @@ model User {
   incidents       Incident[]
   refreshTokens   RefreshToken[]
   scanLogs        ScanLog[]
+  aiActionLogs    AiActionLog[]
   unit            Unit?
   organization    Organization?    @relation(fields: [organizationId], references: [id])
   role            Role             @relation(fields: [roleId], references: [id])
@@ -627,6 +630,70 @@ enum TaskStatus {
   TODO
   IN_PROGRESS
   DONE
+}
+
+model AiTask {
+  id             String       @id @default(cuid())
+  organizationId String
+  type           String       /// e.g. "REPORT_GEN"
+  title          String
+  params         Json         /// e.g. { reportType: "pdf", ... }
+  cron           String?      /// Cron expression or simple interval
+  status         AiTaskStatus @default(PENDING)
+  lastRun        DateTime?
+  nextRun        DateTime?
+  error          String?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([status])
+  @@index([nextRun])
+}
+
+enum AiTaskStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+}
+
+enum AiActionStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  EXECUTED
+  FAILED
+}
+
+model AiActionLog {
+  id              String         @id @default(cuid())
+  organizationId  String
+  organization    Organization   @relation(fields: [organizationId], references: [id])
+  userId          String?
+  user            User?          @relation(fields: [userId], references: [id])
+  actionType      String         // e.g., "CHAT", "SCHEDULE_TASK", "BULK_QR_CREATE"
+  prompt          String         @db.Text
+  intentJson      Json?          // The proposed action details (null for plain chat)
+  status          AiActionStatus @default(PENDING)
+  result          String?        @db.Text
+  metadata        Json?
+  
+  // Usage tracking
+  promptTokens     Int?
+  completionTokens Int?
+  totalTokens      Int?
+  estimatedCost    Float?
+  
+  // Feedback
+  feedback         String?        // "THUMBS_UP", "THUMBS_DOWN"
+  
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  @@index([organizationId])
+  @@index([userId])
 }
 
 enum Plan {

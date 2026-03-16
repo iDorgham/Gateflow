@@ -19,7 +19,7 @@ export default function GateAIPage() {
   const isRtl = i18n.language === 'ar';
   const [showChat, setShowChat] = React.useState(false);
 
-  const { messages, input, handleInputChange, handleSubmit, isLoading, error } = useChat({
+  const { messages, input, handleInputChange, handleSubmit, isLoading, error, data } = useChat({
     api: '/api/ai/chat',
   });
 
@@ -37,7 +37,14 @@ export default function GateAIPage() {
         
         {error && (
           <div className="p-4 bg-[var(--ds-background-danger,#FFEBE6)] text-[var(--ds-text-danger,#BF2600)] rounded-lg text-sm mb-4">
-            {t('ai.chatError', 'Failed to connect to GateAI. Please check your credentials or try again later.')}
+            <p className="font-semibold">
+              {(() => {
+                const errData = error.message;
+                if (errData.includes('ai.quotaError')) return t('ai.quotaError');
+                if (errData.includes('ai.chatError')) return t('ai.chatError');
+                return t('ai.chatError', 'Failed to connect to GateAI. Please check your credentials or try again later.');
+              })()}
+            </p>
             <pre className="mt-2 text-[10px] opacity-70">{(error as any).message || error.toString()}</pre>
           </div>
         )}
@@ -49,6 +56,7 @@ export default function GateAIPage() {
           handleSubmit={handleSubmit} 
           isLoading={isLoading} 
           isRtl={isRtl}
+          streamData={data as any[]}
         />
       </div>
     );
