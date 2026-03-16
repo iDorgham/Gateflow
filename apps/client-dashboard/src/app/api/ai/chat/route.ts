@@ -1,4 +1,4 @@
-import { google } from '@ai-sdk/google';
+import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { streamText } from 'ai';
 import { requireAuth } from '@/lib/dashboard-auth';
 import { getOrganizationContext } from '@/lib/ai/context-providers';
@@ -19,7 +19,11 @@ export async function POST(req: Request) {
     // 2. Fetch real-time data context for the organization
     const orgContext = await getOrganizationContext(session.user.organizationId);
 
-    // 3. Initialize the Gemini model
+    // 3. Initialize the Gemini provider with the explicit API key
+    const google = createGoogleGenerativeAI({
+      apiKey: process.env.GEMINI_API_KEY,
+    });
+    
     const model = google('gemini-1.5-flash');
 
     // 4. Enhanced System prompt for GateAI (data-aware)
