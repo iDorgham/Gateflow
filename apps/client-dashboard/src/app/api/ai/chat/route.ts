@@ -8,7 +8,7 @@ export const maxDuration = 30;
 
 export async function POST(req: Request) {
   try {
-    // 1. Authenticate and get organization context
+    // 1. Authenticate and verify organization
     const session = await requireAuth();
     if (!session || !session.user.organizationId) {
       return new Response('Unauthorized', { status: 401 });
@@ -16,10 +16,10 @@ export async function POST(req: Request) {
 
     const { messages } = await req.json();
 
-    // 2. Fetch real-time data context for the organization
+    // 2. Fetch real-time data context for the organization (Resilient)
     const orgContext = await getOrganizationContext(session.user.organizationId);
 
-    // 3. Initialize the Gemini provider with the explicit API key
+    // 3. Initialize the Gemini provider with the explicit API key from environment
     const google = createGoogleGenerativeAI({
       apiKey: process.env.GEMINI_API_KEY,
     });
@@ -50,8 +50,8 @@ ${orgContext ? JSON.stringify(orgContext, null, 2) : 'No data available.'}
     });
 
     return result.toDataStreamResponse();
-  } catch (error) {
-    console.error('GateAI Error:', error);
-    return new Response('AI Assistant Error', { status: 500 });
+  } catch (error: any) {
+    console.error('[GateAI] API Error:', error);
+    return new Response(`AI Assistant Error: ${error.message || 'Unknown error'}`, { status: 500 });
   }
 }
