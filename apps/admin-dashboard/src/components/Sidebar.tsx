@@ -1,5 +1,6 @@
 'use client';
 
+import * as React from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -23,37 +24,35 @@ import {
   ChevronRight,
   CreditCard,
   KeyRound,
+  HelpCircle,
 } from 'lucide-react';
-import { cn } from '@gate-access/ui';
+import { 
+  cn, 
+  SideNavigationShell, 
+  SideNavItem, 
+  NavGroup,
+  Avatar,
+  AvatarFallback
+} from '@gate-access/ui';
 
-interface NavItem {
+interface NavItemData {
   href: string;
   label: string;
   icon: React.ComponentType<{ className?: string }>;
   exact?: boolean;
 }
 
-interface NavGroup {
+interface NavGroupData {
   label: string;
-  items: NavItem[];
+  items: NavItemData[];
 }
 
-// To support i18n safely within the component
-const getNavGroups = (t: TFunction): NavGroup[] => [
+const getNavGroups = (t: TFunction): NavGroupData[] => [
   {
     label: t('admin:nav.platform', 'Platform'),
     items: [
-      {
-        href: '/',
-        label: t('admin:nav.overview'),
-        icon: LayoutDashboard,
-        exact: true,
-      },
-      {
-        href: '/organizations',
-        label: t('admin:nav.organizations'),
-        icon: Building2,
-      },
+      { href: '/', label: t('admin:nav.overview'), icon: LayoutDashboard, exact: true },
+      { href: '/organizations', label: t('admin:nav.organizations'), icon: Building2 },
       { href: '/users', label: t('admin:nav.users'), icon: Users },
       { href: '/projects', label: t('admin:nav.projects'), icon: FolderOpen },
       { href: '/gates', label: t('admin:nav.gates'), icon: DoorOpen },
@@ -70,22 +69,14 @@ const getNavGroups = (t: TFunction): NavGroup[] => [
   {
     label: t('admin:nav.revenue', 'Revenue'),
     items: [
-      {
-        href: '/finance',
-        label: t('admin:nav.finance', 'Finance'),
-        icon: CreditCard,
-      },
+      { href: '/finance', label: t('admin:nav.finance', 'Finance'), icon: CreditCard },
     ],
   },
   {
     label: t('admin:nav.system', 'System'),
     items: [
       { href: '/monitoring', label: t('admin:nav.monitoring'), icon: Activity },
-      {
-        href: '/authorization-keys',
-        label: t('admin:nav.authKeys', 'Auth Keys'),
-        icon: KeyRound,
-      },
+      { href: '/authorization-keys', label: t('admin:nav.authKeys', 'Auth Keys'), icon: KeyRound },
       { href: '/settings', label: t('admin:nav.settings'), icon: Settings },
       { href: '/admins', label: t('admin:nav.admins'), icon: Shield },
     ],
@@ -110,146 +101,100 @@ export function Sidebar() {
   }
 
   return (
-    <div
-      className={cn(
-        'flex h-full flex-col bg-sidebar text-sidebar-foreground border-r border-sidebar-border transition-all duration-300',
-        isCollapsed ? 'w-20' : 'w-64'
-      )}
-    >
-      {/* Logo */}
-      <div
-        className={cn(
-          'flex h-16 shrink-0 items-center border-b border-sidebar-border px-6',
-          isCollapsed ? 'justify-center px-0' : 'justify-between'
-        )}
-      >
-        <Link href="/" className="flex items-center gap-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-[13px] font-bold text-primary-foreground shadow-[0_0_15px_rgba(37,99,235,0.3)]">
-            GF
-          </div>
-          {!isCollapsed && (
-            <div className="flex flex-col">
-              <span className="text-sm font-bold tracking-tight text-sidebar-foreground uppercase">
-                GateFlow
-              </span>
-              <span className="text-[9px] font-bold text-blue-400 tracking-[0.2em] uppercase">
-                Control
-              </span>
+    <div className="relative h-full">
+      <SideNavigationShell
+        isCollapsed={isCollapsed}
+        header={
+          <div className={cn(
+            "flex h-16 items-center px-4 gap-3",
+            isCollapsed && "justify-center px-0"
+          )}>
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--ds-background-brand-bold,#0052CC)] text-[13px] font-bold text-white shadow-sm">
+              GF
             </div>
-          )}
-        </Link>
-        {!isCollapsed && (
-          <div className="flex items-center justify-center h-5 w-5 rounded-full bg-sidebar-accent border border-sidebar-border">
-            <ShieldCheck className="h-3 w-3 text-blue-400" />
-          </div>
-        )}
-      </div>
-
-      {/* Navigation */}
-      <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-5">
-        {navGroups.map((group) => (
-          <div key={group.label}>
             {!isCollapsed && (
-              <p className="mb-2 px-3 text-[9px] font-black uppercase tracking-[0.25em] text-slate-500 opacity-70">
-                {group.label}
-              </p>
+              <div className="flex flex-col min-w-0">
+                <span className="text-sm font-bold tracking-tight text-[var(--ds-text,#172B4D)] uppercase">
+                  GateFlow
+                </span>
+                <span className="text-[10px] font-bold text-[var(--ds-text-brand,#0052CC)] tracking-[0.1em] uppercase">
+                  Admin Console
+                </span>
+              </div>
             )}
-            <div
-              className={cn(
-                'space-y-0.5',
-                isCollapsed && 'flex flex-col items-center'
+          </div>
+        }
+        footer={
+          <div className="flex flex-col gap-0.5 p-2">
+            <SideNavItem
+              href="#"
+              label={t('admin:nav.help', 'Help')}
+              icon={HelpCircle}
+              isCollapsed={isCollapsed}
+            />
+            <SideNavItem
+              href="#"
+              label={t('admin:nav.signOut', 'Sign out')}
+              icon={LogOut}
+              isCollapsed={isCollapsed}
+              onClick={() => {
+                handleSignOut();
+              }}
+            />
+            <div className={cn(
+              "mt-2 flex items-center gap-3 rounded-[3px] p-2 transition-colors hover:bg-[var(--ds-background-subtle,#F4F5F7)] cursor-pointer group",
+              isCollapsed && "justify-center"
+            )}>
+              <Avatar size="small">
+                <AvatarFallback className="text-[10px] bg-[var(--ds-background-brand-subtle,#DEEBFF)] text-[var(--ds-text-brand,#0052CC)]">
+                  AD
+                </AvatarFallback>
+              </Avatar>
+              {!isCollapsed && (
+                <div className="flex flex-col min-w-0">
+                  <span className="text-xs font-semibold text-[var(--ds-text,#172B4D)] truncate">
+                    Admin User
+                  </span>
+                  <span className="text-[10px] text-[var(--ds-text-subtlest,#6B778C)] truncate">
+                    admin@gateflow.io
+                  </span>
+                </div>
               )}
-            >
-              {group.items.map((item) => {
-                const itemHref = `${localePrefix}${item.href === '/' ? '' : item.href}`;
-                const active = item.exact
-                  ? pathname === itemHref || pathname === `${itemHref}/`
-                  : pathname.startsWith(itemHref);
-                const Icon = item.icon;
-
-                return (
-                  <Link
-                    key={item.href}
-                    href={itemHref}
-                    title={isCollapsed ? item.label : undefined}
-                    className={cn(
-                      'group relative flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-all duration-200',
-                      active
-                        ? 'bg-primary/10 text-sidebar-foreground shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]'
-                        : 'text-slate-400 hover:bg-sidebar-accent hover:text-slate-200',
-                      isCollapsed && 'justify-center px-0 w-10 h-10'
-                    )}
-                  >
-                    {active && (
-                      <span className="absolute rtl:right-0 ltr:left-0 top-1/2 h-5 w-1 -translate-y-1/2 rounded-full bg-primary shadow-[0_0_10px_rgba(59,130,246,0.6)]" />
-                    )}
-                    <Icon
-                      className={cn(
-                        'h-[17px] w-[17px] transition-all duration-300 shrink-0',
-                        active
-                          ? 'text-blue-400 scale-110'
-                          : 'text-slate-500 group-hover:scale-110 group-hover:text-slate-300'
-                      )}
-                    />
-                    {!isCollapsed && (
-                      <span className="flex-1 truncate">{item.label}</span>
-                    )}
-                  </Link>
-                );
-              })}
             </div>
           </div>
-        ))}
-      </nav>
-
-      {/* Footer / Sign out */}
-      <div
-        className={cn(
-          'mt-auto shrink-0 border-t border-sidebar-border p-3',
-          isCollapsed ? 'px-2' : 'px-3'
-        )}
+        }
       >
-        <div
-          className={cn(
-            'flex items-center gap-2',
-            isCollapsed ? 'flex-col' : 'flex-row'
-          )}
-        >
-          <button
-            onClick={handleSignOut}
-            disabled={signingOut}
-            className={cn(
-              'group flex items-center gap-3 rounded-xl transition-all duration-200 disabled:opacity-50 text-sm font-medium text-slate-400 hover:bg-red-500/10 hover:text-red-400',
-              isCollapsed ? 'justify-center w-10 h-10 px-0' : 'flex-1 px-4 py-3'
-            )}
-            title={isCollapsed ? t('admin:nav.signOut', 'Sign out') : undefined}
-          >
-            <LogOut className="h-[17px] w-[17px] text-slate-500 group-hover:text-red-400 transition-colors shrink-0 rtl:rotate-180" />
-            {!isCollapsed && (
-              <span className="truncate">
-                {signingOut ? '...' : t('admin:nav.signOut', 'Sign out')}
-              </span>
-            )}
-          </button>
+        {navGroups.map((group) => (
+          <NavGroup key={group.label} label={group.label} isCollapsed={isCollapsed}>
+            {group.items.map((item) => {
+              const itemHref = `${localePrefix}${item.href === '/' ? '' : item.href}`;
+              const active = item.exact
+                ? pathname === itemHref || pathname === `${itemHref}/`
+                : pathname.startsWith(itemHref);
+              return (
+                <SideNavItem
+                  key={item.href}
+                  label={item.label}
+                  href={itemHref}
+                  icon={item.icon}
+                  isActive={active}
+                  isCollapsed={isCollapsed}
+                />
+              );
+            })}
+          </NavGroup>
+        ))}
+      </SideNavigationShell>
 
-          <button
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            className={cn(
-              'group flex items-center justify-center rounded-xl transition-all duration-200 text-slate-400 hover:bg-sidebar-accent hover:text-slate-200',
-              isCollapsed ? 'w-10 h-10' : 'w-12 h-12'
-            )}
-            title={
-              isCollapsed ? t('admin:nav.expand') : t('admin:nav.collapse')
-            }
-          >
-            {isCollapsed ? (
-              <ChevronRight className="h-[18px] w-[18px] text-slate-500 group-hover:text-slate-200 transition-colors shrink-0 rtl:rotate-180" />
-            ) : (
-              <ChevronLeft className="h-[18px] w-[18px] text-slate-500 group-hover:text-slate-200 transition-colors shrink-0 rtl:rotate-180" />
-            )}
-          </button>
-        </div>
-      </div>
+      {/* Collapse toggle */}
+      <button
+        type="button"
+        onClick={() => setIsCollapsed(!isCollapsed)}
+        className="absolute top-10 -right-3 z-50 flex h-6 w-6 items-center justify-center rounded-full border border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-background-default,#FFFFFF)] shadow-sm hover:bg-[var(--ds-background-subtle,#F4F5F7)] transition-all group"
+        aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+      >
+        <ChevronLeft className={cn('h-3.5 w-3.5 text-[var(--ds-icon-subtle,#6B778C)] transition-transform group-hover:text-[var(--ds-icon,#172B4D)]', isCollapsed && 'rotate-180')} />
+      </button>
     </div>
   );
 }

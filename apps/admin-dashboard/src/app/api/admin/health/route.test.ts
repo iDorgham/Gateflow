@@ -3,6 +3,7 @@ export {};
 // Mock dependencies before imports
 jest.mock('@/lib/admin-auth', () => ({
   isAdminAuthenticated: jest.fn(),
+  isAdminAuthorized: jest.fn(),
 }));
 
 jest.mock('@gate-access/db', () => ({
@@ -17,7 +18,7 @@ jest.mock('@gate-access/db', () => ({
   },
 }));
 
-const { isAdminAuthenticated } = require('@/lib/admin-auth');
+const { isAdminAuthenticated, isAdminAuthorized } = require('@/lib/admin-auth');
 
 // Mock NextRequest
 class MockNextRequest {
@@ -29,7 +30,7 @@ describe('GET /api/admin/health', () => {
   beforeEach(() => { jest.clearAllMocks(); });
 
   it('returns 401 if not authenticated', async () => {
-    isAdminAuthenticated.mockReturnValue(false);
+    isAdminAuthorized.mockResolvedValue(false);
     const { GET } = await import('./route');
     const req = new MockNextRequest('http://localhost/en/api/admin/health');
     const res = await GET(req as never);
@@ -37,7 +38,7 @@ describe('GET /api/admin/health', () => {
   });
 
   it('returns health data when authenticated', async () => {
-    isAdminAuthenticated.mockReturnValue(true);
+    isAdminAuthorized.mockResolvedValue(true);
     const { GET } = await import('./route');
     const req = new MockNextRequest('http://localhost/en/api/admin/health');
     const res = await GET(req as never);

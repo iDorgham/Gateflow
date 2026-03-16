@@ -23,7 +23,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { upsertResidentLimit } from '../../../app/[locale]/dashboard/settings/residents/actions';
-import { UnitType } from '@gate-access/db';
+import type { UnitType } from '@gate-access/db';
 import { Pencil, Info } from 'lucide-react';
 
 interface ResidentLimit {
@@ -45,8 +45,17 @@ export function UnitTypeTable({ limits }: UnitTypeTableProps) {
   const [quota, setQuota] = useState(0);
   const [canOpen, setCanOpen] = useState(false);
 
-  // All known unit types
-  const unitTypes = Object.values(UnitType);
+  // All known unit types - hardcoded to avoid ReferenceError on type-only import
+  const unitTypes: UnitType[] = [
+    'STUDIO',
+    'ONE_BR',
+    'TWO_BR',
+    'THREE_BR',
+    'FOUR_BR',
+    'VILLA',
+    'PENTHOUSE',
+    'COMMERCIAL'
+  ];
 
   const handleEdit = (type: UnitType) => {
     const existing = limits.find((l) => l.unitType === type) || {

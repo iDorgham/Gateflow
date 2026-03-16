@@ -1,6 +1,9 @@
 export {};
 
-jest.mock('@/lib/admin-auth', () => ({ isAdminAuthenticated: jest.fn() }));
+jest.mock('@/lib/admin-auth', () => ({
+  isAdminAuthenticated: jest.fn(),
+  isAdminAuthorized: jest.fn(),
+}));
 jest.mock('@gate-access/db', () => ({
   prisma: {
     user: {
@@ -10,7 +13,7 @@ jest.mock('@gate-access/db', () => ({
   },
 }));
 
-const { isAdminAuthenticated } = require('@/lib/admin-auth');
+const { isAdminAuthenticated, isAdminAuthorized } = require('@/lib/admin-auth');
 
 class MockNextRequest {
   url: string;
@@ -21,14 +24,14 @@ describe('GET /api/admin/users', () => {
   beforeEach(() => jest.clearAllMocks());
 
   it('returns 401 if not authenticated', async () => {
-    isAdminAuthenticated.mockReturnValue(false);
+    isAdminAuthorized.mockResolvedValue(false);
     const { GET } = await import('./route');
     const res = await GET(new MockNextRequest('http://localhost/en/api/admin/users') as never);
     expect(res.status).toBe(401);
   });
 
   it('returns user list when authenticated', async () => {
-    isAdminAuthenticated.mockReturnValue(true);
+    isAdminAuthorized.mockResolvedValue(true);
     const { GET } = await import('./route');
     const res = await GET(new MockNextRequest('http://localhost/en/api/admin/users') as never);
     expect(res.status).toBe(200);

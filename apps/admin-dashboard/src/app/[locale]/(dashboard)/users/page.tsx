@@ -18,7 +18,7 @@ export default async function UsersPage({
   searchParams: SearchParams;
 }) {
   await requireAdmin();
-  const { t } = await getTranslation(locale, 'admin');
+  const { t } = (await getTranslation(locale, 'admin')) as { t: any; dict: any };
 
   const search = searchParams.q?.trim() ?? '';
   const roleFilter = searchParams.role ?? '';

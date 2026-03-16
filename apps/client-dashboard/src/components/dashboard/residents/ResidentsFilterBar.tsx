@@ -17,6 +17,8 @@ const UNIT_TYPES = [
   'COMMERCIAL',
 ] as const;
 
+import { Check, Columns, Search } from 'lucide-react';
+
 interface Gate {
   id: string;
   name: string;
@@ -34,6 +36,10 @@ interface ResidentsFilterBarProps {
   gates?: Gate[];
   tags?: TagOption[];
   className?: string;
+  onCustomizerOpen?: () => void;
+  totalCount?: number;
+  selectedCount?: number;
+  searchPlaceholder?: string;
 }
 
 export function ResidentsFilterBar({
@@ -42,6 +48,10 @@ export function ResidentsFilterBar({
   gates: initialGates = [],
   tags = [],
   className,
+  onCustomizerOpen,
+  totalCount,
+  selectedCount,
+  searchPlaceholder,
 }: ResidentsFilterBarProps) {
   const { t } = useTranslation('dashboard');
   const { projects, currentProjectId } = useProjectFilter();
@@ -120,12 +130,14 @@ export function ResidentsFilterBar({
 
   const projectValue = filters.projectId || currentProjectId || '';
   const is7d = (() => {
+    if (!filters.from || !filters.to) return false;
     const from = new Date(filters.from + 'T00:00:00');
     const to = new Date(filters.to + 'T23:59:59');
     const days = Math.round((to.getTime() - from.getTime()) / (24 * 60 * 60 * 1000));
     return days <= 7;
   })();
   const is30d = (() => {
+    if (!filters.from || !filters.to) return false;
     const from = new Date(filters.from + 'T00:00:00');
     const to = new Date(filters.to + 'T23:59:59');
     const days = Math.round((to.getTime() - from.getTime()) / (24 * 60 * 60 * 1000));
@@ -133,141 +145,102 @@ export function ResidentsFilterBar({
   })();
 
   return (
-    <div
-      className={cn(
-        'flex flex-wrap items-center gap-3 rounded-xl border border-border bg-card p-3',
-        className
-      )}
-    >
-      <div className="flex items-center gap-2">
-        <span className="text-sm font-medium text-foreground">
-          {t('analytics.filterDateRange', 'Date range')}
-        </span>
-        <Button
-          variant={is7d ? 'secondary' : 'ghost'}
-          size="sm"
-          onClick={() => handleRangePreset('7d')}
-        >
-          {t('analytics.range7d', 'Last 7 days')}
-        </Button>
-        <Button
-          variant={is30d ? 'secondary' : 'ghost'}
-          size="sm"
-          onClick={() => handleRangePreset('30d')}
-        >
-          {t('analytics.range30d', 'Last 30 days')}
-        </Button>
+    <div className={cn('flex flex-wrap items-center gap-4 bg-white dark:bg-[#1D2125] p-3 rounded-xl border border-[#DFE1E6] dark:border-[#343A46] shadow-sm', className)}>
+      <div className="flex items-center gap-3 pr-4 border-r border-[#DFE1E6] dark:border-[#343A46]">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#6B778C] pointer-events-none" />
+          <Input
+            type="search"
+            placeholder={searchPlaceholder || t('contacts.searchPlaceholder', 'Search contacts…')}
+            value={searchInput}
+            onChange={(e) => handleSearchChange(e.target.value)}
+            className="w-[240px] h-9 pl-9 bg-[#F4F5F7] dark:bg-[#2C333A] border-[#DFE1E6] dark:border-[#343A46] focus:bg-white dark:focus:bg-[#1D2125] transition-all text-[13px] rounded-lg"
+            aria-label={t('analytics.filterSearch', 'Search')}
+          />
+        </div>
       </div>
 
-      <div className="flex items-center gap-2">
-        <Input
-          type="date"
-          value={customFrom}
-          onChange={(e) => setCustomFrom(e.target.value)}
-          className="w-[140px]"
-          aria-label={t('analytics.fromDate', 'From date')}
-        />
-        <Input
-          type="date"
-          value={customTo}
-          onChange={(e) => setCustomTo(e.target.value)}
-          className="w-[140px]"
-          aria-label={t('analytics.toDate', 'To date')}
-        />
-        <Button size="sm" onClick={handleCustomDateApply}>
-          {t('analytics.apply', 'Apply')}
-        </Button>
-      </div>
-
-      {projects.length > 0 && (
-        <div className="flex items-center gap-2">
-          <label className="text-sm font-medium text-foreground sr-only">
-            {t('analytics.filterProject', 'Project')}
-          </label>
-          <NativeSelect
-            value={projectValue}
-            onChange={(e) => onFiltersChange({ projectId: e.target.value, page: 1 })}
-            className="w-[180px]"
+      <div className="flex items-center gap-3">
+        <span className="text-[11px] font-bold text-[#6B778C] dark:text-[#97A0AF] uppercase tracking-widest">{t('analytics.filterDateRange', 'Range')}</span>
+        <div className="flex rounded-lg border border-[#DFE1E6] dark:border-[#343A46] p-0.5 bg-[#EBECF0] dark:bg-[#1D2125]/50 overflow-hidden shadow-inner">
+          <Button
+            variant="ghost"
+            size="sm"
+            className={cn("h-7 px-3 text-[12px] font-bold rounded-md transition-all", is7d ? "bg-white dark:bg-[#343A46] text-[#0052CC] shadow-sm" : "text-[#42526E] dark:text-[#A5ADBA] hover:bg-white/50 dark:hover:bg-[#343A46]/50")}
+            onClick={() => handleRangePreset('7d')}
           >
-            <option value="">{t('analytics.filterAllProjects', 'All projects')}</option>
-            {projects.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.name}
-              </option>
+            7d
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            className={cn("h-7 px-3 text-[12px] font-bold rounded-md transition-all", is30d ? "bg-white dark:bg-[#343A46] text-[#0052CC] shadow-sm" : "text-[#42526E] dark:text-[#A5ADBA] hover:bg-white/50 dark:hover:bg-[#343A46]/50")}
+            onClick={() => handleRangePreset('30d')}
+          >
+            30d
+          </Button>
+        </div>
+        <div className="flex items-center gap-1.5 ml-1 bg-[#F4F5F7] dark:bg-[#2C333A] px-2 py-1 rounded-lg border border-[#DFE1E6] dark:border-[#343A46]">
+          <input
+            type="date"
+            value={customFrom}
+            onChange={(e) => setCustomFrom(e.target.value)}
+            className="w-[105px] h-6 bg-transparent border-none text-[11px] font-bold text-[#172B4D] dark:text-[#E3E6E8] focus:ring-0 p-0"
+          />
+          <span className="text-[#6B778C] dark:text-[#97A0AF] text-[10px] font-black opacity-30">—</span>
+          <input
+            type="date"
+            value={customTo}
+            onChange={(e) => setCustomTo(e.target.value)}
+            className="w-[105px] h-6 bg-transparent border-none text-[11px] font-bold text-[#172B4D] dark:text-[#E3E6E8] focus:ring-0 p-0"
+          />
+          <Button
+            size="sm"
+            onClick={handleCustomDateApply}
+            className="h-6 w-6 p-0 bg-white dark:bg-[#343A46] border border-[#DFE1E6] dark:border-[#343A46] text-[#42526E] dark:text-[#E3E6E8] hover:bg-[#F4F5F7] dark:hover:bg-[#2C333A] rounded shadow-sm transition-transform active:scale-95"
+          >
+            <Check className="h-3 w-3" />
+          </Button>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-3 ml-auto">
+        <div className="flex items-center gap-2">
+           <NativeSelect
+            value={filters.unitType}
+            onChange={(e) => onFiltersChange({ unitType: e.target.value, page: 1 })}
+            className="w-[130px] h-9 text-[12px] font-semibold bg-white dark:bg-[#1D2125] border-[#DFE1E6] dark:border-[#343A46] rounded-lg cursor-pointer hover:border-[#0052CC] transition-colors"
+          >
+            <option value="">{t('analytics.filterAllUnitTypes', 'All Types')}</option>
+            {UNIT_TYPES.map((u) => (
+              <option key={u} value={u}>{unitTypeLabels[u] ?? u}</option>
             ))}
           </NativeSelect>
-        </div>
-      )}
 
-      {gates.length > 0 && (
-        <div className="flex items-center gap-2">
-          <label className="text-sm font-medium text-foreground sr-only">
-            {t('analytics.filterGate', 'Gate')}
-          </label>
-          <NativeSelect
-            value={filters.gateId}
-            onChange={(e) => onFiltersChange({ gateId: e.target.value, page: 1 })}
-            className="w-[160px]"
-          >
-            <option value="">{t('analytics.filterAllGates', 'All gates')}</option>
-            {gates.map((g) => (
-              <option key={g.id} value={g.id}>
-                {g.name}
-              </option>
-            ))}
-          </NativeSelect>
-        </div>
-      )}
-
-      <div className="flex items-center gap-2">
-        <label className="text-sm font-medium text-foreground sr-only">
-          {t('analytics.filterUnitType', 'Unit type')}
-        </label>
-        <NativeSelect
-          value={filters.unitType}
-          onChange={(e) => onFiltersChange({ unitType: e.target.value, page: 1 })}
-          className="w-[160px]"
-        >
-          <option value="">{t('analytics.filterAllUnitTypes', 'All unit types')}</option>
-          {UNIT_TYPES.map((u) => (
-            <option key={u} value={u}>
-              {unitTypeLabels[u] ?? u}
-            </option>
-          ))}
-        </NativeSelect>
-      </div>
-
-      <Input
-        type="search"
-        placeholder={t('contacts.searchPlaceholder', 'Search contacts…')}
-        value={searchInput}
-        onChange={(e) => handleSearchChange(e.target.value)}
-        className="w-[180px]"
-        aria-label={t('analytics.filterSearch', 'Search')}
-      />
-
-      {tags.length > 0 && (
-        <div className="flex items-center gap-2">
-          <label className="text-sm font-medium text-foreground sr-only">
-            {t('residents.filterByTag', 'Filter by tag')}
-          </label>
           <NativeSelect
             value={filters.tagIds || ''}
-            onChange={(e) => {
-              const val = e.target.value;
-              onFiltersChange({ tagIds: val, page: 1 });
-            }}
-            className="w-[160px]"
+            onChange={(e) => onFiltersChange({ tagIds: e.target.value, page: 1 })}
+            className="w-[130px] h-9 text-[12px] font-semibold bg-white dark:bg-[#1D2125] border-[#DFE1E6] dark:border-[#343A46] rounded-lg cursor-pointer hover:border-[#0052CC] transition-colors"
           >
-            <option value="">{t('residents.allTags', 'All tags')}</option>
+            <option value="">{t('residents.allTags', 'All Tags')}</option>
             {tags.map((tag) => (
-              <option key={tag.id} value={tag.id}>
-                {tag.name}
-              </option>
+              <option key={tag.id} value={tag.id}>{tag.name}</option>
             ))}
           </NativeSelect>
         </div>
-      )}
+
+        {onCustomizerOpen && (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={onCustomizerOpen}
+            className="h-9 px-4 border-[#DFE1E6] dark:border-[#343A46] text-[#42526E] dark:text-[#A5ADBA] font-bold hover:bg-[#F4F5F7] dark:hover:bg-[#2C333A] rounded-lg shadow-sm group"
+          >
+            <Columns className="h-4 w-4 mr-2 group-hover:text-[#0052CC] transition-colors" />
+            {t('residents.columns', 'Columns')}
+          </Button>
+        )}
+      </div>
     </div>
   );
 }

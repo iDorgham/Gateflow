@@ -39,7 +39,7 @@ export function GateStatusIndicator({
           <Icon className={cn("w-5 h-5", config.color)} />
           {gateName}
         </CardTitle>
-        <Badge variant={status === "online" ? "default" : status === "offline" ? "destructive" : "secondary"} className="capitalize">
+        <Badge variant={status === "online" ? "default" : status === "offline" ? "danger" : "secondary"} className="capitalize">
           {config.text}
         </Badge>
       </CardHeader>

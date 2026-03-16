@@ -13,7 +13,11 @@ const config: Config = {
   theme: {
     extend: {
       colors: tokens.colors,
+      spacing: tokens.spacing,
+      fontFamily: tokens.typography.fontFamily,
+      fontWeight: tokens.typography.fontWeight,
       borderRadius: tokens.borderRadius,
+      screens: tokens.screens,
     },
   },
 };

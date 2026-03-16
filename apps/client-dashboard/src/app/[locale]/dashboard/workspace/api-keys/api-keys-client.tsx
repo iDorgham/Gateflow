@@ -275,7 +275,7 @@ function ApiKeyRow({
         <div className="flex flex-wrap items-center gap-2 mb-1">
           <span className="font-bold text-slate-900 dark:text-white">{apiKey.name}</span>
           {expired ? (
-            <Badge variant="destructive" className="text-[10px] font-bold px-2 py-0">
+            <Badge variant="danger" className="text-[10px] font-bold px-2 py-0">
               Expired
             </Badge>
           ) : (

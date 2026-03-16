@@ -33,7 +33,6 @@ export default async function DashboardLayout({
 
   let projects: { id: string; name: string }[] = [];
   let currentProjectId: string | null = null;
-  let hideGates = false;
 
   if (org) {
     const [dbProjects, validatedProjectId] = await Promise.all([
@@ -43,18 +42,12 @@ export default async function DashboardLayout({
         select: { 
           id: true, 
           name: true,
-          _count: {
-            select: { gates: { where: { deletedAt: null } } }
-          }
         },
       }),
       getValidatedProjectId(org.id),
     ]);
     projects = dbProjects.map(p => ({ id: p.id, name: p.name }));
     currentProjectId = validatedProjectId;
-    
-    // Hide gates if all projects have 0 or 1 gate
-    hideGates = dbProjects.length > 0 && dbProjects.every(p => p._count.gates <= 1);
   }
 
   // To use the new DashboardLayout (mini header, ⌘K search, collapsible sidebars, AI+Tasks panel), replace DashboardShell with DashboardLayout and pass the same props.

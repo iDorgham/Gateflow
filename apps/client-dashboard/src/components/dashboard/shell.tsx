@@ -13,6 +13,7 @@ import { NotificationDropdown } from './notification-dropdown';
 import { ProjectFilterProvider } from '@/context/ProjectFilterContext';
 import { getCsrfToken } from '@/lib/csrf';
 import { Locale } from '@/lib/i18n-config';
+import { HeaderUserMenu } from './header-user-menu';
 import { useRealtimeEvents } from '@/lib/realtime/use-realtime-events';
 import {
   SheetContent,
@@ -185,6 +186,13 @@ export function DashboardShell({
           </Button>
           <LanguageSwitcher currentLocale={locale} variant="mini" />
           <ThemeToggle />
+          <div className="h-6 w-px bg-sidebar-border/50 mx-1 hidden sm:block" />
+          <HeaderUserMenu 
+            user={user} 
+            org={org} 
+            locale={locale} 
+            variant="header" 
+          />
         </div>
       </header>
 

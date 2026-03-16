@@ -29,9 +29,9 @@ export function ScanLogRow({
 
   const badgeVariant = {
     granted: "default",
-    denied: "destructive",
+    denied: "danger",
     pending: "secondary",
-  }[status] as "default" | "destructive" | "secondary" | "outline";
+  }[status] as "default" | "danger" | "secondary" | "outline";
 
   return (
     <TableRow>

@@ -339,7 +339,7 @@ export function AuthKeysClient() {
                       )}
                       {isExpired(key.expiresAt) ? (
                         <Badge
-                          variant="destructive"
+                          variant="danger"
                           className="text-[10px] font-bold px-2 py-0"
                         >
                           Expired

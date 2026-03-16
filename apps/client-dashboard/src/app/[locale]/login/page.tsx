@@ -122,38 +122,21 @@ function LoginControls({ locale }: { locale: Locale }) {
 function SubmitButton({ isRtl }: { isRtl: boolean }) {
   const { pending } = useFormStatus();
   return (
-    <button
+    <Button
       type="submit"
       disabled={pending}
-      className="group w-full h-12 rounded-lg text-sm font-black uppercase tracking-widest text-white active:scale-[0.98] transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2"
-      style={{
-        background: 'linear-gradient(135deg, #EB4A00 0%, #EB4A00 100%)',
-        boxShadow: '0 4px 14px rgba(235,74,0,0.25)',
-        transition: 'all 0.2s cubic-bezier(0.4,0,0.2,1)',
-      }}
-      onMouseEnter={(e) => {
-        (e.currentTarget as HTMLButtonElement).style.background =
-          'linear-gradient(135deg, #020E73 0%, #EB4A00 100%)';
-        (e.currentTarget as HTMLButtonElement).style.boxShadow =
-          '0 6px 20px rgba(235,74,0,0.35), 0 -2px 0 0 rgba(2,14,115,0.1) inset';
-        (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-2px)';
-      }}
-      onMouseLeave={(e) => {
-        (e.currentTarget as HTMLButtonElement).style.background =
-          'linear-gradient(135deg, #EB4A00 0%, #EB4A00 100%)';
-        (e.currentTarget as HTMLButtonElement).style.boxShadow = '0 4px 14px rgba(235,74,0,0.25)';
-        (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(0)';
-      }}
+      className="w-full h-10 font-medium transition-all duration-200"
+      variant="default"
     >
       {pending ? (
-        <Loader2 className="h-5 w-5 animate-spin mx-auto" />
+        <Loader2 className="h-4 w-4 animate-spin mx-auto" />
       ) : (
         <span className={cn('flex items-center justify-center gap-2', isRtl && 'flex-row-reverse')}>
-          Sign In
+          Sign in
           <ArrowRight className={cn('h-4 w-4', isRtl && 'rotate-180')} />
         </span>
       )}
-    </button>
+    </Button>
   );
 }
 
@@ -192,18 +175,6 @@ export default function LoginPage() {
     previousErrorRef.current = state?.error;
   }, [state?.error]);
 
-  const successIcons = (
-    <>
-      <Home className="h-5 w-5 text-muted-foreground/40" />
-      <QrCode className="h-5 w-5 text-muted-foreground/40" />
-      <ScanLine className="h-5 w-5 text-muted-foreground/40" />
-      <Users className="h-5 w-5 text-muted-foreground/40" />
-      <Shield className="h-5 w-5 text-muted-foreground/40" />
-      <div className="mt-12">
-        <Settings className="h-5 w-5 text-muted-foreground/40" />
-      </div>
-    </>
-  );
 
   return (
     <LoginShell
@@ -214,7 +185,6 @@ export default function LoginPage() {
       topRight={<LoginControls locale={locale} />}
       errorKey={errorKey}
       isSuccess={isSuccess}
-      successIcons={successIcons}
     >
       <Card className="border-none shadow-none bg-transparent">
         <CardContent className="px-0 pb-0">
@@ -230,18 +200,18 @@ export default function LoginPage() {
               <div className="space-y-2">
                 <Label
                   htmlFor="email"
-                  className="text-xs font-bold uppercase tracking-widest text-[#020E73]/70"
+                  className="text-xs font-semibold text-[#42526E] dark:text-[#97A0AF]"
                 >
-                  {isRtl ? 'البريد الإلكتروني' : 'Email Address'}
+                  {isRtl ? 'البريد الإلكتروني' : 'Email'}
                 </Label>
                 <Input
                   id="email"
                   name="email"
                   type="email"
-                  placeholder="you@company.com"
+                  placeholder="name@company.com"
                   autoComplete="email"
                   required
-                  className="h-12 bg-white/80 border-[rgba(2,14,115,0.18)] focus:border-[#EB4A00] focus:ring-[rgba(235,74,0,0.2)] transition-all duration-200"
+                  className="h-9 focus:ring-0 focus:border-primary transition-all duration-200"
                 />
               </div>
 
@@ -249,16 +219,16 @@ export default function LoginPage() {
                 <div className="flex items-center justify-between">
                   <Label
                     htmlFor="password"
-                    className="text-xs font-bold uppercase tracking-widest text-[#020E73]/70"
+                    className="text-xs font-semibold text-[#42526E] dark:text-[#97A0AF]"
                   >
                     {isRtl ? 'كلمة المرور' : 'Password'}
                   </Label>
                   <a
                     href="#"
-                    className="text-[10px] font-bold uppercase tracking-widest text-[#EB4A00] hover:opacity-75 transition-opacity"
+                    className="text-xs font-medium text-primary hover:underline transition-opacity"
                     tabIndex={-1}
                   >
-                    {isRtl ? 'نسيت كلمة المرور؟' : 'Forgot password?'}
+                    {isRtl ? 'نسيت كلمة المرور؟' : 'Can\'t log in?'}
                   </a>
                 </div>
                 <div className="relative">
@@ -270,8 +240,8 @@ export default function LoginPage() {
                     autoComplete="current-password"
                     required
                     className={cn(
-                      'h-12 bg-white/80 border-[rgba(2,14,115,0.18)] focus:border-[#EB4A00] focus:ring-[rgba(235,74,0,0.2)] transition-all duration-200',
-                      isRtl ? 'pl-12 pr-4' : 'pr-12 pl-4'
+                      'h-9 focus:ring-0 focus:border-primary transition-all duration-200',
+                      isRtl ? 'pl-10 pr-3' : 'pr-10 pl-3'
                     )}
                   />
                   <button
@@ -294,14 +264,14 @@ export default function LoginPage() {
 
             <SubmitButton isRtl={isRtl} />
 
-            <div className="mt-6 pt-2 text-center">
-              <p className="text-[10px] text-muted-foreground/60 font-medium">
+            <div className="mt-8 pt-6 border-t border-border text-center">
+              <p className="text-xs text-muted-foreground font-medium">
                 {isRtl ? 'ليس لديك حساب؟' : "Don't have an account?"}{' '}
                 <a
                   href="mailto:support@gateflow.io"
-                  className="text-muted-foreground font-bold underline underline-offset-4 hover:opacity-80 transition-opacity"
+                  className="text-primary font-semibold hover:underline transition-opacity"
                 >
-                  {isRtl ? 'اتصل بالدعم' : 'Contact support'}
+                  {isRtl ? 'اتصل بالدعم' : 'Contact Support'}
                 </a>
               </p>
             </div>

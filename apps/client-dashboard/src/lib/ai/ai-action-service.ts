@@ -13,6 +13,24 @@ export interface CreateAiActionParams {
 
 export class AiActionService {
   /**
+   * Redact sensitive information from text (Emails, Phones, etc.)
+   */
+  static maskPII(text: string | null | undefined): string {
+    if (!text) return '';
+    
+    // Mask emails: test@example.com -> t***@example.com
+    let masked = text.replace(/([a-zA-Z0-9._%+-])[a-zA-Z0-9._%+-]*@([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g, '$1***@$2');
+    
+    // Mask phone numbers (basic pattern for global/local): +961 70 123 456 -> +961 70 *** 456
+    masked = masked.replace(/(\+?\d{1,3}[-.\s]?)?\(?\d{2,3}\)?[-.\s]?\d{3,4}[-.\s]?\d{3,4}/g, (match) => {
+      if (match.length < 6) return match;
+      return match.substring(0, match.length - 7) + '***' + match.substring(match.length - 4);
+    });
+
+    return masked;
+  }
+
+  /**
    * Create a new AI action log
    */
   static async createAction(params: CreateAiActionParams) {
@@ -23,7 +41,7 @@ export class AiActionService {
         organizationId: params.organizationId,
         userId: params.userId,
         actionType: params.actionType,
-        prompt: params.prompt,
+        prompt: this.maskPII(params.prompt),
         intentJson: params.intentJson || null,
         status: (params.status as any) || 'PENDING',
         metadata: params.metadata,
@@ -71,7 +89,7 @@ export class AiActionService {
       where: { id: actionId },
       data: {
         status,
-        result,
+        result: result ? this.maskPII(result) : undefined,
         updatedAt: new Date(),
       },
     });

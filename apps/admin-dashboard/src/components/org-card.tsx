@@ -71,7 +71,7 @@ export function OrgCard({
               status === 'active'
                 ? 'default'
                 : status === 'suspended'
-                  ? 'destructive'
+                  ? 'danger'
                   : 'secondary'
             }
             className="capitalize"

@@ -12,9 +12,13 @@ const config: Config = {
   theme: {
     extend: {
       colors: tokens.colors,
+      spacing: tokens.spacing,
+      fontWeight: tokens.typography.fontWeight,
       borderRadius: tokens.borderRadius,
+      screens: tokens.screens,
       fontFamily: {
-        sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
+        sans: [tokens.typography.fontFamily.sans, 'system-ui', 'sans-serif'],
+        mono: [tokens.typography.fontFamily.mono, 'monospace'],
         arabic: ['var(--font-cairo)', 'system-ui', 'sans-serif'],
       },
       keyframes: {

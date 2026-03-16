@@ -10,4 +10,3 @@ export {
   clearOrganizationContext,
 } from './tenant';
 export type { OrganizationContext, DbClient } from './tenant';
-export * from './seed-data';

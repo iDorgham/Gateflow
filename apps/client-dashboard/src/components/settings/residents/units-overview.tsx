@@ -12,7 +12,7 @@ import {
   Input,
 } from '@gate-access/ui';
 import { useTranslation } from 'react-i18next';
-import { UnitType } from '@gate-access/db';
+import type { UnitType } from '@gate-access/db';
 import { Search, MapPin, LayoutGrid } from 'lucide-react';
 import { cn } from '@/lib/utils';
 

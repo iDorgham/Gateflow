@@ -8,17 +8,28 @@ import {
   Dialog,
   DialogContent,
   DialogFooter,
-  DialogHeader,
   DialogTitle,
   Input,
   NativeSelect,
+  PageHeader,
+  cn,
+  Pagination,
 } from '@gate-access/ui';
 import { useTranslation } from 'react-i18next';
-import { ChevronLeft, ChevronRight, Download, Plus, RefreshCw, Trash2, Columns } from 'lucide-react';
+import { 
+  Download, 
+  Plus, 
+  RefreshCw, 
+  Trash2, 
+  X,
+  Search,
+  Calendar,
+  Clock,
+  Activity
+} from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useQRCodes } from '@/lib/qrcodes/use-qrcodes';
 import { QRCodesTable } from '@/components/dashboard/qrcodes/QRCodesTable';
-import { PageHeader } from '@/components/dashboard/page-header';
 import { FilterBar } from '@/components/dashboard/filter-bar';
 import { toast } from 'sonner';
 
@@ -37,13 +48,11 @@ export default function QRCodesPage() {
   const { t } = useTranslation('dashboard');
 
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(25);
   const [sortBy, setSortBy] = useState<SortBy>('createdAt');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
-  const [customizerOpen, setCustomizerOpen] = useState(false);
 
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
@@ -64,7 +73,7 @@ export default function QRCodesPage() {
   const filters = useMemo(
     () => ({
       page,
-      pageSize,
+      pageSize: 25,
       sortBy,
       sortOrder,
       search: debouncedSearch || undefined,
@@ -77,7 +86,6 @@ export default function QRCodesPage() {
     }),
     [
       page,
-      pageSize,
       sortBy,
       sortOrder,
       debouncedSearch,
@@ -94,7 +102,7 @@ export default function QRCodesPage() {
   const rows = data?.data ?? [];
   const total = data?.total ?? 0;
   const currentPage = data?.page ?? page;
-  const effectivePageSize = data?.pageSize ?? pageSize;
+  const effectivePageSize = data?.pageSize ?? 25;
   const totalPages = Math.max(1, Math.ceil(total / effectivePageSize));
 
   const handleRefresh = useCallback(() => {
@@ -170,301 +178,269 @@ export default function QRCodesPage() {
   }, [selectedIds, refetch, t, queryClient]);
 
   return (
-    <div className="space-y-6 pb-20">
+    <div className="pb-20 animate-in fade-in duration-500">
       <PageHeader
         title={t('qrcodes.title', 'QR Codes')}
-        subtitle={t('qrcodes.description', 'Manage and track access QR codes.')}
-        actions={
-          <Link href={`/${locale}/dashboard/qrcodes/create`}>
-            <Button className="gap-2">
+        subtitle={t('qrcodes.description', 'Manage and monitor digital access keys for residents and visitors.')}
+        breadcrumbs={[
+          { label: 'Dashboard', href: `/${locale}/dashboard` },
+          { label: 'QR Codes' }
+        ]}
+        homeHref={`/${locale}/dashboard`}
+        actions={[
+          <Button 
+            key="export"
+            variant="outline" 
+            onClick={() => triggerDownload(buildExportUrl())} 
+            className="h-9 px-4 border-[#DFE1E6] dark:border-[#343A46] text-[#42526E] dark:text-[#A5ADBA] font-bold hover:bg-[#F4F5F7] dark:hover:bg-[#2C333A] rounded-lg shadow-sm transition-all active:scale-95 flex items-center gap-2 group"
+          >
+            <Download className="h-4 w-4 text-[#6B778C] group-hover:text-[#0052CC] transition-colors" />
+            {t('common.export', 'Export')}
+          </Button>,
+          <Link key="create" href={`/${locale}/dashboard/qrcodes/create`}>
+            <Button className="h-9 px-5 bg-[#0052CC] hover:bg-[#0747A6] text-white font-bold rounded-lg shadow-[0_2px_4px_rgba(0,82,204,0.2)] transition-all active:scale-95 flex items-center gap-2">
               <Plus className="h-4 w-4" />
               {t('qrcodes.create', 'Create QR Code')}
             </Button>
           </Link>
-        }
+        ]}
       />
 
-      {/* Filter bar: search + date ranges */}
-      <div className="flex flex-col gap-3">
-        <div className="flex items-center justify-between gap-4">
-          <FilterBar className="flex-1">
-            <FilterBar.Search
-              placeholder={t('qrcodes.searchPlaceholder', 'Search codes...')}
-              value={search}
-              onChange={(e) => {
-                setPage(1);
-                setSearch(e.target.value);
-              }}
-              aria-label={t('qrcodes.search', 'Search')}
-              containerClassName="max-w-sm"
-            />
-          </FilterBar>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setCustomizerOpen(true)}
-            className="hidden sm:flex h-10 rounded-xl font-bold uppercase tracking-widest text-[10px] gap-2 px-4"
-          >
-            <Columns className="h-3.5 w-3.5" />
-            {t('residents.columns', 'Columns')}
-          </Button>
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <div className="rounded-xl border border-border bg-card px-3 py-2 flex items-center gap-2">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-              {t('common.sort', 'Sort')}
-            </span>
-            <NativeSelect
-              value={sortBy}
-              onChange={(e) => {
-                setPage(1);
-                setSortBy(e.target.value as SortBy);
-              }}
-              className="h-9 text-xs"
-            >
-              <option value="createdAt">{t('qrcodes.createdAt', 'Created')}</option>
-              <option value="expiresAt">{t('qrcodes.expiresAt', 'Expires')}</option>
-              <option value="code">{t('qrcodes.code', 'Code')}</option>
-              <option value="type">{t('qrcodes.type', 'Type')}</option>
-              <option value="scansCount">{t('qrcodes.scansCount', 'Scans')}</option>
-              <option value="gateName">{t('qrcodes.gate', 'Gate')}</option>
-              <option value="projectName">{t('qrcodes.project', 'Project')}</option>
-            </NativeSelect>
-            <NativeSelect
-              value={sortOrder}
-              onChange={(e) => {
-                setPage(1);
-                setSortOrder(e.target.value as 'asc' | 'desc');
-              }}
-              className="h-9 text-xs"
-            >
-              <option value="desc">{t('common.desc', 'Desc')}</option>
-              <option value="asc">{t('common.asc', 'Asc')}</option>
-            </NativeSelect>
-          </div>
-          <div className="rounded-xl border border-border bg-card px-3 py-2 flex items-center gap-2">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-              {t('common.pageSize', 'Page size')}
-            </span>
-            <NativeSelect
-              value={String(pageSize)}
-              onChange={(e) => {
-                const next = parseInt(e.target.value, 10) || 25;
-                setPage(1);
-                setPageSize(next);
-              }}
-              className="h-9 text-xs"
-            >
-              <option value="10">10</option>
-              <option value="25">25</option>
-              <option value="50">50</option>
-              <option value="100">100</option>
-            </NativeSelect>
-          </div>
-        </div>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-          <div className="rounded-xl border border-border bg-card p-3 space-y-2">
-            <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-              {t('qrcodes.filters.createdAt', 'Created at')}
+      <div className="mt-8 space-y-6">
+        {/* Advanced Filter Bar */}
+        <div className="bg-white dark:bg-[#1D2125] border border-[#DFE1E6] dark:border-[#343A46] rounded-2xl p-6 shadow-sm space-y-6">
+          <div className="flex flex-wrap items-center gap-4">
+            <div className="flex-1 min-w-[300px] relative group">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#6B778C] pointer-events-none group-focus-within:text-[#0052CC] transition-colors" />
+              <FilterBar.Search
+                placeholder={t('qrcodes.searchPlaceholder', 'Search by code, holder name, or property…')}
+                value={search}
+                onChange={(e) => {
+                  setPage(1);
+                  setSearch(e.target.value);
+                }}
+                className="w-full h-11 pl-10 bg-[#F4F5F7] dark:bg-[#2C333A] border-[#DFE1E6] dark:border-[#343A46] focus:bg-white dark:focus:bg-[#1D2125] transition-all rounded-xl text-sm font-medium"
+              />
             </div>
-            <div className="grid grid-cols-2 gap-2">
-              <Input
-                type="date"
-                value={createdFrom}
-                onChange={(e) => {
-                  setPage(1);
-                  setCreatedFrom(e.target.value);
-                }}
-              />
-              <Input
-                type="date"
-                value={createdTo}
-                onChange={(e) => {
-                  setPage(1);
-                  setCreatedTo(e.target.value);
-                }}
-              />
+            
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                onClick={handleRefresh}
+                disabled={isLoading}
+                className="h-11 w-11 p-0 border-[#DFE1E6] dark:border-[#343A46] rounded-xl hover:bg-[#F4F5F7] dark:hover:bg-[#2C333A]"
+              >
+                <RefreshCw className={cn('h-4 w-4 text-[#6B778C]', isLoading && 'animate-spin')} />
+              </Button>
             </div>
           </div>
-          <div className="rounded-xl border border-border bg-card p-3 space-y-2">
-            <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-              {t('qrcodes.filters.expiresAt', 'Expires at')}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
+            {/* Creation Date Filter */}
+            <div className="space-y-2.5">
+              <label className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-[#6B778C] dark:text-[#97A0AF] ml-1">
+                <Calendar className="h-3 w-3" />
+                {t('qrcodes.filters.createdAt', 'Creation Period')}
+              </label>
+              <div className="flex items-center gap-2 bg-[#FAFBFC] dark:bg-[#091E42]/10 p-1 rounded-xl border border-[#DFE1E6] dark:border-[#343A46]">
+                <Input
+                  type="date"
+                  value={createdFrom}
+                  onChange={(e) => { setPage(1); setCreatedFrom(e.target.value); }}
+                  className="h-9 bg-transparent border-none text-xs font-bold text-[#172B4D] dark:text-white focus:ring-0"
+                />
+                <span className="text-[#C1C7D0] font-black">/</span>
+                <Input
+                  type="date"
+                  value={createdTo}
+                  onChange={(e) => { setPage(1); setCreatedTo(e.target.value); }}
+                  className="h-9 bg-transparent border-none text-xs font-bold text-[#172B4D] dark:text-white focus:ring-0"
+                />
+              </div>
             </div>
-            <div className="grid grid-cols-2 gap-2">
-              <Input
-                type="date"
-                value={expiresFrom}
-                onChange={(e) => {
-                  setPage(1);
-                  setExpiresFrom(e.target.value);
-                }}
-              />
-              <Input
-                type="date"
-                value={expiresTo}
-                onChange={(e) => {
-                  setPage(1);
-                  setExpiresTo(e.target.value);
-                }}
-              />
+
+            {/* Expiry Date Filter */}
+            <div className="space-y-2.5">
+              <label className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest dark:text-[#97A0AF] ml-1 text-amber-600">
+                <Clock className="h-3 w-3" />
+                {t('qrcodes.filters.expiresAt', 'Expiry Window')}
+              </label>
+              <div className="flex items-center gap-2 bg-[#FAFBFC] dark:bg-[#091E42]/10 p-1 rounded-xl border border-[#DFE1E6] dark:border-[#343A46]">
+                <Input
+                  type="date"
+                  value={expiresFrom}
+                  onChange={(e) => { setPage(1); setExpiresFrom(e.target.value); }}
+                  className="h-9 bg-transparent border-none text-xs font-bold text-[#172B4D] dark:text-white focus:ring-0"
+                />
+                <span className="text-[#C1C7D0] font-black">/</span>
+                <Input
+                  type="date"
+                  value={expiresTo}
+                  onChange={(e) => { setPage(1); setExpiresTo(e.target.value); }}
+                  className="h-9 bg-transparent border-none text-xs font-bold text-[#172B4D] dark:text-white focus:ring-0"
+                />
+              </div>
+            </div>
+
+            {/* Usage Filter */}
+            <div className="space-y-2.5">
+              <label className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest dark:text-[#97A0AF] ml-1 text-emerald-600">
+                <Activity className="h-3 w-3" />
+                {t('qrcodes.filters.lastScanAt', 'Last Usage')}
+              </label>
+              <div className="flex items-center gap-2 bg-[#FAFBFC] dark:bg-[#091E42]/10 p-1 rounded-xl border border-[#DFE1E6] dark:border-[#343A46]">
+                <Input
+                  type="date"
+                  value={lastScanFrom}
+                  onChange={(e) => { setPage(1); setLastScanFrom(e.target.value); }}
+                  className="h-9 bg-transparent border-none text-xs font-bold text-[#172B4D] dark:text-white focus:ring-0"
+                />
+                <span className="text-[#C1C7D0] font-black">/</span>
+                <Input
+                  type="date"
+                  value={lastScanTo}
+                  onChange={(e) => { setPage(1); setLastScanTo(e.target.value); }}
+                  className="h-9 bg-transparent border-none text-xs font-bold text-[#172B4D] dark:text-white focus:ring-0"
+                />
+              </div>
             </div>
           </div>
-          <div className="rounded-xl border border-border bg-card p-3 space-y-2">
-            <div className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-              {t('qrcodes.filters.lastScanAt', 'Last scan')}
+
+          <div className="flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-[#DFE1E6] dark:border-[#343A46]">
+            <div className="flex items-center gap-3">
+              {selectedIds.length > 0 ? (
+                <div className="flex items-center gap-2 animate-in fade-in zoom-in duration-300">
+                   <span className="text-[11px] font-black uppercase tracking-widest text-[#6B778C] mr-2">Selection:</span>
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    onClick={() => setDeleteOpen(true)}
+                    className="h-8 bg-[#FFEBE6] hover:bg-[#FFD5CC] dark:bg-[#44130C] dark:hover:bg-[#601A12] text-[#BF2600] dark:text-[#FF8F73] border-none font-bold shadow-none rounded-full px-4"
+                  >
+                    <Trash2 className="h-3.5 w-3.5 mr-2" />
+                    {t('common.deleteSelected', { defaultValue: 'Delete {{count}}', count: selectedIds.length })}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => triggerDownload(buildExportUrl(selectedIds))}
+                    className="h-8 border-[#DFE1E6] dark:border-[#343A46] text-[#42526E] dark:text-[#A5ADBA] font-bold rounded-full px-4 bg-white dark:bg-[#2C333A] hover:bg-[#FAFBFC]"
+                  >
+                    <Download className="h-3.5 w-3.5 mr-2" />
+                    {t('common.exportSelected', 'Export')}
+                  </Button>
+                  <div className="w-px h-4 bg-[#DFE1E6] mx-2" />
+                </div>
+              ) : (
+                <div className="flex items-center gap-4 bg-[#F4F5F7] dark:bg-[#2C333A] p-1.5 rounded-xl border border-[#DFE1E6] dark:border-[#343A46]">
+                   <div className="flex items-center gap-2 px-3 py-1 bg-white dark:bg-[#1D2125] rounded-lg shadow-sm">
+                      <span className="text-[10px] font-black text-[#6B778C] uppercase tracking-widest">{t('common.sort', 'Order')}</span>
+                      <NativeSelect
+                        value={sortBy}
+                        onChange={(e) => { setPage(1); setSortBy(e.target.value as SortBy); }}
+                        className="h-7 text-[11px] font-bold border-none bg-transparent focus:ring-0 min-w-[100px]"
+                      >
+                        <option value="createdAt">{t('qrcodes.createdAt', 'Date Created')}</option>
+                        <option value="expiresAt">{t('qrcodes.expiresAt', 'Expiry Date')}</option>
+                        <option value="code">{t('qrcodes.code', 'QR Code ID')}</option>
+                        <option value="type">{t('qrcodes.type', 'Access Type')}</option>
+                        <option value="scansCount">{t('qrcodes.scansCount', 'Usage Count')}</option>
+                        <option value="gateName">{t('qrcodes.gate', 'Entry Gate')}</option>
+                      </NativeSelect>
+                      <NativeSelect
+                        value={sortOrder}
+                        onChange={(e) => { setPage(1); setSortOrder(e.target.value as 'asc' | 'desc'); }}
+                        className="h-7 text-[11px] font-black border-none bg-transparent focus:ring-0"
+                      >
+                        <option value="desc">DESC</option>
+                        <option value="asc">ASC</option>
+                      </NativeSelect>
+                   </div>
+                </div>
+              )}
+              
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  setPage(1); setSearch(''); setSortBy('createdAt'); setSortOrder('desc');
+                  setCreatedFrom(''); setCreatedTo(''); setExpiresFrom(''); setExpiresTo('');
+                  setLastScanFrom(''); setLastScanTo(''); setSelectedIds([]);
+                }}
+                className="h-8 text-[#0052CC] hover:bg-[#DEEBFF] text-[11px] font-bold uppercase tracking-widest rounded-full px-4"
+              >
+                <X className="h-3.5 w-3.5 mr-2" />
+                Clear Filters
+              </Button>
             </div>
-            <div className="grid grid-cols-2 gap-2">
-              <Input
-                type="date"
-                value={lastScanFrom}
-                onChange={(e) => {
-                  setPage(1);
-                  setLastScanFrom(e.target.value);
-                }}
-              />
-              <Input
-                type="date"
-                value={lastScanTo}
-                onChange={(e) => {
-                  setPage(1);
-                  setLastScanTo(e.target.value);
-                }}
+
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-[#6B778C]">
+                 Results: <span className="text-[#172B4D] dark:text-white tabular-nums">{total.toLocaleString()}</span>
+              </div>
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={(p) => setPage(p)}
+                className="w-auto"
               />
             </div>
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleRefresh}
-            disabled={isLoading}
-          >
-            <RefreshCw
-              className={`h-4 w-4 mr-2 ${isLoading ? 'animate-spin' : ''}`}
-            />
-            {t('common.refresh', 'Refresh')}
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => triggerDownload(buildExportUrl())}
-            disabled={isLoading}
-          >
-            <Download className="h-4 w-4 mr-2" />
-            {t('common.export', 'Export')}
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => triggerDownload(buildExportUrl(selectedIds))}
-            disabled={isLoading || selectedIds.length === 0}
-          >
-            <Download className="h-4 w-4 mr-2" />
-            {t('common.exportSelected', { defaultValue: 'Export selected ({{count}})', count: selectedIds.length })}
-          </Button>
-          <Button
-            variant="destructive"
-            size="sm"
-            onClick={() => setDeleteOpen(true)}
-            disabled={isLoading || selectedIds.length === 0}
-          >
-            <Trash2 className="h-4 w-4 mr-2" />
-            {t('common.deleteSelected', { defaultValue: 'Delete selected ({{count}})', count: selectedIds.length })}
-          </Button>
-          <div className="ml-auto flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
-              disabled={isLoading || currentPage <= 1}
-            >
-              <ChevronLeft className="h-4 w-4" />
-            </Button>
-            <div className="text-xs text-muted-foreground tabular-nums">
-              {t('common.page', 'Page')} {currentPage} / {totalPages}
-            </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-              disabled={isLoading || currentPage >= totalPages}
-            >
-              <ChevronRight className="h-4 w-4" />
-            </Button>
-          </div>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => {
-              setPage(1);
-              setSearch('');
-              setSortBy('createdAt');
-              setSortOrder('desc');
-              setCreatedFrom('');
-              setCreatedTo('');
-              setExpiresFrom('');
-              setExpiresTo('');
-              setLastScanFrom('');
-              setLastScanTo('');
-              setSelectedIds([]);
-            }}
-          >
-            {t('common.clear', 'Clear')}
-          </Button>
-        </div>
+        <QRCodesTable
+          data={rows}
+          isLoading={isLoading}
+          isFetching={isFetching}
+          error={error}
+          onRefresh={handleRefresh}
+          locale={locale}
+          sortBy={sortBy}
+          sortOrder={sortOrder}
+          onSortChange={(nextBy, nextOrder) => {
+            setPage(1);
+            setSortBy(nextBy as SortBy);
+            setSortOrder(nextOrder);
+          }}
+          selectedIds={selectedIds}
+          onSelectionChange={(ids) => setSelectedIds(ids as string[])}
+        />
       </div>
 
-      <QRCodesTable
-        data={rows}
-        isLoading={isLoading}
-        isFetching={isFetching}
-        error={error}
-        onRefresh={handleRefresh}
-        locale={locale}
-        sortBy={sortBy}
-        sortOrder={sortOrder}
-        onSortChange={(nextBy, nextOrder) => {
-          setPage(1);
-          setSortBy(nextBy as SortBy);
-          setSortOrder(nextOrder);
-        }}
-        selectedIds={selectedIds}
-        onToggleRow={(id, checked) => {
-          setSelectedIds((prev) =>
-            checked ? Array.from(new Set([...prev, id])) : prev.filter((x) => x !== id)
-          );
-        }}
-        onToggleAllOnPage={(checked, idsOnPage) => {
-          setSelectedIds((prev) => {
-            if (checked) return Array.from(new Set([...prev, ...idsOnPage]));
-            const set = new Set(idsOnPage);
-            return prev.filter((id) => !set.has(id));
-          });
-        }}
-        customizerOpen={customizerOpen}
-        onCustomizerOpenChange={setCustomizerOpen}
-      />
-
       <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>
-              {t('qrcodes.confirmBulkDeleteTitle', { defaultValue: 'Delete {{count}} QR codes?', count: selectedIds.length })}
-            </DialogTitle>
-          </DialogHeader>
-          <p className="text-sm text-muted-foreground">
-            {t('qrcodes.confirmBulkDeleteBody', 'This will soft-delete the selected QR codes. This action is logged for audit.')}
-          </p>
-          <DialogFooter className="gap-2 sm:gap-0">
-            <Button variant="outline" onClick={() => setDeleteOpen(false)} disabled={isPending}>
-              {t('common.cancel', 'Cancel')}
-            </Button>
-            <Button variant="destructive" onClick={deleteSelected} disabled={isPending}>
-              {isPending ? t('common.deleting', 'Deleting...') : t('common.delete', 'Delete')}
-            </Button>
-          </DialogFooter>
+        <DialogContent className="max-w-md rounded-2xl border-none shadow-2xl p-0 overflow-hidden">
+          <div className="bg-[#FFEBE6] p-6 flex flex-col items-center gap-4 text-center">
+             <div className="h-16 w-16 rounded-full bg-white flex items-center justify-center shadow-sm">
+                <Trash2 className="h-8 w-8 text-[#BF2600]" />
+             </div>
+             <DialogTitle className="text-2xl font-black tracking-tight text-[#BF2600]">
+                Confirm Bulk Deletion
+             </DialogTitle>
+          </div>
+          <div className="p-8 space-y-6">
+            <p className="text-[15px] font-medium text-[#42526E] dark:text-[#A5ADBA] leading-relaxed text-center">
+              {t('qrcodes.confirmBulkDeleteBody', 'You are about to deactivate and soft-delete {{count}} QR codes. This action will be logged and is irreversible for the end-users.', { count: selectedIds.length })}
+            </p>
+            <DialogFooter className="flex flex-col sm:flex-row gap-3">
+              <Button 
+                variant="outline" 
+                onClick={() => setDeleteOpen(false)} 
+                disabled={isPending}
+                className="flex-1 h-12 rounded-xl border-[#DFE1E6] font-bold text-[#42526E]"
+              >
+                {t('common.cancel', 'No, keep them')}
+              </Button>
+              <Button 
+                variant="destructive" 
+                onClick={deleteSelected} 
+                disabled={isPending}
+                className="flex-1 h-12 rounded-xl bg-[#BF2600] hover:bg-[#DE350B] font-bold text-white shadow-lg"
+              >
+                {isPending ? <RefreshCw className="h-5 w-5 animate-spin mr-2" /> : <Trash2 className="h-5 w-5 mr-2" />}
+                {t('common.delete', 'Yes, delete all')}
+              </Button>
+            </DialogFooter>
+          </div>
         </DialogContent>
       </Dialog>
     </div>

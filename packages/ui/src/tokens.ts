@@ -44,47 +44,109 @@ export const tokens = {
       DEFAULT: 'hsl(var(--card))',
       foreground: 'hsl(var(--card-foreground))',
     },
-    // Extended semantic (Atlassian)
-    success: {
-      DEFAULT: 'hsl(var(--success))',
-      foreground: 'hsl(var(--success-foreground))',
+    // Atlassian Semantic Tokens (v1)
+    ds: {
+      background: {
+        default: 'var(--ds-background-default)',
+        subtle: 'var(--ds-background-subtle)',
+        subtlest: 'var(--ds-background-subtlest)',
+        selected: 'var(--ds-background-selected)',
+        brand: {
+          bold: 'var(--ds-background-brand-bold)',
+          subtle: 'var(--ds-background-brand-subtle)',
+        },
+        danger: {
+          bold: 'var(--ds-background-danger-bold)',
+          subtle: 'var(--ds-background-danger-subtle)',
+        },
+        warning: {
+          bold: 'var(--ds-background-warning-bold)',
+          subtle: 'var(--ds-background-warning-subtle)',
+        },
+        success: {
+          bold: 'var(--ds-background-success-bold)',
+          subtle: 'var(--ds-background-success-subtle)',
+        },
+        information: {
+          bold: 'var(--ds-background-information-bold)',
+          subtle: 'var(--ds-background-information-subtle)',
+        },
+      },
+      text: {
+        DEFAULT: 'var(--ds-text)',
+        subtle: 'var(--ds-text-subtle)',
+        subtlest: 'var(--ds-text-subtlest)',
+        inverse: 'var(--ds-text-inverse)',
+        selected: 'var(--ds-text-selected)',
+        brand: 'var(--ds-text-brand)',
+        danger: 'var(--ds-text-danger)',
+        warning: 'var(--ds-text-warning)',
+        success: 'var(--ds-text-success)',
+        information: 'var(--ds-text-information)',
+      },
+      border: {
+        DEFAULT: 'var(--ds-border)',
+        bold: 'var(--ds-border-bold)',
+        selected: 'var(--ds-border-selected)',
+        brand: 'var(--ds-border-brand)',
+        danger: 'var(--ds-border-danger)',
+        warning: 'var(--ds-border-warning)',
+        success: 'var(--ds-border-success)',
+        information: 'var(--ds-border-information)',
+      },
+      icon: {
+        DEFAULT: 'var(--ds-icon)',
+        subtle: 'var(--ds-icon-subtle)',
+        inverse: 'var(--ds-icon-inverse)',
+        brand: 'var(--ds-icon-brand)',
+        danger: 'var(--ds-icon-danger)',
+        warning: 'var(--ds-icon-warning)',
+        success: 'var(--ds-icon-success)',
+        information: 'var(--ds-icon-information)',
+      },
     },
-    warning: {
-      DEFAULT: 'hsl(var(--warning))',
-      foreground: 'hsl(var(--warning-foreground))',
+  },
+  spacing: {
+    'space-0': '0rem',
+    'space-025': '0.125rem', // 2px
+    'space-050': '0.25rem',  // 4px
+    'space-075': '0.375rem', // 6px
+    'space-100': '0.5rem',   // 8px (Base)
+    'space-150': '0.75rem',  // 12px
+    'space-200': '1rem',     // 16px
+    'space-250': '1.25rem',  // 20px
+    'space-300': '1.5rem',   // 24px
+    'space-400': '2rem',     // 32px
+    'space-500': '2.5rem',   // 40px
+    'space-600': '3rem',     // 48px
+    'space-800': '4rem',     // 64px
+    'space-1000': '5rem',    // 80px
+  },
+  typography: {
+    fontFamily: {
+      sans: 'var(--ds-font-family-sans)',
+      mono: 'var(--ds-font-family-mono)',
     },
-    info: {
-      DEFAULT: 'hsl(var(--info))',
-      foreground: 'hsl(var(--info-foreground))',
-    },
-    danger: {
-      DEFAULT: 'hsl(var(--danger))',
-      foreground: 'hsl(var(--danger-foreground))',
-    },
-    // Sidebar (Atlassian Blue or Dark Neutral)
-    sidebar: {
-      DEFAULT: 'hsl(var(--sidebar))',
-      foreground: 'hsl(var(--sidebar-foreground))',
-      primary: 'hsl(var(--sidebar-primary))',
-      'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
-      accent: 'hsl(var(--sidebar-accent))',
-      'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
-      border: 'hsl(var(--sidebar-border))',
-      ring: 'hsl(var(--sidebar-ring))',
-    },
-    // Chart palette (Atlassian multi-color)
-    chart: {
-      1: 'hsl(var(--chart-1))',
-      2: 'hsl(var(--chart-2))',
-      3: 'hsl(var(--chart-3))',
-      4: 'hsl(var(--chart-4))',
-      5: 'hsl(var(--chart-5))',
+    fontWeight: {
+      light: '300',
+      regular: '400',
+      medium: '500',
+      semibold: '600',
+      bold: '700',
     },
   },
   borderRadius: {
-    lg: 'var(--radius)',
-    md: 'calc(var(--radius) - 2px)',
-    sm: 'calc(var(--radius) - 4px)',
+    DEFAULT: 'var(--ds-border-radius)',
+    sm: 'var(--ds-border-radius-sm)',
+    lg: 'var(--ds-border-radius-lg)',
+    full: '9999px',
+  },
+  // Added breakpoints for Grid Beta
+  screens: {
+    xs: '600px',
+    sm: '768px',
+    md: '992px',
+    lg: '1200px',
   },
 };
 

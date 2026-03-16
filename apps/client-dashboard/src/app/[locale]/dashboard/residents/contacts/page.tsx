@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useTransition, useCallback, useEffect } from 'react';
-import Link from 'next/link';
 import { useParams, useSearchParams, useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import {
@@ -27,6 +26,7 @@ import {
   AvatarImage,
   AvatarFallback,
   Textarea,
+  PageHeader,
 } from '@gate-access/ui';
 import { useTranslation } from 'react-i18next';
 import {
@@ -43,15 +43,12 @@ import {
   Pencil,
   Trash2,
   Users,
-  BarChart3,
   ChevronLeft,
   ChevronRight,
-  Columns,
   Eye,
   Building,
   Check,
 } from 'lucide-react';
-import { buildAnalyticsUrl } from '@/lib/analytics';
 import {
   mergeFilters,
   parseResidentsFiltersFromSearchParams,
@@ -328,11 +325,11 @@ export default function ContactsPage() {
       if (columnId === 'avatar')
         return (
           <TableCell key={columnId} className="w-14">
-            <Avatar className="h-9 w-9">
+            <Avatar className="h-8 w-8 rounded-full ring-2 ring-white dark:ring-slate-800">
               {c.avatarUrl ? (
                 <AvatarImage src={c.avatarUrl} alt={`${c.firstName} ${c.lastName}`} />
               ) : null}
-              <AvatarFallback className="text-xs bg-muted">
+              <AvatarFallback className="text-[10px] bg-[#F4F5F7] dark:bg-slate-700 text-[#42526E] dark:text-[#A5ADBA] font-bold">
                 {c.firstName.charAt(0)}
                 {c.lastName.charAt(0)}
               </AvatarFallback>
@@ -341,89 +338,64 @@ export default function ContactsPage() {
         );
       if (columnId === 'firstName')
         return (
-          <TableCell key={columnId} className="font-medium">
+          <TableCell key={columnId} className="font-semibold text-[#172B4D] dark:text-slate-200">
             {c.firstName}
           </TableCell>
         );
       if (columnId === 'lastName')
-        return <TableCell key={columnId}>{c.lastName}</TableCell>;
+        return <TableCell key={columnId} className="text-[#42526E] dark:text-slate-300">{c.lastName}</TableCell>;
       if (columnId === 'birthday')
         return (
-          <TableCell key={columnId} className="text-sm text-muted-foreground">
-            {c.birthday ?? '—'}
+          <TableCell key={columnId} className="text-[12px] text-[#6B778C] dark:text-[#A5ADBA]">
+            {c.birthday ?? <span className="text-[#DFE1E6]">/</span>}
           </TableCell>
         );
       if (columnId === 'company')
         return (
-          <TableCell key={columnId} className="text-sm">
-            {c.company ?? '—'}
+          <TableCell key={columnId} className="text-[12px] text-[#42526E] dark:text-slate-300">
+            {c.company ?? <span className="text-[#DFE1E6]">—</span>}
           </TableCell>
         );
       if (columnId === 'phone')
         return (
-          <TableCell key={columnId} className="text-sm font-mono">
-            {c.phone ?? '—'}
+          <TableCell key={columnId} className="text-[12px] font-mono text-[#42526E] dark:text-[#A5ADBA]">
+            {c.phone ?? <span className="text-[#DFE1E6]">—</span>}
           </TableCell>
         );
       if (columnId === 'email')
         return (
-          <TableCell key={columnId} className="text-sm">
-            {c.email ?? '—'}
+          <TableCell key={columnId} className="text-[12px] text-[#0052CC] dark:text-[#4C9AFF] hover:underline cursor-pointer">
+            {c.email ?? <span className="text-[#DFE1E6]">—</span>}
           </TableCell>
         );
       if (columnId === 'tags')
         return (
           <TableCell key={columnId}>
-            <div className="flex flex-wrap gap-1">
-              {(c.tags ?? []).length === 0 ? (
-                <span className="text-xs text-muted-foreground">—</span>
-              ) : (
-                (c.tags ?? []).map((tag) => (
-                  <Badge
-                    key={tag.id}
-                    variant="secondary"
-                    className="text-xs cursor-pointer"
-                    style={
-                      tag.color
-                        ? {
-                            backgroundColor: tag.color,
-                            color: 'hsl(var(--primary-foreground))',
-                            border: 'none',
-                          }
-                        : undefined
-                    }
-                    onClick={() =>
-                      removeTagMutation.mutate({
-                        contactId: c.id,
-                        tagId: tag.id,
-                      })
-                    }
-                    title={t('residents.clickToRemoveTag', 'Click to remove')}
-                  >
-                    {tag.name}
-                  </Badge>
-                ))
-              )}
+            <div className="flex flex-wrap gap-1 items-center">
+              {(c.tags ?? []).length > 0 && (c.tags ?? []).map((tag) => (
+                <Badge
+                  key={tag.id}
+                  variant="secondary"
+                  className="px-1.5 py-0 text-[10px] font-bold bg-[#EBECF0] dark:bg-slate-700 text-[#42526E] dark:text-[#A5ADBA] border-none hover:bg-[#DFE1E6]"
+                  style={tag.color ? { backgroundColor: `${tag.color}20`, color: tag.color, border: `1px solid ${tag.color}40` } : undefined}
+                  onClick={() => removeTagMutation.mutate({ contactId: c.id, tagId: tag.id })}
+                >
+                  {tag.name}
+                </Badge>
+              ))}
               <NativeSelect
                 value=""
                 onChange={(e) => {
                   const tagId = e.target.value;
-                  if (tagId)
-                    addTagMutation.mutate({ contactId: c.id, tagId });
+                  if (tagId) addTagMutation.mutate({ contactId: c.id, tagId });
                   e.target.value = '';
                 }}
-                className="h-7 w-[120px] text-xs"
+                className="h-6 w-[80px] text-[10px] bg-transparent border-none shadow-none focus:ring-0 text-[#6B778C] hover:bg-[#F4F5F7] rounded"
               >
-                <option value="">{t('residents.addTag', 'Add tag')}</option>
-                {tagOptions
-                  .filter(
-                    (tag) => !(c.tags ?? []).some((assigned) => assigned.id === tag.id)
-                  )
-                  .map((tag) => (
-                    <option key={tag.id} value={tag.id}>
-                      {tag.name}
-                    </option>
-                  ))}
+                <option value="">+ Tag</option>
+                {tagOptions.filter(t => !(c.tags ?? []).some(a => a.id === t.id)).map(t => (
+                  <option key={t.id} value={t.id}>{t.name}</option>
+                ))}
               </NativeSelect>
             </div>
           </TableCell>
@@ -431,15 +403,15 @@ export default function ContactsPage() {
       if (columnId === 'units')
         return (
           <TableCell key={columnId}>
-            <div className="flex flex-wrap gap-1 items-center">
+            <div className="flex flex-wrap gap-1">
               {c.units.length === 0 ? (
-                <span className="text-xs text-muted-foreground">—</span>
+                <span className="text-[#DFE1E6]">—</span>
               ) : (
                 c.units.map((u) => (
                   <Badge
                     key={u.id}
-                    variant="secondary"
-                    className="text-xs cursor-pointer hover:bg-secondary/80"
+                    variant="outline"
+                    className="px-1.5 py-0 text-[10px] font-bold bg-[#DEEBFF] dark:bg-[#DEEBFF]/10 text-[#0747A6] dark:text-[#DEEBFF] border-none cursor-pointer"
                     onClick={() => setViewUnitsFor(c)}
                   >
                     {u.name}
@@ -449,64 +421,38 @@ export default function ContactsPage() {
             </div>
           </TableCell>
         );
-      if (columnId === 'visitsInRange')
+      if (columnId === 'visitsInRange' || columnId === 'passesInRange')
         return (
-          <TableCell key={columnId} className="text-right tabular-nums">
-            {c.visitsInRange ?? 0}
-          </TableCell>
-        );
-      if (columnId === 'passesInRange')
-        return (
-          <TableCell key={columnId} className="text-right tabular-nums">
-            {c.passesInRange ?? 0}
+          <TableCell key={columnId} className="text-right tabular-nums text-[12px] font-semibold text-[#172B4D] dark:text-slate-200">
+            {c[columnId] ?? 0}
           </TableCell>
         );
       if (columnId === 'lastVisitInRange')
         return (
-          <TableCell key={columnId} className="text-right text-sm text-muted-foreground">
-            {c.lastVisitInRange
-              ? new Date(c.lastVisitInRange).toLocaleDateString(undefined, {
-                  dateStyle: 'short',
-                })
-              : '—'}
+          <TableCell key={columnId} className="text-right text-[11px] text-[#6B778C] dark:text-[#A5ADBA]">
+            {c.lastVisitInRange ? new Date(c.lastVisitInRange).toLocaleDateString(undefined, { dateStyle: 'short' }) : '—'}
           </TableCell>
         );
       if (columnId === 'actions')
         return (
           <TableCell key={columnId}>
-            <div className="flex items-center gap-1">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-7 w-7"
-                onClick={() => setViewUnitsFor(c)}
-                title={t('residents.viewUnits', 'View units')}
-              >
+            <div className="flex items-center gap-0.5 justify-end">
+              <Button variant="ghost" size="icon" className="h-7 w-7 text-[#42526E] hover:bg-[#EBECF0]" onClick={() => setViewUnitsFor(c)}>
                 <Eye className="h-3.5 w-3.5" />
               </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-7 w-7"
-                onClick={() => openEdit(c)}
-              >
+              <Button variant="ghost" size="icon" className="h-7 w-7 text-[#42526E] hover:bg-[#EBECF0]" onClick={() => openEdit(c)}>
                 <Pencil className="h-3.5 w-3.5" />
               </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-7 w-7 text-destructive hover:text-destructive"
-                onClick={() => confirmDelete(c)}
-              >
+              <Button variant="ghost" size="icon" className="h-7 w-7 text-[#BF2600] hover:bg-[#FFEBE6] hover:text-[#BF2600]" onClick={() => confirmDelete(c)}>
                 <Trash2 className="h-3.5 w-3.5" />
               </Button>
             </div>
           </TableCell>
         );
-      return <TableCell key={columnId}>—</TableCell>;
+      return <TableCell key={columnId} className="text-[#DFE1E6]">/</TableCell>;
   };
 
-  const { data, isLoading, isError, error, isFetching, refetch } = useContacts(filters);
+  const { data, isLoading, isError: _isError, error: _error, isFetching: _isFetching, refetch } = useContacts(filters);
   const contacts = data?.data ?? [];
   const total = data?.total ?? 0;
   const page = data?.page ?? 1;
@@ -853,271 +799,265 @@ export default function ContactsPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold">
-            {t('contacts.title', 'Contacts')}
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            {t(
-              'contacts.description',
-              'Manage resident and visitor contacts for your organization.'
-            )}
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" asChild>
-            <Link href={buildAnalyticsUrl(locale, { search: filters.search })}>
-              <BarChart3 className="h-4 w-4 mr-1" />{' '}
-              {t('analytics.openInAnalytics', 'Open in Analytics Dashboard')}
-            </Link>
-          </Button>
-          <Button variant="outline" size="sm" onClick={exportCSV}>
-            <Download className="h-4 w-4 mr-1" />{' '}
-            {t('contacts.exportCsv', 'Export CSV')}
-          </Button>
-          <label className="cursor-pointer">
-            <Button variant="outline" size="sm" asChild>
-              <span>
-                <Upload className="h-4 w-4 mr-1" />{' '}
-                {t('contacts.importCsv', 'Import CSV')}
-              </span>
+    <div className="pb-20 animate-in fade-in duration-500">
+      <PageHeader
+        title={t('contacts.title', { defaultValue: 'Residents' })}
+        subtitle={t('contacts.description', { defaultValue: 'Manage residents, occupants, and visitors for your organisation.' })}
+        breadcrumbs={[
+          { label: 'Dashboard', href: `/${locale}/dashboard` },
+          { label: 'Residents' }
+        ]}
+        homeHref={`/${locale}/dashboard`}
+        actions={[
+          <div key="actions-group" className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              className="h-9 px-4 border-[#DFE1E6] dark:border-[#343A46] text-[#42526E] dark:text-[#A5ADBA] font-bold hover:bg-[#F4F5F7] dark:hover:bg-[#2C333A] rounded-lg shadow-sm group"
+              asChild
+            >
+              <label className="cursor-pointer flex items-center">
+                <Upload className="h-4 w-4 mr-2 group-hover:text-[#0052CC] transition-colors" />
+                {t('common.import', 'Import')}
+                <input
+                  type="file"
+                  accept=".csv"
+                  className="hidden"
+                  onChange={importCSV}
+                />
+              </label>
             </Button>
-            <input
-              type="file"
-              accept=".csv"
-              className="hidden"
-              onChange={importCSV}
-            />
-          </label>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setCustomizerOpen(true)}
-          >
-            <Columns className="h-4 w-4 mr-1" />{' '}
-            {t('residents.customizeColumns', 'Customize columns')}
-          </Button>
-          <Button size="sm" onClick={openCreate}>
-            <Plus className="h-4 w-4 mr-1" />{' '}
-            {t('contacts.addContact', 'Add Contact')}
-          </Button>
-        </div>
-      </div>
-
-      {filters.unitId && (
-        <div className="flex items-center gap-2">
-          <Badge variant="secondary">
-            {t('residents.viewingUnit', 'Viewing unit')}
-          </Badge>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => updateFiltersAndUrl({ unitId: '' })}
-          >
-            {t('residents.clearUnitFilter', 'Clear')}
-          </Button>
-        </div>
-      )}
-
-      <ResidentsFilterBar
-        filters={filters}
-        onFiltersChange={updateFiltersAndUrl}
-        tags={tagOptions}
+            <Button
+              variant="outline"
+              onClick={exportCSV}
+              className="h-9 px-4 border-[#DFE1E6] dark:border-[#343A46] text-[#42526E] dark:text-[#A5ADBA] font-bold hover:bg-[#F4F5F7] dark:hover:bg-[#2C333A] rounded-lg shadow-sm group"
+            >
+              <Download className="h-4 w-4 mr-2 group-hover:text-[#0052CC] transition-colors" />
+              {t('common.export', 'Export')}
+            </Button>
+            <Button
+              onClick={openCreate}
+              className="h-9 px-5 bg-[#0052CC] hover:bg-[#0747A6] text-white font-bold rounded-lg shadow-md shadow-[#0052CC]/10 transition-all active:scale-95"
+            >
+              <Plus className="h-4 w-4 mr-2" />
+              {t('contacts.create', 'Create Resident')}
+            </Button>
+          </div>
+        ]}
       />
 
-      {contacts.length > 0 && (
-        <div className="flex flex-wrap items-center gap-2 rounded-lg border bg-muted/20 px-3 py-2">
-          <NativeSelect
-            value={bulkTagId}
-            onChange={(e) => setBulkTagId(e.target.value)}
-            className="w-[220px]"
-          >
-            <option value="">{t('residents.selectTag', 'Select tag')}</option>
-            {tagOptions.map((tag) => (
-              <option key={tag.id} value={tag.id}>
-                {tag.name}
-              </option>
-            ))}
-          </NativeSelect>
-          <Button
-            variant="outline"
-            size="sm"
-            disabled={!bulkTagId || selectedContactIds.length === 0}
-            onClick={() => applyBulkTagAction('add')}
-          >
-            {t('residents.addTagToSelected', 'Add tag to selected')}
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            disabled={!bulkTagId || selectedContactIds.length === 0}
-            onClick={() => applyBulkTagAction('remove')}
-          >
-            {t('residents.removeTagFromSelected', 'Remove tag from selected')}
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            disabled={selectedContactIds.length === 0}
-            onClick={exportSelectedCSV}
-          >
-            <Download className="h-3.5 w-3.5 mr-1" />
-            {t('residents.exportSelected', 'Export selected')}
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            className="text-destructive hover:text-destructive"
-            disabled={selectedContactIds.length === 0}
-            onClick={() => setBulkDeleteConfirmOpen(true)}
-          >
-            <Trash2 className="h-3.5 w-3.5 mr-1" />
-            {t('residents.bulkDelete', 'Delete selected')}
-          </Button>
-          <span className="text-xs text-muted-foreground">
-            {t('residents.selectedCount', {
-              count: selectedContactIds.length,
-              defaultValue: `${selectedContactIds.length} selected`,
-            })}
-          </span>
-        </div>
-      )}
+      <div className="mt-8 space-y-4">
+        <ResidentsFilterBar
+          filters={filters}
+          onFiltersChange={updateFiltersAndUrl}
+          onCustomizerOpen={() => setCustomizerOpen(true)}
+          totalCount={total}
+          selectedCount={selectedContactIds.length}
+          tags={tagOptions}
+        />
 
-      <TableCustomizerModal
-        open={customizerOpen}
-        onOpenChange={setCustomizerOpen}
-        columns={contactColumns}
-        view={tableView}
-        onSave={(view) => {
-          setTableView(view);
-          updatePreferences({ tableViews: { contacts: view } }).catch(() =>
-            toast.error(
-              t('residents.saveViewFailed', 'Failed to save column preferences')
-            )
-          );
-        }}
-        getPresetVisibility={(preset) => PRESET_VIEWS[preset] ?? {}}
-      />
+        {/* Bulk Actions Toolbar */}
+        {selectedContactIds.length > 0 && (
+          <div className="flex flex-wrap items-center gap-4 bg-[#DEEBFF] dark:bg-[#0747A6]/20 px-6 py-3 rounded-xl border border-[#B3D4FF] dark:border-[#0747A6]/40 animate-in slide-in-from-top-2 duration-300">
+            <div className="flex items-center gap-3 pr-4 border-r border-[#B3D4FF] dark:border-[#0747A6]/40">
+              <span className="text-[11px] font-black text-[#0052CC] dark:text-[#4C9AFF] uppercase tracking-widest flex items-center gap-2">
+                <div className="h-2 w-2 rounded-full bg-[#0052CC] animate-pulse" />
+                {selectedContactIds.length} {t('residents.selected', 'Selected')}
+              </span>
+            </div>
 
-      {isError ? (
-        <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-6 text-center">
-          <p className="text-sm font-medium text-destructive">
-            {error?.message ?? t('contacts.errors.loadFailed', 'Failed to load contacts')}
-          </p>
-          <Button variant="outline" size="sm" className="mt-4" onClick={() => refetch()}>
-            {t('common.retry', 'Retry')}
-          </Button>
-        </div>
-      ) : (
-      <div className={`rounded-lg border bg-card overflow-x-auto ${isFetching && !isLoading ? 'opacity-70 transition-opacity' : ''}`}>
-        <Table className="min-w-[800px]">
-          <TableHeader>
-            {contactsTable.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  const columnId = header.column.id;
-                  return (
-                    <TableHead
-                      key={header.id}
-                      className={
-                        columnId === 'avatar'
-                          ? 'w-14'
-                          : columnId === 'actions'
-                            ? 'w-24'
-                            : columnId === 'visitsInRange' ||
-                                columnId === 'passesInRange' ||
-                                columnId === 'lastVisitInRange'
-                              ? 'text-right'
-                              : ''
-                      }
-                    >
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {isLoading ? (
-              Array.from({ length: 5 }).map((_, i) => (
-                <TableRow key={i}>
-                  {visibleColumns.map((_, j) => (
-                    <TableCell key={j}>
-                      <Skeleton className="h-4 w-full" />
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : contacts.length === 0 ? (
-              <TableRow>
-                <TableCell
-                  colSpan={visibleColumns.length}
-                  className="text-center py-12"
-                >
-                  <div className="flex flex-col items-center gap-2 text-muted-foreground">
-                    <Users className="h-8 w-8 opacity-30" />
-                    <span className="text-sm">
-                      {filters.search
-                        ? t('contacts.noMatch', 'No contacts match your search')
-                        : t(
-                            'contacts.empty',
-                            'No contacts yet. Add your first contact.'
-                          )}
-                    </span>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ) : (
-              contactsTable.getRowModel().rows.map((row) => (
-                <TableRow key={row.id}>
-                  {row.getVisibleCells().map((cell) =>
-                    flexRender(cell.column.columnDef.cell, cell.getContext())
-                  )}
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-        {totalPages > 1 && (
-          <div className="flex items-center justify-between border-t px-4 py-2">
-            <p className="text-sm text-muted-foreground">
-              {t('contacts.paginationSummary', {
-                from: (page - 1) * pageSize + 1,
-                to: Math.min(page * pageSize, total),
-                total,
-                defaultValue: `Showing ${(page - 1) * pageSize + 1}-${Math.min(page * pageSize, total)} of ${total}`,
-              })}
-            </p>
-            <div className="flex gap-1">
+            <div className="flex items-center gap-2 pr-4 border-r border-[#B3D4FF] dark:border-[#0747A6]/40">
+              <NativeSelect
+                value={bulkTagId}
+                onChange={(e) => setBulkTagId(e.target.value)}
+                className="w-[160px] h-8 text-[11px] font-bold bg-white dark:bg-[#1D2125] border-[#B3D4FF] dark:border-[#343A46] rounded-lg"
+              >
+                <option value="">{t('residents.selectTag', 'Apply Tag')}</option>
+                {tagOptions.map((tag) => (
+                  <option key={tag.id} value={tag.id}>
+                    {tag.name}
+                  </option>
+                ))}
+              </NativeSelect>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-8 px-3 text-[11px] font-bold text-[#0052CC] dark:text-[#4C9AFF] hover:bg-white/50 dark:hover:bg-[#1D2125]/50"
+                disabled={!bulkTagId}
+                onClick={() => applyBulkTagAction('add')}
+              >
+                Add
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-8 px-3 text-[11px] font-bold text-[#E54937] hover:bg-[#FFEBE6] dark:hover:bg-[#BF2600]/20"
+                disabled={!bulkTagId}
+                onClick={() => applyBulkTagAction('remove')}
+              >
+                Remove
+              </Button>
+            </div>
+
+            <div className="flex items-center gap-2">
               <Button
                 variant="outline"
                 size="sm"
-                disabled={page <= 1}
-                onClick={() => updateFiltersAndUrl({ page: page - 1 })}
+                className="h-8 px-3 bg-white dark:bg-[#1D2125] text-[#0052CC] border-[#B3D4FF] dark:border-[#343A46] text-[11px] font-bold rounded-lg shadow-sm"
+                onClick={exportSelectedCSV}
               >
-                <ChevronLeft className="h-4 w-4" />
+                <Download className="h-3 w-3 mr-1.5" />
+                Export CSV
               </Button>
               <Button
                 variant="outline"
                 size="sm"
-                disabled={page >= totalPages}
+                className="h-8 px-3 bg-white dark:bg-[#1D2125] text-[#BF2600] border-[#FFEBE6] dark:border-[#343A46] hover:bg-[#FFEBE6] text-[11px] font-bold rounded-lg shadow-sm"
+                onClick={() => setBulkDeleteConfirmOpen(true)}
+              >
+                <Trash2 className="h-3 w-3 mr-1.5" />
+                Delete Selected
+              </Button>
+            </div>
+
+            <Button
+              variant="ghost"
+              size="sm"
+              className="ml-auto h-8 px-3 text-[11px] font-bold text-[#6B778C] hover:bg-black/5"
+              onClick={() => setSelectedContactIds([])}
+            >
+              Cancel
+            </Button>
+          </div>
+        )}
+
+        {/* Data Table Container */}
+        <div className="bg-white dark:bg-[#1D2125] rounded-2xl border border-[#DFE1E6] dark:border-[#343A46] overflow-hidden shadow-sm">
+          <div className="overflow-x-auto min-h-[500px]">
+            <Table>
+              <TableHeader className="bg-[#FAFBFC] dark:bg-[#091E42]/20 border-b border-[#DFE1E6] dark:border-[#343A46]">
+                {contactsTable.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id} className="hover:bg-transparent border-none h-12">
+                    {headerGroup.headers.map((header) => {
+                      const columnId = header.column.id;
+                      return (
+                        <TableHead
+                          key={header.id}
+                          className={cn(
+                            "px-6 text-[#6B778C] dark:text-[#97A0AF] text-[11px] font-black uppercase tracking-widest",
+                            (columnId === 'visitsInRange' || columnId === 'passesInRange' || columnId === 'lastVisitInRange' || columnId === 'actions') && "text-right"
+                          )}
+                        >
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext()
+                              )}
+                        </TableHead>
+                      );
+                    })}
+                  </TableRow>
+                ))}
+              </TableHeader>
+              <TableBody className="divide-y divide-[#DFE1E6] dark:divide-[#343A46]">
+                {isLoading ? (
+                  Array.from({ length: 8 }).map((_, i) => (
+                    <TableRow key={i} className="h-16">
+                      {visibleColumns.map((col) => (
+                        <TableCell key={col.id} className="px-6">
+                          <Skeleton className="h-4 w-full rounded-md opacity-20" />
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))
+                ) : contacts.length === 0 ? (
+                  <TableRow>
+                    <TableCell
+                      colSpan={visibleColumns.length}
+                      className="h-[400px] text-center"
+                    >
+                      <div className="flex flex-col items-center justify-center gap-6 py-20 animate-in fade-in zoom-in duration-500">
+                        <div className="h-20 w-20 rounded-3xl bg-[#F4F5F7] dark:bg-[#2C333A] flex items-center justify-center shadow-inner">
+                          <Users className="h-10 w-10 text-[#6B778C] opacity-20" />
+                        </div>
+                        <div className="space-y-2 max-w-sm">
+                          <h3 className="text-xl font-bold text-[#172B4D] dark:text-white">{t('residents.empty', 'No residents found')}</h3>
+                          <p className="text-sm text-[#6B778C] dark:text-[#97A0AF] leading-relaxed">
+                            {filters.search 
+                              ? t('contacts.noMatch', 'Try adjusting your search filters or check your spelling.') 
+                              : t('contacts.emptyDesc', 'Start building your community database by adding your first resident profile.')}
+                          </p>
+                        </div>
+                        <Button 
+                          onClick={openCreate} 
+                          className="bg-[#0052CC] hover:bg-[#0747A6] text-white font-bold h-10 px-6 rounded-xl shadow-lg shadow-[#0052CC]/20 transition-all active:scale-95"
+                        >
+                          <Plus className="h-4 w-4 mr-2" />
+                          {t('contacts.create', 'Add Resident')}
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  contactsTable.getRowModel().rows.map((row) => (
+                    <TableRow
+                      key={row.id}
+                      className="hover:bg-[#FAFBFC] dark:hover:bg-[#091E42]/10 transition-colors group h-16 border-b border-[#DFE1E6] dark:border-[#343A46]"
+                    >
+                      {row.getVisibleCells().map((cell) =>
+                        flexRender(cell.column.columnDef.cell, cell.getContext())
+                      )}
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
+
+          {/* Pagination Toolbar */}
+          <div className="px-6 py-4 bg-[#FAFBFC] dark:bg-[#091E42]/10 flex items-center justify-between border-t border-[#DFE1E6] dark:border-[#343A46]">
+            <div className="flex items-center gap-4 text-[#6B778C] dark:text-[#97A0AF] text-[11px] font-black uppercase tracking-widest">
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-white dark:bg-[#1D2125] rounded-lg border border-[#DFE1E6] dark:border-[#343A46] shadow-sm">
+                <span className="text-[#0052CC]">{page}</span>
+                <span className="opacity-30">/</span>
+                <span>{totalPages}</span>
+              </div>
+              <span className="opacity-30">·</span>
+              <span className="tabular-nums">
+                {t('contacts.paginationSummary', {
+                  from: (page - 1) * pageSize + 1,
+                  to: Math.min(page * pageSize, total),
+                  total,
+                  defaultValue: `${(page - 1) * pageSize + 1}–${Math.min(page * pageSize, total)} of ${total} Profiles`,
+                })}
+              </span>
+            </div>
+            
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-9 px-4 border-[#DFE1E6] dark:border-[#343A46] text-[#42526E] dark:text-[#E3E6E8] bg-white dark:bg-[#1D2125] font-bold rounded-lg shadow-sm disabled:opacity-30 transition-all active:scale-95"
+                disabled={page <= 1 || isLoading}
+                onClick={() => updateFiltersAndUrl({ page: page - 1 })}
+              >
+                <ChevronLeft className="h-4 w-4 mr-2" />
+                {t('common.prev', 'Back')}
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-9 px-4 border-[#DFE1E6] dark:border-[#343A46] text-[#42526E] dark:text-[#E3E6E8] bg-white dark:bg-[#1D2125] font-bold rounded-lg shadow-sm disabled:opacity-30 transition-all active:scale-95"
+                disabled={page >= totalPages || isLoading}
                 onClick={() => updateFiltersAndUrl({ page: page + 1 })}
               >
-                <ChevronRight className="h-4 w-4" />
+                {t('common.next', 'Next')}
+                <ChevronRight className="h-4 w-4 ml-2" />
               </Button>
             </div>
           </div>
-        )}
+        </div>
       </div>
-      )}
 
       {dialogOpen && (
         <EditPanel
@@ -1390,6 +1330,28 @@ export default function ContactsPage() {
             </section>
           </div>
         </EditPanel>
+      )}
+
+      {customizerOpen && (
+        <TableCustomizerModal
+          open={customizerOpen}
+          onOpenChange={setCustomizerOpen}
+          columns={contactColumns.map((c) => ({
+            id: c.id,
+            label: c.label as string,
+            canHide: c.canHide !== false,
+          }))}
+          view={tableView}
+          onSave={(v) => {
+            setTableView(v);
+            updatePreferences({
+              tableViews: { ...preferences.tableViews, contacts: v },
+            });
+            setCustomizerOpen(false);
+          }}
+          presetNames={Object.keys(PRESET_VIEWS)}
+          getPresetVisibility={(name) => PRESET_VIEWS[name] || {}}
+        />
       )}
 
       {viewUnitsFor && (

@@ -3,26 +3,20 @@ import { getTranslation } from '@/lib/i18n/i18n';
 import { Locale } from '@/lib/i18n/i18n-config';
 import { prisma } from '@gate-access/db';
 import {
-  ScrollText,
   Search,
   Building2,
-  ChevronLeft,
-  ChevronRight,
-  CheckCircle2,
-  XCircle,
-  AlertCircle,
-  Clock,
   Shield,
   Download,
   X,
-  Smartphone,
-  Monitor,
+  History,
+  FileText,
 } from 'lucide-react';
-import { Card, CardContent, Badge, Button, Input, cn } from '@gate-access/ui';
+import { Badge, Button, Input, cn, Pagination } from '@gate-access/ui';
 import Link from 'next/link';
 import { PageHeader } from '@/components/page-header';
+import { AuditLogsTable } from '@/components/monitoring/AuditLogsTable';
 
-export const metadata = { title: 'Audit Logs' };
+export const metadata = { title: 'Compliance Audit Archive' };
 
 interface SearchParams {
   org?: string;
@@ -43,7 +37,7 @@ export default async function AuditLogsPage({
   searchParams: SearchParams;
 }) {
   await requireAdmin();
-  const { t } = await getTranslation(locale, 'admin');
+  const { t } = (await getTranslation(locale, 'admin')) as { t: any; dict: any };
 
   const page = Math.max(1, parseInt(searchParams.page ?? '1', 10));
   const skip = (page - 1) * PAGE_SIZE;
@@ -110,254 +104,138 @@ export default async function AuditLogsPage({
   const exportUrl = `/api/admin/audit-logs/export?${new URLSearchParams(currentParams)}`;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-in fade-in duration-500 pb-12">
       <PageHeader
         title={t('auditLogs.title')}
         subtitle={t('auditLogs.subtitle')}
-        badge={<Badge variant="outline" className="bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300 border-emerald-100 dark:border-emerald-800 font-bold text-xs">{t('auditLogs.records', { count: total })}</Badge>}
+        badge={
+          <Badge variant="primary" className="h-6 px-3 shadow-sm font-black italic">
+             {total.toLocaleString(locale)} ENTRIES
+          </Badge>
+        }
         actions={
-          <Button variant="outline" size="sm" asChild className="font-bold gap-1.5 h-9 rounded-xl">
+          <Button variant="outline" size="sm" asChild className="font-bold gap-2 h-10 px-6 rounded-lg border-[var(--ds-border,#DFE1E6)] hover:bg-[var(--ds-background-neutral-subtle,#F4F5F7)] transition-all">
             <a href={exportUrl} download>
-              <Download className="h-3.5 w-3.5" />
+              <Download className="h-4 w-4 text-[var(--ds-text-brand,#0052CC)]" />
               {t('auditLogs.exportCsv')}
             </a>
           </Button>
         }
       />
 
-      {/* Filters */}
-      <Card className="shadow-sm">
-        <CardContent className="p-4">
-          <form method="GET" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-3 items-end">
-            <div className="space-y-1 lg:col-span-2">
-              <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground ltr:ml-1 rtl:mr-1">{t('auditLogs.organization')}</label>
-              <div className="relative">
-                <Building2 className="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input name="org" defaultValue={orgFilter} placeholder={t('auditLogs.filterByOrg')} className="ltr:pl-9 rtl:pr-9 h-10" />
-              </div>
+      {/* Advanced Filters */}
+      <div className="bg-[var(--ds-background-default,#FFFFFF)] border border-[var(--ds-border,#DFE1E6)] rounded-xl p-5 shadow-sm space-y-6">
+        <form method="GET" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-5 items-end">
+          <div className="space-y-2 lg:col-span-2">
+            <label className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-[var(--ds-text-subtle,#6B778C)] ltr:ml-1 rtl:mr-1">
+              <Building2 className="h-3 w-3" />
+              {t('auditLogs.organization')}
+            </label>
+            <div className="relative group">
+              <Building2 className="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--ds-text-subtlest,#A5ADBA)] group-focus-within:text-[var(--ds-text-brand,#0052CC)] transition-colors" />
+              <Input
+                name="org"
+                defaultValue={orgFilter}
+                placeholder={t('auditLogs.filterByOrg')}
+                className="ltr:pl-9 rtl:pr-9 h-11 bg-[var(--ds-background-neutral-subtle,#F4F5F7)] border-none rounded-lg focus:bg-white transition-all shadow-inner"
+              />
             </div>
-            <div className="space-y-1">
-              <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground ltr:ml-1 rtl:mr-1">{t('auditLogs.scanUuid')}</label>
-              <div className="relative">
-                <Search className="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <Input name="q" defaultValue={uuidFilter} placeholder={t('auditLogs.uuidPlaceholder')} className="ltr:pl-9 rtl:pr-9 h-10" />
-              </div>
+          </div>
+          
+          <div className="space-y-2">
+            <label className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-[var(--ds-text-subtle,#6B778C)] ltr:ml-1 rtl:mr-1">
+              <FileText className="h-3 w-3" />
+              {t('auditLogs.scanUuid', 'Event UUID')}
+            </label>
+            <div className="relative group">
+              <Search className="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--ds-text-subtlest,#A5ADBA)] group-focus-within:text-[var(--ds-text-brand,#0052CC)] transition-colors" />
+              <Input
+                name="q"
+                defaultValue={uuidFilter}
+                placeholder={t('auditLogs.uuidPlaceholder')}
+                className="ltr:pl-9 rtl:pr-9 h-11 bg-[var(--ds-background-neutral-subtle,#F4F5F7)] border-none rounded-lg focus:bg-white transition-all shadow-inner"
+              />
             </div>
-            <div className="space-y-1">
-              <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground ltr:ml-1 rtl:mr-1">{t('auditLogs.status')}</label>
-              <select
-                name="status"
-                defaultValue={statusFilter}
-                className="w-full h-10 rounded-md border border-input bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring/20"
-              >
-                <option value="">{t('auditLogs.all')}</option>
-                {['SUCCESS', 'DENIED', 'FAILED', 'EXPIRED', 'MAX_USES_REACHED', 'INACTIVE'].map((s) => (
-                  <option key={s} value={s}>{s}</option>
-                ))}
-              </select>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-[11px] font-black uppercase tracking-widest text-[var(--ds-text-subtle,#6B778C)] ltr:ml-1 rtl:mr-1">
+              {t('auditLogs.status')}
+            </label>
+            <select
+              name="status"
+              defaultValue={statusFilter}
+              className="w-full h-11 rounded-lg border border-[var(--ds-border,#DFE1E6)] bg-white px-4 text-xs font-bold text-[var(--ds-text,#172B4D)] focus:outline-none focus:ring-2 focus:ring-[var(--ds-border-focused,#4C9AFF)]"
+            >
+              <option value="">{t('auditLogs.all')}</option>
+              {['SUCCESS', 'DENIED', 'FAILED', 'EXPIRED', 'MAX_USES_REACHED', 'INACTIVE'].map((s) => (
+                <option key={s} value={s}>{s}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-[11px] font-black uppercase tracking-widest text-[var(--ds-text-subtle,#6B778C)] ltr:ml-1 rtl:mr-1">
+               Audit Window (From/To)
+            </label>
+            <div className="grid grid-cols-2 gap-2 h-11 p-1 bg-[var(--ds-background-neutral-subtle,#F4F5F7)] rounded-lg border border-[var(--ds-border,#DFE1E6)]">
+               <input
+                 type="date"
+                 name="from"
+                 defaultValue={searchParams.from ?? ''}
+                 className="bg-transparent border-none text-[11px] font-bold text-[var(--ds-text,#172B4D)] px-2 outline-none"
+               />
+               <input
+                 type="date"
+                 name="to"
+                 defaultValue={searchParams.to ?? ''}
+                 className="bg-transparent border-none text-[11px] font-bold text-[var(--ds-text,#172B4D)] px-2 outline-none"
+               />
             </div>
-            <div className="space-y-1">
-              <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground ltr:ml-1 rtl:mr-1">{t('auditLogs.from')}</label>
-              <Input type="date" name="from" defaultValue={searchParams.from ?? ''} className="h-10" />
-            </div>
-            <div className="space-y-1">
-              <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground ltr:ml-1 rtl:mr-1">{t('auditLogs.to')}</label>
-              <Input type="date" name="to" defaultValue={searchParams.to ?? ''} className="h-10" />
-            </div>
-            <div className="flex gap-2">
-              <Button type="submit" size="sm" className="h-10 bg-primary font-bold flex-1">
-                <Search className="h-4 w-4 ltr:mr-2 rtl:ml-2" />
-                {t('auditLogs.search')}
-              </Button>
-              <Button variant="outline" size="sm" asChild className="h-10 px-3">
-                <Link href="/audit-logs">
-                  <X className="h-4 w-4" />
-                </Link>
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+          </div>
 
-      {/* Logs */}
-      <div className="space-y-2">
-        {logs.length === 0 ? (
-          <Card className="shadow-sm">
-            <CardContent className="py-12 text-center">
-              <div className="flex flex-col items-center gap-2 text-muted-foreground">
-                <ScrollText className="h-8 w-8 opacity-20" />
-                <p className="font-medium">{t('auditLogs.noResults')}</p>
-              </div>
-            </CardContent>
-          </Card>
-        ) : (
-          logs.map((log) => {
-            const trail = Array.isArray(log.auditTrail) ? log.auditTrail : [];
-            return (
-              <Card key={log.id} className="shadow-sm hover:shadow-md transition-shadow">
-                <CardContent className="p-4">
-                  <div className="flex flex-col md:flex-row md:items-start gap-4">
-                    {/* Status icon */}
-                    <div className="shrink-0 flex md:flex-col items-center gap-2 md:gap-1">
-                      <StatusIcon status={log.status} />
-                      <span className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">
-                        {log.status}
-                      </span>
-                    </div>
-
-                    {/* Main info */}
-                    <div className="flex-1 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-                      {/* Identity */}
-                      <div className="space-y-1">
-                        <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">{t('auditLogs.scanner')}</p>
-                        <div className="flex items-center gap-1.5">
-                          {log.user ? (
-                            <Smartphone className="h-3 w-3 text-muted-foreground" />
-                          ) : (
-                            <Monitor className="h-3 w-3 text-muted-foreground" />
-                          )}
-                          <p className="text-xs font-bold text-foreground">{log.user?.name ?? t('auditLogs.anonymous')}</p>
-                        </div>
-                        {log.user?.email && (
-                          <p className="text-[10px] text-muted-foreground">{log.user.email}</p>
-                        )}
-                      </div>
-
-                      {/* Organization & Gate */}
-                      <div className="space-y-1">
-                        <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">{t('auditLogs.orgGate')}</p>
-                        <p className="text-xs font-bold text-foreground">
-                          {log.qrCode?.organization?.name ?? '—'}
-                        </p>
-                        <p className="text-[10px] text-muted-foreground">{log.gate?.name ?? '—'}</p>
-                      </div>
-
-                      {/* QR Code */}
-                      <div className="space-y-1">
-                        <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">{t('auditLogs.qrCredential')}</p>
-                        <div className="flex items-center gap-1.5">
-                          <Badge variant="secondary" className="text-[9px] font-bold uppercase h-4 px-1.5">
-                            {log.qrCode?.type ?? 'DIRECT'}
-                          </Badge>
-                        </div>
-                        <p className="text-[10px] font-mono text-muted-foreground truncate max-w-[150px]">
-                          {log.qrCode?.code?.slice(0, 16)}…
-                        </p>
-                      </div>
-
-                      {/* Timestamp & UUID */}
-                      <div className="space-y-1">
-                        <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground">{t('auditLogs.timestamp')}</p>
-                        <p className="text-xs font-bold text-foreground">
-                          {log.scannedAt.toLocaleDateString(locale)}
-                        </p>
-                        <p className="text-[10px] text-muted-foreground">
-                          {log.scannedAt.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
-                        </p>
-                        {log.scanUuid && (
-                          <p className="text-[9px] font-mono text-muted-foreground truncate max-w-[150px]" title={log.scanUuid}>
-                            {log.scanUuid.slice(0, 16)}…
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Audit trail */}
-                  {trail.length > 0 && (
-                    <div className="mt-3 pt-3 border-t border-border">
-                      <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground mb-2">
-                        {trail.length === 1 ? t('auditLogs.auditTrail', { count: trail.length }) : t('auditLogs.auditTrailPlural', { count: trail.length })}
-                      </p>
-                      <div className="flex flex-wrap gap-1.5">
-                        {(trail as Array<Record<string, unknown>>).slice(0, 6).map((entry, i) => (
-                          <div
-                            key={i}
-                            className="rounded-lg bg-muted/50 border border-border px-2.5 py-1.5 text-[10px] font-mono text-muted-foreground max-w-[300px] truncate"
-                            title={JSON.stringify(entry)}
-                          >
-                            {String((entry as any).action ?? (entry as any).event ?? `Event ${i + 1}`)}
-                            {(entry as any).ts && (
-                              <span className="ltr:ml-1.5 rtl:mr-1.5 text-[9px] opacity-60">
-                                {new Date((entry as any).ts as string).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' })}
-                              </span>
-                            )}
-                          </div>
-                        ))}
-                        {trail.length > 6 && (
-                          <span className="text-[10px] text-muted-foreground self-center">{t('auditLogs.moreEvents', { count: trail.length - 6 })}</span>
-                        )}
-                      </div>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-            );
-          })
-        )}
-      </div>
-
-      {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4 px-1">
-          <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest">
-            {t('auditLogs.pageOf', { current: page, total: totalPages })}
-          </p>
           <div className="flex gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={page <= 1}
-              asChild={page > 1}
-              className="h-9 font-bold text-[11px] uppercase tracking-wider"
-            >
-              {page > 1 ? (
-                <Link href={`/audit-logs?${new URLSearchParams({ ...currentParams, page: String(page - 1) })}`}>
-                  <ChevronLeft className="h-4 w-4 ltr:mr-1.5 rtl:ml-1.5 rtl:rotate-180" />
-                  {t('auditLogs.prev')}
-                </Link>
-              ) : (
-                <span><ChevronLeft className="h-4 w-4 ltr:mr-1.5 rtl:ml-1.5 rtl:rotate-180" />{t('auditLogs.prev')}</span>
-              )}
+            <Button type="submit" variant="primary" className="h-11 px-8 font-bold shadow-md flex-1">
+              <Search className="h-4 w-4 ltr:mr-2 rtl:ml-2" />
+              {t('auditLogs.search')}
             </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              disabled={page >= totalPages}
-              asChild={page < totalPages}
-              className="h-9 font-bold text-[11px] uppercase tracking-wider"
-            >
-              {page < totalPages ? (
-                <Link href={`/audit-logs?${new URLSearchParams({ ...currentParams, page: String(page + 1) })}`}>
-                  {t('auditLogs.next')}
-                  <ChevronRight className="h-4 w-4 ltr:ml-1.5 rtl:mr-1.5 rtl:rotate-180" />
-                </Link>
-              ) : (
-                <span>{t('auditLogs.next')}<ChevronRight className="h-4 w-4 ltr:ml-1.5 rtl:mr-1.5 rtl:rotate-180" /></span>
-              )}
+            <Button variant="subtle" className="h-11 w-11 p-0 rounded-lg" asChild>
+              <Link href="/audit-logs">
+                <X className="h-4 w-4" />
+              </Link>
             </Button>
           </div>
-        </div>
-      )}
+        </form>
+      </div>
 
-      <div className="flex items-center gap-2 text-[11px] font-medium text-muted-foreground px-1">
-        <Shield className="h-3 w-3" />
-        <p>{t('auditLogs.auditNotice')}</p>
+      {/* Table Container */}
+      <div className="bg-[var(--ds-background-default,#FFFFFF)] border border-[var(--ds-border,#DFE1E6)] rounded-xl shadow-md overflow-hidden">
+        <AuditLogsTable logs={logs as any} locale={locale} t={t} />
+      </div>
+
+      {/* Pagination & Footer */}
+      <div className="flex flex-col md:flex-row items-center justify-between gap-6 px-1">
+        <div className="flex items-center gap-3 text-[11px] font-black uppercase tracking-tighter text-[var(--ds-text-subtlest,#A5ADBA)]">
+           <Shield className="h-4 w-4 text-[var(--ds-text-brand,#0052CC)]" />
+           <p>{t('auditLogs.auditNotice')}</p>
+        </div>
+
+        <Pagination
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={undefined}
+          getHref={(p) => `/audit-logs?${new URLSearchParams({ ...currentParams, page: String(p) }).toString()}`}
+          className="w-auto"
+        />
+      </div>
+
+      <div className="pt-6 border-t border-[var(--ds-border,#DFE1E6)] flex justify-between items-center text-[10px] font-black uppercase tracking-[0.2em] text-[var(--ds-text-subtlest,#A5ADBA)] opacity-60">
+         <span className="flex items-center gap-2">
+            <History className="h-4 w-4" />
+            Immutable Audit Trail Engine
+         </span>
+         <span>Compliance Level: SOC2/GDPR Ready</span>
       </div>
     </div>
   );
-}
-
-function StatusIcon({ status }: { status: string }) {
-  const map: Record<string, { icon: React.ComponentType<{ className?: string }>; color: string }> = {
-    SUCCESS: { icon: CheckCircle2, color: 'text-emerald-500' },
-    DENIED: { icon: XCircle, color: 'text-red-500' },
-    FAILED: { icon: AlertCircle, color: 'text-amber-500' },
-    EXPIRED: { icon: Clock, color: 'text-blue-500' },
-    MAX_USES_REACHED: { icon: AlertCircle, color: 'text-violet-500' },
-    INACTIVE: { icon: XCircle, color: 'text-slate-500' },
-  };
-  const config = map[status] ?? { icon: Clock, color: 'text-muted-foreground' };
-  const Icon = config.icon;
-  return <Icon className={cn('h-5 w-5 shrink-0', config.color)} />;
 }

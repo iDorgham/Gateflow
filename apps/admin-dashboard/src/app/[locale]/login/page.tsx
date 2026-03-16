@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useTheme } from 'next-themes';
 import { useTranslation } from 'react-i18next';
 import {
+  Button,
   Card,
   CardContent,
   Input,
@@ -220,9 +221,9 @@ export default function AdminLoginPage() {
             <div className="space-y-2">
               <Label
                 htmlFor="key"
-                className="text-xs font-bold uppercase tracking-widest text-[#020E73]/70"
+                className="text-xs font-semibold text-[#42526E] dark:text-[#97A0AF]"
               >
-                {isRtl ? 'مفتاح التفويض' : 'Authorization Key'}
+                {isRtl ? 'مفتاح التفويض' : 'Access Key'}
               </Label>
               <div className="relative">
                 <Input
@@ -236,8 +237,8 @@ export default function AdminLoginPage() {
                   }}
                   placeholder="••••••••••••••••"
                   className={cn(
-                    'h-12 bg-white/80 border-[rgba(2,14,115,0.18)] focus:border-[#EB4A00] focus:ring-[rgba(235,74,0,0.2)] transition-all duration-200',
-                    isRtl ? 'pl-12 pr-4' : 'pr-12 pl-4'
+                    'h-9 focus:ring-0 focus:border-primary transition-all duration-200',
+                    isRtl ? 'pl-10 pr-3' : 'pr-10 pl-3'
                   )}
                   autoFocus
                 />
@@ -260,39 +261,20 @@ export default function AdminLoginPage() {
               </p>
             )}
 
-            <button
+            <Button
               type="submit"
               disabled={loading}
-              className="w-full h-12 rounded-lg text-sm font-black uppercase tracking-widest text-white active:scale-[0.98] transition-all duration-200 disabled:opacity-60 disabled:cursor-not-allowed focus-visible:outline-none"
-              style={{
-                background: 'linear-gradient(135deg, #EB4A00 0%, #EB4A00 100%)',
-                boxShadow: '0 4px 14px rgba(235,74,0,0.25)',
-                transition: 'all 0.2s cubic-bezier(0.4,0,0.2,1)',
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.background =
-                  'linear-gradient(135deg, #020E73 0%, #EB4A00 100%)';
-                (e.currentTarget as HTMLButtonElement).style.boxShadow =
-                  '0 6px 20px rgba(235,74,0,0.35)';
-                (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(-2px)';
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.background =
-                  'linear-gradient(135deg, #EB4A00 0%, #EB4A00 100%)';
-                (e.currentTarget as HTMLButtonElement).style.boxShadow =
-                  '0 4px 14px rgba(235,74,0,0.25)';
-                (e.currentTarget as HTMLButtonElement).style.transform = 'translateY(0)';
-              }}
+              className="w-full h-10 font-medium transition-all duration-200"
             >
               {loading ? (
-                <Loader2 className="h-5 w-5 animate-spin mx-auto" />
+                <Loader2 className="h-4 w-4 animate-spin mx-auto" />
               ) : (
                 <span className={cn('flex items-center justify-center gap-2', isRtl && 'flex-row-reverse')}>
-                  {isRtl ? 'تفويض الوصول' : 'Authorize Access'}
+                  {isRtl ? 'تفويض الوصول' : 'Authorize access'}
                   <ArrowRight className={cn('h-4 w-4', isRtl && 'rotate-180')} />
                 </span>
               )}
-            </button>
+            </Button>
           </form>
         </CardContent>
       </Card>

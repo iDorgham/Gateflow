@@ -29,20 +29,20 @@
 
 ### gateai — GateFlow Intelligent Operations Agent
 **IDEA:** `docs/plan/context/IDEA_gateai.md`
-**Status:** 🔄 In Progress
+**Status:** ✅ Complete
 **Target:** Q3 2026
 
 - [x] Phase 0 — Ready & /ai Page Scaffold
 - [x] Phase 1 — Basic Read-Only Chat + Gemini 1.5 Flash Hello World
 - [x] Phase 2 — Scoped Context Injection + Simple Real Q&A
-- [ ] Phase 3 — Inline Recharts Visuals from Analytics
-- [ ] Phase 4 — One-Shot Report Generation (PDF/CSV)
-- [ ] Phase 5 — Scheduling Engine Skeleton + AiTask Model
-- [ ] Phase 6 — Mutation Safety Layer + Confirmation UX
-- [ ] Phase 7 — Bulk QR Creation Agent – MVP
-- [ ] Phase 8 — Feedback, Usage Tracking, Rate Limiting & Polish
-- [ ] Phase 9 — Resident Portal / Mobile Mini-Version
-- [ ] Phase 10 — Hardening, Red-Teaming & Monitoring
+- [x] Phase 3 — Inline Recharts Visuals from Analytics
+- [x] Phase 4 — One-Shot Report Generation (PDF/CSV)
+- [x] Phase 5 — Scheduling Engine Skeleton + AiTask Model
+- [x] Phase 6 — Mutation Safety Layer + Confirmation UX
+- [x] Phase 7 — Bulk QR Creation Agent – MVP
+- [x] Phase 8 — Feedback, Usage Tracking, Rate Limiting & Polish
+- [x] Phase 9 — Resident Portal / Mobile Mini-Version
+- [x] Phase 10 — Hardening, Red-Teaming & Monitoring
 
 
 ---

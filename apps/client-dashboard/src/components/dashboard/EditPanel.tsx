@@ -101,14 +101,14 @@ export function EditPanel({
 
   const content = (
     <div
-      className="fixed inset-0 z-50 flex"
+      className="fixed inset-0 z-[100] flex"
       role="dialog"
       aria-modal="true"
       aria-labelledby="edit-panel-title"
     >
       {/* Overlay: dim + block interaction, no close on click */}
       <div
-        className="absolute inset-0 bg-foreground/50 backdrop-blur-sm"
+        className="absolute inset-0 bg-[#091E42]/60 backdrop-blur-[2px] transition-opacity duration-300"
         onClick={handleOverlayClick}
         aria-hidden="true"
       />
@@ -116,44 +116,59 @@ export function EditPanel({
       {/* Panel: slide from right (or left in RTL) */}
       <div
         className={cn(
-          'relative z-10 flex w-full max-w-3xl flex-col border-border bg-card shadow-xl',
-          'animate-in duration-300',
-          isRtl ? 'slide-in-from-left border-r' : 'slide-in-from-right border-l',
+          'relative z-10 flex w-full max-w-2xl flex-col bg-white dark:bg-[#1D2125] shadow-2xl overflow-hidden',
+          'animate-in duration-300 ease-in-out',
+          isRtl ? 'slide-in-from-left' : 'slide-in-from-right',
           isRtl ? 'ml-0 mr-auto' : 'ml-auto mr-0'
         )}
       >
         {/* Header */}
-        <div className="flex shrink-0 items-center justify-between border-b border-border px-6 py-4">
-          <h2 id="edit-panel-title" className="text-lg font-semibold text-foreground">
-            {title}
-          </h2>
-          <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center justify-between border-b border-[#DFE1E6] dark:border-[#343A46] px-8 py-5">
+          <div className="flex flex-col gap-1">
+            <h2 id="edit-panel-title" className="text-[20px] font-semibold text-[#172B4D] dark:text-[#E3E6E8] tracking-tight">
+              {title}
+            </h2>
+          </div>
+          <div className="flex items-center gap-3">
             {headerExtra}
             <Button
               variant="ghost"
               size="icon"
-              className="h-8 w-8 rounded-lg text-muted-foreground hover:text-foreground"
+              className="h-9 w-9 rounded-full text-[#42526E] dark:text-[#97A0AF] hover:bg-[#EBECF0] dark:hover:bg-[#343A46]"
               onClick={handleQuit}
               aria-label="Close"
             >
-              <X className="h-4 w-4" />
+              <X className="h-5 w-5" />
             </Button>
           </div>
         </div>
 
         {/* Content */}
-        <ScrollArea className="flex-1">
-          <div className="p-6">{children}</div>
+        <ScrollArea className="flex-1 bg-[#FAFBFC] dark:bg-[#1D2125]">
+          <div className="px-8 py-8">{children}</div>
         </ScrollArea>
 
         {/* Footer */}
-        <div className="flex shrink-0 justify-end gap-2 border-t border-border px-6 py-4">
-          <Button variant="outline" onClick={handleQuit} className="border-border">
-            Quit
+        <div className="flex shrink-0 justify-end items-center gap-3 border-t border-[#DFE1E6] dark:border-[#343A46] px-8 py-5 bg-white dark:bg-[#1D2125]">
+          <Button 
+            variant="ghost" 
+            onClick={handleQuit} 
+            className="text-[#42526E] dark:text-[#97A0AF] hover:bg-[#EBECF0] dark:hover:bg-[#343A46] font-semibold"
+          >
+            Cancel
           </Button>
           {onSave && (
-            <Button onClick={handleSave} disabled={isSaving} className="bg-primary text-primary-foreground">
-              {isSaving ? 'Saving…' : saveLabel}
+            <Button 
+              onClick={handleSave} 
+              disabled={isSaving} 
+              className="bg-[#0052CC] hover:bg-[#0747A6] text-white px-6 font-semibold shadow-sm transition-all active:scale-95"
+            >
+              {isSaving ? (
+                <div className="flex items-center gap-2">
+                  <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/20 border-t-white" />
+                  Saving...
+                </div>
+              ) : saveLabel}
             </Button>
           )}
         </div>

@@ -30,13 +30,15 @@
     "argon2": "^0.41.1",
     "date-fns": "^4.1.0",
     "dotenv": "^17.3.1",
-    "faker": "^5.5.3",
-    "pg": "^8.20.0"
+    "pg": "^8.20.0",
+    "server-only": "^0.0.1"
   },
   "devDependencies": {
     "@gate-access/config": "workspace:*",
+    "@types/faker": "^5.5.3",
     "@types/node": "^20.19.33",
     "@types/pg": "^8.18.0",
+    "faker": "^5.5.3",
     "prisma": "^5.22.0",
     "tsx": "^4.7.1",
     "typescript": "^5.9.3"

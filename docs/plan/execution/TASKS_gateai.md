@@ -60,14 +60,13 @@
 - [x] Upstash rate limiting (20 req/min)
 - [x] Verify usage dashboard
 
-## Phase 9: Resident Portal / Mobile Mini-Version [ ]
+## Phase 9: Resident Portal / Mobile Mini-Version ✅
 
-- [ ] Port chat UI to Resident Portal (React)
-- [ ] Port simplified AI to Resident Mobile (Expo)
-- [ ] Verify guest QR creation via voice/chat on mobile
+- [x] Port chat UI to Resident Portal (React)
+- [x] Port simplified AI to Resident Mobile (Expo)
+- [x] Verify guest QR creation via voice/chat on mobile
 
-## Phase 10: Hardening, Red-Teaming & Monitoring [ ]
-
-- [ ] Conduct security audit of all AI tools
-- [ ] Finalize audit trail and monitoring alerts
-- [ ] Verify red-team compliance (org-scoping etc.)
+## Phase 10: Hardening, Red-Teaming & Monitoring ✅
+- [x] Conduct security audit of all AI tools
+- [x] Finalize audit trail and monitoring alerts (PII Masking)
+- [x] Verify red-team compliance (org-scoping etc.)

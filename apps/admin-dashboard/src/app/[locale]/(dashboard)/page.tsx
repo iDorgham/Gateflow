@@ -10,6 +10,7 @@ import {
   ArrowUpRight,
   ShieldCheck,
   CheckCircle2,
+  TrendingUp,
 } from 'lucide-react';
 import {
   Card,
@@ -18,15 +19,17 @@ import {
   CardTitle,
   Badge,
   cn,
+  DynamicTable,
+  Column,
 } from '@gate-access/ui';
 import Link from 'next/link';
 import { PageHeader } from '@/components/page-header';
 
-export const metadata = { title: 'Overview' };
+export const metadata = { title: 'Operational Overview' };
 
 export default async function AdminOverviewPage({ params: { locale } }: { params: { locale: Locale } }) {
   await requireAdmin();
-  const { t } = await getTranslation(locale, 'admin');
+  const { t } = (await getTranslation(locale, 'admin')) as any;
 
   const now = new Date();
   const todayStart = new Date(now); todayStart.setHours(0, 0, 0, 0);
@@ -66,153 +69,172 @@ export default async function AdminOverviewPage({ params: { locale } }: { params
       value: activeOrgs.toLocaleString(locale),
       sub: t('overview.suspendedOrgs', { count: suspendedOrgs }),
       icon: Building2,
-      color: 'text-blue-600 dark:text-blue-400',
-      bg: 'bg-blue-500/10',
+      variant: 'brand',
     },
     {
       label: t('overview.totalUsers'),
       value: totalUsers.toLocaleString(locale),
       sub: t('overview.adminUsers', { count: adminUsers }),
       icon: Users,
-      color: 'text-violet-600 dark:text-violet-400',
-      bg: 'bg-violet-500/10',
+      variant: 'primary',
     },
     {
       label: t('overview.scansToday'),
       value: scansToday.toLocaleString(locale),
       sub: t('overview.scansLast24h'),
       icon: ScanLine,
-      color: 'text-emerald-600 dark:text-emerald-400',
-      bg: 'bg-emerald-500/10',
+      variant: 'success',
     },
     {
       label: t('overview.systemHealth'),
       value: '100%',
       sub: t('overview.allServicesActive'),
       icon: Activity,
-      color: 'text-amber-600 dark:text-amber-400',
-      bg: 'bg-amber-500/10',
+      variant: 'warning',
+    },
+  ];
+
+  const columns: Column<typeof recentOrgs[0]>[] = [
+    {
+      key: 'org',
+      label: t('overview.org'),
+      render: (org) => (
+        <div className="flex flex-col">
+          <span className="font-bold text-[var(--ds-text,#172B4D)]">{org.name}</span>
+          <span className="text-[11px] text-[var(--ds-text-subtle,#6B778C)] truncate max-w-[200px]">{org.email}</span>
+        </div>
+      ),
+    },
+    {
+      key: 'plan',
+      label: t('overview.plan'),
+      render: (org) => (
+        <Badge variant={org.plan === 'PRO' ? 'primary' : 'subtle'} className="h-5 px-1.5 font-bold text-[9px]">
+           {org.plan}
+        </Badge>
+      ),
+    },
+    {
+      key: 'joined',
+      label: t('overview.joined'),
+      align: 'right',
+      render: (org) => (
+        <span className="text-xs font-medium text-[var(--ds-text-subtle,#6B778C)]">
+          {new Date(org.createdAt).toLocaleDateString(locale)}
+        </span>
+      ),
     },
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 animate-in fade-in duration-500 pb-10">
       <PageHeader
         title={t('overview.title')}
         subtitle={t('overview.subtitle')}
+        badge={<Badge variant="primary" className="h-6 font-black tracking-widest px-2 italic shadow-sm">LIVE MONITORING</Badge>}
       />
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      {/* Stats Cluster */}
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         {stats.map((stat) => (
-          <Card key={stat.label} className="border-border shadow-md transition-all hover:scale-[1.02] hover:shadow-lg">
-            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                {stat.label}
-              </CardTitle>
-              <div className={`${stat.bg} ${stat.color} p-2 rounded-lg`}>
-                <stat.icon className="h-4 w-4" />
+          <Card key={stat.label} className="border-[var(--ds-border,#DFE1E6)] shadow-sm hover:shadow-md transition-all hover:-translate-y-1">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                 <div className={cn(
+                   "p-2.5 rounded-xl shadow-inner",
+                   stat.variant === 'brand' ? "bg-[var(--ds-background-brand-bold,#0052CC)] text-white" :
+                   stat.variant === 'primary' ? "bg-[var(--ds-background-selected,#DEEBFF)] text-[var(--ds-text-selected,#0747A6)]" :
+                   stat.variant === 'success' ? "bg-[var(--ds-background-success,#E3FCEF)] text-[var(--ds-text-success,#006644)]" :
+                   "bg-[var(--ds-background-warning,#FFF0B3)] text-[var(--ds-text-warning,#172B4D)]"
+                 )}>
+                   <stat.icon className="h-5 w-5" />
+                 </div>
+                 <TrendingUp className="h-4 w-4 text-[var(--ds-text-subtlest,#A5ADBA)] opacity-50" />
               </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-foreground">{stat.value}</div>
-              <p className="text-[10px] text-muted-foreground mt-1 font-medium uppercase tracking-tight">{stat.sub}</p>
+              <div className="space-y-1">
+                <p className="text-[11px] font-black uppercase tracking-widest text-[var(--ds-text-subtle,#6B778C)]">
+                   {stat.label}
+                </p>
+                <h3 className="text-3xl font-black text-[var(--ds-text,#172B4D)] tracking-tight italic">
+                   {stat.value}
+                </h3>
+              </div>
+              <p className="text-[10px] text-[var(--ds-text-subtlest,#6B778C)] mt-4 pt-4 border-t border-[var(--ds-border-subtle,#EBECF0)] font-bold uppercase flex items-center gap-1.5">
+                 <span className="w-1 h-1 rounded-full bg-current" />
+                 {stat.sub}
+              </p>
             </CardContent>
           </Card>
         ))}
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
-        {/* Recent Organizations */}
-        <Card className="lg:col-span-2 shadow-md">
-          <CardHeader className="flex flex-row items-center justify-between border-b border-border pb-4">
+      <div className="grid gap-8 lg:grid-cols-3">
+        {/* Recent Organizations Table */}
+        <Card className="lg:col-span-2 border-[var(--ds-border,#DFE1E6)] shadow-md overflow-hidden flex flex-col">
+          <CardHeader className="flex flex-row items-center justify-between border-b border-[var(--ds-border-subtle,#EBECF0)] px-6 py-5 bg-[var(--ds-background-neutral-subtle,#F4F5F7)]/30">
             <div>
-              <CardTitle className="text-lg font-bold">{t('overview.newestOrgs')}</CardTitle>
-              <p className="text-xs text-muted-foreground mt-1">{t('overview.newestOrgsDesc')}</p>
+              <CardTitle className="text-base font-black italic uppercase tracking-tight text-[var(--ds-text,#172B4D)]">
+                 {t('overview.newestOrgs')}
+              </CardTitle>
+              <p className="text-[11px] text-[var(--ds-text-subtle,#6B778C)] font-medium">{t('overview.newestOrgsDesc')}</p>
             </div>
             <Link 
               href="/organizations" 
-              className="group flex items-center gap-1.5 text-xs font-bold text-primary hover:text-primary/80 transition-colors"
+              className="group flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-[var(--ds-text-brand,#0052CC)] hover:opacity-80 transition-all"
             >
               {t('overview.viewAll')}
-              <ArrowUpRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 rtl:rotate-90 rtl:group-hover:-translate-x-0.5" />
+              <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 rtl:rotate-90 rtl:group-hover:-translate-x-0.5" />
             </Link>
           </CardHeader>
-          <CardContent className="p-0">
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="bg-muted/50 text-muted-foreground text-[10px] font-bold uppercase tracking-widest border-b border-border">
-                    <th className="px-5 py-3 text-left rtl:text-right">{t('overview.org')}</th>
-                    <th className="px-5 py-3 text-left rtl:text-right">{t('overview.plan')}</th>
-                    <th className="px-5 py-3 text-left rtl:text-right">{t('overview.joined')}</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-border">
-                  {recentOrgs.map((org) => (
-                    <tr key={org.id} className="group hover:bg-primary/5 transition-colors">
-                      <td className="px-5 py-4">
-                        <Link href={`/organizations?q=${encodeURIComponent(org.name)}`} className="block">
-                          <p className="font-bold text-foreground group-hover:text-primary transition-colors">{org.name}</p>
-                          <p className="text-xs text-muted-foreground">{org.email}</p>
-                        </Link>
-                      </td>
-                      <td className="px-5 py-4">
-                        <Badge variant="secondary" className={cn(
-                          "text-[10px] font-bold uppercase tracking-wider",
-                          org.plan === 'PRO' ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 border-blue-200 dark:border-blue-800" :
-                          "bg-muted text-muted-foreground border-border"
-                        )}>
-                          {org.plan}
-                        </Badge>
-                      </td>
-                      <td className="px-5 py-4 text-xs font-medium text-muted-foreground">
-                        {new Date(org.createdAt).toLocaleDateString(locale)}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+          <CardContent className="p-0 flex-1">
+             <DynamicTable columns={columns} items={recentOrgs} />
           </CardContent>
         </Card>
 
-        {/* System Status */}
-        <Card className="shadow-md">
-          <CardHeader>
-            <CardTitle className="text-lg font-bold">{t('overview.infraHealth')}</CardTitle>
+        {/* System & Infra Health */}
+        <Card className="border-[var(--ds-border,#DFE1E6)] shadow-md">
+          <CardHeader className="px-6 py-5">
+            <CardTitle className="text-base font-black italic uppercase tracking-tight text-[var(--ds-text,#172B4D)]">
+               {t('overview.infraHealth')}
+            </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-5">
-            <div className="flex items-center gap-4 p-4 rounded-xl bg-emerald-500/5 dark:bg-emerald-500/10 border border-emerald-500/10 dark:border-emerald-500/20 group">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-white shadow-lg shadow-emerald-500/20 transition-transform group-hover:scale-110">
-                <ShieldCheck className="h-5 w-5" />
+          <CardContent className="px-6 space-y-6">
+            <div className="flex items-center gap-4 p-4 rounded-xl bg-[var(--ds-background-success-bold,#00875A)]/5 border border-[var(--ds-background-success-bold,#00875A)]/10 group">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[var(--ds-background-success-bold,#00875A)] text-white shadow-lg transition-transform group-hover:rotate-12">
+                <ShieldCheck className="h-6 w-6" />
               </div>
-              <div>
-                <p className="text-sm font-bold text-emerald-900 dark:text-emerald-300">{t('overview.dbCluster')}</p>
-                <p className="text-xs text-emerald-600 dark:text-emerald-400 font-medium">{t('overview.dbSynced')}</p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-4 p-4 rounded-xl bg-blue-500/5 dark:bg-blue-500/10 border border-blue-500/10 dark:border-blue-500/20 group">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-500 text-white shadow-lg shadow-blue-500/20 transition-transform group-hover:scale-110">
-                <CheckCircle2 className="h-5 w-5" />
-              </div>
-              <div>
-                <p className="text-sm font-bold text-blue-900 dark:text-blue-300">{t('overview.authServices')}</p>
-                <p className="text-xs text-blue-600 dark:text-blue-400 font-medium">{t('overview.authRotated')}</p>
+              <div className="space-y-0.5">
+                <p className="text-sm font-bold text-[var(--ds-text-success,#006644)]">{t('overview.dbCluster')}</p>
+                <p className="text-[11px] text-[var(--ds-text-subtle,#6B778C)] font-black uppercase tracking-tighter opacity-80">{t('overview.dbSynced')}</p>
               </div>
             </div>
 
-            <div className="rounded-xl border border-border p-4 bg-muted/50">
-              <div className="flex items-center justify-between mb-2">
-                <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">{t('overview.syncTraffic')}</p>
-                <Badge className="bg-emerald-500 text-white border-none h-4 text-[9px] font-bold">{t('overview.optimal')}</Badge>
+            <div className="flex items-center gap-4 p-4 rounded-xl bg-[var(--ds-background-brand-bold,#0052CC)]/5 border border-[var(--ds-background-brand-bold,#0052CC)]/10 group">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[var(--ds-background-brand-bold,#0052CC)] text-white shadow-lg transition-transform group-hover:rotate-12">
+                <CheckCircle2 className="h-6 w-6" />
               </div>
-              <div className="flex items-end gap-1 h-8 px-1">
-                {[30, 45, 25, 60, 40, 35, 20].map((h, i) => (
-                  <div key={i} className="flex-1 bg-primary/10 rounded-t-sm relative group/bar">
-                    <div className="absolute bottom-0 left-0 w-full bg-primary rounded-t-sm transition-all group-hover/bar:bg-primary/80" style={{ height: `${h}%` }}></div>
+              <div className="space-y-0.5">
+                <p className="text-sm font-bold text-[var(--ds-text-brand,#0052CC)]">{t('overview.authServices')}</p>
+                <p className="text-[11px] text-[var(--ds-text-subtle,#6B778C)] font-black uppercase tracking-tighter opacity-80">{t('overview.authRotated')}</p>
+              </div>
+            </div>
+
+            {/* Traffic Visualizer */}
+            <div className="rounded-2xl border border-[var(--ds-border,#DFE1E6)] p-5 bg-[var(--ds-background-neutral-subtle,#F4F5F7)]/50">
+              <div className="flex items-center justify-between mb-4">
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--ds-text-subtlest,#A5ADBA)]">{t('overview.syncTraffic')}</p>
+                <Badge variant="success" className="h-4 text-[8px] font-black">{t('overview.optimal')}</Badge>
+              </div>
+              <div className="flex items-end gap-1.5 h-12 px-1">
+                {[30, 45, 25, 60, 40, 35, 20, 50, 45, 30].map((h, i) => (
+                  <div key={i} className="flex-1 bg-[var(--ds-background-brand-bold,#0052CC)]/10 rounded-full relative group/bar overflow-hidden">
+                    <div className="absolute bottom-0 left-0 w-full bg-[var(--ds-background-brand-bold,#0052CC)] rounded-full transition-all group-hover/bar:bg-[var(--ds-background-brand-bold-hovered,#004EBE)]" style={{ height: `${h}%` }}></div>
                   </div>
                 ))}
+              </div>
+              <div className="mt-4 flex justify-between items-center text-[9px] font-bold text-[var(--ds-text-subtlest,#A5ADBA)] uppercase tracking-widest">
+                 <span>Latency: 12ms</span>
+                 <span>Throughput: High</span>
               </div>
             </div>
           </CardContent>

@@ -10,15 +10,25 @@ interface PageHeaderProps {
 
 export function PageHeader({ title, subtitle, badge, actions, className }: PageHeaderProps) {
   return (
-    <div className={cn('flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between', className)}>
-      <div className="min-w-0">
-        <div className="flex items-center gap-2.5">
-          <h1 className="text-xl font-black uppercase tracking-tight text-foreground">{title}</h1>
+    <div className={cn('flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between py-2', className)}>
+      <div className="space-y-1.5 min-w-0">
+        <div className="flex items-center gap-3">
+          <h1 className="text-2xl font-black tracking-tight text-[var(--ds-text,#172B4D)] leading-none italic uppercase">
+            {title}
+          </h1>
           {badge}
         </div>
-        {subtitle && <p className="text-sm text-muted-foreground mt-0.5">{subtitle}</p>}
+        {subtitle && (
+          <p className="text-[13px] font-medium text-[var(--ds-text-subtle,#6B778C)] max-w-2xl leading-relaxed">
+            {subtitle}
+          </p>
+        )}
       </div>
-      {actions && <div className="flex items-center gap-2 shrink-0">{actions}</div>}
+      {actions && (
+        <div className="flex items-center gap-3 shrink-0 animate-in fade-in slide-in-from-right-4 duration-500">
+          {actions}
+        </div>
+      )}
     </div>
   );
 }

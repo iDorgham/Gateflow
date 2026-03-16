@@ -1,6 +1,9 @@
 export {};
 
-jest.mock('@/lib/admin-auth', () => ({ isAdminAuthenticated: jest.fn() }));
+jest.mock('@/lib/admin-auth', () => ({
+  isAdminAuthenticated: jest.fn(),
+  isAdminAuthorized: jest.fn(),
+}));
 jest.mock('@gate-access/db', () => ({
   prisma: {
     organization: {
@@ -15,7 +18,7 @@ jest.mock('@gate-access/db', () => ({
   },
 }));
 
-const { isAdminAuthenticated } = require('@/lib/admin-auth');
+const { isAdminAuthenticated, isAdminAuthorized } = require('@/lib/admin-auth');
 
 class MockNextRequest {
   url: string;
@@ -26,14 +29,14 @@ describe('GET /api/admin/finance', () => {
   beforeEach(() => jest.clearAllMocks());
 
   it('returns 401 if not authenticated', async () => {
-    isAdminAuthenticated.mockReturnValue(false);
+    isAdminAuthorized.mockResolvedValue(false);
     const { GET } = await import('./route');
     const res = await GET(new MockNextRequest('http://localhost/en/api/admin/finance') as never);
     expect(res.status).toBe(401);
   });
 
   it('returns finance data with MRR when authenticated', async () => {
-    isAdminAuthenticated.mockReturnValue(true);
+    isAdminAuthorized.mockResolvedValue(true);
     const { GET } = await import('./route');
     const res = await GET(new MockNextRequest('http://localhost/en/api/admin/finance') as never);
     expect(res.status).toBe(200);
@@ -41,7 +44,7 @@ describe('GET /api/admin/finance', () => {
     expect(body.success).toBe(true);
     expect(body.data).toHaveProperty('planCounts');
     expect(body.data).toHaveProperty('mrr');
-    // MRR = 2 PRO * $99 = $198
-    expect(body.data.mrr).toBe(198);
+    // MRR = 2 PRO * $49 = $98
+    expect(body.data.mrr).toBe(98);
   });
 });

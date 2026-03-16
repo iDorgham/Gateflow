@@ -7,42 +7,29 @@ export async function BottomCTA({ locale }: { locale: Locale }) {
   const { t } = await getTranslation(locale, 'landing');
   const { t: tc } = await getTranslation(locale, 'common');
   return (
-    <section className="py-24">
-      <div className="container px-6 mx-auto">
-        <div className="relative overflow-hidden rounded-[2.5rem] bg-accent dark:bg-accent/50 p-10 lg:p-20 text-accent-foreground border-4 border-muted/50">
-          <div className="absolute top-0 right-0 p-12 text-[10rem] font-black leading-none tracking-tighter opacity-10 pointer-events-none select-none">
-            GATE <br /> FLOW
-          </div>
-
-          <div className="relative z-10 grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <p className="text-primary text-sm font-bold uppercase tracking-widest mb-4">
+    <section className="py-24 bg-[#F4F5F7] dark:bg-[#091E42]">
+      <div className="container px-6 mx-auto text-center">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-4xl lg:text-5xl font-semibold tracking-tight text-[#172B4D] dark:text-[#E3E9F0] mb-6">
+            {t('cta.headline')}
+          </h2>
+          <p className="text-lg text-[#42526E] dark:text-[#97A0AF] mb-10">
+            {t('cta.subHeadline')}
+          </p>
+          
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Button
+              size="lg"
+              className="h-11 px-8 bg-[#0052CC] hover:bg-[#0747A6] rounded-sm text-sm font-semibold transition-all w-full sm:w-auto"
+              asChild
+            >
+              <I18nLink locale={locale} href="/contact">
                 {tc('buttons.getStarted')}
-              </p>
-              <h2 className="text-4xl lg:text-6xl font-black tracking-tight mb-8">
-                {t('cta.headline')}
-              </h2>
-              <p className="text-muted-foreground text-lg mb-0 max-w-sm">
-                {t('cta.noCreditCard')}
-              </p>
-            </div>
-
-            <div className="bg-background/50 backdrop-blur p-1.5 rounded-2xl border flex flex-col sm:flex-row gap-2">
-              <input
-                type="email"
-                placeholder={t('cta.emailPlaceholder')}
-                className="flex-1 bg-transparent px-6 py-4 outline-none font-medium placeholder:text-muted-foreground text-foreground"
-              />
-              <Button
-                size="lg"
-                className="h-12 sm:h-auto rounded-xl px-8 font-bold transition-colors shrink-0"
-                asChild
-              >
-                <I18nLink locale={locale} href="/contact">
-                  {tc('buttons.getStarted')}
-                </I18nLink>
-              </Button>
-            </div>
+              </I18nLink>
+            </Button>
+            <p className="text-sm text-[#6B778C] dark:text-[#8993A4] font-medium">
+              {t('cta.noCreditCard')}
+            </p>
           </div>
         </div>
       </div>

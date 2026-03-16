@@ -20,7 +20,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { createProject, updateProject, getResources } from '@/app/[locale]/dashboard/settings/projects/actions';
-import { GateMode } from '@gate-access/db';
+import type { GateMode } from '@gate-access/db';
 import { useRouter } from 'next/navigation';
 
 interface ProjectSheetProps {
@@ -43,7 +43,7 @@ export function ProjectSheet({ mode, project, children }: ProjectSheetProps) {
   // Form State
   const [name, setName] = useState(project?.name || '');
   const [description, setDescription] = useState(project?.description || '');
-  const [gateMode, setGateMode] = useState<GateMode>((project?.gateMode as GateMode) || GateMode.MULTI);
+  const [gateMode, setGateMode] = useState<GateMode>((project?.gateMode as GateMode) || 'MULTI');
   const [selectedGates, setSelectedGates] = useState<string[]>([]);
   const [selectedUnits, setSelectedUnits] = useState<string[]>([]);
   
@@ -56,8 +56,7 @@ export function ProjectSheet({ mode, project, children }: ProjectSheetProps) {
       // Reset form on open
       setName(project?.name || '');
       setDescription(project?.description || '');
-      setGateMode((project?.gateMode as GateMode) || GateMode.MULTI);
-      
+      setGateMode((project?.gateMode as GateMode) || 'MULTI');
       // Fetch resources
       const fetchResources = async () => {
         // We need orgId, but server actions get it from session. 
@@ -153,11 +152,11 @@ export function ProjectSheet({ mode, project, children }: ProjectSheetProps) {
             <Label>{t('projects.fields.gateMode', 'Gate Mode')}</Label>
             <RadioGroup value={gateMode} onValueChange={(v) => setGateMode(v as GateMode)} className="flex gap-4">
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value={GateMode.SINGLE} id="mode-single" />
+                <RadioGroupItem value="SINGLE" id="mode-single" />
                 <Label htmlFor="mode-single" className="font-medium">{t('projects.modes.single', 'Single Gate')}</Label>
               </div>
               <div className="flex items-center space-x-2">
-                <RadioGroupItem value={GateMode.MULTI} id="mode-multi" />
+                <RadioGroupItem value="MULTI" id="mode-multi" />
                 <Label htmlFor="mode-multi" className="font-medium">{t('projects.modes.multi', 'Multi-Gate')}</Label>
               </div>
             </RadioGroup>

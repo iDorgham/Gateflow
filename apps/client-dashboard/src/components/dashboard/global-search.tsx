@@ -107,7 +107,7 @@ export function GlobalSearch({ locale }: { locale: string }) {
   };
 
   return (
-    <div className="relative w-full md:w-[300px] lg:w-[400px]">
+    <div className="relative w-full">
       <Command className="border border-border/50 rounded-lg overflow-visible bg-transparent">
         <CommandInput
           placeholder="Search workspace..."
@@ -123,7 +123,7 @@ export function GlobalSearch({ locale }: { locale: string }) {
             // small delay so clicks on the dropdown list register
             setTimeout(() => setOpen(false), 200);
           }}
-          className="h-9 outline-none border-none bg-secondary/50 focus:bg-secondary focus:ring-0 transition-colors w-full"
+          className="h-9 outline-none border-none bg-[#EBECF0] dark:bg-[#2C333A] focus:bg-white dark:focus:bg-[#1C2533] focus:ring-0 transition-all w-full"
         />
         
         {open && (

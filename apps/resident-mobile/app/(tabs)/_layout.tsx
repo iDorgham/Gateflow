@@ -34,6 +34,14 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
+        name="ai/index"
+        options={{
+          title: 'GateAI',
+          tabBarIcon: ({ color, size }) => <Ionicons name="sparkles" color={color} size={size} />,
+          headerTitle: 'GateAI Assistant',
+        }}
+      />
+      <Tabs.Screen
         name="history/index"
         options={{
           title: 'History',

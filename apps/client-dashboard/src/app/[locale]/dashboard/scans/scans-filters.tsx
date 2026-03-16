@@ -3,8 +3,9 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Layers, DoorOpen, User } from 'lucide-react';
+import { Layers, DoorOpen, Search, Download, X, User as UserIcon } from 'lucide-react';
 import { FilterBar } from '@/components/dashboard/filter-bar';
+import { Button, cn, DatePicker } from '@gate-access/ui';
 
 export interface Gate {
   id: string;
@@ -40,10 +41,6 @@ const STATUS_CHIP: Record<string, string> = {
   DENIED: 'bg-rose-100 text-rose-700 border-rose-200',
 };
 
-const inputCls =
-  'w-full rounded-xl border border-border bg-card px-3 py-2 text-xs text-foreground placeholder-muted-foreground ' +
-  'focus:outline-none focus:ring-2 focus:ring-ring focus:border-ring h-9';
-
 interface Props {
   gates: Gate[];
   operators: Operator[];
@@ -60,7 +57,7 @@ export function ScansFilters({
   operators,
   projects,
   currentProjectId,
-  totalCount,
+  totalCount: _totalCount,
   filteredCount,
   exportHref,
 }: Props) {
@@ -146,7 +143,10 @@ export function ScansFilters({
   function clearAll() {
     setQ('');
     setDeviceId('');
-    router.push('/dashboard/scans');
+    const params = new URLSearchParams();
+    if (searchParams.get('project')) params.set('project', searchParams.get('project')!);
+    const s = params.toString();
+    router.push(`/dashboard/scans${s ? '?' + s : ''}`);
   }
 
   const currentStatus = sp.get('status') ?? '';
@@ -158,173 +158,183 @@ export function ScansFilters({
   const hasProjects = projects.length > 0;
 
   return (
-    <div className="space-y-4">
-      {/* Filter bar — row 1: search + dropdowns */}
-      <FilterBar>
-        <FilterBar.Search
-          placeholder={t('scans.filters.searchPlaceholder', { defaultValue: 'Search QR code…' })}
-          value={q}
-          onChange={(e) => {
-            setQ(e.target.value);
-            debounced(debounceQ, 'q', e.target.value);
-          }}
-          containerClassName="flex-1 min-w-[160px]"
-        />
+    <div className="space-y-6 animate-in fade-in duration-500">
+      {/* Search & Main Selects */}
+      <FilterBar className="bg-white dark:bg-[#1D2125] p-3 rounded-xl border border-[#DFE1E6] dark:border-[#343A46] shadow-sm flex flex-wrap items-center gap-4">
+        <div className="flex-1 min-w-[280px] relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#6B778C] pointer-events-none" />
+          <FilterBar.Search
+            placeholder={t('scans.filters.searchPlaceholder', { defaultValue: 'Search QR code…' })}
+            value={q}
+            onChange={(e) => {
+              setQ(e.target.value);
+              debounced(debounceQ, 'q', e.target.value);
+            }}
+            className="w-full pl-9 bg-[#F4F5F7] dark:bg-[#2C333A] border-[#DFE1E6] dark:border-[#343A46] focus:bg-white dark:focus:bg-[#1D2125] h-10 transition-all rounded-lg text-sm"
+            containerClassName="w-full"
+          />
+        </div>
 
-        <FilterBar.Divider />
-
-        <FilterBar.Select
-          value={currentStatus}
-          onChange={(e) => immediate('status', e.target.value)}
-          icon={<Layers />}
-        >
-          <option value="">{t('scans.filters.allStatuses', { defaultValue: 'All statuses' })}</option>
-          {STATUSES.map((s) => (
-            <option key={s} value={s}>
-              {t(`scans.status.${s}`, { defaultValue: s.replace(/_/g, ' ') })}
-            </option>
-          ))}
-        </FilterBar.Select>
-
-        {hasProjects && (
+        <div className="flex flex-wrap items-center gap-3 ml-auto">
           <FilterBar.Select
-            value={currentProjectId}
-            onChange={(e) => immediate('project', e.target.value)}
-            aria-label={t('scans.filters.allProjects', { defaultValue: 'All projects' })}
+            value={currentStatus}
+            onChange={(e) => immediate('status', e.target.value)}
+            className="h-10 bg-white dark:bg-[#1D2125] border-[#DFE1E6] dark:border-[#343A46] text-[#42526E] dark:text-[#A5ADBA] font-bold rounded-lg hover:border-[#0052CC] transition-colors"
+            icon={<Layers className="h-4 w-4" />}
           >
-            <option value="all">{t('scans.filters.allProjects', { defaultValue: 'All projects' })}</option>
-            {projects.map((p) => (
-              <option key={p.id} value={p.id}>
-                {p.name}
+            <option value="">{t('scans.filters.allStatuses', { defaultValue: 'All Statuses' })}</option>
+            {STATUSES.map((s) => (
+              <option key={s} value={s}>
+                {t(`scans.status.${s}`, { defaultValue: s.replace(/_/g, ' ') })}
               </option>
             ))}
           </FilterBar.Select>
-        )}
 
-        <FilterBar.Select
-          value={currentGate}
-          onChange={(e) => immediate('gate', e.target.value)}
-          icon={<DoorOpen />}
-        >
-          <option value="">{t('scans.filters.allGates', { defaultValue: 'All gates' })}</option>
-          {gates.map((g) => (
-            <option key={g.id} value={g.id}>
-              {g.name}
-            </option>
-          ))}
-        </FilterBar.Select>
+          {hasProjects && (
+            <FilterBar.Select
+              value={currentProjectId}
+              onChange={(e) => immediate('project', e.target.value)}
+              className="h-10 bg-white dark:bg-[#1D2125] border-[#DFE1E6] dark:border-[#343A46] text-[#42526E] dark:text-[#A5ADBA] font-bold rounded-lg hover:border-[#0052CC] transition-colors"
+              aria-label={t('scans.filters.allProjects', { defaultValue: 'All projects' })}
+            >
+              <option value="all">{t('scans.filters.allProjects', { defaultValue: 'All Projects' })}</option>
+              {projects.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.name}
+                </option>
+              ))}
+            </FilterBar.Select>
+          )}
 
-        <FilterBar.Select
-          value={currentUserId}
-          onChange={(e) => immediate('userId', e.target.value)}
-          icon={<User />}
-        >
-          <option value="">{t('scans.filters.allOperators', { defaultValue: 'All operators' })}</option>
-          {operators.map((u) => (
-            <option key={u.id} value={u.id}>
-              {u.name}
-            </option>
-          ))}
-        </FilterBar.Select>
+          <FilterBar.Select
+            value={currentGate}
+            onChange={(e) => immediate('gate', e.target.value)}
+            className="h-10 bg-white dark:bg-[#1D2125] border-[#DFE1E6] dark:border-[#343A46] text-[#42526E] dark:text-[#A5ADBA] font-bold rounded-lg hover:border-[#0052CC] transition-colors"
+            icon={<DoorOpen className="h-4 w-4" />}
+          >
+            <option value="">{t('scans.filters.allGates', { defaultValue: 'All Gates' })}</option>
+            {gates.map((g) => (
+              <option key={g.id} value={g.id}>
+                {g.name}
+              </option>
+            ))}
+          </FilterBar.Select>
+
+          <FilterBar.Select
+            value={currentUserId}
+            onChange={(e) => immediate('userId', e.target.value)}
+            className="h-10 bg-white dark:bg-[#1D2125] border-[#DFE1E6] dark:border-[#343A46] text-[#42526E] dark:text-[#A5ADBA] font-bold rounded-lg hover:border-[#0052CC] transition-colors"
+            icon={<UserIcon className="h-4 w-4" />}
+          >
+            <option value="">{t('scans.filters.allOperators', { defaultValue: 'All Operators' })}</option>
+            {operators.map((u) => (
+              <option key={u.id} value={u.id}>
+                {u.name}
+              </option>
+            ))}
+          </FilterBar.Select>
+        </div>
       </FilterBar>
 
-      {/* Second row: dates + device */}
-      <div className="grid gap-3 sm:grid-cols-3">
-        {/* Date from */}
-        <div className="flex flex-col gap-1">
-          <label className="text-xs font-medium text-slate-500 dark:text-slate-400">{t('scans.filters.dateFrom', { defaultValue: 'From' })}</label>
-          <input
-            type="date"
+      {/* Date Range & Device */}
+      <div className="flex flex-wrap items-end gap-6 bg-[#FAFBFC] dark:bg-[#091E42]/10 p-5 rounded-xl border border-[#DFE1E6] dark:border-[#343A46]">
+        <div className="flex items-end gap-3">
+          <DatePicker
+            label={t('scans.filters.dateFrom', { defaultValue: 'From Date' })}
             value={currentDateFrom}
             onChange={(e) => immediate('dateFrom', e.target.value)}
-            className={inputCls}
+            onClear={() => clearFilter('dateFrom')}
+            className="w-[180px]"
           />
-        </div>
-
-        {/* Date to */}
-        <div className="flex flex-col gap-1">
-          <label className="text-xs font-medium text-slate-500">{t('scans.filters.dateTo', { defaultValue: 'To' })}</label>
-          <input
-            type="date"
+          <div className="pb-3 text-[#DFE1E6] font-black">—</div>
+          <DatePicker
+            label={t('scans.filters.dateTo', { defaultValue: 'To Date' })}
             value={currentDateTo}
             onChange={(e) => immediate('dateTo', e.target.value)}
-            className={inputCls}
+            onClear={() => clearFilter('dateTo')}
+            className="w-[180px]"
           />
         </div>
 
-        {/* Device ID */}
-        <div className="flex flex-col gap-1">
-          <label className="text-xs font-medium text-slate-500">{t('scans.table.device', { defaultValue: 'Device ID' })}</label>
-          <input
-            type="text"
-            placeholder={t('scans.filters.deviceIdPlaceholder', { defaultValue: 'Filter by device…' })}
-            value={deviceId}
-            onChange={(e) => {
-              setDeviceId(e.target.value);
-              debounced(debounceDevice, 'deviceId', e.target.value);
-            }}
-            className={inputCls}
-          />
+        <div className="space-y-2 flex-1 min-w-[200px]">
+          <label className="text-[11px] font-black text-[#6B778C] dark:text-[#97A0AF] uppercase tracking-widest block ml-1">
+            {t('scans.filters.deviceIdPlaceholder', { defaultValue: 'Hardware Device' })}
+          </label>
+          <div className="relative">
+            <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center gap-2 pointer-events-none">
+               <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            </div>
+            <input
+              type="text"
+              placeholder={t('scans.filters.deviceIdPlaceholder', { defaultValue: 'Filter by Device ID…' })}
+              value={deviceId}
+              onChange={(e) => {
+                setDeviceId(e.target.value);
+                debounced(debounceDevice, 'deviceId', e.target.value);
+              }}
+              className="h-10 w-full pl-7 bg-white dark:bg-[#2C333A] border-[#DFE1E6] dark:border-[#343A46] rounded-lg text-sm font-mono font-bold text-[#172B4D] dark:text-emerald-400 placeholder-[#6B778C] shadow-sm focus:ring-2 focus:ring-[#0052CC] transition-all"
+            />
+          </div>
+        </div>
+
+        <div className="ml-auto">
+          <Button
+            onClick={() => window.open(exportHref, '_blank')}
+            className="bg-white dark:bg-[#2C333A] border border-[#DFE1E6] dark:border-[#343A46] text-[#42526E] dark:text-[#A5ADBA] font-bold h-10 px-5 rounded-lg shadow-sm hover:bg-[#F4F5F7] dark:hover:bg-[#1D2125] transition-all active:scale-95 group"
+          >
+            <Download className="h-4 w-4 mr-2 group-hover:text-[#0052CC] transition-colors" />
+            {t('scans.filters.exportCsv', { defaultValue: 'Export CSV' })}
+          </Button>
         </div>
       </div>
 
-      {/* Active filter chips + results count */}
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+      {/* Filter Status Bar */}
+      <div className="flex items-center justify-between px-1">
         <div className="flex flex-wrap items-center gap-2">
           {activeFilters.length > 0 ? (
             <>
+              <span className="text-[11px] font-black text-[#6B778C] dark:text-[#97A0AF] uppercase tracking-widest mr-2">Active Filters:</span>
               {activeFilters.map((f) => (
                 <span
                   key={f.key}
-                  className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-medium ${
+                  className={cn(
+                    "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-bold shadow-sm transition-all animate-in zoom-in-95 duration-200",
                     f.key === 'status' && currentStatus
-                      ? (STATUS_CHIP[currentStatus] ?? 'bg-slate-100 text-slate-600 border-slate-200')
+                      ? (STATUS_CHIP[currentStatus] ?? 'bg-[#F4F5F7] text-[#42526E] border-[#DFE1E6]')
                       : f.key === 'project'
-                      ? 'bg-blue-50 text-blue-700 border-blue-200'
-                      : 'bg-slate-100 text-slate-700 border-slate-200'
-                  }`}
+                      ? 'bg-[#DEEBFF] text-[#0747A6] border-[#B3D4FF]'
+                      : 'bg-[#F4F5F7] text-[#172B4D] border-[#DFE1E6] dark:bg-[#2C333A] dark:text-[#D1D5DB] dark:border-[#343A46]'
+                  )}
                 >
                   {f.label}
                   <button
                     onClick={() => clearFilter(f.key)}
-                    className="ml-0.5 rounded-full hover:opacity-70"
-                    aria-label={`Remove ${f.label} filter`}
+                    className="ml-1 rounded-full hover:bg-black/10 p-0.5 transition-colors"
                   >
-                    ×
+                    <X className="h-3 w-3" />
                   </button>
                 </span>
               ))}
-              <button
+              <Button
+                variant="ghost"
+                size="sm"
                 onClick={clearAll}
-                className="text-xs font-medium text-slate-400 hover:text-slate-700 underline underline-offset-2"
+                className="text-[11px] font-black text-[#0052CC] hover:bg-[#DEEBFF] h-6 px-3 rounded-full"
               >
-                {t('scans.filters.clearAll', { defaultValue: 'Clear all' })}
-              </button>
+                {t('scans.filters.clearAll', { defaultValue: 'CLEAR ALL' })}
+              </Button>
             </>
           ) : (
-            <span className="text-xs text-slate-400">{t('scans.filters.noFilters', { defaultValue: 'No filters applied' })}</span>
+             <div className="flex items-center gap-2 text-[#6B778C] opacity-50">
+               <div className="h-1 w-1 rounded-full bg-[#6B778C]" />
+               <span className="text-[10px] font-black uppercase tracking-[0.2em]">{t('scans.filters.noFilters', { defaultValue: 'Live Audit Trail' })}</span>
+             </div>
           )}
         </div>
 
-        <div className="flex items-center gap-3">
-          <p className="text-sm text-slate-500 dark:text-slate-400 whitespace-nowrap">
-            {t('scans.filters.showingResults', { 
-              filtered: filteredCount.toLocaleString(), 
-              total: totalCount.toLocaleString(),
-              defaultValue: `Showing ${filteredCount.toLocaleString()} of ${totalCount.toLocaleString()} results`
-            })}
-          </p>
-          <a
-            href={exportHref}
-            className="inline-flex h-8 items-center gap-1.5 rounded-md border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 text-xs font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 whitespace-nowrap"
-          >
-            <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-              <path strokeLinecap="round" strokeLinejoin="round"
-                d="M12 10v6m0 0l-3-3m3 3l3-3M3 17v3a1 1 0 001 1h16a1 1 0 001-1v-3" />
-            </svg>
-            {t('scans.filters.exportCsv', { defaultValue: 'Export CSV' })}
-          </a>
-        </div>
+        <p className="text-[11px] font-black text-[#6B778C] dark:text-[#97A0AF] uppercase tracking-widest">
+           {filteredCount.toLocaleString()} {t('scans.filters.showingResultsSimple', { defaultValue: 'Entries Found' })}
+        </p>
       </div>
     </div>
   );

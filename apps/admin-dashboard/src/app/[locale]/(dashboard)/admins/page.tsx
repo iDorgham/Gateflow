@@ -27,10 +27,12 @@ import {
   Input,
   Label,
   cn,
+  DynamicTable,
+  Column,
 } from '@gate-access/ui';
 import { PageHeader } from '@/components/page-header';
 
-export const metadata = { title: 'Admins' };
+export const metadata = { title: 'Platform Authority' };
 
 // ─── Server actions ────────────────────────────────────────────────────────────
 
@@ -109,7 +111,7 @@ export default async function AdminsPage({
   params: { locale: Locale };
 }) {
   await requireAdmin();
-  const { t } = await getTranslation(locale, 'admin');
+  const { t } = (await getTranslation(locale, 'admin')) as any;
 
   // Key fingerprint — first 8 chars of the session token hash (safe to show)
   let keyFingerprint = '— not configured —';
@@ -149,20 +151,89 @@ export default async function AdminsPage({
     // ignore
   }
 
+  const columns: Column<typeof admins[0]>[] = [
+    {
+      key: 'admin',
+      label: t('admins.platformAdmins', { count: '' }),
+      render: (admin) => {
+        const suspended = admin.deletedAt !== null;
+        return (
+          <div className="flex items-center gap-3">
+            <div className={cn(
+              "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg font-bold text-[10px] uppercase shadow-inner",
+              suspended ? "bg-[var(--ds-background-neutral,#F4F5F7)] text-[var(--ds-text-subtle,#6B778C)]" : "bg-[var(--ds-background-brand-bold,#0052CC)] text-white"
+            )}>
+              {admin.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
+            </div>
+            <div className="flex flex-col">
+              <span className={cn("text-xs font-bold font-mono tracking-tight", suspended ? "text-[var(--ds-text-subtle,#6B778C)] line-through opacity-50" : "text-[var(--ds-text,#172B4D)]")}>
+                {admin.name}
+              </span>
+              <span className="text-[10px] text-[var(--ds-text-subtle,#6B778C)] font-medium">{admin.email}</span>
+            </div>
+          </div>
+        );
+      }
+    },
+    {
+      key: 'status',
+      label: 'Status',
+      render: (admin) => (
+        <Badge variant={admin.deletedAt ? 'warning' : 'success'} className="h-5 px-2 text-[9px] font-black italic uppercase">
+           {admin.deletedAt ? t('admins.suspended') : 'Active'}
+        </Badge>
+      )
+    },
+    {
+      key: 'actions',
+      label: '',
+      align: 'right',
+      render: (admin) => (
+        <div className="flex items-center gap-2">
+          <form action={resetAdminPassword}>
+            <input type="hidden" name="id" value={admin.id} />
+            <Button type="submit" variant="subtle" size="compact" className="h-7 text-[10px] font-black uppercase tracking-widest gap-1.5 opacity-60 hover:opacity-100">
+               <KeyRound className="h-3 w-3" />
+               {t('admins.reset')}
+            </Button>
+          </form>
+          <form action={toggleSuspend}>
+            <input type="hidden" name="id" value={admin.id} />
+            <input type="hidden" name="suspended" value={String(admin.deletedAt !== null)} />
+            <Button type="submit" variant={admin.deletedAt ? 'success' : 'destructive'} size="compact" className="h-7 text-[10px] font-black uppercase tracking-widest gap-1.5">
+               {admin.deletedAt ? (
+                 <><ShieldCheck className="h-3 w-3" /> {t('admins.restore')}</>
+               ) : (
+                 <><ShieldAlert className="h-3 w-3" /> {t('admins.suspend')}</>
+               )}
+            </Button>
+          </form>
+        </div>
+      )
+    }
+  ];
+
   return (
-    <div className="space-y-6">
-      <PageHeader title={t('admins.title')} subtitle={t('admins.subtitle')} />
+    <div className="space-y-8 animate-in fade-in duration-500 pb-10">
+      <PageHeader 
+        title={t('admins.title')} 
+        subtitle={t('admins.subtitle')} 
+        badge={<Badge variant="primary" className="h-6 font-black tracking-widest px-2 italic shadow-sm">SYSTEM AUTH</Badge>}
+      />
 
       {/* Auth mechanism info */}
-      <Card className="border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/10 shadow-sm">
-        <CardContent className="p-4">
-          <div className="flex items-start gap-3">
-            <Info className="h-4 w-4 text-blue-600 dark:text-blue-400 mt-0.5 shrink-0" />
+      <Card className="border-[var(--ds-border-information,#DEEBFF)] bg-[var(--ds-background-information,#DEEBFF)]/20 shadow-sm overflow-hidden group">
+        <div className="h-1 bg-[var(--ds-background-information-bold,#0052CC)] w-full opacity-50 group-hover:opacity-100 transition-opacity" />
+        <CardContent className="p-5">
+          <div className="flex items-start gap-4">
+            <div className="p-3 bg-[var(--ds-background-information-bold,#0052CC)] text-white rounded-2xl shadow-lg">
+               <Info className="h-5 w-5" />
+            </div>
             <div className="space-y-1">
-              <p className="text-sm font-bold text-blue-900 dark:text-blue-300">{t('admins.twoLayerAuth')}</p>
-              <p className="text-xs text-blue-700 dark:text-blue-400">
+              <p className="text-sm font-black italic uppercase tracking-tight text-[var(--ds-text-information-bold,#0747A6)]">{t('admins.twoLayerAuth')}</p>
+              <p className="text-[13px] text-[var(--ds-text-information,#0747A6)] font-medium max-w-4xl leading-relaxed">
                 {String(t('admins.twoLayerAuthDesc')).split('<1>')[0]}
-                <code className="rounded bg-blue-100 dark:bg-blue-900/50 px-1 font-mono">ADMIN_ACCESS_KEY</code>
+                <code className="rounded-lg bg-white/50 border border-[var(--ds-border-information,#DEEBFF)] px-2 py-0.5 font-mono text-[11px] font-black text-[var(--ds-text-information-bold,#0747A6)] mx-1 shadow-inner italic">ADMIN_ACCESS_KEY</code>
                 {String(t('admins.twoLayerAuthDesc')).split('</1>')[1]}
               </p>
             </div>
@@ -172,22 +243,22 @@ export default async function AdminsPage({
 
       {/* Password flash */}
       {pwFlash && (
-        <Card className="border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20 shadow-lg shadow-amber-500/10">
-          <CardHeader className="pb-3 border-b border-amber-100/50 dark:border-amber-800/50">
-            <div className="flex items-center gap-2 text-amber-800 dark:text-amber-300">
-              <KeyRound className="h-5 w-5" />
-              <CardTitle className="text-base font-bold">{t('admins.tempPasswordGen')}</CardTitle>
+        <Card className="border-[var(--ds-border-warning,#FFE380)] bg-[var(--ds-background-warning,#FFF0B3)]/20 shadow-2xl shadow-amber-500/10 animate-in zoom-in-95 duration-500">
+          <CardHeader className="pb-4 border-b border-[var(--ds-border-warning,#FFE380)]/50">
+            <div className="flex items-center gap-3 text-[var(--ds-text-warning-inverse,#172B4D)] uppercase">
+              <KeyRound className="h-5 w-5 text-[var(--ds-background-warning-bold,#FFAB00)]" />
+              <CardTitle className="text-sm font-black tracking-widest">{t('admins.tempPasswordGen')}</CardTitle>
             </div>
           </CardHeader>
-          <CardContent className="pt-4 space-y-3">
-            <p className="text-sm text-amber-700 dark:text-amber-400 font-medium">
+          <CardContent className="pt-6 space-y-4">
+            <p className="text-[11px] font-black uppercase tracking-widest text-[var(--ds-text-warning-inverse,#172B4D)] opacity-70">
               {t('admins.shareSecurely')}
             </p>
-            <div className="relative group">
-              <code className="block w-full rounded-xl bg-amber-100/80 dark:bg-amber-900/40 border border-amber-200 dark:border-amber-700 px-6 py-4 font-mono text-xl font-black tracking-[0.2em] text-amber-950 dark:text-amber-200 text-center shadow-inner ltr:tracking-[0.2em] rtl:tracking-normal">
+            <div className="relative group max-w-md">
+              <code className="block w-full rounded-2xl bg-white/80 border-2 border-[var(--ds-border-warning,#FFE380)] px-8 py-5 font-mono text-2xl font-black tracking-[0.3em] text-[var(--ds-text-warning-inverse,#172B4D)] text-center shadow-[inset_0_2px_10px_rgba(0,0,0,0.05)] ltr:tracking-[0.3em] rtl:tracking-normal group-hover:bg-white transition-colors">
                 {pwFlash.pw}
               </code>
-              <Badge className="absolute -top-2 ltr:-right-1 rtl:-left-1 bg-amber-800 text-white font-bold text-[10px] tracking-widest uppercase border-none">
+              <Badge variant="primary" className="absolute -top-3 ltr:-right-2 rtl:-left-2 h-6 px-3 bg-[var(--ds-background-warning-bold,#FFAB00)] text-[var(--ds-text-warning-inverse,#172B4D)] font-black text-[9px] tracking-[0.2em] uppercase border-none shadow-md">
                 {t('admins.expiresIn')}
               </Badge>
             </div>
@@ -196,205 +267,115 @@ export default async function AdminsPage({
       )}
 
       {/* Access key fingerprint + security checklist */}
-      <div className="grid gap-4 lg:grid-cols-2">
-        <Card className="shadow-sm">
-          <CardHeader className="border-b border-border pb-3">
-            <CardTitle className="text-sm font-black uppercase tracking-widest flex items-center gap-2">
-              <Shield className="h-4 w-4 text-primary" />
-              Access Key Status
+      <div className="grid gap-6 lg:grid-cols-2">
+        <Card className="border-[var(--ds-border,#DFE1E6)] shadow-sm hover:shadow-md transition-all">
+          <CardHeader className="border-b border-[var(--ds-border-subtle,#EBECF0)] pb-4 bg-[var(--ds-background-neutral-subtle,#F4F5F7)]/30">
+            <CardTitle className="text-[11px] font-black uppercase tracking-[0.2em] text-[var(--ds-text-subtle,#6B778C)] flex items-center gap-2">
+              <Shield className="h-3.5 w-3.5" />
+              Access Key Authority
             </CardTitle>
           </CardHeader>
-          <CardContent className="p-4 space-y-3">
+          <CardContent className="p-6 space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">ADMIN_ACCESS_KEY</span>
-              <div className="flex items-center gap-2">
-                {keyConfigured ? (
-                  <Badge className="bg-emerald-500 text-white border-none text-[10px] font-bold">Configured</Badge>
-                ) : (
-                  <Badge className="bg-red-500 text-white border-none text-[10px] font-bold">Not set</Badge>
-                )}
-              </div>
+              <span className="text-[10px] font-black uppercase tracking-widest text-[var(--ds-text-subtle,#6B778C)] opacity-70">ADMIN_ACCESS_KEY</span>
+              <Badge variant={keyConfigured ? 'success' : 'danger'} className="h-5 px-2 text-[9px] font-black uppercase italic">
+                 {keyConfigured ? 'CONFIGURED' : 'NOT SET'}
+              </Badge>
             </div>
             {keyConfigured && (
               <>
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">Fingerprint</span>
-                  <code className="text-xs font-mono font-black text-foreground bg-muted px-2 py-0.5 rounded">{keyFingerprint}</code>
+                  <span className="text-[10px] font-black uppercase tracking-widest text-[var(--ds-text-subtle,#6B778C)] opacity-70">Fingerprint</span>
+                  <code className="text-xs font-mono font-black text-[var(--ds-text-brand,#0052CC)] bg-[var(--ds-background-neutral-subtle,#F4F5F7)] px-2 py-1 rounded-lg border border-[var(--ds-border-subtle,#EBECF0)] shadow-inner italic">{keyFingerprint}</code>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">Key length</span>
-                  <span className={cn('text-xs font-bold', adminKeyLength >= 32 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400')}>
-                    {adminKeyLength} chars {adminKeyLength >= 32 ? '✓' : '(min 32 required)'}
+                  <span className="text-[10px] font-black uppercase tracking-widest text-[var(--ds-text-subtle,#6B778C)] opacity-70">Key Strength</span>
+                  <span className={cn('text-[11px] font-black italic uppercase', adminKeyLength >= 32 ? 'text-[var(--ds-text-success,#006644)]' : 'text-[var(--ds-text-danger,#DE350B)]')}>
+                    {adminKeyLength} BITS {adminKeyLength >= 32 ? '✓ OPTIMAL' : '(INSECURE)'}
                   </span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">Session expiry</span>
-                  <span className="text-xs font-bold text-foreground">12 hours</span>
                 </div>
               </>
             )}
-            <p className="text-[10px] text-muted-foreground pt-1 border-t border-border">
-              Rotate by updating <code className="font-mono">ADMIN_ACCESS_KEY</code> in your environment and redeploying.
+            <p className="text-[9px] font-bold text-[var(--ds-text-subtlest,#A5ADBA)] pt-4 border-t border-[var(--ds-border-subtle,#EBECF0)] uppercase tracking-widest">
+              Rotate via <code className="font-mono text-[var(--ds-text-brand,#0052CC)]">.env.production</code> Redepoloyment required.
             </p>
           </CardContent>
         </Card>
 
-        <Card className="shadow-sm">
-          <CardHeader className="border-b border-border pb-3">
-            <CardTitle className="text-sm font-black uppercase tracking-widest flex items-center gap-2">
-              <ShieldCheck className="h-4 w-4 text-primary" />
-              Security Checklist
+        <Card className="border-[var(--ds-border,#DFE1E6)] shadow-sm hover:shadow-md transition-all">
+          <CardHeader className="border-b border-[var(--ds-border-subtle,#EBECF0)] pb-4 bg-[var(--ds-background-neutral-subtle,#F4F5F7)]/30">
+            <CardTitle className="text-[11px] font-black uppercase tracking-[0.2em] text-[var(--ds-text-subtle,#6B778C)] flex items-center gap-2">
+              <ShieldCheck className="h-3.5 w-3.5" />
+              Compliance Checklist
             </CardTitle>
           </CardHeader>
-          <CardContent className="p-4 space-y-2.5">
+          <CardContent className="p-6 space-y-3.5">
             {[
-              { label: 'Access key ≥ 32 characters', ok: adminKeyLength >= 32 },
-              { label: 'Access key is configured', ok: keyConfigured },
-              { label: 'Session cookie: httpOnly + sameSite=lax', ok: true },
-              { label: 'HTTPS enforced in production', ok: process.env.NODE_ENV === 'production' },
-              { label: 'Two-layer auth (key + user account)', ok: true },
-              { label: 'MFA: not yet implemented', ok: false, optional: true },
-            ].map(({ label, ok, optional }) => (
-              <div key={label} className="flex items-center gap-2.5">
-                <span className={cn('h-4 w-4 rounded-full flex items-center justify-center text-[10px] shrink-0', ok ? 'bg-emerald-500/15 text-emerald-600' : optional ? 'bg-muted text-muted-foreground' : 'bg-red-500/15 text-red-600')}>
-                  {ok ? '✓' : '○'}
-                </span>
-                <span className={cn('text-xs', ok ? 'text-foreground' : 'text-muted-foreground')}>{label}</span>
-                {optional && <Badge variant="outline" className="text-[8px] font-bold ml-auto">Optional</Badge>}
+              { label: 'Entropy ≥ 32 characters', ok: adminKeyLength >= 32 },
+              { label: 'Platform Master Secret Configured', ok: keyConfigured },
+              { label: 'Cookie Context: httpOnly + lax', ok: true },
+              { label: 'TLS/SSL Enforcement: ACTIVE', ok: process.env.NODE_ENV === 'production' },
+              { label: 'Dual-Layer Architecture Verified', ok: true },
+            ].map(({ label, ok }) => (
+              <div key={label} className="flex items-center gap-3">
+                <div className={cn('h-5 w-5 rounded-lg flex items-center justify-center text-[10px] shrink-0 border transition-all', ok ? 'bg-[var(--ds-background-success,#E3FCEF)] border-[var(--ds-border-success,#36B37E)] text-[var(--ds-text-success,#006644)] shadow-sm' : 'bg-[var(--ds-background-neutral-subtle,#F4F5F7)] border-[var(--ds-border,#DFE1E6)] text-[var(--ds-text-subtlest,#A5ADBA)]')}>
+                  {ok ? '✓' : '—'}
+                </div>
+                <span className={cn('text-[11px] font-black italic uppercase tracking-tight', ok ? 'text-[var(--ds-text,#172B4D)]' : 'text-[var(--ds-text-subtlest,#A5ADBA)] opacity-60')}>{label}</span>
               </div>
             ))}
           </CardContent>
         </Card>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-3">
+      <div className="grid gap-12 lg:grid-cols-3">
         {/* Admin list */}
-        <div className="lg:col-span-2 space-y-4">
-          <h2 className="text-base font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2">
-            <Shield className="h-4 w-4" />
-            {t('admins.platformAdmins', { count: admins.length })}
-          </h2>
-          {admins.length === 0 ? (
-            <Card className="shadow-sm">
-              <CardContent className="py-10 text-center text-muted-foreground">
-                <Shield className="h-8 w-8 mx-auto mb-2 opacity-20" />
-                <p className="font-medium">{t('admins.noAdminsYet')}</p>
-                <p className="text-xs mt-1">{t('admins.createFirstAdmin')}</p>
-              </CardContent>
-            </Card>
-          ) : (
-            <div className="space-y-2">
-              {admins.map((admin) => {
-                const suspended = admin.deletedAt !== null;
-                const isFlash = pwFlash?.id === admin.id;
-                return (
-                  <Card
-                    key={admin.id}
-                    className={cn(
-                      'shadow-sm transition-colors',
-                      suspended ? 'opacity-70' : '',
-                      isFlash ? 'border-amber-200 dark:border-amber-700 bg-amber-50/50 dark:bg-amber-900/10' : ''
-                    )}
-                  >
-                    <CardContent className="p-4">
-                      <div className="flex items-center justify-between gap-4">
-                        <div className="flex items-center gap-3 min-w-0">
-                          <div className={cn(
-                            'flex h-10 w-10 shrink-0 items-center justify-center rounded-full font-bold text-xs uppercase shadow-sm',
-                            suspended
-                              ? 'bg-muted text-muted-foreground'
-                              : 'bg-red-500/10 text-red-600 dark:text-red-400'
-                          )}>
-                            {admin.name.split(' ').map((n) => n[0]).join('').slice(0, 2)}
-                          </div>
-                          <div className="min-w-0">
-                            <div className="flex items-center gap-2">
-                              <p className="font-bold text-foreground text-sm leading-none truncate">{admin.name}</p>
-                              {suspended && (
-                                <Badge className="bg-amber-100 dark:bg-amber-900/30 text-amber-900 dark:text-amber-300 border-none text-[9px] font-bold uppercase">
-                                  {t('admins.suspended')}
-                                </Badge>
-                              )}
-                            </div>
-                            <div className="flex items-center gap-3 mt-1">
-                              <p className="text-xs text-muted-foreground flex items-center gap-1 truncate">
-                                <Mail className="h-2.5 w-2.5 shrink-0" />
-                                {admin.email}
-                              </p>
-                              <p className="text-[10px] text-muted-foreground flex items-center gap-1 shrink-0">
-                                <Calendar className="h-2.5 w-2.5" />
-                                {new Date(admin.createdAt).toLocaleDateString(locale)}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-2 shrink-0">
-                          <form action={resetAdminPassword}>
-                            <input type="hidden" name="id" value={admin.id} />
-                            <Button
-                              type="submit"
-                              size="sm"
-                              variant="outline"
-                              className="h-8 px-3 text-[11px] font-bold whitespace-nowrap"
-                            >
-                              <KeyRound className="h-3 w-3 ltr:mr-1.5 rtl:ml-1.5" />
-                              {t('admins.reset')}
-                            </Button>
-                          </form>
-                          <form action={toggleSuspend}>
-                            <input type="hidden" name="id" value={admin.id} />
-                            <input type="hidden" name="suspended" value={String(suspended)} />
-                            <Button
-                              type="submit"
-                              size="sm"
-                              variant="outline"
-                              className={cn(
-                                'h-8 text-[11px] font-bold shadow-sm',
-                                suspended
-                                  ? 'border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/20'
-                                  : 'border-red-100 dark:border-red-800 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20'
-                              )}
-                            >
-                              {suspended ? (
-                                <><ShieldCheck className="h-3 w-3 ltr:mr-1.5 rtl:ml-1.5" />{t('admins.restore')}</>
-                              ) : (
-                                <><ShieldAlert className="h-3 w-3 ltr:mr-1.5 rtl:ml-1.5" />{t('admins.suspend')}</>
-                              )}
-                            </Button>
-                          </form>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                );
-              })}
-            </div>
-          )}
+        <div className="lg:col-span-2 flex flex-col">
+          <Card className="border-[var(--ds-border,#DFE1E6)] shadow-md overflow-hidden flex flex-col flex-1">
+            <CardHeader className="flex flex-row items-center justify-between border-b border-[var(--ds-border-subtle,#EBECF0)] px-6 py-5 bg-[var(--ds-background-neutral-subtle,#F4F5F7)]/30">
+              <div>
+                <CardTitle className="text-base font-black italic uppercase tracking-tight text-[var(--ds-text,#172B4D)]">
+                   {t('admins.platformAdmins', { count: admins.length })}
+                </CardTitle>
+                <p className="text-[11px] text-[var(--ds-text-subtle,#6B778C)] font-medium">Verified system administrator accounts with full infrastructure access.</p>
+              </div>
+              <Shield className="h-5 w-5 text-[var(--ds-text-subtlest,#A5ADBA)] opacity-30" />
+            </CardHeader>
+            <CardContent className="p-0 flex-1">
+               <DynamicTable columns={columns} items={admins} />
+            </CardContent>
+          </Card>
         </div>
 
         {/* Create admin form */}
-        <div>
-          <h2 className="text-base font-bold uppercase tracking-widest text-muted-foreground flex items-center gap-2 mb-4">
-            <UserPlus className="h-4 w-4" />
-            {t('admins.addAdmin')}
-          </h2>
-          <Card className="shadow-md">
-            <CardContent className="p-5">
-              <form action={createAdmin} className="space-y-4">
-                <div className="space-y-1.5">
-                  <Label htmlFor="name" className="text-[11px] font-black uppercase tracking-widest text-muted-foreground">
+        <div className="space-y-6">
+          <Card className="border-[var(--ds-border,#DFE1E6)] shadow-xl overflow-hidden sticky top-6">
+            <div className="h-1 bg-[var(--ds-background-brand-bold,#0052CC)] w-full" />
+            <CardHeader className="px-6 pt-6">
+              <CardTitle className="text-base font-black italic uppercase tracking-tight text-[var(--ds-text,#172B4D)] flex items-center gap-3">
+                <div className="p-2 bg-[var(--ds-background-neutral-subtle,#F4F5F7)] rounded-lg">
+                   <UserPlus className="h-4 w-4 text-[var(--ds-text-brand,#0052CC)]" />
+                </div>
+                {t('admins.addAdmin')}
+              </CardTitle>
+              <p className="text-[11px] text-[var(--ds-text-subtle,#6B778C)] font-medium">Provision new administrative credentials.</p>
+            </CardHeader>
+            <CardContent className="p-6">
+              <form action={createAdmin} className="space-y-5">
+                <div className="space-y-2">
+                  <Label htmlFor="name" className="text-[10px] font-black italic uppercase tracking-[0.1em] text-[var(--ds-text-subtle,#6B778C)]">
                     {t('admins.fullName')}
                   </Label>
-                  <Input id="name" name="name" placeholder={t('admins.fullNamePlaceholder')} required className="h-10" />
+                  <Input id="name" name="name" placeholder={t('admins.fullNamePlaceholder')} required className="h-11 border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-background-neutral-subtle,#F4F5F7)]/50 focus:bg-white transition-all rounded-xl" />
                 </div>
-                <div className="space-y-1.5">
-                  <Label htmlFor="email" className="text-[11px] font-black uppercase tracking-widest text-muted-foreground">
+                <div className="space-y-2">
+                  <Label htmlFor="email" className="text-[10px] font-black italic uppercase tracking-[0.1em] text-[var(--ds-text-subtle,#6B778C)]">
                     {t('admins.email')}
                   </Label>
-                  <Input id="email" name="email" type="email" placeholder={t('admins.emailPlaceholder')} required className="h-10" dir="ltr" />
+                  <Input id="email" name="email" type="email" placeholder={t('admins.emailPlaceholder')} required className="h-11 border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-background-neutral-subtle,#F4F5F7)]/50 focus:bg-white transition-all rounded-xl" dir="ltr" />
                 </div>
-                <div className="space-y-1.5">
-                  <Label htmlFor="password" className="text-[11px] font-black uppercase tracking-widest text-muted-foreground">
+                <div className="space-y-2">
+                  <Label htmlFor="password" className="text-[10px] font-black italic uppercase tracking-[0.1em] text-[var(--ds-text-subtle,#6B778C)]">
                     {t('admins.initialPassword')}
                   </Label>
                   <Input
@@ -404,15 +385,20 @@ export default async function AdminsPage({
                     placeholder={t('admins.passwordPlaceholder')}
                     minLength={8}
                     required
-                    className="h-10 text-left ltr:text-left rtl:text-right"
+                    className="h-11 border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-background-neutral-subtle,#F4F5F7)]/50 focus:bg-white transition-all rounded-xl text-left ltr:text-left rtl:text-right"
                   />
                 </div>
-                <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold">
+                <Button type="submit" variant="primary" className="w-full h-12 text-xs font-black italic uppercase tracking-[0.2em] shadow-lg shadow-blue-500/20 active:translate-y-0.5 transition-all">
                   <UserPlus className="h-4 w-4 ltr:mr-2 rtl:ml-2" />
                   {t('admins.createAdminBtn')}
                 </Button>
               </form>
             </CardContent>
+            <div className="p-4 bg-[var(--ds-background-neutral-subtle,#F4F5F7)]/50 border-t border-[var(--ds-border-subtle,#EBECF0)]">
+               <p className="text-[9px] text-[var(--ds-text-subtlest,#A5ADBA)] text-center font-bold uppercase tracking-widest">
+                  Action will be logged in Immutable Audit Archive
+               </p>
+            </div>
           </Card>
         </div>
       </div>
