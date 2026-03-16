@@ -24,7 +24,8 @@ export async function POST(req: Request) {
       apiKey: process.env.GEMINI_API_KEY,
     });
     
-    const model = google('gemini-1.5-flash');
+    // Use Gemini 2.0 Flash (as verified available in this environment)
+    const model = google('gemini-2.0-flash');
 
     // 4. Enhanced System prompt for GateAI (data-aware)
     const systemPrompt = `You are GateAI, an intelligent operations agent for GateFlow.
@@ -52,6 +53,12 @@ ${orgContext ? JSON.stringify(orgContext, null, 2) : 'No data available.'}
     return result.toDataStreamResponse();
   } catch (error: any) {
     console.error('[GateAI] API Error:', error);
+    
+    // Specialize error messages for the user
+    if (error.status === 429 || error.message?.includes('429') || error.message?.includes('Resource has been exhausted')) {
+      return new Response('Quota exceeded: The AI is currently at its free-tier limit. Please try again in a few minutes.', { status: 429 });
+    }
+    
     return new Response(`AI Assistant Error: ${error.message || 'Unknown error'}`, { status: 500 });
   }
 }
