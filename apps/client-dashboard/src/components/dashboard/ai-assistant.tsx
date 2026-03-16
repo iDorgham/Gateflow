@@ -4,9 +4,24 @@ import { useState, useEffect, useRef } from 'react';
 import { useChat, type Message } from 'ai/react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { Send, Bot, User, Loader2, RotateCcw, Sparkles } from 'lucide-react';
-import { cn } from '@gate-access/ui';
-import { Button } from '@gate-access/ui';
+import { 
+  Send, 
+  User, 
+  Loader2, 
+  RotateCcw, 
+  Mic, 
+  Paperclip, 
+  Plus
+} from 'lucide-react';
+import { 
+  cn, 
+  Button, 
+  AvatarTag,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger
+} from '@gate-access/ui';
 import type { Locale } from '@/lib/i18n-config';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -80,8 +95,10 @@ export interface AIAssistantProps {
 export function AIAssistant({ locale }: AIAssistantProps) {
   const [hydrated, setHydrated] = useState(false);
   const [storedMessages, setStoredMessages] = useState<Message[]>([]);
+  const [taggedItems, setTaggedItems] = useState<{ id: string; label: string; type: 'resident' | 'unit' }[]>([]);
   const formRef = useRef<HTMLFormElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
   const isRtl = locale.startsWith('ar');
@@ -101,6 +118,7 @@ export function AIAssistant({ locale }: AIAssistantProps) {
     isLoading,
     setMessages,
     append,
+    setInput,
   } = useChat({
     api: '/api/ai/assistant',
     initialMessages: hydrated
@@ -168,39 +186,50 @@ export function AIAssistant({ locale }: AIAssistantProps) {
   const hasOnlyWelcome = messages.length === 1 && messages[0]?.id === 'welcome';
 
   return (
-    <div className="flex h-full flex-col bg-card" dir={isRtl ? 'rtl' : 'ltr'}>
+    <div className="flex h-full flex-col bg-[var(--ds-surface-default,#FFFFFF)]" dir={isRtl ? 'rtl' : 'ltr'}>
 
       {/* Messages */}
-      <div className="flex-1 space-y-5 overflow-y-auto px-4 py-4">
+      <div className="flex-1 space-y-4 overflow-y-auto px-4 py-4">
 
-        {/* Premium welcome card — shown only when no real conversation yet */}
+        {/* mediaBubble AI Welcome card */}
         {hasOnlyWelcome && !isLoading && (
-          <div className="rounded-2xl bg-muted/20 p-6 text-center">
+          <div className="rounded-[var(--ds-border-radius-400,8px)] bg-[var(--ds-surface-raised,#FFFFFF)] border border-[var(--ds-border,#DFE1E6)] shadow-[var(--ds-shadow-raised)] p-6 text-center">
             <div className="flex justify-center mb-4">
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10 text-primary">
-                <Sparkles className="h-8 w-8" />
+              {/* Rovo gradient avatar */}
+              <div className="flex h-14 w-14 items-center justify-center rounded-[var(--ds-border-radius-400,8px)] shadow-[var(--ds-shadow-overlay)]"
+                style={{ background: 'linear-gradient(135deg, #6554C0 0%, #8777D9 50%, #998DD9 100%)' }}>
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 3L20 7.5V16.5L12 21L4 16.5V7.5L12 3Z" stroke="white" strokeWidth="1.5" strokeLinejoin="round"/>
+                  <path d="M12 8L16 10.5V15.5L12 18L8 15.5V10.5L12 8Z" fill="white" fillOpacity="0.4"/>
+                  <circle cx="12" cy="12" r="2" fill="white"/>
+                </svg>
               </div>
             </div>
             <div className="flex items-center justify-center gap-1.5 mb-1">
-              <p className="text-sm font-black uppercase tracking-tight">
-                {isRtl ? 'مساعد GateFlow' : 'GateFlow Assistant'}
+              <p className="text-sm font-bold text-[var(--ds-text,#172B4D)]">
+                {isRtl ? 'مساعد GateFlow' : 'GateFlow'}
               </p>
-              <span className="rounded-md bg-muted px-1.5 py-0.5 text-[9px] font-bold text-muted-foreground uppercase tracking-wider">
-                Gemini
+              <span className="rounded-[var(--ds-border-radius-200,4px)] px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider"
+                style={{
+                  background: 'var(--ds-background-discovery,#EAE6FF)',
+                  color: 'var(--ds-text-discovery,#403294)',
+                  border: '1px solid var(--ds-border-discovery,#998DD9)',
+                }}>
+                AI
               </span>
             </div>
-            <p className="text-xs text-muted-foreground mb-5">
+            <p className="text-xs text-[var(--ds-text-subtle,#42526E)] mb-5">
               {isRtl ? 'اسألني أي شيء عن نظامك' : 'Ask me anything about your system'}
             </p>
-            <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-2">
-              {isRtl ? 'اقتراحات' : 'Get Started'}
+            <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--ds-text-subtlest,#6B778C)] mb-2">
+              {isRtl ? 'اقتراحات' : 'Get started'}
             </p>
             <div className="flex flex-wrap gap-2 justify-center">
               {prompts.map((p) => (
                 <button
                   key={p}
                   onClick={() => sendExample(p)}
-                  className="rounded-xl border border-border bg-background px-3 py-2 text-xs text-muted-foreground transition-all hover:border-primary/30 hover:bg-primary/5 hover:text-foreground hover:shadow-md active:scale-95"
+                  className="rounded-[var(--ds-border-radius-200,4px)] border border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-surface-sunken,#F4F5F7)] px-3 py-2 text-xs text-[var(--ds-text-subtle,#42526E)] transition-all hover:border-[var(--ds-border-discovery,#998DD9)] hover:bg-[var(--ds-background-discovery,#EAE6FF)] hover:text-[var(--ds-text-discovery,#403294)] active:scale-95"
                 >
                   {p}
                 </button>
@@ -209,7 +238,7 @@ export function AIAssistant({ locale }: AIAssistantProps) {
           </div>
         )}
 
-        {/* Message bubbles — skip welcome message, show real messages */}
+        {/* Message bubbles */}
         {!hasOnlyWelcome && messages.map((message) => {
           if (message.id === 'welcome') return null;
           const isUser = message.role === 'user';
@@ -227,24 +256,30 @@ export function AIAssistant({ locale }: AIAssistantProps) {
                   : isRtl ? 'flex-row-reverse' : 'flex-row'
               )}
             >
-              <div
-                className={cn(
-                  'flex h-8 w-8 shrink-0 items-center justify-center rounded-full',
-                  isUser ? 'bg-primary' : 'bg-muted'
-                )}
+              {/* Avatar */}
+              <div className={cn(
+                'flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold',
+                isUser
+                  ? 'bg-[var(--ds-background-brand-bold,#0052CC)] text-[var(--ds-text-inverse,#FFFFFF)]'
+                  : 'text-white'
+              )}
+                style={!isUser ? { background: 'linear-gradient(135deg, #6554C0, #8777D9)' } : undefined}
               >
                 {isUser ? (
-                  <User className="h-4 w-4 text-primary-foreground" />
+                  <User className="h-4 w-4" />
                 ) : (
-                  <Bot className="h-4 w-4 text-muted-foreground" />
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 4L19 8V16L12 20L5 16V8L12 4Z" stroke="white" strokeWidth="1.5" strokeLinejoin="round"/>
+                    <circle cx="12" cy="12" r="2" fill="white"/>
+                  </svg>
                 )}
               </div>
               <div
                 className={cn(
-                  'max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed shadow-sm',
+                  'max-w-[85%] rounded-[var(--ds-border-radius-400,8px)] px-3.5 py-2.5 text-sm leading-relaxed',
                   isUser
-                    ? cn('bg-primary text-primary-foreground', isRtl ? 'rounded-bl-sm' : 'rounded-br-sm')
-                    : cn('bg-muted/50 text-foreground border border-border/50', isRtl ? 'rounded-br-sm' : 'rounded-bl-sm')
+                    ? 'bg-[var(--ds-background-brand-bold,#0052CC)] text-[var(--ds-text-inverse,#FFFFFF)] shadow-[var(--ds-shadow-raised)]'
+                    : 'bg-[var(--ds-surface-raised,#FFFFFF)] text-[var(--ds-text,#172B4D)] border border-[var(--ds-border,#DFE1E6)] shadow-[var(--ds-shadow-raised)]'
                 )}
                 dir={msgRtl ? 'rtl' : 'ltr'}
               >
@@ -257,18 +292,19 @@ export function AIAssistant({ locale }: AIAssistantProps) {
         {/* Typing indicator */}
         {isLoading && (
           <div className={cn('flex items-end gap-2', isRtl ? 'flex-row-reverse' : 'flex-row')}>
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-muted">
-              <Bot className="h-4 w-4 text-muted-foreground" />
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-white"
+              style={{ background: 'linear-gradient(135deg, #6554C0, #8777D9)' }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M12 4L19 8V16L12 20L5 16V8L12 4Z" stroke="white" strokeWidth="1.5" strokeLinejoin="round"/>
+                <circle cx="12" cy="12" r="2" fill="white"/>
+              </svg>
             </div>
-            <div
-              className={cn(
-                'flex items-center gap-1 rounded-2xl bg-muted/50 px-3.5 py-3 border border-border/50',
-                isRtl ? 'rounded-br-sm' : 'rounded-bl-sm'
-              )}
-            >
-              <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground [animation-delay:0ms]" />
-              <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground [animation-delay:150ms]" />
-              <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-muted-foreground [animation-delay:300ms]" />
+            <div className={cn(
+              'flex items-center gap-1 rounded-[var(--ds-border-radius-400,8px)] bg-[var(--ds-surface-raised,#FFFFFF)] px-3.5 py-3 border border-[var(--ds-border,#DFE1E6)] shadow-[var(--ds-shadow-raised)]',
+            )}>
+              <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[var(--ds-background-discovery-bold,#5243AA)] [animation-delay:0ms]" />
+              <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[var(--ds-background-discovery-bold,#5243AA)] [animation-delay:150ms]" />
+              <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[var(--ds-background-discovery-bold,#5243AA)] [animation-delay:300ms]" />
             </div>
           </div>
         )}
@@ -293,37 +329,146 @@ export function AIAssistant({ locale }: AIAssistantProps) {
       {/* Input */}
       <form
         ref={formRef}
-        onSubmit={handleSubmit}
-        className="shrink-0 border-t border-border p-4 bg-muted/10"
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit(e);
+          setTaggedItems([]); // Clear tags after sending
+        }}
+        className="shrink-0 border-t border-[var(--ds-border,#DFE1E6)] p-0 bg-[var(--ds-surface-default,#FFFFFF)]"
       >
-        <div className={cn('flex items-end gap-2', isRtl ? 'flex-row-reverse' : 'flex-row')}>
-          <textarea
-            value={input}
-            onChange={handleInputChange}
-            onKeyDown={handleKeyDown}
-            placeholder={isRtl ? 'اسأل شيئاً...' : 'Ask something...'}
-            rows={1}
-            disabled={isLoading}
-            className="flex-1 resize-none rounded-2xl border border-border bg-background px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 disabled:opacity-50 shadow-sm transition-all"
-            style={{
-              direction: isRtl ? 'rtl' : 'ltr',
-              minHeight: '48px',
-              maxHeight: '120px',
-            }}
-          />
-          <Button
-            type="submit"
-            size="icon"
-            disabled={isLoading || !input.trim()}
-            className="h-11 w-11 shrink-0 rounded-2xl shadow-sm transition-transform active:scale-95"
-          >
-            {isLoading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <Send className={cn('h-4 w-4', isRtl && 'rotate-180')} />
-            )}
-          </Button>
-        </div>
+        <TooltipProvider>
+          {/* Tagged Context Area */}
+          {taggedItems.length > 0 && (
+            <div className="px-4 pt-3 flex flex-wrap gap-2 animate-in fade-in slide-in-from-bottom-2 duration-300">
+              {taggedItems.map((item) => (
+                <AvatarTag
+                  key={item.id}
+                  label={item.label}
+                  onRemove={() => setTaggedItems(prev => prev.filter(i => i.id !== item.id))}
+                />
+              ))}
+            </div>
+          )}
+
+          <div className="flex flex-col p-4 gap-3">
+            <div className={cn(
+              'relative flex flex-col rounded-[12px] border transition-all duration-300 shadow-sm focus-within:shadow-md focus-within:ring-2 focus-within:ring-[var(--ds-border-selected,#4C9AFF)] focus-within:ring-offset-0',
+              'bg-[var(--ds-surface-raised,#FFFFFF)] border-[var(--ds-border,#DFE1E6)]'
+            )}>
+              <textarea
+                value={input}
+                onChange={handleInputChange}
+                onKeyDown={handleKeyDown}
+                placeholder={isRtl ? 'اسأل شيئاً...' : 'Ask something or tag with @...'}
+                rows={1}
+                disabled={isLoading}
+                className="w-full resize-none bg-transparent px-4 pt-4 pb-2 text-sm focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+                style={{
+                  direction: isRtl ? 'rtl' : 'ltr',
+                  minHeight: '48px',
+                  maxHeight: '120px',
+                }}
+              />
+              
+              <div className={cn("flex items-center justify-between px-2 pb-2", isRtl && "flex-row-reverse")}>
+                <div className={cn("flex items-center gap-1", isRtl && "flex-row-reverse")}>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <>
+                        <input 
+                          type="file" 
+                          ref={fileInputRef} 
+                          className="hidden" 
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              toast.info(isRtl ? `تم اختيار: ${file.name}` : `Selected: ${file.name}`);
+                              // In Phase 3+ we will handle actual upload
+                            }
+                          }}
+                        />
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          type="button" 
+                          className="h-8 w-8 text-[var(--ds-icon-subtle,#6B778C)] hover:text-[var(--ds-text,#172B4D)]"
+                          onClick={() => fileInputRef.current?.click()}
+                        >
+                          <Paperclip size={16} />
+                        </Button>
+                      </>
+                    </TooltipTrigger>
+                    <TooltipContent side="top">{isRtl ? 'إرفاق ملف' : 'Attach file'}</TooltipContent>
+                  </Tooltip>
+
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        type="button" 
+                        className="h-8 w-8 text-[var(--ds-icon-subtle,#6B778C)] hover:text-[var(--ds-text,#172B4D)]"
+                        onClick={() => toast.info(isRtl ? 'ميزة الصوت ستتوفر قريباً' : 'Voice feature coming soon')}
+                      >
+                        <Mic size={16} />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side="top">{isRtl ? 'تحدث' : 'Voice'}</TooltipContent>
+                  </Tooltip>
+
+                  <div className="w-px h-4 bg-[var(--ds-border,#DFE1E6)] mx-1" />
+
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        type="button" 
+                        className="h-8 w-8 text-[var(--ds-icon-subtle,#6B778C)] hover:text-[var(--ds-text-brand,#0052CC)]"
+                        onClick={() => {
+                          // Mock tagging a resident for demonstration
+                          if (!taggedItems.some(i => i.id === 'demo-res')) {
+                            setTaggedItems(prev => [...prev, { id: 'demo-res', label: 'Ahmed V-42', type: 'resident' }]);
+                            if (!input) setInput(isRtl ? 'أنشئ رمز QR لـ ' : 'Create QR for ');
+                          }
+                        }}
+                      >
+                        <Plus size={16} />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side="top">{isRtl ? 'تاق' : 'Tag'}</TooltipContent>
+                  </Tooltip>
+                </div>
+
+                <Button
+                  type="submit"
+                  size="compact"
+                  variant="brand"
+                  disabled={isLoading || (!input.trim() && taggedItems.length === 0)}
+                  className="gap-2 font-semibold"
+                >
+                  {isLoading ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <>
+                      <span>{isRtl ? 'إرسال' : 'Send'}</span>
+                      <Send size={14} className={cn(isRtl && 'rotate-180')} />
+                    </>
+                  )}
+                </Button>
+              </div>
+            </div>
+            
+            <div className={cn("flex items-center gap-1.5 px-1", isRtl && "flex-row-reverse")}>
+              <div className="px-1.5 py-0.5 rounded-sm bg-[var(--ds-background-discovery,#EAE6FF)] text-[var(--ds-text-discovery,#403294)] text-[9px] font-bold uppercase tracking-wider">
+                mediaBubble AI
+              </div>
+              <span className="text-[10px] text-[var(--ds-text-subtlest,#6B778C)]">
+                {isRtl ? 'مدعوم بواسطة mediaBubble AI Intelligence' : 'Powered by mediaBubble AI Intelligence'}
+              </span>
+            </div>
+          </div>
+        </TooltipProvider>
       </form>
     </div>
   );

@@ -440,12 +440,16 @@
       "manage": "Manage"
     },
     "sidebar": {
+      "groupMain": "Main",
+      "groupResidents": "Residents",
+      "groupAccess": "Access",
+      "groupSystem": "System",
       "operations": "Operations",
       "workspace": "Workspace",
       "residents": "Residents",
       "contacts": "Contacts",
       "units": "Units",
-      "overview": "Overview",
+      "overview": "Dashboard",
       "projects": "Projects",
       "qrCodes": "QR Codes",
       "scanLogs": "Scan Logs",
@@ -453,6 +457,7 @@
       "gates": "Gates",
       "gateAssignments": "Gate assignments",
       "analytics": "Analytics",
+      "gateAi": "GateAI",
       "watchlist": "Watchlist",
       "settings": "Settings",
       "expand": "Expand Sidebar",
@@ -800,6 +805,19 @@
         "filteredDesc": "Try clearing your filters to see all QR codes.",
         "noneDesc": "Create your first QR code to start controlling gate access.",
         "clearFilters": "Clear filters"
+      },
+      "ai": {
+        "welcomeTitle": "Meet GateAI: Your Intelligent Operations Agent",
+        "welcomeDesc": "Streamline your property operations with natural language. Ask questions about scans, generate reports, or create bulk QRs in seconds.",
+        "getStarted": "Get Started",
+        "viewGuide": "View Guide",
+        "capAnalytics": "Data Q&A & Analytics",
+        "capAnalyticsDesc": "Ask questions about your projects and visitor trends. GateAI pulls real-time data to give you instant answers.",
+        "capReporting": "Automated Reporting",
+        "capReportingDesc": "Generate custom PDF and CSV reports on the fly. Schedule them for daily or weekly delivery to your inbox.",
+        "capBulkQR": "Bulk QR Operations",
+        "capBulkQRDesc": "Create hundreds of QR codes by simply describing your intent. Tag and assign rules with a single sentence.",
+        "comingSoon": "Phase 1 development is underway. Read-only intelligence will be available in the next update."
       },
       "table": {
         "code": "Code",

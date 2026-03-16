@@ -5,25 +5,29 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import {
-  LayoutDashboard,
-  QrCode,
-  ScanLine,
-  BarChart3,
-  Settings,
-  Power,
   ShieldCheck,
   ChevronLeft,
   ChevronRight,
   ChevronDown,
   Menu,
   Sparkles,
-  ListTodo,
-  CreditCard,
-  Users,
-  Home,
   X,
-  Building,
+  Settings,
+  Power,
+  CreditCard,
+  ListTodo
 } from 'lucide-react';
+import {
+  SquaresFour,
+  QrCode as QrCodeIcon,
+  Record,
+  ChartLineUp,
+  House,
+  Gear,
+  Sparkle,
+  Users,
+  Buildings,
+} from '@phosphor-icons/react';
 import {
   Avatar,
   AvatarFallback,
@@ -50,7 +54,12 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
 } from '@gate-access/ui';
+import { useTranslation } from 'react-i18next';
 import { GlobalSearch } from './global-search';
 import { AIAssistant } from './ai-assistant';
 import { ThemeToggle } from './theme-toggle';
@@ -58,7 +67,6 @@ import { ProjectFilterProvider } from '@/context/ProjectFilterContext';
 import { Locale } from '@/lib/i18n-config';
 import { useRealtimeEvents } from '@/lib/realtime/use-realtime-events';
 import { getCsrfToken } from '@/lib/csrf';
-import { ChevronsUpDown } from 'lucide-react';
 
 export interface DashboardLayoutProps {
   user: { id: string; name: string; email: string; role: string };
@@ -76,135 +84,126 @@ export interface TaskItem {
   done: boolean;
 }
 
-function MiniHeader({ user, locale }: { user: DashboardLayoutProps['user']; locale: Locale }) {
-  const router = useRouter();
-  const initials = user.name.split(' ').filter(Boolean).map((n) => n[0]).join('').slice(0, 2);
-
-  return (
-    <header
-      className="flex h-8 shrink-0 items-center justify-end gap-2 border-b border-border/50 bg-muted/30 px-3 md:px-4"
-      role="banner"
-      aria-label="User and account"
-    >
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <button
-            type="button"
-            className="flex items-center gap-2 rounded-md px-2 py-1 text-left outline-none hover:opacity-90 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-            aria-label="Open user menu"
-          >
-            <Avatar className="h-5 w-5 border border-border">
-              <AvatarFallback className="bg-primary text-primary-foreground text-[10px] font-semibold">
-                {initials}
-              </AvatarFallback>
-            </Avatar>
-            <span className="max-w-[120px] truncate text-xs font-medium hidden sm:inline">{user.name}</span>
-            <ChevronDown className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
-          </button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" sideOffset={6} className="w-56">
-          <DropdownMenuLabel className="font-normal">
-            <p className="text-sm font-medium">{user.name}</p>
-            <p className="text-xs text-muted-foreground truncate">{user.email}</p>
-          </DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem asChild>
-            <Link href={`/${locale}/dashboard/settings`} className="flex items-center gap-2 cursor-pointer">
-              <Settings className="h-4 w-4" />
-              <span>Settings</span>
-            </Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-            <Link href={`/${locale}/dashboard/settings?tab=billing`} className="flex items-center gap-2 cursor-pointer">
-              <CreditCard className="h-4 w-4" />
-              <span>Billing</span>
-            </Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem className="flex items-center justify-between gap-2 cursor-default">
-            <span className="text-xs text-muted-foreground">Theme</span>
-            <ThemeToggle />
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            className="text-destructive focus:text-destructive cursor-pointer"
-            onClick={() => router.push(`/${locale}/logout`)}
-          >
-            <Power className="h-4 w-4" />
-            <span>Log out</span>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </header>
-  );
-}
-
 function SearchHeader({ 
   locale, 
+  user,
   projects, 
   currentProjectId,
   handleProjectSwitch,
   isPending
 }: { 
   locale: Locale;
+  user: DashboardLayoutProps['user'];
   projects: { id: string; name: string }[];
   currentProjectId: string | null;
   handleProjectSwitch: (id: string) => void;
   isPending: boolean;
 }) {
+  const initials = user.name.split(' ').filter(Boolean).map((n) => n[0]).join('').slice(0, 2).toUpperCase();
+
   return (
     <div
-      className="flex h-12 shrink-0 items-center gap-3 border-b border-border bg-background/95 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/80"
+      className="flex h-16 shrink-0 items-center justify-between gap-4 border-b border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-background-default,#FFFFFF)]/80 px-4 backdrop-blur-md sticky top-0 z-30"
       role="search"
     >
-      <div className="flex flex-1 items-center max-w-xl">
+      <div className="flex flex-1 items-center max-w-md">
         <GlobalSearch locale={locale} />
       </div>
-      
-      {/* Project Switcher */}
-      {projects.length > 0 && (
-        <div className="hidden sm:flex items-center gap-2">
-          <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground opacity-60 px-1">
-            Project
-          </span>
-          <Select
-            value={currentProjectId ?? 'all'}
-            onValueChange={handleProjectSwitch}
-            disabled={isPending}
-          >
-            <SelectTrigger className="h-8 w-[160px] bg-secondary/30 border-none text-xs font-bold hover:bg-secondary/50">
-              <SelectValue placeholder="Select Project" />
-            </SelectTrigger>
-            <SelectContent align="end">
-              <SelectItem value="all" className="text-xs font-medium">All Projects</SelectItem>
-              {projects.map((p) => (
-                <SelectItem key={p.id} value={p.id} className="text-xs font-medium">
-                  {p.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-      )}
 
-      <kbd className="hidden sm:inline-flex h-6 select-none items-center gap-0.5 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground" aria-hidden>
-        <span>⌘</span>K
-      </kbd>
+      <div className="flex items-center gap-2">
+        {/* Project Switcher */}
+        {projects.length > 0 && (
+          <div className="hidden sm:flex items-center gap-1.5 mr-2">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--ds-text-subtlest,#6B778C)]">
+              Project
+            </span>
+            <Select
+              value={currentProjectId ?? 'all'}
+              onValueChange={handleProjectSwitch}
+              disabled={isPending}
+            >
+              <SelectTrigger className="h-7 w-[140px] bg-[var(--ds-background-neutral-subtle,#F4F5F7)] border-none text-xs font-medium hover:bg-[var(--ds-background-neutral,#DFE1E6)] transition-colors">
+                <SelectValue placeholder="Select Project" />
+              </SelectTrigger>
+              <SelectContent align="end">
+                <SelectItem value="all" className="text-xs">All Projects</SelectItem>
+                {projects.map((p) => (
+                  <SelectItem key={p.id} value={p.id} className="text-xs">
+                    {p.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button
+              type="button"
+              className="flex items-center gap-1 rounded-sm p-1 transition-colors hover:bg-[var(--ds-background-subtle,#F4F5F7)] focus-visible:ring-2 focus-visible:ring-[var(--ds-border-selected,#4C9AFF)] outline-none"
+              aria-label="Open user menu"
+            >
+              <Avatar size="xsmall">
+                <AvatarFallback className="bg-[var(--ds-background-brand-subtle,#DEEBFF)] text-[var(--ds-text-brand,#0052CC)] text-[9px] font-bold">
+                  {initials}
+                </AvatarFallback>
+              </Avatar>
+              <ChevronDown className="h-3 w-3 text-[var(--ds-icon-subtle,#6B778C)]" />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" sideOffset={8} className="w-56 p-2">
+            <DropdownMenuLabel className="font-normal px-2 py-3">
+              <div className="flex flex-col gap-0.5">
+                <p className="text-sm font-semibold text-[var(--ds-text,#172B4D)]">{user.name}</p>
+                <p className="text-xs text-[var(--ds-text-subtle,#42526E)] truncate">{user.email}</p>
+              </div>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator className="bg-[var(--ds-border,#DFE1E6)]" />
+            <DropdownMenuItem asChild>
+              <Link href={`/${locale}/dashboard/settings`} className="flex items-center gap-2 cursor-pointer py-2">
+                <Settings className="h-4 w-4" />
+                <span>Settings</span>
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href={`/${locale}/dashboard/settings?tab=billing`} className="flex items-center gap-2 cursor-pointer py-2">
+                <CreditCard className="h-4 w-4" />
+                <span>Billing</span>
+              </Link>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator className="bg-[var(--ds-border,#DFE1E6)]" />
+            <DropdownMenuItem
+              className="text-[var(--ds-text-danger,#DE350B)] focus:text-[var(--ds-text-danger,#DE350B)] cursor-pointer py-2"
+              onClick={() => (window.location.href = `/${locale}/logout`)}
+            >
+              <Power className="h-4 w-4" />
+              <span>Log out</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        <div className="ml-2 hidden lg:block">
+          <ThemeToggle />
+        </div>
+      </div>
     </div>
   );
 }
 
 const NAV_ITEMS = [
-  { label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard, exact: true },
-  { label: 'QR Codes', href: '/dashboard/qrcodes', icon: QrCode },
-  { label: 'Scan Logs', href: '/dashboard/scans', icon: ScanLine },
-  { label: 'Gates', href: '/dashboard/gates', icon: Home },
-  { label: 'Analytics', href: '/dashboard/analytics', icon: BarChart3 },
-  { label: 'Settings', href: '/dashboard/settings', icon: Settings },
+  { label: 'Dashboard', href: '/dashboard', icon: SquaresFour, exact: true, i18nKey: 'sidebar.overview' },
+  { label: 'GateAI', href: '/dashboard/ai', icon: Sparkle, i18nKey: 'sidebar.gateAi' },
+  { label: 'QR Codes', href: '/dashboard/qrcodes', icon: QrCodeIcon, i18nKey: 'sidebar.qrCodes' },
+  { label: 'Scan Logs', href: '/dashboard/scans', icon: Record, i18nKey: 'sidebar.scanLogs' },
+  { label: 'Gates', href: '/dashboard/gates', icon: House, i18nKey: 'sidebar.gates' },
+  { label: 'Analytics', href: '/dashboard/analytics', icon: ChartLineUp, i18nKey: 'sidebar.analytics' },
+  { label: 'Settings', href: '/dashboard/settings', icon: Gear, i18nKey: 'sidebar.settings' },
 ];
 
 const RESIDENTS_ITEMS = [
-  { label: 'Contacts', href: '/dashboard/residents/contacts', icon: Users },
-  { label: 'Units', href: '/dashboard/residents/units', icon: Building },
+  { label: 'Contacts', href: '/dashboard/residents/contacts', icon: Users, i18nKey: 'sidebar.contacts' },
+  { label: 'Units', href: '/dashboard/residents/units', icon: Buildings, i18nKey: 'sidebar.units' },
 ];
 
 function LeftSidebar({
@@ -219,10 +218,52 @@ function LeftSidebar({
   isRtl: boolean;
 }) {
   const pathname = usePathname();
-
+  const { t } = useTranslation('dashboard');
   const isActive = (href: string, exact?: boolean) => {
     const localized = `/${locale}${href}`;
     return exact ? pathname === localized : pathname === localized || pathname.startsWith(localized + '/');
+  };
+
+  const NavItem = ({ 
+    item, 
+    collapsed, 
+    onClick 
+  }: { 
+    item: { label: string; href: string; icon: React.ElementType; exact?: boolean; i18nKey?: string }; 
+    collapsed: boolean;
+    onClick?: () => void;
+  }) => {
+    const Icon = item.icon;
+    const active = isActive(item.href, item.exact);
+    const label = item.i18nKey ? t(item.i18nKey, item.label) : item.label;
+
+    return (
+      <TooltipProvider delayDuration={300}>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Link
+              href={`/${locale}${item.href}`}
+              onClick={onClick}
+              className={cn(
+                'flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors mb-1',
+                active 
+                  ? 'bg-[#DEEBFF] text-[#0052CC] dark:bg-[#0747A6]/30 dark:text-[#4C9AFF]' 
+                  : 'text-[#42526E] dark:text-[#97A0AF] hover:bg-[#EBECF0] dark:hover:bg-[#2C333A]',
+                collapsed && 'justify-center px-0'
+              )}
+            >
+              <Icon weight={active ? 'fill' : 'regular'} className="h-5 w-5 shrink-0" />
+              {!collapsed && <span>{label}</span>}
+            </Link>
+          </TooltipTrigger>
+          {collapsed && (
+            <TooltipContent side="right" sideOffset={10}>
+              {label}
+            </TooltipContent>
+          )}
+        </Tooltip>
+      </TooltipProvider>
+    );
   };
 
   return (
@@ -234,91 +275,101 @@ function LeftSidebar({
       role="navigation"
       aria-label="Main navigation"
     >
-      <div className={cn('shrink-0 border-b border-sidebar-border p-3', isCollapsed ? 'flex justify-center' : 'px-4')}>
+      <div className={cn('shrink-0 border-b border-border/50 p-4', isCollapsed ? 'flex justify-center' : 'px-5')}>
         <Link
           href={`/${locale}/dashboard`}
-          className="flex items-center gap-3 rounded-lg transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar"
+          className="flex items-center gap-3 rounded-lg transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-ring"
           aria-label="GateFlow home"
         >
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground shadow-sm">
-            <ShieldCheck className="h-4 w-4" />
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-[#0052CC] text-white shadow-sm">
+            <ShieldCheck className="h-5 w-5" />
           </div>
-          {!isCollapsed && <span className="text-sm font-semibold tracking-tight text-sidebar-foreground">GateFlow</span>}
+          {!isCollapsed && <span className="text-lg font-bold tracking-tight text-[#172B4D] dark:text-[#EBECF0]">GateFlow</span>}
         </Link>
       </div>
 
       <ScrollArea className="flex-1 py-2">
-        <nav className="space-y-1 px-2">
-          <Link
-            href={`/${locale}/dashboard`}
-            className={cn(
-              'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
-              isActive('/dashboard', true) ? 'bg-primary/10 text-sidebar-foreground' : 'text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground',
-              isCollapsed && 'justify-center px-2'
+          <nav className="space-y-0.5 px-3">
+            {!isCollapsed && (
+              <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[#6B778C] dark:text-[#97A0AF] mb-3 mt-4">
+                {t('sidebar.groupMain', 'Main')}
+              </p>
             )}
-          >
-            <LayoutDashboard className="h-4 w-4 shrink-0" />
-            {!isCollapsed && <span>Dashboard</span>}
-          </Link>
+            <NavItem item={NAV_ITEMS[0]} collapsed={isCollapsed} />
 
-          <Collapsible defaultOpen className="space-y-1">
-            <CollapsibleTrigger
-              className={cn(
-                'flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring',
-                isCollapsed && 'justify-center px-2'
-              )}
-            >
-              <Users className="h-4 w-4 shrink-0" />
-              {!isCollapsed && (
-                <>
-                  <span className="flex-1 text-left">Residents</span>
-                  <ChevronDown className="h-4 w-4 shrink-0 transition-transform [[data-state=open]_&]:rotate-180" />
-                </>
-              )}
-            </CollapsibleTrigger>
-            <CollapsibleContent>
-              <div className={cn('space-y-0.5', isCollapsed ? 'mt-1' : 'ml-4 mt-1')}>
-                {RESIDENTS_ITEMS.map((item) => {
-                  const Icon = item.icon;
-                  const active = isActive(item.href);
-                  return (
-                    <Link
-                      key={item.href}
-                      href={`/${locale}${item.href}`}
-                      className={cn(
-                        'flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors',
-                        active ? 'bg-primary/10 text-sidebar-foreground font-medium' : 'text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground',
-                        isCollapsed && 'justify-center px-2'
-                      )}
-                    >
-                      <Icon className="h-4 w-4 shrink-0" />
-                      {!isCollapsed && <span>{item.label}</span>}
-                    </Link>
-                  );
-                })}
-              </div>
-            </CollapsibleContent>
-          </Collapsible>
-
-          {NAV_ITEMS.filter((item) => item.href !== '/dashboard').map((item) => {
-            const Icon = item.icon;
-            const active = isActive(item.href, item.exact);
-            return (
-              <Link
-                key={item.href}
-                href={`/${locale}${item.href}`}
+            {!isCollapsed && (
+              <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[#6B778C] dark:text-[#97A0AF] mb-3 mt-8">
+                {t('sidebar.groupResidents', 'Residents')}
+              </p>
+            )}
+            <Collapsible defaultOpen className="space-y-1">
+              <CollapsibleTrigger
                 className={cn(
-                  'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
-                  active ? 'bg-primary/10 text-sidebar-foreground' : 'text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground',
-                  isCollapsed && 'justify-center px-2'
+                  'flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-[#42526E] dark:text-[#97A0AF] hover:bg-[#EBECF0] dark:hover:bg-[#2C333A] transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring mb-1',
+                  isCollapsed && 'justify-center px-0'
                 )}
               >
-                <Icon className="h-4 w-4 shrink-0" />
-                {!isCollapsed && <span>{item.label}</span>}
-              </Link>
-            );
-          })}
-        </nav>
+                <Users className="h-5 w-5 shrink-0" />
+                {!isCollapsed && (
+                  <>
+                    <span className="flex-1 text-left">{t('sidebar.groupResidents', 'Residents')}</span>
+                    <ChevronDown className="h-4 w-4 shrink-0 transition-transform [[data-state=open]_&]:rotate-180" />
+                  </>
+                )}
+              </CollapsibleTrigger>
+              <CollapsibleContent>
+                <div className={cn('space-y-1', isCollapsed ? 'mt-1' : 'ml-4 mt-0.5')}>
+                  {RESIDENTS_ITEMS.map((item) => {
+                    const Icon = item.icon;
+                    const active = isActive(item.href);
+                    const label = item.i18nKey ? t(item.i18nKey, item.label) : item.label;
+                    return (
+                      <TooltipProvider key={item.href} delayDuration={300}>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Link
+                              href={`/${locale}${item.href}`}
+                              className={cn(
+                                'flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors mb-1',
+                                active 
+                                  ? 'bg-[#DEEBFF] text-[#0052CC] dark:bg-[#0747A6]/30 dark:text-[#4C9AFF] font-semibold' 
+                                  : 'text-[#42526E] dark:text-[#97A0AF] hover:bg-[#EBECF0] dark:hover:bg-[#2C333A]',
+                                isCollapsed && 'justify-center px-0'
+                              )}
+                            >
+                              <Icon weight={active ? 'fill' : 'regular'} className="h-5 w-5 shrink-0" />
+                              {!isCollapsed && <span>{label}</span>}
+                            </Link>
+                          </TooltipTrigger>
+                          {isCollapsed && (
+                            <TooltipContent side="right" sideOffset={10}>
+                              {label}
+                            </TooltipContent>
+                          )}
+                        </Tooltip>
+                      </TooltipProvider>
+                    );
+                  })}
+                </div>
+              </CollapsibleContent>
+            </Collapsible>
+
+            {!isCollapsed && (
+              <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[#6B778C] dark:text-[#97A0AF] mb-3 mt-8">
+                {t('sidebar.groupAccess', 'Access')}
+              </p>
+            )}
+            {NAV_ITEMS.filter((item) => item.href !== '/dashboard' && item.href !== '/dashboard/settings').map((item) => (
+              <NavItem key={item.href} item={item} collapsed={isCollapsed} />
+            ))}
+
+            {!isCollapsed && (
+              <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[#6B778C] dark:text-[#97A0AF] mb-3 mt-8">
+                {t('sidebar.groupSystem', 'System')}
+              </p>
+            )}
+            <NavItem item={NAV_ITEMS.find(n => n.href === '/dashboard/settings')!} collapsed={isCollapsed} />
+          </nav>
       </ScrollArea>
 
       <div className="shrink-0 border-t border-sidebar-border p-2 flex justify-center">
@@ -441,6 +492,7 @@ function MobileSidebar({
 }) {
   const pathname = usePathname();
 
+  const { t } = useTranslation('dashboard');
   useEffect(() => {
     onOpenChange(false);
   }, [pathname, onOpenChange]);
@@ -450,61 +502,83 @@ function MobileSidebar({
     return exact ? pathname === localized : pathname === localized || pathname.startsWith(localized + '/');
   };
 
+  const NavItem = ({ 
+    item, 
+    collapsed, 
+    onClick 
+  }: { 
+    item: { label: string; href: string; icon: React.ElementType; exact?: boolean; i18nKey?: string }; 
+    collapsed: boolean;
+    onClick?: () => void;
+  }) => {
+    const Icon = item.icon;
+    const active = isActive(item.href, item.exact);
+    const label = item.i18nKey ? t(item.i18nKey, item.label) : item.label;
+
+    return (
+      <Link
+        href={`/${locale}${item.href}`}
+        onClick={onClick}
+        className={cn(
+          'flex items-center gap-3 rounded-md px-3 py-3 text-sm font-medium transition-colors mb-1',
+          active 
+            ? 'bg-[#DEEBFF] text-[#0052CC] dark:bg-[#0747A6]/30 dark:text-[#4C9AFF]' 
+            : 'text-[#42526E] dark:text-[#97A0AF] hover:bg-[#EBECF0] dark:hover:bg-[#2C333A]',
+          collapsed && 'justify-center px-0'
+        )}
+      >
+        <Icon weight={active ? 'fill' : 'regular'} className="h-6 w-6 shrink-0" />
+        {!collapsed && <span>{label}</span>}
+      </Link>
+    );
+  };
+
   return (
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
       <SheetContent
         side={isRtl ? 'right' : 'left'}
-        className="w-64 p-0 border-0 bg-sidebar text-sidebar-foreground"
+        className="w-72 p-0 border-0 bg-white dark:bg-[#091E42] text-[#172B4D] dark:text-[#EBECF0]"
         aria-label="Mobile navigation"
       >
         <div className="flex flex-col h-full pt-6">
-          <Link href={`/${locale}/dashboard`} className="flex items-center gap-3 px-4 pb-4 border-b border-sidebar-border" onClick={() => onOpenChange(false)}>
-            <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
-              <ShieldCheck className="h-4 w-4" />
+          <Link href={`/${locale}/dashboard`} className="flex items-center gap-3 px-5 pb-5 border-b border-border/50" onClick={() => onOpenChange(false)}>
+            <div className="flex h-8 w-8 items-center justify-center rounded-md bg-[#0052CC] text-white">
+              <ShieldCheck className="h-5 w-5" />
             </div>
-            <span className="text-sm font-semibold">GateFlow</span>
+            <span className="text-lg font-bold tracking-tight text-[#172B4D]">GateFlow</span>
           </Link>
           <ScrollArea className="flex-1 py-4">
-            <nav className="space-y-1 px-2">
-              <Link
-                href={`/${locale}/dashboard`}
-                className={cn('flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium', isActive('/dashboard', true) ? 'bg-primary/10' : 'hover:bg-sidebar-accent')}
+            <nav className="space-y-0.5 px-3">
+              <NavItem
+                item={{
+                  href: '/dashboard',
+                  label: t('sidebar.overview', 'Dashboard'),
+                  icon: SquaresFour,
+                  exact: true,
+                }}
+                collapsed={false}
                 onClick={() => onOpenChange(false)}
-              >
-                <LayoutDashboard className="h-4 w-4" />
-                <span>Dashboard</span>
-              </Link>
-              <div className="py-1">
-                <p className="px-3 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-1">Residents</p>
-                {RESIDENTS_ITEMS.map((item) => {
-                  const Icon = item.icon;
-                  return (
-                    <Link
-                      key={item.href}
-                      href={`/${locale}${item.href}`}
-                      className={cn('flex items-center gap-3 rounded-lg px-3 py-2 text-sm', isActive(item.href) ? 'bg-primary/10' : 'hover:bg-sidebar-accent')}
-                      onClick={() => onOpenChange(false)}
-                    >
-                      <Icon className="h-4 w-4" />
-                      <span>{item.label}</span>
-                    </Link>
-                  );
-                })}
-              </div>
-              {NAV_ITEMS.filter((n) => n.href !== '/dashboard').map((item) => {
-                const Icon = item.icon;
-                return (
-                  <Link
+              />
+              <div className="py-2">
+                <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[#6B778C] mb-2 mt-4">Residents</p>
+                {RESIDENTS_ITEMS.map((item) => (
+                  <NavItem
                     key={item.href}
-                    href={`/${locale}${item.href}`}
-                    className={cn('flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium', isActive(item.href, item.exact) ? 'bg-primary/10' : 'hover:bg-sidebar-accent')}
+                    item={item}
+                    collapsed={false}
                     onClick={() => onOpenChange(false)}
-                  >
-                    <Icon className="h-4 w-4" />
-                    <span>{item.label}</span>
-                  </Link>
-                );
-              })}
+                  />
+                ))}
+              </div>
+              <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[#6B778C] mb-2 mt-4">{t('sidebar.groupSystem', 'System')}</p>
+              {NAV_ITEMS.filter((n) => n.href !== '/dashboard').map((item) => (
+                <NavItem
+                  key={item.href}
+                  item={item}
+                  collapsed={false}
+                  onClick={() => onOpenChange(false)}
+                />
+              ))}
             </nav>
           </ScrollArea>
         </div>
@@ -552,22 +626,30 @@ export function DashboardLayout({
   const [rightOpen, setRightOpen] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const isRtl = locale === 'ar-EG';
+  const pathname = usePathname();
+
+  // Dynamic breadcrumbs calculation
+  const segments = pathname.split('/').filter(Boolean).slice(1); // skip locale
+  const breadcrumbs = segments.map((s, i) => {
+    const label = s.charAt(0).toUpperCase() + s.slice(1).replace(/-/g, ' ');
+    const href = '/' + locale + '/' + segments.slice(0, i + 1).join('/');
+    return { label, href };
+  });
 
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-background" dir={isRtl ? 'rtl' : 'ltr'} lang={locale}>
-      <MiniHeader user={user} locale={locale} />
-
       <div className="flex flex-1 min-h-0 overflow-hidden">
         <LeftSidebar locale={locale} isCollapsed={leftCollapsed} onToggleCollapse={() => setLeftCollapsed((c) => !c)} isRtl={isRtl} />
 
         <div className="flex flex-1 min-w-0 flex-col min-h-0 overflow-hidden">
-          <div className="flex h-12 shrink-0 items-center gap-2 border-b border-border bg-background px-4 md:hidden">
+          <div className="flex h-16 shrink-0 items-center gap-2 border-b border-border bg-background px-4 md:hidden">
             <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setMobileNavOpen(true)} aria-label="Open menu">
               <Menu className="h-5 w-5" />
             </Button>
             <div className="flex-1 min-w-0">
               <SearchHeader 
                 locale={locale} 
+                user={user}
                 projects={projects}
                 currentProjectId={currentProjectId}
                 handleProjectSwitch={handleProjectSwitch}
@@ -579,6 +661,7 @@ export function DashboardLayout({
           <div className="hidden md:block sticky top-0 z-20">
             <SearchHeader 
               locale={locale} 
+              user={user}
               projects={projects}
               currentProjectId={currentProjectId}
               handleProjectSwitch={handleProjectSwitch}
@@ -586,9 +669,11 @@ export function DashboardLayout({
             />
           </div>
 
-          <main className="flex-1 min-h-0 overflow-y-auto p-4 md:p-6 lg:p-8 bg-muted/20" role="main">
+          <main className="flex-1 min-h-0 overflow-y-auto p-6 lg:p-10 bg-[var(--ds-surface-sunken,#FAFBFC)]" role="main">
             <ProjectFilterProvider currentProjectId={currentProjectId} projects={projects}>
-              <div className="animate-in fade-in duration-300">{children}</div>
+              <div className="max-w-[1400px] mx-auto animate-in fade-in slide-in-from-bottom-2 duration-500">
+                {children}
+              </div>
             </ProjectFilterProvider>
           </main>
         </div>
