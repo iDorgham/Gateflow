@@ -8,6 +8,8 @@ import {
   cn,
   DynamicTable,
   Column,
+  NativeSelect,
+  Input,
 } from '@gate-access/ui';
 import {
   Users,
@@ -52,14 +54,14 @@ export function UsersClient({ users, search, roleFilter, statusFilter, total, ro
         return (
           <div className="flex items-center gap-3">
             <div className={cn(
-              'flex h-9 w-9 items-center justify-center rounded-full font-bold text-[10px] uppercase shadow-sm shrink-0',
-              user.deletedAt ? 'bg-[var(--ds-background-neutral,#DFE1E6)] text-[var(--ds-text-subtle,#6B778C)]' : 'bg-[var(--ds-background-brand-bold,#0052CC)] text-[var(--ds-text-inverse,#FFFFFF)]'
+              'flex h-9 w-9 items-center justify-center rounded-full font-bold text-[10px] uppercase shadow-sm shrink-0 transition-colors',
+              user.deletedAt ? 'bg-ds-background-neutral text-ds-text-subtle' : 'bg-ds-background-brand-bold text-ds-text-inverse'
             )}>
               {initials}
             </div>
             <div className="flex flex-col min-w-0">
-              <span className="font-bold text-[var(--ds-text,#172B4D)] truncate">{user.name}</span>
-              <span className="text-[11px] text-[var(--ds-text-subtle,#6B778C)] truncate">{user.email}</span>
+              <span className="font-bold text-ds-text truncate leading-tight">{user.name}</span>
+              <span className="text-[11px] text-ds-text-subtle truncate">{user.email}</span>
             </div>
           </div>
         );
@@ -71,15 +73,15 @@ export function UsersClient({ users, search, roleFilter, statusFilter, total, ro
       render: (user) => (
         user.organization ? (
           <div className="flex flex-col gap-1">
-            <span className="text-[11px] font-bold text-[var(--ds-text,#172B4D)] truncate max-w-[140px] uppercase tracking-tight">
+            <span className="text-[11px] font-bold text-ds-text truncate max-w-[140px] uppercase tracking-tight leading-tight">
               {user.organization.name}
             </span>
-            <Badge variant={user.organization.plan === 'PRO' ? 'primary' : 'subtle'} className="w-fit text-[9px] h-4 px-1.5 border-[var(--ds-border-selected,#B3D4FF)]/30 font-bold">
+            <Badge variant={user.organization.plan === 'PRO' ? 'primary' : 'subtle'} className="w-fit text-[9px] h-4 px-1.5 border-ds-border-selected/20 font-bold uppercase">
               {user.organization.plan}
             </Badge>
           </div>
         ) : (
-          <span className="text-[10px] font-black text-[var(--ds-text-subtlest,#A5ADBA)] uppercase tracking-widest italic">Platform</span>
+          <span className="text-[10px] font-black text-ds-text-subtlest uppercase tracking-widest italic opacity-50">Platform</span>
         )
       ),
     },
@@ -89,7 +91,7 @@ export function UsersClient({ users, search, roleFilter, statusFilter, total, ro
       align: 'center',
       render: (user) => (
         user.role ? (
-          <Badge variant="subtle" className="text-[10px] h-5">
+          <Badge variant="subtle" className="text-[10px] h-5 px-2 font-semibold bg-ds-background-neutral-subtle text-ds-text-subtle border-none">
             {user.role.name.replace('_', ' ')}
           </Badge>
         ) : null
@@ -99,9 +101,9 @@ export function UsersClient({ users, search, roleFilter, statusFilter, total, ro
       key: 'status',
       label: 'Status',
       render: (user) => (
-        <Badge variant={user.deletedAt ? 'default' : 'success'} className="h-6">
+        <Badge variant={user.deletedAt ? 'default' : 'success'} className="h-6 px-2">
           {user.deletedAt ? (
-             <span className="flex items-center gap-1.5 text-[var(--ds-text-subtle,#6B778C)]"><ShieldAlert className="h-3 w-3" /> Suspended</span>
+             <span className="flex items-center gap-1.5 text-ds-text-subtle"><ShieldAlert className="h-3 w-3" /> Suspended</span>
           ) : (
              <span className="flex items-center gap-1.5"><ShieldCheck className="h-3 w-3" /> Active</span>
           )}
@@ -131,45 +133,45 @@ export function UsersClient({ users, search, roleFilter, statusFilter, total, ro
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       {/* Filters */}
-      <div className="bg-[var(--ds-background-default,#FFFFFF)] border border-[var(--ds-border,#DFE1E6)] rounded-xl p-4 shadow-sm">
-        <form method="GET" className="flex flex-wrap items-center gap-4">
-          <div className="relative flex-1 min-w-[300px]">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--ds-text-subtlest,#6B778C)]" />
-            <input
+      <div className="bg-ds-background-default border border-ds-border rounded-xl p-5 shadow-sm">
+        <form method="GET" className="flex flex-wrap items-center gap-5">
+          <div className="relative flex-1 min-w-[300px] group">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-ds-text-subtlest group-focus-within:text-ds-text-brand transition-colors" />
+            <Input
               name="q"
               defaultValue={search}
               placeholder="Search by name or email…"
-              className="w-full h-10 pl-10 pr-4 rounded-lg bg-[var(--ds-background-neutral-subtle,#F4F5F7)] border-[var(--ds-border,#DFE1E6)] focus:border-[var(--ds-border-focused,#4C9AFF)] text-sm font-medium focus:bg-[var(--ds-background-default,#FFFFFF)] transition-all shadow-inner outline-none"
+              className="w-full h-10 pl-10 h-10 rounded-full bg-ds-background-neutral-subtle border-ds-border focus:bg-ds-background-default transition-all shadow-none"
             />
           </div>
           <div className="flex items-center gap-3">
-            <select
+            <NativeSelect
               name="role"
               defaultValue={roleFilter}
-              className="h-10 rounded-lg border border-[var(--ds-border,#DFE1E6)] bg-white px-4 text-xs font-bold text-[var(--ds-text,#172B4D)] focus:outline-none focus:ring-2 focus:ring-[var(--ds-border-focused,#4C9AFF)]"
+              className="h-10 rounded-full border border-ds-border bg-ds-background-default px-4 text-xs font-bold text-ds-text focus:ring-2 focus:ring-ds-border-focused min-w-[130px]"
             >
               <option value="">All Roles</option>
               {roles.map((r) => (
                 <option key={r.id} value={r.name}>{r.name.replace('_', ' ')}</option>
               ))}
-            </select>
-            <select
+            </NativeSelect>
+            <NativeSelect
               name="status"
               defaultValue={statusFilter}
-              className="h-10 rounded-lg border border-[var(--ds-border,#DFE1E6)] bg-white px-4 text-xs font-bold text-[var(--ds-text,#172B4D)] focus:outline-none focus:ring-2 focus:ring-[var(--ds-border-focused,#4C9AFF)]"
+              className="h-10 rounded-full border border-ds-border bg-ds-background-default px-4 text-xs font-bold text-ds-text focus:ring-2 focus:ring-ds-border-focused min-w-[140px]"
             >
               <option value="all">Any Status</option>
               <option value="active">Active</option>
               <option value="suspended">Suspended</option>
-            </select>
+            </NativeSelect>
           </div>
           <div className="flex items-center gap-2">
-            <Button type="submit" variant="primary" className="h-10 px-6 font-bold shadow-md">
+            <Button type="submit" variant="primary" className="h-10 px-6 font-bold rounded-full shadow-sm">
               Apply
             </Button>
-            <Button variant="subtle" className="h-10 w-10 p-0" asChild>
+            <Button variant="subtle" className="h-10 w-10 p-0 rounded-full" asChild>
               <Link href="users">
-                <X className="h-4 w-4" />
+                <X className="h-4 w-4 text-ds-text-subtlest" />
               </Link>
             </Button>
           </div>
@@ -177,19 +179,19 @@ export function UsersClient({ users, search, roleFilter, statusFilter, total, ro
       </div>
 
       {/* Table Container */}
-      <div className="bg-[var(--ds-background-default,#FFFFFF)] border border-[var(--ds-border,#DFE1E6)] rounded-xl shadow-sm overflow-hidden">
+      <div className="bg-ds-background-default border border-ds-border rounded-xl shadow-sm overflow-hidden">
         <DynamicTable
           columns={columns}
           items={users}
           onRowClick={(user) => setSelectedUserId(user.id)}
           emptyState={
             <div className="flex flex-col items-center justify-center p-20 gap-4 text-center">
-              <div className="h-20 w-20 rounded-full bg-[var(--ds-background-neutral-subtle,#F4F5F7)] flex items-center justify-center">
-                <Users className="h-10 w-10 text-[var(--ds-text-subtlest,#6B778C)]" />
+              <div className="h-20 w-20 rounded-full bg-ds-background-neutral-subtle flex items-center justify-center">
+                <Users className="h-10 w-10 text-ds-text-subtlest" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-[var(--ds-text,#172B4D)]">No Users Found</h3>
-                <p className="text-sm text-[var(--ds-text-subtle,#6B778C)]">Try adjusting your filters or search query.</p>
+                <h3 className="text-lg font-bold text-ds-text">No Users Found</h3>
+                <p className="text-sm text-ds-text-subtle">Try adjusting your filters or search query.</p>
               </div>
             </div>
           }
@@ -197,11 +199,11 @@ export function UsersClient({ users, search, roleFilter, statusFilter, total, ro
       </div>
 
       {/* Footer Info */}
-      <div className="flex justify-between items-center px-2">
-        <p className="text-[11px] font-bold text-[var(--ds-text-subtle,#6B778C)] uppercase tracking-widest tabular-nums">
-          Displaying {users.length} <span className="mx-1 text-[var(--ds-text-subtlest,#A5ADBA)]">/</span> Total {total}
+      <div className="flex justify-between items-center px-1">
+        <p className="text-[11px] font-bold text-ds-text-subtle uppercase tracking-widest tabular-nums">
+          Displaying {users.length} <span className="mx-1 text-ds-text-subtlest">/</span> Total {total}
         </p>
-        <p className="text-[10px] font-black text-[var(--ds-text-subtlest,#6B778C)] uppercase">
+        <p className="text-[10px] font-black text-ds-text-subtlest uppercase tracking-tighter">
            Sorted by newest registration
         </p>
       </div>

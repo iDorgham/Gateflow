@@ -11,7 +11,7 @@ import {
   History,
   FileText,
 } from 'lucide-react';
-import { Badge, Button, Input, Pagination } from '@gate-access/ui';
+import { Badge, Button, Input, Pagination, NativeSelect } from '@gate-access/ui';
 import Link from 'next/link';
 import { PageHeader } from '@/components/page-header';
 import { AuditLogsTable } from '@/components/monitoring/AuditLogsTable';
@@ -154,7 +154,7 @@ export default async function AuditLogsPage({
                 name="org"
                 defaultValue={orgFilter}
                 placeholder={t('auditLogs.filterByOrg')}
-                className="ltr:pl-9 rtl:pr-9 h-11 bg-ds-background-neutral-subtle border-ds-border rounded-lg focus:bg-ds-background-default transition-all shadow-inner"
+                className="ltr:pl-9 rtl:pr-9 h-10 bg-ds-background-neutral-subtle border-ds-border rounded-full focus:bg-ds-background-default transition-all shadow-none"
               />
             </div>
           </div>
@@ -170,7 +170,7 @@ export default async function AuditLogsPage({
                 name="q"
                 defaultValue={uuidFilter}
                 placeholder={t('auditLogs.uuidPlaceholder')}
-                className="ltr:pl-9 rtl:pr-9 h-11 bg-ds-background-neutral-subtle border-ds-border rounded-lg focus:bg-ds-background-default transition-all shadow-inner"
+                className="ltr:pl-9 rtl:pr-9 h-10 bg-ds-background-neutral-subtle border-ds-border rounded-full focus:bg-ds-background-default transition-all shadow-none"
               />
             </div>
           </div>
@@ -179,46 +179,46 @@ export default async function AuditLogsPage({
             <label className="text-[11px] font-black uppercase tracking-widest text-ds-text-subtle ltr:ml-1 rtl:mr-1">
               {t('auditLogs.status')}
             </label>
-            <select
+            <NativeSelect
               name="status"
               defaultValue={statusFilter}
-              className="w-full h-11 rounded-lg border border-ds-border bg-ds-background-default px-4 text-xs font-bold text-ds-text focus:outline-none focus:ring-2 focus:ring-ds-border-focused"
+              className="w-full h-10 rounded-full border border-ds-border bg-ds-background-default px-4 text-xs font-bold text-ds-text focus:outline-none focus:ring-2 focus:ring-ds-border-focused"
             >
               <option value="">{t('auditLogs.all')}</option>
               {['SUCCESS', 'DENIED', 'FAILED', 'EXPIRED', 'MAX_USES_REACHED', 'INACTIVE'].map((s) => (
                 <option key={s} value={s}>{s}</option>
               ))}
-            </select>
+            </NativeSelect>
           </div>
 
           <div className="space-y-2">
             <label className="text-[11px] font-black uppercase tracking-widest text-ds-text-subtle ltr:ml-1 rtl:mr-1">
                Audit Window (From/To)
             </label>
-            <div className="grid grid-cols-2 gap-2 h-11 p-1 bg-ds-background-neutral-subtle rounded-lg border border-ds-border">
+            <div className="grid grid-cols-2 gap-2 h-10 p-1 bg-ds-background-neutral-subtle rounded-full border border-ds-border">
                <input
                  type="date"
                  name="from"
                  defaultValue={searchParams.from ?? ''}
-                 className="bg-transparent border-none text-[11px] font-bold text-ds-text px-2 outline-none"
+                 className="bg-transparent border-none text-[10px] font-bold text-ds-text px-3 outline-none uppercase"
                />
                <input
                  type="date"
                  name="to"
                  defaultValue={searchParams.to ?? ''}
-                 className="bg-transparent border-none text-[11px] font-bold text-ds-text px-2 outline-none"
+                 className="bg-transparent border-none text-[10px] font-bold text-ds-text px-3 outline-none uppercase"
                />
             </div>
           </div>
 
           <div className="flex gap-2">
-            <Button type="submit" variant="primary" className="h-11 px-8 font-bold shadow-md flex-1">
+            <Button type="submit" variant="primary" className="h-10 px-8 font-bold shadow-sm flex-1 rounded-full">
               <Search className="h-4 w-4 ltr:mr-2 rtl:ml-2" />
               {t('auditLogs.search')}
             </Button>
-            <Button variant="subtle" className="h-11 w-11 p-0 rounded-lg" asChild>
+            <Button variant="subtle" className="h-10 w-11 p-0 rounded-full" asChild>
               <Link href="/audit-logs">
-                <X className="h-4 w-4" />
+                <X className="h-4 w-4 text-ds-text-subtlest" />
               </Link>
             </Button>
           </div>

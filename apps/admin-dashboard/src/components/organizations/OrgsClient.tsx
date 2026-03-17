@@ -9,6 +9,7 @@ import {
   cn,
   DynamicTable,
   Column,
+  NativeSelect,
 } from '@gate-access/ui';
 import {
   Building2,
@@ -56,14 +57,14 @@ export function OrgsClient({ orgs, locale, search, planFilter, statusFilter, tot
       render: (org) => (
         <div className="flex items-center gap-4">
           <div className={cn(
-            'flex h-10 w-10 items-center justify-center rounded-lg font-bold text-xs uppercase shadow-sm shrink-0',
-            org.deletedAt ? 'bg-[var(--ds-background-neutral,#DFE1E6)] text-[var(--ds-text-subtle,#6B778C)]' : 'bg-[var(--ds-background-brand-bold,#0052CC)] text-[var(--ds-text-inverse,#FFFFFF)]'
+            'flex h-10 w-10 items-center justify-center rounded-lg font-bold text-xs uppercase shadow-sm shrink-0 transition-colors',
+            org.deletedAt ? 'bg-ds-background-neutral text-ds-text-subtle' : 'bg-ds-background-brand-bold text-ds-text-inverse'
           )}>
             {org.name.substring(0, 2)}
           </div>
           <div className="flex flex-col min-w-0">
-            <span className="font-bold text-[var(--ds-text,#172B4D)] text-sm truncate">{org.name}</span>
-            <span className="text-xs text-[var(--ds-text-subtle,#6B778C)] truncate">{org.email}</span>
+            <span className="font-bold text-ds-text text-sm truncate leading-tight">{org.name}</span>
+            <span className="text-xs text-ds-text-subtle truncate">{org.email}</span>
           </div>
         </div>
       ),
@@ -72,7 +73,7 @@ export function OrgsClient({ orgs, locale, search, planFilter, statusFilter, tot
       key: 'plan',
       label: 'Plan',
       render: (org) => (
-        <Badge variant={org.plan === 'PRO' ? 'primary' : 'subtle'} className="h-5 px-2">
+        <Badge variant={org.plan === 'PRO' ? 'primary' : 'subtle'} className="h-5 px-2 font-bold uppercase text-[9px]">
           {org.plan}
         </Badge>
       ),
@@ -84,16 +85,16 @@ export function OrgsClient({ orgs, locale, search, planFilter, statusFilter, tot
       render: (org) => (
         <div className="flex items-center justify-center gap-6">
           <div className="flex flex-col items-center group/metric" title="Users">
-            <Users className="h-3.5 w-3.5 text-[var(--ds-text-subtlest,#6B778C)] mb-1 group-hover/metric:text-[var(--ds-text-brand,#0052CC)] transition-colors" />
-            <span className="text-[11px] font-bold text-[var(--ds-text,#172B4D)] tabular-nums">{org._count.users.toLocaleString(locale)}</span>
+            <Users className="h-3.5 w-3.5 text-ds-text-subtlest mb-1 group-hover/metric:text-ds-text-brand transition-colors" />
+            <span className="text-[11px] font-bold text-ds-text tabular-nums">{org._count.users.toLocaleString(locale)}</span>
           </div>
           <div className="flex flex-col items-center group/metric" title="QR Codes">
-            <QrCode className="h-3.5 w-3.5 text-[var(--ds-text-subtlest,#6B778C)] mb-1 group-hover/metric:text-[var(--ds-text-brand,#0052CC)] transition-colors" />
-            <span className="text-[11px] font-bold text-[var(--ds-text,#172B4D)] tabular-nums">{org._count.qrCodes.toLocaleString(locale)}</span>
+            <QrCode className="h-3.5 w-3.5 text-ds-text-subtlest mb-1 group-hover/metric:text-ds-text-brand transition-colors" />
+            <span className="text-[11px] font-bold text-ds-text tabular-nums">{org._count.qrCodes.toLocaleString(locale)}</span>
           </div>
           <div className="flex flex-col items-center group/metric" title="Scans (30d)">
-            <ScanLine className="h-3.5 w-3.5 text-[var(--ds-text-subtlest,#6B778C)] mb-1 group-hover/metric:text-[var(--ds-text-brand,#0052CC)] transition-colors" />
-            <span className="text-[11px] font-bold text-[var(--ds-text,#172B4D)] tabular-nums">{org.scansLast30d.toLocaleString(locale)}</span>
+            <ScanLine className="h-3.5 w-3.5 text-ds-text-subtlest mb-1 group-hover/metric:text-ds-text-brand transition-colors" />
+            <span className="text-[11px] font-bold text-ds-text tabular-nums">{org.scansLast30d.toLocaleString(locale)}</span>
           </div>
         </div>
       ),
@@ -102,9 +103,9 @@ export function OrgsClient({ orgs, locale, search, planFilter, statusFilter, tot
       key: 'status',
       label: 'Status',
       render: (org) => (
-        <Badge variant={org.deletedAt ? 'default' : 'success'} className="h-6">
+        <Badge variant={org.deletedAt ? 'default' : 'success'} className="h-6 px-2">
           {org.deletedAt ? (
-            <span className="flex items-center gap-1.5 text-[var(--ds-text-subtle,#6B778C)]"><ShieldAlert className="h-3 w-3" /> Suspended</span>
+            <span className="flex items-center gap-1.5 text-ds-text-subtle"><ShieldAlert className="h-3 w-3" /> Suspended</span>
           ) : (
             <span className="flex items-center gap-1.5"><ShieldCheck className="h-3 w-3" /> Active</span>
           )}
@@ -134,45 +135,45 @@ export function OrgsClient({ orgs, locale, search, planFilter, statusFilter, tot
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       {/* Filters */}
-      <div className="bg-[var(--ds-background-default,#FFFFFF)] border border-[var(--ds-border,#DFE1E6)] rounded-xl p-4 shadow-sm">
-        <form method="GET" className="flex flex-wrap items-center gap-4">
-          <div className="relative flex-1 min-w-[300px]">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--ds-text-subtlest,#6B778C)]" />
+      <div className="bg-ds-background-default border border-ds-border rounded-xl p-5 shadow-sm">
+        <form method="GET" className="flex flex-wrap items-center gap-5">
+          <div className="relative flex-1 min-w-[300px] group">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-ds-text-subtlest group-focus-within:text-ds-text-brand transition-colors" />
             <Input
               name="q"
               defaultValue={search}
               placeholder="Search organizations…"
-              className="pl-10 h-10 rounded-lg bg-[var(--ds-background-neutral-subtle,#F4F5F7)] border-[var(--ds-border,#DFE1E6)] focus:bg-[var(--ds-background-default,#FFFFFF)] transition-all shadow-inner"
+              className="pl-10 h-10 rounded-full bg-ds-background-neutral-subtle border-ds-border focus:bg-ds-background-default transition-all shadow-none"
             />
           </div>
           
           <div className="flex items-center gap-3">
-            <select
+            <NativeSelect
               name="plan"
               defaultValue={planFilter}
-              className="h-10 rounded-lg border border-[var(--ds-border,#DFE1E6)] bg-white px-4 text-xs font-bold text-[var(--ds-text,#172B4D)] focus:outline-none focus:ring-2 focus:ring-[var(--ds-border-focused,#4C9AFF)]"
+              className="h-10 rounded-full border border-ds-border bg-ds-background-default px-4 text-xs font-bold text-ds-text focus:ring-2 focus:ring-ds-border-focused min-w-[120px]"
             >
               <option value="">All Plans</option>
               {PLANS.map((p) => <option key={p} value={p}>{p}</option>)}
-            </select>
-            <select
+            </NativeSelect>
+            <NativeSelect
               name="status"
               defaultValue={statusFilter}
-              className="h-10 rounded-lg border border-[var(--ds-border,#DFE1E6)] bg-white px-4 text-xs font-bold text-[var(--ds-text,#172B4D)] focus:outline-none focus:ring-2 focus:ring-[var(--ds-border-focused,#4C9AFF)]"
+              className="h-10 rounded-full border border-ds-border bg-ds-background-default px-4 text-xs font-bold text-ds-text focus:ring-2 focus:ring-ds-border-focused min-w-[140px]"
             >
               <option value="all">Any Status</option>
               <option value="active">Active</option>
               <option value="suspended">Suspended</option>
-            </select>
+            </NativeSelect>
           </div>
 
           <div className="flex items-center gap-2">
-            <Button type="submit" variant="primary" className="h-10 px-6 font-bold shadow-sm">
+            <Button type="submit" variant="primary" className="h-10 px-6 font-bold rounded-full shadow-sm">
               Filter
             </Button>
-            <Button variant="subtle" className="h-10 w-10 p-0 rounded-lg" asChild>
+            <Button variant="subtle" className="h-10 w-10 p-0 rounded-full" asChild>
               <Link href="organizations">
-                <X className="h-4 w-4" />
+                <X className="h-4 w-4 text-ds-text-subtlest" />
               </Link>
             </Button>
           </div>
@@ -180,19 +181,19 @@ export function OrgsClient({ orgs, locale, search, planFilter, statusFilter, tot
       </div>
 
       {/* Table Container */}
-      <div className="bg-[var(--ds-background-default,#FFFFFF)] border border-[var(--ds-border,#DFE1E6)] rounded-xl shadow-sm overflow-hidden">
+      <div className="bg-ds-background-default border border-ds-border rounded-xl shadow-sm overflow-hidden">
         <DynamicTable
           columns={columns}
           items={orgs}
           onRowClick={(org) => setSelectedOrgId(org.id)}
           emptyState={
             <div className="flex flex-col items-center justify-center p-20 gap-4 text-center">
-              <div className="h-20 w-20 rounded-full bg-[var(--ds-background-neutral-subtle,#F4F5F7)] flex items-center justify-center">
-                <Building2 className="h-10 w-10 text-[var(--ds-text-subtlest,#6B778C)]" />
+              <div className="h-20 w-20 rounded-full bg-ds-background-neutral-subtle flex items-center justify-center">
+                <Building2 className="h-10 w-10 text-ds-text-subtlest" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-[var(--ds-text,#172B4D)]">No Organizations</h3>
-                <p className="text-sm text-[var(--ds-text-subtle,#6B778C)]">Try changing your search or filters.</p>
+                <h3 className="text-lg font-bold text-ds-text">No Organizations</h3>
+                <p className="text-sm text-ds-text-subtle">Try changing your search or filters.</p>
               </div>
             </div>
           }
@@ -200,12 +201,12 @@ export function OrgsClient({ orgs, locale, search, planFilter, statusFilter, tot
       </div>
 
       {/* Footer Info */}
-      <div className="flex justify-between items-center px-2">
-        <p className="text-[11px] font-bold text-[var(--ds-text-subtle,#6B778C)] uppercase tracking-widest tabular-nums">
-          Displaying {orgs.length} <span className="mx-1 text-[var(--ds-text-subtlest,#A5ADBA)]">/</span> Total {total}
+      <div className="flex justify-between items-center px-1">
+        <p className="text-[11px] font-bold text-ds-text-subtle uppercase tracking-widest tabular-nums">
+          Displaying {orgs.length} <span className="mx-1 text-ds-text-subtlest">/</span> Total {total}
         </p>
-        <div className="flex items-center gap-4 text-[10px] font-black text-[var(--ds-text-brand,#0052CC)] uppercase tracking-tighter cursor-help hover:opacity-80 transition-opacity">
-           <ShieldCheck className="h-3 w-3" />
+        <div className="flex items-center gap-4 text-[10px] font-black text-ds-text-brand uppercase tracking-tighter cursor-help hover:opacity-80 transition-opacity">
+           <ShieldCheck className="h-3.5 w-3.5" />
            System Verified Audit Logs
         </div>
       </div>
