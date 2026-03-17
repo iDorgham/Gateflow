@@ -36,6 +36,32 @@ try {
       execSync(`git push origin ${baseBranch}`, { stdio: 'inherit' });
       break;
 
+    case 'tag': {
+      const tagNameInput = process.argv[5] || 'stable';
+      // Sanitize: allow only alphanumeric, dashes, and dots
+      const tagName = tagNameInput.replace(/[^a-zA-Z0-9.-]/g, '-');
+      const fullTagName = `v${slug}-p${phase}-${tagName}`;
+      
+      console.log(`Ensuring tag: ${fullTagName}`);
+      try {
+        // Attempt to delete locally first to allow overwriting/fresh tag
+        execSync(`git tag -d ${fullTagName}`, { stdio: 'ignore' });
+      } catch (e) {
+        // Tag didn't exist locally, that's fine
+      }
+
+      try {
+        execSync(`git tag -a ${fullTagName} -m "Phase ${phase} complete: ${tagName}"`, { stdio: 'inherit' });
+        console.log(`Pushing tag to origin...`);
+        // Use --force to ensure remote is updated if we are re-tagging a phase
+        execSync(`git push origin ${fullTagName} --force`, { stdio: 'inherit' });
+      } catch (error) {
+        console.error(`Failed to create or push tag:`, error.message);
+        process.exit(1);
+      }
+      break;
+    }
+
     default:
       console.error(`Unknown command: ${command}`);
       process.exit(1);

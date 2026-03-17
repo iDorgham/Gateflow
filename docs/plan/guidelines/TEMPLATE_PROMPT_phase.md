@@ -87,8 +87,13 @@ Invoke these *before* or *during* implementation when the phase needs exploratio
 - `path/to/file1.ts`
 - `path/to/file2.tsx`
 
-### Multi-CLI (optional — only for complex/high-risk phases)
-
-**Use sparingly.** Claude Pro has limits — add only when the phase is security-critical, architectural, or high-risk.
-- Routine CRUD, simple UI, config: **skip multi-CLI**
 - Auth, multi-tenant, offline sync, conflict resolution: consider `claude -p "[prompt]"` in a separate terminal
+
+### Adversarial Review (Mandatory for High-Risk)
+
+**Trigger**: This phase involves [Auth | Multi-tenancy | Core Scripts | Security Invariants].
+
+1. **Invoke Adversary**: Use a second model (Gemini/Opencode) as an "Adversary."
+2. **Challenge**: "Analyze the code for edge cases, race conditions, or security bypasses. Attempt to break my implementation."
+3. **Loop**: Self-correct *before* git commit.
+4. **Verification**: State total corrected flaws in walkthrough.
