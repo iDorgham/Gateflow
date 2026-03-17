@@ -62,6 +62,29 @@ try {
       break;
     }
 
+    case 'status': {
+      console.log(`--- Ralph Status: ${slug} ---`);
+      const currentBranch = execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
+      console.log(`Current Branch: ${currentBranch}`);
+      
+      try {
+        const lastTag = execSync(`git tag -l "v${slug}-p*" | sort -V | tail -n 1`).toString().trim();
+        if (lastTag) {
+          console.log(`Last Completed Phase Tag: ${lastTag}`);
+          const match = lastTag.match(/-p(\d+)-/);
+          if (match) {
+            console.log(`Next Suggested Phase: ${parseInt(match[1]) + 1}`);
+          }
+        } else {
+          console.log(`No phases completed yet for ${slug}.`);
+          console.log(`Next Suggested Phase: 1`);
+        }
+      } catch (e) {
+        console.log(`Could not determine phase status.`);
+      }
+      break;
+    }
+
     default:
       console.error(`Unknown command: ${command}`);
       process.exit(1);

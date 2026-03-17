@@ -16,13 +16,14 @@ Transform GateFlow into a self-correcting, autonomous engineering ecosystem wher
 - [ ] Verify that enforcers catch violations and agent auto-fixes them.
 - [ ] Deliver a walkthrough showing the "Loop" in action.
 
-### Phase 3: Skill Intelligence (Adversarial Review)
-- [ ] Integrate "Adversarial Review" prompts.
-- [ ] Use `Multi-CLI` for cross-model verification of security and design.
+### Phase 3: Skill Intelligence (Adversarial Review) [DONE]
+- [x] Integrate "Adversarial Review" prompts.
+- [x] Use `Multi-CLI` for cross-model verification of security and design.
 
-### Phase 4: Full Multi-CLI Orchestration
-- [ ] Optimize terminal-based development using parallel Claude/Gemini/Opencode.
-- [ ] Implement automated CLI usage tracking and limit management.
+### Phase 4: Full Multi-CLI Orchestration [IN-PROGRESS]
+- [ ] Implement "Next-Step Autopilot" in workflows.
+- [ ] Add `status` command to `ralph-git.js` for phase reporting.
+- [ ] Optimize parallel CLI usage tracking.
 
 ### Phase 5: Self-Evolving Ecosystem
 - [ ] AI-driven backlog prioritization.
