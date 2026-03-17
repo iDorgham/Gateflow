@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 import {
   GateAIHubLayout,
 } from '@/components/dashboard/gateai/GateAIHubLayout';
+import { TagSidebar } from '@/components/dashboard/gateai/TagSidebar';
 import { Sparkles, Zap, BarChart3, Tag, BrainCircuit } from 'lucide-react';
 
 /* ─────────────── Center canvas placeholder ─────────────── */
@@ -83,43 +84,7 @@ function CanvasPlaceholder() {
   );
 }
 
-/* ─────────────── Left panel placeholder ─────────────── */
-
-function TagSidebarPlaceholder() {
-  return (
-    <div className="flex flex-col gap-4 p-4">
-      <div className="flex items-center gap-2">
-        <Tag
-          size={14}
-          style={{ color: '#ED4B00' }}
-        />
-        <span
-          className="text-[11px] font-semibold uppercase tracking-widest"
-          style={{ color: 'var(--ga-text-muted, rgba(242,243,244,0.55))' }}
-        >
-          Tags
-        </span>
-      </div>
-      {/* Skeleton tag rows */}
-      {Array.from({ length: 5 }).map((_, i) => (
-        <div
-          key={i}
-          className="h-7 rounded-md animate-pulse"
-          style={{
-            background: `rgba(237, 75, 0, ${0.04 + i * 0.01})`,
-            width: `${70 + i * 5}%`,
-          }}
-        />
-      ))}
-      <p
-        className="mt-2 text-[11px] leading-relaxed"
-        style={{ color: 'var(--ga-text-muted, rgba(242,243,244,0.55))' }}
-      >
-        Tag workspace arrives in Phase 2.
-      </p>
-    </div>
-  );
-}
+/* --- TagSidebar integrated in page return --- */
 
 /* ─────────────── Right panel placeholder ─────────────── */
 
@@ -167,7 +132,7 @@ export default function GateAIHubPage() {
   return (
     <GateAIHubLayout
       isRtl={isRtl}
-      left={<TagSidebarPlaceholder />}
+      left={<TagSidebar />}
       center={<CanvasPlaceholder />}
       right={<AIContextPlaceholder />}
     />

@@ -480,11 +480,30 @@ model Tag {
   updatedAt      DateTime     @updatedAt
   deletedAt      DateTime?
   contacts       ContactTag[]
+  aiContents     AiContentTag[]
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
 
   @@unique([organizationId, name])
   @@index([organizationId])
   @@index([deletedAt])
+}
+
+model AiContentTag {
+  id            String       @id @default(cuid())
+  tagId         String
+  aiTaskId      String?
+  aiActionLogId String?
+  createdAt     DateTime     @default(now())
+
+  tag           Tag          @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  aiTask        AiTask?      @relation(fields: [aiTaskId], references: [id], onDelete: Cascade)
+  aiActionLog   AiActionLog? @relation(fields: [aiActionLogId], references: [id], onDelete: Cascade)
+
+  @@unique([tagId, aiTaskId])
+  @@unique([tagId, aiActionLogId])
+  @@index([tagId])
+  @@index([aiTaskId])
+  @@index([aiActionLogId])
 }
 
 model ContactTag {
@@ -646,6 +665,7 @@ model AiTask {
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  tags           AiContentTag[]
 
   @@index([organizationId])
   @@index([status])
@@ -688,6 +708,8 @@ model AiActionLog {
   
   // Feedback
   feedback         String?        // "THUMBS_UP", "THUMBS_DOWN"
+  
+  tags             AiContentTag[]
   
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
