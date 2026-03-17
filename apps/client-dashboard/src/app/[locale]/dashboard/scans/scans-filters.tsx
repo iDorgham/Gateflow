@@ -237,31 +237,31 @@ export function ScansFilters({
       </FilterBar>
 
       {/* Date Range & Device */}
-      <div className="flex flex-wrap items-end gap-6 bg-[#FAFBFC] dark:bg-[#091E42]/10 p-5 rounded-xl border border-[#DFE1E6] dark:border-[#343A46]">
-        <div className="flex items-end gap-3">
+      <div className="flex flex-wrap items-end gap-4 bg-[#FAFBFC] dark:bg-[#091E42]/10 p-4 rounded-sm border border-[#DFE1E6] dark:border-[#343A46]">
+        <div className="flex items-end gap-2">
           <DatePicker
             label={t('scans.filters.dateFrom', { defaultValue: 'From Date' })}
             value={currentDateFrom}
             onChange={(e) => immediate('dateFrom', e.target.value)}
             onClear={() => clearFilter('dateFrom')}
-            className="w-[180px]"
+            className="w-[160px]"
           />
-          <div className="pb-3 text-[#DFE1E6] font-black">—</div>
+          <div className="pb-2 text-[#DFE1E6] dark:text-[#343A46] font-bold">—</div>
           <DatePicker
             label={t('scans.filters.dateTo', { defaultValue: 'To Date' })}
             value={currentDateTo}
             onChange={(e) => immediate('dateTo', e.target.value)}
             onClear={() => clearFilter('dateTo')}
-            className="w-[180px]"
+            className="w-[160px]"
           />
         </div>
 
-        <div className="space-y-2 flex-1 min-w-[200px]">
-          <label className="text-[11px] font-black text-[#6B778C] dark:text-[#97A0AF] uppercase tracking-widest block ml-1">
+        <div className="flex-1 min-w-[200px]">
+          <label className="text-[11px] font-bold text-[#6B778C] dark:text-[#97A0AF] uppercase tracking-wider block ml-1 mb-1.5">
             {t('scans.filters.deviceIdPlaceholder', { defaultValue: 'Hardware Device' })}
           </label>
-          <div className="relative">
-            <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center gap-2 pointer-events-none">
+          <div className="relative group">
+            <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center gap-2 pointer-events-none z-10">
                <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
             </div>
             <input
@@ -272,17 +272,18 @@ export function ScansFilters({
                 setDeviceId(e.target.value);
                 debounced(debounceDevice, 'deviceId', e.target.value);
               }}
-              className="h-10 w-full pl-7 bg-white dark:bg-[#2C333A] border-[#DFE1E6] dark:border-[#343A46] rounded-lg text-sm font-mono font-bold text-[#172B4D] dark:text-emerald-400 placeholder-[#6B778C] shadow-sm focus:ring-2 focus:ring-[#0052CC] transition-all"
+              className="h-8 w-full pl-7 bg-white dark:bg-[#1D2125] border-[#DFE1E6] dark:border-[#343A46] rounded-sm text-xs font-mono font-semibold text-[#172B4D] dark:text-emerald-400 placeholder-[#6B778C] transition-all focus:outline-none focus:ring-2 focus:ring-[#4C9AFF] hover:bg-[#FAFBFC] dark:hover:bg-[#2C333A]"
             />
           </div>
         </div>
 
         <div className="ml-auto">
           <Button
+            variant="outline"
             onClick={() => window.open(exportHref, '_blank')}
-            className="bg-white dark:bg-[#2C333A] border border-[#DFE1E6] dark:border-[#343A46] text-[#42526E] dark:text-[#A5ADBA] font-bold h-10 px-5 rounded-lg shadow-sm hover:bg-[#F4F5F7] dark:hover:bg-[#1D2125] transition-all active:scale-95 group"
+            className="h-8 px-4 border-[#DFE1E6] dark:border-[#343A46] text-[#42526E] dark:text-[#A5ADBA] font-bold rounded-sm hover:bg-[#F4F5F7] dark:hover:bg-[#2C333A] transition-all active:scale-95 group"
           >
-            <Download className="h-4 w-4 mr-2 group-hover:text-[#0052CC] transition-colors" />
+            <Download className="h-3.5 w-3.5 mr-2 text-[#6B778C] group-hover:text-[#0052CC] transition-colors" />
             {t('scans.filters.exportCsv', { defaultValue: 'Export CSV' })}
           </Button>
         </div>

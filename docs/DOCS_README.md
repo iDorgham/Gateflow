@@ -1,14 +1,14 @@
 # GateFlow Docs v2 Overview
 
-This `docs/` folder is the **v2 documentation set**, aligned with the canonical product spec in `PRD_v7.0.md`.
+This `docs/` folder is the **v3 documentation set**, aligned with the canonical product spec in `PRD_v8.0.md`.
 
 ## What to read first
 
-- **Product requirements:** [`PRD_v7.0.md`](PRD_v7.0.md)
-  The single source of truth for GateFlow v7 — all 6 apps, complete feature set, security, resident portal/mobile, scanner rules, real-time updates, and marketing suite.
+- **Product requirements:** [`PRD_v8.0.md`](PRD_v8.0.md)
+  The single source of truth for GateFlow v8 — all 6 apps, complete feature set, security, resident portal/mobile, scanner rules, real-time updates, marketing suite, and GateAI.
 
 - **Progress dashboard:** [`PROJECT_PROGRESS_DASHBOARD.md`](PROJECT_PROGRESS_DASHBOARD.md)
-  Current status (95% MVP complete), phase roadmap, app status, and recent activity.
+  Current status (100% MVP complete ✅), phase roadmap, app status, and recent activity (GateAI + ADS).
 
 - **Plans & initiatives:** [`docs/plan/`](plan/)
   - `plan/context/` — initiative ideas (`IDEA_*.md`)
@@ -49,6 +49,6 @@ Treat these as **historical reference only**.
 
 ---
 
-**Version:** 7.0  
-**Last Updated:** March 12, 2026  
-**Status:** Living Documentation
+**Version:** 8.0  
+**Last Updated:** March 16, 2026  
+**Status:** Living Documentation (Production Ready)

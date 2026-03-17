@@ -6,6 +6,7 @@
 
 ### advanced_seeding_v2 — Ultra-Advanced Seeding Matrix (v2)
 **IDEA:** `docs/plan/context/IDEA_advanced_seeding_v2.md`
+**PLAN:** `docs/plan/in-progress/advanced_seeding_v2/PLAN_advanced_seeding_v2.md`
 **Status:** 🔄 In Progress
 **Target:** Q3 2026
 
@@ -17,6 +18,7 @@
 
 ### atlassian_ui_remake — Atlassian Design System UI Remake
 **IDEA:** `docs/plan/context/IDEA_atlassian_ui_remake.md`
+**PLAN:** `docs/plan/planning/atlassian_ui_remake/PLAN_atlassian_ui_remake.md`
 **Status:** 🏗️ Planning
 **Target:** Q4 2026
 
@@ -29,6 +31,7 @@
 
 ### gateai — GateFlow Intelligent Operations Agent
 **IDEA:** `docs/plan/context/IDEA_gateai.md`
+**PLAN:** `docs/plan/done/gateai/PLAN_gateai.md`
 **Status:** ✅ Complete
 **Target:** Q3 2026
 
@@ -44,6 +47,19 @@
 - [x] Phase 9 — Resident Portal / Mobile Mini-Version
 - [x] Phase 10 — Hardening, Red-Teaming & Monitoring
 
+### gateflow_command_redesign — GateFlow Command Proactive Redesign (v8.1)
+**PLAN:** `docs/plan/planned/gateflow_ai_assistant_redesign/PLAN_gateflow_ai_assistant_redesign.md`
+**Status:** 🏗️ Ready
+**Target:** Q4 2026
+
+- [ ] Phase 1 — Intelligence & Data Foundation (Brain)
+- [ ] Phase 2 — Core Component Factory (Body)
+- [ ] Phase 3 — Cinematic Shell & Motion (Soul)
+- [ ] Phase 4 — Context Engine & Action Chips (Instinct)
+- [ ] Phase 5 — Predictive Alerting System (Reflexes)
+- [ ] Phase 6 — Smart Tagging Implementation
+- [ ] Phase 7 — Unified Asset Hub & Integrations (Memory)
+- [ ] Phase 8 — Polish, Audit & Performance
 
 ---
 
@@ -51,6 +67,7 @@
 
 ### resident_mobile — Resident Mobile App (Phase 2 Flagship)
 **IDEA:** `docs/plan/context/IDEA_resident_mobile.md`
+**PLAN:** `docs/plan/done/resident_mobile/PLAN_resident_mobile.md`
 **Status:** ✅ Complete
 **Target:** Q3 2026
 
@@ -63,6 +80,7 @@
 
 ### marketing_website — Marketing Website Full Platform Pages
 **IDEA:** `docs/plan/context/IDEA_marketing_website.md`
+**PLAN:** `docs/plan/done/marketing_website/PLAN_marketing_website.md`
 **Status:** ✅ Complete
 **Target:** Q3 2026
 
@@ -74,6 +92,7 @@
 
 ### realtime_updates — Real-Time Live Updates
 **IDEA:** `docs/plan/context/IDEA_realtime_updates.md`
+**PLAN:** `docs/plan/done/realtime_updates/PLAN_realtime_updates.md`
 **Status:** ✅ Complete
 **Target:** Q3 2026
 

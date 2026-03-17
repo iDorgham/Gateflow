@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
+import type * as React from 'react';
 import {
   cn,
   DynamicTable,
@@ -14,7 +15,9 @@ import {
   XCircle,
   AlertCircle,
   Clock,
+  Building2,
 } from 'lucide-react';
+import Link from 'next/link';
 
 interface ScanLog {
   id: string;
@@ -33,11 +36,10 @@ interface ScanLog {
 interface GlobalScansTableProps {
   scans: ScanLog[];
   locale: string;
-  t: (key: string, options?: any) => string;
 }
 
-function ScanStatusBadge({ status, t }: { status: string; t: any }) {
-  const styles: Record<string, { variant: "success" | "danger" | "warning" | "default"; icon: any }> = {
+function ScanStatusBadge({ status }: { status: string }) {
+  const styles: Record<string, { variant: "success" | "danger" | "warning" | "default"; icon: React.ElementType }> = {
     SUCCESS: { variant: 'success', icon: CheckCircle2 },
     DENIED: { variant: 'danger', icon: XCircle },
     FAILED: { variant: 'danger', icon: AlertCircle },
@@ -50,14 +52,14 @@ function ScanStatusBadge({ status, t }: { status: string; t: any }) {
   const Icon = current.icon;
 
   return (
-    <Badge variant={current.variant} className="h-6 flex items-center gap-1.5 px-2">
+    <Badge variant={current.variant} className="h-6 flex items-center gap-1.5 px-2 rounded-sm font-bold uppercase text-[9px]">
       <Icon className="h-3 w-3" />
       {status}
     </Badge>
   );
 }
 
-export function GlobalScansTable({ scans, locale, t }: GlobalScansTableProps) {
+export function GlobalScansTable({ scans, locale }: GlobalScansTableProps) {
   const columns = useMemo<Column<ScanLog>[]>(() => [
     {
       key: 'identity',
@@ -65,16 +67,16 @@ export function GlobalScansTable({ scans, locale, t }: GlobalScansTableProps) {
       render: (scan) => (
         <div className="flex items-center gap-3">
           <div className={cn(
-            'flex h-9 w-9 items-center justify-center rounded-lg shadow-sm transition-all group-hover:bg-[var(--ds-background-brand-bold,#0052CC)] group-hover:text-white',
+            'flex h-8 w-8 items-center justify-center rounded-sm shadow-sm transition-all group-hover:bg-[var(--ds-background-brand-bold,#0052CC)] group-hover:text-white',
             scan.user ? 'bg-[var(--ds-background-neutral-subtle,#F4F5F7)] text-[var(--ds-text,#172B4D)]' : 'bg-[var(--ds-background-neutral,#DFE1E6)] text-[var(--ds-text-subtle,#6B778C)]'
           )}>
             {scan.user ? <Smartphone className="h-4 w-4" /> : <Monitor className="h-4 w-4" />}
           </div>
           <div className="flex flex-col min-w-0">
-            <span className="font-bold text-[var(--ds-text,#172B4D)] truncate leading-tight">
+            <span className="font-bold text-[var(--ds-text,#172B4D)] truncate text-xs leading-tight">
               {scan.user?.name ?? 'Anonymous Scanner'}
             </span>
-            <span className="text-[10px] font-mono text-[var(--ds-text-subtle,#6B778C)] uppercase mt-0.5">
+            <span className="text-[10px] font-mono text-[var(--ds-text-subtlest,#A5ADBA)] uppercase">
               ID: {scan.scanUuid?.slice(0, 8) ?? scan.id.slice(0, 8)}
             </span>
           </div>
@@ -85,12 +87,19 @@ export function GlobalScansTable({ scans, locale, t }: GlobalScansTableProps) {
       key: 'logistics',
       label: 'Platform Context',
       render: (scan) => (
-        <div className="flex flex-col gap-1">
-          <span className="text-[11px] font-bold text-[var(--ds-text,#172B4D)] truncate max-w-[150px] uppercase tracking-tight">
-            {scan.qrCode?.organization?.name ?? 'System Admin'}
-          </span>
-          <div className="flex items-center gap-2 text-[10px] text-[var(--ds-text-subtle,#6B778C)] font-medium">
-             <span className="w-1.5 h-1.5 rounded-full bg-[var(--ds-background-brand-bold,#0052CC)]/20" />
+        <div className="flex flex-col gap-0.5">
+          {scan.qrCode?.organization ? (
+            <Link 
+              href={`/organizations/${scan.qrCode.organization.id}`}
+              className="text-[11px] font-bold text-[var(--ds-text,#172B4D)] truncate max-w-[150px] uppercase tracking-tighter hover:text-[var(--ds-text-brand,#0052CC)] transition-colors"
+            >
+              {scan.qrCode.organization.name}
+            </Link>
+          ) : (
+            <span className="text-[11px] font-bold text-[var(--ds-text-subtlest,#A5ADBA)] uppercase tracking-widest italic">System Admin</span>
+          )}
+          <div className="flex items-center gap-1.5 text-[10px] text-[var(--ds-text-subtle,#6B778C)] font-medium">
+             <Building2 className="h-3 w-3 text-[var(--ds-text-brand,#0052CC)]" />
              {scan.gate?.name ?? 'Admin Portal'}
           </div>
         </div>
@@ -113,7 +122,7 @@ export function GlobalScansTable({ scans, locale, t }: GlobalScansTableProps) {
     {
       key: 'status',
       label: 'Result',
-      render: (scan) => <ScanStatusBadge status={scan.status} t={t} />,
+      render: (scan) => <ScanStatusBadge status={scan.status} />,
     },
     {
       key: 'timestamp',
@@ -133,7 +142,7 @@ export function GlobalScansTable({ scans, locale, t }: GlobalScansTableProps) {
         );
       },
     },
-  ], [locale, t]);
+  ], [locale]);
 
   return (
     <DynamicTable

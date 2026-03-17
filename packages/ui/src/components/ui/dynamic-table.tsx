@@ -98,7 +98,7 @@ export function DynamicTable<T extends { id: string | number }>({
                 key={column.key}
                 style={{ width: column.width }}
                 className={cn(
-                  'h-10 text-[var(--ds-text-subtle,#42526E)] font-bold text-xs uppercase tracking-wider',
+                  'h-11 text-[var(--ds-text-subtle,#42526E)] font-semibold text-xs transition-colors',
                   column.align === 'center' && 'text-center',
                   column.align === 'right' && 'text-right'
                 )}
@@ -106,18 +106,21 @@ export function DynamicTable<T extends { id: string | number }>({
                 {column.isSortable ? (
                   <button
                     onClick={() => handleSort(column.key)}
-                    className="flex items-center gap-1 hover:text-[var(--ds-text,#172B4D)] transition-colors group"
+                    className="flex items-center gap-1.5 hover:text-[var(--ds-text,#172B4D)] transition-colors group w-full h-full"
                   >
-                    {column.label}
-                    <div className="flex flex-col opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span className="truncate">{column.label}</span>
+                    <div className="flex flex-col flex-shrink-0">
                       {sortKey === column.key ? (
                         sortOrder === 'asc' ? (
-                          <ChevronUp className="h-3 w-3 text-[var(--ds-text-brand,#0052CC)] opacity-100" />
+                          <ChevronUp className="h-3.5 w-3.5 text-[var(--ds-icon-selected,#0052CC)]" />
                         ) : (
-                          <ChevronDown className="h-3 w-3 text-[var(--ds-text-brand,#0052CC)] opacity-100" />
+                          <ChevronDown className="h-3.5 w-3.5 text-[var(--ds-icon-selected,#0052CC)]" />
                         )
                       ) : (
-                        <ChevronUp className="h-3 w-3 opacity-30" />
+                        <div className="flex flex-col -space-y-1.5 opacity-0 group-hover:opacity-40 transition-opacity">
+                          <ChevronUp className="h-2.5 w-2.5" />
+                          <ChevronDown className="h-2.5 w-2.5" />
+                        </div>
                       )}
                     </div>
                   </button>
@@ -131,22 +134,22 @@ export function DynamicTable<T extends { id: string | number }>({
         <TableBody>
           {isLoading ? (
             Array.from({ length: 5 }).map((_, i) => (
-              <TableRow key={i} className="border-b border-[var(--ds-border-subtle,#EBECF0)]">
+              <TableRow key={i} className="border-b border-[var(--ds-border-subtle,#EBECF0)] dark:border-[#343A46]/50">
                 {isSelectable && (
                   <TableCell className="px-4">
-                    <Skeleton className="h-4 w-4 rounded-sm opacity-50" />
+                    <Skeleton className="h-4 w-4 rounded-sm" />
                   </TableCell>
                 )}
                 {columns.map((col) => (
-                  <TableCell key={col.key}>
-                    <Skeleton className="h-4 w-full opacity-50" />
+                  <TableCell key={col.key} className="py-4">
+                    <Skeleton className="h-4 w-full max-w-[120px]" />
                   </TableCell>
                 ))}
               </TableRow>
             ))
           ) : items.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={columns.length + (isSelectable ? 1 : 0)} className="h-48 text-center">
+              <TableCell colSpan={columns.length + (isSelectable ? 1 : 0)} className="h-64 text-center">
                 {emptyState || <EmptyState icon={Search} title="No results found" description="Try adjusting your filters" />}
               </TableCell>
             </TableRow>
@@ -156,8 +159,8 @@ export function DynamicTable<T extends { id: string | number }>({
                 key={item.id}
                 onClick={() => onRowClick?.(item)}
                 className={cn(
-                  'group border-b border-[var(--ds-border-subtle,#EBECF0)] hover:bg-[var(--ds-background-neutral-subtle,#F4F5F7)] transition-colors cursor-pointer',
-                  selectedIds.includes(item.id) && 'bg-[var(--ds-background-selected,#DEEBFF)] hover:bg-[var(--ds-background-selected-hovered,#B3D4FF)]',
+                  'group border-b border-[var(--ds-border-subtle,#EBECF0)] dark:border-[#343A46]/50 hover:bg-[var(--ds-background-neutral-subtle,#F4F5F7)] dark:hover:bg-[#2C333A] transition-colors cursor-pointer',
+                  selectedIds.includes(item.id) && 'bg-[var(--ds-background-selected,#DEEBFF)] dark:bg-[#DEEBFF]/10 hover:bg-[var(--ds-background-selected-hovered,#B3D4FF)] dark:hover:bg-[#DEEBFF]/20',
                   rowClassName?.(item)
                 )}
               >
@@ -174,7 +177,7 @@ export function DynamicTable<T extends { id: string | number }>({
                   <TableCell
                     key={column.key}
                     className={cn(
-                      'text-sm text-[var(--ds-text,#172B4D)] py-4',
+                      'text-sm text-[var(--ds-text,#172B4D)] dark:text-[#E3E6E8] py-3.5',
                       column.align === 'center' && 'text-center',
                       column.align === 'right' && 'text-right'
                     )}

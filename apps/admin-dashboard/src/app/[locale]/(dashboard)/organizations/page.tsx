@@ -8,7 +8,7 @@ import { OrgsClient } from '@/components/organizations/OrgsClient';
 
 export const metadata = { title: 'Organizations' };
 
-interface SearchParams { q?: string; plan?: string; status?: string }
+interface SearchParams { q?: string; plan?: string; status?: string; page?: string }
 
 export default async function OrganizationsPage({
   params: { locale },
@@ -18,11 +18,14 @@ export default async function OrganizationsPage({
   searchParams: SearchParams;
 }) {
   await requireAdmin();
-  const { t } = (await getTranslation(locale, 'admin')) as { t: any; dict: any };
+  const { t } = (await getTranslation(locale, 'admin')) as { t: (key: string, options?: any) => string };
 
   const search = searchParams.q?.trim() ?? '';
   const planFilter = searchParams.plan ?? '';
   const statusFilter = searchParams.status ?? 'all';
+  const page = Math.max(1, parseInt(searchParams.page ?? '1'));
+  const take = 25;
+  const skip = (page - 1) * take;
 
   const where = {
     ...(search
@@ -45,7 +48,8 @@ export default async function OrganizationsPage({
     prisma.organization.findMany({
       where,
       orderBy: { createdAt: 'desc' },
-      take: 50,
+      skip,
+      take,
       select: {
         id: true,
         name: true,
@@ -96,7 +100,7 @@ export default async function OrganizationsPage({
         title={t('organizations.title')}
         subtitle={t('organizations.subtitle')}
         badge={
-          <Badge variant="outline" className="bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800 font-bold text-xs px-2.5 py-1">
+          <Badge variant="outline" className="font-bold text-[10px] px-2.5 py-0.5 rounded-sm">
             {total.toLocaleString(locale)}
           </Badge>
         }
@@ -109,6 +113,8 @@ export default async function OrganizationsPage({
         planFilter={planFilter}
         statusFilter={statusFilter}
         total={total}
+        page={page}
+        totalPages={Math.ceil(total / take)}
       />
     </div>
   );

@@ -8,7 +8,7 @@ import { UsersClient } from '@/components/users/UsersClient';
 
 export const metadata = { title: 'Users' };
 
-interface SearchParams { q?: string; role?: string; status?: string }
+interface SearchParams { q?: string; role?: string; status?: string; page?: string }
 
 export default async function UsersPage({
   params: { locale },
@@ -18,11 +18,14 @@ export default async function UsersPage({
   searchParams: SearchParams;
 }) {
   await requireAdmin();
-  const { t } = (await getTranslation(locale, 'admin')) as { t: any; dict: any };
+  const { t } = (await getTranslation(locale, 'admin')) as { t: (key: string, options?: any) => string };
 
   const search = searchParams.q?.trim() ?? '';
   const roleFilter = searchParams.role ?? '';
   const statusFilter = searchParams.status ?? 'active';
+  const page = Math.max(1, parseInt(searchParams.page ?? '1'));
+  const take = 25;
+  const skip = (page - 1) * take;
 
   const where = {
     ...(search
@@ -45,7 +48,8 @@ export default async function UsersPage({
     prisma.user.findMany({
       where,
       orderBy: { createdAt: 'desc' },
-      take: 100,
+      skip,
+      take,
       select: {
         id: true,
         name: true,
@@ -78,7 +82,7 @@ export default async function UsersPage({
         title={t('users.title')}
         subtitle={t('users.subtitle')}
         badge={
-          <Badge variant="outline" className="bg-violet-50 dark:bg-violet-900/20 text-violet-700 dark:text-violet-300 border-violet-200 dark:border-violet-800 font-bold text-xs px-2.5 py-1">
+          <Badge variant="outline" className="font-bold text-[10px] px-2.5 py-0.5 rounded-sm">
             {activeCount.toLocaleString(locale)} active
           </Badge>
         }
@@ -92,6 +96,8 @@ export default async function UsersPage({
         statusFilter={statusFilter}
         total={total}
         roles={roles}
+        page={page}
+        totalPages={Math.ceil(total / take)}
       />
     </div>
   );

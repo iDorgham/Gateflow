@@ -1,0 +1,30 @@
+name: Ralph Loop Enforcer (v9.0)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  enforce:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 8
+      - name: Install dependencies
+        run: pnpm install
+      
+      - name: ADS Compliance Check
+        run: node scripts/enforce-ads-design.js
+        
+      - name: Security Invariants Check
+        run: node scripts/enforce-security-invariants.js
+        
+      - name: Motion Performance Check
+        run: node scripts/enforce-motion-performance.js
+        
+      - name: Turborepo Preflight
+        run: pnpm turbo run lint typecheck test

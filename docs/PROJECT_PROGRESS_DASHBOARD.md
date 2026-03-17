@@ -12,7 +12,7 @@
 | -------------- | -------------------------------------------------------------------------- |
 | **Product**    | GateFlow — Zero-Trust Digital Gate Infrastructure Platform                 |
 | **Status**     | MVP 100% Complete ✅                                                       |
-| **Phase**      | Phase 1 & 2 Complete — Ready for Production                               |
+| **Phase**      | Phase 1, 2, 3, & 5 Complete — Production Ready ✅         |
 | **Tech Stack** | Next.js 14 · Expo SDK 54 · PostgreSQL 15 · Prisma 5 · pnpm 8 · Turborepo 2 |
 
 ---
@@ -163,8 +163,8 @@
 | -------------------------------------------------- | --------------------- |
 | [README.md](../README.md)                          | Project overview      |
 | [CLAUDE.md](../CLAUDE.md)                          | AI assistant guide    |
-| [PRD v7.0](./PRD_v7.0.md)                          | Product requirements  |
-| [PRD v6.0](./PRD_v7.0.md)                          | Previous PRD version  |
+| [PRD v8.0](./PRD_v8.0.md)                          | Product requirements  |
+| [PRD v7.0](./PRD_v7.0.md)                          | Previous PRD version  |
 | [Security Overview](./guides/SECURITY_OVERVIEW.md) | Security architecture |
 
 ### Development
@@ -213,6 +213,8 @@
 
 ## Recent Activity
 
+- **Atlassian UI Remake** — Completed Phase 5 (Admin Dashboard Management) and established the ADS design token system across all consoles.
+- **GateAI Hardening** — Completed Phases 1-10 of the AI Intelligent Agent, including report generation, scheduling, and monitoring.
 - **Real-time Updates** — Added SSE streaming for live dashboard updates (EventLog model, /api/events/stream)
 - **Marketing Website** — Completed homepage, features, pricing, solutions pages (90% complete)
 - **Resident Mobile** — Added QR list, creation, offline cache, history (60% complete)

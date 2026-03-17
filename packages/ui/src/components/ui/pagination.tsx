@@ -43,12 +43,12 @@ export function Pagination({
 
   const Item = ({ page, active, disabled, children }: { page: number; active?: boolean; disabled?: boolean; children: React.ReactNode }) => {
     const commonClass = cn(
-      'inline-flex items-center justify-center rounded-lg text-sm font-bold transition-all',
-      'min-w-[36px] h-9 px-2',
+      'inline-flex items-center justify-center rounded-sm text-sm font-semibold transition-all',
+      'min-w-[32px] h-8 px-2',
       active
-        ? 'bg-[var(--ds-background-selected,#DEEBFF)] text-[var(--ds-text-selected,#0747A6)] shadow-sm'
-        : 'text-[var(--ds-text-subtle,#42526E)] hover:bg-[var(--ds-background-neutral-subtle,#F4F5F7)] dark:hover:bg-[#2C333A]',
-      disabled && 'opacity-30 pointer-events-none cursor-not-allowed border-dashed'
+        ? 'bg-[var(--ds-background-selected,#DEEBFF)] dark:bg-[#DEEBFF]/10 text-[var(--ds-text-selected,#0747A6)] dark:text-[#4C9AFF]'
+        : 'text-[var(--ds-text-subtle,#42526E)] dark:text-[#97A0AF] hover:bg-[var(--ds-background-neutral-subtle,#F4F5F7)] dark:hover:bg-[#2C333A]',
+      disabled && 'opacity-30 pointer-events-none'
     );
 
     if (getHref && !disabled) {
@@ -72,21 +72,21 @@ export function Pagination({
   };
 
   return (
-    <nav className={cn('flex items-center justify-center gap-1.5', className)} aria-label="Pagination">
+    <nav className={cn('flex items-center justify-center gap-1', className)} aria-label="Pagination">
       <Item page={currentPage - 1} disabled={currentPage <= 1}>
         <ChevronLeft className="h-4 w-4 mr-1" />
         <span className="hidden sm:inline">Prev</span>
       </Item>
 
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-0.5">
         {pages.map((p, i) => (
           typeof p === 'number' ? (
             <Item key={i} page={p} active={currentPage === p}>
               {p}
             </Item>
           ) : (
-            <span key={i} className="px-2 text-[var(--ds-text-subtle,#6B778C)] opacity-50 font-black">
-              &bull;&bull;&bull;
+            <span key={i} className="px-2 text-[var(--ds-text-subtlest,#6B778C)] font-black">
+              &hellip;
             </span>
           )
         ))}

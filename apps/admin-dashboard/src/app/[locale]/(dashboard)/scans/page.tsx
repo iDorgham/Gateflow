@@ -4,7 +4,6 @@ import { getTranslation } from '@/lib/i18n/i18n';
 import { Locale } from '@/lib/i18n/i18n-config';
 import { prisma } from '@gate-access/db';
 import {
-  ScanLine,
   Search,
   Building2,
   Shield,
@@ -15,8 +14,8 @@ import {
   Badge,
   Button,
   Input,
-  cn,
   Pagination,
+  DatePicker,
 } from '@gate-access/ui';
 import Link from 'next/link';
 import { PageHeader } from '@/components/page-header';
@@ -109,32 +108,32 @@ export default async function AdminScansPage({
       />
 
       {/* Filters Container */}
-      <div className="bg-[var(--ds-background-default,#FFFFFF)] border border-[var(--ds-border,#DFE1E6)] rounded-xl p-5 shadow-sm space-y-6">
+      <div className="bg-[var(--ds-background-default,#FFFFFF)] dark:bg-[#1D2125] border border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46] rounded-sm p-4 shadow-sm space-y-4">
         <form method="GET" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-6 items-end">
-          <div className="space-y-2.5 lg:col-span-2">
-            <label className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-[var(--ds-text-subtle,#6B778C)] ltr:ml-1 rtl:mr-1">
+          <div className="space-y-1.5 lg:col-span-2">
+            <label className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wider text-[var(--ds-text-subtle,#6B778C)] ltr:ml-1 rtl:mr-1">
               <Building2 className="h-3 w-3" />
               {t('scans.organization')}
             </label>
             <div className="relative group">
-              <Building2 className="absolute ltr:left-3.5 rtl:right-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--ds-text-subtlest,#A5ADBA)] group-focus-within:text-[var(--ds-text-brand,#0052CC)] transition-colors" />
+              <Building2 className="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[var(--ds-text-subtlest,#A5ADBA)] group-focus-within:text-[var(--ds-text-brand,#0052CC)] transition-colors" />
               <Input
                 name="org"
                 defaultValue={orgFilter}
                 placeholder={t('scans.filterByOrg')}
-                className="ltr:pl-10 rtl:pr-10 h-11 rounded-lg bg-[var(--ds-background-neutral-subtle,#F4F5F7)] border-none focus:bg-white transition-all shadow-inner"
+                className="ltr:pl-9 rtl:pr-9 h-8 bg-[var(--ds-background-neutral-subtle,#F4F5F7)] dark:bg-[#2C333A] border-[#DFE1E6] dark:border-[#343A46] focus:bg-white dark:focus:bg-[#1D2125] transition-all"
               />
             </div>
           </div>
 
-          <div className="space-y-2.5">
-            <label className="text-[11px] font-black uppercase tracking-widest text-[var(--ds-text-subtle,#6B778C)] ltr:ml-1 rtl:mr-1">
+          <div className="space-y-1.5">
+            <label className="text-[11px] font-bold uppercase tracking-wider text-[var(--ds-text-subtle,#6B778C)] ltr:ml-1 rtl:mr-1">
               {t('scans.status')}
             </label>
             <select
               name="status"
               defaultValue={statusFilter}
-              className="w-full h-11 rounded-lg border border-[var(--ds-border,#DFE1E6)] bg-white px-4 text-xs font-bold text-[var(--ds-text,#172B4D)] focus:outline-none focus:ring-2 focus:ring-[var(--ds-border-focused,#4C9AFF)]"
+              className="w-full h-8 rounded-sm border border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46] bg-white dark:bg-[#1D2125] px-3 text-xs font-semibold text-[var(--ds-text,#172B4D)] dark:text-[#E3E6E8] focus:outline-none focus:ring-2 focus:ring-[var(--ds-border-focused,#4C9AFF)]"
             >
               <option value="">{t('scans.allStatuses', 'All Scan Outcomes')}</option>
               {['SUCCESS', 'DENIED', 'FAILED', 'EXPIRED'].map((s) => (
@@ -143,32 +142,30 @@ export default async function AdminScansPage({
             </select>
           </div>
 
-          <div className="space-y-2.5">
-            <label className="text-[11px] font-black uppercase tracking-widest text-[var(--ds-text-subtle,#6B778C)] ltr:ml-1 rtl:mr-1">
-              Period (From/To)
-            </label>
-            <div className="grid grid-cols-2 gap-2 h-11 p-1 bg-[var(--ds-background-neutral-subtle,#F4F5F7)] rounded-lg border border-[var(--ds-border,#DFE1E6)]">
-              <input
-                type="date"
-                name="from"
-                defaultValue={searchParams.from ?? ''}
-                className="bg-transparent border-none text-[11px] font-bold text-[var(--ds-text,#172B4D)] px-2 outline-none"
-              />
-              <input
-                type="date"
-                name="to"
-                defaultValue={searchParams.to ?? ''}
-                className="bg-transparent border-none text-[11px] font-bold text-[var(--ds-text,#172B4D)] px-2 outline-none"
-              />
-            </div>
+          <div className="lg:col-span-2 xl:col-span-1">
+            <DatePicker
+              label="From Date"
+              name="from"
+              defaultValue={searchParams.from ?? ''}
+              className="w-full"
+            />
+          </div>
+
+          <div className="lg:col-span-2 xl:col-span-1">
+            <DatePicker
+              label="To Date"
+              name="to"
+              defaultValue={searchParams.to ?? ''}
+              className="w-full"
+            />
           </div>
 
           <div className="flex items-center gap-2">
-            <Button type="submit" variant="primary" className="h-11 px-8 font-bold shadow-md flex-1">
+            <Button type="submit" variant="primary" className="h-8 px-6 font-bold flex-1 rounded-sm">
               <Search className="h-4 w-4 ltr:mr-2 rtl:ml-2" />
               {t('scans.search')}
             </Button>
-            <Button variant="subtle" className="h-11 w-11 p-0" asChild>
+            <Button variant="subtle" className="h-8 w-8 p-0" asChild>
               <Link href="/scans">
                 <X className="h-4 w-4" />
               </Link>
@@ -178,7 +175,7 @@ export default async function AdminScansPage({
       </div>
 
       {/* Table Section */}
-      <div className="bg-[var(--ds-background-default,#FFFFFF)] border border-[var(--ds-border,#DFE1E6)] rounded-xl shadow-md overflow-hidden">
+      <div className="bg-[var(--ds-background-default,#FFFFFF)] dark:bg-[#1D2125] border border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46] rounded-sm shadow-md overflow-hidden">
         <GlobalScansTable scans={scans as any} locale={locale} t={t} />
       </div>
 

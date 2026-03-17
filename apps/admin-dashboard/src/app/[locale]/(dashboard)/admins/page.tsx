@@ -13,8 +13,6 @@ import {
   KeyRound,
   ShieldCheck,
   ShieldAlert,
-  Mail,
-  Calendar,
   Info,
 } from 'lucide-react';
 import {
@@ -111,7 +109,7 @@ export default async function AdminsPage({
   params: { locale: Locale };
 }) {
   await requireAdmin();
-  const { t } = (await getTranslation(locale, 'admin')) as any;
+  const { t } = (await getTranslation(locale, 'admin')) as { t: (key: string, options?: any) => string };
 
   // Key fingerprint — first 8 chars of the session token hash (safe to show)
   let keyFingerprint = '— not configured —';
@@ -160,16 +158,16 @@ export default async function AdminsPage({
         return (
           <div className="flex items-center gap-3">
             <div className={cn(
-              "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg font-bold text-[10px] uppercase shadow-inner",
-              suspended ? "bg-[var(--ds-background-neutral,#F4F5F7)] text-[var(--ds-text-subtle,#6B778C)]" : "bg-[var(--ds-background-brand-bold,#0052CC)] text-white"
+              "flex h-8 w-8 shrink-0 items-center justify-center rounded-sm font-bold text-[10px] uppercase shadow-sm transition-all group-hover:bg-[var(--ds-background-brand-bold,#0052CC)] group-hover:text-white",
+              suspended ? "bg-[var(--ds-background-neutral,#DFE1E6)] text-[var(--ds-text-subtle,#6B778C)]" : "bg-[var(--ds-background-neutral-subtle,#F4F5F7)] text-[var(--ds-text,#172B4D)]"
             )}>
               {admin.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
             </div>
-            <div className="flex flex-col">
-              <span className={cn("text-xs font-bold font-mono tracking-tight", suspended ? "text-[var(--ds-text-subtle,#6B778C)] line-through opacity-50" : "text-[var(--ds-text,#172B4D)]")}>
+            <div className="flex flex-col min-w-0">
+              <span className={cn("text-xs font-bold leading-tight truncate", suspended ? "text-[var(--ds-text-subtle,#6B778C)] line-through opacity-50" : "text-[var(--ds-text,#172B4D)]")}>
                 {admin.name}
               </span>
-              <span className="text-[10px] text-[var(--ds-text-subtle,#6B778C)] font-medium">{admin.email}</span>
+              <span className="text-[10px] text-[var(--ds-text-subtlest,#6B778C)] truncate">{admin.email}</span>
             </div>
           </div>
         );
@@ -179,7 +177,7 @@ export default async function AdminsPage({
       key: 'status',
       label: 'Status',
       render: (admin) => (
-        <Badge variant={admin.deletedAt ? 'warning' : 'success'} className="h-5 px-2 text-[9px] font-black italic uppercase">
+        <Badge variant={admin.deletedAt ? 'warning' : 'success'} className="h-6 rounded-sm px-2 font-bold uppercase text-[9px]">
            {admin.deletedAt ? t('admins.suspended') : 'Active'}
         </Badge>
       )
@@ -218,7 +216,7 @@ export default async function AdminsPage({
       <PageHeader 
         title={t('admins.title')} 
         subtitle={t('admins.subtitle')} 
-        badge={<Badge variant="primary" className="h-6 font-black tracking-widest px-2 italic shadow-sm">SYSTEM AUTH</Badge>}
+        badge={<Badge variant="primary" className="font-bold text-[10px] px-2.5 py-0.5 rounded-sm uppercase tracking-widest">System Authority</Badge>}
       />
 
       {/* Auth mechanism info */}

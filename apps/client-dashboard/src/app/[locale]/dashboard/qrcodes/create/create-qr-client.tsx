@@ -10,8 +10,9 @@ import {
   Label,
   Card,
   CardContent,
+  DatePicker,
+  cn,
 } from '@gate-access/ui';
-import { cn } from '@gate-access/ui';
 import { toast } from 'sonner';
 import { createQRCode } from './actions';
 import { QRCodeType } from '@gate-access/types';
@@ -324,18 +325,13 @@ function Step2({
 
       {/* Expiry (non-PERMANENT) */}
       {showExpiry && (
-        <div className="space-y-2">
-          <Label htmlFor="expiry" className="text-[11px] font-black uppercase tracking-widest text-muted-foreground">
-            Expires At (optional)
-          </Label>
-          <Input
-            id="expiry"
-            type="datetime-local"
-            value={expiresAt}
-            onChange={(e) => setExpiresAt(e.target.value)}
-            className="h-11 rounded-xl"
-          />
-        </div>
+        <DatePicker
+          label="Expires At (optional)"
+          value={expiresAt}
+          onChange={(e) => setExpiresAt(e.target.value)}
+          onClear={() => setExpiresAt('')}
+          className="w-full"
+        />
       )}
 
       {error && (

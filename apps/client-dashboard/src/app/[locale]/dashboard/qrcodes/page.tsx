@@ -9,11 +9,11 @@ import {
   DialogContent,
   DialogFooter,
   DialogTitle,
-  Input,
   NativeSelect,
   PageHeader,
   cn,
   Pagination,
+  DatePicker,
 } from '@gate-access/ui';
 import { useTranslation } from 'react-i18next';
 import { 
@@ -23,9 +23,6 @@ import {
   Trash2, 
   X,
   Search,
-  Calendar,
-  Clock,
-  Activity
 } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useQRCodes } from '@/lib/qrcodes/use-qrcodes';
@@ -237,73 +234,31 @@ export default function QRCodesPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
             {/* Creation Date Filter */}
-            <div className="space-y-2.5">
-              <label className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-[#6B778C] dark:text-[#97A0AF] ml-1">
-                <Calendar className="h-3 w-3" />
-                {t('qrcodes.filters.createdAt', 'Creation Period')}
-              </label>
-              <div className="flex items-center gap-2 bg-[#FAFBFC] dark:bg-[#091E42]/10 p-1 rounded-xl border border-[#DFE1E6] dark:border-[#343A46]">
-                <Input
-                  type="date"
-                  value={createdFrom}
-                  onChange={(e) => { setPage(1); setCreatedFrom(e.target.value); }}
-                  className="h-9 bg-transparent border-none text-xs font-bold text-[#172B4D] dark:text-white focus:ring-0"
-                />
-                <span className="text-[#C1C7D0] font-black">/</span>
-                <Input
-                  type="date"
-                  value={createdTo}
-                  onChange={(e) => { setPage(1); setCreatedTo(e.target.value); }}
-                  className="h-9 bg-transparent border-none text-xs font-bold text-[#172B4D] dark:text-white focus:ring-0"
-                />
-              </div>
-            </div>
+            <DatePicker
+              label={t('qrcodes.filters.createdAt', 'Creation Period')}
+              value={createdFrom}
+              onChange={(e) => { setPage(1); setCreatedFrom(e.target.value); }}
+              onClear={() => { setPage(1); setCreatedFrom(''); }}
+              className="w-full"
+            />
 
             {/* Expiry Date Filter */}
-            <div className="space-y-2.5">
-              <label className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest dark:text-[#97A0AF] ml-1 text-amber-600">
-                <Clock className="h-3 w-3" />
-                {t('qrcodes.filters.expiresAt', 'Expiry Window')}
-              </label>
-              <div className="flex items-center gap-2 bg-[#FAFBFC] dark:bg-[#091E42]/10 p-1 rounded-xl border border-[#DFE1E6] dark:border-[#343A46]">
-                <Input
-                  type="date"
-                  value={expiresFrom}
-                  onChange={(e) => { setPage(1); setExpiresFrom(e.target.value); }}
-                  className="h-9 bg-transparent border-none text-xs font-bold text-[#172B4D] dark:text-white focus:ring-0"
-                />
-                <span className="text-[#C1C7D0] font-black">/</span>
-                <Input
-                  type="date"
-                  value={expiresTo}
-                  onChange={(e) => { setPage(1); setExpiresTo(e.target.value); }}
-                  className="h-9 bg-transparent border-none text-xs font-bold text-[#172B4D] dark:text-white focus:ring-0"
-                />
-              </div>
-            </div>
+            <DatePicker
+              label={t('qrcodes.filters.expiresAt', 'Expiry Window')}
+              value={expiresFrom}
+              onChange={(e) => { setPage(1); setExpiresFrom(e.target.value); }}
+              onClear={() => { setPage(1); setExpiresFrom(''); }}
+              className="w-full"
+            />
 
             {/* Usage Filter */}
-            <div className="space-y-2.5">
-              <label className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest dark:text-[#97A0AF] ml-1 text-emerald-600">
-                <Activity className="h-3 w-3" />
-                {t('qrcodes.filters.lastScanAt', 'Last Usage')}
-              </label>
-              <div className="flex items-center gap-2 bg-[#FAFBFC] dark:bg-[#091E42]/10 p-1 rounded-xl border border-[#DFE1E6] dark:border-[#343A46]">
-                <Input
-                  type="date"
-                  value={lastScanFrom}
-                  onChange={(e) => { setPage(1); setLastScanFrom(e.target.value); }}
-                  className="h-9 bg-transparent border-none text-xs font-bold text-[#172B4D] dark:text-white focus:ring-0"
-                />
-                <span className="text-[#C1C7D0] font-black">/</span>
-                <Input
-                  type="date"
-                  value={lastScanTo}
-                  onChange={(e) => { setPage(1); setLastScanTo(e.target.value); }}
-                  className="h-9 bg-transparent border-none text-xs font-bold text-[#172B4D] dark:text-white focus:ring-0"
-                />
-              </div>
-            </div>
+            <DatePicker
+              label={t('qrcodes.filters.lastScanAt', 'Last Usage')}
+              value={lastScanFrom}
+              onChange={(e) => { setPage(1); setLastScanFrom(e.target.value); }}
+              onClear={() => { setPage(1); setLastScanFrom(''); }}
+              className="w-full"
+            />
           </div>
 
           <div className="flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-[#DFE1E6] dark:border-[#343A46]">
