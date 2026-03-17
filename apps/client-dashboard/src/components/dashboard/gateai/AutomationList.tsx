@@ -9,12 +9,9 @@ import {
   Clock, 
   FileText, 
   Download, 
-  Calendar,
-  MoreVertical,
-  Pause,
-  Play
+  Calendar
 } from 'lucide-react';
-import { cn, Button } from '@gate-access/ui';
+import { cn } from '@gate-access/ui';
 
 type Automation = {
   id: string;

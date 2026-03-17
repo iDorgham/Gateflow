@@ -190,7 +190,7 @@ export async function POST(request: NextRequest) {
       });
     });
 
-    emitEvent(claims.orgId!, EventType.VISITOR_QR_CREATED, { qrId: visitor.qrCodeId }).catch(() => {});
+    emitEvent(claims.orgId!, EventType.QR_CREATED, { qrId: visitor.qrCodeId }).catch(() => {});
 
     return NextResponse.json({
       success: true,

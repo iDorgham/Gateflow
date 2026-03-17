@@ -2,8 +2,10 @@
 
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Tag, Plus, Trash2, Loader2, AlertCircle } from 'lucide-react';
+import { Tag as TagIcon, Plus, Trash2, Loader2, AlertCircle } from 'lucide-react';
 import { cn, Button } from '@gate-access/ui';
+import { motion, AnimatePresence } from 'framer-motion';
+import { gaSpring } from './GateAITokens';
 
 // Shared GateFlow real-estate palette presets
 const PRESET_COLORS = [
@@ -104,7 +106,7 @@ export function TagSidebar() {
     <div className="flex flex-col h-full overflow-hidden">
       {/* Header */}
       <div className="flex items-center gap-2 p-4 border-b border-[var(--ga-navy-border)] shrink-0">
-        <Tag size={16} style={{ color: 'var(--ga-orange)' }} />
+        <TagIcon size={16} style={{ color: 'var(--ga-orange)' }} />
         <span
           className="text-xs font-semibold uppercase tracking-widest"
           style={{ color: 'var(--ga-text-primary)' }}
@@ -162,7 +164,7 @@ export function TagSidebar() {
       </div>
 
       {/* Tags List */}
-      <div className="flex-1 overflow-y-auto ga-scroll p-4 space-y-2">
+      <div className="flex-1 overflow-y-auto ga-scroll p-4 space-y-2" role="list">
         {loading ? (
           <div className="flex items-center justify-center py-8">
             <Loader2 size={24} className="animate-spin text-[var(--ga-text-muted)]" />
@@ -172,42 +174,50 @@ export function TagSidebar() {
             No tags found. Create one above to start organizing AI context.
           </div>
         ) : (
-          tags.map((tag) => (
-            <div
-              key={tag.id}
-              draggable
-              onDragStart={(e) => {
-                e.dataTransfer.setData('application/vnd.gateai.tag.id', tag.id);
-                e.dataTransfer.setData('application/vnd.gateai.tag.name', tag.name);
-                e.dataTransfer.setData('application/vnd.gateai.tag.color', tag.color || '#ED4B00');
-                e.dataTransfer.effectAllowed = 'copy';
-              }}
-              className="group flex items-center justify-between p-2.5 rounded-md border border-transparent hover:border-[var(--ga-navy-border)] hover:bg-black/20 transition-colors cursor-grab active:cursor-grabbing"
-            >
-              <div className="flex items-center gap-2.5 min-w-0 pointer-events-none">
-                <div
-                  className="w-2.5 h-2.5 rounded-full shrink-0"
-                  style={{ backgroundColor: tag.color || '#ED4B00' }}
-                />
-                <span className="text-sm font-medium text-[var(--ga-text-primary)] truncate">
-                  {tag.name}
-                </span>
-                {tag._count?.aiContents !== undefined && (
-                  <span className="text-[10px] font-mono text-[var(--ga-text-muted)] bg-black/20 px-1.5 py-0.5 rounded-sm shrink-0">
-                    {tag._count.aiContents}
-                  </span>
-                )}
-              </div>
-              <button
-                type="button"
-                onClick={() => handleDelete(tag.id)}
-                className="opacity-0 group-hover:opacity-100 p-1.5 text-[var(--ga-text-muted)] hover:text-red-400 transition-all shrink-0"
-                aria-label={`Delete ${tag.name}`}
+          <AnimatePresence initial={false}>
+            {tags.map((tag) => (
+              <motion.div
+                key={tag.id}
+                layout
+                role="listitem"
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                transition={gaSpring}
+                draggable
+                onDragStart={(e: any) => {
+                  e.dataTransfer.setData('application/vnd.gateai.tag.id', tag.id);
+                  e.dataTransfer.setData('application/vnd.gateai.tag.name', tag.name);
+                  e.dataTransfer.setData('application/vnd.gateai.tag.color', tag.color || '#ED4B00');
+                  e.dataTransfer.effectAllowed = 'copy';
+                }}
+                className="group flex items-center justify-between p-2.5 rounded-md border border-transparent hover:border-[var(--ga-navy-border)] hover:bg-black/20 transition-colors cursor-grab active:cursor-grabbing"
               >
-                <Trash2 size={14} />
-              </button>
-            </div>
-          ))
+                <div className="flex items-center gap-2.5 min-w-0 pointer-events-none">
+                  <div
+                    className="w-2.5 h-2.5 rounded-full shrink-0"
+                    style={{ backgroundColor: tag.color || '#ED4B00' }}
+                  />
+                  <span className="text-sm font-medium text-[var(--ga-text-primary)] truncate">
+                    {tag.name}
+                  </span>
+                  {tag._count?.aiContents !== undefined && (
+                    <span className="text-[10px] font-mono text-[var(--ga-text-muted)] bg-black/20 px-1.5 py-0.5 rounded-sm shrink-0">
+                      {tag._count.aiContents}
+                    </span>
+                  )}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleDelete(tag.id)}
+                  className="opacity-0 group-hover:opacity-100 p-1.5 text-[var(--ga-text-muted)] hover:text-red-400 transition-all shrink-0"
+                  aria-label={`Delete ${tag.name}`}
+                >
+                  <Trash2 size={14} />
+                </button>
+              </motion.div>
+            ))}
+          </AnimatePresence>
         )}
       </div>
     </div>

@@ -71,19 +71,20 @@ export async function getOrganizationContext(orgId: string): Promise<Organizatio
       return [[], [], [], 0, 0];
     });
 
+    const scansRawTyped = (scansRaw as unknown as { status: string; _count: { _all: number } }[]) || [];
     const stats = {
-      totalScans: (scansRaw as any[]).reduce((acc, curr) => acc + (curr._count?._all || 0), 0),
-      successScans: (scansRaw as any[]).find(s => s.status === 'SUCCESS')?._count?._all || 0,
-      failedScans: (scansRaw as any[]).find(s => s.status === 'FAILED')?._count?._all || 0,
-      deniedScans: (scansRaw as any[]).find(s => s.status === 'DENIED')?._count?._all || 0,
+      totalScans: scansRawTyped.reduce((acc, curr) => acc + (curr._count?._all || 0), 0),
+      successScans: scansRawTyped.find(s => s.status === 'SUCCESS')?._count?._all || 0,
+      failedScans: scansRawTyped.find(s => s.status === 'FAILED')?._count?._all || 0,
+      deniedScans: scansRawTyped.find(s => s.status === 'DENIED')?._count?._all || 0,
     };
 
     return {
       name: org.name,
-      totalProjects: (projects as any[]).length,
-      projectNames: (projects as any[]).map(p => p.name),
-      totalGates: (gates as any[]).length,
-      gateNames: (gates as any[]).map(g => g.name),
+      totalProjects: (projects as unknown[]).length,
+      projectNames: (projects as { name: string }[]).map(p => p.name),
+      totalGates: (gates as unknown[]).length,
+      gateNames: (gates as { name: string }[]).map(g => g.name),
       stats,
       capacity: {
         totalUnits: unitsCount as number,

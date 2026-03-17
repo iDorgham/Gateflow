@@ -126,8 +126,8 @@ ${isResident ? `
      }
    }
    \`\`\`
-6. EXTREMELY IMPORTANT: For any automation or scheduling action, you MUST FIRST propose it using a "confirm" block (see below). Wait for the user to confirm before you call the `scheduleReport` or `exportDataNow` tools.
-7. You have internal tools to handle `scheduleReport` and `exportDataNow`. Use them only after confirmation.
+6. EXTREMELY IMPORTANT: For any automation or scheduling action, you MUST FIRST propose it using a "confirm" block (see below). Wait for the user to confirm before you call the \`scheduleReport\` or \`exportDataNow\` tools.
+7. You have internal tools to handle \`scheduleReport\` and \`exportDataNow\`. Use them only after confirmation.
 
 ### Action JSON Structures:
 1. To offer an instant report download, output a JSON block:
@@ -150,7 +150,7 @@ ${isResident ? `
      }
    }
    \`\`\`
-Answer concisely.`,
+Answer concisely.`}`,
       onFinish: async (finish) => {
         if (finish.usage) {
           await AiActionService.recordUsage(actionLog.id, {

@@ -67,8 +67,8 @@ export async function POST(request: Request) {
     const automation = await prisma.aiAutomation.create({
       data: {
         ...result.data,
-        organizationId: claims.orgId,
-        userId: claims.sub,
+        organization: { connect: { id: claims.orgId } }, // Reverted to original correct syntax
+        user: { connect: { id: claims.sub } },
         status: 'ACTIVE',
       },
     });

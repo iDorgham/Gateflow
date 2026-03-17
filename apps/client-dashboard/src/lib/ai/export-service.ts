@@ -28,14 +28,14 @@ export async function generateAndDeliverReport(automationId: string) {
         where: { organizationId: orgId, deletedAt: null },
         take: 100,
         orderBy: { createdAt: 'desc' },
-        select: { name: true, phone: true, email: true, createdAt: true }
+        select: { firstName: true, lastName: true, phone: true, email: true, createdAt: true }
       });
-    } else if (reportType === 'SCANS') {
+    } else {
       data = await prisma.scanLog.findMany({
-        where: { organizationId: orgId },
+        where: { gate: { organizationId: orgId } },
         take: 100,
-        orderBy: { createdAt: 'desc' },
-        select: { status: true, code: true, createdAt: true }
+        orderBy: { scannedAt: 'desc' },
+        select: { status: true, scannedAt: true }
       });
     }
 

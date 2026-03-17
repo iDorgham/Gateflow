@@ -31,6 +31,7 @@ After a task or phase was executed **using a CLI** (Claude CLI, Gemini CLI, Open
 | Date | CLI | Task / phase | Outcome | Notes |
 |------|-----|--------------|--------|-------|
 | 2026-03-17 | Gemini CLI | Phase 5 atlassian_ui_remake | success | Standardized Organizations, Users, Scans and Audit Logs. |
+| 2026-03-17 | Antigravity | Phase 5 gateai_hub_v2 | success | Unified motion tokens and RTL logical properties. |
 
 ---
 

@@ -2,29 +2,30 @@ import * as React from 'react';
 import { NodeViewWrapper, NodeViewProps } from '@tiptap/react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { Loader2, TrendingUp } from 'lucide-react';
+import { motion, useReducedMotion } from 'framer-motion';
+import { gaSpring, gaInitialScale, gaScaleIn } from '../GateAITokens';
 
 export function LiveChartComponent(props: NodeViewProps) {
   const { node } = props;
-  const { tagId, tagName, color } = node.attrs;
+  const { tagId, tagName, color, isRtl } = node.attrs;
+  const shouldReduceMotion = useReducedMotion();
 
-  const [data, setData] = React.useState<any[]>([]);
+  const [data, setData] = React.useState<unknown[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState('');
 
+  const springConfig = gaSpring;
+
   React.useEffect(() => {
-    // Phase 3: We mock fetching aggregated data representing the Tag constraint.
-    // In production, this hits an endpoint that verifies `organizationId`.
     let mounted = true;
 
     const fetchAnalytics = async () => {
       try {
         setLoading(true);
-        // Simulate network delay to verify optimistic rendering
         await new Promise(r => setTimeout(r, 800));
         
         if (!mounted) return;
 
-        // Mock data logic tied to the specific tag
         setData([
           { name: 'Mon', value: Math.floor(Math.random() * 50) + 10 },
           { name: 'Tue', value: Math.floor(Math.random() * 50) + 10 },
@@ -57,10 +58,11 @@ export function LiveChartComponent(props: NodeViewProps) {
 
   return (
     <NodeViewWrapper className="my-6 select-none" as="div" draggable>
-      {/* Node Content wrapper ensures clicks inside don't trigger prose-mirror focus weirdly */}
-      <div 
+      <motion.div 
+        initial={gaInitialScale(shouldReduceMotion)}
+        animate={gaScaleIn(shouldReduceMotion)}
         className="rounded-xl border border-[var(--ga-navy-border)] bg-[var(--ga-panel-bg)] p-5 shadow-lg backdrop-blur-md overflow-hidden" 
-        contentEditable={false} // Block Tiptap from editing inside
+        contentEditable={false}
       >
         <div className="flex items-center gap-3 mb-5 border-b border-[var(--ga-navy-border)] pb-3">
           <div className="w-8 h-8 rounded-md bg-black/20 flex items-center justify-center" style={{ color }}>
@@ -75,7 +77,7 @@ export function LiveChartComponent(props: NodeViewProps) {
             </span>
           </div>
           
-          <div className="ml-auto text-xs text-[var(--ga-text-muted)] flex items-center gap-1.5 bg-black/20 rounded-full px-2.5 py-1 select-none">
+          <div className="ms-auto text-xs text-[var(--ga-text-muted)] flex items-center gap-1.5 bg-black/20 rounded-full px-2.5 py-1 select-none">
             {loading ? (
               <Loader2 size={12} className="animate-spin text-[var(--ga-text-muted)]" />
             ) : (
@@ -100,10 +102,29 @@ export function LiveChartComponent(props: NodeViewProps) {
             </div>
           ) : (
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={data} margin={{ top: 5, right: 10, left: -25, bottom: 5 }}>
+              <BarChart 
+                data={data} 
+                margin={isRtl 
+                  ? { top: 5, right: -25, left: 10, bottom: 5 }
+                  : { top: 5, right: 10, left: -25, bottom: 5 }
+                }
+              >
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
-                <XAxis dataKey="name" stroke="var(--ga-text-muted)" fontSize={11} tickLine={false} axisLine={false} />
-                <YAxis stroke="var(--ga-text-muted)" fontSize={11} tickLine={false} axisLine={false} />
+                <XAxis 
+                  dataKey="name" 
+                  stroke="var(--ga-text-muted)" 
+                  fontSize={11} 
+                  tickLine={false} 
+                  axisLine={false} 
+                  reversed={isRtl}
+                />
+                <YAxis 
+                  stroke="var(--ga-text-muted)" 
+                  fontSize={11} 
+                  tickLine={false} 
+                  axisLine={false} 
+                  orientation={isRtl ? 'right' : 'left'}
+                />
                 <Tooltip 
                   contentStyle={{ 
                     backgroundColor: 'var(--ga-navy)', 
@@ -115,12 +136,19 @@ export function LiveChartComponent(props: NodeViewProps) {
                   itemStyle={{ color: 'var(--ga-text-primary)', fontWeight: 600 }}
                   cursor={{ fill: 'rgba(255,255,255,0.03)' }}
                 />
-                <Bar dataKey="value" fill={color || '#ED4B00'} radius={[4, 4, 0, 0]} />
+                <Bar 
+                  dataKey="value" 
+                  fill={color || '#ED4B00'} 
+                  radius={[4, 4, 0, 0]} 
+                  isAnimationActive={!shouldReduceMotion}
+                  animationDuration={1500}
+                  animationEasing="ease-in-out"
+                />
               </BarChart>
             </ResponsiveContainer>
           )}
         </div>
-      </div>
+      </motion.div>
     </NodeViewWrapper>
   );
 }

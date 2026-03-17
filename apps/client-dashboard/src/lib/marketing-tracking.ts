@@ -53,7 +53,7 @@ export function trackPixelEvent(
 ): void {
   if (typeof window === 'undefined') return;
   
-  const fbq = (window as any).fbq;
+  const fbq = (window as unknown as { fbq?: (...args: unknown[]) => void }).fbq;
   if (fbq) {
     fbq('track', eventName, params);
   }
@@ -68,7 +68,7 @@ export function trackGA4Event(
 ): void {
   if (typeof window === 'undefined') return;
   
-  const gtag = (window as any).gtag;
+  const gtag = (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag;
   if (gtag) {
     gtag('event', eventName, params);
   }

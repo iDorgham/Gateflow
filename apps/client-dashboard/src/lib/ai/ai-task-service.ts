@@ -1,12 +1,12 @@
 import { prisma } from '@gate-access/db';
-import { AiTaskStatus } from '@gate-access/db';
+// import { AiTaskStatus } from '@gate-access/db';
 
 export interface CreateAiTaskParams {
   organizationId: string;
   userId?: string;
   type: string;
   title: string;
-  params: Record<string, any>;
+  params: Record<string, unknown>;
   cron?: string;
 }
 
@@ -20,7 +20,7 @@ export const AiTaskService = {
   async createTask(data: CreateAiTaskParams) {
     const nextRun = this.calculateNextRun(data.cron);
     
-    return await (prisma as any).aiTask.create({
+    return await prisma.aiTask.create({
       data: {
         organizationId: data.organizationId,
         userId: data.userId,

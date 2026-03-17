@@ -6,14 +6,22 @@ import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import { LiveChartNode } from './live-chart/LiveChartNode';
 import { Loader2, CheckCircle2, CloudFog } from 'lucide-react';
+import { motion, useReducedMotion } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
+import { gaSpring, gaInitialFadeUp, gaFadeInUp } from './GateAITokens';
 
 /**
  * GateAI Operations Hub - Canvas Editor (Phase 3)
  * Provides Tiptap Infinite Canvas with drag-and-drop support for tagging.
  */
 export function CanvasEditor() {
+  const { i18n } = useTranslation('dashboard');
+  const isRtl = i18n.language === 'ar' || i18n.language === 'ar-EG';
   const [saveState, setSaveState] = React.useState<'idle' | 'saving' | 'saved' | 'error'>('saved');
   const debounceRef = React.useRef<NodeJS.Timeout>(null);
+  const shouldReduceMotion = useReducedMotion();
+
+  const springConfig = gaSpring;
 
   const editor = useEditor({
     extensions: [
@@ -72,6 +80,7 @@ export function CanvasEditor() {
               tagId,
               tagName,
               color: color || '#ED4B00',
+              isRtl,
             },
           })
           .run();
@@ -93,7 +102,7 @@ export function CanvasEditor() {
       canvasElement.removeEventListener('drop', handleDrop);
       canvasElement.removeEventListener('dragover', handleDragOver);
     };
-  }, [editor]);
+  }, [editor, isRtl]);
 
   // Handle unmount cleanup
   React.useEffect(() => {
@@ -128,9 +137,14 @@ export function CanvasEditor() {
       </div>
       
       <div className="flex-1 overflow-y-auto ga-scroll">
-        <div className="max-w-4xl mx-auto w-full">
+        <motion.div 
+          initial={gaInitialFadeUp(shouldReduceMotion)}
+          animate={gaFadeInUp(shouldReduceMotion)}
+          className="max-w-4xl mx-auto w-full"
+          aria-label="Operations Canvas Content"
+        >
           <EditorContent editor={editor} />
-        </div>
+        </motion.div>
       </div>
     </div>
   );

@@ -22,6 +22,9 @@ export const LiveChartNode = Node.create({
       chartType: {
         default: 'bar', // 'bar', 'line', 'area'
       },
+      isRtl: {
+        default: false,
+      },
     };
   },
 

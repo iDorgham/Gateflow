@@ -13,6 +13,8 @@
 import * as React from 'react';
 import { cn } from '@gate-access/ui';
 import { Menu, X } from 'lucide-react';
+import { motion, useReducedMotion } from 'framer-motion';
+import { gaLayoutSpring } from './GateAITokens';
 
 /* ─────────────── Design Tokens (scoped to GateAI Hub) ─────────────── */
 
@@ -71,12 +73,11 @@ interface LeftPanelProps {
   isRtl?: boolean;
 }
 
-export function GateAILeftPanel({ children, isRtl }: LeftPanelProps) {
+export function GateAILeftPanel({ children, _isRtl }: LeftPanelProps) {
   return (
     <aside
       className={cn(
-        'ga-panel ga-scroll flex flex-col shrink-0 w-64 h-full overflow-y-auto',
-        isRtl ? 'border-l border-r-0' : 'border-r border-l-0'
+        'ga-panel ga-scroll flex flex-col shrink-0 w-64 h-full overflow-y-auto'
       )}
       aria-label="GateAI Tags & Navigation"
     >
@@ -100,12 +101,11 @@ interface RightPanelProps {
   isRtl?: boolean;
 }
 
-export function GateAIRightPanel({ children, isRtl }: RightPanelProps) {
+export function GateAIRightPanel({ children, _isRtl }: RightPanelProps) {
   return (
     <aside
       className={cn(
-        'ga-panel-right ga-scroll flex flex-col shrink-0 w-72 h-full overflow-y-auto',
-        isRtl ? 'border-r border-l-0' : 'border-l border-r-0'
+        'ga-panel-right ga-scroll flex flex-col shrink-0 w-72 h-full overflow-y-auto'
       )}
       aria-label="GateAI AI Context & Info"
     >
@@ -157,6 +157,9 @@ export function GateAIHubLayout({
 }: GateAIHubLayoutProps) {
   const [leftOpen, setLeftOpen] = React.useState(true);
   const [rightOpen, setRightOpen] = React.useState(true);
+  const shouldReduceMotion = useReducedMotion();
+
+  const springConfig = gaLayoutSpring;
 
   React.useEffect(() => {
     // Inject scoped CSS vars once
@@ -196,29 +199,35 @@ export function GateAIHubLayout({
       </button>
 
       {/* ── Left Panel (Tags & Nav) ── */}
-      <div
-        className={cn(
-          'transition-all duration-300 ease-in-out shrink-0 lg:block',
-          leftOpen ? 'w-64' : 'w-0 overflow-hidden'
-        )}
+      <motion.div
+        initial={false}
+        animate={{ 
+          width: leftOpen ? 256 : 0,
+          opacity: leftOpen ? 1 : 0
+        }}
+        transition={shouldReduceMotion ? { duration: 0 } : springConfig}
+        className="shrink-0 lg:block overflow-hidden"
         aria-hidden={!leftOpen}
       >
         <GateAILeftPanel isRtl={isRtl}>{left}</GateAILeftPanel>
-      </div>
+      </motion.div>
 
       {/* ── Center Canvas ── */}
       <GateAICenterCanvas>{center}</GateAICenterCanvas>
 
       {/* ── Right Panel (AI Context) ── */}
-      <div
-        className={cn(
-          'transition-all duration-300 ease-in-out shrink-0 hidden lg:block',
-          rightOpen ? 'w-72' : 'w-0 overflow-hidden'
-        )}
+      <motion.div
+        initial={false}
+        animate={{ 
+          width: rightOpen ? 288 : 0,
+          opacity: rightOpen ? 1 : 0
+        }}
+        transition={shouldReduceMotion ? { duration: 0 } : springConfig}
+        className="shrink-0 hidden lg:block overflow-hidden"
         aria-hidden={!rightOpen}
       >
         <GateAIRightPanel isRtl={isRtl}>{right}</GateAIRightPanel>
-      </div>
+      </motion.div>
 
       {/* ── Toggle button: right panel (desktop) ── */}
       <button

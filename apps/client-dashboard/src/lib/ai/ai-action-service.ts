@@ -6,8 +6,8 @@ export interface CreateAiActionParams {
   userId?: string;
   actionType: string;
   prompt: string;
-  intentJson?: any;
-  metadata?: any;
+  intentJson?: unknown;
+  metadata?: unknown;
   status?: AiActionStatus | string;
 }
 
@@ -36,14 +36,14 @@ export class AiActionService {
   static async createAction(params: CreateAiActionParams) {
     console.log(`>>> [AiActionService] Creating action: ${params.actionType}`);
     
-    return await (prisma as any).aiActionLog.create({
+    return await prisma.aiActionLog.create({
       data: {
         organizationId: params.organizationId,
         userId: params.userId,
         actionType: params.actionType,
         prompt: this.maskPII(params.prompt),
         intentJson: params.intentJson || null,
-        status: (params.status as any) || 'PENDING',
+        status: (params.status as AiActionStatus) || 'PENDING',
         metadata: params.metadata,
       },
     });
@@ -58,7 +58,7 @@ export class AiActionService {
     const outputCost = (usage.completionTokens / 1_000_000) * 0.30;
     const estimatedCost = inputCost + outputCost;
 
-    return await (prisma as any).aiActionLog.update({
+    return await prisma.aiActionLog.update({
       where: { id: actionId },
       data: {
         promptTokens: usage.promptTokens,
@@ -73,7 +73,7 @@ export class AiActionService {
    * Submit feedback for an action
    */
   static async submitFeedback(actionId: string, feedback: 'THUMBS_UP' | 'THUMBS_DOWN') {
-    return await (prisma as any).aiActionLog.update({
+    return await prisma.aiActionLog.update({
       where: { id: actionId },
       data: { feedback },
     });
@@ -85,7 +85,7 @@ export class AiActionService {
   static async updateStatus(actionId: string, status: AiActionStatus | string, result?: string) {
     console.log(`>>> [AiActionService] Updating action ${actionId} to: ${status}`);
     
-    return await (prisma as any).aiActionLog.update({
+    return await prisma.aiActionLog.update({
       where: { id: actionId },
       data: {
         status,
@@ -99,7 +99,7 @@ export class AiActionService {
    * Get an action by ID
    */
   static async getAction(actionId: string) {
-    return await (prisma as any).aiActionLog.findUnique({
+    return await prisma.aiActionLog.findUnique({
       where: { id: actionId },
     });
   }
