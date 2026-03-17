@@ -36,6 +36,7 @@ describe('deleteExpiredShortLinks', () => {
         expiresAt: {
           lt: new Date('2024-01-01T12:00:00Z'),
         },
+        organizationId: { not: '' }
       },
     });
   });

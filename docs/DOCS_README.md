@@ -4,16 +4,18 @@ This `docs/` folder is the **v2 documentation set**, aligned with the canonical 
 
 ## What to read first
 
-- **Product requirements:** [`PRD_v7.0.md`](PRD_v7.0.md)
-  The single source of truth for GateFlow v7 — all 6 apps, complete feature set, security, resident portal/mobile, scanner rules, real-time updates, and marketing suite.
+- **Product requirements:** [`PRD_v8.0_COMPREHENSIVE.md`](product/PRD_v8.0_COMPREHENSIVE.md)
+  The single source of truth for GateFlow v8 — all 6 apps, complete feature set, security, resident portal/mobile, scanner rules, real-time updates, and marketing suite.
 
 - **Progress dashboard:** [`PROJECT_PROGRESS_DASHBOARD.md`](PROJECT_PROGRESS_DASHBOARD.md)
-  Current status (95% MVP complete), phase roadmap, app status, and recent activity.
+  Current status (100% MVP complete, Phase 3 Growth), phase roadmap, app status, and recent activity.
 
 - **Plans & initiatives:** [`docs/plan/`](plan/)
   - `plan/context/` — initiative ideas (`IDEA_*.md`)
-  - `plan/execution/` — active and completed plans (`PLAN_*.md`, `PROMPT_*_phase_*.md`, `TASKS_*.md`)
-  - `plan/done/` — completed plans (all phases passed)
+  - `plan/planning/` — draft plans before approval
+  - `plan/planned/` — approved plans awaiting start
+  - `plan/in-progress/` — active plans currently being developed
+  - `plan/done/` — completely finished and verified plans
   - `plan/learning/` — cross-phase patterns, incidents, decisions, CLI tracking
 
 ## Guides
@@ -42,13 +44,13 @@ Treat these as **historical reference only**.
 
 ## Contributing to docs
 
-- **Product changes** → update `PRD_v7.0.md` (use the `pro-prd-writer` skill for large sections).
-- **New initiatives** → `/idea` to capture → `/plan` to phase → `/dev` to execute. Outputs land in `docs/plan/`.
-- **Guide updates** → edit the relevant file in `docs/guides/`. Keep guides concise; link to PRD rather than duplicate it.
+- **Product changes** → update `product/PRD_v8.0_COMPREHENSIVE.md` (use the `pro-prd-writer` skill for large sections).
+- **New initiatives** → `/idea` to capture → `/plan` to phase → `/dev` to execute. Outputs land in `plan/planning/`, `plan/in-progress/`, etc.
+- **Guide updates** → edit the relevant file in `guides/`. Keep guides concise; link to PRD rather than duplicate it.
 - **Learning captures** → append to `docs/plan/learning/{patterns,incidents,decisions}.md` after significant phases.
 
 ---
 
-**Version:** 7.0  
-**Last Updated:** March 12, 2026  
+**Version:** 8.0  
+**Last Updated:** March 2026  
 **Status:** Living Documentation

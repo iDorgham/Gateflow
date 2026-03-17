@@ -17,15 +17,11 @@ import {
 } from '@/components/dashboard/gateai/GateAIHubLayout';
 import { TagSidebar } from '@/components/dashboard/gateai/TagSidebar';
 import { CanvasEditor } from '@/components/dashboard/gateai/CanvasEditor';
+import { AutomationList } from '@/components/dashboard/gateai/AutomationList';
 import { Sparkles, Zap, BarChart3, Tag, BrainCircuit } from 'lucide-react';
 
 /* --- CanvasEditor integrated in page return --- */
 
-/* ─────────────── Right panel placeholder ─────────────── */
-
-function AIContextPlaceholder() {
-  return (
-    <div className="flex flex-col gap-4 p-4">
       <div className="flex items-center gap-2">
         <Sparkles
           size={14}

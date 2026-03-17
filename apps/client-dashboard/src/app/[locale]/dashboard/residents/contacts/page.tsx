@@ -329,7 +329,7 @@ export default function ContactsPage() {
               {c.avatarUrl ? (
                 <AvatarImage src={c.avatarUrl} alt={`${c.firstName} ${c.lastName}`} />
               ) : null}
-              <AvatarFallback className="text-[10px] bg-[#F4F5F7] dark:bg-slate-700 text-[#42526E] dark:text-[#A5ADBA] font-bold">
+              <AvatarFallback className="text-[10px] bg-[var(--ds-background-neutral-subtle)] dark:bg-[var(--ds-background-neutral-subtle)]/10 text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtle)] font-bold">
                 {c.firstName.charAt(0)}
                 {c.lastName.charAt(0)}
               </AvatarFallback>
@@ -338,34 +338,34 @@ export default function ContactsPage() {
         );
       if (columnId === 'firstName')
         return (
-          <TableCell key={columnId} className="font-semibold text-[#172B4D] dark:text-slate-200">
+          <TableCell key={columnId} className="font-semibold text-[var(--ds-text)] dark:text-[var(--ds-text-inverse)]">
             {c.firstName}
           </TableCell>
         );
       if (columnId === 'lastName')
-        return <TableCell key={columnId} className="text-[#42526E] dark:text-slate-300">{c.lastName}</TableCell>;
+        return <TableCell key={columnId} className="text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtle)]">{c.lastName}</TableCell>;
       if (columnId === 'birthday')
         return (
-          <TableCell key={columnId} className="text-[12px] text-[#6B778C] dark:text-[#A5ADBA]">
-            {c.birthday ?? <span className="text-[#DFE1E6]">/</span>}
+          <TableCell key={columnId} className="text-[12px] text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtle)]">
+            {c.birthday ?? <span className="text-[var(--ds-border)]">/</span>}
           </TableCell>
         );
       if (columnId === 'company')
         return (
-          <TableCell key={columnId} className="text-[12px] text-[#42526E] dark:text-slate-300">
-            {c.company ?? <span className="text-[#DFE1E6]">—</span>}
+          <TableCell key={columnId} className="text-[12px] text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtle)]">
+            {c.company ?? <span className="text-[var(--ds-border)]">—</span>}
           </TableCell>
         );
       if (columnId === 'phone')
         return (
-          <TableCell key={columnId} className="text-[12px] font-mono text-[#42526E] dark:text-[#A5ADBA]">
-            {c.phone ?? <span className="text-[#DFE1E6]">—</span>}
+          <TableCell key={columnId} className="text-[12px] font-mono text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtle)]">
+            {c.phone ?? <span className="text-[var(--ds-border)]">—</span>}
           </TableCell>
         );
       if (columnId === 'email')
         return (
-          <TableCell key={columnId} className="text-[12px] text-[#0052CC] dark:text-[#4C9AFF] hover:underline cursor-pointer">
-            {c.email ?? <span className="text-[#DFE1E6]">—</span>}
+          <TableCell key={columnId} className="text-[12px] text-[var(--ds-text-brand)] dark:text-[var(--ds-text-brand)] hover:underline cursor-pointer">
+            {c.email ?? <span className="text-[var(--ds-border)]">—</span>}
           </TableCell>
         );
       if (columnId === 'tags')
@@ -376,7 +376,7 @@ export default function ContactsPage() {
                 <Badge
                   key={tag.id}
                   variant="secondary"
-                  className="px-1.5 py-0 text-[10px] font-bold bg-[#EBECF0] dark:bg-slate-700 text-[#42526E] dark:text-[#A5ADBA] border-none hover:bg-[#DFE1E6]"
+                  className="px-1.5 py-0 text-[10px] font-bold bg-[var(--ds-background-neutral-subtle-hovered)] dark:bg-[var(--ds-background-neutral-subtle)]/10 text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtle)] border-none hover:bg-[var(--ds-background-neutral-pressed)]"
                   style={tag.color ? { backgroundColor: `${tag.color}20`, color: tag.color, border: `1px solid ${tag.color}40` } : undefined}
                   onClick={() => removeTagMutation.mutate({ contactId: c.id, tagId: tag.id })}
                 >
@@ -390,7 +390,7 @@ export default function ContactsPage() {
                   if (tagId) addTagMutation.mutate({ contactId: c.id, tagId });
                   e.target.value = '';
                 }}
-                className="h-6 w-[80px] text-[10px] bg-transparent border-none shadow-none focus:ring-0 text-[#6B778C] hover:bg-[#F4F5F7] rounded"
+                className="h-6 w-[80px] text-[10px] bg-transparent border-none shadow-none focus:ring-0 text-[var(--ds-text-subtle)] hover:bg-[var(--ds-background-neutral-subtle)] rounded"
               >
                 <option value="">+ Tag</option>
                 {tagOptions.filter(t => !(c.tags ?? []).some(a => a.id === t.id)).map(t => (
@@ -405,13 +405,13 @@ export default function ContactsPage() {
           <TableCell key={columnId}>
             <div className="flex flex-wrap gap-1">
               {c.units.length === 0 ? (
-                <span className="text-[#DFE1E6]">—</span>
+                <span className="text-[var(--ds-border)]">—</span>
               ) : (
                 c.units.map((u) => (
                   <Badge
                     key={u.id}
                     variant="outline"
-                    className="px-1.5 py-0 text-[10px] font-bold bg-[#DEEBFF] dark:bg-[#DEEBFF]/10 text-[#0747A6] dark:text-[#DEEBFF] border-none cursor-pointer"
+                    className="px-1.5 py-0 text-[10px] font-bold bg-[var(--ds-background-brand-subtle)] dark:bg-[var(--ds-background-brand-subtle)]/10 text-[var(--ds-text-brand)] dark:text-[var(--ds-text-brand)] border-none cursor-pointer"
                     onClick={() => setViewUnitsFor(c)}
                   >
                     {u.name}
@@ -423,13 +423,13 @@ export default function ContactsPage() {
         );
       if (columnId === 'visitsInRange' || columnId === 'passesInRange')
         return (
-          <TableCell key={columnId} className="text-right tabular-nums text-[12px] font-semibold text-[#172B4D] dark:text-slate-200">
+          <TableCell key={columnId} className="text-right tabular-nums text-[12px] font-semibold text-[var(--ds-text)] dark:text-[var(--ds-text-inverse)]">
             {c[columnId] ?? 0}
           </TableCell>
         );
       if (columnId === 'lastVisitInRange')
         return (
-          <TableCell key={columnId} className="text-right text-[11px] text-[#6B778C] dark:text-[#A5ADBA]">
+          <TableCell key={columnId} className="text-right text-[11px] text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtle)]">
             {c.lastVisitInRange ? new Date(c.lastVisitInRange).toLocaleDateString(undefined, { dateStyle: 'short' }) : '—'}
           </TableCell>
         );
@@ -437,22 +437,22 @@ export default function ContactsPage() {
         return (
           <TableCell key={columnId}>
             <div className="flex items-center gap-0.5 justify-end">
-              <Button variant="ghost" size="icon" className="h-7 w-7 text-[#42526E] hover:bg-[#EBECF0]" onClick={() => setViewUnitsFor(c)}>
+              <Button variant="ghost" size="icon" className="h-7 w-7 text-[var(--ds-text-subtle)] hover:bg-[var(--ds-background-neutral-subtle-hovered)]" onClick={() => setViewUnitsFor(c)}>
                 <Eye className="h-3.5 w-3.5" />
               </Button>
-              <Button variant="ghost" size="icon" className="h-7 w-7 text-[#42526E] hover:bg-[#EBECF0]" onClick={() => openEdit(c)}>
+              <Button variant="ghost" size="icon" className="h-7 w-7 text-[var(--ds-text-subtle)] hover:bg-[var(--ds-background-neutral-subtle-hovered)]" onClick={() => openEdit(c)}>
                 <Pencil className="h-3.5 w-3.5" />
               </Button>
-              <Button variant="ghost" size="icon" className="h-7 w-7 text-[#BF2600] hover:bg-[#FFEBE6] hover:text-[#BF2600]" onClick={() => confirmDelete(c)}>
+              <Button variant="ghost" size="icon" className="h-7 w-7 text-[var(--ds-text-danger)] hover:bg-[var(--ds-background-danger-subtle-hovered)] hover:text-[var(--ds-text-danger)]" onClick={() => confirmDelete(c)}>
                 <Trash2 className="h-3.5 w-3.5" />
               </Button>
             </div>
           </TableCell>
         );
-      return <TableCell key={columnId} className="text-[#DFE1E6]">/</TableCell>;
+      return <TableCell key={columnId} className="text-[var(--ds-border)]">/</TableCell>;
   };
 
-  const { data, isLoading, isError: _isError, error: _error, isFetching: _isFetching, refetch } = useContacts(filters);
+  const { data, isLoading, refetch } = useContacts(filters);
   const contacts = data?.data ?? [];
   const total = data?.total ?? 0;
   const page = data?.page ?? 1;
@@ -900,7 +900,7 @@ export default function ContactsPage() {
                 </NativeSelect>
                 <Button
                   size="sm"
-                  className="h-7 w-7 p-0 bg-[var(--ds-background-brand-bold,#0052CC)] hover:bg-[var(--ds-background-brand-bold-hovered,#004EBE)] text-white rounded-full"
+                  className="h-7 w-7 p-0 bg-[var(--ds-background-brand-bold)] hover:bg-[var(--ds-background-brand-bold-hovered)] text-white rounded-full"
                   onClick={() => applyBulkTagAction('add')}
                   disabled={!bulkTagId}
                 >
@@ -912,7 +912,7 @@ export default function ContactsPage() {
             <Button
               variant="ghost"
               size="sm"
-              className="h-7 px-3 text-[10px] font-black uppercase tracking-widest text-[var(--ds-text-subtle,#6B778C)] hover:bg-[var(--ds-background-neutral-subtle-hovered,#EBECF0)] rounded-full"
+              className="h-7 px-3 text-[10px] font-black uppercase tracking-widest text-[var(--ds-text-subtle)] hover:bg-[var(--ds-background-neutral-subtle-hovered)] rounded-full"
               onClick={() => setSelectedContactIds([])}
             >
               Cancel
@@ -921,10 +921,10 @@ export default function ContactsPage() {
         )}
 
         {/* Data Table Container */}
-        <div className="bg-white dark:bg-[#1D2125] rounded-2xl border border-[#DFE1E6] dark:border-[#343A46] overflow-hidden shadow-sm">
+        <div className="bg-[var(--ds-background-default)] dark:bg-[var(--ds-background-default)] rounded-2xl border border-[var(--ds-border)] dark:border-[var(--ds-border)] overflow-hidden shadow-sm">
           <div className="overflow-x-auto min-h-[500px]">
             <Table>
-              <TableHeader className="bg-[#FAFBFC] dark:bg-[#091E42]/20 border-b border-[#DFE1E6] dark:border-[#343A46]">
+              <TableHeader className="bg-[var(--ds-background-neutral-subtle)] dark:bg-[var(--ds-background-neutral-subtle)]/20 border-b border-[var(--ds-border)] dark:border-[var(--ds-border)]">
                 {contactsTable.getHeaderGroups().map((headerGroup) => (
                   <TableRow key={headerGroup.id} className="hover:bg-transparent border-none h-12">
                     {headerGroup.headers.map((header) => {
@@ -933,7 +933,7 @@ export default function ContactsPage() {
                         <TableHead
                           key={header.id}
                           className={cn(
-                            "px-6 text-[#6B778C] dark:text-[#97A0AF] text-[11px] font-black uppercase tracking-widest",
+                            "px-6 text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtle)] text-[11px] font-black uppercase tracking-widest",
                             (columnId === 'visitsInRange' || columnId === 'passesInRange' || columnId === 'lastVisitInRange' || columnId === 'actions') && "text-right"
                           )}
                         >
@@ -949,7 +949,7 @@ export default function ContactsPage() {
                   </TableRow>
                 ))}
               </TableHeader>
-              <TableBody className="divide-y divide-[#DFE1E6] dark:divide-[#343A46]">
+              <TableBody className="divide-y divide-[var(--ds-border)] dark:divide-[var(--ds-border)]">
                 {isLoading ? (
                   Array.from({ length: 8 }).map((_, i) => (
                     <TableRow key={i} className="h-16">
@@ -967,12 +967,12 @@ export default function ContactsPage() {
                       className="h-[400px] text-center"
                     >
                       <div className="flex flex-col items-center justify-center gap-6 py-20 animate-in fade-in zoom-in duration-500">
-                        <div className="h-20 w-20 rounded-3xl bg-[#F4F5F7] dark:bg-[#2C333A] flex items-center justify-center shadow-inner">
-                          <Users className="h-10 w-10 text-[#6B778C] opacity-20" />
+                        <div className="h-20 w-20 rounded-3xl bg-[var(--ds-background-neutral-subtle)] dark:bg-[var(--ds-background-neutral-subtle)] flex items-center justify-center shadow-inner">
+                          <Users className="h-10 w-10 text-[var(--ds-text-subtle)] opacity-20" />
                         </div>
                         <div className="space-y-2 max-w-sm">
-                          <h3 className="text-xl font-bold text-[#172B4D] dark:text-white">{t('residents.empty', 'No residents found')}</h3>
-                          <p className="text-sm text-[#6B778C] dark:text-[#97A0AF] leading-relaxed">
+                          <h3 className="text-xl font-bold text-[var(--ds-text)] dark:text-[var(--ds-text-inverse)]">{t('residents.empty', 'No residents found')}</h3>
+                          <p className="text-sm text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtle)] leading-relaxed">
                             {filters.search 
                               ? t('contacts.noMatch', 'Try adjusting your search filters or check your spelling.') 
                               : t('contacts.emptyDesc', 'Start building your community database by adding your first resident profile.')}
@@ -980,7 +980,7 @@ export default function ContactsPage() {
                         </div>
                         <Button 
                           onClick={openCreate} 
-                          className="bg-[#0052CC] hover:bg-[#0747A6] text-white font-bold h-10 px-6 rounded-xl shadow-lg shadow-[#0052CC]/20 transition-all active:scale-95"
+                          className="bg-[var(--ds-background-brand-bold)] hover:bg-[var(--ds-background-brand-bold-hovered)] text-white font-bold h-10 px-6 rounded-xl shadow-lg shadow-[var(--ds-background-brand-bold)]/20 transition-all active:scale-95"
                         >
                           <Plus className="h-4 w-4 mr-2" />
                           {t('contacts.create', 'Add Resident')}
@@ -992,7 +992,7 @@ export default function ContactsPage() {
                   contactsTable.getRowModel().rows.map((row) => (
                     <TableRow
                       key={row.id}
-                      className="hover:bg-[#FAFBFC] dark:hover:bg-[#091E42]/10 transition-colors group h-16 border-b border-[#DFE1E6] dark:border-[#343A46]"
+                      className="hover:bg-[var(--ds-background-neutral-subtle)] dark:hover:bg-[var(--ds-background-neutral-subtle)]/10 transition-colors group h-16 border-b border-[var(--ds-border)] dark:border-[var(--ds-border)]"
                     >
                       {row.getVisibleCells().map((cell) =>
                         flexRender(cell.column.columnDef.cell, cell.getContext())
@@ -1005,10 +1005,10 @@ export default function ContactsPage() {
           </div>
 
           {/* Pagination Toolbar */}
-          <div className="px-6 py-4 bg-[#FAFBFC] dark:bg-[#091E42]/10 flex items-center justify-between border-t border-[#DFE1E6] dark:border-[#343A46]">
-            <div className="flex items-center gap-4 text-[#6B778C] dark:text-[#97A0AF] text-[11px] font-black uppercase tracking-widest">
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-white dark:bg-[#1D2125] rounded-lg border border-[#DFE1E6] dark:border-[#343A46] shadow-sm">
-                <span className="text-[#0052CC]">{page}</span>
+          <div className="px-6 py-4 bg-[var(--ds-background-neutral-subtle)] dark:bg-[var(--ds-background-neutral-subtle)]/10 flex items-center justify-between border-t border-[var(--ds-border)] dark:border-[var(--ds-border)]">
+            <div className="flex items-center gap-4 text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtle)] text-[11px] font-black uppercase tracking-widest">
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-[var(--ds-background-default)] dark:bg-[var(--ds-background-default)] rounded-lg border border-[var(--ds-border)] dark:border-[var(--ds-border)] shadow-sm">
+                <span className="text-[var(--ds-text-brand)]">{page}</span>
                 <span className="opacity-30">/</span>
                 <span>{totalPages}</span>
               </div>
@@ -1027,7 +1027,7 @@ export default function ContactsPage() {
               <Button
                 variant="outline"
                 size="sm"
-                className="h-9 px-4 border-[#DFE1E6] dark:border-[#343A46] text-[#42526E] dark:text-[#E3E6E8] bg-white dark:bg-[#1D2125] font-bold rounded-lg shadow-sm disabled:opacity-30 transition-all active:scale-95"
+                className="h-9 px-4 border-[var(--ds-border)] dark:border-[var(--ds-border)] text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtle)] bg-[var(--ds-background-default)] dark:bg-[var(--ds-background-default)] font-bold rounded-lg shadow-sm disabled:opacity-30 transition-all active:scale-95"
                 disabled={page <= 1 || isLoading}
                 onClick={() => updateFiltersAndUrl({ page: page - 1 })}
               >
@@ -1037,7 +1037,7 @@ export default function ContactsPage() {
               <Button
                 variant="outline"
                 size="sm"
-                className="h-9 px-4 border-[#DFE1E6] dark:border-[#343A46] text-[#42526E] dark:text-[#E3E6E8] bg-white dark:bg-[#1D2125] font-bold rounded-lg shadow-sm disabled:opacity-30 transition-all active:scale-95"
+                className="h-9 px-4 border-[var(--ds-border)] dark:border-[var(--ds-border)] text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtle)] bg-[var(--ds-background-default)] dark:bg-[var(--ds-background-default)] font-bold rounded-lg shadow-sm disabled:opacity-30 transition-all active:scale-95"
                 disabled={page >= totalPages || isLoading}
                 onClick={() => updateFiltersAndUrl({ page: page + 1 })}
               >

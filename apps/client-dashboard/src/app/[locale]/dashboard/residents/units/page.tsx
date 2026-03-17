@@ -243,7 +243,7 @@ export default function UnitsPage() {
     .filter(Boolean);
 
   const UNIT_TYPE_LABELS = getUnitTypeLabels(t);
-  const { data, isLoading, isError, error, isFetching: _isFetching, refetch } = useUnits(filters);
+  const { data, isLoading, isError, error, refetch } = useUnits(filters);
   const units = data?.data ?? [];
   const total = data?.total ?? 0;
   const page = data?.page ?? 1;
@@ -255,7 +255,7 @@ export default function UnitsPage() {
   const renderUnitCell = (columnId: string, u: Unit) => {
     if (columnId === 'select')
       return (
-        <TableCell key={columnId} className="w-10 px-6 border-l-2 border-transparent group-hover:border-l-[#0052CC] transition-all">
+        <TableCell key={columnId} className="w-10 px-6 border-l-2 border-transparent group-hover:border-l-[var(--ds-background-brand-bold)] transition-all">
           <Checkbox
             checked={selectedUnitIds.includes(u.id)}
             onChange={(e) => {
@@ -273,19 +273,19 @@ export default function UnitsPage() {
         <TableCell key={columnId} className="px-6 py-4">
           <div className="flex flex-col">
             <div className="flex items-center gap-2">
-              <span className="text-[14px] font-bold text-[#172B4D] dark:text-[#DEEBFF] leading-tight">
+              <span className="text-[14px] font-bold text-[var(--ds-text)] dark:text-[var(--ds-text-inverse)] leading-tight">
                 {u.name}
               </span>
               {u.potentialVacancy && (
                 <Badge
                   variant="outline"
-                  className="px-1.5 py-0 text-[9px] font-black uppercase tracking-widest border-[#FFAB00] text-[#FFAB00] bg-[#FFAB00]/5"
+                  className="px-1.5 py-0 text-[9px] font-black uppercase tracking-widest border-[var(--ds-border-warning)] text-[var(--ds-text-warning)] bg-[var(--ds-background-warning-subtle)]"
                 >
                   {t('units.potentialVacancy', 'Vacancy risk')}
                 </Badge>
               )}
             </div>
-            <span className="text-[11px] text-[#6B778C] dark:text-[#97A0AF] tabular-nums font-medium">
+            <span className="text-[11px] text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtlest)] tabular-nums font-medium">
               ID: {u.id.slice(0, 8).toUpperCase()}
             </span>
           </div>
@@ -298,10 +298,10 @@ export default function UnitsPage() {
             variant="outline"
             className={cn(
               "px-2 py-0.5 rounded-md text-[10px] font-black uppercase tracking-widest border-none",
-              u.type === 'RESIDENTIAL' ? "bg-[#EAE6FF] text-[#403294] dark:bg-[#403294]/20" :
-              u.type === 'COMMERCIAL' ? "bg-[#FFF0B3] text-[#172B4D] dark:bg-[#FFF0B3]/20" :
-              u.type === 'INDUSTRIAL' ? "bg-[#DFE1E6] text-[#42526E] dark:bg-[#DFE1E6]/20" :
-              "bg-[#DEEBFF] text-[#0747A6] dark:bg-[#DEEBFF]/20"
+              u.type === 'RESIDENTIAL' ? "bg-[var(--ds-background-discovery)] text-[var(--ds-text-discovery)] dark:bg-[var(--ds-background-discovery)]/20" :
+              u.type === 'COMMERCIAL' ? "bg-[var(--ds-background-warning)] text-[var(--ds-text-warning-inverse)] dark:bg-[var(--ds-background-warning)]/20" :
+              u.type === 'INDUSTRIAL' ? "bg-[var(--ds-border)] text-[var(--ds-text-subtle)] dark:bg-[var(--ds-border)]/20" :
+              "bg-[var(--ds-background-brand-subtle)] text-[var(--ds-text-brand)] dark:bg-[var(--ds-background-brand-subtle)]/20"
             )}
           >
             {UNIT_TYPE_LABELS[u.type as UnitType] ?? u.type}
@@ -310,8 +310,8 @@ export default function UnitsPage() {
       );
     if (columnId === 'size')
       return (
-        <TableCell key={columnId} className="px-6 text-[12px] font-bold text-[#42526E] dark:text-[#A5ADBA] tabular-nums">
-          {u.sizeSqm != null ? `${u.sizeSqm} m²` : <span className="text-[#C1C7D0]">—</span>}
+        <TableCell key={columnId} className="px-6 text-[12px] font-bold text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtlest)] tabular-nums">
+          {u.sizeSqm != null ? `${u.sizeSqm} m²` : <span className="text-[var(--ds-text-disabled)]">—</span>}
         </TableCell>
       );
     if (columnId === 'residents')
@@ -319,13 +319,13 @@ export default function UnitsPage() {
         <TableCell key={columnId} className="px-6">
           <div className="flex flex-wrap gap-1.5 max-w-[200px]">
             {u.contacts.length === 0 ? (
-              <span className="text-[#C1C7D0] text-[12px]">No contacts</span>
+              <span className="text-[var(--ds-text-disabled)] text-[12px]">No contacts</span>
             ) : (
               u.contacts.slice(0, 2).map((c) => (
                 <Badge
                   key={c.id}
                   variant="secondary"
-                  className="px-2 py-0.5 text-[10px] font-bold bg-[#F4F5F7] dark:bg-[#2C333A] text-[#42526E] dark:text-[#A5ADBA] border-none hover:bg-[#EBECF0]"
+                  className="px-2 py-0.5 text-[10px] font-bold bg-[var(--ds-background-neutral-subtle)] dark:bg-[var(--ds-background-neutral-subtle)] text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtle)] border-none hover:bg-[var(--ds-background-neutral-subtle-hovered)]"
                   onClick={() => setViewContactsFor(u)}
                 >
                   {c.firstName}
@@ -333,7 +333,7 @@ export default function UnitsPage() {
               ))
             )}
             {u.contacts.length > 2 && (
-              <Badge variant="outline" className="px-2 py-0.5 text-[10px] font-black border-[#DFE1E6] dark:border-[#343A46] text-[#6B778C]">
+              <Badge variant="outline" className="px-2 py-0.5 text-[10px] font-black border-[var(--ds-border)] dark:border-[var(--ds-border)] text-[var(--ds-text-subtle)]">
                 +{u.contacts.length - 2}
               </Badge>
             )}
@@ -342,49 +342,49 @@ export default function UnitsPage() {
       );
     if (columnId === 'linkedResident')
       return (
-        <TableCell key={columnId} className="px-6 text-[12px] text-[#0052CC] dark:text-[#4C9AFF] font-bold">
+        <TableCell key={columnId} className="px-6 text-[12px] text-[var(--ds-text-brand)] dark:text-[var(--ds-text-brand)] font-bold">
           {u.user ? (
             <div className="flex items-center gap-1.5 hover:underline cursor-pointer">
                <span title={u.user.email}>{u.user.name}</span>
             </div>
           ) : (
-            <span className="text-[#C1C7D0]">—</span>
+            <span className="text-[var(--ds-text-disabled)]">—</span>
           )}
         </TableCell>
       );
     if (columnId === 'qrQuota')
       return (
-        <TableCell key={columnId} className="px-6 font-mono text-[13px] font-black text-[#172B4D] dark:text-white tabular-nums">
+        <TableCell key={columnId} className="px-6 font-mono text-[13px] font-black text-[var(--ds-text)] dark:text-[var(--ds-text-inverse)] tabular-nums">
           {u.qrQuota}
         </TableCell>
       );
     if (columnId === 'project')
       return (
-        <TableCell key={columnId} className="px-6 text-[12px] font-medium text-[#6B778C] dark:text-[#97A0AF]">
-          {u.projectName ?? <span className="text-[#C1C7D0]">—</span>}
+        <TableCell key={columnId} className="px-6 text-[12px] font-medium text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtle)]">
+          {u.projectName ?? <span className="text-[var(--ds-text-disabled)]">—</span>}
         </TableCell>
       );
     if (columnId === 'visitsInRange' || columnId === 'passesInRange')
       return (
-        <TableCell key={columnId} className="px-6 text-right tabular-nums text-[13px] font-black text-[#172B4D] dark:text-white">
+        <TableCell key={columnId} className="px-6 text-right tabular-nums text-[13px] font-black text-[var(--ds-text)] dark:text-[var(--ds-text-inverse)]">
           {u[columnId] ?? 0}
         </TableCell>
       );
     if (columnId === 'lastVisitInRange')
       return (
-        <TableCell key={columnId} className="px-6 text-right text-[11px] font-bold text-[#6B778C] dark:text-[#97A0AF] uppercase tracking-tighter">
+        <TableCell key={columnId} className="px-6 text-right text-[11px] font-bold text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtle)] uppercase tracking-tighter">
           {u.lastVisitInRange ? new Date(u.lastVisitInRange).toLocaleDateString(undefined, { dateStyle: 'medium' }) : '—'}
         </TableCell>
       );
     if (columnId === 'tagSummary')
       return (
-        <TableCell key={columnId} className="px-6 text-[11px] font-bold text-[#6B778C] dark:text-[#97A0AF] max-w-[150px] truncate">
-          {u.tagSummary ?? <span className="text-[#DFE1E6]">—</span>}
+        <TableCell key={columnId} className="px-6 text-[11px] font-bold text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtle)] max-w-[150px] truncate">
+          {u.tagSummary ?? <span className="text-[var(--ds-border)]">—</span>}
         </TableCell>
       );
     if (columnId === 'linkedContactCount')
       return (
-        <TableCell key={columnId} className="px-6 text-right tabular-nums text-[13px] font-black text-[#172B4D] dark:text-white">
+        <TableCell key={columnId} className="px-6 text-right tabular-nums text-[13px] font-black text-[var(--ds-text)] dark:text-[var(--ds-text-inverse)]">
           {u.linkedContactCount ?? 0}
         </TableCell>
       );
@@ -395,7 +395,7 @@ export default function UnitsPage() {
             <Button
               variant="outline"
               size="icon"
-              className="h-8 w-8 rounded-lg border-[#DFE1E6] dark:border-[#343A46] text-[#42526E] dark:text-[#A5ADBA] hover:bg-white dark:hover:bg-[#2C333A] shadow-sm"
+              className="h-8 w-8 rounded-lg border-[var(--ds-border)] dark:border-[var(--ds-border)] text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtle)] hover:bg-[var(--ds-background-neutral-subtle-hovered)] dark:hover:bg-[var(--ds-background-neutral-subtle-hovered)] shadow-sm"
               onClick={() => setViewContactsFor(u)}
             >
               <Eye className="h-4 w-4" />
@@ -403,7 +403,7 @@ export default function UnitsPage() {
             <Button
               variant="outline"
               size="icon"
-              className="h-8 w-8 rounded-lg border-[#DFE1E6] dark:border-[#343A46] text-[#42526E] dark:text-[#A5ADBA] hover:bg-white dark:hover:bg-[#2C333A] shadow-sm"
+              className="h-8 w-8 rounded-lg border-[var(--ds-border)] dark:border-[var(--ds-border)] text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtle)] hover:bg-[var(--ds-background-neutral-subtle-hovered)] dark:hover:bg-[var(--ds-background-neutral-subtle-hovered)] shadow-sm"
               onClick={() => { setLinkTarget(u); setLinkUserId(u.userId ?? ''); }}
             >
               <UserPlus className="h-4 w-4" />
@@ -411,7 +411,7 @@ export default function UnitsPage() {
             <Button
               variant="outline"
               size="icon"
-              className="h-8 w-8 rounded-lg border-[#DFE1E6] dark:border-[#343A46] text-[#42526E] dark:text-[#A5ADBA] hover:bg-white dark:hover:bg-[#2C333A] shadow-sm"
+              className="h-8 w-8 rounded-lg border-[var(--ds-border)] dark:border-[var(--ds-border)] text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtle)] hover:bg-[var(--ds-background-neutral-subtle-hovered)] dark:hover:bg-[var(--ds-background-neutral-subtle-hovered)] shadow-sm"
               onClick={() => openEdit(u)}
             >
               <Pencil className="h-4 w-4" />
@@ -419,7 +419,7 @@ export default function UnitsPage() {
             <Button
               variant="outline"
               size="icon"
-              className="h-8 w-8 rounded-lg border-[#FFEBE6] text-[#BF2600] bg-[#FFEBE6]/50 hover:bg-[#FFEBE6] shadow-sm"
+              className="h-8 w-8 rounded-lg border-[var(--ds-background-danger-subtle-hovered)] text-[var(--ds-text-danger)] bg-[var(--ds-background-danger-subtle)] hover:bg-[var(--ds-background-danger-subtle-hovered)] shadow-sm"
               onClick={() => setDeleteTarget(u)}
             >
               <Trash2 className="h-4 w-4" />
@@ -427,7 +427,7 @@ export default function UnitsPage() {
           </div>
         </TableCell>
       );
-    return <TableCell key={columnId} className="text-[#DFE1E6]">/</TableCell>;
+    return <TableCell key={columnId} className="text-[var(--ds-border)]">/</TableCell>;
   };
 
   const reactTableColumns = visibleColumns.map((col) => ({
@@ -816,7 +816,7 @@ export default function UnitsPage() {
       />
 
       <div className="mt-8 space-y-6">
-        <div className="bg-white dark:bg-[#1D2125] border border-[#DFE1E6] dark:border-[#343A46] rounded-2xl p-6 shadow-sm">
+        <div className="bg-[var(--ds-background-default)] dark:bg-[var(--ds-background-default)] border border-[var(--ds-border)] dark:border-[var(--ds-border)] rounded-2xl p-6 shadow-sm">
           <ResidentsFilterBar
             filters={filters}
             onFiltersChange={updateFiltersAndUrl}
@@ -867,12 +867,12 @@ export default function UnitsPage() {
           )}
 
           <div className={cn(
-            "bg-white dark:bg-[#1D2125] border border-[#DFE1E6] dark:border-[#343A46] shadow-sm",
+            "bg-[var(--ds-background-default)] dark:bg-[var(--ds-background-default)] border border-[var(--ds-border)] dark:border-[var(--ds-border)] shadow-sm",
             selectedUnitIds.length > 0 ? "rounded-b-2xl" : "rounded-2xl"
           )}>
             <div className="overflow-x-auto min-h-[500px]">
               <Table>
-                <TableHeader className="bg-[#FAFBFC] dark:bg-[#091E42]/10 border-b border-border/50">
+                <TableHeader className="bg-[var(--ds-background-neutral-subtle)] dark:bg-[var(--ds-background-neutral-subtle)]/10 border-b border-border/50">
                   {unitsTable.getHeaderGroups().map((headerGroup) => (
                     <TableRow key={headerGroup.id} className="hover:bg-transparent border-none">
                       {headerGroup.headers.map((header) => {
@@ -881,7 +881,7 @@ export default function UnitsPage() {
                           <TableHead
                             key={header.id}
                             className={cn(
-                              "h-12 px-6 text-[11px] font-black uppercase tracking-widest text-[#6B778C] dark:text-[#97A0AF]",
+                              "h-12 px-6 text-[11px] font-black uppercase tracking-widest text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtle)]",
                               (columnId === 'visitsInRange' || columnId === 'passesInRange' || columnId === 'lastVisitInRange' || columnId === 'actions') ? "text-right" : "text-left"
                             )}
                           >
@@ -897,7 +897,7 @@ export default function UnitsPage() {
                     </TableRow>
                   ))}
                 </TableHeader>
-                <TableBody className="divide-y divide-[#DFE1E6] dark:divide-[#343A46]">
+                <TableBody className="divide-y divide-[var(--ds-border)] dark:divide-[var(--ds-border)]">
                   {isError ? (
                     <TableRow>
                       <TableCell colSpan={visibleColumns.length} className="h-48 text-center text-rose-600 font-bold">
@@ -919,14 +919,14 @@ export default function UnitsPage() {
                     <TableRow>
                       <TableCell colSpan={visibleColumns.length} className="h-64 text-center">
                         <div className="flex flex-col items-center justify-center space-y-4">
-                           <div className="h-20 w-20 rounded-full bg-[#FAFBFC] dark:bg-[#2C333A] flex items-center justify-center">
-                              <Building className="h-10 w-10 text-[#C1C7D0]" />
+                           <div className="h-20 w-20 rounded-full bg-[var(--ds-background-neutral-subtle)] dark:bg-[var(--ds-background-neutral-subtle)]/10 flex items-center justify-center">
+                              <Building className="h-10 w-10 text-[var(--ds-text-disabled)]" />
                            </div>
                            <div className="space-y-1">
-                              <p className="text-[15px] font-bold text-[#172B4D] dark:text-white">No units discovered</p>
-                              <p className="text-sm text-[#6B778C]">Start by creating a new unit or importing via CSV.</p>
+                              <p className="text-[15px] font-bold text-[var(--ds-text)] dark:text-white">No units discovered</p>
+                              <p className="text-sm text-[var(--ds-text-subtle)]">Start by creating a new unit or importing via CSV.</p>
                            </div>
-                           <Button onClick={openCreate} variant="outline" className="border-[#DFE1E6] font-bold">
+                           <Button onClick={openCreate} variant="outline" className="border-[var(--ds-border)] font-bold">
                               Add your first unit
                            </Button>
                         </div>
@@ -936,7 +936,7 @@ export default function UnitsPage() {
                     unitsTable.getRowModel().rows.map((row) => (
                       <TableRow 
                         key={row.id} 
-                        className="group hover:bg-[#F4F5F7] dark:hover:bg-[#091E42]/10 transition-colors border-none h-14"
+                        className="group hover:bg-[var(--ds-background-neutral-subtle-hovered)] dark:hover:bg-[var(--ds-background-neutral-subtle)]/10 transition-colors border-none h-14"
                       >
                         {row.getVisibleCells().map((cell) => 
                           flexRender(cell.column.columnDef.cell, cell.getContext())
@@ -948,8 +948,8 @@ export default function UnitsPage() {
               </Table>
             </div>
 
-            <div className="flex items-center justify-between px-6 py-4 bg-[#FAFBFC] dark:bg-[#091E42]/10 border-t border-[#DFE1E6] dark:border-[#343A46]">
-              <div className="text-[11px] font-black uppercase tracking-widest text-[#6B778C] tabular-nums">
+            <div className="flex items-center justify-between px-6 py-4 bg-[var(--ds-background-neutral-subtle)] dark:bg-[var(--ds-background-neutral-subtle)]/10 border-t border-[var(--ds-border)] dark:border-[var(--ds-border)]">
+              <div className="text-[11px] font-black uppercase tracking-widest text-[var(--ds-text-subtle)] tabular-nums">
                 {total.toLocaleString()} units found • Page {page} of {totalPages}
               </div>
               <div className="flex items-center gap-1.5">
@@ -958,11 +958,11 @@ export default function UnitsPage() {
                   size="sm"
                   onClick={() => updateFiltersAndUrl({ page: page - 1 })}
                   disabled={isLoading || page <= 1}
-                  className="h-8 w-12 border-[#DFE1E6] dark:border-[#343A46] rounded-lg hover:bg-white"
+                  className="h-8 w-12 border-[var(--ds-border)] dark:border-[var(--ds-border)] rounded-lg hover:bg-[var(--ds-background-default)]"
                 >
                   <ChevronLeft className="h-4 w-4" />
                 </Button>
-                <div className="h-8 px-3 flex items-center bg-white dark:bg-[#1D2125] rounded-lg border border-[#DFE1E6] dark:border-[#343A46] text-[11px] font-bold tabular-nums">
+                <div className="h-8 px-3 flex items-center bg-[var(--ds-background-default)] dark:bg-[var(--ds-background-default)] rounded-lg border border-[var(--ds-border)] dark:border-[var(--ds-border)] text-[11px] font-bold tabular-nums">
                    {page}
                 </div>
                 <Button
@@ -970,7 +970,7 @@ export default function UnitsPage() {
                   size="sm"
                   onClick={() => updateFiltersAndUrl({ page: page + 1 })}
                   disabled={isLoading || page >= totalPages}
-                  className="h-8 w-12 border-[#DFE1E6] dark:border-[#343A46] rounded-lg hover:bg-white"
+                  className="h-8 w-12 border-[var(--ds-border)] dark:border-[var(--ds-border)] rounded-lg hover:bg-[var(--ds-background-default)]"
                 >
                   <ChevronRight className="h-4 w-4" />
                 </Button>
@@ -1008,22 +1008,22 @@ export default function UnitsPage() {
         >
           <div className="space-y-6 px-1">
             <div className="space-y-2">
-              <Label className="text-[11px] font-black uppercase tracking-widest text-[#6B778C]">{t('units.form.name', 'Unit Identifier')}</Label>
+              <Label className="text-[11px] font-black uppercase tracking-widest text-[var(--ds-text-subtle)]">{t('units.form.name', 'Unit Identifier')}</Label>
               <Input
                 value={form.name}
                 onChange={(e) => setForm((prev) => ({ ...prev, name: e.target.value }))}
                 placeholder="e.g. APT-402, Villa 12, Office A"
-                className="h-11 rounded-xl bg-[#F4F5F7] border-[#DFE1E6] focus:bg-white dark:bg-[#2C333A] dark:border-[#343A46] transition-all font-bold"
+                className="h-11 rounded-xl bg-[var(--ds-background-neutral-subtle)] border-[var(--ds-border)] focus:bg-[var(--ds-background-default)] dark:bg-[var(--ds-background-neutral-subtle)] dark:border-[var(--ds-border)] transition-all font-bold"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-6">
               <div className="space-y-2">
-                <Label className="text-[11px] font-black uppercase tracking-widest text-[#6B778C]">{t('units.form.type', 'Classification')}</Label>
+                <Label className="text-[11px] font-black uppercase tracking-widest text-[var(--ds-text-subtle)]">{t('units.form.type', 'Classification')}</Label>
                 <NativeSelect
                   value={form.type}
                   onChange={(e) => handleTypeChange(e.target.value as UnitType)}
-                  className="h-11 rounded-xl bg-[#F4F5F7] border-[#DFE1E6] dark:bg-[#2C333A] dark:border-[#343A46] font-bold"
+                  className="h-11 rounded-xl bg-[var(--ds-background-neutral-subtle)] border-[var(--ds-border)] dark:bg-[var(--ds-background-neutral-subtle)] dark:border-[var(--ds-border)] font-bold"
                 >
                   {Object.entries(UNIT_TYPE_LABELS).map(([val, label]) => (
                     <option key={val} value={val}>{label}</option>
@@ -1031,23 +1031,23 @@ export default function UnitsPage() {
                 </NativeSelect>
               </div>
               <div className="space-y-2">
-                <Label className="text-[11px] font-black uppercase tracking-widest text-[#6B778C]">{t('units.form.size', 'Area (m²)')}</Label>
+                <Label className="text-[11px] font-black uppercase tracking-widest text-[var(--ds-text-subtle)]">{t('units.form.size', 'Area (m²)')}</Label>
                 <Input
                   type="number"
                   value={form.sizeSqm ?? ''}
                   onChange={(e) => setForm((prev) => ({ ...prev, sizeSqm: e.target.value ? parseFloat(e.target.value) : null }))}
                   placeholder="0.00"
-                   className="h-11 rounded-xl bg-[#F4F5F7] border-[#DFE1E6] dark:bg-[#2C333A] dark:border-[#343A46] font-bold"
+                   className="h-11 rounded-xl bg-[var(--ds-background-neutral-subtle)] border-[var(--ds-border)] dark:bg-[var(--ds-background-neutral-subtle)] dark:border-[var(--ds-border)] font-bold"
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label className="text-[11px] font-black uppercase tracking-widest text-[#6B778C]">{t('units.form.project', 'Parent Project')}</Label>
+              <Label className="text-[11px] font-black uppercase tracking-widest text-[var(--ds-text-subtle)]">{t('units.form.project', 'Parent Project')}</Label>
               <NativeSelect
                 value={form.projectId}
                 onChange={(e) => setForm((prev) => ({ ...prev, projectId: e.target.value }))}
-                 className="h-11 rounded-xl bg-[#F4F5F7] border-[#DFE1E6] dark:bg-[#2C333A] dark:border-[#343A46] font-bold"
+                 className="h-11 rounded-xl bg-[var(--ds-background-neutral-subtle)] border-[var(--ds-border)] dark:bg-[var(--ds-background-neutral-subtle)] dark:border-[var(--ds-border)] font-bold"
               >
                 <option value="">{t('units.form.selectProject', 'Global / No Project')}</option>
                 {projects.map((p) => (
@@ -1057,23 +1057,23 @@ export default function UnitsPage() {
             </div>
 
             <div className="space-y-2">
-              <Label className="text-[11px] font-black uppercase tracking-widest text-[#6B778C]">{t('units.form.qrQuota', 'Digital Key Quota')}</Label>
-              <div className="flex items-center gap-4 bg-[#F4F5F7] dark:bg-[#2C333A] p-3 rounded-xl border border-[#DFE1E6] dark:border-[#343A46]">
+              <Label className="text-[11px] font-black uppercase tracking-widest text-[var(--ds-text-subtle)]">{t('units.form.qrQuota', 'Digital Key Quota')}</Label>
+              <div className="flex items-center gap-4 bg-[var(--ds-background-neutral-subtle)] dark:bg-[var(--ds-background-neutral-subtle)]/10 p-3 rounded-xl border border-[var(--ds-border)] dark:border-[var(--ds-border)]">
                  <Input
                   type="number"
                   value={form.qrQuota}
                   onChange={(e) => setForm((prev) => ({ ...prev, qrQuota: parseInt(e.target.value) || 0 }))}
-                  className="w-24 h-10 rounded-lg bg-white dark:bg-[#1D2125] border-[#DFE1E6] dark:border-[#343A46] font-black text-center"
+                  className="w-24 h-10 rounded-lg bg-[var(--ds-background-default)] dark:bg-[var(--ds-background-default)] border-[var(--ds-border)] dark:border-[var(--ds-border)] font-black text-center"
                 />
-                <p className="text-[12px] text-[#6B778C] leading-tight flex-1">
+                <p className="text-[12px] text-[var(--ds-text-subtle)] leading-tight flex-1">
                   Total QR keys allowed per unit. Recommended for {form.type.toLowerCase().replace('_', ' ')} is {UNIT_QUOTA_DEFAULTS[form.type]}.
                 </p>
               </div>
             </div>
 
             <div className="space-y-3 pt-2">
-              <Label className="text-[11px] font-black uppercase tracking-widest text-[#6B778C]">{t('units.form.contacts', 'Resident Access Control List')}</Label>
-              <div className="grid grid-cols-1 gap-2 max-h-[300px] overflow-y-auto p-1 bg-[#F4F5F7] dark:bg-[#2C333A] rounded-2xl border border-[#DFE1E6] dark:border-[#343A46]">
+              <Label className="text-[11px] font-black uppercase tracking-widest text-[var(--ds-text-subtle)]">{t('units.form.contacts', 'Resident Access Control List')}</Label>
+              <div className="grid grid-cols-1 gap-2 max-h-[300px] overflow-y-auto p-1 bg-[var(--ds-background-neutral-subtle)] dark:bg-[var(--ds-background-neutral-subtle)]/10 rounded-2xl border border-[var(--ds-border)] dark:border-[var(--ds-border)]">
                 {contacts.map((c) => (
                   <div
                     key={c.id}
@@ -1081,25 +1081,25 @@ export default function UnitsPage() {
                     className={cn(
                       "flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all border-2",
                       form.contactIds.includes(c.id) 
-                        ? "bg-white dark:bg-[#1D2125] border-[#0052CC] shadow-sm" 
-                        : "bg-transparent border-transparent hover:bg-white/50"
+                        ? "bg-[var(--ds-background-default)] dark:bg-[var(--ds-background-default)] border-[var(--ds-background-brand-bold)] shadow-sm" 
+                        : "bg-transparent border-transparent hover:bg-[var(--ds-background-neutral-subtle)]"
                     )}
                   >
                     <div className={cn(
                       "h-5 w-5 rounded-md flex items-center justify-center transition-all",
-                      form.contactIds.includes(c.id) ? "bg-[#0052CC]" : "bg-[#DFE1E6] dark:bg-[#343A46]"
+                      form.contactIds.includes(c.id) ? "bg-[var(--ds-background-brand-bold)]" : "bg-[var(--ds-border)] dark:bg-[var(--ds-border)]"
                     )}>
                        {form.contactIds.includes(c.id) && <Check className="h-3 w-3 text-white" />}
                     </div>
-                    <span className={cn("text-sm font-bold", form.contactIds.includes(c.id) ? "text-[#0052CC]" : "text-[#42526E] dark:text-[#A5ADBA]")}>
+                    <span className={cn("text-sm font-bold", form.contactIds.includes(c.id) ? "text-[var(--ds-text-brand)]" : "text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtle)]")}>
                       {c.firstName} {c.lastName}
                     </span>
                   </div>
                 ))}
                 {contacts.length === 0 && (
-                  <div className="p-8 text-center bg-white/50 dark:bg-[#1D2125]/50 rounded-xl m-2">
-                    <p className="text-sm font-bold text-[#6B778C]">No contacts found</p>
-                    <p className="text-xs text-[#A5ADBA]">Residents will appear here once added to the system.</p>
+                  <div className="p-8 text-center bg-[var(--ds-background-neutral-subtle)] dark:bg-[var(--ds-background-neutral-subtle)]/10 rounded-xl m-2">
+                    <p className="text-sm font-bold text-[var(--ds-text-subtle)]">No contacts found</p>
+                    <p className="text-xs text-[var(--ds-text-subtlest)]">Residents will appear here once added to the system.</p>
                   </div>
                 )}
               </div>
@@ -1109,37 +1109,37 @@ export default function UnitsPage() {
       </Dialog>
 
       <Dialog open={!!linkTarget} onOpenChange={(open) => !open && setLinkTarget(null)}>
-        <DialogContent className="max-w-md rounded-2xl border-none shadow-2xl p-0 overflow-hidden bg-white dark:bg-[#1D2125]">
-          <div className="bg-[#DEEBFF] dark:bg-[#0747A6]/20 p-6 flex flex-col items-center gap-4 text-center border-b border-[#DEEBFF] dark:border-[#343A46]">
-             <div className="h-16 w-16 rounded-full bg-white dark:bg-[#2C333A] flex items-center justify-center shadow-sm">
-                <UserPlus className="h-8 w-8 text-[#0052CC]" />
+        <DialogContent className="max-w-md rounded-2xl border-none shadow-2xl p-0 overflow-hidden bg-[var(--ds-background-default)] dark:bg-[var(--ds-background-default)]">
+          <div className="bg-[var(--ds-background-brand-subtle)] dark:bg-[var(--ds-background-brand-subtle)]/10 p-6 flex flex-col items-center gap-4 text-center border-b border-[var(--ds-background-brand-subtle)] dark:border-[var(--ds-border)]">
+             <div className="h-16 w-16 rounded-full bg-[var(--ds-background-default)] dark:bg-[var(--ds-background-default)] flex items-center justify-center shadow-sm">
+                <UserPlus className="h-8 w-8 text-[var(--ds-text-brand)]" />
              </div>
-             <DialogTitle className="text-2xl font-black tracking-tight text-[#0052CC] dark:text-[#4C9AFF]">
+             <DialogTitle className="text-2xl font-black tracking-tight text-[var(--ds-text-brand)] dark:text-[var(--ds-text-brand)]">
                 Link Portal User
              </DialogTitle>
           </div>
           <div className="p-8 space-y-6">
             <div className="space-y-3">
-              <Label className="text-[11px] font-black uppercase tracking-widest text-[#6B778C]">Assign primary resident account</Label>
+              <Label className="text-[11px] font-black uppercase tracking-widest text-[var(--ds-text-subtle)]">Assign primary resident account</Label>
               <NativeSelect
                 value={linkUserId}
                 onChange={(e) => setLinkUserId(e.target.value)}
-                className="h-12 rounded-xl bg-[#F4F5F7] dark:bg-[#2C333A] border-[#DFE1E6] dark:border-[#343A46] font-bold"
+                className="h-12 rounded-xl bg-[var(--ds-background-neutral-subtle)] dark:bg-[var(--ds-background-neutral-subtle)]/10 border-[var(--ds-border)] dark:border-[var(--ds-border)] font-bold"
               >
                 <option value="">{t('units.notLinked', 'No User Linked')}</option>
                 {residents.map((r) => (
                   <option key={r.id} value={r.id}>{r.name} ({r.email})</option>
                 ))}
               </NativeSelect>
-              <p className="text-[12px] text-[#6B778C] bg-[#F4F5F7] dark:bg-[#2C333A] p-4 rounded-xl leading-relaxed">
+              <p className="text-[12px] text-[var(--ds-text-subtle)] bg-[var(--ds-background-neutral-subtle)] dark:bg-[var(--ds-background-neutral-subtle)]/10 p-4 rounded-xl leading-relaxed">
                 This links a Dashboard/App user account to this unit. The linked resident will be able to manage their guests and view logs for this property.
               </p>
             </div>
             <DialogFooter className="flex flex-col sm:flex-row gap-3 pt-2">
-              <Button variant="outline" onClick={() => setLinkTarget(null)} className="flex-1 h-12 rounded-xl border-[#DFE1E6] dark:border-[#343A46] font-bold">
+              <Button variant="outline" onClick={() => setLinkTarget(null)} className="flex-1 h-12 rounded-xl border-[var(--ds-border)] dark:border-[var(--ds-border)] font-bold">
                 {t('common.cancel', 'Cancel')}
               </Button>
-              <Button onClick={doLinkResident} disabled={isPending} className="flex-1 h-12 rounded-xl bg-[#0052CC] hover:bg-[#0747A6] font-bold text-white shadow-lg">
+              <Button onClick={doLinkResident} disabled={isPending} className="flex-1 h-12 rounded-xl bg-[var(--ds-background-brand-bold)] hover:bg-[var(--ds-background-brand-bold-hovered)] font-bold text-white shadow-lg">
                 {isPending ? <RefreshCw className="h-5 w-5 animate-spin mr-2" /> : <Check className="h-5 w-5 mr-2" />}
                 {t('common.save', 'Link Account')}
               </Button>
@@ -1149,24 +1149,24 @@ export default function UnitsPage() {
       </Dialog>
 
       <Dialog open={!!deleteTarget} onOpenChange={(open) => !open && setDeleteTarget(null)}>
-         <DialogContent className="max-w-md rounded-2xl border-none shadow-2xl p-0 overflow-hidden bg-white dark:bg-[#1D2125]">
-          <div className="bg-[#FFEBE6] dark:bg-[#44130C]/20 p-6 flex flex-col items-center gap-4 text-center border-b border-[#FFEBE6] dark:border-[#343A46]">
-             <div className="h-16 w-16 rounded-full bg-white dark:bg-[#2C333A] flex items-center justify-center shadow-sm">
-                <Trash2 className="h-8 w-8 text-[#BF2600]" />
+         <DialogContent className="max-w-md rounded-2xl border-none shadow-2xl p-0 overflow-hidden bg-[var(--ds-background-default)] dark:bg-[var(--ds-background-default)]">
+          <div className="bg-[var(--ds-background-danger-subtle)] dark:bg-[var(--ds-background-danger-subtle)]/10 p-6 flex flex-col items-center gap-4 text-center border-b border-[var(--ds-background-danger-subtle)] dark:border-[var(--ds-border)]">
+             <div className="h-16 w-16 rounded-full bg-[var(--ds-background-default)] dark:bg-[var(--ds-background-default)] flex items-center justify-center shadow-sm">
+                <Trash2 className="h-8 w-8 text-[var(--ds-text-danger)]" />
              </div>
-             <DialogTitle className="text-2xl font-black tracking-tight text-[#BF2600] dark:text-[#FF8F73]">
+             <DialogTitle className="text-2xl font-black tracking-tight text-[var(--ds-text-danger)] dark:text-[var(--ds-text-danger)]">
                 Delete Unit?
              </DialogTitle>
           </div>
           <div className="p-8 space-y-6 text-center">
-            <p className="text-[15px] font-medium text-[#42526E] dark:text-[#A5ADBA] leading-relaxed">
-              Are you sure you want to delete unit <span className="font-black text-[#172B4D] dark:text-white">{deleteTarget?.name}</span>? This action will unlink all associated contacts and cannot be undone.
+            <p className="text-[15px] font-medium text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtle)] leading-relaxed">
+              Are you sure you want to delete unit <span className="font-black text-[var(--ds-text)] dark:text-white">{deleteTarget?.name}</span>? This action will unlink all associated contacts and cannot be undone.
             </p>
             <DialogFooter className="flex flex-col sm:flex-row gap-3">
-              <Button variant="outline" onClick={() => setDeleteTarget(null)} className="flex-1 h-12 rounded-xl border-[#DFE1E6] dark:border-[#343A46] font-bold">
+              <Button variant="outline" onClick={() => setDeleteTarget(null)} className="flex-1 h-12 rounded-xl border-[var(--ds-border)] dark:border-[var(--ds-border)] font-bold">
                 {t('common.cancel', 'Keep it')}
               </Button>
-              <Button variant="destructive" onClick={doDelete} disabled={isPending} className="flex-1 h-12 rounded-xl bg-[#BF2600] hover:bg-[#DE350B] font-bold text-white shadow-lg">
+              <Button variant="destructive" onClick={doDelete} disabled={isPending} className="flex-1 h-12 rounded-xl bg-[var(--ds-background-danger-bold)] hover:bg-[var(--ds-background-danger-bold-hovered)] font-bold text-white shadow-lg">
                 {t('common.delete', 'Yes, delete')}
               </Button>
             </DialogFooter>
@@ -1175,24 +1175,24 @@ export default function UnitsPage() {
       </Dialog>
 
       <Dialog open={bulkDeleteConfirmOpen} onOpenChange={setBulkDeleteConfirmOpen}>
-        <DialogContent className="max-w-md rounded-2xl border-none shadow-2xl p-0 overflow-hidden bg-white dark:bg-[#1D2125]">
-          <div className="bg-[#FFEBE6] dark:bg-[#44130C]/20 p-6 flex flex-col items-center gap-4 text-center border-b border-[#FFEBE6] dark:border-[#343A46]">
-             <div className="h-16 w-16 rounded-full bg-white dark:bg-[#2C333A] flex items-center justify-center shadow-sm">
-                <Trash2 className="h-8 w-8 text-[#BF2600]" />
+        <DialogContent className="max-w-md rounded-2xl border-none shadow-2xl p-0 overflow-hidden bg-[var(--ds-background-default)] dark:bg-[var(--ds-background-default)]">
+          <div className="bg-[var(--ds-background-danger-subtle)] dark:bg-[var(--ds-background-danger-subtle)]/10 p-6 flex flex-col items-center gap-4 text-center border-b border-[var(--ds-background-danger-subtle)] dark:border-[var(--ds-border)]">
+             <div className="h-16 w-16 rounded-full bg-[var(--ds-background-default)] dark:bg-[var(--ds-background-default)] flex items-center justify-center shadow-sm">
+                <Trash2 className="h-8 w-8 text-[var(--ds-text-danger)]" />
              </div>
-             <DialogTitle className="text-2xl font-black tracking-tight text-[#BF2600] dark:text-[#FF8F73]">
+             <DialogTitle className="text-2xl font-black tracking-tight text-[var(--ds-text-danger)] dark:text-[var(--ds-text-danger)]">
                 Bulk Deletion
              </DialogTitle>
           </div>
           <div className="p-8 space-y-6 text-center">
-            <p className="text-[15px] font-medium text-[#42526E] dark:text-[#A5ADBA] leading-relaxed">
-              You are about to delete <span className="font-black text-[#172B4D] dark:text-white">{selectedUnitIds.length}</span> units. This action is irreversible.
+            <p className="text-[15px] font-medium text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtle)] leading-relaxed">
+              You are about to delete <span className="font-black text-[var(--ds-text)] dark:text-white">{selectedUnitIds.length}</span> units. This action is irreversible.
             </p>
             <DialogFooter className="flex flex-col sm:flex-row gap-3">
-              <Button variant="outline" onClick={() => setBulkDeleteConfirmOpen(false)} className="flex-1 h-12 rounded-xl border-[#DFE1E6] dark:border-[#343A46] font-bold">
+              <Button variant="outline" onClick={() => setBulkDeleteConfirmOpen(false)} className="flex-1 h-12 rounded-xl border-[var(--ds-border)] dark:border-[var(--ds-border)] font-bold">
                 {t('common.cancel', 'Cancel')}
               </Button>
-              <Button variant="destructive" onClick={doBulkDelete} disabled={isPending} className="flex-1 h-12 rounded-xl bg-[#BF2600] hover:bg-[#DE350B] font-bold text-white shadow-lg">
+              <Button variant="destructive" onClick={doBulkDelete} disabled={isPending} className="flex-1 h-12 rounded-xl bg-[var(--ds-background-danger-bold)] hover:bg-[var(--ds-background-danger-bold-hovered)] font-bold text-white shadow-lg">
                 {t('common.delete', 'Delete all selected')}
               </Button>
             </DialogFooter>

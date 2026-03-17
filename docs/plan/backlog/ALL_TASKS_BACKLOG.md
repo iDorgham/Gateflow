@@ -24,7 +24,7 @@
 - [x] Phase 2 — Public Realm: Marketing & Auth Flows
 - [x] Phase 3 — Client Dashboard: Navigation & Shell
 - [ ] Phase 4 — Client Dashboard: Feature Modules
-- [ ] Phase 5 — Admin Dashboard: Platform Management
+- [x] Phase 5 — Admin Dashboard: Platform Management
 - [ ] Phase 6 — Polish & Global Audit
 
 ### gateai — GateFlow Intelligent Operations Agent

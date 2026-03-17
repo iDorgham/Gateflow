@@ -38,6 +38,7 @@ model Organization {
   adminAuthKeys                 AdminAuthorizationKey[]
   apiKeys                       ApiKey[]
   auditLogs                     AuditLog[]
+  aiAutomations                 AiAutomation[]
   chatMessages                  ChatMessage[]
   contacts                      Contact[]
   eventLogs                     EventLog[]
@@ -126,6 +127,7 @@ model User {
   chatMessages    ChatMessage[]
   gateAssignments GateAssignment[]
   incidents       Incident[]
+  aiAutomations   AiAutomation[]
   refreshTokens   RefreshToken[]
   scanLogs        ScanLog[]
   aiActionLogs    AiActionLog[]
@@ -817,6 +819,41 @@ enum EventType {
   SCAN_RECORDED
   CONTACT_CREATED
   CONTACT_UPDATED
-  VISITOR_QR_CREATED
   VISITOR_QR_DELETED
+}
+
+model AiAutomation {
+  id             String             @id @default(cuid())
+  organizationId String
+  userId         String
+  name           String
+  description    String?
+  type           AiAutomationType
+  trigger        String             // "CRON"
+  schedule       String             // cron expression or NLP string
+  action         Json               // metadata about the action (e.g., { "reportType": "VISITORS", "format": "PDF" })
+  status         AiAutomationStatus @default(ACTIVE)
+  lastRunAt      DateTime?
+  nextRunAt      DateTime?
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  deletedAt      DateTime?
+
+  organization   Organization       @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user           User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([userId])
+  @@index([deletedAt])
+}
+
+enum AiAutomationType {
+  REPORT
+  EXPORT
+}
+
+enum AiAutomationStatus {
+  ACTIVE
+  PAUSED
+  COMPLETED
 }

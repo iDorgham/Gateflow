@@ -4,7 +4,7 @@ GateFlow is an enterprise-grade gate access and resident management system
 engineered for high-security environments and large-scale residential
 communities.
 
-[![Deployment Status](https://img.shields.io/badge/Vercel-Success-000000?logo=vercel)](https://vercel.com)
+[![Version](https://img.shields.io/badge/Version-8.0-blue)](https://gateflow.site)
 [![Build Status](https://img.shields.io/badge/Build-Passing-4c1?logo=github)](https://github.com)
 [![Status](https://img.shields.io/badge/Status-100%25%20MVP-brightgreen)](https://github.com)
 [![Security](https://img.shields.io/badge/Security-Strict-blue)](https://github.com)
@@ -277,16 +277,17 @@ pnpm turbo typecheck
 
 > **Start here:** [Documentation Hub](./docs/README.md)
 
-| Document                                                 | Description                   |
-| -------------------------------------------------------- | ----------------------------- |
-| [PRD v8.0 Comprehensive](./docs/product/PRD_v8.0_COMPREHENSIVE.md) | Full Platform Blueprint & Specs |
-| [PRD v8.0 Summary](./docs/product/PRD_v8.0.md)           | Roadmap & Strategy Overview |
-| [Antigravity Skills](./docs/guides/ANTIGRAVITY_SKILLS.md) | AI system capabilities guide |
-| [Project Progress](./docs/PROJECT_PROGRESS_DASHBOARD.md) | MVP completion status         |
-| [Development Guide](./docs/guides/DEVELOPMENT_GUIDE.md)   | Local setup and workspace     |
-| [Architecture Overview](./docs/architecture/ARCHITECTURE.md) | System-level design       |
-| [Security Overview](./docs/architecture/ARCHITECTURE.md) | Security architecture         |
-| [API Reference](./docs/product/PRD_v8.0.md)              | REST API documentation        |
+| Document                                                 | Description                            | Link                                      |
+| :------------------------------------------------------- | :------------------------------------- | :---------------------------------------- |
+| **PRD v8.0 Comprehensive**                               | Complete product requirements document | [View](docs/planning/PRD_v8.0_COMPREHENSIVE.md) |
+| **PRD v8.0 Summary**                                     | Roadmap and strategy overview          | [View](docs/planning/PRD_v8.0.md)         |
+| **PRD v7.0**                                             | Previous PRD version                   | [View](docs/archive/PRD_v7.0.md)          |
+| [Antigravity Skills](./docs/execution/ANTIGRAVITY_SKILLS.md) | AI system capabilities guide           |                                           |
+| [Project Progress](./docs/execution/PROJECT_PROGRESS_DASHBOARD.md) | MVP completion status                  |                                           |
+| [Development Guide](./docs/guides/DEVELOPMENT_GUIDE.md)  | Local setup and workspace              |                                           |
+| [Architecture Overview](./docs/architecture/ARCHITECTURE.md) | System-level design                    |                                           |
+| [Security Overview](./docs/architecture/ARCHITECTURE.md) | Security architecture                  |                                           |
+| [API Reference](./docs/planning/PRD_v8.0.md)             | REST API documentation                 |                                           |
 
 ---
 

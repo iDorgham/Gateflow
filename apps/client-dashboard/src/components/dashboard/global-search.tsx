@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import {
-  Search,
   Contact2,
   Building,
   QrCode,
@@ -17,10 +16,7 @@ import {
   CommandList,
   CommandEmpty,
   CommandItem,
-  Button,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
+  cn,
 } from '@gate-access/ui';
 
 interface SearchContact {
@@ -108,7 +104,22 @@ export function GlobalSearch({ locale }: { locale: string }) {
 
   return (
     <div className="relative w-full">
-      <Command className="border border-border/50 rounded-lg overflow-visible bg-transparent">
+      <Command 
+        className={cn(
+          "rounded-lg overflow-visible bg-transparent",
+          "[&_[cmdk-input-wrapper]]:border-2 [&_[cmdk-input-wrapper]]:border-transparent",
+          "[&_[cmdk-input-wrapper]]:bg-[var(--ds-background-neutral)]",
+          "dark:[&_[cmdk-input-wrapper]]:bg-[var(--ds-background-neutral)]",
+          "[&_[cmdk-input-wrapper]]:rounded-lg",
+          "hover:[&_[cmdk-input-wrapper]]:bg-[var(--ds-background-neutral-hovered)]",
+          "dark:hover:[&_[cmdk-input-wrapper]]:bg-[var(--ds-background-neutral-hovered)]",
+          "focus-within:[&_[cmdk-input-wrapper]]:bg-[var(--ds-background-input)]",
+          "dark:focus-within:[&_[cmdk-input-wrapper]]:bg-[var(--ds-background-input)]",
+          "focus-within:[&_[cmdk-input-wrapper]]:border-[var(--ds-border-focused)]",
+          "dark:focus-within:[&_[cmdk-input-wrapper]]:border-[var(--ds-border-focused)]",
+          "[&_[cmdk-input-wrapper]]:transition-colors"
+        )}
+      >
         <CommandInput
           placeholder="Search workspace..."
           value={query}
@@ -123,7 +134,7 @@ export function GlobalSearch({ locale }: { locale: string }) {
             // small delay so clicks on the dropdown list register
             setTimeout(() => setOpen(false), 200);
           }}
-          className="h-9 outline-none border-none bg-[#EBECF0] dark:bg-[#2C333A] focus:bg-white dark:focus:bg-[#1C2533] focus:ring-0 transition-all w-full"
+          className="h-9 outline-none border-none bg-transparent focus:bg-transparent dark:focus:bg-transparent focus:ring-0 w-full"
         />
         
         {open && (

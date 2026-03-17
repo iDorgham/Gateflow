@@ -17,7 +17,7 @@
     <img src="https://img.shields.io/github/forks/iDorgham/Gateflow?style=social" alt="Forks">
   </a>
   <img src="https://img.shields.io/badge/Status-100%25%20MVP-brightgreen" alt="Status">
-  <img src="https://img.shields.io/badge/Version-7.0-blue" alt="Version">
+  <img src="https://img.shields.io/badge/Version-8.0-blue" alt="Version">
   <img src="https://img.shields.io/badge/Security-Strict-blue" alt="Security">
   <a href="https://twitter.com/intent/tweet?text=Check+out+GateFlow+-+Zero-Trust+Digital+Gate+Infrastructure+Platform&url=https%3A%2F%2Fgithub.com%2FiDorgham%2FGateflow">
     <img src="https://img.shields.io/badge/Tweet-Share-blue" alt="Tweet">
@@ -685,13 +685,14 @@ EXPO_PUSH_TOKEN="your-expo-push-token"
 
 ### 📚 Core Documentation
 
-| Document              | Description                              | Link                                       |
-| :-------------------- | :--------------------------------------- | :----------------------------------------- |
-| **PRD v7.0**          | Complete product requirements document   | [View](docs/PRD_v7.0.md)                   |
-| **Architecture**      | System design and data flow              | [View](docs/ARCHITECTURE.md)               |
-| **Project Progress**  | MVP completion status and roadmap        | [View](docs/PROJECT_PROGRESS_DASHBOARD.md) |
-| **Development Guide** | Local setup and workspace guide          | [View](docs/DEVELOPMENT_GUIDE.md)          |
-| **Security Overview** | Security architecture and best practices | [View](docs/guides/SECURITY_OVERVIEW.md)   |
+| Document              | Description                              | Link                                           |
+| :-------------------- | :--------------------------------------- | :--------------------------------------------- |
+| **PRD v8.0 Comprehensive** | Complete product requirements document   | [View](docs/product/PRD_v8.0_COMPREHENSIVE.md) |
+| **PRD v8.0 Summary**  | Roadmap and strategy overview        | [View](docs/product/PRD_v8.0.md)               |
+| **Architecture**      | System design and data flow              | [View](docs/ARCHITECTURE.md)                   |
+| **Project Progress**  | MVP completion status and roadmap        | [View](docs/PROJECT_PROGRESS_DASHBOARD.md)     |
+| **Development Guide** | Local setup and workspace guide          | [View](docs/DEVELOPMENT_GUIDE.md)              |
+| **Security Overview** | Security architecture and best practices | [View](docs/guides/SECURITY_OVERVIEW.md)       |
 
 <br>
 
@@ -729,7 +730,7 @@ EXPO_PUSH_TOKEN="your-expo-push-token"
 
 | Document         | Description                 | Link                                      |
 | :--------------- | :-------------------------- | :---------------------------------------- |
-| **PRD v6.0**     | Previous PRD version        | [View](docs/archive/old-prds/PRD_v6.0.md) |
+| **PRD v7.0**     | Previous PRD version        | [View](docs/archive/old-prds/PRD_v7.0.md) |
 | **Legacy Plans** | Archived planning documents | [Browse](docs/archive/legacy-plans/)      |
 
 <br>

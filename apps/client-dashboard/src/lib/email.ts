@@ -30,6 +30,36 @@ export function resetTransporter() {
   transporter = null;
 }
 
+export interface SendEmailOptions {
+  to: string;
+  subject: string;
+  text?: string;
+  html?: string;
+  attachments?: {
+    filename: string;
+    content: Buffer;
+    contentType: string;
+  }[];
+}
+
+export async function sendEmail(options: SendEmailOptions) {
+  const mailTransporter = getTransporter();
+  
+  const mailOptions = {
+    from: `"GateFlow Ops" <${process.env.SMTP_USER}>`,
+    ...options,
+  };
+
+  try {
+    const info = await mailTransporter.sendMail(mailOptions);
+    console.log('[EmailService] Message sent: %s', info.messageId);
+    return info;
+  } catch (error) {
+    console.error('[EmailService] Failed to send email:', error);
+    throw error;
+  }
+}
+
 export function buildEmailHtml(recipientName: string, orgName: string, expiresAt?: Date | null): string {
   const displayName = recipientName || 'there';
   const expiryLine = expiresAt

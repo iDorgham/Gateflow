@@ -4,6 +4,7 @@ import { requireAuth } from '@/lib/dashboard-auth';
 import { getOrganizationContext } from '@/lib/ai/context-providers';
 import { checkRateLimit } from '@/lib/rate-limit';
 import { AiActionService } from '@/lib/ai/ai-action-service';
+import { automationTools } from '@/lib/ai/tools/automation-tools';
 
 // Allow streaming responses up to 60 seconds
 export const maxDuration = 60;
@@ -77,6 +78,8 @@ export async function POST(req: Request) {
     const result = streamText({
       model,
       messages,
+      tools: automationTools,
+      maxSteps: 5,
       system: `You are GateAI, an intelligent operations agent for GateFlow.
 Organization: ${orgContext?.orgName || 'GateFlow'}.
 Organization ID: ${session.user.organizationId}.
@@ -123,36 +126,30 @@ ${isResident ? `
      }
    }
    \`\`\`
-5. You can schedule tasks (like recurring reports). To schedule a task, output a JSON block like this:
+6. EXTREMELY IMPORTANT: For any automation or scheduling action, you MUST FIRST propose it using a "confirm" block (see below). Wait for the user to confirm before you call the `scheduleReport` or `exportDataNow` tools.
+7. You have internal tools to handle `scheduleReport` and `exportDataNow`. Use them only after confirmation.
+
+### Action JSON Structures:
+1. To offer an instant report download, output a JSON block:
    \`\`\`json
    {
-     "type": "schedule",
-     "taskType": "report",
-     "title": "Weekly Analytics Summary",
-     "cron": "weekly" | "daily" | "0 0 * * 0",
-     "params": {
-       "reportType": "pdf" | "csv",
-       "projectId": "...",
-       "gateId": "..."
-     }
+     "type": "report",
+     "reportType": "pdf" | "csv",
+     ...
    }
    \`\`\`
-6. CRITICAL: For any action that modifies data (scheduling, creating, deleting), you MUST FIRST propose it using a "confirm" block. DO NOT provide the "schedule" block directly unless it's just a summary of what's already been done.
+2. To propose a scheduled task, use the "confirm" block:
    \`\`\`json
    {
      "type": "confirm",
-     "actionType": "SCHEDULE_TASK" | "BULK_QR_CREATE",
-     "title": "...",
-     "description": "...",
+     "actionType": "SCHEDULE_TASK",
+     "title": "Weekly Summary",
+     "description": "I will schedule a weekly visitor report in PDF format...",
      "intentJson": {
-       // For SCHEDULE_TASK:
-       "title": "...", "cron": "...", "params": { ... }
-       // For BULK_QR_CREATE:
-       "count": number, "type": "WORKER" | "VIRTUAL" | "PHYSICAL", "validFrom": "ISO string", "validUntil": "ISO string", "tag": "...", "assignTo": "...", "projectId": "...", "gateId": "..."
+       "title": "...", "cron": "...", "params": { "reportType": "pdf", ... }
      }
    }
    \`\`\`
-8. You can now perform limited actions like generating reports, scheduling tasks, and creating bulk QR codes.`}
 Answer concisely.`,
       onFinish: async (finish) => {
         if (finish.usage) {
