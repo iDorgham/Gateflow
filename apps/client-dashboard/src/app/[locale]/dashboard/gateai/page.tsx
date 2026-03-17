@@ -16,75 +16,10 @@ import {
   GateAIHubLayout,
 } from '@/components/dashboard/gateai/GateAIHubLayout';
 import { TagSidebar } from '@/components/dashboard/gateai/TagSidebar';
+import { CanvasEditor } from '@/components/dashboard/gateai/CanvasEditor';
 import { Sparkles, Zap, BarChart3, Tag, BrainCircuit } from 'lucide-react';
 
-/* ─────────────── Center canvas placeholder ─────────────── */
-
-function CanvasPlaceholder() {
-  return (
-    <div className="flex flex-1 flex-col items-center justify-center gap-6 p-8 text-center">
-      {/* Glowing hub icon */}
-      <div className="relative flex items-center justify-center">
-        <div
-          className="absolute inset-0 rounded-full opacity-20 blur-2xl"
-          style={{ background: 'radial-gradient(circle, #ED4B00 0%, transparent 70%)' }}
-        />
-        <BrainCircuit
-          size={72}
-          className="relative z-10"
-          style={{ color: '#ED4B00' }}
-        />
-      </div>
-
-      <div className="flex flex-col gap-2 max-w-md">
-        <h1
-          className="text-2xl font-bold tracking-tight"
-          style={{ color: 'var(--ga-text-primary, #F2F3F4)' }}
-        >
-          GateAI Operations Hub
-        </h1>
-        <p
-          className="text-sm leading-relaxed"
-          style={{ color: 'var(--ga-text-muted, rgba(242,243,244,0.55))' }}
-        >
-          Your intelligent operations workbench is being built.
-          The Infinite Canvas will land in Phase 3.
-        </p>
-      </div>
-
-      {/* Feature roadmap pills */}
-      <div className="flex flex-wrap gap-2 justify-center mt-2">
-        {[
-          { icon: Tag, label: 'Intelligent Tags', phase: 'Phase 2' },
-          { icon: BarChart3, label: 'Live Canvas', phase: 'Phase 3' },
-          { icon: Zap, label: 'Automation Hub', phase: 'Phase 4' },
-          { icon: Sparkles, label: 'Motion & RTL', phase: 'Phase 5' },
-        ].map(({ icon: Icon, label, phase }) => (
-          <span
-            key={label}
-            className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium border"
-            style={{
-              backgroundColor: 'rgba(2, 0, 53, 0.6)',
-              borderColor: 'rgba(237, 75, 0, 0.2)',
-              color: 'rgba(242, 243, 244, 0.7)',
-            }}
-          >
-            <Icon size={11} />
-            <span>{label}</span>
-            <span
-              className="rounded-full px-1.5 py-0.5 text-[10px] font-semibold"
-              style={{ background: 'rgba(237, 75, 0, 0.15)', color: '#ED4B00' }}
-            >
-              {phase}
-            </span>
-          </span>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-/* --- TagSidebar integrated in page return --- */
+/* --- CanvasEditor integrated in page return --- */
 
 /* ─────────────── Right panel placeholder ─────────────── */
 
@@ -133,7 +68,7 @@ export default function GateAIHubPage() {
     <GateAIHubLayout
       isRtl={isRtl}
       left={<TagSidebar />}
-      center={<CanvasPlaceholder />}
+      center={<CanvasEditor />}
       right={<AIContextPlaceholder />}
     />
   );

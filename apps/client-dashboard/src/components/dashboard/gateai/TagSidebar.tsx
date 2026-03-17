@@ -175,9 +175,16 @@ export function TagSidebar() {
           tags.map((tag) => (
             <div
               key={tag.id}
-              className="group flex items-center justify-between p-2.5 rounded-md border border-transparent hover:border-[var(--ga-navy-border)] hover:bg-black/20 transition-colors"
+              draggable
+              onDragStart={(e) => {
+                e.dataTransfer.setData('application/vnd.gateai.tag.id', tag.id);
+                e.dataTransfer.setData('application/vnd.gateai.tag.name', tag.name);
+                e.dataTransfer.setData('application/vnd.gateai.tag.color', tag.color || '#ED4B00');
+                e.dataTransfer.effectAllowed = 'copy';
+              }}
+              className="group flex items-center justify-between p-2.5 rounded-md border border-transparent hover:border-[var(--ga-navy-border)] hover:bg-black/20 transition-colors cursor-grab active:cursor-grabbing"
             >
-              <div className="flex items-center gap-2.5 min-w-0">
+              <div className="flex items-center gap-2.5 min-w-0 pointer-events-none">
                 <div
                   className="w-2.5 h-2.5 rounded-full shrink-0"
                   style={{ backgroundColor: tag.color || '#ED4B00' }}
