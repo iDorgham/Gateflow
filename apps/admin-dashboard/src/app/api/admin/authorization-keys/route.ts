@@ -1,17 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { randomBytes, createHash } from 'crypto';
 import { isAdminAuthorized } from '@/lib/admin-auth';
 import { prisma } from '@gate-access/db';
 
 export const dynamic = 'force-dynamic';
 
 function generateKey(): string {
-  const { randomBytes } = require('crypto');
   const bytes = randomBytes(32);
   return `gflv_admin_${bytes.toString('base64url')}`;
 }
 
 function hashKey(key: string): string {
-  const { createHash } = require('crypto');
   return createHash('sha256').update(key).digest('hex');
 }
 
@@ -80,7 +79,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
   try {
     const body = await request.json();
-    let { name, type, expiresAt, organizationId } = body;
+    const { name, type, expiresAt, organizationId } = body;
 
     if (!name || !type) {
       return NextResponse.json(
@@ -115,7 +114,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const created = await prisma.adminAuthorizationKey.create({
       data: {
         name,
-        type: upperType as any,
+        type: upperType as 'ADMIN' | 'SERVICE',
         keyHash,
         keyPrefix,
         expiresAt: expiresAt ? new Date(expiresAt) : null,

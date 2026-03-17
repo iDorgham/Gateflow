@@ -44,11 +44,11 @@ export function Pagination({
   const Item = ({ page, active, disabled, children }: { page: number; active?: boolean; disabled?: boolean; children: React.ReactNode }) => {
     const commonClass = cn(
       'inline-flex items-center justify-center rounded-lg text-sm font-bold transition-all',
-      'min-w-[36px] h-9 px-2',
+      'min-w-[32px] h-8 px-2',
       active
         ? 'bg-[var(--ds-background-selected,#DEEBFF)] text-[var(--ds-text-selected,#0747A6)] shadow-sm'
-        : 'text-[var(--ds-text-subtle,#42526E)] hover:bg-[var(--ds-background-neutral-subtle,#F4F5F7)] dark:hover:bg-[#2C333A]',
-      disabled && 'opacity-30 pointer-events-none cursor-not-allowed border-dashed'
+        : 'text-[var(--ds-text-subtle,#42526E)] hover:bg-[var(--ds-background-neutral-subtle-hovered,#EBECF0)]',
+      disabled && 'opacity-30 pointer-events-none cursor-not-allowed'
     );
 
     if (getHref && !disabled) {

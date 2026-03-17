@@ -199,9 +199,9 @@ export default async function ScansPage({
             href={exportHref}
             target="_blank"
             variant="outline"
-            className="h-9 px-4 border-[#DFE1E6] dark:border-[#343A46] text-[#42526E] dark:text-[#A5ADBA] font-bold hover:bg-[#F4F5F7] dark:hover:bg-[#2C333A] rounded-lg shadow-sm group"
+            className="h-9 px-4 border-[var(--ds-border,#DFE1E6)] text-[var(--ds-text-subtle,#42526E)] font-bold hover:bg-[var(--ds-background-neutral-subtle-hovered,#EBECF0)] rounded-lg shadow-sm group"
           >
-            <Download className="h-4 w-4 mr-2 group-hover:text-[#0052CC] transition-colors" />
+            <Download className="h-4 w-4 mr-2 group-hover:text-[var(--ds-icon-brand,#0052CC)] transition-colors" />
             {t('common.export', { defaultValue: 'Export Logs' })}
           </Button>
         ]}

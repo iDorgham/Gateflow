@@ -33,11 +33,10 @@ interface ScanLog {
 interface GlobalScansTableProps {
   scans: ScanLog[];
   locale: string;
-  t: (key: string, options?: any) => string;
 }
 
-function ScanStatusBadge({ status, t }: { status: string; t: any }) {
-  const styles: Record<string, { variant: "success" | "danger" | "warning" | "default"; icon: any }> = {
+function ScanStatusBadge({ status }: { status: string }) {
+  const styles: Record<string, { variant: 'success' | 'danger' | 'warning' | 'default'; icon: typeof CheckCircle2 }> = {
     SUCCESS: { variant: 'success', icon: CheckCircle2 },
     DENIED: { variant: 'danger', icon: XCircle },
     FAILED: { variant: 'danger', icon: AlertCircle },
@@ -57,7 +56,7 @@ function ScanStatusBadge({ status, t }: { status: string; t: any }) {
   );
 }
 
-export function GlobalScansTable({ scans, locale, t }: GlobalScansTableProps) {
+export function GlobalScansTable({ scans, locale }: GlobalScansTableProps) {
   const columns = useMemo<Column<ScanLog>[]>(() => [
     {
       key: 'identity',
@@ -65,16 +64,16 @@ export function GlobalScansTable({ scans, locale, t }: GlobalScansTableProps) {
       render: (scan) => (
         <div className="flex items-center gap-3">
           <div className={cn(
-            'flex h-9 w-9 items-center justify-center rounded-lg shadow-sm transition-all group-hover:bg-[var(--ds-background-brand-bold,#0052CC)] group-hover:text-white',
-            scan.user ? 'bg-[var(--ds-background-neutral-subtle,#F4F5F7)] text-[var(--ds-text,#172B4D)]' : 'bg-[var(--ds-background-neutral,#DFE1E6)] text-[var(--ds-text-subtle,#6B778C)]'
+            'flex h-9 w-9 items-center justify-center rounded-lg shadow-sm transition-all group-hover:bg-ds-background-brand-bold group-hover:text-ds-text-inverse',
+            scan.user ? 'bg-ds-background-neutral-subtle text-ds-text' : 'bg-ds-background-neutral text-ds-text-subtle'
           )}>
             {scan.user ? <Smartphone className="h-4 w-4" /> : <Monitor className="h-4 w-4" />}
           </div>
           <div className="flex flex-col min-w-0">
-            <span className="font-bold text-[var(--ds-text,#172B4D)] truncate leading-tight">
+            <span className="font-bold text-ds-text truncate leading-tight">
               {scan.user?.name ?? 'Anonymous Scanner'}
             </span>
-            <span className="text-[10px] font-mono text-[var(--ds-text-subtle,#6B778C)] uppercase mt-0.5">
+            <span className="text-[10px] font-mono text-ds-text-subtle uppercase mt-0.5">
               ID: {scan.scanUuid?.slice(0, 8) ?? scan.id.slice(0, 8)}
             </span>
           </div>
@@ -86,11 +85,11 @@ export function GlobalScansTable({ scans, locale, t }: GlobalScansTableProps) {
       label: 'Platform Context',
       render: (scan) => (
         <div className="flex flex-col gap-1">
-          <span className="text-[11px] font-bold text-[var(--ds-text,#172B4D)] truncate max-w-[150px] uppercase tracking-tight">
+          <span className="text-[11px] font-bold text-ds-text truncate max-w-[150px] uppercase tracking-tight">
             {scan.qrCode?.organization?.name ?? 'System Admin'}
           </span>
-          <div className="flex items-center gap-2 text-[10px] text-[var(--ds-text-subtle,#6B778C)] font-medium">
-             <span className="w-1.5 h-1.5 rounded-full bg-[var(--ds-background-brand-bold,#0052CC)]/20" />
+          <div className="flex items-center gap-2 text-[10px] text-ds-text-subtle font-medium">
+             <span className="w-1.5 h-1.5 rounded-full bg-ds-background-brand-bold/20 shadow-[0_0_0_1px_rgba(var(--ds-background-brand-bold-rgb),0.1)]" />
              {scan.gate?.name ?? 'Admin Portal'}
           </div>
         </div>
@@ -104,7 +103,7 @@ export function GlobalScansTable({ scans, locale, t }: GlobalScansTableProps) {
           <Badge variant="subtle" className="text-[9px] h-5 tracking-tight px-1.5">
             {scan.qrCode?.type ?? 'DIRECT'}
           </Badge>
-          <span className="text-[10px] font-mono text-[var(--ds-text-subtlest,#A5ADBA)]">
+          <span className="text-[10px] font-mono text-ds-text-subtlest">
             {scan.qrCode?.code?.slice(0, 10)}…
           </span>
         </div>
@@ -113,7 +112,7 @@ export function GlobalScansTable({ scans, locale, t }: GlobalScansTableProps) {
     {
       key: 'status',
       label: 'Result',
-      render: (scan) => <ScanStatusBadge status={scan.status} t={t} />,
+      render: (scan) => <ScanStatusBadge status={scan.status} />,
     },
     {
       key: 'timestamp',
@@ -123,17 +122,17 @@ export function GlobalScansTable({ scans, locale, t }: GlobalScansTableProps) {
         const date = new Date(scan.scannedAt);
         return (
           <div className="flex flex-col items-end">
-            <span className="text-xs font-bold text-[var(--ds-text,#172B4D)]">
+            <span className="text-xs font-bold text-ds-text">
               {date.toLocaleDateString(locale)}
             </span>
-            <span className="text-[10px] font-medium text-[var(--ds-text-subtle,#6B778C)]">
+            <span className="text-[10px] font-medium text-ds-text-subtle">
               {date.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' })}
             </span>
           </div>
         );
       },
     },
-  ], [locale, t]);
+  ], [locale]);
 
   return (
     <DynamicTable
@@ -141,12 +140,12 @@ export function GlobalScansTable({ scans, locale, t }: GlobalScansTableProps) {
       items={scans}
       emptyState={
         <div className="flex flex-col items-center justify-center p-20 gap-4 text-center">
-          <div className="h-20 w-20 rounded-full bg-[var(--ds-background-neutral-subtle,#F4F5F7)] flex items-center justify-center">
-            <Smartphone className="h-10 w-10 text-[var(--ds-text-subtlest,#6B778C)]" />
+          <div className="h-20 w-20 rounded-full bg-ds-background-neutral-subtle flex items-center justify-center">
+            <Smartphone className="h-10 w-10 text-ds-text-subtlest" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-[var(--ds-text,#172B4D)]">No Scan History</h3>
-            <p className="text-sm text-[var(--ds-text-subtle,#6B778C)]">No scan attempts have been recorded for the selected criteria.</p>
+            <h3 className="text-lg font-bold text-ds-text">No Scan History</h3>
+            <p className="text-sm text-ds-text-subtle">No scan attempts have been recorded for the selected criteria.</p>
           </div>
         </div>
       }

@@ -221,7 +221,7 @@ export default function AdminLoginPage() {
             <div className="space-y-2">
               <Label
                 htmlFor="key"
-                className="text-xs font-semibold text-[#42526E] dark:text-[#97A0AF]"
+                className="text-xs font-semibold text-ds-text-subtle"
               >
                 {isRtl ? 'مفتاح التفويض' : 'Access Key'}
               </Label>

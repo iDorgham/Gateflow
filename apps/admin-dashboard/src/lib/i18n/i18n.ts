@@ -17,7 +17,7 @@ export type Path<T> = T extends object
         | null
         | undefined
         ? `${K}`
-        : T[K] extends Array<any>
+        : T[K] extends Array<unknown>
         ? `${K}` | `${K}.${number}`
         : `${K}` | `${K}.${Path<T[K]>}`;
     }[keyof T & (string | number)]
@@ -27,8 +27,8 @@ export type TranslationFunction<TNamespace extends Namespace> = <
   K extends Path<Dictionary[TNamespace]>
 >(
   key: K,
-  options?: { returnObjects?: boolean; count?: number; [key: string]: any }
-) => any;
+  optionsOrValue?: { returnObjects?: boolean; count?: number; [key: string]: unknown } | string
+) => unknown;
 
 const dictionaries = {
   en: () => import('@gate-access/i18n/en').then((module) => module.default),
@@ -52,10 +52,13 @@ export async function getTranslation<N extends Namespace>(
 
   const t: TranslationFunction<N> = (
     key: string,
-    options?: { returnObjects?: boolean; count?: number; [key: string]: any }
-  ): any => {
+    optionsOrValue?: { returnObjects?: boolean; count?: number; [key: string]: unknown } | string
+  ): string | unknown => {
+    const options = typeof optionsOrValue === 'object' ? optionsOrValue : undefined;
+    const defaultValue = typeof optionsOrValue === 'string' ? optionsOrValue : undefined;
+
     // @ts-expect-error - key is a valid path string but split requires string
-    let text = key.split('.').reduce((obj, k) => (obj || {})[k], dict);
+    let text = key.split('.').reduce((obj: Record<string, unknown>, k) => (obj || {})[k], dict);
     
     if (
       options &&
@@ -69,7 +72,7 @@ export async function getTranslation<N extends Namespace>(
       text = ((options.count === 1 && pluralObj.one ? pluralObj.one : pluralObj.other) ?? text) as typeof text;
     }
 
-    if (!text) return key; 
+    if (!text) return defaultValue ?? key; 
     if (typeof text !== 'string' && !options?.returnObjects) return key;
 
     if (options && typeof text === 'string') {

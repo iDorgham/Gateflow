@@ -18,7 +18,7 @@ export default async function UsersPage({
   searchParams: SearchParams;
 }) {
   await requireAdmin();
-  const { t } = (await getTranslation(locale, 'admin')) as { t: any; dict: any };
+  const { t } = (await getTranslation(locale, 'admin')) as { t: (key: string, options?: Record<string, unknown> | string) => string };
 
   const search = searchParams.q?.trim() ?? '';
   const roleFilter = searchParams.role ?? '';
@@ -78,7 +78,7 @@ export default async function UsersPage({
         title={t('users.title')}
         subtitle={t('users.subtitle')}
         badge={
-          <Badge variant="outline" className="bg-violet-50 dark:bg-violet-900/20 text-violet-700 dark:text-violet-300 border-violet-200 dark:border-violet-800 font-bold text-xs px-2.5 py-1">
+          <Badge variant="primary" className="bg-ds-background-selected text-ds-text-selected border-ds-border-selected font-bold text-xs px-2.5 py-1">
             {activeCount.toLocaleString(locale)} active
           </Badge>
         }

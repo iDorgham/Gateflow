@@ -20,7 +20,7 @@ GateFlow uses a shared set of docs, rules, skills, and agents across Cursor, CLI
 
 - `CLAUDE.md` — global assistant guide and constraints.
 - `.antigravity/rules/01-gateflow-ai-workflow.mdc` — AI workflow rules and slash command surface.
-- `docs/plan/guidelines/DEVELOPMENT_WORKFLOWS.md` — commands and workflows.
+- `docs/guides/DEVELOPMENT_GUIDE.md` — commands and workflows.
 
 ---
 
@@ -77,8 +77,8 @@ Security is enforced at three layers: **core rules**, **contracts**, and **speci
     - Multi‑tenancy, soft deletes, QR security and `scanUuid` invariants, authentication, input validation, secrets/tokens, pnpm‑only, workspace imports.
     - Use this as the **authoritative invariant list** for implementation and code review.
 - **Security overview docs**
-  - `docs/SECURITY_OVERVIEW.md` — high‑level security architecture.
-  - `docs/CODE_QUALITY_AND_PERFORMANCE_AUDIT.md` — security and quality checks.
+  - `docs/guides/SECURITY_OVERVIEW.md` — high‑level security architecture.
+  - `docs/architecture/CODE_QUALITY_AND_PERFORMANCE_AUDIT.md` — security and quality checks.
 
 > **Security rule for agents/tools:** Before changing auth, RBAC, QR flows, scanner sync, or any API that touches tenant data, always load:
 > - `.antigravity/skills/gf-security/SKILL.md`
@@ -137,8 +137,8 @@ For any new automation, CI hook, or external tool, start by reading **this file*
 
 - `CLAUDE.md`
 - `docs/plan/guidelines/AI_SKILLS_SUBAGENTS_RULES.md`
-- `docs/plan/guidelines/DEVELOPMENT_WORKFLOWS.md`
-- `docs/guides/ENVIRONMENT_VARIABLES.md` (or `docs/ENVIRONMENT_VARIABLES.md` if present)
+- `docs/guides/DEVELOPMENT_GUIDE.md`
+- `docs/guides/ENVIRONMENT_VARIABLES.md`
 
 ---
 
@@ -147,7 +147,7 @@ For any new automation, CI hook, or external tool, start by reading **this file*
 GateFlow has a **workspace guide** that understands the full setup (skills, agents, rules, commands, templates, contracts) and can steer the user and automation.
 
 - **Skill:** `.antigravity/skills/gf-guide/SKILL.md`
-  - Workspace map (GATEFLOW_CONFIG, docs, plan, commands, agents, contracts).
+  - Workspace map (GATEFLOW_CONFIG, docs, architecture, plan, product, commands, agents, contracts).
   - Pre‑flight before tasks (git, preflight, blocking phase, security).
   - Post‑task summary (must do, recommended, critical, improvements).
   - “What should I do now?” and optional super‑power mode (follow plan, use hierarchy, run CLIs and checks).

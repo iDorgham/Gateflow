@@ -1,7 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -12,18 +11,8 @@ import {
   Users,
   ScanLine,
   LogOut,
-  ShieldCheck,
-  FolderOpen,
-  DoorOpen,
-  BarChart3,
-  ScrollText,
-  Activity,
-  Settings,
   Shield,
   ChevronLeft,
-  ChevronRight,
-  CreditCard,
-  KeyRound,
   HelpCircle,
 } from 'lucide-react';
 import { 
@@ -87,14 +76,12 @@ export function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const { t, i18n } = useTranslation();
-  const [signingOut, setSigningOut] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
   const navGroups = getNavGroups(t);
   const localePrefix = `/${i18n.language}`;
 
   async function handleSignOut() {
-    setSigningOut(true);
     await fetch('/api/admin/login', { method: 'DELETE' });
     router.push('/login');
     router.refresh();

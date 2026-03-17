@@ -3,8 +3,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import {
-  Card,
-  CardContent,
   Badge,
   Button,
   Input,
@@ -18,7 +16,6 @@ import {
   Users,
   QrCode,
   ScanLine,
-  Filter,
   X,
   ShieldAlert,
   ShieldCheck,
@@ -60,13 +57,13 @@ export function OrgsClient({ orgs, locale, search, planFilter, statusFilter, tot
         <div className="flex items-center gap-4">
           <div className={cn(
             'flex h-10 w-10 items-center justify-center rounded-lg font-bold text-xs uppercase shadow-sm shrink-0',
-            org.deletedAt ? 'bg-[var(--ds-background-neutral,#DFE1E6)] text-[var(--ds-text-subtle,#6B778C)]' : 'bg-[var(--ds-background-brand-bold,#0052CC)] text-white'
+            org.deletedAt ? 'bg-[var(--ds-background-neutral,#DFE1E6)] text-[var(--ds-text-subtle,#6B778C)]' : 'bg-[var(--ds-background-brand-bold,#0052CC)] text-[var(--ds-text-inverse,#FFFFFF)]'
           )}>
             {org.name.substring(0, 2)}
           </div>
           <div className="flex flex-col min-w-0">
-            <span className="font-bold text-[var(--ds-text,#172B4D)] truncate">{org.name}</span>
-            <span className="text-[11px] text-[var(--ds-text-subtle,#6B778C)] truncate">{org.email}</span>
+            <span className="font-bold text-[var(--ds-text,#172B4D)] text-sm truncate">{org.name}</span>
+            <span className="text-xs text-[var(--ds-text-subtle,#6B778C)] truncate">{org.email}</span>
           </div>
         </div>
       ),
@@ -105,9 +102,9 @@ export function OrgsClient({ orgs, locale, search, planFilter, statusFilter, tot
       key: 'status',
       label: 'Status',
       render: (org) => (
-        <Badge variant={org.deletedAt ? 'warning' : 'success'} className="h-6">
+        <Badge variant={org.deletedAt ? 'default' : 'success'} className="h-6">
           {org.deletedAt ? (
-            <span className="flex items-center gap-1.5"><ShieldAlert className="h-3 w-3" /> Suspended</span>
+            <span className="flex items-center gap-1.5 text-[var(--ds-text-subtle,#6B778C)]"><ShieldAlert className="h-3 w-3" /> Suspended</span>
           ) : (
             <span className="flex items-center gap-1.5"><ShieldCheck className="h-3 w-3" /> Active</span>
           )}
@@ -145,7 +142,7 @@ export function OrgsClient({ orgs, locale, search, planFilter, statusFilter, tot
               name="q"
               defaultValue={search}
               placeholder="Search organizations…"
-              className="pl-10 h-10 rounded-lg bg-[var(--ds-background-neutral-subtle,#F4F5F7)] border-none focus:bg-white transition-all shadow-inner"
+              className="pl-10 h-10 rounded-lg bg-[var(--ds-background-neutral-subtle,#F4F5F7)] border-[var(--ds-border,#DFE1E6)] focus:bg-[var(--ds-background-default,#FFFFFF)] transition-all shadow-inner"
             />
           </div>
           
@@ -170,10 +167,10 @@ export function OrgsClient({ orgs, locale, search, planFilter, statusFilter, tot
           </div>
 
           <div className="flex items-center gap-2">
-            <Button type="submit" variant="primary" className="h-10 px-6 font-bold shadow-md">
+            <Button type="submit" variant="primary" className="h-10 px-6 font-bold shadow-sm">
               Filter
             </Button>
-            <Button variant="subtle" className="h-10 w-10 p-0" asChild>
+            <Button variant="subtle" className="h-10 w-10 p-0 rounded-lg" asChild>
               <Link href="organizations">
                 <X className="h-4 w-4" />
               </Link>

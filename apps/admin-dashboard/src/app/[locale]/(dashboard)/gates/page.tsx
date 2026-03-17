@@ -11,7 +11,6 @@ import {
   Filter,
   X,
   MapPin,
-  Calendar,
   CheckCircle2,
   XCircle,
   FolderOpen,
@@ -105,10 +104,8 @@ export default async function GatesPage({
     },
   });
 
-  const [totalActive, totalInactive, totalDeleted] = await Promise.all([
+  const [totalActive] = await Promise.all([
     prisma.gate.count({ where: { deletedAt: null, isActive: true } }),
-    prisma.gate.count({ where: { deletedAt: null, isActive: false } }),
-    prisma.gate.count({ where: { NOT: { deletedAt: null } } }),
   ]);
 
   return (

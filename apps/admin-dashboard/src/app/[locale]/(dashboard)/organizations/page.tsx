@@ -18,7 +18,7 @@ export default async function OrganizationsPage({
   searchParams: SearchParams;
 }) {
   await requireAdmin();
-  const { t } = (await getTranslation(locale, 'admin')) as { t: any; dict: any };
+  const { t } = (await getTranslation(locale, 'admin')) as { t: (key: string, options?: Record<string, unknown> | string) => string };
 
   const search = searchParams.q?.trim() ?? '';
   const planFilter = searchParams.plan ?? '';
@@ -96,7 +96,7 @@ export default async function OrganizationsPage({
         title={t('organizations.title')}
         subtitle={t('organizations.subtitle')}
         badge={
-          <Badge variant="outline" className="bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800 font-bold text-xs px-2.5 py-1">
+          <Badge variant="primary" className="bg-ds-background-selected text-ds-text-selected border-ds-border-selected/30 font-bold text-xs px-2.5 py-1">
             {total.toLocaleString(locale)}
           </Badge>
         }

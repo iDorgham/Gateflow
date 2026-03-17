@@ -57,7 +57,6 @@ function formatDate(iso: string): string {
 
 export function AuthKeysClient() {
   const [keys, setKeys] = useState<AuthKey[]>([]);
-  const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<FilterTab>('active');
   const [showCreate, setShowCreate] = useState(false);
   const [revokeTarget, setRevokeTarget] = useState<AuthKey | null>(null);
@@ -78,10 +77,8 @@ export function AuthKeysClient() {
         }
       } catch {
         // Keep empty on error
-      } finally {
-        setLoading(false);
       }
-    }
+    };
     fetchKeys();
   }, []);
 
@@ -94,7 +91,7 @@ export function AuthKeysClient() {
     setError('');
     startCreate(async () => {
       try {
-        const payload: any = { name, type: type.toUpperCase(), expiresAt };
+        const payload: Record<string, unknown> = { name, type: type.toUpperCase(), expiresAt };
         if (type === 'service' && organizationId) {
           payload.organizationId = organizationId;
         }

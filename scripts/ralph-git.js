@@ -4,7 +4,7 @@ const command = process.argv[2];
 const slug = process.argv[3];
 const phase = process.argv[4];
 
-if (!command || !slug || !phase) {
+if (!command || !slug || (command !== 'status' && !phase)) {
   console.error('Usage: node ralph-git.js <command> <slug> <phase>');
   process.exit(1);
 }

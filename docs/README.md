@@ -292,13 +292,14 @@ pnpm turbo typecheck
 
 | Document                                                 | Description                   |
 | -------------------------------------------------------- | ----------------------------- |
-| [PRD v7.0](./docs/PRD_v7.0.md)                           | Complete product requirements |
+| [PRD v8.0 Comprehensive](./docs/product/PRD_v8.0_COMPREHENSIVE.md) | Full Platform Blueprint & Specs |
+| [PRD v8.0 Summary](./docs/product/PRD_v8.0.md)           | Roadmap & Strategy Overview |
+| [Antigravity Skills](./docs/guides/ANTIGRAVITY_SKILLS.md) | AI system capabilities guide |
 | [Project Progress](./docs/PROJECT_PROGRESS_DASHBOARD.md) | MVP completion status         |
-| [Development Guide](./docs/DEVELOPMENT_GUIDE.md)         | Local setup and workspace     |
-| [Security Overview](./docs/SECURITY_OVERVIEW.md)         | Security architecture         |
-| [Seeding Matrix Guide](./docs/SEEDING_MATRIX_GUIDE.md)     | Data generation tool      |
-| [Analytics Charts Guide](./docs/ANALYTICS_CHARTS_GUIDE.md)   | Chart & data requirements |
-| [API Reference](./docs/PRD_v7.0.md#11-api-reference)     | REST API documentation        |
+| [Development Guide](./docs/guides/DEVELOPMENT_GUIDE.md)   | Local setup and workspace     |
+| [Architecture Overview](./docs/architecture/ARCHITECTURE.md) | System-level design       |
+| [Security Overview](./docs/architecture/ARCHITECTURE.md) | Security architecture         |
+| [API Reference](./docs/product/PRD_v8.0.md)              | REST API documentation        |
 
 ---
 

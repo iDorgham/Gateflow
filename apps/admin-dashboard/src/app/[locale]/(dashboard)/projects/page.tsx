@@ -90,9 +90,8 @@ export default async function ProjectsPage({
     },
   });
 
-  const [totalActive, totalArchived] = await Promise.all([
+  const [totalActive] = await Promise.all([
     prisma.project.count({ where: { deletedAt: null } }),
-    prisma.project.count({ where: { NOT: { deletedAt: null } } }),
   ]);
 
   return (

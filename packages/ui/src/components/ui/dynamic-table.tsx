@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { ChevronUp, ChevronDown, MoreHorizontal, Search } from 'lucide-react';
+import { ChevronUp, ChevronDown, Search } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { 
   Table, 
@@ -98,7 +98,7 @@ export function DynamicTable<T extends { id: string | number }>({
                 key={column.key}
                 style={{ width: column.width }}
                 className={cn(
-                  'h-10 text-[var(--ds-text-subtle,#42526E)] font-bold text-xs uppercase tracking-wider',
+                  'h-11 text-[var(--ds-text-subtle,#42526E)] font-bold text-xs uppercase tracking-wider px-4',
                   column.align === 'center' && 'text-center',
                   column.align === 'right' && 'text-right'
                 )}
@@ -106,18 +106,21 @@ export function DynamicTable<T extends { id: string | number }>({
                 {column.isSortable ? (
                   <button
                     onClick={() => handleSort(column.key)}
-                    className="flex items-center gap-1 hover:text-[var(--ds-text,#172B4D)] transition-colors group"
+                    className={cn(
+                      "flex items-center gap-1.5 hover:text-[var(--ds-text,#172B4D)] transition-colors group p-1 -m-1 rounded",
+                      sortKey === column.key && "text-[var(--ds-text-selected,#0747A6)]"
+                    )}
                   >
                     {column.label}
-                    <div className="flex flex-col opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="flex flex-col">
                       {sortKey === column.key ? (
                         sortOrder === 'asc' ? (
-                          <ChevronUp className="h-3 w-3 text-[var(--ds-text-brand,#0052CC)] opacity-100" />
+                          <ChevronUp className="h-3.5 w-3.5 text-[var(--ds-icon-selected,#0052CC)]" />
                         ) : (
-                          <ChevronDown className="h-3 w-3 text-[var(--ds-text-brand,#0052CC)] opacity-100" />
+                          <ChevronDown className="h-3.5 w-3.5 text-[var(--ds-icon-selected,#0052CC)]" />
                         )
                       ) : (
-                        <ChevronUp className="h-3 w-3 opacity-30" />
+                        <ChevronUp className="h-3.5 w-3.5 opacity-0 group-hover:opacity-30 transition-opacity" />
                       )}
                     </div>
                   </button>
@@ -156,7 +159,7 @@ export function DynamicTable<T extends { id: string | number }>({
                 key={item.id}
                 onClick={() => onRowClick?.(item)}
                 className={cn(
-                  'group border-b border-[var(--ds-border-subtle,#EBECF0)] hover:bg-[var(--ds-background-neutral-subtle,#F4F5F7)] transition-colors cursor-pointer',
+                  'group border-b border-[var(--ds-border-subtle,#EBECF0)] hover:bg-[var(--ds-background-neutral-subtle-hovered,#EBECF0)] transition-colors cursor-pointer',
                   selectedIds.includes(item.id) && 'bg-[var(--ds-background-selected,#DEEBFF)] hover:bg-[var(--ds-background-selected-hovered,#B3D4FF)]',
                   rowClassName?.(item)
                 )}

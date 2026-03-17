@@ -6,10 +6,6 @@ import { Card, CardContent, CardHeader, CardTitle, Badge, cn } from '@gate-acces
 import {
   Database,
   Zap,
-  Activity,
-  Building2,
-  Users,
-  Clock,
   Globe,
   CheckCircle2,
   AlertCircle,

@@ -110,7 +110,6 @@ export default async function AnalyticsPage({
     _count: { id: true },
   });
   const planMap = Object.fromEntries(planGroups.map((p) => [p.plan, p._count.id]));
-  const totalOrgs = planGroups.reduce((a, b) => a + b._count.id, 0) || 1;
   const planChartData = ['FREE', 'PRO', 'ENTERPRISE'].map((plan) => ({
     plan,
     count: planMap[plan] ?? 0,

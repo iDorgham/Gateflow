@@ -11,12 +11,27 @@ import {
   History,
   FileText,
 } from 'lucide-react';
-import { Badge, Button, Input, cn, Pagination } from '@gate-access/ui';
+import { Badge, Button, Input, Pagination } from '@gate-access/ui';
 import Link from 'next/link';
 import { PageHeader } from '@/components/page-header';
 import { AuditLogsTable } from '@/components/monitoring/AuditLogsTable';
 
 export const metadata = { title: 'Compliance Audit Archive' };
+
+interface AuditLog {
+  id: string;
+  scanUuid: string | null;
+  status: string;
+  scannedAt: Date;
+  auditTrail: Record<string, unknown>[];
+  gate: { name: string } | null;
+  qrCode: {
+    type: string;
+    code: string;
+    organization: { id: string; name: string } | null;
+  } | null;
+  user: { name: string; email: string } | null;
+}
 
 interface SearchParams {
   org?: string;
@@ -37,7 +52,7 @@ export default async function AuditLogsPage({
   searchParams: SearchParams;
 }) {
   await requireAdmin();
-  const { t } = (await getTranslation(locale, 'admin')) as { t: any; dict: any };
+  const { t } = (await getTranslation(locale, 'admin')) as { t: (key: string, options?: Record<string, unknown> | string) => string };
 
   const page = Math.max(1, parseInt(searchParams.page ?? '1', 10));
   const skip = (page - 1) * PAGE_SIZE;
@@ -114,9 +129,9 @@ export default async function AuditLogsPage({
           </Badge>
         }
         actions={
-          <Button variant="outline" size="sm" asChild className="font-bold gap-2 h-10 px-6 rounded-lg border-[var(--ds-border,#DFE1E6)] hover:bg-[var(--ds-background-neutral-subtle,#F4F5F7)] transition-all">
+          <Button variant="outline" size="sm" asChild className="font-bold gap-2 h-10 px-6 rounded-lg border-ds-border hover:bg-ds-background-neutral-subtle transition-all">
             <a href={exportUrl} download>
-              <Download className="h-4 w-4 text-[var(--ds-text-brand,#0052CC)]" />
+              <Download className="h-4 w-4 text-ds-text-brand" />
               {t('auditLogs.exportCsv')}
             </a>
           </Button>
@@ -124,48 +139,48 @@ export default async function AuditLogsPage({
       />
 
       {/* Advanced Filters */}
-      <div className="bg-[var(--ds-background-default,#FFFFFF)] border border-[var(--ds-border,#DFE1E6)] rounded-xl p-5 shadow-sm space-y-6">
+      <div className="bg-ds-background-default border border-ds-border rounded-xl p-5 shadow-sm space-y-6">
         <form method="GET" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-5 items-end">
           <div className="space-y-2 lg:col-span-2">
-            <label className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-[var(--ds-text-subtle,#6B778C)] ltr:ml-1 rtl:mr-1">
+            <label className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-ds-text-subtle ltr:ml-1 rtl:mr-1">
               <Building2 className="h-3 w-3" />
               {t('auditLogs.organization')}
             </label>
             <div className="relative group">
-              <Building2 className="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--ds-text-subtlest,#A5ADBA)] group-focus-within:text-[var(--ds-text-brand,#0052CC)] transition-colors" />
+              <Building2 className="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-ds-text-subtlest group-focus-within:text-ds-text-brand transition-colors" />
               <Input
                 name="org"
                 defaultValue={orgFilter}
                 placeholder={t('auditLogs.filterByOrg')}
-                className="ltr:pl-9 rtl:pr-9 h-11 bg-[var(--ds-background-neutral-subtle,#F4F5F7)] border-none rounded-lg focus:bg-white transition-all shadow-inner"
+                className="ltr:pl-9 rtl:pr-9 h-11 bg-ds-background-neutral-subtle border-ds-border rounded-lg focus:bg-ds-background-default transition-all shadow-inner"
               />
             </div>
           </div>
           
           <div className="space-y-2">
-            <label className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-[var(--ds-text-subtle,#6B778C)] ltr:ml-1 rtl:mr-1">
+            <label className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-ds-text-subtle ltr:ml-1 rtl:mr-1">
               <FileText className="h-3 w-3" />
               {t('auditLogs.scanUuid', 'Event UUID')}
             </label>
             <div className="relative group">
-              <Search className="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--ds-text-subtlest,#A5ADBA)] group-focus-within:text-[var(--ds-text-brand,#0052CC)] transition-colors" />
+              <Search className="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-ds-text-subtlest group-focus-within:text-ds-text-brand transition-colors" />
               <Input
                 name="q"
                 defaultValue={uuidFilter}
                 placeholder={t('auditLogs.uuidPlaceholder')}
-                className="ltr:pl-9 rtl:pr-9 h-11 bg-[var(--ds-background-neutral-subtle,#F4F5F7)] border-none rounded-lg focus:bg-white transition-all shadow-inner"
+                className="ltr:pl-9 rtl:pr-9 h-11 bg-ds-background-neutral-subtle border-ds-border rounded-lg focus:bg-ds-background-default transition-all shadow-inner"
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <label className="text-[11px] font-black uppercase tracking-widest text-[var(--ds-text-subtle,#6B778C)] ltr:ml-1 rtl:mr-1">
+            <label className="text-[11px] font-black uppercase tracking-widest text-ds-text-subtle ltr:ml-1 rtl:mr-1">
               {t('auditLogs.status')}
             </label>
             <select
               name="status"
               defaultValue={statusFilter}
-              className="w-full h-11 rounded-lg border border-[var(--ds-border,#DFE1E6)] bg-white px-4 text-xs font-bold text-[var(--ds-text,#172B4D)] focus:outline-none focus:ring-2 focus:ring-[var(--ds-border-focused,#4C9AFF)]"
+              className="w-full h-11 rounded-lg border border-ds-border bg-ds-background-default px-4 text-xs font-bold text-ds-text focus:outline-none focus:ring-2 focus:ring-ds-border-focused"
             >
               <option value="">{t('auditLogs.all')}</option>
               {['SUCCESS', 'DENIED', 'FAILED', 'EXPIRED', 'MAX_USES_REACHED', 'INACTIVE'].map((s) => (
@@ -175,21 +190,21 @@ export default async function AuditLogsPage({
           </div>
 
           <div className="space-y-2">
-            <label className="text-[11px] font-black uppercase tracking-widest text-[var(--ds-text-subtle,#6B778C)] ltr:ml-1 rtl:mr-1">
+            <label className="text-[11px] font-black uppercase tracking-widest text-ds-text-subtle ltr:ml-1 rtl:mr-1">
                Audit Window (From/To)
             </label>
-            <div className="grid grid-cols-2 gap-2 h-11 p-1 bg-[var(--ds-background-neutral-subtle,#F4F5F7)] rounded-lg border border-[var(--ds-border,#DFE1E6)]">
+            <div className="grid grid-cols-2 gap-2 h-11 p-1 bg-ds-background-neutral-subtle rounded-lg border border-ds-border">
                <input
                  type="date"
                  name="from"
                  defaultValue={searchParams.from ?? ''}
-                 className="bg-transparent border-none text-[11px] font-bold text-[var(--ds-text,#172B4D)] px-2 outline-none"
+                 className="bg-transparent border-none text-[11px] font-bold text-ds-text px-2 outline-none"
                />
                <input
                  type="date"
                  name="to"
                  defaultValue={searchParams.to ?? ''}
-                 className="bg-transparent border-none text-[11px] font-bold text-[var(--ds-text,#172B4D)] px-2 outline-none"
+                 className="bg-transparent border-none text-[11px] font-bold text-ds-text px-2 outline-none"
                />
             </div>
           </div>
@@ -209,14 +224,14 @@ export default async function AuditLogsPage({
       </div>
 
       {/* Table Container */}
-      <div className="bg-[var(--ds-background-default,#FFFFFF)] border border-[var(--ds-border,#DFE1E6)] rounded-xl shadow-md overflow-hidden">
-        <AuditLogsTable logs={logs as any} locale={locale} t={t} />
+      <div className="bg-ds-background-default border border-ds-border rounded-xl shadow-md overflow-hidden">
+        <AuditLogsTable logs={logs as AuditLog[]} locale={locale} />
       </div>
 
       {/* Pagination & Footer */}
       <div className="flex flex-col md:flex-row items-center justify-between gap-6 px-1">
-        <div className="flex items-center gap-3 text-[11px] font-black uppercase tracking-tighter text-[var(--ds-text-subtlest,#A5ADBA)]">
-           <Shield className="h-4 w-4 text-[var(--ds-text-brand,#0052CC)]" />
+        <div className="flex items-center gap-3 text-[11px] font-black uppercase tracking-tighter text-ds-text-subtlest">
+           <Shield className="h-4 w-4 text-ds-text-brand" />
            <p>{t('auditLogs.auditNotice')}</p>
         </div>
 
@@ -229,7 +244,7 @@ export default async function AuditLogsPage({
         />
       </div>
 
-      <div className="pt-6 border-t border-[var(--ds-border,#DFE1E6)] flex justify-between items-center text-[10px] font-black uppercase tracking-[0.2em] text-[var(--ds-text-subtlest,#A5ADBA)] opacity-60">
+      <div className="pt-6 border-t border-ds-border flex justify-between items-center text-[10px] font-black uppercase tracking-[0.2em] text-ds-text-subtlest opacity-60">
          <span className="flex items-center gap-2">
             <History className="h-4 w-4" />
             Immutable Audit Trail Engine

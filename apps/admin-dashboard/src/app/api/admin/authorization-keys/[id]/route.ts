@@ -26,7 +26,8 @@ export async function DELETE(
     });
   } catch (error) {
     const msg = error instanceof Error ? error.message : String(error);
-    console.error(`DELETE /api/admin/authorization-keys/${(params as any).id} error:`, msg);
+    const { id } = await params;
+    console.error(`DELETE /api/admin/authorization-keys/${id} error:`, msg);
     return NextResponse.json(
       { success: false, message: `Failed to revoke authorization key: ${msg}` },
       { status: 500 }

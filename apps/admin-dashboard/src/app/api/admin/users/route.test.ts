@@ -13,7 +13,7 @@ jest.mock('@gate-access/db', () => ({
   },
 }));
 
-const { isAdminAuthenticated, isAdminAuthorized } = require('@/lib/admin-auth');
+import { isAdminAuthorized } from '@/lib/admin-auth';
 
 class MockNextRequest {
   url: string;
@@ -24,14 +24,14 @@ describe('GET /api/admin/users', () => {
   beforeEach(() => jest.clearAllMocks());
 
   it('returns 401 if not authenticated', async () => {
-    isAdminAuthorized.mockResolvedValue(false);
+    (isAdminAuthorized as jest.Mock).mockResolvedValue(false);
     const { GET } = await import('./route');
     const res = await GET(new MockNextRequest('http://localhost/en/api/admin/users') as never);
     expect(res.status).toBe(401);
   });
 
   it('returns user list when authenticated', async () => {
-    isAdminAuthorized.mockResolvedValue(true);
+    (isAdminAuthorized as jest.Mock).mockResolvedValue(true);
     const { GET } = await import('./route');
     const res = await GET(new MockNextRequest('http://localhost/en/api/admin/users') as never);
     expect(res.status).toBe(200);

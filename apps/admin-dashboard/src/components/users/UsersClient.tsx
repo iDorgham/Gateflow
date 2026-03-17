@@ -5,7 +5,6 @@ import Link from 'next/link';
 import {
   Badge,
   Button,
-  Input,
   cn,
   DynamicTable,
   Column,
@@ -13,7 +12,6 @@ import {
 import {
   Users,
   Search,
-  Filter,
   X,
   ShieldAlert,
   ShieldCheck,
@@ -42,7 +40,7 @@ interface UsersClientProps {
   roles: { id: string; name: string }[];
 }
 
-export function UsersClient({ users, locale, search, roleFilter, statusFilter, total, roles }: UsersClientProps) {
+export function UsersClient({ users, search, roleFilter, statusFilter, total, roles }: UsersClientProps) {
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
 
   const columns = useMemo<Column<User>[]>(() => [
@@ -55,7 +53,7 @@ export function UsersClient({ users, locale, search, roleFilter, statusFilter, t
           <div className="flex items-center gap-3">
             <div className={cn(
               'flex h-9 w-9 items-center justify-center rounded-full font-bold text-[10px] uppercase shadow-sm shrink-0',
-              user.deletedAt ? 'bg-[var(--ds-background-neutral,#DFE1E6)] text-[var(--ds-text-subtle,#6B778C)]' : 'bg-[var(--ds-background-brand-bold,#0052CC)] text-white'
+              user.deletedAt ? 'bg-[var(--ds-background-neutral,#DFE1E6)] text-[var(--ds-text-subtle,#6B778C)]' : 'bg-[var(--ds-background-brand-bold,#0052CC)] text-[var(--ds-text-inverse,#FFFFFF)]'
             )}>
               {initials}
             </div>
@@ -76,7 +74,7 @@ export function UsersClient({ users, locale, search, roleFilter, statusFilter, t
             <span className="text-[11px] font-bold text-[var(--ds-text,#172B4D)] truncate max-w-[140px] uppercase tracking-tight">
               {user.organization.name}
             </span>
-            <Badge variant={user.organization.plan === 'PRO' ? 'secondary' : 'subtle'} className="w-fit text-[9px] h-4 px-1.5">
+            <Badge variant={user.organization.plan === 'PRO' ? 'primary' : 'subtle'} className="w-fit text-[9px] h-4 px-1.5 border-[var(--ds-border-selected,#B3D4FF)]/30 font-bold">
               {user.organization.plan}
             </Badge>
           </div>
@@ -101,9 +99,9 @@ export function UsersClient({ users, locale, search, roleFilter, statusFilter, t
       key: 'status',
       label: 'Status',
       render: (user) => (
-        <Badge variant={user.deletedAt ? 'warning' : 'success'} className="h-6">
+        <Badge variant={user.deletedAt ? 'default' : 'success'} className="h-6">
           {user.deletedAt ? (
-             <span className="flex items-center gap-1.5"><ShieldAlert className="h-3 w-3" /> Suspended</span>
+             <span className="flex items-center gap-1.5 text-[var(--ds-text-subtle,#6B778C)]"><ShieldAlert className="h-3 w-3" /> Suspended</span>
           ) : (
              <span className="flex items-center gap-1.5"><ShieldCheck className="h-3 w-3" /> Active</span>
           )}
@@ -141,7 +139,7 @@ export function UsersClient({ users, locale, search, roleFilter, statusFilter, t
               name="q"
               defaultValue={search}
               placeholder="Search by name or email…"
-              className="w-full h-10 pl-10 pr-4 rounded-lg bg-[var(--ds-background-neutral-subtle,#F4F5F7)] border-none text-sm font-medium focus:bg-white transition-all shadow-inner focus:ring-2 focus:ring-[var(--ds-border-focused,#4C9AFF)] outline-none"
+              className="w-full h-10 pl-10 pr-4 rounded-lg bg-[var(--ds-background-neutral-subtle,#F4F5F7)] border-[var(--ds-border,#DFE1E6)] focus:border-[var(--ds-border-focused,#4C9AFF)] text-sm font-medium focus:bg-[var(--ds-background-default,#FFFFFF)] transition-all shadow-inner outline-none"
             />
           </div>
           <div className="flex items-center gap-3">

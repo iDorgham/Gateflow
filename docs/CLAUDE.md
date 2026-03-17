@@ -40,7 +40,7 @@ Gate-Access/
 ## Essential Commands
 
 ```bash
-# Slash commands (Cursor): /ready (pre-dev), /run, /run all, /guide, /plan, /github, etc.
+# Slash commands (Cursor): /ready, /run, /run all, /guide, /plan, /github, /dev, /dev ralph (recursive autopilot).
 
 # Install dependencies (pnpm ONLY — never npm or yarn)
 pnpm install

@@ -192,13 +192,13 @@ export default function QRCodesPage() {
             key="export"
             variant="outline" 
             onClick={() => triggerDownload(buildExportUrl())} 
-            className="h-9 px-4 border-[#DFE1E6] dark:border-[#343A46] text-[#42526E] dark:text-[#A5ADBA] font-bold hover:bg-[#F4F5F7] dark:hover:bg-[#2C333A] rounded-lg shadow-sm transition-all active:scale-95 flex items-center gap-2 group"
+            className="h-9 px-4 border-[var(--ds-border,#DFE1E6)] text-[var(--ds-text-subtle,#42526E)] font-bold hover:bg-[var(--ds-background-neutral-subtle-hovered,#EBECF0)] rounded-lg shadow-sm transition-all active:scale-95 flex items-center gap-2 group"
           >
-            <Download className="h-4 w-4 text-[#6B778C] group-hover:text-[#0052CC] transition-colors" />
+            <Download className="h-4 w-4 text-[var(--ds-icon-subtle,#6B778C)] group-hover:text-[var(--ds-icon-brand,#0052CC)] transition-colors" />
             {t('common.export', 'Export')}
           </Button>,
           <Link key="create" href={`/${locale}/dashboard/qrcodes/create`}>
-            <Button className="h-9 px-5 bg-[#0052CC] hover:bg-[#0747A6] text-white font-bold rounded-lg shadow-[0_2px_4px_rgba(0,82,204,0.2)] transition-all active:scale-95 flex items-center gap-2">
+            <Button className="h-9 px-5 bg-[var(--ds-background-brand-bold,#0052CC)] hover:bg-[var(--ds-background-brand-bold-hovered,#004EBE)] text-[var(--ds-text-inverse,#FFFFFF)] font-bold rounded-lg shadow-[0_2px_4px_rgba(0,82,204,0.2)] transition-all active:scale-95 flex items-center gap-2">
               <Plus className="h-4 w-4" />
               {t('qrcodes.create', 'Create QR Code')}
             </Button>
@@ -208,10 +208,10 @@ export default function QRCodesPage() {
 
       <div className="mt-8 space-y-6">
         {/* Advanced Filter Bar */}
-        <div className="bg-white dark:bg-[#1D2125] border border-[#DFE1E6] dark:border-[#343A46] rounded-2xl p-6 shadow-sm space-y-6">
+        <div className="bg-[var(--ds-background-default,#FFFFFF)] dark:bg-[#1D2125] border border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46] rounded-2xl p-6 shadow-sm space-y-6">
           <div className="flex flex-wrap items-center gap-4">
             <div className="flex-1 min-w-[300px] relative group">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#6B778C] pointer-events-none group-focus-within:text-[#0052CC] transition-colors" />
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--ds-text-subtle,#6B778C)] pointer-events-none group-focus-within:text-[var(--ds-text-brand,#0052CC)] transition-colors" />
               <FilterBar.Search
                 placeholder={t('qrcodes.searchPlaceholder', 'Search by code, holder name, or property…')}
                 value={search}
@@ -219,7 +219,7 @@ export default function QRCodesPage() {
                   setPage(1);
                   setSearch(e.target.value);
                 }}
-                className="w-full h-11 pl-10 bg-[#F4F5F7] dark:bg-[#2C333A] border-[#DFE1E6] dark:border-[#343A46] focus:bg-white dark:focus:bg-[#1D2125] transition-all rounded-xl text-sm font-medium"
+                className="w-full h-11 pl-10 bg-[var(--ds-background-neutral-subtle,#F4F5F7)] dark:bg-[#2C333A] border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46] focus:bg-[var(--ds-background-default,#FFFFFF)] dark:focus:bg-[#1D2125] transition-all rounded-xl text-sm font-medium"
               />
             </div>
             
@@ -228,7 +228,7 @@ export default function QRCodesPage() {
                 variant="outline"
                 onClick={handleRefresh}
                 disabled={isLoading}
-                className="h-11 w-11 p-0 border-[#DFE1E6] dark:border-[#343A46] rounded-xl hover:bg-[#F4F5F7] dark:hover:bg-[#2C333A]"
+                className="h-11 w-11 p-0 border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46] rounded-xl hover:bg-[var(--ds-background-neutral-subtle-hovered,#EBECF0)] dark:hover:bg-[#2C333A]"
               >
                 <RefreshCw className={cn('h-4 w-4 text-[#6B778C]', isLoading && 'animate-spin')} />
               </Button>
@@ -238,84 +238,84 @@ export default function QRCodesPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
             {/* Creation Date Filter */}
             <div className="space-y-2.5">
-              <label className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-[#6B778C] dark:text-[#97A0AF] ml-1">
+              <label className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-[var(--ds-text-subtle,#6B778C)] dark:text-[#97A0AF] ml-1">
                 <Calendar className="h-3 w-3" />
                 {t('qrcodes.filters.createdAt', 'Creation Period')}
               </label>
-              <div className="flex items-center gap-2 bg-[#FAFBFC] dark:bg-[#091E42]/10 p-1 rounded-xl border border-[#DFE1E6] dark:border-[#343A46]">
+              <div className="flex items-center gap-2 bg-[var(--ds-background-neutral-subtle,#F4F5F7)] dark:bg-[#091E42]/10 p-1 rounded-xl border border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46]">
                 <Input
                   type="date"
                   value={createdFrom}
                   onChange={(e) => { setPage(1); setCreatedFrom(e.target.value); }}
-                  className="h-9 bg-transparent border-none text-xs font-bold text-[#172B4D] dark:text-white focus:ring-0"
+                  className="h-9 bg-transparent border-none text-xs font-bold text-[var(--ds-text,#172B4D)] dark:text-white focus:ring-0"
                 />
-                <span className="text-[#C1C7D0] font-black">/</span>
+                <span className="text-[var(--ds-text-subtlest,#A5ADBA)] font-black">/</span>
                 <Input
                   type="date"
                   value={createdTo}
                   onChange={(e) => { setPage(1); setCreatedTo(e.target.value); }}
-                  className="h-9 bg-transparent border-none text-xs font-bold text-[#172B4D] dark:text-white focus:ring-0"
+                  className="h-9 bg-transparent border-none text-xs font-bold text-[var(--ds-text,#172B4D)] dark:text-white focus:ring-0"
                 />
               </div>
             </div>
 
             {/* Expiry Date Filter */}
             <div className="space-y-2.5">
-              <label className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest dark:text-[#97A0AF] ml-1 text-amber-600">
+              <label className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest dark:text-[#97A0AF] ml-1 text-[var(--ds-text-warning,#B35800)]">
                 <Clock className="h-3 w-3" />
                 {t('qrcodes.filters.expiresAt', 'Expiry Window')}
               </label>
-              <div className="flex items-center gap-2 bg-[#FAFBFC] dark:bg-[#091E42]/10 p-1 rounded-xl border border-[#DFE1E6] dark:border-[#343A46]">
+              <div className="flex items-center gap-2 bg-[var(--ds-background-neutral-subtle,#F4F5F7)] dark:bg-[#091E42]/10 p-1 rounded-xl border border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46]">
                 <Input
                   type="date"
                   value={expiresFrom}
                   onChange={(e) => { setPage(1); setExpiresFrom(e.target.value); }}
-                  className="h-9 bg-transparent border-none text-xs font-bold text-[#172B4D] dark:text-white focus:ring-0"
+                  className="h-9 bg-transparent border-none text-xs font-bold text-[var(--ds-text,#172B4D)] dark:text-white focus:ring-0"
                 />
-                <span className="text-[#C1C7D0] font-black">/</span>
+                <span className="text-[var(--ds-text-subtlest,#A5ADBA)] font-black">/</span>
                 <Input
                   type="date"
                   value={expiresTo}
                   onChange={(e) => { setPage(1); setExpiresTo(e.target.value); }}
-                  className="h-9 bg-transparent border-none text-xs font-bold text-[#172B4D] dark:text-white focus:ring-0"
+                  className="h-9 bg-transparent border-none text-xs font-bold text-[var(--ds-text,#172B4D)] dark:text-white focus:ring-0"
                 />
               </div>
             </div>
 
             {/* Usage Filter */}
             <div className="space-y-2.5">
-              <label className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest dark:text-[#97A0AF] ml-1 text-emerald-600">
+              <label className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest dark:text-[#97A0AF] ml-1 text-[var(--ds-text-success,#006644)]">
                 <Activity className="h-3 w-3" />
                 {t('qrcodes.filters.lastScanAt', 'Last Usage')}
               </label>
-              <div className="flex items-center gap-2 bg-[#FAFBFC] dark:bg-[#091E42]/10 p-1 rounded-xl border border-[#DFE1E6] dark:border-[#343A46]">
+              <div className="flex items-center gap-2 bg-[var(--ds-background-neutral-subtle,#F4F5F7)] dark:bg-[#091E42]/10 p-1 rounded-xl border border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46]">
                 <Input
                   type="date"
                   value={lastScanFrom}
                   onChange={(e) => { setPage(1); setLastScanFrom(e.target.value); }}
-                  className="h-9 bg-transparent border-none text-xs font-bold text-[#172B4D] dark:text-white focus:ring-0"
+                  className="h-9 bg-transparent border-none text-xs font-bold text-[var(--ds-text,#172B4D)] dark:text-white focus:ring-0"
                 />
-                <span className="text-[#C1C7D0] font-black">/</span>
+                <span className="text-[var(--ds-text-subtlest,#A5ADBA)] font-black">/</span>
                 <Input
                   type="date"
                   value={lastScanTo}
                   onChange={(e) => { setPage(1); setLastScanTo(e.target.value); }}
-                  className="h-9 bg-transparent border-none text-xs font-bold text-[#172B4D] dark:text-white focus:ring-0"
+                  className="h-9 bg-transparent border-none text-xs font-bold text-[var(--ds-text,#172B4D)] dark:text-white focus:ring-0"
                 />
               </div>
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-[#DFE1E6] dark:border-[#343A46]">
+          <div className="flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46]">
             <div className="flex items-center gap-3">
               {selectedIds.length > 0 ? (
                 <div className="flex items-center gap-2 animate-in fade-in zoom-in duration-300">
-                   <span className="text-[11px] font-black uppercase tracking-widest text-[#6B778C] mr-2">Selection:</span>
+                   <span className="text-[11px] font-black uppercase tracking-widest text-[var(--ds-text-subtle,#6B778C)] mr-2">Selection:</span>
                   <Button
                     variant="destructive"
                     size="sm"
                     onClick={() => setDeleteOpen(true)}
-                    className="h-8 bg-[#FFEBE6] hover:bg-[#FFD5CC] dark:bg-[#44130C] dark:hover:bg-[#601A12] text-[#BF2600] dark:text-[#FF8F73] border-none font-bold shadow-none rounded-full px-4"
+                    className="h-8 bg-[var(--ds-background-danger-subtle,#FFEBE6)] hover:bg-[var(--ds-background-danger-subtle-hovered,#FFD5CC)] dark:bg-[#44130C] dark:hover:bg-[#601A12] text-[var(--ds-text-danger,#BF2600)] dark:text-[#FF8F73] border-none font-bold shadow-none rounded-full px-4"
                   >
                     <Trash2 className="h-3.5 w-3.5 mr-2" />
                     {t('common.deleteSelected', { defaultValue: 'Delete {{count}}', count: selectedIds.length })}
@@ -324,17 +324,17 @@ export default function QRCodesPage() {
                     variant="outline"
                     size="sm"
                     onClick={() => triggerDownload(buildExportUrl(selectedIds))}
-                    className="h-8 border-[#DFE1E6] dark:border-[#343A46] text-[#42526E] dark:text-[#A5ADBA] font-bold rounded-full px-4 bg-white dark:bg-[#2C333A] hover:bg-[#FAFBFC]"
+                    className="h-8 border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46] text-[var(--ds-text-subtle,#42526E)] dark:text-[#A5ADBA] font-bold rounded-full px-4 bg-[var(--ds-background-default,#FFFFFF)] dark:bg-[#2C333A] hover:bg-[var(--ds-background-neutral-subtle,#FAFBFC)]"
                   >
                     <Download className="h-3.5 w-3.5 mr-2" />
                     {t('common.exportSelected', 'Export')}
                   </Button>
-                  <div className="w-px h-4 bg-[#DFE1E6] mx-2" />
+                  <div className="w-px h-4 bg-[var(--ds-border,#DFE1E6)] mx-2" />
                 </div>
               ) : (
-                <div className="flex items-center gap-4 bg-[#F4F5F7] dark:bg-[#2C333A] p-1.5 rounded-xl border border-[#DFE1E6] dark:border-[#343A46]">
-                   <div className="flex items-center gap-2 px-3 py-1 bg-white dark:bg-[#1D2125] rounded-lg shadow-sm">
-                      <span className="text-[10px] font-black text-[#6B778C] uppercase tracking-widest">{t('common.sort', 'Order')}</span>
+                <div className="flex items-center gap-4 bg-[var(--ds-background-neutral-subtle,#F4F5F7)] dark:bg-[#2C333A] p-1.5 rounded-xl border border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46]">
+                   <div className="flex items-center gap-2 px-3 py-1 bg-[var(--ds-background-default,#FFFFFF)] dark:bg-[#1D2125] rounded-lg shadow-sm">
+                      <span className="text-[10px] font-black text-[var(--ds-text-subtle,#6B778C)] uppercase tracking-widest">{t('common.sort', 'Order')}</span>
                       <NativeSelect
                         value={sortBy}
                         onChange={(e) => { setPage(1); setSortBy(e.target.value as SortBy); }}
@@ -367,7 +367,7 @@ export default function QRCodesPage() {
                   setCreatedFrom(''); setCreatedTo(''); setExpiresFrom(''); setExpiresTo('');
                   setLastScanFrom(''); setLastScanTo(''); setSelectedIds([]);
                 }}
-                className="h-8 text-[#0052CC] hover:bg-[#DEEBFF] text-[11px] font-bold uppercase tracking-widest rounded-full px-4"
+                className="h-8 text-[var(--ds-text-link,#0052CC)] hover:bg-[var(--ds-background-selected,#DEEBFF)] text-[11px] font-bold uppercase tracking-widest rounded-full px-4"
               >
                 <X className="h-3.5 w-3.5 mr-2" />
                 Clear Filters
@@ -375,8 +375,8 @@ export default function QRCodesPage() {
             </div>
 
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-[#6B778C]">
-                 Results: <span className="text-[#172B4D] dark:text-white tabular-nums">{total.toLocaleString()}</span>
+              <div className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-[var(--ds-text-subtle,#6B778C)]">
+                 Results: <span className="text-[var(--ds-text,#172B4D)] dark:text-white tabular-nums">{total.toLocaleString()}</span>
               </div>
               <Pagination
                 currentPage={currentPage}
@@ -408,17 +408,17 @@ export default function QRCodesPage() {
       </div>
 
       <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
-        <DialogContent className="max-w-md rounded-2xl border-none shadow-2xl p-0 overflow-hidden">
-          <div className="bg-[#FFEBE6] p-6 flex flex-col items-center gap-4 text-center">
-             <div className="h-16 w-16 rounded-full bg-white flex items-center justify-center shadow-sm">
-                <Trash2 className="h-8 w-8 text-[#BF2600]" />
+        <DialogContent className="max-w-md rounded-2xl border-none shadow-2xl p-0 overflow-hidden bg-[var(--ds-background-default,#FFFFFF)]">
+          <div className="bg-[var(--ds-background-danger-subtle,#FFEBE6)] p-6 flex flex-col items-center gap-4 text-center">
+             <div className="h-16 w-16 rounded-full bg-[var(--ds-background-default,#FFFFFF)] flex items-center justify-center shadow-sm">
+                <Trash2 className="h-8 w-8 text-[var(--ds-text-danger,#BF2600)]" />
              </div>
-             <DialogTitle className="text-2xl font-black tracking-tight text-[#BF2600]">
+             <DialogTitle className="text-2xl font-black tracking-tight text-[var(--ds-text-danger,#BF2600)]">
                 Confirm Bulk Deletion
              </DialogTitle>
           </div>
           <div className="p-8 space-y-6">
-            <p className="text-[15px] font-medium text-[#42526E] dark:text-[#A5ADBA] leading-relaxed text-center">
+            <p className="text-[15px] font-medium text-[var(--ds-text-subtle,#42526E)] dark:text-[#A5ADBA] leading-relaxed text-center">
               {t('qrcodes.confirmBulkDeleteBody', 'You are about to deactivate and soft-delete {{count}} QR codes. This action will be logged and is irreversible for the end-users.', { count: selectedIds.length })}
             </p>
             <DialogFooter className="flex flex-col sm:flex-row gap-3">
@@ -426,7 +426,7 @@ export default function QRCodesPage() {
                 variant="outline" 
                 onClick={() => setDeleteOpen(false)} 
                 disabled={isPending}
-                className="flex-1 h-12 rounded-xl border-[#DFE1E6] font-bold text-[#42526E]"
+                className="flex-1 h-12 rounded-xl border-[var(--ds-border,#DFE1E6)] font-bold text-[var(--ds-text-subtle,#42526E)]"
               >
                 {t('common.cancel', 'No, keep them')}
               </Button>
@@ -434,7 +434,7 @@ export default function QRCodesPage() {
                 variant="destructive" 
                 onClick={deleteSelected} 
                 disabled={isPending}
-                className="flex-1 h-12 rounded-xl bg-[#BF2600] hover:bg-[#DE350B] font-bold text-white shadow-lg"
+                className="flex-1 h-12 rounded-xl bg-[var(--ds-background-danger-bold,#DE350B)] hover:bg-[var(--ds-background-danger-bold-hovered,#BF2600)] font-bold text-[var(--ds-text-inverse,#FFFFFF)] shadow-lg"
               >
                 {isPending ? <RefreshCw className="h-5 w-5 animate-spin mr-2" /> : <Trash2 className="h-5 w-5 mr-2" />}
                 {t('common.delete', 'Yes, delete all')}
