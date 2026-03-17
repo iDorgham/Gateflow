@@ -23,6 +23,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       return NextResponse.json({ success: false, message: 'visitorQRId is required' }, { status: 400 });
     }
 
+    // skip-organization-check (Unauthenticated public arrival page)
     const visitorQR = await prisma.visitorQR.findUnique({
       where: { id: visitorQRId },
       include: {
@@ -41,6 +42,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     // Idempotency: find most recent SUCCESS scan for this QR
+    // skip-organization-check (Sufficiently scoped by QR code ID)
     const latestScan = await prisma.scanLog.findFirst({
       where: { qrCodeId: visitorQR.qrCode.id, status: 'SUCCESS' },
       orderBy: { scannedAt: 'desc' },

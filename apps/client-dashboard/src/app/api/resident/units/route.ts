@@ -11,9 +11,11 @@ export async function GET() {
       return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
     }
 
+    const organizationId = claims.orgId;
     const units = await prisma.unit.findMany({
       where: {
         userId: claims.sub,
+        organizationId,
         deletedAt: null,
       },
       include: {

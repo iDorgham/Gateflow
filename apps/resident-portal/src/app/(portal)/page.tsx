@@ -14,9 +14,14 @@ import { prisma, checkAndConsumeQuota } from '@gate-access/db';
 export default async function HomePage() {
   const claims = await getSessionClaims();
   const userId = claims?.sub || 'dev-resident-id';
+  const orgId = claims?.org || 'dev-org-id';
 
   const unit = await prisma.unit.findFirst({
-    where: { userId, deletedAt: null },
+    where: { 
+      userId, 
+      organizationId: orgId,
+      deletedAt: null 
+    },
     include: {
       project: {
         select: { name: true, location: true },
@@ -30,6 +35,7 @@ export default async function HomePage() {
     where: {
       createdBy: userId,
       qrCode: {
+        organizationId: orgId,
         isActive: true,
         deletedAt: null,
         expiresAt: {

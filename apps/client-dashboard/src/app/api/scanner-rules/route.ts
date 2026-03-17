@@ -20,8 +20,9 @@ export async function GET() {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
+  const organizationId = claims.orgId;
   const org = await prisma.organization.findFirst({
-    where: { id: claims.orgId, deletedAt: null },
+    where: { id: organizationId, deletedAt: null },
     select: { scannerConfig: true },
   });
 

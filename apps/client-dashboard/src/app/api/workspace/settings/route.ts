@@ -33,8 +33,9 @@ export async function PATCH(request: NextRequest): Promise<NextResponse> {
 
     const { name, email, domain } = validation.data;
 
+    const organizationId = claims.orgId;
     const org = await prisma.organization.findUnique({
-      where: { id: claims.orgId },
+      where: { id: organizationId },
     });
 
     if (!org || org.deletedAt) {

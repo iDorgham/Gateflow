@@ -17,8 +17,9 @@ export async function GET(request: NextRequest) {
 
     if (!unitId) {
       // Find the first unit for this resident
+      const organizationId = claims.orgId;
       const unit = await prisma.unit.findFirst({
-        where: { userId: claims.sub, deletedAt: null },
+        where: { userId: claims.sub, organizationId, deletedAt: null },
       });
       
       if (!unit) {
@@ -27,8 +28,9 @@ export async function GET(request: NextRequest) {
       unitId = unit.id;
     } else {
       // Verify the unit belongs to the resident
+      const organizationId = claims.orgId;
       const unit = await prisma.unit.findFirst({
-        where: { id: unitId, userId: claims.sub, deletedAt: null },
+        where: { id: unitId, userId: claims.sub, organizationId, deletedAt: null },
       });
       
       if (!unit) {

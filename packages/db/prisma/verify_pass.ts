@@ -5,6 +5,7 @@ const prisma = new PrismaClient();
 
 async function main() {
   const email = 'admin@example.com';
+  // skip-organization-check (Internal Security Verification Script)
   const user = await prisma.user.findUnique({ where: { email } });
   
   if (!user) {
@@ -14,10 +15,10 @@ async function main() {
   
   console.log('Found user:', user.email);
   
-  const password = 'password123';
+  const password = process.env.VERIFY_PASSWORD || 'password123';
   const isValid = await argon2.verify(user.passwordHash, password);
   
-  console.log('Verification result for "password123":', isValid ? '✅ VALID' : '❌ INVALID');
+  console.log('Verification result:', isValid ? '✅ VALID' : '❌ INVALID');
 }
 
 main()

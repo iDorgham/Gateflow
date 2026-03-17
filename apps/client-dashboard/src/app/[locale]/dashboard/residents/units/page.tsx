@@ -21,8 +21,8 @@ import {
   DialogFooter,
   Badge,
   Skeleton,
-  PageHeader,
 } from '@gate-access/ui';
+import { PageHeader } from '@/components/dashboard/page-header';
 import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
 import {
@@ -770,21 +770,21 @@ export default function UnitsPage() {
       <PageHeader
         title={t('units.title', { defaultValue: 'Units & Assets' })}
         subtitle={t('units.description', { defaultValue: 'Manage residential and commercial units, track property quotas, and monitor occupant density.' })}
-        breadcrumbs={[
-          { label: 'Dashboard', href: `/${locale}/dashboard` },
-          { label: 'Residents', href: `/${locale}/dashboard/residents` },
-          { label: 'Units' }
-        ]}
-        homeHref={`/${locale}/dashboard`}
+        badge={
+          <div className="bg-[var(--ds-background-selected,#DEEBFF)] text-[var(--ds-text-selected,#0747A6)] font-bold h-6 px-3 rounded-full flex items-center text-xs">
+            {total.toLocaleString()} {t('residents.total', 'Units')}
+          </div>
+        }
         actions={[
           <Button
             key="import"
             variant="outline"
-            className="h-9 px-4 border-[#DFE1E6] dark:border-[#343A46] text-[#42526E] dark:text-[#A5ADBA] font-bold hover:bg-[#F4F5F7] dark:hover:bg-[#2C333A] rounded-lg shadow-sm transition-all active:scale-95 flex items-center gap-2 group"
+            size="sm"
+            className="h-8 border-[var(--ds-border,#DFE1E6)] text-[var(--ds-text-subtle,#42526E)] font-semibold hover:bg-[var(--ds-background-neutral-subtle-hovered,#EBECF0)] rounded-[var(--ds-border-radius-100,#3px)] transition-all flex items-center gap-2 text-xs"
             asChild
           >
             <label className="cursor-pointer flex items-center">
-              <Upload className="h-4 w-4 text-[#6B778C] group-hover:text-[#0052CC] transition-colors" />
+              <Upload className="h-3.5 w-3.5" />
               {t('common.import', 'Import')}
               <input
                 type="file"
@@ -797,16 +797,17 @@ export default function UnitsPage() {
           <Button
             key="export"
             variant="outline"
+            size="sm"
             onClick={exportCSV}
-            className="h-9 px-4 border-[#DFE1E6] dark:border-[#343A46] text-[#42526E] dark:text-[#A5ADBA] font-bold hover:bg-[#F4F5F7] dark:hover:bg-[#2C333A] rounded-lg shadow-sm transition-all active:scale-95 flex items-center gap-2 group"
+            className="h-8 border-[var(--ds-border,#DFE1E6)] text-[var(--ds-text-subtle,#42526E)] font-semibold hover:bg-[var(--ds-background-neutral-subtle-hovered,#EBECF0)] rounded-[var(--ds-border-radius-100,#3px)] transition-all flex items-center gap-2 text-xs"
           >
-            <Download className="h-4 w-4 text-[#6B778C] group-hover:text-[#0052CC] transition-colors" />
+            <Download className="h-3.5 w-3.5" />
             {t('common.export', 'Export')}
           </Button>,
           <Button
             key="create"
             onClick={openCreate}
-            className="h-9 px-5 bg-[#0052CC] hover:bg-[#0747A6] text-white font-bold rounded-lg shadow-[0_2px_4px_rgba(0,82,204,0.2)] transition-all active:scale-95 flex items-center gap-2"
+            className="h-8 px-4 bg-[var(--ds-background-brand-bold,#0052CC)] hover:bg-[var(--ds-background-brand-bold-hovered,#004EBE)] text-[var(--ds-text-inverse,#FFFFFF)] font-semibold rounded-[var(--ds-border-radius-100,#3px)] transition-all flex items-center gap-2 text-xs"
           >
             <Plus className="h-4 w-4" />
             {t('units.create', 'Create Unit')}
@@ -828,33 +829,39 @@ export default function UnitsPage() {
 
         <div className="relative overflow-hidden">
           {selectedUnitIds.length > 0 && (
-            <div className="flex flex-wrap items-center gap-3 bg-[#DEEBFF] dark:bg-[#0747A6]/20 px-6 py-3 border-x border-t border-[#B3D4FF] dark:border-[#343A46] rounded-t-2xl animate-in slide-in-from-top-4 duration-300">
-               <span className="text-[11px] font-black uppercase tracking-widest text-[#0747A6] dark:text-[#DEEBFF] mr-2">Selection: {selectedUnitIds.length} units</span>
-              <Button
-                variant="outline"
-                size="sm"
-                className="h-8 bg-white dark:bg-[#2C333A] text-[#0747A6] border-[#B3D4FF] dark:border-[#343A46] font-bold rounded-full px-4 shadow-sm"
-                onClick={exportSelectedCSV}
-              >
-                <Download className="h-3.5 w-3.5 mr-2" />
-                Export Data
-              </Button>
-              <Button
-                variant="destructive"
-                size="sm"
-                className="h-8 bg-[#FFEBE6] hover:bg-[#FFD5CC] dark:bg-[#44130C] text-[#BF2600] border-none font-bold rounded-full px-4"
-                onClick={() => setBulkDeleteConfirmOpen(true)}
-              >
-                <Trash2 className="h-3.5 w-3.5 mr-2" />
-                Bulk Delete
-              </Button>
+            <div className="flex items-center justify-between gap-4 p-3 bg-[var(--ds-background-neutral-subtle,#F4F5F7)] border-x border-t border-[var(--ds-border,#DFE1E6)] rounded-t-xl animate-in fade-in slide-in-from-top-2 duration-300">
+              <div className="flex items-center gap-2 px-3 py-1 bg-[var(--ds-background-default,#FFFFFF)] rounded-full border border-[var(--ds-border,#DFE1E6)] shadow-none">
+                <span className="text-[11px] font-black text-[var(--ds-text-subtle,#6B778C)] uppercase tracking-tight">
+                  {selectedUnitIds.length} Selected
+                </span>
+                <div className="w-px h-3 bg-[var(--ds-border,#DFE1E6)] mx-1" />
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-7 px-2.5 text-[var(--ds-text-selected,#0052CC)] hover:bg-[var(--ds-background-brand-subtle,#DEEBFF)] rounded-full text-[10px] font-bold"
+                  onClick={exportSelectedCSV}
+                >
+                  <Download className="h-3 w-3 mr-1.5" />
+                  CSV
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-7 px-2.5 text-[var(--ds-text-danger,#BF2600)] hover:bg-[var(--ds-background-danger-subtle,#FFEBE6)] rounded-full text-[10px] font-bold"
+                  onClick={() => setBulkDeleteConfirmOpen(true)}
+                >
+                  <Trash2 className="h-3 w-3 mr-1.5" />
+                  Delete
+                </Button>
+              </div>
+
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-8 text-[#0747A6] hover:bg-[#B3D4FF]/30 font-bold ml-auto"
+                className="ml-auto h-7 px-3 text-[10px] font-black uppercase tracking-widest text-[var(--ds-text-subtle,#6B778C)] hover:bg-[var(--ds-background-neutral-subtle-hovered,#EBECF0)] rounded-full"
                 onClick={() => setSelectedUnitIds([])}
               >
-                Clear selection
+                Cancel
               </Button>
             </div>
           )}

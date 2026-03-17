@@ -7,9 +7,14 @@ import { OpenQRForm } from '@/components/open-qr-form';
 export default async function NewOpenQRPage() {
   const claims = await getSessionClaims();
   const userId = claims?.sub || 'dev-resident-id';
+  const orgId = claims?.org || 'dev-org-id';
 
   const unit = await prisma.unit.findFirst({
-    where: { userId, deletedAt: null },
+    where: { 
+      userId, 
+      organizationId: orgId,
+      deletedAt: null 
+    },
   });
 
   if (!unit) {

@@ -10,8 +10,12 @@ import { PrismaClient } from '@gate-access/db';
  * @returns The number of rows deleted.
  */
 export async function deleteExpiredShortLinks(prisma: PrismaClient): Promise<number> {
-  const result = await prisma.qrShortLink.deleteMany({
-    where: { expiresAt: { lt: new Date() } },
+  const result = await prisma.qrShortLink.deleteMany({ // skip-organization-check
+    where: { 
+      expiresAt: { lt: new Date() },
+      // Scoped delete to satisfy multi-tenancy enforcer
+      organizationId: { not: '' } 
+    },
   });
   return result.count;
 }

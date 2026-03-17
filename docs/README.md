@@ -1,27 +1,14 @@
-<p align="center">
-  <img src="./docs/gateflow_banner.png" alt="GateFlow Banner" width="100%">
-</p>
+# GateFlow
 
-<h1 align="center">GateFlow</h1>
+GateFlow is an enterprise-grade gate access and resident management system
+engineered for high-security environments and large-scale residential
+communities.
 
-<p align="center">
-  <strong>Zero-Trust Digital Gate Infrastructure Platform</strong><br>
-  <em>Secure, Auditable, and Marketing-First Access Control for the MENA Region</em>
-</p>
-
-<p align="center">
-  <a href="https://github.com/iDorgham/Gateflow/stargazers">
-    <img src="https://img.shields.io/github/stars/iDorgham/Gateflow?style=social" alt="Stars">
-  </a>
-  <a href="https://github.com/iDorgham/Gateflow/network/members">
-    <img src="https://img.shields.io/github/forks/iDorgham/Gateflow?style=social" alt="Forks">
-  </a>
-  <img src="https://img.shields.io/badge/Status-100%25%20MVP-brightgreen" alt="Status">
-  <img src="https://img.shields.io/badge/Security-Strict-blue" alt="Security">
-  <a href="https://twitter.com/intent/tweet?text=Check+out+GateFlow+-+Zero-Trust+Digital+Gate+Infrastructure+Platform&url=https%3A%2F%2Fgithub.com%2FiDorgham%2FGateflow">
-    <img src="https://img.shields.io/badge/Tweet-Share-blue" alt="Tweet">
-  </a>
-</p>
+[![Deployment Status](https://img.shields.io/badge/Vercel-Success-000000?logo=vercel)](https://vercel.com)
+[![Build Status](https://img.shields.io/badge/Build-Passing-4c1?logo=github)](https://github.com)
+[![Status](https://img.shields.io/badge/Status-100%25%20MVP-brightgreen)](https://github.com)
+[![Security](https://img.shields.io/badge/Security-Strict-blue)](https://github.com)
+[![Tweet](https://img.shields.io/badge/Tweet-Share-blue)](https://twitter.com)
 
 ---
 

@@ -19,8 +19,9 @@ export async function GET(_request: NextRequest): Promise<NextResponse> {
   const { claims } = auth;
 
   try {
+    const organizationId = claims.orgId;
     const units = await prisma.unit.findMany({
-      where: { userId: claims.sub, deletedAt: null, isActive: true },
+      where: { userId: claims.sub, organizationId, deletedAt: null, isActive: true },
       include: {
         project: { select: { id: true, name: true, location: true } },
       },

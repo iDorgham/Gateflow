@@ -18,9 +18,14 @@ import { Button } from '@gate-access/ui';
 export default async function ProfilePage() {
   const claims = await getSessionClaims();
   const userId = claims?.sub || 'dev-resident-id';
+  const orgId = claims?.org || 'dev-org-id';
 
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
+  const user = await prisma.user.findFirst({
+    where: { 
+      id: userId,
+      organizationId: orgId,
+      deletedAt: null
+    },
     include: {
       unit: {
         where: { deletedAt: null },

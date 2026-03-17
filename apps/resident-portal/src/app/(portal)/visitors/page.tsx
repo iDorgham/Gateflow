@@ -7,11 +7,13 @@ import { Button } from '@gate-access/ui';
 export default async function VisitorsPage() {
   const claims = await getSessionClaims();
   const userId = claims?.sub || 'dev-resident-id';
+  const orgId = claims?.org || 'dev-org-id';
 
   const visitors = await prisma.visitorQR.findMany({
     where: {
       createdBy: userId,
       qrCode: {
+        organizationId: orgId,
         deletedAt: null,
       },
     },

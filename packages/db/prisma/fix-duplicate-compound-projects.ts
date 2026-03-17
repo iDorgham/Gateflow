@@ -6,6 +6,7 @@ async function main() {
   console.log('🔍 Looking for duplicate compound projects (Selena Bay / Vernada)...');
 
   const projects = await prisma.project.findMany({
+    // skip-organization-check
     where: {
       name: { in: ['Selena Bay', 'Vernada'] },
       deletedAt: null,
@@ -39,21 +40,25 @@ async function main() {
     const now = new Date();
 
     await prisma.$transaction(async (tx) => {
+      // skip-organization-check
       await tx.gate.updateMany({
         where: { projectId: { in: duplicateIds } },
         data: { projectId: canonical.id },
       });
 
+      // skip-organization-check
       await tx.unit.updateMany({
         where: { projectId: { in: duplicateIds } },
         data: { projectId: canonical.id },
       });
 
+      // skip-organization-check
       await tx.qRCode.updateMany({
         where: { projectId: { in: duplicateIds } },
         data: { projectId: canonical.id },
       });
 
+      // skip-organization-check
       await tx.project.updateMany({
         where: { id: { in: duplicateIds } },
         data: { deletedAt: now },

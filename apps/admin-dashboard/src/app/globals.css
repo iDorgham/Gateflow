@@ -290,8 +290,8 @@
   * { @apply border-border; }
   body {
     @apply antialiased;
-    background-color: var(--ds-background-default, #FFFFFF);
-    color: var(--ds-text, #172B4D);
+    background-color: var(--ds-background-default);
+    color: var(--ds-text);
     font-family: var(--ds-font-family-sans);
     font-feature-settings: "rlig" 1, "calt" 1;
   }

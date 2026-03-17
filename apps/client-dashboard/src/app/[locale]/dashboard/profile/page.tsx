@@ -9,8 +9,9 @@ export default async function ProfilePage() {
   const claims = await getSessionClaims();
   if (!claims?.sub) redirect('/login');
 
+  const organizationId = claims.orgId;
   const user = await prisma.user.findFirst({
-    where: { id: claims.sub, deletedAt: null },
+    where: { id: claims.sub, organizationId, deletedAt: null },
     select: {
       id: true,
       name: true,

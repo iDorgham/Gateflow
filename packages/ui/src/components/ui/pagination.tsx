@@ -1,9 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '../../lib/utils';
-import { Button } from './button';
 
 import Link from 'next/link';
 import { useMemo } from 'react';
@@ -43,11 +42,11 @@ export function Pagination({
 
   const Item = ({ page, active, disabled, children }: { page: number; active?: boolean; disabled?: boolean; children: React.ReactNode }) => {
     const commonClass = cn(
-      'inline-flex items-center justify-center rounded-lg text-sm font-bold transition-all',
+      'inline-flex items-center justify-center rounded-[var(--ds-border-radius-100,#3px)] text-sm font-semibold transition-all duration-150',
       'min-w-[32px] h-8 px-2',
       active
-        ? 'bg-[var(--ds-background-selected,#DEEBFF)] text-[var(--ds-text-selected,#0747A6)] shadow-sm'
-        : 'text-[var(--ds-text-subtle,#42526E)] hover:bg-[var(--ds-background-neutral-subtle-hovered,#EBECF0)]',
+        ? 'bg-[var(--ds-background-selected,#DEEBFF)] text-[var(--ds-text-selected,#0747A6)]'
+        : 'text-[var(--ds-text-subtle,#42526E)] hover:bg-[var(--ds-background-neutral-subtle-hovered,#EBECF0)] active:bg-[var(--ds-background-neutral-subtle-pressed,#DFE1E6)]',
       disabled && 'opacity-30 pointer-events-none cursor-not-allowed'
     );
 
@@ -74,7 +73,7 @@ export function Pagination({
   return (
     <nav className={cn('flex items-center justify-center gap-1.5', className)} aria-label="Pagination">
       <Item page={currentPage - 1} disabled={currentPage <= 1}>
-        <ChevronLeft className="h-4 w-4 mr-1" />
+        <ChevronLeft className="h-3.5 w-3.5 mr-1" />
         <span className="hidden sm:inline">Prev</span>
       </Item>
 
@@ -94,7 +93,7 @@ export function Pagination({
 
       <Item page={currentPage + 1} disabled={currentPage >= totalPages}>
         <span className="hidden sm:inline">Next</span>
-        <ChevronRight className="h-4 w-4 ml-1" />
+        <ChevronRight className="h-3.5 w-3.5 ml-1" />
       </Item>
     </nav>
   );

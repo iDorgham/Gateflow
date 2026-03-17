@@ -26,8 +26,8 @@ import {
   AvatarImage,
   AvatarFallback,
   Textarea,
-  PageHeader,
 } from '@gate-access/ui';
+import { PageHeader } from '@/components/dashboard/page-header';
 import { useTranslation } from 'react-i18next';
 import {
   type ColumnDef,
@@ -803,20 +803,21 @@ export default function ContactsPage() {
       <PageHeader
         title={t('contacts.title', { defaultValue: 'Residents' })}
         subtitle={t('contacts.description', { defaultValue: 'Manage residents, occupants, and visitors for your organisation.' })}
-        breadcrumbs={[
-          { label: 'Dashboard', href: `/${locale}/dashboard` },
-          { label: 'Residents' }
-        ]}
-        homeHref={`/${locale}/dashboard`}
+        badge={
+          <div className="bg-[var(--ds-background-selected,#DEEBFF)] text-[var(--ds-text-selected,#0747A6)] font-bold h-6 px-3 rounded-full flex items-center text-xs">
+            {total.toLocaleString()} {t('residents.total', 'Contacts')}
+          </div>
+        }
         actions={[
           <div key="actions-group" className="flex items-center gap-2">
             <Button
               variant="outline"
-              className="h-9 px-4 border-[#DFE1E6] dark:border-[#343A46] text-[#42526E] dark:text-[#A5ADBA] font-bold hover:bg-[#F4F5F7] dark:hover:bg-[#2C333A] rounded-lg shadow-sm group"
+              size="sm"
+              className="h-8 border-[var(--ds-border,#DFE1E6)] text-[var(--ds-text-subtle,#42526E)] font-semibold hover:bg-[var(--ds-background-neutral-subtle-hovered,#EBECF0)] rounded-[var(--ds-border-radius-100,#3px)] transition-all flex items-center gap-2 text-xs"
               asChild
             >
               <label className="cursor-pointer flex items-center">
-                <Upload className="h-4 w-4 mr-2 group-hover:text-[#0052CC] transition-colors" />
+                <Upload className="h-3.5 w-3.5" />
                 {t('common.import', 'Import')}
                 <input
                   type="file"
@@ -828,17 +829,19 @@ export default function ContactsPage() {
             </Button>
             <Button
               variant="outline"
+              size="sm"
               onClick={exportCSV}
-              className="h-9 px-4 border-[#DFE1E6] dark:border-[#343A46] text-[#42526E] dark:text-[#A5ADBA] font-bold hover:bg-[#F4F5F7] dark:hover:bg-[#2C333A] rounded-lg shadow-sm group"
+              className="h-8 border-[var(--ds-border,#DFE1E6)] text-[var(--ds-text-subtle,#42526E)] font-semibold hover:bg-[var(--ds-background-neutral-subtle-hovered,#EBECF0)] rounded-[var(--ds-border-radius-100,#3px)] transition-all flex items-center gap-2 text-xs"
             >
-              <Download className="h-4 w-4 mr-2 group-hover:text-[#0052CC] transition-colors" />
+              <Download className="h-3.5 w-3.5" />
               {t('common.export', 'Export')}
             </Button>
             <Button
+              key="create"
               onClick={openCreate}
-              className="h-9 px-5 bg-[#0052CC] hover:bg-[#0747A6] text-white font-bold rounded-lg shadow-md shadow-[#0052CC]/10 transition-all active:scale-95"
+              className="h-8 px-4 bg-[var(--ds-background-brand-bold,#0052CC)] hover:bg-[var(--ds-background-brand-bold-hovered,#004EBE)] text-[var(--ds-text-inverse,#FFFFFF)] font-semibold rounded-[var(--ds-border-radius-100,#3px)] transition-all flex items-center gap-2 text-xs"
             >
-              <Plus className="h-4 w-4 mr-2" />
+              <Plus className="h-4 w-4" />
               {t('contacts.create', 'Create Resident')}
             </Button>
           </div>
@@ -857,72 +860,59 @@ export default function ContactsPage() {
 
         {/* Bulk Actions Toolbar */}
         {selectedContactIds.length > 0 && (
-          <div className="flex flex-wrap items-center gap-4 bg-[#DEEBFF] dark:bg-[#0747A6]/20 px-6 py-3 rounded-xl border border-[#B3D4FF] dark:border-[#0747A6]/40 animate-in slide-in-from-top-2 duration-300">
-            <div className="flex items-center gap-3 pr-4 border-r border-[#B3D4FF] dark:border-[#0747A6]/40">
-              <span className="text-[11px] font-black text-[#0052CC] dark:text-[#4C9AFF] uppercase tracking-widest flex items-center gap-2">
-                <div className="h-2 w-2 rounded-full bg-[#0052CC] animate-pulse" />
-                {selectedContactIds.length} {t('residents.selected', 'Selected')}
-              </span>
-            </div>
-
-            <div className="flex items-center gap-2 pr-4 border-r border-[#B3D4FF] dark:border-[#0747A6]/40">
-              <NativeSelect
-                value={bulkTagId}
-                onChange={(e) => setBulkTagId(e.target.value)}
-                className="w-[160px] h-8 text-[11px] font-bold bg-white dark:bg-[#1D2125] border-[#B3D4FF] dark:border-[#343A46] rounded-lg"
-              >
-                <option value="">{t('residents.selectTag', 'Apply Tag')}</option>
-                {tagOptions.map((tag) => (
-                  <option key={tag.id} value={tag.id}>
-                    {tag.name}
-                  </option>
-                ))}
-              </NativeSelect>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-8 px-3 text-[11px] font-bold text-[#0052CC] dark:text-[#4C9AFF] hover:bg-white/50 dark:hover:bg-[#1D2125]/50"
-                disabled={!bulkTagId}
-                onClick={() => applyBulkTagAction('add')}
-              >
-                Add
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-8 px-3 text-[11px] font-bold text-[#E54937] hover:bg-[#FFEBE6] dark:hover:bg-[#BF2600]/20"
-                disabled={!bulkTagId}
-                onClick={() => applyBulkTagAction('remove')}
-              >
-                Remove
-              </Button>
-            </div>
-
+          <div className="flex items-center justify-between gap-4 p-3 bg-[var(--ds-background-neutral-subtle,#F4F5F7)] border-x border-t border-[var(--ds-border,#DFE1E6)] rounded-t-xl animate-in fade-in slide-in-from-top-2 duration-300">
             <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                className="h-8 px-3 bg-white dark:bg-[#1D2125] text-[#0052CC] border-[#B3D4FF] dark:border-[#343A46] text-[11px] font-bold rounded-lg shadow-sm"
-                onClick={exportSelectedCSV}
-              >
-                <Download className="h-3 w-3 mr-1.5" />
-                Export CSV
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="h-8 px-3 bg-white dark:bg-[#1D2125] text-[#BF2600] border-[#FFEBE6] dark:border-[#343A46] hover:bg-[#FFEBE6] text-[11px] font-bold rounded-lg shadow-sm"
-                onClick={() => setBulkDeleteConfirmOpen(true)}
-              >
-                <Trash2 className="h-3 w-3 mr-1.5" />
-                Delete Selected
-              </Button>
+              <div className="flex items-center gap-2 px-3 py-1 bg-[var(--ds-background-default,#FFFFFF)] rounded-full border border-[var(--ds-border,#DFE1E6)] shadow-none">
+                <span className="text-[11px] font-black text-[var(--ds-text-subtle,#6B778C)] uppercase tracking-tight">
+                  {selectedContactIds.length} Selected
+                </span>
+                <div className="w-px h-3 bg-[var(--ds-border,#DFE1E6)] mx-1" />
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-7 px-2.5 text-[var(--ds-text-selected,#0052CC)] hover:bg-[var(--ds-background-brand-subtle,#DEEBFF)] rounded-full text-[10px] font-bold"
+                  onClick={exportSelectedCSV}
+                >
+                  <Download className="h-3 w-3 mr-1.5" />
+                  CSV
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="h-7 px-2.5 text-[var(--ds-text-danger,#BF2600)] hover:bg-[var(--ds-background-danger-subtle,#FFEBE6)] rounded-full text-[10px] font-bold"
+                  onClick={() => setBulkDeleteConfirmOpen(true)}
+                >
+                  <Trash2 className="h-3 w-3 mr-1.5" />
+                  Delete
+                </Button>
+              </div>
+
+              <div className="flex items-center gap-1.5 ml-2">
+                <NativeSelect
+                  value={bulkTagId}
+                  onChange={(e) => setBulkTagId(e.target.value)}
+                  className="h-7 w-[130px] text-[10px] border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-background-input,#F4F5F7)] focus:bg-[var(--ds-background-default,#FFFFFF)] font-semibold rounded-full"
+                >
+                  <option value="">{t('residents.selectTag', 'Apply Tag…')}</option>
+                  {tagOptions.map((t) => (
+                    <option key={t.id} value={t.id}>{t.name}</option>
+                  ))}
+                </NativeSelect>
+                <Button
+                  size="sm"
+                  className="h-7 w-7 p-0 bg-[var(--ds-background-brand-bold,#0052CC)] hover:bg-[var(--ds-background-brand-bold-hovered,#004EBE)] text-white rounded-full"
+                  onClick={() => applyBulkTagAction('add')}
+                  disabled={!bulkTagId}
+                >
+                  <Check className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
 
             <Button
               variant="ghost"
               size="sm"
-              className="ml-auto h-8 px-3 text-[11px] font-bold text-[#6B778C] hover:bg-black/5"
+              className="h-7 px-3 text-[10px] font-black uppercase tracking-widest text-[var(--ds-text-subtle,#6B778C)] hover:bg-[var(--ds-background-neutral-subtle-hovered,#EBECF0)] rounded-full"
               onClick={() => setSelectedContactIds([])}
             >
               Cancel

@@ -11,6 +11,7 @@ export default async function MonitoringPage({ params: { locale } }: { params: {
 
   // Fetch webhook failure data server-side (static data for initial render)
   const [recentFailedDeliveries, totalWebhookFailed] = await Promise.all([
+    // skip-organization-check (Global Admin Health)
     prisma.webhookDelivery.findMany({
       where: { status: 'FAILED' },
       orderBy: { lastAttemptAt: 'desc' },
@@ -23,6 +24,7 @@ export default async function MonitoringPage({ params: { locale } }: { params: {
         webhook: { select: { url: true, organization: { select: { name: true } } } },
       },
     }),
+    // skip-organization-check (Global Admin Health)
     prisma.webhookDelivery.count({ where: { status: 'FAILED' } }),
   ]);
 

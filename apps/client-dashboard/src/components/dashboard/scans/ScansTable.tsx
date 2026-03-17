@@ -109,7 +109,7 @@ export function ScansTable({
         label: t('scans.table.project', 'Property'),
         render: (item) => (
           item.qrCode?.project?.name ? (
-            <span className="inline-flex items-center gap-1.5 rounded-lg bg-[var(--ds-background-brand-subtle,#DEEBFF)] px-3 py-1 text-[11px] font-black text-[var(--ds-text-brand,#0052CC)] uppercase tracking-widest">
+            <span className="inline-flex items-center gap-1.5 rounded-[3px] bg-[var(--ds-background-brand-subtle,#DEEBFF)] px-2 py-0.5 text-[11px] font-semibold text-[var(--ds-text-brand,#0052CC)] uppercase tracking-tight whitespace-nowrap">
               <Building className="h-3 w-3" />
               {item.qrCode.project.name}
             </span>
@@ -155,10 +155,10 @@ export function ScansTable({
         render: (item) => (
           <div className="flex justify-end">
             <span className={cn(
-              'inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-[10px] font-black uppercase tracking-[0.2em] shadow-sm', 
+              'inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider', 
               STATUS_COLORS[item.status] ?? 'bg-[var(--ds-background-neutral-subtle,#F4F5F7)] text-[var(--ds-text-subtle,#42526E)]'
             )}>
-              <div className={cn("h-1.5 w-1.5 rounded-full", item.status === 'SUCCESS' ? "bg-[var(--ds-text-success,#006644)]" : "bg-[var(--ds-text-danger,#BF2600)]")} />
+              <div className={cn("h-1.5 w-1.5 rounded-full", item.status === 'SUCCESS' ? "bg-[var(--ds-icon-success,#00875A)]" : "bg-[var(--ds-icon-danger,#DE350B)]")} />
               {t(`scans.status.${item.status}`, { defaultValue: item.status.replace(/_/g, ' ') })}
             </span>
           </div>

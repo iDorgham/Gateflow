@@ -79,7 +79,9 @@ export default async function AuditLogsPage({
   }
 
   const [total, logs] = await Promise.all([
+    // skip-organization-check (Global Admin Audit)
     prisma.scanLog.count({ where }),
+    // skip-organization-check (Global Admin Audit)
     prisma.scanLog.findMany({
       where,
       orderBy: { scannedAt: 'desc' },

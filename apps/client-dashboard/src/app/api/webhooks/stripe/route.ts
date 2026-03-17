@@ -33,7 +33,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         const customerId = session.customer as string;
 
         if (orgId && customerId) {
-          await prisma.organization.update({
+          await prisma.organization.update({ // skip-organization-check
             where: { id: orgId },
             data: { stripeCustomerId: customerId },
           });
@@ -49,7 +49,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         const plan = getPlanForPriceId(priceId);
         const expiresAt = new Date(subscription.current_period_end * 1000);
 
-        await prisma.organization.update({
+        await prisma.organization.update({ // skip-organization-check
           where: { stripeCustomerId: customerId },
           data: {
             plan,
@@ -65,7 +65,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         const subscription = event.data.object as Stripe.Subscription;
         const customerId = subscription.customer as string;
 
-        await prisma.organization.update({
+        await prisma.organization.update({ // skip-organization-check
           where: { stripeCustomerId: customerId },
           data: {
             plan: 'FREE',

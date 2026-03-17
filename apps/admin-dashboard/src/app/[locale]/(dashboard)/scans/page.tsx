@@ -10,7 +10,6 @@ import {
   History,
 } from 'lucide-react';
 import {
-  Badge,
   Button,
   Input,
 } from '@gate-access/ui';
@@ -80,7 +79,9 @@ export default async function AdminScansPage({
   }
 
   const [total, scans] = await Promise.all([
+    // skip-organization-check (Global Admin Count)
     prisma.scanLog.count({ where }),
+    // skip-organization-check (Global Admin List)
     prisma.scanLog.findMany({
       where,
       orderBy: { scannedAt: 'desc' },
@@ -110,14 +111,14 @@ export default async function AdminScansPage({
         title={t('scans.title')}
         subtitle={t('scans.subtitle')}
         badge={
-          <Badge variant="primary" className="bg-ds-background-selected text-ds-text-selected border-ds-border-selected/30 font-bold h-6 px-3 shadow-sm">
+          <div className="bg-[var(--ds-background-selected,#DEEBFF)] text-[var(--ds-text-selected,#0747A6)] font-bold h-6 px-3 rounded-full flex items-center text-xs">
             {total.toLocaleString(locale)} {t('scans.totalScans')}
-          </Badge>
+          </div>
         }
       />
 
       {/* Filters Container */}
-      <div className="bg-ds-background-default border border-ds-border rounded-xl p-5 shadow-sm space-y-6">
+      <div className="bg-[var(--ds-background-default,#FFFFFF)] border border-[var(--ds-border,#DFE1E6)] rounded-xl p-5 shadow-none space-y-4">
         <form method="GET" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-5 items-end">
           <div className="space-y-2 lg:col-span-2">
             <label className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-ds-text-subtle ltr:ml-1 rtl:mr-1">
@@ -125,12 +126,12 @@ export default async function AdminScansPage({
               {t('scans.organization')}
             </label>
             <div className="relative group">
-              <Building2 className="absolute ltr:left-3.5 rtl:right-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-ds-text-subtlest group-focus-within:text-ds-text-brand transition-colors" />
+              <Building2 className="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--ds-text-subtlest,#A5ADBA)] group-focus-within:text-[var(--ds-text-brand,#0052CC)] transition-colors" />
               <Input
                 name="org"
                 defaultValue={orgFilter}
                 placeholder={t('scans.filterByOrg')}
-                className="ltr:pl-10 rtl:pr-10 h-11 rounded-lg bg-ds-background-neutral-subtle border-ds-border focus:border-ds-border-focused text-sm font-medium focus:bg-ds-background-default transition-all shadow-inner outline-none"
+                className="ltr:pl-9 rtl:pr-9 h-9 rounded-[var(--ds-border-radius-100,#3px)] bg-[var(--ds-background-input,#F4F5F7)] border-[var(--ds-border,#DFE1E6)] focus:border-[var(--ds-border-focused,#4C9AFF)] text-sm font-semibold focus:bg-[var(--ds-background-default,#FFFFFF)] transition-all outline-none"
               />
             </div>
           </div>
@@ -142,7 +143,7 @@ export default async function AdminScansPage({
             <select
               name="status"
               defaultValue={statusFilter}
-              className="w-full h-11 rounded-lg border border-ds-border bg-ds-background-default px-4 text-xs font-bold text-ds-text focus:outline-none focus:ring-2 focus:ring-ds-border-focused"
+              className="w-full h-9 rounded-[var(--ds-border-radius-100,#3px)] border border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-background-default,#FFFFFF)] px-3 text-xs font-semibold text-[var(--ds-text,#172B4D)] focus:outline-none focus:ring-2 focus:ring-[var(--ds-border-focused,#4C9AFF)]"
             >
               <option value="">{t('scans.all')}</option>
               {['SUCCESS', 'DENIED', 'FAILED', 'EXPIRED', 'MAX_USES_REACHED', 'INACTIVE'].map((s) => (
@@ -155,28 +156,28 @@ export default async function AdminScansPage({
             <label className="text-[11px] font-black uppercase tracking-widest text-ds-text-subtle ltr:ml-1 rtl:mr-1">
                {t('scans.timeRange', 'Audit Window')}
             </label>
-            <div className="grid grid-cols-2 gap-2 h-11 p-1 bg-ds-background-neutral-subtle rounded-lg border border-ds-border">
+            <div className="grid grid-cols-2 gap-2 h-9 p-1 bg-[var(--ds-background-input,#F4F5F7)] rounded-[var(--ds-border-radius-100,#3px)] border border-[var(--ds-border,#DFE1E6)]">
               <input
                 type="date"
                 name="from"
                 defaultValue={searchParams.from ?? ''}
-                className="bg-transparent border-none text-ds-text px-2 outline-none"
+                className="bg-transparent border-none text-[var(--ds-text,#172B4D)] px-2 outline-none text-xs font-semibold"
               />
               <input
                 type="date"
                 name="to"
                 defaultValue={searchParams.to ?? ''}
-                className="bg-transparent border-none text-ds-text px-2 outline-none"
+                className="bg-transparent border-none text-[var(--ds-text,#172B4D)] px-2 outline-none text-xs font-semibold"
               />
             </div>
           </div>
 
           <div className="flex items-center gap-2">
-            <Button type="submit" variant="primary" className="h-11 px-8 font-bold shadow-sm flex-1">
-              <Search className="h-4 w-4 ltr:mr-2 rtl:ml-2" />
+            <Button type="submit" className="h-9 px-6 font-semibold shadow-none flex-1 bg-[var(--ds-background-brand-bold,#0052CC)] hover:bg-[var(--ds-background-brand-bold-hovered,#004EBE)] text-white rounded-[var(--ds-border-radius-100,#3px)]">
+              <Search className="h-3.5 w-3.5 ltr:mr-2 rtl:ml-2" />
               {t('scans.search')}
             </Button>
-            <Button variant="subtle" className="h-11 w-11 p-0 rounded-lg border-ds-border" asChild>
+            <Button variant="outline" className="h-9 w-9 p-0 rounded-[var(--ds-border-radius-100,#3px)] border-[var(--ds-border,#DFE1E6)]" asChild>
               <Link href="/audit-logs">
                 <History className="h-4 w-4" />
               </Link>
@@ -186,7 +187,7 @@ export default async function AdminScansPage({
       </div>
 
       {/* Scans Table Card */}
-      <div className="bg-ds-background-default border border-ds-border rounded-xl shadow-md overflow-hidden">
+      <div className="bg-[var(--ds-background-default,#FFFFFF)] border border-[var(--ds-border,#DFE1E6)] rounded-xl shadow-none overflow-hidden">
         <GlobalScansTable scans={scans as ScanLog[]} locale={locale} />
       </div>
 

@@ -44,11 +44,17 @@ export default async function AdminOverviewPage({ params: { locale } }: { params
     scansToday,
     recentOrgs,
   ] = await Promise.all([
+    // skip-organization-check (Global Admin Overview)
     prisma.organization.count(),
+    // skip-organization-check (Global Admin Overview)
     prisma.organization.count({ where: { deletedAt: null } }),
+    // skip-organization-check (Global Admin Overview)
     prisma.user.count({ where: { deletedAt: null } }),
+    // skip-organization-check (Global Admin Overview)
     prisma.user.count({ where: { role: { name: { in: ['ADMIN', 'TENANT_ADMIN'] } }, deletedAt: null } }),
+    // skip-organization-check (Global Admin Overview)
     prisma.scanLog.count({ where: { scannedAt: { gte: todayStart } } }),
+    // skip-organization-check (Global Admin Overview)
     prisma.organization.findMany({
       where: { deletedAt: null },
       orderBy: { createdAt: 'desc' },

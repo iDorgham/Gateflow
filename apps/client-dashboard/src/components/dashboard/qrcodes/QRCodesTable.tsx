@@ -3,24 +3,22 @@
 import { useMemo } from 'react';
 import Link from 'next/link';
 import {
-  Badge,
   cn,
   DynamicTable,
   type Column
 } from '@gate-access/ui';
 import { useTranslation } from 'react-i18next';
 import { 
-  RefreshCw, 
-  Search 
+  RefreshCw
 } from 'lucide-react';
 import type { QRCodeRow } from '@/lib/qrcodes/use-qrcodes';
 
 const STATUS_BADGE: Record<string, { className?: string }> = {
-  ACTIVE: { className: 'bg-[var(--ds-background-success-subtle,#E3FCEF)] text-[var(--ds-text-success,#006644)] border-none' },
-  INACTIVE: { className: 'bg-[var(--ds-background-neutral-subtle,#F4F5F7)] text-[var(--ds-text-subtle,#42526E)] border-none' },
-  EXPIRED: { className: 'bg-[var(--ds-background-warning-subtle,#FFF0B3)] text-[var(--ds-text-warning-inverse,#172B4D)] border-none' },
-  MAX_USES_REACHED: { className: 'bg-[var(--ds-background-selected,#DEEBFF)] text-[var(--ds-text-selected,#0747A6)] border-none' },
-  REVOKED: { className: 'bg-[var(--ds-background-danger-subtle,#FFEBE6)] text-[var(--ds-text-danger,#BF2600)] border-none' },
+  ACTIVE: { className: 'bg-[var(--ds-background-success-subtle,#E3FCEF)] text-[var(--ds-text-success,#006644)]' },
+  INACTIVE: { className: 'bg-[var(--ds-background-neutral-subtle,#F4F5F7)] text-[var(--ds-text-subtle,#42526E)]' },
+  EXPIRED: { className: 'bg-[var(--ds-background-warning-subtle,#FFF0B3)] text-[var(--ds-text-warning-inverse,#172B4D)]' },
+  MAX_USES_REACHED: { className: 'bg-[var(--ds-background-selected,#DEEBFF)] text-[var(--ds-text-selected,#0747A6)]' },
+  REVOKED: { className: 'bg-[var(--ds-background-danger-subtle,#FFEBE6)] text-[var(--ds-text-danger,#BF2600)]' },
 };
 
 const STATUS_LABEL: Record<string, string> = {
@@ -109,7 +107,7 @@ export function QRCodesTable({
       isSortable: true,
       render: (item) => (
         item.projectName ? (
-          <span className="inline-flex items-center gap-1.5 rounded-lg bg-[var(--ds-background-brand-subtle,#DEEBFF)] px-2 py-0.5 text-[10px] font-black text-[var(--ds-text-brand,#0052CC)] uppercase tracking-widest whitespace-nowrap">
+          <span className="inline-flex items-center gap-1.5 rounded-[3px] bg-[var(--ds-background-brand-subtle,#DEEBFF)] px-2 py-0.5 text-[11px] font-semibold text-[var(--ds-text-brand,#0052CC)] uppercase tracking-tight whitespace-nowrap">
             {item.projectName}
           </span>
         ) : <span className="text-[var(--ds-text-subtle,#6B778C)]">—</span>
@@ -125,10 +123,10 @@ export function QRCodesTable({
         return (
           <div className="flex items-center">
             <span className={cn(
-              'inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-[0.15em]',
+              'inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider',
               config.className
             )}>
-              <div className={cn("h-1.5 w-1.5 rounded-full", status === 'ACTIVE' ? "bg-emerald-500 animate-pulse" : "bg-zinc-400")} />
+              <div className={cn("h-1.5 w-1.5 rounded-full", status === 'ACTIVE' ? "bg-[var(--ds-icon-success,#00875A)] animate-pulse" : "bg-[var(--ds-icon-subtle,#6B778C)]")} />
               {STATUS_LABEL[status] ?? status}
             </span>
           </div>
@@ -141,7 +139,7 @@ export function QRCodesTable({
       isSortable: true,
       render: (item) => (
         <div className="flex flex-col tabular-nums">
-          <span className="text-[13px] font-bold text-[var(--ds-text,#172B4D)]">
+          <span className="text-[13px] font-semibold text-[var(--ds-text,#172B4D)]">
             {new Date(item.createdAt).toLocaleDateString(locale, { month: 'short', day: 'numeric', year: '2-digit' })}
           </span>
         </div>

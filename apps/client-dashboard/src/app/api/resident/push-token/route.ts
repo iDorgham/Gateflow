@@ -34,8 +34,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const organizationId = claims.orgId;
     const user = await prisma.user.findUnique({
-      where: { id: claims.sub },
+      where: { id: claims.sub, organizationId },
       select: { id: true, preferences: true },
     });
 
@@ -59,7 +60,7 @@ export async function POST(request: NextRequest) {
     if (notifyArrival !== undefined) updated.notifyArrival = notifyArrival;
 
     await prisma.user.update({
-      where: { id: claims.sub },
+      where: { id: claims.sub, organizationId },
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       data: { preferences: updated as any },
     });
@@ -84,14 +85,15 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
+    const organizationId = claims.orgId;
     const user = await prisma.user.findUnique({
-      where: { id: claims.sub },
+      where: { id: claims.sub, organizationId },
       select: { preferences: true },
     });
 
     const existing = (user?.preferences ?? {}) as Record<string, unknown>;
     await prisma.user.update({
-      where: { id: claims.sub },
+      where: { id: claims.sub, organizationId },
       data: {
         preferences: {
           ...existing,

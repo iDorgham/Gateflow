@@ -76,6 +76,7 @@ export default async function GatesPage({
   const orgFilter = searchParams.org?.trim() ?? '';
   const statusFilter = searchParams.status ?? 'active';
 
+  // skip-organization-check (Global Admin View)
   const gates = await prisma.gate.findMany({
     where: {
       ...(search ? { name: { contains: search, mode: 'insensitive' } } : {}),

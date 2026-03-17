@@ -15,8 +15,9 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   }
 
   try {
+    const organizationId = claims.orgId;
     const org = await prisma.organization.findUnique({
-      where: { id: claims.orgId },
+      where: { id: organizationId },
       select: { stripeCustomerId: true },
     });
 

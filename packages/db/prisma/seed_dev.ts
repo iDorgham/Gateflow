@@ -27,6 +27,7 @@ async function main() {
   const passwordHash = await argon2.hash(DEFAULT_PASSWORD, ARGON2_OPTIONS);
 
   const org = await prisma.organization.upsert({
+    // skip-organization-check (Internal Seed Script)
     where: { email: 'admin@selenadev.com' },
     update: {},
     create: {
@@ -38,6 +39,7 @@ async function main() {
 
   // Create/Upsert Roles (Use non-empty update to force permissions sync)
   const tenantAdminRole = await prisma.role.upsert({
+    // skip-organization-check (Internal Seed Script)
     where: { id: 'role-tenant-admin' },
     update: {
       permissions: DEFAULT_PERMISSIONS[BUILT_IN_ROLES.ORG_ADMIN],
@@ -52,6 +54,7 @@ async function main() {
   });
 
   const user = await prisma.user.upsert({
+    // skip-organization-check (Internal Seed Script)
     where: { email: 'admin@example.com' },
     update: {
       passwordHash,
@@ -68,6 +71,7 @@ async function main() {
   });
 
   const user2 = await prisma.user.upsert({
+    // skip-organization-check (Internal Seed Script)
     where: { email: 'admin@selenadev.com' },
     update: {
       passwordHash,
@@ -84,6 +88,7 @@ async function main() {
   });
 
   await prisma.project.upsert({
+    // skip-organization-check (Internal Seed Script)
     where: { id: 'default-proj' },
     update: {},
     create: {

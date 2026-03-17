@@ -10,16 +10,24 @@ import { format } from 'date-fns';
 export default async function VisitorDetailPage({ params }: { params: { id: string } }) {
   const claims = await getSessionClaims();
   const userId = claims?.sub || 'dev-resident-id';
+  const orgId = claims?.org || 'dev-org-id';
 
-  const visitor = await prisma.visitorQR.findUnique({
-    where: { id: params.id },
+  const visitor = await prisma.visitorQR.findFirst({
+    where: { 
+      id: params.id,
+      createdBy: userId,
+      qrCode: {
+        organizationId: orgId,
+        deletedAt: null
+      }
+    },
     include: {
       qrCode: true,
       accessRule: true,
     },
   });
 
-  if (!visitor || visitor.createdBy !== userId) {
+  if (!visitor) {
     return notFound();
   }
 

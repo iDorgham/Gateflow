@@ -83,6 +83,7 @@ async function main() {
 
   try {
     // Fetch all non-deleted webhooks (include soft-deleted for completeness)
+    // skip-organization-check
     const webhooks = await prisma.webhook.findMany({
       select: { id: true, secret: true },
     });
@@ -111,6 +112,7 @@ async function main() {
       const newSecret = encrypt(plaintext);
 
       try {
+        // skip-organization-check
         await prisma.webhook.update({
           where: { id: wh.id },
           data: { secret: newSecret },

@@ -42,6 +42,7 @@ export default async function OrganizationsPage({
   };
 
   const [orgs, total] = await Promise.all([
+    // skip-organization-check (Global Admin List)
     prisma.organization.findMany({
       where,
       orderBy: { createdAt: 'desc' },
@@ -56,17 +57,20 @@ export default async function OrganizationsPage({
         _count: { select: { users: true, qrCodes: true, gates: true } },
       },
     }),
+    // skip-organization-check (Global Admin Count)
     prisma.organization.count({ where }),
   ]);
 
   // Scans last 30 days per org
   const thirtyDaysAgo = new Date(Date.now() - 30 * 86_400_000);
+  // skip-organization-check (Global Admin Aggregation)
   const scansByGate = await prisma.scanLog.groupBy({
     by: ['gateId'],
     where: { scannedAt: { gte: thirtyDaysAgo } },
     _count: true,
   });
   const gateIds = scansByGate.map((s) => s.gateId);
+  // skip-organization-check (Global Admin Fetch)
   const gates = await prisma.gate.findMany({
     where: { id: { in: gateIds } },
     select: { id: true, organizationId: true },

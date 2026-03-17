@@ -24,8 +24,13 @@ export default async function PortalLayout({
     return <>{children}</>;
   }
 
+  const organizationId = (claims.org as string) || (claims.orgId as string);
   const unit = await prisma.unit.findFirst({
-    where: { userId: claims.sub, deletedAt: null },
+    where: { 
+      userId: claims.sub, 
+      organizationId,
+      deletedAt: null 
+    },
     select: { id: true },
   });
 

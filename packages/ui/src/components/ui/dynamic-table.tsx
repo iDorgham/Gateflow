@@ -58,7 +58,6 @@ export function DynamicTable<T extends { id: string | number }>({
   };
 
   const allSelected = items.length > 0 && items.every(item => selectedIds.includes(item.id));
-  const someSelected = items.some(item => selectedIds.includes(item.id)) && !allSelected;
 
   const toggleAll = () => {
     if (!onSelectionChange) return;
@@ -83,7 +82,7 @@ export function DynamicTable<T extends { id: string | number }>({
     <div className="w-full">
       <Table>
         <TableHeader>
-          <TableRow className="hover:bg-transparent border-b border-[var(--ds-border,#DFE1E6)]">
+          <TableRow className="hover:bg-transparent border-b border-[var(--ds-border)]">
             {isSelectable && (
               <TableHead className="w-10 px-4">
                 <Checkbox
@@ -98,7 +97,7 @@ export function DynamicTable<T extends { id: string | number }>({
                 key={column.key}
                 style={{ width: column.width }}
                 className={cn(
-                  'h-11 text-[var(--ds-text-subtle,#42526E)] font-bold text-xs uppercase tracking-wider px-4',
+                  'h-11 text-[var(--ds-text-subtle)] font-bold text-xs uppercase tracking-wider px-4',
                   column.align === 'center' && 'text-center',
                   column.align === 'right' && 'text-right'
                 )}
@@ -107,25 +106,27 @@ export function DynamicTable<T extends { id: string | number }>({
                   <button
                     onClick={() => handleSort(column.key)}
                     className={cn(
-                      "flex items-center gap-1.5 hover:text-[var(--ds-text,#172B4D)] transition-colors group p-1 -m-1 rounded",
-                      sortKey === column.key && "text-[var(--ds-text-selected,#0747A6)]"
+                      "flex items-center gap-1.5 hover:bg-[var(--ds-background-neutral-subtle-hovered)] transition-all group px-2 py-1.5 -ml-2 rounded-md",
+                      sortKey === column.key && "text-[var(--ds-text-selected)]"
                     )}
                   >
                     {column.label}
                     <div className="flex flex-col">
                       {sortKey === column.key ? (
                         sortOrder === 'asc' ? (
-                          <ChevronUp className="h-3.5 w-3.5 text-[var(--ds-icon-selected,#0052CC)]" />
+                          <ChevronUp className="h-4 w-4 text-[var(--ds-icon-selected)] animate-in fade-in slide-in-from-bottom-1 duration-200" />
                         ) : (
-                          <ChevronDown className="h-3.5 w-3.5 text-[var(--ds-icon-selected,#0052CC)]" />
+                          <ChevronDown className="h-4 w-4 text-[var(--ds-icon-selected)] animate-in fade-in slide-in-from-top-1 duration-200" />
                         )
                       ) : (
-                        <ChevronUp className="h-3.5 w-3.5 opacity-0 group-hover:opacity-30 transition-opacity" />
+                        <ChevronUp className="h-4 w-4 opacity-0 group-hover:opacity-30 transition-all transform group-hover:translate-y-0.5" />
                       )}
                     </div>
                   </button>
                 ) : (
-                  column.label
+                  <div className="px-0 py-1.5">
+                    {column.label}
+                  </div>
                 )}
               </TableHead>
             ))}
@@ -134,7 +135,7 @@ export function DynamicTable<T extends { id: string | number }>({
         <TableBody>
           {isLoading ? (
             Array.from({ length: 5 }).map((_, i) => (
-              <TableRow key={i} className="border-b border-[var(--ds-border-subtle,#EBECF0)]">
+              <TableRow key={i} className="border-b border-[var(--ds-border-subtle)]">
                 {isSelectable && (
                   <TableCell className="px-4">
                     <Skeleton className="h-4 w-4 rounded-sm opacity-50" />
@@ -159,8 +160,8 @@ export function DynamicTable<T extends { id: string | number }>({
                 key={item.id}
                 onClick={() => onRowClick?.(item)}
                 className={cn(
-                  'group border-b border-[var(--ds-border-subtle,#EBECF0)] hover:bg-[var(--ds-background-neutral-subtle-hovered,#EBECF0)] transition-colors cursor-pointer',
-                  selectedIds.includes(item.id) && 'bg-[var(--ds-background-selected,#DEEBFF)] hover:bg-[var(--ds-background-selected-hovered,#B3D4FF)]',
+                  'group border-b border-[var(--ds-border-subtle)] hover:bg-[var(--ds-background-neutral-subtle-hovered)] transition-colors cursor-pointer',
+                  selectedIds.includes(item.id) && 'bg-[var(--ds-background-selected)] hover:bg-[var(--ds-background-selected-hovered)]',
                   rowClassName?.(item)
                 )}
               >
@@ -177,12 +178,12 @@ export function DynamicTable<T extends { id: string | number }>({
                   <TableCell
                     key={column.key}
                     className={cn(
-                      'text-sm text-[var(--ds-text,#172B4D)] py-4',
+                      'text-sm text-[var(--ds-text)] py-4',
                       column.align === 'center' && 'text-center',
                       column.align === 'right' && 'text-right'
                     )}
                   >
-                    {column.render ? column.render(item) : (item as any)[column.key]}
+                    {column.render ? column.render(item) : (item as Record<string, any>)[column.key]}
                   </TableCell>
                 ))}
               </TableRow>

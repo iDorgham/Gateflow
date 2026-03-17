@@ -35,6 +35,7 @@ async function deleteProject(formData: FormData) {
   requireAdmin();
   const id = formData.get('id') as string;
   if (!id) return;
+  // skip-organization-check (Global Admin Action)
   await prisma.project.update({ where: { id }, data: { deletedAt: new Date() } });
   revalidatePath('/projects');
 }
@@ -44,6 +45,7 @@ async function restoreProject(formData: FormData) {
   requireAdmin();
   const id = formData.get('id') as string;
   if (!id) return;
+  // skip-organization-check (Global Admin Action)
   await prisma.project.update({ where: { id }, data: { deletedAt: null } });
   revalidatePath('/projects');
 }
@@ -66,6 +68,7 @@ export default async function ProjectsPage({
   const orgFilter = searchParams.org?.trim() ?? '';
   const statusFilter = searchParams.status ?? 'active';
 
+  // skip-organization-check (Global Admin List)
   const projects = await prisma.project.findMany({
     where: {
       ...(search ? { name: { contains: search, mode: 'insensitive' } } : {}),
@@ -91,6 +94,7 @@ export default async function ProjectsPage({
   });
 
   const [totalActive] = await Promise.all([
+    // skip-organization-check (Global Admin Count)
     prisma.project.count({ where: { deletedAt: null } }),
   ]);
 

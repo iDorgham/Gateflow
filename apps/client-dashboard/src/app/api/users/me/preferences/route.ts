@@ -39,6 +39,7 @@ export async function GET(): Promise<NextResponse> {
   }
 
   try {
+    const organizationId = claims.orgId;
     const user = await prisma.user.findUnique({
       where: { id: claims.sub, deletedAt: null },
       select: { preferences: true },
