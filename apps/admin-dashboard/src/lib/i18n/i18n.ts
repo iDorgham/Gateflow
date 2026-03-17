@@ -28,7 +28,7 @@ export type TranslationFunction<TNamespace extends Namespace> = <
 >(
   key: K,
   optionsOrValue?: { returnObjects?: boolean; count?: number; [key: string]: unknown } | string
-) => unknown;
+) => any;
 
 const dictionaries = {
   en: () => import('@gate-access/i18n/en').then((module) => module.default),

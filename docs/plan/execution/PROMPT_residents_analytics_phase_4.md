@@ -23,7 +23,7 @@ Align Analytics URL params with Contacts/Units filter schema; add Marketing view
 
 - Audit and align Analytics filter schema with Contacts/Units: dateFrom, dateTo, projectId, gateId, unitType, search; optionally tagIds if Analytics APIs support. buildAnalyticsUrl and parseFiltersFromSearchParams (or equivalent) accept and persist these. buildContactsUrl/buildUnitsUrl already accept filters; ensure Analytics "Apply to Contacts/Units" passes full filter state.
 - Marketing view: add placeholders or minimal implementations for (1) Attribution funnel (Link Open → Scan → Repeat → Lead), (2) Persona/tag pie (by tag from contacts), (3) ROI calculator widget. Can be "Coming soon" or stub charts.
-- Optional: Redis caching for /api/analytics/summary and /api/analytics/heatmap (key e.g. org:{orgId}:analytics:summary:{filterHash}, TTL 5–15 min). If added, create or update docs/CACHE_STRATEGY.md (or docs/plan/...) with key patterns and TTLs.
+- Optional: Redis caching for /api/analytics/summary and /api/analytics/heatmap (key e.g. org:{orgId}:analytics:summary:{filterHash}, TTL 5–15 min). If added, create or update docs/guides/CACHE_STRATEGY.md (or docs/plan/...) with key patterns and TTLs.
 - RTL: ensure Recharts axis labels, tooltips, and legend respect direction; test with Arabic locale.
 
 ### Scope (out)
@@ -56,4 +56,4 @@ Align Analytics URL params with Contacts/Units filter schema; add Marketing view
 - apps/client-dashboard/src/components/dashboard/analytics/* (placeholders)
 - apps/client-dashboard/src/app/api/analytics/summary/route.ts (optional cache)
 - apps/client-dashboard/src/app/api/analytics/heatmap/route.ts (optional cache)
-- docs/CACHE_STRATEGY.md or docs/plan/.../CACHE_STRATEGY.md (if cache added)
+- docs/guides/CACHE_STRATEGY.md or docs/plan/.../CACHE_STRATEGY.md (if cache added)

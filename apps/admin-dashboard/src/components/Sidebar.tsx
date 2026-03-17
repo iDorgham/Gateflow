@@ -14,6 +14,14 @@ import {
   Shield,
   ChevronLeft,
   HelpCircle,
+  BarChart3,
+  ScrollText,
+  CreditCard,
+  Activity,
+  KeyRound,
+  Settings,
+  FolderOpen,
+  DoorOpen,
 } from 'lucide-react';
 import { 
   cn, 

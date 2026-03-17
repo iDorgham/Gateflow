@@ -31,11 +31,11 @@ const buttonVariants = cva(
   // gap-2 built-in so icons never need mr-2
   [
     'inline-flex items-center justify-center gap-2 whitespace-nowrap',
-    'rounded-[var(--ds-border-radius-200,4px)]',
+    'rounded-[var(--ds-border-radius-200)]',
     'text-sm font-semibold',
     'ring-offset-background transition-all duration-150',
     'focus-visible:outline-none focus-visible:ring-2',
-    'focus-visible:ring-[var(--ds-border-focused,#4C9AFF)]',
+    'focus-visible:ring-[var(--ds-border-focused)]',
     'focus-visible:ring-offset-2',
     'disabled:pointer-events-none disabled:opacity-40',
     'active:scale-[0.98]',
@@ -46,106 +46,106 @@ const buttonVariants = cva(
       variant: {
         // ─── Neutral (default) ──────────────────────────────
         default: [
-          'bg-[var(--ds-background-neutral,#F4F5F7)]',
-          'text-[var(--ds-text,#172B4D)]',
-          'hover:bg-[var(--ds-background-neutral-hovered,#EBECF0)]',
-          'active:bg-[var(--ds-background-neutral-pressed,#DFE1E6)]',
+          'bg-[var(--ds-background-neutral)]',
+          'text-[var(--ds-text)]',
+          'hover:bg-[var(--ds-background-neutral-hovered)]',
+          'active:bg-[var(--ds-background-neutral-pressed)]',
         ].join(' '),
 
         // ─── Brand / Primary ────────────────────────────────
         primary: [
-          'bg-[var(--ds-background-brand-bold,#0052CC)]',
-          'text-[var(--ds-text-inverse,#FFFFFF)]',
-          'hover:bg-[var(--ds-background-brand-bold-hovered,#004EBE)]',
-          'active:bg-[var(--ds-background-brand-bold-pressed,#0065FF)]',
-          'shadow-[0_1px_2px_rgba(9,30,66,.25)]',
+          'bg-[var(--ds-background-brand-bold)]',
+          'text-[var(--ds-text-inverse)]',
+          'hover:bg-[var(--ds-background-brand-bold-hovered)]',
+          'active:bg-[var(--ds-background-brand-bold-pressed)]',
+          'shadow-[var(--ds-shadow-raised)]',
         ].join(' '),
 
         brand: [
-          'bg-[var(--ds-background-brand-bold,#0052CC)]',
-          'text-[var(--ds-text-inverse,#FFFFFF)]',
-          'hover:bg-[var(--ds-background-brand-bold-hovered,#004EBE)]',
-          'active:bg-[var(--ds-background-brand-bold-pressed,#0065FF)]',
-          'shadow-[0_1px_2px_rgba(9,30,66,.25)]',
+          'bg-[var(--ds-background-brand-bold)]',
+          'text-[var(--ds-text-inverse)]',
+          'hover:bg-[var(--ds-background-brand-bold-hovered)]',
+          'active:bg-[var(--ds-background-brand-bold-pressed)]',
+          'shadow-[var(--ds-shadow-raised)]',
         ].join(' '),
 
         // ─── Danger / Destructive ───────────────────────────
         destructive: [
-          'bg-[var(--ds-background-danger-bold,#DE350B)]',
-          'text-[var(--ds-text-inverse,#FFFFFF)]',
-          'hover:bg-[var(--ds-background-danger-bold-hovered,#BF2600)]',
+          'bg-[var(--ds-background-danger-bold)]',
+          'text-[var(--ds-text-inverse)]',
+          'hover:bg-[var(--ds-background-danger-bold-hovered)]',
         ].join(' '),
 
         // ─── Outline ────────────────────────────────────────
         outline: [
-          'border border-[var(--ds-border,#DFE1E6)]',
+          'border border-[var(--ds-border)]',
           'bg-transparent',
-          'text-[var(--ds-text,#172B4D)]',
-          'hover:bg-[var(--ds-background-neutral-subtle,#FAFBFC)]',
-          'hover:border-[var(--ds-border-bold,#A5ADBA)]',
-          'active:bg-[var(--ds-background-neutral-hovered,#EBECF0)]',
+          'text-[var(--ds-text)]',
+          'hover:bg-[var(--ds-background-neutral-subtle)]',
+          'hover:border-[var(--ds-border-bold)]',
+          'active:bg-[var(--ds-background-neutral-hovered)]',
         ].join(' '),
 
         // ─── Secondary (Selected/Brand subtle) ──────────────
         secondary: [
-          'bg-[var(--ds-background-selected,#DEEBFF)]',
-          'text-[var(--ds-text-selected,#0052CC)]',
-          'hover:bg-[var(--ds-background-selected-hovered,#B3D4FF)]',
+          'bg-[var(--ds-background-selected)]',
+          'text-[var(--ds-text-selected)]',
+          'hover:bg-[var(--ds-background-selected-hovered)]',
         ].join(' '),
 
         // ─── Ghost ──────────────────────────────────────────
         ghost: [
           'bg-transparent',
-          'text-[var(--ds-text-subtle,#42526E)]',
-          'hover:bg-[var(--ds-background-neutral-subtle,#FAFBFC)]',
-          'active:bg-[var(--ds-background-neutral-hovered,#EBECF0)]',
+          'text-[var(--ds-text-subtle)]',
+          'hover:bg-[var(--ds-background-neutral-subtle)]',
+          'active:bg-[var(--ds-background-neutral-hovered)]',
         ].join(' '),
 
         // ─── Link ───────────────────────────────────────────
         link: [
           'bg-transparent',
-          'text-[var(--ds-text-link,#0052CC)]',
+          'text-[var(--ds-text-link)]',
           'underline-offset-4 hover:underline',
-          'hover:text-[var(--ds-text-brand,#0052CC)]',
+          'hover:text-[var(--ds-text-brand)]',
           'p-0 h-auto',
         ].join(' '),
 
         // ─── Subtle ─────────────────────────────────────────
         subtle: [
           'bg-transparent',
-          'text-[var(--ds-text-subtle,#42526E)]',
-          'hover:bg-[var(--ds-background-neutral-subtle,#FAFBFC)]',
+          'text-[var(--ds-text-subtle)]',
+          'hover:bg-[var(--ds-background-neutral-subtle)]',
         ].join(' '),
 
         // ─── Success ────────────────────────────────────────
         success: [
-          'bg-[var(--ds-background-success-bold,#00875A)]',
-          'text-[var(--ds-text-inverse,#FFFFFF)]',
-          'hover:bg-[var(--ds-background-success-bold-hovered,#006644)]',
-          'shadow-[0_1px_2px_rgba(9,30,66,.15)]',
+          'bg-[var(--ds-background-success-bold)]',
+          'text-[var(--ds-text-inverse)]',
+          'hover:bg-[var(--ds-background-success-bold-hovered)]',
+          'shadow-[var(--ds-shadow-raised)]',
         ].join(' '),
 
         // ─── Warning ────────────────────────────────────────
         warning: [
-          'bg-[var(--ds-background-warning-bold,#FFAB00)]',
-          'text-[var(--ds-text-warning-inverse,#172B4D)]',
-          'hover:bg-[var(--ds-background-warning-bold-hovered,#FF991F)]',
+          'bg-[var(--ds-background-warning-bold)]',
+          'text-[var(--ds-text-warning-inverse)]',
+          'hover:bg-[var(--ds-background-warning-bold-hovered)]',
         ].join(' '),
 
         // ─── Discovery / Rovo AI ────────────────────────────
         discovery: [
-          'bg-[var(--ds-background-discovery-bold,#5243AA)]',
-          'text-[var(--ds-text-inverse,#FFFFFF)]',
-          'hover:bg-[var(--ds-background-discovery-bold-hovered,#403294)]',
-          'shadow-[0_1px_2px_rgba(82,67,170,.3)]',
+          'bg-[var(--ds-background-discovery-bold)]',
+          'text-[var(--ds-text-inverse)]',
+          'hover:bg-[var(--ds-background-discovery-bold-hovered)]',
+          'shadow-[var(--ds-shadow-raised)]',
         ].join(' '),
 
         // ─── Discovery Subtle ───────────────────────────────
         'discovery-subtle': [
-          'bg-[var(--ds-background-discovery-subtle,#EAE6FF)]',
-          'text-[var(--ds-text-discovery,#403294)]',
-          'hover:bg-[var(--ds-background-discovery-subtle-hovered,#C0B6F2)]',
-          'border border-[var(--ds-border-discovery,#998DD9)]',
+          'bg-[var(--ds-background-discovery-subtle)]',
+          'text-[var(--ds-text-discovery)]',
+          'hover:bg-[var(--ds-background-discovery-subtle-hovered)]',
+          'border border-[var(--ds-border-discovery)]',
         ].join(' '),
       },
       size: {
@@ -153,8 +153,8 @@ const buttonVariants = cva(
         sm:      'h-8 px-3 text-xs',
         lg:      'h-11 px-6 text-base',
         xl:      'h-12 px-8 text-base font-bold',
-        icon:    'h-9 w-9 p-0 rounded-[var(--ds-border-radius-200,4px)]',
-        'icon-sm': 'h-7 w-7 p-0 text-xs rounded-[var(--ds-border-radius-200,4px)]',
+        icon:    'h-9 w-9 p-0 rounded-[var(--ds-border-radius-200)]',
+        'icon-sm': 'h-7 w-7 p-0 text-xs rounded-[var(--ds-border-radius-200)]',
         compact: 'h-7 px-2 text-xs',
       },
     },

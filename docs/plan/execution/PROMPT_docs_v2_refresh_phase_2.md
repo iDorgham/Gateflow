@@ -9,7 +9,7 @@ CONTENT / DX
 ## Context
 - **Project**: GateFlow Docs v2
 - **Refs**:
-  - `docs/PRD_v7.0.md` — canonical truth
+  - `docs/archive/legacy/PRD_v7.0.md` — canonical truth
   - `docs/guides/ARCHITECTURE.md` (164 lines)
   - `docs/guides/SECURITY_OVERVIEW.md` (220 lines)
   - `docs/guides/DEVELOPMENT_GUIDE.md` (171 lines)

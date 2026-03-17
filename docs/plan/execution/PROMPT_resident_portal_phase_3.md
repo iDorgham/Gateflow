@@ -36,7 +36,7 @@ Load these skills when implementing (from `.cursor/skills/`):
   - Use soft deletes (`deletedAt: null`) where applicable.  
   - All QR payloads must be HMAC-SHA256 signed using `QR_SIGNING_SECRET`.  
   - Input validation via Zod; rate limiting on high-impact routes if needed.
-- **Refs**: `docs/SECURITY_OVERVIEW.md`, `.cursor/contracts/CONTRACTS.md`, `apps/client-dashboard/src/app/api/qrcodes/*`, `apps/client-dashboard/src/app/api/qr/*`
+- **Refs**: `docs/guides/SECURITY_OVERVIEW.md`, `.cursor/contracts/CONTRACTS.md`, `apps/client-dashboard/src/app/api/qrcodes/*`, `apps/client-dashboard/src/app/api/qr/*`
 
 ### Goal
 

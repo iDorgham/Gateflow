@@ -55,4 +55,4 @@ Complete i18n for all new strings (Unit ID, table customizer, View Units/View Co
 - apps/client-dashboard/src/app/[locale]/dashboard/residents/units/page.tsx (vacancy badge)
 - apps/client-dashboard/src/lib/residents/use-contacts.ts
 - apps/client-dashboard/src/lib/residents/use-units.ts
-- docs/CACHE_STRATEGY.md or docs/plan/.../CACHE_STRATEGY.md
+- docs/guides/CACHE_STRATEGY.md or docs/plan/.../CACHE_STRATEGY.md

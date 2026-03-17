@@ -40,7 +40,7 @@ Use this role when implementing in Cursor or when invoking CLIs for this phase.
 - Reference:
   - `packages/db/prisma/schema.prisma`
   - Existing residents/contacts/units APIs under `apps/client-dashboard/src/app/api/`.
-  - `docs/SECURITY_OVERVIEW.md`, `.cursor/contracts/CONTRACTS.md`.
+  - `docs/guides/SECURITY_OVERVIEW.md`, `.cursor/contracts/CONTRACTS.md`.
 
 ### Goal
 
@@ -68,7 +68,7 @@ Introduce backend fields and API support needed for richer **Project**, **Contac
 
 ### Steps (ordered)
 
-1. Load `gf-database` and `gf-api` skills; skim `docs/SECURITY_OVERVIEW.md` and `.cursor/contracts/CONTRACTS.md` for any constraints on storing additional PII and notes.
+1. Load `gf-database` and `gf-api` skills; skim `docs/guides/SECURITY_OVERVIEW.md` and `.cursor/contracts/CONTRACTS.md` for any constraints on storing additional PII and notes.
 2. In `packages/db/prisma/schema.prisma`, update models for:
    - `Contact`-like model: add `jobTitle`, `source`, `companyWebsite`, `avatarUrl`, `notes` (nullable where appropriate).
    - `Project`: confirm `location`, `website`, `logoUrl`, `coverUrl`; add `galleryJson` (or similar) and `externalUrl` if needed.

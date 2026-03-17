@@ -12,7 +12,7 @@ CONTENT / DX
   - `docs/guides/SCANNER_OPERATIONS.md` — exists
   - `docs/guides/RESIDENT_EXPERIENCE.md` — exists
   - `docs/plan/learning/patterns.md`, `incidents.md`, `decisions.md` — exist but may be sparse
-  - `docs/PRD_v7.0.md` — canonical source for Phase 2 features
+  - `docs/archive/legacy/PRD_v7.0.md` — canonical source for Phase 2 features
 
 ## Goal
 Review and update the two extended guides so they accurately reflect PRD v6. Curate the learning docs with at least the top patterns and decisions from the project so far.
