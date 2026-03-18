@@ -40,6 +40,10 @@
     "node": "^20.0.0"
   },
   "pnpm": {
+    "supportedArchitectures": {
+      "os": ["linux", "darwin"],
+      "cpu": ["x64", "arm64"]
+    },
     "onlyBuiltDependencies": [
       "@prisma/client",
       "argon2",
