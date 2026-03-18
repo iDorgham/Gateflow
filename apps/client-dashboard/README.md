@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Status-95%25-green" alt="Status">
+  <img src="https://img.shields.io/badge/Status-1.0.0--Production-brightgreen" alt="Status">
   <img src="https://img.shields.io/badge/Framework-Next.js%2014-blue" alt="Framework">
   <img src="https://img.shields.io/badge/Auth-JWT%20%2B%20Argon2id-blue" alt="Auth">
 </p>
@@ -19,234 +19,70 @@
 
 ## 📋 Overview
 
-The **GateFlow Client Dashboard** is the primary SaaS portal for property managers, security heads, and administrators to manage access control across their properties. It provides a comprehensive interface for QR code management, gate operations, team management, analytics, and integrations.
+The **GateFlow Client Dashboard** is the primary hub for property managers. It serves as the "Control Tower" for all gate operations, resident management, and security protocols.
 
-### Purpose
-
-- 🏢 **Property Management** — Manage organizations, projects, and units
-- 🔲 **QR Code Management** — Create, validate, and track visitor passes
-- 🚪 **Gate Operations** — Configure and monitor access points
-- 👥 **Team Management** — RBAC with built-in and custom roles
-- 📊 **Analytics** — Real-time metrics and reporting
-- 🔌 **Integrations** — Webhooks, API keys, and external systems
+### Key Capabilities
+- **Simplified Navigation**: Accessible directly at the root locale path (`/[locale]/`) for instant overview.
+- **Unified QR System**: Create passes for guests, contractors, and permanent residents.
+- **Resident Autonomy**: Manage units and visitor quotas with multi-project organization.
+- **Security Hub**: Real-time scan feeds, incident tracking, and watchlist management.
 
 ---
 
 ## ✨ Features
 
-### Core Features
+### 🏢 Property Management
+| Feature | Capability |
+| :--- | :--- |
+| **Organizations** | Multi-tenant isolation for distinct property owners. |
+| **Projects** | Sub-divisions for compound building blocks or specific events. |
+| **Units** | Map residents to physical units with automated quota limits. |
+| **Team RBAC** | Granular permissions (Admin, Manager, Operator) with custom roles. |
 
-| Feature | Description | Status |
-|---------|-------------|--------|
-| **Organization Management** | Multi-tenant organization setup | ✅ Complete |
-| **QR Code Management** | Single, bulk CSV, and recurring passes | ✅ Complete |
-| **Gate Management** | CRUD for physical access points | ✅ Complete |
-| **Team & RBAC** | Built-in roles + custom permissions | ✅ Complete |
-| **Projects** | Multi-project organization | ✅ Complete |
-| **Contacts (CRM)** | Visitor relationship management | ✅ Complete |
-| **Units** | Residential unit management | ✅ Complete |
-| **Watchlists** | Security blocklist | ✅ Complete |
-| **Incidents** | Security incident tracking | ✅ Complete |
-| **Analytics Dashboard** | Real-time metrics & charts | ✅ Complete |
-| **Webhooks** | Event notifications | ✅ Complete |
-| **API Keys** | Programmatic access | ✅ Complete |
-| **Real-time Updates** | SSE-powered live updates | ✅ Complete |
-| **Privacy Controls** | Data retention policies | ✅ Complete |
-| **Supervisor Override** | PIN-based bypass | ✅ Complete |
-
-### Security Features
-
-- 🔐 **JWT Authentication** — Short-lived tokens with refresh
-- 🔑 **Argon2id Password Hashing** — Enterprise-grade security
-- 🛡️ **CSRF Protection** — Double-submit cookie pattern
-- ⏱️ **Rate Limiting** — Redis-backed, multi-instance safe
-- 🔒 **Field Encryption** — AES-256 for sensitive data
-- 📋 **Audit Logs** — Full action trail
-- 🏷️ **Role-Based Access** — Granular permissions
+### 🛡️ Security & Ops
+- **Live Feed (SSE)**: Stateless real-time stream of all gate activity.
+- **Waitlists**: Proactive blocking of individuals or vehicles.
+- **Incident Reporting**: From denial of entry to safety escalations.
+- **Supervisor Override**: Audit-linked PIN bypass for gate operators.
 
 ---
 
 ## 💻 Tech Stack
 
-| Category | Technology |
-|----------|------------|
-| **Framework** | Next.js 14 (App Router) |
-| **Language** | TypeScript |
-| **Styling** | Tailwind CSS + shadcn/ui |
-| **Database** | PostgreSQL via Prisma |
-| **Auth** | JWT (jose) + Argon2id |
-| **Charts** | Recharts |
-| **Forms** | React Hook Form + Zod |
-| **State** | TanStack Query |
-| **i18n** | i18next |
-
-### Key Dependencies
-
-```json
-{
-  "next": "^14.2.35",
-  "@gate-access/db": "^0.1.0",
-  "@gate-access/ui": "workspace:^",
-  "@gate-access/i18n": "workspace:^",
-  "argon2": "^0.44.0",
-  "jose": "4.15.9",
-  "recharts": "^2.15.4",
-  "@tanstack/react-query": "^5.90.21"
-}
-```
+- **Frontend**: Next.js 14 (App Router)
+- **Design System**: Atlassian Design System (ADS) tokens + dark mode.
+- **State/Data**: TanStack Query + Prisma ORM.
+- **Auth**: Decoupled Argon2id password logic with JWT session management.
 
 ---
 
 ## 🚀 Getting Started
 
-### Prerequisites
-
-- Node.js 20+
-- pnpm 8+
-- PostgreSQL 15+
-
-### Installation
-
 ```bash
-# From monorepo root
+# Install root
 pnpm install
 
-# Setup database
-cd packages/db
-cp .env.example .env
-# Configure DATABASE_URL
-npx prisma migrate dev
-npx prisma db seed
+# Setup DB
+pnpm db:migrate
 
-# Start development
-pnpm turbo dev --filter=client-dashboard
+# Start Client Dashboard
+pnpm dev:client
 ```
 
-### Development Server
-
-```bash
-# Navigate to app directory
-cd apps/client-dashboard
-
-# Run development server
-pnpm dev
-
-# Run tests
-pnpm test
-
-# Type-check
-pnpm typecheck
-```
-
-### Default Port
-
-```
-http://localhost:3001
-```
+**Local Port**: `http://localhost:3001`
 
 ---
 
-## 📁 Project Structure
+## 📂 Architecture
 
-```
-apps/client-dashboard/
-├── app/
-│   ├── api/                   # API routes
-│   │   ├── auth/             # Authentication
-│   │   ├── qrcodes/          # QR code CRUD
-│   │   ├── scans/             # Scan operations
-│   │   ├── gates/            # Gate management
-│   │   ├── projects/         # Project CRUD
-│   │   ├── contacts/         # CRM
-│   │   ├── units/            # Unit management
-│   │   ├── webhooks/         # Webhook config
-│   │   ├── api-keys/         # API key management
-│   │   └── events/           # SSE endpoint
-│   ├── dashboard/            # Protected routes
-│   │   ├── qrcodes/          # QR management UI
-│   │   ├── scans/            # Scan history UI
-│   │   ├── gates/            # Gate management UI
-│   │   ├── projects/          # Projects UI
-│   │   ├── team/             # Team/RBAC UI
-│   │   ├── analytics/        # Analytics UI
-│   │   └── workspace/        # Settings UI
-│   ├── login/                # Login page
-│   └── s/[shortId]/         # Short link redirect
-├── lib/
-│   ├── auth.ts               # JWT utilities
-│   ├── auth-cookies.ts       # Cookie management
-│   ├── dashboard-auth.ts     # Route guards
-│   ├── rate-limit.ts         # Rate limiting
-│   ├── encryption.ts         # Field encryption
-│   └── utils.ts              # General utilities
-├── components/               # React components
-└── prisma/                   # Schema (if local)
-```
-
----
-
-## 🔐 Authentication
-
-### JWT Token Flow
-
-1. **Login** → Access token (15 min) + Refresh token (30 days)
-2. **Access Expiry** → Use refresh token
-3. **Refresh** → New access + New refresh (rotation)
-4. **Logout** → Revoke refresh token
-
-### RBAC Roles
-
-| Role | Access Level |
-|------|--------------|
-| `TENANT_ADMIN` | Full access |
-| `TENANT_USER` | Limited access |
-| `SECURITY_MANAGER` | Security operations |
-| `GATE_OPERATOR` | Scanner-only access |
-
----
-
-## 📡 API Endpoints
-
-### Core Endpoints
-
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/auth/login` | POST | User login |
-| `/api/auth/refresh` | POST | Token refresh |
-| `/api/auth/logout` | POST | User logout |
-| `/api/qrcodes` | GET/POST | QR CRUD |
-| `/api/qrcodes/bulk` | POST | Bulk CSV create |
-| `/api/qrcodes/validate` | POST | Server validation |
-| `/api/scans` | GET | Scan history |
-| `/api/gates` | GET/POST | Gate CRUD |
-| `/api/projects` | GET/POST | Project CRUD |
-| `/api/contacts` | GET/POST | Contact CRM |
-| `/api/units` | GET/POST | Unit management |
-| `/api/analytics/*` | GET | Analytics data |
-| `/api/webhooks` | GET/POST | Webhook config |
-| `/api/api-keys` | GET/POST | API key management |
-| `/api/events/stream` | GET | SSE real-time |
-
----
-
-## 🔗 Related Apps
-
-| App | Description | Port |
-|-----|-------------|------|
-| [Marketing](../marketing) | Public website | 3000 |
-| [Admin Dashboard](../admin-dashboard) | Platform admin | 3002 |
-| [Scanner App](../scanner-app) | Gate scanning | 8081 |
-| [Resident Portal](../resident-portal) | Self-service | 3003 |
-
----
-
-## 📄 License
-
-MIT License — see [../../LICENSE](../../LICENSE) for details.
+- `src/app/[locale]/`: Root-localized pages with the new "Home Dashboard" at `page.tsx`.
+- `src/components/dashboard/`: Reusable layouts (`DashboardWrapper`) and widgets.
+- `src/lib/password.ts`: Isolated native Argon2 logic for high-security hashing.
+- `src/lib/auth.ts`: JWT and session management layer.
 
 ---
 
 <p align="center">
-  <strong>Part of the GateFlow Ecosystem</strong><br>
-  <a href="https://gateflow.io">Website</a> • <a href="https://github.com/iDorgham/Gateflow">GitHub</a>
+  <strong>Part of the GateFlow 1.0 Production Ecosystem</strong><br>
+  <a href="../../README.md">Main Project</a> • <a href="../../docs/README.md">Documentation</a>
 </p>

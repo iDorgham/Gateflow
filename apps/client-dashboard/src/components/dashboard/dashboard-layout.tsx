@@ -193,7 +193,7 @@ function SearchHeader({
 }
 
 const NAV_ITEMS = [
-  { label: 'Dashboard', href: '/dashboard', icon: SquaresFour, exact: true, i18nKey: 'sidebar.overview' },
+  { label: 'Dashboard', href: '/', icon: SquaresFour, exact: true, i18nKey: 'sidebar.overview' },
   { label: 'AI assistant', href: '/dashboard/ai', icon: Sparkle, i18nKey: 'sidebar.gateAi' },
   { label: 'Projects', href: '/dashboard/projects', icon: Stack, i18nKey: 'sidebar.projects' },
   { label: 'QR Codes', href: '/dashboard/qrcodes', icon: QrCodeIcon, i18nKey: 'sidebar.qrCodes' },
@@ -279,7 +279,7 @@ function LeftSidebar({
     >
       <div className={cn('shrink-0 border-b border-border/50 p-6', isCollapsed ? 'flex justify-center' : 'px-6')}>
         <Link
-          href={`/${locale}/dashboard`}
+          href={`/${locale}`}
           className="flex items-center gap-3 rounded-lg transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-ring"
           aria-label="GateFlow home"
         >
@@ -520,7 +520,7 @@ function MobileSidebar({
         aria-label="Mobile navigation"
       >
         <div className="flex flex-col h-full pt-6">
-          <Link href={`/${locale}/dashboard`} className="flex items-center gap-3 px-5 pb-5 border-b border-border/50" onClick={() => onOpenChange(false)}>
+          <Link href={`/${locale}`} className="flex items-center gap-3 px-5 pb-5 border-b border-border/50" onClick={() => onOpenChange(false)}>
             <div className="flex h-8 w-8 items-center justify-center rounded-md bg-[#0052CC] text-white">
               <ShieldCheck className="h-5 w-5" />
             </div>
@@ -587,7 +587,7 @@ export function DashboardLayout({
     }).then(() => {
       startTransition(() => {
         if (val === 'all') {
-          router.push(`/${locale}/dashboard`);
+          router.push(`/${locale}`);
         } else {
           router.push(`/${locale}/dashboard/projects/${projectId}`);
         }

@@ -2,8 +2,8 @@
 
 import { cookies } from 'next/headers';
 import { prisma } from '@gate-access/db';
+import { verifyPassword } from '@/lib/password';
 import {
-  verifyPassword,
   signAccessToken,
   generateRefreshToken,
   getRefreshTokenExpiry,

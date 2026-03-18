@@ -5,6 +5,9 @@ import '../globals.css';
 export const metadata: Metadata = {
   title: { template: '%s | GateFlow', default: 'GateFlow' },
   description: 'QR Access Control Platform',
+  icons: {
+    icon: '/icon.png',
+  },
 };
 
 import { Locale, i18n } from '@/lib/i18n-config';

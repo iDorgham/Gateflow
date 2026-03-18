@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { LoginPayloadSchema, TokenResponseSchema } from '@gate-access/types';
 import { prisma } from '@gate-access/db';
+import { verifyPassword } from '../../../../lib/password';
 import {
   signAccessToken,
-  verifyPassword,
   generateRefreshToken,
   getRefreshTokenExpiry,
 } from '../../../../lib/auth';

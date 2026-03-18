@@ -2,7 +2,7 @@
 
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma } from '@gate-access/db';
-import { verifyPassword, hashPassword } from '@/lib/auth';
+import { verifyPassword, hashPassword } from '@/lib/password';
 import { revalidatePath } from 'next/cache';
 
 

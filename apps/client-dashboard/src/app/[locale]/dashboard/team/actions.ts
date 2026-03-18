@@ -3,7 +3,7 @@
 import { logger } from '@/lib/logger';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma } from '@gate-access/db';
-import { hashPassword, generateTemporaryPassword } from '@/lib/auth';
+import { hashPassword, generateTemporaryPassword } from '@/lib/password';
 
 type MemberResult = {
   success: boolean;

@@ -39,11 +39,12 @@
   "engines": {
     "node": "20.x"
   },
-  "dependencies": {
-    "argon2": "^0.44.0",
-    "zod": "^4.3.6"
-  },
   "pnpm": {
+    "onlyBuiltDependencies": [
+      "argon2",
+      "prisma",
+      "@prisma/client"
+    ],
     "patchedDependencies": {
       "expo-router@6.0.23": "patches/expo-router@6.0.23.patch"
     }

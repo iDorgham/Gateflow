@@ -9,6 +9,9 @@ import './globals.css';
 export const metadata: Metadata = {
   title: { default: 'GateFlow Admin', template: '%s | GateFlow Admin' },
   description: 'Super-admin management dashboard',
+  icons: {
+    icon: '/icon.png',
+  },
 };
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
