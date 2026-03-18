@@ -720,6 +720,9 @@ importers:
       '@prisma/client':
         specifier: ^5.22.0
         version: 5.22.0(prisma@5.22.0)
+      '@prisma/extension-accelerate':
+        specifier: ^3.0.1
+        version: 3.0.1(@prisma/client@5.22.0)
       date-fns:
         specifier: ^4.1.0
         version: 4.1.0
@@ -4035,6 +4038,15 @@ packages:
       '@prisma/engines-version': 5.22.0-44.605197351a3c8bdd595af2d2a9bc3025bca48ea2
       '@prisma/fetch-engine': 5.22.0
       '@prisma/get-platform': 5.22.0
+
+  /@prisma/extension-accelerate@3.0.1(@prisma/client@5.22.0):
+    resolution: {integrity: sha512-xc+kn4AjjTzS9jsdD1JWCebB09y0Aj+C8GjjG7oUm81PF9psvmJOw5rxpl7tOEBz/8hmuNX996XL28ys/OLxVA==}
+    engines: {node: '>=22'}
+    peerDependencies:
+      '@prisma/client': '>=4.16.1'
+    dependencies:
+      '@prisma/client': 5.22.0(prisma@5.22.0)
+    dev: false
 
   /@prisma/fetch-engine@5.22.0:
     resolution: {integrity: sha512-bkrD/Mc2fSvkQBV5EpoFcZ87AvOgDxbG99488a5cexp5Ccny+UM6MAe/UFkUC0wLYD9+9befNOqGiIJhhq+HbA==}
