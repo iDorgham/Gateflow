@@ -66,7 +66,7 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (error: unknown) {
-    if (error instanceof Error && (error as any).digest?.startsWith('NEXT_REDIRECT')) {
+    if (error instanceof Error && (error as { digest?: string }).digest?.startsWith('NEXT_REDIRECT')) {
       throw error;
     }
     console.error('AI Report Gen Error:', error);

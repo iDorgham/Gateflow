@@ -7,7 +7,7 @@ const securityHeaders = [
 ];
 
 const nextConfig = {
-  transpilePackages: ['@gate-access/types', '@gate-access/db'],
+  transpilePackages: ['@gate-access/types', '@gate-access/db', '@gate-access/ui', '@gate-access/i18n'],
   experimental: {
     serverComponentsExternalPackages: ['argon2'],
   },

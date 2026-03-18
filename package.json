@@ -37,7 +37,7 @@
   },
   "packageManager": "pnpm@8.15.0",
   "engines": {
-    "node": ">=18"
+    "node": "20.x"
   },
   "dependencies": {
     "argon2": "^0.44.0",

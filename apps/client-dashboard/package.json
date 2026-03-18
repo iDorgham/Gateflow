@@ -10,6 +10,9 @@
     "test": "jest --forceExit",
     "typecheck": "tsc --noEmit"
   },
+  "engines": {
+    "node": "20.x"
+  },
   "dependencies": {
     "@ai-sdk/google": "^1.2.0",
     "@formatjs/intl-localematcher": "^0.8.1",
