@@ -11,6 +11,7 @@ const nextConfig = {
   transpilePackages: ['@gate-access/types', '@gate-access/ui', '@gate-access/db'],
   experimental: {
     optimizePackageImports: ['@phosphor-icons/react'],
+    serverComponentsExternalPackages: ['argon2'],
   },
   async headers() {
     return [{ source: '/(.*)', headers: securityHeaders }];

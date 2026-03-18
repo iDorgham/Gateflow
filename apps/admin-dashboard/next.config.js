@@ -8,6 +8,9 @@ const securityHeaders = [
 
 const nextConfig = {
   transpilePackages: ['@gate-access/types', '@gate-access/db'],
+  experimental: {
+    serverComponentsExternalPackages: ['argon2'],
+  },
   async headers() {
     return [{ source: '/(.*)', headers: securityHeaders }];
   },
