@@ -32,36 +32,38 @@ export function SideNavItem({
   isCollapsed,
 }: SideNavItemProps) {
   return (
-    <Tooltip delayDuration={0}>
-      <TooltipTrigger asChild>
-        <Link
-          href={href}
-          onClick={onClick}
-          className={cn(
-            'group flex items-center gap-3 rounded-[3px] px-3 py-2 text-sm transition-colors duration-200 select-none outline-none focus-visible:ring-2 focus-visible:ring-[var(--ds-border-selected,#4C9AFF)]',
-            isActive
-              ? 'bg-[var(--ds-background-selected,#DEEBFF)] text-[var(--ds-text-selected,#0052CC)] font-semibold'
-              : 'text-[var(--ds-text-subtle,#42526E)] hover:bg-[var(--ds-background-subtle,#F4F5F7)] hover:text-[var(--ds-text,#172B4D)]',
-            isCollapsed && 'justify-center px-0'
-          )}
-        >
-          {Icon && (
-            <Icon
-              className={cn(
-                'h-4 w-4 shrink-0 transition-all duration-200',
-                isActive ? 'text-[var(--ds-text-selected,#0052CC)]' : 'text-[var(--ds-icon-subtle,#6B778C)]'
-              )}
-            />
-          )}
-          {!isCollapsed && <span className="truncate">{label}</span>}
-        </Link>
-      </TooltipTrigger>
-      {isCollapsed && (
-        <TooltipContent side="right" sideOffset={10}>
-          {label}
-        </TooltipContent>
-      )}
-    </Tooltip>
+    <TooltipProvider>
+      <Tooltip delayDuration={0}>
+        <TooltipTrigger asChild>
+          <Link
+            href={href}
+            onClick={onClick}
+            className={cn(
+              'group flex items-center gap-3 rounded-[3px] px-3 py-2 text-sm transition-colors duration-200 select-none outline-none focus-visible:ring-2 focus-visible:ring-[var(--ds-border-selected,#4C9AFF)]',
+              isActive
+                ? 'bg-[var(--ds-background-selected,#DEEBFF)] text-[var(--ds-text-selected,#0052CC)] font-semibold'
+                : 'text-[var(--ds-text-subtle,#42526E)] hover:bg-[var(--ds-background-subtle,#F4F5F7)] hover:text-[var(--ds-text,#172B4D)]',
+              isCollapsed && 'justify-center px-0'
+            )}
+          >
+            {Icon && (
+              <Icon
+                className={cn(
+                  'h-4 w-4 shrink-0 transition-all duration-200',
+                  isActive ? 'text-[var(--ds-text-selected,#0052CC)]' : 'text-[var(--ds-icon-subtle,#6B778C)]'
+                )}
+              />
+            )}
+            {!isCollapsed && <span className="truncate">{label}</span>}
+          </Link>
+        </TooltipTrigger>
+        {isCollapsed && (
+          <TooltipContent side="right" sideOffset={10}>
+            {label}
+          </TooltipContent>
+        )}
+      </Tooltip>
+    </TooltipProvider>
   );
 }
 
