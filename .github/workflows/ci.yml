@@ -3,9 +3,9 @@ name: CI
 
 on:
   push:
-    branches: [main, develop, 'feat/**']
+    branches: [main, master, develop, 'feat/**']
   pull_request:
-    branches: [main, develop, 'feat/**']
+    branches: [main, master, develop, 'feat/**']
 
 defaults:
   run:
