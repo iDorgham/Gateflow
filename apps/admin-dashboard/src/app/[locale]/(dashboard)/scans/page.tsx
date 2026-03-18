@@ -176,7 +176,7 @@ export default async function AdminScansPage({
 
       {/* Table Section */}
       <div className="bg-[var(--ds-background-default,#FFFFFF)] dark:bg-[#1D2125] border border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46] rounded-sm shadow-md overflow-hidden">
-        <GlobalScansTable scans={scans as any} locale={locale} t={t} />
+        <GlobalScansTable scans={scans as any} locale={locale} />
       </div>
 
       {/* Pagination & Audit Info */}

@@ -27,7 +27,7 @@
     "@gate-access/types": "workspace:*",
     "@prisma/adapter-pg": "^7.5.0",
     "@prisma/client": "^5.22.0",
-    "argon2": "^0.41.1",
+    "@node-rs/argon2": "^2.0.0",
     "date-fns": "^4.1.0",
     "dotenv": "^17.3.1",
     "pg": "^8.20.0",
