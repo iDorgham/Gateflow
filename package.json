@@ -37,13 +37,13 @@
   },
   "packageManager": "pnpm@8.15.0",
   "engines": {
-    "node": "20.x"
+    "node": "^20.0.0"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
+      "@prisma/client",
       "argon2",
-      "prisma",
-      "@prisma/client"
+      "prisma"
     ],
     "patchedDependencies": {
       "expo-router@6.0.23": "patches/expo-router@6.0.23.patch"
