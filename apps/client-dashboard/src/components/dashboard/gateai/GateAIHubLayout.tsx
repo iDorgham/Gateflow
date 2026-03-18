@@ -20,40 +20,34 @@ import { gaLayoutSpring } from './GateAITokens';
 
 const hubStyles = `
   :root {
-    --ga-navy:          #020035;
-    --ga-orange:        #ED4B00;
-    --ga-navy-glass:    rgba(2, 0, 53, 0.75);
-    --ga-navy-border:   rgba(237, 75, 0, 0.18);
-    --ga-dot-color:     rgba(237, 75, 0, 0.06);
+    --ga-navy:          transparent;
+    --ga-orange:        #0052CC; /* Primary brand color */
+    --ga-navy-glass:    transparent;
+    --ga-navy-border:   var(--ds-border, #DFE1E6);
+    --ga-dot-color:     transparent;
     --ga-dot-size:      28px;
-    --ga-panel-bg:      rgba(2, 0, 53, 0.72);
-    --ga-panel-border:  rgba(237, 75, 0, 0.15);
-    --ga-highlight:     rgba(237, 75, 0, 0.85);
-    --ga-text-primary:  #F2F3F4;
-    --ga-text-muted:    rgba(242, 243, 244, 0.55);
-    --ga-text-accent:   #ED4B00;
-    --ga-scrollbar:     rgba(237, 75, 0, 0.3);
+    --ga-panel-bg:      var(--ds-background-default, #FFFFFF);
+    --ga-panel-border:  var(--ds-border, #DFE1E6);
+    --ga-highlight:     #0052CC;
+    --ga-text-primary:  var(--ds-text, #172B4D);
+    --ga-text-muted:    var(--ds-text-subtle, #42526E);
+    --ga-text-accent:   #0052CC;
+    --ga-scrollbar:     rgba(9, 30, 66, 0.1);
   }
 
   .ga-hub-root {
-    background-color: var(--ga-navy);
-    background-image: radial-gradient(var(--ga-dot-color) 1.5px, transparent 1.5px);
-    background-size: var(--ga-dot-size) var(--ga-dot-size);
+    background-color: transparent;
     min-height: 100%;
   }
 
   .ga-panel {
     background: var(--ga-panel-bg);
     border-inline-end: 1px solid var(--ga-panel-border);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
   }
 
   .ga-panel-right {
     background: var(--ga-panel-bg);
     border-inline-start: 1px solid var(--ga-panel-border);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
   }
 
   .ga-canvas {
@@ -73,13 +67,13 @@ interface LeftPanelProps {
   isRtl?: boolean;
 }
 
-export function GateAILeftPanel({ children, _isRtl }: LeftPanelProps) {
+export function GateAILeftPanel({ children, isRtl: _isRtl }: LeftPanelProps) {
   return (
     <aside
       className={cn(
         'ga-panel ga-scroll flex flex-col shrink-0 w-64 h-full overflow-y-auto'
       )}
-      aria-label="GateAI Tags & Navigation"
+      aria-label="Assistant Tags & Navigation"
     >
       {children ?? (
         <div className="flex flex-col gap-3 p-4">
@@ -101,13 +95,13 @@ interface RightPanelProps {
   isRtl?: boolean;
 }
 
-export function GateAIRightPanel({ children, _isRtl }: RightPanelProps) {
+export function GateAIRightPanel({ children, isRtl: _isRtl }: RightPanelProps) {
   return (
     <aside
       className={cn(
         'ga-panel-right ga-scroll flex flex-col shrink-0 w-72 h-full overflow-y-auto'
       )}
-      aria-label="GateAI AI Context & Info"
+      aria-label="Assistant Context & Info"
     >
       {children ?? (
         <div className="flex flex-col gap-3 p-4">
@@ -131,7 +125,7 @@ export function GateAICenterCanvas({ children }: CenterCanvasProps) {
   return (
     <main
       className="ga-canvas ga-scroll flex flex-1 flex-col min-h-0 overflow-y-auto"
-      aria-label="GateAI Operations Canvas"
+      aria-label="Assistant Operations Canvas"
     >
       {children}
     </main>
@@ -180,7 +174,7 @@ export function GateAIHubLayout({
     <div
       dir={isRtl ? 'rtl' : 'ltr'}
       className={cn(
-        'ga-hub-root flex h-[calc(100vh-64px)] overflow-hidden',
+        'ga-hub-root flex h-[calc(100vh-180px)] overflow-hidden rounded-xl border border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-background-default,#FFFFFF)]',
         className
       )}
     >

@@ -66,8 +66,13 @@ export async function POST(request: Request) {
 
     const automation = await prisma.aiAutomation.create({
       data: {
-        ...result.data,
-        organization: { connect: { id: claims.orgId } }, // Reverted to original correct syntax
+        name: result.data.name,
+        description: result.data.description,
+        type: result.data.type as any, // Cast to any to avoid enum mismatch if needed, or use specific enum
+        trigger: result.data.trigger,
+        schedule: result.data.schedule,
+        action: result.data.action,
+        organization: { connect: { id: claims.orgId } },
         user: { connect: { id: claims.sub } },
         status: 'ACTIVE',
       },

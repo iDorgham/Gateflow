@@ -34,7 +34,7 @@ export function CanvasEditor() {
       }),
       LiveChartNode,
     ],
-    content: `<h1>Operations Canvas</h1><p>Drag tags from the sidebar to analyze live data blocks.</p>`,
+    content: `<h1>AI assistant Workspace</h1><p>Drag tags from the sidebar to analyze live data blocks.</p>`,
     editorProps: {
       attributes: {
         class: 'prose prose-invert prose-orange max-w-none focus:outline-none min-h-[500px] p-8',

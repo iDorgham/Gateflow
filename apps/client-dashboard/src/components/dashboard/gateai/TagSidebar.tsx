@@ -111,7 +111,7 @@ export function TagSidebar() {
           className="text-xs font-semibold uppercase tracking-widest"
           style={{ color: 'var(--ga-text-primary)' }}
         >
-          Intelligent Tags
+          Assistant Tags
         </span>
       </div>
 

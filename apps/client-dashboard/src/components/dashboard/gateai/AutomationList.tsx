@@ -73,7 +73,7 @@ export function AutomationList() {
     return (
       <div className="flex flex-col items-center justify-center h-64 text-[var(--ga-text-muted)]">
         <Loader2 className="animate-spin mb-2" size={24} />
-        <span className="text-xs font-mono uppercase tracking-widest">Initialising Hub...</span>
+        <span className="text-xs font-mono uppercase tracking-widest">Initializing Assistant...</span>
       </div>
     );
   }
@@ -87,7 +87,7 @@ export function AutomationList() {
           className="text-xs font-semibold uppercase tracking-widest"
           style={{ color: 'var(--ga-text-primary)' }}
         >
-          Automation Hub
+          Assistant Automations
         </span>
       </div>
 

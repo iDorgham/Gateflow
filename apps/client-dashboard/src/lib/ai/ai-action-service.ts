@@ -42,9 +42,9 @@ export class AiActionService {
         userId: params.userId,
         actionType: params.actionType,
         prompt: this.maskPII(params.prompt),
-        intentJson: params.intentJson || null,
+        intentJson: (params.intentJson as any) || null,
         status: (params.status as AiActionStatus) || 'PENDING',
-        metadata: params.metadata,
+        metadata: params.metadata as any,
       },
     });
   }
@@ -88,7 +88,7 @@ export class AiActionService {
     return await prisma.aiActionLog.update({
       where: { id: actionId },
       data: {
-        status,
+        status: status as AiActionStatus,
         result: result ? this.maskPII(result) : undefined,
         updatedAt: new Date(),
       },

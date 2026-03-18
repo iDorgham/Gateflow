@@ -4,10 +4,6 @@ import * as React from 'react';
 import { Message } from 'ai';
 import { 
   Button, 
-  Card, 
-  CardContent, 
-  CardHeader, 
-  CardTitle, 
   cn,
   Avatar,
   AvatarFallback,
@@ -17,7 +13,7 @@ import {
   TooltipProvider,
   TooltipTrigger
 } from '@gate-access/ui';
-import { Send, User, Sparkles, Loader2, Paperclip, ThumbsUp, ThumbsDown } from 'lucide-react';
+import { Send, User, Sparkles, Loader2, Paperclip, ThumbsUp, ThumbsDown, Mic, BarChart3, FileText, QrCode } from 'lucide-react';
 import { AIChartRenderer, type ChartDataBlock } from './AIChartRenderer';
 import { AIReportRenderer, type ReportDataBlock } from './AIReportRenderer';
 import { AIScheduleRenderer, type ScheduleDataBlock } from './AIScheduleRenderer';
@@ -68,7 +64,15 @@ interface ChatPanelProps {
   isLoading: boolean;
   isRtl: boolean;
   streamData?: any[];
+  onSuggestedPromptClick?: (prompt: string) => void;
 }
+
+const SUGGESTED_PROMPTS = [
+  { icon: BarChart3, label: 'Analyze last month\'s scans', prompt: 'Show me an analysis of last month\'s scan trends.', color: 'text-blue-500 bg-blue-50 dark:bg-blue-900/20' },
+  { icon: QrCode, label: 'Generate guest QR', prompt: 'I want to generate a guest QR code for tomorrow.', color: 'text-purple-500 bg-purple-50 dark:bg-purple-900/20' },
+  { icon: FileText, label: 'Create security report', prompt: 'Generate a security incident report for the last 7 days.', color: 'text-orange-500 bg-orange-50 dark:bg-orange-900/20' },
+  { icon: Sparkles, label: 'Optimize gate flow', prompt: 'How can I optimize the visitor flow at the main gate?', color: 'text-green-500 bg-green-50 dark:bg-green-900/20' },
+];
 
 export function ChatPanel({
   messages,
@@ -78,6 +82,7 @@ export function ChatPanel({
   isLoading,
   isRtl,
   streamData = [],
+  onSuggestedPromptClick,
 }: ChatPanelProps) {
   const scrollRef = React.useRef<HTMLDivElement>(null);
 
@@ -173,28 +178,41 @@ export function ChatPanel({
   const t = (en: string, ar: string) => (isRtl ? ar : en);
 
   return (
-    <Card className="flex flex-col h-full border-[var(--ds-border-discovery,#998DD9)] bg-[var(--ds-background-discovery-subtle,#EAE6FF)]/20 shadow-none">
-      <CardHeader className="border-b border-[var(--ds-border-discovery,#998DD9)]/30 py-4">
-        <CardTitle className="flex items-center gap-2 text-[var(--ds-text-discovery,#403294)] text-lg">
-          <Sparkles className="h-5 w-5" />
-          {t('GateAI Assistant', 'مساعد GateAI الذكي')}
-        </CardTitle>
-      </CardHeader>
-      
-      <CardContent className="flex-1 flex flex-col p-0 overflow-hidden">
+    <div className="flex flex-col h-full bg-transparent">
+
+      <div className="flex-1 flex flex-col p-0 overflow-hidden">
         <ScrollArea className="flex-1 p-4" ref={scrollRef}>
           <div className="flex flex-col gap-4">
             {messages.length === 0 && (
-              <div className="flex flex-col items-center justify-center h-[300px] text-center gap-2 text-[var(--ds-text-discovery,#403294)]/60">
-                <div className="h-12 w-12 rounded-full bg-[var(--ds-background-discovery,#EAE6FF)] flex items-center justify-center mb-2">
-                  <Sparkles size={24} className="text-[var(--ds-text-discovery,#403294)]" />
+              <div className="flex flex-col items-center justify-center min-h-[400px] text-center gap-8 py-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
+                <div className="flex flex-col items-center gap-4">
+                  <div className="h-16 w-16 rounded-2xl bg-[var(--ds-background-discovery,#EAE6FF)] flex items-center justify-center shadow-lg transform rotate-3 hover:rotate-0 transition-transform duration-300">
+                    <Sparkles size={32} className="text-[var(--ds-text-discovery,#403294)]" />
+                  </div>
+                  <h1 className="text-3xl font-bold tracking-tight text-[var(--ds-text,#172B4D)] dark:text-white">
+                    {t('How can I help you today?', 'كيف يمكنني مساعدتك اليوم؟')}
+                  </h1>
+                  <p className="text-base text-[var(--ds-text-subtle,#6B778C)] max-w-md leading-relaxed">
+                    {t('I can help you analyze scans, generate reports, or automate your gate operations in seconds.', 'يمكنني مساعدتك في تحليل المسحات، إنشاء التقارير، أو أتمتة عمليات بواباتك في ثوانٍ.')}
+                  </p>
                 </div>
-                <p className="font-medium text-lg">
-                  {t('How can I help you today?', 'كيف يمكنني مساعدتك اليوم؟')}
-                </p>
-                <p className="text-sm max-w-sm">
-                  {t('Ask about reports, visitor trends, or managing your gates.', 'اسأل عن التقارير، اتجاهات الزوار، أو إدارة بواباتك.')}
-                </p>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-2xl px-4">
+                  {SUGGESTED_PROMPTS.map((item, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => onSuggestedPromptClick?.(item.prompt)}
+                      className="flex items-center gap-3 p-4 text-left bg-white dark:bg-[#1C2126] border border-[var(--ds-border,#DFE1E6)] dark:border-[#2C333A] rounded-xl hover:border-[var(--ds-border-selected,#0052CC)] hover:shadow-md transition-all group"
+                    >
+                      <div className={cn("p-2 rounded-lg shrink-0", item.color)}>
+                        <item.icon size={18} />
+                      </div>
+                      <span className="text-sm font-medium text-[var(--ds-text,#172B4D)] dark:text-[#F4F5F7] group-hover:text-[var(--ds-text-selected,#0052CC)] transition-colors">
+                        {t(item.label, item.label)}
+                      </span>
+                    </button>
+                  ))}
+                </div>
               </div>
             )}
             
@@ -228,10 +246,10 @@ export function ChatPanel({
                       <React.Fragment key={`${m.id}-${i}`}>
                         {part.type === 'text' ? (
                           <div className={cn(
-                            "rounded-2xl px-4 py-2 text-sm leading-relaxed relative",
+                            "rounded-2xl px-4 py-3 text-sm leading-relaxed relative",
                             m.role === 'user'
-                              ? "bg-[var(--ds-background-neutral,#F4F5F7)] text-[var(--ds-text,#172B4D)] rounded-tr-none"
-                              : "bg-white text-[var(--ds-text,#172B4D)] border border-[var(--ds-border-discovery,#998DD9)] shadow-sm rounded-tl-none whitespace-pre-wrap"
+                              ? "bg-[var(--ds-background-neutral,#F4F5F7)] dark:bg-[#2C333A] text-[var(--ds-text,#172B4D)] dark:text-[#F4F5F7] rounded-tr-none"
+                              : "bg-white dark:bg-[#1C2126] text-[var(--ds-text,#172B4D)] dark:text-[#F4F5F7] border border-[var(--ds-border-discovery,#998DD9)] dark:border-[#403294]/50 shadow-sm rounded-tl-none whitespace-pre-wrap"
                           )}>
                             {part.content}
                           </div>
@@ -297,22 +315,22 @@ export function ChatPanel({
                     <Loader2 size={14} className="animate-spin" />
                   </AvatarFallback>
                 </Avatar>
-                <span className="text-xs">{t('GateAI is thinking...', 'GateAI يفكر...')}</span>
+                <span className="text-xs">{t('Assistant is thinking...', 'المساعد يفكر...')}</span>
               </div>
             )}
           </div>
         </ScrollArea>
 
         {/* Input Area */}
-        <div className="p-4 border-t border-[var(--ds-border-discovery,#998DD9)]/30 bg-white/50">
+        <div className="p-6 m-4 border border-[var(--ds-border,#DFE1E6)]/30 dark:border-[#2C333A] bg-[var(--ds-background-neutral-subtle,#F4F5F7)] dark:bg-[#1C2126] rounded-xl shadow-lg ring-1 ring-black/5 dark:ring-white/5">
           <form onSubmit={handleSubmit} className="flex flex-col gap-2">
             <div className="relative">
               <input
                 value={input}
                 onChange={handleInputChange}
-                placeholder={t('Ask GateAI something...', 'اسأل GateAI شيئاً...')}
+                placeholder={t('Ask Assistant something...', 'اسأل المساعد شيئاً...')}
                 className={cn(
-                  "w-full bg-white border border-[var(--ds-border-input,#DFE1E6)] rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ds-border-discovery,#998DD9)] transition-all",
+                  "w-full bg-white border border-[var(--ds-border-input,#DFE1E6)] rounded-xl px-4 py-3.5 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-[#0052CC]/20 focus:border-[#0052CC] transition-all",
                   isRtl ? "pl-24" : "pr-24"
                 )}
                 disabled={isLoading}
@@ -324,7 +342,18 @@ export function ChatPanel({
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <Button variant="ghost" size="icon" type="button" className="h-8 w-8 text-[#6B778C]" disabled>
+                      <Button variant="ghost" size="icon" type="button" className="h-8 w-8 text-[#6B778C] dark:text-[#A5ADBA] hover:bg-gray-100 dark:hover:bg-gray-800">
+                        <Mic size={16} />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side="top">Voice input (Coming soon)</TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button variant="ghost" size="icon" type="button" className="h-8 w-8 text-[#6B778C] dark:text-[#A5ADBA] hover:bg-gray-100 dark:hover:bg-gray-800" disabled>
                         <Paperclip size={16} />
                       </Button>
                     </TooltipTrigger>
@@ -334,7 +363,7 @@ export function ChatPanel({
                 <Button 
                   type="submit" 
                   size="icon" 
-                  className="h-8 w-8 bg-[var(--ds-background-discovery-bold,#5243AA)] hover:bg-[var(--ds-background-discovery-bold,#5243AA)]/90 text-white"
+                  className="h-8 w-8 bg-[#0052CC] hover:bg-[#0052CC]/90 text-white rounded-lg transition-transform active:scale-95"
                   disabled={isLoading || !input.trim()}
                 >
                   <Send size={14} className={isRtl ? "rotate-180" : ""} />
@@ -342,11 +371,8 @@ export function ChatPanel({
               </div>
             </div>
           </form>
-          <p className="mt-2 text-[10px] text-center text-[#6B778C]">
-            {t('Powered by mediaBubble AI Intelligence', 'مدعوم من ذكاء ميديا بابل')}
-          </p>
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

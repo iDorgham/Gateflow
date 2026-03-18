@@ -11,7 +11,7 @@ import { getSessionClaims } from '@/lib/auth-cookies';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'GateAI Operations Hub | GateFlow',
+  title: 'AI assistant | GateFlow',
   description:
     'Transform gate operations with intelligent tagging, canvas analytics, and automated scheduling.',
 };

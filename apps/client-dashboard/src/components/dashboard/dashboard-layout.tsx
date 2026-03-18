@@ -27,6 +27,7 @@ import {
   Sparkle,
   Users,
   Buildings,
+  Stack,
 } from '@phosphor-icons/react';
 import {
   Avatar,
@@ -193,7 +194,8 @@ function SearchHeader({
 
 const NAV_ITEMS = [
   { label: 'Dashboard', href: '/dashboard', icon: SquaresFour, exact: true, i18nKey: 'sidebar.overview' },
-  { label: 'GateAI', href: '/dashboard/ai', icon: Sparkle, i18nKey: 'sidebar.gateAi' },
+  { label: 'AI assistant', href: '/dashboard/ai', icon: Sparkle, i18nKey: 'sidebar.gateAi' },
+  { label: 'Projects', href: '/dashboard/projects', icon: Stack, i18nKey: 'sidebar.projects' },
   { label: 'QR Codes', href: '/dashboard/qrcodes', icon: QrCodeIcon, i18nKey: 'sidebar.qrCodes' },
   { label: 'Scan Logs', href: '/dashboard/scans', icon: Record, i18nKey: 'sidebar.scanLogs' },
   { label: 'Gates', href: '/dashboard/gates', icon: House, i18nKey: 'sidebar.gates' },
@@ -275,7 +277,7 @@ function LeftSidebar({
       role="navigation"
       aria-label="Main navigation"
     >
-      <div className={cn('shrink-0 border-b border-border/50 p-4', isCollapsed ? 'flex justify-center' : 'px-5')}>
+      <div className={cn('shrink-0 border-b border-border/50 p-6', isCollapsed ? 'flex justify-center' : 'px-6')}>
         <Link
           href={`/${locale}/dashboard`}
           className="flex items-center gap-3 rounded-lg transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-ring"
@@ -288,100 +290,77 @@ function LeftSidebar({
         </Link>
       </div>
 
-      <ScrollArea className="flex-1 py-2">
-          <nav className="space-y-0.5 px-3">
-            {!isCollapsed && (
-              <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[#6B778C] dark:text-[#97A0AF] mb-3 mt-4">
-                {t('sidebar.groupMain', 'Main')}
-              </p>
-            )}
-            <NavItem item={NAV_ITEMS[0]} collapsed={isCollapsed} />
+      <ScrollArea className="flex-1">
+          <nav className="flex flex-col gap-8 py-6 px-4">
+            <div className="flex flex-col gap-1.5">
+              {!isCollapsed && (
+                <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[#6B778C] dark:text-[#97A0AF] mb-2">
+                  {t('sidebar.groupMain', 'Main')}
+                </p>
+              )}
+              {/* Dashboard & AI assistant first */}
+              <NavItem item={NAV_ITEMS[0]} collapsed={isCollapsed} />
+              <NavItem item={NAV_ITEMS[1]} collapsed={isCollapsed} />
+            </div>
 
-            {!isCollapsed && (
-              <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[#6B778C] dark:text-[#97A0AF] mb-3 mt-8">
-                {t('sidebar.groupResidents', 'Residents')}
-              </p>
-            )}
-            <Collapsible defaultOpen className="space-y-1">
-              <CollapsibleTrigger
-                className={cn(
-                  'flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-[#42526E] dark:text-[#97A0AF] hover:bg-[#EBECF0] dark:hover:bg-[#2C333A] transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring mb-1',
-                  isCollapsed && 'justify-center px-0'
-                )}
-              >
-                <Users className="h-5 w-5 shrink-0" />
-                {!isCollapsed && (
-                  <>
-                    <span className="flex-1 text-left">{t('sidebar.groupResidents', 'Residents')}</span>
-                    <ChevronDown className="h-4 w-4 shrink-0 transition-transform [[data-state=open]_&]:rotate-180" />
-                  </>
-                )}
-              </CollapsibleTrigger>
-              <CollapsibleContent>
-                <div className={cn('space-y-1', isCollapsed ? 'mt-1' : 'ml-4 mt-0.5')}>
-                  {RESIDENTS_ITEMS.map((item) => {
-                    const Icon = item.icon;
-                    const active = isActive(item.href);
-                    const label = item.i18nKey ? t(item.i18nKey, item.label) : item.label;
-                    return (
-                      <TooltipProvider key={item.href} delayDuration={300}>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <Link
-                              href={`/${locale}${item.href}`}
-                              className={cn(
-                                'flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors mb-1',
-                                active 
-                                  ? 'bg-[#DEEBFF] text-[#0052CC] dark:bg-[#0747A6]/30 dark:text-[#4C9AFF] font-semibold' 
-                                  : 'text-[#42526E] dark:text-[#97A0AF] hover:bg-[#EBECF0] dark:hover:bg-[#2C333A]',
-                                isCollapsed && 'justify-center px-0'
-                              )}
-                            >
-                              <Icon weight={active ? 'fill' : 'regular'} className="h-5 w-5 shrink-0" />
-                              {!isCollapsed && <span>{label}</span>}
-                            </Link>
-                          </TooltipTrigger>
-                          {isCollapsed && (
-                            <TooltipContent side="right" sideOffset={10}>
-                              {label}
-                            </TooltipContent>
-                          )}
-                        </Tooltip>
-                      </TooltipProvider>
-                    );
-                  })}
-                </div>
-              </CollapsibleContent>
-            </Collapsible>
+            <div className="flex flex-col gap-1.5">
+              {!isCollapsed && (
+                <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[#6B778C] dark:text-[#97A0AF] mb-2">
+                  {t('sidebar.groupResidents', 'Residents')}
+                </p>
+              )}
+              <Collapsible defaultOpen className="space-y-1">
+                <CollapsibleTrigger
+                  className={cn(
+                    'flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-[#42526E] dark:text-[#97A0AF] hover:bg-[#EBECF0] dark:hover:bg-[#2C333A] transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                    isCollapsed && 'justify-center px-0'
+                  )}
+                >
+                  <Users className="h-5 w-5 shrink-0" />
+                  {!isCollapsed && (
+                    <>
+                      <span className="flex-1 text-left">{t('sidebar.groupResidents', 'Residents')}</span>
+                      <ChevronDown className="h-4 w-4 shrink-0 transition-transform [[data-state=open]_&]:rotate-180" />
+                    </>
+                  )}
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  <div className={cn('space-y-1.5', isCollapsed ? 'mt-1' : 'ml-4 mt-1')}>
+                    {RESIDENTS_ITEMS.map((item) => (
+                      <NavItem key={item.href} item={item} collapsed={isCollapsed} />
+                    ))}
+                  </div>
+                </CollapsibleContent>
+              </Collapsible>
+            </div>
 
-            {!isCollapsed && (
-              <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[#6B778C] dark:text-[#97A0AF] mb-3 mt-8">
-                {t('sidebar.groupAccess', 'Access')}
-              </p>
-            )}
-            {NAV_ITEMS.filter((item) => item.href !== '/dashboard' && item.href !== '/dashboard/settings').map((item) => (
-              <NavItem key={item.href} item={item} collapsed={isCollapsed} />
-            ))}
-
-            {!isCollapsed && (
-              <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[#6B778C] dark:text-[#97A0AF] mb-3 mt-8">
-                {t('sidebar.groupSystem', 'System')}
-              </p>
-            )}
-            <NavItem item={NAV_ITEMS.find(n => n.href === '/dashboard/settings')!} collapsed={isCollapsed} />
+            <div className="flex flex-col gap-1.5">
+              {!isCollapsed && (
+                <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[#6B778C] dark:text-[#97A0AF] mb-2">
+                  {t('sidebar.groupAccess', 'Access')}
+                </p>
+              )}
+              {NAV_ITEMS.filter((item) => !['/dashboard', '/dashboard/ai', '/dashboard/settings'].includes(item.href)).map((item) => (
+                <NavItem key={item.href} item={item} collapsed={isCollapsed} />
+              ))}
+            </div>
           </nav>
       </ScrollArea>
 
-      <div className="shrink-0 border-t border-sidebar-border p-2 flex justify-center">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8 rounded-md text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"
-          onClick={onToggleCollapse}
-          aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-        >
-          {isRtl ? <ChevronRight className={cn('h-4 w-4', isCollapsed && 'rotate-180')} /> : <ChevronLeft className={cn('h-4 w-4', isCollapsed && 'rotate-180')} />}
-        </Button>
+      <div className="shrink-0 p-4 mt-auto border-t border-border/50 flex flex-col gap-2">
+        <NavItem item={NAV_ITEMS.find(n => n.href === '/dashboard/settings')!} collapsed={isCollapsed} />
+        
+        <div className="flex justify-center pt-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 rounded-md text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"
+            onClick={onToggleCollapse}
+            aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          >
+            {isRtl ? <ChevronRight className={cn('h-4 w-4', isCollapsed && 'rotate-180')} /> : <ChevronLeft className={cn('h-4 w-4', isCollapsed && 'rotate-180')} />}
+          </Button>
+        </div>
       </div>
     </aside>
   );
@@ -432,7 +411,7 @@ function RightSidePanel({
               <TabsList className="grid grid-cols-2 h-9 bg-sidebar-accent flex-1">
                 <TabsTrigger value="assistant" className="gap-2 text-xs">
                   <Sparkles className="h-3.5 w-3.5" />
-                  {isRtl ? 'المساعد' : 'AI Assistant'}
+                  {isRtl ? 'المساعد' : 'AI assistant'}
                 </TabsTrigger>
                 <TabsTrigger value="tasks" className="gap-2 text-xs">
                   <ListTodo className="h-3.5 w-3.5" />
@@ -548,37 +527,30 @@ function MobileSidebar({
             <span className="text-lg font-bold tracking-tight text-[#172B4D]">GateFlow</span>
           </Link>
           <ScrollArea className="flex-1 py-4">
-            <nav className="space-y-0.5 px-3">
-              <NavItem
-                item={{
-                  href: '/dashboard',
-                  label: t('sidebar.overview', 'Dashboard'),
-                  icon: SquaresFour,
-                  exact: true,
-                }}
-                collapsed={false}
-                onClick={() => onOpenChange(false)}
-              />
-              <div className="py-2">
-                <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[#6B778C] mb-2 mt-4">Residents</p>
+            <nav className="flex flex-col gap-8 py-4 px-3">
+              <div className="flex flex-col gap-1.5">
+                <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[#6B778C] mb-2">{t('sidebar.groupMain', 'Main')}</p>
+                <NavItem item={NAV_ITEMS[0]} collapsed={false} onClick={() => onOpenChange(false)} />
+                <NavItem item={NAV_ITEMS[1]} collapsed={false} onClick={() => onOpenChange(false)} />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[#6B778C] mb-2">{t('sidebar.groupResidents', 'Residents')}</p>
                 {RESIDENTS_ITEMS.map((item) => (
-                  <NavItem
-                    key={item.href}
-                    item={item}
-                    collapsed={false}
-                    onClick={() => onOpenChange(false)}
-                  />
+                  <NavItem key={item.href} item={item} collapsed={false} onClick={() => onOpenChange(false)} />
                 ))}
               </div>
-              <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[#6B778C] mb-2 mt-4">{t('sidebar.groupSystem', 'System')}</p>
-              {NAV_ITEMS.filter((n) => n.href !== '/dashboard').map((item) => (
-                <NavItem
-                  key={item.href}
-                  item={item}
-                  collapsed={false}
-                  onClick={() => onOpenChange(false)}
-                />
-              ))}
+
+              <div className="flex flex-col gap-1.5">
+                <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[#6B778C] mb-2">{t('sidebar.groupAccess', 'Access')}</p>
+                {NAV_ITEMS.filter((item) => !['/dashboard', '/dashboard/ai', '/dashboard/settings'].includes(item.href)).map((item) => (
+                  <NavItem key={item.href} item={item} collapsed={false} onClick={() => onOpenChange(false)} />
+                ))}
+              </div>
+
+              <div className="mt-auto border-t border-border/50 pt-4">
+                <NavItem item={NAV_ITEMS.find(n => n.href === '/dashboard/settings')!} collapsed={false} onClick={() => onOpenChange(false)} />
+              </div>
             </nav>
           </ScrollArea>
         </div>
@@ -627,14 +599,8 @@ export function DashboardLayout({
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const isRtl = locale === 'ar-EG';
   const pathname = usePathname();
+  const isAiPage = pathname?.includes('/dashboard/ai') || pathname?.includes('/dashboard/gateai');
 
-  // Dynamic breadcrumbs calculation
-  const segments = pathname.split('/').filter(Boolean).slice(1); // skip locale
-  const breadcrumbs = segments.map((s, i) => {
-    const label = s.charAt(0).toUpperCase() + s.slice(1).replace(/-/g, ' ');
-    const href = '/' + locale + '/' + segments.slice(0, i + 1).join('/');
-    return { label, href };
-  });
 
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-background" dir={isRtl ? 'rtl' : 'ltr'} lang={locale}>
@@ -669,9 +635,9 @@ export function DashboardLayout({
             />
           </div>
 
-          <main className="flex-1 min-h-0 overflow-y-auto p-6 lg:p-10 bg-[var(--ds-surface-sunken,#FAFBFC)]" role="main">
+          <main className={`flex-1 min-h-0 bg-[var(--ds-surface-sunken,#FAFBFC)] ${!isAiPage ? 'p-6 lg:p-10 overflow-y-auto' : 'overflow-hidden flex flex-col'}`} role="main">
             <ProjectFilterProvider currentProjectId={currentProjectId} projects={projects}>
-              <div className="max-w-[1400px] mx-auto animate-in fade-in slide-in-from-bottom-2 duration-500">
+              <div className={`animate-in fade-in slide-in-from-bottom-2 duration-500 ${!isAiPage ? 'max-w-[1400px] mx-auto' : 'h-full flex flex-col'}`}>
                 {children}
               </div>
             </ProjectFilterProvider>

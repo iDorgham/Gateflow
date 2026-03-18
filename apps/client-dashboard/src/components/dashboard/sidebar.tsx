@@ -45,11 +45,11 @@ interface NavItemData {
 const getNavGroups = (t: TFunction, permissions: Record<string, boolean>, hideGates?: boolean) => {
   const hasPerm = (p?: Permission) => !p || permissions[p] === true;
 
-  const WORKSPACE_NAV: NavItemData[] = [
+  const DASHBOARD_ITEMS: NavItemData[] = [
     { label: t('sidebar.overview', 'Overview'), href: '/dashboard', icon: SquaresFourIcon, exact: true },
+    { label: t('sidebar.gateAi', 'AI assistant'), href: '/dashboard/ai', icon: SparkleIcon },
     { label: t('sidebar.projects', 'Projects'), href: '/dashboard/projects', icon: StackIcon },
     { label: t('sidebar.analytics', 'Analytics'), href: '/dashboard/analytics', icon: ChartLineUpIcon, permission: 'analytics:view' as Permission },
-    { label: t('sidebar.gateAi', 'GateAI'), href: '/dashboard/ai', icon: SparkleIcon },
   ].filter(item => hasPerm(item.permission));
 
   const RESIDENTS_NAV: NavItemData[] = [
@@ -72,9 +72,9 @@ const getNavGroups = (t: TFunction, permissions: Record<string, boolean>, hideGa
   ].filter(item => hasPerm(item.permission));
 
   return [
-    { label: t('sidebar.groupWorkspace', 'Workspace'), items: WORKSPACE_NAV },
-    { label: t('sidebar.groupResidents', 'Residents'), items: RESIDENTS_NAV },
-    { label: t('sidebar.groupAccessControl', 'Access Control'), items: ACCESS_CONTROL_NAV },
+    { label: t('sidebar.groupWorkspace', 'Main'), items: DASHBOARD_ITEMS, isDashboard: true },
+    { label: t('sidebar.groupResidents', 'Residents'), items: RESIDENTS_NAV, isResidents: true },
+    { label: t('sidebar.groupAccessControl', 'Access'), items: ACCESS_CONTROL_NAV },
     { label: t('sidebar.groupSecurity', 'Security'), items: SECURITY_NAV },
   ].filter(g => g.items.length > 0);
 };
@@ -146,22 +146,9 @@ export function Sidebar({
           </div>
         }
         footer={
-          <div className="flex flex-col gap-0.5 p-2">
-            <SideNavItem
-              href={`/${locale}/dashboard/settings`}
-              label={t('sidebar.settings', 'Settings')}
-              icon={GearIcon}
-              isCollapsed={isCollapsed}
-              isActive={pathname.includes('/settings')}
-            />
-            <SideNavItem
-              href="#"
-              label={t('sidebar.help', 'Help')}
-              icon={QuestionIcon}
-              isCollapsed={isCollapsed}
-            />
+          <div className="flex flex-col p-2 space-y-3 mt-auto pb-4">
             <div className={cn(
-              "mt-2 flex items-center gap-3 rounded-[3px] p-2 transition-colors hover:bg-[var(--ds-background-subtle,#F4F5F7)] cursor-pointer group",
+              "flex items-center gap-3 rounded-[3px] p-2 transition-colors hover:bg-[var(--ds-background-subtle,#F4F5F7)] cursor-pointer group",
               isCollapsed && "justify-center"
             )}>
               <Avatar size="small">
@@ -181,55 +168,77 @@ export function Sidebar({
                 </div>
               )}
             </div>
+            
+            <div className="flex flex-col gap-1 pt-3 border-t border-[var(--ds-border,#DFE1E6)]">
+              <SideNavItem
+                href="#"
+                label={t('sidebar.help', 'Help')}
+                icon={QuestionIcon}
+                isCollapsed={isCollapsed}
+              />
+              <SideNavItem
+                href={`/${locale}/dashboard/settings`}
+                label={t('sidebar.settings', 'Settings')}
+                icon={GearIcon}
+                isCollapsed={isCollapsed}
+                isActive={pathname.includes('/settings')}
+              />
+            </div>
           </div>
         }
       >
-        {navGroups.map((group) => (
-          <NavGroup key={group.label} label={group.label} isCollapsed={isCollapsed}>
-            {group.label === t('sidebar.groupResidents', 'Residents') ? (
-              <NavNestedGroup 
-                label={group.label} 
-                icon={group.items[0]?.icon} 
-                isCollapsed={isCollapsed}
-                defaultOpen
-              >
-                {group.items.map((item) => {
-                  const localizedHref = `/${locale}${item.href}`;
-                  const active = item.exact
-                    ? pathname === localizedHref
-                    : pathname === localizedHref || pathname.startsWith(localizedHref + '/');
-                  return (
-                    <SideNavItem
-                      key={item.href}
-                      label={item.label}
-                      href={localizedHref}
-                      icon={item.icon}
-                      isActive={active}
-                      isCollapsed={isCollapsed}
-                    />
-                  );
-                })}
-              </NavNestedGroup>
-            ) : (
-              group.items.map((item) => {
-                const localizedHref = `/${locale}${item.href}`;
-                const active = item.exact
-                  ? pathname === localizedHref
-                  : pathname === localizedHref || pathname.startsWith(localizedHref + '/');
-                return (
-                  <SideNavItem
-                    key={item.href}
-                    label={item.label}
-                    href={localizedHref}
-                    icon={item.icon}
-                    isActive={active}
+        <div className="flex flex-col space-y-8 py-6 px-2">
+          {navGroups.map((group) => (
+            <NavGroup key={group.label} label={group.label} isCollapsed={isCollapsed}>
+              <div className="flex flex-col space-y-2 mt-2">
+                {(group as any).isResidents ? (
+                  <NavNestedGroup 
+                    label={group.label} 
+                    icon={group.items[0]?.icon} 
                     isCollapsed={isCollapsed}
-                  />
-                );
-              })
-            )}
-          </NavGroup>
-        ))}
+                    defaultOpen
+                  >
+                    <div className="flex flex-col space-y-1">
+                      {group.items.map((item) => {
+                        const localizedHref = `/${locale}${item.href}`;
+                        const active = item.exact
+                          ? pathname === localizedHref
+                          : pathname === localizedHref || pathname.startsWith(localizedHref + '/');
+                        return (
+                          <SideNavItem
+                            key={item.href}
+                            label={item.label}
+                            href={localizedHref}
+                            icon={item.icon}
+                            isActive={active}
+                            isCollapsed={isCollapsed}
+                          />
+                        );
+                      })}
+                    </div>
+                  </NavNestedGroup>
+                ) : (
+                  group.items.map((item) => {
+                    const localizedHref = `/${locale}${item.href}`;
+                    const active = item.exact
+                      ? pathname === localizedHref
+                      : pathname === localizedHref || pathname.startsWith(localizedHref + '/');
+                    return (
+                      <SideNavItem
+                        key={item.href}
+                        label={item.label}
+                        href={localizedHref}
+                        icon={item.icon}
+                        isActive={active}
+                        isCollapsed={isCollapsed}
+                      />
+                    );
+                  })
+                )}
+              </div>
+            </NavGroup>
+          ))}
+        </div>
       </SideNavigationShell>
 
       {/* Collapse toggle */}

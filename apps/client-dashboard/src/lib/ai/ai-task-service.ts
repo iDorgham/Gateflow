@@ -23,10 +23,9 @@ export const AiTaskService = {
     return await prisma.aiTask.create({
       data: {
         organizationId: data.organizationId,
-        userId: data.userId,
         type: data.type,
         title: data.title,
-        params: data.params,
+        params: data.params as any,
         cron: data.cron,
         status: 'PENDING',
         nextRun: nextRun,
