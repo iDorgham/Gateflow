@@ -19,14 +19,20 @@ jobs:
 
       - uses: pnpm/action-setup@v4
 
-      - uses: oven-sh/setup-bun@v1
-        with:
-          bun-version: latest
-
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'pnpm'
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Verify tools
+        run: |
+          node -v
+          pnpm -v
+          bun -v
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
