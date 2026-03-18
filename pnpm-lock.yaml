@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+onlyBuiltDependencies:
+  - '@prisma/client'
+  - argon2
+  - prisma
+
 patchedDependencies:
   expo-router@6.0.23:
     hash: 7eaj6gfinv6kjzw2mqhfv7lvkm
@@ -12,13 +17,6 @@ patchedDependencies:
 importers:
 
   .:
-    dependencies:
-      argon2:
-        specifier: ^0.44.0
-        version: 0.44.0
-      zod:
-        specifier: ^4.3.6
-        version: 4.3.6
     devDependencies:
       '@gate-access/config':
         specifier: workspace:*
@@ -2098,7 +2096,6 @@ packages:
 
   /@emnapi/core@1.8.1:
     resolution: {integrity: sha512-AvT9QFpxK0Zd8J0jopedNm+w/2fIzvtPKPjqyw9jwvBaReTTqPBk9Hixaz7KbjimP+QNz605/XnjFcDAL2pqBg==}
-    requiresBuild: true
     dependencies:
       '@emnapi/wasi-threads': 1.1.0
       tslib: 2.8.1
@@ -2107,7 +2104,6 @@ packages:
 
   /@emnapi/runtime@1.8.1:
     resolution: {integrity: sha512-mehfKSMWjjNol8659Z8KxEMrdSJDDot5SXMq00dM8BN4o+CLNXQ0xH2V7EchNHV4RmbZLmmPdEaXZc5H2FXmDg==}
-    requiresBuild: true
     dependencies:
       tslib: 2.8.1
     dev: true
@@ -2115,7 +2111,6 @@ packages:
 
   /@emnapi/wasi-threads@1.1.0:
     resolution: {integrity: sha512-WI0DdZ8xFSbgMjR1sFsKABJ/C5OnRrjT06JXbZKexJGrDuPTzZdDYfFlsgcCXCyf+suG5QU2e/y1Wo2V/OapLQ==}
-    requiresBuild: true
     dependencies:
       tslib: 2.8.1
     dev: true
@@ -2130,7 +2125,6 @@ packages:
     engines: {node: '>=18'}
     cpu: [ppc64]
     os: [aix]
-    requiresBuild: true
     optional: true
 
   /@esbuild/android-arm64@0.27.3:
@@ -2138,7 +2132,6 @@ packages:
     engines: {node: '>=18'}
     cpu: [arm64]
     os: [android]
-    requiresBuild: true
     optional: true
 
   /@esbuild/android-arm@0.27.3:
@@ -2146,7 +2139,6 @@ packages:
     engines: {node: '>=18'}
     cpu: [arm]
     os: [android]
-    requiresBuild: true
     optional: true
 
   /@esbuild/android-x64@0.27.3:
@@ -2154,7 +2146,6 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [android]
-    requiresBuild: true
     optional: true
 
   /@esbuild/darwin-arm64@0.27.3:
@@ -2162,7 +2153,6 @@ packages:
     engines: {node: '>=18'}
     cpu: [arm64]
     os: [darwin]
-    requiresBuild: true
     optional: true
 
   /@esbuild/darwin-x64@0.27.3:
@@ -2170,7 +2160,6 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [darwin]
-    requiresBuild: true
     optional: true
 
   /@esbuild/freebsd-arm64@0.27.3:
@@ -2178,7 +2167,6 @@ packages:
     engines: {node: '>=18'}
     cpu: [arm64]
     os: [freebsd]
-    requiresBuild: true
     optional: true
 
   /@esbuild/freebsd-x64@0.27.3:
@@ -2186,7 +2174,6 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [freebsd]
-    requiresBuild: true
     optional: true
 
   /@esbuild/linux-arm64@0.27.3:
@@ -2194,7 +2181,6 @@ packages:
     engines: {node: '>=18'}
     cpu: [arm64]
     os: [linux]
-    requiresBuild: true
     optional: true
 
   /@esbuild/linux-arm@0.27.3:
@@ -2202,7 +2188,6 @@ packages:
     engines: {node: '>=18'}
     cpu: [arm]
     os: [linux]
-    requiresBuild: true
     optional: true
 
   /@esbuild/linux-ia32@0.27.3:
@@ -2210,7 +2195,6 @@ packages:
     engines: {node: '>=18'}
     cpu: [ia32]
     os: [linux]
-    requiresBuild: true
     optional: true
 
   /@esbuild/linux-loong64@0.27.3:
@@ -2218,7 +2202,6 @@ packages:
     engines: {node: '>=18'}
     cpu: [loong64]
     os: [linux]
-    requiresBuild: true
     optional: true
 
   /@esbuild/linux-mips64el@0.27.3:
@@ -2226,7 +2209,6 @@ packages:
     engines: {node: '>=18'}
     cpu: [mips64el]
     os: [linux]
-    requiresBuild: true
     optional: true
 
   /@esbuild/linux-ppc64@0.27.3:
@@ -2234,7 +2216,6 @@ packages:
     engines: {node: '>=18'}
     cpu: [ppc64]
     os: [linux]
-    requiresBuild: true
     optional: true
 
   /@esbuild/linux-riscv64@0.27.3:
@@ -2242,7 +2223,6 @@ packages:
     engines: {node: '>=18'}
     cpu: [riscv64]
     os: [linux]
-    requiresBuild: true
     optional: true
 
   /@esbuild/linux-s390x@0.27.3:
@@ -2250,7 +2230,6 @@ packages:
     engines: {node: '>=18'}
     cpu: [s390x]
     os: [linux]
-    requiresBuild: true
     optional: true
 
   /@esbuild/linux-x64@0.27.3:
@@ -2258,7 +2237,6 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [linux]
-    requiresBuild: true
     optional: true
 
   /@esbuild/netbsd-arm64@0.27.3:
@@ -2266,7 +2244,6 @@ packages:
     engines: {node: '>=18'}
     cpu: [arm64]
     os: [netbsd]
-    requiresBuild: true
     optional: true
 
   /@esbuild/netbsd-x64@0.27.3:
@@ -2274,7 +2251,6 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [netbsd]
-    requiresBuild: true
     optional: true
 
   /@esbuild/openbsd-arm64@0.27.3:
@@ -2282,7 +2258,6 @@ packages:
     engines: {node: '>=18'}
     cpu: [arm64]
     os: [openbsd]
-    requiresBuild: true
     optional: true
 
   /@esbuild/openbsd-x64@0.27.3:
@@ -2290,7 +2265,6 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [openbsd]
-    requiresBuild: true
     optional: true
 
   /@esbuild/openharmony-arm64@0.27.3:
@@ -2298,7 +2272,6 @@ packages:
     engines: {node: '>=18'}
     cpu: [arm64]
     os: [openharmony]
-    requiresBuild: true
     optional: true
 
   /@esbuild/sunos-x64@0.27.3:
@@ -2306,7 +2279,6 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [sunos]
-    requiresBuild: true
     optional: true
 
   /@esbuild/win32-arm64@0.27.3:
@@ -2314,7 +2286,6 @@ packages:
     engines: {node: '>=18'}
     cpu: [arm64]
     os: [win32]
-    requiresBuild: true
     optional: true
 
   /@esbuild/win32-ia32@0.27.3:
@@ -2322,7 +2293,6 @@ packages:
     engines: {node: '>=18'}
     cpu: [ia32]
     os: [win32]
-    requiresBuild: true
     optional: true
 
   /@esbuild/win32-x64@0.27.3:
@@ -2330,7 +2300,6 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
-    requiresBuild: true
     optional: true
 
   /@eslint-community/eslint-utils@4.9.1(eslint@8.57.1):
@@ -3742,7 +3711,6 @@ packages:
 
   /@napi-rs/wasm-runtime@0.2.12:
     resolution: {integrity: sha512-ZVWUcfwY4E/yPitQJl481FjFo3K22D6qF0DuFH6Y/nbnE11GY5uguDxZMGXPQ8WQ0128MXQD7TnfHyK4oWoIJQ==}
-    requiresBuild: true
     dependencies:
       '@emnapi/core': 1.8.1
       '@emnapi/runtime': 1.8.1
@@ -3764,7 +3732,6 @@ packages:
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [darwin]
-    requiresBuild: true
     optional: true
 
   /@next/swc-darwin-x64@14.2.33:
@@ -3772,7 +3739,6 @@ packages:
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [darwin]
-    requiresBuild: true
     optional: true
 
   /@next/swc-linux-arm64-gnu@14.2.33:
@@ -3781,7 +3747,6 @@ packages:
     cpu: [arm64]
     os: [linux]
     libc: [glibc]
-    requiresBuild: true
     optional: true
 
   /@next/swc-linux-arm64-musl@14.2.33:
@@ -3790,7 +3755,6 @@ packages:
     cpu: [arm64]
     os: [linux]
     libc: [musl]
-    requiresBuild: true
     optional: true
 
   /@next/swc-linux-x64-gnu@14.2.33:
@@ -3799,7 +3763,6 @@ packages:
     cpu: [x64]
     os: [linux]
     libc: [glibc]
-    requiresBuild: true
     optional: true
 
   /@next/swc-linux-x64-musl@14.2.33:
@@ -3808,7 +3771,6 @@ packages:
     cpu: [x64]
     os: [linux]
     libc: [musl]
-    requiresBuild: true
     optional: true
 
   /@next/swc-win32-arm64-msvc@14.2.33:
@@ -3816,7 +3778,6 @@ packages:
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [win32]
-    requiresBuild: true
     optional: true
 
   /@next/swc-win32-ia32-msvc@14.2.33:
@@ -3824,7 +3785,6 @@ packages:
     engines: {node: '>= 10'}
     cpu: [ia32]
     os: [win32]
-    requiresBuild: true
     optional: true
 
   /@next/swc-win32-x64-msvc@14.2.33:
@@ -3832,7 +3792,6 @@ packages:
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [win32]
-    requiresBuild: true
     optional: true
 
   /@noble/hashes@2.0.1:
@@ -3896,7 +3855,6 @@ packages:
   /@pkgjs/parseargs@0.11.0:
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
     engines: {node: '>=14'}
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -3947,7 +3905,6 @@ packages:
 
   /@prisma/engines@5.22.0:
     resolution: {integrity: sha512-UNjfslWhAt06kVL3CjkuYpHAWSO6L4kDCVPegV6itt7nD1kSJavd3vhgAEhjglLJJKEdJ7oIqDJ+yHk6qO8gPA==}
-    requiresBuild: true
     dependencies:
       '@prisma/debug': 5.22.0
       '@prisma/engines-version': 5.22.0-44.605197351a3c8bdd595af2d2a9bc3025bca48ea2
@@ -5520,7 +5477,6 @@ packages:
 
   /@tiptap/extension-bubble-menu@3.20.4(@tiptap/core@3.20.4)(@tiptap/pm@3.20.4):
     resolution: {integrity: sha512-EXywPlI8wjPcAb8ozymgVhjtMjFrnhtoyNTy8ZcObdpUi5CdO9j892Y7aPbKe5hLhlDpvJk7rMfir4FFKEmfng==}
-    requiresBuild: true
     peerDependencies:
       '@tiptap/core': ^3.20.4
       '@tiptap/pm': ^3.20.4
@@ -5575,7 +5531,6 @@ packages:
 
   /@tiptap/extension-floating-menu@3.20.4(@floating-ui/dom@1.7.5)(@tiptap/core@3.20.4)(@tiptap/pm@3.20.4):
     resolution: {integrity: sha512-AaPTFhoO8DBIElJyd/RTVJjkctvJuL+GHURX0npbtTxXq5HXbebVwf2ARNR7jMd/GThsmBaNJiGxZg4A2oeDqQ==}
-    requiresBuild: true
     peerDependencies:
       '@floating-ui/dom': ^1.0.0
       '@tiptap/core': ^3.20.4
@@ -5867,7 +5822,6 @@ packages:
 
   /@tybys/wasm-util@0.10.1:
     resolution: {integrity: sha512-9tTaPJLSiejZKx+Bmog4uSubteqTvFrVrURwkmHixBo0G4seD0zUxp98E1DzUBJxLQ3NPwXrGKDiVjwx/DpPsg==}
-    requiresBuild: true
     dependencies:
       tslib: 2.8.1
     dev: true
@@ -6309,7 +6263,6 @@ packages:
     resolution: {integrity: sha512-ppLRUgHVaGRWUx0R0Ut06Mjo9gBaBkg3v/8AxusGLhsIotbBLuRk51rAzqLC8gq6NyyAojEXglNjzf6R948DNw==}
     cpu: [arm]
     os: [android]
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -6317,7 +6270,6 @@ packages:
     resolution: {integrity: sha512-lCxkVtb4wp1v+EoN+HjIG9cIIzPkX5OtM03pQYkG+U5O/wL53LC4QbIeazgiKqluGeVEeBlZahHalCaBvU1a2g==}
     cpu: [arm64]
     os: [android]
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -6325,7 +6277,6 @@ packages:
     resolution: {integrity: sha512-gPVA1UjRu1Y/IsB/dQEsp2V1pm44Of6+LWvbLc9SDk1c2KhhDRDBUkQCYVWe6f26uJb3fOK8saWMgtX8IrMk3g==}
     cpu: [arm64]
     os: [darwin]
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -6333,7 +6284,6 @@ packages:
     resolution: {integrity: sha512-cFzP7rWKd3lZaCsDze07QX1SC24lO8mPty9vdP+YVa3MGdVgPmFc59317b2ioXtgCMKGiCLxJ4HQs62oz6GfRQ==}
     cpu: [x64]
     os: [darwin]
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -6341,7 +6291,6 @@ packages:
     resolution: {integrity: sha512-fqtGgak3zX4DCB6PFpsH5+Kmt/8CIi4Bry4rb1ho6Av2QHTREM+47y282Uqiu3ZRF5IQioJQ5qWRV6jduA+iGw==}
     cpu: [x64]
     os: [freebsd]
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -6349,7 +6298,6 @@ packages:
     resolution: {integrity: sha512-u92mvlcYtp9MRKmP+ZvMmtPN34+/3lMHlyMj7wXJDeXxuM0Vgzz0+PPJNsro1m3IZPYChIkn944wW8TYgGKFHw==}
     cpu: [arm]
     os: [linux]
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -6357,7 +6305,6 @@ packages:
     resolution: {integrity: sha512-cINaoY2z7LVCrfHkIcmvj7osTOtm6VVT16b5oQdS4beibX2SYBwgYLmqhBjA1t51CarSaBuX5YNsWLjsqfW5Cw==}
     cpu: [arm]
     os: [linux]
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -6366,7 +6313,6 @@ packages:
     cpu: [arm64]
     os: [linux]
     libc: [glibc]
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -6375,7 +6321,6 @@ packages:
     cpu: [arm64]
     os: [linux]
     libc: [musl]
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -6384,7 +6329,6 @@ packages:
     cpu: [ppc64]
     os: [linux]
     libc: [glibc]
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -6393,7 +6337,6 @@ packages:
     cpu: [riscv64]
     os: [linux]
     libc: [glibc]
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -6402,7 +6345,6 @@ packages:
     cpu: [riscv64]
     os: [linux]
     libc: [musl]
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -6411,7 +6353,6 @@ packages:
     cpu: [s390x]
     os: [linux]
     libc: [glibc]
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -6420,7 +6361,6 @@ packages:
     cpu: [x64]
     os: [linux]
     libc: [glibc]
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -6429,7 +6369,6 @@ packages:
     cpu: [x64]
     os: [linux]
     libc: [musl]
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -6437,7 +6376,6 @@ packages:
     resolution: {integrity: sha512-5u4RkfxJm+Ng7IWgkzi3qrFOvLvQYnPBmjmZQ8+szTK/b31fQCnleNl1GgEt7nIsZRIf5PLhPwT0WM+q45x/UQ==}
     engines: {node: '>=14.0.0'}
     cpu: [wasm32]
-    requiresBuild: true
     dependencies:
       '@napi-rs/wasm-runtime': 0.2.12
     dev: true
@@ -6447,7 +6385,6 @@ packages:
     resolution: {integrity: sha512-nRcz5Il4ln0kMhfL8S3hLkxI85BXs3o8EYoattsJNdsX4YUU89iOkVn7g0VHSRxFuVMdM4Q1jEpIId1Ihim/Uw==}
     cpu: [arm64]
     os: [win32]
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -6455,7 +6392,6 @@ packages:
     resolution: {integrity: sha512-DCEI6t5i1NmAZp6pFonpD5m7i6aFrpofcp4LA2i8IIq60Jyo28hamKBxNrZcyOwVOZkgsRp9O2sXWBWP8MnvIQ==}
     cpu: [ia32]
     os: [win32]
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -6463,7 +6399,6 @@ packages:
     resolution: {integrity: sha512-lrW200hZdbfRtztbygyaq/6jP6AKE8qQN2KvPcJ+x7wiD038YtnYtZ82IMNJ69GJibV7bwL3y9FgK+5w/pYt6g==}
     cpu: [x64]
     os: [win32]
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -7725,7 +7660,6 @@ packages:
 
   /core-js-pure@3.48.0:
     resolution: {integrity: sha512-1slJgk89tWC51HQ1AEqG+s2VuwpTRr8ocu4n20QUcH1v9lAN0RXen0Q0AABa/DK1I7RrNWLucplOHMx8hfTGTw==}
-    requiresBuild: true
     dev: true
 
   /create-jest@29.7.0(@types/node@20.19.35):
@@ -8453,7 +8387,6 @@ packages:
     resolution: {integrity: sha512-8VwMnyGCONIs6cWue2IdpHxHnAjzxnw2Zr7MkVxB2vjmQ2ivqGFb4LEG3SMnv0Gb2F/G/2yA8zUaiL1gywDCCg==}
     engines: {node: '>=18'}
     hasBin: true
-    requiresBuild: true
     optionalDependencies:
       '@esbuild/aix-ppc64': 0.27.3
       '@esbuild/android-arm': 0.27.3
@@ -9562,7 +9495,6 @@ packages:
     resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
-    requiresBuild: true
     optional: true
 
   /function-bind@1.1.2:
@@ -11984,7 +11916,6 @@ packages:
     engines: {node: '>= 12.0.0'}
     cpu: [arm64]
     os: [android]
-    requiresBuild: true
     dev: false
     optional: true
 
@@ -11993,7 +11924,6 @@ packages:
     engines: {node: '>= 12.0.0'}
     cpu: [arm64]
     os: [darwin]
-    requiresBuild: true
     dev: false
     optional: true
 
@@ -12002,7 +11932,6 @@ packages:
     engines: {node: '>= 12.0.0'}
     cpu: [x64]
     os: [darwin]
-    requiresBuild: true
     dev: false
     optional: true
 
@@ -12011,7 +11940,6 @@ packages:
     engines: {node: '>= 12.0.0'}
     cpu: [x64]
     os: [freebsd]
-    requiresBuild: true
     dev: false
     optional: true
 
@@ -12020,7 +11948,6 @@ packages:
     engines: {node: '>= 12.0.0'}
     cpu: [arm]
     os: [linux]
-    requiresBuild: true
     dev: false
     optional: true
 
@@ -12030,7 +11957,6 @@ packages:
     cpu: [arm64]
     os: [linux]
     libc: [glibc]
-    requiresBuild: true
     dev: false
     optional: true
 
@@ -12040,7 +11966,6 @@ packages:
     cpu: [arm64]
     os: [linux]
     libc: [musl]
-    requiresBuild: true
     dev: false
     optional: true
 
@@ -12050,7 +11975,6 @@ packages:
     cpu: [x64]
     os: [linux]
     libc: [glibc]
-    requiresBuild: true
     dev: false
     optional: true
 
@@ -12060,7 +11984,6 @@ packages:
     cpu: [x64]
     os: [linux]
     libc: [musl]
-    requiresBuild: true
     dev: false
     optional: true
 
@@ -12069,7 +11992,6 @@ packages:
     engines: {node: '>= 12.0.0'}
     cpu: [arm64]
     os: [win32]
-    requiresBuild: true
     dev: false
     optional: true
 
@@ -12078,7 +12000,6 @@ packages:
     engines: {node: '>= 12.0.0'}
     cpu: [x64]
     os: [win32]
-    requiresBuild: true
     dev: false
     optional: true
 
@@ -13839,7 +13760,6 @@ packages:
 
   /pg-cloudflare@1.3.0:
     resolution: {integrity: sha512-6lswVVSztmHiRtD6I8hw4qP/nDm1EJbKMRhf3HCYaqud7frGysPv7FYJ5noZQdhQtN2xJnimfMtvQq21pdbzyQ==}
-    requiresBuild: true
     dev: false
     optional: true
 
@@ -16260,7 +16180,6 @@ packages:
     resolution: {integrity: sha512-PmOvodQNiOj77+Zwoqku70vwVjKzL34RTNxxoARjp5RU5FOj/CGiC6vcDQhNtFPUOWSAaogHF5qIka9TBhX4XA==}
     cpu: [x64]
     os: [darwin]
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -16268,7 +16187,6 @@ packages:
     resolution: {integrity: sha512-kI+anKcLIM4L8h+NsM7mtAUpElkCOxv5LgiQVQR8BASyDFfc8Efj5kCk3cqxuxOvIqx0sLfCX7atrHQ2kwuNJQ==}
     cpu: [arm64]
     os: [darwin]
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -16276,7 +16194,6 @@ packages:
     resolution: {integrity: sha512-j29KnQhHyzdzgCykBFeBqUPS4Wj7lWMnZ8CHqytlYDap4Jy70l4RNG46pOL9+lGu6DepK2s1rE86zQfo0IOdPw==}
     cpu: [x64]
     os: [linux]
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -16284,7 +16201,6 @@ packages:
     resolution: {integrity: sha512-OEl1YocXGZDRDh28doOUn49QwNe82kXljO1HXApjU0LapkDiGpfl3jkAlPKxEkGDSYWc8MH5Ll8S16Rf5tEBYg==}
     cpu: [arm64]
     os: [linux]
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -16292,7 +16208,6 @@ packages:
     resolution: {integrity: sha512-717bVk1+Pn2Jody7OmWludhEirEe0okoj1NpRbSm5kVZz/yNN/jfjbxWC6ilimXMz7xoMT3IDfQFJsFR3PMANA==}
     cpu: [x64]
     os: [win32]
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -16300,7 +16215,6 @@ packages:
     resolution: {integrity: sha512-R819HShLIT0Wj6zWVnIsYvSNtRNj1q9VIyaUz0P24SMcLCbQZIm1sV09F4SDbg+KCCumqD2lcaR2UViQ8SnUJA==}
     cpu: [arm64]
     os: [win32]
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -16414,7 +16328,6 @@ packages:
     resolution: {integrity: sha512-v3Xu+yuwBXisp6QYTcH4UbH+xYJXqnq2m/LtQVWKWzYc1iehYnLixoQDN9FH6/j9/oybfd6W9Ghwkl8+UMKTKQ==}
     engines: {node: '>=0.8.0'}
     hasBin: true
-    requiresBuild: true
     dev: true
     optional: true
 
@@ -16547,7 +16460,6 @@ packages:
 
   /unrs-resolver@1.11.1:
     resolution: {integrity: sha512-bSjt9pjaEBnNiGgc9rUiHGKv5l4/TGzDmYw3RhnkJGtLhbnnA/5qJj7x3dNDCRx/PJxu774LlH8lCOlB4hEfKg==}
-    requiresBuild: true
     dependencies:
       napi-postinstall: 0.3.4
     optionalDependencies:
