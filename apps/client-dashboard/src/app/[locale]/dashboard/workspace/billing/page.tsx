@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
+import { Locale } from '@/lib/i18n-config';
 
-export default function BillingRedirect() {
-  redirect('/dashboard/settings?tab=billing');
+export default function BillingRedirect({ params }: { params: { locale: Locale } }) {
+  redirect(`/${params.locale}/dashboard/settings?tab=billing`);
 }

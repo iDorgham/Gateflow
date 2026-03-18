@@ -2,12 +2,13 @@ import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma } from '@gate-access/db';
 import { redirect } from 'next/navigation';
 import { ProfileTab } from '../settings/tabs/profile-tab';
+import { Locale } from '@/lib/i18n-config';
 
 export const metadata = { title: 'Profile | GateFlow' };
 
-export default async function ProfilePage() {
+export default async function ProfilePage({ params }: { params: { locale: Locale } }) {
   const claims = await getSessionClaims();
-  if (!claims?.sub) redirect('/login');
+  if (!claims?.sub) redirect(`/${params.locale}/login`);
 
   const organizationId = claims.orgId;
   const user = await prisma.user.findFirst({
@@ -27,7 +28,7 @@ export default async function ProfilePage() {
     },
   });
 
-  if (!user) redirect('/login');
+  if (!user) redirect(`/${params.locale}/login`);
 
   return (
     <div className="space-y-6 pb-20">

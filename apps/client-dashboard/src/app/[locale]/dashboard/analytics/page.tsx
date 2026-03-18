@@ -69,7 +69,7 @@ export default async function AnalyticsPage({
 }) {
   const { t } = await getTranslation(params.locale, 'dashboard');
   const claims = await getSessionClaims();
-  if (!claims?.orgId) redirect('/login');
+  if (!claims?.orgId) redirect(`/${params.locale}/login`);
 
   const orgId = claims.orgId;
   const cookieProjectId = await getValidatedProjectId(orgId);

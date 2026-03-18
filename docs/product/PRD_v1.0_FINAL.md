@@ -1,8 +1,8 @@
-# GateFlow — Product Requirements Document (FINAL v1.0)
+# GateFlow — Product Requirements Document (v1.0)
 
-**Product Name:** GateFlow  
-**Version:** 1.0.0 (Production Ready)  
-**Status:** MVP 100% Complete | Unified Ecosystem  
+**Product Name:** GateFlow
+**Version:** 1.0.0 (Production Ready)
+**Status:** MVP 100% Complete | Unified Ecosystem
 **Target Region:** MENA (Middle East & North Africa)
 
 ---
@@ -12,17 +12,18 @@
 GateFlow is a premier digital gate infrastructure platform that transforms physical access control into a secure, auditable, and marketing-first digital experience. Designed for high-end gated communities, schools, and enterprise venues, GateFlow replaces the friction of paper logs and unverified sharing with a unified 6-app ecosystem.
 
 ### Core Strategic Pillars
-1.  **Ecosystem Synergy:** Seamless integration between residents, gate operators, property managers, and platform owners.
-2.  **Zero-Trust Security:** Cryptographically signed QR codes and identity verification at every step.
-3.  **MENA First:** Built-in Arabic support (RTL), local formatting, and region-specific workflows (e.g., WhatsApp-first sharing).
-4.  **Marketing Attribution:** Closing the loop between digital ad spend and physical attendance.
+
+1. **Ecosystem Synergy:** Seamless integration between residents, gate operators, property managers, and platform owners.
+2. **Zero-Trust Security:** Cryptographically signed QR codes and identity verification at every step.
+3. **MENA First:** Built-in Arabic support (RTL), local formatting, and region-specific workflows (e.g., WhatsApp-first sharing).
+4. **Marketing Attribution:** Closing the loop between digital ad spend and physical attendance.
 
 ---
 
 ## 2. The 6-App Ecosystem
 
 | App | Status | Description |
-|-----|--------|-------------|
+| :--- | :--- | :--- |
 | **Admin Dashboard** | ✅ 100% | Global platform management, organization onboarding, and cross-tenant analytics. |
 | **Client Dashboard** | ✅ 100% | Main SaaS portal for property owners. Includes Projects, CRM, Team management, and Live Analytics. |
 | **Scanner App** | ✅ 100% | Offline-capable native app for security guards. Features rapid scanning, sync queue, and supervisor overrides. |
@@ -35,18 +36,21 @@ GateFlow is a premier digital gate infrastructure platform that transforms physi
 ## 3. Core Functional Requirements
 
 ### 3.1 QR Access Control
+
 - **Cryptographic Signing:** Every QR code contains an HMAC-SHA256 signature to prevent tampering.
 - **Rule Engine:** Support for One-time, Date-range, Recurring (weekly/daily), and Permanent access.
 - **Identity Levels:** Verification tiers from simple name/phone (Level 0) to full ID document capture (Level 2).
 - **Offline Reliability:** Scanner app caches validation logic and queues results locally for AES-256 encrypted sync.
 
 ### 3.2 Security & Compliance
+
 - **Audit Trails:** Immutable logs for every scan, project change, and administrative action.
 - **Watchlists:** Real-time blocking for persons of interest or restricted vehicles.
 - **Incident Management:** Automated workflow for handling denied entries and safety alerts.
 - **Supervisor Workflow:** PIN-protected override for special cases with dedicated audit logging.
 
 ### 3.3 Advanced Architecture
+
 - **Multi-Tenancy:** Hard isolation via `organizationId` at the database and API layers.
 - **AI Integration:** Gemini-powered admin assistant for natural language queries and report generation.
 - **Real-Time Feed:** Server-sent events (SSE) for "Stateless" live monitoring on the dashboard.
