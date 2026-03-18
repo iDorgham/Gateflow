@@ -9,5 +9,5 @@ export async function generateMetadata({ params }: { params: { locale: Locale } 
 }
 
 export default async function DashboardPage({ params }: { params: { locale: Locale } }) {
-  redirect(`/${params.locale}`);
+  redirect(`/${params.locale}/`);
 }

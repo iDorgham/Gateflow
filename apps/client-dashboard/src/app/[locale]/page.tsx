@@ -11,7 +11,7 @@ export async function generateMetadata({ params }: { params: { locale: Locale } 
 
 export default async function Home({ params }: { params: { locale: Locale } }) {
   const claims = await getSessionClaims();
-  if (!claims) redirect('/login');
+  if (!claims) redirect(`/${params.locale}/login`);
   if (!claims.orgId) redirect('/dashboard/onboarding');
 
   return (

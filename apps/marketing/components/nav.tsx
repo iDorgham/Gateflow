@@ -63,7 +63,7 @@ export function Nav({ locale }: { locale: Locale }) {
         <ThemeToggle />
       </div>
       <Button variant="subtle" size="compact" asChild className="hidden md:flex">
-        <Link href="https://app.gateflow.com/login">{t('header.actions.signIn')}</Link>
+        <Link href={`https://app.gateflow.site/${locale}/login`}>{t('header.actions.signIn')}</Link>
       </Button>
       <Button variant="brand" size="compact" asChild>
         <I18nLink locale={locale} href="/contact">{t('header.actions.getStarted')}</I18nLink>

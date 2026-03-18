@@ -9,8 +9,8 @@ const securityHeaders = [
 
 const nextConfig = {
   transpilePackages: ['@gate-access/types', '@gate-access/ui', '@gate-access/db', '@gate-access/i18n'],
-  serverExternalPackages: ['argon2'],
   experimental: {
+    serverComponentsExternalPackages: ['argon2'],
     optimizePackageImports: ['@phosphor-icons/react'],
   },
   async headers() {

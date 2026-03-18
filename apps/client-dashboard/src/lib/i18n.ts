@@ -11,10 +11,16 @@ const dictionaries = {
 };
 
 export const fetchTranslations = async (locale: string) => {
+  const loader = dictionaries[locale as Locale] || dictionaries['en'];
   try {
-    return await dictionaries[locale as Locale]();
+    return await loader();
   } catch (error) {
-    return await dictionaries['en']();
+    console.error(`Failed to load translations for locale: ${locale}`, error);
+    // Fallback to English if the requested locale loader failed
+    if (loader !== dictionaries['en']) {
+      return await dictionaries['en']();
+    }
+    throw error;
   }
 };
 
