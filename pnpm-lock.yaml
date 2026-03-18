@@ -374,6 +374,9 @@ importers:
       '@tailwindcss/typography':
         specifier: ^0.5.19
         version: 0.5.19(tailwindcss@3.4.19)
+      '@vercel/analytics':
+        specifier: ^2.0.1
+        version: 2.0.1(next@14.2.35)(react@18.3.1)
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -6440,6 +6443,39 @@ packages:
     dependencies:
       '@urql/core': 5.2.0
       wonka: 6.3.5
+    dev: false
+
+  /@vercel/analytics@2.0.1(next@14.2.35)(react@18.3.1):
+    resolution: {integrity: sha512-MTQG6V9qQrt1tsDeF+2Uoo5aPjqbVPys1xvnIftXSJYG2SrwXRHnqEvVoYID7BTruDz4lCd2Z7rM1BdkUehk2g==}
+    peerDependencies:
+      '@remix-run/react': ^2
+      '@sveltejs/kit': ^1 || ^2
+      next: '>= 13'
+      nuxt: '>= 3'
+      react: ^18 || ^19 || ^19.0.0-rc
+      svelte: '>= 4'
+      vue: ^3
+      vue-router: ^4
+    peerDependenciesMeta:
+      '@remix-run/react':
+        optional: true
+      '@sveltejs/kit':
+        optional: true
+      next:
+        optional: true
+      nuxt:
+        optional: true
+      react:
+        optional: true
+      svelte:
+        optional: true
+      vue:
+        optional: true
+      vue-router:
+        optional: true
+    dependencies:
+      next: 14.2.35(@babel/core@7.29.0)(react-dom@18.3.1)(react@18.3.1)
+      react: 18.3.1
     dev: false
 
   /@xmldom/xmldom@0.8.11:

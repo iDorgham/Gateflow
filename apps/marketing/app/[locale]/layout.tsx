@@ -90,6 +90,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { Analytics } from '@vercel/analytics/react';
+
 export default async function RootLayout({
   children,
   params
@@ -138,6 +140,7 @@ export default async function RootLayout({
           <Footer locale={params.locale} />
           <CookieBanner />
           <ChatWidget />
+          <Analytics />
           </Providers>
         </I18nProvider>
       </body>
