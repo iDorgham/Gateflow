@@ -18,7 +18,9 @@ function log(msg: string, data?: unknown) {
   console.log(line);
 }
 
-const google = createGoogleGenerativeAI({ apiKey: process.env.GEMINI_API_KEY });
+function getGoogleClient() {
+  return createGoogleGenerativeAI({ apiKey: process.env.GEMINI_API_KEY || 'missing-key' });
+}
 
 // ─── QR creation helper (mirrors qrcodes/create/actions.ts) ──────────────────
 
@@ -118,7 +120,7 @@ export async function POST(request: NextRequest): Promise<Response> {
 
   try {
     const result = streamText({
-      model: google('gemini-1.5-flash'),
+      model: getGoogleClient()('gemini-1.5-flash'),
       system: `You are the GateFlow AI Assistant — an intelligent helper for a gate access control SaaS platform.
 You help users manage their organization through natural language.
 

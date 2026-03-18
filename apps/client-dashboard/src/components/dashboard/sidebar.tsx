@@ -42,7 +42,14 @@ interface NavItemData {
   permission?: Permission;
 }
 
-const getNavGroups = (t: TFunction, permissions: Record<string, boolean>, hideGates?: boolean) => {
+interface NavGroupData {
+  label: string;
+  items: NavItemData[];
+  isDashboard?: boolean;
+  isResidents?: boolean;
+}
+
+const getNavGroups = (t: TFunction, permissions: Record<string, boolean>, hideGates?: boolean): NavGroupData[] => {
   const hasPerm = (p?: Permission) => !p || permissions[p] === true;
 
   const DASHBOARD_ITEMS: NavItemData[] = [
@@ -191,7 +198,7 @@ export function Sidebar({
           {navGroups.map((group) => (
             <NavGroup key={group.label} label={group.label} isCollapsed={isCollapsed}>
               <div className="flex flex-col space-y-2 mt-2">
-                {(group as any).isResidents ? (
+                {group.isResidents ? (
                   <NavNestedGroup 
                     label={group.label} 
                     icon={group.items[0]?.icon} 

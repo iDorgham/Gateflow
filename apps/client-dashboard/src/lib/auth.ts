@@ -5,24 +5,30 @@ import { Permission } from '@gate-access/types';
 
 // ─── Configuration ────────────────────────────────────────────────────────────
 
-const _jwtSecret = process.env.NEXTAUTH_SECRET ?? process.env.JWT_SECRET;
+let _cachedJwtSecret: Uint8Array | null = null;
 
-if (!_jwtSecret || _jwtSecret.length < 32) {
-  if (process.env.NODE_ENV === 'production') {
-    throw new Error(
-      '[auth] NEXTAUTH_SECRET is missing or shorter than 32 characters. ' +
-        'Set NEXTAUTH_SECRET to a random 64-char string before deploying.'
-    );
-  } else {
+function getJwtSecret(): Uint8Array {
+  if (_cachedJwtSecret) return _cachedJwtSecret;
+
+  const secret = process.env.NEXTAUTH_SECRET ?? process.env.JWT_SECRET;
+
+  if (!secret || secret.length < 32) {
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error(
+        '[auth] NEXTAUTH_SECRET is missing or shorter than 32 characters. ' +
+          'Set NEXTAUTH_SECRET to a random 64-char string before deploying.'
+      );
+    }
     console.warn(
       '[auth] NEXTAUTH_SECRET not set — using insecure fallback. Set it in .env.local'
     );
   }
-}
 
-const JWT_SECRET = new TextEncoder().encode(
-  _jwtSecret ?? 'dev-insecure-fallback-change-me'
-);
+  _cachedJwtSecret = new TextEncoder().encode(
+    secret ?? 'dev-insecure-fallback-change-me'
+  );
+  return _cachedJwtSecret;
+}
 
 const ACCESS_TOKEN_EXPIRY = '15m';
 const REFRESH_TOKEN_EXPIRY_DAYS = 30;
@@ -59,13 +65,13 @@ export async function signAccessToken(
     .setExpirationTime(ACCESS_TOKEN_EXPIRY)
     .setIssuer('gateflow')
     .setAudience('gateflow-api')
-    .sign(JWT_SECRET);
+    .sign(getJwtSecret());
 }
 
 export async function verifyAccessToken(
   token: string
 ): Promise<AccessTokenClaims> {
-  const { payload } = await jwtVerify(token, JWT_SECRET, {
+  const { payload } = await jwtVerify(token, getJwtSecret(), {
     issuer: 'gateflow',
     audience: 'gateflow-api',
   });
