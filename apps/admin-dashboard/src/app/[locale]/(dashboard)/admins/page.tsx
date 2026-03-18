@@ -4,7 +4,7 @@ import { Locale } from '@/lib/i18n/i18n-config';
 import { prisma } from '@gate-access/db';
 import { revalidatePath } from 'next/cache';
 import { randomBytes } from 'crypto';
-import * as argon2 from 'argon2';
+import { hash as argon2Hash } from '@node-rs/argon2';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import {
@@ -42,7 +42,7 @@ async function createAdmin(formData: FormData) {
   const password = formData.get('password') as string;
   if (!name || !email || !password) return;
 
-  const passwordHash = await argon2.hash(password);
+  const passwordHash = await argon2Hash(password);
 
   let adminRole = await prisma.role.findFirst({
     where: { name: 'ADMIN', organizationId: null },
@@ -76,7 +76,7 @@ async function resetAdminPassword(formData: FormData) {
   if (!id) return;
 
   const tempPassword = randomBytes(10).toString('hex');
-  const passwordHash = await argon2.hash(tempPassword);
+  const passwordHash = await argon2Hash(tempPassword);
   await prisma.user.update({ where: { id }, data: { passwordHash } });
 
   cookies().set('_adminpwflash', JSON.stringify({ id, pw: tempPassword }), {

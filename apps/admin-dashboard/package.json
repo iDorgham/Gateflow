@@ -24,7 +24,7 @@
     "@hugeicons/core-free-icons": "^3.1.1",
     "@hugeicons/react": "^1.1.5",
     "ai": "4",
-    "argon2": "^0.44.0",
+    "@node-rs/argon2": "^2.0.0",
     "clsx": "^2.1.1",
     "framer-motion": "^11.18.2",
     "i18next": "^23.16.8",

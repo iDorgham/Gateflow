@@ -45,8 +45,8 @@
       "cpu": ["x64", "arm64"]
     },
     "onlyBuiltDependencies": [
+      "@node-rs/argon2",
       "@prisma/client",
-      "argon2",
       "prisma"
     ],
     "patchedDependencies": {
