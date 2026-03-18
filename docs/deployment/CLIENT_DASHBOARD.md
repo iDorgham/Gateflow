@@ -17,14 +17,14 @@ Add these to your project settings in Vercel:
 
 | Key | Value | Description |
 | :--- | :--- | :--- |
-| `DATABASE_URL` | `postgresql://...` | Connection string for your production database. |
-| `NEXTAUTH_SECRET` | 32+ char string | Generate with `openssl rand -base64 32`. |
+| `DATABASE_URL` | `postgresql://...` | Connection string for production. |
+| `NEXTAUTH_SECRET` | 32+ char string | Generate: `openssl rand -base64 32`. |
 | `NEXTAUTH_URL` | `https://app.yourdomain.com` | Your live application URL. |
-| `QR_SIGNING_SECRET` | 32+ char string | Secure secret for signing QR codes (HMAC-SHA256). |
-| `ENCRYPTION_MASTER_KEY` | 64 hex chars | Required for data encryption at rest (AES-256-GCM). |
+| `QR_SIGNING_SECRET` | 32+ char string | Secure secret for signing QR codes. |
+| `ENCRYPTION_MASTER_KEY` | 64 hex chars | Key for AES-256GCM encryption. |
 | `STRIPE_SECRET_KEY` | `sk_live_...` | Your Stripe Production Secret Key. |
 | `STRIPE_WEBHOOK_SECRET` | `whsec_...` | For processing subscription events. |
-| `GEMINI_API_KEY` | `AI...` | API key from Google AI Studio (for AI Assistant). |
+| `GEMINI_API_KEY` | `AI...` | Key for Google AI (AI Assistant). |
 
 ## 3. Database Execution
 

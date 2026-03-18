@@ -6,6 +6,8 @@ import { AnalyticsQuerySchema } from '@/lib/analytics/analytics-query';
 // It can handle both PDF and CSV by proxying or sharing logic.
 // For now, we reuse the existing export routes but this acts as the "official" AI report gate.
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   try {
     const session = await requireAuth();
@@ -63,7 +65,10 @@ export async function GET(request: NextRequest) {
         'Content-Disposition': contentDisposition,
       },
     });
-  } catch (error) {
+  } catch (error: unknown) {
+    if (error instanceof Error && (error as any).digest?.startsWith('NEXT_REDIRECT')) {
+      throw error;
+    }
     console.error('AI Report Gen Error:', error);
     return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
   }
