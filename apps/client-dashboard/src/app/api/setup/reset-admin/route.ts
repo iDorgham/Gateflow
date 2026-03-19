@@ -67,9 +67,9 @@ export async function GET(request: NextRequest) {
   if (!tenantAdminRole) return NextResponse.json({ error: 'TENANT_ADMIN role missing after seed' }, { status: 500 });
 
   // 2. Find or create org
-  let org = await prisma.organization.findFirst({ where: { slug: 'selenadev' } });
+  let org = await prisma.organization.findFirst({ where: { email: 'org@selenadev.com' } });
   if (!org) {
-    org = await prisma.organization.create({ data: { name: 'Selena Dev', slug: 'selenadev' } });
+    org = await prisma.organization.create({ data: { name: 'Selena Dev', email: 'org@selenadev.com' } });
     results.org = `created (${org.id})`;
   } else {
     results.org = `exists (${org.id})`;
