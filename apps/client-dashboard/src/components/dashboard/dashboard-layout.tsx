@@ -600,6 +600,7 @@ export function DashboardLayout({
   const isRtl = locale === 'ar-EG';
   const pathname = usePathname();
   const isAiPage = pathname?.includes('/dashboard/ai') || pathname?.includes('/dashboard/gateai');
+  const isFullBleed = isAiPage || pathname?.includes('/dashboard/onboarding');
 
 
   return (
@@ -635,9 +636,9 @@ export function DashboardLayout({
             />
           </div>
 
-          <main className={`flex-1 min-h-0 bg-[var(--ds-surface-sunken,#FAFBFC)] ${!isAiPage ? 'p-6 lg:p-10 overflow-y-auto' : 'overflow-hidden flex flex-col'}`} role="main">
+          <main className={`flex-1 min-h-0 bg-[var(--ds-surface-sunken,#FAFBFC)] ${!isFullBleed ? 'p-6 lg:p-10 overflow-y-auto' : isAiPage ? 'overflow-hidden flex flex-col' : 'overflow-y-auto flex flex-col'}`} role="main">
             <ProjectFilterProvider currentProjectId={currentProjectId} projects={projects}>
-              <div className={`animate-in fade-in slide-in-from-bottom-2 duration-500 ${!isAiPage ? 'max-w-[1400px] mx-auto' : 'h-full flex flex-col'}`}>
+              <div className={`animate-in fade-in slide-in-from-bottom-2 duration-500 ${!isFullBleed ? 'max-w-[1400px] mx-auto' : 'flex-1 flex flex-col h-full'}`}>
                 {children}
               </div>
             </ProjectFilterProvider>

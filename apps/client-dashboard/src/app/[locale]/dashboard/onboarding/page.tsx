@@ -79,7 +79,7 @@ export default function OnboardingPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-slate-50 via-white to-blue-50 px-4 py-12">
+    <div className="flex flex-1 min-h-full w-full items-center justify-center bg-gradient-to-br from-slate-50 via-white to-blue-50 px-4 py-10 md:py-20 lg:py-24">
       <div className="w-full max-w-md space-y-6">
 
         {/* Step indicators */}
