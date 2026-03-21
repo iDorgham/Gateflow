@@ -11,7 +11,7 @@ export enum Plan {
 export interface Organization {
   id: string;
   name: string;
-  email: string;
+  email: string | null;
   domain: string | null;
   plan: Plan;
   stripeCustomerId: string | null;

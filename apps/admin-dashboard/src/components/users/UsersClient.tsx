@@ -25,11 +25,11 @@ import { useMemo } from 'react';
 interface User {
   id: string;
   name: string;
-  email: string;
+  email: string | null;
   deletedAt: string | null;
   createdAt: string;
   role: { id: string; name: string } | null;
-  organization: { id: string; name: string; plan: string } | null;
+  organization: { id: string; name: string; plan: string | null } | null;
 }
 
 interface UsersClientProps {
@@ -141,7 +141,7 @@ export function UsersClient({ users, search, roleFilter, statusFilter, total, ro
               name="q"
               defaultValue={search}
               placeholder="Search by name or email…"
-              className="w-full h-10 pl-10 h-10 rounded-full bg-ds-background-neutral-subtle border-ds-border focus:bg-ds-background-default transition-all shadow-none"
+              className="w-full h-10 pl-10 rounded-full bg-ds-background-neutral-subtle border-ds-border focus:bg-ds-background-default transition-all shadow-none"
             />
           </div>
           <div className="flex items-center gap-3">

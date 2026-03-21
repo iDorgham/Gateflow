@@ -28,8 +28,8 @@ import { useMemo } from 'react';
 interface Org {
   id: string;
   name: string;
-  email: string;
-  plan: string;
+  email: string | null;
+  plan: string | null;
   deletedAt: string | null;
   createdAt: string;
   _count: { users: number; qrCodes: number; gates: number };
