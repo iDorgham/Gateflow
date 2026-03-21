@@ -180,7 +180,14 @@ export default async function ProjectsPage({
                     </td>
                   </tr>
                 ) : (
-                  projects.map((project) => {
+                  projects.map((project: {
+                    id: string;
+                    name: string;
+                    deletedAt: Date | null;
+                    createdAt: Date;
+                    organization: { id: string; name: string; plan: string | null };
+                    _count: { gates: number; qrCodes: number };
+                  }) => {
                     const archived = project.deletedAt !== null;
                     return (
                       <tr
@@ -211,7 +218,7 @@ export default async function ProjectsPage({
                         <td className="px-6 py-4">
                           <div className="flex flex-col gap-1">
                             <p className="text-foreground font-bold text-xs">{project.organization.name}</p>
-                            <PlanBadge plan={project.organization.plan} />
+                            <PlanBadge plan={project.organization.plan ?? 'FREE'} />
                           </div>
                         </td>
                         <td className="px-6 py-4">

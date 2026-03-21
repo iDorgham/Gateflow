@@ -45,12 +45,12 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     where: { scannedAt: { gte: monthStart } },
     _count: true,
   });
-  const gateIds = scansByGate.map((s) => s.gateId);
+  const gateIds = scansByGate.map((s: { gateId: string; _count: number }) => s.gateId);
   const gates = await prisma.gate.findMany({
     where: { id: { in: gateIds } },
     select: { id: true, organizationId: true },
   });
-  const gateOrgMap = new Map(gates.map((g) => [g.id, g.organizationId]));
+  const gateOrgMap = new Map<string, string>(gates.map((g: { id: string; organizationId: string }) => [g.id, g.organizationId]));
   const orgScanMap = new Map<string, number>();
   for (const s of scansByGate) {
     const orgId = gateOrgMap.get(s.gateId);
@@ -59,7 +59,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
   const planCounts: Record<string, number> = {};
   for (const g of planGroups) {
-    planCounts[g.plan] = g._count.id;
+    if (g.plan) planCounts[g.plan] = g._count.id;
   }
 
   const mrr = Object.entries(planCounts).reduce((sum, [plan, count]) => {
@@ -72,14 +72,14 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       planCounts,
       mrr,
       planPrices: PLAN_PRICES,
-      orgsWithPlans: orgsWithPlans.map((o) => ({
+      orgsWithPlans: orgsWithPlans.map((o: { id: string; name: string; plan: string; createdAt: Date; _count: { users: number } }) => ({
         id: o.id,
         name: o.name,
         plan: o.plan,
         userCount: o._count.users,
         scansThisMonth: orgScanMap.get(o.id) ?? 0,
         createdAt: o.createdAt.toISOString(),
-        mrr: PLAN_PRICES[o.plan] ?? 0,
+        mrr: o.plan ? (PLAN_PRICES[o.plan] ?? 0) : 0,
       })),
     },
   });

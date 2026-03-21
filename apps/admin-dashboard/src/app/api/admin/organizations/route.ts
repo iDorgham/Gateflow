@@ -54,7 +54,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
   return NextResponse.json({
     success: true,
-    data: orgs.map((o) => ({ ...o, deletedAt: o.deletedAt?.toISOString() ?? null, createdAt: o.createdAt.toISOString() })),
+    data: orgs.map((o: { id: string; name: string; email: string | null; plan: string | null; deletedAt: Date | null; createdAt: Date; _count: { users: number; qrCodes: number; gates: number; } }) => ({ ...o, deletedAt: o.deletedAt?.toISOString() ?? null, createdAt: o.createdAt.toISOString() })),
     total,
     page,
     pageSize,

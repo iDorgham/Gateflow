@@ -45,7 +45,17 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     return NextResponse.json({
       success: true,
-      data: keys.map((k) => ({
+      data: keys.map((k: {
+        id: string;
+        name: string;
+        keyPrefix: string;
+        type: string;
+        lastUsedAt: Date | null;
+        expiresAt: Date | null;
+        createdAt: Date;
+        createdBy: string;
+        organization: { id: string; name: string } | null;
+      }) => ({
         id: k.id,
         name: k.name,
         keyPrefix: k.keyPrefix,

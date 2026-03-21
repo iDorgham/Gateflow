@@ -69,13 +69,13 @@ export default async function OrganizationsPage({
     where: { scannedAt: { gte: thirtyDaysAgo } },
     _count: true,
   });
-  const gateIds = scansByGate.map((s) => s.gateId);
+  const gateIds = scansByGate.map((s: { gateId: string; _count: number }) => s.gateId);
   // skip-organization-check (Global Admin Fetch)
   const gates = await prisma.gate.findMany({
     where: { id: { in: gateIds } },
     select: { id: true, organizationId: true },
   });
-  const gateOrgMap = new Map(gates.map((g) => [g.id, g.organizationId]));
+  const gateOrgMap = new Map<string, string>(gates.map((g: { id: string; organizationId: string }) => [g.id, g.organizationId]));
   const orgScanMap = new Map<string, number>();
   for (const s of scansByGate) {
     const orgId = gateOrgMap.get(s.gateId);
@@ -83,7 +83,7 @@ export default async function OrganizationsPage({
   }
 
   // Serialize for client component
-  const serializedOrgs = orgs.map((o) => ({
+  const serializedOrgs = orgs.map((o: { id: string; name: string; email: string | null; plan: string | null; deletedAt: Date | null; createdAt: Date; _count: { users: number; qrCodes: number; gates: number; } }) => ({
     id: o.id,
     name: o.name,
     email: o.email,

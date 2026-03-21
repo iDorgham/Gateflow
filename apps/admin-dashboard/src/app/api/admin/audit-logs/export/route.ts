@@ -78,7 +78,8 @@ export async function GET(request: NextRequest) {
     'Scanned At',
   ];
 
-  const rows = logs.map((log) => [
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const rows = logs.map((log: any) => [
     log.id,
     log.scanUuid ?? '',
     log.status,
@@ -96,7 +97,7 @@ export async function GET(request: NextRequest) {
 
   const csvLines = [
     headers.map(escapeCSV).join(','),
-    ...rows.map((row) => row.map(escapeCSV).join(',')),
+    ...rows.map((row: string[]) => row.map(escapeCSV).join(',')),
   ];
 
   const csv = csvLines.join('\n');

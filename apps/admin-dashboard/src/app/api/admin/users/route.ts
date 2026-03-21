@@ -56,7 +56,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
   return NextResponse.json({
     success: true,
-    data: users.map((u) => ({
+    data: users.map((u: { id: string; name: string; email: string | null; deletedAt: Date | null; createdAt: Date; role: { id: string; name: string } | null; organization: { id: string; name: string; plan: string | null } | null }) => ({
       ...u,
       deletedAt: u.deletedAt?.toISOString() ?? null,
       createdAt: u.createdAt.toISOString(),

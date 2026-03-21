@@ -60,7 +60,7 @@ export default async function UsersPage({
     prisma.role.findMany({ select: { id: true, name: true }, orderBy: { name: 'asc' } }),
   ]);
 
-  const serializedUsers = users.map((u) => ({
+  const serializedUsers = users.map((u: { id: string; name: string; email: string | null; deletedAt: Date | null; createdAt: Date; role: { id: string; name: string } | null; organization: { id: string; name: string; plan: string | null } | null }) => ({
     id: u.id,
     name: u.name,
     email: u.email,
@@ -70,7 +70,7 @@ export default async function UsersPage({
     organization: u.organization,
   }));
 
-  const activeCount = users.filter((u) => u.deletedAt === null).length;
+  const activeCount = users.filter((u: { deletedAt: Date | null }) => u.deletedAt === null).length;
 
   return (
     <div className="space-y-6">

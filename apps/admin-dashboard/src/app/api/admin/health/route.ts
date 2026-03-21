@@ -59,7 +59,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         by: ['userId'],
         where: { scannedAt: { gte: fifteenMinAgo }, userId: { not: null } },
         _count: true,
-      }).then((r) => r.length),
+      }).then((r: unknown[]) => r.length),
       prisma.scanLog.count({ where: { scannedAt: { gte: new Date(now.getTime() - 5 * 60_000) } } }),
       prisma.organization.count({ where: { deletedAt: null } }),
       prisma.user.count({ where: { deletedAt: null } }),

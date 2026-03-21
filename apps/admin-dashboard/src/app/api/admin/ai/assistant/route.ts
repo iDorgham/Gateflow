@@ -69,7 +69,7 @@ Never make up data — use tools to fetch real information.`,
             take: limit,
             select: { id: true, name: true, plan: true, createdAt: true, _count: { select: { users: true } } },
           });
-          return orgs.map((o) => ({ ...o, createdAt: o.createdAt.toISOString() }));
+          return orgs.map((o: { id: string; name: string; plan: string | null; createdAt: Date; _count: { users: number } }) => ({ ...o, createdAt: o.createdAt.toISOString() }));
         },
       }),
 
@@ -114,7 +114,7 @@ Never make up data — use tools to fetch real information.`,
               qrCode: { select: { organization: { select: { name: true } } } },
             },
           });
-          return scans.map((s) => ({
+          return scans.map((s: { id: string; status: string; scannedAt: Date; gate: { name: string } | null; qrCode: { organization: { name: string } | null } | null }) => ({
             id: s.id,
             status: s.status,
             scannedAt: s.scannedAt.toISOString(),
@@ -145,7 +145,7 @@ Never make up data — use tools to fetch real information.`,
               organization: { select: { name: true } },
             },
           });
-          return users.map((u) => ({
+          return users.map((u: { id: string; name: string; email: string | null; deletedAt: Date | null; role: { name: string } | null; organization: { name: string } | null }) => ({
             id: u.id, name: u.name, email: u.email,
             role: u.role?.name ?? null,
             org: u.organization?.name ?? null,

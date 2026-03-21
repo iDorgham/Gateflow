@@ -41,7 +41,7 @@ export async function checkAndConsumeQuota(unitId: string): Promise<QuotaCheckRe
   }
 
   const organizationLimit = unit.organization.residentLimits.find(
-    (r) => r.unitType === unit.type
+    (r: { unitType: UnitType, canCreateOpenQR: boolean, monthlyQuota: number }) => r.unitType === unit.type
   );
 
   const quota = unit.qrQuota ?? organizationLimit?.monthlyQuota ?? getDefaultMonthlyQuota(unit.type);
@@ -85,7 +85,7 @@ export async function canCreateOpenQR(unitId: string): Promise<boolean> {
   if (!unit) return false;
 
   const organizationLimit = unit.organization.residentLimits.find(
-    (r) => r.unitType === unit.type
+    (r: { unitType: UnitType, canCreateOpenQR: boolean, monthlyQuota: number }) => r.unitType === unit.type
   );
 
   return organizationLimit?.canCreateOpenQR ?? false;

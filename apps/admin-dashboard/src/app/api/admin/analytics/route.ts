@@ -31,7 +31,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const day = new Date(now);
     day.setDate(day.getDate() - 29 + i);
     day.setHours(23, 59, 59, 999);
-    const total = orgsAll.filter((o) => o.createdAt <= day).length;
+    const total = orgsAll.filter((o: { createdAt: Date }) => o.createdAt <= day).length;
     return { label: day.toLocaleDateString('en', { month: 'short', day: 'numeric' }), total };
   });
 
@@ -41,7 +41,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     where: { deletedAt: null },
     _count: { id: true },
   });
-  const planDistribution = planGroups.map((g) => ({ plan: g.plan, count: g._count.id }));
+  const planDistribution = planGroups.map((g: { plan: string | null; _count: { id: number } }) => ({ plan: g.plan, count: g._count.id }));
 
   // Top orgs by scan volume (7d)
   const recentGateScans = await prisma.scanLog.groupBy({
@@ -51,14 +51,14 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     orderBy: { _count: { id: 'desc' } },
     take: 50,
   });
-  const gateIds = recentGateScans.map((g) => g.gateId);
+  const gateIds = recentGateScans.map((g: { gateId: string; _count: { id: number } }) => g.gateId);
   const gates = await prisma.gate.findMany({
     where: { id: { in: gateIds } },
     select: { id: true, organizationId: true, organization: { select: { name: true } } },
   });
   const orgScanAgg = new Map<string, { name: string; scans: number }>();
   for (const gs of recentGateScans) {
-    const gate = gates.find((g) => g.id === gs.gateId);
+    const gate = gates.find((g: { id: string; organizationId: string; organization: { name: string } | null }) => g.id === gs.gateId);
     if (!gate) continue;
     const ex = orgScanAgg.get(gate.organizationId);
     if (ex) { ex.scans += gs._count.id; }
