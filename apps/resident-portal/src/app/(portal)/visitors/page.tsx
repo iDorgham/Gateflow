@@ -60,7 +60,7 @@ export default async function VisitorsPage() {
 
         <div className="space-y-3">
           {visitors.length > 0 ? (
-            visitors.map((v) => {
+            visitors.map((v: any) => {
               const isActive =
                 v.qrCode.isActive && (!v.qrCode.expiresAt || v.qrCode.expiresAt > new Date());
               return (
