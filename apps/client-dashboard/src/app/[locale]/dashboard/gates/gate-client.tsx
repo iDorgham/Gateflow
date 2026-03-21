@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useTransition, useEffect, useRef, useCallback } from 'react';
+import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { Button, Input, Label, Checkbox, NativeSelect } from '@gate-access/ui';
 import { toast } from 'sonner';
@@ -674,17 +675,29 @@ export function GatesList({
           </Button>
         </div>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <motion.div
+          className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
+          variants={{ show: { transition: { staggerChildren: 0.05 } } }}
+          initial="hidden"
+          animate="show"
+        >
           {gates.map((gate) => (
-            <GateCard
+            <motion.div
               key={gate.id}
-              gate={gate}
-              showProject={isAllProjects}
-              onEdit={setEditingGate}
-              onDelete={setDeletingGate}
-            />
+              variants={{
+                hidden: { opacity: 0, y: 16 },
+                show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 280, damping: 24 } },
+              }}
+            >
+              <GateCard
+                gate={gate}
+                showProject={isAllProjects}
+                onEdit={setEditingGate}
+                onDelete={setDeletingGate}
+              />
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       )}
 
       {/* Modals */}

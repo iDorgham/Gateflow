@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
 import {
   Card,
   CardContent,
@@ -251,7 +252,12 @@ export function ProjectsClient({ projects: initial }: { projects: Project[] }) {
           onSuccess={refreshProjects}
         />
 
-        <div className="flex flex-col space-y-6">
+        <motion.div
+          className="flex flex-col space-y-6"
+          variants={{ show: { transition: { staggerChildren: 0.06 } } }}
+          initial="hidden"
+          animate="show"
+        >
           {projects.length === 0 ? (
             <Card className="rounded-2xl border-border shadow-sm overflow-hidden">
               <CardContent className="py-20 text-center">
@@ -276,8 +282,14 @@ export function ProjectsClient({ projects: initial }: { projects: Project[] }) {
             </Card>
           ) : (
             projects.map((project) => (
-              <Card
+              <motion.div
                 key={project.id}
+                variants={{
+                  hidden: { opacity: 0, y: 16 },
+                  show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 280, damping: 24 } },
+                }}
+              >
+              <Card
                 className="group relative flex flex-col sm:flex-row overflow-hidden rounded-3xl border border-border bg-card shadow-sm transition-all duration-300 hover:shadow-2xl hover:border-primary/30"
               >
                 {/* Image Section (Left side on desktop, top on mobile) */}
@@ -450,9 +462,10 @@ export function ProjectsClient({ projects: initial }: { projects: Project[] }) {
                   </CardContent>
                 </div>
               </Card>
+              </motion.div>
             ))
           )}
-        </div>
+        </motion.div>
 
         {/* Safe Delete Confirmation Modal */}
         <Dialog
