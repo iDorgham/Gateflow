@@ -93,7 +93,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       where: { id: { in: userIds } },
       select: { id: true, name: true, email: true },
     });
-    const userMap = new Map(users.map((u) => [u.id, u]));
+    const userMap = new Map<string, { id: string; name: string | null; email: string }>(users.map((u) => [u.id, u]));
 
     const data = groups.map((g) => {
       const u = userMap.get(g.userId!);
