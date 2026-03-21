@@ -96,6 +96,26 @@ const QR_TYPE_COLORS: Record<string, string> = {
 
 const DOW_LABELS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'] as const;
 
+// ─── ADS Tooltip style — replaces Recharts inline contentStyle objects ────────
+const ADS_TOOLTIP_STYLE: React.CSSProperties = {
+  fontSize: 12,
+  borderRadius: 'var(--ds-radius-small, 3px)',
+  border: '1px solid var(--ds-border, #DFE1E6)',
+  background: 'var(--ds-surface-overlay, #FFFFFF)',
+  color: 'var(--ds-text, #172B4D)',
+  boxShadow: '0 4px 8px -2px rgba(9,30,66,0.16), 0 0 1px rgba(9,30,66,0.08)',
+  padding: '8px 12px',
+};
+
+const ADS_TOOLTIP_LABEL_STYLE: React.CSSProperties = {
+  fontWeight: 700,
+  color: 'var(--ds-text, #172B4D)',
+};
+
+const ADS_TOOLTIP_ITEM_STYLE: React.CSSProperties = {
+  color: 'var(--ds-text-subtle, #42526E)',
+};
+
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function gateRateColor(rate: number): string {
@@ -143,8 +163,9 @@ export function AnalyticsCharts({
                 allowDecimals={false}
               />
               <Tooltip
-                contentStyle={{ fontSize: 12, borderRadius: 8, border: '1px solid hsl(var(--border))' }}
-                labelStyle={{ fontWeight: 600 }}
+                contentStyle={ADS_TOOLTIP_STYLE}
+                labelStyle={ADS_TOOLTIP_LABEL_STYLE}
+                itemStyle={ADS_TOOLTIP_ITEM_STYLE}
               />
               <Line
                 type="monotone"
@@ -194,7 +215,9 @@ export function AnalyticsCharts({
                     width={90}
                   />
                   <Tooltip
-                    contentStyle={{ fontSize: 12, borderRadius: 8, border: '1px solid hsl(var(--border))' }}
+                    contentStyle={ADS_TOOLTIP_STYLE}
+                    labelStyle={ADS_TOOLTIP_LABEL_STYLE}
+                    itemStyle={ADS_TOOLTIP_ITEM_STYLE}
                   />
                   <Bar dataKey="scans" name={t('analytics.scans')} fill="hsl(var(--chart-2))" radius={[0, 4, 4, 0]} />
                 </BarChart>
@@ -233,7 +256,9 @@ export function AnalyticsCharts({
                   </Pie>
                   <Tooltip
                     formatter={(value, name) => [value, String(name).replace(/_/g, ' ')]}
-                    contentStyle={{ fontSize: 12, borderRadius: 8, border: '1px solid hsl(var(--border))' }}
+                    contentStyle={ADS_TOOLTIP_STYLE}
+                    labelStyle={ADS_TOOLTIP_LABEL_STYLE}
+                    itemStyle={ADS_TOOLTIP_ITEM_STYLE}
                   />
                   <Legend
                     formatter={(value) => t(`overview.roles.${value}`, { defaultValue: String(value).replace(/_/g, ' ') })}
@@ -286,7 +311,9 @@ export function AnalyticsCharts({
                       value,
                       String(name).charAt(0) + String(name).slice(1).toLowerCase(),
                     ]}
-                    contentStyle={{ fontSize: 12, borderRadius: 8, border: '1px solid hsl(var(--border))' }}
+                    contentStyle={ADS_TOOLTIP_STYLE}
+                    labelStyle={ADS_TOOLTIP_LABEL_STYLE}
+                    itemStyle={ADS_TOOLTIP_ITEM_STYLE}
                   />
                   <Legend
                     formatter={(value) => t(`qrcodes.types.${value}`, { defaultValue: String(value).charAt(0) + String(value).slice(1).toLowerCase() })}
@@ -340,7 +367,9 @@ export function AnalyticsCharts({
                       const { successes, total } = props.payload as GateSuccessRate;
                       return [`${successes} / ${total} (${value}%)`, t('analytics.successRateLabel')];
                     }}
-                    contentStyle={{ fontSize: 12, borderRadius: 8, border: '1px solid hsl(var(--border))' }}
+                    contentStyle={ADS_TOOLTIP_STYLE}
+                    labelStyle={ADS_TOOLTIP_LABEL_STYLE}
+                    itemStyle={ADS_TOOLTIP_ITEM_STYLE}
                   />
                   <Bar dataKey="rate" name={t('analytics.successPct')} radius={[0, 4, 4, 0]}>
                     {gateSuccessRates.map((entry) => (
@@ -384,7 +413,9 @@ export function AnalyticsCharts({
                   width={110}
                 />
                 <Tooltip
-                  contentStyle={{ fontSize: 12, borderRadius: 8, border: '1px solid hsl(var(--border))' }}
+                  contentStyle={ADS_TOOLTIP_STYLE}
+                  labelStyle={ADS_TOOLTIP_LABEL_STYLE}
+                  itemStyle={ADS_TOOLTIP_ITEM_STYLE}
                 />
                 <Bar dataKey="count" name={t('analytics.scans')} radius={[0, 4, 4, 0]}>
                   {statusBreakdown.map((s) => (

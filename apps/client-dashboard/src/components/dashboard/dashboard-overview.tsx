@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { prisma } from '@gate-access/db';
 import { getTranslation, Locale } from '@/lib/i18n';
 import { Card, CardContent, CardHeader, CardTitle, Button } from '@gate-access/ui';
+import { AnimatedKpiGrid } from './animated-kpi-grid';
 import {
   QrCode,
   ScanLine,
@@ -13,67 +14,40 @@ import {
 } from 'lucide-react';
 
 const STATUS_COLORS: Record<string, { bg: string; text: string; dot: string }> = {
-  SUCCESS: { bg: 'bg-success/10', text: 'text-success', dot: 'bg-success' },
-  FAILED: { bg: 'bg-destructive/10', text: 'text-destructive', dot: 'bg-destructive' },
-  EXPIRED: { bg: 'bg-warning/10', text: 'text-warning', dot: 'bg-warning' },
-  MAX_USES_REACHED: { bg: 'bg-primary/10', text: 'text-primary', dot: 'bg-primary' },
-  INACTIVE: { bg: 'bg-muted', text: 'text-muted-foreground', dot: 'bg-muted-foreground' },
-  DENIED: { bg: 'bg-destructive/10', text: 'text-destructive', dot: 'bg-destructive' },
+  SUCCESS: {
+    bg: 'bg-[var(--ds-background-success-subtle)]',
+    text: 'text-[var(--ds-text-success)]',
+    dot: 'bg-[var(--ds-background-success-bold)]',
+  },
+  FAILED: {
+    bg: 'bg-[var(--ds-background-danger-subtle)]',
+    text: 'text-[var(--ds-text-danger)]',
+    dot: 'bg-[var(--ds-background-danger-bold)]',
+  },
+  EXPIRED: {
+    bg: 'bg-[var(--ds-background-warning-subtle)]',
+    text: 'text-[var(--ds-text-warning)]',
+    dot: 'bg-[var(--ds-background-warning-bold)]',
+  },
+  MAX_USES_REACHED: {
+    bg: 'bg-[var(--ds-background-information-subtle)]',
+    text: 'text-[var(--ds-text-information)]',
+    dot: 'bg-[var(--ds-background-information-bold)]',
+  },
+  INACTIVE: {
+    bg: 'bg-[var(--ds-background-neutral-subtle)]',
+    text: 'text-[var(--ds-text-subtlest)]',
+    dot: 'bg-[var(--ds-icon-subtle)]',
+  },
+  DENIED: {
+    bg: 'bg-[var(--ds-background-danger-subtle)]',
+    text: 'text-[var(--ds-text-danger)]',
+    dot: 'bg-[var(--ds-background-danger-bold)]',
+  },
 };
 
 function cn(...classes: (string | false | undefined)[]) {
   return classes.filter(Boolean).join(' ');
-}
-
-interface StatCardProps {
-  title: string;
-  value: number | string;
-  sub: string;
-  icon: React.ElementType;
-  href: string;
-  iconBg: string;
-  iconColor: string;
-  valueColor: string;
-}
-
-function StatCard({
-  title,
-  value,
-  sub,
-  icon: Icon,
-  href,
-  iconBg,
-  iconColor,
-  valueColor,
-}: StatCardProps) {
-  return (
-    <Link href={href} className="group block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-xl">
-      <Card className="border border-border bg-card transition-shadow hover:shadow-md">
-        <CardHeader className="pb-3">
-          <div className="flex items-center justify-between">
-            <CardTitle className="text-sm font-medium text-muted-foreground">{title}</CardTitle>
-            <div className={cn('flex h-9 w-9 items-center justify-center rounded-lg', iconBg)}>
-              <Icon className={cn('h-4.5 w-4.5', iconColor)} aria-hidden="true" />
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent className="pt-0">
-          <div className="flex items-end justify-between">
-            <div>
-              <p className={cn('text-3xl font-bold tabular-nums', valueColor)}>
-                {typeof value === 'number' ? value.toLocaleString() : value}
-              </p>
-              <p className="mt-1 text-xs text-muted-foreground">{sub}</p>
-            </div>
-            <ArrowRight
-              className="h-4 w-4 text-muted-foreground/60 transition-transform group-hover:translate-x-0.5 group-hover:text-muted-foreground"
-              aria-hidden="true"
-            />
-          </div>
-        </CardContent>
-      </Card>
-    </Link>
-  );
 }
 
 export async function DashboardOverview({ locale, orgId }: { locale: Locale; orgId: string }) {
@@ -168,13 +142,9 @@ export async function DashboardOverview({ locale, orgId }: { locale: Locale; org
         </Button>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4" role="region" aria-label="Key metrics">
-        {STAT_CARDS.map((card) => (
-          <StatCard key={card.title} {...card} />
-        ))}
-      </div>
+      <AnimatedKpiGrid cards={STAT_CARDS} />
 
-      <Card>
+      <Card className="border border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-surface-raised,#FFFFFF)] dark:bg-[#1D2125] shadow-[0_1px_1px_rgba(9,30,66,0.08),0_0_1px_rgba(9,30,66,0.08)]">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
