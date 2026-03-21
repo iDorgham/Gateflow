@@ -11,6 +11,9 @@ jest.mock('@gate-access/db', () => ({
       deleteMany: (...args: unknown[]) => mockDeleteMany(...args),
     },
   },
+  Prisma: {
+    InputJsonObject: {} as any,
+  },
   EventType: {
     QR_CREATED: 'QR_CREATED',
     QR_UPDATED: 'QR_UPDATED',

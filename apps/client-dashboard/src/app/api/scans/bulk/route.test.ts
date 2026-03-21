@@ -58,6 +58,8 @@ jest.mock('@gate-access/db', () => ({
     gate: { findMany: (...args: unknown[]) => mockGateFindMany(...args) },
     watchlistEntry: { findMany: (...args: unknown[]) => mockWatchlistFindMany(...args) },
     incident: { create: (...args: unknown[]) => mockIncidentCreate(...args) },
+    eventLog: { create: jest.fn().mockResolvedValue({ id: 'evt_1' }), deleteMany: jest.fn() },
+    webhook: { findMany: jest.fn().mockResolvedValue([]) },
     $transaction: (fn: (tx: unknown) => Promise<unknown>) => fn('mockTx'),
   },
 }));

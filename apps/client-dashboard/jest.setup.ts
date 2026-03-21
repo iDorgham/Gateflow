@@ -95,3 +95,60 @@ jest.mock('react-i18next', () => ({
 }));
 
 global.jest = jest;
+
+// Global @gate-access/db mock for generic build stability
+jest.mock('@gate-access/db', () => ({
+  prisma: {
+    eventLog: {
+      create: jest.fn().mockResolvedValue({ id: 'mock-id' }),
+      deleteMany: jest.fn().mockResolvedValue({ count: 0 }),
+    },
+    webhook: {
+      findMany: jest.fn().mockResolvedValue([]),
+    },
+    auditLog: {
+      create: jest.fn().mockResolvedValue({ id: 'mock-audit-id' }),
+    },
+    organization: {
+      findFirst: jest.fn(),
+      findMany: jest.fn(),
+    },
+    user: {
+      findFirst: jest.fn(),
+      findUnique: jest.fn(),
+    },
+    gate: {
+      findMany: jest.fn(),
+    },
+    scanLog: {
+      groupBy: jest.fn().mockResolvedValue([]),
+      create: jest.fn(),
+    },
+    $transaction: jest.fn().mockImplementation((cb) => cb({
+      eventLog: { create: jest.fn() },
+      webhook: { findMany: jest.fn() },
+    })),
+  },
+  Prisma: {
+    sql: (s) => s,
+    empty: '',
+    raw: (s) => s,
+    InputJsonObject: {} as any,
+  },
+  EventType: {
+    QR_CREATED: 'QR_CREATED',
+    QR_UPDATED: 'QR_UPDATED',
+    QR_DELETED: 'QR_DELETED',
+    SCAN_RECORDED: 'SCAN_RECORDED',
+    CONTACT_CREATED: 'CONTACT_CREATED',
+    CONTACT_UPDATED: 'CONTACT_UPDATED',
+    VISITOR_QR_CREATED: 'VISITOR_QR_CREATED',
+    VISITOR_QR_DELETED: 'VISITOR_QR_DELETED',
+  },
+  AccessRuleType: {
+    ONETIME: 'ONETIME',
+    DATERANGE: 'DATERANGE',
+    RECURRING: 'RECURRING',
+    PERMANENT: 'PERMANENT',
+  },
+}));

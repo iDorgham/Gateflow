@@ -77,9 +77,16 @@ jest.mock('@gate-access/db', () => ({
     auditLog: {
       create: (...args: unknown[]) => mockAuditLogCreate(...args),
     },
+    eventLog: {
+      create: jest.fn().mockResolvedValue({ id: 'evt_1' }),
+      deleteMany: jest.fn().mockResolvedValue({ count: 0 }),
+    },
+    webhook: {
+      findMany: jest.fn().mockResolvedValue([]),
+    },
     $queryRaw: jest.fn().mockResolvedValue([]),
   },
-  Prisma: { sql: jest.fn(), empty: '', raw: jest.fn() },
+  Prisma: { sql: jest.fn(), empty: '', raw: jest.fn(), InputJsonObject: {} as any },
   ContactSource: {
     MANUAL: 'MANUAL',
     IMPORT: 'IMPORT',
