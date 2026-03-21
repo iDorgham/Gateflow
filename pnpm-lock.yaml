@@ -35,7 +35,7 @@ importers:
         version: 20.19.35
       autoprefixer:
         specifier: ^10.4.24
-        version: 10.4.27(postcss@8.5.6)
+        version: 10.4.27(postcss@8.5.8)
       eslint:
         specifier: ^8.57.1
         version: 8.57.1
@@ -234,7 +234,7 @@ importers:
         version: 3.20.4
       '@tiptap/react':
         specifier: ^3.20.4
-        version: 3.20.4(@floating-ui/dom@1.7.5)(@tiptap/core@3.20.4)(@tiptap/pm@3.20.4)(@types/react-dom@18.3.7)(@types/react@18.3.28)(react-dom@18.3.1)(react@18.3.1)
+        version: 3.20.4(@floating-ui/dom@1.7.6)(@tiptap/core@3.20.4)(@tiptap/pm@3.20.4)(@types/react-dom@18.3.7)(@types/react@18.3.28)(react-dom@18.3.1)(react@18.3.1)
       '@tiptap/starter-kit':
         specifier: ^3.20.4
         version: 3.20.4
@@ -720,9 +720,6 @@ importers:
       '@prisma/client':
         specifier: ^5.22.0
         version: 5.22.0(prisma@5.22.0)
-      '@prisma/extension-accelerate':
-        specifier: ^3.0.1
-        version: 3.0.1(@prisma/client@5.22.0)
       date-fns:
         specifier: ^4.1.0
         version: 4.1.0
@@ -895,7 +892,7 @@ importers:
         version: 10.4.27(postcss@8.5.6)
       lucide-react-native:
         specifier: ^0.575.0
-        version: 0.575.0(react-native-svg@15.15.3)(react-native@0.81.5)(react@18.3.1)
+        version: 0.575.0(react-native-svg@15.15.4)(react-native@0.81.5)(react@18.3.1)
       next:
         specifier: ^14.2.35
         version: 14.2.35(@babel/core@7.29.0)(react-dom@18.3.1)(react@18.3.1)
@@ -2103,21 +2100,21 @@ packages:
     engines: {node: '>=18'}
     dev: true
 
-  /@emnapi/core@1.8.1:
-    resolution: {integrity: sha512-AvT9QFpxK0Zd8J0jopedNm+w/2fIzvtPKPjqyw9jwvBaReTTqPBk9Hixaz7KbjimP+QNz605/XnjFcDAL2pqBg==}
+  /@emnapi/core@1.9.1:
+    resolution: {integrity: sha512-mukuNALVsoix/w1BJwFzwXBN/dHeejQtuVzcDsfOEsdpCumXb/E9j8w11h5S54tT1xhifGfbbSm/ICrObRb3KA==}
     dependencies:
-      '@emnapi/wasi-threads': 1.1.0
+      '@emnapi/wasi-threads': 1.2.0
       tslib: 2.8.1
     optional: true
 
-  /@emnapi/runtime@1.8.1:
-    resolution: {integrity: sha512-mehfKSMWjjNol8659Z8KxEMrdSJDDot5SXMq00dM8BN4o+CLNXQ0xH2V7EchNHV4RmbZLmmPdEaXZc5H2FXmDg==}
+  /@emnapi/runtime@1.9.1:
+    resolution: {integrity: sha512-VYi5+ZVLhpgK4hQ0TAjiQiZ6ol0oe4mBx7mVv7IflsiEp0OWoVsp/+f9Vc1hOhE0TtkORVrI1GvzyreqpgWtkA==}
     dependencies:
       tslib: 2.8.1
     optional: true
 
-  /@emnapi/wasi-threads@1.1.0:
-    resolution: {integrity: sha512-WI0DdZ8xFSbgMjR1sFsKABJ/C5OnRrjT06JXbZKexJGrDuPTzZdDYfFlsgcCXCyf+suG5QU2e/y1Wo2V/OapLQ==}
+  /@emnapi/wasi-threads@1.2.0:
+    resolution: {integrity: sha512-N10dEJNSsUx41Z6pZsXU8FjPjpBEplgH24sfkmITrBED1/U2Esum9F3lfLrMjKHHjmi557zQn7kR9R+XWXu5Rg==}
     dependencies:
       tslib: 2.8.1
     optional: true
@@ -2811,12 +2808,27 @@ packages:
       '@floating-ui/utils': 0.2.10
     dev: false
 
+  /@floating-ui/core@1.7.5:
+    resolution: {integrity: sha512-1Ih4WTWyw0+lKyFMcBHGbb5U5FtuHJuujoyyr5zTaWS5EYMeT6Jb2AuDeftsCsEuchO+mM2ij5+q9crhydzLhQ==}
+    dependencies:
+      '@floating-ui/utils': 0.2.11
+    dev: false
+    optional: true
+
   /@floating-ui/dom@1.7.5:
     resolution: {integrity: sha512-N0bD2kIPInNHUHehXhMke1rBGs1dwqvC9O9KYMyyjK7iXt7GAhnro7UlcuYcGdS/yYOlq0MAVgrow8IbWJwyqg==}
     dependencies:
       '@floating-ui/core': 1.7.4
       '@floating-ui/utils': 0.2.10
     dev: false
+
+  /@floating-ui/dom@1.7.6:
+    resolution: {integrity: sha512-9gZSAI5XM36880PPMm//9dfiEngYoC6Am2izES1FF406YFsjvyBMmeJ2g4SAju3xWwtuynNRFL2s9hgxpLI5SQ==}
+    dependencies:
+      '@floating-ui/core': 1.7.5
+      '@floating-ui/utils': 0.2.11
+    dev: false
+    optional: true
 
   /@floating-ui/react-dom@2.1.7(react-dom@18.3.1)(react@18.3.1):
     resolution: {integrity: sha512-0tLRojf/1Go2JgEVm+3Frg9A3IW8bJgKgdO0BN5RkF//ufuz2joZM63Npau2ff3J6lUVYgDSNzNkR+aH3IVfjg==}
@@ -2832,6 +2844,11 @@ packages:
   /@floating-ui/utils@0.2.10:
     resolution: {integrity: sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ==}
     dev: false
+
+  /@floating-ui/utils@0.2.11:
+    resolution: {integrity: sha512-RiB/yIh78pcIxl6lLMG0CgBXAZ2Y0eVHqMPYugu+9U0AeT6YBeiJpf7lbdJNIugFP5SIjwNRgo4DhR1Qxi26Gg==}
+    dev: false
+    optional: true
 
   /@formatjs/fast-memoize@3.1.0:
     resolution: {integrity: sha512-b5mvSWCI+XVKiz5WhnBCY3RJ4ZwfjAidU0yVlKa3d3MSgKmH1hC3tBGEAtYyN5mqL7N0G5x0BOUYyO8CEupWgg==}
@@ -3714,8 +3731,8 @@ packages:
   /@napi-rs/wasm-runtime@0.2.12:
     resolution: {integrity: sha512-ZVWUcfwY4E/yPitQJl481FjFo3K22D6qF0DuFH6Y/nbnE11GY5uguDxZMGXPQ8WQ0128MXQD7TnfHyK4oWoIJQ==}
     dependencies:
-      '@emnapi/core': 1.8.1
-      '@emnapi/runtime': 1.8.1
+      '@emnapi/core': 1.9.1
+      '@emnapi/runtime': 1.9.1
       '@tybys/wasm-util': 0.10.1
     optional: true
 
@@ -4038,15 +4055,6 @@ packages:
       '@prisma/engines-version': 5.22.0-44.605197351a3c8bdd595af2d2a9bc3025bca48ea2
       '@prisma/fetch-engine': 5.22.0
       '@prisma/get-platform': 5.22.0
-
-  /@prisma/extension-accelerate@3.0.1(@prisma/client@5.22.0):
-    resolution: {integrity: sha512-xc+kn4AjjTzS9jsdD1JWCebB09y0Aj+C8GjjG7oUm81PF9psvmJOw5rxpl7tOEBz/8hmuNX996XL28ys/OLxVA==}
-    engines: {node: '>=22'}
-    peerDependencies:
-      '@prisma/client': '>=4.16.1'
-    dependencies:
-      '@prisma/client': 5.22.0(prisma@5.22.0)
-    dev: false
 
   /@prisma/fetch-engine@5.22.0:
     resolution: {integrity: sha512-bkrD/Mc2fSvkQBV5EpoFcZ87AvOgDxbG99488a5cexp5Ccny+UM6MAe/UFkUC0wLYD9+9befNOqGiIJhhq+HbA==}
@@ -5666,14 +5674,14 @@ packages:
       '@tiptap/extensions': 3.20.4(@tiptap/core@3.20.4)(@tiptap/pm@3.20.4)
     dev: false
 
-  /@tiptap/extension-floating-menu@3.20.4(@floating-ui/dom@1.7.5)(@tiptap/core@3.20.4)(@tiptap/pm@3.20.4):
+  /@tiptap/extension-floating-menu@3.20.4(@floating-ui/dom@1.7.6)(@tiptap/core@3.20.4)(@tiptap/pm@3.20.4):
     resolution: {integrity: sha512-AaPTFhoO8DBIElJyd/RTVJjkctvJuL+GHURX0npbtTxXq5HXbebVwf2ARNR7jMd/GThsmBaNJiGxZg4A2oeDqQ==}
     peerDependencies:
       '@floating-ui/dom': ^1.0.0
       '@tiptap/core': ^3.20.4
       '@tiptap/pm': ^3.20.4
     dependencies:
-      '@floating-ui/dom': 1.7.5
+      '@floating-ui/dom': 1.7.6
       '@tiptap/core': 3.20.4(@tiptap/pm@3.20.4)
       '@tiptap/pm': 3.20.4
     dev: false
@@ -5839,7 +5847,7 @@ packages:
       prosemirror-view: 1.41.6
     dev: false
 
-  /@tiptap/react@3.20.4(@floating-ui/dom@1.7.5)(@tiptap/core@3.20.4)(@tiptap/pm@3.20.4)(@types/react-dom@18.3.7)(@types/react@18.3.28)(react-dom@18.3.1)(react@18.3.1):
+  /@tiptap/react@3.20.4(@floating-ui/dom@1.7.6)(@tiptap/core@3.20.4)(@tiptap/pm@3.20.4)(@types/react-dom@18.3.7)(@types/react@18.3.28)(react-dom@18.3.1)(react@18.3.1):
     resolution: {integrity: sha512-1B8iWsHWwb5TeyVaUs8BRPzwWo4PsLQcl03urHaz0zTJ8DauopqvxzV3+lem1OkzRHn7wnrapDvwmIGoROCaQw==}
     peerDependencies:
       '@tiptap/core': ^3.20.4
@@ -5860,7 +5868,7 @@ packages:
       use-sync-external-store: 1.6.0(react@18.3.1)
     optionalDependencies:
       '@tiptap/extension-bubble-menu': 3.20.4(@tiptap/core@3.20.4)(@tiptap/pm@3.20.4)
-      '@tiptap/extension-floating-menu': 3.20.4(@floating-ui/dom@1.7.5)(@tiptap/core@3.20.4)(@tiptap/pm@3.20.4)
+      '@tiptap/extension-floating-menu': 3.20.4(@floating-ui/dom@1.7.6)(@tiptap/core@3.20.4)(@tiptap/pm@3.20.4)
     transitivePeerDependencies:
       - '@floating-ui/dom'
     dev: false
@@ -6974,6 +6982,21 @@ packages:
       fraction.js: 5.3.4
       picocolors: 1.1.1
       postcss: 8.5.6
+      postcss-value-parser: 4.2.0
+    dev: true
+
+  /autoprefixer@10.4.27(postcss@8.5.8):
+    resolution: {integrity: sha512-NP9APE+tO+LuJGn7/9+cohklunJsXWiaWEfV3si4Gi/XHDwVNgkwr1J3RQYFIvPy76GmJ9/bW8vyoU1LcxwKHA==}
+    engines: {node: ^10 || ^12 || >=14}
+    hasBin: true
+    peerDependencies:
+      postcss: ^8.1.0
+    dependencies:
+      browserslist: 4.28.1
+      caniuse-lite: 1.0.30001774
+      fraction.js: 5.3.4
+      picocolors: 1.1.1
+      postcss: 8.5.8
       postcss-value-parser: 4.2.0
     dev: true
 
@@ -12302,7 +12325,7 @@ packages:
     engines: {node: '>=12'}
     dev: true
 
-  /lucide-react-native@0.575.0(react-native-svg@15.15.3)(react-native@0.81.5)(react@18.3.1):
+  /lucide-react-native@0.575.0(react-native-svg@15.15.4)(react-native@0.81.5)(react@18.3.1):
     resolution: {integrity: sha512-kdGcjF4Rm1YKuNs3IaW5lDAqVKn9RBj1Fmjt3JBr08PMIXpVV7iL0ICNF/awiPZQicHlx/v9xgyZZS4TAFxDNg==}
     peerDependencies:
       react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
@@ -12311,7 +12334,7 @@ packages:
     dependencies:
       react: 18.3.1
       react-native: 0.81.5(@babel/core@7.29.0)(@types/react@18.3.28)(react@18.3.1)
-      react-native-svg: 15.15.3(react-native@0.81.5)(react@18.3.1)
+      react-native-svg: 15.15.4(react-native@0.81.5)(react@18.3.1)
     dev: true
 
   /lucide-react@0.344.0(react@18.3.1):
@@ -14120,6 +14143,15 @@ packages:
       picocolors: 1.1.1
       source-map-js: 1.2.1
 
+  /postcss@8.5.8:
+    resolution: {integrity: sha512-OW/rX8O/jXnm82Ey1k44pObPtdblfiuWnrd8X7GJ7emImCOstunGbXUpp7HdBrFQX6rJzn3sPT397Wp5aCwCHg==}
+    engines: {node: ^10 || ^12 || >=14}
+    dependencies:
+      nanoid: 3.3.11
+      picocolors: 1.1.1
+      source-map-js: 1.2.1
+    dev: true
+
   /postgres-array@2.0.0:
     resolution: {integrity: sha512-VpZrUqU5A69eQyW2c5CA1jtLecCsN2U/bD6VilrFDWq5+5UIEVO7nazS3TEcHf1zuPYO/sqGvUvW62g86RXZuA==}
     engines: {node: '>=4'}
@@ -14577,8 +14609,8 @@ packages:
       warn-once: 0.1.1
     dev: false
 
-  /react-native-svg@15.15.3(react-native@0.81.5)(react@18.3.1):
-    resolution: {integrity: sha512-/k4KYwPBLGcx2f5d4FjE+vCScK7QOX14cl2lIASJ28u4slHHtIhL0SZKU7u9qmRBHxTCKPoPBtN6haT1NENJNA==}
+  /react-native-svg@15.15.4(react-native@0.81.5)(react@18.3.1):
+    resolution: {integrity: sha512-boT/vIRgj6zZKBpfTPJJiYWMbZE9duBMOwPK6kCSTgxsS947IFMOq9OgIFkpWZTB7t229H24pDRkh3W9ZK/J1A==}
     peerDependencies:
       react: '*'
       react-native: '*'
