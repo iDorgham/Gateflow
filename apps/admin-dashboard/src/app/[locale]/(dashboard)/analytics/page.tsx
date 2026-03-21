@@ -91,7 +91,7 @@ export default async function AnalyticsPage({
   });
   const orgScanAgg = new Map<string, { name: string; count: number }>();
   for (const gs of recentGateScans) {
-    const gate = gateOrgs.find((g) => g.id === gs.gateId);
+    const gate = gateOrgs.find((g: { id: string; organizationId: string; organization: { name: string } | null }) => g.id === gs.gateId);
     if (!gate) continue;
     const existing = orgScanAgg.get(gate.organizationId);
     if (existing) {
