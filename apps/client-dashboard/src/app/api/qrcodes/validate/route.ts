@@ -411,9 +411,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
           qrCodeId: qrCode.id,
           gateId,
           deviceId: scanContext?.deviceId ?? null,
-          auditTrail: [auditEntry] as unknown as Parameters<
-            typeof tx.scanLog.create
-          >[0]['data']['auditTrail'],
+          auditTrail: [auditEntry] as any,
         },
       });
     });
@@ -544,7 +542,7 @@ async function logRejection(
         deviceId: scanContext?.deviceId ?? null,
         auditTrail: [
           makeAuditEntry('rejected', { reason, deviceId: scanContext?.deviceId ?? null }),
-        ] as unknown as Parameters<typeof prisma.scanLog.create>[0]['data']['auditTrail'],
+        ] as any,
       },
     });
   } catch (err) {
