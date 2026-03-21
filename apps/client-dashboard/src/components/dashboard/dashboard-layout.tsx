@@ -145,8 +145,8 @@ function SearchHeader({
               className="flex items-center gap-1 rounded-sm p-1 transition-colors hover:bg-[var(--ds-background-subtle,#F4F5F7)] focus-visible:ring-2 focus-visible:ring-[var(--ds-border-selected,#4C9AFF)] outline-none"
               aria-label="Open user menu"
             >
-              <Avatar size="xsmall">
-                <AvatarFallback className="bg-[var(--ds-background-brand-subtle,#DEEBFF)] text-[var(--ds-text-brand,#0052CC)] text-[9px] font-bold">
+              <Avatar className="h-8 w-8">
+                <AvatarFallback className="bg-[var(--ds-background-brand-subtle,#DEEBFF)] text-[var(--ds-text-brand,#0052CC)] text-xs font-bold">
                   {initials}
                 </AvatarFallback>
               </Avatar>
