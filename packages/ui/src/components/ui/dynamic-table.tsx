@@ -37,6 +37,8 @@ export interface DynamicTableProps<T> {
   selectedIds?: (string | number)[];
   onSelectionChange?: (ids: (string | number)[]) => void;
   isSelectable?: boolean;
+  /** 'compact' reduces row padding for high-density views (50+ rows). */
+  density?: 'default' | 'compact';
 }
 
 export function DynamicTable<T extends { id: string | number }>({
@@ -52,7 +54,9 @@ export function DynamicTable<T extends { id: string | number }>({
   selectedIds = [],
   onSelectionChange,
   isSelectable = false,
+  density = 'default',
 }: DynamicTableProps<T>) {
+  const isCompact = density === 'compact';
   const handleSort = (key: string) => {
     if (onSort) onSort(key);
   };
@@ -97,7 +101,8 @@ export function DynamicTable<T extends { id: string | number }>({
                 key={column.key}
                 style={{ width: column.width }}
                 className={cn(
-                  'h-11 text-[var(--ds-text-subtle)] font-bold text-xs uppercase tracking-wider px-4',
+                  'text-[var(--ds-text-subtle)] font-bold text-xs uppercase tracking-wider',
+                  isCompact ? 'h-8 px-3' : 'h-11 px-4',
                   column.align === 'center' && 'text-center',
                   column.align === 'right' && 'text-right'
                 )}
@@ -178,7 +183,8 @@ export function DynamicTable<T extends { id: string | number }>({
                   <TableCell
                     key={column.key}
                     className={cn(
-                      'text-sm text-[var(--ds-text)] py-4',
+                      'text-sm text-[var(--ds-text)]',
+                      isCompact ? 'py-1.5 px-3' : 'py-4',
                       column.align === 'center' && 'text-center',
                       column.align === 'right' && 'text-right'
                     )}

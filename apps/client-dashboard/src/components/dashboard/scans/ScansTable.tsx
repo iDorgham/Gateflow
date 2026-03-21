@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   cn,
@@ -8,11 +8,12 @@ import {
   type Column
 } from '@gate-access/ui';
 import { useTranslation } from 'react-i18next';
-import { 
-  QrCode, 
-  Building, 
-  DoorOpen 
+import {
+  QrCode,
+  Building,
+  DoorOpen
 } from 'lucide-react';
+import { ScanDetailDrawer } from './ScanDetailDrawer';
 
 const STATUS_COLORS: Record<string, string> = {
   SUCCESS: 'bg-[var(--ds-background-success-subtle,#E3FCEF)] text-[var(--ds-text-success,#006644)]',
@@ -57,6 +58,7 @@ export function ScansTable({
 }: ScansTableProps) {
   const { t } = useTranslation('dashboard');
   const router = useRouter();
+  const [drawerScan, setDrawerScan] = useState<ScanLog | null>(null);
 
   const handleSort = (key: string) => {
     const newDir = sortCol === key && sortDir === 'desc' ? 'asc' : 'desc';
@@ -170,15 +172,24 @@ export function ScansTable({
   }, [locale, t, showProjectColumn]);
 
   return (
-    <div className="bg-[var(--ds-background-default,#FFFFFF)] rounded-2xl border border-[var(--ds-border,#DFE1E6)] overflow-hidden shadow-sm">
-      <DynamicTable
-        columns={columns}
-        items={data}
-        isLoading={isLoading}
-        sortKey={sortCol}
-        sortOrder={sortDir}
-        onSort={handleSort}
+    <>
+      <div className="bg-[var(--ds-background-default,#FFFFFF)] rounded-2xl border border-[var(--ds-border,#DFE1E6)] overflow-hidden shadow-sm">
+        <DynamicTable
+          columns={columns}
+          items={data}
+          isLoading={isLoading}
+          sortKey={sortCol}
+          sortOrder={sortDir}
+          onSort={handleSort}
+          onRowClick={(item) => setDrawerScan(item)}
+          density="compact"
+        />
+      </div>
+      <ScanDetailDrawer
+        scan={drawerScan}
+        locale={locale}
+        onClose={() => setDrawerScan(null)}
       />
-    </div>
+    </>
   );
 }

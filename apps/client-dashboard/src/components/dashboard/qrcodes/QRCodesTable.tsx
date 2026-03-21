@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import {
   cn,
@@ -8,10 +8,11 @@ import {
   type Column
 } from '@gate-access/ui';
 import { useTranslation } from 'react-i18next';
-import { 
+import {
   RefreshCw
 } from 'lucide-react';
 import type { QRCodeRow } from '@/lib/qrcodes/use-qrcodes';
+import { QRDetailDrawer } from './QRDetailDrawer';
 
 const STATUS_BADGE: Record<string, { className?: string }> = {
   ACTIVE: { className: 'bg-[var(--ds-background-success-subtle,#E3FCEF)] text-[var(--ds-text-success,#006644)]' },
@@ -57,6 +58,7 @@ export function QRCodesTable({
   onSelectionChange,
 }: QRCodesTableProps) {
   const { t } = useTranslation('dashboard');
+  const [drawerQR, setDrawerQR] = useState<QRCodeRow | null>(null);
 
   const columns = useMemo<Column<QRCodeRow>[]>(() => [
     {
@@ -176,18 +178,27 @@ export function QRCodesTable({
   }
 
   return (
-    <div className="bg-[var(--ds-background-default,#FFFFFF)] rounded-2xl border border-[var(--ds-border,#DFE1E6)] overflow-hidden shadow-sm transition-all duration-300">
-      <DynamicTable
-        columns={columns}
-        items={data}
-        isLoading={isLoading}
-        sortKey={sortBy}
-        sortOrder={sortOrder}
-        onSort={(key) => onSortChange(key, sortBy === key && sortOrder === 'asc' ? 'desc' : 'asc')}
-        isSelectable
-        selectedIds={selectedIds}
-        onSelectionChange={onSelectionChange}
+    <>
+      <div className="bg-[var(--ds-background-default,#FFFFFF)] rounded-2xl border border-[var(--ds-border,#DFE1E6)] overflow-hidden shadow-sm transition-all duration-300">
+        <DynamicTable
+          columns={columns}
+          items={data}
+          isLoading={isLoading}
+          sortKey={sortBy}
+          sortOrder={sortOrder}
+          onSort={(key) => onSortChange(key, sortBy === key && sortOrder === 'asc' ? 'desc' : 'asc')}
+          isSelectable
+          selectedIds={selectedIds}
+          onSelectionChange={onSelectionChange}
+          onRowClick={(item) => setDrawerQR(item)}
+          density="compact"
+        />
+      </div>
+      <QRDetailDrawer
+        qr={drawerQR}
+        locale={locale}
+        onClose={() => setDrawerQR(null)}
       />
-    </div>
+    </>
   );
 }
