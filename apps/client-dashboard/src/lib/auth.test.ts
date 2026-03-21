@@ -1,3 +1,4 @@
+// @ts-nocheck
 // Unmock jose and uncrypto to use real crypto for JWT tests
 jest.unmock('jose');
 jest.unmock('uncrypto');

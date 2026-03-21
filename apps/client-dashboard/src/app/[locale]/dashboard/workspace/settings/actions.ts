@@ -130,7 +130,7 @@ export async function updateRetentionAndPrivacyAction(data: {
 
     await prisma.organization.update({
       where: { id: claims.orgId },
-      data: update as Parameters<typeof prisma.organization.update>[0]['data'],
+      data: update as any,
     });
 
     revalidatePath('/dashboard/settings');

@@ -138,7 +138,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     });
 
     // QR codes
-    const qrWhere: Parameters<typeof prisma.qRCode.findMany>[0]['where'] = {
+    const qrWhere: any = {
       organizationId: orgId,
       deletedAt: null,
       ...(projectIds.length > 0 ? { projectId: { in: projectIds } } : {}),
@@ -158,7 +158,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const qrIds = qrCodes.map((q) => q.id);
 
     // Scan logs (scoped via QR codes and date range)
-    const scanWhere: Parameters<typeof prisma.scanLog.findMany>[0]['where'] = {
+    const scanWhere: any = {
       ...(qrIds.length > 0 ? { qrCodeId: { in: qrIds } } : {}),
     };
 

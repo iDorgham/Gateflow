@@ -271,7 +271,7 @@ function LeftSidebar({
   return (
     <aside
       className={cn(
-        'hidden md:flex h-full flex-col border-r border-sidebar-border bg-sidebar text-sidebar-foreground shrink-0 transition-[width] duration-300 ease-in-out',
+        'hidden md:flex h-full flex-col border-r border-sidebar-border bg-sidebar text-sidebar-foreground shrink-0 transition-[width] duration-300 ease-in-out relative',
         isCollapsed ? 'w-[72px]' : 'w-64'
       )}
       role="navigation"
@@ -340,7 +340,7 @@ function LeftSidebar({
                   {t('sidebar.groupAccess', 'Access')}
                 </p>
               )}
-              {NAV_ITEMS.filter((item) => !['/dashboard', '/dashboard/ai', '/dashboard/settings'].includes(item.href)).map((item) => (
+              {NAV_ITEMS.filter((item) => !['/', '/dashboard/ai', '/dashboard/settings'].includes(item.href)).map((item) => (
                 <NavItem key={item.href} item={item} collapsed={isCollapsed} />
               ))}
             </div>
@@ -349,19 +349,24 @@ function LeftSidebar({
 
       <div className="shrink-0 p-4 mt-auto border-t border-border/50 flex flex-col gap-2">
         <NavItem item={NAV_ITEMS.find(n => n.href === '/dashboard/settings')!} collapsed={isCollapsed} />
-        
-        <div className="flex justify-center pt-2">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 rounded-md text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-foreground"
-            onClick={onToggleCollapse}
-            aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          >
-            {isRtl ? <ChevronRight className={cn('h-4 w-4', isCollapsed && 'rotate-180')} /> : <ChevronLeft className={cn('h-4 w-4', isCollapsed && 'rotate-180')} />}
-          </Button>
-        </div>
       </div>
+
+      {/* Collapse toggle */}
+      <button
+        type="button"
+        onClick={onToggleCollapse}
+        className={cn(
+          "absolute top-6 z-50 flex h-6 w-6 items-center justify-center rounded-full border border-border bg-background shadow-sm hover:bg-muted transition-all",
+          isRtl ? "-left-3" : "-right-3"
+        )}
+        aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+      >
+        {isRtl ? (
+          <ChevronRight className={cn('h-3.5 w-3.5 text-muted-foreground', isCollapsed && 'rotate-180')} />
+        ) : (
+          <ChevronLeft className={cn('h-3.5 w-3.5 text-muted-foreground', isCollapsed && 'rotate-180')} />
+        )}
+      </button>
     </aside>
   );
 }
@@ -543,7 +548,7 @@ function MobileSidebar({
 
               <div className="flex flex-col gap-1.5">
                 <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[#6B778C] mb-2">{t('sidebar.groupAccess', 'Access')}</p>
-                {NAV_ITEMS.filter((item) => !['/dashboard', '/dashboard/ai', '/dashboard/settings'].includes(item.href)).map((item) => (
+                {NAV_ITEMS.filter((item) => !['/', '/dashboard/ai', '/dashboard/settings'].includes(item.href)).map((item) => (
                   <NavItem key={item.href} item={item} collapsed={false} onClick={() => onOpenChange(false)} />
                 ))}
               </div>

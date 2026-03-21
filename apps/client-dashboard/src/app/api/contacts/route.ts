@@ -263,9 +263,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
             include: { tag: { select: { id: true, name: true, color: true } } },
           },
         },
-        orderBy: orderBy as Parameters<
-          typeof prisma.contact.findMany
-        >[0]['orderBy'],
+        orderBy: orderBy as any,
         skip: format === 'csv' ? 0 : (page - 1) * pageSize,
         take: format === 'csv' ? 10_000 : pageSize,
       }),

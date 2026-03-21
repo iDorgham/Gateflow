@@ -52,7 +52,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     type Agg = { name: string; total: bigint; success: bigint };
     const projectCond = projectId ? Prisma.sql`AND qr."projectId" = ${projectId}` : Prisma.empty;
-    const raw = await prisma.$queryRaw<Agg[]>(Prisma.sql`
+    const raw = await (prisma.$queryRaw as any)(Prisma.sql`
       SELECT
         COALESCE(qr."utmCampaign", '(no campaign)') AS name,
         COUNT(*)::bigint AS total,
@@ -66,7 +66,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         ${projectCond}
       GROUP BY qr."utmCampaign"
       ORDER BY total DESC
-    `);
+    `) as Agg[];
 
     const campaigns: CampaignRow[] = raw.map((r) => {
       const totalScans = Number(r.total);

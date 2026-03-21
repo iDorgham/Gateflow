@@ -214,9 +214,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
           project: { select: { id: true, name: true } },
           user: { select: { id: true, name: true, email: true } },
         },
-        orderBy: orderBy as Parameters<
-          typeof prisma.unit.findMany
-        >[0]['orderBy'],
+        orderBy: orderBy as any,
         skip: format === 'csv' ? 0 : (page - 1) * pageSize,
         take: format === 'csv' ? 10_000 : pageSize,
       }),
