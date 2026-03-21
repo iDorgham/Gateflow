@@ -356,7 +356,7 @@ function LeftSidebar({
         type="button"
         onClick={onToggleCollapse}
         className={cn(
-          "absolute top-6 z-50 flex h-6 w-6 items-center justify-center rounded-full border border-border bg-background shadow-sm hover:bg-muted transition-all",
+          "absolute bottom-6 z-50 flex h-6 w-6 items-center justify-center rounded-full border border-border bg-background shadow-sm hover:bg-muted transition-all",
           isRtl ? "-left-3" : "-right-3"
         )}
         aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
