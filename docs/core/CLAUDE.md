@@ -1,6 +1,6 @@
 # GateFlow — AI Assistant Guide (CLAUDE.md)
 
-**Product:** GateFlow — Zero-Trust Digital Gate Infrastructure Platform
+**Product:** GateFlow — Modern Digital Gate Infrastructure & Access Control
 **Version:** 1.0.0 (Production)
 **Status:** MVP 100% Complete | Unified Ecosystem
 **Stack:** Next.js 14 · Expo SDK 54 · PostgreSQL 15 · Prisma 5 · pnpm 8 · Turborepo 2
@@ -9,7 +9,7 @@
 
 ## Repository Overview
 
-GateFlow is a **Turborepo monorepo** with 6 apps and 6 shared packages. It is hard-scoped for the MENA region with full RTL/Arabic support and zero-trust security.
+GateFlow is a **Turborepo monorepo** with 6 apps and 6 shared packages. It is hard-scoped for the MENA region with full RTL/Arabic support and high-security architecture.
 
 ```
 Gate-Access/

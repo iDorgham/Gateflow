@@ -69,7 +69,7 @@
   "security": {
     "title": "Security Infrastructure",
     "lastUpdatedValue": "February 23, 2026",
-    "intro": " GateFlow is built on a zero-trust architecture. We prioritize the integrity of your perimeter access through enterprise-grade cryptographic standards and hardened cloud infrastructure.",
+    "intro": " GateFlow is built on a modern security architecture. We prioritize the integrity of your perimeter access through enterprise-grade cryptographic standards and hardened cloud infrastructure.",
     "cards": {
       "aes": {
         "title": "AES-256 Encryption",

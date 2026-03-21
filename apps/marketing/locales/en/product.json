@@ -57,7 +57,7 @@
   },
   "security": {
     "title": "Built for Absolute Security",
-    "description": "We don’t compromise on trust. GateFlow utilizes industry-standard encryption, rate-limiting, and Zero-Trust methodologies across the stack.",
+    "description": "We don’t compromise on security. GateFlow utilizes industry-standard encryption, rate-limiting, and modern security methodologies across the stack.",
     "list": [
       "Argon2id Password Hashing",
       "Double-Submit CSRF Protection",

@@ -3,7 +3,7 @@
 **Product Name:** GateFlow  
 **Current Version:** 9.0 (Growth & Autonomy Edition)  
 **Status:** MVP 100% Complete | Phase 3 (Marketing Suite + Resident Mobile v2) In Progress  
-**Strategic Vision:** Stripe-level infrastructure for physical access control with an emphasis on marketing intelligence, zero-trust security, and absolute resident autonomy.
+**Strategic Vision:** Stripe-level infrastructure for physical access control with an emphasis on marketing intelligence, secure access architecture, and absolute resident autonomy.
 
 ---
 
@@ -112,7 +112,7 @@ GateFlow operates via 6 strictly decoupled applications connected via a Turborep
 3. **i18n & RTL Adherence**  
    GateFlow specifically targets MENA regions. All newly written flexbox, margin, and padding classes must utilize logical properties (`ms-`, `me-`, `-right`/`-left` depending on `dir="rtl"`) to ensure the Arabic UI flows perfectly.
 4. **Security by Design**  
-   Zero trust logic. Cryptographic HMAC-SHA256 checking occurs irrespective of network status.
+   High-security logic. Cryptographic HMAC-SHA256 checking occurs irrespective of network status.
 
 ---
 

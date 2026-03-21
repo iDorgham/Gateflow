@@ -2,7 +2,7 @@
 
 Welcome to the central repository for **GateFlow's technical and operational documentation**. 
 
-GateFlow is a sprawling, enterprise-grade architecture containing 6 interconnected applications operating over a specialized zero-trust security infrastructure. This folder (`/docs`) serves to standardize all architectural decisions, deployment manifests, design paradigms, and product scopes.
+GateFlow is a sprawling, enterprise-grade architecture containing 6 interconnected applications operating over a modern, cryptographically secure infrastructure. This folder (`/docs`) serves to standardize all architectural decisions, deployment manifests, design paradigms, and product scopes.
 
 <br>
 

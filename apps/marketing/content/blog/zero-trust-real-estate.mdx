@@ -1,18 +1,18 @@
 ---
-title: "Zero-trust access for real estate compounds — a technical overview"
+title: "Secure digital access for real estate compounds — a technical overview"
 slug: "zero-trust-real-estate"
 date: "2026-03-01"
 author: "Omar Taha"
 authorTitle: "Lead Engineer"
 tags: ["security", "technical", "architecture"]
-excerpt: "Zero-trust isn't just a buzzword. For gated compounds, it's a concrete architectural pattern: verify every access event cryptographically, log it immutably, and trust no device or network unconditionally."
+excerpt: "Secure digital access isn't just a buzzword. For gated compounds, it's a concrete architectural pattern: verify every access event cryptographically, log it immutably, and ensure every entry is authorized."
 ---
 
-Zero-trust security as a concept was developed for enterprise networks: never assume a request is legitimate because it comes from inside the perimeter. Every request is verified, every action is logged, and no device is permanently trusted.
+High-security access as a concept was developed for enterprise networks: never assume a request is legitimate because it comes from inside the perimeter. Every request is verified, every action is logged, and no device is permanently trusted.
 
 For physical access control — gates, barriers, turnstiles — the same principles apply. A guard's scanner is not automatically trusted. A QR code is not trusted because it looks right. A network request is not trusted because it comes from the right IP. Everything is verified, every time.
 
-Here's how GateFlow implements zero-trust for physical access.
+Here's how GateFlow implements secure digital access.
 
 ## Layer 1: Cryptographic QR signing
 
@@ -76,14 +76,14 @@ Resident data, scan logs, QR codes, gate configurations, and user records are al
 
 ## Layer 6: Watchlists and incident management
 
-Zero-trust doesn't end at the gate. After entry, the system continues to verify. Watchlisted individuals trigger alerts on scan, even if their QR appears valid (a supervisor can revoke and flag simultaneously). Incident reports link to specific scans, creating a chain of evidence.
+Secure access doesn't end at the gate. After entry, the system continues to verify. Watchlisted individuals trigger alerts on scan, even if their QR appears valid (a supervisor can revoke and flag simultaneously). Incident reports link to specific scans, creating a chain of evidence.
 
 Supervisor overrides — where a guard admits someone despite a failed scan — are logged with a PIN confirmation and a mandatory reason field. The override appears in the audit trail distinctly, so it's never confused with a normal acceptance.
 
-## The compound as a zero-trust boundary
+## The compound as a secure boundary
 
 The perimeter of a gated compound is a physical equivalent of a network perimeter. The old model — trust what's inside, verify what comes in once at the gate — fails in exactly the same ways that network perimeter security failed for enterprises.
 
-Zero-trust for compounds means: verify every entry event cryptographically, attribute it to a specific authorization, log it immutably, and never assume that a device or person is trusted because they've been seen before.
+Secure access for compounds means: verify every entry event cryptographically, attribute it to a specific authorization, log it immutably, and never assume that a device or person is trusted because they've been seen before.
 
 GateFlow's architecture implements exactly this model — for every gate, every scan, and every resident — at a cost that compound management can actually afford.

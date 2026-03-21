@@ -1,7 +1,7 @@
 {
   "hero": {
     "headline": {
-      "prefix": "Zero-Trust Gate Access for",
+      "prefix": "Smart QR Access Control for",
       "highlight": "MENA Compounds & Events"
     },
     "subHeadline": "Replace WhatsApp chaos with cryptographically-signed QR access. Offline-capable, Arabic-first, enterprise-grade — built for Egypt & the Gulf.",
@@ -141,7 +141,7 @@
   },
   "securityGrid": {
     "subtitle": "Security First",
-    "title": "Zero-Trust Access Control",
+    "title": "Secure Smart Access Control",
     "description": "GateFlow is built on the same security principles used in global banking applications.",
     "items": {
       "hmac": {
@@ -161,7 +161,7 @@
         "description": "Every scan, override, and admin action is permanently logged with timestamps, gate IDs, and operator identity."
       },
       "jwt": {
-        "title": "Zero-Knowledge Tokens",
+        "title": "Secure Access Tokens",
         "description": "JWT access tokens rotate on use, with instant revocation on logout or detected anomaly."
       },
       "monitoring": {

@@ -6,7 +6,7 @@
 
   <h1>GateFlow</h1>
   <p>
-    <strong>Zero-Trust Digital Gate Infrastructure Platform</strong>
+    <strong>Modern Digital Gate Infrastructure & Access Control</strong>
   </p>
   <p>
     <em>Secure, Auditable, and Marketing-First Access Control for the MENA Region</em>
@@ -80,7 +80,7 @@ GateFlow operates not as a single application, but as a meticulously orchestrate
 
 ### 🛡️ Uncompromising Security
 - 🔒 **Cryptographic Enforcement:** QR codes are structurally generated and verified via mathematical `HMAC-SHA256` signatures preventing absolute forgery.
-- 🔐 **Zero-Trust Auth Ecosystem:** Leverages Argon2id hashing algorithms with heavily rotated JWT session tracking.
+- 🔐 **Secure Auth Ecosystem:** Leverages Argon2id hashing algorithms with heavily rotated JWT session tracking.
 - 🏷️ **Dynamic Watchlists:** Capable of instant entity blocking with automated incident creation for restricted individuals.
 - 🆔 **Tiered Identity Verification:** Optional tiered verification ranging from basic metadata up to mandatory photographic or ID Document capture on site.
 
