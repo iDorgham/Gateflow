@@ -3,8 +3,7 @@
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
-import { cn } from '@/lib/utils';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@gate-access/ui';
+import { AnimatePresence, motion, LayoutGroup } from 'framer-motion';
 import {
   Building2,
   Layers,
@@ -16,6 +15,7 @@ import {
   ShieldAlert,
   FolderKanban,
   CreditCard,
+  Target,
 } from 'lucide-react';
 
 // Import Tabs (Profile & Billing are user settings — avatar menu)
@@ -28,6 +28,7 @@ import { NotificationsTab } from './tabs/notifications-tab';
 import { RolesTab } from './tabs/roles-tab';
 import { ProjectsTab } from './tabs/projects-tab';
 import { BillingTab } from './tabs/billing-tab';
+import { MarketingTab } from './tabs/marketing-tab';
 
 interface SettingsUser {
   id: string;
@@ -55,6 +56,8 @@ interface SettingsOrg {
   incidentRetentionMonths: number | null;
   maskResidentNameOnLandingPage: boolean;
   showUnitOnLandingPage: boolean;
+  pixelMetaId?: string | null;
+  pixelGtmId?: string | null;
 }
 
 interface SettingsProject {
@@ -145,6 +148,7 @@ export function SettingsClient(props: SettingsClientProps) {
     'webhooks',
     'integrations',
     'billing',
+    'marketing',
   ];
   const initialTab = validIds.includes(tabParam) ? tabParam : 'workspace';
   const [activeTab, setActiveTab] = useState(initialTab);
@@ -231,72 +235,97 @@ export function SettingsClient(props: SettingsClientProps) {
         />
       ),
     },
+    {
+      id: 'marketing',
+      label: t('settings.tabs.marketing', 'Marketing'),
+      icon: Target,
+      component: <MarketingTab org={props.org} />,
+    },
   ];
 
+  const activeTabData = TABS.find((tab) => tab.id === activeTab);
+
   return (
-    <div className="space-y-6 pb-20">
-      <div className="flex flex-col gap-1 border-b border-border pb-6">
-        <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20">
-            <Building2 className="h-5 w-5 text-primary" />
+    <div className="space-y-0 pb-20">
+      {/* Page header */}
+      <div className="border-b border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-surface-raised,#FFFFFF)] dark:bg-[#1D2125] px-6 py-5 mb-0">
+        <div className="flex items-center gap-3 mb-1">
+          <div className="h-9 w-9 rounded-md bg-[var(--ds-background-brand-subtle,#DEEBFF)] flex items-center justify-center border border-[var(--ds-border-focused,#4C9AFF)]/30">
+            <Settings2 className="h-4 w-4 text-[var(--ds-text-brand,#0052CC)]" />
           </div>
-          <h1 className="text-2xl font-bold tracking-tight text-foreground uppercase">
+          <h1 className="text-xl font-bold tracking-tight text-[var(--ds-text,#172B4D)] uppercase">
             {t('settings.gateflowTitle', 'GateFlow Setup')}
           </h1>
         </div>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-[var(--ds-text-subtle,#42526E)]">
           <Trans
             t={t}
             i18nKey="settings.gateflowDescription"
             values={{ orgName: props.org.name }}
             defaults="Core operational parameters and administrative nodes for <1>{{orgName}}</1>."
             components={[
-              <span key="org" className="text-primary font-semibold" />,
+              <span key="org" className="text-[var(--ds-text-brand,#0052CC)] font-semibold" />,
             ]}
           />
         </p>
       </div>
 
-      <Tabs
-        value={activeTab}
-        onValueChange={handleTabChange}
-        className="w-full"
-        dir={
-          searchParams.get('locale') === 'ar-EG' || pathname.includes('/ar-EG')
-            ? 'rtl'
-            : 'ltr'
-        }
-      >
-        <TabsList className="w-full flex justify-start overflow-x-auto h-auto mb-6 p-1 bg-transparent border-b border-border rounded-none gap-2">
-          {TABS.map((tab) => {
-            const Icon = tab.icon;
-            return (
-              <TabsTrigger
-                key={tab.id}
-                value={tab.id}
-                className="flex items-center gap-2 whitespace-nowrap px-4 py-2 border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none rounded-none transition-all"
-              >
-                <Icon className="h-4 w-4" />
-                {tab.label}
-              </TabsTrigger>
-            );
-          })}
-        </TabsList>
-
-        {TABS.map((tab) => (
-          <TabsContent
-            key={tab.id}
-            value={tab.id}
-            forceMount
-            className={cn(
-              'mt-0 outline-none',
-              activeTab !== tab.id && 'hidden'
-            )}
+      {/* Tab nav bar */}
+      <div className="border-b border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-surface,#FFFFFF)] dark:bg-[#161A1D] sticky top-0 z-20">
+        <LayoutGroup id="settings-tabs">
+          <nav
+            className="flex overflow-x-auto scrollbar-hide gap-0 px-6"
+            role="tablist"
+            aria-label="Settings sections"
           >
-            {tab.component}
-          </TabsContent>
-        ))}
-      </Tabs>
+            {TABS.map((tab) => {
+              const Icon = tab.icon;
+              const isActive = activeTab === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  role="tab"
+                  aria-selected={isActive}
+                  onClick={() => handleTabChange(tab.id)}
+                  className="relative flex items-center gap-2 whitespace-nowrap px-4 py-3.5 text-sm font-semibold transition-colors outline-none focus-visible:ring-2 focus-visible:ring-[var(--ds-border-focused,#4C9AFF)] focus-visible:ring-offset-1 rounded-sm"
+                  style={{
+                    color: isActive
+                      ? 'var(--ds-text-selected, #0052CC)'
+                      : 'var(--ds-text-subtle, #42526E)',
+                  }}
+                >
+                  <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />
+                  <span>{tab.label}</span>
+                  {isActive && (
+                    <motion.div
+                      layoutId="settings-tab-indicator"
+                      className="absolute bottom-0 start-0 end-0 h-0.5 rounded-full bg-[var(--ds-border-selected,#0052CC)]"
+                      transition={{ type: 'spring', stiffness: 400, damping: 32 }}
+                    />
+                  )}
+                </button>
+              );
+            })}
+          </nav>
+        </LayoutGroup>
+      </div>
+
+      {/* Tab content with AnimatePresence */}
+      <div className="pt-6 px-0">
+        <AnimatePresence mode="wait">
+          {activeTabData && (
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 28 }}
+            >
+              {activeTabData.component}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </div>
   );
 }
