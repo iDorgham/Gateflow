@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { ArrowLeft, User, QrCode, Plus, Search, Filter } from 'lucide-react';
 import { getSessionClaims } from '@/lib/auth-cookies';
-import { prisma } from '@gate-access/db';
+import { prisma, VisitorQR, QRCode, AccessRule } from '@gate-access/db';
 import { Button } from '@gate-access/ui';
 
 export default async function VisitorsPage() {
@@ -60,7 +60,7 @@ export default async function VisitorsPage() {
 
         <div className="space-y-3">
           {visitors.length > 0 ? (
-            visitors.map((v: any) => {
+            visitors.map((v: VisitorQR & { qrCode: QRCode; accessRule: AccessRule | null }) => {
               const isActive =
                 v.qrCode.isActive && (!v.qrCode.expiresAt || v.qrCode.expiresAt > new Date());
               return (

@@ -9,7 +9,7 @@ import {
   Plus,
 } from 'lucide-react';
 import { getSessionClaims } from '@/lib/auth-cookies';
-import { prisma, checkAndConsumeQuota } from '@gate-access/db';
+import { prisma, checkAndConsumeQuota, VisitorQR, QRCode, AccessRule } from '@gate-access/db';
 
 export default async function HomePage() {
   const claims = await getSessionClaims();
@@ -156,7 +156,7 @@ export default async function HomePage() {
               </div>
               <div className="divide-y divide-slate-100">
                 {activeVisitors.length > 0 ? (
-                  activeVisitors.map((v: any) => (
+                  activeVisitors.map((v: VisitorQR & { qrCode: QRCode; accessRule: AccessRule | null }) => (
                     <div key={v.id} className="px-5 py-4 flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <div className="h-10 w-10 bg-slate-100 rounded-full flex items-center justify-center">
