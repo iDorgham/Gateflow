@@ -103,7 +103,13 @@ export default async function ProjectDetailPage({
       name: `${c.contact.firstName} ${c.contact.lastName}`,
     }))
   );
-  const contacts = Array.from(new Map(allContacts.map((c) => [c.id, c])).values());
+  const contacts = Array.from(new Map(allContacts.map((c) => [c.id, c])).values()) as {
+    id: string;
+    name: string;
+    email: string | null;
+    phone: string | null;
+    avatarUrl: string | null;
+  }[];
 
   const units = project.units.map(u => ({
     id: u.id,
