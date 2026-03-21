@@ -1,58 +1,64 @@
-<p align="center">
+<div align="center">
   <img src="./docs/gateflow_banner.png" alt="GateFlow Banner" width="100%">
-</p>
+  
+  <br />
+  <br />
 
-<h1 align="center">GateFlow</h1>
+  <h1>GateFlow</h1>
+  <p>
+    <strong>Zero-Trust Digital Gate Infrastructure Platform</strong>
+  </p>
+  <p>
+    <em>Secure, Auditable, and Marketing-First Access Control for the MENA Region</em>
+  </p>
 
-<p align="center">
-  <strong>Zero-Trust Digital Gate Infrastructure Platform</strong><br>
-  <em>Secure, Auditable, and Marketing-First Access Control for the MENA Region</em>
-</p>
+  <p>
+    <a href="https://gateflow.com"><img src="https://img.shields.io/badge/Status-1.0.0--Production-brightgreen?style=flat-square" alt="Status"></a>
+    <a href="https://nextjs.org"><img src="https://img.shields.io/badge/Stack-Next.js14--Expo54-blue?style=flat-square" alt="Stack"></a>
+    <a href="https://www.prisma.io/"><img src="https://img.shields.io/badge/ORM-Prisma_5-2D3748?style=flat-square&logo=prisma" alt="Prisma"></a>
+    <a href="https://tailwindcss.com"><img src="https://img.shields.io/badge/UI-Tailwind_CSS-38B2AC?style=flat-square&logo=tailwind-css" alt="Tailwind CSS"></a>
+    <a href="https://gateflow.com"><img src="https://img.shields.io/badge/Security-Strict_HMAC--SHA256-red?style=flat-square" alt="Security"></a>
+  </p>
+</div>
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Status-1.0.0--Production-brightgreen" alt="Status">
-  <img src="https://img.shields.io/badge/Stack-Next.js14--Expo54-blue" alt="Stack">
-  <img src="https://img.shields.io/badge/Security-Strict-blue" alt="Security">
-</p>
-
----
+<hr />
 
 ## 📋 Table of Contents
 
 - [✨ What is GateFlow?](#-what-is-gateflow)
-- [🎯 Who is it for?](#-who-is-it-for)
+- [📱 The 6-App Ecosystem](#-the-6-app-ecosystem)
 - [🚀 Key Features](#-key-features)
 - [💻 Tech Stack](#-tech-stack)
-- [🏗️ Architecture](#-architecture)
-- [📱 The 6-App Ecosystem](#-the-6-app-ecosystem)
+- [🏗️ Architecture & Structure](#-architecture--structure)
 - [🔐 Security Architecture](#-security-architecture)
-- [🛠️ Quick Start](#-quick-start)
+- [🛠️ Quick Start & Installation](#-quick-start--installation)
 - [📖 Documentation Index](#-documentation-index)
+- [🤝 Contributing](#-contributing)
 
 ---
 
 ## ✨ What is GateFlow?
 
-**GateFlow** is a **next-generation digital gate infrastructure platform** designed specifically for **gated compounds, real estate developers, schools, clubs, marinas, and high-end venues** across the MENA region.
+**GateFlow** is a **next-generation digital gate infrastructure platform** engineered specifically for **gated communities, educational campuses, real estate developments, marinas, and high-end events** across the MENA region.
 
-GateFlow transforms physical access points into **secure, trackable, and marketing-enabled digital nodes**.
+Unlike legacy access control systems, GateFlow transforms physical access points into **secure, trackable, and marketing-enabled digital nodes**. 
 
-> **Vision:** Stripe-level infrastructure for physical access — controlled entry + live intelligence + enterprise-grade security & integrations.
+> **Vision:** To become the *Stripe-level infrastructure* for physical access — providing uncompromising entry control, live intelligence, real-time analytics, and enterprise-grade security integrations seamlessly out of the box.
 
 <br>
 
-### 📱 The Six Apps Strategy
+## 📱 The 6-App Ecosystem
 
-GateFlow consists of **6 interconnected applications** working as one:
+GateFlow operates not as a single application, but as a meticulously orchestrated ecosystem consisting of **6 interconnected applications** running from a unified Turborepo monorepo:
 
-| App | Mode | Description | Status |
-| :--- | :--- | :--- | :--- |
-| **Client Dashboard** | Web | Main SaaS portal for property owners | ✅ 1.0.0 |
-| **Scanner App** | Native | Offline-capable QR scanner for guards | ✅ 1.0.0 |
-| **Resident Mobile** | Native | Resident self-service (iOS/Android) | ✅ 1.0.0 |
-| **Admin Dashboard** | Web | Super-admin management for platform | ✅ 1.0.0 |
-| **Resident Portal** | Web | Resident self-service (Web/Browser) | ✅ 1.0.0 |
-| **Marketing Site** | Web | Public-facing conversion & blog | ✅ 1.0.0 |
+| App | Platform | Tech | Description | Role / Primary User |
+| :--- | :--- | :--- | :--- | :--- |
+| **Client Dashboard** | Web | Next.js 14 | The primary SaaS portal offering deep analytics, QR management, and marketing pixels. | Property Managers, Marketing Teams |
+| **Admin Dashboard** | Web | Next.js 14 | The central nervous system for platform health, billing cycles, super-admin privileges. | GateFlow Internal Super-Admins |
+| **Resident Portal** | Web | Next.js 14 | Responsive web-based self-service for property residents and unit holders. | VIP Guests, Desktop Residents |
+| **Marketing Site** | Web | Next.js 14 | Public-facing conversion funnels, industry-specific solutions, and lead generation. | Public Prospects |
+| **Scanner App** | Native | Expo 54 | Offline-capable, high-contrast QR scanner with AES-256 local queueing and haptic feedback. | Gate Security Operators / Guards |
+| **Resident Mobile** | Native | Expo 54 | Consumer-grade mobile app featuring AI concierges, native contact-picker sharing, and push alerts. | Everyday Residents / Unit Owners |
 
 <br>
 
@@ -60,85 +66,130 @@ GateFlow consists of **6 interconnected applications** working as one:
 
 ## 🚀 Key Features
 
-### 🏗️ Core Platform
-- 🔲 **QR Code System** — Single, recurring, permanent, and visitor-created passes.
-- 🏢 **Multi-Project Support** — Organize access by compound, event, or building.
-- 👥 **Team & RBAC** — Granular role-based access control for every organization.
-- 📊 **Real-Time Analytics** — Live scan feed (SSE) and deep-dive reporting.
-- 🤝 **Resident Autonomy** — Unit-linked guest management with quota tracking.
+### 🏗️ Core Access Management
+- 🔲 **Intelligent QR Logic:** Support for Single-Use (timestamp constrained), Recurring (shift-based/maid service), Permanent (staff/VIP), and Shareable Open QR links.
+- 🏢 **Multi-Project & Multi-Tenant:** Deep architectural isolation organizing access by compound, sub-community, event, or specific building.
+- 👥 **Granular RBAC:** Deep Role-Based Access Control allowing highly specific permissions per tenant.
+- 🤝 **Resident Autonomy:** Empowers unit-linked guests to manage their own visitor quotas without contacting management.
 
-### 🛡️ Security Operations
-- 🔒 **HMAC-SHA256 QR Signing** — Cryptographically signed signatures prevent forgery.
-- 🔐 **Zero-Trust Auth** — Argon2id password hashing and JWT sessions.
-- 🏷️ **Watchlists** — Instant blocking and incident creation for restricted entities.
-- ids **Identity Verification** — 3-level verification from basic info to ID capture.
-- 📍 **Shift Tracking** — Accountability for gate operators and supervisors.
+### 📈 Marketing & Intelligence
+- **Live Scan Feeds:** Instant SSE (Server-Sent Events) feeds broadcasting live arrivals across dashboards.
+- **UTM Attribution:** Invisible capture of digital source tracking parameters upon visitor registration.
+- **Retargeting Pixels:** Injectable Meta/Google pixels mapped to guest landing pages for powerful retargeting.
+- **CRM Integrations:** Real-time webhooks pushing lead/visit sync directly to HubSpot or Salesforce.
+
+### 🛡️ Uncompromising Security
+- 🔒 **Cryptographic Enforcement:** QR codes are structurally generated and verified via mathematical `HMAC-SHA256` signatures preventing absolute forgery.
+- 🔐 **Zero-Trust Auth Ecosystem:** Leverages Argon2id hashing algorithms with heavily rotated JWT session tracking.
+- 🏷️ **Dynamic Watchlists:** Capable of instant entity blocking with automated incident creation for restricted individuals.
+- 🆔 **Tiered Identity Verification:** Optional tiered verification ranging from basic metadata up to mandatory photographic or ID Document capture on site.
 
 ---
 
 ## 💻 Tech Stack
 
-| Component | Technology | Version |
+Our foundation prioritizes type-safety, absolute performance, and massive scalability.
+
+| Domain | Technology | Details / Version |
 | :--- | :--- | :--- |
-| **Web Frontend** | Next.js 14 (App Router) | 14.2.x |
-| **Mobile Apps** | React Native (Expo SDK 54) | 54.x |
-| **Database** | PostgreSQL | 15+ |
-| **ORM** | Prisma | 5.x |
-| **Styling** | Tailwind CSS | 3.4.x |
-| **Security** | Argon2id + HMAC-SHA256 | Latest |
-| **Build System** | Turborepo + pnpm | 2.x |
+| **Web Frontend** | Next.js 14 (App Router) | React Server Components, Server Actions (`14.2.x`) |
+| **Mobile Apps** | React Native | Expo SDK `54.x`, Expo Router |
+| **Database** | PostgreSQL | Relational integrity & jsonb scalability (`15+`) |
+| **ORM** | Prisma | Strongly typed database client (`5.x`) |
+| **Styling** | Tailwind CSS / Shadcn UI | Utility-first css with Atlassian Design System tokens (`3.4.x`) |
+| **Security** | Argon2id + HMAC-SHA256 | Next-generation cryptography |
+| **Build System** | Turborepo + pnpm | Blazing fast monorepo orchestration (`2.x`) |
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ Architecture & Structure
 
-### 📁 Structure
-```
+GateFlow utilizes an enterprise-grade Monorepo architecture to maximize code sharing and strictly enforce type-safety boundaries between micro-applications.
+
+```bash
 GateFlow/
-├── apps/               # The 6 core interactive apps: Next.js + Expo
-├── packages/           # Shared logic: db, types, ui, i18n, api-client
-├── docs/               # Technical and product documentation
-└── turbo.json          # Monorepo build orchestration
+├── apps/
+│   ├── admin-dashboard/       # Super-admin operations and infrastructure health
+│   ├── client-dashboard/      # B2B Property Manager portal
+│   ├── marketing/             # GateFlow public landing page & SEO
+│   ├── resident-mobile/       # Native Resident application (Expo)
+│   ├── resident-portal/       # Web-based Resident portal
+│   └── scanner-app/           # Native Security Guard application (Expo)
+├── packages/
+│   ├── db/                    # Prisma DB schema, clients, raw queries, migrations
+│   ├── ui/                    # Shared shadcn components & Tailwind setups
+│   ├── types/                 # Universal TypeScript definitions & Zod schemas
+│   └── tsconfig/              # Shared Typescript Configurations
+├── docs/                      # Global comprehensive documentation
+├── package.json               # Root workspace manifest
+└── turbo.json                 # Turborepo pipeline configuration
 ```
 
 ---
 
-## 🛠️ Quick Start
+## 🛠️ Quick Start & Installation
 
 ### 📋 Prerequisites
-- **Node.js** 20+ (LTS recommended)
-- **pnpm** 8+ (`npm install -g pnpm`)
-- **PostgreSQL** 15+
+Ensure your local development environment meets the following requirements:
+- **Node.js** v20.x or higher (LTS recommended)
+- **pnpm** v8.x or higher (`npm install -g pnpm`)
+- **PostgreSQL** v15.x or higher running locally or via Docker
 
-### 📥 Installation
-```bash
-# Clone the repo
-git clone https://github.com/iDorgham/Gateflow.git && cd Gateflow
+### 📥 Initial Setup
 
-# Install everything
-pnpm install
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/iDorgham/Gateflow.git
+   cd Gateflow
+   ```
 
-# Setup database (in packages/db)
-npx prisma migrate dev && npx prisma db seed
+2. **Install all workspace dependencies:**
+   ```bash
+   pnpm install
+   ```
 
-# Run local development
-pnpm turbo dev
-```
+3. **Configure the Environment:**
+   Duplicate the example environment file into the root and specific sub-apps:
+   ```bash
+   cp .env.example .env
+   # Ensure DATABASE_URL andNEXTAUTH_SECRET are populated
+   ```
+
+4. **Initialize the Database:**
+   Generate the Prisma client, migrate the schema, and seed test data.
+   ```bash
+   cd packages/db
+   npx prisma generate
+   npx prisma migrate dev
+   npx prisma db seed
+   ```
+
+5. **Spin up the Development Server:**
+   Launch the entire orchestrated 6-app ecosystem locally:
+   ```bash
+   pnpm turbo dev
+   ```
+
+Your applications will map to local ports (e.g., `3000` for client-dashboard, `3001` for admin-dashboard).
 
 ---
 
 ## 📖 Documentation Index
 
-| Repo Location | Description |
-| :--- | :--- |
-| [**Docs Home**](docs/README.md) | Entry point for all technical and product documentation. |
-| [**Product PRD**](docs/product/PRD_v1.0_FINAL.md) | The definitive scope and requirements for GateFlow v1.0. |
-| [**Architecture**](docs/arch/README.md) | System design, database schema, and security flow. |
-| [**Deployment**](docs/deployment/README.md) | Guides for Vercel, Expo, and CI/CD pipelines. |
-| [**Security**](docs/guides/SECURITY_OVERVIEW.md) | Deep dive into HMAC signing, encryption, and RBAC. |
+For deeper architectural concepts, product specifications, and operational manuals, please refer to our internal document structures:
+
+| Subject | Documentation Link | Description |
+| :--- | :--- | :--- |
+| **Product Overview** | [**Master PRD**](./docs/product/PRD.md) | Absolute source of truth for scope, features, and capabilities. |
+| **Application Ecosystem** | [**Architecture Overview**](./docs/arch/ARCHITECTURE.md) | Deep dive into SSR fetching, Monorepo layout, and db integrations. |
+| **Operations** | [**Deployment Guide**](./docs/deployment/README.md) | CI/CD parameters, Vercel build configs, and Expo submission workflows. |
+| **Security Protocols** | [**Security Spec**](./docs/guides/SECURITY_OVERVIEW.md) | Detailed crypto math (HMAC-SHA256) and RBAC execution patterns. |
+
+---
 
 <br>
 
-<p align="center">
-  © 2026 GateFlow. Built for the modern MENA gate.
-</p>
+<div align="center">
+  <p><b>Built with precision for the modern MENA gate.</b></p>
+  <p>© 2026 GateFlow. All rights reserved.</p>
+</div>
