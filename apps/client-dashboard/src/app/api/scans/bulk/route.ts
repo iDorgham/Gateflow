@@ -11,7 +11,7 @@ import {
   orgHasAssignments,
   getUserAssignedGateIds,
 } from '@/lib/gate-assignment';
-import { checkLocationForGate } from '@/lib/location';
+import { checkLocationForGate, type GateLocationConfig } from '@/lib/location';
 import { getActiveWatchlist, findWatchlistMatch } from '@/lib/watchlist';
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
@@ -59,7 +59,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
             },
           })
         : [];
-    const gateMap = new Map(gates.map((g) => [g.id, g]));
+    const gateMap = new Map<string, GateLocationConfig>(gates.map((g) => [g.id, g]));
     const locationFailed: Array<{ id: string; error: string }> = [];
     const scansPassingLocation = scans.filter((scan) => {
       const gate = gateMap.get(scan.gateId);
