@@ -73,8 +73,8 @@ export default async function AnalyticsPage({
     where: { scannedAt: { gte: thirtyDaysAgo } },
     _count: { id: true },
   });
-  const statusMap = Object.fromEntries(statusGroups.map((s) => [s.status, s._count.id]));
-  const totalScans30 = statusGroups.reduce((a, b) => a + b._count.id, 0);
+  const statusMap = Object.fromEntries(statusGroups.map((s: { status: string; _count: { id: number } }) => [s.status, s._count.id]));
+  const totalScans30 = statusGroups.reduce((a: number, b: { _count: { id: number } }) => a + b._count.id, 0);
 
   // ── Top orgs by scan volume (7 days) ──────────────────────────────────────
   const recentGateScans = await prisma.scanLog.groupBy({
@@ -109,7 +109,7 @@ export default async function AnalyticsPage({
     where: { deletedAt: null },
     _count: { id: true },
   });
-  const planMap = Object.fromEntries(planGroups.map((p) => [p.plan, p._count.id]));
+  const planMap = Object.fromEntries(planGroups.map((p: { plan: string | null; _count: { id: number } }) => [p.plan, p._count.id]));
   const planChartData = ['FREE', 'PRO', 'ENTERPRISE'].map((plan) => ({
     plan,
     count: planMap[plan] ?? 0,
@@ -121,8 +121,8 @@ export default async function AnalyticsPage({
     where: { deletedAt: null },
     _count: { id: true },
   });
-  const qrTypeMap = Object.fromEntries(qrTypeGroups.map((q) => [q.type, q._count.id]));
-  const totalQR = qrTypeGroups.reduce((a, b) => a + b._count.id, 0) || 1;
+  const qrTypeMap = Object.fromEntries(qrTypeGroups.map((q: { type: string; _count: { id: number } }) => [q.type, q._count.id]));
+  const totalQR = qrTypeGroups.reduce((a: number, b: { _count: { id: number } }) => a + b._count.id, 0) || 1;
 
   // ── KPI summary ────────────────────────────────────────────────────────────
   const [totalOrgsCount, totalUsersCount, totalQRCount] = await Promise.all([
