@@ -17,7 +17,7 @@ export async function TrustBar({ locale }: { locale: Locale }) {
         <p className="text-center text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--ds-text-subtle,#42526E)] mb-10">
           {t('trust.badge')}
         </p>
-        <div className="flex flex-wrap justify-center items-center gap-12 lg:gap-24 opacity-60 grayscale hover:grayscale-0 hover:opacity-100 transition-all duration-500">
+        <div className="flex flex-wrap justify-center items-center gap-12 lg:gap-24 opacity-80 hover:opacity-100 transition-all duration-500">
           {partners.map((p) => (
             <div key={p.name} className="flex items-center gap-3 group cursor-default">
               <span className="text-2xl group-hover:scale-110 transition-transform">{p.logo}</span>

@@ -19,15 +19,16 @@ export async function BottomCTA({ locale }: { locale: Locale }) {
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button
+              variant="brand"
               size="lg"
-              className="h-11 px-8 bg-[#0052CC] hover:bg-[#0747A6] rounded-sm text-sm font-semibold transition-all w-full sm:w-auto"
+              className="h-11 px-8 rounded-sm text-sm font-semibold transition-all w-full sm:w-auto"
               asChild
             >
               <I18nLink locale={locale} href="/contact">
                 {tc('buttons.getStarted')}
               </I18nLink>
             </Button>
-            <p className="text-sm text-[#6B778C] dark:text-[#8993A4] font-medium">
+            <p className="text-sm text-[#42526E] dark:text-[#97A0AF] font-medium">
               {t('cta.noCreditCard')}
             </p>
           </div>
