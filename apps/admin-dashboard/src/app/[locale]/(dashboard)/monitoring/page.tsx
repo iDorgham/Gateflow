@@ -28,7 +28,13 @@ export default async function MonitoringPage({ params: { locale } }: { params: {
     prisma.webhookDelivery.count({ where: { status: 'FAILED' } }),
   ]);
 
-  const webhookFailures = recentFailedDeliveries.map((d) => ({
+  const webhookFailures = recentFailedDeliveries.map((d: {
+    id: string;
+    event: string;
+    webhook: { url: string; organization: { name: string } };
+    attemptCount: number;
+    lastAttemptAt: Date | null;
+  }) => ({
     id: d.id,
     event: d.event,
     url: d.webhook.url,

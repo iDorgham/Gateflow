@@ -191,7 +191,16 @@ export default async function GatesPage({
                     </td>
                   </tr>
                 ) : (
-                  gates.map((gate) => {
+                  gates.map((gate: {
+                    id: string;
+                    name: string;
+                    location: string | null;
+                    isActive: boolean;
+                    deletedAt: Date | null;
+                    organization: { name: string };
+                    project: { name: string } | null;
+                    _count: { scanLogs: number };
+                  }) => {
                     const deleted = gate.deletedAt !== null;
                     return (
                       <tr
