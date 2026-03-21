@@ -122,6 +122,8 @@ export default async function RootLayout({
       <head>
         <OrganizationJsonLd locale={params.locale} />
         <WebSiteJsonLd locale={params.locale} />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <meta name="theme-color" content="#3b82f6" />
         <link rel="manifest" href="/manifest.json" />
         <MarketingScripts

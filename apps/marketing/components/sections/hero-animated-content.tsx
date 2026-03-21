@@ -17,12 +17,12 @@ export function HeroAnimatedContent({
   const isRtl = locale === 'ar-EG';
 
   const containerVariants = {
-    hidden: { opacity: 0 },
+    hidden: { opacity: 1 }, // Start visible for LCP
     visible: {
       opacity: 1,
       transition: {
         staggerChildren: 0.1,
-        delayChildren: 0.2,
+        delayChildren: 0.1,
       },
     },
   };
@@ -57,9 +57,9 @@ export function HeroAnimatedContent({
                 <span>{t('trust.badge')}</span>
               </motion.div>
               
-              <motion.h1 variants={itemVariants} className="text-4xl font-bold leading-[1.15] sm:text-5xl lg:text-6xl xl:text-7xl mb-8 tracking-tight text-[var(--ds-text,#172B4D)]">
+              <h1 className="text-4xl font-bold leading-[1.15] sm:text-5xl lg:text-6xl xl:text-7xl mb-8 tracking-tight text-[var(--ds-text,#172B4D)]">
                 {t('hero.headline.prefix')} <span className="text-[var(--ds-text-brand,#0052CC)]">{t('hero.headline.highlight')}</span>
-              </motion.h1>
+              </h1>
 
               <motion.p variants={itemVariants} className="text-lg md:text-xl text-[var(--ds-text-subtle,#42526E)] leading-relaxed mb-10 max-w-xl mx-auto lg:mx-0">
                 {t('hero.subHeadline')}
