@@ -1,4 +1,4 @@
-@import "@gate-access/ui/src/globals.css";
+@import "@gate-access/ui/globals.css";
 
 @tailwind base;
 @tailwind components;

@@ -15,15 +15,19 @@
 - [x] Phase 4 — Marketing & Security Intelligence
 - [x] Phase 5 — CLI Wrapper & Validation
 
-### marketing_suite — Marketing & Sales Attribution Suite
-**IDEA:** `docs/plan/context/IDEA_marketing_suite.md`
-**Status:** 🗺️ Planned
-**Target:** Q3 2026
+### client_dashboard_v10_redesign — Client Dashboard V10 Redesign (ADS Premium)
+**IDEA:** `docs/plan/context/IDEA_client_dashboard_v10_redesign.md`
+**PLAN:** `docs/plan/planned/PLAN_client_dashboard_v10_redesign.md`
+**Status:** 📅 Planned
+**Target:** Q4 2026
 
-- [ ] Phase 1 — UTM Foundation & Schema
-- [ ] Phase 2 — Retargeting & Pixel Engine
-- [ ] Phase 3 — CRM Webhooks & Integration
-- [ ] Phase 4 — Funnel Analytics & ROI Dashboard
+- [x] Phase 0 — Design System Foundation: ADS Token Sync (Light/Dark)
+- [ ] Phase 1 — Global Shell & Sidebar: Premium Morphs + Glassmorphism
+- [ ] Phase 2 — Dashboard Home: Real-time High-Density Analytics
+- [ ] Phase 3 — Scan Operations: Unified High-Density Filter Engine
+- [ ] Phase 4 — Resource Management: Projects, Gates, Residents Card-Grid
+- [ ] Phase 5 — Settings Redesign: Premium Cards & Form Morphs
+- [ ] Phase 6 — Polish & Accessibility Audit (RTL focus)
 
 ### atlassian_ui_remake — Atlassian Design System UI Remake
 **IDEA:** `docs/plan/context/IDEA_atlassian_ui_remake.md`

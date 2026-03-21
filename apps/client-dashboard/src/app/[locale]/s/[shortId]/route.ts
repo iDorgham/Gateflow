@@ -50,24 +50,38 @@ export async function GET(
   let lng: number | null = null;
   let visitorQRId: string | null = null;
   let visitorName: string | null = null;
+  let pixelMetaId: string | null = null;
+  let pixelGtmId: string | null = null;
 
   try {
-    const visitorQR = await prisma.visitorQR.findFirst({
-      where: { qrCodeId: link.qrId },
-      select: {
-        id: true,
-        visitorName: true,
-        unit: { select: { lat: true, lng: true, name: true } },
-      },
-    });
+    const [visitorQR, org] = await Promise.all([
+      prisma.visitorQR.findFirst({
+        where: { qrCodeId: link.qrId },
+        select: {
+          id: true,
+          visitorName: true,
+          unit: { select: { lat: true, lng: true, name: true } },
+        },
+      }),
+      prisma.organization.findUnique({
+        where: { id: link.organizationId },
+        select: { pixelMetaId: true, pixelGtmId: true },
+      }),
+    ]);
+
     if (visitorQR) {
       visitorQRId = visitorQR.id;
       visitorName = visitorQR.visitorName;
       lat = visitorQR.unit?.lat ?? null;
       lng = visitorQR.unit?.lng ?? null;
     }
+
+    if (org) {
+      pixelMetaId = org.pixelMetaId;
+      pixelGtmId = org.pixelGtmId;
+    }
   } catch {
-    // Non-fatal — degrade gracefully (no buttons shown)
+    // Non-fatal — degrade gracefully
   }
 
   const hasCoords = lat !== null && lng !== null;
@@ -84,6 +98,33 @@ export async function GET(
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <title>GateFlow — Visitor Pass</title>
+  
+  ${pixelGtmId ? `<!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','${pixelGtmId}');</script>
+  <!-- End Google Tag Manager -->` : ''}
+
+  ${pixelMetaId ? `<!-- Meta Pixel Code -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '${pixelMetaId}');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=${pixelMetaId}&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Meta Pixel Code -->` : ''}
+
   <style>
     :root {
       --ds-background-default: #F2F3F4;
@@ -161,6 +202,10 @@ export async function GET(
   </style>
 </head>
 <body>
+  ${pixelGtmId ? `<!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=${pixelGtmId}"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->` : ''}
   <div class="card">
     <div class="logo">GateFlow</div>
     <h1>${visitorName ? `Welcome, ${escapeHtml(visitorName)}` : 'You\'re in!'}</h1>

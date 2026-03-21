@@ -31,7 +31,9 @@ model Organization {
   planExpiresAt                 DateTime?
   stripeCustomerId              String?                 @unique
   stripeSubscriptionId          String?                 @unique
-  /// Integration config: { gtmId, hubspotPortalId, googleAnalyticsId, ... }
+  pixelMetaId                   String?
+  pixelGtmId                    String?
+  /// Integration config: { hubspotPortalId, ... }
   integrationConfig             Json?
   /// Notification config: { channels: { email, sms, push }, events: { scanSuccess, scanFailed, ... } }
   notificationConfig            Json?

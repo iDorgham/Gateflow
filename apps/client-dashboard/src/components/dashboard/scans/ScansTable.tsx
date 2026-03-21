@@ -13,7 +13,11 @@ import {
   Building,
   DoorOpen
 } from 'lucide-react';
-import { ScanDetailDrawer } from './ScanDetailDrawer';
+import dynamic from 'next/dynamic';
+const ScanDetailDrawer = dynamic(
+  () => import('./ScanDetailDrawer').then((m) => ({ default: m.ScanDetailDrawer })),
+  { ssr: false }
+);
 
 const STATUS_COLORS: Record<string, string> = {
   SUCCESS: 'bg-[var(--ds-background-success-subtle,#E3FCEF)] text-[var(--ds-text-success,#006644)]',

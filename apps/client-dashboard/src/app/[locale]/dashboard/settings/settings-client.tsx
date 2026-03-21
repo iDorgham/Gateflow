@@ -245,8 +245,14 @@ export function SettingsClient(props: SettingsClientProps) {
 
   const activeTabData = TABS.find((tab) => tab.id === activeTab);
 
+  const isRtl =
+    searchParams.get('locale') === 'ar-EG' ||
+    searchParams.get('locale') === 'ar-SA' ||
+    pathname.includes('/ar-EG') ||
+    pathname.includes('/ar-SA');
+
   return (
-    <div className="space-y-0 pb-20">
+    <div className="space-y-0 pb-20" dir={isRtl ? 'rtl' : 'ltr'}>
       {/* Page header */}
       <div className="border-b border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-surface-raised,#FFFFFF)] dark:bg-[#1D2125] px-6 py-5 mb-0">
         <div className="flex items-center gap-3 mb-1">

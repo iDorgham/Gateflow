@@ -21,6 +21,11 @@ const RetentionSchema = z.object({
   showUnitOnLandingPage: z.boolean().optional(),
 });
 
+const MarketingSettingsSchema = z.object({
+  pixelMetaId: z.string().max(100).nullable().optional(),
+  pixelGtmId: z.string().max(100).nullable().optional(),
+});
+
 function getErrorCode(error: unknown): string | undefined {
   if (typeof error === 'object' && error !== null && 'code' in error) {
     const value = (error as { code?: unknown }).code;
@@ -137,6 +142,44 @@ export async function updateRetentionAndPrivacyAction(data: {
     return { success: true };
   } catch (error) {
     console.error('Server Action Error - updateRetentionAndPrivacyAction:', error);
+    return { success: false, message: 'An internal server error occurred.' };
+  }
+}
+
+export async function updateMarketingSettingsAction(data: {
+  pixelMetaId?: string | null;
+  pixelGtmId?: string | null;
+}) {
+  try {
+    const claims = await getSessionClaims();
+    if (!claims?.orgId) return { success: false, message: 'Unauthorized' };
+    
+    // Permission check - reusing workspace:manage or creating a specific one if needed
+    // For now, workspace:manage is appropriate for marketing pixels
+    if (!claims.permissions?.['workspace:manage']) {
+      return { success: false, message: 'Permission required to change marketing settings' };
+    }
+
+    const validation = MarketingSettingsSchema.safeParse(data);
+    if (!validation.success) return { success: false, message: 'Invalid data provided' };
+
+    const org = await prisma.organization.findFirst({
+      where: { id: claims.orgId, deletedAt: null },
+    });
+    if (!org) return { success: false, message: 'Organization not found' };
+
+    await prisma.organization.update({
+      where: { id: claims.orgId },
+      data: {
+        pixelMetaId: data.pixelMetaId || null,
+        pixelGtmId: data.pixelGtmId || null,
+      },
+    });
+
+    revalidatePath('/dashboard/settings');
+    return { success: true };
+  } catch (error) {
+    console.error('Server Action Error - updateMarketingSettingsAction:', error);
     return { success: false, message: 'An internal server error occurred.' };
   }
 }

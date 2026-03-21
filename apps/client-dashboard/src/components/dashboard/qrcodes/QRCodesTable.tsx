@@ -12,7 +12,11 @@ import {
   RefreshCw
 } from 'lucide-react';
 import type { QRCodeRow } from '@/lib/qrcodes/use-qrcodes';
-import { QRDetailDrawer } from './QRDetailDrawer';
+import dynamic from 'next/dynamic';
+const QRDetailDrawer = dynamic(
+  () => import('./QRDetailDrawer').then((m) => ({ default: m.QRDetailDrawer })),
+  { ssr: false }
+);
 
 const STATUS_BADGE: Record<string, { className?: string }> = {
   ACTIVE: { className: 'bg-[var(--ds-background-success-subtle,#E3FCEF)] text-[var(--ds-text-success,#006644)]' },

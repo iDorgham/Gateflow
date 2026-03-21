@@ -44,13 +44,16 @@ export const tokens = {
       DEFAULT: 'hsl(var(--card))',
       foreground: 'hsl(var(--card-foreground))',
     },
-    // Atlassian Semantic Tokens (v1)
+    // Atlassian Semantic Tokens (Updated)
     ds: {
       background: {
         default: 'var(--ds-background-default)',
         subtle: 'var(--ds-background-subtle)',
-        subtlest: 'var(--ds-background-subtlest)',
+        neutral: 'var(--ds-background-neutral)',
+        'neutral-subtle': 'var(--ds-background-neutral-subtle)',
+        'neutral-hovered': 'var(--ds-background-neutral-hovered)',
         selected: 'var(--ds-background-selected)',
+        card: 'var(--ds-background-card)',
         brand: {
           bold: 'var(--ds-background-brand-bold)',
           subtle: 'var(--ds-background-brand-subtle)',
@@ -71,11 +74,13 @@ export const tokens = {
           bold: 'var(--ds-background-information-bold)',
           subtle: 'var(--ds-background-information-subtle)',
         },
+        input: 'var(--ds-background-input)',
       },
       text: {
         DEFAULT: 'var(--ds-text)',
         subtle: 'var(--ds-text-subtle)',
         subtlest: 'var(--ds-text-subtlest)',
+        disabled: 'var(--ds-text-disabled)',
         inverse: 'var(--ds-text-inverse)',
         selected: 'var(--ds-text-selected)',
         brand: 'var(--ds-text-brand)',
@@ -87,12 +92,14 @@ export const tokens = {
       border: {
         DEFAULT: 'var(--ds-border)',
         bold: 'var(--ds-border-bold)',
+        subtle: 'var(--ds-border-subtle)',
+        focused: 'var(--ds-border-focused)',
         selected: 'var(--ds-border-selected)',
         brand: 'var(--ds-border-brand)',
         danger: 'var(--ds-border-danger)',
         warning: 'var(--ds-border-warning)',
         success: 'var(--ds-border-success)',
-        information: 'var(--ds-border-information)',
+        input: 'var(--ds-border-input)',
       },
       icon: {
         DEFAULT: 'var(--ds-icon)',
@@ -102,29 +109,31 @@ export const tokens = {
         danger: 'var(--ds-icon-danger)',
         warning: 'var(--ds-icon-warning)',
         success: 'var(--ds-icon-success)',
-        information: 'var(--ds-icon-information)',
+      },
+      surface: {
+        DEFAULT: 'var(--ds-surface)',
+        sunken: 'var(--ds-surface-sunken)',
+        raised: 'var(--ds-surface-raised)',
+        overlay: 'var(--ds-surface-overlay)',
       },
     },
   },
   spacing: {
     'space-0': '0rem',
-    'space-025': '0.125rem', // 2px
-    'space-050': '0.25rem',  // 4px
-    'space-075': '0.375rem', // 6px
-    'space-100': '0.5rem',   // 8px (Base)
-    'space-150': '0.75rem',  // 12px
-    'space-200': '1rem',     // 16px
-    'space-250': '1.25rem',  // 20px
-    'space-300': '1.5rem',   // 24px
-    'space-400': '2rem',     // 32px
-    'space-500': '2.5rem',   // 40px
-    'space-600': '3rem',     // 48px
-    'space-800': '4rem',     // 64px
-    'space-1000': '5rem',    // 80px
+    'space-050': 'var(--ds-space-050)',
+    'space-100': 'var(--ds-space-100)',
+    'space-150': 'var(--ds-space-150)',
+    'space-200': 'var(--ds-space-200)',
+    'space-250': 'var(--ds-space-250)',
+    'space-300': 'var(--ds-space-300)',
+    'space-400': 'var(--ds-space-400)',
+    'space-500': 'var(--ds-space-500)',
+    'space-600': 'var(--ds-space-600)',
   },
   typography: {
     fontFamily: {
       sans: 'var(--ds-font-family-sans)',
+      heading: 'var(--ds-font-family-heading)',
       mono: 'var(--ds-font-family-mono)',
     },
     fontWeight: {
@@ -137,6 +146,11 @@ export const tokens = {
   },
   borderRadius: {
     DEFAULT: 'var(--ds-border-radius)',
+    xsmall: 'var(--ds-radius-xsmall)',
+    small: 'var(--ds-radius-small)',
+    medium: 'var(--ds-radius-medium)',
+    large: 'var(--ds-radius-large)',
+    circle: 'var(--ds-radius-circle)',
     sm: 'var(--ds-border-radius-sm)',
     lg: 'var(--ds-border-radius-lg)',
     full: '9999px',
