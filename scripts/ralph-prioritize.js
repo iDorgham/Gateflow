@@ -2,56 +2,83 @@ const fs = require('fs');
 const path = require('path');
 
 const BACKLOG_PATH = path.join(__dirname, '../docs/plan/backlog/ALL_TASKS_BACKLOG.md');
-const AUTONOMY_PLAN_PATH = path.join(__dirname, '../docs/plan/execution/PLAN_gateflow_v9_autonomy.md');
+const IN_PROGRESS_DIR = path.join(__dirname, '../docs/plan/in-progress/');
+const PLANNED_DIR = path.join(__dirname, '../docs/plan/planned/');
 
 function prioritize() {
   console.log('--- Ralph Prioritization Engine ---');
   
-  if (!fs.existsSync(BACKLOG_PATH)) {
-    console.error('Backlog file not found.');
-    return;
-  }
+  // 1. Scan for active initiatives in in-progress/
+  if (fs.existsSync(IN_PROGRESS_DIR)) {
+    const activePlans = fs.readdirSync(IN_PROGRESS_DIR, { withFileTypes: true })
+      .filter(dirent => dirent.isDirectory())
+      .map(dirent => dirent.name);
 
-  const backlog = fs.readFileSync(BACKLOG_PATH, 'utf8');
-  const autonomyPlan = fs.readFileSync(AUTONOMY_PLAN_PATH, 'utf8');
-
-  // 1. Check current Autonomy Plan status
-  const autonomyMatches = autonomyPlan.match(/### Phase (\d+): (.*?) \[IN-PROGRESS\]/);
-  if (autonomyMatches) {
-    console.log(`Current Active Initiative: GateFlow v9.0 Autonomy`);
-    console.log(`Active Phase: Phase ${autonomyMatches[1]} (${autonomyMatches[2]})`);
-    console.log('Recommendation: Complete current Autonomy Phase before switching contexts.');
-    return;
+    if (activePlans.length > 0) {
+      console.log('\nActive Initiatives (In-Progress):');
+      activePlans.forEach(slug => {
+        const planPath = path.join(IN_PROGRESS_DIR, slug, `PLAN_${slug}.md`);
+        if (fs.existsSync(planPath)) {
+          const content = fs.readFileSync(planPath, 'utf8');
+          const phaseMatch = content.match(/### Phase (\d+): (.*?) \(CURRENT\)/);
+          if (phaseMatch) {
+            console.log(`- ${slug}: Phase ${phaseMatch[1]} (${phaseMatch[2]})`);
+          } else {
+            console.log(`- ${slug}: Plan found, but no active phase marked (CURRENT).`);
+          }
+        } else {
+          console.log(`- ${slug}: Plan directory exists, but PLAN_${slug}.md is missing.`);
+        }
+      });
+      console.log('\nRecommendation: Complete current active phases before switching contexts.');
+      return;
+    }
   }
 
   // 2. Scan Backlog for "Planning" or "In Progress" initiatives
-  const openInitiatives = [];
-  const lines = backlog.split('\n');
-  let currentInitiative = null;
+  if (fs.existsSync(BACKLOG_PATH)) {
+    const backlog = fs.readFileSync(BACKLOG_PATH, 'utf8');
+    const openInitiatives = [];
+    const lines = backlog.split('\n');
+    let currentInitiative = null;
 
-  for (const line of lines) {
-    if (line.startsWith('### ')) {
-      currentInitiative = line.replace('### ', '').trim();
-    }
-    if (line.includes('**Status:** 🔄 In Progress') || line.includes('**Status:** 🏗️ Planning')) {
-      if (currentInitiative) {
-        openInitiatives.push(currentInitiative);
+    for (const line of lines) {
+      if (line.startsWith('### ')) {
+        // Strip out the slug part before the dash
+        currentInitiative = line.replace('### ', '').trim().split(' — ')[0];
+      }
+      if (line.includes('**Status:** 🔄 In Progress') || line.includes('**Status:** 🏗️ Planning')) {
+        if (currentInitiative) {
+          openInitiatives.push(currentInitiative);
+        }
       }
     }
-  }
 
-  if (openInitiatives.length > 0) {
-    console.log('\nOther Open Initiatives detected:');
-    openInitiatives.forEach(init => console.log(`- ${init}`));
-    
-    // Simple heuristic: prioritize UI remake if it's open
-    if (openInitiatives.some(i => i.includes('atlassian_ui_remake'))) {
+    if (openInitiatives.length > 0) {
+      console.log('\nOpen Initiatives detected in backlog:');
+      openInitiatives.forEach(init => console.log(`- ${init}`));
+      
+      // Check planned/ directory for approved plans
+      if (fs.existsSync(PLANNED_DIR)) {
+        const plannedPlans = fs.readdirSync(PLANNED_DIR, { withFileTypes: true })
+          .filter(dirent => dirent.isDirectory())
+          .map(dirent => dirent.name);
+        
+        if (plannedPlans.length > 0) {
+          console.log('\nApproved Plans (Ready for /dev):');
+          plannedPlans.forEach(p => console.log(`- ${p}`));
+          console.log(`\nNext Step Recommendation: Run /dev ${plannedPlans[0]} 1`);
+          return;
+        }
+      }
+      
       console.log('\nStrategic Recommendation:');
-      console.log('The Atlassian UI Remake is a high-priority architectural shift.');
-      console.log('Proceed to: Phase 4 of atlassian_ui_remake (Feature Modules).');
+      console.log(`Prepare a formal plan for: ${openInitiatives[0]} using /plan ${openInitiatives[0]}`);
+    } else {
+      console.log('\nAll core initiatives are stable. Check ALL_TASKS_BACKLOG for new ideas.');
     }
   } else {
-    console.log('\nAll core initiatives are stable. Check ALL_TASKS_BACKLOG for new ideas.');
+    console.log('Backlog file not found.');
   }
 }
 

@@ -11,11 +11,12 @@ function discover() {
   let findingsFound = false;
 
   // 1. Scan for hardcoded Hex Colors (Should use ADS tokens)
+  // Exclude hexes that are part of a var() fallback like bg-[var(--ds-bg,#hex)]
+  // Exclude test pages
   console.log('Scanning for hardcoded Hex colors...');
   try {
-    // Focus on src directories and limit results
-    const hexFindings = execSync('grep -rE "#([A-Fa-f0-9]{3}){1,2}" apps/*/src packages/ui/src --exclude-dir=node_modules --exclude-dir=.next | head -n 10', { timeout: 30000 }).toString();
-    if (hexFindings) {
+    const hexFindings = execSync('grep -rE "#([A-Fa-f0-9]{3}){1,2}" apps/*/src packages/ui/src --exclude-dir=node_modules --exclude-dir=.next --exclude-dir=test --exclude-dir=tests | grep -vE "var\\(--ds-.*,#" | grep -v "create-test" | head -n 10', { timeout: 30000 }).toString();
+    if (hexFindings.trim()) {
       findingsFound = true;
       report += `## 🎨 Design System Violations (Hardcoded Hex)\n\nDetected raw hex values instead of Atlassian Design System tokens (\`var(--ds-...)\`).\n\n\`\`\`text\n${hexFindings}\n\`\`\`\n\n`;
     }
@@ -24,11 +25,11 @@ function discover() {
   }
 
   // 2. Scan for potentially missing organizationId guards in Prisma queries
+  // Ignore admin-dashboard as it is the global control plane.
   console.log('Scanning for potential missing organizationId guards...');
   try {
-    // Target api routes and lib files
-    const prismaFindings = execSync('grep -r "prisma\\..*\\.findMany({" apps/*/src packages/*/src --exclude-dir=node_modules | grep -v "organizationId" | head -n 5', { timeout: 30000 }).toString();
-    if (prismaFindings) {
+    const prismaFindings = execSync('grep -r "prisma\\..*\\.findMany({" apps/*/src packages/*/src --exclude-dir=node_modules | grep -v "organizationId" | grep -v "apps/admin-dashboard" | head -n 5', { timeout: 30000 }).toString();
+    if (prismaFindings.trim()) {
       findingsFound = true;
       report += `## 🔒 Security Invariants (Missing organizationId)\n\nPotential multi-tenant isolation risks. Found \`findMany\` calls without an explicit \`organizationId\` filter.\n\n\`\`\`text\n${prismaFindings}\n\`\`\`\n\n`;
     }
@@ -41,6 +42,7 @@ function discover() {
     fs.writeFileSync(REPORT_PATH, report);
     console.log(`\nFound violations! Skill Discovery Report generated at: ${REPORT_PATH}`);
   } else {
+    // If we reach here, it means we found NO violations after filtering
     console.log('\nNo new patterns discovered. Skill Compliance Score: 100%');
   }
 }
