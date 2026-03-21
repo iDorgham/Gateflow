@@ -84,7 +84,7 @@ export default async function AnalyticsPage({
     orderBy: { _count: { id: 'desc' } },
     take: 50,
   });
-  const gateIds = recentGateScans.map((g) => g.gateId);
+  const gateIds = recentGateScans.map((g: { gateId: string; _count: { id: number } }) => g.gateId);
   const gateOrgs = await prisma.gate.findMany({
     where: { id: { in: gateIds } },
     select: { id: true, organizationId: true, organization: { select: { name: true } } },
@@ -184,7 +184,7 @@ export default async function AnalyticsPage({
                 <p className="text-xs text-muted-foreground mt-1">{t('analytics.scanVolumeDesc')}</p>
               </div>
               <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 font-bold text-[10px]">
-                {scanTrendData.reduce((a, b) => a + b.count, 0).toLocaleString(locale)} scans
+                {scanTrendData.reduce((a: number, b: { count: number }) => a + b.count, 0).toLocaleString(locale)} scans
               </Badge>
             </div>
           </CardHeader>
