@@ -315,8 +315,11 @@ model QRCode {
   updatedAt      DateTime     @updatedAt
   deletedAt      DateTime?
   projectId      String?
-  utmCampaign    String?
   utmSource      String?
+  utmMedium      String?
+  utmCampaign    String?
+  utmContent     String?
+  utmTerm        String?
   /// Optional reference to Contact.id (no enforced FK for migration atomicity)
   contactId      String?
   guestEmail     String?
@@ -348,6 +351,11 @@ model ScanLog {
   auditNotes        Json?
   /// Set when the resident receives an "I've arrived" push for this scan (idempotency guard)
   arrivalNotifiedAt DateTime?
+  utmSource         String?
+  utmMedium         String?
+  utmCampaign       String?
+  utmContent        String?
+  utmTerm           String?
   incidents         Incident[]
   attachments       ScanAttachment[]
   gate              Gate             @relation(fields: [gateId], references: [id], onDelete: Cascade)

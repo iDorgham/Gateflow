@@ -8,6 +8,7 @@ import {
   Input, 
   Label, 
 } from '@gate-access/ui';
+import { captureUtmParams, getPersistedUtmParams } from '@gate-access/api-client';
 
 export function OpenQRForm({ unitId }: { unitId: string }) {
   const router = useRouter();
@@ -23,6 +24,10 @@ export function OpenQRForm({ unitId }: { unitId: string }) {
     endTime: '22:00',
   });
 
+  React.useEffect(() => {
+    captureUtmParams();
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -35,9 +40,9 @@ export function OpenQRForm({ unitId }: { unitId: string }) {
         body: JSON.stringify({
           ...formData,
           unitId,
-          isOpenQR: true,
           visitorName: 'Open Access Pass',
           accessType: 'DATERANGE',
+          ...getPersistedUtmParams(),
         }),
       });
 

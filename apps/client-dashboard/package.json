@@ -16,6 +16,7 @@
   "dependencies": {
     "@ai-sdk/google": "^1.2.0",
     "@formatjs/intl-localematcher": "^0.8.1",
+    "@gate-access/api-client": "workspace:*",
     "@gate-access/db": "^0.1.0",
     "@gate-access/i18n": "workspace:^",
     "@gate-access/stripe": "workspace:^",

@@ -143,7 +143,7 @@ export default async function AnalyticsPage({
     <div className="space-y-6">
       <PageHeader
         title={t('analytics.title', { defaultValue: 'Analytics Hub' })}
-        subtitle={t('analytics.description', { defaultValue: 'Real-time platform performance and usage monitoring.' })}
+        subtitle={t('analytics.subtitle', { defaultValue: 'Real-time platform performance and usage monitoring.' })}
       />
 
       {/* KPI summary row */}

@@ -21,6 +21,11 @@ const CreateVisitorSchema = z.object({
   recurringDays: z.array(z.number().min(0).max(6)).optional(),
   startTime: z.string().optional(),
   endTime: z.string().optional(),
+  utmSource: z.string().optional(),
+  utmMedium: z.string().optional(),
+  utmCampaign: z.string().optional(),
+  utmContent: z.string().optional(),
+  utmTerm: z.string().optional(),
 });
 
 export async function GET(request: NextRequest) {
@@ -84,7 +89,8 @@ export async function POST(request: NextRequest) {
 
     const { 
       unitId, visitorName, visitorPhone, visitorEmail, isOpenQR,
-      type, startDate, endDate, recurringDays, startTime, endTime 
+      type, startDate, endDate, recurringDays, startTime, endTime,
+      utmSource, utmMedium, utmCampaign, utmContent, utmTerm
     } = validation.data;
 
     // 1. Verify unit belongs to resident
@@ -158,6 +164,11 @@ export async function POST(request: NextRequest) {
           maxUses,
           expiresAt,
           isActive: true,
+          utmSource,
+          utmMedium,
+          utmCampaign,
+          utmContent,
+          utmTerm,
         },
       });
 

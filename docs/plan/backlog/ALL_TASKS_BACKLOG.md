@@ -15,6 +15,16 @@
 - [x] Phase 4 — Marketing & Security Intelligence
 - [x] Phase 5 — CLI Wrapper & Validation
 
+### marketing_suite — Marketing & Sales Attribution Suite
+**IDEA:** `docs/plan/context/IDEA_marketing_suite.md`
+**Status:** 🗺️ Planned
+**Target:** Q3 2026
+
+- [ ] Phase 1 — UTM Foundation & Schema
+- [ ] Phase 2 — Retargeting & Pixel Engine
+- [ ] Phase 3 — CRM Webhooks & Integration
+- [ ] Phase 4 — Funnel Analytics & ROI Dashboard
+
 ### atlassian_ui_remake — Atlassian Design System UI Remake
 **IDEA:** `docs/plan/context/IDEA_atlassian_ui_remake.md`
 **Status:** ✅ Complete

@@ -411,6 +411,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
           qrCodeId: qrCode.id,
           gateId,
           deviceId: scanContext?.deviceId ?? null,
+          utmSource: fresh.utmSource,
+          utmMedium: fresh.utmMedium,
+          utmCampaign: fresh.utmCampaign,
+          utmContent: fresh.utmContent,
+          utmTerm: fresh.utmTerm,
           auditTrail: [auditEntry] as any,
         },
       });

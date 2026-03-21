@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@gate-access/api-client": "workspace:*",
     "@gate-access/db": "^0.1.0",
     "@gate-access/types": "^0.1.0",
     "@gate-access/ui": "workspace:^",

@@ -11,6 +11,7 @@ import {
   TabsList,
   TabsTrigger,
 } from '@gate-access/ui';
+import { captureUtmParams, getPersistedUtmParams } from '@gate-access/api-client';
 
 export function VisitorForm({ unitId }: { unitId: string }) {
   const router = useRouter();
@@ -28,6 +29,10 @@ export function VisitorForm({ unitId }: { unitId: string }) {
     endTime: '23:59',
   });
 
+  React.useEffect(() => {
+    captureUtmParams();
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -40,6 +45,7 @@ export function VisitorForm({ unitId }: { unitId: string }) {
         body: JSON.stringify({
           unitId,
           ...formData,
+          ...getPersistedUtmParams(),
         }),
       });
 

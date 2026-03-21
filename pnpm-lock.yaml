@@ -184,6 +184,9 @@ importers:
       '@formatjs/intl-localematcher':
         specifier: ^0.8.1
         version: 0.8.1
+      '@gate-access/api-client':
+        specifier: workspace:*
+        version: link:../../packages/api-client
       '@gate-access/db':
         specifier: ^0.1.0
         version: link:../../packages/db
@@ -517,6 +520,9 @@ importers:
 
   apps/resident-portal:
     dependencies:
+      '@gate-access/api-client':
+        specifier: workspace:*
+        version: link:../../packages/api-client
       '@gate-access/db':
         specifier: ^0.1.0
         version: link:../../packages/db
