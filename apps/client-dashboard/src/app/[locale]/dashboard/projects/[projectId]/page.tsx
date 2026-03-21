@@ -133,7 +133,7 @@ export default async function ProjectDetailPage({
         g.gateAssignments.map((a) => [a.user.id, a.user])
       )
     ).values()
-  );
+  ) as { id: string; name: string | null; email: string }[];
 
   const canManageGates = hasPermission(claims, 'gates:manage');
   const coverUrl = project.coverUrl;
