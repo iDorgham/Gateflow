@@ -60,7 +60,7 @@ export default async function AnalyticsPage({
     const day = new Date(now);
     day.setDate(day.getDate() - 29 + i);
     day.setHours(23, 59, 59, 999);
-    const total = orgsAll.filter((o) => o.createdAt <= day).length;
+    const total = orgsAll.filter((o: { createdAt: Date }) => o.createdAt <= day).length;
     return {
       label: day.toLocaleDateString(locale, { month: 'short', day: 'numeric' }),
       total,
