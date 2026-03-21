@@ -13,8 +13,7 @@ import {
   Building2,
   Users,
 } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, Badge, cn } from '@gate-access/ui';
-import { PageHeader } from '@/components/page-header';
+import { Card, CardContent, CardHeader, CardTitle, Badge, cn, PageHeader } from '@gate-access/ui';
 import { ScanTrendChart } from '@/components/analytics/ScanTrendChart';
 import { OrgGrowthChart } from '@/components/analytics/OrgGrowthChart';
 import { PlanDistributionChart } from '@/components/analytics/PlanDistributionChart';
@@ -143,8 +142,8 @@ export default async function AnalyticsPage({
   return (
     <div className="space-y-6">
       <PageHeader
-        title={t('analytics.title')}
-        subtitle={t('analytics.subtitle')}
+        title={t('analytics.title', { defaultValue: 'Analytics Hub' })}
+        subtitle={t('analytics.description', { defaultValue: 'Real-time platform performance and usage monitoring.' })}
       />
 
       {/* KPI summary row */}

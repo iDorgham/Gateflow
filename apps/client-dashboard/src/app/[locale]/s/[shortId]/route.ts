@@ -85,18 +85,79 @@ export async function GET(
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <title>GateFlow — Visitor Pass</title>
   <style>
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F2F3F4;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
-    .card{background:#fff;border-radius:20px;padding:32px 24px;max-width:400px;width:100%;box-shadow:0 4px 24px rgba(2,0,53,0.10)}
-    .logo{font-size:13px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#02066F;margin-bottom:24px}
-    h1{font-size:22px;font-weight:700;color:#020035;margin-bottom:8px}
-    .sub{font-size:15px;color:#6b7280;margin-bottom:32px}
-    .btn{display:block;width:100%;padding:16px;border-radius:14px;font-size:16px;font-weight:600;text-align:center;text-decoration:none;border:none;cursor:pointer;margin-bottom:12px}
-    .btn-primary{background:#ED4B00;color:#fff}
-    .btn-secondary{background:#EDE9E8;color:#020035}
-    .btn:disabled{opacity:0.5;cursor:default}
-    .btn-done{background:#16a34a;color:#fff}
-    .note{font-size:12px;color:#9ca3af;text-align:center;margin-top:16px}
+    :root {
+      --ds-background-default: #F2F3F4;
+      --ds-surface: #FFFFFF;
+      --ds-text: #020035;
+      --ds-text-subtle: #02066F;
+      --ds-text-subtlest: #6B7280;
+      --ds-brand: #ED4B00;
+      --ds-neutral: #EDE9E8;
+      --ds-success: #16A34A;
+      --ds-border: #DEDDE3;
+      --ds-shadow: rgba(2, 0, 53, 0.10);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--ds-background-default);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .card {
+      background: var(--ds-surface);
+      border-radius: 20px;
+      padding: 32px 24px;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0 4px 24px var(--ds-shadow);
+    }
+    .logo {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--ds-text-subtle);
+      margin-bottom: 24px;
+    }
+    h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--ds-text);
+      margin-bottom: 8px;
+    }
+    .sub {
+      font-size: 15px;
+      color: var(--ds-text-subtlest);
+      margin-bottom: 32px;
+    }
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 16px;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 600;
+      text-align: center;
+      text-decoration: none;
+      border: none;
+      cursor: pointer;
+      margin-bottom: 12px;
+      transition: opacity 0.2s;
+    }
+    .btn-primary { background: var(--ds-brand); color: #FFFFFF; }
+    .btn-secondary { background: var(--ds-neutral); color: var(--ds-text); }
+    .btn:disabled { opacity: 0.5; cursor: default; }
+    .btn-done { background: var(--ds-success); color: #FFFFFF; }
+    .note {
+      font-size: 12px;
+      color: var(--ds-text-subtlest);
+      text-align: center;
+      margin-top: 16px;
+    }
   </style>
 </head>
 <body>

@@ -24,7 +24,7 @@ import {
   cn,
 } from '@gate-access/ui';
 import Link from 'next/link';
-import { PageHeader } from '@/components/page-header';
+import { PageHeader } from '@gate-access/ui';
 
 export const metadata = { title: 'Gates' };
 
@@ -111,7 +111,7 @@ export default async function GatesPage({
 
   return (
     <div className="space-y-6">
-      <PageHeader
+      <PageHeader titleClassName="italic uppercase"
         title={t('gates.title')}
         subtitle={t('gates.subtitle')}
         badge={<Badge variant="outline" className="bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300 border-emerald-100 dark:border-emerald-800 font-bold text-xs">{t('gates.activeGates', { count: totalActive })}</Badge>}

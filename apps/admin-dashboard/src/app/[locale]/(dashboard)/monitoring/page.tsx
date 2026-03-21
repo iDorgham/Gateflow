@@ -1,7 +1,7 @@
 import { requireAdmin } from '@/lib/admin-auth';
 import { Locale } from '@/lib/i18n/i18n-config';
 import { prisma } from '@gate-access/db';
-import { PageHeader } from '@/components/page-header';
+import { PageHeader } from '@gate-access/ui';
 import { MonitoringClient } from '@/components/monitoring/MonitoringClient';
 
 export const metadata = { title: 'Monitoring' };
@@ -45,7 +45,7 @@ export default async function MonitoringPage({ params: { locale } }: { params: {
 
   return (
     <div className="space-y-6">
-      <PageHeader
+      <PageHeader titleClassName="italic uppercase"
         title="Server Health"
         subtitle="Live platform monitoring — refreshes every 30s"
       />

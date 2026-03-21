@@ -3,7 +3,7 @@
   
   <br />
 
-  <h1>GateFlow</h1>
+# GateFlow
   <p>
     <strong>The Enterprise OS for Physical Access Control & Marketing Intelligence</strong>
   </p>
@@ -30,13 +30,13 @@
 
 - [✨ Vision & Core Pillars](#-vision--core-pillars)
 - [📱 The 6-App Ecosystem](#-the-6-app-ecosystem)
-- [🏗️ Detailed MVP Functional Breakdown](#️-detailed-mvp-functional-breakdown)
+- [🏗️ Detailed MVP Functional Breakdown](#-detailed-mvp-functional-breakdown)
 - [🚀 Roadmap & Phase Progress](#-roadmap--phase-progress)
 - [📊 Project Progress Dashboard](#-project-progress-dashboard)
 - [🔐 Security Architecture](#-security-architecture)
 - [💻 Tech Stack](#-tech-stack)
-- [🏗️ Monorepo Structure](#️-monorepo-structure)
-- [🛠️ Getting Started](#️-getting-started)
+- [🏗️ Monorepo Structure](#-monorepo-structure)
+- [🛠️ Getting Started](#-getting-started)
 - [📖 Documentation Library](#-documentation-library)
 
 ---
@@ -58,7 +58,8 @@ Developed with strict AI-assisted governance, ensuring 100% adherence to Atlassi
 
 ## 📱 The 6-App Ecosystem
 
-GateFlow is an orchestrated suite of 6 strictly decoupled applications sharing a unified core.
+GateFlow is an orchestrated suite of 6 strictly decoupled applications
+sharing a unified core.
 
 | App | Status | User | Core Capability |
 | :--- | :--- | :--- | :--- |
@@ -159,10 +160,14 @@ GateFlow is an orchestrated suite of 6 strictly decoupled applications sharing a
 
 GateFlow follows a strict **Security-by-Design** philosophy.
 
-- **HMAC-SHA256 QR Signing:** Every QR code contains a cryptographic signature of its payload. Altering even one character of the ticket results in an immediate failure on the scanner.
-- **AES-256 Storage:** Sensitive resident data and offline sync queues are encrypted at rest using industry-standard AES.
-- **Argon2id:** The strongest modern password hashing algorithm is used for all user credentials.
-- **Audit Logging:** Every administrative action and every scan event is logged immutably with full actor attribution.
+- **HMAC-SHA256 QR Signing:** Every QR code contains a cryptographic signature.
+  Altering even one character of the ticket results in an immediate failure.
+- **AES-256 Storage:** Sensitive resident data and offline sync queues are
+  encrypted at rest using industry-standard AES.
+- **Argon2id:** The strongest modern password hashing algorithm is used for
+  all user credentials.
+- **Audit Logging:** Every administrative action and every scan event is
+  logged immutably with full actor attribution.
 
 ---
 
@@ -221,14 +226,22 @@ GateFlow/
 
 ## 📅 Recent Engineering Activity
 
-- **[Live Feed] Real-time Updates:** Added SSE streaming for live dashboard updates (EventLog model, `/api/events/stream`).
-- **[Marketing] Platform Conversion:** Completed homepage, features, pricing, and solutions layouts (100% stable).
-- **[Resident Mobile] Core Flows:** Added native QR list, creation wizards, offline cache, and history tracking.
-- **[Scanner App] v5 Hub:** Mapped 5 tactical tabs: Scanner, Today (Expected), Log, Chat, and Hardware Settings.
-- **[Admin Portal] Auth Keys:** Implemented Authorization Key management with full cryptographic CRUD API.
-- **[Client Dashboard] Analytics Rebuild:** Full data visualization overhaul using Recharts with multi-tenant filtering.
-- **[CRM UI] Projects Hub:** Completed Phase 1-12 of the Projects CRM (multi-project, contacts, units).
-- **[Security] Logic Update:** Hardened visitor identity levels, privacy controls, and watchlist flags.
+- **[Live Feed] Real-time Updates:** Added SSE streaming for live dashboard
+  updates (EventLog model, `/api/events/stream`).
+- **[Marketing] Platform Conversion:** Completed homepage, features,
+  pricing, and solutions layouts (100% stable).
+- **[Resident Mobile] Core Flows:** Added native QR list, creation wizards,
+  offline cache, and history tracking.
+- **[Scanner App] v5 Hub:** Mapped 5 tactical tabs: Scanner, Today (Expected),
+  Log, Chat, and Hardware Settings.
+- **[Admin Portal] Auth Keys:** Implemented Authorization Key management
+  with full cryptographic CRUD API.
+- **[Client Dashboard] Analytics Rebuild:** Full data visualization overhaul
+  using Recharts with multi-tenant filtering.
+- **[CRM UI] Projects Hub:** Completed Phase 1-12 of the Projects CRM
+  (multi-project, contacts, units).
+- **[Security] Logic Update:** Hardened visitor identity levels, privacy
+  controls, and watchlist flags.
 
 ---
 

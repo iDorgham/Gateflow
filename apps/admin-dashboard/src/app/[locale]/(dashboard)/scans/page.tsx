@@ -16,7 +16,7 @@ import {
   NativeSelect,
 } from '@gate-access/ui';
 import Link from 'next/link';
-import { PageHeader } from '@/components/page-header';
+import { PageHeader } from '@gate-access/ui';
 import { GlobalScansTable } from '@/components/monitoring/GlobalScansTable';
 
 export const metadata = { title: 'Security Audit Logs' };
@@ -109,7 +109,7 @@ export default async function AdminScansPage({
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500 pb-10">
-      <PageHeader
+      <PageHeader titleClassName="italic uppercase"
         title={t('scans.title')}
         subtitle={t('scans.subtitle')}
         badge={

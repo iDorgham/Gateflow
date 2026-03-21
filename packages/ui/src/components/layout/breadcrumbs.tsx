@@ -41,7 +41,7 @@ export function Breadcrumbs({
               <Home className="h-3.5 w-3.5" />
             </Link>
             {items.length > 0 && (
-              <span className="text-[var(--ds-text-subtlest,#6B778C)] select-none">/</span>
+              <ChevronRight className="h-3 w-3 text-[var(--ds-text-subtlest,#6B778C)] select-none rtl:rotate-180" />
             )}
           </li>
         )}
@@ -54,17 +54,17 @@ export function Breadcrumbs({
               {item.href && !isActive ? (
                 <Link
                   href={item.href}
-                  className="hover:text-[var(--ds-text,#172B4D)] transition-colors whitespace-nowrap p-0.5 rounded-sm hover:bg-[var(--ds-background-subtle,#F4F5F7)]"
+                  className="hover:text-[var(--ds-text,#172B4D)] transition-colors whitespace-nowrap p-0.5 rounded-sm hover:bg-[var(--ds-background-subtle,#F4F5F7)] font-bold tracking-tight"
                 >
                   {item.label}
                 </Link>
               ) : (
-                <span className={cn('whitespace-nowrap px-0.5', isActive && 'text-[var(--ds-text,#172B4D)] font-semibold')}>
+                <span className={cn('whitespace-nowrap px-0.5', isActive && 'text-[var(--ds-text,#172B4D)] font-black uppercase tracking-widest')}>
                   {item.label}
                 </span>
               )}
               {!isLast && (
-                <span className="text-[var(--ds-text-subtlest,#6B778C)] select-none">/</span>
+                <ChevronRight className="h-3 w-3 text-[var(--ds-text-subtlest,#6B778C)] select-none rtl:rotate-180" />
               )}
             </li>
           );

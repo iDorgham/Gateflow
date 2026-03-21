@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import { Badge, Button, Input, Pagination, NativeSelect } from '@gate-access/ui';
 import Link from 'next/link';
-import { PageHeader } from '@/components/page-header';
+import { PageHeader } from '@gate-access/ui';
 import { AuditLogsTable } from '@/components/monitoring/AuditLogsTable';
 
 export const metadata = { title: 'Compliance Audit Archive' };
@@ -122,7 +122,7 @@ export default async function AuditLogsPage({
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500 pb-12">
-      <PageHeader
+      <PageHeader titleClassName="italic uppercase"
         title={t('auditLogs.title')}
         subtitle={t('auditLogs.subtitle')}
         badge={

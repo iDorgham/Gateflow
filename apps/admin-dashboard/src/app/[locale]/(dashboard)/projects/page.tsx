@@ -21,10 +21,11 @@ import {
   Badge,
   Button,
   Input,
+  NativeSelect,
   cn,
 } from '@gate-access/ui';
 import Link from 'next/link';
-import { PageHeader } from '@/components/page-header';
+import { PageHeader } from '@gate-access/ui';
 
 export const metadata = { title: 'Projects' };
 
@@ -100,7 +101,7 @@ export default async function ProjectsPage({
 
   return (
     <div className="space-y-6">
-      <PageHeader
+      <PageHeader titleClassName="italic uppercase"
         title={t('projects.title')}
         subtitle={t('projects.subtitle')}
         badge={<Badge variant="outline" className="bg-violet-50 dark:bg-violet-900/20 text-violet-700 dark:text-violet-300 border-violet-100 dark:border-violet-800 font-bold text-xs">{t('projects.activeProjects', { count: totalActive })}</Badge>}
@@ -130,15 +131,15 @@ export default async function ProjectsPage({
             </div>
             <div className="flex items-center gap-2">
               <Filter className="h-4 w-4 text-muted-foreground rtl:ml-2" />
-              <select
+              <NativeSelect
                 name="status"
                 defaultValue={statusFilter}
-                className="h-10 rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring/20"
+                className="h-10 w-[140px]"
               >
                 <option value="all">{t('projects.allStatus')}</option>
                 <option value="active">{t('projects.active')}</option>
                 <option value="archived">{t('projects.archived')}</option>
-              </select>
+              </NativeSelect>
             </div>
             <div className="flex items-center gap-2">
               <Button type="submit" size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold">

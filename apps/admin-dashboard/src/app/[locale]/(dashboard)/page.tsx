@@ -23,7 +23,7 @@ import {
   Column,
 } from '@gate-access/ui';
 import Link from 'next/link';
-import { PageHeader } from '@/components/page-header';
+import { PageHeader } from '@gate-access/ui';
 
 export const metadata = { title: 'Operational Overview' };
 
@@ -130,7 +130,7 @@ export default async function AdminOverviewPage({ params: { locale } }: { params
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500 pb-10">
-      <PageHeader
+      <PageHeader titleClassName="italic uppercase"
         title={t('overview.title')}
         subtitle={t('overview.subtitle')}
         badge={<Badge variant="primary" className="bg-ds-background-selected text-ds-text-selected border-ds-border-selected/30 font-bold text-xs px-2.5 py-1">LIVE MONITORING</Badge>}

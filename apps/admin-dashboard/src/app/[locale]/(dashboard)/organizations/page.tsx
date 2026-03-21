@@ -3,7 +3,7 @@ import { getTranslation } from '@/lib/i18n/i18n';
 import { Locale } from '@/lib/i18n/i18n-config';
 import { prisma } from '@gate-access/db';
 import { Badge } from '@gate-access/ui';
-import { PageHeader } from '@/components/page-header';
+import { PageHeader } from '@gate-access/ui';
 import { OrgsClient } from '@/components/organizations/OrgsClient';
 
 export const metadata = { title: 'Organizations' };
@@ -96,7 +96,7 @@ export default async function OrganizationsPage({
 
   return (
     <div className="space-y-6">
-      <PageHeader
+      <PageHeader titleClassName="italic uppercase"
         title={t('organizations.title')}
         subtitle={t('organizations.subtitle')}
         badge={

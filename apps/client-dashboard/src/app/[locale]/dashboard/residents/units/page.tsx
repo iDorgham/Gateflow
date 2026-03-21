@@ -22,7 +22,7 @@ import {
   Badge,
   Skeleton,
 } from '@gate-access/ui';
-import { PageHeader } from '@/components/dashboard/page-header';
+import { PageHeader } from '@gate-access/ui';
 import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
 import {

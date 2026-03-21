@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation';
 import { getTranslation, Locale } from '@/lib/i18n';
 import { AutoRefresh, GatesList } from './gate-client';
 import type { GateWithStats } from './gate-client';
-import { PageHeader } from '@/components/dashboard/page-header';
+import { PageHeader } from '@gate-access/ui';
 
 export async function generateMetadata({ params }: { params: { locale: Locale } }) {
   const { t } = await getTranslation(params.locale, 'dashboard');

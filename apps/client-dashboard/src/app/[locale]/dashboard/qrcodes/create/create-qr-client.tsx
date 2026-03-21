@@ -10,8 +10,9 @@ import {
   Label,
   Card,
   CardContent,
+  NativeSelect,
+  cn,
 } from '@gate-access/ui';
-import { cn } from '@gate-access/ui';
 import { toast } from 'sonner';
 import { createQRCode } from './actions';
 import { QRCodeType } from '@gate-access/types';
@@ -287,18 +288,17 @@ function Step2({
         <Label htmlFor="gate-select" className="text-[11px] font-black uppercase tracking-widest text-muted-foreground">
           Gate (optional)
         </Label>
-        <select
+        <NativeSelect
           id="gate-select"
           value={gateId}
           onChange={(e) => setGateId(e.target.value)}
-          aria-label="Select gate"
-          className="w-full h-11 rounded-xl border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all"
+          className="w-full h-11 rounded-xl"
         >
           <option value="">Any gate — no restriction</option>
           {gates.map((g) => (
             <option key={g.id} value={g.id}>{g.name}</option>
           ))}
-        </select>
+        </NativeSelect>
       </div>
 
       {/* Max uses (RECURRING only) */}

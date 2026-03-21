@@ -10,6 +10,7 @@ import {
   SheetDescription,
   Badge,
   Button,
+  NativeSelect,
   cn,
 } from '@gate-access/ui';
 import {
@@ -41,11 +42,11 @@ interface UserDetailSheetProps {
 }
 
 const roleBadgeColors: Record<string, string> = {
-  ADMIN: 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 border-red-200',
-  TENANT_ADMIN: 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 border-orange-200',
-  TENANT_USER: 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border-blue-200',
-  VISITOR: 'bg-muted text-muted-foreground border-border',
-  RESIDENT: 'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 border-emerald-200',
+  ADMIN: 'bg-[var(--ds-background-danger-subtle)] text-[var(--ds-text-danger)] border-[var(--ds-border-danger)]/20',
+  TENANT_ADMIN: 'bg-[var(--ds-background-warning-subtle)] text-[var(--ds-text-warning)] border-[var(--ds-border-warning)]/20',
+  TENANT_USER: 'bg-[var(--ds-background-information-subtle)] text-[var(--ds-text-information)] border-[var(--ds-border-information)]/20',
+  VISITOR: 'bg-[var(--ds-background-neutral-subtle)] text-[var(--ds-text-subtle)] border-[var(--ds-border)]',
+  RESIDENT: 'bg-[var(--ds-background-success-subtle)] text-[var(--ds-text-success)] border-[var(--ds-border-success)]/20',
 };
 
 export function UserDetailSheet({ userId, onClose }: UserDetailSheetProps) {
@@ -200,17 +201,17 @@ export function UserDetailSheet({ userId, onClose }: UserDetailSheetProps) {
               <div className="space-y-2 pt-2 border-t border-border">
                 <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Change Role</p>
                 <div className="flex gap-2">
-                  <select
+                  <NativeSelect
                     value={selectedRoleId}
                     onChange={(e) => setSelectedRoleId(e.target.value)}
-                    className="flex-1 h-9 rounded-xl border border-input bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring/20"
+                    className="flex-1 h-9 rounded-xl"
                   >
                     {user.availableRoles
                       .filter((r) => r.name !== 'ADMIN')
                       .map((r) => (
                         <option key={r.id} value={r.id}>{r.name.replace('_', ' ')}</option>
                       ))}
-                  </select>
+                  </NativeSelect>
                   <Button
                     size="sm"
                     className="h-9 rounded-xl px-4 font-bold"

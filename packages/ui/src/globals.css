@@ -1,26 +1,107 @@
-/*
- * GateFlow Design System — Real Estate Palette (shared base)
- * Anti-Flash White, Lace Cap, Kimchi (accent), Midnight Blue, Dark Royalty, Deep Sea
- */
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * GateFlow Design System
+ * Atlassian Design System — Full Token Set (Shared Foundation)
+ * Light + Dark mode. Uses --ds- prefix per ADS spec.
+ */
+
 @layer base {
   :root {
-    --background: 210 5% 96%; /* Anti-Flash White #F2F3F4 */
-    --foreground: 235 94% 11%; /* Midnight Blue #020035 */
+    /* ── Typography ─────────────────────────────────── */
+    --ds-font-family-sans: 'Atlassian Sans', ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+    --ds-font-family-heading: 'Atlassian Sans', ui-sans-serif, sans-serif;
+    --ds-font-family-mono: 'Atlassian Mono', 'SFMono-Medium', 'SF Mono', 'Cascadia Mono', 'Segoe UI Mono', 'Roboto Mono', 'Ubuntu Mono', monospace;
+
+    /* ── Radius Tokens ──────────────────────────────── */
+    --ds-border-radius: 3px;
+    --ds-border-radius-100: 2px;
+    --ds-border-radius-200: 4px;
+    --ds-border-radius-300: 6px;
+    --ds-border-radius-400: 8px;
+    --ds-border-radius-800: 16px;
+    --ds-border-radius-circle: 50%;
+    /* Legacy aliases */
+    --ds-border-radius-sm: 2px;
+    --ds-border-radius-lg: 8px;
+
+    /* ── Background Tokens — Light ──────────────────── */
+    --ds-background-default: #FFFFFF;
+    --ds-background-subtle:  #F4F5F7;
+    --ds-background-subtlest: #EBECF0;
+    --ds-background-neutral: #F4F5F7;
+    --ds-background-neutral-subtle: #FAFBFC;
+    --ds-background-neutral-hovered: #EBECF0;
+    --ds-background-selected: #DEEBFF;
+    --ds-background-brand-bold: #0052CC;
+    --ds-background-brand-subtle: #DEEBFF;
+    --ds-background-danger-bold: #DE350B;
+    --ds-background-danger-subtle: #FFEBE6;
+    --ds-background-warning-bold: #FFAB00;
+    --ds-background-success-bold: #00875A;
+    --ds-background-information-bold: #0052CC;
+    --ds-background-input: #FFFFFF;
+
+    /* ── Elevation Surfaces — Light ─────────────────── */
+    --ds-surface-sunken:  #F4F5F7;
+    --ds-surface-default: #FFFFFF;
+    --ds-surface-raised:  #FFFFFF;
+    --ds-surface-overlay: #FFFFFF;
+
+    /* ── Elevation Shadows — Light ──────────────────── */
+    --ds-shadow-card:    0 1px 1px rgba(9,30,66,.25), 0 0 0 1px rgba(9,30,66,.08);
+    --ds-shadow-raised:  0 1px 1px rgba(9,30,66,.25), 0 0 0 1px rgba(9,30,66,.08);
+    --ds-shadow-overlay: 0 8px 16px -4px rgba(9,30,66,.25), 0 0 0 1px rgba(9,30,66,.08);
+
+    /* ── Text Tokens — Light ────────────────────────── */
+    --ds-text: #172B4D;
+    --ds-text-subtle: #42526E;
+    --ds-text-subtlest: #6B778C;
+    --ds-text-disabled: #A5ADBA;
+    --ds-text-inverse: #FFFFFF;
+    --ds-text-selected: #0052CC;
+    --ds-text-brand: #0052CC;
+    --ds-text-danger: #DE350B;
+    --ds-text-warning: #FF8B00;
+    --ds-text-success: #006644;
+    --ds-text-information: #0052CC;
+
+    /* ── Border Tokens — Light ──────────────────────── */
+    --ds-border: #DFE1E6;
+    --ds-border-bold: #A5ADBA;
+    --ds-border-subtle: #EBECF0;
+    --ds-border-focused: #4C9AFF;
+    --ds-border-selected: #0052CC;
+    --ds-border-brand: #0052CC;
+    --ds-border-danger: #DE350B;
+    --ds-border-warning: #FFAB00;
+    --ds-border-success: #36B37E;
+    --ds-border-input: #DFE1E6;
+
+    /* ── Icon Tokens — Light ────────────────────────── */
+    --ds-icon: #42526E;
+    --ds-icon-subtle: #6B778C;
+    --ds-icon-inverse: #FFFFFF;
+    --ds-icon-brand: #0052CC;
+    --ds-icon-danger: #DE350B;
+    --ds-icon-warning: #FFAB00;
+    --ds-icon-success: #36B37E;
+
+    /* ── Shadcn/UI mapping (Real Estate Palette base) ── */
+    --background: 210 5% 96%; /* #F2F3F4 */
+    --foreground: 235 94% 11%; /* #020035 */
     --card: 210 5% 96%;
     --card-foreground: 235 94% 11%;
     --popover: 210 5% 96%;
     --popover-foreground: 235 94% 11%;
-    --primary: 19 100% 46%; /* Kimchi #ED4B00 */
+    --primary: 19 100% 46%; /* Kimchi */
     --primary-foreground: 0 0% 100%;
-    --secondary: 260 7% 93%; /* Lace Cap #EBEAED */
+    --secondary: 260 7% 93%; /* Lace Cap */
     --secondary-foreground: 235 94% 11%;
     --muted: 260 7% 93%;
-    --muted-foreground: 234 96% 23%; /* Dark Royalty #02066F */
+    --muted-foreground: 234 96% 23%; /* Dark Royalty */
     --accent: 260 7% 93%;
     --accent-foreground: 235 94% 11%;
     --destructive: 0 84.2% 60.2%;
@@ -28,38 +109,22 @@
     --border: 260 7% 88%;
     --input: 260 7% 88%;
     --ring: 19 100% 46%;
-    --radius-sm: 6px;
-    --radius-md: 12px;
-    --radius-lg: 16px;
-    --radius-xl: 24px;
     --radius: 12px;
-    --success: 142.1 76.2% 36.3%;
-    --success-foreground: 355.7 100% 97.3%;
-    --danger: 0 84.2% 60.2%;
-    --danger-foreground: 210 40% 98%;
-    --warning: 43 96% 56%;
-    --warning-foreground: 235 94% 11%;
-    --info: 248 100% 35%; /* Deep Sea #2000B1 */
-    --info-foreground: 0 0% 100%;
-    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
   }
 
   .dark {
-    --background: 235 94% 11%; /* Midnight Blue #020035 */
-    --foreground: 210 5% 96%; /* Anti-Flash White #F2F3F4 */
+    --background: 235 94% 11%; /* Midnight Blue */
+    --foreground: 210 5% 96%; /* Anti-Flash White */
     --card: 235 94% 11%;
     --card-foreground: 210 5% 96%;
     --popover: 235 94% 11%;
     --popover-foreground: 210 5% 96%;
-    --primary: 19 100% 46%; /* Kimchi */
+    --primary: 19 100% 46%; 
     --primary-foreground: 0 0% 100%;
-    --secondary: 234 96% 23%; /* Dark Royalty */
+    --secondary: 234 96% 23%; 
     --secondary-foreground: 210 5% 96%;
     --muted: 234 96% 23%;
-    --muted-foreground: 260 7% 93%; /* Lace Cap */
+    --muted-foreground: 260 7% 93%; 
     --accent: 234 96% 23%;
     --accent-foreground: 210 5% 96%;
     --destructive: 0 62.8% 30.6%;
@@ -67,26 +132,29 @@
     --border: 234 96% 28%;
     --input: 234 96% 28%;
     --ring: 19 100% 46%;
-    --success: 142.1 70.6% 45.3%;
-    --success-foreground: 144.9 80.4% 10%;
-    --danger: 0 62.8% 30.6%;
-    --danger-foreground: 210 40% 98%;
-    --warning: 48 96% 53%;
-    --warning-foreground: 26 83.3% 14.1%;
-    --info: 248 100% 35%;
-    --info-foreground: 0 0% 100%;
-    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.15);
-    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
-    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.3), 0 8px 10px -6px rgb(0 0 0 / 0.3);
+
+    /* ── ADS Tokens — Dark ─────────────────────────── */
+    --ds-background-default: #1D2125;
+    --ds-background-subtle: #22272B;
+    --ds-background-neutral: #2C333A;
+    --ds-text: #B6C2CF;
+    --ds-text-subtle: #8C9BAB;
+    --ds-border: #44546F;
+    --ds-icon: #8C9BAB;
   }
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
+  * { @apply border-border; }
   body {
-    @apply bg-background text-foreground;
+    @apply antialiased bg-background text-foreground;
+    font-family: var(--ds-font-family-sans);
   }
+}
+
+@layer utilities {
+  .ds-elevation-sunken  { background: var(--ds-surface-sunken); }
+  .ds-elevation-default { background: var(--ds-surface-default); }
+  .ds-elevation-raised  { background: var(--ds-surface-raised);  box-shadow: var(--ds-shadow-raised); }
+  .ds-elevation-overlay { background: var(--ds-surface-overlay); box-shadow: var(--ds-shadow-overlay); }
 }

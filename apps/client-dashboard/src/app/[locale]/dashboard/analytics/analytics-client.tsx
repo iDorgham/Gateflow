@@ -31,7 +31,7 @@ import {
   type KPIData,
 } from '@/components/dashboard/analytics';
 import { useAnalyticsFilters, useAnalyticsSummary } from '@/lib/analytics';
-import { PageHeader } from '@/components/dashboard/page-header';
+import { PageHeader } from '@gate-access/ui';
 import { PrintButton } from './print-button';
 import { ExportChartButton } from './export-chart-button';
 import { CopyLinkButton } from './copy-link-button';

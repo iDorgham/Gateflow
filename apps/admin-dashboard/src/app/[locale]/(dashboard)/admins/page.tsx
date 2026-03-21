@@ -28,7 +28,7 @@ import {
   DynamicTable,
   Column,
 } from '@gate-access/ui';
-import { PageHeader } from '@/components/page-header';
+import { PageHeader } from '@gate-access/ui';
 
 export const metadata = { title: 'Platform Authority' };
 
@@ -213,7 +213,7 @@ export default async function AdminsPage({
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500 pb-10">
-      <PageHeader 
+      <PageHeader titleClassName="italic uppercase" 
         title={t('admins.title')} 
         subtitle={t('admins.subtitle')} 
         badge={<Badge variant="primary" className="h-6 font-black tracking-widest px-2 italic shadow-sm">SYSTEM AUTH</Badge>}

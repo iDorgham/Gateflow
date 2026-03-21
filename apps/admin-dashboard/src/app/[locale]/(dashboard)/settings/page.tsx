@@ -13,7 +13,7 @@ import {
   AlertCircle,
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, Badge, cn } from '@gate-access/ui';
-import { PageHeader } from '@/components/page-header';
+import { PageHeader } from '@gate-access/ui';
 import { CompliancePlaceholder } from '@/components/settings/CompliancePlaceholder';
 
 export const metadata = { title: 'Settings' };
@@ -110,7 +110,7 @@ export default async function SettingsPage({
 
   return (
     <div className="space-y-6">
-      <PageHeader
+      <PageHeader titleClassName="italic uppercase"
         title={t('settings.title')}
         subtitle={t('settings.subtitle')}
         badge={

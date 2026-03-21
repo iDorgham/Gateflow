@@ -12,6 +12,8 @@ import {
   CardDescription,
   Avatar,
   AvatarFallback,
+  NativeSelect,
+  cn,
 } from '@gate-access/ui';
 import { inviteMember, removeMember, changeRole } from './actions';
 import { toast } from 'sonner';
@@ -264,17 +266,17 @@ export function TeamClient({
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="inviteRole">Role</Label>
-              <select
+              <NativeSelect
                 id="inviteRole"
                 value={inviteRole}
                 onChange={(e) => setInviteRole(e.target.value)}
-                className="w-full rounded-md border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800 px-3 py-2 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full"
               >
                 <option value="TENANT_ADMIN">Admin — full access</option>
                 <option value="TENANT_USER">Member — standard access</option>
                 <option value="VISITOR">Viewer — read only</option>
                 <option value="RESIDENT">Resident — unit portal access</option>
-              </select>
+              </NativeSelect>
             </div>
             <Button onClick={invite} disabled={isPending} className="gap-2">
               {isPending ? (
@@ -326,20 +328,21 @@ export function TeamClient({
                     <p className="truncate text-sm text-slate-500 dark:text-slate-400">{member.email}</p>
                   </div>
                   <div className="flex items-center gap-3">
-                    <select
+                    <NativeSelect
                       value={member.role}
                       disabled={isCurrentUser || isPending}
                       onChange={(e) => updateRole(member.id, e.target.value)}
-                      className={`rounded-lg border px-3 py-1.5 text-xs font-semibold shadow-sm transition-all ${
+                      className={cn(
+                        "h-8 text-xs font-semibold px-2 pr-7",
                         ROLE_COLORS[member.role] ?? 'bg-slate-100 text-slate-700'
-                      } disabled:cursor-not-allowed disabled:opacity-50 border-transparent hover:border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-[url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2012%2012%22%20fill%3D%22none%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%3Cpath%20d%3D%22M2.5%204.5L6%208L9.5%204.5%22%20stroke%3D%22currentColor%22%20stroke-width%3D%221.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22/%3E%3C/svg%3E')] bg-[length:12px_12px] bg-[right_8px_center] bg-no-repeat pr-7`}
+                      )}
                     >
                       {Object.entries(ROLE_LABELS).map(([val, label]) => (
                         <option key={val} value={val}>
                           {label}
                         </option>
                       ))}
-                    </select>
+                    </NativeSelect>
                     {!isCurrentUser && (
                       <button
                         onClick={() => setRemovingMember(member)}
