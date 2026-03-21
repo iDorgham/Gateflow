@@ -68,6 +68,7 @@ import { ProjectFilterProvider } from '@/context/ProjectFilterContext';
 import { Locale } from '@/lib/i18n-config';
 import { useRealtimeEvents } from '@/lib/realtime/use-realtime-events';
 import { getCsrfToken } from '@/lib/csrf';
+import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 
 export interface DashboardLayoutProps {
   user: { id: string; name: string; email: string; role: string };
@@ -104,7 +105,7 @@ function SearchHeader({
 
   return (
     <div
-      className="flex h-16 shrink-0 items-center justify-between gap-4 border-b border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-background-default,#FFFFFF)]/80 px-4 backdrop-blur-md sticky top-0 z-30"
+      className="flex h-16 shrink-0 items-center justify-between gap-4 border-b border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-surface,#FFFFFF)]/80 dark:bg-[#091E42]/80 px-4 backdrop-blur-md sticky top-0 z-30"
       role="search"
     >
       <div className="flex flex-1 items-center max-w-md">
@@ -226,12 +227,12 @@ function LeftSidebar({
     return exact ? pathname === localized : pathname === localized || pathname.startsWith(localized + '/');
   };
 
-  const NavItem = ({ 
-    item, 
-    collapsed, 
-    onClick 
-  }: { 
-    item: { label: string; href: string; icon: React.ElementType; exact?: boolean; i18nKey?: string }; 
+  const NavItem = ({
+    item,
+    collapsed,
+    onClick
+  }: {
+    item: { label: string; href: string; icon: React.ElementType; exact?: boolean; i18nKey?: string };
     collapsed: boolean;
     onClick?: () => void;
   }) => {
@@ -247,19 +248,39 @@ function LeftSidebar({
               href={`/${locale}${item.href}`}
               onClick={onClick}
               className={cn(
-                'flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium transition-colors mb-1',
-                active 
-                  ? 'bg-[#DEEBFF] text-[#0052CC] dark:bg-[#0747A6]/30 dark:text-[#4C9AFF]' 
-                  : 'text-[#42526E] dark:text-[#97A0AF] hover:bg-[#EBECF0] dark:hover:bg-[#2C333A]',
+                'relative flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium mb-1 outline-none focus-visible:ring-2 focus-visible:ring-[var(--ds-border-focused,#4C9AFF)]',
+                active
+                  ? 'text-[var(--ds-text-brand,#0052CC)] dark:text-[#4C9AFF]'
+                  : 'text-[var(--ds-text-subtle,#42526E)] dark:text-[#97A0AF] hover:bg-[var(--ds-background-neutral-subtle,#EBECF0)] dark:hover:bg-[#2C333A]',
                 collapsed && 'justify-center px-0'
               )}
             >
-              <Icon weight={active ? 'fill' : 'regular'} className="h-5 w-5 shrink-0" />
-              {!collapsed && <span>{label}</span>}
+              {active && (
+                <motion.span
+                  layoutId="active-nav-indicator"
+                  className="absolute inset-0 rounded-md bg-[var(--ds-background-brand-subtle,#DEEBFF)] dark:bg-[#0747A6]/30"
+                  transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                />
+              )}
+              <Icon weight={active ? 'fill' : 'regular'} className="relative z-10 h-5 w-5 shrink-0" />
+              <AnimatePresence mode="wait" initial={false}>
+                {!collapsed && (
+                  <motion.span
+                    key={`label-${item.href}`}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.15 }}
+                    className="relative z-10 overflow-hidden whitespace-nowrap"
+                  >
+                    {label}
+                  </motion.span>
+                )}
+              </AnimatePresence>
             </Link>
           </TooltipTrigger>
           {collapsed && (
-            <TooltipContent side="right" sideOffset={10}>
+            <TooltipContent side={isRtl ? 'left' : 'right'} sideOffset={10}>
               {label}
             </TooltipContent>
           )}
@@ -269,60 +290,99 @@ function LeftSidebar({
   };
 
   return (
-    <aside
-      className={cn(
-        'hidden md:flex h-full flex-col border-r border-sidebar-border bg-sidebar text-sidebar-foreground shrink-0 transition-[width] duration-300 ease-in-out relative',
-        isCollapsed ? 'w-[72px]' : 'w-64'
-      )}
+    <motion.aside
+      animate={{ width: isCollapsed ? 72 : 256 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+      className="hidden md:flex h-full flex-col border-e border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-surface,#FFFFFF)]/80 backdrop-blur-md dark:bg-[#091E42]/80 text-[var(--ds-text,#172B4D)] dark:text-[#EBECF0] shrink-0 relative overflow-hidden"
       role="navigation"
       aria-label="Main navigation"
     >
-      <div className={cn('flex h-16 shrink-0 items-center border-b border-border/50 px-6', isCollapsed && 'justify-center px-0')}>
+      <div className={cn('flex h-16 shrink-0 items-center border-b border-[var(--ds-border,#DFE1E6)]/50 px-6', isCollapsed && 'justify-center px-0')}>
         <Link
           href={`/${locale}`}
-          className="flex items-center gap-3 rounded-lg transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-ring"
+          className="flex items-center gap-3 rounded-lg transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-[var(--ds-border-focused,#4C9AFF)]"
           aria-label="GateFlow home"
         >
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-[#0052CC] text-white shadow-sm">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-[var(--ds-background-brand-bold,#0052CC)] text-white shadow-sm">
             <ShieldCheck className="h-5 w-5" />
           </div>
-          {!isCollapsed && <span className="text-lg font-bold tracking-tight text-[#172B4D] dark:text-[#EBECF0]">GateFlow</span>}
+          <AnimatePresence mode="wait" initial={false}>
+            {!isCollapsed && (
+              <motion.span
+                key="brand-name"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.15 }}
+                className="text-lg font-bold tracking-tight text-[var(--ds-text,#172B4D)] dark:text-[#EBECF0] whitespace-nowrap"
+              >
+                GateFlow
+              </motion.span>
+            )}
+          </AnimatePresence>
         </Link>
       </div>
 
       <ScrollArea className="flex-1">
+        <LayoutGroup id="sidebar-nav">
           <nav className="flex flex-col gap-8 py-6 px-4">
             <div className="flex flex-col gap-1.5">
-              {!isCollapsed && (
-                <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[#6B778C] dark:text-[#97A0AF] mb-2">
-                  {t('sidebar.groupMain', 'Main')}
-                </p>
-              )}
-              {/* Dashboard & AI assistant first */}
+              <AnimatePresence mode="wait" initial={false}>
+                {!isCollapsed && (
+                  <motion.p
+                    key="label-main"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.1 }}
+                    className="px-3 text-[10px] font-bold uppercase tracking-widest text-[var(--ds-text-subtlest,#6B778C)] dark:text-[#97A0AF] mb-2"
+                  >
+                    {t('sidebar.groupMain', 'Main')}
+                  </motion.p>
+                )}
+              </AnimatePresence>
               <NavItem item={NAV_ITEMS[0]} collapsed={isCollapsed} />
               <NavItem item={NAV_ITEMS[1]} collapsed={isCollapsed} />
             </div>
 
             <div className="flex flex-col gap-1.5">
-              {!isCollapsed && (
-                <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[#6B778C] dark:text-[#97A0AF] mb-2">
-                  {t('sidebar.groupResidents', 'Residents')}
-                </p>
-              )}
+              <AnimatePresence mode="wait" initial={false}>
+                {!isCollapsed && (
+                  <motion.p
+                    key="label-residents"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.1 }}
+                    className="px-3 text-[10px] font-bold uppercase tracking-widest text-[var(--ds-text-subtlest,#6B778C)] dark:text-[#97A0AF] mb-2"
+                  >
+                    {t('sidebar.groupResidents', 'Residents')}
+                  </motion.p>
+                )}
+              </AnimatePresence>
               <Collapsible defaultOpen className="space-y-1">
                 <CollapsibleTrigger
                   className={cn(
-                    'flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-[#42526E] dark:text-[#97A0AF] hover:bg-[#EBECF0] dark:hover:bg-[#2C333A] transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring',
+                    'flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-[var(--ds-text-subtle,#42526E)] dark:text-[#97A0AF] hover:bg-[var(--ds-background-neutral-subtle,#EBECF0)] dark:hover:bg-[#2C333A] transition-colors outline-none focus-visible:ring-2 focus-visible:ring-[var(--ds-border-focused,#4C9AFF)]',
                     isCollapsed && 'justify-center px-0'
                   )}
                 >
                   <Users className="h-5 w-5 shrink-0" />
-                  {!isCollapsed && (
-                    <>
-                      <span className="flex-1 text-left">{t('sidebar.groupResidents', 'Residents')}</span>
-                      <ChevronDown className="h-4 w-4 shrink-0 transition-transform [[data-state=open]_&]:rotate-180" />
-                    </>
-                  )}
+                  <AnimatePresence mode="wait" initial={false}>
+                    {!isCollapsed && (
+                      <motion.span
+                        key="residents-trigger"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.15 }}
+                        className="flex flex-1 items-center gap-1 overflow-hidden whitespace-nowrap"
+                      >
+                        <span className="flex-1 text-left">{t('sidebar.groupResidents', 'Residents')}</span>
+                        <ChevronDown className="h-4 w-4 shrink-0 transition-transform [[data-state=open]_&]:rotate-180" />
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
                 </CollapsibleTrigger>
                 <CollapsibleContent>
                   <div className={cn('space-y-1.5', isCollapsed ? 'mt-1' : 'ml-4 mt-1')}>
@@ -335,19 +395,29 @@ function LeftSidebar({
             </div>
 
             <div className="flex flex-col gap-1.5">
-              {!isCollapsed && (
-                <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[#6B778C] dark:text-[#97A0AF] mb-2">
-                  {t('sidebar.groupAccess', 'Access')}
-                </p>
-              )}
+              <AnimatePresence mode="wait" initial={false}>
+                {!isCollapsed && (
+                  <motion.p
+                    key="label-access"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.1 }}
+                    className="px-3 text-[10px] font-bold uppercase tracking-widest text-[var(--ds-text-subtlest,#6B778C)] dark:text-[#97A0AF] mb-2"
+                  >
+                    {t('sidebar.groupAccess', 'Access')}
+                  </motion.p>
+                )}
+              </AnimatePresence>
               {NAV_ITEMS.filter((item) => !['/', '/dashboard/ai', '/dashboard/settings'].includes(item.href)).map((item) => (
                 <NavItem key={item.href} item={item} collapsed={isCollapsed} />
               ))}
             </div>
           </nav>
+        </LayoutGroup>
       </ScrollArea>
 
-      <div className="shrink-0 p-4 mt-auto border-t border-border/50 flex flex-col gap-2">
+      <div className="shrink-0 p-4 mt-auto border-t border-[var(--ds-border,#DFE1E6)]/50 flex flex-col gap-2">
         <NavItem item={NAV_ITEMS.find(n => n.href === '/dashboard/settings')!} collapsed={isCollapsed} />
       </div>
 
@@ -356,18 +426,23 @@ function LeftSidebar({
         type="button"
         onClick={onToggleCollapse}
         className={cn(
-          "absolute bottom-6 z-50 flex h-6 w-6 items-center justify-center rounded-full border border-border bg-background shadow-sm hover:bg-muted transition-all",
+          "absolute bottom-6 z-50 flex h-6 w-6 items-center justify-center rounded-full border border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-surface,#FFFFFF)] dark:bg-[#091E42] shadow-sm hover:bg-[var(--ds-background-neutral-subtle,#F4F5F7)] dark:hover:bg-[#2C333A] transition-colors",
           isRtl ? "-left-3" : "-right-3"
         )}
         aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
       >
-        {isRtl ? (
-          <ChevronRight className={cn('h-3.5 w-3.5 text-muted-foreground', isCollapsed && 'rotate-180')} />
-        ) : (
-          <ChevronLeft className={cn('h-3.5 w-3.5 text-muted-foreground', isCollapsed && 'rotate-180')} />
-        )}
+        <motion.div
+          animate={{ rotate: isCollapsed ? 180 : 0 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+        >
+          {isRtl ? (
+            <ChevronRight className="h-3.5 w-3.5 text-[var(--ds-icon-subtle,#6B778C)]" />
+          ) : (
+            <ChevronLeft className="h-3.5 w-3.5 text-[var(--ds-icon-subtle,#6B778C)]" />
+          )}
+        </motion.div>
       </button>
-    </aside>
+    </motion.aside>
   );
 }
 

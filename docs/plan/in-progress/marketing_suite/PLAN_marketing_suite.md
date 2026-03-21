@@ -8,7 +8,7 @@ See [IDEA_marketing_suite.md](file:///Users/Dorgham/Documents/Work/Devleopment/G
 
 ## Phases
 
-### Phase 1: UTM Schema, Session Capture & Propagation (CURRENT)
+### Phase 1: UTM Schema, Session Capture & Propagation (COMPLETED)
 - **Primary Role**: BACKEND-Database
 - **Goal**: Establish the storage and capture mechanism for UTM parameters.
 - **Steps**:
@@ -19,7 +19,7 @@ See [IDEA_marketing_suite.md](file:///Users/Dorgham/Documents/Work/Devleopment/G
   - `pnpm prisma db push` successful.
   - Test QR creation with UTM params result in correct DB records.
 
-### Phase 2: Client Settings & Pixel Injection (P1)
+### Phase 2: Marketing Settings & Retargeting Pixels (CURRENT)
 - **Primary Role**: FRONTEND
 - **Goal**: Enable organizations to inject tracking pixels on guest landing pages.
 - **Steps**:
