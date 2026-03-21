@@ -161,7 +161,7 @@ export default async function AdminsPage({
               "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg font-bold text-[10px] uppercase shadow-inner",
               suspended ? "bg-ds-background-neutral text-ds-text-subtle" : "bg-ds-background-brand-bold text-ds-text-inverse"
             )}>
-              {admin.name.split(' ').map(n => n[0]).join('').slice(0, 2)}
+              {admin.name.split(' ').map((n: string) => n[0]).join('').slice(0, 2)}
             </div>
             <div className="flex flex-col">
               <span className={cn("text-xs font-bold font-mono tracking-tight", suspended ? "text-ds-text-subtle line-through opacity-50" : "text-ds-text")}>
