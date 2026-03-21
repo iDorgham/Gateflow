@@ -1,6 +1,7 @@
 import { SignJWT, jwtVerify, type JWTPayload } from 'jose';
 import { randomBytes } from 'crypto';
 import { Permission } from '@gate-access/types';
+import { hash, verify } from '@node-rs/argon2';
 
 // ─── Configuration ────────────────────────────────────────────────────────────
 
@@ -107,6 +108,32 @@ export function generateRefreshToken(): string {
 
 export function getRefreshTokenExpiry(): Date {
   return new Date(Date.now() + REFRESH_TOKEN_EXPIRY_DAYS * 24 * 60 * 60 * 1000);
+}
+
+// ─── Password Hashing (Argon2id) ───────────────────────────────────────────────
+
+/**
+ * Hash a password using Argon2id with recommended parameters.
+ * @node-rs/argon2 uses safe defaults and native performance.
+ */
+export async function hashPassword(password: string): Promise<string> {
+  // Use default options: Argon2id, 1 iteration, 64MB memory, 4 parallelism
+  return await hash(password);
+}
+
+/**
+ * Verify a password against a hash.
+ */
+export async function verifyPassword(
+  hashString: string,
+  password: string
+): Promise<boolean> {
+  try {
+    return await verify(hashString, password);
+  } catch (err) {
+    console.error('[auth] Password verification error:', err);
+    return false;
+  }
 }
 
 // ─── Exports for testing ──────────────────────────────────────────────────────
