@@ -94,7 +94,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       where: { organizationId: claims.orgId, deletedAt: null },
       select: { id: true, name: true },
     });
-    const gateByName = new Map(orgGates.map((g) => [g.name.toLowerCase(), g]));
+    const gateByName = new Map<string, { id: string; name: string }>(orgGates.map((g) => [g.name.toLowerCase(), g]));
 
     // Phase 1: validate + sign (no DB writes yet)
     const validItems: ValidatedItem[] = [];

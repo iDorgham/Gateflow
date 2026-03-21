@@ -55,7 +55,7 @@ export async function GET(request?: NextRequest): Promise<NextResponse> {
       }),
     ]);
 
-    const scansTodayMap = new Map(scansTodayGroups.map((g) => [g.gateId, g._count]));
+    const scansTodayMap = new Map<string | null, { id: number }>(scansTodayGroups.map((g) => [g.gateId, g._count]));
 
     const data = gates.map((gate) => {
       const scansToday = scansTodayMap.get(gate.id) ?? 0;
