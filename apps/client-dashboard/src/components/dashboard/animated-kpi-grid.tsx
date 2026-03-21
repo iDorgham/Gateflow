@@ -10,10 +10,9 @@ export interface StatCardData {
   title: string;
   value: number | string;
   sub: string;
-  icon: React.ElementType;
+  icon: React.ReactNode;
   href: string;
   iconBg: string;
-  iconColor: string;
   valueColor: string;
 }
 
@@ -57,9 +56,7 @@ export function AnimatedKpiGrid({ cards }: AnimatedKpiGridProps) {
       role="region"
       aria-label="Key metrics"
     >
-      {cards.map((card) => {
-        const Icon = card.icon;
-        return (
+      {cards.map((card) => (
           <motion.div key={card.title} variants={itemVariants}>
             <Link
               href={card.href}
@@ -72,7 +69,7 @@ export function AnimatedKpiGrid({ cards }: AnimatedKpiGridProps) {
                       {card.title}
                     </CardTitle>
                     <div className={cn('flex h-8 w-8 items-center justify-center rounded-lg', card.iconBg)}>
-                      <Icon className={cn('h-4 w-4', card.iconColor)} aria-hidden="true" />
+                      {card.icon}
                     </div>
                   </div>
                 </CardHeader>
@@ -97,8 +94,7 @@ export function AnimatedKpiGrid({ cards }: AnimatedKpiGridProps) {
               </Card>
             </Link>
           </motion.div>
-        );
-      })}
+      ))}
     </motion.div>
   );
 }
