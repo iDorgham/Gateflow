@@ -277,7 +277,7 @@ function LeftSidebar({
       role="navigation"
       aria-label="Main navigation"
     >
-      <div className={cn('shrink-0 border-b border-border/50 p-6', isCollapsed ? 'flex justify-center' : 'px-6')}>
+      <div className={cn('flex h-16 shrink-0 items-center border-b border-border/50 px-6', isCollapsed && 'justify-center px-0')}>
         <Link
           href={`/${locale}`}
           className="flex items-center gap-3 rounded-lg transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-ring"
@@ -524,8 +524,8 @@ function MobileSidebar({
         className="w-72 p-0 border-0 bg-white dark:bg-[#091E42] text-[#172B4D] dark:text-[#EBECF0]"
         aria-label="Mobile navigation"
       >
-        <div className="flex flex-col h-full pt-6">
-          <Link href={`/${locale}`} className="flex items-center gap-3 px-5 pb-5 border-b border-border/50" onClick={() => onOpenChange(false)}>
+        <div className="flex flex-col h-full">
+          <Link href={`/${locale}`} className="flex h-16 shrink-0 items-center gap-3 px-6 border-b border-border/50" onClick={() => onOpenChange(false)}>
             <div className="flex h-8 w-8 items-center justify-center rounded-md bg-[#0052CC] text-white">
               <ShieldCheck className="h-5 w-5" />
             </div>
