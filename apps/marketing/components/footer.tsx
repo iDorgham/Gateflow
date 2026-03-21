@@ -25,16 +25,16 @@ export async function Footer({ locale }: { locale: Locale }) {
               {t('footer.brand.description')}
             </p>
             <div className="flex gap-4">
-              <a href="#" className="text-muted-foreground hover:text-primary">
+              <a href="#" className="text-muted-foreground hover:text-primary" aria-label="Facebook">
                 <Facebook size={20} />
               </a>
-              <a href="#" className="text-muted-foreground hover:text-primary">
+              <a href="#" className="text-muted-foreground hover:text-primary" aria-label="Twitter">
                 <Twitter size={20} />
               </a>
-              <a href="#" className="text-muted-foreground hover:text-primary">
+              <a href="#" className="text-muted-foreground hover:text-primary" aria-label="Instagram">
                 <Instagram size={20} />
               </a>
-              <a href="#" className="text-muted-foreground hover:text-primary">
+              <a href="#" className="text-muted-foreground hover:text-primary" aria-label="Linkedin">
                 <Linkedin size={20} />
               </a>
             </div>
@@ -111,7 +111,7 @@ export async function Footer({ locale }: { locale: Locale }) {
                 <I18nLink
                   locale={locale}
                   href="/company#careers"
-                  className="hover:text-primary opacity-50 cursor-not-allowed"
+                  className="hover:text-primary text-[var(--ds-text-subtle,#42526E)] cursor-not-allowed"
                 >
                   {t('footer.links.careers')}
                 </I18nLink>
@@ -120,7 +120,7 @@ export async function Footer({ locale }: { locale: Locale }) {
                 <I18nLink
                   locale={locale}
                   href="/company#press"
-                  className="hover:text-primary opacity-50 cursor-not-allowed"
+                  className="hover:text-primary text-[var(--ds-text-subtle,#42526E)] cursor-not-allowed"
                 >
                   Press
                 </I18nLink>
@@ -181,7 +181,7 @@ export async function Footer({ locale }: { locale: Locale }) {
             Reserved.
           </p>
           <div className="flex items-center gap-2">
-            <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground opacity-50">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
               {t('footer.brand.madeIn')}
             </span>
             <div className="h-4 w-6 bg-red-600 rounded-sm relative overflow-hidden">

@@ -33,7 +33,7 @@ export async function ComparisonSection({ locale }: { locale: Locale }) {
             <table className="w-full min-w-[700px] border-collapse">
               <thead>
                 <tr className="bg-[var(--ds-background-subtle,#F4F5F7)] border-b border-[var(--ds-border,#DFE1E6)]">
-                  <th className="text-left rtl:text-right py-8 px-8 font-bold text-[14px] text-[var(--ds-text-subtlest,#6B778C)] uppercase tracking-wider">
+                  <th className="text-left rtl:text-right py-8 px-8 font-bold text-[14px] text-[var(--ds-text-subtle,#42526E)] uppercase tracking-wider">
                     {t('comparison.features_col')}
                   </th>
                   <th className="py-8 px-4 text-center">

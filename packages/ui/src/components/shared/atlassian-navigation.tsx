@@ -110,27 +110,28 @@ export function AtlassianNavigation({
           size="icon"
           className="h-9 w-9 text-[var(--ds-icon-subtle,#6B778C)]"
           onClick={onSearchClick}
+          aria-label="Search"
         >
           <Search size={18} />
         </Button>
-
+ 
         {/* Global Actions (Settings, Help, etc) */}
         <div className="hidden sm:flex items-center gap-1">
-          <Button variant="subtle" size="icon" className="h-9 w-9 text-[var(--ds-icon-subtle,#6B778C)]">
+          <Button variant="subtle" size="icon" className="h-9 w-9 text-[var(--ds-icon-subtle,#6B778C)]" aria-label="Help">
             <HelpCircle size={18} />
           </Button>
-          <Button variant="subtle" size="icon" className="h-9 w-9 text-[var(--ds-icon-subtle,#6B778C)]">
+          <Button variant="subtle" size="icon" className="h-9 w-9 text-[var(--ds-icon-subtle,#6B778C)]" aria-label="Settings">
             <Settings size={18} />
           </Button>
         </div>
-
+ 
         {/* Auth Actions */}
         <div className="flex items-center gap-2 ms-2">
           {actions}
         </div>
-
+ 
         {/* Mobile Menu */}
-        <Button variant="subtle" size="icon" className="lg:hidden h-9 w-9">
+        <Button variant="subtle" size="icon" className="lg:hidden h-9 w-9" aria-label="Menu">
           <Menu size={20} />
         </Button>
       </div>

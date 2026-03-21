@@ -174,6 +174,7 @@ export function ChatWidget() {
               type="submit"
               disabled={!input.trim() || typing}
               className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-indigo-700 text-white disabled:opacity-40 hover:bg-indigo-600 transition-colors"
+              aria-label="Send message"
             >
               <Send size={14} />
             </button>

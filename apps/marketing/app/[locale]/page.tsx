@@ -103,7 +103,7 @@ export default async function HomePage({
                 <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden">
                   <div className="h-full bg-[var(--ds-background-brand-bold,#0052CC)] w-3/4" />
                 </div>
-                <div className="flex justify-between mt-4 text-xs font-bold text-white/40 uppercase tracking-widest">
+                <div className="flex justify-between mt-4 text-xs font-bold text-white/70 uppercase tracking-widest">
                   <span>Configuration</span>
                   <span>90% Complete</span>
                 </div>
