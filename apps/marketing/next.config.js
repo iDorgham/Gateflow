@@ -9,6 +9,9 @@ const securityHeaders = [
 
 const nextConfig = {
   transpilePackages: ['@gate-access/ui', '@gate-access/i18n'],
+  experimental: {
+    optimizePackageImports: ['lucide-react', '@gate-access/ui', 'framer-motion'],
+  },
   async headers() {
     return [{ source: '/(.*)', headers: securityHeaders }];
   },

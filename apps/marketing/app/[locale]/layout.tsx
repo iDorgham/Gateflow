@@ -4,13 +4,19 @@ import '../globals.css';
 import { Providers } from '../providers';
 import { Nav } from '../../components/nav';
 import { Footer } from '../../components/footer';
-import { CookieBanner } from '../../components/cookie-banner';
-import { ChatWidget } from '../../components/chat-widget';
 import { i18n, type Locale } from '../../i18n-config';
 import { fetchTranslations } from '../../lib/i18n/get-translation';
 import { I18nProvider } from '../../hooks/use-translation';
+import dynamic from 'next/dynamic';
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
+const CookieBanner = dynamic(() => import('../../components/cookie-banner').then((mod) => mod.CookieBanner), { ssr: false });
+const ChatWidget = dynamic(() => import('../../components/chat-widget').then((mod) => mod.ChatWidget), { ssr: false });
+
+const inter = Inter({ 
+  subsets: ['latin'], 
+  variable: '--font-inter',
+  display: 'swap'
+});
 const cairo = Cairo({ 
   subsets: ['arabic', 'latin-ext'], 
   weight: ['300', '400', '500', '600', '700'],
@@ -122,8 +128,6 @@ export default async function RootLayout({
       <head>
         <OrganizationJsonLd locale={params.locale} />
         <WebSiteJsonLd locale={params.locale} />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <meta name="theme-color" content="#3b82f6" />
         <link rel="manifest" href="/manifest.json" />
         <MarketingScripts
