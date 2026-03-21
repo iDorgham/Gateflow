@@ -50,7 +50,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       where: { id: { in: qrIds } },
       select: { id: true, type: true },
     });
-    const typeByQr = new Map(qrCodes.map((q) => [q.id, q.type]));
+    const typeByQr = new Map<string, string>(qrCodes.map((q) => [q.id, q.type]));
 
     const byType = new Map<string, number>();
     for (const r of rows) {
