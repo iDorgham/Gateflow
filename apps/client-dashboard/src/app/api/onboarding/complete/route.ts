@@ -40,15 +40,40 @@ export async function POST(request: NextRequest) {
     }
 
     const { name, orgName, orgEmail } = validation.data;
-    const tenantAdminRole = await prisma.role.findFirst({
-      where: { name: 'TENANT_ADMIN' },
+    
+    // 1. Ensure the TENANT_ADMIN role exists (built-in)
+    let tenantAdminRole = await prisma.role.findFirst({
+      where: { name: 'TENANT_ADMIN', organizationId: null },
     });
 
     if (!tenantAdminRole) {
-      throw new Error('TENANT_ADMIN role not found');
+      console.log('Onboarding: TENANT_ADMIN role missing, seeding it now.');
+      tenantAdminRole = await prisma.role.create({
+        data: {
+          name: 'TENANT_ADMIN',
+          description: 'Default administrative role for organization owners',
+          isBuiltIn: true,
+          organizationId: null,
+          permissions: {
+            'gates:manage': true,
+            'qr:create': true,
+            'qr:manage': true,
+            'scans:view': true,
+            'scans:override': true,
+            'workspace:manage': true,
+            'roles:manage': true,
+            'users:manage': true,
+            'analytics:view': true,
+            'projects:manage': true,
+            'units:manage': true,
+            'contacts:manage': true,
+          },
+        },
+      });
     }
 
-    // 1. Transaction to create org, default project, and update user
+
+    // 2. Transaction to create org, default project, and update user
     const { org, user, defaultProject } = await prisma.$transaction(
       async (tx) => {
         // Create organization
@@ -82,7 +107,7 @@ export async function POST(request: NextRequest) {
       }
     );
 
-    // 2. Rotate access token to include the new orgId
+    // 3. Rotate access token to include the new orgId
     const newAccessToken = await signAccessToken(
       user.id,
       user.email,

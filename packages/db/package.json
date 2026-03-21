@@ -20,8 +20,9 @@
     "seed:compounds": "npx tsx prisma/seed-compounds.ts",
     "lint": "eslint src/",
     "typecheck": "tsc -p tsconfig.json",
-    "postinstall": "prisma generate",
-    "build": "prisma generate"
+    "postinstall": "prisma generate --no-engine",
+    "build": "prisma generate --no-engine",
+    "db:generate:local": "prisma generate"
   },
   "dependencies": {
     "@gate-access/types": "workspace:*",
