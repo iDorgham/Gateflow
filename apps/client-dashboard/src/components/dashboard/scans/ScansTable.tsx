@@ -20,12 +20,12 @@ const ScanDetailDrawer = dynamic(
 );
 
 const STATUS_COLORS: Record<string, string> = {
-  SUCCESS: 'bg-[var(--ds-background-success-subtle,#E3FCEF)] text-[var(--ds-text-success,#006644)]',
-  FAILED: 'bg-[var(--ds-background-danger-subtle,#FFEBE6)] text-[var(--ds-text-danger,#BF2600)]',
-  EXPIRED: 'bg-[var(--ds-background-warning-subtle,#FFF0B3)] text-[var(--ds-text-warning-inverse,#172B4D)]',
-  MAX_USES_REACHED: 'bg-primary/10 text-primary border border-primary/20',
-  INACTIVE: 'bg-[var(--ds-background-neutral-subtle,#F4F5F7)] text-[var(--ds-text-subtle,#42526E)]',
-  DENIED: 'bg-[var(--ds-background-danger-subtle,#FFEBE6)] text-[var(--ds-text-danger,#BF2600)]',
+  SUCCESS: 'bg-[var(--ds-background-success-subtle)] text-[var(--ds-text-success)]',
+  FAILED: 'bg-[var(--ds-background-danger-subtle)] text-[var(--ds-text-danger)]',
+  EXPIRED: 'bg-[var(--ds-background-warning-subtle)] text-[var(--ds-text-warning)]',
+  MAX_USES_REACHED: 'bg-[var(--ds-background-brand-subtle)] text-[var(--ds-text-brand)] border border-[var(--ds-border-brand)]/20',
+  INACTIVE: 'bg-[var(--ds-background-neutral-subtle)] text-[var(--ds-text-subtle)]',
+  DENIED: 'bg-[var(--ds-background-danger-subtle)] text-[var(--ds-text-danger)]',
 };
 
 export interface ScanLog {
@@ -77,10 +77,10 @@ export function ScansTable({
         isSortable: true,
         render: (item) => (
           <div className="flex flex-col">
-            <span className="text-[13px] font-bold text-[var(--ds-text,#172B4D)]">
+            <span className="text-[13px] font-bold text-[var(--ds-text)]">
               {new Date(item.scannedAt).toLocaleDateString(locale, { month: 'short', day: 'numeric', year: 'numeric' })}
             </span>
-            <span className="text-[10px] font-black text-[var(--ds-text-subtle,#6B778C)] uppercase tracking-tighter">
+            <span className="text-[10px] font-black text-[var(--ds-text-subtle)] uppercase tracking-tighter">
                {new Date(item.scannedAt).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })}
             </span>
           </div>
@@ -91,15 +91,15 @@ export function ScansTable({
         label: t('scans.table.qrCode', 'QR Identifier'),
         render: (item) => (
           <div className="flex items-center gap-3">
-            <div className="h-8 w-8 rounded-lg bg-[var(--ds-background-neutral-subtle,#F4F5F7)] flex items-center justify-center shrink-0">
-               <QrCode className="h-4 w-4 text-[var(--ds-text-subtle,#6B778C)]" />
+            <div className="h-8 w-8 rounded-lg bg-[var(--ds-background-neutral-subtle)] flex items-center justify-center shrink-0">
+               <QrCode className="h-4 w-4 text-[var(--ds-text-subtle)]" />
             </div>
             <div className="flex flex-col">
-              <span className="font-mono text-xs font-black text-primary tracking-wider">
+              <span className="font-mono text-xs font-black text-[var(--ds-text-brand)] tracking-wider">
                 {item.qrCode?.code?.slice(0, 12)}...
               </span>
               {item.qrCode?.type && (
-                <span className="text-[10px] font-bold text-[var(--ds-text-subtle,#6B778C)] uppercase tracking-widest leading-tight opacity-70">
+                <span className="text-[10px] font-bold text-[var(--ds-text-subtlest)] uppercase tracking-widest leading-tight opacity-70">
                   {item.qrCode.type}
                 </span>
               )}
@@ -115,11 +115,11 @@ export function ScansTable({
         label: t('scans.table.project', 'Property'),
         render: (item) => (
           item.qrCode?.project?.name ? (
-            <span className="inline-flex items-center gap-1.5 rounded-[3px] bg-primary/10 px-2 py-0.5 text-[11px] font-semibold text-primary uppercase tracking-tight whitespace-nowrap border border-primary/20">
+            <span className="inline-flex items-center gap-1.5 rounded-[3px] bg-[var(--ds-background-brand-subtle)] px-2 py-0.5 text-[11px] font-semibold text-[var(--ds-text-brand)] uppercase tracking-tight whitespace-nowrap border border-[var(--ds-border-brand)]/20">
               <Building className="h-3 w-3" />
               {item.qrCode.project.name}
             </span>
-          ) : <span className="text-[var(--ds-text-subtlest,#A5ADBA)]">—</span>
+          ) : <span className="text-[var(--ds-text-subtlest)]">—</span>
         ),
       });
     }
@@ -131,9 +131,9 @@ export function ScansTable({
         isSortable: true,
         render: (item) => (
           <div className="flex items-center gap-2">
-            <DoorOpen className="h-4 w-4 text-[var(--ds-text-subtle,#6B778C)] opacity-50" />
-            <span className="text-[13px] font-bold text-[var(--ds-text,#172B4D)]">
-              {item.gate?.name ?? <span className="text-[var(--ds-text-subtlest,#A5ADBA)]">—</span>}
+            <DoorOpen className="h-4 w-4 text-[var(--ds-text-subtle)] opacity-50" />
+            <span className="text-[13px] font-bold text-[var(--ds-text)]">
+              {item.gate?.name ?? <span className="text-[var(--ds-text-subtlest)]">—</span>}
             </span>
           </div>
         ),
@@ -143,15 +143,15 @@ export function ScansTable({
         label: t('scans.table.operator', 'Security Guard'),
         render: (item) => item.user ? (
           <div className="flex items-center gap-3">
-             <div className="h-8 w-8 rounded-full bg-[var(--ds-background-neutral,#EBECF0)] flex items-center justify-center text-[10px] font-black text-[var(--ds-text-subtle,#6B778C)]">
+             <div className="h-8 w-8 rounded-full bg-[var(--ds-background-neutral)] flex items-center justify-center text-[10px] font-black text-[var(--ds-text-subtle)]">
                 {item.user.name?.split(' ').map(n => n[0]).join('')}
              </div>
             <div className="flex flex-col">
-              <span className="text-[13px] font-bold text-[var(--ds-text,#172B4D)]">{item.user.name}</span>
-              <span className="text-[10px] font-bold text-[var(--ds-text-subtle,#6B778C)] lowercase">{item.user.email}</span>
+              <span className="text-[13px] font-bold text-[var(--ds-text)]">{item.user.name}</span>
+              <span className="text-[10px] font-bold text-[var(--ds-text-subtle)] lowercase">{item.user.email}</span>
             </div>
           </div>
-        ) : <span className="text-[var(--ds-text-subtlest,#A5ADBA)]">—</span>,
+        ) : <span className="text-[var(--ds-text-subtlest)]">—</span>,
       },
       {
         key: 'status',
@@ -162,9 +162,9 @@ export function ScansTable({
           <div className="flex justify-end">
             <span className={cn(
               'inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider', 
-              STATUS_COLORS[item.status] ?? 'bg-[var(--ds-background-neutral-subtle,#F4F5F7)] text-[var(--ds-text-subtle,#42526E)]'
+              STATUS_COLORS[item.status] ?? 'bg-[var(--ds-background-neutral-subtle)] text-[var(--ds-text-subtle)]'
             )}>
-              <div className={cn("h-1.5 w-1.5 rounded-full", item.status === 'SUCCESS' ? "bg-[var(--ds-icon-success,#00875A)]" : "bg-[var(--ds-icon-danger,#DE350B)]")} />
+              <div className={cn("h-1.5 w-1.5 rounded-full", item.status === 'SUCCESS' ? "bg-[var(--ds-icon-success)]" : "bg-[var(--ds-icon-danger)]")} />
               {t(`scans.status.${item.status}`, { defaultValue: item.status.replace(/_/g, ' ') })}
             </span>
           </div>
@@ -177,7 +177,7 @@ export function ScansTable({
 
   return (
     <>
-      <div className="bg-[var(--ds-background-default,#FFFFFF)] rounded-2xl border border-[var(--ds-border,#DFE1E6)] overflow-hidden shadow-sm">
+      <div className="bg-[var(--ds-background-default)] rounded-2xl border border-[var(--ds-border)] overflow-hidden shadow-sm">
         <DynamicTable
           columns={columns}
           items={data}

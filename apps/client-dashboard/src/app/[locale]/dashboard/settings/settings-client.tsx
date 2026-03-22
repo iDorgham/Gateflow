@@ -254,30 +254,30 @@ export function SettingsClient(props: SettingsClientProps) {
   return (
     <div className="space-y-0 pb-20" dir={isRtl ? 'rtl' : 'ltr'}>
       {/* Page header */}
-      <div className="border-b border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-surface-raised,#FFFFFF)] px-6 py-5 mb-0">
+      <div className="border-b border-[var(--ds-border)] bg-[var(--ds-surface-raised)] px-6 py-5 mb-0">
         <div className="flex items-center gap-3 mb-1">
-          <div className="h-9 w-9 rounded-md bg-[var(--ds-background-brand-subtle,#DEEBFF)] flex items-center justify-center border border-[var(--ds-border-focused,#4C9AFF)]/30">
-            <Settings2 className="h-4 w-4 text-[var(--ds-text-brand,#0052CC)]" />
+          <div className="h-9 w-9 rounded-md bg-[var(--ds-background-brand-subtle)] flex items-center justify-center border border-[var(--ds-border-focused)]/30">
+            <Settings2 className="h-4 w-4 text-[var(--ds-text-brand)]" />
           </div>
-          <h1 className="text-xl font-bold tracking-tight text-[var(--ds-text,#172B4D)] uppercase">
+          <h1 className="text-xl font-bold tracking-tight text-[var(--ds-text)] uppercase">
             {t('settings.gateflowTitle', 'GateFlow Setup')}
           </h1>
         </div>
-        <p className="text-sm text-[var(--ds-text-subtle,#42526E)]">
+        <p className="text-sm text-[var(--ds-text-subtle)]">
           <Trans
             t={t}
             i18nKey="settings.gateflowDescription"
             values={{ orgName: props.org.name }}
             defaults="Core operational parameters and administrative nodes for <1>{{orgName}}</1>."
             components={[
-              <span key="org" className="text-[var(--ds-text-brand,#0052CC)] font-semibold" />,
+              <span key="org" className="text-[var(--ds-text-brand)] font-semibold" />,
             ]}
           />
         </p>
       </div>
 
       {/* Tab nav bar */}
-      <div className="border-b border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-surface,#FFFFFF)] sticky top-0 z-20">
+      <div className="border-b border-[var(--ds-border)] bg-[var(--ds-surface)] sticky top-0 z-20">
         <LayoutGroup id="settings-tabs">
           <nav
             className="flex overflow-x-auto scrollbar-hide gap-0 px-6"
@@ -293,7 +293,7 @@ export function SettingsClient(props: SettingsClientProps) {
                   role="tab"
                   aria-selected={isActive}
                   onClick={() => handleTabChange(tab.id)}
-                  className="relative flex items-center gap-2 whitespace-nowrap px-4 py-3.5 text-sm font-semibold transition-colors outline-none focus-visible:ring-2 focus-visible:ring-[var(--ds-border-focused,#4C9AFF)] focus-visible:ring-offset-1 rounded-sm"
+                  className="relative flex items-center gap-2 whitespace-nowrap px-4 py-3.5 text-sm font-semibold transition-colors outline-none focus-visible:ring-2 focus-visible:ring-[var(--ds-border-focused)] focus-visible:ring-offset-1 rounded-sm"
                   style={{
                     color: isActive
                       ? 'var(--ds-text-selected)'
@@ -305,7 +305,7 @@ export function SettingsClient(props: SettingsClientProps) {
                   {isActive && (
                     <motion.div
                       layoutId="settings-tab-indicator"
-                      className="absolute bottom-0 start-0 end-0 h-0.5 rounded-full bg-[var(--ds-border-selected,#0052CC)]"
+                      className="absolute bottom-0 start-0 end-0 h-0.5 rounded-full bg-[var(--ds-border-selected)]"
                       transition={{ type: 'spring', stiffness: 400, damping: 32 }}
                     />
                   )}

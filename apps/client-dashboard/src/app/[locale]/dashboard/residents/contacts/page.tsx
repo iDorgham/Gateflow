@@ -804,7 +804,7 @@ export default function ContactsPage() {
         title={t('contacts.title', { defaultValue: 'Residents' })}
         subtitle={t('contacts.description', { defaultValue: 'Manage residents, occupants, and visitors for your organisation.' })}
         badge={
-          <div className="bg-[var(--ds-background-selected,#DEEBFF)] text-[var(--ds-text-selected,#0747A6)] font-bold h-6 px-3 rounded-full flex items-center text-xs">
+          <div className="bg-[var(--ds-background-selected)] text-[var(--ds-text-selected)] font-bold h-6 px-3 rounded-full flex items-center text-xs">
             {total.toLocaleString()} {t('residents.total', 'Contacts')}
           </div>
         }
@@ -870,7 +870,7 @@ export default function ContactsPage() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="h-7 px-2.5 text-[var(--ds-text-selected,#0052CC)] hover:bg-[var(--ds-background-brand-subtle,#DEEBFF)] rounded-full text-[10px] font-bold"
+                  className="h-7 px-2.5 text-[var(--ds-text-selected)] hover:bg-[var(--ds-background-brand-subtle)] rounded-full text-[10px] font-bold"
                   onClick={exportSelectedCSV}
                 >
                   <Download className="h-3 w-3 mr-1.5" />

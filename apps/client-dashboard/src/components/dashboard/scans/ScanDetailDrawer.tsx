@@ -7,39 +7,39 @@ import type { ScanLog } from './ScansTable';
 
 const STATUS_CONFIG: Record<string, { bg: string; text: string; dot: string; label: string }> = {
   SUCCESS: {
-    bg: 'bg-[var(--ds-background-success-subtle,#E3FCEF)]',
-    text: 'text-[var(--ds-text-success,#006644)]',
-    dot: 'bg-[var(--ds-background-success-bold,#00875A)]',
+    bg: 'bg-[var(--ds-background-success-subtle)]',
+    text: 'text-[var(--ds-text-success)]',
+    dot: 'bg-[var(--ds-background-success-bold)]',
     label: 'Success',
   },
   FAILED: {
-    bg: 'bg-[var(--ds-background-danger-subtle,#FFEBE6)]',
-    text: 'text-[var(--ds-text-danger,#BF2600)]',
-    dot: 'bg-[var(--ds-background-danger-bold,#DE350B)]',
+    bg: 'bg-[var(--ds-background-danger-subtle)]',
+    text: 'text-[var(--ds-text-danger)]',
+    dot: 'bg-[var(--ds-background-danger-bold)]',
     label: 'Failed',
   },
   EXPIRED: {
-    bg: 'bg-[var(--ds-background-warning-subtle,#FFF0B3)]',
-    text: 'text-[var(--ds-text-warning-inverse,#172B4D)]',
-    dot: 'bg-[var(--ds-background-warning-bold,#FF991F)]',
+    bg: 'bg-[var(--ds-background-warning-subtle)]',
+    text: 'text-[var(--ds-text-warning)]',
+    dot: 'bg-[var(--ds-background-warning-bold)]',
     label: 'Expired',
   },
   MAX_USES_REACHED: {
-    bg: 'bg-primary/10',
-    text: 'text-primary',
-    dot: 'bg-primary',
+    bg: 'bg-[var(--ds-background-brand-subtle)]',
+    text: 'text-[var(--ds-text-brand)]',
+    dot: 'bg-[var(--ds-background-brand-bold)]',
     label: 'Max Uses',
   },
   INACTIVE: {
-    bg: 'bg-[var(--ds-background-neutral-subtle,#F4F5F7)]',
-    text: 'text-[var(--ds-text-subtlest,#6B778C)]',
-    dot: 'bg-[var(--ds-icon-subtle,#6B778C)]',
+    bg: 'bg-[var(--ds-background-neutral-subtle)]',
+    text: 'text-[var(--ds-text-subtle)]',
+    dot: 'bg-[var(--ds-background-neutral-bold)]',
     label: 'Inactive',
   },
   DENIED: {
-    bg: 'bg-[var(--ds-background-danger-subtle,#FFEBE6)]',
-    text: 'text-[var(--ds-text-danger,#BF2600)]',
-    dot: 'bg-[var(--ds-background-danger-bold,#DE350B)]',
+    bg: 'bg-[var(--ds-background-danger-subtle)]',
+    text: 'text-[var(--ds-text-danger)]',
+    dot: 'bg-[var(--ds-background-danger-bold)]',
     label: 'Denied',
   },
 };
@@ -62,8 +62,8 @@ function Field({
   return (
     <div className="flex flex-col gap-1">
       <div className="flex items-center gap-1.5">
-        <Icon className="h-3 w-3 text-[var(--ds-icon-subtle,#6B778C)]" aria-hidden="true" />
-        <dt className="text-[10px] font-black uppercase tracking-widest text-[var(--ds-text-subtlest,#6B778C)]">
+        <Icon className="h-3 w-3 text-[var(--ds-icon-subtle)]" aria-hidden="true" />
+        <dt className="text-[10px] font-black uppercase tracking-widest text-[var(--ds-text-subtlest)]">
           {label}
         </dt>
       </div>
@@ -96,19 +96,19 @@ export function ScanDetailDrawer({ scan, locale, onClose }: ScanDetailDrawerProp
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            className="fixed inset-y-0 end-0 z-50 w-80 bg-background border-s border-border border-border shadow-xl flex flex-col overflow-hidden"
+            className="fixed inset-y-0 end-0 z-50 w-80 bg-[var(--ds-surface-overlay)] border-s border-[var(--ds-border)] shadow-xl flex flex-col overflow-hidden"
             role="dialog"
             aria-modal="true"
             aria-label="Scan details"
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-4 py-3 border-b border-border shrink-0 bg-muted/20">
-              <p className="text-[10px] font-black uppercase tracking-widest text-[var(--ds-text-subtlest,#6B778C)]">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--ds-border)] shrink-0 bg-[var(--ds-background-neutral-subtle)]">
+              <p className="text-[10px] font-black uppercase tracking-widest text-[var(--ds-text-subtlest)]">
                 Scan Details
               </p>
               <button
                 onClick={onClose}
-                className="h-6 w-6 flex items-center justify-center rounded-sm hover:bg-[var(--ds-background-neutral,#EBECF0)] text-[var(--ds-icon-subtle,#6B778C)] transition-colors"
+                className="h-6 w-6 flex items-center justify-center rounded-sm hover:bg-[var(--ds-background-neutral-hovered)] text-[var(--ds-icon-subtle)] transition-colors"
                 aria-label="Close scan details"
               >
                 <X className="h-3.5 w-3.5" />
@@ -136,7 +136,7 @@ export function ScanDetailDrawer({ scan, locale, onClose }: ScanDetailDrawerProp
 
               <dl className="space-y-4">
                 <Field icon={Hash} label="Timestamp">
-                  <span className="text-sm font-semibold text-[var(--ds-text,#172B4D)] dark:text-[#B6C2CF]">
+                  <span className="text-sm font-semibold text-[var(--ds-text)]">
                     {new Date(scan.scannedAt).toLocaleString(locale, {
                       dateStyle: 'medium',
                       timeStyle: 'medium',
@@ -146,11 +146,11 @@ export function ScanDetailDrawer({ scan, locale, onClose }: ScanDetailDrawerProp
 
                 <Field icon={QrCode} label="QR Code">
                   <div className="flex flex-col gap-0.5">
-                    <span className="font-mono text-xs font-bold text-primary break-all">
+                    <span className="font-mono text-xs font-bold text-[var(--ds-text-brand)] break-all">
                       {scan.qrCode?.code ?? '—'}
                     </span>
                     {scan.qrCode?.type && (
-                      <span className="text-[10px] uppercase tracking-widest text-[var(--ds-text-subtlest,#6B778C)]">
+                      <span className="text-[10px] uppercase tracking-widest text-[var(--ds-text-subtlest)]">
                         {scan.qrCode.type}
                       </span>
                     )}
@@ -159,7 +159,7 @@ export function ScanDetailDrawer({ scan, locale, onClose }: ScanDetailDrawerProp
 
                 {scan.gate && (
                   <Field icon={DoorOpen} label="Gate / Entry Point">
-                    <span className="text-sm font-semibold text-[var(--ds-text,#172B4D)] dark:text-[#B6C2CF]">
+                    <span className="text-sm font-semibold text-[var(--ds-text)]">
                       {scan.gate.name}
                     </span>
                   </Field>
@@ -168,16 +168,16 @@ export function ScanDetailDrawer({ scan, locale, onClose }: ScanDetailDrawerProp
                 {scan.user && (
                   <Field icon={User} label="Operator">
                     <div className="flex flex-col gap-0.5">
-                      <span className="text-sm font-semibold text-[var(--ds-text,#172B4D)] dark:text-[#B6C2CF]">
+                      <span className="text-sm font-semibold text-[var(--ds-text)]">
                         {scan.user.name}
                       </span>
-                      <span className="text-xs text-[var(--ds-text-subtle,#42526E)]">{scan.user.email}</span>
+                      <span className="text-xs text-[var(--ds-text-subtle)]">{scan.user.email}</span>
                     </div>
                   </Field>
                 )}
 
                 <Field icon={Hash} label="Scan ID">
-                  <span className="font-mono text-xs text-[var(--ds-text-subtle,#42526E)] break-all">
+                  <span className="font-mono text-xs text-[var(--ds-text-subtlest)] break-all">
                     {scan.id}
                   </span>
                 </Field>

@@ -33,12 +33,12 @@ const STATUSES = [
 ] as const;
 
 const STATUS_CHIP: Record<string, string> = {
-  SUCCESS: 'bg-[var(--ds-background-success-subtle,#E3FCEF)] text-[var(--ds-text-success,#006644)] border-[var(--ds-border-success,#00A355)]/20',
-  FAILED: 'bg-[var(--ds-background-danger-subtle,#FFEBE6)] text-[var(--ds-text-danger,#BF2600)] border-[var(--ds-border-danger,#FF5630)]/20',
-  EXPIRED: 'bg-[var(--ds-background-warning-subtle,#FFF0B3)] text-[var(--ds-text-warning-inverse,#172B4D)] border-[var(--ds-border-warning,#FFAB00)]/20',
-  MAX_USES_REACHED: 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 border-zinc-200 dark:border-zinc-700',
-  INACTIVE: 'bg-zinc-50 dark:bg-zinc-900 text-zinc-500 dark:text-zinc-400 border-zinc-200 dark:border-zinc-800',
-  DENIED: 'bg-[var(--ds-background-danger-subtle,#FFEBE6)] text-[var(--ds-text-danger,#BF2600)] border-[var(--ds-border-danger,#FF5630)]/20',
+  SUCCESS: 'bg-[var(--ds-background-success-subtle)] text-[var(--ds-text-success)] border-[var(--ds-border-success)]/20',
+  FAILED: 'bg-[var(--ds-background-danger-subtle)] text-[var(--ds-text-danger)] border-[var(--ds-border-danger)]/20',
+  EXPIRED: 'bg-[var(--ds-background-warning-subtle)] text-[var(--ds-text-warning)] border-[var(--ds-border-warning)]/20',
+  MAX_USES_REACHED: 'bg-[var(--ds-background-neutral-subtle)] text-[var(--ds-text)] border-[var(--ds-border)]',
+  INACTIVE: 'bg-[var(--ds-background-neutral-subtle)] text-[var(--ds-text-subtle)] border-[var(--ds-border)]',
+  DENIED: 'bg-[var(--ds-background-danger-subtle)] text-[var(--ds-text-danger)] border-[var(--ds-border-danger)]/20',
 };
 
 interface Props {
@@ -160,9 +160,9 @@ export function ScansFilters({
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       {/* Search & Main Selects */}
-      <FilterBar className="bg-[var(--ds-background-default,#FFFFFF)] p-3 rounded-xl border border-[var(--ds-border,#DFE1E6)] shadow-sm flex flex-wrap items-center gap-4">
+      <FilterBar className="bg-[var(--ds-background-default)] p-3 rounded-xl border border-[var(--ds-border)] shadow-sm flex flex-wrap items-center gap-4">
         <div className="flex-1 min-w-[280px] relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--ds-text-subtle,#6B778C)] pointer-events-none" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--ds-text-subtle)] pointer-events-none" />
           <FilterBar.Search
             placeholder={t('scans.filters.searchPlaceholder', { defaultValue: 'Search QR code…' })}
             value={q}
@@ -170,7 +170,7 @@ export function ScansFilters({
               setQ(e.target.value);
               debounced(debounceQ, 'q', e.target.value);
             }}
-            className="w-full pl-9 bg-[var(--ds-background-neutral-subtle,#F4F5F7)] border-[var(--ds-border,#DFE1E6)] focus:bg-[var(--ds-background-default,#FFFFFF)] h-10 transition-all rounded-lg text-sm"
+            className="w-full pl-9 bg-[var(--ds-background-neutral-subtle)] border-[var(--ds-border)] focus:bg-[var(--ds-background-default)] h-10 transition-all rounded-lg text-sm"
             containerClassName="w-full"
           />
         </div>
@@ -179,7 +179,7 @@ export function ScansFilters({
           <FilterBar.Select
             value={currentStatus}
             onChange={(e) => immediate('status', e.target.value)}
-            className="h-10 bg-[var(--ds-background-default,#FFFFFF)] border-[var(--ds-border,#DFE1E6)] text-[var(--ds-text-subtle,#42526E)] font-bold rounded-lg hover:border-primary transition-colors"
+            className="h-10 bg-[var(--ds-background-default)] border-[var(--ds-border)] text-[var(--ds-text-subtle)] font-bold rounded-lg hover:border-primary transition-colors"
             icon={<Layers className="h-4 w-4" />}
           >
             <option value="">{t('scans.filters.allStatuses', { defaultValue: 'All Statuses' })}</option>
@@ -194,7 +194,7 @@ export function ScansFilters({
             <FilterBar.Select
               value={currentProjectId}
               onChange={(e) => immediate('project', e.target.value)}
-              className="h-10 bg-[var(--ds-background-default,#FFFFFF)] border-[var(--ds-border,#DFE1E6)] text-[var(--ds-text-subtle,#42526E)] font-bold rounded-lg hover:border-primary transition-colors"
+              className="h-10 bg-[var(--ds-background-default)] border-[var(--ds-border)] text-[var(--ds-text-subtle)] font-bold rounded-lg hover:border-primary transition-colors"
               aria-label={t('scans.filters.allProjects', { defaultValue: 'All projects' })}
             >
               <option value="all">{t('scans.filters.allProjects', { defaultValue: 'All Projects' })}</option>
@@ -209,7 +209,7 @@ export function ScansFilters({
           <FilterBar.Select
             value={currentGate}
             onChange={(e) => immediate('gate', e.target.value)}
-            className="h-10 bg-[var(--ds-background-default,#FFFFFF)] border-[var(--ds-border,#DFE1E6)] text-[var(--ds-text-subtle,#42526E)] font-bold rounded-lg hover:border-primary transition-colors"
+            className="h-10 bg-[var(--ds-background-default)] border-[var(--ds-border)] text-[var(--ds-text-subtle)] font-bold rounded-lg hover:border-primary transition-colors"
             icon={<DoorOpen className="h-4 w-4" />}
           >
             <option value="">{t('scans.filters.allGates', { defaultValue: 'All Gates' })}</option>
@@ -223,7 +223,7 @@ export function ScansFilters({
           <FilterBar.Select
             value={currentUserId}
             onChange={(e) => immediate('userId', e.target.value)}
-            className="h-10 bg-[var(--ds-background-default,#FFFFFF)] border-[var(--ds-border,#DFE1E6)] text-[var(--ds-text-subtle,#42526E)] font-bold rounded-lg hover:border-primary transition-colors"
+            className="h-10 bg-[var(--ds-background-default)] border-[var(--ds-border)] text-[var(--ds-text-subtle)] font-bold rounded-lg hover:border-primary transition-colors"
             icon={<UserIcon className="h-4 w-4" />}
           >
             <option value="">{t('scans.filters.allOperators', { defaultValue: 'All Operators' })}</option>
@@ -237,7 +237,7 @@ export function ScansFilters({
       </FilterBar>
 
       {/* Date Range & Device */}
-      <div className="flex flex-wrap items-end gap-6 bg-[var(--ds-background-neutral-subtle,#F4F5F7)] p-5 rounded-xl border border-[var(--ds-border,#DFE1E6)]">
+      <div className="flex flex-wrap items-end gap-6 bg-[var(--ds-background-neutral-subtle)] p-5 rounded-xl border border-[var(--ds-border)]">
         <div className="flex items-end gap-3">
           <DatePicker
             label={t('scans.filters.dateFrom', { defaultValue: 'From Date' })}
@@ -246,7 +246,7 @@ export function ScansFilters({
             onClear={() => clearFilter('dateFrom')}
             className="w-[180px]"
           />
-          <div className="pb-3 text-[var(--ds-border,#DFE1E6)] font-black">—</div>
+          <div className="pb-3 text-[var(--ds-border)] font-black">—</div>
           <DatePicker
             label={t('scans.filters.dateTo', { defaultValue: 'To Date' })}
             value={currentDateTo}
@@ -257,12 +257,12 @@ export function ScansFilters({
         </div>
 
         <div className="space-y-2 flex-1 min-w-[200px]">
-          <label className="text-[11px] font-black text-[var(--ds-text-subtle,#6B778C)] uppercase tracking-widest block ml-1">
+          <label className="text-[11px] font-black text-[var(--ds-text-subtle)] uppercase tracking-widest block ml-1">
             {t('scans.filters.deviceIdPlaceholder', { defaultValue: 'Hardware Device' })}
           </label>
           <div className="relative">
             <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center gap-2 pointer-events-none">
-               <div className="h-1.5 w-1.5 rounded-full bg-[var(--ds-text-success,#006644)] animate-pulse" />
+               <div className="h-1.5 w-1.5 rounded-full bg-[var(--ds-text-success)] animate-pulse" />
             </div>
             <input
               type="text"
@@ -272,7 +272,7 @@ export function ScansFilters({
                 setDeviceId(e.target.value);
                 debounced(debounceDevice, 'deviceId', e.target.value);
               }}
-              className="h-10 w-full pl-7 bg-[var(--ds-background-default,#FFFFFF)] border-[var(--ds-border,#DFE1E6)] rounded-lg text-sm font-mono font-bold text-[var(--ds-text,#172B4D)] placeholder-[var(--ds-text-subtle,#6B778C)] shadow-sm focus:ring-2 focus:ring-[var(--ds-border-focused,#4C9AFF)] transition-all"
+              className="h-10 w-full pl-7 bg-[var(--ds-background-default)] border-[var(--ds-border)] rounded-lg text-sm font-mono font-bold text-[var(--ds-text)] placeholder-[var(--ds-text-subtle)] shadow-sm focus:ring-2 focus:ring-[var(--ds-border-focused)] transition-all"
             />
           </div>
         </div>
@@ -280,7 +280,7 @@ export function ScansFilters({
         <div className="ml-auto">
           <Button
             onClick={() => window.open(exportHref, '_blank')}
-            className="bg-[var(--ds-background-default,#FFFFFF)] border border-[var(--ds-border,#DFE1E6)] text-[var(--ds-text-subtle,#42526E)] font-bold h-10 px-5 rounded-lg shadow-sm hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all active:scale-95 group"
+            className="bg-[var(--ds-background-default)] border border-[var(--ds-border)] text-[var(--ds-text-subtle)] font-bold h-10 px-5 rounded-lg shadow-sm hover:bg-[var(--ds-background-neutral-subtle-hovered)] transition-all active:scale-95 group"
           >
             <Download className="h-4 w-4 mr-2 group-hover:text-primary transition-colors" />
             {t('scans.filters.exportCsv', { defaultValue: 'Export CSV' })}
@@ -293,17 +293,17 @@ export function ScansFilters({
         <div className="flex flex-wrap items-center gap-2">
           {activeFilters.length > 0 ? (
             <>
-              <span className="text-[11px] font-black text-zinc-500 dark:text-zinc-400 uppercase tracking-widest mr-2">Active Filters:</span>
+              <span className="text-[11px] font-black text-[var(--ds-text-subtlest)] uppercase tracking-widest mr-2">Active Filters:</span>
               {activeFilters.map((f) => (
                 <span
                   key={f.key}
                   className={cn(
                     "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-bold shadow-sm transition-all animate-in zoom-in-95 duration-200",
                     f.key === 'status' && currentStatus
-                      ? (STATUS_CHIP[currentStatus] ?? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-500 border-zinc-200 dark:border-zinc-700')
+                      ? (STATUS_CHIP[currentStatus] ?? 'bg-[var(--ds-background-neutral-subtle)] text-[var(--ds-text-subtle)] border-[var(--ds-border)]')
                       : f.key === 'project'
-                      ? 'bg-primary/10 text-primary border-primary/30'
-                      : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 border-zinc-200 dark:border-zinc-700'
+                      ? 'bg-[var(--ds-background-brand-subtle)] text-[var(--ds-text-brand)] border-[var(--ds-border-brand)]/30'
+                      : 'bg-[var(--ds-background-neutral-subtle)] text-[var(--ds-text)] border-[var(--ds-border)]'
                   )}
                 >
                   {f.label}
@@ -325,14 +325,14 @@ export function ScansFilters({
               </Button>
             </>
           ) : (
-             <div className="flex items-center gap-2 text-zinc-500 opacity-50">
-               <div className="h-1 w-1 rounded-full bg-zinc-500" />
+             <div className="flex items-center gap-2 text-[var(--ds-text-subtlest)] opacity-50">
+               <div className="h-1 w-1 rounded-full bg-[var(--ds-text-subtlest)]" />
                <span className="text-[10px] font-black uppercase tracking-[0.2em]">{t('scans.filters.noFilters', { defaultValue: 'Live Audit Trail' })}</span>
              </div>
           )}
         </div>
 
-        <p className="text-[11px] font-black text-[var(--ds-text-subtle,#6B778C)] uppercase tracking-widest">
+        <p className="text-[11px] font-black text-[var(--ds-text-subtle)] uppercase tracking-widest">
            {filteredCount.toLocaleString()} {t('scans.filters.showingResultsSimple', { defaultValue: 'Entries Found' })}
         </p>
       </div>

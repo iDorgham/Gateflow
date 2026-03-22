@@ -43,6 +43,7 @@ After a task or phase was executed **using a CLI** (Claude CLI, Gemini CLI, Open
   - **`analytics-charts.tsx`**: Updated `ADS_TOOLTIP_STYLE` to use `var(--ds-shadow-raised)` instead of hardcoded RGBA.
   - **`settings-client.tsx`**: Cleaned up manual dark mode backgrounds (`#1D2125`, `#161A1D`) and fixed tab text color fallbacks.
   - **`contacts/page.tsx`**: Removed manual dark mode rings and hex fallbacks from table cells to ensure strict design system compliance.
+  - **`scans` module**: Refactored 4 files (`page.tsx`, `scans-filters.tsx`, `ScansTable.tsx`, `ScanDetailDrawer.tsx`). Removed all raw hex violations and manual `dark:` classes.
   - **Verification**: Ran `pnpm preflight` — all checks passed with no new lint errors.
 
 ---
