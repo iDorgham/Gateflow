@@ -7,12 +7,24 @@ jest.mock('@/lib/auth-cookies', () => ({
 
 const mockChatMessageFindMany = jest.fn();
 const mockChatMessageCreate = jest.fn();
+const mockUserUpdate = jest.fn();
+const mockEventLogCreate = jest.fn();
+
 jest.mock('@gate-access/db', () => ({
   prisma: {
     chatMessage: {
       findMany: (...args: unknown[]) => mockChatMessageFindMany(...args),
       create: (...args: unknown[]) => mockChatMessageCreate(...args),
     },
+    user: {
+      update: (...args: unknown[]) => mockUserUpdate(...args),
+    },
+    eventLog: {
+      create: (...args: unknown[]) => mockEventLogCreate(...args),
+    },
+  },
+  EventType: {
+    TEAM_CHAT_MESSAGE: 'TEAM_CHAT_MESSAGE',
   },
 }));
 
@@ -64,6 +76,8 @@ describe('Team Messages API', () => {
       const userId = 'user_1';
       mockGetSessionClaims.mockResolvedValue({ orgId, sub: userId });
       mockChatMessageCreate.mockResolvedValue({ id: 'msg_1', content: 'hello', userId, organizationId: orgId });
+      mockUserUpdate.mockResolvedValue({ id: userId });
+      mockEventLogCreate.mockResolvedValue({ id: 'evt_1' });
 
       const res = await POST({ 
         json: async () => ({ content: 'hello' }) 
