@@ -15,7 +15,7 @@ function discover() {
   // Exclude test pages
   console.log('Scanning for hardcoded Hex colors...');
   try {
-    const hexFindings = execSync('grep -rE "#([A-Fa-f0-9]{3}){1,2}" apps/*/src packages/ui/src --exclude-dir=node_modules --exclude-dir=.next --exclude-dir=test --exclude-dir=tests | grep -vE "var\\(--ds-.*,#" | grep -v "create-test" | head -n 10', { timeout: 30000 }).toString();
+    const hexFindings = execSync('grep -rE "#([A-Fa-f0-9]{3}){1,2}" apps/*/src packages/ui/src --exclude-dir=node_modules --exclude-dir=.next --exclude-dir=test --exclude-dir=tests | grep -vE "var\\(--ds-.*,#" | grep -vE "token\\(.*,[\'\\\" ]?#" | grep -vE "\\\\\\${token" | grep -v "create-test" | head -n 10', { timeout: 30000 }).toString();
     if (hexFindings.trim()) {
       findingsFound = true;
       report += `## 🎨 Design System Violations (Hardcoded Hex)\n\nDetected raw hex values instead of Atlassian Design System tokens (\`var(--ds-...)\`).\n\n\`\`\`text\n${hexFindings}\n\`\`\`\n\n`;

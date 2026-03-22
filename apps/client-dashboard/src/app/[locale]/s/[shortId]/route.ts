@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@gate-access/db';
+import { token } from '@atlaskit/tokens';
 
 /**
  * Short-link resolver for compact QR codes.
@@ -56,11 +57,11 @@ export async function GET(
   try {
     const [visitorQR, org] = await Promise.all([
       prisma.visitorQR.findFirst({
-        where: { qrCodeId: link.qrId },
+        where: { qrCodeId: link.qrId, unit: { organizationId: link.organizationId } },
         select: {
           id: true,
           visitorName: true,
-          unit: { select: { lat: true, lng: true, name: true } },
+          unit: { select: { lat: true, lng: true, name: true, organizationId: true } },
         },
       }),
       prisma.organization.findUnique({
@@ -104,7 +105,7 @@ export async function GET(
   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
   j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-  })(window,document,'script','dataLayer','${pixelGtmId}');</script>
+  })(window,document,'script','dataLayer','${escapeHtml(pixelGtmId)}');</script>
   <!-- End Google Tag Manager -->` : ''}
 
   ${pixelMetaId ? `<!-- Meta Pixel Code -->
@@ -117,26 +118,28 @@ export async function GET(
   t.src=v;s=b.getElementsByTagName(e)[0];
   s.parentNode.insertBefore(t,s)}(window, document,'script',
   'https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init', '${pixelMetaId}');
+  fbq('init', '${escapeHtml(pixelMetaId)}');
   fbq('track', 'PageView');
   </script>
   <noscript><img height="1" width="1" style="display:none"
-  src="https://www.facebook.com/tr?id=${pixelMetaId}&ev=PageView&noscript=1"
+  src="https://www.facebook.com/tr?id=${escapeHtml(pixelMetaId)}&ev=PageView&noscript=1"
   /></noscript>
   <!-- End Meta Pixel Code -->` : ''}
 
   <style>
     :root {
-      --ds-background-default: #F2F3F4;
-      --ds-surface: #FFFFFF;
-      --ds-text: #020035;
-      --ds-text-subtle: #02066F;
-      --ds-text-subtlest: #6B7280;
-      --ds-brand: #ED4B00;
-      --ds-neutral: #EDE9E8;
-      --ds-success: #16A34A;
-      --ds-border: #DEDDE3;
-      --ds-shadow: rgba(2, 0, 53, 0.10);
+      /* ADS Light Tokens alignment using official tokens */
+      --ds-background-default: ${token('elevation.surface', '#FFFFFF')};
+      --ds-surface: ${token('elevation.surface', '#FFFFFF')};
+      --ds-text: ${token('color.text', '#172B4D')};
+      --ds-text-subtle: ${token('color.text.subtle', '#44546F')};
+      --ds-text-subtlest: ${token('color.text.subtlest', '#626F86')};
+      --ds-brand: ${token('color.background.brand.bold', '#0C66E4')};
+      --ds-neutral: ${token('color.background.neutral', '#091E420F')};
+      --ds-success: ${token('color.background.success.bold', '#1F845A')};
+      --ds-border: ${token('color.border', '#091E4224')};
+      --ds-shadow: ${token('elevation.shadow.raised', 'rgba(9, 30, 66, 0.08)')};
+      --ds-text-inverse: ${token('color.text.inverse', '#FFFFFF')};
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -189,10 +192,10 @@ export async function GET(
       margin-bottom: 12px;
       transition: opacity 0.2s;
     }
-    .btn-primary { background: var(--ds-brand); color: #FFFFFF; }
+    .btn-primary { background: var(--ds-brand); color: var(--ds-text-inverse); }
     .btn-secondary { background: var(--ds-neutral); color: var(--ds-text); }
     .btn:disabled { opacity: 0.5; cursor: default; }
-    .btn-done { background: var(--ds-success); color: #FFFFFF; }
+    .btn-done { background: var(--ds-success); color: var(--ds-text-inverse); }
     .note {
       font-size: 12px;
       color: var(--ds-text-subtlest);

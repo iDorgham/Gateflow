@@ -22,7 +22,7 @@ const STATUS_BADGE: Record<string, { className?: string }> = {
   ACTIVE: { className: 'bg-[var(--ds-background-success-subtle,#E3FCEF)] text-[var(--ds-text-success,#006644)]' },
   INACTIVE: { className: 'bg-[var(--ds-background-neutral-subtle,#F4F5F7)] text-[var(--ds-text-subtle,#42526E)]' },
   EXPIRED: { className: 'bg-[var(--ds-background-warning-subtle,#FFF0B3)] text-[var(--ds-text-warning-inverse,#172B4D)]' },
-  MAX_USES_REACHED: { className: 'bg-[var(--ds-background-selected,#DEEBFF)] text-[var(--ds-text-selected,#0747A6)]' },
+  MAX_USES_REACHED: { className: 'bg-primary/10 text-primary border border-primary/20' },
   REVOKED: { className: 'bg-[var(--ds-background-danger-subtle,#FFEBE6)] text-[var(--ds-text-danger,#BF2600)]' },
 };
 
@@ -76,7 +76,7 @@ export function QRCodesTable({
           <div className="flex flex-col">
             <Link
               href={`/${locale}/dashboard/qrcodes?q=${encodeURIComponent(code)}`}
-              className="font-mono text-xs font-black text-[var(--ds-text-link,#0052CC)] hover:underline tracking-tight"
+              className="font-mono text-xs font-black text-primary hover:underline tracking-tight"
               title={code}
             >
               {display}
@@ -113,7 +113,7 @@ export function QRCodesTable({
       isSortable: true,
       render: (item) => (
         item.projectName ? (
-          <span className="inline-flex items-center gap-1.5 rounded-[3px] bg-[var(--ds-background-brand-subtle,#DEEBFF)] px-2 py-0.5 text-[11px] font-semibold text-[var(--ds-text-brand,#0052CC)] uppercase tracking-tight whitespace-nowrap">
+          <span className="inline-flex items-center gap-1.5 rounded-[3px] bg-primary/10 px-2 py-0.5 text-[11px] font-semibold text-primary uppercase tracking-tight whitespace-nowrap border border-primary/20">
             {item.projectName}
           </span>
         ) : <span className="text-[var(--ds-text-subtle,#6B778C)]">—</span>
@@ -172,7 +172,7 @@ export function QRCodesTable({
         <p className="text-sm font-black text-[var(--ds-text-danger,#DE350B)] uppercase tracking-widest">{error.message}</p>
         <button
           onClick={onRefresh}
-          className="mt-6 inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-bold text-[var(--ds-text-danger,#DE350B)] shadow-sm hover:bg-[#F4F5F7]"
+          className="mt-6 inline-flex items-center gap-2 rounded-lg bg-background px-4 py-2 text-sm font-bold text-[var(--ds-text-danger,#DE350B)] shadow-sm hover:bg-[#F4F5F7]"
         >
           <RefreshCw className="h-4 w-4" />
           {t('common.retry', 'Retry Operation')}

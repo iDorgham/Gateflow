@@ -65,7 +65,7 @@ export function LiveChartComponent(props: NodeViewProps) {
         contentEditable={false}
       >
         <div className="flex items-center gap-3 mb-5 border-b border-[var(--ga-navy-border)] pb-3">
-          <div className="w-8 h-8 rounded-md bg-black/20 flex items-center justify-center" style={{ color }}>
+          <div className="w-8 h-8 rounded-md bg-[var(--ds-background-neutral-subtle)] flex items-center justify-center" style={{ color }}>
             <TrendingUp size={18} />
           </div>
           <div className="flex flex-col">
@@ -77,7 +77,7 @@ export function LiveChartComponent(props: NodeViewProps) {
             </span>
           </div>
           
-          <div className="ms-auto text-xs text-[var(--ga-text-muted)] flex items-center gap-1.5 bg-black/20 rounded-full px-2.5 py-1 select-none">
+          <div className="ms-auto text-xs text-[var(--ga-text-muted)] flex items-center gap-1.5 bg-[var(--ds-background-neutral-subtle)] rounded-full px-2.5 py-1 select-none">
             {loading ? (
               <Loader2 size={12} className="animate-spin text-[var(--ga-text-muted)]" />
             ) : (

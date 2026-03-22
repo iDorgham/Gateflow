@@ -105,7 +105,7 @@ function SearchHeader({
 
   return (
     <div
-      className="flex h-16 shrink-0 items-center justify-between gap-4 border-b border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-surface,#FFFFFF)]/80 dark:bg-[#091E42]/80 px-4 backdrop-blur-md sticky top-0 z-30"
+      className="flex h-16 shrink-0 items-center justify-between gap-4 border-b border-[var(--ds-border)] bg-background/80 px-4 backdrop-blur-md sticky top-0 z-30"
       role="search"
     >
       <div className="flex flex-1 items-center max-w-md">
@@ -124,7 +124,7 @@ function SearchHeader({
               onValueChange={handleProjectSwitch}
               disabled={isPending}
             >
-              <SelectTrigger className="h-7 w-[140px] bg-[var(--ds-background-neutral-subtle,#F4F5F7)] border-none text-xs font-medium hover:bg-[var(--ds-background-neutral,#DFE1E6)] transition-colors">
+              <SelectTrigger className="h-7 w-[140px] bg-[var(--ds-background-neutral-subtle)] border-none text-xs font-medium hover:bg-[var(--ds-background-neutral)] transition-colors">
                 <SelectValue placeholder="Select Project" />
               </SelectTrigger>
               <SelectContent align="end">
@@ -143,15 +143,15 @@ function SearchHeader({
           <DropdownMenuTrigger asChild>
             <button
               type="button"
-              className="flex items-center gap-1 rounded-sm p-1 transition-colors hover:bg-[var(--ds-background-subtle,#F4F5F7)] focus-visible:ring-2 focus-visible:ring-[var(--ds-border-selected,#4C9AFF)] outline-none"
+              className="flex items-center gap-1 rounded-sm p-1 transition-colors hover:bg-[var(--ds-background-subtle)] focus-visible:ring-2 focus-visible:ring-[var(--ds-border-selected)] outline-none"
               aria-label="Open user menu"
             >
               <Avatar className="h-8 w-8">
-                <AvatarFallback className="bg-[var(--ds-background-brand-subtle,#DEEBFF)] text-[var(--ds-text-brand,#0052CC)] text-xs font-bold">
+                <AvatarFallback className="bg-primary/10 text-primary text-xs font-bold">
                   {initials}
                 </AvatarFallback>
               </Avatar>
-              <ChevronDown className="h-3 w-3 text-[var(--ds-icon-subtle,#6B778C)]" />
+              <ChevronDown className="h-3 w-3 text-[var(--ds-icon-subtle)]" />
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" sideOffset={8} className="w-56 p-2">
@@ -248,17 +248,17 @@ function LeftSidebar({
               href={`/${locale}${item.href}`}
               onClick={onClick}
               className={cn(
-                'relative flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium mb-1 outline-none focus-visible:ring-2 focus-visible:ring-[var(--ds-border-focused,#4C9AFF)]',
+                'relative flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium mb-1 outline-none focus-visible:ring-2 focus-visible:ring-primary/50',
                 active
-                  ? 'text-[var(--ds-text-brand,#0052CC)] dark:text-[#4C9AFF]'
-                  : 'text-[var(--ds-text-subtle,#42526E)] dark:text-[#97A0AF] hover:bg-[var(--ds-background-neutral-subtle,#EBECF0)] dark:hover:bg-[#2C333A]',
+                  ? 'text-primary'
+                  : 'text-[var(--ds-text-subtle)] hover:bg-[var(--ds-background-neutral-subtle)] hover:bg-accent/50',
                 collapsed && 'justify-center px-0'
               )}
             >
               {active && (
                 <motion.span
                   layoutId="active-nav-indicator"
-                  className="absolute inset-0 rounded-md bg-[var(--ds-background-brand-subtle,#DEEBFF)] dark:bg-[#0747A6]/30"
+                  className="absolute inset-0 rounded-md bg-primary/10"
                   transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                 />
               )}
@@ -293,17 +293,17 @@ function LeftSidebar({
     <motion.aside
       animate={{ width: isCollapsed ? 72 : 256 }}
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-      className="hidden md:flex h-full flex-col border-e border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-surface,#FFFFFF)]/80 backdrop-blur-md dark:bg-[#091E42]/80 text-[var(--ds-text,#172B4D)] dark:text-[#EBECF0] shrink-0 relative overflow-hidden"
+      className="hidden md:flex h-full flex-col border-e border-[var(--ds-border)] bg-sidebar/80 backdrop-blur-md text-[var(--ds-text)] dark:text-zinc-100 shrink-0 relative overflow-hidden"
       role="navigation"
       aria-label="Main navigation"
     >
-      <div className={cn('flex h-16 shrink-0 items-center border-b border-[var(--ds-border,#DFE1E6)]/50 px-6', isCollapsed && 'justify-center px-0')}>
+      <div className={cn('flex h-16 shrink-0 items-center border-b border-[var(--ds-border)]/50 px-6', isCollapsed && 'justify-center px-0')}>
         <Link
           href={`/${locale}`}
-          className="flex items-center gap-3 rounded-lg transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-[var(--ds-border-focused,#4C9AFF)]"
+          className="flex items-center gap-3 rounded-lg transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-primary/50"
           aria-label="GateFlow home"
         >
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-[var(--ds-background-brand-bold,#0052CC)] text-white shadow-sm">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-primary text-white shadow-sm">
             <ShieldCheck className="h-5 w-5" />
           </div>
           <AnimatePresence mode="wait" initial={false}>
@@ -363,7 +363,7 @@ function LeftSidebar({
               <Collapsible defaultOpen className="space-y-1">
                 <CollapsibleTrigger
                   className={cn(
-                    'flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-[var(--ds-text-subtle,#42526E)] dark:text-[#97A0AF] hover:bg-[var(--ds-background-neutral-subtle,#EBECF0)] dark:hover:bg-[#2C333A] transition-colors outline-none focus-visible:ring-2 focus-visible:ring-[var(--ds-border-focused,#4C9AFF)]',
+                    'flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-[var(--ds-text-subtle)] dark:text-zinc-400 hover:bg-[var(--ds-background-neutral-subtle)] hover:bg-accent transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary/50',
                     isCollapsed && 'justify-center px-0'
                   )}
                 >
@@ -426,7 +426,7 @@ function LeftSidebar({
         type="button"
         onClick={onToggleCollapse}
         className={cn(
-          "absolute bottom-6 z-50 flex h-6 w-6 items-center justify-center rounded-full border border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-surface,#FFFFFF)] dark:bg-[#091E42] shadow-sm hover:bg-[var(--ds-background-neutral-subtle,#F4F5F7)] dark:hover:bg-[#2C333A] transition-colors",
+          "absolute bottom-6 z-50 flex h-6 w-6 items-center justify-center rounded-full border border-[var(--ds-border)] bg-[var(--ds-surface)] bg-background shadow-sm hover:bg-[var(--ds-background-neutral-subtle)] hover:bg-accent transition-colors",
           isRtl ? "-left-3" : "-right-3"
         )}
         aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
@@ -581,8 +581,8 @@ function MobileSidebar({
         className={cn(
           'flex items-center gap-3 rounded-md px-3 py-3 text-sm font-medium transition-colors mb-1',
           active 
-            ? 'bg-[#DEEBFF] text-[#0052CC] dark:bg-[#0747A6]/30 dark:text-[#4C9AFF]' 
-            : 'text-[#42526E] dark:text-[#97A0AF] hover:bg-[#EBECF0] dark:hover:bg-[#2C333A]',
+            ? 'bg-primary/10 text-primary' 
+            : 'text-[var(--ds-text-subtle)] hover:bg-[var(--ds-background-neutral-subtle)] hover:bg-accent/50',
           collapsed && 'justify-center px-0'
         )}
       >
@@ -596,15 +596,15 @@ function MobileSidebar({
     <Sheet open={isOpen} onOpenChange={onOpenChange}>
       <SheetContent
         side={isRtl ? 'right' : 'left'}
-        className="w-72 p-0 border-0 bg-white dark:bg-[#091E42] text-[#172B4D] dark:text-[#EBECF0]"
+        className="w-72 p-0 border-0 bg-background text-foreground"
         aria-label="Mobile navigation"
       >
         <div className="flex flex-col h-full">
           <Link href={`/${locale}`} className="flex h-16 shrink-0 items-center gap-3 px-6 border-b border-border/50" onClick={() => onOpenChange(false)}>
-            <div className="flex h-8 w-8 items-center justify-center rounded-md bg-[#0052CC] text-white">
+            <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-white">
               <ShieldCheck className="h-5 w-5" />
             </div>
-            <span className="text-lg font-bold tracking-tight text-[#172B4D]">GateFlow</span>
+            <span className="text-lg font-bold tracking-tight text-foreground">GateFlow</span>
           </Link>
           <ScrollArea className="flex-1 py-4">
             <nav className="flex flex-col gap-8 py-4 px-3">

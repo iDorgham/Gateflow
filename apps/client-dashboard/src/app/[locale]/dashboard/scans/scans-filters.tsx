@@ -36,8 +36,8 @@ const STATUS_CHIP: Record<string, string> = {
   SUCCESS: 'bg-[var(--ds-background-success-subtle,#E3FCEF)] text-[var(--ds-text-success,#006644)] border-[var(--ds-border-success,#00A355)]/20',
   FAILED: 'bg-[var(--ds-background-danger-subtle,#FFEBE6)] text-[var(--ds-text-danger,#BF2600)] border-[var(--ds-border-danger,#FF5630)]/20',
   EXPIRED: 'bg-[var(--ds-background-warning-subtle,#FFF0B3)] text-[var(--ds-text-warning-inverse,#172B4D)] border-[var(--ds-border-warning,#FFAB00)]/20',
-  MAX_USES_REACHED: 'bg-[var(--ds-background-brand-subtle,#DEEBFF)] text-[var(--ds-text-brand,#0052CC)] border-[var(--ds-border-brand,#4C9AFF)]/20',
-  INACTIVE: 'bg-[var(--ds-background-neutral-subtle,#F4F5F7)] text-[var(--ds-text-subtle,#42526E)] border-[var(--ds-border,#DFE1E6)]',
+  MAX_USES_REACHED: 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 border-zinc-200 dark:border-zinc-700',
+  INACTIVE: 'bg-zinc-50 dark:bg-zinc-900 text-zinc-500 dark:text-zinc-400 border-zinc-200 dark:border-zinc-800',
   DENIED: 'bg-[var(--ds-background-danger-subtle,#FFEBE6)] text-[var(--ds-text-danger,#BF2600)] border-[var(--ds-border-danger,#FF5630)]/20',
 };
 
@@ -179,7 +179,7 @@ export function ScansFilters({
           <FilterBar.Select
             value={currentStatus}
             onChange={(e) => immediate('status', e.target.value)}
-            className="h-10 bg-[var(--ds-background-default,#FFFFFF)] border-[var(--ds-border,#DFE1E6)] text-[var(--ds-text-subtle,#42526E)] font-bold rounded-lg hover:border-[var(--ds-border-brand,#0052CC)] transition-colors"
+            className="h-10 bg-[var(--ds-background-default,#FFFFFF)] border-[var(--ds-border,#DFE1E6)] text-[var(--ds-text-subtle,#42526E)] font-bold rounded-lg hover:border-primary transition-colors"
             icon={<Layers className="h-4 w-4" />}
           >
             <option value="">{t('scans.filters.allStatuses', { defaultValue: 'All Statuses' })}</option>
@@ -194,7 +194,7 @@ export function ScansFilters({
             <FilterBar.Select
               value={currentProjectId}
               onChange={(e) => immediate('project', e.target.value)}
-              className="h-10 bg-[var(--ds-background-default,#FFFFFF)] border-[var(--ds-border,#DFE1E6)] text-[var(--ds-text-subtle,#42526E)] font-bold rounded-lg hover:border-[var(--ds-border-brand,#0052CC)] transition-colors"
+              className="h-10 bg-[var(--ds-background-default,#FFFFFF)] border-[var(--ds-border,#DFE1E6)] text-[var(--ds-text-subtle,#42526E)] font-bold rounded-lg hover:border-primary transition-colors"
               aria-label={t('scans.filters.allProjects', { defaultValue: 'All projects' })}
             >
               <option value="all">{t('scans.filters.allProjects', { defaultValue: 'All Projects' })}</option>
@@ -209,7 +209,7 @@ export function ScansFilters({
           <FilterBar.Select
             value={currentGate}
             onChange={(e) => immediate('gate', e.target.value)}
-            className="h-10 bg-[var(--ds-background-default,#FFFFFF)] border-[var(--ds-border,#DFE1E6)] text-[var(--ds-text-subtle,#42526E)] font-bold rounded-lg hover:border-[var(--ds-border-brand,#0052CC)] transition-colors"
+            className="h-10 bg-[var(--ds-background-default,#FFFFFF)] border-[var(--ds-border,#DFE1E6)] text-[var(--ds-text-subtle,#42526E)] font-bold rounded-lg hover:border-primary transition-colors"
             icon={<DoorOpen className="h-4 w-4" />}
           >
             <option value="">{t('scans.filters.allGates', { defaultValue: 'All Gates' })}</option>
@@ -223,7 +223,7 @@ export function ScansFilters({
           <FilterBar.Select
             value={currentUserId}
             onChange={(e) => immediate('userId', e.target.value)}
-            className="h-10 bg-[var(--ds-background-default,#FFFFFF)] border-[var(--ds-border,#DFE1E6)] text-[var(--ds-text-subtle,#42526E)] font-bold rounded-lg hover:border-[var(--ds-border-brand,#0052CC)] transition-colors"
+            className="h-10 bg-[var(--ds-background-default,#FFFFFF)] border-[var(--ds-border,#DFE1E6)] text-[var(--ds-text-subtle,#42526E)] font-bold rounded-lg hover:border-primary transition-colors"
             icon={<UserIcon className="h-4 w-4" />}
           >
             <option value="">{t('scans.filters.allOperators', { defaultValue: 'All Operators' })}</option>
@@ -280,9 +280,9 @@ export function ScansFilters({
         <div className="ml-auto">
           <Button
             onClick={() => window.open(exportHref, '_blank')}
-            className="bg-[var(--ds-background-default,#FFFFFF)] border border-[var(--ds-border,#DFE1E6)] text-[var(--ds-text-subtle,#42526E)] font-bold h-10 px-5 rounded-lg shadow-sm hover:bg-[var(--ds-background-neutral-subtle-hovered,#EBECF0)] transition-all active:scale-95 group"
+            className="bg-[var(--ds-background-default,#FFFFFF)] border border-[var(--ds-border,#DFE1E6)] text-[var(--ds-text-subtle,#42526E)] font-bold h-10 px-5 rounded-lg shadow-sm hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-all active:scale-95 group"
           >
-            <Download className="h-4 w-4 mr-2 group-hover:text-[var(--ds-icon-brand,#0052CC)] transition-colors" />
+            <Download className="h-4 w-4 mr-2 group-hover:text-primary transition-colors" />
             {t('scans.filters.exportCsv', { defaultValue: 'Export CSV' })}
           </Button>
         </div>
@@ -293,17 +293,17 @@ export function ScansFilters({
         <div className="flex flex-wrap items-center gap-2">
           {activeFilters.length > 0 ? (
             <>
-              <span className="text-[11px] font-black text-[#6B778C] dark:text-[#97A0AF] uppercase tracking-widest mr-2">Active Filters:</span>
+              <span className="text-[11px] font-black text-zinc-500 dark:text-zinc-400 uppercase tracking-widest mr-2">Active Filters:</span>
               {activeFilters.map((f) => (
                 <span
                   key={f.key}
                   className={cn(
                     "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-bold shadow-sm transition-all animate-in zoom-in-95 duration-200",
                     f.key === 'status' && currentStatus
-                      ? (STATUS_CHIP[currentStatus] ?? 'bg-[var(--ds-background-neutral-subtle,#F4F5F7)] text-[var(--ds-text-subtle,#42526E)] border-[var(--ds-border,#DFE1E6)]')
+                      ? (STATUS_CHIP[currentStatus] ?? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-500 border-zinc-200 dark:border-zinc-700')
                       : f.key === 'project'
-                      ? 'bg-[var(--ds-background-brand-subtle,#DEEBFF)] text-[var(--ds-text-brand,#0052CC)] border-[var(--ds-border-brand,#4C9AFF)]/30'
-                      : 'bg-[var(--ds-background-neutral-subtle,#F4F5F7)] text-[var(--ds-text,#172B4D)] border-[var(--ds-border,#DFE1E6)]'
+                      ? 'bg-primary/10 text-primary border-primary/30'
+                      : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 border-zinc-200 dark:border-zinc-700'
                   )}
                 >
                   {f.label}
@@ -319,14 +319,14 @@ export function ScansFilters({
                 variant="ghost"
                 size="sm"
                 onClick={clearAll}
-                className="text-[11px] font-black text-[var(--ds-text-link,#0052CC)] hover:bg-[var(--ds-background-brand-subtle,#DEEBFF)] h-6 px-3 rounded-full"
+                className="text-[11px] font-black text-primary hover:bg-primary/10 h-6 px-3 rounded-full"
               >
                 {t('scans.filters.clearAll', { defaultValue: 'CLEAR ALL' })}
               </Button>
             </>
           ) : (
-             <div className="flex items-center gap-2 text-[#6B778C] opacity-50">
-               <div className="h-1 w-1 rounded-full bg-[#6B778C]" />
+             <div className="flex items-center gap-2 text-zinc-500 opacity-50">
+               <div className="h-1 w-1 rounded-full bg-zinc-500" />
                <span className="text-[10px] font-black uppercase tracking-[0.2em]">{t('scans.filters.noFilters', { defaultValue: 'Live Audit Trail' })}</span>
              </div>
           )}

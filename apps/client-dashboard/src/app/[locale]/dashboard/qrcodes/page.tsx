@@ -208,10 +208,10 @@ export default function QRCodesPage() {
 
       <div className="mt-8 space-y-6">
         {/* Advanced Filter Bar */}
-        <div className="bg-[var(--ds-background-default,#FFFFFF)] dark:bg-[#1D2125] border border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46] rounded-xl p-5 shadow-none space-y-4">
+        <div className="bg-[var(--ds-surface)] border border-[var(--ds-border)] rounded-xl p-5 shadow-none space-y-4">
           <div className="flex flex-wrap items-center gap-3">
             <div className="flex-1 min-w-[280px] relative group">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--ds-text-subtle,#6B778C)] pointer-events-none group-focus-within:text-[var(--ds-text-brand,#0052CC)] transition-colors" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--ds-text-subtle)] pointer-events-none group-focus-within:text-[var(--ds-text-brand)] transition-colors" />
               <FilterBar.Search
                 placeholder={t('qrcodes.searchPlaceholder', 'Search by code, holder name, or property…')}
                 value={search}
@@ -219,7 +219,7 @@ export default function QRCodesPage() {
                   setPage(1);
                   setSearch(e.target.value);
                 }}
-                className="w-full h-9 pl-9 bg-[var(--ds-background-input,#F4F5F7)] dark:bg-[#2C333A] border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46] focus:bg-[var(--ds-background-default,#FFFFFF)] dark:focus:bg-[#1D2125] transition-all rounded-[3px] text-sm font-medium"
+                className="w-full h-9 pl-9 bg-[var(--ds-background-input)] border-[var(--ds-border)] focus:bg-[var(--ds-background-default)] transition-all rounded-[3px] text-sm font-medium"
               />
             </div>
             
@@ -228,9 +228,9 @@ export default function QRCodesPage() {
                 variant="outline"
                 onClick={handleRefresh}
                 disabled={isLoading}
-                className="h-9 w-9 p-0 border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46] rounded-[3px] hover:bg-[var(--ds-background-neutral-subtle-hovered,#EBECF0)] dark:hover:bg-[#2C333A]"
+                className="h-9 w-9 p-0 border-[var(--ds-border)] rounded-[3px] hover:bg-[var(--ds-background-neutral-subtle-hovered)]"
               >
-                <RefreshCw className={cn('h-3.5 w-3.5 text-[#6B778C]', isLoading && 'animate-spin')} />
+                <RefreshCw className={cn('h-3.5 w-3.5 text-[var(--ds-text-subtle)]', isLoading && 'animate-spin')} />
               </Button>
             </div>
           </div>
@@ -238,84 +238,84 @@ export default function QRCodesPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-2">
             {/* Creation Date Filter */}
             <div className="space-y-1.5">
-              <label className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-tight text-[var(--ds-text-subtle,#6B778C)] dark:text-[#97A0AF] ml-0.5">
+              <label className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-tight text-[var(--ds-text-subtle)] ml-0.5">
                 <Calendar className="h-3 w-3" />
                 {t('qrcodes.filters.createdAt', 'Creation Period')}
               </label>
-              <div className="flex items-center gap-2 bg-[var(--ds-background-input,#F4F5F7)] dark:bg-[#091E42]/10 p-1 rounded-[3px] border border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46]">
+              <div className="flex items-center gap-2 bg-[var(--ds-background-input)] p-1 rounded-[3px] border border-[var(--ds-border)]">
                 <Input
                   type="date"
                   value={createdFrom}
                   onChange={(e) => { setPage(1); setCreatedFrom(e.target.value); }}
-                  className="h-8 bg-transparent border-none text-[11px] font-semibold text-[var(--ds-text,#172B4D)] dark:text-white focus:ring-0"
+                  className="h-8 bg-transparent border-none text-[11px] font-semibold text-[var(--ds-text)] focus:ring-0"
                 />
-                <span className="text-[var(--ds-text-subtlest,#A5ADBA)] font-black">/</span>
+                <span className="text-[var(--ds-text-subtlest)] font-black">/</span>
                 <Input
                   type="date"
                   value={createdTo}
                   onChange={(e) => { setPage(1); setCreatedTo(e.target.value); }}
-                  className="h-8 bg-transparent border-none text-[11px] font-semibold text-[var(--ds-text,#172B4D)] dark:text-white focus:ring-0"
+                  className="h-8 bg-transparent border-none text-[11px] font-semibold text-[var(--ds-text)] focus:ring-0"
                 />
               </div>
             </div>
 
             {/* Expiry Date Filter */}
             <div className="space-y-1.5">
-              <label className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-tight dark:text-[#97A0AF] ml-0.5 text-[var(--ds-text-warning,#B35800)]">
+              <label className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-tight ml-0.5 text-[var(--ds-text-warning)]">
                 <Clock className="h-3 w-3" />
                 {t('qrcodes.filters.expiresAt', 'Expiry Window')}
               </label>
-              <div className="flex items-center gap-2 bg-[var(--ds-background-input,#F4F5F7)] dark:bg-[#091E42]/10 p-1 rounded-[3px] border border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46]">
+              <div className="flex items-center gap-2 bg-[var(--ds-background-input)] p-1 rounded-[3px] border border-[var(--ds-border)]">
                 <Input
                   type="date"
                   value={expiresFrom}
                   onChange={(e) => { setPage(1); setExpiresFrom(e.target.value); }}
-                  className="h-8 bg-transparent border-none text-[11px] font-semibold text-[var(--ds-text,#172B4D)] dark:text-white focus:ring-0"
+                  className="h-8 bg-transparent border-none text-[11px] font-semibold text-[var(--ds-text)] focus:ring-0"
                 />
-                <span className="text-[var(--ds-text-subtlest,#A5ADBA)] font-black">/</span>
+                <span className="text-[var(--ds-text-subtlest)] font-black">/</span>
                 <Input
                   type="date"
                   value={expiresTo}
                   onChange={(e) => { setPage(1); setExpiresTo(e.target.value); }}
-                  className="h-8 bg-transparent border-none text-[11px] font-semibold text-[var(--ds-text,#172B4D)] dark:text-white focus:ring-0"
+                  className="h-8 bg-transparent border-none text-[11px] font-semibold text-[var(--ds-text)] focus:ring-0"
                 />
               </div>
             </div>
 
             {/* Usage Filter */}
             <div className="space-y-1.5">
-              <label className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-tight dark:text-[#97A0AF] ml-0.5 text-[var(--ds-text-success,#006644)]">
+              <label className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-tight ml-0.5 text-[var(--ds-text-success)]">
                 <Activity className="h-3 w-3" />
                 {t('qrcodes.filters.lastScanAt', 'Last Usage')}
               </label>
-              <div className="flex items-center gap-2 bg-[var(--ds-background-input,#F4F5F7)] dark:bg-[#091E42]/10 p-1 rounded-[3px] border border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46]">
+              <div className="flex items-center gap-2 bg-[var(--ds-background-input)] p-1 rounded-[3px] border border-[var(--ds-border)]">
                 <Input
                   type="date"
                   value={lastScanFrom}
                   onChange={(e) => { setPage(1); setLastScanFrom(e.target.value); }}
-                  className="h-8 bg-transparent border-none text-[11px] font-semibold text-[var(--ds-text,#172B4D)] dark:text-white focus:ring-0"
+                  className="h-8 bg-transparent border-none text-[11px] font-semibold text-[var(--ds-text)] focus:ring-0"
                 />
-                <span className="text-[var(--ds-text-subtlest,#A5ADBA)] font-black">/</span>
+                <span className="text-[var(--ds-text-subtlest)] font-black">/</span>
                 <Input
                   type="date"
                   value={lastScanTo}
                   onChange={(e) => { setPage(1); setLastScanTo(e.target.value); }}
-                  className="h-8 bg-transparent border-none text-[11px] font-semibold text-[var(--ds-text,#172B4D)] dark:text-white focus:ring-0"
+                  className="h-8 bg-transparent border-none text-[11px] font-semibold text-[var(--ds-text)] focus:ring-0"
                 />
               </div>
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46]">
+          <div className="flex flex-wrap items-center justify-between gap-4 pt-6 border-t border-[var(--ds-border)]">
             <div className="flex items-center gap-3">
               {selectedIds.length > 0 ? (
                 <div className="flex items-center gap-2 animate-in fade-in zoom-in duration-300">
-                   <span className="text-[11px] font-bold uppercase tracking-tight text-[var(--ds-text-subtle,#6B778C)] mr-1">Selection:</span>
+                   <span className="text-[11px] font-bold uppercase tracking-tight text-[var(--ds-text-subtle)] mr-1">Selection:</span>
                   <Button
                     variant="destructive"
                     size="sm"
                     onClick={() => setDeleteOpen(true)}
-                    className="h-7 bg-[var(--ds-background-danger-subtle,#FFEBE6)] hover:bg-[var(--ds-background-danger-subtle-hovered,#FFD5CC)] dark:bg-[#44130C] dark:hover:bg-[#601A12] text-[var(--ds-text-danger,#BF2600)] dark:text-[#FF8F73] border-none font-bold shadow-none rounded-full px-3 text-[10px]"
+                    className="h-7 bg-[var(--ds-background-danger-subtle)] hover:bg-[var(--ds-background-danger-subtle-hovered)] text-[var(--ds-text-danger)] border-none font-bold shadow-none rounded-full px-3 text-[10px]"
                   >
                     <Trash2 className="h-3 w-3 mr-1.5" />
                     {t('common.deleteSelected', { defaultValue: 'Delete {{count}}', count: selectedIds.length })}
@@ -324,17 +324,17 @@ export default function QRCodesPage() {
                     variant="outline"
                     size="sm"
                     onClick={() => triggerDownload(buildExportUrl(selectedIds))}
-                    className="h-7 border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46] text-[var(--ds-text-subtle,#42526E)] dark:text-[#A5ADBA] font-bold rounded-full px-3 bg-[var(--ds-background-default,#FFFFFF)] dark:bg-[#2C333A] hover:bg-[var(--ds-background-neutral-subtle,#FAFBFC)] text-[10px]"
+                    className="h-7 border-[var(--ds-border)] text-[var(--ds-text-subtle)] font-bold rounded-full px-3 bg-[var(--ds-background-default)] hover:bg-[var(--ds-background-neutral-subtle)] text-[10px]"
                   >
                     <Download className="h-3 w-3 mr-1.5" />
                     {t('common.exportSelected', 'Export')}
                   </Button>
-                  <div className="w-px h-3.5 bg-[var(--ds-border,#DFE1E6)] mx-1" />
+                  <div className="w-px h-3.5 bg-[var(--ds-border)] mx-1" />
                 </div>
               ) : (
-                <div className="flex items-center gap-3 bg-[var(--ds-background-neutral-subtle,#F4F5F7)] dark:bg-[#2C333A] p-1 rounded-md border border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46]">
-                   <div className="flex items-center gap-2 px-2 py-0.5 bg-[var(--ds-background-default,#FFFFFF)] dark:bg-[#1D2125] rounded shadow-none">
-                      <span className="text-[10px] font-bold text-[var(--ds-text-subtlest,#A5ADBA)] uppercase tracking-tight">{t('common.sort', 'Order')}</span>
+                <div className="flex items-center gap-3 bg-[var(--ds-background-neutral-subtle)] p-1 rounded-md border border-[var(--ds-border)]">
+                   <div className="flex items-center gap-2 px-2 py-0.5 bg-[var(--ds-background-default)] rounded shadow-none">
+                      <span className="text-[10px] font-bold text-[var(--ds-text-subtlest)] uppercase tracking-tight">{t('common.sort', 'Order')}</span>
                       <NativeSelect
                         value={sortBy}
                         onChange={(e) => { setPage(1); setSortBy(e.target.value as SortBy); }}
@@ -375,8 +375,8 @@ export default function QRCodesPage() {
             </div>
 
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-[var(--ds-text-subtle,#6B778C)]">
-                 Results: <span className="text-[var(--ds-text,#172B4D)] dark:text-white tabular-nums">{total.toLocaleString()}</span>
+              <div className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-[var(--ds-text-subtle)]">
+                 Results: <span className="text-[var(--ds-text)] tabular-nums">{total.toLocaleString()}</span>
               </div>
               <Pagination
                 currentPage={currentPage}

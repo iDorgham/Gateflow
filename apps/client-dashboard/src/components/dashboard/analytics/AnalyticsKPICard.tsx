@@ -42,7 +42,7 @@ export function AnalyticsKPICard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: 'spring', stiffness: 300, damping: 24 }}
     >
-    <Card className={cn('h-full rounded-2xl border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-surface-raised,#FFFFFF)] dark:bg-[#1D2125] shadow-[0_1px_1px_rgba(9,30,66,0.08),0_0_1px_rgba(9,30,66,0.08)] hover:shadow-[0_4px_8px_-2px_rgba(9,30,66,0.16),0_0_1px_rgba(9,30,66,0.08)] hover:border-[var(--ds-border-bold,#B3BAC5)] transition-all duration-200', className)}>
+    <Card className={cn('h-full rounded-2xl border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-surface-raised,#FFFFFF)] bg-card shadow-[0_1px_1px_rgba(9,30,66,0.08),0_0_1px_rgba(9,30,66,0.08)] hover:shadow-[0_4px_8px_-2px_rgba(9,30,66,0.16),0_0_1px_rgba(9,30,66,0.08)] hover:border-[var(--ds-border-bold,#B3BAC5)] transition-all duration-200', className)}>
       <CardContent className="p-4 h-full flex flex-col justify-between gap-3">
         <div className="flex items-center justify-between">
           <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground leading-none">

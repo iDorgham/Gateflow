@@ -48,14 +48,14 @@ export function ChatHistorySidebar({ isRtl, onNewChat }: ChatHistorySidebarProps
 
   return (
     <div className={cn(
-      "flex h-full flex-col w-64 bg-[var(--ds-background-neutral-subtle,#F4F5F7)] shrink-0",
-      isRtl ? "border-l border-[var(--ds-border,#DFE1E6)]" : "border-r border-[var(--ds-border,#DFE1E6)]"
+      "flex h-full flex-col w-64 bg-[var(--ds-background-neutral-subtle)] bg-background shrink-0",
+      isRtl ? "border-l border-border border-border" : "border-r border-border border-border"
     )}>
       {/* Search & New Chat */}
       <div className="p-4 flex flex-col gap-3">
         <Button 
           onClick={onNewChat}
-          className="w-full justify-start gap-2 bg-white hover:bg-[var(--ds-background-neutral-subtle-hovered,#EBECF0)] text-[var(--ds-text,#172B4D)] border border-[var(--ds-border,#DFE1E6)] shadow-sm px-3"
+          className="w-full justify-start gap-2 bg-background hover:bg-[var(--ds-background-neutral-subtle-hovered)] hover:bg-accent text-foreground dark:text-zinc-100 border border-border border-border shadow-sm px-3"
           variant="outline"
           size="sm"
         >
@@ -114,7 +114,7 @@ export function ChatHistorySidebar({ isRtl, onNewChat }: ChatHistorySidebarProps
                 <div className={cn(
                   "flex flex-col gap-0.5 py-0.5",
                   isRtl ? "mr-6 border-r pr-2" : "ml-6 border-l pl-2",
-                  "border-[var(--ds-border,#DFE1E6)]"
+                  "border-border border-border"
                 )}>
                    <button className="px-2 py-1.5 text-xs text-[var(--ds-text-subtle,#42526E)] hover:bg-[var(--ds-background-neutral-subtle-hovered,#EBECF0)] rounded-[3px] truncate text-left">
                     Quarterly Scan Report
@@ -163,10 +163,10 @@ function ChatItem({ title, active = false, _isRtl, onOpenSettings }: { title: st
     <div className={cn(
       "flex items-center gap-2 w-full px-3 py-2 text-sm transition-colors group rounded-[3px] relative",
       active 
-        ? "bg-[var(--ds-background-selected,#DEEBFF)] text-[var(--ds-text-selected,#0052CC)] font-medium" 
-        : "text-[var(--ds-text-subtle,#42526E)] hover:bg-[var(--ds-background-neutral-subtle-hovered,#EBECF0)]"
+        ? "bg-primary/10 text-primary font-medium" 
+        : "text-muted-foreground hover:bg-[var(--ds-background-neutral-subtle-hovered)] hover:bg-accent"
     )}>
-      <MessageSquare size={14} className={active ? "text-[var(--ds-icon-selected,#0052CC)]" : "text-[var(--ds-icon-subtle,#6B778C)]"} />
+      <MessageSquare size={14} className={active ? "text-primary" : "text-muted-foreground"} />
       <span className="flex-1 text-left truncate cursor-pointer">{title}</span>
       
       <DropdownMenu>

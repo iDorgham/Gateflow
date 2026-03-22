@@ -113,7 +113,7 @@ export function AutomationList() {
           automations.map((item) => (
             <div 
               key={item.id}
-              className="group relative rounded-xl border border-[var(--ga-navy-border)] bg-black/20 p-4 transition-all hover:border-[var(--ga-orange)]/30 hover:bg-black/40"
+              className="group relative rounded-xl border border-[var(--ga-navy-border)] bg-secondary/20 p-4 transition-all hover:border-[var(--ga-orange)]/30 hover:bg-secondary/40"
             >
               <div className="flex justify-between items-start mb-3">
                 <div className="flex items-center gap-2">
@@ -160,7 +160,7 @@ export function AutomationList() {
       </div>
 
       {/* Footer Info */}
-      <div className="p-4 bg-black/30 border-t border-[var(--ga-navy-border)] shrink-0">
+      <div className="p-4 bg-secondary/30 border-t border-[var(--ga-navy-border)] shrink-0">
         <div className="flex items-center gap-2 text-[10px] text-[var(--ga-text-muted)] italic">
           <Clock size={12} />
           <span>Automations run via Upstash Edge Scheduler</span>

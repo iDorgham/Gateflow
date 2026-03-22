@@ -13,6 +13,7 @@ import {
   NativeSelect,
   cn,
 } from '@gate-access/ui';
+import { token } from '@atlaskit/tokens';
 import { toast } from 'sonner';
 import { createQRCode } from './actions';
 import { QRCodeType } from '@gate-access/types';
@@ -753,10 +754,16 @@ function ResultView({
       {/* QR display */}
       <div
         ref={qrRef}
-        className="flex justify-center rounded-2xl border-2 border-border bg-white p-8 shadow-sm"
+        className="flex justify-center rounded-2xl border-2 border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-surface,#FFFFFF)] p-8 shadow-sm"
         aria-label="Generated QR code"
       >
-        <QRCode value={qrValue} size={200} bgColor="#ffffff" fgColor="#0f172a" level="L" />
+        <QRCode 
+          value={qrValue} 
+          size={200} 
+          bgColor={token('elevation.surface', '#FFFFFF')} 
+          fgColor={token('color.text', '#172B4D')} 
+          level="L" 
+        />
       </div>
 
       {/* Short URL */}
@@ -794,8 +801,8 @@ function ResultView({
           <ChevronDown className={cn('h-3.5 w-3.5 transition-transform', showPayload && 'rotate-180')} aria-hidden="true" />
         </button>
         {showPayload && (
-          <div className="border-t bg-slate-900 px-4 py-3">
-            <p className="break-all font-mono text-xs leading-relaxed text-sky-300">{created.qrString}</p>
+          <div className="border-t border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-background-neutral-bold,#44546F)] px-4 py-3">
+            <p className="break-all font-mono text-xs leading-relaxed text-[var(--ds-text-inverse,#FFFFFF)]">{created.qrString}</p>
           </div>
         )}
       </div>

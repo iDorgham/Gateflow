@@ -161,12 +161,12 @@ export function ProjectDetailContent({
       {/* KPI Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {[
-          { label: 'Contacts', value: aggregates.contactsCount, icon: Users, color: '#0052CC', bg: '#DEEBFF' },
+          { label: 'Contacts', value: aggregates.contactsCount, icon: Users, color: 'var(--primary)', bg: '#DEEBFF' },
           { label: 'Unit Types', value: aggregates.unitTypes.length, icon: Building, color: '#00875A', bg: '#E3FCEF' },
           { label: 'QR Codes', value: aggregates.qrCount, icon: QrCode, color: '#FF991F', bg: '#FFF0B3' },
           { label: '30d Access', value: aggregates.access30d, icon: Shield, color: '#BF2600', bg: '#FFEBE6' },
         ].map((kpi, i) => (
-          <Card key={i} className="border border-[#DFE1E6] dark:border-[#343A46] bg-white dark:bg-[#1D2125] rounded-xl shadow-sm hover:shadow-md transition-all">
+          <Card key={i} className="border border-[#DFE1E6] dark:border-[#343A46] bg-background bg-background rounded-xl shadow-sm hover:shadow-md transition-all">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div className="flex flex-col">
@@ -194,7 +194,7 @@ export function ProjectDetailContent({
         {/* Left Column: About & Gallery */}
         <div className="lg:col-span-2 space-y-8">
           {/* About */}
-          <Card className="border border-[#DFE1E6] dark:border-[#343A46] bg-white dark:bg-[#1D2125] rounded-2xl overflow-hidden shadow-sm">
+          <Card className="border border-[#DFE1E6] dark:border-[#343A46] bg-background bg-background rounded-2xl overflow-hidden shadow-sm">
             <CardHeader className="border-b border-[#DFE1E6] dark:border-[#343A46] px-8 py-5">
               <h2 className="text-[18px] font-semibold text-[#172B4D] dark:text-[#E3E6E8]">About Project</h2>
             </CardHeader>
@@ -214,14 +214,14 @@ export function ProjectDetailContent({
 
           {/* Gallery */}
           {project.galleryJson && project.galleryJson.length > 0 && (
-            <Card className="border border-[#DFE1E6] dark:border-[#343A46] bg-white dark:bg-[#1D2125] rounded-2xl overflow-hidden shadow-sm">
+            <Card className="border border-[#DFE1E6] dark:border-[#343A46] bg-background bg-background rounded-2xl overflow-hidden shadow-sm">
               <CardHeader className="border-b border-[#DFE1E6] dark:border-[#343A46] px-8 py-5">
                 <h2 className="text-[18px] font-semibold text-[#172B4D] dark:text-[#E3E6E8]">Project Gallery</h2>
               </CardHeader>
               <CardContent className="p-8">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {project.galleryJson.map((url, idx) => (
-                    <div key={idx} className="group relative aspect-video rounded-xl overflow-hidden border border-[#DFE1E6] dark:border-[#343A46] bg-muted shadow-sm transition-all hover:ring-2 hover:ring-[#0052CC]">
+                    <div key={idx} className="group relative aspect-video rounded-xl overflow-hidden border border-[#DFE1E6] dark:border-[#343A46] bg-muted shadow-sm transition-all hover:ring-2 hover:ring-[var(--primary)]">
                       <img
                         src={url}
                         alt={`${project.name} gallery image ${idx + 1}`}
@@ -235,12 +235,12 @@ export function ProjectDetailContent({
           )}
 
           {/* Recent Activity */}
-          <Card className="border border-[#DFE1E6] dark:border-[#343A46] bg-white dark:bg-[#1D2125] rounded-2xl overflow-hidden shadow-sm">
+          <Card className="border border-[#DFE1E6] dark:border-[#343A46] bg-background bg-background rounded-2xl overflow-hidden shadow-sm">
             <CardHeader className="border-b border-[#DFE1E6] dark:border-[#343A46] px-8 py-5 flex flex-row items-center justify-between">
               <h2 className="text-[18px] font-semibold text-[#172B4D] dark:text-[#E3E6E8]">Recent Access Logs</h2>
               <Link
                 href={`/${locale}/dashboard/scans?project=${project.id}`}
-                className="text-xs font-bold text-[#0052CC] hover:underline uppercase tracking-wider"
+                className="text-xs font-bold text-[var(--primary)] hover:underline uppercase tracking-wider"
               >
                 View All Logs
               </Link>
@@ -262,7 +262,7 @@ export function ProjectDetailContent({
                   </TableHeader>
                   <TableBody>
                     {recentLogs.map((log) => (
-                      <TableRow key={log.id} className="border-b border-[#DFE1E6] dark:border-[#343A46] hover:bg-[#F4F5F7] dark:hover:bg-[#2C333A] transition-colors">
+                      <TableRow key={log.id} className="border-b border-[#DFE1E6] dark:border-[#343A46] hover:bg-[#F4F5F7] dark:hover:bg-[var(--secondary)] transition-colors">
                         <TableCell className="px-8 py-4 font-semibold text-[#172B4D] dark:text-[#E3E6E8]">{log.gate.name}</TableCell>
                         <TableCell className="py-4 font-mono text-xs text-[#6B778C] dark:text-[#97A0AF]">
                           {log.qrCode.code?.slice(0, 8)}...{log.qrCode.code?.slice(-4)}
@@ -301,7 +301,7 @@ export function ProjectDetailContent({
           />
 
           {/* Quick Stats: Units & Contacts */}
-          <Card className="border border-[#DFE1E6] dark:border-[#343A46] bg-white dark:bg-[#1D2125] rounded-2xl overflow-hidden shadow-sm">
+          <Card className="border border-[#DFE1E6] dark:border-[#343A46] bg-background bg-background rounded-2xl overflow-hidden shadow-sm">
             <CardHeader className="border-b border-[#DFE1E6] dark:border-[#343A46] px-6 py-4 flex flex-row items-center justify-between bg-[#FAFBFC] dark:bg-[#091E42]/20">
               <h3 className="text-sm font-bold text-[#6B778C] uppercase tracking-widest">Resources</h3>
             </CardHeader>
@@ -311,7 +311,7 @@ export function ProjectDetailContent({
                 <div className="p-6 space-y-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="h-8 w-8 rounded-lg bg-[#DEEBFF] text-[#0052CC] flex items-center justify-center">
+                      <div className="h-8 w-8 rounded-lg bg-[#DEEBFF] text-[var(--primary)] flex items-center justify-center">
                         <Building className="h-4 w-4" />
                       </div>
                       <span className="text-sm font-bold text-[#172B4D] dark:text-white">Units</span>
@@ -324,17 +324,17 @@ export function ProjectDetailContent({
                       placeholder="Search units..."
                       value={unitSearch}
                       onChange={(e) => setUnitSearch(e.target.value)}
-                      className="pl-9 h-8 text-xs bg-[#F4F5F7] dark:bg-[#2C333A] border-none"
+                      className="pl-9 h-8 text-xs bg-[#F4F5F7] bg-secondary border-none"
                     />
                   </div>
                   <div className="space-y-2 max-h-[200px] overflow-y-auto pr-1">
                     {filteredUnits.map((u) => (
-                      <div key={u.id} className="flex items-center justify-between p-2 rounded-lg hover:bg-[#F4F5F7] dark:hover:bg-[#2C333A] transition-colors group">
+                      <div key={u.id} className="flex items-center justify-between p-2 rounded-lg hover:bg-[#F4F5F7] dark:hover:bg-[var(--secondary)] transition-colors group">
                         <div className="min-w-0">
                           <p className="text-xs font-semibold text-[#172B4D] dark:text-white truncate">{u.name}</p>
                           <p className="text-[10px] text-[#6B778C] uppercase tracking-tighter">{u.type}</p>
                         </div>
-                        <ArrowRight className="h-3 w-3 text-[#0052CC] opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
+                        <ArrowRight className="h-3 w-3 text-[var(--primary)] opacity-0 group-hover:opacity-100 transition-all -translate-x-2 group-hover:translate-x-0" />
                       </div>
                     ))}
                   </div>
@@ -357,13 +357,13 @@ export function ProjectDetailContent({
                       placeholder="Search contacts..."
                       value={contactSearch}
                       onChange={(e) => setContactSearch(e.target.value)}
-                      className="pl-9 h-8 text-xs bg-[#F4F5F7] dark:bg-[#2C333A] border-none"
+                      className="pl-9 h-8 text-xs bg-[#F4F5F7] bg-secondary border-none"
                     />
                   </div>
                   <div className="space-y-2 max-h-[200px] overflow-y-auto pr-1">
                     {filteredContacts.map((c) => (
-                      <div key={c.id} className="flex items-center gap-3 p-2 rounded-lg hover:bg-[#F4F5F7] dark:hover:bg-[#2C333A] transition-colors group">
-                        <div className="h-6 w-6 rounded-full bg-[#EBECF0] dark:bg-[#343A46] flex items-center justify-center text-[10px] font-bold text-[#42526E] dark:text-[#A5ADBA] shrink-0">
+                      <div key={c.id} className="flex items-center gap-3 p-2 rounded-lg hover:bg-[#F4F5F7] dark:hover:bg-[var(--secondary)] transition-colors group">
+                        <div className="h-6 w-6 rounded-full bg-[#EBECF0] bg-secondary flex items-center justify-center text-[10px] font-bold text-[#42526E] dark:text-[#A5ADBA] shrink-0">
                           {c.avatarUrl ? <img src={c.avatarUrl} className="h-full w-full rounded-full object-cover" /> : c.name.slice(0, 2).toUpperCase()}
                         </div>
                         <div className="min-w-0 flex-1">
@@ -379,12 +379,12 @@ export function ProjectDetailContent({
           </Card>
 
           {/* Team Card */}
-          <Card className="border border-[#DFE1E6] dark:border-[#343A46] bg-white dark:bg-[#1D2125] rounded-2xl overflow-hidden shadow-sm">
+          <Card className="border border-[#DFE1E6] dark:border-[#343A46] bg-background bg-background rounded-2xl overflow-hidden shadow-sm">
             <CardHeader className="border-b border-[#DFE1E6] dark:border-[#343A46] px-6 py-4 flex flex-row items-center justify-between bg-[#FAFBFC] dark:bg-[#091E42]/20">
               <h3 className="text-sm font-bold text-[#6B778C] uppercase tracking-widest">Active Team</h3>
               <Link
                 href={`/${locale}/dashboard/team/gate-assignments?project=${project.id}`}
-                className="text-[10px] font-bold text-[#0052CC] hover:underline uppercase"
+                className="text-[10px] font-bold text-[var(--primary)] hover:underline uppercase"
               >
                 Manage
               </Link>
@@ -399,13 +399,13 @@ export function ProjectDetailContent({
                   {teamUsers.map((user) => (
                     <div 
                       key={user.id} 
-                      className="flex items-center gap-2 px-3 py-1.5 bg-[#EBECF0] dark:bg-[#343A46] rounded-full group cursor-default hover:bg-[#DEEBFF] transition-colors"
+                      className="flex items-center gap-2 px-3 py-1.5 bg-[#EBECF0] bg-secondary rounded-full group cursor-default hover:bg-[#DEEBFF] transition-colors"
                       title={user.email}
                     >
-                      <div className="h-4 w-4 rounded-full bg-[#0052CC] text-[8px] flex items-center justify-center text-white font-bold">
+                      <div className="h-4 w-4 rounded-full bg-[var(--primary)] text-[8px] flex items-center justify-center text-white font-bold">
                         {user.name?.slice(0, 1).toUpperCase()}
                       </div>
-                      <span className="text-xs font-semibold text-[#172B4D] dark:text-[#E3E6E8] group-hover:text-[#0052CC]">
+                      <span className="text-xs font-semibold text-[#172B4D] dark:text-[#E3E6E8] group-hover:text-[var(--primary)]">
                         {user.name?.split(' ')[0]}
                       </span>
                     </div>

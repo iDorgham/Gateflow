@@ -68,10 +68,10 @@ interface ChatPanelProps {
 }
 
 const SUGGESTED_PROMPTS = [
-  { icon: BarChart3, label: 'Analyze last month\'s scans', prompt: 'Show me an analysis of last month\'s scan trends.', color: 'text-blue-500 bg-blue-50 dark:bg-blue-900/20' },
-  { icon: QrCode, label: 'Generate guest QR', prompt: 'I want to generate a guest QR code for tomorrow.', color: 'text-purple-500 bg-purple-50 dark:bg-purple-900/20' },
-  { icon: FileText, label: 'Create security report', prompt: 'Generate a security incident report for the last 7 days.', color: 'text-orange-500 bg-orange-50 dark:bg-orange-900/20' },
-  { icon: Sparkles, label: 'Optimize gate flow', prompt: 'How can I optimize the visitor flow at the main gate?', color: 'text-green-500 bg-green-50 dark:bg-green-900/20' },
+  { icon: BarChart3, label: 'Analyze last month\'s scans', prompt: 'Show me an analysis of last month\'s scan trends.', color: 'text-primary bg-primary/10' },
+  { icon: QrCode, label: 'Generate guest QR', prompt: 'I want to generate a guest QR code for tomorrow.', color: 'text-primary bg-primary/10' },
+  { icon: FileText, label: 'Create security report', prompt: 'Generate a security incident report for the last 7 days.', color: 'text-primary bg-primary/10' },
+  { icon: Sparkles, label: 'Optimize gate flow', prompt: 'How can I optimize the visitor flow at the main gate?', color: 'text-primary bg-primary/10' },
 ];
 
 export function ChatPanel({
@@ -186,8 +186,8 @@ export function ChatPanel({
             {messages.length === 0 && (
               <div className="flex flex-col items-center justify-center min-h-[400px] text-center gap-8 py-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
                 <div className="flex flex-col items-center gap-4">
-                  <div className="h-16 w-16 rounded-2xl bg-[var(--ds-background-discovery,#EAE6FF)] flex items-center justify-center shadow-lg transform rotate-3 hover:rotate-0 transition-transform duration-300">
-                    <Sparkles size={32} className="text-[var(--ds-text-discovery,#403294)]" />
+                  <div className="h-16 w-16 rounded-2xl bg-primary/10 flex items-center justify-center shadow-lg transform rotate-3 hover:rotate-0 transition-transform duration-300">
+                    <Sparkles size={32} className="text-primary" />
                   </div>
                   <h1 className="text-3xl font-bold tracking-tight text-[var(--ds-text,#172B4D)] dark:text-white">
                     {t('How can I help you today?', 'كيف يمكنني مساعدتك اليوم؟')}
@@ -202,12 +202,12 @@ export function ChatPanel({
                     <button
                       key={idx}
                       onClick={() => onSuggestedPromptClick?.(item.prompt)}
-                      className="flex items-center gap-3 p-4 text-left bg-white dark:bg-[#1C2126] border border-[var(--ds-border,#DFE1E6)] dark:border-[#2C333A] rounded-xl hover:border-[var(--ds-border-selected,#0052CC)] hover:shadow-md transition-all group"
+                      className="flex items-center gap-3 p-4 text-left bg-background border border-border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all group"
                     >
                       <div className={cn("p-2 rounded-lg shrink-0", item.color)}>
                         <item.icon size={18} />
                       </div>
-                      <span className="text-sm font-medium text-[var(--ds-text,#172B4D)] dark:text-[#F4F5F7] group-hover:text-[var(--ds-text-selected,#0052CC)] transition-colors">
+                      <span className="text-sm font-medium text-foreground dark:text-zinc-100 group-hover:text-primary transition-colors">
                         {t(item.label, item.label)}
                       </span>
                     </button>
@@ -234,7 +234,7 @@ export function ChatPanel({
                 >
                   <Avatar className={cn(
                     "h-8 w-8 shrink-0",
-                    m.role === 'user' ? "bg-[var(--ds-background-neutral-bold,#44546F)]" : "bg-[var(--ds-background-discovery-bold,#5243AA)]"
+                    m.role === 'user' ? "bg-zinc-700" : "bg-secondary"
                   )}>
                     <AvatarFallback className="text-white text-[10px]">
                       {m.role === 'user' ? <User size={14} /> : <Sparkles size={14} />}
@@ -248,8 +248,8 @@ export function ChatPanel({
                           <div className={cn(
                             "rounded-2xl px-4 py-3 text-sm leading-relaxed relative",
                             m.role === 'user'
-                              ? "bg-[var(--ds-background-neutral,#F4F5F7)] dark:bg-[#2C333A] text-[var(--ds-text,#172B4D)] dark:text-[#F4F5F7] rounded-tr-none"
-                              : "bg-white dark:bg-[#1C2126] text-[var(--ds-text,#172B4D)] dark:text-[#F4F5F7] border border-[var(--ds-border-discovery,#998DD9)] dark:border-[#403294]/50 shadow-sm rounded-tl-none whitespace-pre-wrap"
+                              ? "bg-zinc-100 bg-secondary text-foreground dark:text-zinc-100 rounded-tr-none"
+                              : "bg-background bg-background text-foreground dark:text-zinc-100 border border-zinc-200 border-border shadow-sm rounded-tl-none whitespace-pre-wrap"
                           )}>
                             {part.content}
                           </div>
@@ -309,8 +309,8 @@ export function ChatPanel({
             })}
             
             {isLoading && (
-              <div className="flex gap-3 mr-auto items-center text-[var(--ds-text-subtle,#6B778C)] animate-pulse">
-                <Avatar className="h-8 w-8 bg-[var(--ds-background-discovery-bold,#5243AA)]">
+              <div className="flex gap-3 mr-auto items-center text-muted-foreground animate-pulse">
+                <Avatar className="h-8 w-8 bg-secondary">
                   <AvatarFallback className="text-white">
                     <Loader2 size={14} className="animate-spin" />
                   </AvatarFallback>
@@ -322,7 +322,7 @@ export function ChatPanel({
         </ScrollArea>
 
         {/* Input Area */}
-        <div className="p-6 m-4 border border-[var(--ds-border,#DFE1E6)]/30 dark:border-[#2C333A] bg-[var(--ds-background-neutral-subtle,#F4F5F7)] dark:bg-[#1C2126] rounded-xl shadow-lg ring-1 ring-black/5 dark:ring-white/5">
+        <div className="p-6 m-4 border border-[var(--ds-border,#DFE1E6)]/30 border-border bg-secondary rounded-xl shadow-lg ring-1 ring-black/5 dark:ring-white/5">
           <form onSubmit={handleSubmit} className="flex flex-col gap-2">
             <div className="relative">
               <input
@@ -330,7 +330,7 @@ export function ChatPanel({
                 onChange={handleInputChange}
                 placeholder={t('Ask Assistant something...', 'اسأل المساعد شيئاً...')}
                 className={cn(
-                  "w-full bg-white border border-[var(--ds-border-input,#DFE1E6)] rounded-xl px-4 py-3.5 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-[#0052CC]/20 focus:border-[#0052CC] transition-all",
+                  "w-full bg-background bg-background border border-border rounded-xl px-4 py-3.5 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all",
                   isRtl ? "pl-24" : "pr-24"
                 )}
                 disabled={isLoading}
@@ -363,7 +363,7 @@ export function ChatPanel({
                 <Button 
                   type="submit" 
                   size="icon" 
-                  className="h-8 w-8 bg-[#0052CC] hover:bg-[#0052CC]/90 text-white rounded-lg transition-transform active:scale-95"
+                  className="h-8 w-8 bg-primary hover:bg-primary/90 text-white rounded-lg transition-transform active:scale-95"
                   disabled={isLoading || !input.trim()}
                 >
                   <Send size={14} className={isRtl ? "rotate-180" : ""} />

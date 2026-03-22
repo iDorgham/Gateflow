@@ -121,7 +121,7 @@ export function CanvasEditor() {
 
   return (
     <div className="flex flex-col flex-1 h-full min-h-0 bg-transparent relative">
-      <div className="absolute top-4 right-4 z-10 flex items-center gap-2 bg-black/30 backdrop-blur border border-[var(--ga-navy-border)] px-3 py-1.5 rounded-full text-xs text-[var(--ga-text-muted)]">
+      <div className="absolute top-4 right-4 z-10 flex items-center gap-2 bg-secondary/30 backdrop-blur border border-[var(--ga-navy-border)] px-3 py-1.5 rounded-full text-xs text-[var(--ga-text-muted)]">
         {saveState === 'saving' && (
           <>
             <CloudFog size={14} className="animate-pulse text-[var(--ga-orange)]" />

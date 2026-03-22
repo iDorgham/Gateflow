@@ -145,7 +145,7 @@ export function ResidentsFilterBar({
   })();
 
   return (
-    <div className={cn('flex flex-wrap items-center gap-4 bg-[var(--ds-background-default,#FFFFFF)] dark:bg-[#1D2125] p-3 rounded-xl border border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46] shadow-none', className)}>
+    <div className={cn('flex flex-wrap items-center gap-4 bg-[var(--ds-background-default,#FFFFFF)] bg-background p-3 rounded-xl border border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46] shadow-none', className)}>
       <div className="flex items-center gap-3 pr-4 border-r border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46]">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--ds-text-subtlest,#A5ADBA)] pointer-events-none" />
@@ -154,7 +154,7 @@ export function ResidentsFilterBar({
             placeholder={searchPlaceholder || t('contacts.searchPlaceholder', 'Search contacts…')}
             value={searchInput}
             onChange={(e) => handleSearchChange(e.target.value)}
-            className="w-[240px] h-9 pl-9 bg-[var(--ds-background-input,#F4F5F7)] dark:bg-[#2C333A] border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46] focus:bg-[var(--ds-background-default,#FFFFFF)] dark:focus:bg-[#1D2125] transition-all text-[13px] rounded-[var(--ds-border-radius-100,#3px)] font-semibold"
+            className="w-[240px] h-9 pl-9 bg-[var(--ds-background-input,#F4F5F7)] bg-secondary border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46] focus:bg-[var(--ds-background-default,#FFFFFF)] dark:focus:bg-[var(--background)] transition-all text-[13px] rounded-[var(--ds-border-radius-100,#3px)] font-semibold"
             aria-label={t('analytics.filterSearch', 'Search')}
           />
         </div>
@@ -162,11 +162,11 @@ export function ResidentsFilterBar({
 
       <div className="flex items-center gap-3">
         <span className="text-[11px] font-bold text-[var(--ds-text-subtle,#6B778C)] dark:text-[#97A0AF] uppercase tracking-tight">{t('analytics.filterDateRange', 'Range')}</span>
-        <div className="flex rounded-[var(--ds-border-radius-100,#3px)] border border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46] p-0.5 bg-[var(--ds-background-neutral,#EBECF0)] dark:bg-[#1D2125]/50 overflow-hidden shadow-none">
+        <div className="flex rounded-[var(--ds-border-radius-100,#3px)] border border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46] p-0.5 bg-[var(--ds-background-neutral,#EBECF0)] bg-background/50 overflow-hidden shadow-none">
           <Button
             variant="ghost"
             size="sm"
-            className={cn("h-7 px-3 text-[12px] font-bold rounded-[calc(var(--ds-border-radius-100,3px)-1px)] transition-all", is7d ? "bg-[var(--ds-background-default,#FFFFFF)] dark:bg-[#343A46] text-[var(--ds-text-selected,#0052CC)] shadow-none" : "text-[var(--ds-text-subtle,#42526E)] dark:text-[#A5ADBA] hover:bg-white/50 dark:hover:bg-[#343A46]/50")}
+            className={cn("h-7 px-3 text-[12px] font-bold rounded-[calc(var(--ds-border-radius-100,3px)-1px)] transition-all", is7d ? "bg-[var(--ds-background-default,#FFFFFF)] bg-secondary text-[var(--ds-text-selected,var(--primary))] shadow-none" : "text-[var(--ds-text-subtle,#42526E)] dark:text-[#A5ADBA] hover:bg-background/50 dark:hover:bg-[#343A46]/50")}
             onClick={() => handleRangePreset('7d')}
           >
             7d
@@ -174,13 +174,13 @@ export function ResidentsFilterBar({
           <Button
             variant="ghost"
             size="sm"
-            className={cn("h-7 px-3 text-[12px] font-bold rounded-[calc(var(--ds-border-radius-100,3px)-1px)] transition-all", is30d ? "bg-[var(--ds-background-default,#FFFFFF)] dark:bg-[#343A46] text-[var(--ds-text-selected,#0052CC)] shadow-none" : "text-[var(--ds-text-subtle,#42526E)] dark:text-[#A5ADBA] hover:bg-white/50 dark:hover:bg-[#343A46]/50")}
+            className={cn("h-7 px-3 text-[12px] font-bold rounded-[calc(var(--ds-border-radius-100,3px)-1px)] transition-all", is30d ? "bg-[var(--ds-background-default,#FFFFFF)] bg-secondary text-[var(--ds-text-selected,var(--primary))] shadow-none" : "text-[var(--ds-text-subtle,#42526E)] dark:text-[#A5ADBA] hover:bg-background/50 dark:hover:bg-[#343A46]/50")}
             onClick={() => handleRangePreset('30d')}
           >
             30d
           </Button>
         </div>
-        <div className="flex items-center gap-1.5 ml-1 bg-[var(--ds-background-input,#F4F5F7)] dark:bg-[#2C333A] px-2 py-1 rounded-[var(--ds-border-radius-100,#3px)] border border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46]">
+        <div className="flex items-center gap-1.5 ml-1 bg-[var(--ds-background-input,#F4F5F7)] bg-secondary px-2 py-1 rounded-[var(--ds-border-radius-100,#3px)] border border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46]">
           <input
             type="date"
             value={customFrom}
@@ -197,7 +197,7 @@ export function ResidentsFilterBar({
           <Button
             size="sm"
             onClick={handleCustomDateApply}
-            className="h-6 w-6 p-0 bg-[var(--ds-background-default,#FFFFFF)] dark:bg-[#343A46] border border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46] text-[var(--ds-text-subtle,#42526E)] dark:text-[#E3E6E8] hover:bg-[var(--ds-background-neutral-subtle-hovered,#EBECF0)] dark:hover:bg-[#2C333A] rounded shadow-none transition-transform active:scale-95"
+            className="h-6 w-6 p-0 bg-[var(--ds-background-default,#FFFFFF)] bg-secondary border border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46] text-[var(--ds-text-subtle,#42526E)] dark:text-[#E3E6E8] hover:bg-[var(--ds-background-neutral-subtle-hovered,#EBECF0)] dark:hover:bg-[var(--secondary)] rounded shadow-none transition-transform active:scale-95"
           >
             <Check className="h-3 w-3" />
           </Button>
@@ -209,7 +209,7 @@ export function ResidentsFilterBar({
            <NativeSelect
             value={filters.unitType}
             onChange={(e) => onFiltersChange({ unitType: e.target.value, page: 1 })}
-            className="w-[130px] h-9 text-[12px] font-semibold bg-[var(--ds-background-default,#FFFFFF)] dark:bg-[#1D2125] border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46] rounded-[var(--ds-border-radius-100,#3px)] cursor-pointer hover:border-[#0052CC] transition-colors"
+            className="w-[130px] h-9 text-[12px] font-semibold bg-[var(--ds-background-default,#FFFFFF)] bg-background border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46] rounded-[var(--ds-border-radius-100,#3px)] cursor-pointer hover:border-[var(--primary)] transition-colors"
           >
             <option value="">{t('analytics.filterAllUnitTypes', 'All Types')}</option>
             {UNIT_TYPES.map((u) => (
@@ -220,7 +220,7 @@ export function ResidentsFilterBar({
           <NativeSelect
             value={filters.tagIds || ''}
             onChange={(e) => onFiltersChange({ tagIds: e.target.value, page: 1 })}
-            className="w-[130px] h-9 text-[12px] font-semibold bg-[var(--ds-background-default,#FFFFFF)] dark:bg-[#1D2125] border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46] rounded-[var(--ds-border-radius-100,#3px)] cursor-pointer hover:border-[#0052CC] transition-colors"
+            className="w-[130px] h-9 text-[12px] font-semibold bg-[var(--ds-background-default,#FFFFFF)] bg-background border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46] rounded-[var(--ds-border-radius-100,#3px)] cursor-pointer hover:border-[var(--primary)] transition-colors"
           >
             <option value="">{t('residents.allTags', 'All Tags')}</option>
             {tags.map((tag) => (
@@ -234,9 +234,9 @@ export function ResidentsFilterBar({
             variant="outline"
             size="sm"
             onClick={onCustomizerOpen}
-            className="h-9 px-4 border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46] text-[var(--ds-text-subtle,#42526E)] dark:text-[#A5ADBA] font-bold hover:bg-[var(--ds-background-neutral-subtle-hovered,#EBECF0)] dark:hover:bg-[#2C333A] rounded-[var(--ds-border-radius-100,#3px)] shadow-none group"
+            className="h-9 px-4 border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46] text-[var(--ds-text-subtle,#42526E)] dark:text-[#A5ADBA] font-bold hover:bg-[var(--ds-background-neutral-subtle-hovered,#EBECF0)] dark:hover:bg-[var(--secondary)] rounded-[var(--ds-border-radius-100,#3px)] shadow-none group"
           >
-            <Columns className="h-4 w-4 mr-2 group-hover:text-[#0052CC] transition-colors" />
+            <Columns className="h-4 w-4 mr-2 group-hover:text-primary transition-colors" />
             {t('residents.columns', 'Columns')}
           </Button>
         )}

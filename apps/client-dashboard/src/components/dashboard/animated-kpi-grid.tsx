@@ -60,12 +60,12 @@ export function AnimatedKpiGrid({ cards }: AnimatedKpiGridProps) {
           <motion.div key={card.title} variants={itemVariants}>
             <Link
               href={card.href}
-              className="group block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ds-border-focused,#4C9AFF)] rounded-xl"
+              className="group block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 rounded-xl"
             >
-              <Card className="h-full border border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-surface-raised,#FFFFFF)] dark:bg-[#1D2125] shadow-[0_1px_1px_rgba(9,30,66,0.08),0_0_1px_rgba(9,30,66,0.08)] hover:shadow-[0_4px_8px_-2px_rgba(9,30,66,0.16),0_0_1px_rgba(9,30,66,0.08)] hover:border-[var(--ds-border-bold,#B3BAC5)] transition-all duration-200">
+              <Card className="h-full border border-[var(--ds-border)] bg-[var(--ds-surface-raised)] bg-background shadow-[0_1px_1px_rgba(9,30,66,0.08),0_0_1px_rgba(9,30,66,0.08)] hover:shadow-[0_4px_8px_-2px_rgba(9,30,66,0.16),0_0_1px_rgba(9,30,66,0.08)] hover:border-[var(--ds-border-bold)] transition-all duration-200">
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between">
-                    <CardTitle className="text-[10px] font-black uppercase tracking-widest text-[var(--ds-text-subtlest,#6B778C)]">
+                    <CardTitle className="text-[10px] font-black uppercase tracking-widest text-[var(--ds-text-subtlest)]">
                       {card.title}
                     </CardTitle>
                     <div className={cn('flex h-8 w-8 items-center justify-center rounded-lg', card.iconBg)}>
@@ -83,10 +83,10 @@ export function AnimatedKpiGrid({ cards }: AnimatedKpiGridProps) {
                           card.value
                         )}
                       </p>
-                      <p className="mt-1.5 text-xs text-[var(--ds-text-subtlest,#6B778C)]">{card.sub}</p>
+                      <p className="mt-1.5 text-xs text-[var(--ds-text-subtlest)]">{card.sub}</p>
                     </div>
                     <ArrowRight
-                      className="h-4 w-4 text-[var(--ds-icon-subtle,#6B778C)] transition-transform group-hover:translate-x-0.5 group-hover:text-[var(--ds-icon,#172B4D)]"
+                      className="h-4 w-4 text-[var(--ds-icon-subtle)] transition-transform group-hover:translate-x-0.5 group-hover:text-[var(--ds-text)]"
                       aria-hidden="true"
                     />
                   </div>

@@ -116,6 +116,16 @@ export const tokens = {
         raised: 'var(--ds-surface-raised)',
         overlay: 'var(--ds-surface-overlay)',
       },
+      sidebar: {
+        DEFAULT: 'hsl(var(--sidebar))',
+        foreground: 'hsl(var(--sidebar-foreground))',
+        primary: 'hsl(var(--sidebar-primary))',
+        'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
+        accent: 'hsl(var(--sidebar-accent))',
+        'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
+        border: 'hsl(var(--sidebar-border))',
+        ring: 'hsl(var(--sidebar-ring))',
+      },
     },
   },
   spacing: {

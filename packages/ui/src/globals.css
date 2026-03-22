@@ -123,93 +123,110 @@
     --input: 260 7% 88%;
     --ring: 19 100% 46%;
     --radius: 8px;
+    --sidebar: 210 5% 96%;
+    --sidebar-foreground: 235 94% 11%;
+    --sidebar-primary: 19 100% 46%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 260 7% 93%;
+    --sidebar-accent-foreground: 235 94% 11%;
+    --sidebar-border: 260 7% 88%;
+    --sidebar-ring: 19 100% 46%;
   }
 
   .dark {
-    --background: 235 94% 11%; /* Midnight Blue */
-    --foreground: 210 5% 96%; /* Anti-Flash White */
-    --card: 235 94% 11%;
-    --card-foreground: 210 5% 96%;
-    --popover: 235 94% 11%;
-    --popover-foreground: 210 5% 96%;
-    --primary: 19 100% 46%; 
+    /* ── User Specified Dark Gray ───────────────────── */
+    --background: 210 5% 10%; /* #18191a */
+    --foreground: 210 20% 98%; /* #FAFBFC */
+    --card: 240 4% 13%;       /* #1f1f21 */
+    --card-foreground: 210 20% 98%;
+    --popover: 240 4% 16%;    /* Slightly lighter than card */
+    --popover-foreground: 210 20% 98%;
+    --primary: 19 100% 46%;   /* Kimchi */
     --primary-foreground: 0 0% 100%;
-    --secondary: 234 96% 23%; 
-    --secondary-foreground: 210 5% 96%;
-    --muted: 234 96% 23%;
-    --muted-foreground: 260 7% 93%; 
-    --accent: 234 96% 23%;
-    --accent-foreground: 210 5% 96%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 234 96% 28%;
-    --input: 234 96% 28%;
+    --secondary: 240 4% 13%;  /* #1f1f21 */
+    --secondary-foreground: 210 20% 98%;
+    --muted: 240 4% 16%;
+    --muted-foreground: 210 10% 70%;
+    --accent: 240 4% 16%;
+    --accent-foreground: 210 20% 98%;
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 4% 20%;     /* Subtle border */
+    --input: 240 4% 20%;
     --ring: 19 100% 46%;
 
-    /* ── Background Tokens — Dark ──────────────────── */
-    --ds-background-default: #1D2125;
-    --ds-background-subtle: #161A1D;
-    --ds-background-neutral: #22272B;
-    --ds-background-neutral-subtle: #A1BDD914;
-    --ds-background-neutral-hovered: #A6C5E229;
-    --ds-background-selected: #082145;
-    --ds-background-card: #1D2125;
-    --ds-background-brand-bold: #1D7AFC;
-    --ds-background-brand-subtle: #1C2B41;
-    --ds-background-danger-bold: #F87168;
-    --ds-background-danger-subtle: #441C16;
-    --ds-background-warning-bold: #D97008;
-    --ds-background-warning-subtle: #2D2200;
-    --ds-background-success-bold: #22A06B;
-    --ds-background-success-subtle: #162B22;
-    --ds-background-information-bold: #1D7AFC;
-    --ds-background-information-subtle: #1C2B41;
-    --ds-background-input: #22272B;
+    /* ── Background Tokens — User Specified ─────────── */
+    --ds-background-default: #18191a;
+    --ds-background-subtle: #121314;
+    --ds-background-neutral: #1f1f21;
+    --ds-background-neutral-subtle: #1f1f2180;
+    --ds-background-neutral-hovered: #242526;
+    --ds-background-selected: #1f1f21;
+    --ds-background-card: #1f1f21;
+    --ds-background-brand-bold: #ED4B00;
+    --ds-background-brand-subtle: #1f1f21;
+    --ds-background-danger-bold: #EF4444;
+    --ds-background-danger-subtle: #450A0A;
+    --ds-background-warning-bold: #F59E0B;
+    --ds-background-warning-subtle: #451A03;
+    --ds-background-success-bold: #10B981;
+    --ds-background-success-subtle: #064E3B;
+    --ds-background-information-bold: #3B82F6;
+    --ds-background-information-subtle: #172554;
+    --ds-background-input: #18191a;
 
-    /* ── Elevation Surfaces — Dark ─────────────────── */
-    --ds-surface: #1D2125;
-    --ds-surface-sunken: #161A1D;
-    --ds-surface-raised: #22272B;
-    --ds-surface-overlay: #2C333A;
+    /* ── Elevation Surfaces — User Specified ────────── */
+    --ds-surface: #18191a;
+    --ds-surface-sunken: #101112;
+    --ds-surface-raised: #1f1f21;
+    --ds-surface-overlay: #242526;
 
-    /* ── Elevation Shadows — Dark ──────────────────── */
-    --ds-shadow-card: 0 1px 1px #03040480, 0 0 1px #03040480;
-    --ds-shadow-raised: 0 1px 1px #03040480, 0 0 1px #03040480;
-    --ds-shadow-overlay: 0 8px 16px -4px #030404c0, 0 0 1px #03040480;
+    /* ── Elevation Shadows — Deep Dark ──────────────── */
+    --ds-shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+    --ds-shadow-raised: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+    --ds-shadow-overlay: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
 
-    /* ── Text Tokens — Dark ────────────────────────── */
-    --ds-text: #DEEBFF;
-    --ds-text-subtle: #9FADBC;
-    --ds-text-subtlest: #8C9BAB;
-    --ds-text-disabled: #A1BDD966;
-    --ds-text-inverse: #1D2125;
-    --ds-text-selected: #579DFF;
-    --ds-text-brand: #579DFF;
-    --ds-text-danger: #FF9C8F;
-    --ds-text-warning: #FFC400;
-    --ds-text-success: #7EE2B8;
-    --ds-text-information: #579DFF;
+    /* ── Text Tokens — Neutral Dark ─────────────────── */
+    --ds-text: #FAFAFA;
+    --ds-text-subtle: #A1A1AA;
+    --ds-text-subtlest: #71717A;
+    --ds-text-disabled: #3F3F46;
+    --ds-text-inverse: #09090B;
+    --ds-text-selected: #FAFAFA;
+    --ds-text-brand: #ED4B00;
+    --ds-text-danger: #F87171;
+    --ds-text-warning: #FBBF24;
+    --ds-text-success: #34D399;
+    --ds-text-information: #60A5FA;
 
-    /* ── Border Tokens — Dark ──────────────────────── */
-    --ds-border: #A6C5E229;
-    --ds-border-bold: #A1BDD966;
-    --ds-border-subtle: #161A1D;
-    --ds-border-focused: #85B8FF;
-    --ds-border-selected: #579DFF;
-    --ds-border-brand: #579DFF;
-    --ds-border-danger: #F87168;
-    --ds-border-warning: #FFC400;
-    --ds-border-success: #22A06B;
-    --ds-border-input: #22272B;
+    /* ── Border Tokens — Neutral Dark ───────────────── */
+    --ds-border: #27272A;
+    --ds-border-bold: #3F3F46;
+    --ds-border-subtle: #18181B;
+    --ds-border-focused: #ED4B00;
+    --ds-border-selected: #ED4B00;
+    --ds-border-brand: #ED4B00;
+    --ds-border-danger: #EF4444;
+    --ds-border-warning: #F59E0B;
+    --ds-border-success: #10B981;
+    --ds-border-input: #27272A;
 
-    /* ── Icon Tokens — Dark ────────────────────────── */
-    --ds-icon: #9FADBC;
-    --ds-icon-subtle: #8C9BAB;
-    --ds-icon-inverse: #1D2125;
-    --ds-icon-brand: #579DFF;
-    --ds-icon-danger: #F87168;
-    --ds-icon-warning: #FFC400;
-    --ds-icon-success: #22A06B;
+    /* ── Icon Tokens — Neutral Dark ─────────────────── */
+    --ds-icon: #A1A1AA;
+    --ds-icon-subtle: #71717A;
+    --ds-icon-inverse: #09090B;
+    --ds-icon-brand: #ED4B00;
+    --ds-icon-danger: #EF4444;
+    --ds-icon-warning: #F59E0B;
+    --ds-icon-success: #10B981;
+    --sidebar: 210 5% 10%; /* #18191a */
+    --sidebar-foreground: 210 10% 70%;
+    --sidebar-primary: 19 100% 46%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 5% 15%;
+    --sidebar-accent-foreground: 210 20% 98%;
+    --sidebar-border: 210 5% 12%;
+    --sidebar-ring: 19 100% 46%;
   }
 }
 

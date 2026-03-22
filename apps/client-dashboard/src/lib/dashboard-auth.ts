@@ -30,7 +30,7 @@ export async function requireAuth(): Promise<DashboardSession> {
 
   const userRow = await prisma.user
     .findFirst({
-      where: { id: claims.sub, deletedAt: null },
+      where: { id: claims.sub, organizationId: claims.orgId, deletedAt: null },
       select: {
         id: true,
         name: true,

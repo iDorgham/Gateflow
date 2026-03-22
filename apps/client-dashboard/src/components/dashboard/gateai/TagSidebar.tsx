@@ -124,7 +124,7 @@ export function TagSidebar() {
       )}
 
       {/* Create Form */}
-      <div className="p-4 border-b border-[var(--ga-navy-border)] shrink-0 bg-black/10">
+      <div className="p-4 border-b border-[var(--ga-navy-border)] shrink-0 bg-secondary/10">
         <form onSubmit={handleCreate} className="flex flex-col gap-3">
           <input
             type="text"
@@ -191,7 +191,7 @@ export function TagSidebar() {
                   e.dataTransfer.setData('application/vnd.gateai.tag.color', tag.color || '#ED4B00');
                   e.dataTransfer.effectAllowed = 'copy';
                 }}
-                className="group flex items-center justify-between p-2.5 rounded-md border border-transparent hover:border-[var(--ga-navy-border)] hover:bg-black/20 transition-colors cursor-grab active:cursor-grabbing"
+                className="group flex items-center justify-between p-2.5 rounded-md border border-transparent hover:border-[var(--ga-navy-border)] hover:bg-secondary/20 transition-colors cursor-grab active:cursor-grabbing"
               >
                 <div className="flex items-center gap-2.5 min-w-0 pointer-events-none">
                   <div
@@ -202,7 +202,7 @@ export function TagSidebar() {
                     {tag.name}
                   </span>
                   {tag._count?.aiContents !== undefined && (
-                    <span className="text-[10px] font-mono text-[var(--ga-text-muted)] bg-black/20 px-1.5 py-0.5 rounded-sm shrink-0">
+                    <span className="text-[10px] font-mono text-[var(--ga-text-muted)] bg-secondary/20 px-1.5 py-0.5 rounded-sm shrink-0">
                       {tag._count.aiContents}
                     </span>
                   )}

@@ -37,7 +37,7 @@ export const AIQRPreviewRenderer: React.FC<AIQRPreviewRendererProps> = ({ intent
   };
 
   return (
-    <div className="mt-3 border rounded-lg overflow-hidden bg-white shadow-sm">
+    <div className="mt-3 border rounded-lg overflow-hidden bg-background shadow-sm">
       <div className="bg-slate-50 px-3 py-2 border-b flex items-center gap-2 text-[11px] font-medium text-slate-500 uppercase tracking-wider">
         <QrCode className="w-3 h-3" />
         QR Creation Preview
@@ -52,7 +52,7 @@ export const AIQRPreviewRenderer: React.FC<AIQRPreviewRendererProps> = ({ intent
           </TableRow>
         </TableHeader>
         <TableBody>
-          <TableRow className="hover:bg-white border-none py-1 h-10">
+          <TableRow className="hover:bg-background border-none py-1 h-10">
             <TableCell className="text-xs py-1 h-10">
               <span className="font-bold text-slate-900">{intent.count}</span> codes
             </TableCell>

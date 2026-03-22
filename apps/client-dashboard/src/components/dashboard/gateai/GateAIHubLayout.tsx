@@ -20,19 +20,19 @@ import { gaLayoutSpring } from './GateAITokens';
 
 const hubStyles = `
   :root {
-    --ga-navy:          transparent;
-    --ga-orange:        #0052CC; /* Primary brand color */
-    --ga-navy-glass:    transparent;
+    --ga-navy:          #18191a; /* Base gray */
+    --ga-orange:        var(--primary, #F97316);
+    --ga-navy-glass:    rgba(22, 26, 29, 0.4);
     --ga-navy-border:   var(--ds-border, #DFE1E6);
     --ga-dot-color:     transparent;
     --ga-dot-size:      28px;
-    --ga-panel-bg:      var(--ds-background-default, #FFFFFF);
+    --ga-panel-bg:      var(--ds-background-default, #18191a);
     --ga-panel-border:  var(--ds-border, #DFE1E6);
-    --ga-highlight:     #0052CC;
-    --ga-text-primary:  var(--ds-text, #172B4D);
-    --ga-text-muted:    var(--ds-text-subtle, #42526E);
-    --ga-text-accent:   #0052CC;
-    --ga-scrollbar:     rgba(9, 30, 66, 0.1);
+    --ga-highlight:     var(--primary, #F97316);
+    --ga-text-primary:  var(--ds-text, #FAFBFC);
+    --ga-text-muted:    var(--ds-text-subtle, #A1A1AA);
+    --ga-text-accent:   var(--primary, #F97316);
+    --ga-scrollbar:     rgba(82, 82, 91, 0.2);
   }
 
   .ga-hub-root {

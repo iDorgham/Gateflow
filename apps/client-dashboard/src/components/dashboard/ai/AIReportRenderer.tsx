@@ -67,7 +67,7 @@ export function AIReportRenderer({ config, isRtl }: AIReportRendererProps) {
   const typeLabel = reportType.toUpperCase();
 
   return (
-    <Card className="my-4 border-[var(--ds-border-discovery,#998DD9)]/30 bg-white/80 shadow-sm overflow-hidden group">
+    <Card className="my-4 border-[var(--ds-border-discovery,#998DD9)]/30 bg-background/80 shadow-sm overflow-hidden group">
       <CardContent className="p-4 flex items-center gap-4">
         <div className={cn(
           "h-12 w-12 rounded-lg flex items-center justify-center shrink-0 transition-colors",

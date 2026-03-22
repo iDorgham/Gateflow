@@ -124,7 +124,7 @@ export function AIChartRenderer({ config }: AIChartRendererProps) {
   };
 
   return (
-    <Card className="my-4 border-[var(--ds-border-discovery,#998DD9)]/30 bg-white/50 shadow-sm overflow-hidden">
+    <Card className="my-4 border-[var(--ds-border-discovery,#998DD9)]/30 bg-background/50 shadow-sm overflow-hidden">
       <CardHeader className="py-3 px-4 bg-[var(--ds-background-discovery-subtle,#EAE6FF)]/20 border-b border-[var(--ds-border-discovery,#998DD9)]/10">
         <CardTitle className="text-sm font-medium text-[var(--ds-text-discovery,#403294)]">
           {title}

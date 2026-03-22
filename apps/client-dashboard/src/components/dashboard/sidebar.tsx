@@ -135,16 +135,16 @@ export function Sidebar({
             "flex items-center gap-3 px-3 py-6",
             isCollapsed && "justify-center"
           )}>
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-[var(--ds-background-brand-bold,#0052CC)] text-white shadow-sm">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-primary text-white shadow-sm">
               <ShieldCheckIcon size={20} weight="fill" />
             </div>
             {!isCollapsed && (
               <div className="flex flex-col min-w-0">
-                <span className="text-sm font-bold tracking-tight text-[var(--ds-text,#172B4D)] truncate">
+                <span className="text-sm font-bold tracking-tight text-[var(--ds-text)] truncate">
                   GateFlow
                 </span>
                 {org && (
-                  <span className="text-[10px] font-medium text-[var(--ds-text-subtlest,#6B778C)] truncate">
+                  <span className="text-[10px] font-medium text-[var(--ds-text-subtlest)] truncate">
                     {org.name}
                   </span>
                 )}
@@ -155,28 +155,28 @@ export function Sidebar({
         footer={
           <div className="flex flex-col p-2 space-y-3 mt-auto pb-4">
             <div className={cn(
-              "flex items-center gap-3 rounded-[3px] p-2 transition-colors hover:bg-[var(--ds-background-subtle,#F4F5F7)] cursor-pointer group",
+              "flex items-center gap-3 rounded-[3px] p-2 transition-colors hover:bg-[var(--ds-background-subtle)] cursor-pointer group",
               isCollapsed && "justify-center"
             )}>
               <Avatar size="small">
                 {user.image && <AvatarImage src={user.image} alt={user.name} />}
-                <AvatarFallback className="text-[10px] bg-[var(--ds-background-brand-subtle,#DEEBFF)] text-[var(--ds-text-brand,#0052CC)]">
+                <AvatarFallback className="text-[10px] bg-primary/10 text-primary">
                   {initials}
                 </AvatarFallback>
               </Avatar>
               {!isCollapsed && (
                 <div className="flex flex-col min-w-0 overflow-hidden">
-                  <span className="text-xs font-semibold text-[var(--ds-text,#172B4D)] truncate">
+                  <span className="text-xs font-semibold text-[var(--ds-text)] truncate">
                     {user.name}
                   </span>
-                  <span className="text-[10px] text-[var(--ds-text-subtlest,#6B778C)] truncate">
+                  <span className="text-[10px] text-[var(--ds-text-subtlest)] truncate">
                     {user.email}
                   </span>
                 </div>
               )}
             </div>
             
-            <div className="flex flex-col gap-1 pt-3 border-t border-[var(--ds-border,#DFE1E6)]">
+            <div className="flex flex-col gap-1 pt-3 border-t border-[var(--ds-border)]">
               <SideNavItem
                 href="#"
                 label={t('sidebar.help', 'Help')}
@@ -252,10 +252,10 @@ export function Sidebar({
       <button
         type="button"
         onClick={onToggleCollapse}
-        className="absolute top-10 -right-3 z-50 flex h-6 w-6 items-center justify-center rounded-full border border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-background-default,#FFFFFF)] shadow-sm hover:bg-[var(--ds-background-subtle,#F4F5F7)] transition-all group"
+        className="absolute top-10 -right-3 z-50 flex h-6 w-6 items-center justify-center rounded-full border border-[var(--ds-border)] bg-[var(--ds-background-default)] shadow-sm hover:bg-[var(--ds-background-subtle)] transition-all group"
         aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
       >
-        <CaretLeftIcon className={cn('h-3 w-3 text-[var(--ds-icon-subtle,#6B778C)] transition-transform group-hover:text-[var(--ds-icon,#172B4D)]', isCollapsed && 'rotate-180')} />
+        <CaretLeftIcon className={cn('h-3 w-3 text-[var(--ds-icon-subtle)] transition-transform group-hover:text-[var(--ds-icon)]', isCollapsed && 'rotate-180')} />
       </button>
     </div>
   );

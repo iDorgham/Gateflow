@@ -15,19 +15,27 @@
 - [x] Phase 4 — Marketing & Security Intelligence
 - [x] Phase 5 — CLI Wrapper & Validation
 
-### client_dashboard_v10_redesign — Client Dashboard V10 Redesign (ADS Premium)
-**IDEA:** `docs/plan/context/IDEA_client_dashboard_v10_redesign.md`
-**PLAN:** `docs/plan/planned/PLAN_client_dashboard_v10_redesign.md`
-**Status:** 📅 Planned
+### team_page — Team Management & Integrated Chat (v1.0)
+**IDEA:** `docs/plan/context/IDEA_team_page.md`
+**Status:** 🆕 Ready to Plan
 **Target:** Q4 2026
 
-- [x] Phase 0 — Design System Foundation: ADS Token Sync (Light/Dark)
-- [ ] Phase 1 — Global Shell & Sidebar: Premium Morphs + Glassmorphism
-- [ ] Phase 2 — Dashboard Home: Real-time High-Density Analytics
-- [ ] Phase 3 — Scan Operations: Unified High-Density Filter Engine
-- [ ] Phase 4 — Resource Management: Projects, Gates, Residents Card-Grid
-- [ ] Phase 5 — Settings Redesign: Premium Cards & Form Morphs
-- [ ] Phase 6 — Polish & Accessibility Audit (RTL focus)
+- [ ] Phase 1 — Schema & API: Team, Roles & Messaging
+- [ ] Phase 2 — Sidebar Integration: Persistent Team Chat Drawer
+- [ ] Phase 3 — Team Page: Unified Member & RBAC Management
+- [ ] Phase 4 — Real-time & Polish: SSE/WS Presence & ADS Polish
+
+### marketing_suite — Marketing & Sales Attribution Suite (Phase 2) 
+**IDEA:** `docs/plan/context/IDEA_marketing_suite.md`
+**PLAN:** `docs/plan/in-progress/marketing_suite/PLAN_marketing_suite.md`
+**Status:** 🔄 In Progress
+**Target:** Q4 2026
+
+- [x] Phase 1 — UTM Schema, Session Capture & Propagation
+- [ ] Phase 2 — Marketing Settings & Retargeting Pixels (CURRENT)
+- [ ] Phase 3 — Generic Webhook Engine & HubSpot Preset (P1)
+- [ ] Phase 4 — Marketing ROI & Funnel Dashboards (P2)
+
 
 ### atlassian_ui_remake — Atlassian Design System UI Remake
 **IDEA:** `docs/plan/context/IDEA_atlassian_ui_remake.md`
@@ -62,6 +70,20 @@
 ---
 
 ## Completed Initiatives (Done) ✅
+
+### client_dashboard_v10_redesign — Client Dashboard V10 Redesign (ADS Premium)
+**IDEA:** `docs/plan/context/IDEA_client_dashboard_v10_redesign.md`
+**PLAN:** `docs/plan/done/client_dashboard_v10_redesign/PLAN_client_dashboard_v10_redesign.md`
+**Status:** ✅ Done (Completed via Claude CLI)
+**Target:** Q4 2026
+
+- [x] Phase 0 — Design System Foundation: ADS Token Sync (Light/Dark)
+- [x] Phase 1 — Global Shell & Sidebar: Premium Morphs + Glassmorphism
+- [x] Phase 2 — Dashboard Home: Real-time High-Density Analytics
+- [x] Phase 3 — Scan Operations: Unified High-Density Filter Engine
+- [x] Phase 4 — Resource Management: Projects, Gates, Residents Card-Grid
+- [x] Phase 5 — Settings Redesign: Premium Cards & Form Morphs
+- [x] Phase 6 — Polish & Accessibility Audit (RTL focus)
 
 ### resident_mobile — Resident Mobile App (Phase 2 Flagship)
 **IDEA:** `docs/plan/context/IDEA_resident_mobile.md`

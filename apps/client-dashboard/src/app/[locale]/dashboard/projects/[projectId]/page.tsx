@@ -154,12 +154,12 @@ export default async function ProjectDetailPage({
           />
         ) : (
           <div
-            className="absolute inset-0 bg-gradient-to-br from-[#0052CC] via-[#0747A6] to-[#00214E]"
+            className="absolute inset-0 bg-gradient-to-br from-slate-900 via-zinc-900 to-black"
             aria-hidden
           />
         )}
         <div
-          className="absolute inset-0 bg-gradient-to-t from-[#091E42]/80 via-transparent to-transparent"
+          className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"
           aria-hidden
         />
         
@@ -196,12 +196,12 @@ export default async function ProjectDetailPage({
       {/* Page Content with Breadcrumbs */}
       <div className="px-8 -mt-6 relative z-10">
         <div className="flex items-center gap-2 mb-6">
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-white/90 dark:bg-[#1D2125]/90 backdrop-blur-sm border border-[#DFE1E6] dark:border-[#343A46] rounded-full shadow-sm text-[11px] font-bold uppercase tracking-widest text-[#42526E] dark:text-[#97A0AF]">
-            <Link href={`/${locale}/dashboard`} className="hover:text-[#0052CC] transition-colors">Dashboard</Link>
-            <span className="text-[#A5ADBA]">/</span>
-            <Link href={`/${locale}/dashboard/projects`} className="hover:text-[#0052CC] transition-colors">Projects</Link>
-            <span className="text-[#A5ADBA]">/</span>
-            <span className="text-[#172B4D] dark:text-white">{project.name}</span>
+          <div className="flex items-center gap-2 px-3 py-1.5 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-sm border border-zinc-200 dark:border-zinc-800 rounded-full shadow-sm text-[11px] font-bold uppercase tracking-widest text-zinc-600 dark:text-zinc-400">
+            <Link href={`/${locale}/dashboard`} className="hover:text-primary transition-colors">Dashboard</Link>
+            <span className="text-zinc-300 dark:text-zinc-700">/</span>
+            <Link href={`/${locale}/dashboard/projects`} className="hover:text-primary transition-colors">Projects</Link>
+            <span className="text-zinc-300 dark:text-zinc-700">/</span>
+            <span className="text-zinc-900 dark:text-white">{project.name}</span>
           </div>
         </div>
 

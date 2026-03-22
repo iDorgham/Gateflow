@@ -147,10 +147,14 @@ export async function deleteProject(projectId: string): Promise<Result> {
       return { success: false, error: 'Cannot delete the only project in your organization.' };
     }
 
-    await prisma.project.update({
-      where: { id: projectId },
+    const result = await prisma.project.updateMany({
+      where: { id: projectId, organizationId: claims.orgId },
       data: { deletedAt: new Date() },
     });
+
+    if (result.count === 0) {
+      return { success: false, error: 'Project not found or unauthorized.' };
+    }
 
     revalidatePath('/dashboard/settings');
     return { success: true };

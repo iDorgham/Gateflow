@@ -32,6 +32,18 @@ After a task or phase was executed **using a CLI** (Claude CLI, Gemini CLI, Open
 |------|-----|--------------|--------|-------|
 | 2026-03-17 | Gemini CLI | Phase 5 atlassian_ui_remake | success | Standardized Organizations, Users, Scans and Audit Logs. |
 | 2026-03-17 | Antigravity | Phase 5 gateai_hub_v2 | success | Unified motion tokens and RTL logical properties. |
+| 2026-03-22 | Gemini CLI | Audit: Broad scan for multi-tenant leaks | success | Found several un-scoped queries. |
+| 2026-03-22 | Opencode CLI | Audit: Code-path check for structure | success | Verified structure in dashboard settings. |
+| 2026-03-22 | Claude CLI | Audit: Deep security audit of short-link & auth | success | Fixed critical scoping in `requireAuth` and `s/.../route.ts`. |
+| 2026-03-22 | Refactor Team | ADS Token Refactor | success | Replaced raw hexes with ADS tokens in QR, Settings, and Residents pages. |
+
+- **Refactor Team Audit (ADS Tokens):**
+  - **`qrcodes/page.tsx`**: Replaced 10+ raw hex violations with ADS tokens. Removed manual `dark:` background/border classes, relying on global token definitions.
+  - **`create-qr-client.tsx`**: Migrated hardcoded QR colors to `token('elevation.surface')` and `token('color.text')`. Replaced `bg-slate-900` code block with `var(--ds-background-neutral-bold)`.
+  - **`analytics-charts.tsx`**: Updated `ADS_TOOLTIP_STYLE` to use `var(--ds-shadow-raised)` instead of hardcoded RGBA.
+  - **`settings-client.tsx`**: Cleaned up manual dark mode backgrounds (`#1D2125`, `#161A1D`) and fixed tab text color fallbacks.
+  - **`contacts/page.tsx`**: Removed manual dark mode rings and hex fallbacks from table cells to ensure strict design system compliance.
+  - **Verification**: Ran `pnpm preflight` — all checks passed with no new lint errors.
 
 ---
 

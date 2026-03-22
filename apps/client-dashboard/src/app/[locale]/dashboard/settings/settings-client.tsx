@@ -254,7 +254,7 @@ export function SettingsClient(props: SettingsClientProps) {
   return (
     <div className="space-y-0 pb-20" dir={isRtl ? 'rtl' : 'ltr'}>
       {/* Page header */}
-      <div className="border-b border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-surface-raised,#FFFFFF)] dark:bg-[#1D2125] px-6 py-5 mb-0">
+      <div className="border-b border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-surface-raised,#FFFFFF)] px-6 py-5 mb-0">
         <div className="flex items-center gap-3 mb-1">
           <div className="h-9 w-9 rounded-md bg-[var(--ds-background-brand-subtle,#DEEBFF)] flex items-center justify-center border border-[var(--ds-border-focused,#4C9AFF)]/30">
             <Settings2 className="h-4 w-4 text-[var(--ds-text-brand,#0052CC)]" />
@@ -277,7 +277,7 @@ export function SettingsClient(props: SettingsClientProps) {
       </div>
 
       {/* Tab nav bar */}
-      <div className="border-b border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-surface,#FFFFFF)] dark:bg-[#161A1D] sticky top-0 z-20">
+      <div className="border-b border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-surface,#FFFFFF)] sticky top-0 z-20">
         <LayoutGroup id="settings-tabs">
           <nav
             className="flex overflow-x-auto scrollbar-hide gap-0 px-6"
@@ -296,8 +296,8 @@ export function SettingsClient(props: SettingsClientProps) {
                   className="relative flex items-center gap-2 whitespace-nowrap px-4 py-3.5 text-sm font-semibold transition-colors outline-none focus-visible:ring-2 focus-visible:ring-[var(--ds-border-focused,#4C9AFF)] focus-visible:ring-offset-1 rounded-sm"
                   style={{
                     color: isActive
-                      ? 'var(--ds-text-selected, #0052CC)'
-                      : 'var(--ds-text-subtle, #42526E)',
+                      ? 'var(--ds-text-selected)'
+                      : 'var(--ds-text-subtle)',
                   }}
                 >
                   <Icon className="h-4 w-4 shrink-0" aria-hidden="true" />

@@ -325,11 +325,11 @@ export default function ContactsPage() {
       if (columnId === 'avatar')
         return (
           <TableCell key={columnId} className="w-14">
-            <Avatar className="h-8 w-8 rounded-full ring-2 ring-white dark:ring-slate-800">
+            <Avatar className="h-8 w-8 rounded-full ring-2 ring-[var(--ds-surface-raised)]">
               {c.avatarUrl ? (
                 <AvatarImage src={c.avatarUrl} alt={`${c.firstName} ${c.lastName}`} />
               ) : null}
-              <AvatarFallback className="text-[10px] bg-[var(--ds-background-neutral-subtle)] dark:bg-[var(--ds-background-neutral-subtle)]/10 text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtle)] font-bold">
+              <AvatarFallback className="text-[10px] bg-[var(--ds-background-neutral-subtle)] text-[var(--ds-text-subtle)] font-bold">
                 {c.firstName.charAt(0)}
                 {c.lastName.charAt(0)}
               </AvatarFallback>
@@ -338,33 +338,33 @@ export default function ContactsPage() {
         );
       if (columnId === 'firstName')
         return (
-          <TableCell key={columnId} className="font-semibold text-[var(--ds-text)] dark:text-[var(--ds-text-inverse)]">
+          <TableCell key={columnId} className="font-semibold text-[var(--ds-text)]">
             {c.firstName}
           </TableCell>
         );
       if (columnId === 'lastName')
-        return <TableCell key={columnId} className="text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtle)]">{c.lastName}</TableCell>;
+        return <TableCell key={columnId} className="text-[var(--ds-text-subtle)]">{c.lastName}</TableCell>;
       if (columnId === 'birthday')
         return (
-          <TableCell key={columnId} className="text-[12px] text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtle)]">
+          <TableCell key={columnId} className="text-[12px] text-[var(--ds-text-subtle)]">
             {c.birthday ?? <span className="text-[var(--ds-border)]">/</span>}
           </TableCell>
         );
       if (columnId === 'company')
         return (
-          <TableCell key={columnId} className="text-[12px] text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtle)]">
+          <TableCell key={columnId} className="text-[12px] text-[var(--ds-text-subtle)]">
             {c.company ?? <span className="text-[var(--ds-border)]">—</span>}
           </TableCell>
         );
       if (columnId === 'phone')
         return (
-          <TableCell key={columnId} className="text-[12px] font-mono text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtle)]">
+          <TableCell key={columnId} className="text-[12px] font-mono text-[var(--ds-text-subtle)]">
             {c.phone ?? <span className="text-[var(--ds-border)]">—</span>}
           </TableCell>
         );
       if (columnId === 'email')
         return (
-          <TableCell key={columnId} className="text-[12px] text-[var(--ds-text-brand)] dark:text-[var(--ds-text-brand)] hover:underline cursor-pointer">
+          <TableCell key={columnId} className="text-[12px] text-[var(--ds-text-brand)] hover:underline cursor-pointer">
             {c.email ?? <span className="text-[var(--ds-border)]">—</span>}
           </TableCell>
         );
@@ -376,7 +376,7 @@ export default function ContactsPage() {
                 <Badge
                   key={tag.id}
                   variant="secondary"
-                  className="px-1.5 py-0 text-[10px] font-bold bg-[var(--ds-background-neutral-subtle-hovered)] dark:bg-[var(--ds-background-neutral-subtle)]/10 text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtle)] border-none hover:bg-[var(--ds-background-neutral-pressed)]"
+                  className="px-1.5 py-0 text-[10px] font-bold bg-[var(--ds-background-neutral-subtle-hovered)] text-[var(--ds-text-subtle)] border-none hover:bg-[var(--ds-background-neutral-pressed)]"
                   style={tag.color ? { backgroundColor: `${tag.color}20`, color: tag.color, border: `1px solid ${tag.color}40` } : undefined}
                   onClick={() => removeTagMutation.mutate({ contactId: c.id, tagId: tag.id })}
                 >
@@ -411,7 +411,7 @@ export default function ContactsPage() {
                   <Badge
                     key={u.id}
                     variant="outline"
-                    className="px-1.5 py-0 text-[10px] font-bold bg-[var(--ds-background-brand-subtle)] dark:bg-[var(--ds-background-brand-subtle)]/10 text-[var(--ds-text-brand)] dark:text-[var(--ds-text-brand)] border-none cursor-pointer"
+                    className="px-1.5 py-0 text-[10px] font-bold bg-[var(--ds-background-brand-subtle)] text-[var(--ds-text-brand)] border-none cursor-pointer"
                     onClick={() => setViewUnitsFor(c)}
                   >
                     {u.name}
@@ -423,13 +423,13 @@ export default function ContactsPage() {
         );
       if (columnId === 'visitsInRange' || columnId === 'passesInRange')
         return (
-          <TableCell key={columnId} className="text-right tabular-nums text-[12px] font-semibold text-[var(--ds-text)] dark:text-[var(--ds-text-inverse)]">
+          <TableCell key={columnId} className="text-right tabular-nums text-[12px] font-semibold text-[var(--ds-text)]">
             {c[columnId] ?? 0}
           </TableCell>
         );
       if (columnId === 'lastVisitInRange')
         return (
-          <TableCell key={columnId} className="text-right text-[11px] text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtle)]">
+          <TableCell key={columnId} className="text-right text-[11px] text-[var(--ds-text-subtle)]">
             {c.lastVisitInRange ? new Date(c.lastVisitInRange).toLocaleDateString(undefined, { dateStyle: 'short' }) : '—'}
           </TableCell>
         );

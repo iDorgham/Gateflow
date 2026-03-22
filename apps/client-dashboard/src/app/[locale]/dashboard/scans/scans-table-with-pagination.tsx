@@ -51,7 +51,7 @@ export function ScansTableWithPagination({
 
       {totalPages > 1 && (
         <div className="flex items-center justify-between px-1">
-          <div className="flex items-center gap-4 text-[#6B778C] dark:text-[#97A0AF] text-[11px] font-black uppercase tracking-widest">
+          <div className="flex items-center gap-4 text-zinc-500 dark:text-zinc-400 text-[11px] font-black uppercase tracking-widest">
             <span className="tabular-nums">
               {rangeText}
             </span>

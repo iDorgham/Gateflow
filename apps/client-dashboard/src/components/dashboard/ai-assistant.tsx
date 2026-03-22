@@ -197,7 +197,7 @@ export function AIAssistant({ locale }: AIAssistantProps) {
             <div className="flex justify-center mb-4">
               {/* Rovo gradient avatar */}
               <div className="flex h-14 w-14 items-center justify-center rounded-[var(--ds-border-radius-400,8px)] shadow-[var(--ds-shadow-overlay)]"
-                style={{ background: 'linear-gradient(135deg, #6554C0 0%, #8777D9 50%, #998DD9 100%)' }}>
+                style={{ background: 'linear-gradient(135deg, #27272A 0%, #3F3F46 50%, #52525B 100%)' }}>
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                   <path d="M12 3L20 7.5V16.5L12 21L4 16.5V7.5L12 3Z" stroke="white" strokeWidth="1.5" strokeLinejoin="round"/>
                   <path d="M12 8L16 10.5V15.5L12 18L8 15.5V10.5L12 8Z" fill="white" fillOpacity="0.4"/>
@@ -209,12 +209,7 @@ export function AIAssistant({ locale }: AIAssistantProps) {
               <p className="text-sm font-bold text-[var(--ds-text,#172B4D)]">
                 {isRtl ? 'مساعد GateFlow' : 'GateFlow'}
               </p>
-              <span className="rounded-[var(--ds-border-radius-200,4px)] px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider"
-                style={{
-                  background: 'var(--ds-background-discovery,#EAE6FF)',
-                  color: 'var(--ds-text-discovery,#403294)',
-                  border: '1px solid var(--ds-border-discovery,#998DD9)',
-                }}>
+              <span className="rounded-[var(--ds-border-radius-200,4px)] px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider bg-primary/10 text-primary border border-primary/20">
                 AI
               </span>
             </div>
@@ -229,7 +224,7 @@ export function AIAssistant({ locale }: AIAssistantProps) {
                 <button
                   key={p}
                   onClick={() => sendExample(p)}
-                  className="rounded-[var(--ds-border-radius-200,4px)] border border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-surface-sunken,#F4F5F7)] px-3 py-2 text-xs text-[var(--ds-text-subtle,#42526E)] transition-all hover:border-[var(--ds-border-discovery,#998DD9)] hover:bg-[var(--ds-background-discovery,#EAE6FF)] hover:text-[var(--ds-text-discovery,#403294)] active:scale-95"
+                  className="rounded-[var(--ds-border-radius-200,4px)] border border-[var(--ds-border)] bg-[var(--ds-surface-sunken)] px-3 py-2 text-xs text-[var(--ds-text-subtle)] transition-all hover:border-primary/50 hover:bg-primary/5 active:scale-95"
                 >
                   {p}
                 </button>
@@ -260,10 +255,10 @@ export function AIAssistant({ locale }: AIAssistantProps) {
               <div className={cn(
                 'flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold',
                 isUser
-                  ? 'bg-[var(--ds-background-brand-bold,#0052CC)] text-[var(--ds-text-inverse,#FFFFFF)]'
+                  ? 'bg-primary text-white'
                   : 'text-white'
               )}
-                style={!isUser ? { background: 'linear-gradient(135deg, #6554C0, #8777D9)' } : undefined}
+                style={!isUser ? { background: 'linear-gradient(135deg, #27272A, #52525B)' } : undefined}
               >
                 {isUser ? (
                   <User className="h-4 w-4" />
@@ -278,8 +273,8 @@ export function AIAssistant({ locale }: AIAssistantProps) {
                 className={cn(
                   'max-w-[85%] rounded-[var(--ds-border-radius-400,8px)] px-3.5 py-2.5 text-sm leading-relaxed',
                   isUser
-                    ? 'bg-[var(--ds-background-brand-bold,#0052CC)] text-[var(--ds-text-inverse,#FFFFFF)] shadow-[var(--ds-shadow-raised)]'
-                    : 'bg-[var(--ds-surface-raised,#FFFFFF)] text-[var(--ds-text,#172B4D)] border border-[var(--ds-border,#DFE1E6)] shadow-[var(--ds-shadow-raised)]'
+                  ? 'bg-primary text-white shadow-[var(--ds-shadow-raised)]'
+                  : 'bg-[var(--ds-surface-raised)] text-[var(--ds-text)] border border-[var(--ds-border)] shadow-[var(--ds-shadow-raised)]'
                 )}
                 dir={msgRtl ? 'rtl' : 'ltr'}
               >
@@ -293,18 +288,18 @@ export function AIAssistant({ locale }: AIAssistantProps) {
         {isLoading && (
           <div className={cn('flex items-end gap-2', isRtl ? 'flex-row-reverse' : 'flex-row')}>
             <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-white"
-              style={{ background: 'linear-gradient(135deg, #6554C0, #8777D9)' }}>
+              style={{ background: 'linear-gradient(135deg, #27272A, #52525B)' }}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
                 <path d="M12 4L19 8V16L12 20L5 16V8L12 4Z" stroke="white" strokeWidth="1.5" strokeLinejoin="round"/>
                 <circle cx="12" cy="12" r="2" fill="white"/>
               </svg>
             </div>
             <div className={cn(
-              'flex items-center gap-1 rounded-[var(--ds-border-radius-400,8px)] bg-[var(--ds-surface-raised,#FFFFFF)] px-3.5 py-3 border border-[var(--ds-border,#DFE1E6)] shadow-[var(--ds-shadow-raised)]',
+              'flex items-center gap-1 rounded-[var(--ds-border-radius-400,8px)] bg-[var(--ds-surface-raised)] px-3.5 py-3 border border-[var(--ds-border)] shadow-[var(--ds-shadow-raised)]',
             )}>
-              <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[var(--ds-background-discovery-bold,#5243AA)] [animation-delay:0ms]" />
-              <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[var(--ds-background-discovery-bold,#5243AA)] [animation-delay:150ms]" />
-              <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-[var(--ds-background-discovery-bold,#5243AA)] [animation-delay:300ms]" />
+              <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary/40 [animation-delay:0ms]" />
+              <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary/40 [animation-delay:150ms]" />
+              <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary/40 [animation-delay:300ms]" />
             </div>
           </div>
         )}
@@ -352,8 +347,8 @@ export function AIAssistant({ locale }: AIAssistantProps) {
 
           <div className="flex flex-col p-4 gap-3">
             <div className={cn(
-              'relative flex flex-col rounded-[12px] border transition-all duration-300 shadow-sm focus-within:shadow-md focus-within:ring-2 focus-within:ring-[var(--ds-border-selected,#4C9AFF)] focus-within:ring-offset-0',
-              'bg-[var(--ds-surface-raised,#FFFFFF)] border-[var(--ds-border,#DFE1E6)]'
+              'relative flex flex-col rounded-[12px] border transition-all duration-300 shadow-sm focus-within:shadow-md focus-within:ring-2 focus-within:ring-primary/40 focus-within:ring-offset-0',
+              'bg-[var(--ds-surface-raised)] border-[var(--ds-border)]'
             )}>
               <textarea
                 value={input}
@@ -424,7 +419,7 @@ export function AIAssistant({ locale }: AIAssistantProps) {
                         variant="ghost" 
                         size="icon" 
                         type="button" 
-                        className="h-8 w-8 text-[var(--ds-icon-subtle,#6B778C)] hover:text-[var(--ds-text-brand,#0052CC)]"
+                        className="h-8 w-8 text-[var(--ds-icon-subtle)] hover:text-primary"
                         onClick={() => {
                           // Mock tagging a resident for demonstration
                           if (!taggedItems.some(i => i.id === 'demo-res')) {
@@ -460,8 +455,8 @@ export function AIAssistant({ locale }: AIAssistantProps) {
             </div>
             
             <div className={cn("flex items-center gap-1.5 px-1", isRtl && "flex-row-reverse")}>
-              <div className="px-1.5 py-0.5 rounded-sm bg-[var(--ds-background-discovery,#EAE6FF)] text-[var(--ds-text-discovery,#403294)] text-[9px] font-bold uppercase tracking-wider">
-                mediaBubble AI
+              <div className="px-1.5 py-0.5 rounded-sm bg-primary/10 text-primary text-[9px] font-bold uppercase tracking-wider border border-primary/20">
+                GateFlow AI
               </div>
               <span className="text-[10px] text-[var(--ds-text-subtlest,#6B778C)]">
                 {isRtl ? 'مدعوم بواسطة mediaBubble AI Intelligence' : 'Powered by mediaBubble AI Intelligence'}

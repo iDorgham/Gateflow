@@ -107,7 +107,7 @@ export function ResidentCard({ contact, onView, onEdit }: ResidentCardProps) {
             contact.units.slice(0, 2).map((unit) => (
               <span
                 key={unit.id}
-                className="inline-flex items-center rounded-[3px] bg-[var(--ds-background-brand-subtle,#DEEBFF)] px-1.5 py-0.5 text-[10px] font-semibold text-[var(--ds-text-brand,#0052CC)] uppercase tracking-tight"
+                className="inline-flex items-center rounded-[3px] bg-[var(--ds-background-brand-subtle,#DEEBFF)] px-1.5 py-0.5 text-[10px] font-semibold text-[var(--ds-text-brand,var(--primary))] uppercase tracking-tight"
               >
                 {unit.name}
               </span>

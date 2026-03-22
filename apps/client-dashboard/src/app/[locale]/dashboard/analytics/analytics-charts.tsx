@@ -103,7 +103,7 @@ const ADS_TOOLTIP_STYLE: React.CSSProperties = {
   border: '1px solid var(--ds-border, #DFE1E6)',
   background: 'var(--ds-surface-overlay, #FFFFFF)',
   color: 'var(--ds-text, #172B4D)',
-  boxShadow: '0 4px 8px -2px rgba(9,30,66,0.16), 0 0 1px rgba(9,30,66,0.08)',
+  boxShadow: 'var(--ds-shadow-raised)',
   padding: '8px 12px',
 };
 

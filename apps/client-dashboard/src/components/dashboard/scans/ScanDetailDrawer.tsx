@@ -25,9 +25,9 @@ const STATUS_CONFIG: Record<string, { bg: string; text: string; dot: string; lab
     label: 'Expired',
   },
   MAX_USES_REACHED: {
-    bg: 'bg-[var(--ds-background-information-subtle,#DEEBFF)]',
-    text: 'text-[var(--ds-text-information,#0052CC)]',
-    dot: 'bg-[var(--ds-background-information-bold,#0052CC)]',
+    bg: 'bg-primary/10',
+    text: 'text-primary',
+    dot: 'bg-primary',
     label: 'Max Uses',
   },
   INACTIVE: {
@@ -96,13 +96,13 @@ export function ScanDetailDrawer({ scan, locale, onClose }: ScanDetailDrawerProp
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            className="fixed inset-y-0 end-0 z-50 w-80 bg-[var(--ds-surface,#FFFFFF)] dark:bg-[#1D2125] border-s border-[var(--ds-border,#DFE1E6)] shadow-xl flex flex-col overflow-hidden"
+            className="fixed inset-y-0 end-0 z-50 w-80 bg-background border-s border-border border-border shadow-xl flex flex-col overflow-hidden"
             role="dialog"
             aria-modal="true"
             aria-label="Scan details"
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--ds-border,#DFE1E6)] shrink-0 bg-[var(--ds-background-neutral-subtle,#F4F5F7)]">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-border shrink-0 bg-muted/20">
               <p className="text-[10px] font-black uppercase tracking-widest text-[var(--ds-text-subtlest,#6B778C)]">
                 Scan Details
               </p>
@@ -146,7 +146,7 @@ export function ScanDetailDrawer({ scan, locale, onClose }: ScanDetailDrawerProp
 
                 <Field icon={QrCode} label="QR Code">
                   <div className="flex flex-col gap-0.5">
-                    <span className="font-mono text-xs font-bold text-[var(--ds-text-link,#0052CC)] break-all">
+                    <span className="font-mono text-xs font-bold text-primary break-all">
                       {scan.qrCode?.code ?? '—'}
                     </span>
                     {scan.qrCode?.type && (

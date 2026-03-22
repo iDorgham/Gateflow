@@ -108,7 +108,7 @@ export function EditPanel({
     >
       {/* Overlay: dim + block interaction, no close on click */}
       <div
-        className="absolute inset-0 bg-[#091E42]/60 backdrop-blur-[2px] transition-opacity duration-300"
+        className="absolute inset-0 bg-black/60 dark:bg-black/80 backdrop-blur-[2px] transition-opacity duration-300"
         onClick={handleOverlayClick}
         aria-hidden="true"
       />
@@ -116,16 +116,16 @@ export function EditPanel({
       {/* Panel: slide from right (or left in RTL) */}
       <div
         className={cn(
-          'relative z-10 flex w-full max-w-2xl flex-col bg-white dark:bg-[#1D2125] shadow-2xl overflow-hidden',
+          'relative z-10 flex w-full max-w-2xl flex-col bg-background shadow-2xl overflow-hidden',
           'animate-in duration-300 ease-in-out',
           isRtl ? 'slide-in-from-left' : 'slide-in-from-right',
           isRtl ? 'ml-0 mr-auto' : 'ml-auto mr-0'
         )}
       >
         {/* Header */}
-        <div className="flex shrink-0 items-center justify-between border-b border-[#DFE1E6] dark:border-[#343A46] px-8 py-5">
+        <div className="flex shrink-0 items-center justify-between border-b border-border px-8 py-5">
           <div className="flex flex-col gap-1">
-            <h2 id="edit-panel-title" className="text-[20px] font-semibold text-[#172B4D] dark:text-[#E3E6E8] tracking-tight">
+            <h2 id="edit-panel-title" className="text-[20px] font-semibold text-foreground dark:text-zinc-100 tracking-tight">
               {title}
             </h2>
           </div>
@@ -134,7 +134,7 @@ export function EditPanel({
             <Button
               variant="ghost"
               size="icon"
-              className="h-9 w-9 rounded-full text-[#42526E] dark:text-[#97A0AF] hover:bg-[#EBECF0] dark:hover:bg-[#343A46]"
+              className="h-9 w-9 rounded-full text-muted-foreground hover:bg-muted hover:bg-accent"
               onClick={handleQuit}
               aria-label="Close"
             >
@@ -144,16 +144,16 @@ export function EditPanel({
         </div>
 
         {/* Content */}
-        <ScrollArea className="flex-1 bg-[#FAFBFC] dark:bg-[#1D2125]">
+        <ScrollArea className="flex-1 bg-background">
           <div className="px-8 py-8">{children}</div>
         </ScrollArea>
 
         {/* Footer */}
-        <div className="flex shrink-0 justify-end items-center gap-3 border-t border-[#DFE1E6] dark:border-[#343A46] px-8 py-5 bg-white dark:bg-[#1D2125]">
+        <div className="flex shrink-0 justify-end items-center gap-3 border-t border-border px-8 py-5 bg-background">
           <Button 
             variant="ghost" 
             onClick={handleQuit} 
-            className="text-[#42526E] dark:text-[#97A0AF] hover:bg-[#EBECF0] dark:hover:bg-[#343A46] font-semibold"
+            className="text-muted-foreground hover:bg-muted hover:bg-accent font-semibold"
           >
             Cancel
           </Button>
@@ -161,7 +161,7 @@ export function EditPanel({
             <Button 
               onClick={handleSave} 
               disabled={isSaving} 
-              className="bg-[#0052CC] hover:bg-[#0747A6] text-white px-6 font-semibold shadow-sm transition-all active:scale-95"
+              className="bg-primary hover:bg-primary/90 text-primary-foreground px-6 font-semibold shadow-sm transition-all active:scale-95"
             >
               {isSaving ? (
                 <div className="flex items-center gap-2">

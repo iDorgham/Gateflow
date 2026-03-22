@@ -23,7 +23,7 @@ const STATUS_COLORS: Record<string, string> = {
   SUCCESS: 'bg-[var(--ds-background-success-subtle,#E3FCEF)] text-[var(--ds-text-success,#006644)]',
   FAILED: 'bg-[var(--ds-background-danger-subtle,#FFEBE6)] text-[var(--ds-text-danger,#BF2600)]',
   EXPIRED: 'bg-[var(--ds-background-warning-subtle,#FFF0B3)] text-[var(--ds-text-warning-inverse,#172B4D)]',
-  MAX_USES_REACHED: 'bg-[var(--ds-background-brand-subtle,#DEEBFF)] text-[var(--ds-text-brand,#0052CC)]',
+  MAX_USES_REACHED: 'bg-primary/10 text-primary border border-primary/20',
   INACTIVE: 'bg-[var(--ds-background-neutral-subtle,#F4F5F7)] text-[var(--ds-text-subtle,#42526E)]',
   DENIED: 'bg-[var(--ds-background-danger-subtle,#FFEBE6)] text-[var(--ds-text-danger,#BF2600)]',
 };
@@ -95,7 +95,7 @@ export function ScansTable({
                <QrCode className="h-4 w-4 text-[var(--ds-text-subtle,#6B778C)]" />
             </div>
             <div className="flex flex-col">
-              <span className="font-mono text-xs font-black text-[var(--ds-text-link,#0052CC)] tracking-wider">
+              <span className="font-mono text-xs font-black text-primary tracking-wider">
                 {item.qrCode?.code?.slice(0, 12)}...
               </span>
               {item.qrCode?.type && (
@@ -115,7 +115,7 @@ export function ScansTable({
         label: t('scans.table.project', 'Property'),
         render: (item) => (
           item.qrCode?.project?.name ? (
-            <span className="inline-flex items-center gap-1.5 rounded-[3px] bg-[var(--ds-background-brand-subtle,#DEEBFF)] px-2 py-0.5 text-[11px] font-semibold text-[var(--ds-text-brand,#0052CC)] uppercase tracking-tight whitespace-nowrap">
+            <span className="inline-flex items-center gap-1.5 rounded-[3px] bg-primary/10 px-2 py-0.5 text-[11px] font-semibold text-primary uppercase tracking-tight whitespace-nowrap border border-primary/20">
               <Building className="h-3 w-3" />
               {item.qrCode.project.name}
             </span>
