@@ -1,19 +1,22 @@
 import { requireAuth } from '@/lib/dashboard-auth';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@gate-access/ui';
-import { getTeamMembers, getInvitations, getRoles } from './actions';
 import { TeamRoster } from '@/components/settings/team/team-roster';
 import { InvitationList } from '@/components/settings/team/invitation-list';
-import { Users, Mail } from 'lucide-react';
+import { RoleDashboard } from '@/components/settings/team/role-dashboard';
+import { ActivityLogList } from '@/components/settings/team/activity-log-list';
+import { getTeamMembers, getInvitations, getRoles, getActivityLogs } from './actions';
+import { Users, Mail, ShieldCheck, History } from 'lucide-react';
 
 export default async function TeamSettings() {
   const { user } = await requireAuth();
 
   if (!user) return null;
 
-  const [membersResult, invitationsResult, rolesResult] = await Promise.all([
+  const [membersResult, invitationsResult, rolesResult, logsResult] = await Promise.all([
     getTeamMembers(),
     getInvitations(),
     getRoles(),
+    getActivityLogs(),
   ]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -21,6 +24,7 @@ export default async function TeamSettings() {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const invitations = (invitationsResult.data ?? []) as any[];
   const roles = rolesResult.data ?? [];
+  const logs = logsResult.data ?? [];
 
   return (
     <div className="space-y-6">
@@ -57,6 +61,20 @@ export default async function TeamSettings() {
               </span>
             )}
           </TabsTrigger>
+          <TabsTrigger
+            value="roles"
+            className="rounded-lg gap-2 data-[state=active]:bg-background data-[state=active]:shadow-sm py-2 px-4"
+          >
+            <ShieldCheck className="h-4 w-4" />
+            Roles
+          </TabsTrigger>
+          <TabsTrigger
+            value="activity"
+            className="rounded-lg gap-2 data-[state=active]:bg-background data-[state=active]:shadow-sm py-2 px-4"
+          >
+            <History className="h-4 w-4" />
+            Activity
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="members">
@@ -70,6 +88,19 @@ export default async function TeamSettings() {
         <TabsContent value="invitations">
           <InvitationList
             invitations={invitations}
+          />
+        </TabsContent>
+
+        <TabsContent value="roles">
+          <RoleDashboard
+            roles={roles}
+            canManageRoles={!!(await requireAuth()).claims.permissions?.['roles:manage']}
+          />
+        </TabsContent>
+
+        <TabsContent value="activity">
+          <ActivityLogList
+            logs={logs}
           />
         </TabsContent>
       </Tabs>

@@ -127,6 +127,7 @@ model User {
   /// e.g. { tableViews: { contacts: {...}, units: {...} } }
   preferences     Json?
   roleId          String
+  lastActiveAt    DateTime?
   auditLogs       AuditLog[]
   chatMessages    ChatMessage[]
   gateAssignments GateAssignment[]
@@ -142,6 +143,7 @@ model User {
   @@index([organizationId])
   @@index([roleId])
   @@index([deletedAt])
+  @@index([lastActiveAt])
 }
 
 model Invitation {
@@ -832,6 +834,7 @@ enum EventType {
   CONTACT_CREATED
   CONTACT_UPDATED
   VISITOR_QR_DELETED
+  TEAM_CHAT_MESSAGE
 }
 
 model AiAutomation {

@@ -11,11 +11,12 @@ import {
   ChevronDown,
   Menu,
   Sparkles,
-  X,
+  ListTodo,
+  MessageSquare,
   Settings,
-  Power,
   CreditCard,
-  ListTodo
+  Power,
+  X,
 } from 'lucide-react';
 import {
   SquaresFour,
@@ -64,6 +65,7 @@ import { useTranslation } from 'react-i18next';
 import { GlobalSearch } from './global-search';
 import { AIAssistant } from './ai-assistant';
 import { ThemeToggle } from './theme-toggle';
+import { TeamSidebarChat } from './team/TeamSidebarChat';
 import { ProjectFilterProvider } from '@/context/ProjectFilterContext';
 import { Locale } from '@/lib/i18n-config';
 import { useRealtimeEvents } from '@/lib/realtime/use-realtime-events';
@@ -200,6 +202,7 @@ const NAV_ITEMS = [
   { label: 'QR Codes', href: '/dashboard/qrcodes', icon: QrCodeIcon, i18nKey: 'sidebar.qrCodes' },
   { label: 'Scan Logs', href: '/dashboard/scans', icon: Record, i18nKey: 'sidebar.scanLogs' },
   { label: 'Gates', href: '/dashboard/gates', icon: House, i18nKey: 'sidebar.gates' },
+  { label: 'Team', href: '/dashboard/team', icon: Users, i18nKey: 'sidebar.team' },
   { label: 'Analytics', href: '/dashboard/analytics', icon: ChartLineUp, i18nKey: 'sidebar.analytics' },
   { label: 'Settings', href: '/dashboard/settings', icon: Gear, i18nKey: 'sidebar.settings' },
 ];
@@ -214,11 +217,13 @@ function LeftSidebar({
   isCollapsed,
   onToggleCollapse,
   isRtl,
+  onOpenChat,
 }: {
   locale: Locale;
   isCollapsed: boolean;
   onToggleCollapse: () => void;
   isRtl: boolean;
+  onOpenChat: () => void;
 }) {
   const pathname = usePathname();
   const { t } = useTranslation('dashboard');
@@ -418,6 +423,31 @@ function LeftSidebar({
       </ScrollArea>
 
       <div className="shrink-0 p-4 mt-auto border-t border-[var(--ds-border,#DFE1E6)]/50 flex flex-col gap-2">
+        <TooltipProvider delayDuration={300}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                onClick={onOpenChat}
+                className={cn(
+                  'relative flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium outline-none focus-visible:ring-2 focus-visible:ring-primary/50 text-[var(--ds-text-subtle)] hover:bg-[var(--ds-background-neutral-subtle)]',
+                  isCollapsed && 'justify-center px-0'
+                )}
+              >
+                <MessageSquare className="relative z-10 h-5 w-5 shrink-0" />
+                {!isCollapsed && (
+                  <span className="relative z-10 overflow-hidden whitespace-nowrap">
+                    {t('sidebar.teamChat', 'Team Chat')}
+                  </span>
+                )}
+              </button>
+            </TooltipTrigger>
+            {isCollapsed && (
+              <TooltipContent side={isRtl ? 'left' : 'right'} sideOffset={10}>
+                {t('sidebar.teamChat', 'Team Chat')}
+              </TooltipContent>
+            )}
+          </Tooltip>
+        </TooltipProvider>
         <NavItem item={NAV_ITEMS.find(n => n.href === '/dashboard/settings')!} collapsed={isCollapsed} />
       </div>
 
@@ -543,11 +573,13 @@ function MobileSidebar({
   isOpen,
   onOpenChange,
   isRtl,
+  onOpenChat,
 }: {
   locale: Locale;
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   isRtl: boolean;
+  onOpenChat: () => void;
 }) {
   const pathname = usePathname();
 
@@ -629,6 +661,13 @@ function MobileSidebar({
               </div>
 
               <div className="mt-auto border-t border-border/50 pt-4">
+                <button
+                  onClick={() => { onOpenChat(); onOpenChange(false); }}
+                  className="flex items-center gap-3 rounded-md px-3 py-3 text-sm font-medium transition-colors mb-1 text-[var(--ds-text-subtle)] hover:bg-[var(--ds-background-neutral-subtle)] w-full"
+                >
+                  <MessageSquare className="h-6 w-6 shrink-0" />
+                  <span>{t('sidebar.teamChat', 'Team Chat')}</span>
+                </button>
                 <NavItem item={NAV_ITEMS.find(n => n.href === '/dashboard/settings')!} collapsed={false} onClick={() => onOpenChange(false)} />
               </div>
             </nav>
@@ -651,6 +690,7 @@ export function DashboardLayout({
   useRealtimeEvents();
   const [leftCollapsed, setLeftCollapsed] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const [chatOpen, setChatOpen] = useState(false);
   const router = useRouter();
 
   const handleProjectSwitch = (projectId: string) => {
@@ -686,7 +726,13 @@ export function DashboardLayout({
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-background" dir={isRtl ? 'rtl' : 'ltr'} lang={locale}>
       <div className="flex flex-1 min-h-0 overflow-hidden">
-        <LeftSidebar locale={locale} isCollapsed={leftCollapsed} onToggleCollapse={() => setLeftCollapsed((c) => !c)} isRtl={isRtl} />
+        <LeftSidebar
+          locale={locale}
+          isCollapsed={leftCollapsed}
+          onToggleCollapse={() => setLeftCollapsed((c) => !c)}
+          isRtl={isRtl}
+          onOpenChat={() => setChatOpen(true)}
+        />
 
         <div className="flex flex-1 min-w-0 flex-col min-h-0 overflow-hidden">
           <div className="flex h-16 shrink-0 items-center gap-2 border-b border-border bg-background px-4 md:hidden">
@@ -728,7 +774,14 @@ export function DashboardLayout({
         <RightSidePanel locale={locale} isOpen={rightOpen} onToggle={() => setRightOpen((o) => !o)} />
       </div>
 
-      <MobileSidebar locale={locale} isOpen={mobileNavOpen} onOpenChange={setMobileNavOpen} isRtl={isRtl} />
+      <MobileSidebar locale={locale} isOpen={mobileNavOpen} onOpenChange={setMobileNavOpen} isRtl={isRtl} onOpenChat={() => setChatOpen(true)} />
+
+      <TeamSidebarChat
+        isOpen={chatOpen}
+        onClose={() => setChatOpen(false)}
+        locale={locale}
+        currentUserId={user.id}
+      />
     </div>
   );
 }

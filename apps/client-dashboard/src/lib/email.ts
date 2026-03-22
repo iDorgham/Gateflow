@@ -145,6 +145,59 @@ export function buildEmailHtml(recipientName: string, orgName: string, expiresAt
           </tr>
 
         </table>
+</body>
+</html>`;
+}
+
+export function buildInvitationEmailHtml(orgName: string, joinUrl: string): string {
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Join ${orgName} on GateFlow</title>
+</head>
+<body style="margin:0;padding:0;background:#f1f5f9;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="background:#f1f5f9;padding:40px 16px;">
+    <tr>
+      <td align="center">
+        <table width="560" cellpadding="0" cellspacing="0" role="presentation" style="background:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.1);">
+          <!-- Header -->
+          <tr>
+            <td style="background:#0f172a;padding:28px 32px;">
+              <p style="margin:0;color:#ffffff;font-size:22px;font-weight:700;letter-spacing:-0.3px;">GateFlow</p>
+              <p style="margin:4px 0 0;color:#94a3b8;font-size:13px;">Team Invitation</p>
+            </td>
+          </tr>
+          <!-- Body -->
+          <tr>
+            <td style="padding:32px;">
+              <h1 style="margin:0 0 16px;font-size:20px;font-weight:700;color:#0f172a;">You've been invited!</h1>
+              <p style="margin:0 0 24px;color:#475569;font-size:15px;line-height:1.6;">
+                <strong>${orgName}</strong> has invited you to join their security operations team on GateFlow.
+                Our platform helps manage physical access control with AI-powered insights and real-time monitoring.
+              </p>
+              <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td align="center">
+                    <a href="${joinUrl}" style="background-color: #2563eb; border-radius: 8px; color: #ffffff; display: inline-block; font-size: 14px; font-weight: 700; line-height: 50px; text-align: center; text-decoration: none; width: 220px; -webkit-text-size-adjust: none;">Join the Team</a>
+                  </td>
+                </tr>
+              </table>
+              <p style="margin:24px 0 0;font-size:13px;color:#94a3b8;line-height:1.5;">
+                This link will expire in 7 days. If you weren't expecting this invitation, you can safely ignore this email.
+              </p>
+            </td>
+          </tr>
+          <!-- Footer -->
+          <tr>
+            <td style="padding:20px 32px;background:#f8fafc;border-top:1px solid #e2e8f0;">
+              <p style="margin:0;font-size:12px;color:#94a3b8;text-align:center;">
+                Powered by GateFlow · Secure Access Infrastructure
+              </p>
+            </td>
+          </tr>
+        </table>
       </td>
     </tr>
   </table>

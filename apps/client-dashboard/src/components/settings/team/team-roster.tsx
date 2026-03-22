@@ -20,6 +20,7 @@ import {
   DropdownMenuSeparator,
   Input,
   cn,
+  Checkbox,
 } from '@gate-access/ui';
 import { 
   MoreHorizontal, 
@@ -62,6 +63,7 @@ export function TeamRoster({ users, roles, currentUserId }: TeamRosterProps) {
   const { t } = useTranslation('dashboard');
   const [searchTerm, setSearchTerm] = useState('');
   const [isPending, startTransition] = useTransition();
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   const filteredUsers = users.filter(user => 
     user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -104,6 +106,47 @@ export function TeamRoster({ users, roles, currentUserId }: TeamRosterProps) {
     });
   };
 
+  const handleBulkRemove = async () => {
+    if (selectedIds.length === 0) return;
+    if (!confirm(`Are you sure you want to remove ${selectedIds.length} members?`)) return;
+
+    startTransition(async () => {
+      let successCount = 0;
+      for (const id of selectedIds) {
+        if (id === currentUserId) continue;
+        const res = await removeMember(id);
+        if (res.success) successCount++;
+      }
+      toast.success(`Removed ${successCount} members`);
+      setSelectedIds([]);
+    });
+  };
+
+  const handleBulkRevoke = async () => {
+    if (selectedIds.length === 0) return;
+    startTransition(async () => {
+      for (const id of selectedIds) {
+        await revokeUserSessions(id);
+      }
+      toast.success(`Revoked all sessions for ${selectedIds.length} members`);
+      setSelectedIds([]);
+    });
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedIds.length === filteredUsers.length) {
+      setSelectedIds([]);
+    } else {
+      setSelectedIds(filteredUsers.map(u => u.id));
+    }
+  };
+
+  const toggleSelect = (id: string) => {
+    setSelectedIds(prev => 
+      prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+    );
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -128,6 +171,12 @@ export function TeamRoster({ users, roles, currentUserId }: TeamRosterProps) {
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/50">
+              <TableHead className="w-12 text-center">
+                <Checkbox 
+                  checked={selectedIds.length === filteredUsers.length && filteredUsers.length > 0}
+                  onChange={toggleSelectAll}
+                />
+              </TableHead>
               <TableHead>{t('settings.team.member', 'Member')}</TableHead>
               <TableHead>{t('settings.team.role', 'Role')}</TableHead>
               <TableHead className="text-center">{t('settings.team.activity', 'Activity')}</TableHead>
@@ -143,7 +192,19 @@ export function TeamRoster({ users, roles, currentUserId }: TeamRosterProps) {
               </TableRow>
             ) : (
               filteredUsers.map((user) => (
-                <TableRow key={user.id} className="group hover:bg-muted/30 transition-colors">
+                <TableRow 
+                  key={user.id} 
+                  className={cn(
+                    "group transition-colors",
+                    selectedIds.includes(user.id) ? "bg-primary/5" : "hover:bg-muted/30"
+                  )}
+                >
+                  <TableCell className="text-center">
+                    <Checkbox 
+                      checked={selectedIds.includes(user.id)}
+                      onChange={() => toggleSelect(user.id)}
+                    />
+                  </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-3">
                       <Avatar className="h-9 w-9 border border-border">
@@ -225,6 +286,44 @@ export function TeamRoster({ users, roles, currentUserId }: TeamRosterProps) {
           </TableBody>
         </Table>
       </div>
+
+      {selectedIds.length > 0 && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-foreground text-background px-6 py-3 rounded-2xl shadow-2xl flex items-center gap-6 z-50 animate-in fade-in slide-in-from-bottom-4 duration-300">
+          <div className="flex flex-col">
+            <span className="text-[10px] font-black uppercase tracking-widest opacity-50">Selected</span>
+            <span className="text-xs font-bold leading-none">{selectedIds.length} members</span>
+          </div>
+          <div className="h-4 w-[1px] bg-background/20" />
+          <div className="flex items-center gap-2">
+            <Button 
+              size="sm" 
+              variant="secondary"
+              className="h-8 rounded-lg gap-2 text-[10px] font-bold uppercase tracking-widest"
+              onClick={handleBulkRevoke}
+            >
+              <LogOut className="h-3 w-3" />
+              Revoke Sessions
+            </Button>
+            <Button 
+              size="sm" 
+              variant="destructive"
+              className="h-8 rounded-lg gap-2 text-[10px] font-bold uppercase tracking-widest bg-red-500 hover:bg-red-600 border-none"
+              onClick={handleBulkRemove}
+            >
+              <Trash2 className="h-3 w-3" />
+              Remove
+            </Button>
+            <Button 
+              size="sm" 
+              variant="ghost"
+              className="h-8 rounded-lg text-[10px] font-bold uppercase tracking-widest text-background/50 hover:text-background hover:bg-background/10"
+              onClick={() => setSelectedIds([])}
+            >
+              Cancel
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -13,6 +13,7 @@ const EVENT_QUERY_MAP: Record<string, string[][]> = {
   CONTACT_UPDATED:     [['contacts']],
   VISITOR_QR_CREATED:  [['qrcodes'], ['contacts']],
   VISITOR_QR_DELETED:  [['qrcodes']],
+  TEAM_CHAT_MESSAGE:   [['team-messages']],
 };
 
 /**

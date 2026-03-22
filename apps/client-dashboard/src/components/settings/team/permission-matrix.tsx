@@ -10,12 +10,14 @@ import {
   cn,
 } from '@gate-access/ui';
 import { ShieldAlert } from 'lucide-react';
+import type { Permission } from '@gate-access/types';
+import { Button } from '@gate-access/ui';
 
 export interface PermissionGroup {
   id: string;
   label: string;
   permissions: {
-    id: string;
+    id: Permission;
     label: string;
     description: string;
     isSensitive?: boolean;
@@ -72,11 +74,23 @@ const PERMISSION_GROUPS: PermissionGroup[] = [
     label: 'Analytics & Logs',
     permissions: [
       { id: 'scans:view', label: 'View Scan Logs', description: 'Can see real-time entry history' },
+      { id: 'scans:override', label: 'System Override', description: 'Can manually trigger gate open from dashboard', isSensitive: true },
       { id: 'scans:export', label: 'Export Data', description: 'Can download CSV reports of scans', isSensitive: true },
       { id: 'analytics:view', label: 'View Analytics', description: 'Can see traffic patterns and trends' },
     ]
+  },
+  {
+    id: 'workspace',
+    label: 'Workspace',
+    permissions: [
+      { id: 'workspace:manage', label: 'Workspace Settings', description: 'Can manage branding, billing, and API keys', isSensitive: true },
+      { id: 'contacts:manage', label: 'Global Contacts', description: 'Can manage shared emergency and staff contacts' },
+    ]
   }
 ];
+
+// Helper to find permissions not mapped to groups
+const ALL_MAPPED_IDS = new Set(PERMISSION_GROUPS.flatMap(g => g.permissions.map(p => p.id)));
 
 interface PermissionMatrixProps {
   permissions: Record<string, boolean>;
@@ -101,9 +115,25 @@ export function PermissionMatrix({ permissions, onChange, disabled }: Permission
               <h3 className="text-xs font-black uppercase tracking-widest text-muted-foreground">
                 {group.label}
               </h3>
-              <Badge variant="outline" className="text-[10px] font-bold border-none bg-muted/50">
-                {group.permissions.length} keys
-              </Badge>
+              <div className="flex items-center gap-2">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="h-6 px-2 text-[9px] font-black uppercase tracking-widest text-muted-foreground hover:text-primary"
+                  onClick={() => {
+                    const newPerms = { ...permissions };
+                    const allSelected = group.permissions.every(p => permissions[p.id]);
+                    group.permissions.forEach(p => newPerms[p.id] = !allSelected);
+                    onChange(newPerms);
+                  }}
+                  disabled={disabled}
+                >
+                  {group.permissions.every(p => permissions[p.id]) ? 'Deselect All' : 'Select All'}
+                </Button>
+                <Badge variant="outline" className="text-[10px] font-bold border-none bg-muted/50">
+                  {group.permissions.length} keys
+                </Badge>
+              </div>
             </div>
             
             <div className="space-y-2">
@@ -150,6 +180,30 @@ export function PermissionMatrix({ permissions, onChange, disabled }: Permission
           </div>
         ))}
       </div>
+
+      {/* Developer helper to catch missed permissions */}
+      {process.env.NODE_ENV === 'development' && (
+        <div className="mt-8 p-4 rounded-xl border border-dashed border-muted-foreground/20 bg-muted/5 opacity-50">
+          <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground mb-2">
+            System Debug: Unmapped Permissions
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {Object.keys(permissions).filter(k => !ALL_MAPPED_IDS.has(k as Permission)).length > 0 ? (
+              Object.keys(permissions)
+                .filter(k => !ALL_MAPPED_IDS.has(k as Permission))
+                .map(k => (
+                  <Badge key={k} variant="danger" className="text-[9px] font-black uppercase">
+                    {k}
+                  </Badge>
+                ))
+            ) : (
+              <span className="text-[10px] font-medium text-muted-foreground italic">
+                All permissions present in the role are currently mapped to the UI groups.
+              </span>
+            )}
+          </div>
+        </div>
+      )}
     </TooltipProvider>
   );
 }

@@ -42,6 +42,7 @@
     "ai": "4",
     "clsx": "^2.1.1",
     "crypto-js": "^4.2.0",
+    "date-fns": "^4.1.0",
     "framer-motion": "^11.18.2",
     "html2canvas": "^1.4.1",
     "i18next": "^23.16.8",

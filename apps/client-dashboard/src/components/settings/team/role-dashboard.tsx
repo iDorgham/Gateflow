@@ -25,10 +25,10 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { PermissionMatrix } from './permission-matrix';
 import {
-  createRoleAction,
-  updateRoleAction,
-  deleteRoleAction,
-} from '../../../app/[locale]/dashboard/workspace/settings/actions';
+  createRole,
+  updateRole,
+  deleteRole,
+} from '../../../app/[locale]/dashboard/settings/team/actions';
 
 interface Role {
   id: string;
@@ -65,8 +65,8 @@ export function RoleDashboard({ roles, canManageRoles }: RoleDashboardProps) {
       };
 
       const res = editingRole.id
-        ? await updateRoleAction(editingRole.id, data)
-        : await createRoleAction(data);
+        ? await updateRole({ id: editingRole.id, ...data })
+        : await createRole(data);
 
       if (res.success) {
         toast.success(
@@ -76,7 +76,7 @@ export function RoleDashboard({ roles, canManageRoles }: RoleDashboardProps) {
         );
         setEditingRole(null);
       } else {
-        toast.error(res.message || t('common.error', 'An error occurred.'));
+        toast.error(res.error || t('common.error', 'An error occurred.'));
       }
     });
   };
@@ -93,13 +93,13 @@ export function RoleDashboard({ roles, canManageRoles }: RoleDashboardProps) {
       return;
 
     startTransition(async () => {
-      const res = await deleteRoleAction(id);
+      const res = await deleteRole(id);
       if (res.success) {
         toast.success(
           t('settings.team.roleDeleted', 'Role deleted successfully.')
         );
       } else {
-        toast.error(res.message || t('common.error', 'An error occurred.'));
+        toast.error(res.error || t('common.error', 'An error occurred.'));
       }
     });
   };

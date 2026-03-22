@@ -35,7 +35,7 @@ After a task or phase was executed **using a CLI** (Claude CLI, Gemini CLI, Open
 | 2026-03-22 | Gemini CLI | Audit: Broad scan for multi-tenant leaks | success | Found several un-scoped queries. |
 | 2026-03-22 | Opencode CLI | Audit: Code-path check for structure | success | Verified structure in dashboard settings. |
 | 2026-03-22 | Claude CLI | Audit: Deep security audit of short-link & auth | success | Fixed critical scoping in `requireAuth` and `s/.../route.ts`. |
-| 2026-03-22 | Refactor Team | ADS Token Refactor | success | Replaced raw hexes with ADS tokens in QR, Settings, and Residents pages. |
+| 2026-03-22 | Antigravity | Team Management Suite | success | Full implementation: Roles, Invitations, Audit, Activity, Sessions. |
 
 - **Refactor Team Audit (ADS Tokens):**
   - **`qrcodes/page.tsx`**: Replaced 10+ raw hex violations with ADS tokens. Removed manual `dark:` background/border classes, relying on global token definitions.
@@ -46,7 +46,13 @@ After a task or phase was executed **using a CLI** (Claude CLI, Gemini CLI, Open
   - **`scans` module**: Refactored 4 files (`page.tsx`, `scans-filters.tsx`, `ScansTable.tsx`, `ScanDetailDrawer.tsx`). Removed all raw hex violations and manual `dark:` classes.
   - **Verification**: Ran `pnpm preflight` — all checks passed with no new lint errors.
 
----
+- **Team Management Suite Implementation:**
+  - **Backend Actions**: Implemented context-aware actions for member/role CRUD with strict organization scoping and audit logging.
+  - **Invitation Onboarding**: Designed a professional `/join` flow with email templates and automated session generation.
+  - **Dynamic RBAC**: Built a type-safe `PermissionMatrix` with bulk toggles and dev-mode sanity auditing.
+  - **Security Layer**: Integrated automated session revocation for immediate permission enforcement.
+  - **Audit & Activity**: Created an organization-wide activity log capturing all administrative events for transparency.
+  - **Verification**: Ran `pnpm preflight` — fixed a missing chat prop and checkbox naming inconsistency.
 
 ## Analysis (periodic)
 
