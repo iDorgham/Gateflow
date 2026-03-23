@@ -14,7 +14,6 @@
 - [ ] Phase 2 — Title
 - [ ] Phase 3 — Title
 
-
 ### resident_mobile_one_tap — Resident Mobile Mastery (v2.0)
 
 **IDEA:** `docs/plan/context/IDEA_resident_mobile_one_tap.md`
@@ -44,23 +43,22 @@
 - [ ] Phase 3 — QR Codes & Workspace Exports
 - [ ] Phase 4 — Analytics & Incidents
 - [ ] Phase 5 — Automated Enforcement & Certification
- 
- ### pagespeed_100 — Google PageSpeed 100% Mastery
- 
- **IDEA:** `docs/plan/context/IDEA_pagespeed_100.md`
- 
- **PLAN:** `docs/plan/planned/pagespeed_100/PLAN_pagespeed_100.md`
- 
- **Status:** 🏗️ Planned
- 
- **Target:** Q4 2026
- 
- - [ ] Phase 1 — Lighthouse CI: Automated Performance Baselines
- - [ ] Phase 2 — Asset Overhaul: Image, Font & Icon Optimizations
- - [ ] Phase 3 — Critical Path: Server-Side Streaming & Suspense Boundaries
- - [ ] Phase 4 — High-Density UI: Virtualization & Bundle Shaking
- - [ ] Phase 5 — Final Audit: Global 100/100 Certification
 
+### pagespeed_100 — Google PageSpeed 100% Mastery
+
+**IDEA:** `docs/plan/context/IDEA_pagespeed_100.md`
+
+**PLAN:** `docs/plan/in-progress/pagespeed_100/PLAN_pagespeed_100.md`
+
+**Status:** 🏗️ In Progress (Phases 1 & 2 complete; 3 & 4 pending; 5 infra ready)
+
+**Target:** Q4 2026
+
+- [x] Phase 1 — Lighthouse CI: Automated Performance Baselines
+- [x] Phase 2 — Asset Overhaul: Image, Font & Icon Optimizations
+- [ ] Phase 3 — Critical Path: Server-Side Streaming & Suspense Boundaries
+- [ ] Phase 4 — High-Density UI: Virtualization & Bundle Shaking
+- [x] Phase 5 — Final Audit: Certification infra ready (REGRESSION_TESTING_GUIDE.md, Phase 5 LHCI thresholds set); live 100/100 run pending Phases 3 + 4
 
 ### atlassian_ui_remake — Atlassian Design System UI Remake
 
@@ -118,7 +116,6 @@
 - [x] Phase 5 — CRM Management: Contacts & Units
 - [x] Phase 6 — Sync & Operations: Project Logs & Team
 - [x] Phase 7 — Final Audit: Polish, RTL & Security
-
 
 ### advanced_seeding_v2 — Ultra-Advanced Seeding Matrix (v2)
 

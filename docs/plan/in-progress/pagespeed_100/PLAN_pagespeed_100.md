@@ -49,13 +49,16 @@ Goal: 100/100 Google PageSpeed score (Mobile & Desktop) across all GateFlow rout
   - [ ] Table row virtualization for large logs.
   - [ ] Bundle size reduction (shaking heavy deps).
 
-### Phase 5: Final Audit & 100/100 Certification
+### Phase 5: Final Audit & 100/100 Certification (infra ✅ — live run pending)
 
 - **Goal**: Verify and lock in the perfect score.
 - **Deliverables**:
-  - [ ] Production benchmarks on Vercel Edge.
-  - [ ] Mobile/Desktop certification report.
-  - [ ] Regression testing guide.
+  - [x] `.lighthouserc.js` raised to Phase 5 final thresholds (perf ≥ 0.98, LCP ≤ 1800ms, TBT ≤ 50ms, CLS ≤ 0.01).
+  - [x] `docs/perf/REGRESSION_TESTING_GUIDE.md` — complete runbook for local + CI + production certification.
+  - [x] `docs/plan/learning/pagespeed_results.md` — phase-by-phase results tracker.
+  - [ ] Live production Lighthouse run — requires Phases 3 + 4 complete (streaming + virtualization).
+  - [ ] Mobile/Desktop certification (100/100 all routes, 3 runs each).
+  - [ ] Update `docs/perf/baseline_psi.json` with certified scores.
 
 ---
 

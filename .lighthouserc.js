@@ -58,28 +58,30 @@ module.exports = {
     },
 
     assert: {
-      // ── Phase 2: Asset Overhaul thresholds (raised after font/image/dvh fixes) ──
-      // Update these thresholds as performance improves.
+      // ── Phase 5: Final Certification thresholds ────────────────────────────
+      // These are the FINAL target values for 100/100 certification.
+      // CI will fail until Phases 3 + 4 code changes land (streaming + virtualization).
+      // See docs/perf/REGRESSION_TESTING_GUIDE.md for the full certification runbook.
       assertions: {
         // ── Category Scores ────────────────────────────────────────
-        'categories:performance': ['error', { minScore: 0.82 }], // → 1.0 by Phase 5
-        'categories:accessibility': ['error', { minScore: 0.88 }], // → 1.0 by Phase 5
-        'categories:best-practices': ['error', { minScore: 0.9 }], // → 1.0 by Phase 5
-        'categories:seo': ['error', { minScore: 0.92 }], // → 1.0 by Phase 5
+        'categories:performance': ['error', { minScore: 0.98 }],
+        'categories:accessibility': ['error', { minScore: 0.98 }],
+        'categories:best-practices': ['error', { minScore: 0.98 }],
+        'categories:seo': ['error', { minScore: 0.99 }],
 
         // ── Core Web Vitals ────────────────────────────────────────
         // LCP: good < 2.5s, needs improvement < 4.0s
-        'largest-contentful-paint': ['error', { maxNumericValue: 3000 }], // → 1800 by Phase 5
+        'largest-contentful-paint': ['error', { maxNumericValue: 1800 }],
         // FCP: good < 1.8s
-        'first-contentful-paint': ['warn', { maxNumericValue: 2000 }], // → 1000 by Phase 5
+        'first-contentful-paint': ['error', { maxNumericValue: 1000 }],
         // TBT: good < 200ms
-        'total-blocking-time': ['warn', { maxNumericValue: 400 }], // → 50 by Phase 5
+        'total-blocking-time': ['error', { maxNumericValue: 50 }],
         // CLS: good < 0.1
-        'cumulative-layout-shift': ['error', { maxNumericValue: 0.1 }], // → 0.0 by Phase 5
+        'cumulative-layout-shift': ['error', { maxNumericValue: 0.01 }],
         // TTI: good < 3.8s
-        interactive: ['warn', { maxNumericValue: 4000 }], // → 3000 by Phase 5
+        interactive: ['error', { maxNumericValue: 3000 }],
         // Speed Index: good < 3.4s
-        'speed-index': ['warn', { maxNumericValue: 3500 }], // → 2000 by Phase 5
+        'speed-index': ['error', { maxNumericValue: 2000 }],
 
         // ── Specific Audits (hard gates even at Phase 1) ──────────
         // These should never regress regardless of phase:
@@ -94,15 +96,14 @@ module.exports = {
         'link-name': ['warn', { minScore: 1 }],
         'color-contrast': ['warn', { minScore: 1 }],
 
-        // ── Performance opportunity audits ─────────────────────────
-        // These become errors in Phase 3+
-        'uses-optimized-images': ['warn', { minScore: 0 }],
-        'uses-webp-images': ['warn', { minScore: 0 }],
-        'uses-responsive-images': ['warn', { minScore: 0 }],
-        'efficient-animated-content': ['warn', { minScore: 0 }],
-        'render-blocking-resources': ['warn', { minScore: 0 }],
-        'unused-javascript': ['warn', { minScore: 0 }],
-        'unused-css-rules': ['warn', { minScore: 0 }],
+        // ── Performance opportunity audits (Phase 5: all hard errors) ──────
+        'uses-optimized-images': ['error', { minScore: 1 }],
+        'uses-webp-images': ['error', { minScore: 1 }],
+        'uses-responsive-images': ['error', { minScore: 1 }],
+        'efficient-animated-content': ['error', { minScore: 1 }],
+        'render-blocking-resources': ['error', { minScore: 1 }],
+        'unused-javascript': ['warn', { minScore: 0.8 }],
+        'unused-css-rules': ['warn', { minScore: 0.8 }],
       },
 
       failOnError: true,

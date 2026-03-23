@@ -80,18 +80,19 @@
 
 ---
 
-## Phase 5 — Final Audit & 100/100 Certification ⬜
+## Phase 5 — Final Audit & 100/100 Certification (infra ✅)
 
 ### Tasks
 
-- [ ] Run full LHCI against production Vercel URLs (marketing + dashboard)
+- [x] Update `.lighthouserc.js` with final Phase 5 thresholds (perf ≥ 0.98, LCP ≤ 1800ms, TBT ≤ 50ms, CLS ≤ 0.01)
+- [x] Create `docs/perf/REGRESSION_TESTING_GUIDE.md` — complete runbook (local + CI + post-deploy)
+- [x] Create `docs/plan/learning/pagespeed_results.md` — phase-by-phase results tracker
+- [x] Update `docs/plan/backlog/ALL_TASKS_BACKLOG.md` — phases 1 & 2 marked complete
+- [ ] Run full LHCI against production Vercel URLs (marketing + dashboard) — **requires Phases 3 + 4**
 - [ ] Run against all 4 marketing routes: `/en`, `/en/features`, `/en/pricing`, `/en/solutions`
 - [ ] Run against 3 dashboard routes: `/en/dashboard`, `/en/dashboard/analytics`, `/en/dashboard/scans`
 - [ ] Mobile + Desktop certification (3 runs each, median score = 100)
-- [ ] Update `.lighthouserc.js` with final Phase 5 thresholds (all ≥ 0.98)
 - [ ] Update `docs/perf/baseline_psi.json` with live certified scores
-- [ ] Create `docs/perf/REGRESSION_TESTING_GUIDE.md`
-- [ ] Commit final certification report
 
 ---
 
