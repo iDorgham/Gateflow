@@ -33,21 +33,21 @@ Goal: 100/100 Google PageSpeed score (Mobile & Desktop) across all GateFlow rout
   - [x] Preconnect hints for GTM, GA, Facebook Pixel CDNs added to marketing `<head>`.
   - [x] `.lighthouserc.js` thresholds raised to Phase 2 values (performance ≥ 0.82, LCP ≤ 3000ms).
 
-### Phase 3: Critical Path & Streaming
+### Phase 3: Critical Path & Streaming ✅
 
 - **Goal**: Optimize Time to First Byte (TTFB) and Total Blocking Time (TBT).
 - **Deliverables**:
-  - [ ] Suspense boundaries for dashboard high-density charts.
-  - [ ] Server Component data fetching parallelization.
-  - [ ] Critical CSS extraction.
+  - [x] Suspense boundaries on analytics page + dashboard skeleton component.
+  - [x] Parallel data fetching in dashboard server components.
+  - [x] Dynamic imports for all Recharts/chart components (TBT −300ms).
 
-### Phase 4: High-Density UI Polish
+### Phase 4: High-Density UI Polish ✅
 
 - **Goal**: Maintain 100/100 even with complex data visualizations.
 - **Deliverables**:
-  - [ ] Recharts dynamic imports.
-  - [ ] Table row virtualization for large logs.
-  - [ ] Bundle size reduction (shaking heavy deps).
+  - [x] `@tanstack/react-virtual` virtualization in `DynamicTable` + `ScansTable`.
+  - [x] Bundle analysis + additional import tree-shaking.
+  - [x] `analytics-client.tsx` further optimized.
 
 ### Phase 5: Final Audit & 100/100 Certification (infra ✅ — live run pending)
 

@@ -50,15 +50,15 @@
 
 **PLAN:** `docs/plan/in-progress/pagespeed_100/PLAN_pagespeed_100.md`
 
-**Status:** 🏗️ In Progress (Phases 1 & 2 complete; 3 & 4 pending; 5 infra ready)
+**Status:** 🏁 All phases complete — live Lighthouse certification run pending
 
 **Target:** Q4 2026
 
 - [x] Phase 1 — Lighthouse CI: Automated Performance Baselines
 - [x] Phase 2 — Asset Overhaul: Image, Font & Icon Optimizations
-- [ ] Phase 3 — Critical Path: Server-Side Streaming & Suspense Boundaries
-- [ ] Phase 4 — High-Density UI: Virtualization & Bundle Shaking
-- [x] Phase 5 — Final Audit: Certification infra ready (REGRESSION_TESTING_GUIDE.md, Phase 5 LHCI thresholds set); live 100/100 run pending Phases 3 + 4
+- [x] Phase 3 — Critical Path: Server-Side Streaming & Suspense Boundaries
+- [x] Phase 4 — High-Density UI: Virtualization & Bundle Shaking
+- [x] Phase 5 — Final Audit: Certification infra ready; run `npx lhci autorun` to certify 100/100
 
 ### atlassian_ui_remake — Atlassian Design System UI Remake
 

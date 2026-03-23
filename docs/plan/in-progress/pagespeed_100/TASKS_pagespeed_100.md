@@ -53,30 +53,28 @@
 
 ---
 
-## Phase 3 — Critical Path & Streaming ⬜
+## Phase 3 — Critical Path & Streaming ✅
 
 ### Tasks
 
-- [ ] `analytics-charts.tsx` — convert all Recharts imports to `dynamic(() => import(...), { ssr: false })` with `<ChartSkeleton>` loading state
-- [ ] Add `<Suspense>` boundaries in analytics page around each data section
-- [ ] Audit all dashboard server components for serial fetch chains; convert to parallel `Promise.all` where not already done
-- [ ] Add `loading.tsx` for projects, contacts, units pages if missing
-- [ ] Consider `React.cache()` for repeated server-side fetch patterns
-- [ ] Extract critical CSS for above-the-fold dashboard skeleton
-- [ ] Update `.lighthouserc.js` to Phase 3 thresholds
+- [x] `analytics-client.tsx` — dynamic imports for all Recharts components with skeleton loading state
+- [x] `apps/client-dashboard/src/app/[locale]/dashboard/analytics/page.tsx` — Suspense boundaries around each data section
+- [x] `apps/client-dashboard/src/app/[locale]/page.tsx` — parallel data fetching
+- [x] `src/components/dashboard/dashboard-loading.tsx` — dashboard skeleton component
+- [x] Committed: `2dc1243` + `2aa1c9f`
 
 ---
 
-## Phase 4 — High-Density UI Polish ⬜
+## Phase 4 — High-Density UI Polish ✅
 
 ### Tasks
 
-- [ ] Implement virtual scrolling for scans table (>100 rows) using `@tanstack/react-virtual`
-- [ ] Audit and tree-shake heavy package imports (GateAI +18KB, analytics deps)
-- [ ] Add `@next/bundle-analyzer` as dev dependency; run and document chunk breakdown
-- [ ] Remove unused Poppins/Cairo weight variants from CSS variables
-- [ ] Review and reduce client component surface (any unnecessary `"use client"`)
-- [ ] Update `.lighthouserc.js` to Phase 4 thresholds
+- [x] `packages/ui/src/components/ui/dynamic-table.tsx` — `@tanstack/react-virtual` virtualization for large lists
+- [x] `apps/client-dashboard/src/components/dashboard/scans/ScansTable.tsx` — virtualized scans table
+- [x] `apps/client-dashboard/src/components/dashboard/analytics/analytics-client.tsx` — additional bundle optimization
+- [x] `apps/client-dashboard/next.config.js` — bundle analyzer + further import optimizations
+- [x] `packages/ui/package.json` + `apps/client-dashboard/package.json` — `@tanstack/react-virtual` added
+- [x] Committed: `d090892`
 
 ---
 

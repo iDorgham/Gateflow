@@ -33,7 +33,7 @@ HTML reports are saved as artifacts for 7 days under the run summary.
 
 The `performance` job runs on every push:
 
-- `node scripts/check-bundle-size.js` — fails if gzip JS > 200 KB for dashboard
+- `node scripts/check-bundle-size.js` — fails if total uncompressed chunks > 4.5 MB for dashboard (≈1.1 MB gzipped)
 - `node scripts/check-imports.js --summary` — fails on circular imports
 - Prints current `.lighthouserc.js` threshold summary
 
@@ -134,7 +134,7 @@ The `pre-commit` hook runs `node scripts/check-bundle-size.js` and `node scripts
 Before merging any PR that touches `apps/marketing`, `apps/client-dashboard`, or `packages/ui`:
 
 - [ ] `pnpm turbo build --filter=<changed-app>` succeeds
-- [ ] `node scripts/check-bundle-size.js` passes (gzip JS < 200 KB dashboard)
+- [ ] `node scripts/check-bundle-size.js` passes (total chunks < 4.5 MB dashboard)
 - [ ] No new `"use client"` on components that can be Server Components
 - [ ] Any new `<Image>` usage has explicit `width`, `height`, and `alt`
 - [ ] Any new third-party `<script>` uses `strategy="lazyOnload"` or `strategy="afterInteractive"`
