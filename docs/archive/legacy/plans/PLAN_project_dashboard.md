@@ -82,7 +82,6 @@ Each phase = one focused `/dev` session. Run `pnpm preflight` before each commit
 - Hero: cover image, gradient overlay, title, location badge
 - Description block
 - Responsive layout, RTL support
-- **SuperDesign:** Optional design draft for hero and layout before implementation
 
 **Acceptance criteria:**
 - Page renders with hero, title, location, description

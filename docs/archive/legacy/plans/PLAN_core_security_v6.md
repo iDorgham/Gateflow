@@ -106,7 +106,6 @@
 - Manual or automated UI verification: assign a user to a gate, log in as that user in scanner, confirm only that gate is available; confirm unassigned user cannot select that gate (or sees appropriate message).
 - Lint/typecheck pass for client-dashboard and scanner-app.
 
-**SuperDesign:** Use for dashboard UI (gate-assignment screen) before implementation: create or iterate design draft so layout and flows align with existing dashboard patterns.
 
 ---
 
@@ -188,7 +187,6 @@
 - Scanner flow for Level 1 captures and attaches artifact; API denies cross-org access to artifacts.
 - Retention settings visible and persisted; lint/typecheck pass.
 
-**SuperDesign:** Use for scanner ID-capture flow if it introduces new screens or significant UX change.
 
 ---
 
@@ -207,7 +205,6 @@
 - **gf-security** — loaded at start of every phase implementation (required in each phase prompt Context).
 - **gf-planner** — used to create this plan and phase prompts.
 - **gf-api** / **gf-mobile** — for API and scanner work.
-- **SuperDesign** — for Phase 3 (dashboard) and optionally Phase 6 (scanner ID flow).
 
 ---
 

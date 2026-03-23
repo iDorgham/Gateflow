@@ -83,4 +83,3 @@ Users want a cohesive, professional experience across all dashboard pages and se
 - **tokens-design** — semantic token architecture
 - **gf-creative-ui-animation** — motion, reduced motion
 - **tailwind** — utility classes
-- **SuperDesign** — optional design draft for high-impact pages before implementation

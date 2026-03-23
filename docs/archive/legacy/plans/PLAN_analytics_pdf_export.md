@@ -86,7 +86,6 @@ Success looks like: A security/marketing lead can click “Export PDF”, wait a
 
 **Scope (in)**
 
-- Design the PDF sections (can align with SuperDesign draft):
   - Cover/header with logo + title + date range.
   - KPI band.
   - 2–4 key sections (Visits over time, Heatmap summary, Incidents, UTM/marketing).

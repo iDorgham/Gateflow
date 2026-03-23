@@ -99,13 +99,7 @@ Refine the header and settings architecture so:
    - `pnpm turbo typecheck --filter=client-dashboard`
    - `pnpm turbo test --filter=client-dashboard`
 
-### SuperDesign (optional)
-
-- Use SuperDesign to quickly explore:
-  - A unified header with avatar + theme toggle.
-  - User vs system settings navigation layouts.
-
-### Subagents (optional)
+#### Subagents (optional)
 
 | Subagent      | When | Prompt |
 |---------------|------|--------|

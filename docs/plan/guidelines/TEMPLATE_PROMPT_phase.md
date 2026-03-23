@@ -2,7 +2,7 @@
 
 Copy this template for each phase. Fill placeholders and save as `docs/plan/execution/PROMPT_<initiative>_phase_<N>.md`.
 
-**SuperDesign:** For UI phases, add "SuperDesign" and run design draft *before* implementation. **Subagents:** Add when the phase benefits from explore/shell/browser-use. See `.cursor/skills/gf-planner/SKILL.md`.
+**Subagents:** Add when the phase benefits from explore/shell/browser-use. See `.cursor/skills/gf-planner/SKILL.md`.
 
 ---
 
@@ -51,18 +51,6 @@ Use this role when implementing in Cursor or when invoking CLIs for this phase.
 3. [Add/update tests for...]
 4. Run `pnpm turbo lint --filter=<workspace>`, `pnpm turbo typecheck --filter=<workspace>`, and `pnpm turbo test --filter=<workspace>`
 5. After phase passes: `/github` — git add, commit (conventional), pull --rebase, push
-
-### SuperDesign (optional — for UI phases)
-
-Run *before* implementation when the phase adds or redesigns UI:
-
-| Scenario | Action |
-|----------|--------|
-| New page | `superdesign create-design-draft` with design intent and `--context-file` for layout |
-| Redesign | `superdesign iterate-design-draft` with improvement prompts, `--mode branch` |
-| New feature area | `superdesign create-project` then drafts |
-
-Ensure `.superdesign/init/` exists; use draft output to guide implementation. See `.cursor/skills/superdesign/SKILL.md`.
 
 ### Subagents (optional)
 

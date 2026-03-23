@@ -99,10 +99,7 @@ Assign a **primary role** to each phase. When using **any** CLI (Claude, Opencod
 
 | Field | Value |
 |-------|-------|
-| **Responsibility** | Components, layouts, design system, SuperDesign integration |
-| **Skills** | gf-components, superdesign |
 | **Assign to phase** | New pages, UI changes, component work |
-| **CLI prefix** | `You are the GateFlow Frontend Specialist. Use @gate-access/ui, Tailwind, theme tokens. SuperDesign for new pages. [task]` |
 
 ---
 

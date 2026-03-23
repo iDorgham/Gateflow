@@ -12,7 +12,6 @@
 
 ## Preferred tool
 
-**Cursor** (default). **SuperDesign** optional for scanner ID-capture flow if it introduces new screens or significant UX change.
 
 ---
 
@@ -81,7 +80,6 @@ Introduce **visitor identity levels** (0 = name/phone only; 1 = ID photo capture
 8. **Docs**  
    Update SECURITY_OVERVIEW (and PRD-aligned docs): identity levels 0–2, artifact storage and access control, retention config and intended cleanup behavior.
 
-9. **SuperDesign (optional)**  
    If scanner ID-capture flow adds new screens or major UX, run design draft before implementation.
 
 10. **Quality gates**  

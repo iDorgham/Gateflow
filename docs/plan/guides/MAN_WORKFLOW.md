@@ -66,7 +66,6 @@ docs/plan/
 - **Skills:** gf-design-guide, react, tailwind
 - **MCP:** Context7 (docs), cursor-ide-browser (E2E)
 - **Subagents:** browser-use (verify UI)
-- **SuperDesign:** For new pages/redesigns
 
 **Full-stack phases:**
 - Both backend and frontend skills

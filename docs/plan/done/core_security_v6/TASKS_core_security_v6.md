@@ -99,7 +99,6 @@ Checklist for **PLAN_core_security_v6**. Use with `/dev` and **PROGRESS_DASHBOAR
 - [x] **6.6** Resident toggles (minimal): e.g. maskResidentNameOnLandingPage, showUnitOnLandingPage; expose in resident/org settings
 - [x] **6.7** Tests: identity level 1 enforcement; artifact upload and org-scoped retrieval; cross-org GET fails; retention config read/write
 - [x] **6.8** Docs: SECURITY_OVERVIEW (and PRD-aligned) for identity levels, artifact access, retention
-- [x] **6.9** SuperDesign (optional): if scanner ID-capture adds new screens, run design draft first
 - [x] **6.10** Quality: `pnpm turbo build`, `pnpm turbo test`, lint, typecheck; committed and pushed
 
 **Status:** Done

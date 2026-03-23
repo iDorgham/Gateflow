@@ -13,7 +13,6 @@ FRONTEND | UX
 ### Preferred tool
 
 - [x] Cursor IDE — visual iteration, layout, styling
-- [ ] SuperDesign — premium draft generation
 - [ ] Gemini CLI — layout audit (Accessibility/SEO)
 
 ### Context
@@ -47,13 +46,11 @@ Redesign the invitation landing page to be visually stunning, branded for the or
 
 ### Steps (ordered)
 
-1. Generate a premium design draft:
-   `superdesign create-design-draft "Branded Visitor Invitation Experience" --context-file apps/marketing/src/app/[locale]/s/[shortId]/page.tsx`
-2. Implement the new `VisitorInvitationPage`.
-3. Integration: Fetch `organizationId` and `projectId` from the `QRCode` record to show custom logos/colors.
-4. Logic: Handle signature (`?sig=...`) validation on the server side (next-level security).
-5. Audit: Mobile LHR (Lighthouse) report for accessibility.
-6. **Auto-Sync:** git add, commit, push.
+1. Implement the new `VisitorInvitationPage`.
+2. Integration: Fetch `organizationId` and `projectId` from the `QRCode` record to show custom logos/colors.
+3. Logic: Handle signature (`?sig=...`) validation on the server side (next-level security).
+4. Audit: Mobile LHR (Lighthouse) report for accessibility.
+5. **Auto-Sync:** git add, commit, push.
 
 ### Acceptance criteria
 

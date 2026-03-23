@@ -87,11 +87,7 @@ Introduce backend fields and API support needed for richer **Project**, **Contac
    - `pnpm turbo test --filter=client-dashboard`
 8. If everything passes, update or create a short note in `docs/plan/learning/patterns.md` about CRM-style entity extensions for future reference.
 
-### SuperDesign (optional — for UI phases)
-
-Not required in this backend-focused phase.
-
-### Subagents (optional)
+#### Subagents (optional)
 
 | Subagent | When | Prompt |
 |----------|------|--------|

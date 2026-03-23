@@ -93,15 +93,7 @@ Upgrade **Contacts** and **Units** views into CRM-like dashboards with richer fi
    - `pnpm turbo typecheck --filter=client-dashboard`
    - `pnpm turbo test --filter=client-dashboard`
 
-### SuperDesign (recommended)
-
-For this visually heavy phase:
-
-- Use `superdesign create-design-draft` (or `iterate-design-draft`) focused on:
-  - A CRM-style contact profile side panel.
-  - The revised Contacts/Units table + right-panel layout.
-
-### Subagents (optional)
+#### Subagents (optional)
 
 | Subagent      | When | Prompt |
 |---------------|------|--------|

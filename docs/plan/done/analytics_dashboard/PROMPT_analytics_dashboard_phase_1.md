@@ -111,18 +111,6 @@ Build the core analytics dashboard shell: layout (12-column grid desktop, stacke
 
 ---
 
-## SuperDesign
-
-**Run before implementation** if creating a new dashboard layout:
-
-| Scenario | Action |
-|----------|--------|
-| New layout | `superdesign create-design-draft` with layout intent, 12-column grid, mode toggle, KPI row. Use `--context-file` for existing analytics page and sidebar. |
-
-If skipping SuperDesign, align with existing analytics page structure and `@gate-access/ui` Card, Button, etc.
-
----
-
 ## Subagents (optional)
 
 | Subagent | When | Prompt |

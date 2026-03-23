@@ -12,7 +12,6 @@
 
 ## Preferred tool
 
-**Cursor** (default). SuperDesign is required for the dashboard gate-assignment screen before implementation.
 
 ---
 
@@ -44,7 +43,6 @@ Provide dashboard UI for managing gate–account assignments (assign/unassign us
   - Assign a user to one or more gates; unassign.
   - Show current assignments (e.g. per user or per gate).
 - **Scanner app:** Polish gate selector and empty state when user has no assigned gates (clear message, no silent failure).
-- **SuperDesign:** Run design draft for the gate-assignment dashboard screen before implementing (create or iterate draft; use output to guide layout and components).
 
 ## Scope (out)
 
@@ -59,9 +57,7 @@ Provide dashboard UI for managing gate–account assignments (assign/unassign us
 1. **Load security context**  
    Read `.cursor/skills/gf-security/SKILL.md`, `.cursor/contracts/CONTRACTS.md`, and `.cursor/rules/00-gateflow-core.mdc`.
 
-2. **SuperDesign (run first)**  
    Before coding the dashboard UI:
-   - Ensure `.superdesign/init/` exists; run superdesign init if needed.
    - Create or iterate a design draft for the **gate–account assignment** screen (e.g. “Gate assignment management: list gates, list users, assign/unassign with clear feedback”). Use `--context-file` pointing to existing dashboard layout or shell component if available.
    - Use the draft output to guide component structure, layout, and tables/buttons.
 
@@ -90,7 +86,6 @@ Provide dashboard UI for managing gate–account assignments (assign/unassign us
 ## Acceptance criteria
 
 - [ ] **Security context loaded** — gf-security, 00-gateflow-core.mdc, CONTRACTS.md read at start.
-- [ ] **SuperDesign** — Design draft created or iterated for gate-assignment screen; implementation aligns with draft.
 - [ ] **Dashboard UI** — Gate-assignment page/section exists; user can assign/unassign users to gates; current assignments visible; auth and permission gating in place.
 - [ ] **Scanner UX** — Gate selector shows only assigned gates when applicable; clear message when user has no assigned gates.
 - [ ] **No API/model changes** — Phase 2 APIs and schema unchanged; only UI and UX.

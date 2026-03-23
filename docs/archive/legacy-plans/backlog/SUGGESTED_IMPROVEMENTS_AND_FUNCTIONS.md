@@ -145,7 +145,6 @@ These patterns help keep changes correct and reduce regressions.
 ### For feature work (UI + API)
 
 - **Explore first**: identify the route(s), the API endpoints, the schema, and shared UI components.
-- **Design changes**: if UI/UX is non-trivial, use the `superdesign` skill before implementation.
 - **Implement smallest vertical slice**: schema → API → UI → tests → docs.
 - **Verify**: run `pnpm turbo lint` + `pnpm turbo typecheck` for affected workspaces (and tests if logic changed).
 

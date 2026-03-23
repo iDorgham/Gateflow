@@ -86,11 +86,7 @@ Allow residents to create and manage visitor and open QRs through resident-porta
    - `pnpm turbo typecheck --filter=@gate-access/db --filter=client-dashboard --filter=resident-portal`
    - Relevant tests via `pnpm turbo test --filter=client-dashboard` (and resident-portal tests if added).
 
-### SuperDesign (optional — for UI phases)
-
-- **SuperDesign:** Optionally create/iterate a design draft focused on the "Create visitor QR" flow in resident-portal (form layout, quota widget, list view) before heavy UI refinement.
-
-### Subagents (optional)
+#### Subagents (optional)
 
 | Subagent | When | Prompt |
 |----------|------|--------|

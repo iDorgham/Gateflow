@@ -29,7 +29,6 @@ Implement the `TeamSidebarChat` drawer within the existing dashboard shell to en
 - No member management UI (that's Phase 3).
 
 ### Steps (ordered)
-1. **SuperDesign:** `superdesign create-design-draft --context-file apps/client-dashboard/src/components/dashboard/dashboard-layout.tsx` for the "Chat Sidebar" intent.
 2. **Component Scaffold:** Create `apps/client-dashboard/src/components/dashboard/team/TeamSidebarChat.tsx`. Use Shadcn/UI and ADS tokens.
 3. **Sidebar Update:** Modify `apps/client-dashboard/src/components/dashboard/dashboard-layout.tsx`. Add a toggle button for the chat panel (likely a drawer or fixed sidebar overlay).
 4. **Implementation:** Use `const messages = useQuery({ queryKey: ["team-messages"], ... })` to load history from Phase 1.

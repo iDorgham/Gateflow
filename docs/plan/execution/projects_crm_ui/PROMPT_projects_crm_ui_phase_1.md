@@ -50,14 +50,6 @@ Apply the professional "Real Estate" color palette across the dashboard by updat
 5. Run `pnpm turbo build --filter=@gate-access/ui` and `pnpm turbo typecheck --filter=client-dashboard`
 6. After phase passes: `/github` — git add, commit (conventional), pull --rebase, push
 
-### SuperDesign
-
-Run *before* implementation:
-
-| Scenario | Action |
-|----------|--------|
-| Redesign | `superdesign iterate-design-draft` with "Apply Midnight Blue & Kimchi palette to dashboard shell", `--context-file` for sidebar |
-
 ### Acceptance criteria
 
 - [ ] Dashboard sidebar is Midnight Blue with white text.

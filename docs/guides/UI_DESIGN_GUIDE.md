@@ -122,7 +122,6 @@ The professional real estate palette is applied across client-dashboard, admin-d
 | Global CSS variables | `apps/client-dashboard/src/app/globals.css` |
 | Tailwind config | `tailwind.config.ts` |
 | UI components | `packages/ui/src/components/` |
-| SuperDesign | `.antigravity/skills/superdesign/SKILL.md` — run design drafts before implementation |
 | Real estate palette plan | `docs/plan/execution/PLAN_real_estate_palette.md` |
 
 ---

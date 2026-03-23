@@ -30,7 +30,6 @@ Implement the dedicated Team management page with high-density member tables and
 - No actual email invitation system (just manual DB entry for now).
 
 ### Steps (ordered)
-1. **SuperDesign:** `superdesign create-design-draft` for a "Team Management" high-density table.
 2. **Page Scaffold:** Create the `/dashboard/team` route. Add it to `NAV_ITEMS` in `dashboard-layout.tsx`.
 3. **Table Component:** Create `apps/client-dashboard/src/components/dashboard/team/TeamMembersTable.tsx`. Use `@tanstack/react-table` if appropriate, or standard ADS table layout.
 4. **API:** Create `PATCH /api/team/members` to update roles and `DELETE /api/team/members` for soft removals.

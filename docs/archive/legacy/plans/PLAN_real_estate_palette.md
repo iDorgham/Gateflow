@@ -69,7 +69,6 @@ Each phase is small enough to run as a single `/dev` execution.
 
 **Primary role:** FRONTEND (gf-design-guide, gf-creative-ui-animation)
 
-**SuperDesign:** Optional — run `superdesign iterate-design-draft` for login layout if desired.
 
 **Scope (in):**
 

@@ -42,7 +42,6 @@ GateFlow development is organized as **phased plans** with one pro prompt per ph
   - `docs/plan/guidelines/DEVELOPMENT_WORKFLOWS.md` — how phased execution integrates with everyday dev.
   - `.antigravity/templates/TEMPLATE_PROMPT_phase.md` — phase prompt template (primary role, context, steps, subagents, acceptance criteria).
 - **Planning and execution skills**
-  - `.antigravity/skills/gf-planner/SKILL.md` — create phased plans + per‑phase prompts, assign **Primary role**, decide when to use SuperDesign, subagents, and multi‑CLI.
   - `.antigravity/skills/gf-dev/SKILL.md` — commands, workflows, subagent prompts for implementation.
 
 **Rule for tools**: Any tool (Cursor, CLIs, Kiro, Antigravity) that wants to participate in phased work should:

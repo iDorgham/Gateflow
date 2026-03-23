@@ -97,4 +97,3 @@ GateFlow serves gated compounds, properties, and real estate–adjacent venues i
 - **gf-creative-ui-animation** — particles, motion.
 - **tokens-design** — semantic token architecture.
 - **tailwind** — utility classes.
-- **SuperDesign** — optional design draft for login/marketing polish.

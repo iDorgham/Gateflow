@@ -98,12 +98,7 @@ Turn the project edit experience into a **project CRM hub**, where admins can:
    - `pnpm turbo typecheck --filter=client-dashboard`
    - `pnpm turbo test --filter=client-dashboard`
 
-### SuperDesign (optional)
-
-- If the edit panel becomes visually dense, run a SuperDesign draft focusing on:
-  - Grouped sections for project CRM (branding, advanced data, gates & team).
-
-### Subagents (optional)
+#### Subagents (optional)
 
 | Subagent      | When | Prompt |
 |---------------|------|--------|

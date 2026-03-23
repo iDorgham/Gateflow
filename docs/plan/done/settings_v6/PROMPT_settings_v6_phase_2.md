@@ -40,9 +40,6 @@ Implement General and Workspace settings tabs with support for themes, language,
 7. Run `pnpm preflight`.
 8. After verification: `/github` — commit as `feat(settings): general and workspace tabs (phase 2)`.
 
-## SuperDesign
-**SuperDesign iterate design draft for the General/Workspace forms. Ensure high-density layout and professional styling.**
-
 ## Subagents
 **Subagent (browser-use):**
 "Login at localhost:3001, go to General settings, switch theme to Dark and verify colors. Switch language to Arabic and verify RTL layout. Go to Workspace settings, update the workspace name, and verify the success toast."

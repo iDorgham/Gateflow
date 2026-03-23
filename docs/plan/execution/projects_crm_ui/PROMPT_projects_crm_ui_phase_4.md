@@ -55,14 +55,6 @@ Redesign the project list and implement the detailed project "Command Center" da
 6. Run `pnpm turbo build --filter=client-dashboard`
 7. After phase passes: `/github` — git add, commit (conventional), pull --rebase, push
 
-### SuperDesign
-
-Run *before* implementation:
-
-| Scenario | Action |
-|----------|--------|
-| New page | `superdesign create-design-draft` for "Project Hub detail page with Midnight Blue hero and floating stats", `--context-file` for dashboard |
-
 ### Acceptance criteria
 
 - [ ] Project cards properly link to detailed hub.

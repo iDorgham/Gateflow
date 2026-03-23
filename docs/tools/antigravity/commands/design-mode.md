@@ -35,4 +35,3 @@ Copy this prompt into Antigravity (or any CLI) to get a structured design brief 
 
 1. Replace `[Describe...]` with your actual design task.
 2. Copy the full block and paste into Antigravity chat or any CLI.
-3. Use the output to guide implementation or SuperDesign drafts.

@@ -10,7 +10,6 @@
 - **First view:** Project detail or Projects list (header project switcher drives context). From there: Contacts, Units, QR Codes, Gates, Settings.
 - **Navigation:** Projects → project detail → EditPanel for project/contact/unit/gate/watchlist. Sidebar: Projects, Residents (Contacts / Units), QR Codes, Gates, Analytics, Settings. Header: project selector, theme toggle, avatar (Profile, Workspace, Billing, Security).
 - **Consistency:** Shared **EditPanel** and **real-estate palette** (semantic tokens) across analytics, projects, contacts, units, settings so the dashboard feels like one coherent app.
-- **Implementation:** Use `gf-design-guide`, `ui-ux`, `tailwind`, `gf-creative-ui-animation`; consider SuperDesign once for unified project/CRM layout before locking JSX.
 
 ---
 

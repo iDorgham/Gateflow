@@ -86,13 +86,6 @@ Establish chart color palette (CSS variables only), responsive grid layout, shar
 
 ---
 
-## SuperDesign (optional)
-
-If the current layout is unclear or you want a visual reference:
-- Run SuperDesign with context on `analytics-client.tsx` to draft a grid with KPI row, filters, and 6–8 card placeholders. Use output to align implementation.
-
----
-
 ## Acceptance criteria
 
 - [ ] Chart color helper or doc uses only CSS variables (no hex).

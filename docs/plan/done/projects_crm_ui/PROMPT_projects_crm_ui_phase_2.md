@@ -86,15 +86,7 @@ Expose a clear **Project page under Projects** that:
    - `pnpm turbo typecheck --filter=client-dashboard`
    - `pnpm turbo test --filter=client-dashboard`
 
-### SuperDesign (optional — for layout refinement)
-
-For deeper visual polish:
-
-| Scenario | Action |
-|----------|--------|
-| Project dashboard layout needs rebalancing | `superdesign iterate-design-draft` with screenshots of current project detail and cards to refine hierarchy and density before final tweaks. |
-
-### Subagents (optional)
+#### Subagents (optional)
 
 | Subagent      | When | Prompt |
 |---------------|------|--------|

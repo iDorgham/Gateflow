@@ -62,7 +62,6 @@ Implement the optional **location rule**: when enabled for a gate (or org), a sc
    In `packages/db/prisma/schema.prisma`, add to `Gate` (or equivalent): `latitude`, `longitude` (Float?), `locationRadiusMeters` (Int?), `locationEnforced` (Boolean? default false). Or add org-level defaults if product prefers. Create and apply migration.
 
 3. **Dashboard config (minimal)**  
-   Expose gate (or org) settings for: coordinates, radius, enable/disable location enforcement. Can be a simple form or settings section; ensure auth and org scope. No SuperDesign required unless new full page.
 
 4. **API: accept location in scan**  
    In scan and bulk-sync handlers, accept optional `latitude`, `longitude` (or nested `location`) in request body. Validate with Zod. When `locationEnforced` is true for the gate, require location; if missing, return 400/403 with message. If present, compute distance (e.g. Haversine); if > radius, return 403 with clear message. When `locationEnforced` is false, ignore location for enforcement but may store for audit.

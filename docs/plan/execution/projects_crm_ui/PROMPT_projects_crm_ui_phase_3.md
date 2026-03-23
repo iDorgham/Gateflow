@@ -52,14 +52,6 @@ Develop the reusable side-drawer `EditPanel` and a high-density `DataTable` engi
 6. Run `pnpm turbo build --filter=@gate-access/ui`
 7. After phase passes: `/github` — git add, commit (conventional), pull --rebase, push
 
-### SuperDesign
-
-Run *before* implementation:
-
-| Scenario | Action |
-|----------|--------|
-| New page | `superdesign create-design-draft` for "Advanced Table UI with high density and multi-sort markers", `--context-file` for existing table |
-
 ### Acceptance criteria
 
 - [ ] `EditPanel` slides smoothly (LTR/RTL compliant).

@@ -44,11 +44,7 @@ Establish the core 3-column responsive layout and design tokens (Navy/Orange) fo
 4. Run `pnpm turbo lint --filter=client-dashboard`, `pnpm turbo typecheck --filter=client-dashboard`, and `pnpm turbo test --filter=client-dashboard`.
 5. After phase passes: `/github` — git add, commit (conventional), pull --rebase, push.
 
-### SuperDesign (optional — for UI phases)
-Run *before* implementation:
-`superdesign create-design-draft` with design intent targeting a Glassmorphism 3-column enterprise AI layout using Atlassian logic.
-
-### Acceptance criteria
+#### Acceptance criteria
 - [ ] `pnpm preflight` passes (lint + typecheck + test)
 - [ ] Security checks: org scoping enforced at layout data load.
 - [ ] Visual: New tokens rendered and correct 3-column layout structures present.

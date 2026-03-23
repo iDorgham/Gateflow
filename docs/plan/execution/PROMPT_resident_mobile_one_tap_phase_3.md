@@ -55,13 +55,6 @@ Build an animated "One-Tap Invite" widget on the Home Tab that fetches a signed 
 7. Run `pnpm turbo build --filter=resident-mobile` (to verify no compile errors).
 8. **Auto-Sync:** git add, commit, push.
 
-### SuperDesign (optional)
-
-Run *before* implementation:
-```bash
-superdesign create-design-draft "Premium One-Tap Share widget" --context-file apps/resident-mobile/app/(dashboard)/home/index.tsx
-```
-
 ### Acceptance criteria
 
 - [ ] Widget is visible and visually premium on the Home tab.

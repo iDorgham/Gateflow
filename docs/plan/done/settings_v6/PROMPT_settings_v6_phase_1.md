@@ -38,9 +38,6 @@ Rebuild the main settings layout with a responsive sidebar and tabbed navigation
 6. Run `pnpm turbo lint --filter=client-dashboard` and `pnpm turbo typecheck --filter=client-dashboard`.
 7. After verification: `/github` — commit as `feat(settings): settings layout and navigation (phase 1)`.
 
-## SuperDesign
-**SuperDesign create design draft for the 11-tab settings layout before implementation. Use --context-file for sidebar and typography context.**
-
 ## Subagents
 **Subagent (browser-use):**
 "Login at localhost:3001, navigate to /settings, verify that the sidebar and tabs render correctly on both desktop and mobile viewports."

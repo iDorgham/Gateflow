@@ -7,7 +7,6 @@ This document defines **how we use AI assistance in this repo**: which skills ex
 - **Internal flows** — legacy helpers like `/ready`, `/run`, `/automate`, `/github`, `/clis` live as markdown flows and are orchestrated by the master commands
 - `.cursor/rules/01-gateflow-ai-workflow.mdc` — Cursor rule (always applied)
 - `.cursor/skills/gf-dev/SKILL.md` — gf-dev skill
-- `.cursor/skills/` — domain/workflow skills (gf-mcp, gf-architecture, gf-security, gf-database, gf-testing, gf-mobile, gf-i18n, gf-api, gf-planner, superdesign, excel-spreadsheets)
 - `.cursor/subagents/` — prompt templates (explore, shell, browser-use)
 - `.cursor/commands/` — definitions for master commands (`idea`, `plan`, `dev`, `ship`)
 - `.cursor/commands-ref/` — internal helper flows (`ready`, `run`, `automate`, `github`, `clis`, etc.), not exposed as slash commands
@@ -64,7 +63,6 @@ GateFlow development uses several AI tools (Cursor, Kiro, Antigravity, Claude CL
 | Situation | Prefer |
 |-----------|--------|
 | Day-to-day coding with inline edits | **Cursor** or **Kiro** |
-| Design exploration (layouts, flows) | **SuperDesign** (via Cursor skill) |
 | Quick one-off question, no IDE | **Claude CLI** or **Gemini CLI** |
 | Automated checks (lint, prisma, security) | **Kiro** hooks |
 | Terminal-only workflow | **Claude CLI**, **Opencode CLI**, **Gemini CLI**, or **Kilo CLI** |
@@ -84,26 +82,20 @@ GateFlow development uses several AI tools (Cursor, Kiro, Antigravity, Claude CL
 
 ## Skills available in this workspace
 
-### `superdesign`
 
 - **Purpose**: UI/UX design exploration + infinite-canvas drafts, then mapping to production UI.
 - **Trigger it when**:
   - Designing/redesigning a page, flow, layout, or component.
   - You need to align a UI change with existing tokens/components.
-  - The user mentions SuperDesign or SuperDesign CLI commands.
-- **Where**: `.cursor/skills/superdesign/SKILL.md`
-- **Important**: Follow the skill’s mandatory pre-checks (CLI install + login), and keep `.superdesign/init/` current.
 
 ### `gf-planner`
 
-- **Purpose**: Create phased plans and pro prompts; orchestrate apply → test → enhance → next phase. Uses **Subagent Hierarchy** (company-style roles); assigns primary role per phase. Includes **SuperDesign**, **subagent prompts**, **multi-CLI** (sparingly).
 - **Trigger it when**:
   - User asks for a plan, task breakdown, or phased execution
   - Starting MVP launch, Resident Portal, or any multi-step initiative
   - Need to decompose backlog into executable phases
 - **Where**: `.cursor/skills/gf-planner/SKILL.md`
 - **Full reference**: `docs/plan/guidelines/PHASED_DEVELOPMENT_WORKFLOW.md`
-- **SuperDesign**: UI phases run design draft first; **Subagents**: explore/shell/browser-use; **Multi-CLI**: sparingly — only for complex/high-risk phases (Claude Pro limits)
 
 ### `gf-dev`
 

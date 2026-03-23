@@ -111,13 +111,7 @@ Each phase is executed by a **comprehensive pro prompt** — self-contained, una
 3. [Add/update tests for...]
 4. [Run pnpm preflight for affected workspace]
 
-### SuperDesign (optional — for UI phases)
-When the phase adds or redesigns UI, add SuperDesign *before* implementation:
-- **New page**: `create-design-draft` with intent and `--context-file`
-- **Redesign**: `iterate-design-draft` with improvement prompts, `--mode branch`
-- Ensure `.superdesign/init/` exists; use draft output to guide implementation.
-
-### Subagents (optional)
+#### Subagents (optional)
 When the phase needs exploration or verification, add:
 - **explore**: "Trace flow for [X]...", "Find all [symbol] usages..."
 - **shell**: "Run pnpm preflight...", "Run prisma migrate dev..."
@@ -181,7 +175,6 @@ Add `Unit` model and `UnitType` enum to support resident–unit linking.
 |------|--------|----------------|
 | 1 | **Get the pro prompt** | From plan doc or `docs/plan/execution/PROMPT_phase_N.md` |
 | 2 | **Apply** | Paste prompt into Cursor; execute |
-| 2a | **SuperDesign** (if UI phase) | Run design draft first; use output to guide implementation. See `superdesign` skill |
 | 2b | **Subagents** (if specified) | Invoke explore/shell/browser-use with prompts from phase |
 | 2c | **Multi-CLI** (optional, complex phases only) | Claude Pro has limits — use only for security-critical, architectural, or high-risk phases. See `gf-planner` skill |
 | 3 | **Test** | `pnpm turbo test --filter=<workspace>` |
@@ -326,8 +319,6 @@ docs/plan/
 - `docs/plan/guidelines/SUBAGENT_HIERARCHY.md` — Role definitions for Cursor and all CLIs
 - `docs/plan/guidelines/DEVELOPMENT_WORKFLOWS.md` — Commands, workflows, subagent prompts
 - `docs/plan/guidelines/AI_SKILLS_SUBAGENTS_RULES.md` — All subagents
-- `.cursor/skills/gf-planner/SKILL.md` — Planning skill (SuperDesign, subagents, multi-CLI)
-- `.cursor/skills/superdesign/SKILL.md` — UI/UX design before implementation
 - `.cursor/skills/multi-cli-cursor-workflow/SKILL.md` — Claude/Opencode/Gemini CLI alongside Cursor
 - `.cursor/templates/TEMPLATE_PROMPT_phase.md` — Phase template with subagents section
 - `docs/plan/backlog/ALL_TASKS_BACKLOG.md` — Task source

@@ -14,7 +14,6 @@ Canonical reference for writing effective prompts: phase prompts (`/plan`, `/dev
 - **Goal** — One clear sentence.
 - **Scope (in/out)** — What’s included and excluded.
 - **Steps** — Ordered, concrete, with file paths.
-- **SuperDesign** — For UI phases: run design draft before implementation.
 - **Subagents** — explore, shell, browser-use when needed.
 - **Acceptance criteria** — Lint, typecheck, tests, plus domain-specific checks.
 
@@ -29,7 +28,6 @@ Canonical reference for writing effective prompts: phase prompts (`/plan`, `/dev
 **Steps:**
 1. Add AnalyticsCard component using @gate-access/ui Card.
 2. Use design tokens from packages/ui/src/tokens.ts.
-3. Run superdesign create-design-draft if new layout.
 4. Run pnpm turbo lint --filter=client-dashboard.
 ```
 

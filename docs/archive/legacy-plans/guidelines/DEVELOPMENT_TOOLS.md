@@ -138,7 +138,6 @@ Run Claude CLI, Opencode CLI, and Gemini CLI in separate terminals **while** edi
 | Situation | Prefer |
 |-----------|--------|
 | Day-to-day coding | Cursor or Kiro |
-| Design exploration | SuperDesign (via Cursor skill) |
 | Quick one-off question | Claude CLI or Gemini CLI |
 | Lightweight terminal prompts, quick checks | Kilo CLI |
 | Automated checks (lint, prisma, security) | Kiro hooks |

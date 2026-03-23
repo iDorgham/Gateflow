@@ -40,9 +40,6 @@ This guide documents the specialized skills available to the Antigravity agentic
 
 ## AI & Design Skills
 
-### `superdesign`
-**Purpose:** Infinite-canvas design drafts and visual alignment.
-- **When to use:** Prototyping UI before implementation, refining layouts.
 
 ### `gf-design-guide`
 **Purpose:** Theme tokens, typography, colors, and layout constraints.

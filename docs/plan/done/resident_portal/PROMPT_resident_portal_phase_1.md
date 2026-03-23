@@ -71,11 +71,7 @@ Introduce resident-focused data models (`Unit`, `VisitorQR`, `AccessRule`, `Resi
    - `pnpm turbo typecheck --filter=@gate-access/db`
 7. Optionally open Prisma Studio (`pnpm exec prisma studio` from `packages/db`) to verify the new models and relations are present.
 
-### SuperDesign (optional — for UI phases)
-
-Not applicable for this schema-focused phase.
-
-### Subagents (optional)
+#### Subagents (optional)
 
 Invoke these if helpful:
 

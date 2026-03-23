@@ -236,7 +236,6 @@ Keep prompts **narrow and specific**. Avoid "do everything" requests.
 | **gf-api** | `.cursor/skills/gf-api/SKILL.md` | Next.js API routes, auth, validation |
 | **gf-dev** | `.cursor/skills/gf-dev/SKILL.md` | Workflows, commands, preflight |
 | **gf-planner** | `.cursor/skills/gf-planner/SKILL.md` | Plan creation, pro prompts, phased execution |
-| **superdesign** | `.cursor/skills/superdesign/SKILL.md` | UI/UX design, layouts, components |
 | **excel-spreadsheets** | `.cursor/skills/excel-spreadsheets/SKILL.md` | Excel .xlsx create, read, edit; spreadsheet exports |
 | **multi-cli-cursor-workflow** | `.cursor/skills/multi-cli-cursor-workflow/SKILL.md` | Claude/Opencode/Gemini CLIs alongside Cursor for parallel dev |
 

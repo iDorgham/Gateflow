@@ -50,7 +50,6 @@ So the plan is created with security awareness, and each phase prompt explicitly
 - Prefer small, testable phases executable in one focused session.
 - **Preferred tool** in phase prompts may be set to **Cursor** (default), **Claude CLI**, **Gemini CLI**, **OpenCode CLI**, **Kiro CLI**, **Kilo CLI**, **Qwen CLI**, or **Multi-CLI**. Use Kiro CLI, Kilo CLI, or Qwen CLI when the phase is best run from that terminal CLI (e.g. free-tier agentic coding, large context). See `docs/guides/TOOL_AND_CLI_REFERENCE.md` and `.antigravity/skills/multi-cli-cursor-workflow/SKILL.md`.
 - Add **Multi-CLI** only for phases that are complex or high-risk (per gf-planner and `AI_SKILLS_SUBAGENTS_RULES.md`).
-- Add **SuperDesign** only for phases that add or change UI.
 - Ensure acceptance criteria for security-related phases include checks for org scoping, soft deletes, QR signing, and (where relevant) auth/CSRF/rate limiting.
 ```
 
@@ -67,7 +66,7 @@ After running `/plan` for core_security_v6, the following files exist:
 | `docs/plan/execution/PLAN_core_security_v6.md` | Six-phase plan: invariants → gate–account (model+API) → gate–account (UI) → location rule → watchlists/incidents → identity & retention |
 | `docs/plan/execution/PROMPT_core_security_v6_phase_1.md` | Core invariants & enforcement hardening (SECURITY) |
 | `docs/plan/execution/PROMPT_core_security_v6_phase_2.md` | Gate–account assignment: model + API + enforcement (SECURITY) |
-| `docs/plan/execution/PROMPT_core_security_v6_phase_3.md` | Gate–account: dashboard UI + scanner UX (FRONTEND / MOBILE); SuperDesign for dashboard |
+| `docs/plan/execution/PROMPT_core_security_v6_phase_3.md` | Gate–account: dashboard UI + scanner UX (FRONTEND / MOBILE) |
 | `docs/plan/execution/PROMPT_core_security_v6_phase_4.md` | Location rule optional (SECURITY) |
 | `docs/plan/execution/PROMPT_core_security_v6_phase_5.md` | Watchlists, incidents & guard accountability (SECURITY) |
 | `docs/plan/execution/PROMPT_core_security_v6_phase_6.md` | Visitor identity levels & privacy/retention (SECURITY / MOBILE) |

@@ -50,11 +50,7 @@ Build the visual shell for the project detail page: hero/cover image, title, loc
 5. **RTL** — Ensure layout works for `ar-EG` (dir, text alignment).
 6. Run `pnpm preflight`. Fix any regressions.
 
-### SuperDesign (optional)
-
-If design clarity is needed: run `superdesign create-design-draft` for "real estate project hero and detail layout" with `--context-file` pointing to `docs/guides/UI_DESIGN_GUIDE.md`.
-
-### Acceptance criteria
+#### Acceptance criteria
 
 - [ ] Hero renders with cover image or gradient fallback.
 - [ ] Title, location, description visible.

@@ -73,13 +73,7 @@ Create a functional Resident Portal web app with RESIDENT login and a minimal, m
    - `pnpm turbo typecheck --filter=resident-portal`
 7. Optional: start the app (`pnpm turbo dev --filter=resident-portal`) and manually test login and navigation; optionally use `browser-use` subagent for automated verification.
 
-### SuperDesign (optional — for UI phases)
-
-For a richer UX, you may run SuperDesign before refining the layout:
-
-- **SuperDesign:** Create a design draft for the Resident Portal dashboard shell (login + main navigation + visitor QR/history pages) before deep UI polish.
-
-### Subagents (optional)
+#### Subagents (optional)
 
 | Subagent | When | Prompt |
 |----------|------|--------|

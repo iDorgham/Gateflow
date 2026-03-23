@@ -77,5 +77,4 @@ Use this split for **projects_crm_ui** and similar work. Cursor remains **master
 
 - **Canonical plan:** Treat **projects_crm_ui** as the single initiative for client-dashboard CRM, dashboard, palette, and advanced-tables work; avoid ad-hoc work outside it.
 - **Design brief:** "Projects CRM + dashboards + header/settings split" is one UX story — primary user (property manager / security / marketing), first view (project detail or list), navigation (Projects → Contacts → Units → QR → Settings); use shared EditPanel and real-estate palette throughout.
-- **Implementation:** For UI work, lean on gf-design-guide, ui-ux, tailwind, gf-creative-ui-animation; consider SuperDesign once for unified project/CRM layout before locking JSX.
 - I work mainly on client-dashboard; prefer branch names like feat/xxx. Always mention PROMPTS_REFERENCE.md when talking about /plan.

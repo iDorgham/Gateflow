@@ -72,11 +72,7 @@ Deliver a minimal but functional resident mobile app that lets residents log in,
    - `pnpm turbo typecheck --filter=resident-mobile`
    - Manual smoke via `pnpm turbo dev --filter=resident-mobile` (or `expo start`) testing login, list, detail, and share.
 
-### SuperDesign (optional — for UI phases)
-
-- **SuperDesign:** Optionally design the core resident mobile screens (login, QR list, QR detail) before refining styling and interactions.
-
-### Subagents (optional)
+#### Subagents (optional)
 
 | Subagent | When | Prompt |
 |----------|------|--------|
