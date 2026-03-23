@@ -19,7 +19,8 @@ function checkRateLimit(ip: string): boolean {
 }
 
 function isValidEmail(email: string): boolean {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  // Avoid ReDoS: use non-overlapping groups — domain labels don't contain dots
+  return /^[^\s@]+@[^\s@.]+(?:\.[^\s@.]+)+$/.test(email);
 }
 
 const PLAN_LABELS: Record<string, string> = {
@@ -105,10 +106,8 @@ export async function POST(request: NextRequest) {
   }
 
   const resend = new Resend(resendApiKey);
-  const fromEmail =
-    process.env.CONTACT_FROM_EMAIL ?? 'noreply@gateflow.io';
-  const notifyEmail =
-    process.env.CONTACT_NOTIFY_EMAIL ?? 'team@gateflow.io';
+  const fromEmail = process.env.CONTACT_FROM_EMAIL ?? 'noreply@gateflow.io';
+  const notifyEmail = process.env.CONTACT_NOTIFY_EMAIL ?? 'team@gateflow.io';
   const planLabel = planInterest
     ? (PLAN_LABELS[planInterest] ?? 'Not specified')
     : 'Not specified';

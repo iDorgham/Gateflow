@@ -17,15 +17,29 @@ export class AiActionService {
    */
   static maskPII(text: string | null | undefined): string {
     if (!text) return '';
-    
+
     // Mask emails: test@example.com -> t***@example.com
-    let masked = text.replace(/([a-zA-Z0-9._%+-])[a-zA-Z0-9._%+-]*@([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g, '$1***@$2');
-    
+    // Uses non-overlapping character classes to avoid ReDoS
+    let masked = text.replace(
+      /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+/g,
+      (match) => {
+        const atIdx = match.indexOf('@');
+        return match[0] + '***' + match.slice(atIdx);
+      }
+    );
+
     // Mask phone numbers (basic pattern for global/local): +961 70 123 456 -> +961 70 *** 456
-    masked = masked.replace(/(\+?\d{1,3}[-.\s]?)?\(?\d{2,3}\)?[-.\s]?\d{3,4}[-.\s]?\d{3,4}/g, (match) => {
-      if (match.length < 6) return match;
-      return match.substring(0, match.length - 7) + '***' + match.substring(match.length - 4);
-    });
+    masked = masked.replace(
+      /(\+?\d{1,3}[-.\s]?)?\(?\d{2,3}\)?[-.\s]?\d{3,4}[-.\s]?\d{3,4}/g,
+      (match) => {
+        if (match.length < 6) return match;
+        return (
+          match.substring(0, match.length - 7) +
+          '***' +
+          match.substring(match.length - 4)
+        );
+      }
+    );
 
     return masked;
   }
@@ -35,7 +49,7 @@ export class AiActionService {
    */
   static async createAction(params: CreateAiActionParams) {
     console.log(`>>> [AiActionService] Creating action: ${params.actionType}`);
-    
+
     return await prisma.aiActionLog.create({
       data: {
         organizationId: params.organizationId,
@@ -52,10 +66,17 @@ export class AiActionService {
   /**
    * Record token usage and estimated cost
    */
-  static async recordUsage(actionId: string, usage: { promptTokens: number; completionTokens: number; totalTokens: number }) {
+  static async recordUsage(
+    actionId: string,
+    usage: {
+      promptTokens: number;
+      completionTokens: number;
+      totalTokens: number;
+    }
+  ) {
     // Gemini Flash pricing: $0.075 / 1M input, $0.30 / 1M output
     const inputCost = (usage.promptTokens / 1_000_000) * 0.075;
-    const outputCost = (usage.completionTokens / 1_000_000) * 0.30;
+    const outputCost = (usage.completionTokens / 1_000_000) * 0.3;
     const estimatedCost = inputCost + outputCost;
 
     return await prisma.aiActionLog.update({
@@ -72,7 +93,10 @@ export class AiActionService {
   /**
    * Submit feedback for an action
    */
-  static async submitFeedback(actionId: string, feedback: 'THUMBS_UP' | 'THUMBS_DOWN') {
+  static async submitFeedback(
+    actionId: string,
+    feedback: 'THUMBS_UP' | 'THUMBS_DOWN'
+  ) {
     return await prisma.aiActionLog.update({
       where: { id: actionId },
       data: { feedback },
@@ -82,9 +106,15 @@ export class AiActionService {
   /**
    * Update the status of an AI action
    */
-  static async updateStatus(actionId: string, status: AiActionStatus | string, result?: string) {
-    console.log(`>>> [AiActionService] Updating action ${actionId} to: ${status}`);
-    
+  static async updateStatus(
+    actionId: string,
+    status: AiActionStatus | string,
+    result?: string
+  ) {
+    console.log(
+      `>>> [AiActionService] Updating action ${actionId} to: ${status}`
+    );
+
     return await prisma.aiActionLog.update({
       where: { id: actionId },
       data: {

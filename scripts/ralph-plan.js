@@ -373,7 +373,9 @@ switch (cmd) {
     if (fs.existsSync(backlog)) {
       let content = fs.readFileSync(backlog, 'utf8');
       content = content.replace(
-        new RegExp(`(### ${slug}[^\\n]*\\n\\n\\*\\*Status:\\*\\* )🆕 Open`),
+        new RegExp(
+          `(### ${escapeRegExp(slug)}[^\\n]*\\n\\n\\*\\*Status:\\*\\* )🆕 Open`
+        ),
         '$1✅ Complete'
       );
       fs.writeFileSync(backlog, content);

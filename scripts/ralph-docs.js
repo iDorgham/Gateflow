@@ -260,7 +260,7 @@ function moveUpcomingToShipped(slug) {
   if (!fs.existsSync(UPCOMING)) return;
   const title = slugToTitle(slug);
   let content = fs.readFileSync(UPCOMING, 'utf8');
-  const pattern = new RegExp(`- \\*\\*${title}[^\\n]*\\n`);
+  const pattern = new RegExp(`- \\*\\*${escapeRegExp(title)}[^\\n]*\\n`);
   const match = content.match(pattern);
   if (!match) return;
 
