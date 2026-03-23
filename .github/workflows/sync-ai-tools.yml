@@ -77,16 +77,16 @@ HEADER
 
       - name: Commit synced configs
         run: |
-          git add \
-            .claude/ .cursor/ .antigravity/ .agent/ \
-            .gemini/ .kiro/ .kilocode/ .opencode/ \
-            docs/AI_TOOLS_SYNC_LOG.md \
-            2>/dev/null || true
+          # Only add files that are NOT gitignored.
+          # .claude/ .cursor/ .kiro/ .antigravity/ .opencode/ .kilocode/ .agent/ .agents/
+          # are all in .gitignore — skip them.
+          # Only docs/AI_TOOLS_SYNC_LOG.md is tracked.
+          git add docs/AI_TOOLS_SYNC_LOG.md 2>/dev/null || true
 
           if git diff --staged --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "chore(ai-tools): auto-sync from .agents/ [skip ci]
+            git commit -m "chore(ai-tools): update sync log [skip ci]
 
 Triggered by: ${{ github.event_name }}
 Source commit: ${{ github.sha }}"

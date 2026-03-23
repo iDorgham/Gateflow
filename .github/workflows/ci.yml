@@ -1,47 +1,208 @@
-# GateFlow CI — lint, typecheck, test on push and PR
+# =============================================================================
+# ci.yml — GateFlow monorepo CI
+#
+# Jobs (parallel after setup):
+#   setup     → install deps + prisma generate + turbo cache
+#   lint      → turbo lint (all workspaces)
+#   typecheck → turbo typecheck (all workspaces)
+#   test      → turbo test (all workspaces, with DB secrets)
+#   ci-ok     → summary gate (required status check)
+# =============================================================================
 name: CI
 
 on:
   push:
-    branches: [main, master, develop, 'feat/**']
+    branches: [main, master, develop, 'feat/**', 'fix/**', 'chore/**']
   pull_request:
-    branches: [main, master, develop, 'feat/**']
+    branches: [main, master, develop]
 
-defaults:
-  run:
-    working-directory: .
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
+  PNPM_VERSION: '8.15.0'
 
 jobs:
-  preflight:
+  # ── 1. Setup (shared across all jobs via cache) ──────────────────────────
+  setup:
+    name: Setup
     runs-on: ubuntu-latest
+    outputs:
+      cache-key: ${{ steps.cache.outputs.cache-hit }}
     steps:
       - uses: actions/checkout@v4
 
       - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
 
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'pnpm'
 
-      - uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: latest
-
-      - name: Verify tools
-        run: |
-          node -v
-          pnpm -v
-          bun -v
-
       - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate Prisma client
+        run: pnpm --filter @gate-access/db db:generate
+        env:
+          DATABASE_URL: 'postgresql://placeholder:placeholder@localhost:5432/placeholder'
+
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        id: cache
+        with:
+          path: |
+            node_modules
+            packages/*/node_modules
+            apps/*/node_modules
+            ~/.pnpm-store
+          key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            pnpm-${{ runner.os }}-
+
+  # ── 2. Lint ───────────────────────────────────────────────────────────────
+  lint:
+    name: Lint
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Restore node_modules cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            packages/*/node_modules
+            apps/*/node_modules
+            ~/.pnpm-store
+          key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            pnpm-${{ runner.os }}-
+
+      - name: Install dependencies (if cache missed)
         run: pnpm install --frozen-lockfile
 
       - name: Lint
         run: pnpm turbo lint
 
+  # ── 3. Typecheck ─────────────────────────────────────────────────────────
+  typecheck:
+    name: Typecheck
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Restore node_modules cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            packages/*/node_modules
+            apps/*/node_modules
+            ~/.pnpm-store
+          key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            pnpm-${{ runner.os }}-
+
+      - name: Install dependencies (if cache missed)
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate Prisma client
+        run: pnpm --filter @gate-access/db db:generate
+        env:
+          DATABASE_URL: 'postgresql://placeholder:placeholder@localhost:5432/placeholder'
+
       - name: Typecheck
         run: pnpm turbo typecheck
 
-      - name: Test
+  # ── 4. Test ───────────────────────────────────────────────────────────────
+  test:
+    name: Test
+    needs: setup
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: ${{ secrets.CI_DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/gateflow_test' }}
+      NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET || 'ci-test-secret-32-chars-minimum!!' }}
+      NEXTAUTH_URL: 'http://localhost:3001'
+      QR_SIGNING_SECRET: ${{ secrets.QR_SIGNING_SECRET || 'ci-qr-signing-secret-32-chars-min' }}
+      ENCRYPTION_MASTER_KEY: ${{ secrets.ENCRYPTION_MASTER_KEY || 'ci-encryption-key-32-chars-min!!' }}
+      ADMIN_ACCESS_KEY: ${{ secrets.ADMIN_ACCESS_KEY || 'ci-admin-key' }}
+      NEXT_PUBLIC_APP_URL: 'http://localhost:3001'
+      SKIP_ENV_VALIDATION: 'true'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Restore node_modules cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            packages/*/node_modules
+            apps/*/node_modules
+            ~/.pnpm-store
+          key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            pnpm-${{ runner.os }}-
+
+      - name: Install dependencies (if cache missed)
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate Prisma client
+        run: pnpm --filter @gate-access/db db:generate
+
+      - name: Run tests
         run: pnpm turbo test
+
+  # ── 5. CI gate (required status check) ───────────────────────────────────
+  ci-ok:
+    name: CI OK
+    if: always()
+    needs: [lint, typecheck, test]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check all jobs passed
+        run: |
+          if [[ "${{ needs.lint.result }}" != "success" ||
+                "${{ needs.typecheck.result }}" != "success" ||
+                "${{ needs.test.result }}" != "success" ]]; then
+            echo "One or more CI jobs failed:"
+            echo "  lint:      ${{ needs.lint.result }}"
+            echo "  typecheck: ${{ needs.typecheck.result }}"
+            echo "  test:      ${{ needs.test.result }}"
+            exit 1
+          fi
+          echo "All CI jobs passed."

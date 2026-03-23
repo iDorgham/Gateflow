@@ -18,7 +18,7 @@ Gate-Access/
 │   ├── admin-dashboard/     # Super-admin panel (Next.js 14, Port 3002)
 │   ├── scanner-app/         # Mobile QR scanner (Expo SDK 54, Port 8081)
 │   ├── resident-mobile/     # Resident app (Expo SDK 54)
-│   ├── resident-portal/     # Resident web portal (Next.js 14, Port 3003)
+│   ├── resident-portal/     # Resident web portal (Next.js 14, Port 3004)
 │   └── marketing/           # Public marketing site (Next.js 14, Port 3000)
 ├── packages/
 │   ├── db/                  # Prisma schema, client, migrations, seed

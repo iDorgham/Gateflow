@@ -12,11 +12,12 @@
   </p>
 
   <p>
-    <a href="https://github.com/iDorgham/Gateflow/actions"><img src="https://img.shields.io/badge/Build-Passing-brightgreen?style=for-the-badge&logo=github-actions" alt="Build"></a>
+    <a href="https://github.com/iDorgham/Gateflow/actions/workflows/ci.yml"><img src="https://github.com/iDorgham/Gateflow/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+    <a href="https://github.com/iDorgham/Gateflow/actions/workflows/deploy.yml"><img src="https://github.com/iDorgham/Gateflow/actions/workflows/deploy.yml/badge.svg" alt="Deploy"></a>
     <a href="https://nextjs.org"><img src="https://img.shields.io/badge/Next.js-14.2-black?style=for-the-badge&logo=next.js" alt="Next.js"></a>
     <a href="https://expo.dev"><img src="https://img.shields.io/badge/Expo-54.0-4630EB?style=for-the-badge&logo=expo" alt="Expo"></a>
     <a href="https://www.prisma.io/"><img src="https://img.shields.io/badge/Prisma-5.0-2D3748?style=for-the-badge&logo=prisma" alt="Prisma"></a>
-    <a href="https://pnpm.io/"><img src="https://img.shields.io/badge/pnpm-8.0-F69220?style=for-the-badge&logo=pnpm" alt="pnpm"></a>
+    <a href="https://pnpm.io/"><img src="https://img.shields.io/badge/pnpm-8.15-F69220?style=for-the-badge&logo=pnpm" alt="pnpm"></a>
     <br />
     <a href="https://gateflow.site"><img src="https://img.shields.io/badge/Status-MVP_100%25_Complete-success?style=for-the-badge" alt="Status"></a>
     <a href="#"><img src="https://img.shields.io/badge/Security-Strict_HMAC--SHA256-red?style=for-the-badge" alt="Security"></a>
@@ -257,12 +258,49 @@ GateFlow/
 
 ---
 
+## 🚀 CI/CD & Deployment
+
+### GitHub Actions Workflows
+
+| Workflow | Trigger | Purpose |
+| :--- | :--- | :--- |
+| **CI** (`ci.yml`) | Push / PR | Lint + typecheck + test in parallel |
+| **Deploy** (`deploy.yml`) | Push to main | Deploy all 4 web apps to Vercel |
+| **Lighthouse** (`lighthouse.yml`) | PR / daily | PageSpeed audit (perf ≥90, a11y ≥95, SEO ≥95) |
+| **Sync AI Tools** (`sync-ai-tools.yml`) | `.agents/` change | Sync workflow configs to tool-native formats |
+
+### Required GitHub Secrets
+
+```
+# CI
+NEXTAUTH_SECRET          # ≥32 chars random string
+QR_SIGNING_SECRET        # ≥32 chars random string
+ENCRYPTION_MASTER_KEY    # ≥32 chars random string
+ADMIN_ACCESS_KEY         # Admin bypass key
+CI_DATABASE_URL          # postgres://... (test database)
+
+# Vercel deploy
+VERCEL_TOKEN             # From vercel.com → Settings → Tokens
+VERCEL_ORG_ID            # From vercel.com → Settings
+VERCEL_PROJECT_ID_CLIENT_DASHBOARD
+VERCEL_PROJECT_ID_ADMIN_DASHBOARD
+VERCEL_PROJECT_ID_MARKETING
+VERCEL_PROJECT_ID_RESIDENT_PORTAL
+
+# Optional: Turborepo remote cache
+TURBO_TOKEN
+TURBO_TEAM
+```
+
+---
+
 ## 🤝 Contributing
 
 1. Check the [**Development Guide**](./docs/guides/DEVELOPMENT_GUIDE.md).
 2. Review [**Code Conventions**](./docs/core/CLAUDE.md#code-conventions).
 3. Use `pnpm` exclusively (no npm/yarn).
-4. Run `pnpm turbo build` before submitting PRs.
+4. Run `pnpm preflight` before submitting PRs (lint + typecheck + test).
+5. Follow [Conventional Commits](https://www.conventionalcommits.org/): `feat:`, `fix:`, `chore:`, `docs:`
 
 ---
 

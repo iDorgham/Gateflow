@@ -1,0 +1,313 @@
+# =============================================================================
+# deploy.yml — GateFlow Vercel Deployment
+#
+# Deploys all web apps to Vercel:
+#   - client-dashboard  (production / preview)
+#   - admin-dashboard   (production / preview)
+#   - marketing         (production / preview)
+#   - resident-portal   (production / preview)
+#
+# Triggers:
+#   - Push to main/master → production deploy
+#   - Pull request        → preview deploy
+#   - Manual dispatch
+#
+# Required secrets (set in GitHub → Settings → Secrets):
+#   VERCEL_TOKEN
+#   VERCEL_ORG_ID
+#   VERCEL_PROJECT_ID_CLIENT_DASHBOARD
+#   VERCEL_PROJECT_ID_ADMIN_DASHBOARD
+#   VERCEL_PROJECT_ID_MARKETING
+#   VERCEL_PROJECT_ID_RESIDENT_PORTAL
+# =============================================================================
+name: Deploy
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+    inputs:
+      app:
+        description: 'App to deploy (leave empty for all)'
+        required: false
+        default: ''
+      environment:
+        description: 'Environment (production | preview)'
+        required: false
+        default: 'production'
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  PNPM_VERSION: '8.15.0'
+
+jobs:
+  # ── Build check before deploy ─────────────────────────────────────────────
+  build-check:
+    name: Build Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate Prisma client
+        run: pnpm --filter @gate-access/db db:generate
+        env:
+          DATABASE_URL: 'postgresql://placeholder:placeholder@localhost:5432/placeholder'
+
+      - name: Build all web apps
+        run: pnpm turbo build --filter=client-dashboard --filter=admin-dashboard --filter=marketing --filter=resident-portal
+        env:
+          SKIP_ENV_VALIDATION: 'true'
+          NEXT_TELEMETRY_DISABLED: '1'
+
+  # ── Deploy: client-dashboard ──────────────────────────────────────────────
+  deploy-client:
+    name: Deploy client-dashboard
+    needs: build-check
+    runs-on: ubuntu-latest
+    if: |
+      github.event.inputs.app == '' ||
+      github.event.inputs.app == 'client-dashboard'
+    environment:
+      name: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' ? 'production' : 'preview' }}
+      url: ${{ steps.deploy.outputs.url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel@latest
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Pull Vercel environment
+        run: |
+          vercel pull --yes \
+            --environment=${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' ? 'production' : 'preview' }} \
+            --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: apps/client-dashboard
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_CLIENT_DASHBOARD }}
+
+      - name: Build for Vercel
+        run: vercel build ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' ? '--prod' : '' }} --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: apps/client-dashboard
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_CLIENT_DASHBOARD }}
+
+      - name: Deploy to Vercel
+        id: deploy
+        run: |
+          URL=$(vercel deploy --prebuilt \
+            ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' ? '--prod' : '' }} \
+            --token=${{ secrets.VERCEL_TOKEN }})
+          echo "url=$URL" >> $GITHUB_OUTPUT
+          echo "Deployed to: $URL"
+        working-directory: apps/client-dashboard
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_CLIENT_DASHBOARD }}
+
+  # ── Deploy: admin-dashboard ───────────────────────────────────────────────
+  deploy-admin:
+    name: Deploy admin-dashboard
+    needs: build-check
+    runs-on: ubuntu-latest
+    if: |
+      github.event.inputs.app == '' ||
+      github.event.inputs.app == 'admin-dashboard'
+    environment:
+      name: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' ? 'production' : 'preview' }}
+      url: ${{ steps.deploy.outputs.url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel@latest
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Pull Vercel environment
+        run: |
+          vercel pull --yes \
+            --environment=${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' ? 'production' : 'preview' }} \
+            --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: apps/admin-dashboard
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_ADMIN_DASHBOARD }}
+
+      - name: Build for Vercel
+        run: vercel build ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' ? '--prod' : '' }} --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: apps/admin-dashboard
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_ADMIN_DASHBOARD }}
+
+      - name: Deploy to Vercel
+        id: deploy
+        run: |
+          URL=$(vercel deploy --prebuilt \
+            ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' ? '--prod' : '' }} \
+            --token=${{ secrets.VERCEL_TOKEN }})
+          echo "url=$URL" >> $GITHUB_OUTPUT
+          echo "Deployed to: $URL"
+        working-directory: apps/admin-dashboard
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_ADMIN_DASHBOARD }}
+
+  # ── Deploy: marketing ────────────────────────────────────────────────────
+  deploy-marketing:
+    name: Deploy marketing
+    needs: build-check
+    runs-on: ubuntu-latest
+    if: |
+      github.event.inputs.app == '' ||
+      github.event.inputs.app == 'marketing'
+    environment:
+      name: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' ? 'production' : 'preview' }}
+      url: ${{ steps.deploy.outputs.url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel@latest
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Pull Vercel environment
+        run: |
+          vercel pull --yes \
+            --environment=${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' ? 'production' : 'preview' }} \
+            --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: apps/marketing
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_MARKETING }}
+
+      - name: Build for Vercel
+        run: vercel build ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' ? '--prod' : '' }} --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: apps/marketing
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_MARKETING }}
+
+      - name: Deploy to Vercel
+        id: deploy
+        run: |
+          URL=$(vercel deploy --prebuilt \
+            ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' ? '--prod' : '' }} \
+            --token=${{ secrets.VERCEL_TOKEN }})
+          echo "url=$URL" >> $GITHUB_OUTPUT
+          echo "Deployed to: $URL"
+        working-directory: apps/marketing
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_MARKETING }}
+
+  # ── Deploy: resident-portal ───────────────────────────────────────────────
+  deploy-resident-portal:
+    name: Deploy resident-portal
+    needs: build-check
+    runs-on: ubuntu-latest
+    if: |
+      github.event.inputs.app == '' ||
+      github.event.inputs.app == 'resident-portal'
+    environment:
+      name: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' ? 'production' : 'preview' }}
+      url: ${{ steps.deploy.outputs.url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel@latest
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Pull Vercel environment
+        run: |
+          vercel pull --yes \
+            --environment=${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' ? 'production' : 'preview' }} \
+            --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: apps/resident-portal
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_RESIDENT_PORTAL }}
+
+      - name: Build for Vercel
+        run: vercel build ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' ? '--prod' : '' }} --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: apps/resident-portal
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_RESIDENT_PORTAL }}
+
+      - name: Deploy to Vercel
+        id: deploy
+        run: |
+          URL=$(vercel deploy --prebuilt \
+            ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' ? '--prod' : '' }} \
+            --token=${{ secrets.VERCEL_TOKEN }})
+          echo "url=$URL" >> $GITHUB_OUTPUT
+          echo "Deployed to: $URL"
+        working-directory: apps/resident-portal
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_RESIDENT_PORTAL }}
