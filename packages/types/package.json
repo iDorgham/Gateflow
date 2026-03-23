@@ -12,8 +12,8 @@
     "typecheck": "tsc -p tsconfig.json"
   },
   "dependencies": {
-    "zod": "^4.3.6",
-    "crypto-js": "^4.2.0"
+    "crypto-js": "^4.2.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@gate-access/config": "workspace:*",

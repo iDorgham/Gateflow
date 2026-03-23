@@ -69,6 +69,7 @@ plan:run → plan:done` with automatic folder moves and doc cascades
 - **[Ci]** establish lighthouse ci pipeline and performance baseline — phase 1
 
 ### Bug Fixes
+- **[Security] **resolve CodeQL ReDoS/Injection alerts and transitive vulnerabilities
 
 - **[Build] **resolve next.js type error and align node engine versions
 

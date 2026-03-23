@@ -10,6 +10,13 @@ export interface ScanInput {
   status: 'SUCCESS' | 'FAILED' | 'EXPIRED' | 'MAX_USES_REACHED' | 'INACTIVE' | 'DENIED'; // ScanStatus
   gateId: string;
   deviceId?: string | null;
+  // Optional fields from ScanEvent (passed through from validated bulk payload)
+  retryCount?: number;
+  latitude?: number | null;
+  longitude?: number | null;
+  visitorName?: string | null;
+  visitorPhone?: string | null;
+  visitorIdNumber?: string | null;
 }
 
 export interface ConflictResult {

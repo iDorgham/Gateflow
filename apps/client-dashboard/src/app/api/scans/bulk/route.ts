@@ -154,7 +154,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     const results = await prisma.$transaction(async (tx) => {
-      return processBulkScans(scansForSync, tx);
+      return processBulkScans(scansForSync as import('@/lib/scans/bulk-sync').ScanInput[], tx);
     });
 
     const response = {

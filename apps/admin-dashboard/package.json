@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@ai-sdk/google": "^1.2.0",
+    "@ai-sdk/react": "^3.0.139",
     "@formatjs/intl-localematcher": "^0.8.1",
     "@gate-access/db": "^0.1.0",
     "@gate-access/i18n": "workspace:^",
@@ -23,8 +24,8 @@
     "@gate-access/ui": "workspace:^",
     "@hugeicons/core-free-icons": "^3.1.1",
     "@hugeicons/react": "^1.1.5",
-    "ai": "4",
     "@node-rs/argon2": "^2.0.0",
+    "ai": "^4.3.19",
     "clsx": "^2.1.1",
     "framer-motion": "^11.18.2",
     "i18next": "^23.16.8",
@@ -38,7 +39,7 @@
     "recharts": "^2.15.4",
     "sonner": "^1.7.4",
     "tailwind-merge": "^2.6.1",
-    "zod": "^4.3.6"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/jest": "^30.0.0",

@@ -128,7 +128,7 @@ export function AIAssistant({ locale }: AIAssistantProps) {
       console.log('AI Assistant: Finished', message);
       router.refresh();
     },
-    onError: (err) => {
+    onError: (err: Error) => {
       console.error('AI Assistant: Error', err);
       toast.error(err.message ?? (isRtl ? 'حدث خطأ' : 'Assistant error'));
     },
@@ -234,7 +234,7 @@ export function AIAssistant({ locale }: AIAssistantProps) {
         )}
 
         {/* Message bubbles */}
-        {!hasOnlyWelcome && messages.map((message) => {
+        {!hasOnlyWelcome && messages.map((message: Message) => {
           if (message.id === 'welcome') return null;
           const isUser = message.role === 'user';
           const text = msgText(message.content);

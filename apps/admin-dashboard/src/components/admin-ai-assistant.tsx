@@ -75,7 +75,7 @@ export function AdminAIAssistant({ locale }: AdminAIAssistantProps) {
     api: `/${locale}/api/admin/ai/assistant`,
     initialMessages: hydrated ? storedMessages : [WELCOME_MSG],
     onFinish: () => { router.refresh(); },
-    onError: (err) => {
+    onError: (err: Error) => {
       console.error('Admin AI error:', err);
       toast.error(err.message ?? 'Assistant error');
     },
@@ -147,7 +147,7 @@ export function AdminAIAssistant({ locale }: AdminAIAssistantProps) {
         )}
 
         {/* Message bubbles */}
-        {!hasOnlyWelcome && messages.map((message) => {
+        {!hasOnlyWelcome && messages.map((message: Message) => {
           if (message.id === 'welcome') return null;
           const isUser = message.role === 'user';
           const text = msgText(message.content);
