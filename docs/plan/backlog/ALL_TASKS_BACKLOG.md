@@ -18,6 +18,22 @@
 - [ ] Phase 3 — Home Tab "Express Invite" UI
 - [ ] Phase 4 — Invitee Landing Page: Premium Experience
 - [ ] Phase 5 — GateAI Bridge & Arrival Polish
+
+### security_isolation_fix — High-Risk Security Hardening
+
+**IDEA:** `docs/plan/context/IDEA_security_isolation_fix.md`
+
+**PLAN:** `docs/plan/planned/security_isolation_fix/PLAN_security_isolation_fix.md`
+
+**Status:** 🏗️ Planned
+
+**Target:** Q4 2026
+
+- [ ] Phase 1 — Core Operations Audit & Fix (Gates & Scans)
+- [ ] Phase 2 — CRM & Management Hardening (Contacts & Units)
+- [ ] Phase 3 — QR Codes & Workspace Exports
+- [ ] Phase 4 — Analytics & Incidents
+- [ ] Phase 5 — Automated Enforcement & Certification
  
  ### pagespeed_100 — Google PageSpeed 100% Mastery
  
