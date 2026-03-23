@@ -157,6 +157,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install bun
+        run: |
+          curl -fsSL https://bun.sh/install | bash
+          echo "$HOME/.bun/bin" >> $GITHUB_PATH
+
       - uses: pnpm/action-setup@v4
         with:
           version: ${{ env.PNPM_VERSION }}
