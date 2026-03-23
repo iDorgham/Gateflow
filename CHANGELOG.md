@@ -70,6 +70,8 @@ plan:run → plan:done` with automatic folder moves and doc cascades
 
 ### Bug Fixes
 
+- **[Build] **resolve next.js type error and align node engine versions
+
 - **[Db]** add automated prisma migrate deploy to CI and fix schema drift
 
 - **[Db]** add missing nanoid dependency for qr queries
