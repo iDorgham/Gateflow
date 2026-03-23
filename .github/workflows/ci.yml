@@ -192,11 +192,83 @@ jobs:
       - name: Run tests
         run: pnpm turbo test
 
-  # ── 5. CI gate (required status check) ───────────────────────────────────
+  # ── 5. Performance budget check ───────────────────────────────────────────
+  performance:
+    name: Performance Budget
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Restore node_modules cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            node_modules
+            packages/*/node_modules
+            apps/*/node_modules
+            ~/.pnpm-store
+          key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            pnpm-${{ runner.os }}-
+
+      - name: Install dependencies (if cache missed)
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate Prisma client
+        run: pnpm --filter @gate-access/db db:generate
+        env:
+          DATABASE_URL: 'postgresql://placeholder:placeholder@localhost:5432/placeholder'
+
+      - name: Build apps for bundle analysis
+        run: |
+          pnpm turbo build --filter=marketing --filter=client-dashboard
+        env:
+          SKIP_ENV_VALIDATION: 'true'
+          DATABASE_URL: 'postgresql://placeholder:placeholder@localhost:5432/placeholder'
+          NEXTAUTH_SECRET: 'ci-test-secret-32-chars-minimum!!'
+          QR_SIGNING_SECRET: 'ci-qr-signing-secret-32-chars-min'
+          NEXTAUTH_URL: 'http://localhost:3001'
+          NEXT_PUBLIC_APP_URL: 'http://localhost:3001'
+        continue-on-error: true
+
+      - name: Check bundle size vs baseline
+        run: node scripts/check-bundle-size.js
+        continue-on-error: true
+
+      - name: Check circular imports
+        run: node scripts/check-imports.js --summary
+        continue-on-error: true
+
+      - name: Print .lighthouserc.js thresholds
+        run: |
+          echo "══ Performance Budget Summary ══════════════════════════════"
+          echo "  Lighthouse CI thresholds defined in: .lighthouserc.js"
+          echo "  Phase 1 targets (baseline floor):"
+          echo "    Performance   ≥ 65"
+          echo "    Accessibility ≥ 85"
+          echo "    Best Practices ≥ 88"
+          echo "    SEO            ≥ 90"
+          echo "    CLS            ≤ 0.15"
+          echo ""
+          echo "  Full Lighthouse audit runs in: lighthouse.yml workflow"
+          echo "  Analysis report: docs/perf/ANALYSIS_performance_killers.md"
+          echo "═══════════════════════════════════════════════════════════"
+
+  # ── 6. CI gate (required status check) ───────────────────────────────────
   ci-ok:
     name: CI OK
     if: always()
-    needs: [lint, typecheck, test]
+    needs: [lint, typecheck, test, performance]
     runs-on: ubuntu-latest
     steps:
       - name: Check all jobs passed
@@ -205,9 +277,11 @@ jobs:
                 "${{ needs.typecheck.result }}" != "success" ||
                 "${{ needs.test.result }}" != "success" ]]; then
             echo "One or more CI jobs failed:"
-            echo "  lint:      ${{ needs.lint.result }}"
-            echo "  typecheck: ${{ needs.typecheck.result }}"
-            echo "  test:      ${{ needs.test.result }}"
+            echo "  lint:        ${{ needs.lint.result }}"
+            echo "  typecheck:   ${{ needs.typecheck.result }}"
+            echo "  test:        ${{ needs.test.result }}"
+            echo "  performance: ${{ needs.performance.result }}"
             exit 1
           fi
           echo "All CI jobs passed."
+          echo "Performance job: ${{ needs.performance.result }} (non-blocking during pagespeed_100 Phase 1)"

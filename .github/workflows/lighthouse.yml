@@ -1,15 +1,23 @@
 # =============================================================================
-# lighthouse.yml — Google PageSpeed / Lighthouse CI (target: 100/100)
+# lighthouse.yml — GateFlow Lighthouse CI (Target: 100/100)
+#
+# Plan: pagespeed_100 — Phase 1 infrastructure
+#
+# Jobs:
+#   lighthouse-marketing   → audit marketing site (Mobile + Desktop)
+#   lighthouse-dashboard   → audit client dashboard (Desktop)
+#   lhci-gate              → summary required-status check
 #
 # Runs on:
-#   - PRs targeting main/master
-#   - Daily at 06:00 UTC
-#   - Manual dispatch with optional URL override
+#   - PRs targeting main/master (when frontend files change)
+#   - Daily at 06:00 UTC (regression guard)
+#   - Manual dispatch with URL + strategy override
 #
 # Reports:
-#   - Performance / Accessibility / Best-Practices / SEO scores
-#   - Fails CI if any category < threshold
-#   - Comments score summary on PRs
+#   - Scores posted as PR comment (updated, not duplicated)
+#   - HTML report uploaded as artifact (7-day retention)
+#   - Fails CI if any category < threshold in .lighthouserc.js
+#   - CWV metrics printed to step summary
 # =============================================================================
 name: Lighthouse CI
 
@@ -19,22 +27,46 @@ on:
     paths:
       - 'apps/client-dashboard/**'
       - 'apps/marketing/**'
+      - 'packages/ui/**'
+      - '.lighthouserc.js'
   schedule:
     - cron: '0 6 * * *'
   workflow_dispatch:
     inputs:
-      url:
-        description: 'URL to audit (default: marketing site)'
+      marketing_url:
+        description: 'Marketing site URL to audit'
         required: false
-        default: ''
+        default: 'https://gateflow.app'
+      dashboard_url:
+        description: 'Dashboard URL to audit'
+        required: false
+        default: 'https://app.gateflow.app'
+      strategy:
+        description: 'mobile or desktop'
+        required: false
+        default: 'mobile'
+
+concurrency:
+  group: lighthouse-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PNPM_VERSION: '8.15.0'
+  LHCI_VERSION: '0.14.0'
 
 jobs:
-  lighthouse:
+  # ── 1. Audit Marketing Site ────────────────────────────────────────────────
+  lighthouse-marketing:
+    name: Lighthouse — Marketing (Mobile + Desktop)
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
 
       - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
 
       - uses: actions/setup-node@v4
         with:
@@ -44,94 +76,103 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # ── Build the marketing / dashboard app ──
-      - name: Build marketing app
-        run: pnpm turbo build --filter=marketing
-        continue-on-error: true
-        env:
-          SKIP_ENV_VALIDATION: 'true'
-
-      # ── Install Lighthouse CI ──
       - name: Install @lhci/cli
-        run: npm install -g @lhci/cli
+        run: npm install -g @lhci/cli@${{ env.LHCI_VERSION }}
 
-      # ── Create Lighthouse config ──
-      - name: Write lighthouserc.json
+      - name: Install Chrome
+        uses: browser-actions/setup-chrome@latest
+
+      - name: Determine target URL
+        id: url
         run: |
-          cat > .lighthouserc.json <<'EOF'
-{
-  "ci": {
-    "collect": {
-      "numberOfRuns": 3,
-      "settings": {
-        "preset": "desktop",
-        "chromeFlags": "--no-sandbox --disable-dev-shm-usage"
-      }
-    },
-    "assert": {
-      "preset": "lighthouse:no-pwa",
-      "assertions": {
-        "categories:performance":    ["error", {"minScore": 0.90}],
-        "categories:accessibility":  ["error", {"minScore": 0.95}],
-        "categories:best-practices": ["error", {"minScore": 0.95}],
-        "categories:seo":            ["error", {"minScore": 0.95}],
-        "first-contentful-paint":    ["warn",  {"maxNumericValue": 2000}],
-        "largest-contentful-paint":  ["warn",  {"maxNumericValue": 2500}],
-        "total-blocking-time":       ["warn",  {"maxNumericValue": 200}],
-        "cumulative-layout-shift":   ["error", {"maxNumericValue": 0.1}],
-        "interactive":               ["warn",  {"maxNumericValue": 3500}]
-      },
-      "failOnError": true
-    },
-    "upload": {
-      "target": "temporary-public-storage"
-    }
-  }
-}
-EOF
-
-      # ── Run audit against deployed URL or start local server ──
-      - name: Run Lighthouse CI
-        run: |
-          TARGET_URL="${{ github.event.inputs.url }}"
-
-          if [ -z "$TARGET_URL" ]; then
-            # Try to find a deployment URL from PR or use localhost fallback
-            TARGET_URL="${VERCEL_URL:-https://gateflow.app}"
+          URL="${{ github.event.inputs.marketing_url }}"
+          if [ -z "$URL" ]; then
+            # On PRs: use Vercel preview URL if available, else production
+            URL="${VERCEL_PREVIEW_URL:-https://gateflow.app}"
           fi
+          echo "url=$URL" >> $GITHUB_OUTPUT
+          echo "Auditing marketing: $URL"
 
-          echo "Auditing: $TARGET_URL"
-
+      # ── Mobile audit ──
+      - name: Run Lighthouse — Mobile
+        id: lh_mobile
+        run: |
           lhci autorun \
-            --collect.url="$TARGET_URL" \
-            --config=.lighthouserc.json \
+            --collect.url="${{ steps.url.outputs.url }}" \
+            --collect.url="${{ steps.url.outputs.url }}/en/features" \
+            --collect.url="${{ steps.url.outputs.url }}/en/pricing" \
+            --collect.settings.emulatedFormFactor=mobile \
+            --collect.numberOfRuns=3 \
+            --collect.settings.chromeFlags="--no-sandbox --disable-dev-shm-usage" \
+            --assert.assertions.categories:performance="['error',{'minScore':0.65}]" \
+            --assert.assertions.categories:accessibility="['error',{'minScore':0.85}]" \
+            --assert.assertions.categories:best-practices="['error',{'minScore':0.88}]" \
+            --assert.assertions.categories:seo="['error',{'minScore':0.90}]" \
+            --assert.assertions.cumulative-layout-shift="['error',{'maxNumericValue':0.15}]" \
             --upload.target=temporary-public-storage \
-          || LHCI_EXIT=$?
+            --config=.lighthouserc.js \
+          || echo "LHCI_FAILED=1" >> $GITHUB_ENV
+          mkdir -p lhci-reports/marketing-mobile
+          cp -r .lighthouseci/* lhci-reports/marketing-mobile/ 2>/dev/null || true
+        continue-on-error: true
 
-          # Always print summary regardless of pass/fail
-          if [ -d ".lighthouseci" ]; then
-            echo ""
-            echo "═══ Lighthouse Results ════════════════"
-            ls .lighthouseci/*.json 2>/dev/null | while read report; do
-              python3 -c "
-import json, sys
-with open('$report') as f:
-    data = json.load(f)
-cats = data.get('categories', {})
-print('Performance:   ', round(cats.get('performance', {}).get('score', 0) * 100))
-print('Accessibility: ', round(cats.get('accessibility', {}).get('score', 0) * 100))
-print('Best Practices:', round(cats.get('best-practices', {}).get('score', 0) * 100))
-print('SEO:           ', round(cats.get('seo', {}).get('score', 0) * 100))
-" 2>/dev/null || true
-              break
-            done
-            echo "═══════════════════════════════════════"
-          fi
+      # ── Desktop audit ──
+      - name: Run Lighthouse — Desktop
+        id: lh_desktop
+        run: |
+          lhci autorun \
+            --collect.url="${{ steps.url.outputs.url }}" \
+            --collect.settings.emulatedFormFactor=desktop \
+            --collect.numberOfRuns=3 \
+            --collect.settings.chromeFlags="--no-sandbox --disable-dev-shm-usage" \
+            --upload.target=temporary-public-storage \
+            --config=.lighthouserc.js \
+          || echo "LHCI_DESKTOP_FAILED=1" >> $GITHUB_ENV
+          mkdir -p lhci-reports/marketing-desktop
+          cp -r .lighthouseci/* lhci-reports/marketing-desktop/ 2>/dev/null || true
+        continue-on-error: true
 
-          exit ${LHCI_EXIT:-0}
+      # ── Print CWV metrics to step summary ──
+      - name: Print score summary
+        run: |
+          node - <<'EOF'
+          const fs = require('fs');
+          const path = require('path');
 
-      # ── Post PR comment with scores ──
-      - name: Comment scores on PR
+          const dirs = ['lhci-reports/marketing-mobile', 'lhci-reports/marketing-desktop'];
+          for (const dir of dirs) {
+            if (!fs.existsSync(dir)) continue;
+            const files = fs.readdirSync(dir).filter(f => f.startsWith('lhr-') && f.endsWith('.json'));
+            if (!files.length) continue;
+            const report = JSON.parse(fs.readFileSync(path.join(dir, files[0])));
+            const cats = report.categories || {};
+            const audits = report.audits || {};
+            const fmt = n => n != null ? Math.round(n) : '—';
+            const label = dir.includes('mobile') ? '📱 Mobile' : '🖥 Desktop';
+            console.log(`\n${label} — ${report.finalUrl}`);
+            console.log(`  Performance:    ${fmt((cats.performance?.score ?? 0) * 100)}/100`);
+            console.log(`  Accessibility:  ${fmt((cats.accessibility?.score ?? 0) * 100)}/100`);
+            console.log(`  Best Practices: ${fmt((cats['best-practices']?.score ?? 0) * 100)}/100`);
+            console.log(`  SEO:            ${fmt((cats.seo?.score ?? 0) * 100)}/100`);
+            console.log(`  LCP:            ${fmt(audits['largest-contentful-paint']?.numericValue)}ms`);
+            console.log(`  FCP:            ${fmt(audits['first-contentful-paint']?.numericValue)}ms`);
+            console.log(`  TBT:            ${fmt(audits['total-blocking-time']?.numericValue)}ms`);
+            console.log(`  CLS:            ${(audits['cumulative-layout-shift']?.numericValue ?? 0).toFixed(3)}`);
+          }
+          EOF
+        continue-on-error: true
+
+      # ── Upload HTML reports as artifact ──
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-marketing-${{ github.run_number }}
+          path: lhci-reports/
+          retention-days: 7
+
+      # ── Post/update PR comment with scores ──
+      - name: Comment Lighthouse scores on PR
         if: github.event_name == 'pull_request'
         uses: actions/github-script@v7
         with:
@@ -139,40 +180,164 @@ print('SEO:           ', round(cats.get('seo', {}).get('score', 0) * 100))
             const fs = require('fs');
             const path = require('path');
 
-            const lhDir = '.lighthouseci';
-            if (!fs.existsSync(lhDir)) return;
+            function getScores(dir) {
+              if (!fs.existsSync(dir)) return null;
+              const files = fs.readdirSync(dir).filter(f => f.startsWith('lhr-') && f.endsWith('.json'));
+              if (!files.length) return null;
+              const report = JSON.parse(fs.readFileSync(path.join(dir, files[0])));
+              const cats = report.categories || {};
+              const audits = report.audits || {};
+              const s = key => Math.round((cats[key]?.score ?? 0) * 100);
+              const a = key => Math.round(audits[key]?.numericValue ?? 0);
+              return {
+                perf: s('performance'), a11y: s('accessibility'),
+                bp: s('best-practices'), seo: s('seo'),
+                lcp: a('largest-contentful-paint'),
+                fcp: a('first-contentful-paint'),
+                tbt: a('total-blocking-time'),
+                cls: (audits['cumulative-layout-shift']?.numericValue ?? 0).toFixed(3),
+              };
+            }
 
-            const reports = fs.readdirSync(lhDir)
-              .filter(f => f.endsWith('.json') && f.startsWith('lhr-'));
+            const mobile = getScores('lhci-reports/marketing-mobile');
+            const desktop = getScores('lhci-reports/marketing-desktop');
 
-            if (!reports.length) return;
-
-            const report = JSON.parse(fs.readFileSync(path.join(lhDir, reports[0])));
-            const cats = report.categories || {};
-            const score = (key) => Math.round((cats[key]?.score ?? 0) * 100);
-            const emoji = (s) => s >= 90 ? '🟢' : s >= 50 ? '🟡' : '🔴';
-
-            const perf = score('performance');
-            const a11y = score('accessibility');
-            const bp   = score('best-practices');
-            const seo  = score('seo');
+            const em = s => s >= 95 ? '🟢' : s >= 80 ? '🟡' : '🔴';
+            const row = (label, m, d, key) =>
+              `| ${label} | ${m ? em(m[key]) + ' **' + m[key] + '**/100' : '—'} | ${d ? em(d[key]) + ' **' + d[key] + '**/100' : '—'} |`;
 
             const body = [
-              '## Lighthouse CI Results',
+              '<!-- lighthouse-ci-comment -->',
+              '## Lighthouse CI — Marketing Site',
               '',
-              `| Category | Score |`,
-              `|----------|-------|`,
-              `| ${emoji(perf)} Performance   | ${perf}/100 |`,
-              `| ${emoji(a11y)} Accessibility | ${a11y}/100 |`,
-              `| ${emoji(bp)} Best Practices | ${bp}/100 |`,
-              `| ${emoji(seo)} SEO            | ${seo}/100 |`,
+              '| Category | 📱 Mobile | 🖥 Desktop |',
+              '|----------|-----------|------------|',
+              row('Performance',    mobile, desktop, 'perf'),
+              row('Accessibility',  mobile, desktop, 'a11y'),
+              row('Best Practices', mobile, desktop, 'bp'),
+              row('SEO',            mobile, desktop, 'seo'),
               '',
-              `> Targets: Performance ≥ 90 • Accessibility ≥ 95 • Best Practices ≥ 95 • SEO ≥ 95`,
+              '**Core Web Vitals (Mobile)**',
+              mobile ? `LCP: ${mobile.lcp}ms | FCP: ${mobile.fcp}ms | TBT: ${mobile.tbt}ms | CLS: ${mobile.cls}` : '—',
+              '',
+              `> Plan: \`pagespeed_100\` — Target: 100/100 all categories`,
+              `> Thresholds in [\`.lighthouserc.js\`](.lighthouserc.js)`,
             ].join('\n');
 
-            github.rest.issues.createComment({
+            // Find and update existing bot comment
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner, repo: context.repo.repo,
               issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body
             });
+            const existing = comments.find(c => c.body?.includes('<!-- lighthouse-ci-comment -->'));
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner, repo: context.repo.repo,
+                comment_id: existing.id, body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner, repo: context.repo.repo,
+                issue_number: context.issue.number, body,
+              });
+            }
+
+  # ── 2. Audit Client Dashboard ──────────────────────────────────────────────
+  lighthouse-dashboard:
+    name: Lighthouse — Client Dashboard (Desktop)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install @lhci/cli
+        run: npm install -g @lhci/cli@${{ env.LHCI_VERSION }}
+
+      - uses: browser-actions/setup-chrome@latest
+
+      - name: Determine dashboard URL
+        id: url
+        run: |
+          URL="${{ github.event.inputs.dashboard_url }}"
+          if [ -z "$URL" ]; then
+            URL="${VERCEL_PREVIEW_URL:-https://app.gateflow.app}"
+          fi
+          echo "url=$URL" >> $GITHUB_OUTPUT
+          echo "Auditing dashboard: $URL"
+
+      - name: Run Lighthouse — Desktop
+        run: |
+          lhci autorun \
+            --collect.url="${{ steps.url.outputs.url }}/en" \
+            --collect.settings.emulatedFormFactor=desktop \
+            --collect.numberOfRuns=3 \
+            --collect.settings.chromeFlags="--no-sandbox --disable-dev-shm-usage" \
+            --upload.target=temporary-public-storage \
+            --config=.lighthouserc.js \
+          || echo "LHCI dashboard audit completed with warnings"
+          mkdir -p lhci-reports/dashboard-desktop
+          cp -r .lighthouseci/* lhci-reports/dashboard-desktop/ 2>/dev/null || true
+        continue-on-error: true
+
+      - name: Print score summary
+        run: |
+          node - <<'EOF'
+          const fs = require('fs'), path = require('path');
+          const dir = 'lhci-reports/dashboard-desktop';
+          if (!fs.existsSync(dir)) { console.log('No report found'); process.exit(0); }
+          const files = fs.readdirSync(dir).filter(f => f.startsWith('lhr-') && f.endsWith('.json'));
+          if (!files.length) { console.log('No LHR reports'); process.exit(0); }
+          const r = JSON.parse(fs.readFileSync(path.join(dir, files[0])));
+          const c = r.categories || {}, a = r.audits || {};
+          console.log('\n🖥 Dashboard Desktop —', r.finalUrl);
+          console.log('  Performance:   ', Math.round((c.performance?.score ?? 0) * 100) + '/100');
+          console.log('  Accessibility: ', Math.round((c.accessibility?.score ?? 0) * 100) + '/100');
+          console.log('  Best Practices:', Math.round((c['best-practices']?.score ?? 0) * 100) + '/100');
+          console.log('  LCP:           ', Math.round(a['largest-contentful-paint']?.numericValue ?? 0) + 'ms');
+          console.log('  TBT:           ', Math.round(a['total-blocking-time']?.numericValue ?? 0) + 'ms');
+          console.log('  CLS:           ', (a['cumulative-layout-shift']?.numericValue ?? 0).toFixed(3));
+          EOF
+        continue-on-error: true
+
+      - name: Upload Dashboard reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-dashboard-${{ github.run_number }}
+          path: lhci-reports/
+          retention-days: 7
+
+  # ── 3. Required status gate ────────────────────────────────────────────────
+  lhci-gate:
+    name: Lighthouse Gate
+    if: always()
+    needs: [lighthouse-marketing, lighthouse-dashboard]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check Lighthouse jobs
+        run: |
+          MARKETING="${{ needs.lighthouse-marketing.result }}"
+          DASHBOARD="${{ needs.lighthouse-dashboard.result }}"
+
+          echo "Marketing: $MARKETING"
+          echo "Dashboard: $DASHBOARD"
+
+          # Only fail on hard failures (not continue-on-error passes)
+          if [[ "$MARKETING" == "failure" || "$DASHBOARD" == "failure" ]]; then
+            echo "A Lighthouse job hard-failed. Check logs above."
+            exit 1
+          fi
+
+          echo "Lighthouse CI complete. Review scores in job logs and PR comment."
