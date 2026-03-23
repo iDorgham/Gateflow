@@ -18,7 +18,9 @@
     "dev:client": "turbo dev --filter=client-dashboard",
     "dev:admin": "turbo dev --filter=admin-dashboard",
     "dev:scanner": "turbo dev --filter=scanner-app",
-    "dev:marketing": "turbo dev --filter=marketing"
+    "dev:marketing": "turbo dev --filter=marketing",
+    "sync": "bash scripts/sync-ai-tools.sh",
+    "sync:watch": "node scripts/watch-sync.mjs"
   },
   "devDependencies": {
     "@gate-access/config": "workspace:*",

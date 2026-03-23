@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Auto-sync AI tools after every commit so all tool configs stay in step.
+bash scripts/sync-ai-tools.sh
