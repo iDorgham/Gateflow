@@ -1,8 +1,8 @@
-description = "Capture and refine initiatives into IDEA_<slug>.md"
+description = "Capture and refine GateFlow initiatives into IDEA_<slug>.md and backlog entries."
 prompt = """
-Follow the workflow defined in the idea workflow to capture and refine a new idea.
+Follow the workflow defined in the idea workflow to Capture and refine a new idea or initiative into IDEA_<slug>.md.
 
-@{.antigravity/workflows/idea.md}
+@{.agents/workflows/idea.md}
 
 User input: {{args}}
 """

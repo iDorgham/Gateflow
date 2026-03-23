@@ -1,8 +1,8 @@
-description = "Turn an IDEA into a phased PLAN with PROMPT_phase pro prompts"
+description = "Turn an IDEA_<slug>.md into a phased PLAN_<slug>.md plus PROMPT_<slug>_phase_<N>.md pro prompts."
 prompt = """
-Follow the workflow defined in the plan workflow to create or update a phased plan from an idea.
+Follow the workflow defined in the plan workflow to Turn an IDEA_<slug>.md into a multi-phase PLAN_<slug>.md with phase prompts.
 
-@{.antigravity/workflows/plan.md}
+@{.agents/workflows/plan.md}
 
 User input: {{args}}
 """

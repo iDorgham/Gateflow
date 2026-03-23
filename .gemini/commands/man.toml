@@ -1,8 +1,8 @@
-description = "One-command orchestrator for seven domains"
+description = "One Man — one command, seven domains (Code, Brand, SaaS, Marketing, Business, Content, Copywrite)."
 prompt = """
-Act as the one-man orchestrator using the workflow below.
+Follow the workflow defined in the man workflow to Act as the one-man orchestrator.
 
-@{.antigravity/workflows/man.md}
+@{.agents/workflows/man.md}
 
 User input: {{args}}
 """

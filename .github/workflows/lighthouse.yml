@@ -1,0 +1,178 @@
+# =============================================================================
+# lighthouse.yml — Google PageSpeed / Lighthouse CI (target: 100/100)
+#
+# Runs on:
+#   - PRs targeting main/master
+#   - Daily at 06:00 UTC
+#   - Manual dispatch with optional URL override
+#
+# Reports:
+#   - Performance / Accessibility / Best-Practices / SEO scores
+#   - Fails CI if any category < threshold
+#   - Comments score summary on PRs
+# =============================================================================
+name: Lighthouse CI
+
+on:
+  pull_request:
+    branches: [main, master]
+    paths:
+      - 'apps/client-dashboard/**'
+      - 'apps/marketing/**'
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+    inputs:
+      url:
+        description: 'URL to audit (default: marketing site)'
+        required: false
+        default: ''
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # ── Build the marketing / dashboard app ──
+      - name: Build marketing app
+        run: pnpm turbo build --filter=marketing
+        continue-on-error: true
+        env:
+          SKIP_ENV_VALIDATION: 'true'
+
+      # ── Install Lighthouse CI ──
+      - name: Install @lhci/cli
+        run: npm install -g @lhci/cli
+
+      # ── Create Lighthouse config ──
+      - name: Write lighthouserc.json
+        run: |
+          cat > .lighthouserc.json <<'EOF'
+          {
+            "ci": {
+              "collect": {
+                "numberOfRuns": 3,
+                "settings": {
+                  "preset": "desktop",
+                  "chromeFlags": "--no-sandbox --disable-dev-shm-usage"
+                }
+              },
+              "assert": {
+                "preset": "lighthouse:no-pwa",
+                "assertions": {
+                  "categories:performance":        ["error", {"minScore": 0.90}],
+                  "categories:accessibility":      ["error", {"minScore": 0.95}],
+                  "categories:best-practices":     ["error", {"minScore": 0.95}],
+                  "categories:seo":                ["error", {"minScore": 0.95}],
+                  "first-contentful-paint":        ["warn",  {"maxNumericValue": 2000}],
+                  "largest-contentful-paint":      ["warn",  {"maxNumericValue": 2500}],
+                  "total-blocking-time":           ["warn",  {"maxNumericValue": 200}],
+                  "cumulative-layout-shift":       ["error", {"maxNumericValue": 0.1}],
+                  "interactive":                   ["warn",  {"maxNumericValue": 3500}]
+                },
+                "failOnError": true
+              },
+              "upload": {
+                "target": "temporary-public-storage"
+              }
+            }
+          }
+          EOF
+
+      # ── Run audit against deployed URL or start local server ──
+      - name: Run Lighthouse CI
+        run: |
+          TARGET_URL="${{ github.event.inputs.url }}"
+
+          if [ -z "$TARGET_URL" ]; then
+            # Try to find a deployment URL from PR or use localhost fallback
+            TARGET_URL="${VERCEL_URL:-https://gateflow.app}"
+          fi
+
+          echo "Auditing: $TARGET_URL"
+
+          lhci autorun \
+            --collect.url="$TARGET_URL" \
+            --config=.lighthouserc.json \
+            --upload.target=temporary-public-storage \
+          || LHCI_EXIT=$?
+
+          # Always print summary regardless of pass/fail
+          if [ -d ".lighthouseci" ]; then
+            echo ""
+            echo "═══ Lighthouse Results ════════════════"
+            ls .lighthouseci/*.json 2>/dev/null | while read report; do
+              python3 -c "
+import json, sys
+with open('$report') as f:
+    data = json.load(f)
+cats = data.get('categories', {})
+print('Performance:   ', round(cats.get('performance', {}).get('score', 0) * 100))
+print('Accessibility: ', round(cats.get('accessibility', {}).get('score', 0) * 100))
+print('Best Practices:', round(cats.get('best-practices', {}).get('score', 0) * 100))
+print('SEO:           ', round(cats.get('seo', {}).get('score', 0) * 100))
+" 2>/dev/null || true
+              break
+            done
+            echo "═══════════════════════════════════════"
+          fi
+
+          exit ${LHCI_EXIT:-0}
+
+      # ── Post PR comment with scores ──
+      - name: Comment scores on PR
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+
+            const lhDir = '.lighthouseci';
+            if (!fs.existsSync(lhDir)) return;
+
+            const reports = fs.readdirSync(lhDir)
+              .filter(f => f.endsWith('.json') && f.startsWith('lhr-'));
+
+            if (!reports.length) return;
+
+            const report = JSON.parse(fs.readFileSync(path.join(lhDir, reports[0])));
+            const cats = report.categories || {};
+            const score = (key) => Math.round((cats[key]?.score ?? 0) * 100);
+            const emoji = (s) => s >= 90 ? '🟢' : s >= 50 ? '🟡' : '🔴';
+
+            const perf = score('performance');
+            const a11y = score('accessibility');
+            const bp   = score('best-practices');
+            const seo  = score('seo');
+
+            const body = [
+              '## Lighthouse CI Results',
+              '',
+              `| Category | Score |`,
+              `|----------|-------|`,
+              `| ${emoji(perf)} Performance   | ${perf}/100 |`,
+              `| ${emoji(a11y)} Accessibility | ${a11y}/100 |`,
+              `| ${emoji(bp)} Best Practices | ${bp}/100 |`,
+              `| ${emoji(seo)} SEO            | ${seo}/100 |`,
+              '',
+              `> Targets: Performance ≥ 90 • Accessibility ≥ 95 • Best Practices ≥ 95 • SEO ≥ 95`,
+            ].join('\n');
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body
+            });

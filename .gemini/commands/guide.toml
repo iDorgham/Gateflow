@@ -1,8 +1,8 @@
 description = "Run the GateFlow workspace guide — what should I do now?"
 prompt = """
-Run the workspace guide to assess state and provide next steps.
+Follow the workflow defined in the guide workflow to Run the GateFlow workspace guide.
 
-@{.antigravity/workflows/guide.md}
+@{.agents/workflows/guide.md}
 
 User input: {{args}}
 """

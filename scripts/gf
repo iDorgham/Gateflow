@@ -1,0 +1,270 @@
+#!/usr/bin/env bash
+# =============================================================================
+# gf — Universal GateFlow CLI
+# Any IDE, any AI tool — one command interface.
+#
+# Usage:
+#   gf <command> [args]          # run workflow via best available CLI
+#   gf <command> --via <tool>    # force specific CLI
+#   gf sync [--tool <name>]      # sync all AI tools from .agents/
+#   gf list                      # list available commands
+#   gf tools                     # show available CLIs
+#   gf status                    # git + plan status
+#
+# Commands: dev | plan | guide | idea | ship | man | clis-team
+# Tools:    claude | gemini | opencode | kilocode | kiro | cursor | antigravity
+#
+# Examples:
+#   gf dev                        # run /dev via best CLI
+#   gf dev 3                      # run /dev phase 3
+#   gf plan my-feature            # run /plan for an idea
+#   gf dev --via gemini           # force Gemini CLI
+#   gf sync                       # sync all tool configs
+#   gf sync --tool cursor         # sync only Cursor
+# =============================================================================
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+WORKFLOWS="$ROOT/.agents/workflows"
+
+# ── colour ────────────────────────────────────────────────────────────────────
+BOLD='\033[1m'; CYAN='\033[0;36m'; GREEN='\033[0;32m'
+YELLOW='\033[1;33m'; RED='\033[0;31m'; RESET='\033[0m'
+
+header() { echo -e "\n${BOLD}${CYAN}$*${RESET}"; }
+ok()     { echo -e "  ${GREEN}✓${RESET} $*"; }
+warn()   { echo -e "  ${YELLOW}⚠${RESET}  $*"; }
+err()    { echo -e "  ${RED}✗${RESET}  $*" >&2; }
+
+# ── detect available CLIs ─────────────────────────────────────────────────────
+detect_tools() {
+  AVAILABLE_TOOLS=()
+  command -v claude      &>/dev/null && AVAILABLE_TOOLS+=("claude")
+  command -v gemini      &>/dev/null && AVAILABLE_TOOLS+=("gemini")
+  command -v opencode    &>/dev/null && AVAILABLE_TOOLS+=("opencode")
+  command -v kilocode    &>/dev/null && AVAILABLE_TOOLS+=("kilocode")
+  command -v kiro        &>/dev/null && AVAILABLE_TOOLS+=("kiro")
+  # Cursor and Antigravity are IDE-based (no terminal CLI)
+}
+
+best_tool() {
+  # Preference order for terminal execution
+  for t in claude gemini opencode kilocode kiro; do
+    command -v "$t" &>/dev/null && echo "$t" && return
+  done
+  echo ""
+}
+
+# ── commands metadata ─────────────────────────────────────────────────────────
+VALID_COMMANDS=(dev plan guide idea ship man clis-team)
+
+is_valid_command() {
+  local cmd="$1"
+  for c in "${VALID_COMMANDS[@]}"; do
+    [[ "$c" == "$cmd" ]] && return 0
+  done
+  return 1
+}
+
+workflow_path() {
+  echo "$WORKFLOWS/$1.md"
+}
+
+# ── run workflow via CLI ──────────────────────────────────────────────────────
+run_via_claude() {
+  local wf="$1"; shift
+  local args="${*:-}"
+  header "Running via Claude CLI"
+  # Claude CLI uses stdin or --print mode
+  if command -v claude &>/dev/null; then
+    echo "$(cat "$wf")" | claude --print "${args:+$args}"
+  else
+    err "claude CLI not found"; exit 1
+  fi
+}
+
+run_via_gemini() {
+  local cmd="$1"; shift
+  local args="${*:-}"
+  header "Running via Gemini CLI"
+  if command -v gemini &>/dev/null; then
+    # Gemini CLI supports /@command syntax
+    gemini "/$cmd ${args}"
+  else
+    err "gemini CLI not found"; exit 1
+  fi
+}
+
+run_via_opencode() {
+  local wf="$1"; shift
+  local args="${*:-}"
+  header "Running via OpenCode CLI"
+  if command -v opencode &>/dev/null; then
+    opencode run "$(cat "$wf") ${args}"
+  else
+    err "opencode CLI not found"; exit 1
+  fi
+}
+
+run_via_kilocode() {
+  local wf="$1"; shift
+  local args="${*:-}"
+  header "Running via KiloCode CLI"
+  if command -v kilocode &>/dev/null; then
+    kilocode run "$(cat "$wf") ${args}"
+  else
+    err "kilocode CLI not found"; exit 1
+  fi
+}
+
+run_via_terminal() {
+  # Fallback: print workflow to terminal + clipboard
+  local cmd="$1" wf="$2"; shift 2
+  local args="${*:-}"
+  warn "No CLI available. Printing workflow for manual paste:"
+  echo ""
+  echo "═══ /$cmd workflow ════════════════════════════════"
+  cat "$wf"
+  [[ -n "$args" ]] && echo -e "\nUser input: $args"
+  echo "════════════════════════════════════════════════════"
+  # Try to copy to clipboard
+  if command -v pbcopy &>/dev/null; then
+    (cat "$wf"; [[ -n "$args" ]] && echo "User input: $args") | pbcopy
+    echo ""
+    ok "Copied to clipboard — paste into your IDE AI chat"
+  elif command -v xclip &>/dev/null; then
+    (cat "$wf"; [[ -n "$args" ]] && echo "User input: $args") | xclip -selection clipboard
+    ok "Copied to clipboard"
+  fi
+}
+
+run_command() {
+  local cmd="$1"; shift
+  local force_tool=""
+  local extra_args=()
+
+  # Parse --via flag
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --via) force_tool="$2"; shift 2 ;;
+      *) extra_args+=("$1"); shift ;;
+    esac
+  done
+
+  local wf
+  wf="$(workflow_path "$cmd")"
+  [[ -f "$wf" ]] || { err "Workflow not found: $wf"; exit 1; }
+
+  local tool="${force_tool:-$(best_tool)}"
+  local args="${extra_args[*]:-}"
+
+  case "$tool" in
+    claude)     run_via_claude     "$wf" "$args" ;;
+    gemini)     run_via_gemini     "$cmd" "$args" ;;
+    opencode)   run_via_opencode   "$wf" "$args" ;;
+    kilocode)   run_via_kilocode   "$wf" "$args" ;;
+    kiro|cursor|antigravity)
+      warn "IDE tools ($tool) run in the IDE — printing workflow for copy-paste:"
+      run_via_terminal "$cmd" "$wf" "$args" ;;
+    "")         run_via_terminal "$cmd" "$wf" "$args" ;;
+    *)          err "Unknown tool: $tool"; exit 1 ;;
+  esac
+}
+
+# ── sub-commands ──────────────────────────────────────────────────────────────
+cmd_sync() {
+  header "Syncing AI tools from .agents/"
+  bash "$ROOT/scripts/sync-ai-tools.sh" "$@"
+}
+
+cmd_list() {
+  header "GateFlow Commands"
+  echo ""
+  printf "  %-14s %s\n" "COMMAND" "DESCRIPTION"
+  printf "  %-14s %s\n" "───────" "───────────"
+  while IFS= read -r line; do
+    cmd=$(echo "$line" | grep -o '^[a-z-]*' || true)
+    desc=$(grep -A1 "^## " "$WORKFLOWS/$cmd.md" 2>/dev/null | tail -1 || echo "")
+    [[ -z "$desc" ]] && desc=$(head -5 "$WORKFLOWS/$cmd.md" 2>/dev/null | grep "description:" | sed 's/.*description: //' || echo "")
+    printf "  %-14s %s\n" "/$cmd" "${desc:0:60}"
+  done < <(ls "$WORKFLOWS/"*.md 2>/dev/null | xargs -I{} basename {} .md | sort)
+}
+
+cmd_tools() {
+  detect_tools
+  header "Available AI Tools"
+  echo ""
+  local all_tools=(claude gemini opencode kilocode kiro cursor antigravity)
+  for t in "${all_tools[@]}"; do
+    if printf '%s\n' "${AVAILABLE_TOOLS[@]}" | grep -q "^$t$" 2>/dev/null; then
+      ok "$t (available)"
+    else
+      echo -e "  ${YELLOW}○${RESET}  $t (not in PATH — IDE-only or not installed)"
+    fi
+  done
+}
+
+cmd_status() {
+  header "GateFlow Status"
+  echo ""
+  echo -e "${BOLD}Git:${RESET}"
+  git -C "$ROOT" status --short --branch 2>/dev/null | head -10
+  echo ""
+  echo -e "${BOLD}Active plans:${RESET}"
+  ls "$ROOT/docs/plan/in-progress/" 2>/dev/null | grep -v README || echo "  (none)"
+  echo ""
+  echo -e "${BOLD}Ready to ship:${RESET}"
+  ls "$ROOT/docs/plan/planned/" 2>/dev/null | grep -v README || echo "  (none)"
+}
+
+cmd_help() {
+  cat <<'EOF'
+
+  gf — Universal GateFlow CLI
+
+  USAGE
+    gf <command> [args]           Run workflow via best available CLI
+    gf <command> --via <tool>     Force specific tool
+    gf sync [--tool <name>]       Sync all AI tools from .agents/
+    gf list                       List all commands
+    gf tools                      Show available CLIs
+    gf status                     Git + plan status
+
+  COMMANDS
+    dev [N | slug N]              Execute plan phase
+    plan [slug]                   Create phased plan
+    guide                         Workspace status & next steps
+    idea [description]            Capture new initiative
+    ship [slug]                   Execute all plan phases
+    man [subcommand]              One-man orchestrator
+    clis-team [seo|refactor|audit] Run CLI team
+
+  TOOLS (--via)
+    claude | gemini | opencode | kilocode | kiro
+
+  EXAMPLES
+    gf dev                        Run next phase (best CLI)
+    gf dev 3                      Run phase 3
+    gf dev --via gemini           Force Gemini
+    gf guide --via claude         Run /guide via Claude
+    gf sync                       Sync all tools
+    gf sync --tool cursor         Sync Cursor only
+
+EOF
+}
+
+# ── main ──────────────────────────────────────────────────────────────────────
+[[ $# -eq 0 ]] && { cmd_help; exit 0; }
+
+case "$1" in
+  sync)    shift; cmd_sync "$@" ;;
+  list)    cmd_list ;;
+  tools)   cmd_tools ;;
+  status)  cmd_status ;;
+  help|-h|--help) cmd_help ;;
+  *)
+    cmd="$1"; shift
+    is_valid_command "$cmd" || { err "Unknown command: $cmd\nRun 'gf list' to see available commands."; exit 1; }
+    run_command "$cmd" "$@"
+    ;;
+esac

@@ -1,0 +1,94 @@
+# =============================================================================
+# sync-ai-tools.yml — Auto-sync AI tool configs on .agents/ change
+#
+# Triggers:
+#   - Push to main/master when .agents/ is modified
+#   - Manual dispatch (with optional --tool filter)
+#
+# What it does:
+#   1. Runs scripts/sync-ai-tools.sh (source: .agents/)
+#   2. Commits updated tool configs (.claude/ .cursor/ .antigravity/ etc.)
+#   3. Updates docs/AI_TOOLS_SYNC_LOG.md with timestamp + changed files
+# =============================================================================
+name: Sync AI Tools
+
+on:
+  push:
+    branches: [main, master]
+    paths:
+      - '.agents/**'
+      - 'scripts/sync-ai-tools.sh'
+  workflow_dispatch:
+    inputs:
+      tool:
+        description: 'Sync specific tool (leave empty for all)'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure git
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Run sync script
+        run: |
+          chmod +x scripts/sync-ai-tools.sh
+          TOOL_ARG=""
+          if [ -n "${{ github.event.inputs.tool }}" ]; then
+            TOOL_ARG="--tool ${{ github.event.inputs.tool }}"
+          fi
+          bash scripts/sync-ai-tools.sh $TOOL_ARG
+
+      - name: Update sync log
+        run: |
+          mkdir -p docs
+          LOG="docs/AI_TOOLS_SYNC_LOG.md"
+          TIMESTAMP="$(date -u '+%Y-%m-%d %H:%M UTC')"
+          COMMIT="${{ github.sha }}"
+          TOOL="${{ github.event.inputs.tool }}"
+          CHANGED="$(git diff --name-only | grep -E '^\.(claude|cursor|antigravity|gemini|kiro|kilocode|opencode|agent)/' | wc -l | tr -d ' ')"
+
+          # Create log if it doesn't exist
+          if [ ! -f "$LOG" ]; then
+            cat > "$LOG" <<'HEADER'
+# AI Tools Sync Log
+
+Auto-updated by GitHub Actions when `.agents/` changes.
+
+| Timestamp | Commit | Tool | Files Changed |
+|-----------|--------|------|---------------|
+HEADER
+          fi
+
+          # Append new entry
+          echo "| $TIMESTAMP | \`${COMMIT:0:7}\` | ${TOOL:-all} | $CHANGED files |" >> "$LOG"
+
+      - name: Commit synced configs
+        run: |
+          git add \
+            .claude/ .cursor/ .antigravity/ .agent/ \
+            .gemini/ .kiro/ .kilocode/ .opencode/ \
+            docs/AI_TOOLS_SYNC_LOG.md \
+            2>/dev/null || true
+
+          if git diff --staged --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "chore(ai-tools): auto-sync from .agents/ [skip ci]
+
+Triggered by: ${{ github.event_name }}
+Source commit: ${{ github.sha }}"
+            git push
+          fi

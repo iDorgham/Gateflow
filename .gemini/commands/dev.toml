@@ -1,8 +1,8 @@
-description = "Implement a single plan phase end-to-end (code, tests, git)"
+description = "Implement exactly one plan phase end-to-end (code, tests, git)."
 prompt = """
-Follow the workflow defined in the dev workflow to implement exactly one phase from a plan.
+Follow the workflow defined in the dev workflow to Implement exactly one phase from a plan end-to-end (code, tests, and git).
 
-@{ .antigravity/workflows/dev.md }
+@{.agents/workflows/dev.md}
 
 User input: {{args}}
 """
