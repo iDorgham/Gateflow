@@ -12,22 +12,37 @@ _(next release notes go here)_
 
 ### Security
 
-- **[Repo] **enable security policy, dependabot, and codeql analysis
+- **[Repo]** enable security policy, dependabot, and codeql analysis
 
 ---
 
 ## [0.1.0] — 2026-03-23
 
-### Added
+### Features
 
-- **[Automation] Ralph Loop** — Complete developer automation engine: 19 Ralph scripts, 5 Husky git hooks, 12 quality-check scripts
-- **[Automation] `pnpm ralph`** — Master workspace dashboard: git state, active plans, hook health, quality snapshot, next action
-- **[Automation] Plan lifecycle** — `plan:new → plan:ready → plan:start → plan:run → plan:done` with automatic folder moves and doc cascades
-- **[Automation] Phase auto-close** — Commit messages with `phase 3`, `[p3]`, `closes phase 3` auto-mark PLAN phases `[x]`
-- **[Automation] Phase runner** — `pnpm plan:run` selects right CLI, runs phase, marks done, auto-completes plan on last phase
-- **[Automation] Hotfix workflow** — `hotfix:start/done/status` with auto branch, bump, tag, and PR
-- **[Automation] Semantic versioning** — `version:bump/tag/info` with annotated git tags
-- **[Automation] Docs release** — `docs:release` closes `[Unreleased]`, bumps version, creates tag; `docs:release:dry` previews
+- **[Resident-Mobile]** finalize phase 5 - i18n, GateAI pre-clearance, and security
+  audit
+- **[Resident-Mobile]** complete one-tap invite initiative (phases 1-5)
+- **[Resident Mobile One Tap]** add recent guests to express invite ui
+- **[Resident Mobile One Tap]** implement phase 3 - express invite ui
+- **[Resident Mobile One Tap]** implement phase 2 - express invite api
+
+- **[Automation] Ralph Loop** — Complete developer automation engine: 19 Ralph
+  scripts, 5 Husky git hooks, 12 quality-check scripts
+- **[Automation] `pnpm ralph`** — Master workspace dashboard: git state, active
+  plans, hook health, quality snapshot, next action
+- **[Automation] Plan lifecycle** — `plan:new → plan:ready → plan:start →
+plan:run → plan:done` with automatic folder moves and doc cascades
+- **[Automation] Phase auto-close** — Commit messages with `phase 3`, `[p3]`,
+  `closes phase 3` auto-mark PLAN phases `[x]`
+- **[Automation] Phase runner** — `pnpm plan:run` selects right CLI, runs phase,
+  marks done, auto-completes plan on last phase
+- **[Automation] Hotfix workflow** — `hotfix:start/done/status` with auto branch,
+  bump, tag, and PR
+- **[Automation] Semantic versioning** — `version:bump/tag/info` with annotated
+  git tags
+- **[Automation] Docs release** — `docs:release` closes `[Unreleased]`, bumps
+  version, creates tag; `docs:release:dry` previews
 - **[Automation] On-plan-done cascade** — Auto-updates CHANGELOG, FEATURE_LOG, UPCOMING, PRD, README on plan completion
 - **[Automation] Commitlint** — Conventional commits enforced on every commit; 13 types, 30 scopes
 - **[Automation] lint-staged** — Pre-commit ESLint + Prettier on staged files only
@@ -55,26 +70,31 @@ _(next release notes go here)_
 
 ### Bug Fixes
 
+- **[Db]** add automated prisma migrate deploy to CI and fix schema drift
+
 - **[Db]** add missing nanoid dependency for qr queries
 - **[Ci]** update Node.js to 22 and opt into Node.js 24 for all workflows
 
 ---
 
-## [0.1.0] — 2026-03-23
+- **[Security]** implement hmac-sha256 signature utility for invites
+- **[Pagespeed]** complete phase 4 - virtualization & bundle optimization
+- **[Pagespeed 100]** optimize analytics bundle with dynamic chart imports
+- **[Pagespeed 100]** complete phase 3 - server-side streaming & suspense
+- **[Tools]** doc automation — changelog, versioning, PRD, organize
+- **[Tools]** plan lifecycle automation + phase runner
+- Initial production release of GateFlow v0.1.0
+- 6-app monorepo: client-dashboard, admin-dashboard, scanner-app, resident-mobile, resident-portal, marketing
+- HMAC-SHA256 QR signing + offline-first scanner architecture
+- Multi-tenant Prisma middleware with org-scoped isolation
 
-### Features
-
-- **[Resident-Mobile] **finalize phase 5 - i18n, GateAI pre-clearance, and security audit
-
-- **[Resident-Mobile] **complete one-tap invite initiative (phases 1-5)
-
-- **[Resident Mobile One Tap] **add recent guests to express invite ui
-
-- **[Resident Mobile One Tap] **implement phase 3 - express invite ui
-
-- **[Resident Mobile One Tap] **implement phase 2 - express invite api
-
-- **[Security] **implement hmac-sha256 signature utility for invites
+- **[Resident-Mobile]** finalize phase 5 - i18n, GateAI pre-clearance, and security
+  audit
+- **[Resident-Mobile]** complete one-tap invite initiative (phases 1-5)
+- **[Resident Mobile One Tap]** add recent guests to express invite ui
+- **[Resident Mobile One Tap]** implement phase 3 - express invite ui
+- **[Resident Mobile One Tap]** implement phase 2 - express invite api
+- **[Security]** implement hmac-sha256 signature utility for invites
 
 - **[Pagespeed] **complete phase 4 - virtualization & bundle optimization
 

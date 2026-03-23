@@ -99,6 +99,12 @@ const CHECKS = [
     args: [],
     warnOnly: true, // warn only — build may not exist yet
   },
+  {
+    name: '6. Dependency security',
+    script: 'check-security.js',
+    args: ['--fail'],
+    warnOnly: false, // FAIL blocks deploy
+  },
 ];
 
 // ── Main ──────────────────────────────────────────────────────────────────────

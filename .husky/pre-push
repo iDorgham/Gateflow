@@ -31,6 +31,14 @@ case "$BRANCH" in
     ;;
 esac
 
-# 2. Preflight: lint + typecheck + test
+# 2. Dependency security audit: blocks on HIGH/CRITICAL vulnerabilities
+echo "🛡️  Checking dependency security..."
+pnpm check:security:fail
+SEC_EXIT=$?
+if [ $SEC_EXIT -ne 0 ]; then
+  exit $SEC_EXIT
+fi
+
+# 3. Preflight: lint + typecheck + test
 echo "🔍 Running preflight checks before push..."
 pnpm preflight

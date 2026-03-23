@@ -50,6 +50,9 @@
     "check:todos:old": "node scripts/todos.js --old 30",
     "check:db-drift": "node scripts/check-db-drift.js",
     "check:db-drift:schema": "node scripts/check-db-drift.js --schema",
+    "check:security": "node scripts/check-security.js",
+    "check:security:fail": "node scripts/check-security.js --fail",
+    "check:security:fix": "node scripts/security-fix.js",
     "docs:release:dry": "node scripts/ralph-docs.js release --dry-run",
     "hotfix:start": "node scripts/ralph-hotfix.js start",
     "hotfix:done": "node scripts/ralph-hotfix.js done",
@@ -92,7 +95,7 @@
   },
   "packageManager": "pnpm@8.15.0",
   "engines": {
-    "node": "^20.0.0"
+    "node": ">=20.0.0"
   },
   "pnpm": {
     "supportedArchitectures": {

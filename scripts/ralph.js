@@ -302,6 +302,27 @@ function qualitySection() {
     );
   }
 
+  // Dependency security
+  try {
+    const result = execSync('node scripts/check-security.js', {
+      cwd: ROOT,
+      encoding: 'utf8',
+      stdio: 'pipe',
+    });
+    const match = result.match(/(\d+) vulnerabilities found/);
+    if (match) {
+      console.log(
+        `  ${c.yellow('⚠️')}  Security audit   ${c.yellow(match[1] + ' vulnerabilities found')}`
+      );
+    } else {
+      console.log(`  ${c.green('✓')}  Security audit   ${c.green('clean')}`);
+    }
+  } catch {
+    console.log(
+      `  ${c.dim('•')}  Security audit   ${c.dim('(run check:security)')}`
+    );
+  }
+
   // DB drift
   const hashFile = path.join(ROOT, 'packages', 'db', 'prisma', '.schema-hash');
   const schemaFile = path.join(
