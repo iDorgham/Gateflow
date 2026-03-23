@@ -95,6 +95,23 @@ Teams are rated not only by **individual CLI power** but by **remix potential**:
 
 **Run:** `/clis team ops` — agent runs 1–3; Cursor applies and verifies in step 4.
 
+## Team E — Performance & Speed (`perf`)
+**Rating:** Remix potential **High** — Payload analysis (Gemini) + Optimization gen (Opencode) + Verification (Kilo).
+
+**Roster:** Gemini (Analyzer), Opencode (Optimizer), Kilo (Fast Verify), Claude (Arch-Audit).
+
+**Workflow:** Measure (Lighthouse/PSI) → Analyze Bottlenecks → Generate Fixes → Verify Score.
+
+| Step | Role              | CLI     | Action |
+|------|-------------------|---------|--------|
+| 1    | Speed Analyzer    | Gemini  | Analyze Lighthouse/PSI json report; identify top LCP/CLS/TBT killers. |
+| 2    | Asset Optimizer   | Opencode | Generate fixes: image optimization, script deferral, CSS critical path. |
+| 3    | Fast Verifier     | Kilo    | Run quick sanity check on file size and bundle changes (free, fast). |
+| 4    | Deep Arch Audit   | Claude  | **Escalation:** Review server-side caching, streaming, and DB query speed. |
+| 5    | Apply & Bench     | Cursor  | Apply fixes; run local benchmark; if green, trigger Auto-Sync. |
+
+**Run:** `/clis team perf` — agent runs 1–3 (4 if needed); Cursor does step 5.
+
 ---
 
 ## 80% rule and logging

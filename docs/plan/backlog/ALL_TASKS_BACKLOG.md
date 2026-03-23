@@ -18,6 +18,22 @@
 - [ ] Phase 3 — Home Tab "Express Invite" UI
 - [ ] Phase 4 — Invitee Landing Page: Premium Experience
 - [ ] Phase 5 — GateAI Bridge & Arrival Polish
+ 
+ ### pagespeed_100 — Google PageSpeed 100% Mastery
+ 
+ **IDEA:** `docs/plan/context/IDEA_pagespeed_100.md`
+ 
+ **PLAN:** `docs/plan/planning/pagespeed_100/PLAN_pagespeed_100.md`
+ 
+ **Status:** 🆕 Open
+ 
+ **Target:** Q4 2026
+ 
+ - [ ] Phase 1 — Lighthouse CI: Automated Performance Baselines
+ - [ ] Phase 2 — Asset Overhaul: Image, Font & Icon Optimizations
+ - [ ] Phase 3 — Critical Path: Server-Side Streaming & Suspense Boundaries
+ - [ ] Phase 4 — High-Density UI: Virtualization & Bundle Shaking
+ - [ ] Phase 5 — Final Audit: Global 100/100 Certification
 
 
 ### atlassian_ui_remake — Atlassian Design System UI Remake
