@@ -6,6 +6,7 @@ export * from './quota';
 export * from './access';
 export * from './tenant';
 export * from './queries/projects';
+export * from './queries/qr';
 export type { OrganizationContext, DbClient } from './tenant';
 export {
   createSecureInviteSignature,
