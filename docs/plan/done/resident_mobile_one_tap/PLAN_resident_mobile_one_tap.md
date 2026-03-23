@@ -12,9 +12,9 @@ This plan outlines the implementation of the "One-Tap" invitation experience for
 - **Package:** Centralize signing logic in a shared package or `packages/db/src/security.ts`.
 - **Validation:** Add unit tests for signature generation and verification.
 - **Acceptance Criteria:**
-  - [ ] `createSecureInviteSignature(payload: string, secret: string): string` implementation.
-  - [ ] `verifySecureInviteSignature(payload: string, signature: string, secret: string): boolean` implementation.
-  - [ ] Passing unit tests in `@gate-access/db`.
+  - [x] `createSecureInviteSignature(payload: string, secret: string): string` implementation.
+  - [x] `verifySecureInviteSignature(payload: string, signature: string, secret: string): boolean` implementation.
+  - [x] Passing unit tests in `@gate-access/db`.
 
 ### Phase 2: Core Logic - Fast Link Generation (P0)
 
@@ -24,8 +24,8 @@ This plan outlines the implementation of the "One-Tap" invitation experience for
 - **Logic:** Generate a `QrShortLink` and a corresponding `QRCode` in a single transaction.
 - **Optimization:** Use "Anonymous-to-Identified" logic: the share link is valid even if the guest name isn't filled yet.
 - **Acceptance Criteria:**
-  - [ ] API endpoint returns a signed `shortId` link.
-  - [ ] `QrShortLink` points to the correct marketing landing page.
+  - [x] API endpoint returns a signed `shortId` link.
+  - [x] `QrShortLink` points to the correct marketing landing page.
 
 ### Phase 3: Home Tab "Express Invite" UI (P1)
 
@@ -35,8 +35,8 @@ This plan outlines the implementation of the "One-Tap" invitation experience for
 - **Integration:** Use `expo-sharing` and `expo-contacts`.
 - **UX:** Recent Guests quick-access buttons.
 - **Acceptance Criteria:**
-  - [ ] Widget is visible on Home Tab.
-  - [ ] Tapping "Express Invite" opens the native share sheet with the signed link.
+  - [x] Widget is visible on Home Tab.
+  - [x] Tapping "Express Invite" opens the native share sheet with the signed link.
 
 ### Phase 4: Invitee Landing Page - Premium Experience (P1)
 
@@ -46,8 +46,8 @@ This plan outlines the implementation of the "One-Tap" invitation experience for
 - **Features:** High-density branding, interactive GPS guide, RTL support.
 - **Access:** Integration for "Add to Apple/Google Wallet."
 - **Acceptance Criteria:**
-  - [ ] Landing page is fully responsive.
-  - [ ] Page handles both LTR and RTL perfectly.
+  - [x] Landing page is fully responsive.
+  - [x] Page handles both LTR and RTL perfectly.
 
 ### Phase 5: Refinement - i18n & GateAI Polish (P2)
 
@@ -57,8 +57,8 @@ This plan outlines the implementation of the "One-Tap" invitation experience for
 - **i18n:** Professional Arabic strings for all sharing messages.
 - **Audit:** Security & RTL audit across the new flow.
 - **Acceptance Criteria:**
-  - [ ] Sharing message templates are localized.
-  - [ ] No tenant-isolation leaks (verified via /clis-team audit).
+  - [x] Sharing message templates are localized.
+  - [x] No tenant-isolation leaks (verified via /clis-team audit).
 
 ---
 

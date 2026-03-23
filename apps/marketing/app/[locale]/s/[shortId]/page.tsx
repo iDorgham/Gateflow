@@ -127,6 +127,7 @@ export default async function InvitationPage({
                   : undefined
               }
               isVerified={isValidSig}
+              delegateToAi={shortLink.qrCode.delegateToAi}
               lang={locale}
             />
 

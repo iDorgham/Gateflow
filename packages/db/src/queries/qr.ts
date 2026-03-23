@@ -7,6 +7,7 @@ export interface CreateExpressInviteParams {
   unitId: string;
   projectId?: string;
   expiresInHours?: number;
+  delegateToAi?: boolean;
 }
 
 /**
@@ -18,6 +19,7 @@ export async function createExpressInviteTransaction({
   unitId,
   projectId,
   expiresInHours = 24,
+  delegateToAi = false,
 }: CreateExpressInviteParams) {
   const expiresAt = new Date(Date.now() + expiresInHours * 60 * 60 * 1000);
   const code = `EXP-${nanoid(10).toUpperCase()}`;
@@ -34,6 +36,7 @@ export async function createExpressInviteTransaction({
         expiresAt,
         maxUses: 1, // Traditional guest pass
         isActive: true,
+        delegateToAi,
         // Metadata is filled by the guest later
       },
     });

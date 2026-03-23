@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json().catch(() => ({}));
-    const { unitId: providedUnitId } = body;
+    const { unitId: providedUnitId, delegateToAi } = body;
 
     // 2. Resolve & Verify Unit
     // Residents usually belong to one unit; if not provided, find the primary one.
@@ -62,6 +62,7 @@ export async function POST(request: NextRequest) {
       unitId: unit.id,
       projectId: unit.projectId || undefined,
       expiresInHours: 24, // 1-day link
+      delegateToAi: !!delegateToAi,
     });
 
     // 5. Generate Signed Share URL

@@ -29,6 +29,7 @@ interface BrandedPassProps {
   unitName: string | null;
   coordinates?: { lat: number; lng: number };
   isVerified: boolean;
+  delegateToAi?: boolean;
   lang: string;
 }
 
@@ -42,6 +43,7 @@ export const BrandedPass: React.FC<BrandedPassProps> = ({
   unitName,
   coordinates,
   isVerified,
+  delegateToAi,
   lang,
 }) => {
   const { t } = useTranslation('invitation');
@@ -144,6 +146,21 @@ export const BrandedPass: React.FC<BrandedPassProps> = ({
               <Badge variant="danger" className="gap-1 px-3 py-1">
                 <AlertCircle className="w-3.5 h-3.5" />
                 Unverified
+              </Badge>
+            )}
+
+            {delegateToAi && (
+              <Badge
+                variant="outline"
+                className="bg-accent/10 text-accent border-accent/20 gap-1 px-3 py-1 shadow-sm"
+              >
+                <motion.div
+                  animate={{ opacity: [0.5, 1, 0.5] }}
+                  transition={{ repeat: Infinity, duration: 2 }}
+                >
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                </motion.div>
+                GateAI Managed
               </Badge>
             )}
           </div>

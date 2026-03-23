@@ -5,12 +5,20 @@ import {
   type QRValidateResponse,
   type QRRejectReason,
 } from '@gate-access/types';
-import { prisma, setOrganizationContext, clearOrganizationContext, isAccessAllowed } from '@gate-access/db';
+import {
+  prisma,
+  setOrganizationContext,
+  clearOrganizationContext,
+  isAccessAllowed,
+} from '@gate-access/db';
 import { requireAuth, isNextResponse } from '../../../../lib/require-auth';
 import { checkRateLimit } from '../../../../lib/rate-limit';
 import { checkGateAssignment } from '../../../../lib/gate-assignment';
 import { checkLocationForGate } from '../../../../lib/location';
-import { getActiveWatchlist, findWatchlistMatch } from '../../../../lib/watchlist';
+import {
+  getActiveWatchlist,
+  findWatchlistMatch,
+} from '../../../../lib/watchlist';
 import { emitEvent, EventType } from '../../../../lib/realtime/emit-event';
 import { deliverWebhookEvent } from '../../../../lib/webhook-delivery';
 import { triggerHubSpotSync } from '../../../../lib/integrations/hubspot';
@@ -28,11 +36,11 @@ function getQrSecret(): string {
     if (process.env.NODE_ENV === 'production') {
       throw new Error(
         '[qr/validate] QR_SIGNING_SECRET is missing or shorter than 32 characters. ' +
-        'Set QR_SIGNING_SECRET to a random 64-char string before deploying.'
+          'Set QR_SIGNING_SECRET to a random 64-char string before deploying.'
       );
     }
     console.warn(
-      '[qr/validate] QR_SIGNING_SECRET is missing or shorter than 32 characters — insecure in production',
+      '[qr/validate] QR_SIGNING_SECRET is missing or shorter than 32 characters — insecure in production'
     );
   }
 
@@ -89,9 +97,14 @@ interface AuditTrailEntry {
 
 function makeAuditEntry(
   action: string,
-  details: Record<string, unknown>,
+  details: Record<string, unknown>
 ): AuditTrailEntry {
-  return { timestamp: new Date().toISOString(), action, resolvedBy: 'server', details };
+  return {
+    timestamp: new Date().toISOString(),
+    action,
+    resolvedBy: 'server',
+    details,
+  };
 }
 
 // ─── Route handler ────────────────────────────────────────────────────────────
@@ -129,7 +142,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
           reason: 'wrong_org',
           message: 'Organization context required to validate QR codes',
         },
-        403,
+        403
       );
     }
 
@@ -141,8 +154,12 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const parsed = QRValidateRequestSchema.safeParse(body);
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, message: 'Invalid request body', errors: parsed.error.flatten() },
-        { status: 400 },
+        {
+          success: false,
+          message: 'Invalid request body',
+          errors: parsed.error.flatten(),
+        },
+        { status: 400 }
       );
     }
 
@@ -151,7 +168,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     // Step 5 — Cryptographic verification: signature + payload expiry.
     const sigResult = verifyQRSignature(qrPayload, getQrSecret());
     if (sigResult.valid === false) {
-      return json<QRValidateResponse>(SIGNING_REASON_MAP[sigResult.reason], 403);
+      return json<QRValidateResponse>(
+        SIGNING_REASON_MAP[sigResult.reason],
+        403
+      );
     }
 
     const payload = sigResult.payload;
@@ -164,12 +184,12 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
           reason: 'wrong_org',
           message: 'QR code does not belong to your organization',
         },
-        403,
+        403
       );
     }
 
     // Step 7 — DB lookup: record must exist.
-    const qrCode = await prisma.qRCode.findUnique({ 
+    const qrCode = await prisma.qRCode.findUnique({
       where: { id: payload.qrId },
       include: {
         visitorQR: {
@@ -182,8 +202,12 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     if (!qrCode) {
       return json<QRValidateResponse>(
-        { status: 'rejected', reason: 'not_found', message: 'QR code record not found' },
-        403,
+        {
+          status: 'rejected',
+          reason: 'not_found',
+          message: 'QR code record not found',
+        },
+        403
       );
     }
 
@@ -195,7 +219,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
           reason: 'wrong_org',
           message: 'QR code does not belong to your organization',
         },
-        403,
+        403
       );
     }
 
@@ -203,8 +227,12 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     if (!qrCode.isActive || qrCode.deletedAt !== null) {
       await logRejection(qrCode.id, 'inactive', scanContext, claims.sub);
       return json<QRValidateResponse>(
-        { status: 'rejected', reason: 'inactive', message: 'QR code has been deactivated or revoked' },
-        403,
+        {
+          status: 'rejected',
+          reason: 'inactive',
+          message: 'QR code has been deactivated or revoked',
+        },
+        403
       );
     }
 
@@ -212,8 +240,12 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     if (qrCode.expiresAt !== null && new Date() > qrCode.expiresAt) {
       await logRejection(qrCode.id, 'expired', scanContext, claims.sub);
       return json<QRValidateResponse>(
-        { status: 'rejected', reason: 'expired', message: 'QR code has expired' },
-        403,
+        {
+          status: 'rejected',
+          reason: 'expired',
+          message: 'QR code has expired',
+        },
+        403
       );
     }
 
@@ -221,24 +253,38 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     switch (qrCode.type) {
       case 'SINGLE':
         if (qrCode.currentUses >= 1) {
-          await logRejection(qrCode.id, 'max_uses_reached', scanContext, claims.sub);
+          await logRejection(
+            qrCode.id,
+            'max_uses_reached',
+            scanContext,
+            claims.sub
+          );
           return json<QRValidateResponse>(
-            { status: 'rejected', reason: 'max_uses_reached', message: 'Single-use QR code already scanned' },
-            403,
+            {
+              status: 'rejected',
+              reason: 'max_uses_reached',
+              message: 'Single-use QR code already scanned',
+            },
+            403
           );
         }
         break;
 
       case 'RECURRING':
         if (qrCode.maxUses !== null && qrCode.currentUses >= qrCode.maxUses) {
-          await logRejection(qrCode.id, 'max_uses_reached', scanContext, claims.sub);
+          await logRejection(
+            qrCode.id,
+            'max_uses_reached',
+            scanContext,
+            claims.sub
+          );
           return json<QRValidateResponse>(
             {
               status: 'rejected',
               reason: 'max_uses_reached',
               message: `Max uses (${qrCode.maxUses}) reached`,
             },
-            403,
+            403
           );
         }
         break;
@@ -253,22 +299,28 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
               {
                 status: 'rejected',
                 reason: 'denied',
-                message: access.reason || 'Access denied based on resident rules',
+                message:
+                  access.reason || 'Access denied based on resident rules',
               },
-              403,
+              403
             );
           }
         }
         // Also check maxUses if applicable (e.g. for ONETIME visitor QRs)
         if (qrCode.maxUses !== null && qrCode.currentUses >= qrCode.maxUses) {
-          await logRejection(qrCode.id, 'max_uses_reached', scanContext, claims.sub);
+          await logRejection(
+            qrCode.id,
+            'max_uses_reached',
+            scanContext,
+            claims.sub
+          );
           return json<QRValidateResponse>(
             {
               status: 'rejected',
               reason: 'max_uses_reached',
               message: 'Visitor QR max uses reached',
             },
-            403,
+            403
           );
         }
         break;
@@ -287,7 +339,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
           reason: 'invalid_format',
           message: 'No gate ID provided and QR code has no default gate',
         },
-        400,
+        400
       );
     }
 
@@ -296,7 +348,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     if (assignmentError) {
       return json<QRValidateResponse>(
         { status: 'rejected', reason: 'denied', message: assignmentError },
-        403,
+        403
       );
     }
 
@@ -312,20 +364,36 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     });
     if (gateForLocation) {
       const loc = scanContext;
-      const lat = loc?.latitude ?? (loc?.location && typeof (loc.location as { latitude?: number }).latitude === 'number' ? (loc.location as { latitude: number }).latitude : null);
-      const lon = loc?.longitude ?? (loc?.location && typeof (loc.location as { longitude?: number }).longitude === 'number' ? (loc.location as { longitude: number }).longitude : null);
+      const lat =
+        loc?.latitude ??
+        (loc?.location &&
+        typeof (loc.location as { latitude?: number }).latitude === 'number'
+          ? (loc.location as { latitude: number }).latitude
+          : null);
+      const lon =
+        loc?.longitude ??
+        (loc?.location &&
+        typeof (loc.location as { longitude?: number }).longitude === 'number'
+          ? (loc.location as { longitude: number }).longitude
+          : null);
       const deviceLocation =
         lat != null && lon != null ? { latitude: lat, longitude: lon } : null;
-      const locationResult = checkLocationForGate(gateForLocation, deviceLocation);
+      const locationResult = checkLocationForGate(
+        gateForLocation,
+        deviceLocation
+      );
       if (!locationResult.allowed) {
-        const msg = 'message' in locationResult ? locationResult.message : 'Scan only allowed at gate location.';
+        const msg =
+          'message' in locationResult
+            ? locationResult.message
+            : 'Scan only allowed at gate location.';
         return json<QRValidateResponse>(
           {
             status: 'rejected',
             reason: 'not_on_location',
             message: msg,
           },
-          403,
+          403
         );
       }
     }
@@ -358,7 +426,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
             reason: 'blocked_watchlist',
             message: 'Blocked person on security list.',
           },
-          403,
+          403
         );
       }
     }
@@ -375,9 +443,9 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     const scanLog = await prisma.$transaction(async (tx) => {
       // Re-read inside the transaction to prevent races.
-      const fresh = await tx.qRCode.findUnique({ 
+      const fresh = await tx.qRCode.findUnique({
         where: { id: qrCode.id },
-        include: { visitorQR: { include: { accessRule: true } } }
+        include: { visitorQR: { include: { accessRule: true } } },
       });
       if (!fresh) throw new Error('QR code disappeared during transaction');
 
@@ -385,7 +453,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       if (fresh.type === 'VISITOR' || fresh.type === 'OPEN') {
         if (fresh.visitorQR?.accessRule) {
           const access = isAccessAllowed(fresh.visitorQR.accessRule);
-          if (!access.allowed) throw new UsageLimitError(access.reason || 'Access denied');
+          if (!access.allowed)
+            throw new UsageLimitError(access.reason || 'Access denied');
         }
       }
 
@@ -393,7 +462,9 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         throw new UsageLimitError('Single-use QR code already scanned');
       }
       if (
-        (fresh.type === 'RECURRING' || fresh.type === 'VISITOR' || fresh.type === 'OPEN') &&
+        (fresh.type === 'RECURRING' ||
+          fresh.type === 'VISITOR' ||
+          fresh.type === 'OPEN') &&
         fresh.maxUses !== null &&
         fresh.currentUses >= fresh.maxUses
       ) {
@@ -423,89 +494,133 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       });
     });
 
-    emitEvent(claims.orgId, EventType.SCAN_RECORDED, { scanId: scanLog.id, gateId, qrCodeId: qrCode.id }).catch(() => {});
+    emitEvent(claims.orgId, EventType.SCAN_RECORDED, {
+      scanId: scanLog.id,
+      gateId,
+      qrCodeId: qrCode.id,
+    }).catch(() => {});
 
     // Step 13 — Trigger Webhooks (fire-and-forget background delivery)
     // We fetch the full relation data to provide a rich payload for marketing attribution (HubSpot etc.)
-    void prisma.scanLog.findUnique({
-      where: { id: scanLog.id },
-      include: {
-        gate: { select: { id: true, name: true, location: true } },
-        qrCode: {
-          include: {
-            visitorQR: { include: { unit: { select: { id: true, name: true, building: true } } } }
-          }
-        }
-      }
-    }).then(async (fullScan: any) => {
-      if (!fullScan) return;
-      
-      // Manually fetch contact if present (no explicit Prisma relation on QRCode model)
-      let contactData = null;
-      if (fullScan.qrCode.contactId) {
-        contactData = await prisma.contact.findUnique({
-          where: { id: fullScan.qrCode.contactId },
-          select: { id: true, firstName: true, lastName: true, email: true, phone: true }
-        });
-      }
-
-      const payload = {
-        scanId: fullScan.id,
-        timestamp: fullScan.scannedAt.toISOString(),
-        status: fullScan.status,
-        gate: {
-          id: fullScan.gate.id,
-          name: fullScan.gate.name,
-          location: fullScan.gate.location
+    void prisma.scanLog
+      .findUnique({
+        where: { id: scanLog.id },
+        include: {
+          gate: { select: { id: true, name: true, location: true } },
+          qrCode: {
+            include: {
+              visitorQR: {
+                include: {
+                  unit: { select: { id: true, name: true, building: true } },
+                },
+              },
+            },
+          },
         },
-        qrCode: {
-          id: fullScan.qrCode.id,
-          type: fullScan.qrCode.type,
-          utm: {
-            source: fullScan.utmSource,
-            medium: fullScan.utmMedium,
-            campaign: fullScan.utmCampaign,
-            content: fullScan.utmContent,
-            term: fullScan.utmTerm
-          }
-        },
-        contact: contactData ? {
-          id: contactData.id,
-          name: `${contactData.firstName} ${contactData.lastName}`.trim(),
-          email: contactData.email,
-          phone: contactData.phone
-        } : null,
-        unit: fullScan.qrCode.visitorQR?.unit ? {
-          id: fullScan.qrCode.visitorQR.unit.id,
-          name: fullScan.qrCode.visitorQR.unit.name,
-          building: fullScan.qrCode.visitorQR.unit.building
-        } : null,
-        device: {
-          id: fullScan.deviceId
-        }
-      };
+      })
+      .then(async (fullScan: any) => {
+        if (!fullScan) return;
 
-      await deliverWebhookEvent(claims.orgId!, 'SCAN_SUCCESS', payload as any);
-      void triggerHubSpotSync(claims.orgId!, fullScan.id).catch(() => {});
-    }).catch(err => console.error('[qr/validate] Webhook trigger failed:', err));
+        // Manually fetch contact if present (no explicit Prisma relation on QRCode model)
+        let contactData = null;
+        if (fullScan.qrCode.contactId) {
+          contactData = await prisma.contact.findUnique({
+            where: { id: fullScan.qrCode.contactId },
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              email: true,
+              phone: true,
+            },
+          });
+        }
+
+        const payload = {
+          scanId: fullScan.id,
+          timestamp: fullScan.scannedAt.toISOString(),
+          status: fullScan.status,
+          gate: {
+            id: fullScan.gate.id,
+            name: fullScan.gate.name,
+            location: fullScan.gate.location,
+          },
+          qrCode: {
+            id: fullScan.qrCode.id,
+            type: fullScan.qrCode.type,
+            utm: {
+              source: fullScan.utmSource,
+              medium: fullScan.utmMedium,
+              campaign: fullScan.utmCampaign,
+              content: fullScan.utmContent,
+              term: fullScan.utmTerm,
+            },
+          },
+          contact: contactData
+            ? {
+                id: contactData.id,
+                name: `${contactData.firstName} ${contactData.lastName}`.trim(),
+                email: contactData.email,
+                phone: contactData.phone,
+              }
+            : null,
+          unit: fullScan.qrCode.visitorQR?.unit
+            ? {
+                id: fullScan.qrCode.visitorQR.unit.id,
+                name: fullScan.qrCode.visitorQR.unit.name,
+                building: fullScan.qrCode.visitorQR.unit.building,
+              }
+            : null,
+          device: {
+            id: fullScan.deviceId,
+          },
+        };
+
+        await deliverWebhookEvent(
+          claims.orgId!,
+          'SCAN_SUCCESS',
+          payload as any
+        );
+        void triggerHubSpotSync(claims.orgId!, fullScan.id).catch(() => {});
+      })
+      .catch((err) =>
+        console.error('[qr/validate] Webhook trigger failed:', err)
+      );
 
     // If this is a VisitorQR, notify the resident via Expo Push (fire-and-forget)
     if (qrCode.visitorQR) {
-      notifyResidentOfVisitorScan(qrCode.visitorQR, gateId, claims.orgId).catch(() => {});
+      notifyResidentOfVisitorScan(qrCode.visitorQR, gateId, claims.orgId).catch(
+        () => {}
+      );
     }
 
-    return json<QRValidateResponse>({ status: 'accepted', scanId: scanLog.id }, 200);
+    return json<QRValidateResponse>(
+      {
+        status: 'accepted',
+        scanId: scanLog.id,
+        delegateToAi: (qrCode as any).delegateToAi,
+      },
+      200
+    );
   } catch (error) {
     if (error instanceof UsageLimitError) {
       return json<QRValidateResponse>(
-        { status: 'rejected', reason: 'max_uses_reached', message: error.message },
-        403,
+        {
+          status: 'rejected',
+          reason: 'max_uses_reached',
+          message: error.message,
+        },
+        403
       );
     }
     console.error('[qr/validate] Unhandled error:', error);
     return json<QRValidateResponse>(
-      { status: 'rejected', reason: 'internal_error', message: 'Internal server error' },
-      500,
+      {
+        status: 'rejected',
+        reason: 'internal_error',
+        message: 'Internal server error',
+      },
+      500
     );
   } finally {
     clearOrganizationContext();
@@ -525,13 +640,15 @@ function json<T>(data: T, status: number): NextResponse {
   return NextResponse.json(data, { status });
 }
 
-const REJECTION_STATUS_MAP: Record<string, 'EXPIRED' | 'MAX_USES_REACHED' | 'INACTIVE' | 'FAILED' | 'DENIED'> =
-  {
-    expired: 'EXPIRED',
-    max_uses_reached: 'MAX_USES_REACHED',
-    inactive: 'INACTIVE',
-    denied: 'DENIED',
-  };
+const REJECTION_STATUS_MAP: Record<
+  string,
+  'EXPIRED' | 'MAX_USES_REACHED' | 'INACTIVE' | 'FAILED' | 'DENIED'
+> = {
+  expired: 'EXPIRED',
+  max_uses_reached: 'MAX_USES_REACHED',
+  inactive: 'INACTIVE',
+  denied: 'DENIED',
+};
 
 /**
  * Send an Expo Push notification to the resident who owns a VisitorQR.
@@ -540,7 +657,7 @@ const REJECTION_STATUS_MAP: Record<string, 'EXPIRED' | 'MAX_USES_REACHED' | 'INA
 async function notifyResidentOfVisitorScan(
   visitorQR: { unitId: string; visitorName?: string | null; createdBy: string },
   gateId: string,
-  orgId: string,
+  orgId: string
 ): Promise<void> {
   try {
     // Resolve resident user and their push token
@@ -551,7 +668,8 @@ async function notifyResidentOfVisitorScan(
     if (!unit?.user) return;
 
     const prefs = unit.user.preferences as Record<string, unknown> | null;
-    const expoPushToken = typeof prefs?.expoPushToken === 'string' ? prefs.expoPushToken : null;
+    const expoPushToken =
+      typeof prefs?.expoPushToken === 'string' ? prefs.expoPushToken : null;
     const notifyScan = prefs?.notifyScan !== false; // default true
     if (!expoPushToken || !notifyScan) return;
 
@@ -597,7 +715,7 @@ async function logRejection(
   scanContext:
     | { gateId?: string; deviceId?: string; location?: Record<string, unknown> }
     | undefined,
-  userId: string,
+  userId: string
 ): Promise<void> {
   try {
     const gateId = scanContext?.gateId;
@@ -612,7 +730,10 @@ async function logRejection(
         gateId,
         deviceId: scanContext?.deviceId ?? null,
         auditTrail: [
-          makeAuditEntry('rejected', { reason, deviceId: scanContext?.deviceId ?? null }),
+          makeAuditEntry('rejected', {
+            reason,
+            deviceId: scanContext?.deviceId ?? null,
+          }),
         ] as any,
       },
     });

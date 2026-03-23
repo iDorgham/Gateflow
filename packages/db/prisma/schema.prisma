@@ -336,6 +336,7 @@ model QRCode {
   utmContent     String?
   utmMedium      String?
   utmTerm        String?
+  delegateToAi   Boolean      @default(false)
   gate           Gate?        @relation(fields: [gateId], references: [id])
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   project        Project?     @relation(fields: [projectId], references: [id])

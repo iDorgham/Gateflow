@@ -31,6 +31,7 @@ export const ExpressInviteWidget: React.FC<ExpressInviteWidgetProps> = ({
 }) => {
   const [loading, setLoading] = useState(false);
   const [selectedVisitor, setSelectedVisitor] = useState<string | null>(null);
+  const [delegateToAi, setDelegateToAi] = useState(false);
 
   // Simple local i18n
   const t = {
@@ -38,20 +39,25 @@ export const ExpressInviteWidget: React.FC<ExpressInviteWidgetProps> = ({
       title: 'Express Invite',
       subtitle: 'One-tap link for guests',
       recent: 'Recent Guests',
+      aiToggle: 'Delegate to GateAI',
+      aiSubtitle: 'AI Concierge handles guest help',
       inviteMsg:
-        'Hello {{name}}! Here is your visitor pass for my unit at GateFlow: ',
+        'Hello {{name}}! Here is your secure visitor pass for my unit at GateFlow. Please present this at the gate: ',
       inviteMsgAnon:
-        'Hello! Here is your visitor pass for my unit at GateFlow: ',
-      expiryMsg: '\nValid for 24 hours.',
+        'Hello! Here is your secure visitor pass for my unit at GateFlow. Please present this at the gate: ',
+      expiryMsg: '\n\n*This link is valid for 24 hours.',
     },
     ar: {
       title: 'دعوة سريعة',
       subtitle: 'رابط بنقرة واحدة للضيوف',
       recent: 'ضيوف مؤخراً',
+      aiToggle: 'تفويض GateAI',
+      aiSubtitle: 'المساعد الذكي يتولى مساعدة الضيف',
       inviteMsg:
-        'مرحباً {{name}}! إليك تصريح الزيارة الخاص بك لوحدتي في GateFlow: ',
-      inviteMsgAnon: 'مرحباً! إليك تصريح الزيارة الخاص بك لوحدتي في GateFlow: ',
-      expiryMsg: '\nصالح لمدة 24 ساعة.',
+        'مرحباً {{name}}! إليك تصريح الزيارة الآمن لوحدتي في GateFlow. يرجى إبرازه عند البوابة: ',
+      inviteMsgAnon:
+        'مرحباً! إليك تصريح الزيارة الآمن لوحدتي في GateFlow. يرجى إبرازه عند البوابة: ',
+      expiryMsg: '\n\n*هذا الرابط صالح لمدة 24 ساعة.',
     },
   }[lang];
 
@@ -64,6 +70,7 @@ export const ExpressInviteWidget: React.FC<ExpressInviteWidgetProps> = ({
     try {
       const response = await residentFetch('/resident/express-invite', {
         method: 'POST',
+        body: JSON.stringify({ delegateToAi }),
       });
 
       const result = await response.json();
@@ -144,6 +151,49 @@ export const ExpressInviteWidget: React.FC<ExpressInviteWidgetProps> = ({
               name="share-outline"
               size={20}
               color={colors.primaryForeground}
+            />
+          </View>
+        </Pressable>
+
+        <Pressable
+          onPress={() => setDelegateToAi(!delegateToAi)}
+          style={[
+            styles.aiToggleCard,
+            delegateToAi && { borderColor: colors.accent },
+          ]}
+        >
+          <View
+            style={[
+              styles.aiIcon,
+              {
+                backgroundColor: delegateToAi
+                  ? colors.accent
+                  : colors.secondary,
+              },
+            ]}
+          >
+            <Ionicons
+              name="sparkles"
+              size={16}
+              color={delegateToAi ? colors.primary : colors.mutedForeground}
+            />
+          </View>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.aiTitle}>{t.aiToggle}</Text>
+            <Text style={styles.aiSubtitle}>{t.aiSubtitle}</Text>
+          </View>
+          <View
+            style={[
+              styles.toggleTrack,
+              delegateToAi
+                ? { backgroundColor: colors.accent }
+                : { backgroundColor: colors.border },
+            ]}
+          >
+            <MotiView
+              animate={{ translateX: delegateToAi ? 16 : 0 }}
+              transition={{ type: 'spring', damping: 20 }}
+              style={styles.toggleThumb}
             />
           </View>
         </Pressable>
@@ -278,5 +328,46 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '500',
     color: colors.foreground,
+  },
+  aiToggleCard: {
+    marginTop: spacing.sm,
+    backgroundColor: colors.card,
+    borderRadius: borderRadius.lg,
+    padding: spacing.md,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  aiIcon: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: spacing.sm,
+  },
+  aiTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: colors.foreground,
+  },
+  aiSubtitle: {
+    fontSize: 11,
+    color: colors.mutedForeground,
+  },
+  toggleTrack: {
+    width: 36,
+    height: 20,
+    borderRadius: 10,
+    padding: 2,
+    justifyContent: 'center',
+  },
+  toggleThumb: {
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    backgroundColor: colors.card,
+    ...shadows.sm,
   },
 });

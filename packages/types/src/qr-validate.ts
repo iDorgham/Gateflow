@@ -44,6 +44,7 @@ export const QRValidateResponseSchema = z.discriminatedUnion('status', [
     status: z.literal('accepted'),
     scanId: z.string(),
     message: z.string().optional(),
+    delegateToAi: z.boolean().optional(),
   }),
   z.object({
     status: z.literal('rejected'),
