@@ -127,6 +127,7 @@ export default function QRsScreen() {
           }
           ListHeaderComponent={
             <ExpressInviteWidget
+              recentVisitors={visitors} // Pass visitors to show recent guests
               onSuccess={() => fetchList(true)} // Refresh list to show new express invite
             />
           }

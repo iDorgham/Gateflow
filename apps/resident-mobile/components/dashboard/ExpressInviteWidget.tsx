@@ -8,49 +8,59 @@ import {
   Share,
   Alert,
   Platform,
+  ScrollView,
 } from 'react-native';
-import { MotiView, MotiText } from 'moti';
+import { MotiView } from 'moti';
 import { Ionicons } from '@expo/vector-icons';
 import { theme } from '../../lib/theme';
 import { residentFetch } from '../../lib/api';
+import { type CachedVisitor } from '../../lib/qr-cache';
 
-const { colors, spacing, borderRadius, shadows, typography } = theme;
+const { colors, spacing, borderRadius, shadows } = theme;
 
 interface ExpressInviteWidgetProps {
   onSuccess?: (data: { shortId: string; shareUrl: string }) => void;
+  recentVisitors?: CachedVisitor[];
   lang?: 'en' | 'ar';
 }
 
 export const ExpressInviteWidget: React.FC<ExpressInviteWidgetProps> = ({
   onSuccess,
+  recentVisitors = [],
   lang = 'en',
 }) => {
   const [loading, setLoading] = useState(false);
+  const [selectedVisitor, setSelectedVisitor] = useState<string | null>(null);
 
-  // Simple local i18n for the widget
+  // Simple local i18n
   const t = {
     en: {
       title: 'Express Invite',
       subtitle: 'One-tap link for guests',
-      btn: 'Generate & Share',
-      sharing: 'Generating...',
-      inviteMsg: 'Hello! Here is your visitor pass for my unit at GateFlow: ',
+      recent: 'Recent Guests',
+      inviteMsg:
+        'Hello {{name}}! Here is your visitor pass for my unit at GateFlow: ',
+      inviteMsgAnon:
+        'Hello! Here is your visitor pass for my unit at GateFlow: ',
       expiryMsg: '\nValid for 24 hours.',
     },
     ar: {
       title: 'دعوة سريعة',
       subtitle: 'رابط بنقرة واحدة للضيوف',
-      btn: 'إنشاء ومشاركة',
-      sharing: 'جاري الإنشاء...',
-      inviteMsg: 'مرحباً! إليك تصريح الزيارة الخاص بك لوحدتي في GateFlow: ',
+      recent: 'ضيوف مؤخراً',
+      inviteMsg:
+        'مرحباً {{name}}! إليك تصريح الزيارة الخاص بك لوحدتي في GateFlow: ',
+      inviteMsgAnon: 'مرحباً! إليك تصريح الزيارة الخاص بك لوحدتي في GateFlow: ',
       expiryMsg: '\nصالح لمدة 24 ساعة.',
     },
   }[lang];
 
-  const handlePress = async () => {
+  const handlePress = async (visitorName?: string | null) => {
     if (loading) return;
 
+    if (visitorName) setSelectedVisitor(visitorName);
     setLoading(true);
+
     try {
       const response = await residentFetch('/resident/express-invite', {
         method: 'POST',
@@ -64,10 +74,16 @@ export const ExpressInviteWidget: React.FC<ExpressInviteWidgetProps> = ({
 
       const { shareUrl } = result.data;
 
+      // Prepare message
+      const messageTemplate = visitorName
+        ? t.inviteMsg.replace('{{name}}', visitorName)
+        : t.inviteMsgAnon;
+      const fullMessage = `${messageTemplate}${shareUrl}${t.expiryMsg}`;
+
       // native share
       await Share.share({
-        message: `${t.inviteMsg}${shareUrl}${t.expiryMsg}`,
-        url: Platform.OS === 'ios' ? shareUrl : undefined, // iOS handles URL property
+        message: fullMessage,
+        url: Platform.OS === 'ios' ? shareUrl : undefined,
       });
 
       onSuccess?.(result.data);
@@ -79,54 +95,97 @@ export const ExpressInviteWidget: React.FC<ExpressInviteWidgetProps> = ({
       );
     } finally {
       setLoading(false);
+      setSelectedVisitor(null);
     }
   };
 
+  // Filter unique visitor names for "Recent" list
+  const uniqueRecents = Array.from(
+    new Set(
+      recentVisitors
+        .map((v) => v.visitorName)
+        .filter((name): name is string => name !== null && name.length > 0)
+    )
+  ).slice(0, 5);
+
   return (
-    <MotiView
-      from={{ opacity: 0, scale: 0.9, translateY: 20 }}
-      animate={{ opacity: 1, scale: 1, translateY: 0 }}
-      transition={{ type: 'spring', damping: 15 }}
-      style={styles.container}
-    >
-      <Pressable
-        onPress={handlePress}
-        disabled={loading}
-        style={({ pressed }) => [
-          styles.card,
-          pressed && styles.cardPressed,
-          loading && styles.cardLoading,
-        ]}
+    <View style={styles.container}>
+      <MotiView
+        from={{ opacity: 0, scale: 0.95, translateY: 10 }}
+        animate={{ opacity: 1, scale: 1, translateY: 0 }}
+        transition={{ type: 'spring', damping: 20 }}
       >
-        <View style={styles.iconContainer}>
-          {loading ? (
-            <ActivityIndicator color={colors.primary} size="small" />
-          ) : (
-            <Ionicons name="flash" size={24} color={colors.primary} />
-          )}
-        </View>
-
-        <View style={styles.content}>
-          <Text style={styles.title}>{t.title}</Text>
-          <Text style={styles.subtitle}>{t.subtitle}</Text>
-        </View>
-
-        <MotiView
-          animate={{ scale: loading ? 0.95 : 1 }}
-          style={styles.actionBtn}
+        <Pressable
+          onPress={() => handlePress()}
+          disabled={loading}
+          style={({ pressed }) => [
+            styles.mainCard,
+            pressed && styles.cardPressed,
+            loading && !selectedVisitor && styles.cardLoading,
+          ]}
         >
-          {loading ? (
-            <ActivityIndicator color={colors.primaryForeground} size="small" />
-          ) : (
+          <View
+            style={[styles.iconContainer, { backgroundColor: colors.accent }]}
+          >
+            {loading && !selectedVisitor ? (
+              <ActivityIndicator color={colors.primary} size="small" />
+            ) : (
+              <Ionicons name="flash" size={24} color={colors.primary} />
+            )}
+          </View>
+
+          <View style={styles.content}>
+            <Text style={styles.title}>{t.title}</Text>
+            <Text style={styles.subtitle}>{t.subtitle}</Text>
+          </View>
+
+          <View style={styles.actionBtn}>
             <Ionicons
               name="share-outline"
               size={20}
               color={colors.primaryForeground}
             />
-          )}
+          </View>
+        </Pressable>
+      </MotiView>
+
+      {uniqueRecents.length > 0 && (
+        <MotiView
+          from={{ opacity: 0, translateY: 5 }}
+          animate={{ opacity: 1, translateY: 0 }}
+          transition={{ delay: 200 }}
+          style={styles.recentSection}
+        >
+          <Text style={styles.sectionHeader}>{t.recent}</Text>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.recentList}
+          >
+            {uniqueRecents.map((name, index) => (
+              <Pressable
+                key={`${name}-${index}`}
+                onPress={() => handlePress(name)}
+                disabled={loading}
+                style={({ pressed }) => [
+                  styles.recentItem,
+                  pressed && styles.recentItemPressed,
+                  selectedVisitor === name && styles.recentItemSelected,
+                ]}
+              >
+                {selectedVisitor === name ? (
+                  <ActivityIndicator size="small" color={colors.primary} />
+                ) : (
+                  <Text style={styles.recentName} numberOfLines={1}>
+                    {name}
+                  </Text>
+                )}
+              </Pressable>
+            ))}
+          </ScrollView>
         </MotiView>
-      </Pressable>
-    </MotiView>
+      )}
+    </View>
   );
 };
 
@@ -134,7 +193,7 @@ const styles = StyleSheet.create({
   container: {
     marginBottom: spacing.xl,
   },
-  card: {
+  mainCard: {
     backgroundColor: colors.card,
     borderRadius: borderRadius.xl,
     padding: spacing.lg,
@@ -155,7 +214,6 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: colors.accent,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: spacing.md,
@@ -182,5 +240,43 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginLeft: spacing.sm,
+  },
+  recentSection: {
+    marginTop: spacing.md,
+  },
+  sectionHeader: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: colors.mutedForeground,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+    marginBottom: spacing.sm,
+    marginLeft: spacing.xs,
+  },
+  recentList: {
+    paddingRight: spacing.xl,
+  },
+  recentItem: {
+    backgroundColor: colors.card,
+    borderRadius: borderRadius.lg,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    marginRight: spacing.sm,
+    borderWidth: 1,
+    borderColor: colors.border,
+    minWidth: 80,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  recentItemPressed: {
+    backgroundColor: colors.secondary,
+  },
+  recentItemSelected: {
+    borderColor: colors.primary,
+  },
+  recentName: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: colors.foreground,
   },
 });
