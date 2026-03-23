@@ -39,9 +39,9 @@
  
  **IDEA:** `docs/plan/context/IDEA_pagespeed_100.md`
  
- **PLAN:** `docs/plan/planning/pagespeed_100/PLAN_pagespeed_100.md`
+ **PLAN:** `docs/plan/planned/pagespeed_100/PLAN_pagespeed_100.md`
  
- **Status:** 🆕 Open
+ **Status:** 🏗️ Planned
  
  **Target:** Q4 2026
  
