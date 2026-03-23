@@ -28,7 +28,7 @@
     "expo-image-picker": "^55.0.10",
     "expo-jwt": "^1.8.2",
     "expo-location": "~19.0.8",
-    "expo-network": "~8.0.8",
+    "expo-network": "~55.0.9",
     "expo-router": "~6.0.23",
     "expo-secure-store": "~15.0.8",
     "react": "19.1.0",
