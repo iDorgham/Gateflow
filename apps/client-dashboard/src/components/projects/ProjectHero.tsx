@@ -1,6 +1,6 @@
 'use client';
 
-import { Pencil, Share2, MapPin, Globe, ExternalLink, ArrowLeft } from 'lucide-react';
+import { Pencil, Share2, MapPin, Globe, ExternalLink, ArrowLeft, Building } from 'lucide-react';
 import { Button } from '@gate-access/ui';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
@@ -39,12 +39,12 @@ export function ProjectHero({ project }: ProjectHeroProps) {
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
         
-        {/* Back Button */}
-        <Link 
-          href={`/${locale}/dashboard/projects`} 
-          className="absolute top-6 left-6 flex h-10 w-10 items-center justify-center rounded-xl bg-background/20 backdrop-blur-md text-white hover:bg-background/40 transition-all border border-white/20"
+        {/* Back Button — start-6 for RTL flip */}
+        <Link
+          href={`/${locale}/dashboard/projects`}
+          className="absolute top-6 start-6 flex h-10 w-10 items-center justify-center rounded-xl bg-background/20 backdrop-blur-md text-white hover:bg-background/40 transition-all border border-white/20"
         >
-          <ArrowLeft className="h-5 w-5" />
+          <ArrowLeft className="h-5 w-5 rtl:rotate-180" />
         </Link>
       </div>
 
@@ -134,5 +134,3 @@ export function ProjectHero({ project }: ProjectHeroProps) {
     </div>
   );
 }
-
-import { Building } from 'lucide-react';
