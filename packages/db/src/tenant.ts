@@ -52,131 +52,144 @@ export const db = {
 
   user: {
     ...prisma.user,
-    findFirst: async (...args: Parameters<typeof prisma.user.findFirst>) => {
-      const [query, ...rest] = args;
+    findFirst: async (args?: Prisma.UserFindFirstArgs) => {
       const orgFilter = getOrgFilter();
-      if (!orgFilter) return prisma.user.findFirst(...args);
-      const where = {
-        ...(query as any)?.where,
-        organizationId: orgFilter,
-      };
-      return prisma.user.findFirst({ ...(query as any), where }, ...rest);
+      if (!orgFilter) return prisma.user.findFirst(args);
+      return prisma.user.findFirst({
+        ...args,
+        where: {
+          ...args?.where,
+          organizationId: orgFilter,
+        },
+      });
     },
-    findMany: async (...args: Parameters<typeof prisma.user.findMany>) => {
-      const [query, ...rest] = args;
+    findMany: async (args?: Prisma.UserFindManyArgs) => {
       const orgFilter = getOrgFilter();
-      if (!orgFilter) return prisma.user.findMany(...args);
-      const where = {
-        ...(query as any)?.where,
-        organizationId: orgFilter,
-      };
-      return prisma.user.findMany({ ...(query as any), where }, ...rest);
+      if (!orgFilter) return prisma.user.findMany(args);
+      return prisma.user.findMany({
+        ...args,
+        where: {
+          ...args?.where,
+          organizationId: orgFilter,
+        },
+      });
     },
-    count: async (...args: Parameters<typeof prisma.user.count>) => {
-      const [query, ...rest] = args;
+    count: async (args?: Prisma.UserCountArgs) => {
       const orgFilter = getOrgFilter();
-      if (!orgFilter) return prisma.user.count(...args);
-      const where = {
-        ...(query as any)?.where,
-        organizationId: orgFilter,
-      };
-      return prisma.user.count({ ...(query as any), where }, ...rest);
+      if (!orgFilter) return prisma.user.count(args);
+      return prisma.user.count({
+        ...args,
+        where: {
+          ...args?.where,
+          organizationId: orgFilter,
+        },
+      });
     },
   },
 
   gate: {
     ...prisma.gate,
-    findFirst: async (...args: Parameters<typeof prisma.gate.findFirst>) => {
-      const [query, ...rest] = args;
+    findFirst: async (args?: Prisma.GateFindFirstArgs) => {
       const orgFilter = getOrgFilter();
-      if (!orgFilter) return prisma.gate.findFirst(...args);
-      const where = {
-        ...(query as any)?.where,
-        organizationId: orgFilter,
-      };
-      return prisma.gate.findFirst({ ...(query as any), where }, ...rest);
+      if (!orgFilter) return prisma.gate.findFirst(args);
+      return prisma.gate.findFirst({
+        ...args,
+        where: {
+          ...args?.where,
+          organizationId: orgFilter,
+        },
+      });
     },
-    findMany: async (...args: Parameters<typeof prisma.gate.findMany>) => {
-      const [query, ...rest] = args;
+    findMany: async (args?: Prisma.GateFindManyArgs) => {
       const orgFilter = getOrgFilter();
-      if (!orgFilter) return prisma.gate.findMany(...args);
-      const where = {
-        ...(query as any)?.where,
-        organizationId: orgFilter,
-      };
-      return prisma.gate.findMany({ ...(query as any), where }, ...rest);
+      if (!orgFilter) return prisma.gate.findMany(args);
+      return prisma.gate.findMany({
+        ...args,
+        where: {
+          ...args?.where,
+          organizationId: orgFilter,
+        },
+      });
     },
-    count: async (...args: Parameters<typeof prisma.gate.count>) => {
-      const [query, ...rest] = args;
+    count: async (args?: Prisma.GateCountArgs) => {
       const orgFilter = getOrgFilter();
-      if (!orgFilter) return prisma.gate.count(...args);
-      const where = {
-        ...(query as any)?.where,
-        organizationId: orgFilter,
-      };
-      return prisma.gate.count({ ...(query as any), where }, ...rest);
+      if (!orgFilter) return prisma.gate.count(args);
+      return prisma.gate.count({
+        ...args,
+        where: {
+          ...args?.where,
+          organizationId: orgFilter,
+        },
+      });
     },
   },
 
   qRCode: {
     ...prisma.qRCode,
-    findFirst: async (...args: Parameters<typeof prisma.qRCode.findFirst>) => {
-      const [query, ...rest] = args;
+    findFirst: async (args?: Prisma.QRCodeFindFirstArgs) => {
       const orgFilter = getOrgFilter();
-      if (!orgFilter) return prisma.qRCode.findFirst(...args);
-      const where = {
-        ...(query as any)?.where,
-        organizationId: orgFilter,
-      };
-      return prisma.qRCode.findFirst({ ...(query as any), where }, ...rest);
+      if (!orgFilter) return prisma.qRCode.findFirst(args);
+      return prisma.qRCode.findFirst({
+        ...args,
+        where: {
+          ...args?.where,
+          organizationId: orgFilter,
+        },
+      });
     },
-    findMany: async (...args: Parameters<typeof prisma.qRCode.findMany>) => {
-      const [query, ...rest] = args;
+    findMany: async (args?: Prisma.QRCodeFindManyArgs) => {
       const orgFilter = getOrgFilter();
-      if (!orgFilter) return prisma.qRCode.findMany(...args);
-      const where = {
-        ...(query as any)?.where,
-        organizationId: orgFilter,
-      };
-      return prisma.qRCode.findMany({ ...(query as any), where }, ...rest);
+      if (!orgFilter) return prisma.qRCode.findMany(args);
+      return prisma.qRCode.findMany({
+        ...args,
+        where: {
+          ...args?.where,
+          organizationId: orgFilter,
+        },
+      });
     },
-    count: async (...args: Parameters<typeof prisma.qRCode.count>) => {
-      const [query, ...rest] = args;
+    count: async (args?: Prisma.QRCodeCountArgs) => {
       const orgFilter = getOrgFilter();
-      if (!orgFilter) return prisma.qRCode.count(...args);
-      const where = {
-        ...(query as any)?.where,
-        organizationId: orgFilter,
-      };
-      return prisma.qRCode.count({ ...(query as any), where }, ...rest);
+      if (!orgFilter) return prisma.qRCode.count(args);
+      return prisma.qRCode.count({
+        ...args,
+        where: {
+          ...args?.where,
+          organizationId: orgFilter,
+        },
+      });
     },
   },
 
   scanLog: {
     ...prisma.scanLog,
-    findMany: async (...args: Parameters<typeof prisma.scanLog.findMany>) => {
-      const [query, ...rest] = args;
+    findMany: async (args?: Prisma.ScanLogFindManyArgs) => {
       const orgId = organizationContext.organizationId;
-      if (!orgId) return prisma.scanLog.findMany(...args);
-      const where = {
-        ...(query as any)?.where,
-        gate: {
-          organizationId: orgId,
-        },
-      };
-      return prisma.scanLog.findMany({ ...(query as any), where }, ...rest);
+      if (!orgId) return prisma.scanLog.findMany(args);
+      return prisma.scanLog.findMany({
+        ...args,
+        where: {
+          ...args?.where,
+          gate: {
+            ...(args?.where?.gate as Prisma.GateWhereInput),
+            organizationId: orgId,
+          },
+        } as Prisma.ScanLogWhereInput,
+      });
     },
-    count: async (...args: Parameters<typeof prisma.scanLog.count>) => {
-      const [query, ...rest] = args;
+    count: async (args?: Prisma.ScanLogCountArgs) => {
       const orgId = organizationContext.organizationId;
-      if (!orgId) return prisma.scanLog.count(...args);
-      const where = {
-        ...(query as any)?.where,
-        gate: {
-          organizationId: orgId,
-        },
-      };
-      return prisma.scanLog.count({ ...(query as any), where }, ...rest);
+      if (!orgId) return prisma.scanLog.count(args);
+      return prisma.scanLog.count({
+        ...args,
+        where: {
+          ...args?.where,
+          gate: {
+            ...(args?.where?.gate as Prisma.GateWhereInput),
+            organizationId: orgId,
+          },
+        } as Prisma.ScanLogWhereInput,
+      });
     },
   },
 };
