@@ -6,13 +6,13 @@ export const dynamic = 'force-dynamic';
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { projectId: string } }
+  { params }: { params: { id: string } }
 ) {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
 
-    const { projectId } = params;
+    const projectId = params.id;
 
     const assignments = await prisma.gateAssignment.findMany({
       where: {
@@ -55,13 +55,13 @@ export async function GET(
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: { projectId: string } }
+  { params }: { params: { id: string } }
 ) {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
 
-    const { projectId } = params;
+    const projectId = params.id;
     const body = await request.json();
     const { userId, gateId, startTime, endTime, shiftStart, shiftEnd } = body;
 

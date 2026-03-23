@@ -134,9 +134,9 @@ export function ProjectTeamTable({ projectId, locale, canManage }: ProjectTeamTa
             )}
           >
             {isActive ? (
-              <><ShieldCheck className="h-3 w-3 mr-1 inline" /> Active</>
+              <><ShieldCheck className="h-3 w-3 me-1 inline" /> Active</>
             ) : (
-              <><ShieldAlert className="h-3 w-3 mr-1 inline" /> {isExpired ? 'Expired' : 'Pending'}</>
+              <><ShieldAlert className="h-3 w-3 me-1 inline" /> {isExpired ? 'Expired' : 'Pending'}</>
             )}
           </Badge>
         );

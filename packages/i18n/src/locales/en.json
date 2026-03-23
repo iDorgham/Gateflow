@@ -1304,5 +1304,42 @@
       "noUnitLinkedDesc": "Your account has the Resident role but is not linked to any unit yet. Please contact your organization administrator to link your account to a unit from the Units page.",
       "backToLogin": "Back to login"
     }
+  },
+  "crm": {
+    "contacts": {
+      "addNew": "Add Contact",
+      "addTitle": "New Contact",
+      "editTitle": "Edit Contact",
+      "name": "Name",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email",
+      "phone": "Phone",
+      "jobTitle": "Job Title",
+      "company": "Company",
+      "units": "Units",
+      "linkedUnits": "Linked Units",
+      "info": "Contact Info",
+      "created": "Contact created successfully",
+      "updated": "Contact updated successfully",
+      "batchDeleted": "Contacts deleted successfully"
+    },
+    "units": {
+      "addNew": "Add Unit",
+      "addTitle": "New Unit",
+      "editTitle": "Edit Unit",
+      "name": "Name",
+      "unitName": "Unit Name",
+      "type": "Type",
+      "category": "Category",
+      "building": "Building",
+      "sizeSqm": "Size (sqm)",
+      "area": "Area",
+      "residents": "Residents",
+      "linkedContacts": "Linked Contacts",
+      "created": "Unit created successfully",
+      "updated": "Unit updated successfully",
+      "batchDeleted": "Units deleted successfully"
+    }
   }
 }

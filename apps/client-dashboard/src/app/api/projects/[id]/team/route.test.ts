@@ -1,7 +1,7 @@
 export {};
 
 /**
- * Tests for GET/POST /api/projects/[projectId]/team
+ * Tests for GET/POST /api/projects/[id]/team
  * Phase 6: gate assignment with startTime/endTime window + org scoping
  */
 
@@ -67,7 +67,7 @@ const mockAssignment = {
   gate: { id: 'gate_1', name: 'Main Gate' },
 };
 
-describe('GET /api/projects/[projectId]/team', () => {
+describe('GET /api/projects/[id]/team', () => {
   beforeEach(() => {
     (getSessionClaims as jest.Mock).mockResolvedValue(mockClaims);
     (prisma.gateAssignment.findMany as jest.Mock).mockResolvedValue([mockAssignment]);
@@ -78,13 +78,13 @@ describe('GET /api/projects/[projectId]/team', () => {
   it('returns 401 when unauthenticated', async () => {
     (getSessionClaims as jest.Mock).mockResolvedValue(null);
     const req = new NextRequest('http://localhost/api/projects/proj_1/team') as any;
-    const res = await GET(req, { params: { projectId: 'proj_1' } });
+    const res = await GET(req, { params: { id: 'proj_1' } });
     expect((res as any).status).toBe(401);
   });
 
   it('scopes assignments to project and org', async () => {
     const req = new NextRequest('http://localhost/api/projects/proj_1/team') as any;
-    await GET(req, { params: { projectId: 'proj_1' } });
+    await GET(req, { params: { id: 'proj_1' } });
     expect(prisma.gateAssignment.findMany).toHaveBeenCalledWith(
       expect.objectContaining({
         where: expect.objectContaining({
@@ -98,7 +98,7 @@ describe('GET /api/projects/[projectId]/team', () => {
 
   it('returns team assignments with user and gate data', async () => {
     const req = new NextRequest('http://localhost/api/projects/proj_1/team') as any;
-    const res = await GET(req, { params: { projectId: 'proj_1' } });
+    const res = await GET(req, { params: { id: 'proj_1' } });
     const body = await (res as any).json();
     expect(body.success).toBe(true);
     expect(body.data).toHaveLength(1);
@@ -107,13 +107,13 @@ describe('GET /api/projects/[projectId]/team', () => {
 
   it('excludes soft-deleted assignments', async () => {
     const req = new NextRequest('http://localhost/api/projects/proj_1/team') as any;
-    await GET(req, { params: { projectId: 'proj_1' } });
+    await GET(req, { params: { id: 'proj_1' } });
     const call = (prisma.gateAssignment.findMany as jest.Mock).mock.calls[0][0];
     expect(call.where.deletedAt).toBe(null);
   });
 });
 
-describe('POST /api/projects/[projectId]/team', () => {
+describe('POST /api/projects/[id]/team', () => {
   beforeEach(() => {
     (getSessionClaims as jest.Mock).mockResolvedValue(mockClaims);
     (prisma.gate.findFirst as jest.Mock).mockResolvedValue(mockGate);
@@ -127,7 +127,7 @@ describe('POST /api/projects/[projectId]/team', () => {
     const req = new NextRequest('http://localhost/api/projects/proj_1/team', {
       body: JSON.stringify({ userId: 'user_1', gateId: 'gate_1' }),
     }) as any;
-    const res = await POST(req, { params: { projectId: 'proj_1' } });
+    const res = await POST(req, { params: { id: 'proj_1' } });
     expect((res as any).status).toBe(401);
   });
 
@@ -136,7 +136,7 @@ describe('POST /api/projects/[projectId]/team', () => {
     const req = new NextRequest('http://localhost/api/projects/proj_1/team', {
       body: JSON.stringify({ userId: 'user_1', gateId: 'gate_other' }),
     }) as any;
-    const res = await POST(req, { params: { projectId: 'proj_1' } });
+    const res = await POST(req, { params: { id: 'proj_1' } });
     expect((res as any).status).toBe(400);
   });
 
@@ -144,7 +144,7 @@ describe('POST /api/projects/[projectId]/team', () => {
     const req = new NextRequest('http://localhost/api/projects/proj_1/team', {
       body: JSON.stringify({ userId: 'user_1', gateId: 'gate_1' }),
     }) as any;
-    await POST(req, { params: { projectId: 'proj_1' } });
+    await POST(req, { params: { id: 'proj_1' } });
     expect(prisma.gate.findFirst).toHaveBeenCalledWith(
       expect.objectContaining({
         where: { id: 'gate_1', projectId: 'proj_1', organizationId: 'org_1' },
@@ -156,7 +156,7 @@ describe('POST /api/projects/[projectId]/team', () => {
     const req = new NextRequest('http://localhost/api/projects/proj_1/team', {
       body: JSON.stringify({ userId: 'user_1', gateId: 'gate_1' }),
     }) as any;
-    await POST(req, { params: { projectId: 'proj_1' } });
+    await POST(req, { params: { id: 'proj_1' } });
     expect(prisma.gateAssignment.upsert).toHaveBeenCalledWith(
       expect.objectContaining({
         create: expect.objectContaining({ organizationId: 'org_1' }),
@@ -170,7 +170,7 @@ describe('POST /api/projects/[projectId]/team', () => {
     const req = new NextRequest('http://localhost/api/projects/proj_1/team', {
       body: JSON.stringify({ userId: 'user_1', gateId: 'gate_1', startTime, endTime }),
     }) as any;
-    await POST(req, { params: { projectId: 'proj_1' } });
+    await POST(req, { params: { id: 'proj_1' } });
     expect(prisma.gateAssignment.upsert).toHaveBeenCalledWith(
       expect.objectContaining({
         create: expect.objectContaining({
@@ -185,7 +185,7 @@ describe('POST /api/projects/[projectId]/team', () => {
     const req = new NextRequest('http://localhost/api/projects/proj_1/team', {
       body: JSON.stringify({ userId: 'user_1', gateId: 'gate_1' }),
     }) as any;
-    const res = await POST(req, { params: { projectId: 'proj_1' } });
+    const res = await POST(req, { params: { id: 'proj_1' } });
     const body = await (res as any).json();
     expect(body.success).toBe(true);
     expect(body.data.id).toBe('assign_1');

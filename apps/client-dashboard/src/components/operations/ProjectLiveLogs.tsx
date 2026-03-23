@@ -124,7 +124,7 @@ export function ProjectLiveLogs({ projectId, locale }: ProjectLiveLogsProps) {
                     SCAN_STATUS_STYLES[log.status] ?? 'bg-[#F4F5F7] text-[#42526E]'
                   )}
                 >
-                  {log.status === 'DENIED' && <Shield className="h-3 w-3 mr-1 inline" />}
+                  {log.status === 'DENIED' && <Shield className="h-3 w-3 me-1 inline" />}
                   {log.status.replace(/_/g, ' ')}
                 </Badge>
               </TableCell>

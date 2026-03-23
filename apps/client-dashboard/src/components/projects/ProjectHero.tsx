@@ -4,6 +4,7 @@ import { Pencil, Share2, MapPin, Globe, ExternalLink, ArrowLeft, Building } from
 import { Button } from '@gate-access/ui';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
+import { motion } from 'framer-motion';
 
 interface ProjectHeroProps {
   project: {
@@ -23,7 +24,12 @@ export function ProjectHero({ project }: ProjectHeroProps) {
   const locale = (params?.locale as string) ?? 'en';
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-border bg-card shadow-lg transition-all">
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: [0.4, 0, 0.2, 1] }}
+      className="relative overflow-hidden rounded-3xl border border-border bg-card shadow-lg transition-all"
+    >
       {/* Cover Image */}
       <div className="relative h-48 w-full sm:h-64 lg:h-80 overflow-hidden bg-muted/30">
         {project.coverUrl ? (
@@ -131,6 +137,6 @@ export function ProjectHero({ project }: ProjectHeroProps) {
           </div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }

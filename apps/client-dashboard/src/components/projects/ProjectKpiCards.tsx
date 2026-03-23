@@ -3,6 +3,7 @@
 import { Card, CardContent } from '@gate-access/ui';
 import { Users, Building, QrCode, ScrollText, ArrowUpRight, ArrowDownRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
 
 interface KpiMetric {
   label: string;
@@ -53,8 +54,14 @@ export function ProjectKpiCards({ metrics }: ProjectKpiCardsProps) {
 
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      {data.map((item) => (
-        <Card key={item.label} className="overflow-hidden rounded-2xl border-border bg-card shadow-sm transition-all hover:shadow-md">
+      {data.map((item, index) => (
+        <motion.div
+          key={item.label}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.35, delay: index * 0.07, ease: [0.4, 0, 0.2, 1] }}
+        >
+        <Card className="overflow-hidden rounded-2xl border-border bg-card shadow-sm transition-all hover:shadow-md">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
               <div className={cn(
@@ -86,6 +93,7 @@ export function ProjectKpiCards({ metrics }: ProjectKpiCardsProps) {
             </div>
           </CardContent>
         </Card>
+        </motion.div>
       ))}
     </div>
   );
