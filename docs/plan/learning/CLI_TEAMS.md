@@ -79,6 +79,22 @@ Teams are rated not only by **individual CLI power** but by **remix potential**:
 
 **Run:** `/clis team audit` — agent runs 1–2; if findings are hard enough, run 3 (Claude). Cursor does step 4.
 
+## Team D — Operations & Recovery (`ops`)
+**Rating:** Remix potential **High** — Root cause (Claude) + Broad log scan (Gemini) + Fix generation (Opencode).
+
+**Roster:** Claude (Root Cause), Gemini (Log Scanner), Opencode (Fix Gen).
+
+**Workflow:** Scan Logs → Analyze Root Cause → Generate Fix → Verify.
+
+| Step | Role              | CLI     | Action |
+|------|-------------------|---------|--------|
+| 1    | Log Scanner       | Gemini  | Scan GitHub Action or Vercel logs; identify error patterns; broad context. |
+| 2    | Root Cause Lead   | Claude  | Deep analysis of the error; identify why it failed (security, types, env). |
+| 3    | Fix Generator     | Opencode | Generate the minimal fix (code or config) to resolve the error. |
+| 4    | Repair & Verify   | Cursor  | Apply fix; run `pnpm preflight`; if green, trigger Auto-Sync. |
+
+**Run:** `/clis team ops` — agent runs 1–3; Cursor applies and verifies in step 4.
+
 ---
 
 ## 80% rule and logging
