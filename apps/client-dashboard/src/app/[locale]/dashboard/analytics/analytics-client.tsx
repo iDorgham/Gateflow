@@ -3,32 +3,124 @@
 import { useRef } from 'react';
 import { useParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
+import dynamic from 'next/dynamic';
+import { Skeleton } from '@gate-access/ui';
+
+const ChartSkeleton = () => <Skeleton className="h-full w-full rounded-2xl" />;
+
+const TotalVisitsChart = dynamic(
+  () =>
+    import('@/components/dashboard/analytics').then((m) => m.TotalVisitsChart),
+  { ssr: false, loading: ChartSkeleton }
+);
+const TopGatesChart = dynamic(
+  () => import('@/components/dashboard/analytics').then((m) => m.TopGatesChart),
+  { ssr: false, loading: ChartSkeleton }
+);
+const ScanOutcomeChart = dynamic(
+  () =>
+    import('@/components/dashboard/analytics').then((m) => m.ScanOutcomeChart),
+  { ssr: false, loading: ChartSkeleton }
+);
+const NewVsReturningChart = dynamic(
+  () =>
+    import('@/components/dashboard/analytics').then(
+      (m) => m.NewVsReturningChart
+    ),
+  { ssr: false, loading: ChartSkeleton }
+);
+const UnitTypesRankingChart = dynamic(
+  () =>
+    import('@/components/dashboard/analytics').then(
+      (m) => m.UnitTypesRankingChart
+    ),
+  { ssr: false, loading: ChartSkeleton }
+);
+const VisitorTypeChart = dynamic(
+  () =>
+    import('@/components/dashboard/analytics').then((m) => m.VisitorTypeChart),
+  { ssr: false, loading: ChartSkeleton }
+);
+const TopUnitsChart = dynamic(
+  () => import('@/components/dashboard/analytics').then((m) => m.TopUnitsChart),
+  { ssr: false, loading: ChartSkeleton }
+);
+const IncidentsChart = dynamic(
+  () =>
+    import('@/components/dashboard/analytics').then((m) => m.IncidentsChart),
+  { ssr: false, loading: ChartSkeleton }
+);
+const ResidentQuotaChart = dynamic(
+  () =>
+    import('@/components/dashboard/analytics').then(
+      (m) => m.ResidentQuotaChart
+    ),
+  { ssr: false, loading: ChartSkeleton }
+);
+const PeakDaysChart = dynamic(
+  () => import('@/components/dashboard/analytics').then((m) => m.PeakDaysChart),
+  { ssr: false, loading: ChartSkeleton }
+);
+const UTMAttributionChart = dynamic(
+  () =>
+    import('@/components/dashboard/analytics').then(
+      (m) => m.UTMAttributionChart
+    ),
+  { ssr: false, loading: ChartSkeleton }
+);
+const UTMMatrix = dynamic(
+  () => import('@/components/dashboard/analytics').then((m) => m.UTMMatrix),
+  { ssr: false, loading: ChartSkeleton }
+);
+const AnalyticsAnomalyCards = dynamic(
+  () =>
+    import('@/components/dashboard/analytics').then(
+      (m) => m.AnalyticsAnomalyCards
+    ),
+  { ssr: false, loading: ChartSkeleton }
+);
+const AnalyticsOperatorLeaderboard = dynamic(
+  () =>
+    import('@/components/dashboard/analytics').then(
+      (m) => m.AnalyticsOperatorLeaderboard
+    ),
+  { ssr: false, loading: ChartSkeleton }
+);
+const MarketingFunnel = dynamic(
+  () =>
+    import('@/components/dashboard/analytics').then((m) => m.MarketingFunnel),
+  { ssr: false, loading: ChartSkeleton }
+);
+const AnalyticsCampaignBarChart = dynamic(
+  () =>
+    import('@/components/dashboard/analytics').then(
+      (m) => m.AnalyticsCampaignBarChart
+    ),
+  { ssr: false, loading: ChartSkeleton }
+);
+const AnalyticsPersonaPie = dynamic(
+  () =>
+    import('@/components/dashboard/analytics').then(
+      (m) => m.AnalyticsPersonaPie
+    ),
+  { ssr: false, loading: ChartSkeleton }
+);
+const AnalyticsHeatmapChart = dynamic(
+  () =>
+    import('@/components/dashboard/analytics').then(
+      (m) => m.AnalyticsHeatmapChart
+    ),
+  { ssr: false, loading: ChartSkeleton }
+);
+
 import {
   AnalyticsFilterBar,
   AnalyticsModeToggle,
   AnalyticsKPICards,
   AnalyticsApplyFiltersButton,
-  AnalyticsHeatmapChart,
-  AnalyticsAnomalyCards,
-  AnalyticsOperatorLeaderboard,
-  MarketingFunnel,
-  AnalyticsCampaignBarChart,
-  AnalyticsPersonaPie,
   AnalyticsROIWidget,
   AnalyticsAudienceExportButton,
   AnalyticsPDFExportButton,
-  TotalVisitsChart,
-  TopGatesChart,
-  ScanOutcomeChart,
-  NewVsReturningChart,
-  UnitTypesRankingChart,
-  VisitorTypeChart,
-  TopUnitsChart,
-  IncidentsChart,
-  ResidentQuotaChart,
-  PeakDaysChart,
-  UTMAttributionChart,
-  UTMMatrix,
   type KPIData,
 } from '@/components/dashboard/analytics';
 import { useAnalyticsFilters, useAnalyticsSummary } from '@/lib/analytics';
@@ -82,12 +174,16 @@ export function AnalyticsClient({ kpiData, gates = [] }: AnalyticsClientProps) {
 
   return (
     <div className="space-y-6">
-
       {/* ── Page header ──────────────────────────────────────────────────────── */}
       <PageHeader
         title={t('analytics.title', 'Analytics')}
-        subtitle={t('analytics.subtitle', 'Track access patterns, security events, and visitor trends.')}
-        badge={<AnalyticsModeToggle mode={filters.mode} onModeChange={setMode} />}
+        subtitle={t(
+          'analytics.subtitle',
+          'Track access patterns, security events, and visitor trends.'
+        )}
+        badge={
+          <AnalyticsModeToggle mode={filters.mode} onModeChange={setMode} />
+        }
         actions={
           <>
             {!isSecurity && <AnalyticsAudienceExportButton filters={filters} />}
@@ -118,7 +214,9 @@ export function AnalyticsClient({ kpiData, gates = [] }: AnalyticsClientProps) {
         className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3"
       >
         {/* — Traffic overview — */}
-        <SectionHeader label={t('analytics.sectionOverview', 'Traffic Overview')} />
+        <SectionHeader
+          label={t('analytics.sectionOverview', 'Traffic Overview')}
+        />
 
         <div className="md:col-span-2 lg:col-span-3 min-h-[260px]" dir={dir}>
           <TotalVisitsChart filters={filters} />
@@ -127,10 +225,19 @@ export function AnalyticsClient({ kpiData, gates = [] }: AnalyticsClientProps) {
         {/* — Mode-specific charts — */}
         {isSecurity ? (
           <>
-            <SectionHeader label={t('analytics.sectionSecurity', 'Security & Operations')} />
+            <SectionHeader
+              label={t('analytics.sectionSecurity', 'Security & Operations')}
+            />
 
-            <div className="md:col-span-2 lg:col-span-3 min-h-[320px]" dir={dir}>
-              <AnalyticsHeatmapChart filters={filters} locale={locale} className="min-h-[320px]" />
+            <div
+              className="md:col-span-2 lg:col-span-3 min-h-[320px]"
+              dir={dir}
+            >
+              <AnalyticsHeatmapChart
+                filters={filters}
+                locale={locale}
+                className="min-h-[320px]"
+              />
             </div>
             <div className="min-h-[280px]" dir={dir}>
               <TopGatesChart filters={filters} />
@@ -139,17 +246,28 @@ export function AnalyticsClient({ kpiData, gates = [] }: AnalyticsClientProps) {
               <ScanOutcomeChart filters={filters} />
             </div>
             <div className="min-h-[280px]" dir={dir}>
-              <AnalyticsOperatorLeaderboard filters={filters} className="min-h-[280px]" />
+              <AnalyticsOperatorLeaderboard
+                filters={filters}
+                className="min-h-[280px]"
+              />
             </div>
           </>
         ) : (
           <>
-            <SectionHeader label={t('analytics.sectionMarketing', 'Marketing Performance')} />
+            <SectionHeader
+              label={t('analytics.sectionMarketing', 'Marketing Performance')}
+            />
 
-            <div className="md:col-span-2 lg:col-span-3 min-h-[400px]" dir="ltr">
+            <div
+              className="md:col-span-2 lg:col-span-3 min-h-[400px]"
+              dir="ltr"
+            >
               <MarketingFunnel filters={filters} className="min-h-[400px]" />
             </div>
-            <div className="md:col-span-2 lg:col-span-3 min-h-[400px]" dir={dir}>
+            <div
+              className="md:col-span-2 lg:col-span-3 min-h-[400px]"
+              dir={dir}
+            >
               <UTMMatrix filters={filters} />
             </div>
             <div className="min-h-[280px]" dir={dir}>
@@ -159,7 +277,10 @@ export function AnalyticsClient({ kpiData, gates = [] }: AnalyticsClientProps) {
               <ScanOutcomeChart filters={filters} />
             </div>
             <div className="space-y-4 min-h-[200px]" dir={dir}>
-              <AnalyticsCampaignBarChart filters={filters} className="min-h-[200px]" />
+              <AnalyticsCampaignBarChart
+                filters={filters}
+                className="min-h-[200px]"
+              />
               <AnalyticsROIWidget attributedScans={attributedScans} />
             </div>
             <div className="col-span-full min-h-[200px]" dir={dir}>
@@ -169,7 +290,9 @@ export function AnalyticsClient({ kpiData, gates = [] }: AnalyticsClientProps) {
         )}
 
         {/* — Visitor insights — */}
-        <SectionHeader label={t('analytics.sectionVisitors', 'Visitor Insights')} />
+        <SectionHeader
+          label={t('analytics.sectionVisitors', 'Visitor Insights')}
+        />
 
         <div className="md:col-span-2 lg:col-span-3 min-h-[280px]" dir={dir}>
           <NewVsReturningChart filters={filters} />
@@ -185,7 +308,9 @@ export function AnalyticsClient({ kpiData, gates = [] }: AnalyticsClientProps) {
         </div>
 
         {/* — Operations & compliance — */}
-        <SectionHeader label={t('analytics.sectionOperations', 'Operations & Compliance')} />
+        <SectionHeader
+          label={t('analytics.sectionOperations', 'Operations & Compliance')}
+        />
 
         <div className="min-h-[280px]" dir={dir}>
           <IncidentsChart filters={filters} groupBy="gate" />
@@ -203,7 +328,10 @@ export function AnalyticsClient({ kpiData, gates = [] }: AnalyticsClientProps) {
 
       {/* ── Footer export row ─────────────────────────────────────────────────── */}
       <div className="flex flex-wrap items-center justify-end gap-2 border-t border-border pt-5">
-        <AnalyticsAudienceExportButton filters={filters} labelKey="analytics.exportCsv" />
+        <AnalyticsAudienceExportButton
+          filters={filters}
+          labelKey="analytics.exportCsv"
+        />
         <AnalyticsPDFExportButton filters={filters} locale={locale} />
       </div>
 
