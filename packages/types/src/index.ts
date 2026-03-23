@@ -8,3 +8,4 @@ export * from './qr-payload';
 export * from './qr-signing';
 export * from './qr-validate';
 export * from './auth';
+export * from './crm';
