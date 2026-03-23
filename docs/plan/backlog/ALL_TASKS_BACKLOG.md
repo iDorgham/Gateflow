@@ -4,6 +4,16 @@
 
 ## Open Initiatives
 
+### test_feature — Test Feature
+
+**Status:** 🆕 Open
+
+**Target:** Q4 2026
+
+- [ ] Phase 1 — Title
+- [ ] Phase 2 — Title
+- [ ] Phase 3 — Title
+
 
 ### resident_mobile_one_tap — Resident Mobile Mastery (v2.0)
 

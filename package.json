@@ -20,7 +20,13 @@
     "dev:scanner": "turbo dev --filter=scanner-app",
     "dev:marketing": "turbo dev --filter=marketing",
     "sync": "bash scripts/sync-ai-tools.sh",
-    "sync:watch": "node scripts/watch-sync.mjs"
+    "sync:watch": "node scripts/watch-sync.mjs",
+    "plan:new": "node scripts/ralph-plan.js new",
+    "plan:ready": "node scripts/ralph-plan.js ready",
+    "plan:start": "node scripts/ralph-plan.js start",
+    "plan:done": "node scripts/ralph-plan.js done",
+    "plan:status": "node scripts/ralph-plan.js status",
+    "plan:run": "node scripts/ralph-run.js"
   },
   "devDependencies": {
     "@gate-access/config": "workspace:*",
