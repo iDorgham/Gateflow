@@ -49,6 +49,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Features
 
+- **[Security] **implement hmac-sha256 signature utility for invites
+
 - **[Pagespeed] **complete phase 4 - virtualization & bundle optimization
 
 - **[Pagespeed 100] **optimize analytics bundle with dynamic chart imports
