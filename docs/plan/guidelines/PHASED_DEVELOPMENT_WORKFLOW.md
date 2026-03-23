@@ -1,6 +1,6 @@
-# GateFlow — Phased Development Workflow (v2.0)
+# GateFlow — Phased Development Workflow (v3.0)
 
-**Purpose:** Comprehensive framework for phased development, featuring the **Ralph Loop** for self-correction and the **Recursive Autopilot** (/dev ralph) for hands-off execution.
+**Purpose:** Comprehensive framework for phased development, featuring the **Ralph Loop** for self-correction, **Recursive Autopilot** (/dev ralph) for hands-off execution, and **Full-Cycle Automation** (Auto-Sync, PR Orchestration, Backlog Sync).
 
 ---
 
