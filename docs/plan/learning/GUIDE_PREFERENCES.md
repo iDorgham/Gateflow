@@ -28,6 +28,7 @@ When you say things like "I prefer short answers" or "always give me copy-paste 
 ## Recurring needs (learned from our conversations)
 
 - **Copy-paste prompts:** When the user asks for a "professional prompt" or "prompt to copy," point to `docs/plan/execution/PROMPTS_REFERENCE.md` and say exactly which line to start copying from (e.g. "Copy from the line **Request:**").
+- **Zero-Friction GitHub Automation:** Always perform a full Git cycle (`add`, `commit`, `pull --rebase`, `push`) after completing an `/idea`, `/plan`, or `/dev` phase. No manual confirmation needed if the state is green.
 - *(Add more below as you discover what you want the guide to always do.)*
   - Example: "When discussing /plan for security initiatives, remind to load gf-security and reference CONTRACTS.md in phase prompts."
 
