@@ -17,7 +17,7 @@
     "@expo/vector-icons": "^15.1.1",
     "@gate-access/ui": "workspace:*",
     "@react-native-async-storage/async-storage": "2.2.0",
-    "ai": "^4.3.19",
+    "ai": "^5.0.52",
     "expo": "~54.0.33",
     "expo-contacts": "^55.0.8",
     "expo-device": "~8.0.10",
