@@ -1,0 +1,14 @@
+{
+  "sharing": {
+    "inviteGuest": "Hello! Here is your visitor pass for my unit at GateFlow: {{url}}\nThis link is valid for 24 hours.",
+    "inviteGuestAr": "مرحباً! إليك تصريح الزيارة الخاص بك لوحدتي في GateFlow: {{url}}\nهذا الرابط صالح لمدة 24 ساعة."
+  },
+  "expressInvite": {
+    "title": "One-Tap Invite",
+    "subtitle": "Share a secure link immediately",
+    "buttonLabel": "Generate Link",
+    "sharingLabel": "Sharing...",
+    "error": "Failed to generate link. Please try again.",
+    "recentGuests": "Recent Guests"
+  }
+}

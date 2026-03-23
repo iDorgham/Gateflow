@@ -16,6 +16,7 @@ import {
   type CachedVisitor,
 } from '../../../lib/qr-cache';
 import { theme } from '../../../lib/theme';
+import { ExpressInviteWidget } from '../../../components/dashboard/ExpressInviteWidget';
 
 const { colors, spacing, borderRadius, shadows, typography } = theme;
 
@@ -123,6 +124,11 @@ export default function QRsScreen() {
                 Create passes in the resident portal to see them here.
               </Text>
             </View>
+          }
+          ListHeaderComponent={
+            <ExpressInviteWidget
+              onSuccess={() => fetchList(true)} // Refresh list to show new express invite
+            />
           }
           renderItem={({ item }) => (
             <Pressable
@@ -233,5 +239,3 @@ const styles = StyleSheet.create({
     color: colors.primaryForeground,
   },
 });
-
-
