@@ -38,6 +38,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Performance
 
+- **[Cert] **phase 5 certification infra — regression guide + final LHCI thresholds
+
 - **[Assets] **font display:swap + image allowlist + avif/webp + dvh + preconnect — phase 2
 - **[Ci] **establish lighthouse ci pipeline and performance baseline — phase 1
 
