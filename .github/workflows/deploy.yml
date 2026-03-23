@@ -44,6 +44,7 @@ concurrency:
 
 env:
   PNPM_VERSION: '8.15.0'
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
 jobs:
   # ── Build check before deploy ─────────────────────────────────────────────
@@ -59,7 +60,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'pnpm'
 
       - name: Install dependencies
@@ -85,8 +86,8 @@ jobs:
       github.event.inputs.app == '' ||
       github.event.inputs.app == 'client-dashboard'
     environment:
-      name: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' ? 'production' : 'preview' }}
-      url: ${{ steps.deploy.outputs.url }}
+      name: "${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' ? 'production' : 'preview' }}"
+      url: '${{ steps.deploy.outputs.url }}'
     steps:
       - uses: actions/checkout@v4
 
@@ -96,7 +97,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'pnpm'
 
       - name: Install Vercel CLI
@@ -116,7 +117,7 @@ jobs:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_CLIENT_DASHBOARD }}
 
       - name: Build for Vercel
-        run: vercel build ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' ? '--prod' : '' }} --token=${{ secrets.VERCEL_TOKEN }}
+        run: "vercel build ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' ? '--prod' : '' }} --token=${{ secrets.VERCEL_TOKEN }}"
         working-directory: apps/client-dashboard
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -144,8 +145,8 @@ jobs:
       github.event.inputs.app == '' ||
       github.event.inputs.app == 'admin-dashboard'
     environment:
-      name: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' ? 'production' : 'preview' }}
-      url: ${{ steps.deploy.outputs.url }}
+      name: "${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' ? 'production' : 'preview' }}"
+      url: '${{ steps.deploy.outputs.url }}'
     steps:
       - uses: actions/checkout@v4
 
@@ -155,7 +156,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'pnpm'
 
       - name: Install Vercel CLI
@@ -175,7 +176,7 @@ jobs:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_ADMIN_DASHBOARD }}
 
       - name: Build for Vercel
-        run: vercel build ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' ? '--prod' : '' }} --token=${{ secrets.VERCEL_TOKEN }}
+        run: "vercel build ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' ? '--prod' : '' }} --token=${{ secrets.VERCEL_TOKEN }}"
         working-directory: apps/admin-dashboard
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -203,8 +204,8 @@ jobs:
       github.event.inputs.app == '' ||
       github.event.inputs.app == 'marketing'
     environment:
-      name: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' ? 'production' : 'preview' }}
-      url: ${{ steps.deploy.outputs.url }}
+      name: "${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' ? 'production' : 'preview' }}"
+      url: '${{ steps.deploy.outputs.url }}'
     steps:
       - uses: actions/checkout@v4
 
@@ -214,7 +215,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'pnpm'
 
       - name: Install Vercel CLI
@@ -234,7 +235,7 @@ jobs:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_MARKETING }}
 
       - name: Build for Vercel
-        run: vercel build ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' ? '--prod' : '' }} --token=${{ secrets.VERCEL_TOKEN }}
+        run: "vercel build ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' ? '--prod' : '' }} --token=${{ secrets.VERCEL_TOKEN }}"
         working-directory: apps/marketing
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -262,8 +263,8 @@ jobs:
       github.event.inputs.app == '' ||
       github.event.inputs.app == 'resident-portal'
     environment:
-      name: ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' ? 'production' : 'preview' }}
-      url: ${{ steps.deploy.outputs.url }}
+      name: "${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' ? 'production' : 'preview' }}"
+      url: '${{ steps.deploy.outputs.url }}'
     steps:
       - uses: actions/checkout@v4
 
@@ -273,7 +274,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'pnpm'
 
       - name: Install Vercel CLI
@@ -293,7 +294,7 @@ jobs:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_RESIDENT_PORTAL }}
 
       - name: Build for Vercel
-        run: vercel build ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' ? '--prod' : '' }} --token=${{ secrets.VERCEL_TOKEN }}
+        run: "vercel build ${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' ? '--prod' : '' }} --token=${{ secrets.VERCEL_TOKEN }}"
         working-directory: apps/resident-portal
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}

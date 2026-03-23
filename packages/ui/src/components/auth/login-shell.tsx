@@ -5,9 +5,11 @@ import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { ShieldCheck, Shield } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
-const SPRING_BALANCED = { type: 'spring' as const, stiffness: 160, damping: 24 };
-const SIDEBAR_WIDTH = 96;
-const STAGGER = 0.07;
+const SPRING_BALANCED = {
+  type: 'spring' as const,
+  stiffness: 160,
+  damping: 24,
+};
 
 /* ─── Design tokens (Atlassian inspired) ─────────────────────────────────── */
 const T = {
@@ -16,7 +18,8 @@ const T = {
   surface: 'hsl(var(--background))',
   border: 'hsl(var(--border))',
   muted: 'hsl(var(--muted-foreground))',
-  cardShadow: '0 8px 16px -4px rgba(9, 30, 66, 0.25), 0 0 1px rgba(9, 30, 66, 0.31)',
+  cardShadow:
+    '0 8px 16px -4px rgba(9, 30, 66, 0.25), 0 0 1px rgba(9, 30, 66, 0.31)',
 } as const;
 
 /* ─── Keyframes injected once ────────────────────────────────────────────── */
@@ -42,10 +45,8 @@ export interface LoginShellProps {
   subtitle?: string;
   children: React.ReactNode;
   topRight?: React.ReactNode;
-  footerExtra?: React.ReactNode;
   errorKey?: number;
   isSuccess?: boolean;
-  successIcons?: React.ReactNode;
 }
 
 const DEFAULT_CLIENT_HEADING = 'Sign in to continue';
@@ -62,28 +63,21 @@ export function LoginShell({
   subtitle,
   children,
   topRight,
-  footerExtra,
   errorKey = 0,
   isSuccess = false,
-  successIcons,
 }: LoginShellProps) {
   const isAdmin = variant === 'admin';
   const displayName = appName ?? (isAdmin ? 'Admin' : 'GateFlow');
-  const displayHeading = heading ?? (isAdmin ? DEFAULT_ADMIN_HEADING : DEFAULT_CLIENT_HEADING);
-  const displaySubtitle = subtitle ?? (isAdmin ? DEFAULT_ADMIN_SUBTITLE : DEFAULT_CLIENT_SUBTITLE);
+  const displayHeading =
+    heading ?? (isAdmin ? DEFAULT_ADMIN_HEADING : DEFAULT_CLIENT_HEADING);
+  const displaySubtitle =
+    subtitle ?? (isAdmin ? DEFAULT_ADMIN_SUBTITLE : DEFAULT_CLIENT_SUBTITLE);
   const reduceMotion = useReducedMotion();
   const [shaking, setShaking] = React.useState(false);
   const [mounted, setMounted] = React.useState(false);
-  const [dir, setDir] = React.useState<'ltr' | 'rtl'>('ltr');
 
   React.useEffect(() => {
     setMounted(true);
-    setDir(
-      typeof document !== 'undefined' &&
-        document.documentElement.getAttribute('dir') === 'rtl'
-        ? 'rtl'
-        : 'ltr'
-    );
   }, []);
 
   React.useEffect(() => {
@@ -127,9 +121,13 @@ export function LoginShell({
                   opacity: isSuccess ? 0.8 : 1,
                 }}
               >
-                {isAdmin ? <Shield className="h-7 w-7" /> : <ShieldCheck className="h-8 w-8" />}
+                {isAdmin ? (
+                  <Shield className="h-7 w-7" />
+                ) : (
+                  <ShieldCheck className="h-8 w-8" />
+                )}
               </motion.div>
-              
+
               <h1 className="text-2xl font-semibold tracking-tight text-[var(--ds-text)]">
                 {displayHeading}
               </h1>
@@ -161,7 +159,9 @@ export function LoginShell({
                     <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-500/10 text-green-500">
                       <ShieldCheck className="h-10 w-10" />
                     </div>
-                    <p className="mt-4 font-medium text-[#172B4D] dark:text-[#E3E9F0]">Authenticated Successfully</p>
+                    <p className="mt-4 font-medium text-[#172B4D] dark:text-[#E3E9F0]">
+                      Authenticated Successfully
+                    </p>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -170,7 +170,8 @@ export function LoginShell({
 
           {/* Footer Copyright */}
           <div className="mt-8 text-center text-[12px] text-[var(--ds-text-subtlest)]">
-            © {new Date().getFullYear()} {displayName} • Secure Infrastructure Access
+            © {new Date().getFullYear()} {displayName} • Secure Infrastructure
+            Access
           </div>
         </motion.main>
 
@@ -178,7 +179,9 @@ export function LoginShell({
         <div
           className={cn(
             'fixed top-6 end-6 z-[110] transition-opacity duration-300',
-            mounted && !isSuccess ? 'opacity-100' : 'opacity-0 pointer-events-none'
+            mounted && !isSuccess
+              ? 'opacity-100'
+              : 'opacity-0 pointer-events-none'
           )}
         >
           {topRight}

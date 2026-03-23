@@ -1,7 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import { cn } from '../../lib/utils';
 import { Button } from '../ui/button';
 import {
   DropdownMenu,
@@ -26,18 +25,24 @@ export interface AtlassianNavigationProps {
   logo: React.ReactNode;
   primaryItems: NavItem[];
   actions?: React.ReactNode;
-  locale?: string;
   onSearchClick?: () => void;
-  renderLink?: (props: { href: string; children: React.ReactNode; className?: string }) => React.ReactNode;
+  renderLink?: (props: {
+    href: string;
+    children: React.ReactNode;
+    className?: string;
+  }) => React.ReactNode;
 }
 
 export function AtlassianNavigation({
   logo,
   primaryItems,
   actions,
-  locale = 'en',
   onSearchClick,
-  renderLink = ({ href, children, className }) => <a href={href} className={className}>{children}</a>,
+  renderLink = ({ href, children, className }) => (
+    <a href={href} className={className}>
+      {children}
+    </a>
+  ),
 }: AtlassianNavigationProps) {
   return (
     <header className="sticky top-0 z-50 w-full bg-[var(--ds-background-default,#FFFFFF)] border-b border-[var(--ds-border,#DFE1E6)] h-14 flex items-center px-4">
@@ -60,7 +65,10 @@ export function AtlassianNavigation({
                       className="h-9 px-3 gap-1 hover:text-[var(--ds-text-brand,#0052CC)] group"
                     >
                       {item.label}
-                      <ChevronDown size={14} className="opacity-60 group-hover:opacity-100 transition-opacity" />
+                      <ChevronDown
+                        size={14}
+                        className="opacity-60 group-hover:opacity-100 transition-opacity"
+                      />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="start" className="w-72 p-2">
@@ -68,7 +76,7 @@ export function AtlassianNavigation({
                       <DropdownMenuItem key={subIndex} asChild className="p-0">
                         {renderLink({
                           href: subItem.href,
-                          className: "flex items-start gap-3 p-3 w-full",
+                          className: 'flex items-start gap-3 p-3 w-full',
                           children: (
                             <>
                               {subItem.icon && (
@@ -77,7 +85,9 @@ export function AtlassianNavigation({
                                 </div>
                               )}
                               <div className="flex flex-col">
-                                <span className="text-sm font-semibold">{subItem.label}</span>
+                                <span className="text-sm font-semibold">
+                                  {subItem.label}
+                                </span>
                                 {subItem.description && (
                                   <span className="text-xs text-[var(--ds-text-subtlest,#6B778C)] leading-tight mt-0.5">
                                     {subItem.description}
@@ -85,7 +95,7 @@ export function AtlassianNavigation({
                                 )}
                               </div>
                             </>
-                          )
+                          ),
                         })}
                       </DropdownMenuItem>
                     ))}
@@ -94,8 +104,9 @@ export function AtlassianNavigation({
               ) : (
                 renderLink({
                   href: item.href || '#',
-                  className: "px-3 py-1.5 text-sm font-medium text-[var(--ds-text-subtle,#42526E)] hover:text-[var(--ds-text-brand,#0052CC)] hover:bg-[var(--ds-background-subtle,#F4F5F7)] rounded-sm transition-colors",
-                  children: item.label
+                  className:
+                    'px-3 py-1.5 text-sm font-medium text-[var(--ds-text-subtle,#42526E)] hover:text-[var(--ds-text-brand,#0052CC)] hover:bg-[var(--ds-background-subtle,#F4F5F7)] rounded-sm transition-colors',
+                  children: item.label,
                 })
               )}
             </div>
@@ -114,24 +125,37 @@ export function AtlassianNavigation({
         >
           <Search size={18} />
         </Button>
- 
+
         {/* Global Actions (Settings, Help, etc) */}
         <div className="hidden sm:flex items-center gap-1">
-          <Button variant="subtle" size="icon" className="h-9 w-9 text-[var(--ds-icon-subtle,#6B778C)]" aria-label="Help">
+          <Button
+            variant="subtle"
+            size="icon"
+            className="h-9 w-9 text-[var(--ds-icon-subtle,#6B778C)]"
+            aria-label="Help"
+          >
             <HelpCircle size={18} />
           </Button>
-          <Button variant="subtle" size="icon" className="h-9 w-9 text-[var(--ds-icon-subtle,#6B778C)]" aria-label="Settings">
+          <Button
+            variant="subtle"
+            size="icon"
+            className="h-9 w-9 text-[var(--ds-icon-subtle,#6B778C)]"
+            aria-label="Settings"
+          >
             <Settings size={18} />
           </Button>
         </div>
- 
+
         {/* Auth Actions */}
-        <div className="flex items-center gap-2 ms-2">
-          {actions}
-        </div>
- 
+        <div className="flex items-center gap-2 ms-2">{actions}</div>
+
         {/* Mobile Menu */}
-        <Button variant="subtle" size="icon" className="lg:hidden h-9 w-9" aria-label="Menu">
+        <Button
+          variant="subtle"
+          size="icon"
+          className="lg:hidden h-9 w-9"
+          aria-label="Menu"
+        >
           <Menu size={20} />
         </Button>
       </div>

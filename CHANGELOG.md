@@ -43,11 +43,18 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 - **[Assets] **font display:swap + image allowlist + avif/webp + dvh + preconnect — phase 2
 - **[Ci] **establish lighthouse ci pipeline and performance baseline — phase 1
 
+### Bug Fixes
+
+- **[Db]** add missing nanoid dependency for qr queries
+- **[Ci]** update Node.js to 22 and opt into Node.js 24 for all workflows
+
 ---
 
 ## [0.1.0] — 2026-03-23
 
 ### Features
+
+- **[Resident-Mobile] **finalize phase 5 - i18n, GateAI pre-clearance, and security audit
 
 - **[Resident-Mobile] **complete one-tap invite initiative (phases 1-5)
 

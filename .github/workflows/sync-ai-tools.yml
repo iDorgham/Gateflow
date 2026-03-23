@@ -28,6 +28,9 @@ on:
 permissions:
   contents: write
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
 jobs:
   sync:
     runs-on: ubuntu-latest
@@ -63,13 +66,13 @@ jobs:
           # Create log if it doesn't exist
           if [ ! -f "$LOG" ]; then
             cat > "$LOG" <<'HEADER'
-# AI Tools Sync Log
+          # AI Tools Sync Log
 
-Auto-updated by GitHub Actions when `.agents/` changes.
+          Auto-updated by GitHub Actions when `.agents/` changes.
 
-| Timestamp | Commit | Tool | Files Changed |
-|-----------|--------|------|---------------|
-HEADER
+          | Timestamp | Commit | Tool | Files Changed |
+          |-----------|--------|------|---------------|
+          HEADER
           fi
 
           # Append new entry
@@ -88,7 +91,7 @@ HEADER
           else
             git commit -m "chore(ai-tools): update sync log [skip ci]
 
-Triggered by: ${{ github.event_name }}
-Source commit: ${{ github.sha }}"
+            Triggered by: ${{ github.event_name }}
+            Source commit: ${{ github.sha }}"
             git push
           fi
