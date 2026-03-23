@@ -3,10 +3,9 @@ import { hasPermission } from '@/lib/auth';
 import { Locale } from '@/lib/i18n';
 import { prisma } from '@gate-access/db';
 import { redirect, notFound } from 'next/navigation';
-import Link from 'next/link';
-import Image from 'next/image';
-import { MapPin } from 'lucide-react';
 import { ProjectDetailContent } from '@/components/dashboard/project-detail/ProjectDetailContent';
+import { ProjectHero } from '@/components/projects/ProjectHero';
+import { ProjectKpiCards } from '@/components/projects/ProjectKpiCards';
 
 export async function generateMetadata({
   params,
@@ -136,101 +135,48 @@ export default async function ProjectDetailPage({
   ) as { id: string; name: string | null; email: string }[];
 
   const canManageGates = hasPermission(claims, 'gates:manage');
-  const coverUrl = project.coverUrl;
-  const hasValidCover = coverUrl && coverUrl.startsWith('https://');
 
   return (
-    <div className="space-y-0 -mx-4 md:-mx-8 -mt-4 md:-mt-8">
-      {/* Hero Header */}
-      <section className="relative h-64 sm:h-72 md:h-80 w-full overflow-hidden">
-        {hasValidCover ? (
-          <Image
-            src={coverUrl}
-            alt=""
-            fill
-            className="object-cover"
-            sizes="100vw"
-            priority
-          />
-        ) : (
-          <div
-            className="absolute inset-0 bg-gradient-to-br from-slate-900 via-zinc-900 to-black"
-            aria-hidden
-          />
-        )}
-        <div
-          className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"
-          aria-hidden
-        />
-        
-        {/* Overlay Content */}
-        <div className="absolute inset-0 flex flex-col justify-end px-8 pb-10">
-          <div className="flex flex-col gap-6">
-            <div className="flex items-center gap-6">
-              {project.logoUrl && (
-                <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-xl border-4 border-white/20 bg-white/10 backdrop-blur-md shadow-2xl">
-                  <Image
-                    src={project.logoUrl}
-                    alt={`${project.name} logo`}
-                    fill
-                    className="object-contain p-2"
-                  />
-                </div>
-              )}
-              <div className="flex flex-col">
-                <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white drop-shadow-md tracking-tight">
-                  {project.name}
-                </h1>
-                {project.location && (
-                  <div className="mt-2 flex items-center gap-2 text-white/80">
-                    <MapPin className="h-4 w-4 shrink-0" aria-hidden />
-                    <span className="text-sm font-semibold uppercase tracking-wider">{project.location}</span>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+    <div className="space-y-8">
+      {/* Project Command Center Hero */}
+      <ProjectHero project={project} />
 
-      {/* Page Content with Breadcrumbs */}
-      <div className="px-8 -mt-6 relative z-10">
-        <div className="flex items-center gap-2 mb-6">
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-white/90 dark:bg-zinc-900/90 backdrop-blur-sm border border-zinc-200 dark:border-zinc-800 rounded-full shadow-sm text-[11px] font-bold uppercase tracking-widest text-zinc-600 dark:text-zinc-400">
-            <Link href={`/${locale}/dashboard`} className="hover:text-primary transition-colors">Dashboard</Link>
-            <span className="text-zinc-300 dark:text-zinc-700">/</span>
-            <Link href={`/${locale}/dashboard/projects`} className="hover:text-primary transition-colors">Projects</Link>
-            <span className="text-zinc-300 dark:text-zinc-700">/</span>
-            <span className="text-zinc-900 dark:text-white">{project.name}</span>
-          </div>
-        </div>
+      {/* Primary KPI Metrics */}
+      <ProjectKpiCards 
+        metrics={{
+          contactsCount: contacts.length,
+          unitsCount: units.length,
+          activeQrs: project.qrCodes.length,
+          scanVolume: scans7d,
+          scanGrowth: 0, // Fallback for now, can be calculated or fetched from new helper
+        }} 
+      />
 
-        <ProjectDetailContent
-          project={{
-            id: project.id,
-            name: project.name,
-            description: project.description,
-            location: project.location,
-            logoUrl: project.logoUrl,
-            coverUrl: project.coverUrl,
-            website: project.website,
-            externalUrl: project.externalUrl,
-            galleryJson: project.galleryJson as string[] | null,
-            gateMode: project.gateMode,
-          }}
-          gates={project.gates}
-          units={units}
-          contacts={contacts}
-          aggregates={{
-              ...aggregates,
-              unitTypes: Array.from(new Set(units.map(u => u.type))),
-          }}
-          teamUsers={teamUsers}
-          recentLogs={recentLogs}
-          locale={locale}
-          canManageGates={canManageGates}
-        />
-      </div>
+      <ProjectDetailContent
+        project={{
+          id: project.id,
+          name: project.name,
+          description: project.description,
+          location: project.location,
+          logoUrl: project.logoUrl,
+          coverUrl: project.coverUrl,
+          website: project.website,
+          externalUrl: project.externalUrl,
+          galleryJson: project.galleryJson as string[] | null,
+          gateMode: project.gateMode,
+        }}
+        gates={project.gates}
+        units={units}
+        contacts={contacts}
+        aggregates={{
+            ...aggregates,
+            unitTypes: Array.from(new Set(units.map(u => u.type))),
+        }}
+        teamUsers={teamUsers}
+        recentLogs={recentLogs}
+        locale={locale}
+        canManageGates={canManageGates}
+      />
     </div>
   );
 }

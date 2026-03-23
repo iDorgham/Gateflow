@@ -1,0 +1,8 @@
+description = "Execute all remaining phases of a plan sequentially"
+prompt = """
+Ship a complete plan by executing all phases sequentially.
+
+@{.antigravity/workflows/ship.md}
+
+User input: {{args}}
+"""

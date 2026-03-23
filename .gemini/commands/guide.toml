@@ -1,0 +1,8 @@
+description = "Run the GateFlow workspace guide — what should I do now?"
+prompt = """
+Run the workspace guide to assess state and provide next steps.
+
+@{.antigravity/workflows/guide.md}
+
+User input: {{args}}
+"""

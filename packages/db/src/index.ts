@@ -4,9 +4,6 @@ export { db } from './client';
 export { default as prismaClient } from './client';
 export * from './quota';
 export * from './access';
-export {
-  setOrganizationContext,
-  getOrganizationContext,
-  clearOrganizationContext,
-} from './tenant';
+export * from './tenant';
+export * from './queries/projects';
 export type { OrganizationContext, DbClient } from './tenant';

@@ -1,0 +1,8 @@
+description = "Turn an IDEA into a phased PLAN with PROMPT_phase pro prompts"
+prompt = """
+Follow the workflow defined in the plan workflow to create or update a phased plan from an idea.
+
+@{.antigravity/workflows/plan.md}
+
+User input: {{args}}
+"""

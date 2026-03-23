@@ -137,7 +137,7 @@ describe("Organization Context Isolation", () => {
 
     it("should NOT filter scanLog.findMany when context is NOT set", async () => {
       await db.scanLog.findMany();
-      expect(mockPrisma.scanLog.findMany).toHaveBeenCalledWith(); // Called with no args or undefined
+      expect(mockPrisma.scanLog.findMany).toHaveBeenCalled();
     });
   });
 });

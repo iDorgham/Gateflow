@@ -27,28 +27,28 @@
     --ds-border-radius-lg: 12px;
 
     /* ── Background Tokens — Light ──────────────────── */
-    --ds-background-default: #FFFFFF;
-    --ds-background-subtle: #091E420F;
-    --ds-background-neutral: #091E420F;
-    --ds-background-neutral-subtle: #091E4205;
-    --ds-background-neutral-hovered: #091E4224;
-    --ds-background-selected: #E9F2FF;
+    --ds-background-default: #F2F3F4; /* Anti-Flash White */
+    --ds-background-subtle: #EBEAED;   /* Lace Cap */
+    --ds-background-neutral: #EBEAED;
+    --ds-background-neutral-subtle: #EBEAED80;
+    --ds-background-neutral-hovered: #DEDEE0;
+    --ds-background-selected: #EBEAED;
     --ds-background-card: #FFFFFF;
-    --ds-background-brand-bold: #0C66E4;
-    --ds-background-brand-subtle: #E9F2FF;
+    --ds-background-brand-bold: #ED4B00; /* Kimchi Orange */
+    --ds-background-brand-subtle: #F2F3F4;
     --ds-background-danger-bold: #CA3521;
     --ds-background-danger-subtle: #FFEBE6;
     --ds-background-warning-bold: #E56910;
     --ds-background-warning-subtle: #FFF7D6;
     --ds-background-success-bold: #1F845A;
     --ds-background-success-subtle: #E3FCEF;
-    --ds-background-information-bold: #0C66E4;
-    --ds-background-information-subtle: #E9F2FF;
+    --ds-background-information-bold: #02066F; /* Dark Royalty */
+    --ds-background-information-subtle: #EBEAED;
     --ds-background-input: #FFFFFF;
 
     /* ── Elevation Surfaces — Light ─────────────────── */
-    --ds-surface: #FFFFFF;
-    --ds-surface-sunken: #091E420F;
+    --ds-surface: #F2F3F4;
+    --ds-surface-sunken: #EBEAED;
     --ds-surface-raised: #FFFFFF;
     --ds-surface-overlay: #FFFFFF;
 
@@ -103,13 +103,13 @@
     --ds-space-600: 48px;
 
     /* ── Shadcn/UI mapping (Real Estate Palette base) ── */
-    --background: 210 5% 96%; /* #F2F3F4 */
-    --foreground: 235 94% 11%; /* #020035 */
+    --background: 210 5% 96%; /* #F2F3F4 (Anti-Flash White) */
+    --foreground: 235 94% 11%; /* #020035 (Midnight Blue) */
     --card: 0 0% 100%;
     --card-foreground: 235 94% 11%;
     --popover: 0 0% 100%;
     --popover-foreground: 235 94% 11%;
-    --primary: 19 100% 46%; /* Kimchi */
+    --primary: 19 100% 46%; /* Kimchi Orange */
     --primary-foreground: 0 0% 100%;
     --secondary: 260 7% 93%; /* Lace Cap */
     --secondary-foreground: 235 94% 11%;
@@ -123,63 +123,65 @@
     --input: 260 7% 88%;
     --ring: 19 100% 46%;
     --radius: 8px;
-    --sidebar: 210 5% 96%;
-    --sidebar-foreground: 235 94% 11%;
-    --sidebar-primary: 19 100% 46%;
+
+    /* Sidebar — Professional Midnight Theme (even in light mode) */
+    --sidebar: 235 94% 11%; /* Midnight Blue */
+    --sidebar-foreground: 210 5% 96%; /* Anti-Flash White */
+    --sidebar-primary: 19 100% 46%; /* Kimchi Orange */
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 260 7% 93%;
-    --sidebar-accent-foreground: 235 94% 11%;
-    --sidebar-border: 260 7% 88%;
+    --sidebar-accent: 234 96% 23%; /* Dark Royalty */
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 234 96% 20%;
     --sidebar-ring: 19 100% 46%;
   }
 
   .dark {
-    /* ── User Specified Dark Gray ───────────────────── */
-    --background: 210 5% 10%; /* #18191a */
-    --foreground: 210 20% 98%; /* #FAFBFC */
-    --card: 240 4% 13%;       /* #1f1f21 */
-    --card-foreground: 210 20% 98%;
-    --popover: 240 4% 16%;    /* Slightly lighter than card */
-    --popover-foreground: 210 20% 98%;
+    /* ── Professional Midnight Dark Theme ────────────── */
+    --background: 235 94% 11%; /* Midnight Blue (#020035) */
+    --foreground: 210 5% 96%;  /* Anti-Flash White */
+    --card: 235 94% 14%;       /* Slightly Lighter Midnight */
+    --card-foreground: 210 5% 96%;
+    --popover: 235 94% 16%;
+    --popover-foreground: 210 5% 96%;
     --primary: 19 100% 46%;   /* Kimchi */
     --primary-foreground: 0 0% 100%;
-    --secondary: 240 4% 13%;  /* #1f1f21 */
-    --secondary-foreground: 210 20% 98%;
-    --muted: 240 4% 16%;
-    --muted-foreground: 210 10% 70%;
-    --accent: 240 4% 16%;
-    --accent-foreground: 210 20% 98%;
+    --secondary: 234 96% 23%; /* Dark Royalty */
+    --secondary-foreground: 210 5% 96%;
+    --muted: 234 96% 23%;
+    --muted-foreground: 210 5% 80%;
+    --accent: 234 96% 23%;
+    --accent-foreground: 210 5% 96%;
     --destructive: 0 63% 31%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 4% 20%;     /* Subtle border */
-    --input: 240 4% 20%;
+    --border: 234 96% 20%;
+    --input: 234 96% 20%;
     --ring: 19 100% 46%;
 
-    /* ── Background Tokens — User Specified ─────────── */
-    --ds-background-default: #18191a;
-    --ds-background-subtle: #121314;
-    --ds-background-neutral: #1f1f21;
-    --ds-background-neutral-subtle: #1f1f2180;
-    --ds-background-neutral-hovered: #242526;
-    --ds-background-selected: #1f1f21;
-    --ds-background-card: #1f1f21;
-    --ds-background-brand-bold: #ED4B00;
-    --ds-background-brand-subtle: #1f1f21;
+    /* ── Background Tokens — Real Estate Dark ────────── */
+    --ds-background-default: #020035; /* Midnight Blue */
+    --ds-background-subtle: #010020;
+    --ds-background-neutral: #02066F; /* Dark Royalty */
+    --ds-background-neutral-subtle: #02066F80;
+    --ds-background-neutral-hovered: #03088F;
+    --ds-background-selected: #02066F;
+    --ds-background-card: #02066F;
+    --ds-background-brand-bold: #ED4B00; /* Kimchi */
+    --ds-background-brand-subtle: #02066F;
     --ds-background-danger-bold: #EF4444;
     --ds-background-danger-subtle: #450A0A;
     --ds-background-warning-bold: #F59E0B;
     --ds-background-warning-subtle: #451A03;
     --ds-background-success-bold: #10B981;
     --ds-background-success-subtle: #064E3B;
-    --ds-background-information-bold: #3B82F6;
-    --ds-background-information-subtle: #172554;
-    --ds-background-input: #18191a;
+    --ds-background-information-bold: #2000B1; /* Deep Sea */
+    --ds-background-information-subtle: #010020;
+    --ds-background-input: #020035;
 
-    /* ── Elevation Surfaces — User Specified ────────── */
-    --ds-surface: #18191a;
-    --ds-surface-sunken: #101112;
-    --ds-surface-raised: #1f1f21;
-    --ds-surface-overlay: #242526;
+    /* ── Elevation Surfaces — Real Estate Dark ───────── */
+    --ds-surface: #020035;
+    --ds-surface-sunken: #010020;
+    --ds-surface-raised: #02066F;
+    --ds-surface-overlay: #03088F;
 
     /* ── Elevation Shadows — Deep Dark ──────────────── */
     --ds-shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.1);

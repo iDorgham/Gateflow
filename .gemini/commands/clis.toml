@@ -1,0 +1,8 @@
+description = "Run a predefined CLI team workflow"
+prompt = """
+Run the specified CLI team workflow.
+
+@{.antigravity/workflows/clis-team.md}
+
+User input: {{args}}
+"""

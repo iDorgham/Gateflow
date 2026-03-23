@@ -120,7 +120,7 @@ export function LoginShell({
             {/* Branding Header */}
             <div className="mb-10 flex flex-col items-center text-center">
               <motion.div
-                className="login-logo mb-6 flex h-12 w-12 items-center justify-center rounded-sm bg-[#0052CC] text-white shadow-lg"
+                className="login-logo mb-6 flex h-12 w-12 items-center justify-center rounded-sm bg-primary text-primary-foreground shadow-lg"
                 initial={false}
                 animate={{
                   scale: isSuccess ? 0.8 : 1,
@@ -130,10 +130,10 @@ export function LoginShell({
                 {isAdmin ? <Shield className="h-7 w-7" /> : <ShieldCheck className="h-8 w-8" />}
               </motion.div>
               
-              <h1 className="text-2xl font-semibold tracking-tight text-[#172B4D] dark:text-[#E3E9F0]">
+              <h1 className="text-2xl font-semibold tracking-tight text-[var(--ds-text)]">
                 {displayHeading}
               </h1>
-              <p className="mt-2 text-sm text-[#42526E] dark:text-[#97A0AF]">
+              <p className="mt-2 text-sm text-[var(--ds-text-subtle)]">
                 {displaySubtitle}
               </p>
             </div>
@@ -169,7 +169,7 @@ export function LoginShell({
           </div>
 
           {/* Footer Copyright */}
-          <div className="mt-8 text-center text-[12px] text-[#6B778C] dark:text-[#8993A4]">
+          <div className="mt-8 text-center text-[12px] text-[var(--ds-text-subtlest)]">
             © {new Date().getFullYear()} {displayName} • Secure Infrastructure Access
           </div>
         </motion.main>

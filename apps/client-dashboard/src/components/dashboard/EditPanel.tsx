@@ -119,7 +119,7 @@ export function EditPanel({
           'relative z-10 flex w-full max-w-2xl flex-col bg-background shadow-2xl overflow-hidden',
           'animate-in duration-300 ease-in-out',
           isRtl ? 'slide-in-from-left' : 'slide-in-from-right',
-          isRtl ? 'ml-0 mr-auto' : 'ml-auto mr-0'
+          'ms-auto me-0'
         )}
       >
         {/* Header */}
@@ -134,7 +134,7 @@ export function EditPanel({
             <Button
               variant="ghost"
               size="icon"
-              className="h-9 w-9 rounded-full text-muted-foreground hover:bg-muted hover:bg-accent"
+              className="h-9 w-9 rounded-full text-muted-foreground hover:bg-accent"
               onClick={handleQuit}
               aria-label="Close"
             >
@@ -153,7 +153,7 @@ export function EditPanel({
           <Button 
             variant="ghost" 
             onClick={handleQuit} 
-            className="text-muted-foreground hover:bg-muted hover:bg-accent font-semibold"
+            className="text-muted-foreground hover:bg-accent font-semibold"
           >
             Cancel
           </Button>

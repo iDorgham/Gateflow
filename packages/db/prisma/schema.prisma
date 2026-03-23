@@ -207,6 +207,12 @@ model GateAssignment {
   shiftStart     String?
   /// Optional shift end time (HH:mm, 24h). When set, assignment is valid until this time of day.
   shiftEnd       String?
+  /// Optional specific date/time when this assignment begins.
+  startTime      DateTime?
+  /// Optional specific date/time when this assignment expires.
+  endTime        DateTime?
+  /// Flexible schedule configuration: { days: [1,2,3], rotations: [...] }
+  scheduleJson   Json?
   gate           Gate         @relation(fields: [gateId], references: [id], onDelete: Cascade)
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)

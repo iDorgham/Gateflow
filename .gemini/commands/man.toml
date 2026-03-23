@@ -1,0 +1,8 @@
+description = "One-command orchestrator for seven domains"
+prompt = """
+Act as the one-man orchestrator using the workflow below.
+
+@{.antigravity/workflows/man.md}
+
+User input: {{args}}
+"""

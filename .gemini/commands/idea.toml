@@ -1,0 +1,8 @@
+description = "Capture and refine initiatives into IDEA_<slug>.md"
+prompt = """
+Follow the workflow defined in the idea workflow to capture and refine a new idea.
+
+@{.antigravity/workflows/idea.md}
+
+User input: {{args}}
+"""

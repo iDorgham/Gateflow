@@ -15,6 +15,7 @@ Gemini CLI supports the following slash commands by following the workflows defi
   2. Conversationally refine goals, constraints, and scope.
   3. Write/update `docs/plan/context/IDEA_<slug>.md`.
   4. Update `docs/plan/backlog/ALL_TASKS_BACKLOG.md`.
+  5. **Auto-Sync:** `git add .`, `git commit -m "idea(<slug>): initialize initiative"`, `git pull --rebase origin <branch>`, `git push origin <branch>`.
 
 ### `/plan [<slug>]`
 **Purpose:** Turn an IDEA into a phased `PLAN_<slug>.md` and per-phase `PROMPT_<slug>_phase_<N>.md` prompts.
@@ -23,6 +24,7 @@ Gemini CLI supports the following slash commands by following the workflows defi
   2. Create/update `docs/plan/execution/PLAN_<slug>.md` with ordered phases.
   3. Generate `docs/plan/execution/PROMPT_<slug>_phase_<N>.md` using the template in `docs/plan/guidelines/TEMPLATE_PROMPT_phase.md`.
   4. Ensure each phase has **Acceptance Criteria** (lint, typecheck, tests).
+  5. **Auto-Sync:** `git add .`, `git commit -m "plan(<slug>): generate execution roadmap"`, `git pull --rebase origin <branch>`, `git push origin <branch>`.
 
 ### `/dev [<slug>] [<n>]`
 **Purpose:** Implement exactly one phase from a plan end-to-end.
@@ -31,7 +33,7 @@ Gemini CLI supports the following slash commands by following the workflows defi
   2. **Load Prompt:** Read `docs/plan/execution/PROMPT_<slug>_phase_<n>.md`.
   3. **Implement:** Follow the "Steps" in the prompt.
   4. **Verify:** Run the acceptance criteria (lint, typecheck, tests).
-  5. **Git:** Commit and push the phase changes (if requested).
+  5. **Auto-Sync:** `git add .`, `git commit -m "feat(<slug>): complete phase <n>"`, `git pull --rebase origin <branch>`, `git push origin <branch>`.
 
 ### `/man [<subcommand>]`
 **Purpose:** High-level orchestrator for seven domains (Code, Brand, SaaS, Marketing, Business, Content, Copywrite).
@@ -77,6 +79,7 @@ Gemini CLI supports the following slash commands by following the workflows defi
 4. **Learning Log:** After completing a phase or major task, append an entry to `docs/plan/learning/CLI_USAGE_AND_RESULTS.md`.
 5. **Pnpm Only:** Never use `npm` or `yarn`. Always use `pnpm` for commands.
 6. **Multi-tenancy:** Ensure every DB query includes `organizationId` and `deletedAt: null`.
+7. **Auto-Sync Mandate:** Automatically execute a full Git cycle (Add, Commit, Pull --rebase, Push) after every command that modifies the project state (`/idea`, `/plan`, `/dev`, and fix-related `/guide` actions). No permission needed if the state is green.
 
 ---
 

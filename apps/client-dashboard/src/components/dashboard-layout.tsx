@@ -56,7 +56,7 @@ function Sidebar({ items, className, onClick, isCollapsed }: SidebarProps) {
           title={isCollapsed ? item.title : undefined}
           className={cn(
             'flex items-center gap-3 rounded-lg py-2 text-sm font-medium transition-colors',
-            'hover:bg-accent hover:text-accent-foreground',
+            'hover:bg-sidebar-accent hover:text-sidebar-accent-foreground text-sidebar-foreground/80 hover:text-sidebar-foreground',
             isCollapsed ? 'justify-center px-0 w-10 mx-auto' : 'px-3'
           )}
         >
@@ -184,7 +184,7 @@ function DashboardLayout({
     <div className="flex min-h-screen w-full bg-background overflow-hidden">
       <div
         className={cn(
-          'hidden md:block h-screen transition-all duration-300 flex-shrink-0 border-r bg-card',
+          'hidden md:block h-screen transition-all duration-300 flex-shrink-0 border-r border-sidebar-border bg-sidebar text-sidebar-foreground',
           isCollapsed ? 'w-20' : 'w-64'
         )}
       >
@@ -216,7 +216,7 @@ function DashboardLayout({
             <button
               onClick={() => setIsCollapsed(!isCollapsed)}
               className={cn(
-                'group flex items-center gap-3 rounded-xl py-2 text-sm font-medium text-muted-foreground hover:bg-accent hover:text-foreground transition-all duration-200',
+                'group flex items-center gap-3 rounded-xl py-2 text-sm font-medium text-sidebar-foreground/60 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-all duration-200',
                 isCollapsed ? 'justify-center w-10 px-0' : 'w-full px-4'
               )}
               title={isCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}

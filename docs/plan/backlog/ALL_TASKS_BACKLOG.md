@@ -4,23 +4,21 @@
 
 ## Open Initiatives
 
-### projects_crm_ui — Unified Real Estate CRM & Operations Hub
 
-**IDEA:** `docs/plan/context/IDEA_projects_crm_ui.md`
+### resident_mobile_one_tap — Resident Mobile Mastery (v2.0)
 
-**PLAN:** `docs/plan/planning/PLAN_projects_crm_ui.md`
+**IDEA:** `docs/plan/context/IDEA_resident_mobile_one_tap.md`
 
-**Status:** 🔄 Planning
+**Status:** 🆕 Open
 
 **Target:** Q4 2026
 
-- [ ] Phase 1 — Foundation: Real Estate Palette & Tokens
-- [ ] Phase 2 — Core Schema & API: CRM Aggregates
-- [ ] Phase 3 — Shared UI: EditPanel & Advanced Table Engine
-- [ ] Phase 4 — Project Hub: List & Detail Views
-- [ ] Phase 5 — CRM Management: Contacts & Units
-- [ ] Phase 6 — Sync & Operations: Project Logs & Team
-- [ ] Phase 7 — Final Audit: Polish, RTL & Security
+- [ ] Phase 1 — Security & Signing Foundation
+- [ ] Phase 2 — Core Logic: Fast Link Generation
+- [ ] Phase 3 — Home Tab "Express Invite" UI
+- [ ] Phase 4 — Invitee Landing Page: Premium Experience
+- [ ] Phase 5 — GateAI Bridge & Arrival Polish
+
 
 ### atlassian_ui_remake — Atlassian Design System UI Remake
 
@@ -60,6 +58,25 @@
 ---
 
 ## Completed Initiatives
+
+### projects_crm_ui — Unified Real Estate CRM & Operations Hub
+
+**IDEA:** `docs/plan/context/IDEA_projects_crm_ui.md`
+
+**PLAN:** `docs/plan/done/PLAN_projects_crm_ui.md`
+
+**Status:** ✅ Complete
+
+**Target:** Q4 2026
+
+- [x] Phase 1 — Foundation: Real Estate Palette & Tokens
+- [x] Phase 2 — Core Schema & API: CRM Aggregates
+- [x] Phase 3 — Shared UI: EditPanel & Advanced Table Engine
+- [x] Phase 4 — Project Hub: List & Detail Views
+- [x] Phase 5 — CRM Management: Contacts & Units
+- [x] Phase 6 — Sync & Operations: Project Logs & Team
+- [x] Phase 7 — Final Audit: Polish, RTL & Security
+
 
 ### advanced_seeding_v2 — Ultra-Advanced Seeding Matrix (v2)
 
