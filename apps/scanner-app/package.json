@@ -23,7 +23,7 @@
     "expo-camera": "~17.0.10",
     "expo-crypto": "~15.0.8",
     "expo-device": "~8.0.10",
-    "expo-font": "^14.0.11",
+    "expo-font": "^55.0.4",
     "expo-haptics": "~15.0.8",
     "expo-image-picker": "^55.0.10",
     "expo-jwt": "^1.8.2",
