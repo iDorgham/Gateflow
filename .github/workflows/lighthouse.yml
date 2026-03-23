@@ -65,23 +65,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
-        with:
-          version: ${{ env.PNPM_VERSION }}
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'pnpm'
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
       - name: Install @lhci/cli
         run: npm install -g @lhci/cli@${{ env.LHCI_VERSION }}
 
       - name: Install Chrome
-        uses: browser-actions/setup-chrome@latest
+        uses: browser-actions/setup-chrome@v1
 
       - name: Determine target URL
         id: url
@@ -251,22 +239,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
-        with:
-          version: ${{ env.PNPM_VERSION }}
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'pnpm'
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
       - name: Install @lhci/cli
         run: npm install -g @lhci/cli@${{ env.LHCI_VERSION }}
 
-      - uses: browser-actions/setup-chrome@latest
+      - uses: browser-actions/setup-chrome@v1
 
       - name: Determine dashboard URL
         id: url

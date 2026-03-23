@@ -53,9 +53,11 @@ jobs:
 
       - name: Assign size label
         uses: actions/github-script@v7
+        env:
+          PR_LINES: ${{ steps.diff.outputs.lines }}
         with:
           script: |
-            const lines = parseInt('${{ steps.diff.outputs.lines }}') || 0;
+            const lines = parseInt(process.env.PR_LINES || '0');
 
             const SIZE_LABELS = [
               { max: 10,   label: 'size/XS', color: '3cbf00', desc: 'Extra small change (≤10 lines)' },
@@ -119,18 +121,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: pnpm/action-setup@v4
-        with:
-          version: '8.15.0'
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'pnpm'
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
       - name: Detect affected packages
         id: affected
         run: |
@@ -163,11 +153,15 @@ jobs:
 
       - name: Post affected packages comment
         uses: actions/github-script@v7
+        env:
+          AFFECTED_PACKAGES: ${{ steps.affected.outputs.packages }}
+          PR_ADDITIONS: ${{ github.event.pull_request.additions }}
+          PR_DELETIONS: ${{ github.event.pull_request.deletions }}
         with:
           script: |
-            const packages = `${{ steps.affected.outputs.packages }}`.trim();
-            const lines    = '${{ github.event.pull_request.additions }}';
-            const dels     = '${{ github.event.pull_request.deletions }}';
+            const packages = (process.env.AFFECTED_PACKAGES || '').trim();
+            const lines    = process.env.PR_ADDITIONS || '0';
+            const dels     = process.env.PR_DELETIONS || '0';
 
             const body = [
               '## 📦 Affected Packages',
