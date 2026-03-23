@@ -8,6 +8,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ## [Unreleased]
 
+_(next release notes go here)_
+
+---
+
+## [0.1.0] — 2026-03-23
+
 ### Added
 
 - **[Automation] Ralph Loop** — Complete developer automation engine: 19 Ralph scripts, 5 Husky git hooks, 12 quality-check scripts
