@@ -46,7 +46,7 @@
     "date-fns": "^4.1.0",
     "framer-motion": "^11.18.2",
     "html2canvas": "^1.4.1",
-    "i18next": "^23.16.8",
+    "i18next": "^25.10.5",
     "jose": "4.15.9",
     "json2csv": "6.0.0-alpha.2",
     "lucide-react": "^0.344.0",
