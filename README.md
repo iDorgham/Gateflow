@@ -21,6 +21,7 @@
     <br />
     <a href="https://gateflow.site"><img src="https://img.shields.io/badge/Status-MVP_100%25_Complete-success?style=for-the-badge" alt="Status"></a>
     <a href="#"><img src="https://img.shields.io/badge/Security-Strict_HMAC--SHA256-red?style=for-the-badge" alt="Security"></a>
+    <a href="#"><img src="https://img.shields.io/badge/version-0.1.0-blue?style=for-the-badge" alt="version"></a>
     <a href="#"><img src="https://img.shields.io/badge/i18n-Full_AR/EN_RTL-blue?style=for-the-badge" alt="i18n"></a>
   </p>
 </div>
@@ -227,6 +228,7 @@ GateFlow/
 
 ## 📅 Recent Engineering Activity
 
+- **[Tools]:** plan lifecycle automation + phase runner
 - **[Live Feed] Real-time Updates:** Added SSE streaming for live dashboard
   updates (EventLog model, `/api/events/stream`).
 - **[Marketing] Platform Conversion:** Completed homepage, features,

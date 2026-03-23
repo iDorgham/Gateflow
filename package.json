@@ -26,7 +26,16 @@
     "plan:start": "node scripts/ralph-plan.js start",
     "plan:done": "node scripts/ralph-plan.js done",
     "plan:status": "node scripts/ralph-plan.js status",
-    "plan:run": "node scripts/ralph-run.js"
+    "plan:run": "node scripts/ralph-run.js",
+    "version:bump": "node scripts/ralph-version.js bump",
+    "version:tag": "node scripts/ralph-version.js tag",
+    "version:info": "node scripts/ralph-version.js info",
+    "docs:release": "node scripts/ralph-docs.js release",
+    "docs:changelog": "node scripts/ralph-docs.js changelog",
+    "docs:readme": "node scripts/ralph-docs.js readme refresh",
+    "docs:organize": "node scripts/ralph-organize.js",
+    "docs:index": "node scripts/ralph-organize.js index",
+    "docs:clean": "node scripts/ralph-organize.js clean"
   },
   "devDependencies": {
     "@gate-access/config": "workspace:*",

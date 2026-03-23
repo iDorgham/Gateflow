@@ -13,8 +13,15 @@
  * Aliases: pnpm plan:new / plan:ready / plan:start / plan:done / plan:status
  */
 
-const fs   = require('fs');
-const path = require('path');
+const fs           = require('fs');
+const path         = require('path');
+const { execSync } = require('child_process');
+
+function callDocs(args) {
+  try {
+    execSync(`node scripts/ralph-docs.js ${args}`, { cwd: path.resolve(__dirname, '..'), stdio: 'inherit' });
+  } catch { /* docs update is non-fatal */ }
+}
 
 const ROOT       = path.resolve(__dirname, '..');
 const PLAN_ROOT  = path.join(ROOT, 'docs', 'plan');
@@ -243,6 +250,7 @@ switch (cmd) {
     if (found.state === 'in-progress') { console.log(`ℹ  "${slug}" is already in-progress`); break; }
 
     movePlan(slug, found.state, 'in-progress');
+    callDocs(`on-plan-start ${slug}`);
     console.log(`\n▶  Run the first phase: pnpm plan:run ${slug} 1`);
     break;
   }
@@ -254,6 +262,9 @@ switch (cmd) {
     const found = findPlan(slug);
     if (!found) { console.error(`✗ Plan "${slug}" not found`); process.exit(1); }
     movePlan(slug, found.state, 'done');
+
+    // Trigger docs automation
+    callDocs(`on-plan-done ${slug}`);
 
     // Mark complete in backlog
     const backlog = path.join(PLAN_ROOT, 'backlog', 'ALL_TASKS_BACKLOG.md');
