@@ -1,0 +1,46 @@
+version: 2
+updates:
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    reviewers:
+      - 'iDorgham'
+    labels:
+      - 'dependencies'
+    groups:
+      monorepo-deps:
+        patterns:
+          - '@gate-access/*'
+
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    labels:
+      - 'ci'
+
+  - package-ecosystem: 'npm'
+    directory: '/apps/client-dashboard'
+    schedule:
+      interval: 'weekly'
+
+  - package-ecosystem: 'npm'
+    directory: '/apps/admin-dashboard'
+    schedule:
+      interval: 'weekly'
+
+  - package-ecosystem: 'npm'
+    directory: '/apps/scanner-app'
+    schedule:
+      interval: 'weekly'
+
+  - package-ecosystem: 'npm'
+    directory: '/apps/resident-mobile'
+    schedule:
+      interval: 'weekly'
+
+  - package-ecosystem: 'npm'
+    directory: '/apps/marketing'
+    schedule:
+      interval: 'weekly'
