@@ -49,6 +49,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Features
 
+- **[Resident Mobile One Tap] **add recent guests to express invite ui
+
 - **[Resident Mobile One Tap] **implement phase 3 - express invite ui
 
 - **[Resident Mobile One Tap] **implement phase 2 - express invite api
