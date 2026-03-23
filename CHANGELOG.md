@@ -10,6 +10,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 _(next release notes go here)_
 
+### Security
+
+- **[Repo] **enable security policy, dependabot, and codeql analysis
+
 ---
 
 ## [0.1.0] — 2026-03-23
@@ -44,10 +48,10 @@ _(next release notes go here)_
 
 ### Performance
 
-- **[Cert] **phase 5 certification infra — regression guide + final LHCI thresholds
+- **[Cert]** phase 5 certification infra — regression guide + final LHCI thresholds
 
-- **[Assets] **font display:swap + image allowlist + avif/webp + dvh + preconnect — phase 2
-- **[Ci] **establish lighthouse ci pipeline and performance baseline — phase 1
+- **[Assets]** font display:swap + image allowlist + avif/webp + dvh + preconnect — phase 2
+- **[Ci]** establish lighthouse ci pipeline and performance baseline — phase 1
 
 ### Bug Fixes
 

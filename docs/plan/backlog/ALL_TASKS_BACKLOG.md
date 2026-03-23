@@ -4,6 +4,18 @@
 
 ## Open Initiatives
 
+### github_security_hardening — Github Security Hardening
+
+**Status:** 🆕 Open
+
+**Target:** Q4 2026
+
+- [ ] Phase 1 — Title
+- [ ] Phase 2 — Title
+- [ ] Phase 3 — Title
+- [ ] Phase 4 — Title
+- [ ] Phase 5 — Title
+
 ### test_feature — Test Feature
 
 **Status:** 🆕 Open

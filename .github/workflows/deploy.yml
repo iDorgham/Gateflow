@@ -77,10 +77,36 @@ jobs:
           SKIP_ENV_VALIDATION: 'true'
           NEXT_TELEMETRY_DISABLED: '1'
 
+  # ── Database Migration ────────────────────────────────────────────────────
+  db-migrate:
+    name: Database Migration
+    needs: build-check
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run database migration
+        run: pnpm --filter @gate-access/db exec -- npx prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
   # ── Deploy: client-dashboard ──────────────────────────────────────────────
   deploy-client:
     name: Deploy client-dashboard
-    needs: build-check
+    needs: [build-check, db-migrate]
     runs-on: ubuntu-latest
     if: |
       github.event.inputs.app == '' ||
@@ -139,7 +165,7 @@ jobs:
   # ── Deploy: admin-dashboard ───────────────────────────────────────────────
   deploy-admin:
     name: Deploy admin-dashboard
-    needs: build-check
+    needs: [build-check, db-migrate]
     runs-on: ubuntu-latest
     if: |
       github.event.inputs.app == '' ||
@@ -198,7 +224,7 @@ jobs:
   # ── Deploy: marketing ────────────────────────────────────────────────────
   deploy-marketing:
     name: Deploy marketing
-    needs: build-check
+    needs: [build-check, db-migrate]
     runs-on: ubuntu-latest
     if: |
       github.event.inputs.app == '' ||
@@ -257,7 +283,7 @@ jobs:
   # ── Deploy: resident-portal ───────────────────────────────────────────────
   deploy-resident-portal:
     name: Deploy resident-portal
-    needs: build-check
+    needs: [build-check, db-migrate]
     runs-on: ubuntu-latest
     if: |
       github.event.inputs.app == '' ||
