@@ -1,0 +1,21 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# 1. Secret scanner — blocks on HIGH severity secrets
+node scripts/scan-secrets.js
+SECRET_EXIT=$?
+if [ $SECRET_EXIT -ne 0 ]; then
+  exit $SECRET_EXIT
+fi
+
+# 2. Lint-staged: only lint/typecheck staged files
+npx lint-staged
+
+# 3. Prisma guard: warn if schema.prisma is staged
+if git diff --cached --name-only | grep -q 'schema\.prisma'; then
+  echo ""
+  echo "⚠️  schema.prisma is staged."
+  echo "   If you changed models, run: pnpm prisma db push"
+  echo "   (continuing commit — this is a reminder, not a blocker)"
+  echo ""
+fi

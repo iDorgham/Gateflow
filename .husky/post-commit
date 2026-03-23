@@ -1,6 +1,11 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
+# Skip if this is an auto-amend from phase-close (RALPH_AMEND env var set)
+if [ "$RALPH_AMEND" = "1" ]; then
+  exit 0
+fi
+
 # 1. Auto-sync AI tools after every commit
 bash scripts/sync-ai-tools.sh
 
@@ -12,3 +17,6 @@ case "$COMMIT_MSG" in
     node scripts/ralph-docs.js changelog from-commit
     ;;
 esac
+
+# 3. Phase auto-close — mark PLAN phases [x] from commit message
+node scripts/phase-close.js

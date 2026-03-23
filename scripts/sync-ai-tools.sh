@@ -80,6 +80,9 @@ COMMANDS=(
   "guide|Guide|Run the GateFlow workspace guide — what should I do now?|guide|Run the GateFlow workspace guide"
   "man|Man|One Man — one command, seven domains (Code, Brand, SaaS, Marketing, Business, Content, Copywrite).|man|Act as the one-man orchestrator"
   "clis-team|CLIs Team|Run a predefined CLI team (seo, refactor, audit). Cursor is master; team outputs are proposals.|clis|Run a fixed team of 2-4 CLIs in sequence"
+  "docs|Docs|Automated documentation updates — changelog, version badge, PRD, feature log, README, release.|docs|Update project documentation automatically after shipping a feature or cutting a release"
+  "version|Version|Semantic versioning — bump package.json, create annotated git tags, generate versioned branch names.|version|Manage semantic versioning across package.json, git tags, and branch names"
+  "organize|Organize|Docs folder cleanup — scan structure, remove empty dirs and dead symlinks, rebuild docs/INDEX.md.|organize|Keep the docs/ folder clean, structured, and navigable"
 )
 
 # ── generate commands.json ────────────────────────────────────────────────────

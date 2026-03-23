@@ -1,7 +1,9 @@
-# GateFlow Development Guide (Docs v2)
+# GateFlow Development Guide
 
-**Version:** 1.0  
-**Aligned with:** `docs/PRD_v7.0.md`, `CLAUDE.md`, `GATEFLOW_CONFIG.md`  
+**Version:** 2.0
+**Aligned with:** `docs/PRD_v7.0.md`, `CLAUDE.md`, `GATEFLOW_CONFIG.md`
+
+> **New:** See [AUTOMATION_GUIDE.md](./AUTOMATION_GUIDE.md) for the complete Ralph automation system — all scripts, git hooks, and workflows.
 
 ---
 
@@ -9,11 +11,18 @@
 
 ### 1.1 Prerequisites
 
-- Node.js (LTS; see project `.nvmrc` if present).
-- pnpm ≥ 8 (package manager).
-- PostgreSQL 15+ (local or remote instance).
+- Node.js 20+ (LTS)
+- pnpm ≥ 8 (package manager)
+- PostgreSQL 15+ (local or remote instance)
 
-### 1.2 Install Dependencies
+### 1.2 Automated Onboarding (Recommended)
+
+```bash
+pnpm install
+pnpm setup:dev    # interactive: sets up env, DB, husky
+```
+
+### 1.3 Manual Install
 
 From the repo root:
 
@@ -23,12 +32,14 @@ pnpm install
 
 > **Note:** Use **pnpm only**. Do not use `npm` or `yarn`.
 
-### 1.3 Environment Variables
+### 1.4 Environment Variables
 
-- Copy example envs to local files per app (see `docs/guides/ENVIRONMENT_VARIABLES.md` for details).
+- Use `pnpm setup:dev` to generate `.env.local` interactively.
+- Or copy manually and fill in (see `docs/guides/ENVIRONMENT_VARIABLES.md`).
 - At minimum:
   - `DATABASE_URL` for the database.
   - `QR_SIGNING_SECRET` for QR security.
+  - `NEXTAUTH_SECRET` for auth sessions.
 
 ---
 
@@ -37,26 +48,26 @@ pnpm install
 ### 2.1 All Apps (Turborepo)
 
 ```bash
-pnpm turbo dev
+pnpm dev               # all apps via Turborepo
 ```
 
 ### 2.2 Individual Apps
 
 ```bash
-pnpm turbo dev --filter=client-dashboard
-pnpm turbo dev --filter=scanner-app
-pnpm turbo dev --filter=marketing
-# resident-portal, admin-dashboard follow the same pattern
+pnpm dev:client        # client-dashboard (port 3001)
+pnpm dev:admin         # admin-dashboard
+pnpm dev:marketing     # marketing site
+pnpm dev:scanner       # Expo scanner app
 ```
 
 ### 2.3 Dev Ports
 
-| App | Port | Start command |
-|---|---|---|
-| `marketing` | 3000 | `next dev -p 3000` |
-| `client-dashboard` | 3001 | `next dev -p 3001 -H 0.0.0.0` |
-| `admin-dashboard` | 3002 | `next dev -p 3002` |
-| `scanner-app` | 8081 | `expo start --lan -c` (Metro bundler) |
+| App                | Port | Start command                         |
+| ------------------ | ---- | ------------------------------------- |
+| `marketing`        | 3000 | `next dev -p 3000`                    |
+| `client-dashboard` | 3001 | `next dev -p 3001 -H 0.0.0.0`         |
+| `admin-dashboard`  | 3002 | `next dev -p 3002`                    |
+| `scanner-app`      | 8081 | `expo start --lan -c` (Metro bundler) |
 
 ---
 
@@ -92,23 +103,34 @@ Conventions:
 
 ## 4. Testing, Linting & Typechecking
 
-Global via Turborepo:
-
 ```bash
-pnpm turbo lint
-pnpm turbo test
-pnpm turbo typecheck
-pnpm turbo build
-```
+pnpm preflight                          # lint + typecheck + test (all) — run before every push
 
-Per app (examples):
+# Individually
+pnpm lint
+pnpm test
+pnpm typecheck
 
-```bash
+# Per workspace
 pnpm --filter=client-dashboard test
-pnpm --filter=scanner-app test
+pnpm --filter=scanner-app lint
 ```
 
-Follow any additional instructions in each app’s README where present.
+> The `pre-push` git hook runs `pnpm preflight` automatically before every push.
+
+### Quality Checks
+
+```bash
+pnpm check:env              # validate env vars across all apps
+pnpm check:secrets          # scan repo for leaked secrets
+pnpm check:imports          # find circular dependencies
+pnpm check:todos            # list all TODO/FIXME with author + age
+pnpm check:db-drift         # detect schema drift vs baseline
+pnpm check:bundle           # bundle size vs baseline
+pnpm check:pre-deploy       # full pre-deploy checklist (5 checks)
+```
+
+See [AUTOMATION_GUIDE.md](./AUTOMATION_GUIDE.md) for full details on all check commands.
 
 ---
 
@@ -118,13 +140,13 @@ GateFlow uses a phased workflow orchestrated by Cursor and CLIs (Claude, Gemini,
 
 ### 5.1 Master Slash Commands (Cursor)
 
-| Command | Purpose |
-|---|---|
-| `/idea` | Capture and refine initiatives into `docs/plan/context/IDEA_<slug>.md` |
-| `/plan` | Turn an idea into multi-phase `PLAN_<slug>.md` + per-phase prompts |
-| `/dev` | Implement **one phase** end-to-end (code, tests, docs, git) |
-| `/ship` | Run all remaining phases for a plan sequentially |
-| `/guide` | Workspace guide — what to do next, active plan, recommended actions |
+| Command  | Purpose                                                                |
+| -------- | ---------------------------------------------------------------------- |
+| `/idea`  | Capture and refine initiatives into `docs/plan/context/IDEA_<slug>.md` |
+| `/plan`  | Turn an idea into multi-phase `PLAN_<slug>.md` + per-phase prompts     |
+| `/dev`   | Implement **one phase** end-to-end (code, tests, docs, git)            |
+| `/ship`  | Run all remaining phases for a plan sequentially                       |
+| `/guide` | Workspace guide — what to do next, active plan, recommended actions    |
 
 Supporting commands (see `.antigravity/rules/01-gateflow-ai-workflow.mdc` and legacy guidelines in `docs/archive/plan-legacy/guidelines`):
 
@@ -132,13 +154,13 @@ Supporting commands (see `.antigravity/rules/01-gateflow-ai-workflow.mdc` and le
 
 ### 5.2 Plan & Prompt Files
 
-| File | Location |
-|---|---|
-| Initiative ideas | `docs/plan/context/IDEA_<slug>.md` |
-| Active plans + prompts | `docs/plan/planning/<slug>/PLAN_<slug>.md` |
-| Phase prompts | `docs/plan/planning/<slug>/PROMPT_<slug>_phase_<N>.md` |
-| Phase task checklist | `docs/plan/planning/<slug>/TASKS_<slug>.md` |
-| Completed plans | `docs/plan/done/<slug>/` |
+| File                   | Location                                               |
+| ---------------------- | ------------------------------------------------------ |
+| Initiative ideas       | `docs/plan/context/IDEA_<slug>.md`                     |
+| Active plans + prompts | `docs/plan/planning/<slug>/PLAN_<slug>.md`             |
+| Phase prompts          | `docs/plan/planning/<slug>/PROMPT_<slug>_phase_<N>.md` |
+| Phase task checklist   | `docs/plan/planning/<slug>/TASKS_<slug>.md`            |
+| Completed plans        | `docs/plan/done/<slug>/`                               |
 
 Template & skills:
 
@@ -182,4 +204,3 @@ Key points (see `CLAUDE.md` and core rules for full list):
 - **Architecture:** `docs/guides/ARCHITECTURE.md`
 - **Environment variables:** `docs/guides/ENVIRONMENT_VARIABLES.md`
 - **Legacy guidance & patterns:** `docs/archive/plan-legacy/**`
-

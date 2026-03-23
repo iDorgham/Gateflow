@@ -4,10 +4,17 @@ import { getTranslation, Locale } from '@/lib/i18n';
 import { DashboardOverview } from '@/components/dashboard/dashboard-overview';
 import { DashboardWrapper } from '@/components/dashboard/dashboard-wrapper';
 
-export async function generateMetadata({ params }: { params: { locale: Locale } }) {
+export async function generateMetadata({
+  params,
+}: {
+  params: { locale: Locale };
+}) {
   const { t } = await getTranslation(params.locale, 'dashboard');
   return { title: t('overview.title', { defaultValue: 'Dashboard' }) };
 }
+
+import { Suspense } from 'react';
+import { DashboardLoading } from '@/components/dashboard/dashboard-loading';
 
 export default async function Home({ params }: { params: { locale: Locale } }) {
   const claims = await getSessionClaims();
@@ -16,7 +23,9 @@ export default async function Home({ params }: { params: { locale: Locale } }) {
 
   return (
     <DashboardWrapper locale={params.locale}>
-      <DashboardOverview locale={params.locale} orgId={claims.orgId} />
+      <Suspense fallback={<DashboardLoading />}>
+        <DashboardOverview locale={params.locale} orgId={claims.orgId} />
+      </Suspense>
     </DashboardWrapper>
   );
 }

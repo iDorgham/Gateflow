@@ -1,0 +1,8 @@
+description = "Automated documentation updates — changelog, version badge, PRD, feature log, README, release."
+prompt = """
+Follow the workflow defined in the docs workflow to Update project documentation automatically after shipping a feature or cutting a release.
+
+@{.agents/workflows/docs.md}
+
+User input: {{args}}
+"""

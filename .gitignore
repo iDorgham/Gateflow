@@ -12,6 +12,7 @@ coverage
 .vscode
 .idea
 *.tsbuildinfo
+scripts/.bundle-baseline.json
 .expo
 .claude
 .cursor

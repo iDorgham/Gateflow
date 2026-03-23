@@ -18,40 +18,40 @@
  *   kiro     → IDE: prints file path (cannot auto-run)
  */
 
-const fs           = require('fs');
-const path         = require('path');
-const { spawnSync } = require('child_process');
+const fs = require('fs');
+const path = require('path');
+const { spawnSync, execSync } = require('child_process');
 
-const ROOT      = path.resolve(__dirname, '..');
+const ROOT = path.resolve(__dirname, '..');
 const PLAN_ROOT = path.join(ROOT, 'docs', 'plan');
-const STATES    = ['in-progress', 'execution', 'planned', 'planning', 'done'];
+const STATES = ['in-progress', 'execution', 'planned', 'planning', 'done'];
 
 // ── Tool execution map ────────────────────────────────────────────────────────
 // Each entry: { build: (content) => { cmd, args } } or { ide: true }
 const TOOL_MAP = {
   claude: (content) => ({
-    cmd:  'claude',
+    cmd: 'claude',
     args: ['--dangerously-skip-permissions', '-p', content],
   }),
   gemini: (content) => ({
-    cmd:  'gemini',
+    cmd: 'gemini',
     args: ['--yolo', '-p', content],
   }),
   opencode: (content) => ({
-    cmd:  'opencode',
+    cmd: 'opencode',
     args: ['run', content],
   }),
   kilo: (content) => ({
-    cmd:  'kilo',
+    cmd: 'kilo',
     args: ['run', content],
   }),
   qwen: (content) => ({
-    cmd:  'qwen',
+    cmd: 'qwen',
     args: ['-p', content],
   }),
   // IDE tools — cannot be auto-run; print path instead
   cursor: null,
-  kiro:   null,
+  kiro: null,
 };
 
 // ── helpers ───────────────────────────────────────────────────────────────────
@@ -86,13 +86,15 @@ function promptFilePath(dir, slug, phase, flat) {
 function parsePhases(planContent) {
   const phases = [];
   for (const line of planContent.split('\n')) {
-    const m = line.match(/^\|\s*(\d+)\s*\|\s*(.+?)\s*\|\s*(\w+)\s*\|\s*(\[[ x]\])\s*\|/);
+    const m = line.match(
+      /^\|\s*(\d+)\s*\|\s*(.+?)\s*\|\s*(\w+)\s*\|\s*(\[[ x]\])\s*\|/
+    );
     if (m) {
       phases.push({
         phase: parseInt(m[1], 10),
-        name:  m[2].trim(),
-        tool:  m[3].trim().toLowerCase(),
-        done:  m[4].trim() === '[x]',
+        name: m[2].trim(),
+        tool: m[3].trim().toLowerCase(),
+        done: m[4].trim() === '[x]',
       });
     }
   }
@@ -104,7 +106,9 @@ function markPhaseDone(planPath, phase) {
   let content = fs.readFileSync(planPath, 'utf8');
   // Replace "| <phase> | ... | [ ] |" → "[x]"
   content = content.replace(
-    new RegExp(`(\\|\\s*${phase}\\s*\\|[^|]+\\|[^|]+\\|\\s*)\\[\\s\\](\\s*\\|)`),
+    new RegExp(
+      `(\\|\\s*${phase}\\s*\\|[^|]+\\|[^|]+\\|\\s*)\\[\\s\\](\\s*\\|)`
+    ),
     '$1[x]$2'
   );
   fs.writeFileSync(planPath, content);
@@ -132,13 +136,17 @@ function runPhase(slug, phaseInfo, promptPath, dryRun) {
     console.log(`ℹ  ${tool.toUpperCase()} is an IDE — cannot auto-run.`);
     console.log(`   Open this file in ${tool}:`);
     console.log(`   ${promptPath}`);
-    console.log(`\n   Or copy the prompt from the file and paste into ${tool}.`);
+    console.log(
+      `\n   Or copy the prompt from the file and paste into ${tool}.`
+    );
     return true;
   }
 
   const toolFn = TOOL_MAP[tool];
   if (!toolFn) {
-    console.error(`✗ Unknown tool: "${tool}". Valid tools: ${Object.keys(TOOL_MAP).join(', ')}`);
+    console.error(
+      `✗ Unknown tool: "${tool}". Valid tools: ${Object.keys(TOOL_MAP).join(', ')}`
+    );
     return false;
   }
 
@@ -153,8 +161,8 @@ function runPhase(slug, phaseInfo, promptPath, dryRun) {
   console.log(`▶  Launching ${cmd}...\n`);
 
   const result = spawnSync(cmd, args, {
-    stdio:    'inherit',
-    cwd:      ROOT,
+    stdio: 'inherit',
+    cwd: ROOT,
     encoding: 'utf8',
     maxBuffer: 100 * 1024 * 1024, // 100MB
   });
@@ -174,12 +182,12 @@ function runPhase(slug, phaseInfo, promptPath, dryRun) {
 }
 
 // ── Entry point ───────────────────────────────────────────────────────────────
-const args    = process.argv.slice(2);
-const slug    = args.find(a => !a.startsWith('--') && isNaN(parseInt(a)));
-const phaseArg = args.find(a => !a.startsWith('--') && !isNaN(parseInt(a)));
+const args = process.argv.slice(2);
+const slug = args.find((a) => !a.startsWith('--') && isNaN(parseInt(a)));
+const phaseArg = args.find((a) => !a.startsWith('--') && !isNaN(parseInt(a)));
 const runNext = args.includes('--next');
-const runAll  = args.includes('--all');
-const dryRun  = args.includes('--dry-run');
+const runAll = args.includes('--all');
+const dryRun = args.includes('--dry-run');
 
 if (!slug) {
   console.log(`
@@ -215,10 +223,12 @@ if (!fs.existsSync(pf)) {
 }
 
 const planContent = fs.readFileSync(pf, 'utf8');
-const phases      = parsePhases(planContent);
+const phases = parsePhases(planContent);
 
 if (phases.length === 0) {
-  console.error(`✗ No phases found in PLAN file. Make sure the phases table uses this format:`);
+  console.error(
+    `✗ No phases found in PLAN file. Make sure the phases table uses this format:`
+  );
   console.error(`  | 1 | Phase Name | claude | [ ] |`);
   process.exit(1);
 }
@@ -229,51 +239,91 @@ let toRun = [];
 if (runAll) {
   toRun = phases;
 } else if (runNext) {
-  const next = phases.find(p => !p.done);
-  if (!next) { console.log(`✅ All phases complete for "${slug}".`); process.exit(0); }
+  const next = phases.find((p) => !p.done);
+  if (!next) {
+    console.log(`✅ All phases complete for "${slug}".`);
+    process.exit(0);
+  }
   toRun = [next];
 } else if (phaseArg) {
   const n = parseInt(phaseArg, 10);
-  const ph = phases.find(p => p.phase === n);
-  if (!ph) { console.error(`✗ Phase ${n} not found. Available: ${phases.map(p => p.phase).join(', ')}`); process.exit(1); }
+  const ph = phases.find((p) => p.phase === n);
+  if (!ph) {
+    console.error(
+      `✗ Phase ${n} not found. Available: ${phases.map((p) => p.phase).join(', ')}`
+    );
+    process.exit(1);
+  }
   toRun = [ph];
 } else {
   // Default: next incomplete
-  const next = phases.find(p => !p.done);
-  if (!next) { console.log(`✅ All phases complete for "${slug}".`); process.exit(0); }
+  const next = phases.find((p) => !p.done);
+  if (!next) {
+    console.log(`✅ All phases complete for "${slug}".`);
+    process.exit(0);
+  }
   toRun = [next];
 }
 
 console.log(`\n📋 Plan: ${slug}  [${found.state}]`);
-console.log(`   Phases to run: ${toRun.map(p => p.phase).join(', ')}\n`);
+console.log(`   Phases to run: ${toRun.map((p) => p.phase).join(', ')}\n`);
 
 for (const phaseInfo of toRun) {
   const promptPath = promptFilePath(dir, slug, phaseInfo.phase, flat);
-  const success    = runPhase(slug, phaseInfo, promptPath, dryRun);
+  const success = runPhase(slug, phaseInfo, promptPath, dryRun);
 
-  if (success && !dryRun && phaseInfo.tool !== 'cursor' && phaseInfo.tool !== 'kiro') {
+  if (
+    success &&
+    !dryRun &&
+    phaseInfo.tool !== 'cursor' &&
+    phaseInfo.tool !== 'kiro'
+  ) {
     markPhaseDone(pf, phaseInfo.phase);
     console.log(`\n✓ Marked phase ${phaseInfo.phase} as done in PLAN file.`);
 
     // Auto-move to done if last phase complete
     const updated = parsePhases(fs.readFileSync(pf, 'utf8'));
-    const allDone = updated.every(p => p.done);
+    const allDone = updated.every((p) => p.done);
     if (allDone && found.state === 'in-progress') {
       const destDir = path.join(PLAN_ROOT, 'done', slug);
       fs.mkdirSync(path.dirname(destDir), { recursive: true });
       fs.renameSync(dir, destDir);
       console.log(`\n🎉 All phases complete! Moved "${slug}" → done/`);
+
+      // Trigger full docs automation (same as pnpm plan:done)
+      try {
+        execSync(`node scripts/ralph-docs.js on-plan-done ${slug}`, {
+          cwd: ROOT,
+          stdio: 'inherit',
+        });
+      } catch {
+        /* non-fatal */
+      }
+
+      // Auto-create PR
+      try {
+        execSync(`node scripts/ralph-plan.js pr ${slug}`, {
+          cwd: ROOT,
+          stdio: 'inherit',
+        });
+      } catch {
+        /* non-fatal */
+      }
     }
   }
 
   if (!success && !dryRun) {
-    console.error(`\n⚠  Phase ${phaseInfo.phase} did not complete successfully. Stopping.`);
+    console.error(
+      `\n⚠  Phase ${phaseInfo.phase} did not complete successfully. Stopping.`
+    );
     process.exit(1);
   }
 
   // Small pause between phases in --all mode
   if (runAll && toRun.indexOf(phaseInfo) < toRun.length - 1) {
-    console.log('\n⏸  Press Enter to continue to next phase, or Ctrl+C to stop...');
+    console.log(
+      '\n⏸  Press Enter to continue to next phase, or Ctrl+C to stop...'
+    );
     const buf = Buffer.alloc(1);
     fs.readSync(0, buf, 0, 1);
   }

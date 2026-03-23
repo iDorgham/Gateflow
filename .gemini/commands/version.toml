@@ -1,0 +1,8 @@
+description = "Semantic versioning — bump package.json, create annotated git tags, generate versioned branch names."
+prompt = """
+Follow the workflow defined in the version workflow to Manage semantic versioning across package.json, git tags, and branch names.
+
+@{.agents/workflows/version.md}
+
+User input: {{args}}
+"""

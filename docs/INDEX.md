@@ -4,29 +4,31 @@
 
 ---
 
-## 📂 [api](./docs/api/)
-
 ## 🏗️ [Architecture](./docs/arch/)
-*System design, project structure, code quality audits*
+
+_System design, project structure, code quality audits_
 
 - [ARCHITECTURE](./docs/arch/ARCHITECTURE.md)
 - [CODE QUALITY AND PERFORMANCE AUDIT](./docs/arch/CODE_QUALITY_AND_PERFORMANCE_AUDIT.md)
 - [PROJECT STRUCTURE](./docs/arch/PROJECT_STRUCTURE.md)
 
 ## 📁 [Archive](./docs/archive/)
-*Legacy docs, old PRDs, historical plans*
+
+_Legacy docs, old PRDs, historical plans_
 
 - [DOCUMENTATION UPDATE v7.0](./docs/archive/DOCUMENTATION_UPDATE_v7.0.md)
 
 ## 🧠 [Core References](./docs/core/)
-*CLAUDE.md, project config, progress dashboard*
+
+_CLAUDE.md, project config, progress dashboard_
 
 - [CLAUDE](./docs/core/CLAUDE.md)
 - [GATEFLOW CONFIG](./docs/core/GATEFLOW_CONFIG.md)
 - [PROJECT PROGRESS DASHBOARD](./docs/core/PROJECT_PROGRESS_DASHBOARD.md)
 
 ## 🚀 [Deployment Guides](./docs/deployment/)
-*Per-app deployment and environment setup*
+
+_Per-app deployment and environment setup_
 
 - [ADMIN DASHBOARD](./docs/deployment/ADMIN_DASHBOARD.md)
 - [CLIENT DASHBOARD](./docs/deployment/CLIENT_DASHBOARD.md)
@@ -34,20 +36,24 @@
 - [README](./docs/deployment/README.md)
 
 ## 🎨 [Design & UI](./docs/design/)
-*UI specs, screen drafts, design system notes*
+
+_UI specs, screen drafts, design system notes_
 
 - [draft-gate-assignment-screen](./docs/design/draft-gate-assignment-screen.md)
 
 ## 🐛 [Error Log](./docs/errors/)
-*Documented bugs and resolutions*
+
+_Documented bugs and resolutions_
 
 - [error-1](./docs/errors/error-1.md)
 
 ## 📖 [Developer Guides](./docs/guides/)
-*Dev workflow, security, analytics, component guides*
+
+_Dev workflow, security, analytics, component guides_
 
 - [ANALYTICS CHARTS GUIDE](./docs/guides/ANALYTICS_CHARTS_GUIDE.md)
 - [ANTIGRAVITY SKILLS](./docs/guides/ANTIGRAVITY_SKILLS.md)
+- [AUTOMATION GUIDE](./docs/guides/AUTOMATION_GUIDE.md)
 - [CACHE STRATEGY](./docs/guides/CACHE_STRATEGY.md)
 - [DEPLOYMENT GUIDE](./docs/guides/DEPLOYMENT_GUIDE.md)
 - [DEVELOPMENT GUIDE](./docs/guides/DEVELOPMENT_GUIDE.md)
@@ -55,11 +61,11 @@
 - [ENVIRONMENT VARIABLES](./docs/guides/ENVIRONMENT_VARIABLES.md)
 - [MOTION AND ANIMATION](./docs/guides/MOTION_AND_ANIMATION.md)
 - [PROMPTS REFERENCE](./docs/guides/PROMPTS_REFERENCE.md)
-- [PROMPT ENGINEERING](./docs/guides/PROMPT_ENGINEERING.md)
-- *(6 more files)*
+- _(7 more files)_
 
 ## 📋 [Plan & Roadmap](./docs/plan/)
-*Feature plans, phase prompts, learning log, backlog*
+
+_Feature plans, phase prompts, learning log, backlog_
 
 - [README](./docs/plan/README.md)
   - `backlog/` — 3 files
@@ -72,14 +78,16 @@
   - `templates/` — 2 files
 
 ## 📦 [Product](./docs/product/)
-*PRD, feature log, upcoming features, marketing notes*
+
+_PRD, feature log, upcoming features, marketing notes_
 
 - [MARKETING SUITE](./docs/product/MARKETING_SUITE.md)
 - [PRD](./docs/product/PRD.md)
 
 ## 🔧 [Tools & Automation](./docs/tools/)
-*AI tool configs, antigravity skills reference*
 
+_AI tool configs, antigravity skills reference_
 
 ---
-*Edit docs using the guides in `docs/guides/DEVELOPMENT_GUIDE.md`*
+
+_Edit docs using the guides in `docs/guides/DEVELOPMENT_GUIDE.md`_

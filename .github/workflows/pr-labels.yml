@@ -1,0 +1,204 @@
+# =============================================================================
+# pr-labels.yml — Automated PR size labeling + affected packages comment
+#
+# Runs on every PR open/sync:
+#   1. Labels PR as XS / S / M / L / XL based on lines changed
+#   2. Posts a comment listing which turbo packages are affected
+# =============================================================================
+name: PR Labels
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  label-size:
+    name: Label PR size
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Calculate diff size
+        id: diff
+        run: |
+          BASE="${{ github.event.pull_request.base.sha }}"
+          HEAD="${{ github.event.pull_request.head.sha }}"
+
+          # Count lines added + removed (excluding lockfiles, generated files)
+          LINES=$(git diff --stat "$BASE".."$HEAD" \
+            -- ':!pnpm-lock.yaml' \
+               ':!*.snap' \
+               ':!*.lock' \
+               ':!**/migrations/**' \
+               ':!**/__generated__/**' \
+            | tail -1 \
+            | grep -oE '[0-9]+ (insertion|deletion)' \
+            | grep -oE '[0-9]+' \
+            | paste -sd+ \
+            | bc 2>/dev/null || echo 0)
+
+          echo "lines=$LINES" >> $GITHUB_OUTPUT
+          echo "PR diff size: $LINES lines"
+
+      - name: Assign size label
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const lines = parseInt('${{ steps.diff.outputs.lines }}') || 0;
+
+            const SIZE_LABELS = [
+              { max: 10,   label: 'size/XS', color: '3cbf00', desc: 'Extra small change (≤10 lines)' },
+              { max: 50,   label: 'size/S',  color: '5d9801', desc: 'Small change (11–50 lines)'     },
+              { max: 200,  label: 'size/M',  color: 'edb431', desc: 'Medium change (51–200 lines)'   },
+              { max: 500,  label: 'size/L',  color: 'e8621a', desc: 'Large change (201–500 lines)'   },
+              { max: Infinity, label: 'size/XL', color: 'e11d48', desc: 'Extra large change (>500 lines)' },
+            ];
+
+            const chosen = SIZE_LABELS.find(s => lines <= s.max);
+
+            // Ensure all size labels exist in the repo
+            for (const s of SIZE_LABELS) {
+              try {
+                await github.rest.issues.createLabel({
+                  owner: context.repo.owner,
+                  repo:  context.repo.repo,
+                  name:  s.label,
+                  color: s.color,
+                  description: s.desc,
+                });
+              } catch (e) {
+                if (!e.message.includes('already_exists') && !e.message.includes('Validation Failed')) throw e;
+              }
+            }
+
+            // Remove existing size labels
+            const { data: currentLabels } = await github.rest.issues.listLabelsOnIssue({
+              owner:        context.repo.owner,
+              repo:         context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            for (const label of currentLabels) {
+              if (label.name.startsWith('size/')) {
+                await github.rest.issues.removeLabel({
+                  owner:        context.repo.owner,
+                  repo:         context.repo.repo,
+                  issue_number: context.issue.number,
+                  name:         label.name,
+                });
+              }
+            }
+
+            // Add new size label
+            await github.rest.issues.addLabels({
+              owner:        context.repo.owner,
+              repo:         context.repo.repo,
+              issue_number: context.issue.number,
+              labels:       [chosen.label],
+            });
+
+            core.info(`Labeled PR as ${chosen.label} (${lines} lines changed)`);
+
+  affected-packages:
+    name: Comment affected packages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: '8.15.0'
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Detect affected packages
+        id: affected
+        run: |
+          BASE="${{ github.event.pull_request.base.sha }}"
+
+          # Get changed files
+          CHANGED=$(git diff --name-only "$BASE"..HEAD)
+
+          # Map to package names
+          PACKAGES=""
+          while IFS= read -r file; do
+            if [[ "$file" == apps/client-dashboard/* ]]; then PACKAGES="$PACKAGES\n- \`client-dashboard\` (Next.js app)"; fi
+            if [[ "$file" == apps/admin-dashboard/* ]];  then PACKAGES="$PACKAGES\n- \`admin-dashboard\` (Next.js app)"; fi
+            if [[ "$file" == apps/marketing/* ]];        then PACKAGES="$PACKAGES\n- \`marketing\` (Next.js site)"; fi
+            if [[ "$file" == apps/scanner-app/* ]];      then PACKAGES="$PACKAGES\n- \`scanner-app\` (React Native)"; fi
+            if [[ "$file" == packages/ui/* ]];           then PACKAGES="$PACKAGES\n- \`@gate-access/ui\` (component library)"; fi
+            if [[ "$file" == packages/db/* ]];           then PACKAGES="$PACKAGES\n- \`@gate-access/db\` (Prisma + schema)"; fi
+            if [[ "$file" == packages/types/* ]];        then PACKAGES="$PACKAGES\n- \`@gate-access/types\` (shared types)"; fi
+            if [[ "$file" == packages/config/* ]];       then PACKAGES="$PACKAGES\n- \`@gate-access/config\` (shared config)"; fi
+            if [[ "$file" == .github/* ]];               then PACKAGES="$PACKAGES\n- \`CI/CD workflows\`"; fi
+            if [[ "$file" == scripts/* ]];               then PACKAGES="$PACKAGES\n- \`scripts\` (dev tooling)"; fi
+            if [[ "$file" == packages/db/prisma/* ]];    then PACKAGES="$PACKAGES\n- ⚠️ \`prisma/schema\` (DB migration may be needed)"; fi
+          done <<< "$CHANGED"
+
+          # Deduplicate
+          UNIQUE=$(echo -e "$PACKAGES" | sort -u | grep -v '^$')
+          echo "packages<<EOF" >> $GITHUB_OUTPUT
+          echo "$UNIQUE" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Post affected packages comment
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const packages = `${{ steps.affected.outputs.packages }}`.trim();
+            const lines    = '${{ github.event.pull_request.additions }}';
+            const dels     = '${{ github.event.pull_request.deletions }}';
+
+            const body = [
+              '## 📦 Affected Packages',
+              '',
+              packages || '_No tracked packages changed._',
+              '',
+              '---',
+              `**Diff:** +${lines} / -${dels} lines`,
+              `> Auto-generated by [pr-labels.yml](.github/workflows/pr-labels.yml)`,
+            ].join('\n');
+
+            // Find existing bot comment to update instead of spamming
+            const { data: comments } = await github.rest.issues.listComments({
+              owner:        context.repo.owner,
+              repo:         context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const existing = comments.find(c =>
+              c.user.type === 'Bot' && c.body.includes('## 📦 Affected Packages')
+            );
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner:      context.repo.owner,
+                repo:       context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner:        context.repo.owner,
+                repo:         context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+            }

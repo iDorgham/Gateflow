@@ -16,47 +16,57 @@
  *   on-plan-start <slug>                   add "In Progress" entry to PRD
  */
 
-const fs           = require('fs');
-const path         = require('path');
+const fs = require('fs');
+const path = require('path');
 const { execSync } = require('child_process');
 
-const ROOT       = path.resolve(__dirname, '..');
-const CHANGELOG  = path.join(ROOT, 'CHANGELOG.md');
-const README     = path.join(ROOT, 'README.md');
-const PRD        = path.join(ROOT, 'docs', 'product', 'PRD.md');
+const ROOT = path.resolve(__dirname, '..');
+const CHANGELOG = path.join(ROOT, 'CHANGELOG.md');
+const README = path.join(ROOT, 'README.md');
+const PRD = path.join(ROOT, 'docs', 'product', 'PRD.md');
 const FEATURE_LOG = path.join(ROOT, 'docs', 'product', 'FEATURE_LOG.md');
-const UPCOMING   = path.join(ROOT, 'docs', 'product', 'UPCOMING.md');
+const UPCOMING = path.join(ROOT, 'docs', 'product', 'UPCOMING.md');
 
 // ── helpers ───────────────────────────────────────────────────────────────────
-function today()   { return new Date().toISOString().split('T')[0]; }
+function today() {
+  return new Date().toISOString().split('T')[0];
+}
 function version() {
-  return JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8')).version || '0.1.0';
+  return (
+    JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'))
+      .version || '0.1.0'
+  );
 }
 
 function git(cmd) {
-  try { return execSync(cmd, { cwd: ROOT, encoding: 'utf8', stdio: 'pipe' }).trim(); }
-  catch { return ''; }
+  try {
+    return execSync(cmd, { cwd: ROOT, encoding: 'utf8', stdio: 'pipe' }).trim();
+  } catch {
+    return '';
+  }
 }
 
 function slugToTitle(slug) {
-  return slug.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  return slug.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
 // ── CHANGELOG helpers ─────────────────────────────────────────────────────────
 const TYPE_SECTION = {
-  feat:     'Features',
-  fix:      'Bug Fixes',
-  perf:     'Performance',
+  feat: 'Features',
+  fix: 'Bug Fixes',
+  perf: 'Performance',
   security: 'Security',
-  chore:    'Maintenance',
-  docs:     'Documentation',
+  chore: 'Maintenance',
+  docs: 'Documentation',
   refactor: 'Refactoring',
 };
 
 function ensureChangelog() {
   if (fs.existsSync(CHANGELOG)) return;
   const ver = version();
-  fs.writeFileSync(CHANGELOG, `# Changelog
+  fs.writeFileSync(
+    CHANGELOG,
+    `# Changelog
 
 All notable changes to GateFlow are documented here.
 
@@ -81,7 +91,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 - GateAI intelligent operations assistant
 - Projects CRM: contacts, units, live logs, team management
 - Marketing Suite: UTM attribution, Meta Pixel, CRM webhooks
-`);
+`
+  );
   console.log(`✓ Created CHANGELOG.md`);
 }
 
@@ -89,7 +100,7 @@ function addChangelogEntry(type, description, slug) {
   ensureChangelog();
   let content = fs.readFileSync(CHANGELOG, 'utf8');
   const section = TYPE_SECTION[type] || 'Changes';
-  const entry   = `- **${slug ? `[${slugToTitle(slug)}] ` : ''}**${description}`;
+  const entry = `- **${slug ? `[${slugToTitle(slug)}] ` : ''}**${description}`;
 
   // Find or create section under [Unreleased]
   const sectionHeader = `### ${section}`;
@@ -101,7 +112,8 @@ function addChangelogEntry(type, description, slug) {
       // Add new section before next ## header
       content = content.replace(
         /## \[Unreleased\]\n([\s\S]*?)(?=\n---|\n## \[)/,
-        (m, body) => `## [Unreleased]\n${body.trimEnd()}\n\n${sectionHeader}\n${entry}\n`
+        (m, body) =>
+          `## [Unreleased]\n${body.trimEnd()}\n\n${sectionHeader}\n${entry}\n`
       );
     }
   }
@@ -137,9 +149,12 @@ function closeUnreleased(newVersion) {
 
 // ── README helpers ────────────────────────────────────────────────────────────
 function refreshReadme(slug, description) {
-  if (!fs.existsSync(README)) { console.log('ℹ  README.md not found — skip'); return; }
+  if (!fs.existsSync(README)) {
+    console.log('ℹ  README.md not found — skip');
+    return;
+  }
   let content = fs.readFileSync(README, 'utf8');
-  const ver   = version();
+  const ver = version();
 
   // Update / add version badge
   const versionBadge = `<img src="https://img.shields.io/badge/version-${ver}-blue?style=for-the-badge" alt="version">`;
@@ -157,7 +172,11 @@ function refreshReadme(slug, description) {
   }
 
   // Update Recent Engineering Activity section
-  if (slug && description && content.includes('## 📅 Recent Engineering Activity')) {
+  if (
+    slug &&
+    description &&
+    content.includes('## 📅 Recent Engineering Activity')
+  ) {
     const newEntry = `- **[${slugToTitle(slug)}]:** ${description}`;
     content = content.replace(
       /(## 📅 Recent Engineering Activity\n\n)/,
@@ -181,10 +200,12 @@ function refreshReadme(slug, description) {
 // ── FEATURE LOG ───────────────────────────────────────────────────────────────
 function updateFeatureLog(slug, status, description) {
   const title = slugToTitle(slug);
-  const date  = today();
+  const date = today();
 
   if (!fs.existsSync(FEATURE_LOG)) {
-    fs.writeFileSync(FEATURE_LOG, `# GateFlow — Feature Log
+    fs.writeFileSync(
+      FEATURE_LOG,
+      `# GateFlow — Feature Log
 
 Chronological record of shipped features.
 
@@ -192,7 +213,8 @@ Chronological record of shipped features.
 
 | Date | Feature | Status | Notes |
 |------|---------|--------|-------|
-`);
+`
+    );
   }
 
   let content = fs.readFileSync(FEATURE_LOG, 'utf8');
@@ -208,7 +230,9 @@ Chronological record of shipped features.
 // ── UPCOMING ──────────────────────────────────────────────────────────────────
 function addUpcoming(slug, description) {
   if (!fs.existsSync(UPCOMING)) {
-    fs.writeFileSync(UPCOMING, `# GateFlow — Upcoming Features
+    fs.writeFileSync(
+      UPCOMING,
+      `# GateFlow — Upcoming Features
 
 Features in planning or development.
 
@@ -219,7 +243,8 @@ Features in planning or development.
 ## In Development
 
 ## Recently Shipped
-`);
+`
+    );
   }
 
   let content = fs.readFileSync(UPCOMING, 'utf8');
@@ -233,10 +258,10 @@ Features in planning or development.
 
 function moveUpcomingToShipped(slug) {
   if (!fs.existsSync(UPCOMING)) return;
-  const title   = slugToTitle(slug);
-  let content   = fs.readFileSync(UPCOMING, 'utf8');
+  const title = slugToTitle(slug);
+  let content = fs.readFileSync(UPCOMING, 'utf8');
   const pattern = new RegExp(`- \\*\\*${title}[^\\n]*\\n`);
-  const match   = content.match(pattern);
+  const match = content.match(pattern);
   if (!match) return;
 
   // Remove from In Planning / In Development
@@ -252,7 +277,10 @@ function moveUpcomingToShipped(slug) {
 
 // ── PRD helper ────────────────────────────────────────────────────────────────
 function updatePrd(slug, status) {
-  if (!fs.existsSync(PRD)) { console.log('ℹ  PRD not found — skip'); return; }
+  if (!fs.existsSync(PRD)) {
+    console.log('ℹ  PRD not found — skip');
+    return;
+  }
   let content = fs.readFileSync(PRD, 'utf8');
   const title = slugToTitle(slug);
   const statusLine = `**Status:** ${status} | Last updated: ${today()}`;
@@ -260,7 +288,9 @@ function updatePrd(slug, status) {
   if (content.includes(title)) {
     // Replace existing status line near the slug mention
     content = content.replace(
-      new RegExp(`(${title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}[\\s\\S]{0,200}?)\\*\\*Status:\\*\\*[^\\n]*`),
+      new RegExp(
+        `(${title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}[\\s\\S]{0,200}?)\\*\\*Status:\\*\\*[^\\n]*`
+      ),
       `$1${statusLine}`
     );
   } else {
@@ -275,12 +305,20 @@ function updatePrd(slug, status) {
 
 // ── from-commit: parse latest commit msg ─────────────────────────────────────
 function fromCommit() {
-  const msg  = git('git log -1 --pretty=%s');
-  if (!msg)  { console.log('ℹ  No commit found'); return; }
+  const msg = git('git log -1 --pretty=%s');
+  if (!msg) {
+    console.log('ℹ  No commit found');
+    return;
+  }
 
   // Conventional commit: feat(slug): description
-  const m = msg.match(/^(feat|fix|perf|security|chore|docs|refactor)\(([^)]+)\):\s*(.+)/);
-  if (!m) { console.log(`ℹ  Commit "${msg}" is not conventional — skip changelog`); return; }
+  const m = msg.match(
+    /^(feat|fix|perf|security|chore|docs|refactor)\(([^)]+)\):\s*(.+)/
+  );
+  if (!m) {
+    console.log(`ℹ  Commit "${msg}" is not conventional — skip changelog`);
+    return;
+  }
 
   const [, type, scope, desc] = m;
   addChangelogEntry(type, desc, scope);
@@ -289,18 +327,20 @@ function fromCommit() {
 
 // ── COMMANDS ──────────────────────────────────────────────────────────────────
 const args = process.argv.slice(2);
-const cmd  = args[0];
-const sub  = args[1];
+const cmd = args[0];
+const sub = args[1];
 
 switch (cmd) {
-
   case 'changelog': {
     if (sub === 'add') {
-      const slug    = args[2];
-      const descIdx = args.findIndex(a => !a.startsWith('--') && args.indexOf(a) > 2);
-      const desc    = args.slice(2).find(a => !a.startsWith('--') && a !== slug) || slug;
+      const slug = args[2];
+      const descIdx = args.findIndex(
+        (a) => !a.startsWith('--') && args.indexOf(a) > 2
+      );
+      const desc =
+        args.slice(2).find((a) => !a.startsWith('--') && a !== slug) || slug;
       const typeIdx = args.indexOf('--type');
-      const type    = typeIdx !== -1 ? args[typeIdx + 1] : 'feat';
+      const type = typeIdx !== -1 ? args[typeIdx + 1] : 'feat';
       addChangelogEntry(type, desc, slug);
     } else if (sub === 'from-commit') {
       fromCommit();
@@ -308,7 +348,9 @@ switch (cmd) {
       const ver = args[2] || version();
       closeUnreleased(ver);
     } else {
-      console.log('Usage: ralph-docs changelog [add <slug> "<desc>" | from-commit | release <version>]');
+      console.log(
+        'Usage: ralph-docs changelog [add <slug> "<desc>" | from-commit | release <version>]'
+      );
     }
     break;
   }
@@ -337,7 +379,7 @@ switch (cmd) {
   }
 
   case 'upcoming': {
-    if (sub === 'add')    addUpcoming(args[2], args.slice(3).join(' '));
+    if (sub === 'add') addUpcoming(args[2], args.slice(3).join(' '));
     if (sub === 'shipped') moveUpcomingToShipped(args[2]);
     break;
   }
@@ -346,16 +388,24 @@ switch (cmd) {
   case 'on-plan-start': {
     const slug = args[1];
     if (!slug) break;
-    addChangelogEntry('chore', `Started development of ${slugToTitle(slug)}`, slug);
+    addChangelogEntry(
+      'chore',
+      `Started development of ${slugToTitle(slug)}`,
+      slug
+    );
     updatePrd(slug, 'In Progress');
-    addUpcoming(slug, `Active development — see docs/plan/in-progress/${slug}/`);
+    addUpcoming(
+      slug,
+      `Active development — see docs/plan/in-progress/${slug}/`
+    );
     break;
   }
 
   case 'on-plan-done': {
     const slug = args[1];
     if (!slug) break;
-    const desc = args.slice(2).join(' ') || `Completed all phases of ${slugToTitle(slug)}`;
+    const desc =
+      args.slice(2).join(' ') || `Completed all phases of ${slugToTitle(slug)}`;
     addChangelogEntry('feat', desc, slug);
     updateFeatureLog(slug, '✅ Shipped', desc);
     moveUpcomingToShipped(slug);
@@ -367,19 +417,96 @@ switch (cmd) {
 
   // ── Full release flow ─────────────────────────────────────────────────────
   case 'release': {
-    const newVer = args[1];
-    if (!newVer) { console.error('Usage: ralph-docs release <version>'); process.exit(1); }
+    const dryRun = args.includes('--dry-run') || args.includes('--dry');
+    const newVer = args.slice(1).find((a) => !a.startsWith('--'));
+    if (!newVer) {
+      console.error('Usage: ralph-docs release <version> [--dry-run]');
+      process.exit(1);
+    }
+
+    const currentVer = version();
+
+    // ── DRY RUN: show exactly what would happen, write nothing ───────────────
+    if (dryRun) {
+      console.log(`\n🔍 Release dry-run: v${currentVer} → v${newVer}\n`);
+      console.log('The following changes would be made:\n');
+      console.log(
+        `  1. package.json     version: "${currentVer}" → "${newVer}"`
+      );
+
+      if (fs.existsSync(CHANGELOG)) {
+        const cl = fs.readFileSync(CHANGELOG, 'utf8');
+        const match = cl.match(/## \[Unreleased\]([\s\S]*?)(?=\n---|\n## \[)/);
+        const unreleased = match ? match[1].trim() : '';
+        if (unreleased && unreleased !== '*(next release notes go here)*') {
+          console.log(
+            `\n  2. CHANGELOG.md     [Unreleased] → [${newVer}] — ${today()}`
+          );
+          console.log(`\n     ┌─ Release notes preview ──────────────────────`);
+          unreleased.split('\n').forEach((l) => console.log(`     │ ${l}`));
+          console.log(`     └──────────────────────────────────────────────`);
+        } else {
+          console.log(
+            `  2. CHANGELOG.md     [Unreleased] is empty — header close only`
+          );
+        }
+      } else {
+        console.log(`  2. CHANGELOG.md     would be created`);
+      }
+
+      console.log(
+        `\n  3. README.md        version badge updated to v${newVer}`
+      );
+      console.log(`  4. git commit       "chore(release): v${newVer}"`);
+      console.log(`  5. git tag          v${newVer} (annotated)`);
+      console.log(`\n  After release:`);
+      console.log(`    git push origin HEAD && git push origin v${newVer}`);
+      console.log(
+        `    → GitHub Actions (release.yml) publishes GitHub Release\n`
+      );
+      console.log(
+        'ℹ  Dry run complete — nothing was written. Remove --dry-run to execute.\n'
+      );
+      process.exit(0);
+    }
+
+    // Show changelog preview before doing anything
+    if (fs.existsSync(CHANGELOG)) {
+      const cl = fs.readFileSync(CHANGELOG, 'utf8');
+      const match = cl.match(/## \[Unreleased\]([\s\S]*?)(?=\n---|\n## \[)/);
+      const unreleased = match ? match[1].trim() : '';
+      if (unreleased && unreleased !== '*(next release notes go here)*') {
+        console.log(
+          `\n📋 Changelog preview — what will close as [${newVer}]:\n`
+        );
+        console.log(unreleased);
+        console.log('\n────────────────────────────────────────');
+      } else {
+        console.log(
+          `\nℹ  [Unreleased] section is empty — version bump only.\n`
+        );
+      }
+    }
 
     console.log(`\n🚀 Releasing v${newVer}...\n`);
 
     // 1. Bump version in package.json
-    execSync(`node scripts/ralph-version.js bump ${newVer.split('.').length > 2 ? 'patch' : 'minor'}`, {
-      cwd: ROOT, stdio: 'inherit'
-    });
+    execSync(
+      `node scripts/ralph-version.js bump ${newVer.split('.').length > 2 ? 'patch' : 'minor'}`,
+      {
+        cwd: ROOT,
+        stdio: 'inherit',
+      }
+    );
     // Override to exact version
-    const pkg  = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
+    const pkg = JSON.parse(
+      fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8')
+    );
     pkg.version = newVer;
-    fs.writeFileSync(path.join(ROOT, 'package.json'), JSON.stringify(pkg, null, 2) + '\n');
+    fs.writeFileSync(
+      path.join(ROOT, 'package.json'),
+      JSON.stringify(pkg, null, 2) + '\n'
+    );
     console.log(`✓ package.json → v${newVer}`);
 
     // 2. Close CHANGELOG unreleased section
@@ -389,11 +516,20 @@ switch (cmd) {
     refreshReadme();
 
     // 4. Commit
-    execSync(`git add CHANGELOG.md README.md package.json`, { cwd: ROOT, stdio: 'inherit' });
-    execSync(`git commit -m "chore(release): v${newVer}"`, { cwd: ROOT, stdio: 'inherit' });
+    execSync(`git add CHANGELOG.md README.md package.json`, {
+      cwd: ROOT,
+      stdio: 'inherit',
+    });
+    execSync(`git commit -m "chore(release): v${newVer}"`, {
+      cwd: ROOT,
+      stdio: 'inherit',
+    });
 
     // 5. Tag
-    execSync(`node scripts/ralph-version.js tag "Release v${newVer}"`, { cwd: ROOT, stdio: 'inherit' });
+    execSync(`node scripts/ralph-version.js tag "Release v${newVer}"`, {
+      cwd: ROOT,
+      stdio: 'inherit',
+    });
 
     console.log(`\n🎉 Released v${newVer}`);
     console.log(`   Push: git push origin HEAD && git push origin v${newVer}`);

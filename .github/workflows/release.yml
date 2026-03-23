@@ -1,0 +1,97 @@
+# =============================================================================
+# release.yml — Auto-publish GitHub Release on version tag push
+#
+# Trigger: git push origin v*  (e.g. v0.2.0)
+#
+# Steps:
+#   1. Extract the matching CHANGELOG section for this version
+#   2. Create a GitHub Release with that content as the body
+#   3. Attach build artifacts if present
+# =============================================================================
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Publish GitHub Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract version from tag
+        id: version
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          VERSION="${TAG#v}"
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Publishing release for $TAG (v$VERSION)"
+
+      - name: Extract CHANGELOG section
+        id: changelog
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+
+          if [ ! -f CHANGELOG.md ]; then
+            echo "body=No CHANGELOG.md found." >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          # Extract the block between ## [VERSION] and the next ## [
+          BODY=$(awk "/^## \[${VERSION}\]/{found=1; next} found && /^## \[/{exit} found{print}" CHANGELOG.md)
+
+          if [ -z "$BODY" ]; then
+            # Try [Unreleased] as fallback (if changelog wasn't closed yet)
+            BODY=$(awk '/^## \[Unreleased\]/{found=1; next} found && /^## \[/{exit} found{print}' CHANGELOG.md)
+            if [ -n "$BODY" ]; then
+              BODY="*(from [Unreleased])*"$'\n\n'"$BODY"
+            else
+              BODY="See [CHANGELOG.md](./CHANGELOG.md) for details."
+            fi
+          fi
+
+          # Write to file to handle multiline safely
+          echo "$BODY" > /tmp/release-body.md
+          echo "body_file=/tmp/release-body.md" >> $GITHUB_OUTPUT
+
+      - name: Append release footer
+        run: |
+          cat >> /tmp/release-body.md << 'EOF'
+
+          ---
+          📦 **GateFlow** — Gate access management platform
+          🤖 Release automated by [ralph-docs.js](./scripts/ralph-docs.js)
+          EOF
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: GateFlow ${{ steps.version.outputs.tag }}
+          body_path: /tmp/release-body.md
+          draft: false
+          prerelease: ${{ contains(steps.version.outputs.version, '-') }}
+          generate_release_notes: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Summary
+        run: |
+          echo "## 🎉 Release Published" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Tag:** \`${{ steps.version.outputs.tag }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**Version:** ${{ steps.version.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Release notes" >> $GITHUB_STEP_SUMMARY
+          cat /tmp/release-body.md >> $GITHUB_STEP_SUMMARY

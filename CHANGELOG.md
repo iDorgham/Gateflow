@@ -8,13 +8,46 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ## [Unreleased]
 
-*(next release notes go here)*
+### Added
+
+- **[Automation] Ralph Loop** — Complete developer automation engine: 19 Ralph scripts, 5 Husky git hooks, 12 quality-check scripts
+- **[Automation] `pnpm ralph`** — Master workspace dashboard: git state, active plans, hook health, quality snapshot, next action
+- **[Automation] Plan lifecycle** — `plan:new → plan:ready → plan:start → plan:run → plan:done` with automatic folder moves and doc cascades
+- **[Automation] Phase auto-close** — Commit messages with `phase 3`, `[p3]`, `closes phase 3` auto-mark PLAN phases `[x]`
+- **[Automation] Phase runner** — `pnpm plan:run` selects right CLI, runs phase, marks done, auto-completes plan on last phase
+- **[Automation] Hotfix workflow** — `hotfix:start/done/status` with auto branch, bump, tag, and PR
+- **[Automation] Semantic versioning** — `version:bump/tag/info` with annotated git tags
+- **[Automation] Docs release** — `docs:release` closes `[Unreleased]`, bumps version, creates tag; `docs:release:dry` previews
+- **[Automation] On-plan-done cascade** — Auto-updates CHANGELOG, FEATURE_LOG, UPCOMING, PRD, README on plan completion
+- **[Automation] Commitlint** — Conventional commits enforced on every commit; 13 types, 30 scopes
+- **[Automation] lint-staged** — Pre-commit ESLint + Prettier on staged files only
+- **[Automation] Secret scanner** — 12 HIGH patterns block commit, 4 MEDIUM warn; skips test files and CI yml
+- **[Automation] Env validator** — Checks presence, placeholder detection, and min-length for all app env vars
+- **[Automation] Bundle size guard** — Warn >10% / fail >25% growth vs stored baseline
+- **[Automation] Circular import detector** — Pure static DFS analysis across all TS/JS files
+- **[Automation] DB schema drift** — Hash-based change detection vs committed baseline
+- **[Automation] TODO/FIXME report** — `check:todos` with git blame author + age, severity sorting, JSON output
+- **[Automation] Pre-deploy checklist** — 5-check gate; `--fail` mode for CI
+- **[Automation] Dev onboarding** — `pnpm setup:dev` interactive env setup + DB init + hook install
+- **[Automation] Branch enforcer** — Pre-push validates branch name pattern
+- **[Automation] PR size labels** — GitHub Action labels XS/S/M/L/XL + posts affected packages comment
+- **[Automation] GitHub Release** — Auto-published from CHANGELOG on `v*` tag push
+- **[Automation] Post-merge auto-bump** — Merging `feat/*` into master auto-bumps patch + tags
+- **[Docs] Automation Guide** — Comprehensive `docs/guides/AUTOMATION_GUIDE.md` covering all scripts, hooks, and workflows
+- **[Docs] README rewrite** — Full README with automation badges, command reference, best workflow guide, monorepo structure
+
+### Performance
+
+- **[Assets] **font display:swap + image allowlist + avif/webp + dvh + preconnect — phase 2
+- **[Ci] **establish lighthouse ci pipeline and performance baseline — phase 1
 
 ---
 
 ## [0.1.0] — 2026-03-23
 
 ### Features
+
+- **[Tools] **doc automation — changelog, versioning, PRD, organize
 - **[Tools] **plan lifecycle automation + phase runner
 - Initial production release of GateFlow v0.1.0
 - 6-app monorepo: client-dashboard, admin-dashboard, scanner-app, resident-mobile, resident-portal, marketing

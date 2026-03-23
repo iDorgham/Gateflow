@@ -60,6 +60,11 @@ type SearchParams = {
   mode?: string;
 };
 
+import { Suspense } from 'react';
+import AnalyticsLoading from './loading';
+
+// ... (keep parseDateRange)
+
 export default async function AnalyticsPage({
   params,
   searchParams,
@@ -67,16 +72,39 @@ export default async function AnalyticsPage({
   params: { locale: Locale };
   searchParams: SearchParams;
 }) {
-  const { t } = await getTranslation(params.locale, 'dashboard');
   const claims = await getSessionClaims();
   if (!claims?.orgId) redirect(`/${params.locale}/login`);
 
-  const orgId = claims.orgId;
+  return (
+    <Suspense fallback={<AnalyticsLoading />}>
+      <AnalyticsContent
+        locale={params.locale}
+        searchParams={searchParams}
+        orgId={claims.orgId}
+      />
+    </Suspense>
+  );
+}
+
+async function AnalyticsContent({
+  locale,
+  searchParams,
+  orgId,
+}: {
+  locale: Locale;
+  searchParams: SearchParams;
+  orgId: string;
+}) {
+  const { t } = await getTranslation(locale, 'dashboard');
   const cookieProjectId = await getValidatedProjectId(orgId);
   let projectId: string | null = cookieProjectId;
   if (searchParams.projectId) {
     const valid = await prisma.project.findFirst({
-      where: { id: searchParams.projectId, organizationId: orgId, deletedAt: null },
+      where: {
+        id: searchParams.projectId,
+        organizationId: orgId,
+        deletedAt: null,
+      },
       select: { id: true },
     });
     if (valid) projectId = valid.id;
@@ -84,7 +112,7 @@ export default async function AnalyticsPage({
 
   const { dateFrom, dateTo } = parseDateRange(
     t,
-    params.locale,
+    locale,
     searchParams.range,
     searchParams.from,
     searchParams.to
@@ -105,13 +133,17 @@ export default async function AnalyticsPage({
   ] = await Promise.all([
     // 30d success rate
     prisma.scanLog.count({
-      where: { qrCode: qrFilter, status: 'SUCCESS', scannedAt: { gte: thirtyDaysAgo } },
+      where: {
+        qrCode: qrFilter,
+        status: 'SUCCESS',
+        scannedAt: { gte: thirtyDaysAgo },
+      },
     }),
     prisma.scanLog.count({
       where: { qrCode: qrFilter, scannedAt: { gte: thirtyDaysAgo } },
     }),
 
-    // Heatmap via raw SQL — no conditional template-literal injection
+    // Heatmap via raw SQL
     (async () => {
       type Row = { dow: number; hour: number; count: bigint };
       if (projectId) {
@@ -145,12 +177,20 @@ export default async function AnalyticsPage({
 
     // Denied scans (30d)
     prisma.scanLog.count({
-      where: { qrCode: qrFilter, status: 'DENIED', scannedAt: { gte: thirtyDaysAgo } },
+      where: {
+        qrCode: qrFilter,
+        status: 'DENIED',
+        scannedAt: { gte: thirtyDaysAgo },
+      },
     }),
 
     // Gates for filter bar
     prisma.gate.findMany({
-      where: { organizationId: orgId, deletedAt: null, ...(projectId ? { projectId } : {}) },
+      where: {
+        organizationId: orgId,
+        deletedAt: null,
+        ...(projectId ? { projectId } : {}),
+      },
       select: { id: true, name: true },
       orderBy: { name: 'asc' },
     }),
@@ -159,8 +199,12 @@ export default async function AnalyticsPage({
   const successRatePct =
     totalScans30d > 0 ? Math.round((successRate30d / totalScans30d) * 100) : 0;
 
-  // Peak hour: aggregate heatmap by hour, find max
-  const heatmapRows = heatmapRaw as { dow: number; hour: number; count: bigint | number }[];
+  // Peak hour aggregate
+  const heatmapRows = heatmapRaw as {
+    dow: number;
+    hour: number;
+    count: bigint | number;
+  }[];
   const hourCounts = new Map<number, number>();
   for (const r of heatmapRows) {
     const count = typeof r.count === 'bigint' ? Number(r.count) : r.count;
@@ -186,7 +230,5 @@ export default async function AnalyticsPage({
 
   const gates = gatesForFilter.map((g) => ({ id: g.id, name: g.name }));
 
-  return (
-    <AnalyticsClient kpiData={kpiData} gates={gates} />
-  );
+  return <AnalyticsClient kpiData={kpiData} gates={gates} />;
 }

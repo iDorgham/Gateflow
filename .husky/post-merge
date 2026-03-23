@@ -1,0 +1,29 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Auto patch-bump + tag when merging a feat/* branch into master/main
+CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+
+# Reliable merged branch detection via ORIG_HEAD comparison
+MERGED_BRANCH=$(git log --merges -1 --pretty=format:'%s' 2>/dev/null \
+  | sed "s/Merge branch '\([^']*\)'.*/\1/" \
+  | sed "s/Merge pull request.*from [^/]*\/\([^ ]*\).*/\1/")
+
+# Fallback: check reflog for the last merge action
+if [ -z "$MERGED_BRANCH" ]; then
+  MERGED_BRANCH=$(git reflog -1 --pretty=format:'%gs' 2>/dev/null \
+    | sed "s/merge [^:]*: //" \
+    | sed "s/Merge branch '\([^']*\)'.*/\1/")
+fi
+
+case "$MERGED_BRANCH" in
+  feat/*)
+    if [ "$CURRENT_BRANCH" = "master" ] || [ "$CURRENT_BRANCH" = "main" ]; then
+      echo "🏷  feat/* merged into ${CURRENT_BRANCH} — auto bumping patch version..."
+      node scripts/ralph-version.js bump patch
+      node scripts/ralph-version.js tag "Auto-release after ${MERGED_BRANCH}"
+      echo "✓ Version bumped and tagged. Push with:"
+      echo "   git push origin HEAD && git push origin --tags"
+    fi
+    ;;
+esac
