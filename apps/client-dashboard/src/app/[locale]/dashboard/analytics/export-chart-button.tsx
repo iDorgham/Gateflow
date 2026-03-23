@@ -1,7 +1,7 @@
 'use client';
 
 import { Download } from 'lucide-react';
-import html2canvas from 'html2canvas';
+// html2canvas is dynamically imported in onExport to reduce bundle size
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import type { RefObject } from 'react';
@@ -20,6 +20,7 @@ export function ExportChartButton({ targetRef }: ExportChartButtonProps) {
     }
 
     try {
+      const { default: html2canvas } = await import('html2canvas');
       const canvas = await html2canvas(targetRef.current, {
         useCORS: true,
         scale: Math.min(window.devicePixelRatio || 1, 2),

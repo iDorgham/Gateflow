@@ -2,30 +2,29 @@
 
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import {
-  cn,
-  DynamicTable,
-  type Column
-} from '@gate-access/ui';
+import { cn, DynamicTable, type Column } from '@gate-access/ui';
 import { useTranslation } from 'react-i18next';
-import {
-  QrCode,
-  Building,
-  DoorOpen
-} from 'lucide-react';
+import { QrCode, Building, DoorOpen } from 'lucide-react';
 import dynamic from 'next/dynamic';
 const ScanDetailDrawer = dynamic(
-  () => import('./ScanDetailDrawer').then((m) => ({ default: m.ScanDetailDrawer })),
+  () =>
+    import('./ScanDetailDrawer').then((m) => ({ default: m.ScanDetailDrawer })),
   { ssr: false }
 );
 
 const STATUS_COLORS: Record<string, string> = {
-  SUCCESS: 'bg-[var(--ds-background-success-subtle)] text-[var(--ds-text-success)]',
-  FAILED: 'bg-[var(--ds-background-danger-subtle)] text-[var(--ds-text-danger)]',
-  EXPIRED: 'bg-[var(--ds-background-warning-subtle)] text-[var(--ds-text-warning)]',
-  MAX_USES_REACHED: 'bg-[var(--ds-background-brand-subtle)] text-[var(--ds-text-brand)] border border-[var(--ds-border-brand)]/20',
-  INACTIVE: 'bg-[var(--ds-background-neutral-subtle)] text-[var(--ds-text-subtle)]',
-  DENIED: 'bg-[var(--ds-background-danger-subtle)] text-[var(--ds-text-danger)]',
+  SUCCESS:
+    'bg-[var(--ds-background-success-subtle)] text-[var(--ds-text-success)]',
+  FAILED:
+    'bg-[var(--ds-background-danger-subtle)] text-[var(--ds-text-danger)]',
+  EXPIRED:
+    'bg-[var(--ds-background-warning-subtle)] text-[var(--ds-text-warning)]',
+  MAX_USES_REACHED:
+    'bg-[var(--ds-background-brand-subtle)] text-[var(--ds-text-brand)] border border-[var(--ds-border-brand)]/20',
+  INACTIVE:
+    'bg-[var(--ds-background-neutral-subtle)] text-[var(--ds-text-subtle)]',
+  DENIED:
+    'bg-[var(--ds-background-danger-subtle)] text-[var(--ds-text-danger)]',
 };
 
 export interface ScanLog {
@@ -78,10 +77,19 @@ export function ScansTable({
         render: (item) => (
           <div className="flex flex-col">
             <span className="text-[13px] font-bold text-[var(--ds-text)]">
-              {new Date(item.scannedAt).toLocaleDateString(locale, { month: 'short', day: 'numeric', year: 'numeric' })}
+              {new Date(item.scannedAt).toLocaleDateString(locale, {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric',
+              })}
             </span>
             <span className="text-[10px] font-black text-[var(--ds-text-subtle)] uppercase tracking-tighter">
-               {new Date(item.scannedAt).toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })}
+              {new Date(item.scannedAt).toLocaleTimeString(locale, {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true,
+              })}
             </span>
           </div>
         ),
@@ -92,7 +100,7 @@ export function ScansTable({
         render: (item) => (
           <div className="flex items-center gap-3">
             <div className="h-8 w-8 rounded-lg bg-[var(--ds-background-neutral-subtle)] flex items-center justify-center shrink-0">
-               <QrCode className="h-4 w-4 text-[var(--ds-text-subtle)]" />
+              <QrCode className="h-4 w-4 text-[var(--ds-text-subtle)]" />
             </div>
             <div className="flex flex-col">
               <span className="font-mono text-xs font-black text-[var(--ds-text-brand)] tracking-wider">
@@ -113,14 +121,15 @@ export function ScansTable({
       cols.push({
         key: 'project',
         label: t('scans.table.project', 'Property'),
-        render: (item) => (
+        render: (item) =>
           item.qrCode?.project?.name ? (
             <span className="inline-flex items-center gap-1.5 rounded-[3px] bg-[var(--ds-background-brand-subtle)] px-2 py-0.5 text-[11px] font-semibold text-[var(--ds-text-brand)] uppercase tracking-tight whitespace-nowrap border border-[var(--ds-border-brand)]/20">
               <Building className="h-3 w-3" />
               {item.qrCode.project.name}
             </span>
-          ) : <span className="text-[var(--ds-text-subtlest)]">—</span>
-        ),
+          ) : (
+            <span className="text-[var(--ds-text-subtlest)]">—</span>
+          ),
       });
     }
 
@@ -133,7 +142,9 @@ export function ScansTable({
           <div className="flex items-center gap-2">
             <DoorOpen className="h-4 w-4 text-[var(--ds-text-subtle)] opacity-50" />
             <span className="text-[13px] font-bold text-[var(--ds-text)]">
-              {item.gate?.name ?? <span className="text-[var(--ds-text-subtlest)]">—</span>}
+              {item.gate?.name ?? (
+                <span className="text-[var(--ds-text-subtlest)]">—</span>
+              )}
             </span>
           </div>
         ),
@@ -141,17 +152,27 @@ export function ScansTable({
       {
         key: 'operator',
         label: t('scans.table.operator', 'Security Guard'),
-        render: (item) => item.user ? (
-          <div className="flex items-center gap-3">
-             <div className="h-8 w-8 rounded-full bg-[var(--ds-background-neutral)] flex items-center justify-center text-[10px] font-black text-[var(--ds-text-subtle)]">
-                {item.user.name?.split(' ').map(n => n[0]).join('')}
-             </div>
-            <div className="flex flex-col">
-              <span className="text-[13px] font-bold text-[var(--ds-text)]">{item.user.name}</span>
-              <span className="text-[10px] font-bold text-[var(--ds-text-subtle)] lowercase">{item.user.email}</span>
+        render: (item) =>
+          item.user ? (
+            <div className="flex items-center gap-3">
+              <div className="h-8 w-8 rounded-full bg-[var(--ds-background-neutral)] flex items-center justify-center text-[10px] font-black text-[var(--ds-text-subtle)]">
+                {item.user.name
+                  ?.split(' ')
+                  .map((n) => n[0])
+                  .join('')}
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[13px] font-bold text-[var(--ds-text)]">
+                  {item.user.name}
+                </span>
+                <span className="text-[10px] font-bold text-[var(--ds-text-subtle)] lowercase">
+                  {item.user.email}
+                </span>
+              </div>
             </div>
-          </div>
-        ) : <span className="text-[var(--ds-text-subtlest)]">—</span>,
+          ) : (
+            <span className="text-[var(--ds-text-subtlest)]">—</span>
+          ),
       },
       {
         key: 'status',
@@ -160,12 +181,24 @@ export function ScansTable({
         align: 'right',
         render: (item) => (
           <div className="flex justify-end">
-            <span className={cn(
-              'inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider', 
-              STATUS_COLORS[item.status] ?? 'bg-[var(--ds-background-neutral-subtle)] text-[var(--ds-text-subtle)]'
-            )}>
-              <div className={cn("h-1.5 w-1.5 rounded-full", item.status === 'SUCCESS' ? "bg-[var(--ds-icon-success)]" : "bg-[var(--ds-icon-danger)]")} />
-              {t(`scans.status.${item.status}`, { defaultValue: item.status.replace(/_/g, ' ') })}
+            <span
+              className={cn(
+                'inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider',
+                STATUS_COLORS[item.status] ??
+                  'bg-[var(--ds-background-neutral-subtle)] text-[var(--ds-text-subtle)]'
+              )}
+            >
+              <div
+                className={cn(
+                  'h-1.5 w-1.5 rounded-full',
+                  item.status === 'SUCCESS'
+                    ? 'bg-[var(--ds-icon-success)]'
+                    : 'bg-[var(--ds-icon-danger)]'
+                )}
+              />
+              {t(`scans.status.${item.status}`, {
+                defaultValue: item.status.replace(/_/g, ' '),
+              })}
             </span>
           </div>
         ),
@@ -187,6 +220,8 @@ export function ScansTable({
           onSort={handleSort}
           onRowClick={(item) => setDrawerScan(item)}
           density="compact"
+          isVirtual={true}
+          containerHeight="600px"
         />
       </div>
       <ScanDetailDrawer

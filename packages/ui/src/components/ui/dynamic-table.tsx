@@ -2,14 +2,15 @@
 
 import * as React from 'react';
 import { ChevronUp, ChevronDown, Search } from 'lucide-react';
+import { useVirtualizer } from '@tanstack/react-virtual';
 import { cn } from '../../lib/utils';
-import { 
-  Table, 
-  TableHeader, 
-  TableBody, 
-  TableRow, 
-  TableHead, 
-  TableCell 
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
 } from './table';
 import { Skeleton } from './skeleton';
 import { EmptyState } from './empty-state';
@@ -39,6 +40,9 @@ export interface DynamicTableProps<T> {
   isSelectable?: boolean;
   /** 'compact' reduces row padding for high-density views (50+ rows). */
   density?: 'default' | 'compact';
+  /** Enables row virtualization for large datasets. Requires 'containerHeight'. */
+  isVirtual?: boolean;
+  containerHeight?: string;
 }
 
 export function DynamicTable<T extends { id: string | number }>({
@@ -55,20 +59,38 @@ export function DynamicTable<T extends { id: string | number }>({
   onSelectionChange,
   isSelectable = false,
   density = 'default',
+  isVirtual = false,
+  containerHeight = '500px',
 }: DynamicTableProps<T>) {
   const isCompact = density === 'compact';
+  const parentRef = React.useRef<HTMLDivElement>(null);
+
+  const rowHeight = isCompact ? 40 : 56;
+
+  const virtualizer = useVirtualizer({
+    count: items.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => rowHeight,
+    overscan: 5,
+  });
+
   const handleSort = (key: string) => {
     if (onSort) onSort(key);
   };
 
-  const allSelected = items.length > 0 && items.every(item => selectedIds.includes(item.id));
+  const allSelected =
+    items.length > 0 && items.every((item) => selectedIds.includes(item.id));
 
   const toggleAll = () => {
     if (!onSelectionChange) return;
     if (allSelected) {
-      onSelectionChange(selectedIds.filter(id => !items.find(item => item.id === id)));
+      onSelectionChange(
+        selectedIds.filter((id) => !items.find((item) => item.id === id))
+      );
     } else {
-      const newIds = Array.from(new Set([...selectedIds, ...items.map(item => item.id)]));
+      const newIds = Array.from(
+        new Set([...selectedIds, ...items.map((item) => item.id)])
+      );
       onSelectionChange(newIds);
     }
   };
@@ -76,71 +98,86 @@ export function DynamicTable<T extends { id: string | number }>({
   const toggleRow = (id: string | number) => {
     if (!onSelectionChange) return;
     if (selectedIds.includes(id)) {
-      onSelectionChange(selectedIds.filter(selectedId => selectedId !== id));
+      onSelectionChange(selectedIds.filter((selectedId) => selectedId !== id));
     } else {
       onSelectionChange([...selectedIds, id]);
     }
   };
 
-  return (
-    <div className="w-full">
-      <Table>
-        <TableHeader>
-          <TableRow className="hover:bg-transparent border-b border-[var(--ds-border)]">
-            {isSelectable && (
-              <TableHead className="w-10 px-4">
-                <Checkbox
-                  checked={allSelected}
-                  onChange={toggleAll}
-                  aria-label="Select all"
-                />
-              </TableHead>
+  const renderHeaders = () => (
+    <TableHeader className="sticky top-0 z-10 bg-[var(--ds-surface-raised)] shadow-sm">
+      <TableRow className="hover:bg-transparent border-b border-[var(--ds-border)]">
+        {isSelectable && (
+          <TableHead className="w-10 px-4">
+            <Checkbox
+              checked={allSelected}
+              onChange={toggleAll}
+              aria-label="Select all"
+            />
+          </TableHead>
+        )}
+        {columns.map((column) => (
+          <TableHead
+            key={column.key}
+            style={{ width: column.width }}
+            className={cn(
+              'text-[var(--ds-text-subtle)] font-bold text-xs uppercase tracking-wider',
+              isCompact ? 'h-8 px-3' : 'h-11 px-4',
+              column.align === 'center' && 'text-center',
+              column.align === 'right' && 'text-right'
             )}
-            {columns.map((column) => (
-              <TableHead
-                key={column.key}
-                style={{ width: column.width }}
+          >
+            {column.isSortable ? (
+              <button
+                onClick={() => handleSort(column.key)}
                 className={cn(
-                  'text-[var(--ds-text-subtle)] font-bold text-xs uppercase tracking-wider',
-                  isCompact ? 'h-8 px-3' : 'h-11 px-4',
-                  column.align === 'center' && 'text-center',
-                  column.align === 'right' && 'text-right'
+                  'flex items-center gap-1.5 hover:bg-[var(--ds-background-neutral-subtle-hovered)] transition-all group px-2 py-1.5 -ml-2 rounded-md',
+                  sortKey === column.key && 'text-[var(--ds-text-selected)]'
                 )}
               >
-                {column.isSortable ? (
-                  <button
-                    onClick={() => handleSort(column.key)}
-                    className={cn(
-                      "flex items-center gap-1.5 hover:bg-[var(--ds-background-neutral-subtle-hovered)] transition-all group px-2 py-1.5 -ml-2 rounded-md",
-                      sortKey === column.key && "text-[var(--ds-text-selected)]"
-                    )}
-                  >
-                    {column.label}
-                    <div className="flex flex-col">
-                      {sortKey === column.key ? (
-                        sortOrder === 'asc' ? (
-                          <ChevronUp className="h-4 w-4 text-[var(--ds-icon-selected)] animate-in fade-in slide-in-from-bottom-1 duration-200" />
-                        ) : (
-                          <ChevronDown className="h-4 w-4 text-[var(--ds-icon-selected)] animate-in fade-in slide-in-from-top-1 duration-200" />
-                        )
-                      ) : (
-                        <ChevronUp className="h-4 w-4 opacity-0 group-hover:opacity-30 transition-all transform group-hover:translate-y-0.5" />
-                      )}
-                    </div>
-                  </button>
-                ) : (
-                  <div className="px-0 py-1.5">
-                    {column.label}
-                  </div>
-                )}
-              </TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody>
+                {column.label}
+                <div className="flex flex-col">
+                  {sortKey === column.key ? (
+                    sortOrder === 'asc' ? (
+                      <ChevronUp className="h-4 w-4 text-[var(--ds-icon-selected)] animate-in fade-in slide-in-from-bottom-1 duration-200" />
+                    ) : (
+                      <ChevronDown className="h-4 w-4 text-[var(--ds-icon-selected)] animate-in fade-in slide-in-from-top-1 duration-200" />
+                    )
+                  ) : (
+                    <ChevronUp className="h-4 w-4 opacity-0 group-hover:opacity-30 transition-all transform group-hover:translate-y-0.5" />
+                  )}
+                </div>
+              </button>
+            ) : (
+              <div className="px-0 py-1.5">{column.label}</div>
+            )}
+          </TableHead>
+        ))}
+      </TableRow>
+    </TableHeader>
+  );
+
+  const virtualRows = virtualizer.getVirtualItems();
+  const totalHeight = virtualizer.getTotalSize();
+
+  return (
+    <div
+      ref={parentRef}
+      className="w-full relative overflow-auto rounded-xl border border-[var(--ds-border)]"
+      style={{ maxHeight: containerHeight }}
+    >
+      <Table className="border-separate border-spacing-0">
+        {renderHeaders()}
+        <TableBody
+          className="relative"
+          style={{ height: isVirtual ? totalHeight : 'auto' }}
+        >
           {isLoading ? (
             Array.from({ length: 5 }).map((_, i) => (
-              <TableRow key={i} className="border-b border-[var(--ds-border-subtle)]">
+              <TableRow
+                key={i}
+                className="border-b border-[var(--ds-border-subtle)]"
+              >
                 {isSelectable && (
                   <TableCell className="px-4">
                     <Skeleton className="h-4 w-4 rounded-sm opacity-50" />
@@ -155,10 +192,80 @@ export function DynamicTable<T extends { id: string | number }>({
             ))
           ) : items.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={columns.length + (isSelectable ? 1 : 0)} className="h-48 text-center">
-                {emptyState || <EmptyState icon={Search} title="No results found" description="Try adjusting your filters" />}
+              <TableCell
+                colSpan={columns.length + (isSelectable ? 1 : 0)}
+                className="h-48 text-center"
+              >
+                {emptyState || (
+                  <EmptyState
+                    icon={Search}
+                    title="No results found"
+                    description="Try adjusting your filters"
+                  />
+                )}
               </TableCell>
             </TableRow>
+          ) : isVirtual ? (
+            <>
+              {/* Virtualized Rows */}
+              <div
+                style={{
+                  height: `${virtualRows[0]?.start ?? 0}px`,
+                  gridColumn: `1 / ${columns.length + (isSelectable ? 2 : 1)}`,
+                }}
+              />
+              {virtualRows.map((virtualRow) => {
+                const item = items[virtualRow.index];
+                return (
+                  <TableRow
+                    key={item.id}
+                    onClick={() => onRowClick?.(item)}
+                    data-index={virtualRow.index}
+                    ref={virtualizer.measureElement}
+                    className={cn(
+                      'group border-b border-[var(--ds-border-subtle)] hover:bg-[var(--ds-background-neutral-subtle-hovered)] transition-colors cursor-pointer',
+                      selectedIds.includes(item.id) &&
+                        'bg-[var(--ds-background-selected)] hover:bg-[var(--ds-background-selected-hovered)]',
+                      rowClassName?.(item)
+                    )}
+                  >
+                    {isSelectable && (
+                      <TableCell
+                        className="px-4"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <Checkbox
+                          checked={selectedIds.includes(item.id)}
+                          onChange={() => toggleRow(item.id)}
+                          aria-label={`Select row ${item.id}`}
+                        />
+                      </TableCell>
+                    )}
+                    {columns.map((column) => (
+                      <TableCell
+                        key={column.key}
+                        className={cn(
+                          'text-sm text-[var(--ds-text)]',
+                          isCompact ? 'py-1.5 px-3' : 'py-4',
+                          column.align === 'center' && 'text-center',
+                          column.align === 'right' && 'text-right'
+                        )}
+                      >
+                        {column.render
+                          ? column.render(item)
+                          : (item as Record<string, any>)[column.key]}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                );
+              })}
+              <div
+                style={{
+                  height: `${totalHeight - (virtualRows[virtualRows.length - 1]?.end ?? totalHeight)}px`,
+                  gridColumn: `1 / ${columns.length + (isSelectable ? 2 : 1)}`,
+                }}
+              />
+            </>
           ) : (
             items.map((item) => (
               <TableRow
@@ -166,12 +273,16 @@ export function DynamicTable<T extends { id: string | number }>({
                 onClick={() => onRowClick?.(item)}
                 className={cn(
                   'group border-b border-[var(--ds-border-subtle)] hover:bg-[var(--ds-background-neutral-subtle-hovered)] transition-colors cursor-pointer',
-                  selectedIds.includes(item.id) && 'bg-[var(--ds-background-selected)] hover:bg-[var(--ds-background-selected-hovered)]',
+                  selectedIds.includes(item.id) &&
+                    'bg-[var(--ds-background-selected)] hover:bg-[var(--ds-background-selected-hovered)]',
                   rowClassName?.(item)
                 )}
               >
                 {isSelectable && (
-                  <TableCell className="px-4" onClick={(e) => e.stopPropagation()}>
+                  <TableCell
+                    className="px-4"
+                    onClick={(e) => e.stopPropagation()}
+                  >
                     <Checkbox
                       checked={selectedIds.includes(item.id)}
                       onChange={() => toggleRow(item.id)}
@@ -189,7 +300,9 @@ export function DynamicTable<T extends { id: string | number }>({
                       column.align === 'right' && 'text-right'
                     )}
                   >
-                    {column.render ? column.render(item) : (item as Record<string, any>)[column.key]}
+                    {column.render
+                      ? column.render(item)
+                      : (item as Record<string, any>)[column.key]}
                   </TableCell>
                 ))}
               </TableRow>

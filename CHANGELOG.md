@@ -47,6 +47,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Features
 
+- **[Pagespeed 100] **optimize analytics bundle with dynamic chart imports
+
 - **[Pagespeed 100] **complete phase 3 - server-side streaming & suspense
 
 - **[Tools] **doc automation — changelog, versioning, PRD, organize

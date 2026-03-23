@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import React, { useRef } from 'react';
 import { useParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import dynamic from 'next/dynamic';
@@ -136,7 +136,7 @@ interface AnalyticsClientProps {
 
 // ─── Section Divider ──────────────────────────────────────────────────────────
 
-function SectionHeader({ label }: { label: string }) {
+const SectionHeader = React.memo(({ label }: { label: string }) => {
   return (
     <div className="col-span-full flex items-center gap-3 pt-2">
       <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60">
@@ -145,7 +145,8 @@ function SectionHeader({ label }: { label: string }) {
       <div className="flex-1 h-px bg-border/50" />
     </div>
   );
-}
+});
+SectionHeader.displayName = 'SectionHeader';
 
 // ─── Main Component ───────────────────────────────────────────────────────────
 
@@ -157,16 +158,18 @@ export function AnalyticsClient({ kpiData, gates = [] }: AnalyticsClientProps) {
   const { filters, updateFilters, setMode } = useAnalyticsFilters();
   const { data: summary } = useAnalyticsSummary(filters, true);
 
-  const kpiDataToUse = summary
-    ? {
-        totalVisits: summary.totalVisits,
-        passRate: summary.passRate,
-        peakHour: summary.peakHour,
-        uniqueVisitors: summary.uniqueVisitors,
-        deniedScans: summary.deniedCount,
-        attributedScans: summary.attributedScans,
-      }
-    : kpiData;
+  const kpiDataToUse = React.useMemo(() => {
+    return summary
+      ? {
+          totalVisits: summary.totalVisits,
+          passRate: summary.passRate,
+          peakHour: summary.peakHour,
+          uniqueVisitors: summary.uniqueVisitors,
+          deniedScans: summary.deniedCount,
+          attributedScans: summary.attributedScans,
+        }
+      : kpiData;
+  }, [summary, kpiData]);
 
   const isSecurity = filters.mode === 'security';
   const attributedScans = kpiDataToUse?.attributedScans ?? 0;
