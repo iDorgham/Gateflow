@@ -1,13 +1,19 @@
 'use client';
 
-import React from 'react';
+import React, { use } from 'react';
 import { useTranslation } from 'react-i18next';
 import { UserPlus } from 'lucide-react';
 import { Button } from '@gate-access/ui';
 import { TeamMembersTable } from '@/components/dashboard/team/TeamMembersTable';
 import { motion } from 'framer-motion';
 
-export default function TeamPage({ params: { locale } }: { params: { locale: string } }) {
+export default function TeamPage(props: { params: Promise<{ locale: string }> }) {
+  const params = use(props.params);
+
+  const {
+    locale
+  } = params;
+
   const { t } = useTranslation('dashboard');
 
   return (

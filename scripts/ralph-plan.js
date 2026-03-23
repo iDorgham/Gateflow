@@ -17,6 +17,11 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
+// Escape special regex characters to prevent regex injection from CLI args
+function escapeRegExp(str) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 function callDocs(args) {
   try {
     execSync(`node scripts/ralph-docs.js ${args}`, {

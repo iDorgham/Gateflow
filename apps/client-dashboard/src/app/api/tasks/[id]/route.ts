@@ -14,8 +14,9 @@ const UpdateTaskSchema = z.object({
 /** PATCH /api/tasks/[id] */
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> | { id: string } }
+  props: { params: Promise<Promise<{ id: string }> | { id: string }> }
 ): Promise<NextResponse> {
+  const params = await props.params;
   const claims = await getSessionClaims();
   if (!claims?.orgId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
@@ -49,8 +50,9 @@ export async function PATCH(
 /** DELETE /api/tasks/[id] — soft delete */
 export async function DELETE(
   _request: NextRequest,
-  { params }: { params: Promise<{ id: string }> | { id: string } }
+  props: { params: Promise<Promise<{ id: string }> | { id: string }> }
 ): Promise<NextResponse> {
+  const params = await props.params;
   const claims = await getSessionClaims();
   if (!claims?.orgId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 

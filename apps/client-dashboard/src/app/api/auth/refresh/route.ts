@@ -29,7 +29,7 @@ class TokenAlreadyConsumedError extends Error {
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const ip =
-      request.ip ?? request.headers.get('x-forwarded-for') ?? 'unknown';
+      request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
     const rl = await checkRateLimit(`refresh:${ip}`, 20, 60_000);
 
     if (!rl.allowed) {

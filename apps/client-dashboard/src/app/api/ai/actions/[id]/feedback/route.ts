@@ -3,10 +3,8 @@ import { NextResponse } from 'next/server';
 import { requireAuth } from '@/lib/dashboard-auth';
 import { AiActionService } from '@/lib/ai/ai-action-service';
 
-export async function POST(
-  req: Request,
-  { params }: { params: { id: string } }
-) {
+export async function POST(req: Request, props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   try {
     const session = await requireAuth();
     if (!session || !session.user.organizationId) {

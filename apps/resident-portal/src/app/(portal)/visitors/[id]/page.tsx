@@ -7,7 +7,8 @@ import { Button, Badge } from '@gate-access/ui';
 import { VisitorQRCard } from '@/components/visitor-qr-card';
 import { format } from 'date-fns';
 
-export default async function VisitorDetailPage({ params }: { params: { id: string } }) {
+export default async function VisitorDetailPage(props: { params: Promise<{ id: string }> }) {
+  const params = await props.params;
   const claims = await getSessionClaims();
   const userId = claims?.sub || 'dev-resident-id';
   const orgId = claims?.org || 'dev-org-id';

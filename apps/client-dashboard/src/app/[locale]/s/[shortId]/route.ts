@@ -12,10 +12,8 @@ import { token } from '@atlaskit/tokens';
  *     • "Get directions" button (if Unit has lat/lng)
  *     • "I've arrived" button (notifies resident via /api/resident/arrived)
  */
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { shortId: string } },
-): Promise<NextResponse> {
+export async function GET(request: NextRequest, props: { params: Promise<{ shortId: string }> }): Promise<NextResponse> {
+  const params = await props.params;
   const { shortId } = params;
 
   const link = await prisma.qrShortLink.findUnique({ where: { shortId } });

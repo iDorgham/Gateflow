@@ -4,15 +4,13 @@ import { prisma } from '@gate-access/db';
 import { revalidatePath } from 'next/cache';
 
 
-type RouteContext = { params: { id: string } };
+type RouteContext = { params: Promise<{ id: string }> };
 
 // ─── DELETE /api/api-keys/[id] ────────────────────────────────────────────────
 // Permanently revokes an API key (hard delete — no keyHash to look up after).
 
-export async function DELETE(
-  _request: NextRequest,
-  { params }: RouteContext
-): Promise<NextResponse> {
+export async function DELETE(_request: NextRequest, props: RouteContext): Promise<NextResponse> {
+  const params = await props.params;
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {

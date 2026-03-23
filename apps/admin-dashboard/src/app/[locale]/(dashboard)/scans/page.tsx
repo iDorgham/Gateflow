@@ -45,14 +45,20 @@ interface SearchParams {
 
 const PAGE_SIZE = 50;
 
-export default async function AdminScansPage({
-  params: { locale },
-  searchParams,
-}: {
-  params: { locale: Locale };
-  searchParams: SearchParams;
-}) {
-  await requireAdmin();
+export default async function AdminScansPage(
+  props: {
+    params: Promise<{ locale: Locale }>;
+    searchParams: Promise<SearchParams>;
+  }
+) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
+
+  const {
+    locale
+  } = params;
+
+  await await requireAdmin();
   const { t } = (await getTranslation(locale, 'admin')) as { t: (key: string, options?: Record<string, unknown> | string) => string };
 
   const page = Math.max(1, parseInt(searchParams.page ?? '1', 10));

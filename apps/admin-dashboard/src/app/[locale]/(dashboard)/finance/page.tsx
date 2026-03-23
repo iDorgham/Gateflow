@@ -12,8 +12,14 @@ export const metadata = { title: 'Finance' };
 
 const PLAN_PRICES: Record<string, number> = { FREE: 0, PRO: 99 };
 
-export default async function FinancePage({ params: { locale } }: { params: { locale: Locale } }) {
-  await requireAdmin();
+export default async function FinancePage(props: { params: Promise<{ locale: Locale }> }) {
+  const params = await props.params;
+
+  const {
+    locale
+  } = params;
+
+  await await requireAdmin();
 
   const monthStart = new Date();
   monthStart.setDate(1);

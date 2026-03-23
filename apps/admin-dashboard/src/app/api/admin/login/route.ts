@@ -33,7 +33,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     const sessionToken = sha256(expectedKey);
-    cookies().set(COOKIE_NAME, sessionToken, {
+    (await cookies()).set(COOKIE_NAME, sessionToken, {
       httpOnly: true,
       secure: SECURE,
       sameSite: 'lax',
@@ -50,7 +50,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
 
 export async function DELETE(): Promise<NextResponse> {
-  cookies().delete(COOKIE_NAME);
+  (await cookies()).delete(COOKIE_NAME);
   return NextResponse.json({ success: true });
 }
 

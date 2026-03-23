@@ -29,13 +29,18 @@ const cairo = Cairo({
   display: 'swap',
 });
 
-export default function RootLayout({
-  children,
-  params,
-}: {
-  children: React.ReactNode;
-  params: { locale: Locale };
-}) {
+export default async function RootLayout(
+  props: {
+    children: React.ReactNode;
+    params: Promise<{ locale: Locale }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    children
+  } = props;
+
   if (!i18n.locales.includes(params.locale)) {
     notFound();
   }

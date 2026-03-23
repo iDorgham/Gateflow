@@ -4,12 +4,14 @@ import { hasPermission } from '@/lib/auth';
 import { getTranslation, Locale } from '@/lib/i18n';
 import { IncidentsClient } from './incidents-client';
 
-export async function generateMetadata({ params }: { params: { locale: Locale } }) {
+export async function generateMetadata(props: { params: Promise<{ locale: Locale }> }) {
+  const params = await props.params;
   const { t } = await getTranslation(params.locale, 'dashboard');
   return { title: t('incidents.title', { defaultValue: 'Incidents' }) };
 }
 
-export default async function IncidentsPage({ params }: { params: { locale: Locale } }) {
+export default async function IncidentsPage(props: { params: Promise<{ locale: Locale }> }) {
+  const params = await props.params;
   const claims = await getSessionClaims();
   if (!claims?.orgId) redirect(`/${params.locale}/login`);
   if (!hasPermission(claims, 'gates:manage')) {

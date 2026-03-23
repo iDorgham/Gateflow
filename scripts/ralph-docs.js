@@ -28,6 +28,10 @@ const FEATURE_LOG = path.join(ROOT, 'docs', 'product', 'FEATURE_LOG.md');
 const UPCOMING = path.join(ROOT, 'docs', 'product', 'UPCOMING.md');
 
 // ── helpers ───────────────────────────────────────────────────────────────────
+// Escape special regex characters to prevent regex injection from CLI args
+function escapeRegExp(str) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
 function today() {
   return new Date().toISOString().split('T')[0];
 }

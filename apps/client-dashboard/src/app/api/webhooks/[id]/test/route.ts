@@ -2,13 +2,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { testWebhookDelivery } from '@/lib/webhook-delivery';
 
-type RouteContext = { params: { id: string } };
+type RouteContext = { params: Promise<{ id: string }> };
 export const dynamic = 'force-dynamic';
 
 // ─── POST /api/webhooks/[id]/test ─────────────────────────────────────────────
 // Sends a single test delivery and returns the result synchronously.
 
-export async function POST(_request: NextRequest, { params }: RouteContext): Promise<NextResponse> {
+export async function POST(_request: NextRequest, props: RouteContext): Promise<NextResponse> {
+  const params = await props.params;
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {

@@ -3,14 +3,13 @@ import { JoinClient } from './join-client';
 import { notFound } from 'next/navigation';
 
 interface JoinPageProps {
-  params: { locale: string };
-  searchParams: { token?: string };
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ token?: string }>;
 }
 
-export default async function JoinPage({
-  params,
-  searchParams,
-}: JoinPageProps) {
+export default async function JoinPage(props: JoinPageProps) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   const { token } = searchParams;
   if (!token) return notFound();
 

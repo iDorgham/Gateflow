@@ -22,11 +22,12 @@ const UpdateWebhookSchema = z.object({
   isActive: z.boolean().optional(),
 });
 
-type RouteContext = { params: { id: string } };
+type RouteContext = { params: Promise<{ id: string }> };
 
 // ─── PATCH /api/webhooks/[id] ─────────────────────────────────────────────────
 
-export async function PATCH(request: NextRequest, { params }: RouteContext): Promise<NextResponse> {
+export async function PATCH(request: NextRequest, props: RouteContext): Promise<NextResponse> {
+  const params = await props.params;
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {
@@ -72,7 +73,8 @@ export async function PATCH(request: NextRequest, { params }: RouteContext): Pro
 
 // ─── DELETE /api/webhooks/[id] ────────────────────────────────────────────────
 
-export async function DELETE(_request: NextRequest, { params }: RouteContext): Promise<NextResponse> {
+export async function DELETE(_request: NextRequest, props: RouteContext): Promise<NextResponse> {
+  const params = await props.params;
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {

@@ -16,10 +16,8 @@ interface AuditEntry {
  * Pass/Cancel dialog after a QR code has already been validated successfully.
  * Updates the ScanLog status from SUCCESS → DENIED and appends an audit entry.
  */
-export async function POST(
-  request: NextRequest,
-  { params }: { params: { scanId: string } },
-): Promise<NextResponse> {
+export async function POST(request: NextRequest, props: { params: Promise<{ scanId: string }> }): Promise<NextResponse> {
+  const params = await props.params;
   // Authenticate
   const authResult = await requireAuth(request);
   if (isNextResponse(authResult)) return authResult;

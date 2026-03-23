@@ -17,13 +17,14 @@ import { ContactTable } from '@/components/crm/ContactTable';
 import { UnitTable } from '@/components/crm/UnitTable';
 import { Users, Building, ShieldCheck, Search } from 'lucide-react';
 
-export default async function ProjectCrmPage({
-  params,
-  searchParams,
-}: {
-  params: { projectId: string; locale: Locale };
-  searchParams: { tab?: string };
-}) {
+export default async function ProjectCrmPage(
+  props: {
+    params: Promise<{ projectId: string; locale: Locale }>;
+    searchParams: Promise<{ tab?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   const claims = await getSessionClaims();
   if (!claims?.orgId) redirect('/login');
 

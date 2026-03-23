@@ -80,7 +80,7 @@ export async function loginAction(
 
   // Set CSRF cookie for this session
   const csrfToken = generateCsrfToken();
-  cookies().set(CSRF_COOKIE, csrfToken, {
+  (await cookies()).set(CSRF_COOKIE, csrfToken, {
     httpOnly: false,
     secure: SECURE,
     sameSite: 'strict',
@@ -88,7 +88,7 @@ export async function loginAction(
     path: '/',
   });
 
-  const localeCookie = cookies().get(LOCALE_COOKIE)?.value;
+  const localeCookie = (await cookies()).get(LOCALE_COOKIE)?.value;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const locale = i18n.locales.includes(localeCookie as any)
     ? (localeCookie as (typeof i18n.locales)[number])

@@ -33,7 +33,7 @@ describe('GET /api/artifacts/[id]', () => {
 
     const res = await GET(
       new Request('http://localhost/api/artifacts/att-1') as NextRequest,
-      { params: Promise.resolve({ id: 'att-1' }) } as { params: Promise<{ id: string }> }
+      { params: Promise.resolve({ id: 'att-1' }) }
     );
     expect(res.status).toBe(404);
   });
@@ -50,7 +50,7 @@ describe('GET /api/artifacts/[id]', () => {
 
     const res = await GET(
       new Request('http://localhost/api/artifacts/att-1') as NextRequest,
-      { params: Promise.resolve({ id: 'att-1' }) } as { params: Promise<{ id: string }> }
+      { params: Promise.resolve({ id: 'att-1' }) }
     );
     expect(res.status).toBe(200);
     const json = await res.json();

@@ -18,10 +18,8 @@ const UpdateUnitSchema = z.object({
   lng: z.number().min(-180).max(180).optional().nullable(),
 });
 
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-): Promise<NextResponse> {
+export async function PATCH(request: NextRequest, props: { params: Promise<{ id: string }> }): Promise<NextResponse> {
+  const params = await props.params;
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {
@@ -149,10 +147,8 @@ export async function PATCH(
 
 // ─── DELETE /api/units/[id] ───────────────────────────────────────────────────
 
-export async function DELETE(
-  _request: NextRequest,
-  { params }: { params: { id: string } }
-): Promise<NextResponse> {
+export async function DELETE(_request: NextRequest, props: { params: Promise<{ id: string }> }): Promise<NextResponse> {
+  const params = await props.params;
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {

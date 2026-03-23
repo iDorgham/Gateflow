@@ -10,14 +10,20 @@ export const metadata = { title: 'Users' };
 
 interface SearchParams { q?: string; role?: string; status?: string }
 
-export default async function UsersPage({
-  params: { locale },
-  searchParams,
-}: {
-  params: { locale: Locale };
-  searchParams: SearchParams;
-}) {
-  await requireAdmin();
+export default async function UsersPage(
+  props: {
+    params: Promise<{ locale: Locale }>;
+    searchParams: Promise<SearchParams>;
+  }
+) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
+
+  const {
+    locale
+  } = params;
+
+  await await requireAdmin();
   const { t } = (await getTranslation(locale, 'admin')) as { t: (key: string, options?: Record<string, unknown> | string) => string };
 
   const search = searchParams.q?.trim() ?? '';

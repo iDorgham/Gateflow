@@ -20,12 +20,18 @@ import { PlanDistributionChart } from '@/components/analytics/PlanDistributionCh
 
 export const metadata = { title: 'Analytics' };
 
-export default async function AnalyticsPage({
-  params: { locale },
-}: {
-  params: { locale: Locale };
-}) {
-  await requireAdmin();
+export default async function AnalyticsPage(
+  props: {
+    params: Promise<{ locale: Locale }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    locale
+  } = params;
+
+  await await requireAdmin();
   const { t } = await getTranslation(locale, 'admin');
 
   const now = new Date();

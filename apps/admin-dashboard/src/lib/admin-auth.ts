@@ -32,9 +32,9 @@ export function expectedSessionToken(): string {
 }
 
 /** True if the request's admin_session cookie is valid. */
-export function isAdminAuthenticated(): boolean {
+export async function isAdminAuthenticated(): Promise<boolean> {
   try {
-    const jar = cookies();
+    const jar = await cookies();
     const sessionCookie = jar.get(COOKIE_NAME)?.value;
     return sessionCookie === expectedSessionToken();
   } catch {
@@ -53,7 +53,7 @@ export function isAdminAuthenticated(): boolean {
  */
 export async function isAdminAuthorized(request: Request): Promise<boolean> {
   // 1. Cookie-based session (browser)
-  if (isAdminAuthenticated()) return true;
+  if (await isAdminAuthenticated()) return true;
 
   // 2. Bearer token (programmatic API access)
   const authHeader = request.headers.get('authorization') ?? '';
@@ -92,15 +92,16 @@ export async function isAdminAuthorized(request: Request): Promise<boolean> {
  * Use at the top of every admin server component / action.
  * Redirects to /login if the session is invalid.
  */
-export function requireAdmin(): void {
-  if (!isAdminAuthenticated()) {
+export async function requireAdmin(): Promise<void> {
+  if (!(await isAdminAuthenticated())) {
     redirect('/login');
   }
 }
 
 /** Sets the admin session cookie. */
-export function setAdminSession(): void {
-  cookies().set(COOKIE_NAME, expectedSessionToken(), {
+export async function setAdminSession(): Promise<void> {
+  const jar = await cookies();
+  jar.set(COOKIE_NAME, expectedSessionToken(), {
     httpOnly: true,
     secure: SECURE,
     sameSite: 'lax',
@@ -110,6 +111,7 @@ export function setAdminSession(): void {
 }
 
 /** Clears the admin session cookie. */
-export function clearAdminSession(): void {
-  cookies().delete(COOKIE_NAME);
+export async function clearAdminSession(): Promise<void> {
+  const jar = await cookies();
+  jar.delete(COOKIE_NAME);
 }

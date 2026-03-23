@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "crypto-js": "^4.2.0",
-    "zod": "^3.23.8"
+    "zod": "3.25.76"
   },
   "devDependencies": {
     "@gate-access/config": "workspace:*",

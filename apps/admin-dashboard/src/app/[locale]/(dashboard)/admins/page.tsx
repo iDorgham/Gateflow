@@ -36,7 +36,7 @@ export const metadata = { title: 'Platform Authority' };
 
 async function createAdmin(formData: FormData) {
   'use server';
-  requireAdmin();
+  await requireAdmin();
   const name = (formData.get('name') as string)?.trim();
   const email = (formData.get('email') as string)?.trim().toLowerCase();
   const password = formData.get('password') as string;
@@ -71,7 +71,7 @@ async function createAdmin(formData: FormData) {
 
 async function resetAdminPassword(formData: FormData) {
   'use server';
-  requireAdmin();
+  await requireAdmin();
   const id = formData.get('id') as string;
   if (!id) return;
 
@@ -79,7 +79,7 @@ async function resetAdminPassword(formData: FormData) {
   const passwordHash = await argon2Hash(tempPassword);
   await prisma.user.update({ where: { id }, data: { passwordHash } });
 
-  cookies().set('_adminpwflash', JSON.stringify({ id, pw: tempPassword }), {
+  (await cookies()).set('_adminpwflash', JSON.stringify({ id, pw: tempPassword }), {
     path: '/',
     maxAge: 120,
     sameSite: 'lax',
@@ -90,7 +90,7 @@ async function resetAdminPassword(formData: FormData) {
 
 async function toggleSuspend(formData: FormData) {
   'use server';
-  requireAdmin();
+  await requireAdmin();
   const id = formData.get('id') as string;
   const isSuspended = formData.get('suspended') === 'true';
   if (!id) return;
@@ -103,12 +103,18 @@ async function toggleSuspend(formData: FormData) {
 
 // ─── Page ──────────────────────────────────────────────────────────────────────
 
-export default async function AdminsPage({
-  params: { locale },
-}: {
-  params: { locale: Locale };
-}) {
-  await requireAdmin();
+export default async function AdminsPage(
+  props: {
+    params: Promise<{ locale: Locale }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    locale
+  } = params;
+
+  await await requireAdmin();
   const { t } = await getTranslation(locale, 'admin');
 
   // Key fingerprint — first 8 chars of the session token hash (safe to show)
@@ -140,10 +146,10 @@ export default async function AdminsPage({
   // Read and clear flash
   let pwFlash: { id: string; pw: string } | null = null;
   try {
-    const raw = cookies().get('_adminpwflash')?.value;
+    const raw = (await cookies()).get('_adminpwflash')?.value;
     if (raw) {
       pwFlash = JSON.parse(raw) as { id: string; pw: string };
-      cookies().delete('_adminpwflash');
+      (await cookies()).delete('_adminpwflash');
     }
   } catch {
     // ignore

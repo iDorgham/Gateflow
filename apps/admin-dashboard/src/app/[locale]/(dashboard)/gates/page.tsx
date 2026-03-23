@@ -32,7 +32,7 @@ export const metadata = { title: 'Gates' };
 
 async function setGateActive(formData: FormData) {
   'use server';
-  requireAdmin();
+  await requireAdmin();
   const id = formData.get('id') as string;
   const active = formData.get('active') === 'true';
   if (!id) return;
@@ -42,7 +42,7 @@ async function setGateActive(formData: FormData) {
 
 async function softDeleteGate(formData: FormData) {
   'use server';
-  requireAdmin();
+  await requireAdmin();
   const id = formData.get('id') as string;
   if (!id) return;
   await prisma.gate.update({ where: { id }, data: { deletedAt: new Date() } });
@@ -51,7 +51,7 @@ async function softDeleteGate(formData: FormData) {
 
 async function restoreGate(formData: FormData) {
   'use server';
-  requireAdmin();
+  await requireAdmin();
   const id = formData.get('id') as string;
   if (!id) return;
   await prisma.gate.update({ where: { id }, data: { deletedAt: null } });
@@ -62,14 +62,20 @@ async function restoreGate(formData: FormData) {
 
 interface SearchParams { q?: string; org?: string; status?: string }
 
-export default async function GatesPage({
-  params: { locale },
-  searchParams,
-}: {
-  params: { locale: Locale };
-  searchParams: SearchParams;
-}) {
-  await requireAdmin();
+export default async function GatesPage(
+  props: {
+    params: Promise<{ locale: Locale }>;
+    searchParams: Promise<SearchParams>;
+  }
+) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
+
+  const {
+    locale
+  } = params;
+
+  await await requireAdmin();
   const { t } = await getTranslation(locale, 'admin');
 
   const search = searchParams.q?.trim() ?? '';

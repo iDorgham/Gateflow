@@ -9,11 +9,12 @@ import { Locale } from '@/lib/i18n';
 
 export const metadata = { title: 'Projects | GateFlow' };
 
-export default async function ProjectsPage({
-  params,
-}: {
-  params: { locale: Locale };
-}) {
+export default async function ProjectsPage(
+  props: {
+    params: Promise<{ locale: Locale }>;
+  }
+) {
+  const params = await props.params;
   const claims = await getSessionClaims();
   if (!claims?.orgId) redirect('/login');
 

@@ -7,12 +7,14 @@ import { AutoRefresh, GatesList } from './gate-client';
 import type { GateWithStats } from './gate-client';
 import { PageHeader } from '@gate-access/ui';
 
-export async function generateMetadata({ params }: { params: { locale: Locale } }) {
+export async function generateMetadata(props: { params: Promise<{ locale: Locale }> }) {
+  const params = await props.params;
   const { t } = await getTranslation(params.locale, 'dashboard');
   return { title: t('gates.title', { defaultValue: 'Gates' }) };
 }
 
-export default async function GatesPage({ params }: { params: { locale: Locale } }) {
+export default async function GatesPage(props: { params: Promise<{ locale: Locale }> }) {
+  const params = await props.params;
   const claims = await getSessionClaims();
   if (!claims?.orgId) redirect('/login');
 

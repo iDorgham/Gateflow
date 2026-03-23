@@ -92,7 +92,7 @@ describe('PATCH /api/crm/contacts/[id]', () => {
     const req = new NextRequest('http://localhost/api/crm/contacts/contact_1', {
       body: JSON.stringify({ jobTitle: 'Director' }),
     }) as any;
-    const res = await PATCH(req, { params: { id: 'contact_1' } });
+    const res = await PATCH(req, { params: Promise.resolve({ id: 'contact_1' }) });
     expect((res as any).status).toBe(401);
   });
 
@@ -101,7 +101,7 @@ describe('PATCH /api/crm/contacts/[id]', () => {
     const req = new NextRequest('http://localhost/api/crm/contacts/contact_x', {
       body: JSON.stringify({ jobTitle: 'Director' }),
     }) as any;
-    const res = await PATCH(req, { params: { id: 'contact_x' } });
+    const res = await PATCH(req, { params: Promise.resolve({ id: 'contact_x' }) });
     expect((res as any).status).toBe(404);
   });
 
@@ -109,7 +109,7 @@ describe('PATCH /api/crm/contacts/[id]', () => {
     const req = new NextRequest('http://localhost/api/crm/contacts/contact_1', {
       body: JSON.stringify({ jobTitle: 'Director' }),
     }) as any;
-    await PATCH(req, { params: { id: 'contact_1' } });
+    await PATCH(req, { params: Promise.resolve({ id: 'contact_1' }) });
     expect(prisma.contact.findFirst).toHaveBeenCalledWith(
       expect.objectContaining({
         where: expect.objectContaining({ organizationId: 'org_1' }),
@@ -121,7 +121,7 @@ describe('PATCH /api/crm/contacts/[id]', () => {
     const req = new NextRequest('http://localhost/api/crm/contacts/contact_1', {
       body: JSON.stringify({ jobTitle: 'Director' }),
     }) as any;
-    const res = await PATCH(req, { params: { id: 'contact_1' } });
+    const res = await PATCH(req, { params: Promise.resolve({ id: 'contact_1' }) });
     const body = await (res as any).json();
     expect(body.success).toBe(true);
   });
@@ -139,20 +139,20 @@ describe('DELETE /api/crm/contacts/[id]', () => {
   it('returns 401 when unauthenticated', async () => {
     (getSessionClaims as jest.Mock).mockResolvedValue(null);
     const req = new NextRequest('http://localhost/api/crm/contacts/contact_1') as any;
-    const res = await DELETE(req, { params: { id: 'contact_1' } });
+    const res = await DELETE(req, { params: Promise.resolve({ id: 'contact_1' }) });
     expect((res as any).status).toBe(401);
   });
 
   it('returns 404 when contact not found', async () => {
     (prisma.contact.findFirst as jest.Mock).mockResolvedValue(null);
     const req = new NextRequest('http://localhost/api/crm/contacts/contact_x') as any;
-    const res = await DELETE(req, { params: { id: 'contact_x' } });
+    const res = await DELETE(req, { params: Promise.resolve({ id: 'contact_x' }) });
     expect((res as any).status).toBe(404);
   });
 
   it('performs soft delete (sets deletedAt, does not hard delete)', async () => {
     const req = new NextRequest('http://localhost/api/crm/contacts/contact_1') as any;
-    const res = await DELETE(req, { params: { id: 'contact_1' } });
+    const res = await DELETE(req, { params: Promise.resolve({ id: 'contact_1' }) });
     expect(prisma.contact.update).toHaveBeenCalledWith(
       expect.objectContaining({
         where: { id: 'contact_1' },
@@ -166,7 +166,7 @@ describe('DELETE /api/crm/contacts/[id]', () => {
   it('prevents deleting contact from another org', async () => {
     (prisma.contact.findFirst as jest.Mock).mockResolvedValue(null); // org check fails
     const req = new NextRequest('http://localhost/api/crm/contacts/contact_other') as any;
-    const res = await DELETE(req, { params: { id: 'contact_other' } });
+    const res = await DELETE(req, { params: Promise.resolve({ id: 'contact_other' }) });
     expect((res as any).status).toBe(404);
     expect(prisma.contact.update).not.toHaveBeenCalled();
   });

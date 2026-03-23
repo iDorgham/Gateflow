@@ -33,7 +33,7 @@ export const metadata = { title: 'Projects' };
 
 async function deleteProject(formData: FormData) {
   'use server';
-  requireAdmin();
+  await requireAdmin();
   const id = formData.get('id') as string;
   if (!id) return;
   // skip-organization-check (Global Admin Action)
@@ -43,7 +43,7 @@ async function deleteProject(formData: FormData) {
 
 async function restoreProject(formData: FormData) {
   'use server';
-  requireAdmin();
+  await requireAdmin();
   const id = formData.get('id') as string;
   if (!id) return;
   // skip-organization-check (Global Admin Action)
@@ -55,14 +55,20 @@ async function restoreProject(formData: FormData) {
 
 interface SearchParams { q?: string; org?: string; status?: string }
 
-export default async function ProjectsPage({
-  params: { locale },
-  searchParams,
-}: {
-  params: { locale: Locale };
-  searchParams: SearchParams;
-}) {
-  await requireAdmin();
+export default async function ProjectsPage(
+  props: {
+    params: Promise<{ locale: Locale }>;
+    searchParams: Promise<SearchParams>;
+  }
+) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
+
+  const {
+    locale
+  } = params;
+
+  await await requireAdmin();
   const { t } = await getTranslation(locale, 'admin');
 
   const search = searchParams.q?.trim() ?? '';

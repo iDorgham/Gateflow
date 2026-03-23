@@ -6,11 +6,12 @@ import { Building2 } from 'lucide-react';
 import { getTranslation } from '@/lib/i18n';
 import type { Locale } from '@/lib/i18n-config';
 
-export default async function NoUnitLinkedPage({
-  params,
-}: {
-  params: { locale: Locale };
-}) {
+export default async function NoUnitLinkedPage(
+  props: {
+    params: Promise<{ locale: Locale }>;
+  }
+) {
+  const params = await props.params;
   const claims = await getSessionClaims();
   if (!claims) redirect(`/${params.locale}/login`);
 

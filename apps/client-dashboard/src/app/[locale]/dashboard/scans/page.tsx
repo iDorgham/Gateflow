@@ -11,7 +11,8 @@ import type { ScanStatus } from '@gate-access/db';
 import type { Prisma } from '@gate-access/db';
 import type { ScanLog } from '@/components/dashboard/scans/ScansTable';
 
-export async function generateMetadata({ params }: { params: { locale: Locale } }) {
+export async function generateMetadata(props: { params: Promise<{ locale: Locale }> }) {
+  const params = await props.params;
   const { t } = await getTranslation(params.locale, 'dashboard');
   return { title: t('scans.title', { defaultValue: 'Scan Logs' }) };
 }
@@ -40,13 +41,14 @@ type SearchParams = {
   sort?: string;
 };
 
-export default async function ScansPage({
-  searchParams,
-  params,
-}: {
-  searchParams: SearchParams;
-  params: { locale: Locale };
-}) {
+export default async function ScansPage(
+  props: {
+    searchParams: Promise<SearchParams>;
+    params: Promise<{ locale: Locale }>;
+  }
+) {
+  const params = await props.params;
+  const searchParams = await props.searchParams;
   const claims = await getSessionClaims();
   const { t } = await getTranslation(params.locale, 'dashboard');
   const orgId = claims.orgId;

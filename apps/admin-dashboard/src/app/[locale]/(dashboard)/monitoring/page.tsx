@@ -6,8 +6,14 @@ import { MonitoringClient } from '@/components/monitoring/MonitoringClient';
 
 export const metadata = { title: 'Monitoring' };
 
-export default async function MonitoringPage({ params: { locale } }: { params: { locale: Locale } }) {
-  await requireAdmin();
+export default async function MonitoringPage(props: { params: Promise<{ locale: Locale }> }) {
+  const params = await props.params;
+
+  const {
+    locale
+  } = params;
+
+  await await requireAdmin();
 
   // Fetch webhook failure data server-side (static data for initial render)
   const [recentFailedDeliveries, totalWebhookFailed] = await Promise.all([

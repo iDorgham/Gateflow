@@ -21,8 +21,9 @@ const UpdateProjectSchema = z.object({
 
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> | { id: string } }
+  props: { params: Promise<Promise<{ id: string }> | { id: string }> }
 ) {
+  const params = await props.params;
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {
@@ -109,8 +110,9 @@ export async function PATCH(
 
 export async function DELETE(
   _request: NextRequest,
-  { params }: { params: Promise<{ id: string }> | { id: string } }
+  props: { params: Promise<Promise<{ id: string }> | { id: string }> }
 ) {
+  const params = await props.params;
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {

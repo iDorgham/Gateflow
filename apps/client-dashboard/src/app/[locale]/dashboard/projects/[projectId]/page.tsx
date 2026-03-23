@@ -7,11 +7,12 @@ import { ProjectDetailContent } from '@/components/dashboard/project-detail/Proj
 import { ProjectHero } from '@/components/projects/ProjectHero';
 import { ProjectKpiCards } from '@/components/projects/ProjectKpiCards';
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { locale: Locale; projectId: string };
-}) {
+export async function generateMetadata(
+  props: {
+    params: Promise<{ locale: Locale; projectId: string }>;
+  }
+) {
+  const params = await props.params;
   const claims = await getSessionClaims();
   if (!claims?.orgId) return { title: 'Project | GateFlow' };
 
@@ -22,11 +23,12 @@ export async function generateMetadata({
   return { title: project ? `${project.name} | GateFlow` : 'Project | GateFlow' };
 }
 
-export default async function ProjectDetailPage({
-  params,
-}: {
-  params: { locale: Locale; projectId: string };
-}) {
+export default async function ProjectDetailPage(
+  props: {
+    params: Promise<{ locale: Locale; projectId: string }>;
+  }
+) {
+  const params = await props.params;
   const claims = await getSessionClaims();
   if (!claims?.orgId) redirect('/login');
 

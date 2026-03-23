@@ -65,13 +65,14 @@ import AnalyticsLoading from './loading';
 
 // ... (keep parseDateRange)
 
-export default async function AnalyticsPage({
-  params,
-  searchParams,
-}: {
-  params: { locale: Locale };
-  searchParams: SearchParams;
-}) {
+export default async function AnalyticsPage(
+  props: {
+    params: Promise<{ locale: Locale }>;
+    searchParams: Promise<SearchParams>;
+  }
+) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   const claims = await getSessionClaims();
   if (!claims?.orgId) redirect(`/${params.locale}/login`);
 

@@ -4,18 +4,20 @@ import { hasPermission } from '@/lib/auth';
 import { getTranslation, Locale } from '@/lib/i18n';
 import { GateAssignmentsClient } from './gate-assignments-client';
 
-export async function generateMetadata({ params }: { params: { locale: Locale } }) {
+export async function generateMetadata(props: { params: Promise<{ locale: Locale }> }) {
+  const params = await props.params;
   const { t } = await getTranslation(params.locale, 'dashboard');
   return { title: t('gateAssignments.title', { defaultValue: 'Gate assignments' }) };
 }
 
-export default async function GateAssignmentsPage({
-  params,
-  searchParams,
-}: {
-  params: { locale: Locale };
-  searchParams: { project?: string };
-}) {
+export default async function GateAssignmentsPage(
+  props: {
+    params: Promise<{ locale: Locale }>;
+    searchParams: Promise<{ project?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   const claims = await getSessionClaims();
   if (!claims?.orgId) redirect(`/${params.locale}/login`);
   if (!hasPermission(claims, 'gates:manage')) {

@@ -49,7 +49,7 @@ export async function csrfFetch(
 export async function getCsrfTokenServer(): Promise<string | null> {
   try {
     const { cookies } = await import('next/headers');
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const csrfCookie = cookieStore.get(CSRF_COOKIE);
     return csrfCookie?.value ?? null;
   } catch {

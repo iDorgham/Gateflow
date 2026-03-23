@@ -1,4 +1,4 @@
-import { cookies, headers } from 'next/headers';
+import { cookies, headers, type UnsafeUnwrappedCookies } from 'next/headers';
 import { verifyAccessToken, type AccessTokenClaims } from './auth';
 
 const ACCESS_COOKIE = 'gf_access_token';
@@ -6,7 +6,7 @@ const REFRESH_COOKIE = 'gf_refresh_token';
 const SECURE = process.env.NODE_ENV === 'production';
 
 export function setAuthCookies(accessToken: string, refreshToken: string): void {
-  const jar = cookies();
+  const jar = (cookies() as unknown as UnsafeUnwrappedCookies);
   jar.set(ACCESS_COOKIE, accessToken, {
     httpOnly: true,
     secure: SECURE,
@@ -24,21 +24,21 @@ export function setAuthCookies(accessToken: string, refreshToken: string): void 
 }
 
 export function clearAuthCookies(): void {
-  const jar = cookies();
+  const jar = (cookies() as unknown as UnsafeUnwrappedCookies);
   jar.delete(ACCESS_COOKIE);
   jar.delete(REFRESH_COOKIE);
   jar.delete('gf_csrf_token');
 }
 
 export function getRefreshToken(): string | undefined {
-  return cookies().get(REFRESH_COOKIE)?.value;
+  return (cookies() as unknown as UnsafeUnwrappedCookies).get(REFRESH_COOKIE)?.value;
 }
 
 export async function getSessionClaims(): Promise<AccessTokenClaims | null> {
   // 1. Check Authorization header (for mobile apps / API clients)
   let authHeaderStr: string | null = null;
   try {
-    const reqHeaders = headers();
+    const reqHeaders = await headers();
     authHeaderStr = reqHeaders.get('authorization') || reqHeaders.get('Authorization');
   } catch (e) {
     // Context where headers() might not be available, continue to cookies
@@ -56,7 +56,7 @@ export async function getSessionClaims(): Promise<AccessTokenClaims | null> {
   // 2. Check cookies (for web dashboard)
   let token: string | undefined;
   try {
-    token = cookies().get(ACCESS_COOKIE)?.value;
+    token = (await cookies()).get(ACCESS_COOKIE)?.value;
   } catch (e) {
     // Context where cookies() might not be available
   }

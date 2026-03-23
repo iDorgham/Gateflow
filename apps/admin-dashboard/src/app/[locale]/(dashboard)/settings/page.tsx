@@ -29,12 +29,18 @@ function envMasked(name: string, chars = 6): string {
   return val.slice(0, chars) + '●'.repeat(Math.max(0, val.length - chars - 4)) + val.slice(-4);
 }
 
-export default async function SettingsPage({
-  params: { locale },
-}: {
-  params: { locale: Locale };
-}) {
-  await requireAdmin();
+export default async function SettingsPage(
+  props: {
+    params: Promise<{ locale: Locale }>;
+  }
+) {
+  const params = await props.params;
+
+  const {
+    locale
+  } = params;
+
+  await await requireAdmin();
   const { t } = await getTranslation(locale, 'admin');
 
   const dbUrl = process.env.DATABASE_URL ?? '';

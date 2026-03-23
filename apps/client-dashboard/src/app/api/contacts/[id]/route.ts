@@ -21,10 +21,8 @@ const UpdateContactSchema = z.object({
   unitIds: z.array(z.string()).optional(),
 });
 
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-): Promise<NextResponse> {
+export async function PATCH(request: NextRequest, props: { params: Promise<{ id: string }> }): Promise<NextResponse> {
+  const params = await props.params;
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {
@@ -114,10 +112,8 @@ export async function PATCH(
 
 // ─── DELETE /api/contacts/[id] ────────────────────────────────────────────────
 
-export async function DELETE(
-  _request: NextRequest,
-  { params }: { params: { id: string } }
-): Promise<NextResponse> {
+export async function DELETE(_request: NextRequest, props: { params: Promise<{ id: string }> }): Promise<NextResponse> {
+  const params = await props.params;
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {

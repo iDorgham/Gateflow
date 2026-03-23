@@ -27,14 +27,20 @@ import { PageHeader } from '@gate-access/ui';
 
 export const metadata = { title: 'Operational Overview' };
 
-export default async function AdminOverviewPage({ params: { locale } }: { params: { locale: Locale } }) {
-  await requireAdmin();
+export default async function AdminOverviewPage(props: { params: Promise<{ locale: Locale }> }) {
+  const params = await props.params;
+
+  const {
+    locale
+  } = params;
+
+  await await requireAdmin();
   const { t } = await getTranslation(locale, 'admin');
 
   const now = new Date();
-  const todayStart = new Date(now); todayStart.setHours(0, 0, 0, 0);
-  const weekStart = new Date(now); weekStart.setDate(now.getDate() - 7);
-  const monthStart = new Date(now); monthStart.setDate(now.getDate() - 30);
+  const todayStart = new Date(now);todayStart.setHours(0, 0, 0, 0);
+  const weekStart = new Date(now);weekStart.setDate(now.getDate() - 7);
+  const monthStart = new Date(now);monthStart.setDate(now.getDate() - 30);
 
   const [
     totalOrgs,

@@ -1,4 +1,4 @@
-import { cookies } from 'next/headers';
+import { cookies, type UnsafeUnwrappedCookies } from 'next/headers';
 import { prisma } from '@gate-access/db';
 
 const PROJECT_COOKIE = 'gf_current_project';
@@ -9,11 +9,11 @@ export const ALL_PROJECTS_VALUE = 'all';
 
 /** Returns the raw cookie value (may be ALL_PROJECTS_VALUE, a project id, or null). */
 export function getCurrentProjectCookie(): string | null {
-  return cookies().get(PROJECT_COOKIE)?.value ?? null;
+  return (cookies() as unknown as UnsafeUnwrappedCookies).get(PROJECT_COOKIE)?.value ?? null;
 }
 
 export function setProjectCookie(projectId: string): void {
-  cookies().set(PROJECT_COOKIE, projectId, {
+  (cookies() as unknown as UnsafeUnwrappedCookies).set(PROJECT_COOKIE, projectId, {
     httpOnly: true,
     secure: SECURE,
     sameSite: 'lax',

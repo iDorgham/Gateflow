@@ -100,7 +100,7 @@ describe('PATCH /api/crm/units/[id]', () => {
     const req = new NextRequest('http://localhost/api/crm/units/unit_1', {
       body: JSON.stringify({ building: 'Tower B' }),
     }) as any;
-    const res = await PATCH(req, { params: { id: 'unit_1' } });
+    const res = await PATCH(req, { params: Promise.resolve({ id: 'unit_1' }) });
     expect((res as any).status).toBe(401);
   });
 
@@ -109,7 +109,7 @@ describe('PATCH /api/crm/units/[id]', () => {
     const req = new NextRequest('http://localhost/api/crm/units/unit_x', {
       body: JSON.stringify({ building: 'Tower B' }),
     }) as any;
-    const res = await PATCH(req, { params: { id: 'unit_x' } });
+    const res = await PATCH(req, { params: Promise.resolve({ id: 'unit_x' }) });
     expect((res as any).status).toBe(404);
   });
 
@@ -118,7 +118,7 @@ describe('PATCH /api/crm/units/[id]', () => {
     const req = new NextRequest('http://localhost/api/crm/units/unit_1', {
       body: JSON.stringify({ projectId: 'proj_other' }),
     }) as any;
-    const res = await PATCH(req, { params: { id: 'unit_1' } });
+    const res = await PATCH(req, { params: Promise.resolve({ id: 'unit_1' }) });
     expect((res as any).status).toBe(403);
   });
 
@@ -126,7 +126,7 @@ describe('PATCH /api/crm/units/[id]', () => {
     const req = new NextRequest('http://localhost/api/crm/units/unit_1', {
       body: JSON.stringify({ building: 'Tower B' }),
     }) as any;
-    const res = await PATCH(req, { params: { id: 'unit_1' } });
+    const res = await PATCH(req, { params: Promise.resolve({ id: 'unit_1' }) });
     const body = await (res as any).json();
     expect(body.success).toBe(true);
   });
@@ -144,20 +144,20 @@ describe('DELETE /api/crm/units/[id]', () => {
   it('returns 401 when unauthenticated', async () => {
     (getSessionClaims as jest.Mock).mockResolvedValue(null);
     const req = new NextRequest('http://localhost/api/crm/units/unit_1') as any;
-    const res = await DELETE(req, { params: { id: 'unit_1' } });
+    const res = await DELETE(req, { params: Promise.resolve({ id: 'unit_1' }) });
     expect((res as any).status).toBe(401);
   });
 
   it('returns 404 when unit not found', async () => {
     (prisma.unit.findFirst as jest.Mock).mockResolvedValue(null);
     const req = new NextRequest('http://localhost/api/crm/units/unit_x') as any;
-    const res = await DELETE(req, { params: { id: 'unit_x' } });
+    const res = await DELETE(req, { params: Promise.resolve({ id: 'unit_x' }) });
     expect((res as any).status).toBe(404);
   });
 
   it('performs soft delete (sets deletedAt, does not hard delete)', async () => {
     const req = new NextRequest('http://localhost/api/crm/units/unit_1') as any;
-    const res = await DELETE(req, { params: { id: 'unit_1' } });
+    const res = await DELETE(req, { params: Promise.resolve({ id: 'unit_1' }) });
     expect(prisma.unit.update).toHaveBeenCalledWith(
       expect.objectContaining({
         where: { id: 'unit_1' },
@@ -171,7 +171,7 @@ describe('DELETE /api/crm/units/[id]', () => {
   it('prevents deleting unit from another org', async () => {
     (prisma.unit.findFirst as jest.Mock).mockResolvedValue(null);
     const req = new NextRequest('http://localhost/api/crm/units/unit_other') as any;
-    const res = await DELETE(req, { params: { id: 'unit_other' } });
+    const res = await DELETE(req, { params: Promise.resolve({ id: 'unit_other' }) });
     expect((res as any).status).toBe(404);
     expect(prisma.unit.update).not.toHaveBeenCalled();
   });
