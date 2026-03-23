@@ -49,6 +49,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Features
 
+- **[Resident Mobile One Tap] **implement phase 2 - express invite api
+
 - **[Security] **implement hmac-sha256 signature utility for invites
 
 - **[Pagespeed] **complete phase 4 - virtualization & bundle optimization
