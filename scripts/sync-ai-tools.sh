@@ -12,7 +12,6 @@
 #   ./scripts/sync-ai-tools.sh --tool antigravity
 #   ./scripts/sync-ai-tools.sh --tool kilocode
 #   ./scripts/sync-ai-tools.sh --tool opencode
-#   ./scripts/sync-ai-tools.sh --tool agent
 #   ./scripts/sync-ai-tools.sh --dry-run    # preview without writing
 # =============================================================================
 set -euo pipefail
@@ -269,18 +268,6 @@ sync_antigravity() {
   ok "hooks.json / mcp.json / rules.md"
 }
 
-# ── .agent (mirror) ───────────────────────────────────────────────────────────
-sync_agent() {
-  echo "── .agent/ (full mirror of .agents/) ──"
-  local dest="$ROOT/.agent"
-  if $DRY_RUN; then skip "rsync .agents/ → .agent/"; return; fi
-  mkdir -p "$dest"
-  rsync -a --delete \
-    --exclude ".DS_Store" --exclude "**/.DS_Store" \
-    --exclude "node_modules" \
-    "$SRC/" "$dest/"
-  ok "full mirror"
-}
 
 # ── Gemini CLI ────────────────────────────────────────────────────────────────
 sync_gemini() {
@@ -391,7 +378,6 @@ echo "────────────────────────�
 should_sync claude      && { echo; sync_claude; }
 should_sync cursor      && { echo; sync_cursor; }
 should_sync antigravity && { echo; sync_antigravity; }
-should_sync agent       && { echo; sync_agent; }
 should_sync gemini      && { echo; sync_gemini; }
 should_sync kiro        && { echo; sync_kiro; }
 should_sync kilocode    && { echo; sync_kilocode; }
