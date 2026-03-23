@@ -1,116 +1,67 @@
-## Phase 3: Advanced CRM-style Contacts & Units UI
+# Pro Prompt — projects_crm_ui — Phase 3
+
+## Phase 3: Shared UI — EditPanel & Advanced Table Engine
 
 ### Primary role
 
-FRONTEND
-
-Use this role when implementing in Cursor or when invoking CLIs for this phase.
-
-### Skills to load
-
-- [ ] react — components, hooks, state  
-- [ ] gf-design-guide — layout, density, responsive patterns  
-- [ ] gf-i18n — AR/EN, RTL/LTR  
-- [ ] tailwind — utility classes and tokens  
-- [ ] gf-testing — UI tests where reasonable
-
-### MCP to use
-
-| MCP              | When                    |
-|------------------|-------------------------|
-| Context7         | UI/React best practices |
-| cursor-ide-browser | Manual E2E checks       |
+FRONTEND | ARCHITECTURE
 
 ### Preferred tool
 
-- [x] **Cursor (default)** — Contacts & Units CRM UI, EditPanel, visual iteration (per GUIDE_PREFERENCES.md)
-- [ ] Claude CLI
-- [ ] Gemini CLI
-- [ ] OpenCode CLI
-- [ ] Multi-CLI
+- [x] Cursor (default)
+- [ ] Claude CLI — security, architecture, complex reasoning
+- [ ] Gemini CLI — DB/schema work, fast structural analysis
+- [ ] OpenCode CLI — code generation, scaffolds, refactors
 
 ### Context
 
-- Contacts and Units already have:
-  - Rich tables with column customization, CSV import/export, and filters (`ResidentsFilterBar`).
-  - Edit dialogs, linking units ↔ contacts, and some analytics columns.
-- Phase 1 has introduced backend fields for CRM attributes (job title, source, avatarUrl, notes, etc.).
-- Goal: surface those fields in a cohesive CRM-style **right panel + tables** experience.
+- **Project**: GateFlow — Zero-Trust digital gate platform (Turborepo, pnpm)
+- **Apps**: client-dashboard (3001)
+- **Packages**: ui, types
+- **Rules**: pnpm only; use TanStack Table v8; follow ADS layout.
+- **Refs**: `packages/ui/src/components/tables/DataTable.tsx` (base), `docs/plan/planning/PLAN_projects_crm_ui.md`
 
 ### Goal
 
-Upgrade **Contacts** and **Units** views into CRM-like dashboards with richer fields, better unit/contact linkage, and an improved side edit panel that feels wider and more structured.
+Develop the reusable side-drawer `EditPanel` and a high-density `DataTable` engine that supports server-side sorting, pagination, and multi-field global search.
 
 ### Scope (in)
 
-- Contacts (`/dashboard/residents/contacts`):
-  - Extend contact creation/edit dialog (and, where appropriate, the right-side edit panel) to include:
-    - Avatar image or external photo link (re-using `Avatar` component where possible).
-    - Job title, company, company website.
-    - Source / From (e.g. dropdown or free text: Resident, CSV, Manual, Campaign, etc.).
-    - Notes/comment field with reasonable length and styling.
-  - Improve `Unit/s` field UX:
-    - Replace bare checklist with a more discoverable pill/tag selector, making it easy to tag a contact with one or more units.
-  - Consider a richer contact profile view inside the existing `EditPanel`:
-    - Group sections (Identity, Contact details, Units, Tags, Activity summary).
-- Units (`/dashboard/residents/units`):
-  - Ensure unit rows show CRM-relevant data:
-    - Linked residents/contacts, tag summary, quotas (already partially present).
-  - When clicking through from units to contacts or vice versa, ensure the right panel or modal gives a coherent sense of “relationship” (e.g. which units a contact belongs to).
-- Edit right panel:
-  - Reuse the existing shared `EditPanel` but adjust width and layout so:
-    - It feels spacious enough for CRM fields.
-    - Sections are visually grouped and scannable.
+- `packages/ui/src/components/panels/EditPanel.tsx` (New)
+- `packages/ui/src/components/tables/AdvancedTable.tsx` (New engine)
+- `apps/client-dashboard/src/components/layout/panel-provider.tsx` (Optional state layer)
 
 ### Scope (out)
 
-- No changes to marketing attribution or external CRM webhooks in this phase.
-- No new analytics charts; rely on counts already surfaced.
+- Contacts/Units specific implementation logic.
+- API endpoints.
 
 ### Steps (ordered)
 
-1. Load `react`, `gf-design-guide`, `gf-i18n`, and `tailwind` skills; review current `ContactsPage`, `UnitsPage`, `ResidentsFilterBar`, and `EditPanel` for patterns.
-2. Design the information architecture for the contact edit/profile UI:
-   - Decide which fields go into the main dialog vs side panel.
-   - Decide on groupings (e.g. Personal, Work, Units, Notes).
-3. Implement contact form enhancements:
-   - Add new input fields (job title, company website, source, notes, avatar link/upload as appropriate).
-   - Wire them to the backend fields introduced in Phase 1.
-   - Ensure CSV import/export either ignores the new fields gracefully or is extended in a backwards-compatible way.
-4. Upgrade the `Unit/s` field:
-   - Implement a pill/tag-like selector for units in the contact form backed by existing unit list.
-   - Ensure changes sync correctly to the units table (and vice versa).
-5. Adjust Units view:
-   - Verify CRM-relevant columns are visible and styled (linked contacts count, tag summary, etc.).
-   - Ensure clicking units → “View contacts” feels like a related CRM view, not an isolated modal.
-6. Adjust `EditPanel` layout:
-   - Increase width on desktop.
-   - Add section headings and spacing tokens so content is easy to read.
-   - Verify RTL behavior remains correct.
-7. Add light-touch UI tests where practical (e.g. snapshot or basic interaction tests) for contacts/units forms.
-8. Run:
-   - `pnpm turbo lint --filter=client-dashboard`
-   - `pnpm turbo typecheck --filter=client-dashboard`
-   - `pnpm turbo test --filter=client-dashboard`
-
-#### Subagents (optional)
-
-| Subagent      | When | Prompt |
-|---------------|------|--------|
-| **browser-use** | Verify flows | "Login to client-dashboard, navigate to residents Contacts and Units, create/edit a contact with new CRM fields, link/unlink units, and confirm the right panel layout is readable in both EN and AR." |
-
-### Commands (when to run)
-
-- Before significant UI work: `/ready` if git state is messy.
-- After successful checks: `/github` to commit and push.
+1. **Implement EditPanel**: Create a slide-from-right drawer with a dimming backdrop.
+   - Support `onClose`, `onSave`, and dynamic `children`.
+   - Block background interaction while open.
+   - Apply Midnight Blue header if the panel belongs to a project.
+2. **DataTable Engine**: Scaffold `AdvancedTable.tsx` using TanStack Table v8.
+   - Implement server-side pagination (manual control).
+   - Add column sorting (multi-column support).
+   - Implement the "Advanced Filtering" UI (Global Search and Column Filters).
+3. **Data Density Toggle**: Support "Compact" and "Comfortable" density views.
+4. **Loading States**: Add a skeleton/spinner for table load.
+5. **Security**: Ensure all table actions (Edit, Delete, Bulk Action) are validated for the current session.
+6. Run `pnpm turbo build --filter=@gate-access/ui`
+7. After phase passes: `/github` — git add, commit (conventional), pull --rebase, push
 
 ### Acceptance criteria
 
-- [ ] Contacts form and any right-panel view include avatar, job title, source, website/company website, notes, and updated unit selection.
-- [ ] Linking/unlinking units from contacts updates both Contacts and Units tables correctly.
-- [ ] Edit panel is visually wider and grouped, and works in RTL.
-- [ ] CSV flows either ignore or correctly handle new fields without breaking existing imports.
-- [ ] `pnpm turbo lint --filter=client-dashboard` passes.
-- [ ] `pnpm turbo typecheck --filter=client-dashboard` passes.
-- [ ] `pnpm turbo test --filter=client-dashboard` passes (or no regressions).
+- [ ] `EditPanel` slides smoothly (LTR/RTL compliant).
+- [ ] `AdvancedTable` supports URL-driven pagination/sorting (e.g., `?page=2&sort=name:asc`).
+- [ ] High-density view toggle reduces row padding for maximum information visibility.
+- [ ] `pnpm turbo build --filter=client-dashboard` passes
 
+### Files likely touched
+
+- `packages/ui/src/components/panels/EditPanel.tsx`
+- `packages/ui/src/components/tables/AdvancedTable.tsx`
+- `apps/client-dashboard/src/hooks/use-data-table.ts`
+- `packages/ui/src/index.ts`

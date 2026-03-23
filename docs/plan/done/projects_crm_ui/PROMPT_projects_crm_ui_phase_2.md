@@ -1,108 +1,82 @@
-## Phase 2: Project page under Projects & header project switching
+# Pro Prompt — projects_crm_ui — Phase 2
+
+## Phase 2: Core Schema & API — CRM Aggregates
 
 ### Primary role
 
-FRONTEND
-
-Use this role when implementing in Cursor or when invoking CLIs for this phase.
-
-### Skills to load
-
-- [ ] react — React/Next.js patterns  
-- [ ] gf-architecture — app structure, routing  
-- [ ] gf-design-guide — layout, hierarchy, spacing  
-- [ ] gf-i18n — AR/EN & RTL considerations  
-- [ ] gf-testing — component and integration tests
-
-### MCP to use
-
-| MCP              | When                           |
-|------------------|--------------------------------|
-| Context7         | Next.js App Router references  |
-| cursor-ide-browser | Manual E2E click-through (optional) |
+ARCHITECTURE | BACKEND-Database | BACKEND-API
 
 ### Preferred tool
 
-- [x] **Cursor (default)** — UI, layout, project page & header switching (per GUIDE_PREFERENCES.md)
-- [ ] Claude CLI
-- [ ] Gemini CLI
-- [ ] OpenCode CLI
-- [ ] Multi-CLI
+- [ ] Cursor (default)
+- [ ] Claude CLI — security, architecture, complex reasoning
+- [x] Gemini CLI — DB/schema work, fast structural analysis
+- [ ] OpenCode CLI — code generation, scaffolds, refactors
 
 ### Context
 
-- Existing project detail work is tracked in `TASKS_project_dashboard.md` and implemented in:
-  - `apps/client-dashboard/src/app/[locale]/dashboard/projects/page.tsx`
-  - `apps/client-dashboard/src/app/[locale]/dashboard/projects/[projectId]/page.tsx`
-  - `apps/client-dashboard/src/components/dashboard/project-detail/*`
-- A `ProjectFilterContext` already drives analytics and residents filters.
-- Goal: make **Projects** feel like a hub where the selected project is reflected in both the header and the central project page, with smooth transitions.
+- **Project**: GateFlow — Zero-Trust digital gate platform (Turborepo, pnpm)
+- **Apps**: client-dashboard (3001)
+- **Packages**: db, types
+- **Rules**: pnpm only; multi-tenant (`organizationId`); soft deletes (`deletedAt: null`).
+- **Refs**: `packages/db/prisma/schema.prisma`, `docs/plan/planning/PLAN_projects_crm_ui.md`
 
 ### Goal
 
-Expose a clear **Project page under Projects** that:
-- Shows the selected project’s key CRM metrics and overview, and  
-- Smoothly updates when the user switches project from the header.
+Extend the data model to support shift-based gate assignments and create the API for project-level aggregate metrics.
 
 ### Scope (in)
 
-- Ensure the Projects index (`/dashboard/projects`) clearly links to the project detail route.
-- Align the project detail page layout so it reads like a full “Project dashboard”:
-  - Keep the hero, KPIs, gates, team and logs, but verify copy and labels match the CRM vision (projects as “nodes” with gates, units, contacts).
-- Wire project selection:
-  - Integrate `ProjectFilterContext` (or equivalent) so the **current project** is shown in the header.
-  - When the user switches project via the header selector, the project detail view should update to the newly selected project (e.g. via `router.push` or context-driven navigation) with a smooth experience (no jarring full-page flicker).
-- Update Projects cards to show:
-  - Project name, location, logo, cover (or gradient fallback).
-  - High-level metrics: gates, QR codes, units, contacts.
-  - Unit type diversity (e.g. `N` unit types) where easily available.
+- `packages/db/prisma/schema.prisma` (Extensions)
+- `apps/client-dashboard/src/app/api/projects/[projectId]/aggregates/route.ts` (API)
+- `packages/db/src/queries/projects.ts` (Helper methods)
 
 ### Scope (out)
 
-- No new analytics charts; re-use existing counts/metrics.
-- No changes to ProjectWizard; that is handled by existing plans.
+- Scanning logic changes
+- UI components
 
 ### Steps (ordered)
 
-1. Load `react`, `gf-architecture`, `gf-design-guide`, and `gf-i18n` skills to align with current layout patterns.
-2. Review `ProjectFilterContext` and how it’s currently consumed in analytics/residents filter bars; document how the “current project” is chosen (cookie, default, etc.).
-3. In `projects/page.tsx` and `ProjectsTab`:
-   - Confirm that each project card links consistently to `projects/[projectId]`.
-   - Augment the card to ensure logo, cover, description, location, and key counts are visible and visually balanced.
-4. In `projects/[projectId]/page.tsx` and `ProjectDetailContent`:
-   - Confirm the layout is treated as the main project dashboard and adjust headings/copy if needed.
-   - Ensure it can safely handle being navigated to from both:
-     - (a) Projects list
-     - (b) Header project switcher.
-5. Introduce or refine glue between header project selector and routing:
-   - When the header project changes, navigate to that project’s detail route while preserving locale.
-   - Ensure analytics/residents filters also update (or at least don’t conflict) when the current project changes.
-6. Add loading/empty states for:
-   - No projects available.
-   - Project ID invalid or not found (friendly 404 within dashboard layout).
-7. Add or adjust tests where helpful (e.g. simple React tests for project card composition or a smoke test that project detail renders given mock data).
-8. Run:
-   - `pnpm turbo lint --filter=client-dashboard`
-   - `pnpm turbo typecheck --filter=client-dashboard`
-   - `pnpm turbo test --filter=client-dashboard`
+1. **Extend Schema**: Modify `schema.prisma`'s `GateAssignment`:
+   - Add optional `startTime` (DateTime), `endTime` (DateTime).
+   - Add nullable `scheduleJson` (Json) for future flexible shifting.
+2. **Prisma Push**: Run `pnpm db push --force` and regenerate clients.
+3. **Aggregate API**: Create `/[locale]/api/projects/[projectId]/aggregates/route.ts`:
+   - Returns count of `Contacts` (via Units).
+   - Returns count of `Units`.
+   - Returns count of `qrCodes` and `scanLogs` within a timeframe.
+   - Calculates weekly scan growth percentage from a previous 7-day window.
+4. **Security Check**: Confirm all queries are scoped by `organizationId`.
+5. **Update Types**: Update shared project types in `@gate-access/types` if aggregates are modeled as an interface.
+6. Run `pnpm turbo build --filter=@gate-access/db`, `pnpm turbo build --filter=client-dashboard`
+7. After phase passes: `/github` — git add, commit (conventional), pull --rebase, push
 
-#### Subagents (optional)
+### Subagents
 
-| Subagent      | When | Prompt |
-|---------------|------|--------|
-| **browser-use** | Verify navigation flows | "Login to client-dashboard at localhost:3001, switch projects from the header, open `/dashboard/projects`, and confirm the project detail updates correctly when changing the current project." |
-
-### Commands (when to run)
-
-- Before beginning: `/ready` (optional) to ensure a clean working tree.
-- After success: `/github` to commit and push changes.
+| Subagent | When | Prompt |
+|----------|------|--------|
+| **explore** | Find query paths | "Find how Projects relate to Contacts through Units and ContactUnit. Tracing API-to-DB path." |
+| **shell** | DB verify | "Run pnpm db push and report status." |
 
 ### Acceptance criteria
 
-- [ ] From Projects list, each project card opens its project dashboard.
-- [ ] From the header project selector, choosing a project navigates to its dashboard and the selected project is visually obvious.
-- [ ] Projects cards show logo (if present), cover (or gradient), description snippet, location, and key counts without layout breakage in EN/AR.
-- [ ] `pnpm turbo lint --filter=client-dashboard` passes.
-- [ ] `pnpm turbo typecheck --filter=client-dashboard` passes.
-- [ ] `pnpm turbo test --filter=client-dashboard` passes (or no regressions).
+- [ ] `GateAssignment` supports time-scopes.
+- [ ] API successfully returns Project aggregate data for the dashboard hub.
+- [ ] Every record returned is validated for the current user's `organizationId`.
+- [ ] `pnpm turbo typecheck --filter=client-dashboard` passes
 
+### Files likely touched
+
+- `packages/db/prisma/schema.prisma`
+- `apps/client-dashboard/src/app/api/projects/[projectId]/aggregates/route.ts`
+- `packages/db/src/queries/projects.ts`
+- `packages/types/src/index.ts`
+
+### Adversarial Review (Mandatory for High-Risk)
+
+**Trigger**: This phase involves Multi-tenancy and Core DB Scripts.
+
+1. **Invoke Adversary**: Use Gemini to challenge: "Check the `aggregates` API for potential IDOR where a user from Org A can request aggregates for Project B belonging to Org B."
+2. **Loop**: Self-correct by adding the `claims.orgId` check.
+3. **Verification**: State total corrected flaws in walkthrough.

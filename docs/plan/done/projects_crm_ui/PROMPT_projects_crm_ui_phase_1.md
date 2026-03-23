@@ -1,110 +1,65 @@
-## Phase 1: CRM data model & API extensions
+# Pro Prompt — projects_crm_ui — Phase 1
+
+## Phase 1: Foundation — Real Estate Palette & Tokens
 
 ### Primary role
 
-BACKEND-Database / BACKEND-API
-
-Use this role when implementing in Cursor or when invoking CLIs for this phase.
-
-### Skills to load
-
-- [x] gf-database — Prisma, migrations, queries  
-- [x] gf-api — API routes, validation, rate limiting  
-- [x] gf-security — org scope, CONTRACTS.md, multi-tenant  
-- [x] gf-architecture — monorepo, conventions  
-- [x] gf-testing — Jest, test patterns
-
-### MCP to use
-
-| MCP           | When                                  |
-|---------------|---------------------------------------|
-| Prisma-Local  | Inspect schema, run migrations        |
-| Context7      | Look up Prisma / Next.js patterns     |
+ARCHITECTURE | DESIGN-TOKEN
 
 ### Preferred tool
 
-- [ ] Cursor (default)
-- [x] **Claude CLI** — backend & APIs, multi-file route updates, correctness (per GUIDE_PREFERENCES.md)
-- [ ] Gemini CLI
-- [ ] OpenCode CLI
-- [ ] Multi-CLI
-
-**Tool note:** Use Claude CLI for API/schema work; Cursor applies changes and runs preflight/tests.
+- [x] Cursor (default)
+- [ ] Claude CLI — security, architecture, complex reasoning
+- [ ] Gemini CLI — DB/schema work, fast structural analysis
+- [ ] OpenCode CLI — code generation, scaffolds, refactors
 
 ### Context
 
-- Project: GateFlow — Zero-Trust digital gate platform (Turborepo, pnpm).
-- Apps: `apps/client-dashboard` (Next.js 14) for dashboard; scanner-app and others unchanged in this phase.
-- Packages: `@gate-access/db`, `@gate-access/types`, `@gate-access/api-client`.
-- Rules: pnpm only; multi-tenant (`organizationId`); soft deletes (`deletedAt: null`); QR HMAC-SHA256; no secrets in git.
-- Reference:
-  - `packages/db/prisma/schema.prisma`
-  - Existing residents/contacts/units APIs under `apps/client-dashboard/src/app/api/`.
-  - `docs/guides/SECURITY_OVERVIEW.md`, `.cursor/contracts/CONTRACTS.md`.
+- **Project**: GateFlow — Zero-Trust digital gate platform (Turborepo, pnpm)
+- **Apps**: client-dashboard (3001), admin-dashboard (3002)
+- **Packages**: ui, config
+- **Rules**: pnpm only; use semantic tokens; Midnight Blue (#020035) & Kimchi Orange (#ED4B00) palette.
+- **Refs**: `docs/plan/planning/PLAN_projects_crm_ui.md`, `packages/ui/src/globals.css`
 
 ### Goal
 
-Introduce backend fields and API support needed for richer **Project**, **Contact**, **Unit**, and **Gate** data to enable CRM-style UIs, without yet changing user-facing behavior.
+Apply the professional "Real Estate" color palette across the dashboard by updating the core semantic tokens in the UI package.
 
 ### Scope (in)
 
-- Extend `Contact`-related schema and types with:
-  - `jobTitle`, `source` (how contact entered the system), `companyWebsite` (or reuse existing company fields), `avatarUrl` (photo/link), `notes`/`comment`.
-  - If not already present, ensure it’s easy to relate contacts to QR codes or scan activity via counts or an explicit relation (keep within current PRD).
-- Confirm or adjust `Unit` schema so unit type + quotas are clearly represented and easily surfaced in analytics/CRM views.
-- Confirm `Project` has `location`, `website`, `logoUrl`, `coverUrl`; add:
-  - Optional `gallery` (e.g. JSON string or dedicated table for image URLs).
-  - Optional `externalUrl` for marketing/landing pages if not covered by `website`.
-- Add a boolean/enum on `Project` (or equivalent) to mark **single-gate** vs **multi-gate** projects; no behavior change yet, only data.
-- If needed, extend `GateAssignment` or related models so that per-gate team assignment inside a project edit panel has all data required (no new rules yet).
-- Update `/api/contacts`, `/api/units`, `/api/projects`, `/api/gates` handlers to:
-  - Accept and validate the new fields via Zod.
-  - Preserve org scoping (`organizationId`) and soft deletes.
+- `packages/ui/src/globals.css` (Base tokens)
+- `packages/ui/src/components/auth/login-shell.tsx` (Theme application)
+- `apps/client-dashboard/src/components/layout/sidebar.tsx` (Sidebar theme)
+- `tailwind.config.ts` (Theme extensions if needed)
 
 ### Scope (out)
 
-- No UI components or layout changes (beyond TypeScript fixes) — those come in later phases.
-- No change to scanner-app behavior, QR signing, or auth.
+- Scanner app UI
+- Marketing website UI (unless shared tokens are affected)
 
 ### Steps (ordered)
 
-1. Load `gf-database` and `gf-api` skills; skim `docs/guides/SECURITY_OVERVIEW.md` and `.cursor/contracts/CONTRACTS.md` for any constraints on storing additional PII and notes.
-2. In `packages/db/prisma/schema.prisma`, update models for:
-   - `Contact`-like model: add `jobTitle`, `source`, `companyWebsite`, `avatarUrl`, `notes` (nullable where appropriate).
-   - `Project`: confirm `location`, `website`, `logoUrl`, `coverUrl`; add `galleryJson` (or similar) and `externalUrl` if needed.
-   - Add a `gateMode`/`isSingleGate` flag on `Project` to support single vs multi gate UX later.
-   - Extend `GateAssignment` only if the project edit UX will need additional metadata that isn’t already in the v6 PRD.
-3. Run `cd packages/db && pnpm prisma migrate dev --name projects_crm_ui_phase_1` (or equivalent) and ensure migration applies cleanly.
-4. Update `@gate-access/types` if it mirrors any of the updated models (contact/project types used client-side).
-5. Update API route handlers:
-   - `/api/contacts` (POST/PATCH) to read/write the new contact fields with Zod validation.
-   - `/api/projects` routes to include new fields in GET/POST/PATCH responses.
-   - `/api/units` and `/api/gates` only as needed to expose fields used by later phases.
-6. Add or extend minimal backend tests (or targeted integration checks) for the updated routes to exercise the new fields.
-7. Run:
-   - `pnpm turbo lint --filter=client-dashboard`
-   - `pnpm turbo typecheck --filter=client-dashboard`
-   - `pnpm turbo test --filter=client-dashboard`
-8. If everything passes, update or create a short note in `docs/plan/learning/patterns.md` about CRM-style entity extensions for future reference.
-
-#### Subagents (optional)
-
-| Subagent | When | Prompt |
-|----------|------|--------|
-| **shell** | To run migrations and preflight | "From repo root, run pnpm turbo lint --filter=client-dashboard && pnpm turbo typecheck --filter=client-dashboard && pnpm turbo test --filter=client-dashboard. Report any failures with file:line." |
-
-### Commands (when to run)
-
-- Before migration: consider `/ready` if the branch is messy.
-- After passing tests: `/github` — add, commit, pull --rebase, push.
+1. **Update Tokens**: Modify `packages/ui/src/globals.css` to implement the new palette:
+   - `--background`: Anti-Flash White `#F2F3F4` (Light) / Midnight Blue `#020035` (Dark).
+   - `--foreground`: Midnight Blue `#020035` (Light) / Anti-Flash White `#F2F3F4` (Dark).
+   - `--primary`: Kimchi Orange `#ED4B00`.
+   - `--sidebar-background`: Midnight Blue `#020035`.
+2. **Apply to Shell**: Ensure the `DashboardShell` and `LoginShell` correctly use these tokens for a "Midnight Blue" sidebar experience.
+3. **Verify Contrast**: Check primary text headers in the dashboard to ensure they meet AAA contrast (19:1).
+4. **Cleanup**: Remove any hardcoded `zinc` or `slate` references in key layout files.
+5. Run `pnpm turbo build --filter=@gate-access/ui` and `pnpm turbo typecheck --filter=client-dashboard`
+6. After phase passes: `/github` — git add, commit (conventional), pull --rebase, push
 
 ### Acceptance criteria
 
-- [ ] Prisma schema compiles; migration applies with no data-loss regressions.
-- [ ] New contact fields (`jobTitle`, `source`, `companyWebsite`, `avatarUrl`, `notes`) are persisted and returned by APIs.
-- [ ] Project-level fields (`gallery` representation, `externalUrl`, `isSingleGate`/`gateMode`) are available via project APIs.
-- [ ] All updated routes still enforce `organizationId` scoping and soft deletes.
-- [ ] `pnpm turbo lint --filter=client-dashboard` passes.
-- [ ] `pnpm turbo typecheck --filter=client-dashboard` passes.
-- [ ] `pnpm turbo test --filter=client-dashboard` passes (or no regressions where tests exist).
+- [ ] Dashboard sidebar is Midnight Blue with white text.
+- [ ] Primary buttons use Kimchi Orange.
+- [ ] Background is Anti-Flash White for a clean, professional "Real Estate" feel.
+- [ ] `pnpm turbo lint --filter=client-dashboard` passes
 
+### Files likely touched
+
+- `packages/ui/src/globals.css`
+- `apps/client-dashboard/src/app/globals.css`
+- `apps/client-dashboard/src/components/layout/sidebar.tsx`
+- `packages/ui/src/components/auth/login-shell.tsx`

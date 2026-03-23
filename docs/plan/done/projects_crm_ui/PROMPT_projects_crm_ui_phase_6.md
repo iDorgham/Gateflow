@@ -1,80 +1,79 @@
-# Pro Prompt — Phase 6: Advanced tables — TanStack Table base (QR Codes first)
+# Pro Prompt — projects_crm_ui — Phase 6
 
-## Phase 6: TanStack Table base + QR Codes page
+## Phase 6: Sync & Operations — Project Logs & Team
 
 ### Primary role
 
-FRONTEND
-
-Use this role when implementing in Cursor or when invoking CLIs for this phase.
-
-### Skills to load
-
-- [x] react — React/Next.js patterns
-- [x] gf-architecture — app structure, conventions
-- [x] gf-design-guide — layout, tokens
-- [x] gf-security — org scope, no data leak (for data-fetching contract)
-- [ ] gf-testing — Jest, test patterns
-
-### MCP to use
-
-| MCP | When |
-|-----|------|
-| Context7 | TanStack Table / React Table v8 API lookup |
+BACKEND-API | FRONTEND | ARCHITECTURE
 
 ### Preferred tool
 
-- [x] **Cursor (default)** — TanStack Table base, QR Codes page UI (per GUIDE_PREFERENCES.md)
-- [ ] Claude CLI
-- [ ] Gemini CLI
-- [ ] OpenCode CLI
-- [ ] Multi-CLI
+- [ ] Cursor (default)
+- [ ] Claude CLI — security, architecture, complex reasoning
+- [x] Gemini CLI — DB/schema work, fast structural analysis
+- [ ] OpenCode CLI — code generation, scaffolds, refactors
 
 ### Context
 
-- **Project:** GateFlow — client-dashboard (Next.js 14), pnpm, Turborepo.
-- **Rules:** `.cursor/contracts/CONTRACTS.md`, `.cursor/rules/00-gateflow-core.mdc` — multi-tenant (`organizationId`), soft deletes (`deletedAt: null`), no direct DB from client.
-- **Refs:** `apps/client-dashboard/src/app/[locale]/dashboard/qrcodes/`, existing QR list/API (e.g. `/api/qrcodes`).
+- **Project**: GateFlow — Zero-Trust digital gate platform (Turborepo, pnpm)
+- **Apps**: client-dashboard (3001)
+- **Packages**: ui, db, api-client
+- **Rules**: pnpm only; real-time (SSE/WS context if existing); multi-tenant.
+- **Refs**: `apps/client-dashboard/src/app/[locale]/dashboard/projects/[projectId]/page.tsx` (Phase 4), `docs/plan/planning/PLAN_projects_crm_ui.md`
 
 ### Goal
 
-Introduce **TanStack Table** (React Table v8) as the base for the QR Codes table with server-side data fetching and a default column set, without yet adding column reorder, advanced filters, or export.
+Integrate a real-time "Live Logs" feed and gate assignment management directly into the project hub, utilizing the new time-scope fields from Phase 2.
 
 ### Scope (in)
 
-- QR Codes page: replace or wrap existing table with TanStack Table.
-- Default columns for QR: code/preview, type, createdAt, expiresAt, status, createdBy, scans count, lastScanAt, linked unit(s), linked contact(s), source (or available fields from API).
-- Data fetching: use existing `/api/qrcodes` (or equivalent) with org scope; support `limit`/`offset` (or `page`/`pageSize`) for future pagination.
-- Use `@gate-access/ui` components (Table, Button, Badge, etc.) and semantic tokens (real-estate palette).
+- `apps/client-dashboard/src/components/operations/ProjectLiveLogs.tsx` (New)
+- `apps/client-dashboard/src/components/operations/ProjectTeamTable.tsx` (New)
+- `apps/client-dashboard/src/app/api/projects/[projectId]/logs/route.ts` (API)
+- `apps/client-dashboard/src/app/api/projects/[projectId]/team/route.ts` (API)
 
 ### Scope (out)
 
-- No column reorder, persistence, or advanced filtering in this phase.
-- No export or bulk selection.
-- Contacts and Units tables unchanged.
+- Static analytics pages (outside project scope).
+- Historical logs (> 30 days).
 
 ### Steps (ordered)
 
-1. Load `gf-security` and skim CONTRACTS.md; ensure any new data hooks use auth and org-scoped API only.
-2. Add `@tanstack/react-table` (and peer deps) to `apps/client-dashboard` if not present; verify version compatible with React 18.
-3. In the QR Codes page (or a new `QRCodesTable` component), define column definitions for the default QR column set.
-4. Implement server-side data fetching (e.g. `useSWR` or fetch) calling `/api/qrcodes` with query params for pagination (e.g. `limit`, `offset`); ensure response is org-scoped (no cross-tenant data).
-5. Wire TanStack Table with the fetched data; render table using @gate-access/ui Table primitives; keep existing EditPanel or row actions if any.
-6. Add a simple toolbar above the table: placeholder for future search/filters, “Refresh” button. No export yet.
-7. Add loading and error states (skeleton or spinner).
-8. Run `pnpm turbo lint --filter=client-dashboard`, `pnpm turbo typecheck --filter=client-dashboard`, `pnpm turbo test --filter=client-dashboard`.
+1. **Project Logs API**: Create `/[locale]/api/projects/[projectId]/logs/`:
+   - Returns recent `ScanLog` entries filtered by gates belonging to the project.
+   - Include `ProjectName`, `GateName`, `ResidentName` (if applicable) in JSON.
+2. **Project Team API**: Create `/[locale]/api/projects/[projectId]/team/`:
+   - Returns `GateAssignment` with User data.
+   - Support `startTime` and `endTime` (introduced in Phase 2).
+3. **Live Logs Feed**: Implement `ProjectLiveLogs.tsx`:
+   - Polling or SSE/WS feed of the Logs API.
+   - Highlight "Access Denied" or "Watchlist Match" in Red/Alert.
+   - Map logs to the "Real Estate Palette" (Midnight Blue headers, Anti-Flash backgrounds).
+4. **Project Team Table**: Implement `ProjectTeamTable.tsx` using `AdvancedTable`:
+   - Columns: User Name, Assigned Gate, Shift Start, Shift End, IsActive.
+   - Action: Open `EditPanel` to manage user/gate assignment.
+5. **Time-Scoped Form**: Implement `GateAssignmentForm.tsx` to include the `startTime` / `endTime` fields.
+6. **Security Audit**: Ensure every row change checks the `organizationId`.
+7. Run `pnpm turbo test --filter=client-dashboard`
+8. After phase passes: `/github` — git add, commit (conventional), pull --rebase, push
+
+### Subagents
+
+| Subagent | When | Prompt |
+|----------|------|--------|
+| **explore** | Logs relations | "Find the relation paths between Gate, Project, and ScanLog to ensure the logs API doesn't perform massive joins." |
 
 ### Acceptance criteria
 
-- [ ] QR Codes page uses TanStack Table with default column set.
-- [ ] Data is loaded via existing org-scoped API; no client-side bypass of auth.
-- [ ] Loading and error states are shown.
-- [ ] `pnpm turbo lint --filter=client-dashboard` passes.
-- [ ] `pnpm turbo typecheck --filter=client-dashboard` passes.
-- [ ] `pnpm turbo test --filter=client-dashboard` passes (no regression).
+- [ ] "Live Logs" updates when a scan occurs at a gate within the project.
+- [ ] Assigning a user to a gate with a specific time-window updates the DB correctly.
+- [ ] Users can manage all project operations (Logs, Team) from the single Project Detail Hub.
+- [ ] `pnpm turbo build --filter=client-dashboard` passes
 
 ### Files likely touched
 
-- `apps/client-dashboard/src/app/[locale]/dashboard/qrcodes/page.tsx` (or equivalent)
-- `apps/client-dashboard/src/components/dashboard/qrcodes/QRCodesTable.tsx` (new or refactored)
-- `apps/client-dashboard/package.json` (if adding @tanstack/react-table)
+- `apps/client-dashboard/src/components/operations/ProjectLiveLogs.tsx`
+- `apps/client-dashboard/src/components/operations/ProjectTeamTable.tsx`
+- `apps/client-dashboard/src/app/api/projects/[projectId]/logs/route.ts`
+- `apps/client-dashboard/src/app/api/projects/[projectId]/team/route.ts`
+- `packages/db/src/queries/scanlogs.ts`
