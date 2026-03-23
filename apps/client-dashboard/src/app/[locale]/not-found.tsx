@@ -3,12 +3,14 @@ import { ShieldX } from 'lucide-react';
 
 export default function NotFound() {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-slate-50 via-white to-blue-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 px-4 text-center">
+    <div className="flex min-h-dvh flex-col items-center justify-center bg-gradient-to-br from-slate-50 via-white to-blue-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 px-4 text-center">
       <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-2xl bg-red-50 dark:bg-red-900/20 shadow-sm">
         <ShieldX className="h-10 w-10 text-red-500" aria-hidden="true" />
       </div>
 
-      <h1 className="text-7xl font-black tracking-tight text-slate-900 dark:text-white">404</h1>
+      <h1 className="text-7xl font-black tracking-tight text-slate-900 dark:text-white">
+        404
+      </h1>
       <p className="mt-3 text-lg font-medium text-slate-600 dark:text-slate-400">
         Page not found
       </p>

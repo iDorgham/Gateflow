@@ -52,10 +52,7 @@ function LoginControls2026({ locale }: { locale: Locale }) {
   const isRtl = locale === 'ar-EG';
 
   return (
-    <div
-      className="flex items-center gap-1"
-      style={{ minHeight: 44 }}
-    >
+    <div className="flex items-center gap-1" style={{ minHeight: 44 }}>
       <div className="relative">
         <button
           type="button"
@@ -100,9 +97,7 @@ function LoginControls2026({ locale }: { locale: Locale }) {
                   style={{ color: '#fff' }}
                 >
                   {LOCALE_LABELS[l]}
-                  {l === locale && (
-                    <Check className="h-4 w-4 text-[#EB4A00]" />
-                  )}
+                  {l === locale && <Check className="h-4 w-4 text-[#EB4A00]" />}
                 </button>
               ))}
             </motion.div>
@@ -126,7 +121,11 @@ function LoginControls2026({ locale }: { locale: Locale }) {
           borderColor: 'rgba(255,255,255,0.2)',
           backgroundColor: 'rgba(0,0,0,0.15)',
         }}
-        aria-label={mounted ? `Toggle theme. Current: ${theme === 'dark' ? 'dark' : 'light'}` : 'Toggle theme'}
+        aria-label={
+          mounted
+            ? `Toggle theme. Current: ${theme === 'dark' ? 'dark' : 'light'}`
+            : 'Toggle theme'
+        }
       >
         {mounted && theme === 'dark' ? (
           <Sun className="h-4 w-4" />
@@ -208,7 +207,13 @@ const trustBadgeVariants = {
     y: 0,
     transition: opts.reduce
       ? { duration: 0.01 }
-      : { delay: 0.4 + opts.i * 0.1, duration: 0.4, type: 'spring', stiffness: 350, damping: 30 },
+      : {
+          delay: 0.4 + opts.i * 0.1,
+          duration: 0.4,
+          type: 'spring',
+          stiffness: 350,
+          damping: 30,
+        },
   }),
 };
 
@@ -234,7 +239,7 @@ export function LoginPageLayout2026({
         initial="hidden"
         animate="visible"
         className={cn(
-          'relative flex min-h-[40vh] flex-col justify-between overflow-hidden px-6 py-8 md:col-span-2 md:min-h-screen md:px-10 md:py-12',
+          'relative flex min-h-[40vh] flex-col justify-between overflow-hidden px-6 py-8 md:col-span-2 md:min-h-dvh md:px-10 md:py-12',
           isRtl ? 'md:order-2' : 'md:order-1'
         )}
         style={{
@@ -270,7 +275,10 @@ export function LoginPageLayout2026({
 
         {/* Center: logo + tagline */}
         <div className="relative z-10 flex flex-1 flex-col justify-center">
-          <motion.div variants={taglineVariants} className="flex items-center gap-3">
+          <motion.div
+            variants={taglineVariants}
+            className="flex items-center gap-3"
+          >
             <div
               className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl"
               style={{
@@ -303,7 +311,10 @@ export function LoginPageLayout2026({
             {[
               { icon: Shield, label: t('trustBadgeSoc2', 'SOC2 Compliant') },
               { icon: Server, label: t('trustBadgeMena', 'MENA Hosted') },
-              { icon: CheckCircle, label: t('trustBadgeUptime', '99.9% Uptime') },
+              {
+                icon: CheckCircle,
+                label: t('trustBadgeUptime', '99.9% Uptime'),
+              },
             ].map(({ icon: Icon, label }, i) => (
               <motion.span
                 key={label}
@@ -339,7 +350,7 @@ export function LoginPageLayout2026({
             : { delay: 0.2, type: 'spring', stiffness: 350, damping: 30 }
         }
         className={cn(
-          'relative flex min-h-[60vh] flex-col items-center justify-center overflow-auto px-6 py-8 md:col-span-1 md:min-h-screen md:px-12 md:py-8',
+          'relative flex min-h-[60vh] flex-col items-center justify-center overflow-auto px-6 py-8 md:col-span-1 md:min-h-dvh md:px-12 md:py-8',
           isRtl ? 'md:order-1' : 'md:order-2',
           errorKey > 0 && 'animate-shake'
         )}

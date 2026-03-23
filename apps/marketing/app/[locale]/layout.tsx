@@ -9,19 +9,26 @@ import { fetchTranslations } from '../../lib/i18n/get-translation';
 import { I18nProvider } from '../../hooks/use-translation';
 import dynamic from 'next/dynamic';
 
-const CookieBanner = dynamic(() => import('../../components/cookie-banner').then((mod) => mod.CookieBanner), { ssr: false });
-const ChatWidget = dynamic(() => import('../../components/chat-widget').then((mod) => mod.ChatWidget), { ssr: false });
+const CookieBanner = dynamic(
+  () =>
+    import('../../components/cookie-banner').then((mod) => mod.CookieBanner),
+  { ssr: false }
+);
+const ChatWidget = dynamic(
+  () => import('../../components/chat-widget').then((mod) => mod.ChatWidget),
+  { ssr: false }
+);
 
-const inter = Inter({ 
-  subsets: ['latin'], 
+const inter = Inter({
+  subsets: ['latin'],
   variable: '--font-inter',
-  display: 'swap'
+  display: 'swap',
 });
-const cairo = Cairo({ 
-  subsets: ['arabic', 'latin-ext'], 
-  weight: ['300', '400', '500', '600', '700'],
+const cairo = Cairo({
+  subsets: ['arabic', 'latin-ext'],
+  weight: ['400', '500', '600', '700'],
   variable: '--font-cairo',
-  display: 'swap'
+  display: 'swap',
 });
 
 import { OrganizationJsonLd, WebSiteJsonLd } from '../../components/json-ld';
@@ -41,7 +48,14 @@ export const metadata: Metadata = {
   },
   description:
     'Modern QR-based access control for gated communities, schools, events, and clubs across Egypt and the Gulf. Real-time monitoring, offline scanning, and full audit logs.',
-  keywords: ['access control', 'QR security', 'gated community', 'Egypt tech', 'Gulf security', 'visitor management'],
+  keywords: [
+    'access control',
+    'QR security',
+    'gated community',
+    'Egypt tech',
+    'Gulf security',
+    'visitor management',
+  ],
   authors: [{ name: 'GateFlow Team' }],
   creator: 'GateFlow',
   publisher: 'GateFlow',
@@ -74,8 +88,8 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/',
     languages: {
-      'en': `${BASE_URL}/en`,
-      'ar': `${BASE_URL}/ar-EG`,
+      en: `${BASE_URL}/en`,
+      ar: `${BASE_URL}/ar-EG`,
       'x-default': `${BASE_URL}/en`,
     },
   },
@@ -101,7 +115,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 
 export default async function RootLayout({
   children,
-  params
+  params,
 }: {
   children: React.ReactNode;
   params: { locale: Locale };
@@ -114,18 +128,28 @@ export default async function RootLayout({
   const cookiesDict = await fetchTranslations(params.locale, 'cookies');
   const formsDict = await fetchTranslations(params.locale, 'forms');
   const componentsDict = await fetchTranslations(params.locale, 'components');
-  
+
   const dictionaries = {
     common: commonDict,
     navigation: navDict,
     cookies: cookiesDict,
     forms: formsDict,
-    components: componentsDict
+    components: componentsDict,
   };
 
   return (
-    <html lang={params.locale} dir={isRtl ? 'rtl' : 'ltr'} suppressHydrationWarning>
+    <html
+      lang={params.locale}
+      dir={isRtl ? 'rtl' : 'ltr'}
+      suppressHydrationWarning
+    >
       <head>
+        {/* Resource hints — reduce DNS lookup time for third-party origins */}
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://www.google-analytics.com" />
+        <link rel="preconnect" href="https://connect.facebook.net" />
+        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
         <OrganizationJsonLd locale={params.locale} />
         <WebSiteJsonLd locale={params.locale} />
         <meta name="theme-color" content="#3b82f6" />
@@ -140,15 +164,13 @@ export default async function RootLayout({
       >
         <I18nProvider locale={params.locale} dictionaries={dictionaries}>
           <Providers>
-          <Nav locale={params.locale} />
-          <main className="relative flex min-h-[105.3vh] flex-col">
-            {children}
-          </main>
-          <Footer locale={params.locale} />
-          <CookieBanner />
-          <ChatWidget />
-          <Analytics />
-          <SpeedInsights />
+            <Nav locale={params.locale} />
+            <main className="relative flex min-h-dvh flex-col">{children}</main>
+            <Footer locale={params.locale} />
+            <CookieBanner />
+            <ChatWidget />
+            <Analytics />
+            <SpeedInsights />
           </Providers>
         </I18nProvider>
       </body>

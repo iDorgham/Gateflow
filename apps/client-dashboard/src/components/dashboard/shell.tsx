@@ -15,16 +15,8 @@ import { getCsrfToken } from '@/lib/csrf';
 import { Locale } from '@/lib/i18n-config';
 import { HeaderUserMenu } from './header-user-menu';
 import { useRealtimeEvents } from '@/lib/realtime/use-realtime-events';
-import {
-  SheetContent,
-  Button,
-  Sheet,
-} from '@gate-access/ui';
-import {
-  Sparkles,
-  Menu,
-  ChevronsUpDown,
-} from 'lucide-react';
+import { SheetContent, Button, Sheet } from '@gate-access/ui';
+import { Sparkles, Menu, ChevronsUpDown } from 'lucide-react';
 import { cn } from '@gate-access/ui';
 import { ThemeToggle } from './theme-toggle';
 
@@ -54,7 +46,6 @@ export interface DashboardShellProps {
   hideGates?: boolean;
   permissions?: Record<string, boolean>;
 }
-
 
 export function DashboardShell({
   user,
@@ -99,7 +90,6 @@ export function DashboardShell({
     fetchExpiredQRs();
   }, [fetchExpiredQRs]);
 
-
   const handleProjectSwitch = (projectId: string) => {
     const val = projectId === 'all' ? 'all' : projectId;
     const csrfToken = getCsrfToken() || '';
@@ -108,7 +98,7 @@ export function DashboardShell({
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-csrf-token': csrfToken
+        'x-csrf-token': csrfToken,
       },
       body: JSON.stringify({ projectId: val }),
     }).then(() => {
@@ -123,7 +113,7 @@ export function DashboardShell({
   };
 
   return (
-    <div className="flex h-screen flex-col overflow-hidden bg-background">
+    <div className="flex h-dvh flex-col overflow-hidden bg-background">
       {/* Top bar spanning full width */}
       <header className="flex h-16 shrink-0 items-center justify-between border-b border-sidebar-border bg-sidebar text-sidebar-foreground px-4 md:px-6 shadow-sm z-30">
         <div className="flex items-center gap-6">
@@ -187,11 +177,11 @@ export function DashboardShell({
           <LanguageSwitcher currentLocale={locale} variant="mini" />
           <ThemeToggle />
           <div className="h-6 w-px bg-sidebar-border/50 mx-1 hidden sm:block" />
-          <HeaderUserMenu 
-            user={user} 
-            org={org} 
-            locale={locale} 
-            variant="header" 
+          <HeaderUserMenu
+            user={user}
+            org={org}
+            locale={locale}
+            variant="header"
           />
         </div>
       </header>
@@ -219,40 +209,38 @@ export function DashboardShell({
 
         {/* Right side: content */}
         <div className="flex flex-1 min-h-0 flex-col min-w-0 overflow-hidden">
-        {/* Mobile Sidebar */}
-        <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-          <SheetContent
-            side="left"
-            className="p-0 border-0 w-64"
-            aria-label="Mobile navigation"
-          >
-            <Sidebar
-              user={user}
-              org={org}
-              projects={projects}
-              currentProjectId={currentProjectId}
-              locale={locale}
-              isCollapsed={false}
-              onToggleCollapse={() => setMobileOpen(false)}
-              hideGates={hideGates}
-              permissions={permissions}
-            />
-          </SheetContent>
-        </Sheet>
-
-        {/* Page content */}
-        <main className="flex-1 min-h-0 overflow-y-auto p-4 md:p-8 bg-muted/20 flex flex-col">
-          <div
-            className="animate-in fade-in slide-in-from-bottom-2 duration-500 w-full flex-1 flex flex-col"
-          >
-            <ProjectFilterProvider
-              currentProjectId={currentProjectId}
-              projects={projects}
+          {/* Mobile Sidebar */}
+          <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
+            <SheetContent
+              side="left"
+              className="p-0 border-0 w-64"
+              aria-label="Mobile navigation"
             >
-              {children}
-            </ProjectFilterProvider>
-          </div>
-        </main>
+              <Sidebar
+                user={user}
+                org={org}
+                projects={projects}
+                currentProjectId={currentProjectId}
+                locale={locale}
+                isCollapsed={false}
+                onToggleCollapse={() => setMobileOpen(false)}
+                hideGates={hideGates}
+                permissions={permissions}
+              />
+            </SheetContent>
+          </Sheet>
+
+          {/* Page content */}
+          <main className="flex-1 min-h-0 overflow-y-auto p-4 md:p-8 bg-muted/20 flex flex-col">
+            <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 w-full flex-1 flex flex-col">
+              <ProjectFilterProvider
+                currentProjectId={currentProjectId}
+                projects={projects}
+              >
+                {children}
+              </ProjectFilterProvider>
+            </div>
+          </main>
 
           <SidePanel
             locale={locale}

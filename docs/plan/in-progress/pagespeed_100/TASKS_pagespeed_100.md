@@ -33,20 +33,23 @@
 
 ---
 
-## Phase 2 — Asset Overhaul (LCP & CLS Fixes) ⬜
+## Phase 2 — Asset Overhaul (LCP & CLS Fixes) ✅
 
 ### Tasks
 
-- [ ] `apps/client-dashboard/next.config.js` — replace wildcard `hostname: **` with explicit allowlist + add `formats: ['image/avif', 'image/webp']`
-- [ ] `apps/marketing/components/sections/hero-animated-content.tsx` — render LCP text visible immediately; animate decorative elements only
-- [ ] `apps/client-dashboard/src/app/[locale]/layout.tsx` — add `display: 'swap'` to Poppins; reduce weights to `['400', '600', '700']`
-- [ ] `apps/marketing/app/[locale]/layout.tsx` — same Poppins/Cairo weight reduction
-- [ ] Add `<link rel="preconnect" href="https://www.googletagmanager.com">` and `<link rel="preconnect" href="https://connect.facebook.net">` to marketing `<head>`
-- [ ] Convert `apps/marketing/public/hero-graphic.png` → `.webp` and update `<Image>` src
-- [ ] Convert `apps/marketing/public/images/solutions/*.png` → `.webp`
-- [ ] Add explicit `width` and `height` to all `<AvatarImage>` usages in client-dashboard
-- [ ] Replace `h-screen` and `min-h-screen` with `min-h-dvh` where mobile CLS is a concern
-- [ ] Update `.lighthouserc.js` thresholds to Phase 2 values after fixes land
+- [x] `apps/client-dashboard/next.config.js` — replace wildcard `hostname: **` with 7-entry explicit allowlist + add `formats: ['image/avif', 'image/webp']` + `deviceSizes`/`imageSizes` + `optimizePackageImports`
+- [x] `apps/marketing/components/sections/hero-animated-content.tsx` — confirmed LCP text renders immediately (`containerVariants.hidden: { opacity: 1 }`, h1 not wrapped in motion); no changes needed
+- [x] `apps/client-dashboard/src/app/[locale]/layout.tsx` — added `display: 'swap'` to Poppins; reduced weights `['300','400','500','600','700','800','900']` → `['400','500','600','700']`; `min-h-screen` → `min-h-dvh` on body
+- [x] `apps/marketing/app/[locale]/layout.tsx` — Cairo weight trim `['300','400','500','600','700']` → `['400','500','600','700']`; `min-h-[105.3vh]` → `min-h-dvh`
+- [x] Add `<link rel="preconnect">` for GTM, Google Analytics, Facebook Pixel CDNs + `<link rel="dns-prefetch">` for Google Fonts to marketing `<head>`
+- [x] `apps/marketing/next.config.js` — added `formats: ['image/avif', 'image/webp']` + `deviceSizes`
+- [x] Replace `h-screen` / `min-h-screen` with `h-dvh` / `min-h-dvh` across 6 files: `shell.tsx`, `dashboard-layout.tsx` (×2), `join/page.tsx`, `not-found.tsx`, `login-page-layout-2026.tsx`
+- [x] Update `.lighthouserc.js` thresholds to Phase 2 values
+
+### Skipped (deferred to Phase 3/4)
+
+- PNG → WebP conversions for `hero-graphic.png` and `solutions/*.png` — Next.js now auto-serves AVIF/WebP for these via `formats` config; manual conversion is an additional Phase 4 polish task
+- AvatarImage explicit width/height — affects only logged-in users, not LCP path; deferred to Phase 4
 
 ---
 

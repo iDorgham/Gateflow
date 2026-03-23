@@ -88,14 +88,14 @@ export interface TaskItem {
   done: boolean;
 }
 
-function SearchHeader({ 
-  locale, 
+function SearchHeader({
+  locale,
   user,
-  projects, 
+  projects,
   currentProjectId,
   handleProjectSwitch,
-  isPending
-}: { 
+  isPending,
+}: {
   locale: Locale;
   user: DashboardLayoutProps['user'];
   projects: { id: string; name: string }[];
@@ -103,7 +103,13 @@ function SearchHeader({
   handleProjectSwitch: (id: string) => void;
   isPending: boolean;
 }) {
-  const initials = user.name.split(' ').filter(Boolean).map((n) => n[0]).join('').slice(0, 2).toUpperCase();
+  const initials = user.name
+    .split(' ')
+    .filter(Boolean)
+    .map((n) => n[0])
+    .join('')
+    .slice(0, 2)
+    .toUpperCase();
 
   return (
     <div
@@ -130,7 +136,9 @@ function SearchHeader({
                 <SelectValue placeholder="Select Project" />
               </SelectTrigger>
               <SelectContent align="end">
-                <SelectItem value="all" className="text-xs">All Projects</SelectItem>
+                <SelectItem value="all" className="text-xs">
+                  All Projects
+                </SelectItem>
                 {projects.map((p) => (
                   <SelectItem key={p.id} value={p.id} className="text-xs">
                     {p.name}
@@ -159,19 +167,29 @@ function SearchHeader({
           <DropdownMenuContent align="end" sideOffset={8} className="w-56 p-2">
             <DropdownMenuLabel className="font-normal px-2 py-3">
               <div className="flex flex-col gap-0.5">
-                <p className="text-sm font-semibold text-[var(--ds-text,#172B4D)]">{user.name}</p>
-                <p className="text-xs text-[var(--ds-text-subtle,#42526E)] truncate">{user.email}</p>
+                <p className="text-sm font-semibold text-[var(--ds-text,#172B4D)]">
+                  {user.name}
+                </p>
+                <p className="text-xs text-[var(--ds-text-subtle,#42526E)] truncate">
+                  {user.email}
+                </p>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator className="bg-[var(--ds-border,#DFE1E6)]" />
             <DropdownMenuItem asChild>
-              <Link href={`/${locale}/dashboard/settings`} className="flex items-center gap-2 cursor-pointer py-2">
+              <Link
+                href={`/${locale}/dashboard/settings`}
+                className="flex items-center gap-2 cursor-pointer py-2"
+              >
                 <Settings className="h-4 w-4" />
                 <span>Settings</span>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href={`/${locale}/dashboard/settings?tab=billing`} className="flex items-center gap-2 cursor-pointer py-2">
+              <Link
+                href={`/${locale}/dashboard/settings?tab=billing`}
+                className="flex items-center gap-2 cursor-pointer py-2"
+              >
                 <CreditCard className="h-4 w-4" />
                 <span>Billing</span>
               </Link>
@@ -196,20 +214,76 @@ function SearchHeader({
 }
 
 const NAV_ITEMS = [
-  { label: 'Dashboard', href: '/', icon: SquaresFour, exact: true, i18nKey: 'sidebar.overview' },
-  { label: 'AI assistant', href: '/dashboard/ai', icon: Sparkle, i18nKey: 'sidebar.gateAi' },
-  { label: 'Projects', href: '/dashboard/projects', icon: Stack, i18nKey: 'sidebar.projects' },
-  { label: 'QR Codes', href: '/dashboard/qrcodes', icon: QrCodeIcon, i18nKey: 'sidebar.qrCodes' },
-  { label: 'Scan Logs', href: '/dashboard/scans', icon: Record, i18nKey: 'sidebar.scanLogs' },
-  { label: 'Gates', href: '/dashboard/gates', icon: House, i18nKey: 'sidebar.gates' },
-  { label: 'Team', href: '/dashboard/team', icon: Users, i18nKey: 'sidebar.team' },
-  { label: 'Analytics', href: '/dashboard/analytics', icon: ChartLineUp, i18nKey: 'sidebar.analytics' },
-  { label: 'Settings', href: '/dashboard/settings', icon: Gear, i18nKey: 'sidebar.settings' },
+  {
+    label: 'Dashboard',
+    href: '/',
+    icon: SquaresFour,
+    exact: true,
+    i18nKey: 'sidebar.overview',
+  },
+  {
+    label: 'AI assistant',
+    href: '/dashboard/ai',
+    icon: Sparkle,
+    i18nKey: 'sidebar.gateAi',
+  },
+  {
+    label: 'Projects',
+    href: '/dashboard/projects',
+    icon: Stack,
+    i18nKey: 'sidebar.projects',
+  },
+  {
+    label: 'QR Codes',
+    href: '/dashboard/qrcodes',
+    icon: QrCodeIcon,
+    i18nKey: 'sidebar.qrCodes',
+  },
+  {
+    label: 'Scan Logs',
+    href: '/dashboard/scans',
+    icon: Record,
+    i18nKey: 'sidebar.scanLogs',
+  },
+  {
+    label: 'Gates',
+    href: '/dashboard/gates',
+    icon: House,
+    i18nKey: 'sidebar.gates',
+  },
+  {
+    label: 'Team',
+    href: '/dashboard/team',
+    icon: Users,
+    i18nKey: 'sidebar.team',
+  },
+  {
+    label: 'Analytics',
+    href: '/dashboard/analytics',
+    icon: ChartLineUp,
+    i18nKey: 'sidebar.analytics',
+  },
+  {
+    label: 'Settings',
+    href: '/dashboard/settings',
+    icon: Gear,
+    i18nKey: 'sidebar.settings',
+  },
 ];
 
 const RESIDENTS_ITEMS = [
-  { label: 'Contacts', href: '/dashboard/residents/contacts', icon: Users, i18nKey: 'sidebar.contacts' },
-  { label: 'Units', href: '/dashboard/residents/units', icon: Buildings, i18nKey: 'sidebar.units' },
+  {
+    label: 'Contacts',
+    href: '/dashboard/residents/contacts',
+    icon: Users,
+    i18nKey: 'sidebar.contacts',
+  },
+  {
+    label: 'Units',
+    href: '/dashboard/residents/units',
+    icon: Buildings,
+    i18nKey: 'sidebar.units',
+  },
 ];
 
 function LeftSidebar({
@@ -229,15 +303,23 @@ function LeftSidebar({
   const { t } = useTranslation('dashboard');
   const isActive = (href: string, exact?: boolean) => {
     const localized = `/${locale}${href}`;
-    return exact ? pathname === localized : pathname === localized || pathname.startsWith(localized + '/');
+    return exact
+      ? pathname === localized
+      : pathname === localized || pathname.startsWith(localized + '/');
   };
 
   const NavItem = ({
     item,
     collapsed,
-    onClick
+    onClick,
   }: {
-    item: { label: string; href: string; icon: React.ElementType; exact?: boolean; i18nKey?: string };
+    item: {
+      label: string;
+      href: string;
+      icon: React.ElementType;
+      exact?: boolean;
+      i18nKey?: string;
+    };
     collapsed: boolean;
     onClick?: () => void;
   }) => {
@@ -267,7 +349,10 @@ function LeftSidebar({
                   transition={{ type: 'spring', stiffness: 500, damping: 30 }}
                 />
               )}
-              <Icon weight={active ? 'fill' : 'regular'} className="relative z-10 h-5 w-5 shrink-0" />
+              <Icon
+                weight={active ? 'fill' : 'regular'}
+                className="relative z-10 h-5 w-5 shrink-0"
+              />
               <AnimatePresence mode="wait" initial={false}>
                 {!collapsed && (
                   <motion.span
@@ -302,7 +387,12 @@ function LeftSidebar({
       role="navigation"
       aria-label="Main navigation"
     >
-      <div className={cn('flex h-16 shrink-0 items-center border-b border-[var(--ds-border)]/50 px-6', isCollapsed && 'justify-center px-0')}>
+      <div
+        className={cn(
+          'flex h-16 shrink-0 items-center border-b border-[var(--ds-border)]/50 px-6',
+          isCollapsed && 'justify-center px-0'
+        )}
+      >
         <Link
           href={`/${locale}`}
           className="flex items-center gap-3 rounded-lg transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-primary/50"
@@ -383,16 +473,27 @@ function LeftSidebar({
                         transition={{ duration: 0.15 }}
                         className="flex flex-1 items-center gap-1 overflow-hidden whitespace-nowrap"
                       >
-                        <span className="flex-1 text-left">{t('sidebar.groupResidents', 'Residents')}</span>
+                        <span className="flex-1 text-left">
+                          {t('sidebar.groupResidents', 'Residents')}
+                        </span>
                         <ChevronDown className="h-4 w-4 shrink-0 transition-transform [[data-state=open]_&]:rotate-180" />
                       </motion.span>
                     )}
                   </AnimatePresence>
                 </CollapsibleTrigger>
                 <CollapsibleContent>
-                  <div className={cn('space-y-1.5', isCollapsed ? 'mt-1' : 'ml-4 mt-1')}>
+                  <div
+                    className={cn(
+                      'space-y-1.5',
+                      isCollapsed ? 'mt-1' : 'ml-4 mt-1'
+                    )}
+                  >
                     {RESIDENTS_ITEMS.map((item) => (
-                      <NavItem key={item.href} item={item} collapsed={isCollapsed} />
+                      <NavItem
+                        key={item.href}
+                        item={item}
+                        collapsed={isCollapsed}
+                      />
                     ))}
                   </div>
                 </CollapsibleContent>
@@ -414,7 +515,12 @@ function LeftSidebar({
                   </motion.p>
                 )}
               </AnimatePresence>
-              {NAV_ITEMS.filter((item) => !['/', '/dashboard/ai', '/dashboard/settings'].includes(item.href)).map((item) => (
+              {NAV_ITEMS.filter(
+                (item) =>
+                  !['/', '/dashboard/ai', '/dashboard/settings'].includes(
+                    item.href
+                  )
+              ).map((item) => (
                 <NavItem key={item.href} item={item} collapsed={isCollapsed} />
               ))}
             </div>
@@ -448,7 +554,10 @@ function LeftSidebar({
             )}
           </Tooltip>
         </TooltipProvider>
-        <NavItem item={NAV_ITEMS.find(n => n.href === '/dashboard/settings')!} collapsed={isCollapsed} />
+        <NavItem
+          item={NAV_ITEMS.find((n) => n.href === '/dashboard/settings')!}
+          collapsed={isCollapsed}
+        />
       </div>
 
       {/* Collapse toggle */}
@@ -456,8 +565,8 @@ function LeftSidebar({
         type="button"
         onClick={onToggleCollapse}
         className={cn(
-          "absolute bottom-6 z-50 flex h-6 w-6 items-center justify-center rounded-full border border-[var(--ds-border)] bg-[var(--ds-surface)] bg-background shadow-sm hover:bg-[var(--ds-background-neutral-subtle)] hover:bg-accent transition-colors",
-          isRtl ? "-left-3" : "-right-3"
+          'absolute bottom-6 z-50 flex h-6 w-6 items-center justify-center rounded-full border border-[var(--ds-border)] bg-[var(--ds-surface)] bg-background shadow-sm hover:bg-[var(--ds-background-neutral-subtle)] hover:bg-accent transition-colors',
+          isRtl ? '-left-3' : '-right-3'
         )}
         aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
       >
@@ -491,7 +600,9 @@ function RightSidePanel({
   const isRtl = locale === 'ar-EG';
 
   const toggleTask = useCallback((id: string) => {
-    setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, done: !t.done } : t)));
+    setTasks((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, done: !t.done } : t))
+    );
   }, []);
 
   return (
@@ -516,7 +627,10 @@ function RightSidePanel({
         )}
       >
         {isOpen && (
-          <Tabs defaultValue="assistant" className="flex flex-col h-full min-w-0">
+          <Tabs
+            defaultValue="assistant"
+            className="flex flex-col h-full min-w-0"
+          >
             <div className="shrink-0 flex items-center border-b border-sidebar-border px-2 py-2 gap-2">
               <TabsList className="grid grid-cols-2 h-9 bg-sidebar-accent flex-1">
                 <TabsTrigger value="assistant" className="gap-2 text-xs">
@@ -528,17 +642,31 @@ function RightSidePanel({
                   {isRtl ? 'المهام' : 'Tasks'}
                 </TabsTrigger>
               </TabsList>
-              <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0" onClick={onToggle} aria-label="Close side panel">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 shrink-0"
+                onClick={onToggle}
+                aria-label="Close side panel"
+              >
                 <X className="h-4 w-4" />
               </Button>
             </div>
-            <TabsContent value="assistant" className="flex-1 overflow-hidden m-0 mt-2 min-h-0 data-[state=inactive]:hidden">
+            <TabsContent
+              value="assistant"
+              className="flex-1 overflow-hidden m-0 mt-2 min-h-0 data-[state=inactive]:hidden"
+            >
               <AIAssistant locale={locale} />
             </TabsContent>
-            <TabsContent value="tasks" className="flex-1 overflow-y-auto m-0 mt-2 min-h-0 data-[state=inactive]:hidden">
+            <TabsContent
+              value="tasks"
+              className="flex-1 overflow-y-auto m-0 mt-2 min-h-0 data-[state=inactive]:hidden"
+            >
               <div className="p-4 space-y-2">
                 {tasks.length === 0 ? (
-                  <p className="text-sm text-muted-foreground text-center py-8">{isRtl ? 'لا توجد مهام نشطة.' : 'No active tasks.'}</p>
+                  <p className="text-sm text-muted-foreground text-center py-8">
+                    {isRtl ? 'لا توجد مهام نشطة.' : 'No active tasks.'}
+                  </p>
                 ) : (
                   tasks.map((task) => (
                     <label
@@ -590,15 +718,23 @@ function MobileSidebar({
 
   const isActive = (href: string, exact?: boolean) => {
     const localized = `/${locale}${href}`;
-    return exact ? pathname === localized : pathname === localized || pathname.startsWith(localized + '/');
+    return exact
+      ? pathname === localized
+      : pathname === localized || pathname.startsWith(localized + '/');
   };
 
-  const NavItem = ({ 
-    item, 
-    collapsed, 
-    onClick 
-  }: { 
-    item: { label: string; href: string; icon: React.ElementType; exact?: boolean; i18nKey?: string }; 
+  const NavItem = ({
+    item,
+    collapsed,
+    onClick,
+  }: {
+    item: {
+      label: string;
+      href: string;
+      icon: React.ElementType;
+      exact?: boolean;
+      i18nKey?: string;
+    };
     collapsed: boolean;
     onClick?: () => void;
   }) => {
@@ -612,13 +748,16 @@ function MobileSidebar({
         onClick={onClick}
         className={cn(
           'flex items-center gap-3 rounded-md px-3 py-3 text-sm font-medium transition-colors mb-1',
-          active 
-            ? 'bg-primary/10 text-primary' 
+          active
+            ? 'bg-primary/10 text-primary'
             : 'text-[var(--ds-text-subtle)] hover:bg-[var(--ds-background-neutral-subtle)] hover:bg-accent/50',
           collapsed && 'justify-center px-0'
         )}
       >
-        <Icon weight={active ? 'fill' : 'regular'} className="h-6 w-6 shrink-0" />
+        <Icon
+          weight={active ? 'fill' : 'regular'}
+          className="h-6 w-6 shrink-0"
+        />
         {!collapsed && <span>{label}</span>}
       </Link>
     );
@@ -632,43 +771,87 @@ function MobileSidebar({
         aria-label="Mobile navigation"
       >
         <div className="flex flex-col h-full">
-          <Link href={`/${locale}`} className="flex h-16 shrink-0 items-center gap-3 px-6 border-b border-border/50" onClick={() => onOpenChange(false)}>
+          <Link
+            href={`/${locale}`}
+            className="flex h-16 shrink-0 items-center gap-3 px-6 border-b border-border/50"
+            onClick={() => onOpenChange(false)}
+          >
             <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-white">
               <ShieldCheck className="h-5 w-5" />
             </div>
-            <span className="text-lg font-bold tracking-tight text-foreground">GateFlow</span>
+            <span className="text-lg font-bold tracking-tight text-foreground">
+              GateFlow
+            </span>
           </Link>
           <ScrollArea className="flex-1 py-4">
             <nav className="flex flex-col gap-8 py-4 px-3">
               <div className="flex flex-col gap-1.5">
-                <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[#6B778C] mb-2">{t('sidebar.groupMain', 'Main')}</p>
-                <NavItem item={NAV_ITEMS[0]} collapsed={false} onClick={() => onOpenChange(false)} />
-                <NavItem item={NAV_ITEMS[1]} collapsed={false} onClick={() => onOpenChange(false)} />
+                <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[#6B778C] mb-2">
+                  {t('sidebar.groupMain', 'Main')}
+                </p>
+                <NavItem
+                  item={NAV_ITEMS[0]}
+                  collapsed={false}
+                  onClick={() => onOpenChange(false)}
+                />
+                <NavItem
+                  item={NAV_ITEMS[1]}
+                  collapsed={false}
+                  onClick={() => onOpenChange(false)}
+                />
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[#6B778C] mb-2">{t('sidebar.groupResidents', 'Residents')}</p>
+                <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[#6B778C] mb-2">
+                  {t('sidebar.groupResidents', 'Residents')}
+                </p>
                 {RESIDENTS_ITEMS.map((item) => (
-                  <NavItem key={item.href} item={item} collapsed={false} onClick={() => onOpenChange(false)} />
+                  <NavItem
+                    key={item.href}
+                    item={item}
+                    collapsed={false}
+                    onClick={() => onOpenChange(false)}
+                  />
                 ))}
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[#6B778C] mb-2">{t('sidebar.groupAccess', 'Access')}</p>
-                {NAV_ITEMS.filter((item) => !['/', '/dashboard/ai', '/dashboard/settings'].includes(item.href)).map((item) => (
-                  <NavItem key={item.href} item={item} collapsed={false} onClick={() => onOpenChange(false)} />
+                <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[#6B778C] mb-2">
+                  {t('sidebar.groupAccess', 'Access')}
+                </p>
+                {NAV_ITEMS.filter(
+                  (item) =>
+                    !['/', '/dashboard/ai', '/dashboard/settings'].includes(
+                      item.href
+                    )
+                ).map((item) => (
+                  <NavItem
+                    key={item.href}
+                    item={item}
+                    collapsed={false}
+                    onClick={() => onOpenChange(false)}
+                  />
                 ))}
               </div>
 
               <div className="mt-auto border-t border-border/50 pt-4">
                 <button
-                  onClick={() => { onOpenChat(); onOpenChange(false); }}
+                  onClick={() => {
+                    onOpenChat();
+                    onOpenChange(false);
+                  }}
                   className="flex items-center gap-3 rounded-md px-3 py-3 text-sm font-medium transition-colors mb-1 text-[var(--ds-text-subtle)] hover:bg-[var(--ds-background-neutral-subtle)] w-full"
                 >
                   <MessageSquare className="h-6 w-6 shrink-0" />
                   <span>{t('sidebar.teamChat', 'Team Chat')}</span>
                 </button>
-                <NavItem item={NAV_ITEMS.find(n => n.href === '/dashboard/settings')!} collapsed={false} onClick={() => onOpenChange(false)} />
+                <NavItem
+                  item={
+                    NAV_ITEMS.find((n) => n.href === '/dashboard/settings')!
+                  }
+                  collapsed={false}
+                  onClick={() => onOpenChange(false)}
+                />
               </div>
             </nav>
           </ScrollArea>
@@ -701,7 +884,7 @@ export function DashboardLayout({
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-csrf-token': csrfToken
+        'x-csrf-token': csrfToken,
       },
       body: JSON.stringify({ projectId: val }),
     }).then(() => {
@@ -714,17 +897,22 @@ export function DashboardLayout({
       });
     });
   };
-  
+
   const [rightOpen, setRightOpen] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const isRtl = locale === 'ar-EG';
   const pathname = usePathname();
-  const isAiPage = pathname?.includes('/dashboard/ai') || pathname?.includes('/dashboard/gateai');
+  const isAiPage =
+    pathname?.includes('/dashboard/ai') ||
+    pathname?.includes('/dashboard/gateai');
   const isFullBleed = isAiPage || pathname?.includes('/dashboard/onboarding');
 
-
   return (
-    <div className="flex h-screen flex-col overflow-hidden bg-background" dir={isRtl ? 'rtl' : 'ltr'} lang={locale}>
+    <div
+      className="flex h-dvh flex-col overflow-hidden bg-background"
+      dir={isRtl ? 'rtl' : 'ltr'}
+      lang={locale}
+    >
       <div className="flex flex-1 min-h-0 overflow-hidden">
         <LeftSidebar
           locale={locale}
@@ -736,12 +924,18 @@ export function DashboardLayout({
 
         <div className="flex flex-1 min-w-0 flex-col min-h-0 overflow-hidden">
           <div className="flex h-16 shrink-0 items-center gap-2 border-b border-border bg-background px-4 md:hidden">
-            <Button variant="ghost" size="icon" className="md:hidden" onClick={() => setMobileNavOpen(true)} aria-label="Open menu">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden"
+              onClick={() => setMobileNavOpen(true)}
+              aria-label="Open menu"
+            >
               <Menu className="h-5 w-5" />
             </Button>
             <div className="flex-1 min-w-0">
-              <SearchHeader 
-                locale={locale} 
+              <SearchHeader
+                locale={locale}
                 user={user}
                 projects={projects}
                 currentProjectId={currentProjectId}
@@ -752,8 +946,8 @@ export function DashboardLayout({
           </div>
 
           <div className="hidden md:block sticky top-0 z-20">
-            <SearchHeader 
-              locale={locale} 
+            <SearchHeader
+              locale={locale}
               user={user}
               projects={projects}
               currentProjectId={currentProjectId}
@@ -762,19 +956,37 @@ export function DashboardLayout({
             />
           </div>
 
-          <main className={`flex-1 min-h-0 bg-[var(--ds-surface-sunken,#FAFBFC)] ${!isFullBleed ? 'p-6 lg:p-10 overflow-y-auto' : isAiPage ? 'overflow-hidden flex flex-col' : 'overflow-y-auto flex flex-col'}`} role="main">
-            <ProjectFilterProvider currentProjectId={currentProjectId} projects={projects}>
-              <div className={`animate-in fade-in slide-in-from-bottom-2 duration-500 ${!isFullBleed ? 'max-w-[1400px] mx-auto' : 'flex-1 flex flex-col h-full'}`}>
+          <main
+            className={`flex-1 min-h-0 bg-[var(--ds-surface-sunken,#FAFBFC)] ${!isFullBleed ? 'p-6 lg:p-10 overflow-y-auto' : isAiPage ? 'overflow-hidden flex flex-col' : 'overflow-y-auto flex flex-col'}`}
+            role="main"
+          >
+            <ProjectFilterProvider
+              currentProjectId={currentProjectId}
+              projects={projects}
+            >
+              <div
+                className={`animate-in fade-in slide-in-from-bottom-2 duration-500 ${!isFullBleed ? 'max-w-[1400px] mx-auto' : 'flex-1 flex flex-col h-full'}`}
+              >
                 {children}
               </div>
             </ProjectFilterProvider>
           </main>
         </div>
 
-        <RightSidePanel locale={locale} isOpen={rightOpen} onToggle={() => setRightOpen((o) => !o)} />
+        <RightSidePanel
+          locale={locale}
+          isOpen={rightOpen}
+          onToggle={() => setRightOpen((o) => !o)}
+        />
       </div>
 
-      <MobileSidebar locale={locale} isOpen={mobileNavOpen} onOpenChange={setMobileNavOpen} isRtl={isRtl} onOpenChat={() => setChatOpen(true)} />
+      <MobileSidebar
+        locale={locale}
+        isOpen={mobileNavOpen}
+        onOpenChange={setMobileNavOpen}
+        isRtl={isRtl}
+        onOpenChat={() => setChatOpen(true)}
+      />
 
       <TeamSidebarChat
         isOpen={chatOpen}

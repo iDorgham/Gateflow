@@ -58,28 +58,28 @@ module.exports = {
     },
 
     assert: {
-      // ── Phase 1: Baseline floors (will be tightened per phase) ──
+      // ── Phase 2: Asset Overhaul thresholds (raised after font/image/dvh fixes) ──
       // Update these thresholds as performance improves.
       assertions: {
         // ── Category Scores ────────────────────────────────────────
-        'categories:performance': ['error', { minScore: 0.65 }], // → 1.0 by Phase 5
-        'categories:accessibility': ['error', { minScore: 0.85 }], // → 1.0 by Phase 5
-        'categories:best-practices': ['error', { minScore: 0.88 }], // → 1.0 by Phase 5
-        'categories:seo': ['error', { minScore: 0.9 }], // → 1.0 by Phase 5
+        'categories:performance': ['error', { minScore: 0.82 }], // → 1.0 by Phase 5
+        'categories:accessibility': ['error', { minScore: 0.88 }], // → 1.0 by Phase 5
+        'categories:best-practices': ['error', { minScore: 0.9 }], // → 1.0 by Phase 5
+        'categories:seo': ['error', { minScore: 0.92 }], // → 1.0 by Phase 5
 
         // ── Core Web Vitals ────────────────────────────────────────
         // LCP: good < 2.5s, needs improvement < 4.0s
-        'largest-contentful-paint': ['warn', { maxNumericValue: 4000 }], // → 2000 by Phase 5
+        'largest-contentful-paint': ['error', { maxNumericValue: 3000 }], // → 1800 by Phase 5
         // FCP: good < 1.8s
-        'first-contentful-paint': ['warn', { maxNumericValue: 3000 }], // → 1500 by Phase 5
+        'first-contentful-paint': ['warn', { maxNumericValue: 2000 }], // → 1000 by Phase 5
         // TBT: good < 200ms
-        'total-blocking-time': ['warn', { maxNumericValue: 600 }], // → 100 by Phase 5
+        'total-blocking-time': ['warn', { maxNumericValue: 400 }], // → 50 by Phase 5
         // CLS: good < 0.1
-        'cumulative-layout-shift': ['error', { maxNumericValue: 0.15 }], // → 0.0 by Phase 5
+        'cumulative-layout-shift': ['error', { maxNumericValue: 0.1 }], // → 0.0 by Phase 5
         // TTI: good < 3.8s
-        interactive: ['warn', { maxNumericValue: 5000 }], // → 3000 by Phase 5
+        interactive: ['warn', { maxNumericValue: 4000 }], // → 3000 by Phase 5
         // Speed Index: good < 3.4s
-        'speed-index': ['warn', { maxNumericValue: 4500 }], // → 2000 by Phase 5
+        'speed-index': ['warn', { maxNumericValue: 3500 }], // → 2000 by Phase 5
 
         // ── Specific Audits (hard gates even at Phase 1) ──────────
         // These should never regress regardless of phase:

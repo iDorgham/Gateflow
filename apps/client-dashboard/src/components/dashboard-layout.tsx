@@ -181,10 +181,10 @@ function DashboardLayout({
   const [isCollapsed, setIsCollapsed] = React.useState(false);
 
   return (
-    <div className="flex min-h-screen w-full bg-background overflow-hidden">
+    <div className="flex min-h-dvh w-full bg-background overflow-hidden">
       <div
         className={cn(
-          'hidden md:block h-screen transition-all duration-300 flex-shrink-0 border-r border-sidebar-border bg-sidebar text-sidebar-foreground',
+          'hidden md:block h-dvh transition-all duration-300 flex-shrink-0 border-r border-sidebar-border bg-sidebar text-sidebar-foreground',
           isCollapsed ? 'w-20' : 'w-64'
         )}
       >
@@ -250,7 +250,7 @@ function DashboardLayout({
         </SheetContent>
       </Sheet>
 
-      <div className="flex flex-1 flex-col overflow-hidden h-screen">
+      <div className="flex flex-1 flex-col overflow-hidden h-dvh">
         <Navbar user={user} onMenuClick={() => setMobileOpen(true)} />
         <main className="flex-1 overflow-y-auto p-4 md:p-6">{children}</main>
       </div>
