@@ -1,6 +1,6 @@
 # Skill Discovery Report
 
-**Date:** 2026-03-22T22:51:21.418Z
+**Date:** 2026-03-23T07:24:56.250Z
 
 ## 🎨 Design System Violations (Hardcoded Hex)
 
@@ -8,15 +8,15 @@ Detected raw hex values instead of Atlassian Design System tokens (`var(--ds-...
 
 ```text
 apps/client-dashboard/src/app/[locale]/s/[shortId]/route.ts:    .replace(/'/g, '&#039;');
-apps/client-dashboard/src/app/[locale]/dashboard/qrcodes/create/create-qr-client.tsx:          bgColor={token('elevation.surface', '#FFFFFF')} 
-apps/client-dashboard/src/app/[locale]/dashboard/qrcodes/create/create-qr-client.tsx:          fgColor={token('color.text', '#172B4D')} 
-apps/client-dashboard/src/app/[locale]/dashboard/qrcodes/create/create-qr-client.tsx:      ctx.fillStyle = '#ffffff';
-apps/client-dashboard/src/app/[locale]/dashboard/analytics/analytics-charts.tsx:  border: '1px solid var(--ds-border, #DFE1E6)',
-apps/client-dashboard/src/app/[locale]/dashboard/analytics/analytics-charts.tsx:  background: 'var(--ds-surface-overlay, #FFFFFF)',
-apps/client-dashboard/src/app/[locale]/dashboard/analytics/analytics-charts.tsx:  color: 'var(--ds-text, #172B4D)',
-apps/client-dashboard/src/app/[locale]/dashboard/analytics/analytics-charts.tsx:  color: 'var(--ds-text, #172B4D)',
-apps/client-dashboard/src/app/[locale]/dashboard/analytics/analytics-charts.tsx:  color: 'var(--ds-text-subtle, #42526E)',
-apps/client-dashboard/src/app/[locale]/login/login-page-layout-2026.tsx:          className="inline-flex h-10 min-w-[4rem] items-center justify-center gap-1.5 rounded-lg border px-3 text-sm font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#EB4A00] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f172a] dark:focus-visible:ring-offset-[#0f172a]"
+apps/client-dashboard/src/app/[locale]/dashboard/projects/[projectId]/crm/page.tsx:           <h1 className="text-3xl font-black text-[#172B4D] dark:text-white tracking-tight uppercase">
+apps/client-dashboard/src/app/[locale]/dashboard/projects/[projectId]/crm/page.tsx:           <p className="text-sm font-medium text-[#6B778C] dark:text-[#97A0AF]">
+apps/client-dashboard/src/app/[locale]/dashboard/projects/[projectId]/crm/page.tsx:             <div className="px-8 py-6 border-b border-border bg-[#FAFBFC] dark:bg-[#091E42]/20">
+apps/client-dashboard/src/app/[locale]/dashboard/projects/[projectId]/crm/page.tsx:               <h2 className="text-[18px] font-bold text-[#172B4D] dark:text-white">Residents Directory</h2>
+apps/client-dashboard/src/app/[locale]/dashboard/projects/[projectId]/crm/page.tsx:               <p className="text-xs text-[#6B778C] font-medium mt-1">Full list of verified occupants and external consultants.</p>
+apps/client-dashboard/src/app/[locale]/dashboard/projects/[projectId]/crm/page.tsx:             <div className="px-8 py-6 border-b border-border bg-[#FAFBFC] dark:bg-[#091E42]/20">
+apps/client-dashboard/src/app/[locale]/dashboard/projects/[projectId]/crm/page.tsx:               <h2 className="text-[18px] font-bold text-[#172B4D] dark:text-white">Property Inventory</h2>
+apps/client-dashboard/src/app/[locale]/dashboard/projects/[projectId]/crm/page.tsx:               <p className="text-xs text-[#6B778C] font-medium mt-1">Managed assets and occupancy tracking for this project.</p>
+apps/client-dashboard/src/app/[locale]/dashboard/projects/[projectId]/crm/page.tsx:            <CardHeader className="bg-[#FAFBFC] dark:bg-[#091E42]/20 p-8 border-b border-border">
 
 ```
 
@@ -38,6 +38,8 @@ apps/client-dashboard/src/app/api/qrcodes/export/route.ts:197: prisma.qRCode.fin
 apps/client-dashboard/src/app/api/workspace/export/route.ts:133: prisma.contactUnit.findMany({...})
 apps/client-dashboard/src/app/api/workspace/export/route.ts:154: prisma.qRCode.findMany({...})
 apps/client-dashboard/src/app/api/workspace/export/route.ts:172: prisma.scanLog.findMany({...})
+apps/client-dashboard/src/app/api/crm/contacts/route.ts:56: prisma.contact.findMany({...})
+apps/client-dashboard/src/app/api/crm/units/route.ts:51: prisma.unit.findMany({...})
 apps/client-dashboard/src/app/api/units/route.ts:199: prisma.unit.findMany({...})
 apps/client-dashboard/src/app/api/incidents/route.ts:53: prisma.incident.findMany({...})
 apps/client-dashboard/src/app/api/analytics/export/route.ts:165: prisma.contact.findMany({...})
