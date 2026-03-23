@@ -47,7 +47,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     const qrIds = rows.map((r) => r.qrCodeId);
     const qrCodes = await prisma.qRCode.findMany({
-      where: { id: { in: qrIds } },
+      where: { id: { in: qrIds }, organizationId: claims.orgId },
       select: { id: true, type: true },
     });
     const typeByQr = new Map<string, string>(qrCodes.map((q) => [q.id, q.type]));

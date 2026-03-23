@@ -22,6 +22,8 @@ export { AnalyticsOperatorLeaderboard } from './AnalyticsOperatorLeaderboard';
 export { AnalyticsFunnelChart } from './AnalyticsFunnelChart';
 export { AnalyticsCampaignBarChart } from './AnalyticsCampaignBarChart';
 export { AnalyticsPersonaPie } from './AnalyticsPersonaPie';
+export { UTMMatrix } from './UTMMatrix';
 export { AnalyticsROIWidget } from './AnalyticsROIWidget';
+export { MarketingFunnel } from './MarketingFunnel';
 export { AnalyticsAudienceExportButton } from './AnalyticsAudienceExportButton';
 export { AnalyticsPDFExportButton } from './AnalyticsPDFExportButton';

@@ -60,8 +60,16 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       ...(utmCampaign ? { utmCampaign } : {}),
     };
 
-    const [qrCreated, qrScanned] = await Promise.all([
+    const [qrCreated, qrOpened, qrScanned] = await Promise.all([
       prisma.qRCode.count({ where: qrWhere }),
+      prisma.shortLinkClick.count({
+        where: {
+          organizationId: orgId,
+          clickedAt: { gte: dateFromDate, lte: dateToDate },
+          ...(projectId ? { projectId } : {}),
+          ...(utmCampaign ? { utmCampaign } : {}),
+        },
+      }),
       prisma.scanLog.count({
         where: {
           qrCode: {
@@ -78,9 +86,14 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const stages: FunnelStage[] = [
       { name: 'QR Created', count: qrCreated },
       {
+        name: 'Landing Page Opens',
+        count: qrOpened,
+        dropoffRate: qrCreated > 0 ? Math.round(((qrCreated - qrOpened) / qrCreated) * 100) : 0,
+      },
+      {
         name: 'QR Scanned',
         count: qrScanned,
-        dropoffRate: qrCreated > 0 ? Math.round(((qrCreated - qrScanned) / qrCreated) * 100) : 0,
+        dropoffRate: qrOpened > 0 ? Math.round(((qrOpened - qrScanned) / qrOpened) * 100) : 0,
       },
     ];
 

@@ -19,7 +19,7 @@ See [IDEA_marketing_suite.md](file:///Users/Dorgham/Documents/Work/Devleopment/G
   - `pnpm prisma db push` successful.
   - Test QR creation with UTM params result in correct DB records.
 
-### Phase 2: Marketing Settings & Retargeting Pixels (CURRENT)
+### Phase 2: Marketing Settings & Retargeting Pixels (COMPLETED)
 - **Primary Role**: FRONTEND
 - **Goal**: Enable organizations to inject tracking pixels on guest landing pages.
 - **Steps**:
@@ -30,7 +30,7 @@ See [IDEA_marketing_suite.md](file:///Users/Dorgham/Documents/Work/Devleopment/G
   - UI works with standard tokens.
   - Script tags appear only on landing pages of organizations with IDs configured.
 
-### Phase 3: Generic Webhook Engine & HubSpot Preset (P1)
+### Phase 3: Generic Webhook Engine & HubSpot Preset (COMPLETED)
 - **Primary Role**: BACKEND-API
 - **Goal**: Real-time sync of physical arrivals to external CRMs.
 - **Steps**:
@@ -41,16 +41,30 @@ See [IDEA_marketing_suite.md](file:///Users/Dorgham/Documents/Work/Devleopment/G
   - Successful scan triggers a POST request to configured URL.
   - HMAC signature verification in webhook headers.
 
-### Phase 4: Marketing ROI & Funnel Dashboards (P2)
+### Phase 4: Marketing ROI & Funnel Dashboards (COMPLETED)
 - **Primary Role**: FRONTEND (Data Viz)
 - **Goal**: Visualize the marketing-to-arrival funnel.
 - **Steps**:
-  1. Create `MarketingAnalytics` component with conversion funnel: `Landing Click` -> `Digital Action` -> `Physical Arrival`.
-  2. Add "Top Campaigns" and "Cost Per Visit" charts to the Analytics Hub.
-  3. Ensure RTL/LTR parity for new charts.
+  1. Add `ShortLinkClick` model to track landing page opens.
+  2. Update short-link resolver to log visits with UTM data.
+  3. Implement `MarketingFunnel` premium component with 3-stage conversion tracking.
+  4. Integrate into Analytics Hub with ROI calculator.
 - **Acceptance Criteria**:
-  - Recharts integration is responsive and follows ADS tokens.
-  - Funnel logic correctly handles data from Phase 1.
+  - Funnel logic correctly handles data from Link Clicks to Scanned.
+  - Recharts and Framer Motion integration is responsive and follows ADS tokens.
+
+### Phase 5: Advanced Attribution & Export (COMPLETED)
+- **Primary Role**: FULLSTACK
+- **Goal**: Detailed campaign analysis and multi-format reporting.
+- **Steps**:
+  1. **UTM Source/Medium Matrix**: Create a heatmap or table showing conversion rates per source/medium.
+  2. **Campaign-Specific Funnels**: Update filters to allow viewing the funnel for a single UTM campaign.
+  3. **Attribution Export**: Implement CSV/PDF export for marketing reports.
+  4. **Persona Analysis**: Correlate UTM traffic with visitor types (Resident/Guest/Vendor).
+- **Acceptance Criteria**:
+  - Exported files contain accurate UTM and conversion data.
+  - UI remains performant with filtered datasets.
+
 
 ## Status
-DRAFT
+IN_PROGRESS (Phases 1-5 Completed)

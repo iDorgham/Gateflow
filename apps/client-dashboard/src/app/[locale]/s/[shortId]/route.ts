@@ -34,7 +34,7 @@ export async function GET(
     });
   }
 
-  // Scanner app and API clients get the raw payload (unchanged behaviour)
+  // Browser request — look up VisitorQR + Unit coordinates for GPS guide
   const acceptHeader = request.headers.get('Accept') ?? '';
   if (!acceptHeader.includes('text/html')) {
     return new NextResponse(link.fullPayload, {
@@ -45,6 +45,32 @@ export async function GET(
       },
     });
   }
+
+  // Log landing page visit (Marketing ROI tracking)
+  const { searchParams: urlParams } = new URL(request.url);
+  const utmSource = urlParams.get('utm_source');
+  const utmMedium = urlParams.get('utm_medium');
+  const utmCampaign = urlParams.get('utm_campaign');
+  const utmContent = urlParams.get('utm_content');
+  const utmTerm = urlParams.get('utm_term');
+
+  // Background fire-and-forget logging
+  void prisma.shortLinkClick.create({
+    data: {
+      shortLinkId: link.id,
+      organizationId: link.organizationId,
+      projectId: link.projectId,
+      utmSource,
+      utmMedium,
+      utmCampaign,
+      utmContent,
+      utmTerm,
+      deviceInfo: {
+        userAgent: request.headers.get('user-agent'),
+        ip: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip'),
+      },
+    },
+  }).catch(err => console.error('Failed to log ShortLinkClick:', err));
 
   // Browser request — look up VisitorQR + Unit coordinates for GPS guide
   let lat: number | null = null;

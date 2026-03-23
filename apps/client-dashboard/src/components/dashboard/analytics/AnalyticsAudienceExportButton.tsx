@@ -21,7 +21,9 @@ function buildExportUrl(filters: AnalyticsFilters): string {
   if (filters.gateId) sp.set('gateId', filters.gateId);
   if (filters.unitType) sp.set('unitType', filters.unitType);
   if (filters.search) sp.set('search', filters.search);
-  return `/api/analytics/export?${sp.toString()}`;
+  
+  const base = filters.mode === 'marketing' ? '/api/analytics/export/marketing' : '/api/analytics/export';
+  return `${base}?${sp.toString()}`;
 }
 
 export function AnalyticsAudienceExportButton({

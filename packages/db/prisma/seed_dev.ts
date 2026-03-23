@@ -1,15 +1,7 @@
 import { prisma } from '../src/index';
-import * as argon2 from 'argon2';
+import { hash } from '@node-rs/argon2';
 
 import { BUILT_IN_ROLES, DEFAULT_PERMISSIONS } from '@gate-access/types';
-
-const ARGON2_OPTIONS = {
-  type: argon2.argon2id,
-  memoryCost: 65536,   // 64 MiB
-  timeCost: 3,         // 3 iterations
-  parallelism: 4,
-  raw: false,
-};
 
 // Use environment variable for password or default to a safe value for dev
 const DEFAULT_PASSWORD = process.env.SEED_PASSWORD || 'password123';
@@ -24,7 +16,11 @@ const DEFAULT_CONTACT_TAGS = [
 async function main() {
   console.log('🌱 Starting Legacy Dev Seed...');
 
-  const passwordHash = await argon2.hash(DEFAULT_PASSWORD, ARGON2_OPTIONS);
+  const passwordHash = await hash(DEFAULT_PASSWORD, {
+    memoryCost: 65536,
+    timeCost: 3,
+    parallelism: 4,
+  });
 
   const org = await prisma.organization.upsert({
     // skip-organization-check (Internal Seed Script)

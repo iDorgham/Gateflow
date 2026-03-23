@@ -25,16 +25,29 @@ function discover() {
   }
 
   // 2. Scan for potentially missing organizationId guards in Prisma queries
-  // Ignore admin-dashboard as it is the global control plane.
   console.log('Scanning for potential missing organizationId guards...');
   try {
-    const prismaFindings = execSync('grep -r "prisma\\..*\\.findMany({" apps/*/src packages/*/src --exclude-dir=node_modules | grep -v "organizationId" | grep -v "apps/admin-dashboard" | head -n 5', { timeout: 30000 }).toString();
+    const files = execSync('find apps packages -name "*.ts" -o -name "*.tsx" | grep -v "node_modules" | grep -v ".next" | grep -v "admin-dashboard"').toString().split('\n').filter(Boolean);
+    let prismaFindings = '';
+    
+    for (const file of files) {
+      if (fs.statSync(file).isDirectory()) continue;
+      const content = fs.readFileSync(file, 'utf8');
+      const matches = content.matchAll(/prisma\.(.*?)\.findMany\({([\s\S]*?)}\)/g);
+      for (const match of matches) {
+        if (!match[2].includes('organizationId') && !match[2].includes('// ignore-security-guard')) {
+           const line = content.substring(0, match.index).split('\n').length;
+           prismaFindings += `${file}:${line}: prisma.${match[1]}.findMany({...})\n`;
+        }
+      }
+    }
+
     if (prismaFindings.trim()) {
       findingsFound = true;
       report += `## 🔒 Security Invariants (Missing organizationId)\n\nPotential multi-tenant isolation risks. Found \`findMany\` calls without an explicit \`organizationId\` filter.\n\n\`\`\`text\n${prismaFindings}\n\`\`\`\n\n`;
     }
   } catch (e) {
-    console.log('Prisma scan timed out or failed, skipping...');
+    console.log('Prisma scan failed, skipping...', e);
   }
 
   if (findingsFound) {

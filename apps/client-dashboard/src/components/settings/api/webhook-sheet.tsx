@@ -119,6 +119,38 @@ export function WebhookSheet({ mode, webhook, onSuccess, children }: WebhookShee
 
         <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-y-auto">
           <div className="p-8 space-y-6 flex-1">
+            <div className="space-y-4">
+              <Label className="text-[11px] font-black uppercase tracking-widest text-muted-foreground">
+                Quick Presets
+              </Label>
+              <div className="grid grid-cols-2 gap-3">
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="h-14 rounded-xl flex flex-col items-center justify-center border-border hover:border-primary/40 hover:bg-primary/5 group"
+                  onClick={() => {
+                    setSelectedEvents(['SCAN_SUCCESS']);
+                    toast.info('HubSpot Preset: Subscribed to Scan Approved events.');
+                  }}
+                >
+                  <span className="text-[10px] font-black uppercase tracking-widest text-foreground group-hover:text-primary transition-colors">HubSpot</span>
+                  <span className="text-[9px] text-muted-foreground mt-1">Marketing Sync</span>
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="h-14 rounded-xl flex flex-col items-center justify-center border-border hover:border-primary/40 hover:bg-primary/5 group"
+                  onClick={() => {
+                    setSelectedEvents(['QR_CREATED', 'SCAN_SUCCESS', 'SCAN_FAILED']);
+                    toast.info('Zapier Preset: Subscribed to core lifecycle events.');
+                  }}
+                >
+                  <span className="text-[10px] font-black uppercase tracking-widest text-foreground group-hover:text-primary transition-colors">Zapier / Make</span>
+                  <span className="text-[9px] text-muted-foreground mt-1">Automation Flow</span>
+                </Button>
+              </div>
+            </div>
+
             <div className="space-y-2">
               <Label htmlFor="wh-url" className="text-[11px] font-black uppercase tracking-widest text-muted-foreground">
                 Endpoint URL * (HTTPS only)

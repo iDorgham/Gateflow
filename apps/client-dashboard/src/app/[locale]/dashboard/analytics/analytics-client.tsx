@@ -11,7 +11,7 @@ import {
   AnalyticsHeatmapChart,
   AnalyticsAnomalyCards,
   AnalyticsOperatorLeaderboard,
-  AnalyticsFunnelChart,
+  MarketingFunnel,
   AnalyticsCampaignBarChart,
   AnalyticsPersonaPie,
   AnalyticsROIWidget,
@@ -28,6 +28,7 @@ import {
   ResidentQuotaChart,
   PeakDaysChart,
   UTMAttributionChart,
+  UTMMatrix,
   type KPIData,
 } from '@/components/dashboard/analytics';
 import { useAnalyticsFilters, useAnalyticsSummary } from '@/lib/analytics';
@@ -145,8 +146,11 @@ export function AnalyticsClient({ kpiData, gates = [] }: AnalyticsClientProps) {
           <>
             <SectionHeader label={t('analytics.sectionMarketing', 'Marketing Performance')} />
 
-            <div className="md:col-span-2 lg:col-span-3 min-h-[320px]" dir={dir}>
-              <AnalyticsFunnelChart filters={filters} locale={locale} className="min-h-[320px]" />
+            <div className="md:col-span-2 lg:col-span-3 min-h-[400px]" dir="ltr">
+              <MarketingFunnel filters={filters} className="min-h-[400px]" />
+            </div>
+            <div className="md:col-span-2 lg:col-span-3 min-h-[400px]" dir={dir}>
+              <UTMMatrix filters={filters} />
             </div>
             <div className="min-h-[280px]" dir={dir}>
               <TopGatesChart filters={filters} />

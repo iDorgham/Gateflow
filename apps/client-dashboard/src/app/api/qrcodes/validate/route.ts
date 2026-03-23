@@ -12,6 +12,8 @@ import { checkGateAssignment } from '../../../../lib/gate-assignment';
 import { checkLocationForGate } from '../../../../lib/location';
 import { getActiveWatchlist, findWatchlistMatch } from '../../../../lib/watchlist';
 import { emitEvent, EventType } from '../../../../lib/realtime/emit-event';
+import { deliverWebhookEvent } from '../../../../lib/webhook-delivery';
+import { triggerHubSpotSync } from '../../../../lib/integrations/hubspot';
 
 // ─── Configuration ────────────────────────────────────────────────────────────
 
@@ -422,6 +424,70 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     });
 
     emitEvent(claims.orgId, EventType.SCAN_RECORDED, { scanId: scanLog.id, gateId, qrCodeId: qrCode.id }).catch(() => {});
+
+    // Step 13 — Trigger Webhooks (fire-and-forget background delivery)
+    // We fetch the full relation data to provide a rich payload for marketing attribution (HubSpot etc.)
+    void prisma.scanLog.findUnique({
+      where: { id: scanLog.id },
+      include: {
+        gate: { select: { id: true, name: true, location: true } },
+        qrCode: {
+          include: {
+            visitorQR: { include: { unit: { select: { id: true, name: true, building: true } } } }
+          }
+        }
+      }
+    }).then(async (fullScan: any) => {
+      if (!fullScan) return;
+      
+      // Manually fetch contact if present (no explicit Prisma relation on QRCode model)
+      let contactData = null;
+      if (fullScan.qrCode.contactId) {
+        contactData = await prisma.contact.findUnique({
+          where: { id: fullScan.qrCode.contactId },
+          select: { id: true, firstName: true, lastName: true, email: true, phone: true }
+        });
+      }
+
+      const payload = {
+        scanId: fullScan.id,
+        timestamp: fullScan.scannedAt.toISOString(),
+        status: fullScan.status,
+        gate: {
+          id: fullScan.gate.id,
+          name: fullScan.gate.name,
+          location: fullScan.gate.location
+        },
+        qrCode: {
+          id: fullScan.qrCode.id,
+          type: fullScan.qrCode.type,
+          utm: {
+            source: fullScan.utmSource,
+            medium: fullScan.utmMedium,
+            campaign: fullScan.utmCampaign,
+            content: fullScan.utmContent,
+            term: fullScan.utmTerm
+          }
+        },
+        contact: contactData ? {
+          id: contactData.id,
+          name: `${contactData.firstName} ${contactData.lastName}`.trim(),
+          email: contactData.email,
+          phone: contactData.phone
+        } : null,
+        unit: fullScan.qrCode.visitorQR?.unit ? {
+          id: fullScan.qrCode.visitorQR.unit.id,
+          name: fullScan.qrCode.visitorQR.unit.name,
+          building: fullScan.qrCode.visitorQR.unit.building
+        } : null,
+        device: {
+          id: fullScan.deviceId
+        }
+      };
+
+      await deliverWebhookEvent(claims.orgId!, 'SCAN_SUCCESS', payload as any);
+      void triggerHubSpotSync(claims.orgId!, fullScan.id).catch(() => {});
+    }).catch(err => console.error('[qr/validate] Webhook trigger failed:', err));
 
     // If this is a VisitorQR, notify the resident via Expo Push (fire-and-forget)
     if (qrCode.visitorQR) {

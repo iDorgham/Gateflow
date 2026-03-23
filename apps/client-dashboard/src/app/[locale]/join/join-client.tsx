@@ -88,7 +88,7 @@ export function JoinClient({ token, email, orgName, locale }: JoinClientProps) {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-xs font-semibold text-[#42526E] dark:text-[#97A0AF]">
+                <Label className="text-xs font-semibold text-muted-foreground">
                   Email Address
                 </Label>
                 <Input
@@ -99,7 +99,7 @@ export function JoinClient({ token, email, orgName, locale }: JoinClientProps) {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="join-name" className="text-xs font-semibold text-[#42526E] dark:text-[#97A0AF]">
+                <Label htmlFor="join-name" className="text-xs font-semibold text-muted-foreground">
                   Your Full Name
                 </Label>
                 <Input
@@ -113,7 +113,7 @@ export function JoinClient({ token, email, orgName, locale }: JoinClientProps) {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="join-password" className="text-xs font-semibold text-[#42526E] dark:text-[#97A0AF]">
+                <Label htmlFor="join-password" className="text-xs font-semibold text-muted-foreground">
                   Set Password
                 </Label>
                 <div className="relative">

@@ -90,7 +90,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     const userIds = groups.map((g) => g.userId!).filter(Boolean);
     const users = await prisma.user.findMany({
-      where: { id: { in: userIds } },
+      where: { id: { in: userIds }, organizationId: orgId },
       select: { id: true, name: true, email: true },
     });
     const userMap = new Map<string, { id: string; name: string | null; email: string }>(users.map((u) => [u.id, u]));

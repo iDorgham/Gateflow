@@ -44,6 +44,7 @@ export async function GET(request: NextRequest) {
         ...(unitId ? { unitId } : {}),
         qrCode: {
           deletedAt: null,
+          organizationId: claims.orgId,
         },
       },
       include: {

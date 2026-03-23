@@ -4,42 +4,30 @@
 
 ## Open Initiatives
 
-### advanced_seeding_v2 — Ultra-Advanced Seeding Matrix (v2)
-**IDEA:** `docs/plan/context/IDEA_advanced_seeding_v2.md`
-**Status:** 🔄 In Progress
-**Target:** Q3 2026
+### projects_crm_ui — Unified Real Estate CRM & Operations Hub
 
-- [x] Phase 1 — Core Engine & Scenario Architecture
-- [x] Phase 2 — Temporal Realism & "Rush Hour" Algorithm
-- [x] Phase 3 — High-Volume CRM & RBAC Stress
-- [x] Phase 4 — Marketing & Security Intelligence
-- [x] Phase 5 — CLI Wrapper & Validation
+**IDEA:** `docs/plan/context/IDEA_projects_crm_ui.md`
 
-### team_page — Team Management & Integrated Chat (v1.0)
-**IDEA:** `docs/plan/context/IDEA_team_page.md`
-**Status:** 🆕 Ready to Plan
+**PLAN:** `docs/plan/planning/PLAN_projects_crm_ui.md`
+
+**Status:** 🔄 Planning
+
 **Target:** Q4 2026
 
-- [ ] Phase 1 — Schema & API: Team, Roles & Messaging
-- [ ] Phase 2 — Sidebar Integration: Persistent Team Chat Drawer
-- [ ] Phase 3 — Team Page: Unified Member & RBAC Management
-- [ ] Phase 4 — Real-time & Polish: SSE/WS Presence & ADS Polish
-
-### marketing_suite — Marketing & Sales Attribution Suite (Phase 2) 
-**IDEA:** `docs/plan/context/IDEA_marketing_suite.md`
-**PLAN:** `docs/plan/in-progress/marketing_suite/PLAN_marketing_suite.md`
-**Status:** 🔄 In Progress
-**Target:** Q4 2026
-
-- [x] Phase 1 — UTM Schema, Session Capture & Propagation
-- [ ] Phase 2 — Marketing Settings & Retargeting Pixels (CURRENT)
-- [ ] Phase 3 — Generic Webhook Engine & HubSpot Preset (P1)
-- [ ] Phase 4 — Marketing ROI & Funnel Dashboards (P2)
-
+- [ ] Phase 1 — Foundation: Real Estate Palette & Tokens
+- [ ] Phase 2 — Core Schema & API: CRM Aggregates
+- [ ] Phase 3 — Shared UI: EditPanel & Advanced Table Engine
+- [ ] Phase 4 — Project Hub: List & Detail Views
+- [ ] Phase 5 — CRM Management: Contacts & Units
+- [ ] Phase 6 — Sync & Operations: Project Logs & Team
+- [ ] Phase 7 — Final Audit: Polish, RTL & Security
 
 ### atlassian_ui_remake — Atlassian Design System UI Remake
+
 **IDEA:** `docs/plan/context/IDEA_atlassian_ui_remake.md`
+
 **Status:** ✅ Complete
+
 **Target:** Q4 2026
 
 - [x] Phase 1 — Foundation: Design Tokens & Theme Engine
@@ -50,8 +38,11 @@
 - [x] Phase 6 — Polish & Global Audit
 
 ### gateai — GateFlow Intelligent Operations Agent
+
 **IDEA:** `docs/plan/context/IDEA_gateai.md`
+
 **Status:** ✅ Complete
+
 **Target:** Q3 2026
 
 - [x] Phase 0 — Ready & /ai Page Scaffold
@@ -66,15 +57,61 @@
 - [x] Phase 9 — Resident Portal / Mobile Mini-Version
 - [x] Phase 10 — Hardening, Red-Teaming & Monitoring
 
-
 ---
 
-## Completed Initiatives (Done) ✅
+## Completed Initiatives
+
+### advanced_seeding_v2 — Ultra-Advanced Seeding Matrix (v2)
+
+**IDEA:** `docs/plan/context/IDEA_advanced_seeding_v2.md`
+
+**Status:** ✅ Complete
+
+**Target:** Q3 2026
+
+- [x] Phase 1 — Core Engine & Scenario Architecture
+- [x] Phase 2 — Temporal Realism & "Rush Hour" Algorithm
+- [x] Phase 3 — High-Volume CRM & RBAC Stress
+- [x] Phase 4 — Marketing & Security Intelligence
+- [x] Phase 5 — CLI Wrapper & Validation
+
+### marketing_suite — Marketing & Sales Attribution Suite (Phase 2)
+
+**IDEA:** `docs/plan/context/IDEA_marketing_suite.md`
+
+**PLAN:** `docs/plan/done/marketing_suite/PLAN_marketing_suite.md`
+
+**Status:** ✅ Complete
+
+**Target:** Q4 2026
+
+- [x] Phase 1 — UTM Schema, Session Capture & Propagation
+- [x] Phase 2 — Marketing Settings & Retargeting Pixels
+- [x] Phase 3 — Generic Webhook Engine & HubSpot Preset
+- [x] Phase 4 — Marketing ROI & Funnel Dashboards
+- [x] Phase 5 — Advanced Attribution & Export
+
+### team_page — Team Management & Integrated Chat (v1.0)
+
+**IDEA:** `docs/plan/context/IDEA_team_page.md`
+
+**Status:** ✅ Complete
+
+**Target:** Q4 2026
+
+- [x] Phase 1 — Schema & API: Team, Roles & Messaging
+- [x] Phase 2 — Sidebar Integration: Persistent Team Chat Drawer
+- [x] Phase 3 — Team Page: Unified Member & RBAC Management
+- [x] Phase 4 — Real-time & Polish: SSE/WS Presence & ADS Polish
 
 ### client_dashboard_v10_redesign — Client Dashboard V10 Redesign (ADS Premium)
+
 **IDEA:** `docs/plan/context/IDEA_client_dashboard_v10_redesign.md`
+
 **PLAN:** `docs/plan/done/client_dashboard_v10_redesign/PLAN_client_dashboard_v10_redesign.md`
+
 **Status:** ✅ Done (Completed via Claude CLI)
+
 **Target:** Q4 2026
 
 - [x] Phase 0 — Design System Foundation: ADS Token Sync (Light/Dark)
@@ -86,8 +123,11 @@
 - [x] Phase 6 — Polish & Accessibility Audit (RTL focus)
 
 ### resident_mobile — Resident Mobile App (Phase 2 Flagship)
+
 **IDEA:** `docs/plan/context/IDEA_resident_mobile.md`
+
 **Status:** ✅ Complete
+
 **Target:** Q3 2026
 
 - [x] Phase 1 — Schema verify + Resident API layer
@@ -98,8 +138,11 @@
 - [x] Phase 6 — History, Settings, RTL, tests
 
 ### marketing_website — Marketing Website Full Platform Pages
+
 **IDEA:** `docs/plan/context/IDEA_marketing_website.md`
+
 **Status:** ✅ Complete
+
 **Target:** Q3 2026
 
 - [x] Phase 1 — Homepage: conversion sections
@@ -109,8 +152,11 @@
 - [x] Phase 5 — SEO + content polish
 
 ### realtime_updates — Real-Time Live Updates
+
 **IDEA:** `docs/plan/context/IDEA_realtime_updates.md`
+
 **Status:** ✅ Complete
+
 **Target:** Q3 2026
 
 - [x] Phase 1 — EventLog schema + emitEvent utility
