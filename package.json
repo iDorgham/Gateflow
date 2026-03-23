@@ -113,5 +113,10 @@
     "patchedDependencies": {
       "expo-router@6.0.23": "patches/expo-router@6.0.23.patch"
     }
+  },
+  "dependencies": {
+    "@gate-access/db": "workspace:^0.1.0",
+    "qrcode": "^1.5.4",
+    "react-qr-code": "^2.0.18"
   }
 }

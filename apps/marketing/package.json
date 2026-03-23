@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@formatjs/intl-localematcher": "^0.8.1",
+    "@gate-access/db": "workspace:^0.1.0",
     "@gate-access/ui": "workspace:^",
     "@hugeicons/core-free-icons": "^3.1.1",
     "@hugeicons/react": "^1.1.5",
@@ -24,8 +25,10 @@
     "next": "^14.2.35",
     "next-mdx-remote": "^6.0.0",
     "next-themes": "^0.3.0",
+    "qrcode": "^1.5.4",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-qr-code": "^2.0.18",
     "reading-time": "^1.5.0",
     "resend": "^6.9.3",
     "tailwind-merge": "^2.6.1",

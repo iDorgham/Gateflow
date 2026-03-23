@@ -341,6 +341,7 @@ model QRCode {
   project        Project?     @relation(fields: [projectId], references: [id])
   scanLogs       ScanLog[]
   visitorQR      VisitorQR?
+  qrShortLink    QrShortLink[]
 
   @@index([organizationId])
   @@index([projectId])
@@ -488,6 +489,7 @@ model QrShortLink {
   qrId           String
   organizationId String
   projectId      String?
+  qrCode         QRCode            @relation(fields: [qrId], references: [id], onDelete: Cascade)
   clicks         ShortLinkClick[]
 
   @@index([shortId])

@@ -16,6 +16,16 @@ patchedDependencies:
 
 importers:
   .:
+    dependencies:
+      '@gate-access/db':
+        specifier: workspace:^0.1.0
+        version: link:packages/db
+      qrcode:
+        specifier: ^1.5.4
+        version: 1.5.4
+      react-qr-code:
+        specifier: ^2.0.18
+        version: 2.0.18(react@18.3.1)
     devDependencies:
       '@commitlint/cli':
         specifier: ^20.5.0
@@ -382,6 +392,9 @@ importers:
       '@formatjs/intl-localematcher':
         specifier: ^0.8.1
         version: 0.8.1
+      '@gate-access/db':
+        specifier: workspace:^0.1.0
+        version: link:../../packages/db
       '@gate-access/ui':
         specifier: workspace:^
         version: link:../../packages/ui
@@ -424,12 +437,18 @@ importers:
       next-themes:
         specifier: ^0.3.0
         version: 0.3.0(react-dom@18.3.1)(react@18.3.1)
+      qrcode:
+        specifier: ^1.5.4
+        version: 1.5.4
       react:
         specifier: ^18.3.1
         version: 18.3.1
       react-dom:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
+      react-qr-code:
+        specifier: ^2.0.18
+        version: 2.0.18(react@18.3.1)
       reading-time:
         specifier: ^1.5.0
         version: 1.5.0

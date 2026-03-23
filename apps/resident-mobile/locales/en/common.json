@@ -1,7 +1,7 @@
 {
   "sharing": {
-    "inviteGuest": "Hello! Here is your visitor pass for my unit at GateFlow: {{url}}\nThis link is valid for 24 hours.",
-    "inviteGuestAr": "مرحباً! إليك تصريح الزيارة الخاص بك لوحدتي في GateFlow: {{url}}\nهذا الرابط صالح لمدة 24 ساعة."
+    "inviteGuest": "Hello! I've generated a secure visitor pass for you. Tap the link to view your entrance QR code and get directions: {{url}}",
+    "inviteGuestAr": "مرحباً! لقد قمت بإنشاء تصريح زيارة آمن لك. اضغط على الرابط لعرض رمز الدخول والحصول على الاتجاهات: {{url}}"
   },
   "expressInvite": {
     "title": "One-Tap Invite",

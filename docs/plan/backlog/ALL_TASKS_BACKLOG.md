@@ -14,20 +14,6 @@
 - [ ] Phase 2 — Title
 - [ ] Phase 3 — Title
 
-### resident_mobile_one_tap — Resident Mobile Mastery (v2.0)
-
-**IDEA:** `docs/plan/context/IDEA_resident_mobile_one_tap.md`
-
-**Status:** 🆕 Open
-
-**Target:** Q4 2026
-
-- [ ] Phase 1 — Security & Signing Foundation
-- [ ] Phase 2 — Core Logic: Fast Link Generation
-- [ ] Phase 3 — Home Tab "Express Invite" UI
-- [ ] Phase 4 — Invitee Landing Page: Premium Experience
-- [ ] Phase 5 — GateAI Bridge & Arrival Polish
-
 ### security_isolation_fix — High-Risk Security Hardening
 
 **IDEA:** `docs/plan/context/IDEA_security_isolation_fix.md`
@@ -95,9 +81,21 @@
 - [x] Phase 9 — Resident Portal / Mobile Mini-Version
 - [x] Phase 10 — Hardening, Red-Teaming & Monitoring
 
----
+### resident_mobile_one_tap — Resident Mobile Mastery (v2.0)
 
-## Completed Initiatives
+**IDEA:** `docs/plan/context/IDEA_resident_mobile_one_tap.md`
+
+**PLAN:** `docs/plan/done/resident_mobile_one_tap/PLAN_resident_mobile_one_tap.md`
+
+**Status:** ✅ Complete
+
+**Target:** Q4 2026
+
+- [x] Phase 1 — Security & Signing Foundation
+- [x] Phase 2 — Core Logic: Fast Link Generation
+- [x] Phase 3 — Home Tab "Express Invite" UI
+- [x] Phase 4 — Invitee Landing Page: Premium Experience
+- [x] Phase 5 — GateAI Bridge & Arrival Polish
 
 ### projects_crm_ui — Unified Real Estate CRM & Operations Hub
 
