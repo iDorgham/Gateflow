@@ -3,8 +3,9 @@
 ## Active State
 
 - **Phase 1:** ✅ COMPLETED — commit `0e7ee3c`
-- **Phase 2:** ✅ COMPLETED — commit `72bfec8` — fix(security): CRM contacts & units org isolation confirmed
-- **Next action:** Start Phase 3 — QR Codes & Workspace Exports
+- **Phase 2:** ✅ COMPLETED — commit `72bfec8`
+- **Phase 3:** ✅ COMPLETED — commit `9e054f9` — fix(security): QR codes & workspace exports org isolation
+- **Next action:** Start Phase 4 — Analytics, Incidents & Edge Routes
 
 ## Cross-Session Decisions
 
@@ -44,7 +45,6 @@
 
 ## Remaining Phases
 
-- Phase 3: `api/qrcodes/*`, `api/workspace/export/*`, `api/resident/visitors/*`
 - Phase 4: `api/analytics/export/route.ts`, `api/incidents/route.ts`
 - Phase 5: Rerun discovery with zero violations
 - Phase 6: Gate-Assignment Management UI

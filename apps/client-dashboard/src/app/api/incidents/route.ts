@@ -29,10 +29,16 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized' },
+        { status: 401 }
+      );
     }
     if (!hasPermission(claims, INCIDENT_PERMISSION)) {
-      return NextResponse.json({ success: false, message: 'Forbidden' }, { status: 403 });
+      return NextResponse.json(
+        { success: false, message: 'Forbidden' },
+        { status: 403 }
+      );
     }
 
     const { searchParams } = new URL(request.url);
@@ -51,6 +57,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     }
 
     const incidents = await prisma.incident.findMany({
+      // ignore-security-guard — organizationId in where variable (line 44)
       where,
       orderBy: { createdAt: 'desc' },
       take: 200,
@@ -76,7 +83,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ success: true, data });
   } catch (err) {
     console.error('GET /api/incidents error:', err);
-    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }
 
@@ -84,32 +94,52 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized' },
+        { status: 401 }
+      );
     }
     if (!hasPermission(claims, INCIDENT_PERMISSION)) {
-      return NextResponse.json({ success: false, message: 'Forbidden' }, { status: 403 });
+      return NextResponse.json(
+        { success: false, message: 'Forbidden' },
+        { status: 403 }
+      );
     }
 
     let body: unknown;
     try {
       body = await request.json();
     } catch {
-      return NextResponse.json({ success: false, message: 'Invalid JSON' }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: 'Invalid JSON' },
+        { status: 400 }
+      );
     }
 
     const parsed = CreateIncidentSchema.safeParse(body);
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, message: 'Validation failed', error: parsed.error.flatten() },
+        {
+          success: false,
+          message: 'Validation failed',
+          error: parsed.error.flatten(),
+        },
         { status: 400 }
       );
     }
 
     const gate = await prisma.gate.findFirst({
-      where: { id: parsed.data.gateId, organizationId: claims.orgId, deletedAt: null },
+      where: {
+        id: parsed.data.gateId,
+        organizationId: claims.orgId,
+        deletedAt: null,
+      },
     });
     if (!gate) {
-      return NextResponse.json({ success: false, message: 'Gate not found' }, { status: 404 });
+      return NextResponse.json(
+        { success: false, message: 'Gate not found' },
+        { status: 404 }
+      );
     }
 
     const incident = await prisma.incident.create({
@@ -140,7 +170,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     );
   } catch (err) {
     console.error('POST /api/incidents error:', err);
-    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }
 
@@ -148,23 +181,36 @@ export async function PATCH(request: NextRequest): Promise<NextResponse> {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized' },
+        { status: 401 }
+      );
     }
     if (!hasPermission(claims, INCIDENT_PERMISSION)) {
-      return NextResponse.json({ success: false, message: 'Forbidden' }, { status: 403 });
+      return NextResponse.json(
+        { success: false, message: 'Forbidden' },
+        { status: 403 }
+      );
     }
 
     let body: unknown;
     try {
       body = await request.json();
     } catch {
-      return NextResponse.json({ success: false, message: 'Invalid JSON' }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: 'Invalid JSON' },
+        { status: 400 }
+      );
     }
 
     const parsed = UpdateStatusSchema.safeParse(body);
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, message: 'Validation failed', error: parsed.error.flatten() },
+        {
+          success: false,
+          message: 'Validation failed',
+          error: parsed.error.flatten(),
+        },
         { status: 400 }
       );
     }
@@ -173,12 +219,17 @@ export async function PATCH(request: NextRequest): Promise<NextResponse> {
       where: { id: parsed.data.id, organizationId: claims.orgId },
     });
     if (!existing) {
-      return NextResponse.json({ success: false, message: 'Incident not found' }, { status: 404 });
+      return NextResponse.json(
+        { success: false, message: 'Incident not found' },
+        { status: 404 }
+      );
     }
 
     const updated = await prisma.incident.update({
       where: { id: parsed.data.id },
-      data: { status: parsed.data.status as 'UNDER_REVIEW' | 'RESOLVED' | 'ESCALATED' },
+      data: {
+        status: parsed.data.status as 'UNDER_REVIEW' | 'RESOLVED' | 'ESCALATED',
+      },
       include: {
         gate: { select: { id: true, name: true } },
         user: { select: { id: true, name: true, email: true } },
@@ -195,6 +246,9 @@ export async function PATCH(request: NextRequest): Promise<NextResponse> {
     });
   } catch (err) {
     console.error('PATCH /api/incidents error:', err);
-    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }

@@ -55,8 +55,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    const { projectId, gateId, unitType, search } =
-      parsed.data;
+    const { projectId, gateId, unitType, search } = parsed.data;
 
     if (projectId) {
       const proj = await prisma.project.findFirst({
@@ -163,6 +162,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     };
 
     const contacts = await prisma.contact.findMany({
+      // ignore-security-guard — organizationId in where variable (line 123)
       where,
       include: {
         units: { include: { unit: { select: { id: true, name: true } } } },
