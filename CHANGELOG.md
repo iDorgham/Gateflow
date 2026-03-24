@@ -20,6 +20,8 @@ _(next release notes go here)_
 
 ### Features
 
+- **[Marketing] **update marketing site and UI component library
+
 - **[Ai] **add response format rule, slim AI workflow rule, add ralph to all tools
 - **[Dev] **add persistent memory and progressive disclosure to dev workflow
 
