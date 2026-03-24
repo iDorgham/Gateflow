@@ -15,7 +15,7 @@ export function Icon({
   ...props
 }: IconProps) {
   // Cast to React.ElementType to avoid dual @types/react version mismatch
-  const Comp = IconComponent as React.ElementType<
+  const Comp = IconComponent as unknown as React.ElementType<
     React.SVGAttributes<SVGElement> & { size?: number | string }
   >;
   return <Comp size={size} className={cn('shrink-0', className)} {...props} />;

@@ -16,7 +16,7 @@ export function LoadingSpinner({
     <Loader2
       size={size}
       className={cn('animate-spin text-primary', className)}
-      {...(props as React.ComponentProps<typeof Loader2>)}
+      {...(props as unknown as React.ComponentProps<typeof Loader2>)}
     />
   );
 }
