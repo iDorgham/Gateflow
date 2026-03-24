@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { useChat, type Message } from 'ai/react';
+import { useChat, type Message } from '@ai-sdk/react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { Send, Bot, User, Loader2, RotateCcw, Sparkles } from 'lucide-react';
@@ -15,7 +15,8 @@ const STORAGE_KEY = 'gateflow-admin-ai-chat-v1';
 const WELCOME_MSG: Message = {
   id: 'welcome',
   role: 'assistant',
-  content: 'Hi! I have read-only access to platform data. Ask me about organizations, users, scans, or platform health.',
+  content:
+    'Hi! I have read-only access to platform data. Ask me about organizations, users, scans, or platform health.',
   createdAt: new Date(0),
 };
 
@@ -41,7 +42,9 @@ function loadMessages(): Message[] {
       const parsed = JSON.parse(raw) as Message[];
       if (Array.isArray(parsed) && parsed.length > 0) return parsed;
     }
-  } catch { /* ignore */ }
+  } catch {
+    /* ignore */
+  }
   return [WELCOME_MSG];
 }
 
@@ -53,7 +56,9 @@ interface AdminAIAssistantProps {
 
 export function AdminAIAssistant({ locale }: AdminAIAssistantProps) {
   const [hydrated, setHydrated] = useState(false);
-  const [storedMessages, setStoredMessages] = useState<Message[]>([WELCOME_MSG]);
+  const [storedMessages, setStoredMessages] = useState<Message[]>([
+    WELCOME_MSG,
+  ]);
   const formRef = useRef<HTMLFormElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -74,7 +79,9 @@ export function AdminAIAssistant({ locale }: AdminAIAssistantProps) {
   } = useChat({
     api: `/${locale}/api/admin/ai/assistant`,
     initialMessages: hydrated ? storedMessages : [WELCOME_MSG],
-    onFinish: () => { router.refresh(); },
+    onFinish: () => {
+      router.refresh();
+    },
     onError: (err: Error) => {
       console.error('Admin AI error:', err);
       toast.error(err.message ?? 'Assistant error');
@@ -90,7 +97,11 @@ export function AdminAIAssistant({ locale }: AdminAIAssistantProps) {
   // Persist to localStorage
   useEffect(() => {
     if (hydrated && messages.length > 0) {
-      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(messages)); } catch { /* ignore */ }
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+      } catch {
+        /* ignore */
+      }
     }
   }, [messages, hydrated]);
 
@@ -108,7 +119,11 @@ export function AdminAIAssistant({ locale }: AdminAIAssistantProps) {
 
   const clearChat = () => {
     setMessages([WELCOME_MSG]);
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify([WELCOME_MSG])); } catch { /* ignore */ }
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify([WELCOME_MSG]));
+    } catch {
+      /* ignore */
+    }
   };
 
   const hasOnlyWelcome = messages.length === 1 && messages[0]?.id === 'welcome';
@@ -117,7 +132,6 @@ export function AdminAIAssistant({ locale }: AdminAIAssistantProps) {
     <div className="flex h-full flex-col bg-card">
       {/* Messages */}
       <div className="flex-1 space-y-5 overflow-y-auto px-4 py-4">
-
         {/* Welcome card */}
         {hasOnlyWelcome && !isLoading && (
           <div className="rounded-2xl bg-muted/20 p-6 text-center">
@@ -127,11 +141,19 @@ export function AdminAIAssistant({ locale }: AdminAIAssistantProps) {
               </div>
             </div>
             <div className="flex items-center justify-center gap-1.5 mb-1">
-              <p className="text-sm font-black uppercase tracking-tight text-foreground">GateFlow Admin AI</p>
-              <span className="rounded-md bg-muted px-1.5 py-0.5 text-[9px] font-bold text-muted-foreground uppercase tracking-wider">Gemini</span>
+              <p className="text-sm font-black uppercase tracking-tight text-foreground">
+                GateFlow Admin AI
+              </p>
+              <span className="rounded-md bg-muted px-1.5 py-0.5 text-[9px] font-bold text-muted-foreground uppercase tracking-wider">
+                Gemini
+              </span>
             </div>
-            <p className="text-xs text-muted-foreground mb-5">Read-only platform intelligence</p>
-            <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-2">Get Started</p>
+            <p className="text-xs text-muted-foreground mb-5">
+              Read-only platform intelligence
+            </p>
+            <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-2">
+              Get Started
+            </p>
             <div className="flex flex-wrap gap-2 justify-center">
               {EXAMPLE_PROMPTS.map((p) => (
                 <button
@@ -147,35 +169,46 @@ export function AdminAIAssistant({ locale }: AdminAIAssistantProps) {
         )}
 
         {/* Message bubbles */}
-        {!hasOnlyWelcome && messages.map((message: Message) => {
-          if (message.id === 'welcome') return null;
-          const isUser = message.role === 'user';
-          const text = msgText(message.content);
-          if (!text) return null;
+        {!hasOnlyWelcome &&
+          messages.map((message: Message) => {
+            if (message.id === 'welcome') return null;
+            const isUser = message.role === 'user';
+            const text = msgText(message.content);
+            if (!text) return null;
 
-          return (
-            <div
-              key={message.id}
-              className={cn('flex items-end gap-2', isUser ? 'flex-row-reverse' : 'flex-row')}
-            >
-              <div className={cn('flex h-8 w-8 shrink-0 items-center justify-center rounded-full', isUser ? 'bg-primary' : 'bg-muted')}>
-                {isUser
-                  ? <User className="h-4 w-4 text-primary-foreground" />
-                  : <Bot className="h-4 w-4 text-muted-foreground" />}
-              </div>
+            return (
               <div
+                key={message.id}
                 className={cn(
-                  'max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed shadow-sm',
-                  isUser
-                    ? 'bg-primary text-primary-foreground rounded-br-sm'
-                    : 'bg-muted/50 text-foreground border border-border/50 rounded-bl-sm'
+                  'flex items-end gap-2',
+                  isUser ? 'flex-row-reverse' : 'flex-row'
                 )}
               >
-                <span className="whitespace-pre-wrap">{text}</span>
+                <div
+                  className={cn(
+                    'flex h-8 w-8 shrink-0 items-center justify-center rounded-full',
+                    isUser ? 'bg-primary' : 'bg-muted'
+                  )}
+                >
+                  {isUser ? (
+                    <User className="h-4 w-4 text-primary-foreground" />
+                  ) : (
+                    <Bot className="h-4 w-4 text-muted-foreground" />
+                  )}
+                </div>
+                <div
+                  className={cn(
+                    'max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed shadow-sm',
+                    isUser
+                      ? 'bg-primary text-primary-foreground rounded-br-sm'
+                      : 'bg-muted/50 text-foreground border border-border/50 rounded-bl-sm'
+                  )}
+                >
+                  <span className="whitespace-pre-wrap">{text}</span>
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
 
         {/* Typing indicator */}
         {isLoading && (
@@ -208,7 +241,11 @@ export function AdminAIAssistant({ locale }: AdminAIAssistantProps) {
       )}
 
       {/* Input */}
-      <form ref={formRef} onSubmit={handleSubmit} className="shrink-0 border-t border-border p-4 bg-muted/10">
+      <form
+        ref={formRef}
+        onSubmit={handleSubmit}
+        className="shrink-0 border-t border-border p-4 bg-muted/10"
+      >
         <div className="flex items-end gap-2">
           <textarea
             value={input}
@@ -226,7 +263,11 @@ export function AdminAIAssistant({ locale }: AdminAIAssistantProps) {
             disabled={isLoading || !input.trim()}
             className="h-11 w-11 shrink-0 rounded-2xl shadow-sm transition-transform active:scale-95"
           >
-            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+            {isLoading ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <Send className="h-4 w-4" />
+            )}
           </Button>
         </div>
       </form>

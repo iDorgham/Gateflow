@@ -10,12 +10,17 @@ export const maxDuration = 30;
 
 export async function POST(request: NextRequest) {
   if (!(await isAdminAuthorized(request))) {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+      status: 401,
+    });
   }
 
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    return new Response(JSON.stringify({ error: 'GEMINI_API_KEY is not configured' }), { status: 503 });
+    return new Response(
+      JSON.stringify({ error: 'GEMINI_API_KEY is not configured' }),
+      { status: 503 }
+    );
   }
 
   const google = createGoogleGenerativeAI({ apiKey });
@@ -24,10 +29,14 @@ export async function POST(request: NextRequest) {
   try {
     body = await request.json();
   } catch {
-    return new Response(JSON.stringify({ error: 'Invalid JSON' }), { status: 400 });
+    return new Response(JSON.stringify({ error: 'Invalid JSON' }), {
+      status: 400,
+    });
   }
 
-  const { messages } = body as { messages: { role: string; content: string }[] };
+  const { messages } = body as {
+    messages: { role: string; content: string }[];
+  };
 
   const result = streamText({
     model: google('gemini-1.5-flash'),
@@ -39,19 +48,26 @@ Never make up data — use tools to fetch real information.`,
     maxSteps: 5,
     tools: {
       getPlatformMetrics: tool({
-        description: 'Get platform-wide metrics: total organizations, total users, scans today, scans this month',
+        description:
+          'Get platform-wide metrics: total organizations, total users, scans today, scans this month',
         parameters: z.object({}),
         execute: async () => {
           const now = new Date();
-          const todayStart = new Date(now); todayStart.setHours(0, 0, 0, 0);
+          const todayStart = new Date(now);
+          todayStart.setHours(0, 0, 0, 0);
           const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
 
-          const [totalOrgs, totalUsers, scansToday, scansThisMonth] = await Promise.all([
-            prisma.organization.count({ where: { deletedAt: null } }),
-            prisma.user.count({ where: { deletedAt: null } }),
-            prisma.scanLog.count({ where: { scannedAt: { gte: todayStart } } }),
-            prisma.scanLog.count({ where: { scannedAt: { gte: monthStart } } }),
-          ]);
+          const [totalOrgs, totalUsers, scansToday, scansThisMonth] =
+            await Promise.all([
+              prisma.organization.count({ where: { deletedAt: null } }),
+              prisma.user.count({ where: { deletedAt: null } }),
+              prisma.scanLog.count({
+                where: { scannedAt: { gte: todayStart } },
+              }),
+              prisma.scanLog.count({
+                where: { scannedAt: { gte: monthStart } },
+              }),
+            ]);
 
           return { totalOrgs, totalUsers, scansToday, scansThisMonth };
         },
@@ -60,21 +76,41 @@ Never make up data — use tools to fetch real information.`,
       listRecentOrgs: tool({
         description: 'List the most recently created organizations',
         parameters: z.object({
-          limit: z.number().min(1).max(20).default(5).describe('Number of orgs to return'),
+          limit: z
+            .number()
+            .min(1)
+            .max(20)
+            .default(5)
+            .describe('Number of orgs to return'),
         }),
         execute: async ({ limit }) => {
           const orgs = await prisma.organization.findMany({
             where: { deletedAt: null },
             orderBy: { createdAt: 'desc' },
             take: limit,
-            select: { id: true, name: true, plan: true, createdAt: true, _count: { select: { users: true } } },
+            select: {
+              id: true,
+              name: true,
+              plan: true,
+              createdAt: true,
+              _count: { select: { users: true } },
+            },
           });
-          return orgs.map((o: { id: string; name: string; plan: string | null; createdAt: Date; _count: { users: number } }) => ({ ...o, createdAt: o.createdAt.toISOString() }));
+          return orgs.map(
+            (o: {
+              id: string;
+              name: string;
+              plan: string | null;
+              createdAt: Date;
+              _count: { users: number };
+            }) => ({ ...o, createdAt: o.createdAt.toISOString() })
+          );
         },
       }),
 
       getOrgStats: tool({
-        description: 'Get detailed stats for a specific organization by name or ID',
+        description:
+          'Get detailed stats for a specific organization by name or ID',
         parameters: z.object({
           query: z.string().describe('Organization name (partial) or ID'),
         }),
@@ -87,20 +123,38 @@ Never make up data — use tools to fetch real information.`,
               ],
             },
             select: {
-              id: true, name: true, plan: true, email: true, createdAt: true, deletedAt: true,
+              id: true,
+              name: true,
+              plan: true,
+              email: true,
+              createdAt: true,
+              deletedAt: true,
               _count: { select: { users: true, qrCodes: true, gates: true } },
             },
           });
           if (!org) return { error: 'Organization not found' };
-          const scansTotal = await prisma.scanLog.count({ where: { qrCode: { organizationId: org.id } } });
-          return { ...org, createdAt: org.createdAt.toISOString(), deletedAt: org.deletedAt?.toISOString() ?? null, scansTotal };
+          const scansTotal = await prisma.scanLog.count({
+            where: { qrCode: { organizationId: org.id } },
+          });
+          return {
+            ...org,
+            createdAt: org.createdAt.toISOString(),
+            deletedAt: org.deletedAt?.toISOString() ?? null,
+            scansTotal,
+          };
         },
       }),
 
       listRecentScans: tool({
-        description: 'List the most recent scan log entries across all organizations',
+        description:
+          'List the most recent scan log entries across all organizations',
         parameters: z.object({
-          limit: z.number().min(1).max(20).default(10).describe('Number of scans to return'),
+          limit: z
+            .number()
+            .min(1)
+            .max(20)
+            .default(10)
+            .describe('Number of scans to return'),
         }),
         execute: async ({ limit }) => {
           const scans = await prisma.scanLog.findMany({
@@ -114,13 +168,21 @@ Never make up data — use tools to fetch real information.`,
               qrCode: { select: { organization: { select: { name: true } } } },
             },
           });
-          return scans.map((s: { id: string; status: string; scannedAt: Date; gate: { name: string } | null; qrCode: { organization: { name: string } | null } | null }) => ({
-            id: s.id,
-            status: s.status,
-            scannedAt: s.scannedAt.toISOString(),
-            gate: s.gate?.name ?? null,
-            org: s.qrCode?.organization?.name ?? null,
-          }));
+          return scans.map(
+            (s: {
+              id: string;
+              status: string;
+              scannedAt: Date;
+              gate: { name: string } | null;
+              qrCode: { organization: { name: string } | null } | null;
+            }) => ({
+              id: s.id,
+              status: s.status,
+              scannedAt: s.scannedAt.toISOString(),
+              gate: s.gate?.name ?? null,
+              org: s.qrCode?.organization?.name ?? null,
+            })
+          );
         },
       }),
 
@@ -140,22 +202,35 @@ Never make up data — use tools to fetch real information.`,
             },
             take: limit,
             select: {
-              id: true, name: true, email: true, deletedAt: true,
+              id: true,
+              name: true,
+              email: true,
+              deletedAt: true,
               role: { select: { name: true } },
               organization: { select: { name: true } },
             },
           });
-          return users.map((u: { id: string; name: string; email: string | null; deletedAt: Date | null; role: { name: string } | null; organization: { name: string } | null }) => ({
-            id: u.id, name: u.name, email: u.email,
-            role: u.role?.name ?? null,
-            org: u.organization?.name ?? null,
-            suspended: u.deletedAt !== null,
-          }));
+          return users.map(
+            (u: {
+              id: string;
+              name: string;
+              email: string | null;
+              deletedAt: Date | null;
+              role: { name: string } | null;
+              organization: { name: string } | null;
+            }) => ({
+              id: u.id,
+              name: u.name,
+              email: u.email,
+              role: u.role?.name ?? null,
+              org: u.organization?.name ?? null,
+              suspended: u.deletedAt !== null,
+            })
+          );
         },
       }),
-
     },
   });
 
-  return result.toDataStreamResponse();
+  return result.toUIMessageStreamResponse();
 }
