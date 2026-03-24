@@ -83,6 +83,7 @@ COMMANDS=(
   "docs|Docs|Automated documentation updates — changelog, version badge, PRD, feature log, README, release.|docs|Update project documentation automatically after shipping a feature or cutting a release"
   "version|Version|Semantic versioning — bump package.json, create annotated git tags, generate versioned branch names.|version|Manage semantic versioning across package.json, git tags, and branch names"
   "organize|Organize|Docs folder cleanup — scan structure, remove empty dirs and dead symlinks, rebuild docs/INDEX.md.|organize|Keep the docs/ folder clean, structured, and navigable"
+  "ralph|Ralph|Recursive autopilot: implement ALL remaining phases of the active plan end-to-end until complete. Includes session memory, TDD, enforcement, verification, PR.|ralph|Implement all remaining phases of the active plan automatically until the plan is complete"
 )
 
 # ── generate commands.json ────────────────────────────────────────────────────
@@ -157,7 +158,7 @@ sync_claude() {
     IFS='|' read -r key _ _ _ _ <<< "$entry"
     copy_file "$SRC/workflows/$key.md" "$dest/commands/$key.md"
   done
-  ok "commands (7)"
+  ok "commands (${#COMMANDS[@]})"
 
   # settings.json — commands registry
   if ! $DRY_RUN; then
@@ -196,12 +197,12 @@ sync_cursor() {
     IFS='|' read -r key _ _ _ _ <<< "$entry"
     copy_file "$SRC/workflows/$key.md" "$dest/commands/$key.md"
   done
-  ok "commands (7)"
+  ok "commands (${#COMMANDS[@]})"
 
   if ! $DRY_RUN; then
     generate_commands_json ".cursor/commands" ".md" > "$dest/commands.json"
   fi
-  ok "commands.json (all 7)"
+  ok "commands.json (all ${#COMMANDS[@]})"
 
   # skills / agents / subagents / commands-ref / templates / contracts
   rsync_dir "$SRC/skills"       "$dest/skills"
@@ -245,7 +246,7 @@ sync_antigravity() {
     IFS='|' read -r key _ _ _ _ <<< "$entry"
     copy_file "$SRC/workflows/$key.md" "$dest/workflows/$key.md"
   done
-  ok "workflows (7)"
+  ok "workflows (${#COMMANDS[@]})"
 
   if ! $DRY_RUN; then
     generate_commands_json ".antigravity/workflows" ".md" > "$dest/commands.json"
@@ -287,7 +288,7 @@ sync_gemini() {
       generate_gemini_toml "$key" "$desc" "$gemini_name" "$intro" > "$toml_file"
     fi
   done
-  ok "TOML commands (7 → .gemini/commands/*.toml)"
+  ok "TOML commands (${#COMMANDS[@]} → .gemini/commands/*.toml)"
 }
 
 # ── Kiro CLI ──────────────────────────────────────────────────────────────────
@@ -305,7 +306,7 @@ sync_kiro() {
       generate_kiro_hook "$key" "$desc" > "$json_file"
     fi
   done
-  ok "hook JSON files (7 → .kiro/hooks/cmd-*.json)"
+  ok "hook JSON files (${#COMMANDS[@]} → .kiro/hooks/cmd-*.json)"
 
   # Kiro MCP — extract from .agents/mcp.json (exclude pencil which is Antigravity-specific)
   if ! $DRY_RUN; then
@@ -363,7 +364,7 @@ MD
       fi
     done
   fi
-  ok "commands (7 workflow shortcuts added)"
+  ok "commands (${#COMMANDS[@]} workflow shortcuts added)"
 }
 
 # =============================================================================
