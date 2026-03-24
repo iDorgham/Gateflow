@@ -83,6 +83,22 @@ From `docs/plan/guidelines/SUBAGENT_HIERARCHY.md`:
 | Context7 | React/Next.js/Prisma API lookup |
 | cursor-ide-browser | E2E verification after UI changes |
 
+### Context Budget
+
+Load in order. Stop when you have enough. Tick each layer as loaded.
+
+| Layer | File | Est. Tokens | Load when | Loaded |
+| ----- | ---- | ----------- | --------- | ------ |
+| L0 | `git log --oneline -3` + phase name | ~50 | Always | [ ] |
+| L1 | `TASKS_<slug>.md` | ~150 | Always | [ ] |
+| L2 | `PLAN_<slug>.md` | ~600 | Always | [ ] |
+| L3 | `PROMPT_phase_N.md` (this file) | ~1,200 | When executing | [ ] |
+| L4 | `CONTEXT_<slug>.md` | ~1,800 | DB/types/env work only | [ ] |
+| L5 | `SESSION_MEMORY.md` | ~400 | Always — load FIRST | [ ] |
+
+> Baseline: L0+L1+L2+L5 ≈ **1,200t**. Execution: +L3 → **2,400t**. Schema work: +L4 → **4,200t**.
+> Never pre-load L4 speculatively. Load it when you discover you need schema/types.
+
 ### Context
 
 - **Project**: GateFlow — Zero-Trust digital gate platform (Turborepo, pnpm)
@@ -90,6 +106,7 @@ From `docs/plan/guidelines/SUBAGENT_HIERARCHY.md`:
 - **Packages**: db, types, ui, api-client, i18n, config
 - **Rules**: pnpm only; multi-tenant (`organizationId`); soft deletes (`deletedAt: null`); QR HMAC-SHA256; no secrets in git
 - **Context file**: `docs/plan/{state}/<slug>/CONTEXT_<slug>.md` — frozen schema + types snapshot
+- **Session Memory**: `docs/plan/in-progress/<slug>/SESSION_MEMORY.md` — cross-session decisions + gotchas
 - **Refs**: `CLAUDE.md`, `packages/db/prisma/schema.prisma`, `docs/plan/backlog/ALL_TASKS_BACKLOG.md`
 
 ### Goal

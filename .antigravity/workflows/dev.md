@@ -40,9 +40,57 @@ Use `/dev` to implement **exactly one** phase from a plan end-to-end: code, test
 - `/dev <slug> <n>` — Execute phase `<n>` of `PLAN_<slug>.md`.
 - `/dev ralph` — Recursive autopilot: implement current phase AND auto-start subsequent phases until the plan is complete.
 
+## Progressive Disclosure — Context Layers
+
+Load context in order. **Stop when you have enough.** Never load L3/L4 unless the phase needs it.
+
+| Layer | File | Est. Tokens | Load when |
+| ----- | ---- | ----------- | --------- |
+| L0 | `git log --oneline -3` + phase name | ~50 | Always |
+| L1 | `TASKS_<slug>.md` | ~150 | Always — track progress |
+| L2 | `PLAN_<slug>.md` | ~600 | Always — understand scope |
+| L3 | `PROMPT_phase_N.md` | ~1,200 | When executing a phase |
+| L4 | `CONTEXT_<slug>.md` | ~1,800 | Only when touching DB/types/env |
+| L5 | `SESSION_MEMORY.md` | ~400 | Always — cross-session decisions |
+
+**Baseline session cost:** L0 + L1 + L2 + L5 ≈ **1,200 tokens**
+**Phase execution:** + L3 → ≈ **2,400 tokens**
+**Schema/types work:** + L4 → ≈ **4,200 tokens**
+
+> Never pre-load L4 speculatively. If you discover mid-phase that you need schema context, load it then and note it in SESSION_MEMORY.
+
+---
+
+## Persistent Memory — Session Continuity
+
+Every `/dev` session reads and writes `SESSION_MEMORY.md` in the plan folder. This file survives context resets so a new session can resume instantly.
+
+**At session START (mandatory):**
+
+1. Check `docs/plan/{in-progress,done}/<slug>/SESSION_MEMORY.md`.
+2. If it exists: read it first (L5, ~400t) before loading any other file.
+3. Apply cross-session decisions, discovered gotchas, and resume-from pointer.
+4. If it doesn't exist: create it from `docs/plan/templates/SESSION_MEMORY_template.md`.
+
+**At session END (mandatory — after every phase or part):**
+
+Update `SESSION_MEMORY.md` with:
+
+- **Active State** — phase + status + last commit hash + exact next action
+- **Cross-Session Decisions** — architectural/tooling decisions made this session
+- **Discovered Gotchas** — non-obvious behaviours or deviations found
+- **State Handoff** — files modified, test status, blockers, resume-from pointer
+- **Context Budget** — which layers (L0–L5) were loaded this session
+
+> Template: `docs/plan/templates/SESSION_MEMORY_template.md`
+
+---
+
 ## Implementation notes (for agents)
 
 - **Skill discovery (mandatory):** Start every `/dev` session by invoking `using-superpowers` — check skills before any response.
+- **Persistent memory (mandatory):** Read `SESSION_MEMORY.md` (L5) before anything else. Apply decisions + gotchas. Save it after every phase.
+- **Progressive disclosure (mandatory):** Load layers L0→L5 in order. Show token cost before loading L3 or L4. Never load L4 speculatively.
 - **Plan execution discipline:** Invoke `executing-plans` skill at the start. Load plan, review critically, execute in batches of ~3 tasks, report between batches.
 - **TDD iron law:** Invoke `test-driven-development` for any behavior-changing code. Write failing test first — no production code without a red test.
 - **Debugging:** When a fix attempt fails or cause is unclear, invoke `systematic-debugging`. Find root cause before writing any fix.
@@ -70,6 +118,7 @@ Use `/dev` to implement **exactly one** phase from a plan end-to-end: code, test
 ## Ralph Loop (Automated Phase Execution)
 
 1. **Preflight** — Run `/ready`.
+1.5. **Load Session Memory** — Read `SESSION_MEMORY.md` (L5, ~400t). Apply cross-session decisions + gotchas. If none exists, create from template.
 2. **Select phase**: Next incomplete phase from the active plan.
 3. **Worktree isolation** — If phase is risky or parallel, invoke `using-git-worktrees`.
 4. **Automated Branching** — Run `node scripts/ralph-git.js branch <slug> <N>`.
@@ -94,6 +143,7 @@ Use `/dev` to implement **exactly one** phase from a plan end-to-end: code, test
    - **If PR exists**: Update the PR description with a concise summary.
    - Invoke `requesting-code-review` — dispatch code-reviewer subagent with context + risk areas before merge.
    - **Status Update**: Mark the phase as "Completed" in `PLAN_<slug>.md` and `TASKS_<slug>.md`.
+10. **Save Session Memory** — Update `SESSION_MEMORY.md`: phase + status, last commit hash, decisions made, gotchas, files modified, test status, exact next action (or "all phases complete").
 8. **Inject Next Prompt / Autopilot**:
    - Analyze plan for the next task.
    - **Output the full `/dev` prompt** for the next phase.
