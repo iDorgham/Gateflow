@@ -17,12 +17,12 @@ import type { Locale } from '../../../i18n-config';
 import { getTranslation } from '../../../lib/i18n/get-translation';
 import { getAllPosts } from '../../../lib/blog';
 
-export async function generateMetadata({
-  params: { locale },
-}: {
-  params: { locale: Locale };
+export async function generateMetadata(props: {
+  params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
-  const { t } = await getTranslation(locale, 'navigation');
+  const { locale } = await props.params;
+  const castLocale = locale as Locale;
+  const { t } = await getTranslation(castLocale, 'navigation');
   return {
     title: `${t('header.dropdowns.company.resources.label')} | GateFlow`,
     description:
@@ -69,12 +69,12 @@ const INTEGRATIONS = [
   },
 ];
 
-export default async function ResourcesPage({
-  params: { locale },
-}: {
-  params: { locale: Locale };
+export default async function ResourcesPage(props: {
+  params: Promise<{ locale: string }>;
 }) {
-  const { t } = await getTranslation(locale, 'resources');
+  const { locale } = await props.params;
+  const castLocale = locale as Locale;
+  const { t } = await getTranslation(castLocale, 'resources');
   const allPosts = await getAllPosts();
   const latestPosts = allPosts.slice(0, 3);
 
@@ -122,14 +122,14 @@ export default async function ResourcesPage({
       {/* Resource Cards */}
       <section className="container px-6 grid md:grid-cols-2 gap-8 mb-20">
         <ResourceCard
-          icon={<BookOpen />}
+          icon={<BookOpen size={28} />}
           title={t('categories.documentation.title')}
           desc={t('categories.documentation.description')}
           link="#"
           readMore={t('ui.readMore')}
         />
         <ResourceCard
-          icon={<FileCode />}
+          icon={<FileCode size={28} />}
           title={t('categories.api.title')}
           desc={t('categories.api.description')}
           link="#"
@@ -143,7 +143,7 @@ export default async function ResourcesPage({
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-2xl font-black">Latest from the blog</h2>
             <I18nLink
-              locale={locale}
+              locale={castLocale}
               href="/blog"
               className="text-sm font-bold text-primary hover:underline flex items-center gap-1"
             >
@@ -154,7 +154,7 @@ export default async function ResourcesPage({
             {latestPosts.map((post) => (
               <I18nLink
                 key={post.slug}
-                locale={locale}
+                locale={castLocale}
                 href={`/blog/${post.slug}`}
                 className="group block p-6 rounded-2xl border bg-card hover:border-primary transition-all"
               >
@@ -220,16 +220,15 @@ export default async function ResourcesPage({
               {t('cta.description')}
             </p>
           </div>
-          <Button
-            size="lg"
-            className="bg-white text-primary hover:bg-slate-100 h-14 px-8 rounded-xl font-bold"
-            asChild
-          >
-            <I18nLink locale={locale} href="/contact">
+          <I18nLink locale={castLocale} href="/contact">
+            <Button
+              size="lg"
+              className="bg-white text-primary hover:bg-slate-100 h-14 px-8 rounded-xl font-bold"
+            >
               {t('ui.chatWithSupport')}
               <ArrowRight className="ml-2 h-4 w-4" />
-            </I18nLink>
-          </Button>
+            </Button>
+          </I18nLink>
         </div>
       </section>
     </div>
@@ -243,7 +242,7 @@ function ResourceCard({
   link,
   readMore,
 }: {
-  icon: React.ReactElement;
+  icon: React.ReactNode;
   title: string;
   desc: string;
   link: string;
@@ -253,21 +252,20 @@ function ResourceCard({
     <div className="p-8 rounded-[2.5rem] border bg-card hover:border-primary transition-all group flex flex-col">
       <div className="flex justify-between items-start mb-6">
         <div className="bg-primary/5 text-primary p-4 rounded-2xl group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-          {React.cloneElement(icon, { size: 28 } as React.HTMLAttributes<SVGElement>)}
+          {icon}
         </div>
       </div>
       <h3 className="text-2xl font-bold mb-3">{title}</h3>
-      <p className="text-muted-foreground leading-relaxed mb-8 flex-1">{desc}</p>
-      <Button
-        variant="ghost"
-        className="w-fit p-0 h-auto font-bold hover:bg-transparent hover:text-primary"
-        asChild
+      <p className="text-muted-foreground leading-relaxed mb-8 flex-1">
+        {desc}
+      </p>
+      <a
+        href={link}
+        className="inline-flex items-center gap-2 w-fit font-bold hover:text-primary transition-colors text-sm"
       >
-        <a href={link}>
-          {readMore}
-          <ArrowRight className="ml-2 h-4 w-4" />
-        </a>
-      </Button>
+        {readMore}
+        <ArrowRight className="h-4 w-4" />
+      </a>
     </div>
   );
 }

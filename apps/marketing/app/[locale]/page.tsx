@@ -87,11 +87,11 @@ export default async function HomePage(props: {
               <p className="text-white/70 text-lg mb-10 max-w-md">
                 {t('cta.subHeadline')}
               </p>
-              <Button variant="brand" size="lg" className="h-12 px-8" asChild>
-                <I18nLink locale={locale} href="/contact">
+              <I18nLink locale={locale} href="/contact">
+                <button className="h-12 px-8 bg-[#0052CC] text-white rounded-xl font-bold">
                   {t('hero.primaryCta')}
-                </I18nLink>
-              </Button>
+                </button>
+              </I18nLink>
             </div>
 
             <div className="relative">

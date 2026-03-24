@@ -2,7 +2,13 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { ChevronDown, Search, MessageCircle, BookOpen, Zap } from 'lucide-react';
+import {
+  ChevronDown,
+  Search,
+  MessageCircle,
+  BookOpen,
+  Zap,
+} from 'lucide-react';
 
 const FAQ_JSON_LD = {
   '@context': 'https://schema.org',
@@ -99,7 +105,7 @@ const FAQ_SECTIONS = [
     items: [
       {
         q: 'How do I create my first gate?',
-        a: "After signing up, complete the onboarding wizard. Navigate to Gates → New Gate, enter a name and location, and assign it to a project. Your first gate is ready in under a minute.",
+        a: 'After signing up, complete the onboarding wizard. Navigate to Gates → New Gate, enter a name and location, and assign it to a project. Your first gate is ready in under a minute.',
       },
       {
         q: 'Do I need to install anything to get started?',
@@ -124,11 +130,11 @@ const FAQ_SECTIONS = [
       },
       {
         q: 'How do I generate QR codes in bulk?',
-        a: "Upload a CSV file with columns: name, email. GateFlow generates a signed QR code for each row and emails it to the recipient automatically. Bulk generation is available on Pro and Enterprise plans.",
+        a: 'Upload a CSV file with columns: name, email. GateFlow generates a signed QR code for each row and emails it to the recipient automatically. Bulk generation is available on Pro and Enterprise plans.',
       },
       {
         q: 'Can a QR code be revoked?',
-        a: "Yes. Open the QR code in the dashboard and set its status to Inactive. The scanner app will reject it within seconds — even if it was previously accepted. Revocation is instant.",
+        a: 'Yes. Open the QR code in the dashboard and set its status to Inactive. The scanner app will reject it within seconds — even if it was previously accepted. Revocation is instant.',
       },
       {
         q: 'Are QR codes secure against screenshots and reprints?',
@@ -141,15 +147,15 @@ const FAQ_SECTIONS = [
     items: [
       {
         q: 'What happens when the scanner has no internet connection?',
-        a: "The scanner app verifies QR signatures locally using the pre-loaded signing key. Scans are queued in AES-256 encrypted local storage and automatically synced when connectivity returns. No scan is ever lost.",
+        a: 'The scanner app verifies QR signatures locally using the pre-loaded signing key. Scans are queued in AES-256 encrypted local storage and automatically synced when connectivity returns. No scan is ever lost.',
       },
       {
         q: 'How long can the scanner operate offline?',
-        a: "Indefinitely — there is no time limit on offline operation. The scanner will queue as many scans as needed. The only limitation is that SINGLE-use deduplication only works fully once the queue syncs.",
+        a: 'Indefinitely — there is no time limit on offline operation. The scanner will queue as many scans as needed. The only limitation is that SINGLE-use deduplication only works fully once the queue syncs.',
       },
       {
         q: 'What is scanUuid deduplication?',
-        a: "Each scan event is assigned a unique UUID at the time of scanning. When the offline queue syncs, the server checks these UUIDs and ignores duplicates. This prevents a scan from being counted twice if the network drops mid-sync.",
+        a: 'Each scan event is assigned a unique UUID at the time of scanning. When the offline queue syncs, the server checks these UUIDs and ignores duplicates. This prevents a scan from being counted twice if the network drops mid-sync.',
       },
     ],
   },
@@ -166,7 +172,7 @@ const FAQ_SECTIONS = [
       },
       {
         q: 'Can I export scan logs for audits?',
-        a: "Yes. Go to Scans → Export. Select a date range, filter by gate or QR type, and download a CSV. The export includes all scan metadata: timestamp, gate, QR code ID, status, and operator.",
+        a: 'Yes. Go to Scans → Export. Select a date range, filter by gate or QR type, and download a CSV. The export includes all scan metadata: timestamp, gate, QR code ID, status, and operator.',
       },
       {
         q: 'What is a supervisor override?',
@@ -211,7 +217,9 @@ function AccordionItem({ q, a }: { q: string; a: string }) {
         />
       </button>
       {open && (
-        <p className="pb-4 text-sm leading-relaxed text-slate-500 dark:text-slate-400">{a}</p>
+        <p className="pb-4 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+          {a}
+        </p>
       )}
     </div>
   );
@@ -219,7 +227,13 @@ function AccordionItem({ q, a }: { q: string; a: string }) {
 
 // ─── Page ──────────────────────────────────────────────────────────────────────
 
-export default function HelpPage() {
+import * as React from 'react';
+
+export default function HelpPage(props: {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const { locale } = React.use(props.params);
   const [search, setSearch] = useState('');
 
   const filtered = FAQ_SECTIONS.map((section) => ({
@@ -273,7 +287,11 @@ export default function HelpPage() {
           {[
             { icon: Zap, label: 'Quick Start Guide', href: '#getting-started' },
             { icon: BookOpen, label: 'QR Code Guide', href: '#qr-codes' },
-            { icon: MessageCircle, label: 'Contact Support', href: '/contact' },
+            {
+              icon: MessageCircle,
+              label: 'Contact Support',
+              href: `/${locale}/contact`,
+            },
           ].map((item) => {
             const Icon = item.icon;
             return (
@@ -285,7 +303,9 @@ export default function HelpPage() {
                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400">
                   <Icon size={18} />
                 </div>
-                <span className="text-sm font-semibold text-slate-900 dark:text-white">{item.label}</span>
+                <span className="text-sm font-semibold text-slate-900 dark:text-white">
+                  {item.label}
+                </span>
               </Link>
             );
           })}
@@ -297,7 +317,9 @@ export default function HelpPage() {
         <div className="mx-auto max-w-4xl">
           {filtered.length === 0 ? (
             <div className="text-center py-16">
-              <p className="text-slate-500 dark:text-slate-400">No results for &ldquo;{search}&rdquo;.</p>
+              <p className="text-slate-500 dark:text-slate-400">
+                No results for &ldquo;{search}&rdquo;.
+              </p>
               <button
                 onClick={() => setSearch('')}
                 className="mt-3 text-sm font-semibold text-indigo-600 hover:underline"
@@ -308,7 +330,10 @@ export default function HelpPage() {
           ) : (
             <div className="space-y-10">
               {filtered.map((section) => (
-                <div key={section.title} id={section.title.toLowerCase().replace(/ /g, '-')}>
+                <div
+                  key={section.title}
+                  id={section.title.toLowerCase().replace(/ /g, '-')}
+                >
                   <h2 className="mb-4 text-lg font-extrabold text-slate-900 dark:text-white">
                     {section.title}
                   </h2>
@@ -327,12 +352,14 @@ export default function HelpPage() {
       {/* Still need help */}
       <section className="px-6 pb-24">
         <div className="mx-auto max-w-2xl rounded-2xl bg-indigo-700 p-10 text-center">
-          <h2 className="text-2xl font-extrabold text-white">Still need help?</h2>
+          <h2 className="text-2xl font-extrabold text-white">
+            Still need help?
+          </h2>
           <p className="mt-2 text-indigo-200">
             Our support team typically responds within 4 business hours.
           </p>
           <Link
-            href="/contact"
+            href={`/${locale}/contact`}
             className="mt-6 inline-block rounded-xl bg-white px-6 py-3 text-sm font-bold text-indigo-700 hover:bg-indigo-50 transition-colors"
           >
             Contact Support

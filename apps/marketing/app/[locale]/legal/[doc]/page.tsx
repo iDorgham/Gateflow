@@ -13,7 +13,8 @@ interface LegalDoc {
 const LEGAL_DOCS: Record<string, LegalDoc> = {
   privacy: {
     title: 'Privacy Policy',
-    description: 'How GateFlow collects, uses, and protects your personal information.',
+    description:
+      'How GateFlow collects, uses, and protects your personal information.',
     lastUpdated: 'February 1, 2026',
     sections: [
       {
@@ -93,7 +94,7 @@ const LEGAL_DOCS: Record<string, LegalDoc> = {
       },
       {
         heading: '6. Limitation of Liability',
-        body: "To the maximum extent permitted by law, GateFlow shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of the service.",
+        body: 'To the maximum extent permitted by law, GateFlow shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of the service.',
       },
       {
         heading: '7. Termination',
@@ -112,7 +113,7 @@ const LEGAL_DOCS: Record<string, LegalDoc> = {
     sections: [
       {
         heading: '1. What Are Cookies',
-        body: "Cookies are small text files that are placed on your computer or mobile device when you visit a website. They are widely used to make websites work more efficiently and to provide information to website owners.",
+        body: 'Cookies are small text files that are placed on your computer or mobile device when you visit a website. They are widely used to make websites work more efficiently and to provide information to website owners.',
       },
       {
         heading: '2. Essential Cookies',
@@ -129,7 +130,7 @@ const LEGAL_DOCS: Record<string, LegalDoc> = {
       },
       {
         heading: '4. Your Choices',
-        body: "You can choose to accept all cookies or essential cookies only using our cookie banner. You may also manage cookies through your browser settings, though this may affect website functionality.",
+        body: 'You can choose to accept all cookies or essential cookies only using our cookie banner. You may also manage cookies through your browser settings, though this may affect website functionality.',
       },
       {
         heading: '5. Changes',
@@ -139,7 +140,8 @@ const LEGAL_DOCS: Record<string, LegalDoc> = {
   },
   gdpr: {
     title: 'GDPR & Data Protection',
-    description: 'How GateFlow complies with the General Data Protection Regulation (GDPR) and regional data protection laws.',
+    description:
+      'How GateFlow complies with the General Data Protection Regulation (GDPR) and regional data protection laws.',
     lastUpdated: 'February 1, 2026',
     sections: [
       {
@@ -189,20 +191,23 @@ const DOC_LINKS = [
 ];
 
 interface Props {
-  params: { doc: string };
+  params: Promise<{ locale: string; doc: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 export function generateStaticParams() {
   return Object.keys(LEGAL_DOCS).map((doc) => ({ doc }));
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const doc = LEGAL_DOCS[params.doc];
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const { doc: docId } = await props.params;
+  const doc = LEGAL_DOCS[docId];
   if (!doc) return {};
   return { title: doc.title, description: doc.description };
 }
 
-export default function LegalPage({ params }: Props) {
+export default async function LegalPage(props: Props) {
+  const params = await props.params;
   const doc = LEGAL_DOCS[params.doc];
   if (!doc) notFound();
 
@@ -225,7 +230,7 @@ export default function LegalPage({ params }: Props) {
                 {DOC_LINKS.map((link) => (
                   <Link
                     key={link.slug}
-                    href={`/legal/${link.slug}`}
+                    href={`/${params.locale}/legal/${link.slug}`}
                     className={`block rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                       params.doc === link.slug
                         ? 'bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-400'
@@ -240,11 +245,15 @@ export default function LegalPage({ params }: Props) {
 
             {/* Content */}
             <div className="md:col-span-3">
-              <div className="mb-2 text-xs text-slate-400">Last updated: {doc.lastUpdated}</div>
+              <div className="mb-2 text-xs text-slate-400">
+                Last updated: {doc.lastUpdated}
+              </div>
               <h1 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
                 {doc.title}
               </h1>
-              <p className="mt-3 text-slate-500 dark:text-slate-400">{doc.description}</p>
+              <p className="mt-3 text-slate-500 dark:text-slate-400">
+                {doc.description}
+              </p>
 
               <div className="mt-10 space-y-8">
                 {doc.sections.map((section) => (
@@ -274,7 +283,10 @@ export default function LegalPage({ params }: Props) {
 
               <div className="mt-12 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-5 text-sm text-slate-500 dark:text-slate-400">
                 Questions about this policy? Email us at{' '}
-                <a href="mailto:legal@gateflow.io" className="text-indigo-600 hover:underline">
+                <a
+                  href="mailto:legal@gateflow.io"
+                  className="text-indigo-600 hover:underline"
+                >
                   legal@gateflow.io
                 </a>
               </div>

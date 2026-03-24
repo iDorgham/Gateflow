@@ -39,27 +39,37 @@ export function SolutionLayout({
       {/* Hero */}
       <section className="pt-20 pb-16 container px-6 relative overflow-hidden">
         <div className="absolute top-0 end-0 -z-10 opacity-10">
-          {React.cloneElement(icon as React.ReactElement, { size: 400 })}
+          <div className="scale-[16.6] origin-top-right">{icon}</div>
         </div>
 
         <div className="max-w-3xl">
-          <p className="text-primary font-bold uppercase tracking-widest mb-4">{subtitle}</p>
-          <h1 className="text-5xl lg:text-7xl font-black tracking-tight mb-6">{title}</h1>
-          <p className="text-xl text-muted-foreground leading-relaxed mb-10">{description}</p>
+          <p className="text-primary font-bold uppercase tracking-widest mb-4">
+            {subtitle}
+          </p>
+          <h1 className="text-5xl lg:text-7xl font-black tracking-tight mb-6">
+            {title}
+          </h1>
+          <p className="text-xl text-muted-foreground leading-relaxed mb-10">
+            {description}
+          </p>
 
           <div className="flex flex-wrap gap-4">
-            <Button size="lg" className="h-14 px-8 rounded-xl font-bold" asChild>
-              <I18nLink locale={locale} href="/contact">
+            <I18nLink locale={locale} href="/contact">
+              <Button size="lg" className="h-14 px-8 rounded-xl font-bold">
                 {ctaText}
                 <ArrowRight className="ms-2 h-4 w-4" />
-              </I18nLink>
-            </Button>
-            {secondaryCtaText && (
-              <Button size="lg" variant="outline" className="h-14 px-8 rounded-xl font-bold" asChild>
-                <I18nLink locale={locale} href="/pricing">
-                  {secondaryCtaText}
-                </I18nLink>
               </Button>
+            </I18nLink>
+            {secondaryCtaText && (
+              <I18nLink locale={locale} href="/pricing">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="h-14 px-8 rounded-xl font-bold"
+                >
+                  {secondaryCtaText}
+                </Button>
+              </I18nLink>
             )}
           </div>
         </div>
@@ -90,7 +100,9 @@ export function SolutionLayout({
       {/* Benefits / Key Features */}
       <section className="container px-6 grid lg:grid-cols-2 gap-16 items-center py-24">
         <div className="space-y-8">
-          <h2 className="text-3xl font-black">Tailored for your specific workflows</h2>
+          <h2 className="text-3xl font-black">
+            Tailored for your specific workflows
+          </h2>
           <div className="grid gap-6">
             {benefits.map((b, i) => (
               <div
@@ -102,7 +114,9 @@ export function SolutionLayout({
                 </div>
                 <div>
                   <h4 className="font-bold text-lg mb-1">{b.title}</h4>
-                  <p className="text-muted-foreground text-sm leading-relaxed">{b.desc}</p>
+                  <p className="text-muted-foreground text-sm leading-relaxed">
+                    {b.desc}
+                  </p>
                 </div>
               </div>
             ))}
@@ -112,7 +126,7 @@ export function SolutionLayout({
         <div className="relative aspect-square lg:aspect-auto lg:h-[600px] rounded-[3rem] bg-muted border overflow-hidden flex items-center justify-center">
           {imagePlaceholder || (
             <div className="text-center opacity-20">
-              {React.cloneElement(icon as React.ReactElement, { size: 120 })}
+              <div className="scale-5 origin-center">{icon}</div>
             </div>
           )}
           <div className="absolute inset-x-8 bottom-8 p-6 bg-background/80 backdrop-blur rounded-2xl border shadow-xl">
@@ -135,7 +149,9 @@ export function SolutionLayout({
             {features.map((f, i) => (
               <div key={i} className="flex items-center gap-3">
                 <div className="h-2 w-2 bg-primary rounded-full shadow-[0_0_8px_rgba(var(--primary-rgb),1)]" />
-                <span className="font-bold uppercase tracking-widest text-xs">{f}</span>
+                <span className="font-bold uppercase tracking-widest text-xs">
+                  {f}
+                </span>
               </div>
             ))}
           </div>
@@ -166,13 +182,15 @@ export function SolutionLayout({
       {/* Bottom CTA */}
       <section className="py-16 bg-primary/5 border-t border-border/40">
         <div className="container px-6 text-center">
-          <h3 className="text-3xl font-black mb-4">Ready to upgrade your gate?</h3>
-          <Button size="lg" className="h-14 px-10 rounded-xl font-bold" asChild>
-            <I18nLink locale={locale} href="/contact">
+          <h3 className="text-3xl font-black mb-4">
+            Ready to upgrade your gate?
+          </h3>
+          <I18nLink locale={locale} href="/contact">
+            <Button size="lg" className="h-14 px-10 rounded-xl font-bold">
               {ctaText}
               <ArrowRight className="ms-2 h-4 w-4" />
-            </I18nLink>
-          </Button>
+            </Button>
+          </I18nLink>
         </div>
       </section>
     </div>

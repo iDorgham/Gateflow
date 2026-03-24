@@ -11,7 +11,6 @@ import {
   Lock,
   BarChart3,
 } from 'lucide-react';
-import { Button } from '@gate-access/ui';
 import { I18nLink } from '../../../components/i18n-link';
 
 export async function generateMetadata(props: {
@@ -32,6 +31,12 @@ export default async function FeaturesPage(props: {
   const params = await props.params;
   const { locale } = params;
   const { t } = await getTranslation(locale, 'product');
+
+  // ADS-aligned button styles to replace the Button component that's crashing the build worker
+  const buttonPrimaryStyles =
+    'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-[var(--ds-border-radius-200)] text-sm font-semibold transition-all duration-150 active:scale-[0.98] select-none h-14 px-8 rounded-xl bg-[var(--ds-background-brand-bold)] text-[var(--ds-text-inverse)] hover:bg-[var(--ds-background-brand-bold-hovered)] active:bg-[var(--ds-background-brand-bold-pressed)] shadow-[var(--ds-shadow-raised)]';
+  const buttonOutlineStyles =
+    'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-[var(--ds-border-radius-200)] text-sm font-semibold transition-all duration-150 active:scale-[0.98] select-none h-14 px-8 rounded-xl border border-[var(--ds-border)] bg-transparent text-[var(--ds-text)] hover:bg-[var(--ds-background-neutral-subtle)] hover:border-[var(--ds-border-bold)] active:bg-[var(--ds-background-neutral-hovered)]';
 
   return (
     <div className="flex flex-col w-full pb-24">
@@ -140,21 +145,20 @@ export default async function FeaturesPage(props: {
       <section className="container px-6 pt-24 text-center">
         <h2 className="text-3xl font-black mb-8">{t('cta.headline')}</h2>
         <div className="flex justify-center gap-4">
-          <Button size="lg" className="rounded-xl h-14" asChild>
-            <I18nLink locale={locale} href="/contact">
-              {t('cta.buttonDemo')}
-            </I18nLink>
-          </Button>
-          <Button
-            variant="outline"
-            size="lg"
-            className="rounded-xl h-14"
-            asChild
+          <I18nLink
+            locale={locale}
+            href="/contact"
+            className={buttonPrimaryStyles}
           >
-            <I18nLink locale={locale} href="/pricing">
-              {t('cta.buttonPricing')}
-            </I18nLink>
-          </Button>
+            {t('cta.buttonDemo')}
+          </I18nLink>
+          <I18nLink
+            locale={locale}
+            href="/pricing"
+            className={buttonOutlineStyles}
+          >
+            {t('cta.buttonPricing')}
+          </I18nLink>
         </div>
       </section>
     </div>

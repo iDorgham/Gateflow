@@ -64,7 +64,8 @@ const PRESS = [
   },
   {
     outlet: 'Gulf Tech Review',
-    headline: 'The QR access control startup securing Gulf compounds and events',
+    headline:
+      'The QR access control startup securing Gulf compounds and events',
     date: 'December 2025',
     href: '#',
   },
@@ -77,15 +78,36 @@ const PRESS = [
 ];
 
 const OPEN_ROLES = [
-  { title: 'Senior Backend Engineer (Node.js / PostgreSQL)', location: 'Cairo or Remote', type: 'Full-time' },
-  { title: 'React Native Engineer (Expo)', location: 'Cairo or Remote', type: 'Full-time' },
-  { title: 'Customer Success Manager — Gulf Region', location: 'Dubai or Riyadh', type: 'Full-time' },
-  { title: 'Sales Development Representative — Egypt', location: 'Cairo', type: 'Full-time' },
+  {
+    title: 'Senior Backend Engineer (Node.js / PostgreSQL)',
+    location: 'Cairo or Remote',
+    type: 'Full-time',
+  },
+  {
+    title: 'React Native Engineer (Expo)',
+    location: 'Cairo or Remote',
+    type: 'Full-time',
+  },
+  {
+    title: 'Customer Success Manager — Gulf Region',
+    location: 'Dubai or Riyadh',
+    type: 'Full-time',
+  },
+  {
+    title: 'Sales Development Representative — Egypt',
+    location: 'Cairo',
+    type: 'Full-time',
+  },
 ];
 
 // ─── Page ──────────────────────────────────────────────────────────────────────
 
-export default function CompanyPage() {
+export default async function CompanyPage(props: {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  await props.params;
+  await props.searchParams;
   return (
     <main>
       {/* Hero */}
@@ -107,9 +129,9 @@ export default function CompanyPage() {
             We built what we needed but couldn&apos;t find
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-slate-500 dark:text-slate-400">
-            GateFlow was founded by people who managed actual gates — and lived the daily reality of
-            paper books, WhatsApp chaos, and zero audit trail. We built the platform we always
-            wanted.
+            GateFlow was founded by people who managed actual gates — and lived
+            the daily reality of paper books, WhatsApp chaos, and zero audit
+            trail. We built the platform we always wanted.
           </p>
         </div>
       </section>
@@ -123,13 +145,15 @@ export default function CompanyPage() {
                 Our mission
               </h2>
               <p className="mt-4 text-slate-500 dark:text-slate-400 leading-relaxed">
-                Replace every clipboard and WhatsApp QR link in MENA with cryptographically-signed,
-                auditable, offline-capable digital access control.
+                Replace every clipboard and WhatsApp QR link in MENA with
+                cryptographically-signed, auditable, offline-capable digital
+                access control.
               </p>
               <p className="mt-4 text-slate-500 dark:text-slate-400 leading-relaxed">
-                The MENA region has thousands of gated communities, schools, clubs, and venues that
-                still rely on manual processes that are slow, error-prone, and completely
-                unverifiable. We are changing that — one gate at a time.
+                The MENA region has thousands of gated communities, schools,
+                clubs, and venues that still rely on manual processes that are
+                slow, error-prone, and completely unverifiable. We are changing
+                that — one gate at a time.
               </p>
               <div className="mt-6 flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
                 <MapPin size={15} className="text-indigo-600" />
@@ -137,7 +161,10 @@ export default function CompanyPage() {
               </div>
               <div className="flex items-center gap-2 mt-2 text-sm text-slate-500 dark:text-slate-400">
                 <Mail size={15} className="text-indigo-600" />
-                <a href="mailto:hello@gateflow.io" className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                <a
+                  href="mailto:hello@gateflow.io"
+                  className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                >
                   hello@gateflow.io
                 </a>
               </div>
@@ -156,7 +183,9 @@ export default function CompanyPage() {
                   <p className="text-3xl font-extrabold text-indigo-700 dark:text-indigo-400">
                     {stat.value}
                   </p>
-                  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{stat.label}</p>
+                  <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
+                    {stat.label}
+                  </p>
                 </div>
               ))}
             </div>
@@ -178,8 +207,12 @@ export default function CompanyPage() {
                 key={v.title}
                 className="rounded-2xl border border-slate-100 dark:border-slate-700 bg-white dark:bg-slate-800 p-7 shadow-sm"
               >
-                <h3 className="text-base font-bold text-slate-900 dark:text-white">{v.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-slate-500 dark:text-slate-400">{v.desc}</p>
+                <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                  {v.title}
+                </h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+                  {v.desc}
+                </p>
               </div>
             ))}
           </div>
@@ -203,9 +236,15 @@ export default function CompanyPage() {
                 <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-400 text-lg font-extrabold">
                   {person.initials}
                 </div>
-                <p className="font-bold text-slate-900 dark:text-white">{person.name}</p>
-                <p className="mt-0.5 text-xs text-indigo-600 dark:text-indigo-400 font-semibold">{person.role}</p>
-                <p className="mt-3 text-xs leading-relaxed text-slate-500 dark:text-slate-400">{person.bio}</p>
+                <p className="font-bold text-slate-900 dark:text-white">
+                  {person.name}
+                </p>
+                <p className="mt-0.5 text-xs text-indigo-600 dark:text-indigo-400 font-semibold">
+                  {person.role}
+                </p>
+                <p className="mt-3 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+                  {person.bio}
+                </p>
               </div>
             ))}
           </div>
@@ -217,7 +256,9 @@ export default function CompanyPage() {
         <div className="mx-auto max-w-4xl">
           <div className="flex items-center gap-3 mb-8">
             <Newspaper size={20} className="text-indigo-600" />
-            <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white">Press</h2>
+            <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white">
+              Press
+            </h2>
           </div>
           <div className="space-y-4">
             {PRESS.map((item) => (
@@ -227,18 +268,25 @@ export default function CompanyPage() {
                 className="group flex items-start justify-between gap-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
               >
                 <div>
-                  <p className="text-xs font-bold text-indigo-600 mb-1">{item.outlet}</p>
+                  <p className="text-xs font-bold text-indigo-600 mb-1">
+                    {item.outlet}
+                  </p>
                   <p className="text-sm font-semibold text-slate-900 dark:text-white group-hover:text-indigo-700 dark:group-hover:text-indigo-400 transition-colors">
                     {item.headline}
                   </p>
                 </div>
-                <span className="shrink-0 text-xs text-slate-400">{item.date}</span>
+                <span className="shrink-0 text-xs text-slate-400">
+                  {item.date}
+                </span>
               </a>
             ))}
           </div>
           <p className="mt-4 text-xs text-slate-400">
             For press enquiries:{' '}
-            <a href="mailto:press@gateflow.io" className="text-indigo-600 hover:underline">
+            <a
+              href="mailto:press@gateflow.io"
+              className="text-indigo-600 hover:underline"
+            >
               press@gateflow.io
             </a>
           </p>
@@ -246,11 +294,16 @@ export default function CompanyPage() {
       </section>
 
       {/* Careers */}
-      <section className="px-6 py-20 bg-slate-50/50 dark:bg-slate-900/50" id="careers">
+      <section
+        className="px-6 py-20 bg-slate-50/50 dark:bg-slate-900/50"
+        id="careers"
+      >
         <div className="mx-auto max-w-4xl">
           <div className="flex items-center gap-3 mb-4">
             <Briefcase size={20} className="text-indigo-600" />
-            <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white">Open Roles</h2>
+            <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white">
+              Open Roles
+            </h2>
           </div>
           <p className="mb-8 text-slate-500 dark:text-slate-400">
             We are a small, high-output team. Every hire matters enormously.
@@ -262,7 +315,9 @@ export default function CompanyPage() {
                 className="flex items-start justify-between gap-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-5 shadow-sm"
               >
                 <div>
-                  <p className="text-sm font-bold text-slate-900 dark:text-white">{role.title}</p>
+                  <p className="text-sm font-bold text-slate-900 dark:text-white">
+                    {role.title}
+                  </p>
                   <div className="mt-1.5 flex flex-wrap gap-2">
                     <span className="rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2.5 py-0.5 text-xs">
                       {role.location}
@@ -283,7 +338,10 @@ export default function CompanyPage() {
           </div>
           <p className="mt-6 text-sm text-slate-500 dark:text-slate-400">
             Don&apos;t see your role?{' '}
-            <a href="mailto:careers@gateflow.io" className="text-indigo-600 hover:underline">
+            <a
+              href="mailto:careers@gateflow.io"
+              className="text-indigo-600 hover:underline"
+            >
               Send us your CV anyway.
             </a>
           </p>

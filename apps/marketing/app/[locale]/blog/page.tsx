@@ -10,17 +10,27 @@ export const metadata: Metadata = {
     'Insights on access control, QR security, and digital transformation for compounds, schools, and events across Egypt and the Gulf.',
 };
 
-const ALL_TAGS = ['security', 'access-control', 'operations', 'performance', 'technical', 'architecture', 'mena', 'property-management', 'guide'];
+const ALL_TAGS = [
+  'security',
+  'access-control',
+  'operations',
+  'performance',
+  'technical',
+  'architecture',
+  'mena',
+  'property-management',
+  'guide',
+];
 
-export default async function BlogPage({
-  params: { locale },
-  searchParams,
-}: {
-  params: { locale: Locale };
-  searchParams: { tag?: string };
+export default async function BlogPage(props: {
+  params: Promise<{ locale: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
+  const { locale } = await props.params;
+  const searchParams = await props.searchParams;
+  const castLocale = locale as Locale;
   const allPosts = await getAllPosts();
-  const activeTag = searchParams.tag ?? '';
+  const activeTag = (searchParams?.tag as string) ?? '';
   const posts = activeTag
     ? allPosts.filter((p) => p.tags.includes(activeTag))
     : allPosts;
@@ -40,8 +50,8 @@ export default async function BlogPage({
             Insights &amp; Updates
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-            Deep dives on access control, QR security, and the digital transformation of gated
-            communities across Egypt and the Gulf.
+            Deep dives on access control, QR security, and the digital
+            transformation of gated communities across Egypt and the Gulf.
           </p>
 
           {/* Tag filter */}
@@ -56,7 +66,9 @@ export default async function BlogPage({
             >
               All
             </Link>
-            {ALL_TAGS.filter((tag) => allPosts.some((p) => p.tags.includes(tag))).map((tag) => (
+            {ALL_TAGS.filter((tag) =>
+              allPosts.some((p) => p.tags.includes(tag))
+            ).map((tag) => (
               <Link
                 key={tag}
                 href={`/${locale}/blog?tag=${encodeURIComponent(tag)}`}
@@ -77,7 +89,7 @@ export default async function BlogPage({
       {featured && (
         <section className="px-6 pb-12">
           <div className="mx-auto max-w-5xl">
-            <BlogCard post={featured} locale={locale} featured />
+            <BlogCard post={featured} locale={castLocale} featured />
           </div>
         </section>
       )}
@@ -88,7 +100,7 @@ export default async function BlogPage({
           <div className="mx-auto max-w-5xl">
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {rest.map((post) => (
-                <BlogCard key={post.slug} post={post} locale={locale} />
+                <BlogCard key={post.slug} post={post} locale={castLocale} />
               ))}
             </div>
           </div>
@@ -97,7 +109,9 @@ export default async function BlogPage({
 
       {posts.length === 0 && (
         <section className="px-6 py-24 text-center">
-          <p className="text-muted-foreground">No posts tagged &ldquo;{activeTag}&rdquo; yet.</p>
+          <p className="text-muted-foreground">
+            No posts tagged &ldquo;{activeTag}&rdquo; yet.
+          </p>
           <Link
             href={`/${locale}/blog`}
             className="mt-4 inline-block text-sm font-semibold text-primary hover:underline"

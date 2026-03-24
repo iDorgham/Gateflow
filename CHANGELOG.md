@@ -20,6 +20,9 @@ _(next release notes go here)_
 
 ### Features
 
+- **[Ai] **add response format rule, slim AI workflow rule, add ralph to all tools
+- **[Dev] **add persistent memory and progressive disclosure to dev workflow
+
 - **[Plan] **structured plan folders, phase parts, and 2-tool selection
 
 - **[Ui] **automate UI/UX Pro Max skill across plan/dev workflows

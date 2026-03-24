@@ -1,15 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { ShieldCheck, Shield } from 'lucide-react';
 import { cn } from '../../lib/utils';
-
-const SPRING_BALANCED = {
-  type: 'spring' as const,
-  stiffness: 160,
-  damping: 24,
-};
 
 /* ─── Design tokens (Atlassian inspired) ─────────────────────────────────── */
 const T = {
@@ -32,8 +25,21 @@ const KEYFRAME_STYLES = `
   from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+@keyframes login-shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+  20%, 40%, 60%, 80% { transform: translateX(4px); }
+}
+.animate-login-shake {
+  animation: login-shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+}
+.login-logo-success {
+  transform: scale(0.8);
+  opacity: 0.8;
+  transition: all 0.3s ease;
+}
 @media (prefers-reduced-motion: reduce) {
-  .login-logo { animation: none !important; }
+  .login-logo { animation: none !important; transition: none !important; }
   .login-entrance { animation: none !important; }
 }
 `;
@@ -72,7 +78,6 @@ export function LoginShell({
     heading ?? (isAdmin ? DEFAULT_ADMIN_HEADING : DEFAULT_CLIENT_HEADING);
   const displaySubtitle =
     subtitle ?? (isAdmin ? DEFAULT_ADMIN_SUBTITLE : DEFAULT_CLIENT_SUBTITLE);
-  const reduceMotion = useReducedMotion();
   const [shaking, setShaking] = React.useState(false);
   const [mounted, setMounted] = React.useState(false);
 
@@ -88,23 +93,17 @@ export function LoginShell({
     }
   }, [errorKey]);
 
-  const transition = reduceMotion ? { duration: 0.05 } : SPRING_BALANCED;
-
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: KEYFRAME_STYLES }} />
 
       <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[var(--ds-surface-sunken,#F4F5F7)] transition-colors duration-300">
         {/* Main Content Area: Centered layout for Atlassian feel */}
-        <motion.main
-          layout
-          className="relative z-10 flex w-full max-w-[480px] flex-col px-6"
-          transition={transition}
-        >
+        <main className="relative z-10 flex w-full max-w-[480px] flex-col px-6">
           <div
             className={cn(
               'flex flex-col rounded-sm bg-[var(--ds-surface-raised,#FFFFFF)] p-8 shadow-xl transition-all duration-300',
-              shaking && 'animate-[shake_0.5s_ease-in-out]'
+              shaking && 'animate-login-shake'
             )}
             style={{
               boxShadow: T.cardShadow,
@@ -113,20 +112,18 @@ export function LoginShell({
           >
             {/* Branding Header */}
             <div className="mb-10 flex flex-col items-center text-center">
-              <motion.div
-                className="login-logo mb-6 flex h-12 w-12 items-center justify-center rounded-sm bg-primary text-primary-foreground shadow-lg"
-                initial={false}
-                animate={{
-                  scale: isSuccess ? 0.8 : 1,
-                  opacity: isSuccess ? 0.8 : 1,
-                }}
+              <div
+                className={cn(
+                  'login-logo mb-6 flex h-12 w-12 items-center justify-center rounded-sm bg-primary text-primary-foreground shadow-lg transition-all duration-300',
+                  isSuccess && 'login-logo-success'
+                )}
               >
                 {isAdmin ? (
                   <Shield className="h-7 w-7" />
                 ) : (
                   <ShieldCheck className="h-8 w-8" />
                 )}
-              </motion.div>
+              </div>
 
               <h1 className="text-2xl font-semibold tracking-tight text-[var(--ds-text)]">
                 {displayHeading}
@@ -138,33 +135,20 @@ export function LoginShell({
 
             {/* Content Slot / Form */}
             <div className="relative">
-              <AnimatePresence mode="wait">
-                {!isSuccess ? (
-                  <motion.div
-                    key="form"
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    {children}
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="success"
-                    initial={{ opacity: 0, scale: 0.9 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="flex flex-col items-center justify-center py-10"
-                  >
-                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-500/10 text-green-500">
-                      <ShieldCheck className="h-10 w-10" />
-                    </div>
-                    <p className="mt-4 font-medium text-[#172B4D] dark:text-[#E3E9F0]">
-                      Authenticated Successfully
-                    </p>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              {!isSuccess ? (
+                <div className="animate-in fade-in slide-in-from-bottom-2 duration-300">
+                  {children}
+                </div>
+              ) : (
+                <div className="flex flex-col items-center justify-center py-10 animate-in fade-in zoom-in-95 duration-300">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-500/10 text-green-500">
+                    <ShieldCheck className="h-10 w-10" />
+                  </div>
+                  <p className="mt-4 font-medium text-[#172B4D] dark:text-[#E3E9F0]">
+                    Authenticated Successfully
+                  </p>
+                </div>
+              )}
             </div>
           </div>
 
@@ -173,7 +157,7 @@ export function LoginShell({
             © {new Date().getFullYear()} {displayName} • Secure Infrastructure
             Access
           </div>
-        </motion.main>
+        </main>
 
         {/* Top-right controls (Theme/Locales) */}
         <div

@@ -14,10 +14,9 @@ export async function generateMetadata(props: {
   };
 }
 
-export default function ForbiddenPage({
-  params: { locale },
-}: {
-  params: { locale: Locale };
+export default async function ForbiddenPage(props: {
+  params: Promise<{ locale: Locale }>;
 }) {
+  const { locale } = await props.params;
   return <ErrorContent locale={locale} code="403" />;
 }

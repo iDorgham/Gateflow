@@ -15,8 +15,8 @@
     "typecheck": "tsc -p tsconfig.json"
   },
   "peerDependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "dependencies": {
     "@atlaskit/tokens": "^11.1.1",
@@ -43,8 +43,8 @@
   },
   "devDependencies": {
     "@gate-access/config": "workspace:*",
-    "@types/react": "^18.3.28",
-    "@types/react-dom": "^18.3.7",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
     "autoprefixer": "^10.4.24",
     "lucide-react-native": "^0.575.0",
     "next": "^15.5.14",

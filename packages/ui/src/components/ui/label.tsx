@@ -3,18 +3,20 @@ import { cn } from '../../lib/utils';
 
 export interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {}
 
-const Label = React.forwardRef<HTMLLabelElement, LabelProps>(
-  ({ className, ...props }, ref) => (
+/**
+ * GateFlow Form Label
+ * Refactored to plain function for React 19 / Next.js 15 build worker stability
+ */
+export function Label({ className, ...props }: LabelProps) {
+  return (
     <label
-      ref={ref}
       className={cn(
         'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
         className
       )}
       {...props}
     />
-  )
-);
-Label.displayName = 'Label';
+  );
+}
 
-export { Label };
+Label.displayName = 'Label';

@@ -11,7 +11,7 @@ const securityHeaders = [
 ];
 
 const nextConfig = {
-  transpilePackages: ['@gate-access/ui', '@gate-access/i18n'],
+  transpilePackages: ['@gate-access/ui', '@gate-access/i18n', 'framer-motion'],
   experimental: {
     optimizePackageImports: [
       'lucide-react',

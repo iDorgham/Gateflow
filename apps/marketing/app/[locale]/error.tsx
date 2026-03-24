@@ -1,8 +1,7 @@
-"use client";
+'use client';
 
 import { useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import { Button } from '@gate-access/ui';
 import { AlertCircle } from 'lucide-react';
 import enErrors from '../../locales/en/errors.json';
 import arErrors from '../../locales/ar-EG/errors.json';
@@ -11,13 +10,18 @@ export default function ErrorPage({
   error,
   reset,
 }: {
-  error: Error & { digest?: string }
-  reset: () => void
+  error: Error & { digest?: string };
+  reset: () => void;
 }) {
   const params = useParams();
   const locale = (params?.locale as string) || 'en';
   const dict = locale === 'ar-EG' ? arErrors : enErrors;
-  const t = dict['500'];
+  const t = (dict as any)?.['500'] || {
+    title: '500',
+    headline: 'Error',
+    description: 'Something went wrong',
+    cta: 'Try Again',
+  };
 
   useEffect(() => {
     // Log the error to an error reporting service
@@ -32,13 +36,12 @@ export default function ErrorPage({
       <p className="text-xl text-muted-foreground max-w-lg mb-10">
         {t.description}
       </p>
-      <Button 
-        size="lg" 
-        className="rounded-xl h-14 px-8 font-bold" 
+      <button
+        className="rounded-xl h-14 px-8 font-bold bg-[#0052CC] text-white hover:bg-[#0052CC]/90 transition-colors"
         onClick={() => reset()}
       >
         {t.cta}
-      </Button>
+      </button>
     </div>
   );
 }

@@ -8,7 +8,8 @@ import type { Locale } from '../../../../i18n-config';
 import { BlogCard } from '../../../../components/blog-card';
 
 interface Props {
-  params: { locale: Locale; slug: string };
+  params: Promise<{ locale: string; slug: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 export async function generateStaticParams() {
@@ -19,8 +20,9 @@ export async function generateStaticParams() {
   );
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const post = await getPostBySlug(params.slug);
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const { slug } = await props.params;
+  const post = await getPostBySlug(slug);
   if (!post) return {};
   return {
     title: `${post.title} — GateFlow Blog`,
@@ -28,27 +30,32 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default async function BlogPostPage({ params }: Props) {
+export default async function BlogPostPage(props: Props) {
+  const params = await props.params;
   const post = await getPostBySlug(params.slug);
+
   if (!post) notFound();
 
   const allPosts = await getAllPosts();
   const related = allPosts
-    .filter((p) => p.slug !== post.slug && p.tags.some((t) => post.tags.includes(t)))
+    .filter(
+      (p) => p.slug !== params.slug && p.tags.some((t) => post.tags.includes(t))
+    )
     .slice(0, 2);
+
+  const formattedDate = new Date(post.date).toLocaleDateString(
+    params.locale === 'ar-EG' ? 'ar-EG' : 'en-US',
+    {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    }
+  );
 
   const initials = post.author
     .split(' ')
     .map((n) => n[0])
-    .join('')
-    .slice(0, 2)
-    .toUpperCase();
-
-  const formattedDate = new Date(post.date).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
+    .join('');
 
   return (
     <main>
@@ -56,7 +63,7 @@ export default async function BlogPostPage({ params }: Props) {
       <section className="px-6 pb-12 pt-24 sm:pt-32">
         <div className="mx-auto max-w-2xl">
           <Link
-            href={`/${params.locale}/blog`}
+            href={`/${params.locale as Locale}/blog`}
             className="mb-6 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary transition-colors"
           >
             <ArrowLeft size={14} />
@@ -67,7 +74,7 @@ export default async function BlogPostPage({ params }: Props) {
             {post.tags.map((tag) => (
               <Link
                 key={tag}
-                href={`/${params.locale}/blog?tag=${encodeURIComponent(tag)}`}
+                href={`/${params.locale as Locale}/blog?tag=${encodeURIComponent(tag)}`}
                 className="flex items-center gap-1 rounded-full bg-primary/10 text-primary px-2.5 py-0.5 text-xs font-semibold hover:bg-primary/20 transition-colors capitalize"
               >
                 <Tag size={10} />
@@ -126,7 +133,11 @@ export default async function BlogPostPage({ params }: Props) {
             <h2 className="text-lg font-black mb-6">Related posts</h2>
             <div className="grid gap-4 sm:grid-cols-2">
               {related.map((p) => (
-                <BlogCard key={p.slug} post={p} locale={params.locale} />
+                <BlogCard
+                  key={p.slug}
+                  post={p}
+                  locale={params.locale as Locale}
+                />
               ))}
             </div>
           </div>
@@ -141,17 +152,18 @@ export default async function BlogPostPage({ params }: Props) {
               Ready to upgrade your gate access?
             </h2>
             <p className="mt-2 text-primary-foreground/80">
-              Start free with 1 gate and 500 scans/month. No credit card required.
+              Start free with 1 gate and 500 scans/month. No credit card
+              required.
             </p>
             <div className="mt-6 flex flex-wrap justify-center gap-3">
               <Link
-                href={`/${params.locale}/contact`}
+                href={`/${params.locale as Locale}/contact`}
                 className="rounded-xl bg-white px-6 py-3 text-sm font-bold text-primary hover:bg-white/90 transition-colors"
               >
                 Start Free Trial
               </Link>
               <Link
-                href={`/${params.locale}/pricing`}
+                href={`/${params.locale as Locale}/pricing`}
                 className="rounded-xl border border-primary-foreground/30 px-6 py-3 text-sm font-bold text-primary-foreground hover:bg-primary-foreground/10 transition-colors"
               >
                 See Pricing

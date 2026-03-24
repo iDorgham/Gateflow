@@ -7,17 +7,6 @@ import { Footer } from '../../components/footer';
 import { i18n, type Locale } from '../../i18n-config';
 import { fetchTranslations } from '../../lib/i18n/get-translation';
 import { I18nProvider } from '../../hooks/use-translation';
-import dynamic from 'next/dynamic';
-
-const CookieBanner = dynamic(
-  () =>
-    import('../../components/cookie-banner').then((mod) => mod.CookieBanner),
-  { ssr: false }
-);
-const ChatWidget = dynamic(
-  () => import('../../components/chat-widget').then((mod) => mod.ChatWidget),
-  { ssr: false }
-);
 
 const inter = Inter({
   subsets: ['latin'],
@@ -112,21 +101,23 @@ export const metadata: Metadata = {
 
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import { ClientWidgets } from '../../components/client-widgets';
 
 export default async function RootLayout(props: {
   children: React.ReactNode;
-  params: Promise<{ locale: Locale }>;
+  params: Promise<{ locale: string }>;
 }) {
-  const params = await props.params;
+  const { locale } = await props.params;
+  const castLocale = locale as Locale;
   const { children } = props;
-  const isRtl = params.locale === 'ar-EG';
+  const isRtl = castLocale === 'ar-EG';
 
   // Pre-load common dictionaries for the global layout and Nav/Footer
-  const commonDict = await fetchTranslations(params.locale, 'common');
-  const navDict = await fetchTranslations(params.locale, 'navigation');
-  const cookiesDict = await fetchTranslations(params.locale, 'cookies');
-  const formsDict = await fetchTranslations(params.locale, 'forms');
-  const componentsDict = await fetchTranslations(params.locale, 'components');
+  const commonDict = await fetchTranslations(castLocale, 'common');
+  const navDict = await fetchTranslations(castLocale, 'navigation');
+  const cookiesDict = await fetchTranslations(castLocale, 'cookies');
+  const formsDict = await fetchTranslations(castLocale, 'forms');
+  const componentsDict = await fetchTranslations(castLocale, 'components');
 
   const dictionaries = {
     common: commonDict,
@@ -137,20 +128,15 @@ export default async function RootLayout(props: {
   };
 
   return (
-    <html
-      lang={params.locale}
-      dir={isRtl ? 'rtl' : 'ltr'}
-      suppressHydrationWarning
-    >
+    <html lang={locale} dir={isRtl ? 'rtl' : 'ltr'} suppressHydrationWarning>
       <head>
-        {/* Resource hints — reduce DNS lookup time for third-party origins */}
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://www.google-analytics.com" />
         <link rel="preconnect" href="https://connect.facebook.net" />
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
         <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
-        <OrganizationJsonLd locale={params.locale} />
-        <WebSiteJsonLd locale={params.locale} />
+        <OrganizationJsonLd locale={castLocale} />
+        <WebSiteJsonLd locale={castLocale} />
         <meta name="theme-color" content="#3b82f6" />
         <link rel="manifest" href="/manifest.json" />
         <MarketingScripts
@@ -159,15 +145,16 @@ export default async function RootLayout(props: {
         />
       </head>
       <body
-        className={`${inter.variable} ${cairo.variable} ${isRtl ? 'font-arabic' : 'font-sans'} antialiased selection:bg-primary/10 selection:text-primary transition-colors duration-300`}
+        className={`${inter.variable} ${cairo.variable} ${
+          isRtl ? 'font-arabic' : 'font-sans'
+        } antialiased selection:bg-primary/10 selection:text-primary transition-colors duration-300`}
       >
-        <I18nProvider locale={params.locale} dictionaries={dictionaries}>
+        <I18nProvider locale={castLocale} dictionaries={dictionaries}>
           <Providers>
-            <Nav locale={params.locale} />
+            <Nav locale={castLocale} />
             <main className="relative flex min-h-dvh flex-col">{children}</main>
-            <Footer locale={params.locale} />
-            <CookieBanner />
-            <ChatWidget />
+            <Footer locale={castLocale} />
+            <ClientWidgets />
             <Analytics />
             <SpeedInsights />
           </Providers>

@@ -10,6 +10,7 @@ import {
   Zap,
   Smartphone,
   CheckCircle2,
+  type LucideIcon,
 } from 'lucide-react';
 import { Button } from '@gate-access/ui';
 import { I18nLink } from '../../../components/i18n-link';
@@ -39,7 +40,7 @@ export default async function SolutionsPage(props: {
       id: 'compounds',
       title: t('compounds.title'),
       desc: t('compounds.description'),
-      icon: <Building2 />,
+      icon: Building2,
       features: t('compounds.bulletPoints', {
         returnObjects: true,
       }) as string[],
@@ -49,7 +50,7 @@ export default async function SolutionsPage(props: {
       id: 'schools',
       title: t('schools.title'),
       desc: t('schools.description'),
-      icon: <GraduationCap />,
+      icon: GraduationCap,
       features: t('schools.bulletPoints', { returnObjects: true }) as string[],
       color: 'bg-teal-500',
     },
@@ -57,7 +58,7 @@ export default async function SolutionsPage(props: {
       id: 'events',
       title: t('events.title'),
       desc: t('events.description'),
-      icon: <Calendar />,
+      icon: Calendar,
       features: t('events.bulletPoints', { returnObjects: true }) as string[],
       color: 'bg-orange-500',
     },
@@ -65,7 +66,7 @@ export default async function SolutionsPage(props: {
       id: 'clubs',
       title: t('clubs.title'),
       desc: t('clubs.description'),
-      icon: <Anchor />,
+      icon: Anchor,
       features: t('clubs.bulletPoints', { returnObjects: true }) as string[],
       color: 'bg-blue-500',
     },
@@ -78,9 +79,9 @@ export default async function SolutionsPage(props: {
         <h1 className="text-4xl lg:text-7xl font-black tracking-tight mb-6 uppercase">
           {t('index.hero.headline')}
         </h1>
-        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+        <h2 className="text-xl text-muted-foreground max-w-2xl mx-auto">
           {t('index.hero.subHeadline')}
-        </p>
+        </h2>
       </section>
 
       {/* Grid */}
@@ -95,7 +96,7 @@ export default async function SolutionsPage(props: {
               <div
                 className={`h-16 w-16 rounded-2xl ${v.color} text-white flex items-center justify-center mb-6 shadow-xl`}
               >
-                {v.icon}
+                <v.icon size={32} />
               </div>
               <h2 className="text-3xl lg:text-5xl font-black mb-6">
                 {v.title}
@@ -116,15 +117,11 @@ export default async function SolutionsPage(props: {
                 ))}
               </div>
 
-              <Button
-                size="lg"
-                className="rounded-xl h-14 px-8 font-bold"
-                asChild
-              >
-                <I18nLink locale={locale} href="/contact">
+              <I18nLink locale={locale} href="/contact">
+                <Button size="lg" className="rounded-xl h-14 px-8 font-bold">
                   {t('ui.configureFor')} {v.title}
-                </I18nLink>
-              </Button>
+                </Button>
+              </I18nLink>
             </div>
 
             <div
@@ -132,7 +129,7 @@ export default async function SolutionsPage(props: {
             >
               {/* Visual representation placeholder */}
               <div className="absolute inset-0 bg-gradient-to-br from-slate-200 to-slate-100 dark:from-slate-800 dark:to-slate-900 flex items-center justify-center">
-                <v.icon.type className="w-32 h-32 opacity-10" />
+                <v.icon className="w-32 h-32 opacity-10" />
               </div>
 
               {/* Overlay labels */}
@@ -168,22 +165,22 @@ export default async function SolutionsPage(props: {
             </div>
             <div className="lg:col-span-2 grid sm:grid-cols-2 gap-8">
               <FeatureHorizontal
-                icon={<ShieldCheck />}
+                icon={ShieldCheck}
                 title={t('ui.coreInfrastructure.features.security.title')}
                 desc={t('ui.coreInfrastructure.features.security.description')}
               />
               <FeatureHorizontal
-                icon={<Zap />}
+                icon={Zap}
                 title={t('ui.coreInfrastructure.features.sync.title')}
                 desc={t('ui.coreInfrastructure.features.sync.description')}
               />
               <FeatureHorizontal
-                icon={<Smartphone />}
+                icon={Smartphone}
                 title={t('ui.coreInfrastructure.features.mobile.title')}
                 desc={t('ui.coreInfrastructure.features.mobile.description')}
               />
               <FeatureHorizontal
-                icon={<ShieldCheck />}
+                icon={ShieldCheck}
                 title={t('ui.coreInfrastructure.features.whitelabel.title')}
                 desc={t(
                   'ui.coreInfrastructure.features.whitelabel.description'
@@ -197,11 +194,19 @@ export default async function SolutionsPage(props: {
   );
 }
 
-function FeatureHorizontal({ icon, title, desc }: any) {
+function FeatureHorizontal({
+  icon: Icon,
+  title,
+  desc,
+}: {
+  icon: LucideIcon;
+  title: string;
+  desc: string;
+}) {
   return (
     <div className="flex gap-4">
       <div className="bg-white/10 p-2 rounded-lg h-fit text-primary">
-        {icon}
+        <Icon size={24} />
       </div>
       <div>
         <h4 className="font-bold text-lg mb-1">{title}</h4>

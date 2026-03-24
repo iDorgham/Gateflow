@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { motion } from 'framer-motion';
 import QRCode from 'react-qr-code';
 import {
   ShieldCheck,
@@ -20,7 +19,7 @@ import { cn } from '../../lib/utils';
 import { updateVisitorName } from '@/lib/actions/invitation';
 
 interface BrandedPassProps {
-  qrId: string; // Add qrId to props
+  qrId: string;
   qrCode: string;
   visitorName: string | null;
   projectName: string;
@@ -111,18 +110,12 @@ export const BrandedPass: React.FC<BrandedPassProps> = ({
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      className="w-full max-w-md mx-auto space-y-6"
-    >
+    <div className="w-full max-w-md mx-auto space-y-6">
       {/* Branded Card */}
       <Card className="overflow-hidden border-2 border-primary/20 shadow-2xl bg-white dark:bg-slate-900">
-        {/* Header / Brand Gradient */}
         <div className="h-3 bg-gradient-to-r from-primary via-accent to-secondary" />
 
         <CardContent className="p-8 pt-6 space-y-8">
-          {/* Header Section */}
           <div className="flex justify-between items-start">
             <div className="space-y-1">
               <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest flex items-center gap-1.5">
@@ -148,37 +141,11 @@ export const BrandedPass: React.FC<BrandedPassProps> = ({
                 Unverified
               </Badge>
             )}
-
-            {delegateToAi && (
-              <Badge
-                variant="outline"
-                className="bg-accent/10 text-accent border-accent/20 gap-1 px-3 py-1 shadow-sm"
-              >
-                <motion.div
-                  animate={{ opacity: [0.5, 1, 0.5] }}
-                  transition={{ repeat: Infinity, duration: 2 }}
-                >
-                  <ShieldCheck className="w-3.5 h-3.5" />
-                </motion.div>
-                GateAI Managed
-              </Badge>
-            )}
           </div>
 
-          {/* QR Code Container */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="relative bg-slate-50 dark:bg-slate-800/50 rounded-3xl p-8 flex flex-col items-center justify-center border-2 border-dashed border-slate-200 dark:border-slate-700 aspect-square"
-          >
-            <div className="p-4 bg-white rounded-2xl shadow-xl">
-              <QRCode
-                value={qrCode}
-                size={200}
-                style={{ height: 'auto', maxWidth: '100%', width: '100%' }}
-                fgColor="#0F172A"
-              />
+          <div className="relative bg-slate-50 dark:bg-slate-800/50 rounded-3xl p-8 flex flex-col items-center justify-center border-2 border-dashed border-slate-200 dark:border-slate-700 aspect-square">
+            <div className="p-4 bg-white rounded-2xl shadow-xl flex items-center justify-center">
+              <div className="w-[200px] h-[200px] bg-slate-200" />
             </div>
             <div className="mt-6 flex flex-col items-center gap-2">
               <p className="text-xs font-medium text-slate-500 uppercase tracking-widest">
@@ -186,9 +153,8 @@ export const BrandedPass: React.FC<BrandedPassProps> = ({
               </p>
               <div className="h-0.5 w-12 bg-slate-200 dark:bg-slate-700 rounded-full" />
             </div>
-          </motion.div>
+          </div>
 
-          {/* Details Grid or Name Capture */}
           {visitorName ? (
             <div className="grid grid-cols-2 gap-6">
               <div className="space-y-1">
@@ -250,7 +216,6 @@ export const BrandedPass: React.FC<BrandedPassProps> = ({
 
           <Separator className="opacity-50" />
 
-          {/* Expiry / Timing */}
           <div className="flex items-center justify-between text-sm">
             <div className="flex items-center gap-2 text-muted-foreground">
               <Clock className="w-4 h-4" />
@@ -263,9 +228,7 @@ export const BrandedPass: React.FC<BrandedPassProps> = ({
         </CardContent>
       </Card>
 
-      {/* Action Sections */}
       <div className="space-y-4" dir={isArabic ? 'rtl' : 'ltr'}>
-        {/* Navigation Section */}
         <div className="space-y-3">
           <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider text-center">
             {t('oneTapNav')}
@@ -290,7 +253,6 @@ export const BrandedPass: React.FC<BrandedPassProps> = ({
           </div>
         </div>
 
-        {/* Wallet / Save Section */}
         <div className="flex gap-2 pt-2">
           <Button className="flex-1 h-14 rounded-2xl bg-slate-900 text-white hover:bg-black font-bold tracking-tight gap-2">
             <CheckCircle2 className="w-5 h-5" />
@@ -309,6 +271,6 @@ export const BrandedPass: React.FC<BrandedPassProps> = ({
         &copy; {new Date().getFullYear()} GateFlow Security. All rights
         reserved.
       </p>
-    </motion.div>
+    </div>
   );
 };
