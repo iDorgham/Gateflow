@@ -81,6 +81,8 @@ plan:run → plan:done` with automatic folder moves and doc cascades
 
 ### Bug Fixes
 
+- **[Crm] **replace hardcoded hex colors with ADS tokens
+
 - **[Client] **pin react-hook-form to packages/ui instance to fix dual-version conflict
 - **[Client] **add react paths to tsconfig for @types/react module identity
 - **[Typecheck] **resolve React 19 module identity and ref-as-prop issues in admin-dashboard
