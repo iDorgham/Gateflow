@@ -6,13 +6,8 @@ import { Button } from '@gate-access/ui';
 import { I18nLink } from '../../../../components/i18n-link';
 
 interface InvitationPageProps {
-  params: {
-    locale: string;
-    shortId: string;
-  };
-  searchParams: {
-    sig?: string;
-  };
+  params: Promise<{ locale: string; shortId: string }>;
+  searchParams: Promise<{ sig?: string }>;
 }
 
 export default async function InvitationPage({

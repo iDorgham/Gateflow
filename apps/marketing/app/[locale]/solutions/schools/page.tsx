@@ -4,7 +4,11 @@ import type { Locale } from '../../../../i18n-config';
 import { SolutionLayout } from '../../../../components/sections/solution-layout';
 import { GraduationCap } from 'lucide-react';
 
-export async function generateMetadata({ params: { locale } }: { params: { locale: Locale } }): Promise<Metadata> {
+export async function generateMetadata(props: {
+  params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+  const params = await props.params;
+  const { locale } = params;
   const { t } = await getTranslation(locale, 'solutions');
   return {
     title: `${t('schools.hero.headline')} | GateFlow`,
@@ -12,7 +16,11 @@ export async function generateMetadata({ params: { locale } }: { params: { local
   };
 }
 
-export default async function SchoolsPage({ params: { locale } }: { params: { locale: Locale } }) {
+export default async function SchoolsPage(props: {
+  params: Promise<{ locale: Locale }>;
+}) {
+  const params = await props.params;
+  const { locale } = params;
   const { t } = await getTranslation(locale, 'solutions');
 
   return (
@@ -27,9 +35,18 @@ export default async function SchoolsPage({ params: { locale } }: { params: { lo
       painPoints={t('schools.painPoints', { returnObjects: true }) as string[]}
       features={t('schools.bulletPoints', { returnObjects: true }) as string[]}
       benefits={[
-        { title: t('schools.benefits.items.pickup.title'), desc: t('schools.benefits.items.pickup.description') },
-        { title: t('schools.benefits.items.audit.title'), desc: t('schools.benefits.items.audit.description') },
-        { title: t('schools.benefits.items.offline.title'), desc: t('schools.benefits.items.offline.description') },
+        {
+          title: t('schools.benefits.items.pickup.title'),
+          desc: t('schools.benefits.items.pickup.description'),
+        },
+        {
+          title: t('schools.benefits.items.audit.title'),
+          desc: t('schools.benefits.items.audit.description'),
+        },
+        {
+          title: t('schools.benefits.items.offline.title'),
+          desc: t('schools.benefits.items.offline.description'),
+        },
       ]}
       quote={{
         text: t('schools.quote.text'),

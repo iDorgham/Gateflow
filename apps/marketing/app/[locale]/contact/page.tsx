@@ -4,7 +4,11 @@ import type { Locale } from '../../../i18n-config';
 import { ContactForm } from '../../../components/contact-form';
 import { MessageSquare, Mail, Phone, MapPin } from 'lucide-react';
 
-export async function generateMetadata({ params: { locale } }: { params: { locale: Locale } }): Promise<Metadata> {
+export async function generateMetadata(props: {
+  params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+  const params = await props.params;
+  const { locale } = params;
   const { t } = await getTranslation(locale, 'navigation');
   return {
     title: t('header.dropdowns.company.contact.label'),
@@ -12,7 +16,11 @@ export async function generateMetadata({ params: { locale } }: { params: { local
   };
 }
 
-export default async function ContactPage({ params: { locale } }: { params: { locale: Locale } }) {
+export default async function ContactPage(props: {
+  params: Promise<{ locale: Locale }>;
+}) {
+  const params = await props.params;
+  const { locale } = params;
   const { t, dict } = await getTranslation(locale, 'contact');
 
   return (
@@ -30,56 +38,66 @@ export default async function ContactPage({ params: { locale } }: { params: { lo
       <section className="container px-6 grid lg:grid-cols-5 gap-16 items-start">
         {/* Contact Info */}
         <div className="lg:col-span-2 space-y-8">
-           <ContactCard 
-              icon={<MessageSquare className="text-success" />}
-              title={t('cards.whatsapp.title')}
-              detail={t('cards.whatsapp.detail')}
-              desc={t('cards.whatsapp.desc')}
-              link="https://wa.me/201000000000"
-              linkBtn={t('cards.whatsapp.linkBtn')}
-           />
-           <ContactCard 
-              icon={<Mail className="text-indigo-500" />}
-              title={t('cards.email.title')}
-              detail={t('cards.email.detail')}
-              desc={t('cards.email.desc')}
-           />
-           <ContactCard 
-              icon={<Phone className="text-primary" />}
-              title={t('cards.sales.title')}
-              detail={t('cards.sales.detail')}
-              desc={t('cards.sales.desc')}
-           />
-           
-           <div className="p-1 rounded-[2rem] bg-gradient-to-br from-primary/10 to-indigo-500/10 border overflow-hidden">
-               <div className="p-8 bg-card rounded-[1.9rem] border border-white/20">
-                  <div className="flex items-center gap-3 mb-6">
-                     <MapPin className="text-primary" />
-                     <h3 className="font-bold text-lg">{t('cards.regional.title')}</h3>
+          <ContactCard
+            icon={<MessageSquare className="text-success" />}
+            title={t('cards.whatsapp.title')}
+            detail={t('cards.whatsapp.detail')}
+            desc={t('cards.whatsapp.desc')}
+            link="https://wa.me/201000000000"
+            linkBtn={t('cards.whatsapp.linkBtn')}
+          />
+          <ContactCard
+            icon={<Mail className="text-indigo-500" />}
+            title={t('cards.email.title')}
+            detail={t('cards.email.detail')}
+            desc={t('cards.email.desc')}
+          />
+          <ContactCard
+            icon={<Phone className="text-primary" />}
+            title={t('cards.sales.title')}
+            detail={t('cards.sales.detail')}
+            desc={t('cards.sales.desc')}
+          />
+
+          <div className="p-1 rounded-[2rem] bg-gradient-to-br from-primary/10 to-indigo-500/10 border overflow-hidden">
+            <div className="p-8 bg-card rounded-[1.9rem] border border-white/20">
+              <div className="flex items-center gap-3 mb-6">
+                <MapPin className="text-primary" />
+                <h3 className="font-bold text-lg">
+                  {t('cards.regional.title')}
+                </h3>
+              </div>
+              <div className="space-y-6">
+                <div className="flex gap-4">
+                  <span className="text-2xl">🇪🇬</span>
+                  <div>
+                    <p className="font-bold">
+                      {t('cards.regional.cairo.name')}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {t('cards.regional.cairo.desc')}
+                    </p>
                   </div>
-                  <div className="space-y-6">
-                     <div className="flex gap-4">
-                        <span className="text-2xl">🇪🇬</span>
-                        <div>
-                           <p className="font-bold">{t('cards.regional.cairo.name')}</p>
-                           <p className="text-sm text-muted-foreground">{t('cards.regional.cairo.desc')}</p>
-                        </div>
-                     </div>
-                     <div className="flex gap-4">
-                        <span className="text-2xl">🇦🇪</span>
-                        <div>
-                           <p className="font-bold">{t('cards.regional.dubai.name')}</p>
-                           <p className="text-sm text-muted-foreground">{t('cards.regional.dubai.desc')}</p>
-                        </div>
-                     </div>
+                </div>
+                <div className="flex gap-4">
+                  <span className="text-2xl">🇦🇪</span>
+                  <div>
+                    <p className="font-bold">
+                      {t('cards.regional.dubai.name')}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {t('cards.regional.dubai.desc')}
+                    </p>
                   </div>
-               </div>
-           </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Form */}
         <div className="lg:col-span-3">
-           <ContactForm dict={dict} />
+          <ContactForm dict={dict} />
         </div>
       </section>
     </div>
@@ -87,21 +105,26 @@ export default async function ContactPage({ params: { locale } }: { params: { lo
 }
 
 function ContactCard({ icon, title, detail, desc, link, linkBtn }: any) {
-   return (
-      <div className="flex gap-5 p-6 rounded-2xl border bg-card hover:bg-muted/30 transition-colors">
-         <div className="h-12 w-12 rounded-xl bg-background border flex items-center justify-center shrink-0 shadow-sm">
-            {icon}
-         </div>
-         <div className="flex-1">
-            <h4 className="font-bold text-sm uppercase tracking-widest text-muted-foreground mb-1">{title}</h4>
-            <p className="text-lg font-black mb-1">{detail}</p>
-            <p className="text-sm text-muted-foreground">{desc}</p>
-            {link && (
-               <a href={link} className="inline-flex items-center gap-2 mt-4 text-sm font-bold text-success hover:underline">
-                  {linkBtn}
-               </a>
-            )}
-         </div>
+  return (
+    <div className="flex gap-5 p-6 rounded-2xl border bg-card hover:bg-muted/30 transition-colors">
+      <div className="h-12 w-12 rounded-xl bg-background border flex items-center justify-center shrink-0 shadow-sm">
+        {icon}
       </div>
-   )
+      <div className="flex-1">
+        <h4 className="font-bold text-sm uppercase tracking-widest text-muted-foreground mb-1">
+          {title}
+        </h4>
+        <p className="text-lg font-black mb-1">{detail}</p>
+        <p className="text-sm text-muted-foreground">{desc}</p>
+        {link && (
+          <a
+            href={link}
+            className="inline-flex items-center gap-2 mt-4 text-sm font-bold text-success hover:underline"
+          >
+            {linkBtn}
+          </a>
+        )}
+      </div>
+    </div>
+  );
 }

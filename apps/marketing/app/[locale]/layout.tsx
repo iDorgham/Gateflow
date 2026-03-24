@@ -113,13 +113,12 @@ export const metadata: Metadata = {
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 
-export default async function RootLayout({
-  children,
-  params,
-}: {
+export default async function RootLayout(props: {
   children: React.ReactNode;
-  params: { locale: Locale };
+  params: Promise<{ locale: Locale }>;
 }) {
+  const params = await props.params;
+  const { children } = props;
   const isRtl = params.locale === 'ar-EG';
 
   // Pre-load common dictionaries for the global layout and Nav/Footer

@@ -3,18 +3,29 @@ import { LegalLayout } from '../../../../components/sections/legal-layout';
 import type { Locale } from '../../../../i18n-config';
 import { getTranslation } from '../../../../lib/i18n/get-translation';
 
-export async function generateMetadata({ params: { locale } }: { params: { locale: Locale } }): Promise<Metadata> {
+export async function generateMetadata(props: {
+  params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+  const params = await props.params;
+  const { locale } = params;
   const { t } = await getTranslation(locale, 'legal');
   return {
     title: `${t('terms.title')} | GateFlow`,
   };
 }
 
-export default async function TermsPage({ params: { locale } }: { params: { locale: Locale } }) {
+export default async function TermsPage(props: {
+  params: Promise<{ locale: Locale }>;
+}) {
+  const params = await props.params;
+  const { locale } = params;
   const { t } = await getTranslation(locale, 'legal');
 
   return (
-    <LegalLayout title={t('terms.title')} lastUpdated={`${t('layout.lastUpdated')} ${t('terms.lastUpdatedValue')}`}>
+    <LegalLayout
+      title={t('terms.title')}
+      lastUpdated={`${t('layout.lastUpdated')} ${t('terms.lastUpdatedValue')}`}
+    >
       <section>
         <h2>{t('terms.s1.title')}</h2>
         <p>{t('terms.s1.p')}</p>

@@ -3,18 +3,29 @@ import { LegalLayout } from '../../../../components/sections/legal-layout';
 import type { Locale } from '../../../../i18n-config';
 import { getTranslation } from '../../../../lib/i18n/get-translation';
 
-export async function generateMetadata({ params: { locale } }: { params: { locale: Locale } }): Promise<Metadata> {
+export async function generateMetadata(props: {
+  params: Promise<{ locale: Locale }>;
+}): Promise<Metadata> {
+  const params = await props.params;
+  const { locale } = params;
   const { t } = await getTranslation(locale, 'legal');
   return {
     title: `${t('privacy.title')} | GateFlow`,
   };
 }
 
-export default async function PrivacyPage({ params: { locale } }: { params: { locale: Locale } }) {
+export default async function PrivacyPage(props: {
+  params: Promise<{ locale: Locale }>;
+}) {
+  const params = await props.params;
+  const { locale } = params;
   const { t } = await getTranslation(locale, 'legal');
 
   return (
-    <LegalLayout title={t('privacy.title')} lastUpdated={`${t('layout.lastUpdated')} ${t('privacy.lastUpdatedValue')}`}>
+    <LegalLayout
+      title={t('privacy.title')}
+      lastUpdated={`${t('layout.lastUpdated')} ${t('privacy.lastUpdatedValue')}`}
+    >
       <section>
         <h2>{t('privacy.s1.title')}</h2>
         <p>{t('privacy.s1.p')}</p>
@@ -24,7 +35,7 @@ export default async function PrivacyPage({ params: { locale } }: { params: { lo
         <h2>{t('privacy.s2.title')}</h2>
         <h3>{t('privacy.s2.h3_1')}</h3>
         <p>{t('privacy.s2.p1')}</p>
-        
+
         <h3>{t('privacy.s2.h3_2')}</h3>
         <p>{t('privacy.s2.p2')}</p>
       </section>
