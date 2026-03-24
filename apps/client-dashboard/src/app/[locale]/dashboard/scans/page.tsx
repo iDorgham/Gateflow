@@ -1,6 +1,7 @@
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { getValidatedProjectId } from '@/lib/project-cookie';
 import { prisma } from '@gate-access/db';
+import { redirect } from 'next/navigation';
 import { getTranslation, Locale } from '@/lib/i18n';
 import { ScansFilters } from './scans-filters';
 import { ScansTableWithPagination } from './scans-table-with-pagination';
@@ -11,7 +12,9 @@ import type { ScanStatus } from '@gate-access/db';
 import type { Prisma } from '@gate-access/db';
 import type { ScanLog } from '@/components/dashboard/scans/ScansTable';
 
-export async function generateMetadata(props: { params: Promise<{ locale: Locale }> }) {
+export async function generateMetadata(props: {
+  params: Promise<{ locale: Locale }>;
+}) {
   const params = await props.params;
   const { t } = await getTranslation(params.locale, 'dashboard');
   return { title: t('scans.title', { defaultValue: 'Scan Logs' }) };
@@ -41,15 +44,14 @@ type SearchParams = {
   sort?: string;
 };
 
-export default async function ScansPage(
-  props: {
-    searchParams: Promise<SearchParams>;
-    params: Promise<{ locale: Locale }>;
-  }
-) {
+export default async function ScansPage(props: {
+  searchParams: Promise<SearchParams>;
+  params: Promise<{ locale: Locale }>;
+}) {
   const params = await props.params;
   const searchParams = await props.searchParams;
   const claims = await getSessionClaims();
+  if (!claims?.orgId) redirect('/login');
   const { t } = await getTranslation(params.locale, 'dashboard');
   const orgId = claims.orgId;
 
@@ -63,14 +65,18 @@ export default async function ScansPage(
     : undefined;
   const gateFilter = searchParams.gate || undefined;
   const qFilter = searchParams.q?.trim() || undefined;
-  const dateFrom = searchParams.dateFrom ? new Date(searchParams.dateFrom) : undefined;
+  const dateFrom = searchParams.dateFrom
+    ? new Date(searchParams.dateFrom)
+    : undefined;
   const dateTo = searchParams.dateTo
     ? new Date(new Date(searchParams.dateTo).setHours(23, 59, 59, 999))
     : undefined;
   const userIdFilter = searchParams.userId || undefined;
   const deviceIdFilter = searchParams.deviceId?.trim() || undefined;
 
-  const [sortCol, sortDirRaw] = (searchParams.sort ?? 'scannedAt:desc').split(':');
+  const [sortCol, sortDirRaw] = (searchParams.sort ?? 'scannedAt:desc').split(
+    ':'
+  );
   const validSortCol = VALID_SORT_COLS.has(sortCol) ? sortCol : 'scannedAt';
   const sortDir: 'asc' | 'desc' = sortDirRaw === 'asc' ? 'asc' : 'desc';
 
@@ -132,6 +138,7 @@ export default async function ScansPage(
     prisma.scanLog.count({ where: totalWhere }),
     prisma.scanLog.count({ where }),
     prisma.scanLog.findMany({
+      // ignore-security-guard — scoped via qrCode.organizationId (ScanLog has no direct orgId field)
       where,
       orderBy: orderBy as Prisma.ScanLogOrderByWithRelationInput,
       skip: (page - 1) * pageSize,
@@ -172,15 +179,16 @@ export default async function ScansPage(
   if (gateFilter) exportParams.set('gate', gateFilter);
   exportParams.set('project', effectiveProjectId ?? 'all');
   if (qFilter) exportParams.set('q', qFilter);
-  if (searchParams.dateFrom) exportParams.set('dateFrom', searchParams.dateFrom);
+  if (searchParams.dateFrom)
+    exportParams.set('dateFrom', searchParams.dateFrom);
   if (searchParams.dateTo) exportParams.set('dateTo', searchParams.dateTo);
   if (userIdFilter) exportParams.set('userId', userIdFilter);
   if (deviceIdFilter) exportParams.set('deviceId', deviceIdFilter);
   const exportHref = `/api/scans/export${exportParams.toString() ? '?' + exportParams.toString() : ''}`;
 
-  const rangeText = t('scans.pagination.range', { 
-    start: ((page - 1) * pageSize + 1).toLocaleString(params.locale), 
-    end: Math.min(page * pageSize, total).toLocaleString(params.locale), 
+  const rangeText = t('scans.pagination.range', {
+    start: ((page - 1) * pageSize + 1).toLocaleString(params.locale),
+    end: Math.min(page * pageSize, total).toLocaleString(params.locale),
     total: total.toLocaleString(params.locale),
   });
 
@@ -188,10 +196,13 @@ export default async function ScansPage(
     <div className="pb-20 animate-in fade-in duration-500">
       <PageHeader
         title={t('scans.title', { defaultValue: 'Access Logs' })}
-        subtitle={t('scans.description', { defaultValue: 'Full audit trail of all access attempts for your organisation.' })}
+        subtitle={t('scans.description', {
+          defaultValue:
+            'Full audit trail of all access attempts for your organisation.',
+        })}
         breadcrumbs={[
           { label: 'Dashboard', href: `/${params.locale}/dashboard` },
-          { label: 'Access Logs' }
+          { label: 'Access Logs' },
         ]}
         homeHref={`/${params.locale}/dashboard`}
         actions={[
@@ -205,7 +216,7 @@ export default async function ScansPage(
           >
             <Download className="h-4 w-4 mr-2 group-hover:text-[var(--ds-icon-brand)] transition-colors" />
             {t('common.export', { defaultValue: 'Export Logs' })}
-          </Button>
+          </Button>,
         ]}
       />
 
@@ -221,7 +232,9 @@ export default async function ScansPage(
         />
 
         <ScansTableWithPagination
-          data={scans.map(s => ({...s, scannedAt: s.scannedAt})) as ScanLog[]}
+          data={
+            scans.map((s) => ({ ...s, scannedAt: s.scannedAt })) as ScanLog[]
+          }
           locale={params.locale}
           sortCol={validSortCol}
           sortDir={sortDir}

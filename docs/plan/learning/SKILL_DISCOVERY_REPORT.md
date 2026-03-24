@@ -1,6 +1,6 @@
 # Skill Discovery Report
 
-**Date:** 2026-03-24T21:32:52.200Z
+**Date:** 2026-03-24T22:21:05.309Z
 
 ## 🎨 Design System Violations (Hardcoded Hex)
 
@@ -25,11 +25,7 @@ apps/client-dashboard/src/app/[locale]/login/login-page-layout-2026.tsx:        
 Potential multi-tenant isolation risks. Found `findMany` calls without an explicit `organizationId` filter.
 
 ```text
-apps/client-dashboard/src/app/[locale]/dashboard/gates/page.tsx:33: prisma.gate.findMany({...})
-apps/client-dashboard/src/app/[locale]/dashboard/scans/page.tsx:134: prisma.scanLog.findMany({...})
-apps/client-dashboard/src/app/api/gates/route.ts:41: prisma.gate.findMany({...})
 apps/client-dashboard/src/app/api/resident/visitors/route.ts:41: prisma.visitorQR.findMany({...})
-apps/client-dashboard/src/app/api/scans/export/route.ts:124: prisma.scanLog.findMany({...})
 apps/client-dashboard/src/app/api/contacts/tags/bulk/route.ts:49: prisma.contactTag.findMany({...})
 apps/client-dashboard/src/app/api/contacts/route.ts:258: prisma.contact.findMany({...})
 apps/client-dashboard/src/app/api/contacts/[id]/tags/route.ts:53: prisma.contactTag.findMany({...})

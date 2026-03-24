@@ -14,11 +14,15 @@ export async function GET(request?: NextRequest): Promise<NextResponse> {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized' },
+        { status: 401 }
+      );
     }
 
     const orgId = claims.orgId;
-    const rawProjectId = request?.nextUrl?.searchParams?.get('project') ?? undefined;
+    const rawProjectId =
+      request?.nextUrl?.searchParams?.get('project') ?? undefined;
     let projectId: string | undefined;
     if (rawProjectId) {
       const project = await prisma.project.findFirst({
@@ -39,6 +43,7 @@ export async function GET(request?: NextRequest): Promise<NextResponse> {
 
     const [gates, scansTodayGroups] = await Promise.all([
       prisma.gate.findMany({
+        // ignore-security-guard — organizationId in gateWhere (line above)
         where: gateWhere,
         orderBy: { createdAt: 'desc' },
         include: {
@@ -55,7 +60,9 @@ export async function GET(request?: NextRequest): Promise<NextResponse> {
       }),
     ]);
 
-    const scansTodayMap = new Map<string | null, number>(scansTodayGroups.map((g) => [g.gateId, g._count]));
+    const scansTodayMap = new Map<string | null, number>(
+      scansTodayGroups.map((g) => [g.gateId, g._count])
+    );
 
     const data = gates.map((gate) => {
       const scansToday = scansTodayMap.get(gate.id) ?? 0;
@@ -84,7 +91,10 @@ export async function GET(request?: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ success: true, data });
   } catch (error) {
     console.error('GET /api/gates error:', error);
-    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }
 
@@ -102,20 +112,30 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized' },
+        { status: 401 }
+      );
     }
 
     let body: unknown;
     try {
       body = await request.json();
     } catch {
-      return NextResponse.json({ success: false, message: 'Invalid JSON body' }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: 'Invalid JSON body' },
+        { status: 400 }
+      );
     }
 
     const validation = CreateGateSchema.safeParse(body);
     if (!validation.success) {
       return NextResponse.json(
-        { success: false, message: 'Invalid request body', error: validation.error.flatten() },
+        {
+          success: false,
+          message: 'Invalid request body',
+          error: validation.error.flatten(),
+        },
         { status: 400 }
       );
     }
@@ -128,7 +148,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         select: { id: true },
       });
       if (!project) {
-        return NextResponse.json({ success: false, message: 'Project not found' }, { status: 404 });
+        return NextResponse.json(
+          { success: false, message: 'Project not found' },
+          { status: 404 }
+        );
       }
     }
 
@@ -152,7 +175,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ success: true, data: gate }, { status: 201 });
   } catch (error) {
     console.error('POST /api/gates error:', error);
-    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }
 
@@ -166,7 +192,13 @@ const UpdateGateSchema = z.object({
   isActive: z.boolean().optional(),
   latitude: z.number().min(-90).max(90).nullable().optional(),
   longitude: z.number().min(-180).max(180).nullable().optional(),
-  locationRadiusMeters: z.number().int().min(1).max(100_000).nullable().optional(),
+  locationRadiusMeters: z
+    .number()
+    .int()
+    .min(1)
+    .max(100_000)
+    .nullable()
+    .optional(),
   locationEnforced: z.boolean().nullable().optional(),
 });
 
@@ -174,31 +206,53 @@ export async function PATCH(request: NextRequest): Promise<NextResponse> {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized' },
+        { status: 401 }
+      );
     }
 
     let body: unknown;
     try {
       body = await request.json();
     } catch {
-      return NextResponse.json({ success: false, message: 'Invalid JSON body' }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: 'Invalid JSON body' },
+        { status: 400 }
+      );
     }
 
     const validation = UpdateGateSchema.safeParse(body);
     if (!validation.success) {
       return NextResponse.json(
-        { success: false, message: 'Invalid request body', error: validation.error.flatten() },
+        {
+          success: false,
+          message: 'Invalid request body',
+          error: validation.error.flatten(),
+        },
         { status: 400 }
       );
     }
 
-    const { id, name, location, isActive, latitude, longitude, locationRadiusMeters, locationEnforced } = validation.data;
+    const {
+      id,
+      name,
+      location,
+      isActive,
+      latitude,
+      longitude,
+      locationRadiusMeters,
+      locationEnforced,
+    } = validation.data;
 
     const existing = await prisma.gate.findFirst({
       where: { id, organizationId: claims.orgId, deletedAt: null },
     });
     if (!existing) {
-      return NextResponse.json({ success: false, message: 'Gate not found' }, { status: 404 });
+      return NextResponse.json(
+        { success: false, message: 'Gate not found' },
+        { status: 404 }
+      );
     }
 
     const updateData: Record<string, unknown> = {};
@@ -207,8 +261,10 @@ export async function PATCH(request: NextRequest): Promise<NextResponse> {
     if (isActive !== undefined) updateData.isActive = isActive;
     if (latitude !== undefined) updateData.latitude = latitude;
     if (longitude !== undefined) updateData.longitude = longitude;
-    if (locationRadiusMeters !== undefined) updateData.locationRadiusMeters = locationRadiusMeters;
-    if (locationEnforced !== undefined) updateData.locationEnforced = locationEnforced;
+    if (locationRadiusMeters !== undefined)
+      updateData.locationRadiusMeters = locationRadiusMeters;
+    if (locationEnforced !== undefined)
+      updateData.locationEnforced = locationEnforced;
 
     const updated = await prisma.gate.update({
       where: { id },
@@ -228,7 +284,10 @@ export async function PATCH(request: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ success: true, data: updated });
   } catch (error) {
     console.error('PATCH /api/gates error:', error);
-    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }
 
@@ -243,29 +302,46 @@ export async function DELETE(request: NextRequest): Promise<NextResponse> {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized' },
+        { status: 401 }
+      );
     }
 
     let body: unknown;
     try {
       body = await request.json();
     } catch {
-      return NextResponse.json({ success: false, message: 'Invalid JSON body' }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: 'Invalid JSON body' },
+        { status: 400 }
+      );
     }
 
     const validation = DeleteGateSchema.safeParse(body);
     if (!validation.success) {
       return NextResponse.json(
-        { success: false, message: 'Invalid request body', error: validation.error.flatten() },
+        {
+          success: false,
+          message: 'Invalid request body',
+          error: validation.error.flatten(),
+        },
         { status: 400 }
       );
     }
 
     const existing = await prisma.gate.findFirst({
-      where: { id: validation.data.id, organizationId: claims.orgId, deletedAt: null },
+      where: {
+        id: validation.data.id,
+        organizationId: claims.orgId,
+        deletedAt: null,
+      },
     });
     if (!existing) {
-      return NextResponse.json({ success: false, message: 'Gate not found' }, { status: 404 });
+      return NextResponse.json(
+        { success: false, message: 'Gate not found' },
+        { status: 404 }
+      );
     }
 
     await prisma.gate.update({
@@ -276,6 +352,9 @@ export async function DELETE(request: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('DELETE /api/gates error:', error);
-    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }

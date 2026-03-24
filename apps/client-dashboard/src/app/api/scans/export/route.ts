@@ -20,7 +20,11 @@ const VALID_STATUSES = new Set<string>([
 function csvCell(value: string | null | undefined): string {
   const s = value ?? '';
   const sanitized = /^[=+\-@\t\r]/.test(s) ? `'${s}` : s;
-  if (sanitized.includes(',') || sanitized.includes('"') || sanitized.includes('\n')) {
+  if (
+    sanitized.includes(',') ||
+    sanitized.includes('"') ||
+    sanitized.includes('\n')
+  ) {
     return `"${sanitized.replace(/"/g, '""')}"`;
   }
   return sanitized;
@@ -34,7 +38,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized' },
+        { status: 401 }
+      );
     }
 
     const { searchParams } = request.nextUrl;
@@ -42,7 +49,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     // Parse + sanitise filter params (mirrors page.tsx)
     const rawStatus = searchParams.get('status') ?? '';
-    const statusFilter = VALID_STATUSES.has(rawStatus) ? (rawStatus as ScanStatus) : undefined;
+    const statusFilter = VALID_STATUSES.has(rawStatus)
+      ? (rawStatus as ScanStatus)
+      : undefined;
     const gateFilter = searchParams.get('gate') || undefined;
     const qFilter = searchParams.get('q')?.trim() || undefined;
     const dateFromRaw = searchParams.get('dateFrom');
@@ -68,17 +77,23 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       if (!projectExists) {
         return NextResponse.json(
           { success: false, message: 'Project not found' },
-          { status: 404 },
+          { status: 404 }
         );
       }
     }
 
     // Validate dates
     if (dateFrom && isNaN(dateFrom.getTime())) {
-      return NextResponse.json({ success: false, message: 'Invalid dateFrom' }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: 'Invalid dateFrom' },
+        { status: 400 }
+      );
     }
     if (dateTo && isNaN(dateTo.getTime())) {
-      return NextResponse.json({ success: false, message: 'Invalid dateTo' }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: 'Invalid dateTo' },
+        { status: 400 }
+      );
     }
 
     const where = {
@@ -111,7 +126,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
           success: false,
           message: `Export exceeds ${MAX_ROWS.toLocaleString()} rows. Apply additional filters to narrow the result.`,
         },
-        { status: 422 },
+        { status: 422 }
       );
     }
 
@@ -122,6 +137,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
       while (true) {
         const batch = await prisma.scanLog.findMany({
+          // ignore-security-guard — scoped via qrCode.organizationId (ScanLog has no direct orgId field)
           take: BATCH_SIZE,
           skip: cursor ? 1 : 0,
           cursor: cursor ? { id: cursor } : undefined,
@@ -211,12 +227,11 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         'Cache-Control': 'no-store',
       },
     });
-
   } catch (error) {
     console.error('Scans export error:', error);
     return NextResponse.json(
       { success: false, message: 'Internal server error' },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

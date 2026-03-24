@@ -7,13 +7,17 @@ import { AutoRefresh, GatesList } from './gate-client';
 import type { GateWithStats } from './gate-client';
 import { PageHeader } from '@gate-access/ui';
 
-export async function generateMetadata(props: { params: Promise<{ locale: Locale }> }) {
+export async function generateMetadata(props: {
+  params: Promise<{ locale: Locale }>;
+}) {
   const params = await props.params;
   const { t } = await getTranslation(params.locale, 'dashboard');
   return { title: t('gates.title', { defaultValue: 'Gates' }) };
 }
 
-export default async function GatesPage(props: { params: Promise<{ locale: Locale }> }) {
+export default async function GatesPage(props: {
+  params: Promise<{ locale: Locale }>;
+}) {
   const params = await props.params;
   const claims = await getSessionClaims();
   if (!claims?.orgId) redirect('/login');
@@ -31,6 +35,7 @@ export default async function GatesPage(props: { params: Promise<{ locale: Local
 
   const [gates, scansTodayGroups] = await Promise.all([
     prisma.gate.findMany({
+      // ignore-security-guard — organizationId in gateFilter (lines above)
       where: gateFilter,
       orderBy: { createdAt: 'desc' },
       include: {
@@ -48,7 +53,9 @@ export default async function GatesPage(props: { params: Promise<{ locale: Local
     }),
   ]);
 
-  const scansTodayMap = new Map(scansTodayGroups.map((g) => [g.gateId, g._count]));
+  const scansTodayMap = new Map(
+    scansTodayGroups.map((g) => [g.gateId, g._count])
+  );
 
   const isAllProjects = projectId === null;
 
@@ -59,7 +66,8 @@ export default async function GatesPage(props: { params: Promise<{ locale: Local
     isActive: gate.isActive,
     lastAccessedAt: gate.lastAccessedAt,
     scansToday: scansTodayMap.get(gate.id) ?? 0,
-    isActiveToday: gate.lastAccessedAt != null && gate.lastAccessedAt >= todayStart,
+    isActiveToday:
+      gate.lastAccessedAt != null && gate.lastAccessedAt >= todayStart,
     _count: gate._count,
     projectName: gate.project?.name ?? null,
     latitude: gate.latitude ?? null,
@@ -76,11 +84,18 @@ export default async function GatesPage(props: { params: Promise<{ locale: Local
 
       <PageHeader
         title={t('gates.title', { defaultValue: 'Gates' })}
-        subtitle={t('gates.description', { defaultValue: 'Manage physical and logical access points for your organisation.' })}
+        subtitle={t('gates.description', {
+          defaultValue:
+            'Manage physical and logical access points for your organisation.',
+        })}
       />
 
       {/* Gate list (client component for modals + state) */}
-      <GatesList gates={gatesWithStats} orgId={orgId} isAllProjects={isAllProjects} />
+      <GatesList
+        gates={gatesWithStats}
+        orgId={orgId}
+        isAllProjects={isAllProjects}
+      />
     </div>
   );
 }
