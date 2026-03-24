@@ -81,6 +81,8 @@ plan:run → plan:done` with automatic folder moves and doc cascades
 
 ### Bug Fixes
 
+- **[Security] **add organizationId scoping to contactUnit.findMany
+
 - **[Crm] **replace hardcoded hex colors with ADS tokens
 
 - **[Client] **pin react-hook-form to packages/ui instance to fix dual-version conflict
