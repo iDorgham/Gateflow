@@ -54,13 +54,13 @@ Use this role when implementing in Cursor or when invoking CLIs for this phase.
 
 ### Subagents (optional)
 
-Invoke these *before* or *during* implementation when the phase needs exploration or verification.
+Invoke these _before_ or _during_ implementation when the phase needs exploration or verification.
 
-| Subagent | When | Prompt |
-|----------|------|--------|
-| **explore** | Need to trace flows or find code | "Trace the end-to-end flow for [X] (UI → API → DB). Return key files and call graph." |
-| **shell** | Preflight, migrate, test | "Run pnpm preflight and report failures with file:line." |
-| **browser-use** | Verify UI after changes | "Login at localhost:3001, navigate to [pages], verify [behaviors]." |
+| Subagent        | When                             | Prompt                                                                                |
+| --------------- | -------------------------------- | ------------------------------------------------------------------------------------- |
+| **explore**     | Need to trace flows or find code | "Trace the end-to-end flow for [X] (UI → API → DB). Return key files and call graph." |
+| **shell**       | Preflight, migrate, test         | "Run pnpm preflight and report failures with file:line."                              |
+| **browser-use** | Verify UI after changes          | "Login at localhost:3001, navigate to [pages], verify [behaviors]."                   |
 
 ### Acceptance criteria
 
@@ -69,6 +69,19 @@ Invoke these *before* or *during* implementation when the phase needs exploratio
 - [ ] `pnpm turbo lint --filter=<workspace>` passes
 - [ ] `pnpm turbo typecheck --filter=<workspace>` passes
 - [ ] `pnpm turbo test --filter=<workspace>` passes (or no regression)
+
+### UI/UX Design Intelligence (Mandatory for UI Tasks)
+
+**Trigger**: This phase involves [New Screens | Component Design | RTL Support | Animations | Dashboard Widgets].
+
+1. **Invoke UI/UX Pro Max**: Run the design system search to align with Atlassian Design System + UI/UX Pro Max best practices.
+   - `python3 .agents/skills/ui-ux-pro-max/scripts/search.py "keywords from scope" --design-system`
+2. **Apply Rules**:
+   - Use Lucide/Heroicons only (no emojis).
+   - Ensure `cursor-pointer` on all interactive elements.
+   - Use `transition-colors duration-200` for all hover states.
+   - Validate RTL layout for Arabic support.
+3. **Verify**: Check against `ui-ux-pro-max` Pre-Delivery Checklist in `SKILL.md`.
 
 ### Files likely touched
 
@@ -83,5 +96,5 @@ Invoke these *before* or *during* implementation when the phase needs exploratio
 
 1. **Invoke Adversary**: Use a second model (Gemini/Opencode) as an "Adversary."
 2. **Challenge**: "Analyze the code for edge cases, race conditions, or security bypasses. Attempt to break my implementation."
-3. **Loop**: Self-correct *before* git commit.
+3. **Loop**: Self-correct _before_ git commit.
 4. **Verification**: State total corrected flaws in walkthrough.
