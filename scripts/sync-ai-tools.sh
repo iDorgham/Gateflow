@@ -12,6 +12,7 @@
 #   ./scripts/sync-ai-tools.sh --tool antigravity
 #   ./scripts/sync-ai-tools.sh --tool kilocode
 #   ./scripts/sync-ai-tools.sh --tool opencode
+#   ./scripts/sync-ai-tools.sh --tool qwen
 #   ./scripts/sync-ai-tools.sh --dry-run    # preview without writing
 # =============================================================================
 set -euo pipefail
@@ -367,6 +368,29 @@ MD
   ok "commands (${#COMMANDS[@]} workflow shortcuts added)"
 }
 
+# ── Qwen CLI ──────────────────────────────────────────────────────────────────
+sync_qwen() {
+  echo "── Qwen CLI (.qwen/) ──"
+  # Qwen uses ~/.qwen for global config; sync skills and commands to repo-local .qwen/
+  local dest="$ROOT/.qwen"
+  mkdir -p "$dest"
+
+  rsync_dir "$SRC/skills"       "$dest/skills"
+  rsync_dir "$SRC/agents"       "$dest/agents"
+  rsync_dir "$SRC/commands-ref" "$dest/commands-ref"
+  ok "skills / agents / commands-ref"
+
+  # Add workflow commands as markdown files in .qwen/workflows/
+  if ! $DRY_RUN; then
+    mkdir -p "$dest/workflows"
+    for entry in "${COMMANDS[@]}"; do
+      IFS='|' read -r key _ desc _ _ <<< "$entry"
+      copy_file "$SRC/workflows/$key.md" "$dest/workflows/$key.md"
+    done
+  fi
+  ok "workflows (${#COMMANDS[@]} commands synced)"
+}
+
 # =============================================================================
 # MAIN
 # =============================================================================
@@ -386,6 +410,7 @@ should_sync gemini      && { echo; sync_gemini; }
 should_sync kiro        && { echo; sync_kiro; }
 should_sync kilocode    && { echo; sync_kilocode; }
 should_sync opencode    && { echo; sync_opencode; }
+should_sync qwen        && { echo; sync_qwen; }
 
 echo ""
 echo "────────────────────────────────────"
