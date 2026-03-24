@@ -1,35 +1,43 @@
 {
   "_meta": {
-    "generated": "2026-03-23",
-    "method": "static-analysis",
-    "note": "Baseline estimated via deep static code analysis (no live run possible in CI-less environment). Values represent conservative estimates based on identified bottlenecks. Run `lhci autorun` against deployed URL for live scores.",
+    "generated": "2026-03-24",
+    "method": "live-lighthouse-run",
+    "note": "Live Lighthouse run against production Vercel URLs (www.gateflow.site, app.gateflow.site). Mobile + Desktop, 3 runs each. Phase 5 certification results - NOT 100/100 yet.",
     "target": "100/100 Mobile & Desktop for all routes",
-    "plan": "pagespeed_100"
+    "plan": "pagespeed_100",
+    "run_date": "2026-03-24",
+    "production_urls": {
+      "marketing": "https://www.gateflow.site",
+      "dashboard": "https://app.gateflow.site"
+    }
   },
   "apps": {
     "marketing": {
-      "url": "https://gateflow.app",
+      "url": "https://www.gateflow.site",
       "routes": ["/en", "/en/features", "/en/pricing", "/en/solutions"],
       "estimated_scores": {
         "desktop": {
-          "performance": 78,
-          "accessibility": 88,
-          "best_practices": 92,
-          "seo": 95
+          "performance": 87,
+          "accessibility": 96,
+          "best_practices": 96,
+          "seo": 91
         },
         "mobile": {
-          "performance": 65,
-          "accessibility": 85,
-          "best_practices": 92,
-          "seo": 95
+          "performance": 74,
+          "accessibility": 100,
+          "best_practices": 96,
+          "seo": 91
         }
       },
-      "core_web_vitals_estimates": {
-        "LCP_ms": 2800,
-        "FCP_ms": 1600,
-        "TBT_ms": 280,
-        "CLS": 0.08,
-        "INP_ms": 180,
+      "core_web_vitals": {
+        "LCP_ms_desktop": 824,
+        "LCP_ms_mobile": 2031,
+        "FCP_ms_desktop": 473,
+        "FCP_ms_mobile": 1203,
+        "TBT_ms_desktop": 145,
+        "TBT_ms_mobile": 1357,
+        "CLS": 0,
+        "INP_ms_desktop": 997,
         "TTFB_ms": 450
       },
       "identified_bottlenecks": [
@@ -44,7 +52,7 @@
       ]
     },
     "client_dashboard": {
-      "url": "https://app.gateflow.app",
+      "url": "https://app.gateflow.site",
       "routes": [
         "/en/dashboard",
         "/en/dashboard/analytics",
@@ -64,12 +72,29 @@
           "seo": 70
         }
       },
-      "core_web_vitals_estimates": {
-        "LCP_ms": 3200,
-        "FCP_ms": 1900,
-        "TBT_ms": 480,
-        "CLS": 0.12,
-        "INP_ms": 240,
+      "certified_scores": {
+        "desktop": {
+          "performance": 64,
+          "accessibility": 85,
+          "best_practices": 100,
+          "seo": 100
+        },
+        "mobile": {
+          "performance": 62,
+          "accessibility": 85,
+          "best_practices": 100,
+          "seo": 100
+        }
+      },
+      "core_web_vitals": {
+        "LCP_ms_desktop": 3189,
+        "LCP_ms_mobile": 3128,
+        "FCP_ms_desktop": 1239,
+        "FCP_ms_mobile": 1178,
+        "TBT_ms_desktop": 2359,
+        "TBT_ms_mobile": 4145,
+        "CLS": 0,
+        "INP_ms_desktop": 1500,
         "TTFB_ms": 600
       },
       "identified_bottlenecks": [
@@ -86,11 +111,12 @@
     }
   },
   "gap_to_100": {
-    "marketing_desktop_perf": 22,
-    "marketing_mobile_perf": 35,
-    "client_desktop_perf": 28,
-    "client_mobile_perf": 42
+    "marketing_desktop_perf": 13,
+    "marketing_mobile_perf": 26,
+    "client_desktop_perf": 36,
+    "client_mobile_perf": 38,
+    "certification_status": "NOT_CERTIFIED - scores below Phase 5 targets"
   },
-  "lhci_command": "lhci autorun --collect.url=https://gateflow.app --config=.lighthouserc.js",
+  "lhci_command": "lhci autorun --collect.url=https://www.gateflow.site --collect.url=https://app.gateflow.site --config=.lighthouserc.js",
   "live_run_instructions": "1. Deploy to Vercel 2. Run: npx lhci autorun --collect.url=<deployed_url> --config=.lighthouserc.js 3. Update this file with actual scores"
 }

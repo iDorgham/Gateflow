@@ -12,11 +12,15 @@ export function LoadingSpinner({
   className,
   ...props
 }: LoadingSpinnerProps) {
+  // Cast to React.ElementType to avoid dual @types/react version mismatch
+  const Comp = Loader2 as unknown as React.ElementType<
+    React.SVGAttributes<SVGElement> & { size?: number | string }
+  >;
   return (
-    <Loader2
+    <Comp
       size={size}
       className={cn('animate-spin text-primary', className)}
-      {...(props as unknown as React.ComponentProps<typeof Loader2>)}
+      {...props}
     />
   );
 }

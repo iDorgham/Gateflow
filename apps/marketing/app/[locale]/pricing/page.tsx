@@ -25,32 +25,32 @@ export default async function PricingPage(props: {
 
   const plans = [
     {
-      name: t('plans.starter.name'),
-      price: t('plans.starter.price'),
-      description: t('plans.starter.description'),
-      features: t('plans.starter.features', {
+      name: t('tiers.starter.name'),
+      price: t('tiers.starter.price.monthly'),
+      description: t('tiers.starter.description'),
+      features: t('tiers.starter.features', {
         returnObjects: true,
       }) as string[],
-      cta: t('plans.starter.cta'),
+      cta: t('tiers.starter.cta'),
       variant: 'outline' as const,
     },
     {
-      name: t('plans.pro.name'),
-      price: t('plans.pro.price'),
-      description: t('plans.pro.description'),
-      features: t('plans.pro.features', { returnObjects: true }) as string[],
-      cta: t('plans.pro.cta'),
+      name: t('tiers.pro.name'),
+      price: t('tiers.pro.price.monthly'),
+      description: t('tiers.pro.description'),
+      features: t('tiers.pro.features', { returnObjects: true }) as string[],
+      cta: t('tiers.pro.cta'),
       variant: 'brand' as const,
       highlight: true,
     },
     {
-      name: t('plans.enterprise.name'),
-      price: t('plans.enterprise.price'),
-      description: t('plans.enterprise.description'),
-      features: t('plans.enterprise.features', {
+      name: t('tiers.enterprise.name'),
+      price: t('tiers.enterprise.price.custom'),
+      description: t('tiers.enterprise.description'),
+      features: t('tiers.enterprise.features', {
         returnObjects: true,
       }) as string[],
-      cta: t('plans.enterprise.cta'),
+      cta: t('tiers.enterprise.cta'),
       variant: 'outline' as const,
     },
   ];

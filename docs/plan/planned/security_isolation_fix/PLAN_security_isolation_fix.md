@@ -46,9 +46,33 @@ vulnerabilities discovered by the Ralph Skill Discovery engine.
 - **Acceptance criteria:**
   - [ ] Analytics reports are strictly scoped to the requesting organization.
 
-### Phase 5 — Automated Enforcement & Certification
+### Phase 5 — Automated Enforcement & Certification (Initial)
 
-**Goal:** Certified 100% compliance via automated scanning.
+**Goal:** Run initial enforcement to confirm all backend/API hardening from Phases 1–4 is successful.
+
+- **Deliverables:**
+  - [ ] Rerun `ralph-skill-discover.js` with zero violations across core APIs.
+- **Acceptance criteria:**
+  - [ ] 100% compliance on all Phase 1–4 API scopes.
+
+### Phase 6 — Gate-Assignment Management UI
+
+**Goal:** Implement the dashboard UI for managing user-to-gate assignments as defined in the design craft.
+
+- **Scope:** `dashboard/team/gate-assignments/page.tsx`, `api/gates/assignments/route.ts`.
+- **Deliverables:**
+  - [ ] Assign Form: User select + Gates multi-select.
+  - [ ] Assignments Table: List with unassign actions.
+  - [ ] Scoped to current organization data only.
+- **Depends on:** `gf-ads-core-tokens`, `client-dashboard` layouts.
+- **Acceptance criteria:**
+  - [ ] New page at `/dashboard/team/gate-assignments` with assigned roles protection.
+  - [ ] UI correctly fetches org-specific users and gates.
+  - [ ] Assign and Unassign actions function correctly and refresh the UI.
+
+### Phase 7 — Final Certification & Audit
+
+**Goal:** Certified 100% compliance via automated scanning across all code, including the new UI.
 
 - **Deliverables:**
   - [ ] Rerun `ralph-skill-discover.js` with zero violations.
