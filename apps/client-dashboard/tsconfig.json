@@ -20,7 +20,8 @@
       "react/jsx-runtime": ["../../node_modules/@types/react/jsx-runtime"],
       "react/jsx-dev-runtime": [
         "../../node_modules/@types/react/jsx-dev-runtime"
-      ]
+      ],
+      "react-hook-form": ["../../packages/ui/node_modules/react-hook-form"]
     },
     "plugins": [
       {
