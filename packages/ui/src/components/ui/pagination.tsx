@@ -40,7 +40,17 @@ export function Pagination({
     return items;
   }, [currentPage, totalPages, maxVisible]);
 
-  const Item = ({ page, active, disabled, children }: { page: number; active?: boolean; disabled?: boolean; children: React.ReactNode }) => {
+  const Item = ({
+    page,
+    active,
+    disabled,
+    children,
+  }: {
+    page: number;
+    active?: boolean;
+    disabled?: boolean;
+    children: React.ReactNode;
+  }) => {
     const commonClass = cn(
       'inline-flex items-center justify-center rounded-[var(--ds-border-radius-100,#3px)] text-sm font-semibold transition-all duration-150',
       'min-w-[32px] h-8 px-2',
@@ -53,7 +63,7 @@ export function Pagination({
     if (getHref && !disabled) {
       return (
         <Link href={getHref(page)} className={commonClass}>
-          {children}
+          {children as unknown as JSX.Element}
         </Link>
       );
     }
@@ -71,24 +81,30 @@ export function Pagination({
   };
 
   return (
-    <nav className={cn('flex items-center justify-center gap-1.5', className)} aria-label="Pagination">
+    <nav
+      className={cn('flex items-center justify-center gap-1.5', className)}
+      aria-label="Pagination"
+    >
       <Item page={currentPage - 1} disabled={currentPage <= 1}>
         <ChevronLeft className="h-3.5 w-3.5 mr-1" />
         <span className="hidden sm:inline">Prev</span>
       </Item>
 
       <div className="flex items-center gap-1">
-        {pages.map((p, i) => (
+        {pages.map((p, i) =>
           typeof p === 'number' ? (
             <Item key={i} page={p} active={currentPage === p}>
               {p}
             </Item>
           ) : (
-            <span key={i} className="px-2 text-[var(--ds-text-subtle,#6B778C)] opacity-50 font-black">
+            <span
+              key={i}
+              className="px-2 text-[var(--ds-text-subtle,#6B778C)] opacity-50 font-black"
+            >
               &bull;&bull;&bull;
             </span>
           )
-        ))}
+        )}
       </div>
 
       <Item page={currentPage + 1} disabled={currentPage >= totalPages}>
