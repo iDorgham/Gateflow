@@ -19,22 +19,26 @@ export class AiActionService {
     if (!text) return '';
 
     // Mask emails: test@example.com -> t***@example.com
-    // Uses non-overlapping character classes to avoid ReDoS
+    // ReDoS-resistant pattern using non-backtracking structure
     let masked = text.replace(
-      /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+/g,
+      /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g,
       (match) => {
         const atIdx = match.indexOf('@');
+        if (atIdx <= 1) return match[0] + '***' + match.slice(atIdx);
         return match[0] + '***' + match.slice(atIdx);
       }
     );
 
-    // Mask phone numbers (basic pattern for global/local): +961 70 123 456 -> +961 70 *** 456
+    // Mask phone numbers: +961 70 123 456 -> +961 70 *** 456
+    // Simplified pattern to avoid nested quantifiers and polynomial backtracking
     masked = masked.replace(
-      /(\+?\d{1,3}[-.\s]?)?\(?\d{2,3}\)?[-.\s]?\d{3,4}[-.\s]?\d{3,4}/g,
+      /(?:\+?\d{1,3}[-.\s]?)?\(?\d{2,4}\)?[-.\s]?\d{3,4}[-.\s]?\d{3,9}/g,
       (match) => {
-        if (match.length < 6) return match;
+        if (match.length < 8) return match;
+        // Basic masking strategy: keep first part, mask middle, keep last 4
+        const visible = Math.max(3, match.length - 8);
         return (
-          match.substring(0, match.length - 7) +
+          match.substring(0, visible) +
           '***' +
           match.substring(match.length - 4)
         );

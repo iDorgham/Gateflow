@@ -20,6 +20,8 @@ _(next release notes go here)_
 
 ### Features
 
+- **[Plan] **structured plan folders, phase parts, and 2-tool selection
+
 - **[Ui] **automate UI/UX Pro Max skill across plan/dev workflows
 
 - **[Ui] **install UI/UX Pro Max skill and sync across assistants
