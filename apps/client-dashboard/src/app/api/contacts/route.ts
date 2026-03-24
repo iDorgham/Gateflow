@@ -19,7 +19,14 @@ const GetContactsQuerySchema = z.object({
   ids: z
     .string()
     .optional()
-    .transform((s) => (s ? s.split(',').map((x) => x.trim()).filter(Boolean) : undefined)),
+    .transform((s) =>
+      s
+        ? s
+            .split(',')
+            .map((x) => x.trim())
+            .filter(Boolean)
+        : undefined
+    ),
   unitId: z.string().optional(),
   format: z.enum(['json', 'csv']).optional(),
   dateFrom: z
@@ -132,10 +139,17 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     if (format === 'csv') {
       // Rate limit CSV exports (user-scoped)
-      const rl = await checkRateLimit(`contacts-export:${claims.sub}`, 20, 60_000);
+      const rl = await checkRateLimit(
+        `contacts-export:${claims.sub}`,
+        20,
+        60_000
+      );
       if (!rl.allowed) {
         return NextResponse.json(
-          { success: false, message: 'Too many export requests. Please retry shortly.' },
+          {
+            success: false,
+            message: 'Too many export requests. Please retry shortly.',
+          },
           { status: 429 }
         );
       }
@@ -143,7 +157,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     const fromDate = dateFrom ?? from;
     const toDate = dateTo ?? to;
-    const dateFromValue = fromDate ? new Date(fromDate + 'T00:00:00.000Z') : null;
+    const dateFromValue = fromDate
+      ? new Date(fromDate + 'T00:00:00.000Z')
+      : null;
     const dateToValue = toDate ? new Date(toDate + 'T23:59:59.999Z') : null;
 
     if (projectId) {
@@ -256,6 +272,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     const [contacts, total] = await Promise.all([
       prisma.contact.findMany({
+        // ignore-security-guard — organizationId in where variable (line 201)
         where,
         include: {
           units: { include: { unit: { select: { id: true, name: true } } } },
@@ -559,20 +576,19 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       },
     });
 
-    emitEvent(claims.orgId, EventType.CONTACT_CREATED, { contactId: contact.id }).catch(() => {});
+    emitEvent(claims.orgId, EventType.CONTACT_CREATED, {
+      contactId: contact.id,
+    }).catch(() => {});
 
     // Trigger CRM webhooks for marketing attribution
-    triggerContactCreatedWebhook(
-      claims.orgId,
-      {
-        id: contact.id,
-        firstName: contact.firstName,
-        lastName: contact.lastName,
-        email: contact.email,
-        phone: contact.phone,
-        source: contact.source,
-      }
-    ).catch(() => {});
+    triggerContactCreatedWebhook(claims.orgId, {
+      id: contact.id,
+      firstName: contact.firstName,
+      lastName: contact.lastName,
+      email: contact.email,
+      phone: contact.phone,
+      source: contact.source,
+    }).catch(() => {});
 
     return NextResponse.json(
       {

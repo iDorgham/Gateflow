@@ -29,7 +29,14 @@ const GetUnitsQuerySchema = z.object({
   ids: z
     .string()
     .optional()
-    .transform((s) => (s ? s.split(',').map((x) => x.trim()).filter(Boolean) : undefined)),
+    .transform((s) =>
+      s
+        ? s
+            .split(',')
+            .map((x) => x.trim())
+            .filter(Boolean)
+        : undefined
+    ),
   projectId: z.string().optional(),
   format: z.enum(['json', 'csv']).optional(),
   search: z.string().optional(),
@@ -139,7 +146,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       const rl = await checkRateLimit(`units-export:${auth.sub}`, 20, 60_000);
       if (!rl.allowed) {
         return NextResponse.json(
-          { success: false, message: 'Too many export requests. Please retry shortly.' },
+          {
+            success: false,
+            message: 'Too many export requests. Please retry shortly.',
+          },
           { status: 429 }
         );
       }
@@ -197,6 +207,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     const [units, total] = await Promise.all([
       prisma.unit.findMany({
+        // ignore-security-guard — organizationId in where variable (line 169)
         where,
         include: {
           contacts: {

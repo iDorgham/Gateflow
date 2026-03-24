@@ -8,8 +8,16 @@ export const dynamic = 'force-dynamic';
 const GetUnitsQuerySchema = z.object({
   projectId: z.string().optional(),
   search: z.string().optional(),
-  page: z.string().optional().transform(s => Math.max(1, parseInt(s ?? '1', 10) || 1)),
-  pageSize: z.string().optional().transform(s => Math.min(100, Math.max(1, parseInt(s ?? '25', 10) || 25))),
+  page: z
+    .string()
+    .optional()
+    .transform((s) => Math.max(1, parseInt(s ?? '1', 10) || 1)),
+  pageSize: z
+    .string()
+    .optional()
+    .transform((s) =>
+      Math.min(100, Math.max(1, parseInt(s ?? '25', 10) || 25))
+    ),
   sort: z.enum(['name', 'type', 'createdAt']).optional().default('name'),
   sortDir: z.enum(['asc', 'desc']).optional().default('asc'),
 });
@@ -26,12 +34,22 @@ const CreateUnitSchema = z.object({
 export async function GET(request: NextRequest) {
   try {
     const claims = await getSessionClaims();
-    if (!claims?.orgId) return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+    if (!claims?.orgId)
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized' },
+        { status: 401 }
+      );
 
     const { searchParams } = new URL(request.url);
-    const parsed = GetUnitsQuerySchema.safeParse(Object.fromEntries(searchParams));
-    
-    if (!parsed.success) return NextResponse.json({ success: false, error: parsed.error.flatten() }, { status: 400 });
+    const parsed = GetUnitsQuerySchema.safeParse(
+      Object.fromEntries(searchParams)
+    );
+
+    if (!parsed.success)
+      return NextResponse.json(
+        { success: false, error: parsed.error.flatten() },
+        { status: 400 }
+      );
 
     const { projectId, search, page, pageSize, sort, sortDir } = parsed.data;
 
@@ -39,20 +57,29 @@ export async function GET(request: NextRequest) {
       organizationId: claims.orgId,
       deletedAt: null,
       ...(projectId ? { projectId } : {}),
-      ...(search ? {
-        OR: [
-          { name: { contains: search, mode: 'insensitive' } },
-          { building: { contains: search, mode: 'insensitive' } },
-        ]
-      } : {}),
+      ...(search
+        ? {
+            OR: [
+              { name: { contains: search, mode: 'insensitive' } },
+              { building: { contains: search, mode: 'insensitive' } },
+            ],
+          }
+        : {}),
     };
 
     const [units, total] = await Promise.all([
       prisma.unit.findMany({
+        // ignore-security-guard — organizationId in where variable (line 39)
         where,
         include: {
           project: { select: { id: true, name: true } },
-          contacts: { include: { contact: { select: { id: true, firstName: true, lastName: true } } } },
+          contacts: {
+            include: {
+              contact: {
+                select: { id: true, firstName: true, lastName: true },
+              },
+            },
+          },
         },
         orderBy: { [sort]: sortDir },
         skip: (page - 1) * pageSize,
@@ -61,30 +88,51 @@ export async function GET(request: NextRequest) {
       prisma.unit.count({ where }),
     ]);
 
-    return NextResponse.json({ success: true, data: units, total, page, pageSize });
+    return NextResponse.json({
+      success: true,
+      data: units,
+      total,
+      page,
+      pageSize,
+    });
   } catch (error) {
     console.error('CRM UNITS GET error:', error);
-    return NextResponse.json({ success: false, message: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: 'Internal Server Error' },
+      { status: 500 }
+    );
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
     const claims = await getSessionClaims();
-    if (!claims?.orgId) return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+    if (!claims?.orgId)
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized' },
+        { status: 401 }
+      );
 
     const body = await request.json();
     const validation = CreateUnitSchema.safeParse(body);
 
-    if (!validation.success) return NextResponse.json({ success: false, error: validation.error.flatten() }, { status: 400 });
+    if (!validation.success)
+      return NextResponse.json(
+        { success: false, error: validation.error.flatten() },
+        { status: 400 }
+      );
 
     const { contactIds, ...rest } = validation.data;
 
     // Verify project belongs to organization
     const project = await prisma.project.findFirst({
-      where: { id: rest.projectId, organizationId: claims.orgId }
+      where: { id: rest.projectId, organizationId: claims.orgId },
     });
-    if (!project) return NextResponse.json({ success: false, message: 'Invalid Project or Access Denied' }, { status: 403 });
+    if (!project)
+      return NextResponse.json(
+        { success: false, message: 'Invalid Project or Access Denied' },
+        { status: 403 }
+      );
 
     const unit = await prisma.unit.create({
       data: {
@@ -94,22 +142,32 @@ export async function POST(request: NextRequest) {
         building: rest.building,
         sizeSqm: rest.sizeSqm,
         organizationId: claims.orgId,
-        contacts: contactIds?.length ? {
-          create: await prisma.contact.findMany({
-            where: { id: { in: contactIds }, organizationId: claims.orgId },
-            select: { id: true }
-          }).then(contacts => contacts.map(c => ({ contactId: c.id })))
-        } : undefined,
+        contacts: contactIds?.length
+          ? {
+              create: await prisma.contact
+                .findMany({
+                  where: {
+                    id: { in: contactIds },
+                    organizationId: claims.orgId,
+                  },
+                  select: { id: true },
+                })
+                .then((contacts) => contacts.map((c) => ({ contactId: c.id }))),
+            }
+          : undefined,
       },
       include: {
         project: true,
-        contacts: { include: { contact: true } }
-      }
+        contacts: { include: { contact: true } },
+      },
     });
 
     return NextResponse.json({ success: true, data: unit }, { status: 201 });
   } catch (error) {
     console.error('CRM UNITS POST error:', error);
-    return NextResponse.json({ success: false, message: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: 'Internal Server Error' },
+      { status: 500 }
+    );
   }
 }
