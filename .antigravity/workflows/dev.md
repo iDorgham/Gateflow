@@ -13,6 +13,8 @@ Use `/dev` to implement **exactly one** phase from a plan end-to-end: code, test
   - Check `git status` (clean or committed branch).
   - Optionally run `pnpm preflight` when appropriate.
 - **Resolves plan location**: check `in-progress/<slug>/`, `planned/<slug>/`, `planning/<slug>/`, then legacy `execution/`.
+- **Resolves phase prompt** (new folder structure): `phases/NN_<title>/PROMPT_phase_NN.md` OR `phases/NN_<title>/PROMPT_phase_NN_part_a.md`. Falls back to legacy flat `PROMPT_<slug>_phase_N.md`.
+- **Parts**: When a phase has multiple parts, executes each part in sequence as sub-phases. Each part gets its own commit. Updates `TASKS_<slug>.md` per part.
 - **Lifecycle transitions:**
   - **When starting a phase:** If plan is in `planned/<slug>/`, move it to `in-progress/<slug>/` before executing.
   - **When completing the last phase:** Move `in-progress/<slug>/` → `done/<slug>/`.

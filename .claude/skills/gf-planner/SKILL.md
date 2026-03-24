@@ -41,15 +41,75 @@ See `docs/plan/PLAN_LIFECYCLE.md` for full lifecycle. See `docs/plan/PLANNING_EN
 
 ---
 
+## Plan Folder Structure
+
+Every new plan gets a structured folder. See `docs/plan/templates/PLAN_FOLDER_STRUCTURE.md` for full spec.
+
+```
+docs/plan/planning/<slug>/
+├── PLAN_<slug>.md              # Master overview
+├── TASKS_<slug>.md             # Flat checklist
+├── CONTEXT_<slug>.md           # Frozen schema/types/env snapshot
+├── phases/
+│   ├── 01_<title>/
+│   │   ├── PROMPT_phase_01.md          # Single prompt (short phase)
+│   │   ├── PROMPT_phase_01_part_a.md   # OR Part A (long phase)
+│   │   ├── PROMPT_phase_01_part_b.md   # Part B
+│   │   └── files/                      # Code scaffolds (schema patches, templates)
+│   └── 02_<title>/
+│       └── PROMPT_phase_02.md
+└── assets/
+    └── ARCH_NOTES.md           # Architecture decisions
+```
+
+**Create this folder structure first before writing any files.**
+
+### Phase Splitting Rules
+
+Split a phase into parts when any of these apply:
+
+| Condition | Action |
+|-----------|--------|
+| > 5 implementation steps | Split at logical boundary |
+| Touches > 3 areas (schema + API + UI) | Split by concern |
+| Estimated prompt > 700 words | Split into ~600-word parts |
+| Spans multiple apps or packages | Split by app/package |
+| Mixes DB work + frontend work | Always split |
+
+Part naming convention: `part_a` (foundation/schema), `part_b` (logic/API), `part_c` (UI/integration), `part_d` (tests).
+
+### Tool Selection Matrix (Quality vs Cost)
+
+Every phase prompt must specify **Tool 1** (best quality) and **Tool 2** (free/cheaper fallback).
+
+| Domain | Tool 1 | Tool 2 (free/cheaper) |
+|--------|--------|----------------------|
+| Security / Auth / RBAC | Claude Code CLI | Cursor |
+| DB Schema / Prisma | Cursor | Gemini CLI (free) |
+| API complex | Claude Code CLI | Cursor |
+| API routine CRUD | Cursor | OpenCode CLI (free) |
+| Frontend / UI | Cursor | OpenCode CLI (free) |
+| Architecture reasoning | Claude Code CLI | Gemini CLI (free) |
+| Test generation | Gemini CLI (free) | Cursor |
+| Mobile / Expo | Cursor | Qwen CLI (free) |
+| DevOps / CI | Kilo CLI (free) | Cursor |
+| Code review | Claude Code CLI | Kiro CLI (free) |
+| Refactoring | OpenCode CLI (free) | Cursor |
+
+Switch to Tool 2 when Tool 1 is at 80%+ limit (`gf-cli-limits` skill).
+
+---
+
 ## Planning Workflow (Understand → Investigate → Generate)
 
 For complex initiatives, follow this flow before writing phase prompts:
 
-1. **Understand** — Read IDEA, backlog, product context. Ask clarifying questions if scope is unclear.
+1. **Understand** — Read IDEA, backlog, product context. Ask clarifying questions if scope is unclear. Invoke `brainstorming` skill if goal is creative/unclear.
 2. **Investigate** (optional) — For multi-component or uncertain scope: invoke **explore** subagent to map flows, file patterns, dependencies. Use: "Trace the end-to-end flow for [X]. Return key files and call graph."
-3. **Generate** — Create PLAN + phase prompts. Populate **Skills**, **MCP**, **Subagents**, **Commands** per phase when relevant.
+3. **Scaffold folder** — Create `docs/plan/planning/<slug>/` with phases/ and assets/ subdirectories before writing any files.
+4. **Generate** — Create PLAN + CONTEXT + phase prompts. Populate **Skills** (process + domain), **Tool 1/Tool 2**, **MCP**, **Subagents**, **Commands** per phase. Use `writing-plans` skill for prompt quality. Split long phases into parts.
 
-For simple changes (bug fix, single-file refactor), skip to Generate.
+For simple changes (bug fix, single-file refactor), skip to step 3.
 
 ---
 
@@ -75,7 +135,7 @@ OUTPUT:
 1. Plan summary (2–3 sentences)
 2. Phases (ordered): each with Title, Scope, Deliverables, Depends on, Test criteria
 3. Per phase: assign **Primary role** from SUBAGENT_HIERARCHY. Match role to phase domain.
-8. Per phase: add **Skills to load** — process skills first: `using-superpowers` (always), `test-driven-development` (behavior changes), `systematic-debugging` (debug phases), `verification-before-completion` (before any completion claim), `executing-plans` (execution discipline), `subagent-driven-development` (3+ sub-tasks), `dispatching-parallel-agents` (parallel failures), `brainstorming` (unclear requirements), `finishing-a-development-branch` (branch handoff), `requesting-code-review` (after push), `receiving-code-review` (PR feedback), `using-git-worktrees` (risky/parallel), `writing-skills` (new patterns). Then domain skills: gf-security, gf-database, gf-api, gf-mobile, gf-architecture, gf-testing, ui-ux-pro-max when relevant.
+8. Per phase: add **Skills to load** (gf-security, gf-database, gf-api, gf-mobile, gf-architecture, gf-testing, ui-ux-pro-max) when relevant
 9. **UI/UX Intelligence**: If the phase involves UI, add a step to run `python3 .agents/skills/ui-ux-pro-max/scripts/search.py` and follow its design system.
 10. Per phase: add **MCP to use** (Prisma-Local for schema, Context7 for docs, cursor-ide-browser for E2E) when relevant
 11. Per phase: add **Subagent** (explore/shell/browser-use) with a concrete prompt when exploration or verification helps

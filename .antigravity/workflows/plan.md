@@ -15,14 +15,28 @@ Use `/plan` to convert an idea into an executable multi-phase plan with per-phas
   - `docs/plan/guidelines/PHASED_DEVELOPMENT_WORKFLOW.md`
   - `docs/plan/guidelines/SUBAGENT_HIERARCHY.md`
   - `docs/plan/guidelines/AI_SKILLS_SUBAGENTS_RULES.md`
-- Produces/updates in **`docs/plan/planning/<slug>/`** (draft until marked ready):
-  - `PLAN_<slug>.md` — ordered phases with Scope, Deliverables, Depends on, and Test criteria.
-  - `PROMPT_<slug>_phase_<N>.md` — one pro prompt per phase using template.
-  - `TASKS_<slug>.md` — phase checklist (optional, created by planner).
-- Ensures for each phase:
+  - `docs/plan/templates/PLAN_FOLDER_STRUCTURE.md` — canonical folder structure + tool matrix
+- **Creates the following folder hierarchy** in `docs/plan/planning/<slug>/`:
+  ```
+  planning/<slug>/
+  ├── PLAN_<slug>.md              # Master: phases, deps, risks
+  ├── TASKS_<slug>.md             # Flat checklist (phases + parts)
+  ├── CONTEXT_<slug>.md           # Frozen schema/types/env snapshot
+  ├── phases/
+  │   ├── 01_<title>/
+  │   │   ├── PROMPT_phase_01.md              # or part_a + part_b if long
+  │   │   └── files/                          # Code scaffolds (schema patch, templates)
+  │   └── 02_<title>/
+  │       └── PROMPT_phase_02.md
+  └── assets/
+      └── ARCH_NOTES.md                       # ADRs for complex initiatives
+  ```
+- For each phase, determines if it needs **parts** (split when > 5 steps, > 3 areas, or > 700-word prompt).
+- Ensures for each phase prompt:
   - **Primary role** is chosen from the Subagent Hierarchy.
-  - **Preferred tool** (Cursor, Claude CLI, Gemini CLI, OpenCode CLI, Multi-CLI) is set based on risk and complexity.
+  - **Tool 1** (best quality) and **Tool 2** (free/cheaper fallback) are set using the tool matrix.
   - **Steps** are concrete with file paths and commands.
+  - **Scaffolded files** in `phases/NN_<title>/files/` for schema patches, type defs, templates.
   - **Acceptance criteria** include lint, typecheck, and tests for the affected workspaces.
 
 ## How to use it
@@ -75,7 +89,20 @@ Create phased development plans from goals or backlog. This is one of the **four
 5. **Phase prompt writing:** Invoke `writing-plans` skill when creating phase prompts. Each plan must have exact file paths, complete steps, and test-first approach.
 6. **Isolated work:** When the initiative is large or risky, invoke `using-git-worktrees` to set up an isolated workspace before writing phases.
 7. Create a phased plan: breakdown, deliverables per phase, test criteria.
-8. **UI/UX Intelligence (Automated)**:
+8. **Scaffold folder structure FIRST** (before writing any files):
+   ```bash
+   mkdir -p docs/plan/planning/<slug>/phases
+   mkdir -p docs/plan/planning/<slug>/assets
+   # For each phase NN:
+   mkdir -p docs/plan/planning/<slug>/phases/NN_<title>/files
+   ```
+9. **Write root files**: `PLAN_<slug>.md`, `TASKS_<slug>.md`, `CONTEXT_<slug>.md` (frozen schema + key types + env vars).
+10. **For each phase**, determine if it needs **parts** (see splitting rules in `PLAN_FOLDER_STRUCTURE.md`):
+    - Short phase (≤5 steps, 1-2 areas): single `PROMPT_phase_NN.md`
+    - Long phase (>5 steps, 3+ areas, >700 words): split into `PROMPT_phase_NN_part_a.md`, `_part_b.md`, etc.
+    - Add scaffolded code in `phases/NN_<title>/files/` (schema patches, type defs, templates)
+11. **Tool 1 + Tool 2** in every phase prompt: use `docs/plan/templates/PLAN_FOLDER_STRUCTURE.md` tool matrix. Load `gf-cli-limits` to check current limits.
+12. **UI/UX Intelligence (Automated)**:
    - If the initiative involves UI (SaaS, Mobile, Dashboard, Landing):
    - Run: `python3 .agents/skills/ui-ux-pro-max/scripts/search.py "<slug> <industry>" --design-system --persist -p "<slug>"`
    - Reference `design-system/MASTER.md` in the plan and prompts.
