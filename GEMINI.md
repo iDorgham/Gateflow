@@ -4,12 +4,31 @@ This file defines the foundational mandates and custom commands for Gemini CLI i
 
 ---
 
+## AI Memory (load at session start)
+
+Before starting any task, load these files to avoid re-scanning the codebase:
+
+- `.ai-memory/architecture.md` — monorepo, apps, ports, mandates, commands
+- `.ai-memory/api_patterns.md` — auth, org scope, soft deletes, QR, offline sync
+- `.ai-memory/common_errors.md` — Prisma gotchas, TS/test pitfalls, UI quirks
+- `.ai-memory/modules.md` — scanner flow, Residents, CRM, AI assistant
+
+For deeper reference (load only when relevant):
+
+- `docs/cache/API_ROUTES_MAP.md` — all 95+ routes (replaces globbing api/)
+- `docs/cache/SCHEMA_SNAPSHOT.md` — all 40 Prisma models + enums
+- `docs/cache/WORKSPACE_INDEX.md` — dep versions, env vars, ports
+
+---
+
 ## Custom Commands
 
 Gemini CLI supports the following slash commands by following the workflows defined in `.antigravity/workflows/`:
 
 ### `/idea [<slug>]`
+
 **Purpose:** Capture and refine GateFlow initiatives into `IDEA_<slug>.md` and backlog entries.
+
 - **Workflow:**
   1. Load core context: `CLAUDE.md`, `docs/PRD_v5.0.md`, `docs/plan/backlog/ALL_TASKS_BACKLOG.md`, and relevant specs.
   2. Conversationally refine goals, constraints, metrics, success criteria, and scope.
@@ -20,7 +39,9 @@ Gemini CLI supports the following slash commands by following the workflows defi
 - **Usage:** `/idea` (refine default), `/idea new` (new initiative), `/idea <slug>` (continue existing).
 
 ### `/plan [<slug>]`
+
 **Purpose:** Turn an `IDEA_<slug>.md` into a phased `PLAN_<slug>.md` plus `PROMPT_<slug>_phase_<N>.md` pro prompts.
+
 - **Workflow:**
   1. Read `docs/plan/context/IDEA_<slug>.md` and guidelines (`PHASED_DEVELOPMENT_WORKFLOW.md`, `SUBAGENT_HIERARCHY.md`, `AI_SKILLS_SUBAGENTS_RULES.md`).
   2. Create phased plan in `docs/plan/planning/<slug>/`:
@@ -34,7 +55,9 @@ Gemini CLI supports the following slash commands by following the workflows defi
 - **Usage:** `/plan`, `/plan <slug>`, `/plan ready <slug>`, `/plan phase <n>`.
 
 ### `/dev [<slug>] [<n>]`
+
 **Purpose:** Implement exactly one plan phase end-to-end (code, tests, git).
+
 - **Workflow:**
   1. **Preflight:** Run `/ready` flow (check `git status`, optionally `pnpm preflight`).
   2. **Resolve plan location:** Check `in-progress/<slug>/`, `planned/<slug>/`, `planning/<slug>/`, then legacy `execution/`.
@@ -48,7 +71,9 @@ Gemini CLI supports the following slash commands by following the workflows defi
 - **Usage:** `/dev`, `/dev <n>`, `/dev <slug> <n>`, `/dev ralph` (recursive autopilot).
 
 ### `/man [<subcommand>]`
+
 **Purpose:** One Man — one command, seven domains (Code, Brand, SaaS, Marketing, Business, Content, Copywrite).
+
 - **Subcommands:**
   - `/man` (default): Status + next action; guide in chat.
   - `/man code|brand|saas|marketing|business|content|copywrite`: Domain-specific mode.
@@ -67,7 +92,9 @@ Gemini CLI supports the following slash commands by following the workflows defi
 - **Folder structure:** `docs/plan/{backlog,context,planning,planned,in-progress,done}/`
 
 ### `/ship [<slug>]`
+
 **Purpose:** Execute all remaining phases of a plan sequentially via repeated `/dev`-style execution.
+
 - **Workflow:**
   1. If no IDEA/PLAN exist: run `/idea` then `/plan` first.
   2. Resolve plan location per `PLAN_LIFECYCLE.md` (`in-progress/`, `planned/`, `planning/`, `execution/`).
@@ -79,7 +106,9 @@ Gemini CLI supports the following slash commands by following the workflows defi
 - **Usage:** `/ship`, `/ship all`, `/ship <slug>`.
 
 ### `/guide`
+
 **Purpose:** Run the GateFlow workspace guide — "what should I do now?", next steps, recommended actions.
+
 - **Workflow:**
   1. Load context: `GATEFLOW_CONFIG.md`, `docs/PRD_v7.0.md`, `docs/plan/` (ideas, plans, learning).
   2. Assess state: git status, preflight, active plan/phase.
@@ -97,7 +126,9 @@ Gemini CLI supports the following slash commands by following the workflows defi
 - **Usage:** `/guide`, `/guide what should I do now`, `/guide` + "and do the next phase".
 
 ### `/clis team <name>`
+
 **Purpose:** Run a predefined CLI team (2–4 CLIs in sequence). Cursor is master; outputs are proposals until applied/verified.
+
 - **Teams:**
   | Name | Command | Team | Purpose |
   |------|---------|------|---------|
@@ -120,6 +151,7 @@ Gemini CLI supports the following slash commands by following the workflows defi
 **83 skills** available in `.antigravity/skills/`. Key skills:
 
 ### Core Workflow Skills
+
 - `gf-planner` — Phased planning, roadmap generation.
 - `gf-dev` — Implementation, feasibility, stack fit.
 - `gf-guide` — Workspace guidance, state assessment.
@@ -129,6 +161,7 @@ Gemini CLI supports the following slash commands by following the workflows defi
 - `multi-cli-cursor-workflow` — Multi-CLI coordination.
 
 ### Domain Skills
+
 - **Backend:** `gf-api`, `gf-api-gateway`, `gf-backend-services`, `gf-database`, `gf-prisma-performance`.
 - **Frontend:** `gf-design-guide`, `gf-responsive-design-system`, `gf-shadcn-*` adapters.
 - **Security:** `gf-security`, `gf-rbac-permissions`, `gf-data-privacy-gdpr`, `gf-qr-crypto-security`.
@@ -138,6 +171,7 @@ Gemini CLI supports the following slash commands by following the workflows defi
 - **Architecture:** `gf-architecture`, `gf-monorepo-architecture`, `gf-system-invariants`.
 
 ### ADS (Antigravity Design System) Skills
+
 - `gf-ads-core-tokens`, `gf-ads-color-tokens`, `gf-ads-typography-scale`, `gf-ads-spacing-grid`, `gf-ads-iconography-grid`, `gf-ads-ui-styling-standard`, and more.
 
 ---
@@ -145,6 +179,7 @@ Gemini CLI supports the following slash commands by following the workflows defi
 ## Agent Roles
 
 **11 agent roles** in `.antigravity/agents/roles/`:
+
 - `frontend.md` — UI implementation, component development.
 - `backend-api.md` — API design, endpoints, integration.
 - `backend-database.md` — Schema, migrations, queries.
@@ -158,6 +193,7 @@ Gemini CLI supports the following slash commands by following the workflows defi
 - `explore.md` — Research, discovery, investigation.
 
 ### Subagents
+
 - `browser-use.md` — Web browsing, scraping.
 - `explore.md` — Codebase exploration.
 - `shell.md` — Shell command execution.
@@ -182,11 +218,13 @@ Gemini CLI supports the following slash commands by following the workflows defi
 ## Reference Docs
 
 ### Core
+
 - `docs/CLAUDE.md` — Core project overview and commands.
 - `docs/PRD_v7.0.md` — Product requirements and roadmap.
 - `GATEFLOW_CONFIG.md` — Commands, plans, security, agents, skills.
 
 ### Planning
+
 - `docs/plan/PLAN_LIFECYCLE.md` — Plan state transitions.
 - `docs/plan/guidelines/PHASED_DEVELOPMENT_WORKFLOW.md` — Execution loop.
 - `docs/plan/guidelines/SUBAGENT_HIERARCHY.md` — Roles and subagents brain.
@@ -195,6 +233,7 @@ Gemini CLI supports the following slash commands by following the workflows defi
 - `docs/plan/execution/PROMPTS_REFERENCE.md` — Professional prompt templates.
 
 ### Learning & Memory
+
 - `docs/plan/learning/GUIDE_PREFERENCES.md` — User AI interaction preferences.
 - `docs/plan/learning/CLI_TEAMS.md` — CLI team rosters and workflows.
 - `docs/plan/learning/CLI_LIMITS_TRACKING.md` — CLI usage limits.
@@ -205,6 +244,7 @@ Gemini CLI supports the following slash commands by following the workflows defi
 - `docs/plan/learning/{patterns,incidents,decisions}.md` — Cross-plan learnings.
 
 ### Guides
+
 - `docs/guides/TOOL_AND_CLI_REFERENCE.md` — CLI tool recommendations.
 - `docs/guides/UI_DESIGN_GUIDE.md` — UI design standards.
 - `docs/guides/MOTION_AND_ANIMATION.md` — Animation guidelines.
