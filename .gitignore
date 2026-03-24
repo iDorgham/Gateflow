@@ -34,3 +34,4 @@ test_qr.js
 # .ai-memory — tracked (shared workspace memory for all AI tools)
 # docs/cache — tracked (codebase snapshots)
 .vscode
+.qwen

@@ -81,6 +81,11 @@ plan:run → plan:done` with automatic folder moves and doc cascades
 
 ### Bug Fixes
 
+- **[Client] **pin react-hook-form to packages/ui instance to fix dual-version conflict
+- **[Client] **add react paths to tsconfig for @types/react module identity
+- **[Typecheck] **resolve React 19 module identity and ref-as-prop issues in admin-dashboard
+- **[Ui] **double-cast LucideIcon and props to satisfy resident-mobile strict typecheck
+
 - **[Ui] **resolve @types/react version mismatch in loading-spinner and pagination
 
 - **[Ci] **fix zod-to-json-schema webpack error by raising zod to 3.25.76; fix Next.js 15 type errors (async cookies and params) in all apps
