@@ -1,67 +1,76 @@
-<p align="center">
-  <img src="../../docs/gateflow_banner.png" alt="GateFlow Banner" width="100%">
-</p>
+# GateFlow Scanner App
 
-<h1 align="center">GateFlow Scanner App</h1>
+<div align="center">
 
-<p align="center">
-  <strong>Mobile QR Code Scanner for Gate Operations</strong><br>
-  <em>Offline-capable security scanning with encrypted sync queue</em>
-</p>
+![Banner](docs/gateflow_banner.png)
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Status-1.0.0--Production-brightgreen" alt="Status">
-  <img src="https://img.shields.io/badge/Framework-Expo%20SDK%2054-blue" alt="Framework">
-  <img src="https://img.shields.io/badge/Platform-iOS%20%2B%20Android-blue" alt="Platform">
-</p>
+**Mobile QR Code Scanner for Gate Operations**
+
+_Offline-capable security scanning with encrypted sync queue_
+
+[![Status: Production](https://img.shields.io/badge/Status-Production-success?style=for-the-badge)](#)
+[![Expo](https://img.shields.io/badge/Expo-SDK_54-4630EB?style=for-the-badge&logo=expo)](https://expo.dev)
+[![Platform](https://img.shields.io/badge/Platform-iOS_%2B_Android-blue?style=for-the-badge)](#)
+[![Security](https://img.shields.io/badge/Security-HMAC--SHA256-red?style=for-the-badge)](#)
+
+</div>
 
 ---
 
-## 📋 Overview
+## Overview
 
-The **GateFlow Scanner App** is the frontline tool for gate operators. It provides a robust, zero-latency scanning experience that works even in areas with poor cellular connectivity, ensuring the gate never stops moving.
+The **GateFlow Scanner App** is the frontline tool for gate operators. It provides a robust, zero-latency scanning experience that works even in areas with poor cellular connectivity.
 
 ### Core Mission
-- **Speed**: Sub-500ms QR detection and validation.
-- **Resilience**: Full offline validation using local cryptographic signatures.
-- **Security**: AES-256 encrypted local storage for queued scan results.
-- **Accountability**: Supervisor PIN overrides and shift tracking.
+
+| Goal               | Description                                                  |
+| :----------------- | :----------------------------------------------------------- |
+| **Speed**          | Sub-500ms QR detection and validation                        |
+| **Resilience**     | Full offline validation using local cryptographic signatures |
+| **Security**       | AES-256 encrypted local storage for queued scan results      |
+| **Accountability** | Supervisor PIN overrides and shift tracking                  |
 
 ---
 
-## ✨ Features
+## Features
 
-### 🛡️ Security Operations
-| Feature | Capability |
-| :--- | :--- |
-| **Rapid Scan** | Instant camera-based QR code detection. |
-| **Offline Verification** | Validates cryptographically signed codes without an API call. |
-| **Supervisor Override** | PIN-protected bypass with dedicated audit trails. |
-| **Identity Capture** | Level 1/2 identity photo capture directly at the gate. |
-| **Shift Management** | Tracking scans and activity per operator shift. |
+### Security Operations
 
-### 📱 User Interface (5-Tab System)
-1. **Scanner**: The primary viewfinder for rapid entry.
-2. **Today**: Feed of expected visitors for the current shift.
-3. **Log**: Local and synced history of all gate activity.
-4. **Chat**: Real-time communication with property management.
-5. **Settings**: Gate selection, offline queue status, and logout.
+| Feature                  | Capability                                           |
+| :----------------------- | :--------------------------------------------------- |
+| **Rapid Scan**           | Instant camera-based QR code detection               |
+| **Offline Verification** | Validates cryptographically signed codes without API |
+| **Supervisor Override**  | PIN-protected bypass with audit trails               |
+| **Identity Capture**     | Level 1/2 identity photo at the gate                 |
+| **Shift Management**     | Tracking scans per operator shift                    |
 
----
+### User Interface (5-Tab System)
 
-## 💻 Tech Stack
-
-- **Framework**: React Native (Expo SDK 54).
-- **Security**: HMAC-SHA256 for code signing, AES-256 for local storage.
-- **Hardware**: iOS/Android Camera, Haptics, and Local Geofencing.
-- **Sync**: Intelligent queue manager with exponential backoff.
+| Tab          | Description                                      |
+| :----------- | :----------------------------------------------- |
+| **Scanner**  | Primary viewfinder for rapid entry               |
+| **Today**    | Feed of expected visitors for current shift      |
+| **Log**      | Local and synced history of gate activity        |
+| **Chat**     | Real-time communication with property management |
+| **Settings** | Gate selection, offline queue, logout            |
 
 ---
 
-## 🚀 Getting Started
+## Tech Stack
+
+| Layer         | Technology                                   |
+| :------------ | :------------------------------------------- |
+| **Framework** | React Native (Expo SDK 54)                   |
+| **Security**  | HMAC-SHA256 for signing, AES-256 for storage |
+| **Hardware**  | iOS/Android Camera, Haptics, Geofencing      |
+| **Sync**      | Intelligent queue with exponential backoff   |
+
+---
+
+## Getting Started
 
 ```bash
-# Navigate to scanner directory
+# Navigate to scanner directory (from root)
 cd apps/scanner-app
 
 # Install native dependencies
@@ -70,23 +79,38 @@ pnpm install
 # Start Metro Bundler
 pnpm dev
 
-# Run on device (Expo Go or Development Build)
+# Run on device
 npx expo start --dev-client
 ```
 
 ---
 
-## 🔐 Offline Flow
+## Offline Flow
 
-1. **Scan**: QR is captured and signature extracted.
-2. **Verify**: Locally check HMAC-SHA256 against the shared org secret.
-3. **Queue**: Result is saved to an encrypted local queue with a unique `scanUuid`.
-4. **Sync**: A background worker attempts to push the queue to the API periodically.
-5. **Conflict**: `scanUuid` ensures no duplicate scans are ever recorded in the main DB.
+```
+1. Scan    → QR captured, signature extracted
+2. Verify  → Locally check HMAC-SHA256
+3. Queue   → Result saved with unique scanUuid
+4. Sync    → Background worker pushes to API
+5. Conflict → scanUuid prevents duplicates
+```
 
 ---
 
-<p align="center">
-  <strong>Part of the GateFlow 1.0 Production Ecosystem</strong><br>
-  <a href="../../README.md">Main Project</a> • <a href="../../docs/README.md">Documentation Index</a>
-</p>
+## Related Documentation
+
+| Document                                              | Description               |
+| :---------------------------------------------------- | :------------------------ |
+| [Scanner Operations](../guides/SCANNER_OPERATIONS.md) | Offline flow and sync     |
+| [Security Overview](../guides/SECURITY_OVERVIEW.md)   | QR signing details        |
+| [Mobile Guide](../guides/MOBILE_GUIDE.md)             | Expo setup and deployment |
+
+---
+
+<div align="center">
+
+**Part of the GateFlow Production Ecosystem**
+
+[Main README](../README.md) · [Documentation Index](../README.md) · [gateflow.site](https://gateflow.site)
+
+</div>

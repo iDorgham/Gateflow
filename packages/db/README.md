@@ -1,15 +1,33 @@
 # @gate-access/db
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Status-Stable-brightgreen" alt="Status">
-  <img src="https://img.shields.io/badge/Prisma-5.x-blue" alt="Prisma">
-</p>
+<div align="center">
 
-Prisma database client, schema, and database utilities for GateFlow.
+**Prisma database client, schema, and utilities for GateFlow**
+
+_Multi-tenant context management, quota helpers, and access control_
+
+[![Status](https://img.shields.io/badge/Status-Stable-success?style=for-the-badge)](#)
+[![Prisma](https://img.shields.io/badge/Prisma-5.x-blue?style=for-the-badge&logo=prisma)](https://prisma.io)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=for-the-badge&logo=typescript)](#)
+
+</div>
+
+---
 
 ## Overview
 
 This package provides the database layer for all GateFlow applications. It includes the Prisma client, schema definitions, multi-tenant context management, and quota helpers.
+
+### Key Features
+
+| Feature                    | Description                                    |
+| :------------------------- | :--------------------------------------------- |
+| **Multi-Tenant Isolation** | Hard-scoped queries with `organizationId`      |
+| **Soft Deletes**           | All models support `deletedAt` for data safety |
+| **Quota Management**       | Visitor quota calculations per unit type       |
+| **Access Control**         | Gate access validation utilities               |
+
+---
 
 ## Installation
 
@@ -34,29 +52,35 @@ const gates = await prisma.gate.findMany({
 });
 ```
 
+---
+
 ## Exports
 
 ### Client
 
-- `prisma` — Default Prisma client instance
-- `db` — Alias for prisma
-- `prismaClient` — Default export
+| Export         | Type   | Description                    |
+| :------------- | :----- | :----------------------------- |
+| `prisma`       | Client | Default Prisma client instance |
+| `db`           | Client | Alias for prisma               |
+| `prismaClient` | Client | Default export                 |
 
 ### Tenant Context
 
-- `setOrganizationContext(orgId)` — Set current organization context
-- `getOrganizationContext()` — Get current organization ID
-- `clearOrganizationContext()` — Clear organization context
-- `OrganizationContext` — Type for organization context
-- `DbClient` — Type for database client
+| Export                          | Type     | Description                      |
+| :------------------------------ | :------- | :------------------------------- |
+| `setOrganizationContext(orgId)` | function | Set current organization context |
+| `getOrganizationContext()`      | function | Get current organization ID      |
+| `clearOrganizationContext()`    | function | Clear organization context       |
+| `OrganizationContext`           | Type     | Type for organization context    |
 
-### Quota
+### Quota & Access
 
-- `quota` — Quota management utilities (exported from `./quota`)
+| Export   | Type   | Description                |
+| :------- | :----- | :------------------------- |
+| `quota`  | object | Quota management utilities |
+| `access` | object | Access control utilities   |
 
-### Access
-
-- `access` — Access control utilities (exported from `./access`)
+---
 
 ## Schema
 
@@ -65,7 +89,7 @@ The Prisma schema is located at `prisma/schema.prisma`.
 ### Core Models
 
 | Model          | Purpose                      |
-| -------------- | ---------------------------- |
+| :------------- | :--------------------------- |
 | `Organization` | Multi-tenant root entity     |
 | `Project`      | Sub-grouping within org      |
 | `User`         | Authenticated users          |
@@ -75,6 +99,8 @@ The Prisma schema is located at `prisma/schema.prisma`.
 | `RefreshToken` | JWT refresh tokens           |
 | `Webhook`      | Event notifications          |
 | `ApiKey`       | Programmatic API access      |
+
+---
 
 ## Database Commands
 
@@ -97,13 +123,12 @@ npx prisma db seed
 npx prisma studio
 ```
 
-## Dependencies
-
-- `@prisma/client` — Prisma ORM
-- `prisma` — CLI
+---
 
 ## Related Documentation
 
-- [Security Overview](../../docs/guides/SECURITY_OVERVIEW.md)
-- [Environment Variables](../../docs/guides/ENVIRONMENT_VARIABLES.md)
-- [CLAUDE.md: Database Schema](../../CLAUDE.md#database-schema)
+| Document                                                            | Description                |
+| :------------------------------------------------------------------ | :------------------------- |
+| [Security Overview](../../docs/guides/SECURITY_OVERVIEW.md)         | Multi-tenancy and security |
+| [Environment Variables](../../docs/guides/ENVIRONMENT_VARIABLES.md) | Database configuration     |
+| [CLAUDE.md](../../CLAUDE.md)                                        | Database schema reference  |

@@ -1,12 +1,33 @@
 # @gate-access/ui
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Status-Stable-brightgreen" alt="Status">
-  <img src="https://img.shields.io/badge/Components-29-blue" alt="Components">
-  <img src="https://img.shields.io/badge/Style-Tailwind-green" alt="Style">
-</p>
+<div align="center">
 
-Shared React UI component library for GateFlow applications. Built with Radix UI primitives and Tailwind CSS, following shadcn/ui patterns.
+**Shared React UI component library for GateFlow applications**
+
+_Built with Radix UI primitives, Tailwind CSS, and shadcn/ui patterns_
+
+[![Status](https://img.shields.io/badge/Status-Stable-success?style=for-the-badge)](#)
+[![Components](https://img.shields.io/badge/Components-29-blue?style=for-the-badge)](#)
+[![Style](https://img.shields.io/badge/Style-Tailwind-green?style=for-the-badge&logo=tailwindcss)](#)
+
+</div>
+
+---
+
+## Overview
+
+Shared React UI component library for GateFlow applications. Built with Radix UI primitives and Tailwind CSS, following shadcn/ui patterns with Atlassian Design System (ADS) tokens.
+
+### Key Features
+
+| Feature         | Description                                        |
+| :-------------- | :------------------------------------------------- |
+| **ADS Tokens**  | Atlassian Design System color, typography, spacing |
+| **RTL Support** | Full Arabic/English bidirectional support          |
+| **Dark Mode**   | System-preference detection with manual toggle     |
+| **Accessible**  | WCAG 2.1 compliant with Radix primitives           |
+
+---
 
 ## Installation
 
@@ -40,12 +61,14 @@ function MyComponent() {
 }
 ```
 
+---
+
 ## Components
 
 ### UI Primitives (26)
 
 | Component        | Description                    |
-| ---------------- | ------------------------------ |
+| :--------------- | :----------------------------- |
 | `Button`         | Clickable button with variants |
 | `Input`          | Text input field               |
 | `Textarea`       | Multi-line text input          |
@@ -80,9 +103,11 @@ function MyComponent() {
 ### Auth Components (2)
 
 | Component           | Description         |
-| ------------------- | ------------------- |
+| :------------------ | :------------------ |
 | `LoginShell`        | Login page layout   |
 | `SquaresBackground` | Animated background |
+
+---
 
 ## Utilities
 
@@ -94,6 +119,8 @@ import { cn } from '@gate-access/ui';
 <div className={cn('base-class', condition && 'conditional-class')} />;
 ```
 
+---
+
 ## Design Tokens
 
 Design tokens are exported from `./tokens`:
@@ -102,25 +129,19 @@ Design tokens are exported from `./tokens`:
 import { tokens, breakpoints, spacing, colors } from '@gate-access/ui';
 ```
 
-Tokens include:
+| Export        | Description                                       |
+| :------------ | :------------------------------------------------ |
+| `tokens`      | Color, typography, spacing, radius, shadow tokens |
+| `breakpoints` | Responsive breakpoints                            |
+| `spacing`     | Spacing scale                                     |
+| `colors`      | Color palette                                     |
 
-- `tokens` — Color, typography, spacing, radius, shadow tokens
-- `breakpoints` — Responsive breakpoints
-- `spacing` — Spacing scale
-- `colors` — Color palette
-
-## Dependencies
-
-- `react` — React library
-- `react-dom` — React DOM
-- `@radix-ui/react-*` — Radix UI primitives
-- `tailwind-merge` — Tailwind class merging
-- `clsx` — Class name utility
-- `lucide-react` — Icons
-- `class-variance-authority` — Component variants
+---
 
 ## Related Documentation
 
-- [UI Design Guide](../../docs/guides/UI_DESIGN_GUIDE.md)
-- [Design Tokens](../../docs/guides/UI_DESIGN_GUIDE.md#design-tokens)
-- [Component Library Docs](../../docs/UI_COMPONENT_LIBRARY.md)
+| Document                                                                  | Description        |
+| :------------------------------------------------------------------------ | :----------------- |
+| [UI Design Guide](../../docs/guides/UI_DESIGN_GUIDE.md)                   | ADS tokens and RTL |
+| [Component Library Docs](../../docs/guides/UI_COMPONENT_LIBRARY.md)       | Component patterns |
+| [Design Tokens Guide](../../docs/guides/UI_DESIGN_GUIDE.md#design-tokens) | Token reference    |

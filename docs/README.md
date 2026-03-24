@@ -1,68 +1,100 @@
 # GateFlow — Official Documentation Hub
 
-Welcome to the central repository for **GateFlow's technical and operational documentation**. 
-
-GateFlow is a sprawling, enterprise-grade architecture containing 6 interconnected applications operating over a modern, cryptographically secure infrastructure. This folder (`/docs`) serves to standardize all architectural decisions, deployment manifests, design paradigms, and product scopes.
-
-<br>
-
----
-
-## 🚀 1. Product & Vision
-*The business logic and roadmaps dictating the engineering scope.*
-
-| Document | Purpose |
-| :--- | :--- |
-| [**Master PRD (v9)**](product/PRD.md) | Absolute source of truth for all current implementations, application topologies, and the Phase 3 (Growth) roadmap. |
-| [**Marketing Suite Overview**](product/MARKETING_SUITE.md) | Specifications for the CRM webhooks, UTM parameters, and tracking pixels integrated into the apps. |
-| [**Project Progress Dashboard**](core/PROJECT_PROGRESS_DASHBOARD.md) | Ongoing checklist of completed macro-milestones and upcoming Epics. |
-
----
-
-## 🏗️ 2. Architecture & System Engineering
-*How the code is orchestrated across the monorepo.*
-
-| Document | Purpose |
-| :--- | :--- |
-| [**Global Architecture**](arch/ARCHITECTURE.md) | High-level system design, data flow diagrams, and offline-syncing mechanisms for the scanner edge nodes. |
-| [**Project Structure**](arch/PROJECT_STRUCTURE.md) | Breakdown of the `apps/` and `packages/` monorepo schema utilizing Turborepo. |
-| [**GateFlow Config**](core/GATEFLOW_CONFIG.md) | Centralized environmental configurations and monorepo workspace behaviors. |
-| [**Code Quality Audit**](arch/CODE_QUALITY_AND_PERFORMANCE_AUDIT.md) | Logs on rigorous type-safety optimizations and N+1 Prisma query reductions. |
-
----
-
-## 🔑 3. Development Guidelines & Ops
-*Rules of engagement for autonomous AI agents and human engineers.*
-
-| Document | Purpose |
-| :--- | :--- |
-| [**CLAUDE Mandate**](CLAUDE.md) | The prime directive for all coding workflows, styling restrictions, and code formatting rules. |
-| [**Security Overview**](guides/SECURITY_OVERVIEW.md) | Deep breakdown of the `HMAC-SHA256` hashing math securing our offline QR codes. |
-| [**Environment Variables**](guides/ENVIRONMENT_VARIABLES.md) | Definitions for local and production `.env` requirements (Postgres, URLs, Secrets). |
-| [**UI Design Guide**](guides/UI_DESIGN_GUIDE.md) | Specifications around Atlassian Design System tokens, Tailwind variables, and RTL layouts. |
-| [**Antigravity Skills**](guides/ANTIGRAVITY_SKILLS.md) | Library of internal MCP AI capabilities (`gf-dev`, `gf-security`, etc.). |
-
----
-
-## 🚢 4. Deployment Checklists
-*How we ship to Vercel and the App Stores.*
-
-| Document | Purpose |
-| :--- | :--- |
-| [**Root Deployment**](deployment/README.md) | Standard operating procedure for Turborepo Vercel deployments. |
-| [**Admin Dashboard Pipeline**](deployment/ADMIN_DASHBOARD.md) | Specific routing and environmental variables for the super-admin console. |
-| [**Client Dashboard Pipeline**](deployment/CLIENT_DASHBOARD.md) | CI/CD steps pushing to our B2B portal. |
-| [**Marketing Site**](deployment/MARKETING.md) | Next.js configuration for the public SEO conversion funnels. |
-
----
-
-## ⚖️ Documentation Constants
-
-1. **Parity Requirement:** It is strictly prohibited to build a macro-feature without immediately pushing a matching specification to this `docs/` folder.
-2. **RTL Explicitness:** Any UI-facing documentation MUST account for bidirectional rendering using logical CSS properties.
-3. **Redacted Secrets:** Example payloads MUST NEVER contain actual hashed JWTs or DB tokens. Use mock data prefixes (`gf_test_123`).
-
-<br>
 <div align="center">
-  <em>© 2026 GateFlow Engineering. All docs actively maintained via the Ralph Loop.</em>
+
+![Banner](../docs/gateflow_banner.png)
+
+**Technical and operational documentation for the GateFlow platform**
+
+_Enterprise-grade architecture with 6 interconnected applications_
+
+[![Status](https://img.shields.io/badge/Status-Active-success?style=for-the-badge)](#)
+[![Ralph Loop](https://img.shields.io/badge/Automation-Ralph_Loop-orange?style=for-the-badge)](#)
+[![i18n](https://img.shields.io/badge/i18n-AR_%2B_EN-blue?style=for-the-badge)](#)
+
+</div>
+
+---
+
+## Product & Vision
+
+_The business logic and roadmaps dictating the engineering scope._
+
+| Document                                                         | Purpose                                                              |
+| :--------------------------------------------------------------- | :------------------------------------------------------------------- |
+| [Master PRD (v9)](product/PRD.md)                                | Absolute source of truth for all implementations and Phase 3 roadmap |
+| [Marketing Suite Overview](product/MARKETING_SUITE.md)           | CRM webhooks, UTM parameters, and tracking pixels                    |
+| [Project Progress Dashboard](core/PROJECT_PROGRESS_DASHBOARD.md) | Completed macro-milestones and upcoming Epics                        |
+
+---
+
+## Architecture & System Engineering
+
+_How the code is orchestrated across the monorepo._
+
+| Document                                                         | Purpose                                      |
+| :--------------------------------------------------------------- | :------------------------------------------- |
+| [Global Architecture](arch/ARCHITECTURE.md)                      | High-level system design and data flow       |
+| [Project Structure](arch/PROJECT_STRUCTURE.md)                   | Breakdown of apps/ and packages/             |
+| [GateFlow Config](core/GATEFLOW_CONFIG.md)                       | Centralized environmental configurations     |
+| [Code Quality Audit](arch/CODE_QUALITY_AND_PERFORMANCE_AUDIT.md) | Type-safety optimizations and N+1 reductions |
+
+---
+
+## Development Guidelines & Ops
+
+_Rules of engagement for autonomous AI agents and human engineers._
+
+| Document                                                 | Purpose                                       |
+| :------------------------------------------------------- | :-------------------------------------------- |
+| [CLAUDE Mandate](CLAUDE.md)                              | Prime directive for all coding workflows      |
+| [Security Overview](guides/SECURITY_OVERVIEW.md)         | HMAC-SHA256 hashing math for offline QR codes |
+| [Environment Variables](guides/ENVIRONMENT_VARIABLES.md) | Local and production .env requirements        |
+| [UI Design Guide](guides/UI_DESIGN_GUIDE.md)             | ADS tokens, Tailwind variables, RTL layouts   |
+| [Antigravity Skills](guides/ANTIGRAVITY_SKILLS.md)       | Internal MCP AI capabilities                  |
+
+---
+
+## Deployment Checklists
+
+_How we ship to Vercel and the App Stores._
+
+| Document                                                    | Purpose                                 |
+| :---------------------------------------------------------- | :-------------------------------------- |
+| [Root Deployment](deployment/README.md)                     | Standard operating procedure for Vercel |
+| [Admin Dashboard Pipeline](deployment/ADMIN_DASHBOARD.md)   | Super-admin console routing             |
+| [Client Dashboard Pipeline](deployment/CLIENT_DASHBOARD.md) | B2B portal CI/CD                        |
+| [Marketing Site](deployment/MARKETING.md)                   | SEO conversion funnels                  |
+
+---
+
+## Documentation Constants
+
+| Rule                   | Description                                                       |
+| :--------------------- | :---------------------------------------------------------------- |
+| **Parity Requirement** | Build a macro-feature → immediately push matching spec to `docs/` |
+| **RTL Explicitness**   | UI-facing docs MUST account for bidirectional rendering           |
+| **Redacted Secrets**   | Use mock data prefixes (`gf_test_123`) — never real tokens        |
+
+---
+
+## Quick Navigation
+
+| Section                                                  | Description                                  |
+| :------------------------------------------------------- | :------------------------------------------- |
+| [Plan Lifecycle](../docs/plan/README.md)                 | Ralph workflow: backlog → idea → plan → done |
+| [Automation Guide](guides/AUTOMATION_GUIDE.md)           | Ralph scripts, hooks, and CI/CD              |
+| [Development Guide](guides/DEVELOPMENT_GUIDE.md)         | Local setup and conventions                  |
+| [Tool & CLI Reference](guides/TOOL_AND_CLI_REFERENCE.md) | AI tool selection matrix                     |
+
+---
+
+<div align="center">
+
+_Maintained via the Ralph Loop — every commit updates docs automatically_
+
+[Return to Main README](../README.md) · [Automation Guide](guides/AUTOMATION_GUIDE.md) · [gateflow.site](https://gateflow.site)
+
+&copy; 2026 GateFlow Engineering
+
 </div>

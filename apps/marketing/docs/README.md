@@ -1,49 +1,83 @@
 # GateFlow Marketing Website
 
-The `marketing` application is the public-facing storefront for GateFlow. It is optimized for SEO, speed, and conversion, designed to explain the value proposition to potential B2B clients and capture leads.
+<div align="center">
 
-## 🎯 Primary Objective
-To act as the primary acquisition channel for GateFlow. It provides high-level feature overviews, pricing transparently, and seamless onboarding flows (Waitlist / Direct Signup).
+**Public-facing storefront for GateFlow**
 
-## ✨ Key Features
-- **High-Performance Landing Pages**: Server-side rendered pages detailing LPR, IoT hardware integrations, and software capabilities.
-- **Pricing & Tiers**: Dynamic pricing tables linked directly to our target SaaS models.
-- **Lead Capture**: Smooth integration with CRM (HubSpot/Salesforce) or internal database for sales outreach.
-- **Public Documentation Links**: FAQs and high-level structural guides for developers assessing the platform.
+_Optimized for SEO, speed, and conversion_
 
-## 🛠 Tech Stack
-- **Framework**: Next.js 14 (App Router)
-- **Styling**: Tailwind CSS + `@gate-access/ui` shared tokens
-- **Animations**: Framer Motion (for high-fidelity scroll reveals and hero animations)
-- **Components**: Radix UI primitives / Shadcn UI
-- **SEO Elements**: Next.js Metadata API, dynamic sitemaps, and robots.txt generation.
+</div>
 
-## 📁 Folder Structure
-```text
+---
+
+## Primary Objective
+
+To act as the primary acquisition channel for GateFlow. It provides high-level feature overviews, pricing transparency, and seamless onboarding flows (Waitlist / Direct Signup).
+
+---
+
+## Key Features
+
+| Feature                            | Description                                  |
+| :--------------------------------- | :------------------------------------------- |
+| **High-Performance Landing Pages** | SSR pages for LPR, IoT, and software         |
+| **Pricing & Tiers**                | Dynamic pricing tables linked to SaaS models |
+| **Lead Capture**                   | Smooth CRM integration (HubSpot/Salesforce)  |
+| **Public Documentation**           | FAQs and developer guides                    |
+
+---
+
+## Tech Stack
+
+| Layer          | Technology                                 |
+| :------------- | :----------------------------------------- |
+| **Framework**  | Next.js 14 (App Router)                    |
+| **Styling**    | Tailwind CSS + `@gate-access/ui`           |
+| **Animations** | Framer Motion for scroll reveals           |
+| **Components** | Radix UI / Shadcn UI                       |
+| **SEO**        | Next.js Metadata API, sitemaps, robots.txt |
+
+---
+
+## Folder Structure
+
+```
 marketing/
 ├── app/
 │   ├── pricing/        # Subscription tiers
-│   ├── features/       # Deep dive into hardware & software
+│   ├── features/       # Hardware & software deep dive
 │   ├── contact/        # Lead generation forms
 │   ├── waitlist/       # Pre-launch capture
 │   └── page.tsx        # Hero Landing
-├── components/         # Marketing-specific UI (Carousels, CTAs)
-├── public/             # Marketing assets, OG images, SVGs
-├── tailwind.config.ts  # Extended from packages/config
+├── components/         # Marketing-specific UI
+├── public/             # Marketing assets, OG images
+├── tailwind.config.ts
 └── next.config.mjs
 ```
 
-## 🚀 Getting Started
+---
 
-### Local Development
-Run from the root workspace:
+## Getting Started
+
 ```bash
 pnpm turbo dev --filter marketing
 ```
 
-### Best Practices for this Workspace
-- **Aesthetics First**: This app dictates the brand's first impression. Rely heavily on the `@gate-access/ui` tokens to maintain strict brand alignment.
-- **Bundle Size**: Avoid heavy client-side libraries. Utilize Server Components as much as possible to ensure perfect Core Web Vitals.
+---
 
-## 🔗 Related Documentation
-- [Design Tokens](../../docs/DESIGN_TOKENS.md)
+## Best Practices
+
+| Practice             | Description                                          |
+| :------------------- | :--------------------------------------------------- |
+| **Aesthetics First** | Rely on `@gate-access/ui` tokens for brand alignment |
+| **Bundle Size**      | Use Server Components for Core Web Vitals            |
+
+---
+
+## Related Documentation
+
+| Document                                         | Description      |
+| :----------------------------------------------- | :--------------- |
+| [Design Tokens](../../docs/DESIGN_TOKENS.md)     | UI tokens        |
+| [UI Design Guide](../../docs/UI_DESIGN_GUIDE.md) | Design system    |
+| [SEO Guide](../../docs/guides/SEO_GUIDE.md)      | SEO optimization |

@@ -1,14 +1,24 @@
 # Subagent Prompt Library
 
-Extended, copy-paste prompts for Cursor subagents. Complements `.cursor/subagents/` with more domain-specific flows.
+<div align="center">
+
+**Extended, copy-paste prompts for Cursor subagents**
+
+_Complements `.cursor/subagents/` with domain-specific flows_
+
+</div>
+
+---
 
 ## Index
 
-| File | Subagent | Prompts |
-|------|----------|---------|
-| `explore-library.md` | explore | Trace flows, refactor, security, DB |
-| `shell-library.md` | shell | Preflight, migrate, build, test |
-| `browser-library.md` | browser-use | Auth, i18n, QR, scans, exports |
+| File                 | Subagent    | Prompts                             |
+| :------------------- | :---------- | :---------------------------------- |
+| `explore-library.md` | explore     | Trace flows, refactor, security, DB |
+| `shell-library.md`   | shell       | Preflight, migrate, build, test     |
+| `browser-library.md` | browser-use | Auth, i18n, QR, scans, exports      |
+
+---
 
 ## Usage
 
@@ -17,6 +27,20 @@ Extended, copy-paste prompts for Cursor subagents. Complements `.cursor/subagent
 3. Copy the prompt that matches your task
 4. Paste into Cursor subagent and run
 
-## Base prompts
+---
 
-Shorter, core prompts live in `.cursor/subagents/` (explore.md, shell.md, browser-use.md).
+## Base Prompts
+
+Shorter, core prompts live in `.cursor/subagents/`:
+
+- `explore.md`
+- `shell.md`
+- `browser-use.md`
+
+---
+
+<div align="center">
+
+[Return to Guidelines](../README.md)
+
+</div>

@@ -1,25 +1,47 @@
 # GateFlow Resident Portal
 
-The `resident-portal` is a dedicated web application for the end-users living or working within a GateFlow-managed property. It provides residents with the autonomy to manage their expected visitors, delivery workflows, and personal access history.
+<div align="center">
 
-## 🎯 Primary Objective
+**Self-service web application for residents**
+
+_Put visitor management directly into the hands of residents_
+
+</div>
+
+---
+
+## Primary Objective
+
 To drastically reduce front-desk administrative overhead by putting visitor management directly into the hands of the residents via a fast, responsive, and secure web interface.
 
-## ✨ Key Features
-- **Visitor Passes**: Create one-time or time-boxed QR passes. Track pass validity and usage states.
-- **Open House Passes**: Generate unlimited-use passes constrained by date limits (ideal for real estate agents or large events).
-- **Access Rules**: Configure strict blocklists ("Never Allow") or permanent allowlists for recurring visits (e.g., dog walkers).
-- **Scan History**: Review personal history of who accessed the property bounds under the resident's generated passes.
-- **Quota Tracking**: Monitor monthly or weekly allowances for visitor invitations (managed by the governing org).
+---
 
-## 🛠 Tech Stack
-- **Framework**: Next.js 14 (App Router)
-- **Styling**: Tailwind CSS + `@gate-access/ui` shared tokens
-- **Components**: Radix UI primitives / Shadcn UI
-- **PWA Ready**: Built to be installable on user home screens for offline-capabilities.
+## Key Features
 
-## 📁 Folder Structure
-```text
+| Feature               | Description                             |
+| :-------------------- | :-------------------------------------- |
+| **Visitor Passes**    | Create one-time or time-boxed QR passes |
+| **Open House Passes** | Unlimited-use passes with date limits   |
+| **Access Rules**      | Blocklists and permanent allowlists     |
+| **Scan History**      | Personal history of pass usage          |
+| **Quota Tracking**    | Monthly visitor invitation allowances   |
+
+---
+
+## Tech Stack
+
+| Layer          | Technology                       |
+| :------------- | :------------------------------- |
+| **Framework**  | Next.js 14 (App Router)          |
+| **Styling**    | Tailwind CSS + `@gate-access/ui` |
+| **Components** | Radix UI / Shadcn UI             |
+| **PWA Ready**  | Installable on home screens      |
+
+---
+
+## Folder Structure
+
+```
 resident-portal/
 ├── src/
 │   ├── app/
@@ -27,24 +49,32 @@ resident-portal/
 │   │   ├── dashboard/      # Main authenticated layout
 │   │   │   ├── passes/     # Pass generation & tracking
 │   │   │   ├── history/    # Personal scan logs
-│   │   │   ├── settings/   # Quota usage and profile
-│   │   └── globals.css     # Injects global UI tokens
-│   └── components/         # Resident-focused, mobile-first UI blocks
-├── tailwind.config.ts      # Extended from packages/config
-└── next.config.mjs
+│   │   │   └── settings/   # Quota usage and profile
+│   │   └── components/     # Resident-focused UI
+│   ├── tailwind.config.ts
+│   └── next.config.mjs
 ```
 
-## 🚀 Getting Started
+---
 
-### Local Development
-Run from the root workspace:
+## Getting Started
+
 ```bash
 pnpm turbo dev --filter resident-portal
 ```
 
-### Design Philosophy
-Unlike the desktop-first `client-dashboard` and `admin-dashboard`, the `resident-portal` is strictly **Mobile-First**. Most residents will access this UI out-and-about regarding pending visitors. Assume viewport constraints are narrow. Rely on `packages/ui` standard radii tokens to keep UI controls exceptionally large and tap-friendly.
+---
 
-## 🔗 Related Documentation
-- [Resident Portal Specification](../../docs/RESIDENT_PORTAL_SPEC.md)
-- [Project Structure](../../docs/PROJECT_STRUCTURE.md)
+## Design Philosophy
+
+Unlike `client-dashboard` and `admin-dashboard` (desktop-first), the `resident-portal` is strictly **Mobile-First**. Most residents access this while on-the-go.
+
+---
+
+## Related Documentation
+
+| Document                                                             | Description        |
+| :------------------------------------------------------------------- | :----------------- |
+| [Resident Portal Spec](../../docs/RESIDENT_PORTAL_SPEC.md)           | Full specification |
+| [Project Structure](../../docs/PROJECT_STRUCTURE.md)                 | Monorepo layout    |
+| [Mobile Design Skill](../../.opencode/skills/mobile-design/SKILL.md) | Mobile patterns    |

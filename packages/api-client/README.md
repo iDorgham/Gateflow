@@ -1,11 +1,33 @@
 # @gate-access/api-client
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Status-Stable-brightgreen" alt="Status">
-  <img src="https://img.shields.io/badge/Fetch-Native-blue" alt="Fetch">
-</p>
+<div align="center">
 
-Shared API client with JWT authentication for GateFlow applications.
+**Shared API client with JWT authentication for GateFlow applications**
+
+_Type-safe HTTP client with automatic auth handling_
+
+[![Status](https://img.shields.io/badge/Status-Stable-success?style=for-the-badge)](#)
+[![Fetch](https://img.shields.io/badge/Fetch-Native-blue?style=for-the-badge)](#)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=for-the-badge&logo=typescript)](#)
+
+</div>
+
+---
+
+## Overview
+
+Shared API client with JWT authentication for GateFlow applications. Provides type-safe HTTP methods with automatic auth header injection.
+
+### Key Features
+
+| Feature            | Description                           |
+| :----------------- | :------------------------------------ |
+| **Type-Safe**      | Generic response types with inference |
+| **Auto Auth**      | Automatic JWT token injection         |
+| **Error Handling** | Structured error responses            |
+| **Skip Auth**      | Option for public endpoints           |
+
+---
 
 ## Installation
 
@@ -42,20 +64,26 @@ if (auth.isAuthenticated()) {
 auth.clearToken();
 ```
 
+---
+
 ## Exports
 
 ### Default Export
 
-- `apiClient` — Main API client instance
+| Export      | Type   | Description              |
+| :---------- | :----- | :----------------------- |
+| `apiClient` | Object | Main API client instance |
 
 ### Named Exports
 
-| Export           | Type      | Description                                        |
-| ---------------- | --------- | -------------------------------------------------- |
-| `apiClient`      | Object    | HTTP client with get/post/put/patch/delete methods |
-| `auth`           | Object    | Auth token manager                                 |
-| `ApiResponse<T>` | Interface | Generic API response wrapper                       |
-| `ApiError`       | Interface | API error structure                                |
+| Export           | Type      | Description                                |
+| :--------------- | :-------- | :----------------------------------------- |
+| `apiClient`      | Object    | HTTP client with get/post/put/patch/delete |
+| `auth`           | Object    | Auth token manager                         |
+| `ApiResponse<T>` | Interface | Generic API response wrapper               |
+| `ApiError`       | Interface | API error structure                        |
+
+---
 
 ## API Client Methods
 
@@ -72,18 +100,22 @@ apiClient.delete<T>(url, options?)
 ### Options
 
 | Option     | Type                     | Description                             |
-| ---------- | ------------------------ | --------------------------------------- |
+| :--------- | :----------------------- | :-------------------------------------- |
 | `headers`  | `Record<string, string>` | Custom headers                          |
 | `skipAuth` | `boolean`                | Skip auth header (for public endpoints) |
+
+---
 
 ## Auth Manager
 
 | Method                   | Description           |
-| ------------------------ | --------------------- |
+| :----------------------- | :-------------------- |
 | `auth.setToken(token)`   | Set JWT token         |
 | `auth.getToken()`        | Get current token     |
 | `auth.clearToken()`      | Clear token (logout)  |
 | `auth.isAuthenticated()` | Check if token exists |
+
+---
 
 ## Response Types
 
@@ -102,6 +134,8 @@ interface ApiError {
 }
 ```
 
+---
+
 ## Environment Variables
 
 The client uses `NEXT_PUBLIC_API_URL` for the base URL:
@@ -111,6 +145,8 @@ NEXT_PUBLIC_API_URL=http://localhost:3000/api
 ```
 
 Default: `http://localhost:3000/api`
+
+---
 
 ## Error Handling
 
@@ -129,12 +165,12 @@ try {
 }
 ```
 
-## Dependencies
-
-- `react` — React library (for conditional hooks if needed)
+---
 
 ## Related Documentation
 
-- [Security Overview](../../docs/guides/SECURITY_OVERVIEW.md)
-- [Environment Variables](../../docs/guides/ENVIRONMENT_VARIABLES.md)
-- [CLAUDE.md: Authentication](../../CLAUDE.md#authentication--security)
+| Document                                                            | Description                 |
+| :------------------------------------------------------------------ | :-------------------------- |
+| [Security Overview](../../docs/guides/SECURITY_OVERVIEW.md)         | JWT and auth                |
+| [Environment Variables](../../docs/guides/ENVIRONMENT_VARIABLES.md) | API URL configuration       |
+| [CLAUDE.md](../../CLAUDE.md)                                        | Authentication architecture |

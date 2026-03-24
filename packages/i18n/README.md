@@ -1,12 +1,33 @@
 # @gate-access/i18n
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Status-Stable-brightgreen" alt="Status">
-  <img src="https://img.shields.io/badge/i18next-23.x-blue" alt="i18next">
-  <img src="https://img.shields.io/badge/Locales-EN%2FAR-green" alt="Locales">
-</p>
+<div align="center">
+
+**Arabic/English internationalization (i18n) support for GateFlow applications**
+
+_Built with i18next and react-i18next, optimized for MENA region RTL_
+
+[![Status](https://img.shields.io/badge/Status-Stable-success?style=for-the-badge)](#)
+[![i18next](https://img.shields.io/badge/i18next-23.x-blue?style=for-the-badge)](https://i18next.com)
+[![Locales](https://img.shields.io/badge/Locales-EN_%2B_AR-green?style=for-the-badge)](#)
+
+</div>
+
+---
+
+## Overview
 
 Arabic/English internationalization (i18n) support for GateFlow applications. Built with i18next and react-i18next, optimized for MENA region RTL support.
+
+### Key Features
+
+| Feature               | Description                                       |
+| :-------------------- | :------------------------------------------------ |
+| **Full RTL Support**  | Perfect Arabic layout with CSS logical properties |
+| **Dynamic Switching** | Runtime language toggle with direction update     |
+| **Type-Safe Keys**    | Translation key inference                         |
+| **Namespace Support** | Organized translation files                       |
+
+---
 
 ## Installation
 
@@ -20,7 +41,7 @@ Arabic/English internationalization (i18n) support for GateFlow applications. Bu
 ### Initialize i18n
 
 ```tsx
-// In your app entry point (e.g., app/layout.tsx or _app.tsx)
+// In your app entry point (e.g., app/layout.tsx)
 import { i18n, initReactI18next } from '@gate-access/i18n';
 
 i18n.use(initReactI18next).init({
@@ -32,7 +53,7 @@ i18n.use(initReactI18next).init({
       translation: await import('@gate-access/i18n/ar'),
     },
   },
-  lng: 'en', // default language
+  lng: 'en',
   fallbackLng: 'en',
   interpolation: {
     escapeValue: false,
@@ -80,7 +101,6 @@ function LanguageSwitcher() {
   const toggleLanguage = () => {
     const newLang = i18n.language === 'en' ? 'ar' : 'en';
     i18n.changeLanguage(newLang);
-    // Update document direction for RTL
     document.documentElement.dir = newLang === 'ar' ? 'rtl' : 'ltr';
     document.documentElement.lang = newLang;
   };
@@ -93,37 +113,45 @@ function LanguageSwitcher() {
 }
 ```
 
+---
+
 ## Exports
 
 ### Named Exports
 
 | Export             | Type             | Description            |
-| ------------------ | ---------------- | ---------------------- |
+| :----------------- | :--------------- | :--------------------- |
 | `i18n`             | i18next instance | Main i18n instance     |
 | `initReactI18next` | function         | React integration hook |
 
 ### Locale Files
 
 | Export                 | Path                       | Description                 |
-| ---------------------- | -------------------------- | --------------------------- |
+| :--------------------- | :------------------------- | :-------------------------- |
 | `@gate-access/i18n/en` | `./src/locales/en.json`    | English translations        |
 | `@gate-access/i18n/ar` | `./src/locales/ar-EG.json` | Arabic (Egypt) translations |
+
+---
 
 ## Supported Locales
 
 | Locale         | Code | Direction |
-| -------------- | ---- | --------- |
+| :------------- | :--- | :-------- |
 | English        | `en` | LTR       |
 | Arabic (Egypt) | `ar` | RTL       |
+
+---
 
 ## RTL Support
 
 GateFlow is optimized for Arabic (RTL). Key considerations:
 
-1. **Direction attribute** — Set `dir="rtl"` on `<html>` for Arabic
-2. **CSS logical properties** — Use `margin-inline-start` instead of `margin-left`
-3. **Bidirectional icons** — Mirror icons that indicate direction
-4. **Text alignment** — Use `text-align: start/end` instead of left/right
+| Consideration              | Implementation                                     |
+| :------------------------- | :------------------------------------------------- |
+| **Direction attribute**    | Set `dir="rtl"` on `<html>` for Arabic             |
+| **CSS logical properties** | Use `margin-inline-start` instead of `margin-left` |
+| **Bidirectional icons**    | Mirror direction-indicating icons                  |
+| **Text alignment**         | Use `text-align: start/end` instead of left/right  |
 
 ```css
 /* Good: RTL-aware */
@@ -139,9 +167,9 @@ GateFlow is optimized for Arabic (RTL). Key considerations:
 }
 ```
 
-## Translation Keys Structure
+---
 
-Common translation namespaces:
+## Translation Keys Structure
 
 ```
 common/
@@ -160,13 +188,12 @@ errors/
   unauthorized, forbidden, notFound, serverError
 ```
 
-## Dependencies
-
-- `i18next` — Core i18n library
-- `react-i18next` — React bindings for i18next
+---
 
 ## Related Documentation
 
-- [i18n Guide](../../docs/guides/UI_DESIGN_GUIDE.md#internationalization)
-- [GateFlow i18n Skill](../../.opencode/skills/gf-i18n/SKILL.md)
-- [MENA Market Support](../../CLAUDE.md)
+| Document                                                                | Description            |
+| :---------------------------------------------------------------------- | :--------------------- |
+| [i18n Guide](../../docs/guides/UI_DESIGN_GUIDE.md#internationalization) | Full i18n guide        |
+| [GateFlow i18n Skill](../../.opencode/skills/gf-i18n/SKILL.md)          | AI agent i18n guidance |
+| [MENA Market Support](../../CLAUDE.md)                                  | RTL requirements       |

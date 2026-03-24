@@ -1,63 +1,72 @@
-<p align="center">
-  <img src="../../docs/gateflow_banner.png" alt="GateFlow Banner" width="100%">
-</p>
+# GateFlow Resident Portal
 
-<h1 align="center">GateFlow Resident Portal</h1>
+<div align="center">
 
-<p align="center">
-  <strong>Self-Service Guest Management for Residents</strong><br>
-  <em>Web-based portal for unit owners to manage visitor access</em>
-</p>
+![Banner](docs/gateflow_banner.png)
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Status-1.0.0--Production-brightgreen" alt="Status">
-  <img src="https://img.shields.io/badge/Framework-Next.js%2014-blue" alt="Framework">
-  <img src="https://img.shields.io/badge/Type-Web%20Portal-blue" alt="Type">
-</p>
+**Self-Service Guest Management for Residents**
+
+_Web-based portal for unit owners to manage visitor access_
+
+[![Status: Production](https://img.shields.io/badge/Status-Production-success?style=for-the-badge)](#)
+[![Next.js](https://img.shields.io/badge/Next.js-14-black?style=for-the-badge&logo=next.js)](https://nextjs.org)
+[![Type](https://img.shields.io/badge/Type-Web_Portal-blue?style=for-the-badge)](#)
+[![i18n](https://img.shields.io/badge/i18n-RTL_Supported-green?style=for-the-badge)](#)
+
+</div>
 
 ---
 
-## 📋 Overview
+## Overview
 
-The **GateFlow Resident Portal** provides a professional web interface for residents who prefer desktop management or don't have the mobile app installed. It mirrors the core functionality of the Resident Mobile app in a responsive browser environment.
+The **GateFlow Resident Portal** provides a professional web interface for residents who prefer desktop management or don't have the mobile app installed.
 
 ### Key Capabilities
-- **Desktop Management**: Large-scale visitor management for high-capacity units (Penthouse/Villas).
-- **Quota Visualization**: Detailed breakdown of monthly visitor allocations.
-- **Rule Engine**: Precision control over access windows (Recurring/Date-range).
-- **Audit Logs**: Full history of everyone who has used your unit's QR codes.
+
+| Capability              | Description                                            |
+| :---------------------- | :----------------------------------------------------- |
+| **Desktop Management**  | Large-scale visitor management for high-capacity units |
+| **Quota Visualization** | Detailed breakdown of monthly visitor allocations      |
+| **Rule Engine**         | Precision control over access windows                  |
+| **Audit Logs**          | Full history of QR code usage                          |
 
 ---
 
-## ✨ Features
+## Features
 
-### 🎫 Visitor Control
-| Feature | Capability |
-| :--- | :--- |
-| **Pass Generation** | Create high-resolution QR codes for print or digital sharing. |
-| **Quota Monitor** | Real-time tracking of remaining guest slots for the month. |
-| **Open QR** | Manage permanent, unit-linked passes for primary residents. |
-| **Revocation** | Instantly cancel any active pass from the dashboard. |
+### Visitor Control
 
-### 🏠 Unit Support
-- **Multi-Unit**: Residents with multiple properties can switch between units seamlessly.
-- **Profile Sync**: Shared settings and visitor history across Web and Mobile.
+| Feature             | Capability                                            |
+| :------------------ | :---------------------------------------------------- |
+| **Pass Generation** | High-resolution QR codes for print or digital sharing |
+| **Quota Monitor**   | Real-time tracking of remaining guest slots           |
+| **Open QR**         | Permanent unit-linked passes for residents            |
+| **Revocation**      | Instantly cancel any active pass                      |
 
----
+### Unit Support
 
-## 💻 Tech Stack
-
-- **Frontend**: Next.js 14 (App Router).
-- **QR Generation**: Client-side SVG generation for crisp printing.
-- **Security**: jose-powered JWT verification and secure HttpOnly cookies.
-- **Styling**: Tailwind CSS with RTL/Arabic support.
+| Feature          | Description                                              |
+| :--------------- | :------------------------------------------------------- |
+| **Multi-Unit**   | Residents with multiple properties can switch seamlessly |
+| **Profile Sync** | Shared settings across Web and Mobile                    |
 
 ---
 
-## 🚀 Getting Started
+## Tech Stack
+
+| Layer             | Technology                                    |
+| :---------------- | :-------------------------------------------- |
+| **Framework**     | Next.js 14 (App Router)                       |
+| **QR Generation** | Client-side SVG generation for crisp printing |
+| **Security**      | jose-powered JWT verification                 |
+| **Styling**       | Tailwind CSS with RTL/Arabic support          |
+
+---
+
+## Getting Started
 
 ```bash
-# Install root
+# Install dependencies (from root)
 pnpm install
 
 # Build shared packages
@@ -71,7 +80,38 @@ pnpm dev:resident-portal
 
 ---
 
-<p align="center">
-  <strong>Part of the GateFlow 1.0 Production Ecosystem</strong><br>
-  <a href="../../README.md">Main Project</a> • <a href="../../docs/README.md">Documentation Index</a>
-</p>
+## Architecture
+
+```
+src/
+├── app/
+│   ├── [locale]/          # Root locale routing
+│   │   ├── page.tsx      # Dashboard home
+│   │   ├── visitors/     # Visitor management
+│   │   ├── passes/       # QR pass management
+│   │   └── settings/     # Profile and preferences
+│   └── api/              # API routes
+├── components/           # Portal-specific components
+└── lib/
+    └── qr/               # QR code generation utilities
+```
+
+---
+
+## Related Documentation
+
+| Document                                                        | Description                 |
+| :-------------------------------------------------------------- | :-------------------------- |
+| [Development Guide](../guides/DEVELOPMENT_GUIDE.md)             | Local setup and conventions |
+| [UI Design Guide](../guides/UI_DESIGN_GUIDE.md)                 | RTL and design tokens       |
+| [i18n Guide](../guides/UI_DESIGN_GUIDE.md#internationalization) | AR/EN support               |
+
+---
+
+<div align="center">
+
+**Part of the GateFlow Production Ecosystem**
+
+[Main README](../README.md) · [Documentation Index](../README.md) · [gateflow.site](https://gateflow.site)
+
+</div>

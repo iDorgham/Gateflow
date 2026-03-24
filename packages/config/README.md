@@ -1,13 +1,33 @@
 # @gate-access/config
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Status-Stable-brightgreen" alt="Status">
-  <img src="https://img.shields.io/badge/ESLint-8.x-blue" alt="ESLint">
-  <img src="https://img.shields.io/badge/TypeScript-5.x-blue" alt="TypeScript">
-  <img src="https://img.shields.io/badge/Tailwind-3.x-green" alt="Tailwind">
-</p>
+<div align="center">
 
-Shared configuration presets for ESLint, TypeScript, and Tailwind CSS.
+**Shared configuration presets for ESLint, TypeScript, and Tailwind CSS**
+
+_Consistent code quality across the entire monorepo_
+
+[![Status](https://img.shields.io/badge/Status-Stable-success?style=for-the-badge)](#)
+[![ESLint](https://img.shields.io/badge/ESLint-8.x-blue?style=for-the-badge&logo=eslint)](https://eslint.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=for-the-badge&logo=typescript)](#)
+[![Tailwind](https://img.shields.io/badge/Tailwind-3.x-38B2AC?style=for-the-badge&logo=tailwindcss)](#)
+
+</div>
+
+---
+
+## Overview
+
+Shared configuration presets for ESLint, TypeScript, and Tailwind CSS. Ensures consistent code quality and styling across all apps and packages.
+
+### What's Included
+
+| Config         | Description                                            |
+| :------------- | :----------------------------------------------------- |
+| **ESLint**     | TypeScript rules, Next.js config, Prettier integration |
+| **TypeScript** | Strict mode, workspace paths                           |
+| **Tailwind**   | ADS tokens, color palette, RTL utilities               |
+
+---
 
 ## Installation
 
@@ -66,51 +86,53 @@ export default {
 };
 ```
 
+---
+
 ## Exports
 
-The package exports three main configurations:
+| Export                         | File                 | Description          |
+| :----------------------------- | :------------------- | :------------------- |
+| `@gate-access/config`          | `eslintrc.cjs`       | ESLint configuration |
+| `@gate-access/config/eslint`   | `eslintrc.cjs`       | ESLint (explicit)    |
+| `@gate-access/config/tsconfig` | `tsconfig.json`      | TypeScript base      |
+| `@gate-access/config/tailwind` | `tailwind.config.ts` | Tailwind base        |
 
-| Export                         | File                 | Description                     |
-| ------------------------------ | -------------------- | ------------------------------- |
-| `@gate-access/config`          | `eslintrc.cjs`       | ESLint configuration            |
-| `@gate-access/config/eslint`   | `eslintrc.cjs`       | ESLint configuration (explicit) |
-| `@gate-access/config/tsconfig` | `tsconfig.json`      | TypeScript base config          |
-| `@gate-access/config/tailwind` | `tailwind.config.ts` | Tailwind base config            |
+---
 
 ## Configuration Details
 
 ### ESLint (`eslintrc.cjs`)
 
-Includes:
-
-- TypeScript ESLint plugin
-- Next.js ESLint config
-- Prettier integration
-- React hooks rules
-- Import sorting rules
+| Included                 | Description                  |
+| :----------------------- | :--------------------------- |
+| TypeScript ESLint plugin | TypeScript-specific rules    |
+| Next.js ESLint config    | Next.js best practices       |
+| Prettier integration     | Format-on-save compatibility |
+| React hooks rules        | `exhaustive-deps` and others |
+| Import sorting rules     | `simple-import-sort`         |
 
 ### TypeScript (`tsconfig.json`)
 
-Base settings:
-
-- `strict: true`
-- `target: ES2020`
-- `module: ESNext`
-- `moduleResolution: bundler`
-- `jsx: preserve`
-- `paths` for workspace packages
+| Setting            | Value      |
+| :----------------- | :--------- |
+| `strict`           | `true`     |
+| `target`           | `ES2020`   |
+| `module`           | `ESNext`   |
+| `moduleResolution` | `bundler`  |
+| `jsx`              | `preserve` |
 
 ### Tailwind (`tailwind.config.ts`)
 
-Includes:
+| Included             | Description            |
+| :------------------- | :--------------------- |
+| Custom design tokens | ADS color palette      |
+| Typography scale     | Font sizes and weights |
+| Spacing scale        | Consistent spacing     |
+| Border radius        | Corner radius tokens   |
+| Shadows              | Elevation system       |
+| Animations           | Motion utilities       |
 
-- Custom design tokens
-- Color palette
-- Typography scale
-- Spacing scale
-- Border radius
-- Shadows
-- Animations
+---
 
 ## Workspace Package Paths
 
@@ -127,23 +149,12 @@ The base TypeScript config sets up these path aliases:
 }
 ```
 
-## Dependencies
-
-### Production
-
-- `eslint` — Linter
-- `@typescript-eslint/eslint-plugin` — TypeScript ESLint plugin
-- `@typescript-eslint/parser` — TypeScript parser for ESLint
-- `eslint-config-next` — Next.js ESLint config
-- `eslint-config-prettier` — Disable conflicting Prettier rules
-
-### Development
-
-- `prettier` — Code formatter
-- `typescript` — TypeScript compiler
+---
 
 ## Related Documentation
 
-- [Development Guide](../../docs/guides/DEVELOPMENT_GUIDE.md)
-- [Code Conventions](../../CLAUDE.md#code-conventions)
-- [UI Design Guide](../../docs/guides/UI_DESIGN_GUIDE.md)
+| Document                                                    | Description      |
+| :---------------------------------------------------------- | :--------------- |
+| [Development Guide](../../docs/guides/DEVELOPMENT_GUIDE.md) | Local setup      |
+| [Code Conventions](../../CLAUDE.md)                         | Style guidelines |
+| [UI Design Guide](../../docs/guides/UI_DESIGN_GUIDE.md)     | Design tokens    |

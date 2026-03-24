@@ -1,53 +1,89 @@
 # GateFlow Scanner App
 
-The `scanner-app` is the foundational security bridge of the GateFlow ecosystem. It is a specialized, hardware-oriented React Native (Expo) application used by front-desk personnel, security guards, and automated kiosks to cryptographically validate entering physical credentials.
+<div align="center">
 
-## 🎯 Primary Objective
+**Foundational security bridge for the GateFlow ecosystem**
+
+_Specialized React Native (Expo) application for cryptographically validating physical credentials_
+
+</div>
+
+---
+
+## Primary Objective
+
 To provide a lightning-fast, highly resilient scanning interface capable of validating visitor, resident, and vendor QR codes in varying connectivity environments.
 
-## ✨ Key Features
-- **High-Speed Camera Parsing**: Rapid frame extraction and Barcode/QR logic via Expo Camera.
-- **Cryptographic Validation**: JWT token decoding locally to verify expiry timestamps before making network calls.
-- **Offline First Pipeline**: Sync authorized pass trees locally inside SQLite. If connectivity drops (common at physical gates), the scanner validates fully in offline mode and queues scan logs.
-- **Background Sync Engine**: Resolves queued access sweeps seamlessly when the network restores without interrupting the guard.
-- **Supervisor Override Protocol**: Allows a high-clearance manager to type a PIN to bypass software validation failures.
+---
 
-## 🛠 Tech Stack
-- **Framework**: React Native + Expo (Managed Workflow)
-- **Camera hardware**: `expo-camera` / `expo-barcode-scanner`
-- **Offline Sync & Storage**: Prisma/SQLite or local asynchronous stores managing the `SyncQueue`.
-- **Styling**: Nativewind / React Native `StyleSheet` (Tapping into `packages/ui/src/tokens.ts -> nativeTokens`)
-- **Tokens/Auth**: `expo-secure-store` ensuring gate-level JWTs are locked strictly to the hardware.
+## Key Features
 
-## 📁 Folder Structure
-```text
+| Feature                          | Description                                         |
+| :------------------------------- | :-------------------------------------------------- |
+| **High-Speed Camera Parsing**    | Rapid frame extraction and QR logic via Expo Camera |
+| **Cryptographic Validation**     | JWT token decoding locally to verify expiry         |
+| **Offline First Pipeline**       | Sync authorized passes locally in SQLite            |
+| **Background Sync Engine**       | Resolves queued scans when network restores         |
+| **Supervisor Override Protocol** | PIN bypass for software validation failures         |
+
+---
+
+## Tech Stack
+
+| Layer            | Technology                              |
+| :--------------- | :-------------------------------------- |
+| **Framework**    | React Native + Expo (Managed Workflow)  |
+| **Camera**       | `expo-camera` / `expo-barcode-scanner`  |
+| **Offline Sync** | Prisma/SQLite managing `SyncQueue`      |
+| **Styling**      | Nativewind / React Native `StyleSheet`  |
+| **Auth**         | `expo-secure-store` for gate-level JWTs |
+
+---
+
+## Folder Structure
+
+```
 scanner-app/
 ├── app/                  # Expo Router views
 │   ├── (auth)/           # Operator login & hardware pairing
 │   ├── scanner/          # Main camera viewfinder module
 │   ├── queue/            # Offline sync status tables
-│   ├── _layout.tsx       # Root bounds
-├── logic/                # Core cryptography validation algorithms
+│   └── _layout.tsx       # Root bounds
+├── logic/                # Core cryptography validation
 ├── db/                   # Offline SQLite mappings
-├── eas.json              # EAS Build profiles (Kiosk Lock features)
-├── app.json              # Expo manifest (Hardware permissions)
+├── eas.json              # EAS Build profiles
+├── app.json              # Expo manifest
 └── package.json
 ```
 
-## 🚀 Getting Started
+---
+
+## Getting Started
 
 ### Local Development
-Since this reliant on hardware camera feeds, **Simulators are not recommended**. Use a physical device.
+
+> Simulators are not recommended. Use a physical device.
+
 ```bash
 pnpm turbo dev --filter scanner-app
 ```
 
-### Pre-requisites & Permissions
-The app mandates strict `NSCameraUsageDescription` parameters inside `app.json`. Without proper hardware authorizations, the app routes directly to a `PermissionsDenied` fatal view.
+### Permissions
 
-## 🛡 Security Note
-This app utilizes "Kiosk Mode" logic wherever possible to lock single-purpose Android devices into the Viewfinder perspective, disabling physical home buttons. Handled via the MDM infrastructure alongside EAS profiles.
+The app mandates strict `NSCameraUsageDescription` parameters inside `app.json`.
 
-## 🔗 Related Documentation
-- [Security Overview](../../docs/SECURITY_OVERVIEW.md)
-- [Design Tokens](../../docs/DESIGN_TOKENS.md)
+---
+
+## Security Note
+
+This app utilizes "Kiosk Mode" logic to lock single-purpose Android devices into the Viewfinder perspective.
+
+---
+
+## Related Documentation
+
+| Document                                                      | Description         |
+| :------------------------------------------------------------ | :------------------ |
+| [Security Overview](../../docs/SECURITY_OVERVIEW.md)          | QR security details |
+| [Design Tokens](../../docs/DESIGN_TOKENS.md)                  | UI tokens           |
+| [Scanner Operations](../../docs/guides/SCANNER_OPERATIONS.md) | Offline flow        |
