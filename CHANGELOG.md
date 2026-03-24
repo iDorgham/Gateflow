@@ -69,6 +69,8 @@ plan:run → plan:done` with automatic folder moves and doc cascades
 - **[Ci]** establish lighthouse ci pipeline and performance baseline — phase 1
 
 ### Bug Fixes
+
+- **[Ci] **fix zod-to-json-schema webpack error by raising zod to 3.25.76; fix Next.js 15 type errors (async cookies and params) in all apps
 - **[Deps] **pin ai@4, zod@3.23.8 workspace override; fix ai/react types and bulk-scan compat
 - **[Security] **resolve CodeQL ReDoS/Injection alerts and transitive vulnerabilities
 
