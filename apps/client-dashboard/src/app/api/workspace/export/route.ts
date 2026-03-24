@@ -23,11 +23,17 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized' },
+        { status: 401 }
+      );
     }
 
     if (!hasPermission(claims, 'workspace:manage')) {
-      return NextResponse.json({ success: false, message: 'Forbidden' }, { status: 403 });
+      return NextResponse.json(
+        { success: false, message: 'Forbidden' },
+        { status: 403 }
+      );
     }
 
     const orgId = claims.orgId;
@@ -42,7 +48,11 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, message: 'Invalid query params', error: parsed.error.flatten() },
+        {
+          success: false,
+          message: 'Invalid query params',
+          error: parsed.error.flatten(),
+        },
         { status: 400 }
       );
     }
@@ -56,14 +66,21 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    let projectFilter: { id?: string; organizationId: string; deletedAt: null } | null = null;
+    let projectFilter: {
+      id?: string;
+      organizationId: string;
+      deletedAt: null;
+    } | null = null;
     if (scope === 'project' && projectId) {
       const project = await prisma.project.findFirst({
         where: { id: projectId, organizationId: orgId, deletedAt: null },
         select: { id: true },
       });
       if (!project) {
-        return NextResponse.json({ success: false, message: 'Invalid project' }, { status: 400 });
+        return NextResponse.json(
+          { success: false, message: 'Invalid project' },
+          { status: 400 }
+        );
       }
       projectFilter = { id: projectId, organizationId: orgId, deletedAt: null };
     }
@@ -76,7 +93,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       where: { id: orgId, deletedAt: null },
     });
     if (!organization) {
-      return NextResponse.json({ success: false, message: 'Organization not found' }, { status: 404 });
+      return NextResponse.json(
+        { success: false, message: 'Organization not found' },
+        { status: 404 }
+      );
     }
 
     // Projects
@@ -132,6 +152,8 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     // Contact <-> Unit links
     const contactUnits = await prisma.contactUnit.findMany({
       where: {
+        contact: { organizationId: orgId },
+        unit: { organizationId: orgId },
         ...(contactIds.length > 0 ? { contactId: { in: contactIds } } : {}),
         ...(unitIds.length > 0 ? { unitId: { in: unitIds } } : {}),
       },
@@ -211,7 +233,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       residentLimits,
     };
 
-    const filenameScope = scope === 'project' && projectIds.length === 1 ? `project-${projectIds[0]}` : 'organization';
+    const filenameScope =
+      scope === 'project' && projectIds.length === 1
+        ? `project-${projectIds[0]}`
+        : 'organization';
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const res = NextResponse.json(payload, { status: 200 });
     res.headers.set(
@@ -221,7 +246,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     return res;
   } catch (error) {
     console.error('GET /api/workspace/export error:', error);
-    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }
-
