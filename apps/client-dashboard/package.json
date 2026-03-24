@@ -40,7 +40,7 @@
     "@types/crypto-js": "^4.2.2",
     "@upstash/ratelimit": "^2.0.5",
     "@upstash/redis": "^1.36.2",
-    "ai": "^4.3.19",
+    "ai": "^5.0.52",
     "clsx": "^2.1.1",
     "crypto-js": "^4.2.0",
     "date-fns": "^4.1.0",
