@@ -17,7 +17,6 @@ Use this role when implementing in Cursor or when invoking CLIs for this phase.
 ### Skills to load
 
 **Process skills (apply based on task type):**
-
 - [ ] `using-superpowers` — always check skills first before any response
 - [ ] `test-driven-development` — write failing test BEFORE any behavior-changing code
 - [ ] `systematic-debugging` — when fix attempts fail or cause is unclear
@@ -33,7 +32,6 @@ Use this role when implementing in Cursor or when invoking CLIs for this phase.
 - [ ] `writing-skills` — when a new recurring pattern should become a skill
 
 **Domain skills (load by phase domain):**
-
 - [ ] gf-security — auth, RBAC, QR, multi-tenant
 - [ ] gf-database — Prisma, migrations, queries
 - [ ] gf-api — API routes, validation, rate limiting
@@ -44,11 +42,11 @@ Use this role when implementing in Cursor or when invoking CLIs for this phase.
 
 ### MCP to use
 
-| MCP                | When                                    |
-| ------------------ | --------------------------------------- |
-| Prisma-Local       | Schema change, migration, Prisma Studio |
-| Context7           | React/Next.js/Prisma API lookup         |
-| cursor-ide-browser | E2E verification after UI changes       |
+| MCP | When |
+|-----|------|
+| Prisma-Local | Schema change, migration, Prisma Studio |
+| Context7 | React/Next.js/Prisma API lookup |
+| cursor-ide-browser | E2E verification after UI changes |
 
 ### Preferred tool
 
@@ -90,13 +88,13 @@ Use this role when implementing in Cursor or when invoking CLIs for this phase.
 
 #### Subagents (optional)
 
-Invoke these _before_ or _during_ implementation when the phase needs exploration or verification.
+Invoke these *before* or *during* implementation when the phase needs exploration or verification.
 
-| Subagent        | When                             | Prompt                                                                                |
-| --------------- | -------------------------------- | ------------------------------------------------------------------------------------- |
-| **explore**     | Need to trace flows or find code | "Trace the end-to-end flow for [X] (UI → API → DB). Return key files and call graph." |
-| **shell**       | Preflight, migrate, test         | "Run pnpm preflight and report failures with file:line."                              |
-| **browser-use** | Verify UI after changes          | "Login at localhost:3001, navigate to [pages], verify [behaviors]."                   |
+| Subagent | When | Prompt |
+|----------|------|--------|
+| **explore** | Need to trace flows or find code | "Trace the end-to-end flow for [X] (UI → API → DB). Return key files and call graph." |
+| **shell** | Preflight, migrate, test | "Run pnpm preflight and report failures with file:line." |
+| **browser-use** | Verify UI after changes | "Login at localhost:3001, navigate to [pages], verify [behaviors]." |
 
 ### Commands (when to run)
 
@@ -107,7 +105,6 @@ Invoke these _before_ or _during_ implementation when the phase needs exploratio
 ### Acceptance criteria
 
 **Checklist:**
-
 - [ ] [Criterion 1]
 - [ ] [Criterion 2]
 - [ ] `pnpm turbo lint --filter=<workspace>` passes
@@ -115,7 +112,6 @@ Invoke these _before_ or _during_ implementation when the phase needs exploratio
 - [ ] `pnpm turbo test --filter=<workspace>` passes (or no regression)
 
 **Given/When/Then (optional — for precise behavior):**
-
 - **Given** [precondition], **When** [action], **Then** [expected outcome]
 
 ### Files likely touched
@@ -126,14 +122,12 @@ Invoke these _before_ or _during_ implementation when the phase needs exploratio
 ### Multi-CLI (optional — only for complex/high-risk phases)
 
 **Use sparingly.** Claude Pro has limits — add only when the phase is security-critical, architectural, or high-risk.
-
 - Routine CRUD, simple UI, config: **skip multi-CLI**
 - Auth, multi-tenant, offline sync, conflict resolution: consider `claude -p "[prompt]"` in a separate terminal
 
 ### Escalation (optional)
 
 If during implementation you discover the scope exceeds this phase:
-
 - **Break down**: Add a follow-up phase to the plan
 - **Investigate first**: Run explore subagent to map dependencies
 - **Security**: If touching auth/RBAC/QR and phase isn't SECURITY-primary, pause and add SECURITY phase or review
