@@ -775,11 +775,22 @@
         "plans": {
           "FREE": {
             "description": "Perfect for small venues and personal test labs.",
-            "features": ["3 Secured Gates", "100 QR Codes/month", "Basic Scan Logs", "Community Support"]
+            "features": [
+              "3 Secured Gates",
+              "100 QR Codes/month",
+              "Basic Scan Logs",
+              "Community Support"
+            ]
           },
           "PRO": {
             "description": "Advanced features for growing venues and festivals.",
-            "features": ["20 Secured Gates", "Unlimited QR Codes", "Extended Analytics", "API & Webhooks", "Priority Support"]
+            "features": [
+              "20 Secured Gates",
+              "Unlimited QR Codes",
+              "Extended Analytics",
+              "API & Webhooks",
+              "Priority Support"
+            ]
           }
         }
       }
@@ -943,6 +954,7 @@
       "tableShift": "Shift",
       "tableActions": "Actions",
       "unassign": "Unassign",
+      "unassignConfirm": "Are you sure you want to remove this assignment?",
       "noAssignments": "No assignments yet. Use the form above to assign users to gates.",
       "validation": {
         "selectUserAndGates": "Select a user and at least one gate."
@@ -1004,7 +1016,7 @@
         "labels": {
           "q": "QR: \"{{value}}\"",
           "status": "Status: {{value}}",
-        "dateTo": "To: {{value}}"
+          "dateTo": "To: {{value}}"
         }
       }
     },

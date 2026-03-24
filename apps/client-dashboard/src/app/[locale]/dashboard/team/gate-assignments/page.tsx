@@ -1,43 +1,43 @@
-import { redirect } from 'next/navigation';
-import { getSessionClaims } from '@/lib/auth-cookies';
-import { hasPermission } from '@/lib/auth';
-import { getTranslation, Locale } from '@/lib/i18n';
-import { GateAssignmentsClient } from './gate-assignments-client';
+'use client';
 
-export async function generateMetadata(props: { params: Promise<{ locale: Locale }> }) {
-  const params = await props.params;
-  const { t } = await getTranslation(params.locale, 'dashboard');
-  return { title: t('gateAssignments.title', { defaultValue: 'Gate assignments' }) };
-}
+import React, { use } from 'react';
+import { useTranslation } from 'react-i18next';
+import { WorkspacePageLayout } from '@/components/dashboard/workspace-page-layout';
+import { GateAssignmentForm } from '@/components/dashboard/team/gate-assignment-form';
+import { GateAssignmentsTable } from '@/components/dashboard/team/gate-assignments-table';
 
-export default async function GateAssignmentsPage(
-  props: {
-    params: Promise<{ locale: Locale }>;
-    searchParams: Promise<{ project?: string }>;
-  }
-) {
-  const searchParams = await props.searchParams;
-  const params = await props.params;
-  const claims = await getSessionClaims();
-  if (!claims?.orgId) redirect(`/${params.locale}/login`);
-  if (!hasPermission(claims, 'gates:manage')) {
-    redirect(`/${params.locale}/dashboard`);
-  }
-
-  const { t } = await getTranslation(params.locale, 'dashboard');
-  const projectId = searchParams?.project ?? undefined;
+export default function GateAssignmentsPage(props: {
+  params: Promise<{ locale: string }>;
+}) {
+  const params = use(props.params);
+  const { locale } = params;
+  const { t } = useTranslation('dashboard');
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900 dark:text-white">
-          {t('gateAssignments.title', { defaultValue: 'Gate assignments' })}
-        </h1>
-        <p className="text-sm text-slate-500 dark:text-slate-400">
-          {t('gateAssignments.description', { defaultValue: 'Assign team members to specific gates so they can scan only at those gates.' })}
-        </p>
+    <WorkspacePageLayout
+      header={
+        <div className="animate-in fade-in slide-in-from-top-4 duration-500">
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+            {t('gateAssignments.title', 'Gate Assignments')}
+          </h1>
+          <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
+            {t(
+              'gateAssignments.description',
+              'Manage which team members can scan at specific gates.'
+            )}
+          </p>
+        </div>
+      }
+    >
+      <div className="space-y-8 max-w-5xl">
+        <section className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <GateAssignmentForm locale={locale} />
+        </section>
+
+        <section className="animate-in fade-in slide-in-from-bottom-4 duration-700">
+          <GateAssignmentsTable locale={locale} />
+        </section>
       </div>
-      <GateAssignmentsClient projectId={projectId} />
-    </div>
+    </WorkspacePageLayout>
   );
 }
