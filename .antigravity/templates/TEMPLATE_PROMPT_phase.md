@@ -5,7 +5,7 @@ Save as: `docs/plan/{planning,planned,in-progress}/<slug>/phases/NN_<title>/PROM
 For Part B/C/D: use `TEMPLATE_PROMPT_phase_part.md`.
 
 **Enrichment:** Add **Skills**, **MCP**, **Subagents**, **Commands** when the phase benefits.
-See `docs/plan/templates/PLAN_FOLDER_STRUCTURE.md` and `.antigravity/skills/gf-planner/SKILL.md`.
+See `docs/plan/templates/PLAN_FOLDER_STRUCTURE.md` and `.antigravity/skills/planner/SKILL.md`.
 
 ---
 
@@ -21,7 +21,7 @@ From `docs/plan/guidelines/SUBAGENT_HIERARCHY.md`:
 
 ### Tool Selection (Quality vs Cost)
 
-> Load `gf-cli-limits` skill and check `CLI_LIMITS_TRACKING.md` before choosing.
+> Load `cli-limits` skill and check `CLI_LIMITS_TRACKING.md` before choosing.
 > Switch to Tool 2 when Tool 1 is at 80%+ limit or on a budget day.
 
 | | Tool | Why |
@@ -65,14 +65,14 @@ From `docs/plan/guidelines/SUBAGENT_HIERARCHY.md`:
 
 **Domain skills (tick what applies):**
 
-- [ ] `gf-security` — auth, RBAC, QR, multi-tenant
-- [ ] `gf-database` — Prisma, migrations, queries
-- [ ] `gf-api` — API routes, validation, rate limiting
-- [ ] `gf-mobile` — Expo, offline sync
-- [ ] `gf-architecture` — monorepo, conventions
-- [ ] `gf-testing` — Jest, test patterns
+- [ ] `security` — auth, RBAC, QR, multi-tenant
+- [ ] `database` — Prisma, migrations, queries
+- [ ] `api` — API routes, validation, rate limiting
+- [ ] `mobile` — Expo, offline sync
+- [ ] `architecture` — monorepo, conventions
+- [ ] `testing` — Jest, test patterns
 - [ ] `ui-ux-pro-max` — new pages, redesigns, components
-- [ ] `gf-i18n` — Arabic/RTL changes
+- [ ] `i18n` — Arabic/RTL changes
 - [ ] (none — skip for straightforward phases)
 
 ### MCP to use

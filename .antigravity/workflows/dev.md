@@ -107,7 +107,7 @@ Update `SESSION_MEMORY.md` with:
   - When **Preferred tool** is **Kiro CLI**, **Kilo CLI**, or **Qwen CLI**: run that CLI with the phase prompt, or use Cursor for edits and that CLI for analysis/review as the phase specifies.
   - Invoke CLIs (Claude, Gemini, OpenCode, Kiro, Kilo, Qwen) when the prompt explicitly calls for that CLI.
 - **Limits + permission (mandatory)**:
-  - Load `gf-cli-limits` skill and check `CLI_LIMITS_TRACKING.md` before invoking any CLI.
+  - Load `cli-limits` skill and check `CLI_LIMITS_TRACKING.md` before invoking any CLI.
   - **80% rule**: if a CLI is at **80%+** of its limit, **do not use it** unless the user has given explicit permission.
 - **Learning (mandatory after CLI usage)**:
   - After any task/phase where a CLI was used, append one entry to `docs/plan/learning/CLI_USAGE_AND_RESULTS.md`.

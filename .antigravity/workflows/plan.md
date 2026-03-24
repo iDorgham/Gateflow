@@ -80,7 +80,10 @@ Create phased development plans from goals or backlog. This is one of the **four
 
 ### Instructions
 
-1. Read `gf-planner` skill (Planning Subagent Prompt section).
+- **Persistent Memory (mandatory):** At session start, check for `SESSION_MEMORY.md` in the plan folder and load it first (L5, ~400t). Update it at the end of the session with decisions made and context loaded.
+- **Progressive context loading:** Load files in layer order — L0 (git log ~50t) → L1 (TASKS ~150t) → L2 (PLAN ~600t). Only load L4 (CONTEXT_<slug>.md ~1,800t) if the plan touches schema/types.
+
+1. Read `planner` skill (Planning Subagent Prompt section).
 2. **Skill discovery (mandatory):** Invoke `using-superpowers` — check if any skill applies before any response.
 3. **Idea refinement (before planning):** If goal is unclear or creative, invoke `brainstorming` skill first. Ask one question at a time until requirements are validated.
 4. Start from an idea:
@@ -101,7 +104,7 @@ Create phased development plans from goals or backlog. This is one of the **four
     - Short phase (≤5 steps, 1-2 areas): single `PROMPT_phase_NN.md`
     - Long phase (>5 steps, 3+ areas, >700 words): split into `PROMPT_phase_NN_part_a.md`, `_part_b.md`, etc.
     - Add scaffolded code in `phases/NN_<title>/files/` (schema patches, type defs, templates)
-11. **Tool 1 + Tool 2** in every phase prompt: use `docs/plan/templates/PLAN_FOLDER_STRUCTURE.md` tool matrix. Load `gf-cli-limits` to check current limits.
+11. **Tool 1 + Tool 2** in every phase prompt: use `docs/plan/templates/PLAN_FOLDER_STRUCTURE.md` tool matrix. Load `cli-limits` to check current limits.
 12. **UI/UX Intelligence (Automated)**:
    - If the initiative involves UI (SaaS, Mobile, Dashboard, Landing):
    - Run: `python3 .agents/skills/ui-ux-pro-max/scripts/search.py "<slug> <industry>" --design-system --persist -p "<slug>"`

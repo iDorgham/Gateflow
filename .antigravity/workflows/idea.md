@@ -32,8 +32,8 @@ Use `/idea` to turn a fuzzy request into a well-scoped initiative plus backlog e
 - Treat `docs/plan/context/IDEA_<slug>.md` and `docs/plan/backlog/ALL_TASKS_BACKLOG.md` as the **only** persistence layer for ideas/backlog.
 - Keep ideas high level; detailed execution belongs in `PLAN_<slug>.md` and `PROMPT_<slug>_phase_<N>.md` created by `/plan`.
 - Follow skills:
-  - `gf-planner` skill for plan-oriented questions.
-  - `gf-dev` skill for commands/workflows.
+  - `planner` skill for plan-oriented questions.
+  - `dev-guide` skill for commands/workflows.
 
 ## /idea — Idea refinement & capture
 
@@ -53,8 +53,8 @@ Use `/idea` to turn a fuzzy request into a well-scoped initiative plus backlog e
    - `docs/PRD_v5.0.md`
    - `docs/plan/backlog/ALL_TASKS_BACKLOG.md` (if it exists)
 2. **Invoke skills**
-   - `gf-planner` for phased thinking
-   - `gf-dev` for feasibility and stack fit
+   - `planner` for phased thinking
+   - `dev-guide` for feasibility and stack fit
 3. **Adopt role agents**
    - Primary: planning + architecture
    - Optional: security, backend, mobile, i18n depending on the idea

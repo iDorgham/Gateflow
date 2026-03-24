@@ -5,7 +5,7 @@ description: Run the GateFlow workspace guide — "what should I do now?", next 
 
 # /guide — Workspace Guide
 
-Use `/guide` to get a clear picture of what to do next, what's recommended, what's critical, and optional improvements. The guide uses the **gf-guide** skill and understands the full workspace (Skills, Agents, Rules, Commands, Templates, Contracts, GATEFLOW_CONFIG, docs, and plan).
+Use `/guide` to get a clear picture of what to do next, what's recommended, what's critical, and optional improvements. The guide uses the **workspace-guide** skill and understands the full workspace (Skills, Agents, Rules, Commands, Templates, Contracts, GATEFLOW_CONFIG, docs, and plan).
 
 ## What /guide does
 
@@ -36,7 +36,7 @@ Use `/guide` to get a clear picture of what to do next, what's recommended, what
    If the user wants the guide to "do it for me" or "follow the plan":
    - Use the subagent hierarchy and phase prompts.
    - Use commands (`/ready`, `/dev`, `/github`) and shell for `pnpm preflight`, `pnpm turbo build`, etc.
-   - Load the right skills (gf-dev, gf-planner, gf-security) and confirm automations, tests, performance, and code quality.
+   - Load the right skills (dev-guide, planner, security) and confirm automations, tests, performance, and code quality.
 
 ## How to use it
 
@@ -51,12 +51,12 @@ Use `/guide` to get a clear picture of what to do next, what's recommended, what
 - **Skill discovery first (mandatory):** Invoke `using-superpowers` before any response — even clarifying questions. If 1% chance a skill applies, read it.
 - **PR review feedback:** When user shares code review comments, invoke `receiving-code-review` — evaluate technically, verify before implementing, push back when warranted.
 - **New skill creation:** If a recurring pattern or gap is identified during guide pass, invoke `writing-skills` to author a new skill.
-- Always load `gf-guide` skill when handling `/guide`.
+- Always load `workspace-guide` skill when handling `/guide`.
 - **When finishing a phase:** Update `docs/plan/execution/TASKS_<plan>.md` in the same pass as the commit.
 - When recommending next steps, suggest a CLI when one might do the task better: use **`docs/guides/TOOL_AND_CLI_REFERENCE.md`** and **`docs/plan/learning/CLI_TOOL_MEMORY.md`**. Default: Claude = security/architecture; Gemini = schema/DB; Opencode = code gen; Kiro/Qwen = free agentic, large context; Kilo = free terminal, fast iteration.
 - If `docs/plan/learning/GUIDE_PREFERENCES.md` exists, read it and adapt tone, format, and priorities.
 - **Limits + permission (mandatory for CLI suggestions)**:
-  - Load `gf-cli-limits` skill and check `CLI_LIMITS_TRACKING.md`.
+  - Load `cli-limits` skill and check `CLI_LIMITS_TRACKING.md`.
   - **80% rule**: if a CLI is at **80%+** of its limit, do **not** suggest it unless the user explicitly permits it.
 - **Learning + memory**:
   - After any work that used a CLI, ensure one entry exists in `docs/plan/learning/CLI_USAGE_AND_RESULTS.md`.
