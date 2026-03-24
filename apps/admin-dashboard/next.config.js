@@ -3,14 +3,20 @@ const securityHeaders = [
   { key: 'X-Frame-Options', value: 'DENY' },
   { key: 'X-XSS-Protection', value: '1; mode=block' },
   { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-  { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+  {
+    key: 'Permissions-Policy',
+    value: 'camera=(), microphone=(), geolocation=()',
+  },
 ];
 
 const nextConfig = {
-  transpilePackages: ['@gate-access/types', '@gate-access/db', '@gate-access/ui', '@gate-access/i18n'],
-  experimental: {
-    serverComponentsExternalPackages: ['@node-rs/argon2', '@prisma/client', 'prisma'],
-  },
+  transpilePackages: [
+    '@gate-access/types',
+    '@gate-access/db',
+    '@gate-access/ui',
+    '@gate-access/i18n',
+  ],
+  serverExternalPackages: ['@node-rs/argon2', '@prisma/client', 'prisma'],
   async headers() {
     return [{ source: '/(.*)', headers: securityHeaders }];
   },
