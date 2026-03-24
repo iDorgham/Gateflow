@@ -104,9 +104,6 @@ importers:
       '@ai-sdk/google':
         specifier: ^1.2.0
         version: 1.2.22(zod@3.25.76)
-      '@ai-sdk/react':
-        specifier: ^3.0.139
-        version: 3.0.139(react@18.3.1)(zod@3.25.76)
       '@formatjs/intl-localematcher':
         specifier: ^0.8.1
         version: 0.8.1
@@ -135,8 +132,8 @@ importers:
         specifier: ^2.0.0
         version: 2.0.2
       ai:
-        specifier: ^6.0.137
-        version: 6.0.137(zod@3.25.76)
+        specifier: ^4.3.19
+        version: 4.3.19(react@18.3.1)(zod@3.25.76)
       clsx:
         specifier: ^2.1.1
         version: 2.1.1

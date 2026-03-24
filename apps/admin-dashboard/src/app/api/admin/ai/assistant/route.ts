@@ -232,5 +232,5 @@ Never make up data — use tools to fetch real information.`,
     },
   });
 
-  return result.toUIMessageStreamResponse();
+  return result.toDataStreamResponse();
 }

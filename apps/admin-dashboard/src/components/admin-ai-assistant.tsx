@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { useChat, type Message } from '@ai-sdk/react';
+import { useChat, type Message } from 'ai/react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { Send, Bot, User, Loader2, RotateCcw, Sparkles } from 'lucide-react';
