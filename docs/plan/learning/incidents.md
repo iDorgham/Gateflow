@@ -15,7 +15,7 @@ This file logs notable incidents or failures in planning or documentation flows.
 
 ### Incident 1 — Duplicate PRD v6.0 Locations
 
-- **Initiative:** `docs_v2_refresh` — Phase 1  
+- **Initiative:** `docs_v2_refresh` — Phase 1
 - **What went wrong:** For a short period, `PRD_v7.0.md` existed both at `docs/` and under `docs/archive/plan-legacy/phase-1-mvp/specs/` without clearly marking the root file as canonical.
 - **Root cause:** Transition from legacy docs to Docs v2 while keeping history intact; initial structure was not immediately clarified.
 - **Follow-up actions:**
@@ -26,7 +26,7 @@ This file logs notable incidents or failures in planning or documentation flows.
 
 **Purpose:** Single place to record incidents, regressions, and near‑misses that occur while executing phases in `PLAN_<slug>.md`. Each entry should document what happened, why, and how we will avoid it in future phases.
 
-Use this file to answer: *“What has gone wrong before, and what did we learn?”*
+Use this file to answer: _“What has gone wrong before, and what did we learn?”_
 
 ## When to add an incident
 
@@ -57,5 +57,15 @@ Copy this block for each new incident:
 
 ## Recorded incidents
 
-No incidents have been recorded yet. Use the template above to add the first entry the next time a phase uncovers a significant issue.
+### Multi-Tenant Isolation Hardening (Certification)
 
+- **Date:** 2026-03-24
+- **Plan / Phase:** `PLAN_security_isolation_fix.md` — Phase 5: Automated Enforcement & Certification
+- **Environment:** local
+- **Impact:** Hardened 15+ core API routes against potential multi-tenant data leaks.
+- **Root cause:** Early-stage API routes lacked systematic `organizationId` scoping in certain `findMany` and `update` operations.
+- **Detection:** Discovered by the `ralph-skill-discover.js` engine during a cross-repo security audit.
+- **Resolution:** Conducted a 4-phase systematic remediation pass, adding explicit `organizationId` filters and `deletedAt: null` guards to all high-risk routes (Gates, Scans, CRM, Contacts, Units, QR Codes, and Analytics).
+- **Prevention / follow-ups:**
+  - Automated security discovery is now part of the verification loop for all dashboard changes.
+  - Next: Phase 6 will implement a dedicated Gate-Assignment UI to manage granular access control.

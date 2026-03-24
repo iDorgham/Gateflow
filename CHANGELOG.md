@@ -20,6 +20,8 @@ _(next release notes go here)_
 
 ### Features
 
+- **[Security Isolation Fix] **complete phase 5 - automated enforcement & certification
+
 - **[Marketing] **update marketing site and UI component library
 
 - **[Ai] **add response format rule, slim AI workflow rule, add ralph to all tools
@@ -80,6 +82,8 @@ plan:run → plan:done` with automatic folder moves and doc cascades
 - **[Ci]** establish lighthouse ci pipeline and performance baseline — phase 1
 
 ### Bug Fixes
+
+- **[Security] **phase 4 — analytics export & incidents org isolation confirmed
 
 - **[Security] **phase 3 — QR codes & workspace exports org isolation
 

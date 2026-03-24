@@ -30,17 +30,19 @@
 
 **IDEA:** `docs/plan/context/IDEA_security_isolation_fix.md`
 
-**PLAN:** `docs/plan/planned/security_isolation_fix/PLAN_security_isolation_fix.md`
+**PLAN:** `docs/plan/in-progress/security_isolation_fix/PLAN_security_isolation_fix.md`
 
-**Status:** 🏗️ Planned
+**Status:** 🚧 Hardening Certified — UI Next
 
 **Target:** Q4 2026
 
-- [ ] Phase 1 — Core Operations Audit & Fix (Gates & Scans)
-- [ ] Phase 2 — CRM & Management Hardening (Contacts & Units)
-- [ ] Phase 3 — QR Codes & Workspace Exports
-- [ ] Phase 4 — Analytics & Incidents
-- [ ] Phase 5 — Automated Enforcement & Certification
+- [x] Phase 1 — Core Operations Audit & Fix (Gates & Scans)
+- [x] Phase 2 — CRM & Management Hardening (Contacts & Units)
+- [x] Phase 3 — QR Codes & Workspace Exports
+- [x] Phase 4 — Analytics & Incidents
+- [x] Phase 5 — Automated Enforcement & Certification
+- [ ] Phase 6 — Gate-Assignment Management UI
+- [ ] Phase 7 — Final Certification & Audit
 
 ### pagespeed_100 — Google PageSpeed 100% Mastery
 
