@@ -1,6 +1,6 @@
 # Skill Discovery Report
 
-**Date:** 2026-03-24T22:21:05.309Z
+**Date:** 2026-03-24T22:36:28.685Z
 
 ## 🎨 Design System Violations (Hardcoded Hex)
 
@@ -25,17 +25,6 @@ apps/client-dashboard/src/app/[locale]/login/login-page-layout-2026.tsx:        
 Potential multi-tenant isolation risks. Found `findMany` calls without an explicit `organizationId` filter.
 
 ```text
-apps/client-dashboard/src/app/api/resident/visitors/route.ts:41: prisma.visitorQR.findMany({...})
-apps/client-dashboard/src/app/api/contacts/tags/bulk/route.ts:49: prisma.contactTag.findMany({...})
-apps/client-dashboard/src/app/api/contacts/route.ts:258: prisma.contact.findMany({...})
-apps/client-dashboard/src/app/api/contacts/[id]/tags/route.ts:53: prisma.contactTag.findMany({...})
-apps/client-dashboard/src/app/api/qrcodes/route.ts:235: prisma.qRCode.findMany({...})
-apps/client-dashboard/src/app/api/qrcodes/export/route.ts:197: prisma.qRCode.findMany({...})
-apps/client-dashboard/src/app/api/workspace/export/route.ts:176: prisma.qRCode.findMany({...})
-apps/client-dashboard/src/app/api/workspace/export/route.ts:194: prisma.scanLog.findMany({...})
-apps/client-dashboard/src/app/api/crm/contacts/route.ts:56: prisma.contact.findMany({...})
-apps/client-dashboard/src/app/api/crm/units/route.ts:51: prisma.unit.findMany({...})
-apps/client-dashboard/src/app/api/units/route.ts:199: prisma.unit.findMany({...})
 apps/client-dashboard/src/app/api/incidents/route.ts:53: prisma.incident.findMany({...})
 apps/client-dashboard/src/app/api/analytics/export/route.ts:165: prisma.contact.findMany({...})
 packages/db/prisma/seed.ts:23: prisma.organization.findMany({...})

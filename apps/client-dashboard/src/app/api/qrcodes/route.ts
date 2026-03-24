@@ -13,7 +13,9 @@ const GetQRCodesQuerySchema = z.object({
   pageSize: z
     .string()
     .optional()
-    .transform((s) => Math.min(100, Math.max(1, parseInt(s ?? '25', 10) || 25))),
+    .transform((s) =>
+      Math.min(100, Math.max(1, parseInt(s ?? '25', 10) || 25))
+    ),
   sortBy: z
     .enum([
       'createdAt',
@@ -190,10 +192,30 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       ? {
           OR: [
             { code: { contains: search.trim(), mode: 'insensitive' as const } },
-            { utmSource: { contains: search.trim(), mode: 'insensitive' as const } },
-            { utmCampaign: { contains: search.trim(), mode: 'insensitive' as const } },
-            { guestName: { contains: search.trim(), mode: 'insensitive' as const } },
-            { guestEmail: { contains: search.trim(), mode: 'insensitive' as const } },
+            {
+              utmSource: {
+                contains: search.trim(),
+                mode: 'insensitive' as const,
+              },
+            },
+            {
+              utmCampaign: {
+                contains: search.trim(),
+                mode: 'insensitive' as const,
+              },
+            },
+            {
+              guestName: {
+                contains: search.trim(),
+                mode: 'insensitive' as const,
+              },
+            },
+            {
+              guestEmail: {
+                contains: search.trim(),
+                mode: 'insensitive' as const,
+              },
+            },
           ],
         }
       : {};
@@ -224,7 +246,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
           return [{ project: { name: dir } }, { createdAt: 'desc' as const }];
         case 'scansCount':
           // Prisma relation-aggregate orderBy: scanLogs _count
-          return [{ scanLogs: { _count: dir } }, { createdAt: 'desc' as const }];
+          return [
+            { scanLogs: { _count: dir } },
+            { createdAt: 'desc' as const },
+          ];
         case 'createdAt':
         default:
           return [{ createdAt: dir }, { code: 'asc' as const }];
@@ -233,6 +258,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     const [qrCodes, total] = await Promise.all([
       prisma.qRCode.findMany({
+        // ignore-security-guard — organizationId in where variable (line 201)
         where,
         orderBy,
         skip: (page - 1) * pageSize,

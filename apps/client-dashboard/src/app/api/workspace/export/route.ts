@@ -174,6 +174,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     }
 
     const qrCodes = await prisma.qRCode.findMany({
+      // ignore-security-guard — organizationId in qrWhere variable (line 163)
       where: qrWhere,
     });
 
@@ -192,6 +193,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     }
 
     const scanLogs = await prisma.scanLog.findMany({
+      // ignore-security-guard — scanWhere scoped via qrIds from org-filtered qrCodes above
       where: scanWhere,
     });
 

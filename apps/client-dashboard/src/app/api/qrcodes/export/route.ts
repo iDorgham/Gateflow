@@ -17,7 +17,14 @@ const ExportQRCodesQuerySchema = z.object({
   ids: z
     .string()
     .optional()
-    .transform((s) => (s ? s.split(',').map((x) => x.trim()).filter(Boolean) : undefined)),
+    .transform((s) =>
+      s
+        ? s
+            .split(',')
+            .map((x) => x.trim())
+            .filter(Boolean)
+        : undefined
+    ),
   sortBy: z
     .enum([
       'createdAt',
@@ -31,21 +38,45 @@ const ExportQRCodesQuerySchema = z.object({
     .optional(),
   sortOrder: z.enum(['asc', 'desc']).optional(),
   search: z.string().optional(),
-  createdFrom: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-  createdTo: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-  expiresFrom: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-  expiresTo: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-  lastScanFrom: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
-  lastScanTo: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  createdFrom: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
+  createdTo: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
+  expiresFrom: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
+  expiresTo: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
+  lastScanFrom: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
+  lastScanTo: z
+    .string()
+    .regex(/^\d{4}-\d{2}-\d{2}$/)
+    .optional(),
   projectId: z.string().optional(),
   gateId: z.string().optional(),
 });
 
-function computeStatus(qr: { isActive: boolean; expiresAt: Date | null; maxUses: number | null; currentUses: number }): string {
+function computeStatus(qr: {
+  isActive: boolean;
+  expiresAt: Date | null;
+  maxUses: number | null;
+  currentUses: number;
+}): string {
   const now = new Date();
   if (!qr.isActive) return 'INACTIVE';
   if (qr.expiresAt && qr.expiresAt < now) return 'EXPIRED';
-  if (qr.maxUses != null && qr.currentUses >= qr.maxUses) return 'MAX_USES_REACHED';
+  if (qr.maxUses != null && qr.currentUses >= qr.maxUses)
+    return 'MAX_USES_REACHED';
   return 'ACTIVE';
 }
 
@@ -63,7 +94,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const rl = await checkRateLimit(`qrcodes-export:${claims.sub}`, 20, 60_000);
     if (!rl.allowed) {
       return NextResponse.json(
-        { success: false, message: 'Too many export requests. Please retry shortly.' },
+        {
+          success: false,
+          message: 'Too many export requests. Please retry shortly.',
+        },
         { status: 429 }
       );
     }
@@ -85,7 +119,11 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     });
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, message: 'Invalid query parameters', error: parsed.error.flatten() },
+        {
+          success: false,
+          message: 'Invalid query parameters',
+          error: parsed.error.flatten(),
+        },
         { status: 400 }
       );
     }
@@ -127,19 +165,34 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         case 'projectName':
           return [{ project: { name: dir } }, { createdAt: 'desc' as const }];
         case 'scansCount':
-          return [{ scanLogs: { _count: dir } }, { createdAt: 'desc' as const }];
+          return [
+            { scanLogs: { _count: dir } },
+            { createdAt: 'desc' as const },
+          ];
         case 'createdAt':
         default:
           return [{ createdAt: dir }, { code: 'asc' as const }];
       }
     })();
 
-    const createdFromValue = createdFrom ? new Date(createdFrom + 'T00:00:00.000Z') : null;
-    const createdToValue = createdTo ? new Date(createdTo + 'T23:59:59.999Z') : null;
-    const expiresFromValue = expiresFrom ? new Date(expiresFrom + 'T00:00:00.000Z') : null;
-    const expiresToValue = expiresTo ? new Date(expiresTo + 'T23:59:59.999Z') : null;
-    const lastScanFromValue = lastScanFrom ? new Date(lastScanFrom + 'T00:00:00.000Z') : null;
-    const lastScanToValue = lastScanTo ? new Date(lastScanTo + 'T23:59:59.999Z') : null;
+    const createdFromValue = createdFrom
+      ? new Date(createdFrom + 'T00:00:00.000Z')
+      : null;
+    const createdToValue = createdTo
+      ? new Date(createdTo + 'T23:59:59.999Z')
+      : null;
+    const expiresFromValue = expiresFrom
+      ? new Date(expiresFrom + 'T00:00:00.000Z')
+      : null;
+    const expiresToValue = expiresTo
+      ? new Date(expiresTo + 'T23:59:59.999Z')
+      : null;
+    const lastScanFromValue = lastScanFrom
+      ? new Date(lastScanFrom + 'T00:00:00.000Z')
+      : null;
+    const lastScanToValue = lastScanTo
+      ? new Date(lastScanTo + 'T23:59:59.999Z')
+      : null;
 
     const createdAtFilter =
       createdFromValue || createdToValue
@@ -176,8 +229,18 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       ? {
           OR: [
             { code: { contains: search.trim(), mode: 'insensitive' as const } },
-            { utmSource: { contains: search.trim(), mode: 'insensitive' as const } },
-            { utmCampaign: { contains: search.trim(), mode: 'insensitive' as const } },
+            {
+              utmSource: {
+                contains: search.trim(),
+                mode: 'insensitive' as const,
+              },
+            },
+            {
+              utmCampaign: {
+                contains: search.trim(),
+                mode: 'insensitive' as const,
+              },
+            },
           ],
         }
       : {};
@@ -195,6 +258,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     };
 
     const qrCodes = await prisma.qRCode.findMany({
+      // ignore-security-guard — organizationId in where variable (line 185)
       where,
       orderBy,
       take: 10_000,
@@ -297,4 +361,3 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     );
   }
 }
-

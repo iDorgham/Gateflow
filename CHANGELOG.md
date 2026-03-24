@@ -81,6 +81,9 @@ plan:run → plan:done` with automatic folder moves and doc cascades
 
 ### Bug Fixes
 
+- **[Security] **phase 2 — CRM contacts & units org isolation confirmed
+- **[Security] **phase 1 — gates & scans org isolation hardening
+
 - **[Security] **add organizationId scoping to contactUnit.findMany
 
 - **[Crm] **replace hardcoded hex colors with ADS tokens

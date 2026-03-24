@@ -2,10 +2,9 @@
 
 ## Active State
 
-- **Current phase:** Phase 1 — Core Operations Audit & Fix (Gates & Scans)
-- **Status:** ✅ COMPLETED
-- **Last commit:** `0e7ee3c` — fix(security): phase 1 — gates & scans org isolation hardening
-- **Next action:** Start Phase 2 — CRM & Management Hardening (Contacts & Units)
+- **Phase 1:** ✅ COMPLETED — commit `0e7ee3c`
+- **Phase 2:** ✅ COMPLETED — commit `72bfec8` — fix(security): CRM contacts & units org isolation confirmed
+- **Next action:** Start Phase 3 — QR Codes & Workspace Exports
 
 ## Cross-Session Decisions
 
@@ -45,8 +44,12 @@
 
 ## Remaining Phases
 
-- Phase 2: `api/contacts/*`, `api/crm/*`, `api/units/*`, bulk tag operations
 - Phase 3: `api/qrcodes/*`, `api/workspace/export/*`, `api/resident/visitors/*`
 - Phase 4: `api/analytics/export/route.ts`, `api/incidents/route.ts`
 - Phase 5: Rerun discovery with zero violations
 - Phase 6: Gate-Assignment Management UI
+
+## Phase 2 Notes
+
+- `api/contacts/[id]/tags/route.ts` & `api/contacts/tags/bulk/route.ts`: `contactTag.findMany` has no direct `organizationId` — it's a pure junction table. Security is enforced via pre-validated `contactId`/`tagId` foreign keys (both filtered by org before use). Pattern: **pre-validated FK** = safe, add `ignore-security-guard`.
+- All 6 CRM routes were already secure; no data-path changes required.
