@@ -20,6 +20,8 @@ _(next release notes go here)_
 
 ### Features
 
+- **[Ui] **automate UI/UX Pro Max skill across plan/dev workflows
+
 - **[Ui] **install UI/UX Pro Max skill and sync across assistants
 
 - **[Resident-Mobile]** finalize phase 5 - i18n, GateAI pre-clearance, and security
