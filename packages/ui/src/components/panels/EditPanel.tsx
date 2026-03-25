@@ -15,7 +15,7 @@ export interface EditPanelProps {
   saveLabel?: string;
   cancelLabel?: string;
   /**
-   * Apply Midnight Blue (#020035) header when the panel belongs to a project
+   * Apply Midnight Blue header when the panel belongs to a project
    * context. Provides visual hierarchy cue for project-scoped actions.
    */
   projectHeader?: boolean;
@@ -78,7 +78,12 @@ export function EditPanel({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50" aria-modal="true" role="dialog" aria-label={title}>
+    <div
+      className="fixed inset-0 z-50"
+      aria-modal="true"
+      role="dialog"
+      aria-label={title}
+    >
       {/* Backdrop — dims background and blocks interaction */}
       <div
         className="absolute inset-0 bg-black/40 backdrop-blur-[2px]"
@@ -92,16 +97,16 @@ export function EditPanel({
           'absolute inset-y-0 end-0 flex w-full flex-col shadow-2xl',
           'bg-[var(--ds-surface-raised,#FFFFFF)] dark:bg-[var(--ds-surface-raised,#1f1f21)]',
           'animate-in slide-in-from-right duration-300 ease-out',
-          PANEL_WIDTHS[width],
+          PANEL_WIDTHS[width]
         )}
       >
         {/* Header */}
         <div
           className={cn(
-            'flex shrink-0 items-center justify-between px-6 py-4',
+            'px-6 py-4 border-b flex items-center justify-between sticky top-0 bg-background z-10 transition-colors',
             projectHeader
-              ? 'bg-[#020035] text-white'
-              : 'border-b border-[var(--ds-border)] bg-[var(--ds-surface-raised,#FFFFFF)] dark:bg-[var(--ds-surface-raised,#1f1f21)]',
+              ? 'bg-[var(--ds-background-neutral-bold,#020035)] text-white'
+              : 'bg-background text-foreground'
           )}
         >
           <div className="flex min-w-0 flex-col">
@@ -109,7 +114,7 @@ export function EditPanel({
               <h2
                 className={cn(
                   'truncate text-base font-semibold',
-                  projectHeader ? 'text-white' : 'text-[var(--ds-text)]',
+                  projectHeader ? 'text-white' : 'text-[var(--ds-text)]'
                 )}
               >
                 {title}
@@ -119,7 +124,9 @@ export function EditPanel({
               <p
                 className={cn(
                   'mt-0.5 truncate text-xs',
-                  projectHeader ? 'text-white/70' : 'text-[var(--ds-text-subtle)]',
+                  projectHeader
+                    ? 'text-white/70'
+                    : 'text-[var(--ds-text-subtle)]'
                 )}
               >
                 {subtitle}
@@ -133,7 +140,7 @@ export function EditPanel({
               'ms-4 shrink-0 rounded-md p-1.5 transition-colors',
               projectHeader
                 ? 'text-white/70 hover:bg-white/10 hover:text-white'
-                : 'text-[var(--ds-icon-subtle)] hover:bg-[var(--ds-background-neutral-subtle)] hover:text-[var(--ds-icon)]',
+                : 'text-[var(--ds-icon-subtle)] hover:bg-[var(--ds-background-neutral-subtle)] hover:text-[var(--ds-icon)]'
             )}
             aria-label="Close panel"
           >
@@ -142,9 +149,7 @@ export function EditPanel({
         </div>
 
         {/* Scrollable content */}
-        <div className="flex-1 overflow-y-auto px-6 py-5">
-          {children}
-        </div>
+        <div className="flex-1 overflow-y-auto px-6 py-5">{children}</div>
 
         {/* Footer */}
         <div className="shrink-0 border-t border-[var(--ds-border)] px-6 py-4">

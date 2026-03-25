@@ -44,6 +44,20 @@
 - [ ] Phase 6 — Gate-Assignment Management UI
 - [ ] Phase 7 — Final Certification & Audit
 
+### domain_migration_2026 — Domain Migration to .site (2026)
+
+**IDEA:** `docs/plan/context/IDEA_domain_migration_2026.md`
+
+**PLAN:** `docs/plan/done/domain_migration_2026/PLAN_domain_migration_2026.md`
+
+**Status:** ✅ Complete
+
+**Target:** Q4 2026
+
+- [x] Phase 1 — AI Memory & Master Documentation
+- [x] Phase 2 — App Code & Constants
+- [x] Phase 3 — Environment & Deployment
+
 ### pagespeed_100 — Google PageSpeed 100% Mastery
 
 **IDEA:** `docs/plan/context/IDEA_pagespeed_100.md`

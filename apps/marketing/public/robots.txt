@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemaps
-Sitemap: https://gateflow.io/sitemap.xml
+Sitemap: https://gateflow.site/sitemap.xml
 
 # Disallow admin routes if they were accidentally discoverable
 Disallow: /admin

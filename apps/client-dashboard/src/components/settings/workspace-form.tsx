@@ -25,14 +25,15 @@ import {
   AvatarImage,
 } from '@gate-access/ui';
 import { toast } from 'sonner';
-import { 
-  Building2, 
-  Mail, 
-  Palette, 
-  ShieldCheck, 
-  Upload, 
+import { token } from '@atlaskit/tokens';
+import {
+  Building2,
+  Mail,
+  Palette,
+  ShieldCheck,
+  Upload,
   History,
-  Info 
+  Info,
 } from 'lucide-react';
 import { apiClient } from '@gate-access/api-client';
 
@@ -56,16 +57,21 @@ interface WorkspaceSettingsFormProps {
   };
 }
 
-export function WorkspaceSettingsForm({ initialData }: WorkspaceSettingsFormProps) {
-  const [logoPreview, setLogoPreview] = useState<string | null>(initialData?.logoUrl || null);
-
+export function WorkspaceSettingsForm({
+  initialData,
+}: WorkspaceSettingsFormProps) {
+  const [logoPreview, setLogoPreview] = useState<string | null>(
+    initialData?.logoUrl || null
+  );
 
   const form = useForm<WorkspaceFormValues>({
     resolver: zodResolver(workspaceSchema),
     defaultValues: {
       name: initialData?.name || '',
       adminEmail: initialData?.adminEmail || '',
-      accentColor: initialData?.accentColor || '#3B82F6',
+      accentColor:
+        initialData?.accentColor ||
+        token('color.background.brand.bold', '#3B82F6'),
       retentionDays: initialData?.retentionDays || 365,
     },
   });
@@ -131,7 +137,9 @@ export function WorkspaceSettingsForm({ initialData }: WorkspaceSettingsFormProp
                     variant="outline"
                     size="sm"
                     className="rounded-lg text-[10px] h-8"
-                    onClick={() => document.getElementById('logo-upload')?.click()}
+                    onClick={() =>
+                      document.getElementById('logo-upload')?.click()
+                    }
                   >
                     <Upload className="h-3 w-3 mr-1" />
                     Change Logo
@@ -146,10 +154,10 @@ export function WorkspaceSettingsForm({ initialData }: WorkspaceSettingsFormProp
                     <FormItem>
                       <FormLabel>Workspace Name</FormLabel>
                       <FormControl>
-                        <Input 
-                          placeholder="e.g. Al-Rehab Heights" 
+                        <Input
+                          placeholder="e.g. Al-Rehab Heights"
                           className="bg-background/50 border-border/50 transition-all focus:bg-background"
-                          {...field} 
+                          {...field}
                         />
                       </FormControl>
                       <FormMessage />
@@ -167,10 +175,10 @@ export function WorkspaceSettingsForm({ initialData }: WorkspaceSettingsFormProp
                         Administrative Email
                       </FormLabel>
                       <FormControl>
-                        <Input 
-                          placeholder="admin@gateflow.com" 
+                        <Input
+                          placeholder="admin@gateflow.com"
                           className="bg-background/50 border-border/50 transition-all focus:bg-background"
-                          {...field} 
+                          {...field}
                         />
                       </FormControl>
                       <FormDescription>
@@ -197,12 +205,12 @@ export function WorkspaceSettingsForm({ initialData }: WorkspaceSettingsFormProp
                   <div className="flex items-center gap-4">
                     <FormControl>
                       <div className="flex items-center gap-3 w-full">
-                        <Input 
-                          type="color" 
+                        <Input
+                          type="color"
                           className="h-10 w-10 p-0 border-none bg-transparent cursor-pointer rounded-lg overflow-hidden shrink-0"
-                          {...field} 
+                          {...field}
                         />
-                        <Input 
+                        <Input
                           className="font-mono bg-background/50 border-border/50"
                           {...field}
                           onChange={(e) => field.onChange(e.target.value)}
@@ -254,7 +262,9 @@ export function WorkspaceSettingsForm({ initialData }: WorkspaceSettingsFormProp
                         step="30"
                         className="w-full h-2 bg-muted rounded-lg appearance-none cursor-pointer accent-primary"
                         value={field.value}
-                        onChange={(e) => field.onChange(parseInt(e.target.value))}
+                        onChange={(e) =>
+                          field.onChange(parseInt(e.target.value))
+                        }
                       />
                       <div className="flex justify-between text-[10px] text-muted-foreground font-medium uppercase tracking-tighter">
                         <span>30 Days</span>
@@ -267,7 +277,8 @@ export function WorkspaceSettingsForm({ initialData }: WorkspaceSettingsFormProp
                   <div className="rounded-xl border border-info/20 bg-info/5 p-4 flex gap-3">
                     <Info className="h-5 w-5 text-info shrink-0 mt-0.5" />
                     <p className="text-xs leading-relaxed text-muted-foreground">
-                      Logs older than this period will be automatically purged daily (v6.0 compliance engine).
+                      Logs older than this period will be automatically purged
+                      daily (v6.0 compliance engine).
                     </p>
                   </div>
                   <FormMessage />
@@ -281,7 +292,10 @@ export function WorkspaceSettingsForm({ initialData }: WorkspaceSettingsFormProp
           <Button variant="outline" type="button" className="rounded-xl px-6">
             Cancel
           </Button>
-          <Button type="submit" className="rounded-xl px-10 shadow-lg shadow-primary/20 bg-primary hover:bg-primary/90">
+          <Button
+            type="submit"
+            className="rounded-xl px-10 shadow-lg shadow-primary/20 bg-primary hover:bg-primary/90"
+          >
             Update Workspace
           </Button>
         </div>

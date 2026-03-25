@@ -144,7 +144,12 @@ export function LoginShell({
                   <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-500/10 text-green-500">
                     <ShieldCheck className="h-10 w-10" />
                   </div>
-                  <p className="mt-4 font-medium text-[#172B4D] dark:text-[#E3E9F0]">
+                  <p
+                    className={cn(
+                      'mt-4 font-medium',
+                      'text-[var(--ds-text,#172B4D)]'
+                    )}
+                  >
                     Authenticated Successfully
                   </p>
                 </div>

@@ -5,7 +5,7 @@
   },
   "info": {
     "title": "Contact Information",
-    "email": "hello@gateflow.io",
+    "email": "hello@gateflow.site",
     "emailLabel": "Email Us",
     "phone": "+20 100 000 0000",
     "phoneLabel": "Call Us",
@@ -58,7 +58,7 @@
     },
     "email": {
       "title": "Official Link",
-      "detail": "hello@gateflow.io",
+      "detail": "hello@gateflow.site",
       "desc": "For formal inquiries and partnerships."
     },
     "sales": {
@@ -68,7 +68,10 @@
     },
     "regional": {
       "title": "Regional Presence",
-      "cairo": { "name": "Cairo (HQ)", "desc": "New Cairo Business District, Egypt" },
+      "cairo": {
+        "name": "Cairo (HQ)",
+        "desc": "New Cairo Business District, Egypt"
+      },
       "dubai": { "name": "Dubai", "desc": "Business Bay, United Arab Emirates" }
     }
   }

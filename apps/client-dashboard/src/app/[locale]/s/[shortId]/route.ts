@@ -12,7 +12,10 @@ import { token } from '@atlaskit/tokens';
  *     • "Get directions" button (if Unit has lat/lng)
  *     • "I've arrived" button (notifies resident via /api/resident/arrived)
  */
-export async function GET(request: NextRequest, props: { params: Promise<{ shortId: string }> }): Promise<NextResponse> {
+export async function GET(
+  request: NextRequest,
+  props: { params: Promise<{ shortId: string }> }
+): Promise<NextResponse> {
   const params = await props.params;
   const { shortId } = params;
 
@@ -53,22 +56,26 @@ export async function GET(request: NextRequest, props: { params: Promise<{ short
   const utmTerm = urlParams.get('utm_term');
 
   // Background fire-and-forget logging
-  void prisma.shortLinkClick.create({
-    data: {
-      shortLinkId: link.id,
-      organizationId: link.organizationId,
-      projectId: link.projectId,
-      utmSource,
-      utmMedium,
-      utmCampaign,
-      utmContent,
-      utmTerm,
-      deviceInfo: {
-        userAgent: request.headers.get('user-agent'),
-        ip: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip'),
+  void prisma.shortLinkClick
+    .create({
+      data: {
+        shortLinkId: link.id,
+        organizationId: link.organizationId,
+        projectId: link.projectId,
+        utmSource,
+        utmMedium,
+        utmCampaign,
+        utmContent,
+        utmTerm,
+        deviceInfo: {
+          userAgent: request.headers.get('user-agent'),
+          ip:
+            request.headers.get('x-forwarded-for') ||
+            request.headers.get('x-real-ip'),
+        },
       },
-    },
-  }).catch(err => console.error('Failed to log ShortLinkClick:', err));
+    })
+    .catch((err) => console.error('Failed to log ShortLinkClick:', err));
 
   // Browser request — look up VisitorQR + Unit coordinates for GPS guide
   let lat: number | null = null;
@@ -81,11 +88,16 @@ export async function GET(request: NextRequest, props: { params: Promise<{ short
   try {
     const [visitorQR, org] = await Promise.all([
       prisma.visitorQR.findFirst({
-        where: { qrCodeId: link.qrId, unit: { organizationId: link.organizationId } },
+        where: {
+          qrCodeId: link.qrId,
+          unit: { organizationId: link.organizationId },
+        },
         select: {
           id: true,
           visitorName: true,
-          unit: { select: { lat: true, lng: true, name: true, organizationId: true } },
+          unit: {
+            select: { lat: true, lng: true, name: true, organizationId: true },
+          },
         },
       }),
       prisma.organization.findUnique({
@@ -113,9 +125,7 @@ export async function GET(request: NextRequest, props: { params: Promise<{ short
   const apiBase = process.env.NEXT_PUBLIC_APP_URL ?? '';
 
   // Maps deep link: iOS opens Apple Maps, Android/other opens Google Maps
-  const mapsUrl = hasCoords
-    ? `https://maps.google.com/?q=${lat},${lng}`
-    : '';
+  const mapsUrl = hasCoords ? `https://maps.google.com/?q=${lat},${lng}` : '';
 
   const html = `<!DOCTYPE html>
 <html lang="en">
@@ -124,15 +134,21 @@ export async function GET(request: NextRequest, props: { params: Promise<{ short
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <title>GateFlow — Visitor Pass</title>
   
-  ${pixelGtmId ? `<!-- Google Tag Manager -->
+  ${
+    pixelGtmId
+      ? `<!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
   j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
   })(window,document,'script','dataLayer','${escapeHtml(pixelGtmId)}');</script>
-  <!-- End Google Tag Manager -->` : ''}
+  <!-- End Google Tag Manager -->`
+      : ''
+  }
 
-  ${pixelMetaId ? `<!-- Meta Pixel Code -->
+  ${
+    pixelMetaId
+      ? `<!-- Meta Pixel Code -->
   <script>
   !function(f,b,e,v,n,t,s)
   {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -148,7 +164,9 @@ export async function GET(request: NextRequest, props: { params: Promise<{ short
   <noscript><img height="1" width="1" style="display:none"
   src="https://www.facebook.com/tr?id=${escapeHtml(pixelMetaId)}&ev=PageView&noscript=1"
   /></noscript>
-  <!-- End Meta Pixel Code -->` : ''}
+  <!-- End Meta Pixel Code -->`
+      : ''
+  }
 
   <style>
     :root {
@@ -229,29 +247,43 @@ export async function GET(request: NextRequest, props: { params: Promise<{ short
   </style>
 </head>
 <body>
-  ${pixelGtmId ? `<!-- Google Tag Manager (noscript) -->
+  ${
+    pixelGtmId
+      ? `<!-- Google Tag Manager (noscript) -->
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=${pixelGtmId}"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-  <!-- End Google Tag Manager (noscript) -->` : ''}
+  <!-- End Google Tag Manager (noscript) -->`
+      : ''
+  }
   <div class="card">
     <div class="logo">GateFlow</div>
-    <h1>${visitorName ? `Welcome, ${escapeHtml(visitorName)}` : 'You\'re in!'}</h1>
+    <h1>${visitorName ? `Welcome, ${escapeHtml(visitorName)}` : "You're in!"}</h1>
     <p class="sub">You have been granted access. Use the buttons below to find your way.</p>
 
-    ${hasCoords ? `
+    ${
+      hasCoords
+        ? `
     <a href="${mapsUrl}" class="btn btn-primary" id="directionsBtn" target="_blank" rel="noopener">
       Get directions
-    </a>` : ''}
+    </a>`
+        : ''
+    }
 
-    ${visitorQRId ? `
+    ${
+      visitorQRId
+        ? `
     <button class="btn btn-secondary" id="arrivedBtn" onclick="notifyArrival()">
       I've arrived
-    </button>` : ''}
+    </button>`
+        : ''
+    }
 
     <p class="note">Powered by GateFlow</p>
   </div>
 
-  ${visitorQRId ? `
+  ${
+    visitorQRId
+      ? `
   <script>
     var apiBase = ${JSON.stringify(apiBase)};
     var visitorQRId = ${JSON.stringify(visitorQRId)};
@@ -282,7 +314,9 @@ export async function GET(request: NextRequest, props: { params: Promise<{ short
         btn.disabled = false;
       });
     }
-  </script>` : ''}
+  </script>`
+      : ''
+  }
 </body>
 </html>`;
 
@@ -301,5 +335,5 @@ function escapeHtml(str: string): string {
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
+    .replace(/'/g, '&apos;');
 }
