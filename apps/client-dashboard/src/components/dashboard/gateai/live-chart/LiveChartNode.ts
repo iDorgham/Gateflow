@@ -17,7 +17,7 @@ export const LiveChartNode = Node.create({
         default: 'Analytics',
       },
       color: {
-        default: '#ED4B00',
+        default: 'var(--ga-orange)',
       },
       chartType: {
         default: 'bar', // 'bar', 'line', 'area'

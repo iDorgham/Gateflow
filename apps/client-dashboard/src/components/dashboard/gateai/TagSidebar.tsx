@@ -2,18 +2,25 @@
 
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Tag as TagIcon, Plus, Trash2, Loader2, AlertCircle } from 'lucide-react';
+import {
+  Tag as TagIcon,
+  Plus,
+  Trash2,
+  Loader2,
+  AlertCircle,
+} from 'lucide-react';
 import { cn, Button } from '@gate-access/ui';
+import { token } from '@atlaskit/tokens';
 import { motion, AnimatePresence } from 'framer-motion';
 import { gaSpring } from './GateAITokens';
 
 // Shared GateFlow real-estate palette presets
 const PRESET_COLORS = [
-  '#ED4B00', // Kimchi Orange
-  '#020035', // Midnight Blue
-  '#2000B1', // Deep Sea Info
-  '#16A34A', // Success Green
-  '#F59E0B', // Warning Amber
+  token('color.text.danger', '#ED4B00'), // Kimchi Orange
+  token('color.text.brand', '#020035'), // Midnight Blue
+  token('color.text.information', '#2000B1'), // Deep Sea Info
+  token('color.text.success', '#16A34A'), // Success Green
+  token('color.text.warning', '#F59E0B'), // Warning Amber
 ];
 
 type AiTag = {
@@ -28,7 +35,7 @@ export function TagSidebar() {
   const [tags, setTags] = React.useState<AiTag[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState('');
-  
+
   // Create form state
   const [newName, setNewName] = React.useState('');
   const [newColor, setNewColor] = React.useState(PRESET_COLORS[0]);
@@ -59,7 +66,7 @@ export function TagSidebar() {
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newName.trim()) return;
-    
+
     try {
       setIsCreating(true);
       setError('');
@@ -70,7 +77,7 @@ export function TagSidebar() {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Failed to create tag');
-      
+
       setNewName('');
       setTags((prev) => [data.tag, ...prev]);
     } catch (err: unknown) {
@@ -83,14 +90,21 @@ export function TagSidebar() {
 
   // Delete tag
   const handleDelete = async (id: string) => {
-    if (!confirm(t('ai.tags.confirmDelete', 'Are you sure you want to delete this tag?'))) return;
-    
+    if (
+      !confirm(
+        t('ai.tags.confirmDelete', 'Are you sure you want to delete this tag?')
+      )
+    )
+      return;
+
     try {
       // Optimistic update
       const prev = [...tags];
       setTags(tags.filter((t) => t.id !== id));
-      
-      const res = await fetch(`/api/gateai/tags?id=${id}`, { method: 'DELETE' });
+
+      const res = await fetch(`/api/gateai/tags?id=${id}`, {
+        method: 'DELETE',
+      });
       if (!res.ok) {
         setTags(prev); // revert
         const data = await res.json();
@@ -143,8 +157,10 @@ export function TagSidebar() {
                   type="button"
                   onClick={() => setNewColor(color)}
                   className={cn(
-                    "w-5 h-5 rounded-full shrink-0 border-2 transition-transform",
-                    newColor === color ? "scale-110 border-white" : "border-transparent opacity-60 hover:opacity-100"
+                    'w-5 h-5 rounded-full shrink-0 border-2 transition-transform',
+                    newColor === color
+                      ? 'scale-110 border-white'
+                      : 'border-transparent opacity-60 hover:opacity-100'
                   )}
                   style={{ backgroundColor: color }}
                   aria-label={`Select color ${color}`}
@@ -157,17 +173,27 @@ export function TagSidebar() {
               disabled={isCreating || !newName.trim()}
               className="shrink-0 bg-[var(--ga-orange)] hover:opacity-90 text-white border-0 h-8 px-3"
             >
-              {isCreating ? <Loader2 size={14} className="animate-spin" /> : <Plus size={14} />}
+              {isCreating ? (
+                <Loader2 size={14} className="animate-spin" />
+              ) : (
+                <Plus size={14} />
+              )}
             </Button>
           </div>
         </form>
       </div>
 
       {/* Tags List */}
-      <div className="flex-1 overflow-y-auto ga-scroll p-4 space-y-2" role="list">
+      <div
+        className="flex-1 overflow-y-auto ga-scroll p-4 space-y-2"
+        role="list"
+      >
         {loading ? (
           <div className="flex items-center justify-center py-8">
-            <Loader2 size={24} className="animate-spin text-[var(--ga-text-muted)]" />
+            <Loader2
+              size={24}
+              className="animate-spin text-[var(--ga-text-muted)]"
+            />
           </div>
         ) : tags.length === 0 ? (
           <div className="text-center py-8 text-xs text-[var(--ga-text-muted)]">
@@ -186,9 +212,18 @@ export function TagSidebar() {
                 transition={gaSpring}
                 draggable
                 onDragStart={(e: any) => {
-                  e.dataTransfer.setData('application/vnd.gateai.tag.id', tag.id);
-                  e.dataTransfer.setData('application/vnd.gateai.tag.name', tag.name);
-                  e.dataTransfer.setData('application/vnd.gateai.tag.color', tag.color || '#ED4B00');
+                  e.dataTransfer.setData(
+                    'application/vnd.gateai.tag.id',
+                    tag.id
+                  );
+                  e.dataTransfer.setData(
+                    'application/vnd.gateai.tag.name',
+                    tag.name
+                  );
+                  e.dataTransfer.setData(
+                    'application/vnd.gateai.tag.color',
+                    tag.color || token('color.text.danger', '#ED4B00')
+                  );
                   e.dataTransfer.effectAllowed = 'copy';
                 }}
                 className="group flex items-center justify-between p-2.5 rounded-md border border-transparent hover:border-[var(--ga-navy-border)] hover:bg-secondary/20 transition-colors cursor-grab active:cursor-grabbing"
@@ -196,7 +231,10 @@ export function TagSidebar() {
                 <div className="flex items-center gap-2.5 min-w-0 pointer-events-none">
                   <div
                     className="w-2.5 h-2.5 rounded-full shrink-0"
-                    style={{ backgroundColor: tag.color || '#ED4B00' }}
+                    style={{
+                      backgroundColor:
+                        tag.color || token('color.text.danger', '#ED4B00'),
+                    }}
                   />
                   <span className="text-sm font-medium text-[var(--ga-text-primary)] truncate">
                     {tag.name}

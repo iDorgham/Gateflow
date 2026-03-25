@@ -14,21 +14,25 @@ import {
   TabsList,
   TabsTrigger,
 } from '@gate-access/ui';
+import { cn } from '@/lib/utils';
 import Link from 'next/link';
-import { 
-  Users, 
-  QrCode, 
-  ScrollText, 
-  Shield, 
-  Search, 
-  Building, 
-  User, 
+import {
+  Users,
+  QrCode,
+  ScrollText,
+  Shield,
+  Search,
+  Building,
+  User,
   ArrowRight,
   Activity,
-  UserCheck
+  UserCheck,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { ProjectDetailActions, type ProjectDetailActionsRef } from './ProjectDetailActions';
+import {
+  ProjectDetailActions,
+  type ProjectDetailActionsRef,
+} from './ProjectDetailActions';
 import { GatesCardWithEdit } from './GatesCardWithEdit';
 import { ProjectLiveLogs } from '../../operations/ProjectLiveLogs';
 import { ProjectTeamTable } from '../../operations/ProjectTeamTable';
@@ -117,25 +121,37 @@ export function ProjectDetailContent({
 
   const [unitSearch, setUnitSearch] = useState('');
 
-  const filteredUnits = units.filter(u => 
-    u.name.toLowerCase().includes(unitSearch.toLowerCase()) ||
-    u.building?.toLowerCase().includes(unitSearch.toLowerCase())
-  ).slice(0, 10);
+  const filteredUnits = units
+    .filter(
+      (u) =>
+        u.name.toLowerCase().includes(unitSearch.toLowerCase()) ||
+        u.building?.toLowerCase().includes(unitSearch.toLowerCase())
+    )
+    .slice(0, 10);
 
   return (
     <div className="py-8 space-y-8 animate-in fade-in duration-500">
       {/* Actions Section */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
         <div className="flex flex-col gap-1">
-          <h2 className="text-2xl font-bold text-[#172B4D] dark:text-[#E3E6E8] tracking-tight">
+          <h2
+            className={cn(
+              'text-2xl font-bold tracking-tight',
+              'text-[var(--ds-text,#172B4D)]'
+            )}
+          >
             Command Center
           </h2>
-          <p className="text-sm text-[#6B778C] dark:text-[#97A0AF]">
+          <p className={cn('text-sm', 'text-[var(--ds-text-subtle,#6B778C)]')}>
             Real-time project operations and access management.
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <Button asChild variant="outline" className="h-10 rounded-xl border-border/60 hover:bg-secondary font-bold gap-2">
+          <Button
+            asChild
+            variant="outline"
+            className="h-10 rounded-xl border-border/60 hover:bg-secondary font-bold gap-2"
+          >
             <Link href={`/${locale}/dashboard/projects/${project.id}/crm`}>
               <Users className="h-4 w-4 text-[var(--primary)]" />
               CRM Hub
@@ -156,46 +172,85 @@ export function ProjectDetailContent({
         </div>
       </div>
 
-      <motion.div 
+      <motion.div
         variants={{
           hidden: { opacity: 0 },
           show: {
             opacity: 1,
             transition: {
-              staggerChildren: 0.1
-            }
-          }
+              staggerChildren: 0.1,
+            },
+          },
         }}
         initial="hidden"
         animate="show"
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
       >
         {[
-          { label: 'Contacts', value: aggregates.contactsCount, icon: Users, color: 'var(--primary)', bg: '#DEEBFF' },
-          { label: 'Unit Types', value: aggregates.unitTypes.length, icon: Building, color: '#00875A', bg: '#E3FCEF' },
-          { label: 'QR Codes', value: aggregates.qrCount, icon: QrCode, color: '#FF991F', bg: '#FFF0B3' },
-          { label: '30d Access', value: aggregates.access30d, icon: Shield, color: '#BF2600', bg: '#FFEBE6' },
+          {
+            label: 'Contacts',
+            value: aggregates.contactsCount,
+            icon: Users,
+            color: 'var(--primary)',
+            bg: 'var(--ds-background-selected,#DEEBFF)',
+          },
+          {
+            label: 'Unit Types',
+            value: aggregates.unitTypes.length,
+            icon: Building,
+            color: 'var(--ds-text-success,#006644)',
+            bg: 'var(--ds-background-success-subtle,#E3FCEF)',
+          },
+          {
+            label: 'QR Codes',
+            value: aggregates.qrCount,
+            icon: QrCode,
+            color: 'var(--ds-text-warning,#B65C02)',
+            bg: 'var(--ds-background-warning-subtle,#FFF0B3)',
+          },
+          {
+            label: '30d Access',
+            value: aggregates.access30d,
+            icon: Shield,
+            color: 'var(--ds-text-danger,#AE2A19)',
+            bg: 'var(--ds-background-danger-subtle,#FFEBE6)',
+          },
         ].map((kpi, i) => (
           <motion.div
             key={i}
             variants={{
               hidden: { opacity: 0, y: 20 },
-              show: { opacity: 1, y: 0 }
+              show: { opacity: 1, y: 0 },
             }}
             whileHover={{ y: -4, transition: { duration: 0.2 } }}
           >
-            <Card className="border border-[#DFE1E6] dark:border-[#343A46] bg-background rounded-xl shadow-sm hover:shadow-md transition-all h-full">
+            <Card
+              className={cn(
+                'bg-background rounded-xl shadow-sm hover:shadow-md transition-all h-full',
+                'border-[var(--ds-border,#DFE1E6)]'
+              )}
+            >
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div className="flex flex-col">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-[#6B778C] dark:text-[#97A0AF] mb-1">
+                    <span
+                      className={cn(
+                        'text-[11px] font-bold uppercase tracking-wider',
+                        'text-[var(--ds-text-subtle,#6B778C)]'
+                      )}
+                    >
                       {kpi.label}
                     </span>
-                    <span className="text-3xl font-bold text-[#172B4D] dark:text-white tabular-nums">
+                    <span
+                      className={cn(
+                        'text-3xl font-bold tabular-nums',
+                        'text-[var(--ds-text,#172B4D)]'
+                      )}
+                    >
                       {kpi.value}
                     </span>
                   </div>
-                  <div 
+                  <div
                     className="h-12 w-12 rounded-xl flex items-center justify-center shadow-inner"
                     style={{ backgroundColor: kpi.bg, color: kpi.color }}
                   >
@@ -209,16 +264,30 @@ export function ProjectDetailContent({
       </motion.div>
 
       <Tabs defaultValue="overview" className="w-full">
-        <TabsList className="h-12 p-1 bg-[#F4F5F7] dark:bg-[#091E42]/20 rounded-xl mb-8">
-          <TabsTrigger value="overview" className="flex-1 rounded-lg font-bold gap-2">
+        <TabsList
+          className={cn(
+            'h-12 p-1 rounded-xl mb-8',
+            'bg-[var(--ds-background-neutral-subtle,#F4F5F7)]'
+          )}
+        >
+          <TabsTrigger
+            value="overview"
+            className="flex-1 rounded-lg font-bold gap-2"
+          >
             <Activity className="h-4 w-4" />
             Live Activity
           </TabsTrigger>
-          <TabsTrigger value="team" className="flex-1 rounded-lg font-bold gap-2">
+          <TabsTrigger
+            value="team"
+            className="flex-1 rounded-lg font-bold gap-2"
+          >
             <UserCheck className="h-4 w-4" />
             Access Team
           </TabsTrigger>
-          <TabsTrigger value="about" className="flex-1 rounded-lg font-bold gap-2">
+          <TabsTrigger
+            value="about"
+            className="flex-1 rounded-lg font-bold gap-2"
+          >
             <ScrollText className="h-4 w-4" />
             Project About
           </TabsTrigger>
@@ -238,42 +307,118 @@ export function ProjectDetailContent({
                 actionsRef={actionsRef}
               />
               {/* Resources Card integrated in Sidebar */}
-              <Card className="border border-[#DFE1E6] dark:border-[#343A46] bg-background rounded-2xl overflow-hidden shadow-sm">
-                <CardHeader className="border-b border-[#DFE1E6] dark:border-[#343A46] px-6 py-4 flex flex-row items-center justify-between bg-[#FAFBFC] dark:bg-[#091E42]/20">
-                  <h3 className="text-sm font-bold text-[#6B778C] uppercase tracking-widest">Project Resources</h3>
+              <Card
+                className={cn(
+                  'bg-background rounded-2xl overflow-hidden shadow-sm',
+                  'border-[var(--ds-border,#DFE1E6)]'
+                )}
+              >
+                <CardHeader
+                  className={cn(
+                    'px-6 py-4 flex flex-row items-center justify-between',
+                    'border-b border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-background-neutral-subtle,#FAFBFC)]'
+                  )}
+                >
+                  <h3
+                    className={cn(
+                      'text-sm font-bold uppercase tracking-widest',
+                      'text-[var(--ds-text-subtle,#6B778C)]'
+                    )}
+                  >
+                    Project Resources
+                  </h3>
                 </CardHeader>
                 <CardContent className="p-0">
-                  <div className="divide-y divide-[#DFE1E6] dark:divide-[#343A46]">
-                    <div className="p-6 space-y-4">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className="h-8 w-8 rounded-lg bg-[#DEEBFF] text-[var(--primary)] flex items-center justify-center">
-                            <Building className="h-4 w-4" />
-                          </div>
-                          <span className="text-sm font-bold text-[#172B4D] dark:text-white">Units</span>
+                  <div
+                    className={cn(
+                      'p-6 space-y-4',
+                      'divide-y divide-[var(--ds-border,#DFE1E6)]'
+                    )}
+                  >
+                    <div className="flex items-center justify-between pt-4 first:pt-0">
+                      <div className="flex items-center gap-3">
+                        <div
+                          className={cn(
+                            'h-8 w-8 rounded-lg flex items-center justify-center',
+                            'bg-[var(--ds-background-selected,#DEEBFF)] text-[var(--primary)]'
+                          )}
+                        >
+                          <Building className="h-4 w-4" />
                         </div>
-                        <Badge variant="outline" className="text-[10px] border-[#DFE1E6] text-[#6B778C]">{units.length}</Badge>
+                        <span
+                          className={cn(
+                            'text-sm font-bold',
+                            'text-[var(--ds-text,#172B4D)]'
+                          )}
+                        >
+                          Units
+                        </span>
                       </div>
+                      <Badge
+                        variant="outline"
+                        className={cn(
+                          'text-[10px]',
+                          'border-[var(--ds-border,#DFE1E6)] text-[var(--ds-text-subtle,#6B778C)]'
+                        )}
+                      >
+                        {units.length}
+                      </Badge>
+                    </div>
+                    <div className="pt-4">
                       <div className="relative">
-                        <Search className="absolute start-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#6B778C]" />
+                        <Search
+                          className={cn(
+                            'absolute start-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5',
+                            'text-[var(--ds-text-subtle,#6B778C)]'
+                          )}
+                        />
                         <Input
                           placeholder="Search units..."
                           value={unitSearch}
                           onChange={(e) => setUnitSearch(e.target.value)}
-                          className="ps-9 h-8 text-xs bg-[#F4F5F7] bg-secondary border-none"
+                          className={cn(
+                            'ps-9 h-8 text-xs bg-secondary border-none',
+                            'bg-[var(--ds-background-neutral-subtle,#F4F5F7)]'
+                          )}
                         />
                       </div>
-                      <div className="space-y-2 max-h-[160px] overflow-y-auto pr-1 custom-scrollbar">
-                        {filteredUnits.map((u) => (
-                          <div key={u.id} className="flex items-center justify-between p-2 rounded-lg hover:bg-[#F4F5F7] dark:hover:bg-[var(--secondary)] transition-colors group cursor-default">
+                    </div>
+                    <div className="pt-4 space-y-2 max-h-[160px] overflow-y-auto pr-1 custom-scrollbar">
+                      {filteredUnits.length > 0 ? (
+                        filteredUnits.map((u) => (
+                          <div
+                            key={u.id}
+                            className={cn(
+                              'flex items-center justify-between p-2 rounded-lg transition-colors group cursor-default',
+                              'hover:bg-[var(--ds-background-neutral-subtle,#F4F5F7)]'
+                            )}
+                          >
                             <div className="min-w-0">
-                              <p className="text-xs font-semibold text-[#172B4D] dark:text-white truncate">{u.name}</p>
-                              <p className="text-[10px] text-[#6B778C] uppercase tracking-tighter">{u.type.replace('_', ' ')}</p>
+                              <p
+                                className={cn(
+                                  'text-xs font-semibold truncate',
+                                  'text-[var(--ds-text,#172B4D)]'
+                                )}
+                              >
+                                {u.name}
+                              </p>
+                              <p
+                                className={cn(
+                                  'text-[10px] uppercase tracking-tighter',
+                                  'text-[var(--ds-text-subtle,#6B778C)]'
+                                )}
+                              >
+                                {u.type.replace('_', ' ')}
+                              </p>
                             </div>
                             <ArrowRight className="h-3 w-3 text-[var(--primary)] opacity-0 group-hover:opacity-100 transition-all -translate-x-2 rtl:translate-x-2 group-hover:translate-x-0" />
                           </div>
-                        ))}
-                      </div>
+                        ))
+                      ) : (
+                        <p className="text-[10px] text-center text-[var(--ds-text-subtlest)] py-2">
+                          No units found
+                        </p>
+                      )}
                     </div>
                   </div>
                 </CardContent>
@@ -283,40 +428,96 @@ export function ProjectDetailContent({
         </TabsContent>
 
         <TabsContent value="team">
-          <ProjectTeamTable projectId={project.id} locale={locale} canManage={canManageGates} />
+          <ProjectTeamTable
+            projectId={project.id}
+            locale={locale}
+            canManage={canManageGates}
+          />
         </TabsContent>
 
         <TabsContent value="about" className="space-y-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2 space-y-8">
-              <Card className="border border-[#DFE1E6] dark:border-[#343A46] bg-background rounded-2xl overflow-hidden shadow-sm">
-                <CardHeader className="border-b border-[#DFE1E6] dark:border-[#343A46] px-8 py-5">
-                  <h2 className="text-[18px] font-semibold text-[#172B4D] dark:text-[#E3E6E8]">About Project</h2>
+              <Card
+                className={cn(
+                  'bg-background rounded-2xl overflow-hidden shadow-sm',
+                  'border-[var(--ds-border,#DFE1E6)]'
+                )}
+              >
+                <CardHeader
+                  className={cn(
+                    'px-8 py-5',
+                    'border-b border-[var(--ds-border,#DFE1E6)]'
+                  )}
+                >
+                  <h2
+                    className={cn(
+                      'text-[18px] font-semibold',
+                      'text-[var(--ds-text,#172B4D)]'
+                    )}
+                  >
+                    About Project
+                  </h2>
                 </CardHeader>
                 <CardContent className="p-8">
                   {project.description ? (
-                    <p className="text-[15px] text-[#42526E] dark:text-[#A5ADBA] leading-relaxed whitespace-pre-wrap font-medium">
+                    <p
+                      className={cn(
+                        'text-[15px] leading-relaxed whitespace-pre-wrap font-medium',
+                        'text-[var(--ds-text-subtle,#42526E)]'
+                      )}
+                    >
                       {project.description}
                     </p>
                   ) : (
-                    <div className="flex flex-col items-center justify-center py-6 text-[#6B778C]">
+                    <div
+                      className={cn(
+                        'flex flex-col items-center justify-center py-6',
+                        'text-[var(--ds-text-subtle,#6B778C)]'
+                      )}
+                    >
                       <ScrollText className="h-12 w-12 opacity-10 mb-3" />
-                      <p className="text-sm italic">No description provided for this project.</p>
+                      <p className="text-sm italic">
+                        No description provided for this project.
+                      </p>
                     </div>
                   )}
                 </CardContent>
               </Card>
 
               {project.galleryJson && project.galleryJson.length > 0 && (
-                <Card className="border border-[#DFE1E6] dark:border-[#343A46] bg-background rounded-2xl overflow-hidden shadow-sm">
-                  <CardHeader className="border-b border-[#DFE1E6] dark:border-[#343A46] px-8 py-5">
-                    <h2 className="text-[18px] font-semibold text-[#172B4D] dark:text-[#E3E6E8]">Project Gallery</h2>
+                <Card
+                  className={cn(
+                    'bg-background rounded-2xl overflow-hidden shadow-sm',
+                    'border-[var(--ds-border,#DFE1E6)]'
+                  )}
+                >
+                  <CardHeader
+                    className={cn(
+                      'px-8 py-5',
+                      'border-b border-[var(--ds-border,#DFE1E6)]'
+                    )}
+                  >
+                    <h2
+                      className={cn(
+                        'text-[18px] font-semibold',
+                        'text-[var(--ds-text,#172B4D)]'
+                      )}
+                    >
+                      Project Gallery
+                    </h2>
                   </CardHeader>
                   <CardContent className="p-8">
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                       {project.galleryJson.map((url, idx) => (
-                        <div key={idx} className="group relative aspect-video rounded-xl overflow-hidden border border-[#DFE1E6] dark:border-[#343A46] bg-muted shadow-sm transition-all hover:ring-2 hover:ring-[var(--primary)]">
-                           <img
+                        <div
+                          key={idx}
+                          className={cn(
+                            'group relative aspect-video rounded-xl overflow-hidden bg-muted shadow-sm transition-all hover:ring-2 hover:ring-[var(--primary)]',
+                            'border-[var(--ds-border,#DFE1E6)]'
+                          )}
+                        >
+                          <img
                             src={url}
                             alt={`${project.name} gallery image ${idx + 1}`}
                             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
@@ -329,21 +530,64 @@ export function ProjectDetailContent({
               )}
             </div>
             <div className="space-y-8">
-               <Card className="border border-[#DFE1E6] dark:border-[#343A46] bg-background rounded-2xl overflow-hidden shadow-sm">
-                <CardHeader className="border-b border-[#DFE1E6] dark:border-[#343A46] px-6 py-4 bg-[#FAFBFC] dark:bg-[#091E42]/20">
-                  <h3 className="text-sm font-bold text-[#6B778C] uppercase tracking-widest">Metadata</h3>
+              <Card
+                className={cn(
+                  'bg-background rounded-2xl overflow-hidden shadow-sm',
+                  'border-[var(--ds-border,#DFE1E6)]'
+                )}
+              >
+                <CardHeader
+                  className={cn(
+                    'px-6 py-4 bg-[var(--ds-background-neutral-subtle,#FAFBFC)]',
+                    'border-b border-[var(--ds-border,#DFE1E6)]'
+                  )}
+                >
+                  <h3
+                    className={cn(
+                      'text-sm font-bold uppercase tracking-widest',
+                      'text-[var(--ds-text-subtle,#6B778C)]'
+                    )}
+                  >
+                    Metadata
+                  </h3>
                 </CardHeader>
                 <CardContent className="p-6 space-y-4">
-                   <div className="flex flex-col gap-1">
-                      <span className="text-[10px] font-black text-[#6B778C] uppercase">Location</span>
-                      <span className="text-sm font-bold text-[#172B4D] dark:text-white">{project.location || 'Not set'}</span>
-                   </div>
-                   <div className="flex flex-col gap-1">
-                      <span className="text-[10px] font-black text-[#6B778C] uppercase">Gate Mode</span>
-                      <Badge className="w-fit bg-[#020035] text-white border-none font-bold uppercase text-[9px] tracking-widest">
-                        {project.gateMode || 'MULTI'}
-                      </Badge>
-                   </div>
+                  <div className="flex flex-col gap-1">
+                    <span
+                      className={cn(
+                        'text-[10px] font-black uppercase',
+                        'text-[var(--ds-text-subtle,#6B778C)]'
+                      )}
+                    >
+                      Location
+                    </span>
+                    <span
+                      className={cn(
+                        'text-sm font-bold',
+                        'text-[var(--ds-text,#172B4D)]'
+                      )}
+                    >
+                      {project.location || 'Not set'}
+                    </span>
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <span
+                      className={cn(
+                        'text-[10px] font-black uppercase',
+                        'text-[var(--ds-text-subtle,#6B778C)]'
+                      )}
+                    >
+                      Gate Mode
+                    </span>
+                    <Badge
+                      className={cn(
+                        'w-fit border-none font-bold uppercase text-[9px] tracking-widest',
+                        'bg-[var(--ds-background-neutral-bold,#44546F)] text-[var(--ds-text-inverse,#FFFFFF)]'
+                      )}
+                    >
+                      {project.gateMode || 'MULTI'}
+                    </Badge>
+                  </div>
                 </CardContent>
               </Card>
             </div>

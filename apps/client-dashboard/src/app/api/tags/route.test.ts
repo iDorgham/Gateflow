@@ -43,8 +43,8 @@ describe('/api/tags', () => {
   it('GET returns org-scoped tags', async () => {
     mockGetSessionClaims.mockResolvedValue({ orgId: 'org_1' });
     mockFindMany.mockResolvedValue([
-      { id: 't1', name: 'family', color: '#22c55e' },
-      { id: 't2', name: 'maid', color: '#3b82f6' },
+      { id: 't1', name: 'family', color: 'var(--ds-text-success)' },
+      { id: 't2', name: 'maid', color: 'var(--ds-text-brand)' },
     ]);
 
     const res = await GET();
@@ -63,12 +63,16 @@ describe('/api/tags', () => {
   it('POST creates tag when valid and unique in org', async () => {
     mockGetSessionClaims.mockResolvedValue({ orgId: 'org_1' });
     mockFindFirst.mockResolvedValue(null);
-    mockCreate.mockResolvedValue({ id: 't3', name: 'driver', color: '#a855f7' });
+    mockCreate.mockResolvedValue({
+      id: 't3',
+      name: 'driver',
+      color: 'var(--ds-text-danger)',
+    });
 
     const req = new NextRequest('http://localhost/api/tags', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: 'driver', color: '#a855f7' }),
+      body: JSON.stringify({ name: 'driver', color: 'var(--ds-text-danger)' }),
     });
     const res = await POST(req);
     const payload = await res.json();

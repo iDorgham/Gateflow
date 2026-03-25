@@ -3,22 +3,22 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { 
-  Send, 
-  X, 
-  MessageSquare, 
-  Users, 
+import {
+  Send,
+  X,
+  MessageSquare,
+  Users,
   RefreshCw,
-  Loader2
+  Loader2,
 } from 'lucide-react';
-import { 
-  Button, 
-  Input, 
-  ScrollArea, 
-  Avatar, 
-  AvatarFallback, 
+import {
+  Button,
+  Input,
+  ScrollArea,
+  Avatar,
+  AvatarFallback,
   AvatarImage,
-  cn 
+  cn,
 } from '@gate-access/ui';
 import { motion, AnimatePresence } from 'framer-motion';
 import { formatDistanceToNow } from 'date-fns';
@@ -49,13 +49,22 @@ interface TeamSidebarChatProps {
   currentUserId: string;
 }
 
-export function TeamSidebarChat({ isOpen, onClose, locale, currentUserId }: TeamSidebarChatProps) {
+export function TeamSidebarChat({
+  isOpen,
+  onClose,
+  locale,
+  currentUserId,
+}: TeamSidebarChatProps) {
   const { t } = useTranslation('dashboard');
   const queryClient = useQueryClient();
   const [inputText, setInputText] = useState('');
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const { data: messages = [], isLoading: loadingMessages, refetch: refetchMessages } = useQuery<Message[]>({
+  const {
+    data: messages = [],
+    isLoading: loadingMessages,
+    refetch: refetchMessages,
+  } = useQuery<Message[]>({
     queryKey: ['team-messages'],
     queryFn: async () => {
       const res = await fetch('/api/team/messages');
@@ -122,13 +131,12 @@ export function TeamSidebarChat({ isOpen, onClose, locale, currentUserId }: Team
             exit={{ x: isRtl ? -400 : 400 }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
             className={cn(
-              "fixed inset-y-0 z-50 flex w-full flex-col border-[var(--ds-border)] bg-[var(--ds-surface-sunken)] shadow-2xl lg:w-[380px]",
-              isRtl ? "left-0 border-r" : "right-0 border-l"
+              'fixed inset-y-0 z-50 flex w-full flex-col border-[var(--ds-border)] bg-[var(--ds-surface-sunken,#18191a)] shadow-2xl lg:w-[380px]',
+              isRtl ? 'left-0 border-r' : 'right-0 border-l'
             )}
-            style={{ backgroundColor: '#18191a' }}
           >
             {/* Header */}
-            <div className="flex items-center justify-between border-b border-[var(--ds-border)] px-4 py-3" style={{ backgroundColor: '#1f1f21' }}>
+            <div className="flex items-center justify-between border-b border-[var(--ds-border)] px-4 py-3 bg-[var(--ds-surface-overlay,#1f1f21)]">
               <div className="flex items-center gap-2">
                 <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--ds-background-brand-bold)] text-white">
                   <MessageSquare className="h-4 w-4" />
@@ -139,23 +147,27 @@ export function TeamSidebarChat({ isOpen, onClose, locale, currentUserId }: Team
                   </h3>
                   <div className="flex items-center gap-1.5 text-[10px] text-[var(--ds-text-subtle)]">
                     <Users className="h-3 w-3" />
-                    <span>{members.length} {t('team.chat.members', 'members')}</span>
+                    <span>
+                      {members.length} {t('team.chat.members', 'members')}
+                    </span>
                   </div>
                 </div>
               </div>
               <div className="flex items-center gap-1">
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
+                <Button
+                  variant="ghost"
+                  size="icon"
                   className="h-8 w-8 text-[var(--ds-text-subtle)] hover:bg-white/10"
                   onClick={() => refetchMessages()}
                   disabled={loadingMessages}
                 >
-                  <RefreshCw className={cn("h-4 w-4", loadingMessages && "animate-spin")} />
+                  <RefreshCw
+                    className={cn('h-4 w-4', loadingMessages && 'animate-spin')}
+                  />
                 </Button>
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
+                <Button
+                  variant="ghost"
+                  size="icon"
                   className="h-8 w-8 text-[var(--ds-text-subtle)] hover:bg-white/10"
                   onClick={onClose}
                 >
@@ -180,56 +192,66 @@ export function TeamSidebarChat({ isOpen, onClose, locale, currentUserId }: Team
                       {t('team.chat.noMessages', 'No messages yet.')}
                     </p>
                     <p className="max-w-[200px] text-xs text-[var(--ds-text-subtlest)]">
-                      {t('team.chat.startConversation', 'Start a conversation with your security team.')}
+                      {t(
+                        'team.chat.startConversation',
+                        'Start a conversation with your security team.'
+                      )}
                     </p>
                   </div>
                 ) : (
                   messages.map((msg, i) => {
                     const isOwn = msg.user.id === currentUserId;
-                    const showAvatar = i === 0 || messages[i-1].user.id !== msg.user.id;
-                    
+                    const showAvatar =
+                      i === 0 || messages[i - 1].user.id !== msg.user.id;
+
                     return (
-                      <motion.div 
+                      <motion.div
                         initial={{ opacity: 0, scale: 0.9, y: 10 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
                         transition={{ duration: 0.2 }}
-                        key={msg.id} 
+                        key={msg.id}
                         className={cn(
-                          "flex items-end gap-2",
-                          isOwn ? "flex-row-reverse" : "flex-row"
+                          'flex items-end gap-2',
+                          isOwn ? 'flex-row-reverse' : 'flex-row'
                         )}
                       >
                         <div className="w-8 shrink-0">
                           {showAvatar && !isOwn && (
                             <Avatar className="h-8 w-8">
-                              {msg.user.avatarUrl && <AvatarImage src={msg.user.avatarUrl} />}
+                              {msg.user.avatarUrl && (
+                                <AvatarImage src={msg.user.avatarUrl} />
+                              )}
                               <AvatarFallback className="bg-white/10 text-[10px] text-white">
                                 {msg.user.name.charAt(0)}
                               </AvatarFallback>
                             </Avatar>
                           )}
                         </div>
-                        <div className={cn(
-                          "flex max-w-[80%] flex-col gap-1",
-                          isOwn ? "items-end" : "items-start"
-                        )}>
+                        <div
+                          className={cn(
+                            'flex max-w-[80%] flex-col gap-1',
+                            isOwn ? 'items-end' : 'items-start'
+                          )}
+                        >
                           {showAvatar && !isOwn && (
                             <span className="px-1 text-[10px] font-bold text-[var(--ds-text-subtlest)]">
                               {msg.user.name}
                             </span>
                           )}
-                          <div 
+                          <div
                             className={cn(
-                              "rounded-2xl px-3 py-2 text-sm",
-                              isOwn 
-                                ? "bg-[var(--ds-background-brand-bold)] text-white rounded-br-none shadow-sm" 
-                                : "bg-[#1f1f21] text-[var(--ds-text-inverse)] rounded-bl-none border border-white/5 shadow-sm"
+                              'rounded-2xl px-3 py-2 text-sm',
+                              isOwn
+                                ? 'bg-[var(--ds-background-brand-bold)] text-white rounded-br-none shadow-sm'
+                                : 'bg-[var(--ds-surface-overlay,#1f1f21)] text-[var(--ds-text-inverse)] rounded-bl-none border border-white/5 shadow-sm'
                             )}
                           >
                             {msg.content}
                           </div>
                           <span className="px-1 text-[9px] text-[var(--ds-text-subtlest)] opacity-50">
-                            {formatDistanceToNow(new Date(msg.createdAt), { addSuffix: true })}
+                            {formatDistanceToNow(new Date(msg.createdAt), {
+                              addSuffix: true,
+                            })}
                           </span>
                         </div>
                       </motion.div>
@@ -240,17 +262,19 @@ export function TeamSidebarChat({ isOpen, onClose, locale, currentUserId }: Team
             </ScrollArea>
 
             {/* Input Area */}
-            <div className="border-t border-[var(--ds-border)] p-4" style={{ backgroundColor: '#1f1f21' }}>
+            <div className="border-t border-[var(--ds-border)] p-4 bg-[var(--ds-surface-overlay,#1f1f21)]">
               <div className="flex items-center gap-2">
                 <Input
                   value={inputText}
                   onChange={(e) => setInputText(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
+                  onKeyDown={(e) =>
+                    e.key === 'Enter' && !e.shiftKey && handleSend()
+                  }
                   placeholder={t('team.chat.placeholder', 'Type a message...')}
                   className="bg-black/20 border-white/10 text-white placeholder:text-white/30 focus:ring-[var(--ds-border-brand)]"
                 />
-                <Button 
-                  size="icon" 
+                <Button
+                  size="icon"
                   disabled={!inputText.trim() || sendMutation.isPending}
                   onClick={handleSend}
                   className="shrink-0 bg-[var(--ds-background-brand-bold)] hover:bg-[var(--ds-background-brand-bold-hovered)]"

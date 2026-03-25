@@ -3,15 +3,15 @@
 /**
  * GateAI Operations Hub v2.0 — Phase 1: Foundation & Secure Shell
  *
- * 3-column responsive layout with Glassmorphism + Dot-grid aesthetic
- * Design tokens: Navy #020035 (--ga-navy) / Kimchi Orange #ED4B00 (--ga-orange)
+ * 3-column responsive layout with Glassmorphism + Dash aesthetic
+ * Design tokens: ADS Compliant (using var(--ds-...) tokens)
  *
  * Security: layout only renders if session is confirmed; org scoping
  * validated by the parent server component (layout.tsx).
  */
 
 import * as React from 'react';
-import { cn } from '@gate-access/ui';
+import { cn } from '@/lib/utils';
 import { Menu, X } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { gaLayoutSpring } from './GateAITokens';
@@ -20,24 +20,26 @@ import { gaLayoutSpring } from './GateAITokens';
 
 const hubStyles = `
   :root {
-    --ga-navy:          #18191a; /* Base gray */
-    --ga-orange:        var(--primary, #F97316);
+    --ga-navy:          var(--ds-background-neutral-subtle,#F4F5F7);
+    --ga-orange:        var(--primary,var(--ds-background-selected-bold,#0052CC));
     --ga-navy-glass:    rgba(22, 26, 29, 0.4);
-    --ga-navy-border:   var(--ds-border, #DFE1E6);
+    --ga-navy-border:   var(--ds-border,#DFE1E6);
     --ga-dot-color:     transparent;
     --ga-dot-size:      28px;
-    --ga-panel-bg:      var(--ds-background-default, #18191a);
-    --ga-panel-border:  var(--ds-border, #DFE1E6);
-    --ga-highlight:     var(--primary, #F97316);
-    --ga-text-primary:  var(--ds-text, #FAFBFC);
-    --ga-text-muted:    var(--ds-text-subtle, #A1A1AA);
-    --ga-text-accent:   var(--primary, #F97316);
+    --ga-panel-bg:      var(--ds-background-default,#FFFFFF);
+    --ga-panel-border:  var(--ds-border,#DFE1E6);
+    --ga-highlight:     var(--primary,var(--ds-background-selected-bold,#0052CC));
+    --ga-text-primary:  var(--ds-text,#172B4D);
+    --ga-text-muted:    var(--ds-text-subtle,#6B778C);
+    --ga-text-accent:   var(--primary,var(--ds-background-selected-bold,#0052CC));
     --ga-scrollbar:     rgba(82, 82, 91, 0.2);
   }
 
   .ga-hub-root {
     background-color: transparent;
-    min-height: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
   }
 
   .ga-panel {
@@ -64,10 +66,9 @@ const hubStyles = `
 
 interface LeftPanelProps {
   children?: React.ReactNode;
-  isRtl?: boolean;
 }
 
-export function GateAILeftPanel({ children, isRtl: _isRtl }: LeftPanelProps) {
+export function GateAILeftPanel({ children }: LeftPanelProps) {
   return (
     <aside
       className={cn(
@@ -77,7 +78,6 @@ export function GateAILeftPanel({ children, isRtl: _isRtl }: LeftPanelProps) {
     >
       {children ?? (
         <div className="flex flex-col gap-3 p-4">
-          {/* Empty state placeholder */}
           <p className="text-[11px] font-semibold uppercase tracking-widest text-[var(--ga-text-muted)]">
             Tags & Filters
           </p>
@@ -92,10 +92,9 @@ export function GateAILeftPanel({ children, isRtl: _isRtl }: LeftPanelProps) {
 
 interface RightPanelProps {
   children?: React.ReactNode;
-  isRtl?: boolean;
 }
 
-export function GateAIRightPanel({ children, isRtl: _isRtl }: RightPanelProps) {
+export function GateAIRightPanel({ children }: RightPanelProps) {
   return (
     <aside
       className={cn(
@@ -151,21 +150,17 @@ export function GateAIHubLayout({
 }: GateAIHubLayoutProps) {
   const [leftOpen, setLeftOpen] = React.useState(true);
   const [rightOpen, setRightOpen] = React.useState(true);
-  const shouldReduceMotion = useReducedMotion();
-
-  const springConfig = gaLayoutSpring;
+  const isReducedMotion = useReducedMotion();
 
   React.useEffect(() => {
-    // Inject scoped CSS vars once
-    const styleId = 'ga-hub-tokens';
+    const styleId = 'gateai-hub-tokens';
     if (!document.getElementById(styleId)) {
-      const el = document.createElement('style');
-      el.id = styleId;
-      el.textContent = hubStyles;
-      document.head.appendChild(el);
+      const style = document.createElement('style');
+      style.id = styleId;
+      style.innerHTML = hubStyles;
+      document.head.appendChild(style);
     }
     return () => {
-      // Cleanup on unmount
       document.getElementById(styleId)?.remove();
     };
   }, []);
@@ -174,7 +169,7 @@ export function GateAIHubLayout({
     <div
       dir={isRtl ? 'rtl' : 'ltr'}
       className={cn(
-        'ga-hub-root flex h-[calc(100vh-180px)] overflow-hidden rounded-xl border border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-background-default,#FFFFFF)]',
+        'ga-hub-root relative flex h-[calc(100vh-180px)] overflow-hidden rounded-xl border border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-background-default,#FFFFFF)]',
         className
       )}
     >
@@ -195,15 +190,15 @@ export function GateAIHubLayout({
       {/* ── Left Panel (Tags & Nav) ── */}
       <motion.div
         initial={false}
-        animate={{ 
+        animate={{
           width: leftOpen ? 256 : 0,
-          opacity: leftOpen ? 1 : 0
+          opacity: leftOpen ? 1 : 0,
         }}
-        transition={shouldReduceMotion ? { duration: 0 } : springConfig}
+        transition={isReducedMotion ? { duration: 0 } : gaLayoutSpring}
         className="shrink-0 lg:block overflow-hidden"
         aria-hidden={!leftOpen}
       >
-        <GateAILeftPanel isRtl={isRtl}>{left}</GateAILeftPanel>
+        <GateAILeftPanel>{left}</GateAILeftPanel>
       </motion.div>
 
       {/* ── Center Canvas ── */}
@@ -212,15 +207,15 @@ export function GateAIHubLayout({
       {/* ── Right Panel (AI Context) ── */}
       <motion.div
         initial={false}
-        animate={{ 
+        animate={{
           width: rightOpen ? 288 : 0,
-          opacity: rightOpen ? 1 : 0
+          opacity: rightOpen ? 1 : 0,
         }}
-        transition={shouldReduceMotion ? { duration: 0 } : springConfig}
+        transition={isReducedMotion ? { duration: 0 } : gaLayoutSpring}
         className="shrink-0 hidden lg:block overflow-hidden"
         aria-hidden={!rightOpen}
       >
-        <GateAIRightPanel isRtl={isRtl}>{right}</GateAIRightPanel>
+        <GateAIRightPanel>{right}</GateAIRightPanel>
       </motion.div>
 
       {/* ── Toggle button: right panel (desktop) ── */}
@@ -232,7 +227,9 @@ export function GateAIHubLayout({
           isRtl ? 'left-3' : 'right-3',
           'hidden lg:flex items-center justify-center rounded-md p-1.5 text-[var(--ga-text-muted)] hover:text-[var(--ga-orange)] bg-[var(--ga-navy-glass)] border border-[var(--ga-navy-border)] transition-colors'
         )}
-        aria-label={rightOpen ? 'Collapse context panel' : 'Expand context panel'}
+        aria-label={
+          rightOpen ? 'Collapse context panel' : 'Expand context panel'
+        }
       >
         {rightOpen ? <X size={16} /> : <Menu size={16} />}
       </button>

@@ -21,12 +21,8 @@ const nextConfig = {
     '@gate-access/db',
     '@gate-access/i18n',
   ],
+  serverExternalPackages: ['@node-rs/argon2', '@prisma/client', 'prisma'],
   experimental: {
-    serverComponentsExternalPackages: [
-      '@node-rs/argon2',
-      '@prisma/client',
-      'prisma',
-    ],
     optimizePackageImports: [
       '@phosphor-icons/react',
       'lucide-react',

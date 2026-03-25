@@ -7,6 +7,7 @@ import Placeholder from '@tiptap/extension-placeholder';
 import { LiveChartNode } from './live-chart/LiveChartNode';
 import { Loader2, CheckCircle2, CloudFog } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
+import { token } from '@atlaskit/tokens';
 import { useTranslation } from 'react-i18next';
 import { gaSpring, gaInitialFadeUp, gaFadeInUp } from './GateAITokens';
 
@@ -17,7 +18,9 @@ import { gaSpring, gaInitialFadeUp, gaFadeInUp } from './GateAITokens';
 export function CanvasEditor() {
   const { i18n } = useTranslation('dashboard');
   const isRtl = i18n.language === 'ar' || i18n.language === 'ar-EG';
-  const [saveState, setSaveState] = React.useState<'idle' | 'saving' | 'saved' | 'error'>('saved');
+  const [saveState, setSaveState] = React.useState<
+    'idle' | 'saving' | 'saved' | 'error'
+  >('saved');
   const debounceRef = React.useRef<NodeJS.Timeout>(null);
   const shouldReduceMotion = useReducedMotion();
 
@@ -29,7 +32,8 @@ export function CanvasEditor() {
         heading: { levels: [1, 2, 3] },
       }),
       Placeholder.configure({
-        placeholder: "Start typing '/' for commands, or drag a tag from the sidebar here to generate an instant chart...",
+        placeholder:
+          "Start typing '/' for commands, or drag a tag from the sidebar here to generate an instant chart...",
         emptyEditorClass: 'is-editor-empty',
       }),
       LiveChartNode,
@@ -37,12 +41,13 @@ export function CanvasEditor() {
     content: `<h1>AI assistant Workspace</h1><p>Drag tags from the sidebar to analyze live data blocks.</p>`,
     editorProps: {
       attributes: {
-        class: 'prose prose-invert prose-orange max-w-none focus:outline-none min-h-[500px] p-8',
+        class:
+          'prose prose-invert prose-orange max-w-none focus:outline-none min-h-[500px] p-8',
       },
     },
     onUpdate: ({ editor }) => {
       setSaveState('saving');
-      
+
       // Auto-save debouncer
       if (debounceRef.current) clearTimeout(debounceRef.current);
       debounceRef.current = setTimeout(() => {
@@ -61,14 +66,19 @@ export function CanvasEditor() {
 
     const handleDrop = (e: DragEvent) => {
       e.preventDefault();
-      
+
       const tagId = e.dataTransfer?.getData('application/vnd.gateai.tag.id');
-      const tagName = e.dataTransfer?.getData('application/vnd.gateai.tag.name');
+      const tagName = e.dataTransfer?.getData(
+        'application/vnd.gateai.tag.name'
+      );
       const color = e.dataTransfer?.getData('application/vnd.gateai.tag.color');
 
       if (tagId && tagName) {
         // Find insert position
-        const coordinates = editor.view.posAtCoords({ left: e.clientX, top: e.clientY });
+        const coordinates = editor.view.posAtCoords({
+          left: e.clientX,
+          top: e.clientY,
+        });
         const pos = coordinates?.pos ?? editor.state.doc.content.size;
 
         editor
@@ -79,7 +89,7 @@ export function CanvasEditor() {
             attrs: {
               tagId,
               tagName,
-              color: color || '#ED4B00',
+              color: color || token('color.text.danger', '#ED4B00'),
               isRtl,
             },
           })
@@ -124,7 +134,10 @@ export function CanvasEditor() {
       <div className="absolute top-4 right-4 z-10 flex items-center gap-2 bg-secondary/30 backdrop-blur border border-[var(--ga-navy-border)] px-3 py-1.5 rounded-full text-xs text-[var(--ga-text-muted)]">
         {saveState === 'saving' && (
           <>
-            <CloudFog size={14} className="animate-pulse text-[var(--ga-orange)]" />
+            <CloudFog
+              size={14}
+              className="animate-pulse text-[var(--ga-orange)]"
+            />
             Saving...
           </>
         )}
@@ -135,9 +148,9 @@ export function CanvasEditor() {
           </>
         )}
       </div>
-      
+
       <div className="flex-1 overflow-y-auto ga-scroll">
-        <motion.div 
+        <motion.div
           initial={gaInitialFadeUp(shouldReduceMotion)}
           animate={gaFadeInUp(shouldReduceMotion)}
           className="max-w-4xl mx-auto w-full"
