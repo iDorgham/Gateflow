@@ -25,8 +25,12 @@ function buildVisitsOverTimeUrl(filters: AnalyticsFilters): string {
   return `/api/analytics/visits-over-time?${sp.toString()}`;
 }
 
-async function fetchVisitsOverTime(filters: AnalyticsFilters): Promise<VisitsOverTimePoint[]> {
-  const res = await fetch(buildVisitsOverTimeUrl(filters), { credentials: 'include' });
+async function fetchVisitsOverTime(
+  filters: AnalyticsFilters
+): Promise<VisitsOverTimePoint[]> {
+  const res = await fetch(buildVisitsOverTimeUrl(filters), {
+    credentials: 'include',
+  });
   const json = await res.json();
   if (!res.ok || !json.success || !Array.isArray(json.data)) {
     throw new Error(json.message ?? 'Failed to load visits');
@@ -39,20 +43,36 @@ interface TotalVisitsChartProps {
   className?: string;
 }
 
-export function TotalVisitsChart({ filters, className }: TotalVisitsChartProps) {
+export function TotalVisitsChart({
+  filters,
+  className,
+}: TotalVisitsChartProps) {
   const { t } = useTranslation('dashboard');
   const { data, isLoading, error } = useQuery({
-    queryKey: ['analytics', 'visits-over-time', filters.from, filters.to, filters.projectId, filters.gateId],
+    queryKey: [
+      'analytics',
+      'visits-over-time',
+      filters.from,
+      filters.to,
+      filters.projectId,
+      filters.gateId,
+    ],
     queryFn: () => fetchVisitsOverTime(filters),
   });
 
   const isEmpty = !data || data.length === 0;
-  const noDataMessage = t('analytics.noScanDataInRange', 'No scan data in this period.');
+  const noDataMessage = t(
+    'analytics.noScanDataInRange',
+    'No scan data in this period.'
+  );
 
   return (
     <AnalyticsChartCard
       title={t('analytics.scansOverTime', 'Total Visits Over Time')}
-      tooltip={t('analytics.scansOverTimeDesc', 'All scan attempts including failures.')}
+      tooltip={t(
+        'analytics.scansOverTimeDesc',
+        'All scan attempts including failures.'
+      )}
       loading={isLoading}
       className={className}
       contentClassName="min-h-[260px]"
@@ -69,7 +89,10 @@ export function TotalVisitsChart({ filters, className }: TotalVisitsChartProps) 
       )}
       {!error && !isEmpty && data && (
         <ResponsiveContainer width="100%" height={260}>
-          <AreaChart data={data} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
+          <AreaChart
+            data={data}
+            margin={{ top: 8, right: 8, left: 0, bottom: 0 }}
+          >
             <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
             <XAxis
               dataKey="date"
@@ -77,7 +100,10 @@ export function TotalVisitsChart({ filters, className }: TotalVisitsChartProps) 
               tickFormatter={(v) => {
                 try {
                   const d = new Date(v);
-                  return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+                  return d.toLocaleDateString(undefined, {
+                    month: 'short',
+                    day: 'numeric',
+                  });
                 } catch {
                   return v;
                 }
@@ -85,7 +111,7 @@ export function TotalVisitsChart({ filters, className }: TotalVisitsChartProps) 
             />
             <YAxis tick={{ fontSize: 11 }} allowDecimals={false} />
             <Tooltip
-              formatter={(value: number) => [value, t('analytics.scans', 'Scans')]}
+              formatter={(value: any) => [value, t('analytics.scans', 'Scans')]}
               labelFormatter={(label) => {
                 try {
                   return new Date(label).toLocaleDateString(undefined, {
@@ -97,7 +123,10 @@ export function TotalVisitsChart({ filters, className }: TotalVisitsChartProps) 
                   return label;
                 }
               }}
-              contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))' }}
+              contentStyle={{
+                backgroundColor: 'hsl(var(--card))',
+                border: '1px solid hsl(var(--border))',
+              }}
             />
             <Area
               type="monotone"

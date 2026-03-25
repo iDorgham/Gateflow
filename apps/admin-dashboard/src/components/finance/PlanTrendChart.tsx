@@ -1,6 +1,14 @@
 'use client';
 
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  Cell,
+} from 'recharts';
 
 interface DataPoint {
   plan: string;
@@ -19,10 +27,18 @@ const PLAN_COLORS: Record<string, string> = {
 export function PlanTrendChart({ data }: PlanTrendChartProps) {
   return (
     <ResponsiveContainer width="100%" height={140}>
-      <BarChart data={data} margin={{ top: 4, right: 4, left: -20, bottom: 0 }} barSize={48}>
+      <BarChart
+        data={data}
+        margin={{ top: 4, right: 4, left: -20, bottom: 0 }}
+        barSize={48}
+      >
         <XAxis
           dataKey="plan"
-          tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))', fontWeight: 700 }}
+          tick={{
+            fontSize: 11,
+            fill: 'hsl(var(--muted-foreground))',
+            fontWeight: 700,
+          }}
           tickLine={false}
           axisLine={false}
         />
@@ -40,11 +56,17 @@ export function PlanTrendChart({ data }: PlanTrendChartProps) {
             fontSize: '12px',
             color: 'hsl(var(--foreground))',
           }}
-          formatter={(value: number) => [value.toLocaleString(), 'Organizations']}
+          formatter={(value: any) => [
+            Number(value).toLocaleString(),
+            'Organizations',
+          ]}
         />
         <Bar dataKey="count" radius={[6, 6, 0, 0]}>
           {data.map((entry) => (
-            <Cell key={entry.plan} fill={PLAN_COLORS[entry.plan] ?? 'hsl(var(--primary))'} />
+            <Cell
+              key={entry.plan}
+              fill={PLAN_COLORS[entry.plan] ?? 'hsl(var(--primary))'}
+            />
           ))}
         </Bar>
       </BarChart>

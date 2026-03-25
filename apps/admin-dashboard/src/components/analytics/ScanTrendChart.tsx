@@ -22,14 +22,25 @@ interface ScanTrendChartProps {
 export function ScanTrendChart({ data }: ScanTrendChartProps) {
   return (
     <ResponsiveContainer width="100%" height={160}>
-      <AreaChart data={data} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
+      <AreaChart
+        data={data}
+        margin={{ top: 4, right: 4, left: -20, bottom: 0 }}
+      >
         <defs>
           <linearGradient id="scanGradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="hsl(217, 91%, 60%)" stopOpacity={0.25} />
+            <stop
+              offset="5%"
+              stopColor="hsl(217, 91%, 60%)"
+              stopOpacity={0.25}
+            />
             <stop offset="95%" stopColor="hsl(217, 91%, 60%)" stopOpacity={0} />
           </linearGradient>
         </defs>
-        <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.4} />
+        <CartesianGrid
+          strokeDasharray="3 3"
+          stroke="hsl(var(--border))"
+          opacity={0.4}
+        />
         <XAxis
           dataKey="label"
           tick={{ fontSize: 9, fill: 'hsl(var(--muted-foreground))' }}
@@ -52,7 +63,7 @@ export function ScanTrendChart({ data }: ScanTrendChartProps) {
             color: 'hsl(var(--foreground))',
           }}
           labelStyle={{ fontWeight: 700 }}
-          formatter={(value: number) => [value.toLocaleString(), 'Scans']}
+          formatter={(value: any) => [Number(value).toLocaleString(), 'Scans']}
         />
         <Area
           type="monotone"

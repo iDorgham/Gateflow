@@ -24,8 +24,12 @@ function buildUnitTypesUrl(filters: AnalyticsFilters): string {
   return `/api/analytics/unit-types?${sp.toString()}`;
 }
 
-async function fetchUnitTypes(filters: AnalyticsFilters): Promise<UnitTypesRankingRow[]> {
-  const res = await fetch(buildUnitTypesUrl(filters), { credentials: 'include' });
+async function fetchUnitTypes(
+  filters: AnalyticsFilters
+): Promise<UnitTypesRankingRow[]> {
+  const res = await fetch(buildUnitTypesUrl(filters), {
+    credentials: 'include',
+  });
   const json = await res.json();
   if (!res.ok || !json.success || !Array.isArray(json.data)) {
     throw new Error(json.message ?? 'Failed to load unit types');
@@ -38,20 +42,36 @@ interface UnitTypesRankingChartProps {
   className?: string;
 }
 
-export function UnitTypesRankingChart({ filters, className }: UnitTypesRankingChartProps) {
+export function UnitTypesRankingChart({
+  filters,
+  className,
+}: UnitTypesRankingChartProps) {
   const { t } = useTranslation('dashboard');
   const { data, isLoading, error } = useQuery({
-    queryKey: ['analytics', 'unit-types', filters.from, filters.to, filters.projectId, filters.gateId],
+    queryKey: [
+      'analytics',
+      'unit-types',
+      filters.from,
+      filters.to,
+      filters.projectId,
+      filters.gateId,
+    ],
     queryFn: () => fetchUnitTypes(filters),
   });
 
   const isEmpty = !data || data.length === 0;
-  const noDataMessage = t('analytics.noScanDataInRange', 'No scan data in this period.');
+  const noDataMessage = t(
+    'analytics.noScanDataInRange',
+    'No scan data in this period.'
+  );
 
   return (
     <AnalyticsChartCard
       title={t('analytics.unitTypesRanking', 'Unit Types Visit Ranking')}
-      tooltip={t('analytics.unitTypesRankingDesc', 'Visits by unit type (resident-created QRs).')}
+      tooltip={t(
+        'analytics.unitTypesRankingDesc',
+        'Visits by unit type (resident-created QRs).'
+      )}
       loading={isLoading}
       className={className}
       contentClassName="min-h-[260px]"
@@ -73,19 +93,33 @@ export function UnitTypesRankingChart({ filters, className }: UnitTypesRankingCh
             layout="vertical"
             margin={{ top: 8, right: 8, left: 0, bottom: 0 }}
           >
-            <XAxis type="number" tick={{ fontSize: 11 }} allowDecimals={false} />
+            <XAxis
+              type="number"
+              tick={{ fontSize: 11 }}
+              allowDecimals={false}
+            />
             <YAxis
               type="category"
               dataKey="unitType"
               width={80}
               tick={{ fontSize: 11 }}
-              tickFormatter={(v) => (String(v).length > 10 ? String(v).slice(0, 8) + '…' : v)}
+              tickFormatter={(v) =>
+                String(v).length > 10 ? String(v).slice(0, 8) + '…' : v
+              }
             />
             <Tooltip
-              formatter={(value: number) => [value, t('analytics.scans', 'Scans')]}
-              contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))' }}
+              formatter={(value: any) => [value, t('analytics.scans', 'Scans')]}
+              contentStyle={{
+                backgroundColor: 'hsl(var(--card))',
+                border: '1px solid hsl(var(--border))',
+              }}
             />
-            <Bar dataKey="count" radius={[0, 4, 4, 0]} maxBarSize={24} fill={CHART_PRIMARY} />
+            <Bar
+              dataKey="count"
+              radius={[0, 4, 4, 0]}
+              maxBarSize={24}
+              fill={CHART_PRIMARY}
+            />
           </BarChart>
         </ResponsiveContainer>
       )}

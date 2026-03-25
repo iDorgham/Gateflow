@@ -13,7 +13,12 @@ import {
   Cell,
 } from 'recharts';
 import { AnalyticsChartCard } from './AnalyticsChartCard';
-import { CHART_SUCCESS, CHART_DESTRUCTIVE, CHART_WARNING, CHART_MUTED } from '@/lib/analytics/chart-colors';
+import {
+  CHART_SUCCESS,
+  CHART_DESTRUCTIVE,
+  CHART_WARNING,
+  CHART_MUTED,
+} from '@/lib/analytics/chart-colors';
 import type { AnalyticsFilters } from '@/lib/analytics/analytics-filters';
 import type { ScanOutcomeRow } from '@/lib/analytics/types';
 
@@ -26,8 +31,12 @@ function buildScanOutcomeUrl(filters: AnalyticsFilters): string {
   return `/api/analytics/scan-outcome?${sp.toString()}`;
 }
 
-async function fetchScanOutcome(filters: AnalyticsFilters): Promise<ScanOutcomeRow[]> {
-  const res = await fetch(buildScanOutcomeUrl(filters), { credentials: 'include' });
+async function fetchScanOutcome(
+  filters: AnalyticsFilters
+): Promise<ScanOutcomeRow[]> {
+  const res = await fetch(buildScanOutcomeUrl(filters), {
+    credentials: 'include',
+  });
   const json = await res.json();
   if (!res.ok || !json.success || !Array.isArray(json.data)) {
     throw new Error(json.message ?? 'Failed to load scan outcome');
@@ -56,17 +65,30 @@ interface ScanOutcomeChartProps {
   className?: string;
 }
 
-export function ScanOutcomeChart({ filters, className }: ScanOutcomeChartProps) {
+export function ScanOutcomeChart({
+  filters,
+  className,
+}: ScanOutcomeChartProps) {
   const { t } = useTranslation('dashboard');
   const statusLabel = (status: string) =>
     t(`analytics.status.${status}`, status.replace(/_/g, ' '));
   const { data, isLoading, error } = useQuery({
-    queryKey: ['analytics', 'scan-outcome', filters.from, filters.to, filters.projectId, filters.gateId],
+    queryKey: [
+      'analytics',
+      'scan-outcome',
+      filters.from,
+      filters.to,
+      filters.projectId,
+      filters.gateId,
+    ],
     queryFn: () => fetchScanOutcome(filters),
   });
 
   const isEmpty = !data || data.length === 0;
-  const noDataMessage = t('analytics.noScanDataInRange', 'No scan data in this period.');
+  const noDataMessage = t(
+    'analytics.noScanDataInRange',
+    'No scan data in this period.'
+  );
 
   const total = data?.reduce((s, r) => s + r.count, 0) ?? 0;
   const successCount = data?.find((r) => r.status === 'SUCCESS')?.count ?? 0;
@@ -93,7 +115,8 @@ export function ScanOutcomeChart({ filters, className }: ScanOutcomeChartProps) 
       {!error && !isEmpty && data && (
         <>
           <div className="mb-2 text-sm text-muted-foreground">
-            {t('analytics.successRateLabel', 'Pass rate')}: <span className="font-medium text-foreground">{passRate}%</span>
+            {t('analytics.successRateLabel', 'Pass rate')}:{' '}
+            <span className="font-medium text-foreground">{passRate}%</span>
           </div>
           <ResponsiveContainer width="100%" height={220}>
             <BarChart
@@ -101,7 +124,11 @@ export function ScanOutcomeChart({ filters, className }: ScanOutcomeChartProps) 
               layout="vertical"
               margin={{ top: 8, right: 8, left: 0, bottom: 0 }}
             >
-              <XAxis type="number" tick={{ fontSize: 11 }} allowDecimals={false} />
+              <XAxis
+                type="number"
+                tick={{ fontSize: 11 }}
+                allowDecimals={false}
+              />
               <YAxis
                 type="category"
                 dataKey="status"
@@ -110,9 +137,15 @@ export function ScanOutcomeChart({ filters, className }: ScanOutcomeChartProps) 
                 tickFormatter={(v) => statusLabel(v)}
               />
               <Tooltip
-                formatter={(value: number) => [value, t('analytics.scans', 'Scans')]}
+                formatter={(value: any) => [
+                  value,
+                  t('analytics.scans', 'Scans'),
+                ]}
                 labelFormatter={(label) => statusLabel(label)}
-                contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))' }}
+                contentStyle={{
+                  backgroundColor: 'hsl(var(--card))',
+                  border: '1px solid hsl(var(--border))',
+                }}
               />
               <Legend formatter={(value) => statusLabel(value)} />
               <Bar dataKey="count" radius={[0, 4, 4, 0]} maxBarSize={28}>

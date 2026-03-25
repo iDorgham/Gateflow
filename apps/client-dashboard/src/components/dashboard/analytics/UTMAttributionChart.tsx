@@ -29,8 +29,12 @@ function buildCampaignsUrl(filters: AnalyticsFilters): string {
   return `/api/analytics/campaigns?${sp.toString()}`;
 }
 
-async function fetchCampaigns(filters: AnalyticsFilters): Promise<CampaignRow[]> {
-  const res = await fetch(buildCampaignsUrl(filters), { credentials: 'include' });
+async function fetchCampaigns(
+  filters: AnalyticsFilters
+): Promise<CampaignRow[]> {
+  const res = await fetch(buildCampaignsUrl(filters), {
+    credentials: 'include',
+  });
   const json = await res.json();
   if (!res.ok || !json.success) {
     throw new Error(json.message ?? 'Failed to load campaigns');
@@ -44,15 +48,27 @@ interface UTMAttributionChartProps {
   className?: string;
 }
 
-export function UTMAttributionChart({ filters, className }: UTMAttributionChartProps) {
+export function UTMAttributionChart({
+  filters,
+  className,
+}: UTMAttributionChartProps) {
   const { t } = useTranslation('dashboard');
   const { data, isLoading, error } = useQuery({
-    queryKey: ['analytics', 'campaigns', filters.from, filters.to, filters.projectId],
+    queryKey: [
+      'analytics',
+      'campaigns',
+      filters.from,
+      filters.to,
+      filters.projectId,
+    ],
     queryFn: () => fetchCampaigns(filters),
   });
 
   const isEmpty = !data || data.length === 0;
-  const noDataMessage = t('analytics.noCampaignData', 'No UTM campaign data in this range');
+  const noDataMessage = t(
+    'analytics.noCampaignData',
+    'No UTM campaign data in this range'
+  );
 
   return (
     <AnalyticsChartCard
@@ -79,17 +95,26 @@ export function UTMAttributionChart({ filters, className }: UTMAttributionChartP
             layout="vertical"
             margin={{ top: 8, right: 8, left: 0, bottom: 0 }}
           >
-            <XAxis type="number" tick={{ fontSize: 11 }} allowDecimals={false} />
+            <XAxis
+              type="number"
+              tick={{ fontSize: 11 }}
+              allowDecimals={false}
+            />
             <YAxis
               type="category"
               dataKey="name"
               width={100}
               tick={{ fontSize: 11 }}
-              tickFormatter={(v) => (String(v).length > 12 ? String(v).slice(0, 10) + '…' : v)}
+              tickFormatter={(v) =>
+                String(v).length > 12 ? String(v).slice(0, 10) + '…' : v
+              }
             />
             <Tooltip
-              formatter={(value: number) => [value, t('analytics.scans', 'Scans')]}
-              contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))' }}
+              formatter={(value: any) => [value, t('analytics.scans', 'Scans')]}
+              contentStyle={{
+                backgroundColor: 'hsl(var(--card))',
+                border: '1px solid hsl(var(--border))',
+              }}
             />
             <Bar dataKey="scans" radius={[0, 4, 4, 0]} maxBarSize={24}>
               {data.map((_, index) => (

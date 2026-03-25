@@ -24,8 +24,12 @@ function buildVisitorTypeUrl(filters: AnalyticsFilters): string {
   return `/api/analytics/visitor-type?${sp.toString()}`;
 }
 
-async function fetchVisitorType(filters: AnalyticsFilters): Promise<VisitorTypeRow[]> {
-  const res = await fetch(buildVisitorTypeUrl(filters), { credentials: 'include' });
+async function fetchVisitorType(
+  filters: AnalyticsFilters
+): Promise<VisitorTypeRow[]> {
+  const res = await fetch(buildVisitorTypeUrl(filters), {
+    credentials: 'include',
+  });
   const json = await res.json();
   if (!res.ok || !json.success || !Array.isArray(json.data)) {
     throw new Error(json.message ?? 'Failed to load visitor type');
@@ -38,20 +42,36 @@ interface VisitorTypeChartProps {
   className?: string;
 }
 
-export function VisitorTypeChart({ filters, className }: VisitorTypeChartProps) {
+export function VisitorTypeChart({
+  filters,
+  className,
+}: VisitorTypeChartProps) {
   const { t } = useTranslation('dashboard');
   const { data, isLoading, error } = useQuery({
-    queryKey: ['analytics', 'visitor-type', filters.from, filters.to, filters.projectId, filters.gateId],
+    queryKey: [
+      'analytics',
+      'visitor-type',
+      filters.from,
+      filters.to,
+      filters.projectId,
+      filters.gateId,
+    ],
     queryFn: () => fetchVisitorType(filters),
   });
 
   const isEmpty = !data || data.length === 0;
-  const noDataMessage = t('analytics.noScanDataInRange', 'No scan data in this period.');
+  const noDataMessage = t(
+    'analytics.noScanDataInRange',
+    'No scan data in this period.'
+  );
 
   return (
     <AnalyticsChartCard
       title={t('analytics.scansByQrType', 'Visitor Type Distribution')}
-      tooltip={t('analytics.qrTypeDesc', 'Single-use, recurring, and permanent access codes.')}
+      tooltip={t(
+        'analytics.qrTypeDesc',
+        'Single-use, recurring, and permanent access codes.'
+      )}
       loading={isLoading}
       className={className}
       contentClassName="min-h-[260px]"
@@ -85,8 +105,11 @@ export function VisitorTypeChart({ filters, className }: VisitorTypeChartProps) 
               ))}
             </Pie>
             <Tooltip
-              formatter={(value: number) => [value, t('analytics.scans', 'Scans')]}
-              contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))' }}
+              formatter={(value: any) => [value, t('analytics.scans', 'Scans')]}
+              contentStyle={{
+                backgroundColor: 'hsl(var(--card))',
+                border: '1px solid hsl(var(--border))',
+              }}
             />
             <Legend formatter={(value) => value} />
           </PieChart>

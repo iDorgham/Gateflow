@@ -24,8 +24,12 @@ function buildPeakDaysUrl(filters: AnalyticsFilters): string {
   return `/api/analytics/peak-days?${sp.toString()}`;
 }
 
-async function fetchPeakDays(filters: AnalyticsFilters): Promise<PeakDaysRow[]> {
-  const res = await fetch(buildPeakDaysUrl(filters), { credentials: 'include' });
+async function fetchPeakDays(
+  filters: AnalyticsFilters
+): Promise<PeakDaysRow[]> {
+  const res = await fetch(buildPeakDaysUrl(filters), {
+    credentials: 'include',
+  });
   const json = await res.json();
   if (!res.ok || !json.success || !Array.isArray(json.data)) {
     throw new Error(json.message ?? 'Failed to load peak days');
@@ -41,12 +45,22 @@ interface PeakDaysChartProps {
 export function PeakDaysChart({ filters, className }: PeakDaysChartProps) {
   const { t } = useTranslation('dashboard');
   const { data, isLoading, error } = useQuery({
-    queryKey: ['analytics', 'peak-days', filters.from, filters.to, filters.projectId, filters.gateId],
+    queryKey: [
+      'analytics',
+      'peak-days',
+      filters.from,
+      filters.to,
+      filters.projectId,
+      filters.gateId,
+    ],
     queryFn: () => fetchPeakDays(filters),
   });
 
   const isEmpty = !data || data.length === 0;
-  const noDataMessage = t('analytics.noScanDataInRange', 'No scan data in this period.');
+  const noDataMessage = t(
+    'analytics.noScanDataInRange',
+    'No scan data in this period.'
+  );
 
   return (
     <AnalyticsChartCard
@@ -68,14 +82,25 @@ export function PeakDaysChart({ filters, className }: PeakDaysChartProps) {
       )}
       {!error && !isEmpty && data && (
         <ResponsiveContainer width="100%" height={260}>
-          <BarChart data={data} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
+          <BarChart
+            data={data}
+            margin={{ top: 8, right: 8, left: 0, bottom: 0 }}
+          >
             <XAxis dataKey="label" tick={{ fontSize: 11 }} />
             <YAxis tick={{ fontSize: 11 }} allowDecimals={false} />
             <Tooltip
-              formatter={(value: number) => [value, t('analytics.scans', 'Scans')]}
-              contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))' }}
+              formatter={(value: any) => [value, t('analytics.scans', 'Scans')]}
+              contentStyle={{
+                backgroundColor: 'hsl(var(--card))',
+                border: '1px solid hsl(var(--border))',
+              }}
             />
-            <Bar dataKey="count" radius={[4, 4, 0, 0]} maxBarSize={32} fill={CHART_PRIMARY} />
+            <Bar
+              dataKey="count"
+              radius={[4, 4, 0, 0]}
+              maxBarSize={32}
+              fill={CHART_PRIMARY}
+            />
           </BarChart>
         </ResponsiveContainer>
       )}

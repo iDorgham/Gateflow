@@ -28,10 +28,18 @@ const PLAN_COLORS: Record<string, string> = {
 export function PlanDistributionChart({ data }: PlanDistributionChartProps) {
   return (
     <ResponsiveContainer width="100%" height={120}>
-      <BarChart data={data} margin={{ top: 4, right: 4, left: -20, bottom: 0 }} barSize={32}>
+      <BarChart
+        data={data}
+        margin={{ top: 4, right: 4, left: -20, bottom: 0 }}
+        barSize={32}
+      >
         <XAxis
           dataKey="plan"
-          tick={{ fontSize: 10, fill: 'hsl(var(--muted-foreground))', fontWeight: 700 }}
+          tick={{
+            fontSize: 10,
+            fill: 'hsl(var(--muted-foreground))',
+            fontWeight: 700,
+          }}
           tickLine={false}
           axisLine={false}
         />
@@ -49,7 +57,7 @@ export function PlanDistributionChart({ data }: PlanDistributionChartProps) {
             fontSize: '12px',
             color: 'hsl(var(--foreground))',
           }}
-          formatter={(value: number) => [value.toLocaleString(), 'Orgs']}
+          formatter={(value: any) => [Number(value).toLocaleString(), 'Orgs']}
         />
         <Bar dataKey="count" radius={[4, 4, 0, 0]}>
           {data.map((entry) => (

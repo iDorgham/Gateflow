@@ -22,8 +22,15 @@ interface OrgGrowthChartProps {
 export function OrgGrowthChart({ data }: OrgGrowthChartProps) {
   return (
     <ResponsiveContainer width="100%" height={160}>
-      <LineChart data={data} margin={{ top: 4, right: 4, left: -20, bottom: 0 }}>
-        <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.4} />
+      <LineChart
+        data={data}
+        margin={{ top: 4, right: 4, left: -20, bottom: 0 }}
+      >
+        <CartesianGrid
+          strokeDasharray="3 3"
+          stroke="hsl(var(--border))"
+          opacity={0.4}
+        />
         <XAxis
           dataKey="label"
           tick={{ fontSize: 9, fill: 'hsl(var(--muted-foreground))' }}
@@ -46,7 +53,10 @@ export function OrgGrowthChart({ data }: OrgGrowthChartProps) {
             color: 'hsl(var(--foreground))',
           }}
           labelStyle={{ fontWeight: 700 }}
-          formatter={(value: number) => [value.toLocaleString(), 'Total Orgs']}
+          formatter={(value: any) => [
+            Number(value).toLocaleString(),
+            'Total Orgs',
+          ]}
         />
         <Line
           type="monotone"

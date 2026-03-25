@@ -26,8 +26,12 @@ function buildNewVsReturningUrl(filters: AnalyticsFilters): string {
   return `/api/analytics/new-vs-returning?${sp.toString()}`;
 }
 
-async function fetchNewVsReturning(filters: AnalyticsFilters): Promise<NewVsReturningPoint[]> {
-  const res = await fetch(buildNewVsReturningUrl(filters), { credentials: 'include' });
+async function fetchNewVsReturning(
+  filters: AnalyticsFilters
+): Promise<NewVsReturningPoint[]> {
+  const res = await fetch(buildNewVsReturningUrl(filters), {
+    credentials: 'include',
+  });
   const json = await res.json();
   if (!res.ok || !json.success || !Array.isArray(json.data)) {
     throw new Error(json.message ?? 'Failed to load new vs returning');
@@ -40,20 +44,36 @@ interface NewVsReturningChartProps {
   className?: string;
 }
 
-export function NewVsReturningChart({ filters, className }: NewVsReturningChartProps) {
+export function NewVsReturningChart({
+  filters,
+  className,
+}: NewVsReturningChartProps) {
   const { t } = useTranslation('dashboard');
   const { data, isLoading, error } = useQuery({
-    queryKey: ['analytics', 'new-vs-returning', filters.from, filters.to, filters.projectId, filters.gateId],
+    queryKey: [
+      'analytics',
+      'new-vs-returning',
+      filters.from,
+      filters.to,
+      filters.projectId,
+      filters.gateId,
+    ],
     queryFn: () => fetchNewVsReturning(filters),
   });
 
   const isEmpty = !data || data.length === 0;
-  const noDataMessage = t('analytics.noScanDataInRange', 'No scan data in this period.');
+  const noDataMessage = t(
+    'analytics.noScanDataInRange',
+    'No scan data in this period.'
+  );
 
   return (
     <AnalyticsChartCard
       title={t('analytics.newVsReturning', 'New vs Returning Visitors')}
-      tooltip={t('analytics.newVsReturningDesc', 'Stacked view; stub split until first-scan tracking.')}
+      tooltip={t(
+        'analytics.newVsReturningDesc',
+        'Stacked view; stub split until first-scan tracking.'
+      )}
       loading={isLoading}
       className={className}
       contentClassName="min-h-[260px]"
@@ -70,7 +90,10 @@ export function NewVsReturningChart({ filters, className }: NewVsReturningChartP
       )}
       {!error && !isEmpty && data && (
         <ResponsiveContainer width="100%" height={260}>
-          <AreaChart data={data} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
+          <AreaChart
+            data={data}
+            margin={{ top: 8, right: 8, left: 0, bottom: 0 }}
+          >
             <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
             <XAxis
               dataKey="date"
@@ -78,7 +101,10 @@ export function NewVsReturningChart({ filters, className }: NewVsReturningChartP
               tickFormatter={(v) => {
                 try {
                   const d = new Date(v);
-                  return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+                  return d.toLocaleDateString(undefined, {
+                    month: 'short',
+                    day: 'numeric',
+                  });
                 } catch {
                   return v;
                 }
@@ -86,7 +112,7 @@ export function NewVsReturningChart({ filters, className }: NewVsReturningChartP
             />
             <YAxis tick={{ fontSize: 11 }} allowDecimals={false} />
             <Tooltip
-              formatter={(value: number) => [value]}
+              formatter={(value: any) => [value]}
               labelFormatter={(label) => {
                 try {
                   return new Date(label).toLocaleDateString(undefined, {
@@ -98,7 +124,10 @@ export function NewVsReturningChart({ filters, className }: NewVsReturningChartP
                   return label;
                 }
               }}
-              contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))' }}
+              contentStyle={{
+                backgroundColor: 'hsl(var(--card))',
+                border: '1px solid hsl(var(--border))',
+              }}
             />
             <Legend />
             <Area

@@ -2,8 +2,23 @@
 
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@gate-access/ui';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  Cell,
+} from 'recharts';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from '@gate-access/ui';
 import { cn } from '@gate-access/ui';
 import type { AnalyticsFilters } from '@/lib/analytics/analytics-filters';
 
@@ -30,7 +45,11 @@ function buildFunnelUrl(filters: AnalyticsFilters): string {
   return `/api/analytics/funnel?${sp.toString()}`;
 }
 
-export function AnalyticsFunnelChart({ filters, locale: _locale, className }: AnalyticsFunnelChartProps) {
+export function AnalyticsFunnelChart({
+  filters,
+  locale: _locale,
+  className,
+}: AnalyticsFunnelChartProps) {
   const { t } = useTranslation('dashboard');
   const [stages, setStages] = useState<FunnelStage[]>([]);
   const [loading, setLoading] = useState(true);
@@ -70,7 +89,9 @@ export function AnalyticsFunnelChart({ filters, locale: _locale, className }: An
   return (
     <Card className={cn(className)}>
       <CardHeader>
-        <CardTitle className="text-base">{t('analytics.funnelTitle', 'Attribution funnel')}</CardTitle>
+        <CardTitle className="text-base">
+          {t('analytics.funnelTitle', 'Attribution funnel')}
+        </CardTitle>
         <CardDescription>
           {t('analytics.funnelDesc', 'QR created → scanned conversion')}
           {stages.length >= 2 && (
@@ -95,21 +116,37 @@ export function AnalyticsFunnelChart({ filters, locale: _locale, className }: An
           </div>
         ) : (
           <ResponsiveContainer width="100%" height={280}>
-            <BarChart data={stages} margin={{ top: 8, right: 8, left: 8, bottom: 8 }}>
+            <BarChart
+              data={stages}
+              margin={{ top: 8, right: 8, left: 8, bottom: 8 }}
+            >
               <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
               <XAxis dataKey="name" tick={{ fontSize: 12 }} />
               <YAxis tick={{ fontSize: 12 }} allowDecimals={false} />
               <Tooltip
-                formatter={(value: number, name: string, props: { payload?: FunnelStage }) => [
+                formatter={(
+                  value: any,
+                  name: string,
+                  props: { payload?: FunnelStage }
+                ) => [
                   value,
                   props.payload?.dropoffRate != null
                     ? `${props.payload.name} (${props.payload.dropoffRate}% dropoff)`
                     : name,
                 ]}
               />
-              <Bar dataKey="count" name={t('analytics.count', 'Count')} radius={[4, 4, 0, 0]}>
+              <Bar
+                dataKey="count"
+                name={t('analytics.count', 'Count')}
+                radius={[4, 4, 0, 0]}
+              >
                 {stages.map((_, i) => (
-                  <Cell key={i} fill={i === 0 ? 'hsl(var(--chart-1))' : 'hsl(var(--chart-2))'} />
+                  <Cell
+                    key={i}
+                    fill={
+                      i === 0 ? 'hsl(var(--chart-1))' : 'hsl(var(--chart-2))'
+                    }
+                  />
                 ))}
               </Bar>
             </BarChart>

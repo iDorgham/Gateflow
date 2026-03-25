@@ -24,8 +24,12 @@ function buildTopUnitsUrl(filters: AnalyticsFilters): string {
   return `/api/analytics/top-units?${sp.toString()}`;
 }
 
-async function fetchTopUnits(filters: AnalyticsFilters): Promise<TopUnitsRow[]> {
-  const res = await fetch(buildTopUnitsUrl(filters), { credentials: 'include' });
+async function fetchTopUnits(
+  filters: AnalyticsFilters
+): Promise<TopUnitsRow[]> {
+  const res = await fetch(buildTopUnitsUrl(filters), {
+    credentials: 'include',
+  });
   const json = await res.json();
   if (!res.ok || !json.success || !Array.isArray(json.data)) {
     throw new Error(json.message ?? 'Failed to load top units');
@@ -41,17 +45,30 @@ interface TopUnitsChartProps {
 export function TopUnitsChart({ filters, className }: TopUnitsChartProps) {
   const { t } = useTranslation('dashboard');
   const { data, isLoading, error } = useQuery({
-    queryKey: ['analytics', 'top-units', filters.from, filters.to, filters.projectId, filters.gateId],
+    queryKey: [
+      'analytics',
+      'top-units',
+      filters.from,
+      filters.to,
+      filters.projectId,
+      filters.gateId,
+    ],
     queryFn: () => fetchTopUnits(filters),
   });
 
   const isEmpty = !data || data.length === 0;
-  const noDataMessage = t('analytics.noUnitData', 'No unit data in this period.');
+  const noDataMessage = t(
+    'analytics.noUnitData',
+    'No unit data in this period.'
+  );
 
   return (
     <AnalyticsChartCard
       title={t('analytics.topActiveUnits', 'Top Active Units')}
-      tooltip={t('analytics.topActiveUnitsDesc', 'Top 10 units by scan count (resident-created QRs).')}
+      tooltip={t(
+        'analytics.topActiveUnitsDesc',
+        'Top 10 units by scan count (resident-created QRs).'
+      )}
       loading={isLoading}
       className={className}
       contentClassName="min-h-[260px]"
@@ -73,19 +90,33 @@ export function TopUnitsChart({ filters, className }: TopUnitsChartProps) {
             layout="vertical"
             margin={{ top: 8, right: 8, left: 0, bottom: 0 }}
           >
-            <XAxis type="number" tick={{ fontSize: 11 }} allowDecimals={false} />
+            <XAxis
+              type="number"
+              tick={{ fontSize: 11 }}
+              allowDecimals={false}
+            />
             <YAxis
               type="category"
               dataKey="unitName"
               width={80}
               tick={{ fontSize: 11 }}
-              tickFormatter={(v) => (String(v).length > 12 ? String(v).slice(0, 10) + '…' : v)}
+              tickFormatter={(v) =>
+                String(v).length > 12 ? String(v).slice(0, 10) + '…' : v
+              }
             />
             <Tooltip
-              formatter={(value: number) => [value, t('analytics.scans', 'Scans')]}
-              contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))' }}
+              formatter={(value: any) => [value, t('analytics.scans', 'Scans')]}
+              contentStyle={{
+                backgroundColor: 'hsl(var(--card))',
+                border: '1px solid hsl(var(--border))',
+              }}
             />
-            <Bar dataKey="count" radius={[0, 4, 4, 0]} maxBarSize={24} fill={CHART_PRIMARY} />
+            <Bar
+              dataKey="count"
+              radius={[0, 4, 4, 0]}
+              maxBarSize={24}
+              fill={CHART_PRIMARY}
+            />
           </BarChart>
         </ResponsiveContainer>
       )}

@@ -25,8 +25,12 @@ function buildTopGatesUrl(filters: AnalyticsFilters): string {
   return `/api/analytics/top-gates?${sp.toString()}`;
 }
 
-async function fetchTopGates(filters: AnalyticsFilters): Promise<TopGatesRow[]> {
-  const res = await fetch(buildTopGatesUrl(filters), { credentials: 'include' });
+async function fetchTopGates(
+  filters: AnalyticsFilters
+): Promise<TopGatesRow[]> {
+  const res = await fetch(buildTopGatesUrl(filters), {
+    credentials: 'include',
+  });
   const json = await res.json();
   if (!res.ok || !json.success || !Array.isArray(json.data)) {
     throw new Error(json.message ?? 'Failed to load top gates');
@@ -42,7 +46,14 @@ interface TopGatesChartProps {
 export function TopGatesChart({ filters, className }: TopGatesChartProps) {
   const { t } = useTranslation('dashboard');
   const { data, isLoading, error } = useQuery({
-    queryKey: ['analytics', 'top-gates', filters.from, filters.to, filters.projectId, filters.gateId],
+    queryKey: [
+      'analytics',
+      'top-gates',
+      filters.from,
+      filters.to,
+      filters.projectId,
+      filters.gateId,
+    ],
     queryFn: () => fetchTopGates(filters),
   });
 
@@ -74,7 +85,11 @@ export function TopGatesChart({ filters, className }: TopGatesChartProps) {
             layout="vertical"
             margin={{ top: 8, right: 8, left: 0, bottom: 0 }}
           >
-            <XAxis type="number" tick={{ fontSize: 11 }} allowDecimals={false} />
+            <XAxis
+              type="number"
+              tick={{ fontSize: 11 }}
+              allowDecimals={false}
+            />
             <YAxis
               type="category"
               dataKey="gateName"
@@ -83,8 +98,11 @@ export function TopGatesChart({ filters, className }: TopGatesChartProps) {
               tickFormatter={(v) => (v.length > 12 ? v.slice(0, 10) + '…' : v)}
             />
             <Tooltip
-              formatter={(value: number) => [value, t('analytics.scans', 'Scans')]}
-              contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))' }}
+              formatter={(value: any) => [value, t('analytics.scans', 'Scans')]}
+              contentStyle={{
+                backgroundColor: 'hsl(var(--card))',
+                border: '1px solid hsl(var(--border))',
+              }}
             />
             <Bar dataKey="count" radius={[0, 4, 4, 0]} maxBarSize={24}>
               {data.map((_, index) => (
