@@ -91,6 +91,8 @@ plan:run → plan:done` with automatic folder moves and doc cascades
 
 ### Bug Fixes
 
+- **[Deps] **solve Recharts 3.x tooltip formatter type errors
+
 - **[Db] **comment out directUrl to prevent CI validation errors
 
 - **[Security] **mark global maintenance queries with ignore-security-guard
