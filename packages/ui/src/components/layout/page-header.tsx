@@ -30,15 +30,21 @@ export function PageHeader({
   return (
     <div className={cn('flex flex-col gap-6 mb-8', className)} {...props}>
       {breadcrumbs && (
-        <Breadcrumbs items={breadcrumbs} showHome={showHome} homeHref={homeHref} />
+        <Breadcrumbs
+          items={breadcrumbs}
+          showHome={showHome}
+          homeHref={homeHref}
+        />
       )}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between py-1">
         <div className="flex flex-col gap-1 min-w-0">
           <div className="flex items-center gap-3">
-            <h1 className={cn(
-              "text-2xl font-black tracking-tight text-[var(--ds-text)] dark:text-white truncate",
-              titleClassName
-            )}>
+            <h1
+              className={cn(
+                'text-2xl font-black tracking-tight text-[var(--ds-text)] dark:text-white truncate',
+                titleClassName
+              )}
+            >
               {title}
             </h1>
             {badge}
@@ -50,11 +56,11 @@ export function PageHeader({
           )}
         </div>
         {actions && (
-          <div className="flex items-center gap-3 shrink-0">
-            {actions}
-          </div>
+          <div className="flex items-center gap-3 shrink-0">{actions}</div>
         )}
       </div>
     </div>
   );
 }
+
+PageHeader.displayName = 'PageHeader';

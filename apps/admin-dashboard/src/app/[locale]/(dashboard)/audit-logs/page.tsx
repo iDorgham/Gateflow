@@ -11,9 +11,15 @@ import {
   History,
   FileText,
 } from 'lucide-react';
-import { Badge, Button, Input, Pagination, NativeSelect } from '@gate-access/ui';
+import {
+  Badge,
+  Button,
+  Input,
+  Pagination,
+  NativeSelect,
+  PageHeader,
+} from '@gate-access/ui';
 import Link from 'next/link';
-import { PageHeader } from '@gate-access/ui';
 import { AuditLogsTable } from '@/components/monitoring/AuditLogsTable';
 
 export const metadata = { title: 'Compliance Audit Archive' };
@@ -44,21 +50,19 @@ interface SearchParams {
 
 const PAGE_SIZE = 40;
 
-export default async function AuditLogsPage(
-  props: {
-    params: Promise<{ locale: Locale }>;
-    searchParams: Promise<SearchParams>;
-  }
-) {
+export default async function AuditLogsPage(props: {
+  params: Promise<{ locale: Locale }>;
+  searchParams: Promise<SearchParams>;
+}) {
   const searchParams = await props.searchParams;
   const params = await props.params;
 
-  const {
-    locale
-  } = params;
+  const { locale } = params;
 
-  await await requireAdmin();
-  const { t } = (await getTranslation(locale, 'admin')) as { t: (key: string, options?: Record<string, unknown> | string) => string };
+  await requireAdmin();
+  const { t } = (await getTranslation(locale, 'admin')) as {
+    t: (key: string, options?: Record<string, unknown> | string) => string;
+  };
 
   const page = Math.max(1, parseInt(searchParams.page ?? '1', 10));
   const skip = (page - 1) * PAGE_SIZE;
@@ -67,13 +71,16 @@ export default async function AuditLogsPage(
   const statusFilter = searchParams.status ?? '';
   const uuidFilter = searchParams.q?.trim() ?? '';
   const fromRaw = searchParams.from ? new Date(searchParams.from) : undefined;
-  const toRaw = searchParams.to ? new Date(searchParams.to + 'T23:59:59') : undefined;
+  const toRaw = searchParams.to
+    ? new Date(searchParams.to + 'T23:59:59')
+    : undefined;
   const fromDate = fromRaw && !isNaN(fromRaw.getTime()) ? fromRaw : undefined;
   const toDate = toRaw && !isNaN(toRaw.getTime()) ? toRaw : undefined;
 
   const where: Record<string, unknown> = {};
   if (statusFilter) where.status = statusFilter;
-  if (uuidFilter) where.scanUuid = { contains: uuidFilter, mode: 'insensitive' };
+  if (uuidFilter)
+    where.scanUuid = { contains: uuidFilter, mode: 'insensitive' };
   if (fromDate || toDate) {
     where.scannedAt = {
       ...(fromDate ? { gte: fromDate } : {}),
@@ -81,7 +88,9 @@ export default async function AuditLogsPage(
     };
   }
   if (orgFilter) {
-    where.qrCode = { organization: { name: { contains: orgFilter, mode: 'insensitive' } } };
+    where.qrCode = {
+      organization: { name: { contains: orgFilter, mode: 'insensitive' } },
+    };
   }
 
   const [total, logs] = await Promise.all([
@@ -128,16 +137,25 @@ export default async function AuditLogsPage(
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500 pb-12">
-      <PageHeader titleClassName="italic uppercase"
+      <PageHeader
+        titleClassName="italic uppercase"
         title={t('auditLogs.title')}
         subtitle={t('auditLogs.subtitle')}
         badge={
-          <Badge variant="primary" className="h-6 px-3 shadow-sm font-black italic">
-             {total.toLocaleString(locale)} ENTRIES
+          <Badge
+            variant="primary"
+            className="h-6 px-3 shadow-sm font-black italic"
+          >
+            {total.toLocaleString(locale)} ENTRIES
           </Badge>
         }
         actions={
-          <Button variant="outline" size="sm" asChild className="font-bold gap-2 h-10 px-6 rounded-lg border-ds-border hover:bg-ds-background-neutral-subtle transition-all">
+          <Button
+            variant="outline"
+            size="sm"
+            asChild
+            className="font-bold gap-2 h-10 px-6 rounded-lg border-ds-border hover:bg-ds-background-neutral-subtle transition-all"
+          >
             <a href={exportUrl} download>
               <Download className="h-4 w-4 text-ds-text-brand" />
               {t('auditLogs.exportCsv')}
@@ -148,7 +166,10 @@ export default async function AuditLogsPage(
 
       {/* Advanced Filters */}
       <div className="bg-ds-background-default border border-ds-border rounded-xl p-5 shadow-sm space-y-6">
-        <form method="GET" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-5 items-end">
+        <form
+          method="GET"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6 gap-5 items-end"
+        >
           <div className="space-y-2 lg:col-span-2">
             <label className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-ds-text-subtle ltr:ml-1 rtl:mr-1">
               <Building2 className="h-3 w-3" />
@@ -164,7 +185,7 @@ export default async function AuditLogsPage(
               />
             </div>
           </div>
-          
+
           <div className="space-y-2">
             <label className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-ds-text-subtle ltr:ml-1 rtl:mr-1">
               <FileText className="h-3 w-3" />
@@ -191,38 +212,55 @@ export default async function AuditLogsPage(
               className="w-full h-10 rounded-full border border-ds-border bg-ds-background-default px-4 text-xs font-bold text-ds-text focus:outline-none focus:ring-2 focus:ring-ds-border-focused"
             >
               <option value="">{t('auditLogs.all')}</option>
-              {['SUCCESS', 'DENIED', 'FAILED', 'EXPIRED', 'MAX_USES_REACHED', 'INACTIVE'].map((s) => (
-                <option key={s} value={s}>{s}</option>
+              {[
+                'SUCCESS',
+                'DENIED',
+                'FAILED',
+                'EXPIRED',
+                'MAX_USES_REACHED',
+                'INACTIVE',
+              ].map((s) => (
+                <option key={s} value={s}>
+                  {s}
+                </option>
               ))}
             </NativeSelect>
           </div>
 
           <div className="space-y-2">
             <label className="text-[11px] font-black uppercase tracking-widest text-ds-text-subtle ltr:ml-1 rtl:mr-1">
-               Audit Window (From/To)
+              Audit Window (From/To)
             </label>
             <div className="grid grid-cols-2 gap-2 h-10 p-1 bg-ds-background-neutral-subtle rounded-full border border-ds-border">
-               <input
-                 type="date"
-                 name="from"
-                 defaultValue={searchParams.from ?? ''}
-                 className="bg-transparent border-none text-[10px] font-bold text-ds-text px-3 outline-none uppercase"
-               />
-               <input
-                 type="date"
-                 name="to"
-                 defaultValue={searchParams.to ?? ''}
-                 className="bg-transparent border-none text-[10px] font-bold text-ds-text px-3 outline-none uppercase"
-               />
+              <input
+                type="date"
+                name="from"
+                defaultValue={searchParams.from ?? ''}
+                className="bg-transparent border-none text-[10px] font-bold text-ds-text px-3 outline-none uppercase"
+              />
+              <input
+                type="date"
+                name="to"
+                defaultValue={searchParams.to ?? ''}
+                className="bg-transparent border-none text-[10px] font-bold text-ds-text px-3 outline-none uppercase"
+              />
             </div>
           </div>
 
           <div className="flex gap-2">
-            <Button type="submit" variant="primary" className="h-10 px-8 font-bold shadow-sm flex-1 rounded-full">
+            <Button
+              type="submit"
+              variant="primary"
+              className="h-10 px-8 font-bold shadow-sm flex-1 rounded-full"
+            >
               <Search className="h-4 w-4 ltr:mr-2 rtl:ml-2" />
               {t('auditLogs.search')}
             </Button>
-            <Button variant="subtle" className="h-10 w-11 p-0 rounded-full" asChild>
+            <Button
+              variant="subtle"
+              className="h-10 w-11 p-0 rounded-full"
+              asChild
+            >
               <Link href="/audit-logs">
                 <X className="h-4 w-4 text-ds-text-subtlest" />
               </Link>
@@ -239,25 +277,27 @@ export default async function AuditLogsPage(
       {/* Pagination & Footer */}
       <div className="flex flex-col md:flex-row items-center justify-between gap-6 px-1">
         <div className="flex items-center gap-3 text-[11px] font-black uppercase tracking-tighter text-ds-text-subtlest">
-           <Shield className="h-4 w-4 text-ds-text-brand" />
-           <p>{t('auditLogs.auditNotice')}</p>
+          <Shield className="h-4 w-4 text-ds-text-brand" />
+          <p>{t('auditLogs.auditNotice')}</p>
         </div>
 
         <Pagination
           currentPage={page}
           totalPages={totalPages}
           onPageChange={undefined}
-          getHref={(p) => `/audit-logs?${new URLSearchParams({ ...currentParams, page: String(p) }).toString()}`}
+          getHref={(p) =>
+            `/audit-logs?${new URLSearchParams({ ...currentParams, page: String(p) }).toString()}`
+          }
           className="w-auto"
         />
       </div>
 
       <div className="pt-6 border-t border-ds-border flex justify-between items-center text-[10px] font-black uppercase tracking-[0.2em] text-ds-text-subtlest opacity-60">
-         <span className="flex items-center gap-2">
-            <History className="h-4 w-4" />
-            Immutable Audit Trail Engine
-         </span>
-         <span>Compliance Level: SOC2/GDPR Ready</span>
+        <span className="flex items-center gap-2">
+          <History className="h-4 w-4" />
+          Immutable Audit Trail Engine
+        </span>
+        <span>Compliance Level: SOC2/GDPR Ready</span>
       </div>
     </div>
   );

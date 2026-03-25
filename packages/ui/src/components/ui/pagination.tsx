@@ -114,3 +114,5 @@ export function Pagination({
     </nav>
   );
 }
+
+Pagination.displayName = 'Pagination';

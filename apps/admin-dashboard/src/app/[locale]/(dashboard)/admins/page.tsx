@@ -27,8 +27,8 @@ import {
   cn,
   DynamicTable,
   Column,
+  PageHeader,
 } from '@gate-access/ui';
-import { PageHeader } from '@gate-access/ui';
 
 export const metadata = { title: 'Platform Authority' };
 
@@ -48,7 +48,8 @@ async function createAdmin(formData: FormData) {
     where: { name: 'ADMIN', organizationId: null },
   });
   if (!adminRole) {
-    const { BUILT_IN_ROLES, DEFAULT_PERMISSIONS } = await import('@gate-access/types');
+    const { BUILT_IN_ROLES, DEFAULT_PERMISSIONS } =
+      await import('@gate-access/types');
     adminRole = await prisma.role.create({
       data: {
         id: 'role-admin',
@@ -79,11 +80,15 @@ async function resetAdminPassword(formData: FormData) {
   const passwordHash = await argon2Hash(tempPassword);
   await prisma.user.update({ where: { id }, data: { passwordHash } });
 
-  (await cookies()).set('_adminpwflash', JSON.stringify({ id, pw: tempPassword }), {
-    path: '/',
-    maxAge: 120,
-    sameSite: 'lax',
-  });
+  (await cookies()).set(
+    '_adminpwflash',
+    JSON.stringify({ id, pw: tempPassword }),
+    {
+      path: '/',
+      maxAge: 120,
+      sameSite: 'lax',
+    }
+  );
   revalidatePath('/admins');
   redirect('/admins');
 }
@@ -103,18 +108,14 @@ async function toggleSuspend(formData: FormData) {
 
 // ─── Page ──────────────────────────────────────────────────────────────────────
 
-export default async function AdminsPage(
-  props: {
-    params: Promise<{ locale: Locale }>;
-  }
-) {
+export default async function AdminsPage(props: {
+  params: Promise<{ locale: Locale }>;
+}) {
   const params = await props.params;
 
-  const {
-    locale
-  } = params;
+  const { locale } = params;
 
-  await await requireAdmin();
+  await requireAdmin();
   const { t } = await getTranslation(locale, 'admin');
 
   // Key fingerprint — first 8 chars of the session token hash (safe to show)
@@ -155,7 +156,7 @@ export default async function AdminsPage(
     // ignore
   }
 
-  const columns: Column<typeof admins[0]>[] = [
+  const columns: Column<(typeof admins)[0]>[] = [
     {
       key: 'admin',
       label: t('admins.platformAdmins', { count: admins.length }),
@@ -163,30 +164,50 @@ export default async function AdminsPage(
         const suspended = admin.deletedAt !== null;
         return (
           <div className="flex items-center gap-3">
-            <div className={cn(
-              "flex h-9 w-9 shrink-0 items-center justify-center rounded-lg font-bold text-[10px] uppercase shadow-inner",
-              suspended ? "bg-ds-background-neutral text-ds-text-subtle" : "bg-ds-background-brand-bold text-ds-text-inverse"
-            )}>
-              {admin.name.split(' ').map((n: string) => n[0]).join('').slice(0, 2)}
+            <div
+              className={cn(
+                'flex h-9 w-9 shrink-0 items-center justify-center rounded-lg font-bold text-[10px] uppercase shadow-inner',
+                suspended
+                  ? 'bg-ds-background-neutral text-ds-text-subtle'
+                  : 'bg-ds-background-brand-bold text-ds-text-inverse'
+              )}
+            >
+              {admin.name
+                .split(' ')
+                .map((n: string) => n[0])
+                .join('')
+                .slice(0, 2)}
             </div>
             <div className="flex flex-col">
-              <span className={cn("text-xs font-bold font-mono tracking-tight", suspended ? "text-ds-text-subtle line-through opacity-50" : "text-ds-text")}>
+              <span
+                className={cn(
+                  'text-xs font-bold font-mono tracking-tight',
+                  suspended
+                    ? 'text-ds-text-subtle line-through opacity-50'
+                    : 'text-ds-text'
+                )}
+              >
                 {admin.name}
               </span>
-              <span className="text-[10px] text-ds-text-subtle font-medium">{admin.email}</span>
+              <span className="text-[10px] text-ds-text-subtle font-medium">
+                {admin.email}
+              </span>
             </div>
           </div>
         );
-      }
+      },
     },
     {
       key: 'status',
       label: 'Status',
       render: (admin) => (
-        <Badge variant={admin.deletedAt ? 'warning' : 'success'} className="h-5 px-2 text-[9px] font-black italic uppercase">
-           {admin.deletedAt ? t('admins.suspended') : 'Active'}
+        <Badge
+          variant={admin.deletedAt ? 'warning' : 'success'}
+          className="h-5 px-2 text-[9px] font-black italic uppercase"
+        >
+          {admin.deletedAt ? t('admins.suspended') : 'Active'}
         </Badge>
-      )
+      ),
     },
     {
       key: 'actions',
@@ -196,33 +217,59 @@ export default async function AdminsPage(
         <div className="flex items-center gap-2">
           <form action={resetAdminPassword}>
             <input type="hidden" name="id" value={admin.id} />
-            <Button type="submit" variant="subtle" size="compact" className="h-7 text-[10px] font-black uppercase tracking-widest gap-1.5 opacity-60 hover:opacity-100">
-               <KeyRound className="h-3 w-3" />
-               {t('admins.reset')}
+            <Button
+              type="submit"
+              variant="subtle"
+              size="compact"
+              className="h-7 text-[10px] font-black uppercase tracking-widest gap-1.5 opacity-60 hover:opacity-100"
+            >
+              <KeyRound className="h-3 w-3" />
+              {t('admins.reset')}
             </Button>
           </form>
           <form action={toggleSuspend}>
             <input type="hidden" name="id" value={admin.id} />
-            <input type="hidden" name="suspended" value={String(admin.deletedAt !== null)} />
-            <Button type="submit" variant={admin.deletedAt ? 'success' : 'destructive'} size="compact" className="h-7 text-[10px] font-black uppercase tracking-widest gap-1.5">
-               {admin.deletedAt ? (
-                 <><ShieldCheck className="h-3 w-3" /> {t('admins.restore')}</>
-               ) : (
-                 <><ShieldAlert className="h-3 w-3" /> {t('admins.suspend')}</>
-               )}
+            <input
+              type="hidden"
+              name="suspended"
+              value={String(admin.deletedAt !== null)}
+            />
+            <Button
+              type="submit"
+              variant={admin.deletedAt ? 'success' : 'destructive'}
+              size="compact"
+              className="h-7 text-[10px] font-black uppercase tracking-widest gap-1.5"
+            >
+              {admin.deletedAt ? (
+                <>
+                  <ShieldCheck className="h-3 w-3" /> {t('admins.restore')}
+                </>
+              ) : (
+                <>
+                  <ShieldAlert className="h-3 w-3" /> {t('admins.suspend')}
+                </>
+              )}
             </Button>
           </form>
         </div>
-      )
-    }
+      ),
+    },
   ];
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500 pb-10">
-      <PageHeader titleClassName="italic uppercase" 
-        title={t('admins.title')} 
-        subtitle={t('admins.subtitle')} 
-        badge={<Badge variant="primary" className="h-6 font-black tracking-widest px-2 italic shadow-sm">SYSTEM AUTH</Badge>}
+      <PageHeader
+        titleClassName="italic uppercase"
+        title={t('admins.title')}
+        subtitle={t('admins.subtitle')}
+        badge={
+          <Badge
+            variant="primary"
+            className="h-6 font-black tracking-widest px-2 italic shadow-sm"
+          >
+            SYSTEM AUTH
+          </Badge>
+        }
       />
 
       {/* Auth mechanism info */}
@@ -231,13 +278,17 @@ export default async function AdminsPage(
         <CardContent className="p-5">
           <div className="flex items-start gap-4">
             <div className="p-3 bg-ds-background-information-bold text-ds-text-inverse rounded-2xl shadow-lg">
-               <Info className="h-5 w-5" />
+              <Info className="h-5 w-5" />
             </div>
             <div className="space-y-1">
-              <p className="text-sm font-black italic uppercase tracking-tight text-ds-text-information">{t('admins.twoLayerAuth')}</p>
+              <p className="text-sm font-black italic uppercase tracking-tight text-ds-text-information">
+                {t('admins.twoLayerAuth')}
+              </p>
               <p className="text-[13px] text-ds-text-information font-medium max-w-4xl leading-relaxed">
                 {String(t('admins.twoLayerAuthDesc')).split('<1>')[0]}
-                <code className="rounded-lg bg-white/50 border border-ds-border-information px-2 py-0.5 font-mono text-[11px] font-black text-ds-text-information mx-1 shadow-inner italic">ADMIN_ACCESS_KEY</code>
+                <code className="rounded-lg bg-white/50 border border-ds-border-information px-2 py-0.5 font-mono text-[11px] font-black text-ds-text-information mx-1 shadow-inner italic">
+                  ADMIN_ACCESS_KEY
+                </code>
                 {String(t('admins.twoLayerAuthDesc')).split('</1>')[1]}
               </p>
             </div>
@@ -251,7 +302,9 @@ export default async function AdminsPage(
           <CardHeader className="pb-4 border-b border-ds-border-warning/50">
             <div className="flex items-center gap-3 text-ds-text-subtle uppercase">
               <KeyRound className="h-5 w-5 text-ds-icon-warning" />
-              <CardTitle className="text-sm font-black tracking-widest">{t('admins.tempPasswordGen')}</CardTitle>
+              <CardTitle className="text-sm font-black tracking-widest">
+                {t('admins.tempPasswordGen')}
+              </CardTitle>
             </div>
           </CardHeader>
           <CardContent className="pt-6 space-y-4">
@@ -262,7 +315,10 @@ export default async function AdminsPage(
               <code className="block w-full rounded-2xl bg-white/80 border-2 border-ds-border-warning px-8 py-5 font-mono text-2xl font-black tracking-[0.3em] text-ds-text-subtle text-center shadow-[inset_0_2px_10px_rgba(0,0,0,0.05)] ltr:tracking-[0.3em] rtl:tracking-normal group-hover:bg-white transition-colors">
                 {pwFlash.pw}
               </code>
-              <Badge variant="primary" className="absolute -top-3 ltr:-right-2 rtl:-left-2 h-6 px-3 bg-ds-background-warning-bold text-ds-text-inverse font-black text-[9px] tracking-[0.2em] uppercase border-none shadow-md">
+              <Badge
+                variant="primary"
+                className="absolute -top-3 ltr:-right-2 rtl:-left-2 h-6 px-3 bg-ds-background-warning-bold text-ds-text-inverse font-black text-[9px] tracking-[0.2em] uppercase border-none shadow-md"
+              >
                 {t('admins.expiresIn')}
               </Badge>
             </div>
@@ -281,27 +337,50 @@ export default async function AdminsPage(
           </CardHeader>
           <CardContent className="p-6 space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-black uppercase tracking-widest text-ds-text-subtle opacity-70">ADMIN_ACCESS_KEY</span>
-              <Badge variant={keyConfigured ? 'success' : 'danger'} className="h-5 px-2 text-[9px] font-black uppercase italic">
-                 {keyConfigured ? 'CONFIGURED' : 'NOT SET'}
+              <span className="text-[10px] font-black uppercase tracking-widest text-ds-text-subtle opacity-70">
+                ADMIN_ACCESS_KEY
+              </span>
+              <Badge
+                variant={keyConfigured ? 'success' : 'danger'}
+                className="h-5 px-2 text-[9px] font-black uppercase italic"
+              >
+                {keyConfigured ? 'CONFIGURED' : 'NOT SET'}
               </Badge>
             </div>
             {keyConfigured && (
               <>
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-ds-text-subtle opacity-70">Fingerprint</span>
-                  <code className="text-xs font-mono font-black text-ds-text-brand bg-ds-background-neutral-subtle px-2 py-1 rounded-lg border border-ds-border/50 shadow-inner italic">{keyFingerprint}</code>
+                  <span className="text-[10px] font-black uppercase tracking-widest text-ds-text-subtle opacity-70">
+                    Fingerprint
+                  </span>
+                  <code className="text-xs font-mono font-black text-ds-text-brand bg-ds-background-neutral-subtle px-2 py-1 rounded-lg border border-ds-border/50 shadow-inner italic">
+                    {keyFingerprint}
+                  </code>
                 </div>
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-ds-text-subtle opacity-70">Key Strength</span>
-                  <span className={cn('text-[11px] font-black italic uppercase', adminKeyLength >= 32 ? 'text-ds-text-success' : 'text-ds-text-danger')}>
-                    {adminKeyLength} BITS {adminKeyLength >= 32 ? '✓ OPTIMAL' : '(INSECURE)'}
+                  <span className="text-[10px] font-black uppercase tracking-widest text-ds-text-subtle opacity-70">
+                    Key Strength
+                  </span>
+                  <span
+                    className={cn(
+                      'text-[11px] font-black italic uppercase',
+                      adminKeyLength >= 32
+                        ? 'text-ds-text-success'
+                        : 'text-ds-text-danger'
+                    )}
+                  >
+                    {adminKeyLength} BITS{' '}
+                    {adminKeyLength >= 32 ? '✓ OPTIMAL' : '(INSECURE)'}
                   </span>
                 </div>
               </>
             )}
             <p className="text-[9px] font-bold text-ds-text-subtlest pt-4 border-t border-ds-border/50 uppercase tracking-widest">
-              Rotate via <code className="font-mono text-ds-text-brand">.env.production</code> Redepoloyment required.
+              Rotate via{' '}
+              <code className="font-mono text-ds-text-brand">
+                .env.production
+              </code>{' '}
+              Redepoloyment required.
             </p>
           </CardContent>
         </Card>
@@ -318,14 +397,31 @@ export default async function AdminsPage(
               { label: 'Entropy ≥ 32 characters', ok: adminKeyLength >= 32 },
               { label: 'Platform Master Secret Configured', ok: keyConfigured },
               { label: 'Cookie Context: httpOnly + lax', ok: true },
-              { label: 'TLS/SSL Enforcement: ACTIVE', ok: process.env.NODE_ENV === 'production' },
+              {
+                label: 'TLS/SSL Enforcement: ACTIVE',
+                ok: process.env.NODE_ENV === 'production',
+              },
               { label: 'Dual-Layer Architecture Verified', ok: true },
             ].map(({ label, ok }) => (
               <div key={label} className="flex items-center gap-3">
-                <div className={cn('h-5 w-5 rounded-lg flex items-center justify-center text-[10px] shrink-0 border transition-all', ok ? 'bg-ds-background-success-subtle border-ds-border-success text-ds-text-success shadow-sm' : 'bg-ds-background-neutral-subtle border-ds-border text-ds-text-subtlest opacity-60')}>
+                <div
+                  className={cn(
+                    'h-5 w-5 rounded-lg flex items-center justify-center text-[10px] shrink-0 border transition-all',
+                    ok
+                      ? 'bg-ds-background-success-subtle border-ds-border-success text-ds-text-success shadow-sm'
+                      : 'bg-ds-background-neutral-subtle border-ds-border text-ds-text-subtlest opacity-60'
+                  )}
+                >
                   {ok ? '✓' : '—'}
                 </div>
-                <span className={cn('text-[11px] font-black italic uppercase tracking-tight', ok ? 'text-ds-text' : 'text-ds-text-subtlest opacity-60')}>{label}</span>
+                <span
+                  className={cn(
+                    'text-[11px] font-black italic uppercase tracking-tight',
+                    ok ? 'text-ds-text' : 'text-ds-text-subtlest opacity-60'
+                  )}
+                >
+                  {label}
+                </span>
               </div>
             ))}
           </CardContent>
@@ -339,14 +435,17 @@ export default async function AdminsPage(
             <CardHeader className="flex flex-row items-center justify-between border-b border-ds-border/50 px-6 py-5 bg-ds-background-neutral-subtle/30">
               <div>
                 <CardTitle className="text-base font-black italic uppercase tracking-tight text-ds-text">
-                   {t('admins.platformAdmins', { count: admins.length })}
+                  {t('admins.platformAdmins', { count: admins.length })}
                 </CardTitle>
-                <p className="text-[11px] text-ds-text-subtle font-medium">Verified system administrator accounts with full infrastructure access.</p>
+                <p className="text-[11px] text-ds-text-subtle font-medium">
+                  Verified system administrator accounts with full
+                  infrastructure access.
+                </p>
               </div>
               <Shield className="h-5 w-5 text-ds-icon-subtle opacity-30" />
             </CardHeader>
             <CardContent className="p-0 flex-1">
-               <DynamicTable columns={columns} items={admins} />
+              <DynamicTable columns={columns} items={admins} />
             </CardContent>
           </Card>
         </div>
@@ -358,28 +457,53 @@ export default async function AdminsPage(
             <CardHeader className="px-6 pt-6">
               <CardTitle className="text-base font-black italic uppercase tracking-tight text-ds-text flex items-center gap-3">
                 <div className="p-2 bg-ds-background-neutral-subtle rounded-lg">
-                   <UserPlus className="h-4 w-4 text-ds-text-brand" />
+                  <UserPlus className="h-4 w-4 text-ds-text-brand" />
                 </div>
                 {t('admins.addAdmin')}
               </CardTitle>
-              <p className="text-[11px] text-ds-text-subtle font-medium">Provision new administrative credentials.</p>
+              <p className="text-[11px] text-ds-text-subtle font-medium">
+                Provision new administrative credentials.
+              </p>
             </CardHeader>
             <CardContent className="p-6">
               <form action={createAdmin} className="space-y-5">
                 <div className="space-y-2">
-                  <Label htmlFor="name" className="text-[10px] font-black italic uppercase tracking-[0.1em] text-ds-text-subtle">
+                  <Label
+                    htmlFor="name"
+                    className="text-[10px] font-black italic uppercase tracking-[0.1em] text-ds-text-subtle"
+                  >
                     {t('admins.fullName')}
                   </Label>
-                  <Input id="name" name="name" placeholder={t('admins.fullNamePlaceholder')} required className="h-11 border-ds-border bg-ds-background-neutral-subtle/50 focus:bg-ds-background-default transition-all rounded-xl" />
+                  <Input
+                    id="name"
+                    name="name"
+                    placeholder={t('admins.fullNamePlaceholder')}
+                    required
+                    className="h-11 border-ds-border bg-ds-background-neutral-subtle/50 focus:bg-ds-background-default transition-all rounded-xl"
+                  />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-[10px] font-black italic uppercase tracking-[0.1em] text-ds-text-subtle">
+                  <Label
+                    htmlFor="email"
+                    className="text-[10px] font-black italic uppercase tracking-[0.1em] text-ds-text-subtle"
+                  >
                     {t('admins.email')}
                   </Label>
-                  <Input id="email" name="email" type="email" placeholder={t('admins.emailPlaceholder')} required className="h-11 border-ds-border bg-ds-background-neutral-subtle/50 focus:bg-ds-background-default transition-all rounded-xl" dir="ltr" />
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder={t('admins.emailPlaceholder')}
+                    required
+                    className="h-11 border-ds-border bg-ds-background-neutral-subtle/50 focus:bg-ds-background-default transition-all rounded-xl"
+                    dir="ltr"
+                  />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="password" className="text-[10px] font-black italic uppercase tracking-[0.1em] text-ds-text-subtle">
+                  <Label
+                    htmlFor="password"
+                    className="text-[10px] font-black italic uppercase tracking-[0.1em] text-ds-text-subtle"
+                  >
                     {t('admins.initialPassword')}
                   </Label>
                   <Input
@@ -392,16 +516,20 @@ export default async function AdminsPage(
                     className="h-11 border-ds-border bg-ds-background-neutral-subtle/50 focus:bg-ds-background-default transition-all rounded-xl text-left ltr:text-left rtl:text-right"
                   />
                 </div>
-                <Button type="submit" variant="primary" className="w-full h-12 text-xs font-black italic uppercase tracking-[0.2em] shadow-lg shadow-blue-500/20 active:translate-y-0.5 transition-all">
+                <Button
+                  type="submit"
+                  variant="primary"
+                  className="w-full h-12 text-xs font-black italic uppercase tracking-[0.2em] shadow-lg shadow-blue-500/20 active:translate-y-0.5 transition-all"
+                >
                   <UserPlus className="h-4 w-4 ltr:mr-2 rtl:ml-2" />
                   {t('admins.createAdminBtn')}
                 </Button>
               </form>
             </CardContent>
             <div className="p-4 bg-ds-background-neutral-subtle/50 border-t border-ds-border">
-               <p className="text-[9px] text-ds-text-subtlest text-center font-bold uppercase tracking-widest">
-                  Action will be logged in Immutable Audit Archive
-               </p>
+              <p className="text-[9px] text-ds-text-subtlest text-center font-bold uppercase tracking-widest">
+                Action will be logged in Immutable Audit Archive
+              </p>
             </div>
           </Card>
         </div>

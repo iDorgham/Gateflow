@@ -313,3 +313,5 @@ export function DynamicTable<T extends { id: string | number }>({
     </div>
   );
 }
+
+DynamicTable.displayName = 'DynamicTable';
