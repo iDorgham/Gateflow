@@ -3,10 +3,12 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('🔍 Looking for duplicate compound projects (Selena Bay / Vernada)...');
+  console.log(
+    '🔍 Looking for duplicate compound projects (Selena Bay / Vernada)...'
+  );
 
   const projects = await prisma.project.findMany({
-    // skip-organization-check
+    // ignore-security-guard
     where: {
       name: { in: ['Selena Bay', 'Vernada'] },
       deletedAt: null,
@@ -42,30 +44,36 @@ async function main() {
     await prisma.$transaction(async (tx) => {
       // skip-organization-check
       await tx.gate.updateMany({
+        // ignore-security-guard
         where: { projectId: { in: duplicateIds } },
         data: { projectId: canonical.id },
       });
 
       // skip-organization-check
       await tx.unit.updateMany({
+        // ignore-security-guard
         where: { projectId: { in: duplicateIds } },
         data: { projectId: canonical.id },
       });
 
       // skip-organization-check
       await tx.qRCode.updateMany({
+        // ignore-security-guard
         where: { projectId: { in: duplicateIds } },
         data: { projectId: canonical.id },
       });
 
       // skip-organization-check
       await tx.project.updateMany({
+        // ignore-security-guard
         where: { id: { in: duplicateIds } },
         data: { deletedAt: now },
       });
     });
 
-    console.log(`  ✅ Repointed related records and soft-deleted duplicates for ${key}`);
+    console.log(
+      `  ✅ Repointed related records and soft-deleted duplicates for ${key}`
+    );
   }
 
   console.log('✅ Duplicate compound project cleanup finished.');
@@ -79,4 +87,3 @@ main()
   .finally(async () => {
     await prisma.$disconnect();
   });
-

@@ -30,7 +30,7 @@ function buildMasterKey(): Buffer {
   if (!raw) {
     console.error(
       'ERROR: ENCRYPTION_MASTER_KEY environment variable is not set.\n' +
-        'Set it to the same value used by the application before running this script.',
+        'Set it to the same value used by the application before running this script.'
     );
     process.exit(1);
   }
@@ -38,7 +38,7 @@ function buildMasterKey(): Buffer {
   if (key.length !== 32) {
     console.error(
       `ERROR: ENCRYPTION_MASTER_KEY must be 64 hex characters (32 bytes). ` +
-        `Got ${raw.length} characters (${key.length} bytes).`,
+        `Got ${raw.length} characters (${key.length} bytes).`
     );
     process.exit(1);
   }
@@ -50,19 +50,33 @@ const MASTER_KEY = buildMasterKey();
 function encrypt(plaintext: string): string {
   const iv = randomBytes(12);
   const cipher = createCipheriv('aes-256-gcm', MASTER_KEY, iv);
-  const ciphertext = Buffer.concat([cipher.update(plaintext, 'utf8'), cipher.final()]);
+  const ciphertext = Buffer.concat([
+    cipher.update(plaintext, 'utf8'),
+    cipher.final(),
+  ]);
   const tag = cipher.getAuthTag();
-  return ENCRYPTED_PREFIX + Buffer.concat([iv, tag, ciphertext]).toString('base64');
+  return (
+    ENCRYPTED_PREFIX + Buffer.concat([iv, tag, ciphertext]).toString('base64')
+  );
 }
 
 /** Decrypt — accepts both "enc:v1:" prefixed values and old prefix-less format. */
 function decrypt(value: string): string {
-  const b64 = value.startsWith(ENCRYPTED_PREFIX) ? value.slice(ENCRYPTED_PREFIX.length) : value;
+  const b64 = value.startsWith(ENCRYPTED_PREFIX)
+    ? value.slice(ENCRYPTED_PREFIX.length)
+    : value;
   const data = Buffer.from(b64, 'base64');
   if (data.length < 28) throw new Error('data too short');
-  const decipher = createDecipheriv('aes-256-gcm', MASTER_KEY, data.subarray(0, 12));
+  const decipher = createDecipheriv(
+    'aes-256-gcm',
+    MASTER_KEY,
+    data.subarray(0, 12)
+  );
   decipher.setAuthTag(data.subarray(12, 28));
-  return Buffer.concat([decipher.update(data.subarray(28)), decipher.final()]).toString('utf8');
+  return Buffer.concat([
+    decipher.update(data.subarray(28)),
+    decipher.final(),
+  ]).toString('utf8');
 }
 
 function isEncrypted(value: string): boolean {
@@ -85,6 +99,7 @@ async function main() {
     // Fetch all non-deleted webhooks (include soft-deleted for completeness)
     // skip-organization-check
     const webhooks = await prisma.webhook.findMany({
+      // ignore-security-guard
       select: { id: true, secret: true },
     });
 
@@ -120,14 +135,21 @@ async function main() {
 
         if (wasOldFormat) {
           reWrapped++;
-          console.log(`  [re-wrapped]  webhook ${wh.id} — re-encrypted with enc:v1: prefix`);
+          console.log(
+            `  [re-wrapped]  webhook ${wh.id} — re-encrypted with enc:v1: prefix`
+          );
         } else {
           encrypted++;
-          console.log(`  [encrypted]   webhook ${wh.id} — plaintext secret encrypted`);
+          console.log(
+            `  [encrypted]   webhook ${wh.id} — plaintext secret encrypted`
+          );
         }
       } catch (updateErr) {
         failed++;
-        console.error(`  [FAILED]      webhook ${wh.id} — DB update error:`, updateErr);
+        console.error(
+          `  [FAILED]      webhook ${wh.id} — DB update error:`,
+          updateErr
+        );
       }
     }
   } finally {

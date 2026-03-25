@@ -2,6 +2,7 @@ import { prisma } from '../src';
 
 async function main() {
   const orgs = await prisma.organization.findMany({
+    // ignore-security-guard
     where: { deletedAt: null },
     take: 3,
     orderBy: { createdAt: 'asc' },
@@ -20,10 +21,7 @@ async function main() {
           organizationId: org.id,
           deletedAt: null,
         },
-        orderBy: [
-          { createdAt: 'desc' },
-          { code: 'asc' },
-        ],
+        orderBy: [{ createdAt: 'desc' }, { code: 'asc' }],
         take: 5,
         include: {
           _count: { select: { scanLogs: true } },
@@ -61,4 +59,3 @@ main()
   .finally(async () => {
     await prisma.$disconnect();
   });
-

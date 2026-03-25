@@ -2,11 +2,16 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 async function main() {
   const users = await prisma.user.findMany({
+    // ignore-security-guard
     where: { deletedAt: null },
-    select: { id: true, email: true, passwordHash: true }
+    select: { id: true, email: true, passwordHash: true },
   });
-  users.forEach(u => {
-    console.log(`User: ${u.email}, HasHash: ${!!u.passwordHash}, HashPrefix: ${u.passwordHash?.slice(0, 10)}...`);
+  users.forEach((u) => {
+    console.log(
+      `User: ${u.email}, HasHash: ${!!u.passwordHash}, HashPrefix: ${u.passwordHash?.slice(0, 10)}...`
+    );
   });
 }
-main().catch(console.error).finally(() => prisma.$disconnect());
+main()
+  .catch(console.error)
+  .finally(() => prisma.$disconnect());

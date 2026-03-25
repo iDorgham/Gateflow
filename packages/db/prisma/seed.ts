@@ -21,6 +21,7 @@ async function main() {
 
   // Get all organizations without a default project
   const organizations = await prisma.organization.findMany({
+    // ignore-security-guard
     where: {
       deletedAt: null,
     },
@@ -68,7 +69,8 @@ async function main() {
 
   // Handle unassigned gates and QR codes
   // Assign them to the default "Main" project for each org
-  const orgsWithProjects = await prisma.organization.findMany({
+  const organizationsWithProjects = await prisma.organization.findMany({
+    // ignore-security-guard
     where: {
       deletedAt: null,
     },
