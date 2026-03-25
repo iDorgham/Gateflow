@@ -52,11 +52,11 @@ const LEGAL_DOCS: Record<string, LegalDoc> = {
       },
       {
         heading: '6. Your Rights',
-        body: 'Depending on your location, you may have the right to access, correct, or delete your personal data. To exercise these rights, contact us at privacy@gateflow.io.',
+        body: 'Depending on your location, you may have the right to access, correct, or delete your personal data. To exercise these rights, contact us at privacy@gateflow.site.',
       },
       {
         heading: '7. Contact',
-        body: 'For privacy-related questions, contact our Data Protection Officer at privacy@gateflow.io or write to GateFlow Technologies, Cairo, Egypt.',
+        body: 'For privacy-related questions, contact our Data Protection Officer at privacy@gateflow.site or write to GateFlow Technologies, Cairo, Egypt.',
       },
     ],
   },
@@ -82,7 +82,7 @@ const LEGAL_DOCS: Record<string, LegalDoc> = {
       },
       {
         heading: '3. Account Responsibilities',
-        body: 'You are responsible for maintaining the security of your account credentials and for all activity under your account. Notify us immediately of any unauthorized use at security@gateflow.io.',
+        body: 'You are responsible for maintaining the security of your account credentials and for all activity under your account. Notify us immediately of any unauthorized use at security@gateflow.site.',
       },
       {
         heading: '4. Subscription and Billing',
@@ -173,7 +173,7 @@ const LEGAL_DOCS: Record<string, LegalDoc> = {
       },
       {
         heading: '4. Data Protection Officer',
-        body: 'Our Data Protection Officer can be contacted at dpo@gateflow.io for any GDPR-related enquiries.',
+        body: 'Our Data Protection Officer can be contacted at dpo@gateflow.site for any GDPR-related enquiries.',
       },
       {
         heading: '5. Supervisory Authority',
@@ -284,10 +284,10 @@ export default async function LegalPage(props: Props) {
               <div className="mt-12 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-5 text-sm text-slate-500 dark:text-slate-400">
                 Questions about this policy? Email us at{' '}
                 <a
-                  href="mailto:legal@gateflow.io"
+                  href="mailto:legal@gateflow.site"
                   className="text-indigo-600 hover:underline"
                 >
-                  legal@gateflow.io
+                  legal@gateflow.site
                 </a>
               </div>
             </div>

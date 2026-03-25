@@ -279,7 +279,7 @@ export default function LoginPage() {
               <p className="text-xs text-muted-foreground font-medium">
                 {isRtl ? 'ليس لديك حساب؟' : "Don't have an account?"}{' '}
                 <a
-                  href="mailto:support@gateflow.io"
+                  href="mailto:support@gateflow.site"
                   className="text-primary font-semibold hover:underline transition-opacity"
                 >
                   {isRtl ? 'اتصل بالدعم' : 'Contact Support'}

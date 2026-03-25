@@ -1,4 +1,4 @@
-const BASE_URL = 'https://gateflow.io';
+const BASE_URL = 'https://gateflow.site';
 
 export function OrganizationJsonLd({ locale }: { locale: string }) {
   const isAr = locale === 'ar-EG';

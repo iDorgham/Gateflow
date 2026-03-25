@@ -148,8 +148,8 @@ After every production deploy to Vercel:
 ```bash
 # Run against production URL
 npx lhci collect \
-  --url=https://gateflow.io/en \
-  --url=https://app.gateflow.io/en/dashboard \
+  --url=https://gateflow.site/en \
+  --url=https://app.gateflow.site/en/dashboard \
   --numberOfRuns=3 \
   --settings.emulatedFormFactor=mobile
 

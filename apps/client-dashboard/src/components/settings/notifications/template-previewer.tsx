@@ -102,14 +102,17 @@ const PLACEHOLDER_VALUES: Record<string, string> = {
   denial_reason: 'QR code expired',
   issuer_name: 'Maria García',
   role_name: 'Gate Operator',
-  activation_link: 'https://app.gateflow.io/activate/abc123',
+  activation_link: 'https://app.gateflow.site/activate/abc123',
   alert_type: 'Maintenance Window',
   alert_message: 'Scheduled maintenance on Sunday 02:00–04:00 UTC.',
   severity: 'Low',
 };
 
 function renderTemplate(text: string): string {
-  return text.replace(/\{\{(\w+)\}\}/g, (_, key: string) => PLACEHOLDER_VALUES[key] ?? `{{${key}}}`);
+  return text.replace(
+    /\{\{(\w+)\}\}/g,
+    (_, key: string) => PLACEHOLDER_VALUES[key] ?? `{{${key}}}`
+  );
 }
 
 export function TemplatePreviewer() {
@@ -125,21 +128,33 @@ export function TemplatePreviewer() {
               <Eye className="h-4 w-4 text-primary" />
               Template Preview
             </CardTitle>
-            <CardDescription>Preview notification emails with sample data.</CardDescription>
+            <CardDescription>
+              Preview notification emails with sample data.
+            </CardDescription>
           </div>
-          <Badge variant="outline" className="text-[10px] font-black uppercase text-muted-foreground/60 border-dashed">
+          <Badge
+            variant="outline"
+            className="text-[10px] font-black uppercase text-muted-foreground/60 border-dashed"
+          >
             Read-only
           </Badge>
         </div>
       </CardHeader>
       <CardContent className="space-y-4 pt-4">
         <Select value={selectedId} onValueChange={setSelectedId}>
-          <SelectTrigger className="h-10 rounded-xl" aria-label="Select notification template">
+          <SelectTrigger
+            className="h-10 rounded-xl"
+            aria-label="Select notification template"
+          >
             <SelectValue />
           </SelectTrigger>
           <SelectContent className="rounded-xl">
             {TEMPLATES.map((t) => (
-              <SelectItem key={t.id} value={t.id} className="rounded-lg text-xs font-bold">
+              <SelectItem
+                key={t.id}
+                value={t.id}
+                className="rounded-lg text-xs font-bold"
+              >
                 {t.label}
               </SelectItem>
             ))}
@@ -155,7 +170,9 @@ export function TemplatePreviewer() {
                 <Mail className="h-4 w-4 text-primary" />
               </div>
               <div className="min-w-0">
-                <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Subject</p>
+                <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+                  Subject
+                </p>
                 <p className="text-sm font-bold text-foreground truncate">
                   {renderTemplate(template.subject)}
                 </p>
@@ -173,7 +190,10 @@ export function TemplatePreviewer() {
           {/* Placeholder legend */}
           <div className="px-5 py-3 bg-muted/20 border-t border-border">
             <p className="text-[10px] text-muted-foreground font-medium">
-              <span className="font-black text-primary">{'{{placeholders}}'}</span> are replaced with real data at send time.
+              <span className="font-black text-primary">
+                {'{{placeholders}}'}
+              </span>{' '}
+              are replaced with real data at send time.
             </p>
           </div>
         </div>

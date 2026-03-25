@@ -104,7 +104,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     const fromAddress =
-      process.env.SMTP_FROM ?? `"GateFlow" <noreply@gateflow.io>`;
+      process.env.SMTP_FROM ?? `"GateFlow" <noreply@gateflow.site>`;
     const displayName = recipientName || recipientEmail;
 
     try {

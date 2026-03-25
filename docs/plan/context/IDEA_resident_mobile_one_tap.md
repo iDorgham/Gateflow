@@ -26,7 +26,7 @@ Under **PRD v9.0 (Growth & Autonomy)**, GateFlow is establishing itself as a res
 ### Phase 2: Core Logic - Fast Link Generation (P0)
 
 - Add a low-latency "Express QR" endpoint that bypasses heavy validation for standard guest passes.
-- Create a short-link generator (`gateflow.io/s/[id]`) that routes directly to the premium landing page.
+- Create a short-link generator (`gateflow.site/s/[id]`) that routes directly to the premium landing page.
 - Implement "Anoymous-to-Identified" logic: allow sharing a blank pass that captures guest info during the first scan.
 
 ### Phase 3: Home Tab "Express Invite" UI (P1)

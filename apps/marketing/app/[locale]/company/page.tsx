@@ -162,10 +162,10 @@ export default async function CompanyPage(props: {
               <div className="flex items-center gap-2 mt-2 text-sm text-slate-500 dark:text-slate-400">
                 <Mail size={15} className="text-indigo-600" />
                 <a
-                  href="mailto:hello@gateflow.io"
+                  href="mailto:hello@gateflow.site"
                   className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
                 >
-                  hello@gateflow.io
+                  hello@gateflow.site
                 </a>
               </div>
             </div>
@@ -284,10 +284,10 @@ export default async function CompanyPage(props: {
           <p className="mt-4 text-xs text-slate-400">
             For press enquiries:{' '}
             <a
-              href="mailto:press@gateflow.io"
+              href="mailto:press@gateflow.site"
               className="text-indigo-600 hover:underline"
             >
-              press@gateflow.io
+              press@gateflow.site
             </a>
           </p>
         </div>
@@ -328,7 +328,7 @@ export default async function CompanyPage(props: {
                   </div>
                 </div>
                 <a
-                  href="mailto:careers@gateflow.io"
+                  href="mailto:careers@gateflow.site"
                   className="shrink-0 rounded-lg bg-indigo-700 px-4 py-2 text-xs font-bold text-white hover:bg-indigo-600 transition-colors"
                 >
                   Apply
@@ -339,7 +339,7 @@ export default async function CompanyPage(props: {
           <p className="mt-6 text-sm text-slate-500 dark:text-slate-400">
             Don&apos;t see your role?{' '}
             <a
-              href="mailto:careers@gateflow.io"
+              href="mailto:careers@gateflow.site"
               className="text-indigo-600 hover:underline"
             >
               Send us your CV anyway.

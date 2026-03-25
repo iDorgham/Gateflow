@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
 
     // The link will point to the marketing landing page redesign (Phase 4)
     const baseUrl =
-      process.env.NEXT_PUBLIC_MARKETING_URL || 'https://gateflow.io';
+      process.env.NEXT_PUBLIC_MARKETING_URL || 'https://gateflow.site';
     const landingPath = `/s/${shortLink.shortId}`;
 
     // We sign the shortId to prevent ID enumeration/tampering

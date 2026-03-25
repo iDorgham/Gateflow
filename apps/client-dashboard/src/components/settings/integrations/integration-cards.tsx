@@ -12,7 +12,14 @@ import {
   Label,
   Badge,
 } from '@gate-access/ui';
-import { Save, CheckCircle2, Globe, BarChart3, MessageSquare, Share2 } from 'lucide-react';
+import {
+  Save,
+  CheckCircle2,
+  Globe,
+  BarChart3,
+  MessageSquare,
+  Share2,
+} from 'lucide-react';
 import { toast } from 'sonner';
 import { csrfFetch } from '@/lib/csrf';
 
@@ -58,13 +65,20 @@ function IntegrationCard({
               Connected
             </Badge>
           ) : (
-            <Badge variant="outline" className="text-[10px] font-black uppercase text-muted-foreground/50 border-dashed">
+            <Badge
+              variant="outline"
+              className="text-[10px] font-black uppercase text-muted-foreground/50 border-dashed"
+            >
               Not connected
             </Badge>
           )}
         </div>
-        <CardTitle className="text-sm font-black uppercase tracking-tight mt-3">{title}</CardTitle>
-        <CardDescription className="text-xs leading-relaxed">{description}</CardDescription>
+        <CardTitle className="text-sm font-black uppercase tracking-tight mt-3">
+          {title}
+        </CardTitle>
+        <CardDescription className="text-xs leading-relaxed">
+          {description}
+        </CardDescription>
       </CardHeader>
       <CardContent className="pt-0">
         <div className="space-y-2">
@@ -92,7 +106,10 @@ interface IntegrationCardsProps {
   domain: string | null;
 }
 
-export function IntegrationCards({ initialConfig, domain }: IntegrationCardsProps) {
+export function IntegrationCards({
+  initialConfig,
+  domain,
+}: IntegrationCardsProps) {
   const [config, setConfig] = useState<IntegrationConfig>(initialConfig);
   const [isDirty, setIsDirty] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -117,31 +134,38 @@ export function IntegrationCards({ initialConfig, domain }: IntegrationCardsProp
     });
   };
 
-  const integrations: Omit<IntegrationCardProps, 'value' | 'onChange' | 'isSaved'>[] = [
+  const integrations: Omit<
+    IntegrationCardProps,
+    'value' | 'onChange' | 'isSaved'
+  >[] = [
     {
       title: 'Google Tag Manager',
-      description: 'Fire marketing events and conversion tracking tags via GTM containers.',
+      description:
+        'Fire marketing events and conversion tracking tags via GTM containers.',
       icon: <BarChart3 className="h-5 w-5 text-blue-500" />,
       fieldKey: 'gtmId',
       placeholder: 'GTM-XXXXXXX',
     },
     {
       title: 'Google Analytics',
-      description: 'Track user engagement and scan events in your GA4 property.',
+      description:
+        'Track user engagement and scan events in your GA4 property.',
       icon: <BarChart3 className="h-5 w-5 text-orange-500" />,
       fieldKey: 'googleAnalyticsId',
       placeholder: 'G-XXXXXXXXXX',
     },
     {
       title: 'HubSpot CRM',
-      description: 'Sync visitor and contact data with your HubSpot marketing portal.',
+      description:
+        'Sync visitor and contact data with your HubSpot marketing portal.',
       icon: <MessageSquare className="h-5 w-5 text-orange-600" />,
       fieldKey: 'hubspotPortalId',
       placeholder: '12345678',
     },
     {
       title: 'Meta Pixel',
-      description: 'Track conversions and retarget visitors via Facebook/Instagram ads.',
+      description:
+        'Track conversions and retarget visitors via Facebook/Instagram ads.',
       icon: <Share2 className="h-5 w-5 text-blue-600" />,
       fieldKey: 'facebookPixelId',
       placeholder: '1234567890123456',
@@ -154,7 +178,9 @@ export function IntegrationCards({ initialConfig, domain }: IntegrationCardsProp
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-sm font-black uppercase tracking-tight">Marketing Integrations</h2>
+            <h2 className="text-sm font-black uppercase tracking-tight">
+              Marketing Integrations
+            </h2>
             <p className="text-xs text-muted-foreground mt-0.5">
               Connect marketing platforms to track visitor journeys.
             </p>
@@ -176,7 +202,7 @@ export function IntegrationCards({ initialConfig, domain }: IntegrationCardsProp
               {...int}
               value={config[int.fieldKey] ?? ''}
               onChange={(v) => update(int.fieldKey, v)}
-              isSaved={!!(config[int.fieldKey])}
+              isSaved={!!config[int.fieldKey]}
             />
           ))}
         </div>
@@ -186,16 +212,21 @@ export function IntegrationCards({ initialConfig, domain }: IntegrationCardsProp
       <div className="space-y-4 pt-4 border-t border-border">
         <div className="flex items-center gap-2">
           <Globe className="h-4 w-4 text-primary" />
-          <h2 className="text-sm font-black uppercase tracking-tight">Custom Domain</h2>
+          <h2 className="text-sm font-black uppercase tracking-tight">
+            Custom Domain
+          </h2>
         </div>
         <p className="text-xs text-muted-foreground">
-          Use your own domain for guest-facing QR landing pages and scanner redirects.
+          Use your own domain for guest-facing QR landing pages and scanner
+          redirects.
         </p>
 
         <div className="p-5 rounded-2xl border border-border bg-card/50 space-y-4">
           <div className="flex items-center justify-between">
             <div className="space-y-1">
-              <p className="text-xs font-black uppercase tracking-tight">Current Domain</p>
+              <p className="text-xs font-black uppercase tracking-tight">
+                Current Domain
+              </p>
               <code className="text-sm font-mono text-foreground">
                 {domain ?? 'Not configured'}
               </code>
@@ -206,7 +237,10 @@ export function IntegrationCards({ initialConfig, domain }: IntegrationCardsProp
                 Verified
               </Badge>
             ) : (
-              <Badge variant="outline" className="text-[10px] font-black uppercase text-muted-foreground/50 border-dashed">
+              <Badge
+                variant="outline"
+                className="text-[10px] font-black uppercase text-muted-foreground/50 border-dashed"
+              >
                 Not set
               </Badge>
             )}
@@ -214,10 +248,18 @@ export function IntegrationCards({ initialConfig, domain }: IntegrationCardsProp
 
           {!domain && (
             <div className="p-4 rounded-xl bg-muted/30 border border-border text-xs text-muted-foreground space-y-2">
-              <p className="font-bold text-foreground">To use a custom domain:</p>
+              <p className="font-bold text-foreground">
+                To use a custom domain:
+              </p>
               <ol className="list-decimal list-inside space-y-1 leading-relaxed">
                 <li>Set your domain in Workspace Settings.</li>
-                <li>Add a CNAME record pointing to <code className="font-mono bg-muted px-1 py-0.5 rounded">gateway.gateflow.io</code>.</li>
+                <li>
+                  Add a CNAME record pointing to{' '}
+                  <code className="font-mono bg-muted px-1 py-0.5 rounded">
+                    gateway.gateflow.site
+                  </code>
+                  .
+                </li>
                 <li>DNS propagation typically takes 5–30 minutes.</li>
               </ol>
             </div>

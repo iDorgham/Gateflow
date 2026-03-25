@@ -27,7 +27,7 @@ export async function generateStaticParams() {
   return i18n.locales.map((locale) => ({ locale }));
 }
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://gateflow.io';
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://gateflow.site';
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),

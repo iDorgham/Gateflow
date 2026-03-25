@@ -35,7 +35,7 @@ Implement the `/api/resident/express-invite` endpoint that generates a signed, p
   2. Generate a `QRCode` record (type: GUEST, status: PENDING).
   3. Generate a signed `shortId` using `createSecureInviteSignature`.
   4. Create a `QrShortLink` record linking to the `QRCode`.
-  5. Return the full `shareUrl` (e.g., `https://gateflow.io/s/[shortId]?sig=[signature]`).
+  5. Return the full `shareUrl` (e.g., `https://gateflow.site/s/[shortId]?sig=[signature]`).
 - Ensure link expires in 24 hours.
 
 ### Scope (out)

@@ -80,10 +80,10 @@ export async function getTeamMembers(): Promise<Result<TeamMember[]>> {
       include: {
         role: true,
         _count: {
-          select: { scanLogs: true }
-        }
+          select: { scanLogs: true },
+        },
       },
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: 'desc' },
     });
 
     return { success: true, data: users as unknown as TeamMember[] };
@@ -93,7 +93,10 @@ export async function getTeamMembers(): Promise<Result<TeamMember[]>> {
   }
 }
 
-export async function inviteTeamMember(email: string, roleId: string): Promise<Result> {
+export async function inviteTeamMember(
+  email: string,
+  roleId: string
+): Promise<Result> {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId || !claims.permissions?.['roles:manage']) {
@@ -107,18 +110,24 @@ export async function inviteTeamMember(email: string, roleId: string): Promise<R
 
     // Check if user already exists
     const existingUser = await prisma.user.findUnique({
-      where: { email }
+      where: { email },
     });
     if (existingUser) {
-      return { success: false, error: 'A user with this email already exists.' };
+      return {
+        success: false,
+        error: 'A user with this email already exists.',
+      };
     }
 
     // Check if invitation already exists
     const existingInvite = await prisma.invitation.findFirst({
-      where: { email, organizationId: claims.orgId, acceptedAt: null }
+      where: { email, organizationId: claims.orgId, acceptedAt: null },
     });
     if (existingInvite) {
-      return { success: false, error: 'An invitation is already pending for this email.' };
+      return {
+        success: false,
+        error: 'An invitation is already pending for this email.',
+      };
     }
 
     const token = crypto.randomBytes(32).toString('hex');
@@ -132,18 +141,18 @@ export async function inviteTeamMember(email: string, roleId: string): Promise<R
         token,
         organizationId: claims.orgId,
         expiresAt,
-      }
+      },
     });
 
     // Send invitation email
     const org = await prisma.organization.findUnique({
       where: { id: claims.orgId },
-      select: { name: true }
+      select: { name: true },
     });
-    
-    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://gateflow.io';
+
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://gateflow.site';
     const joinUrl = `${baseUrl}/join?token=${token}`;
-    
+
     try {
       await sendEmail({
         to: email,
@@ -180,7 +189,7 @@ export async function getInvitations(): Promise<Result<Invitation[]>> {
     const invitations = await prisma.invitation.findMany({
       where: { organizationId: claims.orgId, acceptedAt: null },
       include: { role: true },
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: 'desc' },
     });
 
     return { success: true, data: invitations as unknown as Invitation[] };
@@ -198,7 +207,7 @@ export async function revokeInvitation(id: string): Promise<Result> {
     }
 
     await prisma.invitation.delete({
-      where: { id, organizationId: claims.orgId }
+      where: { id, organizationId: claims.orgId },
     });
 
     // AUDIT LOG
@@ -218,7 +227,10 @@ export async function revokeInvitation(id: string): Promise<Result> {
   }
 }
 
-export async function updateMemberRole(userId: string, roleId: string): Promise<Result> {
+export async function updateMemberRole(
+  userId: string,
+  roleId: string
+): Promise<Result> {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId || !claims.permissions?.['roles:manage']) {
@@ -233,13 +245,13 @@ export async function updateMemberRole(userId: string, roleId: string): Promise<
 
     await prisma.user.update({
       where: { id: userId, organizationId: claims.orgId },
-      data: { roleId }
+      data: { roleId },
     });
 
     // AUTOMATED SESSION REVOCATION: Force logout to refresh JWT with new role
     await prisma.refreshToken.updateMany({
       where: { userId },
-      data: { revokedAt: new Date() }
+      data: { revokedAt: new Date() },
     });
 
     // AUDIT LOG
@@ -273,13 +285,13 @@ export async function removeMember(userId: string): Promise<Result> {
 
     await prisma.user.update({
       where: { id: userId, organizationId: claims.orgId },
-      data: { deletedAt: new Date() }
+      data: { deletedAt: new Date() },
     });
 
     // AUTOMATED SESSION REVOCATION: Force immediate logout
     await prisma.refreshToken.updateMany({
       where: { userId },
-      data: { revokedAt: new Date() }
+      data: { revokedAt: new Date() },
     });
 
     // AUDIT LOG
@@ -308,7 +320,7 @@ export async function revokeUserSessions(userId: string): Promise<Result> {
 
     await prisma.refreshToken.updateMany({
       where: { userId },
-      data: { revokedAt: new Date() }
+      data: { revokedAt: new Date() },
     });
 
     // AUDIT LOG
@@ -334,17 +346,14 @@ export async function getRoles(): Promise<Result<Role[]>> {
 
     const roles = await prisma.role.findMany({
       where: {
-        OR: [
-          { isBuiltIn: true },
-          { organizationId: claims.orgId }
-        ]
+        OR: [{ isBuiltIn: true }, { organizationId: claims.orgId }],
       },
       include: {
         _count: {
-          select: { users: true }
-        }
+          select: { users: true },
+        },
       },
-      orderBy: { createdAt: 'asc' }
+      orderBy: { createdAt: 'asc' },
     });
 
     return { success: true, data: roles as unknown as Role[] };
@@ -368,8 +377,8 @@ export async function getActivityLogs(): Promise<Result<ActivityLog[]>> {
             name: true,
             email: true,
             avatarUrl: true,
-          }
-        }
+          },
+        },
       },
       orderBy: { createdAt: 'desc' },
       take: 50, // Limit to recent 50
@@ -389,7 +398,9 @@ const RoleSchema = z.object({
   permissions: z.record(z.boolean()),
 });
 
-export async function createRole(data: z.infer<typeof RoleSchema>): Promise<Result> {
+export async function createRole(
+  data: z.infer<typeof RoleSchema>
+): Promise<Result> {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId || !claims.permissions?.['roles:manage']) {
@@ -408,7 +419,7 @@ export async function createRole(data: z.infer<typeof RoleSchema>): Promise<Resu
         permissions: validation.data.permissions,
         organizationId: claims.orgId,
         isBuiltIn: false,
-      }
+      },
     });
 
     // AUDIT LOG
@@ -429,7 +440,9 @@ export async function createRole(data: z.infer<typeof RoleSchema>): Promise<Resu
   }
 }
 
-export async function updateRole(data: z.infer<typeof RoleSchema>): Promise<Result> {
+export async function updateRole(
+  data: z.infer<typeof RoleSchema>
+): Promise<Result> {
   try {
     if (!data.id) return { success: false, error: 'Role ID is required.' };
 
@@ -444,9 +457,10 @@ export async function updateRole(data: z.infer<typeof RoleSchema>): Promise<Resu
     }
 
     const existing = await prisma.role.findFirst({
-      where: { id: data.id, organizationId: claims.orgId }
+      where: { id: data.id, organizationId: claims.orgId },
     });
-    if (!existing) return { success: false, error: 'Role not found or cannot be edited.' };
+    if (!existing)
+      return { success: false, error: 'Role not found or cannot be edited.' };
 
     await prisma.role.update({
       where: { id: data.id },
@@ -454,14 +468,14 @@ export async function updateRole(data: z.infer<typeof RoleSchema>): Promise<Resu
         name: validation.data.name,
         description: validation.data.description,
         permissions: validation.data.permissions,
-      }
+      },
     });
 
     // AUTOMATED SESSION REVOCATION: Force logout for ALL users with this role
     // This ensures new permissions are applied immediately on next login.
     await prisma.refreshToken.updateMany({
       where: { user: { roleId: data.id } },
-      data: { revokedAt: new Date() }
+      data: { revokedAt: new Date() },
     });
 
     // AUDIT LOG
@@ -490,20 +504,25 @@ export async function deleteRole(id: string): Promise<Result> {
     }
 
     const existing = await prisma.role.findFirst({
-      where: { id, organizationId: claims.orgId }
+      where: { id, organizationId: claims.orgId },
     });
-    if (!existing) return { success: false, error: 'Role not found or cannot be deleted.' };
+    if (!existing)
+      return { success: false, error: 'Role not found or cannot be deleted.' };
 
     // Check if role is in use
     const userCount = await prisma.user.count({
-      where: { roleId: id, deletedAt: null }
+      where: { roleId: id, deletedAt: null },
     });
     if (userCount > 0) {
-      return { success: false, error: 'This role is currently assigned to team members and cannot be deleted.' };
+      return {
+        success: false,
+        error:
+          'This role is currently assigned to team members and cannot be deleted.',
+      };
     }
 
     await prisma.role.delete({
-      where: { id }
+      where: { id },
     });
 
     // AUDIT LOG

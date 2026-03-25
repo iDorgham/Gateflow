@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next';
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://gateflow.io';
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://gateflow.site';
 
 export default function robots(): MetadataRoute.Robots {
   return {

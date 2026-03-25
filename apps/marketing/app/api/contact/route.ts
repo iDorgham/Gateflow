@@ -100,14 +100,14 @@ export async function POST(request: NextRequest) {
   if (!resendApiKey) {
     console.warn('[contact] RESEND_API_KEY not set — skipping email delivery');
     return NextResponse.json(
-      { ok: false, fallback: 'contact@gateflow.io' },
+      { ok: false, fallback: 'contact@gateflow.site' },
       { status: 503 }
     );
   }
 
   const resend = new Resend(resendApiKey);
-  const fromEmail = process.env.CONTACT_FROM_EMAIL ?? 'noreply@gateflow.io';
-  const notifyEmail = process.env.CONTACT_NOTIFY_EMAIL ?? 'team@gateflow.io';
+  const fromEmail = process.env.CONTACT_FROM_EMAIL ?? 'noreply@gateflow.site';
+  const notifyEmail = process.env.CONTACT_NOTIFY_EMAIL ?? 'team@gateflow.site';
   const planLabel = planInterest
     ? (PLAN_LABELS[planInterest] ?? 'Not specified')
     : 'Not specified';
@@ -139,7 +139,7 @@ export async function POST(request: NextRequest) {
       html: `
         <p>Hi ${name},</p>
         <p>Thank you for reaching out to GateFlow! We've received your message and our team will get back to you within <strong>1–2 business days</strong>.</p>
-        <p>If you have an urgent question, you can also reach us directly at <a href="mailto:contact@gateflow.io">contact@gateflow.io</a>.</p>
+        <p>If you have an urgent question, you can also reach us directly at <a href="mailto:contact@gateflow.site">contact@gateflow.site</a>.</p>
         <p>Best regards,<br />The GateFlow Team</p>
       `,
     });

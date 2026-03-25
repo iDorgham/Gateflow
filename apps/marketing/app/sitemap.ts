@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { i18n } from '../i18n-config';
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://gateflow.io';
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://gateflow.site';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const routes = [

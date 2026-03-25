@@ -14,11 +14,12 @@ export default function ResidentLoginPage() {
         </div>
         <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm space-y-4">
           <p className="text-sm text-slate-700">
-            The resident portal currently reuses your existing GateFlow login session.
-            Please sign in via the main dashboard, then refresh this page.
+            The resident portal currently reuses your existing GateFlow login
+            session. Please sign in via the main dashboard, then refresh this
+            page.
           </p>
           <Link
-            href="https://app.gateflow.io/login"
+            href="https://app.gateflow.site/login"
             className="inline-flex w-full items-center justify-center rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-slate-800 transition-colors"
           >
             Go to main login
@@ -28,4 +29,3 @@ export default function ResidentLoginPage() {
     </main>
   );
 }
-
