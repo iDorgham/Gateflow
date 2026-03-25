@@ -52,7 +52,6 @@ jobs:
         run: pnpm --filter @gate-access/db db:generate
         env:
           DATABASE_URL: 'postgresql://placeholder:placeholder@localhost:5432/placeholder'
-          DIRECT_DATABASE_URL: 'postgresql://placeholder:placeholder@localhost:5432/placeholder'
 
       - name: Cache node_modules
         uses: actions/cache@v4
@@ -138,7 +137,6 @@ jobs:
         run: pnpm --filter @gate-access/db db:generate
         env:
           DATABASE_URL: 'postgresql://placeholder:placeholder@localhost:5432/placeholder'
-          DIRECT_DATABASE_URL: 'postgresql://placeholder:placeholder@localhost:5432/placeholder'
 
       - name: Typecheck
         run: pnpm turbo typecheck
@@ -193,7 +191,6 @@ jobs:
         run: pnpm --filter @gate-access/db db:generate
         env:
           DATABASE_URL: 'postgresql://placeholder:placeholder@localhost:5432/placeholder'
-          DIRECT_DATABASE_URL: 'postgresql://placeholder:placeholder@localhost:5432/placeholder'
 
       - name: Run tests
         run: pnpm turbo test
@@ -234,7 +231,6 @@ jobs:
         run: pnpm --filter @gate-access/db db:generate
         env:
           DATABASE_URL: 'postgresql://placeholder:placeholder@localhost:5432/placeholder'
-          DIRECT_DATABASE_URL: 'postgresql://placeholder:placeholder@localhost:5432/placeholder'
 
       - name: Build apps for bundle analysis
         run: |
