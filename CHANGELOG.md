@@ -82,6 +82,8 @@ plan:run → plan:done` with automatic folder moves and doc cascades
 
 - **[Pagespeed 100] **complete phase 5 - Lighthouse CI certification infra ready
 
+- **[Pagespeed 100] **complete phase 5 - Lighthouse CI certification infra ready
+
 - **[Cert]** phase 5 certification infra — regression guide + final LHCI thresholds
 
 - **[Assets]** font display:swap + image allowlist + avif/webp + dvh + preconnect — phase 2
