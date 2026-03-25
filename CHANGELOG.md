@@ -91,6 +91,8 @@ plan:run → plan:done` with automatic folder moves and doc cascades
 
 ### Bug Fixes
 
+- **[Security] **mark global maintenance queries with ignore-security-guard
+
 - **[Security] **phase 4 — analytics export & incidents org isolation confirmed
 
 - **[Security] **phase 3 — QR codes & workspace exports org isolation
