@@ -63,7 +63,7 @@ export function Pagination({
     if (getHref && !disabled) {
       return (
         <Link href={getHref(page)} className={commonClass}>
-          {children}
+          {children as any}
         </Link>
       );
     }
