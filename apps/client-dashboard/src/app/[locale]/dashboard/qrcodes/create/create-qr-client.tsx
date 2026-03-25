@@ -83,13 +83,21 @@ const STEPS = [
 
 function StepIndicator({ current }: { current: number }) {
   return (
-    <div className="flex items-center w-full mb-8" role="list" aria-label="Wizard steps">
+    <div
+      className="flex items-center w-full mb-8"
+      role="list"
+      aria-label="Wizard steps"
+    >
       {STEPS.map((step, idx) => {
         const n = idx + 1;
         const isCompleted = n < current;
         const isActive = n === current;
         return (
-          <div key={n} className="flex items-center flex-1 last:flex-none" role="listitem">
+          <div
+            key={n}
+            className="flex items-center flex-1 last:flex-none"
+            role="listitem"
+          >
             <div className="flex flex-col items-center">
               <div
                 className={cn(
@@ -97,17 +105,25 @@ function StepIndicator({ current }: { current: number }) {
                   isCompleted
                     ? 'bg-primary border-primary text-primary-foreground'
                     : isActive
-                    ? 'border-primary text-primary bg-primary/10'
-                    : 'border-border text-muted-foreground/50 bg-muted/30'
+                      ? 'border-primary text-primary bg-primary/10'
+                      : 'border-border text-muted-foreground/50 bg-muted/30'
                 )}
                 aria-current={isActive ? 'step' : undefined}
               >
-                {isCompleted ? <Check className="h-4 w-4" aria-hidden="true" /> : n}
+                {isCompleted ? (
+                  <Check className="h-4 w-4" aria-hidden="true" />
+                ) : (
+                  n
+                )}
               </div>
               <span
                 className={cn(
                   'mt-1.5 hidden sm:block text-[10px] font-black uppercase tracking-widest transition-colors whitespace-nowrap',
-                  isActive ? 'text-primary' : isCompleted ? 'text-foreground' : 'text-muted-foreground/50'
+                  isActive
+                    ? 'text-primary'
+                    : isCompleted
+                      ? 'text-foreground'
+                      : 'text-muted-foreground/50'
                 )}
               >
                 {step.label}
@@ -147,7 +163,8 @@ const QR_TYPES = [
     desc: 'Allow a fixed number of scans. Useful for event passes or repeat visitors.',
     icon: RefreshCw,
     accent: 'border-violet-500/40 bg-violet-500/5 hover:border-violet-500/60',
-    activeAccent: 'border-violet-500 bg-violet-500/10 ring-2 ring-violet-500/30',
+    activeAccent:
+      'border-violet-500 bg-violet-500/10 ring-2 ring-violet-500/30',
     iconColor: 'text-violet-500',
   },
   {
@@ -155,8 +172,10 @@ const QR_TYPES = [
     label: 'Permanent',
     desc: 'Unlimited scans. Ideal for resident or staff access cards.',
     icon: Infinity,
-    accent: 'border-emerald-500/40 bg-emerald-500/5 hover:border-emerald-500/60',
-    activeAccent: 'border-emerald-500 bg-emerald-500/10 ring-2 ring-emerald-500/30',
+    accent:
+      'border-emerald-500/40 bg-emerald-500/5 hover:border-emerald-500/60',
+    activeAccent:
+      'border-emerald-500 bg-emerald-500/10 ring-2 ring-emerald-500/30',
     iconColor: 'text-emerald-500',
   },
 ];
@@ -173,8 +192,12 @@ function Step1({
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-lg font-black uppercase tracking-tight">Choose Access Type</h2>
-        <p className="text-sm text-muted-foreground mt-1">Select how many times this QR code can be used.</p>
+        <h2 className="text-lg font-black uppercase tracking-tight">
+          Choose Access Type
+        </h2>
+        <p className="text-sm text-muted-foreground mt-1">
+          Select how many times this QR code can be used.
+        </p>
       </div>
 
       <div className="space-y-3">
@@ -186,31 +209,51 @@ function Step1({
               key={t.value}
               type="button"
               onClick={() => setType(t.value)}
-              onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && setType(t.value)}
+              onKeyDown={(e) =>
+                (e.key === 'Enter' || e.key === ' ') && setType(t.value)
+              }
               aria-pressed={isSelected}
               className={cn(
                 'w-full flex items-start gap-4 rounded-2xl border-2 p-5 text-left transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50',
                 isSelected ? t.activeAccent : t.accent
               )}
             >
-              <div className={cn('h-11 w-11 rounded-xl flex items-center justify-center shrink-0 bg-background/80 shadow-sm', isSelected && 'shadow-md')}>
-                <Icon className={cn('h-5 w-5', t.iconColor)} aria-hidden="true" />
+              <div
+                className={cn(
+                  'h-11 w-11 rounded-xl flex items-center justify-center shrink-0 bg-background/80 shadow-sm',
+                  isSelected && 'shadow-md'
+                )}
+              >
+                <Icon
+                  className={cn('h-5 w-5', t.iconColor)}
+                  aria-hidden="true"
+                />
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between gap-2">
-                  <span className="font-black text-foreground uppercase tracking-tight text-sm">{t.label}</span>
+                  <span className="font-black text-foreground uppercase tracking-tight text-sm">
+                    {t.label}
+                  </span>
                   {isSelected && (
-                    <CheckCircle2 className={cn('h-5 w-5 shrink-0', t.iconColor)} aria-hidden="true" />
+                    <CheckCircle2
+                      className={cn('h-5 w-5 shrink-0', t.iconColor)}
+                      aria-hidden="true"
+                    />
                   )}
                 </div>
-                <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">{t.desc}</p>
+                <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
+                  {t.desc}
+                </p>
               </div>
             </button>
           );
         })}
       </div>
 
-      <Button onClick={onNext} className="w-full h-12 gap-2 font-black uppercase tracking-widest text-[11px]">
+      <Button
+        onClick={onNext}
+        className="w-full h-12 gap-2 font-black uppercase tracking-widest text-[11px]"
+      >
         Continue
         <ChevronRight className="h-4 w-4" aria-hidden="true" />
       </Button>
@@ -272,21 +315,30 @@ function Step2({
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-lg font-black uppercase tracking-tight">Gate & Schedule</h2>
-        <p className="text-sm text-muted-foreground mt-1">Optionally restrict this code to a specific gate and set its expiry.</p>
+        <h2 className="text-lg font-black uppercase tracking-tight">
+          Gate & Schedule
+        </h2>
+        <p className="text-sm text-muted-foreground mt-1">
+          Optionally restrict this code to a specific gate and set its expiry.
+        </p>
       </div>
 
       {/* Project badge */}
       {currentProject && (
         <div className="flex items-center gap-2 px-3 py-2 rounded-xl border border-border bg-muted/30">
           <span className="text-xs text-muted-foreground">Project:</span>
-          <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-black text-primary">{currentProject.name}</span>
+          <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-black text-primary">
+            {currentProject.name}
+          </span>
         </div>
       )}
 
       {/* Gate */}
       <div className="space-y-2">
-        <Label htmlFor="gate-select" className="text-[11px] font-black uppercase tracking-widest text-muted-foreground">
+        <Label
+          htmlFor="gate-select"
+          className="text-[11px] font-black uppercase tracking-widest text-muted-foreground"
+        >
           Gate (optional)
         </Label>
         <NativeSelect
@@ -297,7 +349,9 @@ function Step2({
         >
           <option value="">Any gate — no restriction</option>
           {gates.map((g) => (
-            <option key={g.id} value={g.id}>{g.name}</option>
+            <option key={g.id} value={g.id}>
+              {g.name}
+            </option>
           ))}
         </NativeSelect>
       </div>
@@ -305,7 +359,10 @@ function Step2({
       {/* Max uses (RECURRING only) */}
       {showMaxUses && (
         <div className="space-y-2">
-          <Label htmlFor="max-uses" className="text-[11px] font-black uppercase tracking-widest text-muted-foreground">
+          <Label
+            htmlFor="max-uses"
+            className="text-[11px] font-black uppercase tracking-widest text-muted-foreground"
+          >
             Max Uses
           </Label>
           <Input
@@ -326,7 +383,10 @@ function Step2({
       {/* Expiry (non-PERMANENT) */}
       {showExpiry && (
         <div className="space-y-2">
-          <Label htmlFor="expiry" className="text-[11px] font-black uppercase tracking-widest text-muted-foreground">
+          <Label
+            htmlFor="expiry"
+            className="text-[11px] font-black uppercase tracking-widest text-muted-foreground"
+          >
             Expires At (optional)
           </Label>
           <Input
@@ -340,15 +400,24 @@ function Step2({
       )}
 
       {error && (
-        <p role="alert" className="text-sm text-destructive font-medium px-1">{error}</p>
+        <p role="alert" className="text-sm text-destructive font-medium px-1">
+          {error}
+        </p>
       )}
 
       <div className="flex gap-3 pt-2">
-        <Button variant="outline" onClick={onBack} className="flex-1 h-12 gap-2 font-bold uppercase tracking-widest text-[11px]">
+        <Button
+          variant="outline"
+          onClick={onBack}
+          className="flex-1 h-12 gap-2 font-bold uppercase tracking-widest text-[11px]"
+        >
           <ChevronLeft className="h-4 w-4" aria-hidden="true" />
           Back
         </Button>
-        <Button onClick={handleNext} className="flex-1 h-12 gap-2 font-black uppercase tracking-widest text-[11px]">
+        <Button
+          onClick={handleNext}
+          className="flex-1 h-12 gap-2 font-black uppercase tracking-widest text-[11px]"
+        >
           Continue
           <ChevronRight className="h-4 w-4" aria-hidden="true" />
         </Button>
@@ -399,7 +468,8 @@ function Step3({
     );
   });
 
-  const selectedContact = contacts.find((c) => c.id === selectedContactId) ?? null;
+  const selectedContact =
+    contacts.find((c) => c.id === selectedContactId) ?? null;
 
   function selectContact(c: Contact) {
     setSelectedContactId(c.id);
@@ -416,7 +486,9 @@ function Step3({
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-lg font-black uppercase tracking-tight">Guest Details</h2>
+        <h2 className="text-lg font-black uppercase tracking-tight">
+          Guest Details
+        </h2>
         <p className="text-sm text-muted-foreground mt-1">
           Optionally link this code to a guest. You can skip this step.
         </p>
@@ -430,7 +502,9 @@ function Step3({
           aria-pressed={guestMode === 'contact'}
           className={cn(
             'flex-1 flex items-center justify-center gap-2 py-2.5 text-xs font-black uppercase tracking-widest transition-colors border-r border-border',
-            guestMode === 'contact' ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-muted/30'
+            guestMode === 'contact'
+              ? 'bg-primary/10 text-primary'
+              : 'text-muted-foreground hover:bg-muted/30'
           )}
         >
           <User className="h-3.5 w-3.5" aria-hidden="true" />
@@ -442,7 +516,9 @@ function Step3({
           aria-pressed={guestMode === 'manual'}
           className={cn(
             'flex-1 flex items-center justify-center gap-2 py-2.5 text-xs font-black uppercase tracking-widest transition-colors',
-            guestMode === 'manual' ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-muted/30'
+            guestMode === 'manual'
+              ? 'bg-primary/10 text-primary'
+              : 'text-muted-foreground hover:bg-muted/30'
           )}
         >
           <QrCode className="h-3.5 w-3.5" aria-hidden="true" />
@@ -460,7 +536,10 @@ function Step3({
           ) : (
             <>
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                <Search
+                  className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"
+                  aria-hidden="true"
+                />
                 <input
                   type="text"
                   placeholder="Search by name or email…"
@@ -471,9 +550,15 @@ function Step3({
                 />
               </div>
 
-              <div className="max-h-52 overflow-y-auto rounded-xl border border-border divide-y divide-border/50" role="listbox" aria-label="Contacts">
+              <div
+                className="max-h-52 overflow-y-auto rounded-xl border border-border divide-y divide-border/50"
+                role="listbox"
+                aria-label="Contacts"
+              >
                 {filtered.length === 0 ? (
-                  <p className="text-center text-xs text-muted-foreground py-4 italic">No contacts match</p>
+                  <p className="text-center text-xs text-muted-foreground py-4 italic">
+                    No contacts match
+                  </p>
                 ) : (
                   filtered.map((c) => (
                     <button
@@ -484,26 +569,42 @@ function Step3({
                       onClick={() => selectContact(c)}
                       className={cn(
                         'w-full flex items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-muted/30',
-                        selectedContactId === c.id && 'bg-primary/5 border-l-2 border-l-primary'
+                        selectedContactId === c.id &&
+                          'bg-primary/5 border-l-2 border-l-primary'
                       )}
                     >
                       {/* Initials avatar */}
                       <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                        <span className="text-xs font-black text-primary">{getInitials(c)}</span>
+                        <span className="text-xs font-black text-primary">
+                          {getInitials(c)}
+                        </span>
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className="text-sm font-bold text-foreground truncate">{c.firstName} {c.lastName}</p>
+                        <p className="text-sm font-bold text-foreground truncate">
+                          {c.firstName} {c.lastName}
+                        </p>
                         <div className="flex items-center gap-3 mt-0.5">
-                          {c.email && <span className="text-[11px] text-muted-foreground truncate">{c.email}</span>}
+                          {c.email && (
+                            <span className="text-[11px] text-muted-foreground truncate">
+                              {c.email}
+                            </span>
+                          )}
                           {c.phone && (
                             <span className="text-[11px] text-muted-foreground flex items-center gap-0.5 shrink-0">
-                              <Phone className="h-2.5 w-2.5" aria-hidden="true" />{c.phone}
+                              <Phone
+                                className="h-2.5 w-2.5"
+                                aria-hidden="true"
+                              />
+                              {c.phone}
                             </span>
                           )}
                         </div>
                       </div>
                       {selectedContactId === c.id && (
-                        <Check className="h-4 w-4 text-primary shrink-0" aria-hidden="true" />
+                        <Check
+                          className="h-4 w-4 text-primary shrink-0"
+                          aria-hidden="true"
+                        />
                       )}
                     </button>
                   ))
@@ -512,7 +613,10 @@ function Step3({
 
               {selectedContact && (
                 <div className="flex items-center gap-2 px-3 py-2 rounded-xl border border-primary/20 bg-primary/5">
-                  <CheckCircle2 className="h-4 w-4 text-primary shrink-0" aria-hidden="true" />
+                  <CheckCircle2
+                    className="h-4 w-4 text-primary shrink-0"
+                    aria-hidden="true"
+                  />
                   <span className="text-xs font-bold text-primary truncate">
                     {selectedContact.firstName} {selectedContact.lastName}
                     {selectedContact.email && ` · ${selectedContact.email}`}
@@ -528,7 +632,10 @@ function Step3({
       {guestMode === 'manual' && (
         <div className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="guest-name" className="text-[11px] font-black uppercase tracking-widest text-muted-foreground">
+            <Label
+              htmlFor="guest-name"
+              className="text-[11px] font-black uppercase tracking-widest text-muted-foreground"
+            >
               Guest Name
             </Label>
             <Input
@@ -540,7 +647,10 @@ function Step3({
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="guest-email" className="text-[11px] font-black uppercase tracking-widest text-muted-foreground">
+            <Label
+              htmlFor="guest-email"
+              className="text-[11px] font-black uppercase tracking-widest text-muted-foreground"
+            >
               Email Address
             </Label>
             <Input
@@ -553,7 +663,10 @@ function Step3({
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="guest-phone" className="text-[11px] font-black uppercase tracking-widest text-muted-foreground">
+            <Label
+              htmlFor="guest-phone"
+              className="text-[11px] font-black uppercase tracking-widest text-muted-foreground"
+            >
               Phone (optional)
             </Label>
             <Input
@@ -570,8 +683,13 @@ function Step3({
 
       {/* Navigation */}
       <div className="flex gap-3 pt-2">
-        <Button variant="outline" onClick={onBack} className="h-12 px-5 gap-1.5 font-bold uppercase tracking-widest text-[11px] rounded-xl">
-          <ChevronLeft className="h-4 w-4" aria-hidden="true" />Back
+        <Button
+          variant="outline"
+          onClick={onBack}
+          className="h-12 px-5 gap-1.5 font-bold uppercase tracking-widest text-[11px] rounded-xl"
+        >
+          <ChevronLeft className="h-4 w-4" aria-hidden="true" />
+          Back
         </Button>
         <Button
           variant="outline"
@@ -585,9 +703,13 @@ function Step3({
           }}
           className="h-12 px-5 gap-1.5 font-bold uppercase tracking-widest text-[11px] rounded-xl text-muted-foreground"
         >
-          <SkipForward className="h-4 w-4" aria-hidden="true" />Skip
+          <SkipForward className="h-4 w-4" aria-hidden="true" />
+          Skip
         </Button>
-        <Button onClick={onNext} className="flex-1 h-12 gap-2 font-black uppercase tracking-widest text-[11px] rounded-xl">
+        <Button
+          onClick={onNext}
+          className="flex-1 h-12 gap-2 font-black uppercase tracking-widest text-[11px] rounded-xl"
+        >
           Continue <ChevronRight className="h-4 w-4" aria-hidden="true" />
         </Button>
       </div>
@@ -603,11 +725,21 @@ const QR_TYPE_LABELS: Record<string, string> = {
   PERMANENT: 'Permanent',
 };
 
-function SummaryRow({ label, value }: { label: string; value: React.ReactNode }) {
+function SummaryRow({
+  label,
+  value,
+}: {
+  label: string;
+  value: React.ReactNode;
+}) {
   return (
     <div className="flex items-start justify-between gap-4 py-3 border-b border-border/50 last:border-0">
-      <span className="text-[11px] font-black uppercase tracking-widest text-muted-foreground shrink-0">{label}</span>
-      <span className="text-sm font-bold text-foreground text-right">{value}</span>
+      <span className="text-[11px] font-black uppercase tracking-widest text-muted-foreground shrink-0">
+        {label}
+      </span>
+      <span className="text-sm font-bold text-foreground text-right">
+        {value}
+      </span>
     </div>
   );
 }
@@ -639,20 +771,26 @@ function Step4({
   onBack: () => void;
   onSubmit: () => void;
 }) {
-  const gateName = gateId ? (gates.find((g) => g.id === gateId)?.name ?? 'Unknown') : 'Any gate';
+  const gateName = gateId
+    ? (gates.find((g) => g.id === gateId)?.name ?? 'Unknown')
+    : 'Any gate';
   const typeLabel = QR_TYPE_LABELS[type] ?? type;
   const expiryLabel =
     type === QRCodeType.PERMANENT
       ? 'Never'
       : expiresAt
-      ? new Date(expiresAt).toLocaleString()
-      : 'No expiry';
+        ? new Date(expiresAt).toLocaleString()
+        : 'No expiry';
 
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-lg font-black uppercase tracking-tight">Review & Generate</h2>
-        <p className="text-sm text-muted-foreground mt-1">Confirm your choices before generating the QR code.</p>
+        <h2 className="text-lg font-black uppercase tracking-tight">
+          Review & Generate
+        </h2>
+        <p className="text-sm text-muted-foreground mt-1">
+          Confirm your choices before generating the QR code.
+        </p>
       </div>
 
       {/* Summary card */}
@@ -676,20 +814,39 @@ function Step4({
         <SummaryRow
           label="Guest"
           value={
-            guestName || guestEmail
-              ? <span>{guestName && <span className="block">{guestName}</span>}{guestEmail && <span className="block text-muted-foreground text-xs">{guestEmail}</span>}</span>
-              : <span className="text-muted-foreground/60 italic font-normal">Anonymous</span>
+            guestName || guestEmail ? (
+              <span>
+                {guestName && <span className="block">{guestName}</span>}
+                {guestEmail && (
+                  <span className="block text-muted-foreground text-xs">
+                    {guestEmail}
+                  </span>
+                )}
+              </span>
+            ) : (
+              <span className="text-muted-foreground/60 italic font-normal">
+                Anonymous
+              </span>
+            )
           }
         />
       </div>
 
       {error && (
-        <p role="alert" className="text-sm text-destructive font-medium px-1">{error}</p>
+        <p role="alert" className="text-sm text-destructive font-medium px-1">
+          {error}
+        </p>
       )}
 
       <div className="flex gap-3 pt-2">
-        <Button variant="outline" onClick={onBack} disabled={isPending} className="h-12 px-5 gap-1.5 font-bold uppercase tracking-widest text-[11px] rounded-xl">
-          <ChevronLeft className="h-4 w-4" aria-hidden="true" />Back
+        <Button
+          variant="outline"
+          onClick={onBack}
+          disabled={isPending}
+          className="h-12 px-5 gap-1.5 font-bold uppercase tracking-widest text-[11px] rounded-xl"
+        >
+          <ChevronLeft className="h-4 w-4" aria-hidden="true" />
+          Back
         </Button>
         <Button
           onClick={onSubmit}
@@ -697,9 +854,15 @@ function Step4({
           className="flex-1 h-12 gap-2 font-black uppercase tracking-widest text-[11px] rounded-xl"
         >
           {isPending ? (
-            <><span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />Generating…</>
+            <>
+              <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+              Generating…
+            </>
           ) : (
-            <><QrCode className="h-4 w-4" aria-hidden="true" />Generate QR Code</>
+            <>
+              <QrCode className="h-4 w-4" aria-hidden="true" />
+              Generate QR Code
+            </>
           )}
         </Button>
       </div>
@@ -744,10 +907,18 @@ function ResultView({
     <div className="space-y-6">
       {/* Success header */}
       <div className="flex items-center gap-3 p-4 rounded-2xl border border-success/30 bg-success/5">
-        <CheckCircle2 className="h-6 w-6 text-success shrink-0" aria-hidden="true" />
+        <CheckCircle2
+          className="h-6 w-6 text-success shrink-0"
+          aria-hidden="true"
+        />
         <div>
-          <p className="font-black text-foreground uppercase tracking-tight text-sm">QR Code Generated!</p>
-          <p className="text-xs text-muted-foreground mt-0.5">Type: <span className="font-bold text-foreground">{created.type}</span></p>
+          <p className="font-black text-foreground uppercase tracking-tight text-sm">
+            QR Code Generated!
+          </p>
+          <p className="text-xs text-muted-foreground mt-0.5">
+            Type:{' '}
+            <span className="font-bold text-foreground">{created.type}</span>
+          </p>
         </div>
       </div>
 
@@ -757,36 +928,69 @@ function ResultView({
         className="flex justify-center rounded-2xl border-2 border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-surface,#FFFFFF)] p-8 shadow-sm"
         aria-label="Generated QR code"
       >
-        <QRCode 
-          value={qrValue} 
-          size={200} 
-          bgColor={token('elevation.surface', '#FFFFFF')} 
-          fgColor={token('color.text', '#172B4D')} 
-          level="L" 
+        <QRCode
+          value={qrValue}
+          size={200}
+          bgColor={token('elevation.surface', '#FFFFFF')}
+          fgColor={token('color.text', '#172B4D')}
+          level="L"
         />
       </div>
 
       {/* Short URL */}
       {created.shortUrl ? (
         <div className="flex items-center gap-2 rounded-xl border border-primary/20 bg-primary/5 px-3 py-2.5">
-          <Link2 className="h-3.5 w-3.5 shrink-0 text-primary" aria-hidden="true" />
-          <span className="min-w-0 flex-1 truncate font-mono text-xs text-primary">{created.shortUrl}</span>
-          <span className="shrink-0 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-black text-primary uppercase tracking-wider">encoded in QR</span>
+          <Link2
+            className="h-3.5 w-3.5 shrink-0 text-primary"
+            aria-hidden="true"
+          />
+          <span className="min-w-0 flex-1 truncate font-mono text-xs text-primary">
+            {created.shortUrl}
+          </span>
+          <span className="shrink-0 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-black text-primary uppercase tracking-wider">
+            encoded in QR
+          </span>
         </div>
       ) : (
-        <p className="text-center text-xs text-warning">Short link unavailable — full payload encoded in QR.</p>
+        <p className="text-center text-xs text-warning">
+          Short link unavailable — full payload encoded in QR.
+        </p>
       )}
 
       {/* Action buttons */}
       <div className="grid grid-cols-3 gap-2">
-        <Button onClick={onCopy} variant="outline" className="gap-2 rounded-xl font-bold text-xs h-10">
-          {copied ? <><Check className="h-3.5 w-3.5 text-success" />Copied!</> : <><Copy className="h-3.5 w-3.5" />{created.shortUrl ? 'Copy URL' : 'Copy'}</>}
+        <Button
+          onClick={onCopy}
+          variant="outline"
+          className="gap-2 rounded-xl font-bold text-xs h-10"
+        >
+          {copied ? (
+            <>
+              <Check className="h-3.5 w-3.5 text-success" />
+              Copied!
+            </>
+          ) : (
+            <>
+              <Copy className="h-3.5 w-3.5" />
+              {created.shortUrl ? 'Copy URL' : 'Copy'}
+            </>
+          )}
         </Button>
-        <Button onClick={onDownloadSVG} variant="outline" className="gap-2 rounded-xl font-bold text-xs h-10">
-          <Download className="h-3.5 w-3.5" aria-hidden="true" />SVG
+        <Button
+          onClick={onDownloadSVG}
+          variant="outline"
+          className="gap-2 rounded-xl font-bold text-xs h-10"
+        >
+          <Download className="h-3.5 w-3.5" aria-hidden="true" />
+          SVG
         </Button>
-        <Button onClick={onDownloadJPG} variant="outline" className="gap-2 rounded-xl font-bold text-xs h-10">
-          <ImageDown className="h-3.5 w-3.5" aria-hidden="true" />JPG
+        <Button
+          onClick={onDownloadJPG}
+          variant="outline"
+          className="gap-2 rounded-xl font-bold text-xs h-10"
+        >
+          <ImageDown className="h-3.5 w-3.5" aria-hidden="true" />
+          JPG
         </Button>
       </div>
 
@@ -797,12 +1001,22 @@ function ResultView({
           className="flex w-full items-center justify-between px-4 py-3 text-xs text-muted-foreground hover:bg-muted/30 transition-colors"
           aria-expanded={showPayload}
         >
-          <span className="font-bold uppercase tracking-widest text-[10px]">Full signed payload</span>
-          <ChevronDown className={cn('h-3.5 w-3.5 transition-transform', showPayload && 'rotate-180')} aria-hidden="true" />
+          <span className="font-bold uppercase tracking-widest text-[10px]">
+            Full signed payload
+          </span>
+          <ChevronDown
+            className={cn(
+              'h-3.5 w-3.5 transition-transform',
+              showPayload && 'rotate-180'
+            )}
+            aria-hidden="true"
+          />
         </button>
         {showPayload && (
           <div className="border-t border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-background-neutral-bold,#44546F)] px-4 py-3">
-            <p className="break-all font-mono text-xs leading-relaxed text-[var(--ds-text-inverse,#FFFFFF)]">{created.qrString}</p>
+            <p className="break-all font-mono text-xs leading-relaxed text-[var(--ds-text-inverse,#FFFFFF)]">
+              {created.qrString}
+            </p>
           </div>
         )}
       </div>
@@ -829,17 +1043,24 @@ function ResultView({
             disabled={sendingEmail || !sendEmail}
             className="h-10 px-4 rounded-xl font-bold"
           >
-            {sendingEmail
-              ? <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-border border-t-foreground" />
-              : 'Send'}
+            {sendingEmail ? (
+              <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-border border-t-foreground" />
+            ) : (
+              'Send'
+            )}
           </Button>
         </div>
       </div>
 
       {/* Navigation */}
       <div className="flex gap-3 pt-2 border-t border-border">
-        <Button onClick={onReset} variant="outline" className="flex-1 h-11 gap-2 font-bold text-xs">
-          <ListRestart className="h-4 w-4" aria-hidden="true" />Create another
+        <Button
+          onClick={onReset}
+          variant="outline"
+          className="flex-1 h-11 gap-2 font-bold text-xs"
+        >
+          <ListRestart className="h-4 w-4" aria-hidden="true" />
+          Create another
         </Button>
         <Button asChild className="flex-1 h-11 font-bold text-xs">
           <Link href="/dashboard/qrcodes">View all QR codes</Link>
@@ -875,7 +1096,9 @@ export function CreateQRClient({
   const [expiresAt, setExpiresAt] = useState(defaultExpiry());
 
   // Step 3 guest state (used in Phase 3)
-  const [visitorMode, setVisitorMode] = useState<'contact' | 'manual'>('contact');
+  const [visitorMode, setVisitorMode] = useState<'contact' | 'manual'>(
+    'contact'
+  );
   const [selectedContactId, setSelectedContactId] = useState('');
   const [guestName, setGuestName] = useState('');
   const [guestEmail, setGuestEmail] = useState('');
@@ -892,8 +1115,14 @@ export function CreateQRClient({
   const qrRef = useRef<HTMLDivElement>(null);
 
   // Navigation helpers
-  const goForward = () => { setDirection(1); setStep((s) => s + 1); };
-  const goBack = () => { setDirection(-1); setStep((s) => s - 1); };
+  const goForward = () => {
+    setDirection(1);
+    setStep((s) => s + 1);
+  };
+  const goBack = () => {
+    setDirection(-1);
+    setStep((s) => s - 1);
+  };
 
   const showMaxUses = type === QRCodeType.RECURRING;
   const showExpiry = type !== QRCodeType.PERMANENT;
@@ -915,7 +1144,8 @@ export function CreateQRClient({
         type,
         gateId: gateId || null,
         maxUses: showMaxUses ? parseInt(maxUses) : null,
-        expiresAt: showExpiry && expiresAt ? new Date(expiresAt).toISOString() : null,
+        expiresAt:
+          showExpiry && expiresAt ? new Date(expiresAt).toISOString() : null,
         // Guest fields (Phase 3 wires these; empty string → null)
         guestName: guestName || null,
         guestEmail: guestEmail || null,
@@ -924,7 +1154,12 @@ export function CreateQRClient({
       });
 
       if (result?.success) {
-        setCreated({ qrString: result.qrString!, qrId: result.qrId!, type, shortUrl: result.shortUrl });
+        setCreated({
+          qrString: result.qrString!,
+          qrId: result.qrId!,
+          type,
+          shortUrl: result.shortUrl,
+        });
         setShowPayload(false);
         if (!sendEmail && guestEmail) setSendEmail(guestEmail);
       } else {
@@ -947,10 +1182,15 @@ export function CreateQRClient({
       const res = await fetch('/api/qr/send-email', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ qrId: created.qrId, email: sendEmail, shortUrl: created.shortUrl }),
+        body: JSON.stringify({
+          qrId: created.qrId,
+          email: sendEmail,
+          shortUrl: created.shortUrl,
+        }),
       });
-      const json = await res.json() as { success: boolean; message?: string };
-      if (!json.success) throw new Error(json.message ?? 'Failed to send email');
+      const json = (await res.json()) as { success: boolean; message?: string };
+      if (!json.success)
+        throw new Error(json.message ?? 'Failed to send email');
       toast.success(`Link sent to ${sendEmail}`);
     } catch (err: unknown) {
       toast.error(err instanceof Error ? err.message : 'Failed to send email');
@@ -962,7 +1202,9 @@ export function CreateQRClient({
   function downloadSVG() {
     const svg = qrRef.current?.querySelector('svg');
     if (!svg) return;
-    const blob = new Blob([new XMLSerializer().serializeToString(svg)], { type: 'image/svg+xml' });
+    const blob = new Blob([new XMLSerializer().serializeToString(svg)], {
+      type: 'image/svg+xml',
+    });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
@@ -983,7 +1225,7 @@ export function CreateQRClient({
     if (!ctx) return;
     const img = new Image();
     img.onload = () => {
-      ctx.fillStyle = '#ffffff';
+      ctx.fillStyle = token('elevation.surface', '#FFFFFF');
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
       canvas.toBlob(

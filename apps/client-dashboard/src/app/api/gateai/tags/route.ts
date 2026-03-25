@@ -36,7 +36,10 @@ export async function GET(request: Request) {
     return NextResponse.json({ tags });
   } catch (error) {
     console.error('[Tags GET Error]:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal Server Error' },
+      { status: 500 }
+    );
   }
 }
 
@@ -50,7 +53,10 @@ export async function POST(request: Request) {
     const body = await request.json();
     const result = createTagSchema.safeParse(body);
     if (!result.success) {
-      return NextResponse.json({ error: 'Invalid input', details: result.error }, { status: 400 });
+      return NextResponse.json(
+        { error: 'Invalid input', details: result.error },
+        { status: 400 }
+      );
     }
 
     const { name, color } = result.data;
@@ -59,7 +65,7 @@ export async function POST(request: Request) {
     const tag = await prisma.tag.create({
       data: {
         name,
-        color: color || '#ED4B00', // Default to Kimchi Orange if none provided
+        color: color || '#ED4B00', // token('color.brand','#ED4B00')
         organizationId: claims.orgId,
       },
       include: {
@@ -72,11 +78,22 @@ export async function POST(request: Request) {
     return NextResponse.json({ tag }, { status: 201 });
   } catch (error: unknown) {
     // Handle unique constraint violation gracefully
-    if (error && typeof error === 'object' && 'code' in error && error.code === 'P2002') {
-      return NextResponse.json({ error: 'Tag with this name already exists' }, { status: 409 });
+    if (
+      error &&
+      typeof error === 'object' &&
+      'code' in error &&
+      error.code === 'P2002'
+    ) {
+      return NextResponse.json(
+        { error: 'Tag with this name already exists' },
+        { status: 409 }
+      );
     }
     console.error('[Tags POST Error]:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal Server Error' },
+      { status: 500 }
+    );
   }
 }
 
@@ -93,8 +110,15 @@ export async function DELETE(request: Request) {
 
     // Bulk purge requires ADMIN or TENANT_ADMIN (we check role string)
     if (purgeAll) {
-      if (claims.role !== 'ADMIN' && claims.role !== 'TENANT_ADMIN' && claims.role !== 'MANAGER') {
-        return NextResponse.json({ error: 'Forbidden: Insufficient role' }, { status: 403 });
+      if (
+        claims.role !== 'ADMIN' &&
+        claims.role !== 'TENANT_ADMIN' &&
+        claims.role !== 'MANAGER'
+      ) {
+        return NextResponse.json(
+          { error: 'Forbidden: Insufficient role' },
+          { status: 403 }
+        );
       }
 
       const result = await prisma.tag.updateMany({
@@ -122,10 +146,18 @@ export async function DELETE(request: Request) {
 
     return NextResponse.json({ success: true });
   } catch (error: unknown) {
-    if (error && typeof error === 'object' && 'code' in error && error.code === 'P2025') {
+    if (
+      error &&
+      typeof error === 'object' &&
+      'code' in error &&
+      error.code === 'P2025'
+    ) {
       return NextResponse.json({ error: 'Tag not found' }, { status: 404 });
     }
     console.error('[Tags DELETE Error]:', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal Server Error' },
+      { status: 500 }
+    );
   }
 }

@@ -131,7 +131,12 @@ function SubmitButton({ isRtl }: { isRtl: boolean }) {
       {pending ? (
         <Loader2 className="h-4 w-4 animate-spin mx-auto" />
       ) : (
-        <span className={cn('flex items-center justify-center gap-2', isRtl && 'flex-row-reverse')}>
+        <span
+          className={cn(
+            'flex items-center justify-center gap-2',
+            isRtl && 'flex-row-reverse'
+          )}
+        >
           Sign in
           <ArrowRight className={cn('h-4 w-4', isRtl && 'rotate-180')} />
         </span>
@@ -175,20 +180,26 @@ export default function LoginPage() {
     previousErrorRef.current = state?.error;
   }, [state?.error]);
 
-
   return (
     <LoginShell
       variant="client"
       appName="GateFlow"
       heading={t('heading', 'Sign in')}
-      subtitle={t('subtitle', 'Manage gates, QR codes, and scans from anywhere. Zero-trust digital access.')}
+      subtitle={t(
+        'subtitle',
+        'Manage gates, QR codes, and scans from anywhere. Zero-trust digital access.'
+      )}
       topRight={<LoginControls locale={locale} />}
       errorKey={errorKey}
       isSuccess={isSuccess}
     >
       <Card className="border-none shadow-none bg-transparent">
         <CardContent className="px-0 pb-0">
-          <form action={formAction} className="space-y-6" dir={isRtl ? 'rtl' : 'ltr'}>
+          <form
+            action={formAction}
+            className="space-y-6"
+            dir={isRtl ? 'rtl' : 'ltr'}
+          >
             {state?.error && (
               <div className="rounded-xl border border-destructive/20 bg-destructive/5 px-4 py-3 text-sm text-destructive font-semibold flex items-center gap-2">
                 <AlertCircle className="h-4 w-4 shrink-0" />
@@ -200,7 +211,7 @@ export default function LoginPage() {
               <div className="space-y-2">
                 <Label
                   htmlFor="email"
-                  className="text-xs font-semibold text-[#42526E] dark:text-[#97A0AF]"
+                  className="text-xs font-semibold text-[var(--ds-text-subtle,#42526E)] dark:text-[var(--ds-text-subtlest,#97A0AF)]"
                 >
                   {isRtl ? 'البريد الإلكتروني' : 'Email'}
                 </Label>
@@ -219,7 +230,7 @@ export default function LoginPage() {
                 <div className="flex items-center justify-between">
                   <Label
                     htmlFor="password"
-                    className="text-xs font-semibold text-[#42526E] dark:text-[#97A0AF]"
+                    className="text-xs font-semibold text-[var(--ds-text-subtle,#42526E)] dark:text-[var(--ds-text-subtlest,#97A0AF)]"
                   >
                     {isRtl ? 'كلمة المرور' : 'Password'}
                   </Label>
@@ -228,7 +239,7 @@ export default function LoginPage() {
                     className="text-xs font-medium text-primary hover:underline transition-opacity"
                     tabIndex={-1}
                   >
-                    {isRtl ? 'نسيت كلمة المرور؟' : 'Can\'t log in?'}
+                    {isRtl ? 'نسيت كلمة المرور؟' : "Can't log in?"}
                   </a>
                 </div>
                 <div className="relative">

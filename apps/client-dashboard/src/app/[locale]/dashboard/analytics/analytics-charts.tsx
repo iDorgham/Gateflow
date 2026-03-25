@@ -15,7 +15,13 @@ import {
   ResponsiveContainer,
   Legend,
 } from 'recharts';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@gate-access/ui';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from '@gate-access/ui';
 import { useTranslation } from 'react-i18next';
 
 // ─── Types ─────────────────────────────────────────────────────────────────────
@@ -100,20 +106,20 @@ const DOW_LABELS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'] as const;
 const ADS_TOOLTIP_STYLE: React.CSSProperties = {
   fontSize: 12,
   borderRadius: 'var(--ds-radius-small, 3px)',
-  border: '1px solid var(--ds-border, #DFE1E6)',
-  background: 'var(--ds-surface-overlay, #FFFFFF)',
-  color: 'var(--ds-text, #172B4D)',
+  border: '1px solid var(--ds-border,#DFE1E6)',
+  background: 'var(--ds-surface-overlay,#FFFFFF)',
+  color: 'var(--ds-text,#172B4D)',
   boxShadow: 'var(--ds-shadow-raised)',
   padding: '8px 12px',
 };
 
 const ADS_TOOLTIP_LABEL_STYLE: React.CSSProperties = {
   fontWeight: 700,
-  color: 'var(--ds-text, #172B4D)',
+  color: 'var(--ds-text,#172B4D)',
 };
 
 const ADS_TOOLTIP_ITEM_STYLE: React.CSSProperties = {
-  color: 'var(--ds-text-subtle, #42526E)',
+  color: 'var(--ds-text-subtle,#42526E)',
 };
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -143,12 +149,17 @@ export function AnalyticsCharts({
       {/* Scans over time — Line chart */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">{t('analytics.scansOverTime')}</CardTitle>
+          <CardTitle className="text-base">
+            {t('analytics.scansOverTime')}
+          </CardTitle>
           <CardDescription>{t('analytics.scansOverTimeDesc')}</CardDescription>
         </CardHeader>
         <CardContent>
           <ResponsiveContainer width="100%" height={220}>
-            <LineChart data={daily} margin={{ top: 4, right: 16, left: 0, bottom: 0 }}>
+            <LineChart
+              data={daily}
+              margin={{ top: 4, right: 16, left: 0, bottom: 0 }}
+            >
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--muted))" />
               <XAxis
                 dataKey="date"
@@ -186,11 +197,15 @@ export function AnalyticsCharts({
         {/* Top gates — Horizontal bar chart */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">{t('analytics.topGates')}</CardTitle>
+            <CardTitle className="text-base">
+              {t('analytics.topGates')}
+            </CardTitle>
           </CardHeader>
           <CardContent>
             {topGates.length === 0 ? (
-              <p className="text-sm text-muted-foreground">{t('analytics.noGateActivity')}</p>
+              <p className="text-sm text-muted-foreground">
+                {t('analytics.noGateActivity')}
+              </p>
             ) : (
               <ResponsiveContainer width="100%" height={200}>
                 <BarChart
@@ -198,10 +213,17 @@ export function AnalyticsCharts({
                   layout="vertical"
                   margin={{ top: 0, right: 16, left: 0, bottom: 0 }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--muted))" horizontal={false} />
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="hsl(var(--muted))"
+                    horizontal={false}
+                  />
                   <XAxis
                     type="number"
-                    tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
+                    tick={{
+                      fontSize: 11,
+                      fill: 'hsl(var(--muted-foreground))',
+                    }}
                     tickLine={false}
                     axisLine={false}
                     allowDecimals={false}
@@ -219,7 +241,12 @@ export function AnalyticsCharts({
                     labelStyle={ADS_TOOLTIP_LABEL_STYLE}
                     itemStyle={ADS_TOOLTIP_ITEM_STYLE}
                   />
-                  <Bar dataKey="scans" name={t('analytics.scans')} fill="hsl(var(--chart-2))" radius={[0, 4, 4, 0]} />
+                  <Bar
+                    dataKey="scans"
+                    name={t('analytics.scans')}
+                    fill="hsl(var(--chart-2))"
+                    radius={[0, 4, 4, 0]}
+                  />
                 </BarChart>
               </ResponsiveContainer>
             )}
@@ -229,11 +256,15 @@ export function AnalyticsCharts({
         {/* Role breakdown — Pie chart */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">{t('analytics.scansByRole')}</CardTitle>
+            <CardTitle className="text-base">
+              {t('analytics.scansByRole')}
+            </CardTitle>
           </CardHeader>
           <CardContent>
             {roleBreakdown.length === 0 ? (
-              <p className="text-sm text-muted-foreground">{t('analytics.noRoleData')}</p>
+              <p className="text-sm text-muted-foreground">
+                {t('analytics.noRoleData')}
+              </p>
             ) : (
               <ResponsiveContainer width="100%" height={200}>
                 <PieChart>
@@ -251,17 +282,27 @@ export function AnalyticsCharts({
                     labelLine={false}
                   >
                     {roleBreakdown.map((_, index) => (
-                      <Cell key={index} fill={CHART_COLORS[index % CHART_COLORS.length]} />
+                      <Cell
+                        key={index}
+                        fill={CHART_COLORS[index % CHART_COLORS.length]}
+                      />
                     ))}
                   </Pie>
                   <Tooltip
-                    formatter={(value, name) => [value, String(name).replace(/_/g, ' ')]}
+                    formatter={(value, name) => [
+                      value,
+                      String(name).replace(/_/g, ' '),
+                    ]}
                     contentStyle={ADS_TOOLTIP_STYLE}
                     labelStyle={ADS_TOOLTIP_LABEL_STYLE}
                     itemStyle={ADS_TOOLTIP_ITEM_STYLE}
                   />
                   <Legend
-                    formatter={(value) => t(`overview.roles.${value}`, { defaultValue: String(value).replace(/_/g, ' ') })}
+                    formatter={(value) =>
+                      t(`overview.roles.${value}`, {
+                        defaultValue: String(value).replace(/_/g, ' '),
+                      })
+                    }
                     iconSize={10}
                     wrapperStyle={{ fontSize: 11 }}
                   />
@@ -277,12 +318,16 @@ export function AnalyticsCharts({
         {/* QR Type breakdown — Pie chart */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">{t('analytics.scansByQrType')}</CardTitle>
+            <CardTitle className="text-base">
+              {t('analytics.scansByQrType')}
+            </CardTitle>
             <CardDescription>{t('analytics.qrTypeDesc')}</CardDescription>
           </CardHeader>
           <CardContent>
             {qrTypeBreakdown.length === 0 ? (
-              <p className="text-sm text-muted-foreground">{t('analytics.noScanDataInRange')}</p>
+              <p className="text-sm text-muted-foreground">
+                {t('analytics.noScanDataInRange')}
+              </p>
             ) : (
               <ResponsiveContainer width="100%" height={200}>
                 <PieChart>
@@ -302,21 +347,31 @@ export function AnalyticsCharts({
                     {qrTypeBreakdown.map((entry) => (
                       <Cell
                         key={entry.type}
-                        fill={QR_TYPE_COLORS[entry.type] ?? 'hsl(var(--muted-foreground))'}
+                        fill={
+                          QR_TYPE_COLORS[entry.type] ??
+                          'hsl(var(--muted-foreground))'
+                        }
                       />
                     ))}
                   </Pie>
                   <Tooltip
                     formatter={(value, name) => [
                       value,
-                      String(name).charAt(0) + String(name).slice(1).toLowerCase(),
+                      String(name).charAt(0) +
+                        String(name).slice(1).toLowerCase(),
                     ]}
                     contentStyle={ADS_TOOLTIP_STYLE}
                     labelStyle={ADS_TOOLTIP_LABEL_STYLE}
                     itemStyle={ADS_TOOLTIP_ITEM_STYLE}
                   />
                   <Legend
-                    formatter={(value) => t(`qrcodes.types.${value}`, { defaultValue: String(value).charAt(0) + String(value).slice(1).toLowerCase() })}
+                    formatter={(value) =>
+                      t(`qrcodes.types.${value}`, {
+                        defaultValue:
+                          String(value).charAt(0) +
+                          String(value).slice(1).toLowerCase(),
+                      })
+                    }
                     iconSize={10}
                     wrapperStyle={{ fontSize: 11 }}
                   />
@@ -329,12 +384,18 @@ export function AnalyticsCharts({
         {/* Gate success rates — Horizontal bar chart */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">{t('analytics.gateSuccessRate')}</CardTitle>
-            <CardDescription>{t('analytics.gateSuccessRateDesc')}</CardDescription>
+            <CardTitle className="text-base">
+              {t('analytics.gateSuccessRate')}
+            </CardTitle>
+            <CardDescription>
+              {t('analytics.gateSuccessRateDesc')}
+            </CardDescription>
           </CardHeader>
           <CardContent>
             {gateSuccessRates.length === 0 ? (
-              <p className="text-sm text-muted-foreground">{t('analytics.noGateActivityInRange')}</p>
+              <p className="text-sm text-muted-foreground">
+                {t('analytics.noGateActivityInRange')}
+              </p>
             ) : (
               <ResponsiveContainer
                 width="100%"
@@ -345,12 +406,19 @@ export function AnalyticsCharts({
                   layout="vertical"
                   margin={{ top: 0, right: 40, left: 0, bottom: 0 }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--muted))" horizontal={false} />
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    stroke="hsl(var(--muted))"
+                    horizontal={false}
+                  />
                   <XAxis
                     type="number"
                     domain={[0, 100]}
                     tickFormatter={(v) => `${v}%`}
-                    tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
+                    tick={{
+                      fontSize: 11,
+                      fill: 'hsl(var(--muted-foreground))',
+                    }}
                     tickLine={false}
                     axisLine={false}
                   />
@@ -364,14 +432,22 @@ export function AnalyticsCharts({
                   />
                   <Tooltip
                     formatter={(value, _name, props) => {
-                      const { successes, total } = props.payload as GateSuccessRate;
-                      return [`${successes} / ${total} (${value}%)`, t('analytics.successRateLabel')];
+                      const { successes, total } =
+                        props.payload as GateSuccessRate;
+                      return [
+                        `${successes} / ${total} (${value}%)`,
+                        t('analytics.successRateLabel'),
+                      ];
                     }}
                     contentStyle={ADS_TOOLTIP_STYLE}
                     labelStyle={ADS_TOOLTIP_LABEL_STYLE}
                     itemStyle={ADS_TOOLTIP_ITEM_STYLE}
                   />
-                  <Bar dataKey="rate" name={t('analytics.successPct')} radius={[0, 4, 4, 0]}>
+                  <Bar
+                    dataKey="rate"
+                    name={t('analytics.successPct')}
+                    radius={[0, 4, 4, 0]}
+                  >
                     {gateSuccessRates.map((entry) => (
                       <Cell key={entry.name} fill={gateRateColor(entry.rate)} />
                     ))}
@@ -387,16 +463,28 @@ export function AnalyticsCharts({
       {statusBreakdown.length > 0 && (
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">{t('analytics.statusBreakdown30d')}</CardTitle>
+            <CardTitle className="text-base">
+              {t('analytics.statusBreakdown30d')}
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={Math.max(80, statusBreakdown.length * 44)}>
+            <ResponsiveContainer
+              width="100%"
+              height={Math.max(80, statusBreakdown.length * 44)}
+            >
               <BarChart
-                data={statusBreakdown.map((s) => ({ status: s.status.replace(/_/g, ' '), count: s._count }))}
+                data={statusBreakdown.map((s) => ({
+                  status: s.status.replace(/_/g, ' '),
+                  count: s._count,
+                }))}
                 layout="vertical"
                 margin={{ top: 0, right: 16, left: 0, bottom: 0 }}
               >
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--muted))" horizontal={false} />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="hsl(var(--muted))"
+                  horizontal={false}
+                />
                 <XAxis
                   type="number"
                   tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
@@ -417,11 +505,18 @@ export function AnalyticsCharts({
                   labelStyle={ADS_TOOLTIP_LABEL_STYLE}
                   itemStyle={ADS_TOOLTIP_ITEM_STYLE}
                 />
-                <Bar dataKey="count" name={t('analytics.scans')} radius={[0, 4, 4, 0]}>
+                <Bar
+                  dataKey="count"
+                  name={t('analytics.scans')}
+                  radius={[0, 4, 4, 0]}
+                >
                   {statusBreakdown.map((s) => (
                     <Cell
                       key={s.status}
-                      fill={STATUS_COLORS[s.status] ?? 'hsl(var(--muted-foreground))'}
+                      fill={
+                        STATUS_COLORS[s.status] ??
+                        'hsl(var(--muted-foreground))'
+                      }
                     />
                   ))}
                 </Bar>
@@ -435,7 +530,9 @@ export function AnalyticsCharts({
       {heatmap.length > 0 && (
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">{t('analytics.peakHoursHeatmap')}</CardTitle>
+            <CardTitle className="text-base">
+              {t('analytics.peakHoursHeatmap')}
+            </CardTitle>
             <CardDescription>{t('analytics.peakHoursDesc')}</CardDescription>
           </CardHeader>
           <CardContent className="overflow-x-auto">
@@ -457,22 +554,31 @@ export function AnalyticsCharts({
               {/* Rows: one per DOW */}
               {DOW_LABELS.map((dayKey, dow) => (
                 <div key={dow} className="flex items-center">
-                  <div className="w-10 shrink-0 text-right pr-2 text-[10px] text-muted-foreground">{t(`analytics.daysOfWeek.${dayKey}`)}</div>
+                  <div className="w-10 shrink-0 text-right pr-2 text-[10px] text-muted-foreground">
+                    {t(`analytics.daysOfWeek.${dayKey}`)}
+                  </div>
                   {Array.from({ length: 24 }, (_, hour) => {
-                    const cell = heatmap.find((c) => c.dow === dow && c.hour === hour);
+                    const cell = heatmap.find(
+                      (c) => c.dow === dow && c.hour === hour
+                    );
                     const intensity = cell ? cell.count / maxHeatCount : 0;
                     const dayLabel = t(`analytics.daysOfWeek.${dayKey}`);
                     return (
                       <div
                         key={hour}
-                        title={cell ? `${dayLabel} ${hour}:00 — ${cell.count} ${t('analytics.scans')}` : undefined}
+                        title={
+                          cell
+                            ? `${dayLabel} ${hour}:00 — ${cell.count} ${t('analytics.scans')}`
+                            : undefined
+                        }
                         className="m-[1px] flex-1 rounded-sm"
                         style={{
                           minWidth: 16,
                           height: 16,
-                          backgroundColor: intensity > 0
-                            ? `rgba(var(--primary-rgb),${Math.max(0.08, intensity)})`
-                            : 'hsl(var(--muted))',
+                          backgroundColor:
+                            intensity > 0
+                              ? `rgba(var(--primary-rgb),${Math.max(0.08, intensity)})`
+                              : 'hsl(var(--muted))',
                         }}
                       />
                     );
@@ -487,8 +593,12 @@ export function AnalyticsCharts({
       {/* Print styles */}
       <style jsx global>{`
         @media print {
-          .no-print { display: none !important; }
-          body { background: white !important; }
+          .no-print {
+            display: none !important;
+          }
+          body {
+            background: white !important;
+          }
         }
       `}</style>
     </div>

@@ -17,20 +17,30 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized' },
+        { status: 401 }
+      );
     }
 
     let body: unknown;
     try {
       body = await request.json();
     } catch {
-      return NextResponse.json({ success: false, message: 'Invalid JSON body' }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: 'Invalid JSON body' },
+        { status: 400 }
+      );
     }
 
     const validation = SendEmailRequestSchema.safeParse(body);
     if (!validation.success) {
       return NextResponse.json(
-        { success: false, message: 'Invalid request body', error: validation.error.flatten() },
+        {
+          success: false,
+          message: 'Invalid request body',
+          error: validation.error.flatten(),
+        },
         { status: 400 }
       );
     }
@@ -67,7 +77,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       qrBuffer = await QRCode.toBuffer(qrString, {
         width: 400,
         margin: 2,
-        color: { dark: '#0f172a', light: '#ffffff' },
+        color: {
+          dark: '#0f172a', // token('color.text','#0f172a')
+          light: '#ffffff', // token('elevation.surface','#ffffff')
+        },
         errorCorrectionLevel: 'M',
       });
     } catch (err) {
@@ -90,7 +103,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    const fromAddress = process.env.SMTP_FROM ?? `"GateFlow" <noreply@gateflow.io>`;
+    const fromAddress =
+      process.env.SMTP_FROM ?? `"GateFlow" <noreply@gateflow.io>`;
     const displayName = recipientName || recipientEmail;
 
     try {
@@ -111,7 +125,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     } catch (err) {
       console.error('Email send error:', err);
       return NextResponse.json(
-        { success: false, message: `Email delivery failed: ${(err as Error).message}` },
+        {
+          success: false,
+          message: `Email delivery failed: ${(err as Error).message}`,
+        },
         { status: 502 }
       );
     }

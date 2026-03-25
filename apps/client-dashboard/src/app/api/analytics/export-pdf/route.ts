@@ -91,14 +91,16 @@ async function fetchSummary(
     qrCode: { ...scanFilter.qrCode, utmCampaign: { not: null } },
   };
 
-  const [totalVisits, successCount, deniedCount, attributedScans] = await Promise.all([
-    prisma.scanLog.count({ where: scanFilter }),
-    prisma.scanLog.count({ where: { ...scanFilter, status: 'SUCCESS' } }),
-    prisma.scanLog.count({ where: { ...scanFilter, status: 'DENIED' } }),
-    prisma.scanLog.count({ where: attributedFilter }),
-  ]);
+  const [totalVisits, successCount, deniedCount, attributedScans] =
+    await Promise.all([
+      prisma.scanLog.count({ where: scanFilter }),
+      prisma.scanLog.count({ where: { ...scanFilter, status: 'SUCCESS' } }),
+      prisma.scanLog.count({ where: { ...scanFilter, status: 'DENIED' } }),
+      prisma.scanLog.count({ where: attributedFilter }),
+    ]);
 
-  const passRate = totalVisits > 0 ? Math.round((successCount / totalVisits) * 100) : 0;
+  const passRate =
+    totalVisits > 0 ? Math.round((successCount / totalVisits) * 100) : 0;
 
   // Approximate peak hour from ScanLog (optional; keep simple)
   const peakHourRow = await prisma.scanLog.groupBy({
@@ -187,7 +189,11 @@ async function fetchVisitsSeries(
   }
 
   const series: { date: string; count: number }[] = [];
-  for (let d = new Date(dateFromDate); d <= dateToDate; d.setDate(d.getDate() + 1)) {
+  for (
+    let d = new Date(dateFromDate);
+    d <= dateToDate;
+    d.setDate(d.getDate() + 1)
+  ) {
     const key = d.toISOString().slice(0, 10);
     series.push({ date: key, count: byDate.get(key) ?? 0 });
   }
@@ -217,7 +223,7 @@ function createPdfBuffer(
       align: locale === 'ar' ? 'right' : 'left',
     });
     doc.moveDown(0.5);
-    doc.fontSize(10).fillColor('#555555');
+    doc.fontSize(10).fillColor('#555555'); // token('color.text.subtle','#555555')
     doc.text(`${t(locale, 'workspace')}: ${orgName}`);
     doc.text(`${t(locale, 'dateRange')}: ${dateFrom} → ${dateTo}`);
     doc.moveDown(1);
@@ -225,17 +231,23 @@ function createPdfBuffer(
     // KPI section
     doc
       .fontSize(12)
-      .fillColor('#000000')
+      .fillColor('#000000') // token('color.text','#000000')
       .text(t(locale, 'keyMetrics'), { underline: true });
     doc.moveDown(0.5);
     doc.fontSize(10);
-    doc.text(`${t(locale, 'totalVisits')}: ${summary.totalVisits.toLocaleString()}`);
+    doc.text(
+      `${t(locale, 'totalVisits')}: ${summary.totalVisits.toLocaleString()}`
+    );
     doc.text(`${t(locale, 'passRate')}: ${summary.passRate}%`);
     doc.text(
       `${t(locale, 'peakHour')}: ${summary.peakHour >= 0 ? summary.peakHour + 'h' : '—'}`
     );
-    doc.text(`${t(locale, 'deniedScans')}: ${summary.deniedCount.toLocaleString()}`);
-    doc.text(`${t(locale, 'attributedScans')}: ${summary.attributedScans.toLocaleString()}`);
+    doc.text(
+      `${t(locale, 'deniedScans')}: ${summary.deniedCount.toLocaleString()}`
+    );
+    doc.text(
+      `${t(locale, 'attributedScans')}: ${summary.attributedScans.toLocaleString()}`
+    );
     doc.moveDown(1);
 
     // Visits over time (simple table)
@@ -245,18 +257,23 @@ function createPdfBuffer(
     const maxRows = 31;
     const rows = visits.slice(0, maxRows);
     rows.forEach((row) => {
-      doc.text(`${row.date}: ${row.count.toLocaleString()} ${t(locale, 'scans')}`);
+      doc.text(
+        `${row.date}: ${row.count.toLocaleString()} ${t(locale, 'scans')}`
+      );
     });
     if (visits.length > maxRows) {
       doc.text(
-        t(locale, 'moreDays').replace('{{count}}', String(visits.length - maxRows)),
+        t(locale, 'moreDays').replace(
+          '{{count}}',
+          String(visits.length - maxRows)
+        ),
         { oblique: true }
       );
     }
 
     // Footer
     doc.moveDown(2);
-    doc.fontSize(8).fillColor('#777777');
+    doc.fontSize(8).fillColor('#777777'); // token('color.text.subtlest','#777777')
     const nowIso = new Date().toISOString();
     doc.text(
       t(locale, 'generatedAt').replace('{{value}}', nowIso),
@@ -273,7 +290,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized' },
+        { status: 401 }
+      );
     }
 
     const { searchParams } = new URL(request.url);
@@ -287,7 +307,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     });
 
     if (!parsed.success) {
-      return NextResponse.json({ success: false, message: 'Invalid query params' }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: 'Invalid query params' },
+        { status: 400 }
+      );
     }
 
     const validation = await validateAnalyticsQuery(
@@ -296,7 +319,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     );
     if (!validation.ok) {
       const msg = (validation as { ok: false; message: string }).message;
-      return NextResponse.json({ success: false, message: msg }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: msg },
+        { status: 400 }
+      );
     }
     const { ctx } = validation;
 
@@ -337,4 +363,3 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     );
   }
 }
-
