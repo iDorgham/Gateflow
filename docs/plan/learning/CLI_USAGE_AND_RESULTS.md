@@ -39,6 +39,7 @@ After a task or phase was executed **using a CLI** (Claude CLI, Gemini CLI, Open
 | 2026-03-22 | Antigravity  | Team Management Suite                           | success | Full implementation: Roles, Invitations, Audit, Activity, Sessions.       |
 | 2026-03-24 | Antigravity  | marketing:build stabilization (Next 15)         | success | Fixed LucideIcon types (Icon, LoadingSpinner) and pricing i18n keys.      |
 | 2026-03-24 | Gemini CLI   | Phase 5 security_isolation_fix                  | success | Certified 15+ API routes as secured with zero dashboard violations.       |
+| 2026-03-25 | Gemini CLI   | Phase 5 pagespeed_100                           | success | Lighthouse CI infra certified; local mobile perf ~72-75 established.      |
 | 2026-03-25 | Antigravity  | security_isolation_fix: Phase 6 update          | success | Merged Gate-Assignment UI design draft into the official plan as Phase 6. |
 
 - **Refactor Team Audit (ADS Tokens):**

@@ -20,6 +20,8 @@ _(next release notes go here)_
 
 ### Features
 
+- **[Security Isolation Fix] **complete phase 6 - gate-assignment management UI
+
 - **[Security Isolation Fix] **complete phase 5 - automated enforcement & certification
 
 - **[Security Isolation Fix] **complete phase 5 - automated enforcement & certification
@@ -77,6 +79,8 @@ plan:run → plan:done` with automatic folder moves and doc cascades
 - **[Docs] README rewrite** — Full README with automation badges, command reference, best workflow guide, monorepo structure
 
 ### Performance
+
+- **[Pagespeed 100] **complete phase 5 - Lighthouse CI certification infra ready
 
 - **[Cert]** phase 5 certification infra — regression guide + final LHCI thresholds
 

@@ -79,6 +79,7 @@
     "@commitlint/cli": "^20.5.0",
     "@commitlint/config-conventional": "^20.5.0",
     "@gate-access/config": "workspace:*",
+    "@lhci/cli": "^0.15.1",
     "@turbo/gen": "^1.13.4",
     "@types/faker": "5.5.3",
     "@types/jest": "^30.0.0",
