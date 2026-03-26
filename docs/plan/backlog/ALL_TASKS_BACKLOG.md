@@ -40,6 +40,8 @@
 
 **IDEA:** `docs/plan/context/IDEA_maintenance_management.md`
 
+**PLAN:** `docs/plan/planning/maintenance_management/PLAN_maintenance_management.md`
+
 **Status:** 🆕 Open
 
 **Target:** Q1 2027
