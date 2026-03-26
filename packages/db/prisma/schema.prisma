@@ -64,6 +64,8 @@ model Organization {
   watchlistEntries              WatchlistEntry[]
   webhooks                      Webhook[]
   shortLinkClicks               ShortLinkClick[]
+  communicationConfig           OrganizationCommunicationConfig?
+  communicationLogs             CommunicationLog[]
 
   @@index([deletedAt])
 }
@@ -140,6 +142,7 @@ model User {
   unit            Unit?
   organization    Organization?    @relation(fields: [organizationId], references: [id])
   role            Role             @relation(fields: [roleId], references: [id])
+  communicationLogs CommunicationLog[]
 
   @@index([organizationId])
   @@index([roleId])
@@ -587,6 +590,7 @@ model Contact {
   organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   contactTags    ContactTag[]
   units          ContactUnit[]
+  communicationLogs CommunicationLog[]
 
   @@index([organizationId])
   @@index([deletedAt])
@@ -897,4 +901,37 @@ enum AiAutomationStatus {
   ACTIVE
   PAUSED
   COMPLETED
+}
+
+model OrganizationCommunicationConfig {
+  id               String       @id @default(cuid())
+  organizationId   String       @unique
+  provider         String       @default("WHATSAPP") // e.g., WHATSAPP, SMS
+  apiKey           String?
+  providerSettings Json?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+}
+
+model CommunicationLog {
+  id             String       @id @default(cuid())
+  organizationId String
+  userId         String?
+  contactId      String?
+  provider       String
+  type           String       // e.g., INVITATION, ALERT
+  status         String       @default("PENDING") // e.g., PENDING, SENT, FAILED, DELIVERED
+  metadata       Json?
+  createdAt      DateTime     @default(now())
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user           User?        @relation(fields: [userId], references: [id])
+  contact        Contact?     @relation(fields: [contactId], references: [id])
+
+  @@index([organizationId])
+  @@index([userId])
+  @@index([contactId])
+  @@index([createdAt])
 }

@@ -11,9 +11,9 @@
 
 **Scope:**
 
-- **Schema**: Extend `schema.prisma` with `CommunicationGateway` (config) and `CommunicationLog` models.
-- **Provider API**: Implement an internal utility `/lib/crm/communication-provider.ts` for abstraction (SMS/WhatsApp).
-- **Audit**: Add `AuditLog` creation to the existing Contacts/Units CSV export endpoints.
+- **Schema**: Extend `schema.prisma` with `OrganizationCommunicationConfig` (config) and `CommunicationLog` models. [x] **Manual Implementation Complete**
+- **Provider API**: Implement an internal utility `/lib/crm/communication-provider.ts` for abstraction (SMS/WhatsApp). [ ] **Next Step**
+- **Audit**: Add `AuditLog` creation to the existing Contacts/Units CSV export endpoints. [ ] **In Progress**
 
 **Deliverables:**
 

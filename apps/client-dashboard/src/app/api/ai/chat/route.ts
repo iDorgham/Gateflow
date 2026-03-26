@@ -1,5 +1,5 @@
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
-import { streamText, StreamData } from 'ai';
+import { streamText } from 'ai';
 import { requireAuth } from '@/lib/dashboard-auth';
 import { getOrganizationContext } from '@/lib/ai/context-providers';
 import { checkRateLimit } from '@/lib/rate-limit';
@@ -10,13 +10,11 @@ import { automationTools } from '@/lib/ai/tools/automation-tools';
 export const maxDuration = 60;
 
 export async function POST(req: Request) {
-  const data = new StreamData();
-  
   try {
     console.log('>>> [GateAI] [STEP 1] Incoming request');
 
     // 1. Authenticate
-    const session = await requireAuth().catch(err => {
+    const session = await requireAuth().catch((err) => {
       console.error('>>> [GateAI] [FAIL 1] Auth Error:', err);
       throw err;
     });
@@ -30,21 +28,29 @@ export async function POST(req: Request) {
 
     // 2. Redundant Multi-tenant Guard: Client-provided orgId MUST match session
     if (clientOrgId && clientOrgId !== session.user.organizationId) {
-      console.error(`>>> [GateAI] [SECURITY ALERT] Org ID mismatch! Session: ${session.user.organizationId}, Request: ${clientOrgId}`);
+      console.error(
+        `>>> [GateAI] [SECURITY ALERT] Org ID mismatch! Session: ${session.user.organizationId}, Request: ${clientOrgId}`
+      );
       return new Response('Forbidden: Organization Mismatch', { status: 403 });
     }
 
     // 3. Rate Limiting
-    const rateLimit = await checkRateLimit(`ai-chat:${session.user.id}`, 20, 60_000);
+    const rateLimit = await checkRateLimit(
+      `ai-chat:${session.user.id}`,
+      20,
+      60_000
+    );
     if (!rateLimit.allowed) {
-      return new Response(
-        JSON.stringify({ error: "ai.rateLimit" }),
-        { status: 429, headers: { 'Content-Type': 'application/json' } }
-      );
+      return new Response(JSON.stringify({ error: 'ai.rateLimit' }), {
+        status: 429,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
 
     // 3. Fetch context
-    const orgContext = await getOrganizationContext(session.user.organizationId).catch(() => {
+    const orgContext = await getOrganizationContext(
+      session.user.organizationId
+    ).catch(() => {
       return null;
     });
 
@@ -58,9 +64,6 @@ export async function POST(req: Request) {
       status: 'EXECUTED',
     });
 
-    // Append actionId to stream data for the frontend
-    data.append({ actionId: actionLog.id });
-
     // 5. Initialize Gemini
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
@@ -68,7 +71,7 @@ export async function POST(req: Request) {
     }
 
     const google = createGoogleGenerativeAI({ apiKey });
-    const model = google("gemini-flash-latest", {
+    const model = google('gemini-flash-latest', {
       structuredOutputs: false,
     });
 
@@ -94,11 +97,14 @@ User Role: ${session.user.role}.
 ### Guidelines:
 1. Answer questions based ONLY on the data context provided.
 2. If info is missing, say you don't know.
-${isResident ? `
+${
+  isResident
+    ? `
 3. As a RESIDENT, your focus is to help management guest passes, view visitor history, and answer community questions.
 4. You cannot generate complex analytics charts or reports for residents.
 5. If a resident asks to create a guest pass, guide them to the QRs tab or explain how to use the sharing features.
-` : `
+`
+    : `
 3. You can suggest charts when analytics data is requested. To render a chart, output a JSON block like this:
    \`\`\`json
    {
@@ -150,27 +156,31 @@ ${isResident ? `
      }
    }
    \`\`\`
-Answer concisely.`}`,
+Answer concisely.`
+}`,
       onFinish: async (finish) => {
         if (finish.usage) {
           await AiActionService.recordUsage(actionLog.id, {
             promptTokens: finish.usage.promptTokens,
             completionTokens: finish.usage.completionTokens,
             totalTokens: finish.usage.totalTokens,
-          }).catch(err => console.error(">>> [GateAI] Usage log failed:", err));
+          }).catch((err) =>
+            console.error('>>> [GateAI] Usage log failed:', err)
+          );
         }
-        data.close();
       },
       onError: (error) => {
-        console.error(">>> [GateAI] [STREAM ERROR]", error);
-        data.close();
-      }
+        console.error('>>> [GateAI] [STREAM ERROR]', error);
+      },
     });
 
-    return result.toDataStreamResponse({ data });
-    } catch (error: unknown) {
-      data.close();
-      const errorMessage = error instanceof Error ? error.message : "Internal Server Error";
-      return new Response(JSON.stringify({ error: "ai.chatError", details: errorMessage }), { status: 500 });
-    }
+    return result.toDataStreamResponse();
+  } catch (error: unknown) {
+    const errorMessage =
+      error instanceof Error ? error.message : 'Internal Server Error';
+    return new Response(
+      JSON.stringify({ error: 'ai.chatError', details: errorMessage }),
+      { status: 500 }
+    );
+  }
 }

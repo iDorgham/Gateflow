@@ -20,6 +20,8 @@ _(next release notes go here)_
 
 ### Features
 
+- **[Crm] **5-phase execution roadmap for projects_crm v2.0
+
 - **[Crm] **initialize projects_crm v2.0 planning
 
 - **[Perf] **phase 5 live audit + manifest fix + ADS token cleanup + ai-sdk security patch

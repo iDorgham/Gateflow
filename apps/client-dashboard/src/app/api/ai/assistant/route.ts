@@ -4,7 +4,12 @@ import { z } from 'zod';
 import { randomUUID } from 'crypto';
 import { init as initCuid2 } from '@paralleldrive/cuid2';
 import { type NextRequest } from 'next/server';
-import { prisma, UnitType, QRCodeType as PrismaQRCodeType, TaskStatus } from '@gate-access/db';
+import {
+  prisma,
+  UnitType,
+  QRCodeType as PrismaQRCodeType,
+  TaskStatus,
+} from '@gate-access/db';
 import { signQRPayload, QRCodeType } from '@gate-access/types';
 import { getSessionClaims } from '@/lib/auth-cookies';
 
@@ -19,7 +24,9 @@ function log(msg: string, data?: unknown) {
 }
 
 function getGoogleClient() {
-  return createGoogleGenerativeAI({ apiKey: process.env.GEMINI_API_KEY || 'missing-key' });
+  return createGoogleGenerativeAI({
+    apiKey: process.env.GEMINI_API_KEY || 'missing-key',
+  });
 }
 
 // ─── QR creation helper (mirrors qrcodes/create/actions.ts) ──────────────────
@@ -34,10 +41,16 @@ interface QRCreateOptions {
   guestEmail?: string | null;
 }
 
-async function createOneQR(opts: QRCreateOptions): Promise<{ qrId: string; shortUrl: string | null }> {
+async function createOneQR(
+  opts: QRCreateOptions
+): Promise<{ qrId: string; shortUrl: string | null }> {
   const secret = process.env.QR_SIGNING_SECRET ?? '';
   const resolvedMaxUses =
-    opts.type === QRCodeType.SINGLE ? 1 : opts.type === QRCodeType.PERMANENT ? null : (opts.maxUses ?? null);
+    opts.type === QRCodeType.SINGLE
+      ? 1
+      : opts.type === QRCodeType.PERMANENT
+        ? null
+        : (opts.maxUses ?? null);
 
   const qrId = randomUUID();
   const nonce = randomUUID();
@@ -47,7 +60,8 @@ async function createOneQR(opts: QRCreateOptions): Promise<{ qrId: string; short
     organizationId: opts.orgId,
     type: opts.type,
     maxUses: resolvedMaxUses,
-    expiresAt: opts.type === QRCodeType.PERMANENT ? null : (opts.expiresAt ?? null),
+    expiresAt:
+      opts.type === QRCodeType.PERMANENT ? null : (opts.expiresAt ?? null),
     issuedAt: new Date().toISOString(),
     nonce,
   };
@@ -69,7 +83,10 @@ async function createOneQR(opts: QRCreateOptions): Promise<{ qrId: string; short
   });
 
   const shortId = createShortId();
-  const appUrl = process.env.NEXT_PUBLIC_QR_BASE_URL ?? process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3001';
+  const appUrl =
+    process.env.NEXT_PUBLIC_QR_BASE_URL ??
+    process.env.NEXT_PUBLIC_APP_URL ??
+    'http://localhost:3001';
   const shortUrl = `${appUrl}/s/${shortId}`;
   const linkExpiresAt = opts.expiresAt
     ? new Date(new Date(opts.expiresAt).getTime() + 60 * 60 * 1000)
@@ -103,23 +120,28 @@ export async function POST(request: NextRequest): Promise<Response> {
   }
 
   if (!process.env.GEMINI_API_KEY) {
-    return new Response(JSON.stringify({ error: 'AI service not configured' }), {
-      status: 503,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return new Response(
+      JSON.stringify({ error: 'AI service not configured' }),
+      {
+        status: 503,
+        headers: { 'Content-Type': 'application/json' },
+      }
+    );
   }
 
   let body;
   try {
     body = await request.json();
   } catch {
-    return new Response(JSON.stringify({ error: 'Invalid JSON' }), { status: 400 });
+    return new Response(JSON.stringify({ error: 'Invalid JSON' }), {
+      status: 400,
+    });
   }
 
   const { messages } = body as { messages: CoreMessage[] };
 
   try {
-    const result = streamText({
+    const result = await streamText({
       model: getGoogleClient()('gemini-1.5-flash'),
       system: `You are the GateFlow AI Assistant — an intelligent helper for a gate access control SaaS platform.
 You help users manage their organization through natural language.
@@ -146,24 +168,61 @@ Rules:
       messages,
       maxSteps: 6,
       tools: {
-
         // ── createQR ──────────────────────────────────────────────────────────
         createQR: tool({
-          description: 'Create one or more signed QR access codes. Use count > 1 to create a set.',
+          description:
+            'Create one or more signed QR access codes. Use count > 1 to create a set.',
           parameters: z.object({
-            count: z.number().int().min(1).max(20).default(1).describe('Number of QR codes to create (1–20)'),
-            type: z.enum(['SINGLE', 'RECURRING', 'PERMANENT']).default('SINGLE').describe('QR code type'),
-            gateId: z.string().optional().describe('Restrict to a specific gate ID'),
-            expiresAt: z.string().optional().describe('ISO expiry date (e.g. 2026-04-01T00:00:00Z)'),
-            maxUses: z.number().int().min(1).optional().describe('Required for RECURRING type'),
-            guestName: z.string().optional().describe('Optional guest name to associate'),
-            guestEmail: z.string().optional().describe('Optional guest email to associate'),
+            count: z
+              .number()
+              .int()
+              .min(1)
+              .max(20)
+              .default(1)
+              .describe('Number of QR codes to create (1–20)'),
+            type: z
+              .enum(['SINGLE', 'RECURRING', 'PERMANENT'])
+              .default('SINGLE')
+              .describe('QR code type'),
+            gateId: z
+              .string()
+              .optional()
+              .describe('Restrict to a specific gate ID'),
+            expiresAt: z
+              .string()
+              .optional()
+              .describe('ISO expiry date (e.g. 2026-04-01T00:00:00Z)'),
+            maxUses: z
+              .number()
+              .int()
+              .min(1)
+              .optional()
+              .describe('Required for RECURRING type'),
+            guestName: z
+              .string()
+              .optional()
+              .describe('Optional guest name to associate'),
+            guestEmail: z
+              .string()
+              .optional()
+              .describe('Optional guest email to associate'),
           }),
-          execute: async ({ count, type, gateId, expiresAt, maxUses, guestName, guestEmail }) => {
+          execute: async ({
+            count,
+            type,
+            gateId,
+            expiresAt,
+            maxUses,
+            guestName,
+            guestEmail,
+          }) => {
             log('createQR', { count, type });
             const secret = process.env.QR_SIGNING_SECRET ?? '';
             if (!secret || secret.length < 32) {
-              return { success: false, error: 'QR_SIGNING_SECRET not configured.' };
+              return {
+                success: false,
+                error: 'QR_SIGNING_SECRET not configured.',
+              };
             }
             const created: { qrId: string; shortUrl: string | null }[] = [];
             for (let i = 0; i < count; i++) {
@@ -184,10 +243,14 @@ Rules:
 
         // ── createProject ─────────────────────────────────────────────────────
         createProject: tool({
-          description: 'Create a new project in the organization, optionally with named gates.',
+          description:
+            'Create a new project in the organization, optionally with named gates.',
           parameters: z.object({
             name: z.string().min(1).describe('Project name'),
-            gates: z.array(z.string().min(1)).default([]).describe('Gate names to create under this project'),
+            gates: z
+              .array(z.string().min(1))
+              .default([])
+              .describe('Gate names to create under this project'),
           }),
           execute: async ({ name, gates }) => {
             log('createProject', { name, gates });
@@ -198,7 +261,12 @@ Rules:
             const createdGates = [];
             for (const gateName of gates) {
               const gate = await prisma.gate.create({
-                data: { name: gateName, organizationId: claims.orgId, projectId: project.id, isActive: true },
+                data: {
+                  name: gateName,
+                  organizationId: claims.orgId,
+                  projectId: project.id,
+                  isActive: true,
+                },
                 select: { id: true, name: true },
               });
               createdGates.push(gate);
@@ -212,25 +280,51 @@ Rules:
           description: 'Create a residential unit (apartment, villa, etc.)',
           parameters: z.object({
             name: z.string().min(1).describe('Unit identifier, e.g. "A-101"'),
-            type: z.enum(['STUDIO', 'ONE_BR', 'TWO_BR', 'THREE_BR', 'FOUR_BR', 'VILLA', 'PENTHOUSE', 'COMMERCIAL']),
-            projectId: z.string().optional().describe('Project ID to link this unit to'),
-            contactId: z.string().optional().describe('Contact ID to link as resident'),
+            type: z.enum([
+              'STUDIO',
+              'ONE_BR',
+              'TWO_BR',
+              'THREE_BR',
+              'FOUR_BR',
+              'VILLA',
+              'PENTHOUSE',
+              'COMMERCIAL',
+            ]),
+            projectId: z
+              .string()
+              .optional()
+              .describe('Project ID to link this unit to'),
+            contactId: z
+              .string()
+              .optional()
+              .describe('Contact ID to link as resident'),
           }),
           execute: async ({ name, type, projectId, contactId }) => {
             log('createUnit', { name, type });
             const QUOTA: Record<string, number> = {
-              STUDIO: 3, ONE_BR: 5, TWO_BR: 8, THREE_BR: 10, FOUR_BR: 12, VILLA: 20, PENTHOUSE: 20, COMMERCIAL: 5,
+              STUDIO: 3,
+              ONE_BR: 5,
+              TWO_BR: 8,
+              THREE_BR: 10,
+              FOUR_BR: 12,
+              VILLA: 20,
+              PENTHOUSE: 20,
+              COMMERCIAL: 5,
             };
             const unit = await prisma.unit.create({
               data: {
-                name, type: type as UnitType, qrQuota: QUOTA[type] ?? 5,
+                name,
+                type: type as UnitType,
+                qrQuota: QUOTA[type] ?? 5,
                 organizationId: claims.orgId,
                 ...(projectId ? { projectId } : {}),
               },
               select: { id: true, name: true, type: true },
             });
             if (contactId) {
-              await prisma.contactUnit.create({ data: { contactId, unitId: unit.id } });
+              await prisma.contactUnit.create({
+                data: { contactId, unitId: unit.id },
+              });
             }
             return { success: true, unit };
           },
@@ -238,19 +332,47 @@ Rules:
 
         // ── getOrgStats ───────────────────────────────────────────────────────
         getOrgStats: tool({
-          description: 'Get real-time counts for the organization: projects, gates, QR codes, contacts, units, scans.',
+          description:
+            'Get real-time counts for the organization: projects, gates, QR codes, contacts, units, scans.',
           parameters: z.object({}),
           execute: async () => {
             log('getOrgStats');
-            const [projects, gates, qrCodes, contacts, units, scans] = await Promise.all([
-              prisma.project.count({ where: { organizationId: claims.orgId, deletedAt: null } }),
-              prisma.gate.count({ where: { organizationId: claims.orgId, deletedAt: null } }),
-              prisma.qRCode.count({ where: { organizationId: claims.orgId, deletedAt: null, isActive: true } }),
-              prisma.contact.count({ where: { organizationId: claims.orgId, deletedAt: null } }),
-              prisma.unit.count({ where: { organizationId: claims.orgId, deletedAt: null } }),
-              prisma.scanLog.count({ where: { gate: { organizationId: claims.orgId } } }),
-            ]);
-            return { success: true, stats: { projects, gates, activeQRCodes: qrCodes, contacts, units, totalScans: scans } };
+            const [projects, gates, qrCodes, contacts, units, scans] =
+              await Promise.all([
+                prisma.project.count({
+                  where: { organizationId: claims.orgId, deletedAt: null },
+                }),
+                prisma.gate.count({
+                  where: { organizationId: claims.orgId, deletedAt: null },
+                }),
+                prisma.qRCode.count({
+                  where: {
+                    organizationId: claims.orgId,
+                    deletedAt: null,
+                    isActive: true,
+                  },
+                }),
+                prisma.contact.count({
+                  where: { organizationId: claims.orgId, deletedAt: null },
+                }),
+                prisma.unit.count({
+                  where: { organizationId: claims.orgId, deletedAt: null },
+                }),
+                prisma.scanLog.count({
+                  where: { gate: { organizationId: claims.orgId } },
+                }),
+              ]);
+            return {
+              success: true,
+              stats: {
+                projects,
+                gates,
+                activeQRCodes: qrCodes,
+                contacts,
+                units,
+                totalScans: scans,
+              },
+            };
           },
         }),
 
@@ -263,7 +385,9 @@ Rules:
             const projects = await prisma.project.findMany({
               where: { organizationId: claims.orgId, deletedAt: null },
               select: {
-                id: true, name: true, createdAt: true,
+                id: true,
+                name: true,
+                createdAt: true,
                 _count: { select: { gates: true, units: true } },
               },
               orderBy: { name: 'asc' },
@@ -272,8 +396,10 @@ Rules:
             return {
               success: true,
               projects: projects.map((p) => ({
-                id: p.id, name: p.name,
-                gateCount: p._count.gates, unitCount: p._count.units,
+                id: p.id,
+                name: p.name,
+                gateCount: p._count.gates,
+                unitCount: p._count.units,
                 createdAt: p.createdAt.toISOString(),
               })),
             };
@@ -288,15 +414,27 @@ Rules:
             log('listGates', { projectId });
             const gates = await prisma.gate.findMany({
               where: {
-                organizationId: claims.orgId, deletedAt: null, isActive: true,
+                organizationId: claims.orgId,
+                deletedAt: null,
+                isActive: true,
                 ...(projectId ? { projectId } : {}),
               },
-              select: { id: true, name: true, isActive: true, project: { select: { name: true } } },
+              select: {
+                id: true,
+                name: true,
+                isActive: true,
+                project: { select: { name: true } },
+              },
               take: 20,
             });
             return {
               success: true,
-              gates: gates.map((g) => ({ id: g.id, name: g.name, isActive: g.isActive, projectName: g.project?.name ?? null })),
+              gates: gates.map((g) => ({
+                id: g.id,
+                name: g.name,
+                isActive: g.isActive,
+                projectName: g.project?.name ?? null,
+              })),
             };
           },
         }),
@@ -304,27 +442,56 @@ Rules:
         // ── listContacts ──────────────────────────────────────────────────────
         listContacts: tool({
           description: 'Search and list contacts by name or email.',
-          parameters: z.object({ search: z.string().optional().describe('Optional search term') }),
+          parameters: z.object({
+            search: z.string().optional().describe('Optional search term'),
+          }),
           execute: async ({ search }) => {
             log('listContacts', { search });
             const contacts = await prisma.contact.findMany({
               where: {
-                organizationId: claims.orgId, deletedAt: null,
-                ...(search ? {
-                  OR: [
-                    { firstName: { contains: search, mode: 'insensitive' as const } },
-                    { lastName: { contains: search, mode: 'insensitive' as const } },
-                    { email: { contains: search, mode: 'insensitive' as const } },
-                  ],
-                } : {}),
+                organizationId: claims.orgId,
+                deletedAt: null,
+                ...(search
+                  ? {
+                      OR: [
+                        {
+                          firstName: {
+                            contains: search,
+                            mode: 'insensitive' as const,
+                          },
+                        },
+                        {
+                          lastName: {
+                            contains: search,
+                            mode: 'insensitive' as const,
+                          },
+                        },
+                        {
+                          email: {
+                            contains: search,
+                            mode: 'insensitive' as const,
+                          },
+                        },
+                      ],
+                    }
+                  : {}),
               },
-              select: { id: true, firstName: true, lastName: true, email: true, phone: true },
+              select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                email: true,
+                phone: true,
+              },
               take: 10,
             });
             return {
               success: true,
               contacts: contacts.map((c) => ({
-                id: c.id, name: `${c.firstName} ${c.lastName}`, email: c.email, phone: c.phone,
+                id: c.id,
+                name: `${c.firstName} ${c.lastName}`,
+                email: c.email,
+                phone: c.phone,
               })),
             };
           },
@@ -333,7 +500,9 @@ Rules:
         // ── listRecentScans ───────────────────────────────────────────────────
         listRecentScans: tool({
           description: 'Get the last 20 scan logs for the organization.',
-          parameters: z.object({ gateId: z.string().optional().describe('Optional gate filter') }),
+          parameters: z.object({
+            gateId: z.string().optional().describe('Optional gate filter'),
+          }),
           execute: async ({ gateId }) => {
             log('listRecentScans', { gateId });
             const scans = await prisma.scanLog.findMany({
@@ -341,14 +510,21 @@ Rules:
                 gate: { organizationId: claims.orgId },
                 ...(gateId ? { gateId } : {}),
               },
-              select: { id: true, status: true, scannedAt: true, gate: { select: { name: true } } },
+              select: {
+                id: true,
+                status: true,
+                scannedAt: true,
+                gate: { select: { name: true } },
+              },
               orderBy: { scannedAt: 'desc' },
               take: 20,
             });
             return {
               success: true,
               scans: scans.map((s) => ({
-                id: s.id, status: s.status, gateName: s.gate.name,
+                id: s.id,
+                status: s.status,
+                gateName: s.gate.name,
                 scannedAt: s.scannedAt.toISOString(),
               })),
             };
@@ -357,20 +533,39 @@ Rules:
 
         // ── listUnits ─────────────────────────────────────────────────────────
         listUnits: tool({
-          description: 'List residential units, optionally filtered by project or unit type.',
+          description:
+            'List residential units, optionally filtered by project or unit type.',
           parameters: z.object({
             projectId: z.string().optional(),
-            unitType: z.enum(['STUDIO', 'ONE_BR', 'TWO_BR', 'THREE_BR', 'FOUR_BR', 'VILLA', 'PENTHOUSE', 'COMMERCIAL']).optional(),
+            unitType: z
+              .enum([
+                'STUDIO',
+                'ONE_BR',
+                'TWO_BR',
+                'THREE_BR',
+                'FOUR_BR',
+                'VILLA',
+                'PENTHOUSE',
+                'COMMERCIAL',
+              ])
+              .optional(),
           }),
           execute: async ({ projectId, unitType }) => {
             log('listUnits', { projectId, unitType });
             const units = await prisma.unit.findMany({
               where: {
-                organizationId: claims.orgId, deletedAt: null,
+                organizationId: claims.orgId,
+                deletedAt: null,
                 ...(projectId ? { projectId } : {}),
                 ...(unitType ? { type: unitType as UnitType } : {}),
               },
-              select: { id: true, name: true, type: true, building: true, qrQuota: true },
+              select: {
+                id: true,
+                name: true,
+                type: true,
+                building: true,
+                qrQuota: true,
+              },
               take: 20,
             });
             return { success: true, units };
@@ -382,8 +577,14 @@ Rules:
           description: 'Create a task for the organization team.',
           parameters: z.object({
             title: z.string().min(1).max(200).describe('Task title'),
-            description: z.string().optional().describe('Optional task description'),
-            dueDate: z.string().optional().describe('Optional due date (ISO format, e.g. 2026-04-01)'),
+            description: z
+              .string()
+              .optional()
+              .describe('Optional task description'),
+            dueDate: z
+              .string()
+              .optional()
+              .describe('Optional due date (ISO format, e.g. 2026-04-01)'),
           }),
           execute: async ({ title, description, dueDate }) => {
             log('createTask', { title });
@@ -404,10 +605,14 @@ Rules:
       },
 
       onFinish: ({ text, toolCalls }) => {
-        log('AI Finish', { textLength: text?.length, toolCallCount: toolCalls?.length });
+        log('AI Finish', {
+          textLength: text?.length,
+          toolCallCount: toolCalls?.length,
+        });
       },
     });
 
+    // @ts-expect-error - AI SDK v5 type mismatch
     return result.toDataStreamResponse();
   } catch (err) {
     log('FATAL AI ERROR', (err as Error).message);
