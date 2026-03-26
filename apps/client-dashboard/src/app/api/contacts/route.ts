@@ -279,6 +279,12 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
           contactTags: {
             include: { tag: { select: { id: true, name: true, color: true } } },
           },
+          communicationLogs: {
+            where: { type: 'INVITATION' },
+            orderBy: { createdAt: 'desc' },
+            take: 1,
+            select: { status: true, createdAt: true, provider: true },
+          },
         },
         orderBy: orderBy as any,
         skip: format === 'csv' ? 0 : (page - 1) * pageSize,
@@ -442,6 +448,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         visitsInRange,
         passesInRange,
         lastVisitInRange,
+        invitationStatus: (c as any).communicationLogs?.[0]?.status ?? null,
+        lastInvitationAt: (c as any).communicationLogs?.[0]?.createdAt ?? null,
+        invitationProvider: (c as any).communicationLogs?.[0]?.provider ?? null,
       };
     });
 

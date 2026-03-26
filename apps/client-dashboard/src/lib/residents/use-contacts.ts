@@ -32,6 +32,9 @@ export interface ContactRow {
   visitsInRange: number;
   passesInRange: number;
   lastVisitInRange: string | null;
+  invitationStatus: string | null;
+  lastInvitationAt: string | null;
+  invitationProvider: string | null;
 }
 
 interface ContactsResponse {
@@ -59,7 +62,9 @@ function buildContactsQueryParams(filters: ResidentsFilters): URLSearchParams {
   return sp;
 }
 
-async function fetchContacts(filters: ResidentsFilters): Promise<ContactsResponse> {
+async function fetchContacts(
+  filters: ResidentsFilters
+): Promise<ContactsResponse> {
   const params = buildContactsQueryParams(filters);
   const res = await fetch(`/api/contacts?${params.toString()}`);
   const json = await res.json();

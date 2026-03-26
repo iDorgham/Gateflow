@@ -1352,6 +1352,24 @@
       "created": "Unit created successfully",
       "updated": "Unit updated successfully",
       "batchDeleted": "Units deleted successfully"
+    },
+    "invitations": {
+      "sendInvite": "Send Invite",
+      "whatsapp": "WhatsApp",
+      "sms": "SMS",
+      "status": "Status",
+      "lastSent": "Last sent: {{date}}",
+      "noInvites": "No invitations sent yet.",
+      "template": {
+        "invite": "Hello {{name}}, here is your access code for {{orgName}}: {{link}}",
+        "alert": "Security Alert: A blocked visitor ({{name}}) is at the gate."
+      },
+      "success": {
+        "sent": "Invitation sent successfully via {{provider}}."
+      },
+      "errors": {
+        "failed": "Failed to send invitation via {{provider}}."
+      }
     }
   }
 }
