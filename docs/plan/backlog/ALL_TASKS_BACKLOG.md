@@ -8,7 +8,9 @@
 
 **IDEA:** `docs/plan/context/IDEA_projects_crm.md`
 
-**Status:** 🆕 Open
+**PLAN:** `docs/plan/planned/projects_crm/PLAN_projects_crm.md`
+
+**Status:** 🏗️ Planned
 
 **Target:** Q4 2026
 
