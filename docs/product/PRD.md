@@ -880,3 +880,7 @@ Locale detection: URL segment (`/en/` vs `/ar/`), falling back to `Accept-Langua
 _This document is the authoritative source of truth for GateFlow product and engineering decisions._
 _Generated and maintained by the Ralph automation system._
 _Next review: after v0.2.0 planning is complete._
+
+### Github Security Hardening
+
+**Status:** In Progress | Last updated: 2026-03-26

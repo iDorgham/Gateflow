@@ -14,6 +14,10 @@ _(next release notes go here)_
 
 - **[Repo]** enable security policy, dependabot, and codeql analysis
 
+### Maintenance
+
+- **[Github Security Hardening] **Started development of Github Security Hardening
+
 ---
 
 ## [0.1.0] — 2026-03-23

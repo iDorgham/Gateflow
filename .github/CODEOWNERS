@@ -1,0 +1,32 @@
+# =============================================================================
+# CODEOWNERS — GateFlow Repository Governance
+#
+# Rule: Any PR touching these paths requires approval from the owner.
+# =============================================================================
+
+# Global Owners
+*       @iDorgham
+
+# Apps
+/apps/client-dashboard/     @iDorgham
+/apps/admin-dashboard/      @iDorgham
+/apps/scanner-app/          @iDorgham
+/apps/resident-mobile/      @iDorgham
+/apps/resident-portal/      @iDorgham
+/apps/marketing/            @iDorgham
+
+# Core logic & Infra
+/packages/db/               @iDorgham
+/packages/ui/               @iDorgham
+/packages/types/            @iDorgham
+/scripts/                   @iDorgham
+/.github/workflows/         @iDorgham
+/.antigravity/              @iDorgham
+/docs/                      @iDorgham
+
+# Root config
+/package.json               @iDorgham
+/pnpm-lock.yaml             @iDorgham
+/turbo.json                 @iDorgham
+/GEMINI.md                  @iDorgham
+/GATEFLOW_CONFIG.md         @iDorgham

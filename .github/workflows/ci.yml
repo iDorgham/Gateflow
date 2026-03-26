@@ -10,6 +10,9 @@
 # =============================================================================
 name: CI
 
+permissions:
+  contents: read
+
 on:
   push:
     branches: [main, master, develop, 'feat/**', 'fix/**', 'chore/**']
