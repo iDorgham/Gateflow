@@ -19,7 +19,13 @@ export function MarketingScripts({
     <>
       <script
         dangerouslySetInnerHTML={{
-          __html: `window.partytown = { forward: ['fbq', 'gtag', 'dataLayer.push'] };`,
+          __html: `
+            window.partytown = {
+              // Proxied functions to be offloaded to the worker thread
+              // IMPORTANT: Add any new custom global tracking functions here (e.g., 'ttq', 'pintrk')
+              forward: ['fbq', 'gtag', 'dataLayer.push']
+            };
+          `,
         }}
       />
       {/* Meta Pixel */}

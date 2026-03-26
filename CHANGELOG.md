@@ -84,6 +84,8 @@ plan:run → plan:done` with automatic folder moves and doc cascades
 
 ### Performance
 
+- **[Marketing] **implement Partytown for Meta Pixel and GA4 to reduce TBT
+
 - **[Pagespeed 100] **complete phase 5 - Lighthouse CI certification infra ready
 
 - **[Pagespeed 100] **complete phase 5 - Lighthouse CI certification infra ready
