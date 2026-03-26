@@ -20,6 +20,8 @@ _(next release notes go here)_
 
 ### Features
 
+- **[Crm] **certify and finalize projects_crm v2.0 initiative
+
 - **[Ui] **refine dark mode borders and language switcher alignment
 
 - **[Ui] **relocate team chat to right panel and move collapse button to footer
