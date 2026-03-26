@@ -24,6 +24,8 @@ _(next release notes go here)_
 
 ### Features
 
+- **[Db] **add maintenance hub work order models
+
 - **[Maintenance Management] **start phase 1 implementation
 
 - **[Maintenance Management] **finalize phased planning and pro-prompts
