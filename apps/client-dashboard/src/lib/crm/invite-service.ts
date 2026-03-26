@@ -1,6 +1,5 @@
 import { prisma } from '@gate-access/db';
 import { sendCommunication } from './communication-provider';
-import { QRCodeType } from '@gate-access/types';
 
 interface InviteOptions {
   organizationId: string;

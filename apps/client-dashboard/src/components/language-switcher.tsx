@@ -7,6 +7,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  cn,
 } from '@gate-access/ui';
 import { Languages, ChevronDown } from 'lucide-react';
 
@@ -39,11 +40,12 @@ export function LanguageSwitcher({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button
-          className={
+          className={cn(
+            'inline-flex items-center gap-1.5 rounded-lg h-8 text-[11px] font-bold transition-all disabled:pointer-events-none outline-none focus-visible:ring-2 focus-visible:ring-primary/20',
             isMini
-              ? 'inline-flex items-center gap-1.5 rounded px-2 py-0.5 h-5 text-[10px] font-medium text-primary-foreground/90 hover:bg-white/15 hover:text-primary-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-foreground/30 focus-visible:ring-offset-2 focus-visible:ring-offset-primary disabled:pointer-events-none'
-              : 'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-[10px] font-bold ring-offset-background transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-7 px-2 text-primary-foreground/80'
-          }
+              ? 'px-3 text-[var(--ds-text-subtle,#42526E)] hover:bg-[var(--ds-background-neutral-subtle,#091E420F)] hover:text-[var(--ds-text,#172B4D)]'
+              : 'justify-center whitespace-nowrap px-3 text-[var(--ds-text-subtle,#42526E)] opacity-80 hover:opacity-100 hover:bg-[var(--ds-background-neutral-subtle,#091E420F)]'
+          )}
           aria-label="Toggle language"
         >
           <Languages className={isMini ? 'h-3 w-3 opacity-90' : 'h-3 w-3'} />

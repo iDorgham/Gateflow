@@ -161,7 +161,7 @@ function SearchHeader({
 
   return (
     <div
-      className="flex h-16 shrink-0 items-center justify-between gap-4 border-b border-[var(--ds-border)] bg-background/80 px-4 backdrop-blur-md sticky top-0 z-30"
+      className="flex h-16 shrink-0 items-center justify-between gap-4 border-b border-border/40 bg-background/80 px-4 backdrop-blur-md sticky top-0 z-30"
       role="search"
     >
       <div className="flex flex-1 items-center max-w-2xl gap-2">
@@ -222,7 +222,7 @@ function SearchHeader({
             </DropdownMenuItem>
             <DropdownMenuSeparator className="bg-[var(--ds-border,#DFE1E6)]" />
             <DropdownMenuItem
-              className="text-[var(--ds-text-danger,#DE350B)] focus:text-[var(--ds-text-danger,#DE350B)] cursor-pointer py-2"
+              className="flex items-center gap-2 text-[var(--ds-text-danger,#DE350B)] focus:text-[var(--ds-text-danger,#DE350B)] cursor-pointer py-2"
               onClick={() => (window.location.href = `/${locale}/logout`)}
             >
               <Power className="h-4 w-4" />
@@ -412,13 +412,13 @@ function LeftSidebar({
     <motion.aside
       animate={{ width: isCollapsed ? 72 : 256 }}
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-      className="hidden md:flex h-full flex-col border-e border-[var(--ds-border)] bg-sidebar/80 backdrop-blur-md text-[var(--ds-text)] dark:text-zinc-100 shrink-0 relative overflow-hidden"
+      className="hidden md:flex h-full flex-col border-e border-border/40 bg-sidebar/80 backdrop-blur-md text-[var(--ds-text)] shrink-0 relative overflow-hidden"
       role="navigation"
       aria-label="Main navigation"
     >
       <div
         className={cn(
-          'flex h-16 shrink-0 items-center border-b border-[var(--ds-border)]/50 px-6',
+          'flex h-16 shrink-0 items-center border-b border-border/20 px-6',
           isCollapsed && 'justify-center px-0'
         )}
       >
@@ -438,7 +438,7 @@ function LeftSidebar({
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.15 }}
-                className="text-lg font-bold tracking-tight text-[var(--ds-text,#172B4D)] dark:text-[#EBECF0] whitespace-nowrap"
+                className="text-lg font-bold tracking-tight text-[var(--ds-text,#FAFAFA)] whitespace-nowrap"
               >
                 GateFlow
               </motion.span>
@@ -459,7 +459,7 @@ function LeftSidebar({
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.1 }}
-                    className="px-3 text-[10px] font-bold uppercase tracking-widest text-[var(--ds-text-subtlest,#6B778C)] dark:text-[#97A0AF] mb-2"
+                    className="px-3 text-[10px] font-bold uppercase tracking-widest text-[var(--ds-text-subtlest,#A1A1AA)] mb-2"
                   >
                     {t('sidebar.groupMain', 'Main')}
                   </motion.p>
@@ -478,7 +478,7 @@ function LeftSidebar({
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.1 }}
-                    className="px-3 text-[10px] font-bold uppercase tracking-widest text-[var(--ds-text-subtlest,#6B778C)] dark:text-[#97A0AF] mb-2"
+                    className="px-3 text-[10px] font-bold uppercase tracking-widest text-[var(--ds-text-subtlest,#A1A1AA)] mb-2"
                   >
                     {t('sidebar.groupResidents', 'Residents')}
                   </motion.p>
@@ -487,7 +487,7 @@ function LeftSidebar({
               <Collapsible defaultOpen className="space-y-1">
                 <CollapsibleTrigger
                   className={cn(
-                    'flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-[var(--ds-text-subtle)] dark:text-zinc-400 hover:bg-[var(--ds-background-neutral-subtle)] hover:bg-accent transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary/50',
+                    'flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-[var(--ds-text-subtle,#A1A1AA)] hover:bg-[var(--ds-background-neutral-subtle)] hover:bg-accent transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary/50',
                     isCollapsed && 'justify-center px-0'
                   )}
                 >
@@ -538,7 +538,7 @@ function LeftSidebar({
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.1 }}
-                    className="px-3 text-[10px] font-bold uppercase tracking-widest text-[var(--ds-text-subtlest,#6B778C)] dark:text-[#97A0AF] mb-2"
+                    className="px-3 text-[10px] font-bold uppercase tracking-widest text-[var(--ds-text-subtlest,#A1A1AA)] mb-2"
                   >
                     {t('sidebar.groupAccess', 'Access')}
                   </motion.p>
@@ -557,7 +557,7 @@ function LeftSidebar({
         </LayoutGroup>
       </ScrollArea>
 
-      <div className="shrink-0 p-4 mt-auto border-t border-[var(--ds-border,#DFE1E6)]/50">
+      <div className="shrink-0 p-4 mt-auto border-t border-border/20">
         <div className="flex items-center gap-1">
           <div className="flex-1 min-w-0">
             <NavItem
@@ -645,7 +645,7 @@ function RightSidePanel({
 
       <div
         className={cn(
-          'hidden md:flex h-full flex-col border-sidebar-border bg-sidebar text-sidebar-foreground transition-all duration-300 ease-in-out overflow-hidden',
+          'hidden md:flex h-full flex-col border-border/40 bg-sidebar text-sidebar-foreground transition-all duration-300 ease-in-out overflow-hidden',
           isOpen ? 'w-[360px] border-l' : 'w-0 border-l-0'
         )}
       >
@@ -655,7 +655,7 @@ function RightSidePanel({
             onValueChange={onTabChange}
             className="flex flex-col h-full min-w-0"
           >
-            <div className="shrink-0 flex items-center border-b border-sidebar-border px-2 py-2 gap-2">
+            <div className="shrink-0 flex items-center h-16 border-b border-border/40 px-3 gap-2">
               <TabsList className="grid grid-cols-3 h-9 bg-sidebar-accent flex-1">
                 <TabsTrigger value="assistant" className="gap-2 text-xs">
                   <Sparkles className="h-3.5 w-3.5" />
@@ -682,13 +682,13 @@ function RightSidePanel({
             </div>
             <TabsContent
               value="assistant"
-              className="flex-1 overflow-hidden m-0 mt-2 min-h-0 data-[state=inactive]:hidden"
+              className="flex-1 overflow-hidden m-0 min-h-0 data-[state=inactive]:hidden"
             >
               <AIAssistant locale={locale} />
             </TabsContent>
             <TabsContent
               value="team"
-              className="flex-1 overflow-hidden m-0 mt-2 min-h-0 data-[state=inactive]:hidden"
+              className="flex-1 overflow-hidden m-0 min-h-0 data-[state=inactive]:hidden"
             >
               <TeamSidebarChat
                 isOpen={isOpen && activeTab === 'team'}
@@ -700,7 +700,7 @@ function RightSidePanel({
             </TabsContent>
             <TabsContent
               value="tasks"
-              className="flex-1 overflow-y-auto m-0 mt-2 min-h-0 data-[state=inactive]:hidden"
+              className="flex-1 overflow-y-auto m-0 min-h-0 data-[state=inactive]:hidden"
             >
               <div className="p-4 space-y-2">
                 {tasks.length === 0 ? (

@@ -126,7 +126,7 @@ export function TeamSidebarChat({
               <MessageSquare className="h-4 w-4" />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-[var(--ds-text-inverse)]">
+              <h3 className="text-sm font-bold text-[var(--ds-text,#FAFAFA)]">
                 {t('team.chat.title', 'Team Chat')}
               </h3>
               <div className="flex items-center gap-1.5 text-[10px] text-[var(--ds-text-subtle)]">
@@ -141,7 +141,7 @@ export function TeamSidebarChat({
             <Button
               variant="ghost"
               size="icon"
-              className="h-8 w-8 text-[var(--ds-text-subtle)] hover:bg-white/10"
+              className="h-8 w-8 text-[var(--ds-icon-subtle,#A1A1AA)] hover:bg-white/10"
               onClick={() => refetchMessages()}
               disabled={loadingMessages}
             >
@@ -152,7 +152,7 @@ export function TeamSidebarChat({
             <Button
               variant="ghost"
               size="icon"
-              className="h-8 w-8 text-[var(--ds-text-subtle)] hover:bg-white/10"
+              className="h-8 w-8 text-[var(--ds-icon-subtle,#A1A1AA)] hover:bg-white/10"
               onClick={onClose}
             >
               <X className="h-4 w-4" />
@@ -227,8 +227,8 @@ export function TeamSidebarChat({
                       className={cn(
                         'rounded-2xl px-3 py-2 text-sm',
                         isOwn
-                          ? 'bg-[var(--ds-background-brand-bold)] text-white rounded-br-none shadow-sm'
-                          : 'bg-[var(--ds-surface-overlay,#1f1f21)] text-[var(--ds-text-inverse)] rounded-bl-none border border-white/5 shadow-sm'
+                          ? 'bg-[var(--ds-background-brand-bold,#ED4B00)] text-white rounded-br-none shadow-sm'
+                          : 'bg-[var(--ds-surface-overlay,#1f1f21)] text-[var(--ds-text,#FAFAFA)] rounded-bl-none border border-[var(--ds-border-bold,#27272A)]/20 shadow-sm'
                       )}
                     >
                       {msg.content}
@@ -255,7 +255,7 @@ export function TeamSidebarChat({
             onChange={(e) => setInputText(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
             placeholder={t('team.chat.placeholder', 'Type a message...')}
-            className="bg-black/20 border-white/10 text-white placeholder:text-white/30 focus:ring-[var(--ds-border-brand)]"
+            className="bg-[var(--ds-background-input,#18191a)] border-[var(--ds-border,#27272a)] text-[var(--ds-text,#FAFAFA)] placeholder:text-[var(--ds-text-subtlest)] focus:ring-[var(--ds-border-brand)]"
           />
           <Button
             size="icon"

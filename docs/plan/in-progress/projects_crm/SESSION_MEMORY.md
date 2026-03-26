@@ -9,9 +9,9 @@ Save as: `docs/plan/in-progress/projects_crm/SESSION_MEMORY.md`
 
 ## Active State
 
-- **Phase:** Phase 4 — CRM Density & Table Intelligence | **complete**
+- **Phase:** Phase 2 — WhatsApp & SMS Invitation Flow | **complete**
 - **Branch:** `master`
-- **Last commit:** `[to be created]` — feat(crm): phase 4 - CRM density toggle and saved views
+- **Last commit:** `[pending]` — feat(crm): phase 2 - WhatsApp & SMS invitation flow
 - **Next action:** Start Phase 5 — Operations Polish & Final Audit (`/dev projects_crm 5`)
 
 ---
@@ -29,6 +29,8 @@ Save as: `docs/plan/in-progress/projects_crm/SESSION_MEMORY.md`
 | 3     | `sonner` `toast.error` `important` flag doesn't exist in v1.7 types        | Removed `important: true` — use `duration: 10_000` for high-priority alerts instead                                                                                    | Yes          |
 | 4     | Controlled density in AdvancedTable via props                              | Density state persists via user preferences API; supports compact/comfortable modes                                                                                    | Yes          |
 | 4     | Saved views stored in User.preferences JSON field                          | Reuses existing `/api/users/me/preferences` endpoint; no schema changes needed                                                                                         | Yes          |
+| 2     | WhatsApp deep-link uses wa.me format with encoded message                  | Standard Meta WhatsApp API format for direct messaging without saved contacts                                                                                          | Yes          |
+| 2     | CommunicationLog captures all invitation attempts (PENDING→SENT/FAILED)    | Provides audit trail; status updates reflect actual dispatch outcome                                                                                                   | Yes          |
 
 ---
 
@@ -44,7 +46,16 @@ Save as: `docs/plan/in-progress/projects_crm/SESSION_MEMORY.md`
 
 ## State Handoff
 
-- **Files modified this session (Phase 4):**
+- **Files modified this session (Phase 2):**
+  - `apps/client-dashboard/src/app/api/contacts/[id]/invite/route.ts` — Already existed, verified implementation
+  - `apps/client-dashboard/src/lib/crm/invite-service.ts` — Already existed, verified implementation
+  - `apps/client-dashboard/src/app/[locale]/dashboard/residents/contacts/page.tsx` — Already had Send Invite UI
+  - Removed unused `QRCodeType` import from invite-service.ts
+- **Tests:** typecheck ✅ lint ✅ (preflight checks)
+- **Blockers:** none
+- **Note:** Phase 2 was already fully implemented before this session. Verification completed.
+
+- **Files modified (Phase 4):**
   - `packages/ui/src/components/tables/AdvancedTable.tsx` — Added controlled density props (density, onDensityChange, activeView)
   - `apps/client-dashboard/src/components/crm/ContactTable.tsx` — Integrated useUserPreferences, density toggle, SavedViewManager
   - `apps/client-dashboard/src/components/crm/UnitTable.tsx` — Integrated useUserPreferences, density toggle, SavedViewManager
@@ -62,9 +73,11 @@ Save as: `docs/plan/in-progress/projects_crm/SESSION_MEMORY.md`
 | L0    | `git log --oneline -3` + phase name | ~50         | ✓      |
 | L1    | `TASKS_projects_crm.md`             | ~150        | [ ]    |
 | L2    | `PLAN_projects_crm.md`              | ~600        | ✓      |
-| L3    | `PROMPT_projects_crm_phase_4.md`    | ~1,200      | ✓      |
+| L3    | `PROMPT_projects_crm_phase_2.md`    | ~1,200      | ✓      |
 | L4    | `CONTEXT_projects_crm.md`           | ~1,800      | [ ]    |
 | L5    | `SESSION_MEMORY.md` (this file)     | ~400        | ✓      |
 
 **Baseline (always load):** L0 + L1 + L2 + L5 ≈ 1,200 tokens
 **Phase execution (add):** + L3 ≈ 2,400 tokens total
+
+**Note:** Phase 2 was already fully implemented. This session performed verification of existing code.

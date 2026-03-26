@@ -48,6 +48,7 @@
 
     /* ── Elevation Surfaces — Light ─────────────────── */
     --ds-surface: #F2F3F4;
+    --ds-surface-default: #F2F3F4;
     --ds-surface-sunken: #EBEAED;
     --ds-surface-raised: #FFFFFF;
     --ds-surface-overlay: #FFFFFF;
@@ -179,6 +180,7 @@
 
     /* ── Elevation Surfaces — Neutral Dark ──────────── */
     --ds-surface: #18191a;
+    --ds-surface-default: #18191a;
     --ds-surface-sunken: #121213;
     --ds-surface-raised: #1f1f21;
     --ds-surface-overlay: #2a2a2d;
@@ -193,7 +195,7 @@
     --ds-text-subtle: #A1A1AA;
     --ds-text-subtlest: #71717A;
     --ds-text-disabled: #3F3F46;
-    --ds-text-inverse: #09090B;
+    --ds-text-inverse: #FFFFFF;
     --ds-text-selected: #FAFAFA;
     --ds-text-brand: #ED4B00;
     --ds-text-danger: #F87171;
@@ -216,7 +218,7 @@
     /* ── Icon Tokens — Neutral Dark ─────────────────── */
     --ds-icon: #A1A1AA;
     --ds-icon-subtle: #71717A;
-    --ds-icon-inverse: #09090B;
+    --ds-icon-inverse: #FFFFFF;
     --ds-icon-brand: #ED4B00;
     --ds-icon-danger: #EF4444;
     --ds-icon-warning: #F59E0B;

@@ -159,7 +159,7 @@ export function TagSidebar() {
                   className={cn(
                     'w-5 h-5 rounded-full shrink-0 border-2 transition-transform',
                     newColor === color
-                      ? 'scale-110 border-white'
+                      ? 'scale-110 border-primary'
                       : 'border-transparent opacity-60 hover:opacity-100'
                   )}
                   style={{ backgroundColor: color }}
