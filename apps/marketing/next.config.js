@@ -18,6 +18,7 @@ const nextConfig = {
       '@gate-access/ui',
       'framer-motion',
     ],
+    nextScriptWorkers: true,
   },
   async headers() {
     return [{ source: '/(.*)', headers: securityHeaders }];

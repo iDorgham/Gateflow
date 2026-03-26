@@ -4,11 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 3000",
-    "build": "next build",
+    "build": "pnpm partytown:copy && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "partytown:copy": "partytown copylib public/~partytown"
   },
   "dependencies": {
+    "@builder.io/partytown": "^0.10.3",
     "@formatjs/intl-localematcher": "^0.8.1",
     "@gate-access/db": "workspace:^0.1.0",
     "@gate-access/ui": "workspace:^",

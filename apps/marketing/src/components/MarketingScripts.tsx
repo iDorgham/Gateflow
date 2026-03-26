@@ -17,12 +17,17 @@ export function MarketingScripts({
 }: MarketingScriptsProps) {
   return (
     <>
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `window.partytown = { forward: ['fbq', 'gtag', 'dataLayer.push'] };`,
+        }}
+      />
       {/* Meta Pixel */}
       {metaPixelId && (
         <>
           <Script
             id="meta-pixel"
-            strategy="afterInteractive"
+            strategy="worker"
             dangerouslySetInnerHTML={{
               __html: `
                 !function(f,b,e,v,n,t,s)
@@ -55,11 +60,11 @@ export function MarketingScripts({
         <>
           <Script
             src={`https://www.googletagmanager.com/gtag/js?id=${ga4MeasurementId}`}
-            strategy="afterInteractive"
+            strategy="worker"
           />
           <Script
             id="ga4-init"
-            strategy="afterInteractive"
+            strategy="worker"
             dangerouslySetInnerHTML={{
               __html: `
                 window.dataLayer = window.dataLayer || [];

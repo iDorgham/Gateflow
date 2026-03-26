@@ -424,6 +424,9 @@ importers:
 
   apps/marketing:
     dependencies:
+      '@builder.io/partytown':
+        specifier: ^0.10.3
+        version: 0.10.3
       '@formatjs/intl-localematcher':
         specifier: ^0.8.1
         version: 0.8.2
@@ -2639,6 +2642,16 @@ packages:
         integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==,
       }
     dev: true
+
+  /@builder.io/partytown@0.10.3:
+    resolution:
+      {
+        integrity: sha512-N2SWA3c5vEad3rgdAFM3zMb6uc7aXqibkgAz4ijvYzycgQXJ4dE5oH6fGFMXSQWj6ayVlLT1/CmpflYUJHfmQg==,
+      }
+    engines: { node: '>=18.0.0' }
+    deprecated: Use @qwik.dev/partytown instead
+    hasBin: true
+    dev: false
 
   /@commitlint/cli@20.5.0(@types/node@20.19.37)(typescript@5.3.3):
     resolution:
