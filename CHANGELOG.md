@@ -20,6 +20,8 @@ _(next release notes go here)_
 
 ### Features
 
+- **[Ai] **add AI SDK v6 migration initiative to backlog
+
 - **[Security Isolation Fix] **complete phase 6 - gate-assignment management UI
 
 - **[Security Isolation Fix] **complete phase 5 - automated enforcement & certification
