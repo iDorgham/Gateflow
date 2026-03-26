@@ -20,6 +20,8 @@ _(next release notes go here)_
 
 ### Features
 
+- **[Ui] **relocate team chat to right panel and move collapse button to footer
+
 - **[Security] **certify 100% multi-tenant isolation (Phase 7)
 
 - **[Projects Crm] **complete phase 5 operations polish & audit

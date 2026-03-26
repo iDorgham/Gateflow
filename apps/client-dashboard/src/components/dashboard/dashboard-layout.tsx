@@ -557,59 +557,47 @@ function LeftSidebar({
         </LayoutGroup>
       </ScrollArea>
 
-      <div className="shrink-0 p-4 mt-auto border-t border-[var(--ds-border,#DFE1E6)]/50 flex flex-col gap-2">
-        <TooltipProvider delayDuration={300}>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                onClick={onOpenChat}
-                className={cn(
-                  'relative flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium outline-none focus-visible:ring-2 focus-visible:ring-primary/50 text-[var(--ds-text-subtle)] hover:bg-[var(--ds-background-neutral-subtle)]',
-                  isCollapsed && 'justify-center px-0'
-                )}
-              >
-                <MessageSquare className="relative z-10 h-5 w-5 shrink-0" />
-                {!isCollapsed && (
-                  <span className="relative z-10 overflow-hidden whitespace-nowrap">
-                    {t('sidebar.teamChat', 'Team Chat')}
-                  </span>
-                )}
-              </button>
-            </TooltipTrigger>
-            {isCollapsed && (
+      <div className="shrink-0 p-4 mt-auto border-t border-[var(--ds-border,#DFE1E6)]/50">
+        <div className="flex items-center gap-1">
+          <div className="flex-1 min-w-0">
+            <NavItem
+              item={NAV_ITEMS.find((n) => n.href === '/dashboard/settings')!}
+              collapsed={isCollapsed}
+            />
+          </div>
+          <TooltipProvider delayDuration={300}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <button
+                  type="button"
+                  onClick={onToggleCollapse}
+                  className={cn(
+                    'flex h-9 w-9 shrink-0 items-center justify-center rounded-md text-[var(--ds-text-subtle)] hover:bg-[var(--ds-background-neutral-subtle)] transition-all',
+                    isCollapsed && 'w-full'
+                  )}
+                  aria-label={
+                    isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'
+                  }
+                >
+                  <motion.div
+                    animate={{ rotate: isCollapsed ? 180 : 0 }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                  >
+                    {isRtl ? (
+                      <ChevronRight className="h-4 w-4" />
+                    ) : (
+                      <ChevronLeft className="h-4 w-4" />
+                    )}
+                  </motion.div>
+                </button>
+              </TooltipTrigger>
               <TooltipContent side={isRtl ? 'left' : 'right'} sideOffset={10}>
-                {t('sidebar.teamChat', 'Team Chat')}
+                {isCollapsed ? 'Expand' : 'Collapse'}
               </TooltipContent>
-            )}
-          </Tooltip>
-        </TooltipProvider>
-        <NavItem
-          item={NAV_ITEMS.find((n) => n.href === '/dashboard/settings')!}
-          collapsed={isCollapsed}
-        />
+            </Tooltip>
+          </TooltipProvider>
+        </div>
       </div>
-
-      {/* Collapse toggle */}
-      <button
-        type="button"
-        onClick={onToggleCollapse}
-        className={cn(
-          'absolute bottom-6 z-50 flex h-6 w-6 items-center justify-center rounded-full border border-[var(--ds-border)] bg-[var(--ds-surface)] bg-background shadow-sm hover:bg-[var(--ds-background-neutral-subtle)] hover:bg-accent transition-colors',
-          isRtl ? '-left-3' : '-right-3'
-        )}
-        aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-      >
-        <motion.div
-          animate={{ rotate: isCollapsed ? 180 : 0 }}
-          transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-        >
-          {isRtl ? (
-            <ChevronRight className="h-3.5 w-3.5 text-[var(--ds-icon-subtle,#6B778C)]" />
-          ) : (
-            <ChevronLeft className="h-3.5 w-3.5 text-[var(--ds-icon-subtle,#6B778C)]" />
-          )}
-        </motion.div>
-      </button>
     </motion.aside>
   );
 }
@@ -619,11 +607,17 @@ function RightSidePanel({
   isOpen,
   onToggle,
   tasks: initialTasks = [],
+  activeTab = 'assistant',
+  onTabChange,
+  currentUserId,
 }: {
   locale: Locale;
   isOpen: boolean;
   onToggle: () => void;
   tasks?: TaskItem[];
+  activeTab?: string;
+  onTabChange?: (tab: string) => void;
+  currentUserId: string;
 }) {
   const [tasks, setTasks] = useState<TaskItem[]>(initialTasks);
   const isRtl = locale === 'ar-EG';
@@ -657,14 +651,19 @@ function RightSidePanel({
       >
         {isOpen && (
           <Tabs
-            defaultValue="assistant"
+            value={activeTab}
+            onValueChange={onTabChange}
             className="flex flex-col h-full min-w-0"
           >
             <div className="shrink-0 flex items-center border-b border-sidebar-border px-2 py-2 gap-2">
-              <TabsList className="grid grid-cols-2 h-9 bg-sidebar-accent flex-1">
+              <TabsList className="grid grid-cols-3 h-9 bg-sidebar-accent flex-1">
                 <TabsTrigger value="assistant" className="gap-2 text-xs">
                   <Sparkles className="h-3.5 w-3.5" />
-                  {isRtl ? 'المساعد' : 'AI assistant'}
+                  {isRtl ? 'المساعد' : 'AI'}
+                </TabsTrigger>
+                <TabsTrigger value="team" className="gap-2 text-xs">
+                  <MessageSquare className="h-3.5 w-3.5" />
+                  {isRtl ? 'الفريق' : 'Chat'}
                 </TabsTrigger>
                 <TabsTrigger value="tasks" className="gap-2 text-xs">
                   <ListTodo className="h-3.5 w-3.5" />
@@ -686,6 +685,18 @@ function RightSidePanel({
               className="flex-1 overflow-hidden m-0 mt-2 min-h-0 data-[state=inactive]:hidden"
             >
               <AIAssistant locale={locale} />
+            </TabsContent>
+            <TabsContent
+              value="team"
+              className="flex-1 overflow-hidden m-0 mt-2 min-h-0 data-[state=inactive]:hidden"
+            >
+              <TeamSidebarChat
+                isOpen={isOpen && activeTab === 'team'}
+                onClose={() => {}}
+                locale={locale}
+                currentUserId={currentUserId}
+                pure
+              />
             </TabsContent>
             <TabsContent
               value="tasks"
@@ -864,16 +875,6 @@ function MobileSidebar({
               </div>
 
               <div className="mt-auto border-t border-border/50 pt-4">
-                <button
-                  onClick={() => {
-                    onOpenChat();
-                    onOpenChange(false);
-                  }}
-                  className="flex items-center gap-3 rounded-md px-3 py-3 text-sm font-medium transition-colors mb-1 text-[var(--ds-text-subtle)] hover:bg-[var(--ds-background-neutral-subtle)] w-full"
-                >
-                  <MessageSquare className="h-6 w-6 shrink-0" />
-                  <span>{t('sidebar.teamChat', 'Team Chat')}</span>
-                </button>
                 <NavItem
                   item={
                     NAV_ITEMS.find((n) => n.href === '/dashboard/settings')!
@@ -902,7 +903,10 @@ export function DashboardLayout({
   useRealtimeEvents();
   const [leftCollapsed, setLeftCollapsed] = useState(false);
   const [isPending, startTransition] = useTransition();
-  const [chatOpen, setChatOpen] = useState(false);
+  const [rightPanelTab, setRightPanelTab] = useState('assistant');
+  const [rightOpen, setRightOpen] = useState(false);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+
   const router = useRouter();
 
   const handleProjectSwitch = (projectId: string) => {
@@ -927,14 +931,17 @@ export function DashboardLayout({
     });
   };
 
-  const [rightOpen, setRightOpen] = useState(false);
-  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const isRtl = locale === 'ar-EG';
   const pathname = usePathname();
   const isAiPage =
     pathname?.includes('/dashboard/ai') ||
     pathname?.includes('/dashboard/gateai');
   const isFullBleed = isAiPage || pathname?.includes('/dashboard/onboarding');
+
+  const onOpenChat = () => {
+    setRightPanelTab('team');
+    setRightOpen(true);
+  };
 
   return (
     <div
@@ -948,7 +955,7 @@ export function DashboardLayout({
           isCollapsed={leftCollapsed}
           onToggleCollapse={() => setLeftCollapsed((c) => !c)}
           isRtl={isRtl}
-          onOpenChat={() => setChatOpen(true)}
+          onOpenChat={onOpenChat}
         />
 
         <div className="flex flex-1 min-w-0 flex-col min-h-0 overflow-hidden">
@@ -1006,6 +1013,9 @@ export function DashboardLayout({
           locale={locale}
           isOpen={rightOpen}
           onToggle={() => setRightOpen((o) => !o)}
+          activeTab={rightPanelTab}
+          onTabChange={setRightPanelTab}
+          currentUserId={user.id}
         />
       </div>
 
@@ -1014,14 +1024,7 @@ export function DashboardLayout({
         isOpen={mobileNavOpen}
         onOpenChange={setMobileNavOpen}
         isRtl={isRtl}
-        onOpenChat={() => setChatOpen(true)}
-      />
-
-      <TeamSidebarChat
-        isOpen={chatOpen}
-        onClose={() => setChatOpen(false)}
-        locale={locale}
-        currentUserId={user.id}
+        onOpenChat={onOpenChat}
       />
 
       <SecurityNotifier />
