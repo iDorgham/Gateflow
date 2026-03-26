@@ -38,7 +38,6 @@ export async function POST(request: NextRequest) {
     messages: { role: string; content: string }[];
   };
 
-  // @ts-expect-error - Tools property has type mismatch in this workspace version
   const tools: any = {
     getPlatformMetrics: tool({
       description:
@@ -66,6 +65,7 @@ export async function POST(request: NextRequest) {
       },
     }),
 
+    // @ts-expect-error - Tools property has type mismatch in this workspace version
     listRecentOrgs: tool({
       description: 'List the most recently created organizations',
       parameters: z.object({
@@ -107,6 +107,7 @@ export async function POST(request: NextRequest) {
       },
     }),
 
+    // @ts-expect-error - Tools property has type mismatch in this workspace version
     getOrgStats: tool({
       description:
         'Get detailed stats for a specific organization by name or ID',
@@ -152,6 +153,7 @@ export async function POST(request: NextRequest) {
       },
     }),
 
+    // @ts-expect-error - Tools property has type mismatch in this workspace version
     listRecentScans: tool({
       description:
         'List the most recent scan log entries across all organizations',
@@ -193,6 +195,7 @@ export async function POST(request: NextRequest) {
       },
     }),
 
+    // @ts-expect-error - Tools property has type mismatch in this workspace version
     searchUsers: tool({
       description: 'Search for users by name or email',
       parameters: z.object({
@@ -238,7 +241,6 @@ export async function POST(request: NextRequest) {
     }),
   };
 
-  // @ts-expect-error - Tools property has type mismatch in this workspace version
   const result = streamText({
     model: google('gemini-1.5-flash') as any,
     system: `You are the GateFlow platform administrator AI assistant. You have read-only access to platform data.
@@ -250,7 +252,7 @@ Never make up data — use tools to fetch real information.`,
       content: msg.content,
     })),
     tools,
-  });
+  } as any);
 
   return result.toTextStreamResponse();
 }
