@@ -20,6 +20,8 @@ _(next release notes go here)_
 
 ### Features
 
+- **[Crm] **update plan for schema and fix assistant route lint
+
 - **[Crm] **5-phase execution roadmap for projects_crm v2.0
 
 - **[Crm] **initialize projects_crm v2.0 planning
@@ -100,6 +102,8 @@ plan:run → plan:done` with automatic folder moves and doc cascades
 - **[Ci]** establish lighthouse ci pipeline and performance baseline — phase 1
 
 ### Bug Fixes
+
+- **[Ai] **migrate AI SDK v4 → v5 type incompatibilities
 
 - **[Deps] **solve Recharts 3.x tooltip formatter type errors
 
