@@ -20,6 +20,8 @@ _(next release notes go here)_
 
 ### Features
 
+- **[Perf] **phase 5 live audit + manifest fix + ADS token cleanup + ai-sdk security patch
+
 - **[Ai] **add AI SDK v6 migration initiative to backlog
 
 - **[Security Isolation Fix] **complete phase 6 - gate-assignment management UI
