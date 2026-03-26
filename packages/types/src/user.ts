@@ -38,6 +38,8 @@ export const DEFAULT_PERMISSIONS: Record<
     'units:manage': true,
     'residents:manage': true,
     'contacts:manage': true,
+    'maintenance:view': true,
+    'maintenance:manage': true,
   },
   [BUILT_IN_ROLES.ORG_ADMIN]: {
     'gates:view': true,
@@ -60,6 +62,8 @@ export const DEFAULT_PERMISSIONS: Record<
     'units:manage': true,
     'residents:manage': true,
     'contacts:manage': true,
+    'maintenance:view': true,
+    'maintenance:manage': true,
   },
   [BUILT_IN_ROLES.SECURITY_MANAGER]: {
     'gates:view': true,
@@ -82,6 +86,8 @@ export const DEFAULT_PERMISSIONS: Record<
     'units:manage': false,
     'residents:manage': false,
     'contacts:manage': false,
+    'maintenance:view': true,
+    'maintenance:manage': true,
   },
   [BUILT_IN_ROLES.GATE_OPERATOR]: {
     'gates:view': true,
@@ -104,6 +110,8 @@ export const DEFAULT_PERMISSIONS: Record<
     'units:manage': false,
     'residents:manage': false,
     'contacts:manage': false,
+    'maintenance:view': true,
+    'maintenance:manage': false,
   },
   [BUILT_IN_ROLES.RESIDENT]: {
     'gates:view': false,
@@ -126,5 +134,7 @@ export const DEFAULT_PERMISSIONS: Record<
     'units:manage': false,
     'residents:manage': false,
     'contacts:manage': false,
+    'maintenance:view': true,
+    'maintenance:manage': true,
   },
 };

@@ -66,6 +66,7 @@ model Organization {
   shortLinkClicks               ShortLinkClick[]
   communicationConfig           OrganizationCommunicationConfig?
   communicationLogs             CommunicationLog[]
+  workOrders                    WorkOrder[]
 
   @@index([deletedAt])
 }
@@ -92,6 +93,7 @@ model Project {
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   qrCodes        QRCode[]
   units          Unit[]
+  workOrders     WorkOrder[]
 
   @@index([organizationId])
 }
@@ -143,6 +145,8 @@ model User {
   organization    Organization?    @relation(fields: [organizationId], references: [id])
   role            Role             @relation(fields: [roleId], references: [id])
   communicationLogs CommunicationLog[]
+  reportedWorkOrders WorkOrder[] @relation("ReportedWorkOrders")
+  assignedWorkOrders WorkOrder[] @relation("AssignedWorkOrders")
 
   @@index([organizationId])
   @@index([roleId])
@@ -250,6 +254,7 @@ model Gate {
   incidents             Incident[]
   qrCodes               QRCode[]
   scanLogs              ScanLog[]
+  workOrders            WorkOrder[]
 
   @@index([organizationId])
   @@index([projectId])
@@ -622,6 +627,7 @@ model Unit {
   project        Project?      @relation(fields: [projectId], references: [id])
   user           User?         @relation(fields: [userId], references: [id])
   visitorQRs     VisitorQR[]
+  workOrders     WorkOrder[]
 
   @@unique([organizationId, name])
   @@index([organizationId])
@@ -945,4 +951,75 @@ model CommunicationLog {
   @@index([userId])
   @@index([contactId])
   @@index([createdAt])
+}
+
+model WorkOrder {
+  id             String                @id @default(cuid())
+  organizationId String
+  title          String
+  description    String?
+  status         MaintenanceStatus     @default(OPEN)
+  priority       MaintenancePriority   @default(MEDIUM)
+  category       MaintenanceCategory   @default(GENERAL)
+  locationType   MaintenanceLocationType
+  locationId     String?
+  reporterId     String
+  assigneeId     String?
+  dueDate        DateTime?
+  createdAt      DateTime              @default(now())
+  updatedAt      DateTime              @updatedAt
+  deletedAt      DateTime?
+
+  organization   Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  reporter       User                  @relation("ReportedWorkOrders", fields: [reporterId], references: [id])
+  assignee       User?                 @relation("AssignedWorkOrders", fields: [assigneeId], references: [id])
+  
+  // Specific asset relations (optional but indexed and FK-checked)
+  gate           Gate?                 @relation(fields: [gateId], references: [id])
+  gateId         String?
+  unit           Unit?                 @relation(fields: [unitId], references: [id])
+  unitId         String?
+  project        Project?              @relation(fields: [projectId], references: [id])
+  projectId      String?
+
+  @@index([organizationId])
+  @@index([status])
+  @@index([priority])
+  @@index([category])
+  @@index([gateId])
+  @@index([unitId])
+  @@index([projectId])
+  @@index([deletedAt])
+}
+
+enum MaintenanceStatus {
+  OPEN
+  ASSIGNED
+  IN_PROGRESS
+  PENDING_PARTS
+  RESOLVED
+  CANCELLED
+  CLOSED
+}
+
+enum MaintenancePriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum MaintenanceCategory {
+  ELECTRICAL
+  PLUMBING
+  HVAC
+  HARDWARE
+  GENERAL
+  FACILITY
+}
+
+enum MaintenanceLocationType {
+  GATE
+  UNIT
+  PROJECT
 }

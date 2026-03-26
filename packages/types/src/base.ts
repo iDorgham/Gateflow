@@ -49,7 +49,9 @@ export type Permission =
   | 'units:view'
   | 'units:manage'
   | 'residents:manage'
-  | 'contacts:manage';
+  | 'contacts:manage'
+  | 'maintenance:view'
+  | 'maintenance:manage';
 
 export interface Role {
   id: string;
@@ -136,4 +138,57 @@ export interface Project {
   organizationId: string;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export enum MaintenanceStatus {
+  OPEN = 'OPEN',
+  ASSIGNED = 'ASSIGNED',
+  IN_PROGRESS = 'IN_PROGRESS',
+  PENDING_PARTS = 'PENDING_PARTS',
+  RESOLVED = 'RESOLVED',
+  CANCELLED = 'CANCELLED',
+  CLOSED = 'CLOSED',
+}
+
+export enum MaintenancePriority {
+  LOW = 'LOW',
+  MEDIUM = 'MEDIUM',
+  HIGH = 'HIGH',
+  URGENT = 'URGENT',
+}
+
+export enum MaintenanceCategory {
+  ELECTRICAL = 'ELECTRICAL',
+  PLUMBING = 'PLUMBING',
+  HVAC = 'HVAC',
+  HARDWARE = 'HARDWARE',
+  GENERAL = 'GENERAL',
+  FACILITY = 'FACILITY',
+}
+
+export enum MaintenanceLocationType {
+  GATE = 'GATE',
+  UNIT = 'UNIT',
+  PROJECT = 'PROJECT',
+}
+
+export interface WorkOrder {
+  id: string;
+  organizationId: string;
+  title: string;
+  description: string | null;
+  status: MaintenanceStatus;
+  priority: MaintenancePriority;
+  category: MaintenanceCategory;
+  locationType: MaintenanceLocationType;
+  locationId: string | null;
+  reporterId: string;
+  assigneeId: string | null;
+  dueDate: Date | null;
+  createdAt: Date;
+  updatedAt: Date;
+  deletedAt: Date | null;
+  gateId?: string | null;
+  unitId?: string | null;
+  projectId?: string | null;
 }
