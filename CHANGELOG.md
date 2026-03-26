@@ -20,6 +20,8 @@ _(next release notes go here)_
 
 ### Features
 
+- **[Ui] **refine dark mode borders and language switcher alignment
+
 - **[Ui] **relocate team chat to right panel and move collapse button to footer
 
 - **[Ui] **relocate team chat to right panel and move collapse button to footer
