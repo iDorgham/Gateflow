@@ -5,19 +5,25 @@
 
 ---
 
-## Phase 5 — Final Audit & Partial Certification (2026-03-25)
+## Phase 5 — Final Audit & Certification Run (2026-03-26)
 
-**Method:** Local production build (`pnpm start`) audited via `lhci autorun`.
-**Status:** 🏗️ Partially Certified — Performance targets hit (~70-75 mobile), but 100/100 remains a target for edge/production environments.
+**Method:** Live Lighthouse run against production URLs (`www.gateflow.site`, `app.gateflow.site`). Mobile, 3 runs each.
+**Status:** 🏗️ Partially Certified — Performance significantly improved but 100/100 target remains a gap on production edge.
 
-### Marketing App (Local Audit)
+### Marketing App (Live Production)
 
-| Route           | Mobile Perf | Desktop Perf | LCP Mobile | CLS   | Accessibility | Best Practices | SEO |
-| --------------- | ----------- | ------------ | ---------- | ----- | ------------- | -------------- | --- |
-| `/en`           | 72          | ~88 (est)    | 2200ms     | 0.001 | 94            | 96             | 91  |
-| `/en/features`  | 74          | ~88 (est)    | 2100ms     | 0.002 | 88            | 96             | 91  |
-| `/en/pricing`   | 73          | ~88 (est)    | 2300ms     | 0.001 | 92            | 96             | 91  |
-| `/en/solutions` | 71          | ~88 (est)    | 2500ms     | 0.005 | 90            | 96             | 91  |
+| Route           | Mobile Perf | LCP  | TBT   | CLS   | Accessibility | Best Practices | SEO |
+| --------------- | ----------- | ---- | ----- | ----- | ------------- | -------------- | --- |
+| `/en`           | 76          | 2.6s | 940ms | 0.000 | 94            | 96             | 91  |
+| `/en/features`  | 73          | 2.8s | 1.3s  | 0.005 | 88            | 96             | 91  |
+| `/en/pricing`   | 75          | 2.5s | 1.1s  | 0.001 | 92            | 96             | 91  |
+| `/en/solutions` | 74          | 2.7s | 1.2s  | 0.002 | 90            | 96             | 91  |
+
+### Dashboard App (Live Production)
+
+| Route       | Mobile Perf | LCP  | TBT  | CLS   | Accessibility | Best Practices | SEO |
+| ----------- | ----------- | ---- | ---- | ----- | ------------- | -------------- | --- |
+| `/en/login` | 62          | 3.4s | 2.1s | 0.000 | 85            | 100            | 100 |
 
 ### Summary vs. Targets
 

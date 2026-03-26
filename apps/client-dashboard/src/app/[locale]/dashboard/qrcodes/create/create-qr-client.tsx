@@ -925,7 +925,7 @@ function ResultView({
       {/* QR display */}
       <div
         ref={qrRef}
-        className="flex justify-center rounded-2xl border-2 border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-surface,#FFFFFF)] p-8 shadow-sm"
+        className="flex justify-center rounded-2xl border-2 border-ds-border bg-ds-surface p-8 shadow-sm"
         aria-label="Generated QR code"
       >
         <QRCode
@@ -1013,8 +1013,8 @@ function ResultView({
           />
         </button>
         {showPayload && (
-          <div className="border-t border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-background-neutral-bold,#44546F)] px-4 py-3">
-            <p className="break-all font-mono text-xs leading-relaxed text-[var(--ds-text-inverse,#FFFFFF)]">
+          <div className="border-t border-ds-border bg-ds-icon px-4 py-3">
+            <p className="break-all font-mono text-xs leading-relaxed text-ds-text-inverse">
               {created.qrString}
             </p>
           </div>
@@ -1225,7 +1225,7 @@ export function CreateQRClient({
     if (!ctx) return;
     const img = new Image();
     img.onload = () => {
-      ctx.fillStyle = token('elevation.surface', '#FFFFFF');
+      ctx.fillStyle = token('elevation.surface', '#F2F3F4');
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
       canvas.toBlob(

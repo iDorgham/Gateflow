@@ -26,11 +26,11 @@ export function LiveChartComponent(props: NodeViewProps) {
   const springConfig = gaSpring;
 
   const PRESET_COLORS = [
-    token('color.text.danger', '#ED4B00'), // Kimchi Orange
-    token('color.text.brand', '#020035'), // Midnight Blue
-    token('color.text.information', '#2000B1'), // Deep Sea Info
-    token('color.text.success', '#16A34A'), // Success Green
-    token('color.text.warning', '#F59E0B'), // Warning Amber
+    token('color.text.danger', '#AE2A19'), // Kimchi Orange -> now aligned to ADS Danger
+    token('color.text.brand', '#0C66E4'), // Midnight Blue -> now aligned to ADS Brand
+    token('color.text.information', '#0055CC'), // Deep Sea Info -> now aligned to ADS Info
+    token('color.text.success', '#216751'), // Success Green
+    token('color.text.warning', '#974F0C'), // Warning Amber
   ];
   React.useEffect(() => {
     let mounted = true;

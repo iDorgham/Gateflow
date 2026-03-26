@@ -49,7 +49,10 @@ function timingSafeEqual(a: string, b: string): boolean {
 function getLocale(request: NextRequest): string {
   // 1. Check if the user has a locale explicitly set in cookies
   const cookieLocale = request.cookies.get(LOCALE_COOKIE)?.value;
-  if (cookieLocale && (i18n.locales as readonly string[]).includes(cookieLocale)) {
+  if (
+    cookieLocale &&
+    (i18n.locales as readonly string[]).includes(cookieLocale)
+  ) {
     return cookieLocale;
   }
 
@@ -58,7 +61,9 @@ function getLocale(request: NextRequest): string {
   request.headers.forEach((value, key) => (negotiatorHeaders[key] = value));
 
   const locales: string[] = [...i18n.locales];
-  const languages = new Negotiator({ headers: negotiatorHeaders }).languages(locales);
+  const languages = new Negotiator({ headers: negotiatorHeaders }).languages(
+    locales
+  );
 
   try {
     return match(languages, locales, i18n.defaultLocale);
@@ -76,21 +81,26 @@ export function middleware(request: NextRequest) {
   );
 
   // Redirect if there is no locale
-  if (!pathnameHasLocale && 
-      !pathname.startsWith('/api') && 
-      !pathname.startsWith('/_next') && 
-      !pathname.includes('.')) {
+  if (
+    !pathnameHasLocale &&
+    !pathname.startsWith('/api') &&
+    !pathname.startsWith('/_next') &&
+    !pathname.includes('.')
+  ) {
     const locale = getLocale(request);
-    const newUrl = new URL(`/${locale}${pathname === '/' ? '' : pathname}`, request.url);
+    const newUrl = new URL(
+      `/${locale}${pathname === '/' ? '' : pathname}`,
+      request.url
+    );
     newUrl.search = request.nextUrl.search;
     return NextResponse.redirect(newUrl);
   }
 
   // Strip locale from public route matching check
-  const pathWithoutLocale = pathnameHasLocale 
-    ? pathname.replace(new RegExp(`^/(${i18n.locales.join('|')})`), '') 
+  const pathWithoutLocale = pathnameHasLocale
+    ? pathname.replace(new RegExp(`^/(${i18n.locales.join('|')})`), '')
     : pathname;
-  
+
   const effectivePath = pathWithoutLocale === '' ? '/' : pathWithoutLocale;
 
   // 2. Public / unauthenticated routes — always allow
@@ -130,7 +140,7 @@ export function middleware(request: NextRequest) {
   if (!csrfCookie) {
     return NextResponse.json(
       { success: false, message: 'CSRF token missing' },
-      { status: 403 },
+      { status: 403 }
     );
   }
 
@@ -139,7 +149,7 @@ export function middleware(request: NextRequest) {
   if (!requestToken) {
     return NextResponse.json(
       { success: false, message: 'CSRF token missing' },
-      { status: 403 },
+      { status: 403 }
     );
   }
 
@@ -147,7 +157,7 @@ export function middleware(request: NextRequest) {
   if (!timingSafeEqual(requestToken, csrfCookie.value)) {
     return NextResponse.json(
       { success: false, message: 'CSRF token invalid' },
-      { status: 403 },
+      { status: 403 }
     );
   }
 
@@ -159,6 +169,6 @@ export const config = {
     /*
      * Match all paths except Next.js internals and static assets.
      */
-    '/((?!api|_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml).*)',
+    '/((?!api|_next/static|_next/image|favicon.ico|manifest.json|robots.txt|sitemap.xml).*)',
   ],
 };

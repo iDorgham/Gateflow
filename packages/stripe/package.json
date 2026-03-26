@@ -9,6 +9,7 @@
     "typecheck": "tsc -p tsconfig.json"
   },
   "dependencies": {
+    "ai": "5.0.52",
     "stripe": "^17.7.0"
   },
   "devDependencies": {

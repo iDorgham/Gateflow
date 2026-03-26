@@ -29,6 +29,7 @@
     "@node-rs/argon2": "^2.0.0",
     "@prisma/adapter-pg": "^5.22.0",
     "@prisma/client": "^5.22.0",
+    "ai": "5.0.52",
     "date-fns": "^4.1.0",
     "dotenv": "^17.3.1",
     "nanoid": "^5.1.7",

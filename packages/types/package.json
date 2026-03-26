@@ -12,6 +12,7 @@
     "typecheck": "tsc -p tsconfig.json"
   },
   "dependencies": {
+    "ai": "5.0.52",
     "crypto-js": "^4.2.0",
     "zod": "3.25.76"
   },
