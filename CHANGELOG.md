@@ -20,6 +20,9 @@ _(next release notes go here)_
 
 ### Features
 
+- **[Crm] **phase 3 - visitor watchlist status and security alerts
+- **[Projects Crm] **implement phase 2 - invitation gateway and UI
+
 - **[Crm] **update plan for schema and fix assistant route lint
 
 - **[Crm] **5-phase execution roadmap for projects_crm v2.0

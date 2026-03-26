@@ -9,10 +9,10 @@ Save as: `docs/plan/in-progress/projects_crm/SESSION_MEMORY.md`
 
 ## Active State
 
-- **Phase:** Phase 1 — Communication Gateway & Notification Schema | **complete**
+- **Phase:** Phase 3 — Visitor Watchlist & Security Alerts | **complete**
 - **Branch:** `master`
-- **Last commit:** `06f784a` — fix(ai): migrate AI SDK v4 → v5 type incompatibilities
-- **Next action:** Start Phase 2 — WhatsApp & SMS Invitation Flow (`/dev projects_crm 2`)
+- **Last commit:** `bb11d40` — feat(crm): phase 3 - visitor watchlist status and security alerts
+- **Next action:** Start Phase 4 — CRM Density & Table Intelligence (`/dev projects_crm 4`)
 
 ---
 
@@ -24,6 +24,9 @@ Save as: `docs/plan/in-progress/projects_crm/SESSION_MEMORY.md`
 | 1     | `CommunicationLog.provider` stores runtime string (not enum)               | Allows flexible provider extension without schema migration                                                                                                            | Yes          |
 | 1     | Phase 1 code was pre-committed in `f581ff7` before session started         | Schema + communication-provider.ts + AuditLog were already in place                                                                                                    | N/A          |
 | 1     | Fixed AI SDK v4 → v5 breaking changes as side effect of Phase 1 build gate | `parameters:` → `inputSchema:`, `maxSteps` → `stopWhen: stepCountIs(N)`, `toDataStreamResponse` → `toTextStreamResponse`, usage field renames, LanguageModel type cast | Yes          |
+| 3     | Use window CustomEvent bridge for SSE → toast (not a second EventSource)   | Keeps one SSE connection per tab; SecurityNotifier listens via `window.addEventListener('gf:watchlist_alert')` dispatched from `useRealtimeEvents`                     | Yes          |
+| 3     | ESCORT scans are accepted (not rejected); scanner shows haptic Warning     | ESCORT means "watch closely" not "deny" — guards need to escort, not block                                                                                             | Yes          |
+| 3     | `sonner` `toast.error` `important` flag doesn't exist in v1.7 types        | Removed `important: true` — use `duration: 10_000` for high-priority alerts instead                                                                                    | Yes          |
 
 ---
 
@@ -51,7 +54,7 @@ Save as: `docs/plan/in-progress/projects_crm/SESSION_MEMORY.md`
   - `apps/client-dashboard/src/app/[locale]/dashboard/ai/page.tsx` — Type cast for messages prop
 - **Tests:** typecheck ✅ build ✅ (verified with `pnpm turbo typecheck --filter=client-dashboard` and `pnpm turbo build --filter=client-dashboard`)
 - **Blockers:** none
-- **Resume from:** Phase 2 Step 1 — implement `POST /api/contacts/[id]/invite` route
+- **Resume from:** Phase 4 Step 1 — add density toggle to CRM toolbar
 
 ---
 
