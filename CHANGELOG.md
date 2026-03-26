@@ -24,6 +24,8 @@ _(next release notes go here)_
 
 ### Features
 
+- **[Maintenance Management] **initialize maintenance hub initiative
+
 - **[Pagespeed 100] **complete phase 5 - final audit & certification
 
 - **[Security] **complete github hardening and fix design violations

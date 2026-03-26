@@ -36,15 +36,20 @@
 - [x] Phase 4 — Supply Chain Governance (Dependabot)
 - [x] Phase 5 — Security Gate Automation (CI + Scan)
 
-### test_feature — Test Feature
+### maintenance_management — Maintenance Management (Maintenance Hub)
+
+**IDEA:** `docs/plan/context/IDEA_maintenance_management.md`
 
 **Status:** 🆕 Open
 
-**Target:** Q4 2026
+**Target:** Q1 2027
 
-- [ ] Phase 1 — Title
-- [ ] Phase 2 — Title
-- [ ] Phase 3 — Title
+- [ ] Phase 1 — Schema Evolution: Maintenance & Work Order Models
+- [ ] Phase 2 — Core API: Request Lifecycle & Assignment
+- [ ] Phase 3 — Maintenance Hub UI: Command Center & List Views
+- [ ] Phase 4 — Guard Integration: Reporting from Scanner App
+- [ ] Phase 5 — Resident Integration: Resident Portal Request Flow
+- [ ] Phase 6 — Analytics & Service History Audit
 
 ### ai_sdk_v6_migration — AI SDK v6 (Agentic) Migration
 
