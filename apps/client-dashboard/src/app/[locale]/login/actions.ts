@@ -76,7 +76,7 @@ export async function loginAction(
     .catch(() => {});
 
   // Set httpOnly cookies — must happen before redirect()
-  setAuthCookies(accessToken, refreshToken);
+  await setAuthCookies(accessToken, refreshToken);
 
   // Set CSRF cookie for this session
   const csrfToken = generateCsrfToken();

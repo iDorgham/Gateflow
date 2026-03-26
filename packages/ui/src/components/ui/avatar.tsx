@@ -22,7 +22,8 @@ const avatarVariants = cva(
 );
 
 interface AvatarProps
-  extends React.HTMLAttributes<HTMLDivElement>,
+  extends
+    React.HTMLAttributes<HTMLDivElement>,
     VariantProps<typeof avatarVariants> {}
 
 const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
@@ -39,14 +40,18 @@ Avatar.displayName = 'Avatar';
 const AvatarImage = React.forwardRef<
   HTMLImageElement,
   React.ImgHTMLAttributes<HTMLImageElement>
->(({ className, alt, ...props }, ref) => (
-  <img
-    ref={ref}
-    className={cn('aspect-square h-full w-full object-cover', className)}
-    alt={alt ?? ''}
-    {...props}
-  />
-));
+>(({ className, alt, src, ...props }, ref) => {
+  if (!src) return null;
+  return (
+    <img
+      ref={ref}
+      className={cn('aspect-square h-full w-full object-cover', className)}
+      alt={alt ?? ''}
+      src={src}
+      {...props}
+    />
+  );
+});
 AvatarImage.displayName = 'AvatarImage';
 
 const AvatarFallback = React.forwardRef<

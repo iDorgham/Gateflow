@@ -1,4 +1,4 @@
-import { streamText } from 'ai';
+import { streamText, tool, type CoreMessage, type LanguageModel } from 'ai';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { z } from 'zod';
 import { type NextRequest } from 'next/server';
@@ -34,25 +34,20 @@ export async function POST(request: NextRequest) {
     });
   }
 
-  const { messages } = body as {
-    messages: { role: string; content: string }[];
-  };
+  const { messages } = body as { messages: CoreMessage[] };
 
   const result = streamText({
-    model: google('gemini-1.5-flash'),
+    model: google('gemini-1.5-flash') as unknown as LanguageModel,
     system: `You are the GateFlow platform administrator AI assistant. You have read-only access to platform data.
 You can answer questions about organizations, users, scan activity, and platform health.
 Keep responses concise and data-driven. Always refer to data from the available tools.
 Never make up data — use tools to fetch real information.`,
-    messages: messages.map((msg) => ({
-      role: msg.role as 'user' | 'assistant' | 'system',
-      content: msg.content,
-    })),
+    messages,
     tools: {
-      getPlatformMetrics: {
+      getPlatformMetrics: tool({
         description:
           'Get platform-wide metrics: total organizations, total users, scans today, scans this month',
-        parameters: z.object({}),
+        inputSchema: z.object({}),
         execute: async () => {
           const now = new Date();
           const todayStart = new Date(now);
@@ -73,11 +68,11 @@ Never make up data — use tools to fetch real information.`,
 
           return { totalOrgs, totalUsers, scansToday, scansThisMonth };
         },
-      },
+      }),
 
-      listRecentOrgs: {
+      listRecentOrgs: tool({
         description: 'List the most recently created organizations',
-        parameters: z.object({
+        inputSchema: z.object({
           limit: z
             .number()
             .min(1)
@@ -106,12 +101,12 @@ Never make up data — use tools to fetch real information.`,
             userCount: o.users.length,
           }));
         },
-      },
+      }),
 
-      getOrgStats: {
+      getOrgStats: tool({
         description:
           'Get detailed stats for a specific organization by name or ID',
-        parameters: z.object({
+        inputSchema: z.object({
           query: z.string().describe('Organization name (partial) or ID'),
         }),
         execute: async ({ query }: { query: string }) => {
@@ -151,12 +146,12 @@ Never make up data — use tools to fetch real information.`,
             scansTotal,
           };
         },
-      },
+      }),
 
-      listRecentScans: {
+      listRecentScans: tool({
         description:
           'List the most recent scan log entries across all organizations',
-        parameters: z.object({
+        inputSchema: z.object({
           limit: z
             .number()
             .min(1)
@@ -184,11 +179,11 @@ Never make up data — use tools to fetch real information.`,
             org: s.qrCode?.organization?.name ?? null,
           }));
         },
-      },
+      }),
 
-      searchUsers: {
+      searchUsers: tool({
         description: 'Search for users by name or email',
-        parameters: z.object({
+        inputSchema: z.object({
           query: z.string().describe('Name or email to search for'),
           limit: z.number().min(1).max(10).default(5),
         }),
@@ -219,7 +214,7 @@ Never make up data — use tools to fetch real information.`,
             suspended: u.deletedAt !== null,
           }));
         },
-      },
+      }),
     },
   });
 

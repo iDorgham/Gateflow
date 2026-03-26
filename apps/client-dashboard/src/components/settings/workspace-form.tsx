@@ -119,7 +119,7 @@ export function WorkspaceSettingsForm({
             <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
               <div className="flex flex-col items-center gap-2">
                 <Avatar className="h-24 w-24 border-2 border-border/50 rounded-2xl">
-                  <AvatarImage src={logoPreview || ''} />
+                  <AvatarImage src={logoPreview || undefined} />
                   <AvatarFallback className="text-2xl font-bold bg-primary/10 text-primary">
                     {form.getValues('name')?.slice(0, 2).toUpperCase()}
                   </AvatarFallback>

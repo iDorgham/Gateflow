@@ -448,34 +448,32 @@ export function AIAssistant({ locale }: AIAssistantProps) {
                   )}
                 >
                   <Tooltip>
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          toast.info(
+                            isRtl
+                              ? `تم اختيار: ${file.name}`
+                              : `Selected: ${file.name}`
+                          );
+                          // In Phase 3+ we will handle actual upload
+                        }
+                      }}
+                    />
                     <TooltipTrigger asChild>
-                      <>
-                        <input
-                          type="file"
-                          ref={fileInputRef}
-                          className="hidden"
-                          onChange={(e) => {
-                            const file = e.target.files?.[0];
-                            if (file) {
-                              toast.info(
-                                isRtl
-                                  ? `تم اختيار: ${file.name}`
-                                  : `Selected: ${file.name}`
-                              );
-                              // In Phase 3+ we will handle actual upload
-                            }
-                          }}
-                        />
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          type="button"
-                          className="h-8 w-8 text-[var(--ds-icon-subtle,#6B778C)] hover:text-[var(--ds-text,#172B4D)]"
-                          onClick={() => fileInputRef.current?.click()}
-                        >
-                          <Paperclip size={16} />
-                        </Button>
-                      </>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        type="button"
+                        className="h-8 w-8 text-[var(--ds-icon-subtle,#6B778C)] hover:text-[var(--ds-text,#172B4D)]"
+                        onClick={() => fileInputRef.current?.click()}
+                      >
+                        <Paperclip size={16} />
+                      </Button>
                     </TooltipTrigger>
                     <TooltipContent side="top">
                       {isRtl ? 'إرفاق ملف' : 'Attach file'}

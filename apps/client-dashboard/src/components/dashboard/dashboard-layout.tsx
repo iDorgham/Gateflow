@@ -64,6 +64,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { GlobalSearch } from './global-search';
 import { AIAssistant } from './ai-assistant';
+import { LanguageSwitcher } from '../language-switcher';
 import { ThemeToggle } from './theme-toggle';
 import { TeamSidebarChat } from './team/TeamSidebarChat';
 import { ProjectFilterProvider } from '@/context/ProjectFilterContext';
@@ -88,6 +89,51 @@ export interface TaskItem {
   id: string;
   label: string;
   done: boolean;
+}
+
+function ProjectSwitcher({
+  projects,
+  currentProjectId,
+  handleProjectSwitch,
+  isPending,
+}: {
+  projects: { id: string; name: string }[];
+  currentProjectId: string | null;
+  handleProjectSwitch: (id: string) => void;
+  isPending: boolean;
+}) {
+  if (projects.length === 0) return null;
+
+  return (
+    <div className="flex items-center gap-2">
+      <Select
+        value={currentProjectId ?? 'all'}
+        onValueChange={handleProjectSwitch}
+        disabled={isPending}
+      >
+        <SelectTrigger className="h-9 w-[160px] bg-[var(--ds-background-neutral-subtle)] border-none text-xs font-semibold hover:bg-[var(--ds-background-neutral)] transition-colors rounded-lg px-3">
+          <div className="flex items-center gap-2 overflow-hidden">
+            <Stack
+              weight="bold"
+              className="h-3.5 w-3.5 shrink-0 text-[var(--ds-icon-subtle)]"
+            />
+            <SelectValue placeholder="Project" />
+          </div>
+        </SelectTrigger>
+        <SelectContent align="start">
+          <SelectItem value="all" className="text-xs">
+            All Projects
+          </SelectItem>
+          {projects.map((p) => (
+            <SelectItem key={p.id} value={p.id} className="text-xs">
+              {p.name}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      <div className="h-5 w-px bg-[var(--ds-border,#DFE1E6)] mx-1 shrink-0" />
+    </div>
+  );
 }
 
 function SearchHeader({
@@ -118,39 +164,17 @@ function SearchHeader({
       className="flex h-16 shrink-0 items-center justify-between gap-4 border-b border-[var(--ds-border)] bg-background/80 px-4 backdrop-blur-md sticky top-0 z-30"
       role="search"
     >
-      <div className="flex flex-1 items-center max-w-md">
+      <div className="flex flex-1 items-center max-w-2xl gap-2">
+        <ProjectSwitcher
+          projects={projects}
+          currentProjectId={currentProjectId}
+          handleProjectSwitch={handleProjectSwitch}
+          isPending={isPending}
+        />
         <GlobalSearch locale={locale} />
       </div>
 
-      <div className="flex items-center gap-2">
-        {/* Project Switcher */}
-        {projects.length > 0 && (
-          <div className="hidden sm:flex items-center gap-1.5 mr-2">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-[var(--ds-text-subtlest,#6B778C)]">
-              Project
-            </span>
-            <Select
-              value={currentProjectId ?? 'all'}
-              onValueChange={handleProjectSwitch}
-              disabled={isPending}
-            >
-              <SelectTrigger className="h-7 w-[140px] bg-[var(--ds-background-neutral-subtle)] border-none text-xs font-medium hover:bg-[var(--ds-background-neutral)] transition-colors">
-                <SelectValue placeholder="Select Project" />
-              </SelectTrigger>
-              <SelectContent align="end">
-                <SelectItem value="all" className="text-xs">
-                  All Projects
-                </SelectItem>
-                {projects.map((p) => (
-                  <SelectItem key={p.id} value={p.id} className="text-xs">
-                    {p.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        )}
-
+      <div className="flex items-center gap-3">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button
@@ -207,8 +231,11 @@ function SearchHeader({
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <div className="ml-2 hidden lg:block">
-          <ThemeToggle />
+        <div className="flex items-center gap-1 ml-1">
+          <LanguageSwitcher currentLocale={locale} variant="mini" />
+          <div className="hidden lg:block ml-1">
+            <ThemeToggle />
+          </div>
         </div>
       </div>
     </div>

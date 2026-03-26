@@ -110,6 +110,8 @@ plan:run → plan:done` with automatic folder moves and doc cascades
 
 ### Bug Fixes
 
+- **[Admin] **simplify AI assistant tools to native objects for SDK v5 typing
+
 - **[Admin] **targeted @ts-expect-error for AI assistant tools
 
 - **[Admin] **use @ts-expect-error instead of @ts-ignore per ESLint

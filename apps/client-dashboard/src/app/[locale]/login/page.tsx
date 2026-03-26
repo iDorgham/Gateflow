@@ -1,7 +1,7 @@
 'use client';
 
-import { useFormState, useFormStatus } from 'react-dom';
-import { useState, useEffect, useRef } from 'react';
+import { useActionState, useState, useEffect, useRef } from 'react';
+import { useFormStatus } from 'react-dom';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTheme } from 'next-themes';
 import { useTranslation } from 'react-i18next';
@@ -149,7 +149,7 @@ function SubmitButton({ isRtl }: { isRtl: boolean }) {
 
 export default function LoginPage() {
   const { t } = useTranslation('login');
-  const [state, formAction] = useFormState(loginAction, null);
+  const [state, formAction] = useActionState(loginAction, null);
   const [showPassword, setShowPassword] = useState(false);
   const [errorKey, setErrorKey] = useState(0);
   const [isSuccess, setIsSuccess] = useState(false);

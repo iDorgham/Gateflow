@@ -36,7 +36,7 @@ describe('auth-cookies', () => {
       const accessToken = 'access-token';
       const refreshToken = 'refresh-token';
 
-      setAuthCookies(accessToken, refreshToken);
+      await setAuthCookies(accessToken, refreshToken);
 
       expect(mockCookiesObj.set).toHaveBeenCalledTimes(2);
       expect(mockCookiesObj.set).toHaveBeenCalledWith(
@@ -65,7 +65,7 @@ describe('auth-cookies', () => {
   describe('clearAuthCookies', () => {
     it('deletes access, refresh, and csrf tokens', async () => {
       const { clearAuthCookies } = await import('./auth-cookies');
-      clearAuthCookies();
+      await clearAuthCookies();
 
       expect(mockCookiesObj.delete).toHaveBeenCalledTimes(3);
       expect(mockCookiesObj.delete).toHaveBeenCalledWith('gf_access_token');
