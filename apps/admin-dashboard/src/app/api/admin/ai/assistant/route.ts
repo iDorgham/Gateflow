@@ -74,7 +74,7 @@ Never make up data — use tools to fetch real information.`,
 
           return { totalOrgs, totalUsers, scansToday, scansThisMonth };
         },
-      }) as any,
+      }),
 
       listRecentOrgs: tool({
         description: 'List the most recently created organizations',
@@ -99,6 +99,7 @@ Never make up data — use tools to fetch real information.`,
               users: { select: { id: true } },
             },
           });
+          // @ts-expect-error - Prisma enum mismatch in typing
           return orgs.map(
             (o: {
               id: string;
@@ -115,7 +116,7 @@ Never make up data — use tools to fetch real information.`,
             })
           );
         },
-      }) as any,
+      }),
 
       getOrgStats: tool({
         description:
@@ -160,7 +161,7 @@ Never make up data — use tools to fetch real information.`,
             scansTotal,
           };
         },
-      }) as any,
+      }),
 
       listRecentScans: tool({
         description:
@@ -185,6 +186,7 @@ Never make up data — use tools to fetch real information.`,
               qrCode: { select: { organization: { select: { name: true } } } },
             },
           });
+          // @ts-expect-error - Prisma enum mismatch in typing
           return scans.map(
             (s: {
               id: string;
@@ -201,7 +203,7 @@ Never make up data — use tools to fetch real information.`,
             })
           );
         },
-      }) as any,
+      }),
 
       searchUsers: tool({
         description: 'Search for users by name or email',
@@ -245,9 +247,9 @@ Never make up data — use tools to fetch real information.`,
             })
           );
         },
-      }) as any,
+      }),
     } as any,
-  });
+  } as any);
 
   return result.toTextStreamResponse();
 }

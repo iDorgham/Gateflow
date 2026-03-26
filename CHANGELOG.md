@@ -20,6 +20,8 @@ _(next release notes go here)_
 
 ### Features
 
+- **[Projects Crm] **complete phase 5 operations polish & audit
+
 - **[Crm] **phase 3 - visitor watchlist status and security alerts
 - **[Projects Crm] **implement phase 2 - invitation gateway and UI
 
