@@ -51,7 +51,11 @@ export default function GateAIPage() {
             )}
 
             <ChatPanel
-              messages={messages}
+              messages={
+                messages as unknown as Parameters<
+                  typeof ChatPanel
+                >[0]['messages']
+              }
               input={input}
               handleInputChange={handleInputChange}
               handleSubmit={handleSubmit}

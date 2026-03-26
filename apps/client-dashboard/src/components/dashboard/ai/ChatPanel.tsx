@@ -1,9 +1,15 @@
 'use client';
 
 import * as React from 'react';
-import { Message } from 'ai';
-import { 
-  Button, 
+// Local type alias — compatible with both AI SDK v4 Message and v5 UIMessage shapes
+type Message = {
+  id: string;
+  role: string;
+  content: string;
+  [key: string]: unknown;
+};
+import {
+  Button,
   cn,
   Avatar,
   AvatarFallback,
@@ -11,37 +17,68 @@ import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
-  TooltipTrigger
+  TooltipTrigger,
 } from '@gate-access/ui';
-import { Send, User, Sparkles, Loader2, Paperclip, ThumbsUp, ThumbsDown, Mic, BarChart3, FileText, QrCode } from 'lucide-react';
+import {
+  Send,
+  User,
+  Sparkles,
+  Loader2,
+  Paperclip,
+  ThumbsUp,
+  ThumbsDown,
+  Mic,
+  BarChart3,
+  FileText,
+  QrCode,
+} from 'lucide-react';
 import { AIChartRenderer, type ChartDataBlock } from './AIChartRenderer';
 import { AIReportRenderer, type ReportDataBlock } from './AIReportRenderer';
-import { AIScheduleRenderer, type ScheduleDataBlock } from './AIScheduleRenderer';
-import { AIConfirmationRenderer, type ActionDataBlock } from './AIConfirmationRenderer';
+import {
+  AIScheduleRenderer,
+  type ScheduleDataBlock,
+} from './AIScheduleRenderer';
+import {
+  AIConfirmationRenderer,
+  type ActionDataBlock,
+} from './AIConfirmationRenderer';
 import { toast } from 'sonner';
 
 // Helper to parse potential chart/report/schedule data from message content
 function parseMessageContent(content: string) {
   // Look for JSON blocks specifically tagged or structured as charts, reports, or schedules
-  const jsonRegex = /```json\s*(\{[\s\S]*?"type"\s*:\s*"(?:chart|report|schedule|confirm)"[\s\S]*?\})\s*```/g;
+  const jsonRegex =
+    /```json\s*(\{[\s\S]*?"type"\s*:\s*"(?:chart|report|schedule|confirm)"[\s\S]*?\})\s*```/g;
   const parts = [];
   let lastIndex = 0;
   let match;
 
   while ((match = jsonRegex.exec(content)) !== null) {
     if (match.index > lastIndex) {
-      parts.push({ type: 'text' as const, content: content.slice(lastIndex, match.index) });
+      parts.push({
+        type: 'text' as const,
+        content: content.slice(lastIndex, match.index),
+      });
     }
     try {
       const config = JSON.parse(match[1]);
       if (config.type === 'chart') {
-        parts.push({ type: 'chart' as const, config: config as ChartDataBlock });
+        parts.push({
+          type: 'chart' as const,
+          config: config as ChartDataBlock,
+        });
       } else if (config.type === 'report') {
-        parts.push({ type: 'report' as const, config: config as ReportDataBlock });
+        parts.push({
+          type: 'report' as const,
+          config: config as ReportDataBlock,
+        });
       } else if (config.type === 'schedule') {
         parts.push({ type: 'schedule' as const, config: config });
       } else if (config.type === 'confirm') {
-        parts.push({ type: 'confirm' as const, config: config as ActionDataBlock });
+        parts.push({
+          type: 'confirm' as const,
+          config: config as ActionDataBlock,
+        });
       }
     } catch (e) {
       parts.push({ type: 'text' as const, content: match[0] });
@@ -59,7 +96,11 @@ function parseMessageContent(content: string) {
 interface ChatPanelProps {
   messages: Message[];
   input: string;
-  handleInputChange: (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => void;
+  handleInputChange: (
+    e:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLTextAreaElement>
+  ) => void;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   isLoading: boolean;
   isRtl: boolean;
@@ -68,10 +109,30 @@ interface ChatPanelProps {
 }
 
 const SUGGESTED_PROMPTS = [
-  { icon: BarChart3, label: 'Analyze last month\'s scans', prompt: 'Show me an analysis of last month\'s scan trends.', color: 'text-primary bg-primary/10' },
-  { icon: QrCode, label: 'Generate guest QR', prompt: 'I want to generate a guest QR code for tomorrow.', color: 'text-primary bg-primary/10' },
-  { icon: FileText, label: 'Create security report', prompt: 'Generate a security incident report for the last 7 days.', color: 'text-primary bg-primary/10' },
-  { icon: Sparkles, label: 'Optimize gate flow', prompt: 'How can I optimize the visitor flow at the main gate?', color: 'text-primary bg-primary/10' },
+  {
+    icon: BarChart3,
+    label: "Analyze last month's scans",
+    prompt: "Show me an analysis of last month's scan trends.",
+    color: 'text-primary bg-primary/10',
+  },
+  {
+    icon: QrCode,
+    label: 'Generate guest QR',
+    prompt: 'I want to generate a guest QR code for tomorrow.',
+    color: 'text-primary bg-primary/10',
+  },
+  {
+    icon: FileText,
+    label: 'Create security report',
+    prompt: 'Generate a security incident report for the last 7 days.',
+    color: 'text-primary bg-primary/10',
+  },
+  {
+    icon: Sparkles,
+    label: 'Optimize gate flow',
+    prompt: 'How can I optimize the visitor flow at the main gate?',
+    color: 'text-primary bg-primary/10',
+  },
 ];
 
 export function ChatPanel({
@@ -94,13 +155,26 @@ export function ChatPanel({
   }, [messages]);
 
   // Track state of AI actions (pending, confirmed, etc.)
-  const [actionStates, setActionStates] = React.useState<Record<string, 'pending' | 'confirmed' | 'cancelled' | 'executed' | 'failed'>>({});
-  const [executingActions, setExecutingActions] = React.useState<Record<string, boolean>>({});
-  const [feedbackGiven, setFeedbackGiven] = React.useState<Record<string, 'THUMBS_UP' | 'THUMBS_DOWN'>>({});
+  const [actionStates, setActionStates] = React.useState<
+    Record<
+      string,
+      'pending' | 'confirmed' | 'cancelled' | 'executed' | 'failed'
+    >
+  >({});
+  const [executingActions, setExecutingActions] = React.useState<
+    Record<string, boolean>
+  >({});
+  const [feedbackGiven, setFeedbackGiven] = React.useState<
+    Record<string, 'THUMBS_UP' | 'THUMBS_DOWN'>
+  >({});
 
-  const handleActionConfirm = async (messageId: string, partIndex: number, data: ActionDataBlock) => {
+  const handleActionConfirm = async (
+    messageId: string,
+    partIndex: number,
+    data: ActionDataBlock
+  ) => {
     const actionKey = `${messageId}-${partIndex}`;
-    setExecutingActions(prev => ({ ...prev, [actionKey]: true }));
+    setExecutingActions((prev) => ({ ...prev, [actionKey]: true }));
 
     try {
       // 1. Create the action log on the server first
@@ -111,7 +185,7 @@ export function ChatPanel({
           actionType: data.actionType,
           title: data.title,
           intentJson: data.intentJson,
-          prompt: messages.find(m => m.id === messageId)?.content || '',
+          prompt: messages.find((m) => m.id === messageId)?.content || '',
         }),
       });
 
@@ -134,27 +208,35 @@ export function ChatPanel({
         throw new Error(err.error || 'Execution failed');
       }
 
-      setActionStates(prev => ({ ...prev, [actionKey]: 'executed' }));
-      toast.success(t('Action executed successfully', 'تم تنفيذ الإجراء بنجاح'));
+      setActionStates((prev) => ({ ...prev, [actionKey]: 'executed' }));
+      toast.success(
+        t('Action executed successfully', 'تم تنفيذ الإجراء بنجاح')
+      );
     } catch (err: any) {
       console.error('>>> [ChatPanel] Action failed:', err);
-      setActionStates(prev => ({ ...prev, [actionKey]: 'failed' }));
+      setActionStates((prev) => ({ ...prev, [actionKey]: 'failed' }));
       toast.error(err.message || t('Action failed', 'فشل تنفيذ الإجراء'));
     } finally {
-      setExecutingActions(prev => ({ ...prev, [actionKey]: false }));
+      setExecutingActions((prev) => ({ ...prev, [actionKey]: false }));
     }
   };
 
   const handleActionCancel = (messageId: string, partIndex: number) => {
     const actionKey = `${messageId}-${partIndex}`;
-    setActionStates(prev => ({ ...prev, [actionKey]: 'cancelled' }));
+    setActionStates((prev) => ({ ...prev, [actionKey]: 'cancelled' }));
     toast.info(t('Action cancelled', 'تم إلغاء الإجراء'));
   };
 
-  const handleFeedback = async (interactionIdx: number, type: 'THUMBS_UP' | 'THUMBS_DOWN') => {
+  const handleFeedback = async (
+    interactionIdx: number,
+    type: 'THUMBS_UP' | 'THUMBS_DOWN'
+  ) => {
     const interactionId = streamData?.[interactionIdx]?.actionId;
     if (!interactionId) {
-      console.warn('>>> [ChatPanel] No interactionId found for index:', interactionIdx);
+      console.warn(
+        '>>> [ChatPanel] No interactionId found for index:',
+        interactionIdx
+      );
       return;
     }
 
@@ -167,7 +249,7 @@ export function ChatPanel({
 
       if (!res.ok) throw new Error('Failed to submit feedback');
 
-      setFeedbackGiven(prev => ({ ...prev, [interactionId]: type }));
+      setFeedbackGiven((prev) => ({ ...prev, [interactionId]: type }));
       toast.success(t('Thank you for your feedback!', 'شكراً على ملاحظاتك!'));
     } catch (err) {
       console.error('>>> [ChatPanel] Feedback failed:', err);
@@ -179,7 +261,6 @@ export function ChatPanel({
 
   return (
     <div className="flex flex-col h-full bg-transparent">
-
       <div className="flex-1 flex flex-col p-0 overflow-hidden">
         <ScrollArea className="flex-1 p-4" ref={scrollRef}>
           <div className="flex flex-col gap-4">
@@ -190,10 +271,16 @@ export function ChatPanel({
                     <Sparkles size={32} className="text-primary" />
                   </div>
                   <h1 className="text-3xl font-bold tracking-tight text-[var(--ds-text,#172B4D)] dark:text-white">
-                    {t('How can I help you today?', 'كيف يمكنني مساعدتك اليوم؟')}
+                    {t(
+                      'How can I help you today?',
+                      'كيف يمكنني مساعدتك اليوم؟'
+                    )}
                   </h1>
                   <p className="text-base text-[var(--ds-text-subtle,#6B778C)] max-w-md leading-relaxed">
-                    {t('I can help you analyze scans, generate reports, or automate your gate operations in seconds.', 'يمكنني مساعدتك في تحليل المسحات، إنشاء التقارير، أو أتمتة عمليات بواباتك في ثوانٍ.')}
+                    {t(
+                      'I can help you analyze scans, generate reports, or automate your gate operations in seconds.',
+                      'يمكنني مساعدتك في تحليل المسحات، إنشاء التقارير، أو أتمتة عمليات بواباتك في ثوانٍ.'
+                    )}
                   </p>
                 </div>
 
@@ -204,7 +291,9 @@ export function ChatPanel({
                       onClick={() => onSuggestedPromptClick?.(item.prompt)}
                       className="flex items-center gap-3 p-4 text-left bg-background border border-border border-border rounded-xl hover:border-primary/50 hover:shadow-md transition-all group"
                     >
-                      <div className={cn("p-2 rounded-lg shrink-0", item.color)}>
+                      <div
+                        className={cn('p-2 rounded-lg shrink-0', item.color)}
+                      >
                         <item.icon size={18} />
                       </div>
                       <span className="text-sm font-medium text-foreground dark:text-zinc-100 group-hover:text-primary transition-colors">
@@ -215,7 +304,7 @@ export function ChatPanel({
                 </div>
               </div>
             )}
-            
+
             {messages.map((m, messageIdx) => {
               // interaction index is roughly floor(idx / 2) because messages alternate User/AI
               // This is a heuristic that works for normal chat flow
@@ -226,45 +315,65 @@ export function ChatPanel({
                 <div
                   key={m.id}
                   className={cn(
-                    "flex gap-3 max-w-[85%]",
-                    m.role === 'user' 
-                      ? (isRtl ? "mr-auto flex-row-reverse" : "ml-auto flex-row-reverse") 
-                      : "mr-auto w-full"
+                    'flex gap-3 max-w-[85%]',
+                    m.role === 'user'
+                      ? isRtl
+                        ? 'mr-auto flex-row-reverse'
+                        : 'ml-auto flex-row-reverse'
+                      : 'mr-auto w-full'
                   )}
                 >
-                  <Avatar className={cn(
-                    "h-8 w-8 shrink-0",
-                    m.role === 'user' ? "bg-zinc-700" : "bg-secondary"
-                  )}>
+                  <Avatar
+                    className={cn(
+                      'h-8 w-8 shrink-0',
+                      m.role === 'user' ? 'bg-zinc-700' : 'bg-secondary'
+                    )}
+                  >
                     <AvatarFallback className="text-white text-[10px]">
-                      {m.role === 'user' ? <User size={14} /> : <Sparkles size={14} />}
+                      {m.role === 'user' ? (
+                        <User size={14} />
+                      ) : (
+                        <Sparkles size={14} />
+                      )}
                     </AvatarFallback>
                   </Avatar>
-                  
+
                   <div className="flex flex-col gap-1 flex-1 min-w-0 group">
                     {parseMessageContent(m.content).map((part, i) => (
                       <React.Fragment key={`${m.id}-${i}`}>
                         {part.type === 'text' ? (
-                          <div className={cn(
-                            "rounded-2xl px-4 py-3 text-sm leading-relaxed relative",
-                            m.role === 'user'
-                              ? "bg-zinc-100 bg-secondary text-foreground dark:text-zinc-100 rounded-tr-none"
-                              : "bg-background bg-background text-foreground dark:text-zinc-100 border border-zinc-200 border-border shadow-sm rounded-tl-none whitespace-pre-wrap"
-                          )}>
+                          <div
+                            className={cn(
+                              'rounded-2xl px-4 py-3 text-sm leading-relaxed relative',
+                              m.role === 'user'
+                                ? 'bg-zinc-100 bg-secondary text-foreground dark:text-zinc-100 rounded-tr-none'
+                                : 'bg-background bg-background text-foreground dark:text-zinc-100 border border-zinc-200 border-border shadow-sm rounded-tl-none whitespace-pre-wrap'
+                            )}
+                          >
                             {part.content}
                           </div>
                         ) : part.type === 'chart' ? (
-                          <AIChartRenderer config={part.config as ChartDataBlock} />
+                          <AIChartRenderer
+                            config={part.config as ChartDataBlock}
+                          />
                         ) : part.type === 'report' ? (
-                          <AIReportRenderer config={part.config as ReportDataBlock} isRtl={isRtl} />
+                          <AIReportRenderer
+                            config={part.config as ReportDataBlock}
+                            isRtl={isRtl}
+                          />
                         ) : part.type === 'schedule' ? (
-                          <AIScheduleRenderer config={part.config as ScheduleDataBlock} isRtl={isRtl} />
+                          <AIScheduleRenderer
+                            config={part.config as ScheduleDataBlock}
+                            isRtl={isRtl}
+                          />
                         ) : (
-                          <AIConfirmationRenderer 
-                            data={part.config as ActionDataBlock} 
+                          <AIConfirmationRenderer
+                            data={part.config as ActionDataBlock}
                             status={actionStates[`${m.id}-${i}`] || 'pending'}
                             isExecuting={executingActions[`${m.id}-${i}`]}
-                            onConfirm={(data) => handleActionConfirm(m.id, i, data)}
+                            onConfirm={(data) =>
+                              handleActionConfirm(m.id, i, data)
+                            }
                             onCancel={() => handleActionCancel(m.id, i)}
                           />
                         )}
@@ -273,18 +382,23 @@ export function ChatPanel({
 
                     {/* Feedback Buttons for AI messages */}
                     {m.role === 'assistant' && !isLoading && interactionId && (
-                      <div className={cn(
-                        "flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity mt-1",
-                        isRtl ? "justify-end" : "justify-start"
-                      )}>
+                      <div
+                        className={cn(
+                          'flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity mt-1',
+                          isRtl ? 'justify-end' : 'justify-start'
+                        )}
+                      >
                         <Button
                           variant="ghost"
                           size="icon"
                           className={cn(
-                            "h-6 w-6 rounded-full hover:bg-[var(--ds-background-neutral-subtle,#DFE1E6)]",
-                            feedbackGiven[interactionId] === 'THUMBS_UP' && "text-green-600 bg-green-50"
+                            'h-6 w-6 rounded-full hover:bg-[var(--ds-background-neutral-subtle,#DFE1E6)]',
+                            feedbackGiven[interactionId] === 'THUMBS_UP' &&
+                              'text-green-600 bg-green-50'
                           )}
-                          onClick={() => handleFeedback(interactionIdx, 'THUMBS_UP')}
+                          onClick={() =>
+                            handleFeedback(interactionIdx, 'THUMBS_UP')
+                          }
                           disabled={!!feedbackGiven[interactionId]}
                         >
                           <ThumbsUp size={12} />
@@ -293,10 +407,13 @@ export function ChatPanel({
                           variant="ghost"
                           size="icon"
                           className={cn(
-                            "h-6 w-6 rounded-full hover:bg-[var(--ds-background-neutral-subtle,#DFE1E6)]",
-                            feedbackGiven[interactionId] === 'THUMBS_DOWN' && "text-red-600 bg-red-50"
+                            'h-6 w-6 rounded-full hover:bg-[var(--ds-background-neutral-subtle,#DFE1E6)]',
+                            feedbackGiven[interactionId] === 'THUMBS_DOWN' &&
+                              'text-red-600 bg-red-50'
                           )}
-                          onClick={() => handleFeedback(interactionIdx, 'THUMBS_DOWN')}
+                          onClick={() =>
+                            handleFeedback(interactionIdx, 'THUMBS_DOWN')
+                          }
                           disabled={!!feedbackGiven[interactionId]}
                         >
                           <ThumbsDown size={12} />
@@ -307,7 +424,7 @@ export function ChatPanel({
                 </div>
               );
             })}
-            
+
             {isLoading && (
               <div className="flex gap-3 mr-auto items-center text-muted-foreground animate-pulse">
                 <Avatar className="h-8 w-8 bg-secondary">
@@ -315,7 +432,9 @@ export function ChatPanel({
                     <Loader2 size={14} className="animate-spin" />
                   </AvatarFallback>
                 </Avatar>
-                <span className="text-xs">{t('Assistant is thinking...', 'المساعد يفكر...')}</span>
+                <span className="text-xs">
+                  {t('Assistant is thinking...', 'المساعد يفكر...')}
+                </span>
               </div>
             )}
           </div>
@@ -328,45 +447,65 @@ export function ChatPanel({
               <input
                 value={input}
                 onChange={handleInputChange}
-                placeholder={t('Ask Assistant something...', 'اسأل المساعد شيئاً...')}
+                placeholder={t(
+                  'Ask Assistant something...',
+                  'اسأل المساعد شيئاً...'
+                )}
                 className={cn(
-                  "w-full bg-background bg-background border border-border rounded-xl px-4 py-3.5 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all",
-                  isRtl ? "pl-24" : "pr-24"
+                  'w-full bg-background bg-background border border-border rounded-xl px-4 py-3.5 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all',
+                  isRtl ? 'pl-24' : 'pr-24'
                 )}
                 disabled={isLoading}
               />
-              <div className={cn(
-                "absolute top-1/2 -translate-y-1/2 flex items-center gap-1",
-                isRtl ? "left-2" : "right-2"
-              )}>
+              <div
+                className={cn(
+                  'absolute top-1/2 -translate-y-1/2 flex items-center gap-1',
+                  isRtl ? 'left-2' : 'right-2'
+                )}
+              >
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <Button variant="ghost" size="icon" type="button" className="h-8 w-8 text-[#6B778C] dark:text-[#A5ADBA] hover:bg-gray-100 dark:hover:bg-gray-800">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        type="button"
+                        className="h-8 w-8 text-[#6B778C] dark:text-[#A5ADBA] hover:bg-gray-100 dark:hover:bg-gray-800"
+                      >
                         <Mic size={16} />
                       </Button>
                     </TooltipTrigger>
-                    <TooltipContent side="top">Voice input (Coming soon)</TooltipContent>
+                    <TooltipContent side="top">
+                      Voice input (Coming soon)
+                    </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
 
                 <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <Button variant="ghost" size="icon" type="button" className="h-8 w-8 text-[#6B778C] dark:text-[#A5ADBA] hover:bg-gray-100 dark:hover:bg-gray-800" disabled>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        type="button"
+                        className="h-8 w-8 text-[#6B778C] dark:text-[#A5ADBA] hover:bg-gray-100 dark:hover:bg-gray-800"
+                        disabled
+                      >
                         <Paperclip size={16} />
                       </Button>
                     </TooltipTrigger>
-                    <TooltipContent side="top">Attach file (Coming soon)</TooltipContent>
+                    <TooltipContent side="top">
+                      Attach file (Coming soon)
+                    </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
-                <Button 
-                  type="submit" 
-                  size="icon" 
+                <Button
+                  type="submit"
+                  size="icon"
                   className="h-8 w-8 bg-primary hover:bg-primary/90 text-white rounded-lg transition-transform active:scale-95"
                   disabled={isLoading || !input.trim()}
                 >
-                  <Send size={14} className={isRtl ? "rotate-180" : ""} />
+                  <Send size={14} className={isRtl ? 'rotate-180' : ''} />
                 </Button>
               </div>
             </div>

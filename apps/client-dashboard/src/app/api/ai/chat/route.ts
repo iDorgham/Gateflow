@@ -1,5 +1,5 @@
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
-import { streamText } from 'ai';
+import { streamText, stepCountIs, type LanguageModel } from 'ai';
 import { requireAuth } from '@/lib/dashboard-auth';
 import { getOrganizationContext } from '@/lib/ai/context-providers';
 import { checkRateLimit } from '@/lib/rate-limit';
@@ -73,7 +73,7 @@ export async function POST(req: Request) {
     const google = createGoogleGenerativeAI({ apiKey });
     const model = google('gemini-flash-latest', {
       structuredOutputs: false,
-    });
+    }) as unknown as LanguageModel;
 
     const isResident = session.user.role === 'RESIDENT';
 
@@ -82,7 +82,7 @@ export async function POST(req: Request) {
       model,
       messages,
       tools: automationTools,
-      maxSteps: 5,
+      stopWhen: stepCountIs(5),
       system: `You are GateAI, an intelligent operations agent for GateFlow.
 Organization: ${orgContext?.orgName || 'GateFlow'}.
 Organization ID: ${session.user.organizationId}.
@@ -161,8 +161,8 @@ Answer concisely.`
       onFinish: async (finish) => {
         if (finish.usage) {
           await AiActionService.recordUsage(actionLog.id, {
-            promptTokens: finish.usage.promptTokens,
-            completionTokens: finish.usage.completionTokens,
+            promptTokens: finish.usage.inputTokens,
+            completionTokens: finish.usage.outputTokens,
             totalTokens: finish.usage.totalTokens,
           }).catch((err) =>
             console.error('>>> [GateAI] Usage log failed:', err)
@@ -174,7 +174,7 @@ Answer concisely.`
       },
     });
 
-    return result.toDataStreamResponse();
+    return result.toTextStreamResponse();
   } catch (error: unknown) {
     const errorMessage =
       error instanceof Error ? error.message : 'Internal Server Error';

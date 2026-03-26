@@ -1,4 +1,10 @@
-import { streamText, tool, type CoreMessage } from 'ai';
+import {
+  streamText,
+  tool,
+  stepCountIs,
+  type CoreMessage,
+  type LanguageModel,
+} from 'ai';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { z } from 'zod';
 import { randomUUID } from 'crypto';
@@ -142,7 +148,7 @@ export async function POST(request: NextRequest): Promise<Response> {
 
   try {
     const result = await streamText({
-      model: getGoogleClient()('gemini-1.5-flash'),
+      model: getGoogleClient()('gemini-1.5-flash') as unknown as LanguageModel,
       system: `You are the GateFlow AI Assistant — an intelligent helper for a gate access control SaaS platform.
 You help users manage their organization through natural language.
 
@@ -166,13 +172,13 @@ Rules:
 - Never invent or guess IDs. Only use IDs returned by previous tool calls or provided by the user.
 - All actions are scoped to the user's organization (${claims.orgId}).`,
       messages,
-      maxSteps: 6,
+      stopWhen: stepCountIs(6),
       tools: {
         // ── createQR ──────────────────────────────────────────────────────────
         createQR: tool({
           description:
             'Create one or more signed QR access codes. Use count > 1 to create a set.',
-          parameters: z.object({
+          inputSchema: z.object({
             count: z
               .number()
               .int()
@@ -245,7 +251,7 @@ Rules:
         createProject: tool({
           description:
             'Create a new project in the organization, optionally with named gates.',
-          parameters: z.object({
+          inputSchema: z.object({
             name: z.string().min(1).describe('Project name'),
             gates: z
               .array(z.string().min(1))
@@ -278,7 +284,7 @@ Rules:
         // ── createUnit ────────────────────────────────────────────────────────
         createUnit: tool({
           description: 'Create a residential unit (apartment, villa, etc.)',
-          parameters: z.object({
+          inputSchema: z.object({
             name: z.string().min(1).describe('Unit identifier, e.g. "A-101"'),
             type: z.enum([
               'STUDIO',
@@ -334,7 +340,7 @@ Rules:
         getOrgStats: tool({
           description:
             'Get real-time counts for the organization: projects, gates, QR codes, contacts, units, scans.',
-          parameters: z.object({}),
+          inputSchema: z.object({}),
           execute: async () => {
             log('getOrgStats');
             const [projects, gates, qrCodes, contacts, units, scans] =
@@ -379,7 +385,7 @@ Rules:
         // ── listProjects ──────────────────────────────────────────────────────
         listProjects: tool({
           description: 'List all projects with gate and unit counts.',
-          parameters: z.object({}),
+          inputSchema: z.object({}),
           execute: async () => {
             log('listProjects');
             const projects = await prisma.project.findMany({
@@ -409,7 +415,7 @@ Rules:
         // ── listGates ─────────────────────────────────────────────────────────
         listGates: tool({
           description: 'List active gates, optionally filtered by project.',
-          parameters: z.object({ projectId: z.string().optional() }),
+          inputSchema: z.object({ projectId: z.string().optional() }),
           execute: async ({ projectId }) => {
             log('listGates', { projectId });
             const gates = await prisma.gate.findMany({
@@ -442,7 +448,7 @@ Rules:
         // ── listContacts ──────────────────────────────────────────────────────
         listContacts: tool({
           description: 'Search and list contacts by name or email.',
-          parameters: z.object({
+          inputSchema: z.object({
             search: z.string().optional().describe('Optional search term'),
           }),
           execute: async ({ search }) => {
@@ -500,7 +506,7 @@ Rules:
         // ── listRecentScans ───────────────────────────────────────────────────
         listRecentScans: tool({
           description: 'Get the last 20 scan logs for the organization.',
-          parameters: z.object({
+          inputSchema: z.object({
             gateId: z.string().optional().describe('Optional gate filter'),
           }),
           execute: async ({ gateId }) => {
@@ -535,7 +541,7 @@ Rules:
         listUnits: tool({
           description:
             'List residential units, optionally filtered by project or unit type.',
-          parameters: z.object({
+          inputSchema: z.object({
             projectId: z.string().optional(),
             unitType: z
               .enum([
@@ -575,7 +581,7 @@ Rules:
         // ── createTask ────────────────────────────────────────────────────────
         createTask: tool({
           description: 'Create a task for the organization team.',
-          parameters: z.object({
+          inputSchema: z.object({
             title: z.string().min(1).max(200).describe('Task title'),
             description: z
               .string()
