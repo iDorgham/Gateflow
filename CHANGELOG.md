@@ -108,6 +108,8 @@ plan:run → plan:done` with automatic folder moves and doc cascades
 
 ### Bug Fixes
 
+- **[Admin] **targeted @ts-expect-error for AI assistant tools
+
 - **[Admin] **use @ts-expect-error instead of @ts-ignore per ESLint
 
 - **[Admin] **finalize AI assistant tools type bypass via variable isolation

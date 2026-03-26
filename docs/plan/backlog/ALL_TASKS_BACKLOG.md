@@ -71,8 +71,8 @@
 - [x] Phase 3 — QR Codes & Workspace Exports
 - [x] Phase 4 — Analytics & Incidents
 - [x] Phase 5 — Automated Enforcement & Certification
-- [ ] Phase 6 — Gate-Assignment Management UI
-- [ ] Phase 7 — Final Certification & Audit
+- [x] Phase 6 — Gate-Assignment Management UI
+- [x] Phase 7 — Final Certification & Audit
 
 ### domain_migration_2026 — Domain Migration to .site (2026)
 
