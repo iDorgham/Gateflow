@@ -24,6 +24,8 @@ _(next release notes go here)_
 
 ### Features
 
+- **[Maintenance Management] **finalize phased planning and pro-prompts
+
 - **[Maintenance Management] **initialize maintenance hub initiative
 
 - **[Maintenance Management] **initialize maintenance hub initiative
