@@ -26,6 +26,20 @@
 - [ ] Phase 2 — Title
 - [ ] Phase 3 — Title
 
+### ai_sdk_v6_migration — AI SDK v6 (Agentic) Migration
+
+**IDEA:** `docs/plan/context/IDEA_ai_sdk_v6_migration.md`
+
+**Status:** 🆕 Open (Monitor for stability)
+
+**Target:** Q1 2027
+
+- [ ] Phase 1 — Evaluate Stability & API Finalization
+- [ ] Phase 2 — Refactor Client Dashboard: Core useChat Migration
+- [ ] Phase 3 — Refactor Admin Dashboard: AI Assistant Migration
+- [ ] Phase 4 — Data Transformation: Migrate History to Parts Array
+- [ ] Phase 5 — Full Monorepo Audit & Stabilization
+
 ### security_isolation_fix — High-Risk Security Hardening
 
 **IDEA:** `docs/plan/context/IDEA_security_isolation_fix.md`
