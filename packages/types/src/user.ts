@@ -1,62 +1,5 @@
-import { Organization } from './organization';
-/** Role name constants for JWT/auth (matches Role.name in DB) */
-export const UserRole = {
-  ADMIN: 'ADMIN',
-  TENANT_ADMIN: 'TENANT_ADMIN',
-  TENANT_USER: 'TENANT_USER',
-  VISITOR: 'VISITOR',
-  RESIDENT: 'RESIDENT',
-} as const;
-
-export type UserRoleType = (typeof UserRole)[keyof typeof UserRole];
-
-export type Permission =
-  | 'gates:view'
-  | 'gates:manage'
-  | 'gates:assignments'
-  | 'qr:view'
-  | 'qr:create'
-  | 'qr:manage'
-  | 'scans:view'
-  | 'scans:override'
-  | 'scans:export'
-  | 'workspace:manage'
-  | 'roles:manage'
-  | 'users:view'
-  | 'users:manage'
-  | 'analytics:view'
-  | 'projects:view'
-  | 'projects:manage'
-  | 'units:view'
-  | 'units:manage'
-  | 'residents:manage'
-  | 'contacts:manage';
-
-export interface Role {
-  id: string;
-  name: string;
-  description?: string | null;
-  permissions: Record<Permission, boolean>;
-  isBuiltIn: boolean;
-  organizationId?: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-export interface User {
-  id: string;
-  email: string | null;
-  name: string;
-  avatarUrl?: string | null;
-  bio?: string | null;
-  passwordHash: string;
-  roleId: string;
-  role: Role;
-  organizationId: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt: Date | null;
-}
+import type { Organization, User } from './base';
+export * from './base';
 
 export interface UserWithOrganization extends User {
   organization?: Organization | null;
@@ -70,7 +13,10 @@ export const BUILT_IN_ROLES = {
   RESIDENT: 'Resident',
 } as const;
 
-export const DEFAULT_PERMISSIONS: Record<string, Record<Permission, boolean>> = {
+export const DEFAULT_PERMISSIONS: Record<
+  string,
+  Record<import('./base').Permission, boolean>
+> = {
   [BUILT_IN_ROLES.SUPER_ADMIN]: {
     'gates:view': true,
     'gates:manage': true,

@@ -11,9 +11,9 @@
 @layer base {
   :root {
     /* ── Typography ─────────────────────────────────── */
-    --ds-font-family-sans: 'Atlassian Sans', ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
-    --ds-font-family-heading: 'Atlassian Sans', ui-sans-serif, sans-serif;
-    --ds-font-family-mono: 'Atlassian Mono', 'SFMono-Medium', 'SF Mono', 'Cascadia Mono', 'Segoe UI Mono', 'Roboto Mono', 'Ubuntu Mono', monospace;
+    --ds-font-family-sans: var(--font-sans, var(--font-inter, var(--font-poppins, ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif)));
+    --ds-font-family-heading: var(--font-heading, var(--font-sans, var(--font-inter, var(--font-poppins, ui-sans-serif, sans-serif))));
+    --ds-font-family-mono: var(--font-mono, 'SFMono-Medium', 'SF Mono', 'Cascadia Mono', 'Segoe UI Mono', 'Roboto Mono', 'Ubuntu Mono', monospace);
 
     /* ── Radius Tokens ──────────────────────────────── */
     --ds-border-radius: 8px;

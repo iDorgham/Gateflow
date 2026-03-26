@@ -1,29 +1,8 @@
-import type { User } from './user';
-import type { Gate } from './gate';
-import type { QRCode } from './qr';
-
-export enum ScanStatus {
-  SUCCESS = 'SUCCESS',
-  FAILED = 'FAILED',
-  EXPIRED = 'EXPIRED',
-  MAX_USES_REACHED = 'MAX_USES_REACHED',
-  INACTIVE = 'INACTIVE',
-  DENIED = 'DENIED',
-}
-
-export interface ScanLog {
-  id: string;
-  status: ScanStatus;
-  scannedAt: Date;
-  userId: string | null;
-  gateId: string;
-  qrCodeId: string;
-}
+import type { User, Gate, QRCode, ScanLog } from './base';
+export * from './base';
 
 export interface ScanLogWithRelations extends ScanLog {
   user?: User | null;
   gate?: Gate;
   qrCode?: QRCode;
 }
-
-export type ScanStatusType = keyof typeof ScanStatus;

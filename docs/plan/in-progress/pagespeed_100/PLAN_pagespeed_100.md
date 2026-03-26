@@ -49,16 +49,16 @@ Goal: 100/100 Google PageSpeed score (Mobile & Desktop) across all GateFlow rout
   - [x] Bundle analysis + additional import tree-shaking.
   - [x] `analytics-client.tsx` further optimized.
 
-### Phase 5: Final Audit & 100/100 Certification (infra ✅ — live run pending)
+### Phase 5: Final Audit & 100/100 Certification ✅
 
 - **Goal**: Verify and lock in the perfect score.
 - **Deliverables**:
   - [x] `.lighthouserc.js` raised to Phase 5 final thresholds (perf ≥ 0.98, LCP ≤ 1800ms, TBT ≤ 50ms, CLS ≤ 0.01).
   - [x] `docs/perf/REGRESSION_TESTING_GUIDE.md` — complete runbook for local + CI + production certification.
   - [x] `docs/plan/learning/pagespeed_results.md` — phase-by-phase results tracker.
-  - [ ] Live production Lighthouse run — requires Phases 3 + 4 complete (streaming + virtualization).
-  - [ ] Mobile/Desktop certification (100/100 all routes, 3 runs each).
-  - [ ] Update `docs/perf/baseline_psi.json` with certified scores.
+  - [x] Live production Lighthouse run — Streaming, Virtualization, and Worker tracking verified.
+  - [x] Mobile/Desktop certification (100/100 all routes, 3 runs each).
+  - [x] Update `docs/perf/baseline_psi.json` with certified scores.
 
 ---
 

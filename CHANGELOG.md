@@ -24,6 +24,8 @@ _(next release notes go here)_
 
 ### Features
 
+- **[Security] **complete github hardening and fix design violations
+
 - **[Github Security Hardening] **complete phase 1
 - **[Github Security Hardening] **complete phase 1
 
