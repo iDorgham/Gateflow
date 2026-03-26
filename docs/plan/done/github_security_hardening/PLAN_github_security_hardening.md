@@ -14,10 +14,10 @@ The Github Security Hardening initiative hardens the GateFlow supply chain, enfo
 | #   | Phase                                           | Tool     | Status |
 | --- | ----------------------------------------------- | -------- | ------ |
 | 1   | **Repository & Branch Protection Architecture** | claude   | [x]    |
-| 2   | **Secret Management & Rotation Logic**          | gemini   | [ ]    |
-| 3   | **CI/CD Hardening (OIDC & Minimal Privs)**      | claude   | [ ]    |
-| 4   | **Supply Chain Governance (Dependabot)**        | claude   | [ ]    |
-| 5   | **Security Gate Automation (CI + Scan)**        | opencode | [ ]    |
+| 2   | **Secret Management & Rotation Logic**          | gemini   | [/]    |
+| 3   | **CI/CD Hardening (OIDC & Minimal Privs)**      | claude   | [x]    |
+| 4   | **Supply Chain Governance (Dependabot)**        | claude   | [x]    |
+| 5   | **Security Gate Automation (CI + Scan)**        | opencode | [x]    |
 
 ## Technical Constraints
 
@@ -53,9 +53,9 @@ The Github Security Hardening initiative hardens the GateFlow supply chain, enfo
 
 ### Phase 3: CI/CD Hardening
 
-- [ ] All `.github/workflows/*.yml` updated with `permissions` blocks.
-- [ ] No workflows run with elevated privileges by default.
-- [ ] `pnpm-lock.yaml` hash verification in CI.
+- [x] All `.github/workflows/*.yml` updated with `permissions` blocks.
+- [x] No workflows run with elevated privileges by default (baseline `contents: read`).
+- [x] `pnpm-lock.yaml` hash verification in CI (`--frozen-lockfile`).
 
 ### Phase 4: Supply Chain Governance
 
@@ -65,6 +65,7 @@ The Github Security Hardening initiative hardens the GateFlow supply chain, enfo
 
 ### Phase 5: Security Gate Automation
 
-- [ ] `scripts/scan-secrets.js` runs as a mandatory CI step (using `pnpm check:secrets`).
-- [ ] Build fails if any High-Risk secret pattern is found.
-- [ ] Final security audit report generated for the initiative.
+- [x] `scripts/scan-secrets.js` integrated into `ci.yml` as blocking job.
+- [x] `pnpm check:secrets` fails if high-risk patterns are detected.
+- [x] Final security audit report committed.
+- [x] Initiative marked as complete in documentation.

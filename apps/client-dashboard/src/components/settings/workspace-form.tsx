@@ -71,7 +71,7 @@ export function WorkspaceSettingsForm({
       adminEmail: initialData?.adminEmail || '',
       accentColor:
         initialData?.accentColor ||
-        token('color.background.brand.bold', '#3B82F6'),
+        token('color.background.brand.bold', '#0C66E4'),
       retentionDays: initialData?.retentionDays || 365,
     },
   });

@@ -1225,7 +1225,7 @@ export function CreateQRClient({
     if (!ctx) return;
     const img = new Image();
     img.onload = () => {
-      ctx.fillStyle = token('elevation.surface', '#F2F3F4');
+      ctx.fillStyle = token('elevation.surface', '#FFFFFF');
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
       canvas.toBlob(

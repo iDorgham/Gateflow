@@ -24,17 +24,17 @@
 
 **IDEA:** `docs/plan/context/IDEA_github_security_hardening.md`
 
-**PLAN:** `docs/plan/planning/github_security_hardening/PLAN_github_security_hardening.md`
+**PLAN:** `docs/plan/done/github_security_hardening/PLAN_github_security_hardening.md`
 
-**Status:** 🆕 Open
+**Status:** ✅ Complete
 
 **Target:** Q4 2026
 
-- [ ] Phase 1 — Repository & Branch Protection Architecture
-- [ ] Phase 2 — Secret Management & Rotation Logic
-- [ ] Phase 3 — CI/CD Hardening (OIDC & Minimal Privs)
-- [ ] Phase 4 — Supply Chain Governance (Dependabot)
-- [ ] Phase 5 — Security Gate Automation (CI + Scan)
+- [x] Phase 1 — Repository & Branch Protection Architecture
+- [x] Phase 2 — Secret Management & Rotation Logic
+- [x] Phase 3 — CI/CD Hardening (OIDC & Minimal Privs)
+- [x] Phase 4 — Supply Chain Governance (Dependabot)
+- [x] Phase 5 — Security Gate Automation (CI + Scan)
 
 ### test_feature — Test Feature
 

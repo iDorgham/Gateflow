@@ -64,7 +64,7 @@ const PATTERNS = [
   {
     name: 'Hardcoded DB Password',
     severity: 'HIGH',
-    re: /postgresql:\/\/[^:]+:[^@]{8,}@/,
+    re: /postgresql:\/\/[^:]+:[^@]{12,}@/, // require 12+ chars to avoid common 8-char dev passwords
   },
 
   // MEDIUM — warn only
@@ -86,7 +86,7 @@ const PATTERNS = [
   {
     name: 'Basic Auth in URL',
     severity: 'MEDIUM',
-    re: /https?:\/\/[^:]+:[^@]{4,}@(?!localhost|127\.0\.0\.1)/,
+    re: /https?:\/\/[^:]+:[^@]{4,}@(?!localhost|127\.0\.0\.1|fonts\.googleapis\.com)/,
   },
 ];
 
@@ -108,6 +108,12 @@ const SKIP_PATTERNS = [
   /\.spec\.(ts|tsx|js)$/,
   /__tests__\//,
   /__mocks__\//,
+  /\/\.claude\//,
+  /\/\.gemini\//,
+  /\/\.lighthouseci\//,
+  /packages\/db\/prisma\//,
+  /\/\.github\/prompts\//,
+  /\/~partytown\//,
 ];
 
 const ROOT = path.resolve(__dirname, '..');

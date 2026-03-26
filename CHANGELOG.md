@@ -24,6 +24,9 @@ _(next release notes go here)_
 
 ### Features
 
+- **[Github Security Hardening] **complete phase 1
+- **[Github Security Hardening] **complete phase 1
+
 - **[Crm] **certify and finalize projects_crm v2.0 initiative
 
 - **[Ui] **refine dark mode borders and language switcher alignment
