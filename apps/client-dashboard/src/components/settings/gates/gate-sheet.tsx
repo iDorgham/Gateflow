@@ -23,12 +23,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { csrfFetch } from '@/lib/csrf';
 import { MapPin, DoorOpen } from 'lucide-react';
-import type { GateRow } from './gate-table';
-
-interface Project {
-  id: string;
-  name: string;
-}
+import type { GateRow, Project } from './types';
 
 interface GateSheetProps {
   mode: 'create' | 'edit';
@@ -38,7 +33,13 @@ interface GateSheetProps {
   children: React.ReactNode;
 }
 
-export function GateSheet({ mode, gate, projects, onSuccess, children }: GateSheetProps) {
+export function GateSheet({
+  mode,
+  gate,
+  projects,
+  onSuccess,
+  children,
+}: GateSheetProps) {
   const { t } = useTranslation('dashboard');
   const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
@@ -60,9 +61,17 @@ export function GateSheet({ mode, gate, projects, onSuccess, children }: GateShe
       setProjectId(gate?.projectId ?? '');
       setLatitude(gate?.latitude != null ? String(gate.latitude) : '');
       setLongitude(gate?.longitude != null ? String(gate.longitude) : '');
-      setRadiusMeters(gate?.locationRadiusMeters != null ? String(gate.locationRadiusMeters) : '');
+      setRadiusMeters(
+        gate?.locationRadiusMeters != null
+          ? String(gate.locationRadiusMeters)
+          : ''
+      );
       setLocationEnforced(gate?.locationEnforced ?? false);
-      setIdentityLevel(gate?.requiredIdentityLevel != null ? String(gate.requiredIdentityLevel) : '');
+      setIdentityLevel(
+        gate?.requiredIdentityLevel != null
+          ? String(gate.requiredIdentityLevel)
+          : ''
+      );
     }
   }, [open, gate]);
 
@@ -79,15 +88,24 @@ export function GateSheet({ mode, gate, projects, onSuccess, children }: GateShe
     const radius = radiusMeters ? parseInt(radiusMeters, 10) : null;
 
     if (locationEnforced && (lat == null || lng == null || radius == null)) {
-      toast.error(t('settings.gates.gpsRequired', 'GPS coordinates and radius are required when enforcement is enabled'));
+      toast.error(
+        t(
+          'settings.gates.gpsRequired',
+          'GPS coordinates and radius are required when enforcement is enabled'
+        )
+      );
       return;
     }
     if (lat != null && (lat < -90 || lat > 90)) {
-      toast.error(t('settings.gates.latInvalid', 'Latitude must be between -90 and 90'));
+      toast.error(
+        t('settings.gates.latInvalid', 'Latitude must be between -90 and 90')
+      );
       return;
     }
     if (lng != null && (lng < -180 || lng > 180)) {
-      toast.error(t('settings.gates.lngInvalid', 'Longitude must be between -180 and 180'));
+      toast.error(
+        t('settings.gates.lngInvalid', 'Longitude must be between -180 and 180')
+      );
       return;
     }
 
@@ -100,15 +118,22 @@ export function GateSheet({ mode, gate, projects, onSuccess, children }: GateShe
         longitude: lng,
         locationRadiusMeters: radius,
         locationEnforced,
-        requiredIdentityLevel: identityLevel !== '' ? parseInt(identityLevel, 10) : null,
+        requiredIdentityLevel:
+          identityLevel !== '' ? parseInt(identityLevel, 10) : null,
       };
 
       let res: Response;
       if (mode === 'create') {
-        res = await csrfFetch('/api/gates', { method: 'POST', body: JSON.stringify(body) });
+        res = await csrfFetch('/api/gates', {
+          method: 'POST',
+          body: JSON.stringify(body),
+        });
       } else {
         body.id = gate!.id;
-        res = await csrfFetch('/api/gates', { method: 'PATCH', body: JSON.stringify(body) });
+        res = await csrfFetch('/api/gates', {
+          method: 'PATCH',
+          body: JSON.stringify(body),
+        });
       }
 
       if (res.ok) {
@@ -140,15 +165,24 @@ export function GateSheet({ mode, gate, projects, onSuccess, children }: GateShe
               : t('settings.gates.editTitle', 'Edit Gate')}
           </SheetTitle>
           <SheetDescription>
-            {t('settings.gates.sheetDesc', 'Configure gate details, project assignment, and GPS enforcement.')}
+            {t(
+              'settings.gates.sheetDesc',
+              'Configure gate details, project assignment, and GPS enforcement.'
+            )}
           </SheetDescription>
         </SheetHeader>
 
-        <form onSubmit={handleSubmit} className="flex-1 flex flex-col overflow-y-auto">
+        <form
+          onSubmit={handleSubmit}
+          className="flex-1 flex flex-col overflow-y-auto"
+        >
           <div className="p-8 space-y-6 flex-1">
             {/* Gate name */}
             <div className="space-y-2">
-              <Label htmlFor="gate-name" className="text-[11px] font-black uppercase tracking-widest text-muted-foreground">
+              <Label
+                htmlFor="gate-name"
+                className="text-[11px] font-black uppercase tracking-widest text-muted-foreground"
+              >
                 {t('settings.gates.nameLabel', 'Gate Name')} *
               </Label>
               <Input
@@ -163,7 +197,10 @@ export function GateSheet({ mode, gate, projects, onSuccess, children }: GateShe
 
             {/* Location */}
             <div className="space-y-2">
-              <Label htmlFor="gate-location" className="text-[11px] font-black uppercase tracking-widest text-muted-foreground">
+              <Label
+                htmlFor="gate-location"
+                className="text-[11px] font-black uppercase tracking-widest text-muted-foreground"
+              >
                 {t('settings.gates.locationLabel', 'Location Description')}
               </Label>
               <Input
@@ -177,19 +214,31 @@ export function GateSheet({ mode, gate, projects, onSuccess, children }: GateShe
 
             {/* Project */}
             <div className="space-y-2">
-              <Label htmlFor="gate-project" className="text-[11px] font-black uppercase tracking-widest text-muted-foreground">
+              <Label
+                htmlFor="gate-project"
+                className="text-[11px] font-black uppercase tracking-widest text-muted-foreground"
+              >
                 {t('settings.gates.projectLabel', 'Project')}
               </Label>
               <Select value={projectId} onValueChange={setProjectId}>
                 <SelectTrigger id="gate-project" className="h-11 rounded-xl">
-                  <SelectValue placeholder={t('settings.gates.noProject', 'No project (global)')} />
+                  <SelectValue
+                    placeholder={t(
+                      'settings.gates.noProject',
+                      'No project (global)'
+                    )}
+                  />
                 </SelectTrigger>
                 <SelectContent className="rounded-xl">
                   <SelectItem value="" className="rounded-lg text-xs font-bold">
                     — {t('settings.gates.noProject', 'No project')}
                   </SelectItem>
                   {projects.map((p) => (
-                    <SelectItem key={p.id} value={p.id} className="rounded-lg text-xs font-bold">
+                    <SelectItem
+                      key={p.id}
+                      value={p.id}
+                      className="rounded-lg text-xs font-bold"
+                    >
                       {p.name}
                     </SelectItem>
                   ))}
@@ -206,7 +255,10 @@ export function GateSheet({ mode, gate, projects, onSuccess, children }: GateShe
                     {t('settings.gates.gpsTitle', 'GPS Enforcement')}
                   </span>
                 </div>
-                <Switch checked={locationEnforced} onCheckedChange={setLocationEnforced} />
+                <Switch
+                  checked={locationEnforced}
+                  onCheckedChange={setLocationEnforced}
+                />
               </div>
 
               {locationEnforced && (
@@ -266,30 +318,59 @@ export function GateSheet({ mode, gate, projects, onSuccess, children }: GateShe
 
             {/* Identity level override */}
             <div className="space-y-2">
-              <Label htmlFor="gate-identity" className="text-[11px] font-black uppercase tracking-widest text-muted-foreground">
+              <Label
+                htmlFor="gate-identity"
+                className="text-[11px] font-black uppercase tracking-widest text-muted-foreground"
+              >
                 {t('settings.gates.identityLevel', 'Identity Level Override')}
               </Label>
               <Select value={identityLevel} onValueChange={setIdentityLevel}>
                 <SelectTrigger id="gate-identity" className="h-11 rounded-xl">
-                  <SelectValue placeholder={t('settings.gates.identityDefault', 'Use org default')} />
+                  <SelectValue
+                    placeholder={t(
+                      'settings.gates.identityDefault',
+                      'Use org default'
+                    )}
+                  />
                 </SelectTrigger>
                 <SelectContent className="rounded-xl">
-                  <SelectItem value="" className="rounded-lg text-xs font-bold">Use org default</SelectItem>
-                  <SelectItem value="0" className="rounded-lg text-xs font-bold">0 — Name & phone only</SelectItem>
-                  <SelectItem value="1" className="rounded-lg text-xs font-bold">1 — ID photo capture</SelectItem>
-                  <SelectItem value="2" className="rounded-lg text-xs font-bold">2 — ID OCR verification</SelectItem>
+                  <SelectItem value="" className="rounded-lg text-xs font-bold">
+                    Use org default
+                  </SelectItem>
+                  <SelectItem
+                    value="0"
+                    className="rounded-lg text-xs font-bold"
+                  >
+                    0 — Name & phone only
+                  </SelectItem>
+                  <SelectItem
+                    value="1"
+                    className="rounded-lg text-xs font-bold"
+                  >
+                    1 — ID photo capture
+                  </SelectItem>
+                  <SelectItem
+                    value="2"
+                    className="rounded-lg text-xs font-bold"
+                  >
+                    2 — ID OCR verification
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
 
           <SheetFooter className="p-8 pt-0 border-t border-border">
-            <Button type="submit" disabled={isPending} className="w-full h-12 rounded-xl font-black uppercase tracking-widest text-[11px]">
+            <Button
+              type="submit"
+              disabled={isPending}
+              className="w-full h-12 rounded-xl font-black uppercase tracking-widest text-[11px]"
+            >
               {isPending
                 ? t('common.saving', 'Saving...')
                 : mode === 'create'
-                ? t('settings.gates.createBtn', 'Create Gate')
-                : t('common.saveChanges', 'Save Changes')}
+                  ? t('settings.gates.createBtn', 'Create Gate')
+                  : t('common.saveChanges', 'Save Changes')}
             </Button>
           </SheetFooter>
         </form>

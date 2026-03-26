@@ -31,26 +31,7 @@ import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { csrfFetch } from '@/lib/csrf';
 import { GateSheet } from './gate-sheet';
-
-export interface GateRow {
-  id: string;
-  name: string;
-  location: string | null;
-  isActive: boolean;
-  projectId: string | null;
-  projectName: string | null;
-  latitude: number | null;
-  longitude: number | null;
-  locationRadiusMeters: number | null;
-  locationEnforced: boolean | null;
-  requiredIdentityLevel: number | null;
-  _count: { qrCodes: number; scanLogs: number };
-}
-
-interface Project {
-  id: string;
-  name: string;
-}
+import type { GateRow, Project } from './types';
 
 interface GateTableProps {
   gates: GateRow[];
@@ -80,7 +61,9 @@ export function GateTable({ gates: initial, projects }: GateTableProps) {
     });
     if (res.ok) {
       setGates((prev) =>
-        prev.map((g) => (g.id === gate.id ? { ...g, isActive: !g.isActive } : g))
+        prev.map((g) =>
+          g.id === gate.id ? { ...g, isActive: !g.isActive } : g
+        )
       );
       toast.success(gate.isActive ? 'Gate deactivated' : 'Gate activated');
     } else {
@@ -140,18 +123,33 @@ export function GateTable({ gates: initial, projects }: GateTableProps) {
               <TableHead>{t('settings.gates.name', 'Gate Name')}</TableHead>
               <TableHead>{t('settings.gates.project', 'Project')}</TableHead>
               <TableHead>{t('settings.gates.location', 'Location')}</TableHead>
-              <TableHead className="text-center">{t('settings.gates.status', 'Status')}</TableHead>
-              <TableHead className="text-center">{t('settings.gates.scans', 'Scans')}</TableHead>
-              <TableHead className="text-right">{t('common.actions', 'Actions')}</TableHead>
+              <TableHead className="text-center">
+                {t('settings.gates.status', 'Status')}
+              </TableHead>
+              <TableHead className="text-center">
+                {t('settings.gates.scans', 'Scans')}
+              </TableHead>
+              <TableHead className="text-right">
+                {t('common.actions', 'Actions')}
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filtered.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className="h-40 text-center text-muted-foreground italic">
+                <TableCell
+                  colSpan={6}
+                  className="h-40 text-center text-muted-foreground italic"
+                >
                   {gates.length === 0
-                    ? t('settings.gates.empty', 'No gates yet. Add your first gate.')
-                    : t('settings.gates.noResults', 'No gates match your search.')}
+                    ? t(
+                        'settings.gates.empty',
+                        'No gates yet. Add your first gate.'
+                      )
+                    : t(
+                        'settings.gates.noResults',
+                        'No gates match your search.'
+                      )}
                 </TableCell>
               </TableRow>
             ) : (
@@ -162,7 +160,9 @@ export function GateTable({ gates: initial, projects }: GateTableProps) {
                 >
                   <TableCell>
                     <div className="flex flex-col">
-                      <span className="font-bold text-foreground">{gate.name}</span>
+                      <span className="font-bold text-foreground">
+                        {gate.name}
+                      </span>
                       {gate.locationEnforced && gate.latitude != null && (
                         <span className="text-[10px] text-primary font-bold flex items-center gap-1 mt-0.5">
                           <MapPin className="h-2.5 w-2.5" />
@@ -180,7 +180,9 @@ export function GateTable({ gates: initial, projects }: GateTableProps) {
                         {gate.projectName}
                       </Badge>
                     ) : (
-                      <span className="text-xs text-muted-foreground/50 italic">—</span>
+                      <span className="text-xs text-muted-foreground/50 italic">
+                        —
+                      </span>
                     )}
                   </TableCell>
                   <TableCell>
@@ -217,14 +219,27 @@ export function GateTable({ gates: initial, projects }: GateTableProps) {
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-44 rounded-xl">
-                        <GateSheet mode="edit" gate={gate} projects={projects} onSuccess={refresh}>
-                          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                      <DropdownMenuContent
+                        align="end"
+                        className="w-44 rounded-xl"
+                      >
+                        <GateSheet
+                          mode="edit"
+                          gate={gate}
+                          projects={projects}
+                          onSuccess={refresh}
+                        >
+                          <DropdownMenuItem
+                            onSelect={(e) => e.preventDefault()}
+                          >
                             <Pencil className="h-4 w-4 mr-2" />
                             {t('common.edit', 'Edit')}
                           </DropdownMenuItem>
                         </GateSheet>
-                        <DropdownMenuItem onClick={() => handleToggle(gate)} disabled={isPending}>
+                        <DropdownMenuItem
+                          onClick={() => handleToggle(gate)}
+                          disabled={isPending}
+                        >
                           <Power className="h-4 w-4 mr-2" />
                           {gate.isActive
                             ? t('settings.gates.deactivate', 'Deactivate')

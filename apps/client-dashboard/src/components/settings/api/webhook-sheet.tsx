@@ -18,15 +18,39 @@ import {
 import { Plus, Webhook } from 'lucide-react';
 import { toast } from 'sonner';
 import { csrfFetch } from '@/lib/csrf';
-import type { WebhookRow } from './webhook-table';
+import type { WebhookRow } from './types';
 
 const WEBHOOK_EVENTS = [
-  { id: 'QR_CREATED', label: 'QR Created', description: 'A new access QR code was generated' },
-  { id: 'QR_SCANNED', label: 'QR Scanned', description: 'A QR code was scanned at a gate' },
-  { id: 'QR_REVOKED', label: 'QR Revoked', description: 'An access code was manually revoked' },
-  { id: 'QR_EXPIRED', label: 'QR Expired', description: 'A QR code reached its expiry date' },
-  { id: 'SCAN_SUCCESS', label: 'Scan Approved', description: 'Entry was granted at a gate' },
-  { id: 'SCAN_FAILED', label: 'Scan Denied', description: 'Entry was denied or code invalid' },
+  {
+    id: 'QR_CREATED',
+    label: 'QR Created',
+    description: 'A new access QR code was generated',
+  },
+  {
+    id: 'QR_SCANNED',
+    label: 'QR Scanned',
+    description: 'A QR code was scanned at a gate',
+  },
+  {
+    id: 'QR_REVOKED',
+    label: 'QR Revoked',
+    description: 'An access code was manually revoked',
+  },
+  {
+    id: 'QR_EXPIRED',
+    label: 'QR Expired',
+    description: 'A QR code reached its expiry date',
+  },
+  {
+    id: 'SCAN_SUCCESS',
+    label: 'Scan Approved',
+    description: 'Entry was granted at a gate',
+  },
+  {
+    id: 'SCAN_FAILED',
+    label: 'Scan Denied',
+    description: 'Entry was denied or code invalid',
+  },
 ];
 
 interface WebhookSheetProps {
@@ -36,7 +60,12 @@ interface WebhookSheetProps {
   children?: React.ReactNode;
 }
 
-export function WebhookSheet({ mode, webhook, onSuccess, children }: WebhookSheetProps) {
+export function WebhookSheet({
+  mode,
+  webhook,
+  onSuccess,
+  children,
+}: WebhookSheetProps) {
   const [open, setOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
 
@@ -60,8 +89,10 @@ export function WebhookSheet({ mode, webhook, onSuccess, children }: WebhookShee
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!url.trim()) return toast.error('Endpoint URL is required');
-    if (!url.startsWith('https://')) return toast.error('Webhook URL must start with https://');
-    if (selectedEvents.length === 0) return toast.error('Select at least one event');
+    if (!url.startsWith('https://'))
+      return toast.error('Webhook URL must start with https://');
+    if (selectedEvents.length === 0)
+      return toast.error('Select at least one event');
 
     startTransition(async () => {
       let res: Response;
@@ -73,16 +104,24 @@ export function WebhookSheet({ mode, webhook, onSuccess, children }: WebhookShee
       } else {
         res = await csrfFetch(`/api/webhooks/${webhook!.id}`, {
           method: 'PATCH',
-          body: JSON.stringify({ url: url.trim(), events: selectedEvents, isActive }),
+          body: JSON.stringify({
+            url: url.trim(),
+            events: selectedEvents,
+            isActive,
+          }),
         });
       }
 
       if (res.ok) {
-        toast.success(mode === 'create' ? 'Webhook created' : 'Webhook updated');
+        toast.success(
+          mode === 'create' ? 'Webhook created' : 'Webhook updated'
+        );
         if (mode === 'create') {
           const data = (await res.json()) as { secret?: string };
           if (data.secret) {
-            toast.info(`Webhook secret (save it): ${data.secret}`, { duration: 15000 });
+            toast.info(`Webhook secret (save it): ${data.secret}`, {
+              duration: 15000,
+            });
           }
         }
         setOpen(false);
@@ -117,7 +156,10 @@ export function WebhookSheet({ mode, webhook, onSuccess, children }: WebhookShee
           </SheetDescription>
         </SheetHeader>
 
-        <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-y-auto">
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col flex-1 overflow-y-auto"
+        >
           <div className="p-8 space-y-6 flex-1">
             <div className="space-y-4">
               <Label className="text-[11px] font-black uppercase tracking-widest text-muted-foreground">
@@ -130,29 +172,48 @@ export function WebhookSheet({ mode, webhook, onSuccess, children }: WebhookShee
                   className="h-14 rounded-xl flex flex-col items-center justify-center border-border hover:border-primary/40 hover:bg-primary/5 group"
                   onClick={() => {
                     setSelectedEvents(['SCAN_SUCCESS']);
-                    toast.info('HubSpot Preset: Subscribed to Scan Approved events.');
+                    toast.info(
+                      'HubSpot Preset: Subscribed to Scan Approved events.'
+                    );
                   }}
                 >
-                  <span className="text-[10px] font-black uppercase tracking-widest text-foreground group-hover:text-primary transition-colors">HubSpot</span>
-                  <span className="text-[9px] text-muted-foreground mt-1">Marketing Sync</span>
+                  <span className="text-[10px] font-black uppercase tracking-widest text-foreground group-hover:text-primary transition-colors">
+                    HubSpot
+                  </span>
+                  <span className="text-[9px] text-muted-foreground mt-1">
+                    Marketing Sync
+                  </span>
                 </Button>
                 <Button
                   type="button"
                   variant="outline"
                   className="h-14 rounded-xl flex flex-col items-center justify-center border-border hover:border-primary/40 hover:bg-primary/5 group"
                   onClick={() => {
-                    setSelectedEvents(['QR_CREATED', 'SCAN_SUCCESS', 'SCAN_FAILED']);
-                    toast.info('Zapier Preset: Subscribed to core lifecycle events.');
+                    setSelectedEvents([
+                      'QR_CREATED',
+                      'SCAN_SUCCESS',
+                      'SCAN_FAILED',
+                    ]);
+                    toast.info(
+                      'Zapier Preset: Subscribed to core lifecycle events.'
+                    );
                   }}
                 >
-                  <span className="text-[10px] font-black uppercase tracking-widest text-foreground group-hover:text-primary transition-colors">Zapier / Make</span>
-                  <span className="text-[9px] text-muted-foreground mt-1">Automation Flow</span>
+                  <span className="text-[10px] font-black uppercase tracking-widest text-foreground group-hover:text-primary transition-colors">
+                    Zapier / Make
+                  </span>
+                  <span className="text-[9px] text-muted-foreground mt-1">
+                    Automation Flow
+                  </span>
                 </Button>
               </div>
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="wh-url" className="text-[11px] font-black uppercase tracking-widest text-muted-foreground">
+              <Label
+                htmlFor="wh-url"
+                className="text-[11px] font-black uppercase tracking-widest text-muted-foreground"
+              >
                 Endpoint URL * (HTTPS only)
               </Label>
               <Input
@@ -187,8 +248,12 @@ export function WebhookSheet({ mode, webhook, onSuccess, children }: WebhookShee
                       className="mt-0.5 shrink-0"
                     />
                     <div>
-                      <p className="text-xs font-black uppercase tracking-tight">{ev.label}</p>
-                      <p className="text-[10px] text-muted-foreground mt-0.5">{ev.description}</p>
+                      <p className="text-xs font-black uppercase tracking-tight">
+                        {ev.label}
+                      </p>
+                      <p className="text-[10px] text-muted-foreground mt-0.5">
+                        {ev.description}
+                      </p>
                     </div>
                   </div>
                 ))}
@@ -198,7 +263,9 @@ export function WebhookSheet({ mode, webhook, onSuccess, children }: WebhookShee
             {mode === 'edit' && (
               <div className="flex items-center justify-between p-4 rounded-xl border border-border bg-muted/20">
                 <div>
-                  <p className="text-xs font-black uppercase tracking-tight">Active</p>
+                  <p className="text-xs font-black uppercase tracking-tight">
+                    Active
+                  </p>
                   <p className="text-[10px] text-muted-foreground mt-0.5">
                     Paused webhooks stop receiving events temporarily.
                   </p>
@@ -209,8 +276,16 @@ export function WebhookSheet({ mode, webhook, onSuccess, children }: WebhookShee
           </div>
 
           <SheetFooter className="p-8 pt-0 border-t border-border">
-            <Button type="submit" disabled={isPending} className="w-full h-12 rounded-xl font-black uppercase tracking-widest text-[11px]">
-              {isPending ? 'Saving...' : mode === 'create' ? 'Create Webhook' : 'Save Changes'}
+            <Button
+              type="submit"
+              disabled={isPending}
+              className="w-full h-12 rounded-xl font-black uppercase tracking-widest text-[11px]"
+            >
+              {isPending
+                ? 'Saving...'
+                : mode === 'create'
+                  ? 'Create Webhook'
+                  : 'Save Changes'}
             </Button>
           </SheetFooter>
         </form>
