@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { AdvancedTable, Button, cn, Badge } from '@gate-access/ui';
 import { token } from '@atlaskit/tokens';
 import { useDataTable } from '@/hooks/use-data-table';
+import { useUserPreferences } from '@/lib/residents/use-user-preferences';
 import {
   Building,
   Download,
@@ -17,6 +18,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { EditPanel } from '../dashboard/EditPanel';
 import { UnitForm } from './UnitForm';
+import { SavedViewManager } from './SavedViewManager';
 
 interface Unit {
   id: string;
@@ -39,6 +41,86 @@ export function UnitTable({ projectId, locale }: UnitTableProps) {
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [selectedUnit, setSelectedUnit] = useState<Unit | null>(null);
   const [selectedIds, setSelectedIds] = useState<(string | number)[]>([]);
+
+  const { preferences, updatePreferences, isSaving } = useUserPreferences();
+  const tableViews = preferences.tableViews?.units;
+  const [density, setDensity] = useState<'compact' | 'comfortable'>(
+    (tableViews?.density as 'compact' | 'comfortable') || 'comfortable'
+  );
+  const [activeView, setActiveView] = useState<string | undefined>(
+    tableViews?.activeView
+  );
+
+  useEffect(() => {
+    if (tableViews?.density) {
+      setDensity(tableViews.density as 'compact' | 'comfortable');
+    }
+  }, [tableViews?.density]);
+
+  const handleDensityChange = async (newDensity: 'compact' | 'comfortable') => {
+    setDensity(newDensity);
+    await updatePreferences({
+      tableViews: {
+        units: { ...tableViews, density: newDensity },
+      },
+    });
+  };
+
+  const handleViewSelect = (viewId: string | undefined) => {
+    setActiveView(viewId);
+    if (viewId && tableViews?.savedViews?.[viewId]) {
+      const view = tableViews.savedViews[viewId];
+      console.log('Applying saved view:', view);
+    }
+  };
+
+  const handleViewSave = async (name: string) => {
+    const newViewId = `view_${Date.now()}`;
+    const currentSavedViews =
+      (tableViews?.savedViews as Record<
+        string,
+        {
+          name: string;
+          columnOrder?: string[];
+          columnVisibility?: Record<string, boolean>;
+        }
+      >) || {};
+    const newView = {
+      name,
+      columnOrder: [] as string[],
+      columnVisibility: {} as Record<string, boolean>,
+    };
+    await updatePreferences({
+      tableViews: {
+        units: {
+          ...tableViews,
+          savedViews: {
+            ...currentSavedViews,
+            [newViewId]: newView,
+          },
+          activeView: newViewId,
+        },
+      },
+    });
+    setActiveView(newViewId);
+    toast.success(t('crm.tables.viewSaved', 'View saved'));
+  };
+
+  const handleViewDelete = async (viewId: string) => {
+    const { [viewId]: _, ...remaining } = tableViews?.savedViews || {};
+    await updatePreferences({
+      tableViews: {
+        units: {
+          ...tableViews,
+          savedViews: remaining,
+          activeView: activeView === viewId ? undefined : activeView,
+        },
+      },
+    });
+    if (activeView === viewId) {
+      setActiveView(undefined);
+    }
+  };
 
   const {
     state,
@@ -260,6 +342,25 @@ export function UnitTable({ projectId, locale }: UnitTableProps) {
             {t('common.export', 'Export')}
           </Button>
         </div>
+        <SavedViewManager
+          activeView={activeView}
+          savedViews={
+            tableViews?.savedViews as
+              | Record<
+                  string,
+                  {
+                    id: string;
+                    name: string;
+                    columnOrder?: string[];
+                    columnVisibility?: Record<string, boolean>;
+                  }
+                >
+              | undefined
+          }
+          onViewSelect={handleViewSelect}
+          onViewSave={handleViewSave}
+          onViewDelete={handleViewDelete}
+        />
       </div>
 
       <AdvancedTable
@@ -278,6 +379,9 @@ export function UnitTable({ projectId, locale }: UnitTableProps) {
         selectedIds={selectedIds}
         onSelectionChange={setSelectedIds}
         onRowClick={handleEdit}
+        density={density}
+        onDensityChange={handleDensityChange}
+        activeView={activeView}
         bulkActions={
           <Button
             variant="destructive"

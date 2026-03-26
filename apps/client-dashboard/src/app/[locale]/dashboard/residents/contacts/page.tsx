@@ -1293,7 +1293,7 @@ export default function ContactsPage() {
                     <div className="space-y-1.5">
                       <Label
                         htmlFor="firstName"
-                        className="text-[10px] font-black uppercase tracking-widest text-foreground/50 ml-1"
+                        className="text-[10px] font-black uppercase tracking-widest text-foreground/50 ms-1"
                       >
                         {t('contacts.form.firstName', 'First Name')} *
                       </Label>
@@ -1309,7 +1309,7 @@ export default function ContactsPage() {
                     <div className="space-y-1.5">
                       <Label
                         htmlFor="lastName"
-                        className="text-[10px] font-black uppercase tracking-widest text-foreground/50 ml-1"
+                        className="text-[10px] font-black uppercase tracking-widest text-foreground/50 ms-1"
                       >
                         {t('contacts.form.lastName', 'Last Name')} *
                       </Label>
@@ -1328,7 +1328,7 @@ export default function ContactsPage() {
                     <div className="space-y-1.5">
                       <Label
                         htmlFor="email"
-                        className="text-[10px] font-black uppercase tracking-widest text-foreground/50 ml-1"
+                        className="text-[10px] font-black uppercase tracking-widest text-foreground/50 ms-1"
                       >
                         {t('contacts.form.email', 'Email Address')}
                       </Label>
@@ -1345,7 +1345,7 @@ export default function ContactsPage() {
                     <div className="space-y-1.5">
                       <Label
                         htmlFor="phone"
-                        className="text-[10px] font-black uppercase tracking-widest text-foreground/50 ml-1"
+                        className="text-[10px] font-black uppercase tracking-widest text-foreground/50 ms-1"
                       >
                         {t('contacts.form.phone', 'Phone Number')}
                       </Label>
@@ -1363,7 +1363,7 @@ export default function ContactsPage() {
                   <div className="space-y-1.5 max-w-[200px]">
                     <Label
                       htmlFor="birthday"
-                      className="text-[10px] font-black uppercase tracking-widest text-foreground/50 ml-1"
+                      className="text-[10px] font-black uppercase tracking-widest text-foreground/50 ms-1"
                     >
                       {t('contacts.form.birthday', 'Birthdate')}
                     </Label>
@@ -1394,7 +1394,7 @@ export default function ContactsPage() {
                 <div className="space-y-1.5">
                   <Label
                     htmlFor="jobTitle"
-                    className="text-[10px] font-black uppercase tracking-widest text-foreground/50 ml-1"
+                    className="text-[10px] font-black uppercase tracking-widest text-foreground/50 ms-1"
                   >
                     {t('contacts.form.jobTitle', 'Job Title')}
                   </Label>
@@ -1410,7 +1410,7 @@ export default function ContactsPage() {
                 <div className="space-y-1.5">
                   <Label
                     htmlFor="company"
-                    className="text-[10px] font-black uppercase tracking-widest text-foreground/50 ml-1"
+                    className="text-[10px] font-black uppercase tracking-widest text-foreground/50 ms-1"
                   >
                     {t('contacts.form.company', 'Company')}
                   </Label>
@@ -1429,7 +1429,7 @@ export default function ContactsPage() {
                 <div className="space-y-1.5">
                   <Label
                     htmlFor="companyWebsite"
-                    className="text-[10px] font-black uppercase tracking-widest text-foreground/50 ml-1"
+                    className="text-[10px] font-black uppercase tracking-widest text-foreground/50 ms-1"
                   >
                     {t('contacts.form.companyWebsite', 'Company Website')}
                   </Label>
@@ -1446,7 +1446,7 @@ export default function ContactsPage() {
                 <div className="space-y-1.5">
                   <Label
                     htmlFor="source"
-                    className="text-[10px] font-black uppercase tracking-widest text-foreground/50 ml-1"
+                    className="text-[10px] font-black uppercase tracking-widest text-foreground/50 ms-1"
                   >
                     {t('contacts.form.source', 'Resident Source')}
                   </Label>

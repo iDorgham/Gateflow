@@ -72,12 +72,21 @@ export interface AdvancedTableProps<T extends { id: string | number }> {
   searchPlaceholder?: string;
   /** Allow hiding the toolbar (search + density toggle) */
   showToolbar?: boolean;
+  /** Controlled density (if not provided, uses internal state) */
+  density?: DensityMode;
+  /** Called when density changes */
+  onDensityChange?: (density: DensityMode) => void;
+  /** Saved view identifier */
+  activeView?: string;
   className?: string;
 }
 
 /* ─── Sort helpers ───────────────────────────────────────────────────────── */
 
-function getSortDirection(sorting: SortingState[], id: string): 'asc' | 'desc' | null {
+function getSortDirection(
+  sorting: SortingState[],
+  id: string
+): 'asc' | 'desc' | null {
   const found = sorting.find((s) => s.id === id);
   if (!found) return null;
   return found.desc ? 'desc' : 'asc';
@@ -105,7 +114,9 @@ function SortIcon({ direction }: { direction: 'asc' | 'desc' | null }) {
     return <ChevronUp className="h-3.5 w-3.5 text-[var(--ds-text-selected)]" />;
   }
   if (direction === 'desc') {
-    return <ChevronDown className="h-3.5 w-3.5 text-[var(--ds-text-selected)]" />;
+    return (
+      <ChevronDown className="h-3.5 w-3.5 text-[var(--ds-text-selected)]" />
+    );
   }
   return (
     <ChevronsUpDown className="h-3.5 w-3.5 opacity-0 group-hover:opacity-40 transition-opacity" />
@@ -146,9 +157,20 @@ export function AdvancedTable<T extends { id: string | number }>({
   rowActions,
   searchPlaceholder = 'Search…',
   showToolbar = true,
+  density: controlledDensity,
+  onDensityChange,
+  activeView,
   className,
 }: AdvancedTableProps<T>) {
-  const [density, setDensity] = React.useState<DensityMode>('comfortable');
+  const [internalDensity, setInternalDensity] =
+    React.useState<DensityMode>('comfortable');
+  const density = controlledDensity ?? internalDensity;
+  const setDensity = (d: DensityMode) => {
+    if (controlledDensity === undefined) {
+      setInternalDensity(d);
+    }
+    onDensityChange?.(d);
+  };
   const [localFilter, setLocalFilter] = React.useState(globalFilter);
 
   // Sync local filter with external globalFilter prop
@@ -158,7 +180,8 @@ export function AdvancedTable<T extends { id: string | number }>({
 
   const isCompact = density === 'compact';
   const hasSelection = selectedIds.length > 0;
-  const allSelected = data.length > 0 && data.every((row) => selectedIds.includes(row.id));
+  const allSelected =
+    data.length > 0 && data.every((row) => selectedIds.includes(row.id));
 
   const hasRowActions = rowActions !== null && rowActions !== undefined;
   const effectiveColumns = hasRowActions
@@ -169,9 +192,13 @@ export function AdvancedTable<T extends { id: string | number }>({
   const toggleAll = () => {
     if (!onSelectionChange) return;
     if (allSelected) {
-      onSelectionChange(selectedIds.filter((id) => !data.find((r) => r.id === id)));
+      onSelectionChange(
+        selectedIds.filter((id) => !data.find((r) => r.id === id))
+      );
     } else {
-      onSelectionChange(Array.from(new Set([...selectedIds, ...data.map((r) => r.id)])));
+      onSelectionChange(
+        Array.from(new Set([...selectedIds, ...data.map((r) => r.id)]))
+      );
     }
   };
 
@@ -180,7 +207,7 @@ export function AdvancedTable<T extends { id: string | number }>({
     onSelectionChange(
       selectedIds.includes(id)
         ? selectedIds.filter((sid) => sid !== id)
-        : [...selectedIds, id],
+        : [...selectedIds, id]
     );
   };
 
@@ -215,7 +242,7 @@ export function AdvancedTable<T extends { id: string | number }>({
                 className={cn(
                   'w-full rounded-md border border-[var(--ds-border-input)] bg-[var(--ds-background-input)]',
                   'ps-9 pe-9 py-2 text-sm text-[var(--ds-text)] placeholder:text-[var(--ds-text-subtlest)]',
-                  'outline-none focus:ring-2 focus:ring-[var(--ds-border-focused)] transition-shadow',
+                  'outline-none focus:ring-2 focus:ring-[var(--ds-border-focused)] transition-shadow'
                 )}
               />
               {localFilter && (
@@ -243,7 +270,7 @@ export function AdvancedTable<T extends { id: string | number }>({
                   'flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium transition-colors',
                   density === 'comfortable'
                     ? 'bg-[var(--ds-background-selected)] text-[var(--ds-text-selected)]'
-                    : 'text-[var(--ds-text-subtle)] hover:bg-[var(--ds-background-neutral-subtle)]',
+                    : 'text-[var(--ds-text-subtle)] hover:bg-[var(--ds-background-neutral-subtle)]'
                 )}
               >
                 <AlignJustify className="h-3.5 w-3.5" />
@@ -257,7 +284,7 @@ export function AdvancedTable<T extends { id: string | number }>({
                   'flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium transition-colors border-s border-[var(--ds-border)]',
                   density === 'compact'
                     ? 'bg-[var(--ds-background-selected)] text-[var(--ds-text-selected)]'
-                    : 'text-[var(--ds-text-subtle)] hover:bg-[var(--ds-background-neutral-subtle)]',
+                    : 'text-[var(--ds-text-subtle)] hover:bg-[var(--ds-background-neutral-subtle)]'
                 )}
               >
                 <AlignCenter className="h-3.5 w-3.5" />
@@ -273,7 +300,7 @@ export function AdvancedTable<T extends { id: string | number }>({
                 className={cn(
                   'rounded-md border border-[var(--ds-border)] bg-[var(--ds-background-input)]',
                   'px-2 py-1.5 text-xs text-[var(--ds-text)] outline-none',
-                  'focus:ring-2 focus:ring-[var(--ds-border-focused)]',
+                  'focus:ring-2 focus:ring-[var(--ds-border-focused)]'
                 )}
                 aria-label="Rows per page"
               >
@@ -325,17 +352,19 @@ export function AdvancedTable<T extends { id: string | number }>({
                       'text-[var(--ds-text-subtle)] font-bold text-xs uppercase tracking-wider select-none',
                       isCompact ? 'h-8 px-3' : 'h-11 px-4',
                       col.align === 'center' && 'text-center',
-                      col.align === 'right' && 'text-right',
+                      col.align === 'right' && 'text-right'
                     )}
                   >
                     {col.isSortable && onSortingChange ? (
                       <button
                         type="button"
-                        onClick={() => onSortingChange(toggleSortColumn(sorting, col.key))}
+                        onClick={() =>
+                          onSortingChange(toggleSortColumn(sorting, col.key))
+                        }
                         className={cn(
                           'group flex items-center gap-1 rounded px-1.5 py-1 -mx-1.5',
                           'hover:bg-[var(--ds-background-neutral-subtle)] transition-colors',
-                          sortDir && 'text-[var(--ds-text-selected)]',
+                          sortDir && 'text-[var(--ds-text-selected)]'
                         )}
                       >
                         {col.label}
@@ -351,27 +380,38 @@ export function AdvancedTable<T extends { id: string | number }>({
           </TableHeader>
           <TableBody>
             {isLoading ? (
-              Array.from({ length: pageSize > 10 ? 8 : pageSize }).map((_, i) => (
-                <TableRow key={i} className="border-b border-[var(--ds-border-subtle)]">
-                  {onSelectionChange && (
-                    <TableCell className={isCompact ? 'px-3' : 'px-4'}>
-                      <Skeleton className="h-4 w-4 rounded-sm" />
-                    </TableCell>
-                  )}
-                  {effectiveColumns.map((col) => (
-                    <TableCell key={col.key} className={isCompact ? 'py-1.5 px-3' : 'py-4 px-4'}>
-                      <Skeleton className="h-4 w-full" />
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
+              Array.from({ length: pageSize > 10 ? 8 : pageSize }).map(
+                (_, i) => (
+                  <TableRow
+                    key={i}
+                    className="border-b border-[var(--ds-border-subtle)]"
+                  >
+                    {onSelectionChange && (
+                      <TableCell className={isCompact ? 'px-3' : 'px-4'}>
+                        <Skeleton className="h-4 w-4 rounded-sm" />
+                      </TableCell>
+                    )}
+                    {effectiveColumns.map((col) => (
+                      <TableCell
+                        key={col.key}
+                        className={isCompact ? 'py-1.5 px-3' : 'py-4 px-4'}
+                      >
+                        <Skeleton className="h-4 w-full" />
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                )
+              )
             ) : data.length === 0 ? (
               <TableRow>
                 <TableCell
-                  colSpan={effectiveColumns.length + (onSelectionChange ? 1 : 0)}
+                  colSpan={
+                    effectiveColumns.length + (onSelectionChange ? 1 : 0)
+                  }
                   className="h-48 text-center text-sm text-[var(--ds-text-subtle)]"
                 >
-                  {emptyState ?? 'No results found. Try adjusting your search or filters.'}
+                  {emptyState ??
+                    'No results found. Try adjusting your search or filters.'}
                 </TableCell>
               </TableRow>
             ) : (
@@ -381,8 +421,10 @@ export function AdvancedTable<T extends { id: string | number }>({
                   onClick={() => onRowClick?.(row)}
                   className={cn(
                     'group border-b border-[var(--ds-border-subtle)] transition-colors',
-                    onRowClick && 'cursor-pointer hover:bg-[var(--ds-background-neutral-subtle)]',
-                    selectedIds.includes(row.id) && 'bg-[var(--ds-background-selected)]',
+                    onRowClick &&
+                      'cursor-pointer hover:bg-[var(--ds-background-neutral-subtle)]',
+                    selectedIds.includes(row.id) &&
+                      'bg-[var(--ds-background-selected)]'
                   )}
                 >
                   {onSelectionChange && (
@@ -404,17 +446,22 @@ export function AdvancedTable<T extends { id: string | number }>({
                         'text-sm text-[var(--ds-text)]',
                         isCompact ? 'py-1.5 px-3' : 'py-3.5 px-4',
                         col.align === 'center' && 'text-center',
-                        col.align === 'right' && 'text-right',
+                        col.align === 'right' && 'text-right'
                       )}
                     >
                       {col.render
                         ? col.render(row)
-                        : (row as Record<string, unknown>)[col.key] as React.ReactNode}
+                        : ((row as Record<string, unknown>)[
+                            col.key
+                          ] as React.ReactNode)}
                     </TableCell>
                   ))}
                   {hasRowActions && (
                     <TableCell
-                      className={cn('text-right', isCompact ? 'py-1 px-3' : 'py-2 px-4')}
+                      className={cn(
+                        'text-right',
+                        isCompact ? 'py-1 px-3' : 'py-2 px-4'
+                      )}
                       onClick={(e) => e.stopPropagation()}
                     >
                       {rowActions!(row)}

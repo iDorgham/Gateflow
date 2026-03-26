@@ -9,10 +9,10 @@ Save as: `docs/plan/in-progress/projects_crm/SESSION_MEMORY.md`
 
 ## Active State
 
-- **Phase:** Phase 3 — Visitor Watchlist & Security Alerts | **complete**
+- **Phase:** Phase 4 — CRM Density & Table Intelligence | **complete**
 - **Branch:** `master`
-- **Last commit:** `bb11d40` — feat(crm): phase 3 - visitor watchlist status and security alerts
-- **Next action:** Start Phase 4 — CRM Density & Table Intelligence (`/dev projects_crm 4`)
+- **Last commit:** `[to be created]` — feat(crm): phase 4 - CRM density toggle and saved views
+- **Next action:** Start Phase 5 — Operations Polish & Final Audit (`/dev projects_crm 5`)
 
 ---
 
@@ -27,6 +27,8 @@ Save as: `docs/plan/in-progress/projects_crm/SESSION_MEMORY.md`
 | 3     | Use window CustomEvent bridge for SSE → toast (not a second EventSource)   | Keeps one SSE connection per tab; SecurityNotifier listens via `window.addEventListener('gf:watchlist_alert')` dispatched from `useRealtimeEvents`                     | Yes          |
 | 3     | ESCORT scans are accepted (not rejected); scanner shows haptic Warning     | ESCORT means "watch closely" not "deny" — guards need to escort, not block                                                                                             | Yes          |
 | 3     | `sonner` `toast.error` `important` flag doesn't exist in v1.7 types        | Removed `important: true` — use `duration: 10_000` for high-priority alerts instead                                                                                    | Yes          |
+| 4     | Controlled density in AdvancedTable via props                              | Density state persists via user preferences API; supports compact/comfortable modes                                                                                    | Yes          |
+| 4     | Saved views stored in User.preferences JSON field                          | Reuses existing `/api/users/me/preferences` endpoint; no schema changes needed                                                                                         | Yes          |
 
 ---
 
@@ -42,19 +44,14 @@ Save as: `docs/plan/in-progress/projects_crm/SESSION_MEMORY.md`
 
 ## State Handoff
 
-- **Files modified this session (Phase 1):**
-  - `packages/db/prisma/schema.prisma` — Added `OrganizationCommunicationConfig` and `CommunicationLog` models
-  - `apps/client-dashboard/src/lib/crm/communication-provider.ts` — New provider abstraction (stubbed dispatch for Phase 1)
-  - `apps/client-dashboard/src/app/api/contacts/route.ts` — AuditLog on CSV export
-  - `apps/client-dashboard/src/app/api/units/route.ts` — AuditLog on CSV export
-  - `apps/client-dashboard/src/app/api/ai/assistant/route.ts` — AI SDK v5 migration (type fixes)
-  - `apps/client-dashboard/src/app/api/ai/chat/route.ts` — AI SDK v5 migration
-  - `apps/client-dashboard/src/lib/ai/tools/automation-tools.ts` — `parameters:` → `inputSchema:`
-  - `apps/client-dashboard/src/components/dashboard/ai/ChatPanel.tsx` — Local `Message` type alias
-  - `apps/client-dashboard/src/app/[locale]/dashboard/ai/page.tsx` — Type cast for messages prop
-- **Tests:** typecheck ✅ build ✅ (verified with `pnpm turbo typecheck --filter=client-dashboard` and `pnpm turbo build --filter=client-dashboard`)
+- **Files modified this session (Phase 4):**
+  - `packages/ui/src/components/tables/AdvancedTable.tsx` — Added controlled density props (density, onDensityChange, activeView)
+  - `apps/client-dashboard/src/components/crm/ContactTable.tsx` — Integrated useUserPreferences, density toggle, SavedViewManager
+  - `apps/client-dashboard/src/components/crm/UnitTable.tsx` — Integrated useUserPreferences, density toggle, SavedViewManager
+  - `apps/client-dashboard/src/components/crm/SavedViewManager.tsx` — New component for saved views dropdown + modal
+- **Tests:** typecheck ✅ lint ✅ (preflight checks)
 - **Blockers:** none
-- **Resume from:** Phase 4 Step 1 — add density toggle to CRM toolbar
+- **Resume from:** Phase 5 — Operations Polish & Final Audit
 
 ---
 
@@ -65,7 +62,7 @@ Save as: `docs/plan/in-progress/projects_crm/SESSION_MEMORY.md`
 | L0    | `git log --oneline -3` + phase name | ~50         | ✓      |
 | L1    | `TASKS_projects_crm.md`             | ~150        | [ ]    |
 | L2    | `PLAN_projects_crm.md`              | ~600        | ✓      |
-| L3    | `PROMPT_projects_crm_phase_1.md`    | ~1,200      | ✓      |
+| L3    | `PROMPT_projects_crm_phase_4.md`    | ~1,200      | ✓      |
 | L4    | `CONTEXT_projects_crm.md`           | ~1,800      | [ ]    |
 | L5    | `SESSION_MEMORY.md` (this file)     | ~400        | ✓      |
 

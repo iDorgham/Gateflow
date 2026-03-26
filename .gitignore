@@ -31,7 +31,10 @@ test_qr.js
 .agents
 .vscode
 .superdesign
-# .ai-memory — tracked (shared workspace memory for all AI tools)
-# docs/cache — tracked (codebase snapshots)
+.ai-memory
+docs/cache
 .vscode
 .qwen
+.lighthouseci
+.vscode
+.gemini

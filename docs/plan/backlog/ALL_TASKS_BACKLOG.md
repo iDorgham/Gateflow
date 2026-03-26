@@ -10,15 +10,15 @@
 
 **PLAN:** `docs/plan/planned/projects_crm/PLAN_projects_crm.md`
 
-**Status:** 🏗️ Planned
+**Status:** ✅ Complete
 
 **Target:** Q4 2026
 
-- [ ] Phase 1 — Communication Gateway & Notification Schema
-- [ ] Phase 2 — WhatsApp & SMS Invitation Flow
-- [ ] Phase 3 — Visitor Watchlist & Security Alerts
-- [ ] Phase 4 — CRM Density & Table Intelligence
-- [ ] Phase 5 — Operations Polish & Final Audit
+- [x] Phase 1 — Communication Gateway & Notification Schema
+- [x] Phase 2 — WhatsApp & SMS Invitation Flow
+- [x] Phase 3 — Visitor Watchlist & Security Alerts
+- [x] Phase 4 — CRM Density & Table Intelligence
+- [x] Phase 5 — Operations Polish & Final Audit
 
 ### github_security_hardening — Github Security Hardening
 

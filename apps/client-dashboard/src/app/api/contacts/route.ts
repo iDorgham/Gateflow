@@ -333,7 +333,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
               rowCount: contacts.length,
               idsCount: ids?.length ?? null,
               filters: {
-                search: search ?? null,
+                search:
+                  search && /[\d@]/.test(search)
+                    ? '[REDACTED_PII]'
+                    : (search ?? null),
                 unitId: unitId ?? null,
                 unitType: unitType ?? null,
                 projectId: projectId ?? null,
