@@ -223,6 +223,56 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
+    // Step 7b — Contact watchlist check (if this QR is linked to a Contact).
+    let linkedContact: {
+      firstName: string;
+      lastName: string;
+      watchlistStatus: string;
+    } | null = null;
+    if (qrCode.contactId) {
+      const contact = await prisma.contact.findFirst({
+        where: {
+          id: qrCode.contactId,
+          organizationId: claims.orgId,
+          deletedAt: null,
+        },
+        select: { firstName: true, lastName: true, watchlistStatus: true },
+      });
+      if (contact && contact.watchlistStatus === 'BLOCKED') {
+        // Emit real-time security alert (fire-and-forget)
+        emitEvent(claims.orgId, EventType.WATCHLIST_ALERT, {
+          contactName: `${contact.firstName} ${contact.lastName}`,
+          severity: 'BLOCKED',
+          gateId: qrCode.gateId ?? scanContext?.gateId ?? null,
+          qrCodeId: qrCode.id,
+        }).catch(() => {});
+        await logRejection(
+          qrCode.id,
+          'blocked_watchlist',
+          scanContext,
+          claims.sub
+        );
+        return json<QRValidateResponse>(
+          {
+            status: 'rejected',
+            reason: 'blocked_watchlist',
+            message: 'Blocked person on security list.',
+          },
+          403
+        );
+      }
+      if (contact && contact.watchlistStatus === 'ESCORT') {
+        linkedContact = contact;
+        // Emit escort-level alert (fire-and-forget) — scan will be allowed
+        emitEvent(claims.orgId, EventType.WATCHLIST_ALERT, {
+          contactName: `${contact.firstName} ${contact.lastName}`,
+          severity: 'ESCORT',
+          gateId: qrCode.gateId ?? scanContext?.gateId ?? null,
+          qrCodeId: qrCode.id,
+        }).catch(() => {});
+      }
+    }
+
     // Step 8 — Active / revoked check.
     if (!qrCode.isActive || qrCode.deletedAt !== null) {
       await logRejection(qrCode.id, 'inactive', scanContext, claims.sub);
@@ -599,7 +649,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         status: 'accepted',
         scanId: scanLog.id,
         delegateToAi: (qrCode as any).delegateToAi,
-      },
+        ...(linkedContact ? { escortRequired: true } : {}),
+      } as any,
       200
     );
   } catch (error) {

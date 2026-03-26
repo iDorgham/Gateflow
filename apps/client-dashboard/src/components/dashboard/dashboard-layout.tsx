@@ -69,6 +69,8 @@ import { TeamSidebarChat } from './team/TeamSidebarChat';
 import { ProjectFilterProvider } from '@/context/ProjectFilterContext';
 import { Locale } from '@/lib/i18n-config';
 import { useRealtimeEvents } from '@/lib/realtime/use-realtime-events';
+import { SecurityNotifier } from './realtime/SecurityNotifier';
+import { Toaster } from 'sonner';
 import { getCsrfToken } from '@/lib/csrf';
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 
@@ -994,6 +996,9 @@ export function DashboardLayout({
         locale={locale}
         currentUserId={user.id}
       />
+
+      <SecurityNotifier />
+      <Toaster position="top-right" richColors closeButton />
     </div>
   );
 }

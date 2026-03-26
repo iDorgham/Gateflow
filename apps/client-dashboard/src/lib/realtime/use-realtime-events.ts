@@ -5,16 +5,20 @@ import { useQueryClient } from '@tanstack/react-query';
 
 /** Maps SSE event type strings to TanStack Query keys to invalidate. */
 const EVENT_QUERY_MAP: Record<string, string[][]> = {
-  QR_CREATED:          [['qrcodes']],
-  QR_UPDATED:          [['qrcodes']],
-  QR_DELETED:          [['qrcodes']],
-  SCAN_RECORDED:       [['scans'], ['analytics', 'summary']],
-  CONTACT_CREATED:     [['contacts']],
-  CONTACT_UPDATED:     [['contacts']],
-  VISITOR_QR_CREATED:  [['qrcodes'], ['contacts']],
-  VISITOR_QR_DELETED:  [['qrcodes']],
-  TEAM_CHAT_MESSAGE:   [['team-messages']],
+  QR_CREATED: [['qrcodes']],
+  QR_UPDATED: [['qrcodes']],
+  QR_DELETED: [['qrcodes']],
+  SCAN_RECORDED: [['scans'], ['analytics', 'summary']],
+  CONTACT_CREATED: [['contacts']],
+  CONTACT_UPDATED: [['contacts']],
+  VISITOR_QR_CREATED: [['qrcodes'], ['contacts']],
+  VISITOR_QR_DELETED: [['qrcodes']],
+  TEAM_CHAT_MESSAGE: [['team-messages']],
+  WATCHLIST_ALERT: [],
 };
+
+/** Custom DOM event name used to forward WATCHLIST_ALERT payloads to SecurityNotifier. */
+export const WATCHLIST_ALERT_EVENT = 'gf:watchlist_alert';
 
 /**
  * Opens a single SSE connection to /api/events/stream and maps incoming
@@ -50,10 +54,24 @@ export function useRealtimeEvents(): void {
 
       es.onmessage = (event: MessageEvent) => {
         try {
-          const { type } = JSON.parse(event.data as string) as { type: string };
-          const keys = EVENT_QUERY_MAP[type];
+          const parsed = JSON.parse(event.data as string) as {
+            type: string;
+            payload?: unknown;
+          };
+          const keys = EVENT_QUERY_MAP[parsed.type];
           if (keys) {
-            keys.forEach((key) => queryClient.invalidateQueries({ queryKey: key }));
+            keys.forEach((key) =>
+              queryClient.invalidateQueries({ queryKey: key })
+            );
+          }
+          // Forward security alerts as a window-level custom event for SecurityNotifier
+          if (
+            parsed.type === 'WATCHLIST_ALERT' &&
+            typeof window !== 'undefined'
+          ) {
+            window.dispatchEvent(
+              new CustomEvent(WATCHLIST_ALERT_EVENT, { detail: parsed.payload })
+            );
           }
         } catch {
           // Malformed event — ignore silently

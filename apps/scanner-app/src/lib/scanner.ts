@@ -4,7 +4,8 @@ import { getValidAccessToken } from './auth-client';
 import { scanQueue } from './offline-queue';
 import type { QRPayload } from '@gate-access/types';
 
-const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:3001/api';
+const API_BASE_URL =
+  process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:3001/api';
 
 export interface LocationContext {
   latitude: number;
@@ -19,6 +20,8 @@ export interface ScanResult {
   scanId?: string;
   /** true when the result is locally optimistic (network unavailable or no auth) */
   offline: boolean;
+  /** true when the visitor is on the ESCORT watchlist — access is granted but escort is required */
+  escortRequired?: boolean;
 }
 
 /**
@@ -38,7 +41,7 @@ export async function validateOnServer(
   qrPayload: string,
   localPayload: QRPayload,
   location?: LocationContext,
-  gateId?: string,
+  gateId?: string
 ): Promise<ScanResult> {
   const token = await getValidAccessToken();
 
@@ -65,7 +68,13 @@ export async function validateOnServer(
         qrPayload,
         scanContext: {
           deviceId,
-          ...(location ? { location, latitude: location.latitude, longitude: location.longitude } : {}),
+          ...(location
+            ? {
+                location,
+                latitude: location.latitude,
+                longitude: location.longitude,
+              }
+            : {}),
           ...(gateId ? { gateId } : {}),
         },
       }),
@@ -103,12 +112,20 @@ export async function validateOnServer(
     const body = await response.json();
 
     if (body.status === 'accepted') {
-      await haptic(Haptics.NotificationFeedbackType.Success);
+      const escortRequired = body.escortRequired === true;
+      if (escortRequired) {
+        await haptic(Haptics.NotificationFeedbackType.Warning);
+      } else {
+        await haptic(Haptics.NotificationFeedbackType.Success);
+      }
       return {
         status: 'accepted',
         scanId: body.scanId as string | undefined,
-        message: body.message as string | undefined,
+        message: escortRequired
+          ? 'Access granted — escort required'
+          : (body.message as string | undefined),
         offline: false,
+        escortRequired,
       };
     }
 
@@ -116,7 +133,9 @@ export async function validateOnServer(
     return {
       status: 'rejected',
       reason: body.reason as string | undefined,
-      message: (body.message as string | undefined) ?? serverReasonMessage(body.reason as string),
+      message:
+        (body.message as string | undefined) ??
+        serverReasonMessage(body.reason as string),
       offline: false,
     };
   } catch {
@@ -136,7 +155,7 @@ export async function validateOnServer(
 async function enqueueOfflineScan(
   qrPayload: string,
   localPayload: QRPayload,
-  gateId?: string,
+  gateId?: string
 ): Promise<void> {
   try {
     // Use the selected gateId when available; fall back to organizationId
@@ -175,7 +194,8 @@ function serverReasonMessage(reason: string): string {
     internal_error: 'Server error — please retry',
     invalid_format: 'No gate assigned for this QR code',
     denied: 'You are not allowed to scan at this gate',
-    not_on_location: 'Scanning is only allowed at the gate location. Enable device location or move closer to the gate.',
+    not_on_location:
+      'Scanning is only allowed at the gate location. Enable device location or move closer to the gate.',
     blocked_watchlist: 'Blocked person on security list.',
   };
   return map[reason] ?? 'Access denied';

@@ -587,6 +587,8 @@ model Contact {
   companyWebsite String?
   /// Free-text notes about the contact
   notes          String?
+  /// Security watchlist status for this contact
+  watchlistStatus WatchlistStatus @default(NONE)
   organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   contactTags    ContactTag[]
   units          ContactUnit[]
@@ -594,6 +596,7 @@ model Contact {
 
   @@index([organizationId])
   @@index([deletedAt])
+  @@index([watchlistStatus])
 }
 
 model Unit {
@@ -890,6 +893,14 @@ enum EventType {
   CONTACT_UPDATED
   VISITOR_QR_DELETED
   TEAM_CHAT_MESSAGE
+  WATCHLIST_ALERT
+}
+
+/// Security watchlist status for a Contact
+enum WatchlistStatus {
+  NONE
+  BLOCKED
+  ESCORT
 }
 
 enum AiAutomationType {
