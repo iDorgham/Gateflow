@@ -108,6 +108,8 @@ plan:run → plan:done` with automatic folder moves and doc cascades
 
 ### Bug Fixes
 
+- **[Admin] **bypass strict type check for ai assistant tools
+
 - **[Ai] **migrate AI SDK v4 → v5 type incompatibilities
 
 - **[Deps] **solve Recharts 3.x tooltip formatter type errors
