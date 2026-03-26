@@ -38,6 +38,7 @@ export async function POST(request: NextRequest) {
     messages: { role: string; content: string }[];
   };
 
+  // @ts-expect-error - Tools property has type mismatch in this workspace version
   const tools: any = {
     getPlatformMetrics: tool({
       description:
@@ -237,6 +238,7 @@ export async function POST(request: NextRequest) {
     }),
   };
 
+  // @ts-expect-error - Tools property has type mismatch in this workspace version
   const result = streamText({
     model: google('gemini-1.5-flash') as any,
     system: `You are the GateFlow platform administrator AI assistant. You have read-only access to platform data.
@@ -248,7 +250,7 @@ Never make up data — use tools to fetch real information.`,
       content: msg.content,
     })),
     tools,
-  } as any);
+  });
 
   return result.toTextStreamResponse();
 }

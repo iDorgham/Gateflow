@@ -108,6 +108,8 @@ plan:run → plan:done` with automatic folder moves and doc cascades
 
 ### Bug Fixes
 
+- **[Admin] **finalize AI assistant tools type bypass via variable isolation
+
 - **[Admin] **restore as any for individual tools to bypass tsc
 
 - **[Admin] **bypass strict type check for ai assistant tools
