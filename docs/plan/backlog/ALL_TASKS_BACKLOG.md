@@ -4,6 +4,20 @@
 
 ## Open Initiatives
 
+### projects_crm — Core CRM Extensions & Operations v2.0
+
+**IDEA:** `docs/plan/context/IDEA_projects_crm.md`
+
+**Status:** 🆕 Open
+
+**Target:** Q4 2026
+
+- [ ] Phase 1 — Communication Gateway & Notification Schema
+- [ ] Phase 2 — WhatsApp & SMS Invitation Flow
+- [ ] Phase 3 — Visitor Watchlist & Security Alerts
+- [ ] Phase 4 — CRM Density & Table Intelligence
+- [ ] Phase 5 — Operations Polish & Final Audit
+
 ### github_security_hardening — Github Security Hardening
 
 **Status:** 🆕 Open
