@@ -1,4 +1,4 @@
-import { streamText, tool, type ModelMessage } from 'ai';
+import { streamText, tool, convertToModelMessages, type UIMessage } from 'ai';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { z } from 'zod';
 import { type NextRequest } from 'next/server';
@@ -34,7 +34,8 @@ export async function POST(request: NextRequest) {
     });
   }
 
-  const { messages } = body as { messages: ModelMessage[] };
+  const { messages } = body as { messages: UIMessage[] };
+  const modelMessages = await convertToModelMessages(messages);
 
   const result = streamText({
     model: google('gemini-1.5-flash'),
@@ -42,7 +43,7 @@ export async function POST(request: NextRequest) {
 You can answer questions about organizations, users, scan activity, and platform health.
 Keep responses concise and data-driven. Always refer to data from the available tools.
 Never make up data — use tools to fetch real information.`,
-    messages,
+    messages: modelMessages,
     tools: {
       getPlatformMetrics: tool({
         description:

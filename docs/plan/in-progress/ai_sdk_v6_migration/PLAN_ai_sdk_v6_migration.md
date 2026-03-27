@@ -16,7 +16,7 @@
 | 1 | Phase 1: Title | claude | [x] |
 | 2 | Phase 2: Title | claude | [x] |
 | 3 | Phase 3: Title | gemini | [ ] |
-| 4 | Phase 4: Title | claude | [ ] |
+| 4 | Phase 4: Title | claude | [x] |
 | 5 | Phase 5: Title | claude | [ ] |
 
 ## Technical Constraints

@@ -1,4 +1,10 @@
-import { streamText, tool, stepCountIs, type ModelMessage } from 'ai';
+import {
+  streamText,
+  tool,
+  stepCountIs,
+  convertToModelMessages,
+  type UIMessage,
+} from 'ai';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { z } from 'zod';
 import { randomUUID } from 'crypto';
@@ -138,7 +144,8 @@ export async function POST(request: NextRequest): Promise<Response> {
     });
   }
 
-  const { messages } = body as { messages: ModelMessage[] };
+  const { messages } = body as { messages: UIMessage[] };
+  const modelMessages = await convertToModelMessages(messages);
 
   try {
     const result = await streamText({
@@ -165,7 +172,7 @@ Rules:
 - Respond in the SAME language the user writes in. Arabic → Arabic, English → English.
 - Never invent or guess IDs. Only use IDs returned by previous tool calls or provided by the user.
 - All actions are scoped to the user's organization (${claims.orgId}).`,
-      messages,
+      messages: modelMessages,
       stopWhen: stepCountIs(6),
       tools: {
         // ── createQR ──────────────────────────────────────────────────────────
