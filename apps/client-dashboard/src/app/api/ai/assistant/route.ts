@@ -1,10 +1,4 @@
-import {
-  streamText,
-  tool,
-  stepCountIs,
-  type CoreMessage,
-  type LanguageModel,
-} from 'ai';
+import { streamText, tool, stepCountIs, type ModelMessage } from 'ai';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { z } from 'zod';
 import { randomUUID } from 'crypto';
@@ -144,11 +138,11 @@ export async function POST(request: NextRequest): Promise<Response> {
     });
   }
 
-  const { messages } = body as { messages: CoreMessage[] };
+  const { messages } = body as { messages: ModelMessage[] };
 
   try {
     const result = await streamText({
-      model: getGoogleClient()('gemini-1.5-flash') as unknown as LanguageModel,
+      model: getGoogleClient()('gemini-1.5-flash'),
       system: `You are the GateFlow AI Assistant — an intelligent helper for a gate access control SaaS platform.
 You help users manage their organization through natural language.
 
@@ -618,8 +612,7 @@ Rules:
       },
     });
 
-    // @ts-expect-error - AI SDK v5 type mismatch
-    return result.toDataStreamResponse();
+    return result.toUIMessageStreamResponse();
   } catch (err) {
     log('FATAL AI ERROR', (err as Error).message);
     return new Response(

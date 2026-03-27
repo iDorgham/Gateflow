@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { useChat, type Message } from '@ai-sdk/react';
+import { useChat, type UIMessage } from '@ai-sdk/react';
+import { DefaultChatTransport } from 'ai';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { Send, Bot, User, Loader2, RotateCcw, Sparkles } from 'lucide-react';
@@ -12,12 +13,15 @@ import type { Locale } from '@/lib/i18n/i18n-config';
 
 const STORAGE_KEY = 'gateflow-admin-ai-chat-v1';
 
-const WELCOME_MSG: Message = {
+const WELCOME_MSG: UIMessage = {
   id: 'welcome',
   role: 'assistant',
-  content:
-    'Hi! I have read-only access to platform data. Ask me about organizations, users, scans, or platform health.',
-  createdAt: new Date(0),
+  parts: [
+    {
+      type: 'text',
+      text: 'Hi! I have read-only access to platform data. Ask me about organizations, users, scans, or platform health.',
+    },
+  ],
 };
 
 const EXAMPLE_PROMPTS = [
@@ -30,16 +34,23 @@ const EXAMPLE_PROMPTS = [
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
-function msgText(content: Message['content']): string {
-  return typeof content === 'string' ? content : '';
+function msgText(message: UIMessage): string {
+  if (typeof (message as any).content === 'string') {
+    return (message as any).content;
+  }
+  if (!Array.isArray((message as any).parts)) return '';
+  return (message as any).parts
+    .filter((p: any) => p.type === 'text')
+    .map((p: any) => p.text ?? p.content ?? '')
+    .join('');
 }
 
-function loadMessages(): Message[] {
+function loadMessages(): UIMessage[] {
   if (typeof window === 'undefined') return [WELCOME_MSG];
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) {
-      const parsed = JSON.parse(raw) as Message[];
+      const parsed = JSON.parse(raw) as UIMessage[];
       if (Array.isArray(parsed) && parsed.length > 0) return parsed;
     }
   } catch {
@@ -56,9 +67,10 @@ interface AdminAIAssistantProps {
 
 export function AdminAIAssistant({ locale }: AdminAIAssistantProps) {
   const [hydrated, setHydrated] = useState(false);
-  const [storedMessages, setStoredMessages] = useState<Message[]>([
+  const [storedMessages, setStoredMessages] = useState<UIMessage[]>([
     WELCOME_MSG,
   ]);
+  const [input, setInput] = useState('');
   const formRef = useRef<HTMLFormElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -68,17 +80,11 @@ export function AdminAIAssistant({ locale }: AdminAIAssistantProps) {
     setHydrated(true);
   }, []);
 
-  const {
-    messages,
-    input,
-    handleInputChange,
-    handleSubmit,
-    isLoading,
-    setMessages,
-    append,
-  } = useChat({
-    api: `/${locale}/api/admin/ai/assistant`,
-    initialMessages: hydrated ? storedMessages : [WELCOME_MSG],
+  const { messages, sendMessage, status, setMessages } = useChat({
+    transport: new DefaultChatTransport({
+      api: `/${locale}/api/admin/ai/assistant`,
+    }),
+    messages: [WELCOME_MSG],
     onFinish: () => {
       router.refresh();
     },
@@ -87,6 +93,19 @@ export function AdminAIAssistant({ locale }: AdminAIAssistantProps) {
       toast.error(err.message ?? 'Assistant error');
     },
   });
+
+  const isLoading = status !== 'ready';
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) =>
+    setInput(e.target.value);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const trimmed = input.trim();
+    if (!trimmed) return;
+    setInput('');
+    void sendMessage({ text: trimmed });
+  };
 
   // Sync from localStorage after hydration
   useEffect(() => {
@@ -158,7 +177,7 @@ export function AdminAIAssistant({ locale }: AdminAIAssistantProps) {
               {EXAMPLE_PROMPTS.map((p) => (
                 <button
                   key={p}
-                  onClick={() => append({ role: 'user', content: p })}
+                  onClick={() => void sendMessage({ text: p })}
                   className="rounded-xl border border-border bg-background px-3 py-2 text-xs text-muted-foreground transition-all hover:border-primary/30 hover:bg-primary/5 hover:text-foreground hover:shadow-md active:scale-95"
                 >
                   {p}
@@ -170,10 +189,10 @@ export function AdminAIAssistant({ locale }: AdminAIAssistantProps) {
 
         {/* Message bubbles */}
         {!hasOnlyWelcome &&
-          messages.map((message: Message) => {
+          messages.map((message: UIMessage) => {
             if (message.id === 'welcome') return null;
             const isUser = message.role === 'user';
-            const text = msgText(message.content);
+            const text = msgText(message);
             if (!text) return null;
 
             return (

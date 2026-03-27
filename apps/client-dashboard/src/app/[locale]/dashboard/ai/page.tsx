@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useChat } from '@ai-sdk/react';
+import { DefaultChatTransport } from 'ai';
 import { ChatPanel } from '@/components/dashboard/ai/ChatPanel';
 import { ChatHistorySidebar } from '@/components/dashboard/ai/ChatHistorySidebar';
 
@@ -10,17 +11,34 @@ export default function GateAIPage() {
   const { t, i18n } = useTranslation('dashboard');
   const isRtl = i18n.language === 'ar';
 
-  const {
-    messages,
-    input,
-    handleInputChange,
-    handleSubmit,
-    isLoading,
-    error,
-    data,
-  } = useChat({
-    api: '/api/ai/chat',
+  const [input, setInput] = React.useState('');
+  const [streamData, setStreamData] = React.useState<any[]>([]);
+
+  const { messages, sendMessage, status, error } = useChat({
+    transport: new DefaultChatTransport({
+      api: '/api/ai/chat',
+    }),
+    onData: (dataPart) => {
+      setStreamData((prev) => [...prev, dataPart]);
+    },
   });
+
+  const isLoading = status !== 'ready';
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setInput(e.target.value);
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const trimmed = input.trim();
+    if (!trimmed) return;
+    setStreamData([]);
+    setInput('');
+    await sendMessage({ text: trimmed });
+  };
 
   return (
     <div className="flex h-full overflow-hidden bg-[var(--ds-background-default,#FFFFFF)] dark:bg-[var(--ds-background-default,#161A1D)]">
@@ -61,7 +79,7 @@ export default function GateAIPage() {
               handleSubmit={handleSubmit}
               isLoading={isLoading}
               isRtl={isRtl}
-              streamData={data as any[]}
+              streamData={streamData}
               onSuggestedPromptClick={(prompt) => {
                 handleInputChange({ target: { value: prompt } } as any);
               }}

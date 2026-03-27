@@ -1,11 +1,18 @@
 'use client';
 
 import * as React from 'react';
-// Local type alias — compatible with both AI SDK v4 Message and v5 UIMessage shapes
+// Local type alias — supports both legacy `content` messages and AI SDK v3
+// `parts`-based UIMessage shapes.
 type Message = {
   id: string;
   role: string;
-  content: string;
+  content?: string;
+  parts?: Array<{
+    type: string;
+    text?: string;
+    content?: string;
+    [key: string]: unknown;
+  }>;
   [key: string]: unknown;
 };
 import {
@@ -91,6 +98,21 @@ function parseMessageContent(content: string) {
   }
 
   return parts.length > 0 ? parts : [{ type: 'text' as const, content }];
+}
+
+function messageText(message?: Message): string {
+  if (!message) return '';
+  if (typeof message.content === 'string') return message.content;
+  if (!Array.isArray(message.parts)) return '';
+
+  return message.parts
+    .filter((p) => p.type === 'text')
+    .map((p) => {
+      if (typeof p.text === 'string') return p.text;
+      if (typeof p.content === 'string') return p.content;
+      return '';
+    })
+    .join('');
 }
 
 interface ChatPanelProps {
@@ -185,7 +207,7 @@ export function ChatPanel({
           actionType: data.actionType,
           title: data.title,
           intentJson: data.intentJson,
-          prompt: messages.find((m) => m.id === messageId)?.content || '',
+          prompt: messageText(messages.find((m) => m.id === messageId)),
         }),
       });
 
@@ -276,7 +298,7 @@ export function ChatPanel({
                       'كيف يمكنني مساعدتك اليوم؟'
                     )}
                   </h1>
-                  <p className="text-base text-[var(--ds-text-subtle,#6B778C)] max-w-md leading-relaxed">
+                  <p className="text-base text-[var(--ds-text-subtle)] max-w-md leading-relaxed">
                     {t(
                       'I can help you analyze scans, generate reports, or automate your gate operations in seconds.',
                       'يمكنني مساعدتك في تحليل المسحات، إنشاء التقارير، أو أتمتة عمليات بواباتك في ثوانٍ.'
@@ -339,7 +361,7 @@ export function ChatPanel({
                   </Avatar>
 
                   <div className="flex flex-col gap-1 flex-1 min-w-0 group">
-                    {parseMessageContent(m.content).map((part, i) => (
+                    {parseMessageContent(messageText(m)).map((part, i) => (
                       <React.Fragment key={`${m.id}-${i}`}>
                         {part.type === 'text' ? (
                           <div
@@ -470,7 +492,7 @@ export function ChatPanel({
                         variant="ghost"
                         size="icon"
                         type="button"
-                        className="h-8 w-8 text-[#6B778C] dark:text-[#A5ADBA] hover:bg-gray-100 dark:hover:bg-gray-800"
+                        className="h-8 w-8 text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtle)] hover:bg-gray-100 dark:hover:bg-gray-800"
                       >
                         <Mic size={16} />
                       </Button>
@@ -488,7 +510,7 @@ export function ChatPanel({
                         variant="ghost"
                         size="icon"
                         type="button"
-                        className="h-8 w-8 text-[#6B778C] dark:text-[#A5ADBA] hover:bg-gray-100 dark:hover:bg-gray-800"
+                        className="h-8 w-8 text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtle)] hover:bg-gray-100 dark:hover:bg-gray-800"
                         disabled
                       >
                         <Paperclip size={16} />

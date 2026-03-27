@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { useChat, type Message } from '@ai-sdk/react';
+import { useChat, type UIMessage } from '@ai-sdk/react';
+import { DefaultChatTransport } from 'ai';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import {
@@ -28,20 +29,26 @@ import type { Locale } from '@/lib/i18n-config';
 
 const STORAGE_KEY = 'gateflow-ai-chat-v1';
 
-const WELCOME_EN: Message = {
+const WELCOME_EN: UIMessage = {
   id: 'welcome',
   role: 'assistant',
-  content:
-    'Hi! I can create projects, units, QR codes, and more. What would you like to do?',
-  createdAt: new Date(0),
+  parts: [
+    {
+      type: 'text',
+      text: 'Hi! I can create projects, units, QR codes, and more. What would you like to do?',
+    },
+  ],
 };
 
-const WELCOME_AR: Message = {
+const WELCOME_AR: UIMessage = {
   id: 'welcome',
   role: 'assistant',
-  content:
-    'مرحباً! يمكنني إنشاء مشاريع ووحدات ورموز QR والمزيد. بماذا يمكنني مساعدتك؟',
-  createdAt: new Date(0),
+  parts: [
+    {
+      type: 'text',
+      text: 'مرحباً! يمكنني إنشاء مشاريع ووحدات ورموز QR والمزيد. بماذا يمكنني مساعدتك؟',
+    },
+  ],
 };
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -50,16 +57,24 @@ function isArabic(text: string): boolean {
   return /[\u0600-\u06FF]/.test(text);
 }
 
-function msgText(content: Message['content']): string {
-  return typeof content === 'string' ? content : '';
+function msgText(message: UIMessage): string {
+  if (typeof (message as any).content === 'string') {
+    return (message as any).content;
+  }
+
+  if (!Array.isArray((message as any).parts)) return '';
+  return (message as any).parts
+    .filter((p: any) => p.type === 'text')
+    .map((p: any) => p.text ?? p.content ?? '')
+    .join('');
 }
 
-function loadMessages(isRtl: boolean): Message[] {
+function loadMessages(isRtl: boolean): UIMessage[] {
   if (typeof window === 'undefined') return [];
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (raw) {
-      const parsed = JSON.parse(raw) as Message[];
+      const parsed = JSON.parse(raw) as UIMessage[];
       if (Array.isArray(parsed) && parsed.length > 0) return parsed;
     }
   } catch {
@@ -94,7 +109,8 @@ export interface AIAssistantProps {
 
 export function AIAssistant({ locale }: AIAssistantProps) {
   const [hydrated, setHydrated] = useState(false);
-  const [storedMessages, setStoredMessages] = useState<Message[]>([]);
+  const [storedMessages, setStoredMessages] = useState<UIMessage[]>([]);
+  const [input, setInput] = useState('');
   const [taggedItems, setTaggedItems] = useState<
     { id: string; label: string; type: 'resident' | 'unit' }[]
   >([]);
@@ -112,22 +128,10 @@ export function AIAssistant({ locale }: AIAssistantProps) {
     setHydrated(true);
   }, [isRtl]);
 
-  const {
-    messages,
-    input,
-    handleInputChange,
-    handleSubmit,
-    isLoading,
-    setMessages,
-    append,
-    setInput,
-  } = useChat({
-    api: '/api/ai/assistant',
-    initialMessages: hydrated
-      ? storedMessages
-      : [isRtl ? WELCOME_AR : WELCOME_EN],
-    onFinish: (message) => {
-      console.log('AI Assistant: Finished', message);
+  const { messages, sendMessage, status, setMessages } = useChat({
+    transport: new DefaultChatTransport({ api: '/api/ai/assistant' }),
+    messages: [isRtl ? WELCOME_AR : WELCOME_EN],
+    onFinish: () => {
       router.refresh();
     },
     onError: (err: Error) => {
@@ -135,6 +139,21 @@ export function AIAssistant({ locale }: AIAssistantProps) {
       toast.error(err.message ?? (isRtl ? 'حدث خطأ' : 'Assistant error'));
     },
   });
+
+  const isLoading = status !== 'ready';
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) =>
+    setInput(e.target.value);
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const trimmed = input.trim();
+    if (!trimmed) return;
+
+    setTaggedItems([]);
+    setInput('');
+    void sendMessage({ text: trimmed });
+  };
 
   useEffect(() => {
     console.log('AI Assistant: Messages updated', messages);
@@ -182,7 +201,7 @@ export function AIAssistant({ locale }: AIAssistantProps) {
   };
 
   const sendExample = (prompt: string) => {
-    append({ role: 'user', content: prompt });
+    void sendMessage({ text: prompt });
   };
 
   const hasOnlyWelcome = messages.length === 1 && messages[0]?.id === 'welcome';
@@ -203,7 +222,7 @@ export function AIAssistant({ locale }: AIAssistantProps) {
                 className="flex h-14 w-14 items-center justify-center rounded-[var(--ds-border-radius-400,8px)] shadow-[var(--ds-shadow-overlay)]"
                 style={{
                   background:
-                    'linear-gradient(135deg, #27272A 0%, #3F3F46 50%, #52525B 100%)',
+                    'linear-gradient(135deg, var(--ds-surface-raised) 0%, var(--ds-surface) 50%, var(--ds-surface-sunken) 100%)',
                 }}
               >
                 <svg
@@ -260,10 +279,10 @@ export function AIAssistant({ locale }: AIAssistantProps) {
 
         {/* Message bubbles */}
         {!hasOnlyWelcome &&
-          messages.map((message: Message) => {
+          messages.map((message: UIMessage) => {
             if (message.id === 'welcome') return null;
             const isUser = message.role === 'user';
-            const text = msgText(message.content);
+            const text = msgText(message);
             const msgRtl = isArabic(text);
             if (!text) return null;
 
@@ -291,7 +310,7 @@ export function AIAssistant({ locale }: AIAssistantProps) {
                     !isUser
                       ? {
                           background:
-                            'linear-gradient(135deg, #27272A, #52525B)',
+                            'linear-gradient(135deg, var(--ds-surface-raised), var(--ds-surface-sunken))',
                         }
                       : undefined
                   }
@@ -336,7 +355,8 @@ export function AIAssistant({ locale }: AIAssistantProps) {
             <div
               className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-white"
               style={{
-                background: 'linear-gradient(135deg, #27272A, #52525B)',
+                background:
+                  'linear-gradient(135deg, var(--ds-surface-raised), var(--ds-surface-sunken))',
               }}
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
@@ -386,11 +406,7 @@ export function AIAssistant({ locale }: AIAssistantProps) {
       {/* Input */}
       <form
         ref={formRef}
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleSubmit(e);
-          setTaggedItems([]); // Clear tags after sending
-        }}
+        onSubmit={handleSubmit}
         className="shrink-0 border-t border-border/40 p-0 bg-[var(--ds-surface,#18191a)]"
       >
         <TooltipProvider>

@@ -1,4 +1,4 @@
-import { streamText, tool, type CoreMessage, type LanguageModel } from 'ai';
+import { streamText, tool, type ModelMessage } from 'ai';
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { z } from 'zod';
 import { type NextRequest } from 'next/server';
@@ -34,10 +34,10 @@ export async function POST(request: NextRequest) {
     });
   }
 
-  const { messages } = body as { messages: CoreMessage[] };
+  const { messages } = body as { messages: ModelMessage[] };
 
   const result = streamText({
-    model: google('gemini-1.5-flash') as unknown as LanguageModel,
+    model: google('gemini-1.5-flash'),
     system: `You are the GateFlow platform administrator AI assistant. You have read-only access to platform data.
 You can answer questions about organizations, users, scan activity, and platform health.
 Keep responses concise and data-driven. Always refer to data from the available tools.
@@ -218,5 +218,5 @@ Never make up data — use tools to fetch real information.`,
     },
   });
 
-  return result.toTextStreamResponse();
+  return result.toUIMessageStreamResponse();
 }

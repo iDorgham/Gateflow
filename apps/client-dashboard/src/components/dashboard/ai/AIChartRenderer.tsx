@@ -32,7 +32,13 @@ interface AIChartRendererProps {
 }
 
 export function AIChartRenderer({ config }: AIChartRendererProps) {
-  const { chartType, title, data, xAxisKey = 'label', yAxisKey = 'value' } = config;
+  const {
+    chartType,
+    title,
+    data,
+    xAxisKey = 'label',
+    yAxisKey = 'value',
+  } = config;
 
   if (!data || data.length === 0) {
     return (
@@ -46,28 +52,36 @@ export function AIChartRenderer({ config }: AIChartRendererProps) {
     switch (chartType) {
       case 'line':
         return (
-          <LineChart data={data} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" opacity={0.5} />
-            <XAxis 
-              dataKey={xAxisKey} 
-              tick={{ fontSize: 11 }} 
-              axisLine={false}
-              tickLine={false}
+          <LineChart
+            data={data}
+            margin={{ top: 20, right: 30, left: 0, bottom: 0 }}
+          >
+            <CartesianGrid
+              strokeDasharray="3 3"
+              vertical={false}
+              stroke="hsl(var(--border))"
+              opacity={0.5}
             />
-            <YAxis 
+            <XAxis
+              dataKey={xAxisKey}
               tick={{ fontSize: 11 }}
               axisLine={false}
               tickLine={false}
             />
+            <YAxis tick={{ fontSize: 11 }} axisLine={false} tickLine={false} />
             <Tooltip
-              contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: '8px' }}
+              contentStyle={{
+                backgroundColor: 'hsl(var(--card))',
+                border: '1px solid hsl(var(--border))',
+                borderRadius: '8px',
+              }}
             />
-            <Line 
-              type="monotone" 
-              dataKey={yAxisKey} 
-              stroke="var(--ds-background-discovery-bold, #5243AA)" 
+            <Line
+              type="monotone"
+              dataKey={yAxisKey}
+              stroke="var(--ds-background-discovery-bold)"
               strokeWidth={2}
-              dot={{ r: 4, fill: 'var(--ds-background-discovery-bold, #5243AA)' }}
+              dot={{ r: 4, fill: 'var(--ds-background-discovery-bold)' }}
               activeDot={{ r: 6 }}
             />
           </LineChart>
@@ -90,28 +104,40 @@ export function AIChartRenderer({ config }: AIChartRendererProps) {
               ))}
             </Pie>
             <Tooltip
-              contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: '8px' }}
+              contentStyle={{
+                backgroundColor: 'hsl(var(--card))',
+                border: '1px solid hsl(var(--border))',
+                borderRadius: '8px',
+              }}
             />
           </PieChart>
         );
       case 'bar':
       default:
         return (
-          <BarChart data={data} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border))" opacity={0.5} />
-            <XAxis 
-              dataKey={xAxisKey} 
+          <BarChart
+            data={data}
+            margin={{ top: 20, right: 30, left: 0, bottom: 0 }}
+          >
+            <CartesianGrid
+              strokeDasharray="3 3"
+              vertical={false}
+              stroke="hsl(var(--border))"
+              opacity={0.5}
+            />
+            <XAxis
+              dataKey={xAxisKey}
               tick={{ fontSize: 11 }}
               axisLine={false}
               tickLine={false}
             />
-            <YAxis 
-              tick={{ fontSize: 11 }}
-              axisLine={false}
-              tickLine={false}
-            />
+            <YAxis tick={{ fontSize: 11 }} axisLine={false} tickLine={false} />
             <Tooltip
-              contentStyle={{ backgroundColor: 'hsl(var(--card))', border: '1px solid hsl(var(--border))', borderRadius: '8px' }}
+              contentStyle={{
+                backgroundColor: 'hsl(var(--card))',
+                border: '1px solid hsl(var(--border))',
+                borderRadius: '8px',
+              }}
             />
             <Bar dataKey={yAxisKey} radius={[4, 4, 0, 0]} maxBarSize={30}>
               {data.map((_, index) => (
@@ -124,9 +150,9 @@ export function AIChartRenderer({ config }: AIChartRendererProps) {
   };
 
   return (
-    <Card className="my-4 border-[var(--ds-border-discovery,#998DD9)]/30 bg-background/50 shadow-sm overflow-hidden">
-      <CardHeader className="py-3 px-4 bg-[var(--ds-background-discovery-subtle,#EAE6FF)]/20 border-b border-[var(--ds-border-discovery,#998DD9)]/10">
-        <CardTitle className="text-sm font-medium text-[var(--ds-text-discovery,#403294)]">
+    <Card className="my-4 border-[var(--ds-border-discovery)]/30 bg-background/50 shadow-sm overflow-hidden">
+      <CardHeader className="py-3 px-4 bg-[var(--ds-background-discovery-subtle)]/20 border-b border-[var(--ds-border-discovery)]/10">
+        <CardTitle className="text-sm font-medium text-[var(--ds-text-discovery)]">
           {title}
         </CardTitle>
       </CardHeader>

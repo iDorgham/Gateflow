@@ -1,5 +1,5 @@
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
-import { streamText, stepCountIs, type LanguageModel } from 'ai';
+import { streamText, stepCountIs, type ModelMessage } from 'ai';
 import { requireAuth } from '@/lib/dashboard-auth';
 import { getOrganizationContext } from '@/lib/ai/context-providers';
 import { checkRateLimit } from '@/lib/rate-limit';
@@ -24,7 +24,10 @@ export async function POST(req: Request) {
       return new Response('Unauthorized', { status: 401 });
     }
 
-    const { messages, organizationId: clientOrgId } = await req.json();
+    const { messages, organizationId: clientOrgId } = (await req.json()) as {
+      messages: ModelMessage[];
+      organizationId?: string;
+    };
 
     // 2. Redundant Multi-tenant Guard: Client-provided orgId MUST match session
     if (clientOrgId && clientOrgId !== session.user.organizationId) {
@@ -55,7 +58,9 @@ export async function POST(req: Request) {
     });
 
     // 4. Interaction Log Entry
-    const lastUserMessage = messages?.[messages.length - 1]?.content || '';
+    const lastMsgContent = messages?.[messages.length - 1]?.content;
+    const lastUserMessage =
+      typeof lastMsgContent === 'string' ? lastMsgContent : '';
     const actionLog = await AiActionService.createAction({
       organizationId: session.user.organizationId,
       userId: session.user.id,
@@ -71,9 +76,7 @@ export async function POST(req: Request) {
     }
 
     const google = createGoogleGenerativeAI({ apiKey });
-    const model = google('gemini-flash-latest', {
-      structuredOutputs: false,
-    }) as unknown as LanguageModel;
+    const model = google('gemini-flash-latest');
 
     const isResident = session.user.role === 'RESIDENT';
 
@@ -174,7 +177,7 @@ Answer concisely.`
       },
     });
 
-    return result.toTextStreamResponse();
+    return result.toUIMessageStreamResponse();
   } catch (error: unknown) {
     const errorMessage =
       error instanceof Error ? error.message : 'Internal Server Error';
