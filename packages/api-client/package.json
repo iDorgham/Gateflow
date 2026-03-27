@@ -17,6 +17,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@gate-access/types": "workspace:*",
     "ai": "5.0.52"
   }
 }

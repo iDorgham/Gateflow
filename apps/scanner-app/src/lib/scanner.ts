@@ -150,6 +150,88 @@ export async function validateOnServer(
   }
 }
 
+import { maintenanceQueue } from './maintenance-queue';
+
+/**
+ * Report a hardware or facility issue discovered at a gate.
+ *
+ * @param gateId The gate where the issue occurred (required)
+ * @param scanLogId Optional scan log associated with the discovery (for evidence)
+ */
+export async function createMaintenanceRequest(params: {
+  title: string;
+  description?: string;
+  category: 'HARDWARE' | 'FACILITY' | 'OTHER';
+  gateId: string;
+  scanLogId?: string;
+}): Promise<{ success: boolean; message?: string; offline?: boolean }> {
+  const token = await getValidAccessToken();
+  if (!token) {
+    // If not signed in, we can't really queue it with the correct org context
+    // unless we use the last known orgId. For now, require auth.
+    return { success: false, message: 'Not signed in' };
+  }
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/maintenance/work-orders`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        title: params.title,
+        description: params.description,
+        category: params.category,
+        gateId: params.gateId,
+        scanLogId: params.scanLogId,
+        priority: 'MEDIUM', // Default priority for field reports
+        source: 'SCANNER_APP',
+      }),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      return {
+        success: data.success,
+        message: data.message,
+      };
+    }
+
+    // 5xx or network error → fallback to offline queue
+    if (response.status >= 500) {
+      throw new Error('Server error');
+    }
+
+    const data = await response.json();
+    return {
+      success: false,
+      message: data.message ?? `Error ${response.status}`,
+    };
+  } catch (err) {
+    // Queue offline
+    try {
+      await maintenanceQueue.addReport({
+        title: params.title,
+        description: params.description,
+        category: params.category,
+        gateId: params.gateId,
+        scanLogId: params.scanLogId,
+      });
+      return {
+        success: true,
+        offline: true,
+        message: 'No connection — report queued for sync',
+      };
+    } catch (queueErr) {
+      return {
+        success: false,
+        message: (err as Error).message ?? 'Network failure',
+      };
+    }
+  }
+}
+
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 async function enqueueOfflineScan(

@@ -127,7 +127,10 @@ export const encryption = {
       return decrypted;
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
-      if (msg.includes('Malformed UTF-8') || msg.includes('Decryption failed')) {
+      if (
+        msg.includes('Malformed UTF-8') ||
+        msg.includes('Decryption failed')
+      ) {
         throw new Error('Decryption failed - invalid key or corrupted data');
       }
       throw err;
@@ -352,6 +355,8 @@ async function bulkSyncScans(scans: QueuedScan[]): Promise<{
   }
 }
 
+import { maintenanceQueue } from './maintenance-queue';
+
 export const syncManager = {
   isSyncing: false,
 
@@ -373,6 +378,9 @@ export const syncManager = {
     this.isSyncing = true;
 
     try {
+      // Trigger maintenance sync in parallel
+      maintenanceQueue.triggerSync().catch(console.error);
+
       const pendingScans = await scanQueue.getPendingScans();
 
       if (pendingScans.length === 0) {

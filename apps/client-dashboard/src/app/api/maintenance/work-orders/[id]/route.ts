@@ -1,14 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@gate-access/db';
 import { getSessionClaims } from '@/lib/auth-cookies';
-import { updateWorkOrderSchema, isValidStatusTransition, MaintenanceStatus } from '@gate-access/types';
+import { WorkOrderService } from '@/lib/maintenance/work-order-service';
+import { updateWorkOrderSchema, BUILT_IN_ROLES } from '@gate-access/types';
 
-export const dynamic = 'force-dynamic';
-
-// ─── GET /api/maintenance/work-orders/[id] ─────────────────────────────────────
-// Retrieve a single work order detail.
+/**
+ * GET /api/maintenance/work-orders/[id]
+ * Get work order details.
+ */
 export async function GET(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ): Promise<NextResponse> {
   try {
@@ -20,18 +20,8 @@ export async function GET(
       );
     }
 
-    const { id } = params;
-
-    const workOrder = await prisma.workOrder.findFirst({
-      where: { id, organizationId: claims.orgId, deletedAt: null },
-      include: {
-        reporter: { select: { id: true, name: true, email: true, image: true } },
-        assignee: { select: { id: true, name: true, email: true, image: true } },
-        gate: { select: { id: true, name: true } },
-        unit: { select: { id: true, name: true } },
-        project: { select: { id: true, name: true } },
-      },
-    });
+    const { id } = await params;
+    const workOrder = await WorkOrderService.getById(claims.orgId, id);
 
     if (!workOrder) {
       return NextResponse.json(
@@ -40,9 +30,23 @@ export async function GET(
       );
     }
 
-    return NextResponse.json({ success: true, data: workOrder });
+    // RBAC: Residents can only see their own reports
+    if (
+      claims.roleName === BUILT_IN_ROLES.RESIDENT &&
+      workOrder.reporterId !== claims.sub
+    ) {
+      return NextResponse.json(
+        { success: false, message: 'Forbidden' },
+        { status: 403 }
+      );
+    }
+
+    return NextResponse.json({
+      success: true,
+      data: workOrder,
+    });
   } catch (error) {
-    console.error('GET /api/maintenance/work-orders/[id] error:', error);
+    console.error(`GET /api/maintenance/work-orders/[id] error:`, error);
     return NextResponse.json(
       { success: false, message: 'Internal server error' },
       { status: 500 }
@@ -50,8 +54,10 @@ export async function GET(
   }
 }
 
-// ─── PATCH /api/maintenance/work-orders/[id] ───────────────────────────────────
-// Update a work order (status, priority, assignee, etc.).
+/**
+ * PATCH /api/maintenance/work-orders/[id]
+ * Update work order.
+ */
 export async function PATCH(
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -65,89 +71,55 @@ export async function PATCH(
       );
     }
 
-    const { id } = params;
-    let body: unknown;
-    try {
-      body = await request.json();
-    } catch {
-      return NextResponse.json(
-        { success: false, message: 'Invalid JSON body' },
-        { status: 400 }
-      );
-    }
+    const { id } = await params;
+    const body = await request.json();
+    const parsed = updateWorkOrderSchema.safeParse(body);
 
-    const validation = updateWorkOrderSchema.safeParse(body);
-    if (!validation.success) {
+    if (!parsed.success) {
       return NextResponse.json(
         {
           success: false,
-          message: 'Invalid request body',
-          error: validation.error.flatten(),
+          message: 'Validation failed',
+          error: parsed.error.flatten(),
         },
         { status: 400 }
       );
     }
 
-    const existing = await prisma.workOrder.findFirst({
-      where: { id, organizationId: claims.orgId, deletedAt: null },
-    });
-
-    if (!existing) {
+    // RBAC: Residents cannot update work orders (except maybe cancellation, but keeping it simple for now)
+    if (claims.roleName === BUILT_IN_ROLES.RESIDENT) {
       return NextResponse.json(
-        { success: false, message: 'Work order not found' },
-        { status: 404 }
+        { success: false, message: 'Forbidden' },
+        { status: 403 }
       );
     }
 
-    const updates = validation.data;
+    const updated = await WorkOrderService.update(
+      claims.orgId,
+      id,
+      parsed.data
+    );
 
-    // Validate Status Transition
-    if (updates.status && updates.status !== existing.status) {
-      if (!isValidStatusTransition(existing.status as MaintenanceStatus, updates.status as MaintenanceStatus)) {
-        return NextResponse.json(
-          { 
-            success: false, 
-            message: `Invalid status transition from ${existing.status} to ${updates.status}` 
-          },
-          { status: 400 }
-        );
-      }
-    }
-
-    // Auto-update status to ASSIGNED if assigneeId is provided and current status is OPEN
-    if (updates.assigneeId && existing.status === MaintenanceStatus.OPEN && !updates.status) {
-      updates.status = MaintenanceStatus.ASSIGNED;
-    }
-
-    const updated = await prisma.workOrder.update({
-      where: { id },
-      data: {
-        ...updates,
-        dueDate: updates.dueDate ? new Date(updates.dueDate) : updates.dueDate,
-      },
-      include: {
-        reporter: { select: { id: true, name: true, email: true, image: true } },
-        assignee: { select: { id: true, name: true, email: true, image: true } },
-        gate: { select: { id: true, name: true } },
-        unit: { select: { id: true, name: true } },
-        project: { select: { id: true, name: true } },
-      },
+    return NextResponse.json({
+      success: true,
+      data: updated,
     });
-
-    return NextResponse.json({ success: true, data: updated });
-  } catch (error) {
-    console.error('PATCH /api/maintenance/work-orders/[id] error:', error);
+  } catch (error: any) {
+    console.error(`PATCH /api/maintenance/work-orders/[id] error:`, error);
+    const status = error.message === 'Work order not found' ? 404 : 400;
     return NextResponse.json(
-      { success: false, message: 'Internal server error' },
-      { status: 500 }
+      { success: false, message: error.message },
+      { status }
     );
   }
 }
 
-// ─── DELETE /api/maintenance/work-orders/[id] ──────────────────────────────────
-// Soft-deletes a work order.
+/**
+ * DELETE /api/maintenance/work-orders/[id]
+ * Soft-delete work order.
+ */
 export async function DELETE(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ): Promise<NextResponse> {
   try {
@@ -159,30 +131,30 @@ export async function DELETE(
       );
     }
 
-    const { id } = params;
-
-    const existing = await prisma.workOrder.findFirst({
-      where: { id, organizationId: claims.orgId, deletedAt: null },
-    });
-
-    if (!existing) {
+    // RBAC: Only Admins can delete
+    if (
+      claims.roleName !== BUILT_IN_ROLES.SUPER_ADMIN &&
+      claims.roleName !== BUILT_IN_ROLES.ORG_ADMIN
+    ) {
       return NextResponse.json(
-        { success: false, message: 'Work order not found' },
-        { status: 404 }
+        { success: false, message: 'Forbidden' },
+        { status: 403 }
       );
     }
 
-    await prisma.workOrder.update({
-      where: { id },
-      data: { deletedAt: new Date() },
-    });
+    const { id } = await params;
+    await WorkOrderService.delete(claims.orgId, id);
 
-    return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error('DELETE /api/maintenance/work-orders/[id] error:', error);
+    return NextResponse.json({
+      success: true,
+      message: 'Work order deleted',
+    });
+  } catch (error: any) {
+    console.error(`DELETE /api/maintenance/work-orders/[id] error:`, error);
+    const status = error.message === 'Work order not found' ? 404 : 500;
     return NextResponse.json(
-      { success: false, message: 'Internal server error' },
-      { status: 500 }
+      { success: false, message: error.message },
+      { status }
     );
   }
 }

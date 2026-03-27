@@ -417,6 +417,30 @@
         "DENIED": "Denied"
       }
     },
+    "maintenance": {
+      "title": "Maintenance Hub",
+      "description": "Manage and track facility maintenance requests across gates, units, and projects.",
+      "dashboard": {
+        "title": "Maintenance Dashboard",
+        "openOrders": "Open Orders",
+        "inProgress": "In Progress",
+        "resolved": "Resolved Today"
+      },
+      "table": {
+        "issue": "Issue / Work Order",
+        "status": "Status",
+        "priority": "Priority",
+        "asset": "Location / Asset",
+        "assignee": "Assignee",
+        "lastUpdated": "Last Updated"
+      },
+      "actions": {
+        "create": "Create Work Order",
+        "view": "View Details",
+        "assign": "Assign Technician",
+        "cancel": "Cancel Work Order"
+      }
+    },
     "projectDetail": {
       "location": "Location",
       "about": "About",
@@ -460,6 +484,7 @@
       "gateAi": "AI assistant",
       "watchlist": "Watchlist",
       "settings": "Settings",
+      "maintenance": "Maintenance",
       "expand": "Expand Sidebar",
       "collapse": "Collapse Sidebar",
       "activeProject": "Active Project",

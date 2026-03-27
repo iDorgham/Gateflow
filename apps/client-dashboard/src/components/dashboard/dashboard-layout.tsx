@@ -17,6 +17,7 @@ import {
   CreditCard,
   Power,
   X,
+  Wrench,
 } from 'lucide-react';
 import {
   SquaresFour,
@@ -291,6 +292,12 @@ const NAV_ITEMS = [
     href: '/dashboard/analytics',
     icon: ChartLineUp,
     i18nKey: 'sidebar.analytics',
+  },
+  {
+    label: 'Maintenance',
+    href: '/dashboard/maintenance',
+    icon: Wrench,
+    i18nKey: 'sidebar.maintenance',
   },
   {
     label: 'Settings',

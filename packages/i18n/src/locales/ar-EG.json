@@ -418,6 +418,30 @@
         "DENIED": "مرفوض"
       }
     },
+    "maintenance": {
+      "title": "مركز الصيانة",
+      "description": "إدارة وتتبع طلبات صيانة المنشأة عبر البوابات والوحدات والمشاريع.",
+      "dashboard": {
+        "title": "لوحة الصيانة",
+        "openOrders": "طلبات مفتوحة",
+        "inProgress": "قيد التنفيذ",
+        "resolved": "تم حلها اليوم"
+      },
+      "table": {
+        "issue": "المشكلة / أمر العمل",
+        "status": "الحالة",
+        "priority": "الأولوية",
+        "asset": "الموقع / الأصل",
+        "assignee": "المسؤول",
+        "lastUpdated": "آخر تحديث"
+      },
+      "actions": {
+        "create": "إنشاء أمر عمل",
+        "view": "عرض التفاصيل",
+        "assign": "تعيين فني",
+        "cancel": "إلغاء أمر العمل"
+      }
+    },
     "projectDetail": {
       "location": "الموقع",
       "about": "نبذة",
@@ -461,6 +485,7 @@
       "gateAi": "المساعد الذكي",
       "watchlist": "قائمة المراقبة",
       "settings": "الإعدادات",
+      "maintenance": "الصيانة",
       "expand": "توسيع القائمة",
       "collapse": "طي القائمة",
       "activeProject": "المشروع النشط",

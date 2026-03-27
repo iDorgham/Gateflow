@@ -754,6 +754,9 @@ importers:
       expo-secure-store:
         specifier: ~15.0.8
         version: 15.0.8(expo@54.0.33)
+      lucide-react-native:
+        specifier: ^0.575.0
+        version: 0.575.0(react-native-svg@15.15.4)(react-native@0.81.5)(react@19.1.0)
       react:
         specifier: 19.1.0
         version: 19.1.0
@@ -782,6 +785,9 @@ importers:
 
   packages/api-client:
     dependencies:
+      '@gate-access/types':
+        specifier: workspace:*
+        version: link:../types
       ai:
         specifier: 5.0.52
         version: 5.0.52(zod@3.25.76)
@@ -950,6 +956,9 @@ importers:
       '@atlaskit/tokens':
         specifier: ^11.1.1
         version: 11.2.0(react@19.2.4)
+      '@gate-access/types':
+        specifier: workspace:*
+        version: link:../types
       '@hugeicons/core-free-icons':
         specifier: ^3.1.1
         version: 3.3.0
@@ -10300,7 +10309,6 @@ packages:
       {
         integrity: sha512-JZOSA7Mo9sNGB8+UjSgzdLtokWAky1zbztM3WRLCbZ70/3cTANmQmOdR7y2g+J0e2WXywy1yS468tY+IruqEww==,
       }
-    dev: true
 
   /bplist-creator@0.1.0:
     resolution:
@@ -11336,7 +11344,6 @@ packages:
       domhandler: 5.0.3
       domutils: 3.2.2
       nth-check: 2.1.1
-    dev: true
 
   /css-tree@1.1.3:
     resolution:
@@ -11347,7 +11354,6 @@ packages:
     dependencies:
       mdn-data: 2.0.14
       source-map: 0.6.1
-    dev: true
 
   /css-what@6.2.2:
     resolution:
@@ -11355,7 +11361,6 @@ packages:
         integrity: sha512-u/O3vwbptzhMs3L1fQE82ZSLHQQfto5gyZzwteVIEyeaY5Fc7R4dapF/BvRoSYFeqfBk4m0V1Vafq5Pjv25wvA==,
       }
     engines: { node: '>= 6' }
-    dev: true
 
   /cssesc@3.0.0:
     resolution:
@@ -11924,14 +11929,12 @@ packages:
       domelementtype: 2.3.0
       domhandler: 5.0.3
       entities: 4.5.0
-    dev: true
 
   /domelementtype@2.3.0:
     resolution:
       {
         integrity: sha512-OLETBj6w0OsagBwdXnPdN0cnMfF9opN69co+7ZrbfPGrdpPVNBUj02spi6B1N7wChLQiPn4CSH/zJvXw56gmHw==,
       }
-    dev: true
 
   /domhandler@5.0.3:
     resolution:
@@ -11941,7 +11944,6 @@ packages:
     engines: { node: '>= 4' }
     dependencies:
       domelementtype: 2.3.0
-    dev: true
 
   /domutils@3.2.2:
     resolution:
@@ -11952,7 +11954,6 @@ packages:
       dom-serializer: 2.0.0
       domelementtype: 2.3.0
       domhandler: 5.0.3
-    dev: true
 
   /dot-case@2.1.1:
     resolution:
@@ -17329,6 +17330,21 @@ packages:
     engines: { node: '>=12' }
     dev: true
 
+  /lucide-react-native@0.575.0(react-native-svg@15.15.4)(react-native@0.81.5)(react@19.1.0):
+    resolution:
+      {
+        integrity: sha512-kdGcjF4Rm1YKuNs3IaW5lDAqVKn9RBj1Fmjt3JBr08PMIXpVV7iL0ICNF/awiPZQicHlx/v9xgyZZS4TAFxDNg==,
+      }
+    peerDependencies:
+      react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-native: '*'
+      react-native-svg: ^12.0.0 || ^13.0.0 || ^14.0.0 || ^15.0.0
+    dependencies:
+      react: 19.1.0
+      react-native: 0.81.5(@babel/core@7.29.0)(@react-native/metro-config@0.84.1)(@types/react@19.2.14)(react@19.1.0)
+      react-native-svg: 15.15.4(react-native@0.81.5)(react@19.1.0)
+    dev: false
+
   /lucide-react-native@0.575.0(react-native-svg@15.15.4)(react-native@0.81.5)(react@19.2.4):
     resolution:
       {
@@ -17586,7 +17602,6 @@ packages:
       {
         integrity: sha512-dn6wd0uw5GsdswPFfsgMp5NSB0/aDe6fK94YJV/AJDYXL6HVLWBsxeq7js7Ad+mU2K9LAlwpk6kN2D5mwCPVow==,
       }
-    dev: true
 
   /mdurl@2.0.0:
     resolution:
@@ -19075,7 +19090,6 @@ packages:
       }
     dependencies:
       boolbase: 1.0.0
-    dev: true
 
   /nullthrows@1.1.1:
     resolution:
@@ -20769,6 +20783,22 @@ packages:
     dependencies:
       react: 19.1.0
       react-freeze: 1.0.4(react@19.1.0)
+      react-native: 0.81.5(@babel/core@7.29.0)(@react-native/metro-config@0.84.1)(@types/react@19.2.14)(react@19.1.0)
+      warn-once: 0.1.1
+    dev: false
+
+  /react-native-svg@15.15.4(react-native@0.81.5)(react@19.1.0):
+    resolution:
+      {
+        integrity: sha512-boT/vIRgj6zZKBpfTPJJiYWMbZE9duBMOwPK6kCSTgxsS947IFMOq9OgIFkpWZTB7t229H24pDRkh3W9ZK/J1A==,
+      }
+    peerDependencies:
+      react: '*'
+      react-native: '*'
+    dependencies:
+      css-select: 5.2.2
+      css-tree: 1.1.3
+      react: 19.1.0
       react-native: 0.81.5(@babel/core@7.29.0)(@react-native/metro-config@0.84.1)(@types/react@19.2.14)(react@19.1.0)
       warn-once: 0.1.1
     dev: false

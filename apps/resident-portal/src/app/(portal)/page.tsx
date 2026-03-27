@@ -7,9 +7,17 @@ import {
   Users,
   History,
   Plus,
+  Wrench,
+  ChevronRight,
 } from 'lucide-react';
 import { getSessionClaims } from '@/lib/auth-cookies';
-import { prisma, checkAndConsumeQuota, VisitorQR, QRCode, AccessRule } from '@gate-access/db';
+import {
+  prisma,
+  checkAndConsumeQuota,
+  VisitorQR,
+  QRCode,
+  AccessRule,
+} from '@gate-access/db';
 
 export default async function HomePage() {
   const claims = await getSessionClaims();
@@ -17,10 +25,10 @@ export default async function HomePage() {
   const orgId = claims?.org || 'dev-org-id';
 
   const unit = await prisma.unit.findFirst({
-    where: { 
-      userId, 
+    where: {
+      userId,
       organizationId: orgId,
-      deletedAt: null 
+      deletedAt: null,
     },
     include: {
       project: {
@@ -29,7 +37,9 @@ export default async function HomePage() {
     },
   });
 
-  const quota = unit ? await checkAndConsumeQuota(unit.id) : { used: 0, quota: 15, remaining: 15, resetDate: new Date() };
+  const quota = unit
+    ? await checkAndConsumeQuota(unit.id)
+    : { used: 0, quota: 15, remaining: 15, resetDate: new Date() };
 
   const activeVisitors = await prisma.visitorQR.findMany({
     where: {
@@ -147,45 +157,83 @@ export default async function HomePage() {
               </Link>
             </div>
 
+            <Link
+              href="/maintenance"
+              className="flex items-center gap-4 p-4 bg-white rounded-xl border border-slate-200 hover:bg-slate-50 transition-colors"
+            >
+              <div className="h-12 w-12 bg-orange-100 rounded-xl flex items-center justify-center">
+                <Wrench className="h-6 w-6 text-orange-600" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-bold text-slate-900">Maintenance</h3>
+                <p className="text-xs text-slate-500">
+                  Report plumbing, electrical or other issues
+                </p>
+              </div>
+              <ChevronRight className="h-5 w-5 text-slate-300" />
+            </Link>
+
             <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
               <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
-                <h2 className="font-semibold text-slate-900">Active Visitors</h2>
-                <Link href="/visitors" className="text-sm text-blue-600 hover:underline">
+                <h2 className="font-semibold text-slate-900">
+                  Active Visitors
+                </h2>
+                <Link
+                  href="/visitors"
+                  className="text-sm text-blue-600 hover:underline"
+                >
                   View all
                 </Link>
               </div>
               <div className="divide-y divide-slate-100">
                 {activeVisitors.length > 0 ? (
-                  activeVisitors.map((v: VisitorQR & { qrCode: QRCode; accessRule: AccessRule | null }) => (
-                    <div key={v.id} className="px-5 py-4 flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="h-10 w-10 bg-slate-100 rounded-full flex items-center justify-center">
-                          <User className="h-5 w-5 text-slate-400" />
-                        </div>
-                        <div>
-                          <p className="font-medium text-slate-900">{v.visitorName || 'Open QR'}</p>
-                          <p className="text-xs text-slate-500">
-                            {v.accessRule?.type === 'ONETIME'
-                              ? 'One-time access'
-                              : v.accessRule?.type === 'RECURRING'
-                                ? 'Recurring access'
-                                : 'Permanent access'}
-                          </p>
-                        </div>
-                      </div>
-                      <span
-                        className={`px-2 py-1 text-xs rounded-full ${
-                          v.isOpenQR ? 'bg-purple-100 text-purple-700' : 'bg-green-100 text-green-700'
-                        }`}
+                  activeVisitors.map(
+                    (
+                      v: VisitorQR & {
+                        qrCode: QRCode;
+                        accessRule: AccessRule | null;
+                      }
+                    ) => (
+                      <div
+                        key={v.id}
+                        className="px-5 py-4 flex items-center justify-between"
                       >
-                        {v.isOpenQR ? 'Open' : 'Active'}
-                      </span>
-                    </div>
-                  ))
+                        <div className="flex items-center gap-3">
+                          <div className="h-10 w-10 bg-slate-100 rounded-full flex items-center justify-center">
+                            <User className="h-5 w-5 text-slate-400" />
+                          </div>
+                          <div>
+                            <p className="font-medium text-slate-900">
+                              {v.visitorName || 'Open QR'}
+                            </p>
+                            <p className="text-xs text-slate-500">
+                              {v.accessRule?.type === 'ONETIME'
+                                ? 'One-time access'
+                                : v.accessRule?.type === 'RECURRING'
+                                  ? 'Recurring access'
+                                  : 'Permanent access'}
+                            </p>
+                          </div>
+                        </div>
+                        <span
+                          className={`px-2 py-1 text-xs rounded-full ${
+                            v.isOpenQR
+                              ? 'bg-purple-100 text-purple-700'
+                              : 'bg-green-100 text-green-700'
+                          }`}
+                        >
+                          {v.isOpenQR ? 'Open' : 'Active'}
+                        </span>
+                      </div>
+                    )
+                  )
                 ) : (
                   <div className="px-5 py-8 text-center">
                     <p className="text-sm text-slate-500">No active visitors</p>
-                    <Link href="/visitors/new" className="text-sm text-blue-600 font-medium mt-1 inline-block">
+                    <Link
+                      href="/visitors/new"
+                      className="text-sm text-blue-600 font-medium mt-1 inline-block"
+                    >
                       Create your first visitor QR
                     </Link>
                   </div>
@@ -206,19 +254,38 @@ export default async function HomePage() {
 
       <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-20">
         <div className="max-w-md mx-auto flex justify-around py-3">
-          <Link href="/" className="flex flex-col items-center gap-1 text-blue-600">
+          <Link
+            href="/"
+            className="flex flex-col items-center gap-1 text-blue-600"
+          >
             <Home className="h-5 w-5" />
             <span className="text-xs">Home</span>
           </Link>
-          <Link href="/visitors" className="flex flex-col items-center gap-1 text-slate-400">
+          <Link
+            href="/visitors"
+            className="flex flex-col items-center gap-1 text-slate-400"
+          >
             <QrCode className="h-5 w-5" />
             <span className="text-xs">Visitors</span>
           </Link>
-          <Link href="/history" className="flex flex-col items-center gap-1 text-slate-400">
+          <Link
+            href="/maintenance"
+            className="flex flex-col items-center gap-1 text-slate-400"
+          >
+            <Wrench className="h-5 w-5" />
+            <span className="text-xs">Repair</span>
+          </Link>
+          <Link
+            href="/history"
+            className="flex flex-col items-center gap-1 text-slate-400"
+          >
             <History className="h-5 w-5" />
             <span className="text-xs">History</span>
           </Link>
-          <Link href="/profile" className="flex flex-col items-center gap-1 text-slate-400">
+          <Link
+            href="/profile"
+            className="flex flex-col items-center gap-1 text-slate-400"
+          >
             <User className="h-5 w-5" />
             <span className="text-xs">Profile</span>
           </Link>

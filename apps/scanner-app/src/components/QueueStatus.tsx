@@ -24,6 +24,7 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { scanQueue, syncManager } from '../lib/offline-queue';
+import { maintenanceQueue } from '../lib/maintenance-queue';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -32,7 +33,8 @@ const LAST_SYNC_KEY = 'last_sync_at';
 // ─── Types ────────────────────────────────────────────────────────────────────
 
 interface QueueStats {
-  pending: number;
+  pendingScans: number;
+  pendingReports: number;
   failed: number;
   total: number;
 }
@@ -45,7 +47,12 @@ export interface QueueStatusProps {
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export function QueueStatus({ visible, onClose }: QueueStatusProps) {
-  const [stats, setStats] = useState<QueueStats>({ pending: 0, failed: 0, total: 0 });
+  const [stats, setStats] = useState<QueueStats>({
+    pendingScans: 0,
+    pendingReports: 0,
+    failed: 0,
+    total: 0,
+  });
   const [lastSync, setLastSync] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isSyncing, setIsSyncing] = useState(false);
@@ -56,16 +63,27 @@ export function QueueStatus({ visible, onClose }: QueueStatusProps) {
   const loadStats = useCallback(async () => {
     setIsLoading(true);
     try {
-      const [pending, failed, rawQueue, syncTs] = await Promise.all([
+      const [
+        pendingScans,
+        pendingReports,
+        failedScans,
+        scans,
+        reports,
+        syncTs,
+      ] = await Promise.all([
         scanQueue.getPendingScans(),
+        maintenanceQueue.getQueue().then((q) => q.filter((r) => !r.synced)),
         scanQueue.getFailedScans(),
         scanQueue.getQueue(),
+        maintenanceQueue.getQueue(),
         AsyncStorage.getItem(LAST_SYNC_KEY),
       ]);
+
       setStats({
-        pending: pending.length,
-        failed: failed.length,
-        total: rawQueue.length,
+        pendingScans: pendingScans.length,
+        pendingReports: pendingReports.length,
+        failed: failedScans.length, // Reports don't have explicit "failed" yet in this simple impl
+        total: scans.length + reports.length,
       });
       setLastSync(syncTs);
     } catch {
@@ -86,14 +104,17 @@ export function QueueStatus({ visible, onClose }: QueueStatusProps) {
     setStatusMsg('');
     setIsSyncing(true);
     try {
-      await syncManager.triggerSync();
+      await Promise.all([
+        syncManager.triggerSync(),
+        maintenanceQueue.triggerSync(),
+      ]);
       const now = new Date().toISOString();
       await AsyncStorage.setItem(LAST_SYNC_KEY, now);
       await loadStats();
       setStatusMsg('Sync completed.');
       setStatusOk(true);
     } catch {
-      setStatusMsg('Sync failed. Check your network connection.');
+      setStatusMsg('Sync partial or failed. Check connection.');
       setStatusOk(false);
     } finally {
       setIsSyncing(false);
@@ -133,7 +154,9 @@ export function QueueStatus({ visible, onClose }: QueueStatusProps) {
           <View style={s.header}>
             <Text style={s.title}>Offline Queue</Text>
             <Pressable onPress={onClose} style={s.doneBtn} disabled={busy}>
-              <Text style={[s.doneBtnText, busy && s.doneBtnDisabled]}>Done</Text>
+              <Text style={[s.doneBtnText, busy && s.doneBtnDisabled]}>
+                Done
+              </Text>
             </Pressable>
           </View>
 
@@ -149,9 +172,17 @@ export function QueueStatus({ visible, onClose }: QueueStatusProps) {
             >
               {/* Stats */}
               <View style={s.statsRow}>
-                <StatCard label="Pending" value={stats.pending} color="#f59e0b" />
+                <StatCard
+                  label="Scans"
+                  value={stats.pendingScans}
+                  color="#3b82f6"
+                />
+                <StatCard
+                  label="Reports"
+                  value={stats.pendingReports}
+                  color="#f59e0b"
+                />
                 <StatCard label="Failed" value={stats.failed} color="#ef4444" />
-                <StatCard label="Total" value={stats.total} color="#64748b" />
               </View>
 
               {/* Last sync */}
@@ -169,7 +200,10 @@ export function QueueStatus({ visible, onClose }: QueueStatusProps) {
                   ]}
                 >
                   <Text
-                    style={[s.statusText, statusOk ? s.statusTextOk : s.statusTextErr]}
+                    style={[
+                      s.statusText,
+                      statusOk ? s.statusTextOk : s.statusTextErr,
+                    ]}
                   >
                     {statusMsg}
                   </Text>
@@ -208,9 +242,9 @@ export function QueueStatus({ visible, onClose }: QueueStatusProps) {
 
               {/* Info note */}
               <Text style={s.note}>
-                Pending scans are automatically synced when a network connection is
-                detected. Failed scans have exceeded the retry limit (10 attempts)
-                and must be cleared manually.
+                Pending scans are automatically synced when a network connection
+                is detected. Failed scans have exceeded the retry limit (10
+                attempts) and must be cleared manually.
               </Text>
             </ScrollView>
           )}

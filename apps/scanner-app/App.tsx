@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, lazy, Suspense } from 'react';
-import { nativeTokens } from '@gate-access/ui/src/tokens';
+import { nativeTokens } from '@gate-access/ui/tokens';
 import {
   ActivityIndicator,
   Dimensions,
@@ -31,6 +31,7 @@ import {
 } from './src/lib/scanner';
 import { login, logout, getValidAccessToken } from './src/lib/auth-client';
 import { IDCaptureModal } from './src/components/IDCaptureModal';
+import { MaintenanceReportModal } from './src/components/MaintenanceReportModal';
 import {
   loadSelectedGate,
   saveSelectedGate,
@@ -257,10 +258,6 @@ export default function App() {
     Cairo_700Bold,
   });
 
-  if (!fontsLoaded) {
-    return null;
-  }
-
   // On mount: check SecureStore for a valid (or refreshable) token.
   // If found → skip login and go straight to scanner.
   useEffect(() => {
@@ -268,6 +265,10 @@ export default function App() {
       .then((token) => setAppPhase(token ? 'scanner' : 'login'))
       .catch(() => setAppPhase('login'));
   }, []);
+
+  if (!fontsLoaded) {
+    return null;
+  }
 
   const handleLoginSuccess = () => setAppPhase('scanner');
 
@@ -430,6 +431,7 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
   // ── Overlay states ────────────────────────────────────────────────────────
   const [showQueueStatus, setShowQueueStatus] = useState(false);
   const [showOverride, setShowOverride] = useState(false);
+  const [showMaintenanceModal, setShowMaintenanceModal] = useState(false);
 
   // ── Tab state ─────────────────────────────────────────────────────────────
   const [activeTab, setActiveTab] = useState<
@@ -947,6 +949,7 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
                   ? handleRequestOverride
                   : undefined
               }
+              onReportIssue={() => setShowMaintenanceModal(true)}
             />
           )}
         </>
@@ -1053,6 +1056,19 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
             onCancel={handleOverrideCancel}
           />
         </Suspense>
+      )}
+
+      {showMaintenanceModal && selectedGate && (
+        <MaintenanceReportModal
+          visible
+          gateId={selectedGate.id}
+          scanLogId={ui.phase === 'result' ? ui.result.scanId : undefined}
+          onClose={() => setShowMaintenanceModal(false)}
+          onSuccess={() => {
+            setShowMaintenanceModal(false);
+            haptic(Haptics.NotificationFeedbackType.Success).catch(() => {});
+          }}
+        />
       )}
 
       {/* ── Bottom navigation ────────────────────────────────────────────── */}
@@ -1247,6 +1263,7 @@ function ResultOverlay({
   onScanAgain: () => void;
   /** Defined only for non-offline rejections */
   onRequestOverride?: () => void;
+  onReportIssue?: () => void;
 }) {
   const ok = result.status === 'accepted';
   return (
@@ -1273,6 +1290,11 @@ function ResultOverlay({
           <Text style={styles.overrideButtonText}>Request Override</Text>
         </Pressable>
       )}
+
+      {/* Report Issue button */}
+      <Pressable style={styles.maintenanceButton} onPress={onReportIssue}>
+        <Text style={styles.maintenanceButtonText}>⚐ Report Issue</Text>
+      </Pressable>
 
       <Pressable style={styles.scanAgainButton} onPress={onScanAgain}>
         <Text style={styles.scanAgainText}>Scan Again</Text>
@@ -1598,6 +1620,20 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontFamily: 'Cairo_600SemiBold',
     color: '#fff',
+  },
+  maintenanceButton: {
+    marginTop: 8,
+    backgroundColor: 'rgba(234,179,8,0.15)',
+    paddingVertical: 12,
+    paddingHorizontal: 36,
+    borderRadius: nativeTokens.borderRadius.md,
+    borderWidth: 1,
+    borderColor: 'rgba(234,179,8,0.4)',
+  },
+  maintenanceButtonText: {
+    fontSize: 15,
+    fontFamily: 'Cairo_600SemiBold',
+    color: '#fde68a',
   },
 
   // ── Bottom navigation bar ─────────────────────────────────────────────────

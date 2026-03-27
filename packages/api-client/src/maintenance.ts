@@ -3,7 +3,7 @@ import type {
   CreateWorkOrderInput,
   UpdateWorkOrderInput,
   WorkOrderQuery,
-} from '@gate-access/types/maintenance';
+} from '@gate-access/types';
 
 export const maintenanceApi = {
   /**
@@ -17,7 +17,9 @@ export const maintenanceApi = {
       });
     }
     const queryString = params.toString();
-    return apiClient.get(`/maintenance/work-orders${queryString ? `?${queryString}` : ''}`);
+    return apiClient.get(
+      `/maintenance/work-orders${queryString ? `?${queryString}` : ''}`
+    );
   },
 
   /**

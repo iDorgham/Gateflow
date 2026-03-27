@@ -24,6 +24,8 @@ _(next release notes go here)_
 
 ### Features
 
+- **[Maintenance] **starting phase 3 - Maintenance Hub UI
+
 - **[Maintenance] **baseline sync and starting phase 2
 - **[Maintenance] **baseline phase 1 and start phase 2
 

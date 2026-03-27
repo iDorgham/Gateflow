@@ -24,46 +24,50 @@ Goal: Centralized maintenance operations for Gates, Units, and Projects.
   - [x] Unit testing for API routes.
 - **Status**: ✅ Completed
 
-### Phase 3: Maintenance Hub UI (Client Management)
+### [x] **Phase 3: Maintenance Hub UI (Client Management)**
 
 - **Goal**: A high-density dashboard for managers to track facility health.
 - **Primary role**: `frontend.md`
 - **Preferred tool**: `Cursor IDE`
 - **Deliverables**:
-  - [ ] `MaintenanceTable`: Virtualized list with status filters (using `DynamicTable`).
-  - [ ] `MaintenanceSheet`: Side panel for viewing and updating work order status/priority.
-  - [ ] `AssetMaintenanceLog`: Shared component to show service history on Gate/Unit detail pages.
-  - [ ] Palette: Use "Real Estate" theme tokens for maintenance status colors (e.g., `warning` for `PENDING_PARTS`).
+  - [x] `MaintenanceTable`: Virtualized list with status filters (using `DynamicTable`).
+  - [x] `MaintenanceSheet`: Side panel for viewing and updating work order status/priority.
+  - [x] `AssetMaintenanceLog`: Shared component to show service history on Gate/Unit detail pages.
+  - [x] Palette: Use "Real Estate" theme tokens for maintenance status colors (e.g., `warning` for `PENDING_PARTS`).
+- **Status**: ✅ Completed
 
-### Phase 4: Field Reporting (Guard / Scanner App)
+### [x] **Phase 4: Field Reporting (Guard / Scanner App)**
 
 - **Goal**: Empower guards to report hardware issues discovered during scans.
 - **Primary role**: `mobile.md`
 - **Preferred tool**: `Gemini CLI`
 - **Deliverables**:
-  - [ ] Scanner UI: "Report Hardware Issue" button in Scan Results view.
-  - [ ] Payload: Link request to the current `Gate` and latest `ScanLog` (for evidence/attachments).
-  - [ ] Offline Sync: Ensure reports can be queued while offline (consistent with `scanUuid` pattern).
+  - [x] Scanner UI: "Report Hardware Issue" button in Scan Results view.
+  - [x] Payload: Link request to the current `Gate` and latest `ScanLog` (for evidence/attachments).
+  - [x] Offline Sync: Ensure reports can be queued while offline (consistent with `scanUuid` pattern).
+- **Status**: ✅ Completed
 
-### Phase 5: Resident Portal Integration
+### [x] **Phase 5: Resident Portal Integration**
 
 - **Goal**: Residents report unit-level maintenance (e.g., Plumbing, Electrical).
 - **Primary role**: `frontend.md`
 - **Preferred tool**: `Cursor IDE`
 - **Deliverables**:
-  - [ ] `ResidentRequestForm`: Multi-step form for residents with RTL support.
-  - [ ] `MyRequests`: View tracking status of open/closed unit orders.
-  - [ ] Identity: Auto-link to the resident's `Unit` based on auth context.
+  - [x] ResidentRequestForm: Multi-step form for residents with RTL support.
+  - [x] MyRequests: View tracking status of open/closed unit orders.
+  - [x] Identity: Auto-link to the resident's `Unit` based on auth context.
+- **Status**: ✅ Completed
 
-### Phase 6: Final Audit & RTL Polish
+### [x] **Phase 6: Final Audit & RTL Polish**
 
 - **Goal**: Ensure 100/100 performance and perfect MENA localization.
 - **Primary role**: `qa.md`
 - **Preferred tool**: `Kilo CLI`
 - **Deliverables**:
-  - [ ] RTL Check: Verify Arabic alignment for maintenance categories and timelines.
-  - [ ] Performance Audit: Ensure high-density tables maintain 100/100 PageSpeed.
-  - [ ] Backlog Closure: Move initiative to `done/`.
+  - [x] RTL Check: Verify Arabic alignment for maintenance categories and timelines.
+  - [x] Performance Audit: Ensure high-density tables maintain 100/100 PageSpeed.
+  - [x] Backlog Closure: Move initiative to `done/`.
+- **Status**: ✅ Completed
 
 ---
 

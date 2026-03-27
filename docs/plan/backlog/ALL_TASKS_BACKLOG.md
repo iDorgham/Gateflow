@@ -40,18 +40,18 @@
 
 **IDEA:** `docs/plan/context/IDEA_maintenance_management.md`
 
-**PLAN:** `docs/plan/planned/maintenance_management/PLAN_maintenance_management.md`
+**PLAN:** `docs/plan/done/maintenance_management/PLAN_maintenance_management.md`
 
-**Status:** 📅 Planned
+**Status:** ✅ Complete
 
 **Target:** Q1 2027
 
-- [ ] Phase 1 — Schema Evolution: Maintenance & Work Order Models
-- [ ] Phase 2 — Core API: Request Lifecycle & Assignment
-- [ ] Phase 3 — Maintenance Hub UI: Command Center & List Views
-- [ ] Phase 4 — Guard Integration: Reporting from Scanner App
-- [ ] Phase 5 — Resident Integration: Resident Portal Request Flow
-- [ ] Phase 6 — Analytics & Service History Audit
+- [x] Phase 1 — Schema Evolution: Maintenance & Work Order Models
+- [x] Phase 2 — Core API: Request Lifecycle & Assignment
+- [x] Phase 3 — Maintenance Hub UI: Command Center & List Views
+- [x] Phase 4 — Guard Integration: Reporting from Scanner App
+- [x] Phase 5 — Resident Integration: Resident Portal Request Flow
+- [x] Phase 6 — Final Audit & RTL Polish
 
 ### ai_sdk_v6_migration — AI SDK v6 (Agentic) Migration
 

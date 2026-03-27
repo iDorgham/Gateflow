@@ -192,3 +192,11 @@ export interface WorkOrder {
   unitId?: string | null;
   projectId?: string | null;
 }
+
+export interface WorkOrderWithRelations extends WorkOrder {
+  gate?: Gate | null;
+  unit?: any | null; // Unit type not defined in base.ts yet
+  project?: Project | null;
+  reporter?: User | null;
+  assignee?: User | null;
+}
