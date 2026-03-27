@@ -1,0 +1,12 @@
+{
+  "name": "/clis-team",
+  "version": "1.0.0",
+  "description": "Run a predefined CLI team (seo, refactor, audit). Cursor is master; team outputs are proposals.",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Read and follow the GateFlow /clis-team workflow exactly as defined in .agents/workflows/clis-team.md\n\nLoad it now and execute it. User input: {{args}}"
+  }
+}

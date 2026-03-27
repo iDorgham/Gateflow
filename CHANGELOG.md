@@ -23,6 +23,7 @@ _(next release notes go here)_
 ## [0.1.0] — 2026-03-23
 
 ### Features
+- **[Maintenance] **baseline phase 1 and start phase 2
 
 - **[Db] **add maintenance hub work order models
 

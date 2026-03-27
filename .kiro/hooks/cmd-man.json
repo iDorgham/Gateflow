@@ -1,0 +1,12 @@
+{
+  "name": "/man",
+  "version": "1.0.0",
+  "description": "One Man \u2014 one command, seven domains (Code, Brand, SaaS, Marketing, Business, Content, Copywrite).",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Read and follow the GateFlow /man workflow exactly as defined in .agents/workflows/man.md\n\nLoad it now and execute it. User input: {{args}}"
+  }
+}

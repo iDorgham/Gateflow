@@ -1,0 +1,12 @@
+{
+  "name": "/plan",
+  "version": "1.0.0",
+  "description": "Turn an IDEA_<slug>.md into a phased PLAN_<slug>.md plus PROMPT_<slug>_phase_<N>.md pro prompts.",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Read and follow the GateFlow /plan workflow exactly as defined in .agents/workflows/plan.md\n\nLoad it now and execute it. User input: {{args}}"
+  }
+}

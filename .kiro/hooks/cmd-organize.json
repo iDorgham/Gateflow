@@ -1,0 +1,12 @@
+{
+  "name": "/organize",
+  "version": "1.0.0",
+  "description": "Docs folder cleanup \u2014 scan structure, remove empty dirs and dead symlinks, rebuild docs/INDEX.md.",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Read and follow the GateFlow /organize workflow exactly as defined in .agents/workflows/organize.md\n\nLoad it now and execute it. User input: {{args}}"
+  }
+}

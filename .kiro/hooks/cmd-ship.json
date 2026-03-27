@@ -1,0 +1,12 @@
+{
+  "name": "/ship",
+  "version": "1.0.0",
+  "description": "Execute all remaining phases of a plan sequentially via repeated /dev-style execution.",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Read and follow the GateFlow /ship workflow exactly as defined in .agents/workflows/ship.md\n\nLoad it now and execute it. User input: {{args}}"
+  }
+}

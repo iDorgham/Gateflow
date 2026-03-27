@@ -1,0 +1,12 @@
+{
+  "name": "/guide",
+  "version": "1.0.0",
+  "description": "Run the GateFlow workspace guide \u2014 what should I do now?",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Read and follow the GateFlow /guide workflow exactly as defined in .agents/workflows/guide.md\n\nLoad it now and execute it. User input: {{args}}"
+  }
+}

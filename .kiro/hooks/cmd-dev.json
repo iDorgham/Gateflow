@@ -1,0 +1,12 @@
+{
+  "name": "/dev",
+  "version": "1.0.0",
+  "description": "Implement exactly one plan phase end-to-end (code, tests, git).",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Read and follow the GateFlow /dev workflow exactly as defined in .agents/workflows/dev.md\n\nLoad it now and execute it. User input: {{args}}"
+  }
+}

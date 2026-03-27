@@ -1,0 +1,12 @@
+{
+  "name": "/idea",
+  "version": "1.0.0",
+  "description": "Capture and refine GateFlow initiatives into IDEA_<slug>.md and backlog entries.",
+  "when": {
+    "type": "userTriggered"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Read and follow the GateFlow /idea workflow exactly as defined in .agents/workflows/idea.md\n\nLoad it now and execute it. User input: {{args}}"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "lockfileVersion": 1,
+  "configVersion": 1,
+  "workspaces": {
+    "": {
+      "dependencies": {
+        "@kilocode/plugin": "7.1.0",
+      },
+    },
+  },
+  "packages": {
+    "@kilocode/plugin": ["@kilocode/plugin@7.1.0", "https://registry.npmmirror.com/@kilocode/plugin/-/plugin-7.1.0.tgz", { "dependencies": { "@kilocode/sdk": "7.1.0", "zod": "4.1.8" } }, "sha512-G/4F5ZK5S3TOt1VGvCxEEgVzWUCCZPTK1tbyMzmqB49A+GDxKduTiNeuF8fKEXnZOjOVP5jNX9Sh9Gc4KsD5IA=="],
+
+    "@kilocode/sdk": ["@kilocode/sdk@7.1.0", "https://registry.npmmirror.com/@kilocode/sdk/-/sdk-7.1.0.tgz", {}, "sha512-xdn9NZ0W8KTnQ5gWnyKEPut5wAKbF9Qp5USJ/Hyevss33tqyN7f5tdjeXq0WCr8wIHPr8/TZn6DUH1Pq49eImw=="],
+
+    "zod": ["zod@4.1.8", "https://registry.npmmirror.com/zod/-/zod-4.1.8.tgz", {}, "sha512-5R1P+WwQqmmMIEACyzSvo4JXHY5WiAFHRMg+zBZKgKS+Q1viRa0C1hmUKtHltoIFKtIdki3pRxkmpP74jnNYHQ=="],
+  }
+}
