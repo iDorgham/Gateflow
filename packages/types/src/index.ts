@@ -9,3 +9,4 @@ export * from './qr-signing';
 export * from './qr-validate';
 export * from './auth';
 export * from './crm';
+export * from './maintenance';

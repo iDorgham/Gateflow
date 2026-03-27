@@ -1,4 +1,4 @@
- Powers  pthis ## GateFlow Configuration Index
+Powers pthis ## GateFlow Configuration Index
 
 GateFlow uses a shared set of docs, rules, skills, and agents across Cursor, CLIs (Claude, Gemini, Opencode), and other IDEs (Kiro, Antigravity). This file is the **entry point** for any tool that needs to understand how GateFlow is configured.
 
@@ -6,15 +6,15 @@ GateFlow uses a shared set of docs, rules, skills, and agents across Cursor, CLI
 
 ## 1. Master Commands & Flows (Cursor)
 
-- **Visible slash commands (Cursor)**: `/man`, `/idea`, `/plan`, `/dev`, `/ship`, `/guide`
-  - **`/man`** (One Man): One command, seven domains (Code, Brand, SaaS, Marketing, Business, Content, Copywrite). Subcommands give more power: `tasks`, `settings`, `mindset` (change profile), `inspire`, `run`, `ship`, `status`. See `docs/plan/ONE_MAN_CODE.md` and `.antigravity/skills/one-man/SKILL.md`.
+- **Visible slash commands (Cursor)**: `/brainstorm`, `/idea`, `/plan`, `/dev`, `/ship`, `/guide`
+  - **`/brainstorm`** (Strategy): Strategic ideation, market research (`browser-use`), and release planning. Subcommands: `research`, `gaps`, `merge`, `release`, `roadmap`. See `.antigravity/workflows/brainstorm.md`.
   - `/idea`: Refine goals and capture context into `docs/plan/context/IDEA_<slug>.md` and backlog entries in `docs/plan/backlog/ALL_TASKS_BACKLOG.md`.
   - `/plan`: Turn an idea/backlog section into a phased plan in `docs/plan/planning/<slug>/`; use `/plan ready <slug>` to move to `planned/` when approved.
-  - `/dev`: Implement **one phase** end‑to‑end using its `PROMPT_<slug>_phase_<N>.md` file (code, tests, lint/typecheck, git).
-  - `/ship`: Run remaining phases for a plan sequentially (internally chaining `/dev`), enforcing tests and quality gates.
+  - `/dev`: Implement **one phase** end‑to‑end using its `PROMPT_<slug>_phase_<N>.md` file (code, tests, lint/typecheck, git). Automated branching and tagging.
+  - `/ship`: Run remaining phases for a plan sequentially (internally chaining `/dev`), enforcing tests and quality gates. Auto-merges to `master` upon completion.
   - `/guide`: Workspace guide — “what should I do now?”, next steps, recommended, critical, improvements; uses `.antigravity/skills/gf-guide/SKILL.md` and can run in super‑power mode (follow plan, use hierarchy, run checks). Rule `.antigravity/rules/02-gateflow-guide.mdc` adds pre‑flight before tasks and optional post‑task summary.
 - **Supporting commands** (defined in `.antigravity/workflows/` and documented in `.antigravity/rules/01-gateflow-ai-workflow.mdc` and `docs/plan/guidelines/DEVELOPMENT_WORKFLOWS.md`):
-  - `/ready` (pre‑dev checks), `/github` (branch/commit/push), `/docs`, `/test`, `/perf`, `/security`, `/dept`, `/clis`, **`/clis team <seo|refactor|audit>`** (predefined CLI teams; see `docs/plan/learning/CLI_TEAMS.md`), `/automate`.
+  - `/ready` (pre‑dev checks), `/github` (branch/commit/push), `/docs`, `/version`, `/organize`, `/test`, `/perf`, `/security`, `/dept`, `/clis`, **`/clis team <seo|refactor|audit>`** (predefined CLI teams), `/automate`.
 
 **Primary references**
 
@@ -80,6 +80,7 @@ Security is enforced at three layers: **core rules**, **contracts**, and **speci
   - `docs/architecture/CODE_QUALITY_AND_PERFORMANCE_AUDIT.md` — security and quality checks.
 
 > **Security rule for agents/tools:** Before changing auth, RBAC, QR flows, scanner sync, or any API that touches tenant data, always load:
+>
 > - `.antigravity/skills/gf-security/SKILL.md`
 > - `.antigravity/contracts/CONTRACTS.md`
 > - `.antigravity/rules/00-gateflow-core.mdc`
@@ -156,4 +157,3 @@ GateFlow has a **workspace guide** that understands the full setup (skills, agen
   - After completing a task: optionally give a short guide summary.
 - **Command:** `/guide` — `.antigravity/workflows/guide.md`
   - Explicit “what should I do now?” flow; can run in super‑power mode to follow the plan and use the subagent hierarchy.
-

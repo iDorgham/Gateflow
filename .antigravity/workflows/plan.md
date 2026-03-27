@@ -11,6 +11,7 @@ Use `/plan` to convert an idea into an executable multi-phase plan with per-phas
 
 - Reads:
   - `docs/plan/context/IDEA_<slug>.md` (or goal text if none exists)
+  - `docs/plan/brainstorming/STRATEGY_<slug>.md` or `ROADMAP_STRATEGY.md` (for market alignment)
   - Existing plan in `docs/plan/planning/<slug>/` or `docs/plan/in-progress/<slug>/` (when refining)
   - `docs/plan/guidelines/PHASED_DEVELOPMENT_WORKFLOW.md`
   - `docs/plan/guidelines/SUBAGENT_HIERARCHY.md`

@@ -23,6 +23,7 @@ Use `/dev` to implement **exactly one** phase from a plan end-to-end: code, test
   - A specific phase number/slug if provided.
 - Reads:
   - `PLAN_<slug>.md` and `PROMPT_<slug>_phase_<N>.md` from the resolved location
+  - `docs/plan/brainstorming/STRATEGY_<slug>.md` (to ensure vision alignment)
   - Relevant guidelines from `PHASED_DEVELOPMENT_WORKFLOW.md` and `AI_SKILLS_SUBAGENTS_RULES.md`
 - Executes the phase by:
   - Adopting the phase's **Primary role** and **Preferred tool**.
@@ -124,6 +125,7 @@ Update `SESSION_MEMORY.md` with:
 4. **Automated Branching** — Run `node scripts/ralph-git.js branch <slug> <N>`.
 5. **Load prompt** — Open Phase Prompt. Invoke `executing-plans` skill.
 6. **Recursive Implementation (Ralph Loop)**:
+   - **Step 0: Branch Initialization**: Run `node scripts/ralph-git.js branch <slug> <N>`.
    - **Step A: TDD first**: Invoke `test-driven-development` — write failing test, then implement. No production code before red test.
    - **Step B: Implement**: Write code following the prompt.
    - **Step C: Aggressive Enforce**:
@@ -135,15 +137,12 @@ Update `SESSION_MEMORY.md` with:
    - **Step E: Completion**: Invoke `verification-before-completion` — run all checks fresh, provide evidence, only then claim done.
 7. **Parallel failures**: If 2+ independent failures exist → invoke `dispatching-parallel-agents`.
 8. **Automated Versioning (Auto-Sync Mandate)**:
-   - Once all criteria pass: `git add .`, `git commit -m "feat(<slug>): complete phase <N>"`, `git pull --rebase origin <branch>`, `git push origin <branch>`.
-9. **Branch completion & PR:**
-   - Invoke `finishing-a-development-branch` — verify tests, find base branch, create PR summary.
-   - For every pushed phase: Check for existing PR using GitHub MCP.
-   - **If no PR exists**: Create a draft PR using template.
-   - **If PR exists**: Update the PR description with a concise summary.
-   - Invoke `requesting-code-review` — dispatch code-reviewer subagent with context + risk areas before merge.
-   - **Status Update**: Mark the phase as "Completed" in `PLAN_<slug>.md` and `TASKS_<slug>.md`.
-10. **Save Session Memory** — Update `SESSION_MEMORY.md`: phase + status, last commit hash, decisions made, gotchas, files modified, test status, exact next action (or "all phases complete").
+   - Once all criteria pass: Run `node scripts/ralph-git.js commit <slug> <N>` then `node scripts/ralph-git.js tag <slug> <N> stable`.
+9. **Branch completion & PR / Merge**:
+   - If not the last phase: Push branch via `git push origin head`.
+   - **If the last phase in the plan**: Run `node scripts/ralph-git.js merge <slug> <N>` to merge into master and push.
+   - Status Update: Mark the phase as "Completed" in `PLAN_<slug>.md` and `TASKS_<slug>.md`.
+10. **Save Session Memory**: Update `SESSION_MEMORY.md`: phase + status, last commit hash, decisions made, gotchas, files modified, test status, exact next action (or "all phases complete").
 8. **Inject Next Prompt / Autopilot**:
    - Analyze plan for the next task.
    - **Output the full `/dev` prompt** for the next phase.

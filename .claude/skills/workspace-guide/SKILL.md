@@ -163,18 +163,21 @@ Use this when the user explicitly asked for guidance:
 - **Self-Evolving Recommendation**: Output of `ralph-prioritize.js`.
 - **Skill Discovery Findings**: Summary of `docs/plan/learning/SKILL_DISCOVERY_REPORT.md`.
 
-### 💡 Idea Developer: App Enhancements
-*Acting as your inseparable engineer partner to think ahead and build better.*
-- **UX & Friction**: Area where the interface feels clunky or could be streamlined.
-- **Innovative Ideas**: New features (e.g., predictive analytics, automated pre-clearance).
-- **Architectural Scalability**: Suggestions to handle growth or simplify development.
+### 💡 Strategic Professional Workflow
+- **State Check**: Current step in the `Brainstorm -> Idea -> Plan -> Dev -> Ship` loop.
+- **Strategic Alignment**: Are current tasks aligned with the `docs/plan/brainstorming/` vision?
+- **App Engineering Level-up**: Suggestions to merge apps, split packages, or prune dead code.
+
+### 🚀 Market Opportunities (from strategist)
+- **Competitive Gaps**: What features from your research are still missing?
+- **High-ROI Implementation**: Which task in the backlog has the best impact/effort ratio?
 
 ### Must do
-- [Action 1]
+- [Action 1] (e.g., Run /dev maintenance_management 2)
 - [Action 2]
 
 ### Recommended
-- [Action]
+- [Action] (e.g., Run /brainstorm gaps to check for mobile features)
 
 ### Critical
 - [Any security/compliance item or “None”]

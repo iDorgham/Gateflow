@@ -5,16 +5,12 @@ Goal: Centralized maintenance operations for Gates, Units, and Projects.
 
 ## 🗺️ Phases
 
-### Phase 1: Foundation (Schema & Domain Models)
+### [x] **Phase 1: Foundation (Schema & Domain Models)**
 
-- **Goal**: Establish the data structure for Work Orders and link them to existing assets.
-- **Primary role**: `backend-database.md`
-- **Preferred tool**: `Claude CLI`
-- **Deliverables**:
-  - [ ] Prisma Schema Update: `WorkOrder`, `MaintenanceCategory`, `MaintenancePriority`, `MaintenanceStatus` enums.
-  - [ ] Relations: Link `WorkOrder` to `Gate`, `Unit`, `Project`, and `User` (Assignee/Reporter).
-  - [ ] Base Types: Update `packages/types/src/base.ts` with new maintenance interfaces.
-  - [ ] Migration: Generate and apply `maintenance_hub_initial` migration.
+- **Scope**: Evolve Prisma schema to include `WorkOrder` and maintenance enums.
+- **Deliverables**: Updated `schema.prisma`, extracted base types in `packages/types/src/base.ts`.
+- **Acceptance**: `pnpm db:generate` succeeds; types are exported; no circular dependencies.
+- **Status**: ✅ Completed
 
 ### Phase 2: Core API & Work Order Lifecycle
 

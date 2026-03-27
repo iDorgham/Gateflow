@@ -70,5 +70,6 @@ Automate a whole plan: run all remaining phases from idea → plan → implement
      - Commit and push via `/github`.
    - **Do not skip** a phase if tests or quality gates fail — fix and re-run.
 3. **Finish**:
-   - All phases completed and merged.
+   - All phases completed.
+   - Run `node scripts/ralph-git.js merge <slug> <last_phase>` to merge the final feature branch into master and push.
    - Docs updated as specified in prompts (`docs/`, `CLAUDE.md`, etc.).

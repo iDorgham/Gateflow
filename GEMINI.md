@@ -38,6 +38,25 @@ Gemini CLI supports the following slash commands by following the workflows defi
   6. **Auto-Sync:** `git add .`, `git commit -m "idea(<slug>): initialize"`, `git pull --rebase origin <branch>`, `git push origin <branch>`.
 - **Usage:** `/idea` (refine default), `/idea new` (new initiative), `/idea <slug>` (continue existing).
 
+### `/brainstorm [<topic>]`
+
+**Purpose:** Strategic ideation, market research, and release planning from an app engineering perspective.
+
+- **Workflow:**
+  1. Load core context and audit current app state (`CLAUDE.md`, backlog, codebase).
+  2. Research market trends and user needs (using `browser-use`).
+  3. Suggest high-impact functions, specs, or modifications (Merge/Split/Prune).
+  4. Plan next releases and strategic roadmaps.
+  5. **Capture:** Write to `docs/plan/brainstorming/BRAINSTORM_<topic>.md` and update roadmap.
+  6. **Auto-Sync:** `git add .`, `git commit -m "brainstorm(<topic>): update roadmap"`, `git push origin master`.
+- **Subcommands:**
+  - `/brainstorm research`: Competitor analysis using `browser-use`.
+  - `/brainstorm gaps`: Audit for missing market features and standards.
+  - `/brainstorm merge`: Feature/app consolidation and package optimization.
+  - `/brainstorm release`: Define semantic release specs (v1.x, v2.x).
+  - `/brainstorm roadmap`: Strategic long-term roadmap generation.
+- **Usage:** `/brainstorm`, `/brainstorm <topic>`, `/brainstorm roadmap`.
+
 ### `/plan [<slug>]`
 
 **Purpose:** Turn an `IDEA_<slug>.md` into a phased `PLAN_<slug>.md` plus `PROMPT_<slug>_phase_<N>.md` pro prompts.
@@ -208,7 +227,13 @@ Gemini CLI supports the following slash commands by following the workflows defi
 4. **Learning Log:** After completing a phase or major task, append an entry to `docs/plan/learning/CLI_USAGE_AND_RESULTS.md`. Record durable notes in `CLI_TOOL_MEMORY.md`.
 5. **Pnpm Only:** Never use `npm` or `yarn`. Always use `pnpm` for commands.
 6. **Multi-tenancy:** Ensure every DB query includes `organizationId` and `deletedAt: null`.
-7. **Auto-Sync Mandate:** Automatically execute a full Git cycle (Add, Commit, Pull --rebase, Push) after every command that modifies the project state (`/idea`, `/plan`, `/dev`, `/ship`, fix-related `/guide` actions). No permission needed if the state is green.
+7. **Auto-Sync & Branching Mandate**:
+   - **Planning commands** (`/brainstorm`, `/idea`, `/plan`): Execute on `master`. Auto-commit and push immediately.
+   - **Execution commands** (`/dev`, `/ship`):
+     - **Start**: Automatically create/switch to a feature branch (`feat/<slug>-phase-<N>`) via `node scripts/ralph-git.js branch`.
+     - **Finish Phase**: Commit and Tag each phase via `node scripts/ralph-git.js commit` and `tag`.
+     - **Final Merge**: Automatically run `node scripts/ralph-git.js merge` to merge into `master` and push once the **last** phase of a plan is marked Done.
+   - No user permission needed if state is green.
 8. **Performance Guard/100% Mandate:** Every major command must assess if performance is impacted. Trigger `/clis team perf` if score drops < 100.
 9. **Plan Lifecycle:** Respect folder transitions: `planning/` (draft) → `planned/` (ready) → `in-progress/` (active) → `done/` (complete).
 10. **Role + Tool Alignment:** Adopt the phase's **Primary role** from `SUBAGENT_HIERARCHY.md` and respect **Preferred tool** (Cursor, Claude CLI, Gemini CLI, Opencode, Kiro, Kilo, Qwen).

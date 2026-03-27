@@ -191,15 +191,15 @@ This document is the **canonical reference** for choosing **Cursor IDE**, **Clau
 
 Use this table so the guide can tailor suggestions to the tools and plans you actually use. Update the “Plan” column to match your setup.
 
-| Tool | Default model / plan | Notes |
-|------|----------------------|--------|
-| **Cursor IDE** | $20 plan | Primary IDE; /plan, /dev, /ship, subagents. |
-| **Claude CLI** | $20 plan | Security, architecture, complex refactors, CI. |
-| **Gemini CLI** (Antigravity) | $20 plan | Large context, speed, multimodal. |
-| **Opencode CLI** | free | TDD, refactors, docs-from-code, batch code gen. |
-| **Kiro CLI** | qwen3-coder-next (free) | Agentic terminal coding, 262K context, MCP. |
-| **Kilo CLI** | MiniMax M2.5 (free tier) | Terminal agent, SWE-bench strong, cost-effective. |
-| **Qwen CLI** | Qwen3 Coder 480B (free tier) | Agentic CLI, 256K–1M context, tool-use. |
+| Tool                         | Default model / plan         | Notes                                             |
+| ---------------------------- | ---------------------------- | ------------------------------------------------- |
+| **Cursor IDE**               | $20 plan                     | Primary IDE; /plan, /dev, /ship, subagents.       |
+| **Claude CLI**               | $20 plan                     | Security, architecture, complex refactors, CI.    |
+| **Gemini CLI** (Antigravity) | $20 plan                     | Large context, speed, multimodal.                 |
+| **Opencode CLI**             | free                         | TDD, refactors, docs-from-code, batch code gen.   |
+| **Kiro CLI**                 | qwen3-coder-next (free)      | Agentic terminal coding, 262K context, MCP.       |
+| **Kilo CLI**                 | MiniMax M2.5 (free tier)     | Terminal agent, SWE-bench strong, cost-effective. |
+| **Qwen CLI**                 | Qwen3 Coder 480B (free tier) | Agentic CLI, 256K–1M context, tool-use.           |
 
 ---
 
@@ -207,22 +207,24 @@ Use this table so the guide can tailor suggestions to the tools and plans you ac
 
 Use this table when suggesting which tool to use. **Primary** = best default; **Also good** = valid alternative when constraints differ (e.g. speed vs correctness, cost, or context size).
 
-| Task or goal | Primary tool | Also good | Prefer CLI when |
-|--------------|--------------|-----------|------------------|
-| Inline edit, quick fix, new component | **Cursor IDE** | — | — |
-| Explore codebase, navigate, small edits | **Cursor IDE** | Gemini CLI, Kiro CLI, Qwen CLI (large repo) | Need huge context in terminal |
-| Security review / audit | **Claude CLI** | Cursor (with gf-security) | You want highest correctness, audit trail |
-| Architecture review / design | **Claude CLI** | Cursor | Deep reasoning in terminal |
-| Prisma / schema / DB queries | **Gemini CLI** | Cursor, Claude CLI, Kilo CLI | Fast iteration, large schema in one context |
-| Multi-file refactor (many files) | **Claude CLI** or **Opencode CLI** | Cursor, Kiro CLI, Qwen CLI | Autonomous, repeatable, or CI |
-| TDD: implement from failing tests | **Opencode CLI** | Cursor, Kilo CLI | Terminal-first, batch |
-| Docs sync with code / API docs | **Opencode CLI** | Cursor | Automated, project-wide |
-| Quick structural check / second opinion | **Gemini CLI** | Cursor, Kilo CLI, Kiro CLI | Speed and cost matter |
-| CI/CD, pre-commit, headless automation | **Claude CLI** | Opencode CLI | Scripted, no IDE |
-| Batch code gen / scaffolds | **Opencode CLI** | Claude CLI, Kiro CLI, Qwen CLI | Terminal, many files |
-| Planning phases, prompts, /plan | **Cursor IDE** | Claude CLI | Using Cursor commands and skills |
-| Free-tier agentic coding, large context (terminal) | **Kiro CLI** or **Qwen CLI** | Kilo CLI | Free; agentic; 262K–1M context |
-| Free terminal tasks, fast iteration | **Kilo CLI** or **Kiro CLI** | Qwen CLI | Free tier; no paid CLI quota |
+| Task or goal                                       | Primary tool                       | Also good                                   | Prefer CLI when                             |
+| -------------------------------------------------- | ---------------------------------- | ------------------------------------------- | ------------------------------------------- |
+| Inline edit, quick fix, new component              | **Cursor IDE**                     | —                                           | —                                           |
+| Explore codebase, navigate, small edits            | **Cursor IDE**                     | Gemini CLI, Kiro CLI, Qwen CLI (large repo) | Need huge context in terminal               |
+| Market Research / Competitor Audit                 | **Browser-Use (Cursor/Claude)**    | —                                           | Autonomous web research                     |
+| Strategic Roadmap / /brainstorm                    | **Cursor IDE (Strategist Skill)**  | —                                           | Need strategic insight & backlog sync       |
+| Security review / audit                            | **Claude CLI**                     | Cursor (with gf-security)                   | You want highest correctness, audit trail   |
+| Architecture review / design                       | **Claude CLI**                     | Cursor                                      | Deep reasoning in terminal                  |
+| Prisma / schema / DB queries                       | **Gemini CLI**                     | Cursor, Claude CLI, Kilo CLI                | Fast iteration, large schema in one context |
+| Multi-file refactor (many files)                   | **Claude CLI** or **Opencode CLI** | Cursor, Kiro CLI, Qwen CLI                  | Autonomous, repeatable, or CI               |
+| TDD: implement from failing tests                  | **Opencode CLI**                   | Cursor, Kilo CLI                            | Terminal-first, batch                       |
+| Docs sync with code / API docs                     | **Opencode CLI**                   | Cursor                                      | Automated, project-wide                     |
+| Quick structural check / second opinion            | **Gemini CLI**                     | Cursor, Kilo CLI, Kiro CLI                  | Speed and cost matter                       |
+| CI/CD, pre-commit, headless automation             | **Claude CLI**                     | Opencode CLI                                | Scripted, no IDE                            |
+| Batch code gen / scaffolds                         | **Opencode CLI**                   | Claude CLI, Kiro CLI, Qwen CLI              | Terminal, many files                        |
+| Planning phases, prompts, /plan                    | **Cursor IDE**                     | Claude CLI                                  | Using Cursor commands and skills            |
+| Free-tier agentic coding, large context (terminal) | **Kiro CLI** or **Qwen CLI**       | Kilo CLI                                    | Free; agentic; 262K–1M context              |
+| Free terminal tasks, fast iteration                | **Kilo CLI** or **Kiro CLI**       | Qwen CLI                                    | Free tier; no paid CLI quota                |
 
 ---
 
@@ -230,11 +232,11 @@ Use this table when suggesting which tool to use. **Primary** = best default; **
 
 **Cursor is master:** Cursor decides when to run a team; CLI outputs are proposals until Cursor applies and verifies. Predefined teams (see **`docs/plan/learning/CLI_TEAMS.md`**):
 
-| Team | Command | CLIs | Purpose |
-|------|---------|------|---------|
-| **SEO / Content** | `/clis team seo` | Kiro, Gemini, Opencode, Qwen | Draft → 2 improvers → curator → humanize. |
-| **Code / Refactor** | `/clis team refactor` | Opencode, Gemini, Kilo | Refactor lead → second opinion → fast verify. |
-| **Review / Audit** | `/clis team audit` | Gemini, Opencode, Claude (escalation only) | Broad pass → code pass → escalate to Claude for hardest. |
+| Team                | Command               | CLIs                                       | Purpose                                                  |
+| ------------------- | --------------------- | ------------------------------------------ | -------------------------------------------------------- |
+| **SEO / Content**   | `/clis team seo`      | Kiro, Gemini, Opencode, Qwen               | Draft → 2 improvers → curator → humanize.                |
+| **Code / Refactor** | `/clis team refactor` | Opencode, Gemini, Kilo                     | Refactor lead → second opinion → fast verify.            |
+| **Review / Audit**  | `/clis team audit`    | Gemini, Opencode, Claude (escalation only) | Broad pass → code pass → escalate to Claude for hardest. |
 
 Respect the **80% rule** before running a team; prefer tool choice from **`CLI_TOOL_MEMORY.md`** when present; **Claude is escalation-only** and excluded from competition scoring.
 
@@ -267,4 +269,4 @@ When recommending a tool or CLI:
 
 ---
 
-*Sources: Anthropic Claude Code docs, Google Gemini CLI docs, OpenCode docs, Kiro CLI docs, Kilo Code docs, Qwen Code docs, and third-party comparisons (Cursor vs Claude Code, Gemini CLI vs Claude CLI, terminal AI assistants 2024–2026). Update this doc when tool capabilities or team preferences change.*
+_Sources: Anthropic Claude Code docs, Google Gemini CLI docs, OpenCode docs, Kiro CLI docs, Kilo Code docs, Qwen Code docs, and third-party comparisons (Cursor vs Claude Code, Gemini CLI vs Claude CLI, terminal AI assistants 2024–2026). Update this doc when tool capabilities or team preferences change._

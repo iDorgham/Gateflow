@@ -47,6 +47,14 @@ pnpm preflight               # Run full verification (lint + typecheck + test)
 npx prisma generate          # Regenerate Client
 npx prisma migrate dev       # Create migration
 npx prisma db seed           # Seed data
+
+# Strategic AI Commands
+/idea [<slug>]               # Refine initiative
+/brainstorm [<topic>]        # Strategic roadmap & market research
+/plan [<slug>]               # Phased development planning
+/dev [<slug>] [<phase>]      # Phased implementation
+/ship [<slug>]               # Full-cycle completion
+/guide                       # Workspace state & recommendations
 ```
 
 ---
@@ -66,14 +74,14 @@ npx prisma db seed           # Seed data
 
 ## Documentation Index
 
-| Index Section | Primary Files |
-| :--- | :--- |
-| **Product** | [PRD Final v1.0](../product/PRD_v1.0_FINAL.md) |
-| **Architecture** | [System Design](../arch/README.md) · [DB Schema](../arch/DATABASE_SCHEMA.md) |
-| **Security** | [Security Overview](../guides/SECURITY_OVERVIEW.md) |
-| **Guides** | [Environment Variables](../guides/ENVIRONMENT_VARIABLES.md) · [Deployment](../deployment/README.md) |
-| **Planning** | [Backlog](../plan/backlog/ALL_TASKS_BACKLOG.md) |
+| Index Section    | Primary Files                                                                                       |
+| :--------------- | :-------------------------------------------------------------------------------------------------- |
+| **Product**      | [PRD Final v1.0](../product/PRD_v1.0_FINAL.md)                                                      |
+| **Architecture** | [System Design](../arch/README.md) · [DB Schema](../arch/DATABASE_SCHEMA.md)                        |
+| **Security**     | [Security Overview](../guides/SECURITY_OVERVIEW.md)                                                 |
+| **Guides**       | [Environment Variables](../guides/ENVIRONMENT_VARIABLES.md) · [Deployment](../deployment/README.md) |
+| **Planning**     | [Backlog](../plan/backlog/ALL_TASKS_BACKLOG.md)                                                     |
 
 ---
 
-*This guide is the primary mandate for all AI agents working in this repository. Maintain strict adherence to the defined patterns.*
+_This guide is the primary mandate for all AI agents working in this repository. Maintain strict adherence to the defined patterns._
