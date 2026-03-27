@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useChat, type UIMessage } from '@ai-sdk/react';
-import { DefaultChatTransport } from 'ai';
+import { DefaultChatTransport, isTextUIPart } from 'ai';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import {
@@ -55,18 +55,6 @@ const WELCOME_AR: UIMessage = {
 
 function isArabic(text: string): boolean {
   return /[\u0600-\u06FF]/.test(text);
-}
-
-function msgText(message: UIMessage): string {
-  if (typeof (message as any).content === 'string') {
-    return (message as any).content;
-  }
-
-  if (!Array.isArray((message as any).parts)) return '';
-  return (message as any).parts
-    .filter((p: any) => p.type === 'text')
-    .map((p: any) => p.text ?? p.content ?? '')
-    .join('');
 }
 
 function loadMessages(isRtl: boolean): UIMessage[] {
@@ -282,7 +270,8 @@ export function AIAssistant({ locale }: AIAssistantProps) {
           messages.map((message: UIMessage) => {
             if (message.id === 'welcome') return null;
             const isUser = message.role === 'user';
-            const text = msgText(message);
+            const textParts = message.parts.filter(isTextUIPart);
+            const text = textParts.map((p) => p.text).join('');
             const msgRtl = isArabic(text);
             if (!text) return null;
 
@@ -338,7 +327,11 @@ export function AIAssistant({ locale }: AIAssistantProps) {
                   )}
                   dir={msgRtl ? 'rtl' : 'ltr'}
                 >
-                  <span className="whitespace-pre-wrap">{text}</span>
+                  {textParts.map((part, i) => (
+                    <span key={i} className="whitespace-pre-wrap">
+                      {part.text}
+                    </span>
+                  ))}
                 </div>
               </div>
             );
