@@ -1,0 +1,60 @@
+{
+    "version": 1,
+    "commands": {
+        "idea": {
+            "title": "Idea",
+            "description": "Capture and refine GateFlow initiatives into IDEA_<slug>.md and backlog entries.",
+            "run": ".cursor/commands/idea.md"
+        },
+        "plan": {
+            "title": "Plan",
+            "description": "Turn an IDEA_<slug>.md into a phased PLAN_<slug>.md plus PROMPT_<slug>_phase_<N>.md pro prompts.",
+            "run": ".cursor/commands/plan.md"
+        },
+        "dev": {
+            "title": "Dev",
+            "description": "Implement exactly one plan phase end-to-end (code, tests, git).",
+            "run": ".cursor/commands/dev.md"
+        },
+        "ship": {
+            "title": "Ship",
+            "description": "Execute all remaining phases of a plan sequentially via repeated /dev-style execution.",
+            "run": ".cursor/commands/ship.md"
+        },
+        "guide": {
+            "title": "Guide",
+            "description": "Run the GateFlow workspace guide \u2014 what should I do now?",
+            "run": ".cursor/commands/guide.md"
+        },
+        "man": {
+            "title": "Man",
+            "description": "One Man \u2014 one command, seven domains (Code, Brand, SaaS, Marketing, Business, Content, Copywrite).",
+            "run": ".cursor/commands/man.md"
+        },
+        "clis-team": {
+            "title": "CLIs Team",
+            "description": "Run a predefined CLI team (seo, refactor, audit). Cursor is master; team outputs are proposals.",
+            "run": ".cursor/commands/clis-team.md"
+        },
+        "docs": {
+            "title": "Docs",
+            "description": "Automated documentation updates \u2014 changelog, version badge, PRD, feature log, README, release.",
+            "run": ".cursor/commands/docs.md"
+        },
+        "version": {
+            "title": "Version",
+            "description": "Semantic versioning \u2014 bump package.json, create annotated git tags, generate versioned branch names.",
+            "run": ".cursor/commands/version.md"
+        },
+        "organize": {
+            "title": "Organize",
+            "description": "Docs folder cleanup \u2014 scan structure, remove empty dirs and dead symlinks, rebuild docs/INDEX.md.",
+            "run": ".cursor/commands/organize.md"
+        },
+        "ralph": {
+            "title": "Ralph",
+            "description": "Recursive autopilot: implement ALL remaining phases of the active plan end-to-end until complete. Includes session memory, TDD, enforcement, verification, PR.",
+            "run": ".cursor/commands/ralph.md"
+        }
+    }
+}
