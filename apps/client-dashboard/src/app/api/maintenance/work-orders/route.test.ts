@@ -37,13 +37,13 @@ jest.mock('next/server', () => {
 
 // ─── Service + Auth mocks ──────────────────────────────────────────────────────
 
-const mockGetSessionClaims = jest.fn();
+const mockGetSessionClaims = jest.fn() as any;
 jest.mock('@/lib/auth-cookies', () => ({
   getSessionClaims: (...args: unknown[]) => mockGetSessionClaims(...args),
 }));
 
-const mockWorkOrderList = jest.fn();
-const mockWorkOrderCreate = jest.fn();
+const mockWorkOrderList = jest.fn() as any;
+const mockWorkOrderCreate = jest.fn() as any;
 
 jest.mock('@/lib/maintenance/work-order-service', () => ({
   WorkOrderService: {
@@ -53,12 +53,12 @@ jest.mock('@/lib/maintenance/work-order-service', () => ({
 }));
 
 function makeGetRequest(qs = '') {
-  const { NextRequest } = jest.requireMock('next/server');
+  const { NextRequest } = jest.requireMock('next/server') as any;
   return new NextRequest(`http://localhost/api/maintenance/work-orders${qs}`);
 }
 
 function makePostRequest(body: any) {
-  const { NextRequest } = jest.requireMock('next/server');
+  const { NextRequest } = jest.requireMock('next/server') as any;
   return new NextRequest(`http://localhost/api/maintenance/work-orders`, {
     body,
   });

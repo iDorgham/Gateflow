@@ -1,4 +1,5 @@
 import { MetadataRoute } from 'next';
+import { token } from '@atlaskit/tokens';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
@@ -7,8 +8,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: 'Modern QR-based access control for the MENA region.',
     start_url: '/',
     display: 'standalone',
-    background_color: '#FFFFFF',
-    theme_color: '#0C66E4',
+    background_color: token('elevation.surface'),
+    theme_color: token('color.background.brand.bold'),
     icons: [
       {
         src: '/icon.png',

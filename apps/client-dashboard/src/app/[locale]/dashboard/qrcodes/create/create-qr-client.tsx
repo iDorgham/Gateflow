@@ -931,8 +931,8 @@ function ResultView({
         <QRCode
           value={qrValue}
           size={200}
-          bgColor={token('elevation.surface', '#FFFFFF')}
-          fgColor={token('color.text', '#172B4D')}
+          bgColor={token('elevation.surface')}
+          fgColor={token('color.text')}
           level="L"
         />
       </div>
@@ -1225,7 +1225,7 @@ export function CreateQRClient({
     if (!ctx) return;
     const img = new Image();
     img.onload = () => {
-      ctx.fillStyle = token('elevation.surface', '#FFFFFF');
+      ctx.fillStyle = token('elevation.surface');
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
       canvas.toBlob(

@@ -22,9 +22,38 @@ _Modern, Cryptographically Secure, and Marketing-First Infrastructure for the ME
 | :---------------------------------------------------- | :------------------------------- |
 | [Development Guide](docs/guides/DEVELOPMENT_GUIDE.md) | Setup, workflow, and conventions |
 | [Automation Guide](docs/guides/AUTOMATION_GUIDE.md)   | Ralph Loop, scripts, and CI/CD   |
+| [Workspace Docs](docs/workspace/README.md)            | Agents, rules, skills, commands  |
+| [Workspace Changelog](docs/workspace/CHANGELOG.md)    | Workspace-only changes           |
 | [API Reference](docs/guides/API_REFERENCE.md)         | REST API endpoints               |
 | [Security Overview](docs/guides/SECURITY_OVERVIEW.md) | Threat model and protections     |
 | [PRD v7.0](docs/PRD_v7.0.md)                          | Product roadmap and features     |
+
+---
+
+## Release Tracks
+
+GateFlow now documents releases in three separate tracks:
+
+- **Workspace**: automation, plans, prompts, AI orchestration, rules, skills, agents.
+- **AI Tools**: AI SDK, assistants, prompts, transports, and AI infra behavior.
+- **Apps**: end-user products (`client-dashboard`, `admin-dashboard`, `scanner-app`, `resident-mobile`, `resident-portal`, `marketing`).
+
+### Version Badges
+
+![Workspace Version](https://img.shields.io/badge/Workspace-v0.1.0-blue?style=for-the-badge)
+![Apps Version](https://img.shields.io/badge/Apps-v0.1.0-0ea5e9?style=for-the-badge)
+![AI Tools Version](https://img.shields.io/badge/AI_Tools-v6_migration_in_progress-7c3aed?style=for-the-badge)
+
+### App Versions
+
+| App                | Version |
+| :----------------- | :------ |
+| `client-dashboard` | `0.1.0` |
+| `admin-dashboard`  | `0.1.0` |
+| `scanner-app`      | `0.1.0` |
+| `resident-mobile`  | `0.1.0` |
+| `resident-portal`  | `0.1.0` |
+| `marketing`        | `0.1.0` |
 
 ---
 
@@ -448,20 +477,21 @@ git push && git push origin v0.2.0   # Deploy + GitHub Release
 
 ## Documentation Library
 
-| Document                                                      | Description                          |
-| :------------------------------------------------------------ | :----------------------------------- |
-| [Development Guide](docs/guides/DEVELOPMENT_GUIDE.md)         | Development workflow and conventions |
-| [Automation Guide](docs/guides/AUTOMATION_GUIDE.md)           | Ralph automation reference           |
-| [Tool & CLI Reference](docs/guides/TOOL_AND_CLI_REFERENCE.md) | AI tool selection matrix             |
-| [UI Design Guide](docs/guides/UI_DESIGN_GUIDE.md)             | Design system, RTL, accessibility    |
-| [Security Overview](docs/guides/SECURITY_OVERVIEW.md)         | Security architecture                |
-| [Deployment Guide](docs/guides/DEPLOYMENT_GUIDE.md)           | Vercel deployment                    |
-| [Environment Variables](docs/guides/ENVIRONMENT_VARIABLES.md) | All env vars                         |
-| [Motion & Animation](docs/guides/MOTION_AND_ANIMATION.md)     | Animation library guide              |
-| [Scanner Operations](docs/guides/SCANNER_OPERATIONS.md)       | Scanner architecture                 |
-| [Analytics & Charts](docs/guides/ANALYTICS_CHARTS_GUIDE.md)   | Chart patterns                       |
-| [PRD v7.0](docs/PRD_v7.0.md)                                  | Product Requirements                 |
-| [Docs Index](docs/INDEX.md)                                   | Auto-generated index                 |
+| Document                                                           | Description                                |
+| :----------------------------------------------------------------- | :----------------------------------------- |
+| [Development Guide](docs/guides/DEVELOPMENT_GUIDE.md)              | Development workflow and conventions       |
+| [Automation Guide](docs/guides/AUTOMATION_GUIDE.md)                | Ralph automation reference                 |
+| [Tool & CLI Reference](docs/guides/TOOL_AND_CLI_REFERENCE.md)      | AI tool selection matrix                   |
+| [Release Notes Template](docs/workspace/RELEASE_NOTES_TEMPLATE.md) | Workspace/AI Tools/Apps changelog template |
+| [UI Design Guide](docs/guides/UI_DESIGN_GUIDE.md)                  | Design system, RTL, accessibility          |
+| [Security Overview](docs/guides/SECURITY_OVERVIEW.md)              | Security architecture                      |
+| [Deployment Guide](docs/guides/DEPLOYMENT_GUIDE.md)                | Vercel deployment                          |
+| [Environment Variables](docs/guides/ENVIRONMENT_VARIABLES.md)      | All env vars                               |
+| [Motion & Animation](docs/guides/MOTION_AND_ANIMATION.md)          | Animation library guide                    |
+| [Scanner Operations](docs/guides/SCANNER_OPERATIONS.md)            | Scanner architecture                       |
+| [Analytics & Charts](docs/guides/ANALYTICS_CHARTS_GUIDE.md)        | Chart patterns                             |
+| [PRD v7.0](docs/PRD_v7.0.md)                                       | Product Requirements                       |
+| [Docs Index](docs/INDEX.md)                                        | Auto-generated index                       |
 
 ---
 

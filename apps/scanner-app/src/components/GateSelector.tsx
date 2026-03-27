@@ -25,7 +25,8 @@ import { getValidAccessToken } from '../lib/auth-client';
 
 const GATE_LIST_KEY = 'cached_gate_list';
 const SELECTED_GATE_KEY = 'selected_gate';
-const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:3001/api';
+const API_BASE_URL =
+  process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:3001/api';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -62,14 +63,18 @@ export async function loadSelectedGate(): Promise<SelectedGate | null> {
   }
 }
 
-export async function saveSelectedGate(gate: SelectedGate | null): Promise<void> {
+export async function saveSelectedGate(
+  gate: SelectedGate | null
+): Promise<void> {
   try {
     if (gate) {
       await AsyncStorage.setItem(SELECTED_GATE_KEY, JSON.stringify(gate));
     } else {
       await AsyncStorage.removeItem(SELECTED_GATE_KEY);
     }
-  } catch { /* non-fatal */ }
+  } catch {
+    /* non-fatal */
+  }
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -110,10 +115,13 @@ export function GateSelector({
 
       if (!json.success) throw new Error('API error');
 
-      const activeGates = json.data.filter((g) => g.isActive).map((g) => ({
-        ...g,
-        requiredIdentityLevel: g.requiredIdentityLevel ?? json.orgDefaultIdentityLevel ?? 0,
-      }));
+      const activeGates = json.data
+        .filter((g) => g.isActive)
+        .map((g) => ({
+          ...g,
+          requiredIdentityLevel:
+            g.requiredIdentityLevel ?? json.orgDefaultIdentityLevel ?? 0,
+        }));
       setGates(activeGates);
       if (json.assignedOnly && activeGates.length === 0) {
         setLoadError('No gates assigned. Contact your administrator.');
@@ -149,7 +157,11 @@ export function GateSelector({
 
   const handleSelect = async (gate: Gate | null) => {
     const next = gate
-      ? { id: gate.id, name: gate.name, requiredIdentityLevel: gate.requiredIdentityLevel ?? null }
+      ? {
+          id: gate.id,
+          name: gate.name,
+          requiredIdentityLevel: gate.requiredIdentityLevel ?? null,
+        }
       : null;
     await saveSelectedGate(next);
     onSelect(next);
@@ -160,11 +172,17 @@ export function GateSelector({
     const isSelected = item.id === selectedGate?.id;
     return (
       <Pressable
-        style={({ pressed }) => [s.gateRow, isSelected && s.gateRowSelected, pressed && s.gateRowPressed]}
+        style={({ pressed }) => [
+          s.gateRow,
+          isSelected && s.gateRowSelected,
+          pressed && s.gateRowPressed,
+        ]}
         onPress={() => handleSelect(item)}
       >
         <View style={s.gateInfo}>
-          <Text style={[s.gateName, isSelected && s.gateNameSelected]}>{item.name}</Text>
+          <Text style={[s.gateName, isSelected && s.gateNameSelected]}>
+            {item.name}
+          </Text>
           {!!item.location && (
             <Text style={s.gateLocation}>{item.location}</Text>
           )}
@@ -193,7 +211,10 @@ export function GateSelector({
 
           {isLoading ? (
             <View style={s.loadingWrap}>
-              <ActivityIndicator size="large" color="#3b82f6" />
+              <ActivityIndicator
+                size="large"
+                color="var(--ds-text-information)"
+              />
               <Text style={s.loadingText}>Loading gates…</Text>
             </View>
           ) : (
@@ -218,7 +239,9 @@ export function GateSelector({
                     ]}
                     onPress={() => handleSelect(null)}
                   >
-                    <Text style={[s.gateName, !selectedGate && s.gateNameSelected]}>
+                    <Text
+                      style={[s.gateName, !selectedGate && s.gateNameSelected]}
+                    >
                       No gate selected
                     </Text>
                     {!selectedGate && <Text style={s.checkmark}>✓</Text>}
@@ -226,7 +249,9 @@ export function GateSelector({
                 }
                 ListEmptyComponent={
                   <Text style={s.emptyText}>
-                    {loadError && (loadError.includes('No gates assigned') || loadError.includes('no gates assigned'))
+                    {loadError &&
+                    (loadError.includes('No gates assigned') ||
+                      loadError.includes('no gates assigned'))
                       ? loadError
                       : 'No active gates found. Check that your account has gates configured.'}
                   </Text>
@@ -256,12 +281,12 @@ const s = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   sheet: {
-    backgroundColor: '#0f172a',
+    backgroundColor: 'var(--ds-background-neutral)',
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     maxHeight: '75%',
     borderTopWidth: 1,
-    borderColor: '#1e293b',
+    borderColor: 'var(--ds-border)',
   },
   header: {
     flexDirection: 'row',
@@ -271,21 +296,21 @@ const s = StyleSheet.create({
     paddingTop: 20,
     paddingBottom: 14,
     borderBottomWidth: 1,
-    borderColor: '#1e293b',
+    borderColor: 'var(--ds-border)',
   },
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#f1f5f9',
+    color: 'var(--ds-text-inverse)',
   },
   doneBtn: {
     paddingVertical: 6,
     paddingHorizontal: 14,
-    backgroundColor: '#1e293b',
+    backgroundColor: 'var(--ds-background-neutral)',
     borderRadius: 8,
   },
   doneBtnText: {
-    color: '#64748b',
+    color: 'var(--ds-text-subtle)',
     fontSize: 15,
     fontWeight: '600',
   },
@@ -296,7 +321,7 @@ const s = StyleSheet.create({
     gap: 16,
   },
   loadingText: {
-    color: '#64748b',
+    color: 'var(--ds-text-subtle)',
     fontSize: 14,
   },
   errorBox: {
@@ -307,7 +332,7 @@ const s = StyleSheet.create({
     paddingHorizontal: 20,
   },
   errorText: {
-    color: '#fde68a',
+    color: 'var(--ds-text-warning)',
     fontSize: 13,
   },
   list: {
@@ -327,7 +352,7 @@ const s = StyleSheet.create({
     backgroundColor: 'rgba(59,130,246,0.1)',
   },
   gateRowPressed: {
-    backgroundColor: '#1e293b',
+    backgroundColor: 'var(--ds-background-neutral)',
   },
   gateInfo: {
     flex: 1,
@@ -335,32 +360,32 @@ const s = StyleSheet.create({
   },
   gateName: {
     fontSize: 16,
-    color: '#f1f5f9',
+    color: 'var(--ds-text-inverse)',
     fontWeight: '500',
   },
   gateNameSelected: {
-    color: '#3b82f6',
+    color: 'var(--ds-text-information)',
     fontWeight: '600',
   },
   gateLocation: {
     fontSize: 13,
-    color: '#64748b',
+    color: 'var(--ds-text-subtle)',
   },
   checkmark: {
     fontSize: 18,
-    color: '#3b82f6',
+    color: 'var(--ds-text-information)',
     fontWeight: '700',
     marginLeft: 12,
   },
   separator: {
     height: 1,
-    backgroundColor: '#1e293b',
+    backgroundColor: 'var(--ds-border)',
     marginHorizontal: 20,
   },
   emptyText: {
     padding: 24,
     textAlign: 'center',
-    color: '#475569',
+    color: 'var(--ds-text-subtle)',
     fontSize: 14,
     lineHeight: 20,
   },
@@ -368,10 +393,10 @@ const s = StyleSheet.create({
     paddingVertical: 14,
     alignItems: 'center',
     borderTopWidth: 1,
-    borderColor: '#1e293b',
+    borderColor: 'var(--ds-border)',
   },
   refreshBtnText: {
-    color: '#3b82f6',
+    color: 'var(--ds-text-information)',
     fontSize: 15,
     fontWeight: '600',
   },

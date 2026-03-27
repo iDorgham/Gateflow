@@ -89,7 +89,7 @@ export function CanvasEditor() {
             attrs: {
               tagId,
               tagName,
-              color: color || token('color.text.danger', '#ED4B00'),
+              color: color || token('color.text.danger'),
               isRtl,
             },
           })

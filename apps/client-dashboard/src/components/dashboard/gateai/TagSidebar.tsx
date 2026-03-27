@@ -16,11 +16,11 @@ import { gaSpring } from './GateAITokens';
 
 // Shared GateFlow real-estate palette presets
 const PRESET_COLORS = [
-  token('color.text.danger', '#ED4B00'), // Kimchi Orange
-  token('color.text.brand', '#020035'), // Midnight Blue
-  token('color.text.information', '#2000B1'), // Deep Sea Info
-  token('color.text.success', '#16A34A'), // Success Green
-  token('color.text.warning', '#F59E0B'), // Warning Amber
+  token('color.text.danger'), // Kimchi Orange
+  token('color.text.brand'), // Midnight Blue
+  token('color.text.information'), // Deep Sea Info
+  token('color.text.success'), // Success Green
+  token('color.text.warning'), // Warning Amber
 ];
 
 type AiTag = {
@@ -222,7 +222,7 @@ export function TagSidebar() {
                   );
                   e.dataTransfer.setData(
                     'application/vnd.gateai.tag.color',
-                    tag.color || token('color.text.danger', '#ED4B00')
+                    tag.color || token('color.text.danger')
                   );
                   e.dataTransfer.effectAllowed = 'copy';
                 }}
@@ -232,8 +232,7 @@ export function TagSidebar() {
                   <div
                     className="w-2.5 h-2.5 rounded-full shrink-0"
                     style={{
-                      backgroundColor:
-                        tag.color || token('color.text.danger', '#ED4B00'),
+                      backgroundColor: tag.color || token('color.text.danger'),
                     }}
                   />
                   <span className="text-sm font-medium text-[var(--ga-text-primary)] truncate">

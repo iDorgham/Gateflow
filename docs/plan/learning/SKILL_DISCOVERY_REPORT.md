@@ -1,21 +1,21 @@
 # Skill Discovery Report
 
-**Date:** 2026-03-27T04:31:54.977Z
+**Date:** 2026-03-27T13:21:06.353Z
 
 ## 🎨 Design System Violations (Hardcoded Hex)
 
 Detected raw hex values instead of Atlassian Design System tokens (`var(--ds-...)`).
 
 ```text
-apps/client-dashboard/src/app/[locale]/dashboard/qrcodes/create/create-qr-client.tsx:          bgColor={token('elevation.surface', '#FFFFFF')}
-apps/client-dashboard/src/app/[locale]/dashboard/qrcodes/create/create-qr-client.tsx:          fgColor={token('color.text', '#172B4D')}
-apps/client-dashboard/src/app/[locale]/dashboard/qrcodes/create/create-qr-client.tsx:      ctx.fillStyle = token('elevation.surface', '#FFFFFF');
-apps/client-dashboard/src/app/manifest.ts:    background_color: '#FFFFFF',
-apps/client-dashboard/src/app/manifest.ts:    theme_color: '#0C66E4',
-apps/client-dashboard/src/components/settings/workspace-form.tsx:        token('color.background.brand.bold', '#0C66E4'),
-apps/client-dashboard/src/components/dashboard/gateai/CanvasEditor.tsx:              color: color || token('color.text.danger', '#ED4B00'),
-apps/client-dashboard/src/components/dashboard/gateai/live-chart/LiveChartComponent.tsx:    token('color.text.danger', '#AE2A19'), // Kimchi Orange -> now aligned to ADS Danger
-apps/client-dashboard/src/components/dashboard/gateai/live-chart/LiveChartComponent.tsx:    token('color.text.brand', '#0C66E4'), // Midnight Blue -> now aligned to ADS Brand
-apps/client-dashboard/src/components/dashboard/gateai/live-chart/LiveChartComponent.tsx:    token('color.text.information', '#0055CC'), // Deep Sea Info -> now aligned to ADS Info
+packages/ui/src/tokens.ts:    neutral10: '#FFFFFF',
+packages/ui/src/tokens.ts:    neutral20: '#F4F5F7',
+packages/ui/src/tokens.ts:    neutral30: '#EBECF0',
+packages/ui/src/tokens.ts:    neutral40: '#DFE1E6',
+packages/ui/src/tokens.ts:    neutral50: '#C1C7D0',
+packages/ui/src/tokens.ts:    neutral60: '#A5ADBA',
+packages/ui/src/tokens.ts:    neutral70: '#97A0AF',
+packages/ui/src/tokens.ts:    neutral80: '#8993A4',
+packages/ui/src/tokens.ts:    neutral90: '#7A869A',
+packages/ui/src/tokens.ts:    neutral100: '#6B778C',
 
 ```

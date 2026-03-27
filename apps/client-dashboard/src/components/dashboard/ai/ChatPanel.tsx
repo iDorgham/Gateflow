@@ -1,18 +1,10 @@
 'use client';
 
 import * as React from 'react';
-// Local type alias — supports both legacy `content` messages and AI SDK v3
-// `parts`-based UIMessage shapes.
-type Message = {
-  id: string;
-  role: string;
-  content?: string;
-  parts?: Array<{
-    type: string;
-    text?: string;
-    content?: string;
-    [key: string]: unknown;
-  }>;
+import { type UIMessage } from '@ai-sdk/react';
+
+// Local type alias for backward compatibility or specialized properties
+type Message = UIMessage & {
   [key: string]: unknown;
 };
 import {
@@ -102,16 +94,13 @@ function parseMessageContent(content: string) {
 
 function messageText(message?: Message): string {
   if (!message) return '';
-  if (typeof message.content === 'string') return message.content;
+  if (typeof message.content === 'string' && message.content)
+    return message.content;
   if (!Array.isArray(message.parts)) return '';
 
   return message.parts
     .filter((p) => p.type === 'text')
-    .map((p) => {
-      if (typeof p.text === 'string') return p.text;
-      if (typeof p.content === 'string') return p.content;
-      return '';
-    })
+    .map((p) => (p as any).text || '')
     .join('');
 }
 
@@ -361,46 +350,182 @@ export function ChatPanel({
                   </Avatar>
 
                   <div className="flex flex-col gap-1 flex-1 min-w-0 group">
-                    {parseMessageContent(messageText(m)).map((part, i) => (
-                      <React.Fragment key={`${m.id}-${i}`}>
-                        {part.type === 'text' ? (
-                          <div
-                            className={cn(
-                              'rounded-2xl px-4 py-3 text-sm leading-relaxed relative',
-                              m.role === 'user'
-                                ? 'bg-zinc-100 bg-secondary text-foreground dark:text-zinc-100 rounded-tr-none'
-                                : 'bg-background bg-background text-foreground dark:text-zinc-100 border border-zinc-200 border-border shadow-sm rounded-tl-none whitespace-pre-wrap'
+                    {/* Render Parts Natively (V6 Pattern) */}
+                    {m.parts && m.parts.length > 0
+                      ? m.parts.map((part, i) => (
+                          <React.Fragment key={`${m.id}-part-${i}`}>
+                            {part.type === 'text' ? (
+                              <div
+                                className={cn(
+                                  'rounded-2xl px-4 py-3 text-sm leading-relaxed relative',
+                                  m.role === 'user'
+                                    ? 'bg-zinc-100 bg-secondary text-foreground dark:text-zinc-100 rounded-tr-none'
+                                    : 'bg-background bg-background text-foreground dark:text-zinc-100 border border-zinc-200 border-border shadow-sm rounded-tl-none whitespace-pre-wrap'
+                                )}
+                              >
+                                {/* If it's a tool-supporting text part, it might still contain JSON blocks for legacy reasons or model fallback */}
+                                {m.role === 'assistant'
+                                  ? parseMessageContent(part.text).map(
+                                      (subPart, j) => (
+                                        <React.Fragment
+                                          key={`${m.id}-part-${i}-sub-${j}`}
+                                        >
+                                          {subPart.type === 'text' ? (
+                                            subPart.content
+                                          ) : subPart.type === 'chart' ? (
+                                            <AIChartRenderer
+                                              config={
+                                                subPart.config as ChartDataBlock
+                                              }
+                                            />
+                                          ) : subPart.type === 'report' ? (
+                                            <AIReportRenderer
+                                              config={
+                                                subPart.config as ReportDataBlock
+                                              }
+                                              isRtl={isRtl}
+                                            />
+                                          ) : subPart.type === 'schedule' ? (
+                                            <AIScheduleRenderer
+                                              config={
+                                                subPart.config as ScheduleDataBlock
+                                              }
+                                              isRtl={isRtl}
+                                            />
+                                          ) : (
+                                            <AIConfirmationRenderer
+                                              data={
+                                                subPart.config as ActionDataBlock
+                                              }
+                                              status={
+                                                actionStates[
+                                                  `${m.id}-part-${i}-sub-${j}`
+                                                ] || 'pending'
+                                              }
+                                              isExecuting={
+                                                executingActions[
+                                                  `${m.id}-part-${i}-sub-${j}`
+                                                ]
+                                              }
+                                              onConfirm={(data) =>
+                                                handleActionConfirm(
+                                                  m.id,
+                                                  i * 100 + j,
+                                                  data
+                                                )
+                                              }
+                                              onCancel={() =>
+                                                handleActionCancel(
+                                                  m.id,
+                                                  i * 100 + j
+                                                )
+                                              }
+                                            />
+                                          )}
+                                        </React.Fragment>
+                                      )
+                                    )
+                                  : part.text}
+                              </div>
+                            ) : part.type.startsWith('tool-') ? (
+                              <div className="my-2">
+                                {(part as any).toolName === 'showChart' && (
+                                  <AIChartRenderer
+                                    config={
+                                      (part as any).args as ChartDataBlock
+                                    }
+                                  />
+                                )}
+                                {(part as any).toolName === 'showReport' && (
+                                  <AIReportRenderer
+                                    config={
+                                      (part as any).args as ReportDataBlock
+                                    }
+                                    isRtl={isRtl}
+                                  />
+                                )}
+                                {(part as any).toolName === 'showSchedule' && (
+                                  <AIScheduleRenderer
+                                    config={
+                                      (part as any).args as ScheduleDataBlock
+                                    }
+                                    isRtl={isRtl}
+                                  />
+                                )}
+                                {(part as any).toolName ===
+                                  'requestConfirmation' && (
+                                  <AIConfirmationRenderer
+                                    data={(part as any).args as ActionDataBlock}
+                                    status={
+                                      actionStates[
+                                        `${m.id}-tool-${(part as any).toolCallId}`
+                                      ] || 'pending'
+                                    }
+                                    isExecuting={
+                                      executingActions[
+                                        `${m.id}-tool-${(part as any).toolCallId}`
+                                      ]
+                                    }
+                                    onConfirm={(data) =>
+                                      handleActionConfirm(m.id, i, data)
+                                    }
+                                    onCancel={() => handleActionCancel(m.id, i)}
+                                  />
+                                )}
+
+                                {/* Handle Tool Results (e.g. success message after execution) */}
+                                {(part as any).state === 'result' && (
+                                  <div className="text-[10px] text-muted-foreground mt-1 opacity-70 italic">
+                                    {JSON.stringify((part as any).result)}
+                                  </div>
+                                )}
+                              </div>
+                            ) : null}
+                          </React.Fragment>
+                        ))
+                      : /* Legacy Fallback for content-only messages */
+                        parseMessageContent(messageText(m)).map((part, i) => (
+                          <React.Fragment key={`${m.id}-${i}`}>
+                            {part.type === 'text' ? (
+                              <div
+                                className={cn(
+                                  'rounded-2xl px-4 py-3 text-sm leading-relaxed relative',
+                                  m.role === 'user'
+                                    ? 'bg-zinc-100 bg-secondary text-foreground dark:text-zinc-100 rounded-tr-none'
+                                    : 'bg-background bg-background text-foreground dark:text-zinc-100 border border-zinc-200 border-border shadow-sm rounded-tl-none whitespace-pre-wrap'
+                                )}
+                              >
+                                {part.content}
+                              </div>
+                            ) : part.type === 'chart' ? (
+                              <AIChartRenderer
+                                config={part.config as ChartDataBlock}
+                              />
+                            ) : part.type === 'report' ? (
+                              <AIReportRenderer
+                                config={part.config as ReportDataBlock}
+                                isRtl={isRtl}
+                              />
+                            ) : part.type === 'schedule' ? (
+                              <AIScheduleRenderer
+                                config={part.config as ScheduleDataBlock}
+                                isRtl={isRtl}
+                              />
+                            ) : (
+                              <AIConfirmationRenderer
+                                data={part.config as ActionDataBlock}
+                                status={
+                                  actionStates[`${m.id}-${i}`] || 'pending'
+                                }
+                                isExecuting={executingActions[`${m.id}-${i}`]}
+                                onConfirm={(data) =>
+                                  handleActionConfirm(m.id, i, data)
+                                }
+                                onCancel={() => handleActionCancel(m.id, i)}
+                              />
                             )}
-                          >
-                            {part.content}
-                          </div>
-                        ) : part.type === 'chart' ? (
-                          <AIChartRenderer
-                            config={part.config as ChartDataBlock}
-                          />
-                        ) : part.type === 'report' ? (
-                          <AIReportRenderer
-                            config={part.config as ReportDataBlock}
-                            isRtl={isRtl}
-                          />
-                        ) : part.type === 'schedule' ? (
-                          <AIScheduleRenderer
-                            config={part.config as ScheduleDataBlock}
-                            isRtl={isRtl}
-                          />
-                        ) : (
-                          <AIConfirmationRenderer
-                            data={part.config as ActionDataBlock}
-                            status={actionStates[`${m.id}-${i}`] || 'pending'}
-                            isExecuting={executingActions[`${m.id}-${i}`]}
-                            onConfirm={(data) =>
-                              handleActionConfirm(m.id, i, data)
-                            }
-                            onCancel={() => handleActionCancel(m.id, i)}
-                          />
-                        )}
-                      </React.Fragment>
-                    ))}
+                          </React.Fragment>
+                        ))}
 
                     {/* Feedback Buttons for AI messages */}
                     {m.role === 'assistant' && !isLoading && interactionId && (

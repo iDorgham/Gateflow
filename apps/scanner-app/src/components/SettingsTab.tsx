@@ -13,22 +13,32 @@ import {
   View,
 } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
-import { getPreferences, setPreference, type AppPreferences } from '../lib/preferences';
+import {
+  getPreferences,
+  setPreference,
+  type AppPreferences,
+} from '../lib/preferences';
 import { clearHistory } from '../lib/scan-history';
 import { scanQueue } from '../lib/offline-queue';
 import { clearNonceCache } from '../lib/qr-verify';
+import { nativeTokens } from '@gate-access/ui/tokens';
 
 const SUPERVISOR_PIN_KEY = 'supervisor_pin';
 
-const TOP_OFFSET = Platform.OS === 'android'
-  ? (StatusBar.currentHeight ?? 24) + 20
-  : 60;
+const TOP_OFFSET =
+  Platform.OS === 'android' ? (StatusBar.currentHeight ?? 24) + 20 : 60;
 
 const APP_VERSION = '0.1.0';
 
 // ─── Section wrapper ──────────────────────────────────────────────────────────
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function Section({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
   return (
     <View style={s.section}>
       <Text style={s.sectionTitle}>{title}</Text>
@@ -62,9 +72,14 @@ function ToggleRow({
         value={value}
         onValueChange={onValueChange}
         disabled={disabled}
-        trackColor={{ false: '#334155', true: '#2563eb' }}
-        thumbColor={value ? '#93c5fd' : '#64748b'}
-        ios_backgroundColor="#334155"
+        trackColor={{
+          false: nativeTokens.colors.neutral500,
+          true: nativeTokens.colors.primary,
+        }}
+        thumbColor={
+          value ? nativeTokens.colors.ring : nativeTokens.colors.mutedForeground
+        }
+        ios_backgroundColor={nativeTokens.colors.neutral500}
       />
     </View>
   );
@@ -96,7 +111,10 @@ function ActionRow({
         {sub ? <Text style={s.rowSub}>{sub}</Text> : null}
       </View>
       {busy ? (
-        <ActivityIndicator size="small" color="#64748b" />
+        <ActivityIndicator
+          size="small"
+          color={nativeTokens.colors.mutedForeground}
+        />
       ) : (
         <Text style={[s.chevron, danger && s.chevronDanger]}>›</Text>
       )}
@@ -129,7 +147,9 @@ export function SettingsTab({ onLogout }: SettingsTabProps) {
 
   // ── Supervisor PIN state ────────────────────────────────────────────────
   const [pinConfigured, setPinConfigured] = useState<boolean>(false);
-  const [showPinInput, setShowPinInput] = useState<'set' | 'change' | null>(null);
+  const [showPinInput, setShowPinInput] = useState<'set' | 'change' | null>(
+    null
+  );
   const [pinValue, setPinValue] = useState('');
   const [pinConfirm, setPinConfirm] = useState('');
   const [pinError, setPinError] = useState('');
@@ -155,7 +175,10 @@ export function SettingsTab({ onLogout }: SettingsTabProps) {
     refreshPinStatus();
   }, [loadPrefs, refreshPinStatus]);
 
-  async function toggle<K extends keyof AppPreferences>(key: K, value: AppPreferences[K]) {
+  async function toggle<K extends keyof AppPreferences>(
+    key: K,
+    value: AppPreferences[K]
+  ) {
     setPrefs((prev) => ({ ...prev, [key]: value }));
     await setPreference(key, value);
   }
@@ -181,7 +204,7 @@ export function SettingsTab({ onLogout }: SettingsTabProps) {
             }
           },
         },
-      ],
+      ]
     );
   };
 
@@ -200,13 +223,16 @@ export function SettingsTab({ onLogout }: SettingsTabProps) {
               await clearHistory();
               Alert.alert('Done', 'Local scan history cleared.');
             } catch {
-              Alert.alert('Error', 'Failed to clear history. Please try again.');
+              Alert.alert(
+                'Error',
+                'Failed to clear history. Please try again.'
+              );
             } finally {
               setIsClearingHistory(false);
             }
           },
         },
-      ],
+      ]
     );
   };
 
@@ -225,13 +251,16 @@ export function SettingsTab({ onLogout }: SettingsTabProps) {
               await clearNonceCache();
               Alert.alert('Done', 'Local nonce cache cleared.');
             } catch {
-              Alert.alert('Error', 'Failed to clear nonce cache. Please try again.');
+              Alert.alert(
+                'Error',
+                'Failed to clear nonce cache. Please try again.'
+              );
             } finally {
               setIsClearingNonce(false);
             }
           },
         },
-      ],
+      ]
     );
   };
 
@@ -269,7 +298,10 @@ export function SettingsTab({ onLogout }: SettingsTabProps) {
       await SecureStore.setItemAsync(SUPERVISOR_PIN_KEY, pinValue);
       setPinConfigured(true);
       setShowPinInput(null);
-      Alert.alert('PIN Saved', 'Supervisor PIN has been saved securely on this device.');
+      Alert.alert(
+        'PIN Saved',
+        'Supervisor PIN has been saved securely on this device.'
+      );
     } catch {
       setPinError('Failed to save PIN. Please try again.');
     } finally {
@@ -290,13 +322,16 @@ export function SettingsTab({ onLogout }: SettingsTabProps) {
             try {
               await SecureStore.deleteItemAsync(SUPERVISOR_PIN_KEY);
               setPinConfigured(false);
-              Alert.alert('PIN Removed', 'Supervisor PIN has been removed from this device.');
+              Alert.alert(
+                'PIN Removed',
+                'Supervisor PIN has been removed from this device.'
+              );
             } catch {
               Alert.alert('Error', 'Failed to remove PIN. Please try again.');
             }
           },
         },
-      ],
+      ]
     );
   };
 
@@ -315,7 +350,7 @@ export function SettingsTab({ onLogout }: SettingsTabProps) {
             await onLogout();
           },
         },
-      ],
+      ]
     );
   };
 
@@ -328,7 +363,7 @@ export function SettingsTab({ onLogout }: SettingsTabProps) {
 
       {loading ? (
         <View style={s.center}>
-          <ActivityIndicator size="large" color="#3b82f6" />
+          <ActivityIndicator size="large" color={nativeTokens.colors.primary} />
         </View>
       ) : (
         <ScrollView
@@ -384,14 +419,19 @@ export function SettingsTab({ onLogout }: SettingsTabProps) {
             {showPinInput ? (
               <View style={s.pinInputBlock}>
                 <Text style={s.pinInputLabel}>
-                  {showPinInput === 'set' ? 'Set a new supervisor PIN (4–6 digits):' : 'Change supervisor PIN (4–6 digits):'}
+                  {showPinInput === 'set'
+                    ? 'Set a new supervisor PIN (4–6 digits):'
+                    : 'Change supervisor PIN (4–6 digits):'}
                 </Text>
                 <TextInput
                   style={s.pinInput}
                   value={pinValue}
-                  onChangeText={(t) => { setPinValue(t.replace(/[^0-9]/g, '')); setPinError(''); }}
+                  onChangeText={(t) => {
+                    setPinValue(t.replace(/[^0-9]/g, ''));
+                    setPinError('');
+                  }}
                   placeholder="New PIN"
-                  placeholderTextColor="#475569"
+                  placeholderTextColor={nativeTokens.colors.mutedForeground}
                   secureTextEntry
                   keyboardType="number-pad"
                   maxLength={6}
@@ -399,23 +439,37 @@ export function SettingsTab({ onLogout }: SettingsTabProps) {
                 <TextInput
                   style={[s.pinInput, { marginTop: 8 }]}
                   value={pinConfirm}
-                  onChangeText={(t) => { setPinConfirm(t.replace(/[^0-9]/g, '')); setPinError(''); }}
+                  onChangeText={(t) => {
+                    setPinConfirm(t.replace(/[^0-9]/g, ''));
+                    setPinError('');
+                  }}
                   placeholder="Confirm PIN"
-                  placeholderTextColor="#475569"
+                  placeholderTextColor={nativeTokens.colors.mutedForeground}
                   secureTextEntry
                   keyboardType="number-pad"
                   maxLength={6}
                 />
                 {!!pinError && <Text style={s.pinError}>{pinError}</Text>}
                 <View style={s.pinBtnRow}>
-                  <Pressable style={[s.pinBtn, s.pinBtnCancel]} onPress={() => setShowPinInput(null)}>
+                  <Pressable
+                    style={[s.pinBtn, s.pinBtnCancel]}
+                    onPress={() => setShowPinInput(null)}
+                  >
                     <Text style={s.pinBtnCancelText}>Cancel</Text>
                   </Pressable>
-                  <Pressable style={[s.pinBtn, s.pinBtnSave]} onPress={handleSavePin} disabled={pinBusy}>
-                    {pinBusy
-                      ? <ActivityIndicator size="small" color="#fff" />
-                      : <Text style={s.pinBtnSaveText}>Save PIN</Text>
-                    }
+                  <Pressable
+                    style={[s.pinBtn, s.pinBtnSave]}
+                    onPress={handleSavePin}
+                    disabled={pinBusy}
+                  >
+                    {pinBusy ? (
+                      <ActivityIndicator
+                        size="small"
+                        color={nativeTokens.colors.primaryForeground}
+                      />
+                    ) : (
+                      <Text style={s.pinBtnSaveText}>Save PIN</Text>
+                    )}
                   </Pressable>
                 </View>
               </View>
@@ -425,7 +479,9 @@ export function SettingsTab({ onLogout }: SettingsTabProps) {
                   <View style={s.rowText}>
                     <Text style={s.rowLabel}>Supervisor PIN</Text>
                     <Text style={s.rowSub}>
-                      {pinConfigured ? '✅ PIN configured on this device' : '⚠ No PIN set — only force-override available'}
+                      {pinConfigured
+                        ? '✅ PIN configured on this device'
+                        : '⚠ No PIN set — only force-override available'}
                     </Text>
                   </View>
                 </View>
@@ -475,12 +531,16 @@ export function SettingsTab({ onLogout }: SettingsTabProps) {
             <Divider />
             <View style={s.row}>
               <Text style={s.rowLabel}>Platform</Text>
-              <Text style={s.rowValue}>{Platform.OS} {Platform.Version}</Text>
+              <Text style={s.rowValue}>
+                {Platform.OS} {Platform.Version}
+              </Text>
             </View>
           </Section>
 
           {/* Footer */}
-          <Text style={s.footer}>GateFlow Scanner · All data encrypted at rest</Text>
+          <Text style={s.footer}>
+            GateFlow Scanner · All data encrypted at rest
+          </Text>
         </ScrollView>
       )}
     </View>
@@ -492,19 +552,19 @@ export function SettingsTab({ onLogout }: SettingsTabProps) {
 const s = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: nativeTokens.colors.neutral800,
     paddingTop: TOP_OFFSET,
   },
   header: {
     paddingHorizontal: 24,
     paddingBottom: 16,
     borderBottomWidth: 1,
-    borderColor: '#1e293b',
+    borderColor: nativeTokens.colors.neutral700,
   },
   title: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#f1f5f9',
+    color: nativeTokens.colors.primaryForeground,
   },
   center: {
     flex: 1,
@@ -524,17 +584,17 @@ const s = StyleSheet.create({
   sectionTitle: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#475569',
+    color: nativeTokens.colors.mutedForeground,
     letterSpacing: 0.8,
     textTransform: 'uppercase',
     marginBottom: 8,
     paddingHorizontal: 4,
   },
   sectionCard: {
-    backgroundColor: '#0f172a',
+    backgroundColor: nativeTokens.colors.neutral700,
     borderRadius: 14,
     borderWidth: 1,
-    borderColor: '#1e293b',
+    borderColor: nativeTokens.colors.neutral700,
     overflow: 'hidden',
   },
 
@@ -554,24 +614,24 @@ const s = StyleSheet.create({
   },
   rowLabel: {
     fontSize: 15,
-    color: '#e2e8f0',
+    color: nativeTokens.colors.neutral30,
     fontWeight: '500',
   },
   rowLabelDanger: {
-    color: '#f87171',
+    color: nativeTokens.colors.destructive,
   },
   rowSub: {
     fontSize: 12,
-    color: '#64748b',
+    color: nativeTokens.colors.mutedForeground,
   },
   rowValue: {
     fontSize: 14,
-    color: '#64748b',
+    color: nativeTokens.colors.mutedForeground,
     fontVariant: ['tabular-nums'],
   },
   chevron: {
     fontSize: 22,
-    color: '#334155',
+    color: nativeTokens.colors.neutral500,
     lineHeight: 26,
   },
   chevronDanger: {
@@ -582,13 +642,13 @@ const s = StyleSheet.create({
   divider: {
     marginLeft: 18,
     height: StyleSheet.hairlineWidth,
-    backgroundColor: '#1e293b',
+    backgroundColor: nativeTokens.colors.neutral700,
   },
 
   // Footer
   footer: {
     fontSize: 12,
-    color: '#334155',
+    color: nativeTokens.colors.neutral500,
     textAlign: 'center',
     marginTop: 8,
   },
@@ -600,23 +660,23 @@ const s = StyleSheet.create({
   },
   pinInputLabel: {
     fontSize: 13,
-    color: '#94a3b8',
+    color: nativeTokens.colors.mutedForeground,
     marginBottom: 10,
   },
   pinInput: {
-    backgroundColor: '#1e293b',
+    backgroundColor: nativeTokens.colors.neutral700,
     borderWidth: 1,
-    borderColor: '#334155',
+    borderColor: nativeTokens.colors.neutral500,
     borderRadius: 10,
     paddingVertical: 11,
     paddingHorizontal: 14,
     fontSize: 16,
-    color: '#f1f5f9',
+    color: nativeTokens.colors.primaryForeground,
     letterSpacing: 4,
   },
   pinError: {
     fontSize: 13,
-    color: '#fca5a5',
+    color: nativeTokens.colors.destructive,
     marginTop: 6,
   },
   pinBtnRow: {
@@ -631,20 +691,20 @@ const s = StyleSheet.create({
     alignItems: 'center',
   },
   pinBtnCancel: {
-    backgroundColor: '#1e293b',
+    backgroundColor: nativeTokens.colors.neutral700,
     borderWidth: 1,
-    borderColor: '#334155',
+    borderColor: nativeTokens.colors.neutral500,
   },
   pinBtnCancelText: {
-    color: '#94a3b8',
+    color: nativeTokens.colors.mutedForeground,
     fontWeight: '600',
     fontSize: 14,
   },
   pinBtnSave: {
-    backgroundColor: '#2563eb',
+    backgroundColor: nativeTokens.colors.primary,
   },
   pinBtnSaveText: {
-    color: '#fff',
+    color: nativeTokens.colors.primaryForeground,
     fontWeight: '600',
     fontSize: 14,
   },

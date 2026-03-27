@@ -26,11 +26,11 @@ export function LiveChartComponent(props: NodeViewProps) {
   const springConfig = gaSpring;
 
   const PRESET_COLORS = [
-    token('color.text.danger', '#AE2A19'), // Kimchi Orange -> now aligned to ADS Danger
-    token('color.text.brand', '#0C66E4'), // Midnight Blue -> now aligned to ADS Brand
-    token('color.text.information', '#0055CC'), // Deep Sea Info -> now aligned to ADS Info
-    token('color.text.success', '#216751'), // Success Green
-    token('color.text.warning', '#974F0C'), // Warning Amber
+    token('color.text.danger'), // ADS Danger
+    token('color.text.brand'), // ADS Brand
+    token('color.text.information'), // ADS Info
+    token('color.text.success'), // Success
+    token('color.text.warning'), // Warning
   ];
   React.useEffect(() => {
     let mounted = true;
@@ -168,7 +168,7 @@ export function LiveChartComponent(props: NodeViewProps) {
                 />
                 <Bar
                   dataKey="value"
-                  fill={color || token('color.text.danger', '#ED4B00')}
+                  fill={color || token('color.text.danger')}
                   radius={[4, 4, 0, 0]}
                   isAnimationActive={!shouldReduceMotion}
                   animationDuration={1500}

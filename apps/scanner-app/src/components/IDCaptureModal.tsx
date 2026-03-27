@@ -14,8 +14,10 @@ import {
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { getValidAccessToken } from '../lib/auth-client';
+import { nativeTokens } from '@gate-access/ui/tokens';
 
-const API_BASE_URL = process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:3001/api';
+const API_BASE_URL =
+  process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:3001/api';
 
 export interface IDCaptureModalProps {
   visible: boolean;
@@ -113,7 +115,7 @@ export function IDCaptureModal({
           <Text style={s.title}>Capture ID</Text>
           <Text style={s.subtitle}>
             {required
-              ? 'This gate requires ID verification. Capture a photo of the visitor\'s ID.'
+              ? "This gate requires ID verification. Capture a photo of the visitor's ID."
               : 'Optional: Capture ID for records.'}
           </Text>
 
@@ -129,14 +131,21 @@ export function IDCaptureModal({
             disabled={isCapturing}
           >
             {isCapturing ? (
-              <ActivityIndicator size="small" color="#fff" />
+              <ActivityIndicator
+                size="small"
+                color={nativeTokens.colors.primaryForeground}
+              />
             ) : (
               <Text style={s.captureBtnText}>Take Photo</Text>
             )}
           </Pressable>
 
           {!required && onSkip && (
-            <Pressable style={s.skipBtn} onPress={onSkip} disabled={isCapturing}>
+            <Pressable
+              style={s.skipBtn}
+              onPress={onSkip}
+              disabled={isCapturing}
+            >
               <Text style={s.skipBtnText}>Skip</Text>
             </Pressable>
           )}
@@ -153,7 +162,7 @@ const s = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   sheet: {
-    backgroundColor: '#0f172a',
+    backgroundColor: nativeTokens.colors.neutral700,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     padding: 24,
@@ -162,12 +171,12 @@ const s = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#f1f5f9',
+    color: nativeTokens.colors.primaryForeground,
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 14,
-    color: '#94a3b8',
+    color: nativeTokens.colors.mutedForeground,
     marginBottom: 24,
     lineHeight: 20,
   },
@@ -180,11 +189,11 @@ const s = StyleSheet.create({
     marginBottom: 16,
   },
   errorText: {
-    color: '#fca5a5',
+    color: nativeTokens.colors.destructive,
     fontSize: 14,
   },
   captureBtn: {
-    backgroundColor: '#3b82f6',
+    backgroundColor: nativeTokens.colors.primary,
     borderRadius: 12,
     paddingVertical: 16,
     alignItems: 'center',
@@ -194,7 +203,7 @@ const s = StyleSheet.create({
     opacity: 0.6,
   },
   captureBtnText: {
-    color: '#fff',
+    color: nativeTokens.colors.primaryForeground,
     fontSize: 17,
     fontWeight: '600',
   },
@@ -203,7 +212,7 @@ const s = StyleSheet.create({
     alignItems: 'center',
   },
   skipBtnText: {
-    color: '#64748b',
+    color: nativeTokens.colors.mutedForeground,
     fontSize: 15,
   },
 });

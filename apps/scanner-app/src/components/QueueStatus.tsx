@@ -25,6 +25,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { scanQueue, syncManager } from '../lib/offline-queue';
 import { maintenanceQueue } from '../lib/maintenance-queue';
+import { nativeTokens } from '@gate-access/ui/tokens';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -162,7 +163,10 @@ export function QueueStatus({ visible, onClose }: QueueStatusProps) {
 
           {isLoading ? (
             <View style={s.loadingWrap}>
-              <ActivityIndicator size="large" color="#3b82f6" />
+              <ActivityIndicator
+                size="large"
+                color={nativeTokens.colors.primary}
+              />
               <Text style={s.loadingText}>Loading queue…</Text>
             </View>
           ) : (
@@ -175,14 +179,18 @@ export function QueueStatus({ visible, onClose }: QueueStatusProps) {
                 <StatCard
                   label="Scans"
                   value={stats.pendingScans}
-                  color="#3b82f6"
+                  color={nativeTokens.colors.primary}
                 />
                 <StatCard
                   label="Reports"
                   value={stats.pendingReports}
-                  color="#f59e0b"
+                  color={nativeTokens.colors.warning}
                 />
-                <StatCard label="Failed" value={stats.failed} color="#ef4444" />
+                <StatCard
+                  label="Failed"
+                  value={stats.failed}
+                  color={nativeTokens.colors.destructive}
+                />
               </View>
 
               {/* Last sync */}
@@ -217,7 +225,10 @@ export function QueueStatus({ visible, onClose }: QueueStatusProps) {
                 disabled={busy}
               >
                 {isSyncing ? (
-                  <ActivityIndicator size="small" color="#fff" />
+                  <ActivityIndicator
+                    size="small"
+                    color={nativeTokens.colors.primaryForeground}
+                  />
                 ) : (
                   <Text style={s.syncBtnText}>↑ Sync Now</Text>
                 )}
@@ -231,7 +242,10 @@ export function QueueStatus({ visible, onClose }: QueueStatusProps) {
                   disabled={busy}
                 >
                   {isClearing ? (
-                    <ActivityIndicator size="small" color="#ef4444" />
+                    <ActivityIndicator
+                      size="small"
+                      color={nativeTokens.colors.destructive}
+                    />
                   ) : (
                     <Text style={s.clearBtnText}>
                       ✕ Clear Failed ({stats.failed})
@@ -292,12 +306,12 @@ const s = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   sheet: {
-    backgroundColor: '#0f172a',
+    backgroundColor: nativeTokens.colors.neutral700,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     maxHeight: '80%',
     borderTopWidth: 1,
-    borderColor: '#1e293b',
+    borderColor: nativeTokens.colors.neutral700,
   },
   header: {
     flexDirection: 'row',
@@ -307,21 +321,21 @@ const s = StyleSheet.create({
     paddingTop: 20,
     paddingBottom: 14,
     borderBottomWidth: 1,
-    borderColor: '#1e293b',
+    borderColor: nativeTokens.colors.neutral700,
   },
   title: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#f1f5f9',
+    color: nativeTokens.colors.primaryForeground,
   },
   doneBtn: {
     paddingVertical: 6,
     paddingHorizontal: 14,
-    backgroundColor: '#1e293b',
+    backgroundColor: nativeTokens.colors.neutral700,
     borderRadius: 8,
   },
   doneBtnText: {
-    color: '#3b82f6',
+    color: nativeTokens.colors.primary,
     fontSize: 15,
     fontWeight: '600',
   },
@@ -335,7 +349,7 @@ const s = StyleSheet.create({
     gap: 16,
   },
   loadingText: {
-    color: '#64748b',
+    color: nativeTokens.colors.mutedForeground,
     fontSize: 14,
   },
   body: {
@@ -349,7 +363,7 @@ const s = StyleSheet.create({
   },
   statCard: {
     flex: 1,
-    backgroundColor: '#1e293b',
+    backgroundColor: nativeTokens.colors.neutral700,
     borderRadius: 12,
     borderWidth: 1,
     paddingVertical: 14,
@@ -362,16 +376,16 @@ const s = StyleSheet.create({
   },
   statLabel: {
     fontSize: 12,
-    color: '#64748b',
+    color: nativeTokens.colors.mutedForeground,
     fontWeight: '500',
   },
   syncTime: {
     fontSize: 13,
-    color: '#64748b',
+    color: nativeTokens.colors.mutedForeground,
     textAlign: 'center',
   },
   syncTimeValue: {
-    color: '#94a3b8',
+    color: nativeTokens.colors.mutedForeground,
     fontWeight: '500',
   },
   statusBox: {
@@ -393,19 +407,19 @@ const s = StyleSheet.create({
     textAlign: 'center',
   },
   statusTextOk: {
-    color: '#86efac',
+    color: nativeTokens.colors.success,
   },
   statusTextErr: {
-    color: '#fca5a5',
+    color: nativeTokens.colors.destructive,
   },
   syncBtn: {
-    backgroundColor: '#3b82f6',
+    backgroundColor: nativeTokens.colors.primary,
     borderRadius: 12,
     paddingVertical: 14,
     alignItems: 'center',
   },
   syncBtnText: {
-    color: '#fff',
+    color: nativeTokens.colors.primaryForeground,
     fontSize: 16,
     fontWeight: '600',
   },
@@ -418,7 +432,7 @@ const s = StyleSheet.create({
     alignItems: 'center',
   },
   clearBtnText: {
-    color: '#fca5a5',
+    color: nativeTokens.colors.destructive,
     fontSize: 15,
     fontWeight: '600',
   },
@@ -427,7 +441,7 @@ const s = StyleSheet.create({
   },
   note: {
     fontSize: 12,
-    color: '#475569',
+    color: nativeTokens.colors.mutedForeground,
     lineHeight: 18,
     textAlign: 'center',
   },

@@ -26,6 +26,7 @@ import {
 import * as SecureStore from 'expo-secure-store';
 import * as Haptics from 'expo-haptics';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { nativeTokens } from '@gate-access/ui/tokens';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -63,7 +64,9 @@ export function SupervisorOverride({
   const [attempts, setAttempts] = useState(0);
   const [error, setError] = useState('');
   const [isValidating, setIsValidating] = useState(false);
-  const [hasPinConfigured, setHasPinConfigured] = useState<boolean | null>(null);
+  const [hasPinConfigured, setHasPinConfigured] = useState<boolean | null>(
+    null
+  );
 
   // Check PIN provisioning state when modal opens
   useEffect(() => {
@@ -87,10 +90,15 @@ export function SupervisorOverride({
     onCancel();
   };
 
-  const logOverride = async (supervisorAuth: boolean, currentAttempts: number) => {
+  const logOverride = async (
+    supervisorAuth: boolean,
+    currentAttempts: number
+  ) => {
     try {
       const raw = await AsyncStorage.getItem(OVERRIDE_LOG_KEY);
-      const log: OverrideEvent[] = raw ? (JSON.parse(raw) as OverrideEvent[]) : [];
+      const log: OverrideEvent[] = raw
+        ? (JSON.parse(raw) as OverrideEvent[])
+        : [];
       log.push({
         id: `ovr_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`,
         timestamp: new Date().toISOString(),
@@ -198,8 +206,8 @@ export function SupervisorOverride({
             {/* Header */}
             <Text style={s.title}>Supervisor Override</Text>
             <Text style={s.sub}>
-              Grant access after a failed scan. Requires a reason and supervisor PIN.
-              All overrides are permanently logged.
+              Grant access after a failed scan. Requires a reason and supervisor
+              PIN. All overrides are permanently logged.
             </Text>
 
             {/* Reason field */}
@@ -212,7 +220,7 @@ export function SupervisorOverride({
                 setError('');
               }}
               placeholder="e.g. Emergency access — ID verified manually"
-              placeholderTextColor="#475569"
+              placeholderTextColor={nativeTokens.colors.mutedForeground}
               multiline
               maxLength={200}
               returnKeyType="done"
@@ -255,10 +263,16 @@ export function SupervisorOverride({
                           disabled={isValidating}
                         >
                           {key === '✓' && isValidating ? (
-                            <ActivityIndicator size="small" color="#fff" />
+                            <ActivityIndicator
+                              size="small"
+                              color={nativeTokens.colors.primaryForeground}
+                            />
                           ) : (
                             <Text
-                              style={[s.padKeyText, key === '✓' && s.padConfirmText]}
+                              style={[
+                                s.padKeyText,
+                                key === '✓' && s.padConfirmText,
+                              ]}
                             >
                               {key}
                             </Text>
@@ -276,7 +290,8 @@ export function SupervisorOverride({
               <View style={s.noPinBox}>
                 <Text style={s.noPinText}>
                   ⚠ No supervisor PIN is configured on this device. Contact your
-                  administrator to provision one. You may only force-override below.
+                  administrator to provision one. You may only force-override
+                  below.
                 </Text>
               </View>
             )}
@@ -287,7 +302,9 @@ export function SupervisorOverride({
             {/* Force override (after 3 failed attempts OR no PIN configured) */}
             {(exhausted || noPinSetup) && (
               <Pressable style={s.forceBtn} onPress={handleForceOverride}>
-                <Text style={s.forceBtnText}>⚠ Override with Warning (logged)</Text>
+                <Text style={s.forceBtnText}>
+                  ⚠ Override with Warning (logged)
+                </Text>
               </Pressable>
             )}
 
@@ -307,7 +324,9 @@ export function SupervisorOverride({
 async function haptic(type: Haptics.NotificationFeedbackType): Promise<void> {
   try {
     await Haptics.notificationAsync(type);
-  } catch { /* simulators */ }
+  } catch {
+    /* simulators */
+  }
 }
 
 // ─── Styles ───────────────────────────────────────────────────────────────────
@@ -319,12 +338,12 @@ const s = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   sheet: {
-    backgroundColor: '#0f172a',
+    backgroundColor: nativeTokens.colors.neutral700,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     maxHeight: '92%',
     borderTopWidth: 1,
-    borderColor: '#1e293b',
+    borderColor: nativeTokens.colors.neutral700,
   },
   scrollContent: {
     padding: 24,
@@ -333,30 +352,30 @@ const s = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#f1f5f9',
+    color: nativeTokens.colors.primaryForeground,
     marginBottom: 8,
   },
   sub: {
     fontSize: 14,
-    color: '#94a3b8',
+    color: nativeTokens.colors.mutedForeground,
     lineHeight: 20,
     marginBottom: 20,
   },
   label: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#94a3b8',
+    color: nativeTokens.colors.mutedForeground,
     marginBottom: 8,
   },
   reasonInput: {
-    backgroundColor: '#1e293b',
+    backgroundColor: nativeTokens.colors.neutral700,
     borderWidth: 1,
-    borderColor: '#334155',
+    borderColor: nativeTokens.colors.neutral500,
     borderRadius: 12,
     paddingVertical: 12,
     paddingHorizontal: 14,
     fontSize: 15,
-    color: '#f1f5f9',
+    color: nativeTokens.colors.primaryForeground,
     minHeight: 72,
     textAlignVertical: 'top',
     marginBottom: 20,
@@ -372,15 +391,15 @@ const s = StyleSheet.create({
     height: 14,
     borderRadius: 7,
     borderWidth: 1.5,
-    borderColor: '#475569',
+    borderColor: nativeTokens.colors.mutedForeground,
     backgroundColor: 'transparent',
   },
   dotFilled: {
-    backgroundColor: '#3b82f6',
-    borderColor: '#3b82f6',
+    backgroundColor: nativeTokens.colors.primary,
+    borderColor: nativeTokens.colors.primary,
   },
   dotOptional: {
-    borderColor: '#334155',
+    borderColor: nativeTokens.colors.neutral500,
     opacity: 0.5,
   },
   pad: {
@@ -395,23 +414,23 @@ const s = StyleSheet.create({
   padKey: {
     width: 76,
     height: 56,
-    backgroundColor: '#1e293b',
+    backgroundColor: nativeTokens.colors.neutral700,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#334155',
+    borderColor: nativeTokens.colors.neutral500,
     alignItems: 'center',
     justifyContent: 'center',
   },
   padConfirm: {
-    backgroundColor: '#3b82f6',
-    borderColor: '#3b82f6',
+    backgroundColor: nativeTokens.colors.primary,
+    borderColor: nativeTokens.colors.primary,
   },
   padKeyPressed: {
     opacity: 0.6,
   },
   padKeyText: {
     fontSize: 22,
-    color: '#f1f5f9',
+    color: nativeTokens.colors.primaryForeground,
     fontWeight: '500',
   },
   padConfirmText: {
@@ -427,12 +446,12 @@ const s = StyleSheet.create({
     marginBottom: 16,
   },
   noPinText: {
-    color: '#fde68a',
+    color: nativeTokens.colors.warning,
     fontSize: 14,
     lineHeight: 20,
   },
   error: {
-    color: '#fca5a5',
+    color: nativeTokens.colors.destructive,
     fontSize: 14,
     textAlign: 'center',
     marginBottom: 12,
@@ -448,7 +467,7 @@ const s = StyleSheet.create({
     marginBottom: 10,
   },
   forceBtnText: {
-    color: '#fca5a5',
+    color: nativeTokens.colors.destructive,
     fontSize: 15,
     fontWeight: '600',
   },
@@ -457,7 +476,7 @@ const s = StyleSheet.create({
     alignItems: 'center',
   },
   cancelText: {
-    color: '#64748b',
+    color: nativeTokens.colors.mutedForeground,
     fontSize: 15,
     fontWeight: '500',
   },

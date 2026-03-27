@@ -833,7 +833,7 @@ function MobileSidebar({
           <ScrollArea className="flex-1 py-4">
             <nav className="flex flex-col gap-8 py-4 px-3">
               <div className="flex flex-col gap-1.5">
-                <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[#6B778C] mb-2">
+                <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[var(--ds-text-subtle)] mb-2">
                   {t('sidebar.groupMain', 'Main')}
                 </p>
                 <NavItem
@@ -849,7 +849,7 @@ function MobileSidebar({
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[#6B778C] mb-2">
+                <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[var(--ds-text-subtle)] mb-2">
                   {t('sidebar.groupResidents', 'Residents')}
                 </p>
                 {RESIDENTS_ITEMS.map((item) => (
@@ -863,7 +863,7 @@ function MobileSidebar({
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[#6B778C] mb-2">
+                <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[var(--ds-text-subtle)] mb-2">
                   {t('sidebar.groupAccess', 'Access')}
                 </p>
                 {NAV_ITEMS.filter(

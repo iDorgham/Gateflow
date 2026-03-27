@@ -70,8 +70,7 @@ export function WorkspaceSettingsForm({
       name: initialData?.name || '',
       adminEmail: initialData?.adminEmail || '',
       accentColor:
-        initialData?.accentColor ||
-        token('color.background.brand.bold', '#0C66E4'),
+        initialData?.accentColor || token('color.background.brand.bold'),
       retentionDays: initialData?.retentionDays || 365,
     },
   });

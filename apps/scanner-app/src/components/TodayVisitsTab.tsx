@@ -33,19 +33,19 @@ const STATUS_CONFIG: Record<
   pending: {
     label: 'Pending',
     bg: 'rgba(59,130,246,0.18)',
-    text: '#60a5fa',
+    text: 'var(--ds-text-information)',
     icon: '⏳',
   },
   used: {
     label: 'Used',
     bg: 'rgba(22,163,74,0.18)',
-    text: '#4ade80',
+    text: 'var(--ds-text-success)',
     icon: '✓',
   },
   expired: {
     label: 'Expired',
     bg: 'rgba(100,116,139,0.22)',
-    text: '#94a3b8',
+    text: 'var(--ds-text-subtlest)',
     icon: '✗',
   },
 };
@@ -184,7 +184,7 @@ export function TodayVisitsTab() {
 
       {loading ? (
         <View style={s.center}>
-          <ActivityIndicator size="large" color="#3b82f6" />
+          <ActivityIndicator size="large" color="var(--ds-text-information)" />
         </View>
       ) : visits.length === 0 ? (
         <EmptyState />
@@ -198,8 +198,8 @@ export function TodayVisitsTab() {
             <RefreshControl
               refreshing={refreshing}
               onRefresh={() => load(true)}
-              tintColor="#3b82f6"
-              colors={['#3b82f6']}
+              tintColor="var(--ds-text-information)"
+              colors={['var(--ds-text-information)']}
             />
           }
           renderItem={({ item }) => <VisitItem item={item} />}
@@ -213,7 +213,7 @@ export function TodayVisitsTab() {
 const s = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: 'var(--ds-background-neutral)',
     paddingTop: TOP_OFFSET,
   },
   header: {
@@ -223,16 +223,16 @@ const s = StyleSheet.create({
     paddingHorizontal: 24,
     paddingBottom: 16,
     borderBottomWidth: 1,
-    borderColor: '#1e293b',
+    borderColor: 'var(--ds-border)',
   },
   title: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#f1f5f9',
+    color: 'var(--ds-text-inverse)',
   },
   subtitle: {
     fontSize: 13,
-    color: '#475569',
+    color: 'var(--ds-text-subtle)',
     fontWeight: '500',
   },
   center: {
@@ -248,12 +248,12 @@ const s = StyleSheet.create({
   emptyTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#e2e8f0',
+    color: 'var(--ds-text-subtle)',
     textAlign: 'center',
   },
   emptySub: {
     fontSize: 14,
-    color: '#64748b',
+    color: 'var(--ds-text-subtle)',
     textAlign: 'center',
     lineHeight: 20,
     maxWidth: 260,
@@ -271,7 +271,7 @@ const s = StyleSheet.create({
     paddingVertical: 12,
     gap: 12,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderColor: '#1e293b',
+    borderColor: 'var(--ds-border)',
   },
   badge: {
     flexDirection: 'row',
@@ -299,15 +299,15 @@ const s = StyleSheet.create({
   visitorName: {
     fontSize: 15,
     fontWeight: '600',
-    color: '#e2e8f0',
+    color: 'var(--ds-text-subtle)',
   },
   gateName: {
     fontSize: 12,
-    color: '#64748b',
+    color: 'var(--ds-text-subtle)',
   },
   time: {
     fontSize: 12,
-    color: '#475569',
+    color: 'var(--ds-text-subtle)',
   },
   actionButton: {
     backgroundColor: 'rgba(59,130,246,0.18)',
@@ -320,6 +320,6 @@ const s = StyleSheet.create({
   actionText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#60a5fa',
+    color: 'var(--ds-text-information)',
   },
 });

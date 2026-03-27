@@ -9,6 +9,7 @@ import {
   Text,
   View,
 } from 'react-native';
+import { nativeTokens } from '@gate-access/ui/tokens';
 import {
   getHistory,
   type HistoryEntry,
@@ -27,25 +28,25 @@ const OUTCOME_CONFIG: Record<
   pass: {
     label: 'Pass',
     bg: 'rgba(22,163,74,0.18)',
-    text: '#4ade80',
+    text: nativeTokens.colors.success,
     icon: '✓',
   },
   deny: {
     label: 'Deny',
     bg: 'rgba(220,38,38,0.18)',
-    text: '#f87171',
+    text: nativeTokens.colors.destructive,
     icon: '✗',
   },
   offline: {
     label: 'Offline',
     bg: 'rgba(245,158,11,0.18)',
-    text: '#fbbf24',
+    text: nativeTokens.colors.warning,
     icon: '⚡',
   },
   rejected: {
     label: 'Rejected',
     bg: 'rgba(100,116,139,0.22)',
-    text: '#94a3b8',
+    text: nativeTokens.colors.mutedForeground,
     icon: '✗',
   },
 };
@@ -181,7 +182,7 @@ export function LogTab() {
 
       {loading ? (
         <View style={s.center}>
-          <ActivityIndicator size="large" color="#3b82f6" />
+          <ActivityIndicator size="large" color={nativeTokens.colors.primary} />
         </View>
       ) : entries.length === 0 ? (
         <View style={s.center}>
@@ -201,8 +202,8 @@ export function LogTab() {
             <RefreshControl
               refreshing={refreshing}
               onRefresh={() => load(true)}
-              tintColor="#3b82f6"
-              colors={['#3b82f6']}
+              tintColor={nativeTokens.colors.primary}
+              colors={[nativeTokens.colors.primary]}
             />
           }
           renderItem={({ item: row }) => {
@@ -222,7 +223,7 @@ export function LogTab() {
 const s = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: nativeTokens.colors.neutral800,
     paddingTop: TOP_OFFSET,
   },
   header: {
@@ -232,16 +233,16 @@ const s = StyleSheet.create({
     paddingHorizontal: 24,
     paddingBottom: 16,
     borderBottomWidth: 1,
-    borderColor: '#1e293b',
+    borderColor: nativeTokens.colors.neutral700,
   },
   title: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#f1f5f9',
+    color: nativeTokens.colors.primaryForeground,
   },
   count: {
     fontSize: 13,
-    color: '#475569',
+    color: nativeTokens.colors.mutedForeground,
     fontWeight: '500',
   },
   center: {
@@ -257,12 +258,12 @@ const s = StyleSheet.create({
   emptyTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#e2e8f0',
+    color: nativeTokens.colors.neutral30,
     textAlign: 'center',
   },
   emptySub: {
     fontSize: 14,
-    color: '#64748b',
+    color: nativeTokens.colors.mutedForeground,
     textAlign: 'center',
     lineHeight: 20,
     maxWidth: 260,
@@ -280,7 +281,7 @@ const s = StyleSheet.create({
   dayLabel: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#475569',
+    color: nativeTokens.colors.mutedForeground,
     letterSpacing: 0.5,
     textTransform: 'uppercase',
   },
@@ -293,7 +294,7 @@ const s = StyleSheet.create({
     paddingVertical: 12,
     gap: 12,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderColor: '#1e293b',
+    borderColor: nativeTokens.colors.neutral700,
   },
   badge: {
     flexDirection: 'row',
@@ -321,20 +322,20 @@ const s = StyleSheet.create({
   qrText: {
     fontFamily: Platform.OS === 'ios' ? 'Courier New' : 'monospace',
     fontSize: 12,
-    color: '#94a3b8',
+    color: nativeTokens.colors.mutedForeground,
   },
   gateName: {
     fontSize: 12,
-    color: '#64748b',
+    color: nativeTokens.colors.mutedForeground,
   },
   message: {
     fontSize: 11,
-    color: '#475569',
+    color: nativeTokens.colors.mutedForeground,
     fontStyle: 'italic',
   },
   time: {
     fontSize: 12,
-    color: '#475569',
+    color: nativeTokens.colors.mutedForeground,
     fontVariant: ['tabular-nums'],
   },
 });

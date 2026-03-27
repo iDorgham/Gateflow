@@ -187,7 +187,7 @@ export function ChatTab() {
 
       {loading ? (
         <View style={s.center}>
-          <ActivityIndicator size="large" color="#3b82f6" />
+          <ActivityIndicator size="large" color="var(--ds-text-information)" />
         </View>
       ) : messages.length === 0 ? (
         <View style={s.content}>
@@ -214,7 +214,7 @@ export function ChatTab() {
           value={inputText}
           onChangeText={setInputText}
           placeholder="Type a message..."
-          placeholderTextColor="#475569"
+          placeholderTextColor="var(--ds-text-subtle)"
           multiline
           maxLength={1000}
           editable={!sending}
@@ -228,7 +228,7 @@ export function ChatTab() {
           disabled={!inputText.trim() || sending}
         >
           {sending ? (
-            <ActivityIndicator size="small" color="#fff" />
+            <ActivityIndicator size="small" color="var(--ds-text-inverse)" />
           ) : (
             <Text style={s.sendButtonText}>Send</Text>
           )}
@@ -242,7 +242,7 @@ export function ChatTab() {
 const s = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: 'var(--ds-background-neutral)',
     paddingTop: TOP_OFFSET,
   },
   header: {
@@ -252,16 +252,16 @@ const s = StyleSheet.create({
     paddingHorizontal: 24,
     paddingBottom: 16,
     borderBottomWidth: 1,
-    borderColor: '#1e293b',
+    borderColor: 'var(--ds-border)',
   },
   title: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#f1f5f9',
+    color: 'var(--ds-text-inverse)',
   },
   subtitle: {
     fontSize: 13,
-    color: '#475569',
+    color: 'var(--ds-text-subtle)',
     fontWeight: '500',
   },
   center: {
@@ -280,12 +280,12 @@ const s = StyleSheet.create({
   emptyTitle: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#e2e8f0',
+    color: 'var(--ds-text-subtle)',
     textAlign: 'center',
   },
   emptySub: {
     fontSize: 14,
-    color: '#64748b',
+    color: 'var(--ds-text-subtle)',
     textAlign: 'center',
     lineHeight: 20,
     maxWidth: 260,
@@ -312,7 +312,7 @@ const s = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#334155',
+    backgroundColor: 'var(--ds-border)',
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 8,
@@ -320,7 +320,7 @@ const s = StyleSheet.create({
   avatarText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#94a3b8',
+    color: 'var(--ds-text-subtlest)',
   },
   messageBubble: {
     borderRadius: 16,
@@ -329,17 +329,17 @@ const s = StyleSheet.create({
     maxWidth: '100%',
   },
   ownBubble: {
-    backgroundColor: '#3b82f6',
+    backgroundColor: 'var(--ds-text-information)',
     borderBottomRightRadius: 4,
   },
   otherBubble: {
-    backgroundColor: '#1e293b',
+    backgroundColor: 'var(--ds-background-neutral)',
     borderBottomLeftRadius: 4,
   },
   senderName: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#64748b',
+    color: 'var(--ds-text-subtle)',
     marginBottom: 2,
   },
   messageText: {
@@ -347,10 +347,10 @@ const s = StyleSheet.create({
     lineHeight: 20,
   },
   ownText: {
-    color: '#fff',
+    color: 'var(--ds-text-inverse)',
   },
   otherText: {
-    color: '#e2e8f0',
+    color: 'var(--ds-text-subtle)',
   },
   timestamp: {
     fontSize: 10,
@@ -361,7 +361,7 @@ const s = StyleSheet.create({
     textAlign: 'right',
   },
   otherTimestamp: {
-    color: '#475569',
+    color: 'var(--ds-text-subtle)',
   },
 
   // Input
@@ -372,23 +372,23 @@ const s = StyleSheet.create({
     paddingVertical: 12,
     gap: 8,
     borderTopWidth: 1,
-    borderColor: '#1e293b',
-    backgroundColor: '#0f172a',
+    borderColor: 'var(--ds-border)',
+    backgroundColor: 'var(--ds-background-neutral)',
   },
   input: {
     flex: 1,
-    backgroundColor: '#1e293b',
+    backgroundColor: 'var(--ds-background-neutral)',
     borderRadius: 20,
     paddingHorizontal: 16,
     paddingVertical: 10,
     fontSize: 15,
-    color: '#f1f5f9',
+    color: 'var(--ds-text-inverse)',
     maxHeight: 100,
     borderWidth: 1,
-    borderColor: '#334155',
+    borderColor: 'var(--ds-border)',
   },
   sendButton: {
-    backgroundColor: '#3b82f6',
+    backgroundColor: 'var(--ds-text-information)',
     borderRadius: 20,
     paddingHorizontal: 20,
     paddingVertical: 10,
@@ -400,7 +400,7 @@ const s = StyleSheet.create({
     opacity: 0.5,
   },
   sendButtonText: {
-    color: '#fff',
+    color: 'var(--ds-text-inverse)',
     fontSize: 15,
     fontWeight: '600',
   },

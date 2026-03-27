@@ -8,15 +8,23 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ## [Unreleased]
 
-_(next release notes go here)_
+### Workspace
 
-### Security
+- **[Workspace Docs]** split documentation into Workspace, AI Tools, and Apps tracks.
+- **[Workspace]** add dedicated workspace documentation hub under `docs/workspace/`.
+- **[Workspace Version]** establish independent workspace version tracking alongside app versions.
+- **[GitHub Security Hardening]** started development of GitHub hardening workflow and policy updates.
 
-- **[Repo]** enable security policy, dependabot, and codeql analysis
+### AI Tools
 
-### Maintenance
+- **[AI SDK v6]** continue migration to `ai@6` / `@ai-sdk/react@3` in dashboard assistants.
+- **[AI Tools Docs]** separate AI tooling updates from app delivery updates.
+- **[AI SDK v6 Migration]** started implementation of the AI SDK v6 migration initiative.
 
-- **[Github Security Hardening] **Started development of Github Security Hardening
+### Apps
+
+- **[Maintenance]** continue maintenance management rollout across dashboards.
+- **[Apps Version]** keep app release cadence independent from workspace/tooling cadence.
 
 ---
 
@@ -24,69 +32,65 @@ _(next release notes go here)_
 
 ### Features
 
-- **[Maintenance] **starting phase 3 - Maintenance Hub UI
+- **[Ai] **fix server-side message conversion for AI SDK v6 (phase 4)
+- **[Ai] **migrate to AI SDK v6 + @ai-sdk/google v3 (phases 1 & 2)
 
-- **[Maintenance] **baseline sync and starting phase 2
-- **[Maintenance] **baseline phase 1 and start phase 2
+- **[Maintenance]** starting phase 3 - Maintenance Hub UI
 
-- **[Db] **add maintenance hub work order models
+- **[Maintenance]** baseline sync and starting phase 2
+- **[Maintenance]** baseline phase 1 and start phase 2
 
-- **[Maintenance Management] **start phase 1 implementation
+- **[DB]** add maintenance hub work order models
 
-- **[Maintenance Management] **finalize phased planning and pro-prompts
+- **[Maintenance Management]** start phase 1 implementation
 
-- **[Maintenance Management] **initialize maintenance hub initiative
+- **[Maintenance Management]** finalize phased planning and pro-prompts
 
-- **[Maintenance Management] **initialize maintenance hub initiative
+- **[Maintenance Management]** initialize maintenance hub initiative
 
-- **[Pagespeed 100] **complete phase 5 - final audit & certification
+- **[PageSpeed 100]** complete phase 5 - final audit & certification
 
-- **[Security] **complete github hardening and fix design violations
+- **[Security]** complete GitHub hardening and fix design violations
 
-- **[Github Security Hardening] **complete phase 1
-- **[Github Security Hardening] **complete phase 1
+- **[GitHub Security Hardening]** complete phase 1
 
-- **[Crm] **certify and finalize projects_crm v2.0 initiative
+- **[CRM]** certify and finalize projects_crm v2.0 initiative
 
-- **[Ui] **refine dark mode borders and language switcher alignment
+- **[UI]** refine dark mode borders and language switcher alignment
 
-- **[Ui] **relocate team chat to right panel and move collapse button to footer
+- **[UI]** relocate team chat to right panel and move collapse button to footer
 
-- **[Ui] **relocate team chat to right panel and move collapse button to footer
+- **[Security]** certify 100% multi-tenant isolation (Phase 7)
 
-- **[Security] **certify 100% multi-tenant isolation (Phase 7)
+- **[Projects CRM]** complete phase 5 operations polish & audit
 
-- **[Projects Crm] **complete phase 5 operations polish & audit
+- **[CRM]** phase 3 - visitor watchlist status and security alerts
+- **[Projects CRM]** implement phase 2 - invitation gateway and UI
 
-- **[Crm] **phase 3 - visitor watchlist status and security alerts
-- **[Projects Crm] **implement phase 2 - invitation gateway and UI
+- **[CRM]** update plan for schema and fix assistant route lint
 
-- **[Crm] **update plan for schema and fix assistant route lint
+- **[CRM]** 5-phase execution roadmap for projects_crm v2.0
 
-- **[Crm] **5-phase execution roadmap for projects_crm v2.0
+- **[CRM]** initialize projects_crm v2.0 planning
 
-- **[Crm] **initialize projects_crm v2.0 planning
+- **[Perf]** phase 5 live audit + manifest fix + ADS token cleanup + AI SDK security patch
 
-- **[Perf] **phase 5 live audit + manifest fix + ADS token cleanup + ai-sdk security patch
+- **[AI]** add AI SDK v6 migration initiative to backlog
 
-- **[Ai] **add AI SDK v6 migration initiative to backlog
+- **[Security Isolation Fix]** complete phase 6 - gate-assignment management UI
 
-- **[Security Isolation Fix] **complete phase 6 - gate-assignment management UI
+- **[Security Isolation Fix]** complete phase 5 - automated enforcement & certification
 
-- **[Security Isolation Fix] **complete phase 5 - automated enforcement & certification
+- **[Marketing]** update marketing site and UI component library
 
-- **[Security Isolation Fix] **complete phase 5 - automated enforcement & certification
+- **[AI]** add response format rule, slim AI workflow rule, add ralph to all tools
+- **[Dev]** add persistent memory and progressive disclosure to dev workflow
 
-- **[Marketing] **update marketing site and UI component library
+- **[Plan]** structured plan folders, phase parts, and 2-tool selection
 
-- **[Ai] **add response format rule, slim AI workflow rule, add ralph to all tools
-- **[Dev] **add persistent memory and progressive disclosure to dev workflow
+- **[UI]** automate UI/UX Pro Max skill across plan/dev workflows
 
-- **[Plan] **structured plan folders, phase parts, and 2-tool selection
-
-- **[Ui] **automate UI/UX Pro Max skill across plan/dev workflows
-
-- **[Ui] **install UI/UX Pro Max skill and sync across assistants
+- **[UI]** install UI/UX Pro Max skill and sync across assistants
 
 - **[Resident-Mobile]** finalize phase 5 - i18n, GateAI pre-clearance, and security
   audit
@@ -131,74 +135,72 @@ plan:run → plan:done` with automatic folder moves and doc cascades
 
 ### Performance
 
-- **[Marketing] **implement Partytown for Meta Pixel and GA4 to reduce TBT
+- **[Marketing]** implement Partytown for Meta Pixel and GA4 to reduce TBT
 
-- **[Pagespeed 100] **complete phase 5 - Lighthouse CI certification infra ready
-
-- **[Pagespeed 100] **complete phase 5 - Lighthouse CI certification infra ready
+- **[PageSpeed 100]** complete phase 5 - Lighthouse CI certification infra ready
 
 - **[Cert]** phase 5 certification infra — regression guide + final LHCI thresholds
 
 - **[Assets]** font display:swap + image allowlist + avif/webp + dvh + preconnect — phase 2
-- **[Ci]** establish lighthouse ci pipeline and performance baseline — phase 1
+- **[CI]** establish lighthouse ci pipeline and performance baseline — phase 1
 
 ### Bug Fixes
 
-- **[Admin] **simplify AI assistant tools to native objects for SDK v5 typing
+- **[Admin]** simplify AI assistant tools to native objects for SDK v5 typing
 
-- **[Admin] **targeted @ts-expect-error for AI assistant tools
+- **[Admin]** targeted @ts-expect-error for AI assistant tools
 
-- **[Admin] **use @ts-expect-error instead of @ts-ignore per ESLint
+- **[Admin]** use @ts-expect-error instead of @ts-ignore per ESLint
 
-- **[Admin] **finalize AI assistant tools type bypass via variable isolation
+- **[Admin]** finalize AI assistant tools type bypass via variable isolation
 
-- **[Admin] **restore as any for individual tools to bypass tsc
+- **[Admin]** restore as any for individual tools to bypass tsc
 
-- **[Admin] **bypass strict type check for ai assistant tools
+- **[Admin]** bypass strict type check for AI assistant tools
 
-- **[Ai] **migrate AI SDK v4 → v5 type incompatibilities
+- **[AI]** migrate AI SDK v4 → v5 type incompatibilities
 
-- **[Deps] **solve Recharts 3.x tooltip formatter type errors
+- **[Deps]** solve Recharts 3.x tooltip formatter type errors
 
-- **[Db] **comment out directUrl to prevent CI validation errors
+- **[DB]** comment out directUrl to prevent CI validation errors
 
-- **[Security] **mark global maintenance queries with ignore-security-guard
+- **[Security]** mark global maintenance queries with ignore-security-guard
 
-- **[Security] **phase 4 — analytics export & incidents org isolation confirmed
+- **[Security]** phase 4 — analytics export & incidents org isolation confirmed
 
-- **[Security] **phase 3 — QR codes & workspace exports org isolation
+- **[Security]** phase 3 — QR codes & workspace exports org isolation
 
-- **[Security] **phase 2 — CRM contacts & units org isolation confirmed
-- **[Security] **phase 1 — gates & scans org isolation hardening
+- **[Security]** phase 2 — CRM contacts & units org isolation confirmed
+- **[Security]** phase 1 — gates & scans org isolation hardening
 
-- **[Security] **add organizationId scoping to contactUnit.findMany
+- **[Security]** add organizationId scoping to contactUnit.findMany
 
-- **[Crm] **replace hardcoded hex colors with ADS tokens
+- **[CRM]** replace hardcoded hex colors with ADS tokens
 
-- **[Client] **pin react-hook-form to packages/ui instance to fix dual-version conflict
-- **[Client] **add react paths to tsconfig for @types/react module identity
-- **[Typecheck] **resolve React 19 module identity and ref-as-prop issues in admin-dashboard
-- **[Ui] **double-cast LucideIcon and props to satisfy resident-mobile strict typecheck
+- **[Client]** pin react-hook-form to packages/ui instance to fix dual-version conflict
+- **[Client]** add react paths to tsconfig for @types/react module identity
+- **[Typecheck]** resolve React 19 module identity and ref-as-prop issues in admin-dashboard
+- **[UI]** double-cast LucideIcon and props to satisfy resident-mobile strict typecheck
 
-- **[Ui] **resolve @types/react version mismatch in loading-spinner and pagination
+- **[UI]** resolve @types/react version mismatch in loading-spinner and pagination
 
-- **[Ci] **fix zod-to-json-schema webpack error by raising zod to 3.25.76; fix Next.js 15 type errors (async cookies and params) in all apps
-- **[Deps] **pin ai@4, zod@3.23.8 workspace override; fix ai/react types and bulk-scan compat
-- **[Security] **resolve CodeQL ReDoS/Injection alerts and transitive vulnerabilities
+- **[CI]** fix zod-to-json-schema webpack error by raising zod to 3.25.76; fix Next.js 15 type errors (async cookies and params) in all apps
+- **[Deps]** pin ai@4, zod@3.23.8 workspace override; fix ai/react types and bulk-scan compat
+- **[Security]** resolve CodeQL ReDoS/Injection alerts and transitive vulnerabilities
 
-- **[Build] **resolve next.js type error and align node engine versions
+- **[Build]** resolve Next.js type error and align node engine versions
 
-- **[Db]** add automated prisma migrate deploy to CI and fix schema drift
+- **[DB]** add automated prisma migrate deploy to CI and fix schema drift
 
-- **[Db]** add missing nanoid dependency for qr queries
-- **[Ci]** update Node.js to 22 and opt into Node.js 24 for all workflows
+- **[DB]** add missing nanoid dependency for qr queries
+- **[CI]** update Node.js to 22 and opt into Node.js 24 for all workflows
 
 ---
 
 - **[Security]** implement hmac-sha256 signature utility for invites
-- **[Pagespeed]** complete phase 4 - virtualization & bundle optimization
-- **[Pagespeed 100]** optimize analytics bundle with dynamic chart imports
-- **[Pagespeed 100]** complete phase 3 - server-side streaming & suspense
+- **[PageSpeed]** complete phase 4 - virtualization & bundle optimization
+- **[PageSpeed 100]** optimize analytics bundle with dynamic chart imports
+- **[PageSpeed 100]** complete phase 3 - server-side streaming & suspense
 - **[Tools]** doc automation — changelog, versioning, PRD, organize
 - **[Tools]** plan lifecycle automation + phase runner
 - Initial production release of GateFlow v0.1.0
@@ -206,26 +208,6 @@ plan:run → plan:done` with automatic folder moves and doc cascades
 - HMAC-SHA256 QR signing + offline-first scanner architecture
 - Multi-tenant Prisma middleware with org-scoped isolation
 
-- **[Resident-Mobile]** finalize phase 5 - i18n, GateAI pre-clearance, and security
-  audit
-- **[Resident-Mobile]** complete one-tap invite initiative (phases 1-5)
-- **[Resident Mobile One Tap]** add recent guests to express invite ui
-- **[Resident Mobile One Tap]** implement phase 3 - express invite ui
-- **[Resident Mobile One Tap]** implement phase 2 - express invite api
-- **[Security]** implement hmac-sha256 signature utility for invites
-
-- **[Pagespeed] **complete phase 4 - virtualization & bundle optimization
-
-- **[Pagespeed 100] **optimize analytics bundle with dynamic chart imports
-
-- **[Pagespeed 100] **complete phase 3 - server-side streaming & suspense
-
-- **[Tools] **doc automation — changelog, versioning, PRD, organize
-- **[Tools] **plan lifecycle automation + phase runner
-- Initial production release of GateFlow v0.1.0
-- 6-app monorepo: client-dashboard, admin-dashboard, scanner-app, resident-mobile, resident-portal, marketing
-- HMAC-SHA256 QR signing + offline-first scanner architecture
-- Multi-tenant Prisma middleware with org-scoped isolation
 - Atlassian Design System tokens + full AR/EN RTL support
 - GateAI intelligent operations assistant
 - Projects CRM: contacts, units, live logs, team management

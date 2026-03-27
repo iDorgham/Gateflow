@@ -9,7 +9,7 @@ import { updateWorkOrderSchema, BUILT_IN_ROLES } from '@gate-access/types';
  */
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  props: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
   try {
     const claims = await getSessionClaims();
@@ -20,7 +20,8 @@ export async function GET(
       );
     }
 
-    const { id } = await params;
+    const params = await props.params;
+    const { id } = params;
     const workOrder = await WorkOrderService.getById(claims.orgId, id);
 
     if (!workOrder) {
@@ -60,7 +61,7 @@ export async function GET(
  */
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  props: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
   try {
     const claims = await getSessionClaims();
@@ -71,7 +72,8 @@ export async function PATCH(
       );
     }
 
-    const { id } = await params;
+    const params = await props.params;
+    const { id } = params;
     const body = await request.json();
     const parsed = updateWorkOrderSchema.safeParse(body);
 
@@ -120,7 +122,7 @@ export async function PATCH(
  */
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  props: { params: Promise<{ id: string }> }
 ): Promise<NextResponse> {
   try {
     const claims = await getSessionClaims();
@@ -142,7 +144,8 @@ export async function DELETE(
       );
     }
 
-    const { id } = await params;
+    const params = await props.params;
+    const { id } = params;
     await WorkOrderService.delete(claims.orgId, id);
 
     return NextResponse.json({

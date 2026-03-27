@@ -62,17 +62,12 @@ export class WorkOrderService {
     const { page = 1, limit = 20, ...filters } = query;
     const skip = (page - 1) * limit;
 
-    const where: any = {
-      organizationId,
-      deletedAt: null,
-      ...filters,
-    };
-
     // If reporterId or assigneeId are in filters, they are handled by spread
 
     const [items, total] = await Promise.all([
       prisma.workOrder.findMany({
-        where,
+        // Force tenant scope + soft-delete filter to be un-overridable by query filters.
+        where: { ...filters, organizationId, deletedAt: null },
         skip,
         take: limit,
         orderBy: { createdAt: 'desc' },
@@ -88,7 +83,9 @@ export class WorkOrderService {
           project: { select: { id: true, name: true } },
         },
       }),
-      prisma.workOrder.count({ where }),
+      prisma.workOrder.count({
+        where: { ...filters, organizationId, deletedAt: null },
+      }),
     ]);
 
     return {

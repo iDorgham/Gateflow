@@ -884,3 +884,7 @@ _Next review: after v0.2.0 planning is complete._
 ### Github Security Hardening
 
 **Status:** In Progress | Last updated: 2026-03-26
+
+### Ai Sdk V6 Migration
+
+**Status:** In Progress | Last updated: 2026-03-27

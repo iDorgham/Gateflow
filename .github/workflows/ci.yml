@@ -104,6 +104,9 @@ jobs:
       - name: Lint
         run: pnpm turbo lint
 
+      - name: Changelog structure check
+        run: pnpm docs:changelog:check
+
   # ── 3. Security Scan ──────────────────────────────────────────────────────
   security:
     name: Security Scan

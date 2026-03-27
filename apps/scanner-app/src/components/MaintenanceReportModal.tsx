@@ -121,7 +121,9 @@ export function MaintenanceReportModal({
                   <Icon
                     size={20}
                     color={
-                      active ? '#fff' : nativeTokens.colors.mutedForeground
+                      active
+                        ? nativeTokens.colors.primaryForeground
+                        : nativeTokens.colors.mutedForeground
                     }
                   />
                   <Text
@@ -140,7 +142,7 @@ export function MaintenanceReportModal({
             value={title}
             onChangeText={setTitle}
             placeholder="e.g., Gate won't open, Scanner blurry"
-            placeholderTextColor="#475569"
+            placeholderTextColor={nativeTokens.colors.mutedForeground}
             autoFocus
           />
 
@@ -150,7 +152,7 @@ export function MaintenanceReportModal({
             value={description}
             onChangeText={setDescription}
             placeholder="Provide more details if needed..."
-            placeholderTextColor="#475569"
+            placeholderTextColor={nativeTokens.colors.mutedForeground}
             multiline
             numberOfLines={3}
           />
@@ -162,7 +164,10 @@ export function MaintenanceReportModal({
               disabled={isSubmitting}
             >
               {isSubmitting ? (
-                <ActivityIndicator size="small" color="#fff" />
+                <ActivityIndicator
+                  size="small"
+                  color={nativeTokens.colors.primaryForeground}
+                />
               ) : (
                 <Text style={s.submitBtnText}>Submit Report</Text>
               )}
@@ -189,7 +194,7 @@ const s = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   sheet: {
-    backgroundColor: '#0f172a',
+    backgroundColor: nativeTokens.colors.neutral700,
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     padding: 24,
@@ -212,26 +217,26 @@ const s = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#f1f5f9',
+    color: nativeTokens.colors.primaryForeground,
   },
   subtitle: {
     fontSize: 14,
-    color: '#94a3b8',
+    color: nativeTokens.colors.mutedForeground,
   },
   label: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#94a3b8',
+    color: nativeTokens.colors.mutedForeground,
     marginBottom: 8,
     marginTop: 16,
   },
   input: {
-    backgroundColor: '#1e293b',
+    backgroundColor: nativeTokens.colors.neutral800,
     borderWidth: 1,
-    borderColor: '#334155',
+    borderColor: nativeTokens.colors.neutral600,
     borderRadius: 12,
     padding: 14,
-    color: '#f1f5f9',
+    color: nativeTokens.colors.primaryForeground,
     fontSize: 16,
   },
   textArea: {
@@ -249,22 +254,22 @@ const s = StyleSheet.create({
     justifyContent: 'center',
     gap: 6,
     paddingVertical: 10,
-    backgroundColor: '#1e293b',
+    backgroundColor: nativeTokens.colors.neutral800,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#334155',
+    borderColor: nativeTokens.colors.neutral600,
   },
   categoryBtnActive: {
-    backgroundColor: '#3b82f6',
-    borderColor: '#3b82f6',
+    backgroundColor: nativeTokens.colors.primary,
+    borderColor: nativeTokens.colors.primary,
   },
   categoryLabel: {
-    color: '#94a3b8',
+    color: nativeTokens.colors.mutedForeground,
     fontSize: 13,
     fontWeight: '600',
   },
   categoryLabelActive: {
-    color: '#fff',
+    color: nativeTokens.colors.primaryForeground,
   },
   errorBox: {
     backgroundColor: 'rgba(239,68,68,0.15)',
@@ -275,7 +280,7 @@ const s = StyleSheet.create({
     marginBottom: 16,
   },
   errorText: {
-    color: '#fca5a5',
+    color: nativeTokens.colors.destructive,
     fontSize: 14,
   },
   footer: {
@@ -288,7 +293,7 @@ const s = StyleSheet.create({
     alignItems: 'center',
   },
   submitBtn: {
-    backgroundColor: '#3b82f6',
+    backgroundColor: nativeTokens.colors.primary,
   },
   cancelBtn: {
     backgroundColor: 'transparent',
@@ -297,12 +302,12 @@ const s = StyleSheet.create({
     opacity: 0.6,
   },
   submitBtnText: {
-    color: '#fff',
+    color: nativeTokens.colors.primaryForeground,
     fontSize: 17,
     fontWeight: '700',
   },
   cancelBtnText: {
-    color: '#64748b',
+    color: nativeTokens.colors.mutedForeground,
     fontSize: 15,
   },
 });
