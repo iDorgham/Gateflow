@@ -1,3 +1,5 @@
+'use client';
+
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -72,7 +74,6 @@ const MOCK_CHART_DATA: ScanFailureDataPoint[] = [
 
 export default function AiHubPage() {
   const { t, i18n } = useTranslation('dashboard');
-  const isRtl = i18n.language === 'ar' || i18n.language === 'ar-EG';
 
   return (
     <div className="flex flex-col gap-6 p-1">

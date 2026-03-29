@@ -155,6 +155,8 @@ plan:run → plan:done` with automatic folder moves and doc cascades
 
 ### Bug Fixes
 
+- **[Ci] **restore green status by resolving nextjs 15 type errors and cleaning up imports
+
 - **[Ci] **resolve nextjs 15 type errors and update action versions
 
 - **[Ci] **resolve all stale action references and relax lighthouse thresholds

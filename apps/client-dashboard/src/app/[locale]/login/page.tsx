@@ -25,12 +25,6 @@ import {
   Moon,
   Globe,
   Check,
-  Home,
-  QrCode,
-  ScanLine,
-  Users,
-  Shield,
-  Settings,
 } from 'lucide-react';
 import type { Locale } from '@/lib/i18n-config';
 

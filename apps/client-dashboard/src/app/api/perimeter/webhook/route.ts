@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma, EventType, IncidentStatus } from '@gate-access/db';
 import crypto from 'crypto';
+import {
+  PerimeterEventType,
+  PerimeterWebhookPayload,
+} from '@/lib/types/perimeter';
 
 /**
  * POST /api/perimeter/webhook
@@ -10,23 +14,6 @@ import crypto from 'crypto';
  * security: HMAC Signature Verification (SHA-256)
  * logic: Cross-reference barrier vs scan-log timings to detect anomalies.
  */
-
-// Perimeter event types
-export enum PerimeterEventType {
-  TAILGATING = 'TAILGATING',
-  LPR_MATCH = 'LPR_MATCH',
-  BARRIER_FORCED = 'BARRIER_FORCED',
-  VEHICLE_STOPPED = 'VEHICLE_STOPPED',
-}
-
-interface PerimeterWebhookPayload {
-  organizationId: string;
-  projectId: string;
-  gateId: string;
-  type: PerimeterEventType;
-  payload: any;
-  timestamp: string;
-}
 
 export async function POST(req: NextRequest) {
   try {
