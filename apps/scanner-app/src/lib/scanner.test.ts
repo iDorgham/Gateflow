@@ -36,8 +36,38 @@ jest.mock('./auth-client', () => ({
 jest.mock('./offline-queue', () => ({
   scanQueue: {
     addScan: jest.fn(() =>
-      Promise.resolve({ id: 'q1', scanUuid: 'uuid-1', qrCode: '', gateId: '', scannedAt: '', synced: false, retryCount: 0 }),
+      Promise.resolve({
+        id: 'q1',
+        scanUuid: 'uuid-1',
+        qrCode: '',
+        gateId: '',
+        scannedAt: '',
+        synced: false,
+        retryCount: 0,
+      })
     ),
+  },
+}));
+
+/** Real module imports expo-crypto (ESM); Jest must not load it when testing validateOnServer. */
+jest.mock('./maintenance-queue', () => ({
+  maintenanceQueue: {
+    addReport: jest.fn(() =>
+      Promise.resolve({
+        id: 'maint_test_1',
+        title: 't',
+        gateId: 'g1',
+        category: 'OTHER' as const,
+        reportedAt: new Date().toISOString(),
+        synced: false,
+        retryCount: 0,
+      })
+    ),
+    getQueue: jest.fn(() => Promise.resolve([])),
+    markAsSynced: jest.fn(() => Promise.resolve()),
+    markAsFailed: jest.fn(() => Promise.resolve()),
+    clearSynced: jest.fn(() => Promise.resolve()),
+    triggerSync: jest.fn(() => Promise.resolve()),
   },
 }));
 
@@ -50,8 +80,12 @@ import type { QRPayload } from '@gate-access/types';
 
 // ─── Typed mock helpers ───────────────────────────────────────────────────────
 
-const mockGetToken = getValidAccessToken as jest.MockedFunction<typeof getValidAccessToken>;
-const mockAddScan = scanQueue.addScan as jest.MockedFunction<typeof scanQueue.addScan>;
+const mockGetToken = getValidAccessToken as jest.MockedFunction<
+  typeof getValidAccessToken
+>;
+const mockAddScan = scanQueue.addScan as jest.MockedFunction<
+  typeof scanQueue.addScan
+>;
 
 // ─── Fixtures ────────────────────────────────────────────────────────────────
 
@@ -67,10 +101,11 @@ const VALID_PAYLOAD: QRPayload = {
 
 // A plausible (but not truly valid) signed QR string for unit test purposes.
 // verifyScanQR has already accepted it before validateOnServer is called.
-const QR_STRING = 'gateflow:1:eyJxcklkIjoiY2x0ZXN0MTIzIn0=.abcdef1234567890'.padEnd(
-  'gateflow:1:'.length + 68, // prefix + base64payload.64hexchars
-  '0',
-);
+const QR_STRING =
+  'gateflow:1:eyJxcklkIjoiY2x0ZXN0MTIzIn0=.abcdef1234567890'.padEnd(
+    'gateflow:1:'.length + 68, // prefix + base64payload.64hexchars
+    '0'
+  );
 
 // ─── Setup / teardown ────────────────────────────────────────────────────────
 
@@ -87,7 +122,11 @@ describe('scan success', () => {
     (global.fetch as jest.Mock).mockResolvedValue({
       ok: true,
       json: () =>
-        Promise.resolve({ status: 'accepted', scanId: 'scan_abc123', message: 'Welcome!' }),
+        Promise.resolve({
+          status: 'accepted',
+          scanId: 'scan_abc123',
+          message: 'Welcome!',
+        }),
     });
 
     const result = await validateOnServer(QR_STRING, VALID_PAYLOAD);
@@ -108,13 +147,18 @@ describe('scan success', () => {
     await validateOnServer(QR_STRING, VALID_PAYLOAD);
 
     expect(global.fetch).toHaveBeenCalledTimes(1);
-    const [url, options] = (global.fetch as jest.Mock).mock.calls[0] as [string, RequestInit];
+    const [url, options] = (global.fetch as jest.Mock).mock.calls[0] as [
+      string,
+      RequestInit,
+    ];
 
     expect(url).toContain('/qrcodes/validate');
     const body = JSON.parse(options.body as string);
     expect(body.qrPayload).toBe(QR_STRING);
     expect(body.scanContext.deviceId).toBe('iOS-iPhone-15');
-    expect((options.headers as Record<string, string>)['Authorization']).toBe('Bearer my-jwt-token');
+    expect((options.headers as Record<string, string>)['Authorization']).toBe(
+      'Bearer my-jwt-token'
+    );
   });
 
   it('does NOT enqueue the scan on server success', async () => {
@@ -138,7 +182,11 @@ describe('server rejection (invalid_signature / other reasons)', () => {
     (global.fetch as jest.Mock).mockResolvedValue({
       ok: true,
       json: () =>
-        Promise.resolve({ status: 'rejected', reason: 'invalid_signature', message: 'Bad QR' }),
+        Promise.resolve({
+          status: 'rejected',
+          reason: 'invalid_signature',
+          message: 'Bad QR',
+        }),
     });
 
     const result = await validateOnServer(QR_STRING, VALID_PAYLOAD);
@@ -183,14 +231,19 @@ describe('server rejection (invalid_signature / other reasons)', () => {
 describe('offline fallback', () => {
   it('returns optimistic accepted and queues scan when fetch throws (no network)', async () => {
     mockGetToken.mockResolvedValue('valid-access-token');
-    (global.fetch as jest.Mock).mockRejectedValue(new Error('Network request failed'));
+    (global.fetch as jest.Mock).mockRejectedValue(
+      new Error('Network request failed')
+    );
 
     const result = await validateOnServer(QR_STRING, VALID_PAYLOAD);
 
     expect(result.status).toBe('accepted');
     expect(result.offline).toBe(true);
     expect(result.message).toMatch(/queue/i);
-    expect(mockAddScan).toHaveBeenCalledWith(QR_STRING, VALID_PAYLOAD.organizationId);
+    expect(mockAddScan).toHaveBeenCalledWith(
+      QR_STRING,
+      VALID_PAYLOAD.organizationId
+    );
   });
 
   it('returns optimistic accepted and queues when no auth token', async () => {
@@ -217,12 +270,17 @@ describe('offline fallback', () => {
     expect(result.status).toBe('accepted');
     expect(result.offline).toBe(true);
     expect(result.message).toContain('503');
-    expect(mockAddScan).toHaveBeenCalledWith(QR_STRING, VALID_PAYLOAD.organizationId);
+    expect(mockAddScan).toHaveBeenCalledWith(
+      QR_STRING,
+      VALID_PAYLOAD.organizationId
+    );
   });
 
   it('swallows queue error silently and still returns accepted when queue throws', async () => {
     mockGetToken.mockResolvedValue('valid-access-token');
-    (global.fetch as jest.Mock).mockRejectedValue(new Error('Network request failed'));
+    (global.fetch as jest.Mock).mockRejectedValue(
+      new Error('Network request failed')
+    );
     mockAddScan.mockRejectedValue(new Error('Authentication required'));
 
     const result = await validateOnServer(QR_STRING, VALID_PAYLOAD);
@@ -246,7 +304,10 @@ describe('location in scanContext', () => {
     const location = { latitude: 30.0444, longitude: 31.2357, accuracy: 10 };
     await validateOnServer(QR_STRING, VALID_PAYLOAD, location);
 
-    const [, options] = (global.fetch as jest.Mock).mock.calls[0] as [string, RequestInit];
+    const [, options] = (global.fetch as jest.Mock).mock.calls[0] as [
+      string,
+      RequestInit,
+    ];
     const body = JSON.parse(options.body as string);
     expect(body.scanContext.location).toEqual(location);
   });
@@ -260,7 +321,10 @@ describe('location in scanContext', () => {
 
     await validateOnServer(QR_STRING, VALID_PAYLOAD); // no location arg
 
-    const [, options] = (global.fetch as jest.Mock).mock.calls[0] as [string, RequestInit];
+    const [, options] = (global.fetch as jest.Mock).mock.calls[0] as [
+      string,
+      RequestInit,
+    ];
     const body = JSON.parse(options.body as string);
     expect(body.scanContext).not.toHaveProperty('location');
   });

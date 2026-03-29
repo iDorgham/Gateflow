@@ -1,0 +1,16 @@
+---
+description: Security invariants — never bypass these
+globs: ["**/*"]
+alwaysApply: true
+---
+
+# Security Invariants
+
+1. **Input validation**: Validate all user input at system boundaries (API routes, form handlers).
+2. **SQL injection**: Use parameterized queries / ORM only. No raw string interpolation.
+3. **XSS**: Sanitize all user-supplied content before rendering as HTML.
+4. **CSRF**: Require CSRF tokens on all state-mutating requests.
+5. **Org isolation**: Never return data across organization boundaries.
+6. **Signed payloads**: All QR codes / external tokens must be HMAC-SHA256 signed.
+7. **Rate limiting**: All public-facing endpoints need rate limiting.
+8. **Dependency audit**: Run `pnpm audit` as part of CI. Block on critical severity.

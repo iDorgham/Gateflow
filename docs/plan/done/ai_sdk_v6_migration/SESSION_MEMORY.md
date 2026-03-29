@@ -5,10 +5,34 @@ type: session
 
 ## Active State
 
-- **Phase:** 5 — COMPLETED (ALL PHASES DONE)
-- **Status:** Green (lint ✓, typecheck ✓, tests 284 passed ✓)
-- **Last commit:** `35366e9` — feat(ai): fix server-side message conversion for AI SDK v6 (phase 4)
-- **Next action:** Plan moved to done/ — migration complete
+- **Phase:** All plan phases (1–5) including **Phase 3 (v6 tool part guards)** — COMPLETED in repo
+- **Status:** Green for touched apps (lint ✓, typecheck ✓ for client-dashboard + admin-dashboard)
+- **Next action:** Commit Phase 3 changes if not yet on main; then PR/merge or close initiative.
+
+---
+
+## Accomplished in Phase 3 (two slices)
+
+**Slice A (earlier): GateAI tool UI + `ui-tools`**
+
+1. **Native Parts Rendering:** `ChatPanel.tsx` iterates `UIMessage.parts`.
+2. **UI Tools:** `ui-tools.ts` — `showChart`, `showReport`, `showSchedule`, `requestConfirmation`.
+3. **Route:** AI chat uses tool calling for rich UI; regex fallback on text parts for old history.
+
+**Slice B (2026-03-29): AI SDK v6 part shape**
+
+1. **Guards:** `isTextUIPart`, `isToolUIPart`, `getToolName`, `isReasoningUIPart`, `isFileUIPart`, `isDataUIPart`; tool payload from `input` via `toolUiPayload()`.
+2. **States:** `output-available` / `output-error` (no legacy `result` / `args`).
+3. **Keys:** JSON-in-text confirmations use `actionStates[\`${m.id}-${i \* 100 + j}\`]`to match`handleActionConfirm`; tool `requestConfirmation`uses`${m.id}-${i}`.
+4. **Sidebars:** `ai-assistant.tsx` and `admin-ai-assistant.tsx` render assistant turns with tool/reasoning/file/data parts (compact).
+
+## Accomplished in Phases 1, 2, 4, 5 (Previous runs)
+
+1. **Core SDK Update:** Migrated `@ai-sdk/react` and `ai` packages to v3+ / v6.
+2. **Unified Transport:** Switched `ChatPanel` and `AIAssistant` to `DefaultChatTransport`.
+3. **UIMessage Adoption:** Server now returns `result.toUIMessageStreamResponse()`.
+4. **Server-side Conversion:** Fixed `convertToModelMessages` async handling in routes.
+5. **Route Mapping:** Updated all three AI routes (`chat`, `assistant`, `admin`).
 
 ---
 
@@ -75,9 +99,5 @@ const text = msg.parts
   .map((p) => p.text)
   .join('');
 ```
-
-## Phase 3 Scope (proposed — skipped by user)
-
-`ChatPanel.tsx` still uses `parseMessageContent(messageText(m))` — regex-parsing text for JSON chart/report/schedule/confirm blocks. In v6, `UIMessage.parts` are natively typed; the panel could read parts directly instead of extracting text first.
 
 **Context budget:** L0+L2+L5 loaded this session.

@@ -125,6 +125,23 @@ function title(slug) {
   return slug.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
+function parsePhaseProgress(planContent) {
+  const rows = [
+    ...planContent.matchAll(
+      /^\|\s*(\d+)\s*\|[^|]+\|[^|]+\|\s*(\[[ x]\])\s*\|/gm
+    ),
+  ];
+
+  const total = rows.length;
+  const done = rows.filter((row) => row[2].trim() === '[x]').length;
+  const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+  const filled = Math.max(0, Math.min(10, Math.round(pct / 10)));
+  const empty = Math.max(0, 10 - filled);
+  const bar = '█'.repeat(filled) + '░'.repeat(empty);
+
+  return { total, done, pct, bar };
+}
+
 function movePlan(slug, fromState, toState) {
   const src = path.join(stateDir(fromState), slug);
   const dest = path.join(stateDir(toState), slug);
@@ -448,12 +465,7 @@ switch (cmd) {
         }
 
         const content = fs.readFileSync(pf, 'utf8');
-        const total = (content.match(/^\| \d+/gm) || []).length;
-        const done = (content.match(/\[x\]/g) || []).length;
-        const pct = total > 0 ? Math.round((done / total) * 100) : 0;
-        const bar =
-          '█'.repeat(Math.round(pct / 10)) +
-          '░'.repeat(10 - Math.round(pct / 10));
+        const { total, done, pct, bar } = parsePhaseProgress(content);
         console.log(
           `   • ${slug.padEnd(35)} ${bar} ${done}/${total} phases (${pct}%)`
         );

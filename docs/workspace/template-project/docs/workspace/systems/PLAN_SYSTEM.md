@@ -1,58 +1,53 @@
-# Plan System and File Organization
+# Plan System
 
-This document defines how planning artifacts are organized and executed in this workspace.
+## Structure
 
-## Plan Lifecycle Folders
+```
+plan/
+├── planned/       # Approved — ready to start
+├── in-progress/   # Active work
+└── done/          # Completed
+```
 
-Root: `docs/plan/`
+## Files per initiative (`<slug>`)
 
-- `context/` - idea briefs (`IDEA_<slug>.md`)
-- `planning/` - draft plans under authoring
-- `planned/` - approved plans ready to start
-- `in-progress/` - active initiatives
-- `done/` - completed initiatives
-- `execution/` - execution helpers and task tracking docs
-- `guides/` - operational playbooks
-- `guidelines/` - templates, standards, and conventions
-- `learning/` - persistent lessons and tool memory
+```
+plan/in-progress/<slug>/
+├── PLAN_<slug>.md              # Phase table + scope
+├── TASKS_<slug>.md             # Execution checklist
+├── SESSION_MEMORY.md           # Cross-session AI state
+└── phases/
+    └── 01_<title>/
+        └── PROMPT_phase_01.md  # Acceptance criteria + steps
+```
 
-## Canonical Plan Files per Initiative
+## Lifecycle
 
-For initiative `<slug>`:
+Move the `<slug>/` folder as work progresses:
 
-- `PLAN_<slug>.md` - high-level plan with phase table
-- `PROMPT_<slug>_phase_<N>.md` - one prompt file per phase
-- `TASKS_<slug>.md` - execution checklist (when used by initiative)
-
-Typical location during execution:
-
-- `docs/plan/in-progress/<slug>/PLAN_<slug>.md`
-- `docs/plan/in-progress/<slug>/PROMPT_<slug>_phase_<N>.md`
-
-## Execution Commands
-
-- `pnpm plan:new <slug>`
-- `pnpm plan:ready <slug>`
-- `pnpm plan:start <slug>`
-- `pnpm plan:run <slug> <phase>`
-- `pnpm plan:done <slug>`
-- `pnpm plan:status`
+```
+plan/planned/<slug>/  →  plan/in-progress/<slug>/  →  plan/done/<slug>/
+```
 
 ## Phase Prompt Standards
 
-Each prompt should include:
+Each `PROMPT_phase_N.md` must include:
 
-- Primary role
-- Preferred tool
-- Context and references
-- Goal
-- Scope (in/out)
-- Ordered implementation steps
-- Acceptance criteria (lint/typecheck/test/build/docs as applicable)
+- **Role** — who is executing (architect, engineer, etc.)
+- **Goal** — one-sentence outcome
+- **Steps** — ordered implementation steps
+- **Acceptance criteria** — lint ✓ · typecheck ✓ · tests ✓
 
-## Rules for Reliable Plan Operations
+## Rules
 
-- Keep one source of truth for phase status (plan table + tasks file).
-- Do not mark a phase done without evidence from acceptance criteria.
-- Keep `in-progress` and `done` folders synchronized with actual state.
-- Update changelog/docs as part of phase completion when behavior or workflow changes.
+- One source of truth: plan table + TASKS file.
+- Never mark a phase done without evidence (acceptance criteria passed).
+- Update `SESSION_MEMORY.md` after every phase — it survives context resets.
+
+## Related Folders
+
+| Folder                      | Purpose                                    |
+| --------------------------- | ------------------------------------------ |
+| `docs/ideas/`               | IDEA\_<slug>.md brainstorm files           |
+| `docs/learning/`            | CLI memory, patterns, decisions, incidents |
+| `docs/workspace/templates/` | Reusable plan/session templates            |

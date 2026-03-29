@@ -32,6 +32,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Features
 
+- **[Ai] **UIMessage v6 parts, assistant fallbacks; docs template; scanner Jest
+
+- **[Ai] **native UIMessage parts rendering in AIAssistant sidebar (phase 4)
+- **[-M] **complete phase feat(ai): native UIMessage parts rendering in ChatPanel (phase 3)
+
 - **[Ai] **fix server-side message conversion for AI SDK v6 (phase 4)
 - **[Ai] **migrate to AI SDK v6 + @ai-sdk/google v3 (phases 1 & 2)
 

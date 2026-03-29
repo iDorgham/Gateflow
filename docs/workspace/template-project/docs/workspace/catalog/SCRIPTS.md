@@ -1,43 +1,38 @@
-# Workspace Scripts (Clean Copy)
+# Scripts
 
-Source: `scripts/*.js`
+Source: `scripts/`
 
-## Ralph Core
+## Workspace Setup
 
-- `ralph.js`
-- `ralph-plan.js`
-- `ralph-run.js`
-- `ralph-docs.js`
-- `ralph-organize.js`
-- `ralph-version.js`
-- `ralph-hotfix.js`
-- `ralph-git.js`
-- `ralph-prioritize.js`
-- `ralph-skill-discover.js`
+| Script       | Command                  | What it does                                           |
+| ------------ | ------------------------ | ------------------------------------------------------ |
+| `install.js` | `pnpm workspace:install` | Interactive scaffolder — guided setup for new projects |
+| `upgrade.js` | `pnpm workspace:upgrade` | Diff installed template vs current, show what changed  |
 
-## Validation and Enforcement
+## AI Folder Sync
 
-- `check-changelog.js`
-- `format-changelog.js`
-- `check-env.js`
-- `check-security.js`
-- `check-bundle-size.js`
-- `check-imports.js`
-- `check-db-drift.js`
-- `scan-secrets.js`
-- `pre-deploy.js`
-- `security-fix.js`
-- `enforce-security-invariants.js`
-- `enforce-ads-design.js`
-- `enforce-motion-performance.js`
+| Script               | Command         | What it does                                                        |
+| -------------------- | --------------- | ------------------------------------------------------------------- |
+| `sync-ai-folders.js` | `pnpm ai:sync`  | Merge ops-core/ into .cursor/.claude/.antigravity/.gemini/.opencode |
+| `check-ai-drift.js`  | `pnpm ai:check` | Fail if AI folders differ from ops-core/ source                     |
 
-## Workflow Utilities
+## Cache
 
-- `setup-dev.js`
-- `phase-close.js`
-- `todos.js`
+| Script           | Command            | What it does                                    |
+| ---------------- | ------------------ | ----------------------------------------------- |
+| `cache-build.js` | `pnpm cache:build` | Scan project → auto-generate WORKSPACE_INDEX.md |
+| `cache-check.js` | `pnpm cache:check` | Report stale cache files by TTL frontmatter     |
 
-## Notes
+## Memory & Docs
 
-- This file is a clean inventory for workspace-level scripts.
-- Script behavior and ownership remain in source files.
+| Script           | Command            | What it does                                              |
+| ---------------- | ------------------ | --------------------------------------------------------- |
+| `memory-init.js` | `pnpm memory:init` | Create docs/system/memory/ starter files (safe to re-run) |
+| `docs-index.js`  | `pnpm docs:index`  | Auto-regenerate docs/README.md from folder structure      |
+
+## Validation
+
+| Script                  | Command                   | What it does                              |
+| ----------------------- | ------------------------- | ----------------------------------------- |
+| `template-validate.js`  | `pnpm template:validate`  | Check required structure and content      |
+| `bootstrap-template.sh` | `pnpm template:bootstrap` | Validate + report pending checklist items |

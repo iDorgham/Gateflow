@@ -38,3 +38,11 @@ docs/cache
 .lighthouseci
 .vscode
 .gemini
+
+# Keep template AI workspace assets versioned
+!docs/workspace/template-project/.cursor/
+!docs/workspace/template-project/.cursor/**
+!docs/workspace/template-project/.claude/
+!docs/workspace/template-project/.claude/**
+!docs/workspace/template-project/.antigravity/
+!docs/workspace/template-project/.antigravity/**

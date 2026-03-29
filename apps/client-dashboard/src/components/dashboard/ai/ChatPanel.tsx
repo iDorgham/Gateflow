@@ -2,6 +2,14 @@
 
 import * as React from 'react';
 import { type UIMessage } from '@ai-sdk/react';
+import {
+  getToolName,
+  isDataUIPart,
+  isFileUIPart,
+  isReasoningUIPart,
+  isTextUIPart,
+  isToolUIPart,
+} from 'ai';
 
 // Local type alias for backward compatibility or specialized properties
 type Message = UIMessage & {
@@ -99,9 +107,15 @@ function messageText(message?: Message): string {
   if (!Array.isArray(message.parts)) return '';
 
   return message.parts
-    .filter((p) => p.type === 'text')
-    .map((p) => (p as any).text || '')
+    .filter(isTextUIPart)
+    .map((p) => p.text)
     .join('');
+}
+
+/** Prefer tool input for UI renderers (chart/report payloads live on input; output is often an ack). */
+function toolUiPayload(part: { input?: unknown; output?: unknown }): unknown {
+  if (part.input !== undefined && part.input !== null) return part.input;
+  return part.output;
 }
 
 interface ChatPanelProps {
@@ -354,7 +368,7 @@ export function ChatPanel({
                     {m.parts && m.parts.length > 0
                       ? m.parts.map((part, i) => (
                           <React.Fragment key={`${m.id}-part-${i}`}>
-                            {part.type === 'text' ? (
+                            {isTextUIPart(part) ? (
                               <div
                                 className={cn(
                                   'rounded-2xl px-4 py-3 text-sm leading-relaxed relative',
@@ -363,123 +377,228 @@ export function ChatPanel({
                                     : 'bg-background bg-background text-foreground dark:text-zinc-100 border border-zinc-200 border-border shadow-sm rounded-tl-none whitespace-pre-wrap'
                                 )}
                               >
-                                {/* If it's a tool-supporting text part, it might still contain JSON blocks for legacy reasons or model fallback */}
+                                {/* Legacy JSON-in-text fallback for assistant */}
                                 {m.role === 'assistant'
                                   ? parseMessageContent(part.text).map(
-                                      (subPart, j) => (
-                                        <React.Fragment
-                                          key={`${m.id}-part-${i}-sub-${j}`}
-                                        >
-                                          {subPart.type === 'text' ? (
-                                            subPart.content
-                                          ) : subPart.type === 'chart' ? (
-                                            <AIChartRenderer
-                                              config={
-                                                subPart.config as ChartDataBlock
-                                              }
-                                            />
-                                          ) : subPart.type === 'report' ? (
-                                            <AIReportRenderer
-                                              config={
-                                                subPart.config as ReportDataBlock
-                                              }
-                                              isRtl={isRtl}
-                                            />
-                                          ) : subPart.type === 'schedule' ? (
-                                            <AIScheduleRenderer
-                                              config={
-                                                subPart.config as ScheduleDataBlock
-                                              }
-                                              isRtl={isRtl}
-                                            />
-                                          ) : (
-                                            <AIConfirmationRenderer
-                                              data={
-                                                subPart.config as ActionDataBlock
-                                              }
-                                              status={
-                                                actionStates[
-                                                  `${m.id}-part-${i}-sub-${j}`
-                                                ] || 'pending'
-                                              }
-                                              isExecuting={
-                                                executingActions[
-                                                  `${m.id}-part-${i}-sub-${j}`
-                                                ]
-                                              }
-                                              onConfirm={(data) =>
-                                                handleActionConfirm(
-                                                  m.id,
-                                                  i * 100 + j,
-                                                  data
-                                                )
-                                              }
-                                              onCancel={() =>
-                                                handleActionCancel(
-                                                  m.id,
-                                                  i * 100 + j
-                                                )
-                                              }
-                                            />
-                                          )}
-                                        </React.Fragment>
-                                      )
+                                      (subPart, j) => {
+                                        const subActionKey = `${m.id}-${
+                                          i * 100 + j
+                                        }`;
+                                        return (
+                                          <React.Fragment
+                                            key={`${m.id}-part-${i}-sub-${j}`}
+                                          >
+                                            {subPart.type === 'text' ? (
+                                              subPart.content
+                                            ) : subPart.type === 'chart' ? (
+                                              <AIChartRenderer
+                                                config={
+                                                  subPart.config as ChartDataBlock
+                                                }
+                                              />
+                                            ) : subPart.type === 'report' ? (
+                                              <AIReportRenderer
+                                                config={
+                                                  subPart.config as ReportDataBlock
+                                                }
+                                                isRtl={isRtl}
+                                              />
+                                            ) : subPart.type === 'schedule' ? (
+                                              <AIScheduleRenderer
+                                                config={
+                                                  subPart.config as ScheduleDataBlock
+                                                }
+                                                isRtl={isRtl}
+                                              />
+                                            ) : (
+                                              <AIConfirmationRenderer
+                                                data={
+                                                  subPart.config as ActionDataBlock
+                                                }
+                                                status={
+                                                  actionStates[subActionKey] ||
+                                                  'pending'
+                                                }
+                                                isExecuting={
+                                                  executingActions[subActionKey]
+                                                }
+                                                onConfirm={(data) =>
+                                                  handleActionConfirm(
+                                                    m.id,
+                                                    i * 100 + j,
+                                                    data
+                                                  )
+                                                }
+                                                onCancel={() =>
+                                                  handleActionCancel(
+                                                    m.id,
+                                                    i * 100 + j
+                                                  )
+                                                }
+                                              />
+                                            )}
+                                          </React.Fragment>
+                                        );
+                                      }
                                     )
                                   : part.text}
                               </div>
-                            ) : part.type.startsWith('tool-') ? (
+                            ) : isToolUIPart(part) ? (
                               <div className="my-2">
-                                {(part as any).toolName === 'showChart' && (
-                                  <AIChartRenderer
-                                    config={
-                                      (part as any).args as ChartDataBlock
-                                    }
-                                  />
-                                )}
-                                {(part as any).toolName === 'showReport' && (
-                                  <AIReportRenderer
-                                    config={
-                                      (part as any).args as ReportDataBlock
-                                    }
-                                    isRtl={isRtl}
-                                  />
-                                )}
-                                {(part as any).toolName === 'showSchedule' && (
-                                  <AIScheduleRenderer
-                                    config={
-                                      (part as any).args as ScheduleDataBlock
-                                    }
-                                    isRtl={isRtl}
-                                  />
-                                )}
-                                {(part as any).toolName ===
-                                  'requestConfirmation' && (
-                                  <AIConfirmationRenderer
-                                    data={(part as any).args as ActionDataBlock}
-                                    status={
-                                      actionStates[
-                                        `${m.id}-tool-${(part as any).toolCallId}`
-                                      ] || 'pending'
-                                    }
-                                    isExecuting={
-                                      executingActions[
-                                        `${m.id}-tool-${(part as any).toolCallId}`
-                                      ]
-                                    }
-                                    onConfirm={(data) =>
-                                      handleActionConfirm(m.id, i, data)
-                                    }
-                                    onCancel={() => handleActionCancel(m.id, i)}
-                                  />
-                                )}
+                                {(() => {
+                                  const name = getToolName(part);
+                                  const payload = toolUiPayload(part);
+                                  const actionKey = `${m.id}-${i}`;
+                                  const state = (part as { state?: string })
+                                    .state;
+                                  const errorText = (
+                                    part as { errorText?: string }
+                                  ).errorText;
 
-                                {/* Handle Tool Results (e.g. success message after execution) */}
-                                {(part as any).state === 'result' && (
-                                  <div className="text-[10px] text-muted-foreground mt-1 opacity-70 italic">
-                                    {JSON.stringify((part as any).result)}
-                                  </div>
-                                )}
+                                  if (name === 'showChart') {
+                                    return payload ? (
+                                      <AIChartRenderer
+                                        config={payload as ChartDataBlock}
+                                      />
+                                    ) : (
+                                      <div className="text-xs text-muted-foreground border border-dashed rounded-lg p-3">
+                                        {t(
+                                          'Loading chart…',
+                                          'جاري تحميل الرسم…'
+                                        )}
+                                      </div>
+                                    );
+                                  }
+                                  if (name === 'showReport') {
+                                    return payload ? (
+                                      <AIReportRenderer
+                                        config={payload as ReportDataBlock}
+                                        isRtl={isRtl}
+                                      />
+                                    ) : (
+                                      <div className="text-xs text-muted-foreground border border-dashed rounded-lg p-3">
+                                        {t(
+                                          'Loading report…',
+                                          'جاري تحميل التقرير…'
+                                        )}
+                                      </div>
+                                    );
+                                  }
+                                  if (name === 'showSchedule') {
+                                    return payload ? (
+                                      <AIScheduleRenderer
+                                        config={payload as ScheduleDataBlock}
+                                        isRtl={isRtl}
+                                      />
+                                    ) : (
+                                      <div className="text-xs text-muted-foreground border border-dashed rounded-lg p-3">
+                                        {t(
+                                          'Loading schedule…',
+                                          'جاري تحميل الجدول…'
+                                        )}
+                                      </div>
+                                    );
+                                  }
+                                  if (name === 'requestConfirmation') {
+                                    if (!payload) {
+                                      return (
+                                        <div className="text-xs text-muted-foreground border border-dashed rounded-lg p-3">
+                                          {t(
+                                            'Loading confirmation…',
+                                            'جاري تحميل التأكيد…'
+                                          )}
+                                        </div>
+                                      );
+                                    }
+                                    const pd = payload as Record<
+                                      string,
+                                      unknown
+                                    >;
+                                    const confirmData: ActionDataBlock = {
+                                      type: 'confirm',
+                                      actionType: String(pd.actionType ?? ''),
+                                      title: String(pd.title ?? ''),
+                                      description:
+                                        pd.description != null
+                                          ? String(pd.description)
+                                          : undefined,
+                                      intentJson: pd.intentJson ?? {},
+                                      actionId:
+                                        pd.actionId != null
+                                          ? String(pd.actionId)
+                                          : undefined,
+                                    };
+                                    return (
+                                      <AIConfirmationRenderer
+                                        data={confirmData}
+                                        status={
+                                          actionStates[actionKey] || 'pending'
+                                        }
+                                        isExecuting={
+                                          executingActions[actionKey]
+                                        }
+                                        onConfirm={(data) =>
+                                          handleActionConfirm(m.id, i, data)
+                                        }
+                                        onCancel={() =>
+                                          handleActionCancel(m.id, i)
+                                        }
+                                      />
+                                    );
+                                  }
+
+                                  return (
+                                    <div className="text-xs text-muted-foreground border rounded p-2 space-y-1">
+                                      <div className="font-medium">{name}</div>
+                                      {state && (
+                                        <div className="opacity-70">
+                                          {state}
+                                        </div>
+                                      )}
+                                      {state === 'output-error' &&
+                                        errorText && (
+                                          <pre className="text-[10px] overflow-auto text-red-600 whitespace-pre-wrap">
+                                            {errorText}
+                                          </pre>
+                                        )}
+                                      {state === 'output-available' &&
+                                        (part as { output?: unknown }).output !=
+                                          undefined && (
+                                          <pre className="mt-1 text-[10px] overflow-auto max-h-32">
+                                            {JSON.stringify(
+                                              (part as { output: unknown })
+                                                .output,
+                                              null,
+                                              2
+                                            )}
+                                          </pre>
+                                        )}
+                                    </div>
+                                  );
+                                })()}
                               </div>
+                            ) : isReasoningUIPart(part) ? (
+                              <details className="my-2 text-xs text-muted-foreground border rounded-lg p-2">
+                                <summary className="cursor-pointer font-medium">
+                                  {t('Reasoning', 'التفكير')}
+                                </summary>
+                                <pre className="mt-2 whitespace-pre-wrap text-[11px] text-foreground/80">
+                                  {part.text}
+                                </pre>
+                              </details>
+                            ) : isFileUIPart(part) ? (
+                              <a
+                                href={part.url}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="text-xs text-primary underline my-1 inline-block"
+                              >
+                                {part.filename || part.url}
+                              </a>
+                            ) : isDataUIPart(part) ? (
+                              <pre className="text-[10px] bg-muted/50 rounded p-2 overflow-auto max-h-40 my-1">
+                                {JSON.stringify(part.data, null, 2)}
+                              </pre>
                             ) : null}
                           </React.Fragment>
                         ))

@@ -1,26 +1,32 @@
-# Cache Layer (Workspace)
+# Cache Layer
 
-This document maps caching across workspace tooling, CI, docs, and app-level runtime caches.
+Pre-computed workspace state — saves 5,000–15,000 tokens per AI session.
 
-## Workspace / Build Caches
+## Layer 1 — Codebase Snapshots (`docs/system/cache/`)
 
-- **Turbo cache**: task-level build caching via `turbo` (`turbo.json`, CI `TURBO_TOKEN` / `TURBO_TEAM`).
-- **pnpm store cache**: dependency cache in CI (`~/.pnpm-store`) and `node_modules` restore keys.
-- **GitHub Actions cache**: reusable cache blocks in `ci.yml` for setup/lint/typecheck/test/performance jobs.
+| File                 | Contents                    | Refresh command                  |
+| -------------------- | --------------------------- | -------------------------------- |
+| `WORKSPACE_INDEX.md` | Apps, ports, deps, env vars | `pnpm cache:build`               |
+| `API_ROUTES_MAP.md`  | All routes, methods, auth   | Manual (update on route change)  |
+| `SCHEMA_SNAPSHOT.md` | DB models, enums, gotchas   | Manual (update on schema change) |
 
-## Documentation Caches
+Auto-build: `pnpm cache:build` — scans project, generates WORKSPACE_INDEX.md
+Staleness check: `pnpm cache:check` — reports stale files (run in CI)
 
-- `docs/cache/CACHE_POLICY.md`
-- `docs/cache/WORKSPACE_INDEX.md`
-- `docs/cache/API_ROUTES_MAP.md`
+## Layer 2 — Library Docs Cache (`docs/system/cache/context7/`)
 
-## Runtime / App Caches (current examples)
+Locally cached library docs from Context7 MCP.
 
-- `apps/client-dashboard/src/lib/analytics-cache.ts`
-- `apps/resident-mobile/lib/history-cache.ts`
-- `apps/resident-mobile/lib/qr-cache.ts`
+Naming: `{library}-{version}.md`
+TTL: 14 days (configurable in frontmatter)
+Check: `pnpm cache:check`
 
-## Performance and Audit Caches
+## Layer 3 — Build Cache (CI)
 
-- Lighthouse artifacts and local reports (`.lighthouseci/*`, CI artifacts in `lighthouse.yml`).
-- Bundle baseline snapshots and checks (`scripts/check-bundle-size.js`).
+- **Turbo cache**: task-level caching via `turbo` + `TURBO_TOKEN`
+- **pnpm store cache**: `~/.pnpm-store` restored in CI
+- **GitHub Actions cache**: setup/lint/test job reuse keys
+
+## Cache Policy
+
+See `docs/system/cache/CACHE_POLICY.md` for TTL rules, update triggers, and token savings estimates.

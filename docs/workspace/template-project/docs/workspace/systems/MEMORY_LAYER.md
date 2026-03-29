@@ -1,35 +1,38 @@
-# Memory Layer (Workspace)
+# Memory Layer
 
-This document captures persistent memory systems used by the workspace automation stack.
+Three-tier persistent AI context system.
 
-## AI Memory Stores
+## Layer 1 — Project Memory (`docs/memory/`)
 
-- `.ai-memory/README.md`
-- `.ai-memory/architecture.md`
-- `.ai-memory/modules.md`
-- `.ai-memory/api_patterns.md`
+Committed, project-wide AI knowledge. Survives context resets.
 
-## Learning and Tool Memory
+| File               | Type     | Purpose                      | Load when   |
+| ------------------ | -------- | ---------------------------- | ----------- |
+| `MEMORY.md`        | index    | Master index — always loaded | Always      |
+| `architecture.md`  | project  | Stack, apps, ports, commands | Any task    |
+| `api_patterns.md`  | project  | Auth, org scope, conventions | API work    |
+| `common_errors.md` | feedback | Gotchas, known bugs          | Debugging   |
+| `decisions.md`     | project  | Architectural decisions      | Design work |
 
-- `docs/plan/learning/CLI_USAGE_AND_RESULTS.md`
-- `docs/plan/learning/CLI_TOOL_MEMORY.md`
-- `docs/plan/learning/CLI_LIMITS_TRACKING.md`
-- `docs/plan/learning/GUIDE_PREFERENCES.md`
+Initialize: `pnpm memory:init`
 
-## Continual Learning State
+## Layer 2 — Plan Session Memory (`docs/plan/.../SESSION_MEMORY.md`)
 
-- `.cursor/hooks/state/continual-learning.json`
-- `.antigravity/hooks/state/continual-learning.json`
+Per-plan cross-session state. Updated by `/dev` after each phase.
 
-## Sync and Trace Memory
+Template: `docs/workspace/templates/SESSION_MEMORY_template.md`
 
-- `docs/AI_TOOLS_SYNC_LOG.md` (updated by `sync-ai-tools.yml`)
-- `docs/workspace/CHANGELOG.md` (workspace-specific release history)
-- root `CHANGELOG.md` (global release history)
+Contains: active phase + status, last commit, cross-session decisions, gotchas, file changes, context budget.
 
-## Plan and Execution Memory
+## Layer 3 — Learning (`docs/learning/`)
 
-- `docs/plan/context/IDEA_<slug>.md`
-- `docs/plan/in-progress/*`
-- `docs/plan/done/*`
-- `docs/plan/execution/*`
+Accumulated learnings across all plans.
+
+| File                       | Contents                                            |
+| -------------------------- | --------------------------------------------------- |
+| `CLI_TOOL_MEMORY.md`       | CLI scoreboard — which CLI wins for which task type |
+| `CLI_USAGE_AND_RESULTS.md` | Raw log of CLI invocations                          |
+| `CLI_LIMITS_TRACKING.md`   | Quota tracking (80% rule)                           |
+| `patterns.md`              | Recurring code/arch patterns                        |
+| `decisions.md`             | Cross-plan architectural decisions                  |
+| `incidents.md`             | Post-mortems and failures                           |

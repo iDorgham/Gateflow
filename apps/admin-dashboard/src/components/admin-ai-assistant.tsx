@@ -2,7 +2,15 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useChat, type UIMessage } from '@ai-sdk/react';
-import { DefaultChatTransport } from 'ai';
+import {
+  DefaultChatTransport,
+  getToolName,
+  isDataUIPart,
+  isFileUIPart,
+  isReasoningUIPart,
+  isTextUIPart,
+  isToolUIPart,
+} from 'ai';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { Send, Bot, User, Loader2, RotateCcw, Sparkles } from 'lucide-react';
@@ -33,17 +41,6 @@ const EXAMPLE_PROMPTS = [
 ];
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
-
-function msgText(message: UIMessage): string {
-  if (typeof (message as any).content === 'string') {
-    return (message as any).content;
-  }
-  if (!Array.isArray((message as any).parts)) return '';
-  return (message as any).parts
-    .filter((p: any) => p.type === 'text')
-    .map((p: any) => p.text ?? p.content ?? '')
-    .join('');
-}
 
 function loadMessages(): UIMessage[] {
   if (typeof window === 'undefined') return [WELCOME_MSG];
@@ -192,8 +189,15 @@ export function AdminAIAssistant({ locale }: AdminAIAssistantProps) {
           messages.map((message: UIMessage) => {
             if (message.id === 'welcome') return null;
             const isUser = message.role === 'user';
-            const text = msgText(message);
-            if (!text) return null;
+            const parts = message.parts ?? [];
+            const textParts = parts.filter(isTextUIPart);
+            const text = textParts.map((p) => p.text).join('');
+            const extraParts = parts.filter((p) => !isTextUIPart(p));
+            if (isUser) {
+              if (!text) return null;
+            } else if (!text && extraParts.length === 0) {
+              return null;
+            }
 
             return (
               <div
@@ -217,13 +221,60 @@ export function AdminAIAssistant({ locale }: AdminAIAssistantProps) {
                 </div>
                 <div
                   className={cn(
-                    'max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed shadow-sm',
+                    'max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed shadow-sm space-y-2',
                     isUser
                       ? 'bg-primary text-primary-foreground rounded-br-sm'
                       : 'bg-muted/50 text-foreground border border-border/50 rounded-bl-sm'
                   )}
                 >
-                  <span className="whitespace-pre-wrap">{text}</span>
+                  {textParts.map((part, i) => (
+                    <span key={i} className="whitespace-pre-wrap block">
+                      {part.text}
+                    </span>
+                  ))}
+                  {!isUser &&
+                    extraParts.map((part, i) => (
+                      <div
+                        key={`extra-${i}`}
+                        className={cn(
+                          'text-[11px] text-muted-foreground',
+                          (text || i > 0) && 'border-t border-border/60 pt-2'
+                        )}
+                      >
+                        {isToolUIPart(part) ? (
+                          <span>
+                            {getToolName(part)}
+                            {(part as { state?: string }).state
+                              ? ` · ${(part as { state: string }).state}`
+                              : ''}
+                          </span>
+                        ) : isReasoningUIPart(part) ? (
+                          <details>
+                            <summary className="cursor-pointer">
+                              Model reasoning
+                            </summary>
+                            <pre className="mt-1 whitespace-pre-wrap text-[10px] opacity-90 max-h-32 overflow-auto">
+                              {part.text}
+                            </pre>
+                          </details>
+                        ) : isFileUIPart(part) ? (
+                          <a
+                            href={part.url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-primary underline"
+                          >
+                            {part.filename || part.url}
+                          </a>
+                        ) : isDataUIPart(part) ? (
+                          <pre className="text-[10px] max-h-24 overflow-auto opacity-90">
+                            {JSON.stringify(part.data, null, 2)}
+                          </pre>
+                        ) : (
+                          <span className="opacity-70">{part.type}</span>
+                        )}
+                      </div>
+                    ))}
                 </div>
               </div>
             );

@@ -2,7 +2,15 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useChat, type UIMessage } from '@ai-sdk/react';
-import { DefaultChatTransport, isTextUIPart } from 'ai';
+import {
+  DefaultChatTransport,
+  getToolName,
+  isDataUIPart,
+  isFileUIPart,
+  isReasoningUIPart,
+  isTextUIPart,
+  isToolUIPart,
+} from 'ai';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import {
@@ -270,10 +278,16 @@ export function AIAssistant({ locale }: AIAssistantProps) {
           messages.map((message: UIMessage) => {
             if (message.id === 'welcome') return null;
             const isUser = message.role === 'user';
-            const textParts = message.parts.filter(isTextUIPart);
+            const parts = message.parts ?? [];
+            const textParts = parts.filter(isTextUIPart);
             const text = textParts.map((p) => p.text).join('');
-            const msgRtl = isArabic(text);
-            if (!text) return null;
+            const extraParts = parts.filter((p) => !isTextUIPart(p));
+            if (isUser) {
+              if (!text) return null;
+            } else if (!text && extraParts.length === 0) {
+              return null;
+            }
+            const msgRtl = text ? isArabic(text) : isRtl;
 
             return (
               <div
@@ -320,7 +334,7 @@ export function AIAssistant({ locale }: AIAssistantProps) {
                 </div>
                 <div
                   className={cn(
-                    'max-w-[85%] rounded-[var(--ds-border-radius-400,8px)] px-3.5 py-2.5 text-sm leading-relaxed outline-none',
+                    'max-w-[85%] rounded-[var(--ds-border-radius-400,8px)] px-3.5 py-2.5 text-sm leading-relaxed outline-none space-y-2',
                     isUser
                       ? 'bg-primary text-white shadow-[var(--ds-shadow-raised)]'
                       : 'bg-[var(--ds-surface-raised,#1f1f21)] text-[var(--ds-text,#FAFAFA)] border border-[var(--ds-border,#27272a)] shadow-[var(--ds-shadow-raised)]'
@@ -328,10 +342,54 @@ export function AIAssistant({ locale }: AIAssistantProps) {
                   dir={msgRtl ? 'rtl' : 'ltr'}
                 >
                   {textParts.map((part, i) => (
-                    <span key={i} className="whitespace-pre-wrap">
+                    <span key={i} className="whitespace-pre-wrap block">
                       {part.text}
                     </span>
                   ))}
+                  {!isUser &&
+                    extraParts.map((part, i) => (
+                      <div
+                        key={`extra-${i}`}
+                        className={cn(
+                          'text-[11px] text-[var(--ds-text-subtle,#A1A1AA)]',
+                          (text || i > 0) &&
+                            'border-t border-[var(--ds-border,#27272a)] pt-2'
+                        )}
+                      >
+                        {isToolUIPart(part) ? (
+                          <span>
+                            {getToolName(part)}
+                            {(part as { state?: string }).state
+                              ? ` · ${(part as { state: string }).state}`
+                              : ''}
+                          </span>
+                        ) : isReasoningUIPart(part) ? (
+                          <details>
+                            <summary className="cursor-pointer">
+                              {isRtl ? 'تفكير النموذج' : 'Model reasoning'}
+                            </summary>
+                            <pre className="mt-1 whitespace-pre-wrap text-[10px] opacity-90 max-h-32 overflow-auto">
+                              {part.text}
+                            </pre>
+                          </details>
+                        ) : isFileUIPart(part) ? (
+                          <a
+                            href={part.url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-primary underline"
+                          >
+                            {part.filename || part.url}
+                          </a>
+                        ) : isDataUIPart(part) ? (
+                          <pre className="text-[10px] max-h-24 overflow-auto opacity-90">
+                            {JSON.stringify(part.data, null, 2)}
+                          </pre>
+                        ) : (
+                          <span className="opacity-70">{part.type}</span>
+                        )}
+                      </div>
+                    ))}
                 </div>
               </div>
             );

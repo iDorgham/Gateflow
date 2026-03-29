@@ -20,6 +20,8 @@ Follow this order exactly.
    - `plan/`
    - `assets/`
    - `.cursor/`
+   - `.claude/`
+   - `.antigravity/`
    - `scripts/`
 
 ## 2) Install Workspace Structure
@@ -39,7 +41,7 @@ Create and wire:
 
 ## 3) Install Rules
 
-Install rules into `.cursor/rules/` and document them in `docs/workspace/catalog/RULES.md`.
+Install rules into `.cursor/rules/` and `.claude/rules/`, then document them in `docs/workspace/catalog/RULES.md`.
 
 Must include:
 
@@ -57,6 +59,10 @@ Install:
 - `.cursor/agents/roles/*`
 - `.cursor/agents/scenarios/*`
 - `.cursor/subagents/*`
+- `.claude/agents/orchestrator.md`
+- `.claude/agents/roles/*`
+- `.antigravity/agents/*`
+- `.antigravity/subagents/*`
 
 Then document in:
 
@@ -65,7 +71,7 @@ Then document in:
 
 ## 5) Install Skills
 
-Install `.cursor/skills/*/SKILL.md` and document in:
+Install `.cursor/skills/*/SKILL.md` and `.claude/skills/*/SKILL.md`, then document in:
 
 - `docs/workspace/catalog/SKILLS.md`
 
@@ -75,6 +81,9 @@ Install:
 
 - `.cursor/commands/*.md` (master slash commands)
 - `.cursor/commands-ref/*.md` (internal command refs)
+- `.claude/commands/*.md` (Claude command templates, including installer command)
+- `.antigravity/commands-ref/*.md` (internal references used by workflows)
+- `.antigravity/workflows/*.md` (master workflow docs)
 
 Document in:
 
@@ -132,6 +141,8 @@ Create:
 
 - `docs/workspace/templates/README.md`
 - `docs/workspace/contracts/README.md`
+- `.antigravity/templates/README.md`
+- `.antigravity/contracts/README.md`
 
 Ensure contracts are wired into rules/prompts/review flow.
 
@@ -151,6 +162,7 @@ Return:
 3. what still needs project-specific customization
 4. MVP roadmap summary (phases + prompt files)
 5. required MCP servers and onboarding status
+6. template validation result from `node scripts/template-validate.js`
 
 Execution constraints:
 
