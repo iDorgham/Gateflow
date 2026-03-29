@@ -67,7 +67,7 @@ export default async function MaintenancePage(props: {
       />
 
       <MaintenanceClient
-        initialData={workOrders as WorkOrderWithRelations[]}
+        initialData={workOrders as any as WorkOrderWithRelations[]}
         role={
           claims.roleName === 'RESIDENT'
             ? BUILT_IN_ROLES.RESIDENT

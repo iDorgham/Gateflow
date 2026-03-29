@@ -32,6 +32,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Features
 
+- **[Autonomous Ops Intelligence] **agentic foundation, perimeter bridge, and high-density UI
+
 - **[Ai] **UIMessage v6 parts, assistant fallbacks; docs template; scanner Jest
 
 - **[Ai] **UIMessage v6 parts, assistant fallbacks; docs template; scanner Jest

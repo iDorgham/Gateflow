@@ -111,21 +111,24 @@ function makeAuditEntry(
 // ─── Route handler ────────────────────────────────────────────────────────────
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
+  let claims: any = null;
+  let body: any = null;
+
   try {
     // Step 1 — Authenticate: verify Bearer JWT, extract claims.
     const authResult = await requireAuth(request);
     if (isNextResponse(authResult)) return authResult;
-    const claims = authResult;
+    claims = authResult;
 
     // Step 2 — Rate limit: 100 req/min per authenticated user.
     const rl = await checkRateLimit(`validate:${claims.sub}`);
     if (!rl.allowed) {
-      const body: QRValidateResponse = {
+      const responseBody: QRValidateResponse = {
         status: 'rejected',
         reason: 'rate_limited',
         message: 'Too many requests — please slow down',
       };
-      return NextResponse.json(body, {
+      return NextResponse.json(responseBody, {
         status: 429,
         headers: {
           'Retry-After': String(Math.ceil(rl.retryAfterMs / 1000)),
@@ -151,7 +154,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     setOrganizationContext({ organizationId: claims.orgId });
 
     // Step 4 — Parse & validate request body.
-    const body = await request.json();
+    body = await request.json();
     const parsed = QRValidateRequestSchema.safeParse(body);
     if (!parsed.success) {
       return NextResponse.json(
