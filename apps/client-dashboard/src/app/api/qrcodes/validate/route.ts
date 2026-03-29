@@ -12,6 +12,7 @@ import {
   isAccessAllowed,
 } from '@gate-access/db';
 import { requireAuth, isNextResponse } from '../../../../lib/require-auth';
+import { type AccessTokenClaims } from '../../../../lib/auth';
 import { checkRateLimit } from '../../../../lib/rate-limit';
 import { checkGateAssignment } from '../../../../lib/gate-assignment';
 import { checkLocationForGate } from '../../../../lib/location';
@@ -111,8 +112,8 @@ function makeAuditEntry(
 // ─── Route handler ────────────────────────────────────────────────────────────
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
-  let claims: any = null;
-  let body: any = null;
+  let claims: AccessTokenClaims | null = null;
+  let body: any = null; // Still using any for body until we parse it safely
 
   try {
     // Step 1 — Authenticate: verify Bearer JWT, extract claims.
