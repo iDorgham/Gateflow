@@ -39,11 +39,11 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-      - uses: pnpm/action-setup@a34861ae66f44d852a5c531d279cf1863cc3d463 # v4.1.0
+      - uses: pnpm/action-setup@v4
         with:
           version: ${{ env.PNPM_VERSION }}
 
-      - uses: actions/setup-node@3266030c6a35017df8ed07cc090f488669527e06 # v4.2.0
+      - uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'pnpm'
@@ -81,7 +81,7 @@ jobs:
         with:
           version: ${{ env.PNPM_VERSION }}
 
-      - uses: actions/setup-node@3266030c6a35017df8ed07cc090f488669527e06 # v4.2.0
+      - uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'pnpm'
@@ -115,11 +115,11 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-      - uses: pnpm/action-setup@a34861ae66f44d852a5c531d279cf1863cc3d463 # v4.1.0
+      - uses: pnpm/action-setup@v4
         with:
           version: ${{ env.PNPM_VERSION }}
 
-      - uses: actions/setup-node@3266030c6a35017df8ed07cc090f488669527e06 # v4.2.0
+      - uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'pnpm'
@@ -151,7 +151,7 @@ jobs:
         with:
           version: ${{ env.PNPM_VERSION }}
 
-      - uses: actions/setup-node@3266030c6a35017df8ed07cc090f488669527e06 # v4.2.0
+      - uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'pnpm'
@@ -205,7 +205,7 @@ jobs:
         with:
           version: ${{ env.PNPM_VERSION }}
 
-      - uses: actions/setup-node@3266030c6a35017df8ed07cc090f488669527e06 # v4.2.0
+      - uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'pnpm'
@@ -245,7 +245,7 @@ jobs:
         with:
           version: ${{ env.PNPM_VERSION }}
 
-      - uses: actions/setup-node@3266030c6a35017df8ed07cc090f488669527e06 # v4.2.0
+      - uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'pnpm'
