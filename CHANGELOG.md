@@ -155,6 +155,8 @@ plan:run → plan:done` with automatic folder moves and doc cascades
 
 ### Bug Fixes
 
+- **[Ci] **update all action versions to fix stale commit SHA failures
+
 - **[Client] **resolve build/type errors in maintenance hub and QR validation
 
 - **[Admin]** simplify AI assistant tools to native objects for SDK v5 typing

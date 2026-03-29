@@ -57,7 +57,7 @@ jobs:
           DATABASE_URL: 'postgresql://placeholder:placeholder@localhost:5432/placeholder'
 
       - name: Cache node_modules
-        uses: actions/cache@d2993c1045a204aa70e5c832c3f87a829f032644 # v4.2.0
+        uses: actions/cache@v4
         id: cache
         with:
           path: |
@@ -125,7 +125,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Restore node_modules cache
-        uses: actions/cache@d2993c1045a204aa70e5c832c3f87a829f032644 # v4.2.0
+        uses: actions/cache@v4
         with:
           path: |
             node_modules
