@@ -8,9 +8,9 @@
 
 **IDEA:** `docs/plan/context/IDEA_autonomous_ops_intelligence.md`
 
-**PLAN:** `docs/plan/planning/autonomous_ops_intelligence/PLAN_autonomous_ops_intelligence.md`
+**PLAN:** `docs/plan/planned/autonomous_ops_intelligence/PLAN_autonomous_ops_intelligence.md`
 
-**Status:** 🆕 Planning
+**Status:** 🆕 Planned
 
 **Target:** Q1 2027
 

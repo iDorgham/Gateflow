@@ -22,6 +22,7 @@ import {
 import { emitEvent, EventType } from '../../../../lib/realtime/emit-event';
 import { deliverWebhookEvent } from '../../../../lib/webhook-delivery';
 import { triggerHubSpotSync } from '../../../../lib/integrations/hubspot';
+import { MaintenanceExecutor } from '../../../../lib/ai/maintenance-executor';
 
 // ─── Configuration ────────────────────────────────────────────────────────────
 
@@ -664,6 +665,26 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         403
       );
     }
+
+    // Agentic Maintenance Trigger: If scan fails due to an "Internal Error"
+    // or specifically simulated "hardware failure" from the Scanner client.
+    if (claims?.orgId) {
+      const isHardwareError =
+        (body as any)?.scanContext?.status === 'hardware_error' ||
+        (error as any)?.code === 'HARDWARE_TIMEOUT';
+
+      if (isHardwareError) {
+        void MaintenanceExecutor.handleScanFailure({
+          organizationId: claims.orgId,
+          gateId: (body as any)?.scanContext?.gateId || 'unknown',
+          projectId: (body as any)?.scanContext?.projectId || undefined,
+          reason: (error as any)?.message || 'Hardware/Timeout Failure',
+        }).catch((err) =>
+          console.error('[qr/validate] MaintenanceExecutor failed:', err)
+        );
+      }
+    }
+
     console.error('[qr/validate] Unhandled error:', error);
     return json<QRValidateResponse>(
       {

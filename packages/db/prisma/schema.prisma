@@ -67,6 +67,7 @@ model Organization {
   communicationConfig           OrganizationCommunicationConfig?
   communicationLogs             CommunicationLog[]
   workOrders                    WorkOrder[]
+  vendors                       Vendor[]
 
   @@index([deletedAt])
 }
@@ -94,8 +95,29 @@ model Project {
   qrCodes        QRCode[]
   units          Unit[]
   workOrders     WorkOrder[]
+  vendors        Vendor[]
 
   @@index([organizationId])
+}
+
+model Vendor {
+  id             String              @id @default(cuid())
+  name           String
+  email          String?
+  phone          String?
+  category       MaintenanceCategory @default(GENERAL)
+  organizationId String
+  projectId      String?
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+  deletedAt      DateTime?
+  organization   Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  project        Project?            @relation(fields: [projectId], references: [id])
+  workOrders     WorkOrder[]
+
+  @@index([organizationId])
+  @@index([projectId])
+  @@index([deletedAt])
 }
 
 model Role {
@@ -834,6 +856,7 @@ enum WebhookEvent {
   QR_EXPIRED
   SCAN_SUCCESS
   SCAN_FAILED
+  SCAN_FAILURE // Agentic failure (hardware/timeout)
 }
 
 enum WebhookDeliveryStatus {
@@ -904,6 +927,7 @@ enum EventType {
   MAINTENANCE_ASSIGNED
   MAINTENANCE_UPDATED
   MAINTENANCE_DELETED
+  SCAN_FAILURE
 }
 
 /// Security watchlist status for a Contact
@@ -985,6 +1009,8 @@ model WorkOrder {
   unitId         String?
   project        Project?              @relation(fields: [projectId], references: [id])
   projectId      String?
+  vendor         Vendor?               @relation(fields: [vendorId], references: [id])
+  vendorId       String?
 
   @@index([organizationId])
   @@index([status])
@@ -993,6 +1019,7 @@ model WorkOrder {
   @@index([gateId])
   @@index([unitId])
   @@index([projectId])
+  @@index([vendorId])
   @@index([deletedAt])
 }
 

@@ -1,4 +1,4 @@
-// @ts-nocheck
+/* eslint-disable */
 const { TextEncoder, TextDecoder } = require('util');
 
 global.TextEncoder = TextEncoder;
@@ -124,10 +124,12 @@ jest.mock('@gate-access/db', () => ({
       groupBy: jest.fn().mockResolvedValue([]),
       create: jest.fn(),
     },
-    $transaction: jest.fn().mockImplementation((cb) => cb({
-      eventLog: { create: jest.fn() },
-      webhook: { findMany: jest.fn() },
-    })),
+    $transaction: jest.fn().mockImplementation((cb) =>
+      cb({
+        eventLog: { create: jest.fn() },
+        webhook: { findMany: jest.fn() },
+      })
+    ),
   },
   Prisma: {
     sql: (s) => s,
@@ -150,5 +152,33 @@ jest.mock('@gate-access/db', () => ({
     DATERANGE: 'DATERANGE',
     RECURRING: 'RECURRING',
     PERMANENT: 'PERMANENT',
+  },
+  MaintenanceStatus: {
+    OPEN: 'OPEN',
+    ASSIGNED: 'ASSIGNED',
+    IN_PROGRESS: 'IN_PROGRESS',
+    PENDING_PARTS: 'PENDING_PARTS',
+    RESOLVED: 'RESOLVED',
+    CANCELLED: 'CANCELLED',
+    CLOSED: 'CLOSED',
+  },
+  MaintenancePriority: {
+    LOW: 'LOW',
+    MEDIUM: 'MEDIUM',
+    HIGH: 'HIGH',
+    URGENT: 'URGENT',
+  },
+  MaintenanceCategory: {
+    ELECTRICAL: 'ELECTRICAL',
+    PLUMBING: 'PLUMBING',
+    HVAC: 'HVAC',
+    HARDWARE: 'HARDWARE',
+    GENERAL: 'GENERAL',
+    FACILITY: 'FACILITY',
+  },
+  MaintenanceLocationType: {
+    GATE: 'GATE',
+    UNIT: 'UNIT',
+    PROJECT: 'PROJECT',
   },
 }));
