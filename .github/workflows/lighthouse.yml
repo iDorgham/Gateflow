@@ -79,7 +79,7 @@ jobs:
           which lhci
 
       - name: Install Chrome
-        uses: browser-actions/setup-chrome@060136653df8a95f54cc652e9da4bc9369f691b0 # v1
+        uses: browser-actions/setup-chrome@4f8e94349a351df0f048634f25fec36c3c91eded # v2.1.1
 
       - name: Verify Chrome installation
         run: |
@@ -288,7 +288,7 @@ jobs:
       - name: Install @lhci/cli
         run: npm install -g @lhci/cli@${{ env.LHCI_VERSION }}
 
-      - uses: browser-actions/setup-chrome@060136653df8a95f54cc652e9da4bc9369f691b0 # v1
+      - uses: browser-actions/setup-chrome@4f8e94349a351df0f048634f25fec36c3c91eded # v2.1.1
 
       - name: Verify Chrome installation
         run: |
