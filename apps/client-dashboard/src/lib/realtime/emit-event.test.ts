@@ -64,14 +64,21 @@ describe('emitEvent', () => {
   });
 
   it('does not throw when prisma.eventLog.create fails', async () => {
+    const errSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
     mockCreate.mockRejectedValue(new Error('DB connection lost'));
 
     // Should resolve without throwing
-    await expect(emitEvent('org_fail', EventType.QR_DELETED, { qrId: 'x' })).resolves.toBeUndefined();
+    await expect(
+      emitEvent('org_fail', EventType.QR_DELETED, { qrId: 'x' })
+    ).resolves.toBeUndefined();
+    expect(errSpy).toHaveBeenCalled();
+    errSpy.mockRestore();
   });
 
   it('calls pruneOldEvents (deleteMany) after a successful create', async () => {
-    await emitEvent('org_prune', EventType.CONTACT_CREATED, { contactId: 'c1' });
+    await emitEvent('org_prune', EventType.CONTACT_CREATED, {
+      contactId: 'c1',
+    });
 
     // Allow the fire-and-forget pruneOldEvents to settle
     await new Promise((r) => setTimeout(r, 10));
@@ -87,8 +94,14 @@ describe('emitEvent', () => {
   });
 
   it('does not throw when pruneOldEvents fails', async () => {
+    const errSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
     mockDeleteMany.mockRejectedValue(new Error('prune failed'));
 
-    await expect(emitEvent('org_prune_fail', EventType.QR_UPDATED, {})).resolves.toBeUndefined();
+    await expect(
+      emitEvent('org_prune_fail', EventType.QR_UPDATED, {})
+    ).resolves.toBeUndefined();
+    await new Promise((r) => setTimeout(r, 10));
+    expect(errSpy).toHaveBeenCalled();
+    errSpy.mockRestore();
   });
 });

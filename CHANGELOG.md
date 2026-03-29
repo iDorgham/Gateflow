@@ -34,6 +34,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 - **[Ai] **UIMessage v6 parts, assistant fallbacks; docs template; scanner Jest
 
+- **[Ai] **UIMessage v6 parts, assistant fallbacks; docs template; scanner Jest
+
 - **[Ai] **native UIMessage parts rendering in AIAssistant sidebar (phase 4)
 - **[-M] **complete phase feat(ai): native UIMessage parts rendering in ChatPanel (phase 3)
 

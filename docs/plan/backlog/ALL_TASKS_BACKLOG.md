@@ -4,17 +4,19 @@
 
 ## Open Initiatives
 
-### ai_sdk_v6_migration — Ai Sdk V6 Migration
+### autonomous_ops_intelligence — Autonomous Operations & Perimeter Intelligence (Q1 2026)
+
+**STRATEGY:** `docs/plan/brainstorming/STRATEGY_autonomous_ops_intelligence.md`
 
 **Status:** 🆕 Open
 
-**Target:** Q4 2026
+**Target:** Q1 2027
 
-- [ ] Phase 1 — Title
-- [ ] Phase 2 — Title
-- [ ] Phase 3 — Title
-- [ ] Phase 4 — Title
-- [ ] Phase 5 — Title
+- [ ] Level 1 — ADS High-Density & Offline Diagnostics
+- [ ] Level 2 — Agentic Maintenance & WhatsApp Concierge
+- [ ] Level 3 — Perimeter Intelligence Hub (LPR/Tailgating)
+
+### ai_sdk_v6_migration — Ai Sdk V6 Migration
 
 ### projects_crm — Core CRM Extensions & Operations v2.0
 

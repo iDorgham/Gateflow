@@ -64,7 +64,18 @@
       "Bash(node /Users/Dorgham/Documents/Work/Devleopment/Gate-Access/scripts/ralph-skill-discover.js)",
       "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\(''''scripts'''', {}\\), indent=2\\)\\)\")",
       "Bash(node scripts/enforce-security-invariants.js)",
-      "Bash(npm info:*)"
+      "Bash(npm info:*)",
+      "Bash(BASE=/Users/Dorgham/Documents/Work/Devleopment/Gate-Access/docs/workspace/template-project/ops-core)",
+      "Bash(cp \"$BASE/cursor/rules/00-core.mdc\" \"$BASE/claude/rules/00-core.mdc\")",
+      "Bash(cp \"$BASE/cursor/rules/01-workflow.mdc\" \"$BASE/claude/rules/01-workflow.mdc\")",
+      "Bash(cp \"$BASE/cursor/rules/02-security.mdc\" \"$BASE/claude/rules/02-security.mdc\")",
+      "Bash(cp \"$BASE/cursor/agents/orchestrator.md\" \"$BASE/claude/agents/orchestrator.md\")",
+      "Bash(node scripts/template-validate.js)",
+      "Bash(node scripts/sync-ai-folders.js)",
+      "Bash(node scripts/check-ai-drift.js)",
+      "Bash(node docs/workspace/template-project/scripts/cache-build.js)",
+      "Bash(node docs/workspace/template-project/scripts/cache-check.js)",
+      "Bash(node docs/workspace/template-project/scripts/memory-init.js)"
     ]
   },
   "enabledMcpjsonServers": [

@@ -44,11 +44,17 @@ jest.mock('@/lib/rate-limit', () => ({
 
 const mockUpdateMany = jest.fn();
 const mockAuditCreate = jest.fn();
+const mockEventLogCreate = jest.fn();
+const mockEventLogDeleteMany = jest.fn();
 
 jest.mock('@gate-access/db', () => ({
   prisma: {
     qRCode: { updateMany: (...args: unknown[]) => mockUpdateMany(...args) },
     auditLog: { create: (...args: unknown[]) => mockAuditCreate(...args) },
+    eventLog: {
+      create: (...args: unknown[]) => mockEventLogCreate(...args),
+      deleteMany: (...args: unknown[]) => mockEventLogDeleteMany(...args),
+    },
   },
   EventType: {
     QR_CREATED: 'QR_CREATED',
@@ -80,7 +86,11 @@ describe('POST /api/qrcodes/bulk-delete', () => {
     POST = mod.POST as typeof POST;
   });
 
-  beforeEach(() => jest.clearAllMocks());
+  beforeEach(() => {
+    jest.clearAllMocks();
+    mockEventLogCreate.mockResolvedValue({ id: 'evt_test' });
+    mockEventLogDeleteMany.mockResolvedValue({ count: 0 });
+  });
 
   it('returns 401 when no session', async () => {
     mockGetSessionClaims.mockResolvedValue(null);

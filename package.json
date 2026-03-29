@@ -121,6 +121,8 @@
       "expo-router@6.0.23": "patches/expo-router@6.0.23.patch"
     },
     "overrides": {
+      "handlebars": ">=4.7.9",
+      "path-to-regexp": ">=0.1.13",
       "minimatch": ">=10.2.4",
       "braces": ">=3.0.3",
       "brace-expansion": ">=2.0.2",
