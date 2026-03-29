@@ -6,15 +6,19 @@
 
 ### autonomous_ops_intelligence — Autonomous Operations & Perimeter Intelligence (Q1 2026)
 
-**STRATEGY:** `docs/plan/brainstorming/STRATEGY_autonomous_ops_intelligence.md`
+**IDEA:** `docs/plan/context/IDEA_autonomous_ops_intelligence.md`
 
-**Status:** 🆕 Open
+**PLAN:** `docs/plan/planning/autonomous_ops_intelligence/PLAN_autonomous_ops_intelligence.md`
+
+**Status:** 🆕 Planning
 
 **Target:** Q1 2027
 
-- [ ] Level 1 — ADS High-Density & Offline Diagnostics
-- [ ] Level 2 — Agentic Maintenance & WhatsApp Concierge
-- [ ] Level 3 — Perimeter Intelligence Hub (LPR/Tailgating)
+- [ ] Phase 1 — Agentic Foundation (Backend)
+- [ ] Phase 2 — High-Density UI & Diagnostics (Frontend)
+- [ ] Phase 3 — Perimeter Bridge (Infrastructure)
+- [ ] Phase 4 — WhatsApp Concierge (Interactive)
+- [ ] Phase 5 — Resident Super-App (Convergence)
 
 ### ai_sdk_v6_migration — Ai Sdk V6 Migration
 
