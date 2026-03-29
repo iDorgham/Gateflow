@@ -5,13 +5,11 @@ import { TrustBar } from '../../components/sections/trust-bar';
 import { SecurityGrid } from '../../components/sections/security-grid';
 import { BottomCTA } from '../../components/sections/bottom-cta';
 import { StatsSection } from '../../components/sections/stats-section';
-import { SocialProof } from '../../components/sections/social-proof';
 import { HowItWorksSection } from '../../components/sections/how-it-works';
 import { ProductScreenshots } from '../../components/sections/product-screenshots';
 import { TestimonialsSection } from '../../components/sections/testimonials';
 import { ComparisonSection } from '../../components/sections/comparison';
 import { Shield, Zap, Smartphone, BarChart3 } from 'lucide-react';
-import { Button } from '@gate-access/ui';
 import { I18nLink } from '../../components/i18n-link';
 
 export default async function HomePage(props: {

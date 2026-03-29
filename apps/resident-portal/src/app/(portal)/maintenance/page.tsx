@@ -86,6 +86,7 @@ async function fetchMyRequests(): Promise<MaintenanceRequestItem[]> {
 }
 
 export default async function MaintenancePage(props: {
+  params: Promise<Record<string, string>>;
   searchParams: Promise<{ new?: string }>;
 }) {
   const searchParams = await props.searchParams;

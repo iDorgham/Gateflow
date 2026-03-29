@@ -2,8 +2,6 @@ import Link from 'next/link';
 import {
   ArrowLeft,
   User,
-  Mail,
-  Phone,
   Home,
   LogOut,
   Bell,
@@ -21,10 +19,10 @@ export default async function ProfilePage() {
   const orgId = claims?.org || 'dev-org-id';
 
   const user = await prisma.user.findFirst({
-    where: { 
+    where: {
       id: userId,
       organizationId: orgId,
-      deletedAt: null
+      deletedAt: null,
     },
     include: {
       unit: {

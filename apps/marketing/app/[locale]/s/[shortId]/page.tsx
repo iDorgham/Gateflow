@@ -2,17 +2,7 @@ export const dynamic = 'force-dynamic';
 
 import { prisma, verifySecureInviteSignature } from '@gate-access/db';
 import { getTranslation } from '../../../../lib/i18n/get-translation';
-import {
-  AlertCircle,
-  ShieldAlert,
-  Building,
-  ShieldCheck,
-  Clock,
-  User,
-  Navigation,
-  ExternalLink,
-  CheckCircle2,
-} from 'lucide-react';
+import { AlertCircle, Building, ShieldCheck, Clock, User } from 'lucide-react';
 import { Button, Separator } from '@gate-access/ui';
 import { I18nLink } from '../../../../components/i18n-link';
 import type { Locale } from '../../../../i18n-config';
@@ -29,7 +19,7 @@ export default async function InvitationPage(props: InvitationPageProps) {
   const { t } = await getTranslation(castLocale, 'invitation');
 
   // 1. Fetch the Short Link record
-  const shortLinkData = await (prisma.qrShortLink as any).findFirst({
+  const shortLink = await (prisma.qrShortLink as any).findFirst({
     where: {
       shortId,
       expiresAt: {
@@ -57,8 +47,6 @@ export default async function InvitationPage(props: InvitationPageProps) {
       },
     },
   });
-
-  const shortLink = shortLinkData as any;
 
   if (!shortLink) {
     return (
@@ -88,8 +76,6 @@ export default async function InvitationPage(props: InvitationPageProps) {
   const visitor = shortLink.qrCode.visitorQR;
   const project = shortLink.qrCode.project;
   const org = shortLink.qrCode.organization;
-  const gate = project?.gates?.[0];
-  const isArabic = castLocale === 'ar-EG';
 
   return (
     <div className="flex-1 bg-[var(--ds-background-subtle,#F4F5F7)] pt-24 pb-32">

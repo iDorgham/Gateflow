@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { LegalLayout } from '../../../../components/sections/legal-layout';
-import { Shield, Lock, FileText, CheckCircle2 } from 'lucide-react';
+import { Shield, Lock } from 'lucide-react';
 import type { Locale } from '../../../../i18n-config';
 import { getTranslation } from '../../../../lib/i18n/get-translation';
 

@@ -155,6 +155,8 @@ plan:run → plan:done` with automatic folder moves and doc cascades
 
 ### Bug Fixes
 
+- **[Ci] **resolve nextjs 15 type errors and update action versions
+
 - **[Ci] **resolve all stale action references and relax lighthouse thresholds
 
 - **[Ci] **update all action versions to fix stale commit SHA failures

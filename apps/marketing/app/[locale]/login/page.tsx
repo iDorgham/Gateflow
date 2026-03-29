@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { Button } from '@gate-access/ui';
 import { Shield, ArrowRight, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { I18nLink } from '../../../components/i18n-link';
