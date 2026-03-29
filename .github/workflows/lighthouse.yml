@@ -70,10 +70,25 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Install @lhci/cli
-        run: npm install -g @lhci/cli@${{ env.LHCI_VERSION }}
+        run: |
+          npm install -g @lhci/cli@${{ env.LHCI_VERSION }} || {
+            echo "❌ LHCI CLI installation failed"
+            exit 1
+          }
+          lhci --version
+          which lhci
 
       - name: Install Chrome
         uses: browser-actions/setup-chrome@060136653df8a95f54cc652e9da4bc9369f691b0 # v1
+
+      - name: Verify Chrome installation
+        run: |
+          which google-chrome || which chrome || which chromium || which chromium-browser || {
+            echo "❌ Chrome not found in PATH"
+            exit 1
+          }
+          # Try to get version from whatever we found
+          (google-chrome --version || chrome --version || chromium --version || chromium-browser --version) 2>/dev/null || echo "Could not determine version"
 
       - name: Determine target URL
         id: url
@@ -85,11 +100,13 @@ jobs:
           fi
           echo "url=$URL" >> $GITHUB_OUTPUT
           echo "Auditing marketing: $URL"
+          curl -I "$URL" || echo "⚠ Warning: URL may be unreachable"
 
       # ── Mobile audit ──
       - name: Run Lighthouse — Mobile
         id: lh_mobile
         run: |
+          set +e
           lhci autorun \
             --collect.url="${{ steps.url.outputs.url }}" \
             --collect.url="${{ steps.url.outputs.url }}/en/features" \
@@ -103,30 +120,56 @@ jobs:
             --assert.assertions.categories:seo="['error',{'minScore':0.90}]" \
             --assert.assertions.cumulative-layout-shift="['error',{'maxNumericValue':0.15}]" \
             --upload.target=temporary-public-storage \
-            --config=.lighthouserc.js \
-          || echo "LHCI_FAILED=1" >> $GITHUB_ENV
+            --config=.lighthouserc.js
+          EXIT_CODE=$?
+          set -e
+
+          echo "LHCI exit code: $EXIT_CODE"
           mkdir -p lhci-reports/marketing-mobile
-          cp -r .lighthouseci/* lhci-reports/marketing-mobile/ 2>/dev/null || true
-        continue-on-error: true
+          if [ -d ".lighthouseci" ]; then
+            cp -r .lighthouseci/* lhci-reports/marketing-mobile/
+            ls -la lhci-reports/marketing-mobile/
+          else
+            echo "⚠ Warning: .lighthouseci directory not created"
+          fi
+          exit $EXIT_CODE
 
       # ── Desktop audit ──
       - name: Run Lighthouse — Desktop
         id: lh_desktop
         run: |
+          set +e
           lhci autorun \
             --collect.url="${{ steps.url.outputs.url }}" \
             --collect.settings.emulatedFormFactor=desktop \
             --collect.numberOfRuns=3 \
             --collect.settings.chromeFlags="--no-sandbox --disable-dev-shm-usage" \
             --upload.target=temporary-public-storage \
-            --config=.lighthouserc.js \
-          || echo "LHCI_DESKTOP_FAILED=1" >> $GITHUB_ENV
+            --config=.lighthouserc.js
+          EXIT_CODE=$?
+          set -e
+
+          echo "LHCI exit code: $EXIT_CODE"
           mkdir -p lhci-reports/marketing-desktop
-          cp -r .lighthouseci/* lhci-reports/marketing-desktop/ 2>/dev/null || true
-        continue-on-error: true
+          if [ -d ".lighthouseci" ]; then
+            cp -r .lighthouseci/* lhci-reports/marketing-desktop/
+          else
+            echo "⚠ Warning: .lighthouseci directory not created"
+          fi
+          exit $EXIT_CODE
+
+      # ── Debug — List artifacts ──
+      - name: Debug — List artifacts
+        if: always()
+        run: |
+          echo "=== lhci-reports structure ==="
+          find lhci-reports -type f 2>/dev/null || echo "lhci-reports directory not found"
+          echo "=== .lighthouseci contents ==="
+          ls -la .lighthouseci 2>/dev/null || echo ".lighthouseci directory not found"
 
       # ── Print CWV metrics to step summary ──
       - name: Print score summary
+        if: always()
         run: |
           node - <<'EOF'
           const fs = require('fs');
@@ -153,7 +196,6 @@ jobs:
             console.log(`  CLS:            ${(audits['cumulative-layout-shift']?.numericValue ?? 0).toFixed(3)}`);
           }
           EOF
-        continue-on-error: true
 
       # ── Upload HTML reports as artifact ──
       - name: Upload Lighthouse reports
@@ -166,7 +208,7 @@ jobs:
 
       # ── Post/update PR comment with scores ──
       - name: Comment Lighthouse scores on PR
-        if: github.event_name == 'pull_request'
+        if: always() && github.event_name == 'pull_request'
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
         with:
           script: |
@@ -248,6 +290,13 @@ jobs:
 
       - uses: browser-actions/setup-chrome@060136653df8a95f54cc652e9da4bc9369f691b0 # v1
 
+      - name: Verify Chrome installation
+        run: |
+          which google-chrome || which chrome || which chromium || which chromium-browser || {
+            echo "❌ Chrome not found in PATH"
+            exit 1
+          }
+
       - name: Determine dashboard URL
         id: url
         run: |
@@ -257,22 +306,32 @@ jobs:
           fi
           echo "url=$URL" >> $GITHUB_OUTPUT
           echo "Auditing dashboard: $URL"
+          curl -I "$URL" || echo "⚠ Warning: URL may be unreachable"
 
       - name: Run Lighthouse — Desktop
         run: |
+          set +e
           lhci autorun \
             --collect.url="${{ steps.url.outputs.url }}/en" \
             --collect.settings.emulatedFormFactor=desktop \
             --collect.numberOfRuns=3 \
             --collect.settings.chromeFlags="--no-sandbox --disable-dev-shm-usage" \
             --upload.target=temporary-public-storage \
-            --config=.lighthouserc.js \
-          || echo "LHCI dashboard audit completed with warnings"
+            --config=.lighthouserc.js
+          EXIT_CODE=$?
+          set -e
+
+          echo "LHCI exit code: $EXIT_CODE"
           mkdir -p lhci-reports/dashboard-desktop
-          cp -r .lighthouseci/* lhci-reports/dashboard-desktop/ 2>/dev/null || true
-        continue-on-error: true
+          if [ -d ".lighthouseci" ]; then
+            cp -r .lighthouseci/* lhci-reports/dashboard-desktop/
+          else
+            echo "⚠ Warning: .lighthouseci directory not created"
+          fi
+          exit $EXIT_CODE
 
       - name: Print score summary
+        if: always()
         run: |
           node - <<'EOF'
           const fs = require('fs'), path = require('path');
@@ -290,7 +349,6 @@ jobs:
           console.log('  TBT:           ', Math.round(a['total-blocking-time']?.numericValue ?? 0) + 'ms');
           console.log('  CLS:           ', (a['cumulative-layout-shift']?.numericValue ?? 0).toFixed(3));
           EOF
-        continue-on-error: true
 
       - name: Upload Dashboard reports
         if: always()
