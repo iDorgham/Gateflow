@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowLeft, Bell, Smartphone, Mail, Shield } from 'lucide-react';
+import { ArrowLeft, Bell, Mail, Shield } from 'lucide-react';
 
 export default function NotificationsSettingsPage() {
   return (

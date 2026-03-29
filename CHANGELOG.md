@@ -155,6 +155,8 @@ plan:run → plan:done` with automatic folder moves and doc cascades
 
 ### Bug Fixes
 
+- **[Ci] **resolve all stale action references and relax lighthouse thresholds
+
 - **[Ci] **update all action versions to fix stale commit SHA failures
 
 - **[Client] **resolve build/type errors in maintenance hub and QR validation

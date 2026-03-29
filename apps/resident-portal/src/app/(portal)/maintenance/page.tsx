@@ -85,11 +85,10 @@ async function fetchMyRequests(): Promise<MaintenanceRequestItem[]> {
   return json.data as MaintenanceRequestItem[];
 }
 
-export default async function MaintenancePage({
-  searchParams,
-}: {
-  searchParams: { new?: string };
+export default async function MaintenancePage(props: {
+  searchParams: Promise<{ new?: string }>;
 }) {
+  const searchParams = await props.searchParams;
   const isNew = searchParams.new === 'true';
   const requests = await fetchMyRequests();
 
