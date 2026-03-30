@@ -155,6 +155,8 @@ plan:run → plan:done` with automatic folder moves and doc cascades
 
 ### Bug Fixes
 
+- **[Db] **resolve implicit any in transaction and refine types
+
 - **[Db] **correct version for accelerate extension
 
 - **[Db] **resolve type recursion and missing accelerate extension

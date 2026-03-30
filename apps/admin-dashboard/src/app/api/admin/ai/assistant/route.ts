@@ -94,7 +94,7 @@ Never make up data — use tools to fetch real information.`,
               users: { select: { id: true } },
             },
           });
-          return orgs.map((o) => ({
+          return orgs.map((o: any) => ({
             id: o.id,
             name: o.name,
             plan: String(o.plan),
@@ -172,7 +172,7 @@ Never make up data — use tools to fetch real information.`,
               qrCode: { select: { organization: { select: { name: true } } } },
             },
           });
-          return scans.map((s) => ({
+          return (scans as any[]).map((s: any) => ({
             id: s.id,
             status: String(s.status),
             scannedAt: s.scannedAt.toISOString(),
@@ -206,7 +206,7 @@ Never make up data — use tools to fetch real information.`,
               organization: { select: { name: true } },
             },
           });
-          return users.map((u) => ({
+          return (users as any[]).map((u: any) => ({
             id: u.id,
             name: u.name,
             email: u.email,
