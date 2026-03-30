@@ -1,7 +1,7 @@
 # Tasks — Autonomous Operations & Perimeter Intelligence
 
 **Slug:** autonomous_ops_intelligence
-**Status:** 🆕 Planning
+**Status:** ✅ Phase 05 Done
 
 ---
 
@@ -9,52 +9,52 @@
 
 | Phase  | Title                  | Role             | Status |
 | :----- | :--------------------- | :--------------- | :----: |
-| **01** | **Agentic Foundation** | BACKEND-Database |  [ ]   |
-| **02** | **High-Density UI**    | FRONTEND         |  [ ]   |
-| **03** | **Perimeter Bridge**   | ARCHITECTURE     |  [ ]   |
-| **04** | **WhatsApp Concierge** | BACKEND-API      |  [ ]   |
-| **05** | **Resident Super-App** | MOBILE           |  [ ]   |
+| **01** | **Agentic Foundation** | BACKEND-Database |  [x]   |
+| **02** | **High-Density UI**    | FRONTEND         |  [x]   |
+| **03** | **Perimeter Bridge**   | ARCHITECTURE     |  [x]   |
+| **04** | **WhatsApp Concierge** | BACKEND-API      |  [x]   |
+| **05** | **Resident Super-App** | MOBILE           |  [x]   |
 
 ---
 
-## 01: Agentic Foundation (Backend) — [ ]
+## 01: Agentic Foundation (Backend) — [x]
 
-- [ ] Create `Vendor` Prisma model and Link to `Project`.
-- [ ] Add `SCAN_FAILURE` trigger logic in QR validation API.
-- [ ] Implement `MaintenanceExecutor` class for autonomous WO creation.
-- [ ] Unit test: Failure triggers automated Wool order assignment.
-
----
-
-## 02: High-Density UI & Diagnostics (Frontend) — [ ]
-
-- [ ] Implement virtualization for scan feed (Recharts + ADS High Density).
-- [ ] Create `DiagnosticsOverlay` for `scanner-app`.
-- [ ] Audit RTL for dense tables.
+- [x] Create `Vendor` Prisma model and Link to `Project`.
+- [x] Add `SCAN_FAILURE` trigger logic in QR validation API.
+- [x] Implement `MaintenanceExecutor` class for autonomous WO creation.
+- [x] Unit test: Failure triggers automated Work order assignment.
 
 ---
 
-## 03: Perimeter Bridge (Infrastructure) — [ ]
+## 02: High-Density UI & Diagnostics (Frontend) — [x]
 
-- [ ] Create `POST /api/perimeter/webhook` with signature verification.
-- [ ] Implement tailgating/LPR incident logic.
-- [ ] SSE Incident alerts to the dashboard.
-
----
-
-## 04: WhatsApp Concierge (Interactive) — [ ]
-
-- [ ] Handle WhatsApp Incoming payload (webhook).
-- [ ] Create conversant guest registration bot.
-- [ ] Resident push notification for one-tap approval.
+- [x] Implement virtualization for scan feed (Recharts + ADS High Density).
+- [x] Create `DiagnosticsOverlay` for `scanner-app`.
+- [x] Audit RTL for dense tables.
 
 ---
 
-## 05: Resident Super-App (Convergence) — [ ]
+## 03: Perimeter Bridge (Infrastructure) — [x]
 
-- [ ] Create Marketplace tab in `resident-mobile`.
-- [ ] Add Merchant & Service schema.
-- [ ] Integrated service payment flow (v0.1).
+- [x] Create `POST /api/perimeter/webhook` with signature verification.
+- [x] Implement tailgating/LPR incident logic.
+- [x] SSE Incident alerts to the dashboard.
+
+---
+
+## 04: WhatsApp Concierge (Interactive) — [x]
+
+- [x] Handle WhatsApp Incoming payload (webhook).
+- [x] Create conversant guest registration bot (MVP: webhook-driven pending visitor QR + approval routing).
+- [x] Resident push notification for one-tap approval.
+
+---
+
+## 05: Resident Super-App (Convergence) — [x]
+
+- [x] Create Marketplace tab in `resident-mobile`.
+- [x] Add Merchant & Service schema.
+- [x] Integrated service payment flow (v0.1) (MVP: org-scoped booking marked `PAID`).
 
 ---
 

@@ -155,6 +155,8 @@ plan:run → plan:done` with automatic folder moves and doc cascades
 
 ### Bug Fixes
 
+- **[Admin] **resolve type inference issues in AI assistant route
+
 - **[Db] **resolve implicit any in transaction and refine types
 
 - **[Db] **correct version for accelerate extension

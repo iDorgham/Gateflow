@@ -14,7 +14,7 @@ const EVENT_QUERY_MAP: Record<string, string[][]> = {
   VISITOR_QR_CREATED: [['qrcodes'], ['contacts']],
   VISITOR_QR_DELETED: [['qrcodes']],
   TEAM_CHAT_MESSAGE: [['team-messages']],
-  WATCHLIST_ALERT: [],
+  WATCHLIST_ALERT: [['incidents']],
 };
 
 /** Custom DOM event name used to forward WATCHLIST_ALERT payloads to SecurityNotifier. */

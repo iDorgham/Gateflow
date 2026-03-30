@@ -69,6 +69,10 @@ model Organization {
   workOrders                    WorkOrder[]
   vendors                       Vendor[]
 
+  merchants         Merchant[]
+  services          Service[]
+  serviceBookings  ServiceBooking[]
+
   @@index([deletedAt])
 }
 
@@ -169,6 +173,8 @@ model User {
   communicationLogs CommunicationLog[]
   reportedWorkOrders WorkOrder[] @relation("ReportedWorkOrders")
   assignedWorkOrders WorkOrder[] @relation("AssignedWorkOrders")
+
+  serviceBookings ServiceBooking[]
 
   @@index([organizationId])
   @@index([roleId])
@@ -650,6 +656,7 @@ model Unit {
   user           User?         @relation(fields: [userId], references: [id])
   visitorQRs     VisitorQR[]
   workOrders     WorkOrder[]
+  serviceBookings ServiceBooking[]
 
   @@unique([organizationId, name])
   @@index([organizationId])
@@ -937,6 +944,12 @@ enum WatchlistStatus {
   ESCORT
 }
 
+enum ServiceBookingStatus {
+  PENDING
+  PAID
+  CANCELLED
+}
+
 enum AiAutomationType {
   REPORT
   EXPORT
@@ -1020,6 +1033,80 @@ model WorkOrder {
   @@index([unitId])
   @@index([projectId])
   @@index([vendorId])
+  @@index([deletedAt])
+}
+
+model Merchant {
+  id             String       @id @default(cuid())
+  organizationId String
+  name           String
+  description    String?
+  isActive       Boolean      @default(true)
+  deletedAt      DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  services     Service[]
+
+  @@index([organizationId])
+  @@index([deletedAt])
+  @@index([isActive])
+}
+
+model Service {
+  id             String       @id @default(cuid())
+  organizationId String
+  merchantId     String
+  name           String
+  description    String?
+  category       String?
+  priceCents     Int
+  currency       String       @default("USD")
+  durationMins   Int?
+  isActive       Boolean      @default(true)
+  deletedAt      DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  merchant     Merchant     @relation(fields: [merchantId], references: [id])
+
+  serviceBookings ServiceBooking[]
+
+  @@index([organizationId])
+  @@index([merchantId])
+  @@index([deletedAt])
+  @@index([isActive])
+}
+
+model ServiceBooking {
+  id             String       @id @default(cuid())
+  organizationId String
+  serviceId      String
+  unitId         String
+  userId         String
+
+  status         ServiceBookingStatus @default(PAID)
+  priceCents     Int
+  currency       String
+
+  // Soft delete for accidental cancel/refund flows
+  deletedAt      DateTime?
+
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  service      Service     @relation(fields: [serviceId], references: [id])
+  unit         Unit        @relation(fields: [unitId], references: [id])
+  user         User        @relation(fields: [userId], references: [id])
+
+  @@index([organizationId])
+  @@index([serviceId])
+  @@index([unitId])
+  @@index([userId])
+  @@index([status])
   @@index([deletedAt])
 }
 

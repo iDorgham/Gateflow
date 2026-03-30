@@ -40,6 +40,16 @@ lifestyle super-app for premium communities.
 
 ---
 
+## Phases
+
+| #   | Phase                         | Tool   | Status |
+| --- | ----------------------------- | ------ | ------ |
+| 1   | Agentic Foundation            | cursor | [x]    |
+| 2   | High-Density UI & Diagnostics | cursor | [x]    |
+| 3   | Perimeter Bridge              | qwen   | [x]    |
+| 4   | WhatsApp Concierge            | cursor | [x]    |
+| 5   | Resident Super-App            | cursor | [x]    |
+
 ### Phase 01: Agentic Foundation (Backend)
 
 **Goal:** Allow GateAI to trigger autonomous assignments for hardware failures.
@@ -118,8 +128,8 @@ lifestyle super-app for premium communities.
   3. **Integrated Payments**: Scoped payment flow (v0.1) for services.
 - **Deliverables:** Resident Marketplace Tab, Service schema, Payment UI.
 - **Accpetance Criteria:**
-  - [ ] Residents can book and pay for services in Arabic and English.
-  - [ ] Payments are hard-scoped to organization and resident.
+  - [x] Residents can book and pay for services (MVP: org-scoped booking marked `PAID`) in Arabic and English (RTL strings).
+  - [x] Payments are hard-scoped to organization and resident.
 
 ---
 

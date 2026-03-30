@@ -183,7 +183,7 @@ const s = StyleSheet.create({
     borderWidth: 1,
     borderColor: nativeTokens.colors.neutral700,
     overflow: 'hidden',
-    shadowColor: '#000',
+    shadowColor: nativeTokens.colors.foreground,
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.3,
     shadowRadius: 15,

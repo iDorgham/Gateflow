@@ -29,7 +29,9 @@ export default function TabsLayout() {
         name="qrs/index"
         options={{
           title: 'QRs',
-          tabBarIcon: ({ color, size }) => <Ionicons name="qr-code" color={color} size={size} />,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="qr-code" color={color} size={size} />
+          ),
           headerTitle: 'My visitor QRs',
         }}
       />
@@ -37,7 +39,9 @@ export default function TabsLayout() {
         name="ai/index"
         options={{
           title: 'GateAI',
-          tabBarIcon: ({ color, size }) => <Ionicons name="sparkles" color={color} size={size} />,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="sparkles" color={color} size={size} />
+          ),
           headerTitle: 'GateAI Assistant',
         }}
       />
@@ -45,7 +49,9 @@ export default function TabsLayout() {
         name="history/index"
         options={{
           title: 'History',
-          tabBarIcon: ({ color, size }) => <Ionicons name="time-outline" color={color} size={size} />,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="time-outline" color={color} size={size} />
+          ),
           headerTitle: 'Visitor history',
         }}
       />
@@ -53,11 +59,22 @@ export default function TabsLayout() {
         name="settings/index"
         options={{
           title: 'Settings',
-          tabBarIcon: ({ color, size }) => <Ionicons name="settings-outline" color={color} size={size} />,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="settings-outline" color={color} size={size} />
+          ),
           headerTitle: 'Settings',
+        }}
+      />
+      <Tabs.Screen
+        name="marketplace/index"
+        options={{
+          title: 'Marketplace',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="bag-handle-outline" color={color} size={size} />
+          ),
+          headerTitle: 'Marketplace',
         }}
       />
     </Tabs>
   );
 }
-

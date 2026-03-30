@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma, EventType, IncidentStatus } from '@gate-access/db';
 import crypto from 'crypto';
+import { z } from 'zod';
 import {
   PerimeterEventType,
   PerimeterWebhookPayload,
@@ -11,92 +12,194 @@ import {
  *
  * Ingest real-time visual AI events (Tailgating, LPR, Forced Entry).
  *
- * security: HMAC Signature Verification (SHA-256)
- * logic: Cross-reference barrier vs scan-log timings to detect anomalies.
+ * Security: HMAC-SHA256 fail-closed — missing secret or invalid signature → 401.
+ * Multi-tenancy: all DB reads/writes are scoped to webhook `organizationId`.
+ * Idempotency: duplicate incidents within a 10-second window are suppressed.
  */
 
+/** HMAC signing format: `${timestamp}.${rawBody}` (same as sender convention). */
+function computeHmac(
+  secret: string,
+  timestamp: string,
+  rawBody: string
+): Buffer {
+  return Buffer.from(
+    crypto
+      .createHmac('sha256', secret)
+      .update(`${timestamp}.${rawBody}`)
+      .digest('hex'),
+    'hex'
+  );
+}
+
+const PerimeterWebhookSchema = z.object({
+  organizationId: z.string().min(1),
+  projectId: z.string().min(1),
+  gateId: z.string().min(1),
+  type: z.nativeEnum(PerimeterEventType),
+  payload: z.record(z.any()),
+  timestamp: z.string().min(1),
+});
+
 export async function POST(req: NextRequest) {
+  // ── 1. Read raw body (needed for correct HMAC computation) ─────────────────
+  let rawBody: string;
+  let bodyUnknown: unknown;
   try {
-    const body = (await req.json()) as PerimeterWebhookPayload;
-    const signature = req.headers.get('x-gf-signature');
-    const timestamp = req.headers.get('x-gf-timestamp');
+    rawBody = await req.text();
+    bodyUnknown = JSON.parse(rawBody) as unknown;
+  } catch {
+    return NextResponse.json(
+      { success: false, message: 'Invalid JSON body' },
+      { status: 400 }
+    );
+  }
 
-    // 1. Basic Validation
-    if (!body.organizationId || !body.gateId || !body.type) {
-      return NextResponse.json(
-        { success: false, message: 'Malfront payload' },
-        { status: 400 }
-      );
-    }
+  // ── 2. Payload validation (Zod) ─────────────────────────────────────────────
+  const parsed = PerimeterWebhookSchema.safeParse(bodyUnknown);
+  if (!parsed.success) {
+    return NextResponse.json(
+      {
+        success: false,
+        message: 'Malformed payload',
+        error: parsed.error.flatten(),
+      },
+      { status: 400 }
+    );
+  }
 
-    // 2. HMAC Security (Optional in Dev, Mandatory in Prod)
-    // For now, we'll implement the logic assuming the signature is present.
-    const secret = process.env.PERIMETER_WEBHOOK_SECRET || 'dev-secret';
-    if (signature) {
-      const expectedSignature = crypto
-        .createHmac('sha256', secret)
-        .update(`${timestamp}.${JSON.stringify(body)}`)
-        .digest('hex');
+  // Zod guarantees shape; we still cast to the shared TS interface.
+  const body = parsed.data as PerimeterWebhookPayload;
 
-      if (signature !== expectedSignature) {
-        return NextResponse.json(
-          { success: false, message: 'Invalid signature' },
-          { status: 401 }
-        );
-      }
-    }
+  // ── 3. Fail-closed HMAC verification ──────────────────────────────────────
+  // No dev fallback — if the secret is absent, the endpoint refuses all requests.
+  const secret = process.env.PERIMETER_WEBHOOK_SECRET;
+  if (!secret) {
+    console.error(
+      '[perimeter/webhook] PERIMETER_WEBHOOK_SECRET is not configured'
+    );
+    return NextResponse.json(
+      { success: false, message: 'Webhook secret not configured' },
+      { status: 500 }
+    );
+  }
 
-    // 3. Logic: Detect Tailgating or Intrusion
+  const signature = req.headers.get('x-gf-signature');
+  const timestamp = req.headers.get('x-gf-timestamp');
+
+  if (!signature || !timestamp) {
+    return NextResponse.json(
+      { success: false, message: 'Missing signature headers' },
+      { status: 401 }
+    );
+  }
+
+  const expectedBuf = computeHmac(secret, timestamp, rawBody);
+  let sigBuf: Buffer;
+  try {
+    sigBuf = Buffer.from(signature, 'hex');
+  } catch {
+    return NextResponse.json(
+      { success: false, message: 'Invalid signature encoding' },
+      { status: 401 }
+    );
+  }
+
+  // timingSafeEqual requires equal-length buffers — a length mismatch is itself
+  // an invalid signature so we can safely short-circuit here.
+  if (
+    sigBuf.length !== expectedBuf.length ||
+    !crypto.timingSafeEqual(sigBuf, expectedBuf)
+  ) {
+    return NextResponse.json(
+      { success: false, message: 'Invalid signature' },
+      { status: 401 }
+    );
+  }
+
+  try {
+    // ── 4. Detect anomalies: Tailgating or Forced Entry ─────────────────────
     if (
       body.type === PerimeterEventType.TAILGATING ||
+      body.type === PerimeterEventType.LPR_MATCH ||
       body.type === PerimeterEventType.BARRIER_FORCED
     ) {
-      // Cross-reference with last 5s of scan logs
-      const fiveSecondsAgo = new Date(Date.now() - 5000);
+      const fiveSecondsAgo = new Date(Date.now() - 5_000);
+
+      // Org-scoped scan cross-reference: filter via qrCode.organizationId so
+      // a gateId from another tenant cannot satisfy this check.
       const recentValidScan = await prisma.scanLog.findFirst({
         where: {
           gateId: body.gateId,
           scannedAt: { gte: fiveSecondsAgo },
           status: 'SUCCESS',
+          qrCode: { organizationId: body.organizationId },
         },
       });
 
-      // If tailgating detected and no recent success scan, create an Incident
-      if (!recentValidScan || body.type === PerimeterEventType.BARRIER_FORCED) {
-        const incident = await prisma.incident.create({
-          data: {
+      const isAnomaly =
+        body.type === PerimeterEventType.BARRIER_FORCED ||
+        (body.type === PerimeterEventType.TAILGATING && !recentValidScan) ||
+        body.type === PerimeterEventType.LPR_MATCH;
+
+      if (isAnomaly) {
+        // ── 5. Idempotency guard ─────────────────────────────────────────────
+        // Suppress duplicate incidents for the same gate + type within 10 seconds.
+        const tenSecondsAgo = new Date(Date.now() - 10_000);
+        const existingIncident = await prisma.incident.findFirst({
+          where: {
             organizationId: body.organizationId,
             gateId: body.gateId,
-            reason:
-              body.type === PerimeterEventType.BARRIER_FORCED
-                ? 'BARRIER_FORCED: Sudden force detected without scan.'
-                : 'TAILGATING: Vehicle entered without active scan.',
-            status: IncidentStatus.UNDER_REVIEW,
-            notes: `Detection from AI Camera at ${body.timestamp}. Metadata: ${JSON.stringify(body.payload)}`,
+            reason: { startsWith: `${body.type}:` },
+            createdAt: { gte: tenSecondsAgo },
           },
+          select: { id: true },
         });
 
-        // 4. Record to EventLog to trigger real-time SSE stream in Dashboard
-        await prisma.eventLog.create({
-          data: {
-            organizationId: body.organizationId,
-            type: EventType.WATCHLIST_ALERT, // We'll reuse Alert or add a generic INCIDENT_CREATED if needed
-            payload: {
-              incidentId: incident.id,
+        if (!existingIncident) {
+          const reason =
+            body.type === PerimeterEventType.BARRIER_FORCED
+              ? `${body.type}: Sudden force detected without authorised scan.`
+              : body.type === PerimeterEventType.TAILGATING
+                ? `${body.type}: Vehicle entered without an active scan.`
+                : `${body.type}: Licence plate flagged by perimeter camera.`;
+
+          // Attempt to link the triggering scan when available
+          const triggeringScan = recentValidScan ?? null;
+
+          const incident = await prisma.incident.create({
+            data: {
+              organizationId: body.organizationId,
               gateId: body.gateId,
-              severity: 'CRITICAL',
-              reason: incident.reason,
+              reason,
+              status: IncidentStatus.UNDER_REVIEW,
+              notes: `AI camera detection at ${body.timestamp}. Metadata: ${JSON.stringify(body.payload)}`,
+              ...(triggeringScan ? { scanLogId: triggeringScan.id } : {}),
             },
-          },
-        });
+          });
+
+          // ── 6. Emit SSE alert via EventLog ──────────────────────────────────
+          await prisma.eventLog.create({
+            data: {
+              organizationId: body.organizationId,
+              type: EventType.WATCHLIST_ALERT,
+              payload: {
+                incidentId: incident.id,
+                gateId: body.gateId,
+                severity: 'CRITICAL',
+                reason: incident.reason,
+              },
+            },
+          });
+        }
       }
     }
 
-    // 5. Generic Event Logging for analytics
+    // ── 7. Generic analytics event log ──────────────────────────────────────
     await prisma.eventLog.create({
       data: {
         organizationId: body.organizationId,
-        type: EventType.SCAN_RECORDED, // Generic perimeter entry
+        type: EventType.SCAN_RECORDED,
         payload: {
           type: body.type,
           gateId: body.gateId,

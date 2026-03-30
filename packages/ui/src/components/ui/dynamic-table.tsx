@@ -123,8 +123,11 @@ export function DynamicTable<T extends { id: string | number }>({
             className={cn(
               'text-[var(--ds-text-subtle)] font-bold text-xs uppercase tracking-wider',
               isCompact ? 'h-8 px-3' : 'h-11 px-4',
-              column.align === 'center' && 'text-center',
-              column.align === 'right' && 'text-right'
+              column.align === 'center'
+                ? 'text-center'
+                : column.align === 'right'
+                  ? 'text-end'
+                  : 'text-start'
             )}
           >
             {column.isSortable ? (
@@ -247,8 +250,11 @@ export function DynamicTable<T extends { id: string | number }>({
                         className={cn(
                           'text-sm text-[var(--ds-text)]',
                           isCompact ? 'py-1.5 px-3' : 'py-4',
-                          column.align === 'center' && 'text-center',
-                          column.align === 'right' && 'text-right'
+                          column.align === 'center'
+                            ? 'text-center'
+                            : column.align === 'right'
+                              ? 'text-end'
+                              : 'text-start'
                         )}
                       >
                         {column.render
@@ -296,8 +302,11 @@ export function DynamicTable<T extends { id: string | number }>({
                     className={cn(
                       'text-sm text-[var(--ds-text)]',
                       isCompact ? 'py-1.5 px-3' : 'py-4',
-                      column.align === 'center' && 'text-center',
-                      column.align === 'right' && 'text-right'
+                      column.align === 'center'
+                        ? 'text-center'
+                        : column.align === 'right'
+                          ? 'text-end'
+                          : 'text-start'
                     )}
                   >
                     {column.render
