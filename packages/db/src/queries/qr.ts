@@ -25,7 +25,7 @@ export async function createExpressInviteTransaction({
   const code = `EXP-${nanoid(10).toUpperCase()}`;
   const shortId = nanoid(8);
 
-  return await prisma.$transaction(async (tx) => {
+  return await prisma.$transaction(async (tx: any) => {
     // 1. Create the base QR Code (Status: Pending details)
     const qrCode = await tx.qRCode.create({
       data: {
