@@ -39,20 +39,26 @@ export const db = {
 
   organization: {
     ...prisma.organization,
-    findFirst: async (...args: Parameters<typeof prisma.organization.findFirst>) => {
+    findFirst: async (
+      ...args: Parameters<typeof prisma.organization.findFirst>
+    ) => {
       return prisma.organization.findFirst(...args);
     },
-    findUnique: async (...args: Parameters<typeof prisma.organization.findUnique>) => {
+    findUnique: async (
+      ...args: Parameters<typeof prisma.organization.findUnique>
+    ) => {
       return prisma.organization.findUnique(...args);
     },
-    findMany: async (...args: Parameters<typeof prisma.organization.findMany>) => {
+    findMany: async (
+      ...args: Parameters<typeof prisma.organization.findMany>
+    ) => {
       return prisma.organization.findMany(...args);
     },
   },
 
   user: {
     ...prisma.user,
-    findFirst: async (args?: Prisma.UserFindFirstArgs) => {
+    findFirst: async (args?: Parameters<typeof prisma.user.findFirst>[0]) => {
       const orgFilter = getOrgFilter();
       if (!orgFilter) return prisma.user.findFirst(args);
       return prisma.user.findFirst({
@@ -61,9 +67,9 @@ export const db = {
           ...args?.where,
           organizationId: orgFilter,
         },
-      });
+      } as any);
     },
-    findMany: async (args?: Prisma.UserFindManyArgs) => {
+    findMany: async (args?: Parameters<typeof prisma.user.findMany>[0]) => {
       const orgFilter = getOrgFilter();
       if (!orgFilter) return prisma.user.findMany(args);
       return prisma.user.findMany({
@@ -72,9 +78,9 @@ export const db = {
           ...args?.where,
           organizationId: orgFilter,
         },
-      });
+      } as any);
     },
-    count: async (args?: Prisma.UserCountArgs) => {
+    count: async (args?: Parameters<typeof prisma.user.count>[0]) => {
       const orgFilter = getOrgFilter();
       if (!orgFilter) return prisma.user.count(args);
       return prisma.user.count({
@@ -83,13 +89,13 @@ export const db = {
           ...args?.where,
           organizationId: orgFilter,
         },
-      });
+      } as any);
     },
   },
 
   gate: {
     ...prisma.gate,
-    findFirst: async (args?: Prisma.GateFindFirstArgs) => {
+    findFirst: async (args?: Parameters<typeof prisma.gate.findFirst>[0]) => {
       const orgFilter = getOrgFilter();
       if (!orgFilter) return prisma.gate.findFirst(args);
       return prisma.gate.findFirst({
@@ -98,9 +104,9 @@ export const db = {
           ...args?.where,
           organizationId: orgFilter,
         },
-      });
+      } as any);
     },
-    findMany: async (args?: Prisma.GateFindManyArgs) => {
+    findMany: async (args?: Parameters<typeof prisma.gate.findMany>[0]) => {
       const orgFilter = getOrgFilter();
       if (!orgFilter) return prisma.gate.findMany(args);
       return prisma.gate.findMany({
@@ -109,9 +115,9 @@ export const db = {
           ...args?.where,
           organizationId: orgFilter,
         },
-      });
+      } as any);
     },
-    count: async (args?: Prisma.GateCountArgs) => {
+    count: async (args?: Parameters<typeof prisma.gate.count>[0]) => {
       const orgFilter = getOrgFilter();
       if (!orgFilter) return prisma.gate.count(args);
       return prisma.gate.count({
@@ -120,13 +126,13 @@ export const db = {
           ...args?.where,
           organizationId: orgFilter,
         },
-      });
+      } as any);
     },
   },
 
   qRCode: {
     ...prisma.qRCode,
-    findFirst: async (args?: Prisma.QRCodeFindFirstArgs) => {
+    findFirst: async (args?: Parameters<typeof prisma.qRCode.findFirst>[0]) => {
       const orgFilter = getOrgFilter();
       if (!orgFilter) return prisma.qRCode.findFirst(args);
       return prisma.qRCode.findFirst({
@@ -135,9 +141,9 @@ export const db = {
           ...args?.where,
           organizationId: orgFilter,
         },
-      });
+      } as any);
     },
-    findMany: async (args?: Prisma.QRCodeFindManyArgs) => {
+    findMany: async (args?: Parameters<typeof prisma.qRCode.findMany>[0]) => {
       const orgFilter = getOrgFilter();
       if (!orgFilter) return prisma.qRCode.findMany(args);
       return prisma.qRCode.findMany({
@@ -146,9 +152,9 @@ export const db = {
           ...args?.where,
           organizationId: orgFilter,
         },
-      });
+      } as any);
     },
-    count: async (args?: Prisma.QRCodeCountArgs) => {
+    count: async (args?: Parameters<typeof prisma.qRCode.count>[0]) => {
       const orgFilter = getOrgFilter();
       if (!orgFilter) return prisma.qRCode.count(args);
       return prisma.qRCode.count({
@@ -157,13 +163,13 @@ export const db = {
           ...args?.where,
           organizationId: orgFilter,
         },
-      });
+      } as any);
     },
   },
 
   scanLog: {
     ...prisma.scanLog,
-    findMany: async (args?: Prisma.ScanLogFindManyArgs) => {
+    findMany: async (args?: Parameters<typeof prisma.scanLog.findMany>[0]) => {
       const orgId = organizationContext.organizationId;
       if (!orgId) return prisma.scanLog.findMany(args);
       return prisma.scanLog.findMany({
@@ -171,13 +177,13 @@ export const db = {
         where: {
           ...args?.where,
           gate: {
-            ...(args?.where?.gate as Prisma.GateWhereInput),
+            ...(args?.where?.gate as any),
             organizationId: orgId,
           },
-        } as Prisma.ScanLogWhereInput,
-      });
+        },
+      } as any);
     },
-    count: async (args?: Prisma.ScanLogCountArgs) => {
+    count: async (args?: Parameters<typeof prisma.scanLog.count>[0]) => {
       const orgId = organizationContext.organizationId;
       if (!orgId) return prisma.scanLog.count(args);
       return prisma.scanLog.count({
@@ -185,11 +191,11 @@ export const db = {
         where: {
           ...args?.where,
           gate: {
-            ...(args?.where?.gate as Prisma.GateWhereInput),
+            ...(args?.where?.gate as any),
             organizationId: orgId,
           },
-        } as Prisma.ScanLogWhereInput,
-      });
+        },
+      } as any);
     },
   },
 };

@@ -155,6 +155,8 @@ plan:run → plan:done` with automatic folder moves and doc cascades
 
 ### Bug Fixes
 
+- **[Db] **enable prisma accelerate and resolve production runtime crash
+
 - **[DB]** enable Prisma Accelerate support in production via `@prisma/extension-accelerate` and `withAccelerate`.
 - **[DB]** resolve production migration drift (P3009, P3018) for `add_refresh_token` and `update_scanlog_audit_trail`.
 - **[Actions]** correct invalid actions/cache SHA (d2993c1... → 1bd1e32).
