@@ -155,6 +155,9 @@ plan:run → plan:done` with automatic folder moves and doc cascades
 
 ### Bug Fixes
 
+- **[Ci] **resolve GitHub Actions workflow failures - update stale action versions
+- **[Ci] **resolve GitHub Actions build failures - perimeter webhook route exports and ai-hub client component
+
 - **[Ci] **restore green status by resolving nextjs 15 type errors and cleaning up imports
 
 - **[Ci] **resolve nextjs 15 type errors and update action versions
