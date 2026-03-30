@@ -155,6 +155,9 @@ plan:run → plan:done` with automatic folder moves and doc cascades
 
 ### Bug Fixes
 
+- **[Actions] **correct invalid actions/cache SHA (d2993c1... → 1bd1e32)
+- **[Actions] **correct invalid pnpm/action-setup SHA (feaa2f5... → 0c17529)
+
 - **[Ci] **resolve GitHub Actions workflow failures - update stale action versions
 - **[Ci] **resolve GitHub Actions build failures - perimeter webhook route exports and ai-hub client component
 
