@@ -8,16 +8,22 @@
  * - To regenerate locally without --no-engine: pnpm db:generate:local
  */
 import { PrismaClient } from '@prisma/client';
-
-const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined;
-};
+import { withAccelerate } from '@prisma/extension-accelerate';
 
 function createPrismaClient() {
   return new PrismaClient({
-    log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
-  });
+    log:
+      process.env.NODE_ENV === 'development'
+        ? ['query', 'error', 'warn']
+        : ['error'],
+  }).$extends(withAccelerate());
 }
+
+type ExtendedPrismaClient = ReturnType<typeof createPrismaClient>;
+
+const globalForPrisma = globalThis as unknown as {
+  prisma: ExtendedPrismaClient | undefined;
+};
 
 export const prisma = globalForPrisma.prisma ?? createPrismaClient();
 

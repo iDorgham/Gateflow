@@ -155,13 +155,15 @@ plan:run → plan:done` with automatic folder moves and doc cascades
 
 ### Bug Fixes
 
-- **[Actions] **correct invalid actions/cache SHA (d2993c1... → 1bd1e32)
-- **[Actions] **correct invalid pnpm/action-setup SHA (feaa2f5... → 0c17529)
+- **[DB]** enable Prisma Accelerate support in production via `@prisma/extension-accelerate` and `withAccelerate`.
+- **[DB]** resolve production migration drift (P3009, P3018) for `add_refresh_token` and `update_scanlog_audit_trail`.
+- **[Actions]** correct invalid actions/cache SHA (d2993c1... → 1bd1e32).
+- **[Actions]** correct invalid pnpm/action-setup SHA (feaa2f5... → 0c17529).
 
-- **[Ci] **resolve GitHub Actions workflow failures - update stale action versions
-- **[Ci] **resolve GitHub Actions build failures - perimeter webhook route exports and ai-hub client component
+- **[Ci]** resolve GitHub Actions workflow failures - update stale action versions.
+- **[Ci]** resolve GitHub Actions build failures - perimeter webhook route exports and ai-hub client component.
 
-- **[Ci] **restore green status by resolving nextjs 15 type errors and cleaning up imports
+- **[Ci]** restore green status by resolving nextjs 15 type errors and cleaning up imports.
 
 - **[Ci] **resolve nextjs 15 type errors and update action versions
 
