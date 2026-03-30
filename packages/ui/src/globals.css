@@ -27,70 +27,70 @@
     --ds-border-radius-lg: 12px;
 
     /* ── Background Tokens — Light ──────────────────── */
-    --ds-background-default: #F2F3F4; /* Anti-Flash White */
-    --ds-background-subtle: #EBEAED;   /* Lace Cap */
-    --ds-background-neutral: #EBEAED;
-    --ds-background-neutral-subtle: #EBEAED80;
-    --ds-background-neutral-hovered: #DEDEE0;
-    --ds-background-selected: #EBEAED;
-    --ds-background-card: #FFFFFF;
-    --ds-background-brand-bold: #ED4B00; /* Kimchi Orange */
-    --ds-background-brand-subtle: #F2F3F4;
-    --ds-background-danger-bold: #CA3521;
-    --ds-background-danger-subtle: #FFEBE6;
-    --ds-background-warning-bold: #E56910;
-    --ds-background-warning-subtle: #FFF7D6;
-    --ds-background-success-bold: #1F845A;
-    --ds-background-success-subtle: #E3FCEF;
-    --ds-background-information-bold: #02066F; /* Dark Royalty */
-    --ds-background-information-subtle: #EBEAED;
-    --ds-background-input: #FFFFFF;
+    --ds-background-default: rgb(242, 243, 244); /* Anti-Flash White */
+    --ds-background-subtle: rgb(235, 234, 237);   /* Lace Cap */
+    --ds-background-neutral: rgb(235, 234, 237);
+    --ds-background-neutral-subtle: rgba(235, 234, 237, 0.5);
+    --ds-background-neutral-hovered: rgb(222, 222, 224);
+    --ds-background-selected: rgb(235, 234, 237);
+    --ds-background-card: rgb(255, 255, 255);
+    --ds-background-brand-bold: rgb(237, 75, 0); /* Kimchi Orange */
+    --ds-background-brand-subtle: rgb(242, 243, 244);
+    --ds-background-danger-bold: rgb(202, 53, 33);
+    --ds-background-danger-subtle: rgb(255, 235, 230);
+    --ds-background-warning-bold: rgb(229, 105, 16);
+    --ds-background-warning-subtle: rgb(255, 247, 214);
+    --ds-background-success-bold: rgb(31, 132, 90);
+    --ds-background-success-subtle: rgb(227, 252, 239);
+    --ds-background-information-bold: rgb(2, 6, 111); /* Dark Royalty */
+    --ds-background-information-subtle: rgb(235, 234, 237);
+    --ds-background-input: rgb(255, 255, 255);
 
     /* ── Elevation Surfaces — Light ─────────────────── */
-    --ds-surface: #F2F3F4;
-    --ds-surface-default: #F2F3F4;
-    --ds-surface-sunken: #EBEAED;
-    --ds-surface-raised: #FFFFFF;
-    --ds-surface-overlay: #FFFFFF;
+    --ds-surface: rgb(242, 243, 244);
+    --ds-surface-default: rgb(242, 243, 244);
+    --ds-surface-sunken: rgb(235, 234, 237);
+    --ds-surface-raised: rgb(255, 255, 255);
+    --ds-surface-overlay: rgb(255, 255, 255);
 
     /* ── Elevation Shadows — Light ──────────────────── */
-    --ds-shadow-card: 0 1px 1px #091E424F, 0 0 1px #091E424F;
-    --ds-shadow-raised: 0 1px 1px #091E424F, 0 0 1px #091E424F;
-    --ds-shadow-overlay: 0 8px 16px -4px #091E4240, 0 0 1px #091E424F;
+    --ds-shadow-card: 0 1px 1px rgba(9, 30, 66, 0.31), 0 0 1px rgba(9, 30, 66, 0.31);
+    --ds-shadow-raised: 0 1px 1px rgba(9, 30, 66, 0.31), 0 0 1px rgba(9, 30, 66, 0.31);
+    --ds-shadow-overlay: 0 8px 16px -4px rgba(9, 30, 66, 0.25), 0 0 1px rgba(9, 30, 66, 0.31);
 
     /* ── Text Tokens — Light ────────────────────────── */
-    --ds-text: #172B4D;
-    --ds-text-subtle: #44546F;
-    --ds-text-subtlest: #626F86;
-    --ds-text-disabled: #091E424F;
-    --ds-text-inverse: #FFFFFF;
-    --ds-text-selected: #0C66E4;
-    --ds-text-brand: #0C66E4;
-    --ds-text-danger: #AE2A19;
-    --ds-text-warning: #974F0C;
-    --ds-text-success: #216751;
-    --ds-text-information: #0055CC;
+    --ds-text: rgb(23, 43, 77);
+    --ds-text-subtle: rgb(68, 84, 111);
+    --ds-text-subtlest: rgb(98, 111, 134);
+    --ds-text-disabled: rgba(9, 30, 66, 0.31);
+    --ds-text-inverse: rgb(255, 255, 255);
+    --ds-text-selected: rgb(12, 102, 228);
+    --ds-text-brand: rgb(12, 102, 228);
+    --ds-text-danger: rgb(174, 42, 25);
+    --ds-text-warning: rgb(151, 79, 12);
+    --ds-text-success: rgb(33, 103, 81);
+    --ds-text-information: rgb(0, 85, 204);
 
     /* ── Border Tokens — Light ──────────────────────── */
-    --ds-border: #091E4224;
-    --ds-border-bold: #091E424F;
-    --ds-border-subtle: #091E420F;
-    --ds-border-focused: #388BFF;
-    --ds-border-selected: #0C66E4;
-    --ds-border-brand: #0C66E4;
-    --ds-border-danger: #CA3521;
-    --ds-border-warning: #D97008;
-    --ds-border-success: #1F845A;
-    --ds-border-input: #091E4224;
+    --ds-border: rgba(9, 30, 66, 0.14);
+    --ds-border-bold: rgba(9, 30, 66, 0.31);
+    --ds-border-subtle: rgba(9, 30, 66, 0.06);
+    --ds-border-focused: rgb(56, 139, 255);
+    --ds-border-selected: rgb(12, 102, 228);
+    --ds-border-brand: rgb(12, 102, 228);
+    --ds-border-danger: rgb(202, 53, 33);
+    --ds-border-warning: rgb(217, 112, 8);
+    --ds-border-success: rgb(31, 132, 90);
+    --ds-border-input: rgba(9, 30, 66, 0.14);
 
     /* ── Icon Tokens — Light ────────────────────────── */
-    --ds-icon: #44546F;
-    --ds-icon-subtle: #626F86;
-    --ds-icon-inverse: #FFFFFF;
-    --ds-icon-brand: #0C66E4;
-    --ds-icon-danger: #CA3521;
-    --ds-icon-warning: #E56910;
-    --ds-icon-success: #1F845A;
+    --ds-icon: rgb(68, 84, 111);
+    --ds-icon-subtle: rgb(98, 111, 134);
+    --ds-icon-inverse: rgb(255, 255, 255);
+    --ds-icon-brand: rgb(12, 102, 228);
+    --ds-icon-danger: rgb(202, 53, 33);
+    --ds-icon-warning: rgb(229, 105, 16);
+    --ds-icon-success: rgb(31, 132, 90);
 
     /* ── Spacing Tokens ─────────────────────────────── */
     --ds-space-050: 4px;
@@ -104,8 +104,8 @@
     --ds-space-600: 48px;
 
     /* ── Shadcn/UI mapping (Real Estate Palette base) ── */
-    --background: 210 5% 96%; /* #F2F3F4 (Anti-Flash White) */
-    --foreground: 235 94% 11%; /* #020035 (Midnight Blue) */
+    --background: 210 5% 96%; /* Anti-Flash White */
+    --foreground: 235 94% 11%; /* Midnight Blue */
     --card: 0 0% 100%;
     --card-foreground: 235 94% 11%;
     --popover: 0 0% 100%;
@@ -138,9 +138,9 @@
 
   .dark {
     /* ── Professional Neutral Gray Dark Theme ────────── */
-    --background: 210 5% 10%;  /* Neutral Gray Sunken (#18191a) */
+    --background: 210 5% 10%;  /* Neutral Gray Sunken */
     --foreground: 210 5% 96%;  /* Anti-Flash White */
-    --card: 240 4% 13%;       /* Neutral Gray Surface (#1f1f21) */
+    --card: 240 4% 13%;       /* Neutral Gray Surface */
     --card-foreground: 210 5% 96%;
     --popover: 240 4% 15%;
     --popover-foreground: 210 5% 96%;
@@ -159,31 +159,31 @@
     --ring: 19 100% 46%;
 
     /* ── Background Tokens — Neutral Dark ───────────── */
-    --ds-background-default: #18191a;
-    --ds-background-subtle: #121213;
-    --ds-background-neutral: #1f1f21;
+    --ds-background-default: rgb(24, 25, 26);
+    --ds-background-subtle: rgb(18, 18, 19);
+    --ds-background-neutral: rgb(31, 31, 33);
     --ds-background-neutral-subtle: rgba(31, 31, 33, 0.5);
-    --ds-background-neutral-hovered: #2a2a2d;
-    --ds-background-selected: #2a2a2d;
-    --ds-background-card: #1f1f21;
-    --ds-background-brand-bold: #ED4B00; /* Kimchi */
-    --ds-background-brand-subtle: #1f1f21;
-    --ds-background-danger-bold: #EF4444;
-    --ds-background-danger-subtle: #450A0A;
-    --ds-background-warning-bold: #F59E0B;
-    --ds-background-warning-subtle: #451A03;
-    --ds-background-success-bold: #10B981;
-    --ds-background-success-subtle: #064E3B;
-    --ds-background-information-bold: #3B82F6;
-    --ds-background-information-subtle: #172554;
-    --ds-background-input: #18191a;
+    --ds-background-neutral-hovered: rgb(42, 42, 45);
+    --ds-background-selected: rgb(42, 42, 45);
+    --ds-background-card: rgb(31, 31, 33);
+    --ds-background-brand-bold: rgb(237, 75, 0); /* Kimchi */
+    --ds-background-brand-subtle: rgb(31, 31, 33);
+    --ds-background-danger-bold: rgb(239, 68, 68);
+    --ds-background-danger-subtle: rgb(69, 10, 10);
+    --ds-background-warning-bold: rgb(245, 158, 11);
+    --ds-background-warning-subtle: rgb(69, 26, 3);
+    --ds-background-success-bold: rgb(16, 185, 129);
+    --ds-background-success-subtle: rgb(6, 78, 59);
+    --ds-background-information-bold: rgb(59, 130, 246);
+    --ds-background-information-subtle: rgb(23, 37, 84);
+    --ds-background-input: rgb(24, 25, 26);
 
     /* ── Elevation Surfaces — Neutral Dark ──────────── */
-    --ds-surface: #18191a;
-    --ds-surface-default: #18191a;
-    --ds-surface-sunken: #121213;
-    --ds-surface-raised: #1f1f21;
-    --ds-surface-overlay: #2a2a2d;
+    --ds-surface: rgb(24, 25, 26);
+    --ds-surface-default: rgb(24, 25, 26);
+    --ds-surface-sunken: rgb(18, 18, 19);
+    --ds-surface-raised: rgb(31, 31, 33);
+    --ds-surface-overlay: rgb(42, 42, 45);
 
     /* ── Elevation Shadows — Deep Dark ──────────────── */
     --ds-shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
@@ -191,39 +191,39 @@
     --ds-shadow-overlay: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
 
     /* ── Text Tokens — Neutral Dark ─────────────────── */
-    --ds-text: #FAFAFA;
-    --ds-text-subtle: #A1A1AA;
-    --ds-text-subtlest: #71717A;
-    --ds-text-disabled: #3F3F46;
-    --ds-text-inverse: #FFFFFF;
-    --ds-text-selected: #FAFAFA;
-    --ds-text-brand: #ED4B00;
-    --ds-text-danger: #F87171;
-    --ds-text-warning: #FBBF24;
-    --ds-text-success: #34D399;
-    --ds-text-information: #60A5FA;
+    --ds-text: rgb(250, 250, 250);
+    --ds-text-subtle: rgb(161, 161, 170);
+    --ds-text-subtlest: rgb(113, 113, 122);
+    --ds-text-disabled: rgb(63, 63, 70);
+    --ds-text-inverse: rgb(255, 255, 255);
+    --ds-text-selected: rgb(250, 250, 250);
+    --ds-text-brand: rgb(237, 75, 0);
+    --ds-text-danger: rgb(248, 113, 113);
+    --ds-text-warning: rgb(251, 191, 36);
+    --ds-text-success: rgb(52, 211, 153);
+    --ds-text-information: rgb(96, 165, 250);
 
     /* ── Border Tokens — Neutral Dark ───────────────── */
-    --ds-border: #27272A;
-    --ds-border-bold: #3F3F46;
-    --ds-border-subtle: #18181B;
-    --ds-border-focused: #ED4B00;
-    --ds-border-selected: #ED4B00;
-    --ds-border-brand: #ED4B00;
-    --ds-border-danger: #EF4444;
-    --ds-border-warning: #F59E0B;
-    --ds-border-success: #10B981;
-    --ds-border-input: #27272A;
+    --ds-border: rgb(39, 39, 42);
+    --ds-border-bold: rgb(63, 63, 70);
+    --ds-border-subtle: rgb(24, 24, 27);
+    --ds-border-focused: rgb(237, 75, 0);
+    --ds-border-selected: rgb(237, 75, 0);
+    --ds-border-brand: rgb(237, 75, 0);
+    --ds-border-danger: rgb(239, 68, 68);
+    --ds-border-warning: rgb(245, 158, 11);
+    --ds-border-success: rgb(16, 185, 129);
+    --ds-border-input: rgb(39, 39, 42);
 
     /* ── Icon Tokens — Neutral Dark ─────────────────── */
-    --ds-icon: #A1A1AA;
-    --ds-icon-subtle: #71717A;
-    --ds-icon-inverse: #FFFFFF;
-    --ds-icon-brand: #ED4B00;
-    --ds-icon-danger: #EF4444;
-    --ds-icon-warning: #F59E0B;
-    --ds-icon-success: #10B981;
-    --sidebar: 210 5% 10%; /* #18191a */
+    --ds-icon: rgb(161, 161, 170);
+    --ds-icon-subtle: rgb(113, 113, 122);
+    --ds-icon-inverse: rgb(255, 255, 255);
+    --ds-icon-brand: rgb(237, 75, 0);
+    --ds-icon-danger: rgb(239, 68, 68);
+    --ds-icon-warning: rgb(245, 158, 11);
+    --ds-icon-success: rgb(16, 185, 129);
+    --sidebar: 210 5% 10%; /* neutral dark */
     --sidebar-foreground: 210 10% 70%;
     --sidebar-primary: 19 100% 46%;
     --sidebar-primary-foreground: 0 0% 100%;
