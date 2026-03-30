@@ -155,6 +155,8 @@ plan:run → plan:done` with automatic folder moves and doc cascades
 
 ### Bug Fixes
 
+- **[Db] **resolve type recursion and missing accelerate extension
+
 - **[Db] **enable prisma accelerate and resolve production runtime crash
 
 - **[DB]** enable Prisma Accelerate support in production via `@prisma/extension-accelerate` and `withAccelerate`.
