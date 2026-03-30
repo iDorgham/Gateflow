@@ -179,59 +179,59 @@ export const tokens = {
 export const nativeTokens = {
   colors: {
     // Atlassian Neutral scale
-    neutral10: '#FFFFFF',
-    neutral20: '#F4F5F7',
-    neutral30: '#EBECF0',
-    neutral40: '#DFE1E6',
-    neutral50: '#C1C7D0',
-    neutral60: '#A5ADBA',
-    neutral70: '#97A0AF',
-    neutral80: '#8993A4',
-    neutral90: '#7A869A',
-    neutral100: '#6B778C',
-    neutral200: '#5E6C84',
-    neutral300: '#505F79',
-    neutral400: '#42526E',
-    neutral500: '#344563',
-    neutral600: '#253858',
-    neutral700: '#172B4D',
-    neutral800: '#091E42',
+    neutral10: 'rgb(255, 255, 255)',
+    neutral20: 'rgb(244, 245, 247)',
+    neutral30: 'rgb(235, 236, 240)',
+    neutral40: 'rgb(223, 225, 230)',
+    neutral50: 'rgb(193, 199, 208)',
+    neutral60: 'rgb(165, 173, 186)',
+    neutral70: 'rgb(151, 160, 175)',
+    neutral80: 'rgb(137, 147, 164)',
+    neutral90: 'rgb(122, 134, 154)',
+    neutral100: 'rgb(107, 119, 140)',
+    neutral200: 'rgb(94, 108, 132)',
+    neutral300: 'rgb(80, 95, 121)',
+    neutral400: 'rgb(66, 82, 110)',
+    neutral500: 'rgb(52, 69, 99)',
+    neutral600: 'rgb(37, 56, 88)',
+    neutral700: 'rgb(23, 43, 77)',
+    neutral800: 'rgb(9, 30, 66)',
 
     // Semantic
-    background: '#FFFFFF',
-    foreground: '#172B4D',      // Neutral 700
-    card: '#FFFFFF',
-    cardForeground: '#172B4D',
-    primary: '#0052CC',         // Atlassian Blue
-    primaryForeground: '#FFFFFF',
-    secondary: '#EBECF0',       // Neutral 30
-    secondaryForeground: '#42526E',
-    muted: '#F4F5F7',           // Neutral 20
-    mutedForeground: '#6B778C', // Neutral 100
-    neutral: '#6B778C',
-    accent: '#DEEBFF',          // Blue 50
-    accentForeground: '#0052CC',
-    destructive: '#DE350B',     // Red
-    destructiveForeground: '#FFFFFF',
-    border: '#DFE1E6',          // Neutral 40
-    input: '#DFE1E6',
-    ring: '#4C9AFF',            // Blue 200
+    background: 'rgb(255, 255, 255)',
+    foreground: 'rgb(23, 43, 77)', // Neutral 700
+    card: 'rgb(255, 255, 255)',
+    cardForeground: 'rgb(23, 43, 77)',
+    primary: 'rgb(0, 82, 204)', // Atlassian Blue
+    primaryForeground: 'rgb(255, 255, 255)',
+    secondary: 'rgb(235, 236, 240)', // Neutral 30
+    secondaryForeground: 'rgb(66, 82, 110)',
+    muted: 'rgb(244, 245, 247)', // Neutral 20
+    mutedForeground: 'rgb(107, 119, 140)', // Neutral 100
+    neutral: 'rgb(107, 119, 140)',
+    accent: 'rgb(222, 235, 255)', // Blue 50
+    accentForeground: 'rgb(0, 82, 204)',
+    destructive: 'rgb(222, 53, 11)', // Red
+    destructiveForeground: 'rgb(255, 255, 255)',
+    border: 'rgb(223, 225, 230)', // Neutral 40
+    input: 'rgb(223, 225, 230)',
+    ring: 'rgb(76, 154, 255)', // Blue 200
 
     // Extended semantic
-    success: '#36B37E',
-    successForeground: '#FFFFFF',
-    warning: '#FFAB00',
-    warningForeground: '#172B4D',
-    info: '#00B8D9',
-    infoForeground: '#FFFFFF',
-    danger: '#FF5630',
-    dangerForeground: '#FFFFFF',
+    success: 'rgb(54, 179, 126)',
+    successForeground: 'rgb(255, 255, 255)',
+    warning: 'rgb(255, 171, 0)',
+    warningForeground: 'rgb(23, 43, 77)',
+    info: 'rgb(0, 184, 217)',
+    infoForeground: 'rgb(255, 255, 255)',
+    danger: 'rgb(255, 86, 48)',
+    dangerForeground: 'rgb(255, 255, 255)',
 
     // Sidebar (Atlassian Blue)
-    sidebar: '#0747A6',
-    sidebarForeground: '#DEEBFF',
-    sidebarAccent: '#0052CC',
-    sidebarBorder: '#0052CC',
+    sidebar: 'rgb(7, 71, 166)',
+    sidebarForeground: 'rgb(222, 235, 255)',
+    sidebarAccent: 'rgb(0, 82, 204)',
+    sidebarBorder: 'rgb(0, 82, 204)',
   },
   spacing: {
     xs: 4,
@@ -245,36 +245,36 @@ export const nativeTokens = {
   },
   borderRadius: {
     none: 0,
-    sm: 4,     // Mira: compact
-    md: 6,     // Mira: compact
-    lg: 8,     // Mira: compact
+    sm: 4, // Mira: compact
+    md: 6, // Mira: compact
+    lg: 8, // Mira: compact
     xl: 12,
     full: 9999,
   },
   shadows: {
     sm: {
-      shadowColor: '#000',
+      shadowColor: 'rgb(0, 0, 0)',
       shadowOffset: { width: 0, height: 1 },
       shadowOpacity: 0.05,
       shadowRadius: 2,
       elevation: 1,
     },
     md: {
-      shadowColor: '#000',
+      shadowColor: 'rgb(0, 0, 0)',
       shadowOffset: { width: 0, height: 4 },
       shadowOpacity: 0.1,
       shadowRadius: 6,
       elevation: 3,
     },
     lg: {
-      shadowColor: '#000',
+      shadowColor: 'rgb(0, 0, 0)',
       shadowOffset: { width: 0, height: 10 },
       shadowOpacity: 0.1,
       shadowRadius: 15,
       elevation: 5,
     },
     xl: {
-      shadowColor: '#000',
+      shadowColor: 'rgb(0, 0, 0)',
       shadowOffset: { width: 0, height: 12 },
       shadowOpacity: 0.15,
       shadowRadius: 20,
@@ -296,50 +296,50 @@ export const nativeTokens = {
  * React-Native tokens aligned with the web "Real Estate Palette".
  *
  * Source of truth (web): `apps/client-dashboard/src/app/globals.css`
- * - Kimchi (accent): #ED4B00
- * - Midnight Blue (foreground/dark bg): #020035
- * - Dark Royalty (muted-foreground): #02066F
- * - Deep Sea (info): #2000B1
- * - Anti-Flash White (background): #F2F3F4
- * - Lace Cap (muted/secondary): #EBEAED
+ * - Kimchi (accent)
+ * - Midnight Blue (foreground/dark bg)
+ * - Dark Royalty (muted-foreground)
+ * - Deep Sea (info)
+ * - Anti-Flash White (background)
+ * - Lace Cap (muted/secondary)
  */
 export const nativeTokensRealEstate = {
   ...nativeTokens,
   colors: {
     ...nativeTokens.colors,
     // Base palette
-    background: '#F2F3F4',
-    foreground: '#020035',
-    card: '#F2F3F4',
-    cardForeground: '#020035',
-    primary: '#ED4B00',
-    primaryForeground: '#FFFFFF',
-    secondary: '#EBEAED',
-    secondaryForeground: '#020035',
-    muted: '#EBEAED',
-    mutedForeground: '#02066F',
-    neutral: '#02066F',
-    accent: '#EBEAED',
-    accentForeground: '#020035',
-    border: '#DEDDE3',
-    input: '#DEDDE3',
-    ring: '#ED4B00',
+    background: 'rgb(242, 243, 244)',
+    foreground: 'rgb(2, 0, 53)',
+    card: 'rgb(242, 243, 244)',
+    cardForeground: 'rgb(2, 0, 53)',
+    primary: 'rgb(237, 75, 0)',
+    primaryForeground: 'rgb(255, 255, 255)',
+    secondary: 'rgb(235, 234, 237)',
+    secondaryForeground: 'rgb(2, 0, 53)',
+    muted: 'rgb(235, 234, 237)',
+    mutedForeground: 'rgb(2, 6, 111)',
+    neutral: 'rgb(2, 6, 111)',
+    accent: 'rgb(235, 234, 237)',
+    accentForeground: 'rgb(2, 0, 53)',
+    border: 'rgb(222, 221, 227)',
+    input: 'rgb(222, 221, 227)',
+    ring: 'rgb(237, 75, 0)',
 
     // Extended semantic
-    success: '#16A34A',
-    successForeground: '#F2F3F4',
-    warning: '#F59E0B',
-    warningForeground: '#020035',
-    info: '#2000B1',
-    infoForeground: '#F2F3F4',
-    danger: '#DC2626',
-    dangerForeground: '#F2F3F4',
+    success: 'rgb(22, 163, 74)',
+    successForeground: 'rgb(242, 243, 244)',
+    warning: 'rgb(245, 158, 11)',
+    warningForeground: 'rgb(2, 0, 53)',
+    info: 'rgb(32, 0, 177)',
+    infoForeground: 'rgb(242, 243, 244)',
+    danger: 'rgb(220, 38, 38)',
+    dangerForeground: 'rgb(242, 243, 244)',
 
     // Optional dark surfaces (useful for headers/nav)
-    sidebar: '#020035',
-    sidebarForeground: '#F2F3F4',
-    sidebarAccent: '#02066F',
-    sidebarBorder: '#02066F',
+    sidebar: 'rgb(2, 0, 53)',
+    sidebarForeground: 'rgb(242, 243, 244)',
+    sidebarAccent: 'rgb(2, 6, 111)',
+    sidebarBorder: 'rgb(2, 6, 111)',
   },
 };
 

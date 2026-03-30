@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   Alert,
   FlatList,
@@ -47,49 +47,52 @@ export default function MarketplaceScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const load = async (isRefresh = false) => {
-    if (isRefresh) setRefreshing(true);
-    else setLoading(true);
+  const load = useCallback(
+    async (isRefresh = false) => {
+      if (isRefresh) setRefreshing(true);
+      else setLoading(true);
 
-    setError(null);
-    try {
-      const res = await residentFetch('/marketplace/services');
-      if (res.status === 401) {
-        router.replace('/login');
-        return;
-      }
-      const json = (await res.json()) as {
-        success?: boolean;
-        data?: MarketplaceService[];
-        message?: string;
-      };
+      setError(null);
+      try {
+        const res = await residentFetch('/marketplace/services');
+        if (res.status === 401) {
+          router.replace('/login');
+          return;
+        }
+        const json = (await res.json()) as {
+          success?: boolean;
+          data?: MarketplaceService[];
+          message?: string;
+        };
 
-      if (!res.ok || !json.success) {
-        setError(
-          json.message ?? t('Failed to load services', 'فشل في تحميل الخدمات')
-        );
+        if (!res.ok || !json.success) {
+          setError(
+            json.message ?? t('Failed to load services', 'فشل في تحميل الخدمات')
+          );
+          setServices([]);
+          return;
+        }
+
+        setServices(json.data ?? []);
+      } catch (e) {
+        const err = e as Error & { status?: number };
+        if (err.status === 401) {
+          router.replace('/login');
+          return;
+        }
+        setError(err.message ?? t('Network error', 'خطأ في الاتصال'));
         setServices([]);
-        return;
+      } finally {
+        setLoading(false);
+        setRefreshing(false);
       }
-
-      setServices(json.data ?? []);
-    } catch (e) {
-      const err = e as Error & { status?: number };
-      if (err.status === 401) {
-        router.replace('/login');
-        return;
-      }
-      setError(err.message ?? t('Network error', 'خطأ في الاتصال'));
-      setServices([]);
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
-  };
+    },
+    [t]
+  );
 
   useEffect(() => {
     load();
-  }, []);
+  }, [load]);
 
   const book = async (serviceId: string) => {
     try {
