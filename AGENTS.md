@@ -5,6 +5,7 @@
 - When executing an attached Cursor plan, do not edit the plan file; update todo status as work progresses and complete listed items unless blocked.
 - Enforce changelog structure in CI with `pnpm docs:changelog:check`; use `pnpm docs:changelog:format` to normalize tag casing and spacing.
 - Keep `ai:sync` and `ai:check` only in `docs/workspace/template-project/package.json`; do not add or retain those scripts on the repository root `package.json`.
+- Unless intentionally versioning them, revert transient Cursor hook state under `.cursor/hooks/state/` (e.g. `continual-learning.json`) before commits, and do not mix accidental hook/sync-driven `.gitignore` edits with feature or UI commits—revert or use a separate commit.
 
 ## Learned Workspace Facts
 
