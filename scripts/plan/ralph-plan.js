@@ -3,12 +3,12 @@
  * ralph-plan.js — Plan lifecycle manager
  *
  * Commands:
- *   node scripts/ralph-plan.js new <slug> [--phases 5] [--title "My Feature"]
- *   node scripts/ralph-plan.js ready   <slug>   # planning  → planned
- *   node scripts/ralph-plan.js start   <slug>   # planned   → in-progress
- *   node scripts/ralph-plan.js done    <slug>   # in-progress → done
- *   node scripts/ralph-plan.js status           # show all plans + state
- *   node scripts/ralph-plan.js move <slug> <from> <to>  # manual move
+ *   node scripts/plan/ralph-plan.js new <slug> [--phases 5] [--title "My Feature"]
+ *   node scripts/plan/ralph-plan.js ready   <slug>   # planning  → planned
+ *   node scripts/plan/ralph-plan.js start   <slug>   # planned   → in-progress
+ *   node scripts/plan/ralph-plan.js done    <slug>   # in-progress → done
+ *   node scripts/plan/ralph-plan.js status           # show all plans + state
+ *   node scripts/plan/ralph-plan.js move <slug> <from> <to>  # manual move
  *
  * Aliases: pnpm plan:new / plan:ready / plan:start / plan:done / plan:status
  */
@@ -24,8 +24,8 @@ function escapeRegExp(str) {
 
 function callDocs(args) {
   try {
-    execSync(`node scripts/ralph-docs.js ${args}`, {
-      cwd: path.resolve(__dirname, '..'),
+    execSync(`node scripts/docs/ralph-docs.js ${args}`, {
+      cwd: path.resolve(__dirname, '../..'),
       stdio: 'inherit',
     });
   } catch {
@@ -56,7 +56,7 @@ function createPR(slug, planDir) {
     }
   }
 
-  prBody += `\n\n## Test plan\n- [ ] All preflight checks pass (\`pnpm preflight\`)\n- [ ] Reviewed by team\n\n🤖 Generated with [GateFlow Ralph](../scripts/ralph-plan.js)`;
+  prBody += `\n\n## Test plan\n- [ ] All preflight checks pass (\`pnpm preflight\`)\n- [ ] Reviewed by team\n\n🤖 Generated with [GateFlow Ralph](../scripts/plan/ralph-plan.js)`;
 
   try {
     const result = execSync(

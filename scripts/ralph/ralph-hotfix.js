@@ -19,7 +19,7 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-const ROOT = path.resolve(__dirname, '..');
+const ROOT = path.resolve(__dirname, '../..');
 
 // ── Colours ───────────────────────────────────────────────────────────────────
 const c = {
@@ -131,7 +131,7 @@ function done(slug) {
 
   // 2. Bump patch version
   console.log('\n  2. Bumping patch version...');
-  run('node scripts/ralph-version.js bump patch');
+  run('node scripts/version/ralph-version.js bump patch');
   const newVer = currentVersion();
   console.log(c.green(`  ✓ Version → ${newVer}`));
 
@@ -139,9 +139,9 @@ function done(slug) {
   console.log('\n  3. Updating CHANGELOG...');
   try {
     run(
-      `node scripts/ralph-docs.js changelog add ${slug} "Hotfix: ${slug.replace(/-/g, ' ')}" --type fix`
+      `node scripts/docs/ralph-docs.js changelog add ${slug} "Hotfix: ${slug.replace(/-/g, ' ')}" --type fix`
     );
-    run(`node scripts/ralph-docs.js readme refresh`);
+    run(`node scripts/docs/ralph-docs.js readme refresh`);
   } catch {
     /* non-fatal */
   }
@@ -157,7 +157,7 @@ function done(slug) {
 
   // 5. Create annotated tag
   console.log('\n  5. Tagging release...');
-  run(`node scripts/ralph-version.js tag "Hotfix v${newVer}: ${slug}"`);
+  run(`node scripts/version/ralph-version.js tag "Hotfix v${newVer}: ${slug}"`);
   console.log(c.green(`  ✓ Tagged v${newVer}`));
 
   // 6. Auto-create PR

@@ -16,7 +16,7 @@ import { resolve, dirname, relative } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dir = dirname(fileURLToPath(import.meta.url));
-const ROOT = resolve(__dir, '..');
+const ROOT = resolve(__dir, '../..');
 const WATCH_DIR = resolve(ROOT, '.antigravity');
 const TOOL_ARG = process.argv.includes('--tool')
   ? `--tool ${process.argv[process.argv.indexOf('--tool') + 1]}`
@@ -30,7 +30,7 @@ function sync() {
   const label = lastFile ? ` (triggered by ${lastFile})` : '';
   console.log(`\n🔄  Syncing AI tools${label}…`);
   try {
-    execSync(`bash scripts/sync-ai-tools.sh ${TOOL_ARG}`.trim(), {
+    execSync(`bash scripts/ai-sync/sync-ai-tools.sh ${TOOL_ARG}`.trim(), {
       cwd: ROOT,
       stdio: 'inherit',
     });

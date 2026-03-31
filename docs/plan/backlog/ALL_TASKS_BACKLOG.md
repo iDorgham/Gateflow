@@ -4,6 +4,22 @@
 
 ## Open Initiatives
 
+### marketing_growth_engine_q3_2026 — Marketing Growth Engine (Q3 2026)
+
+**IDEA:** `docs/plan/context/IDEA_marketing_growth_engine_q3_2026.md`
+
+**STRATEGY:** `docs/plan/brainstorming/STRATEGY_marketing_growth_engine_q3_2026.md`
+
+**PLAN:** `docs/plan/planning/marketing_growth_engine_q3_2026/PLAN_marketing_growth_engine_q3_2026.md`
+
+**Status:** 📝 Planning — ready for `/plan ready marketing_growth_engine_q3_2026`
+
+**Target:** Q3 2026
+
+- [ ] Level 1 — Clarity + Trust polish (proof blocks, CTA trust markers, conversion QA)
+- [ ] Level 2 — Adaptive funnel evolution (intent routing, vertical playbooks, migration assistant)
+- [ ] Level 3 — Marketing-to-operations loop (pilot readiness score, campaign->first-scan analytics, AI concierge)
+
 ### marketing_rebuild_dashboard_parity — Marketing site: dashboard tokens + AI-skills rebuild
 
 **IDEA:** `docs/plan/context/IDEA_marketing_rebuild_dashboard_parity.md`

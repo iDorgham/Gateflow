@@ -16,7 +16,7 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-const ROOT = path.resolve(__dirname, '..');
+const ROOT = path.resolve(__dirname, '../..');
 const PLAN_ROOT = path.join(ROOT, 'docs', 'plan');
 
 // ── Colours ───────────────────────────────────────────────────────────────────
@@ -236,7 +236,7 @@ function qualitySection() {
 
   // Circular imports
   try {
-    const result = execSync('node scripts/check-imports.js --summary', {
+    const result = execSync('node scripts/check/check-imports.js --summary', {
       cwd: ROOT,
       encoding: 'utf8',
       stdio: 'pipe',
@@ -257,7 +257,7 @@ function qualitySection() {
 
   // TODOs
   try {
-    const todos = execSync('node scripts/todos.js --json', {
+    const todos = execSync('node scripts/check/todos.js --json', {
       cwd: ROOT,
       encoding: 'utf8',
       stdio: 'pipe',
@@ -283,7 +283,7 @@ function qualitySection() {
   }
 
   // Bundle baseline
-  const baseline = path.join(ROOT, 'scripts', '.bundle-baseline.json');
+  const baseline = path.join(ROOT, 'scripts', 'check', '.bundle-baseline.json');
   if (fs.existsSync(baseline)) {
     const b = JSON.parse(fs.readFileSync(baseline, 'utf8'));
     const clientKb = b['client-dashboard']?.totalKb;
@@ -304,7 +304,7 @@ function qualitySection() {
 
   // Dependency security
   try {
-    const result = execSync('node scripts/check-security.js', {
+    const result = execSync('node scripts/check/check-security.js', {
       cwd: ROOT,
       encoding: 'utf8',
       stdio: 'pipe',

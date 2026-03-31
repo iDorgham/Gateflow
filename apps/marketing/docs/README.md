@@ -72,6 +72,12 @@ pnpm turbo dev --filter marketing
 | **Aesthetics First** | Rely on `@gate-access/ui` tokens for brand alignment |
 | **Bundle Size**      | Use Server Components for Core Web Vitals            |
 
+### Metadata Title Policy
+
+- Root layout (`app/[locale]/layout.tsx`) uses `title.template: '%s | GateFlow'`.
+- Use `templatedMarketingTitle(...)` from `lib/metadata-title.ts` when a page should keep that branded suffix.
+- Use `absoluteMarketingTitle(...)` from `lib/metadata-title.ts` when a page must bypass the suffix (for legal/error/auth/blog-exception pages).
+
 ---
 
 ## Related Documentation

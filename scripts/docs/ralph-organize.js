@@ -9,13 +9,13 @@
  *   node scripts/ralph-organize.js archive <file>  move file to docs/archive/
  */
 
-const fs   = require('fs');
+const fs = require('fs');
 const path = require('path');
 
-const ROOT      = path.resolve(__dirname, '..');
-const DOCS      = path.join(ROOT, 'docs');
-const INDEX     = path.join(DOCS, 'INDEX.md');
-const ARCHIVE   = path.join(DOCS, 'archive');
+const ROOT = path.resolve(__dirname, '..');
+const DOCS = path.join(ROOT, 'docs');
+const INDEX = path.join(DOCS, 'INDEX.md');
+const ARCHIVE = path.join(DOCS, 'archive');
 
 // ── helpers ───────────────────────────────────────────────────────────────────
 function walk(dir, depth = 0, results = []) {
@@ -24,7 +24,14 @@ function walk(dir, depth = 0, results = []) {
     if (name === '.gitkeep' || name === '.DS_Store') continue;
     const full = path.join(dir, name);
     const stat = fs.lstatSync(full);
-    results.push({ full, rel: path.relative(ROOT, full), name, depth, isDir: stat.isDirectory(), isSymlink: stat.isSymbolicLink() });
+    results.push({
+      full,
+      rel: path.relative(ROOT, full),
+      name,
+      depth,
+      isDir: stat.isDirectory(),
+      isSymlink: stat.isSymbolicLink(),
+    });
     if (stat.isDirectory() && depth < 3) walk(full, depth + 1, results);
   }
   return results;
@@ -32,7 +39,7 @@ function walk(dir, depth = 0, results = []) {
 
 function isEmptyDir(dir) {
   // Only consider truly empty (not even .gitkeep — those are intentional)
-  const entries = fs.readdirSync(dir).filter(f => f !== '.DS_Store');
+  const entries = fs.readdirSync(dir).filter((f) => f !== '.DS_Store');
   return entries.length === 0;
 }
 
@@ -46,34 +53,76 @@ function isDeadSymlink(p) {
 }
 
 const SECTION_META = {
-  'arch':       { emoji: '🏗️',  title: 'Architecture',          desc: 'System design, project structure, code quality audits' },
-  'core':       { emoji: '🧠',  title: 'Core References',        desc: 'CLAUDE.md, project config, progress dashboard' },
-  'deployment': { emoji: '🚀',  title: 'Deployment Guides',      desc: 'Per-app deployment and environment setup' },
-  'design':     { emoji: '🎨',  title: 'Design & UI',            desc: 'UI specs, screen drafts, design system notes' },
-  'errors':     { emoji: '🐛',  title: 'Error Log',              desc: 'Documented bugs and resolutions' },
-  'guides':     { emoji: '📖',  title: 'Developer Guides',       desc: 'Dev workflow, security, analytics, component guides' },
-  'plan':       { emoji: '📋',  title: 'Plan & Roadmap',         desc: 'Feature plans, phase prompts, learning log, backlog' },
-  'product':    { emoji: '📦',  title: 'Product',                desc: 'PRD, feature log, upcoming features, marketing notes' },
-  'tools':      { emoji: '🔧',  title: 'Tools & Automation',     desc: 'AI tool configs, antigravity skills reference' },
-  'archive':    { emoji: '📁',  title: 'Archive',                desc: 'Legacy docs, old PRDs, historical plans' },
+  arch: {
+    emoji: '🏗️',
+    title: 'Architecture',
+    desc: 'System design, project structure, code quality audits',
+  },
+  core: {
+    emoji: '🧠',
+    title: 'Core References',
+    desc: 'CLAUDE.md, project config, progress dashboard',
+  },
+  deployment: {
+    emoji: '🚀',
+    title: 'Deployment Guides',
+    desc: 'Per-app deployment and environment setup',
+  },
+  design: {
+    emoji: '🎨',
+    title: 'Design & UI',
+    desc: 'UI specs, screen drafts, design system notes',
+  },
+  errors: {
+    emoji: '🐛',
+    title: 'Error Log',
+    desc: 'Documented bugs and resolutions',
+  },
+  guides: {
+    emoji: '📖',
+    title: 'Developer Guides',
+    desc: 'Dev workflow, security, analytics, component guides',
+  },
+  plan: {
+    emoji: '📋',
+    title: 'Plan & Roadmap',
+    desc: 'Feature plans, phase prompts, learning log, backlog',
+  },
+  product: {
+    emoji: '📦',
+    title: 'Product',
+    desc: 'PRD, feature log, upcoming features, marketing notes',
+  },
+  tools: {
+    emoji: '🔧',
+    title: 'Tools & Automation',
+    desc: 'AI tool configs, antigravity skills reference',
+  },
+  archive: {
+    emoji: '📁',
+    title: 'Archive',
+    desc: 'Legacy docs, old PRDs, historical plans',
+  },
 };
 
 // ── SCAN ──────────────────────────────────────────────────────────────────────
 function scan() {
   console.log('\n📁 Docs Structure Scan\n');
   const entries = walk(DOCS);
-  let emptyDirs = 0, deadLinks = 0, totalFiles = 0;
+  let emptyDirs = 0,
+    deadLinks = 0,
+    totalFiles = 0;
 
   for (const e of entries) {
     const prefix = '  '.repeat(e.depth);
     if (e.isSymlink) {
       const dead = isDeadSymlink(e.full);
-      const tag  = dead ? ' ⚠ DEAD SYMLINK' : ' → symlink';
+      const tag = dead ? ' ⚠ DEAD SYMLINK' : ' → symlink';
       console.log(`${prefix}${e.isDir ? '📂' : '🔗'} ${e.name}${tag}`);
       if (dead) deadLinks++;
     } else if (e.isDir) {
       const empty = isEmptyDir(e.full);
-      const tag   = empty ? ' (empty)' : '';
+      const tag = empty ? ' (empty)' : '';
       console.log(`${prefix}📂 ${e.name}${tag}`);
       if (empty) emptyDirs++;
     } else {
@@ -84,8 +133,12 @@ function scan() {
 
   console.log(`\n📊 Summary:`);
   console.log(`   Files       : ${totalFiles}`);
-  console.log(`   Empty dirs  : ${emptyDirs}  ${emptyDirs > 0 ? '← run: pnpm docs:organize clean' : '✓'}`);
-  console.log(`   Dead symlinks: ${deadLinks}  ${deadLinks > 0 ? '← run: pnpm docs:organize clean' : '✓'}`);
+  console.log(
+    `   Empty dirs  : ${emptyDirs}  ${emptyDirs > 0 ? '← run: pnpm docs:organize clean' : '✓'}`
+  );
+  console.log(
+    `   Dead symlinks: ${deadLinks}  ${deadLinks > 0 ? '← run: pnpm docs:organize clean' : '✓'}`
+  );
   console.log();
 }
 
@@ -105,7 +158,7 @@ function clean() {
   }
 
   // Remove empty dirs (deepest first)
-  const dirs = entries.filter(e => e.isDir && !e.isSymlink).reverse();
+  const dirs = entries.filter((e) => e.isDir && !e.isSymlink).reverse();
   for (const e of dirs) {
     if (fs.existsSync(e.full) && isEmptyDir(e.full)) {
       fs.rmdirSync(e.full);
@@ -121,8 +174,9 @@ function clean() {
 // ── INDEX ─────────────────────────────────────────────────────────────────────
 function buildIndex() {
   console.log('\n📑 Building docs/INDEX.md...\n');
-  const topDirs = fs.readdirSync(DOCS)
-    .filter(n => {
+  const topDirs = fs
+    .readdirSync(DOCS)
+    .filter((n) => {
       if (n.startsWith('.') || n === 'INDEX.md') return false;
       const p = path.join(DOCS, n);
       return fs.statSync(p).isDirectory();
@@ -136,30 +190,39 @@ function buildIndex() {
   ];
 
   for (const dir of topDirs) {
-    const meta  = SECTION_META[dir] || { emoji: '📂', title: dir, desc: '' };
-    const files = fs.readdirSync(path.join(DOCS, dir))
-      .filter(f => f.endsWith('.md') && f !== '.gitkeep')
+    const meta = SECTION_META[dir] || { emoji: '📂', title: dir, desc: '' };
+    const files = fs
+      .readdirSync(path.join(DOCS, dir))
+      .filter((f) => f.endsWith('.md') && f !== '.gitkeep')
       .sort();
 
     lines.push(`## ${meta.emoji} [${meta.title}](./docs/${dir}/)`);
     if (meta.desc) lines.push(`*${meta.desc}*\n`);
 
     if (files.length > 0) {
-      for (const f of files.slice(0, 10)) { // max 10 per section
+      for (const f of files.slice(0, 10)) {
+        // max 10 per section
         const title = f.replace(/\.md$/, '').replace(/_/g, ' ');
         lines.push(`- [${title}](./docs/${dir}/${f})`);
       }
-      if (files.length > 10) lines.push(`- *(${files.length - 10} more files)*`);
+      if (files.length > 10)
+        lines.push(`- *(${files.length - 10} more files)*`);
     }
 
     // Recurse one level for plan subfolders
     if (dir === 'plan') {
-      const planDirs = fs.readdirSync(path.join(DOCS, 'plan'))
-        .filter(d => !d.startsWith('.') && fs.statSync(path.join(DOCS, 'plan', d)).isDirectory())
+      const planDirs = fs
+        .readdirSync(path.join(DOCS, 'plan'))
+        .filter(
+          (d) =>
+            !d.startsWith('.') &&
+            fs.statSync(path.join(DOCS, 'plan', d)).isDirectory()
+        )
         .sort();
       for (const pd of planDirs) {
-        const count = fs.readdirSync(path.join(DOCS, 'plan', pd))
-          .filter(f => f.endsWith('.md')).length;
+        const count = fs
+          .readdirSync(path.join(DOCS, 'plan', pd))
+          .filter((f) => f.endsWith('.md')).length;
         if (count > 0) lines.push(`  - \`${pd}/\` — ${count} files`);
       }
     }
@@ -168,7 +231,9 @@ function buildIndex() {
   }
 
   lines.push('---');
-  lines.push('*Edit docs using the guides in `docs/guides/DEVELOPMENT_GUIDE.md`*');
+  lines.push(
+    '*Edit docs using the guides in `docs/guides/DEVELOPMENT_GUIDE.md`*'
+  );
 
   fs.writeFileSync(INDEX, lines.join('\n'));
   console.log(`✓ Generated docs/INDEX.md (${topDirs.length} sections)`);
@@ -176,9 +241,15 @@ function buildIndex() {
 
 // ── ARCHIVE ───────────────────────────────────────────────────────────────────
 function archive(relPath) {
-  if (!relPath) { console.error('Usage: ralph-organize archive <path>'); process.exit(1); }
-  const src  = path.resolve(ROOT, relPath);
-  if (!fs.existsSync(src)) { console.error(`✗ Not found: ${relPath}`); process.exit(1); }
+  if (!relPath) {
+    console.error('Usage: ralph-organize archive <path>');
+    process.exit(1);
+  }
+  const src = path.resolve(ROOT, relPath);
+  if (!fs.existsSync(src)) {
+    console.error(`✗ Not found: ${relPath}`);
+    process.exit(1);
+  }
 
   fs.mkdirSync(ARCHIVE, { recursive: true });
   const dest = path.join(ARCHIVE, path.basename(src));
@@ -187,13 +258,21 @@ function archive(relPath) {
 }
 
 // ── entry ─────────────────────────────────────────────────────────────────────
-const [,, cmd, arg1] = process.argv;
+const [, , cmd, arg1] = process.argv;
 
 switch (cmd) {
-  case 'scan':    scan();        break;
-  case 'clean':   clean();       break;
-  case 'index':   buildIndex();  break;
-  case 'archive': archive(arg1); break;
+  case 'scan':
+    scan();
+    break;
+  case 'clean':
+    clean();
+    break;
+  case 'index':
+    buildIndex();
+    break;
+  case 'archive':
+    archive(arg1);
+    break;
   default:
     // Default: scan + index
     scan();

@@ -20,7 +20,7 @@ const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-const ROOT = path.resolve(__dirname, '..');
+const ROOT = path.resolve(__dirname, '../..');
 const CHANGELOG = path.join(ROOT, 'CHANGELOG.md');
 const README = path.join(ROOT, 'README.md');
 const PRD = path.join(ROOT, 'docs', 'product', 'PRD.md');
@@ -496,7 +496,7 @@ switch (cmd) {
 
     // 1. Bump version in package.json
     execSync(
-      `node scripts/ralph-version.js bump ${newVer.split('.').length > 2 ? 'patch' : 'minor'}`,
+      `node scripts/version/ralph-version.js bump ${newVer.split('.').length > 2 ? 'patch' : 'minor'}`,
       {
         cwd: ROOT,
         stdio: 'inherit',
@@ -530,7 +530,7 @@ switch (cmd) {
     });
 
     // 5. Tag
-    execSync(`node scripts/ralph-version.js tag "Release v${newVer}"`, {
+    execSync(`node scripts/version/ralph-version.js tag "Release v${newVer}"`, {
       cwd: ROOT,
       stdio: 'inherit',
     });

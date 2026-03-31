@@ -7,16 +7,16 @@ if [ "$RALPH_AMEND" = "1" ]; then
 fi
 
 # 1. Auto-sync AI tools after every commit
-bash scripts/sync-ai-tools.sh
+bash scripts/ai-sync/sync-ai-tools.sh
 
 # 2. Auto-update CHANGELOG from conventional commit message
 #    Only runs for feat/fix/perf/security commits (skips chore/docs/ci)
 COMMIT_MSG=$(git log -1 --pretty=%s)
 case "$COMMIT_MSG" in
-  feat\(*|fix\(*|perf\(*|security\(*)
-    node scripts/ralph-docs.js changelog from-commit
+  feat\(*|fix\(*|perf\(*|security\(\)
+    node scripts/docs/ralph-docs.js changelog from-commit
     ;;
 esac
 
 # 3. Phase auto-close — mark PLAN phases [x] from commit message
-node scripts/phase-close.js
+node scripts/plan/phase-close.js

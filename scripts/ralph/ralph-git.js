@@ -26,7 +26,9 @@ try {
     case 'commit':
       console.log(`Committing changes for ${slug} phase ${phase}`);
       execSync('git add .', { stdio: 'inherit' });
-      execSync(`git commit -m "feat(${slug}): complete phase ${phase}"`, { stdio: 'inherit' });
+      execSync(`git commit -m "feat(${slug}): complete phase ${phase}"`, {
+        stdio: 'inherit',
+      });
       break;
 
     case 'merge':
@@ -41,7 +43,7 @@ try {
       // Sanitize: allow only alphanumeric, dashes, and dots
       const tagName = tagNameInput.replace(/[^a-zA-Z0-9.-]/g, '-');
       const fullTagName = `v${slug}-p${phase}-${tagName}`;
-      
+
       console.log(`Ensuring tag: ${fullTagName}`);
       try {
         // Attempt to delete locally first to allow overwriting/fresh tag
@@ -51,10 +53,15 @@ try {
       }
 
       try {
-        execSync(`git tag -a ${fullTagName} -m "Phase ${phase} complete: ${tagName}"`, { stdio: 'inherit' });
+        execSync(
+          `git tag -a ${fullTagName} -m "Phase ${phase} complete: ${tagName}"`,
+          { stdio: 'inherit' }
+        );
         console.log(`Pushing tag to origin...`);
         // Use --force to ensure remote is updated if we are re-tagging a phase
-        execSync(`git push origin ${fullTagName} --force`, { stdio: 'inherit' });
+        execSync(`git push origin ${fullTagName} --force`, {
+          stdio: 'inherit',
+        });
       } catch (error) {
         console.error(`Failed to create or push tag:`, error.message);
         process.exit(1);
@@ -64,11 +71,17 @@ try {
 
     case 'status': {
       console.log(`--- Ralph Status: ${slug} ---`);
-      const currentBranch = execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
+      const currentBranch = execSync('git rev-parse --abbrev-ref HEAD')
+        .toString()
+        .trim();
       console.log(`Current Branch: ${currentBranch}`);
-      
+
       try {
-        const lastTag = execSync(`git tag -l "v${slug}-p*" | sort -V | tail -n 1`).toString().trim();
+        const lastTag = execSync(
+          `git tag -l "v${slug}-p*" | sort -V | tail -n 1`
+        )
+          .toString()
+          .trim();
         if (lastTag) {
           console.log(`Last Completed Phase Tag: ${lastTag}`);
           const match = lastTag.match(/-p(\d+)-/);

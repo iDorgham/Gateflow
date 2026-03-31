@@ -283,11 +283,11 @@ jobs:
         continue-on-error: true
 
       - name: Check bundle size vs baseline
-        run: node scripts/check-bundle-size.js
+        run: node scripts/check/check-bundle-size.js
         continue-on-error: true
 
       - name: Check circular imports
-        run: node scripts/check-imports.js --summary
+        run: node scripts/check/check-imports.js --summary
         continue-on-error: true
 
       - name: Print .lighthouserc.js thresholds

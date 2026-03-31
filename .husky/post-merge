@@ -20,8 +20,8 @@ case "$MERGED_BRANCH" in
   feat/*)
     if [ "$CURRENT_BRANCH" = "master" ] || [ "$CURRENT_BRANCH" = "main" ]; then
       echo "🏷  feat/* merged into ${CURRENT_BRANCH} — auto bumping patch version..."
-      node scripts/ralph-version.js bump patch
-      node scripts/ralph-version.js tag "Auto-release after ${MERGED_BRANCH}"
+      node scripts/version/ralph-version.js bump patch
+      node scripts/version/ralph-version.js tag "Auto-release after ${MERGED_BRANCH}"
       echo "✓ Version bumped and tagged. Push with:"
       echo "   git push origin HEAD && git push origin --tags"
     fi

@@ -74,7 +74,7 @@ jobs:
 
           ---
           📦 **GateFlow** — Gate access management platform
-          🤖 Release automated by [ralph-docs.js](./scripts/ralph-docs.js)
+          🤖 Release automated by [ralph-docs.js](./scripts/docs/ralph-docs.js)
           EOF
 
       - name: Create GitHub Release

@@ -6,7 +6,7 @@
 #   - Manual dispatch (with optional --tool filter)
 #
 # What it does:
-#   1. Runs scripts/sync-ai-tools.sh (source: .agents/)
+#   1. Runs scripts/ai-sync/sync-ai-tools.sh (source: .agents/)
 #   2. Commits updated tool configs (.claude/ .cursor/ .antigravity/ etc.)
 #   3. Updates docs/AI_TOOLS_SYNC_LOG.md with timestamp + changed files
 # =============================================================================
@@ -17,7 +17,7 @@ on:
     branches: [main, master]
     paths:
       - '.agents/**'
-      - 'scripts/sync-ai-tools.sh'
+      - 'scripts/ai-sync/sync-ai-tools.sh'
   workflow_dispatch:
     inputs:
       tool:
@@ -47,12 +47,12 @@ jobs:
 
       - name: Run sync script
         run: |
-          chmod +x scripts/sync-ai-tools.sh
+          chmod +x scripts/ai-sync/sync-ai-tools.sh
           TOOL_ARG=""
           if [ -n "${{ github.event.inputs.tool }}" ]; then
             TOOL_ARG="--tool ${{ github.event.inputs.tool }}"
           fi
-          bash scripts/sync-ai-tools.sh $TOOL_ARG
+          bash scripts/ai-sync/sync-ai-tools.sh $TOOL_ARG
 
       - name: Update sync log
         run: |

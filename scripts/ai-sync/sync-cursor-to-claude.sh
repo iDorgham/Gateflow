@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 
 FLAG_OPENCODE="false"
 FLAG_ANTIGRAVITY="false"
@@ -9,7 +9,7 @@ FLAG_ANTIGRAVITY="false"
 usage() {
   cat <<'EOF'
 Usage:
-  scripts/sync-cursor-to-claude.sh [--opencode] [--antigravity]
+  scripts/ai-sync/sync-cursor-to-claude.sh [--opencode] [--antigravity]
 
 Copies Cursor workspace context from .cursor/ into docs/cli-context/.
 

@@ -4,20 +4,20 @@
 # Single source of truth: .agents/
 #
 # Usage:
-#   ./scripts/sync-ai-tools.sh              # sync all tools
-#   ./scripts/sync-ai-tools.sh --tool claude
-#   ./scripts/sync-ai-tools.sh --tool cursor
-#   ./scripts/sync-ai-tools.sh --tool gemini
-#   ./scripts/sync-ai-tools.sh --tool kiro
-#   ./scripts/sync-ai-tools.sh --tool antigravity
-#   ./scripts/sync-ai-tools.sh --tool kilocode
-#   ./scripts/sync-ai-tools.sh --tool opencode
-#   ./scripts/sync-ai-tools.sh --tool qwen
-#   ./scripts/sync-ai-tools.sh --dry-run    # preview without writing
+#   ./scripts/ai-sync/sync-ai-tools.sh              # sync all tools
+#   ./scripts/ai-sync/sync-ai-tools.sh --tool claude
+#   ./scripts/ai-sync/sync-ai-tools.sh --tool cursor
+#   ./scripts/ai-sync/sync-ai-tools.sh --tool gemini
+#   ./scripts/ai-sync/sync-ai-tools.sh --tool kiro
+#   ./scripts/ai-sync/sync-ai-tools.sh --tool antigravity
+#   ./scripts/ai-sync/sync-ai-tools.sh --tool kilocode
+#   ./scripts/ai-sync/sync-ai-tools.sh --tool opencode
+#   ./scripts/ai-sync/sync-ai-tools.sh --tool qwen
+#   ./scripts/ai-sync/sync-ai-tools.sh --dry-run    # preview without writing
 # =============================================================================
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 SRC="$ROOT/.agents"
 DRY_RUN=false
 ONLY_TOOL=""

@@ -6,6 +6,8 @@
 - Enforce changelog structure in CI with `pnpm docs:changelog:check`; use `pnpm docs:changelog:format` to normalize tag casing and spacing.
 - Keep `ai:sync` and `ai:check` only in `docs/workspace/template-project/package.json`; do not add or retain those scripts on the repository root `package.json`.
 - Unless intentionally versioning them, revert transient Cursor hook state under `.cursor/hooks/state/` (e.g. `continual-learning.json`) before commits, and do not mix accidental hook/sync-driven `.gitignore` edits with feature or UI commits—revert or use a separate commit.
+- Prefer development guidance and docs to cover a multi-tool stack (Cursor, Kiro, Antigravity, Claude CLI, Opencode CLI, Gemini CLI, and Kilo CLI) instead of Cursor-only instructions.
+- Prefer phased execution workflows: plan/tasks first, then apply prompts phase-by-phase with testing and incremental enhancements after each phase.
 
 ## Learned Workspace Facts
 

@@ -2,7 +2,7 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 # 1. Secret scanner — blocks on HIGH severity secrets
-node scripts/scan-secrets.js
+node scripts/check/scan-secrets.js
 SECRET_EXIT=$?
 if [ $SECRET_EXIT -ne 0 ]; then
   exit $SECRET_EXIT

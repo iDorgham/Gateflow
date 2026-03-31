@@ -3,10 +3,10 @@
  * ralph-run.js — Phase runner with auto-tool selection + auto-accept security
  *
  * Usage:
- *   node scripts/ralph-run.js <slug> <phase>      run specific phase
- *   node scripts/ralph-run.js <slug> --next       run next incomplete phase
- *   node scripts/ralph-run.js <slug> --all        run all phases sequentially
- *   node scripts/ralph-run.js <slug> --dry-run 1  preview without executing
+ *   node scripts/plan/ralph-run.js <slug> <phase>      run specific phase
+ *   node scripts/plan/ralph-run.js <slug> --next       run next incomplete phase
+ *   node scripts/plan/ralph-run.js <slug> --all        run all phases sequentially
+ *   node scripts/plan/ralph-run.js <slug> --dry-run 1  preview without executing
  *
  * Auto-accept flags per tool:
  *   claude   → --dangerously-skip-permissions -p
@@ -22,7 +22,7 @@ const fs = require('fs');
 const path = require('path');
 const { spawnSync, execSync } = require('child_process');
 
-const ROOT = path.resolve(__dirname, '..');
+const ROOT = path.resolve(__dirname, '../..');
 const PLAN_ROOT = path.join(ROOT, 'docs', 'plan');
 const STATES = ['in-progress', 'execution', 'planned', 'planning', 'done'];
 
@@ -292,7 +292,7 @@ for (const phaseInfo of toRun) {
 
       // Trigger full docs automation (same as pnpm plan:done)
       try {
-        execSync(`node scripts/ralph-docs.js on-plan-done ${slug}`, {
+        execSync(`node scripts/docs/ralph-docs.js on-plan-done ${slug}`, {
           cwd: ROOT,
           stdio: 'inherit',
         });
@@ -302,7 +302,7 @@ for (const phaseInfo of toRun) {
 
       // Auto-create PR
       try {
-        execSync(`node scripts/ralph-plan.js pr ${slug}`, {
+        execSync(`node scripts/plan/ralph-plan.js pr ${slug}`, {
           cwd: ROOT,
           stdio: 'inherit',
         });

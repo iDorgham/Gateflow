@@ -1,6 +1,6 @@
 #!/bin/bash
 # GateFlow Commands for Kiro CLI
-# Usage: ./scripts/kiro-commands.sh <command>
+# Usage: ./scripts/ralph/kiro-commands.sh <command>
 
 COMMANDS_DIR=".cursor/commands"
 WORKFLOWS_DIR=".agent/workflows"
