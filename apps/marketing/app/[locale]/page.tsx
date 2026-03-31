@@ -11,6 +11,7 @@ import { TestimonialsSection } from '../../components/sections/testimonials';
 import { ComparisonSection } from '../../components/sections/comparison';
 import { Shield, Zap, Smartphone, BarChart3 } from 'lucide-react';
 import { I18nLink } from '../../components/i18n-link';
+import { Button } from '@gate-access/ui';
 
 export default async function HomePage(props: {
   params: Promise<{ locale: Locale }>;
@@ -26,18 +27,18 @@ export default async function HomePage(props: {
       <StatsSection locale={locale} />
 
       {/* Problem/Solution Section */}
-      <section className="py-24 bg-[var(--ds-background-subtle,#F4F5F7)] border-y border-[var(--ds-border,#DFE1E6)]">
-        <div className="container px-[var(--ds-grid-margin-xs,1rem)] md:px-[var(--ds-grid-margin-md,2rem)] lg:px-[var(--ds-grid-margin-lg,4rem)] mx-auto">
+      <section className="border-y border-border bg-muted/30 py-24">
+        <div className="container mx-auto px-4 md:px-8 lg:px-16">
           <div className="text-center max-w-2xl mx-auto mb-20 lg:mb-24">
-            <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--ds-text-brand,#0052CC)] mb-4">
+            <h2 className="mb-4 text-[11px] font-bold uppercase tracking-[0.2em] text-primary">
               {t('problems.title')}
             </h2>
-            <p className="text-3xl lg:text-5xl font-bold tracking-tight text-[var(--ds-text,#172B4D)] leading-tight">
+            <p className="text-3xl lg:text-5xl font-bold tracking-tight text-foreground leading-tight">
               {t('features.title')}
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-[var(--ds-grid-gutter,1.5rem)]">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             <FeatureCard
               icon={<Shield className="w-8 h-8" />}
               title={t('features.items.qr.title')}
@@ -73,37 +74,37 @@ export default async function HomePage(props: {
       <SecurityGrid locale={locale} />
 
       {/* Visual Momentum Section */}
-      <section className="py-24 bg-[var(--ds-background-default,#FFFFFF)] overflow-hidden">
-        <div className="container px-[var(--ds-grid-margin-xs,1rem)] mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-center bg-[#172B4D] rounded-xl p-8 lg:p-16 text-white overflow-hidden relative isolate">
-            <div className="absolute inset-0 -z-10 opacity-20 bg-[radial-gradient(circle_at_top_right,var(--ds-background-brand-bold,#0052CC),transparent)]" />
+      <section className="overflow-hidden bg-background py-24">
+        <div className="container mx-auto px-4">
+          <div className="relative isolate grid items-center gap-16 overflow-hidden rounded-2xl border border-border bg-card p-8 lg:grid-cols-2 lg:p-16">
+            <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_right,hsl(var(--primary)/0.16),transparent)]" />
 
             <div>
-              <h2 className="text-3xl lg:text-5xl font-bold tracking-tight mb-8 leading-tight">
+              <h2 className="mb-8 text-3xl font-bold leading-tight tracking-tight text-foreground lg:text-5xl">
                 {t('cta.headline')}
               </h2>
-              <p className="text-white/70 text-lg mb-10 max-w-md">
+              <p className="mb-10 max-w-md text-lg text-muted-foreground">
                 {t('cta.subHeadline')}
               </p>
               <I18nLink locale={locale} href="/contact">
-                <button className="h-12 px-8 bg-[#0052CC] text-white rounded-xl font-bold">
+                <Button variant="brand" size="lg" className="px-8">
                   {t('hero.primaryCta')}
-                </button>
+                </Button>
               </I18nLink>
             </div>
 
             <div className="relative">
-              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-8 lg:p-12 shadow-2xl">
-                <div className="text-[var(--ds-text-brand,#579DFF)] mb-6">
+              <div className="rounded-xl border border-border bg-background/80 p-8 shadow-2xl backdrop-blur-sm lg:p-12">
+                <div className="mb-6 text-primary">
                   <Zap className="w-12 h-12" />
                 </div>
-                <h3 className="text-2xl font-bold text-white mb-6">
+                <h3 className="mb-6 text-2xl font-bold text-foreground">
                   Ready to upgrade your community security?
                 </h3>
-                <div className="h-2 w-full bg-white/10 rounded-full overflow-hidden">
-                  <div className="h-full bg-[var(--ds-background-brand-bold,#0052CC)] w-3/4" />
+                <div className="h-2 w-full overflow-hidden rounded-full bg-muted">
+                  <div className="h-full w-3/4 bg-primary" />
                 </div>
-                <div className="flex justify-between mt-4 text-xs font-bold text-white/70 uppercase tracking-widest">
+                <div className="mt-4 flex justify-between text-xs font-bold uppercase tracking-widest text-muted-foreground">
                   <span>Configuration</span>
                   <span>90% Complete</span>
                 </div>
@@ -130,28 +131,23 @@ function FeatureCard({
   color?: 'brand' | 'success' | 'information' | 'warning';
 }) {
   const colorMap = {
-    brand:
-      'var(--ds-background-brand-subtle,#DEEBFF) text-[var(--ds-text-brand,#0052CC)]',
-    success:
-      'var(--ds-background-success-subtle,#E3FCEF) text-[var(--ds-text-success,#006644)]',
-    information:
-      'var(--ds-background-information-subtle,#EBF1FF) text-[var(--ds-text-information,#0052CC)]',
-    warning:
-      'var(--ds-background-warning-subtle,#FFF0B3) text-[var(--ds-text-warning,#827013)]',
+    brand: 'bg-primary/10 text-primary',
+    success: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
+    information: 'bg-sky-500/10 text-sky-600 dark:text-sky-400',
+    warning: 'bg-amber-500/10 text-amber-600 dark:text-amber-400',
   };
 
   return (
-    <div className="bg-[var(--ds-background-default,#FFFFFF)] border border-[var(--ds-border,#DFE1E6)] p-8 rounded-lg hover:border-[var(--ds-border-bold,#A5ADBA)] hover:shadow-[0_8px_24px_rgba(9,30,66,0.12)] transition-all group flex flex-col h-full">
+    <div className="group flex h-full flex-col rounded-xl border border-border bg-card p-8 transition-all hover:border-border/80 hover:shadow-xl">
       <div
-        className={`w-14 h-14 flex items-center justify-center rounded-lg mb-8 transition-transform group-hover:-translate-y-1`}
-        style={{ backgroundColor: colorMap[color].split(' ')[0] }}
+        className={`mb-8 flex h-14 w-14 items-center justify-center rounded-lg transition-transform group-hover:-translate-y-1 ${colorMap[color]}`}
       >
-        <div className={colorMap[color].split(' ')[1]}>{icon}</div>
+        <div>{icon}</div>
       </div>
-      <h3 className="text-[18px] font-bold text-[var(--ds-text,#172B4D)] mb-3 tracking-tight">
+      <h3 className="mb-3 text-[18px] font-bold tracking-tight text-foreground">
         {title}
       </h3>
-      <p className="text-[var(--ds-text-subtle,#42526E)] text-[14px] leading-relaxed flex-grow">
+      <p className="flex-grow text-[14px] leading-relaxed text-muted-foreground">
         {desc}
       </p>
     </div>

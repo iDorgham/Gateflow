@@ -44,7 +44,7 @@ export default async function SolutionsPage(props: {
       features: t('compounds.bulletPoints', {
         returnObjects: true,
       }) as string[],
-      color: 'bg-indigo-500',
+      color: 'bg-primary text-primary-foreground',
     },
     {
       id: 'schools',
@@ -52,7 +52,7 @@ export default async function SolutionsPage(props: {
       desc: t('schools.description'),
       icon: GraduationCap,
       features: t('schools.bulletPoints', { returnObjects: true }) as string[],
-      color: 'bg-teal-500',
+      color: 'bg-emerald-500 text-white',
     },
     {
       id: 'events',
@@ -60,7 +60,7 @@ export default async function SolutionsPage(props: {
       desc: t('events.description'),
       icon: Calendar,
       features: t('events.bulletPoints', { returnObjects: true }) as string[],
-      color: 'bg-orange-500',
+      color: 'bg-amber-500 text-amber-950',
     },
     {
       id: 'clubs',
@@ -68,7 +68,7 @@ export default async function SolutionsPage(props: {
       desc: t('clubs.description'),
       icon: Anchor,
       features: t('clubs.bulletPoints', { returnObjects: true }) as string[],
-      color: 'bg-blue-500',
+      color: 'bg-sky-500 text-white',
     },
   ];
 
@@ -85,16 +85,16 @@ export default async function SolutionsPage(props: {
       </section>
 
       {/* Grid */}
-      <section className="container px-6 grid gap-16">
+      <section className="container grid gap-16 px-6">
         {verticals.map((v, i) => (
           <div
             key={v.id}
             id={v.id}
-            className={`grid lg:grid-cols-2 gap-12 items-center ${i % 2 === 0 ? '' : 'lg:flex-row-reverse'}`}
+            className="grid items-center gap-12 lg:grid-cols-2"
           >
             <div className={i % 2 === 0 ? 'lg:order-1' : 'lg:order-2'}>
               <div
-                className={`h-16 w-16 rounded-2xl ${v.color} text-white flex items-center justify-center mb-6 shadow-xl`}
+                className={`mb-6 flex h-16 w-16 items-center justify-center rounded-2xl shadow-xl ${v.color}`}
               >
                 <v.icon size={32} />
               </div>
@@ -125,10 +125,10 @@ export default async function SolutionsPage(props: {
             </div>
 
             <div
-              className={`relative aspect-square lg:aspect-video rounded-[2.5rem] bg-muted overflow-hidden border ${i % 2 === 0 ? 'lg:order-2' : 'lg:order-1'}`}
+              className={`relative aspect-square overflow-hidden rounded-[2.5rem] border bg-muted lg:aspect-video ${i % 2 === 0 ? 'lg:order-2' : 'lg:order-1'}`}
             >
               {/* Visual representation placeholder */}
-              <div className="absolute inset-0 bg-gradient-to-br from-slate-200 to-slate-100 dark:from-slate-800 dark:to-slate-900 flex items-center justify-center">
+              <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-muted to-muted/30">
                 <v.icon className="w-32 h-32 opacity-10" />
               </div>
 
@@ -138,12 +138,12 @@ export default async function SolutionsPage(props: {
                   <span className="text-xs font-black uppercase tracking-widest text-primary">
                     {t('ui.liveOperations')}
                   </span>
-                  <span className="text-xs font-bold text-success animate-pulse">
+                  <span className="text-xs font-bold text-emerald-500 animate-pulse">
                     ● {t('ui.systemOnline')}
                   </span>
                 </div>
                 <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
-                  <div className="h-full bg-primary w-full shadow-[0_0_10px_rgba(var(--primary-rgb),0.5)]" />
+                  <div className="h-full w-full bg-primary shadow-[0_0_12px_hsl(var(--primary)/0.45)]" />
                 </div>
               </div>
             </div>
@@ -153,13 +153,13 @@ export default async function SolutionsPage(props: {
 
       {/* Shared Features Summary */}
       <section className="container px-6 mt-32">
-        <div className="bg-slate-900 rounded-[3rem] p-12 lg:p-20 text-white relative overflow-hidden">
+        <div className="relative overflow-hidden rounded-[3rem] border border-border bg-card p-12 lg:p-20">
           <div className="relative z-10 grid lg:grid-cols-3 gap-12">
             <div className="lg:col-span-1">
-              <h3 className="text-3xl font-black mb-4">
+              <h3 className="mb-4 text-3xl font-black text-foreground">
                 {t('ui.coreInfrastructure.title')}
               </h3>
-              <p className="text-slate-400">
+              <p className="text-muted-foreground">
                 {t('ui.coreInfrastructure.description')}
               </p>
             </div>
@@ -205,12 +205,12 @@ function FeatureHorizontal({
 }) {
   return (
     <div className="flex gap-4">
-      <div className="bg-white/10 p-2 rounded-lg h-fit text-primary">
+      <div className="h-fit rounded-lg bg-primary/10 p-2 text-primary">
         <Icon size={24} />
       </div>
       <div>
-        <h4 className="font-bold text-lg mb-1">{title}</h4>
-        <p className="text-slate-500 text-sm leading-relaxed">{desc}</p>
+        <h4 className="mb-1 text-lg font-bold text-foreground">{title}</h4>
+        <p className="text-sm leading-relaxed text-muted-foreground">{desc}</p>
       </div>
     </div>
   );

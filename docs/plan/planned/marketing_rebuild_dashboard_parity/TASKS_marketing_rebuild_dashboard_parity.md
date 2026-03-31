@@ -1,7 +1,7 @@
 # TASKS: marketing_rebuild_dashboard_parity
 
 **Plan:** `PLAN_marketing_rebuild_dashboard_parity.md`  
-**Status:** In progress (Phase 02 complete)
+**Status:** In progress (Phase 03 complete)
 
 ---
 
@@ -21,10 +21,10 @@
 
 ## Phase 03 — Section refactors
 
-- [ ] Refactor homepage and shared sections (`components/sections/*`) to semantic token classes
-- [ ] Pricing, features, solutions index — consistent cards, CTAs, borders
-- [ ] RTL audit (`ar-EG`) on refactored sections
-- [ ] `pnpm preflight` if marketing + ui both touched
+- [x] Refactor homepage and shared sections (`components/sections/*`) to semantic token classes
+- [x] Pricing, features, solutions index — consistent cards, CTAs, borders
+- [x] RTL audit (`ar-EG`) on refactored sections (ordering/layout classes validated in shell + sections)
+- [x] `pnpm preflight` if marketing + ui both touched (not required; `packages/ui` untouched)
 
 ## Phase 04 — SEO, motion, verification
 

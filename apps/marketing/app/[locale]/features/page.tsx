@@ -12,6 +12,7 @@ import {
   BarChart3,
 } from 'lucide-react';
 import { I18nLink } from '../../../components/i18n-link';
+import { Button } from '@gate-access/ui';
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: Locale }>;
@@ -31,12 +32,6 @@ export default async function FeaturesPage(props: {
   const params = await props.params;
   const { locale } = params;
   const { t } = await getTranslation(locale, 'product');
-
-  // ADS-aligned button styles to replace the Button component that's crashing the build worker
-  const buttonPrimaryStyles =
-    'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-[var(--ds-border-radius-200)] text-sm font-semibold transition-all duration-150 active:scale-[0.98] select-none h-14 px-8 rounded-xl bg-[var(--ds-background-brand-bold)] text-[var(--ds-text-inverse)] hover:bg-[var(--ds-background-brand-bold-hovered)] active:bg-[var(--ds-background-brand-bold-pressed)] shadow-[var(--ds-shadow-raised)]';
-  const buttonOutlineStyles =
-    'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-[var(--ds-border-radius-200)] text-sm font-semibold transition-all duration-150 active:scale-[0.98] select-none h-14 px-8 rounded-xl border border-[var(--ds-border)] bg-transparent text-[var(--ds-text)] hover:bg-[var(--ds-background-neutral-subtle)] hover:border-[var(--ds-border-bold)] active:bg-[var(--ds-background-neutral-hovered)]';
 
   return (
     <div className="flex flex-col w-full pb-24">
@@ -111,7 +106,7 @@ export default async function FeaturesPage(props: {
               </div>
             </div>
             <div className="relative">
-              <div className="bg-slate-900 rounded-3xl p-8 text-white font-mono text-sm shadow-2xl ltr:text-left rtl:text-left rtl:dir-ltr">
+              <div className="rounded-3xl border border-border bg-card p-8 font-mono text-sm text-foreground shadow-2xl ltr:text-left rtl:text-left rtl:dir-ltr">
                 <div className="flex gap-1.5 mb-6">
                   <div className="h-2.5 w-2.5 rounded-full bg-red-500" />
                   <div className="h-2.5 w-2.5 rounded-full bg-yellow-500" />
@@ -127,11 +122,11 @@ export default async function FeaturesPage(props: {
                     {t('deepDives.code.authorized')}
                   </p>
                   <p className="pl-4">timestamp: Date.now(),</p>
-                  <p className="pl-4 text-indigo-400">
+                  <p className="pl-4 text-sky-500">
                     {t('deepDives.code.queued')}
                   </p>
                   <p>{'}'}</p>
-                  <p className="mt-6 text-slate-500">
+                  <p className="mt-6 text-muted-foreground">
                     {t('deepDives.code.processed')}
                   </p>
                 </div>
@@ -145,19 +140,15 @@ export default async function FeaturesPage(props: {
       <section className="container px-6 pt-24 text-center">
         <h2 className="text-3xl font-black mb-8">{t('cta.headline')}</h2>
         <div className="flex justify-center gap-4">
-          <I18nLink
-            locale={locale}
-            href="/contact"
-            className={buttonPrimaryStyles}
-          >
-            {t('cta.buttonDemo')}
+          <I18nLink locale={locale} href="/contact">
+            <Button size="lg" variant="brand" className="h-14 px-8">
+              {t('cta.buttonDemo')}
+            </Button>
           </I18nLink>
-          <I18nLink
-            locale={locale}
-            href="/pricing"
-            className={buttonOutlineStyles}
-          >
-            {t('cta.buttonPricing')}
+          <I18nLink locale={locale} href="/pricing">
+            <Button size="lg" variant="outline" className="h-14 px-8">
+              {t('cta.buttonPricing')}
+            </Button>
           </I18nLink>
         </div>
       </section>
