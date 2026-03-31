@@ -120,15 +120,22 @@
 
 **IDEA:** `docs/plan/context/IDEA_resident_portal_responsive.md`
 
-**Status:** 🆕 New
+**PLAN:** `docs/plan/planning/resident_portal_responsive/PLAN_resident_portal_responsive.md`
+
+**Status:** 🆕 Planning
 
 **Target:** Q2 2026
 
-- [ ] Phase 1 — Foundation: Shared Layout & Navigation (PortalShell, BottomNav, Sidebar, FAB, useBreakpoint)
+- [ ] Phase 1 — Foundation: Shared Layout & Navigation
+  (`phases/01_foundation/PROMPT_phase_01.md`)
 - [ ] Phase 2 — PWA: Manifest, Service Worker, Offline QR Cache, Web Push
-- [ ] Phase 3 — Responsive Pages: Home & Visitors (adaptive grids, FAB, desktop table view)
+  (`phases/02_pwa/PROMPT_phase_02.md`)
+- [ ] Phase 3 — Responsive Pages: Home & Visitors
+  (`phases/03_home_visitors/PROMPT_phase_03.md`)
 - [ ] Phase 4 — Responsive Pages: History, Maintenance, Profile & Settings
-- [ ] Phase 5 — Polish: Transitions, Gestures, RTL, A11y, Loading/Error Boundaries
+  (`phases/04_history_maintenance/PROMPT_phase_04.md`)
+- [ ] Phase 5 — Polish: Transitions, Gestures, RTL, A11y
+  (`phases/05_polish/PROMPT_phase_05.md`)
 
 ### security_isolation_fix — High-Risk Security Hardening
 
