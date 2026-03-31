@@ -137,19 +137,26 @@
 - [ ] Phase 5 — Polish: Transitions, Gestures, RTL, A11y
   (`phases/05_polish/PROMPT_phase_05.md`)
 
-### scanner_biometric_auth — Scanner App: Biometric Identity Verification
+### scanner_onboarding_session — Scanner App: Onboarding & Session Management
 
-**IDEA:** `docs/plan/context/IDEA_scanner_biometric_auth.md`
+**IDEA:** `docs/plan/context/IDEA_scanner_onboarding_session.md`
 
-**Status:** 🆕 New
+**PLAN:** `docs/plan/planning/scanner_onboarding_session/PLAN_scanner_onboarding_session.md`
+
+**Status:** 🆕 Planning
 
 **Target:** Q3 2026
 
-- [ ] Phase 1 — Integration: `expo-local-authentication` Setup
-- [ ] Phase 2 — Implementation: BiometricGuard component & session logic
-- [ ] Phase 3 — Audit & Control: Admin toggle + Schema updates
-- [ ] Phase 4 — Localization: Prompts and i18n
-- [ ] Phase 5 — Verification: Fail-safe logic and fallback testing
+- [ ] Phase 1 — Security & Auth: `local-authentication` Setup
+  (`phases/01_security_auth/PROMPT_phase_01.md`)
+- [ ] Phase 2 — Wizard UI: Multi-step ADS Onboarding
+  (`phases/02_onboarding_wizard/PROMPT_phase_02.md`)
+- [ ] Phase 3 — Shift Logic: Clock-in/out API & Logic
+  (`phases/03_shift_management/PROMPT_phase_03.md`)
+- [ ] Phase 4 — Home Redesign: Master Scan & ADS Dashboard
+  (`phases/04_home_redesign/PROMPT_phase_04.md`)
+- [ ] Phase 5 — Polish: Animation, Security Guard, & RTL
+  (`phases/05_polish_qa/PROMPT_phase_05.md`)
 
 ### security_isolation_fix — High-Risk Security Hardening
 

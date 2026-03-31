@@ -2,23 +2,23 @@
 
 ## Phase 1: Foundation – Layout & Nav
 
-- [ ] Create `useBreakpoint` hook (xs, sm, md, lg)
-- [ ] Create `BottomNav` component (Home, Visitors, Create, History, Profile)
-- [ ] Create `Sidebar` component (Desktop layout)
-- [ ] Create `PortalShell` layout wrapper
-- [ ] Create `PageHeader` shared component
-- [ ] Create `QuickCreateFAB` component
-- [ ] Refactor all portal pages to use `PortalShell`
-- [ ] Verify `organizationId` scoping on shell links
+- [x] Create `useBreakpoint` hook (xs, sm, md, lg)
+- [x] Create `BottomNav` component (Home, Visitors, Create, History, Profile)
+- [x] Create `Sidebar` component (Desktop layout)
+- [x] Create `PortalShell` layout wrapper
+- [x] Create `PageHeader` shared component
+- [x] Create `QuickCreateFAB` component
+- [x] Refactor all portal pages to use `PortalShell`
+- [x] Verify `organizationId` scoping on shell links
 
 ## Phase 2: PWA – Install & Offline
 
-- [ ] Configure `manifest.json` and meta tags
-- [ ] Setup `next-pwa` or custom SW handling
-- [ ] Implement `offline-cache.ts` for QR storage (IndexedDB)
-- [ ] Wire QR views to check cache first when offline
-- [ ] Add "Offline" banner/indicator
-- [ ] Web Push: registration flow and server-side subscription storage
+- [x] Configure `manifest.json` and meta tags
+- [x] Setup `next-pwa` or custom SW handling
+- [x] Implement `offline-cache.ts` for QR storage (IndexedDB)
+- [x] Wire QR views to check cache first when offline
+- [x] Add "Offline" banner/indicator
+- [x] Web Push: registration flow and server-side subscription storage
 
 ## Phase 3: Home & Visitors Redesign
 

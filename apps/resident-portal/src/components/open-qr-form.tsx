@@ -9,6 +9,7 @@ import {
   Label, 
 } from '@gate-access/ui';
 import { captureUtmParams, getPersistedUtmParams } from '@gate-access/api-client';
+import { queueVisitorRequest } from '@/lib/pending-sync';
 
 export function OpenQRForm({ unitId }: { unitId: string }) {
   const router = useRouter();
@@ -32,18 +33,19 @@ export function OpenQRForm({ unitId }: { unitId: string }) {
     e.preventDefault();
     setLoading(true);
     setError(null);
+    const payload = {
+      ...formData,
+      unitId,
+      visitorName: 'Open Access Pass',
+      accessType: 'DATERANGE',
+      ...getPersistedUtmParams(),
+    };
 
     try {
       const response = await fetch('/api/resident/visitors', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          unitId,
-          visitorName: 'Open Access Pass',
-          accessType: 'DATERANGE',
-          ...getPersistedUtmParams(),
-        }),
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
@@ -55,6 +57,11 @@ export function OpenQRForm({ unitId }: { unitId: string }) {
       router.push(`/visitors/${data.id}`);
       router.refresh();
     } catch (err: unknown) {
+      if (typeof navigator !== 'undefined' && !navigator.onLine) {
+        queueVisitorRequest(payload as Record<string, unknown>);
+        setError('You are offline. Open QR request queued for sync.');
+        return;
+      }
       setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setLoading(false);

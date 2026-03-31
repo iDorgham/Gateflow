@@ -1,0 +1,20 @@
+{
+  "name": "GateFlow Resident Portal",
+  "short_name": "GateFlow",
+  "description": "Resident access portal for visitor and QR management",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#2563eb",
+  "orientation": "portrait",
+  "lang": "en",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

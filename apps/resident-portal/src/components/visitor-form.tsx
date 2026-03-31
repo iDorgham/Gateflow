@@ -12,6 +12,7 @@ import {
   TabsTrigger,
 } from '@gate-access/ui';
 import { captureUtmParams, getPersistedUtmParams } from '@gate-access/api-client';
+import { queueVisitorRequest } from '@/lib/pending-sync';
 
 export function VisitorForm({ unitId }: { unitId: string }) {
   const router = useRouter();
@@ -37,16 +38,17 @@ export function VisitorForm({ unitId }: { unitId: string }) {
     e.preventDefault();
     setLoading(true);
     setError(null);
+    const payload = {
+      unitId,
+      ...formData,
+      ...getPersistedUtmParams(),
+    };
 
     try {
       const response = await fetch('/api/resident/visitors', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          unitId,
-          ...formData,
-          ...getPersistedUtmParams(),
-        }),
+        body: JSON.stringify(payload),
       });
 
       const data = await response.json();
@@ -58,6 +60,11 @@ export function VisitorForm({ unitId }: { unitId: string }) {
       router.push(`/visitors/${data.id}`);
       router.refresh();
     } catch (err: unknown) {
+      if (typeof navigator !== 'undefined' && !navigator.onLine) {
+        queueVisitorRequest(payload as Record<string, unknown>);
+        setError('You are offline. Request saved and will sync automatically.');
+        return;
+      }
       setError(err instanceof Error ? err.message : 'Unknown error');
     } finally {
       setLoading(false);

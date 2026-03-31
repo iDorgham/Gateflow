@@ -2,10 +2,12 @@ import './globals.css';
 import { Inter, Cairo } from 'next/font/google';
 import type { Metadata } from 'next';
 import { Toaster } from 'sonner';
+import { PwaBootstrap } from '@/components/pwa/pwa-bootstrap';
 
 export const metadata: Metadata = {
   title: 'GateFlow Resident Portal',
   description: 'Manage your visitor access codes',
+  manifest: '/manifest.json',
 };
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
@@ -25,6 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`min-h-screen bg-background antialiased ${inter.variable} ${cairo.variable} font-sans`}>
+        <PwaBootstrap />
         {children}
         <Toaster position="top-right" />
       </body>

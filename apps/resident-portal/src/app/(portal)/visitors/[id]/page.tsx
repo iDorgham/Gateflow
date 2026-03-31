@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Share2, Download, Trash2, Shield } from 'lucide-react';
 import { getSessionClaims } from '@/lib/auth-cookies';
@@ -7,6 +6,7 @@ import { Button, Badge } from '@gate-access/ui';
 import { VisitorQRCard } from '@/components/visitor-qr-card';
 import { format } from 'date-fns';
 import { PageHeader } from '@/components/layout/page-header';
+import { OfflineQrCacheClient } from '@/components/pwa/offline-qr-cache-client';
 
 export default async function VisitorDetailPage(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -59,6 +59,15 @@ export default async function VisitorDetailPage(props: { params: Promise<{ id: s
       />
 
       <main className="mx-auto flex w-full max-w-md flex-col items-center space-y-8 px-4 py-8 pb-24 md:max-w-3xl">
+        <OfflineQrCacheClient
+          payload={{
+            id: visitor.id,
+            code: visitor.qrCode.code,
+            expiresAt: visitor.qrCode.expiresAt?.toISOString() ?? null,
+            accessType: visitor.accessRule?.type ?? 'PERMANENT',
+            cachedAt: new Date().toISOString(),
+          }}
+        />
         <VisitorQRCard
           visitorName={visitor.visitorName || 'Open Access Pass'}
           date={dateStr}
