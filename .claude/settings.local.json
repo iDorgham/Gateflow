@@ -75,7 +75,11 @@
       "Bash(node scripts/check-ai-drift.js)",
       "Bash(node docs/workspace/template-project/scripts/cache-build.js)",
       "Bash(node docs/workspace/template-project/scripts/cache-check.js)",
-      "Bash(node docs/workspace/template-project/scripts/memory-init.js)"
+      "Bash(node docs/workspace/template-project/scripts/memory-init.js)",
+      "Bash(1:*)",
+      "Bash(vercel deploy:*)",
+      "Bash(vercel ls:*)",
+      "Bash(vercel inspect:*)"
     ]
   },
   "enabledMcpjsonServers": [

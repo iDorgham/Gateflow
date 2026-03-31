@@ -4,6 +4,21 @@
 
 ## Open Initiatives
 
+### marketing_rebuild_dashboard_parity — Marketing site: dashboard tokens + AI-skills rebuild
+
+**IDEA:** `docs/plan/context/IDEA_marketing_rebuild_dashboard_parity.md`
+
+**PLAN:** `docs/plan/planned/marketing_rebuild_dashboard_parity/PLAN_marketing_rebuild_dashboard_parity.md`
+
+**Status:** Planned — ready for `/dev marketing_rebuild_dashboard_parity 1`
+
+**Target:** Q2 2026
+
+- [ ] Phase 1 — Token & Tailwind alignment (`phases/01_token_audit/PROMPT_phase_01.md`)
+- [ ] Phase 2 — Layout shell & primitives (`phases/02_layout_shell/PROMPT_phase_02.md`)
+- [ ] Phase 3 — Section refactors & RTL (`phases/03_sections_refactor/PROMPT_phase_03.md`)
+- [ ] Phase 4 — SEO, motion, a11y, verification (`phases/04_seo_motion_verify/PROMPT_phase_04.md`)
+
 ### autonomous_ops_intelligence — Autonomous Operations & Perimeter Intelligence (Q1 2026)
 
 **IDEA:** `docs/plan/context/IDEA_autonomous_ops_intelligence.md`

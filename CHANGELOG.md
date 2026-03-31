@@ -33,6 +33,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 ### Features
 
 - **[Marketing] **refactor section tokens and rtl layout (phase 03)
+
+- **[Marketing] **refactor section tokens and rtl layout (phase 03)
 - **[Marketing] **align layout shell tokens (phase 02)
 
 - **[Marketing] **align layout shell tokens (phase 02)
