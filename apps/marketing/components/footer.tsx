@@ -8,7 +8,7 @@ export async function Footer({ locale }: { locale: Locale }) {
 
   return (
     <footer className="bg-background border-t">
-      <div className="container px-6 py-12 mx-auto">
+      <div className="container mx-auto px-6 py-12">
         <div className="grid grid-cols-2 gap-8 lg:grid-cols-4">
           <div className="col-span-2 lg:col-span-1">
             <I18nLink
@@ -25,16 +25,32 @@ export async function Footer({ locale }: { locale: Locale }) {
               {t('footer.brand.description')}
             </p>
             <div className="flex gap-4">
-              <a href="#" className="text-muted-foreground hover:text-primary" aria-label="Facebook">
+              <a
+                href="#"
+                className="text-muted-foreground transition-colors hover:text-primary"
+                aria-label="Facebook"
+              >
                 <Facebook size={20} />
               </a>
-              <a href="#" className="text-muted-foreground hover:text-primary" aria-label="Twitter">
+              <a
+                href="#"
+                className="text-muted-foreground transition-colors hover:text-primary"
+                aria-label="Twitter"
+              >
                 <Twitter size={20} />
               </a>
-              <a href="#" className="text-muted-foreground hover:text-primary" aria-label="Instagram">
+              <a
+                href="#"
+                className="text-muted-foreground transition-colors hover:text-primary"
+                aria-label="Instagram"
+              >
                 <Instagram size={20} />
               </a>
-              <a href="#" className="text-muted-foreground hover:text-primary" aria-label="Linkedin">
+              <a
+                href="#"
+                className="text-muted-foreground transition-colors hover:text-primary"
+                aria-label="Linkedin"
+              >
                 <Linkedin size={20} />
               </a>
             </div>
@@ -111,7 +127,7 @@ export async function Footer({ locale }: { locale: Locale }) {
                 <I18nLink
                   locale={locale}
                   href="/company#careers"
-                  className="hover:text-primary text-[var(--ds-text-subtle,#42526E)] cursor-not-allowed"
+                  className="cursor-not-allowed text-muted-foreground hover:text-primary"
                 >
                   {t('footer.links.careers')}
                 </I18nLink>
@@ -120,7 +136,7 @@ export async function Footer({ locale }: { locale: Locale }) {
                 <I18nLink
                   locale={locale}
                   href="/company#press"
-                  className="hover:text-primary text-[var(--ds-text-subtle,#42526E)] cursor-not-allowed"
+                  className="cursor-not-allowed text-muted-foreground hover:text-primary"
                 >
                   Press
                 </I18nLink>

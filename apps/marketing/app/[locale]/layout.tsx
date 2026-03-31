@@ -137,7 +137,7 @@ export default async function RootLayout(props: {
         <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
         <OrganizationJsonLd locale={castLocale} />
         <WebSiteJsonLd locale={castLocale} />
-        <meta name="theme-color" content="#3b82f6" />
+        <meta name="theme-color" content="#ED4B00" />
         <link rel="manifest" href="/manifest.json" />
         <MarketingScripts
           metaPixelId={process.env.NEXT_PUBLIC_META_PIXEL_ID}

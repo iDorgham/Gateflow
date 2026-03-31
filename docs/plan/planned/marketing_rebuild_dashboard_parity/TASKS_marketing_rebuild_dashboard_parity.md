@@ -1,7 +1,7 @@
 # TASKS: marketing_rebuild_dashboard_parity
 
 **Plan:** `PLAN_marketing_rebuild_dashboard_parity.md`  
-**Status:** In progress (Phase 01 complete)
+**Status:** In progress (Phase 02 complete)
 
 ---
 
@@ -14,10 +14,10 @@
 
 ## Phase 02 — Layout shell & primitives
 
-- [ ] Refactor `apps/marketing/app/[locale]/layout.tsx` and global providers to use aligned tokens
-- [ ] Migrate `Nav`, `Footer`, and shared wrappers to `@gate-access/ui` primitives where it reduces drift
-- [ ] Verify theme toggle + fonts (Inter/Cairo decision recorded)
-- [ ] `pnpm --filter marketing lint` + spot manual EN/AR
+- [x] Refactor `apps/marketing/app/[locale]/layout.tsx` and global providers to use aligned tokens
+- [x] Migrate `Nav`, `Footer`, and shared wrappers to `@gate-access/ui` primitives where it reduces drift
+- [x] Verify theme toggle + fonts (Inter/Cairo decision recorded)
+- [x] `pnpm --filter marketing lint` + spot manual EN/AR (token-level RTL ordering verified in shell components)
 
 ## Phase 03 — Section refactors
 
