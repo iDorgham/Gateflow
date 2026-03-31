@@ -21,6 +21,73 @@
       "description": "Read how leading compounds and event organizers completely eliminated gate queues."
     }
   },
+  "playbooks": {
+    "title": "Vertical Playbooks",
+    "subtitle": "Actionable rollout guides for each high-impact segment. Pick your vertical and move from strategy to launch faster.",
+    "stepsTitle": "Rollout sequence",
+    "outcomesTitle": "Expected outcomes",
+    "leadGateTitle": "Ready to adapt this playbook to your operations?",
+    "leadGateDescription": "Book a guided walkthrough and get a deployment checklist tailored to your gates, staffing model, and resident or visitor flow.",
+    "leadGateCta": "Book a Playbook Session",
+    "backToResources": "Back to resources",
+    "openPlaybook": "Open playbook",
+    "compounds": {
+      "title": "Residential Compounds Playbook",
+      "summary": "Eliminate WhatsApp pass chaos with resident self-service, quota controls, and auditable guard workflows.",
+      "outcomes": [
+        "Resident-approved access replaces ad-hoc messaging",
+        "Unit-based quotas reduce unauthorized overuse",
+        "Management gains complete gate visibility"
+      ],
+      "steps": [
+        "Map resident, contractor, and delivery access policies by unit type",
+        "Enable signed visitor passes with validity windows and gate assignment",
+        "Train guards on scanner-only flow and daily incident exports"
+      ]
+    },
+    "schools": {
+      "title": "Private Schools Playbook",
+      "summary": "Operationalize parent pickup approvals, guard-only scanning, and immutable incident-ready entry logs.",
+      "outcomes": [
+        "Only pre-approved pickup guardians enter campus",
+        "Gate queues shrink with scan-first verification",
+        "Security teams get exportable audit evidence"
+      ],
+      "steps": [
+        "Define pickup authorization roles and expiry policy",
+        "Issue pickup-specific QR passes and enforce single-use controls",
+        "Run weekly audit log reviews with school security leadership"
+      ]
+    },
+    "events": {
+      "title": "Mass Events Playbook",
+      "summary": "Move from manual ticket checks to high-throughput signed QR admissions with offline resilience.",
+      "outcomes": [
+        "Faster gate throughput during peak entry windows",
+        "Reduced fraud from duplicated or forwarded tickets",
+        "Reliable post-event attendance reconciliation"
+      ],
+      "steps": [
+        "Import attendee lists and segment by access tier",
+        "Generate single-use signed passes and pre-assign scan zones",
+        "Use offline scanner queues and reconcile after connectivity returns"
+      ]
+    },
+    "clubs": {
+      "title": "Clubs & Marinas Playbook",
+      "summary": "Protect premium member access with schedule-aware QR permissions and per-member visit intelligence.",
+      "outcomes": [
+        "Membership tiers enforced automatically at gates",
+        "Shared passes stop working outside policy windows",
+        "Operations can track member and guest patterns"
+      ],
+      "steps": [
+        "Model membership tiers and facility-specific gate rules",
+        "Issue signed member credentials with recurring schedules",
+        "Monitor revocations, guest quotas, and weekly access anomalies"
+      ]
+    }
+  },
   "cta": {
     "title": "Need hands-on help?",
     "description": "Our implementation engineers are available for priority support and custom integrations for Enterprise customers."
@@ -30,6 +97,7 @@
     "knowledgeBaseTitleSpan": "Base",
     "readMore": "Read More",
     "chatWithSupport": "Chat with Support",
+    "viewPlaybook": "View playbook",
     "tags": {
       "comingSoon": "Coming Soon",
       "phase2": "Phase 2"

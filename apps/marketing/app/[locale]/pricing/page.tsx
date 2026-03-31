@@ -2,9 +2,10 @@ import type { Metadata } from 'next';
 import { getTranslation } from '../../../lib/i18n/get-translation';
 import type { Locale } from '../../../i18n-config';
 import { Button } from '@gate-access/ui';
-import { I18nLink } from '../../../components/i18n-link';
 import { CheckCircle2, Zap, Shield, Globe } from 'lucide-react';
 import { templatedMarketingTitle } from '../../../lib/metadata-title';
+import { IntentLink } from '../../../components/intent-link';
+import { IntentLandingTracker } from '../../../components/intent-landing-tracker';
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -34,6 +35,8 @@ export default async function PricingPage(props: {
       }) as string[],
       cta: t('tiers.starter.cta'),
       variant: 'outline' as const,
+      intent: 'demo' as const,
+      surface: 'pricing_starter_cta',
     },
     {
       name: t('tiers.pro.name'),
@@ -43,6 +46,8 @@ export default async function PricingPage(props: {
       cta: t('tiers.pro.cta'),
       variant: 'brand' as const,
       highlight: true,
+      intent: 'pilot' as const,
+      surface: 'pricing_pro_cta',
     },
     {
       name: t('tiers.enterprise.name'),
@@ -53,11 +58,18 @@ export default async function PricingPage(props: {
       }) as string[],
       cta: t('tiers.enterprise.cta'),
       variant: 'outline' as const,
+      intent: 'consult' as const,
+      surface: 'pricing_enterprise_cta',
     },
   ];
 
   return (
     <div className="flex flex-col w-full pb-24">
+      <IntentLandingTracker
+        locale={castLocale}
+        surface="pricing_page"
+        intent="pilot"
+      />
       {/* Hero */}
       <section className="pt-20 pb-16 text-center container px-6">
         <h1 className="text-4xl lg:text-7xl font-black tracking-tight mb-6">
@@ -101,14 +113,19 @@ export default async function PricingPage(props: {
               ))}
             </div>
 
-            <I18nLink locale={castLocale} href="/contact">
+            <IntentLink
+              locale={castLocale}
+              href="/contact"
+              intent={plan.intent}
+              surface={plan.surface}
+            >
               <Button
                 variant={plan.variant}
                 className="w-full h-12 rounded-xl text-sm font-bold"
               >
                 {plan.cta}
               </Button>
-            </I18nLink>
+            </IntentLink>
           </div>
         ))}
       </section>

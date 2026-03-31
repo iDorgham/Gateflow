@@ -10,9 +10,9 @@
 
 **STRATEGY:** `docs/plan/brainstorming/STRATEGY_marketing_growth_engine_q3_2026.md`
 
-**PLAN:** `docs/plan/planning/marketing_growth_engine_q3_2026/PLAN_marketing_growth_engine_q3_2026.md`
+**PLAN:** `docs/plan/done/marketing_growth_engine_q3_2026/PLAN_marketing_growth_engine_q3_2026.md`
 
-**Status:** 📝 Planning — ready for `/plan ready marketing_growth_engine_q3_2026`
+**Status:** ✅ Done — closed-loop analytics delivered and verified
 
 **Target:** Q3 2026
 
@@ -115,6 +115,20 @@
 - [ ] Phase 3 — Refactor Admin Dashboard: AI Assistant Migration
 - [ ] Phase 4 — Data Transformation: Migrate History to Parts Array
 - [ ] Phase 5 — Full Monorepo Audit & Stabilization
+
+### resident_portal_responsive — Resident Portal: Responsive & Mobile App Experience
+
+**IDEA:** `docs/plan/context/IDEA_resident_portal_responsive.md`
+
+**Status:** 🆕 New
+
+**Target:** Q2 2026
+
+- [ ] Phase 1 — Foundation: Shared Layout & Navigation (PortalShell, BottomNav, Sidebar, FAB, useBreakpoint)
+- [ ] Phase 2 — PWA: Manifest, Service Worker, Offline QR Cache, Web Push
+- [ ] Phase 3 — Responsive Pages: Home & Visitors (adaptive grids, FAB, desktop table view)
+- [ ] Phase 4 — Responsive Pages: History, Maintenance, Profile & Settings
+- [ ] Phase 5 — Polish: Transitions, Gestures, RTL, A11y, Loading/Error Boundaries
 
 ### security_isolation_fix — High-Risk Security Hardening
 

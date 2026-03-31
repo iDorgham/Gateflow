@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { CheckCircle2, ArrowRight, AlertTriangle, Quote } from 'lucide-react';
 import { Button } from '@gate-access/ui';
-import { I18nLink } from '../i18n-link';
+import { IntentLink } from '../intent-link';
 import type { Locale } from '../../i18n-config';
+import { IntentLandingTracker } from '../intent-landing-tracker';
 
 interface SolutionLayoutProps {
   locale: Locale;
@@ -18,6 +19,8 @@ interface SolutionLayoutProps {
   painPoints?: string[];
   quote?: { text: string; author: string; role: string };
   secondaryCtaText?: string;
+  intent: 'demo' | 'pilot' | 'migration' | 'consult';
+  surfacePrefix: string;
 }
 
 export function SolutionLayout({
@@ -33,9 +36,16 @@ export function SolutionLayout({
   painPoints,
   quote,
   secondaryCtaText,
+  intent,
+  surfacePrefix,
 }: SolutionLayoutProps) {
   return (
     <div className="flex flex-col w-full pb-24">
+      <IntentLandingTracker
+        locale={locale}
+        surface={`${surfacePrefix}_page`}
+        intent={intent}
+      />
       {/* Hero */}
       <section className="pt-20 pb-16 container px-6 relative overflow-hidden">
         <div className="absolute top-0 end-0 -z-10 opacity-10">
@@ -54,14 +64,24 @@ export function SolutionLayout({
           </p>
 
           <div className="flex flex-wrap gap-4">
-            <I18nLink locale={locale} href="/contact">
+            <IntentLink
+              locale={locale}
+              href="/contact"
+              intent={intent}
+              surface={`${surfacePrefix}_hero_cta`}
+            >
               <Button size="lg" className="h-14 px-8 rounded-xl font-bold">
                 {ctaText}
                 <ArrowRight className="ms-2 h-4 w-4" />
               </Button>
-            </I18nLink>
+            </IntentLink>
             {secondaryCtaText && (
-              <I18nLink locale={locale} href="/pricing">
+              <IntentLink
+                locale={locale}
+                href="/pricing"
+                intent={intent}
+                surface={`${surfacePrefix}_pricing_cta`}
+              >
                 <Button
                   size="lg"
                   variant="outline"
@@ -69,7 +89,7 @@ export function SolutionLayout({
                 >
                   {secondaryCtaText}
                 </Button>
-              </I18nLink>
+              </IntentLink>
             )}
           </div>
         </div>
@@ -185,12 +205,17 @@ export function SolutionLayout({
           <h3 className="text-3xl font-black mb-4">
             Ready to upgrade your gate?
           </h3>
-          <I18nLink locale={locale} href="/contact">
+          <IntentLink
+            locale={locale}
+            href="/contact"
+            intent={intent}
+            surface={`${surfacePrefix}_bottom_cta`}
+          >
             <Button size="lg" className="h-14 px-10 rounded-xl font-bold">
               {ctaText}
               <ArrowRight className="ms-2 h-4 w-4" />
             </Button>
-          </I18nLink>
+          </IntentLink>
         </div>
       </section>
     </div>

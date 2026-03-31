@@ -54,6 +54,8 @@ export default async function SchoolsPage(props: {
         author: t('schools.quote.author'),
         role: t('schools.quote.role'),
       }}
+      intent="consult"
+      surfacePrefix="solutions_schools"
     />
   );
 }

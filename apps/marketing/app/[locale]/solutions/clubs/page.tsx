@@ -54,6 +54,8 @@ export default async function ClubsPage(props: {
         author: t('clubs.quote.author'),
         role: t('clubs.quote.role'),
       }}
+      intent="demo"
+      surfacePrefix="solutions_clubs"
     />
   );
 }

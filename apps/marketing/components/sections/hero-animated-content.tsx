@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { Button } from '@gate-access/ui';
-import { I18nLink } from '../i18n-link';
+import { IntentLink } from '../intent-link';
 import type { Locale } from '../../i18n-config';
 import {
   ArrowLeft,
@@ -46,7 +46,12 @@ export function HeroAnimatedContent({ locale }: { locale: Locale }) {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-12">
-              <I18nLink locale={locale} href="/contact">
+              <IntentLink
+                locale={locale}
+                href="/contact"
+                intent="demo"
+                surface="home_hero_primary"
+              >
                 <Button
                   variant="brand"
                   size="lg"
@@ -59,8 +64,13 @@ export function HeroAnimatedContent({ locale }: { locale: Locale }) {
                     <ArrowRight className="ml-3 mr-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                   )}
                 </Button>
-              </I18nLink>
-              <I18nLink locale={locale} href="/solutions">
+              </IntentLink>
+              <IntentLink
+                locale={locale}
+                href="/solutions"
+                intent="consult"
+                surface="home_hero_secondary"
+              >
                 <Button
                   variant="subtle"
                   size="lg"
@@ -68,7 +78,7 @@ export function HeroAnimatedContent({ locale }: { locale: Locale }) {
                 >
                   {t('hero.secondaryCta')}
                 </Button>
-              </I18nLink>
+              </IntentLink>
             </div>
 
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-8 gap-y-4 pt-4 border-t border-[var(--ds-border,#DFE1E6)] w-fit mx-auto lg:mx-0 text-[var(--ds-text-subtle,#42526E)]">

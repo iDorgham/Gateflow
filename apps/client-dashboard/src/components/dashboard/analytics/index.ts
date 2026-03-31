@@ -25,5 +25,6 @@ export { AnalyticsPersonaPie } from './AnalyticsPersonaPie';
 export { UTMMatrix } from './UTMMatrix';
 export { AnalyticsROIWidget } from './AnalyticsROIWidget';
 export { MarketingFunnel } from './MarketingFunnel';
+export { CampaignFirstScanLinkage } from './CampaignFirstScanLinkage';
 export { AnalyticsAudienceExportButton } from './AnalyticsAudienceExportButton';
 export { AnalyticsPDFExportButton } from './AnalyticsPDFExportButton';

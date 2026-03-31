@@ -3,7 +3,7 @@
 **Slug:** `marketing_growth_engine_q3_2026`  
 **IDEA:** `docs/plan/context/IDEA_marketing_growth_engine_q3_2026.md`  
 **Branch (suggested):** `feat/marketing-growth-engine-q3-2026`  
-**Status:** Planning — run `/plan ready marketing_growth_engine_q3_2026` when approved
+**Status:** Done — all phases complete and verified
 
 ---
 

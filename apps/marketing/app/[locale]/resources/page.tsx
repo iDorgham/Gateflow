@@ -13,6 +13,8 @@ import {
   Clock,
 } from 'lucide-react';
 import { I18nLink } from '../../../components/i18n-link';
+import { IntentLink } from '../../../components/intent-link';
+import { IntentLandingTracker } from '../../../components/intent-landing-tracker';
 import type { Locale } from '../../../i18n-config';
 import { getTranslation } from '../../../lib/i18n/get-translation';
 import { getAllPosts } from '../../../lib/blog';
@@ -80,9 +82,36 @@ export default async function ResourcesPage(props: {
   const { t } = await getTranslation(castLocale, 'resources');
   const allPosts = await getAllPosts();
   const latestPosts = allPosts.slice(0, 3);
+  const playbooks = [
+    {
+      key: 'compounds',
+      intent: 'migration' as const,
+      surface: 'resources_playbook_compounds',
+    },
+    {
+      key: 'schools',
+      intent: 'consult' as const,
+      surface: 'resources_playbook_schools',
+    },
+    {
+      key: 'events',
+      intent: 'pilot' as const,
+      surface: 'resources_playbook_events',
+    },
+    {
+      key: 'clubs',
+      intent: 'demo' as const,
+      surface: 'resources_playbook_clubs',
+    },
+  ];
 
   return (
     <div className="flex flex-col w-full pb-24">
+      <IntentLandingTracker
+        locale={castLocale}
+        surface="resources_page"
+        intent="migration"
+      />
       {/* Header */}
       <section className="pt-20 pb-16 text-center container px-6">
         <h1 className="text-4xl lg:text-7xl font-black tracking-tight mb-6 uppercase">
@@ -126,18 +155,53 @@ export default async function ResourcesPage(props: {
       <section className="container px-6 grid md:grid-cols-2 gap-8 mb-20">
         <ResourceCard
           icon={<BookOpen size={28} />}
-          title={t('categories.documentation.title')}
-          desc={t('categories.documentation.description')}
-          link="#"
-          readMore={t('ui.readMore')}
+          title={t('playbooks.compounds.title')}
+          desc={t('playbooks.compounds.summary')}
+          href="/resources/playbooks/compounds"
+          locale={castLocale}
+          intent="migration"
+          surface="resources_featured_compounds"
+          readMore={t('ui.viewPlaybook')}
         />
         <ResourceCard
           icon={<FileCode size={28} />}
-          title={t('categories.api.title')}
-          desc={t('categories.api.description')}
-          link="#"
-          readMore={t('ui.readMore')}
+          title={t('playbooks.schools.title')}
+          desc={t('playbooks.schools.summary')}
+          href="/resources/playbooks/schools"
+          locale={castLocale}
+          intent="consult"
+          surface="resources_featured_schools"
+          readMore={t('ui.viewPlaybook')}
         />
+      </section>
+
+      <section className="container px-6 mb-20">
+        <div className="mb-8">
+          <h2 className="text-2xl font-black mb-2">{t('playbooks.title')}</h2>
+          <p className="text-muted-foreground">{t('playbooks.subtitle')}</p>
+        </div>
+        <div className="grid md:grid-cols-2 gap-6">
+          {playbooks.map((playbook) => (
+            <div key={playbook.key} className="rounded-2xl border bg-card p-6">
+              <h3 className="font-bold text-lg mb-2">
+                {t(`playbooks.${playbook.key}.title`)}
+              </h3>
+              <p className="text-sm text-muted-foreground mb-5">
+                {t(`playbooks.${playbook.key}.summary`)}
+              </p>
+              <IntentLink
+                locale={castLocale}
+                href={`/resources/playbooks/${playbook.key}`}
+                intent={playbook.intent}
+                surface={playbook.surface}
+                className="inline-flex items-center gap-2 text-sm font-bold text-primary hover:underline"
+              >
+                {t('playbooks.openPlaybook')}
+                <ArrowRight size={14} />
+              </IntentLink>
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* Latest Blog Posts */}
@@ -223,7 +287,12 @@ export default async function ResourcesPage(props: {
               {t('cta.description')}
             </p>
           </div>
-          <I18nLink locale={castLocale} href="/contact">
+          <IntentLink
+            locale={castLocale}
+            href="/contact"
+            intent="consult"
+            surface="resources_help_banner_cta"
+          >
             <Button
               size="lg"
               className="bg-white text-primary hover:bg-slate-100 h-14 px-8 rounded-xl font-bold"
@@ -231,7 +300,7 @@ export default async function ResourcesPage(props: {
               {t('ui.chatWithSupport')}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
-          </I18nLink>
+          </IntentLink>
         </div>
       </section>
     </div>
@@ -242,13 +311,19 @@ function ResourceCard({
   icon,
   title,
   desc,
-  link,
+  href,
+  locale,
+  intent,
+  surface,
   readMore,
 }: {
   icon: React.ReactNode;
   title: string;
   desc: string;
-  link: string;
+  href: string;
+  locale: Locale;
+  intent: 'demo' | 'pilot' | 'migration' | 'consult';
+  surface: string;
   readMore: string;
 }) {
   return (
@@ -262,13 +337,16 @@ function ResourceCard({
       <p className="text-muted-foreground leading-relaxed mb-8 flex-1">
         {desc}
       </p>
-      <a
-        href={link}
+      <IntentLink
+        locale={locale}
+        href={href}
+        intent={intent}
+        surface={surface}
         className="inline-flex items-center gap-2 w-fit font-bold hover:text-primary transition-colors text-sm"
       >
         {readMore}
         <ArrowRight className="h-4 w-4" />
-      </a>
+      </IntentLink>
     </div>
   );
 }

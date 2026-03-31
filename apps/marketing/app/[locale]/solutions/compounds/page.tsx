@@ -58,6 +58,8 @@ export default async function CompoundsPage(props: {
         author: t('compounds.quote.author'),
         role: t('compounds.quote.role'),
       }}
+      intent="migration"
+      surfacePrefix="solutions_compounds"
     />
   );
 }
