@@ -79,7 +79,8 @@
       "Bash(1:*)",
       "Bash(vercel deploy:*)",
       "Bash(vercel ls:*)",
-      "Bash(vercel inspect:*)"
+      "Bash(vercel inspect:*)",
+      "Bash(cat apps/marketing/app/[locale]/layout.tsx)"
     ]
   },
   "enabledMcpjsonServers": [
