@@ -1,16 +1,16 @@
 # TASKS: marketing_growth_engine_q3_2026
 
 **Plan:** `PLAN_marketing_growth_engine_q3_2026.md`  
-**Status:** Planning
+**Status:** In Progress
 
 ---
 
 ## Phase 01 — Intent taxonomy & KPI contract
 
-- [ ] Define CTA intent taxonomy (demo, pilot, migration, consult) and event naming
-- [ ] Define KPI contract and baseline metrics snapshot
-- [ ] Validate tracking feasibility against current API/dashboard capabilities
-- [ ] Phase 01 acceptance criteria verified
+- [x] Define CTA intent taxonomy (demo, pilot, migration, consult) and event naming
+- [x] Define KPI contract and baseline metrics snapshot
+- [x] Validate tracking feasibility against current API/dashboard capabilities
+- [x] Phase 01 acceptance criteria verified
 
 ## Phase 02 — Adaptive CTA routing & instrumentation
 
