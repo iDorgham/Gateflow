@@ -39,7 +39,7 @@ export async function HowItWorksSection({ locale }: { locale: Locale }) {
           {steps.map((step, i) => (
             <div key={i} className="relative">
               {i < steps.length - 1 && (
-                <div className="hidden md:block absolute top-12 left-[calc(50%+40px)] right-[calc(-50%+40px)] h-0.5 bg-gradient-to-r from-primary/50 to-primary/50 lg:left-[calc(50%+50px)] lg:right-[calc(-50%+50px)]" />
+                <div className="hidden md:block absolute top-12 start-[calc(50%+40px)] end-[calc(-50%+40px)] h-0.5 bg-gradient-to-r from-primary/50 to-primary/50 lg:start-[calc(50%+50px)] lg:end-[calc(-50%+50px)] rtl:bg-gradient-to-l" />
               )}
               <div className="text-center">
                 <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-ds-background-brand-bold text-ds-text-inverse mb-8 shadow-xl">

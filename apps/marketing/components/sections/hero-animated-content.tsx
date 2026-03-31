@@ -17,13 +17,13 @@ import { useTranslation } from '../../hooks/use-translation';
 
 export function HeroAnimatedContent({ locale }: { locale: Locale }) {
   const { t } = useTranslation('landing');
-  const isRtl = locale === 'ar-EG';
+  const isRtl = locale.startsWith('ar');
 
   return (
     <section className="relative overflow-hidden pt-24 pb-32 lg:pt-40 lg:pb-48 bg-ds-surface">
       {/* Background Decor */}
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_60%_60%_at_50%_-10%,rgba(var(--ds-background-brand-bold),0.06),transparent)]" />
-      <div className="absolute top-0 right-0 -z-10 w-[500px] h-[500px] bg-ds-selected/30 blur-[120px] rounded-full translate-x-1/2 -translate-y-1/2" />
+      <div className="absolute top-0 end-0 -z-10 w-[500px] h-[500px] bg-ds-selected/30 blur-[120px] rounded-full translate-x-1/2 -translate-y-1/2 rtl:-translate-x-1/2" />
 
       <div className="container px-[var(--ds-grid-margin-xs,1rem)] md:px-[var(--ds-grid-margin-md,2rem)] lg:px-[var(--ds-grid-margin-lg,4rem)] mx-auto">
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-[var(--ds-grid-gutter,1.5rem)] items-center">
@@ -105,34 +105,55 @@ export function HeroAnimatedContent({ locale }: { locale: Locale }) {
 
           {/* Right Artwork Content - 5 columns */}
           <div className="lg:col-span-5 relative h-[500px] lg:h-[600px] flex items-center justify-center">
-            <div className="relative z-20 w-[280px] sm:w-[320px] bg-[var(--ds-background-default,#FFFFFF)] border border-[var(--ds-border-bold,#A5ADBA)] shadow-[0_24px_48px_rgba(9,30,66,0.15)] rounded-2xl p-6 sm:p-8 flex flex-col items-center">
-              <div className="w-full h-1 bg-[var(--ds-background-subtle,#F4F5F7)] rounded-full mb-8 relative overflow-hidden">
-                <div className="absolute top-0 left-0 h-full w-full bg-[var(--ds-background-brand-bold,#0052CC)]" />
-              </div>
-
-              <div className="w-full flex justify-between items-center mb-10">
-                <div className="text-sm font-bold text-[var(--ds-text,#172B4D)] tracking-tight">
-                  GateFlow Digital Pass
+            <div className="relative z-20 w-[300px] sm:w-[340px] bg-ds-surface border border-ds-border-bold shadow-[0_32px_64px_rgba(9,30,66,0.18)] rounded-2xl p-6 sm:p-7 flex flex-col items-center">
+              <div className="w-full flex justify-between items-center mb-6">
+                <div className="flex flex-col">
+                  <div className="text-[11px] font-black uppercase tracking-widest text-ds-text-subtlest mb-1">
+                    System Core v.9.4
+                  </div>
+                  <div className="text-sm font-black text-ds-text-heading tracking-tight">
+                    GateFlow Digital Pass
+                  </div>
                 </div>
-                <ShieldCheck className="w-5 h-5 text-[var(--ds-icon-brand,#0052CC)]" />
+                <ShieldCheck className="w-6 h-6 text-ds-text-brand" />
               </div>
 
-              <div className="w-48 h-48 sm:w-56 sm:h-56 bg-white rounded-xl p-6 shadow-[0_4px_12px_rgba(0,0,0,0.05)] border border-[var(--ds-border,#DFE1E6)] mb-10 flex items-center justify-center relative group overflow-hidden">
+              <div className="w-full h-1 bg-ds-surface-sunken rounded-full mb-8 relative overflow-hidden">
+                <div className="absolute top-0 start-0 h-full w-[70%] bg-ds-background-brand-bold shadow-[0_0_8px_rgba(var(--ds-background-brand-bold),0.5)]" />
+              </div>
+
+              <div className="w-full grid grid-cols-2 gap-4 mb-8">
+                <div className="p-3 bg-ds-surface-sunken rounded-lg border border-ds-border">
+                  <div className="text-[10px] font-black uppercase tracking-widest text-ds-text-subtle mb-1">Gate ID</div>
+                  <div className="text-[13px] font-black text-ds-text-heading">GH-904-B</div>
+                </div>
+                <div className="p-3 bg-ds-surface-sunken rounded-lg border border-ds-border">
+                  <div className="text-[10px] font-black uppercase tracking-widest text-ds-text-subtle mb-1">Expiry</div>
+                  <div className="text-[13px] font-black text-ds-text-heading">24H 00M</div>
+                </div>
+              </div>
+
+              <div className="w-44 h-44 sm:w-52 sm:h-52 bg-white rounded-xl p-5 shadow-[0_8px_24px_rgba(0,0,0,0.06)] border border-ds-border mb-8 flex items-center justify-center relative group overflow-hidden">
                 <QrCode
-                  className="w-full h-full text-[#091E42]"
+                  className="w-full h-full text-ds-text-heading"
                   strokeWidth={1}
                 />
               </div>
 
-              {/* Status Badge */}
-              <div className="w-full bg-[var(--ds-background-success-subtle,#E3FCEF)] text-[var(--ds-text-success,#006644)] py-4 rounded-lg flex justify-center items-center gap-3 font-bold text-sm border border-[var(--ds-border-success,#36B37E)]">
-                <CheckCircle2 className="w-5 h-5" />
-                {isRtl ? 'تصريح ساري' : 'Access Verified'}
+              {/* Status Badge - ADS Lozenge Pattern */}
+              <div className="w-full bg-ds-background-success-subtle text-ds-text-success py-3 px-4 rounded-lg flex justify-between items-center border border-ds-border-success">
+                <div className="flex items-center gap-2 font-black text-[12px] uppercase tracking-widest">
+                  <CheckCircle2 className="w-4 h-4" />
+                  {isRtl ? 'تصريح ساري' : 'Access Verified'}
+                </div>
+                <div className="text-[10px] bg-ds-text-success text-white px-2 py-0.5 rounded-sm font-black">
+                  ACTIVE
+                </div>
               </div>
             </div>
 
             {/* Floating Elements (Static) */}
-            <div className="absolute -top-4 left-0 sm:-left-12 z-30 bg-[var(--ds-background-default,#FFFFFF)] border border-[var(--ds-border,#DFE1E6)] shadow-xl rounded-xl p-4 flex gap-4 items-center">
+            <div className="absolute -top-4 start-0 sm:-start-12 z-30 bg-ds-surface border border-ds-border shadow-xl rounded-xl p-4 flex gap-4 items-center">
               <div className="w-10 h-10 rounded-lg bg-[var(--ds-background-information-subtle,#EBF1FF)] text-[var(--ds-text-information,#0052CC)] flex items-center justify-center">
                 <Home size={20} />
               </div>
@@ -146,14 +167,14 @@ export function HeroAnimatedContent({ locale }: { locale: Locale }) {
               </div>
             </div>
 
-            <div className="absolute bottom-10 -right-4 sm:-right-8 z-30 bg-[#172B4D] text-white shadow-2xl rounded-xl p-4 flex gap-4 items-center">
+            <div className="absolute bottom-10 -end-4 sm:-end-8 z-30 bg-ds-text-heading text-ds-text-inverse shadow-2xl rounded-xl p-4 flex gap-4 items-center">
               <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
                 <CheckCircle2
                   size={20}
-                  className="text-[var(--ds-text-success,#36B37E)]"
+                  className="text-ds-text-success"
                 />
               </div>
-              <div className="text-left rtl:text-right">
+              <div className="text-start">
                 <p className="text-[13px] font-bold leading-tight">
                   {isRtl ? 'تم الدخول' : 'Entry Granted'}
                 </p>

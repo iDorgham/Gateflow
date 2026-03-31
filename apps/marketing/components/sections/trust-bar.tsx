@@ -12,21 +12,21 @@ export async function TrustBar({ locale }: { locale: Locale }) {
   ];
 
   return (
-    <section className="border-y border-border bg-muted/30 py-12">
-      <div className="container mx-auto px-6">
-        <p className="mb-10 text-center text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
+    <section className="border-y border-ds-border bg-ds-surface-sunken py-16 md:py-24">
+      <div className="container mx-auto px-8">
+        <p className="mb-12 text-center text-[12px] font-black uppercase tracking-[0.3em] text-ds-text-subtle">
           {t('trust.badge')}
         </p>
         <div className="flex flex-wrap justify-center items-center gap-12 lg:gap-24 opacity-80 hover:opacity-100 transition-all duration-500">
           {partners.map((p) => (
             <div
               key={p.name}
-              className="flex items-center gap-3 group cursor-default"
+              className="flex items-center gap-4 group cursor-default"
             >
-              <span className="text-2xl group-hover:scale-110 transition-transform">
+              <span className="text-3xl group-hover:scale-110 transition-transform">
                 {p.logo}
               </span>
-              <span className="text-xl font-bold tracking-tighter uppercase text-muted-foreground">
+              <span className="text-2xl font-black tracking-tighter uppercase text-ds-text-heading">
                 {p.name}
               </span>
             </div>
