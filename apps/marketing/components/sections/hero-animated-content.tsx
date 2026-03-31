@@ -20,32 +20,32 @@ export function HeroAnimatedContent({ locale }: { locale: Locale }) {
   const isRtl = locale === 'ar-EG';
 
   return (
-    <section className="relative overflow-hidden pt-16 pb-20 lg:pt-24 lg:pb-32 bg-[var(--ds-background-default,#FFFFFF)]">
+    <section className="relative overflow-hidden pt-24 pb-32 lg:pt-40 lg:pb-48 bg-ds-surface">
       {/* Background Decor */}
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_60%_60%_at_50%_-10%,rgba(0,82,204,0.06),transparent)]" />
-      <div className="absolute top-0 right-0 -z-10 w-[500px] h-[500px] bg-[#DEEBFF]/30 blur-[120px] rounded-full translate-x-1/2 -translate-y-1/2" />
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_60%_60%_at_50%_-10%,rgba(var(--ds-background-brand-bold),0.06),transparent)]" />
+      <div className="absolute top-0 right-0 -z-10 w-[500px] h-[500px] bg-ds-selected/30 blur-[120px] rounded-full translate-x-1/2 -translate-y-1/2" />
 
       <div className="container px-[var(--ds-grid-margin-xs,1rem)] md:px-[var(--ds-grid-margin-md,2rem)] lg:px-[var(--ds-grid-margin-lg,4rem)] mx-auto">
         <div className="grid lg:grid-cols-12 gap-12 lg:gap-[var(--ds-grid-gutter,1.5rem)] items-center">
           {/* Left Text Content - 7 columns */}
           <div className="lg:col-span-7 flex flex-col text-center lg:text-left rtl:lg:text-right">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-sm bg-[var(--ds-background-selected,#DEEBFF)] dark:bg-[var(--ds-background-brand-subtle,#1C2B41)] text-[var(--ds-text-selected,#0052CC)] dark:text-[var(--ds-text-brand,#579DFF)] text-[12px] font-bold tracking-wide mb-8 w-fit mx-auto lg:mx-0">
-              <Shield size={14} fill="currentColor" fillOpacity={0.2} />
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-ds-radius-small bg-ds-selected text-ds-text-brand text-[13px] font-black tracking-wide mb-10 w-fit mx-auto lg:mx-0">
+              <Shield size={16} fill="currentColor" fillOpacity={0.2} />
               <span>{t('trust.badge')}</span>
             </div>
 
-            <h1 className="text-4xl font-bold leading-[1.15] sm:text-5xl lg:text-6xl xl:text-7xl mb-8 tracking-tight text-[var(--ds-text,#172B4D)]">
+            <h1 className="text-5xl font-black leading-[1.1] sm:text-6xl lg:text-7xl xl:text-8xl mb-10 tracking-tight text-ds-text-heading">
               {t('hero.headline.prefix')}{' '}
-              <span className="text-[var(--ds-text-brand,#0052CC)]">
+              <span className="text-ds-text-brand">
                 {t('hero.headline.highlight')}
               </span>
             </h1>
 
-            <p className="text-lg md:text-xl text-[var(--ds-text-subtle,#42526E)] leading-relaxed mb-10 max-w-xl mx-auto lg:mx-0">
+            <p className="text-xl md:text-2xl text-ds-text-subtle leading-relaxed mb-12 max-w-xl mx-auto lg:mx-0">
               {t('hero.subHeadline')}
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 mb-12">
+            <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-6 mb-16">
               <IntentLink
                 locale={locale}
                 href="/contact"
@@ -55,13 +55,13 @@ export function HeroAnimatedContent({ locale }: { locale: Locale }) {
                 <Button
                   variant="brand"
                   size="lg"
-                  className="h-12 px-8 min-w-[160px] group transition-all"
+                  className="h-14 px-10 text-lg min-w-[200px] group transition-all"
                 >
                   {t('hero.primaryCta')}
                   {isRtl ? (
-                    <ArrowLeft className="ml-2 mr-3 h-4 w-4 group-hover:-translate-x-1 transition-transform" />
+                    <ArrowLeft className="ml-2 mr-4 h-5 w-5 group-hover:-translate-x-1 transition-transform" />
                   ) : (
-                    <ArrowRight className="ml-3 mr-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight className="ml-4 mr-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                   )}
                 </Button>
               </IntentLink>
@@ -74,29 +74,29 @@ export function HeroAnimatedContent({ locale }: { locale: Locale }) {
                 <Button
                   variant="subtle"
                   size="lg"
-                  className="h-12 px-8 transition-colors border border-transparent hover:border-[var(--ds-border,#DFE1E6)]"
+                  className="h-14 px-10 text-lg transition-colors border border-ds-border hover:border-ds-border-bold"
                 >
                   {t('hero.secondaryCta')}
                 </Button>
               </IntentLink>
             </div>
 
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-8 gap-y-4 pt-4 border-t border-[var(--ds-border,#DFE1E6)] w-fit mx-auto lg:mx-0 text-[var(--ds-text-subtle,#42526E)]">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-[var(--ds-background-success-bold,#36B37E)]" />
-                <span className="text-sm font-semibold">
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-10 gap-y-6 pt-6 border-t border-ds-border w-fit mx-auto lg:mx-0 text-ds-text-subtle font-black uppercase text-[12px] tracking-widest">
+              <div className="flex items-center gap-3">
+                <div className="w-2.5 h-2.5 rounded-full bg-ds-success-bold" />
+                <span>
                   {t('features.items.qr.title')}
                 </span>
               </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-[var(--ds-background-information-bold,#00B8D9)]" />
-                <span className="text-sm font-semibold">
+              <div className="flex items-center gap-3">
+                <div className="w-2.5 h-2.5 rounded-full bg-ds-accent-bold" />
+                <span>
                   {t('features.items.offline.title')}
                 </span>
               </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-[var(--ds-background-warning-bold,#FFAB00)]" />
-                <span className="text-sm font-semibold">
+              <div className="flex items-center gap-3">
+                <div className="w-2.5 h-2.5 rounded-full bg-ds-warning-bold" />
+                <span>
                   {t('features.items.portal.title')}
                 </span>
               </div>

@@ -24,13 +24,13 @@ export async function HowItWorksSection({ locale }: { locale: Locale }) {
   ];
 
   return (
-    <section className="py-24 bg-muted/20">
+    <section className="py-32 md:py-48 bg-ds-surface-sunken border-y border-ds-border">
       <div className="container mx-auto px-6">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-sm font-bold uppercase tracking-[0.3em] text-primary mb-4">
+          <h2 className="text-[12px] font-black uppercase tracking-[0.3em] text-ds-text-brand mb-6">
             {t('howItWorks.badge')}
           </h2>
-          <p className="text-4xl lg:text-5xl font-black tracking-tight">
+          <p className="text-4xl lg:text-7xl font-black tracking-tight text-ds-text-heading leading-tight">
             {t('howItWorks.title')}
           </p>
         </div>
@@ -42,14 +42,14 @@ export async function HowItWorksSection({ locale }: { locale: Locale }) {
                 <div className="hidden md:block absolute top-12 left-[calc(50%+40px)] right-[calc(-50%+40px)] h-0.5 bg-gradient-to-r from-primary/50 to-primary/50 lg:left-[calc(50%+50px)] lg:right-[calc(-50%+50px)]" />
               )}
               <div className="text-center">
-                <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-primary text-white mb-6">
+                <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-ds-background-brand-bold text-ds-text-inverse mb-8 shadow-xl">
                   {step.icon}
                 </div>
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-2 w-8 h-8 rounded-full bg-slate-900 text-white font-bold flex items-center justify-center">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-4 w-10 h-10 rounded-full bg-ds-text-heading text-ds-text-inverse font-black flex items-center justify-center border-4 border-ds-surface-sunken">
                   {i + 1}
                 </div>
-                <h3 className="text-xl font-bold mb-3">{step.title}</h3>
-                <p className="text-muted-foreground text-sm leading-relaxed">
+                <h3 className="text-2xl font-black mb-4 text-ds-text-heading">{step.title}</h3>
+                <p className="text-ds-text-subtle text-base leading-relaxed max-w-[280px] mx-auto">
                   {step.desc}
                 </p>
               </div>
