@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { getTranslation } from '../../../lib/i18n/get-translation';
 import type { Locale } from '../../../i18n-config';
+import { templatedMarketingTitle } from '../../../lib/metadata-title';
 import {
   Zap,
   Shield,
@@ -21,7 +22,7 @@ export async function generateMetadata(props: {
   const { locale } = params;
   const { t } = await getTranslation(locale, 'product');
   return {
-    title: t('hero.headline'),
+    title: templatedMarketingTitle(t('hero.headline')),
     description: t('hero.subHeadline'),
   };
 }

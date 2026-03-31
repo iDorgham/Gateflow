@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
+import { templatedMarketingTitle } from '../../../../lib/metadata-title';
 
 interface LegalDoc {
   title: string;
@@ -203,7 +204,10 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const { doc: docId } = await props.params;
   const doc = LEGAL_DOCS[docId];
   if (!doc) return {};
-  return { title: doc.title, description: doc.description };
+  return {
+    title: templatedMarketingTitle(doc.title),
+    description: doc.description,
+  };
 }
 
 export default async function LegalPage(props: Props) {

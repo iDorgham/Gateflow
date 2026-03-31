@@ -3,6 +3,7 @@ import { getTranslation } from '../../../../lib/i18n/get-translation';
 import type { Locale } from '../../../../i18n-config';
 import { SolutionLayout } from '../../../../components/sections/solution-layout';
 import { Anchor } from 'lucide-react';
+import { templatedMarketingTitle } from '../../../../lib/metadata-title';
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: Locale }>;
@@ -11,7 +12,7 @@ export async function generateMetadata(props: {
   const { locale } = params;
   const { t } = await getTranslation(locale, 'solutions');
   return {
-    title: `${t('clubs.hero.headline')}`,
+    title: templatedMarketingTitle(t('clubs.hero.headline')),
     description: t('clubs.description'),
   };
 }

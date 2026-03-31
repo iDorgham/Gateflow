@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
 import { MapPin, Mail, Briefcase, Newspaper } from 'lucide-react';
+import { templatedMarketingTitle } from '../../../lib/metadata-title';
 
 export const metadata: Metadata = {
-  title: 'Company',
+  title: templatedMarketingTitle('Company'),
   description:
     'Learn about GateFlow — our mission, team, and commitment to replacing insecure manual gate management across the MENA region.',
 };

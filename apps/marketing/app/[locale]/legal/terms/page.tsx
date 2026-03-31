@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { LegalLayout } from '../../../../components/sections/legal-layout';
 import type { Locale } from '../../../../i18n-config';
 import { getTranslation } from '../../../../lib/i18n/get-translation';
+import { absoluteMarketingTitle } from '../../../../lib/metadata-title';
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: Locale }>;
@@ -10,7 +11,7 @@ export async function generateMetadata(props: {
   const { locale } = params;
   const { t } = await getTranslation(locale, 'legal');
   return {
-    title: `${t('terms.title')}`,
+    title: absoluteMarketingTitle(t('terms.title')),
   };
 }
 

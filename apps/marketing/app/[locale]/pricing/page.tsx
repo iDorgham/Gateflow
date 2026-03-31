@@ -4,6 +4,7 @@ import type { Locale } from '../../../i18n-config';
 import { Button } from '@gate-access/ui';
 import { I18nLink } from '../../../components/i18n-link';
 import { CheckCircle2, Zap, Shield, Globe } from 'lucide-react';
+import { templatedMarketingTitle } from '../../../lib/metadata-title';
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string }>;
@@ -12,7 +13,7 @@ export async function generateMetadata(props: {
   const castLocale = locale as Locale;
   const { t } = await getTranslation(castLocale, 'navigation');
   return {
-    title: t('header.dropdowns.pricing.label'),
+    title: templatedMarketingTitle(t('header.dropdowns.pricing.label')),
   };
 }
 

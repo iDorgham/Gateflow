@@ -3,9 +3,10 @@ import Link from 'next/link';
 import { getAllPosts } from '../../../lib/blog';
 import { BlogCard } from '../../../components/blog-card';
 import type { Locale } from '../../../i18n-config';
+import { absoluteMarketingTitle } from '../../../lib/metadata-title';
 
 export const metadata: Metadata = {
-  title: 'Blog — GateFlow',
+  title: absoluteMarketingTitle('Blog — GateFlow'),
   description:
     'Insights on access control, QR security, and digital transformation for compounds, schools, and events across Egypt and the Gulf.',
 };

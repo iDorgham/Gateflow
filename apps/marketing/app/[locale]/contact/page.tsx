@@ -3,6 +3,7 @@ import { getTranslation } from '../../../lib/i18n/get-translation';
 import type { Locale } from '../../../i18n-config';
 import { ContactForm } from '../../../components/contact-form';
 import { MessageSquare, Mail, Phone, MapPin } from 'lucide-react';
+import { templatedMarketingTitle } from '../../../lib/metadata-title';
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: Locale }>;
@@ -11,7 +12,7 @@ export async function generateMetadata(props: {
   const { locale } = params;
   const { t } = await getTranslation(locale, 'navigation');
   return {
-    title: t('header.dropdowns.company.contact.label'),
+    title: templatedMarketingTitle(t('header.dropdowns.company.contact.label')),
     description: 'Get in touch with the GateFlow team in Cairo and Dubai.',
   };
 }

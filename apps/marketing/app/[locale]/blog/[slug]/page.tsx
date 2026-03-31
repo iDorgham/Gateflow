@@ -6,6 +6,7 @@ import { getAllPosts, getPostBySlug } from '../../../../lib/blog';
 import { Clock, ArrowLeft, Tag } from 'lucide-react';
 import type { Locale } from '../../../../i18n-config';
 import { BlogCard } from '../../../../components/blog-card';
+import { absoluteMarketingTitle } from '../../../../lib/metadata-title';
 
 interface Props {
   params: Promise<{ locale: string; slug: string }>;
@@ -25,7 +26,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const post = await getPostBySlug(slug);
   if (!post) return {};
   return {
-    title: `${post.title} — GateFlow Blog`,
+    title: absoluteMarketingTitle(`${post.title} — GateFlow Blog`),
     description: post.excerpt,
   };
 }

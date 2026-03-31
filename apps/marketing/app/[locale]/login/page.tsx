@@ -3,9 +3,10 @@ import { Shield, ArrowRight, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { I18nLink } from '../../../components/i18n-link';
 import type { Locale } from '../../../i18n-config';
+import { absoluteMarketingTitle } from '../../../lib/metadata-title';
 
 export const metadata: Metadata = {
-  title: 'Sign In',
+  title: absoluteMarketingTitle('Sign In'),
   description: 'Access the GateFlow administration dashboard.',
 };
 

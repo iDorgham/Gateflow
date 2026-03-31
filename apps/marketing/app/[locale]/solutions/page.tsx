@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { getTranslation } from '../../../lib/i18n/get-translation';
 import type { Locale } from '../../../i18n-config';
+import { templatedMarketingTitle } from '../../../lib/metadata-title';
 import {
   Building2,
   GraduationCap,
@@ -23,7 +24,9 @@ export async function generateMetadata(props: {
   const { t } = await getTranslation(locale, 'navigation');
   const { t: ts } = await getTranslation(locale, 'solutions');
   return {
-    title: t('header.dropdowns.solutions.compounds.label'), // Fallback generic title
+    title: templatedMarketingTitle(
+      t('header.dropdowns.solutions.compounds.label')
+    ), // Fallback generic title
     description: ts('index.hero.subHeadline'),
   };
 }

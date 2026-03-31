@@ -2,6 +2,7 @@ import { ErrorContent } from '../../../components/sections/error-content';
 import type { Locale } from '../../../i18n-config';
 import type { Metadata } from 'next';
 import { getTranslation } from '../../../lib/i18n/get-translation';
+import { absoluteMarketingTitle } from '../../../lib/metadata-title';
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: Locale }>;
@@ -10,7 +11,7 @@ export async function generateMetadata(props: {
   const { locale } = params;
   const { t } = await getTranslation(locale, 'errors');
   return {
-    title: `${t('403.headline')}`,
+    title: absoluteMarketingTitle(t('403.headline')),
   };
 }
 

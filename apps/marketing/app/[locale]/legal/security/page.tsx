@@ -3,6 +3,7 @@ import { LegalLayout } from '../../../../components/sections/legal-layout';
 import { Shield, Lock } from 'lucide-react';
 import type { Locale } from '../../../../i18n-config';
 import { getTranslation } from '../../../../lib/i18n/get-translation';
+import { absoluteMarketingTitle } from '../../../../lib/metadata-title';
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: Locale }>;
@@ -11,7 +12,7 @@ export async function generateMetadata(props: {
   const { locale } = params;
   const { t } = await getTranslation(locale, 'legal');
   return {
-    title: `${t('security.title')}`,
+    title: absoluteMarketingTitle(t('security.title')),
   };
 }
 
