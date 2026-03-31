@@ -137,6 +137,20 @@
 - [ ] Phase 5 — Polish: Transitions, Gestures, RTL, A11y
   (`phases/05_polish/PROMPT_phase_05.md`)
 
+### scanner_biometric_auth — Scanner App: Biometric Identity Verification
+
+**IDEA:** `docs/plan/context/IDEA_scanner_biometric_auth.md`
+
+**Status:** 🆕 New
+
+**Target:** Q3 2026
+
+- [ ] Phase 1 — Integration: `expo-local-authentication` Setup
+- [ ] Phase 2 — Implementation: BiometricGuard component & session logic
+- [ ] Phase 3 — Audit & Control: Admin toggle + Schema updates
+- [ ] Phase 4 — Localization: Prompts and i18n
+- [ ] Phase 5 — Verification: Fail-safe logic and fallback testing
+
 ### security_isolation_fix — High-Risk Security Hardening
 
 **IDEA:** `docs/plan/context/IDEA_security_isolation_fix.md`

@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma } from '@gate-access/db';
+import { PortalShell } from '@/components/layout/portal-shell';
 
 /**
  * Guard: RESIDENT users must have a linked unit to access portal content.
@@ -38,5 +39,5 @@ export default async function PortalLayout({
     redirect('/no-unit-linked');
   }
 
-  return <>{children}</>;
+  return <PortalShell>{children}</PortalShell>;
 }

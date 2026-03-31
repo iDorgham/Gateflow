@@ -1,8 +1,9 @@
 import Link from 'next/link';
-import { ArrowLeft, User, QrCode, Plus, Search, Filter } from 'lucide-react';
+import { User, QrCode, Plus, Search, Filter } from 'lucide-react';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma, VisitorQR, QRCode, AccessRule } from '@gate-access/db';
 import { Button } from '@gate-access/ui';
+import { PageHeader } from '@/components/layout/page-header';
 
 export default async function VisitorsPage() {
   const claims = await getSessionClaims();
@@ -26,24 +27,20 @@ export default async function VisitorsPage() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-10">
-        <div className="max-w-md mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Link href="/" className="p-2 -ml-2 hover:bg-slate-100 rounded-full">
-              <ArrowLeft className="h-5 w-5 text-slate-600" />
-            </Link>
-            <h1 className="text-xl font-bold text-slate-900">My Visitors</h1>
-          </div>
+      <PageHeader
+        title="My Visitors"
+        backHref="/"
+        action={
           <Link href="/visitors/new">
             <Button size="sm" className="h-9 gap-1">
               <Plus className="h-4 w-4" />
               Add
             </Button>
           </Link>
-        </div>
-      </header>
+        }
+      />
 
-      <main className="max-w-md mx-auto px-4 py-6 space-y-4 pb-24">
+      <main className="mx-auto w-full max-w-md space-y-4 px-4 py-6 pb-24 md:max-w-3xl">
         <div className="flex gap-2">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
@@ -122,27 +119,6 @@ export default async function VisitorsPage() {
           )}
         </div>
       </main>
-
-      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-20">
-        <div className="max-w-md mx-auto flex justify-around py-3">
-          <Link href="/" className="flex flex-col items-center gap-1 text-slate-400">
-            <ArrowLeft className="h-5 w-5" />
-            <span className="text-xs">Home</span>
-          </Link>
-          <Link href="/visitors" className="flex flex-col items-center gap-1 text-blue-600">
-            <QrCode className="h-5 w-5" />
-            <span className="text-xs">Visitors</span>
-          </Link>
-          <Link href="/history" className="flex flex-col items-center gap-1 text-slate-400">
-            <Plus className="h-5 w-5" />
-            <span className="text-xs">History</span>
-          </Link>
-          <Link href="/profile" className="flex flex-col items-center gap-1 text-slate-400">
-            <User className="h-5 w-5" />
-            <span className="text-xs">Profile</span>
-          </Link>
-        </div>
-      </nav>
     </div>
   );
 }

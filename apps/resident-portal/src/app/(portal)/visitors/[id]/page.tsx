@@ -1,11 +1,12 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowLeft, Share2, Download, Trash2, Shield } from 'lucide-react';
+import { Share2, Download, Trash2, Shield } from 'lucide-react';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma } from '@gate-access/db';
 import { Button, Badge } from '@gate-access/ui';
 import { VisitorQRCard } from '@/components/visitor-qr-card';
 import { format } from 'date-fns';
+import { PageHeader } from '@/components/layout/page-header';
 
 export default async function VisitorDetailPage(props: { params: Promise<{ id: string }> }) {
   const params = await props.params;
@@ -47,21 +48,17 @@ export default async function VisitorDetailPage(props: { params: Promise<{ id: s
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-10">
-        <div className="max-w-md mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Link href="/visitors" className="p-2 -ml-2 hover:bg-slate-100 rounded-full">
-              <ArrowLeft className="h-5 w-5 text-slate-600" />
-            </Link>
-            <h1 className="text-xl font-bold text-slate-900">Pass Details</h1>
-          </div>
-          <button className="p-2 text-red-600 hover:bg-red-50 rounded-full">
+      <PageHeader
+        title="Pass Details"
+        backHref="/visitors"
+        action={
+          <button type="button" className="rounded-full p-2 text-red-600 hover:bg-red-50">
             <Trash2 className="h-5 w-5" />
           </button>
-        </div>
-      </header>
+        }
+      />
 
-      <main className="max-w-md mx-auto px-4 py-8 flex flex-col items-center space-y-8 pb-24">
+      <main className="mx-auto flex w-full max-w-md flex-col items-center space-y-8 px-4 py-8 pb-24 md:max-w-3xl">
         <VisitorQRCard
           visitorName={visitor.visitorName || 'Open Access Pass'}
           date={dateStr}

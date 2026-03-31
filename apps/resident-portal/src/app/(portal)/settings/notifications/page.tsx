@@ -1,22 +1,12 @@
-import Link from 'next/link';
-import { ArrowLeft, Bell, Mail, Shield } from 'lucide-react';
+import { Bell, Mail, Shield } from 'lucide-react';
+import { PageHeader } from '@/components/layout/page-header';
 
 export default function NotificationsSettingsPage() {
   return (
     <div className="min-h-screen bg-slate-50">
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-10">
-        <div className="max-w-md mx-auto px-4 py-4 flex items-center gap-3">
-          <Link
-            href="/profile"
-            className="p-2 -ml-2 hover:bg-slate-100 rounded-full"
-          >
-            <ArrowLeft className="h-5 w-5 text-slate-600" />
-          </Link>
-          <h1 className="text-xl font-bold text-slate-900">Notifications</h1>
-        </div>
-      </header>
+      <PageHeader title="Notifications" backHref="/profile" />
 
-      <main className="max-w-md mx-auto px-4 py-6 space-y-6 pb-24">
+      <main className="mx-auto w-full max-w-md space-y-6 px-4 py-6 pb-24 md:max-w-3xl">
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
           <div className="px-5 py-4 border-b border-slate-100">
             <h2 className="font-semibold text-slate-900">Push Notifications</h2>

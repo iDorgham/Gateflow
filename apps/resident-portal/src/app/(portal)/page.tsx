@@ -2,8 +2,6 @@ import Link from 'next/link';
 import {
   Home,
   User,
-  Settings,
-  QrCode,
   Users,
   History,
   Plus,
@@ -18,6 +16,7 @@ import {
   QRCode,
   AccessRule,
 } from '@gate-access/db';
+import { PageHeader } from '@/components/layout/page-header';
 
 export default async function HomePage() {
   const claims = await getSessionClaims();
@@ -66,16 +65,9 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-[105.3vh] bg-slate-50">
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-10">
-        <div className="max-w-md mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="text-xl font-bold text-slate-900">GateFlow</h1>
-          <button className="p-2 hover:bg-slate-100 rounded-full">
-            <Settings className="h-5 w-5 text-slate-600" />
-          </button>
-        </div>
-      </header>
+      <PageHeader title="GateFlow" />
 
-      <main className="max-w-md mx-auto px-4 py-6 space-y-6 pb-24">
+      <main className="mx-auto w-full max-w-md space-y-6 px-4 py-6 pb-24 md:max-w-3xl">
         {unit && (
           <div className="bg-white rounded-xl p-5 shadow-sm border border-slate-200">
             <div className="flex items-center gap-3 mb-3">
@@ -251,46 +243,6 @@ export default async function HomePage() {
           </>
         )}
       </main>
-
-      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-20">
-        <div className="max-w-md mx-auto flex justify-around py-3">
-          <Link
-            href="/"
-            className="flex flex-col items-center gap-1 text-blue-600"
-          >
-            <Home className="h-5 w-5" />
-            <span className="text-xs">Home</span>
-          </Link>
-          <Link
-            href="/visitors"
-            className="flex flex-col items-center gap-1 text-slate-400"
-          >
-            <QrCode className="h-5 w-5" />
-            <span className="text-xs">Visitors</span>
-          </Link>
-          <Link
-            href="/maintenance"
-            className="flex flex-col items-center gap-1 text-slate-400"
-          >
-            <Wrench className="h-5 w-5" />
-            <span className="text-xs">Repair</span>
-          </Link>
-          <Link
-            href="/history"
-            className="flex flex-col items-center gap-1 text-slate-400"
-          >
-            <History className="h-5 w-5" />
-            <span className="text-xs">History</span>
-          </Link>
-          <Link
-            href="/profile"
-            className="flex flex-col items-center gap-1 text-slate-400"
-          >
-            <User className="h-5 w-5" />
-            <span className="text-xs">Profile</span>
-          </Link>
-        </div>
-      </nav>
     </div>
   );
 }

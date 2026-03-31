@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import {
-  ArrowLeft,
   Wrench,
   Clock,
   CheckCircle2,
@@ -13,6 +12,7 @@ import {
 import { format } from 'date-fns';
 import { MaintenanceStatus } from '@gate-access/types';
 import { cn } from '@gate-access/ui';
+import { PageHeader } from '@/components/layout/page-header';
 
 interface MaintenanceRequestItem {
   id: string;
@@ -95,29 +95,22 @@ export default async function MaintenancePage(props: {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-10">
-        <div className="max-w-md mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Link
-              href="/"
-              className="p-2 -ml-2 hover:bg-slate-100 rounded-full"
-            >
-              <ArrowLeft className="h-5 w-5 text-slate-600" />
-            </Link>
-            <h1 className="text-xl font-bold text-slate-900">Maintenance</h1>
-          </div>
-          {!isNew && (
+      <PageHeader
+        title="Maintenance"
+        backHref="/"
+        action={
+          !isNew ? (
             <Link
               href="/maintenance?new=true"
-              className="p-2 bg-blue-600 text-white rounded-full shadow-sm hover:bg-blue-700 active:scale-95 transition-all"
+              className="rounded-full bg-blue-600 p-2 text-white shadow-sm transition-all hover:bg-blue-700 active:scale-95"
             >
               <Plus className="h-5 w-5" />
             </Link>
-          )}
-        </div>
-      </header>
+          ) : null
+        }
+      />
 
-      <main className="max-w-md mx-auto px-4 py-6 space-y-6 pb-24">
+      <main className="mx-auto w-full max-w-md space-y-6 px-4 py-6 pb-24 md:max-w-3xl">
         {isNew ? (
           <div className="space-y-6">
             <div className="flex flex-col gap-1 px-1">

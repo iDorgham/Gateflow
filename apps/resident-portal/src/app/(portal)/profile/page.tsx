@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import {
-  ArrowLeft,
   User,
   Home,
   LogOut,
@@ -12,6 +11,7 @@ import {
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma } from '@gate-access/db';
 import { Button } from '@gate-access/ui';
+import { PageHeader } from '@/components/layout/page-header';
 
 export default async function ProfilePage() {
   const claims = await getSessionClaims();
@@ -34,16 +34,9 @@ export default async function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-10">
-        <div className="max-w-md mx-auto px-4 py-4 flex items-center gap-3">
-          <Link href="/" className="p-2 -ml-2 hover:bg-slate-100 rounded-full">
-            <ArrowLeft className="h-5 w-5 text-slate-600" />
-          </Link>
-          <h1 className="text-xl font-bold text-slate-900">Profile</h1>
-        </div>
-      </header>
+      <PageHeader title="Profile" backHref="/" />
 
-      <main className="max-w-md mx-auto px-4 py-6 space-y-6 pb-24">
+      <main className="mx-auto w-full max-w-md space-y-6 px-4 py-6 pb-24 md:max-w-3xl">
         {/* User Info Card */}
         <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
           <div className="flex items-center gap-4">
@@ -158,39 +151,6 @@ export default async function ProfilePage() {
           <p className="mt-1">Made for secure living</p>
         </div>
       </main>
-
-      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-20">
-        <div className="max-w-md mx-auto flex justify-around py-3">
-          <Link
-            href="/"
-            className="flex flex-col items-center gap-1 text-slate-400"
-          >
-            <Home className="h-5 w-5" />
-            <span className="text-xs">Home</span>
-          </Link>
-          <Link
-            href="/visitors"
-            className="flex flex-col items-center gap-1 text-slate-400"
-          >
-            <User className="h-5 w-5" />
-            <span className="text-xs">Visitors</span>
-          </Link>
-          <Link
-            href="/history"
-            className="flex flex-col items-center gap-1 text-slate-400"
-          >
-            <Shield className="h-5 w-5" />
-            <span className="text-xs">History</span>
-          </Link>
-          <Link
-            href="/profile"
-            className="flex flex-col items-center gap-1 text-blue-600"
-          >
-            <User className="h-5 w-5" />
-            <span className="text-xs">Profile</span>
-          </Link>
-        </div>
-      </nav>
     </div>
   );
 }

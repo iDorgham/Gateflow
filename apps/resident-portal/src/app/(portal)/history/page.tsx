@@ -1,6 +1,6 @@
-import Link from 'next/link';
-import { ArrowLeft, History, CheckCircle2, XCircle, Clock } from 'lucide-react';
+import { History, CheckCircle2, XCircle, Clock } from 'lucide-react';
 import { format } from 'date-fns';
+import { PageHeader } from '@/components/layout/page-header';
 
 interface ResidentHistoryItem {
   id: string;
@@ -29,16 +29,9 @@ export default async function HistoryPage() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <header className="bg-white border-b border-slate-200 sticky top-0 z-10">
-        <div className="max-w-md mx-auto px-4 py-4 flex items-center gap-3">
-          <Link href="/" className="p-2 -ml-2 hover:bg-slate-100 rounded-full">
-            <ArrowLeft className="h-5 w-5 text-slate-600" />
-          </Link>
-          <h1 className="text-xl font-bold text-slate-900">Access History</h1>
-        </div>
-      </header>
+      <PageHeader title="Access History" backHref="/" />
 
-      <main className="max-w-md mx-auto px-4 py-6 space-y-4 pb-12">
+      <main className="mx-auto w-full max-w-md space-y-4 px-4 py-6 pb-24 md:max-w-3xl">
         <div className="space-y-3">
           {scans.length > 0 ? (
             scans.map((scan) => (
