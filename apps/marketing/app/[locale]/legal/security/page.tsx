@@ -11,7 +11,7 @@ export async function generateMetadata(props: {
   const { locale } = params;
   const { t } = await getTranslation(locale, 'legal');
   return {
-    title: `${t('security.title')} | GateFlow`,
+    title: `${t('security.title')}`,
   };
 }
 

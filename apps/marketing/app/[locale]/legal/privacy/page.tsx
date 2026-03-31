@@ -10,7 +10,7 @@ export async function generateMetadata(props: {
   const { locale } = params;
   const { t } = await getTranslation(locale, 'legal');
   return {
-    title: `${t('privacy.title')} | GateFlow`,
+    title: `${t('privacy.title')}`,
   };
 }
 

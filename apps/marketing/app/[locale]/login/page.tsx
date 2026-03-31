@@ -5,7 +5,7 @@ import { I18nLink } from '../../../components/i18n-link';
 import type { Locale } from '../../../i18n-config';
 
 export const metadata: Metadata = {
-  title: 'Sign In | GateFlow',
+  title: 'Sign In',
   description: 'Access the GateFlow administration dashboard.',
 };
 

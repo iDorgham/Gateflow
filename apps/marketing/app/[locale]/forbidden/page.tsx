@@ -10,7 +10,7 @@ export async function generateMetadata(props: {
   const { locale } = params;
   const { t } = await getTranslation(locale, 'errors');
   return {
-    title: `${t('403.headline')} | GateFlow`,
+    title: `${t('403.headline')}`,
   };
 }
 

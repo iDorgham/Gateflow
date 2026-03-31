@@ -59,7 +59,7 @@ export function ContactForm({ dict }: { dict: any }) {
 
   if (status === 'error') {
     return (
-      <div className="bg-destructive/5 border border-destructive/20 rounded-3xl p-12 text-center animate-in fade-in zoom-in-95 duration-300">
+      <div className="bg-destructive/5 border border-destructive/20 rounded-3xl p-12 text-center motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in-95 motion-safe:duration-300">
         <AlertCircle className="mx-auto h-16 w-16 text-destructive mb-6" />
         <h2 className="text-2xl font-black mb-4">Something went wrong</h2>
         <p className="text-muted-foreground mb-8">
@@ -74,7 +74,7 @@ export function ContactForm({ dict }: { dict: any }) {
 
   if (status === 'sent') {
     return (
-      <div className="bg-success/5 border border-success/20 rounded-3xl p-12 text-center animate-in fade-in zoom-in-95 duration-300">
+      <div className="bg-success/5 border border-success/20 rounded-3xl p-12 text-center motion-safe:animate-in motion-safe:fade-in motion-safe:zoom-in-95 motion-safe:duration-300">
         <CheckCircle2 className="mx-auto h-16 w-16 text-success mb-6" />
         <h2 className="text-2xl font-black mb-4">
           {dict.form.status.successTitle}

@@ -24,7 +24,7 @@ export async function generateMetadata(props: {
   const castLocale = locale as Locale;
   const { t } = await getTranslation(castLocale, 'navigation');
   return {
-    title: `${t('header.dropdowns.company.resources.label')} | GateFlow`,
+    title: `${t('header.dropdowns.company.resources.label')}`,
     description:
       'Learn how to get the most out of the GateFlow access control platform.',
   };
