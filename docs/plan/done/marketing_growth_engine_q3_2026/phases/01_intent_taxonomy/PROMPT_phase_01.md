@@ -22,7 +22,7 @@
 
 ### Context
 
-- `docs/plan/in-progress/marketing_growth_engine_q3_2026/CONTEXT_marketing_growth_engine_q3_2026.md`
+- `docs/plan/done/marketing_growth_engine_q3_2026/CONTEXT_marketing_growth_engine_q3_2026.md`
 - `docs/plan/context/IDEA_marketing_growth_engine_q3_2026.md`
 - `docs/plan/brainstorming/STRATEGY_marketing_growth_engine_q3_2026.md`
 

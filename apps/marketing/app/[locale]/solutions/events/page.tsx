@@ -54,6 +54,8 @@ export default async function EventsPage(props: {
         author: t('events.quote.author'),
         role: t('events.quote.role'),
       }}
+      intent="pilot"
+      surfacePrefix="solutions_events"
     />
   );
 }

@@ -10,9 +10,9 @@
 
 **STRATEGY:** `docs/plan/brainstorming/STRATEGY_marketing_growth_engine_q3_2026.md`
 
-**PLAN:** `docs/plan/in-progress/marketing_growth_engine_q3_2026/PLAN_marketing_growth_engine_q3_2026.md`
+**PLAN:** `docs/plan/done/marketing_growth_engine_q3_2026/PLAN_marketing_growth_engine_q3_2026.md`
 
-**Status:** 🚧 In Progress — active `/dev marketing_growth_engine_q3_2026 1`
+**Status:** ✅ Done — closed-loop analytics delivered and verified
 
 **Target:** Q3 2026
 

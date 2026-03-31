@@ -14,7 +14,8 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { Button } from '@gate-access/ui';
-import { I18nLink } from '../../../components/i18n-link';
+import { IntentLink } from '../../../components/intent-link';
+import { IntentLandingTracker } from '../../../components/intent-landing-tracker';
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: Locale }>;
@@ -77,6 +78,11 @@ export default async function SolutionsPage(props: {
 
   return (
     <div className="flex flex-col w-full pb-24">
+      <IntentLandingTracker
+        locale={locale}
+        surface="solutions_page"
+        intent="consult"
+      />
       {/* Hero */}
       <section className="pt-20 pb-16 text-center container px-6">
         <h1 className="text-4xl lg:text-7xl font-black tracking-tight mb-6 uppercase">
@@ -120,11 +126,16 @@ export default async function SolutionsPage(props: {
                 ))}
               </div>
 
-              <I18nLink locale={locale} href="/contact">
+              <IntentLink
+                locale={locale}
+                href="/contact"
+                intent="pilot"
+                surface={`solutions_${v.id}_cta`}
+              >
                 <Button size="lg" className="rounded-xl h-14 px-8 font-bold">
                   {t('ui.configureFor')} {v.title}
                 </Button>
-              </I18nLink>
+              </IntentLink>
             </div>
 
             <div

@@ -98,7 +98,7 @@ export default async function ContactPage(props: {
 
         {/* Form */}
         <div className="lg:col-span-3">
-          <ContactForm dict={dict} />
+          <ContactForm dict={dict} locale={locale} />
         </div>
       </section>
     </div>

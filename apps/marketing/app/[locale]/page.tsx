@@ -10,8 +10,9 @@ import { ProductScreenshots } from '../../components/sections/product-screenshot
 import { TestimonialsSection } from '../../components/sections/testimonials';
 import { ComparisonSection } from '../../components/sections/comparison';
 import { Shield, Zap, Smartphone, BarChart3 } from 'lucide-react';
-import { I18nLink } from '../../components/i18n-link';
 import { Button } from '@gate-access/ui';
+import { IntentLink } from '../../components/intent-link';
+import { IntentLandingTracker } from '../../components/intent-landing-tracker';
 
 export default async function HomePage(props: {
   params: Promise<{ locale: Locale }>;
@@ -22,6 +23,7 @@ export default async function HomePage(props: {
 
   return (
     <div className="flex flex-col w-full">
+      <IntentLandingTracker locale={locale} surface="home_page" intent="demo" />
       <Hero locale={locale} />
       <TrustBar locale={locale} />
       <StatsSection locale={locale} />
@@ -86,11 +88,16 @@ export default async function HomePage(props: {
               <p className="mb-10 max-w-md text-lg text-muted-foreground">
                 {t('cta.subHeadline')}
               </p>
-              <I18nLink locale={locale} href="/contact">
+              <IntentLink
+                locale={locale}
+                href="/contact"
+                intent="demo"
+                surface="home_mid_cta"
+              >
                 <Button variant="brand" size="lg" className="px-8">
                   {t('hero.primaryCta')}
                 </Button>
-              </I18nLink>
+              </IntentLink>
             </div>
 
             <div className="relative">

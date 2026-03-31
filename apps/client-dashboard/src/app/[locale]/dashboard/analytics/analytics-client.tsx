@@ -91,6 +91,13 @@ const MarketingFunnel = dynamic(
     import('@/components/dashboard/analytics').then((m) => m.MarketingFunnel),
   { ssr: false, loading: ChartSkeleton }
 );
+const CampaignFirstScanLinkage = dynamic(
+  () =>
+    import('@/components/dashboard/analytics').then(
+      (m) => m.CampaignFirstScanLinkage
+    ),
+  { ssr: false, loading: ChartSkeleton }
+);
 const AnalyticsCampaignBarChart = dynamic(
   () =>
     import('@/components/dashboard/analytics').then(
@@ -272,6 +279,15 @@ export function AnalyticsClient({ kpiData, gates = [] }: AnalyticsClientProps) {
               dir={dir}
             >
               <UTMMatrix filters={filters} />
+            </div>
+            <div
+              className="md:col-span-2 lg:col-span-3 min-h-[340px]"
+              dir={dir}
+            >
+              <CampaignFirstScanLinkage
+                filters={filters}
+                className="min-h-[340px]"
+              />
             </div>
             <div className="min-h-[280px]" dir={dir}>
               <TopGatesChart filters={filters} />

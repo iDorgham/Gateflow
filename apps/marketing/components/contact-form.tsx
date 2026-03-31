@@ -1,15 +1,24 @@
 'use client';
 
 import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Button, Input, Label, Textarea } from '@gate-access/ui';
 import { CheckCircle2, Loader2, Send, AlertCircle } from 'lucide-react';
+import {
+  buildMarketingEvent,
+  emitMarketingEvent,
+  type MarketingIntent,
+  getUtmFromSearchParams,
+} from '../lib/marketing-intent';
+import type { Locale } from '../i18n-config';
 
-export function ContactForm({ dict }: { dict: any }) {
+export function ContactForm({ dict, locale }: { dict: any; locale: Locale }) {
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>(
     'idle'
   );
   const [errorMessage, setErrorMessage] = useState('');
   const [submittedName, setSubmittedName] = useState('');
+  const searchParams = useSearchParams();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -40,6 +49,26 @@ export function ContactForm({ dict }: { dict: any }) {
       if (json.ok) {
         setSubmittedName(name);
         setStatus('sent');
+        const intentFromQuery = searchParams.get('intent');
+        const intent = (
+          intentFromQuery === 'demo' ||
+          intentFromQuery === 'pilot' ||
+          intentFromQuery === 'migration' ||
+          intentFromQuery === 'consult'
+            ? intentFromQuery
+            : 'demo'
+        ) as MarketingIntent;
+        const surface = searchParams.get('surface') ?? 'contact_form';
+
+        emitMarketingEvent(
+          buildMarketingEvent({
+            intent,
+            locale,
+            surface,
+            funnelStage: 'lead_submit',
+            utm: getUtmFromSearchParams(new URLSearchParams(searchParams)),
+          })
+        );
       } else if (json.fallback) {
         setStatus('error');
         setErrorMessage(

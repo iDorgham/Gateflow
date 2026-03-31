@@ -1,5 +1,5 @@
 import { Button } from '@gate-access/ui';
-import { I18nLink } from '../i18n-link';
+import { IntentLink } from '../intent-link';
 import type { Locale } from '../../i18n-config';
 import { getTranslation } from '../../lib/i18n/get-translation';
 
@@ -18,9 +18,11 @@ export async function BottomCTA({ locale }: { locale: Locale }) {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <I18nLink
+            <IntentLink
               locale={locale}
               href="/contact"
+              intent="consult"
+              surface="home_bottom_cta"
               className="w-full sm:w-auto"
             >
               <Button
@@ -30,7 +32,7 @@ export async function BottomCTA({ locale }: { locale: Locale }) {
               >
                 {tc('buttons.getStarted')}
               </Button>
-            </I18nLink>
+            </IntentLink>
             <p className="text-sm font-medium text-muted-foreground">
               {t('cta.noCreditCard')}
             </p>
