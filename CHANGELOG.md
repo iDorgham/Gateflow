@@ -32,6 +32,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Features
 
+- **[Marketing] **align tokens with @gate-access/ui (phase 01)
+
 - **[Ops] **complete autonomous_ops_intelligence Phase 05 marketplace booking MVP
 
 - **[Autonomous Ops Intelligence] **agentic foundation, perimeter bridge, and high-density UI

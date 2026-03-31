@@ -1,322 +1,42 @@
+/**
+ * Marketing uses the same token entry as client-dashboard: @gate-access/ui/globals.css.
+ * This file adds marketing-only base tweaks and legacy radius utility names.
+ */
+@import "@gate-access/ui/globals.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/*
- * GateFlow Design System
- * Atlassian Design System — Full Token Set (Phase 6 GA)
- * Marketing app — Light + Dark mode. Uses --ds- prefix per ADS spec.
- */
-
 @layer base {
-  :root {
-    /* ── Typography ─────────────────────────────────── */
-    --ds-font-family-sans: var(--font-inter), ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
-    --ds-font-family-heading: var(--font-inter), ui-sans-serif, sans-serif;
-    --ds-font-family-mono: 'Atlassian Mono', 'SFMono-Medium', 'SF Mono', 'Cascadia Mono', 'Segoe UI Mono', 'Roboto Mono', 'Ubuntu Mono', monospace;
-
-    /* ── Radius Tokens ──────────────────────────────── */
-    --ds-border-radius: 3px;
-    --ds-border-radius-100: 2px;
-    --ds-border-radius-200: 4px;
-    --ds-border-radius-300: 6px;
-    --ds-border-radius-400: 8px;
-    --ds-border-radius-800: 16px;
-    --ds-border-radius-circle: 50%;
-    --ds-border-radius-sm: 2px;
-    --ds-border-radius-lg: 8px;
-
-    /* ── Grid Beta ──────────────────────────────────── */
-    --ds-grid-columns: 12;
-    --ds-grid-gutter: 1.5rem;
-    --ds-grid-margin-xs: 1rem;
-    --ds-grid-margin-md: 2rem;
-    --ds-grid-margin-lg: 4rem;
-
-    /* ── Background Tokens — Light ──────────────────── */
-    --ds-background-default: #FFFFFF;
-    --ds-background-subtle:  #F4F5F7;
-    --ds-background-subtlest: #EBECF0;
-    --ds-background-neutral: #F4F5F7;
-    --ds-background-neutral-subtle: #FAFBFC;
-    --ds-background-neutral-subtle-hovered: #F0F1F3;
-    --ds-background-neutral-hovered: #EBECF0;
-    --ds-background-neutral-pressed: #DFE1E6;
-    --ds-background-selected: #DEEBFF;
-    --ds-background-selected-hovered: #B3D4FF;
-    --ds-background-selected-pressed: #4C9AFF;
-    --ds-background-brand-bold: #0052CC;
-    --ds-background-brand-bold-hovered: #004EBE;
-    --ds-background-brand-bold-pressed: #0065FF;
-    --ds-background-brand-subtle: #DEEBFF;
-    --ds-background-brand-subtle-hovered: #B3D4FF;
-    --ds-background-danger-bold: #DE350B;
-    --ds-background-danger-bold-hovered: #BF2600;
-    --ds-background-danger-subtle: #FFEBE6;
-    --ds-background-danger-subtle-hovered: #FFBDAD;
-    --ds-background-warning-bold: #FFAB00;
-    --ds-background-warning-bold-hovered: #FF991F;
-    --ds-background-warning: #FFF0B3;
-    --ds-background-warning-subtle: #FFFAE6;
-    --ds-background-success-bold: #00875A;
-    --ds-background-success-bold-hovered: #006644;
-    --ds-background-success-subtle: #E3FCEF;
-    --ds-background-success-subtle-hovered: #ABF5D1;
-    --ds-background-information-bold: #0052CC;
-    --ds-background-information-bold-hovered: #004EBE;
-    --ds-background-information-subtle: #DEEBFF;
-    --ds-background-discovery-bold: #5243AA;
-    --ds-background-discovery-bold-hovered: #403294;
-    --ds-background-discovery: #EAE6FF;
-    --ds-background-discovery-subtle: #EAE6FF;
-    --ds-background-discovery-subtle-hovered: #C0B6F2;
-    --ds-background-input: #FFFFFF;
-    --ds-background-input-hovered: #F4F5F7;
-    --ds-background-input-pressed: #FFFFFF;
-    --ds-background-inverse-subtle: rgba(255,255,255,0.08);
-    --ds-background-inverse-subtle-hovered: rgba(255,255,255,0.16);
-
-    /* ── Elevation Surfaces — Light ─────────────────── */
-    --ds-surface-sunken:  #F4F5F7;
-    --ds-surface-default: #FFFFFF;
-    --ds-surface-raised:  #FFFFFF;
-    --ds-surface-overlay: #FFFFFF;
-
-    /* ── Elevation Shadows — Light ──────────────────── */
-    --ds-shadow-card:    0 1px 1px rgba(9,30,66,.25), 0 0 0 1px rgba(9,30,66,.08);
-    --ds-shadow-raised:  0 1px 1px rgba(9,30,66,.25), 0 0 0 1px rgba(9,30,66,.08);
-    --ds-shadow-overlay: 0 8px 16px -4px rgba(9,30,66,.25), 0 0 0 1px rgba(9,30,66,.08);
-
-    /* ── Text Tokens — Light ────────────────────────── */
-    --ds-text: #172B4D;
-    --ds-text-subtle: #42526E;
-    --ds-text-subtlest: #6B778C;
-    --ds-text-disabled: #A5ADBA;
-    --ds-text-inverse: #FFFFFF;
-    --ds-text-selected: #0052CC;
-    --ds-text-brand: #0052CC;
-    --ds-text-danger: #DE350B;
-    --ds-text-warning: #FF8B00;
-    --ds-text-warning-inverse: #172B4D;
-    --ds-text-success: #006644;
-    --ds-text-information: #0052CC;
-    --ds-text-information-bold: #0747A6;
-    --ds-text-link: #0052CC;
-    --ds-text-link-visited: #5243AA;
-    --ds-text-discovery: #403294;
-
-    /* ── Border Tokens — Light ──────────────────────── */
-    --ds-border: #DFE1E6;
-    --ds-border-bold: #A5ADBA;
-    --ds-border-subtle: #EBECF0;
-    --ds-border-disabled: #EBECF0;
-    --ds-border-focused: #4C9AFF;
-    --ds-border-selected: #0052CC;
-    --ds-border-brand: #0052CC;
-    --ds-border-danger: #DE350B;
-    --ds-border-warning: #FFAB00;
-    --ds-border-success: #36B37E;
-    --ds-border-information: #0052CC;
-    --ds-border-discovery: #998DD9;
-    --ds-border-input: #DFE1E6;
-
-    /* ── Icon Tokens — Light ────────────────────────── */
-    --ds-icon: #42526E;
-    --ds-icon-subtle: #6B778C;
-    --ds-icon-inverse: #FFFFFF;
-    --ds-icon-disabled: #A5ADBA;
-    --ds-icon-brand: #0052CC;
-    --ds-icon-selected: #0052CC;
-    --ds-icon-danger: #DE350B;
-    --ds-icon-warning: #FFAB00;
-    --ds-icon-success: #36B37E;
-    --ds-icon-information: #0052CC;
-    --ds-icon-discovery: #5243AA;
-
-    /* ── Shadcn/UI mapping (HSL triplets) ───────────── */
-    --background: 0 0% 100%;
-    --foreground: 220 54% 20%;
-    --card: 0 0% 100%;
-    --card-foreground: 220 54% 20%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 54% 20%;
-    --primary: 216 100% 40%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 220 18% 93%;
-    --secondary-foreground: 220 25% 35%;
-    --muted: 220 17% 96%;
-    --muted-foreground: 220 15% 48%;
-    --accent: 216 100% 94%;
-    --accent-foreground: 216 100% 40%;
-    --destructive: 11 90% 43%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 220 12% 89%;
-    --input: 220 12% 89%;
-    --ring: 212 100% 65%;
-    --radius: 4px;
-  }
-
-  .dark {
-    /* ── Background Tokens — Dark ───────────────────── */
-    --ds-background-default: #1D2125;
-    --ds-background-subtle: #22272B;
-    --ds-background-subtlest: #2C333A;
-    --ds-background-neutral: #2C333A;
-    --ds-background-neutral-subtle: #1D2125;
-    --ds-background-neutral-subtle-hovered: #282E33;
-    --ds-background-neutral-hovered: #343A46;
-    --ds-background-neutral-pressed: #3B4450;
-    --ds-background-selected: #1C2B41;
-    --ds-background-selected-hovered: #09326C;
-    --ds-background-selected-pressed: #0055CC;
-    --ds-background-brand-bold: #579DFF;
-    --ds-background-brand-bold-hovered: #85B8FF;
-    --ds-background-brand-bold-pressed: #CCE0FF;
-    --ds-background-brand-subtle: #1C2B41;
-    --ds-background-brand-subtle-hovered: #09326C;
-    --ds-background-danger-bold: #FF5630;
-    --ds-background-danger-bold-hovered: #FF7452;
-    --ds-background-danger-subtle: #42130A;
-    --ds-background-danger-subtle-hovered: #601D10;
-    --ds-background-warning-bold: #FFAB00;
-    --ds-background-warning-bold-hovered: #FFD740;
-    --ds-background-warning: #291D00;
-    --ds-background-warning-subtle: #332700;
-    --ds-background-success-bold: #36B37E;
-    --ds-background-success-bold-hovered: #57D9A3;
-    --ds-background-success-subtle: #1D2D25;
-    --ds-background-success-subtle-hovered: #23392E;
-    --ds-background-information-bold: #579DFF;
-    --ds-background-information-bold-hovered: #85B8FF;
-    --ds-background-information-subtle: #1C2B41;
-    --ds-background-discovery-bold: #8777D9;
-    --ds-background-discovery-bold-hovered: #998DD9;
-    --ds-background-discovery: #352C63;
-    --ds-background-discovery-subtle: #352C63;
-    --ds-background-discovery-subtle-hovered: #403294;
-    --ds-background-input: #22272B;
-    --ds-background-input-hovered: #282E33;
-    --ds-background-input-pressed: #22272B;
-    --ds-background-inverse-subtle: rgba(255,255,255,0.06);
-    --ds-background-inverse-subtle-hovered: rgba(255,255,255,0.12);
-
-    /* ── Elevation Surfaces — Dark ──────────────────── */
-    --ds-surface-sunken:  #161A1D;
-    --ds-surface-default: #1D2125;
-    --ds-surface-raised:  #22272B;
-    --ds-surface-overlay: #282E33;
-
-    /* ── Elevation Shadows — Dark ───────────────────── */
-    --ds-shadow-card:    0 1px 1px rgba(0,0,0,.36), 0 0 0 1px rgba(255,255,255,.06);
-    --ds-shadow-raised:  0 1px 1px rgba(0,0,0,.36), 0 0 0 1px rgba(255,255,255,.06);
-    --ds-shadow-overlay: 0 8px 16px -4px rgba(0,0,0,.36), 0 0 0 1px rgba(255,255,255,.06);
-
-    /* ── Text Tokens — Dark ─────────────────────────── */
-    --ds-text: #B6C2CF;
-    --ds-text-subtle: #8C9BAB;
-    --ds-text-subtlest: #738496;
-    --ds-text-disabled: #44546F;
-    --ds-text-inverse: #1D2125;
-    --ds-text-selected: #579DFF;
-    --ds-text-brand: #579DFF;
-    --ds-text-danger: #FF5630;
-    --ds-text-warning: #FFAB00;
-    --ds-text-warning-inverse: #1D2125;
-    --ds-text-success: #36B37E;
-    --ds-text-information: #579DFF;
-    --ds-text-information-bold: #85B8FF;
-    --ds-text-link: #579DFF;
-    --ds-text-link-visited: #C0B6F2;
-    --ds-text-discovery: #C0B6F2;
-
-    /* ── Border Tokens — Dark ───────────────────────── */
-    --ds-border: #44546F;
-    --ds-border-bold: #738496;
-    --ds-border-subtle: #2C333A;
-    --ds-border-disabled: #2C333A;
-    --ds-border-focused: #4C9AFF;
-    --ds-border-selected: #579DFF;
-    --ds-border-brand: #579DFF;
-    --ds-border-danger: #FF5630;
-    --ds-border-warning: #FFAB00;
-    --ds-border-success: #36B37E;
-    --ds-border-information: #579DFF;
-    --ds-border-discovery: #8777D9;
-    --ds-border-input: #44546F;
-
-    /* ── Icon Tokens — Dark ─────────────────────────── */
-    --ds-icon: #8C9BAB;
-    --ds-icon-subtle: #738496;
-    --ds-icon-inverse: #1D2125;
-    --ds-icon-disabled: #44546F;
-    --ds-icon-brand: #579DFF;
-    --ds-icon-selected: #579DFF;
-    --ds-icon-danger: #FF5630;
-    --ds-icon-warning: #FFAB00;
-    --ds-icon-success: #36B37E;
-    --ds-icon-information: #579DFF;
-    --ds-icon-discovery: #8777D9;
-
-    /* ── Shadcn/UI mapping — Dark ───────────────────── */
-    --background: 216 31% 13%;
-    --foreground: 215 19% 77%;
-    --card: 216 27% 15%;
-    --card-foreground: 215 19% 77%;
-    --popover: 216 27% 17%;
-    --popover-foreground: 215 19% 77%;
-    --primary: 212 100% 65%;
-    --primary-foreground: 216 31% 13%;
-    --secondary: 216 31% 17%;
-    --secondary-foreground: 215 19% 77%;
-    --muted: 216 31% 17%;
-    --muted-foreground: 214 16% 56%;
-    --accent: 216 27% 20%;
-    --accent-foreground: 212 100% 65%;
-    --border: 216 27% 28%;
-    --input: 216 27% 18%;
-    --ring: 212 100% 65%;
-  }
-}
-
-@layer base {
-  * { @apply border-border; }
   html {
-    @apply scroll-smooth;
+    scroll-behavior: smooth;
     zoom: 0.95;
   }
+
   body {
-    @apply antialiased;
-    background-color: var(--ds-background-default, #FFFFFF);
-    color: var(--ds-text, #172B4D);
-    font-family: var(--ds-font-family-sans);
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
   }
 }
 
 @layer utilities {
-  .ds-elevation-sunken  { background: var(--ds-surface-sunken); }
-  .ds-elevation-default { background: var(--ds-surface-default); }
-  .ds-elevation-raised  { background: var(--ds-surface-raised);  box-shadow: var(--ds-shadow-raised); }
-  .ds-elevation-overlay { background: var(--ds-surface-overlay); box-shadow: var(--ds-shadow-overlay); }
-  .ds-radius-100 { border-radius: var(--ds-border-radius-100, 2px); }
-  .ds-radius-200 { border-radius: var(--ds-border-radius-200, 4px); }
-  .ds-radius-300 { border-radius: var(--ds-border-radius-300, 6px); }
-  .ds-radius-400 { border-radius: var(--ds-border-radius-400, 8px); }
-  .ds-radius-800 { border-radius: var(--ds-border-radius-800, 16px); }
-  .ds-radius-circle { border-radius: var(--ds-border-radius-circle, 50%); }
-}
-
-/* Micro-animations */
-.animate-in {
-  animation: ads-in 0.3s ease-out;
-}
-
-@keyframes ads-in {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Glassmorphism utility */
-.glass {
-  @apply bg-background/60 backdrop-blur-md border-border/50;
+  /* Legacy class names from pre-merge marketing; map to UI semantic radius tokens */
+  .ds-radius-100 {
+    border-radius: var(--ds-radius-xsmall, 2px);
+  }
+  .ds-radius-200 {
+    border-radius: var(--ds-radius-small, 4px);
+  }
+  .ds-radius-300 {
+    border-radius: 6px;
+  }
+  .ds-radius-400 {
+    border-radius: var(--ds-radius-medium, var(--ds-border-radius, 8px));
+  }
+  .ds-radius-800 {
+    border-radius: 16px;
+  }
+  .ds-radius-circle {
+    border-radius: var(--ds-radius-circle, 50%);
+  }
 }
