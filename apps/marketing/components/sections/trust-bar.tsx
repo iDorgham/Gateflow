@@ -1,8 +1,12 @@
-import { getTranslation } from '../../lib/i18n/get-translation';
-import type { Locale } from '../../i18n-config';
+'use client';
 
-export async function TrustBar({ locale }: { locale: Locale }) {
-  const { t } = await getTranslation(locale, 'landing');
+import * as React from 'react';
+import { motion } from 'framer-motion';
+import type { Locale } from '../../i18n-config';
+import { useTranslation } from '../../hooks/use-translation';
+
+export function TrustBar({ locale }: { locale: Locale }) {
+  const { t } = useTranslation('landing');
   const partners = [
     { name: 'Palm Hills', logo: '🌴' },
     { name: 'Sodic', logo: '🏢' },
@@ -12,24 +16,37 @@ export async function TrustBar({ locale }: { locale: Locale }) {
   ];
 
   return (
-    <section className="border-y border-ds-border bg-ds-surface-sunken py-16 md:py-24">
-      <div className="container mx-auto px-8">
-        <p className="mb-12 text-center text-[12px] font-black uppercase tracking-[0.3em] text-ds-text-subtle">
+    <section className="border-y border-ds-border bg-ds-surface-sunken py-24 md:py-32 relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-r from-ds-surface-sunken via-transparent to-ds-surface-sunken z-10 pointer-events-none" />
+      
+      <div className="container mx-auto px-8 relative z-0">
+        <motion.p 
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="mb-16 text-center text-[12px] font-black uppercase tracking-[0.4em] text-ds-text-subtlest"
+        >
           {t('trust.badge')}
-        </p>
-        <div className="flex flex-wrap justify-center items-center gap-12 lg:gap-24 opacity-80 hover:opacity-100 transition-all duration-500">
-          {partners.map((p) => (
-            <div
+        </motion.p>
+        
+        <div className="flex flex-wrap justify-center items-center gap-12 lg:gap-32">
+          {partners.map((p, i) => (
+            <motion.div
               key={p.name}
-              className="flex items-center gap-4 group cursor-default"
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 0.6, y: 0 }}
+              whileHover={{ opacity: 1, scale: 1.05 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+              className="flex items-center gap-5 group cursor-default grayscale hover:grayscale-0 transition-all duration-500"
             >
-              <span className="text-3xl group-hover:scale-110 transition-transform">
+              <span className="text-4xl group-hover:drop-shadow-[0_0_15px_rgba(var(--ds-background-brand-bold),0.3)] transition-all">
                 {p.logo}
               </span>
-              <span className="text-2xl font-black tracking-tighter uppercase text-ds-text-heading">
+              <span className="text-[22px] font-black tracking-tight uppercase text-ds-text-heading">
                 {p.name}
               </span>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

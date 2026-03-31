@@ -6,7 +6,24 @@
     },
     "subHeadline": "Replace WhatsApp chaos with cryptographically-signed QR access. Offline-capable, Arabic-first, enterprise-grade — built for Egypt & the Gulf.",
     "primaryCta": "Start Free Trial",
-    "secondaryCta": "Book a Demo"
+    "secondaryCta": "Book a Demo",
+    "slides": {
+      "security": {
+        "title": "Digital Gate Security",
+        "suffix": "Reimagined",
+        "subHeadline": "Replace WhatsApp chaos with cryptographically-signed QR access. Offline-capable, enterprise-grade security built for the Middle East."
+      },
+      "permission": {
+        "title": "Visitor Permission",
+        "suffix": "Flows",
+        "subHeadline": "Empower residents to manage guests with seamless visitor permission flows. Get instant notifications upon arrival."
+      },
+      "hub": {
+        "title": "Smart Access Hub",
+        "suffix": "Control",
+        "subHeadline": "Total control at every gate with real-time analytics, automated audit logs, and high-density performance monitoring."
+      }
+    }
   },
   "trust": {
     "badge": "Trusted by leading communities",

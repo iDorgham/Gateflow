@@ -1,9 +1,14 @@
-import { getTranslation } from '../../lib/i18n/get-translation';
-import type { Locale } from '../../i18n-config';
-import { Check, X } from 'lucide-react';
+'use client';
 
-export async function ComparisonSection({ locale }: { locale: Locale }) {
-  const { t } = await getTranslation(locale, 'landing');
+import * as React from 'react';
+import { motion } from 'framer-motion';
+import { Check, X, ShieldCheck } from 'lucide-react';
+import type { Locale } from '../../i18n-config';
+import { useTranslation } from '../../hooks/use-translation';
+
+export function ComparisonSection({ locale }: { locale: Locale }) {
+  const { t } = useTranslation('landing');
+  const isRtl = locale.startsWith('ar');
 
   const features = [
     { name: t('comparison.features.offline'), gateflow: true, whatsapp: false, paper: false },
@@ -17,74 +22,95 @@ export async function ComparisonSection({ locale }: { locale: Locale }) {
   ];
 
   return (
-    <section className="py-24 bg-[var(--ds-background-default,#FFFFFF)]">
-      <div className="container px-[var(--ds-grid-margin-xs,1rem)] md:px-[var(--ds-grid-margin-md,2rem)] lg:px-[var(--ds-grid-margin-lg,4rem)] mx-auto">
-        <div className="text-center max-w-2xl mx-auto mb-20">
-          <h2 className="text-[11px] font-bold uppercase tracking-[0.2em] text-[var(--ds-text-brand,#0052CC)] mb-4">
+    <section className="py-32 lg:py-48 bg-ds-surface relative overflow-hidden">
+      <div className="container px-8 mx-auto relative z-10">
+        <div className="text-center max-w-4xl mx-auto mb-24 lg:mb-32">
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-[13px] font-black uppercase tracking-[0.4em] text-ds-text-brand mb-8"
+          >
             {t('comparison.badge')}
-          </h2>
-          <p className="text-3xl lg:text-5xl font-bold tracking-tight text-[var(--ds-text,#172B4D)] leading-tight">
+          </motion.h2>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-5xl lg:text-7xl font-black tracking-tight text-ds-text-heading leading-tight"
+          >
             {t('comparison.title')}
-          </p>
+          </motion.p>
         </div>
 
-        <div className="overflow-hidden border border-[var(--ds-border,#DFE1E6)] rounded-lg shadow-[0_8px_32px_rgba(9,30,66,0.08)]">
+        <motion.div 
+           initial={{ opacity: 0, scale: 0.98 }}
+           whileInView={{ opacity: 1, scale: 1 }}
+           viewport={{ once: true }}
+           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+           className="overflow-hidden border border-ds-border-bold rounded-[32px] bg-ds-surface-raised shadow-[0_64px_128px_rgba(0,0,0,0.12)]"
+        >
           <div className="overflow-x-auto">
-            <table className="w-full min-w-[700px] border-collapse">
+            <table className="w-full min-w-[800px] border-collapse">
               <thead>
-                <tr className="bg-[var(--ds-background-subtle,#F4F5F7)] border-b border-[var(--ds-border,#DFE1E6)]">
-                  <th className="text-left rtl:text-right py-8 px-8 font-bold text-[14px] text-[var(--ds-text-subtle,#42526E)] uppercase tracking-wider">
+                <tr className="bg-ds-surface-sunken/50 border-b border-ds-border-bold">
+                  <th className="text-left rtl:text-right py-12 px-12 font-black text-[14px] text-ds-text-subtlest uppercase tracking-[0.3em]">
                     {t('comparison.features_col')}
                   </th>
-                  <th className="py-8 px-4 text-center">
-                    <div className="inline-flex items-center justify-center px-4 py-1.5 bg-[var(--ds-background-brand-bold,#0052CC)] text-white text-xs font-bold rounded-sm uppercase tracking-widest">
+                  <th className="py-12 px-8 text-center bg-ds-background-brand-subtle/30">
+                    <div className="inline-flex items-center gap-3 px-6 py-2.5 bg-ds-background-brand-bold text-white text-[13px] font-black rounded-xl uppercase tracking-[0.2em] shadow-xl shadow-ds-background-brand-bold/20">
+                      <ShieldCheck size={16} />
                       GateFlow
                     </div>
                   </th>
-                  <th className="py-8 px-4 text-center text-[14px] font-bold text-[var(--ds-text-subtle,#42526E)]">
+                  <th className="py-12 px-8 text-center text-[15px] font-black text-ds-text-subtle uppercase tracking-widest leading-none">
                     WhatsApp/SMS
                   </th>
-                  <th className="py-8 px-4 text-center text-[14px] font-bold text-[var(--ds-text-subtle,#42526E)]">
+                  <th className="py-12 px-8 text-center text-[15px] font-black text-ds-text-subtle uppercase tracking-widest leading-none">
                     Manual/Paper
                   </th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-ds-border">
                 {features.map((feature, i) => (
                   <tr
                     key={i}
-                    className="border-b border-[var(--ds-border,#DFE1E6)] last:border-0 hover:bg-[var(--ds-background-subtle,#F4F5F7)] transition-colors group"
+                    className="group transition-colors hover:bg-ds-surface-sunken/40"
                   >
-                    <td className="py-6 px-8 font-semibold text-[var(--ds-text,#172B4D)]">{feature.name}</td>
-                    <td className="py-6 px-4 text-center bg-[var(--ds-background-selected,#DEEBFF)]/20">
+                    <td className="py-8 px-12 font-black text-[18px] text-ds-text-heading tracking-tight">{feature.name}</td>
+                    <td className="py-8 px-8 text-center bg-ds-background-brand-subtle/10 border-x border-ds-border-brand/10">
                       <div className="flex justify-center">
-                        <div className="w-8 h-8 rounded-full bg-[var(--ds-background-success-bold,#36B37E)] text-white flex items-center justify-center shadow-md">
-                          <Check size={18} strokeWidth={3} />
-                        </div>
+                        <motion.div 
+                          whileHover={{ scale: 1.2 }}
+                          className="w-10 h-10 rounded-2xl bg-ds-background-brand-bold text-white flex items-center justify-center shadow-lg shadow-ds-background-brand-bold/30"
+                        >
+                          <Check size={22} strokeWidth={3} />
+                        </motion.div>
                       </div>
                     </td>
-                    <td className="py-6 px-4 text-center">
+                    <td className="py-8 px-8 text-center">
                       <div className="flex justify-center">
                         {feature.whatsapp ? (
-                          <div className="w-8 h-8 rounded-full bg-[var(--ds-background-success-subtle,#E3FCEF)] text-[var(--ds-text-success,#006644)] flex items-center justify-center border border-[var(--ds-border-success,#36B37E)]">
-                            <Check size={18} />
+                          <div className="w-10 h-10 rounded-2xl bg-ds-background-success-subtle text-ds-text-success flex items-center justify-center border border-ds-border-success">
+                            <Check size={22} />
                           </div>
                         ) : (
-                          <div className="w-8 h-8 rounded-full bg-[var(--ds-background-danger-subtle,#FFEBE6)] text-[var(--ds-text-danger,#BF2600)] flex items-center justify-center border border-[var(--ds-border-danger,#FF5630)]">
-                            <X size={18} />
+                          <div className="w-10 h-10 rounded-2xl bg-ds-background-danger-subtle text-ds-text-danger flex items-center justify-center border border-ds-border-danger">
+                            <X size={22} />
                           </div>
                         )}
                       </div>
                     </td>
-                    <td className="py-6 px-4 text-center">
+                    <td className="py-8 px-8 text-center">
                       <div className="flex justify-center">
                         {feature.paper ? (
-                          <div className="w-8 h-8 rounded-full bg-[var(--ds-background-success-subtle,#E3FCEF)] text-[var(--ds-text-success,#006644)] flex items-center justify-center border border-[var(--ds-border-success,#36B37E)]">
-                            <Check size={18} />
+                          <div className="w-10 h-10 rounded-2xl bg-ds-background-success-subtle text-ds-text-success flex items-center justify-center border border-ds-border-success">
+                            <Check size={22} />
                           </div>
                         ) : (
-                          <div className="w-8 h-8 rounded-full bg-[var(--ds-background-danger-subtle,#FFEBE6)] text-[var(--ds-text-danger,#BF2600)] flex items-center justify-center border border-[var(--ds-border-danger,#FF5630)]">
-                            <X size={18} />
+                          <div className="w-10 h-10 rounded-2xl bg-ds-background-danger-subtle text-ds-text-danger flex items-center justify-center border border-ds-border-danger">
+                            <X size={22} />
                           </div>
                         )}
                       </div>
@@ -94,7 +120,7 @@ export async function ComparisonSection({ locale }: { locale: Locale }) {
               </tbody>
             </table>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

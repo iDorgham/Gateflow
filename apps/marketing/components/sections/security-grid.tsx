@@ -1,3 +1,7 @@
+'use client';
+
+import * as React from 'react';
+import { motion } from 'framer-motion';
 import {
   Shield,
   Lock,
@@ -6,11 +10,11 @@ import {
   RefreshCw,
   BarChart3,
 } from 'lucide-react';
-import { getTranslation } from '../../lib/i18n/get-translation';
 import type { Locale } from '../../i18n-config';
+import { useTranslation } from '../../hooks/use-translation';
 
-export async function SecurityGrid({ locale }: { locale: Locale }) {
-  const { t } = await getTranslation(locale, 'landing');
+export function SecurityGrid({ locale }: { locale: Locale }) {
+  const { t } = useTranslation('landing');
 
   const securityItems = [
     {
@@ -48,37 +52,64 @@ export async function SecurityGrid({ locale }: { locale: Locale }) {
   return (
     <section
       id="security"
-      className="py-32 lg:py-48 bg-ds-surface-sunken border-y border-ds-border relative overflow-hidden"
+      className="py-32 md:py-64 bg-ds-surface-sunken border-y border-ds-border relative overflow-hidden"
     >
-      <div className="container px-8 mx-auto">
-        <div className="max-w-4xl mx-auto text-center mb-24 lg:mb-32">
-          <h2 className="text-[12px] font-black uppercase tracking-[0.3em] text-ds-text-brand mb-6">
+      <div className="container px-8 mx-auto relative z-10">
+        <div className="max-w-4xl mx-auto text-center mb-24 lg:mb-40">
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-[13px] font-black uppercase tracking-[0.4em] text-ds-text-brand mb-8"
+          >
             {t('securityGrid.subtitle')}
-          </h2>
-          <p className="text-4xl lg:text-7xl font-black tracking-tight mb-10 text-ds-text-heading leading-tight">
+          </motion.h2>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-5xl lg:text-8xl font-black tracking-tight mb-12 text-ds-text-heading leading-[1.05]"
+          >
             {t('securityGrid.title')}
-          </p>
-          <p className="text-xl text-ds-text-subtle leading-relaxed max-w-2xl mx-auto">
+          </motion.p>
+          <motion.p 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="text-xl md:text-2xl text-ds-text-subtle leading-relaxed max-w-3xl mx-auto font-medium"
+          >
             {t('securityGrid.description')}
-          </p>
+          </motion.p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
-          {securityItems.map((item, _i) => (
-            <div
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-16">
+          {securityItems.map((item, i) => (
+            <motion.div
               key={item.title}
-              className="group p-12 rounded-ds-radius-large border border-ds-border bg-ds-surface-raised hover:border-ds-border-brand transition-all duration-300 hover:shadow-2xl hover:shadow-ds-text-brand/5 hover:-translate-y-2 text-start"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+              className="group p-12 rounded-[32px] border border-ds-border bg-ds-surface-raised hover:border-ds-border-bold transition-all duration-500 hover:shadow-[0_48px_96px_rgba(0,0,0,0.1)] hover:-translate-y-3"
             >
-              <div className="h-16 w-16 bg-ds-background-brand-subtle rounded-ds-radius-medium flex items-center justify-center text-ds-text-brand mb-8 group-hover:bg-ds-background-brand-bold group-hover:text-ds-text-inverse transition-colors shadow-sm">
-                <item.icon size={32} />
+              <div className="h-20 w-20 bg-ds-background-brand-subtle rounded-2xl flex items-center justify-center text-ds-text-brand mb-10 group-hover:scale-110 transition-transform shadow-inner ring-1 ring-ds-border-brand/10">
+                <item.icon size={36} strokeWidth={1.5} />
               </div>
-              <h3 className="text-2xl font-black mb-4 text-ds-text-heading">{item.title}</h3>
-              <p className="text-ds-text-subtle text-base leading-relaxed">
+              <h3 className="text-3xl font-black mb-6 text-ds-text-heading tracking-tight">{item.title}</h3>
+              <p className="text-ds-text-subtle text-[17px] leading-[1.6] font-medium group-hover:text-ds-text-heading transition-colors">
                 {item.desc}
               </p>
-            </div>
+            </motion.div>
           ))}
         </div>
+      </div>
+      
+      {/* Dynamic light rays */}
+      <div className="absolute top-0 left-0 w-full h-full pointer-events-none opacity-20">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-ds-background-brand-subtle blur-[150px] rounded-full" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-ds-background-success-subtle blur-[150px] rounded-full" />
       </div>
     </section>
   );

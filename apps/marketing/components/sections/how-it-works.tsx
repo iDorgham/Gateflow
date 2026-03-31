@@ -1,59 +1,95 @@
-import { getTranslation } from '../../lib/i18n/get-translation';
-import type { Locale } from '../../i18n-config';
-import { QrCode, ScanLine, FileCheck } from 'lucide-react';
+'use client';
 
-export async function HowItWorksSection({ locale }: { locale: Locale }) {
-  const { t } = await getTranslation(locale, 'landing');
+import * as React from 'react';
+import { motion } from 'framer-motion';
+import { QrCode, ScanLine, FileCheck, ArrowRight } from 'lucide-react';
+import type { Locale } from '../../i18n-config';
+import { useTranslation } from '../../hooks/use-translation';
+
+export function HowItWorksSection({ locale }: { locale: Locale }) {
+  const { t } = useTranslation('landing');
+  const isRtl = locale.startsWith('ar');
 
   const steps = [
     {
-      icon: <QrCode className="w-10 h-10" />,
+      icon: <QrCode size={40} strokeWidth={1} />,
       title: t('howItWorks.step1.title'),
       desc: t('howItWorks.step1.desc'),
     },
     {
-      icon: <ScanLine className="w-10 h-10" />,
+      icon: <ScanLine size={40} strokeWidth={1} />,
       title: t('howItWorks.step2.title'),
       desc: t('howItWorks.step2.desc'),
     },
     {
-      icon: <FileCheck className="w-10 h-10" />,
+      icon: <FileCheck size={40} strokeWidth={1} />,
       title: t('howItWorks.step3.title'),
       desc: t('howItWorks.step3.desc'),
     },
   ];
 
   return (
-    <section className="py-32 md:py-48 bg-ds-surface-sunken border-y border-ds-border">
-      <div className="container mx-auto px-6">
-        <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="text-[12px] font-black uppercase tracking-[0.3em] text-ds-text-brand mb-6">
+    <section className="py-32 md:py-64 bg-ds-surface-sunken border-y border-ds-border relative overflow-hidden">
+      <div className="container mx-auto px-8 relative z-10">
+        <div className="text-center max-w-4xl mx-auto mb-24 lg:mb-40">
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-[13px] font-black uppercase tracking-[0.4em] text-ds-text-brand mb-8"
+          >
             {t('howItWorks.badge')}
-          </h2>
-          <p className="text-4xl lg:text-7xl font-black tracking-tight text-ds-text-heading leading-tight">
+          </motion.h2>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-5xl lg:text-8xl font-black tracking-tight text-ds-text-heading leading-[1.05]"
+          >
             {t('howItWorks.title')}
-          </p>
+          </motion.p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 lg:gap-12">
+        <div className="grid md:grid-cols-3 gap-16 lg:gap-24">
           {steps.map((step, i) => (
-            <div key={i} className="relative">
+            <motion.div 
+              key={i} 
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.2 }}
+              className="relative group flex flex-col items-center"
+            >
+              {/* Connector line (Desktop only) */}
               {i < steps.length - 1 && (
-                <div className="hidden md:block absolute top-12 start-[calc(50%+40px)] end-[calc(-50%+40px)] h-0.5 bg-gradient-to-r from-primary/50 to-primary/50 lg:start-[calc(50%+50px)] lg:end-[calc(-50%+50px)] rtl:bg-gradient-to-l" />
+                <div className="hidden md:block absolute top-16 start-[calc(50%+60px)] end-[calc(-50%+60px)] h-[2px] bg-ds-border-brand/20 lg:start-[calc(50%+80px)] lg:end-[calc(-50%+80px)]">
+                   <motion.div 
+                      initial={{ scaleX: 0 }}
+                      whileInView={{ scaleX: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 0.8, duration: 1 }}
+                      className="w-full h-full bg-ds-background-brand-bold origin-left rtl:origin-right"
+                   />
+                </div>
               )}
-              <div className="text-center">
-                <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-ds-background-brand-bold text-ds-text-inverse mb-8 shadow-xl">
-                  {step.icon}
+              
+              <div className="text-center relative">
+                <div className="relative mb-12">
+                   <div className="inline-flex items-center justify-center w-32 h-32 rounded-[32px] bg-ds-background-brand-bold text-white mb-0 shadow-2xl shadow-ds-background-brand-bold/30 ring-4 ring-ds-background-brand-subtle group-hover:scale-110 transition-transform duration-500">
+                     {step.icon}
+                   </div>
+                   <div className="absolute -top-4 -end-4 w-12 h-12 rounded-2xl bg-ds-text-heading text-ds-text-inverse font-black text-xl flex items-center justify-center border-4 border-ds-surface-sunken shadow-lg group-hover:bg-ds-background-brand-bold transition-colors">
+                     {i + 1}
+                   </div>
                 </div>
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-4 w-10 h-10 rounded-full bg-ds-text-heading text-ds-text-inverse font-black flex items-center justify-center border-4 border-ds-surface-sunken">
-                  {i + 1}
-                </div>
-                <h3 className="text-2xl font-black mb-4 text-ds-text-heading">{step.title}</h3>
-                <p className="text-ds-text-subtle text-base leading-relaxed max-w-[280px] mx-auto">
+                
+                <h3 className="text-3xl font-black mb-6 text-ds-text-heading tracking-tight">{step.title}</h3>
+                <p className="text-ds-text-subtle text-lg leading-relaxed font-medium">
                   {step.desc}
                 </p>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>

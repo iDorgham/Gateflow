@@ -1,8 +1,13 @@
-import { getTranslation } from '../../lib/i18n/get-translation';
-import type { Locale } from '../../i18n-config';
+'use client';
 
-export async function TestimonialsSection({ locale }: { locale: Locale }) {
-  const { t } = await getTranslation(locale, 'landing');
+import * as React from 'react';
+import { motion } from 'framer-motion';
+import type { Locale } from '../../i18n-config';
+import { useTranslation } from '../../hooks/use-translation';
+import { Star } from 'lucide-react';
+
+export function TestimonialsSection({ locale }: { locale: Locale }) {
+  const { t } = useTranslation('landing');
 
   const testimonials = [
     {
@@ -26,47 +31,71 @@ export async function TestimonialsSection({ locale }: { locale: Locale }) {
   ];
 
   return (
-    <section className="py-32 md:py-48 bg-ds-surface-sunken border-y border-ds-border">
-      <div className="container mx-auto px-8">
-        <div className="text-center max-w-4xl mx-auto mb-20 lg:mb-24">
-          <h2 className="text-[12px] font-black uppercase tracking-[0.3em] text-ds-text-brand mb-6">
+    <section className="py-32 md:py-64 bg-ds-surface relative overflow-hidden">
+      {/* Background glow */}
+      <div className="absolute top-0 start-0 w-full h-[1px] bg-gradient-to-r from-transparent via-ds-border-success/30 to-transparent opacity-50" />
+      
+      <div className="container mx-auto px-8 relative z-10">
+        <div className="text-center max-w-4xl mx-auto mb-24 lg:mb-40">
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-[13px] font-black uppercase tracking-[0.4em] text-ds-text-success mb-8"
+          >
             {t('testimonials.badge')}
-          </h2>
-          <p className="text-4xl lg:text-7xl font-black tracking-tight text-ds-text-heading leading-tight">
+          </motion.h2>
+          <motion.p 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-5xl lg:text-8xl font-black tracking-tight text-ds-text-heading leading-[1.05]"
+          >
             {t('testimonials.title')}
-          </p>
+          </motion.p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 gap-12 lg:gap-16">
           {testimonials.map((testimonial, i) => (
-            <div
+            <motion.div
               key={i}
-              className="bg-ds-surface-raised p-12 rounded-ds-radius-large border border-ds-border shadow-sm hover:shadow-2xl hover:border-ds-border-bold transition-all duration-300 hover:-translate-y-2 text-start flex flex-col"
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.15 }}
+              className="bg-ds-surface-raised p-16 rounded-[40px] border border-ds-border hover:border-ds-border-bold shadow-[0_32px_64px_rgba(0,0,0,0.06)] hover:shadow-[0_48px_96px_rgba(0,0,0,0.1)] transition-all duration-500 hover:-translate-y-3 text-start flex flex-col relative group"
             >
-              <div className="flex gap-1.5 mb-8">
+              <div className="absolute top-10 start-10 text-ds-text-brand/10 text-8xl font-serif pointer-events-none group-hover:text-ds-text-brand/20 transition-colors">
+                &ldquo;
+              </div>
+
+              <div className="flex gap-2 mb-12 relative z-10">
                 {[...Array(5)].map((_, j) => (
-                  <svg
+                  <Star
                     key={j}
-                    className="w-6 h-6 text-yellow-500 fill-current"
-                    viewBox="0 0 20 20"
-                  >
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1.5 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1.5 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1.5 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1.5 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1.5 0 00.951-.69l1.07-3.292z" />
-                  </svg>
+                    size={20}
+                    className="text-ds-background-warning-bold"
+                    fill="currentColor"
+                  />
                 ))}
               </div>
-              <blockquote className="text-xl font-black mb-8 text-ds-text-heading leading-relaxed italic grow">
-                &ldquo;{testimonial.quote}&rdquo;
+
+              <blockquote className="text-[22px] font-black mb-12 text-ds-text-heading leading-[1.5] tracking-tight relative z-10 grow">
+                {testimonial.quote}
               </blockquote>
-              <div className="pt-8 border-t border-ds-border">
-                <div className="font-black text-lg text-ds-text-heading">{testimonial.author}</div>
-                <div className="text-sm font-black uppercase tracking-widest text-ds-text-subtle mt-1">
+
+              <div className="pt-10 border-t border-ds-border relative z-10">
+                <div className="font-black text-[20px] text-ds-text-heading mb-1">{testimonial.author}</div>
+                <div className="text-[12px] font-black uppercase tracking-[0.2em] text-ds-text-subtlest mb-4">
                   {testimonial.role}
                 </div>
-                <div className="text-[13px] text-ds-text-brand font-black mt-3">
+                <div className="inline-flex items-center gap-3 px-4 py-1.5 bg-ds-background-brand-subtle rounded-lg text-ds-text-brand text-[13px] font-black">
+                  <div className="w-1.5 h-1.5 rounded-full bg-ds-background-brand-bold" />
                   {testimonial.company}
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
