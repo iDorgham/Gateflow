@@ -21,6 +21,7 @@ overrides:
   zod: 3.25.76
   '@types/react': 19.2.14
   '@types/react-dom': 19.2.3
+  '@xmldom/xmldom': '>=0.8.12'
 
 patchedDependencies:
   expo-router@6.0.23:
@@ -3784,7 +3785,7 @@ packages:
         integrity: sha512-pfNtErGGzzRwHP+5+RqswzPDKkZrx+Cli0mzjQaus1ZWFsog5ibL+nVT3NcporW51o8ggnt7x813vtRbPiyOrQ==,
       }
     dependencies:
-      '@xmldom/xmldom': 0.8.11
+      '@xmldom/xmldom': 0.9.9
       base64-js: 1.5.1
       xmlbuilder: 15.1.1
     dev: false
@@ -3795,7 +3796,7 @@ packages:
         integrity: sha512-o4xdVdBpe4aTl3sPMZ2u3fJH4iG1I768EIRk1xRZP+GaFI93MaR3JvoFibYqxeTmLQ1p1kNEVqylfUjezxx45g==,
       }
     dependencies:
-      '@xmldom/xmldom': 0.8.11
+      '@xmldom/xmldom': 0.9.9
       base64-js: 1.5.1
       xmlbuilder: 15.1.1
     dev: false
@@ -9294,12 +9295,12 @@ packages:
       react: 19.2.4
     dev: false
 
-  /@xmldom/xmldom@0.8.11:
+  /@xmldom/xmldom@0.9.9:
     resolution:
       {
-        integrity: sha512-cQzWCtO6C8TQiYl1ruKNn2U6Ao4o4WBBcbL61yJl84x+j5sOWWFU9X7DpND8XZG3daDppSsigMdfAIl2upQBRw==,
+        integrity: sha512-qycIHAucxy/LXAYIjmLmtQ8q9GPnMbnjG1KXhWm9o5sCr6pOYDATkMPiTNa6/v8eELyqOQ2FsEqeoFYmgv/gJg==,
       }
-    engines: { node: '>=10.0.0' }
+    engines: { node: '>=14.6' }
     dev: false
 
   /abort-controller@3.0.0:
@@ -19844,7 +19845,7 @@ packages:
       }
     engines: { node: '>=10.4.0' }
     dependencies:
-      '@xmldom/xmldom': 0.8.11
+      '@xmldom/xmldom': 0.9.9
       base64-js: 1.5.1
       xmlbuilder: 15.1.1
     dev: false
