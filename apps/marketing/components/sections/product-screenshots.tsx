@@ -5,7 +5,12 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import type { Locale } from '../../i18n-config';
 import { useTranslation } from '../../hooks/use-translation';
-import { Monitor, Smartphone, LayoutDashboard, ExternalLink } from 'lucide-react';
+import {
+  Monitor,
+  Smartphone,
+  LayoutDashboard,
+  ExternalLink,
+} from 'lucide-react';
 
 interface MockupPanelProps {
   caption: string;
@@ -15,14 +20,22 @@ interface MockupPanelProps {
   isMobile?: boolean;
 }
 
-function MockupPanel({ caption, desc, icon, imageSrc, isMobile }: MockupPanelProps) {
+function MockupPanel({
+  caption,
+  desc,
+  icon,
+  imageSrc,
+  isMobile,
+}: MockupPanelProps) {
   return (
-    <motion.div 
+    <motion.div
       whileHover={{ y: -10 }}
       className="flex flex-col items-center gap-10 group"
     >
       {/* Device frame */}
-      <div className={`relative w-full overflow-hidden transition-all duration-500 rounded-[40px] border border-ds-border-bold bg-ds-surface-sunken shadow-[0_64px_128px_rgba(0,0,0,0.15)] group-hover:shadow-[0_80px_160px_rgba(var(--ds-background-brand-bold),0.12)] group-hover:border-ds-border-brand/40 ${isMobile ? 'aspect-[9/16] max-w-[340px] mx-auto' : 'aspect-video'}`}>
+      <div
+        className={`relative w-full overflow-hidden transition-all duration-500 rounded-[40px] border border-ds-border-bold bg-ds-surface-sunken shadow-[0_64px_128px_rgba(0,0,0,0.15)] group-hover:shadow-[0_80px_160px_rgba(var(--ds-background-brand-bold),0.12)] group-hover:border-ds-border-brand/40 ${isMobile ? 'aspect-[9/16] max-w-[340px] mx-auto' : 'aspect-video'}`}
+      >
         {/* Window/Mobile Status Bar */}
         {!isMobile && (
           <div className="bg-ds-surface px-6 py-4 flex items-center justify-between border-b border-ds-border-bold">
@@ -37,35 +50,39 @@ function MockupPanel({ caption, desc, icon, imageSrc, isMobile }: MockupPanelPro
             <ExternalLink size={14} className="text-ds-text-subtlest" />
           </div>
         )}
-        
+
         {/* Real Screenshot Area */}
         <div className="relative w-full h-full bg-ds-surface">
-           <Image 
-             src={imageSrc} 
-             alt={caption}
-             fill
-             className="object-cover transition-transform duration-1000 group-hover:scale-105"
-             placeholder="blur"
-             blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg=="
-           />
-           {/* Glass overlay */}
-           <div className="absolute inset-0 bg-gradient-to-t from-ds-text-heading/10 to-transparent pointer-events-none" />
+          <Image
+            src={imageSrc}
+            alt={caption}
+            fill
+            className="object-cover transition-transform duration-1000 group-hover:scale-105"
+            placeholder="blur"
+            blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg=="
+          />
+          {/* Glass overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-ds-text-heading/10 to-transparent pointer-events-none" />
         </div>
       </div>
 
       {/* Caption */}
       <div className="text-center max-w-sm">
         <div className="inline-flex items-center gap-3 px-4 py-2 bg-ds-background-brand-subtle rounded-xl text-ds-text-brand mb-5 shadow-sm">
-            {icon}
-            <span className="text-[12px] font-black uppercase tracking-widest leading-none">{caption}</span>
+          {icon}
+          <span className="text-[12px] font-black uppercase tracking-widest leading-none">
+            {caption}
+          </span>
         </div>
-        <p className="text-lg md:text-xl text-ds-text-subtle font-medium leading-relaxed">{desc}</p>
+        <p className="text-lg md:text-xl text-ds-text-subtle font-medium leading-relaxed">
+          {desc}
+        </p>
       </div>
     </motion.div>
   );
 }
 
-export function ProductScreenshots({ _locale }: { _locale: Locale }) {
+export function ProductScreenshots({ locale }: { locale: Locale }) {
   const { t } = useTranslation('landing');
 
   const panels = [
@@ -96,10 +113,10 @@ export function ProductScreenshots({ _locale }: { _locale: Locale }) {
     <section className="py-32 md:py-64 bg-ds-surface border-y border-ds-border relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute top-0 start-1/2 -translate-x-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-ds-border-brand/40 to-transparent" />
-      
+
       <div className="container mx-auto px-8 relative z-10">
         <div className="text-center max-w-4xl mx-auto mb-24 lg:mb-40">
-          <motion.h2 
+          <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -107,7 +124,7 @@ export function ProductScreenshots({ _locale }: { _locale: Locale }) {
           >
             {t('screenshots.badge')}
           </motion.h2>
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
