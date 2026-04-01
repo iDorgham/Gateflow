@@ -11,7 +11,14 @@ import { PrismaClient } from '@prisma/client';
 import { withAccelerate } from '@prisma/extension-accelerate';
 
 function createPrismaClient() {
+  const url =
+    process.env.DATABASE_URL ||
+    'postgresql://postgres:postgres@localhost:5432/gate_access';
+
   return new PrismaClient({
+    datasources: {
+      db: { url },
+    },
     log:
       process.env.NODE_ENV === 'development'
         ? ['query', 'error', 'warn']

@@ -75,8 +75,12 @@ jobs:
       - name: Build all web apps
         run: pnpm turbo build --filter=client-dashboard --filter=admin-dashboard --filter=marketing --filter=resident-portal
         env:
+          DATABASE_URL: 'postgresql://placeholder:placeholder@localhost:5432/placeholder'
           SKIP_ENV_VALIDATION: 'true'
           NEXT_TELEMETRY_DISABLED: '1'
+          STATSIG_SERVER_API_KEY: 'placeholder'
+          EXPERIMENTATION_CONFIG_ITEM_KEY: 'placeholder'
+          tune_EXPERIMENTATION_CONFIG_ITEM_KEY: 'placeholder'
 
   # ── Database Migration ────────────────────────────────────────────────────
   db-migrate:
