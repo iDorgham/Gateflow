@@ -1,8 +1,9 @@
+import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { getTranslation } from '../../../lib/i18n/get-translation';
 import type { Locale } from '../../../i18n-config';
 import { ContactForm } from '../../../components/contact-form';
-import { MessageSquare, Mail, Phone, MapPin } from 'lucide-react';
+import { MessageSquare, Mail, Phone, MapPin, Loader2 } from 'lucide-react';
 import { templatedMarketingTitle } from '../../../lib/metadata-title';
 
 export async function generateMetadata(props: {
@@ -98,14 +99,38 @@ export default async function ContactPage(props: {
 
         {/* Form */}
         <div className="lg:col-span-3">
-          <ContactForm dict={dict} locale={locale} />
+          <Suspense
+            fallback={
+              <div className="bg-card border rounded-3xl p-8 lg:p-10 flex items-center justify-center min-h-[400px]">
+                <Loader2 className="animate-spin text-primary h-8 w-8" />
+              </div>
+            }
+          >
+            <ContactForm dict={dict} locale={locale} />
+          </Suspense>
         </div>
       </section>
     </div>
   );
 }
 
-function ContactCard({ icon, title, detail, desc, link, linkBtn }: any) {
+interface ContactCardProps {
+  icon: React.ReactNode;
+  title: string;
+  detail: string;
+  desc: string;
+  link?: string;
+  linkBtn?: string;
+}
+
+function ContactCard({
+  icon,
+  title,
+  detail,
+  desc,
+  link,
+  linkBtn,
+}: ContactCardProps) {
   return (
     <div className="flex gap-5 p-6 rounded-2xl border bg-card hover:bg-muted/30 transition-colors">
       <div className="h-12 w-12 rounded-xl bg-background border flex items-center justify-center shrink-0 shadow-sm">
