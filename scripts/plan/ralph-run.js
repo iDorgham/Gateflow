@@ -79,24 +79,53 @@ function promptFilePath(dir, slug, phase, flat) {
     : path.join(dir, `PROMPT_${slug}_phase_${phase}.md`);
 }
 
+const VALID_PLAN_TOOLS = new Set([
+  'claude',
+  'gemini',
+  'opencode',
+  'kilo',
+  'qwen',
+  'cursor',
+  'kiro',
+]);
+
 /** Parse the phases table from PLAN file.
- *  Expects rows like: | 1 | Phase Name | claude | [ ] |
+ *  Supports:
+ *  - Legacy: | 1 | Phase Name | claude | [ ] |
+ *  - Extended: | 1 | Title | Role | Deps | Cursor | Deliverables | [ ] |
  *  Returns: [{ phase, name, tool, done }]
  */
 function parsePhases(planContent) {
   const phases = [];
   for (const line of planContent.split('\n')) {
-    const m = line.match(
+    const legacy = line.match(
       /^\|\s*(\d+)\s*\|\s*(.+?)\s*\|\s*(\w+)\s*\|\s*(\[[ x]\])\s*\|/
     );
-    if (m) {
+    if (legacy) {
       phases.push({
-        phase: parseInt(m[1], 10),
-        name: m[2].trim(),
-        tool: m[3].trim().toLowerCase(),
-        done: m[4].trim() === '[x]',
+        phase: parseInt(legacy[1], 10),
+        name: legacy[2].trim(),
+        tool: legacy[3].trim().toLowerCase(),
+        done: legacy[4].trim() === '[x]',
       });
+      continue;
     }
+
+    const parts = line.split('|').map((p) => p.trim());
+    if (parts.length < 7 || !/^\d+$/.test(parts[1])) continue;
+
+    const tool = parts[5].toLowerCase();
+    if (!VALID_PLAN_TOOLS.has(tool)) continue;
+
+    const phase = parseInt(parts[1], 10);
+    const name = parts[2];
+    let done = false;
+    if (parts.length >= 8) {
+      const status = parts[7];
+      if (status === '[x]') done = true;
+    }
+
+    phases.push({ phase, name, tool, done });
   }
   return phases;
 }
@@ -104,10 +133,19 @@ function parsePhases(planContent) {
 /** Mark a phase as complete in the PLAN file */
 function markPhaseDone(planPath, phase) {
   let content = fs.readFileSync(planPath, 'utf8');
-  // Replace "| <phase> | ... | [ ] |" → "[x]"
+  // Extended row: | n | title | role | deps | tool | deliverables | [ ] |
   content = content.replace(
     new RegExp(
-      `(\\|\\s*${phase}\\s*\\|[^|]+\\|[^|]+\\|\\s*)\\[\\s\\](\\s*\\|)`
+      `^(\\|\\s*${phase}\\s*\\|(?:[^\\n|]+\\|){5}[^\\n|]+\\|\\s*)\\[\\s\\](\\s*\\|?)`,
+      'gm'
+    ),
+    '$1[x]$2'
+  );
+  // Legacy 4-column: | n | name | tool | [ ] |
+  content = content.replace(
+    new RegExp(
+      `^(\\|\\s*${phase}\\s*\\|[^\\n|]+\\|[^\\n|]+\\|\\s*)\\[\\s\\](\\s*\\|)`,
+      'gm'
     ),
     '$1[x]$2'
   );

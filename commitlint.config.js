@@ -37,6 +37,7 @@ module.exports = {
         // Packages
         'ui',
         'db',
+        'seeding',
         'types',
         'config',
         // Cross-cutting

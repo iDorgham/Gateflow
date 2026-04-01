@@ -1,0 +1,5 @@
+-- CreateEnum
+CREATE TYPE "UnitIdFormat" AS ENUM ('COMPACT', 'BUILDING_FIRST', 'SIMPLE', 'LOCATION', 'DESCRIPTIVE', 'GLOBAL');
+
+-- AlterTable
+ALTER TABLE "Project" ADD COLUMN "unitIdFormat" "UnitIdFormat" NOT NULL DEFAULT 'COMPACT';

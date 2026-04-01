@@ -94,6 +94,8 @@ model Project {
   /// External marketing / landing-page URL (distinct from website)
   externalUrl    String?
   gateMode       GateMode     @default(MULTI)
+  /// How advanced seeding builds default `Unit.name` strings for this project.
+  unitIdFormat   UnitIdFormat @default(COMPACT)
   gates          Gate[]
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   qrCodes        QRCode[]
@@ -627,6 +629,8 @@ model Contact {
   units          ContactUnit[]
   communicationLogs CommunicationLog[]
 
+  /// Org-scoped identity: partial **unique** indexes on (`organizationId`,`email`) and (`organizationId`,`phone`)
+  /// for rows with `deletedAt IS NULL` — see migration `seeding_integrity_foundation` (not expressible as `@@unique` here).
   @@index([organizationId])
   @@index([deletedAt])
   @@index([watchlistStatus])
@@ -918,6 +922,16 @@ enum ContactSource {
 enum GateMode {
   SINGLE
   MULTI
+}
+
+/// Strategy for generated `Unit.name` labels during advanced seeding (CRM `UnitTable`).
+enum UnitIdFormat {
+  COMPACT
+  BUILDING_FIRST
+  SIMPLE
+  LOCATION
+  DESCRIPTIVE
+  GLOBAL
 }
 
 enum EventType {

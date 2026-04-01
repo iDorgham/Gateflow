@@ -36,17 +36,17 @@ Nine phases build a **security-first** advanced seeding and **live emulation** c
 
 ## Phase overview
 
-| #   | Title                                              | Primary role               | Depends on          | Preferred tool | Key deliverables                                                                        |
-| --- | -------------------------------------------------- | -------------------------- | ------------------- | -------------- | --------------------------------------------------------------------------------------- |
-| 1   | Core Schema & Data Integrity Foundation            | **BACKEND** (DB)           | —                   | Cursor         | Migrations as needed; `validateUniqueness()` / pre-insert registry; tests               |
-| 2   | Red Sea Data Library & Unit ID Format System       | **BACKEND**                | 1                   | Cursor         | `red-sea-data.ts`; 6 format encoders; per-project `unitIdFormat` config                 |
-| 3   | Rich Contact Generation with Nationality Weighting | **BACKEND**                | 1, 2                | Cursor         | Weighted nationalities (14+); profile fields; duplicate-safe generation                 |
-| 4   | Unit Hierarchy Seeding with Areas & Owner Linking  | **BACKEND**                | 1–3                 | Cursor         | Phases/buildings/floors; `areaSqm`, balcony/terrace; `ownerContactId` links             |
-| 5   | Rush Hour Algorithm & Traffic Simulation           | **BACKEND**                | 1–4                 | Cursor         | Temporal clustering for scan density; scenario hooks                                    |
-| 6   | QR Generation, Access Logs & Relational Chain      | **BACKEND** + **SECURITY** | 1–5                 | Cursor         | HMAC-SHA256 QRs; VisitorQR; ScanLog; chain integrity tests                              |
-| 7   | Live Emulation API (Vercel Serverless)             | **BACKEND** + **SECURITY** | 1–6                 | Cursor         | `POST /api/admin/emulate-traffic`; Super Admin guard; Upstash rate limit; `AiActionLog` |
-| 8   | Admin Dashboard Multi-Step UI Wizard (ADS)         | **FRONTEND**               | 7 (contract stable) | Cursor         | `/admin/emulation`; 6-step wizard; a11y; tokens                                         |
-| 9   | CLI Integration, Testing & Documentation           | **BACKEND** + **QA**       | 1–8                 | Cursor         | `seed` flags; integrity/dry-run; docs; acceptance tests                                 |
+| #   | Title                                              | Primary role               | Depends on          | Preferred tool | Key deliverables                                                                        | Status |
+| --- | -------------------------------------------------- | -------------------------- | ------------------- | -------------- | --------------------------------------------------------------------------------------- | ------ |
+| 1   | Core Schema & Data Integrity Foundation            | **BACKEND** (DB)           | —                   | Cursor         | Migrations as needed; `validateUniqueness()` / pre-insert registry; tests               | [x]    |
+| 2   | Red Sea Data Library & Unit ID Format System       | **BACKEND**                | 1                   | Cursor         | `red-sea-data.ts`; 6 format encoders; per-project `unitIdFormat` config                 | [x]    |
+| 3   | Rich Contact Generation with Nationality Weighting | **BACKEND**                | 1, 2                | Cursor         | Weighted nationalities (14+); profile fields; duplicate-safe generation                 | [x]    |
+| 4   | Unit Hierarchy Seeding with Areas & Owner Linking  | **BACKEND**                | 1–3                 | Cursor         | Phases/buildings/floors; `areaSqm`, balcony/terrace; `ownerContactId` links             | [ ]    |
+| 5   | Rush Hour Algorithm & Traffic Simulation           | **BACKEND**                | 1–4                 | Cursor         | Temporal clustering for scan density; scenario hooks                                    | [ ]    |
+| 6   | QR Generation, Access Logs & Relational Chain      | **BACKEND** + **SECURITY** | 1–5                 | Cursor         | HMAC-SHA256 QRs; VisitorQR; ScanLog; chain integrity tests                              | [ ]    |
+| 7   | Live Emulation API (Vercel Serverless)             | **BACKEND** + **SECURITY** | 1–6                 | Cursor         | `POST /api/admin/emulate-traffic`; Super Admin guard; Upstash rate limit; `AiActionLog` | [ ]    |
+| 8   | Admin Dashboard Multi-Step UI Wizard (ADS)         | **FRONTEND**               | 7 (contract stable) | Cursor         | `/admin/emulation`; 6-step wizard; a11y; tokens                                         | [ ]    |
+| 9   | CLI Integration, Testing & Documentation           | **BACKEND** + **QA**       | 1–8                 | Cursor         | `seed` flags; integrity/dry-run; docs; acceptance tests                                 | [ ]    |
 
 ---
 

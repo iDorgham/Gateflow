@@ -13,14 +13,15 @@
  *   ✓ phase 3         → emoji style
  *
  * Called from: .husky/post-commit
- * Usage: node scripts/phase-close.js
+ * Usage: node scripts/plan/phase-close.js
  */
 
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
 
-const ROOT = path.resolve(__dirname, '..');
+// Repo root (this file lives in scripts/plan/)
+const ROOT = path.resolve(__dirname, '../..');
 const PLAN_ROOT = path.join(ROOT, 'docs', 'plan');
 
 function getLastCommitMsg() {

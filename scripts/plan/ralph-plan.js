@@ -61,7 +61,7 @@ function createPR(slug, planDir) {
   try {
     const result = execSync(
       `gh pr create --title ${JSON.stringify(prTitle)} --body ${JSON.stringify(prBody)}`,
-      { cwd: path.resolve(__dirname, '..'), encoding: 'utf8', stdio: 'pipe' }
+      { cwd: path.resolve(__dirname, '../..'), encoding: 'utf8', stdio: 'pipe' }
     );
     console.log(`✓ PR created: ${result.trim()}`);
   } catch (err) {
@@ -80,7 +80,8 @@ function createPR(slug, planDir) {
   }
 }
 
-const ROOT = path.resolve(__dirname, '..');
+// Repo root (this file lives in scripts/plan/)
+const ROOT = path.resolve(__dirname, '../..');
 const PLAN_ROOT = path.join(ROOT, 'docs', 'plan');
 const TEMPLATES = path.join(PLAN_ROOT, 'templates');
 const STATES = ['planning', 'planned', 'in-progress', 'done', 'execution'];
@@ -126,11 +127,18 @@ function title(slug) {
 }
 
 function parsePhaseProgress(planContent) {
-  const rows = [
-    ...planContent.matchAll(
-      /^\|\s*(\d+)\s*\|[^|]+\|[^|]+\|\s*(\[[ x]\])\s*\|/gm
-    ),
-  ];
+  const rows = [];
+  for (const line of planContent.split('\n')) {
+    const ext = line.match(/^\|\s*(\d+)\s*\|(?:[^|]+\|){5}\s*(\[[ x]\])\s*\|/);
+    if (ext) {
+      rows.push(ext);
+      continue;
+    }
+    const legacy = line.match(
+      /^\|\s*(\d+)\s*\|[^|]+\|[^|]+\|\s*(\[[ x]\])\s*\|/
+    );
+    if (legacy) rows.push(legacy);
+  }
 
   const total = rows.length;
   const done = rows.filter((row) => row[2].trim() === '[x]').length;

@@ -18,6 +18,9 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 - **[Workspace]** add dedicated workspace documentation hub under `docs/workspace/`.
 - **[Workspace Version]** establish independent workspace version tracking alongside app versions.
 - **[GitHub Security Hardening]** started development of GitHub hardening workflow and policy updates.
+- **[Advanced Seeding Emulation V3 — DB]** Phase 1: partial unique indexes on active `Contact` (`organizationId` + `email` / `phone`, `deletedAt IS NULL`); `validateUniqueness` in `@gate-access/db` (`seed-integrity`); migration `seeding_integrity_foundation`.
+- **[Advanced Seeding Emulation V3 — DB]** Phase 2: `red-sea-data` + `unit-id-formats` (`generateUnitId` × six strategies); `Project.unitIdFormat` enum + migration `add_project_unit_id_format`.
+- **[Advanced Seeding Emulation V3 — DB]** Phase 3: `rich-contact` — 14 nationalities, IDEA v3 weight table, `generateRichContact` + `validateUniqueness`; distribution test N=10_000 seed=42 (±2%).
 
 ### AI Tools
 
