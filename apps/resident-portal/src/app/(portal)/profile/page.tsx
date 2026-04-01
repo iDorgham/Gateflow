@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma } from '@gate-access/db';
-import { Button } from '@gate-access/ui';
+import { Button, Input } from '@gate-access/ui';
 import { PageHeader } from '@/components/layout/page-header';
 
 export default async function ProfilePage() {
@@ -36,62 +36,82 @@ export default async function ProfilePage() {
     <div className="min-h-screen bg-slate-50">
       <PageHeader title="Profile" backHref="/" />
 
-      <main className="mx-auto w-full max-w-md space-y-6 px-4 py-6 pb-24 md:max-w-3xl">
+      <main className="mx-auto w-full max-w-md space-y-6 px-4 py-6 pb-24 md:max-w-6xl">
         {/* User Info Card */}
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
-          <div className="flex items-center gap-4">
-            <div className="h-16 w-16 bg-blue-100 rounded-full flex items-center justify-center">
-              <User className="h-8 w-8 text-blue-600" />
-            </div>
-            <div className="flex-1">
-              <h2 className="font-semibold text-slate-900">
-                {user?.name || 'Resident'}
-              </h2>
-              <p className="text-sm text-slate-500">
-                {user?.email || 'resident@example.com'}
-              </p>
-              <span className="inline-flex items-center mt-1 px-2 py-0.5 bg-green-100 text-green-700 text-xs font-medium rounded-full">
-                Active
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* My Unit */}
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-          <div className="px-5 py-4 border-b border-slate-100">
-            <h3 className="font-semibold text-slate-900">My Unit</h3>
-          </div>
-          <div className="divide-y divide-slate-100">
-            {user?.unit ? (
-              <div className="px-5 py-4 flex items-center gap-3">
-                <div className="h-10 w-10 bg-slate-100 rounded-full flex items-center justify-center">
-                  <Home className="h-5 w-5 text-slate-500" />
-                </div>
-                <div className="flex-1">
-                  <p className="font-medium text-slate-900">{user.unit.name}</p>
-                  <p className="text-xs text-slate-500">
-                    {user.unit.type.replace('_', ' ')} •{' '}
-                    {user.unit.project?.name}
-                  </p>
-                </div>
-                <span className="text-xs text-green-600 font-medium">
+        <section className="grid gap-6 xl:grid-cols-3">
+          <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm xl:col-span-2">
+            <div className="flex items-center gap-4">
+              <div className="h-16 w-16 bg-blue-100 rounded-full flex items-center justify-center">
+                <User className="h-8 w-8 text-blue-600" />
+              </div>
+              <div className="flex-1">
+                <h2 className="font-semibold text-slate-900">
+                  {user?.name || 'Resident'}
+                </h2>
+                <p className="text-sm text-slate-500">
+                  {user?.email || 'resident@example.com'}
+                </p>
+                <span className="inline-flex items-center mt-1 px-2 py-0.5 bg-green-100 text-green-700 text-xs font-medium rounded-full">
                   Active
                 </span>
               </div>
-            ) : (
-              <div className="px-5 py-6 text-center">
-                <p className="text-sm text-slate-500">No unit assigned</p>
-                <Link
-                  href="/"
-                  className="text-sm text-blue-600 font-medium mt-1 inline-block"
-                >
-                  Go to home
-                </Link>
-              </div>
-            )}
+            </div>
+            <div className="mt-6 grid gap-3 md:grid-cols-2">
+              <Input defaultValue={user?.name || ''} placeholder="Full name" />
+              <Input
+                defaultValue={user?.phone || ''}
+                placeholder="Phone number"
+              />
+              <Input
+                defaultValue={user?.email || ''}
+                disabled
+                placeholder="Email address"
+              />
+              <Input
+                defaultValue={user?.website || ''}
+                placeholder="Website (optional)"
+              />
+            </div>
           </div>
-        </div>
+
+          {/* My Unit */}
+          <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div className="px-5 py-4 border-b border-slate-100">
+              <h3 className="font-semibold text-slate-900">My Unit</h3>
+            </div>
+            <div className="divide-y divide-slate-100">
+              {user?.unit ? (
+                <div className="px-5 py-4 flex items-center gap-3">
+                  <div className="h-10 w-10 bg-slate-100 rounded-full flex items-center justify-center">
+                    <Home className="h-5 w-5 text-slate-500" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-medium text-slate-900">
+                      {user.unit.name}
+                    </p>
+                    <p className="text-xs text-slate-500">
+                      {user.unit.type.replace('_', ' ')} -{' '}
+                      {user.unit.project?.name}
+                    </p>
+                  </div>
+                  <span className="text-xs text-green-600 font-medium">
+                    Active
+                  </span>
+                </div>
+              ) : (
+                <div className="px-5 py-6 text-center">
+                  <p className="text-sm text-slate-500">No unit assigned</p>
+                  <Link
+                    href="/"
+                    className="text-sm text-blue-600 font-medium mt-1 inline-block"
+                  >
+                    Go to home
+                  </Link>
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
 
         {/* Settings */}
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">

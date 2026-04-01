@@ -22,22 +22,22 @@
 
 ## Phase 3: Home & Visitors Redesign
 
-- [ ] Redesign `(portal)/page.tsx` for desktop (grid-based widgets)
-- [ ] Redesign `(portal)/visitors/page.tsx` (Table on Desktop, List on Mobile)
-- [ ] Implement modal/panel overlay for visitor creation on Desktop
-- [ ] Add quick-select templates to FAB
+- [x] Redesign `(portal)/page.tsx` for desktop (grid-based widgets)
+- [x] Redesign `(portal)/visitors/page.tsx` (Table on Desktop, List on Mobile)
+- [x] Implement modal/panel overlay for visitor creation on Desktop
+- [x] Add quick-select templates to FAB
 
 ## Phase 4: History & Maintenance
 
-- [ ] Redesign `(portal)/history/page.tsx` (Timeline vs Table)
-- [ ] Redesign `(portal)/maintenance/page.tsx` (Split-view List-Detail)
-- [ ] Integrate maintenance form into responsive layout
-- [ ] Wire notification toggles in `Profile` to API
+- [x] Redesign `(portal)/history/page.tsx` (Timeline vs Table)
+- [x] Redesign `(portal)/maintenance/page.tsx` (Split-view List-Detail)
+- [x] Integrate maintenance form into responsive layout
+- [x] Wire notification toggles in `Profile` to API
 
 ## Phase 5: Polish & Final QA
 
-- [ ] Add Framer Motion page transitions
-- [ ] Implement swipe gestures for BottomNav switching
-- [ ] Conduct full RTL audit (Arabic focus)
-- [ ] Add loading skeletons for all core pages
+- [x] Add Framer Motion page transitions
+- [x] Implement swipe gestures for BottomNav switching
+- [x] Conduct full RTL audit (Arabic focus)
+- [x] Add loading skeletons for all core pages
 - [ ] Final PWA and Lighthouse audit (Target 90+)

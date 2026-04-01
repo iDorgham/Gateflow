@@ -4,6 +4,26 @@
 
 ## Open Initiatives
 
+### advanced_seeding_emulation_v3 — Advanced Data Seeding & Emulation Panel (Security-First, ADS)
+
+**IDEA:** `docs/plan/context/IDEA_advanced_seeding_emulation_v3.md`
+
+**PLAN:** `docs/plan/planned/advanced_seeding_emulation_v3/PLAN_advanced_seeding_emulation_v3.md`
+
+**Status:** Planned — ready for `/dev advanced_seeding_emulation_v3 phase 1`
+
+**Target:** Q2 2026
+
+- [ ] Phase 1 — Core Schema & Data Integrity Foundation
+- [ ] Phase 2 — Red Sea Data Library & Unit ID Format System
+- [ ] Phase 3 — Rich Contact Generation with Nationality Weighting
+- [ ] Phase 4 — Unit Hierarchy Seeding with Areas & Owner Linking
+- [ ] Phase 5 — Rush Hour Algorithm & Traffic Simulation
+- [ ] Phase 6 — QR Generation, Access Logs & Relational Chain
+- [ ] Phase 7 — Live Emulation API (Vercel Serverless)
+- [ ] Phase 8 — Client Dashboard Multi-Step UI Wizard (ADS)
+- [ ] Phase 9 — CLI Integration, Testing & Documentation
+
 ### marketing_growth_engine_q3_2026 — Marketing Growth Engine (Q3 2026)
 
 **IDEA:** `docs/plan/context/IDEA_marketing_growth_engine_q3_2026.md`
@@ -127,15 +147,15 @@
 **Target:** Q2 2026
 
 - [ ] Phase 1 — Foundation: Shared Layout & Navigation
-  (`phases/01_foundation/PROMPT_phase_01.md`)
+      (`phases/01_foundation/PROMPT_phase_01.md`)
 - [ ] Phase 2 — PWA: Manifest, Service Worker, Offline QR Cache, Web Push
-  (`phases/02_pwa/PROMPT_phase_02.md`)
+      (`phases/02_pwa/PROMPT_phase_02.md`)
 - [ ] Phase 3 — Responsive Pages: Home & Visitors
-  (`phases/03_home_visitors/PROMPT_phase_03.md`)
+      (`phases/03_home_visitors/PROMPT_phase_03.md`)
 - [ ] Phase 4 — Responsive Pages: History, Maintenance, Profile & Settings
-  (`phases/04_history_maintenance/PROMPT_phase_04.md`)
+      (`phases/04_history_maintenance/PROMPT_phase_04.md`)
 - [ ] Phase 5 — Polish: Transitions, Gestures, RTL, A11y
-  (`phases/05_polish/PROMPT_phase_05.md`)
+      (`phases/05_polish/PROMPT_phase_05.md`)
 
 ### scanner_onboarding_session — Scanner App: Onboarding & Session Management
 
@@ -148,15 +168,15 @@
 **Target:** Q3 2026
 
 - [ ] Phase 1 — Security & Auth: `local-authentication` Setup
-  (`phases/01_security_auth/PROMPT_phase_01.md`)
+      (`phases/01_security_auth/PROMPT_phase_01.md`)
 - [ ] Phase 2 — Wizard UI: Multi-step ADS Onboarding
-  (`phases/02_onboarding_wizard/PROMPT_phase_02.md`)
+      (`phases/02_onboarding_wizard/PROMPT_phase_02.md`)
 - [ ] Phase 3 — Shift Logic: Clock-in/out API & Logic
-  (`phases/03_shift_management/PROMPT_phase_03.md`)
+      (`phases/03_shift_management/PROMPT_phase_03.md`)
 - [ ] Phase 4 — Home Redesign: Master Scan & ADS Dashboard
-  (`phases/04_home_redesign/PROMPT_phase_04.md`)
+      (`phases/04_home_redesign/PROMPT_phase_04.md`)
 - [ ] Phase 5 — Polish: Animation, Security Guard, & RTL
-  (`phases/05_polish_qa/PROMPT_phase_05.md`)
+      (`phases/05_polish_qa/PROMPT_phase_05.md`)
 
 ### security_isolation_fix — High-Risk Security Hardening
 

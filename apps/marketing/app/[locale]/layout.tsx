@@ -118,6 +118,8 @@ export default async function RootLayout(props: {
   const cookiesDict = await fetchTranslations(castLocale, 'cookies');
   const formsDict = await fetchTranslations(castLocale, 'forms');
   const componentsDict = await fetchTranslations(castLocale, 'components');
+  // Load landing namespace for all home-page client sections
+  const landingDict = await fetchTranslations(castLocale, 'landing');
 
   const dictionaries = {
     common: commonDict,
@@ -125,6 +127,7 @@ export default async function RootLayout(props: {
     cookies: cookiesDict,
     forms: formsDict,
     components: componentsDict,
+    landing: landingDict,
   };
 
   return (

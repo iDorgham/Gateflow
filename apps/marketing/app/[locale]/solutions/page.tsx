@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import { getTranslation } from '../../../lib/i18n/get-translation';
 import type { Locale } from '../../../i18n-config';
 import { templatedMarketingTitle } from '../../../lib/metadata-title';
@@ -49,6 +50,7 @@ export default async function SolutionsPage(props: {
         returnObjects: true,
       }) as string[],
       color: 'bg-primary text-primary-foreground',
+      imageSrc: '/images/solutions/me_compounds.png',
     },
     {
       id: 'schools',
@@ -57,6 +59,7 @@ export default async function SolutionsPage(props: {
       icon: GraduationCap,
       features: t('schools.bulletPoints', { returnObjects: true }) as string[],
       color: 'bg-emerald-500 text-white',
+      imageSrc: '/images/solutions/me_schools.png',
     },
     {
       id: 'events',
@@ -65,6 +68,7 @@ export default async function SolutionsPage(props: {
       icon: Calendar,
       features: t('events.bulletPoints', { returnObjects: true }) as string[],
       color: 'bg-amber-500 text-amber-950',
+      imageSrc: '/images/solutions/me_events.png',
     },
     {
       id: 'clubs',
@@ -73,6 +77,7 @@ export default async function SolutionsPage(props: {
       icon: Anchor,
       features: t('clubs.bulletPoints', { returnObjects: true }) as string[],
       color: 'bg-sky-500 text-white',
+      imageSrc: '/images/solutions/me_clubs.png',
     },
   ];
 
@@ -99,7 +104,7 @@ export default async function SolutionsPage(props: {
           <div
             key={v.id}
             id={v.id}
-            className="grid items-center gap-12 lg:grid-cols-2"
+            className="grid items-center gap-12 lg:grid-cols-2 py-24 lg:py-32"
           >
             <div className={i % 2 === 0 ? 'lg:order-1' : 'lg:order-2'}>
               <div
@@ -139,12 +144,18 @@ export default async function SolutionsPage(props: {
             </div>
 
             <div
-              className={`relative aspect-square overflow-hidden rounded-[2.5rem] border bg-muted lg:aspect-video ${i % 2 === 0 ? 'lg:order-2' : 'lg:order-1'}`}
+              className={`relative aspect-square overflow-hidden rounded-[2.5rem] border bg-ds-surface-sunken lg:aspect-video shadow-[0_30px_60px_rgba(0,0,0,0.15)] group ${i % 2 === 0 ? 'lg:order-2' : 'lg:order-1'}`}
             >
-              {/* Visual representation placeholder */}
-              <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-muted to-muted/30">
-                <v.icon className="w-32 h-32 opacity-10" />
-              </div>
+              <Image
+                src={v.imageSrc}
+                alt={v.title}
+                fill
+                quality={100}
+                className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.03]"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+              />
+
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-60 mix-blend-multiply" />
 
               {/* Overlay labels */}
               <div className="absolute inset-x-8 bottom-8 p-6 bg-background/80 backdrop-blur rounded-2xl border shadow-xl">

@@ -1,24 +1,28 @@
 'use client';
 
 import * as React from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { User, Phone, Mail, AlertCircle } from 'lucide-react';
-import { 
-  Button, 
-  Input, 
-  Label, 
+import {
+  Button,
+  Input,
+  Label,
   Tabs,
   TabsList,
   TabsTrigger,
 } from '@gate-access/ui';
-import { captureUtmParams, getPersistedUtmParams } from '@gate-access/api-client';
+import {
+  captureUtmParams,
+  getPersistedUtmParams,
+} from '@gate-access/api-client';
 import { queueVisitorRequest } from '@/lib/pending-sync';
 
 export function VisitorForm({ unitId }: { unitId: string }) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
-  
+
   const [formData, setFormData] = React.useState({
     visitorName: '',
     visitorPhone: '',
@@ -33,6 +37,32 @@ export function VisitorForm({ unitId }: { unitId: string }) {
   React.useEffect(() => {
     captureUtmParams();
   }, []);
+
+  React.useEffect(() => {
+    const template = searchParams.get('template');
+    if (!template) return;
+
+    if (template === 'delivery') {
+      setFormData((prev) => ({
+        ...prev,
+        visitorName: prev.visitorName || 'Delivery Guest',
+        accessType: 'ONETIME',
+      }));
+      return;
+    }
+
+    if (template === 'weekend') {
+      const now = new Date();
+      const end = new Date(now);
+      end.setDate(now.getDate() + 2);
+      setFormData((prev) => ({
+        ...prev,
+        visitorName: prev.visitorName || 'Weekend Guest',
+        accessType: 'DATERANGE',
+        endDate: end.toISOString().split('T')[0],
+      }));
+    }
+  }, [searchParams]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -81,7 +111,9 @@ export function VisitorForm({ unitId }: { unitId: string }) {
       )}
 
       <div className="space-y-4">
-        <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider">Visitor Details</h3>
+        <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider">
+          Visitor Details
+        </h3>
         <div className="space-y-3">
           <div className="space-y-1.5">
             <Label htmlFor="visitorName">Full Name</Label>
@@ -93,7 +125,9 @@ export function VisitorForm({ unitId }: { unitId: string }) {
                 className="pl-9"
                 required
                 value={formData.visitorName}
-                onChange={(e) => setFormData({ ...formData, visitorName: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, visitorName: e.target.value })
+                }
               />
             </div>
           </div>
@@ -107,7 +141,9 @@ export function VisitorForm({ unitId }: { unitId: string }) {
                   placeholder="+971..."
                   className="pl-9"
                   value={formData.visitorPhone}
-                  onChange={(e) => setFormData({ ...formData, visitorPhone: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, visitorPhone: e.target.value })
+                  }
                 />
               </div>
             </div>
@@ -121,7 +157,9 @@ export function VisitorForm({ unitId }: { unitId: string }) {
                   placeholder="john@example.com"
                   className="pl-9"
                   value={formData.visitorEmail}
-                  onChange={(e) => setFormData({ ...formData, visitorEmail: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, visitorEmail: e.target.value })
+                  }
                 />
               </div>
             </div>
@@ -130,10 +168,17 @@ export function VisitorForm({ unitId }: { unitId: string }) {
       </div>
 
       <div className="space-y-4 pt-2">
-        <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider">Access Rules</h3>
-        <Tabs 
-          value={formData.accessType} 
-          onValueChange={(val) => setFormData({ ...formData, accessType: val as 'ONETIME' | 'DATERANGE' | 'RECURRING' })}
+        <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider">
+          Access Rules
+        </h3>
+        <Tabs
+          value={formData.accessType}
+          onValueChange={(val) =>
+            setFormData({
+              ...formData,
+              accessType: val as 'ONETIME' | 'DATERANGE' | 'RECURRING',
+            })
+          }
           className="w-full"
         >
           <TabsList className="grid grid-cols-3 w-full">
@@ -141,24 +186,30 @@ export function VisitorForm({ unitId }: { unitId: string }) {
             <TabsTrigger value="DATERANGE">Range</TabsTrigger>
             <TabsTrigger value="RECURRING">Daily</TabsTrigger>
           </TabsList>
-          
+
           <div className="mt-4 p-4 bg-white border border-slate-200 rounded-xl space-y-4">
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
-                <Label>{formData.accessType === 'DATERANGE' ? 'Start Date' : 'Date'}</Label>
-                <Input 
-                  type="date" 
+                <Label>
+                  {formData.accessType === 'DATERANGE' ? 'Start Date' : 'Date'}
+                </Label>
+                <Input
+                  type="date"
                   value={formData.startDate}
-                  onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, startDate: e.target.value })
+                  }
                 />
               </div>
               {formData.accessType === 'DATERANGE' && (
                 <div className="space-y-1.5">
                   <Label>End Date</Label>
-                  <Input 
-                    type="date" 
+                  <Input
+                    type="date"
                     value={formData.endDate}
-                    onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
+                    onChange={(e) =>
+                      setFormData({ ...formData, endDate: e.target.value })
+                    }
                   />
                 </div>
               )}
@@ -167,18 +218,22 @@ export function VisitorForm({ unitId }: { unitId: string }) {
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
                 <Label>Start Time</Label>
-                <Input 
-                  type="time" 
+                <Input
+                  type="time"
                   value={formData.startTime}
-                  onChange={(e) => setFormData({ ...formData, startTime: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, startTime: e.target.value })
+                  }
                 />
               </div>
               <div className="space-y-1.5">
                 <Label>End Time</Label>
-                <Input 
-                  type="time" 
+                <Input
+                  type="time"
                   value={formData.endTime}
-                  onChange={(e) => setFormData({ ...formData, endTime: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, endTime: e.target.value })
+                  }
                 />
               </div>
             </div>
@@ -186,7 +241,11 @@ export function VisitorForm({ unitId }: { unitId: string }) {
         </Tabs>
       </div>
 
-      <Button type="submit" className="w-full h-12 text-base font-semibold" disabled={loading}>
+      <Button
+        type="submit"
+        className="w-full h-12 text-base font-semibold"
+        disabled={loading}
+      >
         {loading ? 'Generating QR...' : 'Create Visitor Pass'}
       </Button>
     </form>

@@ -8,45 +8,84 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@gate-access/ui';
-import { Languages } from 'lucide-react';
+import { motion } from 'framer-motion';
+
+const GlobeIcon = () => (
+  <svg
+    width="18"
+    height="18"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <circle cx="12" cy="12" r="10" />
+    <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+    <path d="M2 12h20" />
+  </svg>
+);
+
+const localeLabels: Record<
+  Locale,
+  { label: string; short: string; flag: string }
+> = {
+  en: { label: 'English', short: 'EN', flag: '🇺🇸' },
+  'ar-EG': { label: 'العربية', short: 'AR', flag: '🇪🇬' },
+};
 
 export function LanguageSwitcher({ currentLocale }: { currentLocale: Locale }) {
   const pathname = usePathname();
   const router = useRouter();
 
   const handleLocaleChange = (newLocale: Locale) => {
-    if (!pathname) return '/';
+    if (!pathname) return;
     const segments = pathname.split('/');
     segments[1] = newLocale;
-    const newPathname = segments.join('/');
-    router.push(newPathname);
+    router.push(segments.join('/'));
   };
 
-  const localeLabels: Record<Locale, string> = {
-    en: 'English',
-    'ar-EG': 'العربية',
-  };
+  const current = localeLabels[currentLocale];
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button
-          className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-9 w-9"
-          aria-label="Toggle language"
+          className="group inline-flex items-center gap-2 rounded-xl border border-ds-border bg-ds-surface-raised px-3 py-2 text-[12px] font-black uppercase tracking-[0.15em] text-ds-text-subtle transition-all duration-200 hover:border-ds-border-brand hover:bg-ds-background-brand-subtle hover:text-ds-text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ds-border-brand"
+          aria-label="Switch language"
         >
-          <Languages className="h-[1.2rem] w-[1.2rem]" />
+          <span className="text-ds-text-brand transition-transform duration-300 group-hover:rotate-[15deg]">
+            <GlobeIcon />
+          </span>
+          <span>{current.short}</span>
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        {i18n.locales.map((locale) => (
-          <DropdownMenuItem
-            key={locale}
-            onClick={() => handleLocaleChange(locale)}
-            className={currentLocale === locale ? 'bg-accent' : ''}
-          >
-            {localeLabels[locale]}
-          </DropdownMenuItem>
-        ))}
+      <DropdownMenuContent
+        align="end"
+        className="min-w-[160px] overflow-hidden rounded-2xl border border-ds-border bg-ds-surface p-1.5 shadow-[0_20px_60px_rgba(0,0,0,0.15)]"
+      >
+        {i18n.locales.map((locale, i) => {
+          const info = localeLabels[locale];
+          const isActive = currentLocale === locale;
+          return (
+            <DropdownMenuItem
+              key={locale}
+              onClick={() => handleLocaleChange(locale)}
+              className={`flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-[13px] font-semibold transition-all duration-150 ${
+                isActive
+                  ? 'bg-ds-background-brand-subtle text-ds-text-brand'
+                  : 'text-ds-text-subtle hover:bg-ds-surface-raised hover:text-ds-text-heading'
+              }`}
+            >
+              <span className="text-lg leading-none">{info.flag}</span>
+              <span className="flex-1">{info.label}</span>
+              {isActive && (
+                <span className="h-2 w-2 rounded-full bg-ds-background-brand-bold" />
+              )}
+            </DropdownMenuItem>
+          );
+        })}
       </DropdownMenuContent>
     </DropdownMenu>
   );

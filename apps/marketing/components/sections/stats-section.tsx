@@ -1,64 +1,95 @@
 import * as React from 'react';
 import { getTranslation } from '../../lib/i18n/get-translation';
 import type { Locale } from '../../i18n-config';
-import { Check, Clock, Shield, QrCode } from 'lucide-react';
+import { Check, Clock, Shield, QrCode, type LucideProps } from 'lucide-react';
+
+type StatItem = {
+  icon: React.FC<LucideProps>;
+  value: string;
+  badge: string;
+  badgeClass: string;
+  label: string;
+  sub: string;
+};
 
 export async function StatsSection({ locale }: { locale: Locale }) {
   const { t } = await getTranslation(locale, 'landing');
 
-  const stats = [
+  const stats: StatItem[] = [
     {
-      icon: <Clock className="w-8 h-8" />,
+      icon: Clock,
       value: '500ms',
+      badge: '+12%',
+      badgeClass: 'bg-emerald-500 text-white',
       label: t('stats.scanTime'),
+      sub: 'Latency Peer-Verified',
     },
     {
-      icon: <Shield className="w-8 h-8" />,
+      icon: Shield,
       value: '100%',
+      badge: 'STABLE',
+      badgeClass: 'bg-ds-background-brand-bold text-white',
       label: t('stats.offline'),
+      sub: 'End-to-End Encrypted',
     },
     {
-      icon: <QrCode className="w-8 h-8" />,
+      icon: QrCode,
       value: '1M+',
+      badge: '+12%',
+      badgeClass: 'bg-emerald-500 text-white',
       label: t('stats.qrCodes'),
+      sub: 'Global Distribution',
     },
     {
-      icon: <Check className="w-8 h-8" />,
+      icon: Check,
       value: '99.9%',
+      badge: 'STABLE',
+      badgeClass: 'bg-ds-background-brand-bold text-white',
       label: t('stats.uptime'),
+      sub: 'Tier-4 Reliability',
     },
   ];
 
   return (
-    <section className="py-32 md:py-48 bg-ds-text-heading text-ds-text-inverse border-y border-white/5 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(var(--ds-background-brand-bold),0.15),transparent)]" />
+    <section className="py-24 md:py-32 relative overflow-hidden bg-ds-surface">
+      <div className="absolute top-0 inset-x-0 h-px bg-ds-border" />
+      <div className="absolute bottom-0 inset-x-0 h-px bg-ds-border" />
+
       <div className="container mx-auto px-8 relative z-10">
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-0 divide-y md:divide-y-0 md:divide-x divide-ds-border">
           {stats.map((stat, i) => (
-            <div key={i} className="flex flex-col items-center lg:items-start text-center lg:text-left rtl:lg:text-right group">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-ds-radius-medium bg-white/5 text-ds-text-brand mb-8 border border-white/10 group-hover:bg-ds-background-brand-bold group-hover:text-ds-text-inverse transition-all duration-300">
-                {React.cloneElement(stat.icon as React.ReactElement, { size: 28 })}
+            <div
+              key={i}
+              className="group flex flex-col px-8 py-10 lg:py-0 first:ps-0 last:pe-0 relative"
+            >
+              {/* Icon */}
+              <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-ds-surface-raised border border-ds-border text-ds-text-subtle group-hover:border-ds-border-bold group-hover:text-ds-text transition-all duration-300 shadow-sm">
+                <stat.icon size={24} strokeWidth={1.5} />
               </div>
-              <div className="flex items-baseline gap-3 mb-2">
-                <div className="text-5xl lg:text-7xl font-black tracking-tighter text-ds-text-inverse">
+
+              {/* Value + badge */}
+              <div className="flex items-end gap-3 mb-3">
+                <span className="text-[56px] lg:text-[72px] font-black tracking-tighter leading-none text-ds-text-heading">
                   {stat.value}
-                </div>
-                {i % 2 === 0 ? (
-                  <div className="text-[10px] font-black bg-ds-background-success-bold text-white px-2 py-0.5 rounded-sm tracking-widest uppercase">
-                    +12%
-                  </div>
-                ) : (
-                  <div className="text-[10px] font-black bg-ds-background-brand-bold text-white px-2 py-0.5 rounded-sm tracking-widest uppercase">
-                    STABLE
-                  </div>
-                )}
+                </span>
+                <span
+                  className={`mb-2 text-[10px] font-black px-2 py-1 rounded-md tracking-[0.15em] uppercase ${stat.badgeClass}`}
+                >
+                  {stat.badge}
+                </span>
               </div>
-              <div className="text-ds-text-subtle font-black uppercase text-[12px] tracking-[0.2em] mb-4">
+
+              {/* Label */}
+              <div className="text-[13px] font-bold text-ds-text uppercase tracking-[0.25em] mb-4">
                 {stat.label}
               </div>
-              <div className="w-full h-px bg-white/10 mb-4" />
-              <div className="text-[11px] font-black text-white/40 uppercase tracking-widest leading-relaxed">
-                {i === 0 ? 'Latency Peer-Verified' : i === 1 ? 'End-to-End Encrypted' : i === 2 ? 'Global Distribution' : 'Tier-4 Reliability'}
+
+              {/* Divider */}
+              <div className="w-8 h-px bg-ds-border mb-4 group-hover:w-16 group-hover:bg-ds-background-brand-bold transition-all duration-500" />
+
+              {/* Sub-label */}
+              <div className="text-[11px] font-semibold text-ds-text-subtle uppercase tracking-[0.2em]">
+                {stat.sub}
               </div>
             </div>
           ))}

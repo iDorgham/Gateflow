@@ -10,6 +10,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Plan Lifecycle]** moved `advanced_seeding_emulation_v3` assets to `docs/plan/planned/advanced_seeding_emulation_v3/` and normalized prompt/checklist links.
+- **[Backlog]** added tracking entry for `advanced_seeding_emulation_v3` in `docs/plan/backlog/ALL_TASKS_BACKLOG.md`.
+- **[Plan Docs]** added a local README for `advanced_seeding_emulation_v3` with lifecycle status and canonical `/dev` commands.
+- **[Plan Docs]** initialize `resident_portal_responsive` 5-phase roadmap and phase prompts.
 - **[Workspace Docs]** split documentation into Workspace, AI Tools, and Apps tracks.
 - **[Workspace]** add dedicated workspace documentation hub under `docs/workspace/`.
 - **[Workspace Version]** establish independent workspace version tracking alongside app versions.
@@ -23,6 +27,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Apps
 
+- **[Resident Portal]** implement responsive multi-column layout with adaptive Sidebar/BottomNav switching.
+- **[Resident Portal]** develop maintenance hub, history timeline, and visitor management components with ADS compact density.
+- **[Resident Portal]** establish PWA foundation with loading skeletons, pull-to-refresh, and error boundaries.
+- **[Marketing]** finalize mega menu navigation architecture and refine mid-cta section design tokens.
 - **[Maintenance]** continue maintenance management rollout across dashboards.
 - **[Apps Version]** keep app release cadence independent from workspace/tooling cadence.
 
@@ -32,32 +40,32 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Features
 
-- **[Marketing] **normalize all metadata titles via templatedMarketingTitle helper
-- **[Marketing] **update marketing dashboard rebuild plan and remove obsolete context files
+- **[Marketing]** normalize all metadata titles via templatedMarketingTitle helper
+- **[Marketing]** update marketing dashboard rebuild plan and remove obsolete context files
 
-- **[Marketing] **SEO title dedup, motion-safe guards, JSON-LD env var (phase 04)
-- **[Marketing] **add marketing dashboard rebuild plan and update tasks
+- **[Marketing]** SEO title dedup, motion-safe guards, JSON-LD env var (phase 04)
+- **[Marketing]** add marketing dashboard rebuild plan and update tasks
 
-- **[Marketing] **refactor section tokens and rtl layout (phase 03)
+- **[Marketing]** refactor section tokens and rtl layout (phase 03)
 
-- **[Marketing] **refactor section tokens and rtl layout (phase 03)
-- **[Marketing] **align layout shell tokens (phase 02)
+- **[Marketing]** refactor section tokens and rtl layout (phase 03)
+- **[Marketing]** align layout shell tokens (phase 02)
 
-- **[Marketing] **align tokens with @gate-access/ui (phase 01)
+- **[Marketing]** align tokens with @gate-access/ui (phase 01)
 
-- **[Ops] **complete autonomous_ops_intelligence Phase 05 marketplace booking MVP
+- **[Ops]** complete autonomous_ops_intelligence Phase 05 marketplace booking MVP
 
-- **[Autonomous Ops Intelligence] **agentic foundation, perimeter bridge, and high-density UI
+- **[Autonomous Ops Intelligence]** agentic foundation, perimeter bridge, and high-density UI
 
-- **[Ai] **UIMessage v6 parts, assistant fallbacks; docs template; scanner Jest
+- **[AI]** UIMessage v6 parts, assistant fallbacks; docs template; scanner Jest
 
-- **[Ai] **UIMessage v6 parts, assistant fallbacks; docs template; scanner Jest
+- **[AI]** UIMessage v6 parts, assistant fallbacks; docs template; scanner Jest
 
-- **[Ai] **native UIMessage parts rendering in AIAssistant sidebar (phase 4)
-- **[-M] **complete phase feat(ai): native UIMessage parts rendering in ChatPanel (phase 3)
+- **[AI]** native UIMessage parts rendering in AIAssistant sidebar (phase 4)
+- **[-M]** complete phase feat(ai): native UIMessage parts rendering in ChatPanel (phase 3)
 
-- **[Ai] **fix server-side message conversion for AI SDK v6 (phase 4)
-- **[Ai] **migrate to AI SDK v6 + @ai-sdk/google v3 (phases 1 & 2)
+- **[AI]** fix server-side message conversion for AI SDK v6 (phase 4)
+- **[AI]** migrate to AI SDK v6 + @ai-sdk/google v3 (phases 1 & 2)
 
 - **[Maintenance]** starting phase 3 - Maintenance Hub UI
 
@@ -170,33 +178,33 @@ plan:run → plan:done` with automatic folder moves and doc cascades
 
 ### Bug Fixes
 
-- **[Admin] **resolve type inference issues in AI assistant route
+- **[Admin]** resolve type inference issues in AI assistant route
 
-- **[Db] **resolve implicit any in transaction and refine types
+- **[DB]** resolve implicit any in transaction and refine types
 
-- **[Db] **correct version for accelerate extension
+- **[DB]** correct version for accelerate extension
 
-- **[Db] **resolve type recursion and missing accelerate extension
+- **[DB]** resolve type recursion and missing accelerate extension
 
-- **[Db] **enable prisma accelerate and resolve production runtime crash
+- **[DB]** enable prisma accelerate and resolve production runtime crash
 
 - **[DB]** enable Prisma Accelerate support in production via `@prisma/extension-accelerate` and `withAccelerate`.
 - **[DB]** resolve production migration drift (P3009, P3018) for `add_refresh_token` and `update_scanlog_audit_trail`.
 - **[Actions]** correct invalid actions/cache SHA (d2993c1... → 1bd1e32).
 - **[Actions]** correct invalid pnpm/action-setup SHA (feaa2f5... → 0c17529).
 
-- **[Ci]** resolve GitHub Actions workflow failures - update stale action versions.
-- **[Ci]** resolve GitHub Actions build failures - perimeter webhook route exports and ai-hub client component.
+- **[CI]** resolve GitHub Actions workflow failures - update stale action versions.
+- **[CI]** resolve GitHub Actions build failures - perimeter webhook route exports and ai-hub client component.
 
-- **[Ci]** restore green status by resolving nextjs 15 type errors and cleaning up imports.
+- **[CI]** restore green status by resolving nextjs 15 type errors and cleaning up imports.
 
-- **[Ci] **resolve nextjs 15 type errors and update action versions
+- **[CI]** resolve nextjs 15 type errors and update action versions
 
-- **[Ci] **resolve all stale action references and relax lighthouse thresholds
+- **[CI]** resolve all stale action references and relax lighthouse thresholds
 
-- **[Ci] **update all action versions to fix stale commit SHA failures
+- **[CI]** update all action versions to fix stale commit SHA failures
 
-- **[Client] **resolve build/type errors in maintenance hub and QR validation
+- **[Client]** resolve build/type errors in maintenance hub and QR validation
 
 - **[Admin]** simplify AI assistant tools to native objects for SDK v5 typing
 

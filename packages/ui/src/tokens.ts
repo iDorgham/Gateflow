@@ -78,6 +78,7 @@ export const tokens = {
       },
       text: {
         DEFAULT: 'var(--ds-text)',
+        heading: 'var(--ds-text-heading)', // alias → text-ds-text-heading now resolves correctly
         subtle: 'var(--ds-text-subtle)',
         subtlest: 'var(--ds-text-subtlest)',
         disabled: 'var(--ds-text-disabled)',

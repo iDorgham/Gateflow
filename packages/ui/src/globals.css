@@ -35,7 +35,7 @@
     --ds-background-selected: rgb(235, 234, 237);
     --ds-background-card: rgb(255, 255, 255);
     --ds-background-brand-bold: rgb(237, 75, 0); /* Kimchi Orange */
-    --ds-background-brand-subtle: rgb(242, 243, 244);
+    --ds-background-brand-subtle: rgb(255, 236, 228); /* Warm tinted tint for legible brand badges in light mode */
     --ds-background-danger-bold: rgb(202, 53, 33);
     --ds-background-danger-subtle: rgb(255, 235, 230);
     --ds-background-warning-bold: rgb(229, 105, 16);
@@ -59,13 +59,14 @@
     --ds-shadow-overlay: 0 8px 16px -4px rgba(9, 30, 66, 0.25), 0 0 1px rgba(9, 30, 66, 0.31);
 
     /* ── Text Tokens — Light ────────────────────────── */
-    --ds-text: rgb(23, 43, 77);
+    --ds-text: rgb(24, 25, 26);
+    --ds-text-heading: rgb(24, 25, 26);       /* alias for ds-text; fixes text-ds-text-heading class */
     --ds-text-subtle: rgb(68, 84, 111);
     --ds-text-subtlest: rgb(98, 111, 134);
     --ds-text-disabled: rgba(9, 30, 66, 0.31);
     --ds-text-inverse: rgb(255, 255, 255);
     --ds-text-selected: rgb(12, 102, 228);
-    --ds-text-brand: rgb(12, 102, 228);
+    --ds-text-brand: rgb(204, 60, 0);         /* Kimchi Orange — high-contrast brand color for light mode */
     --ds-text-danger: rgb(174, 42, 25);
     --ds-text-warning: rgb(151, 79, 12);
     --ds-text-success: rgb(33, 103, 81);
@@ -77,7 +78,7 @@
     --ds-border-subtle: rgba(9, 30, 66, 0.06);
     --ds-border-focused: rgb(56, 139, 255);
     --ds-border-selected: rgb(12, 102, 228);
-    --ds-border-brand: rgb(12, 102, 228);
+    --ds-border-brand: rgb(204, 60, 0);         /* Kimchi Orange border to match brand text */
     --ds-border-danger: rgb(202, 53, 33);
     --ds-border-warning: rgb(217, 112, 8);
     --ds-border-success: rgb(31, 132, 90);
@@ -192,6 +193,7 @@
 
     /* ── Text Tokens — Neutral Dark ─────────────────── */
     --ds-text: rgb(250, 250, 250);
+    --ds-text-heading: rgb(250, 250, 250);    /* alias for ds-text; fixes text-ds-text-heading class */
     --ds-text-subtle: rgb(161, 161, 170);
     --ds-text-subtlest: rgb(113, 113, 122);
     --ds-text-disabled: rgb(63, 63, 70);
