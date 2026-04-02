@@ -13,7 +13,7 @@ bash scripts/ai-sync/sync-ai-tools.sh
 #    Only runs for feat/fix/perf/security commits (skips chore/docs/ci)
 COMMIT_MSG=$(git log -1 --pretty=%s)
 case "$COMMIT_MSG" in
-  feat\(*|fix\(*|perf\(*|security\(\)
+  feat*|fix*|perf*|security*)
     node scripts/docs/ralph-docs.js changelog from-commit
     ;;
 esac
