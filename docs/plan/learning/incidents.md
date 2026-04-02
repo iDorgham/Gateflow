@@ -16,17 +16,24 @@ This file logs notable incidents or failures in planning or documentation flows.
 ### Incident 1 — Duplicate PRD v6.0 Locations
 
 - **Initiative:** `docs_v2_refresh` — Phase 1
-- **What went wrong:** For a short period, `PRD_v7.0.md` existed both at `docs/` and under `docs/archive/plan-legacy/phase-1-mvp/specs/` without clearly marking the root file as canonical.
-- **Root cause:** Transition from legacy docs to Docs v2 while keeping history intact; initial structure was not immediately clarified.
+- **What went wrong:** For a short period, `PRD_v7.0.md` existed both at `docs/`
+  and under `docs/archive/plan-legacy/phase-1-mvp/specs/` without clearly
+  marking the root file as canonical.
+- **Root cause:** Transition from legacy docs to Docs v2 while keeping history
+  intact; initial structure was not immediately clarified.
 - **Follow-up actions:**
   - Mark root `docs/PRD_v7.0.md` as canonical in its header.
-  - Add `docs/README.md` to explain the new structure and archive location.
+  - Add `docs/README.md` to explain the structure and archive location.
 
-# GateFlow — Incidents & Post‑mortems
+---
 
-**Purpose:** Single place to record incidents, regressions, and near‑misses that occur while executing phases in `PLAN_<slug>.md`. Each entry should document what happened, why, and how we will avoid it in future phases.
+## GateFlow — Incidents & Post‑mortems
 
-Use this file to answer: _“What has gone wrong before, and what did we learn?”_
+**Purpose:** Single place to record incidents, regressions, and near‑misses.
+Each entry documents what happened, why, and how we avoid it.
+
+Use this file to answer: _“What has gone wrong before,
+and what did we learn?”_
 
 ## When to add an incident
 
@@ -60,25 +67,34 @@ Copy this block for each new incident:
 ### Multi-Tenant Isolation Hardening (Certification)
 
 - **Date:** 2026-03-24
-- **Plan / Phase:** `PLAN_security_isolation_fix.md` — Phase 5: Automated Enforcement & Certification
+- **Plan / Phase:** `PLAN_security_isolation_fix.md` —
+  Phase 5: Automated Enforcement & Certification
 - **Environment:** local
-- **Impact:** Hardened 15+ core API routes against potential multi-tenant data leaks.
-- **Root cause:** Early-stage API routes lacked systematic `organizationId` scoping in certain `findMany` and `update` operations.
-- **Detection:** Discovered by the `ralph-skill-discover.js` engine during a cross-repo security audit.
-- **Resolution:** Conducted a 4-phase systematic remediation pass, adding explicit `organizationId` filters and `deletedAt: null` guards to all high-risk routes (Gates, Scans, CRM, Contacts, Units, QR Codes, and Analytics).
+- **Impact:** Hardened 15+ core API routes against multi-tenant leaks.
+- **Root cause:** Early-stage API routes lacked systematic `organizationId`
+  scoping in certain `findMany` and `update` operations.
+- **Detection:** Discovered by `ralph-skill-discover.js` during audit.
+- **Resolution:** Conducted a 4-phase systematic remediation pass.
+  Added explicit `organizationId` filters and `deletedAt: null` guards to all
+  high-risk routes (Gates, Scans, CRM, Contacts, Units, QR Codes, Analytics).
 - **Prevention / follow-ups:**
-  - Automated security discovery is now part of the verification loop for all dashboard changes.
-  - Next: Phase 6 will implement a dedicated Gate-Assignment UI to manage granular access control.
+  - Automated security discovery is now part of the verification loop.
+  - Next: Phase 6 will implement a dedicated Gate-Assignment UI.
 
-### Multi-Tenant Isolation — Global Final Certification ( iniciativa: security_isolation_fix )
+### Multi-Tenant Isolation — UI-Inclusive Final Certification
 
-- **Date:** 2026-03-26
-- **Plan / Phase:** `PLAN_security_isolation_fix.md` — Phase 7: Final Certification & Audit
+- **Date:** 2026-04-02
+- **Plan / Phase:** `PLAN_security_isolation_fix.md` —
+  Phase 7: Final Certification & Audit
 - **Environment:** local
-- **Impact:** Certified 100% compliance across all 25+ dashboard-facing API routes and UI modules.
-- **Root cause:** N/A — final verification.
-- **Detection:** `node scripts/ralph-skill-discover.js --security-only` — Zero security violations found.
-- **Resolution:** The initiative is now officially closed. All core services (Gates, Scans, CRM, Analytics, QR) are confirmed secure and multi-tenant isolated.
+- **Impact:** Certified 100% compliance across all 30+ dashboard API routes,
+  including the new Gate-Assignment Management UI.
+- **Root cause:** Final verification pass including the Phase 6 UI components.
+- **Detection:** `node scripts/ralph/ralph-skill-discover.js` — Zero security
+  violations found (100% Compliance Score).
+- **Resolution:** The initiative is now officially complete. All core services
+  (Gates, Scans, CRM, Analytics, QR, and Gate-Assignments) are confirmed
+  secure and multi-tenant isolated.
 - **Prevention / follow-ups:**
-  - Automated security discovery scanner remains active in the pre-commit loop.
-  - Recommended: Periodically rerun the full scanner suite after major schema migrations.
+  - Automated security discovery is now a hard-gate in the workflows.
+  - Recommended: Regular audit of `GateAssignment` model usage.

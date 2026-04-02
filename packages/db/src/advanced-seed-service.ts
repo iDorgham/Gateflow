@@ -11,8 +11,11 @@ import {
   type PlannedUnitSeed,
   type UnitHierarchyRangeConfig,
 } from './lib/unit-hierarchy-seed';
-import { createUniquenessBucket } from './lib/seed-integrity';
-import type { UniquenessBucket } from './lib/seed-integrity';
+import {
+  createUniquenessBucket,
+  type UniquenessBucket,
+} from './lib/seed-integrity';
+import { generateRichContact } from './lib/rich-contact';
 import {
   buildSignedVisitorQRCodeString,
   deterministicScanUuid,
@@ -51,6 +54,19 @@ async function createManyInChunksContactUnit(
     batch: Prisma.ContactUnitCreateManyInput[]
   ) => Promise<{ count?: number }>,
   rows: Prisma.ContactUnitCreateManyInput[]
+): Promise<number> {
+  let total = 0;
+  for (let i = 0; i < rows.length; i += CREATE_MANY_CHUNK) {
+    const batch = rows.slice(i, i + CREATE_MANY_CHUNK);
+    const res = await run(batch);
+    total += res.count ?? batch.length;
+  }
+  return total;
+}
+
+async function createManyInChunksContact(
+  run: (batch: Prisma.ContactCreateManyInput[]) => Promise<{ count?: number }>,
+  rows: Prisma.ContactCreateManyInput[]
 ): Promise<number> {
   let total = 0;
   for (let i = 0; i < rows.length; i += CREATE_MANY_CHUNK) {
@@ -684,17 +700,50 @@ export async function runEmulation(
 
   if (params.ranges && !dryRun) {
     // Phase 4 of v3: Seed structural hierarchy before traffic
-    // We need at least one owner contact for the round-robin linking
-    let ownerContactIds = [ctx.contactId];
-
-    // If we're seeding a lot, let's try to get more contacts from the org to distribute ownership
+    // We want a diverse set of owner contacts. If the org is empty or sparse,
+    // we'll seed up to 20 rich contacts first to ensure high-fidelity hierarchy.
     const existing = await db.contact.findMany({
       where: { organizationId, deletedAt: null },
-      take: 10,
+      take: 20,
       select: { id: true },
     });
-    if (existing.length > 1) {
-      ownerContactIds = existing.map((c) => c.id);
+
+    let ownerContactIds = existing.map((c) => c.id);
+
+    if (ownerContactIds.length < 5) {
+      const bucket = createUniquenessBucket();
+      const newContactPayloads = Array.from({ length: 20 }).map((_, i) => {
+        const payload = generateRichContact({
+          organizationId,
+          seed: randomSeed,
+          sequence: i,
+          bucket,
+        });
+        return {
+          organizationId: payload.organizationId,
+          firstName: payload.firstName,
+          lastName: payload.lastName,
+          email: payload.email,
+          phone: payload.phone,
+          jobTitle: payload.jobTitle,
+          company: payload.company,
+        };
+      });
+
+      await createManyInChunksContact(
+        (data) => db.contact.createMany({ data }),
+        newContactPayloads
+      );
+
+      const insertedContacts = await db.contact.findMany({
+        where: {
+          organizationId,
+          deletedAt: null,
+          email: { in: newContactPayloads.map((p) => p.email) },
+        },
+        select: { id: true },
+      });
+      ownerContactIds = insertedContacts.map((c) => c.id);
     }
 
     seeded = await seedUnitHierarchyForProject(db, {
@@ -726,7 +775,7 @@ export async function runEmulation(
       });
       if (inserted) {
         finalUnitId = inserted.id;
-        finalContactId = inserted.contacts[0]?.contactId ?? ownerContactIds[0];
+        finalContactId = inserted.contacts[0]?.contactId ?? ownerContactIds[0]!;
       }
     }
   }

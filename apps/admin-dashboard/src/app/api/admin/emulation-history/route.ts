@@ -1,16 +1,3 @@
-/**
- * ## GET /api/admin/emulation-history
- *
- * **Auth:** Admin Session Cookie — **Internal Admin** only.
- *
- * **Query Params:**
- * - `organizationId` (string, required)
- * - `limit` (int, default 50)
- *
- * **Returns:**
- * - List of `AiActionLog` entries filtered for `EMULATE_TRAFFIC` and `SEED_HIERARCHY`.
- */
-
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@gate-access/db';
 import { isAdminAuthorized } from '@/lib/admin-auth';
@@ -26,33 +13,30 @@ export async function GET(request: NextRequest) {
   const organizationId = searchParams.get('organizationId');
   const limit = parseInt(searchParams.get('limit') ?? '50', 10);
 
-  if (!organizationId) {
-    return NextResponse.json(
-      { error: 'organizationId is required' },
-      { status: 400 }
-    );
-  }
-
   try {
-    // skip-organization-check (Admin Management)
     const logs = await prisma.aiActionLog.findMany({
       where: {
-        organizationId,
-        actionType: {
-          in: ['EMULATE_TRAFFIC', 'SEED_HIERARCHY'],
-        },
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
-      take: limit,
-      include: {
-        user: {
-          select: {
-            name: true,
-            email: true,
+        AND: [
+          { organizationId: organizationId || undefined },
+          {
+            OR: [
+              { actionType: 'EMULATE_TRAFFIC' },
+              { actionType: 'SEED_HIERARCHY' },
+            ],
           },
-        },
+        ],
+      },
+      orderBy: { createdAt: 'desc' },
+      take: Math.min(limit, 100),
+      select: {
+        id: true,
+        organizationId: true,
+        actionType: true,
+        status: true,
+        result: true,
+        metadata: true,
+        createdAt: true,
+        intentJson: true,
       },
     });
 
@@ -61,10 +45,8 @@ export async function GET(request: NextRequest) {
       data: logs,
     });
   } catch (err) {
-    console.error('[emulation-history]', err);
-    return NextResponse.json(
-      { error: 'Failed to fetch history' },
-      { status: 500 }
-    );
+    const message = err instanceof Error ? err.message : 'Unknown error';
+    console.error(`[emulation-history] Failed:`, err);
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

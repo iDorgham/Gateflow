@@ -75,7 +75,7 @@ vulnerabilities discovered by the Ralph Skill Discovery engine.
 **Goal:** Certified 100% compliance via automated scanning across all code, including the new UI.
 
 - **Deliverables:**
-  - [x] Rerun `ralph-skill-discover.js` with zero violations. Verified 2026-03-26.
+  - [x] Rerun `ralph-skill-discover.js` with zero violations. Verified 2026-04-02.
   - [x] Document the security hardening in `docs/plan/learning/incidents.md`.
 - **Primary role:** QA | SECURITY
 

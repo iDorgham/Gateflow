@@ -542,3 +542,142 @@ export async function deleteRole(id: string): Promise<Result> {
     return { success: false, error: 'Failed to delete role.' };
   }
 }
+
+// ─── GATE ASSIGNMENTS ──────────────────────────────────────────────────────────
+
+export interface GateAssignment {
+  id: string;
+  userId: string;
+  user: { id: string; name: string; email: string; avatarUrl: string | null };
+  gateId: string;
+  gate: { id: string; name: string; location: string | null };
+  shiftStart: string | null;
+  shiftEnd: string | null;
+  createdAt: Date;
+}
+
+export interface LiteGate {
+  id: string;
+  name: string;
+  location: string | null;
+}
+
+export async function getGateAssignments(): Promise<Result<GateAssignment[]>> {
+  try {
+    const claims = await getSessionClaims();
+    if (!claims?.orgId) return { success: false, error: 'Unauthorized.' };
+
+    const assignments = await prisma.gateAssignment.findMany({
+      where: { organizationId: claims.orgId, deletedAt: null },
+      include: {
+        user: { select: { id: true, name: true, email: true, avatarUrl: true } },
+        gate: { select: { id: true, name: true, location: true } },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    return { success: true, data: assignments as unknown as GateAssignment[] };
+  } catch (error) {
+    console.error('getGateAssignments error:', error);
+    return { success: false, error: 'Failed to fetch assignments.' };
+  }
+}
+
+export async function unassignGate(id: string): Promise<Result> {
+  try {
+    const claims = await getSessionClaims();
+    if (!claims?.orgId || !claims.permissions?.['gates:manage']) {
+      return { success: false, error: 'Unauthorized.' };
+    }
+
+    await prisma.gateAssignment.update({
+      where: { id, organizationId: claims.orgId },
+      data: { deletedAt: new Date() },
+    });
+
+    // AUDIT LOG
+    await logAuditAction({
+      action: 'UNASSIGN_GATE',
+      entityType: 'GATE_ASSIGNMENT',
+      entityId: id,
+      orgId: claims.orgId,
+      userId: claims.sub,
+    });
+
+    revalidatePath('/dashboard/settings/team');
+    return { success: true };
+  } catch (error) {
+    console.error('unassignGate error:', error);
+    return { success: false, error: 'Failed to remove assignment.' };
+  }
+}
+
+export async function assignGates(
+  userId: string,
+  gateIds: string[],
+  shiftStart?: string,
+  shiftEnd?: string
+): Promise<Result> {
+  try {
+    const claims = await getSessionClaims();
+    if (!claims?.orgId || !claims.permissions?.['gates:manage']) {
+      return { success: false, error: 'Unauthorized.' };
+    }
+
+    const orgId = claims.orgId;
+
+    // Bulk creation with upsert logic for soft-deleted
+    for (const gateId of gateIds) {
+      await prisma.gateAssignment.upsert({
+        where: { userId_gateId: { userId, gateId } },
+        update: {
+          deletedAt: null,
+          shiftStart: shiftStart || null,
+          shiftEnd: shiftEnd || null,
+          updatedAt: new Date(),
+        },
+        create: {
+          userId,
+          gateId,
+          organizationId: orgId,
+          shiftStart: shiftStart || null,
+          shiftEnd: shiftEnd || null,
+        },
+      });
+    }
+
+    // AUDIT LOG
+    await logAuditAction({
+      action: 'ASSIGN_GATES',
+      entityType: 'USER',
+      entityId: userId,
+      orgId: claims.orgId,
+      userId: claims.sub,
+      metadata: { gateIds, shiftStart, shiftEnd },
+    });
+
+    revalidatePath('/dashboard/settings/team');
+    return { success: true };
+  } catch (error) {
+    console.error('assignGates error:', error);
+    return { success: false, error: 'Failed to assign gates.' };
+  }
+}
+
+export async function getGates(): Promise<Result<LiteGate[]>> {
+  try {
+    const claims = await getSessionClaims();
+    if (!claims?.orgId) return { success: false, error: 'Unauthorized.' };
+
+    const gates = await prisma.gate.findMany({
+      where: { organizationId: claims.orgId, deletedAt: null },
+      select: { id: true, name: true, location: true },
+      orderBy: { name: 'asc' },
+    });
+
+    return { success: true, data: gates };
+  } catch (error) {
+    console.error('getGates error:', error);
+    return { success: false, error: 'Failed to fetch gates.' };
+  }
+}

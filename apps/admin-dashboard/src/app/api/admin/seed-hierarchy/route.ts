@@ -1,21 +1,4 @@
-/**
- * ## POST /api/admin/seed-hierarchy
- *
- * **Auth:** Admin Session Cookie — **Internal Admin** only.
- *
- * **Rate limit:** 10 requests per hour.
- *
- * **Body (JSON):**
- * - `organizationId` (string, required)
- * - `projectId` (string, required)
- * - `ranges`: `UnitHierarchyRangeConfig`
- * - `seed` (int)
- * - `ownerContactIds`: `string[]` (round-robin assignment)
- * - `unitIdFormatOverride`: `UnitIdFormatKey`
- */
-
 import { NextRequest, NextResponse } from 'next/server';
-import { z } from 'zod';
 import {
   prisma,
   seedUnitHierarchyForProject,
@@ -23,6 +6,7 @@ import {
   type PrismaClient,
 } from '@gate-access/db';
 import { isAdminAuthorized } from '@/lib/admin-auth';
+import { z } from 'zod';
 
 export const dynamic = 'force-dynamic';
 
@@ -39,9 +23,7 @@ const SeedHierarchyBodySchema = z.object({
     minUnitsPerFloor: z.number().int().min(1).max(32),
     maxUnitsPerFloor: z.number().int().min(1).max(40),
   }),
-  seed: z.number().int().optional(),
-  ownerContactIds: z.array(z.string()).min(1).optional(),
-  unitIdFormatOverride: z
+  unitIdFormat: z
     .enum([
       'COMPACT',
       'BUILDING_FIRST',
@@ -51,6 +33,7 @@ const SeedHierarchyBodySchema = z.object({
       'GLOBAL',
     ])
     .optional(),
+  randomSeed: z.number().int().optional(),
 });
 
 export async function POST(request: NextRequest) {
@@ -75,42 +58,41 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const data = parsed.data;
-
-  // skip-organization-check (Admin Management)
-  const org = await prisma.organization.findFirst({
-    where: { id: data.organizationId, deletedAt: null },
-    select: { id: true },
-  });
-  if (!org) {
-    return NextResponse.json(
-      { error: 'Organization not found' },
-      { status: 404 }
-    );
-  }
+  const { organizationId, projectId, ranges, unitIdFormat, randomSeed } =
+    parsed.data;
+  const seed = randomSeed ?? Math.floor(Math.random() * 1_000_000);
 
   const auditBase = {
-    organizationId: data.organizationId,
+    organizationId,
     userId: actorId,
     actionType: 'SEED_HIERARCHY',
-    prompt: 'GateFlow structural hierarchy seeding via Admin Dashboard',
-    intentJson: {
-      projectId: data.projectId,
-      ranges: data.ranges,
-      unitIdFormat: data.unitIdFormatOverride,
-    } as const,
+    prompt: `GateFlow organizational hierarchy seeding (Admin Dashboard)`,
+    intentJson: { projectId, ranges, unitIdFormat, seed } as const,
   };
 
   try {
+    // 1. Get some contacts to act as owners
+    const contacts = await prisma.contact.findMany({
+      where: { organizationId, deletedAt: null },
+      take: 10,
+      select: { id: true },
+    });
+
+    if (contacts.length === 0) {
+      throw new Error(
+        'seed-hierarchy: No contacts found in target organization'
+      );
+    }
+
     const result = await seedUnitHierarchyForProject(
       prisma as unknown as PrismaClient,
       {
-        organizationId: data.organizationId,
-        projectId: data.projectId,
-        ranges: data.ranges,
-        seed: data.seed ?? Math.floor(Math.random() * 1_000_000),
-        ownerContactIds: data.ownerContactIds ?? [],
-        unitIdFormatOverride: data.unitIdFormatOverride as any,
+        organizationId,
+        projectId,
+        ranges,
+        seed,
+        ownerContactIds: contacts.map((c: any) => c.id),
+        unitIdFormatOverride: unitIdFormat as any,
       }
     );
 
@@ -121,17 +103,24 @@ export async function POST(request: NextRequest) {
         status: AiActionStatus.EXECUTED,
         result: 'seeding_completed',
         metadata: {
-          scanned: result.planned.length,
+          unitsCreated: result.unitsCreated,
+          contactLinksCreated: result.contactLinksCreated,
+          projectId,
         },
       },
     });
 
     return NextResponse.json({
       success: true,
-      data: result,
+      data: {
+        unitsCreated: result.unitsCreated,
+        contactLinksCreated: result.contactLinksCreated,
+      },
     });
   } catch (err) {
     const message = err instanceof Error ? err.message : 'Unknown error';
+    console.error(`[seed-hierarchy] Failed for ${organizationId}:`, err);
+
     // skip-organization-check (Admin Audit Log)
     await prisma.aiActionLog.create({
       data: {
@@ -143,7 +132,7 @@ export async function POST(request: NextRequest) {
         },
       },
     });
-    console.error('[seed-hierarchy]', err);
-    return NextResponse.json({ error: 'Seeding failed' }, { status: 500 });
+
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

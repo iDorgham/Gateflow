@@ -4,19 +4,36 @@ import { TeamRoster } from '@/components/settings/team/team-roster';
 import { InvitationList } from '@/components/settings/team/invitation-list';
 import { RoleDashboard } from '@/components/settings/team/role-dashboard';
 import { ActivityLogList } from '@/components/settings/team/activity-log-list';
-import { getTeamMembers, getInvitations, getRoles, getActivityLogs } from './actions';
-import { Users, Mail, ShieldCheck, History } from 'lucide-react';
+import { GateAssignmentManager } from '@/components/settings/team/gate-assignment-manager';
+import { 
+  getTeamMembers, 
+  getInvitations, 
+  getRoles, 
+  getActivityLogs,
+  getGateAssignments,
+  getGates
+} from './actions';
+import { Users, Mail, ShieldCheck, History, ShieldAlert } from 'lucide-react';
 
 export default async function TeamSettings() {
   const { user } = await requireAuth();
 
   if (!user) return null;
 
-  const [membersResult, invitationsResult, rolesResult, logsResult] = await Promise.all([
+  const [
+    membersResult, 
+    invitationsResult, 
+    rolesResult, 
+    logsResult,
+    assignmentsResult,
+    gatesResult
+  ] = await Promise.all([
     getTeamMembers(),
     getInvitations(),
     getRoles(),
     getActivityLogs(),
+    getGateAssignments(),
+    getGates(),
   ]);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -25,6 +42,8 @@ export default async function TeamSettings() {
   const invitations = (invitationsResult.data ?? []) as any[];
   const roles = rolesResult.data ?? [];
   const logs = logsResult.data ?? [];
+  const assignments = assignmentsResult.data ?? [];
+  const gates = gatesResult.data ?? [];
 
   return (
     <div className="space-y-6">
@@ -36,7 +55,7 @@ export default async function TeamSettings() {
       </div>
 
       <Tabs defaultValue="members" className="space-y-6">
-        <TabsList className="bg-muted/50 p-1 rounded-xl w-fit h-auto">
+        <TabsList className="bg-muted/50 p-1 rounded-xl w-fit h-auto flex-wrap sm:flex-nowrap">
           <TabsTrigger
             value="members"
             className="rounded-lg gap-2 data-[state=active]:bg-background data-[state=active]:shadow-sm py-2 px-4"
@@ -69,6 +88,18 @@ export default async function TeamSettings() {
             Roles
           </TabsTrigger>
           <TabsTrigger
+            value="assignments"
+            className="rounded-lg gap-2 data-[state=active]:bg-background data-[state=active]:shadow-sm py-2 px-4"
+          >
+            <ShieldAlert className="h-4 w-4" />
+            Gate Access
+            {assignments.length > 0 && (
+              <span className="ml-1 text-[10px] font-black bg-orange-500/10 text-orange-600 rounded-full px-1.5 py-0.5">
+                {assignments.length}
+              </span>
+            )}
+          </TabsTrigger>
+          <TabsTrigger
             value="activity"
             className="rounded-lg gap-2 data-[state=active]:bg-background data-[state=active]:shadow-sm py-2 px-4"
           >
@@ -95,6 +126,14 @@ export default async function TeamSettings() {
           <RoleDashboard
             roles={roles}
             canManageRoles={!!(await requireAuth()).claims.permissions?.['roles:manage']}
+          />
+        </TabsContent>
+
+        <TabsContent value="assignments">
+          <GateAssignmentManager
+            assignments={assignments}
+            users={members}
+            gates={gates}
           />
         </TabsContent>
 
