@@ -10,6 +10,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Tooling]** `@gate-access/config`: `eslint-config-next` ^15.5.14 (was 14.x) so `next lint` on Next 15 apps no longer hits circular ESLint config; root `.eslintrc.json` extends only `packages/config/eslintrc.cjs` (drops duplicate `@typescript-eslint/recommended`).
 - **[Db]** `@gate-access/db/prisma` subpath re-exports `@prisma/client` only for client components; CRM/settings pick it up for `UnitType` / `GateMode`.
 - **[Tooling]** Next apps include `global.d.ts` (declares `*.css` modules) in `tsconfig.json`.
 - **[Tooling]** Root devDependencies pin TypeScript 5.9.3 and ESLint 8.57.1 (pnpm overrides).
