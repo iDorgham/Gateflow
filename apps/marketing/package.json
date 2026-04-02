@@ -19,7 +19,7 @@
     "@tailwindcss/typography": "^0.5.19",
     "@vercel/analytics": "^2.0.1",
     "@vercel/speed-insights": "^2.0.0",
-    "ai": "5.0.52",
+    "ai": "6.0.142",
     "clsx": "^2.1.1",
     "framer-motion": "^11.18.2",
     "gray-matter": "^4.0.3",

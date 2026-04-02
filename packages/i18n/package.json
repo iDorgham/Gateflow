@@ -14,7 +14,7 @@
     "typecheck": "tsc -p tsconfig.json"
   },
   "dependencies": {
-    "ai": "5.0.52",
+    "ai": "6.0.142",
     "i18next": "^23.16.8",
     "react-i18next": "^14.1.3"
   },

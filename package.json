@@ -86,7 +86,7 @@
     "@types/faker": "5.5.3",
     "@types/jest": "^30.0.0",
     "@types/node": "^20.19.33",
-    "ai": "6.0.138",
+    "ai": "6.0.142",
     "autoprefixer": "^10.4.24",
     "eslint": "8.57.1",
     "faker": "5.5.3",
