@@ -70,3 +70,20 @@ export type {
   PlannedUnitSeed,
   UnitHierarchyRangeConfig,
 } from './lib/unit-hierarchy-seed';
+export {
+  chiSquareUniform,
+  histogramBins01,
+  massInRange,
+  normalizedPositionsInWindow,
+  RUSH_SCENARIO_REGISTRY,
+  RUSH_SCENARIOS,
+  RushHourScheduleError,
+  sampleScanTimestamps,
+} from './lib/rush-hour';
+export type {
+  RushGaussianPeak,
+  RushScenario,
+  RushScenarioDefinition,
+  SampleScanTimestampsParams,
+  WeekendAccent,
+} from './lib/rush-hour';
