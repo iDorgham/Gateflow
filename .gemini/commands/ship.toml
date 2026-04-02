@@ -1,8 +1,0 @@
-description = "Execute all remaining phases of a plan sequentially via repeated /dev-style execution."
-prompt = """
-Follow the workflow defined in the ship workflow to Execute all remaining phases of a plan sequentially.
-
-@{.agents/workflows/ship.md}
-
-User input: {{args}}
-"""

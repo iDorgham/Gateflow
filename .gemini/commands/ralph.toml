@@ -1,8 +1,0 @@
-description = "Recursive autopilot: implement ALL remaining phases of the active plan end-to-end until complete. Includes session memory, TDD, enforcement, verification, PR."
-prompt = """
-Follow the workflow defined in the ralph workflow to Implement all remaining phases of the active plan automatically until the plan is complete.
-
-@{.agents/workflows/ralph.md}
-
-User input: {{args}}
-"""

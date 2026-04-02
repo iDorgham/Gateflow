@@ -1,8 +1,0 @@
-description = "Implement exactly one plan phase end-to-end (code, tests, git)."
-prompt = """
-Follow the workflow defined in the dev workflow to Implement exactly one phase from a plan end-to-end (code, tests, and git).
-
-@{.agents/workflows/dev.md}
-
-User input: {{args}}
-"""

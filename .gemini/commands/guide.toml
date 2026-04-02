@@ -1,8 +1,0 @@
-description = "Run the GateFlow workspace guide — what should I do now?"
-prompt = """
-Follow the workflow defined in the guide workflow to Run the GateFlow workspace guide.
-
-@{.agents/workflows/guide.md}
-
-User input: {{args}}
-"""

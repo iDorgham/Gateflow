@@ -1,8 +1,0 @@
-description = "Turn an IDEA_<slug>.md into a phased PLAN_<slug>.md plus PROMPT_<slug>_phase_<N>.md pro prompts."
-prompt = """
-Follow the workflow defined in the plan workflow to Turn an IDEA_<slug>.md into a multi-phase PLAN_<slug>.md with phase prompts.
-
-@{.agents/workflows/plan.md}
-
-User input: {{args}}
-"""

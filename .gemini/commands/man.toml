@@ -1,8 +1,0 @@
-description = "One Man — one command, seven domains (Code, Brand, SaaS, Marketing, Business, Content, Copywrite)."
-prompt = """
-Follow the workflow defined in the man workflow to Act as the one-man orchestrator.
-
-@{.agents/workflows/man.md}
-
-User input: {{args}}
-"""
