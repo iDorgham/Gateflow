@@ -119,8 +119,8 @@ importers:
         specifier: ^3.0.53
         version: 3.0.53(zod@3.25.76)
       '@ai-sdk/react':
-        specifier: ^3.0.139
-        version: 3.0.140(react@18.3.1)(zod@3.25.76)
+        specifier: ^3.0.144
+        version: 3.0.144(react@18.3.1)(zod@3.25.76)
       '@formatjs/intl-localematcher':
         specifier: ^0.8.1
         version: 0.8.2
@@ -240,8 +240,8 @@ importers:
         specifier: ^3.0.53
         version: 3.0.53(zod@3.25.76)
       '@ai-sdk/react':
-        specifier: ^3.0.139
-        version: 3.0.140(react@18.3.1)(zod@3.25.76)
+        specifier: ^3.0.144
+        version: 3.0.144(react@18.3.1)(zod@3.25.76)
       '@atlaskit/tokens':
         specifier: ^11.1.1
         version: 11.2.0(react@18.3.1)
@@ -295,7 +295,7 @@ importers:
         version: 3.20.5(@tiptap/pm@3.20.5)
       '@tiptap/extension-placeholder':
         specifier: ^3.20.4
-        version: 3.20.5(@tiptap/extensions@3.20.5)
+        version: 3.20.5(@tiptap/extensions@3.22.0)
       '@tiptap/pm':
         specifier: ^3.20.4
         version: 3.20.5
@@ -548,8 +548,8 @@ importers:
         specifier: ^1.2.0
         version: 1.2.22(zod@3.25.76)
       '@ai-sdk/react':
-        specifier: ^3.0.139
-        version: 3.0.140(react@19.1.0)(zod@3.25.76)
+        specifier: ^3.0.144
+        version: 3.0.144(react@19.1.0)(zod@3.25.76)
       '@babel/runtime':
         specifier: ^7.28.6
         version: 7.29.2
@@ -1116,6 +1116,18 @@ packages:
       '@vercel/oidc': 3.1.0
       zod: 3.25.76
 
+  /@ai-sdk/gateway@3.0.84(zod@3.25.76):
+    resolution: {integrity: sha512-RnUw6UNvkaw9MEaJU9cIjA+WBP+ZR5+M/9nfbfJHcGKtTbcWXijJuYKx9nYRnm+qU+iiakb0XvQA/vvho6lTsw==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      zod: 3.25.76
+    dependencies:
+      '@ai-sdk/provider': 3.0.8
+      '@ai-sdk/provider-utils': 4.0.21(zod@3.25.76)
+      '@vercel/oidc': 3.1.0
+      zod: 3.25.76
+    dev: false
+
   /@ai-sdk/google@1.2.22(zod@3.25.76):
     resolution: {integrity: sha512-Ppxu3DIieF1G9pyQ5O1Z646GYR0gkC57YdBqXJ82qvCdhEhZHu0TWhmnOoeIWe2olSbuDeoOY+MfJrW8dzS3Hw==}
     engines: {node: '>=18'}
@@ -1193,14 +1205,14 @@ packages:
     dependencies:
       json-schema: 0.4.0
 
-  /@ai-sdk/react@3.0.140(react@18.3.1)(zod@3.25.76):
-    resolution: {integrity: sha512-wCL9iTrzoW8ppYVrz7BFCurCEqW6hjCoFFyxkrS3us2pSbUlQpXHmrprFQevzfa2PJXiF5hss7ZN8ZNdiZW//A==}
+  /@ai-sdk/react@3.0.144(react@18.3.1)(zod@3.25.76):
+    resolution: {integrity: sha512-8Y7OX1BhEwEWr4c9sy9UoX/bpBw6TvCvO5XXiqYpM8l5QjzIJlKDs+7QJEJmo9oobbx+Z2Ops3OjT+4r7JJUzw==}
     engines: {node: '>=18'}
     peerDependencies:
       react: ^18 || ~19.0.1 || ~19.1.2 || ^19.2.1
     dependencies:
       '@ai-sdk/provider-utils': 4.0.21(zod@3.25.76)
-      ai: 6.0.138(zod@3.25.76)
+      ai: 6.0.142(zod@3.25.76)
       react: 18.3.1
       swr: 2.4.1(react@18.3.1)
       throttleit: 2.1.0
@@ -1208,14 +1220,14 @@ packages:
       - zod
     dev: false
 
-  /@ai-sdk/react@3.0.140(react@19.1.0)(zod@3.25.76):
-    resolution: {integrity: sha512-wCL9iTrzoW8ppYVrz7BFCurCEqW6hjCoFFyxkrS3us2pSbUlQpXHmrprFQevzfa2PJXiF5hss7ZN8ZNdiZW//A==}
+  /@ai-sdk/react@3.0.144(react@19.1.0)(zod@3.25.76):
+    resolution: {integrity: sha512-8Y7OX1BhEwEWr4c9sy9UoX/bpBw6TvCvO5XXiqYpM8l5QjzIJlKDs+7QJEJmo9oobbx+Z2Ops3OjT+4r7JJUzw==}
     engines: {node: '>=18'}
     peerDependencies:
       react: ^18 || ~19.0.1 || ~19.1.2 || ^19.2.1
     dependencies:
       '@ai-sdk/provider-utils': 4.0.21(zod@3.25.76)
-      ai: 6.0.138(zod@3.25.76)
+      ai: 6.0.142(zod@3.25.76)
       react: 19.1.0
       swr: 2.4.1(react@19.1.0)
       throttleit: 2.1.0
@@ -6403,11 +6415,11 @@ packages:
       '@tiptap/core': 3.20.5(@tiptap/pm@3.20.5)
     dev: false
 
-  /@tiptap/extension-bubble-menu@3.20.5(@tiptap/core@3.20.5)(@tiptap/pm@3.20.5):
-    resolution: {integrity: sha512-6FsASu4o32bp3FzBVb5N2ERjrBy83DtJQAGv9/ycYqsgv2kq9DNlhvtNI7GPiTW7a73ZcImjIX+jEWrARbzOlQ==}
+  /@tiptap/extension-bubble-menu@3.22.0(@tiptap/core@3.20.5)(@tiptap/pm@3.20.5):
+    resolution: {integrity: sha512-792CUdP0roO17jQJ+fflSJEWfw2cAric61nV2291a2iL7L/6mNJGP4QFim1FqZzfx3/FwHSXEI3NYT6wdUlh8w==}
     peerDependencies:
-      '@tiptap/core': ^3.20.5
-      '@tiptap/pm': ^3.20.5
+      '@tiptap/core': ^3.22.0
+      '@tiptap/pm': ^3.22.0
     dependencies:
       '@floating-ui/dom': 1.7.6
       '@tiptap/core': 3.20.5(@tiptap/pm@3.20.5)
@@ -6457,12 +6469,12 @@ packages:
       '@tiptap/extensions': 3.20.5(@tiptap/core@3.20.5)(@tiptap/pm@3.20.5)
     dev: false
 
-  /@tiptap/extension-floating-menu@3.20.5(@floating-ui/dom@1.7.6)(@tiptap/core@3.20.5)(@tiptap/pm@3.20.5):
-    resolution: {integrity: sha512-mTzBNUeAocinrxa5xV+5hGnnNCQB0pVI1GSBwUTHwdB7jNwBqfKAILmtLZONgmhxKWLmGa6WCA59sk+yDI+N0A==}
+  /@tiptap/extension-floating-menu@3.22.0(@floating-ui/dom@1.7.6)(@tiptap/core@3.20.5)(@tiptap/pm@3.20.5):
+    resolution: {integrity: sha512-6Gg3I6n+YaCJyvpcKheWiOtU9Oy0M3lbwUGdLK7jTxgAG2YOJxEcx2CzDv3PtNcoyAVUVk9Eio21awVMOECLAQ==}
     peerDependencies:
       '@floating-ui/dom': ^1.0.0
-      '@tiptap/core': ^3.20.5
-      '@tiptap/pm': ^3.20.5
+      '@tiptap/core': ^3.22.0
+      '@tiptap/pm': ^3.22.0
     dependencies:
       '@floating-ui/dom': 1.7.6
       '@tiptap/core': 3.20.5(@tiptap/pm@3.20.5)
@@ -6565,12 +6577,12 @@ packages:
       '@tiptap/core': 3.20.5(@tiptap/pm@3.20.5)
     dev: false
 
-  /@tiptap/extension-placeholder@3.20.5(@tiptap/extensions@3.20.5):
+  /@tiptap/extension-placeholder@3.20.5(@tiptap/extensions@3.22.0):
     resolution: {integrity: sha512-PcZJbzJ8j+YcRdYWFjmFFVnOOx3nETA0pzMj9fXADi28vNABnrWLwsHAseh3I5QfLmywKQb9SpTSTU2LxQgBoA==}
     peerDependencies:
       '@tiptap/extensions': ^3.20.5
     dependencies:
-      '@tiptap/extensions': 3.20.5(@tiptap/core@3.20.5)(@tiptap/pm@3.20.5)
+      '@tiptap/extensions': 3.22.0(@tiptap/core@3.20.5)(@tiptap/pm@3.20.5)
     dev: false
 
   /@tiptap/extension-strike@3.20.5(@tiptap/core@3.20.5):
@@ -6602,6 +6614,16 @@ packages:
     peerDependencies:
       '@tiptap/core': ^3.20.5
       '@tiptap/pm': ^3.20.5
+    dependencies:
+      '@tiptap/core': 3.20.5(@tiptap/pm@3.20.5)
+      '@tiptap/pm': 3.20.5
+    dev: false
+
+  /@tiptap/extensions@3.22.0(@tiptap/core@3.20.5)(@tiptap/pm@3.20.5):
+    resolution: {integrity: sha512-En8p1FiFBT3V9CduErCyLPFxDRsYLISb2cCtLKTeYVeCRn2vQZK4B8WuOgHI4IBipz3I3XidmDhra4yt8mmi/w==}
+    peerDependencies:
+      '@tiptap/core': ^3.22.0
+      '@tiptap/pm': ^3.22.0
     dependencies:
       '@tiptap/core': 3.20.5(@tiptap/pm@3.20.5)
       '@tiptap/pm': 3.20.5
@@ -6650,8 +6672,8 @@ packages:
       react-dom: 18.3.1(react@18.3.1)
       use-sync-external-store: 1.6.0(react@18.3.1)
     optionalDependencies:
-      '@tiptap/extension-bubble-menu': 3.20.5(@tiptap/core@3.20.5)(@tiptap/pm@3.20.5)
-      '@tiptap/extension-floating-menu': 3.20.5(@floating-ui/dom@1.7.6)(@tiptap/core@3.20.5)(@tiptap/pm@3.20.5)
+      '@tiptap/extension-bubble-menu': 3.22.0(@tiptap/core@3.20.5)(@tiptap/pm@3.20.5)
+      '@tiptap/extension-floating-menu': 3.22.0(@floating-ui/dom@1.7.6)(@tiptap/core@3.20.5)(@tiptap/pm@3.20.5)
     transitivePeerDependencies:
       - '@floating-ui/dom'
     dev: false
@@ -7548,6 +7570,19 @@ packages:
       '@ai-sdk/provider-utils': 4.0.21(zod@3.25.76)
       '@opentelemetry/api': 1.9.0
       zod: 3.25.76
+
+  /ai@6.0.142(zod@3.25.76):
+    resolution: {integrity: sha512-ZoxAsnTL/dFg5WdcwC8QNhKVlLtqwwT3I7p/4i8IJJP+6ZwqF1ljuwMsAsPYYvppZ+RzUxjxxFGb1cbEhNH3dg==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      zod: 3.25.76
+    dependencies:
+      '@ai-sdk/gateway': 3.0.84(zod@3.25.76)
+      '@ai-sdk/provider': 3.0.8
+      '@ai-sdk/provider-utils': 4.0.21(zod@3.25.76)
+      '@opentelemetry/api': 1.9.0
+      zod: 3.25.76
+    dev: false
 
   /ajv@6.14.0:
     resolution: {integrity: sha512-IWrosm/yrn43eiKqkfkHis7QioDleaXQHdDVPKg0FSwwd/DuvyX79TZnFOnYpB7dcsFAMmtFztZuXPDvSePkFw==}
