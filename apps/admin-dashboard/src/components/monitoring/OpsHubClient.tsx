@@ -432,7 +432,7 @@ export function OpsHubClient({ locale }: { locale: string }) {
             <DynamicTable
               columns={columns}
               items={logs}
-              loading={loading && logs.length === 0}
+              isLoading={loading && logs.length === 0}
               onRowClick={(log) => setSelectedLog(log)}
               emptyState={
                 <div className="py-20 text-center flex flex-col items-center gap-4">
