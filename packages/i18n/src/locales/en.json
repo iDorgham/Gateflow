@@ -49,6 +49,7 @@
       "admins": "Administrators",
       "collapse": "Collapse Sidebar",
       "expand": "Expand Sidebar",
+      "operations": "Operational Hub",
       "emulation": "Traffic Emulation",
       "ops_hub": "Ops Hub",
       "seeding": "Advanced Seeding"

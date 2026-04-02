@@ -174,7 +174,7 @@ export async function seedUnitHierarchyForProject(
 
   await db.$transaction(async (tx) => {
     await createManyInChunksUnit(
-      (data) => tx.unit.createMany({ data }),
+      (data) => tx.unit.createMany({ data, skipDuplicates: true }),
       unitRows
     );
 
@@ -211,7 +211,7 @@ export async function seedUnitHierarchyForProject(
     });
 
     await createManyInChunksContactUnit(
-      (data) => tx.contactUnit.createMany({ data }),
+      (data) => tx.contactUnit.createMany({ data, skipDuplicates: true }),
       linkRows
     );
   });
@@ -411,7 +411,7 @@ export async function seedRelationalChain(
     });
 
     await createManyInChunksScanLog(
-      (data) => tx.scanLog.createMany({ data }),
+      (data) => tx.scanLog.createMany({ data, skipDuplicates: true }),
       scanRows
     );
 
@@ -731,7 +731,7 @@ export async function runEmulation(
       });
 
       await createManyInChunksContact(
-        (data) => db.contact.createMany({ data }),
+        (data) => db.contact.createMany({ data, skipDuplicates: true }),
         newContactPayloads
       );
 

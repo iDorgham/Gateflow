@@ -47,3 +47,4 @@ docs/cache
 !docs/workspace/template-project/.antigravity/
 !docs/workspace/template-project/.antigravity/**
 .worktrees
+.vercel

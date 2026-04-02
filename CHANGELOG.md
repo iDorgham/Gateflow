@@ -9,6 +9,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 ## [Unreleased]
 
 ### Workspace
+
+- **[Admin Emulation Hub]** Phase 2: Emulation & Seeding Hub (UI) - Ops Hub & Seeding Controls
 - **[Admin Emulation Hub]** Phase 1: Advanced Seeding Integration (Backend & API)
 
 - **[Admin Emulation Hub]** complete phase 4
@@ -55,6 +57,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 - **[AI SDK v6 Migration]** started implementation of the AI SDK v6 migration initiative.
 
 ### Apps
+
+- **[Scanner]** biometric and shift log foundation
 
 - **[Admin]** constant-time compare + emulation gate/unit overrides
 

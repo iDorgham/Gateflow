@@ -87,6 +87,50 @@ export async function POST(request: NextRequest) {
       }),
     ]);
 
+    // Phase 4 mandate: Re-seed a "Clean" hierarchy after wipe
+    // Note: seedUnitHierarchyForProject needs an owner contact. We'll pick the first non-deleted contact or create one if empty.
+    let targetContactId = '';
+    const existingContact = await prisma.contact.findFirst({
+      where: { organizationId, deletedAt: null },
+      select: { id: true },
+    });
+
+    if (existingContact) {
+      targetContactId = existingContact.id;
+    } else {
+      const newContact = await prisma.contact.create({
+        data: {
+          organizationId,
+          firstName: 'System',
+          lastName: 'Admin',
+          email: `admin-${organizationId}@gateflow.io`,
+          phone: '+1000000000',
+        },
+      });
+      targetContactId = newContact.id;
+    }
+
+    let seededResults = null;
+    if (projectId) {
+      const { seedUnitHierarchyForProject } = await import('@gate-access/db');
+      seededResults = await seedUnitHierarchyForProject(prisma as any, {
+        organizationId,
+        projectId,
+        seed: Math.floor(Math.random() * 1000000),
+        ownerContactIds: [targetContactId],
+        ranges: {
+          minPhases: 1,
+          maxPhases: 2,
+          minBuildingsPerPhase: 1,
+          maxBuildingsPerPhase: 2,
+          minFloorsPerBuilding: 1,
+          maxFloorsPerBuilding: 3,
+          minUnitsPerFloor: 2,
+          maxUnitsPerFloor: 4,
+        },
+      });
+    }
+
     // skip-organization-check (Admin Audit Log)
     await prisma.aiActionLog.create({
       data: {
@@ -100,6 +144,7 @@ export async function POST(request: NextRequest) {
             unitsSoftDeleted: stats[2].count,
             contactsSoftDeleted: stats[3].count,
             incidentsSoftDeleted: stats[4].count,
+            reSeeded: seededResults ? seededResults.unitsCreated : 0,
           },
         },
       },

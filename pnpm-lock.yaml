@@ -758,6 +758,9 @@ importers:
       expo-jwt:
         specifier: ^1.8.2
         version: 1.8.2
+      expo-local-authentication:
+        specifier: ~15.0.2
+        version: 15.0.2(expo@54.0.33)
       expo-location:
         specifier: ~19.0.8
         version: 19.0.8(expo@54.0.33)
@@ -13231,6 +13234,18 @@ packages:
     transitivePeerDependencies:
       - expo
       - supports-color
+    dev: false
+
+  /expo-local-authentication@15.0.2(expo@54.0.33):
+    resolution:
+      {
+        integrity: sha512-v7TOfovuivGWffA8B0FudEas+njMKTrjhaPpJYLASiTLTP3zUYqtumNgZ9pkaDB6Cagq0+DeNH39AI8tdEBUkQ==,
+      }
+    peerDependencies:
+      expo: '*'
+    dependencies:
+      expo: 54.0.33(@babel/core@7.29.0)(@expo/metro-runtime@6.1.2)(expo-router@6.0.23)(react-native@0.81.5)(react@19.1.0)
+      invariant: 2.2.4
     dev: false
 
   /expo-location@19.0.8(expo@54.0.33):
