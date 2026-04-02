@@ -11,7 +11,7 @@ import {
   RadioGroupItem,
   MultiSelect,
 } from '@gate-access/ui';
-import { UnitType } from '@gate-access/db';
+import { UnitType } from '@gate-access/db/prisma';
 import { useTranslation } from 'react-i18next';
 
 const unitSchema = z.object({
@@ -59,9 +59,15 @@ export function UnitForm({
   const selectedContacts = watch('contactIds') || [];
 
   return (
-    <form id="unit-form" onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form
+      id="unit-form"
+      onSubmit={handleSubmit(onSubmit)}
+      className="space-y-6"
+    >
       <div className="space-y-2">
-        <Label htmlFor="name">{t('crm.units.name', 'Unit Name / Number')}</Label>
+        <Label htmlFor="name">
+          {t('crm.units.name', 'Unit Name / Number')}
+        </Label>
         <Input
           id="name"
           {...register('name')}
@@ -81,9 +87,15 @@ export function UnitForm({
           className="grid grid-cols-2 sm:grid-cols-3 gap-3"
         >
           {Object.values(UnitType).map((type) => (
-            <div key={type} className="flex items-center space-x-2 rounded-lg border border-border p-3 hover:bg-accent transition-colors">
+            <div
+              key={type}
+              className="flex items-center space-x-2 rounded-lg border border-border p-3 hover:bg-accent transition-colors"
+            >
               <RadioGroupItem value={type} id={`type-${type}`} />
-              <Label htmlFor={`type-${type}`} className="text-xs font-bold flex-1 cursor-pointer">
+              <Label
+                htmlFor={`type-${type}`}
+                className="text-xs font-bold flex-1 cursor-pointer"
+              >
                 {type.replace('_', ' ')}
               </Label>
             </div>
@@ -93,7 +105,9 @@ export function UnitForm({
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="building">{t('crm.units.building', 'Building / Block')}</Label>
+          <Label htmlFor="building">
+            {t('crm.units.building', 'Building / Block')}
+          </Label>
           <Input
             id="building"
             {...register('building')}
@@ -101,7 +115,9 @@ export function UnitForm({
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="sizeSqm">{t('crm.units.sizeSqm', 'Surface Area (sqm)')}</Label>
+          <Label htmlFor="sizeSqm">
+            {t('crm.units.sizeSqm', 'Surface Area (sqm)')}
+          </Label>
           <Input
             id="sizeSqm"
             type="number"
@@ -112,11 +128,15 @@ export function UnitForm({
       </div>
 
       <div className="space-y-2">
-        <Label>{t('crm.units.linkedContacts', 'Linked Residents / Contacts')}</Label>
+        <Label>
+          {t('crm.units.linkedContacts', 'Linked Residents / Contacts')}
+        </Label>
         <MultiSelect
           options={contactOptions}
           selected={selectedContacts}
-          onChange={(vals) => setValue('contactIds', vals, { shouldDirty: true })}
+          onChange={(vals) =>
+            setValue('contactIds', vals, { shouldDirty: true })
+          }
           placeholder="Assign contacts to this unit..."
         />
       </div>

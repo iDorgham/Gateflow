@@ -6,6 +6,7 @@
   "types": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
+    "./prisma": "./src/prisma.ts",
     "./client": "./src/client.ts",
     "./quota": "./src/quota.ts",
     "./access": "./src/access.ts"

@@ -10,6 +10,9 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Db]** `@gate-access/db/prisma` subpath re-exports `@prisma/client` only for client components; CRM/settings pick it up for `UnitType` / `GateMode`.
+- **[Tooling]** Next apps include `global.d.ts` (declares `*.css` modules) in `tsconfig.json`.
+- **[Tooling]** Root devDependencies pin TypeScript 5.9.3 and ESLint 8.57.1 (pnpm overrides).
 - **[Db]** avoid node:crypto in client webpack graph; turbo env passthrough
 
 - **[Scripts]** ralph-docs changelog inserts under Unreleased tri-track
