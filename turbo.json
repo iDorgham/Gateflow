@@ -29,7 +29,8 @@
         "DIRECT_DATABASE_URL",
         "STATSIG_SERVER_API_KEY",
         "EXPERIMENTATION_CONFIG_ITEM_KEY",
-        "tune_EXPERIMENTATION_CONFIG_ITEM_KEY"
+        "tune_EXPERIMENTATION_CONFIG_ITEM_KEY",
+        "PRISMA_CLIENT_ENGINE_TYPE"
       ],
       "cache": true
     },
