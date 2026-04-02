@@ -1,6 +1,6 @@
 # IDEA: advanced_seeding_emulation_v3 — Advanced Data Seeding & Emulation Panel
 
-**Status:** Planning  
+**Status:** Delivered (v3 plan complete)  
 **Supersedes / extends:** `IDEA_advanced_seeding_v2.md`  
 **Product line:** Platform super-admin tooling + `@gate-access/db` seeding engine
 
@@ -34,7 +34,7 @@ Source conversation is now available at `docs/Pasted_Text_1774974939864.txt` and
 
 ## Success metrics
 
-See `docs/plan/execution/PLAN_advanced_seeding_emulation_v3.md` — Success Metrics table.
+See `docs/plan/done/advanced_seeding_emulation_v3/PLAN_advanced_seeding_emulation_v3.md` — Success Metrics table.
 
 ## Seeding logic reference
 
@@ -44,7 +44,7 @@ Rush hour: scenario-specific temporal clustering (Gaussian peaks + baseline) for
 
 ## Related docs
 
-- `docs/plan/execution/PLAN_advanced_seeding_emulation_v3.md`
+- `docs/plan/done/advanced_seeding_emulation_v3/PLAN_advanced_seeding_emulation_v3.md`
 - `docs/Pasted_Text_1774974939864.txt`
 - `docs/arch/ARCHITECTURE.md`, `docs/arch/PROJECT_STRUCTURE.md`
 - `docs/archive/old-prds/PRD_v8.0.md`

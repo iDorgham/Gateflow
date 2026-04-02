@@ -31,4 +31,20 @@ jest.mock('@prisma/client', () => ({
   Prisma: {
     StringFilter: {},
   },
+  /** Minimal enum stubs so modules that import values (e.g. advanced-seed-service) load under the mock. */
+  ScanStatus: {
+    SUCCESS: 'SUCCESS',
+    FAILED: 'FAILED',
+    EXPIRED: 'EXPIRED',
+    MAX_USES_REACHED: 'MAX_USES_REACHED',
+    INACTIVE: 'INACTIVE',
+    DENIED: 'DENIED',
+  },
+  QRCodeType: {
+    SINGLE: 'SINGLE',
+    RECURRING: 'RECURRING',
+    PERMANENT: 'PERMANENT',
+    VISITOR: 'VISITOR',
+    OPEN: 'OPEN',
+  },
 }));

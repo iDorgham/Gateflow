@@ -68,7 +68,7 @@ _Dev workflow, security, analytics, component guides_
 _Feature plans, phase prompts, learning log, backlog_
 
 - [README](./docs/plan/README.md)
-- [Planned: advanced_seeding_emulation_v3](./docs/plan/planned/advanced_seeding_emulation_v3/README.md)
+- [Done: advanced_seeding_emulation_v3](./docs/plan/done/advanced_seeding_emulation_v3/README.md)
   - `backlog/` — 3 files
   - `context/` — 23 files
   - `done/` — 1 files

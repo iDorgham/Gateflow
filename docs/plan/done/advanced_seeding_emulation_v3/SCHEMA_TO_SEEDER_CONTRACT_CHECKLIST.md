@@ -8,7 +8,7 @@ Use this checklist at the end of **every phase** that touches seeding, emulation
 
 - [ ] `.antigravity/rules/00-gateflow-core.mdc`
 - [ ] `.antigravity/contracts/CONTRACTS.md`
-- [ ] `docs/plan/planned/advanced_seeding_emulation_v3/PLAN_advanced_seeding_emulation_v3.md`
+- [ ] `docs/plan/done/advanced_seeding_emulation_v3/PLAN_advanced_seeding_emulation_v3.md`
 - [ ] Active phase prompt (`PROMPT_advanced_seeding_emulation_v3_phase_N.md`)
 - [ ] `docs/Pasted_Text_1774974939864.txt` (for scenario and temporal realism constants)
 

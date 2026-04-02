@@ -94,6 +94,8 @@ npx prisma db seed
 npx prisma studio
 ```
 
+**Seed flags and traffic emulation** (dry-run, integrity checks, CLI emulation): see [SEED_AND_EMULATION_CLI.md](./SEED_AND_EMULATION_CLI.md).
+
 Conventions:
 
 - Schema file: `packages/db/prisma/schema.prisma`.

@@ -4,10 +4,11 @@ Lifecycle status and execution entrypoint for `advanced_seeding_emulation_v3`.
 
 ## Status
 
-- **Lifecycle:** `planned`
-- **Plan file:** `docs/plan/planned/advanced_seeding_emulation_v3/PLAN_advanced_seeding_emulation_v3.md`
-- **Checklist:** `docs/plan/planned/advanced_seeding_emulation_v3/SCHEMA_TO_SEEDER_CONTRACT_CHECKLIST.md`
+- **Lifecycle:** `done` (all 9 phases)
+- **Plan file:** `./PLAN_advanced_seeding_emulation_v3.md` (also `docs/plan/done/advanced_seeding_emulation_v3/PLAN_advanced_seeding_emulation_v3.md`)
+- **Checklist:** `./SCHEMA_TO_SEEDER_CONTRACT_CHECKLIST.md`
 - **IDEA source:** `docs/plan/context/IDEA_advanced_seeding_emulation_v3.md`
+- **Ops CLI:** `docs/guides/SEED_AND_EMULATION_CLI.md`
 
 ## Canonical /dev Commands
 
@@ -27,8 +28,7 @@ Use one phase at a time:
 
 ## Notes
 
-- All prompts and checklist references are already normalized to `planned`.
-- Keep security hard gates active in every phase:
+- Security hard gates for seeding and emulation:
   - `organizationId` scoping
   - `deletedAt: null` on soft-deleted models
   - HMAC-SHA256 QR signing via `QR_SIGNING_SECRET`

@@ -1,8 +1,8 @@
 # Phase 6: QR Generation, Access Logs & Relational Chain
 
-> **Checklist (mandatory):** `docs/plan/planned/advanced_seeding_emulation_v3/SCHEMA_TO_SEEDER_CONTRACT_CHECKLIST.md`
+> **Checklist (mandatory):** `docs/plan/done/advanced_seeding_emulation_v3/SCHEMA_TO_SEEDER_CONTRACT_CHECKLIST.md`
 
-> **Plan:** `docs/plan/planned/advanced_seeding_emulation_v3/PLAN_advanced_seeding_emulation_v3.md`
+> **Plan:** `docs/plan/done/advanced_seeding_emulation_v3/PLAN_advanced_seeding_emulation_v3.md`
 
 ### Primary role
 

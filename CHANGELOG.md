@@ -12,7 +12,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 - **[Scripts]** ralph-docs changelog inserts under Unreleased tri-track
 
-- **[Plan Lifecycle]** moved `advanced_seeding_emulation_v3` assets to `docs/plan/planned/advanced_seeding_emulation_v3/` and normalized prompt/checklist links.
+- **[Plan Lifecycle]** `advanced_seeding_emulation_v3` plan assets live under `docs/plan/done/advanced_seeding_emulation_v3/` (completed); prompt/checklist links normalized to that path.
 - **[Backlog]** added tracking entry for `advanced_seeding_emulation_v3` in `docs/plan/backlog/ALL_TASKS_BACKLOG.md`.
 - **[Plan Docs]** added a local README for `advanced_seeding_emulation_v3` with lifecycle status and canonical `/dev` commands.
 - **[Plan Docs]** initialize `resident_portal_responsive` 5-phase roadmap and phase prompts.
@@ -28,6 +28,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 - **[Advanced Seeding Emulation V3 — DB]** Phase 6: `seedRelationalChain` + `relational-chain-seed` — HMAC-signed VISITOR `QRCode` (`signQRPayload` / `verifyQRSignature`), `VisitorQR`, batched `ScanLog` (~500) with unique `scanUuid`; org-scoped preflight + `scanLogWhereForOrganization`; tests for verify/tamper/isolation/chain depth.
 - **[Advanced Seeding Emulation V3 — API]** Phase 7: `POST /api/admin/emulate-traffic` (client-dashboard) — Super Admin + CSRF, Upstash `checkRateLimit` (5/hour per admin), Zod body (`scenario`, `pastDays`, `totalScans`, `incidentRate`, `randomSeed`, `organizationId`, `dryRun`, optional entity overrides); `runEmulation` in `@gate-access/db`; `AiActionLog` per run (target org id, no secrets in metadata); Jest coverage for 401/403/429/400/404/500/200.
 - **[Advanced Seeding Emulation V3 — Client Dashboard]** Phase 8: Super Admin `/{locale}/dashboard/emulation` multi-step wizard (ADS tokens, i18n, `csrfFetch` → Phase 7 API); sidebar “Traffic emulation” (platform section); client Zod mirror + `emulation-schema` unit tests.
+- **[Advanced Seeding Emulation V3 — DB / Ops]** Phase 9: `prisma/seed-entry.ts` router (`--help`, `--dry-run`, `--test-integrity`, `--organizations.min/max`, emulation flags aligned with Phase 7); `executeSeedCli` + `packages/db` tests; `verify:seed-contract` script; `docs/guides/SEED_AND_EMULATION_CLI.md`; Prisma `seed` → `seed-entry.ts`; fix `prisma/seed.ts` loop variable (`organizationsWithProjects`).
 
 ### AI Tools
 

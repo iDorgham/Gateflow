@@ -46,7 +46,7 @@ Nine phases build a **security-first** advanced seeding and **live emulation** c
 | 6   | QR Generation, Access Logs & Relational Chain      | **BACKEND** + **SECURITY** | 1–5                 | Cursor         | HMAC-SHA256 QRs; VisitorQR; ScanLog; chain integrity tests                              | [x]    |
 | 7   | Live Emulation API (Vercel Serverless)             | **BACKEND** + **SECURITY** | 1–6                 | Cursor         | `POST /api/admin/emulate-traffic`; Super Admin guard; Upstash rate limit; `AiActionLog` | [x]    |
 | 8   | Admin Dashboard Multi-Step UI Wizard (ADS)         | **FRONTEND**               | 7 (contract stable) | Cursor         | `/dashboard/emulation`; 6-step wizard; a11y; tokens                                     | [x]    |
-| 9   | CLI Integration, Testing & Documentation           | **BACKEND** + **QA**       | 1–8                 | Cursor         | `seed` flags; integrity/dry-run; docs; acceptance tests                                 | [ ]    |
+| 9   | CLI Integration, Testing & Documentation           | **BACKEND** + **QA**       | 1–8                 | Cursor         | `seed` flags; integrity/dry-run; docs; acceptance tests                                 | [x]    |
 
 ---
 
@@ -153,7 +153,7 @@ Seeder output must match current schema and client-dashboard table/data contract
 ## Execution order
 
 1. Preflight: clean branch, `pnpm preflight` (or fix unrelated failures before starting Phase 1).
-2. For each phase N: run `/dev` with `docs/plan/planned/advanced_seeding_emulation_v3/PROMPT_advanced_seeding_emulation_v3_phase_N.md`.
+2. For each phase N: run `/dev` with `docs/plan/done/advanced_seeding_emulation_v3/PROMPT_advanced_seeding_emulation_v3_phase_N.md`.
 3. Commit: `feat(seeding): phase N — <short title>`
 4. Final: `feat(seeding): advanced emulation panel v3 — data integrity, ADS UI, Red Sea realism`
 
@@ -180,4 +180,4 @@ Seeder output must match current schema and client-dashboard table/data contract
 | 8     | `PROMPT_advanced_seeding_emulation_v3_phase_8.md` |
 | 9     | `PROMPT_advanced_seeding_emulation_v3_phase_9.md` |
 
-All prompts live in **`docs/plan/planned/advanced_seeding_emulation_v3/`** alongside this file.
+All prompts live in **`docs/plan/done/advanced_seeding_emulation_v3/`** alongside this file.

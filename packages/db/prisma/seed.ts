@@ -88,7 +88,7 @@ async function main() {
     },
   });
 
-  for (const org of orgsWithProjects) {
+  for (const org of organizationsWithProjects) {
     const mainProject = org.projects[0];
     if (!mainProject) continue;
 
