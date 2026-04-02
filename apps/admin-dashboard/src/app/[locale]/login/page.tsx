@@ -66,7 +66,10 @@ function LoginControls({ locale }: { locale: Locale }) {
         </button>
         {langOpen && (
           <>
-            <div className="fixed inset-0 z-10" onClick={() => setLangOpen(false)} />
+            <div
+              className="fixed inset-0 z-10"
+              onClick={() => setLangOpen(false)}
+            />
             <div className="absolute end-0 top-full mt-1 z-20 min-w-[120px] rounded-xl border border-border bg-card shadow-xl py-1 overflow-hidden">
               {LOCALES.map((l) => (
                 <button
@@ -120,7 +123,7 @@ export default function AdminLoginPage() {
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
-  const DEV_KEY = 'dev-admin-key-change-in-production';
+  const DEV_KEY = 'local-setup-admin-access-key-change-in-production';
 
   async function handleCopyDevKey() {
     try {
@@ -175,7 +178,10 @@ export default function AdminLoginPage() {
       variant="admin"
       appName="Admin"
       heading={t('adminHeading', 'Admin Portal')}
-      subtitle={t('adminSubtitle', 'Secure access for platform operators. Use your organization access key.')}
+      subtitle={t(
+        'adminSubtitle',
+        'Secure access for platform operators. Use your organization access key.'
+      )}
       topRight={
         <div className="flex items-center gap-1">
           {process.env.NODE_ENV !== 'production' && (
@@ -190,7 +196,9 @@ export default function AdminLoginPage() {
                 type="button"
                 onClick={handleCopyDevKey}
                 className="rounded-lg p-1.5 text-muted-foreground hover:bg-black/5 dark:hover:bg-white/10 hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                aria-label={copied ? t('copied', 'Copied') : t('copyKey', 'Copy key')}
+                aria-label={
+                  copied ? t('copied', 'Copied') : t('copyKey', 'Copy key')
+                }
               >
                 {copied ? (
                   <Check className="h-3.5 w-3.5 text-success" />
@@ -210,7 +218,11 @@ export default function AdminLoginPage() {
     >
       <Card className="border-none shadow-none bg-transparent">
         <CardContent className="px-0 pb-0">
-          <form onSubmit={handleSubmit} className="space-y-6" dir={isRtl ? 'rtl' : 'ltr'}>
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-6"
+            dir={isRtl ? 'rtl' : 'ltr'}
+          >
             {error && (
               <div className="rounded-xl border border-destructive/20 bg-destructive/5 px-4 py-3 text-sm text-destructive font-semibold flex items-center gap-2">
                 <AlertCircle className="h-4 w-4 shrink-0" />
@@ -250,14 +262,21 @@ export default function AdminLoginPage() {
                     isRtl ? 'left-3' : 'right-3'
                   )}
                 >
-                  {showKey ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  {showKey ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
                 </button>
               </div>
             </div>
 
             {process.env.NODE_ENV !== 'production' && (
               <p className="text-xs text-muted-foreground/80 whitespace-pre-line">
-                {t('adminDevKeyHint', 'Need the dev key?\nHover over the copy icon in the top-right corner.')}
+                {t(
+                  'adminDevKeyHint',
+                  'Need the dev key?\nHover over the copy icon in the top-right corner.'
+                )}
               </p>
             )}
 
@@ -269,9 +288,16 @@ export default function AdminLoginPage() {
               {loading ? (
                 <Loader2 className="h-4 w-4 animate-spin mx-auto" />
               ) : (
-                <span className={cn('flex items-center justify-center gap-2', isRtl && 'flex-row-reverse')}>
+                <span
+                  className={cn(
+                    'flex items-center justify-center gap-2',
+                    isRtl && 'flex-row-reverse'
+                  )}
+                >
                   {isRtl ? 'تفويض الوصول' : 'Authorize access'}
-                  <ArrowRight className={cn('h-4 w-4', isRtl && 'rotate-180')} />
+                  <ArrowRight
+                    className={cn('h-4 w-4', isRtl && 'rotate-180')}
+                  />
                 </span>
               )}
             </Button>

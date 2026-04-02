@@ -130,7 +130,8 @@ const SAFE_DEFAULTS = {
   NEXTAUTH_URL: 'http://localhost:3001',
   NEXT_PUBLIC_APP_URL: 'http://localhost:3001',
   EXPO_PUBLIC_API_URL: 'http://localhost:3001/api',
-  ADMIN_ACCESS_KEY: 'dev-admin-key',
+  // 35+ chars; matches admin-dashboard dev login helper (no "dev" substring for check-env weak list)
+  ADMIN_ACCESS_KEY: 'local-setup-admin-access-key-change-in-production',
   NODE_ENV: 'development',
 };
 

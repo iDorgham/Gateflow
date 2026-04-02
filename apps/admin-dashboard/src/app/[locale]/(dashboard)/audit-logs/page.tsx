@@ -59,7 +59,7 @@ export default async function AuditLogsPage(props: {
 
   const { locale } = params;
 
-  await requireAdmin();
+  await requireAdmin(locale);
   const { t } = (await getTranslation(locale, 'admin')) as {
     t: (key: string, options?: Record<string, unknown> | string) => string;
   };

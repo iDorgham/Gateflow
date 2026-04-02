@@ -13,6 +13,7 @@
 import { createHash } from 'crypto';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { i18n, type Locale } from '@/lib/i18n/i18n-config';
 
 const COOKIE_NAME = 'admin_session';
 const SECURE = process.env.NODE_ENV === 'production';
@@ -25,7 +26,7 @@ export function expectedSessionToken(): string {
   if (!key || key.length < 32) {
     throw new Error(
       '[admin-auth] ADMIN_ACCESS_KEY is missing or too short. ' +
-      'Set it to a random string (at least 32 chars) in your .env file.'
+        'Set it to a random string (at least 32 chars) in your .env file.'
     );
   }
   return createHash('sha256').update(key).digest('hex');
@@ -90,11 +91,15 @@ export async function isAdminAuthorized(request: Request): Promise<boolean> {
 
 /**
  * Use at the top of every admin server component / action.
- * Redirects to /login if the session is invalid.
+ * Redirects to `/{locale}/login` — the app has no bare `/login` (only `[locale]/login`).
  */
-export async function requireAdmin(): Promise<void> {
+export async function requireAdmin(locale?: Locale): Promise<void> {
   if (!(await isAdminAuthenticated())) {
-    redirect('/login');
+    const loc =
+      locale && (i18n.locales as readonly string[]).includes(locale)
+        ? locale
+        : i18n.defaultLocale;
+    redirect(`/${loc}/login`);
   }
 }
 

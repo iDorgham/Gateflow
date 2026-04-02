@@ -32,11 +32,18 @@ import {
 
 export const metadata = { title: 'Platform Authority' };
 
+function localeFromFormData(formData: FormData): Locale {
+  const raw = String(formData.get('locale') ?? '');
+  if (raw === 'ar-EG' || raw === 'en') return raw;
+  return 'en';
+}
+
 // ─── Server actions ────────────────────────────────────────────────────────────
 
 async function createAdmin(formData: FormData) {
   'use server';
-  await requireAdmin();
+  const locale = localeFromFormData(formData);
+  await requireAdmin(locale);
   const name = (formData.get('name') as string)?.trim();
   const email = (formData.get('email') as string)?.trim().toLowerCase();
   const password = formData.get('password') as string;
@@ -66,13 +73,14 @@ async function createAdmin(formData: FormData) {
     create: { name, email, passwordHash, roleId: adminRole.id },
     update: { name, passwordHash, roleId: adminRole.id, deletedAt: null },
   });
-  revalidatePath('/admins');
-  redirect('/admins');
+  revalidatePath(`/${locale}/admins`);
+  redirect(`/${locale}/admins`);
 }
 
 async function resetAdminPassword(formData: FormData) {
   'use server';
-  await requireAdmin();
+  const locale = localeFromFormData(formData);
+  await requireAdmin(locale);
   const id = formData.get('id') as string;
   if (!id) return;
 
@@ -89,13 +97,14 @@ async function resetAdminPassword(formData: FormData) {
       sameSite: 'lax',
     }
   );
-  revalidatePath('/admins');
-  redirect('/admins');
+  revalidatePath(`/${locale}/admins`);
+  redirect(`/${locale}/admins`);
 }
 
 async function toggleSuspend(formData: FormData) {
   'use server';
-  await requireAdmin();
+  const locale = localeFromFormData(formData);
+  await requireAdmin(locale);
   const id = formData.get('id') as string;
   const isSuspended = formData.get('suspended') === 'true';
   if (!id) return;
@@ -103,7 +112,7 @@ async function toggleSuspend(formData: FormData) {
     where: { id },
     data: { deletedAt: isSuspended ? null : new Date() },
   });
-  revalidatePath('/admins');
+  revalidatePath(`/${locale}/admins`);
 }
 
 // ─── Page ──────────────────────────────────────────────────────────────────────
@@ -115,7 +124,7 @@ export default async function AdminsPage(props: {
 
   const { locale } = params;
 
-  await requireAdmin();
+  await requireAdmin(locale);
   const { t } = await getTranslation(locale, 'admin');
 
   // Key fingerprint — first 8 chars of the session token hash (safe to show)
@@ -216,6 +225,7 @@ export default async function AdminsPage(props: {
       render: (admin) => (
         <div className="flex items-center gap-2">
           <form action={resetAdminPassword}>
+            <input type="hidden" name="locale" value={locale} />
             <input type="hidden" name="id" value={admin.id} />
             <Button
               type="submit"
@@ -228,6 +238,7 @@ export default async function AdminsPage(props: {
             </Button>
           </form>
           <form action={toggleSuspend}>
+            <input type="hidden" name="locale" value={locale} />
             <input type="hidden" name="id" value={admin.id} />
             <input
               type="hidden"
@@ -467,6 +478,7 @@ export default async function AdminsPage(props: {
             </CardHeader>
             <CardContent className="p-6">
               <form action={createAdmin} className="space-y-5">
+                <input type="hidden" name="locale" value={locale} />
                 <div className="space-y-2">
                   <Label
                     htmlFor="name"

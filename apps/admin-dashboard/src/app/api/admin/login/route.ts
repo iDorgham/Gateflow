@@ -15,20 +15,35 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const key: string = body?.key ?? '';
 
     if (!key) {
-      return NextResponse.json({ success: false, message: 'Access key required.' }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: 'Access key required.' },
+        { status: 400 }
+      );
     }
 
     const expectedKey = process.env.ADMIN_ACCESS_KEY;
 
-    if (!expectedKey) {
-      console.error('Server Error: ADMIN_ACCESS_KEY is not set.');
-      return NextResponse.json({ success: false, message: 'Server configuration error.' }, { status: 500 });
+    if (!expectedKey || expectedKey.length < 32) {
+      console.error(
+        'Server Error: ADMIN_ACCESS_KEY is not set or shorter than 32 characters.'
+      );
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            'Server configuration error: ADMIN_ACCESS_KEY must be at least 32 characters.',
+        },
+        { status: 503 }
+      );
     }
     if (key !== expectedKey) {
       const received = sha256(key);
       const expected = sha256(expectedKey);
       if (received !== expected) {
-        return NextResponse.json({ success: false, message: 'Invalid access key.' }, { status: 401 });
+        return NextResponse.json(
+          { success: false, message: 'Invalid access key.' },
+          { status: 401 }
+        );
       }
     }
 
@@ -44,13 +59,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ success: true });
   } catch (e: unknown) {
     console.error('Login Error:', e);
-    return NextResponse.json({ success: false, message: 'Server error.' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: 'Server error.' },
+      { status: 500 }
+    );
   }
 }
-
 
 export async function DELETE(): Promise<NextResponse> {
   (await cookies()).delete(COOKIE_NAME);
   return NextResponse.json({ success: true });
 }
-

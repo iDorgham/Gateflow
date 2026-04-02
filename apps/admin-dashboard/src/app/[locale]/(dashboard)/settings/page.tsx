@@ -12,7 +12,14 @@ import {
   CheckCircle2,
   AlertCircle,
 } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, Badge, cn } from '@gate-access/ui';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Badge,
+  cn,
+} from '@gate-access/ui';
 import { PageHeader } from '@gate-access/ui';
 import { CompliancePlaceholder } from '@/components/settings/CompliancePlaceholder';
 
@@ -26,27 +33,33 @@ function envMasked(name: string, chars = 6): string {
   const val = process.env[name];
   if (!val) return '— not set —';
   if (val.length <= chars) return '●'.repeat(val.length);
-  return val.slice(0, chars) + '●'.repeat(Math.max(0, val.length - chars - 4)) + val.slice(-4);
+  return (
+    val.slice(0, chars) +
+    '●'.repeat(Math.max(0, val.length - chars - 4)) +
+    val.slice(-4)
+  );
 }
 
-export default async function SettingsPage(
-  props: {
-    params: Promise<{ locale: Locale }>;
-  }
-) {
+export default async function SettingsPage(props: {
+  params: Promise<{ locale: Locale }>;
+}) {
   const params = await props.params;
 
-  const {
-    locale
-  } = params;
+  const { locale } = params;
 
-  await await requireAdmin();
+  await requireAdmin(locale);
   const { t } = await getTranslation(locale, 'admin');
 
   const dbUrl = process.env.DATABASE_URL ?? '';
-  const dbHost = dbUrl ? (() => {
-    try { return new URL(dbUrl).hostname; } catch { return t('settings.notSet'); }
-  })() : t('settings.notSet');
+  const dbHost = dbUrl
+    ? (() => {
+        try {
+          return new URL(dbUrl).hostname;
+        } catch {
+          return t('settings.notSet');
+        }
+      })()
+    : t('settings.notSet');
 
   const sections = [
     {
@@ -54,8 +67,16 @@ export default async function SettingsPage(
       icon: Database,
       color: 'text-blue-600 bg-blue-500/10',
       items: [
-        { label: t('settings.host'), value: dbHost, ok: !!dbHost && dbHost !== t('settings.notSet') },
-        { label: 'DATABASE_URL', value: envMasked('DATABASE_URL'), ok: envPresent('DATABASE_URL') },
+        {
+          label: t('settings.host'),
+          value: dbHost,
+          ok: !!dbHost && dbHost !== t('settings.notSet'),
+        },
+        {
+          label: 'DATABASE_URL',
+          value: envMasked('DATABASE_URL'),
+          ok: envPresent('DATABASE_URL'),
+        },
       ],
     },
     {
@@ -63,9 +84,21 @@ export default async function SettingsPage(
       icon: ShieldCheck,
       color: 'text-emerald-600 bg-emerald-500/10',
       items: [
-        { label: 'NEXTAUTH_SECRET', value: envMasked('NEXTAUTH_SECRET'), ok: envPresent('NEXTAUTH_SECRET') },
-        { label: 'NEXTAUTH_URL', value: process.env.NEXTAUTH_URL ?? t('settings.notSet'), ok: envPresent('NEXTAUTH_URL') },
-        { label: 'ADMIN_ACCESS_KEY', value: envMasked('ADMIN_ACCESS_KEY'), ok: envPresent('ADMIN_ACCESS_KEY') },
+        {
+          label: 'NEXTAUTH_SECRET',
+          value: envMasked('NEXTAUTH_SECRET'),
+          ok: envPresent('NEXTAUTH_SECRET'),
+        },
+        {
+          label: 'NEXTAUTH_URL',
+          value: process.env.NEXTAUTH_URL ?? t('settings.notSet'),
+          ok: envPresent('NEXTAUTH_URL'),
+        },
+        {
+          label: 'ADMIN_ACCESS_KEY',
+          value: envMasked('ADMIN_ACCESS_KEY'),
+          ok: envPresent('ADMIN_ACCESS_KEY'),
+        },
       ],
     },
     {
@@ -73,7 +106,11 @@ export default async function SettingsPage(
       icon: Key,
       color: 'text-amber-600 bg-amber-500/10',
       items: [
-        { label: 'QR_SIGNING_SECRET', value: envMasked('QR_SIGNING_SECRET'), ok: envPresent('QR_SIGNING_SECRET') },
+        {
+          label: 'QR_SIGNING_SECRET',
+          value: envMasked('QR_SIGNING_SECRET'),
+          ok: envPresent('QR_SIGNING_SECRET'),
+        },
         { label: t('settings.algorithm'), value: 'HMAC-SHA256', ok: true },
         { label: t('settings.minKeyLength'), value: '32 chars', ok: true },
       ],
@@ -83,8 +120,16 @@ export default async function SettingsPage(
       icon: RefreshCw,
       color: 'text-violet-600 bg-violet-500/10',
       items: [
-        { label: 'UPSTASH_REDIS_REST_URL', value: envMasked('UPSTASH_REDIS_REST_URL'), ok: envPresent('UPSTASH_REDIS_REST_URL') },
-        { label: 'UPSTASH_REDIS_REST_TOKEN', value: envMasked('UPSTASH_REDIS_REST_TOKEN'), ok: envPresent('UPSTASH_REDIS_REST_TOKEN') },
+        {
+          label: 'UPSTASH_REDIS_REST_URL',
+          value: envMasked('UPSTASH_REDIS_REST_URL'),
+          ok: envPresent('UPSTASH_REDIS_REST_URL'),
+        },
+        {
+          label: 'UPSTASH_REDIS_REST_TOKEN',
+          value: envMasked('UPSTASH_REDIS_REST_TOKEN'),
+          ok: envPresent('UPSTASH_REDIS_REST_TOKEN'),
+        },
         { label: t('settings.provider'), value: 'Upstash Redis', ok: true },
       ],
     },
@@ -93,8 +138,16 @@ export default async function SettingsPage(
       icon: Globe,
       color: 'text-cyan-600 bg-cyan-500/10',
       items: [
-        { label: 'NEXT_PUBLIC_APP_URL', value: process.env.NEXT_PUBLIC_APP_URL ?? t('settings.notSet'), ok: envPresent('NEXT_PUBLIC_APP_URL') },
-        { label: 'NEXT_PUBLIC_API_URL', value: process.env.NEXT_PUBLIC_API_URL ?? t('settings.notSet'), ok: envPresent('NEXT_PUBLIC_API_URL') },
+        {
+          label: 'NEXT_PUBLIC_APP_URL',
+          value: process.env.NEXT_PUBLIC_APP_URL ?? t('settings.notSet'),
+          ok: envPresent('NEXT_PUBLIC_APP_URL'),
+        },
+        {
+          label: 'NEXT_PUBLIC_API_URL',
+          value: process.env.NEXT_PUBLIC_API_URL ?? t('settings.notSet'),
+          ok: envPresent('NEXT_PUBLIC_API_URL'),
+        },
       ],
     },
     {
@@ -103,20 +156,39 @@ export default async function SettingsPage(
       color: 'text-rose-600 bg-rose-500/10',
       items: [
         { label: t('settings.accessTokenTtl'), value: '15 minutes', ok: true },
-        { label: t('settings.refreshTokenTtl'), value: '30 days (rotated)', ok: true },
-        { label: t('settings.passwordHashing'), value: 'Argon2id — t=3, m=65536, p=4', ok: true },
+        {
+          label: t('settings.refreshTokenTtl'),
+          value: '30 days (rotated)',
+          ok: true,
+        },
+        {
+          label: t('settings.passwordHashing'),
+          value: 'Argon2id — t=3, m=65536, p=4',
+          ok: true,
+        },
         { label: t('settings.csrf'), value: 'Double-submit cookie', ok: true },
-        { label: t('settings.apiKeyStorage'), value: 'SHA-256 hash only', ok: true },
-        { label: t('settings.fieldEncryption'), value: 'AES-256 (webhook secrets)', ok: true },
+        {
+          label: t('settings.apiKeyStorage'),
+          value: 'SHA-256 hash only',
+          ok: true,
+        },
+        {
+          label: t('settings.fieldEncryption'),
+          value: 'AES-256 (webhook secrets)',
+          ok: true,
+        },
       ],
     },
   ];
 
-  const missingCount = sections.flatMap((s) => s.items).filter((i) => !i.ok).length;
+  const missingCount = sections
+    .flatMap((s) => s.items)
+    .filter((i) => !i.ok).length;
 
   return (
     <div className="space-y-6">
-      <PageHeader titleClassName="italic uppercase"
+      <PageHeader
+        titleClassName="italic uppercase"
         title={t('settings.title')}
         subtitle={t('settings.subtitle')}
         badge={
@@ -136,7 +208,9 @@ export default async function SettingsPage(
             ) : (
               <span className="flex items-center gap-1.5">
                 <AlertCircle className="h-3.5 w-3.5" />
-                {missingCount === 1 ? t('settings.missingConfig', { count: missingCount }) : t('settings.missingConfigs', { count: missingCount })}
+                {missingCount === 1
+                  ? t('settings.missingConfig', { count: missingCount })
+                  : t('settings.missingConfigs', { count: missingCount })}
               </span>
             )}
           </Badge>
@@ -184,10 +258,14 @@ export default async function SettingsPage(
                       ) : (
                         <AlertCircle className="h-3 w-3 text-amber-500 shrink-0" />
                       )}
-                      <code className={cn(
-                        'text-[11px] font-mono truncate',
-                        item.ok ? 'text-foreground' : 'text-amber-600 dark:text-amber-400'
-                      )}>
+                      <code
+                        className={cn(
+                          'text-[11px] font-mono truncate',
+                          item.ok
+                            ? 'text-foreground'
+                            : 'text-amber-600 dark:text-amber-400'
+                        )}
+                      >
                         {item.value}
                       </code>
                     </div>
@@ -206,10 +284,14 @@ export default async function SettingsPage(
         <div className="flex items-start gap-3">
           <Settings className="h-4 w-4 text-amber-600 dark:text-amber-400 mt-0.5 shrink-0" />
           <div className="space-y-1">
-            <p className="text-sm font-bold text-amber-900 dark:text-amber-300">{t('settings.configNoticeTitle')}</p>
+            <p className="text-sm font-bold text-amber-900 dark:text-amber-300">
+              {t('settings.configNoticeTitle')}
+            </p>
             <p className="text-xs text-amber-700 dark:text-amber-400">
               {String(t('settings.configNoticeDesc')).split('<1>')[0]}
-              <code className="rounded bg-amber-100 dark:bg-amber-900/50 px-1 font-mono">.env.local</code>
+              <code className="rounded bg-amber-100 dark:bg-amber-900/50 px-1 font-mono">
+                .env.local
+              </code>
               {String(t('settings.configNoticeDesc')).split('</1>')[1]}
             </p>
           </div>
