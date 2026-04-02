@@ -37,15 +37,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
     // Constant-time compare to avoid timing attacks.
-    // We compare SHA-256 digests so the comparison length is fixed.
+    // We compare SHA-256 digests so the comparison length is fixed:
+    // - sha256 hex digest is always 64 chars
+    // - decoded buffer is always 32 bytes
     const receivedHash = sha256(key);
     const expectedHash = sha256(expectedKey);
     const receivedBuf = Buffer.from(receivedHash, 'hex');
     const expectedBuf = Buffer.from(expectedHash, 'hex');
-    if (
-      receivedBuf.length !== expectedBuf.length ||
-      !timingSafeEqual(receivedBuf, expectedBuf)
-    ) {
+    if (!timingSafeEqual(receivedBuf, expectedBuf)) {
       return NextResponse.json(
         { success: false, message: 'Invalid access key.' },
         { status: 401 }

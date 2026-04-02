@@ -63,8 +63,8 @@ export function EmulationWizard() {
     React.useState<UnitIdFormatKey>('COMPACT');
   const [projectId, setProjectId] = React.useState('');
   const [contactId, setContactId] = React.useState('');
-  const gateId = '';
-  const unitId = '';
+  const [gateId, setGateId] = React.useState('');
+  const [unitId, setUnitId] = React.useState('');
   const [createdByUserId, setCreatedByUserId] = React.useState('');
 
   const [minPhases, setMinPhases] = React.useState(1);
@@ -323,6 +323,36 @@ export function EmulationWizard() {
                     <Input
                       value={projectId}
                       onChange={(e) => setProjectId(e.target.value)}
+                      placeholder={t('emulation.placeholders.uuid')}
+                      className="pl-10 h-12 bg-ds-background-neutral-subtle border-ds-border shadow-none font-mono text-xs"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2.5">
+                  <Label className="text-[11px] font-black uppercase tracking-widest text-ds-text-subtle">
+                    {t('emulation.fields.gate_id_optional')}
+                  </Label>
+                  <div className="relative group">
+                    <Terminal className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-ds-text-subtlest group-focus-within:text-ds-text-selected transition-colors" />
+                    <Input
+                      value={gateId}
+                      onChange={(e) => setGateId(e.target.value)}
+                      placeholder={t('emulation.placeholders.uuid')}
+                      className="pl-10 h-12 bg-ds-background-neutral-subtle border-ds-border shadow-none font-mono text-xs"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2.5">
+                  <Label className="text-[11px] font-black uppercase tracking-widest text-ds-text-subtle">
+                    {t('emulation.fields.unit_id_optional')}
+                  </Label>
+                  <div className="relative group">
+                    <Zap className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-ds-text-subtlest group-focus-within:text-ds-text-selected transition-colors" />
+                    <Input
+                      value={unitId}
+                      onChange={(e) => setUnitId(e.target.value)}
                       placeholder={t('emulation.placeholders.uuid')}
                       className="pl-10 h-12 bg-ds-background-neutral-subtle border-ds-border shadow-none font-mono text-xs"
                     />
