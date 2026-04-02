@@ -140,8 +140,8 @@ importers:
         specifier: workspace:^
         version: link:../../packages/ui
       '@hugeicons/core-free-icons':
-        specifier: ^3.1.1
-        version: 3.3.0
+        specifier: ^4.1.1
+        version: 4.1.1
       '@hugeicons/react':
         specifier: ^1.1.5
         version: 1.1.6(react@18.3.1)
@@ -270,8 +270,8 @@ importers:
         specifier: ^5.2.2
         version: 5.2.2(react-hook-form@7.72.0)
       '@hugeicons/core-free-icons':
-        specifier: ^3.1.1
-        version: 3.3.0
+        specifier: ^4.1.1
+        version: 4.1.1
       '@hugeicons/react':
         specifier: ^1.1.5
         version: 1.1.6(react@18.3.1)
@@ -295,7 +295,7 @@ importers:
         version: 3.20.5(@tiptap/pm@3.20.5)
       '@tiptap/extension-placeholder':
         specifier: ^3.20.4
-        version: 3.20.5(@tiptap/extensions@3.20.5)
+        version: 3.20.5(@tiptap/extensions@3.22.0)
       '@tiptap/pm':
         specifier: ^3.20.4
         version: 3.20.5
@@ -448,8 +448,8 @@ importers:
         specifier: workspace:^
         version: link:../../packages/ui
       '@hugeicons/core-free-icons':
-        specifier: ^3.1.1
-        version: 3.3.0
+        specifier: ^4.1.1
+        version: 4.1.1
       '@hugeicons/react':
         specifier: ^1.1.5
         version: 1.1.6(react@19.2.4)
@@ -639,8 +639,8 @@ importers:
         specifier: workspace:^
         version: link:../../packages/ui
       '@hugeicons/core-free-icons':
-        specifier: ^3.1.1
-        version: 3.3.0
+        specifier: ^4.1.1
+        version: 4.1.1
       '@hugeicons/react':
         specifier: ^1.1.5
         version: 1.1.6(react@18.3.1)
@@ -983,8 +983,8 @@ importers:
         specifier: workspace:*
         version: link:../types
       '@hugeicons/core-free-icons':
-        specifier: ^3.1.1
-        version: 3.3.0
+        specifier: ^4.1.1
+        version: 4.1.1
       '@hugeicons/react':
         specifier: ^1.1.5
         version: 1.1.6(react@19.2.4)
@@ -3358,8 +3358,8 @@ packages:
       react-hook-form: 7.72.0(react@18.3.1)
     dev: false
 
-  /@hugeicons/core-free-icons@3.3.0:
-    resolution: {integrity: sha512-qYyr4JQ2eQIHTSTbITvnJvs6ERNK64D9gpwZnf2IyuG0exzqfyABLO/oTB71FB3RZPfu1GbwycdiGSo46apjMQ==}
+  /@hugeicons/core-free-icons@4.1.1:
+    resolution: {integrity: sha512-teqIBvPHl90ygIwKyJwTxOH8aNp1X1PjDTcMvLkEwdPxPD+8mssrZ5kXKIAJJFYPsz69a8LYQY0UPid4PAdavg==}
     dev: false
 
   /@hugeicons/react@1.1.6(react@18.3.1):
@@ -6403,11 +6403,11 @@ packages:
       '@tiptap/core': 3.20.5(@tiptap/pm@3.20.5)
     dev: false
 
-  /@tiptap/extension-bubble-menu@3.20.5(@tiptap/core@3.20.5)(@tiptap/pm@3.20.5):
-    resolution: {integrity: sha512-6FsASu4o32bp3FzBVb5N2ERjrBy83DtJQAGv9/ycYqsgv2kq9DNlhvtNI7GPiTW7a73ZcImjIX+jEWrARbzOlQ==}
+  /@tiptap/extension-bubble-menu@3.22.0(@tiptap/core@3.20.5)(@tiptap/pm@3.20.5):
+    resolution: {integrity: sha512-792CUdP0roO17jQJ+fflSJEWfw2cAric61nV2291a2iL7L/6mNJGP4QFim1FqZzfx3/FwHSXEI3NYT6wdUlh8w==}
     peerDependencies:
-      '@tiptap/core': ^3.20.5
-      '@tiptap/pm': ^3.20.5
+      '@tiptap/core': ^3.22.0
+      '@tiptap/pm': ^3.22.0
     dependencies:
       '@floating-ui/dom': 1.7.6
       '@tiptap/core': 3.20.5(@tiptap/pm@3.20.5)
@@ -6457,12 +6457,12 @@ packages:
       '@tiptap/extensions': 3.20.5(@tiptap/core@3.20.5)(@tiptap/pm@3.20.5)
     dev: false
 
-  /@tiptap/extension-floating-menu@3.20.5(@floating-ui/dom@1.7.6)(@tiptap/core@3.20.5)(@tiptap/pm@3.20.5):
-    resolution: {integrity: sha512-mTzBNUeAocinrxa5xV+5hGnnNCQB0pVI1GSBwUTHwdB7jNwBqfKAILmtLZONgmhxKWLmGa6WCA59sk+yDI+N0A==}
+  /@tiptap/extension-floating-menu@3.22.0(@floating-ui/dom@1.7.6)(@tiptap/core@3.20.5)(@tiptap/pm@3.20.5):
+    resolution: {integrity: sha512-6Gg3I6n+YaCJyvpcKheWiOtU9Oy0M3lbwUGdLK7jTxgAG2YOJxEcx2CzDv3PtNcoyAVUVk9Eio21awVMOECLAQ==}
     peerDependencies:
       '@floating-ui/dom': ^1.0.0
-      '@tiptap/core': ^3.20.5
-      '@tiptap/pm': ^3.20.5
+      '@tiptap/core': ^3.22.0
+      '@tiptap/pm': ^3.22.0
     dependencies:
       '@floating-ui/dom': 1.7.6
       '@tiptap/core': 3.20.5(@tiptap/pm@3.20.5)
@@ -6565,12 +6565,12 @@ packages:
       '@tiptap/core': 3.20.5(@tiptap/pm@3.20.5)
     dev: false
 
-  /@tiptap/extension-placeholder@3.20.5(@tiptap/extensions@3.20.5):
+  /@tiptap/extension-placeholder@3.20.5(@tiptap/extensions@3.22.0):
     resolution: {integrity: sha512-PcZJbzJ8j+YcRdYWFjmFFVnOOx3nETA0pzMj9fXADi28vNABnrWLwsHAseh3I5QfLmywKQb9SpTSTU2LxQgBoA==}
     peerDependencies:
       '@tiptap/extensions': ^3.20.5
     dependencies:
-      '@tiptap/extensions': 3.20.5(@tiptap/core@3.20.5)(@tiptap/pm@3.20.5)
+      '@tiptap/extensions': 3.22.0(@tiptap/core@3.20.5)(@tiptap/pm@3.20.5)
     dev: false
 
   /@tiptap/extension-strike@3.20.5(@tiptap/core@3.20.5):
@@ -6602,6 +6602,16 @@ packages:
     peerDependencies:
       '@tiptap/core': ^3.20.5
       '@tiptap/pm': ^3.20.5
+    dependencies:
+      '@tiptap/core': 3.20.5(@tiptap/pm@3.20.5)
+      '@tiptap/pm': 3.20.5
+    dev: false
+
+  /@tiptap/extensions@3.22.0(@tiptap/core@3.20.5)(@tiptap/pm@3.20.5):
+    resolution: {integrity: sha512-En8p1FiFBT3V9CduErCyLPFxDRsYLISb2cCtLKTeYVeCRn2vQZK4B8WuOgHI4IBipz3I3XidmDhra4yt8mmi/w==}
+    peerDependencies:
+      '@tiptap/core': ^3.22.0
+      '@tiptap/pm': ^3.22.0
     dependencies:
       '@tiptap/core': 3.20.5(@tiptap/pm@3.20.5)
       '@tiptap/pm': 3.20.5
@@ -6650,8 +6660,8 @@ packages:
       react-dom: 18.3.1(react@18.3.1)
       use-sync-external-store: 1.6.0(react@18.3.1)
     optionalDependencies:
-      '@tiptap/extension-bubble-menu': 3.20.5(@tiptap/core@3.20.5)(@tiptap/pm@3.20.5)
-      '@tiptap/extension-floating-menu': 3.20.5(@floating-ui/dom@1.7.6)(@tiptap/core@3.20.5)(@tiptap/pm@3.20.5)
+      '@tiptap/extension-bubble-menu': 3.22.0(@tiptap/core@3.20.5)(@tiptap/pm@3.20.5)
+      '@tiptap/extension-floating-menu': 3.22.0(@floating-ui/dom@1.7.6)(@tiptap/core@3.20.5)(@tiptap/pm@3.20.5)
     transitivePeerDependencies:
       - '@floating-ui/dom'
     dev: false
