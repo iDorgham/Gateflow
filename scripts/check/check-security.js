@@ -4,6 +4,7 @@
  *
  * Runs 'pnpm audit' and reports vulnerabilities.
  * Exits with status 1 if any HIGH or CRITICAL issues are found.
+ * Audit always uses registry.npmjs.org so private/mirror defaults without a security API still get results.
  *
  * Usage:
  *   node scripts/check-security.js            # report all
