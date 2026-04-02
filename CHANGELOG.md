@@ -53,6 +53,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Apps
 
+- **[Admin]** add traffic emulation tooling to admin dashboard
+
 - **[Admin dashboard]** Single `src/middleware.ts`: locale redirect, admin session (SHA-256 of `ADMIN_ACCESS_KEY` → `admin_session` cookie), `503`/`401` JSON on `/api/admin/*` when misconfigured or unauthenticated; `requireAdmin(locale?)` → `/{locale}/login`; gates/projects/admins server actions pass `locale` via hidden field; `docs/deployment/ADMIN_DASHBOARD.md` production smoke test + RSC digest / Vercel log correlation.
 
 - **[Marketing]** `AntigravityBackground`: pass initial value to `useRef` for React 19 typings (`number | undefined`).

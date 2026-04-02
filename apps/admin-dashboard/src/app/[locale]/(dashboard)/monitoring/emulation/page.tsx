@@ -14,14 +14,14 @@ export default async function EmulationPage(props: {
   const { locale } = params;
 
   await requireAdmin(locale);
-  const { t } = await getTranslation(locale, 'emulation');
+  const { t } = await getTranslation(locale, 'dashboard');
 
   return (
     <div className="space-y-6">
       <PageHeader
         titleClassName="italic uppercase"
-        title={t('title')}
-        subtitle={t('subtitle')}
+        title={t('emulation.title')}
+        subtitle={t('emulation.subtitle')}
         badge={
           <Badge
             variant="warning"

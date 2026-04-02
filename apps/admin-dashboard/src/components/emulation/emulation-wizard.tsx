@@ -45,7 +45,7 @@ interface EmulationResult {
 }
 
 export function EmulationWizard() {
-  const { t } = useTranslation();
+  const { t } = useTranslation('dashboard');
   const [step, setStep] = React.useState(0);
   const [loading, setLoading] = React.useState(false);
   const [result, setResult] = React.useState<EmulationResult | null>(null);
