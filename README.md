@@ -5,7 +5,7 @@
 </p>
 
 <p align="center">
-  <b>The Operating System for Physical Access Control & Marketing Intelligence.</b><br>
+  <b>The Enterprise Operating System for Physical Access Control & Marketing Intelligence.</b><br>
   <i>Stripe-level infrastructure for the 2026 MENA PropTech landscape.</i>
 </p>
 
@@ -13,99 +13,171 @@
   <img src="https://img.shields.io/badge/Status-Production--Ready-success?style=for-the-badge&logo=checkmarx" alt="Status">
   <img src="https://img.shields.io/badge/Security-HMAC--SHA256-red?style=for-the-badge&logo=securityscorecard" alt="Security">
   <img src="https://img.shields.io/badge/Performance-100/100-orange?style=for-the-badge&logo=lighthouse" alt="Performance">
+  <img src="https://img.shields.io/badge/Release-v0.1.0-0ea5e9?style=for-the-badge&logo=githubactions" alt="Release">
   <img src="https://img.shields.io/github/commit-activity/m/iDorgham/Gateflow?style=for-the-badge&color=blueviolet&logo=github" alt="Activity">
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Next.js_15-000000?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js">
-  <img src="https://img.shields.io/badge/React_Native-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React Native">
-  <img src="https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white" alt="Prisma">
-  <img src="https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge&logo=postgresql&logoColor=white" alt="Postgres">
-  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white" alt="Tailwind">
+  <img src="https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js">
+  <img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React">
+  <img src="https://img.shields.io/badge/Prisma-5-2D3748?style=for-the-badge&logo=prisma&logoColor=white" alt="Prisma">
+  <img src="https://img.shields.io/badge/PostgreSQL-16-336791?style=for-the-badge&logo=postgresql&logoColor=white" alt="Postgres">
+  <img src="https://img.shields.io/badge/Expo-54-4630EB?style=for-the-badge&logo=expo&logoColor=white" alt="Expo">
   <img src="https://img.shields.io/badge/Turborepo-2.8-EF4444?style=for-the-badge&logo=turborepo&logoColor=white" alt="Turbo">
 </p>
 
 ---
 
+## 💎 The Vision
+
+GateFlow is not just a QR scanner—it is **Stripe-level infrastructure for physical access**. By treating ogni physical arrival as a first-class digital conversion event, we provide a seamless, secure, and auditable data loop for gated communities, enterprise facilities, and high-volume events.
+
+---
+
+## 🗂️ Table of Contents
+
+1.  [The 6-App Ecosystem](#-the-6-app-ecosystem)
+2.  [Master Architecture](#-master-architecture)
+3.  [Strategic Core Pillars](#-strategic-core-pillars)
+4.  [Security & Compliance](#-security--compliance)
+5.  [Analytics & Intelligence](#-analytics--intelligence)
+6.  [Localization & i18n](#-localization--i18n)
+7.  [The Ralph Loop Automation](#-the-ralph-loop-automation)
+8.  [Performance & Governance](#-performance--governance)
+9.  [Documentation & Support](#-documentation--support)
+
+---
+
 ## 🏗️ The 6-App Ecosystem
 
-GateFlow is a sophisticated monorepo orchestrating six specialized applications strictly decoupled yet unified by a shared data backbone.
+GateFlow is a technical monorepo orchestrating six specialized applications, unified by a shared core of design tokens, cryptographic standards, and real-time data flows.
 
-| Application                                   | Purpose                                                            | Status                                                                      | Core Tech           |
-| :-------------------------------------------- | :----------------------------------------------------------------- | :-------------------------------------------------------------------------- | :------------------ |
-| **[Client Dashboard](apps/client-dashboard)** | Real-time scan monitoring (SSE), resident CRM, and marketing ROI.  | ![Live](https://img.shields.io/badge/Status-Live-success?style=flat-square) | Next.js 15          |
-| **[Admin Dashboard](apps/admin-dashboard)**   | Platform-wide oversight. Org isolation, key rotation, and health.  | ![Live](https://img.shields.io/badge/Status-Live-success?style=flat-square) | Next.js + AdminKeys |
-| **[Resident Portal](apps/resident-portal)**   | Web self-service. Instant pass generation and guest landing pages. | ![Live](https://img.shields.io/badge/Status-Live-success?style=flat-square) | Next.js 15          |
-| **[Marketing Site](apps/marketing)**          | High-SEO Growth Engine. Conversion funnels and platform specs.     | ![Live](https://img.shields.io/badge/Status-Live-success?style=flat-square) | Next.js 15 (SSR)    |
-| **[Resident Mobile](apps/resident-mobile)**   | Native iOS/Android suit for pass creation and WhatsApp sharing.    | ![Live](https://img.shields.io/badge/Status-Live-success?style=flat-square) | Expo 54             |
-| **[Scanner App](apps/scanner-app)**           | Field Verification Hub. Offline-first HMAC validation and haptics. | ![Live](https://img.shields.io/badge/Status-Live-success?style=flat-square) | React Native        |
+<details open>
+<summary><b>View App Matrix</b></summary>
 
----
+| Application                                   | Role           | Key Capability                                    | Deployment              |
+| :-------------------------------------------- | :------------- | :------------------------------------------------ | :---------------------- |
+| **[Client Dashboard](apps/client-dashboard)** | Property Hub   | Real-time monitoring (SSE), Marketing ROI & CRM.  | Vercel                  |
+| **[Admin Dashboard](apps/admin-dashboard)**   | Platform Ops   | Multi-tenant isolation & Cloud platform health.   | Vercel                  |
+| **[Resident Mobile](apps/resident-mobile)**   | User Interface | Native iOS/Android pass creation & WhatsApp sync. | App Store/Play          |
+| **[Scanner App](apps/scanner-app)**           | Field Agent    | Offline-first HMAC validation & Haptic feedback.  | Enterprise Distribution |
+| **[Resident Portal](apps/resident-portal)**   | Web Access     | Guest management & Pass self-service utility.     | Vercel                  |
+| **[Marketing Site](apps/marketing)**          | Growth Node    | High-SEO conversion funnels & Tracking events.    | Vercel                  |
 
-## 📊 Release & Performance Tracking
-
-Monitoring the evolution and reliability of the GateFlow ecosystem.
-
-- **Apps Release**: ![Apps Version](https://img.shields.io/badge/Apps-v0.1.0-0ea5e9?style=for-the-badge) — High-cadence delivery of end-user features.
-- **Platform Health**: ![Uptime](https://img.shields.io/badge/Uptime-99.99%25-success?style=for-the-badge) — Real-time infrastructure reliability.
-- **PageSpeed Audit**: ![Lighthouse](https://img.shields.io/badge/Lighthouse-100%2F100-orange?style=for-the-badge) — Zero-regression performance governance.
+</details>
 
 ---
 
-## 🛠️ Development Stack
+## 🏗️ Master Architecture
 
-GateFlow is built on a hardened, enterprise-grade architecture for extreme reliability.
+GateFlow follows a modern, enterprise-grade, scalable monorepo structure powered by **Turborepo** and **pnpm**, ensuring consistent versioning and
+high-speed delivery paths.
 
-- **[Monorepo Architecture]**: Orchestrated by **Turborepo** and **pnpm** for ultra-fast builds and type-safe shared packages (`@gate-access/db`, `@gate-access/ui`, `@gate-access/types`).
-- **[Design Intelligence]**: 100% adherence to **Atlassian Design System (ADS)** standards. Global token-led theming for typography, spacing, and accessibility.
-- **[Automation Backbone]**: Powered by **The Ralph Loop**—the autonomous engineering stack with 19+ scripts and 5 git hooks governing every commit.
+```text
+/GateFlow (Root)
+├── /apps                          # Mission-Critical Applications
+│   ├── admin-dashboard            # Internal Platform Operations (Next.js 15)
+│   ├── client-dashboard           # B2B Property Manager Portal (Next.js 15)
+│   ├── marketing                  # Public Landing & SEO Funnels (Next.js 15)
+│   ├── resident-mobile            # Native iOS/Android Apps (Expo 54)
+│   ├── resident-portal            # Web-based Resident Utility (Next.js 15)
+│   └── scanner-app               # Field Verification (React Native, Offline-First)
+├── /packages                      # Shared Core Infrastructure
+│   ├── db                         # Prisma + Multi-tenant middleware + Seeding
+│   ├── ui                         # Atlassian Design System (ADS) Component Library
+│   ├── types                      # Universal TS Types & Zod Cross-App Schemas
+│   ├── i18n                       # Localized AR/EN Dictionaries
+│   ├── api-client                 # Shared Type-safe Fetch Utilities
+│   └── config                    # Shared ESLint + Tailwind + TSConfig Presets
+└── /scripts                       # The Ralph Loop Automation Backbone
+```
 
 ---
 
-## 📑 Apps Changelog
+## 🛡️ Strategic Core Pillars
 
-Tracking the mission-critical evolution of the GateFlow applications.
+### 1. Cryptographic Access (Zero-Trust)
 
-- **[Apps Modernization]**: Follow the transition to Next.js 15, React 19, and Expo 54. ➔ [View Changelog](CHANGELOG.md#apps)
-- **[Security Ledger]**: Records of HMAC signature hardening and tenant isolation certifications. ➔ [View Security](CHANGELOG.md#security)
-- **[Marketing Suite Evolution]**: Tracking the growth of physical attribution and CRM integration. ➔ [View Marketing](CHANGELOG.md#marketing)
+Verification happens exclusively on the edge. Every QR code contains a cryptographic proof of origin, ensuring gate operations continue even with zero connectivity. All sensitive field data is encrypted at rest using **AES-256**.
 
----
-
-## 🎯 Strategic Core Pillars
-
-GateFlow transforms traditional, siloed physical security into an integrated data ecosystem. We treat every physical arrival as a first-class digital conversion event.
-
-### 🛡️ Zero-Trust Access Security
-
-Offline-first QR verification powered by **HMAC-SHA256** signatures. Verification happens on the edge, ensuring gate operations continue even with zero connectivity. All sensitive field queue data is encrypted at rest using **AES-256**.
-
-### 📉 Physical-to-Digital Marketing Intelligence
+### 2. Physical-to-Digital Marketing ROI
 
 The first platform to bridge the gap between digital spend and physical arrivals.
 
-- **UTM Lifecycle Tracking**: Bind visitors to their origin (Meta/Google/SMS) from the first ad-click to the final physical scan.
-- **Conversion Firing**: Real-time server-side events pushed to Meta Pixel and GA4 upon gate entry.
-- **CRM Integration**: Instant lead sync with HubSpot and Salesforce during the physical check-in flow.
+- **UTM Lifecycle Persistence**: Track visitors from ad-click (Meta/Google/SMS) to the physical scanner.
+- **Conversion APIs**: Automated server-side firing to Meta Pixel and GA4 upon gate entry.
+
+### 3. Atlassian Design System (ADS) Foundation
+
+A global design token architecture ensures that brand identity, typography, and spacing are 100% consistent across web and native mobile interfaces.
 
 ---
 
-## 🗺️ Product Roadmap
+## 🔒 Security & Compliance
 
-Current release track: **[v11.0 — Enterprise Automation]**
+GateFlow is built with a "Security-by-Design" philosophy.
 
-- **[x] v11.0**: Hierarchical seeding, traffic emulation, and real-time SSE monitoring dashboard.
-- **[ ] v11.5**: WhatsApp Business API Integration for direct pass delivery.
-- **[ ] v12.0**: **GateAI Assistant** — Voice-first community management and agents.
-- **[ ] v13.0**: Decentralized Physical Infrastructure (DePIN) for hardware nodes.
+- **HMAC-SHA256 Signing**: Every QR pass is cryptographically signed and immutable.
+- **Tenant Isolation**: Prisma middleware enforces `organizationId` scoping on every database query.
+- **AES-256 Encryption**: Native encryption for sensitive offline scan queues.
+- **RBAC Enforcement**: Granular Role-Based Access Control across all dashboards.
 
 ---
 
-## 📚 Product Documentation Library
+## 🧠 Analytics & Intelligence
 
-- **[Master PRD v11.0](docs/product/PRD.md)** — Comprehensive product requirements and personas.
-- **[Marketing Suite](docs/product/MARKETING_SUITE.md)** — Digital-to-physical attribution guide.
-- **[Strategic Pipeline](docs/product/UPCOMING.md)** — Strategic 2026/2027 roadmap.
+Transforming physical arrivals into actionable data intelligence.
+
+- **Real-time Monitoring**: Server-Sent Events (SSE) push scan logs directly to administrative panels.
+- **GateAI Co-pilot**: An agentic intelligence layer to manage infrastructure via natural language.
+- **Advanced Charts**: High-density Recharts data visualization integrated into the "Resident CRM".
+
+---
+
+## 🌐 Localization & i18n
+
+Engineered specifically for the Middle Eastern market.
+
+- **Arabic-First Design**: Full RTL (Right-to-Left) layout support for Arabic speakers.
+- **Zero-Friction Switching**: Clean, localized typography (Cairo font) for bi-directional support.
+- **Dynamic LTRS/RTL**: UI components automatically adjust dimensions based on the active locale.
+
+---
+
+## 🚀 The Ralph Loop Automation
+
+Every routine engineering task is managed by **Ralph**, the GateFlow autonomous engineering backbone.
+
+- **19+ Automation Scripts**: From hierarchical seeding to automated traffic emulation.
+- **5 Husky Git Hooks**: Enforcing committed secrets scanning, linting, and AI-tool sync.
+- **Phase Runner**: Automated plan-to-dev loop with 100% compliance auditing.
+- **Type-Safe Sync**: Cross-package synchronization for universal types and schemas.
+
+---
+
+## 📊 Performance & Governance
+
+We maintain a zero-regression performance policy.
+
+<p align="left">
+  <img src="https://img.shields.io/badge/Uptime-99.99%25-success?style=for-the-badge" alt="Uptime">
+  <img src="https://img.shields.io/badge/Lighthouse-100%2F100-orange?style=for-the-badge" alt="Lighthouse">
+</p>
+
+- **100/100 Lighthouse**: Guaranteed vitals across both Desktop and Mobile.
+- **Syncpack Enforcement**: Ensuring absolute dependency consistency across the monorepo packages.
+- **Automated CI/CD**: High-precision deployment via GitHub Actions to Vercel and Native App Stores.
+
+---
+
+## 📚 Documentation & Support
+
+Detailed technical resources for the GateFlow platform.
+
+- **[Master PRD v11.0](docs/product/PRD.md)** — Comprehensive technical specifications.
+- **[Marketing Suite](docs/product/MARKETING_SUITE.md)** — Physical attribution guide.
+- **[Automation Guide](docs/guides/AUTOMATION_GUIDE.md)** — Reference for the Ralph Loop stack.
+- **[Strategic Pipeline](CHANGELOG.md)** — Release notes and roadmap history.
 
 ---
 
@@ -116,6 +188,6 @@ Current release track: **[v11.0 — Enterprise Automation]**
 </p>
 
 <div align="center">
-  <sub>Managed by the <b>Ralph Loop</b> Autonomous Engineering Stack.</sub><br>
+  <sub>Managed by the <b>Ralph Loop</b> Autonomous Engineering Infrastructure.</sub><br>
   <sub>&copy; 2026 GateFlow. All rights reserved.</sub>
 </div>
