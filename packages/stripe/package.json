@@ -15,6 +15,6 @@
   "devDependencies": {
     "@gate-access/config": "workspace:*",
     "@gate-access/types": "workspace:*",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.2"
   }
 }
