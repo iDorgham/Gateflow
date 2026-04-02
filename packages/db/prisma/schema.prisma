@@ -72,6 +72,7 @@ model Organization {
   merchants         Merchant[]
   services          Service[]
   serviceBookings  ServiceBooking[]
+  shiftLogs         ShiftLog[]
 
   @@index([deletedAt])
 }
@@ -177,6 +178,7 @@ model User {
   assignedWorkOrders WorkOrder[] @relation("AssignedWorkOrders")
 
   serviceBookings ServiceBooking[]
+  shiftLogs       ShiftLog[]
 
   @@index([organizationId])
   @@index([roleId])
@@ -261,6 +263,26 @@ model GateAssignment {
   @@index([deletedAt])
 }
 
+model ShiftLog {
+  id             String       @id @default(cuid())
+  guardId        String
+  gateId         String
+  organizationId String
+  startTime      DateTime     @default(now())
+  endTime        DateTime?
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  guard          User         @relation(fields: [guardId], references: [id], onDelete: Cascade)
+  gate           Gate         @relation(fields: [gateId], references: [id], onDelete: Cascade)
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([guardId])
+  @@index([gateId])
+  @@index([organizationId])
+  @@index([startTime, endTime])
+}
+
 model Gate {
   id                    String           @id @default(cuid())
   name                  String
@@ -285,6 +307,7 @@ model Gate {
   qrCodes               QRCode[]
   scanLogs              ScanLog[]
   workOrders            WorkOrder[]
+  shiftLogs             ShiftLog[]
 
   @@index([organizationId])
   @@index([projectId])

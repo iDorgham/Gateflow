@@ -2,11 +2,11 @@
 
 ## Phase 1: Security & Auth Hooks
 
-- [ ] Add `expo-local-authentication` to `scanner-app`
-- [ ] Create `SecurePINStorage` utility (`expo-secure-store`)
-- [ ] Implement `BiometricContext` / `useBiometry` hook
-- [ ] Update Prisma schema: Add `ShiftLog` (id, guardId, gateId, startTime, endTime)
-- [ ] Migration: Run `pnpm db:migrate`
+- [x] Add `expo-local-authentication` to `scanner-app` (declared in package.json; awaiting pnpm install after corepack EPERM fix)
+- [x] Create `SecurePINStorage` utility (`expo-secure-store`) — `src/lib/security/secure-pin.ts`
+- [x] Implement `useBiometry` hook — `src/hooks/use-biometry.ts`
+- [x] Update Prisma schema: Add `ShiftLog` (id, guardId, gateId, startTime, endTime, organizationId)
+- [x] Migration: Applied `20260402124145_shift_log` — database in sync
 
 ## Phase 2: Onboarding Wizard (UI/UX)
 
