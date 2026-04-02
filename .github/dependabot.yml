@@ -32,6 +32,14 @@ updates:
           - 'prettier*'
           - 'turbo'
           - 'pnpm'
+    # Prisma 7+ needs a dedicated migration (prisma.config.ts, datasource-less schema,
+    # accelerateUrl or driver adapters). See:
+    # https://www.prisma.io/docs/orm/more/upgrade-guides/upgrading-versions/upgrading-to-prisma-7
+    ignore:
+      - dependency-name: 'prisma'
+        versions: ['>=7.0.0']
+      - dependency-name: '@prisma/client'
+        versions: ['>=7.0.0']
 
   - package-ecosystem: 'github-actions'
     directory: '/'

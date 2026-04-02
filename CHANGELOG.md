@@ -16,6 +16,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 - **[Tooling]** Root devDependencies pin TypeScript 5.9.3 and ESLint 8.57.1 (pnpm overrides).
 - **[Db]** avoid node:crypto in client webpack graph; turbo env passthrough
 
+- **[CI]** Dependabot: ignore `prisma` / `@prisma/client` `>=7` until a dedicated Prisma ORM 7 migration ([upgrade guide](https://www.prisma.io/docs/orm/more/upgrade-guides/upgrading-versions/upgrading-to-prisma-7)).
+
 - **[Scripts]** ralph-docs changelog inserts under Unreleased tri-track
 
 - **[Plan Lifecycle]** `advanced_seeding_emulation_v3` plan assets live under `docs/plan/done/advanced_seeding_emulation_v3/` (completed); prompt/checklist links normalized to that path.
