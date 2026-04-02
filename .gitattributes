@@ -1,0 +1,27 @@
+# GitHub Linguist Configuration
+# Force certain directories to be ignored in language percentages
+
+docs/** linguist-documentation
+assets/** linguist-vendored
+*.json linguist-vendored
+*.yaml linguist-vendored
+*.yml linguist-vendored
+*.md linguist-documentation
+*.mdx linguist-documentation
+scripts/** linguist-vendored
+
+# Explicitly ignore common noise folders if they ever get tracked
+node_modules/** linguist-vendored
+.next/** linguist-vendored
+.turbo/** linguist-vendored
+.lighthouseci/** linguist-vendored
+dist/** linguist-vendored
+build/** linguist-vendored
+out/** linguist-vendored
+.expo/** linguist-vendored
+.vscode/** linguist-vendored
+.idea/** linguist-vendored
+
+# Ensure TypeScript is the hero
+*.ts linguist-detectable
+*.tsx linguist-detectable
