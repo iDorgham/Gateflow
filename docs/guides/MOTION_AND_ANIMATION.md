@@ -2,7 +2,7 @@
 
 Canonical reference for CSS animations, Tailwind transitions, micro-interactions, performance, and accessibility. Used by Cursor, CLIs, Antigravity, and design skills.
 
-**Stack:** Tailwind CSS 3.4, `@gate-access/ui`, Next.js 14. Optional: Framer Motion for complex layout morphs (add as dependency if needed).
+**Stack:** Tailwind CSS 3.4, `@gate-access/ui`, Next.js 14. **Default motion:** CSS / Tailwind + `prefers-reduced-motion` (see `creative-animation` skill). **Heavy motion libs** (`framer-motion`, `animejs`): use only when a **spec or phase prompt** explicitly requires them; for **`apps/design-system`** / **`@gateflow/*`** work, add a **dedicated acceptance criterion** (library + scope + version/peer intent) in the phase prompt _before_ adding the dependency — see **Motion default policy** in `docs/plan/execution/PLAN_gateflow_design_system.md`.
 
 ---
 
@@ -21,13 +21,23 @@ Define keyframes in `tailwind.config.ts` or `globals.css`:
 
 ```css
 @keyframes fade-in {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slide-up {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 ```
 
@@ -94,7 +104,7 @@ For complex morphs (e.g. login panel → sidebar), consider **Framer Motion**:
 - **Stagger:** `staggerChildren: 0.06`–`0.12` for list entrances.
 - **AnimatePresence:** `mode="wait"` for exit/enter sequences.
 
-Add `framer-motion` to `package.json` only when needed; GateFlow does not include it by default.
+Add `framer-motion` (or `animejs`) to `package.json` only when needed; GateFlow does not include them by default. For the **design-system** initiative, **do not** add them for chrome or galleries until the phase prompt includes an explicit acceptance bullet (library, scope, version/peers), per `PLAN_gateflow_design_system.md`.
 
 ---
 
@@ -113,7 +123,9 @@ Add `framer-motion` to `package.json` only when needed; GateFlow does not includ
 
 ```css
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
@@ -146,13 +158,13 @@ Before shipping animated UI:
 
 ## 10. References
 
-| Resource | Path |
-|----------|------|
-| Tailwind animation | [Tailwind docs — animation](https://tailwindcss.com/docs/animation) |
-| gf-creative-ui-animation | `.antigravity/skills/gf-creative-ui-animation/SKILL.md` |
-| UI Design Guide | `docs/guides/UI_DESIGN_GUIDE.md` |
+| Resource                         | Path                                                                         |
+| -------------------------------- | ---------------------------------------------------------------------------- |
+| Tailwind animation               | [Tailwind docs — animation](https://tailwindcss.com/docs/animation)          |
+| gf-creative-ui-animation         | `.antigravity/skills/gf-creative-ui-animation/SKILL.md`                      |
+| UI Design Guide                  | `docs/guides/UI_DESIGN_GUIDE.md`                                             |
 | gf-uiux-animator (Framer Motion) | `docs/cli-context/skills/gf-uiux-animator/SKILL.md` — advanced layout morphs |
 
 ---
 
-*Use Tailwind 3.4. Do not upgrade to Tailwind v4 without explicit approval.*
+_Use Tailwind 3.4. Do not upgrade to Tailwind v4 without explicit approval._
