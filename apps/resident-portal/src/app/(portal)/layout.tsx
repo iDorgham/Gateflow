@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#2563eb',
+  themeColor: 'token("color.background.accent.blue.bold")',
 };
 
 /**
@@ -40,10 +40,10 @@ export default async function PortalLayout({
 
   const organizationId = (claims.org as string) || (claims.orgId as string);
   const unit = await prisma.unit.findFirst({
-    where: { 
-      userId: claims.sub, 
+    where: {
+      userId: claims.sub,
       organizationId,
-      deletedAt: null 
+      deletedAt: null,
     },
     select: { id: true },
   });

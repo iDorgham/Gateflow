@@ -53,6 +53,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Apps
 
+- **[Admin]** constant-time compare + emulation gate/unit overrides
+
 - **[Admin]** correct emulation i18n namespace wiring
 
 - **[Admin]** add traffic emulation tooling to admin dashboard

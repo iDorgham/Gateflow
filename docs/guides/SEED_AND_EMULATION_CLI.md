@@ -37,6 +37,39 @@ pnpm prisma db seed -- \
 
 Optional entity overrides: `--projectId`, `--gateId`, `--unitId`, `--contactId`, `--createdByUserId`.
 
+## Global Emulation Mode (Platform-Wide)
+
+To simulate traffic concurrently across all active organizations in the platform, enable **Global Mode**:
+
+```bash
+# Target the entire platform (ignoring single organizationId)
+pnpm prisma db seed -- --globalMode --scenario=peak-hour --scans=100 --pastDays=1
+```
+
+_Note: Global Mode requires `ALLOW_ADMIN_OPERATIONS=1` and is typically used for dashboard stress testing._
+
+## Admin Dashboard Hubs (UI-First)
+
+While the CLI is powerful for automated runs, the **Admin Dashboard** provides a unified command center for high-density operations:
+
+### 1. Seeding Hub `/monitoring/seeding`
+
+- **Seeding Wizard**: Visual hierarchy configuration for Phases, Buildings, Floors, and Units.
+- **Deterministic Scale**: Real-time estimation of total units generated before execution.
+- **Relational Integrity**: Automatically links generated units to round-robin contacts from the org pool.
+
+### 2. Emulation Hub `/monitoring/emulation`
+
+- **Scenario Studio**: Toggle between predefined traffic patterns (Nightclub, Peak Hour, Steady Stream).
+- **Global Toggle**: Enable/Disable platform-wide concurrent simulation via the UI.
+- **Precision Inputs**: Define exact scan counts and incident rates for targeted testing.
+
+### 3. Monitoring Hub `/monitoring/hub`
+
+- **SSE Real-time Tracking**: Powered by Server-Sent Events, this hub provides a live feed of all platform operations.
+- **Operation Insight**: Drill down into specific runs via the side drawer to inspect metadata payloads and performance impacts.
+- **Audit Trails**: Every action (Seed, Emulate, Reset) is logged with `system-admin` attribution for full accountability.
+
 ### Security
 
 - Do **not** pass `QR_SIGNING_SECRET` on the command line.

@@ -27,6 +27,7 @@
     "@node-rs/argon2": "^2.0.0",
     "ai": "^6.0.138",
     "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
     "framer-motion": "^11.18.2",
     "i18next": "^23.16.8",
     "lucide-react": "^0.344.0",

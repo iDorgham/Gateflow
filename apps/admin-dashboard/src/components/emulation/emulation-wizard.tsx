@@ -44,14 +44,22 @@ interface EmulationResult {
   totalScans?: number;
 }
 
-export function EmulationWizard() {
+export function EmulationWizard(props: { organizationId?: string } = {}) {
   const { t } = useTranslation('dashboard');
   const [step, setStep] = React.useState(0);
   const [loading, setLoading] = React.useState(false);
   const [result, setResult] = React.useState<EmulationResult | null>(null);
 
   // Form State
-  const [organizationId, setOrganizationId] = React.useState('');
+  const [organizationId, setOrganizationId] = React.useState(
+    props.organizationId ?? ''
+  );
+
+  React.useEffect(() => {
+    if (typeof props.organizationId === 'string') {
+      setOrganizationId(props.organizationId);
+    }
+  }, [props.organizationId]);
   const [pastDays, setPastDays] = React.useState(7);
   const [totalScans, setTotalScans] = React.useState(100);
   const [incidentRate, setIncidentRate] = React.useState(0.05);
@@ -122,6 +130,17 @@ export function EmulationWizard() {
         unitId,
         contactId,
         createdByUserId,
+        unitIdFormat,
+        ranges: {
+          minPhases,
+          maxPhases,
+          minBuildingsPerPhase: minBuildings,
+          maxBuildingsPerPhase: maxBuildings,
+          minFloorsPerBuilding: minFloors,
+          maxFloorsPerBuilding: maxFloors,
+          minUnitsPerFloor: 2, // Hardcoded or default to keep form simple
+          maxUnitsPerFloor: 6,
+        },
       });
 
       const res = await fetch('/api/admin/emulate-traffic', {

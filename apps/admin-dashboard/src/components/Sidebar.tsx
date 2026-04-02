@@ -23,6 +23,7 @@ import {
   FolderOpen,
   DoorOpen,
   Zap,
+  Database,
 } from 'lucide-react';
 import {
   cn,
@@ -87,6 +88,11 @@ const getNavGroups = (t: TFunction): NavGroupData[] => [
     label: t('admin:nav.system', 'System'),
     items: [
       { href: '/monitoring', label: t('admin:nav.monitoring'), icon: Activity },
+      {
+        href: '/monitoring/seeding',
+        label: t('admin:nav.seeding', 'Seeding'),
+        icon: Database,
+      },
       {
         href: '/monitoring/emulation',
         label: t('admin:nav.emulation', 'Emulation'),

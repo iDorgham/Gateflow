@@ -441,6 +441,10 @@ export type RunEmulationParams = {
   unitId?: string;
   contactId?: string;
   createdByUserId?: string;
+  /** v4: Advanced seeding ranges (Phase 4 of v3) */
+  ranges?: UnitHierarchyRangeConfig;
+  /** v4: Unit ID naming pattern (Phase 2 of v3) */
+  unitIdFormat?: UnitIdFormat;
 };
 
 export type RunEmulationResult = {
@@ -459,6 +463,8 @@ export type RunEmulationResult = {
   windowStartIso: string;
   windowEndIso: string;
   relationalChain?: SeedRelationalChainResult;
+  /** v4: Details of seeded hierarchy (if ranges provided) */
+  seeded?: SeedUnitHierarchyForProjectResult;
 };
 
 async function resolveEmulationContext(
@@ -672,6 +678,59 @@ export async function runEmulation(
     createdByUserId: createdByOpt,
   });
 
+  let seeded: SeedUnitHierarchyForProjectResult | undefined;
+  let finalUnitId = ctx.unitId;
+  let finalContactId = ctx.contactId;
+
+  if (params.ranges && !dryRun) {
+    // Phase 4 of v3: Seed structural hierarchy before traffic
+    // We need at least one owner contact for the round-robin linking
+    let ownerContactIds = [ctx.contactId];
+
+    // If we're seeding a lot, let's try to get more contacts from the org to distribute ownership
+    const existing = await db.contact.findMany({
+      where: { organizationId, deletedAt: null },
+      take: 10,
+      select: { id: true },
+    });
+    if (existing.length > 1) {
+      ownerContactIds = existing.map((c) => c.id);
+    }
+
+    seeded = await seedUnitHierarchyForProject(db, {
+      organizationId,
+      projectId: ctx.projectId,
+      ranges: params.ranges,
+      seed: randomSeed,
+      ownerContactIds,
+      unitIdFormatOverride: params.unitIdFormat,
+    });
+
+    // Pick one of the newly seeded units as the anchor for the relational scan chain
+    if (seeded.planned.length > 0) {
+      const firstTarget = seeded.planned[0]!;
+      const inserted = await db.unit.findFirst({
+        where: {
+          organizationId,
+          projectId: ctx.projectId,
+          name: firstTarget.name,
+          deletedAt: null,
+        },
+        select: {
+          id: true,
+          contacts: {
+            take: 1,
+            select: { contactId: true },
+          },
+        },
+      });
+      if (inserted) {
+        finalUnitId = inserted.id;
+        finalContactId = inserted.contacts[0]?.contactId ?? ownerContactIds[0];
+      }
+    }
+  }
+
   if (dryRun) {
     return {
       dryRun: true,
@@ -692,8 +751,8 @@ export async function runEmulation(
     organizationId,
     projectId: ctx.projectId,
     gateId: ctx.gateId,
-    unitId: ctx.unitId,
-    contactId: ctx.contactId,
+    unitId: finalUnitId,
+    contactId: finalContactId,
     createdByUserId: ctx.createdByUserId,
     signingSecret,
     scannedAtIsos,
@@ -706,6 +765,8 @@ export async function runEmulation(
     dryRun: false,
     organizationId,
     ...ctx,
+    unitId: finalUnitId,
+    contactId: finalContactId,
     scenario,
     pastDays,
     totalScans,
@@ -714,5 +775,6 @@ export async function runEmulation(
     windowStartIso: windowStart.toISOString(),
     windowEndIso: windowEnd.toISOString(),
     relationalChain,
+    seeded,
   };
 }

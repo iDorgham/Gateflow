@@ -43,11 +43,36 @@ const EmulateTrafficBodySchema = z.object({
   incidentRate: z.number().min(0).max(1),
   randomSeed: z.number().int(),
   dryRun: z.boolean().optional().default(false),
+  globalMode: z.boolean().optional().default(false),
   projectId: z.string().min(1).optional(),
   gateId: z.string().min(1).optional(),
   unitId: z.string().min(1).optional(),
   contactId: z.string().min(1).optional(),
   createdByUserId: z.string().min(1).optional(),
+  /** v4: Advanced seeding ranges */
+  ranges: z
+    .object({
+      minPhases: z.number().int().min(1).max(32),
+      maxPhases: z.number().int().min(1).max(32),
+      minBuildingsPerPhase: z.number().int().min(1).max(32),
+      maxBuildingsPerPhase: z.number().int().min(1).max(32),
+      minFloorsPerBuilding: z.number().int().min(1).max(32),
+      maxFloorsPerBuilding: z.number().int().min(1).max(32),
+      minUnitsPerFloor: z.number().int().min(1).max(32),
+      maxUnitsPerFloor: z.number().int().min(1).max(40),
+    })
+    .optional(),
+  /** v4: Unit ID naming pattern */
+  unitIdFormat: z
+    .enum([
+      'COMPACT',
+      'BUILDING_FIRST',
+      'SIMPLE',
+      'LOCATION',
+      'DESCRIPTIVE',
+      'GLOBAL',
+    ])
+    .optional(),
 });
 
 function isEmulationResolutionError(
@@ -80,8 +105,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  // Note: admin-dashboard uses internal admin auth, so we don't have a userId (sub) in the same way as client-dashboard.
-  // We'll use 'admin-portal' as the actor for audit logs.
   const actorId = 'system-admin';
 
   let body: unknown;
@@ -101,16 +124,14 @@ export async function POST(request: NextRequest) {
 
   const data = parsed.data;
 
-  // skip-organization-check (Admin Emulation Tool)
-  const org = await prisma.organization.findFirst({
-    where: { id: data.organizationId, deletedAt: null },
-    select: { id: true },
-  });
-  if (!org) {
-    return NextResponse.json(
-      { error: 'Organization not found' },
-      { status: 404 }
-    );
+  // skip-organization-check (Admin Management)
+  let targetOrgIds = [data.organizationId];
+  if (data.globalMode) {
+    const allOrgs = await prisma.organization.findMany({
+      where: { deletedAt: null },
+      select: { id: true },
+    });
+    targetOrgIds = allOrgs.map((o: any) => o.id);
   }
 
   const secret = process.env.QR_SIGNING_SECRET ?? '';
@@ -121,106 +142,110 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const auditBase = {
-    organizationId: data.organizationId,
-    userId: actorId,
-    actionType: 'EMULATE_TRAFFIC',
-    prompt: 'GateFlow advanced seeding emulation (traffic) via Admin Dashboard',
-    intentJson: {
-      scenario: data.scenario,
-      pastDays: data.pastDays,
-      totalScans: data.totalScans,
-      dryRun: data.dryRun,
-    } as const,
-  };
+  const results: any[] = [];
 
-  try {
-    const result = await runEmulation({
-      db: prisma as unknown as PrismaClient,
-      organizationId: data.organizationId,
-      scenario: data.scenario as any,
-      pastDays: data.pastDays,
-      totalScans: data.totalScans,
-      incidentRate: data.incidentRate,
-      randomSeed: data.randomSeed,
-      dryRun: data.dryRun,
-      signingSecret: secret,
-      projectId: data.projectId,
-      gateId: data.gateId,
-      unitId: data.unitId,
-      contactId: data.contactId,
-      createdByUserId: data.createdByUserId,
-    });
-
-    const metadata = {
-      scenario: result.scenario,
-      targetOrganizationId: result.organizationId,
-      projectId: result.projectId,
-      gateId: result.gateId,
-      unitId: result.unitId,
-      contactId: result.contactId,
-      createdByUserId: result.createdByUserId,
-      totalScans: result.totalScans,
-      dryRun: result.dryRun,
-      windowStartIso: result.windowStartIso,
-      windowEndIso: result.windowEndIso,
-      relationalChain: result.relationalChain
-        ? publicRelationalSummary(result.relationalChain)
-        : undefined,
+  for (const orgId of targetOrgIds) {
+    const auditBase = {
+      organizationId: orgId,
+      userId: actorId,
+      actionType: 'EMULATE_TRAFFIC',
+      prompt: `GateFlow advanced seeding emulation (traffic) via Admin Dashboard [${data.globalMode ? 'GLOBAL' : 'SINGLE'}]`,
+      intentJson: {
+        scenario: data.scenario,
+        pastDays: data.pastDays,
+        totalScans: data.totalScans,
+        dryRun: data.dryRun,
+        global: data.globalMode,
+      } as const,
     };
 
-    // skip-organization-check (Admin Audit Log)
-    await prisma.aiActionLog.create({
-      data: {
-        ...auditBase,
-        status: AiActionStatus.EXECUTED,
-        result: result.dryRun ? 'dry_run_ok' : 'emulation_completed',
-        metadata,
-      },
-    });
+    try {
+      const result = await runEmulation({
+        db: prisma as unknown as PrismaClient,
+        organizationId: orgId,
+        scenario: data.scenario as any,
+        pastDays: data.pastDays,
+        totalScans: data.totalScans,
+        incidentRate: data.incidentRate,
+        randomSeed: data.randomSeed,
+        dryRun: data.dryRun,
+        signingSecret: secret,
+        projectId: data.projectId,
+        gateId: data.gateId,
+        unitId: data.unitId,
+        contactId: data.contactId,
+        createdByUserId: data.createdByUserId,
+        ranges: data.ranges,
+        unitIdFormat: data.unitIdFormat as any,
+      });
 
-    return NextResponse.json({
-      success: true,
-      data: {
-        ...result,
+      const metadata = {
+        scenario: result.scenario,
+        targetOrganizationId: result.organizationId,
+        projectId: result.projectId,
+        gateId: result.gateId,
+        unitId: result.unitId,
+        contactId: result.contactId,
+        createdByUserId: result.createdByUserId,
+        totalScans: result.totalScans,
+        dryRun: result.dryRun,
+        windowStartIso: result.windowStartIso,
+        windowEndIso: result.windowEndIso,
         relationalChain: result.relationalChain
           ? publicRelationalSummary(result.relationalChain)
           : undefined,
-      },
-    });
-  } catch (err) {
-    if (isEmulationResolutionError(err)) {
+      };
+
+      // skip-organization-check (Admin Audit Log)
+      await prisma.aiActionLog.create({
+        data: {
+          ...auditBase,
+          status: AiActionStatus.EXECUTED,
+          result: result.dryRun ? 'dry_run_ok' : 'emulation_completed',
+          metadata,
+        },
+      });
+
+      results.push({
+        success: true,
+        data: {
+          ...result,
+          relationalChain: result.relationalChain
+            ? publicRelationalSummary(result.relationalChain)
+            : undefined,
+        },
+      });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Unknown error';
+      console.error(`[emulate-traffic] Failed for ${orgId}:`, err);
+
       // skip-organization-check (Admin Audit Log)
       await prisma.aiActionLog.create({
         data: {
           ...auditBase,
           status: AiActionStatus.FAILED,
-          result: 'resolution_failed',
+          result: isEmulationResolutionError(err)
+            ? 'resolution_failed'
+            : 'emulation_failed',
           metadata: {
-            errorCode: err.code,
-            message: err.message,
+            message:
+              message.length > 500 ? `${message.slice(0, 500)}…` : message,
+            code: isEmulationResolutionError(err) ? err.code : undefined,
           },
         },
       });
-      return NextResponse.json(
-        { error: err.message, code: err.code },
-        { status: 400 }
-      );
-    }
 
-    const message = err instanceof Error ? err.message : 'Unknown error';
-    // skip-organization-check (Admin Audit Log)
-    await prisma.aiActionLog.create({
-      data: {
-        ...auditBase,
-        status: AiActionStatus.FAILED,
-        result: 'emulation_failed',
-        metadata: {
-          message: message.length > 500 ? `${message.slice(0, 500)}…` : message,
-        },
-      },
-    });
-    console.error('[emulate-traffic]', err);
-    return NextResponse.json({ error: 'Emulation failed' }, { status: 500 });
+      results.push({
+        success: false,
+        organizationId: orgId,
+        error: message,
+        code: isEmulationResolutionError(err) ? err.code : undefined,
+      });
+    }
   }
+
+  return NextResponse.json({
+    success: results.every((r) => r.success),
+    batchResults: results,
+  });
 }

@@ -29,6 +29,30 @@ export const EmulateTrafficBodySchema = z.object({
   unitId: z.string().min(1).optional(),
   contactId: z.string().min(1).optional(),
   createdByUserId: z.string().min(1).optional(),
+  /** v4: Advanced seeding ranges */
+  ranges: z
+    .object({
+      minPhases: z.number().int().min(1).max(32),
+      maxPhases: z.number().int().min(1).max(32),
+      minBuildingsPerPhase: z.number().int().min(1).max(32),
+      maxBuildingsPerPhase: z.number().int().min(1).max(32),
+      minFloorsPerBuilding: z.number().int().min(1).max(32),
+      maxFloorsPerBuilding: z.number().int().min(1).max(32),
+      minUnitsPerFloor: z.number().int().min(1).max(32),
+      maxUnitsPerFloor: z.number().int().min(1).max(40),
+    })
+    .optional(),
+  /** v4: Unit ID naming pattern */
+  unitIdFormat: z
+    .enum([
+      'COMPACT',
+      'BUILDING_FIRST',
+      'SIMPLE',
+      'LOCATION',
+      'DESCRIPTIVE',
+      'GLOBAL',
+    ])
+    .optional(),
 });
 
 export type EmulateTrafficBody = z.infer<typeof EmulateTrafficBodySchema>;
@@ -66,6 +90,17 @@ export function buildEmulateTrafficBody(input: {
   unitId: string;
   contactId: string;
   createdByUserId: string;
+  ranges?: {
+    minPhases: number;
+    maxPhases: number;
+    minBuildingsPerPhase: number;
+    maxBuildingsPerPhase: number;
+    minFloorsPerBuilding: number;
+    maxFloorsPerBuilding: number;
+    minUnitsPerFloor: number;
+    maxUnitsPerFloor: number;
+  };
+  unitIdFormat?: UnitIdFormatKey;
 }): EmulateTrafficBody {
   const base: EmulateTrafficBody = {
     organizationId: input.organizationId.trim(),
@@ -75,6 +110,8 @@ export function buildEmulateTrafficBody(input: {
     incidentRate: input.incidentRate,
     randomSeed: input.randomSeed,
     dryRun: input.dryRun,
+    ranges: input.ranges,
+    unitIdFormat: input.unitIdFormat,
   };
 
   const opt = (
