@@ -51,3 +51,22 @@ export type {
   GenerateRichContactInput,
   RichContactPayload,
 } from './lib/rich-contact';
+export { seedUnitHierarchyForProject } from './advanced-seed-service';
+export type {
+  SeedUnitHierarchyForProjectParams,
+  SeedUnitHierarchyForProjectResult,
+} from './advanced-seed-service';
+export {
+  assertPlannedHierarchyIntegrity,
+  buildPlannedUnitHierarchy,
+  buildingCodeForGlobalIndex,
+  DEFAULT_UNIT_HIERARCHY_RANGES,
+  plannedUnitsToCreateManyInput,
+  projectScopedUnitName,
+} from './lib/unit-hierarchy-seed';
+export type {
+  BuildPlannedUnitHierarchyParams,
+  PlannedUnitMeta,
+  PlannedUnitSeed,
+  UnitHierarchyRangeConfig,
+} from './lib/unit-hierarchy-seed';

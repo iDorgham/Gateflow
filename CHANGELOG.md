@@ -23,6 +23,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 - **[Advanced Seeding Emulation V3 — DB]** Phase 1: partial unique indexes on active `Contact` (`organizationId` + `email` / `phone`, `deletedAt IS NULL`); `validateUniqueness` in `@gate-access/db` (`seed-integrity`); migration `seeding_integrity_foundation`.
 - **[Advanced Seeding Emulation V3 — DB]** Phase 2: `red-sea-data` + `unit-id-formats` (`generateUnitId` × six strategies); `Project.unitIdFormat` enum + migration `add_project_unit_id_format`.
 - **[Advanced Seeding Emulation V3 — DB]** Phase 3: `rich-contact` — 14 nationalities, IDEA v3 weight table, `generateRichContact` + `validateUniqueness`; distribution test N=10_000 seed=42 (±2%).
+- **[Advanced Seeding Emulation V3 — DB]** Phase 4: `unit-hierarchy-seed` + `seedUnitHierarchyForProject` — logical phase/building/floor tree mapped to `Unit` + `generateUnitId`, org-unique `Unit.name` via `projectScopedUnitName`, `ContactUnit` owner links, batched `createMany` (~500).
 
 ### AI Tools
 
@@ -31,6 +32,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 - **[AI SDK v6 Migration]** started implementation of the AI SDK v6 migration initiative.
 
 ### Apps
+
+- **[Marketing]** initiate June 2026 Resilience campaign & Master Landing Page Protocol
 
 - **[Resident Portal]** implement responsive multi-column layout with adaptive Sidebar/BottomNav switching.
 - **[Resident Portal]** develop maintenance hub, history timeline, and visitor management components with ADS compact density.
