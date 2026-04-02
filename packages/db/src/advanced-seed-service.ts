@@ -2,7 +2,6 @@
  * Orchestration for advanced seeding phases (units, traffic, QR chain — incremental).
  */
 
-import { randomUUID } from 'node:crypto';
 import type { Prisma, PrismaClient, UnitIdFormat } from '@prisma/client';
 import { QRCodeType, ScanStatus } from '@prisma/client';
 import { BUILT_IN_ROLES } from '@gate-access/types';
@@ -21,6 +20,16 @@ import {
 } from './lib/relational-chain-seed';
 import { mulberry32 } from './lib/red-sea-data';
 import { sampleScanTimestamps, type RushScenario } from './lib/rush-hour';
+
+function randomUUID(): string {
+  const c = globalThis.crypto;
+  if (!c?.randomUUID) {
+    throw new Error(
+      'globalThis.crypto.randomUUID is required for advanced seeding (Node 19+ / modern runtimes)'
+    );
+  }
+  return c.randomUUID();
+}
 
 const CREATE_MANY_CHUNK = 500;
 
@@ -457,11 +466,7 @@ async function resolveEmulationContext(
   organizationId: string,
   o: Pick<
     RunEmulationParams,
-    | 'projectId'
-    | 'gateId'
-    | 'unitId'
-    | 'contactId'
-    | 'createdByUserId'
+    'projectId' | 'gateId' | 'unitId' | 'contactId' | 'createdByUserId'
   >
 ): Promise<{
   projectId: string;

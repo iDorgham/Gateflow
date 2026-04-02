@@ -1,8 +1,9 @@
 /**
- * Helpers for Phase 6 relational seed: signed Visitor QR + ScanLog rows (scanUuid dedupe).
+ * Phase 6 relational seed: signed Visitor QR + ScanLog rows (scanUuid dedupe).
+ * SHA-256 via CryptoJS so this file stays webpack-safe when pulled from `@gate-access/db` on the client.
  */
 
-import { createHash } from 'node:crypto';
+import CryptoJS from 'crypto-js';
 import type { Prisma } from '@prisma/client';
 import { QRCodeType as PayloadQRType, signQRPayload } from '@gate-access/types';
 
@@ -13,13 +14,16 @@ export const RELATIONAL_SEED_CHAIN_DEPTH = 7 as const;
  * RFC 4122 UUID v4–shaped id derived from `(seed, index)` for reproducible tests.
  */
 export function deterministicScanUuid(seed: number, index: number): string {
-  const hash = createHash('sha256')
-    .update(`scanUuid:${seed}:${index}`)
-    .digest();
-  const bytes = Buffer.from(hash.subarray(0, 16));
+  const hex = CryptoJS.SHA256(`scanUuid:${seed}:${index}`).toString(
+    CryptoJS.enc.Hex
+  );
+  const bytes = new Uint8Array(16);
+  for (let i = 0; i < 16; i++) {
+    bytes[i] = parseInt(hex.slice(i * 2, i * 2 + 2), 16);
+  }
   bytes[6] = (bytes[6]! & 0x0f) | 0x40;
   bytes[8] = (bytes[8]! & 0x3f) | 0x80;
-  const h = bytes.toString('hex');
+  const h = [...bytes].map((b) => b.toString(16).padStart(2, '0')).join('');
   return `${h.slice(0, 8)}-${h.slice(8, 12)}-${h.slice(12, 16)}-${h.slice(16, 20)}-${h.slice(20, 32)}`;
 }
 

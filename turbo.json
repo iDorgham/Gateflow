@@ -1,18 +1,29 @@
 {
   "$schema": "https://v2-8-13.turborepo.dev/schema.json",
-  "globalDependencies": [
-    "**/.env.*local"
+  "globalDependencies": ["**/.env.*local"],
+  "globalPassThroughEnv": [
+    "ADMIN_ACCESS_KEY",
+    "ENCRYPTION_MASTER_KEY",
+    "NEXTAUTH_SECRET",
+    "NEXTAUTH_URL",
+    "OPTIMIZE_API_KEY",
+    "QR_SIGNING_SECRET",
+    "SMTP_FROM",
+    "SMTP_HOST",
+    "SMTP_PASS",
+    "SMTP_PORT",
+    "SMTP_USER",
+    "STRIPE_PRICE_ID_ENTERPRISE",
+    "STRIPE_PRICE_ID_PRO",
+    "STRIPE_SECRET_KEY",
+    "STRIPE_WEBHOOK_SECRET",
+    "UPSTASH_REDIS_REST_TOKEN",
+    "UPSTASH_REDIS_REST_URL"
   ],
   "tasks": {
     "build": {
-      "dependsOn": [
-        "^build"
-      ],
-      "outputs": [
-        "dist/**",
-        ".next/**",
-        "!.next/cache/**"
-      ],
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", ".next/**", "!.next/cache/**"],
       "env": [
         "DATABASE_URL",
         "DIRECT_DATABASE_URL",
@@ -23,9 +34,7 @@
       "cache": true
     },
     "lint": {
-      "dependsOn": [
-        "^build"
-      ],
+      "dependsOn": ["^build"],
       "cache": true
     },
     "dev": {
@@ -33,18 +42,12 @@
       "persistent": true
     },
     "test": {
-      "dependsOn": [
-        "^build"
-      ],
-      "outputs": [
-        "coverage/**"
-      ],
+      "dependsOn": ["^build"],
+      "outputs": ["coverage/**"],
       "cache": true
     },
     "typecheck": {
-      "dependsOn": [
-        "^build"
-      ],
+      "dependsOn": ["^build"],
       "cache": true
     }
   }

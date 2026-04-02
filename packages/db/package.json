@@ -26,6 +26,7 @@
     "db:generate:edge": "prisma generate --no-engine"
   },
   "dependencies": {
+    "crypto-js": "^4.2.0",
     "@gate-access/types": "workspace:*",
     "@node-rs/argon2": "^2.0.0",
     "@prisma/adapter-pg": "^5.22.0",
@@ -40,6 +41,7 @@
     "zod": "3.25.76"
   },
   "devDependencies": {
+    "@types/crypto-js": "^4.2.2",
     "@gate-access/config": "workspace:*",
     "@types/faker": "^5.5.3",
     "@types/node": "^20.19.33",

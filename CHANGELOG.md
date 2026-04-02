@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Db]** avoid node:crypto in client webpack graph; turbo env passthrough
+
 - **[Scripts]** ralph-docs changelog inserts under Unreleased tri-track
 
 - **[Plan Lifecycle]** `advanced_seeding_emulation_v3` plan assets live under `docs/plan/done/advanced_seeding_emulation_v3/` (completed); prompt/checklist links normalized to that path.
