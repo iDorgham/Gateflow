@@ -48,7 +48,8 @@
       "settings": "Settings",
       "admins": "Administrators",
       "collapse": "Collapse Sidebar",
-      "expand": "Expand Sidebar"
+      "expand": "Expand Sidebar",
+      "emulation": "Traffic Emulation"
     },
     "header": {
       "search": "Search...",
