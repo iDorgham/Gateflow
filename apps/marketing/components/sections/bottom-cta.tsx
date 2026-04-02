@@ -115,7 +115,7 @@ export function BottomCTA({ locale }: { locale: Locale }) {
               duration: 0.9,
               ease: [0.22, 1, 0.36, 1],
             }}
-            className="mb-10 text-5xl lg:text-9xl font-black tracking-tighter leading-[0.9] text-ds-text-heading max-w-4xl mx-auto"
+            className="mb-10 text-4xl lg:text-5xl font-black tracking-tighter leading-[0.9] text-ds-text-heading max-w-4xl mx-auto"
           >
             {t('cta.headline')}
           </motion.h2>

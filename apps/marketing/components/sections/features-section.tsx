@@ -82,9 +82,9 @@ export function FeaturesSection({
           <span className="mb-8 inline-block text-[12px] font-black uppercase tracking-[0.4em] text-ds-text-subtle px-5 py-2 bg-ds-surface-raised rounded-full border border-ds-border shadow-sm">
             {sectionTitle}
           </span>
-          <p className="text-6xl lg:text-[100px] font-black tracking-tighter text-ds-text-heading leading-[0.95]">
+          <h2 className="text-4xl lg:text-5xl font-black tracking-tighter text-ds-text-heading leading-[0.95]">
             {featuresTitle}
-          </p>
+          </h2>
         </motion.div>
 
         {/* ── Feature cards ── */}

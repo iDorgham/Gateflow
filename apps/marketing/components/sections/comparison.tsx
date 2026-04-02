@@ -11,21 +11,61 @@ export function ComparisonSection({ locale }: { locale: Locale }) {
   const isRtl = locale.startsWith('ar');
 
   const features = [
-    { name: t('comparison.features.offline'), gateflow: true, whatsapp: false, paper: false },
-    { name: t('comparison.features.analytics'), gateflow: true, whatsapp: false, paper: false },
-    { name: t('comparison.features.qrCodes'), gateflow: true, whatsapp: true, paper: false },
-    { name: t('comparison.features.auditLog'), gateflow: true, whatsapp: false, paper: false },
-    { name: t('comparison.features.residentPortal'), gateflow: true, whatsapp: false, paper: false },
-    { name: t('comparison.features.pushNotifications'), gateflow: true, whatsapp: true, paper: false },
-    { name: t('comparison.features.multiGate'), gateflow: true, whatsapp: false, paper: false },
-    { name: t('comparison.features.apiAccess'), gateflow: true, whatsapp: false, paper: false },
+    {
+      name: t('comparison.features.offline'),
+      gateflow: true,
+      whatsapp: false,
+      paper: false,
+    },
+    {
+      name: t('comparison.features.analytics'),
+      gateflow: true,
+      whatsapp: false,
+      paper: false,
+    },
+    {
+      name: t('comparison.features.qrCodes'),
+      gateflow: true,
+      whatsapp: true,
+      paper: false,
+    },
+    {
+      name: t('comparison.features.auditLog'),
+      gateflow: true,
+      whatsapp: false,
+      paper: false,
+    },
+    {
+      name: t('comparison.features.residentPortal'),
+      gateflow: true,
+      whatsapp: false,
+      paper: false,
+    },
+    {
+      name: t('comparison.features.pushNotifications'),
+      gateflow: true,
+      whatsapp: true,
+      paper: false,
+    },
+    {
+      name: t('comparison.features.multiGate'),
+      gateflow: true,
+      whatsapp: false,
+      paper: false,
+    },
+    {
+      name: t('comparison.features.apiAccess'),
+      gateflow: true,
+      whatsapp: false,
+      paper: false,
+    },
   ];
 
   return (
     <section className="py-32 lg:py-48 bg-ds-surface relative overflow-hidden">
       <div className="container px-8 mx-auto relative z-10">
         <div className="text-center max-w-4xl mx-auto mb-24 lg:mb-32">
-          <motion.h2 
+          <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -33,23 +73,23 @@ export function ComparisonSection({ locale }: { locale: Locale }) {
           >
             {t('comparison.badge')}
           </motion.h2>
-          <motion.p 
+          <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-5xl lg:text-7xl font-black tracking-tight text-ds-text-heading leading-tight"
+            className="text-4xl lg:text-5xl font-black tracking-tight text-ds-text-heading leading-tight"
           >
             {t('comparison.title')}
-          </motion.p>
+          </motion.h2>
         </div>
 
-        <motion.div 
-           initial={{ opacity: 0, scale: 0.98 }}
-           whileInView={{ opacity: 1, scale: 1 }}
-           viewport={{ once: true }}
-           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-           className="overflow-hidden border border-ds-border-bold rounded-[32px] bg-ds-surface-raised shadow-[0_64px_128px_rgba(0,0,0,0.12)]"
+        <motion.div
+          initial={{ opacity: 0, scale: 0.98 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          className="overflow-hidden border border-ds-border-bold rounded-[32px] bg-ds-surface-raised shadow-[0_64px_128px_rgba(0,0,0,0.12)]"
         >
           <div className="overflow-x-auto">
             <table className="w-full min-w-[800px] border-collapse">
@@ -78,10 +118,12 @@ export function ComparisonSection({ locale }: { locale: Locale }) {
                     key={i}
                     className="group transition-colors hover:bg-ds-surface-sunken/40"
                   >
-                    <td className="py-8 px-12 font-black text-[18px] text-ds-text-heading tracking-tight">{feature.name}</td>
+                    <td className="py-8 px-12 font-black text-[18px] text-ds-text-heading tracking-tight">
+                      {feature.name}
+                    </td>
                     <td className="py-8 px-8 text-center bg-ds-background-brand-subtle/10 border-x border-ds-border-brand/10">
                       <div className="flex justify-center">
-                        <motion.div 
+                        <motion.div
                           whileHover={{ scale: 1.2 }}
                           className="w-10 h-10 rounded-2xl bg-ds-background-brand-bold text-white flex items-center justify-center shadow-lg shadow-ds-background-brand-bold/30"
                         >

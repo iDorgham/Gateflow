@@ -19,14 +19,14 @@ export function MidCtaSection({
   ctaLabel: string;
 }) {
   return (
-    <section className="relative overflow-hidden py-32 md:py-64 bg-ds-surface">
+    <section className="relative overflow-hidden py-32 md:py-64 bg-ds-surface-sunken">
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="relative isolate overflow-hidden rounded-[40px] border border-ds-border-bold bg-ds-text-heading p-12 lg:p-32 shadow-[0_48px_96px_rgba(0,0,0,0.3)]"
+          className="relative isolate overflow-hidden rounded-[40px] border border-ds-border-bold bg-[#0B0C0E] p-12 lg:p-32 shadow-[0_48px_96px_rgba(0,0,0,0.3)]"
         >
           <div className="absolute top-0 end-0 -z-10 w-[600px] h-[600px] bg-ds-background-brand-bold/20 blur-[120px] rounded-full translate-x-1/3 -translate-y-1/3" />
 
@@ -36,7 +36,7 @@ export function MidCtaSection({
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2 }}
-                className="mb-10 text-6xl lg:text-[100px] font-black leading-[0.9] tracking-tighter text-white"
+                className="mb-10 text-4xl lg:text-5xl font-black leading-[0.9] tracking-tighter text-white"
               >
                 {headline}
               </motion.h2>
