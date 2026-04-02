@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Scripts]** ralph-docs changelog inserts under Unreleased tri-track
+
 - **[Plan Lifecycle]** moved `advanced_seeding_emulation_v3` assets to `docs/plan/planned/advanced_seeding_emulation_v3/` and normalized prompt/checklist links.
 - **[Backlog]** added tracking entry for `advanced_seeding_emulation_v3` in `docs/plan/backlog/ALL_TASKS_BACKLOG.md`.
 - **[Plan Docs]** added a local README for `advanced_seeding_emulation_v3` with lifecycle status and canonical `/dev` commands.

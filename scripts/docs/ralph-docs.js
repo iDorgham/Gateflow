@@ -65,6 +65,38 @@ const TYPE_SECTION = {
   refactor: 'Refactoring',
 };
 
+/** Monorepo [Unreleased] uses ### Workspace / ### AI Tools / ### Apps (see docs:changelog:check). */
+const CHANGELOG_AI_TOOLS_SCOPES = new Set(['ai', 'i18n', 'rtl', 'analytics']);
+const CHANGELOG_APPS_SCOPES = new Set([
+  'client',
+  'admin',
+  'scanner',
+  'marketing',
+  'crm',
+  'residents',
+  'contacts',
+  'units',
+  'gates',
+  'projects',
+  'settings',
+]);
+
+function pickTriTrackSubsection(scope) {
+  const s = (scope || '').trim().toLowerCase();
+  if (CHANGELOG_AI_TOOLS_SCOPES.has(s)) return 'AI Tools';
+  if (CHANGELOG_APPS_SCOPES.has(s)) return 'Apps';
+  return 'Workspace';
+}
+
+/** `- **[Tag]** description` — must match scripts/check/check-changelog.js */
+function formatChangelogBullet(scope, description) {
+  const label =
+    scope && String(scope).trim()
+      ? slugToTitle(String(scope).trim())
+      : 'Change';
+  return `- **[${label}]** ${description}`;
+}
+
 function ensureChangelog() {
   if (fs.existsSync(CHANGELOG)) return;
   const ver = version();
@@ -103,24 +135,58 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 function addChangelogEntry(type, description, slug) {
   ensureChangelog();
   let content = fs.readFileSync(CHANGELOG, 'utf8');
-  const section = TYPE_SECTION[type] || 'Changes';
-  const entry = `- **${slug ? `[${slugToTitle(slug)}] ` : ''}**${description}`;
+  const startMarker = '## [Unreleased]';
+  const startIdx = content.indexOf(startMarker);
+  if (startIdx === -1) {
+    console.log('ℹ  No [Unreleased] section — skip changelog');
+    return;
+  }
+  const bodyStart = content.indexOf('\n', startIdx) + 1;
+  let bodyEnd = content.length;
+  const dashSep = content.indexOf('\n---\n', bodyStart);
+  const nextVer = content.indexOf('\n## [', bodyStart);
+  if (dashSep !== -1) bodyEnd = Math.min(bodyEnd, dashSep);
+  if (nextVer !== -1) bodyEnd = Math.min(bodyEnd, nextVer);
 
-  // Find or create section under [Unreleased]
-  const sectionHeader = `### ${section}`;
-  if (content.includes(`## [Unreleased]`)) {
-    if (content.includes(sectionHeader)) {
-      // Append after existing section header
-      content = content.replace(sectionHeader, `${sectionHeader}\n${entry}`);
-    } else {
-      // Add new section before next ## header
-      content = content.replace(
-        /## \[Unreleased\]\n([\s\S]*?)(?=\n---|\n## \[)/,
-        (m, body) =>
-          `## [Unreleased]\n${body.trimEnd()}\n\n${sectionHeader}\n${entry}\n`
+  let unreleasedBody = content.slice(bodyStart, bodyEnd);
+  const triTrack =
+    /^### Workspace\s*$/m.test(unreleasedBody) &&
+    /^### AI Tools\s*$/m.test(unreleasedBody) &&
+    /^### Apps\s*$/m.test(unreleasedBody);
+
+  let newBody;
+  if (triTrack) {
+    const subsection = pickTriTrackSubsection(slug);
+    const entry = formatChangelogBullet(slug, description);
+    const header = `### ${subsection}\n`;
+    const pos = unreleasedBody.indexOf(header);
+    if (pos === -1) {
+      console.log(
+        `ℹ  Changelog: missing ${header.trim()} under [Unreleased] — skip`
       );
+      return;
+    }
+    const insertAt = pos + header.length;
+    newBody =
+      unreleasedBody.slice(0, insertAt) +
+      entry +
+      '\n' +
+      unreleasedBody.slice(insertAt);
+  } else {
+    const section = TYPE_SECTION[type] || 'Changes';
+    const sectionHeader = `### ${section}\n`;
+    const entry = formatChangelogBullet(slug || section, description);
+    if (unreleasedBody.includes(`### ${section}\n`)) {
+      const pos = unreleasedBody.indexOf(sectionHeader) + sectionHeader.length;
+      newBody =
+        unreleasedBody.slice(0, pos) + entry + '\n' + unreleasedBody.slice(pos);
+    } else {
+      newBody =
+        unreleasedBody.trimEnd() + `\n\n### ${section}\n` + entry + '\n';
     }
   }
+
+  content = content.slice(0, bodyStart) + newBody + content.slice(bodyEnd);
   fs.writeFileSync(CHANGELOG, content);
   console.log(`✓ Changelog updated [${type}]: ${description}`);
 }
@@ -325,6 +391,12 @@ function fromCommit() {
   }
 
   const [, type, scope, desc] = m;
+  if (!['feat', 'fix', 'perf', 'security'].includes(type)) {
+    console.log(
+      `ℹ  Type "${type}" — skip auto-changelog (feat/fix/perf/security only)`
+    );
+    return;
+  }
   addChangelogEntry(type, desc, scope);
   if (type === 'feat') refreshReadme(scope, desc);
 }
