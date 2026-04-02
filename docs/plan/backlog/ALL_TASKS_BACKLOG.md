@@ -10,7 +10,7 @@
 
 **PLAN:** `docs/plan/in-progress/advanced_seeding_emulation_v3/PLAN_advanced_seeding_emulation_v3.md`
 
-**Status:** In progress — Phase 7 delivered; continue with Phase 8
+**Status:** In progress — Phase 8 delivered; continue with Phase 9
 
 **Target:** Q2 2026
 
@@ -21,7 +21,7 @@
 - [x] Phase 5 — Rush Hour Algorithm & Traffic Simulation
 - [x] Phase 6 — QR Generation, Access Logs & Relational Chain
 - [x] Phase 7 — Live Emulation API (Vercel Serverless)
-- [ ] Phase 8 — Client Dashboard Multi-Step UI Wizard (ADS)
+- [x] Phase 8 — Client Dashboard Multi-Step UI Wizard (ADS)
 - [ ] Phase 9 — CLI Integration, Testing & Documentation
 
 ### gateflow_design_system — GateFlow Design System (tokens, theme, UI, design.gateflow.site)
@@ -36,11 +36,14 @@
 
 - [ ] Phase 1 — `@gateflow/tokens` (OKLCH, `tokens.css`, `@theme`, `token()`)
 - [ ] Phase 2 — `@gateflow/theme` (`data-color-mode`, `next-themes`, root `dev:design` / `build:design`)
-- [ ] Phase 3 — `@gateflow/ui` upgrade (semantic tokens, elevation/surface; successor to `@gate-access/ui`)
-- [ ] Phase 4 — `apps/design-system` (`@gateflow/design-system`) scaffold (Next.js, Tailwind v4, IA shell)
+- [ ] Phase 3 — `@gateflow/ui` upgrade (primitives; semantic tokens; successor to `@gate-access/ui`)
+- [ ] Phase 9 — `@gateflow/components` (composed patterns on `ui`) — _run after 3; parallel with 10_
+- [ ] Phase 10 — `@gateflow/ai` (AI UI kit: chat, streaming, tools) — _run after 3; parallel with 9_
+- [ ] Phase 4 — `apps/design-system` (`@gateflow/design-system`) scaffold (Next.js, Tailwind v4, IA: `/components` + primitives/patterns/ai stubs)
 - [ ] Phase 5 — Foundations + interactive Token Explorer
-- [ ] Phase 6 — Components gallery + packages / guidelines docs
+- [ ] Phase 6 — **Primitives + Patterns + AI** galleries + **comprehensive `/packages`** catalog + guidelines (_needs 9+10_)
 - [ ] Phase 7 — RTL, search, polish, Vercel `design.gateflow.site`
+- [ ] Phase 8 — npm publish (**tokens, theme, ui, components, ai**) + CI + external smoke test
 
 ### marketing_growth_engine_q3_2026 — Marketing Growth Engine (Q3 2026)
 

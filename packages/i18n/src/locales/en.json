@@ -489,7 +489,121 @@
       "collapse": "Collapse Sidebar",
       "activeProject": "Active Project",
       "allProjects": "All Projects",
-      "branding": "Dashboard"
+      "branding": "Dashboard",
+      "groupPlatform": "Platform",
+      "emulation": "Traffic emulation"
+    },
+    "emulation": {
+      "meta_title": "Traffic emulation · GateFlow",
+      "title": "Traffic emulation",
+      "subtitle": "Super Admin wizard for advanced seeding and rush-hour traffic simulation.",
+      "step_progress": "Step {{current}} of {{total}}",
+      "step_help": "Use Next and Back. Fields are validated before leaving each step.",
+      "steps": {
+        "0": "Organization & scan window",
+        "1": "Unit ID format & project",
+        "2": "Contacts & visitor mix",
+        "3": "Unit hierarchy parameters",
+        "4": "Rush scenario",
+        "5": "Review & run"
+      },
+      "step0": {
+        "intro": "Target a tenant organization and define how many synthetic scans to place in the time window. The live run uses Phase 7 resolution rules (project, gate, unit, contact, staff user)."
+      },
+      "step1": {
+        "body": "Unit naming during advanced seeding follows the project’s Unit ID format (CRM / Phase 4). Choose a reference format for this run’s documentation; optional project ID narrows resolution when multiple projects exist."
+      },
+      "step2": {
+        "body": "Rich contacts (Phase 3) use weighted nationalities and duplicate-safe email/phone. The emulation API resolves a default contact when omitted; set an override to tie the visitor QR to a specific Contact row."
+      },
+      "step3": {
+        "body": "Phase 4 seeds phases, buildings, and floors into Units. Ranges below document the intended hierarchy density for operators; the live API still resolves gate, unit, and staff IDs unless you override them."
+      },
+      "step4": {
+        "intro": "Rush-hour shaping (Phase 5) clusters scans around scenario-specific peaks.",
+        "error": {
+          "phases": "Check phases min/max (1–32, min ≤ max).",
+          "buildings": "Check buildings min/max (1–32, min ≤ max).",
+          "floors": "Check floors min/max (1–32, min ≤ max)."
+        }
+      },
+      "step5": {
+        "intro": "Confirm payload. Dry run validates resolution and timestamps only (no QR or ScanLog writes). Turn off dry run only when QR_SIGNING_SECRET is configured on the server."
+      },
+      "fields": {
+        "organization_id": "Target organization ID",
+        "past_days": "Past days (1–365)",
+        "total_scans": "Total scans (1–10,000)",
+        "incident_rate": "Failed scan rate",
+        "random_seed": "Random seed (integer)",
+        "randomize": "Randomize",
+        "reference_unit_format": "Reference unit ID format",
+        "project_id_optional": "Project ID (optional override)",
+        "contact_id_optional": "Contact ID (optional override)",
+        "phases_range": "Phases",
+        "phases_range_min": "Phases (min)",
+        "phases_range_max": "Phases (max)",
+        "buildings_range": "Buildings",
+        "buildings_range_min": "Buildings (min)",
+        "buildings_range_max": "Buildings (max)",
+        "floors_range": "Floors",
+        "floors_range_min": "Floors (min)",
+        "floors_range_max": "Floors (max)",
+        "gate_id_optional": "Gate ID",
+        "unit_id_optional": "Unit ID",
+        "created_by_optional": "Created-by user ID (staff)",
+        "dry_run": "Dry run (no database writes for QR / scans)",
+        "dry_run_hint": "Recommended for first-time validation on production-shaped data."
+      },
+      "placeholders": {
+        "uuid": "Leave empty to auto-resolve"
+      },
+      "advanced": {
+        "entity_ids": "Entity ID overrides"
+      },
+      "summary": {
+        "api": "API payload",
+        "rate_note": "Super Admin only. Rate limit: 5 requests per hour per operator.",
+        "context": "Seeding context (reference)",
+        "unit_format": "Unit ID format",
+        "hierarchy": "Hierarchy ranges"
+      },
+      "scenarios": {
+        "luxury-compound": {
+          "title": "Luxury compound",
+          "desc": "Residential compound traffic curve with morning and evening peaks."
+        },
+        "nightclub": {
+          "title": "Nightclub",
+          "desc": "Late-night entry spike with lighter daytime baseline."
+        },
+        "private-school": {
+          "title": "Private school",
+          "desc": "Drop-off and pickup rush clusters aligned to school hours."
+        },
+        "wedding-venue": {
+          "title": "Wedding venue",
+          "desc": "Event-day surge with preparation-phase arrivals."
+        }
+      },
+      "actions": {
+        "back": "Back",
+        "next": "Next",
+        "run": "Run emulation",
+        "running": "Running…"
+      },
+      "result": {
+        "title": "Last response"
+      },
+      "error": {
+        "invalid_payload": "Invalid inputs.",
+        "rate_limit": "Too many requests. Retry after {{seconds}}s.",
+        "request_failed": "Request failed.",
+        "network": "Network error."
+      },
+      "success": {
+        "title": "Emulation run completed."
+      }
     },
     "common": {
       "retry": "Retry",

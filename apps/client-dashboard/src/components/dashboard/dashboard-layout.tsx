@@ -30,6 +30,7 @@ import {
   Users,
   Buildings,
   Stack,
+  Pulse,
 } from '@phosphor-icons/react';
 import {
   Avatar,
@@ -84,6 +85,8 @@ export interface DashboardLayoutProps {
   locale: Locale;
   children: React.ReactNode;
   permissions?: Record<string, boolean>;
+  /** Platform-only navigation (e.g. traffic emulation). */
+  isSuperAdmin?: boolean;
 }
 
 export interface TaskItem {
@@ -322,18 +325,29 @@ const RESIDENTS_ITEMS = [
   },
 ];
 
+const SUPER_ADMIN_NAV = [
+  {
+    label: 'Traffic emulation',
+    href: '/dashboard/emulation',
+    icon: Pulse,
+    i18nKey: 'sidebar.emulation',
+  },
+] as const;
+
 function LeftSidebar({
   locale,
   isCollapsed,
   onToggleCollapse,
   isRtl,
   onOpenChat,
+  isSuperAdmin,
 }: {
   locale: Locale;
   isCollapsed: boolean;
   onToggleCollapse: () => void;
   isRtl: boolean;
   onOpenChat: () => void;
+  isSuperAdmin: boolean;
 }) {
   const pathname = usePathname();
   const { t } = useTranslation('dashboard');
@@ -475,6 +489,32 @@ function LeftSidebar({
               <NavItem item={NAV_ITEMS[0]} collapsed={isCollapsed} />
               <NavItem item={NAV_ITEMS[1]} collapsed={isCollapsed} />
             </div>
+
+            {isSuperAdmin ? (
+              <div className="flex flex-col gap-1.5">
+                <AnimatePresence mode="wait" initial={false}>
+                  {!isCollapsed && (
+                    <motion.p
+                      key="label-platform"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.1 }}
+                      className="px-3 text-[10px] font-bold uppercase tracking-widest text-[var(--ds-text-subtlest,#A1A1AA)] mb-2"
+                    >
+                      {t('sidebar.groupPlatform', 'Platform')}
+                    </motion.p>
+                  )}
+                </AnimatePresence>
+                {SUPER_ADMIN_NAV.map((item) => (
+                  <NavItem
+                    key={item.href}
+                    item={item}
+                    collapsed={isCollapsed}
+                  />
+                ))}
+              </div>
+            ) : null}
 
             <div className="flex flex-col gap-1.5">
               <AnimatePresence mode="wait" initial={false}>
@@ -749,12 +789,14 @@ function MobileSidebar({
   onOpenChange,
   isRtl,
   onOpenChat,
+  isSuperAdmin,
 }: {
   locale: Locale;
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   isRtl: boolean;
   onOpenChat: () => void;
+  isSuperAdmin: boolean;
 }) {
   const pathname = usePathname();
 
@@ -848,6 +890,22 @@ function MobileSidebar({
                 />
               </div>
 
+              {isSuperAdmin ? (
+                <div className="flex flex-col gap-1.5">
+                  <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[var(--ds-text-subtle)] mb-2">
+                    {t('sidebar.groupPlatform', 'Platform')}
+                  </p>
+                  {SUPER_ADMIN_NAV.map((item) => (
+                    <NavItem
+                      key={item.href}
+                      item={item}
+                      collapsed={false}
+                      onClick={() => onOpenChange(false)}
+                    />
+                  ))}
+                </div>
+              ) : null}
+
               <div className="flex flex-col gap-1.5">
                 <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[var(--ds-text-subtle)] mb-2">
                   {t('sidebar.groupResidents', 'Residents')}
@@ -906,6 +964,7 @@ export function DashboardLayout({
   locale,
   children,
   permissions: _permissions,
+  isSuperAdmin = false,
 }: DashboardLayoutProps) {
   useRealtimeEvents();
   const [leftCollapsed, setLeftCollapsed] = useState(false);
@@ -963,6 +1022,7 @@ export function DashboardLayout({
           onToggleCollapse={() => setLeftCollapsed((c) => !c)}
           isRtl={isRtl}
           onOpenChat={onOpenChat}
+          isSuperAdmin={isSuperAdmin}
         />
 
         <div className="flex flex-1 min-w-0 flex-col min-h-0 overflow-hidden">
@@ -1032,6 +1092,7 @@ export function DashboardLayout({
         onOpenChange={setMobileNavOpen}
         isRtl={isRtl}
         onOpenChat={onOpenChat}
+        isSuperAdmin={isSuperAdmin}
       />
 
       <SecurityNotifier />
