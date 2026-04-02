@@ -34,7 +34,7 @@ export const AntigravityBackground: React.FC = () => {
   const mouseRef = useRef({ x: 0, y: 0 });
   const focalPointRef = useRef({ x: 0, y: 0 });
   const particlesRef = useRef<Particle[]>([]);
-  const requestRef = useRef<number>();
+  const requestRef = useRef<number | undefined>(undefined);
 
   const initParticles = (width: number, height: number) => {
     const particles: Particle[] = [];

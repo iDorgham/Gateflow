@@ -43,6 +43,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Apps
 
+- **[Marketing]** `AntigravityBackground`: pass initial value to `useRef` for React 19 typings (`number | undefined`).
+
 - **[Marketing]** initiate June 2026 Resilience campaign & Master Landing Page Protocol
 
 - **[Resident Portal]** implement responsive multi-column layout with adaptive Sidebar/BottomNav switching.
