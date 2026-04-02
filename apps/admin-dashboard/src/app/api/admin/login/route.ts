@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { createHash } from 'crypto';
+import { createHash, timingSafeEqual } from 'crypto';
 
 const COOKIE_NAME = 'admin_session';
 const SECURE = process.env.NODE_ENV === 'production';
@@ -36,15 +36,20 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         { status: 503 }
       );
     }
-    if (key !== expectedKey) {
-      const received = sha256(key);
-      const expected = sha256(expectedKey);
-      if (received !== expected) {
-        return NextResponse.json(
-          { success: false, message: 'Invalid access key.' },
-          { status: 401 }
-        );
-      }
+    // Constant-time compare to avoid timing attacks.
+    // We compare SHA-256 digests so the comparison length is fixed.
+    const receivedHash = sha256(key);
+    const expectedHash = sha256(expectedKey);
+    const receivedBuf = Buffer.from(receivedHash, 'hex');
+    const expectedBuf = Buffer.from(expectedHash, 'hex');
+    if (
+      receivedBuf.length !== expectedBuf.length ||
+      !timingSafeEqual(receivedBuf, expectedBuf)
+    ) {
+      return NextResponse.json(
+        { success: false, message: 'Invalid access key.' },
+        { status: 401 }
+      );
     }
 
     const sessionToken = sha256(expectedKey);

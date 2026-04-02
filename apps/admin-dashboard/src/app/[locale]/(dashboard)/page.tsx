@@ -19,11 +19,10 @@ import {
   CardTitle,
   Badge,
   cn,
-  DynamicTable,
-  Column,
 } from '@gate-access/ui';
 import Link from 'next/link';
 import { PageHeader } from '@gate-access/ui';
+import { DashboardRecentOrgsTable } from './DashboardRecentOrgsTable';
 
 export const metadata = { title: 'Operational Overview' };
 
@@ -116,42 +115,24 @@ export default async function AdminOverviewPage(props: {
     },
   ];
 
-  const columns: Column<(typeof recentOrgs)[0]>[] = [
-    {
-      key: 'org',
-      label: t('overview.org'),
-      render: (org) => (
-        <div className="flex flex-col">
-          <span className="font-bold text-ds-text">{org.name}</span>
-          <span className="text-[11px] text-ds-text-subtle truncate max-w-[200px]">
-            {org.email}
-          </span>
-        </div>
-      ),
-    },
-    {
-      key: 'plan',
-      label: t('overview.plan'),
-      render: (org) => (
-        <Badge
-          variant={org.plan === 'PRO' ? 'primary' : 'subtle'}
-          className="h-5 px-1.5 font-bold text-[9px]"
-        >
-          {org.plan}
-        </Badge>
-      ),
-    },
-    {
-      key: 'joined',
-      label: t('overview.joined'),
-      align: 'right',
-      render: (org) => (
-        <span className="text-xs font-medium text-ds-text-subtle">
-          {new Date(org.createdAt).toLocaleDateString(locale)}
-        </span>
-      ),
-    },
-  ];
+  type RecentOrg = {
+    id: string;
+    name: string;
+    email: string | null;
+    plan: string | null;
+    createdAt: Date;
+  };
+
+  const recentOrgsSafe = recentOrgs.map((o: RecentOrg) => ({
+    ...o,
+    createdAt: new Date(o.createdAt).toISOString(),
+  }));
+
+  const recentOrgsLabels = {
+    org: t('overview.org'),
+    plan: t('overview.plan'),
+    joined: t('overview.joined'),
+  };
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500 pb-10">
@@ -232,7 +213,11 @@ export default async function AdminOverviewPage(props: {
             </Link>
           </CardHeader>
           <CardContent className="p-0 flex-1">
-            <DynamicTable columns={columns} items={recentOrgs} />
+            <DashboardRecentOrgsTable
+              recentOrgs={recentOrgsSafe}
+              locale={locale}
+              labels={recentOrgsLabels}
+            />
           </CardContent>
         </Card>
 

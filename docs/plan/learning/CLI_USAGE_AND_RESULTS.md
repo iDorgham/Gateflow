@@ -29,21 +29,22 @@ After a task or phase was executed **using a CLI** (Claude CLI, Gemini CLI, Open
 
 ## Log entries
 
-| Date       | CLI          | Task / phase                                                   | Outcome | Notes                                                                                                          |
-| ---------- | ------------ | -------------------------------------------------------------- | ------- | -------------------------------------------------------------------------------------------------------------- |
-| 2026-03-17 | Gemini CLI   | Phase 5 atlassian_ui_remake                                    | success | Standardized Organizations, Users, Scans and Audit Logs.                                                       |
-| 2026-03-17 | Antigravity  | Phase 5 gateai_hub_v2                                          | success | Unified motion tokens and RTL logical properties.                                                              |
-| 2026-03-22 | Gemini CLI   | Audit: Broad scan for multi-tenant leaks                       | success | Found several un-scoped queries.                                                                               |
-| 2026-03-22 | Opencode CLI | Audit: Code-path check for structure                           | success | Verified structure in dashboard settings.                                                                      |
-| 2026-03-22 | Claude CLI   | Audit: Deep security audit of short-link & auth                | success | Fixed critical scoping in `requireAuth` and `s/.../route.ts`.                                                  |
-| 2026-03-22 | Antigravity  | Team Management Suite                                          | success | Full implementation: Roles, Invitations, Audit, Activity, Sessions.                                            |
-| 2026-03-24 | Antigravity  | marketing:build stabilization (Next 15)                        | success | Fixed LucideIcon types (Icon, LoadingSpinner) and pricing i18n keys.                                           |
-| 2026-03-24 | Gemini CLI   | Phase 5 security_isolation_fix                                 | success | Certified 15+ API routes as secured with zero dashboard violations.                                            |
-| 2026-03-25 | Gemini CLI   | Phase 5 pagespeed_100                                          | success | Lighthouse CI infra certified; local mobile perf ~72-75 established.                                           |
-| 2026-03-25 | Antigravity  | security_isolation_fix: Phase 6 update                         | success | Merged Gate-Assignment UI design draft into the official plan as Phase 6.                                      |
-| 2026-03-30 | Qwen CLI     | Phase 3 autonomous_ops_intelligence                            | partial | Webhook+incident+SSE notifier improvements; tests required manual follow-up due to tool approval gating.       |
-| 2026-04-02 | Cursor       | Marketing useRef + eslint-config-next 15 + push master         | success | `pnpm`/git only; pre-push preflight passed; Dependabot `ai-6.0.138` already contained merged master on remote. |
-| 2026-04-02 | Cursor       | Commit `fix/admin-access-key-hardening` (admin key, turbo, CI) | success | `pnpm docs:changelog:check`; `turbo typecheck lint --filter=admin-dashboard`.                                  |
+| Date       | CLI          | Task / phase                                                   | Outcome | Notes                                                                                                                   |
+| ---------- | ------------ | -------------------------------------------------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------- |
+| 2026-03-17 | Gemini CLI   | Phase 5 atlassian_ui_remake                                    | success | Standardized Organizations, Users, Scans and Audit Logs.                                                                |
+| 2026-03-17 | Antigravity  | Phase 5 gateai_hub_v2                                          | success | Unified motion tokens and RTL logical properties.                                                                       |
+| 2026-03-22 | Gemini CLI   | Audit: Broad scan for multi-tenant leaks                       | success | Found several un-scoped queries.                                                                                        |
+| 2026-03-22 | Opencode CLI | Audit: Code-path check for structure                           | success | Verified structure in dashboard settings.                                                                               |
+| 2026-03-22 | Claude CLI   | Audit: Deep security audit of short-link & auth                | success | Fixed critical scoping in `requireAuth` and `s/.../route.ts`.                                                           |
+| 2026-03-22 | Antigravity  | Team Management Suite                                          | success | Full implementation: Roles, Invitations, Audit, Activity, Sessions.                                                     |
+| 2026-03-24 | Antigravity  | marketing:build stabilization (Next 15)                        | success | Fixed LucideIcon types (Icon, LoadingSpinner) and pricing i18n keys.                                                    |
+| 2026-03-24 | Gemini CLI   | Phase 5 security_isolation_fix                                 | success | Certified 15+ API routes as secured with zero dashboard violations.                                                     |
+| 2026-03-25 | Gemini CLI   | Phase 5 pagespeed_100                                          | success | Lighthouse CI infra certified; local mobile perf ~72-75 established.                                                    |
+| 2026-03-25 | Antigravity  | security_isolation_fix: Phase 6 update                         | success | Merged Gate-Assignment UI design draft into the official plan as Phase 6.                                               |
+| 2026-03-30 | Qwen CLI     | Phase 3 autonomous_ops_intelligence                            | partial | Webhook+incident+SSE notifier improvements; tests required manual follow-up due to tool approval gating.                |
+| 2026-04-02 | Cursor       | Marketing useRef + eslint-config-next 15 + push master         | success | `pnpm`/git only; pre-push preflight passed; Dependabot `ai-6.0.138` already contained merged master on remote.          |
+| 2026-04-02 | Cursor       | Commit `fix/admin-access-key-hardening` (admin key, turbo, CI) | success | `pnpm docs:changelog:check`; `turbo typecheck lint --filter=admin-dashboard`.                                           |
+| 2026-04-02 | Vercel CLI   | Redeploy admin-dashboard render-boundary fix                   | partial | `vercel redeploy` completed; local `/en/admins` verified 200. Remote smoke check requires Vercel protection bypass/SSO. |
 
 - **Refactor Team Audit (ADS Tokens):**
   - **`qrcodes/page.tsx`**: Replaced 10+ raw hex violations with ADS tokens. Removed manual `dark:` background/border classes, relying on global token definitions.

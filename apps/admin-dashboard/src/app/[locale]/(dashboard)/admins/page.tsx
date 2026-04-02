@@ -2,19 +2,9 @@ import { requireAdmin, expectedSessionToken } from '@/lib/admin-auth';
 import { getTranslation } from '@/lib/i18n/i18n';
 import { Locale } from '@/lib/i18n/i18n-config';
 import { prisma } from '@gate-access/db';
-import { revalidatePath } from 'next/cache';
-import { randomBytes } from 'crypto';
-import { hash as argon2Hash } from '@node-rs/argon2';
 import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
-import {
-  Shield,
-  UserPlus,
-  KeyRound,
-  ShieldCheck,
-  ShieldAlert,
-  Info,
-} from 'lucide-react';
+import { createAdmin } from './admin-actions';
+import { Shield, UserPlus, KeyRound, ShieldCheck, Info } from 'lucide-react';
 import {
   Card,
   CardContent,
@@ -25,95 +15,11 @@ import {
   Input,
   Label,
   cn,
-  DynamicTable,
-  Column,
   PageHeader,
 } from '@gate-access/ui';
+import { AdminsTable } from './AdminsTable';
 
 export const metadata = { title: 'Platform Authority' };
-
-function localeFromFormData(formData: FormData): Locale {
-  const raw = String(formData.get('locale') ?? '');
-  if (raw === 'ar-EG' || raw === 'en') return raw;
-  return 'en';
-}
-
-// ─── Server actions ────────────────────────────────────────────────────────────
-
-async function createAdmin(formData: FormData) {
-  'use server';
-  const locale = localeFromFormData(formData);
-  await requireAdmin(locale);
-  const name = (formData.get('name') as string)?.trim();
-  const email = (formData.get('email') as string)?.trim().toLowerCase();
-  const password = formData.get('password') as string;
-  if (!name || !email || !password) return;
-
-  const passwordHash = await argon2Hash(password);
-
-  let adminRole = await prisma.role.findFirst({
-    where: { name: 'ADMIN', organizationId: null },
-  });
-  if (!adminRole) {
-    const { BUILT_IN_ROLES, DEFAULT_PERMISSIONS } =
-      await import('@gate-access/types');
-    adminRole = await prisma.role.create({
-      data: {
-        id: 'role-admin',
-        name: 'ADMIN',
-        description: 'Platform super-admin',
-        isBuiltIn: true,
-        permissions: DEFAULT_PERMISSIONS[BUILT_IN_ROLES.SUPER_ADMIN],
-      },
-    });
-  }
-
-  await prisma.user.upsert({
-    where: { email },
-    create: { name, email, passwordHash, roleId: adminRole.id },
-    update: { name, passwordHash, roleId: adminRole.id, deletedAt: null },
-  });
-  revalidatePath(`/${locale}/admins`);
-  redirect(`/${locale}/admins`);
-}
-
-async function resetAdminPassword(formData: FormData) {
-  'use server';
-  const locale = localeFromFormData(formData);
-  await requireAdmin(locale);
-  const id = formData.get('id') as string;
-  if (!id) return;
-
-  const tempPassword = randomBytes(10).toString('hex');
-  const passwordHash = await argon2Hash(tempPassword);
-  await prisma.user.update({ where: { id }, data: { passwordHash } });
-
-  (await cookies()).set(
-    '_adminpwflash',
-    JSON.stringify({ id, pw: tempPassword }),
-    {
-      path: '/',
-      maxAge: 120,
-      sameSite: 'lax',
-    }
-  );
-  revalidatePath(`/${locale}/admins`);
-  redirect(`/${locale}/admins`);
-}
-
-async function toggleSuspend(formData: FormData) {
-  'use server';
-  const locale = localeFromFormData(formData);
-  await requireAdmin(locale);
-  const id = formData.get('id') as string;
-  const isSuspended = formData.get('suspended') === 'true';
-  if (!id) return;
-  await prisma.user.update({
-    where: { id },
-    data: { deletedAt: isSuspended ? null : new Date() },
-  });
-  revalidatePath(`/${locale}/admins`);
-}
 
 // ─── Page ──────────────────────────────────────────────────────────────────────
 
@@ -147,11 +53,17 @@ export default async function AdminsPage(props: {
       id: true,
       name: true,
       email: true,
-      role: true,
       deletedAt: true,
-      createdAt: true,
     },
   });
+
+  const tableLabels = {
+    platformAdmins: t('admins.platformAdmins', { count: admins.length }),
+    suspended: t('admins.suspended'),
+    reset: t('admins.reset'),
+    restore: t('admins.restore'),
+    suspend: t('admins.suspend'),
+  };
 
   // Read and clear flash
   let pwFlash: { id: string; pw: string } | null = null;
@@ -164,108 +76,6 @@ export default async function AdminsPage(props: {
   } catch {
     // ignore
   }
-
-  const columns: Column<(typeof admins)[0]>[] = [
-    {
-      key: 'admin',
-      label: t('admins.platformAdmins', { count: admins.length }),
-      render: (admin) => {
-        const suspended = admin.deletedAt !== null;
-        return (
-          <div className="flex items-center gap-3">
-            <div
-              className={cn(
-                'flex h-9 w-9 shrink-0 items-center justify-center rounded-lg font-bold text-[10px] uppercase shadow-inner',
-                suspended
-                  ? 'bg-ds-background-neutral text-ds-text-subtle'
-                  : 'bg-ds-background-brand-bold text-ds-text-inverse'
-              )}
-            >
-              {admin.name
-                .split(' ')
-                .map((n: string) => n[0])
-                .join('')
-                .slice(0, 2)}
-            </div>
-            <div className="flex flex-col">
-              <span
-                className={cn(
-                  'text-xs font-bold font-mono tracking-tight',
-                  suspended
-                    ? 'text-ds-text-subtle line-through opacity-50'
-                    : 'text-ds-text'
-                )}
-              >
-                {admin.name}
-              </span>
-              <span className="text-[10px] text-ds-text-subtle font-medium">
-                {admin.email}
-              </span>
-            </div>
-          </div>
-        );
-      },
-    },
-    {
-      key: 'status',
-      label: 'Status',
-      render: (admin) => (
-        <Badge
-          variant={admin.deletedAt ? 'warning' : 'success'}
-          className="h-5 px-2 text-[9px] font-black italic uppercase"
-        >
-          {admin.deletedAt ? t('admins.suspended') : 'Active'}
-        </Badge>
-      ),
-    },
-    {
-      key: 'actions',
-      label: '',
-      align: 'right',
-      render: (admin) => (
-        <div className="flex items-center gap-2">
-          <form action={resetAdminPassword}>
-            <input type="hidden" name="locale" value={locale} />
-            <input type="hidden" name="id" value={admin.id} />
-            <Button
-              type="submit"
-              variant="subtle"
-              size="compact"
-              className="h-7 text-[10px] font-black uppercase tracking-widest gap-1.5 opacity-60 hover:opacity-100"
-            >
-              <KeyRound className="h-3 w-3" />
-              {t('admins.reset')}
-            </Button>
-          </form>
-          <form action={toggleSuspend}>
-            <input type="hidden" name="locale" value={locale} />
-            <input type="hidden" name="id" value={admin.id} />
-            <input
-              type="hidden"
-              name="suspended"
-              value={String(admin.deletedAt !== null)}
-            />
-            <Button
-              type="submit"
-              variant={admin.deletedAt ? 'success' : 'destructive'}
-              size="compact"
-              className="h-7 text-[10px] font-black uppercase tracking-widest gap-1.5"
-            >
-              {admin.deletedAt ? (
-                <>
-                  <ShieldCheck className="h-3 w-3" /> {t('admins.restore')}
-                </>
-              ) : (
-                <>
-                  <ShieldAlert className="h-3 w-3" /> {t('admins.suspend')}
-                </>
-              )}
-            </Button>
-          </form>
-        </div>
-      ),
-    },
-  ];
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500 pb-10">
@@ -446,7 +256,7 @@ export default async function AdminsPage(props: {
             <CardHeader className="flex flex-row items-center justify-between border-b border-ds-border/50 px-6 py-5 bg-ds-background-neutral-subtle/30">
               <div>
                 <CardTitle className="text-base font-black italic uppercase tracking-tight text-ds-text">
-                  {t('admins.platformAdmins', { count: admins.length })}
+                  {tableLabels.platformAdmins}
                 </CardTitle>
                 <p className="text-[11px] text-ds-text-subtle font-medium">
                   Verified system administrator accounts with full
@@ -456,7 +266,11 @@ export default async function AdminsPage(props: {
               <Shield className="h-5 w-5 text-ds-icon-subtle opacity-30" />
             </CardHeader>
             <CardContent className="p-0 flex-1">
-              <DynamicTable columns={columns} items={admins} />
+              <AdminsTable
+                admins={admins}
+                locale={locale}
+                labels={tableLabels}
+              />
             </CardContent>
           </Card>
         </div>
