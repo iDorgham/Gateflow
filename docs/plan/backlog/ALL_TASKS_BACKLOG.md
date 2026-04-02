@@ -10,7 +10,7 @@
 
 **PLAN:** `docs/plan/in-progress/advanced_seeding_emulation_v3/PLAN_advanced_seeding_emulation_v3.md`
 
-**Status:** In progress — Phase 6 delivered; continue with Phase 7
+**Status:** In progress — Phase 7 delivered; continue with Phase 8
 
 **Target:** Q2 2026
 
@@ -20,9 +20,27 @@
 - [x] Phase 4 — Unit Hierarchy Seeding with Areas & Owner Linking
 - [x] Phase 5 — Rush Hour Algorithm & Traffic Simulation
 - [x] Phase 6 — QR Generation, Access Logs & Relational Chain
-- [ ] Phase 7 — Live Emulation API (Vercel Serverless)
+- [x] Phase 7 — Live Emulation API (Vercel Serverless)
 - [ ] Phase 8 — Client Dashboard Multi-Step UI Wizard (ADS)
 - [ ] Phase 9 — CLI Integration, Testing & Documentation
+
+### gateflow_design_system — GateFlow Design System (tokens, theme, UI, design.gateflow.site)
+
+**IDEA:** `docs/plan/context/IDEA_atlassian_ui_remake.md`
+
+**PLAN:** `docs/plan/execution/PLAN_gateflow_design_system.md`
+
+**Status:** Planned — execute with `/dev design_system 1` (phase prompts in `docs/plan/execution/`)
+
+**Target:** Q2–Q3 2026
+
+- [ ] Phase 1 — `@gateflow/tokens` (OKLCH, `tokens.css`, `@theme`, `token()`)
+- [ ] Phase 2 — `@gateflow/theme` (`data-color-mode`, `next-themes`, root `dev:design` / `build:design`)
+- [ ] Phase 3 — `@gateflow/ui` upgrade (semantic tokens, elevation/surface; successor to `@gate-access/ui`)
+- [ ] Phase 4 — `apps/design-system` (`@gateflow/design-system`) scaffold (Next.js, Tailwind v4, IA shell)
+- [ ] Phase 5 — Foundations + interactive Token Explorer
+- [ ] Phase 6 — Components gallery + packages / guidelines docs
+- [ ] Phase 7 — RTL, search, polish, Vercel `design.gateflow.site`
 
 ### marketing_growth_engine_q3_2026 — Marketing Growth Engine (Q3 2026)
 

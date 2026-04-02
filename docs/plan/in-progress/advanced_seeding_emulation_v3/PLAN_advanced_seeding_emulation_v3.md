@@ -44,7 +44,7 @@ Nine phases build a **security-first** advanced seeding and **live emulation** c
 | 4   | Unit Hierarchy Seeding with Areas & Owner Linking  | **BACKEND**                | 1–3                 | Cursor         | Phases/buildings/floors; `areaSqm`, balcony/terrace; `ownerContactId` links             | [x]    |
 | 5   | Rush Hour Algorithm & Traffic Simulation           | **BACKEND**                | 1–4                 | Cursor         | Temporal clustering for scan density; scenario hooks                                    | [x]    |
 | 6   | QR Generation, Access Logs & Relational Chain      | **BACKEND** + **SECURITY** | 1–5                 | Cursor         | HMAC-SHA256 QRs; VisitorQR; ScanLog; chain integrity tests                              | [x]    |
-| 7   | Live Emulation API (Vercel Serverless)             | **BACKEND** + **SECURITY** | 1–6                 | Cursor         | `POST /api/admin/emulate-traffic`; Super Admin guard; Upstash rate limit; `AiActionLog` | [ ]    |
+| 7   | Live Emulation API (Vercel Serverless)             | **BACKEND** + **SECURITY** | 1–6                 | Cursor         | `POST /api/admin/emulate-traffic`; Super Admin guard; Upstash rate limit; `AiActionLog` | [x]    |
 | 8   | Admin Dashboard Multi-Step UI Wizard (ADS)         | **FRONTEND**               | 7 (contract stable) | Cursor         | `/admin/emulation`; 6-step wizard; a11y; tokens                                         | [ ]    |
 | 9   | CLI Integration, Testing & Documentation           | **BACKEND** + **QA**       | 1–8                 | Cursor         | `seed` flags; integrity/dry-run; docs; acceptance tests                                 | [ ]    |
 

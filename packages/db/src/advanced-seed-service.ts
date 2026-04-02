@@ -5,6 +5,7 @@
 import { randomUUID } from 'node:crypto';
 import type { Prisma, PrismaClient, UnitIdFormat } from '@prisma/client';
 import { QRCodeType, ScanStatus } from '@prisma/client';
+import { BUILT_IN_ROLES } from '@gate-access/types';
 import {
   buildPlannedUnitHierarchy,
   plannedUnitsToCreateManyInput,
@@ -19,6 +20,7 @@ import {
   RELATIONAL_SEED_CHAIN_DEPTH,
 } from './lib/relational-chain-seed';
 import { mulberry32 } from './lib/red-sea-data';
+import { sampleScanTimestamps, type RushScenario } from './lib/rush-hour';
 
 const CREATE_MANY_CHUNK = 500;
 
@@ -397,5 +399,315 @@ export async function seedRelationalChain(
     signedCode,
     scanLogsCreated: scanRows.length,
     chainDepth: RELATIONAL_SEED_CHAIN_DEPTH,
+  };
+}
+
+// ─── Phase 7: live emulation orchestration ───────────────────────────────────
+
+export class EmulationResolutionError extends Error {
+  readonly code: string;
+
+  constructor(code: string, message: string) {
+    super(message);
+    this.name = 'EmulationResolutionError';
+    this.code = code;
+  }
+}
+
+const EMULATION_MAX_TOTAL_SCANS = 10_000;
+const EMULATION_MAX_PAST_DAYS = 365;
+
+export type RunEmulationParams = {
+  db: PrismaClient;
+  organizationId: string;
+  scenario: RushScenario;
+  pastDays: number;
+  totalScans: number;
+  incidentRate: number;
+  randomSeed: number;
+  dryRun: boolean;
+  signingSecret: string;
+  projectId?: string;
+  gateId?: string;
+  unitId?: string;
+  contactId?: string;
+  createdByUserId?: string;
+};
+
+export type RunEmulationResult = {
+  dryRun: boolean;
+  organizationId: string;
+  projectId: string;
+  gateId: string;
+  unitId: string;
+  contactId: string;
+  createdByUserId: string;
+  scenario: RushScenario;
+  pastDays: number;
+  totalScans: number;
+  incidentRate: number;
+  randomSeed: number;
+  windowStartIso: string;
+  windowEndIso: string;
+  relationalChain?: SeedRelationalChainResult;
+};
+
+async function resolveEmulationContext(
+  db: PrismaClient,
+  organizationId: string,
+  o: Pick<
+    RunEmulationParams,
+    | 'projectId'
+    | 'gateId'
+    | 'unitId'
+    | 'contactId'
+    | 'createdByUserId'
+  >
+): Promise<{
+  projectId: string;
+  gateId: string;
+  unitId: string;
+  contactId: string;
+  createdByUserId: string;
+}> {
+  const project = o.projectId
+    ? await db.project.findFirst({
+        where: {
+          id: o.projectId,
+          organizationId,
+          deletedAt: null,
+        },
+        select: { id: true },
+      })
+    : await db.project.findFirst({
+        where: { organizationId, deletedAt: null },
+        orderBy: { createdAt: 'asc' },
+        select: { id: true },
+      });
+
+  if (!project) {
+    throw new EmulationResolutionError(
+      'NO_PROJECT',
+      'No active project found for organization (or invalid projectId)'
+    );
+  }
+
+  const gate = o.gateId
+    ? await db.gate.findFirst({
+        where: {
+          id: o.gateId,
+          organizationId,
+          deletedAt: null,
+        },
+        select: { id: true, projectId: true },
+      })
+    : await db.gate.findFirst({
+        where: {
+          organizationId,
+          deletedAt: null,
+          OR: [{ projectId: project.id }, { projectId: null }],
+        },
+        orderBy: { createdAt: 'asc' },
+        select: { id: true, projectId: true },
+      });
+
+  if (!gate) {
+    throw new EmulationResolutionError(
+      'NO_GATE',
+      'No gate found for organization (or invalid gateId)'
+    );
+  }
+
+  if (gate.projectId != null && gate.projectId !== project.id) {
+    throw new EmulationResolutionError(
+      'GATE_PROJECT_MISMATCH',
+      'Gate belongs to a different project than the resolved project'
+    );
+  }
+
+  const unit = o.unitId
+    ? await db.unit.findFirst({
+        where: {
+          id: o.unitId,
+          organizationId,
+          projectId: project.id,
+          deletedAt: null,
+        },
+        select: { id: true },
+      })
+    : await db.unit.findFirst({
+        where: {
+          organizationId,
+          projectId: project.id,
+          deletedAt: null,
+        },
+        orderBy: { createdAt: 'desc' },
+        select: { id: true },
+      });
+
+  if (!unit) {
+    throw new EmulationResolutionError(
+      'NO_UNIT',
+      'No unit found for project (or invalid unitId)'
+    );
+  }
+
+  const contact = o.contactId
+    ? await db.contact.findFirst({
+        where: {
+          id: o.contactId,
+          organizationId,
+          deletedAt: null,
+        },
+        select: { id: true },
+      })
+    : await db.contact.findFirst({
+        where: { organizationId, deletedAt: null },
+        orderBy: { createdAt: 'asc' },
+        select: { id: true },
+      });
+
+  if (!contact) {
+    throw new EmulationResolutionError(
+      'NO_CONTACT',
+      'No contact found for organization (or invalid contactId)'
+    );
+  }
+
+  const user = o.createdByUserId
+    ? await db.user.findFirst({
+        where: {
+          id: o.createdByUserId,
+          organizationId,
+          deletedAt: null,
+        },
+        select: { id: true },
+      })
+    : await db.user.findFirst({
+        where: {
+          organizationId,
+          deletedAt: null,
+          role: { name: { not: BUILT_IN_ROLES.RESIDENT } },
+        },
+        orderBy: { createdAt: 'asc' },
+        select: { id: true },
+      });
+
+  if (!user) {
+    throw new EmulationResolutionError(
+      'NO_STAFF_USER',
+      'No non-resident user found for createdBy (or invalid createdByUserId)'
+    );
+  }
+
+  return {
+    projectId: project.id,
+    gateId: gate.id,
+    unitId: unit.id,
+    contactId: contact.id,
+    createdByUserId: user.id,
+  };
+}
+
+/**
+ * Phase 7 entrypoint: sample rush-hour timestamps for a target org, then (unless `dryRun`)
+ * insert signed visitor QR + scan logs via {@link seedRelationalChain}.
+ */
+export async function runEmulation(
+  params: RunEmulationParams
+): Promise<RunEmulationResult> {
+  const {
+    db,
+    organizationId,
+    scenario,
+    pastDays,
+    totalScans,
+    incidentRate,
+    randomSeed,
+    dryRun,
+    signingSecret,
+    projectId: projectIdOpt,
+    gateId: gateIdOpt,
+    unitId: unitIdOpt,
+    contactId: contactIdOpt,
+    createdByUserId: createdByOpt,
+  } = params;
+
+  if (totalScans < 1 || totalScans > EMULATION_MAX_TOTAL_SCANS) {
+    throw new Error(
+      `runEmulation: totalScans must be between 1 and ${EMULATION_MAX_TOTAL_SCANS}`
+    );
+  }
+  if (pastDays < 1 || pastDays > EMULATION_MAX_PAST_DAYS) {
+    throw new Error(
+      `runEmulation: pastDays must be between 1 and ${EMULATION_MAX_PAST_DAYS}`
+    );
+  }
+
+  const frac = Math.min(1, Math.max(0, incidentRate));
+
+  const windowEnd = new Date();
+  const windowStart = new Date(
+    windowEnd.getTime() - pastDays * 24 * 60 * 60 * 1000
+  );
+
+  const scannedAtIsos = sampleScanTimestamps({
+    count: totalScans,
+    scenario,
+    windowStart,
+    windowEnd,
+    seed: randomSeed,
+  });
+
+  const ctx = await resolveEmulationContext(db, organizationId, {
+    projectId: projectIdOpt,
+    gateId: gateIdOpt,
+    unitId: unitIdOpt,
+    contactId: contactIdOpt,
+    createdByUserId: createdByOpt,
+  });
+
+  if (dryRun) {
+    return {
+      dryRun: true,
+      organizationId,
+      ...ctx,
+      scenario,
+      pastDays,
+      totalScans,
+      incidentRate: frac,
+      randomSeed,
+      windowStartIso: windowStart.toISOString(),
+      windowEndIso: windowEnd.toISOString(),
+    };
+  }
+
+  const relationalChain = await seedRelationalChain({
+    db,
+    organizationId,
+    projectId: ctx.projectId,
+    gateId: ctx.gateId,
+    unitId: ctx.unitId,
+    contactId: ctx.contactId,
+    createdByUserId: ctx.createdByUserId,
+    signingSecret,
+    scannedAtIsos,
+    scanUuidSeed: randomSeed,
+    failedScanFraction: frac,
+    statusRngSeed: randomSeed ^ 0x51f4e4b1,
+  });
+
+  return {
+    dryRun: false,
+    organizationId,
+    ...ctx,
+    scenario,
+    pastDays,
+    totalScans,
+    incidentRate: frac,
+    randomSeed,
+    windowStartIso: windowStart.toISOString(),
+    windowEndIso: windowEnd.toISOString(),
+    relationalChain,
   };
 }

@@ -52,10 +52,14 @@ export type {
   RichContactPayload,
 } from './lib/rich-contact';
 export {
+  EmulationResolutionError,
+  runEmulation,
   seedRelationalChain,
   seedUnitHierarchyForProject,
 } from './advanced-seed-service';
 export type {
+  RunEmulationParams,
+  RunEmulationResult,
   SeedRelationalChainConfig,
   SeedRelationalChainResult,
   SeedUnitHierarchyForProjectParams,

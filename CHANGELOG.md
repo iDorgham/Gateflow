@@ -26,6 +26,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 - **[Advanced Seeding Emulation V3 — DB]** Phase 4: `unit-hierarchy-seed` + `seedUnitHierarchyForProject` — logical phase/building/floor tree mapped to `Unit` + `generateUnitId`, org-unique `Unit.name` via `projectScopedUnitName`, `ContactUnit` owner links, batched `createMany` (~500).
 - **[Advanced Seeding Emulation V3 — DB]** Phase 5: `rush-hour` — `sampleScanTimestamps` (uniform + Gaussian mixture), scenarios `luxury-compound` / `nightclub` / `private-school` / `wedding-venue`, optional `weekendAccent: mena`, `minInterScanMs` with window-anchored spacing, histogram + chi-square tests.
 - **[Advanced Seeding Emulation V3 — DB]** Phase 6: `seedRelationalChain` + `relational-chain-seed` — HMAC-signed VISITOR `QRCode` (`signQRPayload` / `verifyQRSignature`), `VisitorQR`, batched `ScanLog` (~500) with unique `scanUuid`; org-scoped preflight + `scanLogWhereForOrganization`; tests for verify/tamper/isolation/chain depth.
+- **[Advanced Seeding Emulation V3 — API]** Phase 7: `POST /api/admin/emulate-traffic` (client-dashboard) — Super Admin + CSRF, Upstash `checkRateLimit` (5/hour per admin), Zod body (`scenario`, `pastDays`, `totalScans`, `incidentRate`, `randomSeed`, `organizationId`, `dryRun`, optional entity overrides); `runEmulation` in `@gate-access/db`; `AiActionLog` per run (target org id, no secrets in metadata); Jest coverage for 401/403/429/400/404/500/200.
 
 ### AI Tools
 
