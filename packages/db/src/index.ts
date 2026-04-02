@@ -51,11 +51,23 @@ export type {
   GenerateRichContactInput,
   RichContactPayload,
 } from './lib/rich-contact';
-export { seedUnitHierarchyForProject } from './advanced-seed-service';
+export {
+  seedRelationalChain,
+  seedUnitHierarchyForProject,
+} from './advanced-seed-service';
 export type {
+  SeedRelationalChainConfig,
+  SeedRelationalChainResult,
   SeedUnitHierarchyForProjectParams,
   SeedUnitHierarchyForProjectResult,
 } from './advanced-seed-service';
+export {
+  buildSignedVisitorQRCodeString,
+  deterministicScanUuid,
+  RELATIONAL_SEED_CHAIN_DEPTH,
+  scanLogWhereForOrganization,
+} from './lib/relational-chain-seed';
+export type { BuildVisitorSignedCodeInput } from './lib/relational-chain-seed';
 export {
   assertPlannedHierarchyIntegrity,
   buildPlannedUnitHierarchy,

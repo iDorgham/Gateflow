@@ -25,6 +25,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 - **[Advanced Seeding Emulation V3 — DB]** Phase 3: `rich-contact` — 14 nationalities, IDEA v3 weight table, `generateRichContact` + `validateUniqueness`; distribution test N=10_000 seed=42 (±2%).
 - **[Advanced Seeding Emulation V3 — DB]** Phase 4: `unit-hierarchy-seed` + `seedUnitHierarchyForProject` — logical phase/building/floor tree mapped to `Unit` + `generateUnitId`, org-unique `Unit.name` via `projectScopedUnitName`, `ContactUnit` owner links, batched `createMany` (~500).
 - **[Advanced Seeding Emulation V3 — DB]** Phase 5: `rush-hour` — `sampleScanTimestamps` (uniform + Gaussian mixture), scenarios `luxury-compound` / `nightclub` / `private-school` / `wedding-venue`, optional `weekendAccent: mena`, `minInterScanMs` with window-anchored spacing, histogram + chi-square tests.
+- **[Advanced Seeding Emulation V3 — DB]** Phase 6: `seedRelationalChain` + `relational-chain-seed` — HMAC-signed VISITOR `QRCode` (`signQRPayload` / `verifyQRSignature`), `VisitorQR`, batched `ScanLog` (~500) with unique `scanUuid`; org-scoped preflight + `scanLogWhereForOrganization`; tests for verify/tamper/isolation/chain depth.
 
 ### AI Tools
 
