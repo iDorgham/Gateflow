@@ -42,6 +42,7 @@ After a task or phase was executed **using a CLI** (Claude CLI, Gemini CLI, Open
 | 2026-03-25 | Gemini CLI   | Phase 5 pagespeed_100                           | success | Lighthouse CI infra certified; local mobile perf ~72-75 established.                                     |
 | 2026-03-25 | Antigravity  | security_isolation_fix: Phase 6 update          | success | Merged Gate-Assignment UI design draft into the official plan as Phase 6.                                |
 | 2026-03-30 | Qwen CLI     | Phase 3 autonomous_ops_intelligence             | partial | Webhook+incident+SSE notifier improvements; tests required manual follow-up due to tool approval gating. |
+| 2026-04-02 | Cursor       | Marketing useRef + eslint-config-next 15 + push master | success | `pnpm`/git only; pre-push preflight passed; Dependabot `ai-6.0.138` already contained merged master on remote. |
 
 - **Refactor Team Audit (ADS Tokens):**
   - **`qrcodes/page.tsx`**: Replaced 10+ raw hex violations with ADS tokens. Removed manual `dark:` background/border classes, relying on global token definitions.
