@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 ## [Unreleased]
 
 ### Workspace
+- **[Admin Emulation Hub]** Phase 1: Advanced Seeding Integration (Backend & API)
 
 - **[Admin Emulation Hub]** complete phase 4
 

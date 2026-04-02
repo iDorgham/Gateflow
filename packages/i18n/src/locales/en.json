@@ -49,7 +49,9 @@
       "admins": "Administrators",
       "collapse": "Collapse Sidebar",
       "expand": "Expand Sidebar",
-      "emulation": "Traffic Emulation"
+      "emulation": "Traffic Emulation",
+      "ops_hub": "Ops Hub",
+      "seeding": "Advanced Seeding"
     },
     "header": {
       "search": "Search...",
@@ -282,6 +284,31 @@
     "monitoring": {
       "title": "Monitoring",
       "subtitle": "Platform health, database vitals, and service status.",
+      "hub": {
+        "title": "Operational Ops Hub",
+        "subtitle": "Real-time visibility into platform-wide emulation and seeding activities.",
+        "stats": {
+          "total_scans": "Total Scans Generated",
+          "active_runs": "Active Runs",
+          "successful_seeds": "Successful Seeds"
+        },
+        "table": {
+          "action": "Action",
+          "organization": "Organization",
+          "status": "Status",
+          "result": "Result",
+          "timestamp": "Timestamp",
+          "actions": "Actions"
+        }
+      },
+      "seeding": {
+        "title": "Advanced Seeding Control",
+        "subtitle": "Large-scale organizational hierarchy generation and tenant setup.",
+        "config": "Seeding Configuration",
+        "submit": "Seed Now",
+        "success": "Seeding initiated successfully.",
+        "error": "Seeding failed."
+      },
       "database": "PostgreSQL",
       "operational": "Operational · {{latency}}ms",
       "connectionFailed": "Connection Failed",

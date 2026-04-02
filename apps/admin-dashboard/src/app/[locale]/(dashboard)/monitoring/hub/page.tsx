@@ -1,11 +1,11 @@
 import { requireAdmin } from '@/lib/admin-auth';
 import { Locale } from '@/lib/i18n/i18n-config';
 import { PageHeader } from '@gate-access/ui';
-import { SeedingClient } from '@/components/monitoring/SeedingClient';
+import { OpsHubClient } from '@/components/monitoring/OpsHubClient';
 
-export const metadata = { title: 'Advanced Seeding Control' };
+export const metadata = { title: 'Operational Ops Hub' };
 
-export default async function SeedingPage(props: {
+export default async function OpsHubPage(props: {
   params: Promise<{ locale: Locale }>;
 }) {
   const params = await props.params;
@@ -17,11 +17,11 @@ export default async function SeedingPage(props: {
     <div className="space-y-6">
       <PageHeader
         titleClassName="italic uppercase"
-        title="Advanced Seeding Control"
-        subtitle="Large-scale organizational hierarchy generation and tenant setup"
+        title="Operational Ops Hub"
+        subtitle="Real-time visibility into platform-wide emulation and seeding activities"
       />
       
-      <SeedingClient locale={locale} />
+      <OpsHubClient locale={locale} />
     </div>
   );
 }

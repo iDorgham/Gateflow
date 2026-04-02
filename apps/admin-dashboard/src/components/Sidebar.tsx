@@ -85,19 +85,29 @@ const getNavGroups = (t: TFunction): NavGroupData[] => [
     ],
   },
   {
-    label: t('admin:nav.system', 'System'),
+    label: t('admin:nav.operations', 'Operations'),
     items: [
-      { href: '/monitoring', label: t('admin:nav.monitoring'), icon: Activity },
       {
-        href: '/monitoring/seeding',
-        label: t('admin:nav.seeding', 'Seeding'),
-        icon: Database,
+        href: '/monitoring/hub',
+        label: t('admin:nav.ops_hub'),
+        icon: Activity,
       },
       {
         href: '/monitoring/emulation',
-        label: t('admin:nav.emulation', 'Emulation'),
+        label: t('admin:nav.emulation'),
         icon: Zap,
       },
+      {
+        href: '/monitoring/seeding',
+        label: t('admin:nav.seeding'),
+        icon: Database,
+      },
+    ],
+  },
+  {
+    label: t('admin:nav.system', 'System'),
+    items: [
+      { href: '/monitoring', label: t('admin:nav.monitoring'), icon: Activity },
       {
         href: '/authorization-keys',
         label: t('admin:nav.authKeys', 'Auth Keys'),
