@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 ## [Unreleased]
 
 ### Workspace
+- **[Toolchain]** keep ESLint 8 + TypeScript 5.9 with turbo 2.9.x
 
 - **[Db]** `@gate-access/db/prisma` subpath re-exports `@prisma/client` only for client components; CRM/settings pick it up for `UnitType` / `GateMode`.
 - **[Tooling]** Next apps include `global.d.ts` (declares `*.css` modules) in `tsconfig.json`.
