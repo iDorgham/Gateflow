@@ -154,10 +154,19 @@ function addChangelogEntry(type, description, slug) {
     /^### AI Tools\s*$/m.test(unreleasedBody) &&
     /^### Apps\s*$/m.test(unreleasedBody);
 
+  const legacySection = TYPE_SECTION[type] || 'Changes';
+  const entry = triTrack
+    ? formatChangelogBullet(slug, description)
+    : formatChangelogBullet(slug || legacySection, description);
+
+  if (unreleasedBody.includes(entry)) {
+    console.log('ℹ  Changelog entry already present — skip');
+    return;
+  }
+
   let newBody;
   if (triTrack) {
     const subsection = pickTriTrackSubsection(slug);
-    const entry = formatChangelogBullet(slug, description);
     const header = `### ${subsection}\n`;
     const pos = unreleasedBody.indexOf(header);
     if (pos === -1) {
@@ -173,16 +182,14 @@ function addChangelogEntry(type, description, slug) {
       '\n' +
       unreleasedBody.slice(insertAt);
   } else {
-    const section = TYPE_SECTION[type] || 'Changes';
-    const sectionHeader = `### ${section}\n`;
-    const entry = formatChangelogBullet(slug || section, description);
-    if (unreleasedBody.includes(`### ${section}\n`)) {
+    const sectionHeader = `### ${legacySection}\n`;
+    if (unreleasedBody.includes(`### ${legacySection}\n`)) {
       const pos = unreleasedBody.indexOf(sectionHeader) + sectionHeader.length;
       newBody =
         unreleasedBody.slice(0, pos) + entry + '\n' + unreleasedBody.slice(pos);
     } else {
       newBody =
-        unreleasedBody.trimEnd() + `\n\n### ${section}\n` + entry + '\n';
+        unreleasedBody.trimEnd() + `\n\n### ${legacySection}\n` + entry + '\n';
     }
   }
 
