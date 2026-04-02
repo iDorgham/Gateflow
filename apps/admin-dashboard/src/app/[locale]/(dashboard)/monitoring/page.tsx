@@ -6,14 +6,14 @@ import { MonitoringClient } from '@/components/monitoring/MonitoringClient';
 
 export const metadata = { title: 'Monitoring' };
 
-export default async function MonitoringPage(props: { params: Promise<{ locale: Locale }> }) {
+export default async function MonitoringPage(props: {
+  params: Promise<{ locale: Locale }>;
+}) {
   const params = await props.params;
 
-  const {
-    locale
-  } = params;
+  const { locale } = params;
 
-  await await requireAdmin();
+  await requireAdmin(locale);
 
   // Fetch webhook failure data server-side (static data for initial render)
   const [recentFailedDeliveries, totalWebhookFailed] = await Promise.all([
@@ -27,31 +27,36 @@ export default async function MonitoringPage(props: { params: Promise<{ locale: 
         event: true,
         attemptCount: true,
         lastAttemptAt: true,
-        webhook: { select: { url: true, organization: { select: { name: true } } } },
+        webhook: {
+          select: { url: true, organization: { select: { name: true } } },
+        },
       },
     }),
     // skip-organization-check (Global Admin Health)
     prisma.webhookDelivery.count({ where: { status: 'FAILED' } }),
   ]);
 
-  const webhookFailures = recentFailedDeliveries.map((d: {
-    id: string;
-    event: string;
-    webhook: { url: string; organization: { name: string } };
-    attemptCount: number;
-    lastAttemptAt: Date | null;
-  }) => ({
-    id: d.id,
-    event: d.event,
-    url: d.webhook.url,
-    orgName: d.webhook.organization.name,
-    attemptCount: d.attemptCount,
-    lastAttemptAt: d.lastAttemptAt?.toISOString() ?? null,
-  }));
+  const webhookFailures = recentFailedDeliveries.map(
+    (d: {
+      id: string;
+      event: string;
+      webhook: { url: string; organization: { name: string } };
+      attemptCount: number;
+      lastAttemptAt: Date | null;
+    }) => ({
+      id: d.id,
+      event: d.event,
+      url: d.webhook.url,
+      orgName: d.webhook.organization.name,
+      attemptCount: d.attemptCount,
+      lastAttemptAt: d.lastAttemptAt?.toISOString() ?? null,
+    })
+  );
 
   return (
     <div className="space-y-6">
-      <PageHeader titleClassName="italic uppercase"
+      <PageHeader
+        titleClassName="italic uppercase"
         title="Server Health"
         subtitle="Live platform monitoring — refreshes every 30s"
       />

@@ -29,46 +29,57 @@ import { PageHeader } from '@gate-access/ui';
 
 export const metadata = { title: 'Projects' };
 
+function localeFromFormData(formData: FormData): Locale {
+  const raw = String(formData.get('locale') ?? '');
+  if (raw === 'ar-EG' || raw === 'en') return raw;
+  return 'en';
+}
+
 // ─── Server actions ────────────────────────────────────────────────────────────
 
 async function deleteProject(formData: FormData) {
   'use server';
-  await requireAdmin();
+  const locale = localeFromFormData(formData);
+  await requireAdmin(locale);
   const id = formData.get('id') as string;
   if (!id) return;
   // skip-organization-check (Global Admin Action)
-  await prisma.project.update({ where: { id }, data: { deletedAt: new Date() } });
-  revalidatePath('/projects');
+  await prisma.project.update({
+    where: { id },
+    data: { deletedAt: new Date() },
+  });
+  revalidatePath(`/${locale}/projects`);
 }
 
 async function restoreProject(formData: FormData) {
   'use server';
-  await requireAdmin();
+  const locale = localeFromFormData(formData);
+  await requireAdmin(locale);
   const id = formData.get('id') as string;
   if (!id) return;
   // skip-organization-check (Global Admin Action)
   await prisma.project.update({ where: { id }, data: { deletedAt: null } });
-  revalidatePath('/projects');
+  revalidatePath(`/${locale}/projects`);
 }
 
 // ─── Page ──────────────────────────────────────────────────────────────────────
 
-interface SearchParams { q?: string; org?: string; status?: string }
+interface SearchParams {
+  q?: string;
+  org?: string;
+  status?: string;
+}
 
-export default async function ProjectsPage(
-  props: {
-    params: Promise<{ locale: Locale }>;
-    searchParams: Promise<SearchParams>;
-  }
-) {
+export default async function ProjectsPage(props: {
+  params: Promise<{ locale: Locale }>;
+  searchParams: Promise<SearchParams>;
+}) {
   const searchParams = await props.searchParams;
   const params = await props.params;
 
-  const {
-    locale
-  } = params;
+  const { locale } = params;
 
-  await await requireAdmin();
+  await requireAdmin(locale);
   const { t } = await getTranslation(locale, 'admin');
 
   const search = searchParams.q?.trim() ?? '';
@@ -80,13 +91,17 @@ export default async function ProjectsPage(
     where: {
       ...(search ? { name: { contains: search, mode: 'insensitive' } } : {}),
       ...(orgFilter
-        ? { organization: { name: { contains: orgFilter, mode: 'insensitive' } } }
+        ? {
+            organization: {
+              name: { contains: orgFilter, mode: 'insensitive' },
+            },
+          }
         : {}),
       ...(statusFilter === 'active'
         ? { deletedAt: null }
         : statusFilter === 'archived'
-        ? { NOT: { deletedAt: null } }
-        : {}),
+          ? { NOT: { deletedAt: null } }
+          : {}),
     },
     orderBy: { createdAt: 'desc' },
     take: 200,
@@ -107,10 +122,18 @@ export default async function ProjectsPage(
 
   return (
     <div className="space-y-6">
-      <PageHeader titleClassName="italic uppercase"
+      <PageHeader
+        titleClassName="italic uppercase"
         title={t('projects.title')}
         subtitle={t('projects.subtitle')}
-        badge={<Badge variant="outline" className="bg-violet-50 dark:bg-violet-900/20 text-violet-700 dark:text-violet-300 border-violet-100 dark:border-violet-800 font-bold text-xs">{t('projects.activeProjects', { count: totalActive })}</Badge>}
+        badge={
+          <Badge
+            variant="outline"
+            className="bg-violet-50 dark:bg-violet-900/20 text-violet-700 dark:text-violet-300 border-violet-100 dark:border-violet-800 font-bold text-xs"
+          >
+            {t('projects.activeProjects', { count: totalActive })}
+          </Badge>
+        }
       />
 
       {/* Filters */}
@@ -148,7 +171,11 @@ export default async function ProjectsPage(
               </NativeSelect>
             </div>
             <div className="flex items-center gap-2">
-              <Button type="submit" size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold">
+              <Button
+                type="submit"
+                size="sm"
+                className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold"
+              >
                 {t('projects.filter')}
               </Button>
               <Button variant="outline" size="sm" asChild className="font-bold">
@@ -169,11 +196,21 @@ export default async function ProjectsPage(
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-muted/50 text-muted-foreground text-[10px] font-bold uppercase tracking-widest border-b border-border">
-                  <th className="px-6 py-4 text-left rtl:text-right">{t('projects.project')}</th>
-                  <th className="px-6 py-4 text-left rtl:text-right">{t('projects.organization')}</th>
-                  <th className="px-6 py-4 text-center">{t('projects.resources')}</th>
-                  <th className="px-6 py-4 text-left rtl:text-right">{t('projects.created')}</th>
-                  <th className="px-6 py-4 text-right rtl:text-left">{t('projects.actions')}</th>
+                  <th className="px-6 py-4 text-left rtl:text-right">
+                    {t('projects.project')}
+                  </th>
+                  <th className="px-6 py-4 text-left rtl:text-right">
+                    {t('projects.organization')}
+                  </th>
+                  <th className="px-6 py-4 text-center">
+                    {t('projects.resources')}
+                  </th>
+                  <th className="px-6 py-4 text-left rtl:text-right">
+                    {t('projects.created')}
+                  </th>
+                  <th className="px-6 py-4 text-right rtl:text-left">
+                    {t('projects.actions')}
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
@@ -187,99 +224,147 @@ export default async function ProjectsPage(
                     </td>
                   </tr>
                 ) : (
-                  projects.map((project: {
-                    id: string;
-                    name: string;
-                    deletedAt: Date | null;
-                    createdAt: Date;
-                    organization: { id: string; name: string; plan: string | null };
-                    _count: { gates: number; qrCodes: number };
-                  }) => {
-                    const archived = project.deletedAt !== null;
-                    return (
-                      <tr
-                        key={project.id}
-                        className={cn(
-                          'group transition-colors',
-                          archived ? 'bg-muted/30 opacity-70' : 'hover:bg-primary/5'
-                        )}
-                      >
-                        <td className="px-6 py-4">
-                          <div className="flex items-center gap-3">
-                            <div className={cn(
-                              'flex h-9 w-9 items-center justify-center rounded-lg font-bold text-xs uppercase shadow-sm transition-transform group-hover:scale-110',
-                              archived
-                                ? 'bg-muted text-muted-foreground'
-                                : 'bg-violet-500/10 text-violet-700 dark:text-violet-300'
-                            )}>
-                              <FolderOpen className="h-4 w-4" />
+                  projects.map(
+                    (project: {
+                      id: string;
+                      name: string;
+                      deletedAt: Date | null;
+                      createdAt: Date;
+                      organization: {
+                        id: string;
+                        name: string;
+                        plan: string | null;
+                      };
+                      _count: { gates: number; qrCodes: number };
+                    }) => {
+                      const archived = project.deletedAt !== null;
+                      return (
+                        <tr
+                          key={project.id}
+                          className={cn(
+                            'group transition-colors',
+                            archived
+                              ? 'bg-muted/30 opacity-70'
+                              : 'hover:bg-primary/5'
+                          )}
+                        >
+                          <td className="px-6 py-4">
+                            <div className="flex items-center gap-3">
+                              <div
+                                className={cn(
+                                  'flex h-9 w-9 items-center justify-center rounded-lg font-bold text-xs uppercase shadow-sm transition-transform group-hover:scale-110',
+                                  archived
+                                    ? 'bg-muted text-muted-foreground'
+                                    : 'bg-violet-500/10 text-violet-700 dark:text-violet-300'
+                                )}
+                              >
+                                <FolderOpen className="h-4 w-4" />
+                              </div>
+                              <div>
+                                <p className="font-bold text-foreground leading-none">
+                                  {project.name}
+                                </p>
+                                <p className="text-[10px] font-mono text-muted-foreground mt-1 uppercase">
+                                  {project.id.slice(0, 10)}
+                                </p>
+                              </div>
                             </div>
-                            <div>
-                              <p className="font-bold text-foreground leading-none">{project.name}</p>
-                              <p className="text-[10px] font-mono text-muted-foreground mt-1 uppercase">
-                                {project.id.slice(0, 10)}
+                          </td>
+                          <td className="px-6 py-4">
+                            <div className="flex flex-col gap-1">
+                              <p className="text-foreground font-bold text-xs">
+                                {project.organization.name}
                               </p>
+                              <PlanBadge
+                                plan={project.organization.plan ?? 'FREE'}
+                              />
                             </div>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4">
-                          <div className="flex flex-col gap-1">
-                            <p className="text-foreground font-bold text-xs">{project.organization.name}</p>
-                            <PlanBadge plan={project.organization.plan ?? 'FREE'} />
-                          </div>
-                        </td>
-                        <td className="px-6 py-4">
-                          <div className="flex items-center justify-center gap-4">
-                            <div className="flex flex-col items-center" title={t('projects.gates')}>
-                              <DoorOpen className="h-3 w-3 text-muted-foreground mb-1" />
-                              <span className="text-[11px] font-bold text-foreground">{project._count.gates.toLocaleString(locale)}</span>
+                          </td>
+                          <td className="px-6 py-4">
+                            <div className="flex items-center justify-center gap-4">
+                              <div
+                                className="flex flex-col items-center"
+                                title={t('projects.gates')}
+                              >
+                                <DoorOpen className="h-3 w-3 text-muted-foreground mb-1" />
+                                <span className="text-[11px] font-bold text-foreground">
+                                  {project._count.gates.toLocaleString(locale)}
+                                </span>
+                              </div>
+                              <div
+                                className="flex flex-col items-center"
+                                title={t('projects.qrCodes')}
+                              >
+                                <QrCode className="h-3 w-3 text-muted-foreground mb-1" />
+                                <span className="text-[11px] font-bold text-foreground">
+                                  {project._count.qrCodes.toLocaleString(
+                                    locale
+                                  )}
+                                </span>
+                              </div>
                             </div>
-                            <div className="flex flex-col items-center" title={t('projects.qrCodes')}>
-                              <QrCode className="h-3 w-3 text-muted-foreground mb-1" />
-                              <span className="text-[11px] font-bold text-foreground">{project._count.qrCodes.toLocaleString(locale)}</span>
+                          </td>
+                          <td className="px-6 py-4">
+                            <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
+                              <Calendar className="h-3 w-3" />
+                              {new Date(project.createdAt).toLocaleDateString(
+                                locale
+                              )}
                             </div>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4">
-                          <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
-                            <Calendar className="h-3 w-3" />
-                            {new Date(project.createdAt).toLocaleDateString(locale)}
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 text-right">
-                          <div className="flex items-center justify-end gap-2 translate-x-2 group-hover:translate-x-0 transition-transform">
-                            {archived ? (
-                              <form action={restoreProject}>
-                                <input type="hidden" name="id" value={project.id} />
-                                <Button
-                                  type="submit"
-                                  size="sm"
-                                  variant="outline"
-                                  className="h-8 border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-[11px] font-bold shadow-sm"
-                                >
-                                  <RotateCcw className="h-3 w-3 ltr:mr-1.5 rtl:ml-1.5" />
-                                  {t('projects.restore')}
-                                </Button>
-                              </form>
-                            ) : (
-                              <form action={deleteProject}>
-                                <input type="hidden" name="id" value={project.id} />
-                                <Button
-                                  type="submit"
-                                  size="sm"
-                                  variant="outline"
-                                  className="h-8 border-red-100 dark:border-red-800 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 text-[11px] font-bold shadow-sm opacity-0 group-hover:opacity-100 transition-opacity"
-                                >
-                                  <Trash2 className="h-3 w-3 ltr:mr-1.5 rtl:ml-1.5" />
-                                  {t('projects.archive')}
-                                </Button>
-                              </form>
-                            )}
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })
+                          </td>
+                          <td className="px-6 py-4 text-right">
+                            <div className="flex items-center justify-end gap-2 translate-x-2 group-hover:translate-x-0 transition-transform">
+                              {archived ? (
+                                <form action={restoreProject}>
+                                  <input
+                                    type="hidden"
+                                    name="locale"
+                                    value={locale}
+                                  />
+                                  <input
+                                    type="hidden"
+                                    name="id"
+                                    value={project.id}
+                                  />
+                                  <Button
+                                    type="submit"
+                                    size="sm"
+                                    variant="outline"
+                                    className="h-8 border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-[11px] font-bold shadow-sm"
+                                  >
+                                    <RotateCcw className="h-3 w-3 ltr:mr-1.5 rtl:ml-1.5" />
+                                    {t('projects.restore')}
+                                  </Button>
+                                </form>
+                              ) : (
+                                <form action={deleteProject}>
+                                  <input
+                                    type="hidden"
+                                    name="locale"
+                                    value={locale}
+                                  />
+                                  <input
+                                    type="hidden"
+                                    name="id"
+                                    value={project.id}
+                                  />
+                                  <Button
+                                    type="submit"
+                                    size="sm"
+                                    variant="outline"
+                                    className="h-8 border-red-100 dark:border-red-800 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 text-[11px] font-bold shadow-sm opacity-0 group-hover:opacity-100 transition-opacity"
+                                  >
+                                    <Trash2 className="h-3 w-3 ltr:mr-1.5 rtl:ml-1.5" />
+                                    {t('projects.archive')}
+                                  </Button>
+                                </form>
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    }
+                  )
                 )}
               </tbody>
             </table>

@@ -8,23 +8,25 @@ import { UsersClient } from '@/components/users/UsersClient';
 
 export const metadata = { title: 'Users' };
 
-interface SearchParams { q?: string; role?: string; status?: string }
+interface SearchParams {
+  q?: string;
+  role?: string;
+  status?: string;
+}
 
-export default async function UsersPage(
-  props: {
-    params: Promise<{ locale: Locale }>;
-    searchParams: Promise<SearchParams>;
-  }
-) {
+export default async function UsersPage(props: {
+  params: Promise<{ locale: Locale }>;
+  searchParams: Promise<SearchParams>;
+}) {
   const searchParams = await props.searchParams;
   const params = await props.params;
 
-  const {
-    locale
-  } = params;
+  const { locale } = params;
 
-  await await requireAdmin();
-  const { t } = (await getTranslation(locale, 'admin')) as { t: (key: string, options?: Record<string, unknown> | string) => string };
+  await requireAdmin(locale);
+  const { t } = (await getTranslation(locale, 'admin')) as {
+    t: (key: string, options?: Record<string, unknown> | string) => string;
+  };
 
   const search = searchParams.q?.trim() ?? '';
   const roleFilter = searchParams.role ?? '';
@@ -43,8 +45,8 @@ export default async function UsersPage(
     ...(statusFilter === 'active'
       ? { deletedAt: null }
       : statusFilter === 'suspended'
-      ? { NOT: { deletedAt: null } }
-      : {}),
+        ? { NOT: { deletedAt: null } }
+        : {}),
   };
 
   const [users, total, roles] = await Promise.all([
@@ -63,28 +65,47 @@ export default async function UsersPage(
       },
     }),
     prisma.user.count({ where }),
-    prisma.role.findMany({ select: { id: true, name: true }, orderBy: { name: 'asc' } }),
+    prisma.role.findMany({
+      select: { id: true, name: true },
+      orderBy: { name: 'asc' },
+    }),
   ]);
 
-  const serializedUsers = users.map((u: { id: string; name: string; email: string | null; deletedAt: Date | null; createdAt: Date; role: { id: string; name: string } | null; organization: { id: string; name: string; plan: string | null } | null }) => ({
-    id: u.id,
-    name: u.name,
-    email: u.email,
-    deletedAt: u.deletedAt?.toISOString() ?? null,
-    createdAt: u.createdAt.toISOString(),
-    role: u.role,
-    organization: u.organization,
-  }));
+  const serializedUsers = users.map(
+    (u: {
+      id: string;
+      name: string;
+      email: string | null;
+      deletedAt: Date | null;
+      createdAt: Date;
+      role: { id: string; name: string } | null;
+      organization: { id: string; name: string; plan: string | null } | null;
+    }) => ({
+      id: u.id,
+      name: u.name,
+      email: u.email,
+      deletedAt: u.deletedAt?.toISOString() ?? null,
+      createdAt: u.createdAt.toISOString(),
+      role: u.role,
+      organization: u.organization,
+    })
+  );
 
-  const activeCount = users.filter((u: { deletedAt: Date | null }) => u.deletedAt === null).length;
+  const activeCount = users.filter(
+    (u: { deletedAt: Date | null }) => u.deletedAt === null
+  ).length;
 
   return (
     <div className="space-y-6">
-      <PageHeader titleClassName="italic uppercase"
+      <PageHeader
+        titleClassName="italic uppercase"
         title={t('users.title')}
         subtitle={t('users.subtitle')}
         badge={
-          <Badge variant="primary" className="bg-ds-background-selected text-ds-text-selected border-ds-border-selected font-bold text-xs px-2.5 py-1">
+          <Badge
+            variant="primary"
+            className="bg-ds-background-selected text-ds-text-selected border-ds-border-selected font-bold text-xs px-2.5 py-1"
+          >
             {activeCount.toLocaleString(locale)} active
           </Badge>
         }

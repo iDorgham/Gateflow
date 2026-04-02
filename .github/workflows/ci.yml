@@ -190,7 +190,7 @@ jobs:
       NEXTAUTH_URL: 'http://localhost:3001'
       QR_SIGNING_SECRET: ${{ secrets.QR_SIGNING_SECRET || 'ci-qr-signing-secret-32-chars-min' }}
       ENCRYPTION_MASTER_KEY: ${{ secrets.ENCRYPTION_MASTER_KEY || 'ci-encryption-key-32-chars-min!!' }}
-      ADMIN_ACCESS_KEY: ${{ secrets.ADMIN_ACCESS_KEY || 'ci-admin-key' }}
+      ADMIN_ACCESS_KEY: ${{ secrets.ADMIN_ACCESS_KEY || 'ci-admin-access-key-pad-to-thirty-two-chars' }}
       NEXT_PUBLIC_APP_URL: 'http://localhost:3001'
       SKIP_ENV_VALIDATION: 'true'
     steps:

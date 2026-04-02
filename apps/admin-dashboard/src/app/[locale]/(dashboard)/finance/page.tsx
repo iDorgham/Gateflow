@@ -12,14 +12,14 @@ export const metadata = { title: 'Finance' };
 
 const PLAN_PRICES: Record<string, number> = { FREE: 0, PRO: 99 };
 
-export default async function FinancePage(props: { params: Promise<{ locale: Locale }> }) {
+export default async function FinancePage(props: {
+  params: Promise<{ locale: Locale }>;
+}) {
   const params = await props.params;
 
-  const {
-    locale
-  } = params;
+  const { locale } = params;
 
-  await await requireAdmin();
+  await requireAdmin(locale);
 
   const monthStart = new Date();
   monthStart.setDate(1);
@@ -50,12 +50,19 @@ export default async function FinancePage(props: { params: Promise<{ locale: Loc
     where: { scannedAt: { gte: monthStart } },
     _count: true,
   });
-  const gateIds = scansByGate.map((s: { gateId: string; _count: number }) => s.gateId);
+  const gateIds = scansByGate.map(
+    (s: { gateId: string; _count: number }) => s.gateId
+  );
   const gates = await prisma.gate.findMany({
     where: { id: { in: gateIds } },
     select: { id: true, organizationId: true },
   });
-  const gateOrgMap = new Map<string, string>(gates.map((g: { id: string; organizationId: string }) => [g.id, g.organizationId]));
+  const gateOrgMap = new Map<string, string>(
+    gates.map((g: { id: string; organizationId: string }) => [
+      g.id,
+      g.organizationId,
+    ])
+  );
   const orgScanMap = new Map<string, number>();
   for (const s of scansByGate) {
     const orgId = gateOrgMap.get(s.gateId);
@@ -65,22 +72,37 @@ export default async function FinancePage(props: { params: Promise<{ locale: Loc
   const planCounts: Record<string, number> = {};
   for (const g of planGroups) planCounts[g.plan] = g._count.id;
 
-  const mrr = Object.entries(planCounts).reduce((sum, [plan, count]) => sum + (PLAN_PRICES[plan] ?? 0) * count, 0);
-  const planChartData = ['FREE', 'PRO'].map((plan) => ({ plan, count: planCounts[plan] ?? 0 }));
-
-  const orgRows = orgs.map((o: { id: string; name: string; plan: string; createdAt: Date; _count: { users: number } }) => ({
-    id: o.id,
-    name: o.name,
-    plan: o.plan,
-    userCount: o._count.users,
-    scansThisMonth: orgScanMap.get(o.id) ?? 0,
-    createdAt: o.createdAt.toISOString(),
-    mrr: PLAN_PRICES[o.plan] ?? 0,
+  const mrr = Object.entries(planCounts).reduce(
+    (sum, [plan, count]) => sum + (PLAN_PRICES[plan] ?? 0) * count,
+    0
+  );
+  const planChartData = ['FREE', 'PRO'].map((plan) => ({
+    plan,
+    count: planCounts[plan] ?? 0,
   }));
+
+  const orgRows = orgs.map(
+    (o: {
+      id: string;
+      name: string;
+      plan: string;
+      createdAt: Date;
+      _count: { users: number };
+    }) => ({
+      id: o.id,
+      name: o.name,
+      plan: o.plan,
+      userCount: o._count.users,
+      scansThisMonth: orgScanMap.get(o.id) ?? 0,
+      createdAt: o.createdAt.toISOString(),
+      mrr: PLAN_PRICES[o.plan] ?? 0,
+    })
+  );
 
   return (
     <div className="space-y-6">
-      <PageHeader titleClassName="italic uppercase"
+      <PageHeader
+        titleClassName="italic uppercase"
         title="Finance"
         subtitle="Subscriptions, plans, and revenue overview"
       />
@@ -97,8 +119,12 @@ export default async function FinancePage(props: { params: Promise<{ locale: Loc
       <div className="grid gap-6 lg:grid-cols-3">
         <Card className="shadow-md">
           <CardHeader className="border-b border-border pb-4">
-            <CardTitle className="text-sm font-black uppercase tracking-widest">Plan Distribution</CardTitle>
-            <p className="text-xs text-muted-foreground mt-1">Active organizations by plan tier</p>
+            <CardTitle className="text-sm font-black uppercase tracking-widest">
+              Plan Distribution
+            </CardTitle>
+            <p className="text-xs text-muted-foreground mt-1">
+              Active organizations by plan tier
+            </p>
           </CardHeader>
           <CardContent className="pt-4 pb-2">
             <PlanTrendChart data={planChartData} />
@@ -106,7 +132,9 @@ export default async function FinancePage(props: { params: Promise<{ locale: Loc
               {planChartData.map(({ plan, count }) => (
                 <div key={plan} className="text-center">
                   <p className="text-lg font-black text-foreground">{count}</p>
-                  <p className="text-[9px] text-muted-foreground uppercase tracking-widest font-bold">{plan}</p>
+                  <p className="text-[9px] text-muted-foreground uppercase tracking-widest font-bold">
+                    {plan}
+                  </p>
                 </div>
               ))}
             </div>
@@ -122,9 +150,12 @@ export default async function FinancePage(props: { params: Promise<{ locale: Loc
       {/* Subscriptions table */}
       <Card className="shadow-md overflow-hidden">
         <CardHeader className="border-b border-border pb-4">
-          <CardTitle className="text-sm font-black uppercase tracking-widest">All Subscriptions</CardTitle>
+          <CardTitle className="text-sm font-black uppercase tracking-widest">
+            All Subscriptions
+          </CardTitle>
           <p className="text-xs text-muted-foreground mt-1">
-            {orgRows.length} organizations · estimated MRR ${mrr.toLocaleString(locale)}/month
+            {orgRows.length} organizations · estimated MRR $
+            {mrr.toLocaleString(locale)}/month
           </p>
         </CardHeader>
         <CardContent className="p-0">

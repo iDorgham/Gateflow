@@ -1,17 +1,6 @@
 /**
- * CSRF Protection Middleware
- *
- * Uses the double-submit cookie pattern:
- * 1. Server sets `gf_csrf_token` as a non-httpOnly cookie on login.
- * 2. Client reads the cookie value and sends it as the `x-csrf-token` header.
- * 3. Middleware compares header vs cookie with a timing-safe comparison.
- *
- * Exemptions:
- * - Public routes (login, auth refresh/logout)
- * - GET / HEAD / OPTIONS (non-mutating)
- * - Next.js Server Actions (have built-in same-origin checking)
- * - Requests with a Bearer Authorization header (scanner app / API clients —
- *   attackers cannot forge Bearer tokens from a cross-origin context)
+ * Admin portal session (ADMIN_ACCESS_KEY + admin_session cookie), locale redirect,
+ * and CSRF protection (double-submit cookie vs x-csrf-token for gf_* session).
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -19,11 +8,13 @@ import { match } from '@formatjs/intl-localematcher';
 import Negotiator from 'negotiator';
 import { i18n, LOCALE_COOKIE } from './lib/i18n/i18n-config';
 
+const ADMIN_COOKIE = 'admin_session';
 const CSRF_COOKIE = 'gf_csrf_token';
 const CSRF_HEADER = 'x-csrf-token';
 const AUTH_COOKIE = 'gf_access_token';
+const MIN_ADMIN_KEY_LENGTH = 32;
+const DEFAULT_LOCALE = 'en';
 
-// Routes that never need CSRF validation (unauthenticated or use Bearer auth)
 const PUBLIC_ROUTES = [
   '/login',
   '/api/admin/login',
@@ -34,10 +25,6 @@ const PUBLIC_ROUTES = [
 
 const CSRF_PROTECTED_METHODS = ['POST', 'PUT', 'PATCH', 'DELETE'];
 
-/**
- * Constant-time string comparison to prevent timing side-channel attacks.
- * Returns false immediately on length mismatch (length is not secret here).
- */
 function timingSafeEqual(a: string, b: string): boolean {
   if (a.length !== b.length) return false;
   let diff = 0;
@@ -48,107 +35,199 @@ function timingSafeEqual(a: string, b: string): boolean {
 }
 
 function getLocale(request: NextRequest): string {
-  // 1. Check if the user has a locale explicitly set in cookies
   const cookieLocale = request.cookies.get(LOCALE_COOKIE)?.value;
-  if (cookieLocale && (i18n.locales as readonly string[]).includes(cookieLocale)) {
+  if (
+    cookieLocale &&
+    (i18n.locales as readonly string[]).includes(cookieLocale)
+  ) {
     return cookieLocale;
   }
 
-  // 2. Try to negotiate based on Accept-Language
   const negotiatorHeaders: Record<string, string> = {};
   request.headers.forEach((value, key) => (negotiatorHeaders[key] = value));
 
   const locales: string[] = [...i18n.locales];
-  const languages = new Negotiator({ headers: negotiatorHeaders }).languages(locales);
+  const languages = new Negotiator({ headers: negotiatorHeaders }).languages(
+    locales
+  );
 
   try {
     return match(languages, locales, i18n.defaultLocale);
-  } catch (e) {
+  } catch {
     return i18n.defaultLocale;
   }
 }
 
-export function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
-
-  // 1. Check if there is any supported locale in the pathname
-  const pathnameHasLocale = i18n.locales.some(
+function pathnameHasLocale(pathname: string): boolean {
+  return i18n.locales.some(
     (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
   );
+}
 
-  // Redirect if there is no locale
-  if (!pathnameHasLocale && 
-      !pathname.startsWith('/api') && 
-      !pathname.startsWith('/_next') && 
-      !pathname.includes('.')) {
+function loginPathForRequest(request: NextRequest, pathname: string): string {
+  const segments = pathname.split('/').filter(Boolean);
+  if (
+    segments.length >= 1 &&
+    (i18n.locales as readonly string[]).includes(segments[0]!)
+  ) {
+    return `/${segments[0]}/login`;
+  }
+  return `/${DEFAULT_LOCALE}/login`;
+}
+
+function requiresAdminPortalAuth(pathname: string): boolean {
+  if (pathname.startsWith('/api/admin/')) {
+    return !pathname.startsWith('/api/admin/login');
+  }
+  if (!pathnameHasLocale(pathname)) {
+    return false;
+  }
+  const pathWithoutLocale =
+    pathname.replace(new RegExp(`^/(${i18n.locales.join('|')})`), '') || '/';
+  const effective = pathWithoutLocale === '' ? '/' : pathWithoutLocale;
+  if (effective === '/login' || effective.startsWith('/login/')) {
+    return false;
+  }
+  return true;
+}
+
+function isAdminAccessKeyConfigured(): boolean {
+  const key = process.env.ADMIN_ACCESS_KEY;
+  return Boolean(key && key.length >= MIN_ADMIN_KEY_LENGTH);
+}
+
+async function sha256Hex(message: string): Promise<string> {
+  const data = new TextEncoder().encode(message);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function enforceAdminPortalSession(
+  request: NextRequest,
+  pathname: string
+): Promise<NextResponse | null> {
+  if (!requiresAdminPortalAuth(pathname)) {
+    return null;
+  }
+
+  if (!isAdminAccessKeyConfigured()) {
+    if (pathname.startsWith('/api/')) {
+      return NextResponse.json(
+        {
+          success: false,
+          message:
+            'ADMIN_ACCESS_KEY is missing or shorter than 32 characters. Set a secure random value (≥32 chars) to use the admin portal.',
+        },
+        { status: 503 }
+      );
+    }
+    const loginUrl = request.nextUrl.clone();
+    loginUrl.pathname = loginPathForRequest(request, pathname);
+    loginUrl.search = '';
+    return NextResponse.redirect(loginUrl);
+  }
+
+  const key = process.env.ADMIN_ACCESS_KEY!;
+  const expected = await sha256Hex(key);
+  const session = request.cookies.get(ADMIN_COOKIE)?.value;
+  if (session !== expected) {
+    if (pathname.startsWith('/api/')) {
+      return NextResponse.json(
+        { success: false, message: 'Admin session required.' },
+        { status: 401 }
+      );
+    }
+    const loginUrl = request.nextUrl.clone();
+    loginUrl.pathname = loginPathForRequest(request, pathname);
+    loginUrl.search = '';
+    return NextResponse.redirect(loginUrl);
+  }
+
+  return null;
+}
+
+export async function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  if (
+    pathname.startsWith('/_next') ||
+    pathname.startsWith('/favicon') ||
+    /\.(ico|png|jpg|jpeg|gif|webp|svg|txt|xml)$/i.test(pathname)
+  ) {
+    return NextResponse.next();
+  }
+
+  const hasLocale = pathnameHasLocale(pathname);
+
+  if (
+    !hasLocale &&
+    !pathname.startsWith('/api') &&
+    !pathname.startsWith('/_next') &&
+    !pathname.includes('.')
+  ) {
     const locale = getLocale(request);
-    const newUrl = new URL(`/${locale}${pathname === '/' ? '' : pathname}`, request.url);
+    const newUrl = new URL(
+      `/${locale}${pathname === '/' ? '' : pathname}`,
+      request.url
+    );
     newUrl.search = request.nextUrl.search;
     return NextResponse.redirect(newUrl);
   }
 
-  // Strip locale from public route matching check
-  const pathWithoutLocale = pathnameHasLocale 
-    ? pathname.replace(new RegExp(`^/(${i18n.locales.join('|')})`), '') 
+  const adminGate = await enforceAdminPortalSession(request, pathname);
+  if (adminGate) {
+    return adminGate;
+  }
+
+  const pathWithoutLocale = hasLocale
+    ? pathname.replace(new RegExp(`^/(${i18n.locales.join('|')})`), '')
     : pathname;
-  
+
   const effectivePath = pathWithoutLocale === '' ? '/' : pathWithoutLocale;
 
-  // 2. Public / unauthenticated routes — always allow
   if (PUBLIC_ROUTES.some((route) => effectivePath.startsWith(route))) {
     return NextResponse.next();
   }
 
-  // 2. Non-mutating methods — no CSRF risk
   if (!CSRF_PROTECTED_METHODS.includes(request.method)) {
     return NextResponse.next();
   }
 
-  // 3. Next.js Server Actions carry a same-origin origin check built-in
   if (request.headers.has('next-action')) {
     return NextResponse.next();
   }
 
-  // 4. Bearer-token requests (scanner app, API clients) — CSRF exempt because
-  //    cross-origin attackers cannot obtain or inject a Bearer token.
   if (request.headers.get('authorization')?.startsWith('Bearer ')) {
     return NextResponse.next();
   }
 
-  // From here on we are dealing with cookie-authenticated dashboard requests.
-
   const authCookie = request.cookies.get(AUTH_COOKIE);
   const csrfCookie = request.cookies.get(CSRF_COOKIE);
 
-  // 5. Not authenticated (no session cookie) — let the route handler return 401.
-  //    CSRF middleware only enforces token validity; auth is enforced in route handlers.
   if (!authCookie) {
     return NextResponse.next();
   }
 
-  // 6. Authenticated but CSRF cookie absent — reject (prevents CSRF on sessions
-  //    where the token was never issued or was manually cleared).
   if (!csrfCookie) {
     return NextResponse.json(
       { success: false, message: 'CSRF token missing' },
-      { status: 403 },
+      { status: 403 }
     );
   }
 
-  // 7. CSRF header must be present
   const requestToken = request.headers.get(CSRF_HEADER);
   if (!requestToken) {
     return NextResponse.json(
       { success: false, message: 'CSRF token missing' },
-      { status: 403 },
+      { status: 403 }
     );
   }
 
-  // 8. Timing-safe comparison
   if (!timingSafeEqual(requestToken, csrfCookie.value)) {
     return NextResponse.json(
       { success: false, message: 'CSRF token invalid' },
-      { status: 403 },
+      { status: 403 }
     );
   }
 
@@ -157,9 +236,6 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    /*
-     * Match all paths except Next.js internals and static assets.
-     */
-    '/((?!api|_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml).*)',
+    '/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml).*)',
   ],
 };

@@ -83,8 +83,10 @@ const MANIFEST = [
     var: 'ADMIN_ACCESS_KEY',
     apps: ['admin'],
     secret: true,
-    description: 'Admin dashboard access key',
-    example: 'openssl rand -hex 16',
+    minLength: 32,
+    description:
+      'Admin portal access key (min 32 chars). Used to authenticate the admin dashboard.',
+    example: 'openssl rand -base64 32',
   },
 
   // ── AI Features ───────────────────────────────────────────────────────────

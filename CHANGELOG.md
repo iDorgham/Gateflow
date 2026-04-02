@@ -9,14 +9,18 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 ## [Unreleased]
 
 ### Workspace
+- **[Admin-Dashboard]** ADMIN_ACCESS_KEY min length and locale-aware auth
 
 - **[Tooling]** `@gate-access/config`: `eslint-config-next` ^15.5.14 (was 14.x) so `next lint` on Next 15 apps no longer hits circular ESLint config; root `.eslintrc.json` extends only `packages/config/eslintrc.cjs` (drops duplicate `@typescript-eslint/recommended`).
 - **[Db]** `@gate-access/db/prisma` subpath re-exports `@prisma/client` only for client components; CRM/settings pick it up for `UnitType` / `GateMode`.
 - **[Tooling]** Next apps include `global.d.ts` (declares `*.css` modules) in `tsconfig.json`.
+- **[Tooling]** `turbo.json`: `test` task uses `outputs: []` (no `coverage/**` emitted by default) to avoid “no output files found” warnings.
 - **[Tooling]** Root devDependencies pin TypeScript 5.9.3 and ESLint 8.57.1 (pnpm overrides).
 - **[Db]** avoid node:crypto in client webpack graph; turbo env passthrough
 
-- **[CI]** Dependabot: ignore `prisma` / `@prisma/client` `>=7` until a dedicated Prisma ORM 7 migration ([upgrade guide](https://www.prisma.io/docs/orm/more/upgrade-guides/upgrading-versions/upgrading-to-prisma-7)).
+- **[CI]** Dependabot: ignore `prisma` / `@prisma/client` `>=7` until a dedicated Prisma ORM 7 migration (schema + `prisma.config.ts` + client bootstrap per [upgrade guide](https://www.prisma.io/docs/orm/more/upgrade-guides/upgrading-versions/upgrading-to-prisma-7)).
+
+- **[Scripts]** `check-env.js`: `ADMIN_ACCESS_KEY` requires ≥32 characters; `setup-dev` / CI use long non-placeholder defaults; `.env.example` documents admin portal auth requirement.
 
 - **[Scripts]** ralph-docs changelog inserts under Unreleased tri-track
 
@@ -45,6 +49,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 - **[AI SDK v6 Migration]** started implementation of the AI SDK v6 migration initiative.
 
 ### Apps
+
+- **[Admin dashboard]** Single `src/middleware.ts`: locale redirect, admin session (SHA-256 of `ADMIN_ACCESS_KEY` → `admin_session` cookie), `503`/`401` JSON on `/api/admin/*` when misconfigured or unauthenticated; `requireAdmin(locale?)` → `/{locale}/login`; gates/projects/admins server actions pass `locale` via hidden field; `docs/deployment/ADMIN_DASHBOARD.md` production smoke test + RSC digest / Vercel log correlation.
 
 - **[Marketing]** `AntigravityBackground`: pass initial value to `useRef` for React 19 typings (`number | undefined`).
 
