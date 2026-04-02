@@ -58,6 +58,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Apps
 
+- **[Marketing]** add app illustrations and update marketing sections
+
 - **[Scanner]** biometric and shift log foundation
 
 - **[Admin]** constant-time compare + emulation gate/unit overrides
