@@ -16,13 +16,12 @@ const nextConfig = {
     '@gate-access/ui',
     '@gate-access/i18n',
   ],
-  serverExternalPackages: ['@node-rs/argon2', '@prisma/client', 'prisma'],
-  experimental: {
-    serverComponentsExternalPackages: [
-      '@prisma/client/edge',
-      '@prisma/extension-accelerate',
-    ],
-  },
+  serverExternalPackages: [
+    '@node-rs/argon2',
+    '@prisma/client',
+    '@prisma/client/edge',
+    'prisma',
+  ],
   async headers() {
     return [{ source: '/(.*)', headers: securityHeaders }];
   },
