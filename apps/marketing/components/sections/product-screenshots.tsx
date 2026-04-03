@@ -92,7 +92,7 @@ function MockupPanel({
   );
 }
 
-export function ProductScreenshots({ locale }: { locale: Locale }) {
+export function ProductScreenshots({ _locale }: { _locale: Locale }) {
   const { t } = useTranslation('landing');
 
   // Define panels for clean mapping

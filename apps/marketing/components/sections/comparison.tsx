@@ -6,9 +6,8 @@ import { Check, X, ShieldCheck } from 'lucide-react';
 import type { Locale } from '../../i18n-config';
 import { useTranslation } from '../../hooks/use-translation';
 
-export function ComparisonSection({ locale }: { locale: Locale }) {
+export function ComparisonSection({ _locale }: { _locale: Locale }) {
   const { t } = useTranslation('landing');
-  const isRtl = locale.startsWith('ar');
 
   const features = [
     {

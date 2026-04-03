@@ -74,10 +74,10 @@ export default async function HomePage({
       <HowItWorksSection locale={locale} />
 
       {/* Product Screenshots */}
-      <ProductScreenshots locale={locale} />
+      <ProductScreenshots _locale={locale} />
 
       {/* Comparison */}
-      <ComparisonSection locale={locale} />
+      <ComparisonSection _locale={locale} />
 
       {/* Testimonials */}
       <TestimonialsSection locale={locale} />
