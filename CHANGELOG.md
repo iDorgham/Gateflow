@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Vercel]** add debian-openssl-3.0.x binary target for Vercel edge runtime
+
 - **[Prisma]** update to edge client for vercel accelerate
 
 - **[Admin-Dashboard]** upgrade to react 19 and fix searchParams crash

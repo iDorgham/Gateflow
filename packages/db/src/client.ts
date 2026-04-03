@@ -7,7 +7,7 @@
  * - For prisma studio / migrate dev: uses DIRECT_DATABASE_URL (see schema.prisma directUrl)
  * - To regenerate locally without --no-engine: pnpm db:generate:local
  */
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client/edge';
 import { withAccelerate } from '@prisma/extension-accelerate';
 
 function createPrismaClient() {
