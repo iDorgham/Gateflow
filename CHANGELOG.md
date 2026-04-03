@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Admin-Dashboard]** upgrade to react 19 and fix searchParams crash
+
 - **[Admin Emulation Hub]** Phase 2: Emulation & Seeding Hub (UI) - Ops Hub & Seeding Controls
 - **[Admin Emulation Hub]** Phase 1: Advanced Seeding Integration (Backend & API)
 
