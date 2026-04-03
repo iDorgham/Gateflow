@@ -6,6 +6,7 @@ import {
   type QRRejectReason,
 } from '@gate-access/types';
 import {
+  Prisma,
   prisma,
   setOrganizationContext,
   clearOrganizationContext,
@@ -113,7 +114,7 @@ function makeAuditEntry(
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   let claims: AccessTokenClaims | null = null;
-  let body: any = null; // Still using any for body until we parse it safely
+  let body: unknown = null;
 
   try {
     // Step 1 — Authenticate: verify Bearer JWT, extract claims.
@@ -544,7 +545,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
           utmCampaign: fresh.utmCampaign,
           utmContent: fresh.utmContent,
           utmTerm: fresh.utmTerm,
-          auditTrail: [auditEntry] as any,
+          auditTrail: [auditEntry] as unknown as Prisma.JsonValue,
         },
       });
     });
@@ -573,8 +574,28 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
           },
         },
       })
-      .then(async (fullScan: any) => {
+      .then(async (fullScan) => {
         if (!fullScan) return;
+        const scan = fullScan as {
+          id: string;
+          scannedAt: Date;
+          status: string;
+          utmSource: string | null;
+          utmMedium: string | null;
+          utmCampaign: string | null;
+          utmContent: string | null;
+          utmTerm: string | null;
+          deviceId: string | null;
+          gate: { id: string; name: string; location: string | null };
+          qrCode: {
+            id: string;
+            type: string;
+            contactId: string | null;
+            visitorQR?: {
+              unit?: { id: string; name: string; building: string | null };
+            } | null;
+          };
+        };
 
         // Manually fetch contact if present (no explicit Prisma relation on QRCode model)
         let contactData = null;
@@ -634,7 +655,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         await deliverWebhookEvent(
           claims.orgId!,
           'SCAN_SUCCESS',
-          payload as any
+          payload as Record<string, unknown>
         );
         void triggerHubSpotSync(claims.orgId!, fullScan.id).catch(() => {});
       })
@@ -653,9 +674,9 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       {
         status: 'accepted',
         scanId: scanLog.id,
-        delegateToAi: (qrCode as any).delegateToAi,
+        delegateToAi: !!(qrCode as { delegateToAi?: boolean }).delegateToAi,
         ...(linkedContact ? { escortRequired: true } : {}),
-      } as any,
+      },
       200
     );
   } catch (error) {
@@ -674,15 +695,18 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     // or specifically simulated "hardware failure" from the Scanner client.
     if (claims?.orgId) {
       const isHardwareError =
-        (body as any)?.scanContext?.status === 'hardware_error' ||
-        (error as any)?.code === 'HARDWARE_TIMEOUT';
+        (body as Record<string, any>)?.scanContext?.status ===
+          'hardware_error' ||
+        (error as Record<string, any>)?.code === 'HARDWARE_TIMEOUT';
 
       if (isHardwareError) {
         void MaintenanceExecutor.handleScanFailure({
           organizationId: claims.orgId,
-          gateId: (body as any)?.scanContext?.gateId || 'unknown',
-          projectId: (body as any)?.scanContext?.projectId || undefined,
-          reason: (error as any)?.message || 'Hardware/Timeout Failure',
+          gateId:
+            (body as Record<string, any>)?.scanContext?.gateId || 'unknown',
+          projectId:
+            (body as Record<string, any>)?.scanContext?.projectId || undefined,
+          reason: (error as Error)?.message || 'Hardware/Timeout Failure',
         }).catch((err) =>
           console.error('[qr/validate] MaintenanceExecutor failed:', err)
         );

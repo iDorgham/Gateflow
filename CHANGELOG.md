@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Vercel]** add edge runtime to Prisma schema for Vercel
+
 - **[Vercel]** use edge client for Prisma on Vercel
 
 - **[Vercel]** add debian-openssl-3.0.x binary target for Vercel edge runtime

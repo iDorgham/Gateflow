@@ -2,17 +2,9 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { AdvancedTable, Button, cn, Badge } from '@gate-access/ui';
-import { token } from '@atlaskit/tokens';
 import { useDataTable } from '@/hooks/use-data-table';
 import { useUserPreferences } from '@/lib/residents/use-user-preferences';
-import {
-  Building,
-  Download,
-  Trash2,
-  Pencil,
-  Users,
-  Maximize2,
-} from 'lucide-react';
+import { Building, Download, Trash2, Pencil, Maximize2 } from 'lucide-react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
@@ -42,7 +34,7 @@ export function UnitTable({ projectId, locale }: UnitTableProps) {
   const [selectedUnit, setSelectedUnit] = useState<Unit | null>(null);
   const [selectedIds, setSelectedIds] = useState<(string | number)[]>([]);
 
-  const { preferences, updatePreferences, isSaving } = useUserPreferences();
+  const { preferences, updatePreferences } = useUserPreferences();
   const tableViews = preferences.tableViews?.units;
   const [density, setDensity] = useState<'compact' | 'comfortable'>(
     (tableViews?.density as 'compact' | 'comfortable') || 'comfortable'
@@ -107,7 +99,8 @@ export function UnitTable({ projectId, locale }: UnitTableProps) {
   };
 
   const handleViewDelete = async (viewId: string) => {
-    const { [viewId]: _, ...remaining } = tableViews?.savedViews || {};
+    const remaining = { ...(tableViews?.savedViews || {}) };
+    delete remaining[viewId];
     await updatePreferences({
       tableViews: {
         units: {
@@ -162,7 +155,13 @@ export function UnitTable({ projectId, locale }: UnitTableProps) {
 
   const contactOptions = useMemo(
     () =>
-      contactsData?.data?.map((c: any) => ({
+      (
+        contactsData?.data as Array<{
+          firstName: string;
+          lastName: string;
+          id: string;
+        }>
+      )?.map((c) => ({
         label: `${c.firstName} ${c.lastName}`,
         value: c.id,
       })) || [],
@@ -170,7 +169,7 @@ export function UnitTable({ projectId, locale }: UnitTableProps) {
   );
 
   const saveMutation = useMutation({
-    mutationFn: async (values: any) => {
+    mutationFn: async (values: Record<string, unknown>) => {
       const url = selectedUnit
         ? `/api/crm/units/${selectedUnit.id}`
         : '/api/crm/units';
@@ -364,7 +363,7 @@ export function UnitTable({ projectId, locale }: UnitTableProps) {
       </div>
 
       <AdvancedTable
-        columns={columns as any}
+        columns={columns as never}
         data={data?.data || []}
         pageIndex={state.pageIndex}
         pageSize={state.pageSize}
@@ -427,7 +426,15 @@ export function UnitTable({ projectId, locale }: UnitTableProps) {
             selectedUnit
               ? {
                   name: selectedUnit.name,
-                  type: selectedUnit.type as any,
+                  type: selectedUnit.type as
+                    | 'STUDIO'
+                    | 'ONE_BR'
+                    | 'TWO_BR'
+                    | 'THREE_BR'
+                    | 'FOUR_BR'
+                    | 'VILLA'
+                    | 'PENTHOUSE'
+                    | 'COMMERCIAL',
                   building: selectedUnit.building,
                   sizeSqm: selectedUnit.sizeSqm,
                   contactIds: selectedUnit.contacts.map((c) => c.contact.id),

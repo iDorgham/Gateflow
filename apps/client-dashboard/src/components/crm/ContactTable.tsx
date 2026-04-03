@@ -3,10 +3,7 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { AdvancedTable, Button, Badge, cn } from '@gate-access/ui';
 import { useDataTable } from '@/hooks/use-data-table';
-import {
-  useUserPreferences,
-  TableDensity,
-} from '@/lib/residents/use-user-preferences';
+import { useUserPreferences } from '@/lib/residents/use-user-preferences';
 import {
   UserPlus,
   Download,
@@ -19,7 +16,6 @@ import {
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
-import { token } from '@atlaskit/tokens';
 import { EditPanel } from '../dashboard/EditPanel';
 import { ContactForm } from './ContactForm';
 import { SavedViewManager } from './SavedViewManager';
@@ -40,14 +36,17 @@ interface ContactTableProps {
   locale: string;
 }
 
-export function ContactTable({ projectId, locale }: ContactTableProps) {
+export function ContactTable({
+  projectId,
+  locale: _locale,
+}: ContactTableProps) {
   const { t } = useTranslation('dashboard');
   const queryClient = useQueryClient();
   const [isPanelOpen, setIsPanelOpen] = useState(false);
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null);
   const [selectedIds, setSelectedIds] = useState<(string | number)[]>([]);
 
-  const { preferences, updatePreferences, isSaving } = useUserPreferences();
+  const { preferences, updatePreferences } = useUserPreferences();
   const tableViews = preferences.tableViews?.contacts;
   const [density, setDensity] = useState<'compact' | 'comfortable'>(
     (tableViews?.density as 'compact' | 'comfortable') || 'comfortable'
@@ -112,7 +111,8 @@ export function ContactTable({ projectId, locale }: ContactTableProps) {
   };
 
   const handleViewDelete = async (viewId: string) => {
-    const { [viewId]: _, ...remaining } = tableViews?.savedViews || {};
+    const remaining = { ...(tableViews?.savedViews || {}) };
+    delete remaining[viewId];
     await updatePreferences({
       tableViews: {
         contacts: {
@@ -167,12 +167,15 @@ export function ContactTable({ projectId, locale }: ContactTableProps) {
 
   const unitOptions = useMemo(
     () =>
-      unitsData?.data?.map((u: any) => ({ label: u.name, value: u.id })) || [],
+      (unitsData?.data as Array<{ name: string; id: string }>)?.map((u) => ({
+        label: u.name,
+        value: u.id,
+      })) || [],
     [unitsData]
   );
 
   const saveMutation = useMutation({
-    mutationFn: async (values: any) => {
+    mutationFn: async (values: Record<string, unknown>) => {
       const url = selectedContact
         ? `/api/crm/contacts/${selectedContact.id}`
         : '/api/crm/contacts';
@@ -368,7 +371,7 @@ export function ContactTable({ projectId, locale }: ContactTableProps) {
       </div>
 
       <AdvancedTable
-        columns={columns as any}
+        columns={columns as never}
         data={data?.data || []}
         pageIndex={state.pageIndex}
         pageSize={state.pageSize}

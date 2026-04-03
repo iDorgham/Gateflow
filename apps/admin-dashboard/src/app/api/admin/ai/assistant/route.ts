@@ -94,7 +94,15 @@ Never make up data — use tools to fetch real information.`,
               users: { select: { id: true } },
             },
           });
-          return orgs.map((o: any) => ({
+          return (
+            orgs as unknown as Array<{
+              id: string;
+              name: string;
+              plan: string | null;
+              createdAt: Date;
+              users: Array<{ id: string }>;
+            }>
+          ).map((o) => ({
             id: o.id,
             name: o.name,
             plan: String(o.plan),
@@ -172,7 +180,15 @@ Never make up data — use tools to fetch real information.`,
               qrCode: { select: { organization: { select: { name: true } } } },
             },
           });
-          return (scans as any[]).map((s: any) => ({
+          return (
+            scans as unknown as Array<{
+              id: string;
+              status: string;
+              scannedAt: Date;
+              gate: { name: string } | null;
+              qrCode: { organization: { name: string } | null } | null;
+            }>
+          ).map((s) => ({
             id: s.id,
             status: String(s.status),
             scannedAt: s.scannedAt.toISOString(),
@@ -206,7 +222,16 @@ Never make up data — use tools to fetch real information.`,
               organization: { select: { name: true } },
             },
           });
-          return (users as any[]).map((u: any) => ({
+          return (
+            users as unknown as Array<{
+              id: string;
+              name: string | null;
+              email: string | null;
+              deletedAt: Date | null;
+              role: { name: string } | null;
+              organization: { name: string } | null;
+            }>
+          ).map((u) => ({
             id: u.id,
             name: u.name,
             email: u.email,
