@@ -28,7 +28,8 @@ export default async function OrganizationsPage(props: {
     t: (key: string, options?: Record<string, unknown> | string) => string;
   };
 
-  const search = searchParams.q?.trim() ?? '';
+  const search =
+    typeof searchParams.q === 'string' ? searchParams.q.trim() : '';
   const planFilter = searchParams.plan ?? '';
   const statusFilter = searchParams.status ?? 'all';
 

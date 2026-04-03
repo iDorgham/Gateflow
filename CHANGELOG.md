@@ -58,6 +58,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Apps
 
+- **[Marketing]** resolve production build type errors for ProductScreenshots and ComparisonSection
+
 - **[Marketing]** add missing locale prop to ProductScreenshots
 
 - **[Marketing]** add app illustrations and update marketing sections
