@@ -7,13 +7,15 @@
  * - For prisma studio / migrate dev: uses DIRECT_DATABASE_URL (see schema.prisma directUrl)
  * - To regenerate locally without --no-engine: pnpm db:generate:local
  */
-import { PrismaClient } from '@prisma/client/edge';
+import { PrismaClient } from '@prisma/client';
 import { withAccelerate } from '@prisma/extension-accelerate';
 
 function createPrismaClient() {
   const url =
     process.env.DATABASE_URL ||
     'postgresql://postgres:postgres@localhost:5432/gate_access';
+
+  const isAccelerate = url.startsWith('prisma://');
 
   return new PrismaClient({
     datasources: {
@@ -23,7 +25,7 @@ function createPrismaClient() {
       process.env.NODE_ENV === 'development'
         ? ['query', 'error', 'warn']
         : ['error'],
-  }).$extends(withAccelerate());
+  }).$extends(isAccelerate ? withAccelerate() : {});
 }
 
 type ExtendedPrismaClient = ReturnType<typeof createPrismaClient>;
