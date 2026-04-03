@@ -119,7 +119,7 @@ importers:
         version: 3.0.53(zod@3.25.76)
       '@ai-sdk/react':
         specifier: ^3.0.139
-        version: 3.0.140(react@18.3.1)(zod@3.25.76)
+        version: 3.0.140(react@19.2.4)(zod@3.25.76)
       '@formatjs/intl-localematcher':
         specifier: ^0.8.1
         version: 0.8.2
@@ -143,7 +143,7 @@ importers:
         version: 3.3.0
       '@hugeicons/react':
         specifier: ^1.1.5
-        version: 1.1.6(react@18.3.1)
+        version: 1.1.6(react@19.2.4)
       '@node-rs/argon2':
         specifier: ^2.0.0
         version: 2.0.2
@@ -158,37 +158,37 @@ importers:
         version: 4.1.0
       framer-motion:
         specifier: ^11.18.2
-        version: 11.18.2(react-dom@18.3.1)(react@18.3.1)
+        version: 11.18.2(react-dom@19.2.4)(react@19.2.4)
       i18next:
         specifier: ^23.16.8
         version: 23.16.8
       lucide-react:
         specifier: ^0.344.0
-        version: 0.344.0(react@18.3.1)
+        version: 0.344.0(react@19.2.4)
       negotiator:
         specifier: ^1.0.0
         version: 1.0.0
       next:
         specifier: ^15.5.14
-        version: 15.5.14(@babel/core@7.29.0)(react-dom@18.3.1)(react@18.3.1)
+        version: 15.5.14(@babel/core@7.29.0)(react-dom@19.2.4)(react@19.2.4)
       next-themes:
         specifier: ^0.4.6
-        version: 0.4.6(react-dom@18.3.1)(react@18.3.1)
+        version: 0.4.6(react-dom@19.2.4)(react@19.2.4)
       react:
-        specifier: ^18.3.1
-        version: 18.3.1
+        specifier: ^19.0.0
+        version: 19.2.4
       react-dom:
-        specifier: ^18.3.1
-        version: 18.3.1(react@18.3.1)
+        specifier: ^19.0.0
+        version: 19.2.4(react@19.2.4)
       react-i18next:
         specifier: ^14.1.3
-        version: 14.1.3(i18next@23.16.8)(react-dom@18.3.1)(react@18.3.1)
+        version: 14.1.3(i18next@23.16.8)(react-dom@19.2.4)(react@19.2.4)
       recharts:
         specifier: ^2.15.4
-        version: 2.15.4(react-dom@18.3.1)(react@18.3.1)
+        version: 2.15.4(react-dom@19.2.4)(react@19.2.4)
       sonner:
         specifier: ^1.7.4
-        version: 1.7.4(react-dom@18.3.1)(react@18.3.1)
+        version: 1.7.4(react-dom@19.2.4)(react@19.2.4)
       tailwind-merge:
         specifier: ^2.6.1
         version: 2.6.1
@@ -1261,6 +1261,24 @@ packages:
       ai: 6.0.138(zod@3.25.76)
       react: 19.1.0
       swr: 2.4.1(react@19.1.0)
+      throttleit: 2.1.0
+    transitivePeerDependencies:
+      - zod
+    dev: false
+
+  /@ai-sdk/react@3.0.140(react@19.2.4)(zod@3.25.76):
+    resolution:
+      {
+        integrity: sha512-wCL9iTrzoW8ppYVrz7BFCurCEqW6hjCoFFyxkrS3us2pSbUlQpXHmrprFQevzfa2PJXiF5hss7ZN8ZNdiZW//A==,
+      }
+    engines: { node: '>=18' }
+    peerDependencies:
+      react: ^18 || ~19.0.1 || ~19.1.2 || ^19.2.1
+    dependencies:
+      '@ai-sdk/provider-utils': 4.0.21(zod@3.25.76)
+      ai: 6.0.138(zod@3.25.76)
+      react: 19.2.4
+      swr: 2.4.1(react@19.2.4)
       throttleit: 2.1.0
     transitivePeerDependencies:
       - zod
@@ -18928,6 +18946,19 @@ packages:
       react-dom: 18.3.1(react@18.3.1)
     dev: false
 
+  /next-themes@0.4.6(react-dom@19.2.4)(react@19.2.4):
+    resolution:
+      {
+        integrity: sha512-pZvgD5L0IEvX5/9GWyHMf3m8BKiVQwsCMHfoFosXtXBMnaS0ZnIJ9ST4b4NqLVKDEm8QBxoNNGNaBv2JNF6XNA==,
+      }
+    peerDependencies:
+      react: ^16.8 || ^17 || ^18 || ^19 || ^19.0.0-rc
+      react-dom: ^16.8 || ^17 || ^18 || ^19 || ^19.0.0-rc
+    dependencies:
+      react: 19.2.4
+      react-dom: 19.2.4(react@19.2.4)
+    dev: false
+
   /next@15.5.14(@babel/core@7.29.0)(react-dom@18.3.1)(react@18.3.1):
     resolution:
       {
@@ -21159,6 +21190,22 @@ packages:
       react-transition-group: 4.4.5(react-dom@18.3.1)(react@18.3.1)
     dev: false
 
+  /react-smooth@4.0.4(react-dom@19.2.4)(react@19.2.4):
+    resolution:
+      {
+        integrity: sha512-gnGKTpYwqL0Iii09gHobNolvX4Kiq4PKx6eWBCYYix+8cdw+cGo3do906l1NBPKkSWx1DghC1dlWG9L2uGd61Q==,
+      }
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    dependencies:
+      fast-equals: 5.4.0
+      prop-types: 15.8.1
+      react: 19.2.4
+      react-dom: 19.2.4(react@19.2.4)
+      react-transition-group: 4.4.5(react-dom@19.2.4)(react@19.2.4)
+    dev: false
+
   /react-style-singleton@2.2.3(@types/react@19.2.14)(react@19.1.0):
     resolution:
       {
@@ -21212,6 +21259,23 @@ packages:
       prop-types: 15.8.1
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
+    dev: false
+
+  /react-transition-group@4.4.5(react-dom@19.2.4)(react@19.2.4):
+    resolution:
+      {
+        integrity: sha512-pZcd1MCJoiKiBR2NRxeCRg13uCXbydPnmB4EOeRrY7480qNWO8IIgQG6zlDkm6uRMsURXPuKq0GWtiM59a5Q6g==,
+      }
+    peerDependencies:
+      react: '>=16.6.0'
+      react-dom: '>=16.6.0'
+    dependencies:
+      '@babel/runtime': 7.29.2
+      dom-helpers: 5.2.1
+      loose-envify: 1.4.0
+      prop-types: 15.8.1
+      react: 19.2.4
+      react-dom: 19.2.4(react@19.2.4)
     dev: false
 
   /react@18.3.1:
@@ -21301,6 +21365,28 @@ packages:
       react-dom: 18.3.1(react@18.3.1)
       react-is: 18.3.1
       react-smooth: 4.0.4(react-dom@18.3.1)(react@18.3.1)
+      recharts-scale: 0.4.5
+      tiny-invariant: 1.3.3
+      victory-vendor: 36.9.2
+    dev: false
+
+  /recharts@2.15.4(react-dom@19.2.4)(react@19.2.4):
+    resolution:
+      {
+        integrity: sha512-UT/q6fwS3c1dHbXv2uFgYJ9BMFHu3fwnd7AYZaEQhXuYQ4hgsxLvsUXzGdKeZrW5xopzDCvuA2N41WJ88I7zIw==,
+      }
+    engines: { node: '>=14' }
+    peerDependencies:
+      react: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    dependencies:
+      clsx: 2.1.1
+      eventemitter3: 4.0.7
+      lodash: 4.18.1
+      react: 19.2.4
+      react-dom: 19.2.4(react@19.2.4)
+      react-is: 18.3.1
+      react-smooth: 4.0.4(react-dom@19.2.4)(react@19.2.4)
       recharts-scale: 0.4.5
       tiny-invariant: 1.3.3
       victory-vendor: 36.9.2
@@ -22276,6 +22362,19 @@ packages:
       react-dom: 18.3.1(react@18.3.1)
     dev: false
 
+  /sonner@1.7.4(react-dom@19.2.4)(react@19.2.4):
+    resolution:
+      {
+        integrity: sha512-DIS8z4PfJRbIyfVFDVnK9rO3eYDtse4Omcm6bt0oEr5/jtLgysmjuBl1frJ9E/EQZrFmKx2A8m/s5s9CRXIzhw==,
+      }
+    peerDependencies:
+      react: ^18.0.0 || ^19.0.0 || ^19.0.0-rc
+      react-dom: ^18.0.0 || ^19.0.0 || ^19.0.0-rc
+    dependencies:
+      react: 19.2.4
+      react-dom: 19.2.4(react@19.2.4)
+    dev: false
+
   /source-map-js@1.2.1:
     resolution:
       {
@@ -22902,6 +23001,19 @@ packages:
       dequal: 2.0.3
       react: 19.1.0
       use-sync-external-store: 1.6.0(react@19.1.0)
+    dev: false
+
+  /swr@2.4.1(react@19.2.4):
+    resolution:
+      {
+        integrity: sha512-2CC6CiKQtEwaEeNiqWTAw9PGykW8SR5zZX8MZk6TeAvEAnVS7Visz8WzphqgtQ8v2xz/4Q5K+j+SeMaKXeeQIA==,
+      }
+    peerDependencies:
+      react: ^16.11.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    dependencies:
+      dequal: 2.0.3
+      react: 19.2.4
+      use-sync-external-store: 1.6.0(react@19.2.4)
     dev: false
 
   /symbol-tree@3.2.4:
@@ -24050,6 +24162,17 @@ packages:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
     dependencies:
       react: 19.1.0
+    dev: false
+
+  /use-sync-external-store@1.6.0(react@19.2.4):
+    resolution:
+      {
+        integrity: sha512-Pp6GSwGP/NrPIrxVFAIkOQeyw8lFenOHijQWkUTrDvrF4ALqylP2C/KCkeS9dpUM3KvYRQhna5vt7IL95+ZQ9w==,
+      }
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
+    dependencies:
+      react: 19.2.4
     dev: false
 
   /util-deprecate@1.0.2:
