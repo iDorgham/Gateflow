@@ -80,7 +80,18 @@ export default async function AdminOverviewPage(props: {
         createdAt: true,
       },
     }),
-  ]);
+  ]).catch((err: unknown) => {
+    console.error(
+      '[AdminOverviewPage] DB query failed:',
+      err instanceof Error ? err.message : err,
+      {
+        DATABASE_URL_SET: !!process.env.DATABASE_URL,
+        DATABASE_URL_PREFIX:
+          process.env.DATABASE_URL?.slice(0, 20) ?? 'NOT SET',
+      }
+    );
+    throw err;
+  });
 
   const suspendedOrgs = totalOrgs - activeOrgs;
 
