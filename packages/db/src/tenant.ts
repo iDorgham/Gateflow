@@ -185,7 +185,7 @@ export const db = {
     },
     count: async (args?: Parameters<typeof prisma.scanLog.count>[0]) => {
       const orgId = organizationContext.organizationId;
-      if (!orgId) return prisma.scanLog.count(args);
+      if (!orgId) return prisma.scanLog.count(args as any);
       return prisma.scanLog.count({
         ...args,
         where: {
