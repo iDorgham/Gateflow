@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 ## [Unreleased]
 
 ### Workspace
+- **[Ci]** standardize cache action and remove pnpm-store from cache paths
 
 - **[Vercel]** add edge runtime to Prisma schema for Vercel
 
