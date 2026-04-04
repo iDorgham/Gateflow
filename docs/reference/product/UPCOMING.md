@@ -7,6 +7,8 @@
 
 ---
 
+> **Roadmap SSOT:** This file is the canonical place for pipeline status, initiatives, and strategic goals. The root [`README.md`](../../../README.md) links here and does **not** duplicate roadmap tables—refresh the README snapshot line only when you want a new high-level teaser.
+
 ## 🏗️ Active Initiatives
 
 Real-time status of the engineering pipeline.
