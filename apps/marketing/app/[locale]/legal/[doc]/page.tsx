@@ -237,8 +237,8 @@ export default async function LegalPage(props: Props) {
                     href={`/${params.locale}/legal/${link.slug}`}
                     className={`block rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                       params.doc === link.slug
-                        ? 'bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-400'
-                        : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white'
+                        ? 'bg-ds-background-brand-subtle text-ds-text-brand'
+                        : 'text-ds-text-subtle hover:bg-ds-surface-raised hover:text-ds-text-heading'
                     }`}
                   >
                     {link.label}
@@ -285,7 +285,7 @@ export default async function LegalPage(props: Props) {
                 ))}
               </div>
 
-              <div className="mt-12 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-5 text-sm text-slate-500 dark:text-slate-400">
+              <div className="mt-12 rounded-xl border border-ds-border bg-ds-surface-sunken p-5 text-sm text-ds-text-subtle">
                 Questions about this policy? Email us at{' '}
                 <a
                   href="mailto:legal@gateflow.site"

@@ -42,7 +42,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 - **[Scripts]** ralph-docs changelog inserts under Unreleased tri-track
 
-- **[Plan Lifecycle]** `advanced_seeding_emulation_v3` plan assets live under `docs/plan/done/advanced_seeding_emulation_v3/` (completed); prompt/checklist links normalized to that path.
+- **[Plan Lifecycle]** `advanced_seeding_emulation_v3` plan assets live under `docs/plan/Complete/advanced_seeding_emulation_v3/` (completed); prompt/checklist links normalized to that path.
 - **[Backlog]** added tracking entry for `advanced_seeding_emulation_v3` in `docs/plan/backlog/ALL_TASKS_BACKLOG.md`.
 - **[Plan Docs]** added a local README for `advanced_seeding_emulation_v3` with lifecycle status and canonical `/dev` commands.
 - **[Plan Docs]** initialize `resident_portal_responsive` 5-phase roadmap and phase prompts.
@@ -82,7 +82,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 - **[Admin]** add traffic emulation tooling to admin dashboard
 
-- **[Admin dashboard]** Single `src/middleware.ts`: locale redirect, admin session (SHA-256 of `ADMIN_ACCESS_KEY` → `admin_session` cookie), `503`/`401` JSON on `/api/admin/*` when misconfigured or unauthenticated; `requireAdmin(locale?)` → `/{locale}/login`; gates/projects/admins server actions pass `locale` via hidden field; `docs/deployment/ADMIN_DASHBOARD.md` production smoke test + RSC digest / Vercel log correlation.
+- **[Admin dashboard]** Single `src/middleware.ts`: locale redirect, admin session (SHA-256 of `ADMIN_ACCESS_KEY` → `admin_session` cookie), `503`/`401` JSON on `/api/admin/*` when misconfigured or unauthenticated; `requireAdmin(locale?)` → `/{locale}/login`; gates/projects/admins server actions pass `locale` via hidden field; `docs/guides/DEPLOYMENT_GUIDE.md` production smoke test + RSC digest / Vercel log correlation.
 
 - **[Marketing]** `AntigravityBackground`: pass initial value to `useRef` for React 19 typings (`number | undefined`).
 

@@ -20,18 +20,18 @@ This `docs/` folder is the **v2 documentation set**, aligned with the canonical 
 
 ## Guides
 
-| Guide | Purpose |
-|---|---|
-| [`guides/ARCHITECTURE.md`](guides/ARCHITECTURE.md) | System architecture — apps, packages, data flows, QR lifecycle |
-| [`guides/SECURITY_OVERVIEW.md`](guides/SECURITY_OVERVIEW.md) | Security model — JWT, RBAC, multi-tenancy, QR signing, scanner invariants |
-| [`guides/DEVELOPMENT_GUIDE.md`](guides/DEVELOPMENT_GUIDE.md) | Local setup, pnpm/Turborepo commands, slash command workflows |
-| [`guides/ENVIRONMENT_VARIABLES.md`](guides/ENVIRONMENT_VARIABLES.md) | All env vars per app with descriptions |
-| [`guides/SCANNER_OPERATIONS.md`](guides/SCANNER_OPERATIONS.md) | Guard flows, gate assignment, offline mode, watchlist, supervisor override |
-| [`guides/RESIDENT_EXPERIENCE.md`](guides/RESIDENT_EXPERIENCE.md) | Resident portal + mobile flows (Phase 2, Q3–Q4 2026) |
-| [`guides/UI_DESIGN_GUIDE.md`](guides/UI_DESIGN_GUIDE.md) | Design tokens, component conventions, Tailwind patterns |
-| [`guides/MOTION_AND_ANIMATION.md`](guides/MOTION_AND_ANIMATION.md) | Animation principles and motion patterns for the dashboard |
-| [`guides/TOOL_AND_CLI_REFERENCE.md`](guides/TOOL_AND_CLI_REFERENCE.md) | CLI tool matrix (Cursor, Claude, Gemini, Opencode, Kiro, Kilo, Qwen) |
-| [`guides/PROMPT_ENGINEERING.md`](guides/PROMPT_ENGINEERING.md) | Prompt writing patterns for AI-assisted development |
+| Guide                                                                  | Purpose                                                                    |
+| ---------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| [`guides/ARCHITECTURE.md`](guides/ARCHITECTURE.md)                     | System architecture — apps, packages, data flows, QR lifecycle             |
+| [`guides/SECURITY_OVERVIEW.md`](guides/SECURITY_OVERVIEW.md)           | Security model — JWT, RBAC, multi-tenancy, QR signing, scanner invariants  |
+| [`guides/DEVELOPMENT_GUIDE.md`](guides/DEVELOPMENT_GUIDE.md)           | Local setup, pnpm/Turborepo commands, slash command workflows              |
+| [`guides/ENVIRONMENT_VARIABLES.md`](guides/ENVIRONMENT_VARIABLES.md)   | All env vars per app with descriptions                                     |
+| [`guides/SCANNER_OPERATIONS.md`](guides/SCANNER_OPERATIONS.md)         | Guard flows, gate assignment, offline mode, watchlist, supervisor override |
+| [`guides/RESIDENT_EXPERIENCE.md`](guides/RESIDENT_EXPERIENCE.md)       | Resident portal + mobile flows (Phase 2, Q3–Q4 2026)                       |
+| [`guides/UI_DESIGN_GUIDE.md`](guides/UI_DESIGN_GUIDE.md)               | Design tokens, component conventions, Tailwind patterns                    |
+| [`guides/MOTION_AND_ANIMATION.md`](guides/MOTION_AND_ANIMATION.md)     | Animation principles and motion patterns for the dashboard                 |
+| [`guides/TOOL_AND_CLI_REFERENCE.md`](guides/TOOL_AND_CLI_REFERENCE.md) | CLI tool matrix (Cursor, Claude, Gemini, Opencode, Kiro, Kilo, Qwen)       |
+| [`guides/PROMPT_ENGINEERING.md`](guides/PROMPT_ENGINEERING.md)         | Prompt writing patterns for AI-assisted development                        |
 
 ## Legacy docs
 
@@ -47,7 +47,7 @@ Treat these as **historical reference only**.
 - **Product changes** → update `product/PRD_v8.0_COMPREHENSIVE.md` (use the `pro-prd-writer` skill for large sections).
 - **New initiatives** → `/idea` to capture → `/plan` to phase → `/dev` to execute. Outputs land in `plan/planning/`, `plan/in-progress/`, etc.
 - **Guide updates** → edit the relevant file in `guides/`. Keep guides concise; link to PRD rather than duplicate it.
-- **Learning captures** → append to `docs/plan/learning/{patterns,incidents,decisions}.md` after significant phases.
+- **Learning captures** → append to `docs/development/learning/{patterns,incidents,decisions}.md` after significant phases.
 
 ---
 

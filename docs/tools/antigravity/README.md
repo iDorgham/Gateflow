@@ -31,7 +31,7 @@ _Wire into IDE macros if your tool supports it_
 
 ## Copy-Paste Reference
 
-All prompts are also listed in `docs/plan/execution/PROMPTS_REFERENCE.md` with "Where to copy from" guidance.
+All prompts are also listed in `docs/guides/PROMPTS_REFERENCE.md` with "Where to copy from" guidance.
 
 ---
 

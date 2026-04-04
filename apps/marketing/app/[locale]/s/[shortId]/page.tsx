@@ -95,7 +95,7 @@ export default async function InvitationPage(props: InvitationPageProps) {
           <div className="grid lg:grid-cols-2 gap-12 items-start">
             {/* INLINED PASS UI TO BYPASS BUILD CRASH */}
             <div className="w-full max-w-md mx-auto space-y-6">
-              <div className="bg-white dark:bg-slate-900 rounded-[2rem] border-2 border-primary/10 shadow-2xl overflow-hidden p-8 space-y-8">
+              <div className="bg-ds-surface rounded-[2rem] border-2 border-primary/10 shadow-2xl overflow-hidden p-8 space-y-8">
                 <div className="flex justify-between items-start">
                   <div className="space-y-1">
                     <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest flex items-center gap-1.5">
@@ -107,14 +107,14 @@ export default async function InvitationPage(props: InvitationPageProps) {
                     </h2>
                   </div>
                   {isValidSig && (
-                    <div className="bg-emerald-50 text-emerald-700 border border-emerald-200 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+                    <div className="bg-ds-background-success-subtle text-ds-text-success border border-ds-border-success px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
                       <ShieldCheck className="w-3.5 h-3.5" />
                       {t('verification')}
                     </div>
                   )}
                 </div>
 
-                <div className="aspect-square bg-slate-50 dark:bg-slate-800/50 rounded-3xl p-8 flex flex-col items-center justify-center border-2 border-dashed">
+                <div className="aspect-square bg-ds-surface-sunken rounded-3xl p-8 flex flex-col items-center justify-center border-2 border-dashed">
                   <div className="w-48 h-48 bg-slate-200 rounded-xl" />
                   <p className="mt-4 text-[10px] uppercase font-bold text-slate-400">
                     {t('verificationDesc')}
@@ -151,7 +151,7 @@ export default async function InvitationPage(props: InvitationPageProps) {
             </div>
 
             <div className="hidden lg:block space-y-8">
-              <div className="bg-white dark:bg-slate-900 rounded-3xl p-8 border shadow-sm space-y-6">
+              <div className="bg-ds-surface rounded-3xl p-8 border-ds-border border shadow-sm space-y-6">
                 <h3 className="font-bold text-lg">{t('verification')}</h3>
                 <p className="text-sm text-muted-foreground">
                   {t('verificationDesc')}

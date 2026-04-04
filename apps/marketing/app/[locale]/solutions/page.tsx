@@ -89,7 +89,7 @@ export default async function SolutionsPage(props: {
         intent="consult"
       />
       {/* Hero */}
-      <section className="pt-20 pb-16 text-center container px-6">
+      <section className="pt-48 pb-32 text-center container px-6">
         <h1 className="text-4xl lg:text-7xl font-black tracking-tight mb-6 uppercase">
           {t('index.hero.headline')}
         </h1>
@@ -120,9 +120,9 @@ export default async function SolutionsPage(props: {
               </p>
 
               <div className="grid sm:grid-cols-2 gap-x-8 gap-y-4 mb-10">
-                {v.features.map((f) => (
+                {v.features.map((f, index) => (
                   <div
-                    key={f}
+                    key={`${v.id}-${index}`}
                     className="flex items-center gap-2 font-bold text-sm"
                   >
                     <CheckCircle2 className="text-primary h-5 w-5" />
@@ -178,7 +178,7 @@ export default async function SolutionsPage(props: {
 
       {/* Shared Features Summary */}
       <section className="container px-6 mt-32">
-        <div className="relative overflow-hidden rounded-[3rem] border border-border bg-card p-12 lg:p-20">
+        <div className="group/card relative overflow-hidden rounded-[32px] border border-ds-border bg-ds-surface-sunken/40 p-8 transition-all hover:bg-ds-surface-raised/10">
           <div className="relative z-10 grid lg:grid-cols-3 gap-12">
             <div className="lg:col-span-1">
               <h3 className="mb-4 text-3xl font-black text-foreground">

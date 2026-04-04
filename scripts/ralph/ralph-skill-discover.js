@@ -4,7 +4,7 @@ const path = require('path');
 
 const REPORT_PATH = path.join(
   __dirname,
-  '../docs/plan/learning/SKILL_DISCOVERY_REPORT.md'
+  '../docs/development/learning/SKILL_DISCOVERY_REPORT.md'
 );
 
 function discover() {

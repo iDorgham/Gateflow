@@ -24,7 +24,7 @@ const { spawnSync, execSync } = require('child_process');
 
 const ROOT = path.resolve(__dirname, '../..');
 const PLAN_ROOT = path.join(ROOT, 'docs', 'plan');
-const STATES = ['in-progress', 'execution', 'planned', 'planning', 'done'];
+const STATES = ['Active', 'Ready', 'Draft', 'Complete'];
 
 // ── Tool execution map ────────────────────────────────────────────────────────
 // Each entry: { build: (content) => { cmd, args } } or { ide: true }
@@ -59,10 +59,6 @@ function findPlanDir(slug) {
   for (const state of STATES) {
     const dir = path.join(PLAN_ROOT, state, slug);
     if (fs.existsSync(dir)) return { state, dir };
-    // execution/ stores files flat (legacy)
-    const flat = path.join(PLAN_ROOT, state);
-    const planFlat = path.join(flat, `PLAN_${slug}.md`);
-    if (fs.existsSync(planFlat)) return { state, dir: flat, flat: true };
   }
   return null;
 }
@@ -252,7 +248,7 @@ if (!found) {
   process.exit(1);
 }
 
-const { dir, flat } = found;
+const { dir, flat = false } = found;
 const pf = planFilePath(dir, slug, flat);
 
 if (!fs.existsSync(pf)) {
@@ -322,11 +318,11 @@ for (const phaseInfo of toRun) {
     // Auto-move to done if last phase complete
     const updated = parsePhases(fs.readFileSync(pf, 'utf8'));
     const allDone = updated.every((p) => p.done);
-    if (allDone && found.state === 'in-progress') {
-      const destDir = path.join(PLAN_ROOT, 'done', slug);
+    if (allDone && found.state === 'Active') {
+      const destDir = path.join(PLAN_ROOT, 'Complete', slug);
       fs.mkdirSync(path.dirname(destDir), { recursive: true });
       fs.renameSync(dir, destDir);
-      console.log(`\n🎉 All phases complete! Moved "${slug}" → done/`);
+      console.log(`\n🎉 All phases complete! Moved "${slug}" → Complete/`);
 
       // Trigger full docs automation (same as pnpm plan:done)
       try {

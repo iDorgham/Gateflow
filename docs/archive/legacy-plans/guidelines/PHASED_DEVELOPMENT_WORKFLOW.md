@@ -72,7 +72,7 @@ Create a phased plan for [MVP Launch / Resident Portal Phase 2 / etc.]:
 - Break into 4–8 phases
 - Each phase: clear scope, deliverables, test criteria
 - Order by dependency (schema before API, API before UI)
-- Output in markdown suitable for docs/plan/execution/PLAN_<name>.md
+- Output in markdown suitable for docs/plan/Complete/PLAN_<name>.md
 ```
 
 ---
@@ -87,32 +87,40 @@ Each phase is executed by a **comprehensive pro prompt** — self-contained, una
 ## Phase N: [Title]
 
 ### Primary role
+
 [From SUBAGENT_HIERARCHY: SECURITY | BACKEND-API | FRONTEND | etc.]
 
 ### Context
+
 - GateFlow monorepo: apps/client-dashboard, admin-dashboard, scanner-app, packages/db, types, ui
 - Rules: pnpm only, multi-tenant (organizationId), soft deletes (deletedAt: null), QR HMAC-SHA256
 - Reference: CLAUDE.md, packages/db/prisma/schema.prisma
 
 ### Goal
+
 [One clear sentence: what this phase must achieve]
 
 ### Scope (in)
+
 - [Item 1]
 - [Item 2]
 - [Item 3]
 
 ### Scope (out)
+
 - [Explicitly exclude] — do not touch [X]
 
 ### Steps (ordered)
+
 1. [Concrete step with file paths]
 2. [Concrete step]
 3. [Add/update tests for...]
 4. [Run pnpm preflight for affected workspace]
 
 #### Subagents (optional)
+
 When the phase needs exploration or verification, add:
+
 - **explore**: "Trace flow for [X]...", "Find all [symbol] usages..."
 - **shell**: "Run pnpm preflight...", "Run prisma migrate dev..."
 - **browser-use**: "Login at localhost:3001, verify [behaviors]..."
@@ -120,12 +128,14 @@ When the phase needs exploration or verification, add:
 See `.cursor/skills/gf-planner/SKILL.md` for full prompt templates.
 
 ### Acceptance criteria
+
 - [ ] [Criterion 1]
 - [ ] [Criterion 2]
 - [ ] pnpm turbo lint --filter=<workspace> passes
 - [ ] pnpm turbo test --filter=<workspace> passes (or no regression)
 
 ### Files likely touched
+
 - path/to/file1.ts
 - path/to/file2.tsx
 ```
@@ -136,23 +146,28 @@ See `.cursor/skills/gf-planner/SKILL.md` for full prompt templates.
 ## Phase 1: Add Unit model to Prisma schema
 
 ### Context
+
 - packages/db/prisma/schema.prisma
 - Reference: docs/plan/phase-2-resident-portal/specs/RESIDENT_PORTAL_SPEC.md
 - Rules: soft delete, organizationId, cuid
 
 ### Goal
+
 Add `Unit` model and `UnitType` enum to support resident–unit linking.
 
 ### Scope (in)
+
 - Unit model with: id, organizationId, name, unitType, deletedAt, timestamps
 - UnitType enum: STUDIO, ONE_BEDROOM, TWO_BEDROOM, THREE_BEDROOM, PENTHOUSE
 - Indexes: organizationId, deletedAt
 - Relation to Organization
 
 ### Scope (out)
+
 - No API routes, no UI — schema only
 
 ### Steps
+
 1. Edit packages/db/prisma/schema.prisma: add UnitType enum
 2. Add Unit model with fields per RESIDENT_PORTAL_SPEC
 3. Run pnpm db:generate
@@ -160,6 +175,7 @@ Add `Unit` model and `UnitType` enum to support resident–unit linking.
 5. Run pnpm turbo build to confirm no breakage
 
 ### Acceptance criteria
+
 - [ ] Unit model exists with correct fields
 - [ ] Migration created and applied
 - [ ] pnpm turbo build passes
@@ -171,18 +187,18 @@ Add `Unit` model and `UnitType` enum to support resident–unit linking.
 
 ### Step-by-step (per phase)
 
-| Step | Action | Command / tool |
-|------|--------|----------------|
-| 1 | **Get the pro prompt** | From plan doc or `docs/plan/execution/PROMPT_phase_N.md` |
-| 2 | **Apply** | Paste prompt into Cursor; execute |
-| 2b | **Subagents** (if specified) | Invoke explore/shell/browser-use with prompts from phase |
-| 2c | **Multi-CLI** (optional, complex phases only) | Claude Pro has limits — use only for security-critical, architectural, or high-risk phases. See `gf-planner` skill |
-| 3 | **Test** | `pnpm turbo test --filter=<workspace>` |
-| 4 | **Lint / typecheck** | `pnpm turbo lint --filter=<workspace>` and `pnpm turbo typecheck --filter=<workspace>` |
-| 5 | **Enhance** | Fix failures; add missing tests; improve edge cases |
-| 6 | **Verify** | `pnpm preflight` if full regression check needed |
-| 7 | **Commit** | `git add ... && git commit -m "Phase N: [title]"` |
-| 8 | **Next** | Proceed to Phase N+1 |
+| Step | Action                                        | Command / tool                                                                                                     |
+| ---- | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| 1    | **Get the pro prompt**                        | From plan doc or `docs/plan/Complete/PROMPT_phase_N.md`                                                            |
+| 2    | **Apply**                                     | Paste prompt into Cursor; execute                                                                                  |
+| 2b   | **Subagents** (if specified)                  | Invoke explore/shell/browser-use with prompts from phase                                                           |
+| 2c   | **Multi-CLI** (optional, complex phases only) | Claude Pro has limits — use only for security-critical, architectural, or high-risk phases. See `gf-planner` skill |
+| 3    | **Test**                                      | `pnpm turbo test --filter=<workspace>`                                                                             |
+| 4    | **Lint / typecheck**                          | `pnpm turbo lint --filter=<workspace>` and `pnpm turbo typecheck --filter=<workspace>`                             |
+| 5    | **Enhance**                                   | Fix failures; add missing tests; improve edge cases                                                                |
+| 6    | **Verify**                                    | `pnpm preflight` if full regression check needed                                                                   |
+| 7    | **Commit**                                    | `git add ... && git commit -m "Phase N: [title]"`                                                                  |
+| 8    | **Next**                                      | Proceed to Phase N+1                                                                                               |
 
 ### Loop (visual)
 
@@ -245,7 +261,7 @@ Treat these as **hard gates** for `/dev` phases and `/ship` plans — tools must
 Use the **Planning subagent** prompt above (Section 1) with your goal. Save output to:
 
 ```
-docs/plan/execution/PLAN_<initiative>.md
+docs/plan/Complete/PLAN_<initiative>.md
 ```
 
 ### Create pro prompts from plan
@@ -253,14 +269,14 @@ docs/plan/execution/PLAN_<initiative>.md
 For each phase in the plan, create:
 
 ```
-docs/plan/execution/PROMPT_<initiative>_phase_<N>.md
+docs/plan/Complete/PROMPT_<initiative>_phase_<N>.md
 ```
 
 Use the **Pro Prompt Template** (Section 2).
 
 ### Execute phase N
 
-1. Open `docs/plan/execution/PROMPT_<initiative>_phase_<N>.md`
+1. Open `docs/plan/Complete/PROMPT_<initiative>_phase_<N>.md`
 2. Copy full content
 3. Paste into Cursor (or your AI tool) as the task
 4. Let the agent implement
@@ -305,20 +321,20 @@ docs/plan/
 
 ## 6. Quick Reference
 
-| I want to… | Do this |
-|------------|---------|
-| Create a plan from backlog | Use **Planning subagent** prompt (Section 1); save to `docs/plan/execution/PLAN_<name>.md` |
-| Write a pro prompt for phase | Use **Pro Prompt Template** (Section 2); save to `PROMPT_<name>_phase_N.md` |
-| Execute one phase | Paste pro prompt → implement → test → enhance → commit |
-| Run full phased cycle | For each phase: apply → test → enhance → commit → next |
+| I want to…                   | Do this                                                                                   |
+| ---------------------------- | ----------------------------------------------------------------------------------------- |
+| Create a plan from backlog   | Use **Planning subagent** prompt (Section 1); save to `docs/plan/Complete/PLAN_<name>.md` |
+| Write a pro prompt for phase | Use **Pro Prompt Template** (Section 2); save to `PROMPT_<name>_phase_N.md`               |
+| Execute one phase            | Paste pro prompt → implement → test → enhance → commit                                    |
+| Run full phased cycle        | For each phase: apply → test → enhance → commit → next                                    |
 
 ---
 
 ## 7. Related
 
-- `docs/plan/guidelines/SUBAGENT_HIERARCHY.md` — Role definitions for Cursor and all CLIs
-- `docs/plan/guidelines/DEVELOPMENT_WORKFLOWS.md` — Commands, workflows, subagent prompts
-- `docs/plan/guidelines/AI_SKILLS_SUBAGENTS_RULES.md` — All subagents
+- `docs/development/guidelines/SUBAGENT_HIERARCHY.md` — Role definitions for Cursor and all CLIs
+- `docs/development/guidelines/DEVELOPMENT_WORKFLOWS.md` — Commands, workflows, subagent prompts
+- `docs/development/guidelines/AI_SKILLS_SUBAGENTS_RULES.md` — All subagents
 - `.cursor/skills/multi-cli-cursor-workflow/SKILL.md` — Claude/Opencode/Gemini CLI alongside Cursor
 - `.cursor/templates/TEMPLATE_PROMPT_phase.md` — Phase template with subagents section
 - `docs/plan/backlog/ALL_TASKS_BACKLOG.md` — Task source

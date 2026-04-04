@@ -24,7 +24,11 @@ export function CookieBanner() {
   }, []);
 
   function save(value: string) {
-    try { localStorage.setItem(STORAGE_KEY, value); } catch { /* noop */ }
+    try {
+      localStorage.setItem(STORAGE_KEY, value);
+    } catch {
+      /* noop */
+    }
     setVisible(false);
   }
 
@@ -32,7 +36,7 @@ export function CookieBanner() {
 
   return (
     <div className="fixed bottom-4 left-4 right-4 z-[60] mx-auto max-w-2xl">
-      <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5 shadow-2xl">
+      <div className="rounded-2xl border border-ds-border bg-ds-surface p-5 shadow-2xl">
         <div className="flex items-start gap-3">
           <span className="text-2xl shrink-0">🍪</span>
           <div className="flex-1 min-w-0">
@@ -41,14 +45,17 @@ export function CookieBanner() {
             </p>
             <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
               {t('cookieBanner.desc')}{' '}
-              <Link href="/legal/cookies" className="underline underline-offset-2 hover:text-indigo-600 dark:hover:text-indigo-400">
+              <Link
+                href="/legal/cookies"
+                className="underline underline-offset-2 hover:text-indigo-600 dark:hover:text-indigo-400"
+              >
                 {t('cookieBanner.learnMore')}
               </Link>
             </p>
           </div>
           <button
             onClick={() => save('dismissed')}
-            className="shrink-0 p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 transition-colors"
+            className="shrink-0 p-1 rounded-lg hover:bg-ds-surface-raised text-ds-text-subtlest transition-colors"
             aria-label="Dismiss"
           >
             <X size={16} />
@@ -57,7 +64,7 @@ export function CookieBanner() {
         <div className="mt-4 flex flex-wrap gap-2 justify-end">
           <button
             onClick={() => save('essential')}
-            className="px-4 py-1.5 text-xs font-semibold rounded-lg border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
+            className="px-4 py-1.5 text-xs font-semibold rounded-lg border border-ds-border text-ds-text-subtle hover:bg-ds-surface-raised transition-colors"
           >
             {t('cookieBanner.essential')}
           </button>

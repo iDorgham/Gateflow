@@ -142,13 +142,13 @@ GateFlow uses a phased workflow orchestrated by Cursor and CLIs (Claude, Gemini,
 
 ### 5.1 Master Slash Commands (Cursor)
 
-| Command  | Purpose                                                                |
-| -------- | ---------------------------------------------------------------------- |
-| `/idea`  | Capture and refine initiatives into `docs/plan/context/IDEA_<slug>.md` |
-| `/plan`  | Turn an idea into multi-phase `PLAN_<slug>.md` + per-phase prompts     |
-| `/dev`   | Implement **one phase** end-to-end (code, tests, docs, git)            |
-| `/ship`  | Run all remaining phases for a plan sequentially                       |
-| `/guide` | Workspace guide — what to do next, active plan, recommended actions    |
+| Command  | Purpose                                                                           |
+| -------- | --------------------------------------------------------------------------------- |
+| `/idea`  | Capture and refine initiatives into `docs/development/initiatives/IDEA_<slug>.md` |
+| `/plan`  | Turn an idea into multi-phase `PLAN_<slug>.md` + per-phase prompts                |
+| `/dev`   | Implement **one phase** end-to-end (code, tests, docs, git)                       |
+| `/ship`  | Run all remaining phases for a plan sequentially                                  |
+| `/guide` | Workspace guide — what to do next, active plan, recommended actions               |
 
 Supporting commands (see `.antigravity/rules/01-gateflow-ai-workflow.mdc` and legacy guidelines in `docs/archive/plan-legacy/guidelines`):
 
@@ -156,13 +156,13 @@ Supporting commands (see `.antigravity/rules/01-gateflow-ai-workflow.mdc` and le
 
 ### 5.2 Plan & Prompt Files
 
-| File                   | Location                                               |
-| ---------------------- | ------------------------------------------------------ |
-| Initiative ideas       | `docs/plan/context/IDEA_<slug>.md`                     |
-| Active plans + prompts | `docs/plan/planning/<slug>/PLAN_<slug>.md`             |
-| Phase prompts          | `docs/plan/planning/<slug>/PROMPT_<slug>_phase_<N>.md` |
-| Phase task checklist   | `docs/plan/planning/<slug>/TASKS_<slug>.md`            |
-| Completed plans        | `docs/plan/done/<slug>/`                               |
+| File                   | Location                                            |
+| ---------------------- | --------------------------------------------------- |
+| Initiative ideas       | `docs/development/initiatives/IDEA_<slug>.md`       |
+| Active plans + prompts | `docs/plan/Draft/<slug>/PLAN_<slug>.md`             |
+| Phase prompts          | `docs/plan/Draft/<slug>/PROMPT_<slug>_phase_<N>.md` |
+| Phase task checklist   | `docs/plan/Draft/<slug>/TASKS_<slug>.md`            |
+| Completed plans        | `docs/plan/Complete/<slug>/`                        |
 
 Template & skills:
 

@@ -8,21 +8,21 @@
 
 ### Root scripts (run from repo root)
 
-| Command | What it does |
-|---------|--------------|
-| `pnpm install` | Install all workspace dependencies |
-| `pnpm dev` | Start all apps in dev mode |
-| `pnpm build` | Build all packages and apps |
-| `pnpm lint` | Lint all workspaces |
-| `pnpm test` | Run tests across monorepo |
-| `pnpm typecheck` | Type-check all workspaces |
-| `pnpm db:generate` | Regenerate Prisma client |
-| `pnpm db:studio` | Open Prisma Studio |
-| `pnpm dev:client` | Start client-dashboard only (3001) |
-| `pnpm dev:admin` | Start admin-dashboard only (3002) |
-| `pnpm dev:scanner` | Start scanner-app only (8081) |
-| `pnpm dev:marketing` | Start marketing only (3000) |
-| `pnpm preflight` | Run lint + typecheck + test (pre-PR) |
+| Command              | What it does                         |
+| -------------------- | ------------------------------------ |
+| `pnpm install`       | Install all workspace dependencies   |
+| `pnpm dev`           | Start all apps in dev mode           |
+| `pnpm build`         | Build all packages and apps          |
+| `pnpm lint`          | Lint all workspaces                  |
+| `pnpm test`          | Run tests across monorepo            |
+| `pnpm typecheck`     | Type-check all workspaces            |
+| `pnpm db:generate`   | Regenerate Prisma client             |
+| `pnpm db:studio`     | Open Prisma Studio                   |
+| `pnpm dev:client`    | Start client-dashboard only (3001)   |
+| `pnpm dev:admin`     | Start admin-dashboard only (3002)    |
+| `pnpm dev:scanner`   | Start scanner-app only (8081)        |
+| `pnpm dev:marketing` | Start marketing only (3000)          |
+| `pnpm preflight`     | Run lint + typecheck + test (pre-PR) |
 
 ### Turborepo filtered commands
 
@@ -61,13 +61,13 @@ npx prisma studio               # GUI
 
 ### Ports
 
-| App | Port |
-|-----|------|
-| Marketing | 3000 |
-| Client Dashboard | 3001 |
-| Admin Dashboard | 3002 |
-| Resident Portal | 3004 |
-| Scanner App (Metro) | 8081 |
+| App                     | Port |
+| ----------------------- | ---- |
+| Marketing               | 3000 |
+| Client Dashboard        | 3001 |
+| Admin Dashboard         | 3002 |
+| Resident Portal         | 3004 |
+| Scanner App (Metro)     | 8081 |
 | Resident Mobile (Metro) | 8082 |
 
 ---
@@ -157,7 +157,7 @@ npx prisma studio               # GUI
 
 1. **Rule**: Create `.cursor/rules/<nn>-<name>.mdc` with frontmatter (`description`, `globs`, `alwaysApply`).
 2. **Skill**: Create `.cursor/skills/<name>/SKILL.md`; document purpose, when to use, and key knowledge.
-3. **Reference** from `docs/plan/guidelines/AI_SKILLS_SUBAGENTS_RULES.md`.
+3. **Reference** from `docs/development/guidelines/AI_SKILLS_SUBAGENTS_RULES.md`.
 4. **Test**: Open a file matching the glob; confirm rule/skill is applied.
 
 **Reference:** `.cursor/skills-cursor/create-rule/SKILL.md`, `create-skill/SKILL.md` (if present).
@@ -166,9 +166,9 @@ npx prisma studio               # GUI
 
 ### Workflow: Phased development (plan → pro prompts → execute → test → enhance)
 
-1. **Invoke planning subagent** with goal (from backlog or user request). See `docs/plan/guidelines/PHASED_DEVELOPMENT_WORKFLOW.md`.
-2. **Save plan** to `docs/plan/execution/PLAN_<initiative>.md`.
-3. **For each phase**: Write pro prompt using `.cursor/templates/TEMPLATE_PROMPT_phase.md` → save `docs/plan/execution/PROMPT_<initiative>_phase_N.md`.
+1. **Invoke planning subagent** with goal (from backlog or user request). See `docs/development/guidelines/PHASED_DEVELOPMENT_WORKFLOW.md`.
+2. **Save plan** to `docs/plan/Complete/PLAN_<initiative>.md`.
+3. **For each phase**: Write pro prompt using `.cursor/templates/TEMPLATE_PROMPT_phase.md` → save `docs/plan/Complete/PROMPT_<initiative>_phase_N.md`.
 4. **Execute phase N**:
    - Prefer using the master commands:
      - `/dev` — implement a single phase according to its prompt.
@@ -180,23 +180,23 @@ npx prisma studio               # GUI
      - Commit via `/github`.
 5. **Next phase**: Repeat until plan complete.
 
-**Reference:** `docs/plan/guidelines/PHASED_DEVELOPMENT_WORKFLOW.md`, `.cursor/skills/gf-planner/SKILL.md`.
+**Reference:** `docs/development/guidelines/PHASED_DEVELOPMENT_WORKFLOW.md`, `.cursor/skills/gf-planner/SKILL.md`.
 
 ---
 
 ## 3. AI Skills & Subagents (from AI_SKILLS_SUBAGENTS_RULES.md)
 
-**Full reference:** `docs/plan/guidelines/AI_SKILLS_SUBAGENTS_RULES.md`
+**Full reference:** `docs/development/guidelines/AI_SKILLS_SUBAGENTS_RULES.md`
 
 ### When to use which subagent
 
-| Task | Subagent |
-|------|----------|
-| Trace flows, find features, refactor discovery | **explore** |
-| pnpm/turbo, git, prisma, builds | **shell** |
-| Login, navigation, filters, exports, i18n checks | **browser-use** |
-| Ambiguous mixed investigation | **general-purpose** |
-| Create plan, task breakdown, phased execution | **planning** |
+| Task                                             | Subagent            |
+| ------------------------------------------------ | ------------------- |
+| Trace flows, find features, refactor discovery   | **explore**         |
+| pnpm/turbo, git, prisma, builds                  | **shell**           |
+| Login, navigation, filters, exports, i18n checks | **browser-use**     |
+| Ambiguous mixed investigation                    | **general-purpose** |
+| Create plan, task breakdown, phased execution    | **planning**        |
 
 Keep prompts **narrow and specific**. Avoid "do everything" requests.
 
@@ -211,12 +211,12 @@ Keep prompts **narrow and specific**. Avoid "do everything" requests.
 
 ## 4. MCP Servers (when available)
 
-| Task | MCP | Use |
-|------|-----|-----|
-| Prisma migrations, schema, Studio | **Prisma-Local** | migrate-dev, migrate-status, Prisma-Studio |
-| Library/docs (React, Next.js, Prisma) | **Context7** | query-docs, resolve-library-id |
-| E2E verification | **cursor-ide-browser** | browser_navigate, browser_snapshot |
-| GitHub PRs, issues | **GitHub** | create PR, list issues |
+| Task                                  | MCP                    | Use                                        |
+| ------------------------------------- | ---------------------- | ------------------------------------------ |
+| Prisma migrations, schema, Studio     | **Prisma-Local**       | migrate-dev, migrate-status, Prisma-Studio |
+| Library/docs (React, Next.js, Prisma) | **Context7**           | query-docs, resolve-library-id             |
+| E2E verification                      | **cursor-ide-browser** | browser_navigate, browser_snapshot         |
+| GitHub PRs, issues                    | **GitHub**             | create PR, list issues                     |
 
 **Skill:** `.cursor/skills/gf-mcp/SKILL.md` | **Setup:** `docs/MCP_SETUP.md`
 
@@ -224,22 +224,22 @@ Keep prompts **narrow and specific**. Avoid "do everything" requests.
 
 ## 5. Skills Index
 
-| Skill | Location | When to use |
-|-------|----------|-------------|
-| **gf-mcp** | `.cursor/skills/gf-mcp/SKILL.md` | MCP server usage, schema, docs, E2E |
-| **gf-architecture** | `.cursor/skills/gf-architecture/SKILL.md` | Monorepo, conventions, architectural decisions |
-| **gf-security** | `.cursor/skills/gf-security/SKILL.md` | Auth, RBAC, sensitive data, APIs |
-| **gf-database** | `.cursor/skills/gf-database/SKILL.md` | Prisma, migrations, query patterns |
-| **gf-testing** | `.cursor/skills/gf-testing/SKILL.md` | Jest, unit/integration tests, mocks |
-| **gf-mobile** | `.cursor/skills/gf-mobile/SKILL.md` | Scanner app, resident-mobile, offline sync |
-| **gf-i18n** | `.cursor/skills/gf-i18n/SKILL.md` | Arabic/English, RTL, locale switching |
-| **gf-api** | `.cursor/skills/gf-api/SKILL.md` | Next.js API routes, auth, validation |
-| **gf-dev** | `.cursor/skills/gf-dev/SKILL.md` | Workflows, commands, preflight |
-| **gf-planner** | `.cursor/skills/gf-planner/SKILL.md` | Plan creation, pro prompts, phased execution |
-| **excel-spreadsheets** | `.cursor/skills/excel-spreadsheets/SKILL.md` | Excel .xlsx create, read, edit; spreadsheet exports |
+| Skill                         | Location                                            | When to use                                                   |
+| ----------------------------- | --------------------------------------------------- | ------------------------------------------------------------- |
+| **gf-mcp**                    | `.cursor/skills/gf-mcp/SKILL.md`                    | MCP server usage, schema, docs, E2E                           |
+| **gf-architecture**           | `.cursor/skills/gf-architecture/SKILL.md`           | Monorepo, conventions, architectural decisions                |
+| **gf-security**               | `.cursor/skills/gf-security/SKILL.md`               | Auth, RBAC, sensitive data, APIs                              |
+| **gf-database**               | `.cursor/skills/gf-database/SKILL.md`               | Prisma, migrations, query patterns                            |
+| **gf-testing**                | `.cursor/skills/gf-testing/SKILL.md`                | Jest, unit/integration tests, mocks                           |
+| **gf-mobile**                 | `.cursor/skills/gf-mobile/SKILL.md`                 | Scanner app, resident-mobile, offline sync                    |
+| **gf-i18n**                   | `.cursor/skills/gf-i18n/SKILL.md`                   | Arabic/English, RTL, locale switching                         |
+| **gf-api**                    | `.cursor/skills/gf-api/SKILL.md`                    | Next.js API routes, auth, validation                          |
+| **gf-dev**                    | `.cursor/skills/gf-dev/SKILL.md`                    | Workflows, commands, preflight                                |
+| **gf-planner**                | `.cursor/skills/gf-planner/SKILL.md`                | Plan creation, pro prompts, phased execution                  |
+| **excel-spreadsheets**        | `.cursor/skills/excel-spreadsheets/SKILL.md`        | Excel .xlsx create, read, edit; spreadsheet exports           |
 | **multi-cli-cursor-workflow** | `.cursor/skills/multi-cli-cursor-workflow/SKILL.md` | Claude/Opencode/Gemini CLIs alongside Cursor for parallel dev |
 
-*Kiro users: parallel skills exist in `.kiro/skills/` for gf-architecture, security, database, testing, mobile.*
+_Kiro users: parallel skills exist in `.kiro/skills/` for gf-architecture, security, database, testing, mobile._
 
 ---
 
@@ -264,7 +264,7 @@ List API routes under /api/[path] and summarize auth, input validation, and org 
 ### Planning
 
 ```
-Create a phased plan for [GOAL/EPIC]. Use docs/plan/backlog/ALL_TASKS_BACKLOG.md and RESIDENT_PORTAL_SPEC. Output: phases with scope, deliverables, test criteria. Save to docs/plan/execution/PLAN_<name>.md.
+Create a phased plan for [GOAL/EPIC]. Use docs/plan/backlog/ALL_TASKS_BACKLOG.md and RESIDENT_PORTAL_SPEC. Output: phases with scope, deliverables, test criteria. Save to docs/plan/Complete/PLAN_<name>.md.
 ```
 
 ### Shell
@@ -301,36 +301,36 @@ Toggle locale (AR/EN) on client-dashboard login page and verify RTL layout and l
 
 All AI tools and developers must follow:
 
-| Rule | Summary |
-|------|---------|
-| **Package manager** | pnpm only; never npm or yarn |
-| **Multi-tenancy** | All tenant queries scope by `organizationId` |
-| **Soft deletes** | Filter `deletedAt: null`; never hard delete |
-| **Auth** | Short-lived tokens; secure cookies / SecureStore |
-| **QR security** | HMAC-SHA256 signed; preserve `scanUuid` dedup |
-| **Secrets** | Never commit `.env`; use `.env.example` |
-| **Imports** | Use `@gate-access/*` workspace packages |
+| Rule                | Summary                                          |
+| ------------------- | ------------------------------------------------ |
+| **Package manager** | pnpm only; never npm or yarn                     |
+| **Multi-tenancy**   | All tenant queries scope by `organizationId`     |
+| **Soft deletes**    | Filter `deletedAt: null`; never hard delete      |
+| **Auth**            | Short-lived tokens; secure cookies / SecureStore |
+| **QR security**     | HMAC-SHA256 signed; preserve `scanUuid` dedup    |
+| **Secrets**         | Never commit `.env`; use `.env.example`          |
+| **Imports**         | Use `@gate-access/*` workspace packages          |
 
-**Full rules:** `.cursor/rules/00-gateflow-core.mdc`, `docs/plan/guidelines/AI_SKILLS_SUBAGENTS_RULES.md`.
+**Full rules:** `.cursor/rules/00-gateflow-core.mdc`, `docs/development/guidelines/AI_SKILLS_SUBAGENTS_RULES.md`.
 
 ---
 
 ## 8. Quick Links
 
-| Doc | Purpose |
-|-----|---------|
-| `docs/plan/guidelines/SUBAGENT_HIERARCHY.md` | Role hierarchy for Cursor + all CLIs |
-| `CLAUDE.md` | Full AI assistant guide |
-| `docs/plan/guidelines/PHASED_DEVELOPMENT_WORKFLOW.md` | Plan + pro prompts + phased execution |
-| `docs/plan/guidelines/AI_SKILLS_SUBAGENTS_RULES.md` | Skills, subagents, rules |
-| `docs/plan/guidelines/DEVELOPMENT_TOOLS.md` | Cursor, Kiro, CLIs |
-| `docs/plan/guidelines/REQUIRED_SKILLS_AND_AGENTS.md` | Human skills, Kiro config |
-| `docs/plan/backlog/ALL_TASKS_BACKLOG.md` | Task list |
-| `docs/plan/execution/` | Plans and pro prompts |
-| `.cursor/templates/` | Phase prompt, API route, commit, PR, test, DoD templates |
-| `.cursor/contracts/` | Code invariants (multi-tenant, soft delete, QR, auth) |
-| `.cursor/agents/` | Role personas, scenarios, orchestrator (adopt for phases) |
-| `.kiro/QUICK_REFERENCE.md` | Kiro patterns and templates |
+| Doc                                                          | Purpose                                                   |
+| ------------------------------------------------------------ | --------------------------------------------------------- |
+| `docs/development/guidelines/SUBAGENT_HIERARCHY.md`          | Role hierarchy for Cursor + all CLIs                      |
+| `CLAUDE.md`                                                  | Full AI assistant guide                                   |
+| `docs/development/guidelines/PHASED_DEVELOPMENT_WORKFLOW.md` | Plan + pro prompts + phased execution                     |
+| `docs/development/guidelines/AI_SKILLS_SUBAGENTS_RULES.md`   | Skills, subagents, rules                                  |
+| `docs/development/guidelines/DEVELOPMENT_TOOLS.md`           | Cursor, Kiro, CLIs                                        |
+| `docs/development/guidelines/REQUIRED_SKILLS_AND_AGENTS.md`  | Human skills, Kiro config                                 |
+| `docs/plan/backlog/ALL_TASKS_BACKLOG.md`                     | Task list                                                 |
+| `docs/plan/Complete/`                                        | Plans and pro prompts                                     |
+| `.cursor/templates/`                                         | Phase prompt, API route, commit, PR, test, DoD templates  |
+| `.cursor/contracts/`                                         | Code invariants (multi-tenant, soft delete, QR, auth)     |
+| `.cursor/agents/`                                            | Role personas, scenarios, orchestrator (adopt for phases) |
+| `.kiro/QUICK_REFERENCE.md`                                   | Kiro patterns and templates                               |
 
 ---
 

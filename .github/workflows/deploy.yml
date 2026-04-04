@@ -50,12 +50,54 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
 jobs:
+  # ── Filter changes ──────────────────────────────────────────────────────────
+  changes:
+    name: Detect Changes
+    runs-on: ubuntu-latest
+    outputs:
+      client: ${{ steps.filter.outputs.client }}
+      admin: ${{ steps.filter.outputs.admin }}
+      marketing: ${{ steps.filter.outputs.marketing }}
+      resident: ${{ steps.filter.outputs.resident }}
+      db: ${{ steps.filter.outputs.db }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            client:
+              - 'apps/client-dashboard/**'
+              - 'packages/**'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+            admin:
+              - 'apps/admin-dashboard/**'
+              - 'packages/**'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+            marketing:
+              - 'apps/marketing/**'
+              - 'packages/**'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+            resident:
+              - 'apps/resident-portal/**'
+              - 'packages/**'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+            db:
+              - 'packages/db/**'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+
   # ── Build check before deploy ─────────────────────────────────────────────
   build-check:
     name: Build Check
+    needs: changes
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@v4
       - uses: pnpm/action-setup@0c17529a66aca453f9227af23103ed11469b1e47 # v4.0.0
         with:
           version: ${{ env.PNPM_VERSION }}
@@ -85,9 +127,11 @@ jobs:
   # ── Database Migration ────────────────────────────────────────────────────
   db-migrate:
     name: Database Migration
-    needs: build-check
+    needs: [changes, build-check]
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+    if: |
+      (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') &&
+      needs.changes.outputs.db == 'true'
     environment:
       name: production
     steps:
@@ -114,11 +158,15 @@ jobs:
   # ── Deploy: client-dashboard ──────────────────────────────────────────────
   deploy-client:
     name: Deploy client-dashboard
-    needs: [build-check, db-migrate]
+    needs: [changes, build-check, db-migrate]
     runs-on: ubuntu-latest
     if: |
-      github.event.inputs.app == '' ||
-      github.event.inputs.app == 'client-dashboard'
+      always() &&
+      !cancelled() &&
+      !failed() &&
+      (needs.db-migrate.result == 'success' || needs.db-migrate.result == 'skipped') &&
+      (github.event.inputs.app == '' || github.event.inputs.app == 'client-dashboard') &&
+      needs.changes.outputs.client == 'true'
     environment:
       name: "${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && 'production' || 'preview' }}"
       url: '${{ steps.deploy.outputs.url }}'
@@ -173,11 +221,15 @@ jobs:
   # ── Deploy: admin-dashboard ───────────────────────────────────────────────
   deploy-admin:
     name: Deploy admin-dashboard
-    needs: [build-check, db-migrate]
+    needs: [changes, build-check, db-migrate]
     runs-on: ubuntu-latest
     if: |
-      github.event.inputs.app == '' ||
-      github.event.inputs.app == 'admin-dashboard'
+      always() &&
+      !cancelled() &&
+      !failed() &&
+      (needs.db-migrate.result == 'success' || needs.db-migrate.result == 'skipped') &&
+      (github.event.inputs.app == '' || github.event.inputs.app == 'admin-dashboard') &&
+      needs.changes.outputs.admin == 'true'
     environment:
       name: "${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && 'production' || 'preview' }}"
       url: '${{ steps.deploy.outputs.url }}'
@@ -232,11 +284,15 @@ jobs:
   # ── Deploy: marketing ────────────────────────────────────────────────────
   deploy-marketing:
     name: Deploy marketing
-    needs: [build-check, db-migrate]
+    needs: [changes, build-check, db-migrate]
     runs-on: ubuntu-latest
     if: |
-      github.event.inputs.app == '' ||
-      github.event.inputs.app == 'marketing'
+      always() &&
+      !cancelled() &&
+      !failed() &&
+      (needs.db-migrate.result == 'success' || needs.db-migrate.result == 'skipped') &&
+      (github.event.inputs.app == '' || github.event.inputs.app == 'marketing') &&
+      needs.changes.outputs.marketing == 'true'
     environment:
       name: "${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && 'production' || 'preview' }}"
       url: '${{ steps.deploy.outputs.url }}'
@@ -291,11 +347,15 @@ jobs:
   # ── Deploy: resident-portal ───────────────────────────────────────────────
   deploy-resident-portal:
     name: Deploy resident-portal
-    needs: [build-check, db-migrate]
+    needs: [changes, build-check, db-migrate]
     runs-on: ubuntu-latest
     if: |
-      github.event.inputs.app == '' ||
-      github.event.inputs.app == 'resident-portal'
+      always() &&
+      !cancelled() &&
+      !failed() &&
+      (needs.db-migrate.result == 'success' || needs.db-migrate.result == 'skipped') &&
+      (github.event.inputs.app == '' || github.event.inputs.app == 'resident-portal') &&
+      needs.changes.outputs.resident == 'true'
     environment:
       name: "${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && 'production' || 'preview' }}"
       url: '${{ steps.deploy.outputs.url }}'

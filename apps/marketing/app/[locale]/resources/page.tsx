@@ -113,7 +113,7 @@ export default async function ResourcesPage(props: {
         intent="migration"
       />
       {/* Header */}
-      <section className="pt-20 pb-16 text-center container px-6">
+      <section className="pt-48 pb-32 text-center container px-6">
         <h1 className="text-4xl lg:text-7xl font-black tracking-tight mb-6 uppercase">
           {t('ui.knowledgeBaseTitle')}{' '}
           <span className="text-primary italic">
@@ -127,7 +127,7 @@ export default async function ResourcesPage(props: {
 
       {/* PDF Download */}
       <section className="container px-6 mb-16">
-        <div className="rounded-[2.5rem] border bg-gradient-to-br from-primary/5 to-primary/10 p-10 flex flex-col lg:flex-row items-center gap-8">
+        <div className="rounded-[2.5rem] border border-ds-border bg-gradient-to-br from-primary/5 to-primary/10 p-10 flex flex-col lg:flex-row items-center gap-8">
           <div className="flex-1">
             <p className="text-xs font-bold uppercase tracking-widest text-primary mb-2">
               Free Download
@@ -182,7 +182,10 @@ export default async function ResourcesPage(props: {
         </div>
         <div className="grid md:grid-cols-2 gap-6">
           {playbooks.map((playbook) => (
-            <div key={playbook.key} className="rounded-2xl border bg-card p-6">
+            <div
+              key={playbook.key}
+              className="rounded-2xl border border-ds-border bg-ds-surface-sunken/40 p-6"
+            >
               <h3 className="font-bold text-lg mb-2">
                 {t(`playbooks.${playbook.key}.title`)}
               </h3>
@@ -223,7 +226,7 @@ export default async function ResourcesPage(props: {
                 key={post.slug}
                 locale={castLocale}
                 href={`/blog/${post.slug}`}
-                className="group block p-6 rounded-2xl border bg-card hover:border-primary transition-all"
+                className="group block p-6 rounded-2xl border border-ds-border bg-ds-surface-sunken/40 hover:border-primary transition-all"
               >
                 {post.tags[0] && (
                   <span className="inline-block mb-3 text-xs font-bold uppercase tracking-widest text-primary bg-primary/10 px-3 py-1 rounded-full">
@@ -253,7 +256,7 @@ export default async function ResourcesPage(props: {
           {INTEGRATIONS.map((item) => (
             <div
               key={item.name}
-              className="flex items-start gap-4 p-6 rounded-2xl border bg-card"
+              className="flex items-start gap-4 p-6 rounded-2xl border border-ds-border bg-ds-surface-sunken/40"
             >
               <div className="shrink-0 h-11 w-11 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
                 {item.icon}
@@ -327,7 +330,7 @@ function ResourceCard({
   readMore: string;
 }) {
   return (
-    <div className="p-8 rounded-[2.5rem] border bg-card hover:border-primary transition-all group flex flex-col">
+    <div className="p-10 bg-ds-surface-sunken border border-ds-border rounded-[2.5rem] hover:border-primary transition-all group flex flex-col">
       <div className="flex justify-between items-start mb-6">
         <div className="bg-primary/5 text-primary p-4 rounded-2xl group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
           {icon}

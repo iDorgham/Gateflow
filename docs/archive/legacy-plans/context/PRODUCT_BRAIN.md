@@ -70,6 +70,5 @@ This file is read by Cursor, CLIs, Kiro, and Antigravity as background context f
 
 - **Planning & phases**
   - `docs/plan/backlog/ALL_TASKS_BACKLOG.md`
-  - `docs/plan/execution/PLAN_<slug>.md`
-  - `docs/plan/execution/PROMPT_<slug>_phase_<N>.md`
-
+  - `docs/plan/Complete/PLAN_<slug>.md`
+  - `docs/plan/Complete/PROMPT_<slug>_phase_<N>.md`

@@ -1,10 +1,10 @@
 # PLAN_docs_v2_refresh — Docs v2 Refresh (PRD v6 Aligned)
 
 **Initiative:** Docs v2 refresh  
-**Source idea:** `docs/plan/context/IDEA_docs_v2_refresh.md`  
+**Source idea:** `docs/development/initiatives/IDEA_docs_v2_refresh.md`  
 **Primary product spec:** `docs/PRD_v7.0.md`  
 **Owner:** Product + Engineering  
-**Status:** Not started  
+**Status:** Not started
 
 ---
 
@@ -126,12 +126,12 @@ docs/plan/
 
 **Key tasks:**
 
-- [ ] Ensure `docs/plan/context/IDEA_docs_v2_refresh.md` is up to date.
+- [ ] Ensure `docs/development/initiatives/IDEA_docs_v2_refresh.md` is up to date.
 - [ ] For each future initiative, create `IDEA_<slug>.md` via `/idea`.
 - [ ] For each initiative, run `/plan` to generate:
-  - `PLAN_<slug>.md` under `docs/plan/execution/`.
+  - `PLAN_<slug>.md` under `docs/plan/Complete/`.
   - Phase prompts to `PROMPT_<slug>_phase_<N>.md` using `TEMPLATE_PROMPT_phase.md`.
-- [ ] Recreate `docs/plan/learning/{patterns,incidents,decisions}.md`:
+- [ ] Recreate `docs/development/learning/{patterns,incidents,decisions}.md`:
   - Either migrate curated content from legacy.
   - Or start fresh and link to the legacy learning docs in `archive/plan-legacy/**`.
 
@@ -166,7 +166,7 @@ docs/plan/
 **Key tasks:**
 
 - [ ] For each new guide, run `/idea` + `/plan` if scope is large, or write directly if small.
-- [ ] Write or refine `docs/plan/learning/{patterns,incidents,decisions}.md`:
+- [ ] Write or refine `docs/development/learning/{patterns,incidents,decisions}.md`:
   - Capture at least the **top 5–10** patterns and incidents from previous work (as a starting point).
 
 **Acceptance criteria:**
@@ -195,7 +195,7 @@ docs/plan/
 - `gf-planner` — for multi-phase planning of initiatives.
 - Slash commands:
   - `/idea` → capture initiatives.
-  - `/plan` → generate this and future PLAN_* files.
+  - `/plan` → generate this and future PLAN\_\* files.
   - `/dev` → implement individual phases.
 
 ---
@@ -206,4 +206,3 @@ docs/plan/
 - **Staleness risk:** To avoid Docs v2 becoming v1 again, we should:
   - Prefer updating PRD v6 and core guides over adding new files.
   - Tie significant code/feature work to updating relevant docs as part of phase acceptance criteria.
-

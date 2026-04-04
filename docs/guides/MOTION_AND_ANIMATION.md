@@ -2,7 +2,7 @@
 
 Canonical reference for CSS animations, Tailwind transitions, micro-interactions, performance, and accessibility. Used by Cursor, CLIs, Antigravity, and design skills.
 
-**Stack:** Tailwind CSS 3.4, `@gate-access/ui`, Next.js 14. **Default motion:** CSS / Tailwind + `prefers-reduced-motion` (see `creative-animation` skill). **Heavy motion libs** (`framer-motion`, `animejs`): use only when a **spec or phase prompt** explicitly requires them; for **`apps/design-system`** / **`@gateflow/*`** work, add a **dedicated acceptance criterion** (library + scope + version/peer intent) in the phase prompt _before_ adding the dependency — see **Motion default policy** in `docs/plan/execution/PLAN_gateflow_design_system.md`.
+**Stack:** Tailwind CSS 3.4, `@gate-access/ui`, Next.js 14. **Default motion:** CSS / Tailwind + `prefers-reduced-motion` (see `creative-animation` skill). **Heavy motion libs** (`framer-motion`, `animejs`): use only when a **spec or phase prompt** explicitly requires them; for **`apps/design-system`** / **`@gateflow/*`** work, add a **dedicated acceptance criterion** (library + scope + version/peer intent) in the phase prompt _before_ adding the dependency — see **Motion default policy** in `docs/plan/Ready/gateflow_design_system/PLAN_gateflow_design_system.md`.
 
 ---
 

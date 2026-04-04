@@ -230,7 +230,7 @@ Use this table when suggesting which tool to use. **Primary** = best default; **
 
 ## 9.1 CLI teams (run via `/clis team`)
 
-**Cursor is master:** Cursor decides when to run a team; CLI outputs are proposals until Cursor applies and verifies. Predefined teams (see **`docs/plan/learning/CLI_TEAMS.md`**):
+**Cursor is master:** Cursor decides when to run a team; CLI outputs are proposals until Cursor applies and verifies. Predefined teams (see **`docs/development/learning/CLI_TEAMS.md`**):
 
 | Team                | Command               | CLIs                                       | Purpose                                                  |
 | ------------------- | --------------------- | ------------------------------------------ | -------------------------------------------------------- |
@@ -246,7 +246,7 @@ Respect the **80% rule** before running a team; prefer tool choice from **`CLI_T
 
 When recommending a tool or CLI:
 
-0. **Cursor is master; tool memory** — Cursor decides. When suggesting a CLI, consult **`docs/plan/learning/CLI_TOOL_MEMORY.md`** when present; prefer the recommended tool for that task type. Respect 80% rule; **Claude is escalation-only** and excluded from competition scoring.
+0. **Cursor is master; tool memory** — Cursor decides. When suggesting a CLI, consult **`docs/development/learning/CLI_TOOL_MEMORY.md`** when present; prefer the recommended tool for that task type. Respect 80% rule; **Claude is escalation-only** and excluded from competition scoring.
 1. **Load this file** — `docs/guides/TOOL_AND_CLI_REFERENCE.md` — when suggesting “use X for this task.”
 2. **Match the task** — Use Section 9 (task-to-tool matrix) for the primary and “also good” options.
 3. **Phrase the suggestion** — e.g. “For [task], use [Primary tool]; for [reason]. Alternatively, [Also good] if [condition].”
@@ -258,13 +258,13 @@ When recommending a tool or CLI:
 9. **User’s tools** — If the user has listed preferred CLIs (e.g. in `GUIDE_PREFERENCES.md` or “My tools”), prefer suggesting those when they match the task (Section 8).
 
 10. **Limits awareness** — Before suggesting or using any CLI, load **gf-cli-limits** skill. If a CLI is at **80%+ of its limit** (per `CLI_LIMITS_TRACKING.md` or `GUIDE_PREFERENCES.md`), **do not use or suggest it** without the user's explicit permission. If "near limit" or "prefer free today", prefer **free-tier** CLIs (Kiro, Kilo, Qwen, Opencode) or Cursor when the matrix allows.
-11. **Record results** — After a task completed with any CLI, append one entry to **`docs/plan/learning/CLI_USAGE_AND_RESULTS.md`** (date, CLI, task/phrase, outcome, notes). This supports better future decisions and analysis of which CLI works best for which task type.
+11. **Record results** — After a task completed with any CLI, append one entry to **`docs/development/learning/CLI_USAGE_AND_RESULTS.md`** (date, CLI, task/phrase, outcome, notes). This supports better future decisions and analysis of which CLI works best for which task type.
 
 ---
 
 ## 11. Recording results and limits (for agents and /guide)
 
-- **Recording:** After any task or phase executed **with a CLI**, add one row to the log table in `docs/plan/learning/CLI_USAGE_AND_RESULTS.md`: Date | CLI | Task/phase | Outcome (success/partial/fail) | Notes. Keep entries short. This enables future dissection and better tool choice.
+- **Recording:** After any task or phase executed **with a CLI**, add one row to the log table in `docs/development/learning/CLI_USAGE_AND_RESULTS.md`: Date | CLI | Task/phase | Outcome (success/partial/fail) | Notes. Keep entries short. This enables future dissection and better tool choice.
 - **Limits:** Load **`.antigravity/skills/gf-cli-limits/SKILL.md`** when suggesting or using a CLI. **80% rule:** If a CLI has reached **80% or more** of its limit, **agents and commands must NOT use that CLI** without the user's explicit permission. If "near limit" or "prefer free today", suggest **Kiro CLI**, **Kilo CLI**, **Qwen CLI**, or **Opencode CLI** (or Cursor) instead when the matrix allows.
 
 ---

@@ -9,7 +9,7 @@ Reusable, copy-paste prompts for Cursor chat.
 **Short prompt** (concise but wrapped for readability):
 
 ```
-Run /plan with gf-security loaded, using `docs/plan/context/IDEA_core_security_v6.md`.
+Run /plan with gf-security loaded, using `docs/development/initiatives/IDEA_core_security_v6.md`.
 It should produce `PLAN_core_security_v6.md` and all `PROMPT_core_security_v6_phase_N.md` files.
 In every phase prompt's Context section, require loading `.antigravity/skills/gf-security/SKILL.md`
 and respecting `.antigravity/rules/00-gateflow-core.mdc` and `.antigravity/contracts/CONTRACTS.md` during implementation.
@@ -23,15 +23,15 @@ and respecting `.antigravity/rules/00-gateflow-core.mdc` and `.antigravity/contr
 **Request:** Run `/plan` (the plan workflow) with **gf-security** loaded to produce a phased plan and phase prompts for the core security v6 initiative.
 
 **Input**
-- **Source idea:** `docs/plan/context/IDEA_core_security_v6.md`
+- **Source idea:** `docs/development/initiatives/IDEA_core_security_v6.md`
 - **Planning skill:** `.antigravity/skills/gf-planner/SKILL.md`
 - **Security context:** Load `.antigravity/skills/gf-security/SKILL.md` before and during planning so the plan and every phase prompt are written with the GateFlow security model in mind (auth, RBAC, multi-tenancy, QR signing, API checklist, soft deletes).
 
 **Outputs**
-1. **Plan:** `docs/plan/execution/PLAN_core_security_v6.md`
+1. **Plan:** `docs/plan/Complete/core_security_v6/PLAN_core_security_v6.md`
    - Ordered phases with Scope, Deliverables, Depends on, and Test criteria.
-   - Each phase must have a **Primary role** from `docs/plan/guidelines/SUBAGENT_HIERARCHY.md` (use **SECURITY** where the phase is security-critical).
-   - Use `docs/plan/guidelines/PHASED_DEVELOPMENT_WORKFLOW.md` and `.antigravity/templates/TEMPLATE_PROMPT_phase.md` for structure.
+   - Each phase must have a **Primary role** from `docs/development/guidelines/SUBAGENT_HIERARCHY.md` (use **SECURITY** where the phase is security-critical).
+   - Use `docs/development/guidelines/PHASED_DEVELOPMENT_WORKFLOW.md` and `.antigravity/templates/TEMPLATE_PROMPT_phase.md` for structure.
 
 2. **Phase prompts:** One file per phase, e.g. `PROMPT_core_security_v6_phase_1.md`, `PROMPT_core_security_v6_phase_2.md`, …
    - Each must be based on `.antigravity/templates/TEMPLATE_PROMPT_phase.md`.
@@ -53,7 +53,7 @@ So the plan is created with security awareness, and each phase prompt explicitly
 - Ensure acceptance criteria for security-related phases include checks for org scoping, soft deletes, QR signing, and (where relevant) auth/CSRF/rate limiting.
 ```
 
-*Use with the **/plan** command: paste the block above into Cursor chat when you run `/plan` for core_security_v6.*
+_Use with the **/plan** command: paste the block above into Cursor chat when you run `/plan` for core_security_v6._
 
 ---
 
@@ -61,15 +61,15 @@ So the plan is created with security awareness, and each phase prompt explicitly
 
 After running `/plan` for core_security_v6, the following files exist:
 
-| File | Description |
-|------|--------------|
-| `docs/plan/execution/PLAN_core_security_v6.md` | Six-phase plan: invariants → gate–account (model+API) → gate–account (UI) → location rule → watchlists/incidents → identity & retention |
-| `docs/plan/execution/PROMPT_core_security_v6_phase_1.md` | Core invariants & enforcement hardening (SECURITY) |
-| `docs/plan/execution/PROMPT_core_security_v6_phase_2.md` | Gate–account assignment: model + API + enforcement (SECURITY) |
-| `docs/plan/execution/PROMPT_core_security_v6_phase_3.md` | Gate–account: dashboard UI + scanner UX (FRONTEND / MOBILE) |
-| `docs/plan/execution/PROMPT_core_security_v6_phase_4.md` | Location rule optional (SECURITY) |
-| `docs/plan/execution/PROMPT_core_security_v6_phase_5.md` | Watchlists, incidents & guard accountability (SECURITY) |
-| `docs/plan/execution/PROMPT_core_security_v6_phase_6.md` | Visitor identity levels & privacy/retention (SECURITY / MOBILE) |
+| File                                                                     | Description                                                                                                                             |
+| ------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `docs/plan/Complete/core_security_v6/PLAN_core_security_v6.md`           | Six-phase plan: invariants → gate–account (model+API) → gate–account (UI) → location rule → watchlists/incidents → identity & retention |
+| `docs/plan/Complete/core_security_v6/PROMPT_core_security_v6_phase_1.md` | Core invariants & enforcement hardening (SECURITY)                                                                                      |
+| `docs/plan/Complete/core_security_v6/PROMPT_core_security_v6_phase_2.md` | Gate–account assignment: model + API + enforcement (SECURITY)                                                                           |
+| `docs/plan/Complete/core_security_v6/PROMPT_core_security_v6_phase_3.md` | Gate–account: dashboard UI + scanner UX (FRONTEND / MOBILE)                                                                             |
+| `docs/plan/Complete/core_security_v6/PROMPT_core_security_v6_phase_4.md` | Location rule optional (SECURITY)                                                                                                       |
+| `docs/plan/Complete/core_security_v6/PROMPT_core_security_v6_phase_5.md` | Watchlists, incidents & guard accountability (SECURITY)                                                                                 |
+| `docs/plan/Complete/core_security_v6/PROMPT_core_security_v6_phase_6.md` | Visitor identity levels & privacy/retention (SECURITY / MOBILE)                                                                         |
 
 Execute phases in order via `/dev` using the corresponding `PROMPT_core_security_v6_phase_N.md`.
 
@@ -89,7 +89,7 @@ Run this before starting a phase to ensure a clean baseline: git state check and
 **Request:** Run the ready flow before starting a phase:
 1. Check git status — branch name, uncommitted changes. If dirty, suggest committing or stashing first.
 2. Run `pnpm preflight` (or `pnpm turbo lint && pnpm turbo typecheck && pnpm turbo test` from repo root) and report pass/fail. If any step fails, list the first actionable error with file:line.
-3. Confirm which plan is active (e.g. core_security_v6) and which phase is next from `docs/plan/execution/PLAN_core_security_v6.md` (or the plan the user cares about).
+3. Confirm which plan is active (e.g. core_security_v6) and which phase is next from `docs/plan/Complete/core_security_v6/PLAN_core_security_v6.md` (or the plan the user cares about).
 4. Summarize: "Ready to run /dev" if green, or "Do this first: [fix X, then re-run preflight]" if not.
 ```
 
@@ -106,7 +106,7 @@ Run this to implement **one** phase. Replace `<slug>` and `<N>` with the plan sl
 
 **Steps:**
 1. Run ready checks: git status and `pnpm preflight`; stop if preflight fails and report the first error.
-2. Load the phase prompt: `docs/plan/execution/PROMPT_<slug>_phase_<N>.md` (e.g. PROMPT_core_security_v6_phase_1.md).
+2. Load the phase prompt: `docs/plan/<Draft|Ready|Active|Complete>/<slug>/phases/NN_<title>/PROMPT_phase_NN.md` (legacy: `PROMPT_<slug>_phase_<N>.md` beside `PLAN_<slug>.md` in archived folders).
 3. Load the prompt’s **Context** requirements: gf-security SKILL, `.antigravity/rules/00-gateflow-core.mdc`, `.antigravity/contracts/CONTRACTS.md`.
 4. Implement the phase following the prompt’s **Steps** and **Scope (in/out)**. Use the **Primary role** and **Preferred tool** from the prompt.
 5. Run acceptance checks: `pnpm turbo lint`, `pnpm turbo typecheck`, `pnpm turbo test` for affected workspaces (or `pnpm preflight`). Fix until all pass.
@@ -122,7 +122,7 @@ Copy this to run **phase 1** of the core_security_v6 plan (Core Invariants & Enf
 ```text
 **Command:** `/dev`
 
-**Request:** Execute phase 1 of core_security_v6. Use `docs/plan/execution/PROMPT_core_security_v6_phase_1.md` as the single source of truth.
+**Request:** Execute phase 1 of core_security_v6. Use `docs/plan/Complete/core_security_v6/PROMPT_core_security_v6_phase_1.md` as the single source of truth.
 
 1. **Ready:** Check git status; run `pnpm preflight`. If anything fails, report and stop.
 2. **Load security context:** Read `.antigravity/skills/gf-security/SKILL.md`, `.antigravity/contracts/CONTRACTS.md`, `.antigravity/rules/00-gateflow-core.mdc`.
@@ -160,7 +160,7 @@ Use in Antigravity, Gemini CLI, or any CLI to get the same Must do / Recommended
 - `GATEFLOW_CONFIG.md` (repo root) — commands, plans, security, agents, skills
 - `docs/PRD_v7.0.md` — product status and roadmap
 - `docs/plan/` — latest IDEA, PLAN, and which phase is next
-- `docs/plan/learning/GUIDE_PREFERENCES.md` (if present) — user preferences
+- `docs/development/learning/GUIDE_PREFERENCES.md` (if present) — user preferences
 - `docs/guides/TOOL_AND_CLI_REFERENCE.md` — task-to-tool matrix for CLI suggestions
 
 **State to assess:**
@@ -248,7 +248,7 @@ Use for a single, professional prompt to implement identical sign-in layout and 
 4. `docs/guides/MOTION_AND_ANIMATION.md` — duration, transform/opacity, checklist
 5. `.antigravity/skills/gf-uiux-animator/SKILL.md` — Framer Motion layout morphs, spring presets
 
-**Primary role:** FRONTEND  
+**Primary role:** FRONTEND
 **Preferred tool:** Cursor
 
 **Context**

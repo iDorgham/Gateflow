@@ -2,7 +2,7 @@
 
 **Purpose:** Canonical place to capture reusable implementation patterns that emerge from executing phases in `PLAN_<slug>.md` and their `PROMPT_<slug>_phase_<N>.md` pro prompts.
 
-Use this file to answer: *“How did we solve this before?”* for future phases, CLIs, and IDEs.
+Use this file to answer: _“How did we solve this before?”_ for future phases, CLIs, and IDEs.
 
 ## How to use this doc
 
@@ -35,9 +35,8 @@ Copy this block for each new pattern:
 - **Pattern:** For every plan, use:
   - `PLAN_<slug>.md` for phases and scope,
   - `PROMPT_<slug>_phase_<N>.md` for execution prompts,
-  - `docs/plan/learning/patterns.md`, `incidents.md`, and `decisions.md` to capture cross‑phase learnings and make them discoverable to all tools.
+  - `docs/development/learning/patterns.md`, `incidents.md`, and `decisions.md` to capture cross‑phase learnings and make them discoverable to all tools.
 - **Trade‑offs:** Adds a small documentation step to each phase, but greatly reduces future planning time and duplicated work.
 - **References:**
   - `.cursor/plans/cursor-god-mode-final_005f5566.plan.md`
-  - `docs/plan/guidelines/PHASED_DEVELOPMENT_WORKFLOW.md`
-
+  - `docs/development/guidelines/PHASED_DEVELOPMENT_WORKFLOW.md`

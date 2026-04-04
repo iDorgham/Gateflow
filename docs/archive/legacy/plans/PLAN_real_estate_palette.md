@@ -1,9 +1,9 @@
 # PLAN_real_estate_palette — Professional Real Estate Palette & UI Refresh
 
 **Initiative:** Real estate–grade color palette and UI polish  
-**Source idea:** `docs/plan/context/IDEA_real_estate_palette.md`  
+**Source idea:** `docs/development/initiatives/IDEA_real_estate_palette.md`  
 **Primary reference:** `assets/Images/bbab71814a23880255d1be321d27b24f.jpg`  
-**Status:** Not started  
+**Status:** Not started
 
 ---
 
@@ -69,7 +69,6 @@ Each phase is small enough to run as a single `/dev` execution.
 
 **Primary role:** FRONTEND (gf-design-guide, gf-creative-ui-animation)
 
-
 **Scope (in):**
 
 - `packages/ui/src/components/auth/login-shell.tsx`
@@ -132,11 +131,11 @@ Each phase is small enough to run as a single `/dev` execution.
 
 ## 6. Dependencies & Risks
 
-| Phase | Depends on | Risks |
-|-------|------------|-------|
-| 1 | — | None; token changes are isolated |
-| 2 | 1 | Particles may need tuning for performance |
-| 3 | 1, 2 | Broad scope; limit to high-visibility surfaces |
+| Phase | Depends on | Risks                                          |
+| ----- | ---------- | ---------------------------------------------- |
+| 1     | —          | None; token changes are isolated               |
+| 2     | 1          | Particles may need tuning for performance      |
+| 3     | 1, 2       | Broad scope; limit to high-visibility surfaces |
 
 ---
 
@@ -147,11 +146,13 @@ Run each phase via `/dev`:
 ```
 /dev
 ```
-Then paste the contents of `docs/plan/execution/PROMPT_real_estate_palette_phase_N.md` for the desired phase.
+
+Then paste the contents of `docs/plan/Complete/PROMPT_real_estate_palette_phase_N.md` for the desired phase.
 
 Or run the full plan:
 
 ```
 /ship
 ```
+
 (After configuring ship to use `PLAN_real_estate_palette.md`)

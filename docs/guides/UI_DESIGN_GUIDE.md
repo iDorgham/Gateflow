@@ -99,16 +99,16 @@ Canonical reference for web app design: colors, typography, grid systems, respon
 
 ## 10. Real Estate Palette (Applied)
 
-The professional real estate palette is applied across client-dashboard, admin-dashboard, marketing, and `@gate-access/ui`. See `docs/plan/context/IDEA_real_estate_palette.md`.
+The professional real estate palette is applied across client-dashboard, admin-dashboard, marketing, and `@gate-access/ui`. See `docs/development/initiatives/IDEA_real_estate_palette.md`.
 
-| Name | Hex | HSL | Contrast | Token mapping |
-|------|-----|-----|----------|---------------|
-| Anti-Flash White | #F2F3F4 | 210 5% 96% | 18.9:1 | `--background` (light), `--foreground` (dark) |
-| Lace Cap | #EBEAED | 260 7% 93% | 17.52:1 | `--muted`, `--secondary`, `--accent` (light) |
-| Kimchi | #ED4B00 | 19 100% 46% | 3.74:1 | `--primary`, `--login-accent` — **accent** |
-| Midnight Blue | #020035 | 235 94% 11% | 19.92:1 | `--foreground` (light), `--background` (dark) |
-| Dark Royalty | #02066F | 234 96% 23% | 16.69:1 | `--muted-foreground` (light), `--muted` (dark) |
-| Deep Sea | #2000B1 | 248 100% 35% | 12.38:1 | `--info`, chart/links |
+| Name             | Hex     | HSL          | Contrast | Token mapping                                  |
+| ---------------- | ------- | ------------ | -------- | ---------------------------------------------- |
+| Anti-Flash White | #F2F3F4 | 210 5% 96%   | 18.9:1   | `--background` (light), `--foreground` (dark)  |
+| Lace Cap         | #EBEAED | 260 7% 93%   | 17.52:1  | `--muted`, `--secondary`, `--accent` (light)   |
+| Kimchi           | #ED4B00 | 19 100% 46%  | 3.74:1   | `--primary`, `--login-accent` — **accent**     |
+| Midnight Blue    | #020035 | 235 94% 11%  | 19.92:1  | `--foreground` (light), `--background` (dark)  |
+| Dark Royalty     | #02066F | 234 96% 23%  | 16.69:1  | `--muted-foreground` (light), `--muted` (dark) |
+| Deep Sea         | #2000B1 | 248 100% 35% | 12.38:1  | `--info`, chart/links                          |
 
 **Contrast notes:** All ratios from the reference image preserved for WCAG AA. Kimchi (`--primary`) used with white (`--primary-foreground`) for CTAs. Light mode: Anti-Flash White backgrounds, Midnight Blue text. Dark mode: Midnight Blue backgrounds, Anti-Flash White text.
 
@@ -116,13 +116,13 @@ The professional real estate palette is applied across client-dashboard, admin-d
 
 ## 11. References
 
-| Resource | Path |
-|----------|------|
-| Design tokens | `packages/ui/src/tokens.ts` |
-| Global CSS variables | `apps/client-dashboard/src/app/globals.css` |
-| Tailwind config | `tailwind.config.ts` |
-| UI components | `packages/ui/src/components/` |
-| Real estate palette plan | `docs/plan/execution/PLAN_real_estate_palette.md` |
+| Resource                 | Path                                                                 |
+| ------------------------ | -------------------------------------------------------------------- |
+| Design tokens            | `packages/ui/src/tokens.ts`                                          |
+| Global CSS variables     | `apps/client-dashboard/src/app/globals.css`                          |
+| Tailwind config          | `tailwind.config.ts`                                                 |
+| UI components            | `packages/ui/src/components/`                                        |
+| Real estate palette plan | `docs/plan/Complete/real_estate_palette/PLAN_real_estate_palette.md` |
 
 ---
 

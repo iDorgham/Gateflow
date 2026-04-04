@@ -42,119 +42,119 @@ Assign a **primary role** to each phase. When using **any** CLI (Claude, Opencod
 
 ### 1. PLANNING (Orchestrator)
 
-| Field | Value |
-|-------|-------|
-| **Responsibility** | Create plans, break down phases, assign roles, orchestrate execution |
-| **Skills** | gf-planner |
-| **Assign to phase** | Planning only; does not own implementation phases |
-| **CLI prefix** | `You are the GateFlow Planning Lead. Create an executable phased plan. Context: CLAUDE.md, ALL_TASKS_BACKLOG.md. [task]` |
+| Field               | Value                                                                                                                    |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| **Responsibility**  | Create plans, break down phases, assign roles, orchestrate execution                                                     |
+| **Skills**          | gf-planner                                                                                                               |
+| **Assign to phase** | Planning only; does not own implementation phases                                                                        |
+| **CLI prefix**      | `You are the GateFlow Planning Lead. Create an executable phased plan. Context: CLAUDE.md, ALL_TASKS_BACKLOG.md. [task]` |
 
 ---
 
 ### 2. ARCHITECTURE
 
-| Field | Value |
-|-------|-------|
-| **Responsibility** | Monorepo structure, conventions, cross-cutting decisions, tech stack |
-| **Skills** | gf-architecture |
-| **Assign to phase** | Cross-app changes, new patterns, refactors touching multiple packages |
-| **CLI prefix** | `You are the GateFlow Architecture Lead. Rules: pnpm only, organizationId scope, deletedAt null, @gate-access/* imports. [task]` |
+| Field               | Value                                                                                                                            |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| **Responsibility**  | Monorepo structure, conventions, cross-cutting decisions, tech stack                                                             |
+| **Skills**          | gf-architecture                                                                                                                  |
+| **Assign to phase** | Cross-app changes, new patterns, refactors touching multiple packages                                                            |
+| **CLI prefix**      | `You are the GateFlow Architecture Lead. Rules: pnpm only, organizationId scope, deletedAt null, @gate-access/* imports. [task]` |
 
 ---
 
 ### 3. SECURITY
 
-| Field | Value |
-|-------|-------|
-| **Responsibility** | Auth, RBAC, multi-tenant isolation, QR signing, encryption, CSRF, rate limit |
-| **Skills** | gf-security |
-| **Assign to phase** | Auth flows, new APIs, sensitive data, RBAC, QR generation/validation |
-| **CLI prefix** | `You are the GateFlow Security Specialist. Check: requireAuth, organizationId scope, deletedAt null, HMAC-SHA256 for QR. [task]` |
+| Field               | Value                                                                                                                            |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| **Responsibility**  | Auth, RBAC, multi-tenant isolation, QR signing, encryption, CSRF, rate limit                                                     |
+| **Skills**          | gf-security                                                                                                                      |
+| **Assign to phase** | Auth flows, new APIs, sensitive data, RBAC, QR generation/validation                                                             |
+| **CLI prefix**      | `You are the GateFlow Security Specialist. Check: requireAuth, organizationId scope, deletedAt null, HMAC-SHA256 for QR. [task]` |
 
 ---
 
 ### 4. BACKEND — Database
 
-| Field | Value |
-|-------|-------|
-| **Responsibility** | Prisma schema, migrations, queries, multi-tenant patterns, soft deletes |
-| **Skills** | gf-database |
-| **Assign to phase** | Schema changes, migrations, complex queries, data modeling |
-| **CLI prefix** | `You are the GateFlow Database Specialist. Schema: packages/db/prisma/schema.prisma. Always scope by organizationId, filter deletedAt null. [task]` |
+| Field               | Value                                                                                                                                               |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Responsibility**  | Prisma schema, migrations, queries, multi-tenant patterns, soft deletes                                                                             |
+| **Skills**          | gf-database                                                                                                                                         |
+| **Assign to phase** | Schema changes, migrations, complex queries, data modeling                                                                                          |
+| **CLI prefix**      | `You are the GateFlow Database Specialist. Schema: packages/db/prisma/schema.prisma. Always scope by organizationId, filter deletedAt null. [task]` |
 
 ---
 
 ### 5. BACKEND — API
 
-| Field | Value |
-|-------|-------|
-| **Responsibility** | Next.js API routes, auth, validation, rate limit |
-| **Skills** | gf-api |
-| **Assign to phase** | New or modified API endpoints |
-| **CLI prefix** | `You are the GateFlow API Specialist. Pattern: requireAuth → org scope → Zod validate → query. [task]` |
+| Field               | Value                                                                                                  |
+| ------------------- | ------------------------------------------------------------------------------------------------------ |
+| **Responsibility**  | Next.js API routes, auth, validation, rate limit                                                       |
+| **Skills**          | gf-api                                                                                                 |
+| **Assign to phase** | New or modified API endpoints                                                                          |
+| **CLI prefix**      | `You are the GateFlow API Specialist. Pattern: requireAuth → org scope → Zod validate → query. [task]` |
 
 ---
 
 ### 6. FRONTEND
 
-| Field | Value |
-|-------|-------|
+| Field               | Value                                 |
+| ------------------- | ------------------------------------- |
 | **Assign to phase** | New pages, UI changes, component work |
 
 ---
 
 ### 7. MOBILE
 
-| Field | Value |
-|-------|-------|
-| **Responsibility** | Expo, scanner-app, resident-mobile, offline sync, SecureStore |
-| **Skills** | gf-mobile |
-| **Assign to phase** | Scanner app, resident-mobile, offline queue, QR verification |
-| **CLI prefix** | `You are the GateFlow Mobile Specialist. SecureStore for tokens, scanUuid dedup, offline queue. [task]` |
+| Field               | Value                                                                                                   |
+| ------------------- | ------------------------------------------------------------------------------------------------------- |
+| **Responsibility**  | Expo, scanner-app, resident-mobile, offline sync, SecureStore                                           |
+| **Skills**          | gf-mobile                                                                                               |
+| **Assign to phase** | Scanner app, resident-mobile, offline queue, QR verification                                            |
+| **CLI prefix**      | `You are the GateFlow Mobile Specialist. SecureStore for tokens, scanUuid dedup, offline queue. [task]` |
 
 ---
 
 ### 8. QA / TESTING
 
-| Field | Value |
-|-------|-------|
-| **Responsibility** | Jest, mocks, coverage, API tests, browser verification |
-| **Skills** | gf-testing |
-| **Assign to phase** | Test strategy, test implementation, verification |
-| **CLI prefix** | `You are the GateFlow QA Specialist. Jest + ts-jest. Mock Prisma, requireAuth. Verify org scoping in tests. [task]` |
+| Field               | Value                                                                                                               |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| **Responsibility**  | Jest, mocks, coverage, API tests, browser verification                                                              |
+| **Skills**          | gf-testing                                                                                                          |
+| **Assign to phase** | Test strategy, test implementation, verification                                                                    |
+| **CLI prefix**      | `You are the GateFlow QA Specialist. Jest + ts-jest. Mock Prisma, requireAuth. Verify org scoping in tests. [task]` |
 
 ---
 
 ### 9. i18n / LOCALIZATION
 
-| Field | Value |
-|-------|-------|
-| **Responsibility** | Arabic/English, RTL, locale switching, useTranslations |
-| **Skills** | gf-i18n |
-| **Assign to phase** | New UI with text, locale routes, RTL layout |
-| **CLI prefix** | `You are the GateFlow i18n Specialist. Arabic (ar), English (en). RTL for ar. useTranslations, [locale] routes. [task]` |
+| Field               | Value                                                                                                                   |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| **Responsibility**  | Arabic/English, RTL, locale switching, useTranslations                                                                  |
+| **Skills**          | gf-i18n                                                                                                                 |
+| **Assign to phase** | New UI with text, locale routes, RTL layout                                                                             |
+| **CLI prefix**      | `You are the GateFlow i18n Specialist. Arabic (ar), English (en). RTL for ar. useTranslations, [locale] routes. [task]` |
 
 ---
 
 ### 10. DEVOPS / PLATFORM
 
-| Field | Value |
-|-------|-------|
-| **Responsibility** | Builds, migrations, preflight, shell commands |
-| **Skills** | gf-dev |
-| **Assign to phase** | Build failures, migration runs, pre-PR checks |
-| **CLI prefix** | `You are the GateFlow DevOps Specialist. pnpm turbo build/lint/test. prisma migrate/generate. [task]` |
+| Field               | Value                                                                                                 |
+| ------------------- | ----------------------------------------------------------------------------------------------------- |
+| **Responsibility**  | Builds, migrations, preflight, shell commands                                                         |
+| **Skills**          | gf-dev                                                                                                |
+| **Assign to phase** | Build failures, migration runs, pre-PR checks                                                         |
+| **CLI prefix**      | `You are the GateFlow DevOps Specialist. pnpm turbo build/lint/test. prisma migrate/generate. [task]` |
 
 ---
 
 ### 11. EXPLORE (Discovery)
 
-| Field | Value |
-|-------|-------|
-| **Responsibility** | Trace flows, find implementations, refactor discovery |
-| **Cursor tool** | explore subagent |
-| **Assign to phase** | When phase needs codebase discovery before implementation |
-| **CLI prefix** | `Trace the GateFlow codebase for [X]. Return key files and call graph. Ref: CLAUDE.md. [task]` |
+| Field               | Value                                                                                          |
+| ------------------- | ---------------------------------------------------------------------------------------------- |
+| **Responsibility**  | Trace flows, find implementations, refactor discovery                                          |
+| **Cursor tool**     | explore subagent                                                                               |
+| **Assign to phase** | When phase needs codebase discovery before implementation                                      |
+| **CLI prefix**      | `Trace the GateFlow codebase for [X]. Return key files and call graph. Ref: CLAUDE.md. [task]` |
 
 ---
 
@@ -162,17 +162,17 @@ Assign a **primary role** to each phase. When using **any** CLI (Claude, Opencod
 
 When creating a plan, assign **one primary role** per phase:
 
-| Phase type | Primary role | Optional review |
-|------------|--------------|-----------------|
-| Schema/migration | BACKEND—Database | ARCHITECTURE |
-| New API route | BACKEND—API | SECURITY |
-| Auth/RBAC | SECURITY | — |
-| New page/UI | FRONTEND | i18n if localized |
-| Scanner/offline | MOBILE | SECURITY |
-| Tests | QA | — |
-| Build/migrate | DEVOPS | — |
-| Cross-app refactor | ARCHITECTURE | — |
-| Plan creation | PLANNING | — |
+| Phase type         | Primary role     | Optional review   |
+| ------------------ | ---------------- | ----------------- |
+| Schema/migration   | BACKEND—Database | ARCHITECTURE      |
+| New API route      | BACKEND—API      | SECURITY          |
+| Auth/RBAC          | SECURITY         | —                 |
+| New page/UI        | FRONTEND         | i18n if localized |
+| Scanner/offline    | MOBILE           | SECURITY          |
+| Tests              | QA               | —                 |
+| Build/migrate      | DEVOPS           | —                 |
+| Cross-app refactor | ARCHITECTURE     | —                 |
+| Plan creation      | PLANNING         | —                 |
 
 ---
 
@@ -185,7 +185,7 @@ When creating a plan, assign **one primary role** per phase:
 - **Complex** (security audit, architecture): Claude — best depth
 - **Fallback**: If one hits quota, switch CLI. Same role prefix keeps quality.
 
-See `docs/plan/guidelines/DEVELOPMENT_TOOLS.md` for full CLI selection matrix.
+See `docs/development/guidelines/DEVELOPMENT_TOOLS.md` for full CLI selection matrix.
 
 ---
 
@@ -216,12 +216,13 @@ gemini "You are the GateFlow Database Specialist. Schema at packages/db/prisma/s
 ## Shared Context (All Roles)
 
 Every role must respect:
+
 - **pnpm only** — never npm or yarn
 - **organizationId** — all tenant queries
 - **deletedAt: null** — soft deletes
 - **QR HMAC-SHA256** — no unsigned QRs
 - **scanUuid dedup** — preserve for scanner sync
-- **@gate-access/*** — workspace imports
+- **@gate-access/\*** — workspace imports
 
 ---
 
@@ -234,6 +235,6 @@ Role personas for the main agent: `.cursor/agents/roles/` — planning, security
 - `.cursor/agents/` — Role personas and scenarios
 - `.cursor/skills/gf-planner/SKILL.md` — Planning and role assignment
 - `.cursor/skills/gf-*/SKILL.md` — Domain skills per role
-- `docs/plan/guidelines/AI_SKILLS_SUBAGENTS_RULES.md` — Subagent rules
-- `docs/plan/guidelines/DEVELOPMENT_TOOLS.md` — CLI reference
+- `docs/development/guidelines/AI_SKILLS_SUBAGENTS_RULES.md` — Subagent rules
+- `docs/development/guidelines/DEVELOPMENT_TOOLS.md` — CLI reference
 - `CLAUDE.md` — Repo overview

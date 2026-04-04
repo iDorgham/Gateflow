@@ -47,7 +47,7 @@ export function SolutionLayout({
         intent={intent}
       />
       {/* Hero */}
-      <section className="pt-20 pb-16 container px-6 relative overflow-hidden">
+      <section className="pt-48 pb-32 container px-6 relative overflow-hidden">
         <div className="absolute top-0 end-0 -z-10 opacity-10">
           <div className="scale-[16.6] origin-top-right">{icon}</div>
         </div>

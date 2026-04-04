@@ -204,7 +204,7 @@ const FAQ_SECTIONS = [
 function AccordionItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="border-b border-slate-100 dark:border-slate-800 last:border-0">
+    <div className="border-b border-ds-border-subtle last:border-0">
       <button
         className="flex w-full items-start justify-between gap-4 py-4 text-left text-sm font-semibold text-slate-900 dark:text-white hover:text-indigo-700 dark:hover:text-indigo-400 transition-colors"
         onClick={() => setOpen((v) => !v)}
@@ -253,7 +253,7 @@ export default function HelpPage(props: {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(FAQ_JSON_LD) }}
       />
       {/* Hero */}
-      <section className="px-6 pb-12 pt-24 sm:pt-32">
+      <section className="relative overflow-hidden px-6 pb-32 pt-48">
         <div className="mx-auto max-w-3xl text-center">
           <p className="mb-4 text-sm font-bold uppercase tracking-widest text-indigo-600">
             HELP CENTER
@@ -275,7 +275,7 @@ export default function HelpPage(props: {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search help articles..."
-              className="w-full rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 pl-10 pr-4 py-3 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 shadow-sm outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+              className="w-full rounded-xl border border-ds-border bg-ds-surface pl-10 pr-4 py-3 text-sm text-ds-text-heading placeholder:text-ds-text-subtlest shadow-sm outline-none focus:ring-2 focus:ring-ds-border-focused focus:border-transparent"
             />
           </div>
         </div>
@@ -298,7 +298,7 @@ export default function HelpPage(props: {
               <Link
                 key={item.label}
                 href={item.href}
-                className="flex items-center gap-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
+                className="flex items-center gap-3 rounded-xl border border-ds-border bg-ds-surface p-4 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
               >
                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400">
                   <Icon size={18} />
@@ -337,7 +337,7 @@ export default function HelpPage(props: {
                   <h2 className="mb-4 text-lg font-extrabold text-slate-900 dark:text-white">
                     {section.title}
                   </h2>
-                  <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-6 shadow-sm">
+                  <div className="rounded-2xl border border-ds-border bg-ds-surface px-6 shadow-sm">
                     {section.items.map((item) => (
                       <AccordionItem key={item.q} q={item.q} a={item.a} />
                     ))}

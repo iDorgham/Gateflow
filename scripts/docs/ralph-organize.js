@@ -3,16 +3,17 @@
  * ralph-organize.js — Docs folder cleanup and organization
  *
  * Commands:
- *   node scripts/ralph-organize.js scan      show structure, flag issues
- *   node scripts/ralph-organize.js clean     remove empty dirs + dead symlinks
- *   node scripts/ralph-organize.js index     regenerate docs/INDEX.md
- *   node scripts/ralph-organize.js archive <file>  move file to docs/archive/
+ *   pnpm docs:organize              scan + regenerate INDEX (default)
+ *   pnpm docs:index                 regenerate docs/INDEX.md only
+ *   pnpm docs:clean                 remove empty dirs + dead symlinks under docs/
+ *   node scripts/docs/ralph-organize.js archive <path>  move file to docs/archive/
  */
 
 const fs = require('fs');
 const path = require('path');
 
-const ROOT = path.resolve(__dirname, '..');
+/** Repository root (parent of `scripts/`) */
+const ROOT = path.resolve(__dirname, '../..');
 const DOCS = path.join(ROOT, 'docs');
 const INDEX = path.join(DOCS, 'INDEX.md');
 const ARCHIVE = path.join(DOCS, 'archive');
@@ -52,58 +53,89 @@ function isDeadSymlink(p) {
   }
 }
 
-const SECTION_META = {
-  arch: {
-    emoji: '🏗️',
-    title: 'Architecture',
-    desc: 'System design, project structure, code quality audits',
-  },
-  core: {
-    emoji: '🧠',
-    title: 'Core References',
-    desc: 'CLAUDE.md, project config, progress dashboard',
-  },
-  deployment: {
-    emoji: '🚀',
-    title: 'Deployment Guides',
-    desc: 'Per-app deployment and environment setup',
-  },
-  design: {
-    emoji: '🎨',
-    title: 'Design & UI',
-    desc: 'UI specs, screen drafts, design system notes',
-  },
-  errors: {
-    emoji: '🐛',
-    title: 'Error Log',
-    desc: 'Documented bugs and resolutions',
-  },
-  guides: {
-    emoji: '📖',
-    title: 'Developer Guides',
-    desc: 'Dev workflow, security, analytics, component guides',
-  },
-  plan: {
-    emoji: '📋',
-    title: 'Plan & Roadmap',
-    desc: 'Feature plans, phase prompts, learning log, backlog',
-  },
-  product: {
-    emoji: '📦',
-    title: 'Product',
-    desc: 'PRD, feature log, upcoming features, marketing notes',
-  },
-  tools: {
-    emoji: '🔧',
-    title: 'Tools & Automation',
-    desc: 'AI tool configs, antigravity skills reference',
-  },
-  archive: {
-    emoji: '📁',
-    title: 'Archive',
-    desc: 'Legacy docs, old PRDs, historical plans',
-  },
-};
+// ── INDEX helpers ─────────────────────────────────────────────────────────────
+function mdDisplayTitle(filename) {
+  return filename.replace(/\.md$/, '').replace(/_/g, ' ');
+}
+
+function listMarkdownFiles(dir) {
+  if (!fs.existsSync(dir)) return [];
+  return fs
+    .readdirSync(dir)
+    .filter((f) => f.endsWith('.md') && f !== '.gitkeep')
+    .sort();
+}
+
+function markdownLinkLines(relDir, files, max = 10) {
+  const out = [];
+  const slice = files.slice(0, max);
+  for (const f of slice) {
+    out.push(`- [${mdDisplayTitle(f)}](./${relDir}/${f})`);
+  }
+  if (files.length > max) {
+    out.push(`- *(${files.length - max} more files)*`);
+  }
+  return out;
+}
+
+/** Top-level .md only (not subfolders). */
+function listTopLevelGuidesMd() {
+  const dir = path.join(DOCS, 'guides');
+  if (!fs.existsSync(dir)) return [];
+  return fs
+    .readdirSync(dir)
+    .filter((f) => {
+      if (!f.endsWith('.md') || f === '.gitkeep') return false;
+      return fs.statSync(path.join(dir, f)).isFile();
+    })
+    .sort();
+}
+
+function countMdRecursive(dir) {
+  let n = 0;
+  function walk(d) {
+    let entries;
+    try {
+      entries = fs.readdirSync(d);
+    } catch {
+      return;
+    }
+    for (const name of entries) {
+      if (name === '.DS_Store') continue;
+      const full = path.join(d, name);
+      let st;
+      try {
+        st = fs.lstatSync(full);
+      } catch {
+        continue;
+      }
+      if (st.isSymbolicLink()) continue;
+      if (st.isDirectory()) walk(full);
+      else if (name.endsWith('.md')) n++;
+    }
+  }
+  walk(dir);
+  return n;
+}
+
+function firstReadmeUnderPlanComplete() {
+  const complete = path.join(DOCS, 'plan', 'Complete');
+  if (!fs.existsSync(complete)) return null;
+  const dirs = fs
+    .readdirSync(complete)
+    .filter((d) => {
+      if (d.startsWith('.')) return false;
+      return fs.statSync(path.join(complete, d)).isDirectory();
+    })
+    .sort();
+  for (const d of dirs) {
+    const readme = path.join(complete, d, 'README.md');
+    if (fs.existsSync(readme)) {
+      return { slug: d, href: `./plan/Complete/${d}/README.md` };
+    }
+  }
+  return null;
+}
 
 // ── SCAN ──────────────────────────────────────────────────────────────────────
 function scan() {
@@ -172,71 +204,161 @@ function clean() {
 }
 
 // ── INDEX ─────────────────────────────────────────────────────────────────────
+/**
+ * Regenerates docs/INDEX.md. Paths are relative to docs/INDEX.md (under docs/).
+ * Layout matches docs/: reference/, guides/, development/, plan/, archive/, tools/.
+ */
 function buildIndex() {
   console.log('\n📑 Building docs/INDEX.md...\n');
-  const topDirs = fs
-    .readdirSync(DOCS)
-    .filter((n) => {
-      if (n.startsWith('.') || n === 'INDEX.md') return false;
-      const p = path.join(DOCS, n);
-      return fs.statSync(p).isDirectory();
-    })
-    .sort();
+  const today = new Date().toISOString().split('T')[0];
 
-  let lines = [
-    '# GateFlow — Documentation Index\n',
-    `> Auto-generated by \`ralph-organize.js\` — ${new Date().toISOString().split('T')[0]}\n`,
-    '---\n',
+  const lines = [
+    '# GateFlow — Documentation Index',
+    '',
+    `> Auto-generated by \`ralph-organize.js\` — ${today}`,
+    '',
+    '---',
+    '',
   ];
 
-  for (const dir of topDirs) {
-    const meta = SECTION_META[dir] || { emoji: '📂', title: dir, desc: '' };
-    const files = fs
-      .readdirSync(path.join(DOCS, dir))
-      .filter((f) => f.endsWith('.md') && f !== '.gitkeep')
-      .sort();
+  const arch = listMarkdownFiles(path.join(DOCS, 'reference', 'architecture'));
+  lines.push('## 🏗️ [Architecture](./reference/architecture/)');
+  lines.push('');
+  lines.push('_System design, project structure, code quality audits_');
+  lines.push('');
+  lines.push(...markdownLinkLines('reference/architecture', arch, 20));
+  lines.push('');
 
-    lines.push(`## ${meta.emoji} [${meta.title}](./docs/${dir}/)`);
-    if (meta.desc) lines.push(`*${meta.desc}*\n`);
+  const archiveFiles = listMarkdownFiles(path.join(DOCS, 'archive'));
+  lines.push('## 📁 [Archive](./archive/)');
+  lines.push('');
+  lines.push('_Legacy docs, old PRDs, historical plans_');
+  lines.push('');
+  lines.push(...markdownLinkLines('archive', archiveFiles, 15));
+  lines.push('');
 
-    if (files.length > 0) {
-      for (const f of files.slice(0, 10)) {
-        // max 10 per section
-        const title = f.replace(/\.md$/, '').replace(/_/g, ' ');
-        lines.push(`- [${title}](./docs/${dir}/${f})`);
-      }
-      if (files.length > 10)
-        lines.push(`- *(${files.length - 10} more files)*`);
-    }
+  const workspace = listMarkdownFiles(
+    path.join(DOCS, 'reference', 'workspace')
+  );
+  lines.push('## 🧠 [Core References](./reference/workspace/)');
+  lines.push('');
+  lines.push('_CLAUDE.md, project config, progress dashboard_');
+  lines.push('');
+  lines.push(...markdownLinkLines('reference/workspace', workspace, 20));
+  lines.push('');
 
-    // Recurse one level for plan subfolders
-    if (dir === 'plan') {
-      const planDirs = fs
-        .readdirSync(path.join(DOCS, 'plan'))
-        .filter(
-          (d) =>
-            !d.startsWith('.') &&
-            fs.statSync(path.join(DOCS, 'plan', d)).isDirectory()
-        )
-        .sort();
-      for (const pd of planDirs) {
-        const count = fs
-          .readdirSync(path.join(DOCS, 'plan', pd))
-          .filter((f) => f.endsWith('.md')).length;
-        if (count > 0) lines.push(`  - \`${pd}/\` — ${count} files`);
-      }
-    }
-
-    lines.push('');
+  lines.push('## 🚀 [Deployment](./guides/DEPLOYMENT_GUIDE.md)');
+  lines.push('');
+  lines.push('_Vercel and release checklists_');
+  lines.push('');
+  if (fs.existsSync(path.join(DOCS, 'guides', 'DEPLOYMENT_GUIDE.md'))) {
+    lines.push('- [DEPLOYMENT GUIDE](./guides/DEPLOYMENT_GUIDE.md)');
   }
+  lines.push('');
+
+  const design = listMarkdownFiles(path.join(DOCS, 'guides', 'design'));
+  lines.push('## 🎨 [Design & UI](./guides/design/)');
+  lines.push('');
+  lines.push('_UI specs, screen drafts, design system notes_');
+  lines.push('');
+  lines.push(...markdownLinkLines('guides/design', design, 15));
+  lines.push('');
+
+  lines.push('## 📚 [Reference hub](./reference/README.md)');
+  lines.push('');
+  lines.push('_Product, workspace, architecture, cache snapshots_');
+  lines.push('');
+  if (fs.existsSync(path.join(DOCS, 'reference', 'README.md'))) {
+    lines.push('- [Reference README](./reference/README.md)');
+  }
+  lines.push('');
+
+  const topGuides = listTopLevelGuidesMd();
+  lines.push('## 📖 [Developer Guides](./guides/)');
+  lines.push('');
+  lines.push(
+    '_Dev workflow, security, analytics, component guides (top-level files)_'
+  );
+  lines.push('');
+  lines.push(...markdownLinkLines('guides', topGuides, 12));
+  lines.push('');
+
+  lines.push('## 📋 [Plan & Roadmap](./plan/)');
+  lines.push('');
+  lines.push('_Plan lifecycle folders, phase prompts, backlog_');
+  lines.push('');
+  if (fs.existsSync(path.join(DOCS, 'plan', 'README.md'))) {
+    lines.push(
+      '- [Plan folder README](./plan/README.md) — **Draft/**, **Ready/**, **Active/**, **Complete/**, **backlog/**'
+    );
+  }
+  if (fs.existsSync(path.join(DOCS, 'development', 'README.md'))) {
+    lines.push(
+      '- [Development & workflow hub](./development/README.md) — guidelines, templates, learning'
+    );
+  }
+  const initReadme = path.join(DOCS, 'development', 'initiatives', 'README.md');
+  if (fs.existsSync(initReadme)) {
+    lines.push(
+      '- [Initiatives (IDEA files)](./development/initiatives/README.md)'
+    );
+  }
+  if (fs.existsSync(path.join(DOCS, 'development', 'PLAN_LIFECYCLE.md'))) {
+    lines.push(
+      '- Lifecycle: [PLAN_LIFECYCLE.md](./development/PLAN_LIFECYCLE.md)'
+    );
+  }
+  const exampleComplete = firstReadmeUnderPlanComplete();
+  if (exampleComplete) {
+    lines.push(
+      `- Example archive plan: [Complete/${exampleComplete.slug}](${exampleComplete.href})`
+    );
+  }
+  const planRoot = path.join(DOCS, 'plan');
+  if (fs.existsSync(planRoot)) {
+    const subs = fs
+      .readdirSync(planRoot)
+      .filter((d) => !d.startsWith('.') && d !== 'README.md')
+      .filter((d) => fs.statSync(path.join(planRoot, d)).isDirectory())
+      .sort();
+    for (const pd of subs) {
+      const n = countMdRecursive(path.join(planRoot, pd));
+      if (n > 0) {
+        lines.push(`- \`${pd}/\` — ${n} markdown files`);
+      }
+    }
+  }
+  lines.push('');
+
+  const product = listMarkdownFiles(path.join(DOCS, 'reference', 'product'));
+  lines.push('## 📦 [Product](./reference/product/)');
+  lines.push('');
+  lines.push('_PRD, feature log, upcoming features, marketing notes_');
+  lines.push('');
+  lines.push(...markdownLinkLines('reference/product', product, 20));
+  lines.push('');
+
+  const toolFiles = listMarkdownFiles(path.join(DOCS, 'tools'));
+  lines.push('## 🔧 [Tools & Automation](./tools/)');
+  lines.push('');
+  lines.push('_AI tool configs, automation notes_');
+  lines.push('');
+  if (toolFiles.length) {
+    lines.push(...markdownLinkLines('tools', toolFiles, 15));
+  } else {
+    lines.push('- _(No top-level markdown in `docs/tools/` yet.)_');
+  }
+  lines.push('');
 
   lines.push('---');
+  lines.push('');
   lines.push(
-    '*Edit docs using the guides in `docs/guides/DEVELOPMENT_GUIDE.md`*'
+    '_Edit docs using the guides in `docs/guides/DEVELOPMENT_GUIDE.md`_'
   );
+  lines.push('');
 
   fs.writeFileSync(INDEX, lines.join('\n'));
-  console.log(`✓ Generated docs/INDEX.md (${topDirs.length} sections)`);
+  console.log('✓ Generated docs/INDEX.md');
 }
 
 // ── ARCHIVE ───────────────────────────────────────────────────────────────────

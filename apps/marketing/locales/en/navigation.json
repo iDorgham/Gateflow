@@ -16,14 +16,59 @@
     },
     "dropdowns": {
       "product": {
-        "features": { "label": "Features", "desc": "Secure QR access control" },
-        "security": { "label": "Security", "desc": "Enterprise-grade protection" }
+        "features": {
+          "label": "Features",
+          "description": "Secure QR access control"
+        },
+        "security": {
+          "label": "Security",
+          "description": "Enterprise-grade protection"
+        }
       },
       "solutions": {
-        "compounds": { "label": "Compounds", "desc": "Residential security" },
-        "schools": { "label": "Schools", "desc": "Campus safety" },
-        "events": { "label": "Events", "desc": "Access management" },
-        "clubs": { "label": "Clubs", "desc": "Member validation" }
+        "viewAll": "View all Solutions",
+        "quickLinks": { "title": "Hardware Solutions" },
+        "compounds": {
+          "label": "Residential Communities",
+          "description": "Secure access for gated communities."
+        },
+        "commercial": {
+          "label": "Commercial Hubs",
+          "description": "High-density office access control."
+        },
+        "schools": {
+          "label": "Education Campus",
+          "description": "Campus security for students and staff."
+        },
+        "events": {
+          "label": "Event Management",
+          "description": "Temporary QR access for massive crowds."
+        }
+      },
+      "resources": {
+        "viewAll": "View all Resources",
+        "quickLinks": { "title": "Developer Hub" },
+        "docs": {
+          "label": "Help Center",
+          "description": "Platform setup guides and documentation."
+        },
+        "caseStudies": {
+          "label": "Customer Stories",
+          "description": "See how leading operators secure perimeters."
+        },
+        "changelog": {
+          "label": "Platform Changelog",
+          "description": "Track all the latest feature releases."
+        },
+        "security": {
+          "label": "Security & Privacy",
+          "description": "Enterprise RBAC & GDPR compliance details."
+        },
+        "api": { "label": "API Reference" },
+        "webhooks": { "label": "Webhooks & Events" },
+        "sdk": { "label": "Mobile SDK" },
+        "status": { "label": "System Status" },
+        "community": { "label": "Developer Community" }
       }
     }
   },

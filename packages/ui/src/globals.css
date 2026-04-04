@@ -206,9 +206,9 @@
     --ds-text-information: rgb(96, 165, 250);
 
     /* ── Border Tokens — Neutral Dark ───────────────── */
-    --ds-border: rgb(39, 39, 42);
+    --ds-border: rgb(48, 48, 52);
     --ds-border-bold: rgb(63, 63, 70);
-    --ds-border-subtle: rgb(24, 24, 27);
+    --ds-border-subtle: rgb(35, 35, 38);
     --ds-border-focused: rgb(237, 75, 0);
     --ds-border-selected: rgb(237, 75, 0);
     --ds-border-brand: rgb(237, 75, 0);

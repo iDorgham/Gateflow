@@ -1,1 +1,1 @@
-core/CLAUDE.md
+reference/workspace/CLAUDE.md

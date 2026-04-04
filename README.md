@@ -1,7 +1,7 @@
 # <p align="center">GateFlow — The Invisible Sentinel</p>
 
 <p align="center">
-  <img src="docs/gateflow_banner.png" alt="GateFlow Banner" width="100%">
+  <img src="assets/Images/gateflow_banner.png" alt="GateFlow Banner" width="100%">
 </p>
 
 <p align="center">
@@ -65,6 +65,87 @@ GateFlow is a technical monorepo orchestrating six specialized applications, uni
 | **[Marketing Site](apps/marketing)**          | Growth Node    | High-SEO conversion funnels & Tracking events.    | Vercel                  |
 
 </details>
+ 
+ ---
+ 
+## 🚀 Quick Start & Local Development
+
+Follow these steps to get a fresh clone of GateFlow running on your local machine.
+
+### 1. Prerequisites
+
+Ensure you have the following installed:
+
+- **Node.js v20+**
+- **pnpm v8+** (`npm i -g pnpm`)
+- **PostgreSQL v16+** (Running locally or on a managed instance)
+
+### 2. Automatic Setup (Recommended)
+
+The fastest way to get started is by running our unified onboarding script:
+
+```bash
+git clone https://github.com/iDorgham/Gateflow.git
+cd Gateflow
+pnpm setup:dev
+```
+
+This script will:
+
+1. Install all dependencies (`pnpm install`).
+2. Guide you through creating your `.env.local` file.
+3. Generate the **Prisma Client**.
+4. Push the schema to your database (`prisma db push`).
+5. Install Git hooks for security and linting.
+
+### 3. Manual Setup (Step-by-Step)
+
+If you prefer to configure the environment manually:
+
+**A. Install Dependencies**
+
+```bash
+pnpm install
+```
+
+**B. Environment Variables**
+Copy `.env.example` to `.env.local` and fill in your database and security secrets:
+
+```bash
+cp .env.example .env.local
+```
+
+**C. Database Initialization**
+
+```bash
+# Generate the Prisma Client
+pnpm db:generate
+
+# Push schema to your DB (use migrate dev if you want versioned migrations)
+pnpm --filter @gate-access/db exec prisma db push
+```
+
+### 4. Running the Applications
+
+You can start the entire ecosystem or specific apps using Turborepo filters:
+
+| Dashboard / App      | Port | Command              |
+| :------------------- | :--- | :------------------- |
+| **All Web Apps**     | Var  | `pnpm dev`           |
+| **Client Dashboard** | 3001 | `pnpm dev:client`    |
+| **Admin Dashboard**  | 3002 | `pnpm dev:admin`     |
+| **Marketing Site**   | 3000 | `pnpm dev:marketing` |
+| **Resident Portal**  | 3004 | `pnpm dev:resident`  |
+| **Scanner App**      | Exp  | `pnpm dev:scanner`   |
+| **Resident Mobile**  | Exp  | `pnpm dev:mobile`    |
+
+### 5. Mobile Development (Expo)
+
+For the **Scanner App** and **Resident Mobile**:
+
+1. Ensure you have the **Expo Go** app installed on your phone.
+2. Start the dev server: `pnpm dev:scanner`.
+3. Scan the QR code reflected in your terminal to open the app.
 
 ---
 
@@ -174,8 +255,8 @@ We maintain a zero-regression performance policy.
 
 Detailed technical resources for the GateFlow platform.
 
-- **[Master PRD v11.0](docs/product/PRD.md)** — Comprehensive technical specifications.
-- **[Marketing Suite](docs/product/MARKETING_SUITE.md)** — Physical attribution guide.
+- **[Master PRD v11.0](docs/reference/product/PRD.md)** — Comprehensive technical specifications.
+- **[Marketing Suite](docs/reference/product/MARKETING_SUITE.md)** — Physical attribution guide.
 - **[Automation Guide](docs/guides/AUTOMATION_GUIDE.md)** — Reference for the Ralph Loop stack.
 - **[Strategic Pipeline](CHANGELOG.md)** — Release notes and roadmap history.
 

@@ -112,7 +112,7 @@ export default async function CompanyPage(props: {
   return (
     <main>
       {/* Hero */}
-      <section className="relative overflow-hidden px-6 pb-16 pt-24 sm:pt-32">
+      <section className="relative overflow-hidden px-6 pb-32 pt-48">
         <div
           className="absolute inset-x-0 -top-40 -z-10 overflow-hidden blur-3xl"
           aria-hidden="true"
@@ -138,7 +138,7 @@ export default async function CompanyPage(props: {
       </section>
 
       {/* Mission */}
-      <section className="px-6 py-20 bg-slate-50/50 dark:bg-slate-900/50">
+      <section className="px-6 py-20 bg-ds-surface-sunken">
         <div className="mx-auto max-w-4xl">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div>
@@ -179,7 +179,7 @@ export default async function CompanyPage(props: {
               ].map((stat) => (
                 <div
                   key={stat.label}
-                  className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 text-center shadow-sm"
+                  className="rounded-2xl border border-ds-border bg-ds-surface p-6 text-center shadow-sm"
                 >
                   <p className="text-3xl font-extrabold text-indigo-700 dark:text-indigo-400">
                     {stat.value}
@@ -206,7 +206,7 @@ export default async function CompanyPage(props: {
             {VALUES.map((v) => (
               <div
                 key={v.title}
-                className="rounded-2xl border border-slate-100 dark:border-slate-700 bg-white dark:bg-slate-800 p-7 shadow-sm"
+                className="rounded-2xl border border-ds-border bg-ds-surface p-7 shadow-sm"
               >
                 <h3 className="text-base font-bold text-slate-900 dark:text-white">
                   {v.title}
@@ -221,7 +221,7 @@ export default async function CompanyPage(props: {
       </section>
 
       {/* Team */}
-      <section className="px-6 py-20 bg-slate-50/50 dark:bg-slate-900/50">
+      <section className="px-6 py-20 bg-ds-surface-sunken">
         <div className="mx-auto max-w-5xl">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
@@ -232,7 +232,7 @@ export default async function CompanyPage(props: {
             {TEAM.map((person) => (
               <div
                 key={person.name}
-                className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 text-center shadow-sm"
+                className="rounded-2xl border border-ds-border bg-ds-surface p-6 text-center shadow-sm"
               >
                 <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-indigo-100 dark:bg-indigo-900 text-indigo-700 dark:text-indigo-400 text-lg font-extrabold">
                   {person.initials}
@@ -266,7 +266,7 @@ export default async function CompanyPage(props: {
               <a
                 key={item.headline}
                 href={item.href}
-                className="group flex items-start justify-between gap-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
+                className="group flex items-start justify-between gap-4 rounded-xl border border-ds-border bg-ds-surface p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
               >
                 <div>
                   <p className="text-xs font-bold text-indigo-600 mb-1">
@@ -313,14 +313,14 @@ export default async function CompanyPage(props: {
             {OPEN_ROLES.map((role) => (
               <div
                 key={role.title}
-                className="flex items-start justify-between gap-4 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-5 shadow-sm"
+                className="flex items-start justify-between gap-4 rounded-xl border border-ds-border bg-ds-surface p-5 shadow-sm"
               >
                 <div>
                   <p className="text-sm font-bold text-slate-900 dark:text-white">
                     {role.title}
                   </p>
                   <div className="mt-1.5 flex flex-wrap gap-2">
-                    <span className="rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-2.5 py-0.5 text-xs">
+                    <span className="rounded-full bg-ds-surface-raised text-ds-text-subtle px-2.5 py-0.5 text-xs">
                       {role.location}
                     </span>
                     <span className="rounded-full bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-400 px-2.5 py-0.5 text-xs">

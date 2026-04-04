@@ -7,7 +7,7 @@
 **Owner:** Product + Engineering  
 **Status:** Complete (all phases done)  
 **Estimated total:** 8–10 weeks across 4 phases  
-**Task checklist:** `docs/plan/execution/TASKS_analytics_dashboard.md`
+**Task checklist:** `docs/plan/Complete/TASKS_analytics_dashboard.md`
 
 ---
 
@@ -28,24 +28,24 @@ Build **one central place** where property managers, security heads, marketing l
 
 ## 2. Prerequisites & Dependencies
 
-| Dependency | Status | Notes |
-|------------|--------|-------|
-| Contacts + Units pages | Exists | [residents/contacts](apps/client-dashboard/src/app/[locale]/dashboard/residents/contacts/page.tsx), [residents/units](apps/client-dashboard/src/app/[locale]/dashboard/residents/units/page.tsx) |
-| Existing analytics page | Exists | Server-rendered, Recharts; heatmap, daily trend, top gates, status breakdown |
-| UTM persistence | Not in schema | ScanLog/QRCode lack `utm_campaign`, `utm_source`; add in Phase 1 or stub |
-| Tagging system | Not in schema | No `Tag` / `ContactTag`; Phase 2/3 can stub or add minimal model |
-| Filter bar component | May need creation | Shared date range, project, gate, tags, unit type, search |
+| Dependency              | Status            | Notes                                                                                                                                                                                            |
+| ----------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Contacts + Units pages  | Exists            | [residents/contacts](apps/client-dashboard/src/app/[locale]/dashboard/residents/contacts/page.tsx), [residents/units](apps/client-dashboard/src/app/[locale]/dashboard/residents/units/page.tsx) |
+| Existing analytics page | Exists            | Server-rendered, Recharts; heatmap, daily trend, top gates, status breakdown                                                                                                                     |
+| UTM persistence         | Not in schema     | ScanLog/QRCode lack `utm_campaign`, `utm_source`; add in Phase 1 or stub                                                                                                                         |
+| Tagging system          | Not in schema     | No `Tag` / `ContactTag`; Phase 2/3 can stub or add minimal model                                                                                                                                 |
+| Filter bar component    | May need creation | Shared date range, project, gate, tags, unit type, search                                                                                                                                        |
 
 ---
 
 ## 3. High-Level Phases
 
-| # | Phase | Primary role | Summary |
-|---|--------|--------------|---------|
-| 1 | Core Dashboard Shell | FRONTEND | Layout, mode toggle, filter bar, KPI row, chart placeholders, filter inheritance |
-| 2 | Security View Depth | BACKEND-API + FRONTEND | Heatmap API, threat/anomaly cards, operator leaderboard, short-polling KPIs |
-| 3 | Marketing View Depth | BACKEND-API + FRONTEND | Attribution funnel, campaign bar, persona/tag pie, ROI widget, audience export |
-| 4 | Polish & Real-time | FRONTEND + BACKEND-API | WebSocket, export/share, mobile optimizations, caching tuning |
+| #   | Phase                | Primary role           | Summary                                                                          |
+| --- | -------------------- | ---------------------- | -------------------------------------------------------------------------------- |
+| 1   | Core Dashboard Shell | FRONTEND               | Layout, mode toggle, filter bar, KPI row, chart placeholders, filter inheritance |
+| 2   | Security View Depth  | BACKEND-API + FRONTEND | Heatmap API, threat/anomaly cards, operator leaderboard, short-polling KPIs      |
+| 3   | Marketing View Depth | BACKEND-API + FRONTEND | Attribution funnel, campaign bar, persona/tag pie, ROI widget, audience export   |
+| 4   | Polish & Real-time   | FRONTEND + BACKEND-API | WebSocket, export/share, mobile optimizations, caching tuning                    |
 
 ---
 
@@ -178,16 +178,16 @@ Build **one central place** where property managers, security heads, marketing l
 
 ## 8. KPI Cards Reference
 
-| Card | Formula | Security Emphasis | Marketing Emphasis |
-|------|---------|-------------------|---------------------|
-| Total Visits | COUNT(ScanLog) status=SUCCESS | 24h/7d | 30d/campaign |
-| Pass Rate | PASS/(PASS+DENY)×100 | Low = alert | vs baseline |
-| Peak Hour | Hour with MAX(scans) | Staffing | Best time for events |
-| Unique Visitors | COUNT(DISTINCT contactId)* | Watchlist overlap | Prospect vs repeat |
-| Denied Scans | COUNT status=DENIED | >5% critical | Friction point |
-| Attributed Scans | COUNT utm_campaign IS NOT NULL | — | Campaign ROI proxy |
+| Card             | Formula                        | Security Emphasis | Marketing Emphasis   |
+| ---------------- | ------------------------------ | ----------------- | -------------------- |
+| Total Visits     | COUNT(ScanLog) status=SUCCESS  | 24h/7d            | 30d/campaign         |
+| Pass Rate        | PASS/(PASS+DENY)×100           | Low = alert       | vs baseline          |
+| Peak Hour        | Hour with MAX(scans)           | Staffing          | Best time for events |
+| Unique Visitors  | COUNT(DISTINCT contactId)\*    | Watchlist overlap | Prospect vs repeat   |
+| Denied Scans     | COUNT status=DENIED            | >5% critical      | Friction point       |
+| Attributed Scans | COUNT utm_campaign IS NOT NULL | —                 | Campaign ROI proxy   |
 
-*Requires contactId on ScanLog or via QRCode→VisitorQR→Unit→Contact join; may need schema extension.
+\*Requires contactId on ScanLog or via QRCode→VisitorQR→Unit→Contact join; may need schema extension.
 
 ---
 

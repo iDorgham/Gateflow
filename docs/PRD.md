@@ -1,1 +1,1 @@
-product/PRD.md
+reference/product/PRD.md

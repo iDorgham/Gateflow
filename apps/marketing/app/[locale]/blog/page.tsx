@@ -42,7 +42,7 @@ export default async function BlogPage(props: {
   return (
     <main>
       {/* Hero */}
-      <section className="px-6 pb-12 pt-24 sm:pt-32">
+      <section className="px-6 pb-32 pt-48">
         <div className="mx-auto max-w-4xl text-center">
           <p className="mb-4 text-sm font-bold uppercase tracking-widest text-primary">
             THE GATEFLOW BLOG

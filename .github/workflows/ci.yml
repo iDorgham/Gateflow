@@ -302,7 +302,7 @@ jobs:
           echo "    CLS            ≤ 0.15"
           echo ""
           echo "  Full Lighthouse audit runs in: lighthouse.yml workflow"
-          echo "  Analysis report: docs/perf/ANALYSIS_performance_killers.md"
+          echo "  Analysis report: docs/guides/performance/ANALYSIS_performance_killers.md"
           echo "═══════════════════════════════════════════════════════════"
 
   # ── 6. CI gate (required status check) ───────────────────────────────────

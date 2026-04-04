@@ -6,15 +6,15 @@
 
 ## Quick lookup
 
-| Tool | Type | Primary use |
-|------|------|-------------|
-| **Cursor** | IDE | Main editor, inline AI, MCP, subagents |
-| **Kiro** | IDE | Project-specific skills, steering rules, hooks |
-| **Antigravity** | IDE | Alternative AI IDE |
-| **Claude CLI** | CLI | Terminal Claude, quick Q&A, scripting |
-| **Opencode CLI** | CLI | Code workflows, generation |
-| **Gemini CLI** | CLI | Terminal Gemini access |
-| **Kilo CLI** | CLI | Terminal AI workflows |
+| Tool             | Type | Primary use                                    |
+| ---------------- | ---- | ---------------------------------------------- |
+| **Cursor**       | IDE  | Main editor, inline AI, MCP, subagents         |
+| **Kiro**         | IDE  | Project-specific skills, steering rules, hooks |
+| **Antigravity**  | IDE  | Alternative AI IDE                             |
+| **Claude CLI**   | CLI  | Terminal Claude, quick Q&A, scripting          |
+| **Opencode CLI** | CLI  | Code workflows, generation                     |
+| **Gemini CLI**   | CLI  | Terminal Gemini access                         |
+| **Kilo CLI**     | CLI  | Terminal AI workflows                          |
 
 ---
 
@@ -29,7 +29,7 @@
   - MCP tool integration and subagents (explore, shell, browser-use)
   - `.cursor/rules/` and `.cursor/skills/` for project context
 - **Project config:** `.cursor/rules/00-gateflow-core.mdc`, `01-gateflow-ai-workflow.mdc`
-- **Reference:** `docs/plan/guidelines/AI_SKILLS_SUBAGENTS_RULES.md`
+- **Reference:** `docs/development/guidelines/AI_SKILLS_SUBAGENTS_RULES.md`
 
 ### Kiro
 
@@ -39,7 +39,7 @@
   - Automated lint-on-save, prisma-generate, multi-tenant checks
   - Context-aware steering rules (Prisma, API, components)
 - **Project config:** `.kiro/skills/`, `.kiro/steering/`, `.kiro/hooks/`
-- **Reference:** `docs/plan/guidelines/REQUIRED_SKILLS_AND_AGENTS.md`
+- **Reference:** `docs/development/guidelines/REQUIRED_SKILLS_AND_AGENTS.md`
 
 ### Antigravity IDE
 
@@ -135,15 +135,15 @@ Run Claude CLI, Opencode CLI, and Gemini CLI in separate terminals **while** edi
 
 ### When to prefer which
 
-| Situation | Prefer |
-|-----------|--------|
-| Day-to-day coding | Cursor or Kiro |
-| Quick one-off question | Claude CLI or Gemini CLI |
-| Lightweight terminal prompts, quick checks | Kilo CLI |
-| Automated checks (lint, prisma, security) | Kiro hooks |
-| Terminal-only workflow | Claude CLI, Opencode CLI, Gemini CLI, or Kilo CLI |
-| Multi-step UI verification | Cursor browser-use subagent |
-| Codebase exploration | Cursor explore subagent or Shell subagent |
+| Situation                                  | Prefer                                            |
+| ------------------------------------------ | ------------------------------------------------- |
+| Day-to-day coding                          | Cursor or Kiro                                    |
+| Quick one-off question                     | Claude CLI or Gemini CLI                          |
+| Lightweight terminal prompts, quick checks | Kilo CLI                                          |
+| Automated checks (lint, prisma, security)  | Kiro hooks                                        |
+| Terminal-only workflow                     | Claude CLI, Opencode CLI, Gemini CLI, or Kilo CLI |
+| Multi-step UI verification                 | Cursor browser-use subagent                       |
+| Codebase exploration                       | Cursor explore subagent or Shell subagent         |
 
 ---
 
@@ -153,22 +153,22 @@ Spread usage across CLIs to avoid rate limits, and pick the CLI that fits the ta
 
 ### By task complexity and model strength
 
-| Task type | Simple | Medium | Complex |
-|-----------|--------|--------|---------|
-| **Security review** | Gemini | Claude | Claude (detailed audit) |
-| **Prisma / DB query** | Gemini | Claude or Gemini | Claude |
-| **Code generation** | OpenCode | OpenCode or Claude | Claude |
-| **Architecture decision** | — | Claude | Claude |
-| **Test generation** | Gemini | Claude | Claude |
-| **Quick schema check** | Gemini | — | — |
+| Task type                 | Simple   | Medium             | Complex                 |
+| ------------------------- | -------- | ------------------ | ----------------------- |
+| **Security review**       | Gemini   | Claude             | Claude (detailed audit) |
+| **Prisma / DB query**     | Gemini   | Claude or Gemini   | Claude                  |
+| **Code generation**       | OpenCode | OpenCode or Claude | Claude                  |
+| **Architecture decision** | —        | Claude             | Claude                  |
+| **Test generation**       | Gemini   | Claude             | Claude                  |
+| **Quick schema check**    | Gemini   | —                  | —                       |
 
 ### By model strength
 
-| CLI | Strengths | Limits |
-|-----|-----------|--------|
-| **Claude** | Security audit, reasoning, detailed analysis, multi-step logic | Claude Pro quota |
-| **Gemini** | Fast schema/query suggestions, code snippets, good at structure | Google One quota, retries on exhaust |
-| **OpenCode** | Code workflows, file ops, multi-provider (can use different models) | — |
+| CLI          | Strengths                                                           | Limits                               |
+| ------------ | ------------------------------------------------------------------- | ------------------------------------ |
+| **Claude**   | Security audit, reasoning, detailed analysis, multi-step logic      | Claude Pro quota                     |
+| **Gemini**   | Fast schema/query suggestions, code snippets, good at structure     | Google One quota, retries on exhaust |
+| **OpenCode** | Code workflows, file ops, multi-provider (can use different models) | —                                    |
 
 ### Best practice
 
@@ -189,22 +189,22 @@ Regardless of which tool you use, follow the same rules:
 - **Secrets** — never commit `.env` / `.env.local`
 - **Shared packages** — use `@gate-access/*` imports
 
-See `CLAUDE.md` and `docs/plan/guidelines/AI_SKILLS_SUBAGENTS_RULES.md` for full details.
+See `CLAUDE.md` and `docs/development/guidelines/AI_SKILLS_SUBAGENTS_RULES.md` for full details.
 
 ---
 
 ## Subagent hierarchy (all tools)
 
-GateFlow uses a development-company-style subagent hierarchy. When using **any** CLI, prefix with the role for consistent quality. See `docs/plan/guidelines/SUBAGENT_HIERARCHY.md`.
+GateFlow uses a development-company-style subagent hierarchy. When using **any** CLI, prefix with the role for consistent quality. See `docs/development/guidelines/SUBAGENT_HIERARCHY.md`.
 
 ---
 
 ## Related docs
 
-- `docs/plan/guidelines/SUBAGENT_HIERARCHY.md` — Role definitions for Cursor + all CLIs
+- `docs/development/guidelines/SUBAGENT_HIERARCHY.md` — Role definitions for Cursor + all CLIs
 - `CLAUDE.md` — AI assistant guide, constraints
-- `docs/plan/guidelines/AI_SKILLS_SUBAGENTS_RULES.md` — Cursor skills, subagents, rules
-- `docs/plan/guidelines/REQUIRED_SKILLS_AND_AGENTS.md` — Human skills, Kiro config, roles
+- `docs/development/guidelines/AI_SKILLS_SUBAGENTS_RULES.md` — Cursor skills, subagents, rules
+- `docs/development/guidelines/REQUIRED_SKILLS_AND_AGENTS.md` — Human skills, Kiro config, roles
 
 ---
 

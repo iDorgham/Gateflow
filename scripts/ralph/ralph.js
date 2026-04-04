@@ -96,7 +96,7 @@ function gitSection() {
 // ── PLAN STATE ────────────────────────────────────────────────────────────────
 function plansSection() {
   sep('Plans');
-  const states = ['in-progress', 'planned', 'planning'];
+  const states = ['Active', 'Ready', 'Draft'];
   let found = false;
 
   for (const state of states) {
@@ -108,7 +108,7 @@ function plansSection() {
     if (!plans.length) continue;
     found = true;
 
-    const icons = { 'in-progress': '🔄', planned: '📌', planning: '📝' };
+    const icons = { Active: '🔄', Ready: '📌', Draft: '📝' };
     console.log(`\n  ${icons[state] || '•'} ${c.bold(state.toUpperCase())}`);
 
     for (const slug of plans) {
@@ -136,7 +136,7 @@ function plansSection() {
     }
   }
 
-  const doneDir = path.join(PLAN_ROOT, 'done');
+  const doneDir = path.join(PLAN_ROOT, 'Complete');
   const doneCount = fs.existsSync(doneDir)
     ? fs
         .readdirSync(doneDir)
@@ -193,13 +193,12 @@ function automationSection() {
     { when: 'feat/* → master', fires: 'auto patch-bump + annotated git tag' },
     {
       when: 'pnpm plan:start',
-      fires:
-        'move planning→in-progress + PRD update + UPCOMING entry + CHANGELOG',
+      fires: 'move Ready→Active + PRD update + UPCOMING entry + CHANGELOG',
     },
     {
       when: 'pnpm plan:done',
       fires:
-        'move in-progress→done + CHANGELOG + FEATURE_LOG + UPCOMING + PRD + README + auto PR',
+        'move Active→Complete + CHANGELOG + FEATURE_LOG + UPCOMING + PRD + README + auto PR',
     },
     {
       when: 'pnpm plan:run',
@@ -358,7 +357,7 @@ function nextActionSection() {
   sep('Recommended Next Action');
 
   // Find next incomplete plan phase
-  const inProgressDir = path.join(PLAN_ROOT, 'in-progress');
+  const inProgressDir = path.join(PLAN_ROOT, 'Active');
   if (fs.existsSync(inProgressDir)) {
     const plans = fs
       .readdirSync(inProgressDir)
@@ -388,7 +387,7 @@ function nextActionSection() {
   }
 
   // No active plan — suggest starting one
-  const plannedDir = path.join(PLAN_ROOT, 'planned');
+  const plannedDir = path.join(PLAN_ROOT, 'Ready');
   if (fs.existsSync(plannedDir)) {
     const plans = fs
       .readdirSync(plannedDir)

@@ -1,0 +1,3 @@
+# Prettier refuses to format symlink targets when paths are passed explicitly (lint-staged).
+docs/CLAUDE.md
+docs/PRD.md

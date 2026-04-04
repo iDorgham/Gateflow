@@ -2,7 +2,7 @@
 
 **Purpose:** Central log of important decisions that affect how we design, implement, and operate GateFlow. Each entry should reference the plan and phase where the decision was made and link to the relevant code and docs.
 
-Use this file to answer: *“Why do we do it this way?”* for future phases, CLIs, and IDEs.
+Use this file to answer: _“Why do we do it this way?”_ for future phases, CLIs, and IDEs.
 
 ## Decision entry template
 
@@ -32,13 +32,12 @@ Copy this block for each new decision:
 - **Plan / Phase:** `cursor-god-mode-final` — Roadmap step “add learning docs and begin capturing outcomes from each phase”
 - **Status:** Accepted
 - **Context:** We needed a single, tool‑agnostic place for Cursor, CLIs, Kiro, and Antigravity to consume cross‑phase learnings without duplicating planning logic in every tool.
-- **Decision:** Store reusable patterns, incidents, and decisions under `docs/plan/learning/` and treat these files as the canonical learning layer for all phase execution.
+- **Decision:** Store reusable patterns, incidents, and decisions under `docs/development/learning/` and treat these files as the canonical learning layer for all phase execution.
 - **Consequences:**
-  - Phases and prompts stay focused on *what* to do, while `learning/` captures *what we learned* across plans.
+  - Phases and prompts stay focused on _what_ to do, while `learning/` captures _what we learned_ across plans.
   - All tools can index a single directory to reuse prior work, making future planning and reviews faster.
   - Requires lightweight discipline to update learning docs when phases complete or incidents occur.
 - **References:**
   - `.cursor/plans/cursor-god-mode-final_005f5566.plan.md`
-  - `docs/plan/learning/patterns.md`
-  - `docs/plan/learning/incidents.md`
-
+  - `docs/development/learning/patterns.md`
+  - `docs/development/learning/incidents.md`

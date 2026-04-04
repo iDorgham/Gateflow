@@ -112,7 +112,7 @@ export const BrandedPass: React.FC<BrandedPassProps> = ({
   return (
     <div className="w-full max-w-md mx-auto space-y-6">
       {/* Branded Card */}
-      <Card className="overflow-hidden border-2 border-primary/20 shadow-2xl bg-white dark:bg-slate-900">
+      <Card className="overflow-hidden border-2 border-primary/20 shadow-2xl bg-ds-surface">
         <div className="h-3 bg-gradient-to-r from-primary via-accent to-secondary" />
 
         <CardContent className="p-8 pt-6 space-y-8">
@@ -143,15 +143,15 @@ export const BrandedPass: React.FC<BrandedPassProps> = ({
             )}
           </div>
 
-          <div className="relative bg-slate-50 dark:bg-slate-800/50 rounded-3xl p-8 flex flex-col items-center justify-center border-2 border-dashed border-slate-200 dark:border-slate-700 aspect-square">
-            <div className="p-4 bg-white rounded-2xl shadow-xl flex items-center justify-center">
+          <div className="relative bg-ds-surface-sunken rounded-3xl p-8 flex flex-col items-center justify-center border-2 border-dashed border-ds-border aspect-square">
+            <div className="p-4 bg-ds-surface rounded-2xl shadow-xl flex items-center justify-center">
               <div className="w-[200px] h-[200px] bg-slate-200" />
             </div>
             <div className="mt-6 flex flex-col items-center gap-2">
               <p className="text-xs font-medium text-slate-500 uppercase tracking-widest">
                 {t('verificationDesc')}
               </p>
-              <div className="h-0.5 w-12 bg-slate-200 dark:bg-slate-700 rounded-full" />
+              <div className="h-0.5 w-12 bg-ds-surface-raised rounded-full" />
             </div>
           </div>
 
@@ -180,7 +180,7 @@ export const BrandedPass: React.FC<BrandedPassProps> = ({
           ) : (
             <form
               onSubmit={handleUpdateName}
-              className="space-y-4 bg-slate-50 dark:bg-slate-800/50 p-6 rounded-2xl border border-dashed"
+              className="space-y-4 bg-ds-surface-sunken p-6 rounded-2xl border border-dashed"
             >
               <div className="space-y-1.5 text-center mb-4">
                 <p className="text-sm font-bold tracking-tight">
@@ -194,7 +194,7 @@ export const BrandedPass: React.FC<BrandedPassProps> = ({
                 <input
                   name="fullName"
                   placeholder={t('fullNamePlaceholder')}
-                  className="w-full h-11 px-4 rounded-xl border bg-white dark:bg-slate-900 focus:ring-2 focus:ring-primary/20 outline-none transition-all text-sm"
+                  className="w-full h-11 px-4 rounded-xl border border-ds-border bg-ds-surface focus:ring-2 focus:ring-ds-border-focused outline-none transition-all text-sm"
                   disabled={isUpdating}
                   required
                 />

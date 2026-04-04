@@ -4,7 +4,7 @@
 
 **Plans and pro prompts for phased development**
 
-_See `docs/plan/guidelines/PHASED_DEVELOPMENT_WORKFLOW.md` for the full workflow_
+_See `docs/development/guidelines/PHASED_DEVELOPMENT_WORKFLOW.md` for the full workflow_
 
 </div>
 
@@ -18,7 +18,7 @@ _See `docs/plan/guidelines/PHASED_DEVELOPMENT_WORKFLOW.md` for the full workflow
 | 2    | **Create plan** → `/plan` (planning subagent) saves `PLAN_<slug>.md` |
 | 3    | **Write pro prompts** → Template creates `PROMPT_<slug>_phase_N.md`  |
 | 4    | **Execute** → `/dev` applies phase N or `/ship` runs all phases      |
-| 5    | **Capture learnings** → Update `docs/plan/learning/` files           |
+| 5    | **Capture learnings** → Update `docs/development/learning/` files    |
 
 ---
 
@@ -45,7 +45,7 @@ PROMPT_resident_portal_phase_2.md  → Add VisitorQR model
 
 ## Migration Note
 
-New plans should be created in `docs/plan/planning/` using `/plan` command.
+New plans should be created in `docs/plan/Draft/` using `/plan` command.
 
 See [docs/plan/README.md](../README.md) for current workflow.
 

@@ -4,9 +4,9 @@
  *
  * Commands:
  *   node scripts/plan/ralph-plan.js new <slug> [--phases 5] [--title "My Feature"]
- *   node scripts/plan/ralph-plan.js ready   <slug>   # planning  → planned
- *   node scripts/plan/ralph-plan.js start   <slug>   # planned   → in-progress
- *   node scripts/plan/ralph-plan.js done    <slug>   # in-progress → done
+ *   node scripts/plan/ralph-plan.js ready   <slug>   # Draft  → Ready
+ *   node scripts/plan/ralph-plan.js start   <slug>   # Ready  → Active
+ *   node scripts/plan/ralph-plan.js done    <slug>   # Active → Complete
  *   node scripts/plan/ralph-plan.js status           # show all plans + state
  *   node scripts/plan/ralph-plan.js move <slug> <from> <to>  # manual move
  *
@@ -84,7 +84,8 @@ function createPR(slug, planDir) {
 const ROOT = path.resolve(__dirname, '../..');
 const PLAN_ROOT = path.join(ROOT, 'docs', 'plan');
 const TEMPLATES = path.join(PLAN_ROOT, 'templates');
-const STATES = ['planning', 'planned', 'in-progress', 'done', 'execution'];
+/** Lookup order: prefer Active → Ready → Draft → Complete */
+const STATES = ['Active', 'Ready', 'Draft', 'Complete'];
 
 // ── CLI TOOLS available in this workspace ────────────────────────────────────
 const TOOLS = [
@@ -178,7 +179,7 @@ function buildPlanTemplate(slug, featureTitle, phases) {
   return `# PLAN: ${featureTitle}
 
 **Slug:** \`${slug}\`
-**Status:** planning
+**Status:** draft
 **Created:** ${today()}
 **Target:** Q4 2026
 
@@ -291,9 +292,9 @@ switch (cmd) {
     const tIdx = rawArgs.indexOf('--title');
     const featureTitle = tIdx !== -1 ? rawArgs[tIdx + 1] : title(slug);
 
-    const dest = path.join(stateDir('planning'), slug);
+    const dest = path.join(stateDir('Draft'), slug);
     if (fs.existsSync(dest)) {
-      console.error(`✗ Plan "${slug}" already exists in planning/`);
+      console.error(`✗ Plan "${slug}" already exists in Draft/`);
       process.exit(1);
     }
 
@@ -304,7 +305,7 @@ switch (cmd) {
       planFile(dest, slug),
       buildPlanTemplate(slug, featureTitle, phases)
     );
-    console.log(`✓ Created: docs/plan/planning/${slug}/PLAN_${slug}.md`);
+    console.log(`✓ Created: docs/plan/Draft/${slug}/PLAN_${slug}.md`);
 
     // PROMPT files
     for (let i = 1; i <= phases; i++) {
@@ -336,23 +337,23 @@ switch (cmd) {
     console.log(`\n📋 Plan created. Next steps:`);
     console.log(`   1. Edit PLAN_${slug}.md — fill in phase titles and tools`);
     console.log(`   2. Edit each PROMPT file — fill in steps and criteria`);
-    console.log(`   3. pnpm plan:ready ${slug}  — move to planned/`);
+    console.log(`   3. pnpm plan:ready ${slug}  — move to Ready/`);
     break;
   }
 
-  // ── ready (planning → planned) ───────────────────────────────────────────
+  // ── ready (Draft → Ready) ───────────────────────────────────────────
   case 'ready': {
     const slug = rawArgs[0];
     if (!slug) {
       console.error('Usage: ralph-plan ready <slug>');
       process.exit(1);
     }
-    movePlan(slug, 'planning', 'planned');
+    movePlan(slug, 'Draft', 'Ready');
     console.log(`\n▶  Run when ready to start: pnpm plan:start ${slug}`);
     break;
   }
 
-  // ── start (planned → in-progress) ────────────────────────────────────────
+  // ── start (→ Active) ────────────────────────────────────────
   case 'start': {
     const slug = rawArgs[0];
     if (!slug) {
@@ -360,24 +361,23 @@ switch (cmd) {
       process.exit(1);
     }
 
-    // try planned first, then planning
     const found = findPlan(slug);
     if (!found) {
       console.error(`✗ Plan "${slug}" not found`);
       process.exit(1);
     }
-    if (found.state === 'in-progress') {
-      console.log(`ℹ  "${slug}" is already in-progress`);
+    if (found.state === 'Active') {
+      console.log(`ℹ  "${slug}" is already Active`);
       break;
     }
 
-    movePlan(slug, found.state, 'in-progress');
+    movePlan(slug, found.state, 'Active');
     callDocs(`on-plan-start ${slug}`);
     console.log(`\n▶  Run the first phase: pnpm plan:run ${slug} 1`);
     break;
   }
 
-  // ── done (in-progress → done) ─────────────────────────────────────────────
+  // ── done (→ Complete) ─────────────────────────────────────────────
   case 'done': {
     const slug = rawArgs[0];
     if (!slug) {
@@ -389,13 +389,13 @@ switch (cmd) {
       console.error(`✗ Plan "${slug}" not found`);
       process.exit(1);
     }
-    movePlan(slug, found.state, 'done');
+    movePlan(slug, found.state, 'Complete');
 
     // Trigger docs automation
     callDocs(`on-plan-done ${slug}`);
 
     // Auto-create PR (non-fatal if gh CLI not available)
-    const doneDir = path.join(stateDir('done'), slug);
+    const doneDir = path.join(stateDir('Complete'), slug);
     createPR(slug, doneDir);
 
     // Mark complete in backlog
@@ -444,10 +444,10 @@ switch (cmd) {
   // ── status ────────────────────────────────────────────────────────────────
   case 'status': {
     console.log('\n📋 Plan Status\n');
-    const activeStates = ['planning', 'planned', 'in-progress'];
+    const activeStates = ['Draft', 'Ready', 'Active'];
     let found = false;
 
-    for (const state of [...activeStates, 'done']) {
+    for (const state of [...activeStates, 'Complete']) {
       const dir = stateDir(state);
       if (!fs.existsSync(dir)) continue;
       const entries = fs
@@ -460,9 +460,8 @@ switch (cmd) {
       found = true;
 
       const icon =
-        { planning: '📝', planned: '📌', 'in-progress': '🔄', done: '✅' }[
-          state
-        ] || '•';
+        { Draft: '📝', Ready: '📌', Active: '🔄', Complete: '✅' }[state] ||
+        '•';
       console.log(`${icon}  ${state.toUpperCase()}`);
 
       for (const slug of entries) {
@@ -490,10 +489,10 @@ switch (cmd) {
 ralph-plan — Plan lifecycle manager
 
 Commands:
-  new <slug> [--phases N] [--title "Title"]   Create new plan in planning/
-  ready <slug>                                 planning/ → planned/
-  start <slug>                                 planned/  → in-progress/
-  done  <slug>                                 in-progress/ → done/
+  new <slug> [--phases N] [--title "Title"]   Create new plan in Draft/
+  ready <slug>                                 Draft/ → Ready/
+  start <slug>                                 Ready/  → Active/
+  done  <slug>                                 Active/ → Complete/
   move  <slug> <from> <to>                     Manual move between states
   status                                       Show all plans + progress
 

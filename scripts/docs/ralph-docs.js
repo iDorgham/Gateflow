@@ -477,10 +477,7 @@ switch (cmd) {
       slug
     );
     updatePrd(slug, 'In Progress');
-    addUpcoming(
-      slug,
-      `Active development — see docs/plan/in-progress/${slug}/`
-    );
+    addUpcoming(slug, `Active development — see docs/plan/Active/${slug}/`);
     break;
   }
 

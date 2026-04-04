@@ -37,7 +37,7 @@ export default async function FeaturesPage(props: {
   return (
     <div className="flex flex-col w-full pb-24">
       {/* Hero */}
-      <section className="pt-20 pb-16 text-center container px-6">
+      <section className="pt-48 pb-32 text-center container px-6">
         <h1 className="text-4xl lg:text-7xl font-black tracking-tight mb-6">
           {t('hero.headline')}
         </h1>

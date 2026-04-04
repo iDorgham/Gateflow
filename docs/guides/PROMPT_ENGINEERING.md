@@ -37,15 +37,15 @@ Canonical reference for writing effective prompts: phase prompts (`/plan`, `/dev
 
 When using Claude CLI, Gemini CLI, OpenCode CLI, Kiro CLI, Kilo CLI, or Qwen CLI, prefix with the role for consistent quality:
 
-| Role | Prefix |
-|------|--------|
-| Security | `You are the GateFlow Security Specialist. Check: requireAuth, organizationId scope, deletedAt null. ` |
-| API | `You are the GateFlow API Specialist. Pattern: requireAuth → org scope → Zod. ` |
-| Database | `You are the GateFlow Database Specialist. Schema: packages/db/prisma/schema.prisma. Always scope by organizationId. ` |
-| Frontend | `You are the GateFlow Frontend Specialist. Use @gate-access/ui, Tailwind. ` |
-| Mobile | `You are the GateFlow Mobile Specialist. SecureStore, scanUuid dedup. ` |
-| QA | `You are the GateFlow QA Specialist. Jest, mock Prisma/auth. ` |
-| Architecture | `You are the GateFlow Architecture Lead. pnpm only, org scope, @gate-access/*. ` |
+| Role         | Prefix                                                                                                                 |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------- |
+| Security     | `You are the GateFlow Security Specialist. Check: requireAuth, organizationId scope, deletedAt null. `                 |
+| API          | `You are the GateFlow API Specialist. Pattern: requireAuth → org scope → Zod. `                                        |
+| Database     | `You are the GateFlow Database Specialist. Schema: packages/db/prisma/schema.prisma. Always scope by organizationId. ` |
+| Frontend     | `You are the GateFlow Frontend Specialist. Use @gate-access/ui, Tailwind. `                                            |
+| Mobile       | `You are the GateFlow Mobile Specialist. SecureStore, scanUuid dedup. `                                                |
+| QA           | `You are the GateFlow QA Specialist. Jest, mock Prisma/auth. `                                                         |
+| Architecture | `You are the GateFlow Architecture Lead. pnpm only, org scope, @gate-access/*. `                                       |
 
 **Example:** `claude -p "You are the GateFlow Frontend Specialist. Review apps/client-dashboard/src/app/[locale]/dashboard/page.tsx for responsive layout and token usage."`
 
@@ -70,7 +70,7 @@ References: [path to similar page or component].
 Use @gate-access/ui and design tokens from packages/ui/src/tokens.ts.
 ```
 
-**Sign-in design:** For unified admin + client sign-in layout and post-login animation, use the full prompt in `docs/plan/execution/PROMPTS_REFERENCE.md` (section “Sign-in pages design (admin + client)”). Load gf-design-guide, gf-creative-ui-animation, gf-uiux-animator.
+**Sign-in design:** For unified admin + client sign-in layout and post-login animation, use the full prompt in `docs/guides/PROMPTS_REFERENCE.md` (section “Sign-in pages design (admin + client)”). Load gf-design-guide, gf-creative-ui-animation, gf-uiux-animator.
 
 ---
 
@@ -99,7 +99,7 @@ Stack: Tailwind 3.4. Optional: Framer Motion for layout morphs.
 Include in prompts when the model may not have full repo context:
 
 ```
-Context: GateFlow monorepo. Rules: pnpm only, organizationId scope, deletedAt null, 
+Context: GateFlow monorepo. Rules: pnpm only, organizationId scope, deletedAt null,
 QR HMAC-SHA256. Ref: CLAUDE.md.
 ```
 
@@ -107,7 +107,7 @@ QR HMAC-SHA256. Ref: CLAUDE.md.
 
 ## 6. Copy-Paste Prompts
 
-All copy-paste prompts live in `docs/plan/execution/PROMPTS_REFERENCE.md`. When adding new ones:
+All copy-paste prompts live in `docs/guides/PROMPTS_REFERENCE.md`. When adding new ones:
 
 - Start with **Request:** for the user to copy from.
 - Keep blocks self-contained (include context and constraints).
@@ -117,14 +117,14 @@ All copy-paste prompts live in `docs/plan/execution/PROMPTS_REFERENCE.md`. When 
 
 ## 7. References
 
-| Resource | Path |
-|----------|------|
-| Phase template | `.antigravity/templates/TEMPLATE_PROMPT_phase.md` |
-| Pro prompts | `docs/plan/execution/PROMPTS_REFERENCE.md` |
+| Resource           | Path                                                        |
+| ------------------ | ----------------------------------------------------------- |
+| Phase template     | `.antigravity/templates/TEMPLATE_PROMPT_phase.md`           |
+| Pro prompts        | `docs/guides/PROMPTS_REFERENCE.md`                          |
 | Subagent hierarchy | `docs/archive/plan-legacy/guidelines/SUBAGENT_HIERARCHY.md` |
-| Tool reference | `docs/guides/TOOL_AND_CLI_REFERENCE.md` |
-| gf-planner | `.antigravity/skills/gf-planner/SKILL.md` |
+| Tool reference     | `docs/guides/TOOL_AND_CLI_REFERENCE.md`                     |
+| gf-planner         | `.antigravity/skills/gf-planner/SKILL.md`                   |
 
 ---
 
-*Use this guide when writing prompts for /plan, /dev, CLIs, or design/animation tasks.*
+_Use this guide when writing prompts for /plan, /dev, CLIs, or design/animation tasks._

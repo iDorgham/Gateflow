@@ -3,15 +3,15 @@ const path = require('path');
 
 const BACKLOG_PATH = path.join(
   __dirname,
-  '../docs/plan/backlog/ALL_TASKS_BACKLOG.md'
+  '../../docs/plan/backlog/ALL_TASKS_BACKLOG.md'
 );
-const IN_PROGRESS_DIR = path.join(__dirname, '../docs/plan/in-progress/');
-const PLANNED_DIR = path.join(__dirname, '../docs/plan/planned/');
+const IN_PROGRESS_DIR = path.join(__dirname, '../../docs/plan/Active/');
+const PLANNED_DIR = path.join(__dirname, '../../docs/plan/Ready/');
 
 function prioritize() {
   console.log('--- Ralph Prioritization Engine ---');
 
-  // 1. Scan for active initiatives in in-progress/
+  // 1. Scan for active initiatives in Active/
   if (fs.existsSync(IN_PROGRESS_DIR)) {
     const activePlans = fs
       .readdirSync(IN_PROGRESS_DIR, { withFileTypes: true })
@@ -73,7 +73,7 @@ function prioritize() {
       console.log('\nOpen Initiatives detected in backlog:');
       openInitiatives.forEach((init) => console.log(`- ${init}`));
 
-      // Check planned/ directory for approved plans
+      // Check Ready/ directory for approved plans
       if (fs.existsSync(PLANNED_DIR)) {
         const plannedPlans = fs
           .readdirSync(PLANNED_DIR, { withFileTypes: true })

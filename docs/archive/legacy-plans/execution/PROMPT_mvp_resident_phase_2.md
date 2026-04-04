@@ -10,7 +10,7 @@
 - **Apps**: client-dashboard (3001), admin-dashboard (3002), scanner-app (8081), marketing (3000), resident-portal (3004)
 - **Packages**: db, types, ui, api-client, i18n, config
 - **Rules**: pnpm only; multi-tenant (`organizationId`); soft deletes (`deletedAt: null`); QR HMAC-SHA256; no secrets in git
-- **Refs**: `CLAUDE.md`, `packages/db/prisma/schema.prisma`, `docs/plan/execution/PLAN_mvp_and_resident.md`
+- **Refs**: `CLAUDE.md`, `packages/db/prisma/schema.prisma`, `docs/plan/Complete/PLAN_mvp_and_resident.md`
 
 ## Goal
 

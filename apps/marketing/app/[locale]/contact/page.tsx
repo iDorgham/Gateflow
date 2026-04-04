@@ -28,7 +28,7 @@ export default async function ContactPage(props: {
   return (
     <div className="flex flex-col w-full pb-24">
       {/* Header */}
-      <section className="pt-20 pb-16 text-center container px-6">
+      <section className="pt-48 pb-32 text-center container px-6">
         <h1 className="text-4xl lg:text-7xl font-black tracking-tight mb-6">
           {t('hero.headline')}
         </h1>
@@ -62,7 +62,7 @@ export default async function ContactPage(props: {
           />
 
           <div className="p-1 rounded-[2rem] bg-gradient-to-br from-primary/10 to-indigo-500/10 border overflow-hidden">
-            <div className="p-8 bg-card rounded-[1.9rem] border border-white/20">
+            <div className="p-8 bg-card rounded-[1.9rem] border border-ds-border">
               <div className="flex items-center gap-3 mb-6">
                 <MapPin className="text-primary" />
                 <h3 className="font-bold text-lg">

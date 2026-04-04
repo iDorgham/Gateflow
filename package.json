@@ -19,6 +19,8 @@
     "dev:admin": "turbo dev --filter=admin-dashboard",
     "dev:scanner": "turbo dev --filter=scanner-app",
     "dev:marketing": "turbo dev --filter=marketing",
+    "dev:resident": "turbo dev --filter=resident-portal",
+    "dev:mobile": "turbo dev --filter=resident-mobile",
     "sync": "bash scripts/ai-sync/sync-ai-tools.sh",
     "sync:watch": "node scripts/ai-sync/watch-sync.mjs",
     "plan:new": "node scripts/plan/ralph-plan.js new",
@@ -64,18 +66,6 @@
     "setup:dev": "node scripts/dev/setup-dev.js",
     "ralph": "node scripts/ralph/ralph.js",
     "ralph:short": "node scripts/ralph/ralph.js --short"
-  },
-  "lint-staged": {
-    "*.{ts,tsx}": [
-      "eslint --fix",
-      "prettier --write"
-    ],
-    "*.{js,mjs,cjs}": [
-      "prettier --write"
-    ],
-    "*.{json,md,yml,yaml}": [
-      "prettier --write"
-    ]
   },
   "devDependencies": {
     "@commitlint/cli": "^20.5.0",

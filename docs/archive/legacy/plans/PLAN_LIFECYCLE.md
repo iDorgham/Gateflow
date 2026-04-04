@@ -26,12 +26,12 @@ docs/plan/
 
 ## Lifecycle States
 
-| State        | Folder        | When                                       |
-|-------------|---------------|--------------------------------------------|
-| **Planning**| `planning/`   | `/plan` creates or refines a plan         |
-| **Planned** | `planned/`    | User approves plan ready for development   |
-| **In Progress** | `in-progress/` | `/dev` starts first or next phase       |
-| **Done**    | `done/`       | `/dev` completes the last phase            |
+| State           | Folder         | When                                     |
+| --------------- | -------------- | ---------------------------------------- |
+| **Planning**    | `planning/`    | `/plan` creates or refines a plan        |
+| **Planned**     | `planned/`     | User approves plan ready for development |
+| **In Progress** | `in-progress/` | `/dev` starts first or next phase        |
+| **Done**        | `done/`        | `/dev` completes the last phase          |
 
 ## Commands & Transitions
 
@@ -49,7 +49,7 @@ When resolving a plan by slug, check in order:
 1. `in-progress/<slug>/`
 2. `planned/<slug>/`
 3. `planning/<slug>/`
-4. `docs/plan/execution/` (legacy — flat `PLAN_<slug>.md`, `PROMPT_*`)
+4. `docs/plan/Complete/` (legacy — flat `PLAN_<slug>.md`, `PROMPT_*`)
 
 Legacy plans in `execution/` are treated as active (equivalent to `in-progress` or `planned`).
 

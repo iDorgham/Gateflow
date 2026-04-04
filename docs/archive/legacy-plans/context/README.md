@@ -50,20 +50,20 @@ Read alongside `CLAUDE.md` and rules when reasoning about environment.
 Treat these as the **single source of truth** across all IDEs and CLIs:
 
 ```
-docs/plan/context/IDEA_<slug>.md
-docs/plan/context/PRODUCT_BRAIN.md
-docs/plan/context/GATEFLOW_CONFIG.md
-docs/plan/execution/PLAN_<slug>.md
-docs/plan/execution/PROMPT_<slug>_phase_<N>.md
+docs/development/initiatives/IDEA_<slug>.md
+docs/archive/legacy-plans/context/PRODUCT_BRAIN.md   # historical; prefer PRD + IDEA when newer
+docs/reference/workspace/GATEFLOW_CONFIG.md
+docs/plan/<Draft|Ready|Active|Complete>/<slug>/PLAN_<slug>.md
+docs/plan/<Draft|Ready|Active|Complete>/<slug>/phases/NN_<title>/PROMPT_phase_NN.md
 ```
 
 ---
 
 ## Migration Note
 
-New ideas should be created via `/idea` command in `docs/plan/context/`.
+New ideas should be created via `/idea` command in `docs/development/initiatives/`.
 
-See [docs/plan/README.md](../README.md) for current workflow.
+See [docs/plan/README.md](../../../plan/README.md) for current workflow.
 
 ---
 

@@ -15,9 +15,9 @@ Before starting any task, load these files to avoid re-scanning the codebase:
 
 For deeper reference (load only when relevant):
 
-- `docs/cache/API_ROUTES_MAP.md` — all 95+ routes (replaces globbing api/)
-- `docs/cache/SCHEMA_SNAPSHOT.md` — all 40 Prisma models + enums
-- `docs/cache/WORKSPACE_INDEX.md` — dep versions, env vars, ports
+- `docs/reference/cache/API_ROUTES_MAP.md` — all 95+ routes (replaces globbing api/)
+- `docs/reference/cache/SCHEMA_SNAPSHOT.md` — all 40 Prisma models + enums
+- `docs/reference/cache/WORKSPACE_INDEX.md` — dep versions, env vars, ports
 
 ---
 
@@ -33,7 +33,7 @@ Gemini CLI supports the following slash commands by following the workflows defi
   1. Load core context: `CLAUDE.md`, `docs/PRD_v5.0.md`, `docs/plan/backlog/ALL_TASKS_BACKLOG.md`, and relevant specs.
   2. Conversationally refine goals, constraints, metrics, success criteria, and scope.
   3. Invoke skills: `gf-planner` for phased thinking, `gf-dev` for feasibility.
-  4. Write/update `docs/plan/context/IDEA_<slug>.md` with problem, vision, constraints, success criteria, risks.
+  4. Write/update `docs/development/initiatives/IDEA_<slug>.md` with problem, vision, constraints, success criteria, risks.
   5. Update `docs/plan/backlog/ALL_TASKS_BACKLOG.md` with linked section.
   6. **Auto-Sync:** `git add .`, `git commit -m "idea(<slug>): initialize"`, `git pull --rebase origin <branch>`, `git push origin <branch>`.
 - **Usage:** `/idea` (refine default), `/idea new` (new initiative), `/idea <slug>` (continue existing).
@@ -47,7 +47,7 @@ Gemini CLI supports the following slash commands by following the workflows defi
   2. Research market trends and user needs (using `browser-use`).
   3. Suggest high-impact functions, specs, or modifications (Merge/Split/Prune).
   4. Plan next releases and strategic roadmaps.
-  5. **Capture:** Write to `docs/plan/brainstorming/BRAINSTORM_<topic>.md` and update roadmap.
+  5. **Capture:** Write to `docs/development/brainstorming/BRAINSTORM_<topic>.md` and update roadmap.
   6. **Auto-Sync:** `git add .`, `git commit -m "brainstorm(<topic>): update roadmap"`, `git push origin master`.
 - **Subcommands:**
   - `/brainstorm research`: Competitor analysis using `browser-use`.
@@ -62,8 +62,8 @@ Gemini CLI supports the following slash commands by following the workflows defi
 **Purpose:** Turn an `IDEA_<slug>.md` into a phased `PLAN_<slug>.md` plus `PROMPT_<slug>_phase_<N>.md` pro prompts.
 
 - **Workflow:**
-  1. Read `docs/plan/context/IDEA_<slug>.md` and guidelines (`PHASED_DEVELOPMENT_WORKFLOW.md`, `SUBAGENT_HIERARCHY.md`, `AI_SKILLS_SUBAGENTS_RULES.md`).
-  2. Create phased plan in `docs/plan/planning/<slug>/`:
+  1. Read `docs/development/initiatives/IDEA_<slug>.md` and guidelines (`PHASED_DEVELOPMENT_WORKFLOW.md`, `SUBAGENT_HIERARCHY.md`, `AI_SKILLS_SUBAGENTS_RULES.md`).
+  2. Create phased plan in `docs/plan/Draft/<slug>/`:
      - `PLAN_<slug>.md` — ordered phases with Scope, Deliverables, Depends on, Test criteria.
      - `PROMPT_<slug>_phase_<N>.md` — per-phase pro prompts using `TEMPLATE_PROMPT_phase.md`.
      - `TASKS_<slug>.md` — phase checklist (optional).
@@ -85,7 +85,7 @@ Gemini CLI supports the following slash commands by following the workflows defi
   5. Adopt phase's **Primary role** and **Preferred tool**; follow **Steps** and invoke subagents.
   6. **Verify:** Run acceptance criteria (`pnpm turbo lint/typecheck/test --filter=<workspace>`).
   7. **Limits + permission:** Load `gf-cli-limits` skill; check `CLI_LIMITS_TRACKING.md`; respect 80% rule.
-  8. **Learning:** Append entry to `docs/plan/learning/CLI_USAGE_AND_RESULTS.md` after CLI usage.
+  8. **Learning:** Append entry to `docs/development/learning/CLI_USAGE_AND_RESULTS.md` after CLI usage.
   9. **Auto-Sync:** `git add .`, `git commit -m "feat(<slug>): complete phase <n>"`, `git pull --rebase origin <branch>`, `git push origin <branch>`.
 - **Usage:** `/dev`, `/dev <n>`, `/dev <slug> <n>`, `/dev ralph` (recursive autopilot).
 
@@ -157,7 +157,7 @@ Gemini CLI supports the following slash commands by following the workflows defi
   | Ops/Recovery | `/clis team ops` | Claude, Gemini, Opencode | Scan logs → Root cause → Fix |
   | Perf/Speed | `/clis team perf` | Gemini, Opencode, Kilo | Analyze bottlenecks → Optimize → Verify |
 - **Workflow:**
-  1. Load `docs/plan/learning/CLI_TEAMS.md` for roster and steps.
+  1. Load `docs/development/learning/CLI_TEAMS.md` for roster and steps.
   2. Check limits: Load `gf-cli-limits` and `CLI_LIMITS_TRACKING.md`; respect 80% rule.
   3. Run steps sequentially; capture outputs.
   4. Apply & verify: Cursor/user applies changes; run `pnpm preflight`.
@@ -223,8 +223,8 @@ Gemini CLI supports the following slash commands by following the workflows defi
 
 1. **Planning Mode:** Always use `enter_plan_mode` for `/idea`, `/plan`, and before starting a `/ship` run.
 2. **Context First:** Always read `docs/CLAUDE.md` and the active `PLAN_<slug>.md` at the start of a session.
-3. **80% Rule:** Check `docs/plan/learning/CLI_LIMITS_TRACKING.md` before suggesting or using high-usage CLIs. If a CLI is at **80%+** of its limit, do not use it without explicit user permission.
-4. **Learning Log:** After completing a phase or major task, append an entry to `docs/plan/learning/CLI_USAGE_AND_RESULTS.md`. Record durable notes in `CLI_TOOL_MEMORY.md`.
+3. **80% Rule:** Check `docs/development/learning/CLI_LIMITS_TRACKING.md` before suggesting or using high-usage CLIs. If a CLI is at **80%+** of its limit, do not use it without explicit user permission.
+4. **Learning Log:** After completing a phase or major task, append an entry to `docs/development/learning/CLI_USAGE_AND_RESULTS.md`. Record durable notes in `CLI_TOOL_MEMORY.md`.
 5. **Pnpm Only:** Never use `npm` or `yarn`. Always use `pnpm` for commands.
 6. **Multi-tenancy:** Ensure every DB query includes `organizationId` and `deletedAt: null`.
 7. **Auto-Sync & Branching Mandate**:
@@ -250,23 +250,23 @@ Gemini CLI supports the following slash commands by following the workflows defi
 
 ### Planning
 
-- `docs/plan/PLAN_LIFECYCLE.md` — Plan state transitions.
-- `docs/plan/guidelines/PHASED_DEVELOPMENT_WORKFLOW.md` — Execution loop.
-- `docs/plan/guidelines/SUBAGENT_HIERARCHY.md` — Roles and subagents brain.
-- `docs/plan/guidelines/AI_SKILLS_SUBAGENTS_RULES.md` — Skills usage rules.
-- `docs/plan/guidelines/TEMPLATE_PROMPT_phase.md` — Phase prompt template.
-- `docs/plan/execution/PROMPTS_REFERENCE.md` — Professional prompt templates.
+- `docs/development/PLAN_LIFECYCLE.md` — Plan state transitions.
+- `docs/development/guidelines/PHASED_DEVELOPMENT_WORKFLOW.md` — Execution loop.
+- `docs/development/guidelines/SUBAGENT_HIERARCHY.md` — Roles and subagents brain.
+- `docs/development/guidelines/AI_SKILLS_SUBAGENTS_RULES.md` — Skills usage rules.
+- `docs/development/guidelines/TEMPLATE_PROMPT_phase.md` — Phase prompt template.
+- `docs/guides/PROMPTS_REFERENCE.md` — Professional prompt templates.
 
 ### Learning & Memory
 
-- `docs/plan/learning/GUIDE_PREFERENCES.md` — User AI interaction preferences.
-- `docs/plan/learning/CLI_TEAMS.md` — CLI team rosters and workflows.
-- `docs/plan/learning/CLI_LIMITS_TRACKING.md` — CLI usage limits.
-- `docs/plan/learning/CLI_USAGE_AND_RESULTS.md` — CLI usage log.
-- `docs/plan/learning/CLI_TOOL_MEMORY.md` — Durable tool learnings.
-- `docs/plan/learning/ONE_MAN_MEMORY.md` — One Man profile state.
-- `docs/plan/learning/ONE_MAN_CODE_SETTINGS.md` — One Man configuration.
-- `docs/plan/learning/{patterns,incidents,decisions}.md` — Cross-plan learnings.
+- `docs/development/learning/GUIDE_PREFERENCES.md` — User AI interaction preferences.
+- `docs/development/learning/CLI_TEAMS.md` — CLI team rosters and workflows.
+- `docs/development/learning/CLI_LIMITS_TRACKING.md` — CLI usage limits.
+- `docs/development/learning/CLI_USAGE_AND_RESULTS.md` — CLI usage log.
+- `docs/development/learning/CLI_TOOL_MEMORY.md` — Durable tool learnings.
+- `docs/development/learning/ONE_MAN_MEMORY.md` — One Man profile state.
+- `docs/development/learning/ONE_MAN_CODE_SETTINGS.md` — One Man configuration.
+- `docs/development/learning/{patterns,incidents,decisions}.md` — Cross-plan learnings.
 
 ### Guides
 

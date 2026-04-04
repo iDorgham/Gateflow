@@ -3,6 +3,7 @@
 This document defines **how we use AI assistance in this repo**: which skills exist, when to use subagents, and the engineering rules that must be followed to keep GateFlow safe, consistent, and shippable.
 
 **Workflow integration:** These rules are implemented in:
+
 - **Master slash commands** — `/idea`, `/plan`, `/dev`, `/ship` (the only visible slash commands in Cursor)
 - **Internal flows** — legacy helpers like `/ready`, `/run`, `/automate`, `/github`, `/clis` live as markdown flows and are orchestrated by the master commands
 - `.cursor/rules/01-gateflow-ai-workflow.mdc` — Cursor rule (always applied)
@@ -10,7 +11,7 @@ This document defines **how we use AI assistance in this repo**: which skills ex
 - `.cursor/subagents/` — prompt templates (explore, shell, browser-use)
 - `.cursor/commands/` — definitions for master commands (`idea`, `plan`, `dev`, `ship`)
 - `.cursor/commands-ref/` — internal helper flows (`ready`, `run`, `automate`, `github`, `clis`, etc.), not exposed as slash commands
-- `docs/plan/guidelines/DEVELOPMENT_WORKFLOWS.md` — section 3 (AI Skills & Subagents)
+- `docs/development/guidelines/DEVELOPMENT_WORKFLOWS.md` — section 3 (AI Skills & Subagents)
 
 ---
 
@@ -32,19 +33,19 @@ Reference: `CLAUDE.md`, `docs/PRD_v5.0.md`, `docs/APP_DESIGN_DOCS.md`.
 
 All tools (Cursor, CLIs, Kiro, Antigravity) share a **single planning and learning brain** under `docs/plan/`:
 
-- **Ideas & context**: `docs/plan/context/IDEA_<slug>.md`
+- **Ideas & context**: `docs/development/initiatives/IDEA_<slug>.md`
 - **Backlog**: `docs/plan/backlog/ALL_TASKS_BACKLOG.md`
 - **Plans & phases**:
-  - `docs/plan/execution/PLAN_<slug>.md`
-  - `docs/plan/execution/PROMPT_<slug>_phase_<N>.md`
+  - `docs/plan/Complete/PLAN_<slug>.md`
+  - `docs/plan/Complete/PROMPT_<slug>_phase_<N>.md`
 - **Guidelines / “brain”**:
-  - `docs/plan/guidelines/AI_SKILLS_SUBAGENTS_RULES.md`
-  - `docs/plan/guidelines/PHASED_DEVELOPMENT_WORKFLOW.md`
-  - `docs/plan/guidelines/DEVELOPMENT_WORKFLOWS.md`
+  - `docs/development/guidelines/AI_SKILLS_SUBAGENTS_RULES.md`
+  - `docs/development/guidelines/PHASED_DEVELOPMENT_WORKFLOW.md`
+  - `docs/development/guidelines/DEVELOPMENT_WORKFLOWS.md`
 - **Learnings (long-lived)**:
-  - `docs/plan/learning/patterns.md`
-  - `docs/plan/learning/incidents.md`
-  - `docs/plan/learning/decisions.md`
+  - `docs/development/learning/patterns.md`
+  - `docs/development/learning/incidents.md`
+  - `docs/development/learning/decisions.md`
 
 Every IDE and CLI must treat these files as the **single source of truth** for ideas, plans, prompts, and learnings. New plans and phases are always written back here, not into ad‑hoc notes elsewhere.
 
@@ -56,20 +57,20 @@ Every IDE and CLI must treat these files as the **single source of truth** for i
 
 ## Multi-tool setup
 
-GateFlow development uses several AI tools (Cursor, Kiro, Antigravity, Claude CLI, Opencode CLI, Gemini CLI, Kilo CLI). See `docs/plan/guidelines/DEVELOPMENT_TOOLS.md` for the single reference.
+GateFlow development uses several AI tools (Cursor, Kiro, Antigravity, Claude CLI, Opencode CLI, Gemini CLI, Kilo CLI). See `docs/development/guidelines/DEVELOPMENT_TOOLS.md` for the single reference.
 
 ### When to prefer which tool
 
-| Situation | Prefer |
-|-----------|--------|
-| Day-to-day coding with inline edits | **Cursor** or **Kiro** |
-| Quick one-off question, no IDE | **Claude CLI** or **Gemini CLI** |
-| Automated checks (lint, prisma, security) | **Kiro** hooks |
-| Terminal-only workflow | **Claude CLI**, **Opencode CLI**, **Gemini CLI**, or **Kilo CLI** |
-| Multi-step UI verification | **Cursor** browser-use subagent |
-| Codebase exploration across apps | **Cursor** explore subagent |
-| Shell commands, builds, git | **Cursor** shell subagent |
-| Alternative IDE or parallel task | **Antigravity**, **Kiro** |
+| Situation                                 | Prefer                                                            |
+| ----------------------------------------- | ----------------------------------------------------------------- |
+| Day-to-day coding with inline edits       | **Cursor** or **Kiro**                                            |
+| Quick one-off question, no IDE            | **Claude CLI** or **Gemini CLI**                                  |
+| Automated checks (lint, prisma, security) | **Kiro** hooks                                                    |
+| Terminal-only workflow                    | **Claude CLI**, **Opencode CLI**, **Gemini CLI**, or **Kilo CLI** |
+| Multi-step UI verification                | **Cursor** browser-use subagent                                   |
+| Codebase exploration across apps          | **Cursor** explore subagent                                       |
+| Shell commands, builds, git               | **Cursor** shell subagent                                         |
+| Alternative IDE or parallel task          | **Antigravity**, **Kiro**                                         |
 
 ### Shared context (all tools)
 
@@ -81,7 +82,6 @@ GateFlow development uses several AI tools (Cursor, Kiro, Antigravity, Claude CL
 ---
 
 ## Skills available in this workspace
-
 
 - **Purpose**: UI/UX design exploration + infinite-canvas drafts, then mapping to production UI.
 - **Trigger it when**:
@@ -95,7 +95,7 @@ GateFlow development uses several AI tools (Cursor, Kiro, Antigravity, Claude CL
   - Starting MVP launch, Resident Portal, or any multi-step initiative
   - Need to decompose backlog into executable phases
 - **Where**: `.cursor/skills/gf-planner/SKILL.md`
-- **Full reference**: `docs/plan/guidelines/PHASED_DEVELOPMENT_WORKFLOW.md`
+- **Full reference**: `docs/development/guidelines/PHASED_DEVELOPMENT_WORKFLOW.md`
 
 ### `gf-dev`
 
@@ -105,7 +105,7 @@ GateFlow development uses several AI tools (Cursor, Kiro, Antigravity, Claude CL
   - Adding API route, component, Prisma model
   - Pre-PR checks, debugging, onboarding
 - **Where**: `.cursor/skills/gf-dev/SKILL.md`
-- **Full reference**: `docs/plan/guidelines/DEVELOPMENT_WORKFLOWS.md`
+- **Full reference**: `docs/development/guidelines/DEVELOPMENT_WORKFLOWS.md`
 
 ### `multi-cli-cursor-workflow`
 
@@ -138,15 +138,15 @@ GateFlow development uses several AI tools (Cursor, Kiro, Antigravity, Claude CL
 
 ### Domain skills (Cursor)
 
-| Skill | Purpose | Trigger when |
-|-------|---------|--------------|
-| **gf-architecture** | Monorepo structure, conventions | Any code change, architectural decision |
-| **gf-security** | Auth, RBAC, multi-tenant, QR signing | Auth, sensitive data, new APIs |
-| **gf-database** | Prisma, migrations, query patterns | Schema, queries, migrations |
-| **gf-testing** | Jest, mocks, API tests | Writing tests, debugging |
-| **gf-mobile** | Expo, offline sync, scanner | Scanner-app, resident-mobile |
-| **gf-i18n** | Arabic/English, RTL, locale switching | Localization, MENA support |
-| **gf-api** | Next.js API routes, auth, validation | New or modified API endpoints |
+| Skill               | Purpose                               | Trigger when                            |
+| ------------------- | ------------------------------------- | --------------------------------------- |
+| **gf-architecture** | Monorepo structure, conventions       | Any code change, architectural decision |
+| **gf-security**     | Auth, RBAC, multi-tenant, QR signing  | Auth, sensitive data, new APIs          |
+| **gf-database**     | Prisma, migrations, query patterns    | Schema, queries, migrations             |
+| **gf-testing**      | Jest, mocks, API tests                | Writing tests, debugging                |
+| **gf-mobile**       | Expo, offline sync, scanner           | Scanner-app, resident-mobile            |
+| **gf-i18n**         | Arabic/English, RTL, locale switching | Localization, MENA support              |
+| **gf-api**          | Next.js API routes, auth, validation  | New or modified API endpoints           |
 
 All in `.cursor/skills/<name>/SKILL.md`.
 
@@ -169,7 +169,7 @@ GateFlow uses a **development-company-style hierarchy** for consistent quality a
 
 **Roles:** PLANNING | ARCHITECTURE | SECURITY | BACKEND-Database | BACKEND-API | FRONTEND | MOBILE | QA | i18n | DEVOPS | EXPLORE
 
-**Full reference:** This doc (`AI_SKILLS_SUBAGENTS_RULES.md`) **plus** `docs/plan/guidelines/SUBAGENT_HIERARCHY.md` together form the **single brain** for roles and subagents — they define the role list, responsibilities, CLI prefixes, and when to use each subagent. Other docs and skills should **reference these files instead of redefining roles.**
+**Full reference:** This doc (`AI_SKILLS_SUBAGENTS_RULES.md`) **plus** `docs/development/guidelines/SUBAGENT_HIERARCHY.md` together form the **single brain** for roles and subagents — they define the role list, responsibilities, CLI prefixes, and when to use each subagent. Other docs and skills should **reference these files instead of redefining roles.**
 
 ---
 
@@ -186,6 +186,7 @@ Use when you need to **understand an area of the repo quickly**:
 - Locating all references for a refactor
 
 **Good prompts**:
+
 - “Where is QR signature verified and how is it used by scanner sync?”
 - “List all API routes involved in onboarding and token issuance.”
 
@@ -213,12 +214,13 @@ Use when the task is ambiguous or spans code + docs + behavior and you want one 
 Use when the user wants to **create a plan**, **break down tasks**, or **run phased development** (create plan → write pro prompts → apply one by one → test/enhance → next phase).
 
 **Workflow:**
-1. Create plan from goal/backlog → save to `docs/plan/execution/PLAN_<name>.md`
+
+1. Create plan from goal/backlog → save to `docs/plan/Complete/PLAN_<name>.md`
 2. Write each phase as pro prompt → `PROMPT_<name>_phase_N.md`
 3. Execute: apply prompt → test → enhance → commit → next
 
 **Skill:** `.cursor/skills/gf-planner/SKILL.md`  
-**Full reference:** `docs/plan/guidelines/PHASED_DEVELOPMENT_WORKFLOW.md`
+**Full reference:** `docs/development/guidelines/PHASED_DEVELOPMENT_WORKFLOW.md`
 
 ---
 
@@ -294,10 +296,9 @@ Reference: `docs/ENVIRONMENT_VARIABLES.md`, `docs/CODE_QUALITY_AND_PERFORMANCE_A
 
 ## Where to look first (fast navigation)
 
-- **Phased plan + pro prompts**: `docs/plan/guidelines/PHASED_DEVELOPMENT_WORKFLOW.md`
-- **Commands, workflows, prompts**: `docs/plan/guidelines/DEVELOPMENT_WORKFLOWS.md`
+- **Phased plan + pro prompts**: `docs/development/guidelines/PHASED_DEVELOPMENT_WORKFLOW.md`
+- **Commands, workflows, prompts**: `docs/development/guidelines/DEVELOPMENT_WORKFLOWS.md`
 - **Product / requirements**: `docs/PRD_v5.0.md`, `docs/RESIDENT_PORTAL_SPEC.md`
 - **System design**: `docs/APP_DESIGN_DOCS.md`, `docs/PROJECT_STRUCTURE.md`
 - **Security model**: `docs/SECURITY_OVERVIEW.md`, `docs/CODE_QUALITY_AND_PERFORMANCE_AUDIT.md`
 - **Roadmaps**: `docs/IMPROVEMENTS_AND_ROADMAP.md`, `docs/PHASE_2_ROADMAP.md`
-

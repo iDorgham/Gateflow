@@ -70,7 +70,7 @@ function parsePhaseRefs(msg) {
 
 // ── Find active in-progress plans ────────────────────────────────────────────
 function getInProgressPlans() {
-  const dir = path.join(PLAN_ROOT, 'in-progress');
+  const dir = path.join(PLAN_ROOT, 'Active');
   if (!fs.existsSync(dir)) return [];
   return fs
     .readdirSync(dir)
