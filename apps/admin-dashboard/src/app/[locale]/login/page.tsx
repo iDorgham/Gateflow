@@ -123,7 +123,8 @@ export default function AdminLoginPage() {
   const inputRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
-  const DEV_KEY = 'local-setup-admin-access-key-change-in-production';
+  const DEV_KEY =
+    '1967664b3d703503b4d412aaaf906a9f7f8b7057db224a478d89a7fbfab91762';
 
   async function handleCopyDevKey() {
     try {
