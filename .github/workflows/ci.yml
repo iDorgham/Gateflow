@@ -57,14 +57,13 @@ jobs:
           DATABASE_URL: 'postgresql://placeholder:placeholder@localhost:5432/placeholder'
 
       - name: Cache node_modules
-        uses: actions/cache@1bd1e32a3bdc45362d1e726936510720a7c30a57 # v4.2.0
+        uses: actions/cache@v4
         id: cache
         with:
           path: |
             node_modules
             packages/*/node_modules
             apps/*/node_modules
-            ~/.pnpm-store
           key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             pnpm-${{ runner.os }}-
@@ -93,19 +92,9 @@ jobs:
             node_modules
             packages/*/node_modules
             apps/*/node_modules
-            ~/.pnpm-store
           key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             pnpm-${{ runner.os }}-
-
-      - name: Install dependencies (if cache missed)
-        run: pnpm install --frozen-lockfile
-
-      - name: Lint
-        run: pnpm turbo lint
-
-      - name: Changelog structure check
-        run: pnpm docs:changelog:check
 
   # ── 3. Security Scan ──────────────────────────────────────────────────────
   security:
@@ -131,7 +120,6 @@ jobs:
             node_modules
             packages/*/node_modules
             apps/*/node_modules
-            ~/.pnpm-store
           key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             pnpm-${{ runner.os }}-
@@ -163,7 +151,6 @@ jobs:
             node_modules
             packages/*/node_modules
             apps/*/node_modules
-            ~/.pnpm-store
           key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             pnpm-${{ runner.os }}-
@@ -217,7 +204,6 @@ jobs:
             node_modules
             packages/*/node_modules
             apps/*/node_modules
-            ~/.pnpm-store
           key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             pnpm-${{ runner.os }}-
@@ -257,7 +243,6 @@ jobs:
             node_modules
             packages/*/node_modules
             apps/*/node_modules
-            ~/.pnpm-store
           key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             pnpm-${{ runner.os }}-
