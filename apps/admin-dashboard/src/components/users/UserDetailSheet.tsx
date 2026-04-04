@@ -42,11 +42,16 @@ interface UserDetailSheetProps {
 }
 
 const roleBadgeColors: Record<string, string> = {
-  ADMIN: 'bg-[var(--ds-background-danger-subtle)] text-[var(--ds-text-danger)] border-[var(--ds-border-danger)]/20',
-  TENANT_ADMIN: 'bg-[var(--ds-background-warning-subtle)] text-[var(--ds-text-warning)] border-[var(--ds-border-warning)]/20',
-  TENANT_USER: 'bg-[var(--ds-background-information-subtle)] text-[var(--ds-text-information)] border-[var(--ds-border-information)]/20',
-  VISITOR: 'bg-[var(--ds-background-neutral-subtle)] text-[var(--ds-text-subtle)] border-[var(--ds-border)]',
-  RESIDENT: 'bg-[var(--ds-background-success-subtle)] text-[var(--ds-text-success)] border-[var(--ds-border-success)]/20',
+  ADMIN:
+    'bg-[var(--ds-background-danger-subtle)] text-[var(--ds-text-danger)] border-[var(--ds-border-danger)]/20',
+  TENANT_ADMIN:
+    'bg-[var(--ds-background-warning-subtle)] text-[var(--ds-text-warning)] border-[var(--ds-border-warning)]/20',
+  TENANT_USER:
+    'bg-[var(--ds-background-information-subtle)] text-[var(--ds-text-information)] border-[var(--ds-border-information)]/20',
+  VISITOR:
+    'bg-[var(--ds-background-neutral-subtle)] text-[var(--ds-text-subtle)] border-[var(--ds-border)]',
+  RESIDENT:
+    'bg-[var(--ds-background-success-subtle)] text-[var(--ds-text-success)] border-[var(--ds-border-success)]/20',
 };
 
 export function UserDetailSheet({ userId, onClose }: UserDetailSheetProps) {
@@ -59,9 +64,12 @@ export function UserDetailSheet({ userId, onClose }: UserDetailSheetProps) {
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
-    if (!userId) { setUser(null); return; }
+    if (!userId) {
+      setUser(null);
+      return;
+    }
     setLoading(true);
-    fetch(`/${locale}/api/admin/users/${userId}`)
+    fetch(`/api/admin/users/${userId}`)
       .then((r) => r.json())
       .then((res: { success: boolean; data?: UserDetail }) => {
         if (res.success && res.data) {
@@ -76,14 +84,16 @@ export function UserDetailSheet({ userId, onClose }: UserDetailSheetProps) {
   function handleAction(action: 'deactivate' | 'reactivate') {
     if (!userId) return;
     startTransition(async () => {
-      const res = await fetch(`/${locale}/api/admin/users/${userId}`, {
+      const res = await fetch(`/api/admin/users/${userId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action }),
       });
-      const data = await res.json() as { success: boolean; message?: string };
+      const data = (await res.json()) as { success: boolean; message?: string };
       if (data.success) {
-        toast.success(action === 'deactivate' ? 'User deactivated' : 'User reactivated');
+        toast.success(
+          action === 'deactivate' ? 'User deactivated' : 'User reactivated'
+        );
         router.refresh();
         onClose();
       } else {
@@ -95,12 +105,16 @@ export function UserDetailSheet({ userId, onClose }: UserDetailSheetProps) {
   function handleRoleChange() {
     if (!userId || !selectedRoleId || selectedRoleId === user?.role?.id) return;
     startTransition(async () => {
-      const res = await fetch(`/${locale}/api/admin/users/${userId}`, {
+      const res = await fetch(`/api/admin/users/${userId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ roleId: selectedRoleId }),
       });
-      const data = await res.json() as { success: boolean; roleName?: string; message?: string };
+      const data = (await res.json()) as {
+        success: boolean;
+        roleName?: string;
+        message?: string;
+      };
       if (data.success) {
         toast.success(`Role changed to ${data.roleName}`);
         router.refresh();
@@ -113,17 +127,31 @@ export function UserDetailSheet({ userId, onClose }: UserDetailSheetProps) {
 
   const suspended = user?.deletedAt !== null && user?.deletedAt !== undefined;
   const roleName = user?.role?.name ?? '';
-  const initials = user?.name.split(' ').map((n) => n[0]).join('').substring(0, 2) ?? '??';
+  const initials =
+    user?.name
+      .split(' ')
+      .map((n) => n[0])
+      .join('')
+      .substring(0, 2) ?? '??';
 
   return (
-    <Sheet open={!!userId} onOpenChange={(open) => { if (!open) onClose(); }}>
+    <Sheet
+      open={!!userId}
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
       <SheetContent className="w-full sm:max-w-md p-0 flex flex-col overflow-y-auto">
         <SheetHeader className="p-6 border-b border-border bg-muted/20 shrink-0">
           <div className="flex items-center gap-3 mb-2">
-            <div className={cn(
-              'flex h-10 w-10 items-center justify-center rounded-full font-bold text-sm shadow-sm shrink-0',
-              suspended ? 'bg-muted text-muted-foreground' : 'bg-foreground text-background'
-            )}>
+            <div
+              className={cn(
+                'flex h-10 w-10 items-center justify-center rounded-full font-bold text-sm shadow-sm shrink-0',
+                suspended
+                  ? 'bg-muted text-muted-foreground'
+                  : 'bg-foreground text-background'
+              )}
+            >
               {initials}
             </div>
             <div className="min-w-0">
@@ -137,16 +165,33 @@ export function UserDetailSheet({ userId, onClose }: UserDetailSheetProps) {
           </div>
           <div className="flex items-center gap-2 flex-wrap">
             {roleName && (
-              <Badge variant="outline" className={cn('text-[10px] font-bold uppercase tracking-wider', roleBadgeColors[roleName] ?? '')}>
+              <Badge
+                variant="outline"
+                className={cn(
+                  'text-[10px] font-bold uppercase tracking-wider',
+                  roleBadgeColors[roleName] ?? ''
+                )}
+              >
                 {roleName.replace('_', ' ')}
               </Badge>
             )}
             {user && (
-              <Badge className={cn('border-none text-[10px] font-bold uppercase', suspended ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300' : 'bg-emerald-500 text-white')}>
+              <Badge
+                className={cn(
+                  'border-none text-[10px] font-bold uppercase',
+                  suspended
+                    ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300'
+                    : 'bg-emerald-500 text-white'
+                )}
+              >
                 {suspended ? (
-                  <span className="flex items-center gap-1"><ShieldAlert className="h-2.5 w-2.5" /> Suspended</span>
+                  <span className="flex items-center gap-1">
+                    <ShieldAlert className="h-2.5 w-2.5" /> Suspended
+                  </span>
                 ) : (
-                  <span className="flex items-center gap-1"><ShieldCheck className="h-2.5 w-2.5" /> Active</span>
+                  <span className="flex items-center gap-1">
+                    <ShieldCheck className="h-2.5 w-2.5" /> Active
+                  </span>
                 )}
               </Badge>
             )}
@@ -166,8 +211,12 @@ export function UserDetailSheet({ userId, onClose }: UserDetailSheetProps) {
                   <Building2 className="h-4 w-4" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-xs font-black text-foreground truncate">{user.organization.name}</p>
-                  <p className="text-[10px] text-muted-foreground">{user.organization.plan} plan</p>
+                  <p className="text-xs font-black text-foreground truncate">
+                    {user.organization.name}
+                  </p>
+                  <p className="text-[10px] text-muted-foreground">
+                    {user.organization.plan} plan
+                  </p>
                 </div>
               </div>
             )}
@@ -178,28 +227,45 @@ export function UserDetailSheet({ userId, onClose }: UserDetailSheetProps) {
                 <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-500/10 text-amber-600 mb-2">
                   <ScanLine className="h-3.5 w-3.5" />
                 </div>
-                <p className="text-xl font-black text-foreground">{user.scansTotal.toLocaleString(locale)}</p>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mt-0.5">Total Scans</p>
+                <p className="text-xl font-black text-foreground">
+                  {user.scansTotal.toLocaleString(locale)}
+                </p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mt-0.5">
+                  Total Scans
+                </p>
               </div>
               <div className="rounded-xl border border-border bg-card p-3">
                 <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-500/10 text-blue-600 mb-2">
                   <ScanLine className="h-3.5 w-3.5" />
                 </div>
-                <p className="text-xl font-black text-foreground">{user.scansThisMonth.toLocaleString(locale)}</p>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mt-0.5">This Month</p>
+                <p className="text-xl font-black text-foreground">
+                  {user.scansThisMonth.toLocaleString(locale)}
+                </p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mt-0.5">
+                  This Month
+                </p>
               </div>
             </div>
 
             {/* Joined date */}
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <CalendarDays className="h-3.5 w-3.5 shrink-0" />
-              <span>Joined {new Date(user.createdAt).toLocaleDateString(locale, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+              <span>
+                Joined{' '}
+                {new Date(user.createdAt).toLocaleDateString(locale, {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}
+              </span>
             </div>
 
             {/* Role change */}
             {user.availableRoles.length > 0 && roleName !== 'ADMIN' && (
               <div className="space-y-2 pt-2 border-t border-border">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">Change Role</p>
+                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                  Change Role
+                </p>
                 <div className="flex gap-2">
                   <NativeSelect
                     value={selectedRoleId}
@@ -209,7 +275,9 @@ export function UserDetailSheet({ userId, onClose }: UserDetailSheetProps) {
                     {user.availableRoles
                       .filter((r) => r.name !== 'ADMIN')
                       .map((r) => (
-                        <option key={r.id} value={r.id}>{r.name.replace('_', ' ')}</option>
+                        <option key={r.id} value={r.id}>
+                          {r.name.replace('_', ' ')}
+                        </option>
                       ))}
                   </NativeSelect>
                   <Button
@@ -226,16 +294,25 @@ export function UserDetailSheet({ userId, onClose }: UserDetailSheetProps) {
 
             {/* Actions */}
             <div className="space-y-2 pt-2 border-t border-border">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3">Actions</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3">
+                Actions
+              </p>
               {roleName === 'ADMIN' ? (
-                <p className="text-xs text-muted-foreground italic">Platform admin accounts cannot be deactivated or have their role changed from this panel.</p>
+                <p className="text-xs text-muted-foreground italic">
+                  Platform admin accounts cannot be deactivated or have their
+                  role changed from this panel.
+                </p>
               ) : suspended ? (
                 <Button
                   className="w-full h-11 rounded-xl font-black bg-emerald-600 hover:bg-emerald-700 text-white"
                   disabled={isPending}
                   onClick={() => handleAction('reactivate')}
                 >
-                  {isPending ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <ShieldCheck className="h-4 w-4 mr-2" />}
+                  {isPending ? (
+                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                  ) : (
+                    <ShieldCheck className="h-4 w-4 mr-2" />
+                  )}
                   Reactivate User
                 </Button>
               ) : (
@@ -245,11 +322,19 @@ export function UserDetailSheet({ userId, onClose }: UserDetailSheetProps) {
                   disabled={isPending}
                   onClick={() => handleAction('deactivate')}
                 >
-                  {isPending ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <ShieldAlert className="h-4 w-4 mr-2" />}
+                  {isPending ? (
+                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                  ) : (
+                    <ShieldAlert className="h-4 w-4 mr-2" />
+                  )}
                   Deactivate User
                 </Button>
               )}
-              <Button variant="ghost" className="w-full h-9 rounded-xl text-muted-foreground" onClick={onClose}>
+              <Button
+                variant="ghost"
+                className="w-full h-9 rounded-xl text-muted-foreground"
+                onClick={onClose}
+              >
                 Close
               </Button>
             </div>

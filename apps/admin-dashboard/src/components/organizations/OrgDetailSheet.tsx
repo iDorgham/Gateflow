@@ -51,9 +51,12 @@ export function OrgDetailSheet({ orgId, onClose }: OrgDetailSheetProps) {
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
-    if (!orgId) { setOrg(null); return; }
+    if (!orgId) {
+      setOrg(null);
+      return;
+    }
     setLoading(true);
-    fetch(`/${locale}/api/admin/organizations/${orgId}`)
+    fetch(`/api/admin/organizations/${orgId}`)
       .then((r) => r.json())
       .then((res: { success: boolean; data?: OrgDetail }) => {
         if (res.success && res.data) setOrg(res.data);
@@ -65,14 +68,18 @@ export function OrgDetailSheet({ orgId, onClose }: OrgDetailSheetProps) {
   function handleAction(action: 'suspend' | 'restore') {
     if (!orgId) return;
     startTransition(async () => {
-      const res = await fetch(`/${locale}/api/admin/organizations/${orgId}`, {
+      const res = await fetch(`/api/admin/organizations/${orgId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action }),
       });
-      const data = await res.json() as { success: boolean; message?: string };
+      const data = (await res.json()) as { success: boolean; message?: string };
       if (data.success) {
-        toast.success(action === 'suspend' ? 'Organization suspended' : 'Organization restored');
+        toast.success(
+          action === 'suspend'
+            ? 'Organization suspended'
+            : 'Organization restored'
+        );
         router.refresh();
         onClose();
       } else {
@@ -89,7 +96,12 @@ export function OrgDetailSheet({ orgId, onClose }: OrgDetailSheetProps) {
   };
 
   return (
-    <Sheet open={!!orgId} onOpenChange={(open) => { if (!open) onClose(); }}>
+    <Sheet
+      open={!!orgId}
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
       <SheetContent className="w-full sm:max-w-md p-0 flex flex-col overflow-y-auto">
         <SheetHeader className="p-6 border-b border-border bg-muted/20 shrink-0">
           <div className="flex items-center gap-3 mb-1">
@@ -107,16 +119,33 @@ export function OrgDetailSheet({ orgId, onClose }: OrgDetailSheetProps) {
           </div>
           <div className="flex items-center gap-2 mt-2">
             {org && (
-              <Badge variant="outline" className={cn('text-[10px] font-bold uppercase tracking-wider', planColors[org.plan] ?? '')}>
+              <Badge
+                variant="outline"
+                className={cn(
+                  'text-[10px] font-bold uppercase tracking-wider',
+                  planColors[org.plan] ?? ''
+                )}
+              >
                 {org.plan}
               </Badge>
             )}
             {org && (
-              <Badge className={cn('border-none text-[10px] font-bold uppercase', suspended ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300' : 'bg-emerald-500 text-white')}>
+              <Badge
+                className={cn(
+                  'border-none text-[10px] font-bold uppercase',
+                  suspended
+                    ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300'
+                    : 'bg-emerald-500 text-white'
+                )}
+              >
                 {suspended ? (
-                  <span className="flex items-center gap-1"><ShieldAlert className="h-2.5 w-2.5" /> Suspended</span>
+                  <span className="flex items-center gap-1">
+                    <ShieldAlert className="h-2.5 w-2.5" /> Suspended
+                  </span>
                 ) : (
-                  <span className="flex items-center gap-1"><ShieldCheck className="h-2.5 w-2.5" /> Active</span>
+                  <span className="flex items-center gap-1">
+                    <ShieldCheck className="h-2.5 w-2.5" /> Active
+                  </span>
                 )}
               </Badge>
             )}
@@ -132,43 +161,92 @@ export function OrgDetailSheet({ orgId, onClose }: OrgDetailSheetProps) {
             {/* Stats grid */}
             <div className="grid grid-cols-2 gap-3">
               {[
-                { label: 'Users', value: org._count.users, icon: Users, color: 'text-violet-600 bg-violet-500/10' },
-                { label: 'Gates', value: org._count.gates, icon: DoorOpen, color: 'text-blue-600 bg-blue-500/10' },
-                { label: 'QR Codes', value: org._count.qrCodes, icon: QrCode, color: 'text-emerald-600 bg-emerald-500/10' },
-                { label: 'Total Scans', value: org.scansTotal, icon: ScanLine, color: 'text-amber-600 bg-amber-500/10' },
+                {
+                  label: 'Users',
+                  value: org._count.users,
+                  icon: Users,
+                  color: 'text-violet-600 bg-violet-500/10',
+                },
+                {
+                  label: 'Gates',
+                  value: org._count.gates,
+                  icon: DoorOpen,
+                  color: 'text-blue-600 bg-blue-500/10',
+                },
+                {
+                  label: 'QR Codes',
+                  value: org._count.qrCodes,
+                  icon: QrCode,
+                  color: 'text-emerald-600 bg-emerald-500/10',
+                },
+                {
+                  label: 'Total Scans',
+                  value: org.scansTotal,
+                  icon: ScanLine,
+                  color: 'text-amber-600 bg-amber-500/10',
+                },
               ].map(({ label, value, icon: Icon, color }) => (
-                <div key={label} className="rounded-xl border border-border bg-card p-3">
-                  <div className={cn('flex h-7 w-7 items-center justify-center rounded-lg mb-2', color)}>
+                <div
+                  key={label}
+                  className="rounded-xl border border-border bg-card p-3"
+                >
+                  <div
+                    className={cn(
+                      'flex h-7 w-7 items-center justify-center rounded-lg mb-2',
+                      color
+                    )}
+                  >
                     <Icon className="h-3.5 w-3.5" />
                   </div>
-                  <p className="text-xl font-black text-foreground">{value.toLocaleString(locale)}</p>
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mt-0.5">{label}</p>
+                  <p className="text-xl font-black text-foreground">
+                    {value.toLocaleString(locale)}
+                  </p>
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mt-0.5">
+                    {label}
+                  </p>
                 </div>
               ))}
             </div>
 
             {/* Scans this month */}
             <div className="rounded-xl border border-border bg-card p-4">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-1">Scans this month</p>
-              <p className="text-2xl font-black text-foreground">{org.scansThisMonth.toLocaleString(locale)}</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-1">
+                Scans this month
+              </p>
+              <p className="text-2xl font-black text-foreground">
+                {org.scansThisMonth.toLocaleString(locale)}
+              </p>
             </div>
 
             {/* Dates */}
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <CalendarDays className="h-3.5 w-3.5 shrink-0" />
-              <span>Joined {new Date(org.createdAt).toLocaleDateString(locale, { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+              <span>
+                Joined{' '}
+                {new Date(org.createdAt).toLocaleDateString(locale, {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}
+              </span>
             </div>
 
             {/* Actions */}
             <div className="space-y-2 pt-2 border-t border-border">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3">Actions</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3">
+                Actions
+              </p>
               {suspended ? (
                 <Button
                   className="w-full h-11 rounded-xl font-black bg-emerald-600 hover:bg-emerald-700 text-white"
                   disabled={isPending}
                   onClick={() => handleAction('restore')}
                 >
-                  {isPending ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <ShieldCheck className="h-4 w-4 mr-2" />}
+                  {isPending ? (
+                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                  ) : (
+                    <ShieldCheck className="h-4 w-4 mr-2" />
+                  )}
                   Restore Organization
                 </Button>
               ) : (
@@ -178,11 +256,19 @@ export function OrgDetailSheet({ orgId, onClose }: OrgDetailSheetProps) {
                   disabled={isPending}
                   onClick={() => handleAction('suspend')}
                 >
-                  {isPending ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <ShieldAlert className="h-4 w-4 mr-2" />}
+                  {isPending ? (
+                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                  ) : (
+                    <ShieldAlert className="h-4 w-4 mr-2" />
+                  )}
                   Suspend Organization
                 </Button>
               )}
-              <Button variant="ghost" className="w-full h-9 rounded-xl text-muted-foreground" onClick={onClose}>
+              <Button
+                variant="ghost"
+                className="w-full h-9 rounded-xl text-muted-foreground"
+                onClick={onClose}
+              >
                 Close
               </Button>
             </div>

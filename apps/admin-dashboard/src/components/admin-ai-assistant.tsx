@@ -79,7 +79,7 @@ export function AdminAIAssistant({ locale }: AdminAIAssistantProps) {
 
   const { messages, sendMessage, status, setMessages } = useChat({
     transport: new DefaultChatTransport({
-      api: `/${locale}/api/admin/ai/assistant`,
+      api: `/api/admin/ai/assistant`,
     }),
     messages: [WELCOME_MSG],
     onFinish: () => {
