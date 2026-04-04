@@ -3,9 +3,6 @@
   "buildCommand": "cd ../.. && pnpm turbo build --filter=admin-dashboard",
   "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
   "outputDirectory": ".next",
-  "prisma": {
-    "generate": true
-  },
   "headers": [
     {
       "source": "/(.*)",
