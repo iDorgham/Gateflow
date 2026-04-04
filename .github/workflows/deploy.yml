@@ -165,7 +165,7 @@ jobs:
     if: |
       always() &&
       !cancelled() &&
-      !failed() &&
+      !failure() &&
       (needs.db-migrate.result == 'success' || needs.db-migrate.result == 'skipped') &&
       (github.event.inputs.app == '' || github.event.inputs.app == 'client-dashboard') &&
       needs.changes.outputs.client == 'true'
@@ -228,7 +228,7 @@ jobs:
     if: |
       always() &&
       !cancelled() &&
-      !failed() &&
+      !failure() &&
       (needs.db-migrate.result == 'success' || needs.db-migrate.result == 'skipped') &&
       (github.event.inputs.app == '' || github.event.inputs.app == 'admin-dashboard') &&
       needs.changes.outputs.admin == 'true'
@@ -291,7 +291,7 @@ jobs:
     if: |
       always() &&
       !cancelled() &&
-      !failed() &&
+      !failure() &&
       (needs.db-migrate.result == 'success' || needs.db-migrate.result == 'skipped') &&
       (github.event.inputs.app == '' || github.event.inputs.app == 'marketing') &&
       needs.changes.outputs.marketing == 'true'
@@ -354,7 +354,7 @@ jobs:
     if: |
       always() &&
       !cancelled() &&
-      !failed() &&
+      !failure() &&
       (needs.db-migrate.result == 'success' || needs.db-migrate.result == 'skipped') &&
       (github.event.inputs.app == '' || github.event.inputs.app == 'resident-portal') &&
       needs.changes.outputs.resident == 'true'
