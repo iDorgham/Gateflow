@@ -27,6 +27,7 @@
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"],
       "env": [
         "ACCELERATE_URL",
+        "ADMIN_ACCESS_KEY",
         "DATABASE_URL",
         "DIRECT_DATABASE_URL",
         "STATSIG_SERVER_API_KEY",
