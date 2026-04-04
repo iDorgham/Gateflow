@@ -20,6 +20,7 @@ const nextConfig = {
     '@node-rs/argon2',
     '@prisma/client',
     '@prisma/client/edge',
+    '@prisma/extension-accelerate',
     'prisma',
     '.prisma/client',
   ],
