@@ -113,10 +113,12 @@ jobs:
         run: pnpm --filter @gate-access/db db:generate
         env:
           DATABASE_URL: 'postgresql://placeholder:placeholder@localhost:5432/placeholder'
+          ACCELERATE_URL: 'false'
 
       - name: Build all web apps
         run: pnpm turbo build --filter=client-dashboard --filter=admin-dashboard --filter=marketing --filter=resident-portal
         env:
+          ACCELERATE_URL: 'false'
           DATABASE_URL: 'postgresql://placeholder:placeholder@localhost:5432/placeholder'
           SKIP_ENV_VALIDATION: 'true'
           NEXT_TELEMETRY_DISABLED: '1'
