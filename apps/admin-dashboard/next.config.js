@@ -22,6 +22,16 @@ const nextConfig = {
     '@prisma/client/edge',
     'prisma',
   ],
+  webpack: (config, { isServer }) => {
+    if (isServer) {
+      config.externals = config.externals || [];
+      config.externals.push({
+        prisma: 'commonjs prisma',
+        '@prisma/client': 'commonjs @prisma/client',
+      });
+    }
+    return config;
+  },
   async headers() {
     return [{ source: '/(.*)', headers: securityHeaders }];
   },
