@@ -21,6 +21,7 @@ const nextConfig = {
     '@prisma/client',
     '@prisma/client/edge',
     'prisma',
+    '.prisma/client',
   ],
   webpack: (config, { isServer }) => {
     if (isServer) {
@@ -28,6 +29,7 @@ const nextConfig = {
       config.externals.push({
         prisma: 'commonjs prisma',
         '@prisma/client': 'commonjs @prisma/client',
+        '@prisma/client/edge': 'commonjs @prisma/client/edge',
       });
     }
     return config;
