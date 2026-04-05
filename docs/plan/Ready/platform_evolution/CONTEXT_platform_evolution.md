@@ -30,19 +30,39 @@ Based on current global property management SaaS trends, GateFlow is positioned 
 - **Audit Logging**: All AI-driven actions (publishing, scoring, sending) MUST be logged in `AiActionLog` with status `PENDING_CONFIRMATION` until approved by a human.
 - **Security Check**: Load `gf-security` skill during implementation of any data or auth surface.
 
-### 2. Design Aesthetics (ADS v7)
+### 2. Departmental RBAC Roles (define in Phase 1c)
+
+All `/api/**` routes for each department must check role server-side. Return `403` for unauthorized access.
+
+| Role               | CRM               | Tasks           | Blog/CMS   | Landing Pages | Support     | Ops Dashboard | Admin Settings |
+| :----------------- | :---------------- | :-------------- | :--------- | :------------ | :---------- | :------------ | :------------- |
+| `SUPER_ADMIN`      | Full              | Full            | Full       | Full          | Full        | Full          | Full           |
+| `SALES_REP`        | Own leads only    | Own tasks       | Read-only  | None          | None        | None          | None           |
+| `SALES_MANAGER`    | All leads + deals | All sales tasks | Read-only  | None          | None        | Summary       | None           |
+| `MARKETING_EDITOR` | Summary only      | Marketing tasks | Full draft | Full          | None        | Summary       | None           |
+| `DEV_ADMIN`        | Audit logs        | Dev tasks       | None       | None          | Escalations | Full          | Read-only      |
+| `SUPPORT_AGENT`    | None              | Support tasks   | None       | None          | Full        | None          | None           |
+
+### 3. Data Privacy (PII — MANDATORY before CRM Phase 2)
+
+- **Field-level encryption**: `email` and `phone` on `Lead` model — encrypted at rest (AES-256-GCM).
+- **No raw PII in AI prompts**: Strip/hash PII before any LLM API call. Use metadata tiers only (companySize, region, orgType).
+- **Consent flag**: `Lead.consentGiven` must be `true` before AI can generate outreach drafts.
+- **Data residency**: Comply with Saudi PDPL, UAE PDPPL, and GDPR for MENA market data.
+
+### 4. Design Aesthetics (ADS v7)
 
 - **Token Compliance**: 100% adherence to Atlassian Design System (ADS) tokens. No hardcoded colors.
 - **Visual Parity**: Client and Admin dashboards must be indistinguishable in visual quality.
-- **Micro-interactions**: Use Framer Motion for subtle, premium transitions (e.g., side-panel slides, layout morphs).
+- **Micro-interactions**: CSS-first transitions. Add `framer-motion` only where a phase prompt explicitly requires it.
 
-### 3. AI Safety & Interaction (SDK v6)
+### 5. AI Safety & Interaction (SDK v6)
 
 - **Vercel AI SDK v6**: Use core patterns including tool calling and generative UI where applicable.
 - **Human-in-the-Loop (HiTL)**: AI actions require human confirmation before external impact (emails, site publishing).
 - **Image Generation**: Support for visual asset generation (Grok Imagine or equivalent) within the Landing Page and Blog builders.
 
-### 4. MENA-First Globalization
+### 6. MENA-First Globalization
 
 - **Full RTL Support**: Every UI feature must support English and Arabic with perfect RTL layout.
 - **Culturally Appropriate AI**: Ensure AI-generated Arabic content uses appropriate local tones (e.g., Saudi/UAE market standards).

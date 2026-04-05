@@ -67,6 +67,8 @@
 - [ ] **Visual contract:** Components use semantic variables; dark mode flips neutrals correctly when `data-color-mode`/`.dark` contract is applied by consuming app.
 - [ ] **Compatibility:** Existing shadcn-style class names still work.
 - [ ] **Quality:** UI package lint + typecheck pass; at least one consumer app build passes.
+- [ ] **Cross-app smoke test:** Run `pnpm turbo build --filter=client-dashboard --filter=admin-dashboard --filter=marketing` — all three must build without errors. This is the primary regression gate for `@gate-access/ui` → `@gateflow/ui` migration.
+- [ ] **Visual regression baseline:** Take screenshots of at least 5 key pages (client dashboard home, admin dashboard home, marketing hero, login, settings) before and after the migration. Compare manually or via Chromatic/screenshot diff. No layout shifts or color regressions allowed.
 - [ ] **Motion deps:** Primitives use **CSS / Tailwind** motion (`creative-animation`). **No** new **`framer-motion`** / **`animejs`** dependencies on `@gateflow/ui` **unless** a **new acceptance bullet** is added to this prompt first (library + component scope).
 - [ ] **Docs:** `packages/ui/README.md` (short) or extend `docs/guides/UI_COMPONENT_LIBRARY.md` with token import instructions and new scope.
 

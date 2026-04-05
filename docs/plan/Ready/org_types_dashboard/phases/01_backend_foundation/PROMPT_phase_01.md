@@ -3,6 +3,10 @@
 > **Plan:** `PLAN_org_types_dashboard.md` (plan folder root)  
 > **Slug:** `org_types_dashboard`
 
+> ⚠️ **Migration Conflict Contract:** This phase **owns** the `OrganizationType` enum. The `platform_evolution` Phase 1 runs _after_ this migration is pushed to `master`. Coordinate: complete this phase → `git push` → then signal `platform_evolution` P1 to begin DB steps. Never run both schema migrations simultaneously.
+
+> 🔗 **Admin Dashboard Coordination:** After this phase, `platform_evolution` P1 must add an `OrgProvisioningForm` to the Admin Dashboard so that `orgType` can be set per org. Document this in `phase_logs/PHASE_LOG_phase_01.md` as a handoff item.
+
 ### Primary role
 
 **BACKEND** (with **SECURITY** awareness for auth/session and API exposure)
@@ -54,7 +58,9 @@ Persist **`OrganizationType`** on every organization, backfill safely, expose **
 3. Update seeds: at least one org per type for manual testing; keep volumes batched per seeding guidelines.
 4. Ensure any API that returns the current organization includes `type` and is **auth + org scoped**.
 5. If extending JWT: update `signAccessToken` / verify paths and **tests** in `apps/client-dashboard/src/lib/auth.test.ts` / `auth-cookies.test.ts`; keep claims minimal (type string only).
-6. Run `pnpm turbo lint` and `pnpm turbo typecheck` for affected packages; run `pnpm preflight` if feasible.
+6. **Performance check**: The `ORGANIZATION_FEATURES` config object (Phase 2) must be a static in-memory object, not a runtime DB query. Verify config evaluation adds ≤5ms TTFB overhead. Document this constraint in Phase 2 prompt.
+7. Run `pnpm turbo lint` and `pnpm turbo typecheck` for affected packages; run `pnpm preflight` if feasible.
+8. Write `phase_logs/PHASE_LOG_phase_01.md` with handoff note: "Signal `platform_evolution` P1 to begin after this migration is pushed."
 
 ### Acceptance criteria
 
