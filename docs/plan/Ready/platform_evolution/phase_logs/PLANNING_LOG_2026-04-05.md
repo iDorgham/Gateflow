@@ -4,6 +4,53 @@
 
 ---
 
+## 2026-04-05 — Phase 3, 4, 7 Rewrite (Quality Parity)
+
+**Attendees:** Product Owner + AI Strategist  
+**Status:** Planning — phases raised to 9/10 quality
+
+### Trigger
+
+Readiness audit scored Phases 3, 4, 7 at 4-5/10 versus Phases 1, 2, 5, 6 at 9/10. Three weak prompts were rewritten from scratch.
+
+### Phase 3 (Task Manager) — Changes
+
+| Before                      | After                                                                                  |
+| :-------------------------- | :------------------------------------------------------------------------------------- |
+| No RBAC                     | Full 6-role department-scoped RBAC table                                               |
+| "AiTaskBot" in one sentence | Full `TaskBotRule` schema with conditions JSON, action templates, `autoExecute` toggle |
+| Hardcoded `#3b82f6`         | Removed — ADS tokens only                                                              |
+| No HiTL for bots            | Bot tasks require approval unless `autoExecute` explicitly enabled                     |
+| No rate limiting            | Max 10 bot tasks/rule/hour; auto-disable on exceed                                     |
+| No notifications            | In-app notification bell with 4 trigger types                                          |
+| No MENA calendar            | Friday-Saturday weekend, Hijri calendar option                                         |
+| No CRM cross-linking spec   | Polymorphic `linkedType`/`linkedId` FK design                                          |
+
+### Phase 4 (Style Hub) — Changes
+
+| Before                                  | After                                                        |
+| :-------------------------------------- | :----------------------------------------------------------- |
+| No `@gateflow/tokens` reference         | Full whitelist of overridable tokens from `@gateflow/tokens` |
+| "Iframe preview" unspecified            | PostMessage protocol with origin validation                  |
+| "Glassmorphism" as acceptance criterion | Replaced with measurable WCAG contrast checks                |
+| No asset storage                        | Vercel Blob Storage with 2MB limit                           |
+| No rollback                             | `BrandingSnapshot` table with one-click restore              |
+| No RBAC                                 | `DEV_ADMIN` / `SUPER_ADMIN` only                             |
+| No WCAG spec                            | WCAG 2.1 AA (4.5:1) — block save on violation                |
+
+### Phase 7 (Ops Hub) — Changes
+
+| Before                          | After                                                               |
+| :------------------------------ | :------------------------------------------------------------------ |
+| 3 unrelated systems in 53 lines | 4 discrete sub-modules (A-D) in 200+ lines                          |
+| No support schema               | Full `SupportTicket` + `SupportMessage` Prisma models               |
+| No audit trail viewer           | Searchable UI with filters, detail panel, CSV/XLSX export           |
+| No AI cost tracking             | `AiUsageLog` table + interceptor + department breakdown chart       |
+| No notification for escalation  | Escalation creates linked Task + in-app notification                |
+| No rate limiting spec           | Per-route-group sliders with Edge middleware via @upstash/ratelimit |
+
+---
+
 ## 2026-04-05 — Architecture Clarification Session
 
 **Attendees:** Product Owner + AI Strategist  
