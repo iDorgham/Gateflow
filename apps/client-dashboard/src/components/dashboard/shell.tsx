@@ -174,7 +174,7 @@ export function DashboardShell({
           >
             <Sparkles className="h-[17px] w-[17px]" />
           </Button>
-          <LanguageSwitcher currentLocale={locale} variant="mini" />
+          <LanguageSwitcher currentLocale={locale} />
           <ThemeToggle />
           <div className="h-6 w-px bg-sidebar-border/50 mx-1 hidden sm:block" />
           <HeaderUserMenu

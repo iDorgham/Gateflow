@@ -236,7 +236,7 @@ function SearchHeader({
         </DropdownMenu>
 
         <div className="flex items-center gap-1 ml-1">
-          <LanguageSwitcher currentLocale={locale} variant="mini" />
+          <LanguageSwitcher currentLocale={locale} />
           <div className="hidden lg:block ml-1">
             <ThemeToggle />
           </div>

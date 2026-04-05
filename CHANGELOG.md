@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Dashboards]** fix audit logs runtime error, sync theme/locale across all apps, and fix RTL/sidebar layout
+
 - **[Changelog]** restructure Unreleased to match required tri-track format
 
 - **[Deploy]** add outputFileTracingRoot to all Next.js apps for pnpm monorepo
@@ -27,6 +29,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 - **[Admin AI]** refine UI/UX with premium animations and hybrid message parts.
 
 ### Apps
+
 - **[Marketing]** merge marketing_growth_engine_q3_2026 worktree into master
 
 - **[Admin]** resolve type errors in AI Assistant SDK migration
