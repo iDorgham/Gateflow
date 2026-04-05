@@ -28,6 +28,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Apps
 
+- **[Admin]** resolve type errors in AI Assistant SDK migration
+
 - **[Admin]** refine theme with specific hex colors and unified radii
 
 - **[Admin]** modernize dashboard aesthetics to match client dashboard
