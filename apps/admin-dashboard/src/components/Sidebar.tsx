@@ -121,26 +121,26 @@ export function Sidebar() {
   }
 
   return (
-    <div className="relative h-full">
+    <div className="relative h-full transition-all duration-300">
       <SideNavigationShell
         isCollapsed={isCollapsed}
         header={
           <div
             className={cn(
-              'flex h-16 items-center px-4 gap-3',
-              isCollapsed && 'justify-center px-0'
+              'flex h-20 items-center px-4 gap-3 border-b border-ds-border/30 mb-2',
+              isCollapsed && 'justify-center border-none'
             )}
           >
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[var(--ds-background-brand-bold,#0052CC)] text-[13px] font-bold text-white shadow-sm">
-              GF
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-ds-background-brand-bold text-white shadow-lg shadow-primary/25 ring-2 ring-background transition-transform hover:scale-105 active:scale-95 cursor-default">
+              <Shield className="h-5 w-5" fill="currentColor" />
             </div>
             {!isCollapsed && (
               <div className="flex flex-col min-w-0">
-                <span className="text-sm font-bold tracking-tight text-[var(--ds-text,#172B4D)] uppercase">
+                <span className="text-sm font-black italic tracking-tighter text-ds-text uppercase">
                   GateFlow
                 </span>
-                <span className="text-[10px] font-bold text-[var(--ds-text-brand,#0052CC)] tracking-[0.1em] uppercase">
-                  Admin Console
+                <span className="text-[10px] font-black text-ds-text-brand tracking-widest uppercase opacity-90">
+                  Global Admin
                 </span>
               </div>
             )}
@@ -186,11 +186,10 @@ export function Sidebar() {
         ))}
       </SideNavigationShell>
 
-      {/* Collapse toggle */}
       <button
         type="button"
         onClick={() => setIsCollapsed(!isCollapsed)}
-        className="absolute top-10 -right-3 z-50 flex h-6 w-6 items-center justify-center rounded-full border border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-background-default,#FFFFFF)] shadow-sm hover:bg-[var(--ds-background-subtle,#F4F5F7)] transition-all group"
+        className="absolute top-1/2 -translate-y-1/2 -right-3 z-50 flex h-6 w-6 items-center justify-center rounded-full border border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-background-default,#FFFFFF)] shadow-sm hover:bg-[var(--ds-background-subtle,#F4F5F7)] transition-all group"
         aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
       >
         <ChevronLeft

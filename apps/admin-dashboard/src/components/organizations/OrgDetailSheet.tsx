@@ -5,9 +5,6 @@ import { useRouter, useParams } from 'next/navigation';
 import {
   Sheet,
   SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetDescription,
   Badge,
   Button,
   cn,
@@ -25,11 +22,7 @@ import {
   ShieldCheck,
   X,
   Mail,
-  ExternalLink,
-  ChevronRight,
   Activity,
-  Globe,
-  Settings2,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
@@ -106,7 +99,7 @@ export function OrgDetailSheet({ orgId, onClose }: OrgDetailSheetProps) {
         if (!open) onClose();
       }}
     >
-      <SheetContent className="w-full sm:max-w-md p-0 flex flex-col h-full bg-ds-background-default border-l border-ds-border shadow-2xl">
+      <SheetContent className="w-full sm:max-w-xl p-0 flex flex-col h-full bg-ds-background-default border-l border-ds-border shadow-2xl">
         {loading ? (
           <div className="flex-1 flex items-center justify-center">
             <Loader2 className="h-8 w-8 animate-spin text-ds-text-brand" />
@@ -156,139 +149,134 @@ export function OrgDetailSheet({ orgId, onClose }: OrgDetailSheetProps) {
             <ScrollArea className="flex-1">
               <div className="p-6 space-y-8">
                 {/* Visual Stats Grid */}
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="p-4 rounded-xl bg-ds-background-default border border-ds-border shadow-sm group hover:border-ds-border-brand transition-colors">
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="p-4 rounded-xl bg-ds-background-default border border-ds-border shadow-sm group hover:border-ds-border-brand transition-all hover:translate-y-[-2px]">
                     <div className="flex items-center gap-2 mb-2 text-ds-text-subtlest group-hover:text-ds-text-brand transition-colors">
                       <Users className="h-3.5 w-3.5" />
                       <span className="text-[10px] font-black uppercase tracking-widest">
-                        Total Users
+                        Users
                       </span>
                     </div>
                     <div className="text-2xl font-black text-ds-text tabular-nums">
                       {org._count.users}
                     </div>
                   </div>
-                  <div className="p-4 rounded-xl bg-ds-background-default border border-ds-border shadow-sm group hover:border-ds-border-brand transition-colors">
+                  <div className="p-4 rounded-xl bg-ds-background-default border border-ds-border shadow-sm group hover:border-ds-border-brand transition-all hover:translate-y-[-2px]">
                     <div className="flex items-center gap-2 mb-2 text-ds-text-subtlest group-hover:text-ds-text-brand transition-colors">
                       <QrCode className="h-3.5 w-3.5" />
                       <span className="text-[10px] font-black uppercase tracking-widest">
-                        Active QRs
+                        QRs
                       </span>
                     </div>
                     <div className="text-2xl font-black text-ds-text tabular-nums">
                       {org._count.qrCodes}
                     </div>
                   </div>
+                  <div className="p-4 rounded-xl bg-ds-background-default border border-ds-border shadow-sm group hover:border-ds-border-brand transition-all hover:translate-y-[-2px]">
+                    <div className="flex items-center gap-2 mb-2 text-ds-text-subtlest group-hover:text-ds-text-brand transition-colors">
+                      <DoorOpen className="h-3.5 w-3.5" />
+                      <span className="text-[10px] font-black uppercase tracking-widest">
+                        Gates
+                      </span>
+                    </div>
+                    <div className="text-2xl font-black text-ds-text tabular-nums text-ds-text-accent-teal">
+                      {org._count.gates}
+                    </div>
+                  </div>
                 </div>
 
                 {/* Info List */}
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between group">
-                    <div className="flex items-center gap-3">
-                      <div className="h-8 w-8 rounded-lg bg-ds-background-neutral flex items-center justify-center text-ds-text-subtle">
-                        <Mail className="h-4 w-4" />
-                      </div>
-                      <div className="flex flex-col">
-                        <span className="text-[10px] font-bold text-ds-text-subtlest uppercase tracking-widest mb-0.5">
-                          Admin Email
-                        </span>
-                        <span className="text-sm font-bold text-ds-text truncate max-w-[200px]">
-                          {org.email}
-                        </span>
-                      </div>
+                <div className="grid grid-cols-2 gap-y-6 gap-x-8">
+                  <div className="flex flex-col gap-1 pr-4 border-r border-ds-border/50">
+                    <span className="text-[10px] font-bold text-ds-text-subtlest uppercase tracking-widest">
+                      Admin Email
+                    </span>
+                    <div className="flex items-center gap-2 group cursor-pointer">
+                      <span className="text-sm font-bold text-ds-text truncate">
+                        {org.email}
+                      </span>
+                      <Mail className="h-3 w-3 text-ds-text-subtlest group-hover:text-ds-text-brand transition-colors" />
                     </div>
-                    <ExternalLink className="h-3.5 w-3.5 text-ds-text-subtlest opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
 
-                  <div className="flex items-center justify-between group">
-                    <div className="flex items-center gap-3">
-                      <div className="h-8 w-8 rounded-lg bg-ds-background-neutral flex items-center justify-center text-ds-text-subtle">
-                        <CalendarDays className="h-4 w-4" />
-                      </div>
-                      <div className="flex flex-col">
-                        <span className="text-[10px] font-bold text-ds-text-subtlest uppercase tracking-widest mb-0.5">
-                          Registration
-                        </span>
-                        <span className="text-sm font-bold text-ds-text">
-                          {format(new Date(org.createdAt), 'MMMM dd, yyyy')}
-                        </span>
-                      </div>
+                  <div className="flex flex-col gap-1">
+                    <span className="text-[10px] font-bold text-ds-text-subtlest uppercase tracking-widest">
+                      Registration
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-bold text-ds-text">
+                        {format(new Date(org.createdAt), 'MMM dd, yyyy')}
+                      </span>
+                      <CalendarDays className="h-3 w-3 text-ds-text-subtlest" />
                     </div>
-                    <Globe className="h-3.5 w-3.5 text-ds-text-subtlest opacity-0 group-hover:opacity-100 transition-opacity" />
                   </div>
 
-                  <div className="flex items-center justify-between group">
-                    <div className="flex items-center gap-3">
-                      <div className="h-8 w-8 rounded-lg bg-ds-background-neutral flex items-center justify-center text-ds-text-subtle">
-                        <ShieldAlert
-                          className={cn(
-                            'h-4 w-4',
-                            suspended
-                              ? 'text-ds-text-danger'
-                              : 'text-ds-text-success'
-                          )}
-                        />
-                      </div>
-                      <div className="flex flex-col">
-                        <span className="text-[10px] font-bold text-ds-text-subtlest uppercase tracking-widest mb-0.5">
-                          Compliance
-                        </span>
-                        <span
-                          className={cn(
-                            'text-sm font-bold',
-                            suspended
-                              ? 'text-ds-text-danger'
-                              : 'text-ds-text-success'
-                          )}
-                        >
-                          {suspended
-                            ? 'Account Suspended'
-                            : 'Verified & Active'}
-                        </span>
-                      </div>
+                  <div className="flex flex-col gap-1 pr-4 border-r border-ds-border/50">
+                    <span className="text-[10px] font-bold text-ds-text-subtlest uppercase tracking-widest">
+                      Compliance
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <ShieldCheck
+                        className={cn(
+                          'h-3.5 w-3.5',
+                          suspended
+                            ? 'text-ds-text-danger'
+                            : 'text-ds-text-success'
+                        )}
+                      />
+                      <span
+                        className={cn(
+                          'text-xs font-black uppercase tracking-tighter',
+                          suspended
+                            ? 'text-ds-text-danger'
+                            : 'text-ds-text-success'
+                        )}
+                      >
+                        {suspended ? 'Suspended' : 'Verified'}
+                      </span>
                     </div>
-                    <ChevronRight className="h-3.5 w-3.5 text-ds-text-subtlest group-hover:translate-x-1 transition-transform" />
+                  </div>
+
+                  <div className="flex flex-col gap-1">
+                    <span className="text-[10px] font-bold text-ds-text-subtlest uppercase tracking-widest">
+                      Network Status
+                    </span>
+                    <div className="flex items-center gap-1.5">
+                      <div className="h-1.5 w-1.5 rounded-full bg-ds-text-success animate-pulse" />
+                      <span className="text-xs font-bold text-ds-text-subtle">
+                        Live & Syncing
+                      </span>
+                    </div>
                   </div>
                 </div>
 
                 {/* Usage Summary */}
                 <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-[11px] font-black text-ds-text-subtle uppercase tracking-[0.2em]">
-                      Platform Usage
-                    </h3>
-                    <Badge
-                      variant="subtle"
-                      className="text-[9px] h-4 font-bold bg-ds-background-neutral text-ds-text-subtle border-none"
-                    >
-                      Current Billing Cycle
-                    </Badge>
-                  </div>
-
-                  <div className="grid grid-cols-1 gap-3">
-                    <div className="p-4 rounded-xl bg-ds-background-neutral-subtle/50 border border-ds-border-subtle flex items-center justify-between">
-                      <div className="flex flex-col">
-                        <span className="text-[10px] font-bold text-ds-text-subtlest uppercase tracking-widest mb-1">
-                          Total Platform Scans
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="p-4 rounded-xl bg-ds-background-neutral-subtle border border-ds-border flex items-center justify-between group overflow-hidden relative">
+                      <div className="flex flex-col relative z-10">
+                        <span className="text-[10px] font-black text-ds-text-subtlest uppercase tracking-[0.2em] mb-1">
+                          Lifetime Total
                         </span>
-                        <span className="text-xl font-black text-ds-text tabular-nums">
+                        <span className="text-xl font-black text-ds-text tabular-nums tracking-tighter">
                           {org.scansTotal.toLocaleString(locale)}
                         </span>
                       </div>
-                      <div className="h-10 w-10 rounded-full bg-ds-background-brand-subtle flex items-center justify-center">
+                      <div className="h-10 w-10 rounded-xl bg-ds-background-brand-bold/10 flex items-center justify-center relative z-10 group-hover:scale-110 transition-transform">
                         <ScanLine className="h-5 w-5 text-ds-text-brand" />
                       </div>
                     </div>
-                    <div className="p-4 rounded-xl bg-ds-background-neutral-subtle/50 border border-ds-border-subtle flex items-center justify-between">
-                      <div className="flex flex-col">
-                        <span className="text-[10px] font-bold text-ds-text-subtlest uppercase tracking-widest mb-1">
-                          Scans This Month
+
+                    <div className="p-4 rounded-xl bg-ds-background-neutral-subtle border border-ds-border flex items-center justify-between group overflow-hidden relative">
+                      <div className="flex flex-col relative z-10">
+                        <span className="text-[10px] font-black text-ds-text-subtlest uppercase tracking-[0.2em] mb-1">
+                          This Month
                         </span>
-                        <span className="text-xl font-black text-ds-text tabular-nums">
+                        <span className="text-xl font-black text-ds-text-success tabular-nums tracking-tighter">
                           {org.scansThisMonth.toLocaleString(locale)}
                         </span>
                       </div>
-                      <div className="h-10 w-10 rounded-full bg-ds-background-success-subtle flex items-center justify-center">
+                      <div className="h-10 w-10 rounded-xl bg-ds-background-success-bold/10 flex items-center justify-center relative z-10 group-hover:scale-110 transition-transform">
                         <Activity className="h-5 w-5 text-ds-text-success" />
                       </div>
                     </div>

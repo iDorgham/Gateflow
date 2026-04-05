@@ -10,20 +10,25 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Changelog]** restructure Unreleased to match required tri-track format
+
 - **[Deploy]** add outputFileTracingRoot to all Next.js apps for pnpm monorepo
 - **[Deploy]** remove prisma generate from client-dashboard and resident-portal build scripts
 - **[Db]** resolve TS2345 type error in tenant.ts scanLog.count
 - **[Ci]** standardize cache action and remove pnpm-store from cache paths
-- **[Scripts]** ralph-docs changelog inserts under Unreleased tri-track
-- **[Plan Lifecycle]** complete documentation for tasks.md and automation
+- **[Scripts]** ralph-docs changelog inserts under Unreleased
+  tri-track format
+- **[Plan Lifecycle]** update tasks.md and document automation logic
 
 ### AI Tools
 
 - **[AI SDK v6]** continue migration to `ai@6` / `@ai-sdk/react@3` in dashboard assistants.
+- **[Admin AI]** refine UI/UX with premium animations and hybrid message parts.
 
 ### Apps
 
-- **[Admin]** complete phase 8 - global polish and localization
+- **[Admin]** Align Admin Dashboard aesthetics (Radius, Tokens, Shell) with Client
+  Dashboard premium look
 - **[Admin]** add traffic emulation tooling and emulation hub v4.0
 - **[Admin]** resolve typecheck errors blocking CI (i18n keys, lucide icon, hook-form deps)
 - **[Client]** verify 100% multi-tenant isolation

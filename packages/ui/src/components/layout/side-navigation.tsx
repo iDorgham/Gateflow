@@ -150,7 +150,7 @@ export function SideNavigationShell({
   return (
     <div
       className={cn(
-        'flex h-full flex-col bg-[var(--ds-background-neutral-subtle)] border-r border-[var(--ds-border)] transition-all duration-300 ease-in-out',
+        'flex h-full flex-col bg-ds-background-default border-r border-ds-border transition-all duration-300 ease-in-out relative z-40',
         isCollapsed ? 'w-[64px]' : 'w-64',
         className
       )}

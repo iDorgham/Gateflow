@@ -155,13 +155,15 @@ export default async function AdminOverviewPage(props: {
         {stats.map((stat) => (
           <Card
             key={stat.label}
-            className="border-ds-border shadow-sm hover:shadow-md transition-all hover:-translate-y-1"
+            className="rounded-[32px] border-ds-border bg-ds-background-neutral-subtle/20 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 group overflow-hidden relative"
           >
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between mb-4">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+
+            <CardContent className="p-8">
+              <div className="flex items-center justify-between mb-6">
                 <div
                   className={cn(
-                    'p-2.5 rounded-xl shadow-inner',
+                    'p-3.5 rounded-2xl shadow-lg ring-4 ring-background transition-transform group-hover:rotate-6',
                     stat.variant === 'brand'
                       ? 'bg-ds-background-brand-bold text-ds-text-inverse'
                       : stat.variant === 'primary'
@@ -171,22 +173,40 @@ export default async function AdminOverviewPage(props: {
                           : 'bg-ds-background-warning text-ds-text-warning'
                   )}
                 >
-                  <stat.icon className="h-5 w-5" />
+                  <stat.icon className="h-6 w-6" />
                 </div>
-                <TrendingUp className="h-4 w-4 text-ds-text-subtlest opacity-50" />
+                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-ds-background-neutral-subtle opacity-40 group-hover:opacity-100 transition-opacity">
+                  <TrendingUp className="h-4 w-4 text-ds-text-subtlest" />
+                </div>
               </div>
+
               <div className="space-y-1">
-                <p className="text-[11px] font-black uppercase tracking-widest text-ds-text-subtle">
+                <p className="text-[11px] font-black uppercase tracking-[0.2em] text-ds-text-subtlest group-hover:text-primary transition-colors">
                   {stat.label}
                 </p>
-                <h3 className="text-3xl font-black text-ds-text tracking-tight italic">
-                  {stat.value}
-                </h3>
+                <div className="flex items-baseline gap-2">
+                  <h3 className="text-4xl font-black text-ds-text tracking-tighter italic">
+                    {stat.value}
+                  </h3>
+                </div>
               </div>
-              <p className="text-[10px] text-ds-text-subtlest mt-4 pt-4 border-t border-ds-border-subtle font-bold uppercase flex items-center gap-1.5">
-                <span className="w-1 h-1 rounded-full bg-current" />
-                {stat.sub}
-              </p>
+
+              <div className="mt-6 pt-6 border-t border-ds-border-subtle/50 flex items-center justify-between">
+                <p className="text-[10px] text-ds-text-subtlest font-black uppercase tracking-widest flex items-center gap-2">
+                  <span
+                    className={cn(
+                      'w-1.5 h-1.5 rounded-full',
+                      stat.variant === 'brand'
+                        ? 'bg-primary'
+                        : stat.variant === 'success'
+                          ? 'bg-green-500'
+                          : 'bg-orange-500'
+                    )}
+                  />
+                  {stat.sub}
+                </p>
+                <ArrowUpRight className="h-3.5 w-3.5 text-ds-text-subtlest opacity-0 group-hover:opacity-100 transition-all translate-y-1 group-hover:translate-y-0" />
+              </div>
             </CardContent>
           </Card>
         ))}

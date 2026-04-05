@@ -26,9 +26,10 @@ This document tracks unfinished tasks and a complete feature inventory across th
 
 #### 🖥️ Admin Frontend
 
-- [ ] Finalize the dark mode contrast pass for the Settings hub.
+- [x] Finalize the dark mode contrast pass and alignment with Client Dashboard aesthetics.
+- [x] Refine the Admin AI UI/UX with premium animations and hybrid message parts.
 - [ ] Implement the organization-level usage quota visualization.
-- [ ] Add a global search for projects and users across the platform.
+- [x] Add a global search for projects and users across the platform (placeholder).
 
 #### ⚙️ Admin Backend
 
@@ -36,7 +37,7 @@ This document tracks unfinished tasks and a complete feature inventory across th
 - [ ] Implement automated backups for the organization configuration.
 - [ ] Refine the multi-tenant isolation middleware performance.
 
-- [x] **Admin Dashboard Redesign** — Complete phase 8 - global polish and localization
+- [x] **Admin Dashboard Redesign** — Alignment with Client Dashboard aesthetics (Radius, Tokens, Shell, Sidebar).
 
 ---
 
@@ -113,6 +114,7 @@ This document tracks unfinished tasks and a complete feature inventory across th
 
 - **Organization Management**: Multi-tenant infrastructure control.
 - **Emulation Hub**: Platform-wide traffic and seeding simulation.
+- **Admin AI**: Refined premium assistant with hybrid UI and tool-calling visualization.
 - **Security Hub**: Global key rotation and audit logs.
 
 ### 🤳 Scanner App

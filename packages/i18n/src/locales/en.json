@@ -125,6 +125,22 @@
       "sortedByDesc": "Sorted by creation date (descending)",
       "syncTime": "Metrics sync: Every 30 minutes"
     },
+    "ai": {
+      "title": "GateFlow Admin AI",
+      "subtitle": "Read-only platform intelligence",
+      "welcome": "Hi! I have read-only access to platform data. Ask me about organizations, users, scans, or platform health.",
+      "placeholder": "Ask about platform data...",
+      "clear": "Clear conversation",
+      "thinking": "Thinking...",
+      "reasoning": "Model reasoning",
+      "examplePrompts": {
+        "metrics": "Show platform metrics",
+        "orgs": "List recent organizations",
+        "scans": "Scan activity today",
+        "plans": "How many PRO orgs?",
+        "user": "Search for user admin"
+      }
+    },
     "users": {
       "title": "Users",
       "subtitle": "Manage global platform users, roles, and security.",
