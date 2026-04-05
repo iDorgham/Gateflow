@@ -10,7 +10,10 @@ const securityHeaders = [
   },
 ];
 
+const path = require('path');
+
 const nextConfig = {
+  outputFileTracingRoot: path.join(__dirname, '../../'),
   reactStrictMode: true,
   transpilePackages: [
     '@gate-access/ui',

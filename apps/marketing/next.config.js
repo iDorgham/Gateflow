@@ -10,7 +10,10 @@ const securityHeaders = [
   },
 ];
 
+const path = require('path');
+
 const nextConfig = {
+  outputFileTracingRoot: path.join(__dirname, '../../'),
   transpilePackages: ['@gate-access/ui', '@gate-access/i18n', 'framer-motion'],
   experimental: {
     optimizePackageImports: [

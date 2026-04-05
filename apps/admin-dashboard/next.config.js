@@ -9,7 +9,10 @@ const securityHeaders = [
   },
 ];
 
+const path = require('path');
+
 const nextConfig = {
+  outputFileTracingRoot: path.join(__dirname, '../../'),
   transpilePackages: [
     '@gate-access/types',
     '@gate-access/db',
