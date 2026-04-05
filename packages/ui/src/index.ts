@@ -35,8 +35,6 @@ export * from './components/ui/progress';
 
 export * from './components/auth/login-shell';
 export * from './components/auth/squares-background';
-export * from './components/layout/breadcrumbs';
-export * from './components/layout/page-header';
 export * from './components/layout/side-navigation';
 export * from './components/shared/atlassian-navigation';
 export * from './components/shared/maintenance-status-badge';
