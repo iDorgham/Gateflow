@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Avatar, AvatarFallback } from '@gate-access/ui';
+import { Button, Avatar, AvatarFallback, cn } from '@gate-access/ui';
 import { Sidebar } from './Sidebar';
 import { AdminSidePanel } from './admin-side-panel';
 import { LanguageSwitcher } from './language-switcher';
@@ -9,6 +9,7 @@ import { ThemeToggle } from './theme-toggle';
 import type { Locale } from '@/lib/i18n/i18n-config';
 import { useTranslation } from 'react-i18next';
 import { GlobalSearch } from './GlobalSearch';
+import { PanelRight } from 'lucide-react';
 
 interface AdminShellProps {
   locale: Locale;
@@ -22,14 +23,14 @@ export function AdminShell({ children, locale: _locale }: AdminShellProps) {
   return (
     <div className="flex h-screen w-full bg-background overflow-hidden selection:bg-primary/30 selection:text-primary-foreground sm:antialiased">
       {/* Left/Right Sidebar */}
-      <div className="flex h-full shrink-0 border-inline-end border-ds-border bg-ds-background-default shadow-sm z-30 ltr:border-r rtl:border-l">
+      <div className="flex h-full shrink-0 border-inline-end border-ds-border bg-sidebar/40 shadow-sm z-30 ltr:border-r rtl:border-l backdrop-blur-xl">
         <Sidebar />
       </div>
 
       {/* Main Content Area */}
       <div className="relative flex flex-1 flex-col min-w-0 h-full overflow-hidden">
         {/* Top Header */}
-        <header className="flex h-16 shrink-0 items-center justify-between border-b border-ds-border bg-sidebar px-6 sticky top-0 z-20">
+        <header className="flex h-16 shrink-0 items-center justify-between border-b border-border bg-card px-6 sticky top-0 z-20 shadow-sm">
           <div className="flex items-center gap-1.5 min-w-0">
             <h1 className="text-sm font-black uppercase tracking-widest text-ds-text-subtlest truncate">
               {t('admin:shell.core_platform', 'Core Platform')}
@@ -44,19 +45,39 @@ export function AdminShell({ children, locale: _locale }: AdminShellProps) {
               <ThemeToggle />
               <LanguageSwitcher currentLocale={_locale} />
 
-              <div className="flex items-center gap-2 rounded-lg p-1 pl-3 bg-ds-background-neutral-subtle border border-ds-border hover:bg-ds-background-neutral transition-all cursor-pointer group ltr:pl-3 rtl:pr-3">
+              <div className="flex items-center gap-2 rounded-lg p-1 pl-3 bg-card border border-border hover:bg-muted transition-all cursor-pointer group ltr:pl-3 rtl:pr-3">
                 <span className="max-w-[120px] truncate text-[11px] font-black uppercase tracking-tight text-ds-text-subtle group-hover:text-ds-text">
                   Selena Admin
                 </span>
                 <Avatar
                   size="small"
-                  className="border-2 border-ds-background-default shadow-sm h-7 w-7"
+                  className="border-2 border-background shadow-sm h-7 w-7"
                 >
                   <AvatarFallback className="bg-ds-background-brand-bold text-white text-[9px] font-black uppercase">
                     SA
                   </AvatarFallback>
                 </Avatar>
               </div>
+
+              <Button
+                variant="ghost"
+                size="icon"
+                className={cn(
+                  'h-8 w-8 rounded-lg border transition-all duration-300',
+                  isSidePanelOpen
+                    ? 'bg-primary text-white border-primary shadow-lg shadow-primary/20 hover:bg-primary/90'
+                    : 'bg-card border-border text-muted-foreground hover:bg-muted'
+                )}
+                onClick={() => setIsSidePanelOpen(!isSidePanelOpen)}
+                aria-label="Toggle AI Panel"
+              >
+                <PanelRight
+                  className={cn(
+                    'h-4 w-4',
+                    !isSidePanelOpen && 'rotate-180 transition-transform'
+                  )}
+                />
+              </Button>
             </div>
           </div>
         </header>

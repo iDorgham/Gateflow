@@ -135,9 +135,9 @@ export default async function AdminOverviewPage(props: {
   };
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500 pb-10">
+    <div className="space-y-6 animate-in fade-in duration-500 pb-6">
       <PageHeader
-        titleClassName="italic uppercase"
+        titleClassName="font-black uppercase tracking-tighter text-3xl"
         title={t('overview.title')}
         subtitle={t('overview.subtitle')}
         badge={
@@ -151,19 +151,19 @@ export default async function AdminOverviewPage(props: {
       />
 
       {/* Stats Cluster */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {stats.map((stat) => (
           <Card
             key={stat.label}
-            className="border-ds-border bg-ds-background-neutral-subtle/20 shadow-lg hover:shadow-xl transition-all duration-500 hover:-translate-y-2 group overflow-hidden relative"
+            className="border-border bg-card shadow-lg hover:shadow-primary/5 transition-all duration-500 hover:-translate-y-2 group overflow-hidden relative"
           >
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-primary/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
 
-            <CardContent className="p-8">
-              <div className="flex items-center justify-between mb-6">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between mb-4">
                 <div
                   className={cn(
-                    'p-3.5 rounded-2xl shadow-lg ring-4 ring-background transition-transform group-hover:rotate-6',
+                    'p-3.5 rounded-2xl shadow-xl ring-2 ring-ds-border/10 transition-transform group-hover:rotate-6',
                     stat.variant === 'brand'
                       ? 'bg-ds-background-brand-bold text-ds-text-inverse'
                       : stat.variant === 'primary'
@@ -191,7 +191,7 @@ export default async function AdminOverviewPage(props: {
                 </div>
               </div>
 
-              <div className="mt-6 pt-6 border-t border-ds-border-subtle/50 flex items-center justify-between">
+              <div className="mt-6 pt-6 border-t border-border/40 flex items-center justify-between">
                 <p className="text-[10px] text-ds-text-subtlest font-black uppercase tracking-widest flex items-center gap-2">
                   <span
                     className={cn(
@@ -212,10 +212,10 @@ export default async function AdminOverviewPage(props: {
         ))}
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-3">
+      <div className="grid gap-6 lg:grid-cols-3">
         {/* Recent Organizations Table */}
-        <Card className="lg:col-span-2 border-ds-border shadow-md overflow-hidden flex flex-col">
-          <CardHeader className="flex flex-row items-center justify-between border-b border-ds-border/50 px-6 py-5 bg-ds-background-neutral-subtle/30">
+        <Card className="lg:col-span-2 border-border bg-card shadow-lg overflow-hidden flex flex-col">
+          <CardHeader className="flex flex-row items-center justify-between border-b border-border/40 px-6 py-5 bg-muted/5">
             <div>
               <CardTitle className="text-base font-black italic uppercase tracking-tight text-ds-text">
                 {t('overview.newestOrgs')}
@@ -242,14 +242,14 @@ export default async function AdminOverviewPage(props: {
         </Card>
 
         {/* System & Infra Health */}
-        <Card className="border-ds-border shadow-md">
+        <Card className="border-border bg-card shadow-lg">
           <CardHeader className="px-6 py-5">
             <CardTitle className="text-base font-black italic uppercase tracking-tight text-ds-text">
               {t('overview.infraHealth')}
             </CardTitle>
           </CardHeader>
-          <CardContent className="px-6 space-y-6">
-            <div className="flex items-center gap-4 p-4 rounded-xl bg-ds-background-success-bold/5 border border-ds-background-success-bold/10 group">
+          <CardContent className="px-6 pb-6 space-y-4">
+            <div className="flex items-center gap-4 p-3 rounded-xl bg-muted/30 border border-border/40 group">
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-ds-background-success-bold text-ds-text-inverse shadow-lg transition-transform group-hover:rotate-12">
                 <ShieldCheck className="h-6 w-6" />
               </div>
@@ -263,7 +263,7 @@ export default async function AdminOverviewPage(props: {
               </div>
             </div>
 
-            <div className="flex items-center gap-4 p-4 rounded-xl bg-ds-background-brand-bold/5 border border-ds-background-brand-bold/10 group">
+            <div className="flex items-center gap-4 p-3 rounded-xl bg-muted/30 border border-border/40 group">
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-ds-background-brand-bold text-ds-text-inverse shadow-lg transition-transform group-hover:rotate-12">
                 <CheckCircle2 className="h-6 w-6" />
               </div>
@@ -278,7 +278,7 @@ export default async function AdminOverviewPage(props: {
             </div>
 
             {/* Traffic Visualizer */}
-            <div className="rounded-2xl border border-ds-border p-5 bg-ds-background-neutral-subtle/50">
+            <div className="rounded-2xl border border-border/40 p-5 bg-muted/5">
               <div className="flex items-center justify-between mb-4">
                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-ds-text-subtlest">
                   {t('overview.syncTraffic')}

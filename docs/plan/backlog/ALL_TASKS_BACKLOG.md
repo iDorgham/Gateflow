@@ -79,6 +79,20 @@
 - [ ] Phase 7 — i18n & RTL Mastery
 - [ ] Phase 8 — Global Polish & Dark Mode Review
 
+### platform_evolution — GateFlow Platform Evolution (OS for Access)
+
+**PLAN:** `docs/plan/Ready/platform_evolution/`  
+`PLAN_platform_evolution.md`  
+**Status:** 🆕 Draft (Planning Phase)  
+**Target:** Q2-Q3 2026
+
+- [ ] Phase 1 — Nested Organizational Hierarchy (Users, Projects, Gates inside Org)
+- [ ] Phase 2 — Settings v6: Teams, Roles, Integrations, Tracking Tags
+- [ ] Phase 3 — Marketing Suite: Blog CMS, Webflow-style Landing Page Builder
+- [ ] Phase 4 — Support & Operational Hub: AI Chat, Task Manager, Feature Flags
+- [ ] Phase 5 — UI/UX Unification: Dynamic Theming, Global Style Sync
+- [ ] Phase 6 — Growth Optimization: A/B Testing & Lead Attribution
+
 ---
 
 ## 🏛️ Archived & Completed (2026)

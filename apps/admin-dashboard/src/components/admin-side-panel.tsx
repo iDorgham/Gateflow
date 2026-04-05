@@ -38,45 +38,36 @@ export function AdminSidePanel({
         isOpen ? 'w-[420px] min-w-[420px] shadow-xl' : 'w-0 min-w-0 border-l-0'
       )}
     >
-      {/* Collapse toggle on left edge */}
-      <button
-        onClick={onToggle}
-        className={cn(
-          'absolute bottom-[38px] -left-3 z-50 flex h-6 w-6 items-center justify-center rounded-full border border-sidebar-border bg-sidebar shadow-sm transition-transform hover:bg-sidebar-accent',
-          !isOpen && 'rotate-180'
-        )}
-        aria-label={isOpen ? 'Close panel' : 'Open panel'}
-      >
-        <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
-      </button>
-
       <div className={cn('flex h-full flex-col', !isOpen && 'hidden')}>
         <Tabs defaultValue="ai" className="flex h-full flex-col">
           {/* Tab bar */}
           <div
-            className="flex shrink-0 items-center justify-between border-b border-border px-3 py-2 bg-muted/20"
+            className="flex h-16 shrink-0 items-center justify-between border-b border-border px-3 py-2 bg-card"
             dir={isRtl ? 'rtl' : 'ltr'}
           >
-            <TabsList className="bg-sidebar-accent h-10 p-1 gap-0.5">
+            <TabsList className="bg-muted/50 h-11 p-1 gap-1 rounded-xl w-full">
               <TabsTrigger
                 value="ai"
-                className="gap-1.5 px-4 text-[11px] font-black uppercase tracking-widest data-[state=active]:text-primary"
+                className="flex-1 gap-1.5 px-4 text-[10px] h-9 rounded-lg font-black uppercase tracking-widest data-[state=active]:bg-primary data-[state=active]:text-white transition-all"
               >
-                <Sparkles className="h-4 w-4" aria-hidden="true" />
+                <Sparkles
+                  className="h-3.5 w-3.5 transition-transform group-active:scale-95"
+                  aria-hidden="true"
+                />
                 AI
               </TabsTrigger>
               <TabsTrigger
                 value="logs"
-                className="gap-1.5 px-4 text-[11px] font-black uppercase tracking-widest data-[state=active]:text-primary"
+                className="flex-1 gap-1.5 px-4 text-[10px] h-9 rounded-lg font-black uppercase tracking-widest data-[state=active]:bg-primary data-[state=active]:text-white transition-all"
               >
-                <ScrollText className="h-4 w-4" aria-hidden="true" />
+                <ScrollText className="h-3.5 w-3.5" aria-hidden="true" />
                 Logs
               </TabsTrigger>
               <TabsTrigger
                 value="chat"
-                className="gap-1.5 px-4 text-[11px] font-black uppercase tracking-widest data-[state=active]:text-primary"
+                className="flex-1 gap-1.5 px-4 text-[10px] h-9 rounded-lg font-black uppercase tracking-widest data-[state=active]:bg-primary data-[state=active]:text-white transition-all"
               >
-                <MessageSquare className="h-4 w-4" aria-hidden="true" />
+                <MessageSquare className="h-3.5 w-3.5" aria-hidden="true" />
                 Chat
               </TabsTrigger>
             </TabsList>
@@ -101,7 +92,7 @@ export function AdminSidePanel({
 
           {/* Logs tab — placeholder */}
           <TabsContent value="logs" className="flex-1 overflow-hidden m-0">
-            <div className="flex h-full flex-col items-center justify-center gap-3 p-8 text-center bg-ds-background-default">
+            <div className="flex h-full flex-col items-center justify-center gap-3 p-8 text-center bg-background">
               <div className="relative">
                 <div className="absolute -inset-2 rounded-2xl bg-ds-background-brand-subtle/40 blur-xl" />
                 <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-ds-background-brand-subtle">
@@ -121,7 +112,7 @@ export function AdminSidePanel({
 
           {/* Chat tab — placeholder */}
           <TabsContent value="chat" className="flex-1 overflow-hidden m-0">
-            <div className="flex h-full flex-col items-center justify-center gap-3 p-8 text-center bg-ds-background-default">
+            <div className="flex h-full flex-col items-center justify-center gap-3 p-8 text-center bg-background">
               <div className="relative">
                 <div className="absolute -inset-2 rounded-2xl bg-ds-background-accent-teal/20 blur-xl" />
                 <div className="relative flex h-16 w-16 items-center justify-center rounded-2xl bg-ds-background-accent-teal/10 text-ds-text-accent-teal">

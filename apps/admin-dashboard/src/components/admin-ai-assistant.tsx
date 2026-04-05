@@ -321,9 +321,9 @@ export function AdminAIAssistant({ locale: _locale }: AdminAIAssistantProps) {
   ];
 
   return (
-    <div className="flex h-full flex-col bg-ds-background-default relative border-none">
+    <div className="flex h-full flex-col bg-background relative border-none">
       {/* Background decoration */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_-20%,rgba(access-brand-colors)/0.05,transparent)] opacity-50 pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_-20%,rgba(access-brand-colors)/0.03,transparent)] opacity-30 pointer-events-none" />
 
       {/* Messages */}
       <div className="flex-1 space-y-6 overflow-y-auto px-4 py-6 scrollbar-hide relative z-10">
@@ -334,7 +334,7 @@ export function AdminAIAssistant({ locale: _locale }: AdminAIAssistantProps) {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="rounded-3xl border border-ds-border/30 bg-ds-surface-sunken/40 p-8 text-center backdrop-blur-sm"
+              className="rounded-3xl border border-border bg-card p-8 text-center shadow-lg"
             >
               <div className="mb-6 flex justify-center">
                 <div className="relative">
@@ -361,7 +361,7 @@ export function AdminAIAssistant({ locale: _locale }: AdminAIAssistantProps) {
                     <button
                       key={key}
                       onClick={() => void sendMessage({ text: label })}
-                      className="group flex items-center gap-3 rounded-2xl border border-ds-border/40 bg-ds-surface-overlay px-4 py-3 text-left transition-all hover:translate-y-[-2px] hover:border-ds-border-selected hover:shadow-md active:scale-[0.98]"
+                      className="group flex items-center gap-3 rounded-2xl border border-border bg-background px-4 py-3 text-left transition-all hover:translate-y-[-2px] hover:border-primary/40 hover:shadow-md active:scale-[0.98]"
                     >
                       <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-ds-background-subtle group-hover:bg-ds-background-brand-subtle group-hover:text-ds-text-brand transition-colors">
                         <Icon className="h-4 w-4" />
@@ -427,7 +427,7 @@ export function AdminAIAssistant({ locale: _locale }: AdminAIAssistantProps) {
                       'rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-sm transition-all relative overflow-hidden',
                       isUser
                         ? 'bg-ds-background-accent-teal text-white rounded-tr-sm'
-                        : 'bg-ds-surface-overlay text-ds-text border border-ds-border/40 rounded-tl-sm hover:border-ds-border-selected'
+                        : 'bg-card text-ds-text border border-border rounded-tl-sm'
                     )}
                   >
                     {/* Glass effect for bot */}
@@ -525,9 +525,9 @@ export function AdminAIAssistant({ locale: _locale }: AdminAIAssistantProps) {
       <form
         ref={formRef}
         onSubmit={handleSubmit}
-        className="shrink-0 border-t border-ds-border bg-ds-surface-overlay/80 p-4 backdrop-blur-sm relative z-30"
+        className="shrink-0 border-t border-border bg-card p-4 relative z-30"
       >
-        <div className="flex items-end gap-2 bg-ds-background-default border border-ds-border/60 rounded-2xl p-1 shadow-sm focus-within:border-ds-border-selected focus-within:ring-4 focus-within:ring-ds-background-brand-subtle transition-all">
+        <div className="flex items-end gap-2 bg-background border border-border/60 rounded-2xl p-1 shadow-sm focus-within:border-primary/50 transition-all">
           <textarea
             value={input}
             onChange={handleInputChange}

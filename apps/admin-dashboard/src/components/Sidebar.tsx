@@ -127,11 +127,11 @@ export function Sidebar() {
         header={
           <div
             className={cn(
-              'flex h-20 items-center px-4 gap-3 border-b border-ds-border/30 mb-2',
+              'flex h-16 items-center px-4 gap-3 border-b border-border/40 mb-2',
               isCollapsed && 'justify-center border-none'
             )}
           >
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-ds-background-brand-bold text-white shadow-lg shadow-primary/25 ring-2 ring-background transition-transform hover:scale-105 active:scale-95 cursor-default">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-ds-background-brand-bold text-white shadow-lg shadow-primary/25 ring-2 ring-sidebar/20 transition-transform hover:scale-105 active:scale-95 cursor-default">
               <Shield className="h-5 w-5" fill="currentColor" />
             </div>
             {!isCollapsed && (

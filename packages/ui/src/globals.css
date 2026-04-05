@@ -127,23 +127,23 @@
 
   .dark {
     /* ── Custom Dark Theme ──────────────────────────── */
-    --background: 240 4% 7%;      /* #111112 */
+    --background: 240 4% 4%;      /* #111112 Exactly */
     --foreground: 210 5% 96%;
-    --card: 219 6% 11%;           /* #191a1c */
+    --card: 220 6% 10%;           /* #191a1c Exactly */
     --card-foreground: 210 5% 96%;
-    --popover: 219 6% 11%;        /* #191a1c */
+    --popover: 220 6% 10%;
     --popover-foreground: 210 5% 96%;
     --primary: 19 100% 46%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 219 6% 11%;
+    --secondary: 222 5% 12%;      /* #1e1f21 Exactly */
     --secondary-foreground: 210 5% 96%;
-    --muted: 219 6% 11%;
-    --muted-foreground: 210 5% 70%;
-    --accent: 219 6% 11%;
+    --muted: 222 5% 12%;          /* #1e1f21 Exactly */
+    --muted-foreground: 210 5% 60%;
+    --accent: 222 5% 12%;
     --accent-foreground: 210 5% 96%;
     --destructive: 0 63% 31%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 4% 19%;         /* #2f2f33 */
+    --border: 240 4% 19%;         /* Gray border #2f2f33 */
     --input: 240 4% 19%;
     --ring: 19 100% 46%;
 
