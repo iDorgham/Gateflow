@@ -401,7 +401,17 @@
       "enforced": "Enforced",
       "optional": "Optional",
       "configNoticeTitle": "Configuration is environment-based",
-      "configNoticeDesc": "All platform settings are controlled via environment variables in <1>.env.local</1>. Restart the server after making changes. Values shown above are masked for security."
+      "configNoticeDesc": "All platform settings are controlled via environment variables in <1>.env.local</1>. Restart the server after making changes. Values shown above are masked for security.",
+      "host": "Host",
+      "algorithm": "Algorithm",
+      "minKeyLength": "Min Key Length",
+      "provider": "Provider",
+      "accessTokenTtl": "Access Token TTL",
+      "refreshTokenTtl": "Refresh Token TTL",
+      "passwordHashing": "Password Hashing",
+      "csrf": "CSRF Protection",
+      "apiKeyStorage": "API Key Storage",
+      "fieldEncryption": "Field Encryption"
     },
     "admins": {
       "title": "Admins",

@@ -1,7 +1,7 @@
 import { requireAdmin } from '@/lib/admin-auth';
 import { getTranslation } from '@/lib/i18n/i18n';
 import { Locale } from '@/lib/i18n/i18n-config';
-import { Mail, Shield, Tool, ExternalLink } from 'lucide-react';
+import { Mail, Shield, Wrench, ExternalLink } from 'lucide-react';
 import {
   Card,
   CardContent,
@@ -46,7 +46,7 @@ export default async function EmailSettingsPage(props: {
           </CardHeader>
           <CardContent className="p-12 flex flex-col items-center justify-center text-center gap-6 min-h-[300px]">
             <div className="h-16 w-16 rounded-full bg-ds-background-neutral-subtle flex items-center justify-center animate-pulse">
-              <Tool className="h-8 w-8 text-ds-text-subtlest" />
+              <Wrench className="h-8 w-8 text-ds-text-subtlest" />
             </div>
             <div className="flex flex-col gap-2">
               <h3 className="text-lg font-black tracking-tight text-ds-text uppercase">

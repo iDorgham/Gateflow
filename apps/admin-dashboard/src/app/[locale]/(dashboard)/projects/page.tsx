@@ -110,13 +110,15 @@ export default async function ProjectsPage(props: {
     }),
   ]);
 
-  const serializedProjects = projects.map((p): any => ({
+  const serializedProjects = projects.map((p: (typeof projects)[number]) => ({
     ...p,
     createdAt: p.createdAt.toISOString(),
     deletedAt: p.deletedAt?.toISOString() ?? null,
   }));
 
-  const serializedOrgs = organizations.map((o) => ({ ...o }));
+  const serializedOrgs = organizations.map(
+    (o: (typeof organizations)[number]) => ({ ...o })
+  );
 
   return (
     <ProjectsClient
