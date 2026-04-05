@@ -69,23 +69,71 @@ All `/api/**` routes for each department must check role server-side. Return `40
 
 ---
 
-## 🏗️ Scope Overview
+---
 
-| In Scope                                 | Out of Scope                                      |
-| :--------------------------------------- | :------------------------------------------------ |
-| Nested org hierarchy & context switching | Significant Resident Mobile UX changes            |
-| AI-Powered CRM & Lead Scoring            | Full Webflow-level freeform builder (Blocks only) |
-| Advanced Task Manager with AI Bots       | Production billing/Stripe integration             |
-| Style Editing Hub (Live Theming)         | Direct hardware firmware updates                  |
-| AI Landing Page Builder & Blog Engine    |                                                   |
-| Unified Support & Ops Analytics          |                                                   |
+## 🏗️ Module Architecture — Who Uses What & Where It Publishes
+
+> The Admin Dashboard is a **pure internal OS for the GateFlow company team**. Clients never directly use Admin Dashboard tools.
+
+| Module                   | Admin Dashboard Tool             | Used By                  | Publishes / Targets                            | Notes                                    |
+| :----------------------- | :------------------------------- | :----------------------- | :--------------------------------------------- | :--------------------------------------- |
+| **Org Hierarchy**        | Nested routing + OrgSwitcher     | GateFlow Ops/Dev         | `admin-dashboard` internal                     | Phase 1                                  |
+| **GateFlow CRM**         | Lead scoring, pipeline, deals    | GateFlow Sales team      | Internal DB — tracks leads for buying GateFlow | Leads come from `gateflow.site` visitors |
+| **Client CRM**           | Resident/member/inquiry tracking | Client org admins        | Client dashboard per org                       | Separate — in `org_types_dashboard` plan |
+| **Task Manager**         | Kanban + AI bots                 | GateFlow all departments | Internal task boards                           | Sales, Marketing, Dev, Support           |
+| **Style Hub**            | Live theming, token overrides    | GateFlow Dev/Design      | `apps/client-dashboard` per org                | White-labeling for clients               |
+| **Landing Page Builder** | Block-based AI page composer     | GateFlow Marketing team  | `www.gateflow.site/en/[slug]`                  | e.g. `/landingpage_a`, `/landingpage_b`  |
+| **Blog CMS**             | AI draft + publish workflow      | GateFlow Content team    | `www.gateflow.site/en/blog/[slug]`             | Headless CMS → `apps/marketing`          |
+| **Support Hub**          | Ticket queue + AI triage         | GateFlow Support team    | Internal inbox                                 | Human escalation from client chat        |
+| **Ops Dashboard**        | Analytics, performance dials     | GateFlow Dev/Ops         | Internal dashboards                            | Platform-wide metrics                    |
+
+### Out of Scope (this plan)
+
+| Feature                             | Where Instead                           |
+| :---------------------------------- | :-------------------------------------- |
+| Freeform Webflow-level drag builder | Future roadmap (drag-any-element)       |
+| Client billing / Stripe portal      | Separate billing plan                   |
+| Resident Mobile UX changes          | `scanner-app` / `resident-mobile` plans |
+| Firmware / hardware integration     | External hardware plan                  |
+| Client CRM (detailed)               | `org_types_dashboard` Phase 5+          |
+
+---
+
+## 🔗 Headless CMS Data Flow (Blog & Landing Pages)
+
+Content created in Admin Dashboard is stored in the shared DB and consumed by `apps/marketing`:
+
+```
+Admin Dashboard (CMS Editor)
+       │
+       │  writes to DB
+       ▼
+shared Prisma DB
+  └── BlogPost (slugEn, slugAr, contentEn, contentAr, status: PUBLISHED)
+  └── LandingPage (slug, sections[], status: PUBLISHED)
+       │
+       │  read at build/runtime by
+       ▼
+apps/marketing (Next.js)
+  └── /en/blog/[slug]     → BlogPost.slugEn
+  └── /ar/blog/[slug]     → BlogPost.slugAr
+  └── /en/[slug]          → LandingPage.slug
+  └── /ar/[slug]          → LandingPage (RTL version)
+```
+
+**Implementation requirement**: `apps/marketing` needs:
+
+- `GET /api/cms/blog/[slug]` — fetch published blog post by slug
+- `GET /api/cms/pages/[slug]` — fetch published landing page by slug
+- ISR (Incremental Static Regeneration) revalidation triggered on `PUBLISHED` status change
 
 ---
 
 ## 🧪 Definition of Done
 
-- Passes `pnpm preflight` (lint, typecheck, tests) in `admin-dashboard`, `packages/db`, and `packages/ui`.
+- Passes `pnpm preflight` (lint, typecheck, tests) in `admin-dashboard`, `packages/db`, `packages/ui`, and `apps/marketing` (for Phase 5-6).
 - ADS compliance verified via `enforce-ads-design.js`.
 - All AI workflows include mandatory human review/confirmation gates.
-- Multi-language (EN + AR RTL) verified and working perfectly.
+- Multi-language (EN + AR RTL) verified and working perfectly across all published routes.
 - Security invariants (org scoping, soft deletes) verified.
+- Published content renders correctly at target `gateflow.site` URLs.
