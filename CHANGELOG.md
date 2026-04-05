@@ -18,7 +18,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 - **[Ci]** standardize cache action and remove pnpm-store from cache paths
 - **[Scripts]** ralph-docs changelog inserts under Unreleased
   tri-track format
-- **[Plan Lifecycle]** update tasks.md and document automation logic
+- **[Plan Lifecycle]** update tasks.md and document automation
+  logic
 
 ### AI Tools
 
@@ -26,6 +27,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 - **[Admin AI]** refine UI/UX with premium animations and hybrid message parts.
 
 ### Apps
+
+- **[Admin]** modernize dashboard aesthetics to match client dashboard
 
 - **[Admin]** Align Admin Dashboard aesthetics (Radius, Tokens, Shell) with Client
   Dashboard premium look

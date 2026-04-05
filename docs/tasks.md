@@ -37,7 +37,8 @@ This document tracks unfinished tasks and a complete feature inventory across th
 - [ ] Implement automated backups for the organization configuration.
 - [ ] Refine the multi-tenant isolation middleware performance.
 
-- [x] **Admin Dashboard Redesign** — Alignment with Client Dashboard aesthetics (Radius, Tokens, Shell, Sidebar).
+- [x] **Admin Dashboard Redesign** — Alignment with Client Dashboard aesthetics
+      (Radius, Tokens, Shell, Sidebar).
 
 ---
 
