@@ -1,0 +1,36 @@
+{
+  "name": "@gateflow/components",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts",
+    "./compositions/*": "./src/compositions/*.tsx"
+  },
+  "scripts": {
+    "lint": "eslint src/",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^2.6.1",
+    "@gateflow/tokens": "workspace:*",
+    "@gateflow/theme": "workspace:*",
+    "@gateflow/ui": "workspace:*"
+  },
+  "devDependencies": {
+    "@gate-access/config": "workspace:*",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "next": "^15.5.14",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tailwindcss": "^3.4.19",
+    "typescript": "^5.9.3"
+  }
+}

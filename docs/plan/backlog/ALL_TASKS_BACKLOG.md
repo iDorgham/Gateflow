@@ -9,13 +9,13 @@
 **IDEA:** `docs/development/initiatives/IDEA_atlassian_ui_remake.md`  
 **PLAN:** `docs/plan/Ready/gateflow_design_system/`  
 `PLAN_gateflow_design_system.md`  
-**Status:** 🔵 In-Progress (Phase 4 next)  
+**Status:** 🔵 In-Progress (Phase 5 next)  
 **Target:** Q2-Q3 2026
 
 - [x] Phase 1 — `@gateflow/tokens` (OKLCH, tokens.css, @theme)
 - [x] Phase 2 — `@gateflow/theme` (data-color-mode, next-themes)
 - [x] Phase 3 — `@gateflow/ui` upgrade (successor to @gate-access/ui)
-- [ ] Phase 4 — `@gateflow/components` (composed patterns)
+- [x] Phase 4 — `@gateflow/components` (composed patterns)
 - [ ] Phase 5 — `@gateflow/ai` (AI UI kit: chat, streaming, tools)
 - [ ] Phase 6 — `apps/design-system` scaffold (Tailwind v4)
 - [ ] Phase 7 — Foundations + Token Explorer

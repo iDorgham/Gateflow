@@ -20,8 +20,8 @@
 
 ## Phase 4 — `@gateflow/components`
 
-- [ ] Composed patterns
-- [ ] `phase_logs/PHASE_LOG_phase_04.md` updated
+- [x] Composed patterns
+- [x] `phase_logs/PHASE_LOG_phase_04.md` updated
 
 ## Phase 5 — `@gateflow/ai`
 
