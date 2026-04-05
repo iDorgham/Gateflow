@@ -189,13 +189,24 @@ export function Sidebar() {
       <button
         type="button"
         onClick={() => setIsCollapsed(!isCollapsed)}
-        className="absolute top-1/2 -translate-y-1/2 -right-3 z-50 flex h-6 w-6 items-center justify-center rounded-full border border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-background-default,#FFFFFF)] shadow-sm hover:bg-[var(--ds-background-subtle,#F4F5F7)] transition-all group"
+        className={cn(
+          'absolute top-1/2 -translate-y-1/2 z-50 flex h-6 w-6 items-center justify-center rounded-full border border-ds-border bg-ds-background-default shadow-sm hover:bg-ds-background-neutral-subtle transition-all group',
+          'ltr:-right-3 rtl:-left-3'
+        )}
         aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
       >
         <ChevronLeft
           className={cn(
-            'h-3.5 w-3.5 text-[var(--ds-icon-subtle,#6B778C)] transition-transform group-hover:text-[var(--ds-icon,#172B4D)]',
-            isCollapsed && 'rotate-180'
+            'h-3.5 w-3.5 text-ds-icon-subtle transition-transform group-hover:text-ds-icon',
+            // Default: points left. If collapsed: points right.
+            // But in RTL: default should point right. If collapsed: points left.
+            i18n.language === 'ar-EG'
+              ? isCollapsed
+                ? 'rotate-0'
+                : 'rotate-180'
+              : isCollapsed
+                ? 'rotate-180'
+                : 'rotate-0'
           )}
         />
       </button>

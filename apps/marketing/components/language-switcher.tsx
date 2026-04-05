@@ -8,7 +8,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@gate-access/ui';
-import { motion } from 'framer-motion';
 
 const GlobeIcon = () => (
   <svg
@@ -41,6 +40,14 @@ export function LanguageSwitcher({ currentLocale }: { currentLocale: Locale }) {
 
   const handleLocaleChange = (newLocale: Locale) => {
     if (!pathname) return;
+
+    // Sync across apps using a top-level cookie if on subdomains
+    const domain = window.location.hostname.includes('.')
+      ? `.${window.location.hostname.split('.').slice(-2).join('.')}`
+      : undefined;
+
+    document.cookie = `gf_locale=${newLocale}; path=/; max-age=31536000${domain ? `; domain=${domain}` : ''}`;
+
     const segments = pathname.split('/');
     segments[1] = newLocale;
     router.push(segments.join('/'));
@@ -65,7 +72,7 @@ export function LanguageSwitcher({ currentLocale }: { currentLocale: Locale }) {
         align="end"
         className="min-w-[160px] overflow-hidden rounded-2xl border border-ds-border bg-ds-surface p-1.5 shadow-[0_20px_60px_rgba(0,0,0,0.15)]"
       >
-        {i18n.locales.map((locale, i) => {
+        {i18n.locales.map((locale) => {
           const info = localeLabels[locale];
           const isActive = currentLocale === locale;
           return (

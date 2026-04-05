@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback } from '@gate-access/ui';
 import { Sidebar } from './Sidebar';
 import { AdminSidePanel } from './admin-side-panel';
 import { LanguageSwitcher } from './language-switcher';
+import { ThemeToggle } from './theme-toggle';
 import type { Locale } from '@/lib/i18n/i18n-config';
 import { useTranslation } from 'react-i18next';
 import { GlobalSearch } from './GlobalSearch';
@@ -19,9 +20,9 @@ export function AdminShell({ children, locale: _locale }: AdminShellProps) {
   const { t } = useTranslation();
 
   return (
-    <div className="flex h-screen w-full bg-background overflow-hidden selection:bg-primary/30 selection:text-primary-foreground">
-      {/* Left Sidebar */}
-      <div className="flex h-full shrink-0 border-r border-ds-border bg-ds-background-default shadow-sm z-30">
+    <div className="flex h-screen w-full bg-background overflow-hidden selection:bg-primary/30 selection:text-primary-foreground sm:antialiased">
+      {/* Left/Right Sidebar */}
+      <div className="flex h-full shrink-0 border-inline-end border-ds-border bg-ds-background-default shadow-sm z-30 ltr:border-r rtl:border-l">
         <Sidebar />
       </div>
 
@@ -40,9 +41,10 @@ export function AdminShell({ children, locale: _locale }: AdminShellProps) {
             <div className="h-4 w-px bg-ds-border mx-1" />
 
             <div className="flex items-center gap-3">
+              <ThemeToggle />
               <LanguageSwitcher currentLocale={_locale} />
 
-              <div className="flex items-center gap-2 rounded-lg p-1 pl-3 bg-ds-background-neutral-subtle border border-ds-border hover:bg-ds-background-neutral transition-all cursor-pointer group">
+              <div className="flex items-center gap-2 rounded-lg p-1 pl-3 bg-ds-background-neutral-subtle border border-ds-border hover:bg-ds-background-neutral transition-all cursor-pointer group ltr:pl-3 rtl:pr-3">
                 <span className="max-w-[120px] truncate text-[11px] font-black uppercase tracking-tight text-ds-text-subtle group-hover:text-ds-text">
                   Selena Admin
                 </span>

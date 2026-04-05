@@ -7,65 +7,94 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  cn,
 } from '@gate-access/ui';
-import { Languages, ChevronDown } from 'lucide-react';
 
-export function LanguageSwitcher({
-  currentLocale,
-  variant = 'default',
-}: {
-  currentLocale: Locale;
-  variant?: 'default' | 'mini';
-}) {
+const GlobeIcon = () => (
+  <svg
+    width="16"
+    height="16"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    <circle cx="12" cy="12" r="10" />
+    <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
+    <path d="M2 12h20" />
+  </svg>
+);
+
+const localeLabels: Record<
+  Locale,
+  { label: string; short: string; flag: string }
+> = {
+  en: { label: 'English', short: 'EN', flag: '🇺🇸' },
+  'ar-EG': { label: 'العربية', short: 'AR', flag: '🇪🇬' },
+};
+
+export function LanguageSwitcher({ currentLocale }: { currentLocale: Locale }) {
   const pathname = usePathname();
   const router = useRouter();
 
   const handleLocaleChange = (newLocale: Locale) => {
-    if (!pathname) return '/';
+    if (!pathname) return;
+
+    // Sync across apps using a top-level cookie if on subdomains
+    const domain = window.location.hostname.includes('.')
+      ? `.${window.location.hostname.split('.').slice(-2).join('.')}`
+      : undefined;
+
+    document.cookie = `gf_locale=${newLocale}; path=/; max-age=31536000${domain ? `; domain=${domain}` : ''}`;
+
     const segments = pathname.split('/');
     segments[1] = newLocale;
     const newPathname = segments.join('/');
     router.push(newPathname);
+    router.refresh();
   };
 
-  const localeLabels: Record<Locale, string> = {
-    en: 'English',
-    'ar-EG': 'العربية',
-  };
-
-  const isMini = variant === 'mini';
+  const current = localeLabels[currentLocale];
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button
-          className={cn(
-            'inline-flex items-center gap-1.5 rounded-lg h-8 text-[11px] font-bold transition-all disabled:pointer-events-none outline-none focus-visible:ring-2 focus-visible:ring-primary/20',
-            isMini
-              ? 'px-3 text-[var(--ds-text-subtle,#42526E)] hover:bg-[var(--ds-background-neutral-subtle,#091E420F)] hover:text-[var(--ds-text,#172B4D)]'
-              : 'justify-center whitespace-nowrap px-3 text-[var(--ds-text-subtle,#42526E)] opacity-80 hover:opacity-100 hover:bg-[var(--ds-background-neutral-subtle,#091E420F)]'
-          )}
-          aria-label="Toggle language"
+          className="group inline-flex items-center gap-2 rounded-xl border border-ds-border bg-ds-background-neutral-subtle px-3 py-1.5 text-[11px] font-black uppercase tracking-[0.1em] text-ds-text-subtle transition-all duration-200 hover:border-ds-border-brand hover:bg-ds-background-brand-subtle hover:text-ds-text-brand focus-visible:outline-none focus:ring-2 focus:ring-ds-border-brand"
+          aria-label="Switch language"
         >
-          <Languages className={isMini ? 'h-3 w-3 opacity-90' : 'h-3 w-3'} />
-          <span>{currentLocale === 'ar-EG' ? 'العربية' : 'English'}</span>
-          {isMini && <ChevronDown className="h-2.5 w-2.5 opacity-70" />}
+          <span className="text-ds-text-brand transition-transform duration-300 group-hover:rotate-[15deg]">
+            <GlobeIcon />
+          </span>
+          <span>{current.short}</span>
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="end"
-        className={isMini ? 'min-w-[100px] py-1 text-[10px]' : undefined}
+        className="min-w-[160px] overflow-hidden rounded-2xl border border-ds-border bg-ds-background-default p-1.5 shadow-2xl"
       >
-        {i18n.locales.map((locale) => (
-          <DropdownMenuItem
-            key={locale}
-            onClick={() => handleLocaleChange(locale)}
-            className={currentLocale === locale ? 'bg-accent font-medium' : ''}
-          >
-            {localeLabels[locale]}
-          </DropdownMenuItem>
-        ))}
+        {i18n.locales.map((locale) => {
+          const info = localeLabels[locale as Locale];
+          const isActive = currentLocale === locale;
+          return (
+            <DropdownMenuItem
+              key={locale}
+              onClick={() => handleLocaleChange(locale as Locale)}
+              className={`flex cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-[12px] font-bold transition-all duration-150 ${
+                isActive
+                  ? 'bg-ds-background-brand-subtle text-ds-text-brand'
+                  : 'text-ds-text-subtle hover:bg-ds-background-neutral-subtle hover:text-ds-text'
+              }`}
+            >
+              <span className="text-base leading-none">{info.flag}</span>
+              <span className="flex-1">{info.label}</span>
+              {isActive && (
+                <span className="h-2 w-2 rounded-full bg-ds-background-brand-bold" />
+              )}
+            </DropdownMenuItem>
+          );
+        })}
       </DropdownMenuContent>
     </DropdownMenu>
   );

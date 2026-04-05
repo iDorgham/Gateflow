@@ -30,13 +30,13 @@ interface AuditLog {
   status: string;
   scannedAt: Date;
   auditTrail: Record<string, unknown>[];
-  gate: { name: string } | null;
+  gate: { name: string; location: string | null } | null;
   qrCode: {
     type: string;
     code: string;
     organization: { id: string; name: string } | null;
   } | null;
-  user: { name: string; email: string } | null;
+  user: { name: string; email: string; role: { name: string } | null } | null;
 }
 
 interface SearchParams {
@@ -118,7 +118,13 @@ export default async function AuditLogsPage(props: {
             organization: { select: { id: true, name: true } },
           },
         },
-        user: { select: { name: true, email: true, role: true } },
+        user: {
+          select: {
+            name: true,
+            email: true,
+            role: { select: { name: true } },
+          },
+        },
       },
     }),
   ]);
@@ -261,7 +267,7 @@ export default async function AuditLogsPage(props: {
               className="h-10 w-11 p-0 rounded-full"
               asChild
             >
-              <Link href="/audit-logs">
+              <Link href={`/${locale}/audit-logs`}>
                 <X className="h-4 w-4 text-ds-text-subtlest" />
               </Link>
             </Button>
@@ -286,7 +292,7 @@ export default async function AuditLogsPage(props: {
           totalPages={totalPages}
           onPageChange={undefined}
           getHref={(p) =>
-            `/audit-logs?${new URLSearchParams({ ...currentParams, page: String(p) }).toString()}`
+            `/${locale}/audit-logs?${new URLSearchParams({ ...currentParams, page: String(p) }).toString()}`
           }
           className="w-auto"
         />
