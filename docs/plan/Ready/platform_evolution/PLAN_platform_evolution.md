@@ -1,117 +1,54 @@
-# PLAN: GateFlow Platform Evolution — The Operating System for Access
+# PLAN: GateFlow Platform Evolution — The Operating System Hub (v3.0)
+
+**Mission:** Transform the Admin Dashboard into a premium, intelligent **Operating System Hub** for platform operators, internal teams (Sales, Marketing, Dev, Support), and super-admins. Deeply integrate AI automation across CRM, Task Manager, Style Editing, Landing Page Builder, and Blog Content.
 
 **Slug:** `platform_evolution`  
-**Status:** Draft  
-**Primary apps:** `apps/admin-dashboard`, `apps/client-dashboard`, `apps/marketing`  
+**Status:** Ready  
+**Primary apps:** `apps/admin-dashboard`, `apps/marketing`  
 **Supporting:** `packages/db`, `packages/ui`, `packages/types`, `packages/api`
 
 ---
 
-## Executive Summary — Six Strategic Phases
+## 🏛️ Strategic Summary — Seven Integrated Phases
 
-| Phase | Title                                  | Primary Role     | Outcome                                                                                                 |
-| ----- | -------------------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------- |
-| **1** | **Nested Organizational Hierarchy**    | **BACKEND**      | Users, Projects, and Gates moved inside Org context; Routing refactor; Sidebar cleanup.                 |
-| **2** | **Advanced Settings & Integrations**   | **FRONTEND**     | Teams/Roles (RBAC), Integrations hub, and Tracking Tag injection (GA/FB Pixel).                         |
-| **3** | **Marketing Suite & Live CMS**         | **ARCHITECTURE** | Blog system + Block-based Landing Page Builder inspired by Webflow; A/B testing foundation.             |
-| **4** | **Support & Operational Hub**          | **FULLSTACK**    | Hybrid AI/Human chat system; Internal Task Manager for GateFlow Team; Page feature-flags.               |
-| **5** | **UI/UX Unification & Custom Theming** | **FRONTEND**     | Global CSS synchronization; Admin settings to change fonts, colors, and logos per client.               |
-| **6** | **Optimization & Resilience Hub**      | **OPS/BACKEND**  | Advanced Security (Rate limits), Caching (Edge), and Performance toggles for high-scale app operations. |
-| **7** | **Analytics & Growth Optimization**    | **DATA**         | Conversion rate tracking, Lead generation attribution, and Performance monitoring across funnels.       |
-
----
-
-## Phase 1: Nested Organizational Hierarchy
-
-**Goal**: Transition from global management to an organization-centric model.
-
-- **DB Refactor**: Move `User`, `Project`, and `Gate` entities to be children of `Organization`.
-- **Admin Routing**:
-  - `/organizations/[orgId]` becomes the primary workspace.
-  - Child routes: `/users`, `/projects`, `/gates`.
-- **Sidebar Update**:
-  - Remove global "Users", "Projects", and "Gates" from the Admin sidebar.
-  - Implement a "Context Switcher" for Organizations.
-- **Org-Type Adaptation**: Integrate logic from `PLAN_org_types_dashboard.md` to change UI terminology/modules based on `Organization.type`.
-
-## Phase 2: Settings v6 (Advanced Workspaces)
-
-**Goal**: Deep customization and integration capabilities.
-
-- **Teams & Roles**:
-  - Add a "Team" tab to Org Settings.
-  - Implement Roles (Owner, Admin, Editor, Viewer).
-- **Integrations**: Add an area to manage Auth Keys, API access, and webhooks.
-- **Custom Scripts**: Add input fields for `<head>` tags (Google Analytics, Facebook Pixel, Custom tracking).
-
-## Phase 3: Marketing & Live CMS Engine
-
-**Goal**: Turn GateFlow into a high-converting growth platform.
-
-- **Blog CMS**: Headless CMS architecture with Markdown/Editor support.
-- **Landing Page Builder**:
-  - Live frontend editing environment.
-  - Section-based drag-and-drop hierarchy.
-  - SEO & Meta management for lead generation.
-- **Experimentation**: Built-in A/B testing for landing pages with conversion analytics.
-
-## Phase 4: Operational Support & Task Management
-
-**Goal**: Build tools for internal team collaboration and customer success.
-
-- **GateFlow Tasks**:
-  - Internal Board (Kanban style).
-  - Categorized by: Development, Sales, Marketing, Technical.
-- **Support System**:
-  - Chat widget for Marketing site and Client Dashboard.
-  - AI Agent first-response via Gemini/OpenAI.
-  - Human escalation queue for the GateFlow support team.
-- **Feature Management**: Admin-only section to toggle dashboard features (On/Off) for specific organizations.
-
-## Phase 5: UI/UX Unification & Global Theming
-
-**Goal**: Perfect visual parity and client-specific branding.
-
-- **Global Style System**: Consolidate `packages/ui` tokens.
-- **White-Labeling**:
-  - Brand settings in Admin: Primary/Secondary Colors, Google Font selection, Logo uploads.
-  - Real-time CSS variables specifically for the client dashboard.
-
-## Phase 6: Optimization & Resilience Hub
-
-**Goal**: Enterprise-grade control over platform speed and safety.
-
-- **Security Hardening**:
-  - Per-organization rate-limiting profiles.
-  - Global session management settings (TTL, concurrency, biometric enforcement).
-- **Caching & State**:
-  - Controls for React Query/SWR revalidation intervals.
-  - Edge caching (Next.js 15) configuration per org type.
-- **Performance Toggles**:
-  - Asset prioritization controls for mission-critical scanners.
-  - Global switches for aggressive image/video compression.
-
-## Phase 7: Analytics & Growth Optimization
-
-**Goal**: End-to-end attribution and funnel visualization.
-
-- **Lead Generation**: Advanced tracking for landing page form submissions.
-- **Funnel Analytics**: Conversion rate visualization from marketing hit to resident scan.
-- **A/B Testing Dashboard**: Statistical analysis of landing page variations.
+| Phase | Title                           | Primary Role  | Outcome                                                                                |
+| :---- | :------------------------------ | :------------ | :------------------------------------------------------------------------------------- |
+| **1** | **Nested Hierarchy & Routing**  | **BACKEND**   | Strategic refactor of Users/Projects/Gates into Org context; Smart context switching.  |
+| **2** | **AI CRM & Lead Intelligence**  | **FULLSTACK** | Predictive lead scoring, automated nurturing, and AI deal forecasting for Sales teams. |
+| **3** | **AI Task Manager & Bots**      | **FULLSTACK** | Kanban + Calendar views with rule-based AI bots for cross-departmental automation.     |
+| **4** | **Style Hub & Live Theming**    | **FRONTEND**  | Token-safe white-labeling engine with real-time previews for client branding.          |
+| **5** | **AI Landing Page Builder**     | **FULLSTACK** | Block-based composer with AI text/image generation (Vercel AI SDK v6).                 |
+| **6** | **AI Blog Content Engine**      | **FULLSTACK** | Automated topic suggestion and full draft generation (EN/AR) with HiTL review.         |
+| **7** | **Ops Hub & Resilience Polish** | **QA/OPS**    | Unified help desk queue, predictive analytics, and performance/caching hardening.      |
 
 ---
 
-## Success Criteria
+## 🛡️ Core Mandates & Constraints
 
-1. **Org Nesting**: Global Users/Projects/Gates are completely removed and replaced by Org-specific sub-routes.
-2. **CMS Performance**: Landing pages are generated with perfect SEO and high-speed delivery.
-3. **Internal Velocity**: The GateFlow team uses the internal Task Manager for all daily operations.
-4. **Visual Parity**: Client and Admin dashboards are indistinguishable in aesthetic quality and style logic.
+### 1. Multi-Tenancy & Security
+
+- **Strict Scoping**: Every DB query MUST include `organizationId` and `deletedAt: null`.
+- **Audit Logs**: All AI-driven actions (publishing, scoring, sending) MUST be logged in `AiActionLog` with status `PENDING_CONFIRMATION` until approved by a human.
+- **RBAC**: Access to department-specific hubs (CRM for Sales, Content for Marketing) must be guarded by `gateflow-security` roles.
+
+### 2. Design & Aesthetics (ADS v7)
+
+- **Token Only**: Use shared ADS tokens (e.g., `var(--ds-background-neutral-subtle)`). No hardcoded hex codes.
+- **Micro-interactions**: Use Framer Motion for subtle, premium layout transitions and AI "thinking" states.
+- **RTL/Arabic**: Native full-width support for Arabic (RTL). Mirror icons and layouts logically.
+
+### 3. AI Safety & Vercel SDK v6
+
+- **Tool Calling**: Use tool-calling for all AI interactions (CRM updates, Task creation, Blog drafting).
+- **Human Review**: No external-facing impact (emails, publishing) without a human confirmation gate.
+- **Image Generation**: Integrate Grok Imagine (or fallback) for landing page/blog visual assets.
 
 ---
 
-## Trade-offs & Risks
+## 🧪 Definition of Done
 
-1. **Routing Complexity**: Dynamic nesting requires robust middleware to handle Org-scoping correctly.
-2. **CMS Scope**: Building a "Webflow-like" builder is complex; phase 3 will focus on a "Block-Based" approach to ensure stability.
-3. **Data Migration**: Moving existing global entities into organizations requires careful script-based migration.
+1.  **Code Quality**: Passes `pnpm preflight` (lint, typecheck, tests) in affected workspaces.
+2.  **ADS Compliance**: Verified via `enforce-ads-design.js`.
+3.  **Security Invariants**: Confirmed Org-scoping and Soft-deletes across all new entities.
+4.  **Parity**: EN/AR RTL layouts are indistinguishable in quality.
+5.  **Documentation**: `PRD_v7.0.md` and `ALL_TASKS_BACKLOG.md` updated with phase outcomes.
