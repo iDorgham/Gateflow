@@ -9,7 +9,7 @@ import {
   isReasoningUIPart,
   isTextUIPart,
   isToolUIPart,
-  type ToolPart,
+  type DataUIPart,
 } from 'ai';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
@@ -165,10 +165,13 @@ function ThinkingBubble() {
   );
 }
 
-function ToolInvocCard({ part }: { part: ToolPart }) {
+function ToolInvocCard({ part }: { part: any }) {
   const toolName = getToolName(part);
   const state = part.state;
-  const isComplete = state === 'call' || state === 'result';
+  const isComplete =
+    state === 'output-available' ||
+    (state as string) === 'result' ||
+    (state as string) === 'call';
 
   return (
     <div className="rounded-xl border border-ds-border/40 bg-ds-surface-overlay p-2.5 my-1 shadow-sm overflow-hidden group transition-all hover:bg-ds-surface-raised active:scale-[0.99]">
@@ -199,7 +202,7 @@ function ToolInvocCard({ part }: { part: ToolPart }) {
         {isComplete && <Check className="h-3 w-3 text-ds-text-accent-green" />}
       </div>
 
-      {isDataUIPart(part) && part.data && (
+      {isDataUIPart(part) && (part as DataUIPart<any>).data && (
         <div className="mt-2 text-[10px] bg-ds-surface-sunken/40 rounded-md p-2 font-mono overflow-x-auto border border-ds-border/20 text-ds-text-subtle max-h-32">
           <pre>{JSON.stringify(part.data, null, 2)}</pre>
         </div>
@@ -441,7 +444,7 @@ export function AdminAIAssistant({ locale: _locale }: AdminAIAssistantProps) {
                           textContent && 'pt-3 border-t border-ds-border/40'
                         )}
                       >
-                        {otherParts.map((part, i) => {
+                        {otherParts.map((part: any, i) => {
                           if (isToolUIPart(part))
                             return <ToolInvocCard key={i} part={part} />;
                           if (isReasoningUIPart(part))
