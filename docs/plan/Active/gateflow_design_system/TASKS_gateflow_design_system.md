@@ -25,8 +25,8 @@
 
 ## Phase 5 — `@gateflow/ai`
 
-- [ ] AI UI kit
-- [ ] `phase_logs/PHASE_LOG_phase_05.md` updated
+- [x] AI UI kit
+- [x] `phase_logs/PHASE_LOG_phase_05.md` updated
 
 ## Phase 6 — `apps/design-system`
 
