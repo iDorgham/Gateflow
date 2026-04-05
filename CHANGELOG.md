@@ -8,102 +8,45 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ## [Unreleased]
 
-### Workspace
+### 🏗️ Workspace
 
-- **[Admin Dashboard Redesign]** complete phase 7
-
+- **[Deploy]** add outputFileTracingRoot to all Next.js apps for pnpm monorepo
 - **[Db]** resolve TS2345 type error in tenant.ts scanLog.count
-- **[Admin-Dashboard]** fix Vercel build and 500 after login
-- **[Vercel]** ensure Prisma client generation before build via turbo dependency
 - **[Ci]** standardize cache action and remove pnpm-store from cache paths
-
-- **[Vercel]** add edge runtime to Prisma schema for Vercel
-
-- **[Vercel]** use edge client for Prisma on Vercel
-
-- **[Vercel]** add debian-openssl-3.0.x binary target for Vercel edge runtime
-
-- **[Prisma]** update to edge client for vercel accelerate
-
-- **[Admin-Dashboard]** upgrade to react 19 and fix searchParams crash
-
-- **[Admin Emulation Hub]** Phase 2: Emulation & Seeding Hub (UI) - Ops Hub & Seeding Controls
-- **[Admin Emulation Hub]** Phase 1: Advanced Seeding Integration (Backend & API)
-
-- **[Admin Emulation Hub]** complete phase 4
-
-- **[Admin-Dashboard]** handle missing org emails and harden admin access key
-
-- **[Admin-Dashboard]** ADMIN_ACCESS_KEY min length and locale-aware auth
-
-- **[Tooling]** `@gate-access/config`: `eslint-config-next` ^15.5.14 (was 14.x) so `next lint` on Next 15 apps no longer hits circular ESLint config; root `.eslintrc.json` extends only `packages/config/eslintrc.cjs` (drops duplicate `@typescript-eslint/recommended`).
-- **[Db]** `@gate-access/db/prisma` subpath re-exports `@prisma/client` only for client components; CRM/settings pick it up for `UnitType` / `GateMode`.
-- **[Tooling]** Next apps include `global.d.ts` (declares `*.css` modules) in `tsconfig.json`.
-- **[Tooling]** `turbo.json`: `test` task uses `outputs: []` (no `coverage/**` emitted by default) to avoid “no output files found” warnings.
-- **[Tooling]** Root devDependencies pin TypeScript 5.9.3 and ESLint 8.57.1 (pnpm overrides).
-- **[Db]** avoid node:crypto in client webpack graph; turbo env passthrough
-
-- **[CI]** Dependabot: ignore `prisma` / `@prisma/client` `>=7` until a dedicated Prisma ORM 7 migration (schema + `prisma.config.ts` + client bootstrap per [upgrade guide](https://www.prisma.io/docs/orm/more/upgrade-guides/upgrading-versions/upgrading-to-prisma-7)).
-
-- **[Scripts]** `check-env.js`: `ADMIN_ACCESS_KEY` requires ≥32 characters; `setup-dev` / CI use long non-placeholder defaults; `.env.example` documents admin portal auth requirement.
-
 - **[Scripts]** ralph-docs changelog inserts under Unreleased tri-track
+- **[Plan Lifecycle]** complete documentation for tasks.md and automation
 
-- **[Plan Lifecycle]** `advanced_seeding_emulation_v3` plan assets live under `docs/plan/Complete/advanced_seeding_emulation_v3/` (completed); prompt/checklist links normalized to that path.
-- **[Backlog]** added tracking entry for `advanced_seeding_emulation_v3` in `docs/plan/backlog/ALL_TASKS_BACKLOG.md`.
-- **[Plan Docs]** added a local README for `advanced_seeding_emulation_v3` with lifecycle status and canonical `/dev` commands.
-- **[Plan Docs]** initialize `resident_portal_responsive` 5-phase roadmap and phase prompts.
-- **[Workspace Docs]** split documentation into Workspace, AI Tools, and Apps tracks.
-- **[Workspace]** add dedicated workspace documentation hub under `docs/workspace/`.
-- **[Workspace Version]** establish independent workspace version tracking alongside app versions.
-- **[GitHub Security Hardening]** started development of GitHub hardening workflow and policy updates.
-- **[Advanced Seeding Emulation V3 — DB]** Phase 1: partial unique indexes on active `Contact` (`organizationId` + `email` / `phone`, `deletedAt IS NULL`); `validateUniqueness` in `@gate-access/db` (`seed-integrity`); migration `seeding_integrity_foundation`.
-- **[Advanced Seeding Emulation V3 — DB]** Phase 2: `red-sea-data` + `unit-id-formats` (`generateUnitId` × six strategies); `Project.unitIdFormat` enum + migration `add_project_unit_id_format`.
-- **[Advanced Seeding Emulation V3 — DB]** Phase 3: `rich-contact` — 14 nationalities, IDEA v3 weight table, `generateRichContact` + `validateUniqueness`; distribution test N=10_000 seed=42 (±2%).
-- **[Advanced Seeding Emulation V3 — DB]** Phase 4: `unit-hierarchy-seed` + `seedUnitHierarchyForProject` — logical phase/building/floor tree mapped to `Unit` + `generateUnitId`, org-unique `Unit.name` via `projectScopedUnitName`, `ContactUnit` owner links, batched `createMany` (~500).
-- **[Advanced Seeding Emulation V3 — DB]** Phase 5: `rush-hour` — `sampleScanTimestamps` (uniform + Gaussian mixture), scenarios `luxury-compound` / `nightclub` / `private-school` / `wedding-venue`, optional `weekendAccent: mena`, `minInterScanMs` with window-anchored spacing, histogram + chi-square tests.
-- **[Advanced Seeding Emulation V3 — DB]** Phase 6: `seedRelationalChain` + `relational-chain-seed` — HMAC-signed VISITOR `QRCode` (`signQRPayload` / `verifyQRSignature`), `VisitorQR`, batched `ScanLog` (~500) with unique `scanUuid`; org-scoped preflight + `scanLogWhereForOrganization`; tests for verify/tamper/isolation/chain depth.
-- **[Advanced Seeding Emulation V3 — API]** Phase 7: `POST /api/admin/emulate-traffic` (client-dashboard) — Super Admin + CSRF, Upstash `checkRateLimit` (5/hour per admin), Zod body (`scenario`, `pastDays`, `totalScans`, `incidentRate`, `randomSeed`, `organizationId`, `dryRun`, optional entity overrides); `runEmulation` in `@gate-access/db`; `AiActionLog` per run (target org id, no secrets in metadata); Jest coverage for 401/403/429/400/404/500/200.
-- **[Advanced Seeding Emulation V3 — Client Dashboard]** Phase 8: Super Admin `/{locale}/dashboard/emulation` multi-step wizard (ADS tokens, i18n, `csrfFetch` → Phase 7 API); sidebar “Traffic emulation” (platform section); client Zod mirror + `emulation-schema` unit tests.
-- **[Advanced Seeding Emulation V3 — DB / Ops]** Phase 9: `prisma/seed-entry.ts` router (`--help`, `--dry-run`, `--test-integrity`, `--organizations.min/max`, emulation flags aligned with Phase 7); `executeSeedCli` + `packages/db` tests; `verify:seed-contract` script; `docs/guides/SEED_AND_EMULATION_CLI.md`; Prisma `seed` → `seed-entry.ts`; fix `prisma/seed.ts` loop variable (`organizationsWithProjects`).
-
-### AI Tools
+### 🧪 AI Tools
 
 - **[AI SDK v6]** continue migration to `ai@6` / `@ai-sdk/react@3` in dashboard assistants.
-- **[AI Tools Docs]** separate AI tooling updates from app delivery updates.
-- **[AI SDK v6 Migration]** started implementation of the AI SDK v6 migration initiative.
 
-### Apps
+### 🛡️ Admin Dashboard
 
-- **[Admin]** remove locale prefix from API fetch URLs
-- **[Admin]** log actual DB error in overview page for Vercel diagnostics
+- **Updates**: complete phase 8 - global polish and localization
+- **Enhancements**: add traffic emulation tooling and emulation hub v4.0
+- **Bug Fixes**: resolve typecheck errors and Vercel build issues
 
-- **[Marketing]** resolve production build type errors for ProductScreenshots and ComparisonSection
+### 🏢 Client Dashboard
 
-- **[Marketing]** add missing locale prop to ProductScreenshots
+- **Updates**: verify 100% multi-tenant isolation
+- **Enhancements**: implement maintenance hub UI (Phase 3)
 
-- **[Marketing]** add app illustrations and update marketing sections
+### 🤳 Scanner App
 
-- **[Scanner]** biometric and shift log foundation
+- **Updates**: biometric and shift log foundation
 
-- **[Admin]** constant-time compare + emulation gate/unit overrides
+### 📱 Resident Mobile
 
-- **[Admin]** correct emulation i18n namespace wiring
+- **Updates**: one-tap invite initiative completion
 
-- **[Admin]** add traffic emulation tooling to admin dashboard
+### 🌐 Resident Portal
 
-- **[Admin dashboard]** Single `src/middleware.ts`: locale redirect, admin session (SHA-256 of `ADMIN_ACCESS_KEY` → `admin_session` cookie), `503`/`401` JSON on `/api/admin/*` when misconfigured or unauthenticated; `requireAdmin(locale?)` → `/{locale}/login`; gates/projects/admins server actions pass `locale` via hidden field; `docs/guides/DEPLOYMENT_GUIDE.md` production smoke test + RSC digest / Vercel log correlation.
+- **Updates**: implement responsive multi-column layout
 
-- **[Marketing]** `AntigravityBackground`: pass initial value to `useRef` for React 19 typings (`number | undefined`).
+### 📣 Marketing Website
 
-- **[Marketing]** initiate June 2026 Resilience campaign & Master Landing Page Protocol
-
-- **[Resident Portal]** implement responsive multi-column layout with adaptive Sidebar/BottomNav switching.
-- **[Resident Portal]** develop maintenance hub, history timeline, and visitor management components with ADS compact density.
-- **[Resident Portal]** establish PWA foundation with loading skeletons, pull-to-refresh, and error boundaries.
-- **[Marketing]** finalize mega menu navigation architecture and refine mid-cta section design tokens.
-- **[Maintenance]** continue maintenance management rollout across dashboards.
-- **[Apps Version]** keep app release cadence independent from workspace/tooling cadence.
+- **Updates**: finalize mega menu navigation architecture
+- **Enhancements**: add app illustrations and resilience campaign
 
 ---
 

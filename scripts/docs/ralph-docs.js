@@ -26,6 +26,7 @@ const README = path.join(ROOT, 'README.md');
 const PRD = path.join(ROOT, 'docs', 'product', 'PRD.md');
 const FEATURE_LOG = path.join(ROOT, 'docs', 'product', 'FEATURE_LOG.md');
 const UPCOMING = path.join(ROOT, 'docs', 'product', 'UPCOMING.md');
+const TASKS = path.join(ROOT, 'docs', 'tasks.md');
 
 // ── helpers ───────────────────────────────────────────────────────────────────
 // Escape special regex characters to prevent regex injection from CLI args
@@ -380,6 +381,55 @@ function updatePrd(slug, status) {
   console.log(`✓ PRD updated: [${title}] → ${status}`);
 }
 
+// ── TASKS helpers ─────────────────────────────────────────────────────────────
+const APP_HEADERS = [
+  { key: 'admin', header: '### 🛡️ Admin Dashboard' },
+  { key: 'client', header: '### 🏢 Client Dashboard' },
+  { key: 'scanner', header: '### 🤳 Scanner App' },
+  { key: 'resident-mobile', header: '### 📱 Resident Mobile' },
+  { key: 'resident-portal', header: '### 🌐 Resident Portal' },
+  { key: 'marketing', header: '### 📣 Marketing Website' },
+];
+
+function updateTasksSync(slug, notes) {
+  if (!fs.existsSync(TASKS)) return;
+  const title = slugToTitle(slug);
+  let content = fs.readFileSync(TASKS, 'utf8');
+
+  // If the task exists as a bullet [ ], mark it [x] and add notes
+  const pattern = new RegExp(
+    `- \\[ \\] ([^\\n]*${escapeRegExp(title)}[^\\n]*)`,
+    'i'
+  );
+  if (pattern.test(content)) {
+    content = content.replace(pattern, `- [x] $1 — *completed ${today()}*`);
+    console.log(`✓ TASKS.md: marked "${title}" as complete`);
+  } else {
+    // Attempt to find the specific app section
+    const s = (slug || '').toLowerCase();
+    const appInfo = APP_HEADERS.find((h) => s.includes(h.key));
+    const header = appInfo ? appInfo.header : '## 🛠️ Unfinished Tasks';
+
+    const pos = content.indexOf(header);
+    if (pos !== -1) {
+      let end = content.indexOf('\n---', pos);
+      if (end === -1) end = content.indexOf('\n## ', pos + 1);
+      if (end === -1) end = content.length;
+
+      const section = content.slice(pos, end);
+      if (!section.includes(title)) {
+        content =
+          content.slice(0, end) +
+          `\n- [x] **${title}** — ${notes || '✅ Shipped'}\n` +
+          content.slice(end);
+        console.log(`✓ TASKS.md: added "${title}" to ${header.slice(4)}`);
+      }
+    }
+  }
+
+  fs.writeFileSync(TASKS, content);
+}
+
 // ── from-commit: parse latest commit msg ─────────────────────────────────────
 function fromCommit() {
   const msg = git('git log -1 --pretty=%s');
@@ -466,6 +516,10 @@ switch (cmd) {
     if (sub === 'shipped') moveUpcomingToShipped(args[2]);
     break;
   }
+  case 'tasks': {
+    updateTasksSync(args[2], args.slice(3).join(' '));
+    break;
+  }
 
   // ── Lifecycle hooks (called by ralph-plan.js) ─────────────────────────────
   case 'on-plan-start': {
@@ -490,6 +544,7 @@ switch (cmd) {
     updateFeatureLog(slug, '✅ Shipped', desc);
     moveUpcomingToShipped(slug);
     updatePrd(slug, '✅ Complete');
+    updateTasksSync(slug, desc);
     refreshReadme(slug, desc);
     console.log(`\n✅ Docs updated for: ${slug}`);
     break;
@@ -629,6 +684,7 @@ Commands:
   feature-log <slug> <status>      Add entry to FEATURE_LOG.md
   upcoming add <slug> "<desc>"     Add to UPCOMING.md
   upcoming shipped <slug>          Move from upcoming → shipped
+  tasks update <slug> "<notes>"    Update or add entries in docs/tasks.md
   release <version>                Full release: bump + changelog + tag + readme
 
 Lifecycle hooks (called automatically):
