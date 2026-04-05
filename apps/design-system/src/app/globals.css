@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+@import "../../../../packages/tokens/css/tokens.css";
+
+@theme {
+  --font-sans: var(--font-inter, ui-sans-serif, system-ui);
+  --font-mono: var(--font-mono, monospace);
+
+  --color-background: var(--gf-color-theme-background);
+  --color-foreground: var(--gf-color-theme-foreground);
+  --color-primary: var(--gf-color-primary);
+  --color-primary-foreground: var(--gf-color-primary-foreground);
+  --color-muted: var(--gf-color-muted);
+  --color-muted-foreground: var(--gf-color-muted-foreground);
+  --color-border: var(--gf-color-border);
+  
+  --radius-lg: 12px;
+  --radius-md: 8px;
+  --radius-sm: 4px;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+/* Custom variants for ADS-style states if needed */
+@custom-variant data-color-mode-dark (&:where([data-color-mode="dark"], [data-color-mode="dark"] *));

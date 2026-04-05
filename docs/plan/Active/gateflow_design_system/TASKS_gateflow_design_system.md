@@ -30,8 +30,8 @@
 
 ## Phase 6 — `apps/design-system`
 
-- [ ] App scaffold, IA, Tailwind v4
-- [ ] `phase_logs/PHASE_LOG_phase_06.md` updated
+- [x] App scaffold, IA, Tailwind v4
+- [x] `phase_logs/PHASE_LOG_phase_06.md` updated
 
 ## Phase 7 — Foundations + Token Explorer + Accessibility stub
 

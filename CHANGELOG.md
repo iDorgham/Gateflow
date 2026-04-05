@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Gateflow Design System]** complete phase 5
+
 - **[Gateflow Design System]** complete phase 4
 - **[Gateflow Design System]** complete phase 3
 
