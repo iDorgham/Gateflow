@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Gateflow Design System]** complete phase 1
+
 - **[Org Types]** add OrganizationType to schema and auth tokens
 
 - **[Client-Dashboard]** resolve type error with LanguageSwitcher variant prop
