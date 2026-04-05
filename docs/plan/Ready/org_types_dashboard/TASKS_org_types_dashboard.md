@@ -5,11 +5,11 @@
 
 ## Phase 1: Backend foundation
 
-- [ ] Prisma `OrganizationType` + `Organization.type` + migration (default `REAL_ESTATE`)
-- [ ] Seeds: at least one org per type
-- [ ] APIs / session expose `type`; JWT optional per plan
-- [ ] `pnpm turbo lint` / `pnpm turbo typecheck` (affected); tests updated if claims change
-- [ ] `phase_logs/PHASE_LOG_phase_01.md` updated (errors, commands, fixes)
+- [x] Prisma `OrganizationType` + `Organization.type` + migration (default `REAL_ESTATE`)
+- [x] Seeds: at least one org per type
+- [x] APIs / session expose `type`; JWT optional per plan
+- [x] `pnpm turbo lint` / `pnpm turbo typecheck` (affected); tests updated if claims change
+- [x] `phase_logs/PHASE_LOG_phase_01.md` updated (errors, commands, fixes)
 
 ## Phase 2: Organization context & feature config
 

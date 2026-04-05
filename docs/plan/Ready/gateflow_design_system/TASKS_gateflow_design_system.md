@@ -5,8 +5,8 @@
 
 ## Phase 1 — `@gateflow/tokens`
 
-- [ ] OKLCH `tokens.css`, `token()`, Tailwind `@theme`, package scaffold
-- [ ] `phase_logs/PHASE_LOG_phase_01.md` updated
+- [x] OKLCH `tokens.css`, `token()`, Tailwind `@theme`, package scaffold
+- [x] `phase_logs/PHASE_LOG_phase_01.md` updated
 
 ## Phase 2 — `@gateflow/theme`
 
