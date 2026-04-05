@@ -51,6 +51,6 @@ Finalize the `projects_crm` v2.0 initiative with 100% test coverage for the new 
 ### Files likely touched
 
 - `docs/plan/backlog/PROJECTS_CRM_UI_FOLLOWUPS.md`
-- `docs/PRD_v7.0.md`
+- `docs/PRD.md`
 - `apps/client-dashboard/src/app/[locale]/dashboard/contacts/page.tsx` (RTL check)
 - `docs/plan/Complete/projects_crm/AUDIT_crm_v2.md` (new)

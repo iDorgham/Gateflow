@@ -2,63 +2,20 @@ import { requireAdmin } from '@/lib/admin-auth';
 import { getTranslation } from '@/lib/i18n/i18n';
 import { Locale } from '@/lib/i18n/i18n-config';
 import { prisma } from '@gate-access/db';
-import { revalidatePath } from 'next/cache';
+import { Search, X } from 'lucide-react';
 import {
-  DoorOpen,
-  Search,
-  Building2,
-  ScanLine,
-  Filter,
-  X,
-  MapPin,
-  CheckCircle2,
-  XCircle,
-  FolderOpen,
-} from 'lucide-react';
-import { Card, CardContent, Badge, Button, Input, cn } from '@gate-access/ui';
+  Card,
+  CardContent,
+  Button,
+  Input,
+  NativeSelect,
+} from '@gate-access/ui';
 import Link from 'next/link';
-import { PageHeader } from '@gate-access/ui';
+import { GatesClient, type Gate } from './GatesClient';
 
 export const metadata = { title: 'Gates' };
 
-function localeFromFormData(formData: FormData): Locale {
-  const raw = String(formData.get('locale') ?? '');
-  if (raw === 'ar-EG' || raw === 'en') return raw;
-  return 'en';
-}
-
 // ─── Server actions ────────────────────────────────────────────────────────────
-
-async function setGateActive(formData: FormData) {
-  'use server';
-  const locale = localeFromFormData(formData);
-  await requireAdmin(locale);
-  const id = formData.get('id') as string;
-  const active = formData.get('active') === 'true';
-  if (!id) return;
-  await prisma.gate.update({ where: { id }, data: { isActive: active } });
-  revalidatePath(`/${locale}/gates`);
-}
-
-async function softDeleteGate(formData: FormData) {
-  'use server';
-  const locale = localeFromFormData(formData);
-  await requireAdmin(locale);
-  const id = formData.get('id') as string;
-  if (!id) return;
-  await prisma.gate.update({ where: { id }, data: { deletedAt: new Date() } });
-  revalidatePath(`/${locale}/gates`);
-}
-
-async function restoreGate(formData: FormData) {
-  'use server';
-  const locale = localeFromFormData(formData);
-  await requireAdmin(locale);
-  const id = formData.get('id') as string;
-  if (!id) return;
-  await prisma.gate.update({ where: { id }, data: { deletedAt: null } });
-  revalidatePath(`/${locale}/gates`);
-}
 
 // ─── Page ──────────────────────────────────────────────────────────────────────
 
@@ -84,7 +41,6 @@ export default async function GatesPage(props: {
   const orgFilter = searchParams.org?.trim() ?? '';
   const statusFilter = searchParams.status ?? 'active';
 
-  // skip-organization-check (Global Admin View)
   const gates = await prisma.gate.findMany({
     where: {
       ...(search ? { name: { contains: search, mode: 'insensitive' } } : {}),
@@ -117,296 +73,95 @@ export default async function GatesPage(props: {
     },
   });
 
-  const [totalActive] = await Promise.all([
+  const [totalActive, projects] = await Promise.all([
     prisma.gate.count({ where: { deletedAt: null, isActive: true } }),
+    prisma.project.findMany({
+      where: { deletedAt: null },
+      select: { id: true, name: true },
+    }),
   ]);
 
+  const serializedGates = gates.map(
+    (g: any): Gate => ({
+      ...(g as any),
+      createdAt: g.createdAt.toISOString(),
+      deletedAt: g.deletedAt?.toISOString() ?? null,
+    })
+  );
+
+  const serializedProjects = projects.map((p: any): any => ({ ...p }));
+
   return (
-    <div className="space-y-6">
-      <PageHeader
-        titleClassName="italic uppercase"
-        title={t('gates.title')}
-        subtitle={t('gates.subtitle')}
-        badge={
-          <Badge
-            variant="outline"
-            className="bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300 border-emerald-100 dark:border-emerald-800 font-bold text-xs"
-          >
-            {t('gates.activeGates', { count: totalActive })}
-          </Badge>
-        }
-      />
-
-      {/* Filters */}
-      <Card className="shadow-sm">
-        <CardContent className="p-4">
-          <form method="GET" className="flex flex-wrap items-center gap-3">
-            <div className="relative flex-1 min-w-[200px]">
-              <Search className="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                name="q"
-                defaultValue={search}
-                placeholder={t('gates.searchPlaceholder')}
-                className="ltr:pl-9 rtl:pr-9 h-10"
-              />
-            </div>
-            <div className="relative flex-1 min-w-[200px]">
-              <Building2 className="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                name="org"
-                defaultValue={orgFilter}
-                placeholder={t('gates.filterByOrg')}
-                className="ltr:pl-9 rtl:pr-9 h-10"
-              />
-            </div>
-            <div className="flex items-center gap-2">
-              <Filter className="h-4 w-4 text-muted-foreground rtl:ml-2" />
-              <select
-                name="status"
-                defaultValue={statusFilter}
-                className="h-10 rounded-md border border-input bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring/20"
-              >
-                <option value="all">{t('gates.allStatus')}</option>
-                <option value="active">{t('gates.activeNotDeleted')}</option>
-                <option value="deleted">{t('gates.deleted')}</option>
-              </select>
-            </div>
-            <div className="flex items-center gap-2">
-              <Button
-                type="submit"
-                size="sm"
-                className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold"
-              >
-                {t('gates.filter')}
-              </Button>
-              <Button variant="outline" size="sm" asChild className="font-bold">
-                <Link href="/gates">
-                  <X className="h-3.5 w-3.5 ltr:mr-1.5 rtl:ml-1.5" />
-                  {t('gates.clear')}
-                </Link>
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
-
-      {/* Table */}
-      <Card className="shadow-md overflow-hidden">
-        <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="bg-muted/50 text-muted-foreground text-[10px] font-bold uppercase tracking-widest border-b border-border">
-                  <th className="px-6 py-4 text-left rtl:text-right">
-                    {t('gates.gate')}
-                  </th>
-                  <th className="px-6 py-4 text-left rtl:text-right">
-                    {t('gates.orgProject')}
-                  </th>
-                  <th className="px-6 py-4 text-center">{t('gates.scans')}</th>
-                  <th className="px-6 py-4 text-center">{t('gates.status')}</th>
-                  <th className="px-6 py-4 text-right rtl:text-left">
-                    {t('gates.actions')}
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {gates.length === 0 ? (
-                  <tr>
-                    <td colSpan={5} className="px-6 py-12 text-center">
-                      <div className="flex flex-col items-center gap-2 text-muted-foreground">
-                        <DoorOpen className="h-8 w-8 opacity-20" />
-                        <p className="font-medium">{t('gates.noResults')}</p>
-                      </div>
-                    </td>
-                  </tr>
-                ) : (
-                  gates.map(
-                    (gate: {
-                      id: string;
-                      name: string;
-                      location: string | null;
-                      isActive: boolean;
-                      deletedAt: Date | null;
-                      organization: { name: string };
-                      project: { name: string } | null;
-                      _count: { scanLogs: number };
-                    }) => {
-                      const deleted = gate.deletedAt !== null;
-                      return (
-                        <tr
-                          key={gate.id}
-                          className={cn(
-                            'group transition-colors',
-                            deleted
-                              ? 'bg-muted/30 opacity-70'
-                              : 'hover:bg-primary/5'
-                          )}
-                        >
-                          <td className="px-6 py-4">
-                            <div className="flex items-center gap-3">
-                              <div
-                                className={cn(
-                                  'flex h-9 w-9 items-center justify-center rounded-lg shadow-sm transition-transform group-hover:scale-110',
-                                  deleted
-                                    ? 'bg-muted text-muted-foreground'
-                                    : gate.isActive
-                                      ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
-                                      : 'bg-amber-500/10 text-amber-600 dark:text-amber-400'
-                                )}
-                              >
-                                <DoorOpen className="h-4 w-4" />
-                              </div>
-                              <div>
-                                <p className="font-bold text-foreground leading-none">
-                                  {gate.name}
-                                </p>
-                                {gate.location && (
-                                  <p className="text-[10px] text-muted-foreground mt-1 flex items-center gap-1">
-                                    <MapPin className="h-2.5 w-2.5" />
-                                    {gate.location}
-                                  </p>
-                                )}
-                              </div>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4">
-                            <div className="flex flex-col gap-1">
-                              <p className="text-foreground font-bold text-xs">
-                                {gate.organization.name}
-                              </p>
-                              {gate.project ? (
-                                <p className="text-[10px] text-muted-foreground flex items-center gap-1">
-                                  <FolderOpen className="h-2.5 w-2.5 rtl:ml-1" />
-                                  {gate.project.name}
-                                </p>
-                              ) : (
-                                <p className="text-[10px] text-muted-foreground italic">
-                                  {t('gates.noProject')}
-                                </p>
-                              )}
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 text-center">
-                            <div className="flex flex-col items-center">
-                              <ScanLine className="h-3 w-3 text-muted-foreground mb-1" />
-                              <span className="text-[11px] font-bold text-foreground">
-                                {gate._count.scanLogs.toLocaleString(locale)}
-                              </span>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 text-center">
-                            {deleted ? (
-                              <Badge className="bg-muted text-muted-foreground border-none text-[10px] font-bold uppercase">
-                                {t('gates.deleted')}
-                              </Badge>
-                            ) : gate.isActive ? (
-                              <Badge className="bg-emerald-500 text-white border-none text-[10px] font-bold uppercase flex items-center gap-1 w-fit mx-auto">
-                                <CheckCircle2 className="h-2.5 w-2.5 rtl:ml-1" />
-                                {t('gates.active')}
-                              </Badge>
-                            ) : (
-                              <Badge className="bg-amber-100 dark:bg-amber-900/30 text-amber-900 dark:text-amber-300 border-none text-[10px] font-bold uppercase flex items-center gap-1 w-fit mx-auto">
-                                <XCircle className="h-2.5 w-2.5 rtl:ml-1" />
-                                {t('gates.inactive')}
-                              </Badge>
-                            )}
-                          </td>
-                          <td className="px-6 py-4 text-right">
-                            <div className="flex items-center justify-end gap-2 translate-x-2 group-hover:translate-x-0 transition-transform">
-                              {deleted ? (
-                                <form action={restoreGate}>
-                                  <input
-                                    type="hidden"
-                                    name="locale"
-                                    value={locale}
-                                  />
-                                  <input
-                                    type="hidden"
-                                    name="id"
-                                    value={gate.id}
-                                  />
-                                  <Button
-                                    type="submit"
-                                    size="sm"
-                                    variant="outline"
-                                    className="h-8 border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-[11px] font-bold shadow-sm"
-                                  >
-                                    {t('gates.restore')}
-                                  </Button>
-                                </form>
-                              ) : (
-                                <>
-                                  <form action={setGateActive}>
-                                    <input
-                                      type="hidden"
-                                      name="locale"
-                                      value={locale}
-                                    />
-                                    <input
-                                      type="hidden"
-                                      name="id"
-                                      value={gate.id}
-                                    />
-                                    <input
-                                      type="hidden"
-                                      name="active"
-                                      value={String(!gate.isActive)}
-                                    />
-                                    <Button
-                                      type="submit"
-                                      size="sm"
-                                      variant="outline"
-                                      className={cn(
-                                        'h-8 text-[11px] font-bold shadow-sm opacity-0 group-hover:opacity-100 transition-opacity',
-                                        gate.isActive
-                                          ? 'border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/20'
-                                          : 'border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/20'
-                                      )}
-                                    >
-                                      {gate.isActive
-                                        ? t('gates.deactivate')
-                                        : t('gates.activate')}
-                                    </Button>
-                                  </form>
-                                  <form action={softDeleteGate}>
-                                    <input
-                                      type="hidden"
-                                      name="locale"
-                                      value={locale}
-                                    />
-                                    <input
-                                      type="hidden"
-                                      name="id"
-                                      value={gate.id}
-                                    />
-                                    <Button
-                                      type="submit"
-                                      size="sm"
-                                      variant="outline"
-                                      className="h-8 border-red-100 dark:border-red-800 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 text-[11px] font-bold shadow-sm opacity-0 group-hover:opacity-100 transition-opacity"
-                                    >
-                                      {t('gates.delete')}
-                                    </Button>
-                                  </form>
-                                </>
-                              )}
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    }
-                  )
-                )}
-              </tbody>
-            </table>
-          </div>
-        </CardContent>
-      </Card>
-
-      <p className="text-[11px] font-medium text-muted-foreground px-1">
-        {t('gates.displayNotice')}
-      </p>
-    </div>
+    <GatesClient
+      projects={serializedProjects}
+      gates={serializedGates}
+      locale={locale}
+      filters={
+        <Card className="shadow-sm border-ds-border">
+          <CardContent className="p-4">
+            <form method="GET" className="flex flex-wrap items-center gap-3">
+              <div className="relative flex-1 min-w-[200px]">
+                <Search className="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  name="q"
+                  defaultValue={search}
+                  placeholder={t('gates.searchPlaceholder')}
+                  className="ltr:pl-9 rtl:pr-9 h-10 rounded-lg bg-ds-background-neutral-subtle border-ds-border"
+                />
+              </div>
+              <div className="flex items-center gap-2">
+                <NativeSelect
+                  name="status"
+                  defaultValue={statusFilter}
+                  className="h-10 w-[140px] rounded-lg border-ds-border"
+                >
+                  <option value="all">{t('gates.allStatus' as any)}</option>
+                  <option value="active">{t('gates.active' as any)}</option>
+                  <option value="archived">{t('gates.archived' as any)}</option>
+                </NativeSelect>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  type="submit"
+                  size="sm"
+                  className="bg-ds-background-success-bold hover:bg-ds-background-success-bold/90 text-ds-text-inverse font-bold rounded-lg h-10 px-6"
+                >
+                  {t('gates.filter')}
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  asChild
+                  className="font-bold h-10 rounded-lg"
+                >
+                  <Link href="/gates">
+                    <X className="h-3.5 w-3.5 ltr:mr-1.5 rtl:ml-1.5" />
+                    {t('gates.clear')}
+                  </Link>
+                </Button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
+      }
+      translations={{
+        title: t('gates.title'),
+        subtitle: t('gates.subtitle'),
+        addLabel: t('gates.commission'),
+        totalActive: t('gates.activeGates', { count: totalActive }),
+        emptyTitle: t('gates.title'),
+        emptySubtitle: t('gates.noResultsDesc'),
+        totalHardware: t('nav.monitoring'),
+        statusArchived: t('gates.archived'),
+        statusCommissioned: t('gates.active'),
+        statusStandby: t('gates.inactive'),
+        columns: {
+          gate: t('gates.gate'),
+          parent: t('gates.orgProject'),
+          usage: t('gates.scans'),
+          status: t('gates.status'),
+        },
+      }}
+    />
   );
 }

@@ -29,4 +29,4 @@ Rebuild the Settings Page in GateFlow's Client Dashboard into an enterprise-grad
 
 ## Context
 
-Based on `PRD_v7.0.md` and legacy settings implementation.
+Based on `PRD.md` and legacy settings implementation.

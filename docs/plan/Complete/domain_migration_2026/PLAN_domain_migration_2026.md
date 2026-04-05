@@ -8,7 +8,7 @@ Status: ✅ **COMPLETE**
 ### Phase 1: AI Memory & Master Documentation (Low Risk)
 
 - [x] Update `.ai-memory/architecture.md` with new `*.site` domains.
-- [x] Update `docs/PRD_v7.0.md` — replace all 300+ instances of `.io`.
+- [x] Update `docs/PRD.md` — replace all 300+ instances of `.io`.
 - [x] Update `README.md` and basic repo docs.
 - [x] Auto-commit: `docs(site): update core documentation and AI memory`.
 

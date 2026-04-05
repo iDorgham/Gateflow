@@ -145,7 +145,7 @@
 **Documentation:**
 
 - [Resident Portal Spec](./docs/RESIDENT_PORTAL_SPEC.md)
-- [PRD v7.0](./docs/PRD_v7.0.md)
+- [PRD v7.0](./docs/PRD.md)
 
 ### Phase 3: Marketing Suite — Future
 
@@ -164,8 +164,8 @@
 | -------------------------------------------------- | --------------------- |
 | [README.md](../README.md)                          | Project overview      |
 | [CLAUDE.md](../CLAUDE.md)                          | AI assistant guide    |
-| [PRD v7.0](./PRD_v7.0.md)                          | Product requirements  |
-| [PRD v6.0](./PRD_v7.0.md)                          | Previous PRD version  |
+| [PRD v7.0](./PRD.md)                               | Product requirements  |
+| [PRD v6.0](./PRD.md)                               | Previous PRD version  |
 | [Security Overview](./guides/SECURITY_OVERVIEW.md) | Security architecture |
 
 ### Development

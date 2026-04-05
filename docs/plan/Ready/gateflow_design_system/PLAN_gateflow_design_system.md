@@ -2,7 +2,7 @@
 
 **Slug:** `design_system`  
 **Canonical initiative context:** `docs/development/initiatives/IDEA_atlassian_ui_remake.md` (evolved into a **multi-reference** system below).  
-**Related docs:** `docs/guides/UI_COMPONENT_LIBRARY.md`, `docs/reference/architecture/PROJECT_STRUCTURE.md`, `docs/archive/legacy/PRD_v7.0.md` (historical product framing).  
+**Related docs:** `docs/guides/UI_COMPONENT_LIBRARY.md`, `docs/reference/architecture/PROJECT_STRUCTURE.md`, `docs/archive/legacy/PRD.md` (historical product framing).  
 **Public marketing / brand reference:** [gateflow.site](https://www.gateflow.site) — enterprise gate security, MENA compounds, trust/performance framing, EN/AR.
 
 **Status:** Planned — prompts live under `phases/NN_<title>/PROMPT_phase_NN.md`. Execute with `/dev gateflow_design_system <phase>` (1–10 in order) or `/ship` per `docs/development/PLAN_LIFECYCLE.md` (moves `planned/` → `in-progress/` → `done/`).

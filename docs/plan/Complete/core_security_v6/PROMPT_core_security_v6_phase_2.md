@@ -26,7 +26,7 @@ Before and during implementation you **must**:
 
 Additional references:
 
-- `docs/archive/legacy/PRD_v7.0.md` (Section 13 — Scanner Rules and Gate–Account Assignment).
+- `docs/archive/legacy/PRD.md` (Section 13 — Scanner Rules and Gate–Account Assignment).
 - `docs/guides/SECURITY_OVERVIEW.md`.
 - `packages/db/prisma/schema.prisma`; `apps/client-dashboard/src/app/api/`; scanner scan/bulk-sync flows.
 

@@ -1,7 +1,7 @@
 # GateFlow Development Guide
 
 **Version:** 2.0
-**Aligned with:** `docs/PRD_v7.0.md`, `CLAUDE.md`, `GATEFLOW_CONFIG.md`
+**Aligned with:** `docs/PRD.md`, `CLAUDE.md`, `GATEFLOW_CONFIG.md`
 
 > **New:** See [AUTOMATION_GUIDE.md](./AUTOMATION_GUIDE.md) for the complete Ralph automation system — all scripts, git hooks, and workflows.
 
@@ -201,7 +201,7 @@ Key points (see `CLAUDE.md` and core rules for full list):
 
 ## 7. Where to Look for More
 
-- **Product spec:** `docs/PRD_v7.0.md`
+- **Product spec:** `docs/PRD.md`
 - **Security:** `docs/guides/SECURITY_OVERVIEW.md`, `.antigravity/rules/00-gateflow-core.mdc`, `.antigravity/contracts/CONTRACTS.md`
 - **Architecture:** `docs/guides/ARCHITECTURE.md`
 - **Environment variables:** `docs/guides/ENVIRONMENT_VARIABLES.md`

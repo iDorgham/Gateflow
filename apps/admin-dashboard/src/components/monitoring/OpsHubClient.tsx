@@ -25,14 +25,13 @@ import {
   Database,
   CheckCircle2,
   Clock,
-  ArrowRight,
-  RefreshCw,
   MoreHorizontal,
   ShieldAlert,
   Loader2,
   ExternalLink,
   Clipboard,
-  History,
+  TrendingUp,
+  AlertCircle,
 } from 'lucide-react';
 import Link from 'next/link';
 
@@ -60,129 +59,136 @@ function EmulationDetailDrawer({
 
   return (
     <Sheet open={!!log} onOpenChange={(o) => !o && onClose()}>
-      <SheetContent className="sm:max-w-md bg-white border-l border-ds-border shadow-2xl p-0 flex flex-col h-full">
-        <SheetHeader className="p-6 border-b border-ds-border-subtle bg-ds-background-neutral-subtle/50">
-          <div className="flex items-center gap-3 mb-2">
-            <div
+      <SheetContent className="sm:max-w-md bg-ds-background-neutral border-l border-ds-border shadow-2xl p-0 flex flex-col h-full animate-in slide-in-from-right duration-300">
+        <div className="flex flex-col h-full bg-ds-background-default">
+          <SheetHeader className="p-6 border-b border-ds-border bg-ds-background-subtle/40">
+            <div className="flex items-center gap-4 mb-4">
+              <div
+                className={cn(
+                  'p-2.5 rounded-2xl shadow-sm border border-ds-border/50',
+                  log.actionType === 'EMULATE_TRAFFIC'
+                    ? 'bg-ds-background-brand-bold text-white'
+                    : 'bg-ds-background-selected text-ds-text-selected'
+                )}
+              >
+                {log.actionType === 'EMULATE_TRAFFIC' ? (
+                  <Zap className="h-6 w-6" />
+                ) : (
+                  <Database className="h-6 w-6" />
+                )}
+              </div>
+              <div className="min-w-0">
+                <SheetTitle className="text-base font-black uppercase tracking-tight truncate">
+                  {log.actionType}
+                </SheetTitle>
+                <SheetDescription className="text-[10px] font-mono font-bold text-ds-text-subtlest mt-0.5 uppercase tracking-widest">
+                  Process ID: #{log.id.slice(0, 8)}
+                </SheetDescription>
+              </div>
+            </div>
+
+            <Badge
               className={cn(
-                'p-2 rounded-xl',
-                log.actionType === 'EMULATE_TRAFFIC'
-                  ? 'bg-ds-background-selected/15 text-ds-text-selected'
-                  : 'bg-ds-background-brand-bold/15 text-ds-text-brand'
+                'w-fit h-6 px-3.5 font-black text-[10px] uppercase tracking-widest italic border-none',
+                log.status === 'SUCCESS' || log.status === 'EXECUTED'
+                  ? 'bg-ds-background-success-subtle text-ds-text-success'
+                  : log.status === 'FAILED'
+                    ? 'bg-ds-background-danger-subtle text-ds-text-danger'
+                    : 'bg-ds-background-subtle text-ds-text-subtle'
               )}
             >
-              {log.actionType === 'EMULATE_TRAFFIC' ? (
-                <Zap className="h-5 w-5" />
-              ) : (
-                <Database className="h-5 w-5" />
+              {log.status}
+            </Badge>
+          </SheetHeader>
+
+          <ScrollArea className="flex-1 p-6">
+            <div className="flex flex-col gap-8">
+              {/* Context Section */}
+              <div className="flex flex-col gap-4">
+                <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-ds-text-subtlest pb-2 border-b border-ds-border/50">
+                  Transaction Context
+                </h4>
+                <div className="grid grid-cols-2 gap-6">
+                  <div className="flex flex-col gap-1.5">
+                    <p className="text-[10px] font-black text-ds-text-subtle uppercase tracking-wider">
+                      Target Entity
+                    </p>
+                    <Link
+                      href={`/${locale}/organizations/${log.organizationId}`}
+                      className="text-xs font-bold text-ds-text-brand hover:text-ds-text-brand-bold transition-colors flex items-center gap-1.5 mt-0.5"
+                    >
+                      {log.organizationId || 'System Global'}
+                      <ExternalLink className="h-2.5 w-2.5" />
+                    </Link>
+                  </div>
+                  <div className="flex flex-col gap-1.5">
+                    <p className="text-[10px] font-black text-ds-text-subtle uppercase tracking-wider">
+                      Timestamp
+                    </p>
+                    <p className="text-xs font-bold tabular-nums text-ds-text mt-0.5">
+                      {new Date(log.createdAt).toLocaleString(locale)}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Simulation Result Section */}
+              {log.actionType === 'EMULATE_TRAFFIC' && log.result && (
+                <div className="flex flex-col gap-4">
+                  <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-ds-text-subtlest pb-2 border-b border-ds-border/50">
+                    Operation Metrics
+                  </h4>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="bg-ds-background-subtle/50 rounded-2xl p-4 border border-ds-border/30 text-center">
+                      <TrendingUp className="h-4 w-4 text-ds-text-brand mx-auto mb-2 opacity-50" />
+                      <p className="text-xl font-black italic text-ds-text leading-none">
+                        {log.result.totalScans || 0}
+                      </p>
+                      <p className="text-[8px] font-black text-ds-text-subtlest uppercase tracking-widest mt-2">
+                        Total Scans
+                      </p>
+                    </div>
+                    <div className="bg-ds-background-subtle/50 rounded-2xl p-4 border border-ds-border/30 text-center">
+                      <Activity className="h-4 w-4 text-ds-text-brand mx-auto mb-2 opacity-50" />
+                      <p className="text-xl font-black italic text-ds-text leading-none">
+                        {log.result.scannersCount || 0}
+                      </p>
+                      <p className="text-[8px] font-black text-ds-text-subtlest uppercase tracking-widest mt-2">
+                        Active Units
+                      </p>
+                    </div>
+                  </div>
+                </div>
               )}
-            </div>
-            <div>
-              <SheetTitle className="text-sm font-black uppercase tracking-widest">
-                {log.actionType}
-              </SheetTitle>
-              <SheetDescription className="text-[10px] font-mono opacity-60">
-                {log.id}
-              </SheetDescription>
-            </div>
-          </div>
-          <Badge
-            variant={
-              log.status === 'SUCCESS' || log.status === 'EXECUTED'
-                ? 'success'
-                : log.status === 'FAILED'
-                  ? 'danger'
-                  : 'subtle'
-            }
-            className="w-fit h-6 px-3 font-black text-[10px] uppercase tracking-widest italic"
-          >
-            {log.status}
-          </Badge>
-        </SheetHeader>
 
-        <ScrollArea className="flex-1 p-6">
-          <div className="space-y-8">
-            {/* Basic Info */}
-            <div className="space-y-4">
-              <h4 className="text-[10px] font-black uppercase tracking-widest text-ds-text-subtlest border-b border-ds-border-subtle pb-1">
-                Context
-              </h4>
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <p className="text-[10px] font-bold text-ds-text-subtle uppercase">
-                    Organization
-                  </p>
-                  <Link
-                    href={`/${locale}/organizations/${log.organizationId}`}
-                    className="text-xs font-mono text-ds-text-selected hover:underline flex items-center gap-1 mt-1"
+              {/* Payload Section */}
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center justify-between border-b border-ds-border/50 pb-2">
+                  <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-ds-text-subtlest">
+                    Request Payload
+                  </h4>
+                  <Button
+                    variant="subtle"
+                    size="sm"
+                    className="h-6 px-2.5 text-[9px] font-black uppercase gap-1.5 transition-all hover:bg-ds-background-selected hover:text-ds-text-selected"
+                    onClick={() =>
+                      navigator.clipboard.writeText(
+                        JSON.stringify(log.metadata || log.intentJson, null, 2)
+                      )
+                    }
                   >
-                    {log.organizationId}
-                    <ExternalLink className="h-2.5 w-2.5" />
-                  </Link>
+                    <Clipboard className="h-3 w-3" /> Copy Path
+                  </Button>
                 </div>
-                <div>
-                  <p className="text-[10px] font-bold text-ds-text-subtle uppercase">
-                    Timestamp
-                  </p>
-                  <p className="text-xs font-medium tabular-nums mt-1">
-                    {new Date(log.createdAt).toLocaleString(locale)}
-                  </p>
+                <div className="rounded-2xl bg-ds-background-neutral border border-ds-border p-4 shadow-inner">
+                  <pre className="text-[10px] font-mono text-ds-text leading-relaxed whitespace-pre-wrap max-h-[400px] overflow-y-auto custom-scrollbar">
+                    {JSON.stringify(log.metadata || log.intentJson, null, 2)}
+                  </pre>
                 </div>
               </div>
             </div>
-
-            {/* Results Summary if Emulation */}
-            {log.actionType === 'EMULATE_TRAFFIC' && log.result && (
-              <div className="space-y-4">
-                <h4 className="text-[10px] font-black uppercase tracking-widest text-ds-text-subtlest border-b border-ds-border-subtle pb-1">
-                  Simulation Results
-                </h4>
-                <div className="bg-ds-background-neutral-subtle/30 rounded-xl p-4 border border-ds-border-subtle grid grid-cols-2 gap-4">
-                  <div className="text-center">
-                    <p className="text-lg font-black italic">
-                      {log.result.totalScans || 0}
-                    </p>
-                    <p className="text-[9px] font-bold text-ds-text-subtlest uppercase">
-                      Scans Generated
-                    </p>
-                  </div>
-                  <div className="text-center">
-                    <p className="text-lg font-black italic">
-                      {log.result.scannersCount || 0}
-                    </p>
-                    <p className="text-[9px] font-bold text-ds-text-subtlest uppercase">
-                      Active Units
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* JSON Audit */}
-            <div className="space-y-4">
-              <div className="flex items-center justify-between border-b border-ds-border-subtle pb-1">
-                <h4 className="text-[10px] font-black uppercase tracking-widest text-ds-text-subtlest">
-                  Audit Trace (JSON)
-                </h4>
-                <Button
-                  variant="subtle"
-                  size="sm"
-                  className="h-5 px-2 text-[9px] font-bold uppercase gap-1"
-                  onClick={() =>
-                    navigator.clipboard.writeText(
-                      JSON.stringify(log.metadata || log.intentJson, null, 2)
-                    )
-                  }
-                >
-                  <Clipboard className="h-2.5 w-2.5" /> Copy
-                </Button>
-              </div>
-              <pre className="p-4 rounded-xl bg-ds-background-neutral text-[11px] font-mono text-ds-text overflow-x-auto border border-ds-border">
-                {JSON.stringify(log.metadata || log.intentJson, null, 2)}
-              </pre>
-            </div>
-          </div>
-        </ScrollArea>
+          </ScrollArea>
+        </div>
       </SheetContent>
     </Sheet>
   );
@@ -216,7 +222,7 @@ export function OpsHubClient({ locale }: { locale: string }) {
 
   React.useEffect(() => {
     fetchHistory(true);
-    const interval = setInterval(() => fetchHistory(false), 8_000); // Poll every 8s for Phase 3 parity
+    const interval = setInterval(() => fetchHistory(false), 8_000);
     return () => clearInterval(interval);
   }, [fetchHistory]);
 
@@ -229,33 +235,43 @@ export function OpsHubClient({ locale }: { locale: string }) {
           <div className="flex items-center gap-3">
             <div
               className={cn(
-                'p-1.5 rounded-lg',
+                'h-8 w-8 rounded-xl flex items-center justify-center transition-transform hover:scale-110 shadow-sm border border-ds-border/50',
                 log.actionType === 'EMULATE_TRAFFIC'
-                  ? 'bg-ds-background-selected/10 text-ds-text-selected'
-                  : 'bg-ds-background-brand-bold/10 text-ds-text-brand'
+                  ? 'bg-ds-background-brand-bold text-white'
+                  : 'bg-ds-background-selected text-ds-text-selected'
               )}
             >
               {log.actionType === 'EMULATE_TRAFFIC' ? (
-                <Zap className="h-3.5 w-3.5" />
+                <Zap className="h-4 w-4" />
               ) : (
-                <Database className="h-3.5 w-3.5" />
+                <Database className="h-4 w-4" />
               )}
             </div>
-            <span className="font-bold text-xs uppercase tracking-tight">
-              {log.actionType}
-            </span>
+            <div className="flex flex-col gap-0.5">
+              <span className="font-black text-[11px] uppercase tracking-tight text-ds-text">
+                {log.actionType}
+              </span>
+              <span className="text-[9px] font-bold text-ds-text-subtlest uppercase tracking-widest">
+                ID: {log.id.slice(0, 8)}
+              </span>
+            </div>
           </div>
         ),
       },
       {
         key: 'organization',
-        label: t('admin:monitoring.hub.table.organization'),
+        label: 'Target Context',
         render: (log) => (
           <Link
             href={`/${locale}/organizations/${log.organizationId}`}
-            className="font-mono text-[10px] text-ds-text-subtle hover:text-ds-text-selected transition-colors"
+            className="flex items-center gap-2 group/ctx"
           >
-            {log.organizationId || 'System'}
+            <div className="h-5 w-5 rounded-md bg-ds-background-neutral flex items-center justify-center border border-ds-border group-hover/ctx:bg-ds-background-selected transition-colors">
+              <ExternalLink className="h-2.5 w-2.5 text-ds-text-subtlest group-hover/ctx:text-ds-text-selected" />
+            </div>
+            <span className="font-mono text-[10px] font-bold text-ds-text-subtle group-hover/ctx:text-ds-text-selected transition-colors">
+              {log.organizationId || 'Global System'}
+            </span>
           </Link>
         ),
       },
@@ -264,41 +280,73 @@ export function OpsHubClient({ locale }: { locale: string }) {
         label: t('admin:monitoring.hub.table.status'),
         render: (log) => (
           <Badge
-            variant={
+            className={cn(
+              'h-5 px-2 font-black text-[9px] uppercase tracking-[0.1em] italic border-none',
               log.status === 'SUCCESS' || log.status === 'EXECUTED'
-                ? 'success'
+                ? 'bg-ds-background-success-subtle text-ds-text-success'
                 : log.status === 'FAILED'
-                  ? 'danger'
-                  : 'subtle'
-            }
-            className="h-5 px-2 font-black text-[9px] uppercase tracking-wider"
+                  ? 'bg-ds-background-danger-subtle text-ds-text-danger'
+                  : 'bg-ds-background-subtle text-ds-text-subtle'
+            )}
           >
             {log.status}
           </Badge>
         ),
       },
       {
-        key: 'metrics',
-        label: 'Impact',
+        key: 'impact',
+        label: 'High-Density Metrics',
         render: (log) => {
           if (log.actionType === 'EMULATE_TRAFFIC' && log.result?.totalScans) {
             return (
-              <div className="flex items-center gap-1.5 text-ds-text-subtlest font-black text-[9px] uppercase">
-                <Zap className="h-2.5 w-2.5" />
-                {log.result.totalScans} scans
+              <div className="flex items-center gap-2 group/impact">
+                <div className="flex -space-x-1.5 shrink-0">
+                  {[...Array(3)].map((_, i) => (
+                    <div
+                      key={i}
+                      className="h-4 w-4 rounded-full border border-ds-background-default bg-ds-background-brand-bold/20 flex items-center justify-center"
+                    >
+                      <Zap className="h-2 w-2 text-ds-text-brand" />
+                    </div>
+                  ))}
+                </div>
+                <span className="text-[10px] font-black text-ds-text leading-none italic uppercase">
+                  {log.result.totalScans} Simulated Scans
+                </span>
               </div>
             );
           }
-          return <span className="text-[10px] text-ds-text-subtlest">—</span>;
+          return (
+            <div className="flex items-center gap-2 opacity-50">
+              <div className="h-1 w-8 bg-ds-border rounded-full" />
+              <span className="text-[9px] font-black text-ds-text-subtlest uppercase tracking-widest">
+                N/A
+              </span>
+            </div>
+          );
         },
       },
       {
         key: 'timestamp',
         label: t('admin:monitoring.hub.table.timestamp'),
         render: (log) => (
-          <div className="flex items-center gap-2 text-ds-text-subtle tabular-nums text-[11px]">
-            <Clock className="h-3 w-3 opacity-50" />
-            {new Date(log.createdAt).toLocaleString(locale)}
+          <div className="flex items-center gap-2 text-ds-text-subtle tabular-nums text-[10px] font-bold">
+            <Clock className="h-3 w-3 text-ds-text-brand" />
+            {new Date(log.createdAt).toLocaleString(locale, {
+              hour: '2-digit',
+              minute: '2-digit',
+              second: '2-digit',
+              hour12: false,
+            })}
+            <span className="text-ds-text-subtlest font-medium opacity-50 ml-1">
+              (
+              {new Date(log.createdAt).toLocaleDateString(locale, {
+                weekday: 'short',
+                month: 'short',
+                day: 'numeric',
+              })}
+              )
+            </span>
           </div>
         ),
       },
@@ -310,13 +358,13 @@ export function OpsHubClient({ locale }: { locale: string }) {
           <Button
             variant="subtle"
             size="sm"
-            className="h-7 w-7 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+            className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-all hover:bg-ds-background-selected hover:text-ds-text-selected rounded-xl"
             onClick={(e) => {
               e.stopPropagation();
               setSelectedLog(log);
             }}
           >
-            <MoreHorizontal className="h-3.5 w-3.5" />
+            <MoreHorizontal className="h-4 w-4" />
           </Button>
         ),
       },
@@ -326,197 +374,223 @@ export function OpsHubClient({ locale }: { locale: string }) {
 
   const stats = [
     {
-      label: t('admin:monitoring.hub.stats.total_scans'),
+      label: 'Network Load',
       value: '14.2k',
-      sub: '+1.2k today',
+      trend: '+12%',
+      sub: 'Simulated scans / 7d',
       icon: Zap,
+      color: 'text-ds-text-brand',
+      bg: 'bg-ds-background-brand-bold/10',
     },
     {
-      label: t('admin:monitoring.hub.stats.active_runs'),
-      value: logs.some((l) => l.status === 'RUNNING') ? 'Active' : '0',
-      sub: 'Gaussian Simulation',
+      label: 'Emulation Clusters',
+      value: logs.some((l) => l.status === 'RUNNING') ? 'SYNCING' : 'READY',
+      trend: 'Gaussian',
+      sub: 'Active load simulation',
       icon: Activity,
+      color: 'text-ds-text-selected',
+      bg: 'bg-ds-background-selected/10',
     },
     {
-      label: t('admin:monitoring.hub.stats.successful_seeds'),
-      value: '89',
-      sub: '99% system health',
+      label: 'Success Rate',
+      value: '100%',
+      trend: 'OPTIMAL',
+      sub: 'Platform health score',
       icon: CheckCircle2,
+      color: 'text-ds-text-success',
+      bg: 'bg-ds-background-success-subtle',
     },
   ];
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      {/* Quick Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="flex flex-col gap-8 flex-1 animate-in fade-in slide-in-from-bottom-4 duration-700 max-w-full">
+      {/* Premium Stats Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-fr">
         {stats.map((s, i) => (
-          <Card
+          <div
             key={i}
-            className="border-ds-border bg-ds-background-default shadow-sm overflow-hidden group hover:border-ds-border-selected transition-colors"
+            className="relative group p-6 rounded-[2rem] border border-ds-border bg-ds-background-default shadow-sm hover:border-ds-border-selected transition-all duration-300 hover:shadow-md"
           >
-            <CardContent className="p-6">
-              <div className="flex items-start justify-between">
-                <div className="space-y-1">
-                  <p className="text-[10px] font-black uppercase tracking-widest text-ds-text-subtle">
-                    {s.label}
-                  </p>
-                  {s.value === 'Active' ? (
-                    <div className="flex items-center gap-2 h-7 animate-pulse">
-                      <Loader2 className="h-4 w-4 animate-spin text-ds-text-selected" />
-                      <span className="text-xs font-bold text-ds-text-selected uppercase">
-                        Syncing...
-                      </span>
-                    </div>
-                  ) : (
-                    <h3 className="text-2xl font-black text-ds-text leading-none italic">
-                      {s.value}
-                    </h3>
+            <div className="flex flex-col h-full gap-4">
+              <div className="flex items-center justify-between">
+                <div
+                  className={cn(
+                    'p-3 rounded-2xl transition-all group-hover:scale-110',
+                    s.bg,
+                    s.color
                   )}
-                  <p className="text-[10px] font-medium text-ds-text-success tabular-nums">
-                    {s.sub}
-                  </p>
+                >
+                  <s.icon className="h-5 w-5" />
                 </div>
-                <div className="h-10 w-10 rounded-xl bg-ds-background-neutral-subtle flex items-center justify-center text-ds-text-subtle group-hover:bg-ds-background-selected/10 group-hover:text-ds-text-selected transition-all">
-                  <s.icon
-                    className={cn(
-                      'h-5 w-5',
-                      isRefreshing &&
-                        s.label.includes('active') &&
-                        'animate-pulse'
-                    )}
-                  />
+                <div
+                  className={cn(
+                    'px-2.5 py-1 rounded-full text-[10px] font-black uppercase italic tracking-widest',
+                    s.color === 'text-ds-text-success'
+                      ? 'bg-ds-background-success-subtle text-ds-text-success'
+                      : 'bg-ds-background-selected/10 text-ds-text-selected'
+                  )}
+                >
+                  {s.trend}
                 </div>
               </div>
-            </CardContent>
-          </Card>
+              <div className="flex flex-col gap-0.5 mt-2">
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-ds-text-subtlest leading-tight">
+                  {s.label}
+                </span>
+                <span className="text-3xl font-black italic tracking-tighter text-ds-text leading-none">
+                  {s.value}
+                </span>
+                <p className="text-[10px] font-medium text-ds-text-subtlest mt-1">
+                  {s.sub}
+                </p>
+              </div>
+            </div>
+            <div className="absolute bottom-0 right-0 p-4 opacity-0 group-hover:opacity-10 transition-opacity pointer-events-none">
+              <TrendingUp className="h-16 w-16 rotate-12" />
+            </div>
+          </div>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Main History Table */}
-        <div className="lg:col-span-2 space-y-4">
+      <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
+        {/* Main Operational Table */}
+        <div className="xl:col-span-3 flex flex-col gap-4">
           <div className="flex items-center justify-between px-2">
             <div className="flex items-center gap-4">
-              <h3 className="text-xs font-black uppercase tracking-widest text-ds-text flex items-center gap-2">
-                <History
-                  className={cn('h-3 w-3', isRefreshing && 'animate-spin')}
-                />
-                Operational History
-              </h3>
+              <div className="flex items-center gap-2">
+                <h2 className="text-sm font-black uppercase tracking-tight text-ds-text">
+                  Operational Audit Log
+                </h2>
+                <div className="h-1.5 w-1.5 rounded-full bg-ds-text-selected animate-pulse" />
+              </div>
               {isRefreshing && (
-                <Badge
-                  variant="subtle"
-                  className="text-[8px] font-black uppercase tracking-widest px-2 h-4 bg-ds-background-selected/10 text-ds-text-selected border-none animate-pulse"
-                >
-                  Live Sync
-                </Badge>
+                <div className="flex items-center gap-2 px-3 py-1 bg-ds-background-selected/10 rounded-full border border-ds-border/50">
+                  <Loader2 className="h-3 w-3 animate-spin text-ds-text-selected" />
+                  <span className="text-[9px] font-black uppercase tracking-[0.2em] text-ds-text-selected">
+                    Live Stream
+                  </span>
+                </div>
               )}
             </div>
-            <div className="flex items-center gap-4">
-              <Link
-                href={`/${locale}/monitoring/emulation`}
-                className="text-[10px] font-black text-ds-text-selected hover:underline uppercase tracking-widest flex items-center gap-1"
-              >
-                Start Emulation <ArrowRight className="h-3 w-3" />
-              </Link>
-              <Link
-                href={`/${locale}/monitoring/seeding`}
-                className="text-[10px] font-black text-ds-text-selected hover:underline uppercase tracking-widest flex items-center gap-1"
-              >
-                Mass Seeding <ArrowRight className="h-3 w-3" />
-              </Link>
+
+            <div className="flex items-center gap-6">
+              <div className="flex items-center gap-2 text-[10px] font-black uppercase text-ds-text-subtlest">
+                <div className="h-2 w-2 rounded-full bg-ds-background-brand-bold" />{' '}
+                Emulation
+                <div className="h-2 w-2 rounded-full bg-ds-background-selected ml-2" />{' '}
+                Seeding
+              </div>
             </div>
           </div>
 
-          <div className="bg-ds-background-default border border-ds-border rounded-xl shadow-sm overflow-hidden">
+          <div className="bg-ds-background-default border border-ds-border rounded-[2rem] shadow-sm overflow-hidden group/table">
             <DynamicTable
               columns={columns}
               items={logs}
               isLoading={loading && logs.length === 0}
               onRowClick={(log) => setSelectedLog(log)}
+              rowClassName={() =>
+                'group transition-all hover:bg-ds-background-subtle/50 cursor-pointer h-16 border-b border-ds-border/30 last:border-none'
+              }
               emptyState={
-                <div className="py-20 text-center flex flex-col items-center gap-4">
-                  <div className="h-16 w-16 rounded-full bg-ds-background-neutral-subtle flex items-center justify-center">
-                    <Zap className="h-8 w-8 text-ds-text-subtlest opacity-50" />
+                <div className="py-32 text-center flex flex-col items-center gap-6">
+                  <div className="h-20 w-20 rounded-[2rem] bg-ds-background-subtle flex items-center justify-center border border-ds-border rotate-12">
+                    <Activity className="h-10 w-10 text-ds-text-subtlest opacity-40 -rotate-12" />
                   </div>
-                  <p className="text-sm font-bold text-ds-text-subtle">
-                    No operational activity detected in the audit log.
-                  </p>
+                  <div className="space-y-1">
+                    <p className="text-sm font-black uppercase tracking-tight text-ds-text">
+                      Void Protocol Initialized
+                    </p>
+                    <p className="text-xs text-ds-text-subtlest font-medium">
+                      No operational logs found in the primary datacenter.
+                    </p>
+                  </div>
                 </div>
               }
             />
           </div>
         </div>
 
-        {/* Real-time Intel / Actions (Stay as Ph2) */}
-        <div className="space-y-6">
-          <Card className="border-ds-background-brand-bold/20 bg-ds-background-brand-bold/5 shadow-inner">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-[10px] font-black uppercase tracking-widest text-ds-text-brand flex items-center gap-2">
-                <ShieldAlert className="h-3 w-3" />
-                Ops Hub Intel
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-[11px] font-medium text-ds-text-subtle leading-relaxed">
-                This hub monitoring all 2026 Admin Emulation & Advanced Seeding
-                activities. All actions are immutable and signed by{' '}
-                <span className="font-bold text-ds-text">system-admin</span>.
-              </p>
-              <ul className="space-y-2">
-                <li className="flex items-center gap-2 text-[10px] font-bold text-ds-text-subtle">
-                  <div className="h-1 w-1 bg-ds-text-brand rounded-full" />
-                  Bypasses organization-level soft deletes
-                </li>
-                <li className="flex items-center gap-2 text-[10px] font-bold text-ds-text-subtle">
-                  <div className="h-1 w-1 bg-ds-text-brand rounded-full" />
-                  Full support for Red Sea data libraries
-                </li>
-              </ul>
-            </CardContent>
-          </Card>
-
-          <div className="bg-ds-background-default border border-ds-border rounded-xl p-6 space-y-4 shadow-sm">
-            <h3 className="text-[10px] font-black uppercase tracking-widest text-ds-text-subtle">
-              Platform Tasks
-            </h3>
-            <div className="grid grid-cols-1 gap-3">
-              <Button
-                variant="outline"
-                className="justify-start h-12 rounded-xl group/btn"
-                asChild
-              >
-                <Link href={`/${locale}/monitoring/seeding`}>
-                  <Database className="h-4 w-4 mr-3 text-ds-text-subtlest group-hover/btn:text-ds-text-brand" />
-                  <div className="flex flex-col items-start text-left">
-                    <span className="text-xs font-bold leading-tight">
-                      Seed Tenant
-                    </span>
-                    <span className="text-[9px] text-ds-text-subtlest font-medium">
-                      Bulk initialize units & contacts
-                    </span>
-                  </div>
-                </Link>
-              </Button>
-              <Button
-                variant="outline"
-                className="justify-start h-12 rounded-xl group/btn"
-                asChild
-              >
-                <Link href={`/${locale}/monitoring/emulation`}>
-                  <Zap className="h-4 w-4 mr-3 text-ds-text-subtlest group-hover/btn:text-ds-text-selected" />
-                  <div className="flex flex-col items-start text-left">
-                    <span className="text-xs font-bold leading-tight">
-                      Emulate Traffic
-                    </span>
-                    <span className="text-[9px] text-ds-text-subtlest font-medium">
-                      Rush-hour simulation (Gaussian)
-                    </span>
-                  </div>
-                </Link>
-              </Button>
+        {/* Tactical Actions Panel */}
+        <div className="flex flex-col gap-6">
+          <div className="flex flex-col gap-4 p-6 rounded-[2rem] bg-ds-background-brand-bold text-white shadow-xl shadow-ds-background-brand-bold/20 border border-ds-background-brand-bold group">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-xs font-black uppercase tracking-[0.2em] flex items-center gap-2">
+                <ShieldAlert className="h-4 w-4" />
+                Control Center
+              </h3>
+              <div className="h-2 w-2 rounded-full bg-white animate-pulse" />
+            </div>
+            <p className="text-[11px] font-bold text-white/80 leading-relaxed">
+              Monitoring all 2026 Admin Emulation & Advanced Seeding activities.
+              All actions are signed by system-admin.
+            </p>
+            <div className="mt-2 p-3 bg-white/10 rounded-2xl border border-white/10 flex flex-col gap-2">
+              <div className="flex items-center gap-3 text-[10px] font-bold text-white/90">
+                <CheckCircle2 className="h-3 w-3 text-white" />
+                Immutable Audit Trace
+              </div>
+              <div className="flex items-center gap-3 text-[10px] font-bold text-white/90">
+                <CheckCircle2 className="h-3 w-3 text-white" />
+                Gaussian Load Balancing
+              </div>
             </div>
           </div>
+
+          <div className="flex flex-col gap-4 p-6 rounded-[2rem] border border-ds-border bg-ds-background-default shadow-sm">
+            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-ds-text-subtlest">
+              Task Execution
+            </h3>
+            <div className="flex flex-col gap-3">
+              {[
+                {
+                  href: `/${locale}/monitoring/seeding`,
+                  icon: Database,
+                  title: 'Seed Tenant',
+                  desc: 'Bulk initialize units',
+                  accent: 'hover:border-ds-border-brand',
+                },
+                {
+                  href: `/${locale}/monitoring/emulation`,
+                  icon: Zap,
+                  title: 'Emulate Traffic',
+                  desc: 'Simulation Protocol',
+                  accent: 'hover:border-ds-border-selected',
+                },
+              ].map((task, idx) => (
+                <Link
+                  key={idx}
+                  href={task.href}
+                  className={cn(
+                    'group/btn flex items-center gap-4 p-3 rounded-2xl border border-ds-border bg-ds-background-subtle/30 transition-all duration-300',
+                    task.accent
+                  )}
+                >
+                  <div className="h-10 w-10 rounded-xl bg-ds-background-default flex items-center justify-center border border-ds-border group-hover/btn:scale-110 transition-transform">
+                    <task.icon className="h-5 w-5 text-ds-text-subtlest group-hover/btn:text-ds-text" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-xs font-black uppercase tracking-tight text-ds-text">
+                      {task.title}
+                    </span>
+                    <span className="text-[10px] font-bold text-ds-text-subtlest uppercase tracking-widest leading-none">
+                      {task.desc}
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <Card className="border-ds-border bg-ds-background-neutral-subtle/50 p-4 border-dashed rounded-[2rem]">
+            <div className="flex items-start gap-3">
+              <AlertCircle className="h-4 w-4 text-ds-text-subtlest mt-0.5 shrink-0" />
+              <p className="text-[10px] text-ds-text-subtlest font-bold leading-relaxed uppercase">
+                System health is currently at 99.8%. Emulation protocols are
+                running within predefined safety thresholds.
+              </p>
+            </div>
+          </Card>
         </div>
       </div>
 

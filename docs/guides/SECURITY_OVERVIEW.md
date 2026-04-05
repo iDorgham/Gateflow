@@ -1,7 +1,7 @@
 # GateFlow Security Overview (Docs v2)
 
 **Version:** 1.0  
-**Aligned with:** `docs/PRD_v7.0.md`, `.antigravity/rules/00-gateflow-core.mdc`, `.antigravity/contracts/CONTRACTS.md`  
+**Aligned with:** `docs/PRD.md`, `.antigravity/rules/00-gateflow-core.mdc`, `.antigravity/contracts/CONTRACTS.md`
 
 ---
 
@@ -15,7 +15,7 @@ GateFlow is a **zero‑trust digital gate infrastructure** for gated communities
 
 This guide is a high‑level companion to:
 
-- `PRD_v7.0.md` (Sections 8, 11–14).
+- `PRD.md` (Sections 8, 11–14).
 - `.antigravity/rules/00-gateflow-core.mdc` and `.antigravity/rules/gateflow-security.mdc`.
 - `.antigravity/contracts/CONTRACTS.md`.
 
@@ -68,15 +68,15 @@ If QR signing or `scanUuid` behavior regresses, overall system integrity is at r
 
 The following invariants are **non-negotiable**. Any code that violates them must be treated as a hard error, not a style issue.
 
-| # | Invariant | Where enforced |
-|---|---|---|
-| 1 | Every tenant query **must** include `organizationId` scope | Contracts, core rules |
-| 2 | Soft deletes only — filter `deletedAt: null`, never hard-delete tenant data | Contracts, schema |
-| 3 | QR payloads **must** be HMAC-SHA256 signed (`QR_SIGNING_SECRET`) | QR create/validate routes |
-| 4 | Tokens stored in **secure cookies** (web) or **SecureStore** (mobile) — never `localStorage` | Auth helpers, scanner app |
-| 5 | `scanUuid` is the deduplication key for scan sync — contract must not change | Offline queue, bulk sync |
-| 6 | Security-critical env vars fail closed if missing (refuse to start) | Auth, QR, Redis helpers |
-| 7 | No direct DB access from mobile apps — all flows go through the API layer | Architecture constraint |
+| #   | Invariant                                                                                    | Where enforced            |
+| --- | -------------------------------------------------------------------------------------------- | ------------------------- |
+| 1   | Every tenant query **must** include `organizationId` scope                                   | Contracts, core rules     |
+| 2   | Soft deletes only — filter `deletedAt: null`, never hard-delete tenant data                  | Contracts, schema         |
+| 3   | QR payloads **must** be HMAC-SHA256 signed (`QR_SIGNING_SECRET`)                             | QR create/validate routes |
+| 4   | Tokens stored in **secure cookies** (web) or **SecureStore** (mobile) — never `localStorage` | Auth helpers, scanner app |
+| 5   | `scanUuid` is the deduplication key for scan sync — contract must not change                 | Offline queue, bulk sync  |
+| 6   | Security-critical env vars fail closed if missing (refuse to start)                          | Auth, QR, Redis helpers   |
+| 7   | No direct DB access from mobile apps — all flows go through the API layer                    | Architecture constraint   |
 
 ---
 
@@ -104,11 +104,11 @@ Custom roles allow tenants to define narrower roles, but **never** to grant more
 
 GateFlow v6 formalizes visitor identity levels:
 
-| Level   | Description                                                     | Typical use cases                     |
-|---------|-----------------------------------------------------------------|---------------------------------------|
-| Level 0 | Basic details only: name + phone                                | Casual guests, low‑risk events        |
-| Level 1 | ID photo capture at gate (front/back), stored with the scan    | Contractors, vendors, long‑term stays |
-| Level 2 | ID OCR + matching (name/ID number vs invite data) — stub       | High‑security compounds (coming soon) |
+| Level   | Description                                                 | Typical use cases                     |
+| ------- | ----------------------------------------------------------- | ------------------------------------- |
+| Level 0 | Basic details only: name + phone                            | Casual guests, low‑risk events        |
+| Level 1 | ID photo capture at gate (front/back), stored with the scan | Contractors, vendors, long‑term stays |
+| Level 2 | ID OCR + matching (name/ID number vs invite data) — stub    | High‑security compounds (coming soon) |
 
 Configuration:
 
@@ -190,7 +190,7 @@ GateFlow adds a policy layer for scans:
   - Per‑gate operating hours and access rules (e.g. deliveries only during the day).
   - Integration with incidents and lock‑down behavior for severe events.
 
-Implementation details are in `PRD_v7.0.md` (Scanner Rules & Gate–Account Assignment).
+Implementation details are in `PRD.md` (Scanner Rules & Gate–Account Assignment).
 
 ---
 
@@ -233,4 +233,3 @@ When modifying auth, RBAC, QR flows, scanner sync, or tenant‑scoped APIs:
   - `.antigravity/contracts/CONTRACTS.md`
   - `.antigravity/rules/00-gateflow-core.mdc`
 - Treat violations of these invariants as **hard errors**, not stylistic issues.
-

@@ -2,7 +2,6 @@ import { requireAdmin } from '@/lib/admin-auth';
 import { getTranslation } from '@/lib/i18n/i18n';
 import { Locale } from '@/lib/i18n/i18n-config';
 import {
-  Settings,
   ShieldCheck,
   Database,
   Key,
@@ -11,6 +10,7 @@ import {
   RefreshCw,
   CheckCircle2,
   AlertCircle,
+  Settings,
 } from 'lucide-react';
 import {
   Card,
@@ -20,10 +20,9 @@ import {
   Badge,
   cn,
 } from '@gate-access/ui';
-import { PageHeader } from '@gate-access/ui';
 import { CompliancePlaceholder } from '@/components/settings/CompliancePlaceholder';
 
-export const metadata = { title: 'Settings' };
+export const metadata = { title: 'Settings | Overview' };
 
 function envPresent(name: string): boolean {
   return !!process.env[name];
@@ -181,89 +180,53 @@ export default async function SettingsPage(props: {
     },
   ];
 
-  const missingCount = sections
-    .flatMap((s) => s.items)
-    .filter((i) => !i.ok).length;
-
   return (
-    <div className="space-y-6">
-      <PageHeader
-        titleClassName="italic uppercase"
-        title={t('settings.title')}
-        subtitle={t('settings.subtitle')}
-        badge={
-          <Badge
-            className={cn(
-              'font-bold text-[11px] px-2.5 py-1',
-              missingCount === 0
-                ? 'bg-emerald-500 text-white border-none'
-                : 'bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-700'
-            )}
-          >
-            {missingCount === 0 ? (
-              <span className="flex items-center gap-1.5">
-                <CheckCircle2 className="h-3.5 w-3.5" />
-                {t('settings.allConfigPresent')}
-              </span>
-            ) : (
-              <span className="flex items-center gap-1.5">
-                <AlertCircle className="h-3.5 w-3.5" />
-                {missingCount === 1
-                  ? t('settings.missingConfig', { count: missingCount })
-                  : t('settings.missingConfigs', { count: missingCount })}
-              </span>
-            )}
-          </Badge>
-        }
-      />
-
-      <div className="grid gap-6 lg:grid-cols-2">
+    <div className="flex flex-col gap-8 animate-in slide-in-from-bottom-2 duration-500">
+      <div className="grid gap-6 sm:grid-cols-2">
         {sections.map((section) => {
           const sectionMissing = section.items.filter((i) => !i.ok).length;
           return (
             <Card
               key={section.title}
               className={cn(
-                'shadow-md border',
-                sectionMissing > 0
-                  ? 'border-amber-200 dark:border-amber-800'
-                  : 'border-border'
+                'shadow-sm border border-ds-border transition-all duration-300 hover:shadow-md hover:border-ds-border-brand',
+                sectionMissing > 0 && 'border-ds-border-warning/50'
               )}
             >
-              <CardHeader className="border-b border-border pb-4">
-                <CardTitle className="text-base font-bold flex items-center gap-2.5">
+              <CardHeader className="border-b border-ds-border/50 pb-4 bg-ds-background-subtle/30">
+                <CardTitle className="text-xs font-black uppercase tracking-wider flex items-center gap-2.5 text-ds-text">
                   <div className={cn('p-1.5 rounded-lg', section.color)}>
                     <section.icon className="h-3.5 w-3.5" />
                   </div>
                   {section.title}
                   {sectionMissing > 0 && (
-                    <Badge className="ltr:ml-auto rtl:mr-auto bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-300 border-amber-200 dark:border-amber-700 text-[9px] font-black uppercase">
+                    <Badge className="ltr:ml-auto rtl:mr-auto bg-ds-background-warning-subtle text-ds-text-warning border-ds-border-warning text-[9px] font-black uppercase">
                       {sectionMissing} {t('settings.missing')}
                     </Badge>
                   )}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="pt-4 space-y-3">
+              <CardContent className="pt-4 flex flex-col gap-3">
                 {section.items.map((item) => (
                   <div
                     key={item.label}
-                    className="flex items-center justify-between gap-4 py-2 border-b border-border last:border-none"
+                    className="flex items-center justify-between gap-4 py-1.5 border-b border-ds-border/30 last:border-none"
                   >
-                    <p className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground shrink-0">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-ds-text-subtle shrink-0">
                       {item.label}
                     </p>
                     <div className="flex items-center gap-2 min-w-0">
                       {item.ok ? (
-                        <CheckCircle2 className="h-3 w-3 text-emerald-500 shrink-0" />
+                        <CheckCircle2 className="h-3 w-3 text-ds-text-success shrink-0" />
                       ) : (
-                        <AlertCircle className="h-3 w-3 text-amber-500 shrink-0" />
+                        <AlertCircle className="h-3 w-3 text-ds-text-warning shrink-0" />
                       )}
                       <code
                         className={cn(
-                          'text-[11px] font-mono truncate',
+                          'text-[10px] font-mono truncate px-1.5 py-0.5 rounded-sm bg-ds-background-subtle/50',
                           item.ok
-                            ? 'text-foreground'
-                            : 'text-amber-600 dark:text-amber-400'
+                            ? 'text-ds-text font-bold'
+                            : 'text-ds-text-warning'
                         )}
                       >
                         {item.value}
@@ -277,19 +240,18 @@ export default async function SettingsPage(props: {
         })}
       </div>
 
-      {/* Compliance placeholder */}
       <CompliancePlaceholder />
 
-      <div className="rounded-xl border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/10 p-4">
+      <div className="rounded-lg border border-ds-border-warning/30 bg-ds-background-warning-subtle/20 p-4 transition-colors hover:bg-ds-background-warning-subtle/30">
         <div className="flex items-start gap-3">
-          <Settings className="h-4 w-4 text-amber-600 dark:text-amber-400 mt-0.5 shrink-0" />
+          <Settings className="h-4 w-4 text-ds-text-warning mt-0.5 shrink-0" />
           <div className="space-y-1">
-            <p className="text-sm font-bold text-amber-900 dark:text-amber-300">
+            <p className="text-xs font-black uppercase tracking-tight text-ds-text">
               {t('settings.configNoticeTitle')}
             </p>
-            <p className="text-xs text-amber-700 dark:text-amber-400">
+            <p className="text-[11px] text-ds-text-subtle leading-relaxed">
               {String(t('settings.configNoticeDesc')).split('<1>')[0]}
-              <code className="rounded bg-amber-100 dark:bg-amber-900/50 px-1 font-mono">
+              <code className="rounded bg-ds-background-subtle px-1 font-mono font-bold text-ds-text mx-0.5">
                 .env.local
               </code>
               {String(t('settings.configNoticeDesc')).split('</1>')[1]}

@@ -14,7 +14,7 @@ FRONTEND
 - **Apps**: client-dashboard
 - **Packages**: ui, api-client, db
 - **Rules**: Multi-tenant scoping.
-- **Refs**: `docs/archive/legacy/PRD_v7.0.md` Section: Resident Portal & Quotas.
+- **Refs**: `docs/archive/legacy/PRD.md` Section: Resident Portal & Quotas.
 
 ## Goal
 

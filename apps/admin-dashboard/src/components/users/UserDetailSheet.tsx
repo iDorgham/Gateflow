@@ -5,23 +5,30 @@ import { useRouter, useParams } from 'next/navigation';
 import {
   Sheet,
   SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetDescription,
   Badge,
   Button,
   NativeSelect,
   cn,
+  ScrollArea,
 } from '@gate-access/ui';
 import {
   Building2,
-  ScanLine,
   CalendarDays,
   Loader2,
   ShieldAlert,
   ShieldCheck,
+  X,
+  Mail,
+  Crown,
+  History,
+  Activity,
+  ChevronRight,
+  Shield,
+  Settings2,
+  ExternalLink,
 } from 'lucide-react';
 import { toast } from 'sonner';
+import { format } from 'date-fns';
 
 interface UserDetail {
   id: string;
@@ -43,15 +50,15 @@ interface UserDetailSheetProps {
 
 const roleBadgeColors: Record<string, string> = {
   ADMIN:
-    'bg-[var(--ds-background-danger-subtle)] text-[var(--ds-text-danger)] border-[var(--ds-border-danger)]/20',
+    'bg-ds-background-danger-subtle text-ds-text-danger border-ds-border-danger/20',
   TENANT_ADMIN:
-    'bg-[var(--ds-background-warning-subtle)] text-[var(--ds-text-warning)] border-[var(--ds-border-warning)]/20',
+    'bg-ds-background-warning-subtle text-ds-text-warning border-ds-border-warning/20',
   TENANT_USER:
-    'bg-[var(--ds-background-information-subtle)] text-[var(--ds-text-information)] border-[var(--ds-border-information)]/20',
+    'bg-ds-background-information-subtle text-ds-text-information border-ds-border-information/20',
   VISITOR:
-    'bg-[var(--ds-background-neutral-subtle)] text-[var(--ds-text-subtle)] border-[var(--ds-border)]',
+    'bg-ds-background-neutral-subtle text-ds-text-subtle border-ds-border',
   RESIDENT:
-    'bg-[var(--ds-background-success-subtle)] text-[var(--ds-text-success)] border-[var(--ds-border-success)]/20',
+    'bg-ds-background-success-subtle text-ds-text-success border-ds-border-success/20',
 };
 
 export function UserDetailSheet({ userId, onClose }: UserDetailSheetProps) {
@@ -127,12 +134,14 @@ export function UserDetailSheet({ userId, onClose }: UserDetailSheetProps) {
 
   const suspended = user?.deletedAt !== null && user?.deletedAt !== undefined;
   const roleName = user?.role?.name ?? '';
-  const initials =
-    user?.name
-      .split(' ')
-      .map((n) => n[0])
-      .join('')
-      .substring(0, 2) ?? '??';
+  const initials = user?.name
+    ? user.name
+        .split(' ')
+        .map((n) => n[0])
+        .join('')
+        .substring(0, 2)
+        .toUpperCase()
+    : '??';
 
   return (
     <Sheet
@@ -141,170 +150,236 @@ export function UserDetailSheet({ userId, onClose }: UserDetailSheetProps) {
         if (!open) onClose();
       }}
     >
-      <SheetContent className="w-full sm:max-w-md p-0 flex flex-col overflow-y-auto">
-        <SheetHeader className="p-6 border-b border-border bg-muted/20 shrink-0">
-          <div className="flex items-center gap-3 mb-2">
-            <div
-              className={cn(
-                'flex h-10 w-10 items-center justify-center rounded-full font-bold text-sm shadow-sm shrink-0',
-                suspended
-                  ? 'bg-muted text-muted-foreground'
-                  : 'bg-foreground text-background'
-              )}
-            >
-              {initials}
-            </div>
-            <div className="min-w-0">
-              <SheetTitle className="text-base font-black uppercase tracking-tight truncate">
-                {loading ? '…' : (user?.name ?? 'User')}
-              </SheetTitle>
-              <SheetDescription className="text-xs text-muted-foreground truncate">
-                {user?.email ?? ''}
-              </SheetDescription>
-            </div>
-          </div>
-          <div className="flex items-center gap-2 flex-wrap">
-            {roleName && (
-              <Badge
-                variant="outline"
-                className={cn(
-                  'text-[10px] font-bold uppercase tracking-wider',
-                  roleBadgeColors[roleName] ?? ''
-                )}
-              >
-                {roleName.replace('_', ' ')}
-              </Badge>
-            )}
-            {user && (
-              <Badge
-                className={cn(
-                  'border-none text-[10px] font-bold uppercase',
-                  suspended
-                    ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300'
-                    : 'bg-emerald-500 text-white'
-                )}
-              >
-                {suspended ? (
-                  <span className="flex items-center gap-1">
-                    <ShieldAlert className="h-2.5 w-2.5" /> Suspended
-                  </span>
-                ) : (
-                  <span className="flex items-center gap-1">
-                    <ShieldCheck className="h-2.5 w-2.5" /> Active
-                  </span>
-                )}
-              </Badge>
-            )}
-          </div>
-        </SheetHeader>
-
+      <SheetContent className="w-full sm:max-w-md p-0 flex flex-col h-full bg-ds-background-default border-l border-ds-border shadow-2xl">
         {loading ? (
-          <div className="flex flex-1 items-center justify-center p-10">
-            <Loader2 className="h-6 w-6 animate-spin text-muted-foreground/50" />
+          <div className="flex-1 flex items-center justify-center">
+            <Loader2 className="h-8 w-8 animate-spin text-ds-text-brand" />
           </div>
         ) : user ? (
-          <div className="flex-1 p-6 space-y-6">
-            {/* Org */}
-            {user.organization && (
-              <div className="rounded-xl border border-border bg-card p-4 flex items-center gap-3">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary shrink-0">
-                  <Building2 className="h-4 w-4" />
+          <>
+            <div className="flex flex-col space-y-2 text-center sm:text-left p-6 border-b border-ds-border bg-ds-background-neutral-subtle/20 shrink-0">
+              <div className="flex items-center gap-3 mb-1">
+                <div
+                  className={cn(
+                    'flex h-10 w-10 items-center justify-center rounded-xl font-bold text-sm shadow-sm',
+                    suspended
+                      ? 'bg-ds-background-neutral text-ds-text-subtle'
+                      : 'bg-ds-background-brand-bold text-ds-text-inverse'
+                  )}
+                >
+                  {initials}
                 </div>
-                <div className="min-w-0">
-                  <p className="text-xs font-black text-foreground truncate">
-                    {user.organization.name}
-                  </p>
-                  <p className="text-[10px] text-muted-foreground">
-                    {user.organization.plan} plan
+                <div className="min-w-0 text-left">
+                  <h2 className="text-ds-text text-base font-black uppercase tracking-tight truncate leading-tight">
+                    {user.name}
+                  </h2>
+                  <p className="text-xs text-ds-text-subtle truncate">
+                    {user.email}
                   </p>
                 </div>
+                <div className="flex-1" />
+                <Button
+                  variant="subtle"
+                  size="icon"
+                  className="rounded-full h-8 w-8 hover:bg-ds-background-neutral transition-colors shrink-0"
+                  onClick={onClose}
+                >
+                  <X className="h-4 w-4" />
+                </Button>
               </div>
-            )}
 
-            {/* Scan stats */}
-            <div className="grid grid-cols-2 gap-3">
-              <div className="rounded-xl border border-border bg-card p-3">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-500/10 text-amber-600 mb-2">
-                  <ScanLine className="h-3.5 w-3.5" />
+              <div className="flex items-center gap-2 mt-2">
+                {roleName && (
+                  <Badge
+                    variant="outline"
+                    className={cn(
+                      'h-5 px-1.5 font-bold uppercase text-[9px] tracking-wider',
+                      roleBadgeColors[roleName]
+                    )}
+                  >
+                    {roleName.replace('_', ' ')}
+                  </Badge>
+                )}
+                <div className="flex items-center gap-1.5 ltr:ml-2 rtl:mr-2">
+                  <ShieldCheck
+                    className={cn(
+                      'h-3 w-3',
+                      suspended ? 'text-ds-text-subtle' : 'text-ds-text-success'
+                    )}
+                  />
+                  <span className="text-[10px] font-bold text-ds-text-subtle uppercase tracking-tighter">
+                    {suspended ? 'SUSPENDED' : 'ACTIVE USER'}
+                  </span>
                 </div>
-                <p className="text-xl font-black text-foreground">
-                  {user.scansTotal.toLocaleString(locale)}
-                </p>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mt-0.5">
-                  Total Scans
-                </p>
               </div>
-              <div className="rounded-xl border border-border bg-card p-3">
-                <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-500/10 text-blue-600 mb-2">
-                  <ScanLine className="h-3.5 w-3.5" />
-                </div>
-                <p className="text-xl font-black text-foreground">
-                  {user.scansThisMonth.toLocaleString(locale)}
-                </p>
-                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mt-0.5">
-                  This Month
-                </p>
+            </div>
+            <div className="p-6 space-y-4 border-b border-ds-border">
+              <div className="grid grid-cols-2 gap-3">
+                <Button
+                  variant="primary"
+                  className="font-bold flex-1 h-10 shadow-sm rounded-lg"
+                  disabled={roleName === 'ADMIN'}
+                >
+                  <Crown className="h-4 w-4 mr-2" />
+                  Grant Access
+                </Button>
+                <Button
+                  variant="subtle"
+                  className="font-bold flex-1 h-10 border border-ds-border rounded-lg"
+                >
+                  <Settings2 className="h-4 w-4 mr-2" />
+                  Settings
+                </Button>
               </div>
             </div>
 
-            {/* Joined date */}
-            <div className="flex items-center gap-2 text-xs text-muted-foreground">
-              <CalendarDays className="h-3.5 w-3.5 shrink-0" />
-              <span>
-                Joined{' '}
-                {new Date(user.createdAt).toLocaleDateString(locale, {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric',
-                })}
-              </span>
-            </div>
-
-            {/* Role change */}
-            {user.availableRoles.length > 0 && roleName !== 'ADMIN' && (
-              <div className="space-y-2 pt-2 border-t border-border">
-                <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-                  Change Role
-                </p>
-                <div className="flex gap-2">
-                  <NativeSelect
-                    value={selectedRoleId}
-                    onChange={(e) => setSelectedRoleId(e.target.value)}
-                    className="flex-1 h-9 rounded-xl"
-                  >
-                    {user.availableRoles
-                      .filter((r) => r.name !== 'ADMIN')
-                      .map((r) => (
-                        <option key={r.id} value={r.id}>
-                          {r.name.replace('_', ' ')}
-                        </option>
-                      ))}
-                  </NativeSelect>
-                  <Button
-                    size="sm"
-                    className="h-9 rounded-xl px-4 font-bold"
-                    disabled={isPending || selectedRoleId === user.role?.id}
-                    onClick={handleRoleChange}
-                  >
-                    Apply
-                  </Button>
+            <ScrollArea className="flex-1">
+              <div className="p-6 space-y-8">
+                {/* Stats Grid */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="p-4 rounded-xl bg-ds-background-default border border-ds-border shadow-sm group hover:border-ds-border-brand transition-colors">
+                    <div className="flex items-center gap-2 mb-2 text-ds-text-subtlest group-hover:text-ds-text-brand transition-colors">
+                      <History className="h-3.5 w-3.5" />
+                      <span className="text-[10px] font-black uppercase tracking-widest">
+                        Lifetime Scans
+                      </span>
+                    </div>
+                    <div className="text-2xl font-black text-ds-text tabular-nums">
+                      {user.scansTotal.toLocaleString(locale)}
+                    </div>
+                  </div>
+                  <div className="p-4 rounded-xl bg-ds-background-default border border-ds-border shadow-sm group hover:border-ds-border-brand transition-colors">
+                    <div className="flex items-center gap-2 mb-2 text-ds-text-subtlest group-hover:text-ds-text-brand transition-colors">
+                      <Activity className="h-3.5 w-3.5" />
+                      <span className="text-[10px] font-black uppercase tracking-widest">
+                        Monthly Scans
+                      </span>
+                    </div>
+                    <div className="text-2xl font-black text-ds-text tabular-nums">
+                      {user.scansThisMonth.toLocaleString(locale)}
+                    </div>
+                  </div>
                 </div>
-              </div>
-            )}
 
-            {/* Actions */}
-            <div className="space-y-2 pt-2 border-t border-border">
-              <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3">
-                Actions
-              </p>
+                {/* Info List */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between group">
+                    <div className="flex items-center gap-3">
+                      <div className="h-8 w-8 rounded-lg bg-ds-background-neutral flex items-center justify-center text-ds-text-subtle">
+                        <Mail className="h-4 w-4" />
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-[10px] font-bold text-ds-text-subtlest uppercase tracking-widest mb-0.5">
+                          Primary Email
+                        </span>
+                        <span className="text-sm font-bold text-ds-text truncate max-w-[200px]">
+                          {user.email}
+                        </span>
+                      </div>
+                    </div>
+                    <ExternalLink className="h-3.5 w-3.5 text-ds-text-subtlest opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
+
+                  {user.organization && (
+                    <div className="flex items-center justify-between group">
+                      <div className="flex items-center gap-3">
+                        <div className="h-8 w-8 rounded-lg bg-ds-background-neutral flex items-center justify-center text-ds-text-subtle">
+                          <Building2 className="h-4 w-4" />
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="text-[10px] font-bold text-ds-text-subtlest uppercase tracking-widest mb-0.5">
+                            Organization
+                          </span>
+                          <span className="text-sm font-bold text-ds-text truncate max-w-[200px]">
+                            {user.organization.name}
+                          </span>
+                        </div>
+                      </div>
+                      <Badge
+                        variant="subtle"
+                        className="text-[9px] h-4 font-bold uppercase tracking-tight"
+                      >
+                        {user.organization.plan}
+                      </Badge>
+                    </div>
+                  )}
+
+                  <div className="flex items-center justify-between group">
+                    <div className="flex items-center gap-3">
+                      <div className="h-8 w-8 rounded-lg bg-ds-background-neutral flex items-center justify-center text-ds-text-subtle">
+                        <CalendarDays className="h-4 w-4" />
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-[10px] font-bold text-ds-text-subtlest uppercase tracking-widest mb-0.5">
+                          Joined Platfom
+                        </span>
+                        <span className="text-sm font-bold text-ds-text">
+                          {format(new Date(user.createdAt), 'MMMM dd, yyyy')}
+                        </span>
+                      </div>
+                    </div>
+                    <ChevronRight className="h-3.5 w-3.5 text-ds-text-subtlest opacity-0 group-hover:opacity-100 transition-opacity" />
+                  </div>
+                </div>
+
+                {/* Role Management Section */}
+                {user.availableRoles.length > 0 && roleName !== 'ADMIN' && (
+                  <div className="p-5 rounded-2xl bg-ds-background-neutral-subtle/50 border border-ds-border-subtle space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Shield className="h-4 w-4 text-ds-text-brand" />
+                        <h3 className="text-[11px] font-black text-ds-text uppercase tracking-widest">
+                          Authority Level
+                        </h3>
+                      </div>
+                      <Badge
+                        variant="subtle"
+                        className="text-[9px] h-4 font-bold uppercase bg-ds-background-neutral text-ds-text-subtle"
+                      >
+                        Edit Mode
+                      </Badge>
+                    </div>
+
+                    <div className="flex gap-2">
+                      <NativeSelect
+                        value={selectedRoleId}
+                        onChange={(e) => setSelectedRoleId(e.target.value)}
+                        className="flex-1 h-10 rounded-xl bg-ds-background-default border-ds-border"
+                      >
+                        {user.availableRoles
+                          .filter((r) => r.name !== 'ADMIN')
+                          .map((r) => (
+                            <option key={r.id} value={r.id}>
+                              {r.name.replace('_', ' ')}
+                            </option>
+                          ))}
+                      </NativeSelect>
+                      <Button
+                        variant="primary"
+                        className="h-10 px-4 font-bold rounded-xl"
+                        disabled={isPending || selectedRoleId === user.role?.id}
+                        onClick={handleRoleChange}
+                      >
+                        Update
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </ScrollArea>
+
+            {/* Actions Section */}
+            <div className="p-6 border-t border-ds-border bg-ds-background-default shrink-0 space-y-3">
               {roleName === 'ADMIN' ? (
-                <p className="text-xs text-muted-foreground italic">
-                  Platform admin accounts cannot be deactivated or have their
-                  role changed from this panel.
-                </p>
+                <div className="p-4 rounded-xl bg-ds-background-neutral-subtle border border-ds-border-subtle">
+                  <p className="text-[10px] font-bold text-ds-text-subtlest uppercase tracking-wide leading-relaxed text-center">
+                    Platform admin accounts are protected and cannot be
+                    deactivated from this panel.
+                  </p>
+                </div>
               ) : suspended ? (
                 <Button
-                  className="w-full h-11 rounded-xl font-black bg-emerald-600 hover:bg-emerald-700 text-white"
+                  className="w-full h-11 rounded-xl font-black bg-ds-background-success-bold hover:bg-ds-background-success-bold-hovered text-ds-text-inverse shadow-lg shadow-ds-background-success-bold/20"
                   disabled={isPending}
                   onClick={() => handleAction('reactivate')}
                 >
@@ -313,12 +388,12 @@ export function UserDetailSheet({ userId, onClose }: UserDetailSheetProps) {
                   ) : (
                     <ShieldCheck className="h-4 w-4 mr-2" />
                   )}
-                  Reactivate User
+                  Reactivate Account
                 </Button>
               ) : (
                 <Button
-                  variant="outline"
-                  className="w-full h-11 rounded-xl font-black border-red-200 dark:border-red-800 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20"
+                  variant="subtle"
+                  className="w-full h-11 rounded-xl font-black bg-ds-background-danger-subtle text-ds-text-danger hover:bg-ds-background-danger-subtle-hovered border border-ds-border-danger/20"
                   disabled={isPending}
                   onClick={() => handleAction('deactivate')}
                 >
@@ -327,18 +402,18 @@ export function UserDetailSheet({ userId, onClose }: UserDetailSheetProps) {
                   ) : (
                     <ShieldAlert className="h-4 w-4 mr-2" />
                   )}
-                  Deactivate User
+                  Deactivate Account
                 </Button>
               )}
               <Button
-                variant="ghost"
-                className="w-full h-9 rounded-xl text-muted-foreground"
+                variant="subtle"
+                className="w-full h-10 rounded-xl text-ds-text-subtle font-bold"
                 onClick={onClose}
               >
-                Close
+                Close Profile
               </Button>
             </div>
-          </div>
+          </>
         ) : null}
       </SheetContent>
     </Sheet>

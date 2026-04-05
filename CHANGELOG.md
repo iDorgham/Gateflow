@@ -9,6 +9,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 ## [Unreleased]
 
 ### Workspace
+
+- **[Db]** resolve TS2345 type error in tenant.ts scanLog.count
+- **[Admin-Dashboard]** fix Vercel build and 500 after login
+- **[Vercel]** ensure Prisma client generation before build via turbo dependency
 - **[Ci]** standardize cache action and remove pnpm-store from cache paths
 
 - **[Vercel]** add edge runtime to Prisma schema for Vercel
@@ -68,6 +72,9 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 - **[AI SDK v6 Migration]** started implementation of the AI SDK v6 migration initiative.
 
 ### Apps
+
+- **[Admin]** remove locale prefix from API fetch URLs
+- **[Admin]** log actual DB error in overview page for Vercel diagnostics
 
 - **[Marketing]** resolve production build type errors for ProductScreenshots and ComparisonSection
 

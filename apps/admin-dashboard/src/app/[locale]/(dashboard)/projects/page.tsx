@@ -3,29 +3,16 @@ import { getTranslation } from '@/lib/i18n/i18n';
 import { Locale } from '@/lib/i18n/i18n-config';
 import { prisma } from '@gate-access/db';
 import { revalidatePath } from 'next/cache';
-import {
-  FolderOpen,
-  Search,
-  Building2,
-  DoorOpen,
-  QrCode,
-  Filter,
-  X,
-  Trash2,
-  RotateCcw,
-  Calendar,
-} from 'lucide-react';
+import { Search, Building2, X } from 'lucide-react';
 import {
   Card,
   CardContent,
-  Badge,
   Button,
   Input,
   NativeSelect,
-  cn,
 } from '@gate-access/ui';
 import Link from 'next/link';
-import { PageHeader } from '@gate-access/ui';
+import { ProjectsClient } from './ProjectsClient';
 
 export const metadata = { title: 'Projects' };
 
@@ -115,282 +102,101 @@ export default async function ProjectsPage(props: {
     },
   });
 
-  const [totalActive] = await Promise.all([
-    // skip-organization-check (Global Admin Count)
+  const [totalActive, organizations] = await Promise.all([
     prisma.project.count({ where: { deletedAt: null } }),
+    prisma.organization.findMany({
+      where: { deletedAt: null },
+      select: { id: true, name: true },
+    }),
   ]);
 
+  const serializedProjects = projects.map((p): any => ({
+    ...p,
+    createdAt: p.createdAt.toISOString(),
+    deletedAt: p.deletedAt?.toISOString() ?? null,
+  }));
+
+  const serializedOrgs = organizations.map((o) => ({ ...o }));
+
   return (
-    <div className="space-y-6">
-      <PageHeader
-        titleClassName="italic uppercase"
-        title={t('projects.title')}
-        subtitle={t('projects.subtitle')}
-        badge={
-          <Badge
-            variant="outline"
-            className="bg-violet-50 dark:bg-violet-900/20 text-violet-700 dark:text-violet-300 border-violet-100 dark:border-violet-800 font-bold text-xs"
-          >
-            {t('projects.activeProjects', { count: totalActive })}
-          </Badge>
-        }
-      />
-
-      {/* Filters */}
-      <Card className="shadow-sm">
-        <CardContent className="p-4">
-          <form method="GET" className="flex flex-wrap items-center gap-3">
-            <div className="relative flex-1 min-w-[200px]">
-              <Search className="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                name="q"
-                defaultValue={search}
-                placeholder={t('projects.searchPlaceholder')}
-                className="ltr:pl-9 rtl:pr-9 h-10"
-              />
-            </div>
-            <div className="relative flex-1 min-w-[200px]">
-              <Building2 className="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                name="org"
-                defaultValue={orgFilter}
-                placeholder={t('projects.filterByOrg')}
-                className="ltr:pl-9 rtl:pr-9 h-10"
-              />
-            </div>
-            <div className="flex items-center gap-2">
-              <Filter className="h-4 w-4 text-muted-foreground rtl:ml-2" />
-              <NativeSelect
-                name="status"
-                defaultValue={statusFilter}
-                className="h-10 w-[140px]"
-              >
-                <option value="all">{t('projects.allStatus')}</option>
-                <option value="active">{t('projects.active')}</option>
-                <option value="archived">{t('projects.archived')}</option>
-              </NativeSelect>
-            </div>
-            <div className="flex items-center gap-2">
-              <Button
-                type="submit"
-                size="sm"
-                className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold"
-              >
-                {t('projects.filter')}
-              </Button>
-              <Button variant="outline" size="sm" asChild className="font-bold">
-                <Link href="/projects">
-                  <X className="h-3.5 w-3.5 ltr:mr-1.5 rtl:ml-1.5" />
-                  {t('projects.clear')}
-                </Link>
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
-
-      {/* Table */}
-      <Card className="shadow-md overflow-hidden">
-        <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="bg-muted/50 text-muted-foreground text-[10px] font-bold uppercase tracking-widest border-b border-border">
-                  <th className="px-6 py-4 text-left rtl:text-right">
-                    {t('projects.project')}
-                  </th>
-                  <th className="px-6 py-4 text-left rtl:text-right">
-                    {t('projects.organization')}
-                  </th>
-                  <th className="px-6 py-4 text-center">
-                    {t('projects.resources')}
-                  </th>
-                  <th className="px-6 py-4 text-left rtl:text-right">
-                    {t('projects.created')}
-                  </th>
-                  <th className="px-6 py-4 text-right rtl:text-left">
-                    {t('projects.actions')}
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {projects.length === 0 ? (
-                  <tr>
-                    <td colSpan={5} className="px-6 py-12 text-center">
-                      <div className="flex flex-col items-center gap-2 text-muted-foreground">
-                        <FolderOpen className="h-8 w-8 opacity-20" />
-                        <p className="font-medium">{t('projects.noResults')}</p>
-                      </div>
-                    </td>
-                  </tr>
-                ) : (
-                  projects.map(
-                    (project: {
-                      id: string;
-                      name: string;
-                      deletedAt: Date | null;
-                      createdAt: Date;
-                      organization: {
-                        id: string;
-                        name: string;
-                        plan: string | null;
-                      };
-                      _count: { gates: number; qrCodes: number };
-                    }) => {
-                      const archived = project.deletedAt !== null;
-                      return (
-                        <tr
-                          key={project.id}
-                          className={cn(
-                            'group transition-colors',
-                            archived
-                              ? 'bg-muted/30 opacity-70'
-                              : 'hover:bg-primary/5'
-                          )}
-                        >
-                          <td className="px-6 py-4">
-                            <div className="flex items-center gap-3">
-                              <div
-                                className={cn(
-                                  'flex h-9 w-9 items-center justify-center rounded-lg font-bold text-xs uppercase shadow-sm transition-transform group-hover:scale-110',
-                                  archived
-                                    ? 'bg-muted text-muted-foreground'
-                                    : 'bg-violet-500/10 text-violet-700 dark:text-violet-300'
-                                )}
-                              >
-                                <FolderOpen className="h-4 w-4" />
-                              </div>
-                              <div>
-                                <p className="font-bold text-foreground leading-none">
-                                  {project.name}
-                                </p>
-                                <p className="text-[10px] font-mono text-muted-foreground mt-1 uppercase">
-                                  {project.id.slice(0, 10)}
-                                </p>
-                              </div>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4">
-                            <div className="flex flex-col gap-1">
-                              <p className="text-foreground font-bold text-xs">
-                                {project.organization.name}
-                              </p>
-                              <PlanBadge
-                                plan={project.organization.plan ?? 'FREE'}
-                              />
-                            </div>
-                          </td>
-                          <td className="px-6 py-4">
-                            <div className="flex items-center justify-center gap-4">
-                              <div
-                                className="flex flex-col items-center"
-                                title={t('projects.gates')}
-                              >
-                                <DoorOpen className="h-3 w-3 text-muted-foreground mb-1" />
-                                <span className="text-[11px] font-bold text-foreground">
-                                  {project._count.gates.toLocaleString(locale)}
-                                </span>
-                              </div>
-                              <div
-                                className="flex flex-col items-center"
-                                title={t('projects.qrCodes')}
-                              >
-                                <QrCode className="h-3 w-3 text-muted-foreground mb-1" />
-                                <span className="text-[11px] font-bold text-foreground">
-                                  {project._count.qrCodes.toLocaleString(
-                                    locale
-                                  )}
-                                </span>
-                              </div>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4">
-                            <div className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
-                              <Calendar className="h-3 w-3" />
-                              {new Date(project.createdAt).toLocaleDateString(
-                                locale
-                              )}
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 text-right">
-                            <div className="flex items-center justify-end gap-2 translate-x-2 group-hover:translate-x-0 transition-transform">
-                              {archived ? (
-                                <form action={restoreProject}>
-                                  <input
-                                    type="hidden"
-                                    name="locale"
-                                    value={locale}
-                                  />
-                                  <input
-                                    type="hidden"
-                                    name="id"
-                                    value={project.id}
-                                  />
-                                  <Button
-                                    type="submit"
-                                    size="sm"
-                                    variant="outline"
-                                    className="h-8 border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 text-[11px] font-bold shadow-sm"
-                                  >
-                                    <RotateCcw className="h-3 w-3 ltr:mr-1.5 rtl:ml-1.5" />
-                                    {t('projects.restore')}
-                                  </Button>
-                                </form>
-                              ) : (
-                                <form action={deleteProject}>
-                                  <input
-                                    type="hidden"
-                                    name="locale"
-                                    value={locale}
-                                  />
-                                  <input
-                                    type="hidden"
-                                    name="id"
-                                    value={project.id}
-                                  />
-                                  <Button
-                                    type="submit"
-                                    size="sm"
-                                    variant="outline"
-                                    className="h-8 border-red-100 dark:border-red-800 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 text-[11px] font-bold shadow-sm opacity-0 group-hover:opacity-100 transition-opacity"
-                                  >
-                                    <Trash2 className="h-3 w-3 ltr:mr-1.5 rtl:ml-1.5" />
-                                    {t('projects.archive')}
-                                  </Button>
-                                </form>
-                              )}
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    }
-                  )
-                )}
-              </tbody>
-            </table>
-          </div>
-        </CardContent>
-      </Card>
-
-      <p className="text-[11px] font-medium text-muted-foreground px-1">
-        {t('projects.displayNotice')}
-      </p>
-    </div>
-  );
-}
-
-function PlanBadge({ plan }: { plan: string }) {
-  return (
-    <Badge
-      variant="secondary"
-      className={cn(
-        'w-fit text-[9px] font-bold uppercase tracking-tight h-4 px-1.5',
-        plan === 'PRO'
-          ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
-          : 'bg-muted text-muted-foreground'
-      )}
-    >
-      {plan}
-    </Badge>
+    <ProjectsClient
+      organizations={serializedOrgs}
+      projects={serializedProjects}
+      locale={locale}
+      filters={
+        <Card className="shadow-sm border-ds-border">
+          <CardContent className="p-4">
+            <form method="GET" className="flex flex-wrap items-center gap-3">
+              <div className="relative flex-1 min-w-[200px]">
+                <Search className="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  name="q"
+                  defaultValue={search}
+                  placeholder={t('projects.searchPlaceholder')}
+                  className="ltr:pl-9 rtl:pr-9 h-10 rounded-lg bg-ds-background-neutral-subtle border-ds-border"
+                />
+              </div>
+              <div className="relative flex-1 min-w-[200px]">
+                <Building2 className="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  name="org"
+                  defaultValue={orgFilter}
+                  placeholder={t('projects.filterByOrg')}
+                  className="ltr:pl-9 rtl:pr-9 h-10 rounded-lg bg-ds-background-neutral-subtle border-ds-border"
+                />
+              </div>
+              <div className="flex items-center gap-2">
+                <NativeSelect
+                  name="status"
+                  defaultValue={statusFilter}
+                  className="h-10 w-[140px] rounded-lg border-ds-border"
+                >
+                  <option value="all">{t('projects.allStatus' as any)}</option>
+                  <option value="active">{t('projects.active' as any)}</option>
+                  <option value="archived">
+                    {t('projects.archived' as any)}
+                  </option>
+                </NativeSelect>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  type="submit"
+                  size="sm"
+                  className="bg-ds-background-brand-bold hover:bg-ds-background-brand-bold/90 text-ds-text-inverse font-bold rounded-lg h-10 px-6"
+                >
+                  {t('projects.filter')}
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  asChild
+                  className="font-bold h-10 rounded-lg"
+                >
+                  <Link href="/projects">
+                    <X className="h-3.5 w-3.5 ltr:mr-1.5 rtl:ml-1.5" />
+                    {t('projects.clear')}
+                  </Link>
+                </Button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
+      }
+      translations={{
+        title: t('projects.title'),
+        subtitle: t('projects.subtitle'),
+        addLabel: t('projects.provision'),
+        totalActive: t('projects.activeProjects', { count: totalActive }),
+        emptyTitle: t('projects.title'),
+        emptySubtitle: t('projects.noResultsDesc'),
+        totalInfrastructure: t('projects.title'),
+        columns: {
+          project: t('projects.project'),
+          org: t('projects.organization'),
+          metrics: t('projects.resources'),
+          created: t('projects.created'),
+        },
+      }}
+    />
   );
 }

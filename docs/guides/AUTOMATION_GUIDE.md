@@ -349,7 +349,7 @@ Triggers `on-plan-done` which:
 2. Updates `CHANGELOG.md` — closes the feature entry in `[Unreleased]`
 3. Updates `FEATURE_LOG.md` — adds shipped feature entry
 4. Updates `UPCOMING.md` — removes the feature from upcoming
-5. Updates `PRD_v7.0.md` — marks feature as complete
+5. Updates `PRD.md` — marks feature as complete
 6. Refreshes `README.md` — updates progress dashboards
 7. Creates a GitHub Pull Request automatically
 

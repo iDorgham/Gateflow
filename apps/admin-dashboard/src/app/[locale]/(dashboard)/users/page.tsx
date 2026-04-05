@@ -2,9 +2,10 @@ import { requireAdmin } from '@/lib/admin-auth';
 import { getTranslation } from '@/lib/i18n/i18n';
 import { Locale } from '@/lib/i18n/i18n-config';
 import { prisma } from '@gate-access/db';
-import { Badge } from '@gate-access/ui';
+import { Badge, Button } from '@gate-access/ui';
 import { PageHeader } from '@gate-access/ui';
 import { UsersClient } from '@/components/users/UsersClient';
+import { Plus } from 'lucide-react';
 
 export const metadata = { title: 'Users' };
 
@@ -91,35 +92,36 @@ export default async function UsersPage(props: {
     })
   );
 
-  const activeCount = users.filter(
-    (u: { deletedAt: Date | null }) => u.deletedAt === null
-  ).length;
-
   return (
-    <div className="space-y-6">
-      <PageHeader
-        titleClassName="italic uppercase"
-        title={t('users.title')}
-        subtitle={t('users.subtitle')}
-        badge={
-          <Badge
-            variant="primary"
-            className="bg-ds-background-selected text-ds-text-selected border-ds-border-selected font-bold text-xs px-2.5 py-1"
-          >
-            {activeCount.toLocaleString(locale)} active
-          </Badge>
-        }
-      />
-
-      <UsersClient
-        users={serializedUsers}
-        locale={locale}
-        search={search}
-        roleFilter={roleFilter}
-        statusFilter={statusFilter}
-        total={total}
-        roles={roles}
-      />
-    </div>
+    <UsersClient
+      users={serializedUsers}
+      search={search}
+      roleFilter={roleFilter}
+      statusFilter={statusFilter}
+      total={total}
+      roles={roles as any}
+      locale={locale}
+      translations={{
+        title: t('users.title'),
+        subtitle: t('users.subtitle'),
+        addLabel: t('users.add'),
+        searchPlaceholder: t('users.searchPlaceholder'),
+        allRoles: t('users.allRoles'),
+        anyStatus: t('users.anyStatus'),
+        active: t('users.active'),
+        suspended: t('users.suspended'),
+        filter: t('users.filter'),
+        emptyTitle: t('users.title'),
+        emptySubtitle: t('users.noResultsDesc'),
+        totalUnits: t('users.userIdentity'),
+        sortedBy: t('users.auditLogNotice').split('.')[0],
+        columns: {
+          user: t('users.userIdentity'),
+          org: t('organizations.org'),
+          role: t('users.securityRole'),
+          status: t('users.status'),
+        },
+      }}
+    />
   );
 }

@@ -70,7 +70,7 @@
   - [x] `test` script added; Jest + ts-jest configured (jest.config.js)
   - [x] 5 API test files, 10 test cases — all pass (`pnpm test`)
   - [x] Analytics API route created (`/api/admin/analytics`)
-  - [x] `PRD_v7.0.md` admin dashboard updated to ~85%, feature table updated
+  - [x] `PRD.md` admin dashboard updated to ~85%, feature table updated
   - [x] Lint + typecheck + test all pass ✅
 
 ---

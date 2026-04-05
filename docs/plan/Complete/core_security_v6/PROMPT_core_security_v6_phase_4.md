@@ -26,7 +26,7 @@ Before and during implementation you **must**:
 
 Additional references:
 
-- `docs/archive/legacy/PRD_v7.0.md` (Section 13.2–13.3 — Location rule, “Not on Location” behavior).
+- `docs/archive/legacy/PRD.md` (Section 13.2–13.3 — Location rule, “Not on Location” behavior).
 - `docs/guides/SECURITY_OVERVIEW.md` (Section 6 — Scanner policies).
 - Phase 2 gate–account assignment (scanner is already gate-aware).
 

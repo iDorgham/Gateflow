@@ -27,7 +27,7 @@ Before and during implementation you **must**:
 
 Additional references:
 
-- `docs/archive/legacy/PRD_v7.0.md` (Section 8 — Security & Compliance).
+- `docs/archive/legacy/PRD.md` (Section 8 — Security & Compliance).
 - `docs/guides/SECURITY_OVERVIEW.md`.
 - `apps/client-dashboard/src/lib/require-auth.ts`, `apps/client-dashboard/src/app/api/`.
 

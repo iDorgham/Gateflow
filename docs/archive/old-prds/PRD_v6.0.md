@@ -49,18 +49,18 @@ GateFlow consists of **5 interconnected applications**:
 
 ### Updated Persona Table
 
-| Persona                  | Role / Job-to-be-Done | Pain Points                                      | Must-have Features                                     |
-| ------------------------ | --------------------- | ------------------------------------------------ | ------------------------------------------------------ |
-| **Platform Admin**       | Super admin           | No platform visibility                           | Org management, system analytics, billing oversight    |
-| **Property Manager**     | Compound/School Admin | Security breaches, resident complaints, no logs  | Bulk CSV, team RBAC, live dashboard, audit logs        |
-| **Event Organizer**      | Project Manager       | Gate chaos, VIP fraud, poor data                 | Per-event projects, bulk + manual QR, analytics export |
-| **Security Head**        | Gate Supervisor       | Fake entries, operator abuse, no visibility      | Live scan feed, operator management, override logs     |
-| **Gate Operator**        | Gate Operator         | Fast & reliable scanning                         | Offline-capable mobile app, vibration/sound, simple UI |
-| **Resident**             | Unit Owner/Renter     | Can't give guests access easily, complex process | Self-service QR creation, quota tracking, Open QR      |
-| **Real Estate Marketing Manager** | Marketing | No link between digital ads and physical gate visits | Marketing suite, UTM attribution, pixels, CRM webhooks |
-| **Brokerage Owner / Developer** | Owner | Needs per-project and per-owner attribution      | Brokerage view, project separation, campaign analytics |
-| **Developer/Integrator** | Developer             | Easy CRM/booking sync                            | Full REST API, webhooks, API keys with scopes          |
-| **Analytics Viewer**     | Analytics Viewer      | No data on attendance                            | Read-only analytics, exports, trends                   |
+| Persona                           | Role / Job-to-be-Done | Pain Points                                          | Must-have Features                                     |
+| --------------------------------- | --------------------- | ---------------------------------------------------- | ------------------------------------------------------ |
+| **Platform Admin**                | Super admin           | No platform visibility                               | Org management, system analytics, billing oversight    |
+| **Property Manager**              | Compound/School Admin | Security breaches, resident complaints, no logs      | Bulk CSV, team RBAC, live dashboard, audit logs        |
+| **Event Organizer**               | Project Manager       | Gate chaos, VIP fraud, poor data                     | Per-event projects, bulk + manual QR, analytics export |
+| **Security Head**                 | Gate Supervisor       | Fake entries, operator abuse, no visibility          | Live scan feed, operator management, override logs     |
+| **Gate Operator**                 | Gate Operator         | Fast & reliable scanning                             | Offline-capable mobile app, vibration/sound, simple UI |
+| **Resident**                      | Unit Owner/Renter     | Can't give guests access easily, complex process     | Self-service QR creation, quota tracking, Open QR      |
+| **Real Estate Marketing Manager** | Marketing             | No link between digital ads and physical gate visits | Marketing suite, UTM attribution, pixels, CRM webhooks |
+| **Brokerage Owner / Developer**   | Owner                 | Needs per-project and per-owner attribution          | Brokerage view, project separation, campaign analytics |
+| **Developer/Integrator**          | Developer             | Easy CRM/booking sync                                | Full REST API, webhooks, API keys with scopes          |
+| **Analytics Viewer**              | Analytics Viewer      | No data on attendance                                | Read-only analytics, exports, trends                   |
 
 ### Resident Persona Deep Dive
 
@@ -87,33 +87,33 @@ GateFlow consists of **5 interconnected applications**:
 
 ### 3.1 Admin Dashboard (apps/admin-dashboard)
 
-| Feature                     | Priority | Status                                   |
-| --------------------------- | -------- | ---------------------------------------- |
-| Organization management     | P0       | ✅ Done (list + detail sheet + suspend)  |
-| User management (global)    | P0       | ✅ Done (cross-org, role change, deactivate) |
-| System-wide analytics       | P1       | ✅ Done (Recharts: scans, orgs, plans)   |
-| AI assistant panel          | P1       | ✅ Done (Gemini + 5 admin tools)         |
-| Finance / billing overview  | P1       | ✅ Done (MRR estimate, Stripe placeholder) |
-| Server health monitoring    | P1       | ✅ Done (live 30s polling, DB/Redis)     |
-| Platform settings           | P2       | ✅ Done (env config, security checklist) |
-| Compliance reporting        | P2       | Placeholder (Coming Q4 2026)             |
-| Stripe real integration     | P2       | Not started                              |
-| MFA for admin               | P3       | Not started                              |
+| Feature                    | Priority | Status                                       |
+| -------------------------- | -------- | -------------------------------------------- |
+| Organization management    | P0       | ✅ Done (list + detail sheet + suspend)      |
+| User management (global)   | P0       | ✅ Done (cross-org, role change, deactivate) |
+| System-wide analytics      | P1       | ✅ Done (Recharts: scans, orgs, plans)       |
+| AI assistant panel         | P1       | ✅ Done (Gemini + 5 admin tools)             |
+| Finance / billing overview | P1       | ✅ Done (MRR estimate, Stripe placeholder)   |
+| Server health monitoring   | P1       | ✅ Done (live 30s polling, DB/Redis)         |
+| Platform settings          | P2       | ✅ Done (env config, security checklist)     |
+| Compliance reporting       | P2       | Placeholder (Coming Q4 2026)                 |
+| Stripe real integration    | P2       | Not started                                  |
+| MFA for admin              | P3       | Not started                                  |
 
 ### 3.2 Client Dashboard (apps/client-dashboard)
 
-| Feature                             | Priority | Status  |
-| ----------------------------------- | -------- | ------- |
-| Organization management             | P0       | ~90%    |
-| QR code management (single)         | P0       | ~95%    |
-| QR code management (bulk CSV)       | P0       | ~100%   |
-| Gate management                     | P0       | ~90%    |
-| Team/RBAC (roles + permissions)     | P0       | ~85%    |
-| Analytics dashboard                 | P1       | ~70%    |
-| Webhooks                            | P1       | ~80%    |
-| API keys                            | P1       | ~70%    |
-| Resident unit management            | P1       | **NEW** |
-| Visitor QR management               | P1       | **NEW** |
+| Feature                            | Priority | Status  |
+| ---------------------------------- | -------- | ------- |
+| Organization management            | P0       | ~90%    |
+| QR code management (single)        | P0       | ~95%    |
+| QR code management (bulk CSV)      | P0       | ~100%   |
+| Gate management                    | P0       | ~90%    |
+| Team/RBAC (roles + permissions)    | P0       | ~85%    |
+| Analytics dashboard                | P1       | ~70%    |
+| Webhooks                           | P1       | ~80%    |
+| API keys                           | P1       | ~70%    |
+| Resident unit management           | P1       | **NEW** |
+| Visitor QR management              | P1       | **NEW** |
 | Marketing suite (pixels, UTM, CRM) | P1       | **NEW** |
 
 ### 3.3 Scanner App (apps/scanner-app)
@@ -143,22 +143,22 @@ GateFlow consists of **5 interconnected applications**:
 
 ### 3.5 Resident Portal (apps/resident-portal + apps/resident-mobile)
 
-| Feature                           | Priority | Status  |
-| --------------------------------- | -------- | ------- |
-| Unit linking                      | P0       | **NEW** |
-| Visitor QR creation               | P0       | **NEW** |
-| Quota tracking                    | P0       | **NEW** |
-| Open QR creation                  | P1       | **NEW** |
-| Visitor history                   | P1       | **NEW** |
-| Access time controls              | P1       | **NEW** |
-| Mobile-optimized web              | P1       | **NEW** |
-| Native mobile app                 | P2       | **NEW** |
-| Push notifications (scan + arrival) | P2     | **NEW** |
-| Guest navigation (GPS)            | P2       | **NEW** |
-| Contact-based QR share (WhatsApp/Email) | P0 | **NEW** |
-| Scan notification (visitor scanned at gate) | P0 | **NEW** |
-| Arrival notification (guest at unit) | P1    | **NEW** |
-| Quota widget, who visited today, one-tap share | P2 | **NEW** |
+| Feature                                        | Priority | Status  |
+| ---------------------------------------------- | -------- | ------- |
+| Unit linking                                   | P0       | **NEW** |
+| Visitor QR creation                            | P0       | **NEW** |
+| Quota tracking                                 | P0       | **NEW** |
+| Open QR creation                               | P1       | **NEW** |
+| Visitor history                                | P1       | **NEW** |
+| Access time controls                           | P1       | **NEW** |
+| Mobile-optimized web                           | P1       | **NEW** |
+| Native mobile app                              | P2       | **NEW** |
+| Push notifications (scan + arrival)            | P2       | **NEW** |
+| Guest navigation (GPS)                         | P2       | **NEW** |
+| Contact-based QR share (WhatsApp/Email)        | P0       | **NEW** |
+| Scan notification (visitor scanned at gate)    | P0       | **NEW** |
+| Arrival notification (guest at unit)           | P1       | **NEW** |
+| Quota widget, who visited today, one-tap share | P2       | **NEW** |
 
 ---
 
@@ -327,59 +327,59 @@ enum QRCodeType {
 
 ### Remaining MVP / Phase 2
 
-| #   | Feature                                                 | Priority | Status |
-| --- | ------------------------------------------------------- | -------- | ------ |
-| 1   | Supervisor override (scanner)                           | P1       | ❌     |
-| 2   | Advanced analytics (incl. resident engagement metrics)  | P1       | ❌     |
-| 3   | Multi-project support                                   | P2       | ❌     |
-| 4   | Admin dashboard basics                                  | P1       | ⚠️     |
-| 5   | Marketing website polish                                | P2       | ❌     |
-| 6   | Resident Portal (web + mobile) rollout                  | P0       | ❌     |
-| 7   | Marketing Intelligence Suite (pixels, UTM, CRM)         | P0       | ❌     |
-| 8   | Team roles & custom roles UI                            | P1       | ❌     |
-| 9   | Scanner gate–account assignment + location rule         | P1       | ❌     |
-| 10  | Resident privacy & data retention controls              | P1       | ❌     |
+| #   | Feature                                                | Priority | Status |
+| --- | ------------------------------------------------------ | -------- | ------ |
+| 1   | Supervisor override (scanner)                          | P1       | ❌     |
+| 2   | Advanced analytics (incl. resident engagement metrics) | P1       | ❌     |
+| 3   | Multi-project support                                  | P2       | ❌     |
+| 4   | Admin dashboard basics                                 | P1       | ⚠️     |
+| 5   | Marketing website polish                               | P2       | ❌     |
+| 6   | Resident Portal (web + mobile) rollout                 | P0       | ❌     |
+| 7   | Marketing Intelligence Suite (pixels, UTM, CRM)        | P0       | ❌     |
+| 8   | Team roles & custom roles UI                           | P1       | ❌     |
+| 9   | Scanner gate–account assignment + location rule        | P1       | ❌     |
+| 10  | Resident privacy & data retention controls             | P1       | ❌     |
 
 ---
 
 ## 7. Phase 2 Roadmap (Q3–Q4 2026)
 
-| Feature                  | Target Month | Effort  |
-| ------------------------ | ------------ | ------- |
-| Resident Portal (Web)    | Month 1      | 3 weeks |
-| Resident Portal (Mobile) | Month 2      | 2 weeks |
-| Quota enforcement        | Month 1      | 1 week  |
-| Open QR feature          | Month 2      | 1 week  |
-| Supervisor override      | Month 2      | 1 week  |
-| Contact-based share (WhatsApp/Email) | Month 2 | 1 week  |
-| Scan notification (push to resident) | Month 2 | 1 week  |
-| GPS guide + \"I've arrived\" + arrival notification | Month 3 | 2 weeks |
-| Resident delight (quota widget, who visited today, one-tap share) | Month 3 | 1 week  |
-| Resident privacy & data retention controls | Month 3–4 | 2 weeks |
-| Advanced analytics (incl. resident engagement, unit-type segmentation) | Month 3–4 | 3 weeks |
-| Multi-project            | Month 3–4    | 4 weeks |
-| Marketing Suite Core     | Month 3–4    | 4 weeks |
-| Team & custom roles      | Month 4      | 2 weeks |
-| Scanner rules (gate + location, gate hours, device binding, supervisor queue UX) | Month 4–5 | 3 weeks |
+| Feature                                                                          | Target Month | Effort  |
+| -------------------------------------------------------------------------------- | ------------ | ------- |
+| Resident Portal (Web)                                                            | Month 1      | 3 weeks |
+| Resident Portal (Mobile)                                                         | Month 2      | 2 weeks |
+| Quota enforcement                                                                | Month 1      | 1 week  |
+| Open QR feature                                                                  | Month 2      | 1 week  |
+| Supervisor override                                                              | Month 2      | 1 week  |
+| Contact-based share (WhatsApp/Email)                                             | Month 2      | 1 week  |
+| Scan notification (push to resident)                                             | Month 2      | 1 week  |
+| GPS guide + \"I've arrived\" + arrival notification                              | Month 3      | 2 weeks |
+| Resident delight (quota widget, who visited today, one-tap share)                | Month 3      | 1 week  |
+| Resident privacy & data retention controls                                       | Month 3–4    | 2 weeks |
+| Advanced analytics (incl. resident engagement, unit-type segmentation)           | Month 3–4    | 3 weeks |
+| Multi-project                                                                    | Month 3–4    | 4 weeks |
+| Marketing Suite Core                                                             | Month 3–4    | 4 weeks |
+| Team & custom roles                                                              | Month 4      | 2 weeks |
+| Scanner rules (gate + location, gate hours, device binding, supervisor queue UX) | Month 4–5    | 3 weeks |
 
 ---
 
 ## 8. Security & Compliance
 
-| Requirement                        | Status | Notes                                           |
-| ---------------------------------- | ------ | ------------------------------------------------ |
-| JWT Authentication                 | ✅     | 15-min access token                             |
-| Password Hashing (Argon2id)        | ✅     | t=3, m=65536, p=4                               |
-| Multi-tenant isolation             | ✅     | Row-level                                       |
-| Audit logs                         | ✅     | Full trail                                      |
-| Rate limiting (Redis)              | ✅     | Multi-instance                                  |
-| CSRF protection                    | ✅     | Double-submit cookie                            |
-| Token rotation                     | ✅     | Refresh token                                   |
-| Field encryption                   | ✅     | Webhook secrets                                 |
-| Resident privacy controls          | ❌     | Planned: masking options, guest visibility, unit-location sharing toggles |
-| Data retention per tenant          | ❌     | Planned: configurable retention windows for visitor history and scan logs |
-| Data residency                     | ❌     | Not implemented                                 |
-| Immutable logs                     | ❌     | Not implemented                                 |
+| Requirement                 | Status | Notes                                                                     |
+| --------------------------- | ------ | ------------------------------------------------------------------------- |
+| JWT Authentication          | ✅     | 15-min access token                                                       |
+| Password Hashing (Argon2id) | ✅     | t=3, m=65536, p=4                                                         |
+| Multi-tenant isolation      | ✅     | Row-level                                                                 |
+| Audit logs                  | ✅     | Full trail                                                                |
+| Rate limiting (Redis)       | ✅     | Multi-instance                                                            |
+| CSRF protection             | ✅     | Double-submit cookie                                                      |
+| Token rotation              | ✅     | Refresh token                                                             |
+| Field encryption            | ✅     | Webhook secrets                                                           |
+| Resident privacy controls   | ❌     | Planned: masking options, guest visibility, unit-location sharing toggles |
+| Data retention per tenant   | ❌     | Planned: configurable retention windows for visitor history and scan logs |
+| Data residency              | ❌     | Not implemented                                                           |
+| Immutable logs              | ❌     | Not implemented                                                           |
 
 ---
 
@@ -571,10 +571,10 @@ GateFlow supports multiple levels of visitor identity assurance so tenants can c
 
 **Trust levels (configurable per tenant, per gate, and per scenario):**
 
-| Level | Description | Typical use cases |
-|-------|-------------|-------------------|
-| Level 0 | Basic details only: name + phone (current behavior). | Casual guests, low-risk events. |
-| Level 1 | ID photo capture at gate (front/back), stored with the scan. | Contractors, vendors, longer-term visitors. |
+| Level   | Description                                                    | Typical use cases                              |
+| ------- | -------------------------------------------------------------- | ---------------------------------------------- |
+| Level 0 | Basic details only: name + phone (current behavior).           | Casual guests, low-risk events.                |
+| Level 1 | ID photo capture at gate (front/back), stored with the scan.   | Contractors, vendors, longer-term visitors.    |
 | Level 2 | ID OCR + field matching (e.g., name/ID number vs invite data). | High-security compounds, sensitive facilities. |
 
 **Behavior:**
@@ -651,11 +651,11 @@ This section captures the **Resident Mobile Enhancement Plan**: contact-based sh
 
 **Goal:** Resident selects a phone contact and sends the visitor QR link via WhatsApp or Email.
 
-| Aspect | Approach |
-|--------|----------|
-| **Platform** | `expo-sharing` + `expo-contacts` (or `react-native-contacts`) — native share sheet and contact picker |
-| **Share targets** | WhatsApp, Email, SMS — pre-filled message: \"Your GateFlow access pass: [link]\" |
-| **Flow** | Resident taps Share → Contact picker → Select contact → App resolves phone/email → Share sheet opens with pre-filled recipient |
+| Aspect            | Approach                                                                                                                       |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| **Platform**      | `expo-sharing` + `expo-contacts` (or `react-native-contacts`) — native share sheet and contact picker                          |
+| **Share targets** | WhatsApp, Email, SMS — pre-filled message: \"Your GateFlow access pass: [link]\"                                               |
+| **Flow**          | Resident taps Share → Contact picker → Select contact → App resolves phone/email → Share sheet opens with pre-filled recipient |
 
 **Data flow:** Create/select visitor QR → Tap Share → Pick contact → App builds share sheet (WhatsApp if phone, Email if email, SMS fallback) → Native share opens with message + link.
 
@@ -663,12 +663,12 @@ This section captures the **Resident Mobile Enhancement Plan**: contact-based sh
 
 **Goal:** When the visitor scans the QR at the gate, notify the resident on their mobile device.
 
-| Component | Mechanism |
-|-----------|-----------|
-| **Backend** | On scan success: emit event (e.g. `SCAN_SUCCESS`); notification pipeline resolves resident from `VisitorQR.createdBy` / Unit |
-| **Resident app** | Push via Expo Notifications (or FCM) |
-| **Payload** | \"[Visitor name] just scanned in at [Gate name]\" — minimal, actionable |
-| **Deep link** | Tapping notification opens Visitor History or that visitor’s detail |
+| Component        | Mechanism                                                                                                                    |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| **Backend**      | On scan success: emit event (e.g. `SCAN_SUCCESS`); notification pipeline resolves resident from `VisitorQR.createdBy` / Unit |
+| **Resident app** | Push via Expo Notifications (or FCM)                                                                                         |
+| **Payload**      | \"[Visitor name] just scanned in at [Gate name]\" — minimal, actionable                                                      |
+| **Deep link**    | Tapping notification opens Visitor History or that visitor’s detail                                                          |
 
 **Data flow:** Scanner validates QR → Backend logs scan → Notification service resolves resident → Push to device → Resident sees \"Ahmed scanned in at Main Gate\".
 
@@ -676,12 +676,12 @@ This section captures the **Resident Mobile Enhancement Plan**: contact-based sh
 
 **Goal:** After the scan, the QR link (landing page) offers an option to guide the guest to the unit by GPS.
 
-| Step | Mechanism |
-|------|-----------|
-| **Landing page** | After scan, guest sees QR + \"Copy\" / \"Share\" + **\"Get directions\"** button |
-| **Directions** | Opens Google Maps / Apple Maps with destination = unit coordinates (`latitude`, `longitude` on Unit or Gate) |
-| **Unit coordinates** | Optional `latitude`, `longitude` on Unit (or Gate); if missing, \"Get directions\" is hidden |
-| **Scope** | Directions to **unit** (resident’s door), not only gate — better UX |
+| Step                 | Mechanism                                                                                                    |
+| -------------------- | ------------------------------------------------------------------------------------------------------------ |
+| **Landing page**     | After scan, guest sees QR + \"Copy\" / \"Share\" + **\"Get directions\"** button                             |
+| **Directions**       | Opens Google Maps / Apple Maps with destination = unit coordinates (`latitude`, `longitude` on Unit or Gate) |
+| **Unit coordinates** | Optional `latitude`, `longitude` on Unit (or Gate); if missing, \"Get directions\" is hidden                 |
+| **Scope**            | Directions to **unit** (resident’s door), not only gate — better UX                                          |
 
 **Flow:** Guest scans at gate → Validation succeeds → Redirect to short-link landing page → Page shows \"Navigate to [Unit X]\" → Button opens Maps with unit lat/long.
 
@@ -689,48 +689,48 @@ This section captures the **Resident Mobile Enhancement Plan**: contact-based sh
 
 **Goal:** When the guest arrives near the unit, notify the unit owner again.
 
-| Option | Description |
-|--------|-------------|
+| Option             | Description                                                                                                                                                                       |
+| ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Recommended v1** | **\"I've arrived\" button** — Guest taps when at the door; backend receives check-in → push to resident: \"[Visitor] has arrived at your unit.\" No continuous location tracking. |
-| **Future** | Geofence-based auto-detect: guest’s device location (with consent) triggers notification when within radius of unit. |
+| **Future**         | Geofence-based auto-detect: guest’s device location (with consent) triggers notification when within radius of unit.                                                              |
 
 **Data flow (v1):** Guest opens landing page post-scan → Sees \"Navigate to unit\" + \"I've arrived\" → Taps \"I've arrived\" → Backend `POST /api/visitor-checkin` (or similar) → Push to resident.
 
 ### 14.5 Functions to Make Unit Owners Love the App
 
-| Feature | Description | Impact |
-|---------|-------------|--------|
-| **Quota widget** | Prominent \"X/Y visitors left\" with progress ring | Reduces anxiety about running out |
-| **Who visited today** | Simple list: \"Ahmed (2:30 PM), Sara (4:15 PM)\" | At-a-glance awareness |
-| **One-tap share** | From visitor detail: Share → last used method or contact | Friction reduction |
-| **Smart guest templates** | Save presets like \"Family\", \"Maid\", \"Driver\" with default access rules | Speeds up frequent guest creation |
-| **Recurring visitor presets** | \"Maid: Mon–Fri 8am–6pm\" — one-tap create | Saves repeated setup |
+| Feature                            | Description                                                                              | Impact                                      |
+| ---------------------------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------- |
+| **Quota widget**                   | Prominent \"X/Y visitors left\" with progress ring                                       | Reduces anxiety about running out           |
+| **Who visited today**              | Simple list: \"Ahmed (2:30 PM), Sara (4:15 PM)\"                                         | At-a-glance awareness                       |
+| **One-tap share**                  | From visitor detail: Share → last used method or contact                                 | Friction reduction                          |
+| **Smart guest templates**          | Save presets like \"Family\", \"Maid\", \"Driver\" with default access rules             | Speeds up frequent guest creation           |
+| **Recurring visitor presets**      | \"Maid: Mon–Fri 8am–6pm\" — one-tap create                                               | Saves repeated setup                        |
 | **Guest self-check-in (optional)** | After scan, guest can confirm name/contact and (optionally) upload ID, per tenant policy | Stronger audit trail and dispute resolution |
-| **Scan + arrival in one card** | Combined timeline: \"Scanned at 2:30 PM → Arrived 2:35 PM\" | Clear guest journey |
-| **RTL + Arabic** | Full RTL layout, Arabic copy | MENA market fit |
-| **Offline QR display** | Cache created QRs locally; show even offline | Works in basement parking |
-| **Notification preferences** | Toggle: \"Notify on scan\" / \"Notify on arrival\" / \"Quiet hours\" | User control |
+| **Scan + arrival in one card**     | Combined timeline: \"Scanned at 2:30 PM → Arrived 2:35 PM\"                              | Clear guest journey                         |
+| **RTL + Arabic**                   | Full RTL layout, Arabic copy                                                             | MENA market fit                             |
+| **Offline QR display**             | Cache created QRs locally; show even offline                                             | Works in basement parking                   |
+| **Notification preferences**       | Toggle: \"Notify on scan\" / \"Notify on arrival\" / \"Quiet hours\"                     | User control                                |
 
 ### 14.6 Resident Mobile Technical Stack
 
-| Layer | Technology |
-|-------|------------|
-| **Framework** | Expo SDK 54 / React Native |
-| **Navigation** | expo-router (file-based) |
-| **State** | React state + AsyncStorage for preferences |
-| **Share** | expo-sharing + expo-contacts (or react-native-contacts) |
-| **Push** | expo-notifications (Expo Push) or FCM |
-| **Maps** | Expo Linking to `google.maps` or `maps.apple.com` (no native Maps SDK required for v1) |
+| Layer          | Technology                                                                             |
+| -------------- | -------------------------------------------------------------------------------------- |
+| **Framework**  | Expo SDK 54 / React Native                                                             |
+| **Navigation** | expo-router (file-based)                                                               |
+| **State**      | React state + AsyncStorage for preferences                                             |
+| **Share**      | expo-sharing + expo-contacts (or react-native-contacts)                                |
+| **Push**       | expo-notifications (Expo Push) or FCM                                                  |
+| **Maps**       | Expo Linking to `google.maps` or `maps.apple.com` (no native Maps SDK required for v1) |
 
 ### 14.7 Implementation Order (Resident Mobile)
 
-| Phase | Deliverables |
-|-------|--------------|
-| **Phase A** | Contact picker + share to WhatsApp/Email (resident mobile) |
-| **Phase B** | Backend: scan event → push to resident; resident app: receive push, show \"X scanned in\" |
+| Phase       | Deliverables                                                                                 |
+| ----------- | -------------------------------------------------------------------------------------------- |
+| **Phase A** | Contact picker + share to WhatsApp/Email (resident mobile)                                   |
+| **Phase B** | Backend: scan event → push to resident; resident app: receive push, show \"X scanned in\"    |
 | **Phase C** | Landing page: \"Get directions\" + \"I've arrived\" button; backend: arrival check-in → push |
-| **Phase D** | Unit coordinates (schema + UI); \"Get directions\" opens Maps with destination |
-| **Phase E** | Delight features: quota widget, who visited today, one-tap share |
+| **Phase D** | Unit coordinates (schema + UI); \"Get directions\" opens Maps with destination               |
+| **Phase E** | Delight features: quota widget, who visited today, one-tap share                             |
 
 ---
 
@@ -739,11 +739,10 @@ This section captures the **Resident Mobile Enhancement Plan**: contact-based sh
 - **Previous PRD:** `docs/plan/phase-1-mvp/specs/PRD_v5.0.md` — baseline for MVP features.
 - **Marketing Draft (Archived):** `docs/# GateFlow — Product Requirements Docume.md` — detailed marketing-first v6 draft; now treated as supporting context only.
 - **Resident Mobile Enhancement Plan:** See Section 14 (and `.cursor/plans/resident_mobile_enhancement_*.plan.md` for full plan artifact).
-- **Current Canonical PRD:** `docs/plan/phase-1-mvp/specs/PRD_v7.0.md` (this document).
+- **Current Canonical PRD:** `docs/plan/phase-1-mvp/specs/PRD.md` (this document).
 
 ---
 
 **Document Version:** 6.0  
 **Last Updated:** February 2026  
 **Next Review:** March 2026
-

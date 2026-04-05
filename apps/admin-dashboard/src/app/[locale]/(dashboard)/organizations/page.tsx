@@ -2,9 +2,10 @@ import { requireAdmin } from '@/lib/admin-auth';
 import { getTranslation } from '@/lib/i18n/i18n';
 import { Locale } from '@/lib/i18n/i18n-config';
 import { prisma } from '@gate-access/db';
-import { Badge } from '@gate-access/ui';
+import { Badge, Button } from '@gate-access/ui';
 import { PageHeader } from '@gate-access/ui';
 import { OrgsClient } from '@/components/organizations/OrgsClient';
+import { Plus } from 'lucide-react';
 
 export const metadata = { title: 'Organizations' };
 
@@ -123,29 +124,34 @@ export default async function OrganizationsPage(props: {
   );
 
   return (
-    <div className="space-y-6">
-      <PageHeader
-        titleClassName="italic uppercase"
-        title={t('organizations.title')}
-        subtitle={t('organizations.subtitle')}
-        badge={
-          <Badge
-            variant="primary"
-            className="bg-ds-background-selected text-ds-text-selected border-ds-border-selected/30 font-bold text-xs px-2.5 py-1"
-          >
-            {total.toLocaleString(locale)}
-          </Badge>
-        }
-      />
-
-      <OrgsClient
-        orgs={serializedOrgs}
-        locale={locale}
-        search={search}
-        planFilter={planFilter}
-        statusFilter={statusFilter}
-        total={total}
-      />
-    </div>
+    <OrgsClient
+      orgs={serializedOrgs}
+      locale={locale}
+      search={search}
+      planFilter={planFilter}
+      statusFilter={statusFilter}
+      total={total}
+      translations={{
+        title: t('organizations.title'),
+        subtitle: t('organizations.subtitle'),
+        addLabel: t('organizations.add'),
+        searchPlaceholder: t('organizations.searchPlaceholder'),
+        allPlans: t('organizations.allPlans'),
+        anyStatus: t('organizations.anyStatus'),
+        active: t('organizations.active'),
+        suspended: t('organizations.suspended'),
+        filter: t('organizations.filter'),
+        emptyTitle: t('organizations.title'),
+        emptySubtitle: t('organizations.noResultsDesc'),
+        totalUnits: t('organizations.org'),
+        auditLogNotice: t('monitoring.hub.stats.successful_seeds'), // Generic placeholder for verified
+        columns: {
+          org: t('organizations.org'),
+          plan: t('organizations.plan'),
+          metrics: t('organizations.metrics'),
+          status: t('organizations.status'),
+        },
+      }}
+    />
   );
 }

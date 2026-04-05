@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import {
   Badge,
@@ -10,6 +10,7 @@ import {
   DynamicTable,
   Column,
   NativeSelect,
+  PageHeader,
 } from '@gate-access/ui';
 import {
   Building2,
@@ -21,9 +22,10 @@ import {
   ShieldAlert,
   ShieldCheck,
   MoreHorizontal,
+  Plus,
 } from 'lucide-react';
 import { OrgDetailSheet } from './OrgDetailSheet';
-import { useMemo } from 'react';
+import { AddOrganizationSheet } from './AddOrganizationSheet';
 
 interface Org {
   id: string;
@@ -43,97 +45,187 @@ interface OrgsClientProps {
   planFilter: string;
   statusFilter: string;
   total: number;
+  translations: {
+    title: string;
+    subtitle: string;
+    addLabel: string;
+    searchPlaceholder: string;
+    allPlans: string;
+    anyStatus: string;
+    active: string;
+    suspended: string;
+    filter: string;
+    emptyTitle: string;
+    emptySubtitle: string;
+    totalUnits: string;
+    auditLogNotice: string;
+    columns: {
+      org: string;
+      plan: string;
+      metrics: string;
+      status: string;
+    };
+  };
 }
 
 const PLANS = ['FREE', 'PRO'] as const;
 
-export function OrgsClient({ orgs, locale, search, planFilter, statusFilter, total }: OrgsClientProps) {
+export function OrgsClient({
+  orgs,
+  locale,
+  search,
+  planFilter,
+  statusFilter,
+  total,
+  translations,
+}: OrgsClientProps) {
   const [selectedOrgId, setSelectedOrgId] = useState<string | null>(null);
+  const [isAddSheetOpen, setIsAddSheetOpen] = useState(false);
 
-  const columns = useMemo<Column<Org>[]>(() => [
-    {
-      key: 'organization',
-      label: 'Organization',
-      render: (org) => (
-        <div className="flex items-center gap-4">
-          <div className={cn(
-            'flex h-10 w-10 items-center justify-center rounded-lg font-bold text-xs uppercase shadow-sm shrink-0 transition-colors',
-            org.deletedAt ? 'bg-ds-background-neutral text-ds-text-subtle' : 'bg-ds-background-brand-bold text-ds-text-inverse'
-          )}>
-            {org.name.substring(0, 2)}
+  const columns = useMemo<Column<Org>[]>(
+    () => [
+      {
+        key: 'organization',
+        label: translations.columns.org,
+        render: (org) => (
+          <div className="flex items-center gap-4">
+            <div
+              className={cn(
+                'flex h-10 w-10 items-center justify-center rounded-lg font-bold text-xs uppercase shadow-sm shrink-0 transition-colors',
+                org.deletedAt
+                  ? 'bg-ds-background-neutral text-ds-text-subtle'
+                  : 'bg-ds-background-brand-bold text-ds-text-inverse'
+              )}
+            >
+              {org.name.substring(0, 2)}
+            </div>
+            <div className="flex flex-col min-w-0">
+              <span className="font-bold text-ds-text text-sm truncate leading-tight">
+                {org.name}
+              </span>
+              <span className="text-xs text-ds-text-subtle truncate">
+                {org.email}
+              </span>
+            </div>
           </div>
-          <div className="flex flex-col min-w-0">
-            <span className="font-bold text-ds-text text-sm truncate leading-tight">{org.name}</span>
-            <span className="text-xs text-ds-text-subtle truncate">{org.email}</span>
+        ),
+      },
+      {
+        key: 'plan',
+        label: translations.columns.plan,
+        render: (org) => (
+          <Badge
+            variant={org.plan === 'PRO' ? 'primary' : 'subtle'}
+            className="h-5 px-2 font-bold uppercase text-[9px]"
+          >
+            {org.plan}
+          </Badge>
+        ),
+      },
+      {
+        key: 'metrics',
+        label: translations.columns.metrics,
+        align: 'center',
+        render: (org) => (
+          <div className="flex items-center justify-center gap-6">
+            <div
+              className="flex flex-col items-center group/metric"
+              title="Users"
+            >
+              <Users className="h-3.5 w-3.5 text-ds-text-subtlest mb-1 group-hover/metric:text-ds-text-brand transition-colors" />
+              <span className="text-[11px] font-bold text-ds-text tabular-nums">
+                {org._count.users.toLocaleString(locale)}
+              </span>
+            </div>
+            <div
+              className="flex flex-col items-center group/metric"
+              title="QR Codes"
+            >
+              <QrCode className="h-3.5 w-3.5 text-ds-text-subtlest mb-1 group-hover/metric:text-ds-text-brand transition-colors" />
+              <span className="text-[11px] font-bold text-ds-text tabular-nums">
+                {org._count.qrCodes.toLocaleString(locale)}
+              </span>
+            </div>
+            <div
+              className="flex flex-col items-center group/metric"
+              title="Scans (30d)"
+            >
+              <ScanLine className="h-3.5 w-3.5 text-ds-text-subtlest mb-1 group-hover/metric:text-ds-text-brand transition-colors" />
+              <span className="text-[11px] font-bold text-ds-text tabular-nums">
+                {org.scansLast30d.toLocaleString(locale)}
+              </span>
+            </div>
           </div>
-        </div>
-      ),
-    },
-    {
-      key: 'plan',
-      label: 'Plan',
-      render: (org) => (
-        <Badge variant={org.plan === 'PRO' ? 'primary' : 'subtle'} className="h-5 px-2 font-bold uppercase text-[9px]">
-          {org.plan}
-        </Badge>
-      ),
-    },
-    {
-      key: 'metrics',
-      label: 'Platform Usage',
-      align: 'center',
-      render: (org) => (
-        <div className="flex items-center justify-center gap-6">
-          <div className="flex flex-col items-center group/metric" title="Users">
-            <Users className="h-3.5 w-3.5 text-ds-text-subtlest mb-1 group-hover/metric:text-ds-text-brand transition-colors" />
-            <span className="text-[11px] font-bold text-ds-text tabular-nums">{org._count.users.toLocaleString(locale)}</span>
-          </div>
-          <div className="flex flex-col items-center group/metric" title="QR Codes">
-            <QrCode className="h-3.5 w-3.5 text-ds-text-subtlest mb-1 group-hover/metric:text-ds-text-brand transition-colors" />
-            <span className="text-[11px] font-bold text-ds-text tabular-nums">{org._count.qrCodes.toLocaleString(locale)}</span>
-          </div>
-          <div className="flex flex-col items-center group/metric" title="Scans (30d)">
-            <ScanLine className="h-3.5 w-3.5 text-ds-text-subtlest mb-1 group-hover/metric:text-ds-text-brand transition-colors" />
-            <span className="text-[11px] font-bold text-ds-text tabular-nums">{org.scansLast30d.toLocaleString(locale)}</span>
-          </div>
-        </div>
-      ),
-    },
-    {
-      key: 'status',
-      label: 'Status',
-      render: (org) => (
-        <Badge variant={org.deletedAt ? 'default' : 'success'} className="h-6 px-2">
-          {org.deletedAt ? (
-            <span className="flex items-center gap-1.5 text-ds-text-subtle"><ShieldAlert className="h-3 w-3" /> Suspended</span>
-          ) : (
-            <span className="flex items-center gap-1.5"><ShieldCheck className="h-3 w-3" /> Active</span>
-          )}
-        </Badge>
-      ),
-    },
-    {
-      key: 'actions',
-      label: '',
-      align: 'right',
-      render: (org) => (
-        <Button
-          variant="subtle"
-          size="sm"
-          className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
-          onClick={(e) => {
-            e.stopPropagation();
-            setSelectedOrgId(org.id);
-          }}
-        >
-          <MoreHorizontal className="h-4 w-4" />
-        </Button>
-      ),
-    },
-  ], [locale, setSelectedOrgId]);
+        ),
+      },
+      {
+        key: 'status',
+        label: translations.columns.status,
+        render: (org) => (
+          <Badge
+            variant={org.deletedAt ? 'default' : 'success'}
+            className="h-6 px-2"
+          >
+            {org.deletedAt ? (
+              <span className="flex items-center gap-1.5 text-ds-text-subtle">
+                <ShieldAlert className="h-3 w-3" /> {translations.suspended}
+              </span>
+            ) : (
+              <span className="flex items-center gap-1.5">
+                <ShieldCheck className="h-3 w-3" /> {translations.active}
+              </span>
+            )}
+          </Badge>
+        ),
+      },
+      {
+        key: 'actions',
+        label: '',
+        align: 'right',
+        render: (org) => (
+          <Button
+            variant="subtle"
+            size="sm"
+            className="h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+            onClick={(e) => {
+              e.stopPropagation();
+              setSelectedOrgId(org.id);
+            }}
+          >
+            <MoreHorizontal className="h-4 w-4" />
+          </Button>
+        ),
+      },
+    ],
+    [locale, setSelectedOrgId, translations]
+  );
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
+      <PageHeader
+        titleClassName="italic uppercase"
+        title={translations.title}
+        subtitle={translations.subtitle}
+        badge={
+          <Badge
+            variant="primary"
+            className="bg-ds-background-selected text-ds-text-selected border-ds-border-selected/30 font-bold text-xs px-2.5 py-1"
+          >
+            {total.toLocaleString(locale)}
+          </Badge>
+        }
+        actions={
+          <Button
+            variant="primary"
+            className="h-10 px-6 font-bold rounded-full shadow-sm gap-2 uppercase tracking-tighter"
+            onClick={() => setIsAddSheetOpen(true)}
+          >
+            <Plus className="h-4 w-4" />
+            {translations.addLabel}
+          </Button>
+        }
+      />
+
       {/* Filters */}
       <div className="bg-ds-background-default border border-ds-border rounded-xl p-5 shadow-sm">
         <form method="GET" className="flex flex-wrap items-center gap-5">
@@ -142,36 +234,48 @@ export function OrgsClient({ orgs, locale, search, planFilter, statusFilter, tot
             <Input
               name="q"
               defaultValue={search}
-              placeholder="Search organizations…"
+              placeholder={translations.searchPlaceholder}
               className="pl-10 h-10 rounded-full bg-ds-background-neutral-subtle border-ds-border focus:bg-ds-background-default transition-all shadow-none"
             />
           </div>
-          
+
           <div className="flex items-center gap-3">
             <NativeSelect
               name="plan"
               defaultValue={planFilter}
               className="h-10 rounded-full border border-ds-border bg-ds-background-default px-4 text-xs font-bold text-ds-text focus:ring-2 focus:ring-ds-border-focused min-w-[120px]"
             >
-              <option value="">All Plans</option>
-              {PLANS.map((p) => <option key={p} value={p}>{p}</option>)}
+              <option value="">{translations.allPlans}</option>
+              {PLANS.map((p) => (
+                <option key={p} value={p}>
+                  {p}
+                </option>
+              ))}
             </NativeSelect>
             <NativeSelect
               name="status"
               defaultValue={statusFilter}
               className="h-10 rounded-full border border-ds-border bg-ds-background-default px-4 text-xs font-bold text-ds-text focus:ring-2 focus:ring-ds-border-focused min-w-[140px]"
             >
-              <option value="all">Any Status</option>
-              <option value="active">Active</option>
-              <option value="suspended">Suspended</option>
+              <option value="all">{translations.anyStatus}</option>
+              <option value="active">{translations.active}</option>
+              <option value="suspended">{translations.suspended}</option>
             </NativeSelect>
           </div>
 
           <div className="flex items-center gap-2">
-            <Button type="submit" variant="primary" className="h-10 px-6 font-bold rounded-full shadow-sm">
-              Filter
+            <Button
+              type="submit"
+              variant="primary"
+              className="h-10 px-6 font-bold rounded-full shadow-sm"
+            >
+              {translations.filter}
             </Button>
-            <Button variant="subtle" className="h-10 w-10 p-0 rounded-full" asChild>
+            <Button
+              variant="subtle"
+              className="h-10 w-10 p-0 rounded-full"
+              asChild
+            >
               <Link href="organizations">
                 <X className="h-4 w-4 text-ds-text-subtlest" />
               </Link>
@@ -192,8 +296,12 @@ export function OrgsClient({ orgs, locale, search, planFilter, statusFilter, tot
                 <Building2 className="h-10 w-10 text-ds-text-subtlest" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-ds-text">No Organizations</h3>
-                <p className="text-sm text-ds-text-subtle">Try changing your search or filters.</p>
+                <h3 className="text-lg font-bold text-ds-text">
+                  {translations.emptyTitle}
+                </h3>
+                <p className="text-sm text-ds-text-subtle">
+                  {translations.emptySubtitle}
+                </p>
               </div>
             </div>
           }
@@ -203,15 +311,23 @@ export function OrgsClient({ orgs, locale, search, planFilter, statusFilter, tot
       {/* Footer Info */}
       <div className="flex justify-between items-center px-1">
         <p className="text-[11px] font-bold text-ds-text-subtle uppercase tracking-widest tabular-nums">
-          Displaying {orgs.length} <span className="mx-1 text-ds-text-subtlest">/</span> Total {total}
+          {translations.totalUnits}: {orgs.length}{' '}
+          <span className="mx-1 text-ds-text-subtlest">/</span> Total {total}
         </p>
         <div className="flex items-center gap-4 text-[10px] font-black text-ds-text-brand uppercase tracking-tighter cursor-help hover:opacity-80 transition-opacity">
-           <ShieldCheck className="h-3.5 w-3.5" />
-           System Verified Audit Logs
+          <ShieldCheck className="h-3.5 w-3.5" />
+          {translations.auditLogNotice}
         </div>
       </div>
 
-      <OrgDetailSheet orgId={selectedOrgId} onClose={() => setSelectedOrgId(null)} />
+      <OrgDetailSheet
+        orgId={selectedOrgId}
+        onClose={() => setSelectedOrgId(null)}
+      />
+      <AddOrganizationSheet
+        open={isAddSheetOpen}
+        onClose={() => setIsAddSheetOpen(false)}
+      />
     </div>
   );
 }

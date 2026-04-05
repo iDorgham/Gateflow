@@ -14,7 +14,7 @@ BACKEND-API
 - **Apps**: client-dashboard
 - **Packages**: db, api-client, config
 - **Rules**: Secrets must never be stored in plain text if possible; organization scoping.
-- **Refs**: `PRD_v7.0.md` Section: Marketing & Integrations.
+- **Refs**: `PRD.md` Section: Marketing & Integrations.
 
 ## Goal
 

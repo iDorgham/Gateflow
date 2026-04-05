@@ -13,10 +13,8 @@ import {
   LogOut,
   Shield,
   ChevronLeft,
-  HelpCircle,
   BarChart3,
   ScrollText,
-  CreditCard,
   Activity,
   KeyRound,
   Settings,
@@ -30,8 +28,6 @@ import {
   SideNavigationShell,
   SideNavItem,
   NavGroup,
-  Avatar,
-  AvatarFallback,
 } from '@gate-access/ui';
 
 interface NavItemData {
@@ -48,7 +44,7 @@ interface NavGroupData {
 
 const getNavGroups = (t: TFunction): NavGroupData[] => [
   {
-    label: t('admin:nav.platform', 'Platform'),
+    label: t('admin:nav.management', 'Management'),
     items: [
       {
         href: '/',
@@ -75,17 +71,7 @@ const getNavGroups = (t: TFunction): NavGroupData[] => [
     ],
   },
   {
-    label: t('admin:nav.revenue', 'Revenue'),
-    items: [
-      {
-        href: '/finance',
-        label: t('admin:nav.finance', 'Finance'),
-        icon: CreditCard,
-      },
-    ],
-  },
-  {
-    label: t('admin:nav.operations', 'Operations'),
+    label: t('admin:nav.infrastructure', 'Infrastructure'),
     items: [
       {
         href: '/monitoring/hub',
@@ -105,7 +91,7 @@ const getNavGroups = (t: TFunction): NavGroupData[] => [
     ],
   },
   {
-    label: t('admin:nav.system', 'System'),
+    label: t('admin:nav.governance', 'Governance'),
     items: [
       { href: '/monitoring', label: t('admin:nav.monitoring'), icon: Activity },
       {
@@ -164,12 +150,6 @@ export function Sidebar() {
           <div className="flex flex-col gap-0.5 p-2">
             <SideNavItem
               href="#"
-              label={t('admin:nav.help', 'Help')}
-              icon={HelpCircle}
-              isCollapsed={isCollapsed}
-            />
-            <SideNavItem
-              href="#"
               label={t('admin:nav.signOut', 'Sign out')}
               icon={LogOut}
               isCollapsed={isCollapsed}
@@ -177,28 +157,6 @@ export function Sidebar() {
                 handleSignOut();
               }}
             />
-            <div
-              className={cn(
-                'mt-2 flex items-center gap-3 rounded-[3px] p-2 transition-colors hover:bg-[var(--ds-background-subtle,#F4F5F7)] cursor-pointer group',
-                isCollapsed && 'justify-center'
-              )}
-            >
-              <Avatar size="small">
-                <AvatarFallback className="text-[10px] bg-[var(--ds-background-brand-subtle,#DEEBFF)] text-[var(--ds-text-brand,#0052CC)]">
-                  AD
-                </AvatarFallback>
-              </Avatar>
-              {!isCollapsed && (
-                <div className="flex flex-col min-w-0">
-                  <span className="text-xs font-semibold text-[var(--ds-text,#172B4D)] truncate">
-                    Admin User
-                  </span>
-                  <span className="text-[10px] text-[var(--ds-text-subtlest,#6B778C)] truncate">
-                    admin@gateflow.site
-                  </span>
-                </div>
-              )}
-            </div>
           </div>
         }
       >

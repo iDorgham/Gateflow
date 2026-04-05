@@ -25,7 +25,7 @@
 - **Contracts:** `.antigravity/contracts/CONTRACTS.md`, `.cursor/rules/00-gateflow-core.mdc`
 - **Schema today:** `Organization` in `packages/db/prisma/schema.prisma` has **no** `type` field
 - **Auth today:** `apps/client-dashboard/src/lib/auth.ts` — `AccessTokenClaims` includes `orgId` but not org type
-- **PRD:** `docs/archive/legacy/PRD_v7.0.md` — multi-tenant model, RBAC
+- **PRD:** `docs/archive/legacy/PRD.md` — multi-tenant model, RBAC
 - **Seeding:** align with `docs/development/initiatives/IDEA_advanced_seeding_v2.md` scenarios (`luxury-compound` → REAL_ESTATE, `nightclub` → NIGHTCLUB, `private-school` → SCHOOL, `wedding-venue` → EVENT_ORGANISER; add CLUB preset or map beach/sports club to CLUB)
 
 ### Goal

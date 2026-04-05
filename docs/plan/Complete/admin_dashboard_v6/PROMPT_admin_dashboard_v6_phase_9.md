@@ -14,7 +14,7 @@ QA
 - **Refs**:
   - All pages built in Phases 1–8
   - `apps/admin-dashboard/package.json` — add Jest config
-  - `docs/archive/legacy/PRD_v7.0.md` — update admin dashboard completion %
+  - `docs/archive/legacy/PRD.md` — update admin dashboard completion %
   - `apps/client-dashboard/jest.config.js` — Jest config reference
   - `@gate-access/ui` — design tokens reference
 
@@ -54,7 +54,7 @@ Final polish pass: consistent design tokens, dark mode checks, `PageHeader` on a
 
 ### PRD update
 
-- Open `docs/archive/legacy/PRD_v7.0.md`
+- Open `docs/archive/legacy/PRD.md`
 - Find the admin dashboard status row (was "~15% complete")
 - Update to "~85% complete (phases 1–8 done; Stripe integration + MFA pending)"
 - Update any status table or progress indicator in the PRD that references admin dashboard
@@ -70,7 +70,7 @@ Final polish pass: consistent design tokens, dark mode checks, `PageHeader` on a
 7. Write 5 API test files (minimal: auth check + response shape).
 8. Run `pnpm turbo typecheck --filter=admin-dashboard` — fix any remaining type errors.
 9. Run `pnpm turbo test --filter=admin-dashboard` — all tests pass.
-10. Update `docs/archive/legacy/PRD_v7.0.md` admin dashboard status.
+10. Update `docs/archive/legacy/PRD.md` admin dashboard status.
 11. Run `pnpm turbo lint --filter=admin-dashboard` — passes.
 12. Commit: `feat(admin): polish, tests, typecheck, PRD update — admin dashboard phase 9 complete`.
 
@@ -88,7 +88,7 @@ Final polish pass: consistent design tokens, dark mode checks, `PageHeader` on a
 - [ ] `pnpm turbo typecheck --filter=admin-dashboard` passes with 0 errors.
 - [ ] `pnpm turbo test --filter=admin-dashboard` passes (5 test files, ≥ 10 test cases).
 - [ ] Every API test verifies 401 without auth.
-- [ ] `docs/archive/legacy/PRD_v7.0.md` updated — admin dashboard shows ≥ 85% completion.
+- [ ] `docs/archive/legacy/PRD.md` updated — admin dashboard shows ≥ 85% completion.
 - [ ] `pnpm turbo lint --filter=admin-dashboard` passes.
 
 ## Git commit

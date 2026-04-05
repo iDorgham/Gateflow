@@ -14,7 +14,7 @@ FRONTEND
 - **Apps**: client-dashboard (3001)
 - **Packages**: ui, i18n, db
 - **Rules**: Organization scoping; soft deletes; pnpm only.
-- **Refs**: `docs/plan/Draft/settings_v6/PLAN_settings_v6.md`, `docs/archive/legacy/PRD_v7.0.md`
+- **Refs**: `docs/plan/Draft/settings_v6/PLAN_settings_v6.md`, `docs/archive/legacy/PRD.md`
 
 ## Goal
 

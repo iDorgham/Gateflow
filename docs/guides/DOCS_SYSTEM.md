@@ -1,6 +1,6 @@
 # GateFlow Docs v2 Overview
 
-This `docs/` folder is the **v2 documentation set**, aligned with the canonical product spec in `PRD_v7.0.md`.
+This `docs/` folder is the **v2 documentation set**, aligned with the canonical product spec in `PRD.md`.
 
 ## What to read first
 

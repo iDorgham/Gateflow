@@ -33,7 +33,7 @@ Deliver a **single client-dashboard codebase** where **`Organization.type`** sel
 
 | Document / area              | Path / note                                                                                                             |
 | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
-| PRD v7.0                     | `docs/archive/legacy/PRD_v7.0.md` (canonical in repo; no `docs/PRD_v7.0.md` at root)                                    |
+| PRD v7.0                     | `docs/archive/legacy/PRD.md` (canonical in repo; no `docs/PRD.md` at root)                                              |
 | Settings v6 idea             | `docs/development/initiatives/IDEA_settings_v6.md`                                                                      |
 | Analytics charts             | `docs/guides/ANALYTICS_CHARTS_GUIDE.md`                                                                                 |
 | Advanced seeding idea        | `docs/development/initiatives/IDEA_advanced_seeding_v2.md`                                                              |
