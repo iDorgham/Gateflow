@@ -65,6 +65,22 @@ interface OrgsClientProps {
       metrics: string;
       status: string;
     };
+    addOrganization: {
+      title: string;
+      subtitle: string;
+      description: string;
+      nameLabel: string;
+      namePlaceholder: string;
+      emailLabel: string;
+      emailPlaceholder: string;
+      planLabel: string;
+      planHelper: string;
+      notice: string;
+      submitLabel: string;
+      cancelLabel: string;
+      success: string;
+      error: string;
+    };
   };
 }
 
@@ -327,6 +343,7 @@ export function OrgsClient({
       <AddOrganizationSheet
         open={isAddSheetOpen}
         onClose={() => setIsAddSheetOpen(false)}
+        translations={translations.addOrganization}
       />
     </div>
   );

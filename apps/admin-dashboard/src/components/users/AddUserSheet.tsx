@@ -17,15 +17,32 @@ import {
   ShieldCheck,
   User,
   Mail,
-  Building,
   Shield,
-  ChevronRight,
 } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface AddUserSheetProps {
   open: boolean;
   onClose: () => void;
+  translations: {
+    title: string;
+    subtitle: string;
+    description: string;
+    nameLabel: string;
+    namePlaceholder: string;
+    emailLabel: string;
+    emailPlaceholder: string;
+    accessControl: string;
+    assignRole: string;
+    orgLabel: string;
+    orgPlaceholder: string;
+    passwordNotice: string;
+    submitLabel: string;
+    cancelLabel: string;
+    success: string;
+    error: string;
+    requiredFields: string;
+  };
 }
 
 interface OrgOption {
@@ -38,7 +55,11 @@ interface RoleOption {
   name: string;
 }
 
-export function AddUserSheet({ open, onClose }: AddUserSheetProps) {
+export function AddUserSheet({
+  open,
+  onClose,
+  translations,
+}: AddUserSheetProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const [orgs, setOrgs] = useState<OrgOption[]>([]);
@@ -79,7 +100,7 @@ export function AddUserSheet({ open, onClose }: AddUserSheetProps) {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.roleId) {
-      return toast.error('Please fill in all required fields');
+      return toast.error(translations.requiredFields);
     }
 
     startTransition(async () => {
@@ -92,7 +113,7 @@ export function AddUserSheet({ open, onClose }: AddUserSheetProps) {
         const data = await res.json();
 
         if (data.success) {
-          toast.success('User created successfully');
+          toast.success(translations.success);
           router.refresh();
           onClose();
           setFormData({
@@ -103,10 +124,10 @@ export function AddUserSheet({ open, onClose }: AddUserSheetProps) {
             organizationId: '',
           });
         } else {
-          toast.error(data.message || 'Failed to create user');
+          toast.error(data.message || translations.error);
         }
       } catch (error) {
-        toast.error('An error occurred');
+        toast.error(translations.error);
       }
     });
   }
@@ -123,11 +144,11 @@ export function AddUserSheet({ open, onClose }: AddUserSheetProps) {
               </div>
               <div className="min-w-0">
                 <h2 className="text-ds-text text-xl font-black uppercase tracking-tight truncate leading-tight">
-                  New User Account
+                  {translations.title}
                 </h2>
                 <p className="text-[10px] font-bold text-ds-text-subtle uppercase tracking-tighter flex items-center gap-1 mt-1">
                   <ShieldCheck className="h-3 w-3 text-ds-text-success" />{' '}
-                  IDENTITY MANAGEMENT
+                  {translations.subtitle}
                 </p>
               </div>
             </div>
@@ -152,11 +173,11 @@ export function AddUserSheet({ open, onClose }: AddUserSheetProps) {
                     <div className="flex items-center gap-2 mb-1.5">
                       <User className="h-3.5 w-3.5 text-ds-text-subtle" />
                       <label className="text-[11px] font-black text-ds-text-subtle uppercase tracking-widest">
-                        Full Name
+                        {translations.nameLabel}
                       </label>
                     </div>
                     <Input
-                      placeholder="e.g. John Doe"
+                      placeholder={translations.namePlaceholder}
                       className="h-11 rounded-xl bg-ds-background-neutral-subtle border-ds-border focus:bg-ds-background-default transition-all"
                       value={formData.name}
                       onChange={(e) =>
@@ -169,12 +190,12 @@ export function AddUserSheet({ open, onClose }: AddUserSheetProps) {
                     <div className="flex items-center gap-2 mb-1.5">
                       <Mail className="h-3.5 w-3.5 text-ds-text-subtle" />
                       <label className="text-[11px] font-black text-ds-text-subtle uppercase tracking-widest">
-                        Email Address
+                        {translations.emailLabel}
                       </label>
                     </div>
                     <Input
                       type="email"
-                      placeholder="john@example.com"
+                      placeholder={translations.emailPlaceholder}
                       className="h-11 rounded-xl bg-ds-background-neutral-subtle border-ds-border focus:bg-ds-background-default transition-all"
                       value={formData.email}
                       onChange={(e) =>
@@ -189,14 +210,14 @@ export function AddUserSheet({ open, onClose }: AddUserSheetProps) {
                   <div className="flex items-center gap-2">
                     <Shield className="h-4 w-4 text-ds-text-brand" />
                     <h3 className="text-[11px] font-black text-ds-text uppercase tracking-widest">
-                      Access Control
+                      {translations.accessControl}
                     </h3>
                   </div>
 
                   <div className="grid grid-cols-1 gap-4">
                     <div className="space-y-2">
                       <label className="text-[10px] font-bold text-ds-text-subtlest uppercase tracking-tight ml-1">
-                        Assign Role
+                        {translations.assignRole}
                       </label>
                       <NativeSelect
                         className="h-10 rounded-xl bg-ds-background-default border-ds-border"
@@ -216,7 +237,7 @@ export function AddUserSheet({ open, onClose }: AddUserSheetProps) {
 
                     <div className="space-y-2">
                       <label className="text-[10px] font-bold text-ds-text-subtlest uppercase tracking-tight ml-1">
-                        Organization (Optional)
+                        {translations.orgLabel}
                       </label>
                       <NativeSelect
                         className="h-10 rounded-xl bg-ds-background-default border-ds-border"
@@ -229,9 +250,7 @@ export function AddUserSheet({ open, onClose }: AddUserSheetProps) {
                         }
                         disabled={loadingOptions}
                       >
-                        <option value="">
-                          No Organization (Platform Level)
-                        </option>
+                        <option value="">{translations.orgPlaceholder}</option>
                         {orgs.map((o) => (
                           <option key={o.id} value={o.id}>
                             {o.name}
@@ -248,8 +267,7 @@ export function AddUserSheet({ open, onClose }: AddUserSheetProps) {
                     <span className="text-[10px] font-black">!</span>
                   </div>
                   <p className="text-[10px] font-bold text-ds-text-warning uppercase tracking-tight leading-relaxed">
-                    A temporary password will be generated and sent to the
-                    provided email address upon creation.
+                    {translations.passwordNotice}
                   </p>
                 </div>
               </div>
@@ -268,7 +286,7 @@ export function AddUserSheet({ open, onClose }: AddUserSheetProps) {
               ) : (
                 <UserPlus className="h-4 w-4 mr-2" />
               )}
-              Create User Account
+              {translations.submitLabel}
             </Button>
             <Button
               type="button"
@@ -276,7 +294,7 @@ export function AddUserSheet({ open, onClose }: AddUserSheetProps) {
               className="w-full h-10 rounded-xl text-ds-text-subtle font-bold"
               onClick={onClose}
             >
-              Cancel
+              {translations.cancelLabel}
             </Button>
           </div>
         </form>

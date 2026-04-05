@@ -62,6 +62,7 @@ interface UsersClientProps {
       role: string;
       status: string;
     };
+    addUser: any;
   };
 }
 
@@ -317,6 +318,7 @@ export function UsersClient({
       <AddUserSheet
         open={isAddSheetOpen}
         onClose={() => setIsAddSheetOpen(false)}
+        translations={translations.addUser}
       />
     </div>
   );

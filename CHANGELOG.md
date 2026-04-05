@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Admin Dashboard Redesign]** complete phase 7
+
 - **[Db]** resolve TS2345 type error in tenant.ts scanLog.count
 - **[Admin-Dashboard]** fix Vercel build and 500 after login
 - **[Vercel]** ensure Prisma client generation before build via turbo dependency

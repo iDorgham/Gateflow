@@ -30,12 +30,21 @@ interface ProjectDetailSheetProps {
   onClose: () => void;
 }
 
+interface Project {
+  id: string;
+  name: string;
+  organization: { name: string; plan: string };
+  counts: { gates: number; qrCodes: number };
+  createdAt: string;
+  status: 'ACTIVE' | 'ARCHIVED';
+}
+
 export function ProjectDetailSheet({
   projectId,
   onClose,
 }: ProjectDetailSheetProps) {
   const [loading, setLoading] = React.useState(false);
-  const [project, setProject] = React.useState<any>(null);
+  const [project, setProject] = React.useState<Project | null>(null);
 
   React.useEffect(() => {
     if (projectId) {
@@ -118,7 +127,7 @@ export function ProjectDetailSheet({
 
             <div className="flex-1 overflow-y-auto">
               <Tabs defaultValue="overview" className="w-full">
-                <div className="px-8 border-b border-ds-border bg-ds-background-default bg-ds-background-default sticky top-0 z-10">
+                <div className="px-8 border-b border-ds-border bg-ds-background-default sticky top-0 z-10">
                   <TabsList className="h-14 bg-transparent p-0 gap-8">
                     <TabsTrigger
                       value="overview"

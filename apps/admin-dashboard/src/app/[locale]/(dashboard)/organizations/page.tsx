@@ -2,10 +2,7 @@ import { requireAdmin } from '@/lib/admin-auth';
 import { getTranslation } from '@/lib/i18n/i18n';
 import { Locale } from '@/lib/i18n/i18n-config';
 import { prisma } from '@gate-access/db';
-import { Badge, Button } from '@gate-access/ui';
-import { PageHeader } from '@gate-access/ui';
 import { OrgsClient } from '@/components/organizations/OrgsClient';
-import { Plus } from 'lucide-react';
 
 export const metadata = { title: 'Organizations' };
 
@@ -151,6 +148,9 @@ export default async function OrganizationsPage(props: {
           metrics: t('organizations.metrics'),
           status: t('organizations.status'),
         },
+        addOrganization: t('addOrganization', {
+          returnObjects: true,
+        }) as unknown as any,
       }}
     />
   );

@@ -20,12 +20,21 @@ import {
   Trash2,
   RotateCcw,
   FolderOpen,
-  Building2,
   ScanLine,
   Calendar,
-  ExternalLink,
 } from 'lucide-react';
 import { toast } from 'sonner';
+
+interface Gate {
+  id: string;
+  name: string;
+  location: string;
+  project: { name: string };
+  organization: { name: string };
+  scans: { total: number; last24h: number };
+  createdAt: string;
+  status: 'COMMISSIONED' | 'OFFLINE';
+}
 
 interface GateDetailSheetProps {
   gateId: string | null;
@@ -34,7 +43,7 @@ interface GateDetailSheetProps {
 
 export function GateDetailSheet({ gateId, onClose }: GateDetailSheetProps) {
   const [loading, setLoading] = React.useState(false);
-  const [gate, setGate] = React.useState<any>(null);
+  const [gate, setGate] = React.useState<Gate | null>(null);
 
   React.useEffect(() => {
     if (gateId) {
@@ -120,7 +129,7 @@ export function GateDetailSheet({ gateId, onClose }: GateDetailSheetProps) {
 
             <div className="flex-1 overflow-y-auto">
               <Tabs defaultValue="overview" className="w-full">
-                <div className="px-8 border-b border-ds-border bg-ds-background-default bg-ds-background-default sticky top-0 z-10">
+                <div className="px-8 border-b border-ds-border bg-ds-background-default sticky top-0 z-10">
                   <TabsList className="h-14 bg-transparent p-0 gap-8">
                     <TabsTrigger
                       value="overview"

@@ -428,6 +428,41 @@
       "initialPassword": "كلمة المرور الابتدائية",
       "passwordPlaceholder": "8 أحرف كحد أدنى",
       "createAdminBtn": "إنشاء المشرف"
+    },
+    "addOrganization": {
+      "title": "منظمة جديدة",
+      "subtitle": "نظام تزويد الخدمات",
+      "description": "إنشاء مستأجر جديد للمنصة.",
+      "nameLabel": "اسم العرض",
+      "namePlaceholder": "مثال: شركة أكمي",
+      "emailLabel": "بريد الفواتير",
+      "emailPlaceholder": "billing@acme.com",
+      "planLabel": "خطة الاشتراك",
+      "planHelper": "تتحكم الخطط في حدود الحصص ومستويات الوصول للمميزات.",
+      "notice": "سيؤدي إنشاء المنظمة إلى توفير مشروع إدارة جذري وسياسات أمان افتراضية تلقائياً.",
+      "submitLabel": "إنشاء المنظمة",
+      "cancelLabel": "إلغاء",
+      "success": "تم إنشاء المنظمة بنجاح",
+      "error": "فشل إنشاء المنظمة"
+    },
+    "addUser": {
+      "title": "حساب مستخدم جديد",
+      "subtitle": "إدارة الهوية",
+      "description": "إنشاء مستخدم جديد للمنصة.",
+      "nameLabel": "الاسم الكامل",
+      "namePlaceholder": "مثال: فلان الفلاني",
+      "emailLabel": "البريد الإلكتروني",
+      "emailPlaceholder": "john@example.com",
+      "accessControl": "التحكم في الوصول",
+      "assignRole": "تعيين الصلاحية",
+      "orgLabel": "المنظمة (اختياري)",
+      "orgPlaceholder": "بدون منظمة (مستوى المنصة)",
+      "passwordNotice": "سيتم إنشاء كلمة مرور مؤقتة وإرسالها إلى البريد الإلكتروني المقدم عند الإنشاء.",
+      "submitLabel": "إنشاء حساب المستخدم",
+      "cancelLabel": "إلغاء",
+      "success": "تم إنشاء المستخدم بنجاح",
+      "error": "فشل إنشاء المستخدم",
+      "requiredFields": "يرجى ملء جميع الحقول المطلوبة"
     }
   },
   "solutions": {

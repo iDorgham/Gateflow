@@ -23,23 +23,23 @@
   - [x] Update `OpsHubClient.tsx` to use full width and wider containers.
   - [x] Add advanced filtering/options for platform-wide monitoring.
   - [x] Redesign Emulation and Seeding pages for wide format.
-- [ ] Phase 5 — CRUD Refinement: Add, Edit, Remove
+- [x] Phase 5 — CRUD Refinement: Add, Edit, Remove
   - [x] Add "Add" button to Organizations list header.
   - [x] Add "Add" button to Users list header.
   - [x] Add "Add" button to Projects list header.
   - [x] Add "Add" button to Gates list header.
-  - [/] Standardize "Edit" and "Delete" (Remove) actions for each resource (Refined Headers).
-  - [/] Ensure unified delete confirmation dialog/drawer flows (Refined Headers).
-- [ ] Phase 6 — Organization Panel Fix (OrgDetailSheet)
+  - [x] Standardize "Edit" and "Delete" (Remove) actions for each resource (Refined Headers).
+  - [x] Ensure unified delete confirmation dialog/drawer flows (Refined Headers).
+- [x] Phase 6 — Organization Panel Fix (OrgDetailSheet)
   - [x] Change header to "Edit Organization" (localized header refinement).
   - [x] Fix Dark Mode background and contrast in `OrgDetailSheet.tsx` (ADS Token sync).
   - [x] Refine Badge and Card styles within the drawer (V10 match).
   - [x] Verify translations for all drawer labels (i18n Sync).
-- [ ] Phase 7 — i18n & RTL Mastery
-  - [ ] Audit `en.json` and `ar.json` for all dashboard-specific namespaces.
-  - [ ] Fix any RTL alignment shifts in high-density components (Tables, Sheets).
-  - [ ] 100% Arabic/English verification of all newly added UI text.
-- [ ] Phase 8 — Global Polish & Dark Mode Review
-  - [ ] Site-wide visual audit (Vercel deployment or local).
-  - [ ] Final shadow and token consistency pass.
-  - [ ] Complete transition validation for light/dark mode.
+- [x] Phase 7 — i18n & RTL Mastery
+  - [x] Audit `en.json` and `ar.json` for all dashboard-specific namespaces.
+  - [x] Fix any RTL alignment shifts in high-density components (Tables, Sheets).
+  - [x] 100% Arabic/English verification of all newly added UI text.
+- [x] Phase 8 — Global Polish & Dark Mode Review
+  - [x] Site-wide visual audit (Vercel deployment or local).
+  - [x] Final shadow and token consistency pass.
+  - [x] Complete transition validation for light/dark mode.

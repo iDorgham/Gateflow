@@ -426,6 +426,41 @@
       "initialPassword": "Initial Password",
       "passwordPlaceholder": "Min 8 characters",
       "createAdminBtn": "Create Admin"
+    },
+    "addOrganization": {
+      "title": "New Organization",
+      "subtitle": "PROVISIONING SYSTEM",
+      "description": "Create a new platform tenant.",
+      "nameLabel": "Display Name",
+      "namePlaceholder": "e.g. Acme Corp",
+      "emailLabel": "Billing Email",
+      "emailPlaceholder": "billing@acme.com",
+      "planLabel": "Subscription Plan",
+      "planHelper": "Plans control quota limits and feature access levels.",
+      "notice": "Creating an organization will automatically provision a root administration project and default security policies.",
+      "submitLabel": "Create Organization",
+      "cancelLabel": "Cancel",
+      "success": "Organization created successfully",
+      "error": "Failed to create organization"
+    },
+    "addUser": {
+      "title": "New User Account",
+      "subtitle": "IDENTITY MANAGEMENT",
+      "description": "Create a new platform user.",
+      "nameLabel": "Full Name",
+      "namePlaceholder": "e.g. John Doe",
+      "emailLabel": "Email Address",
+      "emailPlaceholder": "john@example.com",
+      "accessControl": "Access Control",
+      "assignRole": "Assign Role",
+      "orgLabel": "Organization (Optional)",
+      "orgPlaceholder": "No Organization (Platform Level)",
+      "passwordNotice": "A temporary password will be generated and sent to the provided email address upon creation.",
+      "submitLabel": "Create User Account",
+      "cancelLabel": "Cancel",
+      "success": "User created successfully",
+      "error": "Failed to create user",
+      "requiredFields": "Please fill in all required fields"
     }
   },
   "solutions": {
