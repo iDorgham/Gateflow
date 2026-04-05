@@ -9,7 +9,7 @@ import {
   Button,
   cn,
   ScrollArea,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import {
   Building2,
   Users,

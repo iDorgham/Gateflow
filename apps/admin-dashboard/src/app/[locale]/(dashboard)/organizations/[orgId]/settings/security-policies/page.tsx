@@ -10,7 +10,7 @@ import {
   Input,
   Label,
   Badge,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { Shield, Lock, Eye, KeyRound, AlertTriangle } from 'lucide-react';
 
 export default async function SecurityPoliciesPage(props: {

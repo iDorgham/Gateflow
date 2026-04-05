@@ -1,9 +1,9 @@
-import * as React from "react";
-import { CheckCircle2, XCircle, Clock } from "lucide-react";
+import * as React from 'react';
+import { CheckCircle2, XCircle, Clock } from 'lucide-react';
 
-import { TableRow, TableCell, Badge } from "@gate-access/ui";
+import { TableRow, TableCell, Badge } from '@gateflow/ui';
 
-export type ScanStatus = "granted" | "denied" | "pending";
+export type ScanStatus = 'granted' | 'denied' | 'pending';
 
 export interface ScanLogRowProps {
   id: string;
@@ -28,10 +28,10 @@ export function ScanLogRow({
   }[status];
 
   const badgeVariant = {
-    granted: "default",
-    denied: "danger",
-    pending: "secondary",
-  }[status] as "default" | "danger" | "secondary" | "outline";
+    granted: 'default',
+    denied: 'danger',
+    pending: 'secondary',
+  }[status] as 'default' | 'danger' | 'secondary' | 'outline';
 
   return (
     <TableRow>
@@ -39,12 +39,19 @@ export function ScanLogRow({
       <TableCell>{gateName}</TableCell>
       <TableCell className="text-muted-foreground">{timestamp}</TableCell>
       <TableCell>
-        <Badge variant={badgeVariant} className="flex w-fit items-center gap-1 capitalize">
-          <StatusIcon className={`w-3 h-3 ${status !== 'pending' ? 'text-white' : ''}`} />
+        <Badge
+          variant={badgeVariant}
+          className="flex w-fit items-center gap-1 capitalize"
+        >
+          <StatusIcon
+            className={`w-3 h-3 ${status !== 'pending' ? 'text-white' : ''}`}
+          />
           {status}
         </Badge>
       </TableCell>
-      <TableCell className="text-right text-muted-foreground">{operatorName || "-"}</TableCell>
+      <TableCell className="text-right text-muted-foreground">
+        {operatorName || '-'}
+      </TableCell>
     </TableRow>
   );
 }

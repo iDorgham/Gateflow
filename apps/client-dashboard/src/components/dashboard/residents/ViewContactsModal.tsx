@@ -6,7 +6,7 @@ import {
   DialogFooter,
   DialogTitle,
   Button,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { useTranslation } from 'react-i18next';
 import { Building } from 'lucide-react';
 

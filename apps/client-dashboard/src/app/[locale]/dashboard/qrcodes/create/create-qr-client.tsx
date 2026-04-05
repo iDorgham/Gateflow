@@ -12,7 +12,7 @@ import {
   CardContent,
   NativeSelect,
   cn,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { token } from '@atlaskit/tokens';
 import { toast } from 'sonner';
 import { createQRCode } from './actions';

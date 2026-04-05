@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { Button } from '@gate-access/ui';
+import { Button } from '@gateflow/ui';
 import { ArrowRight } from 'lucide-react';
 import type { Locale } from '@/i18n-config';
 import { getTranslation } from '@/lib/i18n/get-translation';

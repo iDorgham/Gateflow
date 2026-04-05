@@ -9,7 +9,7 @@ import {
   CardTitle,
   Badge,
   Input,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 
 export const metadata = { title: 'Settings | Localization' };
 

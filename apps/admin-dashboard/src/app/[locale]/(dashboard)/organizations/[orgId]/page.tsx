@@ -19,9 +19,9 @@ import {
   CardTitle,
   Badge,
   cn,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import Link from 'next/link';
-import { PageHeader } from '@gate-access/ui';
+import { PageHeader } from '@gateflow/ui';
 import { DashboardRecentOrgsTable } from './DashboardRecentOrgsTable';
 
 export const metadata = { title: 'Operational Overview' };

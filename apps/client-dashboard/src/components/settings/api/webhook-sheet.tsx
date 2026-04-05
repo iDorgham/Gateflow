@@ -14,7 +14,7 @@ import {
   Label,
   Checkbox,
   Switch,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { Plus, Webhook } from 'lucide-react';
 import { toast } from 'sonner';
 import { csrfFetch } from '@/lib/csrf';

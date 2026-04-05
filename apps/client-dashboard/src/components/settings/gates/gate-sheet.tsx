@@ -18,7 +18,7 @@ import {
   SelectContent,
   SelectItem,
   Switch,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { csrfFetch } from '@/lib/csrf';

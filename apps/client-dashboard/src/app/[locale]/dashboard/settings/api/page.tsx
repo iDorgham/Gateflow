@@ -1,6 +1,6 @@
 import { requireAuth } from '@/lib/dashboard-auth';
 import { prisma } from '@gate-access/db';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@gate-access/ui';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@gateflow/ui';
 import { ApiKeyTable } from '@/components/settings/api/api-key-table';
 import { WebhookTable } from '@/components/settings/api/webhook-table';
 import { Key, Webhook } from 'lucide-react';
@@ -49,9 +49,12 @@ export default async function APISettings() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-1">
-        <h1 className="text-xl font-black uppercase tracking-tight">API & Webhooks</h1>
+        <h1 className="text-xl font-black uppercase tracking-tight">
+          API & Webhooks
+        </h1>
         <p className="text-sm text-muted-foreground">
-          Manage programmatic access keys and real-time event delivery endpoints.
+          Manage programmatic access keys and real-time event delivery
+          endpoints.
         </p>
       </div>
 

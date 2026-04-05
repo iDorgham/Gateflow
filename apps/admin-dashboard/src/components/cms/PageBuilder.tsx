@@ -38,7 +38,7 @@ import {
   SheetHeader,
   SheetTitle,
   Separator,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { toast } from 'sonner';
 
 /**

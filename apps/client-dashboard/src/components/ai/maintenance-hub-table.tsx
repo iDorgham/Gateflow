@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { AdvancedTable, Badge, cn, type AdvancedColumn } from '@gate-access/ui';
+import { AdvancedTable, Badge, cn, type AdvancedColumn } from '@gateflow/ui';
 import { format } from 'date-fns';
 import { AlertTriangle } from 'lucide-react';
 

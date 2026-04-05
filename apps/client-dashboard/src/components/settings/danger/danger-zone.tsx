@@ -14,7 +14,7 @@ import {
   DialogContent,
   DialogTitle,
   DialogDescription,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import {
   Download,
   Trash2,
@@ -63,10 +63,13 @@ function ExportCard() {
             <Download className="h-5 w-5 text-primary" />
           </div>
           <div>
-            <CardTitle className="text-sm font-black uppercase tracking-tight">Export Workspace Data</CardTitle>
+            <CardTitle className="text-sm font-black uppercase tracking-tight">
+              Export Workspace Data
+            </CardTitle>
             <CardDescription className="text-xs mt-1">
-              Download a full JSON export of all your organization data — users, gates, QR codes, scan logs, contacts, and units.
-              This action is logged in your audit trail.
+              Download a full JSON export of all your organization data — users,
+              gates, QR codes, scan logs, contacts, and units. This action is
+              logged in your audit trail.
             </CardDescription>
           </div>
         </div>
@@ -105,7 +108,11 @@ function PurgeScansCard() {
         method: 'POST',
         body: JSON.stringify({ confirmation, olderThanDays }),
       });
-      const data = (await res.json()) as { success?: boolean; deletedCount?: number; error?: string };
+      const data = (await res.json()) as {
+        success?: boolean;
+        deletedCount?: number;
+        error?: string;
+      };
       if (res.ok && data.success) {
         setResult({ deletedCount: data.deletedCount ?? 0 });
         toast.success(`${data.deletedCount} scan records deleted.`);
@@ -134,8 +141,9 @@ function PurgeScansCard() {
                 Purge Historical Scan Data
               </CardTitle>
               <CardDescription className="text-xs mt-1">
-                Permanently delete scan logs older than a chosen number of days. This frees up storage but removes your audit
-                history. This action is irreversible.
+                Permanently delete scan logs older than a chosen number of days.
+                This frees up storage but removes your audit history. This
+                action is irreversible.
               </CardDescription>
             </div>
           </div>
@@ -151,13 +159,20 @@ function PurgeScansCard() {
         </CardContent>
       </Card>
 
-      <Dialog open={open} onOpenChange={(o) => { if (!o) reset(); }}>
+      <Dialog
+        open={open}
+        onOpenChange={(o) => {
+          if (!o) reset();
+        }}
+      >
         <DialogContent className="sm:max-w-md rounded-2xl border-warning/40 bg-background p-0 overflow-hidden">
           <div className="bg-warning/10 p-6 border-b border-warning/20 text-center">
             <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-warning/20 mb-4 ring-8 ring-warning/5">
               <AlertTriangle className="h-8 w-8 text-warning" />
             </div>
-            <DialogTitle className="text-lg font-black text-foreground mb-1">Purge Scan History</DialogTitle>
+            <DialogTitle className="text-lg font-black text-foreground mb-1">
+              Purge Scan History
+            </DialogTitle>
             <DialogDescription className="text-sm text-muted-foreground">
               This permanently deletes scan records. It cannot be undone.
             </DialogDescription>
@@ -168,8 +183,15 @@ function PurgeScansCard() {
               <div className="flex justify-center">
                 <CheckCircle2 className="h-12 w-12 text-success" />
               </div>
-              <p className="font-bold text-foreground">{result.deletedCount} scan records deleted.</p>
-              <Button onClick={reset} className="w-full rounded-xl h-11 font-black">Done</Button>
+              <p className="font-bold text-foreground">
+                {result.deletedCount} scan records deleted.
+              </p>
+              <Button
+                onClick={reset}
+                className="w-full rounded-xl h-11 font-black"
+              >
+                Done
+              </Button>
             </div>
           ) : (
             <div className="p-6 space-y-5">
@@ -182,14 +204,20 @@ function PurgeScansCard() {
                   min={30}
                   max={3650}
                   value={olderThanDays}
-                  onChange={(e) => setOlderThanDays(parseInt(e.target.value, 10) || 90)}
+                  onChange={(e) =>
+                    setOlderThanDays(parseInt(e.target.value, 10) || 90)
+                  }
                   className="h-11 rounded-xl font-bold text-center"
                 />
               </div>
 
               <div className="space-y-2">
                 <Label className="text-[11px] font-black uppercase tracking-widest text-muted-foreground">
-                  Type <span className="font-mono bg-warning/10 text-warning px-1.5 py-0.5 rounded">PURGE SCANS</span> to confirm
+                  Type{' '}
+                  <span className="font-mono bg-warning/10 text-warning px-1.5 py-0.5 rounded">
+                    PURGE SCANS
+                  </span>{' '}
+                  to confirm
                 </Label>
                 <Input
                   value={confirmation}
@@ -201,7 +229,12 @@ function PurgeScansCard() {
               </div>
 
               <div className="flex gap-3 pt-2">
-                <Button variant="outline" onClick={reset} disabled={isPending} className="flex-1 h-11 rounded-xl font-bold">
+                <Button
+                  variant="outline"
+                  onClick={reset}
+                  disabled={isPending}
+                  className="flex-1 h-11 rounded-xl font-bold"
+                >
                   Cancel
                 </Button>
                 <Button
@@ -235,7 +268,10 @@ function DeleteWorkspaceCard({ orgName }: { orgName: string }) {
     startTransition(async () => {
       const res = await csrfFetch('/api/danger/delete-workspace', {
         method: 'POST',
-        body: JSON.stringify({ orgNameConfirmation: nameInput, actionConfirmation: actionInput }),
+        body: JSON.stringify({
+          orgNameConfirmation: nameInput,
+          actionConfirmation: actionInput,
+        }),
       });
       const data = (await res.json()) as { success?: boolean; error?: string };
       if (res.ok && data.success) {
@@ -259,8 +295,9 @@ function DeleteWorkspaceCard({ orgName }: { orgName: string }) {
               Delete Workspace
             </CardTitle>
             <CardDescription className="text-xs mt-1">
-              Permanently delete your entire workspace — all users, gates, QR codes, scan history, contacts, and billing data.
-              This action is irreversible and cannot be recovered.
+              Permanently delete your entire workspace — all users, gates, QR
+              codes, scan history, contacts, and billing data. This action is
+              irreversible and cannot be recovered.
             </CardDescription>
           </div>
         </div>
@@ -282,7 +319,11 @@ function DeleteWorkspaceCard({ orgName }: { orgName: string }) {
               Step 1 of 2 — Confirm workspace name
             </div>
             <p className="text-xs text-muted-foreground">
-              Type <span className="font-mono font-bold text-foreground">{orgName}</span> to continue.
+              Type{' '}
+              <span className="font-mono font-bold text-foreground">
+                {orgName}
+              </span>{' '}
+              to continue.
             </p>
             <Input
               value={nameInput}
@@ -292,7 +333,14 @@ function DeleteWorkspaceCard({ orgName }: { orgName: string }) {
               autoComplete="off"
             />
             <div className="flex gap-3">
-              <Button variant="outline" onClick={() => { setStep(0); setNameInput(''); }} className="flex-1 h-10 rounded-xl font-bold">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setStep(0);
+                  setNameInput('');
+                }}
+                className="flex-1 h-10 rounded-xl font-bold"
+              >
                 Cancel
               </Button>
               <Button
@@ -314,7 +362,11 @@ function DeleteWorkspaceCard({ orgName }: { orgName: string }) {
               Step 2 of 2 — Final confirmation
             </div>
             <p className="text-xs text-muted-foreground">
-              Type <span className="font-mono font-bold text-foreground">DELETE WORKSPACE</span> to permanently delete.
+              Type{' '}
+              <span className="font-mono font-bold text-foreground">
+                DELETE WORKSPACE
+              </span>{' '}
+              to permanently delete.
             </p>
             <Input
               value={actionInput}
@@ -324,7 +376,14 @@ function DeleteWorkspaceCard({ orgName }: { orgName: string }) {
               autoComplete="off"
             />
             <div className="flex gap-3">
-              <Button variant="outline" onClick={() => { setStep(1); setActionInput(''); }} className="flex-1 h-10 rounded-xl font-bold">
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setStep(1);
+                  setActionInput('');
+                }}
+                className="flex-1 h-10 rounded-xl font-bold"
+              >
                 Back
               </Button>
               <Button
@@ -341,8 +400,12 @@ function DeleteWorkspaceCard({ orgName }: { orgName: string }) {
 
         {step === 3 && (
           <div className="p-4 rounded-xl border border-destructive/20 bg-destructive/5 text-center space-y-2">
-            <p className="font-bold text-destructive text-sm">Workspace deleted.</p>
-            <p className="text-xs text-muted-foreground">Redirecting to login…</p>
+            <p className="font-bold text-destructive text-sm">
+              Workspace deleted.
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Redirecting to login…
+            </p>
           </div>
         )}
       </CardContent>
@@ -358,8 +421,9 @@ export function DangerZone({ orgName }: DangerZoneProps) {
       <div className="flex items-center gap-3 p-4 rounded-xl border border-destructive/30 bg-destructive/5">
         <AlertTriangle className="h-5 w-5 text-destructive shrink-0" />
         <p className="text-sm font-medium text-destructive">
-          All actions on this page are destructive. Buttons have a cooldown timer to prevent accidental clicks.
-          Every action is recorded in your organization&apos;s audit log.
+          All actions on this page are destructive. Buttons have a cooldown
+          timer to prevent accidental clicks. Every action is recorded in your
+          organization&apos;s audit log.
         </p>
       </div>
 

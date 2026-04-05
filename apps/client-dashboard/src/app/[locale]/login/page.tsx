@@ -14,7 +14,7 @@ import {
   CardContent,
   LoginShell,
   cn,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import {
   AlertCircle,
   Eye,

@@ -14,7 +14,7 @@ import {
   CheckCircle2,
   type LucideIcon,
 } from 'lucide-react';
-import { Button } from '@gate-access/ui';
+import { Button } from '@gateflow/ui';
 import { IntentLink } from '../../../components/intent-link';
 import { IntentLandingTracker } from '../../../components/intent-landing-tracker';
 

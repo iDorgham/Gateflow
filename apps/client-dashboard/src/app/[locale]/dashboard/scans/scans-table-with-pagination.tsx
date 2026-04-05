@@ -1,8 +1,11 @@
 'use client';
 
 import { useSearchParams, usePathname } from 'next/navigation';
-import { ScansTable, type ScanLog } from '@/components/dashboard/scans/ScansTable';
-import { Pagination } from '@gate-access/ui';
+import {
+  ScansTable,
+  type ScanLog,
+} from '@/components/dashboard/scans/ScansTable';
+import { Pagination } from '@gateflow/ui';
 
 interface ScansTableWithPaginationProps {
   data: ScanLog[];
@@ -23,7 +26,7 @@ export function ScansTableWithPagination({
   showProjectColumn,
   page,
   totalPages,
-  rangeText
+  rangeText,
 }: ScansTableWithPaginationProps) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -52,11 +55,9 @@ export function ScansTableWithPagination({
       {totalPages > 1 && (
         <div className="flex items-center justify-between px-1">
           <div className="flex items-center gap-4 text-[var(--ds-text-subtlest)] text-[11px] font-black uppercase tracking-widest">
-            <span className="tabular-nums">
-              {rangeText}
-            </span>
+            <span className="tabular-nums">{rangeText}</span>
           </div>
-          
+
           <Pagination
             currentPage={page}
             totalPages={totalPages}

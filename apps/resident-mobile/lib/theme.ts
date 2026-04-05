@@ -1,4 +1,3 @@
-import { nativeTokensRealEstate } from '@gate-access/ui';
+import { nativeTokensRealEstate } from '@gateflow/ui';
 
 export const theme = nativeTokensRealEstate;
-

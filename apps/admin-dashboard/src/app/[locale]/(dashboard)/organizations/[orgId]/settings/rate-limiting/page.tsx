@@ -9,7 +9,7 @@ import {
   Button,
   Input,
   Label,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { Shield, Zap, Globe, Lock } from 'lucide-react';
 
 export default async function RateLimitingPage(props: {

@@ -7,7 +7,7 @@ import {
   PopoverTrigger,
   Button,
   cn,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { Bell, CheckCircle2, QrCode } from 'lucide-react';
 
 interface ExpiredQR {
@@ -27,7 +27,10 @@ function formatCode(code: string): string {
   return code.length > 20 ? `${code.slice(0, 14)}…${code.slice(-6)}` : code;
 }
 
-export function NotificationDropdown({ items, locale }: NotificationDropdownProps) {
+export function NotificationDropdown({
+  items,
+  locale,
+}: NotificationDropdownProps) {
   const isRtl = locale === 'ar-EG';
   const count = items.length;
 
@@ -60,7 +63,10 @@ export function NotificationDropdown({ items, locale }: NotificationDropdownProp
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-border">
           <div className="flex items-center gap-2">
-            <Bell className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+            <Bell
+              className="h-4 w-4 text-muted-foreground"
+              aria-hidden="true"
+            />
             <span className="text-[11px] font-black uppercase tracking-widest text-foreground">
               {isRtl ? 'التنبيهات' : 'Notifications'}
             </span>
@@ -77,13 +83,18 @@ export function NotificationDropdown({ items, locale }: NotificationDropdownProp
           {count === 0 ? (
             <div className="flex flex-col items-center justify-center py-10 text-center">
               <div className="h-12 w-12 rounded-2xl bg-success/10 flex items-center justify-center mb-3">
-                <CheckCircle2 className="h-6 w-6 text-success" aria-hidden="true" />
+                <CheckCircle2
+                  className="h-6 w-6 text-success"
+                  aria-hidden="true"
+                />
               </div>
               <p className="text-sm font-bold text-foreground">
                 {isRtl ? 'كل شيء على ما يرام' : 'All clear'}
               </p>
               <p className="text-[11px] text-muted-foreground mt-0.5">
-                {isRtl ? 'لا توجد رموز QR منتهية الصلاحية' : 'No expired QR codes'}
+                {isRtl
+                  ? 'لا توجد رموز QR منتهية الصلاحية'
+                  : 'No expired QR codes'}
               </p>
             </div>
           ) : (
@@ -92,11 +103,14 @@ export function NotificationDropdown({ items, locale }: NotificationDropdownProp
                 key={qr.id}
                 href={`/${locale}/dashboard/qrcodes?q=${encodeURIComponent(qr.code)}`}
                 className={cn(
-                  'group flex items-start gap-3 rounded-xl border border-border p-3 transition-all hover:border-destructive/20 hover:bg-destructive/5',
+                  'group flex items-start gap-3 rounded-xl border border-border p-3 transition-all hover:border-destructive/20 hover:bg-destructive/5'
                 )}
               >
                 <div className="h-8 w-8 rounded-lg bg-destructive/10 flex items-center justify-center shrink-0 mt-0.5">
-                  <QrCode className="h-4 w-4 text-destructive" aria-hidden="true" />
+                  <QrCode
+                    className="h-4 w-4 text-destructive"
+                    aria-hidden="true"
+                  />
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="font-mono text-xs font-bold text-foreground truncate">
@@ -105,14 +119,19 @@ export function NotificationDropdown({ items, locale }: NotificationDropdownProp
                   <p className="text-[10px] text-muted-foreground mt-0.5">
                     {isRtl ? 'انتهت في' : 'Expired'}{' '}
                     <span className="font-medium text-foreground/70">
-                      {new Date(qr.expiresAt).toLocaleDateString(isRtl ? 'ar-EG' : 'en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric',
-                      })}
+                      {new Date(qr.expiresAt).toLocaleDateString(
+                        isRtl ? 'ar-EG' : 'en-US',
+                        {
+                          month: 'short',
+                          day: 'numeric',
+                          year: 'numeric',
+                        }
+                      )}
                     </span>
                     {qr.gateName && (
-                      <span className="ml-1 text-muted-foreground/60">· {qr.gateName}</span>
+                      <span className="ml-1 text-muted-foreground/60">
+                        · {qr.gateName}
+                      </span>
                     )}
                   </p>
                 </div>

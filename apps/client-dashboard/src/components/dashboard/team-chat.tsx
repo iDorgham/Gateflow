@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useTransition } from 'react';
-import { Button, Input, cn } from '@gate-access/ui';
+import { Button, Input, cn } from '@gateflow/ui';
 import { Send, Loader2, MessageSquare } from 'lucide-react';
 import { toast } from 'sonner';
 import { csrfFetch } from '@/lib/csrf';
@@ -30,7 +30,10 @@ function getInitials(name: string): string {
 
 function formatTime(iso: string): string {
   const d = new Date(iso);
-  return d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+  return d.toLocaleTimeString(undefined, {
+    hour: '2-digit',
+    minute: '2-digit',
+  });
 }
 
 interface TeamChatProps {
@@ -54,7 +57,7 @@ export function TeamChat({ currentUserId }: TeamChatProps) {
   async function loadMessages() {
     try {
       const res = await fetch('/api/chat');
-      const json = await res.json() as { success: boolean; data?: ChatMsg[] };
+      const json = (await res.json()) as { success: boolean; data?: ChatMsg[] };
       if (json.success && json.data) {
         // API returns newest-first; reverse for display
         setMessages(json.data.slice().reverse());
@@ -73,7 +76,7 @@ export function TeamChat({ currentUserId }: TeamChatProps) {
     return () => {
       if (pollRef.current) clearInterval(pollRef.current);
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Send message
@@ -88,7 +91,11 @@ export function TeamChat({ currentUserId }: TeamChatProps) {
         method: 'POST',
         body: JSON.stringify({ content }),
       });
-      const data = await res.json() as { success: boolean; data?: ChatMsg; error?: string };
+      const data = (await res.json()) as {
+        success: boolean;
+        data?: ChatMsg;
+        error?: string;
+      };
       if (data.success && data.data) {
         setMessages((prev) => [...prev, data.data!]);
       } else {
@@ -107,11 +114,12 @@ export function TeamChat({ currentUserId }: TeamChatProps) {
 
   return (
     <div className="flex h-full flex-col bg-card" aria-label="Team chat">
-
       {/* Header */}
       <div className="flex shrink-0 items-center gap-2 border-b border-border px-4 py-3 bg-muted/20">
         <MessageSquare className="h-4 w-4 text-primary" aria-hidden="true" />
-        <span className="text-xs font-black uppercase tracking-widest">Team Chat</span>
+        <span className="text-xs font-black uppercase tracking-widest">
+          Team Chat
+        </span>
         <span className="ml-auto text-[10px] text-muted-foreground/60 font-medium">
           Refreshes every 10s
         </span>
@@ -126,7 +134,10 @@ export function TeamChat({ currentUserId }: TeamChatProps) {
         ) : messages.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-center">
             <div className="h-12 w-12 rounded-2xl bg-muted/50 flex items-center justify-center mb-3">
-              <MessageSquare className="h-6 w-6 text-muted-foreground/40" aria-hidden="true" />
+              <MessageSquare
+                className="h-6 w-6 text-muted-foreground/40"
+                aria-hidden="true"
+              />
             </div>
             <p className="text-sm font-bold text-foreground">No messages yet</p>
             <p className="text-[11px] text-muted-foreground mt-0.5">
@@ -139,7 +150,10 @@ export function TeamChat({ currentUserId }: TeamChatProps) {
             return (
               <div
                 key={msg.id}
-                className={cn('flex items-end gap-2', isMe ? 'flex-row-reverse' : 'flex-row')}
+                className={cn(
+                  'flex items-end gap-2',
+                  isMe ? 'flex-row-reverse' : 'flex-row'
+                )}
               >
                 {/* Avatar */}
                 {!isMe && (
@@ -149,14 +163,23 @@ export function TeamChat({ currentUserId }: TeamChatProps) {
                     aria-hidden="true"
                   >
                     {msg.user.avatarUrl ? (
-                      <img src={msg.user.avatarUrl} alt={msg.user.name} className="h-full w-full rounded-full object-cover" />
+                      <img
+                        src={msg.user.avatarUrl}
+                        alt={msg.user.name}
+                        className="h-full w-full rounded-full object-cover"
+                      />
                     ) : (
                       getInitials(msg.user.name)
                     )}
                   </div>
                 )}
 
-                <div className={cn('flex flex-col gap-0.5 max-w-[80%]', isMe && 'items-end')}>
+                <div
+                  className={cn(
+                    'flex flex-col gap-0.5 max-w-[80%]',
+                    isMe && 'items-end'
+                  )}
+                >
                   {/* Sender name + time */}
                   {!isMe && (
                     <span className="text-[10px] text-muted-foreground font-bold px-1">
@@ -209,10 +232,11 @@ export function TeamChat({ currentUserId }: TeamChatProps) {
             className="h-9 w-9 rounded-xl shrink-0"
             aria-label="Send message"
           >
-            {isPending
-              ? <Loader2 className="h-3.5 w-3.5 animate-spin" />
-              : <Send className="h-3.5 w-3.5" />
-            }
+            {isPending ? (
+              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+            ) : (
+              <Send className="h-3.5 w-3.5" />
+            )}
           </Button>
         </div>
       </form>

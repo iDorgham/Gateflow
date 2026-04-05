@@ -1,15 +1,15 @@
 'use client';
 
 import { useState, useTransition } from 'react';
+import { Card, CardContent, Button, Switch, Label, Badge } from '@gateflow/ui';
 import {
-  Card,
-  CardContent,
-  Button,
-  Switch,
-  Label,
-  Badge,
-} from '@gate-access/ui';
-import { Wifi, WifiOff, Volume2, Vibrate, ShieldCheck, Settings2 } from 'lucide-react';
+  Wifi,
+  WifiOff,
+  Volume2,
+  Vibrate,
+  ShieldCheck,
+  Settings2,
+} from 'lucide-react';
 import { toast } from 'sonner';
 import { csrfFetch } from '@/lib/csrf';
 
@@ -32,7 +32,9 @@ interface ScannerRulesFormProps {
 }
 
 export function ScannerRulesForm({ initialConfig }: ScannerRulesFormProps) {
-  const [config, setConfig] = useState<ScannerConfig>(initialConfig ?? DEFAULT_CONFIG);
+  const [config, setConfig] = useState<ScannerConfig>(
+    initialConfig ?? DEFAULT_CONFIG
+  );
   const [isDirty, setIsDirty] = useState(false);
   const [isPending, startTransition] = useTransition();
 
@@ -66,7 +68,8 @@ export function ScannerRulesForm({ initialConfig }: ScannerRulesFormProps) {
     {
       key: 'offlineModeEnabled',
       label: 'Offline Mode',
-      description: 'Allow scanners to queue entries when network is unavailable. Syncs automatically when online.',
+      description:
+        'Allow scanners to queue entries when network is unavailable. Syncs automatically when online.',
       icon: config.offlineModeEnabled ? (
         <Wifi className="h-5 w-5 text-success" />
       ) : (
@@ -76,19 +79,22 @@ export function ScannerRulesForm({ initialConfig }: ScannerRulesFormProps) {
     {
       key: 'vibrationEnabled',
       label: 'Haptic Feedback',
-      description: 'Scanners vibrate on successful or rejected scans for tactile confirmation.',
+      description:
+        'Scanners vibrate on successful or rejected scans for tactile confirmation.',
       icon: <Vibrate className="h-5 w-5 text-primary" />,
     },
     {
       key: 'soundEnabled',
       label: 'Audio Alerts',
-      description: 'Scanners play a sound on scan events. Useful in noisy gate environments.',
+      description:
+        'Scanners play a sound on scan events. Useful in noisy gate environments.',
       icon: <Volume2 className="h-5 w-5 text-primary" />,
     },
     {
       key: 'allowSupervisorOverride',
       label: 'Supervisor Override',
-      description: 'Supervisors can force-approve a denied scan with PIN authentication and an audit log entry.',
+      description:
+        'Supervisors can force-approve a denied scan with PIN authentication and an audit log entry.',
       icon: <ShieldCheck className="h-5 w-5 text-warning" />,
       isGlobal: true,
     },
@@ -99,9 +105,9 @@ export function ScannerRulesForm({ initialConfig }: ScannerRulesFormProps) {
       <div className="flex items-center gap-2 p-3 rounded-xl border border-primary/20 bg-primary/5 text-primary text-xs">
         <Settings2 className="h-4 w-4 shrink-0" />
         <p className="font-medium">
-          These are <strong>global</strong> defaults. Individual scanner devices can override
-          local preferences (haptics, sound) — but Offline Mode and Supervisor Override are
-          enforced org-wide.
+          These are <strong>global</strong> defaults. Individual scanner devices
+          can override local preferences (haptics, sound) — but Offline Mode and
+          Supervisor Override are enforced org-wide.
         </p>
       </div>
 

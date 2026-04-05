@@ -10,7 +10,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { updateWorkspaceSettingsAction } from './actions';
 import { cn } from '@/lib/utils';
 import { toast } from 'sonner';

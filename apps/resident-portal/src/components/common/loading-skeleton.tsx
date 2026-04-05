@@ -1,4 +1,4 @@
-import { cn } from '@gate-access/ui';
+import { cn } from '@gateflow/ui';
 
 export function LoadingSkeleton({ className }: { className?: string }) {
   return (

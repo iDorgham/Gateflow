@@ -27,12 +27,7 @@ import {
   Palette,
 } from 'lucide-react';
 import { useOrganization } from '@/providers/organization-provider';
-import {
-  cn,
-  SideNavigationShell,
-  SideNavItem,
-  NavGroup,
-} from '@gate-access/ui';
+import { cn, SideNavigationShell, SideNavItem, NavGroup } from '@gateflow/ui';
 import { OrgSwitcher } from './organizations/org-switcher';
 
 interface NavItemData {

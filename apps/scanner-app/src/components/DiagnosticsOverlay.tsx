@@ -14,7 +14,7 @@ import {
   Animated,
   Dimensions,
 } from 'react-native';
-import { nativeTokens } from '@gate-access/ui/tokens';
+import { nativeTokens } from '@gateflow/ui/tokens';
 import { scanQueue } from '../lib/offline-queue';
 import {
   Activity,

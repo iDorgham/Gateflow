@@ -1,7 +1,7 @@
 import { requireAdmin } from '@/lib/admin-auth';
 import { Locale } from '@/lib/i18n/i18n-config';
 import { prisma } from '@gate-access/db';
-import { PageHeader } from '@gate-access/ui';
+import { PageHeader } from '@gateflow/ui';
 import { MonitoringClient } from '@/components/monitoring/MonitoringClient';
 
 export const metadata = { title: 'Monitoring' };

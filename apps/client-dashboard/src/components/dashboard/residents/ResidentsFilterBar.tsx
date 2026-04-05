@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { cn, Button, Input, NativeSelect } from '@gate-access/ui';
+import { cn, Button, Input, NativeSelect } from '@gateflow/ui';
 import { useProjectFilter } from '@/context/ProjectFilterContext';
 import type { ResidentsFilters } from '@/lib/residents/residents-filters';
 
@@ -89,7 +89,12 @@ export function ResidentsFilterBar({
         const res = await fetch('/api/gates');
         const json = await res.json();
         if (json.success && json.data) {
-          setGates(json.data.map((g: { id: string; name: string }) => ({ id: g.id, name: g.name })));
+          setGates(
+            json.data.map((g: { id: string; name: string }) => ({
+              id: g.id,
+              name: g.name,
+            }))
+          );
         }
       } catch {
         // leave gates empty
@@ -133,25 +138,37 @@ export function ResidentsFilterBar({
     if (!filters.from || !filters.to) return false;
     const from = new Date(filters.from + 'T00:00:00');
     const to = new Date(filters.to + 'T23:59:59');
-    const days = Math.round((to.getTime() - from.getTime()) / (24 * 60 * 60 * 1000));
+    const days = Math.round(
+      (to.getTime() - from.getTime()) / (24 * 60 * 60 * 1000)
+    );
     return days <= 7;
   })();
   const is30d = (() => {
     if (!filters.from || !filters.to) return false;
     const from = new Date(filters.from + 'T00:00:00');
     const to = new Date(filters.to + 'T23:59:59');
-    const days = Math.round((to.getTime() - from.getTime()) / (24 * 60 * 60 * 1000));
+    const days = Math.round(
+      (to.getTime() - from.getTime()) / (24 * 60 * 60 * 1000)
+    );
     return days > 7 && days <= 31;
   })();
 
   return (
-    <div className={cn('flex flex-wrap items-center gap-4 bg-[var(--ds-background-default,#FFFFFF)] bg-background p-3 rounded-xl border border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46] shadow-none', className)}>
+    <div
+      className={cn(
+        'flex flex-wrap items-center gap-4 bg-[var(--ds-background-default,#FFFFFF)] bg-background p-3 rounded-xl border border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46] shadow-none',
+        className
+      )}
+    >
       <div className="flex items-center gap-3 pr-4 border-r border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46]">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--ds-text-subtlest,#A5ADBA)] pointer-events-none" />
           <Input
             type="search"
-            placeholder={searchPlaceholder || t('contacts.searchPlaceholder', 'Search contacts…')}
+            placeholder={
+              searchPlaceholder ||
+              t('contacts.searchPlaceholder', 'Search contacts…')
+            }
             value={searchInput}
             onChange={(e) => handleSearchChange(e.target.value)}
             className="w-[240px] h-9 pl-9 bg-[var(--ds-background-input,#F4F5F7)] bg-secondary border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46] focus:bg-[var(--ds-background-default,#FFFFFF)] dark:focus:bg-[var(--background)] transition-all text-[13px] rounded-[var(--ds-border-radius-100,#3px)] font-semibold"
@@ -161,12 +178,19 @@ export function ResidentsFilterBar({
       </div>
 
       <div className="flex items-center gap-3">
-        <span className="text-[11px] font-bold text-[var(--ds-text-subtle,#6B778C)] dark:text-[#97A0AF] uppercase tracking-tight">{t('analytics.filterDateRange', 'Range')}</span>
+        <span className="text-[11px] font-bold text-[var(--ds-text-subtle,#6B778C)] dark:text-[#97A0AF] uppercase tracking-tight">
+          {t('analytics.filterDateRange', 'Range')}
+        </span>
         <div className="flex rounded-[var(--ds-border-radius-100,#3px)] border border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46] p-0.5 bg-[var(--ds-background-neutral,#EBECF0)] bg-background/50 overflow-hidden shadow-none">
           <Button
             variant="ghost"
             size="sm"
-            className={cn("h-7 px-3 text-[12px] font-bold rounded-[calc(var(--ds-border-radius-100,3px)-1px)] transition-all", is7d ? "bg-[var(--ds-background-default,#FFFFFF)] bg-secondary text-[var(--ds-text-selected,var(--primary))] shadow-none" : "text-[var(--ds-text-subtle,#42526E)] dark:text-[#A5ADBA] hover:bg-background/50 dark:hover:bg-[#343A46]/50")}
+            className={cn(
+              'h-7 px-3 text-[12px] font-bold rounded-[calc(var(--ds-border-radius-100,3px)-1px)] transition-all',
+              is7d
+                ? 'bg-[var(--ds-background-default,#FFFFFF)] bg-secondary text-[var(--ds-text-selected,var(--primary))] shadow-none'
+                : 'text-[var(--ds-text-subtle,#42526E)] dark:text-[#A5ADBA] hover:bg-background/50 dark:hover:bg-[#343A46]/50'
+            )}
             onClick={() => handleRangePreset('7d')}
           >
             7d
@@ -174,7 +198,12 @@ export function ResidentsFilterBar({
           <Button
             variant="ghost"
             size="sm"
-            className={cn("h-7 px-3 text-[12px] font-bold rounded-[calc(var(--ds-border-radius-100,3px)-1px)] transition-all", is30d ? "bg-[var(--ds-background-default,#FFFFFF)] bg-secondary text-[var(--ds-text-selected,var(--primary))] shadow-none" : "text-[var(--ds-text-subtle,#42526E)] dark:text-[#A5ADBA] hover:bg-background/50 dark:hover:bg-[#343A46]/50")}
+            className={cn(
+              'h-7 px-3 text-[12px] font-bold rounded-[calc(var(--ds-border-radius-100,3px)-1px)] transition-all',
+              is30d
+                ? 'bg-[var(--ds-background-default,#FFFFFF)] bg-secondary text-[var(--ds-text-selected,var(--primary))] shadow-none'
+                : 'text-[var(--ds-text-subtle,#42526E)] dark:text-[#A5ADBA] hover:bg-background/50 dark:hover:bg-[#343A46]/50'
+            )}
             onClick={() => handleRangePreset('30d')}
           >
             30d
@@ -187,7 +216,9 @@ export function ResidentsFilterBar({
             onChange={(e) => setCustomFrom(e.target.value)}
             className="w-[105px] h-6 bg-transparent border-none text-[11px] font-bold text-[var(--ds-text,#172B4D)] dark:text-[#E3E6E8] focus:ring-0 p-0"
           />
-          <span className="text-[var(--ds-text-subtlest,#A5ADBA)] dark:text-[#97A0AF] text-[10px] font-black opacity-30">—</span>
+          <span className="text-[var(--ds-text-subtlest,#A5ADBA)] dark:text-[#97A0AF] text-[10px] font-black opacity-30">
+            —
+          </span>
           <input
             type="date"
             value={customTo}
@@ -206,25 +237,35 @@ export function ResidentsFilterBar({
 
       <div className="flex items-center gap-3 ml-auto">
         <div className="flex items-center gap-2">
-           <NativeSelect
+          <NativeSelect
             value={filters.unitType}
-            onChange={(e) => onFiltersChange({ unitType: e.target.value, page: 1 })}
+            onChange={(e) =>
+              onFiltersChange({ unitType: e.target.value, page: 1 })
+            }
             className="w-[130px] h-9 text-[12px] font-semibold bg-[var(--ds-background-default,#FFFFFF)] bg-background border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46] rounded-[var(--ds-border-radius-100,#3px)] cursor-pointer hover:border-[var(--primary)] transition-colors"
           >
-            <option value="">{t('analytics.filterAllUnitTypes', 'All Types')}</option>
+            <option value="">
+              {t('analytics.filterAllUnitTypes', 'All Types')}
+            </option>
             {UNIT_TYPES.map((u) => (
-              <option key={u} value={u}>{unitTypeLabels[u] ?? u}</option>
+              <option key={u} value={u}>
+                {unitTypeLabels[u] ?? u}
+              </option>
             ))}
           </NativeSelect>
 
           <NativeSelect
             value={filters.tagIds || ''}
-            onChange={(e) => onFiltersChange({ tagIds: e.target.value, page: 1 })}
+            onChange={(e) =>
+              onFiltersChange({ tagIds: e.target.value, page: 1 })
+            }
             className="w-[130px] h-9 text-[12px] font-semibold bg-[var(--ds-background-default,#FFFFFF)] bg-background border-[var(--ds-border,#DFE1E6)] dark:border-[#343A46] rounded-[var(--ds-border-radius-100,#3px)] cursor-pointer hover:border-[var(--primary)] transition-colors"
           >
             <option value="">{t('residents.allTags', 'All Tags')}</option>
             {tags.map((tag) => (
-              <option key={tag.id} value={tag.id}>{tag.name}</option>
+              <option key={tag.id} value={tag.id}>
+                {tag.name}
+              </option>
             ))}
           </NativeSelect>
         </div>

@@ -33,7 +33,7 @@ import {
   Separator,
   RadioGroup,
   RadioGroupItem,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { toast } from 'sonner';
 
 /**

@@ -1,10 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { 
-  Card, 
-  CardContent 
-} from '@gate-access/ui';
+import { Card, CardContent } from '@gateflow/ui';
 import { CalendarClock, CheckCircle2, Clock } from 'lucide-react';
 
 export interface ScheduleDataBlock {
@@ -37,7 +34,7 @@ export function AIScheduleRenderer({ config, isRtl }: AIScheduleRendererProps) {
         <div className="h-12 w-12 rounded-lg bg-[var(--ds-background-discovery-bold,#5E4DB2)] text-white flex items-center justify-center shrink-0">
           <CalendarClock size={24} />
         </div>
-        
+
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-0.5">
             <p className="text-xs font-semibold text-[var(--ds-text-discovery,#5E4DB2)] uppercase tracking-wider">
@@ -52,7 +49,9 @@ export function AIScheduleRenderer({ config, isRtl }: AIScheduleRendererProps) {
             <Clock size={10} />
             <span>{getIntervalLabel(cron)}</span>
             <span className="mx-1">•</span>
-            <span className="capitalize">{taskType === 'report' ? t('Report', 'تقرير') : taskType}</span>
+            <span className="capitalize">
+              {taskType === 'report' ? t('Report', 'تقرير') : taskType}
+            </span>
           </div>
         </div>
       </CardContent>

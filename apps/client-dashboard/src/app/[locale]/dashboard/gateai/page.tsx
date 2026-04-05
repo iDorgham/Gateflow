@@ -11,13 +11,11 @@
 
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import {
-  GateAIHubLayout,
-} from '@/components/dashboard/gateai/GateAIHubLayout';
+import { GateAIHubLayout } from '@/components/dashboard/gateai/GateAIHubLayout';
 import { TagSidebar } from '@/components/dashboard/gateai/TagSidebar';
 import { CanvasEditor } from '@/components/dashboard/gateai/CanvasEditor';
 import { AutomationList } from '@/components/dashboard/gateai/AutomationList';
-import { PageHeader } from '@gate-access/ui';
+import { PageHeader } from '@gateflow/ui';
 
 /* ─────────────── Page ─────────────── */
 
@@ -29,10 +27,13 @@ export default function GateAIHubPage() {
     <div className="space-y-6">
       <PageHeader
         title={t('ai.title', 'AI assistant')}
-        subtitle={t('ai.description', 'Your intelligent operations agent. Ask anything or drag tags to analyze data.')}
+        subtitle={t(
+          'ai.description',
+          'Your intelligent operations agent. Ask anything or drag tags to analyze data.'
+        )}
         breadcrumbs={[
           { label: 'Dashboard', href: `/${i18n.language}/dashboard` },
-          { label: 'AI assistant' }
+          { label: 'AI assistant' },
         ]}
       />
 

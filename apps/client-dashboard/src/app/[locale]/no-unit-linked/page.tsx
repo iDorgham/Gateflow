@@ -1,16 +1,14 @@
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { redirect } from 'next/navigation';
-import { Button } from '@gate-access/ui';
+import { Button } from '@gateflow/ui';
 import Link from 'next/link';
 import { Building2 } from 'lucide-react';
 import { getTranslation } from '@/lib/i18n';
 import type { Locale } from '@/lib/i18n-config';
 
-export default async function NoUnitLinkedPage(
-  props: {
-    params: Promise<{ locale: Locale }>;
-  }
-) {
+export default async function NoUnitLinkedPage(props: {
+  params: Promise<{ locale: Locale }>;
+}) {
   const params = await props.params;
   const claims = await getSessionClaims();
   if (!claims) redirect(`/${params.locale}/login`);
@@ -25,7 +23,9 @@ export default async function NoUnitLinkedPage(
         </div>
         <div>
           <h1 className="text-2xl font-bold">
-            {t('resident.noUnitLinked', { defaultValue: 'No unit linked to your account' })}
+            {t('resident.noUnitLinked', {
+              defaultValue: 'No unit linked to your account',
+            })}
           </h1>
           <p className="mt-2 text-muted-foreground">
             {t('resident.noUnitLinkedDesc', {

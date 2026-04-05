@@ -15,7 +15,7 @@ import {
   Avatar,
   AvatarFallback,
   LoadingSpinner,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { toast } from 'sonner';
 import { Trash2, User as UserIcon, Loader2, MapPin, Clock } from 'lucide-react';
 import { csrfFetch } from '@/lib/csrf';

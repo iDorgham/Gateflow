@@ -18,7 +18,7 @@ import {
   SheetTitle,
   SheetDescription,
   ScrollArea,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import {
   Activity,
   Zap,

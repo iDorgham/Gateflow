@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from '@gate-access/ui';
+import { Button } from '@gateflow/ui';
 import { X, Cookie, ShieldCheck } from 'lucide-react';
 import type { Locale } from '../i18n-config';
 
@@ -31,16 +31,18 @@ export function CookieConsent({ locale }: { locale: Locale }) {
   const content = {
     en: {
       title: 'Cookie Policy',
-      description: 'We use cookies to enhance your security experience and analyze our traffic. No PII is ever sold or shared.',
+      description:
+        'We use cookies to enhance your security experience and analyze our traffic. No PII is ever sold or shared.',
       accept: 'Accept All',
       decline: 'Decline',
     },
     ar: {
       title: 'سياسة ملفات الارتباط',
-      description: 'نستخدم ملفات الارتباط لتحسين تجربة الأمان الخاصة بك وتحليل حركة المرور لدينا. لا يتم بيع أو مشاركة أي بيانات شخصية.',
+      description:
+        'نستخدم ملفات الارتباط لتحسين تجربة الأمان الخاصة بك وتحليل حركة المرور لدينا. لا يتم بيع أو مشاركة أي بيانات شخصية.',
       accept: 'قبول الكل',
       decline: 'رفض',
-    }
+    },
   };
 
   const t = locale.startsWith('ar') ? content.ar : content.en;
@@ -74,21 +76,21 @@ export function CookieConsent({ locale }: { locale: Locale }) {
             </div>
 
             <div className="flex items-center gap-4 w-full md:w-auto">
-              <Button 
-                variant="subtle" 
+              <Button
+                variant="subtle"
                 onClick={handleDecline}
                 className="flex-grow md:flex-none h-12 px-8 font-black uppercase tracking-widest text-[11px] border border-ds-border hover:border-ds-border-bold transition-all"
               >
                 {t.decline}
               </Button>
-              <Button 
-                variant="brand" 
+              <Button
+                variant="brand"
                 onClick={handleAccept}
                 className="flex-grow md:flex-none h-12 px-10 font-black uppercase tracking-widest text-[11px] shadow-lg shadow-ds-background-brand-bold/20 hover:-translate-y-0.5 transition-all"
               >
                 {t.accept}
               </Button>
-              <button 
+              <button
                 onClick={() => setIsVisible(false)}
                 className="hidden md:flex p-2 text-ds-text-subtlest hover:text-ds-text-heading transition-colors"
               >

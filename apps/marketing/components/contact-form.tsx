@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Button, Input, Label, Textarea } from '@gate-access/ui';
+import { Button, Input, Label, Textarea } from '@gateflow/ui';
 import { CheckCircle2, Loader2, Send, AlertCircle } from 'lucide-react';
 import {
   buildMarketingEvent,

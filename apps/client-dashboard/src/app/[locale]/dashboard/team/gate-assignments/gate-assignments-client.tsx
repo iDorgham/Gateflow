@@ -16,7 +16,7 @@ import {
   TableHeader,
   TableRow,
   MultiSelect,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { Loader2, UserPlus, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
@@ -50,7 +50,9 @@ interface GateAssignmentsClientProps {
   projectId?: string;
 }
 
-export function GateAssignmentsClient({ projectId }: GateAssignmentsClientProps) {
+export function GateAssignmentsClient({
+  projectId,
+}: GateAssignmentsClientProps) {
   const { t } = useTranslation('dashboard');
   const [gates, setGates] = useState<Gate[]>([]);
   const [users, setUsers] = useState<OrgUser[]>([]);
@@ -67,7 +69,9 @@ export function GateAssignmentsClient({ projectId }: GateAssignmentsClientProps)
   const fetchData = useCallback(async () => {
     setLoadError(null);
     setLoading(true);
-    const gatesUrl = projectId ? `/api/gates?project=${encodeURIComponent(projectId)}` : '/api/gates';
+    const gatesUrl = projectId
+      ? `/api/gates?project=${encodeURIComponent(projectId)}`
+      : '/api/gates';
     const assignmentsUrl = projectId
       ? `/api/gates/assignments?project=${encodeURIComponent(projectId)}`
       : '/api/gates/assignments';
@@ -94,7 +98,11 @@ export function GateAssignmentsClient({ projectId }: GateAssignmentsClientProps)
       } else {
         setUsers([]);
       }
-      if (assignmentsRes.ok && assignmentsJson.success && Array.isArray(assignmentsJson.data)) {
+      if (
+        assignmentsRes.ok &&
+        assignmentsJson.success &&
+        Array.isArray(assignmentsJson.data)
+      ) {
         setAssignments(assignmentsJson.data);
       } else {
         setAssignments([]);
@@ -113,12 +121,22 @@ export function GateAssignmentsClient({ projectId }: GateAssignmentsClientProps)
 
   const handleAssign = async () => {
     if (!selectedUserId || selectedGateIds.length === 0) {
-      toast.error(t('gateAssignments.validation.selectUserAndGates', 'Select a user and at least one gate.'));
+      toast.error(
+        t(
+          'gateAssignments.validation.selectUserAndGates',
+          'Select a user and at least one gate.'
+        )
+      );
       return;
     }
     setAssignPending(true);
     try {
-      const payload: { userId: string; gateIds: string[]; shiftStart?: string; shiftEnd?: string } = {
+      const payload: {
+        userId: string;
+        gateIds: string[];
+        shiftStart?: string;
+        shiftEnd?: string;
+      } = {
         userId: selectedUserId,
         gateIds: selectedGateIds,
       };
@@ -131,13 +149,18 @@ export function GateAssignmentsClient({ projectId }: GateAssignmentsClientProps)
       });
       const data = await res.json();
       if (res.ok && data.success) {
-        toast.success(t('gateAssignments.success.assigned', 'Assignments added.'));
+        toast.success(
+          t('gateAssignments.success.assigned', 'Assignments added.')
+        );
         setSelectedGateIds([]);
         setShiftStart('');
         setShiftEnd('');
         await fetchData();
       } else {
-        toast.error(data.message || t('gateAssignments.errors.assignFailed', 'Assign failed.'));
+        toast.error(
+          data.message ||
+            t('gateAssignments.errors.assignFailed', 'Assign failed.')
+        );
       }
     } catch {
       toast.error(t('common.errors.network', 'Network error.'));
@@ -146,7 +169,11 @@ export function GateAssignmentsClient({ projectId }: GateAssignmentsClientProps)
     }
   };
 
-  const handleUnassign = async (assignmentId: string, userId: string, gateId: string) => {
+  const handleUnassign = async (
+    assignmentId: string,
+    userId: string,
+    gateId: string
+  ) => {
     setUnassigningId(assignmentId);
     try {
       const res = await csrfFetch('/api/gates/assignments', {
@@ -156,10 +183,15 @@ export function GateAssignmentsClient({ projectId }: GateAssignmentsClientProps)
       });
       const data = await res.json();
       if (res.ok && data.success) {
-        toast.success(t('gateAssignments.success.unassigned', 'Assignment removed.'));
+        toast.success(
+          t('gateAssignments.success.unassigned', 'Assignment removed.')
+        );
         await fetchData();
       } else {
-        toast.error(data.message || t('gateAssignments.errors.unassignFailed', 'Unassign failed.'));
+        toast.error(
+          data.message ||
+            t('gateAssignments.errors.unassignFailed', 'Unassign failed.')
+        );
       }
     } catch {
       toast.error(t('common.errors.network', 'Network error.'));
@@ -168,7 +200,10 @@ export function GateAssignmentsClient({ projectId }: GateAssignmentsClientProps)
     }
   };
 
-  const gateOptions = gates.map((g) => ({ label: g.location ? `${g.name} (${g.location})` : g.name, value: g.id }));
+  const gateOptions = gates.map((g) => ({
+    label: g.location ? `${g.name} (${g.location})` : g.name,
+    value: g.id,
+  }));
 
   if (loading) {
     return (
@@ -188,22 +223,27 @@ export function GateAssignmentsClient({ projectId }: GateAssignmentsClientProps)
             {t('gateAssignments.assignTitle', 'Assign user to gates')}
           </CardTitle>
           <CardDescription>
-            {t('gateAssignments.assignDescription', 'Select a team member and one or more gates to allow scanning at those gates.')}
+            {t(
+              'gateAssignments.assignDescription',
+              'Select a team member and one or more gates to allow scanning at those gates.'
+            )}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          {loadError && (
-            <p className="text-sm text-destructive">{loadError}</p>
-          )}
+          {loadError && <p className="text-sm text-destructive">{loadError}</p>}
           <div className="space-y-2">
-            <Label htmlFor="gate-assign-user">{t('gateAssignments.userLabel', 'User')}</Label>
+            <Label htmlFor="gate-assign-user">
+              {t('gateAssignments.userLabel', 'User')}
+            </Label>
             <select
               id="gate-assign-user"
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
               value={selectedUserId}
               onChange={(e) => setSelectedUserId(e.target.value)}
             >
-              <option value="">{t('gateAssignments.selectUser', 'Select a user…')}</option>
+              <option value="">
+                {t('gateAssignments.selectUser', 'Select a user…')}
+              </option>
               {users.map((u) => (
                 <option key={u.id} value={u.id}>
                   {u.name || u.email} ({u.email})
@@ -222,7 +262,9 @@ export function GateAssignmentsClient({ projectId }: GateAssignmentsClientProps)
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="shift-start">{t('gateAssignments.shiftStart', 'Shift start (optional)')}</Label>
+              <Label htmlFor="shift-start">
+                {t('gateAssignments.shiftStart', 'Shift start (optional)')}
+              </Label>
               <input
                 id="shift-start"
                 type="time"
@@ -232,7 +274,9 @@ export function GateAssignmentsClient({ projectId }: GateAssignmentsClientProps)
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="shift-end">{t('gateAssignments.shiftEnd', 'Shift end (optional)')}</Label>
+              <Label htmlFor="shift-end">
+                {t('gateAssignments.shiftEnd', 'Shift end (optional)')}
+              </Label>
               <input
                 id="shift-end"
                 type="time"
@@ -244,7 +288,9 @@ export function GateAssignmentsClient({ projectId }: GateAssignmentsClientProps)
           </div>
           <Button
             onClick={handleAssign}
-            disabled={assignPending || !selectedUserId || selectedGateIds.length === 0}
+            disabled={
+              assignPending || !selectedUserId || selectedGateIds.length === 0
+            }
           >
             {assignPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             {t('gateAssignments.assignButton', 'Assign')}
@@ -255,36 +301,58 @@ export function GateAssignmentsClient({ projectId }: GateAssignmentsClientProps)
       {/* Section 2: Current assignments table */}
       <Card>
         <CardHeader>
-          <CardTitle>{t('gateAssignments.tableTitle', 'Current assignments')}</CardTitle>
+          <CardTitle>
+            {t('gateAssignments.tableTitle', 'Current assignments')}
+          </CardTitle>
           <CardDescription>
-            {t('gateAssignments.tableDescription', 'Users and the gates they can scan at.')}
+            {t(
+              'gateAssignments.tableDescription',
+              'Users and the gates they can scan at.'
+            )}
           </CardDescription>
         </CardHeader>
         <CardContent>
           {assignments.length === 0 ? (
             <p className="text-sm text-muted-foreground py-4">
-              {t('gateAssignments.noAssignments', 'No assignments yet. Use the form above to assign users to gates.')}
+              {t(
+                'gateAssignments.noAssignments',
+                'No assignments yet. Use the form above to assign users to gates.'
+              )}
             </p>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>{t('gateAssignments.tableUser', 'User')}</TableHead>
-                  <TableHead>{t('gateAssignments.tableGate', 'Gate')}</TableHead>
-                  <TableHead>{t('gateAssignments.tableShift', 'Shift')}</TableHead>
-                  <TableHead className="w-[100px]">{t('gateAssignments.tableActions', 'Actions')}</TableHead>
+                  <TableHead>
+                    {t('gateAssignments.tableUser', 'User')}
+                  </TableHead>
+                  <TableHead>
+                    {t('gateAssignments.tableGate', 'Gate')}
+                  </TableHead>
+                  <TableHead>
+                    {t('gateAssignments.tableShift', 'Shift')}
+                  </TableHead>
+                  <TableHead className="w-[100px]">
+                    {t('gateAssignments.tableActions', 'Actions')}
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {assignments.map((row) => (
                   <TableRow key={row.id}>
                     <TableCell>
-                      <span className="font-medium">{row.user.name || row.user.email}</span>
+                      <span className="font-medium">
+                        {row.user.name || row.user.email}
+                      </span>
                       <br />
-                      <span className="text-xs text-muted-foreground">{row.user.email}</span>
+                      <span className="text-xs text-muted-foreground">
+                        {row.user.email}
+                      </span>
                     </TableCell>
                     <TableCell>
-                      {row.gate.location ? `${row.gate.name} (${row.gate.location})` : row.gate.name}
+                      {row.gate.location
+                        ? `${row.gate.name} (${row.gate.location})`
+                        : row.gate.name}
                     </TableCell>
                     <TableCell className="text-muted-foreground text-sm">
                       {row.shiftStart && row.shiftEnd
@@ -301,14 +369,18 @@ export function GateAssignmentsClient({ projectId }: GateAssignmentsClientProps)
                         size="sm"
                         className="text-destructive hover:text-destructive"
                         disabled={unassigningId === row.id}
-                        onClick={() => handleUnassign(row.id, row.userId, row.gateId)}
+                        onClick={() =>
+                          handleUnassign(row.id, row.userId, row.gateId)
+                        }
                       >
                         {unassigningId === row.id ? (
                           <Loader2 className="h-4 w-4 animate-spin" />
                         ) : (
                           <Trash2 className="h-4 w-4" />
                         )}
-                        <span className="sr-only">{t('gateAssignments.unassign', 'Unassign')}</span>
+                        <span className="sr-only">
+                          {t('gateAssignments.unassign', 'Unassign')}
+                        </span>
                       </Button>
                     </TableCell>
                   </TableRow>

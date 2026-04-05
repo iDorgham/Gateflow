@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, lazy, Suspense } from 'react';
-import { nativeTokens } from '@gate-access/ui/tokens';
+import { nativeTokens } from '@gateflow/ui/tokens';
 import {
   ActivityIndicator,
   Dimensions,

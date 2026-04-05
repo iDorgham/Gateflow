@@ -19,7 +19,7 @@ import {
   Input,
   Button,
   NativeSelect,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { FolderOpen, Plus } from 'lucide-react';
 import { toast } from 'sonner';
 

@@ -12,7 +12,7 @@ import {
   Label,
   LoginShell,
   cn,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import {
   ArrowRight,
   Loader2,

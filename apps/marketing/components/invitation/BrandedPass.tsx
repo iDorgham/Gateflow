@@ -13,7 +13,7 @@ import {
   CheckCircle2,
   AlertCircle,
 } from 'lucide-react';
-import { Card, CardContent, Badge, Button, Separator } from '@gate-access/ui';
+import { Card, CardContent, Badge, Button, Separator } from '@gateflow/ui';
 import { useTranslation } from '../../hooks/use-translation';
 import { cn } from '../../lib/utils';
 import { updateVisitorName } from '@/lib/actions/invitation';

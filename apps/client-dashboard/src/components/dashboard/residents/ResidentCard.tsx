@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { Building, Mail, Phone, Eye, Pencil } from 'lucide-react';
-import { cn } from '@gate-access/ui';
+import { cn } from '@gateflow/ui';
 import type { ContactRow } from '@/lib/residents/use-contacts';
 
 interface ResidentCardProps {
@@ -27,7 +27,7 @@ export function ResidentCard({ contact, onView, onEdit }: ResidentCardProps) {
         'group relative flex flex-col gap-3 rounded-lg border border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-surface-raised,#FFFFFF)] p-4',
         'shadow-[0_1px_1px_rgba(9,30,66,0.08),0_0_1px_rgba(9,30,66,0.08)]',
         'hover:border-[var(--ds-border-focused,#4C9AFF)] hover:shadow-[0_4px_8px_-2px_rgba(9,30,66,0.16),0_0_1px_rgba(9,30,66,0.08)]',
-        'transition-[border-color,box-shadow] duration-150',
+        'transition-[border-color,box-shadow] duration-150'
       )}
     >
       {/* Header: Avatar + Name */}
@@ -82,20 +82,35 @@ export function ResidentCard({ contact, onView, onEdit }: ResidentCardProps) {
       <div className="flex flex-col gap-1.5 ps-1">
         {contact.email && (
           <div className="flex items-center gap-2">
-            <Mail className="h-3 w-3 shrink-0 text-[var(--ds-icon-subtle,#6B778C)]" aria-hidden="true" />
-            <span className="truncate text-xs text-[var(--ds-text-subtle,#42526E)]">{contact.email}</span>
+            <Mail
+              className="h-3 w-3 shrink-0 text-[var(--ds-icon-subtle,#6B778C)]"
+              aria-hidden="true"
+            />
+            <span className="truncate text-xs text-[var(--ds-text-subtle,#42526E)]">
+              {contact.email}
+            </span>
           </div>
         )}
         {contact.phone && (
           <div className="flex items-center gap-2">
-            <Phone className="h-3 w-3 shrink-0 text-[var(--ds-icon-subtle,#6B778C)]" aria-hidden="true" />
-            <span className="text-xs text-[var(--ds-text-subtle,#42526E)]">{contact.phone}</span>
+            <Phone
+              className="h-3 w-3 shrink-0 text-[var(--ds-icon-subtle,#6B778C)]"
+              aria-hidden="true"
+            />
+            <span className="text-xs text-[var(--ds-text-subtle,#42526E)]">
+              {contact.phone}
+            </span>
           </div>
         )}
         {contact.company && (
           <div className="flex items-center gap-2">
-            <Building className="h-3 w-3 shrink-0 text-[var(--ds-icon-subtle,#6B778C)]" aria-hidden="true" />
-            <span className="truncate text-xs text-[var(--ds-text-subtle,#42526E)]">{contact.company}</span>
+            <Building
+              className="h-3 w-3 shrink-0 text-[var(--ds-icon-subtle,#6B778C)]"
+              aria-hidden="true"
+            />
+            <span className="truncate text-xs text-[var(--ds-text-subtle,#42526E)]">
+              {contact.company}
+            </span>
           </div>
         )}
       </div>
@@ -113,7 +128,9 @@ export function ResidentCard({ contact, onView, onEdit }: ResidentCardProps) {
               </span>
             ))
           ) : (
-            <span className="text-[10px] text-[var(--ds-text-subtlest,#6B778C)]">No units</span>
+            <span className="text-[10px] text-[var(--ds-text-subtlest,#6B778C)]">
+              No units
+            </span>
           )}
           {contact.units.length > 2 && (
             <span className="inline-flex items-center rounded-[3px] bg-[var(--ds-background-neutral-subtle,#F4F5F7)] px-1.5 py-0.5 text-[10px] font-bold text-[var(--ds-text-subtlest,#6B778C)]">

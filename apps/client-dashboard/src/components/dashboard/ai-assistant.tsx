@@ -30,7 +30,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import type { Locale } from '@/lib/i18n-config';
 
 // ─── Constants ────────────────────────────────────────────────────────────────

@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from '@gate-access/ui';
+import { Button } from '@gateflow/ui';
 import {
   Menu,
   X,

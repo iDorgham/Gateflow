@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Button, Avatar, AvatarFallback, cn } from '@gate-access/ui';
+import { Button, Avatar, AvatarFallback, cn } from '@gateflow/ui';
 import { Sidebar } from './Sidebar';
 import { AdminSidePanel } from './admin-side-panel';
 import { LanguageSwitcher } from './language-switcher';

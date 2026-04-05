@@ -1,8 +1,8 @@
 'use client';
 
 import { useTranslation } from 'react-i18next';
-import { Card, CardContent } from '@gate-access/ui';
-import { cn } from '@gate-access/ui';
+import { Card, CardContent } from '@gateflow/ui';
+import { cn } from '@gateflow/ui';
 import { ShieldAlert, TrendingUp } from 'lucide-react';
 
 interface SummaryData {
@@ -19,14 +19,18 @@ interface AnalyticsAnomalyCardsProps {
 }
 
 /** Rule 1: denied % > 5%; Rule 2: last hour > 2× hourly average */
-export function AnalyticsAnomalyCards({ summary, className }: AnalyticsAnomalyCardsProps) {
+export function AnalyticsAnomalyCards({
+  summary,
+  className,
+}: AnalyticsAnomalyCardsProps) {
   const { t } = useTranslation('dashboard');
 
   if (!summary) return null;
 
-  const deniedPct = summary.totalVisits > 0
-    ? Math.round((summary.deniedCount / summary.totalVisits) * 100)
-    : 0;
+  const deniedPct =
+    summary.totalVisits > 0
+      ? Math.round((summary.deniedCount / summary.totalVisits) * 100)
+      : 0;
   const rule1 = deniedPct > 5;
   const hourlyAvg = summary.hourlyAvg ?? 0;
   const lastHour = summary.lastHourCount ?? 0;
@@ -40,14 +44,21 @@ export function AnalyticsAnomalyCards({ summary, className }: AnalyticsAnomalyCa
         <Card className="flex-1 min-w-[220px] rounded-2xl border-warning/30 bg-warning/5">
           <CardContent className="flex items-center gap-4 p-4">
             <div className="h-10 w-10 rounded-xl bg-warning/10 flex items-center justify-center shrink-0">
-              <ShieldAlert className="h-5 w-5 text-warning" aria-hidden="true" />
+              <ShieldAlert
+                className="h-5 w-5 text-warning"
+                aria-hidden="true"
+              />
             </div>
             <div>
               <p className="text-xs font-black uppercase tracking-widest text-warning">
                 {t('analytics.anomalyDeniedHigh', 'High denial rate')}
               </p>
               <p className="text-xs text-muted-foreground mt-0.5">
-                {t('analytics.anomalyDeniedDesc', '{{pct}}% of scans denied (threshold 5%).', { pct: deniedPct })}
+                {t(
+                  'analytics.anomalyDeniedDesc',
+                  '{{pct}}% of scans denied (threshold 5%).',
+                  { pct: deniedPct }
+                )}
               </p>
             </div>
           </CardContent>
@@ -57,17 +68,24 @@ export function AnalyticsAnomalyCards({ summary, className }: AnalyticsAnomalyCa
         <Card className="flex-1 min-w-[220px] rounded-2xl border-destructive/30 bg-destructive/5">
           <CardContent className="flex items-center gap-4 p-4">
             <div className="h-10 w-10 rounded-xl bg-destructive/10 flex items-center justify-center shrink-0">
-              <TrendingUp className="h-5 w-5 text-destructive" aria-hidden="true" />
+              <TrendingUp
+                className="h-5 w-5 text-destructive"
+                aria-hidden="true"
+              />
             </div>
             <div>
               <p className="text-xs font-black uppercase tracking-widest text-destructive">
                 {t('analytics.anomalySpikeDetected', 'Scan spike detected')}
               </p>
               <p className="text-xs text-muted-foreground mt-0.5">
-                {t('analytics.anomalySpikeDesc', 'Last hour ({{count}}) > 2× hourly avg ({{avg}}).', {
-                  count: lastHour,
-                  avg: hourlyAvg.toFixed(1),
-                })}
+                {t(
+                  'analytics.anomalySpikeDesc',
+                  'Last hour ({{count}}) > 2× hourly avg ({{avg}}).',
+                  {
+                    count: lastHour,
+                    avg: hourlyAvg.toFixed(1),
+                  }
+                )}
               </p>
             </div>
           </CardContent>

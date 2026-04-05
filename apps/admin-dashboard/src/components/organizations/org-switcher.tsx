@@ -22,7 +22,7 @@ import {
   PopoverContent,
   PopoverTrigger,
   cn,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { useOrganization } from '@/providers/organization-provider';
 import { useTranslation } from 'react-i18next';
 

@@ -9,7 +9,7 @@ import {
   Loader2,
   AlertCircle,
 } from 'lucide-react';
-import { cn, Button } from '@gate-access/ui';
+import { cn, Button } from '@gateflow/ui';
 import { token } from '@atlaskit/tokens';
 import { motion, AnimatePresence } from 'framer-motion';
 import { gaSpring } from './GateAITokens';

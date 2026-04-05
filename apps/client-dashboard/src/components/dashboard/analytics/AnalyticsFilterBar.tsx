@@ -2,10 +2,20 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { cn, Button, Input, NativeSelect } from '@gate-access/ui';
-import { CalendarDays, ChevronDown, Search, DoorOpen, Layers, LayoutGrid } from 'lucide-react';
+import { cn, Button, Input, NativeSelect } from '@gateflow/ui';
+import {
+  CalendarDays,
+  ChevronDown,
+  Search,
+  DoorOpen,
+  Layers,
+  LayoutGrid,
+} from 'lucide-react';
 import { useProjectFilter } from '@/context/ProjectFilterContext';
-import type { AnalyticsFilters, DateRangePreset } from '@/lib/analytics/analytics-filters';
+import type {
+  AnalyticsFilters,
+  DateRangePreset,
+} from '@/lib/analytics/analytics-filters';
 
 const UNIT_TYPES = [
   'STUDIO',
@@ -76,7 +86,12 @@ export function AnalyticsFilterBar({
         const res = await fetch('/api/gates');
         const json = await res.json();
         if (json.success && json.data) {
-          setGates(json.data.map((g: { id: string; name: string }) => ({ id: g.id, name: g.name })));
+          setGates(
+            json.data.map((g: { id: string; name: string }) => ({
+              id: g.id,
+              name: g.name,
+            }))
+          );
         }
       } catch {
         // leave gates empty
@@ -135,13 +150,20 @@ export function AnalyticsFilterBar({
           {t('analytics.filters', 'Filters')}
         </span>
         <ChevronDown
-          className={cn('h-4 w-4 text-muted-foreground transition-transform duration-200', mobileOpen && 'rotate-180')}
+          className={cn(
+            'h-4 w-4 text-muted-foreground transition-transform duration-200',
+            mobileOpen && 'rotate-180'
+          )}
           aria-hidden="true"
         />
       </button>
 
-      <div className={cn('hidden flex-wrap items-center gap-2 px-4 py-3 sm:flex', mobileOpen && 'flex')}>
-
+      <div
+        className={cn(
+          'hidden flex-wrap items-center gap-2 px-4 py-3 sm:flex',
+          mobileOpen && 'flex'
+        )}
+      >
         {/* Date range presets */}
         <div className="flex items-center gap-1 rounded-xl bg-muted/50 p-1">
           {(['7d', '30d'] as const).map((r) => (
@@ -192,7 +214,11 @@ export function AnalyticsFilterBar({
               className="h-9 w-[140px] rounded-xl text-xs"
               aria-label={t('analytics.toDate', 'To date')}
             />
-            <Button size="sm" className="h-9 rounded-xl text-[11px] font-black uppercase tracking-widest" onClick={handleCustomDateApply}>
+            <Button
+              size="sm"
+              className="h-9 rounded-xl text-[11px] font-black uppercase tracking-widest"
+              onClick={handleCustomDateApply}
+            >
               {t('analytics.apply', 'Apply')}
             </Button>
           </>
@@ -204,16 +230,23 @@ export function AnalyticsFilterBar({
         {/* Project */}
         {projects.length > 0 && (
           <div className="relative flex items-center">
-            <Layers className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground/60 pointer-events-none" aria-hidden="true" />
+            <Layers
+              className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground/60 pointer-events-none"
+              aria-hidden="true"
+            />
             <NativeSelect
               id="analytics-project"
               value={projectValue}
               onChange={(e) => onFiltersChange({ projectId: e.target.value })}
               className="h-9 w-[160px] rounded-xl pl-8 text-xs"
             >
-              <option value="">{t('analytics.filterAllProjects', 'All projects')}</option>
+              <option value="">
+                {t('analytics.filterAllProjects', 'All projects')}
+              </option>
               {projects.map((p) => (
-                <option key={p.id} value={p.id}>{p.name}</option>
+                <option key={p.id} value={p.id}>
+                  {p.name}
+                </option>
               ))}
             </NativeSelect>
           </div>
@@ -222,16 +255,23 @@ export function AnalyticsFilterBar({
         {/* Gate */}
         {gates.length > 0 && (
           <div className="relative flex items-center">
-            <DoorOpen className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground/60 pointer-events-none" aria-hidden="true" />
+            <DoorOpen
+              className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground/60 pointer-events-none"
+              aria-hidden="true"
+            />
             <NativeSelect
               id="analytics-gate"
               value={filters.gateId}
               onChange={(e) => onFiltersChange({ gateId: e.target.value })}
               className="h-9 w-[150px] rounded-xl pl-8 text-xs"
             >
-              <option value="">{t('analytics.filterAllGates', 'All gates')}</option>
+              <option value="">
+                {t('analytics.filterAllGates', 'All gates')}
+              </option>
               {gates.map((g) => (
-                <option key={g.id} value={g.id}>{g.name}</option>
+                <option key={g.id} value={g.id}>
+                  {g.name}
+                </option>
               ))}
             </NativeSelect>
           </div>
@@ -239,23 +279,33 @@ export function AnalyticsFilterBar({
 
         {/* Unit type */}
         <div className="relative flex items-center">
-          <LayoutGrid className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground/60 pointer-events-none" aria-hidden="true" />
+          <LayoutGrid
+            className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground/60 pointer-events-none"
+            aria-hidden="true"
+          />
           <NativeSelect
             id="analytics-unittype"
             value={filters.unitType}
             onChange={(e) => onFiltersChange({ unitType: e.target.value })}
             className="h-9 w-[150px] rounded-xl pl-8 text-xs"
           >
-            <option value="">{t('analytics.filterAllUnitTypes', 'All unit types')}</option>
+            <option value="">
+              {t('analytics.filterAllUnitTypes', 'All unit types')}
+            </option>
             {UNIT_TYPES.map((u) => (
-              <option key={u} value={u}>{unitTypeLabels[u] ?? u}</option>
+              <option key={u} value={u}>
+                {unitTypeLabels[u] ?? u}
+              </option>
             ))}
           </NativeSelect>
         </div>
 
         {/* Search */}
         <div className="relative flex items-center ml-auto">
-          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground/60 pointer-events-none" aria-hidden="true" />
+          <Search
+            className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground/60 pointer-events-none"
+            aria-hidden="true"
+          />
           <Input
             type="search"
             placeholder={t('analytics.filterSearchPlaceholder', 'Search…')}

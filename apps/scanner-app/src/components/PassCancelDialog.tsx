@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Modal, TouchableOpacity } from 'react-native';
-import { nativeTokens } from '@gate-access/ui/tokens';
+import { nativeTokens } from '@gateflow/ui/tokens';
 import { AlertCircle } from 'lucide-react-native';
 
 export interface PassCancelDialogProps {
@@ -10,7 +10,12 @@ export interface PassCancelDialogProps {
   onCancel: () => void;
 }
 
-export function PassCancelDialog({ visible, visitorName, onConfirm, onCancel }: PassCancelDialogProps) {
+export function PassCancelDialog({
+  visible,
+  visitorName,
+  onConfirm,
+  onCancel,
+}: PassCancelDialogProps) {
   return (
     <Modal visible={visible} transparent animationType="fade">
       <View style={styles.backdrop}>
@@ -20,13 +25,21 @@ export function PassCancelDialog({ visible, visitorName, onConfirm, onCancel }: 
           </View>
           <Text style={styles.title}>Cancel Visitor Pass?</Text>
           <Text style={styles.message}>
-            Are you sure you want to cancel the pass for <Text style={{fontWeight: 'bold'}}>{visitorName}</Text>? They will no longer be able to access the property.
+            Are you sure you want to cancel the pass for{' '}
+            <Text style={{ fontWeight: 'bold' }}>{visitorName}</Text>? They will
+            no longer be able to access the property.
           </Text>
           <View style={styles.actions}>
-            <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={onCancel}>
+            <TouchableOpacity
+              style={[styles.button, styles.cancelButton]}
+              onPress={onCancel}
+            >
               <Text style={styles.cancelButtonText}>Keep Pass</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.button, styles.confirmButton]} onPress={onConfirm}>
+            <TouchableOpacity
+              style={[styles.button, styles.confirmButton]}
+              onPress={onConfirm}
+            >
               <Text style={styles.confirmButtonText}>Cancel Pass</Text>
             </TouchableOpacity>
           </View>

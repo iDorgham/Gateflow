@@ -16,7 +16,7 @@ import {
   DialogContent,
   DialogDescription,
   DialogTitle,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import {
   Plus,
   Trash2,
@@ -286,182 +286,185 @@ export function ProjectsClient({ projects: initial }: { projects: Project[] }) {
                 key={project.id}
                 variants={{
                   hidden: { opacity: 0, y: 16 },
-                  show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 280, damping: 24 } },
+                  show: {
+                    opacity: 1,
+                    y: 0,
+                    transition: { type: 'spring', stiffness: 280, damping: 24 },
+                  },
                 }}
               >
-              <Card
-                className="group relative flex flex-col sm:flex-row overflow-hidden rounded-3xl border border-border bg-card shadow-sm transition-all duration-300 hover:shadow-2xl hover:border-primary/30"
-              >
-                {/* Image Section (Left side on desktop, top on mobile) */}
-                <div className="relative h-48 sm:h-auto sm:w-1/3 shrink-0 overflow-hidden bg-muted/30">
-                  {project.coverUrl ? (
-                    <img
-                      src={project.coverUrl}
-                      alt={`${project.name} cover`}
-                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                  ) : (
-                    <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-muted flex items-center justify-center">
-                      <Layers className="h-12 w-12 text-primary/20" />
-                    </div>
-                  )}
-                  {project.logoUrl && (
-                    <div className="absolute bottom-4 left-4 h-16 w-16 rounded-2xl border-4 border-background bg-background shadow-lg overflow-hidden flex items-center justify-center">
+                <Card className="group relative flex flex-col sm:flex-row overflow-hidden rounded-3xl border border-border bg-card shadow-sm transition-all duration-300 hover:shadow-2xl hover:border-primary/30">
+                  {/* Image Section (Left side on desktop, top on mobile) */}
+                  <div className="relative h-48 sm:h-auto sm:w-1/3 shrink-0 overflow-hidden bg-muted/30">
+                    {project.coverUrl ? (
                       <img
-                        src={project.logoUrl}
-                        alt={`${project.name} logo`}
-                        className="h-full w-full object-cover"
+                        src={project.coverUrl}
+                        alt={`${project.name} cover`}
+                        className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                       />
-                    </div>
-                  )}
-                </div>
+                    ) : (
+                      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-muted flex items-center justify-center">
+                        <Layers className="h-12 w-12 text-primary/20" />
+                      </div>
+                    )}
+                    {project.logoUrl && (
+                      <div className="absolute bottom-4 left-4 h-16 w-16 rounded-2xl border-4 border-background bg-background shadow-lg overflow-hidden flex items-center justify-center">
+                        <img
+                          src={project.logoUrl}
+                          alt={`${project.name} logo`}
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
+                    )}
+                  </div>
 
-                {/* Content Section (Right side on desktop, bottom on mobile) */}
-                <div className="flex flex-1 flex-col relative z-10 p-1">
-                  <CardHeader className="pb-4 pt-6 px-6">
-                    <div className="flex items-start justify-between">
-                      <div className="min-w-0 flex-1">
-                        {editingId === project.id ? (
-                          <div className="flex items-center gap-2">
-                            <input
-                              autoFocus
-                              value={editName}
-                              onChange={(e) => setEditName(e.target.value)}
-                              onKeyDown={(e) => {
-                                if (e.key === 'Enter') handleRename(project.id);
-                                if (e.key === 'Escape') setEditingId(null);
-                              }}
-                              disabled={isRenaming}
-                              className="w-full max-w-md h-10 rounded-xl border border-primary/20 px-3 py-1 text-base font-bold focus:outline-none bg-background focus:ring-4 focus:ring-primary/10 shadow-sm"
-                            />
-                            <button
-                              onClick={() => handleRename(project.id)}
-                              disabled={isRenaming}
-                              className="h-10 w-10 flex items-center justify-center rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shadow-sm"
-                            >
-                              {isRenaming ? (
-                                <Loader2 className="h-4 w-4 animate-spin" />
-                              ) : (
-                                <Check className="h-4 w-4" />
+                  {/* Content Section (Right side on desktop, bottom on mobile) */}
+                  <div className="flex flex-1 flex-col relative z-10 p-1">
+                    <CardHeader className="pb-4 pt-6 px-6">
+                      <div className="flex items-start justify-between">
+                        <div className="min-w-0 flex-1">
+                          {editingId === project.id ? (
+                            <div className="flex items-center gap-2">
+                              <input
+                                autoFocus
+                                value={editName}
+                                onChange={(e) => setEditName(e.target.value)}
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter')
+                                    handleRename(project.id);
+                                  if (e.key === 'Escape') setEditingId(null);
+                                }}
+                                disabled={isRenaming}
+                                className="w-full max-w-md h-10 rounded-xl border border-primary/20 px-3 py-1 text-base font-bold focus:outline-none bg-background focus:ring-4 focus:ring-primary/10 shadow-sm"
+                              />
+                              <button
+                                onClick={() => handleRename(project.id)}
+                                disabled={isRenaming}
+                                className="h-10 w-10 flex items-center justify-center rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shadow-sm"
+                              >
+                                {isRenaming ? (
+                                  <Loader2 className="h-4 w-4 animate-spin" />
+                                ) : (
+                                  <Check className="h-4 w-4" />
+                                )}
+                              </button>
+                            </div>
+                          ) : (
+                            <div>
+                              <CardTitle className="truncate text-3xl font-black text-foreground group-hover:text-primary transition-colors tracking-tight">
+                                {project.name}
+                              </CardTitle>
+                              {project.description && (
+                                <p className="mt-2 text-sm font-medium text-muted-foreground/80 line-clamp-2 pr-8 leading-relaxed">
+                                  {project.description}
+                                </p>
                               )}
-                            </button>
-                          </div>
-                        ) : (
-                          <div>
-                            <CardTitle className="truncate text-3xl font-black text-foreground group-hover:text-primary transition-colors tracking-tight">
-                              {project.name}
-                            </CardTitle>
-                            {project.description && (
-                              <p className="mt-2 text-sm font-medium text-muted-foreground/80 line-clamp-2 pr-8 leading-relaxed">
-                                {project.description}
-                              </p>
+                            </div>
+                          )}
+
+                          <div className="flex items-center gap-4 mt-4">
+                            <div className="flex items-center gap-1.5">
+                              <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse" />
+                              <CardDescription className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                                Est.{' '}
+                                {new Date(project.createdAt).toLocaleDateString(
+                                  undefined,
+                                  { month: 'short', year: 'numeric' }
+                                )}
+                              </CardDescription>
+                            </div>
+                            {project.website && (
+                              <a
+                                href={project.website}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-blue-500 hover:text-blue-600 transition-colors"
+                              >
+                                <Link2 className="h-3 w-3" /> Website
+                              </a>
                             )}
                           </div>
-                        )}
-
-                        <div className="flex items-center gap-4 mt-4">
-                          <div className="flex items-center gap-1.5">
-                            <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse" />
-                            <CardDescription className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-                              Est.{' '}
-                              {new Date(project.createdAt).toLocaleDateString(
-                                undefined,
-                                { month: 'short', year: 'numeric' }
-                              )}
-                            </CardDescription>
-                          </div>
-                          {project.website && (
-                            <a
-                              href={project.website}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-blue-500 hover:text-blue-600 transition-colors"
-                            >
-                              <Link2 className="h-3 w-3" /> Website
-                            </a>
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="absolute top-6 right-6 flex shrink-0 gap-1.5 opacity-0 lg:group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-9 w-9 rounded-xl bg-background/50 backdrop-blur-sm shadow-sm text-foreground hover:bg-background hover:text-primary transition-all border border-border/50"
-                          onClick={() => {
-                            setEditingId(project.id);
-                            setEditName(project.name);
-                          }}
-                        >
-                          <Settings2 className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-9 w-9 rounded-xl bg-background/50 backdrop-blur-sm text-muted-foreground hover:bg-destructive shadow-[0_0_15px_-3px_rgba(239,68,68,0)] hover:shadow-destructive/30 hover:text-destructive-foreground hover:border-destructive transition-all border border-border/50"
-                          onClick={() => {
-                            setProjectToDelete(project);
-                            setDeleteConfirmationText('');
-                          }}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  </CardHeader>
-
-                  <CardContent className="mt-auto px-6 pb-6 pt-0">
-                    <div className="flex flex-col sm:flex-row items-end justify-between gap-6">
-                      {/* Stats Clusters */}
-                      <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
-                        <div className="flex items-center gap-3 bg-card border border-border rounded-xl p-3 px-4 shadow-sm group-hover:border-primary/20 transition-colors w-full sm:w-auto">
-                          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-500">
-                            <ScrollText className="h-4 w-4" />
-                          </div>
-                          <div className="flex flex-col">
-                            <span className="text-xl font-black text-foreground leading-none">
-                              {project._count.gates}
-                            </span>
-                            <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground/80 mt-1">
-                              Gates
-                            </span>
-                          </div>
                         </div>
 
-                        <div className="flex items-center gap-3 bg-card border border-border rounded-xl p-3 px-4 shadow-sm group-hover:border-primary/20 transition-colors w-full sm:w-auto">
-                          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                            <QrCode className="h-4 w-4" />
-                          </div>
-                          <div className="flex flex-col">
-                            <span className="text-xl font-black text-foreground leading-none">
-                              {project._count.qrCodes}
-                            </span>
-                            <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground/80 mt-1">
-                              Tokens
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Primary Action Button */}
-                      <div className="w-full sm:w-auto shrink-0">
-                        <Button
-                          asChild
-                          className="w-full sm:w-auto px-8 rounded-xl font-black uppercase tracking-widest text-xs h-12 shadow-[0_0_20px_-5px_rgba(14,165,233,0)] hover:shadow-primary/30 transition-all group/btn"
-                        >
-                          <a
-                            href={`/dashboard/projects/${project.id}`}
-                            className="flex items-center justify-center gap-2"
+                        <div className="absolute top-6 right-6 flex shrink-0 gap-1.5 opacity-0 lg:group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-9 w-9 rounded-xl bg-background/50 backdrop-blur-sm shadow-sm text-foreground hover:bg-background hover:text-primary transition-all border border-border/50"
+                            onClick={() => {
+                              setEditingId(project.id);
+                              setEditName(project.name);
+                            }}
                           >
-                            Dashboard
-                            <ExternalLink className="h-4 w-4 group-hover/btn:scale-110 group-hover/btn:-translate-y-0.5 group-hover/btn:translate-x-0.5 transition-transform" />
-                          </a>
-                        </Button>
+                            <Settings2 className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-9 w-9 rounded-xl bg-background/50 backdrop-blur-sm text-muted-foreground hover:bg-destructive shadow-[0_0_15px_-3px_rgba(239,68,68,0)] hover:shadow-destructive/30 hover:text-destructive-foreground hover:border-destructive transition-all border border-border/50"
+                            onClick={() => {
+                              setProjectToDelete(project);
+                              setDeleteConfirmationText('');
+                            }}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </div>
-                    </div>
-                  </CardContent>
-                </div>
-              </Card>
+                    </CardHeader>
+
+                    <CardContent className="mt-auto px-6 pb-6 pt-0">
+                      <div className="flex flex-col sm:flex-row items-end justify-between gap-6">
+                        {/* Stats Clusters */}
+                        <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+                          <div className="flex items-center gap-3 bg-card border border-border rounded-xl p-3 px-4 shadow-sm group-hover:border-primary/20 transition-colors w-full sm:w-auto">
+                            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-500">
+                              <ScrollText className="h-4 w-4" />
+                            </div>
+                            <div className="flex flex-col">
+                              <span className="text-xl font-black text-foreground leading-none">
+                                {project._count.gates}
+                              </span>
+                              <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground/80 mt-1">
+                                Gates
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-3 bg-card border border-border rounded-xl p-3 px-4 shadow-sm group-hover:border-primary/20 transition-colors w-full sm:w-auto">
+                            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                              <QrCode className="h-4 w-4" />
+                            </div>
+                            <div className="flex flex-col">
+                              <span className="text-xl font-black text-foreground leading-none">
+                                {project._count.qrCodes}
+                              </span>
+                              <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground/80 mt-1">
+                                Tokens
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Primary Action Button */}
+                        <div className="w-full sm:w-auto shrink-0">
+                          <Button
+                            asChild
+                            className="w-full sm:w-auto px-8 rounded-xl font-black uppercase tracking-widest text-xs h-12 shadow-[0_0_20px_-5px_rgba(14,165,233,0)] hover:shadow-primary/30 transition-all group/btn"
+                          >
+                            <a
+                              href={`/dashboard/projects/${project.id}`}
+                              className="flex items-center justify-center gap-2"
+                            >
+                              Dashboard
+                              <ExternalLink className="h-4 w-4 group-hover/btn:scale-110 group-hover/btn:-translate-y-0.5 group-hover/btn:translate-x-0.5 transition-transform" />
+                            </a>
+                          </Button>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </div>
+                </Card>
               </motion.div>
             ))
           )}

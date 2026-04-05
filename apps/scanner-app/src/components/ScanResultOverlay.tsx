@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Animated } from 'react-native';
 import { CheckCircle, XCircle, AlertTriangle } from 'lucide-react-native';
-import { nativeTokens } from '@gate-access/ui/tokens';
+import { nativeTokens } from '@gateflow/ui/tokens';
 
 export type ScanResult = 'success' | 'denied' | 'invalid';
 
@@ -12,7 +12,12 @@ export interface ScanResultOverlayProps {
   visible: boolean;
 }
 
-export function ScanResultOverlay({ result, message, visitorName, visible }: ScanResultOverlayProps) {
+export function ScanResultOverlay({
+  result,
+  message,
+  visitorName,
+  visible,
+}: ScanResultOverlayProps) {
   const [opacity] = React.useState(new Animated.Value(0));
 
   React.useEffect(() => {
@@ -37,17 +42,36 @@ export function ScanResultOverlay({ result, message, visitorName, visible }: Sca
   }
 
   const config = {
-    success: { bg: nativeTokens.colors.success, icon: CheckCircle, title: 'Access Granted' },
-    denied: { bg: nativeTokens.colors.danger, icon: XCircle, title: 'Access Denied' },
-    invalid: { bg: nativeTokens.colors.warning, icon: AlertTriangle, title: 'Invalid QR' },
+    success: {
+      bg: nativeTokens.colors.success,
+      icon: CheckCircle,
+      title: 'Access Granted',
+    },
+    denied: {
+      bg: nativeTokens.colors.danger,
+      icon: XCircle,
+      title: 'Access Denied',
+    },
+    invalid: {
+      bg: nativeTokens.colors.warning,
+      icon: AlertTriangle,
+      title: 'Invalid QR',
+    },
   }[result];
 
   const Icon = config.icon;
 
   return (
-    <Animated.View style={[styles.overlay, { opacity, backgroundColor: config.bg }]} pointerEvents={visible ? 'auto' : 'none'}>
+    <Animated.View
+      style={[styles.overlay, { opacity, backgroundColor: config.bg }]}
+      pointerEvents={visible ? 'auto' : 'none'}
+    >
       <View style={styles.content}>
-        <Icon size={80} color={nativeTokens.colors.background} strokeWidth={nativeTokens.borderRadius.sm / 2} />
+        <Icon
+          size={80}
+          color={nativeTokens.colors.background}
+          strokeWidth={nativeTokens.borderRadius.sm / 2}
+        />
         <Text style={styles.title}>{config.title}</Text>
         {visitorName && <Text style={styles.visitorName}>{visitorName}</Text>}
         <Text style={styles.message}>{message}</Text>

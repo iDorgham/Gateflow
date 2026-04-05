@@ -3,14 +3,14 @@
 import React from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { 
+import {
   MoreVertical,
   Trash2,
   Shield,
   ShieldCheck,
   ShieldAlert,
   User as UserIcon,
-  Loader2
+  Loader2,
 } from 'lucide-react';
 import {
   Button,
@@ -32,7 +32,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
 
@@ -78,7 +78,13 @@ export function TeamMembersTable({ locale: _locale }: { locale: string }) {
   });
 
   const updateRoleMutation = useMutation({
-    mutationFn: async ({ memberId, roleId }: { memberId: string, roleId: string }) => {
+    mutationFn: async ({
+      memberId,
+      roleId,
+    }: {
+      memberId: string;
+      roleId: string;
+    }) => {
       const res = await fetch('/api/team/members', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
@@ -107,10 +113,18 @@ export function TeamMembersTable({ locale: _locale }: { locale: string }) {
 
   const getRoleIcon = (roleName: string) => {
     switch (roleName.toLowerCase()) {
-      case 'admin': return <ShieldCheck className="h-4 w-4 text-[var(--ds-icon-accent-green)]" />;
-      case 'moderator': return <Shield className="h-4 w-4 text-[var(--ds-icon-accent-blue)]" />;
-      case 'operator': return <ShieldAlert className="h-4 w-4 text-[var(--ds-icon-accent-orange)]" />;
-      default: return <UserIcon className="h-4 w-4 text-[var(--ds-icon-subtle)]" />;
+      case 'admin':
+        return (
+          <ShieldCheck className="h-4 w-4 text-[var(--ds-icon-accent-green)]" />
+        );
+      case 'moderator':
+        return <Shield className="h-4 w-4 text-[var(--ds-icon-accent-blue)]" />;
+      case 'operator':
+        return (
+          <ShieldAlert className="h-4 w-4 text-[var(--ds-icon-accent-orange)]" />
+        );
+      default:
+        return <UserIcon className="h-4 w-4 text-[var(--ds-icon-subtle)]" />;
     }
   };
 
@@ -127,47 +141,76 @@ export function TeamMembersTable({ locale: _locale }: { locale: string }) {
       <Table>
         <TableHeader className="bg-[var(--ds-background-neutral-subtle)]">
           <TableRow>
-            <TableHead className="w-[300px]">{t('team.members.name', 'Member')}</TableHead>
+            <TableHead className="w-[300px]">
+              {t('team.members.name', 'Member')}
+            </TableHead>
             <TableHead>{t('team.members.role', 'Role')}</TableHead>
             <TableHead>{t('team.members.joined', 'Joined')}</TableHead>
-            <TableHead className="text-right">{t('common.actions', 'Actions')}</TableHead>
+            <TableHead className="text-right">
+              {t('common.actions', 'Actions')}
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {members.map((member) => (
-            <TableRow key={member.id} className="hover:bg-[var(--ds-background-neutral-subtle)] transition-colors">
+            <TableRow
+              key={member.id}
+              className="hover:bg-[var(--ds-background-neutral-subtle)] transition-colors"
+            >
               <TableCell>
                 <div className="flex items-center gap-3">
                   <div className="relative">
                     <Avatar className="h-9 w-9 border border-[var(--ds-border)]">
-                      {member.avatarUrl && <AvatarImage src={member.avatarUrl} />}
+                      {member.avatarUrl && (
+                        <AvatarImage src={member.avatarUrl} />
+                      )}
                       <AvatarFallback className="bg-[var(--ds-background-neutral-subtle)] text-xs font-bold">
-                        {member.name.split(' ').map(n => n[0]).join('').toUpperCase()}
+                        {member.name
+                          .split(' ')
+                          .map((n) => n[0])
+                          .join('')
+                          .toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
-                    {member.lastActiveAt && (new Date().getTime() - new Date(member.lastActiveAt).getTime() < 5 * 60 * 1000) && (
-                      <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-[var(--ds-surface)] bg-[var(--ds-background-success-bold)]" />
-                    )}
+                    {member.lastActiveAt &&
+                      new Date().getTime() -
+                        new Date(member.lastActiveAt).getTime() <
+                        5 * 60 * 1000 && (
+                        <span className="absolute bottom-0 right-0 h-2.5 w-2.5 rounded-full border-2 border-[var(--ds-surface)] bg-[var(--ds-background-success-bold)]" />
+                      )}
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-sm font-semibold text-[var(--ds-text)]">{member.name}</span>
-                    <span className="text-xs text-[var(--ds-text-subtle)]">{member.email}</span>
+                    <span className="text-sm font-semibold text-[var(--ds-text)]">
+                      {member.name}
+                    </span>
+                    <span className="text-xs text-[var(--ds-text-subtle)]">
+                      {member.email}
+                    </span>
                   </div>
                 </div>
               </TableCell>
               <TableCell>
                 <div className="flex items-center gap-2">
                   {getRoleIcon(member.role.name)}
-                  <Select 
-                    value={member.role.id} 
-                    onValueChange={(val) => updateRoleMutation.mutate({ memberId: member.id, roleId: val })}
+                  <Select
+                    value={member.role.id}
+                    onValueChange={(val) =>
+                      updateRoleMutation.mutate({
+                        memberId: member.id,
+                        roleId: val,
+                      })
+                    }
                   >
                     <SelectTrigger className="h-8 w-[140px] border-none bg-transparent hover:bg-[var(--ds-background-neutral-subtle)] text-xs font-medium">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
                       {roles.map((role) => (
-                        <SelectItem key={role.id} value={role.id} className="text-xs">
+                        <SelectItem
+                          key={role.id}
+                          value={role.id}
+                          className="text-xs"
+                        >
                           {role.name}
                         </SelectItem>
                       ))}
@@ -186,10 +229,17 @@ export function TeamMembersTable({ locale: _locale }: { locale: string }) {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem 
+                    <DropdownMenuItem
                       className="text-[var(--ds-text-danger)] focus:text-[var(--ds-text-danger)]"
                       onClick={() => {
-                        if (confirm(t('team.members.confirmDelete', 'Are you sure you want to remove this member?'))) {
+                        if (
+                          confirm(
+                            t(
+                              'team.members.confirmDelete',
+                              'Are you sure you want to remove this member?'
+                            )
+                          )
+                        ) {
                           deleteMutation.mutate(member.id);
                         }
                       }}

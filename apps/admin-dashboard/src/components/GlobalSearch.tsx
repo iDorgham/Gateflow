@@ -2,7 +2,7 @@
 
 import { Search, Command } from 'lucide-react';
 import { useState } from 'react';
-import { cn } from '@gate-access/ui';
+import { cn } from '@gateflow/ui';
 import { useTranslation } from 'react-i18next';
 
 export function GlobalSearch() {

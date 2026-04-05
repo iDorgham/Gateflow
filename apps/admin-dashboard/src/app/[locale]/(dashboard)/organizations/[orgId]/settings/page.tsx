@@ -19,7 +19,7 @@ import {
   CardTitle,
   Badge,
   cn,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { CompliancePlaceholder } from '@/components/settings/CompliancePlaceholder';
 
 export const metadata = { title: 'Settings | Overview' };

@@ -10,7 +10,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import {
   Plus,
   MessageSquare,

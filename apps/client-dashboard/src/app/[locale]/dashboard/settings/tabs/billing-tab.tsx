@@ -9,8 +9,18 @@ import {
   CardTitle,
   Button,
   Badge,
-} from '@gate-access/ui';
-import { CreditCard, Zap, Activity, Star, Calendar, Download, Save, Info, Loader2 } from 'lucide-react';
+} from '@gateflow/ui';
+import {
+  CreditCard,
+  Zap,
+  Activity,
+  Star,
+  Calendar,
+  Download,
+  Save,
+  Info,
+  Loader2,
+} from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { PlanCards } from '../../workspace/billing/plan-cards';
@@ -28,19 +38,36 @@ interface BillingTabProps {
 const PLAN_INFO = {
   FREE: {
     description: 'Perfect for small venues and personal test labs.',
-    features: ['3 Secured Gates', '100 QR Codes/month', 'Basic Scan Logs', 'Community Support'],
-    accent: 'slate'
+    features: [
+      '3 Secured Gates',
+      '100 QR Codes/month',
+      'Basic Scan Logs',
+      'Community Support',
+    ],
+    accent: 'slate',
   },
   PRO: {
     description: 'Advanced features for growing venues and festivals.',
-    features: ['20 Secured Gates', 'Unlimited QR Codes', 'Extended Analytics', 'API & Webhooks', 'Priority Support'],
+    features: [
+      '20 Secured Gates',
+      'Unlimited QR Codes',
+      'Extended Analytics',
+      'API & Webhooks',
+      'Priority Support',
+    ],
     accent: 'blue',
   },
   ENTERPRISE: {
     description: 'Bespoke infrastructure for large-scale operations.',
-    features: ['Unlimited Secured Gates', 'Unlimited QR Codes', 'White-label Options', 'Dedicated Support', 'Custom Integrations'],
+    features: [
+      'Unlimited Secured Gates',
+      'Unlimited QR Codes',
+      'White-label Options',
+      'Dedicated Support',
+      'Custom Integrations',
+    ],
     accent: 'violet',
-  }
+  },
 };
 
 const PLANS_FOR_CARDS = [
@@ -77,9 +104,24 @@ const PLANS_FOR_CARDS = [
 ];
 
 const MOCK_INVOICES = [
-  { id: 'INV-2026-001', date: 'Feb 01, 2026', amount: '$49.00', status: 'Paid' },
-  { id: 'INV-2026-002', date: 'Jan 01, 2026', amount: '$49.00', status: 'Paid' },
-  { id: 'INV-2025-012', date: 'Dec 01, 2025', amount: '$49.00', status: 'Paid' },
+  {
+    id: 'INV-2026-001',
+    date: 'Feb 01, 2026',
+    amount: '$49.00',
+    status: 'Paid',
+  },
+  {
+    id: 'INV-2026-002',
+    date: 'Jan 01, 2026',
+    amount: '$49.00',
+    status: 'Paid',
+  },
+  {
+    id: 'INV-2025-012',
+    date: 'Dec 01, 2025',
+    amount: '$49.00',
+    status: 'Paid',
+  },
 ];
 
 export function BillingTab({ org, gateCount, qrCount }: BillingTabProps) {
@@ -131,7 +173,8 @@ export function BillingTab({ org, gateCount, qrCount }: BillingTabProps) {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to open billing portal');
+      if (!res.ok)
+        throw new Error(data.error || 'Failed to open billing portal');
 
       if (data.url) {
         window.location.href = data.url;
@@ -150,15 +193,20 @@ export function BillingTab({ org, gateCount, qrCount }: BillingTabProps) {
         <div className="flex items-center gap-6">
           <div className="relative group">
             <div className="h-24 w-24 rounded-2xl bg-muted border-2 border-dashed border-border flex items-center justify-center overflow-hidden transition-all group-hover:border-primary/50 group-hover:bg-primary/5">
-                <CreditCard className="h-10 w-10 text-muted-foreground/30 group-hover:text-primary transition-colors" />
+              <CreditCard className="h-10 w-10 text-muted-foreground/30 group-hover:text-primary transition-colors" />
             </div>
           </div>
           <div className="space-y-1">
-            <h1 className="text-2xl font-black tracking-tight text-foreground uppercase">{t('settings.billing.title', 'Finance & Quotas')}</h1>
+            <h1 className="text-2xl font-black tracking-tight text-foreground uppercase">
+              {t('settings.billing.title', 'Finance & Quotas')}
+            </h1>
             <div className="flex items-center gap-3">
               <span className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest flex items-center gap-1.5">
                 <Info className="h-3 w-3" />
-                {t('settings.billing.description', 'Manage active subscriptions, invoices, and system resource limits.')}
+                {t(
+                  'settings.billing.description',
+                  'Manage active subscriptions, invoices, and system resource limits.'
+                )}
               </span>
             </div>
           </div>
@@ -170,7 +218,7 @@ export function BillingTab({ org, gateCount, qrCount }: BillingTabProps) {
         <div className="absolute top-0 right-0 p-8 opacity-[0.03] group-hover:opacity-[0.05] transition-opacity pointer-events-none">
           <Zap className="h-32 w-32 text-primary" />
         </div>
-        
+
         <div className="space-y-4">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-xs font-bold text-primary uppercase tracking-widest">
             <Star className="h-3 w-3 fill-current" />
@@ -181,26 +229,33 @@ export function BillingTab({ org, gateCount, qrCount }: BillingTabProps) {
               {t(`settings.workspace.plans.${planName}.label`, org.plan)}
             </h1>
             <p className="text-muted-foreground max-w-md">
-              {t(`settings.workspace.plans.${planName}.description`, plan.description)}
+              {t(
+                `settings.workspace.plans.${planName}.description`,
+                plan.description
+              )}
             </p>
           </div>
         </div>
 
         <div className="flex flex-col gap-3 min-w-[200px]">
           <div className="p-4 rounded-xl bg-background border border-border/50 flex flex-col gap-1">
-            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{t('settings.billing.nextBilling', 'Next Billing Date')}</span>
+            <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">
+              {t('settings.billing.nextBilling', 'Next Billing Date')}
+            </span>
             <div className="flex items-center gap-2 font-bold text-foreground">
               <Calendar className="h-4 w-4 text-primary" />
               March 01, 2026
             </div>
           </div>
           {org.stripeCustomerId && (
-            <Button 
+            <Button
               onClick={handleManageBilling}
               disabled={isPortalLoading}
               className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-bold uppercase tracking-widest text-xs h-11 rounded-xl shadow-lg shadow-primary/20"
             >
-              {isPortalLoading && <Loader2 className="h-3 w-3 animate-spin mr-2" />}
+              {isPortalLoading && (
+                <Loader2 className="h-3 w-3 animate-spin mr-2" />
+              )}
               {t('settings.billing.manageSubscription', 'Manage Subscription')}
             </Button>
           )}
@@ -209,10 +264,12 @@ export function BillingTab({ org, gateCount, qrCount }: BillingTabProps) {
 
       {/* Plan Cards */}
       <div className="space-y-4">
-        <h2 className="text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Available Plans</h2>
-        <PlanCards 
-          plans={PLANS_FOR_CARDS} 
-          currentPlan={org.plan} 
+        <h2 className="text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">
+          Available Plans
+        </h2>
+        <PlanCards
+          plans={PLANS_FOR_CARDS}
+          currentPlan={org.plan}
           onUpgrade={handleUpgrade}
           loadingPlan={loadingPlan}
         />
@@ -231,26 +288,39 @@ export function BillingTab({ org, gateCount, qrCount }: BillingTabProps) {
             <CardContent className="space-y-6 px-6 pb-8">
               <div className="space-y-3">
                 <div className="flex items-center justify-between text-[11px] font-bold uppercase tracking-widest">
-                  <span className="text-muted-foreground">{t('sidebar.gates', 'Gates')}</span>
-                  <span className="text-foreground">{gateCount} / {limits.gates === Infinity ? '∞' : limits.gates}</span>
+                  <span className="text-muted-foreground">
+                    {t('sidebar.gates', 'Gates')}
+                  </span>
+                  <span className="text-foreground">
+                    {gateCount} /{' '}
+                    {limits.gates === Infinity ? '∞' : limits.gates}
+                  </span>
                 </div>
                 <div className="h-2 w-full overflow-hidden rounded-full bg-muted border border-border/50">
-                  <div 
-                    className="h-full bg-primary transition-all duration-1000" 
-                    style={{ width: `${Math.min(100, (gateCount / (limits.gates === Infinity ? 1 : limits.gates)) * 100)}%` }} 
+                  <div
+                    className="h-full bg-primary transition-all duration-1000"
+                    style={{
+                      width: `${Math.min(100, (gateCount / (limits.gates === Infinity ? 1 : limits.gates)) * 100)}%`,
+                    }}
                   />
                 </div>
               </div>
 
               <div className="space-y-3">
                 <div className="flex items-center justify-between text-[11px] font-bold uppercase tracking-widest">
-                  <span className="text-muted-foreground">{t('sidebar.qrCodes', 'QR Codes')}</span>
-                  <span className="text-foreground">{qrCount} / {limits.qr === Infinity ? '∞' : limits.qr}</span>
+                  <span className="text-muted-foreground">
+                    {t('sidebar.qrCodes', 'QR Codes')}
+                  </span>
+                  <span className="text-foreground">
+                    {qrCount} / {limits.qr === Infinity ? '∞' : limits.qr}
+                  </span>
                 </div>
                 <div className="h-2 w-full overflow-hidden rounded-full bg-muted border border-border/50">
-                  <div 
-                    className="h-full bg-primary transition-all duration-1000" 
-                    style={{ width: `${Math.min(100, (qrCount / (limits.qr === Infinity ? 1 : limits.qr)) * 100)}%` }} 
+                  <div
+                    className="h-full bg-primary transition-all duration-1000"
+                    style={{
+                      width: `${Math.min(100, (qrCount / (limits.qr === Infinity ? 1 : limits.qr)) * 100)}%`,
+                    }}
                   />
                 </div>
               </div>
@@ -274,18 +344,22 @@ export function BillingTab({ org, gateCount, qrCount }: BillingTabProps) {
                     {org.stripeCustomerId ? 'Active Account' : 'No Account'}
                   </p>
                   <p className="text-[10px] text-muted-foreground font-semibold uppercase tracking-widest">
-                    {org.stripeCustomerId ? 'Managed via portal' : 'Subscribe to start'}
+                    {org.stripeCustomerId
+                      ? 'Managed via portal'
+                      : 'Subscribe to start'}
                   </p>
                 </div>
               </div>
               {org.stripeCustomerId && (
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   onClick={handleManageBilling}
                   disabled={isPortalLoading}
                   className="mt-4 w-full rounded-xl font-bold uppercase tracking-widest text-[10px] h-10 border-border transition-all hover:bg-secondary"
                 >
-                  {isPortalLoading && <Loader2 className="h-3 w-3 animate-spin mr-2" />}
+                  {isPortalLoading && (
+                    <Loader2 className="h-3 w-3 animate-spin mr-2" />
+                  )}
                   {t('settings.billing.managePayment', 'Update Billing Node')}
                 </Button>
               )}
@@ -302,13 +376,16 @@ export function BillingTab({ org, gateCount, qrCount }: BillingTabProps) {
                   {t('settings.billing.invoices', 'Billing & Finance History')}
                 </CardTitle>
                 <CardDescription className="text-xs">
-                  {t('settings.billing.invoicesDesc', 'Download and review your transactional records.')}
+                  {t(
+                    'settings.billing.invoicesDesc',
+                    'Download and review your transactional records.'
+                  )}
                 </CardDescription>
               </div>
               {org.stripeCustomerId && (
-                <Button 
-                  variant="outline" 
-                  size="sm" 
+                <Button
+                  variant="outline"
+                  size="sm"
                   onClick={handleManageBilling}
                   className="hidden sm:flex rounded-lg font-bold uppercase tracking-widest text-[10px] gap-2 h-9"
                 >
@@ -319,7 +396,7 @@ export function BillingTab({ org, gateCount, qrCount }: BillingTabProps) {
             </CardHeader>
             <CardContent className="p-0 flex-1">
               <div className="flex items-center justify-center h-40 text-muted-foreground text-sm font-medium italic">
-                {org.stripeCustomerId 
+                {org.stripeCustomerId
                   ? 'Invoice history is managed in the Stripe Customer Portal.'
                   : 'No invoice history found.'}
               </div>

@@ -1,7 +1,7 @@
-import * as React from "react";
-import { ArrowRight, ShieldCheck } from "lucide-react";
+import * as React from 'react';
+import { ArrowRight, ShieldCheck } from 'lucide-react';
 
-import { Button, cn } from "@gate-access/ui";
+import { Button, cn } from '@gateflow/ui';
 
 export interface HeroSectionProps extends React.HTMLAttributes<HTMLDivElement> {
   title: string;
@@ -27,7 +27,7 @@ export function HeroSection({
   return (
     <section
       className={cn(
-        "relative overflow-hidden bg-background pt-24 pb-32 sm:pt-32 sm:pb-40 lg:pb-48 text-center",
+        'relative overflow-hidden bg-background pt-24 pb-32 sm:pt-32 sm:pb-40 lg:pb-48 text-center',
         className
       )}
       {...props}
@@ -50,11 +50,20 @@ export function HeroSection({
             {subtitle}
           </p>
           <div className="mt-10 flex items-center justify-center gap-x-6 animate-in fade-in slide-in-from-bottom-10 duration-1000 delay-150">
-            <Button size="lg" onClick={onPrimaryAction} className="h-12 px-8 text-base">
+            <Button
+              size="lg"
+              onClick={onPrimaryAction}
+              className="h-12 px-8 text-base"
+            >
               {primaryActionText}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
-            <Button variant="outline" size="lg" onClick={onSecondaryAction} className="h-12 px-8 text-base">
+            <Button
+              variant="outline"
+              size="lg"
+              onClick={onSecondaryAction}
+              className="h-12 px-8 text-base"
+            >
               {secondaryActionText}
             </Button>
           </div>

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { Plus } from 'lucide-react';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma, VisitorQR, QRCode, AccessRule } from '@gate-access/db';
-import { Button } from '@gate-access/ui';
+import { Button } from '@gateflow/ui';
 import { PageHeader } from '@/components/layout/page-header';
 import { VisitorsList } from '@/components/visitors/visitors-list';
 import { PullToRefresh } from '@/components/common/pull-to-refresh';

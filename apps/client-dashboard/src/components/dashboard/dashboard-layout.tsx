@@ -62,7 +62,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { useTranslation } from 'react-i18next';
 import { GlobalSearch } from './global-search';
 import { AIAssistant } from './ai-assistant';

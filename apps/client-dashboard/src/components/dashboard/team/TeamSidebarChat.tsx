@@ -19,7 +19,7 @@ import {
   AvatarFallback,
   AvatarImage,
   cn,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { motion, AnimatePresence } from 'framer-motion';
 import { formatDistanceToNow } from 'date-fns';
 

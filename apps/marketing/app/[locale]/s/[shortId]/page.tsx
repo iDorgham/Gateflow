@@ -3,7 +3,7 @@ export const dynamic = 'force-dynamic';
 import { prisma, verifySecureInviteSignature } from '@gate-access/db';
 import { getTranslation } from '../../../../lib/i18n/get-translation';
 import { AlertCircle, Building, ShieldCheck, Clock, User } from 'lucide-react';
-import { Button, Separator } from '@gate-access/ui';
+import { Button, Separator } from '@gateflow/ui';
 import { I18nLink } from '../../../../components/i18n-link';
 import type { Locale } from '../../../../i18n-config';
 

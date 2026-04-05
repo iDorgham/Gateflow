@@ -29,7 +29,7 @@ import {
   cn,
   ScrollArea,
   Separator,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import {
   BarChart,
   Bar,

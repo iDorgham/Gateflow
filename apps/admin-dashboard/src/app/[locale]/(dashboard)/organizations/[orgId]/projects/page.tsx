@@ -4,13 +4,7 @@ import { Locale } from '@/lib/i18n/i18n-config';
 import { prisma } from '@gate-access/db';
 import { revalidatePath } from 'next/cache';
 import { Search, Building2, X } from 'lucide-react';
-import {
-  Card,
-  CardContent,
-  Button,
-  Input,
-  NativeSelect,
-} from '@gate-access/ui';
+import { Card, CardContent, Button, Input, NativeSelect } from '@gateflow/ui';
 import Link from 'next/link';
 import { ProjectsClient } from './ProjectsClient';
 

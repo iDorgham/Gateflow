@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslation } from 'react-i18next';
-import { cn } from '@gate-access/ui';
+import { cn } from '@gateflow/ui';
 import { Shield, TrendingUp } from 'lucide-react';
 import type { AnalyticsMode } from '@/lib/analytics/analytics-filters';
 
@@ -11,19 +11,41 @@ interface AnalyticsModeToggleProps {
   className?: string;
 }
 
-const MODES: { value: AnalyticsMode; Icon: React.ElementType; labelKey: string; fallback: string }[] = [
-  { value: 'security', Icon: Shield, labelKey: 'analytics.modeSecurity', fallback: 'Security' },
-  { value: 'marketing', Icon: TrendingUp, labelKey: 'analytics.modeMarketing', fallback: 'Marketing' },
+const MODES: {
+  value: AnalyticsMode;
+  Icon: React.ElementType;
+  labelKey: string;
+  fallback: string;
+}[] = [
+  {
+    value: 'security',
+    Icon: Shield,
+    labelKey: 'analytics.modeSecurity',
+    fallback: 'Security',
+  },
+  {
+    value: 'marketing',
+    Icon: TrendingUp,
+    labelKey: 'analytics.modeMarketing',
+    fallback: 'Marketing',
+  },
 ];
 
-export function AnalyticsModeToggle({ mode, onModeChange, className }: AnalyticsModeToggleProps) {
+export function AnalyticsModeToggle({
+  mode,
+  onModeChange,
+  className,
+}: AnalyticsModeToggleProps) {
   const { t } = useTranslation('dashboard');
 
   return (
     <div
       role="group"
       aria-label={t('analytics.modeToggleAria', 'Dashboard view mode')}
-      className={cn('inline-flex rounded-xl border border-border bg-muted/50 p-1 gap-1', className)}
+      className={cn(
+        'inline-flex rounded-xl border border-border bg-muted/50 p-1 gap-1',
+        className
+      )}
     >
       {MODES.map(({ value, Icon, labelKey, fallback }) => (
         <button

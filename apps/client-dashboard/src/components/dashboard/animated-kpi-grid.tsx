@@ -4,7 +4,7 @@ import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import Link from 'next/link';
 import { useEffect } from 'react';
 import { ArrowRight } from 'lucide-react';
-import { cn, Card, CardContent, CardHeader, CardTitle } from '@gate-access/ui';
+import { cn, Card, CardContent, CardHeader, CardTitle } from '@gateflow/ui';
 
 export interface StatCardData {
   title: string;
@@ -57,43 +57,55 @@ export function AnimatedKpiGrid({ cards }: AnimatedKpiGridProps) {
       aria-label="Key metrics"
     >
       {cards.map((card) => (
-          <motion.div key={card.title} variants={itemVariants}>
-            <Link
-              href={card.href}
-              className="group block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 rounded-xl"
-            >
-              <Card className="h-full border border-[var(--ds-border)] bg-[var(--ds-surface-raised)] bg-background shadow-[0_1px_1px_rgba(9,30,66,0.08),0_0_1px_rgba(9,30,66,0.08)] hover:shadow-[0_4px_8px_-2px_rgba(9,30,66,0.16),0_0_1px_rgba(9,30,66,0.08)] hover:border-[var(--ds-border-bold)] transition-all duration-200">
-                <CardHeader className="pb-3">
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-[10px] font-black uppercase tracking-widest text-[var(--ds-text-subtlest)]">
-                      {card.title}
-                    </CardTitle>
-                    <div className={cn('flex h-8 w-8 items-center justify-center rounded-lg', card.iconBg)}>
-                      {card.icon}
-                    </div>
+        <motion.div key={card.title} variants={itemVariants}>
+          <Link
+            href={card.href}
+            className="group block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 rounded-xl"
+          >
+            <Card className="h-full border border-[var(--ds-border)] bg-[var(--ds-surface-raised)] bg-background shadow-[0_1px_1px_rgba(9,30,66,0.08),0_0_1px_rgba(9,30,66,0.08)] hover:shadow-[0_4px_8px_-2px_rgba(9,30,66,0.16),0_0_1px_rgba(9,30,66,0.08)] hover:border-[var(--ds-border-bold)] transition-all duration-200">
+              <CardHeader className="pb-3">
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-[10px] font-black uppercase tracking-widest text-[var(--ds-text-subtlest)]">
+                    {card.title}
+                  </CardTitle>
+                  <div
+                    className={cn(
+                      'flex h-8 w-8 items-center justify-center rounded-lg',
+                      card.iconBg
+                    )}
+                  >
+                    {card.icon}
                   </div>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <div className="flex items-end justify-between">
-                    <div>
-                      <p className={cn('text-3xl font-black tabular-nums leading-none', card.valueColor)}>
-                        {typeof card.value === 'number' ? (
-                          <AnimatedNumber value={card.value} />
-                        ) : (
-                          card.value
-                        )}
-                      </p>
-                      <p className="mt-1.5 text-xs text-[var(--ds-text-subtlest)]">{card.sub}</p>
-                    </div>
-                    <ArrowRight
-                      className="h-4 w-4 text-[var(--ds-icon-subtle)] transition-transform group-hover:translate-x-0.5 group-hover:text-[var(--ds-text)]"
-                      aria-hidden="true"
-                    />
+                </div>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <div className="flex items-end justify-between">
+                  <div>
+                    <p
+                      className={cn(
+                        'text-3xl font-black tabular-nums leading-none',
+                        card.valueColor
+                      )}
+                    >
+                      {typeof card.value === 'number' ? (
+                        <AnimatedNumber value={card.value} />
+                      ) : (
+                        card.value
+                      )}
+                    </p>
+                    <p className="mt-1.5 text-xs text-[var(--ds-text-subtlest)]">
+                      {card.sub}
+                    </p>
                   </div>
-                </CardContent>
-              </Card>
-            </Link>
-          </motion.div>
+                  <ArrowRight
+                    className="h-4 w-4 text-[var(--ds-icon-subtle)] transition-transform group-hover:translate-x-0.5 group-hover:text-[var(--ds-text)]"
+                    aria-hidden="true"
+                  />
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+        </motion.div>
       ))}
     </motion.div>
   );

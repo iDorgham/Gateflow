@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Modal, TouchableOpacity, TextInput } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Modal,
+  TouchableOpacity,
+  TextInput,
+} from 'react-native';
 import { KeyRound } from 'lucide-react-native';
-import { nativeTokens } from '@gate-access/ui/tokens';
+import { nativeTokens } from '@gateflow/ui/tokens';
 
 export interface SupervisorOverrideModalProps {
   visible: boolean;
@@ -10,7 +17,12 @@ export interface SupervisorOverrideModalProps {
   error?: string;
 }
 
-export function SupervisorOverrideModal({ visible, onOverride, onCancel, error }: SupervisorOverrideModalProps) {
+export function SupervisorOverrideModal({
+  visible,
+  onOverride,
+  onCancel,
+  error,
+}: SupervisorOverrideModalProps) {
   const [pin, setPin] = useState('');
 
   const handleConfirm = () => {
@@ -47,11 +59,18 @@ export function SupervisorOverrideModal({ visible, onOverride, onCancel, error }
           </View>
 
           <View style={styles.actions}>
-            <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={onCancel}>
+            <TouchableOpacity
+              style={[styles.button, styles.cancelButton]}
+              onPress={onCancel}
+            >
               <Text style={styles.cancelButtonText}>Cancel</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.button, styles.confirmButton, pin.length < 4 && styles.buttonDisabled]}
+              style={[
+                styles.button,
+                styles.confirmButton,
+                pin.length < 4 && styles.buttonDisabled,
+              ]}
               onPress={handleConfirm}
               disabled={pin.length < 4}
             >

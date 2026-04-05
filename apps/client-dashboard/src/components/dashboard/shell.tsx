@@ -15,9 +15,9 @@ import { getCsrfToken } from '@/lib/csrf';
 import { Locale } from '@/lib/i18n-config';
 import { HeaderUserMenu } from './header-user-menu';
 import { useRealtimeEvents } from '@/lib/realtime/use-realtime-events';
-import { SheetContent, Button, Sheet } from '@gate-access/ui';
+import { SheetContent, Button, Sheet } from '@gateflow/ui';
 import { Sparkles, Menu, ChevronsUpDown } from 'lucide-react';
-import { cn } from '@gate-access/ui';
+import { cn } from '@gateflow/ui';
 import { ThemeToggle } from './theme-toggle';
 
 interface ExpiredQR {

@@ -20,7 +20,7 @@ import {
   Label,
   cn,
   ScrollArea,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { toast } from 'sonner';
 
 /**

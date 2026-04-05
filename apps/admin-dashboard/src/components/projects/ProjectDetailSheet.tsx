@@ -10,7 +10,7 @@ import {
   TabsContent,
   TabsList,
   TabsTrigger,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import {
   ExternalLink,
   ShieldAlert,

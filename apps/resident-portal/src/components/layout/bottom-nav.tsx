@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { cn } from '@gate-access/ui';
+import { cn } from '@gateflow/ui';
 import { portalNavItems } from './nav-items';
 
 function isActivePath(pathname: string, href: string): boolean {

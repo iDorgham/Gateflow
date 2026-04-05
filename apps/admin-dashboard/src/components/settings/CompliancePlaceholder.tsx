@@ -1,4 +1,4 @@
-import { Badge } from '@gate-access/ui';
+import { Badge } from '@gateflow/ui';
 import { FileText, ShieldCheck, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
@@ -11,13 +11,20 @@ export function CompliancePlaceholder() {
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1 flex-wrap">
-            <p className="text-sm font-black uppercase tracking-tight text-foreground">Compliance Reporting</p>
-            <Badge variant="outline" className="text-[10px] font-bold text-muted-foreground border-border">
+            <p className="text-sm font-black uppercase tracking-tight text-foreground">
+              Compliance Reporting
+            </p>
+            <Badge
+              variant="outline"
+              className="text-[10px] font-bold text-muted-foreground border-border"
+            >
               Coming Q4 2026
             </Badge>
           </div>
           <p className="text-xs text-muted-foreground mb-4 max-w-lg">
-            SOC 2 and GDPR compliance reporting will be available in a future release. This will include automated audit report generation, data processing agreements, and retention policy enforcement.
+            SOC 2 and GDPR compliance reporting will be available in a future
+            release. This will include automated audit report generation, data
+            processing agreements, and retention policy enforcement.
           </p>
           <div className="flex flex-wrap gap-4 text-xs text-muted-foreground mb-4">
             {[

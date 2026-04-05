@@ -14,7 +14,7 @@ import {
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { getValidAccessToken } from '../lib/auth-client';
-import { nativeTokens } from '@gate-access/ui/tokens';
+import { nativeTokens } from '@gateflow/ui/tokens';
 
 const API_BASE_URL =
   process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:3001/api';

@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { CheckCircle2, Clock, History, XCircle } from 'lucide-react';
 import { format } from 'date-fns';
-import { Input } from '@gate-access/ui';
+import { Input } from '@gateflow/ui';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
 
 export interface ResidentHistoryItem {

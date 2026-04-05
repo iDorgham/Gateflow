@@ -31,7 +31,7 @@ import {
   Info,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { cn, Button } from '@gate-access/ui';
+import { cn, Button } from '@gateflow/ui';
 import type { Locale } from '@/lib/i18n/i18n-config';
 import { useTranslation } from 'react-i18next';
 

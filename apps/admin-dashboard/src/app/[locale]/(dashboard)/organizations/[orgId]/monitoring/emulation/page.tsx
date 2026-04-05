@@ -1,6 +1,6 @@
 import { requireAdmin } from '@/lib/admin-auth';
 import { Locale } from '@/lib/i18n/i18n-config';
-import { PageHeader } from '@gate-access/ui';
+import { PageHeader } from '@gateflow/ui';
 import { EmulationWizard } from '@/components/emulation/emulation-wizard';
 
 export const metadata = { title: 'Traffic Emulation Control' };

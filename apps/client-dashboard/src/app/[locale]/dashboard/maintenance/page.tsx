@@ -2,7 +2,7 @@ import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma } from '@gate-access/db';
 import { redirect } from 'next/navigation';
 import { getTranslation, Locale } from '@/lib/i18n';
-import { PageHeader } from '@gate-access/ui';
+import { PageHeader } from '@gateflow/ui';
 import { MaintenanceClient } from './maintenance-client';
 import { WorkOrderWithRelations, BUILT_IN_ROLES } from '@gate-access/types';
 

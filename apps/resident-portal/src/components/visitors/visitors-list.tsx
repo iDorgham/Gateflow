@@ -3,7 +3,7 @@
 import * as React from 'react';
 import Link from 'next/link';
 import { Filter, Plus, QrCode, Search, User } from 'lucide-react';
-import { Button, Input } from '@gate-access/ui';
+import { Button, Input } from '@gateflow/ui';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
 import { NewVisitorSheet } from '@/components/visitors/new-visitor-sheet';
 

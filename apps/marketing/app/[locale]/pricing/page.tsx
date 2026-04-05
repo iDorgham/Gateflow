@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { getTranslation } from '../../../lib/i18n/get-translation';
 import type { Locale } from '../../../i18n-config';
-import { Button } from '@gate-access/ui';
+import { Button } from '@gateflow/ui';
 import { CheckCircle2, Zap, Shield, Globe } from 'lucide-react';
 import { templatedMarketingTitle } from '../../../lib/metadata-title';
 import { IntentLink } from '../../../components/intent-link';

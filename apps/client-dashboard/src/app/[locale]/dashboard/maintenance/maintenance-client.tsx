@@ -9,7 +9,7 @@ import {
   AvatarTag,
   Badge,
   cn,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { MaintenanceStatus, MaintenancePriority } from '@gate-access/types';
 import { format } from 'date-fns';
 import { Plus, Filter, MoreHorizontal } from 'lucide-react';
@@ -18,7 +18,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { useTranslation } from 'react-i18next';
 import { BUILT_IN_ROLES, WorkOrderWithRelations } from '@gate-access/types';
 import { MaintenanceSheet } from './maintenance-sheet';

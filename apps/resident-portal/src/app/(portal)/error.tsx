@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { Button } from '@gate-access/ui';
+import { Button } from '@gateflow/ui';
 
 export default function PortalError({
   error,

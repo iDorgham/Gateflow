@@ -14,9 +14,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { AlertTriangle, Link2 } from 'lucide-react';
-import { cn } from '@gate-access/ui';
+import { cn } from '@gateflow/ui';
 import type { AnalyticsFilters } from '@/lib/analytics/analytics-filters';
 
 interface CampaignRow {

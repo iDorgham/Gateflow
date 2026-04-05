@@ -11,7 +11,7 @@ import {
   Column,
   NativeSelect,
   PageHeader,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import {
   Building2,
   Search,

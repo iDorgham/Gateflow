@@ -2,9 +2,23 @@
 
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@gate-access/ui';
-import { cn } from '@gate-access/ui';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from 'recharts';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from '@gateflow/ui';
+import { cn } from '@gateflow/ui';
 import type { AnalyticsFilters } from '@/lib/analytics/analytics-filters';
 
 interface CampaignRow {
@@ -26,7 +40,10 @@ function buildCampaignsUrl(filters: AnalyticsFilters): string {
   return `/api/analytics/campaigns?${sp.toString()}`;
 }
 
-export function AnalyticsCampaignBarChart({ filters, className }: AnalyticsCampaignBarChartProps) {
+export function AnalyticsCampaignBarChart({
+  filters,
+  className,
+}: AnalyticsCampaignBarChartProps) {
   const { t } = useTranslation('dashboard');
   const [campaigns, setCampaigns] = useState<CampaignRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -61,7 +78,9 @@ export function AnalyticsCampaignBarChart({ filters, className }: AnalyticsCampa
   return (
     <Card className={cn(className)}>
       <CardHeader>
-        <CardTitle className="text-base">{t('analytics.campaignsTitle', 'Campaign performance')}</CardTitle>
+        <CardTitle className="text-base">
+          {t('analytics.campaignsTitle', 'Campaign performance')}
+        </CardTitle>
         <CardDescription>
           {t('analytics.campaignsDesc', 'Scans by UTM campaign')}
         </CardDescription>
@@ -77,7 +96,10 @@ export function AnalyticsCampaignBarChart({ filters, className }: AnalyticsCampa
           </div>
         ) : campaigns.length === 0 ? (
           <div className="flex min-h-[220px] items-center justify-center text-sm text-muted-foreground">
-            {t('analytics.noCampaignData', 'No UTM campaign data in this range')}
+            {t(
+              'analytics.noCampaignData',
+              'No UTM campaign data in this range'
+            )}
           </div>
         ) : (
           <ResponsiveContainer width="100%" height={280}>
@@ -86,21 +108,45 @@ export function AnalyticsCampaignBarChart({ filters, className }: AnalyticsCampa
               margin={{ top: 8, right: 8, left: 8, bottom: 24 }}
               layout="vertical"
             >
-              <CartesianGrid strokeDasharray="3 3" className="stroke-muted" horizontal={false} />
-              <XAxis type="number" tick={{ fontSize: 12 }} allowDecimals={false} />
-              <YAxis type="category" dataKey="name" width={120} tick={{ fontSize: 11 }} />
+              <CartesianGrid
+                strokeDasharray="3 3"
+                className="stroke-muted"
+                horizontal={false}
+              />
+              <XAxis
+                type="number"
+                tick={{ fontSize: 12 }}
+                allowDecimals={false}
+              />
+              <YAxis
+                type="category"
+                dataKey="name"
+                width={120}
+                tick={{ fontSize: 11 }}
+              />
               <Tooltip
                 content={({ active, payload }) =>
                   active && payload?.[0] && payload[0].payload ? (
                     <div className="rounded border bg-background px-3 py-2 text-sm shadow">
                       <p className="font-medium">{payload[0].payload.name}</p>
-                      <p>{t('analytics.scans', 'Scans')}: {payload[0].payload.scans}</p>
-                      <p>{t('analytics.passRate', 'Pass rate')}: {payload[0].payload.passRate}%</p>
+                      <p>
+                        {t('analytics.scans', 'Scans')}:{' '}
+                        {payload[0].payload.scans}
+                      </p>
+                      <p>
+                        {t('analytics.passRate', 'Pass rate')}:{' '}
+                        {payload[0].payload.passRate}%
+                      </p>
                     </div>
                   ) : null
                 }
               />
-              <Bar dataKey="scans" name={t('analytics.scans', 'Scans')} fill="hsl(var(--chart-1))" radius={[0, 4, 4, 0]} />
+              <Bar
+                dataKey="scans"
+                name={t('analytics.scans', 'Scans')}
+                fill="hsl(var(--chart-1))"
+                radius={[0, 4, 4, 0]}
+              />
             </BarChart>
           </ResponsiveContainer>
         )}

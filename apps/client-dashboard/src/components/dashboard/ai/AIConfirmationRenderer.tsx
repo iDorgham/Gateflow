@@ -1,12 +1,7 @@
-
 'use client';
 
 import * as React from 'react';
-import { 
-  Card, 
-  CardContent, 
-  Button
-} from '@gate-access/ui';
+import { Card, CardContent, Button } from '@gateflow/ui';
 import { ShieldCheck, AlertCircle, Loader2 } from 'lucide-react';
 import { AIQRPreviewRenderer } from './AIQRPreviewRenderer';
 
@@ -27,12 +22,12 @@ interface AIConfirmationRendererProps {
   status: 'pending' | 'confirmed' | 'cancelled' | 'executed' | 'failed';
 }
 
-export const AIConfirmationRenderer: React.FC<AIConfirmationRendererProps> = ({ 
-  data, 
-  onConfirm, 
+export const AIConfirmationRenderer: React.FC<AIConfirmationRendererProps> = ({
+  data,
+  onConfirm,
   onCancel,
   isExecuting = false,
-  status = 'pending'
+  status = 'pending',
 }) => {
   const isPending = status === 'pending';
   const isConfirmed = status === 'confirmed' || status === 'executed';
@@ -51,15 +46,17 @@ export const AIConfirmationRenderer: React.FC<AIConfirmationRendererProps> = ({
               <ShieldCheck className="w-5 h-5" />
             )}
           </div>
-          
+
           <div className="flex-1 space-y-2">
             <div>
               <h4 className="text-sm font-semibold text-slate-900">
-                {isConfirmed ? 'Action Confirmed' : isCancelled ? 'Action Cancelled' : 'Confirmation Required'}
+                {isConfirmed
+                  ? 'Action Confirmed'
+                  : isCancelled
+                    ? 'Action Cancelled'
+                    : 'Confirmation Required'}
               </h4>
-              <p className="text-xs text-slate-600 mt-1">
-                {data.title}
-              </p>
+              <p className="text-xs text-slate-600 mt-1">{data.title}</p>
               {data.description && (
                 <p className="text-[11px] text-slate-500 italic mt-1">
                   {data.description}
@@ -73,8 +70,8 @@ export const AIConfirmationRenderer: React.FC<AIConfirmationRendererProps> = ({
 
             {isPending && (
               <div className="flex items-center gap-2 pt-2">
-                <Button 
-                  size="sm" 
+                <Button
+                  size="sm"
                   className="h-8 text-xs bg-slate-900 hover:bg-slate-800"
                   onClick={() => onConfirm(data)}
                   disabled={isExecuting}
@@ -88,9 +85,9 @@ export const AIConfirmationRenderer: React.FC<AIConfirmationRendererProps> = ({
                     'Confirm Action'
                   )}
                 </Button>
-                <Button 
-                  size="sm" 
-                  variant="outline" 
+                <Button
+                  size="sm"
+                  variant="outline"
                   className="h-8 text-xs border-slate-200"
                   onClick={() => onCancel(data)}
                   disabled={isExecuting}

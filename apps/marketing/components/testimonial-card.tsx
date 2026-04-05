@@ -1,7 +1,14 @@
-import * as React from "react";
-import { Quote } from "lucide-react";
+import * as React from 'react';
+import { Quote } from 'lucide-react';
 
-import { Card, CardContent, Avatar, AvatarFallback, AvatarImage, cn } from "@gate-access/ui";
+import {
+  Card,
+  CardContent,
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+  cn,
+} from '@gateflow/ui';
 
 export interface TestimonialCardProps {
   quote: string;
@@ -21,7 +28,7 @@ export function TestimonialCard({
   className,
 }: TestimonialCardProps) {
   return (
-    <Card className={cn("bg-card border shadow-sm", className)}>
+    <Card className={cn('bg-card border shadow-sm', className)}>
       <CardContent className="pt-6">
         <Quote className="h-8 w-8 text-primary/20 mb-4" />
         <p className="text-lg italic text-foreground leading-relaxed mb-6">
@@ -37,7 +44,8 @@ export function TestimonialCard({
           <div>
             <h4 className="font-semibold text-foreground">{author}</h4>
             <p className="text-sm text-muted-foreground">
-              {role}, <span className="text-foreground font-medium">{company}</span>
+              {role},{' '}
+              <span className="text-foreground font-medium">{company}</span>
             </p>
           </div>
         </div>

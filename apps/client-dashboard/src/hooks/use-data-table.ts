@@ -2,7 +2,7 @@
 
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { useCallback } from 'react';
-import type { SortingState } from '@gate-access/ui';
+import type { SortingState } from '@gateflow/ui';
 
 export interface DataTableState {
   pageIndex: number;
@@ -62,21 +62,21 @@ export function useDataTable(options: UseDataTableOptions = {}) {
       const qs = params.toString();
       router.push(qs ? `${pathname}?${qs}` : pathname);
     },
-    [router, pathname, searchParams],
+    [router, pathname, searchParams]
   );
 
   const onPageChange = useCallback(
     (newPageIndex: number) => {
       updateParams({ page: String(newPageIndex + 1) });
     },
-    [updateParams],
+    [updateParams]
   );
 
   const onPageSizeChange = useCallback(
     (size: number) => {
       updateParams({ limit: String(size), page: '1' });
     },
-    [updateParams],
+    [updateParams]
   );
 
   const onSortingChange = useCallback(
@@ -86,14 +86,14 @@ export function useDataTable(options: UseDataTableOptions = {}) {
         .join(',');
       updateParams({ sort: sortValue || null, page: '1' });
     },
-    [updateParams],
+    [updateParams]
   );
 
   const onGlobalFilterChange = useCallback(
     (filter: string) => {
       updateParams({ q: filter || null, page: '1' });
     },
-    [updateParams],
+    [updateParams]
   );
 
   return {

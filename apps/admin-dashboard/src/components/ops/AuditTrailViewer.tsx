@@ -36,7 +36,7 @@ import {
   SheetContent,
   SheetHeader,
   SheetTitle,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { format } from 'date-fns';
 
 /**

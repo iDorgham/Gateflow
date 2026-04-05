@@ -30,7 +30,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { ChevronDown } from 'lucide-react';
 import { csrfFetch } from '@/lib/csrf';
 import type { Locale } from '@/lib/i18n-config';

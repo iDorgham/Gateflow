@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { AdvancedTable, Button, Badge, Skeleton } from '@gate-access/ui';
+import { AdvancedTable, Button, Badge, Skeleton } from '@gateflow/ui';
 import { useDataTable } from '@/hooks/use-data-table';
 import { useTranslation } from 'react-i18next';
 import {

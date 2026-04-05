@@ -11,7 +11,7 @@ import {
   Separator,
   Badge,
   // ADS-compliant components...
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { EmulationWizard } from './emulation-wizard';
 import {
   Activity,

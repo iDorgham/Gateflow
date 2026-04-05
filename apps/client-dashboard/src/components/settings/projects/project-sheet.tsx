@@ -16,7 +16,7 @@ import {
   RadioGroup,
   RadioGroupItem,
   MultiSelect,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import {

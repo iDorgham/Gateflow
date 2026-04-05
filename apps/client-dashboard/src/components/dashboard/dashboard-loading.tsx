@@ -1,4 +1,4 @@
-import { Skeleton } from '@gate-access/ui';
+import { Skeleton } from '@gateflow/ui';
 import { QrCode, ScanLine, Shield, Users } from 'lucide-react';
 
 export function DashboardLoading() {

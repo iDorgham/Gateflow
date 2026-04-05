@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Card, CardContent, CardHeader, CardTitle } from '@gate-access/ui';
-import { cn } from '@gate-access/ui';
+import { Card, CardContent, CardHeader, CardTitle } from '@gateflow/ui';
+import { cn } from '@gateflow/ui';
 import type { AnalyticsFilters } from '@/lib/analytics/analytics-filters';
 
 interface OperatorRow {
@@ -27,7 +27,10 @@ function buildOperatorsUrl(filters: AnalyticsFilters): string {
   return `/api/analytics/operators?${sp.toString()}`;
 }
 
-export function AnalyticsOperatorLeaderboard({ filters, className }: AnalyticsOperatorLeaderboardProps) {
+export function AnalyticsOperatorLeaderboard({
+  filters,
+  className,
+}: AnalyticsOperatorLeaderboardProps) {
   const { t } = useTranslation('dashboard');
   const [data, setData] = useState<OperatorRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -62,7 +65,9 @@ export function AnalyticsOperatorLeaderboard({ filters, className }: AnalyticsOp
   return (
     <Card className={cn(className)}>
       <CardHeader>
-        <CardTitle className="text-base">{t('analytics.operatorLeaderboard', 'Top Operators')}</CardTitle>
+        <CardTitle className="text-base">
+          {t('analytics.operatorLeaderboard', 'Top Operators')}
+        </CardTitle>
       </CardHeader>
       <CardContent>
         {loading ? (
@@ -74,16 +79,27 @@ export function AnalyticsOperatorLeaderboard({ filters, className }: AnalyticsOp
             {error}
           </div>
         ) : data.length === 0 ? (
-          <p className="text-sm text-muted-foreground">{t('analytics.noOperators', 'No operator data in this period.')}</p>
+          <p className="text-sm text-muted-foreground">
+            {t('analytics.noOperators', 'No operator data in this period.')}
+          </p>
         ) : (
           <ul className="space-y-2">
             {data.map((op, i) => (
-              <li key={op.userId} className="flex items-center justify-between rounded-md px-2 py-1.5 hover:bg-muted">
+              <li
+                key={op.userId}
+                className="flex items-center justify-between rounded-md px-2 py-1.5 hover:bg-muted"
+              >
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-medium text-slate-400 w-5">{i + 1}.</span>
-                  <span className="text-sm font-medium">{op.name || op.email || 'Unknown'}</span>
+                  <span className="text-xs font-medium text-slate-400 w-5">
+                    {i + 1}.
+                  </span>
+                  <span className="text-sm font-medium">
+                    {op.name || op.email || 'Unknown'}
+                  </span>
                 </div>
-                <span className="text-sm font-medium text-foreground">{op.scanCount.toLocaleString()}</span>
+                <span className="text-sm font-medium text-foreground">
+                  {op.scanCount.toLocaleString()}
+                </span>
               </li>
             ))}
           </ul>

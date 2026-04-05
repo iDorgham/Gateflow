@@ -12,7 +12,7 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { ContactTable } from '@/components/crm/ContactTable';
 import { UnitTable } from '@/components/crm/UnitTable';
 import { Users, Building, ShieldCheck, Search } from 'lucide-react';

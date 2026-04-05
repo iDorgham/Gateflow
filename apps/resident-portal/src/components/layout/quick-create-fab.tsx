@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { Plus, QrCode, Users } from 'lucide-react';
 import * as React from 'react';
-import { cn } from '@gate-access/ui';
+import { cn } from '@gateflow/ui';
 
 export function QuickCreateFAB() {
   const [open, setOpen] = React.useState(false);

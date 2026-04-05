@@ -2,7 +2,14 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'next/navigation';
-import { Card, CardContent, CardHeader, CardTitle, Badge, cn } from '@gate-access/ui';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Badge,
+  cn,
+} from '@gateflow/ui';
 import {
   Database,
   Zap,
@@ -18,7 +25,11 @@ interface HealthData {
   timestamp: string;
   services: {
     database: { status: 'ok' | 'error'; latencyMs: number; message?: string };
-    redis: { status: 'ok' | 'error' | 'unconfigured'; latencyMs?: number; message?: string };
+    redis: {
+      status: 'ok' | 'error' | 'unconfigured';
+      latencyMs?: number;
+      message?: string;
+    };
   };
   metrics: {
     scansLastHour: number;
@@ -55,7 +66,11 @@ function formatUptime(seconds: number): string {
   return `${m}m`;
 }
 
-export function MonitoringClient({ webhookFailures, totalWebhookFailed, locale }: MonitoringClientProps) {
+export function MonitoringClient({
+  webhookFailures,
+  totalWebhookFailed,
+  locale,
+}: MonitoringClientProps) {
   const params = useParams();
   const localeParam = (params?.locale as string) ?? locale;
   const [health, setHealth] = useState<HealthData | null>(null);
@@ -66,7 +81,10 @@ export function MonitoringClient({ webhookFailures, totalWebhookFailed, locale }
     try {
       const res = await fetch(`/${localeParam}/api/admin/health`);
       if (!res.ok) return;
-      const data = await res.json() as { success: boolean; data?: HealthData } & HealthData;
+      const data = (await res.json()) as {
+        success: boolean;
+        data?: HealthData;
+      } & HealthData;
       // Route returns the data directly (not wrapped in data)
       setHealth(data);
       setLastUpdated(new Date());
@@ -85,43 +103,73 @@ export function MonitoringClient({ webhookFailures, totalWebhookFailed, locale }
 
   const errorRatePct = health ? Math.round(health.metrics.errorRate * 100) : 0;
 
-  const liveMetrics = health ? [
-    {
-      label: 'Scans / Hour',
-      value: health.metrics.scansLastHour,
-      sub: `${health.metrics.failedScansLastHour} failed`,
-      highlight: health.metrics.scansLastHour > 0 ? 'ok' as const : 'neutral' as const,
-    },
-    {
-      label: 'Error Rate',
-      value: `${errorRatePct}%`,
-      sub: `${health.metrics.failedScansLastHour} failed scans`,
-      highlight: errorRatePct > 10 ? 'danger' as const : errorRatePct > 2 ? 'warning' as const : 'ok' as const,
-    },
-    {
-      label: 'Active Scanners',
-      value: health.metrics.activeScanners,
-      sub: 'last 15 min',
-      highlight: 'neutral' as const,
-    },
-    {
-      label: 'Recent Queue',
-      value: health.metrics.pendingQueueEstimate,
-      sub: 'scans last 5 min',
-      highlight: 'neutral' as const,
-    },
-  ] : [];
+  const liveMetrics = health
+    ? [
+        {
+          label: 'Scans / Hour',
+          value: health.metrics.scansLastHour,
+          sub: `${health.metrics.failedScansLastHour} failed`,
+          highlight:
+            health.metrics.scansLastHour > 0
+              ? ('ok' as const)
+              : ('neutral' as const),
+        },
+        {
+          label: 'Error Rate',
+          value: `${errorRatePct}%`,
+          sub: `${health.metrics.failedScansLastHour} failed scans`,
+          highlight:
+            errorRatePct > 10
+              ? ('danger' as const)
+              : errorRatePct > 2
+                ? ('warning' as const)
+                : ('ok' as const),
+        },
+        {
+          label: 'Active Scanners',
+          value: health.metrics.activeScanners,
+          sub: 'last 15 min',
+          highlight: 'neutral' as const,
+        },
+        {
+          label: 'Recent Queue',
+          value: health.metrics.pendingQueueEstimate,
+          sub: 'scans last 5 min',
+          highlight: 'neutral' as const,
+        },
+      ]
+    : [];
 
-  const platformMetrics = health ? [
-    { label: 'Organizations', value: health.platform.totalOrgs, highlight: 'neutral' as const },
-    { label: 'Users', value: health.platform.totalUsers, highlight: 'neutral' as const },
-    { label: 'Uptime', value: formatUptime(health.platform.uptime), sub: 'process uptime', highlight: 'ok' as const },
-  ] : [];
+  const platformMetrics = health
+    ? [
+        {
+          label: 'Organizations',
+          value: health.platform.totalOrgs,
+          highlight: 'neutral' as const,
+        },
+        {
+          label: 'Users',
+          value: health.platform.totalUsers,
+          highlight: 'neutral' as const,
+        },
+        {
+          label: 'Uptime',
+          value: formatUptime(health.platform.uptime),
+          sub: 'process uptime',
+          highlight: 'ok' as const,
+        },
+      ]
+    : [];
 
   return (
     <div className="space-y-6">
       {/* Last updated + refresh info */}
-      <div className={cn('flex items-center gap-2 text-xs text-muted-foreground', loading && 'animate-pulse')}>
+      <div
+        className={cn(
+          'flex items-center gap-2 text-xs text-muted-foreground',
+          loading && 'animate-pulse'
+        )}
+      >
         <RefreshCw className={cn('h-3.5 w-3.5', loading && 'animate-spin')} />
         <span>
           {lastUpdated
@@ -144,7 +192,12 @@ export function MonitoringClient({ webhookFailures, totalWebhookFailed, locale }
             label="Redis Cache"
             status={health.services.redis.status}
             latencyMs={health.services.redis.latencyMs}
-            message={health.services.redis.message ?? (health.services.redis.status === 'unconfigured' ? 'Set UPSTASH_REDIS_REST_URL to enable' : undefined)}
+            message={
+              health.services.redis.message ??
+              (health.services.redis.status === 'unconfigured'
+                ? 'Set UPSTASH_REDIS_REST_URL to enable'
+                : undefined)
+            }
             icon={Zap}
           />
         </div>
@@ -153,7 +206,9 @@ export function MonitoringClient({ webhookFailures, totalWebhookFailed, locale }
       {/* Live metrics */}
       {liveMetrics.length > 0 && (
         <div className="space-y-3">
-          <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Scan Metrics</p>
+          <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+            Scan Metrics
+          </p>
           <LiveMetricsGrid metrics={liveMetrics} />
         </div>
       )}
@@ -161,7 +216,9 @@ export function MonitoringClient({ webhookFailures, totalWebhookFailed, locale }
       {/* Platform snapshot */}
       {platformMetrics.length > 0 && (
         <div className="space-y-3">
-          <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Platform Snapshot</p>
+          <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+            Platform Snapshot
+          </p>
           <LiveMetricsGrid metrics={platformMetrics} />
         </div>
       )}
@@ -175,16 +232,27 @@ export function MonitoringClient({ webhookFailures, totalWebhookFailed, locale }
                 <Globe className="h-4 w-4 text-primary" />
                 Webhook Health
               </CardTitle>
-              <p className="text-xs text-muted-foreground mt-1">Recent failed webhook deliveries</p>
+              <p className="text-xs text-muted-foreground mt-1">
+                Recent failed webhook deliveries
+              </p>
             </div>
-            <Badge className={cn(
-              'font-bold text-[11px] border-none',
-              totalWebhookFailed === 0 ? 'bg-emerald-500 text-white' : 'bg-red-500 text-white'
-            )}>
+            <Badge
+              className={cn(
+                'font-bold text-[11px] border-none',
+                totalWebhookFailed === 0
+                  ? 'bg-emerald-500 text-white'
+                  : 'bg-red-500 text-white'
+              )}
+            >
               {totalWebhookFailed === 0 ? (
-                <span className="flex items-center gap-1"><CheckCircle2 className="h-3 w-3" /> All healthy</span>
+                <span className="flex items-center gap-1">
+                  <CheckCircle2 className="h-3 w-3" /> All healthy
+                </span>
               ) : (
-                <span className="flex items-center gap-1"><AlertCircle className="h-3 w-3" /> {totalWebhookFailed} failed</span>
+                <span className="flex items-center gap-1">
+                  <AlertCircle className="h-3 w-3" /> {totalWebhookFailed}{' '}
+                  failed
+                </span>
               )}
             </Badge>
           </div>
@@ -209,15 +277,31 @@ export function MonitoringClient({ webhookFailures, totalWebhookFailed, locale }
                 </thead>
                 <tbody className="divide-y divide-border">
                   {webhookFailures.map((d) => (
-                    <tr key={d.id} className="hover:bg-red-500/5 transition-colors">
-                      <td className="px-5 py-3 text-xs font-bold text-foreground">{d.orgName}</td>
-                      <td className="px-5 py-3">
-                        <Badge variant="secondary" className="text-[10px] font-bold uppercase">{d.event}</Badge>
+                    <tr
+                      key={d.id}
+                      className="hover:bg-red-500/5 transition-colors"
+                    >
+                      <td className="px-5 py-3 text-xs font-bold text-foreground">
+                        {d.orgName}
                       </td>
-                      <td className="px-5 py-3 text-xs text-muted-foreground font-mono truncate max-w-[180px]">{d.url}</td>
-                      <td className="px-5 py-3 text-center text-xs font-black text-red-600 dark:text-red-400">{d.attemptCount}</td>
+                      <td className="px-5 py-3">
+                        <Badge
+                          variant="secondary"
+                          className="text-[10px] font-bold uppercase"
+                        >
+                          {d.event}
+                        </Badge>
+                      </td>
+                      <td className="px-5 py-3 text-xs text-muted-foreground font-mono truncate max-w-[180px]">
+                        {d.url}
+                      </td>
+                      <td className="px-5 py-3 text-center text-xs font-black text-red-600 dark:text-red-400">
+                        {d.attemptCount}
+                      </td>
                       <td className="px-5 py-3 text-right text-xs text-muted-foreground">
-                        {d.lastAttemptAt ? new Date(d.lastAttemptAt).toLocaleDateString(locale) : '—'}
+                        {d.lastAttemptAt
+                          ? new Date(d.lastAttemptAt).toLocaleDateString(locale)
+                          : '—'}
                       </td>
                     </tr>
                   ))}

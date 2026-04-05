@@ -21,7 +21,7 @@ import {
 import { clearHistory } from '../lib/scan-history';
 import { scanQueue } from '../lib/offline-queue';
 import { clearNonceCache } from '../lib/qr-verify';
-import { nativeTokens } from '@gate-access/ui/tokens';
+import { nativeTokens } from '@gateflow/ui/tokens';
 
 const SUPERVISOR_PIN_KEY = 'supervisor_pin';
 

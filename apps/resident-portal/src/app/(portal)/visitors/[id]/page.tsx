@@ -2,26 +2,28 @@ import { notFound } from 'next/navigation';
 import { Share2, Download, Trash2, Shield } from 'lucide-react';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma } from '@gate-access/db';
-import { Button, Badge } from '@gate-access/ui';
+import { Button, Badge } from '@gateflow/ui';
 import { VisitorQRCard } from '@/components/visitor-qr-card';
 import { format } from 'date-fns';
 import { PageHeader } from '@/components/layout/page-header';
 import { OfflineQrCacheClient } from '@/components/pwa/offline-qr-cache-client';
 
-export default async function VisitorDetailPage(props: { params: Promise<{ id: string }> }) {
+export default async function VisitorDetailPage(props: {
+  params: Promise<{ id: string }>;
+}) {
   const params = await props.params;
   const claims = await getSessionClaims();
   const userId = claims?.sub || 'dev-resident-id';
   const orgId = claims?.org || 'dev-org-id';
 
   const visitor = await prisma.visitorQR.findFirst({
-    where: { 
+    where: {
       id: params.id,
       createdBy: userId,
       qrCode: {
         organizationId: orgId,
-        deletedAt: null
-      }
+        deletedAt: null,
+      },
     },
     include: {
       qrCode: true,
@@ -52,7 +54,10 @@ export default async function VisitorDetailPage(props: { params: Promise<{ id: s
         title="Pass Details"
         backHref="/visitors"
         action={
-          <button type="button" className="rounded-full p-2 text-red-600 hover:bg-red-50">
+          <button
+            type="button"
+            className="rounded-full p-2 text-red-600 hover:bg-red-50"
+          >
             <Trash2 className="h-5 w-5" />
           </button>
         }
@@ -85,25 +90,33 @@ export default async function VisitorDetailPage(props: { params: Promise<{ id: s
             </h2>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1">
-                <p className="text-xs text-slate-500 uppercase font-semibold">Uses</p>
+                <p className="text-xs text-slate-500 uppercase font-semibold">
+                  Uses
+                </p>
                 <p className="text-sm font-medium">
                   {visitor.qrCode.currentUses} / {visitor.qrCode.maxUses || '∞'}
                 </p>
               </div>
               <div className="space-y-1">
-                <p className="text-xs text-slate-500 uppercase font-semibold">Type</p>
+                <p className="text-xs text-slate-500 uppercase font-semibold">
+                  Type
+                </p>
                 <Badge variant="outline" className="capitalize">
                   {visitor.accessRule?.type.toLowerCase() || 'permanent'}
                 </Badge>
               </div>
               <div className="space-y-1">
-                <p className="text-xs text-slate-500 uppercase font-semibold">Created</p>
+                <p className="text-xs text-slate-500 uppercase font-semibold">
+                  Created
+                </p>
                 <p className="text-sm font-medium">
                   {format(new Date(visitor.createdAt), 'MMM dd, yyyy')}
                 </p>
               </div>
               <div className="space-y-1">
-                <p className="text-xs text-slate-500 uppercase font-semibold">ID</p>
+                <p className="text-xs text-slate-500 uppercase font-semibold">
+                  ID
+                </p>
                 <p className="text-sm font-mono text-slate-400">
                   #{visitor.id.slice(-6).toUpperCase()}
                 </p>

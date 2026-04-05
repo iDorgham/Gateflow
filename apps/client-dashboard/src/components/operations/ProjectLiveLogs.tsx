@@ -11,7 +11,7 @@ import {
   TableRow,
   Badge,
   Skeleton,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { cn } from '@/lib/utils';
 import { useTranslation } from 'react-i18next';
 import { Shield, Clock, MapPin, Search } from 'lucide-react';

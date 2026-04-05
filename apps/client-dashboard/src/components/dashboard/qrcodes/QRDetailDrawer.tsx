@@ -1,11 +1,22 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { X, QrCode, DoorOpen, User, Hash, Calendar, BarChart2 } from 'lucide-react';
-import { cn } from '@gate-access/ui';
+import {
+  X,
+  QrCode,
+  DoorOpen,
+  User,
+  Hash,
+  Calendar,
+  BarChart2,
+} from 'lucide-react';
+import { cn } from '@gateflow/ui';
 import type { QRCodeRow } from '@/lib/qrcodes/use-qrcodes';
 
-const STATUS_CONFIG: Record<string, { bg: string; text: string; dot: string; label: string }> = {
+const STATUS_CONFIG: Record<
+  string,
+  { bg: string; text: string; dot: string; label: string }
+> = {
   ACTIVE: {
     bg: 'bg-[var(--ds-background-success-subtle,#E3FCEF)]',
     text: 'text-[var(--ds-text-success,#006644)]',
@@ -56,7 +67,10 @@ function Field({
   return (
     <div className="flex flex-col gap-1">
       <div className="flex items-center gap-1.5">
-        <Icon className="h-3 w-3 text-[var(--ds-icon-subtle,#6B778C)]" aria-hidden="true" />
+        <Icon
+          className="h-3 w-3 text-[var(--ds-icon-subtle,#6B778C)]"
+          aria-hidden="true"
+        />
         <dt className="text-[10px] font-black uppercase tracking-widest text-[var(--ds-text-subtlest,#6B778C)]">
           {label}
         </dt>
@@ -119,10 +133,13 @@ export function QRDetailDrawer({ qr, locale, onClose }: QRDetailDrawerProps) {
                     className={cn(
                       'inline-flex items-center gap-1.5 rounded-[3px] px-2 py-0.5 text-xs font-bold uppercase tracking-wider',
                       s.bg,
-                      s.text,
+                      s.text
                     )}
                   >
-                    <span className={cn('h-1.5 w-1.5 rounded-full shrink-0', s.dot)} aria-hidden="true" />
+                    <span
+                      className={cn('h-1.5 w-1.5 rounded-full shrink-0', s.dot)}
+                      aria-hidden="true"
+                    />
                     {s.label}
                   </div>
                 );
@@ -147,7 +164,9 @@ export function QRDetailDrawer({ qr, locale, onClose }: QRDetailDrawerProps) {
                         {qr.guestName}
                       </span>
                       {qr.guestEmail && (
-                        <span className="text-xs text-[var(--ds-text-subtle,#42526E)]">{qr.guestEmail}</span>
+                        <span className="text-xs text-[var(--ds-text-subtle,#42526E)]">
+                          {qr.guestEmail}
+                        </span>
                       )}
                     </div>
                   </Field>

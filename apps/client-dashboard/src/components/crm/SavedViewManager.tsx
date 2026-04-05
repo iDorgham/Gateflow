@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Button, cn } from '@gate-access/ui';
+import { Button, cn } from '@gateflow/ui';
 import { LayoutTemplate, Save, ChevronDown, Trash2, Check } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 

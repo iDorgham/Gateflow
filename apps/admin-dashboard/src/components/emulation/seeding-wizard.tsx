@@ -18,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
   // ADS-compliant components from the monorepo...
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { Loader2, Plus, Users, LayoutGrid, CheckCircle2 } from 'lucide-react';
 import { toast } from 'sonner';
 

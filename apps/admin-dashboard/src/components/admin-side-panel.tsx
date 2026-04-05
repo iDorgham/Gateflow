@@ -7,7 +7,7 @@ import {
   TabsTrigger,
   TabsContent,
   Button,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import {
   Sparkles,
   ScrollText,

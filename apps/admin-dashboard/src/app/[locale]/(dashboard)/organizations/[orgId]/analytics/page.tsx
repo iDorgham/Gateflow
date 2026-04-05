@@ -21,7 +21,7 @@ import {
   Badge,
   cn,
   PageHeader,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { ScanTrendChart } from '@/components/analytics/ScanTrendChart';
 import { OrgGrowthChart } from '@/components/analytics/OrgGrowthChart';
 import { PlanDistributionChart } from '@/components/analytics/PlanDistributionChart';

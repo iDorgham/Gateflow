@@ -3,13 +3,7 @@ import { getTranslation } from '@/lib/i18n/i18n';
 import { Locale } from '@/lib/i18n/i18n-config';
 import { prisma } from '@gate-access/db';
 import { Search, X } from 'lucide-react';
-import {
-  Card,
-  CardContent,
-  Button,
-  Input,
-  NativeSelect,
-} from '@gate-access/ui';
+import { Card, CardContent, Button, Input, NativeSelect } from '@gateflow/ui';
 import Link from 'next/link';
 import { GatesClient, type Gate } from './GatesClient';
 

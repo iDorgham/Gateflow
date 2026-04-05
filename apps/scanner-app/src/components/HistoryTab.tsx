@@ -9,7 +9,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import { nativeTokens } from '@gate-access/ui/tokens';
+import { nativeTokens } from '@gateflow/ui/tokens';
 import {
   getHistory,
   type HistoryEntry,

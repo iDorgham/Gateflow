@@ -18,8 +18,8 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
-} from '@gate-access/ui';
-import { cn } from '@gate-access/ui';
+} from '@gateflow/ui';
+import { cn } from '@gateflow/ui';
 import type { AnalyticsFilters } from '@/lib/analytics/analytics-filters';
 
 interface FunnelStage {

@@ -1,6 +1,6 @@
 import { requireAdmin } from '@/lib/admin-auth';
 import { Locale } from '@/lib/i18n/i18n-config';
-import { PageHeader } from '@gate-access/ui';
+import { PageHeader } from '@gateflow/ui';
 import { SeedingClient } from '@/components/monitoring/SeedingClient';
 
 export const metadata = { title: 'Advanced Seeding Control' };

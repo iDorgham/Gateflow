@@ -1,5 +1,5 @@
 import { getTranslation } from '../../lib/i18n/get-translation';
-import { Button } from '@gate-access/ui';
+import { Button } from '@gateflow/ui';
 import { I18nLink } from '../i18n-link';
 import type { Locale } from '../../i18n-config';
 import { AlertCircle, FileQuestion, Lock, ShieldAlert } from 'lucide-react';

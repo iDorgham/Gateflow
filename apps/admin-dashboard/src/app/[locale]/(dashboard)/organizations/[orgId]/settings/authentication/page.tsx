@@ -9,7 +9,7 @@ import {
   CardTitle,
   Badge,
   cn,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 
 export const metadata = { title: 'Settings | Authentication' };
 

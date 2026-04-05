@@ -9,7 +9,7 @@ import {
   CardTitle,
   CardContent,
   CardDescription,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import {
   MaintenanceHubTable,
   MaintenanceHubRow,

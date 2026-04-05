@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { tokens } from '@gate-access/ui';
+import { tokens } from '@gateflow/ui';
 
 type BreakpointName = 'xs' | 'sm' | 'md' | 'lg';
 

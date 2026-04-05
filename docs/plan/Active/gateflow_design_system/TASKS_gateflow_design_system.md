@@ -15,8 +15,8 @@
 
 ## Phase 3 — `@gateflow/ui`
 
-- [ ] Primitives; migration path from `@gate-access/ui`
-- [ ] `phase_logs/PHASE_LOG_phase_03.md` updated
+- [x] Primitives; migration path from `@gate-access/ui`
+- [x] `phase_logs/PHASE_LOG_phase_03.md` updated
 
 ## Phase 4 — `@gateflow/components`
 

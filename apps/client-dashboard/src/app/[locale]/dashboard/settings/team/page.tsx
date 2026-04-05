@@ -1,17 +1,17 @@
 import { requireAuth } from '@/lib/dashboard-auth';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@gate-access/ui';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@gateflow/ui';
 import { TeamRoster } from '@/components/settings/team/team-roster';
 import { InvitationList } from '@/components/settings/team/invitation-list';
 import { RoleDashboard } from '@/components/settings/team/role-dashboard';
 import { ActivityLogList } from '@/components/settings/team/activity-log-list';
 import { GateAssignmentManager } from '@/components/settings/team/gate-assignment-manager';
-import { 
-  getTeamMembers, 
-  getInvitations, 
-  getRoles, 
+import {
+  getTeamMembers,
+  getInvitations,
+  getRoles,
   getActivityLogs,
   getGateAssignments,
-  getGates
+  getGates,
 } from './actions';
 import { Users, Mail, ShieldCheck, History, ShieldAlert } from 'lucide-react';
 
@@ -21,12 +21,12 @@ export default async function TeamSettings() {
   if (!user) return null;
 
   const [
-    membersResult, 
-    invitationsResult, 
-    rolesResult, 
+    membersResult,
+    invitationsResult,
+    rolesResult,
     logsResult,
     assignmentsResult,
-    gatesResult
+    gatesResult,
   ] = await Promise.all([
     getTeamMembers(),
     getInvitations(),
@@ -48,7 +48,9 @@ export default async function TeamSettings() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-1">
-        <h1 className="text-xl font-black uppercase tracking-tight">Team Management</h1>
+        <h1 className="text-xl font-black uppercase tracking-tight">
+          Team Management
+        </h1>
         <p className="text-sm text-muted-foreground">
           Manage members, assign roles, and control active sessions.
         </p>
@@ -109,23 +111,19 @@ export default async function TeamSettings() {
         </TabsList>
 
         <TabsContent value="members">
-          <TeamRoster
-            users={members}
-            roles={roles}
-            currentUserId={user.id}
-          />
+          <TeamRoster users={members} roles={roles} currentUserId={user.id} />
         </TabsContent>
 
         <TabsContent value="invitations">
-          <InvitationList
-            invitations={invitations}
-          />
+          <InvitationList invitations={invitations} />
         </TabsContent>
 
         <TabsContent value="roles">
           <RoleDashboard
             roles={roles}
-            canManageRoles={!!(await requireAuth()).claims.permissions?.['roles:manage']}
+            canManageRoles={
+              !!(await requireAuth()).claims.permissions?.['roles:manage']
+            }
           />
         </TabsContent>
 
@@ -138,9 +136,7 @@ export default async function TeamSettings() {
         </TabsContent>
 
         <TabsContent value="activity">
-          <ActivityLogList
-            logs={logs}
-          />
+          <ActivityLogList logs={logs} />
         </TabsContent>
       </Tabs>
     </div>

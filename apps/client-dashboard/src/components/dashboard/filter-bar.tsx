@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { cn, Input, NativeSelect } from '@gate-access/ui';
+import { cn, Input, NativeSelect } from '@gateflow/ui';
 import { Search } from 'lucide-react';
 
 // ─── Container ────────────────────────────────────────────────────────────────
@@ -48,7 +48,12 @@ FilterBar.DatePresets = function DatePresets({
   ];
 
   return (
-    <div className={cn('flex items-center gap-1 rounded-xl bg-muted/50 p-1', className)}>
+    <div
+      className={cn(
+        'flex items-center gap-1 rounded-xl bg-muted/50 p-1',
+        className
+      )}
+    >
       {presets.map(({ key, label }) => (
         <button
           key={key}
@@ -70,7 +75,9 @@ FilterBar.DatePresets = function DatePresets({
 
 // ─── Select ───────────────────────────────────────────────────────────────────
 
-interface FilterBarSelectProps extends React.ComponentPropsWithoutRef<typeof NativeSelect> {
+interface FilterBarSelectProps extends React.ComponentPropsWithoutRef<
+  typeof NativeSelect
+> {
   icon?: React.ReactNode;
   containerClassName?: string;
 }
@@ -89,7 +96,11 @@ FilterBar.Select = function FilterBarSelect({
         </span>
       )}
       <NativeSelect
-        className={cn('h-9 rounded-xl text-xs', icon ? 'pl-8' : 'pl-3', className)}
+        className={cn(
+          'h-9 rounded-xl text-xs',
+          icon ? 'pl-8' : 'pl-3',
+          className
+        )}
         {...props}
       />
     </div>
@@ -98,11 +109,17 @@ FilterBar.Select = function FilterBarSelect({
 
 // ─── Search ───────────────────────────────────────────────────────────────────
 
-interface FilterBarSearchProps extends React.ComponentPropsWithoutRef<typeof Input> {
+interface FilterBarSearchProps extends React.ComponentPropsWithoutRef<
+  typeof Input
+> {
   containerClassName?: string;
 }
 
-FilterBar.Search = function FilterBarSearch({ containerClassName, className, ...props }: FilterBarSearchProps) {
+FilterBar.Search = function FilterBarSearch({
+  containerClassName,
+  className,
+  ...props
+}: FilterBarSearchProps) {
   return (
     <div className={cn('relative ml-auto', containerClassName)}>
       <Search className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground" />
@@ -120,6 +137,10 @@ interface FilterBarDividerProps {
   className?: string;
 }
 
-FilterBar.Divider = function FilterBarDivider({ className }: FilterBarDividerProps) {
-  return <div className={cn('h-6 w-px bg-border/50 hidden sm:block', className)} />;
+FilterBar.Divider = function FilterBarDivider({
+  className,
+}: FilterBarDividerProps) {
+  return (
+    <div className={cn('h-6 w-px bg-border/50 hidden sm:block', className)} />
+  );
 };

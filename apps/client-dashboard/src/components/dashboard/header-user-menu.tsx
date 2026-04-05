@@ -1,6 +1,6 @@
 'use client';
 
-import { cn } from '@gate-access/ui';
+import { cn } from '@gateflow/ui';
 import Link from 'next/link';
 
 import { useRouter } from 'next/navigation';
@@ -13,7 +13,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { ThemeToggle } from './theme-toggle';
 import {
   Building,
@@ -33,12 +33,12 @@ interface HeaderUserMenuProps {
   isCollapsed?: boolean;
 }
 
-export function HeaderUserMenu({ 
-  user, 
-  org, 
-  locale, 
+export function HeaderUserMenu({
+  user,
+  org,
+  locale,
   variant = 'header',
-  isCollapsed = false 
+  isCollapsed = false,
 }: HeaderUserMenuProps) {
   const router = useRouter();
   const { t } = useTranslation('dashboard');
@@ -59,25 +59,29 @@ export function HeaderUserMenu({
         <button
           type="button"
           className={cn(
-            "flex items-center outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-all",
-            variant === 'header' 
-              ? "gap-2 rounded-xl p-1.5 hover:bg-sidebar-accent" 
+            'flex items-center outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-all',
+            variant === 'header'
+              ? 'gap-2 rounded-xl p-1.5 hover:bg-sidebar-accent'
               : cn(
-                  "w-full rounded-2xl hover:bg-sidebar-accent/50 group",
-                  isCollapsed ? "justify-center p-2" : "gap-3 p-3 text-left"
+                  'w-full rounded-2xl hover:bg-sidebar-accent/50 group',
+                  isCollapsed ? 'justify-center p-2' : 'gap-3 p-3 text-left'
                 )
           )}
           aria-label={t('sidebar.profile', 'Profile menu')}
         >
-          <Avatar className={cn(
-            "border-2 border-sidebar-border transition-all",
-            variant === 'header' ? "h-9 w-9 hover:border-primary/50" : "h-10 w-10 group-hover:border-primary/50"
-          )}>
+          <Avatar
+            className={cn(
+              'border-2 border-sidebar-border transition-all',
+              variant === 'header'
+                ? 'h-9 w-9 hover:border-primary/50'
+                : 'h-10 w-10 group-hover:border-primary/50'
+            )}
+          >
             <AvatarFallback className="bg-primary text-primary-foreground text-[10px] font-bold uppercase tracking-wider">
               {initials}
             </AvatarFallback>
           </Avatar>
-          
+
           {variant === 'sidebar' && !isCollapsed && (
             <div className="flex-1 min-w-0 flex flex-col items-start">
               <span className="text-xs font-bold text-foreground truncate w-full tracking-tight">
@@ -120,7 +124,9 @@ export function HeaderUserMenu({
               className="flex w-full items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer hover:bg-sidebar-accent transition-colors"
             >
               <User className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm font-medium">{t('sidebar.profile', 'Profile')}</span>
+              <span className="text-sm font-medium">
+                {t('sidebar.profile', 'Profile')}
+              </span>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
@@ -129,7 +135,9 @@ export function HeaderUserMenu({
               className="flex w-full items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer hover:bg-sidebar-accent transition-colors"
             >
               <Building className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm font-medium">{t('sidebar.workspace', 'Workspace')}</span>
+              <span className="text-sm font-medium">
+                {t('sidebar.workspace', 'Workspace')}
+              </span>
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
@@ -138,7 +146,9 @@ export function HeaderUserMenu({
               className="flex w-full items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer hover:bg-sidebar-accent transition-colors"
             >
               <CreditCard className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm font-medium">{t('sidebar.billing', 'Billing & payments')}</span>
+              <span className="text-sm font-medium">
+                {t('sidebar.billing', 'Billing & payments')}
+              </span>
             </Link>
           </DropdownMenuItem>
         </div>
@@ -149,7 +159,9 @@ export function HeaderUserMenu({
             onClick={() => router.push(`/${locale}/logout`)}
           >
             <PowerIcon className="h-4 w-4" />
-            <span className="text-sm font-bold">{t('sidebar.signout', 'Sign out')}</span>
+            <span className="text-sm font-bold">
+              {t('sidebar.signout', 'Sign out')}
+            </span>
           </DropdownMenuItem>
         </div>
       </DropdownMenuContent>

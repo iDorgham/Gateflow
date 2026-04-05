@@ -17,7 +17,7 @@ import {
   Building2,
   HelpCircle,
 } from 'lucide-react-native';
-import { nativeTokens } from '@gate-access/ui/tokens';
+import { nativeTokens } from '@gateflow/ui/tokens';
 import { createMaintenanceRequest } from '../lib/scanner';
 
 export interface MaintenanceReportModalProps {

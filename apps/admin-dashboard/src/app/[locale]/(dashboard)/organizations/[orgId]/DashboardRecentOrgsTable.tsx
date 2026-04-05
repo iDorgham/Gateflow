@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Badge, Column, DynamicTable } from '@gate-access/ui';
+import { Badge, Column, DynamicTable } from '@gateflow/ui';
 
 type RecentOrgRow = {
   id: string;

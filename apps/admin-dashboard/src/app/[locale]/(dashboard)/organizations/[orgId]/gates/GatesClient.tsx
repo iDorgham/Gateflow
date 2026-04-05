@@ -9,7 +9,7 @@ import {
   DynamicTable,
   Column,
   cn,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import {
   Plus,
   DoorOpen,

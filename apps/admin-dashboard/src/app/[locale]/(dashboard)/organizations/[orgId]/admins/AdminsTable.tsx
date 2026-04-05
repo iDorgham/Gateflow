@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Badge, Button, Column, DynamicTable, cn } from '@gate-access/ui';
+import { Badge, Button, Column, DynamicTable, cn } from '@gateflow/ui';
 import { KeyRound, ShieldCheck, ShieldAlert } from 'lucide-react';
 import { resetAdminPassword, toggleSuspend } from './admin-actions';
 

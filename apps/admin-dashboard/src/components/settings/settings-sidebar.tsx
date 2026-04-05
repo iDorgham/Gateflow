@@ -16,7 +16,7 @@ import {
   KeyRound,
   LayoutDashboard,
 } from 'lucide-react';
-import { cn } from '@gate-access/ui';
+import { cn } from '@gateflow/ui';
 
 interface SettingsSidebarProps {
   locale: string;

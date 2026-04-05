@@ -10,7 +10,7 @@ import {
   XCircle,
 } from 'lucide-react';
 import { MaintenanceStatus } from '@gate-access/types';
-import { cn } from '@gate-access/ui';
+import { cn } from '@gateflow/ui';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
 
 export interface MaintenanceRequestItem {

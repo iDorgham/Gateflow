@@ -25,7 +25,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { scanQueue, syncManager } from '../lib/offline-queue';
 import { maintenanceQueue } from '../lib/maintenance-queue';
-import { nativeTokens } from '@gate-access/ui/tokens';
+import { nativeTokens } from '@gateflow/ui/tokens';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 

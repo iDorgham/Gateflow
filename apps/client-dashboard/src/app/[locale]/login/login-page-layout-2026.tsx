@@ -15,7 +15,7 @@ import {
   Server,
   Shield,
 } from 'lucide-react';
-import { cn } from '@gate-access/ui';
+import { cn } from '@gateflow/ui';
 import type { Locale } from '@/lib/i18n-config';
 
 const LOCALE_LABELS: Record<string, string> = {

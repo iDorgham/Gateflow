@@ -11,7 +11,7 @@ import {
   NativeSelect,
   Input,
   PageHeader,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import {
   Users,
   Search,

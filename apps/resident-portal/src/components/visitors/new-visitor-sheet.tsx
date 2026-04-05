@@ -11,7 +11,7 @@ import {
   SheetContent,
   SheetHeader,
   SheetTitle,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { useBreakpoint } from '@/hooks/use-breakpoint';
 import { VisitorForm } from '@/components/visitor-form';
 

@@ -1,4 +1,4 @@
-import { Badge, cn } from '@gate-access/ui';
+import { Badge, cn } from '@gateflow/ui';
 import { Users, ScanLine } from 'lucide-react';
 
 interface OrgRow {
@@ -37,17 +37,28 @@ export function SubscriptionTable({ orgs, locale }: SubscriptionTableProps) {
         </thead>
         <tbody className="divide-y divide-border">
           {orgs.map((org) => (
-            <tr key={org.id} className="group hover:bg-primary/5 transition-colors">
+            <tr
+              key={org.id}
+              className="group hover:bg-primary/5 transition-colors"
+            >
               <td className="px-5 py-3.5">
                 <div className="flex items-center gap-2.5">
                   <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary font-bold text-xs shrink-0">
                     {org.name.substring(0, 2).toUpperCase()}
                   </div>
-                  <p className="font-bold text-foreground text-xs truncate max-w-[160px]">{org.name}</p>
+                  <p className="font-bold text-foreground text-xs truncate max-w-[160px]">
+                    {org.name}
+                  </p>
                 </div>
               </td>
               <td className="px-5 py-3.5">
-                <Badge variant="outline" className={cn('text-[10px] font-bold uppercase tracking-wider', planColors[org.plan] ?? '')}>
+                <Badge
+                  variant="outline"
+                  className={cn(
+                    'text-[10px] font-bold uppercase tracking-wider',
+                    planColors[org.plan] ?? ''
+                  )}
+                >
                   {org.plan}
                 </Badge>
               </td>
@@ -64,12 +75,23 @@ export function SubscriptionTable({ orgs, locale }: SubscriptionTableProps) {
                 </span>
               </td>
               <td className="px-5 py-3.5 text-right">
-                <span className={cn('text-sm font-black', org.mrr > 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-muted-foreground')}>
+                <span
+                  className={cn(
+                    'text-sm font-black',
+                    org.mrr > 0
+                      ? 'text-emerald-600 dark:text-emerald-400'
+                      : 'text-muted-foreground'
+                  )}
+                >
                   {org.mrr > 0 ? `$${org.mrr}` : '—'}
                 </span>
               </td>
               <td className="px-5 py-3.5 text-xs text-muted-foreground">
-                {new Date(org.createdAt).toLocaleDateString(locale, { month: 'short', day: 'numeric', year: 'numeric' })}
+                {new Date(org.createdAt).toLocaleDateString(locale, {
+                  month: 'short',
+                  day: 'numeric',
+                  year: 'numeric',
+                })}
               </td>
             </tr>
           ))}

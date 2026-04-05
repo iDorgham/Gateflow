@@ -21,7 +21,7 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { useTranslation } from 'react-i18next';
 
 // ─── Types ─────────────────────────────────────────────────────────────────────

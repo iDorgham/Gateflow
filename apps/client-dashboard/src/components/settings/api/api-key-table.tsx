@@ -11,7 +11,7 @@ import {
   TableRow,
   Button,
   Badge,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { Trash2, Key, Clock } from 'lucide-react';
 import { toast } from 'sonner';
 import { csrfFetch } from '@/lib/csrf';
@@ -58,7 +58,8 @@ export function ApiKeyTable({ apiKeys: initial }: ApiKeyTableProps) {
     <div className="space-y-4">
       <div className="flex justify-between items-center">
         <p className="text-xs text-muted-foreground font-medium">
-          {keys.length} key{keys.length !== 1 ? 's' : ''} — secrets are never shown again after creation.
+          {keys.length} key{keys.length !== 1 ? 's' : ''} — secrets are never
+          shown again after creation.
         </p>
         <CreateApiKeySheet onSuccess={refresh} />
       </div>
@@ -78,17 +79,25 @@ export function ApiKeyTable({ apiKeys: initial }: ApiKeyTableProps) {
           <TableBody>
             {keys.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className="h-40 text-center text-muted-foreground italic">
+                <TableCell
+                  colSpan={6}
+                  className="h-40 text-center text-muted-foreground italic"
+                >
                   No API keys yet. Generate one to get started.
                 </TableCell>
               </TableRow>
             ) : (
               keys.map((key) => (
-                <TableRow key={key.id} className="group hover:bg-muted/30 transition-colors">
+                <TableRow
+                  key={key.id}
+                  className="group hover:bg-muted/30 transition-colors"
+                >
                   <TableCell>
                     <div className="flex items-center gap-2">
                       <Key className="h-3.5 w-3.5 text-muted-foreground/60 shrink-0" />
-                      <span className="font-bold text-foreground text-sm">{key.name}</span>
+                      <span className="font-bold text-foreground text-sm">
+                        {key.name}
+                      </span>
                     </div>
                   </TableCell>
                   <TableCell>
@@ -110,18 +119,26 @@ export function ApiKeyTable({ apiKeys: initial }: ApiKeyTableProps) {
                     </div>
                   </TableCell>
                   <TableCell className="text-xs text-muted-foreground">
-                    {key.lastUsedAt
-                      ? new Date(key.lastUsedAt).toLocaleDateString()
-                      : <span className="italic opacity-50">Never</span>}
+                    {key.lastUsedAt ? (
+                      new Date(key.lastUsedAt).toLocaleDateString()
+                    ) : (
+                      <span className="italic opacity-50">Never</span>
+                    )}
                   </TableCell>
                   <TableCell>
                     {key.expiresAt ? (
-                      <div className={`flex items-center gap-1 text-xs font-bold ${isExpired(key.expiresAt) ? 'text-destructive' : 'text-muted-foreground'}`}>
+                      <div
+                        className={`flex items-center gap-1 text-xs font-bold ${isExpired(key.expiresAt) ? 'text-destructive' : 'text-muted-foreground'}`}
+                      >
                         <Clock className="h-3 w-3" />
-                        {isExpired(key.expiresAt) ? 'Expired' : new Date(key.expiresAt).toLocaleDateString()}
+                        {isExpired(key.expiresAt)
+                          ? 'Expired'
+                          : new Date(key.expiresAt).toLocaleDateString()}
                       </div>
                     ) : (
-                      <span className="text-xs text-muted-foreground/50 italic">Never</span>
+                      <span className="text-xs text-muted-foreground/50 italic">
+                        Never
+                      </span>
                     )}
                   </TableCell>
                   <TableCell className="text-right">

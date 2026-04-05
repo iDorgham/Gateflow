@@ -1,17 +1,17 @@
 'use client';
 
 import * as React from 'react';
-import { 
-  Zap, 
-  Trash2, 
-  Loader2, 
-  AlertCircle, 
-  Clock, 
-  FileText, 
-  Download, 
-  Calendar
+import {
+  Zap,
+  Trash2,
+  Loader2,
+  AlertCircle,
+  Clock,
+  FileText,
+  Download,
+  Calendar,
 } from 'lucide-react';
-import { cn } from '@gate-access/ui';
+import { cn } from '@gateflow/ui';
 
 type Automation = {
   id: string;
@@ -53,12 +53,14 @@ export function AutomationList() {
 
   const handleDelete = async (id: string) => {
     if (!confirm('Are you sure you want to delete this automation?')) return;
-    
+
     try {
       const prev = [...automations];
-      setAutomations(automations.filter(a => a.id !== id));
-      
-      const res = await fetch(`/api/gateai/automations?id=${id}`, { method: 'DELETE' });
+      setAutomations(automations.filter((a) => a.id !== id));
+
+      const res = await fetch(`/api/gateai/automations?id=${id}`, {
+        method: 'DELETE',
+      });
       if (!res.ok) {
         setAutomations(prev);
         const data = await res.json();
@@ -73,7 +75,9 @@ export function AutomationList() {
     return (
       <div className="flex flex-col items-center justify-center h-64 text-[var(--ga-text-muted)]">
         <Loader2 className="animate-spin mb-2" size={24} />
-        <span className="text-xs font-mono uppercase tracking-widest">Initializing Assistant...</span>
+        <span className="text-xs font-mono uppercase tracking-widest">
+          Initializing Assistant...
+        </span>
       </div>
     );
   }
@@ -104,33 +108,48 @@ export function AutomationList() {
         {automations.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 text-center border-2 border-dashed border-[var(--ga-navy-border)] rounded-xl opacity-60">
             <Clock size={32} className="mb-3 text-[var(--ga-text-muted)]" />
-            <p className="text-xs font-medium text-[var(--ga-text-primary)] mb-1">No Active Tasks</p>
+            <p className="text-xs font-medium text-[var(--ga-text-primary)] mb-1">
+              No Active Tasks
+            </p>
             <p className="text-[10px] text-[var(--ga-text-muted)] max-w-[180px]">
-              Use the AI Canvas to schedule your first operational workflow or data export.
+              Use the AI Canvas to schedule your first operational workflow or
+              data export.
             </p>
           </div>
         ) : (
           automations.map((item) => (
-            <div 
+            <div
               key={item.id}
               className="group relative rounded-xl border border-[var(--ga-navy-border)] bg-secondary/20 p-4 transition-all hover:border-[var(--ga-orange)]/30 hover:bg-secondary/40"
             >
               <div className="flex justify-between items-start mb-3">
                 <div className="flex items-center gap-2">
-                  <div className={cn(
-                    "p-1.5 rounded-md",
-                    item.type === 'REPORT' ? "bg-blue-500/10 text-blue-400" : "bg-purple-500/10 text-purple-400"
-                  )}>
-                    {item.type === 'REPORT' ? <FileText size={14} /> : <Download size={14} />}
+                  <div
+                    className={cn(
+                      'p-1.5 rounded-md',
+                      item.type === 'REPORT'
+                        ? 'bg-blue-500/10 text-blue-400'
+                        : 'bg-purple-500/10 text-purple-400'
+                    )}
+                  >
+                    {item.type === 'REPORT' ? (
+                      <FileText size={14} />
+                    ) : (
+                      <Download size={14} />
+                    )}
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-[var(--ga-text-primary)] leading-none">{item.name}</h4>
-                    <p className="text-[10px] text-[var(--ga-text-muted)] mt-1">{item.schedule}</p>
+                    <h4 className="text-xs font-bold text-[var(--ga-text-primary)] leading-none">
+                      {item.name}
+                    </h4>
+                    <p className="text-[10px] text-[var(--ga-text-muted)] mt-1">
+                      {item.schedule}
+                    </p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button 
+                  <button
                     onClick={() => handleDelete(item.id)}
                     className="p-1.5 text-[var(--ga-text-muted)] hover:text-red-400 transition-colors"
                   >
@@ -143,14 +162,23 @@ export function AutomationList() {
                 <div className="flex items-center gap-3">
                   <div className="flex items-center gap-1 text-[var(--ga-text-muted)]">
                     <Calendar size={10} />
-                    <span>Next: {item.nextRunAt ? new Date(item.nextRunAt).toLocaleDateString() : 'TBD'}</span>
+                    <span>
+                      Next:{' '}
+                      {item.nextRunAt
+                        ? new Date(item.nextRunAt).toLocaleDateString()
+                        : 'TBD'}
+                    </span>
                   </div>
                 </div>
 
-                <span className={cn(
-                  "px-2 py-0.5 rounded-full font-bold uppercase tracking-tighter text-[9px]",
-                  item.status === 'ACTIVE' ? "bg-green-500/10 text-green-500" : "bg-yellow-500/10 text-yellow-500"
-                )}>
+                <span
+                  className={cn(
+                    'px-2 py-0.5 rounded-full font-bold uppercase tracking-tighter text-[9px]',
+                    item.status === 'ACTIVE'
+                      ? 'bg-green-500/10 text-green-500'
+                      : 'bg-yellow-500/10 text-yellow-500'
+                  )}
+                >
                   {item.status}
                 </span>
               </div>

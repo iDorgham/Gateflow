@@ -7,7 +7,7 @@ import {
   useScroll,
   useTransform,
 } from 'framer-motion';
-import { Button } from '@gate-access/ui';
+import { Button } from '@gateflow/ui';
 import { IntentLink } from '../intent-link';
 import type { Locale } from '../../i18n-config';
 import {

@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslation } from 'react-i18next';
-import { cn } from '@gate-access/ui';
+import { cn } from '@gateflow/ui';
 import type { AnalyticsMode } from '@/lib/analytics/analytics-filters';
 
 interface AnalyticsChartPlaceholderProps {
@@ -9,13 +9,22 @@ interface AnalyticsChartPlaceholderProps {
   className?: string;
 }
 
-export function AnalyticsChartPlaceholder({ mode, className }: AnalyticsChartPlaceholderProps) {
+export function AnalyticsChartPlaceholder({
+  mode,
+  className,
+}: AnalyticsChartPlaceholderProps) {
   const { t } = useTranslation('dashboard');
 
   const label =
     mode === 'security'
-      ? t('analytics.placeholderHeatmap', 'Heatmap: Scan intensity by day and hour')
-      : t('analytics.placeholderFunnel', 'Attribution funnel: QR → Opened → Scanned');
+      ? t(
+          'analytics.placeholderHeatmap',
+          'Heatmap: Scan intensity by day and hour'
+        )
+      : t(
+          'analytics.placeholderFunnel',
+          'Attribution funnel: QR → Opened → Scanned'
+        );
 
   return (
     <div

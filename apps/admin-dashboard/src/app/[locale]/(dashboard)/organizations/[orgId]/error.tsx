@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { Button } from '@gate-access/ui';
+import { Button } from '@gateflow/ui';
 import { AlertTriangle } from 'lucide-react';
 
 export default function DashboardError({

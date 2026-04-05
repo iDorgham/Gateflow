@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { usePathname } from 'next/navigation';
-import { cn } from '@gate-access/ui';
+import { cn } from '@gateflow/ui';
 import { portalNavItems } from './nav-items';
 
 interface SidebarProps {
@@ -27,7 +27,9 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
       )}
     >
       <div className="mb-6 flex items-center justify-between px-2">
-        <span className={cn('font-semibold text-slate-900', collapsed && 'sr-only')}>
+        <span
+          className={cn('font-semibold text-slate-900', collapsed && 'sr-only')}
+        >
           Resident Portal
         </span>
         <button
@@ -36,7 +38,11 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           className="rounded-md p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-700"
           aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
-          {collapsed ? <PanelLeftOpen className="h-5 w-5" /> : <PanelLeftClose className="h-5 w-5" />}
+          {collapsed ? (
+            <PanelLeftOpen className="h-5 w-5" />
+          ) : (
+            <PanelLeftClose className="h-5 w-5" />
+          )}
         </button>
       </div>
 

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { CheckCircle2, ArrowRight, AlertTriangle, Quote } from 'lucide-react';
-import { Button } from '@gate-access/ui';
+import { Button } from '@gateflow/ui';
 import { IntentLink } from '../intent-link';
 import type { Locale } from '../../i18n-config';
 import { IntentLandingTracker } from '../intent-landing-tracker';

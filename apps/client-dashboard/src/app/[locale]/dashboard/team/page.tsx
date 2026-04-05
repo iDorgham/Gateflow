@@ -3,16 +3,16 @@
 import React, { use } from 'react';
 import { useTranslation } from 'react-i18next';
 import { UserPlus } from 'lucide-react';
-import { Button } from '@gate-access/ui';
+import { Button } from '@gateflow/ui';
 import { TeamMembersTable } from '@/components/dashboard/team/TeamMembersTable';
 import { motion } from 'framer-motion';
 
-export default function TeamPage(props: { params: Promise<{ locale: string }> }) {
+export default function TeamPage(props: {
+  params: Promise<{ locale: string }>;
+}) {
   const params = use(props.params);
 
-  const {
-    locale
-  } = params;
+  const { locale } = params;
 
   const { t } = useTranslation('dashboard');
 
@@ -24,7 +24,10 @@ export default function TeamPage(props: { params: Promise<{ locale: string }> })
             {t('team.title', 'Team Management')}
           </h1>
           <p className="text-sm text-[var(--ds-text-subtle)]">
-            {t('team.subtitle', 'Manage your organization members and their access levels.')}
+            {t(
+              'team.subtitle',
+              'Manage your organization members and their access levels.'
+            )}
           </p>
         </div>
         <div className="mt-4 lg:mt-0">

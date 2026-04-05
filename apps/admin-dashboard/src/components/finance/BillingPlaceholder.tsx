@@ -1,4 +1,4 @@
-import { Badge } from '@gate-access/ui';
+import { Badge } from '@gateflow/ui';
 import { CreditCard, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
@@ -11,13 +11,19 @@ export function BillingPlaceholder() {
         </div>
       </div>
       <div className="flex items-center justify-center gap-2 mb-2">
-        <p className="text-sm font-black uppercase tracking-tight text-foreground">Stripe Integration</p>
-        <Badge variant="outline" className="text-[10px] font-bold text-muted-foreground border-border">
+        <p className="text-sm font-black uppercase tracking-tight text-foreground">
+          Stripe Integration
+        </p>
+        <Badge
+          variant="outline"
+          className="text-[10px] font-bold text-muted-foreground border-border"
+        >
           Coming Q4 2026
         </Badge>
       </div>
       <p className="text-xs text-muted-foreground max-w-sm mx-auto mb-4">
-        Connect Stripe to enable real billing data, invoice management, subscription lifecycle webhooks, and automated dunning.
+        Connect Stripe to enable real billing data, invoice management,
+        subscription lifecycle webhooks, and automated dunning.
       </p>
       <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground">
         <span className="flex items-center gap-1">

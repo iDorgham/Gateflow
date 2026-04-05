@@ -14,7 +14,7 @@ import {
   CheckCircle2,
   Lock,
 } from 'lucide-react';
-import { Button, Input, Label, Textarea, cn } from '@gate-access/ui';
+import { Button, Input, Label, Textarea, cn } from '@gateflow/ui';
 import { toast } from 'sonner';
 
 /** Category Options */

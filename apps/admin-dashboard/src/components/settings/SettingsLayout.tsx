@@ -18,7 +18,7 @@ import {
   Activity,
   UserCheck,
 } from 'lucide-react';
-import { cn, ScrollArea, Input, PageHeader, Badge } from '@gate-access/ui';
+import { cn, ScrollArea, Input, PageHeader, Badge } from '@gateflow/ui';
 
 interface SettingsTab {
   id: string;

@@ -18,7 +18,7 @@ import {
   Pagination,
   NativeSelect,
   PageHeader,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import Link from 'next/link';
 import { AuditLogsTable } from '@/components/monitoring/AuditLogsTable';
 

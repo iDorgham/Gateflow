@@ -13,7 +13,7 @@ import {
   BarChart3,
 } from 'lucide-react';
 import { I18nLink } from '../../../components/i18n-link';
-import { Button } from '@gate-access/ui';
+import { Button } from '@gateflow/ui';
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: Locale }>;

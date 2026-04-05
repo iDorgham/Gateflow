@@ -11,7 +11,7 @@ import {
   Input,
   Label,
   Badge,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import {
   Save,
   CheckCircle2,

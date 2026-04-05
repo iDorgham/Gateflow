@@ -11,8 +11,8 @@ import {
   CardHeader,
   CardTitle,
   Badge,
-} from '@gate-access/ui';
-import { cn } from '@gate-access/ui';
+} from '@gateflow/ui';
+import { cn } from '@gateflow/ui';
 import {
   AlertCircle,
   Check,

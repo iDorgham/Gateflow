@@ -33,7 +33,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { maintenanceApi } from '@gate-access/api-client';
 import { toast } from 'sonner';
 

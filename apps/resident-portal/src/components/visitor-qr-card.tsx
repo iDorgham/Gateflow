@@ -1,14 +1,24 @@
-import * as React from "react";
-import { User, Calendar, Clock, Download, Share } from "lucide-react";
+import * as React from 'react';
+import { User, Calendar, Clock, Download, Share } from 'lucide-react';
 
-import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription, Badge, Button, cn } from "@gate-access/ui";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  Badge,
+  Button,
+  cn,
+} from '@gateflow/ui';
 
 export interface VisitorQRCardProps {
   visitorName: string;
   date: string;
   timeWindow: string;
   qrValue: string;
-  status: "active" | "expired" | "used";
+  status: 'active' | 'expired' | 'used';
   onShare?: () => void;
   onDownload?: () => void;
   className?: string;
@@ -24,10 +34,16 @@ export function VisitorQRCard({
   onDownload,
   className,
 }: VisitorQRCardProps) {
-  const isActive = status === "active";
+  const isActive = status === 'active';
 
   return (
-    <Card className={cn("overflow-hidden max-w-sm", !isActive && "opacity-70 grayscale-[0.5]", className)}>
+    <Card
+      className={cn(
+        'overflow-hidden max-w-sm',
+        !isActive && 'opacity-70 grayscale-[0.5]',
+        className
+      )}
+    >
       <CardHeader className="bg-primary/5 pb-4">
         <div className="flex justify-between items-start">
           <div>
@@ -35,9 +51,14 @@ export function VisitorQRCard({
               <User className="h-5 w-5 text-primary" />
               {visitorName}
             </CardTitle>
-            <CardDescription className="mt-1">One-time visitor pass</CardDescription>
+            <CardDescription className="mt-1">
+              One-time visitor pass
+            </CardDescription>
           </div>
-          <Badge variant={isActive ? "default" : "secondary"} className="capitalize">
+          <Badge
+            variant={isActive ? 'default' : 'secondary'}
+            className="capitalize"
+          >
             {status}
           </Badge>
         </div>
@@ -71,11 +92,23 @@ export function VisitorQRCard({
         </div>
       </CardContent>
       <CardFooter className="flex justify-between p-4 bg-muted/10">
-        <Button variant="ghost" size="sm" className="w-full" disabled={!isActive} onClick={onShare}>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="w-full"
+          disabled={!isActive}
+          onClick={onShare}
+        >
           <Share className="h-4 w-4 mr-2" /> Share
         </Button>
         <div className="w-px h-6 bg-border mx-2" />
-        <Button variant="ghost" size="sm" className="w-full" disabled={!isActive} onClick={onDownload}>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="w-full"
+          disabled={!isActive}
+          onClick={onDownload}
+        >
           <Download className="h-4 w-4 mr-2" /> Save Image
         </Button>
       </CardFooter>

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import * as React from 'react';
-import { Button } from '@gate-access/ui';
+import { Button } from '@gateflow/ui';
 import {
   BookOpen,
   FileCode,

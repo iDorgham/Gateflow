@@ -11,7 +11,7 @@ import {
   CardContent,
   LoginShell,
   cn,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import {
   AlertCircle,
   Eye,
@@ -68,7 +68,11 @@ export function JoinClient({ token, email, orgName, locale }: JoinClientProps) {
     >
       <Card className="border-none shadow-none bg-transparent">
         <CardContent className="px-0 pb-0">
-          <form onSubmit={handleSubmit} className="space-y-6" dir={isRtl ? 'rtl' : 'ltr'}>
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-6"
+            dir={isRtl ? 'rtl' : 'ltr'}
+          >
             {error && (
               <div className="rounded-xl border border-destructive/20 bg-destructive/5 px-4 py-3 text-sm text-destructive font-semibold flex items-center gap-2">
                 <AlertCircle className="h-4 w-4 shrink-0" />
@@ -82,8 +86,12 @@ export function JoinClient({ token, email, orgName, locale }: JoinClientProps) {
                   <Building className="h-5 w-5 text-primary" />
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Team</span>
-                  <span className="text-sm font-bold text-foreground">{orgName}</span>
+                  <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+                    Team
+                  </span>
+                  <span className="text-sm font-bold text-foreground">
+                    {orgName}
+                  </span>
                 </div>
               </div>
 
@@ -99,7 +107,10 @@ export function JoinClient({ token, email, orgName, locale }: JoinClientProps) {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="join-name" className="text-xs font-semibold text-muted-foreground">
+                <Label
+                  htmlFor="join-name"
+                  className="text-xs font-semibold text-muted-foreground"
+                >
                   Your Full Name
                 </Label>
                 <Input
@@ -113,7 +124,10 @@ export function JoinClient({ token, email, orgName, locale }: JoinClientProps) {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="join-password" className="text-xs font-semibold text-muted-foreground">
+                <Label
+                  htmlFor="join-password"
+                  className="text-xs font-semibold text-muted-foreground"
+                >
                   Set Password
                 </Label>
                 <div className="relative">
@@ -158,7 +172,9 @@ export function JoinClient({ token, email, orgName, locale }: JoinClientProps) {
               ) : (
                 <>
                   Accept Invitation & Join
-                  <ArrowRight className={cn('h-4 w-4', isRtl && 'rotate-180')} />
+                  <ArrowRight
+                    className={cn('h-4 w-4', isRtl && 'rotate-180')}
+                  />
                 </>
               )}
             </Button>

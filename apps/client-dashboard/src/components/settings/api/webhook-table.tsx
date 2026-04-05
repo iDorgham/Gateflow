@@ -11,7 +11,7 @@ import {
   TableRow,
   Button,
   Badge,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { Trash2, Webhook, Send, Pencil } from 'lucide-react';
 import { toast } from 'sonner';
 import { csrfFetch } from '@/lib/csrf';

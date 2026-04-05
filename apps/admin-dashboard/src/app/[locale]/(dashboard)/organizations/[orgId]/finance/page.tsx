@@ -1,8 +1,8 @@
 import { requireAdmin } from '@/lib/admin-auth';
 import { Locale } from '@/lib/i18n/i18n-config';
 import { prisma } from '@gate-access/db';
-import { Card, CardContent, CardHeader, CardTitle } from '@gate-access/ui';
-import { PageHeader } from '@gate-access/ui';
+import { Card, CardContent, CardHeader, CardTitle } from '@gateflow/ui';
+import { PageHeader } from '@gateflow/ui';
 import { RevenueSummaryCards } from '@/components/finance/RevenueSummaryCards';
 import { PlanTrendChart } from '@/components/finance/PlanTrendChart';
 import { SubscriptionTable } from '@/components/finance/SubscriptionTable';

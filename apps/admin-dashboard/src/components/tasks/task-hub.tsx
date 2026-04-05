@@ -37,7 +37,7 @@ import {
   SheetHeader,
   SheetTitle,
   Skeleton,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { useTranslation } from 'react-i18next';
 import { useOrganization } from '@/providers/organization-provider';
 import { toast } from 'sonner';
