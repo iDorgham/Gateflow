@@ -1,13 +1,13 @@
 # Skill Discovery Report
 
-**Date:** 2026-04-05T13:56:12.436Z
+**Date:** 2026-04-05T17:09:07.577Z
 
 ## 🎨 Design System Violations (Hardcoded Hex)
 
 Detected raw hex values instead of Atlassian Design System tokens (`var(--ds-...)`).
 
 ```text
-apps/admin-dashboard/src/components/crm/crm-dashboard.tsx:                             Successfully analyzed Lead #482 (MENA Region). Assinged score of 84 based on organization vertical alignment.
+apps/admin-dashboard/src/components/crm/crm-dashboard.tsx:                          Successfully analyzed Lead #482 (MENA Region).
 apps/admin-dashboard/src/components/theming/StyleEditor.tsx:    '--gf-color-primary': '#0052CC',
 apps/admin-dashboard/src/components/theming/StyleEditor.tsx:    '--gf-color-primary-foreground': '#FFFFFF',
 apps/admin-dashboard/src/components/theming/StyleEditor.tsx:    '--gf-color-background': '#FFFFFF',

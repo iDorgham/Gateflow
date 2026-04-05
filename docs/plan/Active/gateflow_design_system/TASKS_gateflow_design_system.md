@@ -10,8 +10,8 @@
 
 ## Phase 2 — `@gateflow/theme`
 
-- [ ] Theme provider, `data-color-mode`, root scripts
-- [ ] `phase_logs/PHASE_LOG_phase_02.md` updated
+- [x] Theme provider, `data-color-mode`, root scripts
+- [x] `phase_logs/PHASE_LOG_phase_02.md` updated
 
 ## Phase 3 — `@gateflow/ui`
 

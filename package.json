@@ -21,6 +21,8 @@
     "dev:marketing": "turbo dev --filter=marketing",
     "dev:resident": "turbo dev --filter=resident-portal",
     "dev:mobile": "turbo dev --filter=resident-mobile",
+    "dev:design": "turbo dev --filter=@gateflow/design-system",
+    "build:design": "turbo build --filter=@gateflow/design-system",
     "sync": "bash scripts/ai-sync/sync-ai-tools.sh",
     "sync:watch": "node scripts/ai-sync/watch-sync.mjs",
     "plan:new": "node scripts/plan/ralph-plan.js new",

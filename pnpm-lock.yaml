@@ -966,6 +966,34 @@ importers:
         specifier: 5.9.3
         version: 5.9.3
 
+  packages/theme:
+    dependencies:
+      react:
+        specifier: '>=18'
+        version: 19.2.4
+      react-dom:
+        specifier: '>=18'
+        version: 19.2.4(react@19.2.4)
+    devDependencies:
+      '@gate-access/config':
+        specifier: workspace:*
+        version: link:../config
+      '@gateflow/tokens':
+        specifier: workspace:*
+        version: link:../tokens
+      '@types/react':
+        specifier: 19.2.14
+        version: 19.2.14
+      '@types/react-dom':
+        specifier: 19.2.3
+        version: 19.2.3(@types/react@19.2.14)
+      next-themes:
+        specifier: ^0.4.6
+        version: 0.4.6(react-dom@19.2.4)(react@19.2.4)
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
+
   packages/tokens:
     devDependencies:
       '@gate-access/config':
@@ -18975,7 +19003,6 @@ packages:
     dependencies:
       react: 19.2.4
       react-dom: 19.2.4(react@19.2.4)
-    dev: false
 
   /next@15.5.14(@babel/core@7.29.0)(react-dom@18.3.1)(react@18.3.1):
     resolution:

@@ -9,11 +9,11 @@
 **IDEA:** `docs/development/initiatives/IDEA_atlassian_ui_remake.md`  
 **PLAN:** `docs/plan/Ready/gateflow_design_system/`  
 `PLAN_gateflow_design_system.md`  
-**Status:** 🆕 Planned (Ready for Phase 1)  
+**Status:** 🔵 In-Progress (Phase 3 next)  
 **Target:** Q2-Q3 2026
 
-- [ ] Phase 1 — `@gateflow/tokens` (OKLCH, tokens.css, @theme)
-- [ ] Phase 2 — `@gateflow/theme` (data-color-mode, next-themes)
+- [x] Phase 1 — `@gateflow/tokens` (OKLCH, tokens.css, @theme)
+- [x] Phase 2 — `@gateflow/theme` (data-color-mode, next-themes)
 - [ ] Phase 3 — `@gateflow/ui` upgrade (successor to @gate-access/ui)
 - [ ] Phase 4 — `@gateflow/components` (composed patterns)
 - [ ] Phase 5 — `@gateflow/ai` (AI UI kit: chat, streaming, tools)
@@ -49,6 +49,23 @@
 - [ ] Phase 3 — Shift Logic: Clock-in/out API
 - [ ] Phase 4 — Home Redesign: Master Scan Dashboard
 - [ ] Phase 5 — Polish: Animation, Security Guard, & RTL
+
+### admin_dashboard_evolution — Admin Dashboard Evolution
+
+**PLAN:** `docs/plan/Ready/admin_dashboard_evolution/`  
+`PLAN_admin_dashboard_evolution.md`  
+**Status:** 🆕 Ready (Phase 1)  
+**Target:** Q2-Q3 2026
+
+- [ ] Phase 1 — Side Menu Reorganization & Organizations Rebuild
+- [ ] Phase 2 — CMS Section Shell + Settings for www.gateflow.site
+- [ ] Phase 3 — Advanced Webflow-like Front Builder Core
+- [ ] Phase 4 — Landing Pages with AI Content & Image Generation
+- [ ] Phase 5 — Pages & Menus Builder
+- [ ] Phase 6 — Blog Management with AI Topic Suggestion & Drafting
+- [ ] Phase 7 — Task Manager AI Automation for Blog & Landing Page Creation
+- [ ] Phase 8 — CRM, Support System, Analytics Dashboard & Team Roles
+- [ ] Phase 9 — AI Polish, Review Workflows, Multi-Language & Final Testing
 
 ### admin_emulation_hub — Admin Emulation Hub & Advanced Seeding
 
