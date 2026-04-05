@@ -27,6 +27,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 - **[Admin AI]** refine UI/UX with premium animations and hybrid message parts.
 
 ### Apps
+- **[Marketing]** merge marketing_growth_engine_q3_2026 worktree into master
 
 - **[Admin]** resolve type errors in AI Assistant SDK migration
 
