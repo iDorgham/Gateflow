@@ -8,45 +8,30 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ## [Unreleased]
 
-### 🏗️ Workspace
+### Workspace
 
 - **[Deploy]** add outputFileTracingRoot to all Next.js apps for pnpm monorepo
+- **[Deploy]** remove prisma generate from client-dashboard and resident-portal build scripts
 - **[Db]** resolve TS2345 type error in tenant.ts scanLog.count
 - **[Ci]** standardize cache action and remove pnpm-store from cache paths
 - **[Scripts]** ralph-docs changelog inserts under Unreleased tri-track
 - **[Plan Lifecycle]** complete documentation for tasks.md and automation
 
-### 🧪 AI Tools
+### AI Tools
 
 - **[AI SDK v6]** continue migration to `ai@6` / `@ai-sdk/react@3` in dashboard assistants.
 
-### 🛡️ Admin Dashboard
+### Apps
 
-- **Updates**: complete phase 8 - global polish and localization
-- **Enhancements**: add traffic emulation tooling and emulation hub v4.0
-- **Bug Fixes**: resolve typecheck errors and Vercel build issues
-
-### 🏢 Client Dashboard
-
-- **Updates**: verify 100% multi-tenant isolation
-- **Enhancements**: implement maintenance hub UI (Phase 3)
-
-### 🤳 Scanner App
-
-- **Updates**: biometric and shift log foundation
-
-### 📱 Resident Mobile
-
-- **Updates**: one-tap invite initiative completion
-
-### 🌐 Resident Portal
-
-- **Updates**: implement responsive multi-column layout
-
-### 📣 Marketing Website
-
-- **Updates**: finalize mega menu navigation architecture
-- **Enhancements**: add app illustrations and resilience campaign
+- **[Admin]** complete phase 8 - global polish and localization
+- **[Admin]** add traffic emulation tooling and emulation hub v4.0
+- **[Admin]** resolve typecheck errors blocking CI (i18n keys, lucide icon, hook-form deps)
+- **[Client]** verify 100% multi-tenant isolation
+- **[Client]** implement maintenance hub UI (Phase 3)
+- **[Scanner]** biometric and shift log foundation
+- **[Mobile]** one-tap invite initiative completion
+- **[Portal]** implement responsive multi-column layout
+- **[Marketing]** finalize mega menu navigation architecture and app illustrations
 
 ---
 
