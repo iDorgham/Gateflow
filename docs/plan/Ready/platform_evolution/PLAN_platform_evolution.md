@@ -1,54 +1,53 @@
 # PLAN: GateFlow Platform Evolution — The Operating System Hub (v3.0)
 
-**Mission:** Transform the Admin Dashboard into a premium, intelligent **Operating System Hub** for platform operators, internal teams (Sales, Marketing, Dev, Support), and super-admins. Deeply integrate AI automation across CRM, Task Manager, Style Editing, Landing Page Builder, and Blog Content.
-
 **Slug:** `platform_evolution`  
-**Status:** Ready  
+**Status:** Planned — canonical layout: `TASKS_*.md`, `CONTEXT_*.md`, `context/`, `phase_logs/`, `phases/`  
 **Primary apps:** `apps/admin-dashboard`, `apps/marketing`  
 **Supporting:** `packages/db`, `packages/ui`, `packages/types`, `packages/api`
 
 ---
 
-## 🏛️ Strategic Summary — Seven Integrated Phases
+## 🏛️ Executive Summary — Seven Strategic Phases
 
-| Phase | Title                           | Primary Role  | Outcome                                                                                |
-| :---- | :------------------------------ | :------------ | :------------------------------------------------------------------------------------- |
-| **1** | **Nested Hierarchy & Routing**  | **BACKEND**   | Strategic refactor of Users/Projects/Gates into Org context; Smart context switching.  |
-| **2** | **AI CRM & Lead Intelligence**  | **FULLSTACK** | Predictive lead scoring, automated nurturing, and AI deal forecasting for Sales teams. |
-| **3** | **AI Task Manager & Bots**      | **FULLSTACK** | Kanban + Calendar views with rule-based AI bots for cross-departmental automation.     |
-| **4** | **Style Hub & Live Theming**    | **FRONTEND**  | Token-safe white-labeling engine with real-time previews for client branding.          |
-| **5** | **AI Landing Page Builder**     | **FULLSTACK** | Block-based composer with AI text/image generation (Vercel AI SDK v6).                 |
-| **6** | **AI Blog Content Engine**      | **FULLSTACK** | Automated topic suggestion and full draft generation (EN/AR) with HiTL review.         |
-| **7** | **Ops Hub & Resilience Polish** | **QA/OPS**    | Unified help desk queue, predictive analytics, and performance/caching hardening.      |
-
----
-
-## 🛡️ Core Mandates & Constraints
-
-### 1. Multi-Tenancy & Security
-
-- **Strict Scoping**: Every DB query MUST include `organizationId` and `deletedAt: null`.
-- **Audit Logs**: All AI-driven actions (publishing, scoring, sending) MUST be logged in `AiActionLog` with status `PENDING_CONFIRMATION` until approved by a human.
-- **RBAC**: Access to department-specific hubs (CRM for Sales, Content for Marketing) must be guarded by `gateflow-security` roles.
-
-### 2. Design & Aesthetics (ADS v7)
-
-- **Token Only**: Use shared ADS tokens (e.g., `var(--ds-background-neutral-subtle)`). No hardcoded hex codes.
-- **Micro-interactions**: Use Framer Motion for subtle, premium layout transitions and AI "thinking" states.
-- **RTL/Arabic**: Native full-width support for Arabic (RTL). Mirror icons and layouts logically.
-
-### 3. AI Safety & Vercel SDK v6
-
-- **Tool Calling**: Use tool-calling for all AI interactions (CRM updates, Task creation, Blog drafting).
-- **Human Review**: No external-facing impact (emails, publishing) without a human confirmation gate.
-- **Image Generation**: Integrate Grok Imagine (or fallback) for landing page/blog visual assets.
+| Phase | Title                           | Primary Role  | Outcome                                                                                                                                  |
+| :---- | :------------------------------ | :------------ | :--------------------------------------------------------------------------------------------------------------------------------------- |
+| **1** | **Nested Hierarchy & Routing**  | **BACKEND**   | [Prompt](phases/01_nesting_hierarchy/PROMPT_phase_01.md); Strategic refactor of global Users/Projects/Gates into Org context.            |
+| **2** | **AI CRM & Lead Intelligence**  | **FULLSTACK** | [Prompt](phases/02_ai_crm_intelligence/PROMPT_phase_02.md); Predictive lead scoring, automated nurturing, and AI deal forecasting.       |
+| **3** | **AI Task Manager & Bots**      | **FULLSTACK** | [Prompt](phases/03_ai_task_manager/PROMPT_phase_03.md); Kanban + Calendar views with rule-based AI automation bots.                      |
+| **4** | **Style Hub & Live Theming**    | **FRONTEND**  | [Prompt](phases/04_style_editing_hub/PROMPT_phase_04.md); Token-safe white-labeling engine with real-time previews for branding.         |
+| **5** | **AI Landing Page Builder**     | **FULLSTACK** | [Prompt](phases/05_ai_landing_page_builder/PROMPT_phase_05.md); Block-based composer with AI text + image generation (Vercel AI SDK v6). |
+| **6** | **AI Blog Content Engine**      | **FULLSTACK** | [Prompt](phases/06_ai_blog_content_engine/PROMPT_phase_06.md); Automated topic suggestion and full draft generation (EN/AR).             |
+| **7** | **Ops Hub & Resilience Polish** | **QA/OPS**    | [Prompt](phases/07_ai_support_resilience/PROMPT_phase_07.md); Unified help desk, predictive analytics, and performance hardening.        |
 
 ---
 
-## 🧪 Definition of Done
+## 🏛️ Context & Planning Sources
 
-1.  **Code Quality**: Passes `pnpm preflight` (lint, typecheck, tests) in affected workspaces.
-2.  **ADS Compliance**: Verified via `enforce-ads-design.js`.
-3.  **Security Invariants**: Confirmed Org-scoping and Soft-deletes across all new entities.
-4.  **Parity**: EN/AR RTL layouts are indistinguishable in quality.
-5.  **Documentation**: `PRD_v7.0.md` and `ALL_TASKS_BACKLOG.md` updated with phase outcomes.
+| Resource                                                           | Description                                                                             |
+| :----------------------------------------------------------------- | :-------------------------------------------------------------------------------------- |
+| **[CONTEXT_platform_evolution.md](CONTEXT_platform_evolution.md)** | Strategic mission, market audit, mandates, constraints, and DoD.                        |
+| **[TASKS_platform_evolution.md](TASKS_platform_evolution.md)**     | High-level global checklist for the entire initiative.                                  |
+| **PRD v7.0**                                                       | `docs/product/PRD_v7.0.md` — Admin Dashboard, Marketing Suite, Analytics, CRM sections. |
+| **Security Overview**                                              | `docs/guides/SECURITY_OVERVIEW.md` — Scoping and auth invariants.                       |
+| **UI Design Guide**                                                | `docs/guides/UI_DESIGN_GUIDE.md` — ADS v7 token compliance standards.                   |
+
+---
+
+## 🧪 Definition of Done (Global)
+
+1. **Code Quality**: Passes `pnpm preflight` (lint, typecheck, tests).
+2. **ADS Compliance**: Verified via `enforce-ads-design.js`.
+3. **Security Invariants**: 100% org-scoping and soft-delete compliance.
+4. **MENA Parity**: EN/AR RTL layouts indistinguishable in quality.
+5. **Human-in-the-Loop**: All AI workflows include HiTL review/confirmation gates.
+6. **Documentation**: Plan transitioned from Ready → Active → Done.
+
+---
+
+## 🚀 Recommended Start
+
+Proceed to **Phase 1: Nested Hierarchy & Routing**.
+
+```bash
+/dev platform_evolution 1
+```
