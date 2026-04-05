@@ -103,3 +103,4 @@ export type {
   SampleScanTimestampsParams,
   WeekendAccent,
 } from './lib/rush-hour';
+export { encryptField, decryptField } from './lib/crypto';

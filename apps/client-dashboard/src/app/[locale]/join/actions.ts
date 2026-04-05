@@ -2,11 +2,11 @@
 
 import { z } from 'zod';
 import { prisma } from '@gate-access/db';
-import { 
-  hashPassword, 
-  signAccessToken, 
-  generateRefreshToken, 
-  getRefreshTokenExpiry 
+import {
+  hashPassword,
+  signAccessToken,
+  generateRefreshToken,
+  getRefreshTokenExpiry,
 } from '@/lib/auth';
 import { setAuthCookies } from '@/lib/auth-cookies';
 
@@ -18,23 +18,28 @@ const JoinSchema = z.object({
   password: z.string().min(8, 'Password must be at least 8 characters'),
 });
 
-export async function validateInvitation(token: string): Promise<Result<{ email: string; orgName: string }>> {
+export async function validateInvitation(
+  token: string
+): Promise<Result<{ email: string; orgName: string }>> {
   try {
     const invitation = await prisma.invitation.findUnique({
       where: { token },
-      include: { organization: true }
+      include: { organization: true },
     });
 
-    if (!invitation) return { success: false, error: 'Invalid invitation link.' };
-    if (invitation.acceptedAt) return { success: false, error: 'Invitation already accepted.' };
-    if (invitation.expiresAt < new Date()) return { success: false, error: 'Invitation expired.' };
+    if (!invitation)
+      return { success: false, error: 'Invalid invitation link.' };
+    if (invitation.acceptedAt)
+      return { success: false, error: 'Invitation already accepted.' };
+    if (invitation.expiresAt < new Date())
+      return { success: false, error: 'Invitation expired.' };
 
-    return { 
-      success: true, 
-      data: { 
-        email: invitation.email, 
-        orgName: invitation.organization.name 
-      } 
+    return {
+      success: true,
+      data: {
+        email: invitation.email,
+        orgName: invitation.organization.name,
+      },
     };
   } catch (error) {
     console.error('validateInvitation error:', error);
@@ -42,7 +47,9 @@ export async function validateInvitation(token: string): Promise<Result<{ email:
   }
 }
 
-export async function acceptInvitation(data: z.infer<typeof JoinSchema>): Promise<Result> {
+export async function acceptInvitation(
+  data: z.infer<typeof JoinSchema>
+): Promise<Result> {
   try {
     const validation = JoinSchema.safeParse(data);
     if (!validation.success) {
@@ -51,27 +58,30 @@ export async function acceptInvitation(data: z.infer<typeof JoinSchema>): Promis
 
     const invitation = await prisma.invitation.findUnique({
       where: { token: data.token },
-      include: { role: true }
+      include: { role: true, organization: true },
     });
 
     if (!invitation) return { success: false, error: 'Invalid invitation.' };
-    if (invitation.acceptedAt) return { success: false, error: 'Invitation already accepted.' };
-    if (invitation.expiresAt < new Date()) return { success: false, error: 'Invitation expired.' };
+    if (invitation.acceptedAt)
+      return { success: false, error: 'Invitation already accepted.' };
+    if (invitation.expiresAt < new Date())
+      return { success: false, error: 'Invitation expired.' };
 
     // Check if user already exists
-    let user = await prisma.user.findUnique({ where: { email: invitation.email } });
+    let user = await prisma.user.findUnique({
+      where: { email: invitation.email },
+      include: { organization: true },
+    });
 
     if (user) {
-      // If user exists, just update their role and org (assuming they are new or switching?)
-      // PRD multi-tenancy rules: one user per org for now? Or join another?
-      // In GateFlow, user belongs to one org at a time.
+      // If user exists, just update their role and org
       await prisma.user.update({
         where: { id: user.id },
         data: {
           organizationId: invitation.organizationId,
           roleId: invitation.roleId,
-          deletedAt: null // Restore if they were soft-deleted
-        }
+          deletedAt: null, // Restore if they were soft-deleted
+        },
       });
     } else {
       // Create new user
@@ -83,14 +93,15 @@ export async function acceptInvitation(data: z.infer<typeof JoinSchema>): Promis
           passwordHash,
           organizationId: invitation.organizationId,
           roleId: invitation.roleId,
-        }
+        },
+        include: { organization: true },
       });
     }
 
     // Mark invitation as accepted
     await prisma.invitation.update({
       where: { id: invitation.id },
-      data: { acceptedAt: new Date() }
+      data: { acceptedAt: new Date() },
     });
 
     // Sign them in
@@ -102,17 +113,18 @@ export async function acceptInvitation(data: z.infer<typeof JoinSchema>): Promis
         token: refreshToken,
         userId: user.id,
         expiresAt,
-      }
+      },
     });
 
     const accessToken = await signAccessToken(
       user.id,
       user.email,
       user.organizationId,
+      invitation.organization.type,
       {
         id: invitation.roleId,
         name: invitation.role.name,
-        permissions: invitation.role.permissions as Record<string, boolean>
+        permissions: invitation.role.permissions as Record<string, boolean>,
       }
     );
 

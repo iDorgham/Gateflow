@@ -43,6 +43,7 @@ model Organization {
   pixelMetaId                   String?
   adminAuthKeys                 AdminAuthorizationKey[]
   aiActionLogs                  AiActionLog[]
+  aiGeneratedAssets             AiGeneratedAsset[]
   aiAutomations                 AiAutomation[]
   aiTasks                       AiTask[]
   apiKeys                       ApiKey[]
@@ -75,6 +76,16 @@ model Organization {
   services          Service[]
   serviceBookings  ServiceBooking[]
   shiftLogs         ShiftLog[]
+  leads             Lead[]
+  deals             Deal[]
+  taskBoards        TaskBoard[]
+  taskBotRules      TaskBotRule[]
+  notifications     Notification[]
+  branding          OrganizationBranding?
+  brandingSnapshots BrandingSnapshot[]
+  landingPages      LandingPage[]
+  blogPosts         BlogPost[]
+  supportTickets    SupportTicket[]
 
   @@index([deletedAt])
 }
@@ -163,6 +174,7 @@ model User {
   phone           String?
   socialLinks     String?
   website         String?
+  department      Department?      @default(SUPPORT)
   lastActiveAt    DateTime?
   aiActionLogs    AiActionLog[]
   aiAutomations   AiAutomation[]
@@ -179,8 +191,15 @@ model User {
   reportedWorkOrders WorkOrder[] @relation("ReportedWorkOrders")
   assignedWorkOrders WorkOrder[] @relation("AssignedWorkOrders")
 
+  assignedTasks      Task[] @relation("AssignedTasks")
+  createdTasks       Task[] @relation("CreatedTasks")
+  notifications      Notification[]
+
   serviceBookings ServiceBooking[]
   shiftLogs       ShiftLog[]
+  blogPosts       BlogPost[]
+  assignedTickets SupportTicket[] @relation("AssignedTickets")
+  supportMessages SupportMessage[]
 
   @@index([organizationId])
   @@index([roleId])
@@ -206,20 +225,35 @@ model Invitation {
 }
 
 model Task {
-  id             String       @id @default(cuid())
-  title          String
-  description    String?
-  status         TaskStatus   @default(TODO)
-  dueDate        DateTime?
+  id           String       @id @default(cuid())
+  title        String
+  description  String?      @db.Text
+  status       TaskStatus   @default(TODO)
+  priority     TaskPriority @default(MEDIUM)
+  department   Department
   organizationId String
-  createdBy      String?
-  assignedTo     String?
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @updatedAt
-  deletedAt      DateTime?
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  boardId      String
+  assigneeId   String?
+  createdById  String
+  dueDate      DateTime?
+  // Polymorphic linking to CRM/CMS entities
+  linkedType   String?      // 'LEAD' | 'DEAL' | 'BLOG_POST' | 'LANDING_PAGE'
+  linkedId     String?
+  
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  deletedAt    DateTime?
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  board        TaskBoard    @relation(fields: [boardId], references: [id])
+  assignee     User?        @relation("AssignedTasks", fields: [assigneeId], references: [id])
+  creator      User         @relation("CreatedTasks", fields: [createdById], references: [id])
+  notifications Notification[]
 
   @@index([organizationId])
+  @@index([boardId])
+  @@index([department])
+  @@index([status])
   @@index([deletedAt])
 }
 
@@ -803,9 +837,10 @@ model AiActionLog {
   feedback         String?
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
-  organization     Organization   @relation(fields: [organizationId], references: [id])
-  user             User?          @relation(fields: [userId], references: [id])
+  organization     Organization        @relation(fields: [organizationId], references: [id])
+  user             User?               @relation(fields: [userId], references: [id])
   tags             AiContentTag[]
+  aiGeneratedAssets AiGeneratedAsset[]
 
   @@index([organizationId])
   @@index([userId])
@@ -838,7 +873,23 @@ model AiAutomation {
 enum TaskStatus {
   TODO
   IN_PROGRESS
+  IN_REVIEW
   DONE
+  BLOCKED
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum Department {
+  SALES
+  MARKETING
+  DEV
+  SUPPORT
 }
 
 enum AiTaskStatus {
@@ -1189,3 +1240,357 @@ enum MaintenanceLocationType {
   UNIT
   PROJECT
 }
+
+model AiGeneratedAsset {
+  id             String      @id @default(cuid())
+  organizationId String
+  aiActionLogId  String
+  url            String
+  type           AiAssetType
+  createdAt      DateTime    @default(now())
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  aiActionLog    AiActionLog  @relation(fields: [aiActionLogId], references: [id])
+
+  @@index([organizationId])
+  @@index([aiActionLogId])
+}
+
+enum AiAssetType {
+  IMAGE
+  VIDEO
+  DOCUMENT
+}
+
+model Lead {
+  id               String       @id @default(cuid())
+  organizationId   String
+  status           LeadStatus   @default(NEW)
+  score            Int?
+  source           String?
+  notes            String?
+  consentGiven     Boolean      @default(false)
+  purgeAfterDays   Int          @default(365)
+  /// AES-256-GCM encrypted email
+  encryptedEmail   String?
+  /// AES-256-GCM encrypted phone
+  encryptedPhone   String?
+  deletedAt        DateTime?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  deals            Deal[]
+
+  @@index([organizationId])
+  @@index([status])
+  @@index([deletedAt])
+}
+
+model Deal {
+  id               String       @id @default(cuid())
+  organizationId   String
+  leadId           String
+  value            Decimal      @db.Decimal(12, 2)
+  stage            DealStage    @default(DISCOVERY)
+  forecastCloseDate DateTime?
+  deletedAt        DateTime?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  lead             Lead         @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([leadId])
+  @@index([stage])
+  @@index([deletedAt])
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  NEGOTIATION
+  CLOSED_WON
+  CLOSED_LOST
+}
+
+enum DealStage {
+  DISCOVERY
+  PROPOSAL
+  NEGOTIATION
+  CONTRACTING
+  CLOSED_WON
+  CLOSED_LOST
+}
+
+model TaskBoard {
+  id             String       @id @default(cuid())
+  organizationId String
+  name           String
+  department     Department
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  tasks          Task[]
+
+  @@index([organizationId])
+  @@index([department])
+}
+
+model TaskBotRule {
+  id             String       @id @default(cuid())
+  organizationId String
+  name           String
+  department     Department
+  enabled        Boolean      @default(false)
+  autoExecute    Boolean      @default(false)  // false = HiTL required
+  triggerEvent   String       // e.g. 'LEAD_SCORE_ABOVE_80', 'DEAL_STAGE_CHANGED'
+  conditions     Json         // { field: 'score', operator: 'gt', value: 80 }
+  actionTemplate Json         // { title: 'Follow up', department: 'SALES', priority: 'HIGH' }
+  createdById    String
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([department])
+}
+
+model Notification {
+  id             String       @id @default(cuid())
+  organizationId String
+  userId         String
+  taskId         String?
+  type           String       // 'TASK_ASSIGNED', 'TASK_DUE_SOON', 'BOT_ACTION_PENDING'
+  message        String
+  status         NotificationStatus @default(UNREAD)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  task           Task?        @relation(fields: [taskId], references: [id])
+
+  @@index([organizationId])
+  @@index([userId])
+  @@index([status])
+}
+
+enum NotificationStatus {
+  UNREAD
+  READ
+  ARCHIVED
+}
+
+model OrganizationBranding {
+  id               String   @id @default(cuid())
+  organizationId   String   @unique
+  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  // Token overrides stored as JSON: { '--gf-color-primary': 'oklch(...)' }
+  tokenOverrides   Json     
+  fontFamily       String?  // Google Font name (EN)
+  fontFamilyArabic String?  // Google Font name (AR)
+  logoUrl          String?  // Vercel Blob / CDN URL
+  faviconUrl       String?  // Vercel Blob / CDN URL
+  isActive         Boolean  @default(true)
+  version          Int      @default(1)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([organizationId])
+}
+
+model BrandingSnapshot {
+  id               String   @id @default(cuid())
+  organizationId   String
+  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  version          Int
+  tokenOverrides   Json
+  fontFamily       String?
+  fontFamilyArabic String?
+  logoUrl          String?
+  createdById      String
+  createdAt        DateTime @default(now())
+
+  @@index([organizationId])
+}
+model LandingPage {
+  id               String   @id @default(cuid())
+  slug             String   @unique
+  titleEn          String
+  titleAr          String
+  descriptionEn    String?
+  descriptionAr    String?
+  status           LandingPageStatus @default(DRAFT)
+  publishedAt      DateTime?
+  organizationId   String?  // null = GateFlow global marketing page
+  createdById      String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  organization     Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  sections         LandingPageSection[]
+
+  @@index([organizationId])
+  @@index([slug])
+  @@index([status])
+}
+
+model LandingPageSection {
+  id               String      @id @default(cuid())
+  pageId           String
+  type             SectionType
+  order            Int
+  contentEn        Json        // { headline, body, ctaText, ctaLink, imageUrl }
+  contentAr        Json
+  aiGenerated      Boolean     @default(false)
+  
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+
+  page             LandingPage @relation(fields: [pageId], references: [id], onDelete: Cascade)
+
+  @@index([pageId])
+  @@index([order])
+}
+
+enum LandingPageStatus {
+  DRAFT
+  IN_REVIEW
+  PUBLISHED
+  ARCHIVED
+}
+
+enum SectionType {
+  HERO
+  FEATURES
+  SOCIAL_PROOF
+  CTA
+  PRICING
+  FAQ
+  LEAD_FORM
+}
+model BlogPost {
+  id               String   @id @default(cuid())
+  status           BlogPostStatus @default(DRAFT)
+  
+  titleEn          String
+  titleAr          String
+  slugEn           String   @unique
+  slugAr           String   @unique
+  
+  contentEn        String   @db.Text
+  contentAr        String   @db.Text
+  excerptEn        String?  @db.Text
+  excerptAr        String?  @db.Text
+  
+  metaTitleEn      String?
+  metaTitleAr      String?
+  metaDescEn       String?
+  metaDescAr       String?
+  canonicalUrl     String?
+  
+  featuredImageId  String?
+  organizationId   String?  // null = global marketing blog
+  authorId         String
+  
+  publishedAt      DateTime?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  organization     Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  author           User          @relation(fields: [authorId], references: [id])
+  categories       BlogCategory[]
+
+  @@index([organizationId])
+  @@index([slugEn])
+  @@index([slugAr])
+  @@index([status])
+}
+
+model BlogCategory {
+  id               String   @id @default(cuid())
+  nameEn           String
+  nameAr           String
+  slug             String   @unique
+  posts            BlogPost[]
+
+  @@index([slug])
+}
+
+model SupportTicket {
+  id               String         @id @default(cuid())
+  organizationId   String?        // null = general inquiry
+  subject          String
+  status           TicketStatus   @default(OPEN)
+  priority         TicketPriority @default(MEDIUM)
+  assigneeId       String?        // GateFlow support agent
+  aiTriageSummary  String?        @db.Text  // AI-generated summary
+  aiSuggestedAction String?       // AI recommendation
+  source           String         // 'client_dashboard' | 'marketing_site' | 'email' | 'manual'
+  messages         SupportMessage[]
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  resolvedAt       DateTime?
+  deletedAt        DateTime?
+
+  organization     Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  assignee         User?          @relation("AssignedTickets", fields: [assigneeId], references: [id])
+
+  @@index([organizationId])
+  @@index([status])
+  @@index([priority])
+}
+
+model SupportMessage {
+  id           String        @id @default(cuid())
+  ticketId     String
+  ticket       SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  senderId     String?       // null = AI
+  senderType   String        // 'USER' | 'AGENT' | 'AI'
+  content      String        @db.Text
+  createdAt    DateTime      @default(now())
+
+  sender       User?         @relation(fields: [senderId], references: [id])
+
+  @@index([ticketId])
+}
+
+model AiUsageLog {
+  id             String   @id @default(cuid())
+  model          String   // 'gpt-4o', 'gemini-1.5-pro', etc.
+  inputTokens    Int
+  outputTokens   Int
+  estimatedCost  Float    // USD
+  department     String   // 'SALES', 'MARKETING', 'DEV', 'SUPPORT'
+  action         String   // 'LEAD_SCORED', 'BLOG_DRAFTED', 'TASK_GENERATED', 'SUPPORT_TRIAGED'
+  createdAt      DateTime @default(now())
+}
+
+enum TicketStatus {
+  OPEN
+  AI_TRIAGED
+  ASSIGNED
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+enum TicketPriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum BlogPostStatus {
+  DRAFT
+  IN_REVIEW
+  READY_TO_PUBLISH
+  PUBLISHED
+  ARCHIVED
+}
+

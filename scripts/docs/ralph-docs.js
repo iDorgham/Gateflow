@@ -23,9 +23,15 @@ const { execSync } = require('child_process');
 const ROOT = path.resolve(__dirname, '../..');
 const CHANGELOG = path.join(ROOT, 'CHANGELOG.md');
 const README = path.join(ROOT, 'README.md');
-const PRD = path.join(ROOT, 'docs', 'product', 'PRD.md');
-const FEATURE_LOG = path.join(ROOT, 'docs', 'product', 'FEATURE_LOG.md');
-const UPCOMING = path.join(ROOT, 'docs', 'product', 'UPCOMING.md');
+const PRD = path.join(ROOT, 'docs', 'reference', 'product', 'PRD.md');
+const FEATURE_LOG = path.join(
+  ROOT,
+  'docs',
+  'reference',
+  'product',
+  'FEATURE_LOG.md'
+);
+const UPCOMING = path.join(ROOT, 'docs', 'reference', 'product', 'UPCOMING.md');
 const TASKS = path.join(ROOT, 'docs', 'tasks.md');
 
 // ── helpers ───────────────────────────────────────────────────────────────────

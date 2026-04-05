@@ -1,48 +1,27 @@
-@import "./tokens.css";
-
 @theme {
-  /* Colors mapping mapped directly to semantic variables defined in tokens.css */
-  --color-background: var(--gf-color-background);
-  --color-foreground: var(--gf-color-foreground);
-  --color-surface: var(--gf-color-surface);
-  --color-surface-raised: var(--gf-color-surface-raised);
+  --color-gf-primary: var(--gf-color-primary);
+  --color-gf-primary-foreground: var(--gf-color-primary-foreground);
+  --color-gf-background: var(--gf-color-theme-background);
+  --color-gf-foreground: var(--gf-color-theme-foreground);
+  --color-gf-surface: var(--gf-color-surface);
+  --color-gf-surface-raised: var(--gf-color-surface-raised);
+  --color-gf-border: var(--gf-color-border);
+  --color-gf-muted: var(--gf-color-muted);
+  --color-gf-muted-foreground: var(--gf-color-muted-foreground);
   
+  /* Semantic Status */
+  --color-gf-success: var(--gf-color-success);
+  --color-gf-warning: var(--gf-color-warning);
+  --color-gf-danger: var(--gf-color-danger);
+  --color-gf-info: var(--gf-color-info);
+
+  /* shadcn/ui overrides */
+  --color-background: var(--gf-color-theme-background);
+  --color-foreground: var(--gf-color-theme-foreground);
+  --color-card: var(--gf-color-surface);
+  --color-card-foreground: var(--gf-color-theme-foreground);
+  --color-popover: var(--gf-color-surface-overlay);
+  --color-popover-foreground: var(--gf-color-theme-foreground);
   --color-primary: var(--gf-color-primary);
   --color-primary-foreground: var(--gf-color-primary-foreground);
-  
-  --color-secondary: var(--gf-color-secondary);
-  --color-secondary-foreground: var(--gf-color-secondary-foreground);
-  
-  --color-muted: var(--gf-color-muted);
-  --color-muted-foreground: var(--gf-color-muted-foreground);
-  
-  --color-accent: var(--gf-color-accent);
-  --color-accent-foreground: var(--gf-color-accent-foreground);
-  
-  --color-border: var(--gf-color-border);
-  --color-input: var(--gf-color-input);
-  --color-ring: var(--gf-color-ring);
-  
-  --color-success: var(--gf-color-success);
-  --color-success-foreground: var(--gf-color-success-foreground);
-  
-  --color-warning: var(--gf-color-warning);
-  --color-warning-foreground: var(--gf-color-warning-foreground);
-  
-  --color-danger: var(--gf-color-danger);
-  --color-danger-foreground: var(--gf-color-danger-foreground);
-  
-  --color-info: var(--gf-color-info);
-  --color-info-foreground: var(--gf-color-info-foreground);
-
-  /* Elevation mapping */
-  --shadow-sm: var(--gf-elevation-shadow-sm);
-  --shadow-md: var(--gf-elevation-shadow-md);
-  --shadow-lg: var(--gf-elevation-shadow-lg);
-
-  /* Radius mapping. Tailwind v4 treats --radius- as prefix. */
-  --radius-sm: var(--gf-radius-sm);
-  --radius-md: var(--gf-radius-md);
-  --radius-lg: var(--gf-radius-lg);
-  --radius: var(--gf-radius-md);
 }

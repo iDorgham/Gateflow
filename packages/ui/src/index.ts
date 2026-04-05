@@ -31,6 +31,7 @@ export * from './components/ui/tooltip';
 export * from './components/ui/dynamic-table';
 export * from './components/ui/pagination';
 export * from './components/ui/date-picker';
+export * from './components/ui/progress';
 
 export * from './components/auth/login-shell';
 export * from './components/auth/squares-background';

@@ -38,7 +38,7 @@ export async function loginAction(
     return { error: 'Password must be at least 8 characters.' };
 
   // Fetch user — constant-time error path regardless of existence
-  const user = await prisma.user
+  const userData = await prisma.user
     .findFirst({
       where: { email, deletedAt: null },
       select: {
@@ -46,21 +46,43 @@ export async function loginAction(
         email: true,
         name: true,
         passwordHash: true,
-        role: true,
+        role: {
+          select: {
+            id: true,
+            name: true,
+            permissions: true,
+          },
+        },
         organizationId: true,
+        organization: {
+          select: {
+            type: true,
+          },
+        },
       },
     })
     .catch(() => null);
 
-  const passwordValid = user
-    ? await verifyPassword(user.passwordHash, password).catch(() => false)
+  const passwordValid = userData
+    ? await verifyPassword(userData.passwordHash, password).catch(() => false)
     : false;
 
-  if (!user || !passwordValid) return { error: 'Invalid email or password.' };
+  if (!userData || !passwordValid)
+    return { error: 'Invalid email or password.' };
 
   // Issue tokens
   const [accessToken, refreshToken] = await Promise.all([
-    signAccessToken(user.id, user.email, user.organizationId, user.role),
+    signAccessToken(
+      userData.id,
+      userData.email,
+      userData.organizationId,
+      userData.organization?.type ?? null,
+      {
+        id: userData.role.id,
+        name: userData.role.name,
+        permissions: userData.role.permissions as Record<string, boolean>,
+      }
+    ),
     Promise.resolve(generateRefreshToken()),
   ]);
 
@@ -69,7 +91,7 @@ export async function loginAction(
     .create({
       data: {
         token: refreshToken,
-        userId: user.id,
+        userId: userData.id,
         expiresAt: getRefreshTokenExpiry(),
       },
     })

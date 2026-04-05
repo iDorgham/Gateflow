@@ -22,13 +22,18 @@ import {
   DoorOpen,
   Zap,
   Database,
+  Target,
+  Columns3,
+  Palette,
 } from 'lucide-react';
+import { useOrganization } from '@/providers/organization-provider';
 import {
   cn,
   SideNavigationShell,
   SideNavItem,
   NavGroup,
 } from '@gate-access/ui';
+import { OrgSwitcher } from './organizations/org-switcher';
 
 interface NavItemData {
   href: string;
@@ -42,76 +47,128 @@ interface NavGroupData {
   items: NavItemData[];
 }
 
-const getNavGroups = (t: TFunction): NavGroupData[] => [
-  {
-    label: t('admin:nav.management', 'Management'),
-    items: [
-      {
-        href: '/',
-        label: t('admin:nav.overview'),
-        icon: LayoutDashboard,
-        exact: true,
-      },
-      {
-        href: '/organizations',
-        label: t('admin:nav.organizations'),
-        icon: Building2,
-      },
-      { href: '/users', label: t('admin:nav.users'), icon: Users },
-      { href: '/projects', label: t('admin:nav.projects'), icon: FolderOpen },
-      { href: '/gates', label: t('admin:nav.gates'), icon: DoorOpen },
-    ],
-  },
-  {
-    label: t('admin:nav.intelligence', 'Intelligence'),
-    items: [
-      { href: '/analytics', label: t('admin:nav.analytics'), icon: BarChart3 },
-      { href: '/scans', label: t('admin:nav.scans'), icon: ScanLine },
-      { href: '/audit-logs', label: t('admin:nav.audit'), icon: ScrollText },
-    ],
-  },
-  {
-    label: t('admin:nav.infrastructure', 'Infrastructure'),
-    items: [
-      {
-        href: '/monitoring/hub',
-        label: t('admin:nav.ops_hub'),
-        icon: Activity,
-      },
-      {
-        href: '/monitoring/emulation',
-        label: t('admin:nav.emulation'),
-        icon: Zap,
-      },
-      {
-        href: '/monitoring/seeding',
-        label: t('admin:nav.seeding'),
-        icon: Database,
-      },
-    ],
-  },
-  {
-    label: t('admin:nav.governance', 'Governance'),
-    items: [
-      { href: '/monitoring', label: t('admin:nav.monitoring'), icon: Activity },
-      {
-        href: '/authorization-keys',
-        label: t('admin:nav.authKeys', 'Auth Keys'),
-        icon: KeyRound,
-      },
-      { href: '/settings', label: t('admin:nav.settings'), icon: Settings },
-      { href: '/admins', label: t('admin:nav.admins'), icon: Shield },
-    ],
-  },
-];
+const getNavGroups = (t: TFunction, orgId: string | null): NavGroupData[] => {
+  const prefix = orgId ? `/organizations/${orgId}` : '';
+
+  return [
+    {
+      label: t('admin:nav.management', 'Management'),
+      items: [
+        {
+          href: orgId ? `${prefix}` : '/',
+          label: t('admin:nav.overview'),
+          icon: LayoutDashboard,
+          exact: true,
+        },
+        {
+          href: '/organizations',
+          label: t('admin:nav.organizations'),
+          icon: Building2,
+        },
+        { href: `${prefix}/users`, label: t('admin:nav.users'), icon: Users },
+        {
+          href: `${prefix}/tasks`,
+          label: t('admin:nav.tasks', 'Task Hub'),
+          icon: Columns3,
+        },
+        {
+          href: `${prefix}/projects`,
+          label: t('admin:nav.projects'),
+          icon: FolderOpen,
+        },
+        {
+          href: `${prefix}/gates`,
+          label: t('admin:nav.gates'),
+          icon: DoorOpen,
+        },
+        {
+          href: `${prefix}/branding`,
+          label: t('admin:nav.branding', 'Style Hub'),
+          icon: Palette,
+        },
+      ],
+    },
+    {
+      label: t('admin:nav.intelligence', 'Intelligence'),
+      items: [
+        {
+          href: `${prefix}/analytics`,
+          label: t('admin:nav.analytics'),
+          icon: BarChart3,
+        },
+        {
+          href: `${prefix}/crm`,
+          label: t('admin:nav.crm', 'Lead Intel'),
+          icon: Target,
+        },
+        {
+          href: `${prefix}/scans`,
+          label: t('admin:nav.scans'),
+          icon: ScanLine,
+        },
+        {
+          href: `${prefix}/audit-logs`,
+          label: t('admin:nav.audit'),
+          icon: ScrollText,
+        },
+      ],
+    },
+    {
+      label: t('admin:nav.infrastructure', 'Infrastructure'),
+      items: [
+        {
+          href: `${prefix}/monitoring/hub`,
+          label: t('admin:nav.ops_hub'),
+          icon: Activity,
+        },
+        {
+          href: `${prefix}/monitoring/emulation`,
+          label: t('admin:nav.emulation'),
+          icon: Zap,
+        },
+        {
+          href: `${prefix}/monitoring/seeding`,
+          label: t('admin:nav.seeding'),
+          icon: Database,
+        },
+      ],
+    },
+    {
+      label: t('admin:nav.governance', 'Governance'),
+      items: [
+        {
+          href: `${prefix}/monitoring`,
+          label: t('admin:nav.monitoring'),
+          icon: Activity,
+        },
+        {
+          href: `${prefix}/authorization-keys`,
+          label: t('admin:nav.authKeys', 'Auth Keys'),
+          icon: KeyRound,
+        },
+        {
+          href: `${prefix}/settings`,
+          label: t('admin:nav.settings'),
+          icon: Settings,
+        },
+        {
+          href: `${prefix}/admins`,
+          label: t('admin:nav.admins'),
+          icon: Shield,
+        },
+      ],
+    },
+  ];
+};
 
 export function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
   const { t, i18n } = useTranslation();
+  const { orgId } = useOrganization();
   const [isCollapsed, setIsCollapsed] = useState(false);
 
-  const navGroups = getNavGroups(t);
+  const navGroups = getNavGroups(t, orgId);
   const localePrefix = `/${i18n.language}`;
 
   async function handleSignOut() {
@@ -131,16 +188,14 @@ export function Sidebar() {
               isCollapsed && 'justify-center border-none'
             )}
           >
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-ds-background-brand-bold text-white shadow-lg shadow-primary/25 ring-2 ring-sidebar/20 transition-transform hover:scale-105 active:scale-95 cursor-default">
-              <Shield className="h-5 w-5" fill="currentColor" />
-            </div>
+            <OrgSwitcher isCollapsed={isCollapsed} />
             {!isCollapsed && (
               <div className="flex flex-col min-w-0">
                 <span className="text-sm font-black italic tracking-tighter text-ds-text uppercase">
                   GateFlow
                 </span>
                 <span className="text-[10px] font-black text-ds-text-brand tracking-widest uppercase opacity-90">
-                  Global Admin
+                  Platform Admin
                 </span>
               </div>
             )}
