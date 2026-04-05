@@ -1598,9 +1598,9 @@ logger.info('QR code created', {
 
 ### 17.3 Planning Documents
 
-- **Real-time Updates Plan** — `docs/plan/execution/PLAN_realtime_updates.md`
-- **Marketing Website Plan** — `docs/plan/execution/PLAN_marketing_website.md`
-- **Resident Mobile Plan** — `docs/plan/execution/PLAN_resident_mobile.md`
+- **Real-time Updates Plan** — `docs/plan/Complete/PLAN_realtime_updates.md`
+- **Marketing Website Plan** — `docs/plan/Complete/PLAN_marketing_website.md`
+- **Resident Mobile Plan** — `docs/plan/Complete/PLAN_resident_mobile.md`
 
 ---
 

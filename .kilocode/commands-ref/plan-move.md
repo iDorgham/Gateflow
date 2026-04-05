@@ -6,10 +6,10 @@ Internal flow for moving plans between lifecycle folders. Used by `/plan ready`,
 
 To find where a plan `<slug>` lives, check in order:
 
-1. `docs/plan/in-progress/<slug>/PLAN_<slug>.md`
-2. `docs/plan/planned/<slug>/PLAN_<slug>.md`
-3. `docs/plan/planning/<slug>/PLAN_<slug>.md`
-4. `docs/plan/execution/PLAN_<slug>.md` (legacy flat structure)
+1. `docs/plan/Active/<slug>/PLAN_<slug>.md`
+2. `docs/plan/Ready/<slug>/PLAN_<slug>.md`
+3. `docs/plan/Draft/<slug>/PLAN_<slug>.md`
+4. `docs/plan/Complete/PLAN_<slug>.md` (legacy flat structure)
 
 Return the first path that exists. Legacy plans stay in `execution/` until migrated.
 
@@ -19,9 +19,9 @@ Return the first path that exists. Legacy plans stay in `execution/` until migra
 
 ```bash
 # Move planning/<slug>/ → planned/<slug>/
-mkdir -p docs/plan/planned/<slug>
-mv docs/plan/planning/<slug>/* docs/plan/planned/<slug>/
-rmdir docs/plan/planning/<slug>  # if empty
+mkdir -p docs/plan/Ready/<slug>
+mv docs/plan/Draft/<slug>/* docs/plan/Ready/<slug>/
+rmdir docs/plan/Draft/<slug>  # if empty
 ```
 
 Or equivalent file operations: copy all files, then delete originals.
@@ -31,9 +31,9 @@ Or equivalent file operations: copy all files, then delete originals.
 When `/dev` is about to execute a phase and the plan is in `planned/`:
 
 ```bash
-mkdir -p docs/plan/in-progress/<slug>
-mv docs/plan/planned/<slug>/* docs/plan/in-progress/<slug>/
-rmdir docs/plan/planned/<slug>
+mkdir -p docs/plan/Active/<slug>
+mv docs/plan/Ready/<slug>/* docs/plan/Active/<slug>/
+rmdir docs/plan/Ready/<slug>
 ```
 
 ### in-progress → done (when last phase completes)
@@ -41,13 +41,13 @@ rmdir docs/plan/planned/<slug>
 When `/dev` completes the **last** phase (all phases in PLAN have acceptance criteria met):
 
 ```bash
-mkdir -p docs/plan/done/<slug>
-mv docs/plan/in-progress/<slug>/* docs/plan/done/<slug>/
-rmdir docs/plan/in-progress/<slug>
+mkdir -p docs/plan/Complete/<slug>
+mv docs/plan/Active/<slug>/* docs/plan/Complete/<slug>/
+rmdir docs/plan/Active/<slug>
 ```
 
 ### Legacy (execution/)
 
-Plans in `docs/plan/execution/` are not auto-moved. To adopt lifecycle:
+Plans in `docs/plan/Complete/` are not auto-moved. To adopt lifecycle:
 - Manually create `planned/<slug>/` or `in-progress/<slug>/` and copy PLAN, PROMPT_*, TASKS_* there.
 - Or leave in execution/; lookup still finds them.

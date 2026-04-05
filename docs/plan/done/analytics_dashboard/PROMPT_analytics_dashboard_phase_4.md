@@ -1,7 +1,7 @@
 # PROMPT_analytics_dashboard_phase_4 — Polish & Real-time
 
 **Initiative:** analytics_dashboard  
-**Plan:** `docs/plan/execution/PLAN_analytics_dashboard.md`  
+**Plan:** `docs/plan/Complete/PLAN_analytics_dashboard.md`  
 **Phase:** 4 of 4  
 
 ---
@@ -38,7 +38,7 @@ Polish the analytics dashboard: WebSocket for live KPI updates (with short-polli
 - Fallback: keep short-polling if WebSocket unavailable
 - Export & share: export chart as PNG; copy shareable dashboard URL
 - Mobile: collapsible filter accordion, horizontal scroll KPI cards, stacked layout, touch-friendly
-- Performance: ensure React Query or similar caching; document strategy in `docs/plan/execution/CACHE_STRATEGY_analytics.md` or `docs/guides/`
+- Performance: ensure React Query or similar caching; document strategy in `docs/plan/Complete/CACHE_STRATEGY_analytics.md` or `docs/guides/`
 - Load and interaction targets: <2s cached, <4s cold, <800ms filter→chart
 
 ## Scope (out)
@@ -82,7 +82,7 @@ Polish the analytics dashboard: WebSocket for live KPI updates (with short-polli
    - Measure: Lighthouse or manual; aim <2s cached, <4s cold
 
 6. **Caching documentation**
-   - Create `docs/plan/execution/CACHE_STRATEGY_analytics.md` or add section to existing docs
+   - Create `docs/plan/Complete/CACHE_STRATEGY_analytics.md` or add section to existing docs
    - Document: Redis keys (heatmap, summary), TTLs, invalidation triggers, WebSocket events
    - Fallback behavior when Redis unavailable
 
@@ -119,5 +119,5 @@ Polish the analytics dashboard: WebSocket for live KPI updates (with short-polli
 
 - `apps/client-dashboard/src/app/[locale]/dashboard/analytics/` (WebSocket hook, export, share, mobile styles)
 - `apps/client-dashboard/src/app/api/` (WebSocket route if new)
-- `docs/plan/execution/CACHE_STRATEGY_analytics.md` or `docs/guides/`
+- `docs/plan/Complete/CACHE_STRATEGY_analytics.md` or `docs/guides/`
 - `apps/client-dashboard/package.json` (if adding html2canvas or export lib)

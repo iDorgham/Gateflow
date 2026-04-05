@@ -72,7 +72,7 @@ strictly follows the **Atlassian Design System (ADS) Premium** guidelines.
 ## 5. Execution Roadmap
 
 The initiative is broken into 6 ordered phases. See the full execution plan here:
-[PLAN_client_dashboard_v10_redesign.md](file:///Users/Dorgham/Documents/Work/Devleopment/Gate-Access/docs/plan/execution/PLAN_client_dashboard_v10_redesign.md)
+[PLAN_client_dashboard_v10_redesign.md](file:///Users/Dorgham/Documents/Work/Devleopment/Gate-Access/docs/plan/Complete/client_dashboard_v10_redesign/PLAN_client_dashboard_v10_redesign.md)
 
 | Phase | Goal | Status |
 | :--- | :--- | :--- |

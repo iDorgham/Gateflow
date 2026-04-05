@@ -28,6 +28,6 @@ Read that file for:
 ## References
 
 - Phase template: `.antigravity/templates/TEMPLATE_PROMPT_phase.md`
-- Pro prompts: `docs/plan/execution/PROMPTS_REFERENCE.md`
+- Pro prompts: `docs/guides/PROMPTS_REFERENCE.md`
 - Subagent hierarchy: `docs/plan/guidelines/SUBAGENT_HIERARCHY.md`
 - Tool reference: `docs/guides/TOOL_AND_CLI_REFERENCE.md`

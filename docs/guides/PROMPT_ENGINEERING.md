@@ -70,7 +70,7 @@ References: [path to similar page or component].
 Use @gate-access/ui and design tokens from packages/ui/src/tokens.ts.
 ```
 
-**Sign-in design:** For unified admin + client sign-in layout and post-login animation, use the full prompt in `docs/plan/execution/PROMPTS_REFERENCE.md` (section “Sign-in pages design (admin + client)”). Load gf-design-guide, gf-creative-ui-animation, gf-uiux-animator.
+**Sign-in design:** For unified admin + client sign-in layout and post-login animation, use the full prompt in `docs/guides/PROMPTS_REFERENCE.md` (section “Sign-in pages design (admin + client)”). Load gf-design-guide, gf-creative-ui-animation, gf-uiux-animator.
 
 ---
 
@@ -107,7 +107,7 @@ QR HMAC-SHA256. Ref: CLAUDE.md.
 
 ## 6. Copy-Paste Prompts
 
-All copy-paste prompts live in `docs/plan/execution/PROMPTS_REFERENCE.md`. When adding new ones:
+All copy-paste prompts live in `docs/guides/PROMPTS_REFERENCE.md`. When adding new ones:
 
 - Start with **Request:** for the user to copy from.
 - Keep blocks self-contained (include context and constraints).
@@ -120,7 +120,7 @@ All copy-paste prompts live in `docs/plan/execution/PROMPTS_REFERENCE.md`. When 
 | Resource | Path |
 |----------|------|
 | Phase template | `.antigravity/templates/TEMPLATE_PROMPT_phase.md` |
-| Pro prompts | `docs/plan/execution/PROMPTS_REFERENCE.md` |
+| Pro prompts | `docs/guides/PROMPTS_REFERENCE.md` |
 | Subagent hierarchy | `docs/archive/plan-legacy/guidelines/SUBAGENT_HIERARCHY.md` |
 | Tool reference | `docs/guides/TOOL_AND_CLI_REFERENCE.md` |
 | gf-planner | `.antigravity/skills/gf-planner/SKILL.md` |

@@ -16,7 +16,7 @@ Run **`/ready`** first: push everything, run preflight, confirm clean state. Do 
 
 ### Flow
 
-1. Load phase prompt: `docs/plan/execution/PROMPT_<plan>_phase_<N>.md` (default plan: mvp_resident; N from context or next incomplete phase)
+1. Load phase prompt: `docs/plan/Complete/PROMPT_<plan>_phase_<N>.md` (default plan: mvp_resident; N from context or next incomplete phase)
 2. Implement — follow prompt steps, use subagents (explore, shell, browser-use) and MCP (Prisma-Local, Context7) as specified
 3. Test — run `pnpm preflight` via shell subagent; fix until pass
 4. Github — `git add -A`, `git commit -m "feat(scope): Phase title (phase N)"`, `git pull --rebase origin main`, `git push`
@@ -32,7 +32,7 @@ Run **`/ready`** first: push everything, run preflight, confirm clean state. Do 
 
 ### Flow
 
-1. Read plan: `docs/plan/execution/PLAN_<name>.md` (default: mvp_and_resident). Count phases.
+1. Read plan: `docs/plan/Complete/PLAN_<name>.md` (default: mvp_and_resident). Count phases.
 2. For each phase N (1, 2, 3, ...):
    - Load `PROMPT_<plan>_phase_N.md` (create from template if missing)
    - Implement the phase
@@ -53,7 +53,7 @@ Run **`/ready`** first: push everything, run preflight, confirm clean state. Do 
 ## Plan detection
 
 - Default plan: `mvp_resident` (from PLAN_mvp_and_resident.md)
-- Plans live in `docs/plan/execution/PLAN_*.md`
+- Plans live in `docs/plan/Complete/PLAN_*.md`
 - Phase prompts: `PROMPT_<plan>_phase_<N>.md`
 
 ---

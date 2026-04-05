@@ -7,7 +7,7 @@ Every new plan created by `/plan` follows this structure exactly.
 ## Folder Layout
 
 ```
-docs/plan/planning/<slug>/
+docs/plan/Draft/<slug>/
 ├── PLAN_<slug>.md              # Master overview: phases, deps, risks, timeline
 ├── TASKS_<slug>.md             # Flat checklist tracking all phases + parts
 ├── CONTEXT_<slug>.md           # Frozen context snapshot (schema, types, env vars)

@@ -2,7 +2,7 @@
 
 **IDEA:** `docs/plan/context/IDEA_projects_crm_ui.md`
 
-**PLAN:** `docs/plan/planning/PLAN_projects_crm_ui.md`
+**PLAN:** `docs/plan/Draft/PLAN_projects_crm_ui.md`
 
 **Status:** 🔄 In-Progress
 

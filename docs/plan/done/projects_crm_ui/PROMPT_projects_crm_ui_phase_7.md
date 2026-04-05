@@ -19,7 +19,7 @@ SECURITY | QA | i18n
 - **Apps**: client-dashboard (3001)
 - **Packages**: ui, i18n
 - **Rules**: pnpm only; standard RTL; multi-tenant.
-- **Refs**: `docs/plan/planning/PLAN_projects_crm_ui.md`, all Phase 1-6 implementation.
+- **Refs**: `docs/plan/Draft/PLAN_projects_crm_ui.md`, all Phase 1-6 implementation.
 
 ### Goal
 

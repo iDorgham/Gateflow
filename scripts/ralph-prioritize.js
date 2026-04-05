@@ -2,8 +2,8 @@ const fs = require('fs');
 const path = require('path');
 
 const BACKLOG_PATH = path.join(__dirname, '../docs/plan/backlog/ALL_TASKS_BACKLOG.md');
-const IN_PROGRESS_DIR = path.join(__dirname, '../docs/plan/in-progress/');
-const PLANNED_DIR = path.join(__dirname, '../docs/plan/planned/');
+const IN_PROGRESS_DIR = path.join(__dirname, '../docs/plan/Active/');
+const PLANNED_DIR = path.join(__dirname, '../docs/plan/Ready/');
 
 function prioritize() {
   console.log('--- Ralph Prioritization Engine ---');

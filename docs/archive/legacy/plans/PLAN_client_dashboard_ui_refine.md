@@ -174,7 +174,7 @@ Run each phase via `/dev`:
 ```
 /dev
 ```
-Then paste the contents of `docs/plan/execution/PROMPT_client_dashboard_ui_refine_phase_N.md` for the desired phase.
+Then paste the contents of `docs/plan/Complete/PROMPT_client_dashboard_ui_refine_phase_N.md` for the desired phase.
 
 Or run all phases sequentially:
 

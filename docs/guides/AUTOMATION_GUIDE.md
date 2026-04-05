@@ -301,8 +301,8 @@ pnpm plan:new my-feature --phases 5
 
 This creates:
 
-- `docs/plan/planning/my-feature/PLAN_my-feature.md` — phase table with checkboxes
-- `docs/plan/planning/my-feature/PROMPT_my-feature_phase_1.md` through `_phase_5.md`
+- `docs/plan/Draft/my-feature/PLAN_my-feature.md` — phase table with checkboxes
+- `docs/plan/Draft/my-feature/PROMPT_my-feature_phase_1.md` through `_phase_5.md`
 
 Edit the phase prompt files to describe what each phase should implement. Include: **Role**, **Goal**, **Steps**, **Acceptance criteria**, **Preferred tool**.
 
@@ -734,7 +734,7 @@ pnpm plan:run <slug> <next-phase>
 
 # 3. If starting new work — create a plan
 pnpm plan:new payments-integration --phases 4
-# → Edit docs/plan/planning/payments-integration/PROMPT_*.md files
+# → Edit docs/plan/Draft/payments-integration/PROMPT_*.md files
 #    Each file needs: Role, Goal, Steps, Acceptance criteria, Preferred tool
 
 # 4. Approve the plan
@@ -872,14 +872,14 @@ Make sure your commit message contains a recognized pattern:
 "✓ phase 3"        ✓
 ```
 
-And that there is at least one plan in `docs/plan/in-progress/`.
+And that there is at least one plan in `docs/plan/Active/`.
 
 ### `pnpm plan:run` fails to move plan to done
 
 Check that `ralph-run.js` can find the plan file at:
 
 ```
-docs/plan/in-progress/<slug>/PLAN_<slug>.md
+docs/plan/Active/<slug>/PLAN_<slug>.md
 ```
 
 Run `pnpm plan:status` to verify the plan is in `in-progress` state.

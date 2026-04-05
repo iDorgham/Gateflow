@@ -23,10 +23,10 @@ You are the **GateFlow workspace guide**. You know how the repo is built (skills
 | **Skills** | `.antigravity/skills/` | gf-planner, gf-dev, gf-security, gf-api, gf-database, gf-mobile, gf-i18n, gf-mcp, pro-prd-writer, etc. |
 | **Product & docs** | `docs/PRD_v7.0.md`, `docs/README.md`, `docs/plan/`, `docs/guides/` | Canonical PRD, plan (context/execution/learning), guides |
 | **Design guides** | `docs/guides/UI_DESIGN_GUIDE.md`, `docs/guides/MOTION_AND_ANIMATION.md`, `docs/guides/PROMPT_ENGINEERING.md` | Colors, typography, grid, responsive, spacing, motion, prompt templates |
-| **Plan workflow** | `docs/plan/PLAN_LIFECYCLE.md`, `docs/plan/ONE_MAN_CODE.md`, `docs/plan/context/IDEA_*.md`, `docs/plan/{backlog,planning,planned,in-progress,done}/`, `docs/plan/execution/` (legacy) | Backlog → IDEA → planning → planned → in-progress → done. **`/man`** (One Man) = orchestrator; seven domains (Code, Brand, SaaS, Marketing, Business, Content, Copywrite); `/man tasks`, `/man settings`, `/man mindset`, `/man inspire`. |
-| **TASKS files** | `docs/plan/execution/TASKS_<slug>.md` | Phase checklists; update in same pass as commit when finishing a phase (keeps /guide and /dev accurate) |
+| **Plan workflow** | `docs/plan/PLAN_LIFECYCLE.md`, `docs/plan/ONE_MAN_CODE.md`, `docs/plan/context/IDEA_*.md`, `docs/plan/{backlog,planning,planned,in-progress,done}/`, `docs/plan/Complete/` (legacy) | Backlog → IDEA → planning → planned → in-progress → done. **`/man`** (One Man) = orchestrator; seven domains (Code, Brand, SaaS, Marketing, Business, Content, Copywrite); `/man tasks`, `/man settings`, `/man mindset`, `/man inspire`. |
+| **TASKS files** | `docs/plan/Complete/TASKS_<slug>.md` | Phase checklists; update in same pass as commit when finishing a phase (keeps /guide and /dev accurate) |
 | **Guide preferences** | `docs/plan/learning/GUIDE_PREFERENCES.md` | User preferences so the guide adapts (tone, format, priorities, recurring needs) |
-| **Copy-paste prompts** | `docs/plan/execution/PROMPTS_REFERENCE.md` | Reference prompts for /plan and other commands; point here when user asks "where to copy" |
+| **Copy-paste prompts** | `docs/guides/PROMPTS_REFERENCE.md` | Reference prompts for /plan and other commands; point here when user asks "where to copy" |
 | **Tool & CLI reference** | `docs/guides/TOOL_AND_CLI_REFERENCE.md` | Canonical task-to-tool matrix: Cursor IDE, Claude CLI, Gemini CLI, Opencode CLI, Kiro CLI, Kilo CLI, Qwen CLI — strengths, weaknesses, when to use which; includes user tools & plans (Section 8) |
 | **External CLIs** | Claude CLI, Gemini CLI, Opencode CLI, Kiro CLI, Kilo CLI, Qwen CLI | When a task may be done better in terminal: suggest the right CLI using the reference above |
 | **CLI usage & limits** | `docs/plan/learning/CLI_USAGE_AND_RESULTS.md`, `docs/plan/learning/CLI_LIMITS_TRACKING.md`, `docs/plan/learning/CLI_TOOL_MEMORY.md` | After a CLI task, record one line in CLI_USAGE_AND_RESULTS.md; optionally keep CLI_LIMITS_TRACKING.md updated. When suggesting a CLI, consult **CLI_TOOL_MEMORY.md** when present for the recommended tool per task type. Load **gf-cli-limits** when suggesting CLIs. |
@@ -43,7 +43,7 @@ You are the **GateFlow workspace guide**. You know how the repo is built (skills
 
 1. **Git state** — Uncommitted changes? Dirty branch? If they asked for `/dev` or phase work, suggest committing or stashing first.
 2. **Failing checks** — Are tests/lint/typecheck known to be red? If the task will touch code, suggest running `pnpm preflight` (or `pnpm turbo lint && pnpm turbo typecheck && pnpm turbo test`) first.
-3. **Blocking work** — Is there an active plan with an incomplete phase that should be done before this task? Check `docs/plan/in-progress/`, `docs/plan/planned/`, or legacy `docs/plan/execution/PLAN_*.md`.
+3. **Blocking work** — Is there an active plan with an incomplete phase that should be done before this task? Check `docs/plan/Active/`, `docs/plan/Ready/`, or legacy `docs/plan/Complete/PLAN_*.md`.
 4. **Security-sensitive area** — If the task touches auth, RBAC, QR, scanner sync, or tenant data: remind to load `gf-security` and `CONTRACTS.md`.
 
 **If something should be done first**, say so clearly and offer:
@@ -78,7 +78,7 @@ When the user asks **/guide** or **“what should I do now”** (or similar), ru
    - `docs/PRD_v7.0.md` (status, roadmap)
    - `docs/plan/` — latest IDEA, PLAN (from planning/planned/in-progress/ or execution/), and which phase is next. See `docs/plan/PLAN_LIFECYCLE.md` for lifecycle.
    - `docs/plan/learning/` — patterns, incidents, decisions, and **`GUIDE_PREFERENCES.md`** (if present: apply tone, format, and priorities; see workspace map above)
-   - When the user asks for "prompts to copy" or "where to copy from": use `docs/plan/execution/PROMPTS_REFERENCE.md` and state exactly which line to start from (e.g. "Copy from the line **Request:**").
+   - When the user asks for "prompts to copy" or "where to copy from": use `docs/guides/PROMPTS_REFERENCE.md` and state exactly which line to start from (e.g. "Copy from the line **Request:**").
    - When suggesting which tool or CLI to use (Cursor, Claude CLI, Gemini CLI, Opencode CLI, Kiro CLI, Kilo CLI, Qwen CLI): load `docs/guides/TOOL_AND_CLI_REFERENCE.md` and use its task-to-tool matrix (Section 9) and quick reference (Section 10) for accurate, best-result suggestions.
 
 2. **Assess state**
@@ -98,7 +98,7 @@ When the user asks **/guide** or **“what should I do now”** (or similar), ru
    - Include a **Design mode** section in the output (after Improvements or inline).
    - Load and reference: `docs/guides/UI_DESIGN_GUIDE.md`, `docs/guides/MOTION_AND_ANIMATION.md`.
    - For advanced animation: recommend **browser-use** subagent for verification and the motion checklist from `MOTION_AND_ANIMATION.md` (prefers-reduced-motion, transform/opacity, duration).
-   - **Sign-in pages (admin + client):** For unified sign-in layout and post-login “gate” animation, point to the copy-paste prompt in `docs/plan/execution/PROMPTS_REFERENCE.md` — section “Sign-in pages design (admin + client)”.
+   - **Sign-in pages (admin + client):** For unified sign-in layout and post-login “gate” animation, point to the copy-paste prompt in `docs/guides/PROMPTS_REFERENCE.md` — section “Sign-in pages design (admin + client)”.
    - **When to suggest a different tool or CLI:** Read **`docs/guides/TOOL_AND_CLI_REFERENCE.md`** when suggesting which tool (Cursor IDE, Claude CLI, Gemini CLI, Opencode CLI, Kiro CLI, Kilo CLI, Qwen CLI) to use. It defines each tool’s strengths, weaknesses, and a **task-to-tool matrix** so suggestions are accurate and give the best results. Use the matrix (Section 9) for primary and "also good" options; use the quick reference (Section 10) to phrase the suggestion. When the user has listed preferred CLIs (e.g. in GUIDE_PREFERENCES.md “My tools” or “CLIs & plans”), prefer suggesting those when they match the task.
    - **After a task done with a CLI**: remind or ensure one entry is added to **`docs/plan/learning/CLI_USAGE_AND_RESULTS.md`** (date, CLI, task, outcome, notes). If the user has indicated "near limit" in GUIDE_PREFERENCES or CLI_LIMITS_TRACKING, prefer free-tier CLIs when suggesting the next tool (load **gf-cli-limits**).
 
@@ -124,7 +124,7 @@ When the user asks **/guide** or **“what should I do now”** (or similar), ru
 5. **Optional: super-power mode**  
    If the user wants you to “do it for me” or “follow the plan”:
    - Use the **subagent hierarchy** (see `docs/plan/guidelines/SUBAGENT_HIERARCHY.md`): assign the right role (e.g. BACKEND-API, FRONTEND, SECURITY).
-   - Use **phase prompts**: `docs/plan/execution/PROMPT_<slug>_phase_<N>.md` and run the steps and acceptance criteria.
+   - Use **phase prompts**: `docs/plan/Complete/PROMPT_<slug>_phase_<N>.md` and run the steps and acceptance criteria.
    - Use **commands**: suggest or run `/ready`, `/dev`, `/github` as needed; use **shell** subagent for `pnpm preflight`, `pnpm turbo build`, etc.
    - Use **skills**: load gf-dev, gf-planner, gf-security when the work matches (implementation, planning, security).
 
@@ -200,4 +200,4 @@ Keep each section to 1–3 items unless the situation is complex.
 
 - **Preferences file:** `docs/plan/learning/GUIDE_PREFERENCES.md`. When it exists, the guide applies its content (tone, length, what to emphasize, recurring needs, format). When it does not exist, the user can create it and add preferences over time.
 - **When the user expresses a preference** (e.g. "I prefer short answers", "always give me copy-paste prompts", "I want Critical first"): acknowledge it and offer to add or update an entry in `GUIDE_PREFERENCES.md` so future `/guide` runs behave that way. Example: "I'll remember that. Should I add 'When user asks for prompts, point to PROMPTS_REFERENCE.md and say exactly where to start copying' to GUIDE_PREFERENCES.md?"
-- **Copy-paste and "where to start":** When the user asks where to copy a prompt from, point to `docs/plan/execution/PROMPTS_REFERENCE.md` and give the exact start line (e.g. "Copy from the line **Request:**").
+- **Copy-paste and "where to start":** When the user asks where to copy a prompt from, point to `docs/guides/PROMPTS_REFERENCE.md` and give the exact start line (e.g. "Copy from the line **Request:**").

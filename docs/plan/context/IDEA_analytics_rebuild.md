@@ -44,4 +44,4 @@ Transform the current Client Dashboard analytics page (~70% complete per PRD_v6.
 
 ## Plan
 
-See `docs/plan/planning/analytics_rebuild/PLAN_analytics_rebuild.md`.
+See `docs/plan/Draft/analytics_rebuild/PLAN_analytics_rebuild.md`.

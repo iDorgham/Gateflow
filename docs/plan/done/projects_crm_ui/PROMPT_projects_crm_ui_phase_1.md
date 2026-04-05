@@ -19,7 +19,7 @@ ARCHITECTURE | DESIGN-TOKEN
 - **Apps**: client-dashboard (3001), admin-dashboard (3002)
 - **Packages**: ui, config
 - **Rules**: pnpm only; use semantic tokens; Midnight Blue (#020035) & Kimchi Orange (#ED4B00) palette.
-- **Refs**: `docs/plan/planning/PLAN_projects_crm_ui.md`, `packages/ui/src/globals.css`
+- **Refs**: `docs/plan/Draft/PLAN_projects_crm_ui.md`, `packages/ui/src/globals.css`
 
 ### Goal
 

@@ -44,7 +44,7 @@ Use `/guide` to get a clear picture of what to do next, what's recommended, what
 - **`/guide`** or **`/guide what should I do now`** — Full guide pass: context, state, and report (Must do / Recommended / Critical / Improvements).
 - **`/guide`** + "and do the next phase" / "run the plan" — Same as above, then run in super-power mode.
 - **Preferences:** Edit `docs/plan/learning/GUIDE_PREFERENCES.md` so the guide adapts to your tone, format, and recurring needs.
-- **Copy-paste prompts:** See `docs/plan/execution/PROMPTS_REFERENCE.md` for the professional /plan prompt.
+- **Copy-paste prompts:** See `docs/guides/PROMPTS_REFERENCE.md` for the professional /plan prompt.
 
 ## Implementation notes (for agents)
 
@@ -52,7 +52,7 @@ Use `/guide` to get a clear picture of what to do next, what's recommended, what
 - **PR review feedback:** When user shares code review comments, invoke `receiving-code-review` — evaluate technically, verify before implementing, push back when warranted.
 - **New skill creation:** If a recurring pattern or gap is identified during guide pass, invoke `writing-skills` to author a new skill.
 - Always load `workspace-guide` skill when handling `/guide`.
-- **When finishing a phase:** Update `docs/plan/execution/TASKS_<plan>.md` in the same pass as the commit.
+- **When finishing a phase:** Update `docs/plan/Complete/TASKS_<plan>.md` in the same pass as the commit.
 - When recommending next steps, suggest a CLI when one might do the task better: use **`docs/guides/TOOL_AND_CLI_REFERENCE.md`** and **`docs/plan/learning/CLI_TOOL_MEMORY.md`**. Default: Claude = security/architecture; Gemini = schema/DB; Opencode = code gen; Kiro/Qwen = free agentic, large context; Kilo = free terminal, fast iteration.
 - If `docs/plan/learning/GUIDE_PREFERENCES.md` exists, read it and adapt tone, format, and priorities.
 - **Limits + permission (mandatory for CLI suggestions)**:

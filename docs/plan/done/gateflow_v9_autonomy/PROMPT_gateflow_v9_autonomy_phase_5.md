@@ -7,7 +7,7 @@
 - GateFlow (Zero-Trust platform, Turborepo monorepo)
 - Root directory: `/Users/Dorgham/Documents/Work/Devleopment/Gate-Access`
 - Existing scripts: `scripts/ralph-git.js`, `scripts/enforce-*.js`
-- Roadmap: `docs/plan/execution/PLAN_gateflow_v9_autonomy.md`
+- Roadmap: `docs/plan/Complete/gateflow_v9_autonomy/PLAN_gateflow_v9_autonomy.md`
 - Backlog: `docs/plan/backlog/ALL_TASKS_BACKLOG.md`
 
 ### Goal

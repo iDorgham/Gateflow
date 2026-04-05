@@ -147,7 +147,7 @@ const denyScanMutation = useMutation({
    - Kill dev server during create: confirm provisional row removed + toast shown
 8. Run `pnpm turbo lint --filter=client-dashboard`.
 9. Run `pnpm turbo typecheck --filter=client-dashboard`.
-10. Create `docs/plan/execution/TASKS_realtime_updates.md` — all 4 phases marked complete.
+10. Create `docs/plan/Complete/TASKS_realtime_updates.md` — all 4 phases marked complete.
 11. Commit: `feat(realtime): optimistic updates for QR create/delete + scan deny (phase 4)`.
 
 ## Scope (out)
@@ -170,7 +170,7 @@ const denyScanMutation = useMutation({
 - QR create component (find in `dashboard/qrcodes/`)
 - QR table row / delete action component (find in `dashboard/qrcodes/`)
 - Scan deny action component (find in `dashboard/scans/`)
-- `docs/plan/execution/TASKS_realtime_updates.md` (new)
+- `docs/plan/Complete/TASKS_realtime_updates.md` (new)
 
 ## Git commit
 ```

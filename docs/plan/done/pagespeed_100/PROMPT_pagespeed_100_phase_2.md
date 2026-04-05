@@ -19,7 +19,7 @@ FRONTEND | PERFORMANCE
 
 - **Project**: GateFlow (Next.js 14, Turborepo)
 - **Initiative**: `pagespeed_100`
-- **File**: `docs/plan/planned/pagespeed_100/PLAN_pagespeed_100.md`
+- **File**: `docs/plan/Ready/pagespeed_100/PLAN_pagespeed_100.md`
 - **Goal**: Achieve a "Performance" score of 100 by reducing First Contentful Paint (FCP) and Largest Contentful Paint (LCP).
 
 ### Goal

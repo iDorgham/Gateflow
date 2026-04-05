@@ -23,7 +23,7 @@ Copy this prompt when running `/dev` for Phase 6 of the project dashboard plan.
 - **Project**: GateFlow — Zero-Trust digital gate platform (Turborepo, pnpm)
 - **Rules**: pnpm only; semantic tokens only; multi-tenant (`organizationId`); soft deletes (`deletedAt: null`)
 - **APIs**: `/api/projects/[id]` (PATCH), `/api/contacts` (POST), `/api/units` (POST), `/api/gates` (GET, POST, PATCH), `/api/gates/assignments` (GET, POST, DELETE), `/api/watchlist` (GET, POST, DELETE; PATCH if added)
-- **Refs**: `docs/plan/context/IDEA_project_dashboard.md`, `docs/plan/execution/PLAN_project_dashboard.md`, `apps/client-dashboard/src/components/dashboard/EditPanel.tsx`
+- **Refs**: `docs/plan/context/IDEA_project_dashboard.md`, `docs/plan/Complete/PLAN_project_dashboard.md`, `apps/client-dashboard/src/components/dashboard/EditPanel.tsx`
 
 ### Goal
 

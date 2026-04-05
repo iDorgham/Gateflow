@@ -12,7 +12,7 @@ Add a short installer prompt and polish template docs so bootstrap can run in ei
 - `docs/workspace/template-project/README.md`
 - `docs/workspace/template-project/.cursor/README.md`
 - `docs/workspace/template-project/.cursor/commands/install-workspace-template.md`
-- `docs/plan/in-progress/docs_workspace_template_cursor_bootstrap/*`
+- `docs/plan/Active/docs_workspace_template_cursor_bootstrap/*`
 
 ### Out
 

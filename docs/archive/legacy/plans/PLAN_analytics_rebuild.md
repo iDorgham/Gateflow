@@ -7,7 +7,7 @@
 **Owner:** Product + Engineering  
 **Status:** Draft (planning) — use `/plan ready analytics_rebuild` when approved  
 **Estimated total:** 6 phases, ~4–6 weeks  
-**Task checklist:** `docs/plan/planning/analytics_rebuild/TASKS_analytics_rebuild.md` (optional)
+**Task checklist:** `docs/plan/Draft/analytics_rebuild/TASKS_analytics_rebuild.md` (optional)
 
 ---
 

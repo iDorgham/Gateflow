@@ -1,7 +1,7 @@
 # PROMPT_analytics_rebuild_phase_5 — Extended Charts
 
 **Initiative:** analytics_rebuild  
-**Plan:** `docs/plan/planning/analytics_rebuild/PLAN_analytics_rebuild.md`  
+**Plan:** `docs/plan/Draft/analytics_rebuild/PLAN_analytics_rebuild.md`  
 **Phase:** 5 of 6  
 
 ---
@@ -33,7 +33,7 @@
 - **Project**: GateFlow — Zero-Trust digital gate platform (Turborepo, pnpm)
 - **App**: client-dashboard; analytics APIs and components
 - **Prerequisites**: Phases 1–4 (layout, APIs, core charts)
-- **Refs**: `docs/plan/planning/analytics_rebuild/PLAN_analytics_rebuild.md`, existing funnel/campaigns APIs
+- **Refs**: `docs/plan/Draft/analytics_rebuild/PLAN_analytics_rebuild.md`, existing funnel/campaigns APIs
 
 ---
 

@@ -2,8 +2,8 @@
 
 Checklist for **PLAN_analytics_dashboard**. Use with `/dev` and phase prompts.
 
-**Plan:** `docs/plan/execution/PLAN_analytics_dashboard.md`  
-**Prompts:** `docs/plan/execution/PROMPT_analytics_dashboard_phase_N.md`
+**Plan:** `docs/plan/Complete/PLAN_analytics_dashboard.md`  
+**Prompts:** `docs/plan/Complete/PROMPT_analytics_dashboard_phase_N.md`
 
 ---
 

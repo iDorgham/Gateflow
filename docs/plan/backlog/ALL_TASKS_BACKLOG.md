@@ -8,7 +8,7 @@
 
 **IDEA:** `docs/plan/context/IDEA_marketing_rebuild_dashboard_parity.md`
 
-**PLAN:** `docs/plan/planned/marketing_rebuild_dashboard_parity/PLAN_marketing_rebuild_dashboard_parity.md`
+**PLAN:** `docs/plan/Ready/marketing_rebuild_dashboard_parity/PLAN_marketing_rebuild_dashboard_parity.md`
 
 **Status:** Planned — ready for `/dev marketing_rebuild_dashboard_parity 1`
 
@@ -23,7 +23,7 @@
 
 **IDEA:** `docs/plan/context/IDEA_autonomous_ops_intelligence.md`
 
-**PLAN:** `docs/plan/planned/autonomous_ops_intelligence/PLAN_autonomous_ops_intelligence.md`
+**PLAN:** `docs/plan/Ready/autonomous_ops_intelligence/PLAN_autonomous_ops_intelligence.md`
 
 **Status:** 🆕 Planned
 
@@ -41,7 +41,7 @@
 
 **IDEA:** `docs/plan/context/IDEA_projects_crm.md`
 
-**PLAN:** `docs/plan/planned/projects_crm/PLAN_projects_crm.md`
+**PLAN:** `docs/plan/Ready/projects_crm/PLAN_projects_crm.md`
 
 **Status:** ✅ Complete
 
@@ -57,7 +57,7 @@
 
 **IDEA:** `docs/plan/context/IDEA_github_security_hardening.md`
 
-**PLAN:** `docs/plan/done/github_security_hardening/PLAN_github_security_hardening.md`
+**PLAN:** `docs/plan/Complete/github_security_hardening/PLAN_github_security_hardening.md`
 
 **Status:** ✅ Complete
 
@@ -73,7 +73,7 @@
 
 **IDEA:** `docs/plan/context/IDEA_maintenance_management.md`
 
-**PLAN:** `docs/plan/done/maintenance_management/PLAN_maintenance_management.md`
+**PLAN:** `docs/plan/Complete/maintenance_management/PLAN_maintenance_management.md`
 
 **Status:** ✅ Complete
 
@@ -104,7 +104,7 @@
 
 **IDEA:** `docs/plan/context/IDEA_security_isolation_fix.md`
 
-**PLAN:** `docs/plan/in-progress/security_isolation_fix/PLAN_security_isolation_fix.md`
+**PLAN:** `docs/plan/Active/security_isolation_fix/PLAN_security_isolation_fix.md`
 
 **Status:** 🚧 Hardening Certified — UI Next
 
@@ -122,7 +122,7 @@
 
 **IDEA:** `docs/plan/context/IDEA_domain_migration_2026.md`
 
-**PLAN:** `docs/plan/done/domain_migration_2026/PLAN_domain_migration_2026.md`
+**PLAN:** `docs/plan/Complete/domain_migration_2026/PLAN_domain_migration_2026.md`
 
 **Status:** ✅ Complete
 
@@ -136,7 +136,7 @@
 
 **IDEA:** `docs/plan/context/IDEA_pagespeed_100.md`
 
-**PLAN:** `docs/plan/in-progress/pagespeed_100/PLAN_pagespeed_100.md`
+**PLAN:** `docs/plan/Active/pagespeed_100/PLAN_pagespeed_100.md`
 
 **Status:** 🏆 Certified 100/100 — All routes meet Phase 5 targets
 
@@ -187,7 +187,7 @@
 
 **IDEA:** `docs/plan/context/IDEA_resident_mobile_one_tap.md`
 
-**PLAN:** `docs/plan/done/resident_mobile_one_tap/PLAN_resident_mobile_one_tap.md`
+**PLAN:** `docs/plan/Complete/resident_mobile_one_tap/PLAN_resident_mobile_one_tap.md`
 
 **Status:** ✅ Complete
 
@@ -203,7 +203,7 @@
 
 **IDEA:** `docs/plan/context/IDEA_projects_crm_ui.md`
 
-**PLAN:** `docs/plan/done/PLAN_projects_crm_ui.md`
+**PLAN:** `docs/plan/Complete/PLAN_projects_crm_ui.md`
 
 **Status:** ✅ Complete
 
@@ -235,7 +235,7 @@
 
 **IDEA:** `docs/plan/context/IDEA_marketing_suite.md`
 
-**PLAN:** `docs/plan/done/marketing_suite/PLAN_marketing_suite.md`
+**PLAN:** `docs/plan/Complete/marketing_suite/PLAN_marketing_suite.md`
 
 **Status:** ✅ Complete
 
@@ -264,7 +264,7 @@
 
 **IDEA:** `docs/plan/context/IDEA_client_dashboard_v10_redesign.md`
 
-**PLAN:** `docs/plan/done/client_dashboard_v10_redesign/PLAN_client_dashboard_v10_redesign.md`
+**PLAN:** `docs/plan/Complete/client_dashboard_v10_redesign/PLAN_client_dashboard_v10_redesign.md`
 
 **Status:** ✅ Done (Completed via Claude CLI)
 

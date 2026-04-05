@@ -1,7 +1,7 @@
 # PROMPT_core_security_v6_phase_6 — Visitor Identity Levels & Privacy/Retention
 
 **Initiative:** core_security_v6  
-**Plan:** `docs/plan/execution/PLAN_core_security_v6.md`  
+**Plan:** `docs/plan/Complete/PLAN_core_security_v6.md`  
 **Phase:** 6 of 6  
 
 ---

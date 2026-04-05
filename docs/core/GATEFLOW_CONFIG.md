@@ -9,7 +9,7 @@ GateFlow uses a shared set of docs, rules, skills, and agents across Cursor, CLI
 - **Visible slash commands (Cursor)**: `/brainstorm`, `/idea`, `/plan`, `/dev`, `/ship`, `/guide`
   - **`/brainstorm`** (Strategy): Strategic ideation, market research (`browser-use`), and release planning. Subcommands: `research`, `gaps`, `merge`, `release`, `roadmap`. See `.antigravity/workflows/brainstorm.md`.
   - `/idea`: Refine goals and capture context into `docs/plan/context/IDEA_<slug>.md` and backlog entries in `docs/plan/backlog/ALL_TASKS_BACKLOG.md`.
-  - `/plan`: Turn an idea/backlog section into a phased plan in `docs/plan/planning/<slug>/`; use `/plan ready <slug>` to move to `planned/` when approved.
+  - `/plan`: Turn an idea/backlog section into a phased plan in `docs/plan/Draft/<slug>/`; use `/plan ready <slug>` to move to `planned/` when approved.
   - `/dev`: Implement **one phase** end‑to‑end using its `PROMPT_<slug>_phase_<N>.md` file (code, tests, lint/typecheck, git). Automated branching and tagging.
   - `/ship`: Run remaining phases for a plan sequentially (internally chaining `/dev`), enforcing tests and quality gates. Auto-merges to `master` upon completion.
   - `/guide`: Workspace guide — “what should I do now?”, next steps, recommended, critical, improvements; uses `.antigravity/skills/gf-guide/SKILL.md` and can run in super‑power mode (follow plan, use hierarchy, run checks). Rule `.antigravity/rules/02-gateflow-guide.mdc` adds pre‑flight before tasks and optional post‑task summary.
@@ -34,7 +34,7 @@ GateFlow development is organized as **phased plans** with one pro prompt per ph
   - `in-progress/<slug>/` — actively being developed (moved by `/dev` when starting).
   - `done/<slug>/` — completed (moved by `/dev` when last phase done).
   - `PLAN_<slug>.md`, `PROMPT_<slug>_phase_<N>.md`, `TASKS_<slug>.md` — plan bundle in each folder.
-  - Legacy: `docs/plan/execution/` still supported for backward compatibility.
+  - Legacy: `docs/plan/Complete/` still supported for backward compatibility.
 - **Template & workflow**
   - `docs/plan/guidelines/PHASED_DEVELOPMENT_WORKFLOW.md` — end‑to‑end phased workflow (plan → prompts → execute → test → enhance).
   - `docs/plan/guidelines/AI_SKILLS_SUBAGENTS_RULES.md` — skills and subagent rules.
@@ -126,7 +126,7 @@ GateFlow uses a **subagent hierarchy** so every phase has a clear owner role sha
 Other tools should **not** re‑implement planning logic. Instead, they should treat these docs as the source of truth:
 
 - **Planning & phases**
-  - Read from `docs/plan/execution/PLAN_<slug>.md` and `PROMPT_<slug>_phase_<N>.md`.
+  - Read from `docs/plan/Complete/PLAN_<slug>.md` and `PROMPT_<slug>_phase_<N>.md`.
   - Respect the **Primary role**, **Scope**, and **Acceptance criteria** in each phase prompt.
 - **Rules & contracts**
   - Enforce `.antigravity/rules/00-gateflow-core.mdc`, `.antigravity/rules/01-gateflow-ai-workflow.mdc`, `.antigravity/contracts/CONTRACTS.md`, and (for security) `gateflow-security.mdc` once present.

@@ -68,7 +68,7 @@ Use `/idea` to turn a fuzzy request into a well-scoped initiative plus backlog e
      - Success criteria and metrics
      - Open questions and risks
    - Update or create a section in `docs/plan/backlog/ALL_TASKS_BACKLOG.md`
-   - Optionally create `docs/plan/execution/PLAN_<name>_draft.md` as input for `/plan`
+   - Optionally create `docs/plan/Complete/PLAN_<name>_draft.md` as input for `/plan`
 
 ### How this connects to other commands
 

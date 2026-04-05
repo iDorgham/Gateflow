@@ -30,7 +30,7 @@ alwaysApply: true
 - `/plan`:
   - Uses the **Planning** role (see `SUBAGENT_HIERARCHY.md`) and the `gf-planner` skill to:
     - Read `IDEA_<slug>.md`, `PRODUCT_BRAIN.md`, `GATEFLOW_CONFIG.md`, and `ALL_TASKS_BACKLOG.md`.
-    - Generate or update `PLAN_<slug>.md` and `PROMPT_<slug>_phase_<N>.md` in `docs/plan/planning/<slug>/` using the shared phase template (including **Primary role** and **Preferred tool**).
+    - Generate or update `PLAN_<slug>.md` and `PROMPT_<slug>_phase_<N>.md` in `docs/plan/Draft/<slug>/` using the shared phase template (including **Primary role** and **Preferred tool**).
   - `/plan ready <slug>` moves `planning/<slug>/` → `planned/<slug>/` when the plan is approved.
   - May delegate exploration to the **explore** subagent when needed, but never runs builds/tests itself.
 

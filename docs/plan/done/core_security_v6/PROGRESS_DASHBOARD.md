@@ -55,7 +55,7 @@ Repeat until the plan is complete or a phase is blocked. If blocked, list the bl
 ## When you wake up
 
 1. **Open this file** and the **task list**:
-   - `docs/plan/execution/TASKS_core_security_v6.md`
+   - `docs/plan/Complete/TASKS_core_security_v6.md`
 
 2. **Check git and dashboard:**
    - `git status` — any uncommitted work?
@@ -74,11 +74,11 @@ Repeat until the plan is complete or a phase is blocked. If blocked, list the bl
 
 | Purpose | File |
 |--------|------|
-| Full plan (phases, scope) | `docs/plan/execution/PLAN_core_security_v6.md` |
-| Phase task checklist | `docs/plan/execution/TASKS_core_security_v6.md` |
-| Phase 4 prompt | `docs/plan/execution/PROMPT_core_security_v6_phase_4.md` |
-| Phase 5 prompt | `docs/plan/execution/PROMPT_core_security_v6_phase_5.md` |
-| Phase 6 prompt | `docs/plan/execution/PROMPT_core_security_v6_phase_6.md` |
+| Full plan (phases, scope) | `docs/plan/Complete/PLAN_core_security_v6.md` |
+| Phase task checklist | `docs/plan/Complete/TASKS_core_security_v6.md` |
+| Phase 4 prompt | `docs/plan/Complete/PROMPT_core_security_v6_phase_4.md` |
+| Phase 5 prompt | `docs/plan/Complete/PROMPT_core_security_v6_phase_5.md` |
+| Phase 6 prompt | `docs/plan/Complete/PROMPT_core_security_v6_phase_6.md` |
 | Automation (run all) | `.cursor/commands-ref/automate.md` |
 | Dev workflow | `docs/plan/guidelines/DEVELOPMENT_WORKFLOWS.md` |
 

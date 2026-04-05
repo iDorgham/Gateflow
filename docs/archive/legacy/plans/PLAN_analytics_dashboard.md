@@ -7,7 +7,7 @@
 **Owner:** Product + Engineering  
 **Status:** Complete (all phases done)  
 **Estimated total:** 8–10 weeks across 4 phases  
-**Task checklist:** `docs/plan/execution/TASKS_analytics_dashboard.md`
+**Task checklist:** `docs/plan/Complete/TASKS_analytics_dashboard.md`
 
 ---
 

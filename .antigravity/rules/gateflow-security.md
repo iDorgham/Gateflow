@@ -120,7 +120,7 @@ When creating or executing phased plans that include security‑critical work:
   - Use `docs/plan/guidelines/PHASED_DEVELOPMENT_WORKFLOW.md` and `.antigravity/skills/gf-planner/SKILL.md`.
   - For any phase that changes auth, RBAC, QR flows, scanner sync, or tenant data access, set **Primary role: SECURITY** in the phase definition.
 - **Phase prompts**
-  - In `docs/plan/execution/PROMPT_<slug>_phase_<N>.md` for SECURITY phases:
+  - In `docs/plan/Complete/PROMPT_<slug>_phase_<N>.md` for SECURITY phases:
     - Call out `.antigravity/skills/gf-security/SKILL.md` and `.antigravity/contracts/CONTRACTS.md` under **Context**.
     - Add explicit steps to verify organization scoping, soft delete filtering, QR signing, and secrets handling.
     - Include acceptance criteria that require these invariants to hold and relevant tests to pass.

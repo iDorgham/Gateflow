@@ -71,4 +71,4 @@ Use this role when implementing in Cursor or when invoking CLIs for this phase.
 - `apps/client-dashboard/src/components/dashboard/residents/ContactsTable.tsx`
 - `apps/client-dashboard/src/components/dashboard/residents/UnitsTable.tsx`
 - List/export/bulk API routes (audit only, or small fixes)
-- Optional: `docs/plan/execution/AUDIT_tables_security.md` (audit summary)
+- Optional: `docs/plan/Complete/AUDIT_tables_security.md` (audit summary)

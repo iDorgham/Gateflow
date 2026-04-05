@@ -35,7 +35,7 @@ guide learns how you like to work.
 
 ## Recurring needs
 
-- **Copy-paste prompts:** Point to `docs/plan/execution/PROMPTS_REFERENCE.md`
+- **Copy-paste prompts:** Point to `docs/guides/PROMPTS_REFERENCE.md`
   and state the exact line to start from (e.g. "Copy from **Request:**").
 - **Zero-Friction GitHub:** Full Git cycle (`add`, `commit`,
   `pull --rebase`, `push`) after every `/idea`, `/plan`, `/dev` phase.

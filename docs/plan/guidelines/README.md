@@ -20,7 +20,7 @@ _Fill placeholders and save outputs to their target locations_
 
 | Template                         | Purpose                           | Output location                                  |
 | :------------------------------- | :-------------------------------- | :----------------------------------------------- |
-| `TEMPLATE_PROMPT_phase.md`       | Phase pro prompt                  | `docs/plan/execution/PROMPT_<plan>_phase_<N>.md` |
+| `TEMPLATE_PROMPT_phase.md`       | Phase pro prompt                  | `docs/plan/Complete/PROMPT_<plan>_phase_<N>.md` |
 | `TEMPLATE_API_route.md`          | API route scaffold                | `apps/*/src/app/api/<resource>/route.ts`         |
 | `TEMPLATE_API_test.md`           | API route test scaffold           | `*/*.route.test.ts` next to route                |
 | `TEMPLATE_commit_message.md`     | Conventional commit format        | — (reference for `/github`)                      |

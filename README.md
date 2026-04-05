@@ -338,7 +338,7 @@ pnpm ralph
 # 2. Create a plan
 pnpm plan:new my-feature --phases 5
 
-# 3. Edit phase prompts in docs/plan/planning/my-feature/
+# 3. Edit phase prompts in docs/plan/Draft/my-feature/
 
 # 4. Approve the plan
 pnpm plan:ready my-feature

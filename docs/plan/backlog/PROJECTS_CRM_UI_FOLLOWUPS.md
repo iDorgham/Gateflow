@@ -22,7 +22,7 @@ Optional improvements from **PR #38** (feat/projects-crm-ui → master). Refine 
 - [ ] AuditLog row created on units CSV export (org, user, action, count).
 - [ ] No PII in log metadata; document in `AUDIT_tables_security.md`.
 
-**Ref:** `docs/plan/done/projects_crm_ui/AUDIT_tables_security.md`, `/api/qrcodes/export` (rate limit + pattern).
+**Ref:** `docs/plan/Complete/projects_crm_ui/AUDIT_tables_security.md`, `/api/qrcodes/export` (rate limit + pattern).
 
 ---
 

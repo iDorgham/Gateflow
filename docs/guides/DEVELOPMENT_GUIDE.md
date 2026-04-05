@@ -157,10 +157,10 @@ Supporting commands (see `.antigravity/rules/01-gateflow-ai-workflow.mdc` and le
 | File                   | Location                                               |
 | ---------------------- | ------------------------------------------------------ |
 | Initiative ideas       | `docs/plan/context/IDEA_<slug>.md`                     |
-| Active plans + prompts | `docs/plan/planning/<slug>/PLAN_<slug>.md`             |
-| Phase prompts          | `docs/plan/planning/<slug>/PROMPT_<slug>_phase_<N>.md` |
-| Phase task checklist   | `docs/plan/planning/<slug>/TASKS_<slug>.md`            |
-| Completed plans        | `docs/plan/done/<slug>/`                               |
+| Active plans + prompts | `docs/plan/Draft/<slug>/PLAN_<slug>.md`             |
+| Phase prompts          | `docs/plan/Draft/<slug>/PROMPT_<slug>_phase_<N>.md` |
+| Phase task checklist   | `docs/plan/Draft/<slug>/TASKS_<slug>.md`            |
+| Completed plans        | `docs/plan/Complete/<slug>/`                               |
 
 Template & skills:
 

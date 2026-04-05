@@ -106,7 +106,7 @@ Load in order. Stop when you have enough. Tick each layer as loaded.
 - **Packages**: db, types, ui, api-client, i18n, config
 - **Rules**: pnpm only; multi-tenant (`organizationId`); soft deletes (`deletedAt: null`); QR HMAC-SHA256; no secrets in git
 - **Context file**: `docs/plan/{state}/<slug>/CONTEXT_<slug>.md` — frozen schema + types snapshot
-- **Session Memory**: `docs/plan/in-progress/<slug>/SESSION_MEMORY.md` — cross-session decisions + gotchas
+- **Session Memory**: `docs/plan/Active/<slug>/SESSION_MEMORY.md` — cross-session decisions + gotchas
 - **Refs**: `CLAUDE.md`, `packages/db/prisma/schema.prisma`, `docs/plan/backlog/ALL_TASKS_BACKLOG.md`
 
 ### Goal

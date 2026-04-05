@@ -19,7 +19,7 @@ BACKEND | SECURITY
 
 - **Project**: GateFlow (Monorepo)
 - **Initiative**: `security_isolation_fix`
-- **File**: `docs/plan/planning/security_isolation_fix/PLAN_security_isolation_fix.md`
+- **File**: `docs/plan/Draft/security_isolation_fix/PLAN_security_isolation_fix.md`
 - **Report**: `docs/plan/learning/SKILL_DISCOVERY_REPORT.md` (Security violations)
 - **Rule**: Every `findMany` or `findFirst` must include `organizationId: session.user.organizationId` and `deletedAt: null`.
 - **References**: `getAuthSession` in API routes; server components with `auth()` or `getServerSession`.

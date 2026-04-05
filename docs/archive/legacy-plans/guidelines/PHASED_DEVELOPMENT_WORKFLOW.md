@@ -72,7 +72,7 @@ Create a phased plan for [MVP Launch / Resident Portal Phase 2 / etc.]:
 - Break into 4–8 phases
 - Each phase: clear scope, deliverables, test criteria
 - Order by dependency (schema before API, API before UI)
-- Output in markdown suitable for docs/plan/execution/PLAN_<name>.md
+- Output in markdown suitable for docs/plan/Complete/PLAN_<name>.md
 ```
 
 ---
@@ -173,7 +173,7 @@ Add `Unit` model and `UnitType` enum to support resident–unit linking.
 
 | Step | Action | Command / tool |
 |------|--------|----------------|
-| 1 | **Get the pro prompt** | From plan doc or `docs/plan/execution/PROMPT_phase_N.md` |
+| 1 | **Get the pro prompt** | From plan doc or `docs/plan/Complete/PROMPT_phase_N.md` |
 | 2 | **Apply** | Paste prompt into Cursor; execute |
 | 2b | **Subagents** (if specified) | Invoke explore/shell/browser-use with prompts from phase |
 | 2c | **Multi-CLI** (optional, complex phases only) | Claude Pro has limits — use only for security-critical, architectural, or high-risk phases. See `gf-planner` skill |
@@ -245,7 +245,7 @@ Treat these as **hard gates** for `/dev` phases and `/ship` plans — tools must
 Use the **Planning subagent** prompt above (Section 1) with your goal. Save output to:
 
 ```
-docs/plan/execution/PLAN_<initiative>.md
+docs/plan/Complete/PLAN_<initiative>.md
 ```
 
 ### Create pro prompts from plan
@@ -253,14 +253,14 @@ docs/plan/execution/PLAN_<initiative>.md
 For each phase in the plan, create:
 
 ```
-docs/plan/execution/PROMPT_<initiative>_phase_<N>.md
+docs/plan/Complete/PROMPT_<initiative>_phase_<N>.md
 ```
 
 Use the **Pro Prompt Template** (Section 2).
 
 ### Execute phase N
 
-1. Open `docs/plan/execution/PROMPT_<initiative>_phase_<N>.md`
+1. Open `docs/plan/Complete/PROMPT_<initiative>_phase_<N>.md`
 2. Copy full content
 3. Paste into Cursor (or your AI tool) as the task
 4. Let the agent implement
@@ -307,7 +307,7 @@ docs/plan/
 
 | I want to… | Do this |
 |------------|---------|
-| Create a plan from backlog | Use **Planning subagent** prompt (Section 1); save to `docs/plan/execution/PLAN_<name>.md` |
+| Create a plan from backlog | Use **Planning subagent** prompt (Section 1); save to `docs/plan/Complete/PLAN_<name>.md` |
 | Write a pro prompt for phase | Use **Pro Prompt Template** (Section 2); save to `PROMPT_<name>_phase_N.md` |
 | Execute one phase | Paste pro prompt → implement → test → enhance → commit |
 | Run full phased cycle | For each phase: apply → test → enhance → commit → next |

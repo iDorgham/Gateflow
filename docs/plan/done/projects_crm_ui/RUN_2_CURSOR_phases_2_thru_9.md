@@ -4,7 +4,7 @@
 
 ---
 
-**Context:** GateFlow client-dashboard (Next.js 14). Phase 1 is done (schema + API extensions). Refs: `docs/plan/in-progress/projects_crm_ui/PROMPT_projects_crm_ui_phase_2.md` through `PROMPT_projects_crm_ui_phase_9.md`. Design: shared EditPanel, real-estate palette, Projects → Contacts → Units → QR → Settings. Load skills: react, gf-design-guide, gf-architecture, gf-api, gf-security (for any API you touch), gf-i18n.
+**Context:** GateFlow client-dashboard (Next.js 14). Phase 1 is done (schema + API extensions). Refs: `docs/plan/Active/projects_crm_ui/PROMPT_projects_crm_ui_phase_2.md` through `PROMPT_projects_crm_ui_phase_9.md`. Design: shared EditPanel, real-estate palette, Projects → Contacts → Units → QR → Settings. Load skills: react, gf-design-guide, gf-architecture, gf-api, gf-security (for any API you touch), gf-i18n.
 
 **Goal:** Deliver all UI and frontend behavior for Phases 2–9 so the dashboard has project hub, CRM Contacts/Units, project edit, header/settings split, and the full QR Codes table (TanStack Table, column reorder, filtering UI, sort/pagination UI). Backend for Phase 8 (filter API) and Phase 9 (sort/pagination API) can be minimal stubs or implemented here if you prefer; otherwise Run 3 (Claude) will implement those APIs.
 

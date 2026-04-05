@@ -164,7 +164,7 @@ Exact phasing and naming will be decided in `PLAN_core_security_v6.md`, but this
 ## 7. Next Steps
 
 1. Use `/plan` on this IDEA to create `PLAN_core_security_v6.md`, grouping work into phased tracks (A–E) with clear roles (SECURITY, Backend, Mobile, QA) and acceptance criteria.
-2. For each phase, generate `PROMPT_core_security_v6_phase_<N>.md` under `docs/plan/execution/` that:
+2. For each phase, generate `PROMPT_core_security_v6_phase_<N>.md` under `docs/plan/Complete/` that:
    - References `PRD_v7.0.md`, `SECURITY_OVERVIEW.md`, `.cursor/rules/*`, and `CONTRACTS.md`.
    - Sets **Primary role: SECURITY** where appropriate.
    - Includes explicit gates for tests, lint, typecheck, and security validation.

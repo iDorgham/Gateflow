@@ -22,6 +22,6 @@ alwaysApply: true
 
 ## After completing a task (REQUIRED)
 
-- **When finishing a phase:** Update `docs/plan/execution/TASKS_<plan>.md` in the same pass as the commit (tick items, set Status: Done). Do this automatically so /guide and /dev stay accurate.
+- **When finishing a phase:** Update `docs/plan/Complete/TASKS_<plan>.md` in the same pass as the commit (tick items, set Status: Done). Do this automatically so /guide and /dev stay accurate.
 - **Mandatory Guide Report:** Give a concise guide summary: one line each for **Must do next**, **Recommended**, **Critical** (if any), and **Improvements**. 
 - **Next Step Injection:** ALWAYS include a copy-pasteable `/dev` command for the next immediate logical action.

@@ -16,7 +16,7 @@
 
 <!-- Link to the plan this PR implements, if any -->
 
-Plan: `docs/plan/in-progress/<slug>/` or `done/<slug>/`
+Plan: `docs/plan/Active/<slug>/` or `done/<slug>/`
 Phase: <!-- e.g. Phase 3 of 7 -->
 
 ## Checklist

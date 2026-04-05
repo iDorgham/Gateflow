@@ -6,8 +6,8 @@
 **Security context:** `.cursor/skills/gf-security/SKILL.md`, `docs/guides/SECURITY_OVERVIEW.md`, `.cursor/rules/00-gateflow-core.mdc`, `.cursor/contracts/CONTRACTS.md`  
 **Owner:** Security + Product + Engineering  
 **Status:** Complete (Phases 1–6 done)  
-**Progress dashboard:** `docs/plan/execution/PROGRESS_DASHBOARD.md`  
-**Task checklist:** `docs/plan/execution/TASKS_core_security_v6.md`
+**Progress dashboard:** `docs/plan/Complete/PROGRESS_DASHBOARD.md`  
+**Task checklist:** `docs/plan/Complete/TASKS_core_security_v6.md`
 
 ---
 

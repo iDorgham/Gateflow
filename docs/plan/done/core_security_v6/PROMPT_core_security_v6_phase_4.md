@@ -1,7 +1,7 @@
 # PROMPT_core_security_v6_phase_4 — Location Rule (Optional)
 
 **Initiative:** core_security_v6  
-**Plan:** `docs/plan/execution/PLAN_core_security_v6.md`  
+**Plan:** `docs/plan/Complete/PLAN_core_security_v6.md`  
 **Phase:** 4 of 6  
 
 ---

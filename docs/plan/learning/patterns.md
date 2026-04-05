@@ -85,6 +85,6 @@ This file captures recurring patterns and best practices discovered while execut
 
 - **Initiative:** `docs_v2_refresh`
 - **Context:** Phase 3
-- **Description:** When all phases in a plan are complete, move the plan folder from `docs/plan/planning/<slug>/` to `docs/plan/done/<slug>/` using `git mv`. This keeps `planning/` clean (only active work) and gives `done/` value as a searchable archive of patterns and prompts. Workflow files (ONE_MAN_*.md, lifecycle guides) belong in `docs/plan/guides/`, not the root.
+- **Description:** When all phases in a plan are complete, move the plan folder from `docs/plan/Draft/<slug>/` to `docs/plan/Complete/<slug>/` using `git mv`. This keeps `planning/` clean (only active work) and gives `done/` value as a searchable archive of patterns and prompts. Workflow files (ONE_MAN_*.md, lifecycle guides) belong in `docs/plan/guides/`, not the root.
 - **When to apply:** After marking the last phase of any plan as complete in TASKS_<slug>.md.
 

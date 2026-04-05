@@ -2,8 +2,8 @@
 
 Checklist for **PLAN_residents_analytics**. Use with `/dev` and phase prompts.
 
-**Plan:** `docs/plan/execution/PLAN_residents_analytics.md`  
-**Prompts:** `docs/plan/execution/PROMPT_residents_analytics_phase_N.md`
+**Plan:** `docs/plan/Complete/PLAN_residents_analytics.md`  
+**Prompts:** `docs/plan/Complete/PROMPT_residents_analytics_phase_N.md`
 
 ---
 

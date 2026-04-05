@@ -22,7 +22,7 @@
 
 ### Context
 
-- `docs/plan/planned/marketing_rebuild_dashboard_parity/CONTEXT_marketing_rebuild_dashboard_parity.md`
+- `docs/plan/Ready/marketing_rebuild_dashboard_parity/CONTEXT_marketing_rebuild_dashboard_parity.md`
 - `docs/plan/context/IDEA_marketing_rebuild_dashboard_parity.md`
 
 ### Goal
@@ -61,7 +61,7 @@ Establish a **single mechanical source of truth** for design tokens used by mark
 - `apps/marketing/app/globals.css`
 - `apps/marketing/tailwind.config.ts`
 - `packages/ui/package.json` or exports (only if needed for shared CSS entry)
-- `docs/plan/planned/marketing_rebuild_dashboard_parity/assets/ARCH_NOTES.md`
+- `docs/plan/Ready/marketing_rebuild_dashboard_parity/assets/ARCH_NOTES.md`
 
 ### Handoff
 

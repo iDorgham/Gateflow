@@ -1,7 +1,7 @@
 # PROMPT_analytics_rebuild_phase_2 — API & Data Layer
 
 **Initiative:** analytics_rebuild  
-**Plan:** `docs/plan/planning/analytics_rebuild/PLAN_analytics_rebuild.md`  
+**Plan:** `docs/plan/Draft/analytics_rebuild/PLAN_analytics_rebuild.md`  
 **Phase:** 2 of 6  
 
 ---
@@ -34,7 +34,7 @@
 - **App**: client-dashboard; API under `src/app/api/analytics/`
 - **Existing**: `/api/analytics/summary`, `heatmap`, `funnel`, `campaigns`, `operators`, `export`
 - **Rules**: pnpm only; every tenant query must scope by `organizationId` and `deletedAt: null`; use `requireAuth` (or getSessionClaims) before any data access
-- **Refs**: `CLAUDE.md`, `.cursor/contracts/CONTRACTS.md`, `packages/db/prisma/schema.prisma`, `docs/plan/planning/analytics_rebuild/PLAN_analytics_rebuild.md`
+- **Refs**: `CLAUDE.md`, `.cursor/contracts/CONTRACTS.md`, `packages/db/prisma/schema.prisma`, `docs/plan/Draft/analytics_rebuild/PLAN_analytics_rebuild.md`
 
 ---
 

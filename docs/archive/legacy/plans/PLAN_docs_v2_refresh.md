@@ -129,7 +129,7 @@ docs/plan/
 - [ ] Ensure `docs/plan/context/IDEA_docs_v2_refresh.md` is up to date.
 - [ ] For each future initiative, create `IDEA_<slug>.md` via `/idea`.
 - [ ] For each initiative, run `/plan` to generate:
-  - `PLAN_<slug>.md` under `docs/plan/execution/`.
+  - `PLAN_<slug>.md` under `docs/plan/Complete/`.
   - Phase prompts to `PROMPT_<slug>_phase_<N>.md` using `TEMPLATE_PROMPT_phase.md`.
 - [ ] Recreate `docs/plan/learning/{patterns,incidents,decisions}.md`:
   - Either migrate curated content from legacy.

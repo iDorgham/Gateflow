@@ -1,7 +1,7 @@
 # PROMPT_core_security_v6_phase_1 — Core Invariants & Enforcement Hardening
 
 **Initiative:** core_security_v6  
-**Plan:** `docs/plan/execution/PLAN_core_security_v6.md`  
+**Plan:** `docs/plan/Complete/PLAN_core_security_v6.md`  
 **Phase:** 1 of 6  
 
 ---

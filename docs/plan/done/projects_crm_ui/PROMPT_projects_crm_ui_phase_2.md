@@ -19,7 +19,7 @@ ARCHITECTURE | BACKEND-Database | BACKEND-API
 - **Apps**: client-dashboard (3001)
 - **Packages**: db, types
 - **Rules**: pnpm only; multi-tenant (`organizationId`); soft deletes (`deletedAt: null`).
-- **Refs**: `packages/db/prisma/schema.prisma`, `docs/plan/planning/PLAN_projects_crm_ui.md`
+- **Refs**: `packages/db/prisma/schema.prisma`, `docs/plan/Draft/PLAN_projects_crm_ui.md`
 
 ### Goal
 

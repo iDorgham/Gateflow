@@ -114,5 +114,5 @@ Copy this block for each new decision:
   - Requires one manual `git mv` step per plan completion — low overhead.
 - **References:**
   - `docs/plan/README.md`
-  - `docs/plan/planning/docs_v2_refresh/TASKS_docs_v2_refresh.md`
+  - `docs/plan/Draft/docs_v2_refresh/TASKS_docs_v2_refresh.md`
 

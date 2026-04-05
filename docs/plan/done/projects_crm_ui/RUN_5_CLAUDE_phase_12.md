@@ -21,6 +21,6 @@ You are performing **Phase 12** of the GateFlow projects_crm_ui plan: **Tables p
 1. Load `.cursor/skills/gf-security/SKILL.md` and `.cursor/contracts/CONTRACTS.md`.
 2. For each of `/api/qrcodes`, `/api/contacts`, `/api/units`: list, export, bulk — verify auth, org scope, soft delete, validation, audit. List any violation.
 3. Propose concrete code changes (or patches) to fix violations. Recommend performance and UI polish items for Cursor.
-4. Optionally produce a short audit summary (e.g. `docs/plan/in-progress/projects_crm_ui/AUDIT_phase12.md`) with checklist and findings.
+4. Optionally produce a short audit summary (e.g. `docs/plan/Active/projects_crm_ui/AUDIT_phase12.md`) with checklist and findings.
 
 **Acceptance:** Audit document or checklist exists; all security gaps have proposed fixes; Cursor can apply fixes and run preflight to confirm.

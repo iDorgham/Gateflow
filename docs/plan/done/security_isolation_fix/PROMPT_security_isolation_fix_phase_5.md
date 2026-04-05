@@ -19,7 +19,7 @@ QA | SECURITY
 
 - **Project**: GateFlow (Monorepo)
 - **Initiative**: `security_isolation_fix`
-- **File**: `docs/plan/planning/security_isolation_fix/PLAN_security_isolation_fix.md`
+- **File**: `docs/plan/Draft/security_isolation_fix/PLAN_security_isolation_fix.md`
 - **Report**: `docs/plan/learning/SKILL_DISCOVERY_REPORT.md` (Security violations)
 - **Goal**: 100% compliance with `organizationId` scoping.
 

@@ -98,7 +98,7 @@ Target: Performance >= 90, SEO >= 95. Fix any issues found.
 7. AR-EG translation pass: fill all missing keys across all namespaces.
 8. Run `pnpm turbo build --filter=marketing`.
 9. Start local server + run Lighthouse; fix Performance/SEO issues.
-10. Create `docs/plan/execution/TASKS_marketing_website.md` — all 5 phases marked complete.
+10. Create `docs/plan/Complete/TASKS_marketing_website.md` — all 5 phases marked complete.
 11. Commit: `feat(marketing): SEO polish — OG images, JSON-LD, hreflang, company/resources/help pages, AR-EG pass (phase 5)`.
 
 ## Scope (out)
@@ -133,7 +133,7 @@ Target: Performance >= 90, SEO >= 95. Fix any issues found.
 - `apps/marketing/locales/en/resources.json` (new)
 - `apps/marketing/locales/en/help.json` (new)
 - `apps/marketing/locales/ar-EG/*.json` (all updated)
-- `docs/plan/execution/TASKS_marketing_website.md` (new)
+- `docs/plan/Complete/TASKS_marketing_website.md` (new)
 
 ## Git commit
 ```

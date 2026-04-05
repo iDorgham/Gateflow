@@ -2,8 +2,8 @@
 
 Checklist for **PLAN_analytics_rebuild**. Use with `/dev` and phase prompts.
 
-**Plan:** `docs/plan/planning/analytics_rebuild/PLAN_analytics_rebuild.md`  
-**Prompts:** `docs/plan/planning/analytics_rebuild/PROMPT_analytics_rebuild_phase_N.md`
+**Plan:** `docs/plan/Draft/analytics_rebuild/PLAN_analytics_rebuild.md`  
+**Prompts:** `docs/plan/Draft/analytics_rebuild/PROMPT_analytics_rebuild_phase_N.md`
 
 ---
 

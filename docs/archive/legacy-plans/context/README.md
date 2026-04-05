@@ -53,8 +53,8 @@ Treat these as the **single source of truth** across all IDEs and CLIs:
 docs/plan/context/IDEA_<slug>.md
 docs/plan/context/PRODUCT_BRAIN.md
 docs/plan/context/GATEFLOW_CONFIG.md
-docs/plan/execution/PLAN_<slug>.md
-docs/plan/execution/PROMPT_<slug>_phase_<N>.md
+docs/plan/Complete/PLAN_<slug>.md
+docs/plan/Complete/PROMPT_<slug>_phase_<N>.md
 ```
 
 ---

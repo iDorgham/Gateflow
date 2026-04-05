@@ -22,7 +22,7 @@ Copy this prompt when running `/dev` for Phase 7 of the project dashboard plan.
 
 - **Project**: GateFlow — Zero-Trust digital gate platform (Turborepo, pnpm)
 - **Rules**: pnpm only; semantic tokens only; multi-tenant (`organizationId`)
-- **Refs**: `docs/plan/context/IDEA_project_dashboard.md`, `docs/plan/execution/PLAN_project_dashboard.md`
+- **Refs**: `docs/plan/context/IDEA_project_dashboard.md`, `docs/plan/Complete/PLAN_project_dashboard.md`
 - **Existing**: `ProjectWizard` in `@/components/project-wizard`, `ProjectsTab` in settings/tabs/projects-tab.tsx
 
 ### Goal

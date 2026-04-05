@@ -35,8 +35,8 @@ All tools (Cursor, CLIs, Kiro, Antigravity) share a **single planning and learni
 - **Ideas & context**: `docs/plan/context/IDEA_<slug>.md`
 - **Backlog**: `docs/plan/backlog/ALL_TASKS_BACKLOG.md`
 - **Plans & phases**:
-  - `docs/plan/execution/PLAN_<slug>.md`
-  - `docs/plan/execution/PROMPT_<slug>_phase_<N>.md`
+  - `docs/plan/Complete/PLAN_<slug>.md`
+  - `docs/plan/Complete/PROMPT_<slug>_phase_<N>.md`
 - **Guidelines / “brain”**:
   - `docs/plan/guidelines/AI_SKILLS_SUBAGENTS_RULES.md`
   - `docs/plan/guidelines/PHASED_DEVELOPMENT_WORKFLOW.md`
@@ -213,7 +213,7 @@ Use when the task is ambiguous or spans code + docs + behavior and you want one 
 Use when the user wants to **create a plan**, **break down tasks**, or **run phased development** (create plan → write pro prompts → apply one by one → test/enhance → next phase).
 
 **Workflow:**
-1. Create plan from goal/backlog → save to `docs/plan/execution/PLAN_<name>.md`
+1. Create plan from goal/backlog → save to `docs/plan/Complete/PLAN_<name>.md`
 2. Write each phase as pro prompt → `PROMPT_<name>_phase_N.md`
 3. Execute: apply prompt → test → enhance → commit → next
 

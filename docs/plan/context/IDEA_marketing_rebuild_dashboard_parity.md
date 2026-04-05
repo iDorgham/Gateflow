@@ -1,7 +1,7 @@
 # IDEA: Marketing site rebuild — dashboard token parity & AI-skills workflow
 
 **Slug:** `marketing_rebuild_dashboard_parity`  
-**Status:** Planned — `docs/plan/planned/marketing_rebuild_dashboard_parity/`  
+**Status:** Planned — `docs/plan/Ready/marketing_rebuild_dashboard_parity/`  
 **Created:** 2026-03-30  
 **Related:** `IDEA_marketing_website.md` (content phases), `apps/marketing`, `packages/ui`, `apps/client-dashboard`
 
@@ -87,4 +87,4 @@ The user goal: **rebuild / realign marketing** using **current AI skills** and t
 
 ## Next step
 
-Phased plan and prompts live under **`docs/plan/planned/marketing_rebuild_dashboard_parity/`**. Run **`/dev marketing_rebuild_dashboard_parity 1`** to start Phase 01.
+Phased plan and prompts live under **`docs/plan/Ready/marketing_rebuild_dashboard_parity/`**. Run **`/dev marketing_rebuild_dashboard_parity 1`** to start Phase 01.

@@ -12,12 +12,12 @@ Use `/plan` to convert an idea into an executable multi-phase plan with per-phas
 - Reads:
   - `docs/plan/context/IDEA_<slug>.md` (or goal text if none exists)
   - `docs/plan/brainstorming/STRATEGY_<slug>.md` or `ROADMAP_STRATEGY.md` (for market alignment)
-  - Existing plan in `docs/plan/planning/<slug>/` or `docs/plan/in-progress/<slug>/` (when refining)
+  - Existing plan in `docs/plan/Draft/<slug>/` or `docs/plan/Active/<slug>/` (when refining)
   - `docs/plan/guidelines/PHASED_DEVELOPMENT_WORKFLOW.md`
   - `docs/plan/guidelines/SUBAGENT_HIERARCHY.md`
   - `docs/plan/guidelines/AI_SKILLS_SUBAGENTS_RULES.md`
   - `docs/plan/templates/PLAN_FOLDER_STRUCTURE.md` — canonical folder structure + tool matrix
-- **Creates the following folder hierarchy** in `docs/plan/planning/<slug>/`:
+- **Creates the following folder hierarchy** in `docs/plan/Draft/<slug>/`:
   ```
   planning/<slug>/
   ├── PLAN_<slug>.md              # Master: phases, deps, risks
@@ -63,7 +63,7 @@ See `docs/plan/PLAN_LIFECYCLE.md` for full workflow.
 
 - Always use `TEMPLATE_PROMPT_phase.md` template when creating or updating phase prompts. The template now includes **Skills**, **MCP**, **Commands**, and optional **Given/When/Then** acceptance criteria — populate these when relevant. See `docs/plan/PLANNING_ENHANCEMENTS.md`.
 - For complex initiatives: follow Understand → Investigate (explore subagent) → Generate before writing phases.
-- **New plans:** Write to `docs/plan/planning/<slug>/`. If slug folder exists in `planned/`, `in-progress/`, or `done/`, ask user before overwriting.
+- **New plans:** Write to `docs/plan/Draft/<slug>/`. If slug folder exists in `planned/`, `in-progress/`, or `done/`, ask user before overwriting.
 - **`/plan ready <slug>`:** Move all files from `planning/<slug>/` to `planned/<slug>/`. Create `planned/<slug>/` if needed. Remove `planning/<slug>/` after move.
 - Treat:
   - `AI_SKILLS_SUBAGENTS_RULES.md` and `SUBAGENT_HIERARCHY.md` as the **single brain** for roles and subagents.
@@ -95,10 +95,10 @@ Create phased development plans from goals or backlog. This is one of the **four
 7. Create a phased plan: breakdown, deliverables per phase, test criteria.
 8. **Scaffold folder structure FIRST** (before writing any files):
    ```bash
-   mkdir -p docs/plan/planning/<slug>/phases
-   mkdir -p docs/plan/planning/<slug>/assets
+   mkdir -p docs/plan/Draft/<slug>/phases
+   mkdir -p docs/plan/Draft/<slug>/assets
    # For each phase NN:
-   mkdir -p docs/plan/planning/<slug>/phases/NN_<title>/files
+   mkdir -p docs/plan/Draft/<slug>/phases/NN_<title>/files
    ```
 9. **Write root files**: `PLAN_<slug>.md`, `TASKS_<slug>.md`, `CONTEXT_<slug>.md` (frozen schema + key types + env vars).
 10. **For each phase**, determine if it needs **parts** (see splitting rules in `PLAN_FOLDER_STRUCTURE.md`):
@@ -110,9 +110,9 @@ Create phased development plans from goals or backlog. This is one of the **four
    - If the initiative involves UI (SaaS, Mobile, Dashboard, Landing):
    - Run: `python3 .agents/skills/ui-ux-pro-max/scripts/search.py "<slug> <industry>" --design-system --persist -p "<slug>"`
    - Reference `design-system/MASTER.md` in the plan and prompts.
-5. Save the plan to `docs/plan/planning/<slug>/PLAN_<slug>.md`.
+5. Save the plan to `docs/plan/Draft/<slug>/PLAN_<slug>.md`.
 6. For each phase, write a pro prompt using `TEMPLATE_PROMPT_phase.md`:
-   - Save as `docs/plan/planning/<slug>/PROMPT_<slug>_phase_<N>.md`.
+   - Save as `docs/plan/Draft/<slug>/PROMPT_<slug>_phase_<N>.md`.
 7. When user approves the plan: run `/plan ready <slug>` to move `planning/<slug>/` → `planned/<slug>/`.
 8. **Automated Backlog & Lifecycle Orchestration**:
    - For every new or updated plan: Update `docs/plan/backlog/ALL_TASKS_BACKLOG.md`.

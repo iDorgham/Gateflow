@@ -1,7 +1,7 @@
 # PROMPT_analytics_rebuild_phase_1 — Design Tokens & Layout
 
 **Initiative:** analytics_rebuild  
-**Plan:** `docs/plan/planning/analytics_rebuild/PLAN_analytics_rebuild.md`  
+**Plan:** `docs/plan/Draft/analytics_rebuild/PLAN_analytics_rebuild.md`  
 **Phase:** 1 of 6  
 
 ---
@@ -34,7 +34,7 @@
 - **App**: client-dashboard (port 3001)
 - **Existing**: `apps/client-dashboard/src/app/[locale]/dashboard/analytics/page.tsx`, `analytics-client.tsx`, `AnalyticsFilterBar`, `AnalyticsKPICards`, existing chart components
 - **Rules**: pnpm only; multi-tenant (`organizationId`); soft deletes (`deletedAt: null`)
-- **Refs**: `CLAUDE.md`, `docs/plan/planning/analytics_rebuild/PLAN_analytics_rebuild.md`, `docs/plan/context/IDEA_analytics_rebuild.md`, `packages/ui/src/tokens.ts`, `apps/client-dashboard/src/app/globals.css`
+- **Refs**: `CLAUDE.md`, `docs/plan/Draft/analytics_rebuild/PLAN_analytics_rebuild.md`, `docs/plan/context/IDEA_analytics_rebuild.md`, `packages/ui/src/tokens.ts`, `apps/client-dashboard/src/app/globals.css`
 
 ---
 

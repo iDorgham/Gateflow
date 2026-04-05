@@ -61,7 +61,7 @@ Ensure **no SEO regressions**, motion respects **prefers-reduced-motion**, acces
 
 - `apps/marketing/app/[locale]/layout.tsx` (metadata review)
 - `apps/marketing/components/sections/hero-animated-content.tsx` (and other motion)
-- `docs/plan/planned/marketing_rebuild_dashboard_parity/TASKS_marketing_rebuild_dashboard_parity.md`
+- `docs/plan/Ready/marketing_rebuild_dashboard_parity/TASKS_marketing_rebuild_dashboard_parity.md`
 
 ### Handoff
 

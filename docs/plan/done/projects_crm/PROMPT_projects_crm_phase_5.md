@@ -38,7 +38,7 @@ Finalize the `projects_crm` v2.0 initiative with 100% test coverage for the new 
 2. Execute a simulation of 10k `CommunicationLog` writes to check performance impacts.
 3. Review every `Admin Dashboard` audit entry to verify PII compliance.
 4. Final RTL check: Switch the dashboard to `ar-EG` and navigate through all new CRM views.
-5. Create the certification report `docs/plan/done/projects_crm/AUDIT_crm_v2.md`.
+5. Create the certification report `docs/plan/Complete/projects_crm/AUDIT_crm_v2.md`.
 6. Final auto-sync and release tagging.
 
 ### Acceptance criteria
@@ -53,4 +53,4 @@ Finalize the `projects_crm` v2.0 initiative with 100% test coverage for the new 
 - `docs/plan/backlog/PROJECTS_CRM_UI_FOLLOWUPS.md`
 - `docs/PRD_v7.0.md`
 - `apps/client-dashboard/src/app/[locale]/dashboard/contacts/page.tsx` (RTL check)
-- `docs/plan/done/projects_crm/AUDIT_crm_v2.md` (new)
+- `docs/plan/Complete/projects_crm/AUDIT_crm_v2.md` (new)

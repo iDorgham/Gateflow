@@ -19,7 +19,7 @@ BACKEND-API | FRONTEND | ARCHITECTURE
 - **Apps**: client-dashboard (3001)
 - **Packages**: ui, db, api-client
 - **Rules**: pnpm only; real-time (SSE/WS context if existing); multi-tenant.
-- **Refs**: `apps/client-dashboard/src/app/[locale]/dashboard/projects/[projectId]/page.tsx` (Phase 4), `docs/plan/planning/PLAN_projects_crm_ui.md`
+- **Refs**: `apps/client-dashboard/src/app/[locale]/dashboard/projects/[projectId]/page.tsx` (Phase 4), `docs/plan/Draft/PLAN_projects_crm_ui.md`
 
 ### Goal
 

@@ -19,7 +19,7 @@ FRONTEND | BACKEND-API
 - **Apps**: client-dashboard (3001)
 - **Packages**: ui, types
 - **Rules**: pnpm only; use TanStack Table v8; multi-tenant.
-- **Refs**: `apps/client-dashboard/src/app/[locale]/dashboard/projects/[projectId]/page.tsx` (Phase 4), `docs/plan/planning/PLAN_projects_crm_ui.md`
+- **Refs**: `apps/client-dashboard/src/app/[locale]/dashboard/projects/[projectId]/page.tsx` (Phase 4), `docs/plan/Draft/PLAN_projects_crm_ui.md`
 
 ### Goal
 

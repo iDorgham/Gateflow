@@ -43,5 +43,5 @@ Unify three initiatives into one executable plan:
 - `docs/RMS/Qwen_markdown_20260228_aba6wr6wl.md` — Analytics Dashboard spec
 - `docs/RMS/Qwen_markdown_20260228_cml96jxxe.md` — Contacts enhancement spec
 - `docs/RMS/Qwen_markdown_20260228_trajyav6c.md` — Units enhancement spec
-- `docs/plan/execution/PLAN_analytics_dashboard.md` — Existing analytics plan (partially implemented)
+- `docs/plan/Complete/PLAN_analytics_dashboard.md` — Existing analytics plan (partially implemented)
 - `packages/db/prisma/schema.prisma` — Contact, Unit, ContactUnit, ScanLog, QRCode, VisitorQR

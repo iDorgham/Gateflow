@@ -8,7 +8,7 @@
 - **App**: client-dashboard (3001)
 - **Packages**: ui, i18n
 - **Rules**: pnpm only; multi-tenant (`organizationId`); soft deletes (`deletedAt: null`)
-- **Refs**: `CLAUDE.md`, `docs/plan/execution/PLAN_gateai.md`
+- **Refs**: `CLAUDE.md`, `docs/plan/Complete/PLAN_gateai.md`
 
 ### Goal
 Setup the structural foundations for GateAI, including the `/ai` hub page and navigation.

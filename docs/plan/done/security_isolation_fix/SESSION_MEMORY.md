@@ -9,7 +9,7 @@
 - **Phase 5:** ✅ COMPLETED — Automated Enforcement & Certification (Success: Zero dashboard violations)
 - **Phase 6:** ⏭ SKIPPED — User jumped directly to Phase 7
 - **Phase 7:** ✅ COMPLETED — Final Certification & Audit (2026-03-25) — Zero violations in all client-dashboard API routes
-- **Plan status:** ✅ DONE — moved to `docs/plan/done/security_isolation_fix/`
+- **Plan status:** ✅ DONE — moved to `docs/plan/Complete/security_isolation_fix/`
 - **Next action:** None — plan complete
 
 ## Cross-Session Decisions
@@ -23,7 +23,7 @@
 ## Discovered Gotchas
 
 - `dashboard/scans/page.tsx` had a missing null check on `claims` — `const orgId = claims.orgId` on line 54 (pre-fix) would crash if session was absent. Fixed by adding `if (!claims?.orgId) redirect('/login')` and importing `redirect` from `next/navigation`.
-- The plan was in `docs/plan/planned/` — moved to `docs/plan/in-progress/` as lifecycle requires.
+- The plan was in `docs/plan/Ready/` — moved to `docs/plan/Active/` as lifecycle requires.
 
 ## Phase 1-5 Files Touched
 
@@ -52,7 +52,7 @@
 
 ## Remaining Phases
 
-None — all phases complete. Plan archived in `docs/plan/done/security_isolation_fix/`.
+None — all phases complete. Plan archived in `docs/plan/Complete/security_isolation_fix/`.
 
 ## Phase 2 Notes
 

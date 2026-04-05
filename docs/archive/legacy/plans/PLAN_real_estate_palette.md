@@ -147,7 +147,7 @@ Run each phase via `/dev`:
 ```
 /dev
 ```
-Then paste the contents of `docs/plan/execution/PROMPT_real_estate_palette_phase_N.md` for the desired phase.
+Then paste the contents of `docs/plan/Complete/PROMPT_real_estate_palette_phase_N.md` for the desired phase.
 
 Or run the full plan:
 

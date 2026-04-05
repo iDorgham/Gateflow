@@ -210,7 +210,7 @@ qwen "your prompt"        # One-shot or session
 
 ## Integration with phases and **Preferred tool**
 
-GateFlow phase prompts (`docs/plan/execution/PROMPT_<slug>_phase_<N>.md`) include a **Preferred tool** field.  
+GateFlow phase prompts (`docs/plan/Complete/PROMPT_<slug>_phase_<N>.md`) include a **Preferred tool** field.  
 Use this skill to respect that choice instead of inventing a new workflow per phase:
 
 - If **Preferred tool: Cursor (default)**:

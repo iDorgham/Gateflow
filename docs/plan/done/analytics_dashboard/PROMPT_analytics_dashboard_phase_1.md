@@ -1,7 +1,7 @@
 # PROMPT_analytics_dashboard_phase_1 — Core Dashboard Shell
 
 **Initiative:** analytics_dashboard  
-**Plan:** `docs/plan/execution/PLAN_analytics_dashboard.md`  
+**Plan:** `docs/plan/Complete/PLAN_analytics_dashboard.md`  
 **Phase:** 1 of 4  
 
 ---
@@ -22,7 +22,7 @@
 - **Apps**: client-dashboard (port 3001)
 - **Existing analytics**: `apps/client-dashboard/src/app/[locale]/dashboard/analytics/page.tsx`, `analytics-charts.tsx`
 - **Rules**: pnpm only; multi-tenant (`organizationId`); soft deletes (`deletedAt: null`)
-- **Refs**: `CLAUDE.md`, `docs/plan/execution/PLAN_analytics_dashboard.md`, `docs/archive/legacy/PRD_v7.0.md`
+- **Refs**: `CLAUDE.md`, `docs/plan/Complete/PLAN_analytics_dashboard.md`, `docs/archive/legacy/PRD_v7.0.md`
 
 ---
 

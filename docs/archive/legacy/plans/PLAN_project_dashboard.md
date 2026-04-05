@@ -288,4 +288,4 @@ Run each phase via `/dev`:
 ```
 /dev
 ```
-Then paste the contents of `docs/plan/execution/PROMPT_project_dashboard_phase_N.md` for the desired phase.
+Then paste the contents of `docs/plan/Complete/PROMPT_project_dashboard_phase_N.md` for the desired phase.

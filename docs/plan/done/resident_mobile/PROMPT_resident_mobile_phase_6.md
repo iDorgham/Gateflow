@@ -52,7 +52,7 @@ Complete the app: wire History and Settings tabs, audit every screen for RTL cor
 - `arrived.test.ts` — idempotency (second call returns `already_notified`); 403 without RESIDENT role
 - `open-qr.test.ts` — creates isOpenQR QR; respects canCreateOpenQR limit
 
-**TASKS file** — create `docs/plan/execution/TASKS_resident_mobile.md` with all 6 phases marked complete.
+**TASKS file** — create `docs/plan/Complete/TASKS_resident_mobile.md` with all 6 phases marked complete.
 
 ## Steps (ordered)
 1. Add `residentNotifyScan` + `residentNotifyArrival` to User in schema; `prisma db push`.
@@ -64,7 +64,7 @@ Complete the app: wire History and Settings tabs, audit every screen for RTL cor
 7. Write `history.test.ts`, `arrived.test.ts`, `open-qr.test.ts` in client-dashboard.
 8. Run `pnpm turbo lint && pnpm turbo typecheck` (all workspaces).
 9. Run `pnpm turbo test`.
-10. Create `docs/plan/execution/TASKS_resident_mobile.md`.
+10. Create `docs/plan/Complete/TASKS_resident_mobile.md`.
 11. Commit: `feat(resident-mobile): history tab, settings, RTL polish, tests — complete (phase 6)`.
 
 ## Scope (out)
@@ -93,7 +93,7 @@ Complete the app: wire History and Settings tabs, audit every screen for RTL cor
 - `apps/client-dashboard/src/app/api/resident/open-qr.test.ts` (new)
 - `apps/resident-mobile/app/(tabs)/history/index.tsx` (rewrite)
 - `apps/resident-mobile/app/(tabs)/settings/index.tsx` (rewrite)
-- `docs/plan/execution/TASKS_resident_mobile.md` (new)
+- `docs/plan/Complete/TASKS_resident_mobile.md` (new)
 
 ## Git commit
 ```

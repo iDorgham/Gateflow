@@ -19,7 +19,7 @@ FRONTEND | ARCHITECTURE
 - **Apps**: client-dashboard (3001)
 - **Packages**: ui, types
 - **Rules**: pnpm only; use TanStack Table v8; follow ADS layout.
-- **Refs**: `packages/ui/src/components/tables/DataTable.tsx` (base), `docs/plan/planning/PLAN_projects_crm_ui.md`
+- **Refs**: `packages/ui/src/components/tables/DataTable.tsx` (base), `docs/plan/Draft/PLAN_projects_crm_ui.md`
 
 ### Goal
 

@@ -13,7 +13,7 @@ Use this role when implementing in Cursor or when invoking CLIs for this phase.
 - **Apps**: client-dashboard (3001)
 - **Packages**: ui, i18n, config
 - **Rules**: pnpm only; multi-tenant (`organizationId`); soft deletes (`deletedAt: null`)
-- **Refs**: `CLAUDE.md`, `docs/plan/planning/settings_v6/PLAN_settings_v6.md`
+- **Refs**: `CLAUDE.md`, `docs/plan/Draft/settings_v6/PLAN_settings_v6.md`
 
 ## Goal
 Rebuild the main settings layout with a responsive sidebar and tabbed navigation.

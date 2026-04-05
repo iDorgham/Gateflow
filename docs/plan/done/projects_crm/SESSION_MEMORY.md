@@ -3,7 +3,7 @@
 > Auto-updated by `/dev` after each phase. Survives context resets.
 > **Load this FIRST** at the start of every new session — before reading any other plan file.
 
-Save as: `docs/plan/in-progress/projects_crm/SESSION_MEMORY.md`
+Save as: `docs/plan/Active/projects_crm/SESSION_MEMORY.md`
 
 ---
 

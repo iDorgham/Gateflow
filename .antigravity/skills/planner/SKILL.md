@@ -31,7 +31,7 @@ Add multi-CLI to a phase only when it is **complex** or **high-risk**. Prefer Cu
 ## Workflow Summary
 
 1. **Plan (inputs)** → Read `IDEA_<slug>.md` (if present), `PRODUCT_BRAIN.md`, `GATEFLOW_CONFIG.md`, and `ALL_TASKS_BACKLOG.md` to understand intent, product context, and constraints.
-2. **Plan (outputs)** → Use the planning prompt to save/update `docs/plan/planning/<slug>/PLAN_<slug>.md` with ordered phases. New plans go to **planning/** until the user marks them ready.
+2. **Plan (outputs)** → Use the planning prompt to save/update `docs/plan/Draft/<slug>/PLAN_<slug>.md` with ordered phases. New plans go to **planning/** until the user marks them ready.
 4. **Mark ready** → When the plan is approved, user runs `/plan ready <slug>` to move `planning/<slug>/` → `planned/<slug>/`.
 5. **Execute** → `/dev` and `/ship` consume the phase prompts from `planned/` or `in-progress/`, apply them in Cursor (or the phase’s **Preferred tool**), invoke subagents/CLIs as specified, then test → enhance → commit → next phase. `/dev` moves `planned/` → `in-progress/` when starting, and `in-progress/` → `done/` when the last phase completes.
 
@@ -319,7 +319,7 @@ git push -u origin feat/mvp-resident
 - `docs/plan/README.md` — Canonical layout for `context/`, `planning/`, `planned/`, `in-progress/`, `done/`, `execution/`, `guidelines/`, and `learning/`
 - `docs/plan/guidelines/SUBAGENT_HIERARCHY.md` — Role definitions and CLI prefixes for all tools
 - `docs/plan/guidelines/PHASED_DEVELOPMENT_WORKFLOW.md` — Full phased execution workflow
-- `docs/plan/execution/TEMPLATE_PROMPT_phase.md` + `.antigravity/templates/TEMPLATE_PROMPT_phase.md` — Phase prompt template (Primary role, Preferred tool, steps, Acceptance criteria)
+- `docs/plan/Complete/TEMPLATE_PROMPT_phase.md` + `.antigravity/templates/TEMPLATE_PROMPT_phase.md` — Phase prompt template (Primary role, Preferred tool, steps, Acceptance criteria)
 - `docs/plan/backlog/ALL_TASKS_BACKLOG.md` — Task source
 - `docs/plan/learning/{patterns,incidents,decisions}.md` — Cross-plan learnings captured from phases
 - `.antigravity/skills/multi-cli-cursor-workflow/SKILL.md` — Multi-CLI patterns

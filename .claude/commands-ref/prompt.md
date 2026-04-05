@@ -4,7 +4,7 @@ Generate pro prompts for phases. Load phase prompt or create from template.
 
 ## Instructions
 
-1. If phase exists: load `docs/plan/execution/PROMPT_<plan>_phase_<N>.md`.
+1. If phase exists: load `docs/plan/Complete/PROMPT_<plan>_phase_<N>.md`.
 2. If creating new: use `.antigravity/templates/TEMPLATE_PROMPT_phase.md`.
 
 ## Usage
@@ -14,4 +14,4 @@ Generate pro prompts for phases. Load phase prompt or create from template.
 
 ## Template
 
-`.antigravity/templates/TEMPLATE_PROMPT_phase.md` → save to `docs/plan/execution/PROMPT_<plan>_phase_<N>.md`
+`.antigravity/templates/TEMPLATE_PROMPT_phase.md` → save to `docs/plan/Complete/PROMPT_<plan>_phase_<N>.md`

@@ -45,7 +45,7 @@ PROMPT_resident_portal_phase_2.md  → Add VisitorQR model
 
 ## Migration Note
 
-New plans should be created in `docs/plan/planning/` using `/plan` command.
+New plans should be created in `docs/plan/Draft/` using `/plan` command.
 
 See [docs/plan/README.md](../README.md) for current workflow.
 

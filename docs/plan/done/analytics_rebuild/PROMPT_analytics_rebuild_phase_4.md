@@ -1,7 +1,7 @@
 # PROMPT_analytics_rebuild_phase_4 — Core Charts (Batch 2)
 
 **Initiative:** analytics_rebuild  
-**Plan:** `docs/plan/planning/analytics_rebuild/PLAN_analytics_rebuild.md`  
+**Plan:** `docs/plan/Draft/analytics_rebuild/PLAN_analytics_rebuild.md`  
 **Phase:** 4 of 6  
 
 ---
@@ -33,7 +33,7 @@
 - **Project**: GateFlow — Zero-Trust digital gate platform (Turborepo, pnpm)
 - **App**: client-dashboard; analytics components under `components/dashboard/analytics/`
 - **Prerequisites**: Phases 1–3 (layout, APIs, first batch of charts)
-- **Refs**: `docs/plan/planning/analytics_rebuild/PLAN_analytics_rebuild.md`, `IDEA_analytics_rebuild.md`
+- **Refs**: `docs/plan/Draft/analytics_rebuild/PLAN_analytics_rebuild.md`, `IDEA_analytics_rebuild.md`
 
 ---
 

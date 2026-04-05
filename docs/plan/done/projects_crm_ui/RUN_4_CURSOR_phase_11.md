@@ -4,7 +4,7 @@
 
 ---
 
-**Context:** GateFlow client-dashboard. Phases 6–10 are done for QR Codes (TanStack Table, column reorder, filtering, sort, pagination, export, bulk). Refs: `docs/plan/in-progress/projects_crm_ui/PROMPT_projects_crm_ui_phase_11.md`. Load skills: react, gf-design-guide, gf-security (CONTRACTS for any API usage).
+**Context:** GateFlow client-dashboard. Phases 6–10 are done for QR Codes (TanStack Table, column reorder, filtering, sort, pagination, export, bulk). Refs: `docs/plan/Active/projects_crm_ui/PROMPT_projects_crm_ui_phase_11.md`. Load skills: react, gf-design-guide, gf-security (CONTRACTS for any API usage).
 
 **Goal:** Reuse the same table pattern for **Contacts** and **Units** pages: TanStack Table, column reorder + localStorage persistence, filtering (search, date range), sort, pagination, export button, bulk selection and bulk actions (export selected, delete selected with confirmation). Use existing `/api/contacts` and `/api/units`; extend with same query param pattern as QR codes (search, date range, sort, pagination) and add export + bulk-delete endpoints if not present (same security as Phase 10: auth, org scope, audit).
 

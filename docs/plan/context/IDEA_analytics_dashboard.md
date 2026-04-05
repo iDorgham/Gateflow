@@ -36,4 +36,4 @@ One central place where property managers, security heads, marketing leads and a
 
 ## Plan
 
-See `docs/plan/execution/PLAN_analytics_dashboard.md`.
+See `docs/plan/Complete/PLAN_analytics_dashboard.md`.

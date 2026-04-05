@@ -2,9 +2,9 @@
 
 Checklist for **PLAN_core_security_v6**. Use with `/dev` and **PROGRESS_DASHBOARD.md**.
 
-**Plan:** `docs/plan/execution/PLAN_core_security_v6.md`  
-**Prompts:** `docs/plan/execution/PROMPT_core_security_v6_phase_N.md`  
-**Dashboard:** `docs/plan/execution/PROGRESS_DASHBOARD.md`
+**Plan:** `docs/plan/Complete/PLAN_core_security_v6.md`  
+**Prompts:** `docs/plan/Complete/PROMPT_core_security_v6_phase_N.md`  
+**Dashboard:** `docs/plan/Complete/PROGRESS_DASHBOARD.md`
 
 ---
 

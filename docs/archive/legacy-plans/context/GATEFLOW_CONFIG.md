@@ -60,8 +60,8 @@ Tools should **never** propose changes that violate these:
 
 - `docs/plan/context/IDEA_<slug>.md` — initiative/epic context.
 - `docs/plan/backlog/ALL_TASKS_BACKLOG.md` — master backlog.
-- `docs/plan/execution/PLAN_<slug>.md` — phased plan per initiative.
-- `docs/plan/execution/PROMPT_<slug>_phase_<N>.md` — pro prompts per phase.
+- `docs/plan/Complete/PLAN_<slug>.md` — phased plan per initiative.
+- `docs/plan/Complete/PROMPT_<slug>_phase_<N>.md` — pro prompts per phase.
 - `docs/plan/learning/patterns.md`, `incidents.md`, `decisions.md` — cross‑phase learnings.
 - `docs/plan/guidelines/*.md` — AI skills, subagents, workflows, tools.
 

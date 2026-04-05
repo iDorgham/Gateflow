@@ -3,7 +3,7 @@
 ## Purpose
 
 Quick reference for workflows, commands, and prompts when developing GateFlow.  
-Use this skill when you need to run the right command, follow a standard workflow, or execute a **single phase** defined in `docs/plan/execution/PROMPT_<slug>_phase_<N>.md` (typically via the `/dev` command).
+Use this skill when you need to run the right command, follow a standard workflow, or execute a **single phase** defined in `docs/plan/Complete/PROMPT_<slug>_phase_<N>.md` (typically via the `/dev` command).
 
 **Full reference:** `docs/plan/guidelines/AI_SKILLS_SUBAGENTS_RULES.md`
 
@@ -75,7 +75,7 @@ pnpm dev:marketing # Marketing (3000)
 When executing a phase:
 
 1. **Locate the phase prompt**:
-   - Open `docs/plan/execution/PROMPT_<slug>_phase_<N>.md`.
+   - Open `docs/plan/Complete/PROMPT_<slug>_phase_<N>.md`.
    - Read the phase’s **Primary role**, **Preferred tool**, **Steps**, and **Acceptance criteria**.
 2. **Run via `/dev`**:
    - In Cursor, use `/dev` with the chosen phase; `/dev`:
@@ -92,7 +92,7 @@ When executing a phase:
 6. **Git flow**:
    - Use the Git workflow in this skill (and the internal `github` flow) to create a clear, reviewable commit for the phase.
 7. **TASKS update (mandatory when finishing a phase)**:
-   - **In the same pass as the commit**, update `docs/plan/execution/TASKS_<slug>.md`:
+   - **In the same pass as the commit**, update `docs/plan/Complete/TASKS_<slug>.md`:
      - Tick off completed checklist items for the phase.
      - Set **Status: Done** for the phase.
      - Update the Summary table if present.
@@ -120,7 +120,7 @@ When executing a phase:
 - "Login as [role], navigate to [pages], verify [behaviors], and capture screenshots for any broken states."
 
 ### Planning
-- "Create a phased plan for [GOAL/EPIC]. Use docs/plan/backlog/ALL_TASKS_BACKLOG.md and RESIDENT_PORTAL_SPEC. Output: phases with scope, deliverables, test criteria. Save to docs/plan/execution/PLAN_[name].md."
+- "Create a phased plan for [GOAL/EPIC]. Use docs/plan/backlog/ALL_TASKS_BACKLOG.md and RESIDENT_PORTAL_SPEC. Output: phases with scope, deliverables, test criteria. Save to docs/plan/Complete/PLAN_[name].md."
 
 ## Rules (never forget)
 
@@ -149,7 +149,7 @@ When executing a phase:
 - `docs/plan/guidelines/DEVELOPMENT_WORKFLOWS.md` — commands, workflows, prompts
 - `docs/plan/guidelines/AI_SKILLS_SUBAGENTS_RULES.md` — skills, subagents, rules, and phased execution requirements
 - `docs/plan/guidelines/PHASED_DEVELOPMENT_WORKFLOW.md` — detailed phased development loop
-- `docs/plan/execution/` — `PLAN_<slug>.md` plans and `PROMPT_<slug>_phase_<N>.md` pro prompts
+- `docs/plan/Complete/` — `PLAN_<slug>.md` plans and `PROMPT_<slug>_phase_<N>.md` pro prompts
 - `docs/plan/learning/{patterns,incidents,decisions}.md` — outcomes captured from phases
 - `.kiro/QUICK_REFERENCE.md` — patterns, templates
 - `packages/db/prisma/schema.prisma` — database schema

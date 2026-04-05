@@ -19,7 +19,7 @@ FRONTEND | ARCHITECTURE
 - **Apps**: client-dashboard (3001)
 - **Packages**: ui, i18n
 - **Rules**: pnpm only; Midnight Blue/Kimchi Orange palette; multi-tenant.
-- **Refs**: `apps/client-dashboard/src/app/[locale]/dashboard/projects/page.tsx`, `docs/plan/planning/PLAN_projects_crm_ui.md`
+- **Refs**: `apps/client-dashboard/src/app/[locale]/dashboard/projects/page.tsx`, `docs/plan/Draft/PLAN_projects_crm_ui.md`
 
 ### Goal
 

@@ -67,14 +67,14 @@ We need a **Docs v2** set that is:
 
 - **New plan structure**
   - `docs/plan/context/IDEA_<slug>.md` — initiative context (this file is IDEA_docs_v2_refresh).
-  - `docs/plan/execution/PLAN_<slug>.md` — per-initiative plan.
-  - `docs/plan/execution/PROMPT_<slug>_phase_<N>.md` — per-phase prompts, using `TEMPLATE_PROMPT_phase.md`.
+  - `docs/plan/Complete/PLAN_<slug>.md` — per-initiative plan.
+  - `docs/plan/Complete/PROMPT_<slug>_phase_<N>.md` — per-phase prompts, using `TEMPLATE_PROMPT_phase.md`.
   - `docs/plan/learning/{patterns,incidents,decisions}.md` — cross-phase learning docs (rebuilt/cleaned later).
 
 - **Cursor flows alignment**
   - Ensure `/idea`, `/plan`, `/dev`, `/ship` flows:
     - Read `PRD_v7.0.md` and `docs/plan/context/*` as canonical product + initiative context.
-    - Write to `docs/plan/execution/*` using existing templates and new skills (e.g. `pro-prd-writer`).
+    - Write to `docs/plan/Complete/*` using existing templates and new skills (e.g. `pro-prd-writer`).
 
 ### 3.2 Out of scope (Docs v2 idea only)
 

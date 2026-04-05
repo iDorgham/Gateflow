@@ -167,8 +167,8 @@ npx prisma studio               # GUI
 ### Workflow: Phased development (plan → pro prompts → execute → test → enhance)
 
 1. **Invoke planning subagent** with goal (from backlog or user request). See `docs/plan/guidelines/PHASED_DEVELOPMENT_WORKFLOW.md`.
-2. **Save plan** to `docs/plan/execution/PLAN_<initiative>.md`.
-3. **For each phase**: Write pro prompt using `.cursor/templates/TEMPLATE_PROMPT_phase.md` → save `docs/plan/execution/PROMPT_<initiative>_phase_N.md`.
+2. **Save plan** to `docs/plan/Complete/PLAN_<initiative>.md`.
+3. **For each phase**: Write pro prompt using `.cursor/templates/TEMPLATE_PROMPT_phase.md` → save `docs/plan/Complete/PROMPT_<initiative>_phase_N.md`.
 4. **Execute phase N**:
    - Prefer using the master commands:
      - `/dev` — implement a single phase according to its prompt.
@@ -264,7 +264,7 @@ List API routes under /api/[path] and summarize auth, input validation, and org 
 ### Planning
 
 ```
-Create a phased plan for [GOAL/EPIC]. Use docs/plan/backlog/ALL_TASKS_BACKLOG.md and RESIDENT_PORTAL_SPEC. Output: phases with scope, deliverables, test criteria. Save to docs/plan/execution/PLAN_<name>.md.
+Create a phased plan for [GOAL/EPIC]. Use docs/plan/backlog/ALL_TASKS_BACKLOG.md and RESIDENT_PORTAL_SPEC. Output: phases with scope, deliverables, test criteria. Save to docs/plan/Complete/PLAN_<name>.md.
 ```
 
 ### Shell
@@ -326,7 +326,7 @@ All AI tools and developers must follow:
 | `docs/plan/guidelines/DEVELOPMENT_TOOLS.md` | Cursor, Kiro, CLIs |
 | `docs/plan/guidelines/REQUIRED_SKILLS_AND_AGENTS.md` | Human skills, Kiro config |
 | `docs/plan/backlog/ALL_TASKS_BACKLOG.md` | Task list |
-| `docs/plan/execution/` | Plans and pro prompts |
+| `docs/plan/Complete/` | Plans and pro prompts |
 | `.cursor/templates/` | Phase prompt, API route, commit, PR, test, DoD templates |
 | `.cursor/contracts/` | Code invariants (multi-tenant, soft delete, QR, auth) |
 | `.cursor/agents/` | Role personas, scenarios, orchestrator (adopt for phases) |

@@ -22,5 +22,5 @@ alwaysApply: true
 
 ## After completing a task (optional)
 
-- **When finishing a phase:** Update `docs/plan/execution/TASKS_<plan>.md` in the same pass as the commit (tick items, set Status: Done). Do this automatically so /guide and /dev stay accurate.
+- **When finishing a phase:** Update `docs/plan/Complete/TASKS_<plan>.md` in the same pass as the commit (tick items, set Status: Done). Do this automatically so /guide and /dev stay accurate.
 - Give a **short** guide summary: one line each for must-do next, recommended, critical (if any), and 1–2 improvements. Omit if the user asked for a minimal response.

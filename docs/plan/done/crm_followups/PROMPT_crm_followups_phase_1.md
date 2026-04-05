@@ -15,7 +15,7 @@ BACKEND-API
   - `apps/client-dashboard/src/app/api/qrcodes/export/route.ts` — audit log pattern (lines ~213–237)
   - `apps/client-dashboard/src/app/api/contacts/route.ts` — CSV export at bottom of GET handler
   - `apps/client-dashboard/src/app/api/units/route.ts` — CSV export at bottom of GET handler
-  - `docs/plan/done/projects_crm_ui/AUDIT_tables_security.md` — PII guidance
+  - `docs/plan/Complete/projects_crm_ui/AUDIT_tables_security.md` — PII guidance
 
 ## Goal
 Add `AuditLog` entries whenever Contacts or Units data is exported as CSV, matching the QR Codes export audit pattern for compliance parity.

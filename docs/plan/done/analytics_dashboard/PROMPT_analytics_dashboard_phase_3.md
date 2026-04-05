@@ -1,7 +1,7 @@
 # PROMPT_analytics_dashboard_phase_3 — Marketing View Depth
 
 **Initiative:** analytics_dashboard  
-**Plan:** `docs/plan/execution/PLAN_analytics_dashboard.md`  
+**Plan:** `docs/plan/Complete/PLAN_analytics_dashboard.md`  
 **Phase:** 3 of 4  
 
 ---

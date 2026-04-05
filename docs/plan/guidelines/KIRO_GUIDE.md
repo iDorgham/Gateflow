@@ -11,7 +11,7 @@ The complete reference for working on GateFlow with Kiro. Covers commands, workf
 | `/guide` | This file — full workflow reference |
 | `/idea` | Capture a new feature idea → creates `IDEA_<slug>.md` in backlog |
 | `/plan` | Create or refine a `PLAN_<slug>.md` + phase prompts |
-| `/dev` | Execute a single phase prompt from `docs/plan/execution/` |
+| `/dev` | Execute a single phase prompt from `docs/plan/Complete/` |
 | `/ship` | Run all remaining phases for a plan end-to-end |
 | `/github` | Stage, commit (conventional), rebase, push |
 
@@ -33,7 +33,7 @@ The complete reference for working on GateFlow with Kiro. Covers commands, workf
 
 ## Phase Prompt Template
 
-Save each phase as `docs/plan/execution/PROMPT_<initiative>_phase_<N>.md`.
+Save each phase as `docs/plan/Complete/PROMPT_<initiative>_phase_<N>.md`.
 
 ```markdown
 ## Phase N: [Title]

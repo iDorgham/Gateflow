@@ -296,7 +296,7 @@ switch (cmd) {
       planFile(dest, slug),
       buildPlanTemplate(slug, featureTitle, phases)
     );
-    console.log(`✓ Created: docs/plan/planning/${slug}/PLAN_${slug}.md`);
+    console.log(`✓ Created: docs/plan/Draft/${slug}/PLAN_${slug}.md`);
 
     // PROMPT files
     for (let i = 1; i <= phases; i++) {

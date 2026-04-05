@@ -63,7 +63,7 @@ Gemini CLI supports the following slash commands by following the workflows defi
 
 - **Workflow:**
   1. Read `docs/plan/context/IDEA_<slug>.md` and guidelines (`PHASED_DEVELOPMENT_WORKFLOW.md`, `SUBAGENT_HIERARCHY.md`, `AI_SKILLS_SUBAGENTS_RULES.md`).
-  2. Create phased plan in `docs/plan/planning/<slug>/`:
+  2. Create phased plan in `docs/plan/Draft/<slug>/`:
      - `PLAN_<slug>.md` — ordered phases with Scope, Deliverables, Depends on, Test criteria.
      - `PROMPT_<slug>_phase_<N>.md` — per-phase pro prompts using `TEMPLATE_PROMPT_phase.md`.
      - `TASKS_<slug>.md` — phase checklist (optional).
@@ -255,7 +255,7 @@ Gemini CLI supports the following slash commands by following the workflows defi
 - `docs/plan/guidelines/SUBAGENT_HIERARCHY.md` — Roles and subagents brain.
 - `docs/plan/guidelines/AI_SKILLS_SUBAGENTS_RULES.md` — Skills usage rules.
 - `docs/plan/guidelines/TEMPLATE_PROMPT_phase.md` — Phase prompt template.
-- `docs/plan/execution/PROMPTS_REFERENCE.md` — Professional prompt templates.
+- `docs/guides/PROMPTS_REFERENCE.md` — Professional prompt templates.
 
 ### Learning & Memory
 

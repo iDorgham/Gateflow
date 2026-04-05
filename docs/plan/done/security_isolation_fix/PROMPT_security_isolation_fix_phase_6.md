@@ -19,7 +19,7 @@ FRONTEND | SECURITY
 
 - **Project**: GateFlow (Monorepo)
 - **Initiative**: `security_isolation_fix`
-- **Plan**: `docs/plan/planned/security_isolation_fix/PLAN_security_isolation_fix.md`
+- **Plan**: `docs/plan/Ready/security_isolation_fix/PLAN_security_isolation_fix.md`
 - **Design Draft**: `docs/design/draft-gate-assignment-screen.md`
 - **Pathing**:
   - Page: `apps/client-dashboard/src/app/[locale]/dashboard/team/gate-assignments/page.tsx`
