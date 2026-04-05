@@ -32,6 +32,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 - **[Admin]** Align Admin Dashboard aesthetics (Radius, Tokens, Shell) with Client
   Dashboard premium look
+- **[Admin]** Refine Admin theme with specific hex colors (#111112, #191a1c, #2f2f33)
+  and unified 6px/12px border radii.
 - **[Admin]** add traffic emulation tooling and emulation hub v4.0
 - **[Admin]** resolve typecheck errors blocking CI (i18n keys, lucide icon, hook-form deps)
 - **[Client]** verify 100% multi-tenant isolation

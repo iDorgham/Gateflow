@@ -16,15 +16,15 @@
     --ds-font-family-mono: var(--font-mono, 'SFMono-Medium', 'SF Mono', 'Cascadia Mono', 'Segoe UI Mono', 'Roboto Mono', 'Ubuntu Mono', monospace);
 
     /* ── Radius Tokens ──────────────────────────────── */
-    --ds-border-radius: 12px;
-    --ds-radius-xsmall: 4px;
-    --ds-radius-small: 8px;
-    --ds-radius-medium: 12px;
-    --ds-radius-large: 32px;
+    --ds-border-radius: 6px;
+    --ds-radius-xsmall: 2px;
+    --ds-radius-small: 4px;
+    --ds-radius-medium: 8px;
+    --ds-radius-large: 12px;
     --ds-radius-circle: 50%;
     /* Legacy aliases */
     --ds-border-radius-sm: 4px;
-    --ds-border-radius-lg: 16px;
+    --ds-border-radius-lg: 12px;
 
     /* ── Background Tokens — Light ──────────────────── */
     --ds-background-default: rgb(242, 243, 244);
@@ -113,7 +113,7 @@
     --border: 260 7% 88%;
     --input: 260 7% 88%;
     --ring: 19 100% 46%;
-    --radius: 12px;
+    --radius: 6px;
 
     --sidebar: 235 94% 11%;
     --sidebar-foreground: 210 5% 96%;
@@ -126,37 +126,37 @@
   }
 
   .dark {
-    /* ── Professional Neutral Gray Dark Theme ────────── */
-    --background: 210 10% 7%;  /* Deep Black/Gray */
-    --foreground: 210 5% 96%;  /* Anti-Flash White */
-    --card: 210 10% 10%;       /* Slightly Lighter Gray */
+    /* ── Custom Dark Theme ──────────────────────────── */
+    --background: 240 4% 7%;      /* #111112 */
+    --foreground: 210 5% 96%;
+    --card: 219 6% 11%;           /* #191a1c */
     --card-foreground: 210 5% 96%;
-    --popover: 210 10% 12%;
+    --popover: 219 6% 11%;        /* #191a1c */
     --popover-foreground: 210 5% 96%;
-    --primary: 19 100% 46%;   /* Kimchi Orange */
+    --primary: 19 100% 46%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 210 10% 12%;
+    --secondary: 219 6% 11%;
     --secondary-foreground: 210 5% 96%;
-    --muted: 210 10% 12%;
+    --muted: 219 6% 11%;
     --muted-foreground: 210 5% 70%;
-    --accent: 210 10% 12%;
+    --accent: 219 6% 11%;
     --accent-foreground: 210 5% 96%;
     --destructive: 0 63% 31%;
     --destructive-foreground: 0 0% 98%;
-    --border: 210 10% 14%;
-    --input: 210 10% 14%;
+    --border: 240 4% 19%;         /* #2f2f33 */
+    --input: 240 4% 19%;
     --ring: 19 100% 46%;
 
-    /* ── Background Tokens — Neutral Dark ───────────── */
-    --ds-background-default: rgb(18, 18, 20);
-    --ds-background-subtle: rgb(12, 12, 14);
-    --ds-background-neutral: rgb(24, 25, 28);
-    --ds-background-neutral-subtle: rgba(24, 25, 28, 0.5);
-    --ds-background-neutral-hovered: rgb(32, 33, 36);
-    --ds-background-selected: rgb(32, 33, 36);
-    --ds-background-card: rgb(24, 25, 28);
-    --ds-background-brand-bold: rgb(237, 75, 0); /* Kimchi */
-    --ds-background-brand-subtle: rgb(24, 25, 28);
+    /* ── Background Tokens — Custom Dark ────────────── */
+    --ds-background-default: rgb(25, 26, 28);      /* #191a1c */
+    --ds-background-subtle: rgb(17, 17, 18);       /* #111112 */
+    --ds-background-neutral: rgb(25, 26, 28);     /* #191a1c */
+    --ds-background-neutral-subtle: rgba(25, 26, 28, 0.5);
+    --ds-background-neutral-hovered: rgb(47, 47, 51);
+    --ds-background-selected: rgb(47, 47, 51);
+    --ds-background-card: rgb(25, 26, 28);         /* #191a1c */
+    --ds-background-brand-bold: rgb(237, 75, 0);
+    --ds-background-brand-subtle: rgb(25, 26, 28);
     --ds-background-danger-bold: rgb(239, 68, 68);
     --ds-background-danger-subtle: rgb(69, 10, 10);
     --ds-background-warning-bold: rgb(245, 158, 11);
@@ -165,62 +165,62 @@
     --ds-background-success-subtle: rgb(6, 78, 59);
     --ds-background-information-bold: rgb(59, 130, 246);
     --ds-background-information-subtle: rgb(23, 37, 84);
-    --ds-background-input: rgb(18, 18, 20);
+    --ds-background-input: rgb(25, 26, 28);
 
-    /* ── Elevation Surfaces — Neutral Dark ──────────── */
-    --ds-surface: rgb(18, 18, 20);
-    --ds-surface-default: rgb(18, 18, 20);
-    --ds-surface-sunken: rgb(12, 12, 14);
-    --ds-surface-raised: rgb(24, 25, 28);
-    --ds-surface-overlay: rgb(32, 33, 36);
+    /* ── Elevation Surfaces — Custom Dark ───────────── */
+    --ds-surface: rgb(25, 26, 28);
+    --ds-surface-default: rgb(25, 26, 28);
+    --ds-surface-sunken: rgb(17, 17, 18);
+    --ds-surface-raised: rgb(47, 47, 51);
+    --ds-surface-overlay: rgb(47, 47, 51);
 
     /* ── Elevation Shadows — Deep Dark ──────────────── */
-    --ds-shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-    --ds-shadow-raised: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
-    --ds-shadow-overlay: 0 24px 48px -8px rgba(0, 0, 0, 0.6);
+    --ds-shadow-card: 0 2px 4px rgba(0, 0, 0, 0.2);
+    --ds-shadow-raised: 0 4px 12px rgba(0, 0, 0, 0.4);
+    --ds-shadow-overlay: 0 20px 40px rgba(0, 0, 0, 0.5);
 
-    /* ── Text Tokens — Neutral Dark ─────────────────── */
+    /* ── Text Tokens — Custom Dark ──────────────────── */
     --ds-text: rgb(248, 250, 252);
     --ds-text-heading: rgb(248, 250, 252);
-    --ds-text-subtle: rgb(148, 163, 184);
-    --ds-text-subtlest: rgb(100, 116, 139);
-    --ds-text-disabled: rgb(51, 65, 85);
+    --ds-text-subtle: rgb(161, 161, 170);
+    --ds-text-subtlest: rgb(113, 113, 122);
+    --ds-text-disabled: rgb(63, 63, 70);
     --ds-text-inverse: rgb(255, 255, 255);
-    --ds-text-selected: rgb(248, 250, 252);
+    --ds-text-selected: rgb(255, 255, 255);
     --ds-text-brand: rgb(237, 75, 0);
     --ds-text-danger: rgb(248, 113, 113);
     --ds-text-warning: rgb(251, 191, 36);
     --ds-text-success: rgb(52, 211, 153);
     --ds-text-information: rgb(96, 165, 250);
 
-    /* ── Border Tokens — Neutral Dark ───────────────── */
-    --ds-border: rgb(36, 38, 42);
-    --ds-border-bold: rgb(51, 65, 85);
-    --ds-border-subtle: rgb(28, 30, 34);
+    /* ── Border Tokens — Custom Dark ───────────────── */
+    --ds-border: rgb(47, 47, 51);                  /* #2f2f33 */
+    --ds-border-bold: rgb(63, 63, 70);
+    --ds-border-subtle: rgb(39, 39, 42);
     --ds-border-focused: rgb(237, 75, 0);
     --ds-border-selected: rgb(237, 75, 0);
     --ds-border-brand: rgb(237, 75, 0);
     --ds-border-danger: rgb(239, 68, 68);
     --ds-border-warning: rgb(245, 158, 11);
     --ds-border-success: rgb(16, 185, 129);
-    --ds-border-input: rgb(36, 38, 42);
+    --ds-border-input: rgb(47, 47, 51);
 
-    /* ── Icon Tokens — Neutral Dark ─────────────────── */
-    --ds-icon: rgb(148, 163, 184);
-    --ds-icon-subtle: rgb(100, 116, 139);
+    /* ── Icon Tokens — Custom Dark ─────────────────── */
+    --ds-icon: rgb(161, 161, 170);
+    --ds-icon-subtle: rgb(113, 113, 122);
     --ds-icon-inverse: rgb(255, 255, 255);
     --ds-icon-brand: rgb(237, 75, 0);
     --ds-icon-danger: rgb(239, 68, 68);
     --ds-icon-warning: rgb(245, 158, 11);
     --ds-icon-success: rgb(16, 185, 129);
 
-    --sidebar: 210 10% 7%;
+    --sidebar: 219 6% 11%;
     --sidebar-foreground: 210 10% 70%;
     --sidebar-primary: 19 100% 46%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 210 10% 10%;
+    --sidebar-accent: 219 6% 13%;
     --sidebar-accent-foreground: 210 20% 98%;
-    --sidebar-border: 210 10% 10%;
+    --sidebar-border: 240 4% 19%;
     --sidebar-ring: 19 100% 46%;
   }
 

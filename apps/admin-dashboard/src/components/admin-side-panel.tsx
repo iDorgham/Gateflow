@@ -35,9 +35,7 @@ export function AdminSidePanel({
     <div
       className={cn(
         'relative flex h-full flex-col border-l border-ds-border bg-sidebar transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] overflow-hidden',
-        isOpen
-          ? 'w-[420px] min-w-[420px] rounded-l-[32px] shadow-[-20px_0_40px_-15px_rgba(0,0,0,0.5)]'
-          : 'w-0 min-w-0 border-l-0'
+        isOpen ? 'w-[420px] min-w-[420px] shadow-xl' : 'w-0 min-w-0 border-l-0'
       )}
     >
       {/* Collapse toggle on left edge */}

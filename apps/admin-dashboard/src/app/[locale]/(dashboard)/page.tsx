@@ -155,7 +155,7 @@ export default async function AdminOverviewPage(props: {
         {stats.map((stat) => (
           <Card
             key={stat.label}
-            className="rounded-[32px] border-ds-border bg-ds-background-neutral-subtle/20 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 group overflow-hidden relative"
+            className="border-ds-border bg-ds-background-neutral-subtle/20 shadow-lg hover:shadow-xl transition-all duration-500 hover:-translate-y-2 group overflow-hidden relative"
           >
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
 

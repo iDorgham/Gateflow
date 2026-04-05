@@ -21,14 +21,14 @@ export function AdminShell({ children, locale: _locale }: AdminShellProps) {
   return (
     <div className="flex h-screen w-full bg-background overflow-hidden selection:bg-primary/30 selection:text-primary-foreground">
       {/* Left Sidebar */}
-      <div className="flex h-full shrink-0 border-r border-ds-border bg-ds-background-default shadow-xl z-30">
+      <div className="flex h-full shrink-0 border-r border-ds-border bg-ds-background-default shadow-sm z-30">
         <Sidebar />
       </div>
 
       {/* Main Content Area */}
       <div className="relative flex flex-1 flex-col min-w-0 h-full overflow-hidden">
         {/* Top Header */}
-        <header className="flex h-16 shrink-0 items-center justify-between border-b border-ds-border bg-background px-6 sticky top-0 z-20">
+        <header className="flex h-16 shrink-0 items-center justify-between border-b border-ds-border bg-sidebar px-6 sticky top-0 z-20">
           <div className="flex items-center gap-1.5 min-w-0">
             <h1 className="text-sm font-black uppercase tracking-widest text-ds-text-subtlest truncate">
               {t('admin:shell.core_platform', 'Core Platform')}
@@ -42,7 +42,7 @@ export function AdminShell({ children, locale: _locale }: AdminShellProps) {
             <div className="flex items-center gap-3">
               <LanguageSwitcher currentLocale={_locale} />
 
-              <div className="flex items-center gap-2 rounded-full p-1 pl-3 bg-ds-background-neutral-subtle border border-ds-border hover:bg-ds-background-neutral transition-all cursor-pointer group">
+              <div className="flex items-center gap-2 rounded-lg p-1 pl-3 bg-ds-background-neutral-subtle border border-ds-border hover:bg-ds-background-neutral transition-all cursor-pointer group">
                 <span className="max-w-[120px] truncate text-[11px] font-black uppercase tracking-tight text-ds-text-subtle group-hover:text-ds-text">
                   Selena Admin
                 </span>
