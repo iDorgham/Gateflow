@@ -48,3 +48,4 @@ docs/cache
 !docs/workspace/template-project/.antigravity/**
 .worktrees
 .vercel
+.pnpm-store/

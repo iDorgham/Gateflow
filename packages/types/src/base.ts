@@ -5,12 +5,21 @@ export enum Plan {
   ENTERPRISE = 'ENTERPRISE',
 }
 
+export enum OrganizationType {
+  REAL_ESTATE = 'REAL_ESTATE',
+  SCHOOL = 'SCHOOL',
+  CLUB = 'CLUB',
+  NIGHTCLUB = 'NIGHTCLUB',
+  EVENT_ORGANISER = 'EVENT_ORGANISER',
+}
+
 export interface Organization {
   id: string;
   name: string;
   email: string | null;
   domain: string | null;
   plan: Plan;
+  type: OrganizationType;
   stripeCustomerId: string | null;
   stripeSubscriptionId: string | null;
   planExpiresAt: Date | null;

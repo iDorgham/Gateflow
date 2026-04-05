@@ -42,6 +42,7 @@ export interface AccessTokenClaims extends JWTPayload {
   roleName: string;
   permissions: Record<Permission, boolean>;
   orgId: string | null; // organizationId
+  orgType: string | null; // organization type
 }
 
 // ─── Access Token ─────────────────────────────────────────────────────────────
@@ -50,6 +51,7 @@ export async function signAccessToken(
   userId: string,
   email: string,
   orgId: string | null,
+  orgType: string | null,
   role: { id: string; name: string; permissions: Record<string, boolean> }
 ): Promise<string> {
   return new SignJWT({
@@ -58,6 +60,7 @@ export async function signAccessToken(
     roleName: role.name,
     permissions: role.permissions as Record<Permission, boolean>,
     orgId,
+    orgType,
   } satisfies Omit<AccessTokenClaims, 'sub' | 'iat' | 'exp'>)
     .setProtectedHeader({ alg: 'HS256', typ: 'JWT' })
     .setSubject(userId)

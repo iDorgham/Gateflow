@@ -102,6 +102,7 @@ describe('auth-cookies', () => {
       email: 'test@example.com',
       role: 'ADMIN',
       orgId: 'org-id',
+      orgType: 'REAL_ESTATE',
     };
 
     it('returns claims from valid Authorization header', async () => {

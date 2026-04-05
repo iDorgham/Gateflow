@@ -27,13 +27,35 @@ export async function runLegacyDevSeed(): Promise<void> {
 
   const org = await prisma.organization.upsert({
     where: { email: 'admin@selenadev.com' },
-    update: {},
+    update: { type: 'REAL_ESTATE' },
     create: {
       name: 'Selena Development',
       email: 'admin@selenadev.com',
       plan: 'PRO',
+      type: 'REAL_ESTATE',
     },
   });
+
+  // Additional orgs to seed all OrganizationTypes
+  const orgTypes = [
+    { name: 'Gateway Academy', email: 'admin@gateway-school.com', type: 'SCHOOL' as const },
+    { name: 'Albatross Country Club', email: 'admin@albatross-club.com', type: 'CLUB' as const },
+    { name: 'Nebula Nightclub', email: 'admin@nebula-nightclub.com', type: 'NIGHTCLUB' as const },
+    { name: 'Apex Event Organizers', email: 'admin@apex-events.com', type: 'EVENT_ORGANISER' as const },
+  ];
+
+  for (const t of orgTypes) {
+    await prisma.organization.upsert({
+      where: { email: t.email },
+      update: { type: t.type },
+      create: {
+        name: t.name,
+        email: t.email,
+        plan: 'PRO',
+        type: t.type,
+      },
+    });
+  }
 
   const tenantAdminRole = await prisma.role.upsert({
     where: { id: 'role-tenant-admin' },

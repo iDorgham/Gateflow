@@ -55,7 +55,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     // Find user (not soft-deleted)
     const user = await prisma.user.findFirst({
       where: { email, deletedAt: null },
-      include: { role: true },
+      include: { role: true, organization: { select: { type: true } } },
     });
 
     if (!user) {
@@ -83,6 +83,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       user.id,
       user.email,
       user.organizationId,
+      user.organization?.type ?? null,
       {
         id: user.role.id,
         name: user.role.name,

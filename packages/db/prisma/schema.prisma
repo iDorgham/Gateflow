@@ -15,6 +15,8 @@ model Organization {
   email                         String                  @unique
   domain                        String?                 @unique
   plan                          Plan                    @default(FREE)
+  /// Organization vertical — drives UI labels, sidebar, KPIs, and feature gates
+  type                          OrganizationType        @default(REAL_ESTATE)
   createdAt                     DateTime                @default(now())
   updatedAt                     DateTime                @updatedAt
   deletedAt                     DateTime?
@@ -858,6 +860,15 @@ enum Plan {
   FREE
   PRO
   ENTERPRISE
+}
+
+/// Organization type / vertical — determines dashboard experience
+enum OrganizationType {
+  REAL_ESTATE
+  SCHOOL
+  CLUB
+  NIGHTCLUB
+  EVENT_ORGANISER
 }
 
 enum QRCodeType {

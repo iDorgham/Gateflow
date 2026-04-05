@@ -64,7 +64,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     // Step 1 — Look up the token with its owner.
     const storedToken = await prisma.refreshToken.findUnique({
       where: { token: refreshToken },
-      include: { user: { include: { role: true } } },
+      include: { user: { include: { role: true, organization: { select: { type: true } } } } },
     });
 
     if (!storedToken) {
@@ -169,6 +169,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       user.id,
       user.email,
       user.organizationId,
+      user.organization?.type ?? null,
       {
         id: user.role.id,
         name: user.role.name,

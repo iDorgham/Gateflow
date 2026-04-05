@@ -35,7 +35,7 @@ describe('Access Token (JWT)', () => {
   const role = mockRole(UserRole.TENANT_ADMIN);
 
   it('should sign and verify a valid access token', async () => {
-    const token = await signAccessToken(userId, email, orgId, role);
+    const token = await signAccessToken(userId, email, orgId, 'REAL_ESTATE', role);
     expect(typeof token).toBe('string');
     expect(token.split('.').length).toBe(3); // JWT has 3 parts
 
@@ -53,6 +53,7 @@ describe('Access Token (JWT)', () => {
       userId,
       email,
       null,
+      null,
       mockRole(UserRole.ADMIN)
     );
     const claims = await verifyAccessToken(token);
@@ -60,7 +61,7 @@ describe('Access Token (JWT)', () => {
   });
 
   it('should reject a tampered token', async () => {
-    const token = await signAccessToken(userId, email, orgId, role);
+    const token = await signAccessToken(userId, email, orgId, 'REAL_ESTATE', role);
     const tampered = token.slice(0, -5) + 'XXXXX';
 
     await expect(verifyAccessToken(tampered)).rejects.toThrow();
@@ -82,6 +83,7 @@ describe('Access Token (JWT)', () => {
           email,
           role,
           orgId,
+          orgType: 'REAL_ESTATE',
           iat: 0,
           exp: 999999999999,
         })
@@ -95,7 +97,7 @@ describe('Access Token (JWT)', () => {
   });
 
   it('should set expiration (exp > iat)', async () => {
-    const token = await signAccessToken(userId, email, orgId, role);
+    const token = await signAccessToken(userId, email, orgId, 'REAL_ESTATE', role);
     const claims = await verifyAccessToken(token);
     expect(claims.exp!).toBeGreaterThan(claims.iat!);
   });
