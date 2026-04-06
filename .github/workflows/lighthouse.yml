@@ -63,6 +63,7 @@ jobs:
   lighthouse-marketing:
     name: Lighthouse — Marketing (Mobile + Desktop)
     runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]'
     permissions:
       contents: read
       pull-requests: write

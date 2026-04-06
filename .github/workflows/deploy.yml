@@ -54,6 +54,7 @@ jobs:
   changes:
     name: Detect Changes
     runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]'
     outputs:
       client: ${{ steps.filter.outputs.client }}
       admin: ${{ steps.filter.outputs.admin }}
