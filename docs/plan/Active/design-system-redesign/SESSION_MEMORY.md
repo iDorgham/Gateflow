@@ -1,25 +1,27 @@
 # Session Memory — design-system-redesign
 
-**Status:** 🆕 Started Phase 1  
-**Last Action:** Plan moved to `Active/design-system-redesign/`  
-**Last Commit:** `2153be6f8`
+**Status:** ✅ Completed Phase 4 (Monorepo Enforcement)
+**Last Action:** Standardized UI packages and integrated ADS check into CI.
+**Last Commit:** `latest` (Phase 4: Enforcement)
 
 ## 🎯 Active State
 
-- **Phase:** 1 (Foundation Token Overhaul)
-- **Sub-phase:** 1a (Primitive OKLCH Ramps)
-- **Resume Point:** Initializing the feauture branch.
+- **Phase:** 4 (Monorepo Enforcement)
+- **Sub-phase:** Migration (Complete)
+- **Next Action:** /dev design-system-redesign 5 (Marketing & Auth Redesign)
 
 ## 🏗️ Cross-Session Decisions
 
-- Use OKLCH for all primitive and semantic tokens to ensure perceptual uniformity.
-- Target `packages/tokens/css/tokens.css` as the primary source of truth.
+- Use `dynamic` imports for Recharts in documentation to avoid SSR issues.
+- Group documentation pages under `/patterns` for clarity.
+- Maintain consistent "Satin-Charcoal" base across all pattern labs.
 
 ## 🚩 Discovered Gotchas
 
-- N/A
+- Recharts requires `ssr: false` in Next.js 13+ to avoid hydration/window errors.
+- Component labs in documentation should use a client-side wrapper (like `ChartLab.tsx`) for easier prop handling with `dynamic`.
 
 ## 📂 Context Budget
 
-- **Loaded Layers:** L0 (Git Log), L1 (Tasks), L2 (Plan), L3 (Prompt Phase 1).
-- **Est. Tokens Used:** ~1,800t
+- **Loaded Layers:** L0, L1, L2, L3 (Phase 3), L5.
+- **Est. Tokens Used:** ~4,500t

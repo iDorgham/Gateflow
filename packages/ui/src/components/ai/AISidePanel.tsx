@@ -22,6 +22,10 @@ export interface AISidePanelProps extends HTMLMotionProps<'div'> {
   isOpen: boolean;
 }
 
+/**
+ * AISidePanel - High-Flair Intelligence Interface
+ * Standardized to semantic tokens.
+ */
 export function AISidePanel({
   className,
   onClose,
@@ -63,7 +67,7 @@ export function AISidePanel({
           exit={{ x: '100%', opacity: 0 }}
           transition={{ type: 'spring', damping: 25, stiffness: 200 }}
           className={cn(
-            'fixed right-0 top-0 z-50 h-screen w-96 border-l border-[var(--ds-border-brand)]/20 bg-[var(--gf-color-ai-surface)] shadow-ai-glow backdrop-blur-3xl flex flex-col',
+            'fixed right-0 top-0 z-50 h-screen w-96 border-l border-[var(--ds-border-bold)]/20 bg-[var(--ds-ai-surface)] shadow-[var(--ds-ai-glow)] backdrop-blur-3xl flex flex-col',
             className
           )}
           {...props}
@@ -72,23 +76,23 @@ export function AISidePanel({
           <div
             className="absolute inset-0 opacity-[0.05] pointer-events-none"
             style={{
-              backgroundImage: 'var(--gf-pattern-sentinel)',
+              backgroundImage: 'var(--ds-pattern-sentinel)',
               backgroundSize: '24px 24px',
             }}
           />
-          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-[var(--gf-color-ai-accent)]/5 to-transparent pointer-events-none" />
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-[var(--ds-ai-accent)]/5 to-transparent pointer-events-none" />
 
           {/* Header */}
           <header className="flex items-center justify-between px-6 py-4 border-b border-[var(--ds-border-subtle)] relative z-10">
             <div className="flex items-center gap-3">
-              <div className="h-8 w-8 rounded-lg bg-[var(--gf-color-ai-accent)] flex items-center justify-center shadow-lg shadow-[var(--gf-color-ai-accent)]/20">
-                <Bot className="text-white" size={18} />
+              <div className="h-8 w-8 rounded-lg bg-[var(--ds-ai-accent)] flex items-center justify-center shadow-lg shadow-[var(--ds-ai-accent)]/20">
+                <Bot className="text-[var(--ds-text-inverse)]" size={18} />
               </div>
               <div className="flex flex-col">
-                <span className="text-xs font-black uppercase tracking-widest text-[var(--ds-text)]">
+                <span className="text-xs font-black uppercase tracking-widest text-[var(--ds-text-primary)]">
                   GateAI Assistant
                 </span>
-                <span className="text-[10px] font-bold text-[var(--gf-color-ai-accent)]">
+                <span className="text-[10px] font-bold text-[var(--ds-ai-accent)]">
                   Virtual Lab v4.2
                 </span>
               </div>
@@ -104,7 +108,7 @@ export function AISidePanel({
           </header>
 
           {/* Tabs / Nav */}
-          <div className="px-4 py-2 border-b border-[var(--ds-border-subtle)] bg-[var(--ds-background-neutral-subtle)]/30 flex gap-2 relative z-10">
+          <div className="px-4 py-2 border-b border-[var(--ds-border-subtle)] bg-[var(--ds-background-neutral-subtle)] flex gap-2 relative z-10">
             <Button
               variant="ghost"
               size="sm"
@@ -147,13 +151,13 @@ export function AISidePanel({
                     className={cn(
                       'p-4 rounded-2xl text-sm leading-relaxed shadow-sm',
                       msg.role === 'user'
-                        ? 'bg-[var(--ds-background-brand-bold)] text-white'
-                        : 'bg-[var(--ds-background-neutral-subtle)] text-[var(--ds-text)] border border-[var(--ds-border-subtle)]'
+                        ? 'bg-[var(--ds-background-brand-bold)] text-[var(--ds-text-inverse)]'
+                        : 'bg-[var(--ds-background-neutral-subtle)] text-[var(--ds-text-primary)] border border-[var(--ds-border-subtle)]'
                     )}
                   >
                     {msg.content}
                   </div>
-                  <span className="text-[9px] font-bold uppercase tracking-widest text-[var(--ds-text-subtlest)]">
+                  <span className="text-[9px] font-bold uppercase tracking-widest text-[var(--ds-text-subtle)] opacity-50">
                     {msg.role === 'user' ? 'Me' : 'GateAI'} • Just now
                   </span>
                 </motion.div>
@@ -162,19 +166,19 @@ export function AISidePanel({
           </ScrollArea>
 
           {/* Footer Input */}
-          <footer className="p-6 border-t border-[var(--ds-border-subtle)] bg-[var(--ds-background-neutral-subtle)]/50 relative z-10">
+          <footer className="p-6 border-t border-[var(--ds-border-subtle)] bg-[var(--ds-background-neutral-subtle)] relative z-10">
             <div className="flex gap-2 relative">
               <Input
                 placeholder="Ask intelligence engine..."
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-                className="bg-[var(--ds-background-default)] border-[var(--ds-border-subtle)] rounded-xl pr-12 text-sm focus-visible:ring-[var(--gf-color-ai-accent)]"
+                className="bg-[var(--ds-background-default)] border-[var(--ds-border-subtle)] rounded-xl pr-12 text-sm focus-visible:ring-[var(--ds-ai-accent)]"
               />
               <Button
                 onClick={handleSend}
                 size="icon"
-                className="absolute right-1 top-1 bottom-1 h-8 w-8 bg-[var(--gf-color-ai-accent)] text-white rounded-lg hover:opacity-90 transition-all border-none"
+                className="absolute right-1 top-1 bottom-1 h-8 w-8 bg-[var(--ds-ai-accent)] text-[var(--ds-text-inverse)] rounded-lg hover:opacity-90 transition-all border-none"
               >
                 <Send size={14} />
               </Button>
@@ -183,14 +187,14 @@ export function AISidePanel({
               <div className="flex gap-4">
                 <Sparkles
                   size={14}
-                  className="text-[var(--gf-color-ai-accent)] opacity-50"
+                  className="text-[var(--ds-ai-accent)] opacity-50"
                 />
                 <Settings
                   size={14}
-                  className="text-[var(--ds-text-subtlest)]"
+                  className="text-[var(--ds-text-subtle)] opacity-50"
                 />
               </div>
-              <span className="text-[8px] font-black uppercase text-[var(--ds-text-subtlest)]">
+              <span className="text-[8px] font-black uppercase text-[var(--ds-text-subtle)] opacity-50">
                 Powered by Gateflow Cloud
               </span>
             </div>
@@ -200,3 +204,5 @@ export function AISidePanel({
     </AnimatePresence>
   );
 }
+
+AISidePanel.displayName = 'AISidePanel';

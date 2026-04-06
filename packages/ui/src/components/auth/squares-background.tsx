@@ -2,9 +2,7 @@
 
 /**
  * Animated grid background for the login accent panel.
- * Uses GateFlow real estate palette: Kimchi (orange) background with
- * white grid lines and subtle Midnight Blue vignette.
- * Respects prefers-reduced-motion.
+ * Standardized for ADS Monorepo.
  */
 
 import React, { useRef, useEffect } from 'react';
@@ -21,7 +19,7 @@ export interface SquaresBackgroundProps {
   direction?: 'diagonal' | 'up' | 'right' | 'down' | 'left';
   /** Movement speed (0 = static, respects reduced motion) */
   speed?: number;
-  /** Color of the square borders — defaults: white/20 on Kimchi */
+  /** Color of the square borders */
   borderColor?: CanvasStrokeStyle;
   /** Size of each square in pixels */
   squareSize?: number;
@@ -29,23 +27,27 @@ export interface SquaresBackgroundProps {
   hoverFillColor?: CanvasStrokeStyle;
   /** When true, animation is paused (for prefers-reduced-motion) */
   reducedMotion?: boolean;
-  /** Vignette color at edges — rgba string for center→edge gradient */
+  /** Vignette color at edges */
   vignetteColor?: string;
 }
 
-/** Real estate palette defaults for Kimchi (orange) panel */
-const KIMCHI_BORDER = 'rgba(2, 0, 53, 0.35)'; /* Midnight Blue grid lines */
-const KIMCHI_HOVER = 'rgba(2, 0, 53, 0.45)'; /* Midnight Blue on hover */
-const KIMCHI_VIGNETTE = 'rgba(2, 0, 53, 0.15)'; // Midnight Blue tint at edges
+/** 
+ * Real estate palette defaults - Uses OKLCH for ADS compliance.
+ * These match the institutional Satin-Charcoal hierarchy with opacities.
+ */
+const ADS_BORDER = 'oklch(11% 0.015 250 / 0.35)'; 
+const ADS_HOVER = 'oklch(11% 0.015 250 / 0.45)';
+const ADS_VIGNETTE = 'oklch(11% 0.015 250 / 0.15)';
+const TRANSPARENT_OKLCH = 'oklch(0% 0 0 / 0)';
 
 export function SquaresBackground({
   direction = 'diagonal',
   speed = 0.5,
-  borderColor = KIMCHI_BORDER,
+  borderColor = ADS_BORDER,
   squareSize = 40,
-  hoverFillColor = KIMCHI_HOVER,
+  hoverFillColor = ADS_HOVER,
   reducedMotion = false,
-  vignetteColor = KIMCHI_VIGNETTE,
+  vignetteColor = ADS_VIGNETTE,
 }: SquaresBackgroundProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const requestRef = useRef<number | null>(null);
@@ -103,7 +105,7 @@ export function SquaresBackground({
         }
       }
 
-      // Subtle vignette — Midnight Blue at edges for real estate palette cohesion
+      // Subtle vignette
       const maxRadius =
         Math.sqrt(Math.pow(canvas.width, 2) + Math.pow(canvas.height, 2)) / 2;
       const gradient = ctx.createRadialGradient(
@@ -114,8 +116,8 @@ export function SquaresBackground({
         canvas.height / 2,
         maxRadius
       );
-      gradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
-      gradient.addColorStop(0.6, 'rgba(0, 0, 0, 0)');
+      gradient.addColorStop(0, TRANSPARENT_OKLCH);
+      gradient.addColorStop(0.6, TRANSPARENT_OKLCH);
       gradient.addColorStop(1, vignetteColor);
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);

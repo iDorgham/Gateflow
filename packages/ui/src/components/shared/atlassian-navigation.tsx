@@ -45,10 +45,10 @@ export function AtlassianNavigation({
   ),
 }: AtlassianNavigationProps) {
   return (
-    <header className="sticky top-0 z-50 w-full bg-[var(--ds-background-default,#FFFFFF)] border-b border-[var(--ds-border,#DFE1E6)] h-14 flex items-center px-4">
+    <header className="sticky top-0 z-50 w-full bg-[var(--ds-background-default)] border-b border-[var(--ds-border)] h-14 flex items-center px-4">
       <div className="flex items-center gap-2 h-full">
         {/* Logo / Product Switcher */}
-        <div className="flex items-center gap-2 px-2 hover:bg-[var(--ds-background-subtle,#F4F5F7)] rounded-sm cursor-pointer transition-colors h-10">
+        <div className="flex items-center gap-2 px-2 hover:bg-[var(--ds-background-subtle)] rounded-sm cursor-pointer transition-colors h-10">
           {logo}
         </div>
 
@@ -62,7 +62,7 @@ export function AtlassianNavigation({
                     <Button
                       variant="subtle"
                       size="compact"
-                      className="h-9 px-3 gap-1 hover:text-[var(--ds-text-brand,#0052CC)] group"
+                      className="h-9 px-3 gap-1 hover:text-[var(--ds-text-brand)] group"
                     >
                       {item.label}
                       <ChevronDown
@@ -80,7 +80,7 @@ export function AtlassianNavigation({
                           children: (
                             <>
                               {subItem.icon && (
-                                <div className="bg-[var(--ds-background-selected,#DEEBFF)] p-2 rounded-sm text-[var(--ds-text-selected,#0052CC)]">
+                                <div className="bg-[var(--ds-background-selected)] p-2 rounded-sm text-[var(--ds-text-selected)]">
                                   <subItem.icon size={18} />
                                 </div>
                               )}
@@ -89,7 +89,7 @@ export function AtlassianNavigation({
                                   {subItem.label}
                                 </span>
                                 {subItem.description && (
-                                  <span className="text-xs text-[var(--ds-text-subtlest,#6B778C)] leading-tight mt-0.5">
+                                  <span className="text-xs text-[var(--ds-text-subtlest)] leading-tight mt-0.5">
                                     {subItem.description}
                                   </span>
                                 )}
@@ -105,7 +105,7 @@ export function AtlassianNavigation({
                 renderLink({
                   href: item.href || '#',
                   className:
-                    'px-3 py-1.5 text-sm font-medium text-[var(--ds-text-subtle,#42526E)] hover:text-[var(--ds-text-brand,#0052CC)] hover:bg-[var(--ds-background-subtle,#F4F5F7)] rounded-sm transition-colors',
+                    'px-3 py-1.5 text-sm font-medium text-[var(--ds-text-subtle)] hover:text-[var(--ds-text-brand)] hover:bg-[var(--ds-background-subtle)] rounded-sm transition-colors',
                   children: item.label,
                 })
               )}
@@ -119,7 +119,7 @@ export function AtlassianNavigation({
         <Button
           variant="subtle"
           size="icon"
-          className="h-9 w-9 text-[var(--ds-icon-subtle,#6B778C)]"
+          className="h-9 w-9 text-[var(--ds-icon-subtle)]"
           onClick={onSearchClick}
           aria-label="Search"
         >
@@ -131,7 +131,7 @@ export function AtlassianNavigation({
           <Button
             variant="subtle"
             size="icon"
-            className="h-9 w-9 text-[var(--ds-icon-subtle,#6B778C)]"
+            className="h-9 w-9 text-[var(--ds-icon-subtle)]"
             aria-label="Help"
           >
             <HelpCircle size={18} />
@@ -139,7 +139,7 @@ export function AtlassianNavigation({
           <Button
             variant="subtle"
             size="icon"
-            className="h-9 w-9 text-[var(--ds-icon-subtle,#6B778C)]"
+            className="h-9 w-9 text-[var(--ds-icon-subtle)]"
             aria-label="Settings"
           >
             <Settings size={18} />

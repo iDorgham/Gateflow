@@ -35,6 +35,7 @@
   /* Backgrounds */
   --ds-background-default:  var(--gf-color-neutral-10);
   --ds-surface-subtle:      var(--gf-color-neutral-20);
+  --ds-surface-sunken:      var(--gf-color-neutral-20);
   --ds-surface-raised:      var(--gf-color-neutral-30);
   --ds-surface-overlay:     var(--gf-color-neutral-50);
   --ds-surface-glass:       oklch(100% 0 0 / 0.03);
@@ -44,6 +45,10 @@
   --ds-text-subtle:         var(--gf-color-neutral-70);
   --ds-text-inverse:        var(--gf-color-neutral-10);
   --ds-text-accent:         var(--ds-primary-accent);
+  --ds-text-success:        var(--gf-color-success);
+  --ds-text-danger:         var(--gf-color-danger);
+  --ds-text-warning:        var(--gf-color-warning);
+  --ds-text-information:     var(--gf-color-info);
 
   /* Borders */
   --ds-border:              oklch(24% 0.02 250);     /* Custom tier for clarity */
@@ -59,6 +64,67 @@
   --ds-glow-accent:         0 0 20px -5px var(--ds-primary-accent);
   --ds-surface-mesh:        radial-gradient(at 0% 0%, var(--gf-color-neutral-20) 0%, transparent 50%),
                            radial-gradient(at 100% 0%, oklch(18% 0.02 30) 0%, transparent 50%);
+
+  /* ─── Extended Semantic Layer (Components) ─────────────────────── */
+  /* Interaction Tiers (Neutral) */
+  --ds-background-neutral:          var(--gf-color-neutral-20);
+  --ds-background-neutral-hovered:  var(--gf-color-neutral-30);
+  --ds-background-neutral-pressed:  var(--gf-color-neutral-40);
+  --ds-background-neutral-subtle:   transparent;
+  --ds-background-neutral-subtle-hovered: var(--gf-color-neutral-20);
+  --ds-background-neutral-subtle-pressed: var(--gf-color-neutral-30);
+
+  /* Selecting */
+  --ds-background-selected:         oklch(62% 0.22 35 / 0.15); /* Default Kimchi tinte */
+  --ds-background-selected-hovered: oklch(62% 0.22 35 / 0.25);
+  --ds-background-selected-pressed: oklch(62% 0.22 35 / 0.35);
+  --ds-text-selected:               var(--ds-primary-accent);
+  --ds-border-selected:             var(--ds-primary-accent);
+
+  /* Bold Status Backgrounds */
+  --ds-background-brand-bold:       var(--ds-primary-accent);
+  --ds-background-brand-bold-hovered: var(--ds-accent-hover);
+  --ds-background-brand-bold-pressed: var(--ds-accent-hover);
+
+  --ds-background-success-bold:     var(--gf-color-success);
+  --ds-background-success-bold-hovered: oklch(60% 0.12 155);
+  
+  --ds-background-danger-bold:      var(--gf-color-danger);
+  --ds-background-danger-bold-hovered: oklch(55% 0.22 25);
+
+  --ds-background-warning-bold:     var(--gf-color-warning);
+  --ds-background-warning-bold-hovered: oklch(68% 0.16 75);
+  --ds-text-warning-inverse:        var(--gf-color-neutral-10);
+
+  --ds-background-information-bold: var(--gf-color-info);
+  --ds-background-information-bold-hovered: oklch(58% 0.16 250);
+
+  /* Discovery (Purple/Indigo flavor) */
+  --ds-background-discovery-bold:   oklch(65% 0.20 300);
+  --ds-background-discovery-bold-hovered: oklch(58% 0.18 300);
+  --ds-background-discovery-subtle: oklch(65% 0.20 300 / 0.1);
+  --ds-text-discovery:              oklch(75% 0.15 300);
+  --ds-border-discovery:            oklch(65% 0.20 300 / 0.3);
+
+  /* Shadows (Institutional Depth) */
+  --ds-shadow-raised:               0 1px 1px oklch(0% 0 0 / 0.25), 0 0 0 1px oklch(0% 0 0 / 0.08);
+  --ds-shadow-overlay:              0 8px 16px -4px oklch(0% 0 0 / 0.25), 0 0 0 1px oklch(0% 0 0 / 0.08);
+
+  /* Icons */
+  --ds-icon-subtle:                 var(--gf-color-neutral-70);
+  --ds-icon-brand:                  var(--ds-primary-accent);
+  --ds-icon-selected:               var(--ds-primary-accent);
+
+  /* AI Elements (Orchid/Glow flavor) */
+  --ds-ai-accent:                   oklch(70% 0.18 310);
+  --ds-ai-surface:                  oklch(15% 0.02 250);
+  --ds-ai-glow:                     0 0 25px -5px oklch(70% 0.18 310 / 0.4);
+  --ds-pattern-sentinel:            radial-gradient(oklch(70% 0.18 310 / 0.15) 1px, transparent 1px);
+
+  /* UI Specifics */
+  --ds-border-radius-100:           3px;
+  --ds-border-radius-200:           4px;
+  --ds-border-radius-400:           8px;
 
   /* ─── Motion & Easing (Cine-Serious) ──────────────────────────── */
   --ds-motion-duration-fast:   150ms;

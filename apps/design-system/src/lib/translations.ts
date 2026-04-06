@@ -18,6 +18,11 @@ export const translations = {
       spacing: 'Spacing',
       layering: 'Layering & Depth',
       motion: 'Motion',
+      analytics: 'Analytics',
+      forms: 'Forms',
+      complexUi: 'Complex UI',
+      authBranding: 'Auth & Branding',
+      calendar: 'Calendar & Dates',
     },
 
     header: {
@@ -87,6 +92,11 @@ export const translations = {
       spacing: 'المساحات',
       layering: 'الطبقات والعمق',
       motion: 'الحركة',
+      analytics: 'التحليلات (Analytics)',
+      forms: 'النماذج (Forms)',
+      complexUi: 'واجهة معقدة (Complex UI)',
+      authBranding: 'الهوية والدخول',
+      calendar: 'التقويم والتواريخ',
     },
 
     header: {

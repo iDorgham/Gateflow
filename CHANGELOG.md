@@ -19,6 +19,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 ## [Unreleased]
 
 ### Workspace
+- **[Design-System-Redesign]** finalize phase 2 foundations
 
 - **[Design-System-Redesign]** complete phase 2
 

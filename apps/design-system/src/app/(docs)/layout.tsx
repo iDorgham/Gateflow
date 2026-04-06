@@ -17,6 +17,7 @@ import {
   Sun,
   Laptop,
   Globe,
+  Layout,
 } from 'lucide-react';
 import { useLocale } from '../../components/providers/LocaleProvider';
 import { Search } from '../../components/navigation/Search';
@@ -50,6 +51,19 @@ const sidebarItems = (t: Record<string, string>) => [
     ],
   },
   { label: t.tokens, href: '/tokens', icon: Palette },
+  {
+    label: t.patterns,
+    href: '/patterns',
+    icon: Layout,
+    subItems: [
+      { label: t.aiUi, href: '/patterns/ai-ui' },
+      { label: t.analytics, href: '/patterns/analytics' },
+      { label: t.forms, href: '/patterns/forms' },
+      { label: t.complexUi, href: '/patterns/complex-ui' },
+      { label: t.authBranding, href: '/patterns/auth-branding' },
+      { label: t.calendar, href: '/patterns/calendar' },
+    ],
+  },
 
   { label: t.accessibility, href: '/accessibility', icon: Accessibility },
   {

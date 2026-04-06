@@ -95,7 +95,7 @@ export function EditPanel({
       <div
         className={cn(
           'absolute inset-y-0 end-0 flex w-full flex-col shadow-2xl',
-          'bg-[var(--ds-surface-raised,#FFFFFF)] dark:bg-[var(--ds-surface-raised,#1f1f21)]',
+          'bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-raised)]',
           'animate-in slide-in-from-right duration-300 ease-out',
           PANEL_WIDTHS[width]
         )}
@@ -105,7 +105,7 @@ export function EditPanel({
           className={cn(
             'px-6 py-4 border-b flex items-center justify-between sticky top-0 bg-background z-10 transition-colors',
             projectHeader
-              ? 'bg-[var(--ds-background-neutral-bold,#020035)] text-white'
+              ? 'bg-[var(--ds-background-neutral-bold)] text-white'
               : 'bg-background text-foreground'
           )}
         >

@@ -8,23 +8,22 @@ const badgeVariants = cva(
     variants: {
       variant: {
         default:
-          'border-transparent bg-[var(--ds-background-neutral,#DFE1E6)] text-[var(--ds-text,#172B4D)]',
+          'border-transparent bg-[var(--ds-background-neutral)] text-[var(--ds-text)]',
         primary:
-          'border-transparent bg-[var(--ds-background-brand-bold,#0052CC)] text-[var(--ds-text-inverse,#FFFFFF)]',
+          'border-transparent bg-[var(--ds-background-brand-bold)] text-[var(--ds-text-inverse)]',
         secondary:
-          'border-transparent bg-[var(--ds-background-selected,#DEEBFF)] text-[var(--ds-text-selected,#0747A6)]',
+          'border-transparent bg-[var(--ds-background-selected)] text-[var(--ds-text-selected)]',
         success:
-          'border-transparent bg-[var(--ds-background-success-bold,#00875A)] text-[var(--ds-text-inverse,#FFFFFF)]',
+          'border-transparent bg-[var(--ds-background-success-bold)] text-[var(--ds-text-inverse)]',
         danger:
-          'border-transparent bg-[var(--ds-background-danger-bold,#DE350B)] text-[var(--ds-text-inverse,#FFFFFF)]',
+          'border-transparent bg-[var(--ds-background-danger-bold)] text-[var(--ds-text-inverse)]',
         warning:
-          'border-transparent bg-[var(--ds-background-warning-bold,#FFAB00)] text-[var(--ds-text-warning-inverse,#172B4D)]',
-        info: 'border-transparent bg-blue-500 text-white',
+          'border-transparent bg-[var(--ds-background-warning-bold)] text-[var(--ds-text-warning-inverse)]',
+        info: 'border-transparent bg-[var(--ds-background-information-bold)] text-[var(--ds-text-inverse)]',
         outline:
-          'border-[var(--ds-border,#DFE1E6)] text-[var(--ds-text-subtle,#42526E)] bg-transparent',
-
+          'border-[var(--ds-border)] text-[var(--ds-text-subtle)] bg-transparent',
         subtle:
-          'border-transparent bg-[var(--ds-background-neutral-subtle,#F4F5F7)] text-[var(--ds-text-subtle,#42526E)]',
+          'border-transparent bg-[var(--ds-background-neutral-subtle)] text-[var(--ds-text-subtle)]',
       },
     },
     defaultVariants: {
