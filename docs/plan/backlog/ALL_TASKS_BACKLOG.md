@@ -110,9 +110,22 @@
 - [ ] Phase 5 — UI/UX Unification: Dynamic Theming, Global Style Sync
 - [ ] Phase 6 — Growth Optimization: A/B Testing & Lead Attribution
 
----
+### design_system_redesign — GateFlow Design System Redesign (Premium Enterprise)
 
-## 🏛️ Archived & Completed (2026)
+**IDEA:** `docs/development/initiatives/IDEA_design_system_redesign.md`  
+**PLAN:** `docs/plan/Ready/design-system-redesign/`  
+`PLAN_design-system-redesign.md`  
+**Status:** 🆕 Ready (Phase 1)  
+**Target:** Q2 2026
+
+- [ ] Phase 1 — Foundation Token Overhaul (Colors, Typography, Icons, Spacing, Grid)
+- [ ] Phase 2 — Core Foundation Pages (1-6) (Colors to Motion)
+- [ ] Phase 3 — Pattern Documentation (7-12) (AI to Date Pickers)
+- [ ] Phase 4 — Monorepo Enforcement & Migration (enforce-ads-design.js)
+- [ ] Phase 5 — Marketing & Auth Redesign (High-flair premium gateway)
+- [ ] Phase 6 — Dashboards & Portal Redesign (High-density operational focus)
+- [ ] Phase 7 — Mobile Optimization (Scanner & Resident compact refinement)
+- [ ] Phase 8 — Final Polish & Certification (Accessibility audit)
 
 ### security_isolation_fix — High-Risk Security Hardening
 

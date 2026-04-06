@@ -20,6 +20,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Monorepo]** add framer-motion dependencies to @gateflow/ui, @gateflow/components, and design-system
+
 - **[Ui]** resolve AISidePanel type mismatch with framer-motion
 
 - **[Design-System]** standardized gateflow token architecture and in-depth manifesto

@@ -1,329 +1,93 @@
 /**
- * @gateflow/tokens — tokens.css v2
- * 2026 token system: warm neutrals, Kimchi brand, charcoal dark mode.
- * All values use OKLCH for perceptual uniformity.
+ * @gateflow/tokens — tokens.css v3 (Premium Redesign)
+ * 2026 Enterprise System: Satin-Charcoal hierarchy, Multi-Accent Profiles.
+ * All values use OKLCH for perceptual uniformity and institutional depth.
  */
 
 :root {
-  /* ─── Primitives: Neutrals (warm gray, hue ~80) ─────────────────── */
-  --gf-color-neutral-0:    oklch(100% 0 0);
-  --gf-color-neutral-50:   oklch(98.5% 0.004 80);   /* near-white warm */
-  --gf-color-neutral-100:  oklch(96.5% 0.006 80);
-  --gf-color-neutral-200:  oklch(93% 0.008 80);
-  --gf-color-neutral-300:  oklch(88% 0.01 80);
-  --gf-color-neutral-400:  oklch(78% 0.012 80);
-  --gf-color-neutral-500:  oklch(65% 0.015 80);     /* mid gray */
-  --gf-color-neutral-600:  oklch(50% 0.018 80);
-  --gf-color-neutral-700:  oklch(38% 0.02 80);
-  --gf-color-neutral-800:  oklch(26% 0.02 80);
-  --gf-color-neutral-900:  oklch(16% 0.018 80);     /* near-black warm */
-  --gf-color-neutral-950:  oklch(10% 0.015 80);
-  --gf-color-neutral-1000: oklch(0% 0 0);
+  /* ─── Primitives: Neutrals (Satin-Charcoal, Hue 250) ───────────── */
+  /* These tiers provide the "Satin" depth hierarchy. */
+  --gf-color-neutral-10:    oklch(8% 0.015 250);     /* Canvas / Deep Base */
+  --gf-color-neutral-20:    oklch(11% 0.015 250);    /* Sidebar / Subpage Nav */
+  --gf-color-neutral-30:    oklch(14% 0.02 250);     /* Surface / Default Card */
+  --gf-color-neutral-40:    oklch(18% 0.02 250);     /* Raised / Hover State */
+  --gf-color-neutral-50:    oklch(22% 0.02 250);     /* Overlay / Modal */
+  --gf-color-neutral-60:    oklch(35% 0.025 250);    /* Borders / Muted */
+  --gf-color-neutral-70:    oklch(50% 0.02 250);     /* Secondary Text */
+  --gf-color-neutral-80:    oklch(65% 0.015 250);    /* Subtle Text */
+  --gf-color-neutral-90:    oklch(85% 0.01 250);     /* High Contrast Text */
+  --gf-color-neutral-100:   oklch(100% 0 0);         /* Purest White */
 
-  /* ─── Primitives: Brand (Kimchi — #ED4B00) ──────────────────────── */
-  --gf-color-brand-50:     oklch(96% 0.02 38);
-  --gf-color-brand-100:    oklch(92% 0.06 38);
-  --gf-color-brand-200:    oklch(84% 0.12 38);
-  --gf-color-brand-300:    oklch(74% 0.18 38);
-  --gf-color-brand-400:    oklch(67% 0.21 38);
-  --gf-color-brand-500:    oklch(62% 0.22 38);      /* Kimchi core #ED4B00 */
-  --gf-color-brand-600:    oklch(54% 0.20 38);
-  --gf-color-brand-700:    oklch(45% 0.18 38);
-  --gf-color-brand-800:    oklch(35% 0.15 38);
-  --gf-color-brand-900:    oklch(26% 0.12 38);
+  /* ─── Accent Profiles (Dynamic Switching) ─────────────────────── */
+  /* Default Profile: Kimchi (#ED4B00) */
+  --ds-primary-accent:      oklch(62% 0.22 35);      /* Kimchi Core */
+  --ds-accent-hover:        oklch(54% 0.20 35);
+  --ds-accent-subtle:       oklch(20% 0.04 35);
+  --ds-accent-contrast:     oklch(100% 0 0);
 
-  /* ─── Status ─────────────────────────────────────────────────────── */
-  --gf-color-success-subtle:  oklch(95% 0.04 145);
-  --gf-color-success:         oklch(58% 0.20 145);
-  --gf-color-success-bold:    oklch(42% 0.18 145);
+  /* ─── Status Primitives ───────────────────────────────────────── */
+  --gf-color-success:       oklch(65% 0.15 155);     /* Emerald */
+  --gf-color-warning:       oklch(74% 0.18 75);      /* Gold */
+  --gf-color-danger:        oklch(60% 0.25 25);      /* Ruby */
+  --gf-color-info:          oklch(62% 0.18 250);     /* Cobalt-derived */
 
-  --gf-color-warning-subtle:  oklch(96% 0.05 80);
-  --gf-color-warning:         oklch(74% 0.18 75);
-  --gf-color-warning-bold:    oklch(56% 0.18 75);
-
-  --gf-color-danger-subtle:   oklch(96% 0.04 25);
-  --gf-color-danger:          oklch(55% 0.23 25);
-  --gf-color-danger-bold:     oklch(40% 0.20 25);
-
-  --gf-color-info-subtle:     oklch(95% 0.03 245);
-  --gf-color-info:            oklch(58% 0.18 245);
-  --gf-color-info-bold:       oklch(42% 0.16 245);
-
-  /* ─── AI & Specialized Surfaces ───────────────────────────────── */
-  --gf-color-ai-surface:      oklch(97% 0.015 280);
-  --gf-color-ai-accent:       oklch(65% 0.22 280);       /* Orchid / AI Violet */
-  --gf-color-ai-glow:         0 0 30px oklch(65% 0.22 280 / 0.2);
-
-  /* ─── Analytics & Data Viz (Premium Palette) ─────────────────── */
-  --gf-color-chart-1:         var(--gf-color-brand-500); /* Kimchi */
-  --gf-color-chart-2:         oklch(55% 0.18 240);       /* Royal Blue */
-  --gf-color-chart-3:         oklch(62% 0.16 160);       /* Forest / Emerald */
-  --gf-color-chart-4:         oklch(75% 0.15 70);        /* Amber / Sunset */
-  --gf-color-chart-5:         oklch(58% 0.20 320);       /* Magenta / Plum */
-
-  /* ─── Semantic: Light Mode ───────────────────────────────────────── */
-
-
-  /* Backgrounds — 5-level hierarchy */
-  --gf-color-bg-page:         var(--gf-color-neutral-50);    /* page canvas */
-  --gf-color-bg-subtle:       var(--gf-color-neutral-100);   /* sidebar, inset */
-  --gf-color-bg-default:      var(--gf-color-neutral-0);     /* cards */
-  --gf-color-bg-raised:       var(--gf-color-neutral-0);     /* popovers, dropdowns */
-  --gf-color-bg-overlay:      var(--gf-color-neutral-0);     /* modals */
-  --gf-color-bg-glass:        rgba(255, 255, 255, 0.7);      /* glass background */
-  
-  --gf-surface-glow:          var(--gf-glow-brand);
-
-
-
-
-  /* Legacy aliases */
-  --gf-color-theme-background: var(--gf-color-bg-page);
-  --ds-surface:               var(--gf-color-bg-default);
-  --ds-surface-raised:        var(--gf-color-bg-raised);
-  --ds-surface-overlay:       var(--gf-color-bg-overlay);
-  --ds-surface-glass:         var(--gf-color-bg-glass);
-  --ds-glow-premium:          var(--gf-surface-glow);
-
+  /* ─── Semantic Layer: Dark Mode (Institutional Default) ────────── */
+  /* Backgrounds */
+  --ds-background-default:  var(--gf-color-neutral-10);
+  --ds-surface-subtle:      var(--gf-color-neutral-20);
+  --ds-surface-raised:      var(--gf-color-neutral-30);
+  --ds-surface-overlay:     var(--gf-color-neutral-50);
+  --ds-surface-glass:       oklch(100% 0 0 / 0.03);
 
   /* Text */
-  --gf-color-text:              var(--gf-color-neutral-900);
-  --gf-color-text-subtle:       var(--gf-color-neutral-600);
-  --gf-color-text-subtlest:     var(--gf-color-neutral-400);
-  --gf-color-text-inverse:      var(--gf-color-neutral-0);
-  --gf-color-text-brand:        var(--gf-color-brand-500);
-  --gf-color-text-danger:       var(--gf-color-danger);
-  --gf-color-text-success:      var(--gf-color-success-bold);
-  --gf-color-text-warning:      var(--gf-color-warning-bold);
-
-  /* Legacy alias */
-  --gf-color-theme-foreground:  var(--gf-color-text);
+  --ds-text-primary:        var(--gf-color-neutral-90);
+  --ds-text-subtle:         var(--gf-color-neutral-70);
+  --ds-text-inverse:        var(--gf-color-neutral-10);
+  --ds-text-accent:         var(--ds-primary-accent);
 
   /* Borders */
-  --gf-color-border:            var(--gf-color-neutral-200);
-  --gf-color-border-subtle:     var(--gf-color-neutral-100);
-  --gf-color-border-bold:       var(--gf-color-neutral-400);
-  --gf-color-border-focused:    var(--gf-color-brand-500);
-  --gf-color-border-hover:      var(--gf-color-neutral-300);
+  --ds-border:              oklch(24% 0.02 250);     /* Custom tier for clarity */
+  --ds-border-subtle:       oklch(18% 0.015 250);
+  --ds-border-bold:         oklch(35% 0.025 250);
+  --ds-border-focused:      var(--ds-primary-accent);
 
-  /* Brand / Primary */
-  --gf-color-primary:           var(--gf-color-brand-500);
-  --gf-color-primary-foreground: var(--gf-color-neutral-0);
-  --gf-color-primary-hover:     var(--gf-color-brand-600);
-  --gf-color-primary-subtle:    var(--gf-color-brand-50);
+  /* Interactive / Accent */
+  --ds-accent-bold:         var(--ds-primary-accent);
+  --ds-accent-subtle:       oklch(100% 0 0 / 0.05);
 
-  /* Muted */
-  --gf-color-muted:             var(--gf-color-neutral-200);
-  --gf-color-muted-foreground:  var(--gf-color-neutral-600);
+  /* ─── Special Effects (Depth) ─────────────────────────────────── */
+  --ds-glow-accent:         0 0 20px -5px var(--ds-primary-accent);
+  --ds-surface-mesh:        radial-gradient(at 0% 0%, var(--gf-color-neutral-20) 0%, transparent 50%),
+                           radial-gradient(at 100% 0%, oklch(18% 0.02 30) 0%, transparent 50%);
 
-  /* ─── shadcn/ui HSL Aliases — Light Mode ─────────────────────────── */
-  /* NOTE: shadcn expects raw HSL values without hsl() wrapper */
-  --background:             98 14% 99%;      /* neutral-50 */
-  --foreground:             30 8% 16%;       /* neutral-900 */
+  /* ─── Motion & Easing (Cine-Serious) ──────────────────────────── */
+  --ds-motion-duration-fast:   150ms;
+  --ds-motion-duration-base:   300ms;
+  --ds-motion-easing-entrance: cubic-bezier(0.22, 1, 0.36, 1);
+  --ds-motion-stagger-base:    50ms;
 
-  --card:                   0 0% 100%;
-  --card-foreground:        30 8% 16%;
-
-  --popover:                0 0% 100%;
-  --popover-foreground:     30 8% 16%;
-
-  --primary:                20 100% 46%;     /* Kimchi #ED4B00 */
-  --primary-foreground:     0 0% 100%;
-
-  --secondary:              30 10% 93%;      /* neutral-200 */
-  --secondary-foreground:   30 6% 26%;
-
-  --muted:                  30 10% 93%;
-  --muted-foreground:       30 6% 42%;
-
-  --accent:                 20 100% 96%;     /* brand-50 */
-  --accent-foreground:      20 100% 38%;
-
-  --destructive:            10 80% 50%;
-  --destructive-foreground: 0 0% 100%;
-
-  --border:                 30 10% 88%;      /* neutral-200 */
-  --input:                  30 10% 88%;
-  --ring:                   20 100% 46%;     /* Kimchi */
-
-  --radius:                 0.5rem;
-
-  /* ─── Border Radius ────────────────────────────────────────────── */
-  --gf-radius-sm:           4px;
-  --gf-radius-md:           8px;
-  --gf-radius-lg:           12px;
-  --gf-radius-xl:           16px;
-  --gf-radius-2xl:          24px;
-  --gf-radius-full:         9999px;
-
-  /* Aliases for DS components */
-  --ds-border-radius-100:   var(--gf-radius-sm);
-  --ds-border-radius-200:   var(--gf-radius-md);
-  --ds-border-radius-300:   var(--gf-radius-lg);
-  --ds-border-radius-400:   var(--gf-radius-xl);
-
-  /* Elevation / Shadow */
-
-  --gf-shadow-xs: 0 1px 2px oklch(0% 0 0 / 0.05);
-  --gf-shadow-sm: 0 1px 3px oklch(0% 0 0 / 0.08), 0 1px 2px oklch(0% 0 0 / 0.06);
-  --gf-shadow-md: 0 4px 6px oklch(0% 0 0 / 0.07), 0 2px 4px oklch(0% 0 0 / 0.06);
-  --gf-shadow-lg: 0 10px 15px oklch(0% 0 0 / 0.08), 0 4px 6px oklch(0% 0 0 / 0.05);
-  --gf-shadow-xl: 0 20px 25px oklch(0% 0 0 / 0.08), 0 10px 10px oklch(0% 0 0 / 0.04);
-
-  /* ─── Premium Effects ─────────────────────────────────────────── */
-  --gf-glow-brand: 0 0 20px oklch(62% 0.22 38 / 0.15), 0 0 40px oklch(62% 0.22 38 / 0.05);
-  --gf-glow-success: 0 0 20px oklch(58% 0.20 145 / 0.15);
-  --gf-glow-info: 0 0 20px oklch(58% 0.18 245 / 0.15);
-  
-  --gf-surface-mesh: linear-gradient(135deg, oklch(98.5% 0.004 80) 0%, oklch(96.5% 0.006 80) 50%, oklch(94% 0.008 80) 100%);
-  --gf-surface-accent: linear-gradient(90deg, var(--gf-color-brand-500) 0%, oklch(65% 0.25 340) 100%);
-  
-  /* ─── High Density & Enterprise ───────────────────────────────── */
-  --ds-table-header-bg:       oklch(96% 0.005 80);
-  --ds-table-row-hover:       oklch(98% 0.005 80);
-  --ds-sidebar-bg:            oklch(98.5% 0.004 80);
-  --ds-sidebar-item-active:   oklch(94% 0.01 80);
-
-  /* ─── Layout Components ────────────────────────────────────────── */
-  --ds-header-bg:             oklch(100% 0 0 / 0.8);
-  --ds-footer-bg:             var(--gf-color-bg-page);
-  --ds-nav-item-hover:        var(--gf-color-neutral-100);
-
-  --gf-pattern-sentinel: radial-gradient(var(--gf-color-brand-500) 0.5px, transparent 0.5px);
-
-
-  --gf-pattern-size: 24px 24px;
-
-  /* ─── Motion ─────────────────────────────────────────────────────── */
-  --gf-motion-duration-fast:   150ms;
-  --gf-motion-duration-base:   300ms;
-  --gf-motion-duration-slow:   500ms;
-  --gf-motion-easing-expressive: cubic-bezier(0.4, 0, 0.2, 1);
-  --gf-motion-spring-stiff:    "spring(1, 100, 10, 0)";
+  /* ─── Typography & Scale (Cairo / Inter) ───────────────────────── */
+  --ds-font-primary:        "Inter", ui-sans-serif, system-ui;
+  --ds-font-display:        "Cairo", sans-serif;
 }
 
-
-/* ─── Dark Mode ───────────────────────────────────────────────────────── */
-[data-color-mode="dark"] {
-  /* Backgrounds — charcoal hierarchy (warm-tinted dark) */
-  --gf-color-bg-page:         oklch(12% 0.015 250);   /* satin deep canvas */
-  --gf-color-bg-subtle:       oklch(14% 0.015 250);   /* sidebar, nav shadow */
-  --gf-color-bg-default:      oklch(16% 0.020 250);   /* cards surface */
-  --gf-color-bg-raised:       oklch(19% 0.020 250);   /* dropdowns - subtle lift */
-  --gf-color-bg-overlay:      oklch(22% 0.020 250);   /* modals - highest lift */
-  --gf-color-bg-glass:        rgba(255, 255, 255, 0.03); 
-
-  
-  --gf-surface-glow:          var(--gf-glow-brand);
-
-  
-  --gf-surface-glow:          var(--gf-glow-brand);
-
-
-
-  /* Legacy aliases */
-  --gf-color-theme-background: var(--gf-color-bg-page);
-  --gf-color-surface:           var(--gf-color-bg-default);
-  --gf-color-surface-raised:    var(--gf-color-bg-raised);
-  --gf-color-surface-overlay:   var(--gf-color-bg-overlay);
-
-  /* Text */
-  --gf-color-text:              oklch(94% 0.006 80);
-  --gf-color-text-subtle:       oklch(65% 0.010 80);
-  --gf-color-text-subtlest:     oklch(46% 0.010 80);
-  --gf-color-text-inverse:      oklch(12% 0.012 80);
-  --gf-color-text-brand:        var(--gf-color-brand-300);
-  --gf-color-text-danger:       oklch(72% 0.18 25);
-  --gf-color-text-success:      oklch(72% 0.16 145);
-  --gf-color-text-warning:      oklch(80% 0.16 75);
-
-  /* Legacy alias */
-  --gf-color-theme-foreground:  var(--gf-color-text);
-
-  /* Borders — Soft Charcoal (avoiding white/bright grey) */
-  --gf-color-border:            oklch(26% 0.015 250);
-  --gf-color-border-subtle:     oklch(20% 0.012 250);
-  --gf-color-border-bold:       oklch(35% 0.018 250);
-  --gf-color-border-focused:    var(--gf-color-brand-400);
-  --gf-color-border-hover:      oklch(30% 0.018 250);
-
-
-  /* Brand / Primary */
-  --gf-color-primary:           var(--gf-color-brand-400);
-  --gf-color-primary-foreground: oklch(12% 0.012 80);
-  --gf-color-primary-hover:     var(--gf-color-brand-300);
-  --gf-color-primary-subtle:    oklch(20% 0.04 38);
-
-  /* Muted */
-  --gf-color-muted:             oklch(22% 0.012 250);
-  --gf-color-muted-foreground:  oklch(55% 0.010 80);
-
-  /* shadcn/ui HSL Aliases — Dark Mode */
-  --background:             225 18% 9%;
-  --foreground:             30 10% 94%;
-
-  --card:                   225 18% 12%;
-  --card-foreground:        30 10% 94%;
-
-  --popover:                225 18% 11%;
-  --popover-foreground:     30 10% 94%;
-
-  --primary:                20 100% 60%;     /* lighter Kimchi for dark bg */
-  --primary-foreground:     0 0% 100%;
-
-  --secondary:              225 18% 18%;
-  --secondary-foreground:   30 8% 80%;
-
-  --muted:                  225 18% 18%;
-  --muted-foreground:       30 6% 50%;
-
-  --accent:                 225 18% 18%;
-  --accent-foreground:      30 8% 80%;
-
-  --destructive:            0 65% 52%;
-  --destructive-foreground: 0 0% 100%;
-
-  --border:                 225 18% 22%;
-  --input:                  225 18% 22%;
-  --ring:                   20 100% 60%;
-
-  /* Shadows (stronger in dark mode) */
-  --gf-shadow-lg: 0 10px 15px oklch(0% 0 0 / 0.35), 0 4px 6px oklch(0% 0 0 / 0.25);
-
-  /* ─── Premium Effects (Dark) ──────────────────────────────────── */
-  --gf-glow-brand: 0 0 30px oklch(62% 0.22 38 / 0.3);
-  --gf-glow-success: 0 0 30px oklch(72% 0.16 145 / 0.2);
-  --gf-glow-info: 0 0 30px oklch(72% 0.16 245 / 0.2);
-  
-  --gf-surface-mesh: radial-gradient(at 0% 0%, oklch(14% 0.012 250) 0%, transparent 50%),
-                    radial-gradient(at 100% 0%, oklch(18% 0.02 30) 0%, transparent 50%);
-  
-  --gf-pattern-sentinel: radial-gradient(oklch(100% 0 0 / 0.03) 0.5px, transparent 0.5px);
-
-  /* ─── AI & Specialized (Dark) ─────────────────────────────────── */
-  --gf-color-ai-surface:      oklch(15% 0.02 280);
-  --gf-color-ai-accent:       oklch(75% 0.18 280);
-  --gf-color-ai-glow:         0 0 30px oklch(75% 0.18 280 / 0.3);
-
-  /* ─── Analytics (Dark) ────────────────────────────────────────── */
-  --gf-color-chart-1:         var(--gf-color-brand-400); 
-  --gf-color-chart-2:         oklch(65% 0.15 240);
-  --gf-color-chart-3:         oklch(70% 0.12 160);
-  --gf-color-chart-4:         oklch(80% 0.12 70);
-  --gf-color-chart-5:         oklch(68% 0.15 320);
-
-  /* ─── High Density & Enterprise (Dark) ────────────────────────── */
-  --ds-table-header-bg:       oklch(14% 0.015 250);
-  --ds-table-row-hover:       oklch(18% 0.020 250);
-  --ds-sidebar-bg:            oklch(12% 0.015 250);
-  --ds-sidebar-item-active:   oklch(20% 0.02 250);
-
-  /* ─── Layout Components (Dark) ────────────────────────────────── */
-  --ds-header-bg:             oklch(12% 0.015 250 / 0.8);
-  --ds-footer-bg:             var(--gf-color-bg-page);
-  --ds-nav-item-hover:        oklch(18% 0.015 250);
+/* ─── Accent Profile Overrides ────────────────────────────────────── */
+[data-accent-profile="cobalt"] {
+  --ds-primary-accent:      oklch(50% 0.18 250);     /* Professional Blue */
+  --ds-accent-hover:        oklch(42% 0.16 250);
+  --ds-accent-subtle:       oklch(15% 0.03 250);
 }
 
+[data-accent-profile="emerald"] {
+  --ds-primary-accent:      oklch(65% 0.15 155);     /* Safety Green */
+  --ds-accent-hover:        oklch(58% 0.12 155);
+  --ds-accent-subtle:       oklch(18% 0.02 155);
+}
 
-
-
+/* ─── Layout & Density ────────────────────────────────────────────── */
+:root {
+  --ds-space-block:         8px;
+  --ds-space-gap-md:        16px;
+  --ds-space-inset-md:      16px;
+  --ds-container-max:       1280px;
+}

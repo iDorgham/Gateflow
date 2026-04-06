@@ -6,58 +6,54 @@
 
 @layer base {
   :root {
-    /* Typography */
-    --ds-font-family-sans: var(--font-sans, var(--font-inter, ui-sans-serif, system-ui));
-    --ds-font-family-heading: var(--font-heading, var(--ds-font-family-sans));
-    --ds-font-family-mono: var(--font-mono, monospace);
+    /* ─── Typography (Premium Overrides) ─── */
+    --ds-font-family-sans: var(--ds-font-primary);
+    --ds-font-family-heading: var(--ds-font-display);
+    --ds-font-family-mono: "Fira Code", monospace;
 
-    /* Radius */
-    --ds-border-radius:    0.5rem;
-    --ds-border-radius-sm: 0.25rem;
-    --ds-border-radius-lg: 0.75rem;
-    --ds-radius-xsmall:    0.125rem;
-    --ds-radius-small:     0.25rem;
-    --ds-radius-medium:    0.5rem;
-    --ds-radius-large:     0.75rem;
-    --ds-radius-xlarge:    1rem;
-    --ds-radius-circle:    50%;
-    --ds-border-radius-200: var(--ds-border-radius); /* Button alias */
-
-    /* DS Background aliases → gf tokens */
-    --ds-background-default:            var(--gf-color-bg-page);
-    --ds-background-neutral-subtle:     var(--gf-color-bg-subtle);
-    --ds-background-neutral:            var(--gf-color-neutral-200);
-    --ds-background-neutral-hovered:    var(--gf-color-neutral-300);
-    --ds-background-neutral-pressed:    var(--gf-color-neutral-400);
-    --ds-background-brand-bold:         var(--gf-color-primary);
-    --ds-background-brand-bold-hovered: var(--gf-color-primary-hover);
-    --ds-background-brand-subtle:       var(--gf-color-primary-subtle);
-    --ds-background-selected:           var(--gf-color-primary-subtle);
-    --ds-background-selected-hovered:   var(--gf-color-brand-100);
+    /* ─── Radius (8pt Grid) ─── */
+    /* Mapped from tokens or hardcoded and then moved to tokens later */
+    --ds-border-radius-sm: 4px;
+    --ds-border-radius-md: 8px;
+    --ds-border-radius-lg: 12px;
+    
+    /* ─── Background Aliases (Mapping v2 to v3) ─── */
+    --ds-background-default:            var(--ds-background-default);
+    --ds-background-neutral-subtle:     var(--ds-surface-subtle);
+    --ds-background-neutral-subtle-hovered: var(--ds-surface-raised);
+    --ds-background-neutral:            var(--ds-surface-raised);
+    --ds-background-neutral-hovered:    var(--ds-surface-overlay);
+    
+    --ds-background-brand-bold:         var(--ds-accent-bold);
+    --ds-background-brand-bold-hovered: var(--ds-accent-hover);
+    --ds-background-brand-subtle:       var(--ds-accent-subtle);
+    
     --ds-background-danger-bold:        var(--gf-color-danger);
-    --ds-background-danger-subtle:      var(--gf-color-danger-subtle);
-    --ds-background-warning-bold:       var(--gf-color-warning);
     --ds-background-success-bold:       var(--gf-color-success);
+    --ds-background-warning-bold:       var(--gf-color-warning);
     --ds-background-information-bold:   var(--gf-color-info);
 
-    /* DS Text aliases */
-    --ds-text:          var(--gf-color-text);
-    --ds-text-subtle:   var(--gf-color-text-subtle);
-    --ds-text-subtlest: var(--gf-color-text-subtlest);
-    --ds-text-inverse:  var(--gf-color-text-inverse);
-    --ds-text-selected: var(--gf-color-text-brand);
-    --ds-text-brand:    var(--gf-color-text-brand);
-    --ds-text-danger:   var(--gf-color-text-danger);
+    /* ─── Text Aliases ─── */
+    --ds-text:          var(--ds-text-primary);
+    --ds-text-subtle:   var(--ds-text-subtle);
+    --ds-text-inverse:  var(--ds-text-inverse);
+    --ds-text-accent:   var(--ds-text-accent);
+    
+    /* ─── Border Aliases ─── */
+    --ds-border:         var(--ds-border);
+    --ds-border-subtle:  var(--ds-border-subtle);
+    --ds-border-bold:    var(--ds-border-bold);
+    --ds-border-focused: var(--ds-border-focused);
+    --ds-border-accent:  var(--ds-accent-bold);
 
-    /* DS Border aliases */
-    --ds-border:         var(--gf-color-border);
-    --ds-border-subtle:  var(--gf-color-border-subtle);
-    --ds-border-bold:    var(--gf-color-border-bold);
-    --ds-border-focused: var(--gf-color-border-focused);
-    --ds-border-brand:   var(--gf-color-primary);
+    /* ─── Layout & Scaling ─── */
+    --ds-grid-gutter:    var(--ds-space-gap-md);
+    --ds-section-inset:  var(--ds-space-inset-md);
+  }
 
-    /* DS Shadow */
-    --ds-shadow-raised: var(--gf-shadow-sm);
+  /* ─── RTL Support (Logical Properties) ─── */
+  [dir="rtl"] {
+    text-align: right;
   }
 
   * { @apply border-border; }
@@ -69,8 +65,16 @@
 }
 
 @layer utilities {
-  .ds-elevation-sunken  { background: var(--gf-color-bg-subtle); }
-  .ds-elevation-default { background: var(--gf-color-bg-page); }
-  .ds-elevation-raised  { background: var(--gf-color-bg-default); box-shadow: var(--gf-shadow-sm); }
-  .ds-elevation-overlay { background: var(--gf-color-bg-overlay); box-shadow: var(--gf-shadow-md); }
+  /* ─── Premium Modern Elevations ─── */
+  .ds-elevation-sunken  { background: var(--gf-color-neutral-10); }
+  .ds-elevation-default { background: var(--ds-background-default); }
+  .ds-elevation-raised  { background: var(--ds-surface-raised); border: 1px solid var(--ds-border-subtle); box-shadow: var(--ds-shadow-md); }
+  .ds-elevation-overlay { background: var(--ds-surface-overlay); border: 1px solid var(--ds-border); box-shadow: var(--ds-shadow-lg); }
+  
+  /* ─── Glassmorphism Utilities ─── */
+  .glass {
+    background: var(--ds-surface-glass);
+    backdrop-filter: blur(16px);
+    border: 1px solid oklch(100% 0 0 / 0.05);
+  }
 }

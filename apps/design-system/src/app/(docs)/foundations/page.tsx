@@ -54,7 +54,7 @@ export default function FoundationsPage() {
         {values.map((v, i) => (
           <Card
             key={i}
-            className="p-10 rounded-[3rem] border-[var(--ds-border-subtle)] bg-[var(--ds-surface-raised)] text-[var(--ds-text)] dark:bg-[rgba(255,255,255,0.02)] shadow-sm hover:shadow-2xl hover:scale-[1.02] transition-all duration-500 flex flex-col gap-8 group backdrop-blur-[2px]"
+            className="p-10 rounded-[3rem] border-[var(--ds-border-subtle)] bg-[var(--ds-surface-raised)] text-[var(--ds-text)] shadow-sm hover:shadow-2xl hover:scale-[1.02] transition-all duration-500 flex flex-col gap-8 group backdrop-blur-[2px]"
           >
             <div
               className={`h-12 w-12 rounded-2xl ${v.color} flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform`}
