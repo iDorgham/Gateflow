@@ -37,7 +37,7 @@
   "scripts": {
     "lint": "eslint src/",
     "typecheck": "tsc -p tsconfig.json",
-    "build": "tsup"
+    "build": "tsup && node -e \"const fs=require('fs');['dist/index.js','dist/index.mjs'].forEach(f=>{const c=fs.readFileSync(f,'utf8');if(!c.startsWith('\\\"use client\\\";'))fs.writeFileSync(f,'\\\"use client\\\";\\n'+c);})\""
   },
   "peerDependencies": {
     "react": ">=18.0.0",
