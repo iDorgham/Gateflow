@@ -15,9 +15,9 @@ import {
   Settings,
   Bot,
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, type HTMLMotionProps } from 'framer-motion';
 
-export interface AISidePanelProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface AISidePanelProps extends HTMLMotionProps<'div'> {
   onClose?: () => void;
   isOpen: boolean;
 }

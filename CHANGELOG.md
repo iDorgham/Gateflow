@@ -20,6 +20,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Design-System]** standardized gateflow token architecture and in-depth manifesto
+
 - **[Tokens]** remove unused @ts-expect-error in client-dashboard tailwind config
 - **[Tokens]** remove unused @ts-expect-error in resident-portal tailwind config
 - **[Tokens]** token system v2 — Kimchi palette, dark mode fix, unified architecture
