@@ -254,7 +254,11 @@ Gemini CLI supports the following slash commands by following the workflows defi
 8. **Performance Guard/100% Mandate:** Every major command must assess if performance is impacted. Trigger `/clis team perf` if score drops < 100.
 9. **Plan Lifecycle:** Respect folder transitions: `planning/` (draft) → `planned/` (ready) → `in-progress/` (active) → `done/` (complete).
 10. **Role + Tool Alignment:** Adopt the phase's **Primary role** from `SUBAGENT_HIERARCHY.md` and respect **Preferred tool** (Cursor, Claude CLI, Gemini CLI, Opencode, Kiro, Kilo, Qwen).
-11. **Deployment Guard:** Automatic deployments on `push` are DISABLED. Use `/deploy` for all production releases. Cross-reference `.ai-memory/deployment_errors.md` before triggering.
+11. **Deployment Guard**: Automatic deployments on `push` are DISABLED. Use `/deploy` for all production releases.
+    - **Auto-Trigger**: `/dev` automatically triggers `/deploy` after the final phase merge.
+    - **Tracking**: All deployments MUST be logged in `.ai-memory/deployment_tracker.md`.
+    - **Guide Suggestions**: `/guide` will proactively suggest `/deploy` if apps are out of sync with production.
+12. **Role + Tool Alignment**: Adopt the phase's **Primary role** from `SUBAGENT_HIERARCHY.md` and respect **Preferred tool**.
 
 ---
 

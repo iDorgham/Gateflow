@@ -1,7 +1,6 @@
 {
   "framework": "nextjs",
-  "ignoreBuildCommand": "bash ../../scripts/ignore-build.sh",
-  "buildCommand": "cd ../.. && pnpm turbo build --filter=design-system",
+  "buildCommand": "cd ../.. && pnpm turbo build --filter=@gateflow/design-system",
   "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
   "outputDirectory": ".next"
 }
