@@ -52,7 +52,7 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "ai": "^6.0.138",
-    "@ai-sdk/react": "^3.0.139",
+    "@ai-sdk/react": "^3.0.148",
     "next": "^15.5.14",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
