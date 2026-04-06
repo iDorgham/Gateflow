@@ -23,6 +23,7 @@
     "@gate-access/i18n": "workspace:^",
     "@gate-access/stripe": "workspace:^",
     "@gate-access/types": "^0.1.0",
+    "@gateflow/components": "workspace:^",
     "@gateflow/ui": "workspace:^",
     "@hookform/resolvers": "^5.2.2",
     "@hugeicons/core-free-icons": "^3.1.1",

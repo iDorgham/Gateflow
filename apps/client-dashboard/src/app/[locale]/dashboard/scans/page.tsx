@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation';
 import { getTranslation, Locale } from '@/lib/i18n';
 import { ScansFilters } from './scans-filters';
 import { ScansTableWithPagination } from './scans-table-with-pagination';
-import { PageHeader } from '@gateflow/ui';
+import { PageHeader } from '@gateflow/components';
 import { Button } from '@gateflow/ui';
 import { Download } from 'lucide-react';
 import type { ScanStatus } from '@gate-access/db';

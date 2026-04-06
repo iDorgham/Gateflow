@@ -131,7 +131,7 @@ import {
   type KPIData,
 } from '@/components/dashboard/analytics';
 import { useAnalyticsFilters, useAnalyticsSummary } from '@/lib/analytics';
-import { PageHeader } from '@gateflow/ui';
+import { PageHeader } from '@gateflow/components';
 import { PrintButton } from './print-button';
 import { ExportChartButton } from './export-chart-button';
 import { CopyLinkButton } from './copy-link-button';

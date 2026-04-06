@@ -22,7 +22,7 @@ import {
   Badge,
   Skeleton,
 } from '@gateflow/ui';
-import { PageHeader } from '@gateflow/ui';
+import { PageHeader } from '@gateflow/components';
 import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
 import {

@@ -24,13 +24,13 @@ import {
   Label,
   cn,
   LoadingSpinner,
-  PageHeader,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from '@gateflow/ui';
+import { PageHeader } from '@gateflow/components';
 import { ChevronDown } from 'lucide-react';
 import { csrfFetch } from '@/lib/csrf';
 import type { Locale } from '@/lib/i18n-config';

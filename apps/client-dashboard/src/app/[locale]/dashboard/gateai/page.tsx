@@ -15,7 +15,7 @@ import { GateAIHubLayout } from '@/components/dashboard/gateai/GateAIHubLayout';
 import { TagSidebar } from '@/components/dashboard/gateai/TagSidebar';
 import { CanvasEditor } from '@/components/dashboard/gateai/CanvasEditor';
 import { AutomationList } from '@/components/dashboard/gateai/AutomationList';
-import { PageHeader } from '@gateflow/ui';
+import { PageHeader } from '@gateflow/components';
 
 /* ─────────────── Page ─────────────── */
 

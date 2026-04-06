@@ -27,7 +27,7 @@ import {
   AvatarFallback,
   Textarea,
 } from '@gateflow/ui';
-import { PageHeader } from '@gateflow/ui';
+import { PageHeader } from '@gateflow/components';
 import { useTranslation } from 'react-i18next';
 import {
   type ColumnDef,

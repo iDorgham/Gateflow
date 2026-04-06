@@ -17,10 +17,10 @@ import {
   DialogTitle,
   Input,
   NativeSelect,
-  PageHeader,
   cn,
   Pagination,
 } from '@gateflow/ui';
+import { PageHeader } from '@gateflow/components';
 import { useTranslation } from 'react-i18next';
 import {
   Download,

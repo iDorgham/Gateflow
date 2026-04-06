@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation';
 import { getTranslation, Locale } from '@/lib/i18n';
 import { AutoRefresh, GatesList } from './gate-client';
 import type { GateWithStats } from './gate-client';
-import { PageHeader } from '@gateflow/ui';
+import { PageHeader } from '@gateflow/components';
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: Locale }>;
