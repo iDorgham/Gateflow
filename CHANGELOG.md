@@ -20,6 +20,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Ui]** resolve AISidePanel type mismatch with framer-motion
+
 - **[Design-System]** standardized gateflow token architecture and in-depth manifesto
 
 - **[Tokens]** remove unused @ts-expect-error in client-dashboard tailwind config

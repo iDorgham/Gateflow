@@ -20,7 +20,8 @@
     "@gateflow/theme": "workspace:*",
     "@gateflow/ui": "workspace:*",
     "@gateflow/components": "workspace:*",
-    "@gateflow/ai": "workspace:*"
+    "@gateflow/ai": "workspace:*",
+    "framer-motion": "^11.18.2"
   },
   "devDependencies": {
     "@gate-access/config": "workspace:*",
