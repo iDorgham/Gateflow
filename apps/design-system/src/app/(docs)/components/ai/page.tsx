@@ -132,10 +132,10 @@ export default function Demo() {
           <div className="flex flex-col gap-6 p-8 bg-[var(--ds-background-neutral-subtle)] rounded-3xl border border-[var(--ds-border-subtle)] border-dashed w-full max-w-sm">
             <div className="flex items-center gap-4">
               <div className="relative">
-                <div className="h-10 w-10 bg-white border border-[var(--ds-border-subtle)] rounded-xl flex items-center justify-center">
+                <div className="h-10 w-10 bg-[var(--ds-surface-raised)] dark:bg-[rgba(255,255,255,0.05)] border border-[var(--ds-border-subtle)] rounded-xl flex items-center justify-center">
                   <Sparkles size={18} className="text-[var(--ds-text-brand)]" />
                 </div>
-                <div className="absolute -bottom-1 -right-1 h-4 w-4 bg-green-500 rounded-full border-2 border-white animate-ping"></div>
+                <div className="absolute -bottom-1 -right-1 h-4 w-4 bg-green-500 rounded-full border-2 border-[var(--ds-surface-raised)] dark:border-[oklch(12%_0.012_250)] animate-ping"></div>
               </div>
               <div className="flex flex-col gap-0.5">
                 <span className="text-xs font-black uppercase tracking-tight text-[var(--ds-text)]">

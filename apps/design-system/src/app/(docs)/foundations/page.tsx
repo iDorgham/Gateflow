@@ -3,11 +3,13 @@
 import * as React from 'react';
 import { PageHeader } from '@gateflow/components';
 import { useLocale } from '../../../components/providers/LocaleProvider';
+import { translations } from '../../../lib/translations';
 import { Card, Badge } from '@gateflow/ui';
 import { Shield, Sparkles, Zap, Globe, Cpu, Layout } from 'lucide-react';
 
 export default function FoundationsPage() {
-  const { isRTL } = useLocale();
+  const { locale, isRTL } = useLocale();
+  const t = translations[locale as keyof typeof translations].pages.foundations;
 
   const values = [
     {
@@ -39,15 +41,12 @@ export default function FoundationsPage() {
   return (
     <div className="flex flex-col gap-12">
       <PageHeader
-        title={isRTL ? 'الأساسات' : 'Foundations'}
-        subtitle={
-          isRTL
-            ? 'المبادئ والقيم الجوهرية التي تبني تجربة GateFlow.'
-            : 'The core principles and core values that define the GateFlow experience.'
-        }
+        title={t.title}
+        subtitle={t.subtitle}
+        packageName="@gateflow/tokens"
         breadcrumbs={[
-          { label: 'Documentation', href: '/' },
-          { label: isRTL ? 'الأساسات' : 'Foundations' },
+          { label: isRTL ? 'التوثيق' : 'Documentation', href: '/' },
+          { label: t.title },
         ]}
       />
 
@@ -55,7 +54,7 @@ export default function FoundationsPage() {
         {values.map((v, i) => (
           <Card
             key={i}
-            className="p-8 rounded-[2rem] border-[var(--ds-border-subtle)] bg-white shadow-sm hover:shadow-xl transition-all duration-500 flex flex-col gap-6 group"
+            className="p-10 rounded-[3rem] border-[var(--ds-border-subtle)] bg-[var(--ds-surface-raised)] text-[var(--ds-text)] dark:bg-[rgba(255,255,255,0.02)] shadow-sm hover:shadow-2xl hover:scale-[1.02] transition-all duration-500 flex flex-col gap-8 group backdrop-blur-[2px]"
           >
             <div
               className={`h-12 w-12 rounded-2xl ${v.color} flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform`}

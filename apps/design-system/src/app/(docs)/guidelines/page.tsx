@@ -3,6 +3,8 @@
 import * as React from 'react';
 import { PageHeader } from '@gateflow/components';
 import { Card, Badge, Button } from '@gateflow/ui';
+import { useLocale } from '../../../components/providers/LocaleProvider';
+import { translations } from '../../../lib/translations';
 import {
   Palette,
   Accessibility,
@@ -17,19 +19,23 @@ import {
 import Link from 'next/link';
 
 export default function GuidelinesPage() {
+  const { locale, isRTL } = useLocale();
+  const t = translations[locale as keyof typeof translations].pages.guidelines;
+
   return (
     <div className="flex flex-col gap-12">
       <PageHeader
-        title="Guidelines"
-        subtitle="Universal principles for building consistent, performant, and accessible GateFlow experiences."
+        title={t.title}
+        subtitle={t.subtitle}
+        packageName="@gateflow/components"
         breadcrumbs={[
-          { label: 'Documentation', href: '/' },
-          { label: 'Guidelines' },
+          { label: isRTL ? 'التوثيق' : 'Documentation', href: '/' },
+          { label: t.title },
         ]}
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
-        <Card className="rounded-[2rem] p-8 border-[var(--ds-border-subtle)] bg-white shadow-sm flex flex-col gap-6">
+        <Card className="rounded-[2rem] p-8 border-[var(--ds-border-subtle)] bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] ds-card-premium ds-glass-glow shadow-xl hover:shadow-[var(--ds-glow-premium)] transition-all duration-500">
           <div className="h-12 w-12 rounded-2xl bg-[var(--ds-background-brand-bold)] flex items-center justify-center text-white shadow-lg">
             <Layers size={24} />
           </div>
@@ -104,7 +110,7 @@ export default function GuidelinesPage() {
           </div>
         </Card>
 
-        <Card className="rounded-[2rem] p-8 border-[var(--ds-border-subtle)] bg-[var(--ds-background-neutral-subtle)] shadow-sm flex flex-col gap-6">
+        <Card className="rounded-[2rem] p-8 border-[var(--ds-border-subtle)] bg-[var(--ds-background-neutral-subtle)] ds-card-premium ds-glass-glow shadow-xl hover:shadow-[var(--ds-glow-premium)] transition-all duration-500">
           <div className="h-12 w-12 rounded-2xl bg-indigo-500 flex items-center justify-center text-white shadow-lg">
             <Globe size={24} />
           </div>
@@ -118,20 +124,20 @@ export default function GuidelinesPage() {
             </p>
           </div>
           <div className="flex flex-col gap-4">
-            <div className="flex flex-col gap-2 p-5 bg-white border border-[var(--ds-border-subtle)] rounded-2xl shadow-sm">
+            <div className="flex flex-col gap-2 p-5 bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] border border-[var(--ds-border-subtle)] rounded-2xl shadow-sm">
               <div className="flex items-center gap-2 mb-1">
                 <CheckCircle2 size={16} className="text-green-500" />
                 <span className="text-xs font-black uppercase tracking-tight text-[var(--ds-text)]">
-                  Logical Properties
+                  {isRTL ? 'الخصائص المنطقية' : 'Logical Properties'}
                 </span>
               </div>
               <p className="text-[11px] text-[var(--ds-text-subtle)] leading-relaxed">
-                Use `ps-*` instead of `pl-*`, and `border-e` instead of
-                `border-r`. This ensures the layout flips automatically when
-                `dir=&quot;rtl&quot;` is detected.
+                {isRTL
+                  ? 'استخدم `ps-*` بدلاً من `pl-*` ، و `border-e` بدلاً من `border-r`. هذا يضمن انعكاس التخطيط تلقائيًا عند اكتشاف `dir="rtl"`.'
+                  : 'Use `ps-*` instead of `pl-*`, and `border-e` instead of `border-r`. This ensures the layout flips automatically when `dir="rtl"` is detected.'}
               </p>
             </div>
-            <div className="flex flex-col gap-2 p-5 bg-white border border-[var(--ds-border-subtle)] rounded-2xl shadow-sm">
+            <div className="flex flex-col gap-2 p-5 bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] border border-[var(--ds-border-subtle)] rounded-2xl shadow-sm">
               <div className="flex items-center gap-2 mb-1">
                 <AlertCircle size={16} className="text-amber-500" />
                 <span className="text-xs font-black uppercase tracking-tight text-[var(--ds-text)]">
@@ -208,7 +214,7 @@ export default function GuidelinesPage() {
             </div>
           </Card>
 
-          <Card className="flex-1 rounded-[2.5rem] p-10 border-[var(--ds-border-subtle)] bg-white shadow-lg flex flex-col gap-6 relative overflow-hidden group">
+          <Card className="flex-1 rounded-[2.5rem] p-10 border-[var(--ds-border-subtle)] bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] shadow-lg flex flex-col gap-6 relative overflow-hidden group">
             <div className="absolute top-0 right-0 p-10 opacity-[0.03] group-hover:scale-110 group-hover:opacity-[0.05] transition-all duration-700">
               <Accessibility size={200} />
             </div>
@@ -282,7 +288,7 @@ export default function GuidelinesPage() {
           ].map((check) => (
             <div
               key={check}
-              className="flex items-center gap-3 p-4 bg-white rounded-2xl shadow-sm border border-[var(--ds-border-subtle)] group hover:border-[var(--ds-border-brand)] transition-all"
+              className="flex items-center gap-3 p-4 bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] rounded-2xl shadow-sm border border-[var(--ds-border-subtle)] group hover:border-[var(--ds-border-brand)] transition-all"
             >
               <div className="h-5 w-5 rounded-md bg-green-500/10 flex items-center justify-center text-green-500 group-hover:bg-green-500 group-hover:text-white transition-all">
                 <CheckCircle2 size={12} strokeWidth={3} />

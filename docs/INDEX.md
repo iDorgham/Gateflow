@@ -36,6 +36,7 @@ _Vercel and release checklists_
 
 _UI specs, screen drafts, design system notes_
 
+- [TOKENS AND DESIGN SYSTEM MANIFESTO](./reference/TOKENS_AND_DESIGN_SYSTEM_MANIFESTO.md)
 - [draft-gate-assignment-screen](./guides/design/draft-gate-assignment-screen.md)
 
 ## 📚 [Reference hub](./reference/README.md)

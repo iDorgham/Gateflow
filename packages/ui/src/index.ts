@@ -40,5 +40,6 @@ export * from './components/shared/atlassian-navigation';
 export * from './components/shared/maintenance-status-badge';
 export * from './components/panels/EditPanel';
 export * from './components/tables/AdvancedTable';
+export * from './components/ai/AISidePanel';
 export { cn } from './lib/utils';
 export * from './tokens';

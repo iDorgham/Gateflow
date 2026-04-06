@@ -3,6 +3,8 @@
 import * as React from 'react';
 import { PageHeader } from '@gateflow/components';
 import { Badge, Card, CardContent, Button } from '@gateflow/ui';
+import { useLocale } from '../../../components/providers/LocaleProvider';
+import { translations } from '../../../lib/translations';
 import {
   Terminal,
   Layers,
@@ -76,40 +78,47 @@ const packages = [
 ];
 
 export default function PackagesPage() {
+  const { locale, isRTL } = useLocale();
+  const t = translations[locale as keyof typeof translations].pages.packages;
+
   return (
     <div className="flex flex-col gap-12">
       <PageHeader
-        title="Packages"
-        subtitle="The authoritative catalog of the @gateflow monorepo libraries. Managed via Turborepo and Changesets."
+        title={t.title}
+        subtitle={t.subtitle}
         breadcrumbs={[
-          { label: 'Documentation', href: '/' },
-          { label: 'Packages' },
+          { label: isRTL ? 'التوثيق' : 'Documentation', href: '/' },
+          { label: t.title },
         ]}
       />
 
       <section className="flex flex-col gap-6">
-        <div className="rounded-3xl border border-[var(--ds-border-subtle)] bg-white overflow-hidden shadow-sm">
+        <div className="rounded-3xl border border-[var(--ds-border-subtle)] bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] overflow-hidden shadow-sm backdrop-blur-sm">
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs border-collapse">
+            <table
+              className="w-full text-left text-xs border-collapse"
+              dir={isRTL ? 'rtl' : 'ltr'}
+            >
               <thead>
                 <tr className="border-b border-[var(--ds-border-subtle)] bg-[var(--ds-background-neutral-subtle)]">
-                  <th className="px-6 py-4 font-black uppercase tracking-tight text-[var(--ds-text-subtle)]">
-                    Package
+                  <th className="px-6 py-4 font-black uppercase tracking-tight text-[var(--ds-text-subtle)] text-start">
+                    {t.table.package}
                   </th>
-                  <th className="px-6 py-4 font-black uppercase tracking-tight text-[var(--ds-text-subtle)]">
-                    Purpose
+                  <th className="px-6 py-4 font-black uppercase tracking-tight text-[var(--ds-text-subtle)] text-start">
+                    {t.table.purpose}
                   </th>
-                  <th className="px-6 py-4 font-black uppercase tracking-tight text-[var(--ds-text-subtle)]">
-                    npm
+                  <th className="px-6 py-4 font-black uppercase tracking-tight text-[var(--ds-text-subtle)] text-start">
+                    {t.table.npm}
                   </th>
-                  <th className="px-6 py-4 font-black uppercase tracking-tight text-[var(--ds-text-subtle)]">
-                    Internal Deps
+                  <th className="px-6 py-4 font-black uppercase tracking-tight text-[var(--ds-text-subtle)] text-start">
+                    {t.table.deps}
                   </th>
-                  <th className="px-6 py-4 font-black uppercase tracking-tight text-[var(--ds-text-subtle)]">
-                    Status
+                  <th className="px-6 py-4 font-black uppercase tracking-tight text-[var(--ds-text-subtle)] text-start">
+                    {t.table.status}
                   </th>
                 </tr>
               </thead>
+
               <tbody>
                 {packages.map((pkg) => (
                   <tr
@@ -167,7 +176,7 @@ export default function PackagesPage() {
             .map((pkg) => (
               <Card
                 key={pkg.name}
-                className="rounded-3xl border-[var(--ds-border-subtle)] bg-[var(--ds-background-neutral-subtle)] hover:bg-white hover:shadow-xl transition-all h-full"
+                className="rounded-3xl border-[var(--ds-border-subtle)] bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] hover:shadow-2xl hover:scale-[1.02] transition-all h-full backdrop-blur-sm"
               >
                 <CardContent className="p-6 flex flex-col justify-between h-full">
                   <div className="flex flex-col gap-4">
@@ -236,7 +245,7 @@ export default function PackagesPage() {
         <div className="relative z-10">
           <Button
             size="lg"
-            className="rounded-2xl h-14 px-8 bg-white text-[var(--ds-background-brand-bold)] font-black uppercase tracking-tight hover:bg-white/90 shadow-2xl gap-3"
+            className="rounded-2xl h-14 px-8 bg-white text-[var(--ds-background-brand-bold)] dark:bg-[var(--ds-text)] dark:text-[oklch(12%_0.012_250)] font-black uppercase tracking-tight hover:bg-white/90 shadow-2xl gap-3"
           >
             <Download size={20} /> Deploy All Packages
           </Button>

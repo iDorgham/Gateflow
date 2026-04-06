@@ -106,9 +106,21 @@ const statusSwatches = [
   },
   { name: 'Danger', var: '--gf-color-danger', label: 'Default' },
   { name: 'Danger Bold', var: '--gf-color-danger-bold', label: 'Text / icon' },
-  { name: 'Info Subtle', var: '--gf-color-info-subtle', label: 'Background' },
   { name: 'Info', var: '--gf-color-info', label: 'Default' },
   { name: 'Info Bold', var: '--gf-color-info-bold', label: 'Text / icon' },
+];
+
+const analyticSwatches = [
+  { name: 'Chart 1', var: '--gf-color-chart-1', label: 'Primary (Kimchi)' },
+  { name: 'Chart 2', var: '--gf-color-chart-2', label: 'Secondary (Blue)' },
+  { name: 'Chart 3', var: '--gf-color-chart-3', label: 'Emerald' },
+  { name: 'Chart 4', var: '--gf-color-chart-4', label: 'Amber' },
+  { name: 'Chart 5', var: '--gf-color-chart-5', label: 'Plum' },
+];
+
+const aiSwatches = [
+  { name: 'AI Surface', var: '--gf-color-ai-surface', label: 'Glow canvas' },
+  { name: 'AI Accent', var: '--gf-color-ai-accent', label: 'Orchid' },
 ];
 
 export default function ColorFoundationsPage() {
@@ -176,6 +188,20 @@ export default function ColorFoundationsPage() {
         description="Success, Warning, Danger, and Info each have three levels: subtle (background), default (icon/badge), and bold (text on light bg)."
       >
         <SwatchGrid swatches={statusSwatches} />
+      </SwatchSection>
+
+      <SwatchSection
+        title="Predictive & AI (Virtual Lab)"
+        description="Specialized orchid and violet tones for Artificial Intelligence features. AI Surface uses a unique glow palette."
+      >
+        <SwatchGrid swatches={aiSwatches} bordered />
+      </SwatchSection>
+
+      <SwatchSection
+        title="Analytics & Data Viz"
+        description="A curated 5-color palette for charts, trends, and performance metrics, optimized for both light and dark backgrounds."
+      >
+        <SwatchGrid swatches={analyticSwatches} />
       </SwatchSection>
 
       <section className="rounded-3xl border border-[var(--gf-color-info-subtle)] bg-[var(--gf-color-info-subtle)] p-8">

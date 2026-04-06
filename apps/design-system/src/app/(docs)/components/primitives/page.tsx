@@ -2,6 +2,8 @@
 
 import * as React from 'react';
 import { PageHeader } from '@gateflow/components';
+import { useLocale } from '../../../../components/providers/LocaleProvider';
+import { translations } from '../../../../lib/translations';
 import {
   Button,
   Input,
@@ -32,15 +34,21 @@ import { GalleryItem } from '../../../../components/gallery/GalleryItem';
 import { Mail, Settings, Search, Plus, CheckCircle2 } from 'lucide-react';
 
 export default function PrimitivesPage() {
+  const { locale, isRTL } = useLocale();
+  const t = translations[locale as keyof typeof translations].pages.components;
+
   return (
     <div className="flex flex-col gap-12">
       <PageHeader
-        title="Primitives"
-        subtitle="Foundational UI elements from @gateflow/ui. These form the atomic layer of our design system."
+        title={isRTL ? 'العناصر الأساسية' : 'Primitives'}
+        subtitle={
+          isRTL ? 'عناصر واجهة المستخدم الأساسية من @gateflow/ui.' : t.subtitle
+        }
+        packageName="@gateflow/ui"
         breadcrumbs={[
-          { label: 'Documentation', href: '/' },
-          { label: 'Components', href: '/components' },
-          { label: 'Primitives' },
+          { label: isRTL ? 'التوثيق' : 'Documentation', href: '/' },
+          { label: isRTL ? 'المكونات' : 'Components', href: '/components' },
+          { label: isRTL ? 'العناصر الأساسية' : 'Primitives' },
         ]}
       />
 
@@ -139,7 +147,7 @@ export default function Demo() {
           <div className="w-full max-w-sm flex flex-col gap-4">
             <Input
               placeholder="Enter your email"
-              className="rounded-xl border-[var(--ds-border-subtle)] bg-white h-11"
+              className="rounded-xl border-[var(--ds-border-subtle)] bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] h-11"
             />
             <div className="relative group">
               <Search
@@ -148,7 +156,7 @@ export default function Demo() {
               />
               <Input
                 placeholder="Search records..."
-                className="pl-10 rounded-xl border-[var(--ds-border-subtle)] bg-white h-11"
+                className="pl-10 rounded-xl border-[var(--ds-border-subtle)] bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] h-11"
               />
             </div>
             <Input
@@ -235,7 +243,7 @@ export default function Demo() {
   );
 }`}
         >
-          <Card className="w-[350px] rounded-3xl border-[var(--ds-border-subtle)] bg-white shadow-xl overflow-hidden">
+          <Card className="w-[350px] rounded-3xl border-[var(--ds-border-subtle)] bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] shadow-xl overflow-hidden backdrop-blur-sm">
             <CardHeader className="pb-4">
               <div className="flex items-center gap-3 mb-2">
                 <div className="h-8 w-8 rounded-lg bg-[var(--ds-background-brand-bold)] flex items-center justify-center text-white">
@@ -310,17 +318,17 @@ export default function Demo() {
               </AvatarFallback>
             </Avatar>
             <div className="flex -space-x-3">
-              <Avatar className="h-8 w-8 border-2 border-white ring-2 ring-white">
+              <Avatar className="h-8 w-8 border-2 border-white dark:border-[oklch(12%_0.012_250)] ring-2 ring-white dark:ring-[oklch(12%_0.012_250)]">
                 <AvatarFallback className="text-[10px] font-bold bg-blue-500 text-white">
                   A
                 </AvatarFallback>
               </Avatar>
-              <Avatar className="h-8 w-8 border-2 border-white ring-2 ring-white">
+              <Avatar className="h-8 w-8 border-2 border-white dark:border-[oklch(12%_0.012_250)] ring-2 ring-white dark:ring-[oklch(12%_0.012_250)]">
                 <AvatarFallback className="text-[10px] font-bold bg-indigo-500 text-white">
                   B
                 </AvatarFallback>
               </Avatar>
-              <Avatar className="h-8 w-8 border-2 border-white ring-2 ring-white">
+              <Avatar className="h-8 w-8 border-2 border-white dark:border-[oklch(12%_0.012_250)] ring-2 ring-white dark:ring-[oklch(12%_0.012_250)]">
                 <AvatarFallback className="text-[10px] font-bold bg-purple-500 text-white">
                   +5
                 </AvatarFallback>
@@ -356,24 +364,24 @@ export default function Demo() {
             <TabsList className="grid w-full grid-cols-3 bg-[var(--ds-background-neutral-subtle)] p-1 rounded-xl h-11 border border-[var(--ds-border-subtle)]">
               <TabsTrigger
                 value="overview"
-                className="rounded-lg text-[10px] font-black uppercase tracking-tight data-[state=active]:bg-white data-[state=active]:shadow-sm"
+                className="rounded-lg text-[10px] font-black uppercase tracking-tight data-[state=active]:bg-[var(--ds-surface-raised)] dark:data-[state=active]:bg-white/10 data-[state=active]:shadow-sm"
               >
                 Overview
               </TabsTrigger>
               <TabsTrigger
                 value="analytics"
-                className="rounded-lg text-[10px] font-black uppercase tracking-tight data-[state=active]:bg-white data-[state=active]:shadow-sm"
+                className="rounded-lg text-[10px] font-black uppercase tracking-tight data-[state=active]:bg-[var(--ds-surface-raised)] dark:data-[state=active]:bg-white/10 data-[state=active]:shadow-sm"
               >
                 Analytics
               </TabsTrigger>
               <TabsTrigger
                 value="security"
-                className="rounded-lg text-[10px] font-black uppercase tracking-tight data-[state=active]:bg-white data-[state=active]:shadow-sm"
+                className="rounded-lg text-[10px] font-black uppercase tracking-tight data-[state=active]:bg-[var(--ds-surface-raised)] dark:data-[state=active]:bg-white/10 data-[state=active]:shadow-sm"
               >
                 Security
               </TabsTrigger>
             </TabsList>
-            <div className="mt-4 p-6 rounded-2xl bg-white border border-[var(--ds-border-subtle)] min-h-[100px] flex items-center justify-center text-center">
+            <div className="mt-4 p-6 rounded-2xl bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] border border-[var(--ds-border-subtle)] min-h-[100px] flex items-center justify-center text-center backdrop-blur-sm">
               <TabsContent value="overview">
                 <div className="flex flex-col gap-1 items-center">
                   <span className="text-xs font-bold text-[var(--ds-text)]">
@@ -434,7 +442,7 @@ export default function Demo() {
               Region
             </Label>
             <Select defaultValue="middle-east">
-              <SelectTrigger className="w-full rounded-xl border-[var(--ds-border-subtle)] h-11 bg-white focus:ring-[var(--ds-border-brand)]">
+              <SelectTrigger className="w-full rounded-xl border-[var(--ds-border-subtle)] h-11 bg-[var(--ds-surface-raised)] focus:ring-[var(--ds-border-brand)] dark:bg-[rgba(255,255,255,0.05)]">
                 <SelectValue placeholder="Select Region" />
               </SelectTrigger>
               <SelectContent className="rounded-xl border-[var(--ds-border-subtle)] shadow-xl p-1">
@@ -485,7 +493,7 @@ export default function Demo() {
   );
 }`}
         >
-          <div className="flex flex-col gap-6 p-6 bg-white border border-[var(--ds-border-subtle)] rounded-3xl w-full max-w-sm shadow-sm">
+          <div className="flex flex-col gap-6 p-6 bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] border border-[var(--ds-border-subtle)] rounded-3xl w-full max-w-sm shadow-sm backdrop-blur-sm">
             <div className="flex items-center gap-4">
               <Skeleton className="h-14 w-14 rounded-2xl bg-[var(--ds-background-neutral-subtle)]" />
               <div className="flex flex-col gap-2 flex-1">
@@ -518,7 +526,7 @@ export default function Demo() {
   );
 }`}
         >
-          <div className="flex flex-col gap-4 p-6 bg-white border border-[var(--ds-border-subtle)] rounded-3xl w-full max-w-xs shadow-sm">
+          <div className="flex flex-col gap-4 p-6 bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] border border-[var(--ds-border-subtle)] rounded-3xl w-full max-w-xs shadow-sm backdrop-blur-sm">
             <div className="flex items-center justify-between">
               <div className="flex flex-col">
                 <span className="text-xs font-bold text-[var(--ds-text)]">

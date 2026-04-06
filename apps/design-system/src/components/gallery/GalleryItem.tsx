@@ -11,6 +11,7 @@ import {
   useToast,
   Badge,
 } from '@gateflow/ui';
+import { motion } from 'framer-motion';
 
 interface Property {
   name: string;
@@ -50,23 +51,29 @@ export function GalleryItem({
   };
 
   return (
-    <div
-      className="flex flex-col gap-4 mb-20 group/item scroll-mt-20"
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-100px' }}
+      className="flex flex-col gap-6 mb-24 group/item scroll-mt-24"
       id={title.toLowerCase().replace(/\s+/g, '-')}
     >
       <div className="flex flex-col gap-1">
         <div className="flex items-center justify-between gap-4">
-          <h2 className="text-xl font-black uppercase tracking-tight text-[var(--ds-text)] group-hover/item:text-[var(--ds-text-brand)] transition-colors">
+          <h2 className="text-2xl font-black uppercase tracking-tighter text-[var(--ds-text)] group-hover/item:text-[var(--ds-text-brand)] transition-all duration-500">
             {title}
           </h2>
-          <Badge
-            variant="outline"
-            className="text-[10px] uppercase font-black px-2 py-0 h-5 border-[var(--ds-border-subtle)] text-[var(--ds-text-subtlest)]"
-          >
-            {packageName}
-          </Badge>
+          <div className="flex items-center gap-2">
+            <Badge
+              variant="outline"
+              className="text-[10px] uppercase font-black px-2 py-0 h-5 border-[var(--ds-border-subtle)] text-[var(--ds-text-subtlest)] bg-[var(--ds-background-neutral-subtle)]"
+            >
+              {packageName.split('/').pop()}
+            </Badge>
+            <div className="h-1.5 w-8 rounded-full bg-gradient-to-r from-[var(--ds-background-brand-bold)] to-blue-500 opacity-50 group-hover/item:opacity-100 group-hover/item:w-12 transition-all duration-500" />
+          </div>
         </div>
-        <p className="text-sm text-[var(--ds-text-subtle)] leading-relaxed max-w-2xl">
+        <p className="text-base text-[var(--ds-text-subtle)] leading-relaxed max-w-2xl font-medium opacity-80 group-hover/item:opacity-100 transition-opacity">
           {description}
         </p>
       </div>
@@ -107,19 +114,25 @@ export function GalleryItem({
           value="preview"
           className="mt-0 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         >
-          <div className="min-h-[300px] flex items-center justify-center p-8 rounded-3xl border border-[var(--ds-border-subtle)] bg-[var(--ds-background-neutral-subtle)] relative overflow-hidden group/canvas">
-            {/* Grid background logic could go here */}
+          <div className="min-h-[400px] flex items-center justify-center p-12 rounded-[2.5rem] border border-[var(--ds-border-subtle)] bg-[var(--ds-background-neutral-subtle)] dark:bg-[var(--ds-surface-glass)] relative overflow-hidden group/canvas shadow-inner">
+            {/* Design Grid & Patterns */}
             <div
-              className="absolute inset-0 opacity-[0.03] pointer-events-none"
+              className="absolute inset-0 opacity-[0.03] dark:opacity-[0.07] pointer-events-none transition-transform duration-700 group-hover/canvas:scale-110"
               style={{
-                backgroundImage:
-                  'radial-gradient(var(--ds-border-brand) 1px, transparent 1px)',
+                backgroundImage: 'var(--gf-pattern-sentinel)',
                 backgroundSize: '24px 24px',
               }}
             ></div>
-            <div className="relative z-10 w-full flex items-center justify-center">
+
+            {/* Interactive Glow */}
+            <div className="absolute -bottom-24 -right-24 h-64 w-64 bg-[var(--ds-background-brand-bold)]/5 rounded-full blur-[80px] pointer-events-none group-hover/canvas:bg-[var(--ds-background-brand-bold)]/10 transition-all duration-1000" />
+
+            <motion.div
+              layout
+              className="relative z-10 w-full flex items-center justify-center"
+            >
               {children}
-            </div>
+            </motion.div>
           </div>
         </TabsContent>
 
@@ -183,6 +196,6 @@ export function GalleryItem({
           </table>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }

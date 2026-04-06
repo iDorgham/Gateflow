@@ -2,6 +2,8 @@
 
 import * as React from 'react';
 import { PageHeader, EntityCard, FilterBar } from '@gateflow/components';
+import { useLocale } from '../../../../components/providers/LocaleProvider';
+import { translations } from '../../../../lib/translations';
 import {
   Button,
   Badge,
@@ -26,15 +28,21 @@ import {
 } from 'lucide-react';
 
 export default function PatternsPage() {
+  const { locale, isRTL } = useLocale();
+  const t = translations[locale as keyof typeof translations].pages.components;
+
   return (
     <div className="flex flex-col gap-12">
       <PageHeader
-        title="Patterns"
-        subtitle="High-level compositions from @gateflow/components. Used to build consistent product interfaces efficiently."
+        title={isRTL ? 'الأنماط' : 'Patterns'}
+        subtitle={
+          isRTL ? 'تركيبات عالية المستوى من @gateflow/components.' : t.subtitle
+        }
+        packageName="@gateflow/components"
         breadcrumbs={[
-          { label: 'Documentation', href: '/' },
-          { label: 'Components', href: '/components' },
-          { label: 'Patterns' },
+          { label: isRTL ? 'التوثيق' : 'Documentation', href: '/' },
+          { label: isRTL ? 'المكونات' : 'Components', href: '/components' },
+          { label: isRTL ? 'الأنماط' : 'Patterns' },
         ]}
       />
 
@@ -68,7 +76,7 @@ export default function Demo() {
   );
 }`}
         >
-          <div className="w-full bg-white border border-[var(--ds-border-subtle)] rounded-3xl p-8 shadow-sm">
+          <div className="w-full bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] border border-[var(--ds-border-subtle)] rounded-3xl p-8 shadow-sm backdrop-blur-sm">
             <PageHeader
               title="Compound Management"
               subtitle="Configure gate policies, resident permits, and security patrol shifts."
@@ -137,7 +145,7 @@ export default function Demo() {
                 { label: 'Gates', value: '3' },
                 { label: 'Priority', value: 'High' },
               ]}
-              className="rounded-3xl border-[var(--ds-border-subtle)] bg-white shadow-lg p-6"
+              className="rounded-3xl border-[var(--ds-border-subtle)] bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] shadow-lg p-6 backdrop-blur-sm"
             />
             <EntityCard
               title="Ahmadi Residential"
@@ -155,7 +163,7 @@ export default function Demo() {
                 { label: 'Uptime', value: '98%' },
                 { label: 'Health', value: '76/100' },
               ]}
-              className="rounded-3xl border-[var(--ds-border-subtle)] bg-white shadow-lg p-6 border-l-4 border-l-amber-500"
+              className="rounded-3xl border-[var(--ds-border-subtle)] border-l-4 border-l-amber-500 bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] shadow-lg p-6 backdrop-blur-sm"
             />
           </div>
         </GalleryItem>
@@ -179,7 +187,7 @@ export default function Demo() {
   );
 }`}
         >
-          <div className="w-full bg-white border border-[var(--ds-border-subtle)] rounded-3xl p-6 shadow-sm flex flex-col gap-6">
+          <div className="w-full bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] border border-[var(--ds-border-subtle)] rounded-3xl p-6 shadow-sm flex flex-col gap-6 backdrop-blur-sm">
             <FilterBar
               placeholder="Search residents..."
               filters={
@@ -231,7 +239,7 @@ export default function Demo() {
 }`}
         >
           <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-4">
-            <Card className="rounded-3xl p-6 border-[var(--ds-border-subtle)] bg-white shadow-sm hover:shadow-lg transition-shadow">
+            <Card className="rounded-3xl p-6 border-[var(--ds-border-subtle)] bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] shadow-sm hover:shadow-lg transition-shadow backdrop-blur-sm">
               <div className="flex justify-between items-start mb-4">
                 <div className="h-10 w-10 rounded-xl bg-green-500/10 flex items-center justify-center text-green-500">
                   <Activity size={20} />
@@ -249,7 +257,7 @@ export default function Demo() {
                 </span>
               </div>
             </Card>
-            <Card className="rounded-3xl p-6 border-[var(--ds-border-subtle)] bg-white shadow-sm hover:shadow-lg transition-shadow">
+            <Card className="rounded-3xl p-6 border-[var(--ds-border-subtle)] bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] shadow-sm hover:shadow-lg transition-shadow backdrop-blur-sm">
               <div className="flex justify-between items-start mb-4">
                 <div className="h-10 w-10 rounded-xl bg-blue-500/10 flex items-center justify-center text-blue-500">
                   <UserCheck size={20} />
@@ -267,7 +275,7 @@ export default function Demo() {
                 </span>
               </div>
             </Card>
-            <Card className="rounded-3xl p-6 border-[var(--ds-border-subtle)] border-l-4 border-l-red-500 bg-white shadow-sm hover:shadow-lg transition-shadow">
+            <Card className="rounded-3xl p-6 border-[var(--ds-border-subtle)] border-l-4 border-l-red-500 bg-[var(--ds-surface-raised)] dark:bg-[var(--ds-surface-glass)] shadow-sm hover:shadow-lg transition-shadow backdrop-blur-sm">
               <div className="flex justify-between items-start mb-4">
                 <div className="h-10 w-10 rounded-xl bg-red-500/10 flex items-center justify-center text-red-500">
                   <ShieldCheck size={20} />

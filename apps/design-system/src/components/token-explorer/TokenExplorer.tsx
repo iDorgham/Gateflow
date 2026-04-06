@@ -157,7 +157,7 @@ export function TokenExplorer() {
               <TabsTrigger
                 key={group.name}
                 value={group.name}
-                className="rounded-lg px-4 text-xs font-black uppercase tracking-tight data-[state=active]:bg-white data-[state=active]:text-[var(--ds-text-selected)] data-[state=active]:shadow-sm"
+                className="rounded-lg px-4 text-xs font-black uppercase tracking-tight data-[state=active]:bg-[var(--ds-surface-raised)] data-[state=active]:text-[var(--ds-text-selected)] data-[state=active]:shadow-sm"
               >
                 {group.name}
               </TabsTrigger>
@@ -186,7 +186,7 @@ export function TokenExplorer() {
             className="border-[var(--ds-border-subtle)] bg-[var(--ds-background-neutral-subtle)] hover:border-[var(--ds-border-brand)] transition-all group overflow-hidden"
           >
             <CardContent className="p-0 flex items-stretch h-32">
-              <div className="w-32 shrink-0 border-r border-[var(--ds-border-subtle)] flex items-center justify-center bg-white dark:bg-[#09090b] relative overflow-hidden">
+              <div className="w-32 shrink-0 border-r border-[var(--ds-border-subtle)] flex items-center justify-center bg-[var(--ds-surface-raised)] dark:bg-[oklch(12%_0.012_250)] relative overflow-hidden">
                 {/* Light/Dark side-by-side preview */}
                 <div className="absolute inset-0 flex">
                   <div className="flex-1 bg-white flex items-center justify-center">
@@ -207,7 +207,7 @@ export function TokenExplorer() {
                       {token.name.includes('text') ? 'Aa' : ''}
                     </div>
                   </div>
-                  <div className="flex-1 bg-[#09090b] flex items-center justify-center border-l border-[var(--ds-border-subtle)]">
+                  <div className="flex-1 bg-[oklch(12%_0.012_250)] flex items-center justify-center border-l border-[var(--ds-border-subtle)]">
                     <div
                       className={cn(
                         'h-12 w-12 rounded-xl border border-[var(--ds-border-subtle)] shadow-sm',

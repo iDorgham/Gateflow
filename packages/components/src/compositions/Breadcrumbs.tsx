@@ -35,10 +35,10 @@ export function Breadcrumbs({
           <li className="flex items-center">
             <Link
               href={homeHref}
-              className="text-[var(--ds-text-subtle)] hover:text-[var(--ds-text)] transition-colors p-1"
+              className="flex items-center gap-1.5 text-[var(--ds-text-subtle)] hover:text-[var(--ds-text)] transition-colors p-1"
             >
-              <Home size={16} />
-              <span className="sr-only">Home</span>
+              <Home size={14} />
+              <span className="font-medium">Home</span>
             </Link>
           </li>
         )}
@@ -48,7 +48,7 @@ export function Breadcrumbs({
 
           return (
             <React.Fragment key={item.label}>
-              <li className="flex items-center text-[var(--ds-border-bold)]">
+              <li className="flex items-center text-[var(--ds-border-bold)] rtl:rotate-180">
                 <ChevronRight size={14} />
               </li>
               <li className="flex items-center">

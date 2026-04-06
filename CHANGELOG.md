@@ -20,6 +20,17 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Tokens]** remove unused @ts-expect-error in client-dashboard tailwind config
+- **[Tokens]** remove unused @ts-expect-error in resident-portal tailwind config
+- **[Tokens]** token system v2 — Kimchi palette, dark mode fix, unified architecture
+- **[Ci]** run vercel commands from repo root for design-system deploy
+- **[Ci]** add skip_migration input to unblock deploys during stuck migration
+- **[Ui]** add ToastProvider to design-system layout
+- **[Components]** import cn from @gateflow/ui/utils in all compositions
+- **[Ui]** inject 'use client' via postbuild to preserve server-safe utils entry
+- **[Ui]** isolate cn utility to @gateflow/ui/utils for server component safety
+- **[Ui]** remove global 'use client' banner to allow universal utility usage
+
 - **[Ops]** remove invalid vercel property and fix turbo filters
 
 - **[Vercel]** implement ignore-build script to skip dependabot builds
