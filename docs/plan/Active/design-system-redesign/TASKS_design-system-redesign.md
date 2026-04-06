@@ -1,15 +1,15 @@
 # Tasks — design-system-redesign
 
-## 🚀 Status: 🆕 Ready
+## 🚀 Status: 🔵 In-Progress
 
 ---
 
 ### [Phase 1: Foundation Token Overhaul]
 
-- [/] Implement primitive OKLCH ramps (Neutrals, Kimchi, Cobalt, Emerald)
-- [/] Establish the full `--ds-*` semantic level in `packages/tokens`
-- [/] Map Tailwind v4 styles and CSS logical properties to the system
-- [ ] Update documentation package structure for Tailwind v4
+- [x] Implement primitive OKLCH ramps (Neutrals, Kimchi, Cobalt, Emerald)
+- [x] Establish the full `--ds-*` semantic level in `packages/tokens`
+- [x] Map Tailwind v4 styles and CSS logical properties to the system
+- [x] Update documentation package structure for Tailwind v4
 
 ### [Phase 2: Core Foundation Pages (1-6)]
 

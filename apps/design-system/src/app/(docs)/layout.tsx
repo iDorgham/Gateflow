@@ -33,15 +33,20 @@ import {
 } from '@gateflow/ui';
 import { useGateFlowColorMode } from '@gateflow/theme';
 
-const sidebarItems = (t: Record<string, any>) => [
+const sidebarItems = (t: Record<string, string>) => [
   {
     label: t.foundations,
     href: '/foundations',
     icon: Library,
     subItems: [
       { label: t.foundations, href: '/foundations' },
+      { label: t.color, href: '/foundations/color' },
+      { label: t.typography, href: '/foundations/typography' },
+      { label: t.iconography, href: '/foundations/iconography' },
+      { label: t.spacing, href: '/foundations/spacing' },
+      { label: t.layering, href: '/foundations/layering' },
+      { label: t.motion, href: '/foundations/motion' },
       { label: t.tokenMaster, href: '/foundations/tokens-system' },
-      { label: t.tokens, href: '/foundations/color' },
     ],
   },
   { label: t.tokens, href: '/tokens', icon: Palette },

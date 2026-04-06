@@ -12,6 +12,12 @@ export const translations = {
       guidelines: 'Guidelines',
       changelog: 'Changelog',
       tokenMaster: 'Token Master Guide',
+      color: 'Colors',
+      typography: 'Typography',
+      iconography: 'Iconography',
+      spacing: 'Spacing',
+      layering: 'Layering & Depth',
+      motion: 'Motion',
     },
 
     header: {
@@ -75,6 +81,12 @@ export const translations = {
       guidelines: 'الإرشادات',
       changelog: 'سجل التغييرات',
       tokenMaster: 'دليل نظام الرموز الشامل',
+      color: 'الألوان',
+      typography: 'الخطوط',
+      iconography: 'الأيقونات',
+      spacing: 'المساحات',
+      layering: 'الطبقات والعمق',
+      motion: 'الحركة',
     },
 
     header: {
