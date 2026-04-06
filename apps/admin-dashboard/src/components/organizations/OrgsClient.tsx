@@ -10,8 +10,8 @@ import {
   DynamicTable,
   Column,
   NativeSelect,
-  PageHeader,
 } from '@gateflow/ui';
+import { PageHeader } from '@gateflow/components';
 import {
   Building2,
   Search,

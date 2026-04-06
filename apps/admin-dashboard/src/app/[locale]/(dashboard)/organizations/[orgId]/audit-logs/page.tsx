@@ -11,14 +11,8 @@ import {
   History,
   FileText,
 } from 'lucide-react';
-import {
-  Badge,
-  Button,
-  Input,
-  Pagination,
-  NativeSelect,
-  PageHeader,
-} from '@gateflow/ui';
+import { Badge, Button, Input, Pagination, NativeSelect } from '@gateflow/ui';
+import { PageHeader } from '@gateflow/components';
 import Link from 'next/link';
 import { AuditLogsTable } from '@/components/monitoring/AuditLogsTable';
 

@@ -20,8 +20,8 @@ import {
   CardTitle,
   Badge,
   cn,
-  PageHeader,
 } from '@gateflow/ui';
+import { PageHeader } from '@gateflow/components';
 import { ScanTrendChart } from '@/components/analytics/ScanTrendChart';
 import { OrgGrowthChart } from '@/components/analytics/OrgGrowthChart';
 import { PlanDistributionChart } from '@/components/analytics/PlanDistributionChart';

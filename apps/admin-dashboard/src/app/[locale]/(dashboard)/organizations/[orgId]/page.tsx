@@ -20,8 +20,8 @@ import {
   Badge,
   cn,
 } from '@gateflow/ui';
+import { PageHeader } from '@gateflow/components';
 import Link from 'next/link';
-import { PageHeader } from '@gateflow/ui';
 import { DashboardRecentOrgsTable } from './DashboardRecentOrgsTable';
 
 export const metadata = { title: 'Operational Overview' };

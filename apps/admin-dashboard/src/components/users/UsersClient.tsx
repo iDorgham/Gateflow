@@ -10,8 +10,8 @@ import {
   Column,
   NativeSelect,
   Input,
-  PageHeader,
 } from '@gateflow/ui';
+import { PageHeader } from '@gateflow/components';
 import {
   Users,
   Search,

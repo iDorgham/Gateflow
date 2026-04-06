@@ -5,8 +5,8 @@ import { Locale } from '@/lib/i18n/i18n-config';
 import { prisma } from '@gate-access/db';
 import { Search, Building2, Shield, History } from 'lucide-react';
 import { Button, Input, Badge, NativeSelect } from '@gateflow/ui';
+import { PageHeader } from '@gateflow/components';
 import Link from 'next/link';
-import { PageHeader } from '@gateflow/ui';
 import { GlobalScansTable } from '@/components/monitoring/GlobalScansTable';
 
 export const metadata = { title: 'Security Audit Logs' };

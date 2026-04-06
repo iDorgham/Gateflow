@@ -135,6 +135,9 @@ importers:
       '@gate-access/types':
         specifier: ^0.1.0
         version: link:../../packages/types
+      '@gateflow/components':
+        specifier: workspace:^
+        version: link:../../packages/components
       '@gateflow/ui':
         specifier: workspace:^
         version: link:../../packages/ui

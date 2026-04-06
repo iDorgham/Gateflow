@@ -15,8 +15,8 @@ import {
   Input,
   Label,
   cn,
-  PageHeader,
 } from '@gateflow/ui';
+import { PageHeader } from '@gateflow/components';
 import { AdminsTable } from './AdminsTable';
 
 export const metadata = { title: 'Platform Authority' };

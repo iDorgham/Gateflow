@@ -2,14 +2,8 @@
 
 import * as React from 'react';
 import { useState, useMemo } from 'react';
-import {
-  PageHeader,
-  Badge,
-  Button,
-  DynamicTable,
-  Column,
-  cn,
-} from '@gateflow/ui';
+import { Badge, Button, DynamicTable, Column, cn } from '@gateflow/ui';
+import { PageHeader } from '@gateflow/components';
 import {
   Plus,
   FolderOpen,
