@@ -45,7 +45,7 @@
     "@types/crypto-js": "^4.2.2",
     "@gate-access/config": "workspace:*",
     "@types/faker": "^5.5.3",
-    "@types/node": "^20.19.33",
+    "@types/node": "^25.5.2",
     "@types/pg": "^8.18.0",
     "faker": "^5.5.3",
     "prisma": "^5.22.0",

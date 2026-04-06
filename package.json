@@ -77,7 +77,7 @@
     "@turbo/gen": "^1.13.4",
     "@types/faker": "5.5.3",
     "@types/jest": "^30.0.0",
-    "@types/node": "^20.19.33",
+    "@types/node": "^25.5.2",
     "ai": "6.0.138",
     "autoprefixer": "^10.4.24",
     "eslint": "8.57.1",
