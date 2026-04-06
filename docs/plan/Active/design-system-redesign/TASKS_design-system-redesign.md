@@ -13,12 +13,12 @@
 
 ### [Phase 2: Core Foundation Pages (1-6)]
 
-- [ ] Create `apps/design-system/src/app/colors/page.tsx` (Profiles Toggle)
-- [ ] Create `apps/design-system/src/app/typography/page.tsx` (Fluid scale)
-- [ ] Create `apps/design-system/src/app/iconography/page.tsx` (Sentinel Glow)
-- [ ] Create `apps/design-system/src/app/spacing/page.tsx` (Grid Lab)
-- [ ] Create `apps/design-system/src/app/layering/page.tsx` (Z-Index Map)
-- [ ] Create `apps/design-system/src/app/motion/page.tsx` (Easing visualizer)
+- [x] Create `apps/design-system/src/app/colors/page.tsx` (Profiles Toggle)
+- [x] Create `apps/design-system/src/app/typography/page.tsx` (Fluid scale)
+- [x] Create `apps/design-system/src/app/iconography/page.tsx` (Sentinel Glow)
+- [x] Create `apps/design-system/src/app/spacing/page.tsx` (Grid Lab)
+- [x] Create `apps/design-system/src/app/layering/page.tsx` (Z-Index Map)
+- [x] Create `apps/design-system/src/app/motion/page.tsx` (Easing visualizer)
 
 ### [Phase 3: Pattern Documentation (7-12)]
 

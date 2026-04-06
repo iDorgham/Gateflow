@@ -115,11 +115,11 @@
 **IDEA:** `docs/development/initiatives/IDEA_design_system_redesign.md`  
 **PLAN:** `docs/plan/Active/design-system-redesign/`  
 `PLAN_design-system-redesign.md`  
-**Status:** 🔵 In-Progress (Phase 2)  
+**Status:** 🔵 In-Progress (Phase 3)  
 **Target:** Q2 2026
 
 - [x] Phase 1 — Foundation Token Overhaul (Colors, Typography, Icons, Spacing, Grid)
-- [ ] Phase 2 — Core Foundation Pages (1-6) (Colors to Motion)
+- [x] Phase 2 — Core Foundation Pages (1-6) (Colors to Motion)
 - [ ] Phase 3 — Pattern Documentation (7-12) (AI to Date Pickers)
 - [ ] Phase 4 — Monorepo Enforcement & Migration (enforce-ads-design.js)
 - [ ] Phase 5 — Marketing & Auth Redesign (High-flair premium gateway)
