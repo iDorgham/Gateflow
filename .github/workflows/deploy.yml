@@ -26,10 +26,6 @@ permissions:
   contents: read
 
 on:
-  push:
-    branches: [main, master]
-  pull_request:
-    branches: [main, master]
   workflow_dispatch:
     inputs:
       app:
@@ -54,12 +50,15 @@ jobs:
   changes:
     name: Detect Changes
     runs-on: ubuntu-latest
-    if: github.actor != 'dependabot[bot]'
+    if: |
+      github.actor != 'dependabot[bot]' &&
+      vars.DEPLOY_DISABLED != 'true'
     outputs:
       client: ${{ steps.filter.outputs.client }}
       admin: ${{ steps.filter.outputs.admin }}
       marketing: ${{ steps.filter.outputs.marketing }}
       resident: ${{ steps.filter.outputs.resident }}
+      design_system: ${{ steps.filter.outputs.design_system }}
       db: ${{ steps.filter.outputs.db }}
     steps:
       - uses: actions/checkout@v4
@@ -84,6 +83,11 @@ jobs:
               - 'pnpm-lock.yaml'
             resident:
               - 'apps/resident-portal/**'
+              - 'packages/**'
+              - 'package.json'
+              - 'pnpm-lock.yaml'
+            design_system:
+              - 'apps/design-system/**'
               - 'packages/**'
               - 'package.json'
               - 'pnpm-lock.yaml'
@@ -117,7 +121,7 @@ jobs:
           ACCELERATE_URL: 'false'
 
       - name: Build all web apps
-        run: pnpm turbo build --filter=client-dashboard --filter=admin-dashboard --filter=marketing --filter=resident-portal
+        run: pnpm turbo build --filter=design-system
         env:
           ACCELERATE_URL: 'false'
           DATABASE_URL: 'postgresql://placeholder:placeholder@localhost:5432/placeholder'
@@ -169,7 +173,8 @@ jobs:
       !failure() &&
       (needs.db-migrate.result == 'success' || needs.db-migrate.result == 'skipped') &&
       (github.event.inputs.app == '' || github.event.inputs.app == 'client-dashboard') &&
-      needs.changes.outputs.client == 'true'
+      needs.changes.outputs.client == 'true' &&
+      false
     environment:
       name: "${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && 'production' || 'preview' }}"
       url: '${{ steps.deploy.outputs.url }}'
@@ -232,7 +237,8 @@ jobs:
       !failure() &&
       (needs.db-migrate.result == 'success' || needs.db-migrate.result == 'skipped') &&
       (github.event.inputs.app == '' || github.event.inputs.app == 'admin-dashboard') &&
-      needs.changes.outputs.admin == 'true'
+      needs.changes.outputs.admin == 'true' &&
+      false
     environment:
       name: "${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && 'production' || 'preview' }}"
       url: '${{ steps.deploy.outputs.url }}'
@@ -295,7 +301,8 @@ jobs:
       !failure() &&
       (needs.db-migrate.result == 'success' || needs.db-migrate.result == 'skipped') &&
       (github.event.inputs.app == '' || github.event.inputs.app == 'marketing') &&
-      needs.changes.outputs.marketing == 'true'
+      needs.changes.outputs.marketing == 'true' &&
+      false
     environment:
       name: "${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && 'production' || 'preview' }}"
       url: '${{ steps.deploy.outputs.url }}'
@@ -358,7 +365,8 @@ jobs:
       !failure() &&
       (needs.db-migrate.result == 'success' || needs.db-migrate.result == 'skipped') &&
       (github.event.inputs.app == '' || github.event.inputs.app == 'resident-portal') &&
-      needs.changes.outputs.resident == 'true'
+      needs.changes.outputs.resident == 'true' &&
+      false
     environment:
       name: "${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && 'production' || 'preview' }}"
       url: '${{ steps.deploy.outputs.url }}'
@@ -409,3 +417,64 @@ jobs:
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_RESIDENT_PORTAL }}
+
+  # ── Deploy: design-system ────────────────────────────────────────────────
+  deploy-design-system:
+    name: Deploy design-system
+    needs: [changes, build-check, db-migrate]
+    runs-on: ubuntu-latest
+    if: |
+      always() &&
+      !cancelled() &&
+      !failure() &&
+      (needs.db-migrate.result == 'success' || needs.db-migrate.result == 'skipped') &&
+      (github.event.inputs.app == '' || github.event.inputs.app == 'design-system') &&
+      needs.changes.outputs.design_system == 'true'
+    environment:
+      name: "${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && 'production' || 'preview' }}"
+      url: '${{ steps.deploy.outputs.url }}'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel@latest
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Pull Vercel environment
+        run: |
+          vercel pull --yes \
+            --environment=${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && 'production' || 'preview' }} \
+            --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: apps/design-system
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_DESIGN_SYSTEM }}
+
+      - name: Build for Vercel
+        run: "vercel build ${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && '--prod' || '' }} --token=${{ secrets.VERCEL_TOKEN }}"
+        working-directory: apps/design-system
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_DESIGN_SYSTEM }}
+
+      - name: Deploy to Vercel
+        id: deploy
+        run: |
+          URL=$(vercel deploy --prebuilt \
+            ${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && '--prod' || '' }} \
+            --token=${{ secrets.VERCEL_TOKEN }})
+          echo "url=$URL" >> $GITHUB_OUTPUT
+          echo "Deployed to: $URL"
+        working-directory: apps/design-system
+        env:
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_DESIGN_SYSTEM }}

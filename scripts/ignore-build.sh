@@ -10,10 +10,10 @@
 #   bash ../../scripts/ignore-build.sh
 # =============================================================================
 
-if [[ "$VERCEL_GIT_COMMIT_AUTHOR_LOGIN" == "dependabot[bot]" ]]; then
-  echo "🛑 Skipping build for Dependabot"
-  exit 0
-else
-  echo "✅ Proceeding with build"
+if [[ "$PWD" == *"apps/design-system"* ]]; then
+  echo "✅ Proceeding with build for Design System"
   exit 1
 fi
+
+echo "🛑 Deployment disabled for all other apps (Global Skip)"
+exit 0
