@@ -54,7 +54,7 @@
 
 **PLAN:** `docs/plan/Ready/admin_dashboard_evolution/`  
 `PLAN_admin_dashboard_evolution.md`  
-**Status:** 🆕 Ready (Phase 1)  
+**Status:** 🆕 Ready (Phase 1) — _Context files being finalized_  
 **Target:** Q2-Q3 2026
 
 - [ ] Phase 1 — Side Menu Reorganization & Organizations Rebuild

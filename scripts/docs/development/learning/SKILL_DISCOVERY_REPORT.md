@@ -1,6 +1,6 @@
 # Skill Discovery Report
 
-**Date:** 2026-04-05T17:09:07.577Z
+**Date:** 2026-04-06T04:59:40.403Z
 
 ## 🎨 Design System Violations (Hardcoded Hex)
 
@@ -12,10 +12,10 @@ apps/admin-dashboard/src/components/theming/StyleEditor.tsx:    '--gf-color-prim
 apps/admin-dashboard/src/components/theming/StyleEditor.tsx:    '--gf-color-primary-foreground': '#FFFFFF',
 apps/admin-dashboard/src/components/theming/StyleEditor.tsx:    '--gf-color-background': '#FFFFFF',
 apps/admin-dashboard/src/components/theming/StyleEditor.tsx:    '--gf-color-surface': '#F4F5F7',
-packages/ui/src/globals.css:    --background: 240 4% 4%;      /* #111112 Exactly */
-packages/ui/src/globals.css:    --card: 220 6% 10%;           /* #191a1c Exactly */
-packages/ui/src/globals.css:    --secondary: 222 5% 12%;      /* #1e1f21 Exactly */
-packages/ui/src/globals.css:    --muted: 222 5% 12%;          /* #1e1f21 Exactly */
-packages/ui/src/globals.css:    --border: 240 4% 19%;         /* Gray border #2f2f33 */
+apps/design-system/src/app/(docs)/packages/page.tsx:                    <div className="p-3 bg-[#09090b] rounded-xl flex items-center justify-between group shadow-sm">
+apps/design-system/src/app/(docs)/guidelines/page.tsx:          <Card className="flex-1 rounded-[2.5rem] p-10 border-[var(--ds-border-subtle)] bg-[#09090b] text-white shadow-2xl relative overflow-hidden group">
+apps/design-system/src/app/(docs)/guidelines/page.tsx:                Hardcoding hex colors as `text-[#ff0000]` or `bg-white` is
+apps/design-system/src/app/(docs)/guidelines/page.tsx:                  <code className="text-xs text-red-400">text-[#0052cc]</code>
+apps/design-system/src/components/gallery/GalleryItem.tsx:          <div className="rounded-3xl border border-[var(--ds-border-subtle)] bg-[#09090b] overflow-hidden">
 
 ```

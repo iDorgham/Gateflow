@@ -87,7 +87,7 @@ GateFlow is a technical monorepo orchestrating six specialized applications, uni
 
 The README does **not** duplicate that document. Open **UPCOMING.md** for tables, sprint status, and initiative detail; refresh this section only when you want a new high-level teaser line here.
 
-> **Snapshot (see UPCOMING.md for live status):** GitHub security hardening follow-ups · WhatsApp/SMS gateway · Hierarchical seeding v2 · Q3 focus: Lighthouse initiative, offline HMAC hardening, self-serve billing.
+> **Snapshot (see UPCOMING.md for live status):** GateFlow Design System completed · Admin Dashboard Evolution (Side Menu & CMS) · resident-portal responsive overhaul · scanner-app onboarding wizards.
 
 ---
 

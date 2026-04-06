@@ -20,6 +20,9 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Ui]** preserve "use client" and externalize react-hook-form in tsup build
+- **[Admin-Dashboard]** migrate PageHeader import from @gateflow/ui to @gateflow/components
+
 - **[Design-System]** typecheck, lint, and build fixes for all @gateflow/\* packages
 
 - **[Design-System]** primitives patterns ai galleries and packages catalog
@@ -63,6 +66,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 - **[Admin AI]** refine UI/UX with premium animations and hybrid message parts.
 
 ### Apps
+
+- **[Client]** migrate PageHeader import from @gateflow/ui to @gateflow/components
 
 - **[Marketing]** merge marketing_growth_engine_q3_2026 worktree into master
 
