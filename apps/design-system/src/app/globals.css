@@ -6,14 +6,32 @@
   --font-sans: var(--font-inter, ui-sans-serif, system-ui);
   --font-mono: var(--font-mono, monospace);
 
-  --color-background: var(--gf-color-theme-background);
-  --color-foreground: var(--gf-color-theme-foreground);
-  --color-primary: var(--gf-color-primary);
-  --color-primary-foreground: var(--gf-color-primary-foreground);
-  --color-muted: var(--gf-color-muted);
+  /* Surfaces */
+  --color-background: var(--gf-color-bg-page);
+  --color-foreground: var(--gf-color-text);
+  --color-border:     var(--gf-color-border);
+
+  /* Brand / Primary */
+  --color-primary:             var(--gf-color-primary);
+  --color-primary-foreground:  var(--gf-color-primary-foreground);
+
+  /* Muted */
+  --color-muted:            var(--gf-color-muted);
   --color-muted-foreground: var(--gf-color-muted-foreground);
-  --color-border: var(--gf-color-border);
-  
+
+  /* Surface hierarchy */
+  --color-surface-page:    var(--gf-color-bg-page);
+  --color-surface-subtle:  var(--gf-color-bg-subtle);
+  --color-surface-default: var(--gf-color-bg-default);
+  --color-surface-raised:  var(--gf-color-bg-raised);
+  --color-surface-overlay: var(--gf-color-bg-overlay);
+
+  /* Status */
+  --color-success: var(--gf-color-success);
+  --color-warning: var(--gf-color-warning);
+  --color-danger:  var(--gf-color-danger);
+  --color-info:    var(--gf-color-info);
+
   --radius-lg: 12px;
   --radius-md: 8px;
   --radius-sm: 4px;
@@ -29,5 +47,6 @@
   }
 }
 
-/* Custom variants for ADS-style states if needed */
+/* Dark mode variant — matches ThemeProvider's data-color-mode attribute */
+@custom-variant dark (&:where([data-color-mode="dark"], [data-color-mode="dark"] *));
 @custom-variant data-color-mode-dark (&:where([data-color-mode="dark"], [data-color-mode="dark"] *));

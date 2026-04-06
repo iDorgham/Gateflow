@@ -4,7 +4,7 @@ import type { Config } from 'tailwindcss';
 import { tokens } from '../ui/src/tokens';
 
 const config: Config = {
-  darkMode: ['class'],
+  darkMode: ['selector', '[data-color-mode="dark"]'],
   content: [
     '../../apps/*/src/**/*.{ts,tsx}',
     '../../apps/*/app/**/*.{ts,tsx}',

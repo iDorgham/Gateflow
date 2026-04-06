@@ -4,68 +4,64 @@
 
 @import "../../tokens/css/tokens.css";
 
-/*
- * GateFlow Design System — UI Primitives
- * Mapping Layer: Redirects legacy --ds-* tokens to @gateflow/tokens
- */
-
 @layer base {
   :root {
-    /* ── Typography (Foundation) ─────────────────── */
+    /* Typography */
     --ds-font-family-sans: var(--font-sans, var(--font-inter, ui-sans-serif, system-ui));
     --ds-font-family-heading: var(--font-heading, var(--ds-font-family-sans));
     --ds-font-family-mono: var(--font-mono, monospace);
 
-    /* ── Radius Tokens ──────────────────────────── */
-    --ds-border-radius: 6px;
-    --ds-radius-xsmall: 2px;
-    --ds-radius-small: 4px;
-    --ds-radius-medium: 8px;
-    --ds-radius-large: 12px;
-    --ds-radius-circle: 50%;
+    /* Radius */
+    --ds-border-radius:    0.5rem;
+    --ds-border-radius-sm: 0.25rem;
+    --ds-border-radius-lg: 0.75rem;
+    --ds-radius-xsmall:    0.125rem;
+    --ds-radius-small:     0.25rem;
+    --ds-radius-medium:    0.5rem;
+    --ds-radius-large:     0.75rem;
+    --ds-radius-xlarge:    1rem;
+    --ds-radius-circle:    50%;
     --ds-border-radius-200: var(--ds-border-radius); /* Button alias */
 
-    /* ── Legacy Variable Redirection ── */
-    --ds-background-default: var(--gf-color-theme-background);
-    --ds-background-neutral: var(--gf-color-neutral-20);
-    --ds-background-neutral-hovered: var(--gf-color-neutral-30);
-    --ds-background-neutral-pressed: var(--gf-color-neutral-40);
-    --ds-background-neutral-subtle: var(--gf-color-neutral-10);
-    
-    --ds-background-brand-bold: var(--gf-color-brand-500);
-    --ds-background-brand-bold-hovered: var(--gf-color-brand-900); /* Darker on hover */
-    --ds-background-brand-subtle: var(--gf-color-brand-10);
-    
-    --ds-background-danger-bold: var(--gf-color-danger);
-    --ds-background-danger-subtle: var(--gf-color-neutral-10);
-    --ds-background-warning-bold: var(--gf-color-warning);
-    --ds-background-success-bold: var(--gf-color-success);
-    --ds-background-information-bold: var(--gf-color-info);
-    
-    --ds-background-selected: var(--gf-color-brand-10);
-    --ds-background-selected-hovered: var(--gf-color-brand-50);
+    /* DS Background aliases → gf tokens */
+    --ds-background-default:            var(--gf-color-bg-page);
+    --ds-background-neutral-subtle:     var(--gf-color-bg-subtle);
+    --ds-background-neutral:            var(--gf-color-neutral-200);
+    --ds-background-neutral-hovered:    var(--gf-color-neutral-300);
+    --ds-background-neutral-pressed:    var(--gf-color-neutral-400);
+    --ds-background-brand-bold:         var(--gf-color-primary);
+    --ds-background-brand-bold-hovered: var(--gf-color-primary-hover);
+    --ds-background-brand-subtle:       var(--gf-color-primary-subtle);
+    --ds-background-selected:           var(--gf-color-primary-subtle);
+    --ds-background-selected-hovered:   var(--gf-color-brand-100);
+    --ds-background-danger-bold:        var(--gf-color-danger);
+    --ds-background-danger-subtle:      var(--gf-color-danger-subtle);
+    --ds-background-warning-bold:       var(--gf-color-warning);
+    --ds-background-success-bold:       var(--gf-color-success);
+    --ds-background-information-bold:   var(--gf-color-info);
 
-    --ds-text: var(--gf-color-theme-foreground);
-    --ds-text-inverse: var(--gf-color-neutral-0);
-    --ds-text-subtle: var(--gf-color-neutral-70);
-    --ds-text-selected: var(--gf-color-brand-500);
-    --ds-text-brand: var(--gf-color-brand-500);
-    --ds-text-danger: var(--gf-color-danger);
-    
-    --ds-border: var(--gf-color-border);
-    --ds-border-bold: var(--gf-color-neutral-100);
-    --ds-border-focused: var(--gf-color-brand-500);
-    
-    --ds-shadow-raised: 0 1px 1px rgba(9, 30, 66, 0.31), 0 0 1px rgba(9, 30, 66, 0.31);
-    
-    --radius: var(--ds-border-radius);
-    --background: var(--gf-color-theme-background);
-    --foreground: var(--gf-color-theme-foreground);
-    --primary: var(--gf-color-primary);
+    /* DS Text aliases */
+    --ds-text:          var(--gf-color-text);
+    --ds-text-subtle:   var(--gf-color-text-subtle);
+    --ds-text-subtlest: var(--gf-color-text-subtlest);
+    --ds-text-inverse:  var(--gf-color-text-inverse);
+    --ds-text-selected: var(--gf-color-text-brand);
+    --ds-text-brand:    var(--gf-color-text-brand);
+    --ds-text-danger:   var(--gf-color-text-danger);
+
+    /* DS Border aliases */
+    --ds-border:         var(--gf-color-border);
+    --ds-border-subtle:  var(--gf-color-border-subtle);
+    --ds-border-bold:    var(--gf-color-border-bold);
+    --ds-border-focused: var(--gf-color-border-focused);
+    --ds-border-brand:   var(--gf-color-primary);
+
+    /* DS Shadow */
+    --ds-shadow-raised: var(--gf-shadow-sm);
   }
 
   * { @apply border-border; }
-  
+
   body {
     @apply antialiased bg-background text-foreground;
     font-family: var(--ds-font-family-sans);
@@ -73,10 +69,8 @@
 }
 
 @layer utilities {
-  .ds-elevation-sunken  { background: var(--ds-background-neutral-subtle); }
-  .ds-elevation-default { background: var(--ds-background-default); }
-  .ds-elevation-raised  { 
-    background: var(--gf-color-surface-raised); 
-    box-shadow: var(--ds-shadow-raised);
-  }
+  .ds-elevation-sunken  { background: var(--gf-color-bg-subtle); }
+  .ds-elevation-default { background: var(--gf-color-bg-page); }
+  .ds-elevation-raised  { background: var(--gf-color-bg-default); box-shadow: var(--gf-shadow-sm); }
+  .ds-elevation-overlay { background: var(--gf-color-bg-overlay); box-shadow: var(--gf-shadow-md); }
 }
