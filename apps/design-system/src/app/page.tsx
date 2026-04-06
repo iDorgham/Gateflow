@@ -12,7 +12,7 @@ import {
   Zap,
   Globe,
 } from 'lucide-react';
-import { Button, Card, CardContent } from '@gateflow/ui';
+import { cn, Button, Card, CardContent } from '@gateflow/ui';
 
 const sections = [
   {

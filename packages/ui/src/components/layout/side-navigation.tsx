@@ -1,7 +1,6 @@
 'use client';
 
 import * as React from 'react';
-import Link from 'next/link';
 import { cn } from '../../lib/utils';
 import { ChevronDown } from 'lucide-react';
 import {
@@ -38,7 +37,7 @@ export function SideNavItem({
     <TooltipProvider>
       <Tooltip delayDuration={0}>
         <TooltipTrigger asChild>
-          <Link
+          <a
             href={href}
             onClick={onClick}
             className={cn(
@@ -60,7 +59,7 @@ export function SideNavItem({
               />
             )}
             {!isCollapsed && <span className="truncate">{label}</span>}
-          </Link>
+          </a>
         </TooltipTrigger>
         {isCollapsed && (
           <TooltipContent side="right" sideOffset={10}>

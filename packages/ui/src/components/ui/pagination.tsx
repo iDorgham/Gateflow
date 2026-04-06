@@ -4,7 +4,6 @@ import * as React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
-import Link from 'next/link';
 import { useMemo } from 'react';
 
 export interface PaginationProps {
@@ -62,9 +61,9 @@ export function Pagination({
 
     if (getHref && !disabled) {
       return (
-        <Link href={getHref(page)} className={commonClass}>
+        <a href={getHref(page)} className={commonClass}>
           {children as any}
-        </Link>
+        </a>
       );
     }
 

@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { PageHeader } from '@gateflow/components';
-import { useLocale } from '../../components/providers/LocaleProvider';
+import { useLocale } from '../../../components/providers/LocaleProvider';
 import { Badge } from '@gateflow/ui';
 import { CheckCircle2, Milestone } from 'lucide-react';
 

@@ -5,12 +5,15 @@ import { cn } from '@gateflow/ui';
 import { MessageAvatar } from './MessageAvatar';
 import { StreamingIndicator } from './StreamingIndicator';
 
-export interface MessageProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface MessageProps extends Omit<
+  React.HTMLAttributes<HTMLDivElement>,
+  'content'
+> {
   role: 'user' | 'assistant' | 'system';
   content?: string | React.ReactNode;
   isStreaming?: boolean;
   timestamp?: string;
-  avatar?: string;
+  avatar?: string | React.ReactNode;
   name?: string;
   actions?: React.ReactNode;
   attachments?: React.ReactNode;
@@ -41,7 +44,11 @@ export function Message({
       {...props}
     >
       <div className="flex shrink-0 items-start">
-        <MessageAvatar role={role} src={avatar} />
+        {typeof avatar === 'string' || avatar === undefined ? (
+          <MessageAvatar role={role} src={avatar} />
+        ) : (
+          avatar
+        )}
       </div>
 
       <div className="flex flex-1 flex-col gap-2 min-w-0">

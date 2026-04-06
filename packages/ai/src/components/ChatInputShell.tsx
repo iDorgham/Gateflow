@@ -28,8 +28,6 @@ export function ChatInputShell({
   className,
   ...props
 }: ChatInputShellProps) {
-  const textareaRef = React.useRef<HTMLTextAreaElement>(null);
-
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -46,7 +44,6 @@ export function ChatInputShell({
       {...props}
     >
       <Textarea
-        ref={textareaRef}
         rows={1}
         value={value}
         onChange={(e) => onChange?.(e.target.value)}

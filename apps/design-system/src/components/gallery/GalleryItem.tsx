@@ -37,15 +37,14 @@ export function GalleryItem({
   packageName = '@gateflow/ui',
 }: GalleryItemProps) {
   const [copied, setCopied] = React.useState(false);
-  const { toast } = useToast();
+  const { addToast } = useToast();
 
   const handleCopy = () => {
     navigator.clipboard.writeText(code);
     setCopied(true);
-    toast({
+    addToast({
       title: 'Code Copied',
       description: 'The component snippet has been copied to your clipboard.',
-      duration: 2000,
     });
     setTimeout(() => setCopied(false), 2000);
   };

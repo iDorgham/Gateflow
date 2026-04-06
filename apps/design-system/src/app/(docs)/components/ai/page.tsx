@@ -9,9 +9,9 @@ import {
   ToolCallCard,
   ChatInputShell,
 } from '@gateflow/ai';
-import { Button, Badge } from '@gateflow/ui';
+import { Badge } from '@gateflow/ui';
 import { GalleryItem } from '../../../../components/gallery/GalleryItem';
-import { Sparkles, Database, Plus, Send } from 'lucide-react';
+import { Sparkles, Database } from 'lucide-react';
 
 export default function AIGalleryPage() {
   return (
@@ -173,11 +173,11 @@ export default function Demo() {
         >
           <div className="w-full max-w-md">
             <ToolCallCard
-              tool="auditLogs"
-              status="complete"
-              icon={<Database size={16} />}
-              params={{ region: 'ZAYED_CITY', limit: 5 }}
-              result={{ entries: 1242, riskScore: 0.02 }}
+              name="auditLogs"
+              status="success"
+              icon={Database}
+              arguments={JSON.stringify({ region: 'ZAYED_CITY', limit: 5 })}
+              result="Returned 1242 entries. Risk score: 0.02"
             />
           </div>
         </GalleryItem>
@@ -203,46 +203,10 @@ export default function Demo() {
           <div className="w-full max-w-xl flex flex-col gap-3">
             <ChatInputShell
               placeholder="Ask GateAI anything..."
-              leftAction={
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-12 w-12 rounded-[1.5rem] bg-[var(--ds-background-neutral-subtle)] text-[var(--ds-text-subtle)] hover:bg-[var(--ds-background-neutral-hovered)]"
-                >
-                  <Plus size={20} />
-                </Button>
-              }
-              rightAction={
-                <Button className="h-12 w-12 rounded-[1.5rem] bg-[var(--ds-background-brand-bold)] flex items-center justify-center text-white shadow-lg">
-                  <Send size={20} />
-                </Button>
-              }
-              hint={
-                <div className="flex items-center justify-center gap-6 opacity-40">
-                  <div className="flex items-center gap-1.5">
-                    <div className="h-4 w-4 bg-[var(--ds-background-neutral-subtle)] border border-[var(--ds-border-subtle)] rounded flex items-center justify-center text-[10px] font-bold">
-                      &#8984;
-                    </div>
-                    <div className="h-4 w-4 bg-[var(--ds-background-neutral-subtle)] border border-[var(--ds-border-subtle)] rounded flex items-center justify-center text-[10px] font-bold">
-                      K
-                    </div>
-                    <span className="text-[10px] uppercase font-black tracking-widest ml-1">
-                      Tools
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <div className="h-4 w-4 bg-[var(--ds-background-neutral-subtle)] border border-[var(--ds-border-subtle)] rounded flex items-center justify-center text-[10px] font-bold">
-                      &#8984;
-                    </div>
-                    <div className="h-4 w-4 bg-[var(--ds-background-neutral-subtle)] border border-[var(--ds-border-subtle)] rounded flex items-center justify-center text-[10px] font-bold">
-                      G
-                    </div>
-                    <span className="text-[10px] uppercase font-black tracking-widest ml-1">
-                      Guide
-                    </span>
-                  </div>
-                </div>
-              }
+              actions={[
+                { id: 'tools', label: '⌘K Tools' },
+                { id: 'guide', label: '⌘G Guide' },
+              ]}
             />
           </div>
         </GalleryItem>

@@ -6,18 +6,11 @@ import {
   Button,
   Badge,
   Card,
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-  Input,
   Select,
   SelectTrigger,
   SelectValue,
   SelectContent,
   SelectItem,
-  Tabs,
-  TabsList,
-  TabsTrigger,
 } from '@gateflow/ui';
 import { GalleryItem } from '../../../../components/gallery/GalleryItem';
 import {
@@ -25,7 +18,6 @@ import {
   Users,
   ShieldCheck,
   MoreHorizontal,
-  Search,
   Plus,
   ArrowDownRight,
   TrendingUp,
@@ -132,54 +124,36 @@ export default function Demo() {
             <EntityCard
               title="Zayed City North"
               subtitle="Phase 01 | Operations"
-              type="Compound"
               status="Live"
-              icon={<Building2 size={16} />}
-              avatar={
-                <Avatar className="rounded-xl">
-                  <AvatarImage src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=128&q=80" />
-                  <AvatarFallback>ZN</AvatarFallback>
-                </Avatar>
-              }
+              statusVariant="success"
+              icon={Building2}
               actions={
                 <Button size="icon-sm" variant="ghost" className="rounded-lg">
                   <MoreHorizontal size={14} />
                 </Button>
               }
-              metadata={[
+              meta={[
                 { label: 'Guards', value: '8' },
                 { label: 'Gates', value: '3' },
-                {
-                  label: 'Priority',
-                  value: <ShieldCheck size={14} className="text-green-500" />,
-                },
+                { label: 'Priority', value: 'High' },
               ]}
               className="rounded-3xl border-[var(--ds-border-subtle)] bg-white shadow-lg p-6"
             />
             <EntityCard
               title="Ahmadi Residential"
               subtitle="Maintenance Required"
-              type="Zone"
               status="Warning"
-              icon={<Users size={16} />}
-              avatar={
-                <Avatar className="rounded-xl">
-                  <AvatarImage src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=128&q=80" />
-                  <AvatarFallback>AR</AvatarFallback>
-                </Avatar>
-              }
+              statusVariant="warning"
+              icon={Users}
               actions={
                 <Button size="icon-sm" variant="ghost" className="rounded-lg">
                   <MoreHorizontal size={14} />
                 </Button>
               }
-              metadata={[
+              meta={[
                 { label: 'Residents', value: '42k' },
                 { label: 'Uptime', value: '98%' },
-                {
-                  label: 'Health',
-                  value: <span className="text-amber-500">76/100</span>,
-                },
+                { label: 'Health', value: '76/100' },
               ]}
               className="rounded-3xl border-[var(--ds-border-subtle)] bg-white shadow-lg p-6 border-l-4 border-l-amber-500"
             />
@@ -207,42 +181,7 @@ export default function Demo() {
         >
           <div className="w-full bg-white border border-[var(--ds-border-subtle)] rounded-3xl p-6 shadow-sm flex flex-col gap-6">
             <FilterBar
-              search={
-                <div className="relative group w-72">
-                  <Search
-                    size={14}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--ds-text-subtlest)]"
-                  />
-                  <Input
-                    placeholder="Search residents..."
-                    className="pl-11 rounded-xl h-11 bg-[var(--ds-background-neutral-subtle)] border-none"
-                  />
-                </div>
-              }
-              tabs={
-                <Tabs defaultValue="all">
-                  <TabsList className="bg-[var(--ds-background-neutral-subtle)] p-1 rounded-xl h-11 border border-[var(--ds-border-subtle)]">
-                    <TabsTrigger
-                      value="all"
-                      className="rounded-lg text-[10px] font-black uppercase tracking-tight px-4 data-[state=active]:bg-white data-[state=active]:shadow-sm"
-                    >
-                      All Records
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="active"
-                      className="rounded-lg text-[10px] font-black uppercase tracking-tight px-4 data-[state=active]:bg-white data-[state=active]:shadow-sm"
-                    >
-                      Permitted
-                    </TabsTrigger>
-                    <TabsTrigger
-                      value="blocked"
-                      className="rounded-lg text-[10px] font-black uppercase tracking-tight px-4 data-[state=active]:bg-white data-[state=active]:shadow-sm text-red-500"
-                    >
-                      Blocked
-                    </TabsTrigger>
-                  </TabsList>
-                </Tabs>
-              }
+              placeholder="Search residents..."
               filters={
                 <div className="flex gap-2">
                   <Select defaultValue="all-guards">

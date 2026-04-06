@@ -56,7 +56,7 @@ export default function DocsLayout({
 }) {
   const pathname = usePathname();
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
-  const { colorMode, setColorMode } = useGateFlowColorMode();
+  const { theme: colorMode, setTheme: setColorMode } = useGateFlowColorMode();
   const { locale, setLocale, isRTL } = useLocale();
 
   return (

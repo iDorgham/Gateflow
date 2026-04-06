@@ -123,15 +123,14 @@ export function TokenExplorer() {
   const [search, setSearch] = React.useState('');
   const [activeTab, setActiveTab] = React.useState('Background');
   const [copiedToken, setCopiedToken] = React.useState<string | null>(null);
-  const { toast } = useToast();
+  const { addToast } = useToast();
 
   const handleCopy = (token: string) => {
     navigator.clipboard.writeText(token);
     setCopiedToken(token);
-    toast({
+    addToast({
       title: 'Token Copied',
       description: `${token} has been copied to your clipboard.`,
-      duration: 2000,
     });
     setTimeout(() => setCopiedToken(null), 2000);
   };

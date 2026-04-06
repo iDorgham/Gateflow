@@ -183,7 +183,7 @@ export default function GuidelinesPage() {
                 <div className="flex items-center justify-between p-3 bg-red-500/10 border border-red-500/20 rounded-xl">
                   <code className="text-xs text-red-400">text-[#0052cc]</code>
                   <Badge
-                    variant="destructive"
+                    variant="danger"
                     className="h-4 px-1 text-[8px] font-black uppercase"
                   >
                     Rejected

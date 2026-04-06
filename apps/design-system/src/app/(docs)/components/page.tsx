@@ -2,10 +2,10 @@ import * as React from 'react';
 import { PageHeader } from '@gateflow/components';
 
 export default function Page() {
-  const title = 'components'
-    .split('/')
-    .pop()
-    .replace(/^\w/, (c) => c.toUpperCase());
+  const title = ('components'.split('/').pop() ?? 'Components').replace(
+    /^\w/,
+    (c) => c.toUpperCase()
+  );
 
   return (
     <div className="flex flex-col gap-8">

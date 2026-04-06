@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { PageHeader } from '@gateflow/components';
-import { useLocale } from '../../components/providers/LocaleProvider';
+import { useLocale } from '../../../components/providers/LocaleProvider';
 import { Card, Badge } from '@gateflow/ui';
 import { Shield, Sparkles, Zap, Globe, Cpu, Layout } from 'lucide-react';
 

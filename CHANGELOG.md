@@ -20,6 +20,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Design-System]** primitives patterns ai galleries and packages catalog
+
 - **[Gateflow Design System]** complete phase 10 (npm & CI)
 - **[Gateflow Design System]** complete phase 9 (RTL & Search)
 - **[Gateflow Design System]** complete phase 7 & 8 (Foundations & Galleries)

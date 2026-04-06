@@ -9,44 +9,52 @@ Save as: `docs/plan/Active/gateflow_design_system/SESSION_MEMORY.md`
 
 ## Active State
 
-- **Phase:** Phase 8 — Galleries + Guidelines | in-progress
+- **Phase:** ALL PHASES COMPLETE (1–10)
 - **Branch:** `feat/gateflow_design_system-phase-8`
-- **Last commit:** `HEAD` — feat(design-system): foundations, token explorer and accessibility stub (phase 7)
-- **Next action:** Create branch `feat/gateflow_design_system-phase-8` and start listing public exports from `@gateflow/ui`, `@gateflow/components`, `@gateflow/ai`.
+- **Last action:** Phase 9 & 10 retroactive verification + typecheck/lint fixes committed
+- **Next action:** Merge branch → master. Move plan Active/ → Complete/.
 
 ---
 
 ## Cross-Session Decisions
 
-| Phase | Decision                                          | Why                                          | Still valid? |
-| ----- | ------------------------------------------------- | -------------------------------------------- | ------------ |
-| 7     | Implemented side-by-side Light/Dark mode previews | Essential for OKLCH perceptual uniform check | Yes          |
-| 7     | Used `[var(--ds-text)]` etc in explorer           | ADS token alignment                          | Yes          |
+| Phase | Decision                                                     | Why                                                    | Still valid? |
+| ----- | ------------------------------------------------------------ | ------------------------------------------------------ | ------------ |
+| 7     | Implemented side-by-side Light/Dark mode previews            | Essential for OKLCH perceptual uniform check           | Yes          |
+| 7     | Used `[var(--ds-text)]` etc in explorer                      | ADS token alignment                                    | Yes          |
+| 10    | Added `"incremental": false` to all package tsconfigs        | `incremental: true` from root tsconfig breaks tsup DTS | Yes          |
+| 10    | Replaced `next/link` with `<a>` in `@gateflow/ui`            | `next` not hoisted in pnpm workspace, blocks DTS build | Yes          |
+| 10    | Added `./tsconfig.base.json` export to `@gate-access/config` | `theme`, `components`, `ai` extend that path           | Yes          |
+| 9     | `useGateFlowColorMode()` returns next-themes API             | Use `{ theme: colorMode, setTheme: setColorMode }`     | Yes          |
 
 ---
 
 ## Discovered Gotchas
 
-- [Corepack EPERM issue in local environment blocks turbo build in some background shells]
+- `tsup` DTS fails when tsconfig has `incremental: true` without `tsBuildInfoFile` — always add `"incremental": false` to publishable package tsconfigs.
+- `@gateflow/ui` pagination + side-navigation should NOT import `next/link` — use `<a>` tags for framework-agnostic publishability.
+- `@gate-access/config` package.json `exports` must include `./tsconfig.base.json` for packages extending that path.
+- `useGateFlowColorMode` is `useTheme` from next-themes — no `colorMode`/`setColorMode` properties.
+- `ToastProps` has no `duration` field — use `addToast` not `toast`, omit duration.
+- Gallery demo pages must use actual component API props (checked against component source).
 
 ---
 
 ## State Handoff
 
-- **Files modified this session:**
-  - `docs/plan/Active/gateflow_design_system/SESSION_MEMORY.md` — Initialized
-- **Tests:** [N/A - just started Phase 8]
-- **Blockers:** [Corepack EPERM - working around with manual verification]
-- **Resume from:** Step 1 of Phase 8 prompt.
+- **Files modified this session:** All listed in git status — packages tsconfigs, design-system app pages, ai/ui/components packages.
+- **Tests:** All passing — `pnpm turbo typecheck --filter=@gateflow/design-system` 6/6, `pnpm turbo lint --filter=@gateflow/design-system` 0 errors.
+- **Blockers:** None.
+- **Resume from:** Commit changes → move plan to Complete/ → PR.
 
 ---
 
 ## Context Budget (this session)
 
-| Layer | File                                | Est. Tokens | Loaded |
-| ----- | ----------------------------------- | ----------- | ------ |
-| L0    | `git log --oneline -3` + phase name | ~50         | ✓      |
-| L1    | `TASKS_gateflow_design_system.md`   | ~150        | ✓      |
-| L2    | `PLAN_gateflow_design_system.md`    | ~600        | ✓      |
-| L3    | `PROMPT_phase_08.md`                | ~1,200      | ✓      |
-| L5    | `SESSION_MEMORY.md` (this file)     | ~400        | ✓      |
+| Layer | File                                        | Est. Tokens | Loaded |
+| ----- | ------------------------------------------- | ----------- | ------ |
+| L0    | `git log --oneline -3` + phase name         | ~50         | ✓      |
+| L1    | `TASKS_gateflow_design_system.md`           | ~150        | ✓      |
+| L2    | `PLAN_gateflow_design_system.md`            | ~600        | ✓      |
+| L3    | `PROMPT_phase_09.md` + `PROMPT_phase_10.md` | ~2,400      | ✓      |
+| L5    | `SESSION_MEMORY.md` (this file)             | ~400        | ✓      |

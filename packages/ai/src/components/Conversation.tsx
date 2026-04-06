@@ -19,6 +19,7 @@ export function Conversation({
   emptySubtitle = 'Ask GateAI about your workspace, reports, or tasks.',
   autoScroll = true,
   className,
+  dir: _dir,
   ...props
 }: ConversationProps) {
   const scrollRef = React.useRef<HTMLDivElement>(null);
