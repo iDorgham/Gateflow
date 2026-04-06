@@ -20,6 +20,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Ops]** remove invalid vercel property and fix turbo filters
+
 - **[Vercel]** implement ignore-build script to skip dependabot builds
 
 - **[Ui]** preserve "use client" and externalize react-hook-form in tsup build
