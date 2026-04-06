@@ -13,7 +13,4 @@ export default defineConfig({
     'next',
     'react-hook-form',
   ],
-  banner: {
-    js: '"use client";',
-  },
 });
