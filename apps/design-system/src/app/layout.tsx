@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@gateflow/theme';
+import { ToastProvider } from '@gateflow/ui';
 import { cn } from '@gateflow/ui/utils';
 
 const inter = Inter({
@@ -53,7 +54,9 @@ export default function RootLayout({
         )}
       >
         <LocaleProvider>
-          <ThemeProvider>{children}</ThemeProvider>
+          <ThemeProvider>
+            <ToastProvider>{children}</ToastProvider>
+          </ThemeProvider>
         </LocaleProvider>
       </body>
     </html>
