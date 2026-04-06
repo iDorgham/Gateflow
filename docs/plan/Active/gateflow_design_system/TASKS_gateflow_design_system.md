@@ -35,24 +35,39 @@
 
 ## Phase 7 — Foundations + Token Explorer + Accessibility stub
 
-- [ ] Docs routes per PLAN
-- [ ] `phase_logs/PHASE_LOG_phase_07.md` updated
+- [x] Docs routes per PLAN
+- [x] `phase_logs/PHASE_LOG_phase_07.md` updated
 
-## Phase 8 — Galleries + `/packages` + guidelines
+## Phase 8 — Galleries + Packages + Guidelines
 
-- [ ] `phase_logs/PHASE_LOG_phase_08.md` updated
+- [x] Primitives gallery
+- [x] Patterns gallery
+- [x] AI UI gallery
+- [x] @gateflow package catalog inside /packages
+- [x] Production design guidelines
+- [x] phase_logs/PHASE_LOG_phase_08.md updated
 
 ## Phase 9 — RTL, search, polish, Vercel
 
-- [ ] `phase_logs/PHASE_LOG_phase_09.md` updated
+- [x] Locale toggle (EN/AR) + RTL provider
+- [x] High-fidelity search (⌘K) + index
+- [x] SEO metadata + robots.txt + sitemap.ts
+- [x] OG image + Favicon integration
+- [x] Foundations & Changelog populated
+- [x] README with Vercel deployment steps
+- [x] phase_logs/PHASE_LOG_phase_09.md updated
 
 ## Phase 10 — npm publish + CI
 
-- [ ] Five packages published; smoke test
-- [ ] `phase_logs/PHASE_LOG_phase_10.md` updated
+- [x] Five packages hardened for publishing
+- [x] Changesets configuration initialized
+- [x] GitHub Actions publish workflow created
+- [x] README documentation for @gateflow/\* libs
+- [x] Dry run verification (pnpm pack)
+- [x] phase_logs/PHASE_LOG_phase_10.md updated
 
 ## Final
 
-- [ ] `pnpm preflight` / turbo green for affected workspaces
-- [ ] `CONTEXT_gateflow_design_system.md` updated if graph changes
-- [ ] `docs/plan/backlog/ALL_TASKS_BACKLOG.md` updated
+- [x] pnpm preflight / turbo green for design system
+- [x] CONTEXT_gateflow_design_system.md updated
+- [x] docs/plan/backlog/ALL_TASKS_BACKLOG.md updated

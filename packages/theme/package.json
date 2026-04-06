@@ -1,20 +1,36 @@
 {
   "name": "@gateflow/theme",
   "version": "0.1.0",
-  "private": true,
+  "license": "MIT",
+  "author": "GateFlow Team",
+  "description": "Next.js-friendly theme providers and hooks for GateFlow",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iDorgham/Gateflow.git",
+    "directory": "packages/theme"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "src",
+    "README.md"
+  ],
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./src/index.ts",
-      "import": "./src/index.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
     }
   },
   "scripts": {
     "lint": "eslint src/",
     "typecheck": "tsc --noEmit",
-    "build": "echo 'No build step required for theme yet' && exit 0"
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean --external react,react-dom,next-themes"
   },
   "dependencies": {
     "@gateflow/tokens": "workspace:*",
@@ -30,6 +46,7 @@
     "@types/react-dom": "^19.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "tsup": "^8.3.6"
   }
 }

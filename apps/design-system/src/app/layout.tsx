@@ -11,13 +11,33 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://design.gateflow.site'),
   title: {
     default: 'GateFlow Design System',
     template: '%s | GateFlow Design System',
   },
   description:
-    'Official documentation and explorer for the GateFlow design system components and tokens.',
+    'The authoritative documentation for the GateFlow design system. Primitives, patterns, and agentic AI components.',
+  openGraph: {
+    title: 'GateFlow Design System',
+    description: 'Universal building blocks for the MENA COMPOUND sector.',
+    url: 'https://design.gateflow.site',
+    siteName: 'GateFlow',
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'GateFlow Design System',
+    description:
+      'Premium UI primitives and AI patterns for intelligent compound management.',
+  },
+  alternates: {
+    canonical: 'https://design.gateflow.site',
+  },
 };
+
+import { LocaleProvider } from '../components/providers/LocaleProvider';
 
 export default function RootLayout({
   children,
@@ -32,7 +52,9 @@ export default function RootLayout({
           inter.variable
         )}
       >
-        <ThemeProvider>{children}</ThemeProvider>
+        <LocaleProvider>
+          <ThemeProvider>{children}</ThemeProvider>
+        </LocaleProvider>
       </body>
     </html>
   );

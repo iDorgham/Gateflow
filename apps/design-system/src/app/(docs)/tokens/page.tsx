@@ -1,31 +1,33 @@
 import * as React from 'react';
 import { PageHeader } from '@gateflow/components';
+import { TokenExplorer } from '../../../components/token-explorer/TokenExplorer';
 
-export default function Page() {
-  const title = 'tokens'
-    .split('/')
-    .pop()
-    .replace(/^\w/, (c) => c.toUpperCase());
-
+export default function TokensPage() {
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-10">
       <PageHeader
-        title={title}
-        subtitle="This section is currently under development. Content will be populated in Phase 7 and 8."
-        breadcrumbs={[{ label: 'Documentation', href: '/' }, { label: title }]}
+        title="Tokens"
+        subtitle="The atomic elements of the GateFlow design system. Browsable, previewable, and ready to use in any workspace."
+        breadcrumbs={[
+          { label: 'Documentation', href: '/' },
+          { label: 'Tokens' },
+        ]}
       />
 
-      <div className="rounded-3xl border border-dashed border-[var(--ds-border-subtle)] bg-[var(--ds-background-neutral-subtle)] p-20 flex items-center justify-center text-center">
-        <div className="flex flex-col gap-4 max-w-sm">
-          <h2 className="text-2xl font-black uppercase tracking-tight text-[var(--ds-text-subtlest)]">
-            Placeholder
+      <section className="flex flex-col gap-6">
+        <div className="flex flex-col gap-3 max-w-2xl">
+          <h2 className="text-xl font-black uppercase tracking-tight text-[var(--ds-text)]">
+            Token Explorer
           </h2>
           <p className="text-sm text-[var(--ds-text-subtle)] leading-relaxed">
-            Content for ${title} is scheduled for implementation in the next
-            phase of the GateFlow Design System roadmap.
+            Use the explorer below to browse our semantic token library. You can
+            preview how tokens look in both light and dark modes, and copy
+            variable names directly to your CSS or Tailwind configuration.
           </p>
         </div>
-      </div>
+
+        <TokenExplorer />
+      </section>
     </div>
   );
 }

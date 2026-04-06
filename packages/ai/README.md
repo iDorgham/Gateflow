@@ -1,69 +1,50 @@
 # @gateflow/ai
 
-AI-first presentation toolkit for the GateFlow design system.
-
-Focuses on streaming-aware components, tool invocation UI, and accessible chat layouts.
-
-## Features
-
-- **Streaming-Aware**: Native `StreamingIndicator` for assistant responses.
-- **Tool-First**: `ToolCallCard` for displaying status and results of LLM tool usage.
-- **RTL-Safe**: Designed for bidirectional layout and logical alignment.
-- **Vendor-Neutral**: Decoupled from specific LLM providers; compatible with Vercel AI SDK or custom streams.
+Agentic AI UI components and patterns for the GateFlow Design System.
+Designed for **Vercel AI SDK** integration.
 
 ## Installation
 
 ```bash
-pnpm add @gateflow/ai
+npm install @gateflow/ai @gateflow/ui @gateflow/tokens @gateflow/theme ai @ai-sdk/react
 ```
 
-## Basic Usage
+## Usage
+
+### Chat Interfaces
 
 ```tsx
-import {
-  Conversation,
-  Message,
-  MessageAvatar,
-  ChatInputShell,
-} from '@gateflow/ai';
+import { useChat } from 'ai/react';
+import { ChatPanel, MessageCard, ThinkingIndicator } from '@gateflow/ai';
 
-export function ChatView() {
+function MyAssistant() {
+  const { messages, input, handleInputChange, handleSubmit, isLoading } =
+    useChat();
+
   return (
-    <Conversation>
-      <Message
-        role="assistant"
-        content="Hello! How can I help you today?"
-        timestamp="10:00 AM"
-      />
-      <Message
-        role="user"
-        content="Can you show me the last system report?"
-        timestamp="10:01 AM"
-      />
-    </Conversation>
+    <ChatPanel>
+      {messages.map((message) => (
+        <MessageCard
+          key={message.id}
+          role={message.role}
+          content={message.content}
+        />
+      ))}
+      {isLoading && <ThinkingIndicator text="Sentinel is thinking..." />}
+
+      <form onSubmit={handleSubmit}>
+        <input value={input} onChange={handleInputChange} />
+      </form>
+    </ChatPanel>
   );
 }
 ```
 
-## Tool Incarnation Example
+## Features
 
-```tsx
-import { ToolCallCard } from '@gateflow/ai';
-import { Database } from 'lucide-react';
-
-<ToolCallCard
-  name="query_workspace_db"
-  status="success"
-  icon={Database}
-  arguments={{ query: 'SELECT * FROM metrics' }}
-  result={<Table data={...} />}
-/>
-```
-
-## Peer Dependencies
-
-While the core is headless, this toolkit works best when paired with `@gateflow/ui` (primitives) and `@gateflow/theme` (ThemeProvider).
-
-Optional peer dependencies:
-
-- `ai` / `@ai-sdk/react` (for seamless integration with Vercel AI)
+- **Agentic Patterns**: Specialized UI for streaming, reasoning, and tool call outputs.
+- **Vercel AI Compatibility**: First-class support for `ai` and `@ai-sdk/react`.
+- **Localized AI**: RTL support for Arabic chat interfaces and
+  MENA-friendly typography.
+- **Glassmorphism**: Premium, futuristic UI cards for intelligent assistants.
+- **Safety**: Built-in interaction patterns for human-in-the-loop verification.

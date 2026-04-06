@@ -99,7 +99,7 @@ export default function HomePage() {
       <section className="py-24 bg-background">
         <div className="container px-4 md:px-8 mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {sections.map((section, idx) => (
+            {sections.map((section, _idx) => (
               <Link key={section.href} href={section.href} className="group">
                 <Card className="h-full border-[var(--ds-border-subtle)] hover:border-[var(--ds-border-focused)] hover:shadow-xl transition-all duration-300 overflow-hidden bg-transparent">
                   <CardContent className="p-8 flex flex-col items-start gap-4">

@@ -1,40 +1,44 @@
 # @gateflow/tokens
 
-GateFlow's canonical OKLCH-based design tokens package. Designed to bridge primitive Atlassian-inspired enterprise colors with shadcn-friendly semantic variables and Tailwind v4 themes.
+Foundational design tokens for the GateFlow Design System. Built with OKLCH color theory and CSS relative color syntax.
+
+## Installation
+
+```bash
+npm install @gateflow/tokens
+```
 
 ## Usage
 
-### 1. Global CSS Import (Tailwind v3 or raw CSS consumers)
+### CSS
 
-Import the CSS variables directly at the top of your global CSS:
+Include the tokens in your global CSS:
 
 ```css
 @import '@gateflow/tokens/tokens.css';
+@import '@gateflow/tokens/theme.css';
 ```
 
-### 2. Tailwind v4 Integration
-
-Tailwind v4 fully supports css variables defined outside of tailwind, but we provide a dedicated `@theme` block file mapping these to `--color-*` utility properties:
+### Tailwind CSS (v4)
 
 ```css
-@import '@gateflow/tokens/theme.css';
 @import 'tailwindcss';
+@import '@gateflow/tokens/tokens.css';
+@theme {
+  @import '@gateflow/tokens/tokens.css';
+}
 ```
 
-### 3. Usage within Code / Next.js Routing Layout
+### TypeScript
 
-While standard variable use works (`var(--gf-color-background)`), you can leverage the type-safe token helper for styling or runtime config:
-
-```tsx
+```typescript
 import { token } from '@gateflow/tokens';
 
-const style = { backgroundColor: token('color.primary') };
+const color = token('color.background.default');
 ```
 
-## Dark Mode
+## Features
 
-Our tokens look for a standard structural data attribute: `[data-color-mode="dark"]`. If this token is set on `<html>` or `<body>`, dark mode inverted components engage.
-
-```tsx
-<html data-color-mode="dark">
-```
+- **OKLCH Colors**: Perceptually uniform color spaces.
+- **RTL Support**: Semantic spacing tokens for MENA regional consistency.
+- **Light/Dark Mode**: Adaptive tokens for seamless theme transitions.

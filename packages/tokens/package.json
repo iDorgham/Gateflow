@@ -1,14 +1,37 @@
 {
   "name": "@gateflow/tokens",
   "version": "0.1.0",
-  "private": true,
+  "license": "MIT",
+  "author": "GateFlow Team",
+  "description": "Foundational OKLCH tokens for the GateFlow design system",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iDorgham/Gateflow.git",
+    "directory": "packages/tokens"
+  },
+  "keywords": [
+    "design-system",
+    "tokens",
+    "oklch",
+    "gateflow"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "css",
+    "src",
+    "README.md"
+  ],
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./src/index.ts",
-      "import": "./src/index.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
     },
     "./tokens.css": "./css/tokens.css",
     "./theme.css": "./css/theme.css"
@@ -16,10 +39,11 @@
   "scripts": {
     "lint": "eslint src/",
     "typecheck": "tsc --noEmit",
-    "build": "echo 'No build step required for tokens yet' && exit 0"
+    "build": "tsup src/index.ts --format cjs,esm --dts --clean"
   },
   "devDependencies": {
     "@gate-access/config": "workspace:*",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "tsup": "^8.3.6"
   }
 }

@@ -12,12 +12,13 @@ import {
   BookOpen,
   History,
   Menu,
-  X,
-  Search,
   Moon,
   Sun,
   Laptop,
+  Globe,
 } from 'lucide-react';
+import { useLocale } from '../../components/providers/LocaleProvider';
+import { Search } from '../../components/navigation/Search';
 import {
   cn,
   Button,
@@ -56,6 +57,7 @@ export default function DocsLayout({
   const pathname = usePathname();
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
   const { colorMode, setColorMode } = useGateFlowColorMode();
+  const { locale, setLocale, isRTL } = useLocale();
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -85,23 +87,41 @@ export default function DocsLayout({
           </div>
 
           <div className="flex flex-1 items-center justify-end gap-3">
-            <div className="hidden max-w-sm flex-1 md:block">
-              <div className="relative group">
-                <Search
-                  size={16}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--ds-icon-subtle)]"
-                />
-                <input
-                  type="text"
-                  placeholder="Search design system..."
-                  className="h-9 w-full rounded-md border border-[var(--ds-border)] bg-[var(--ds-background-neutral-subtle)] pl-9 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--ds-border-focused)] transition-all"
-                  readOnly
-                />
-                <kbd className="absolute right-3 top-1/2 -translate-y-1/2 hidden md:inline-flex items-center gap-1 rounded border px-1.5 font-mono text-[10px] font-medium opacity-50 bg-[var(--ds-background-neutral-pressed)]">
-                  ⌘K
-                </kbd>
-              </div>
+            <div className="flex-1 max-w-sm hidden md:block">
+              <Search />
             </div>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="h-9 w-9 rounded-md"
+                >
+                  <Globe size={18} />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-32">
+                <DropdownMenuItem
+                  onClick={() => setLocale('en')}
+                  className={cn(
+                    locale === 'en' &&
+                      'bg-[var(--ds-background-selected)] text-[var(--ds-text-selected)]'
+                  )}
+                >
+                  English
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => setLocale('ar')}
+                  className={cn(
+                    locale === 'ar' &&
+                      'bg-[var(--ds-background-selected)] text-[var(--ds-text-selected)] text-right'
+                  )}
+                >
+                  العربية (Arabic)
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -139,10 +159,13 @@ export default function DocsLayout({
         {/* Sidebar */}
         <aside
           className={cn(
-            'fixed inset-y-0 left-0 z-40 w-64 border-r border-[var(--ds-border-subtle)] bg-background transition-transform duration-200 ease-in-out md:sticky md:block',
+            'fixed inset-y-0 z-40 w-64 border-e border-[var(--ds-border-subtle)] bg-background transition-transform duration-200 ease-in-out md:sticky md:block',
+            isRTL ? 'right-0' : 'left-0',
             isSidebarOpen
               ? 'translate-x-0'
-              : '-translate-x-full md:translate-x-0',
+              : isRTL
+                ? 'translate-x-full md:translate-x-0'
+                : '-translate-x-full md:translate-x-0',
             'top-16 h-[calc(100vh-64px)]'
           )}
         >
@@ -170,7 +193,7 @@ export default function DocsLayout({
                     </Link>
 
                     {item.subItems && isActive && (
-                      <div className="ml-9 flex flex-col gap-1 border-l border-[var(--ds-border-subtle)] pl-4">
+                      <div className="ms-9 flex flex-col gap-1 border-s border-[var(--ds-border-subtle)] ps-4">
                         {item.subItems.map((sub) => {
                           const isSubActive = pathname === sub.href;
                           return (

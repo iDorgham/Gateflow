@@ -1,65 +1,50 @@
 # @gateflow/theme
 
-GateFlow Theme Provider and hooks, powered by `next-themes`.
-
-Sets **`data-color-mode`** on `document.documentElement` for Atlassian-style token support (e.g. `[data-color-mode="dark"]`).
+Theme providers and hooks for the GateFlow Design System.
+Designed for **Next.js App Router** and **next-themes** integration.
 
 ## Installation
 
 ```bash
-pnpm add @gateflow/theme
+npm install @gateflow/theme @gateflow/tokens next-themes
 ```
 
-## Setup
+## Usage
 
-Wrap your application in `ThemeProvider`:
+### Root Layout
+
+Wrap your application in `LocaleProvider` and `ThemeProvider` (or equivalent):
 
 ```tsx
-import { ThemeProvider } from '@gateflow/theme';
-import '@gateflow/tokens/tokens.css';
+import { ThemeProvider } from 'next-themes';
+import { LocaleProvider } from '@gateflow/theme';
 
-export default function Layout({ children }) {
+export default function RootLayout({ children }) {
   return (
-    <html suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <ThemeProvider attribute="data-color-mode" defaultTheme="system">
+          <LocaleProvider>{children}</LocaleProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
 }
 ```
 
-## Usage
-
-Use the `useTheme` hook to switch modes or check current state:
+### Hook
 
 ```tsx
-import { useTheme } from '@gateflow/theme';
+import { useLocale } from '@gateflow/theme';
 
-export function ThemeToggle() {
-  const { theme, setTheme, isDark } = useTheme();
-
-  return (
-    <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
-      {isDark ? 'Switch to Light' : 'Switch to Dark'}
-    </button>
-  );
+function MyComponent() {
+  const { locale, setLocale, isRTL } = useLocale();
+  return <div dir={isRTL ? 'rtl' : 'ltr'}>{/* Content */}</div>;
 }
 ```
 
-## Utilities
+## Features
 
-Resolve GateFlow tokens into CSS variables:
-
-```tsx
-import { getTokenVar } from '@gateflow/theme';
-
-const primaryColor = getTokenVar('color.primary'); // 'var(--gf-color-primary)'
-```
-
-## Props
-
-- `attribute`: Defaults to `data-color-mode`.
-- `defaultTheme`: Defaults to `system`.
-- `enableSystem`: Defaults to `true`.
-- `disableTransitionOnChange`: Defaults to `true`.
+- **Directionality (RTL/LTR)**: Built-in support for MENA language parity.
+- **Theme Persistence**: Integration with `next-themes` and `localStorage`.
+- **SSR Friendly**: No hydration mismatch with standard Next.js patterns.

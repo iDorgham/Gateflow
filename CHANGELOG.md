@@ -6,9 +6,24 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ---
 
+## [1.0.0] - 2026-04-06
+
+### Added
+
+- **GateFlow Design System**: Canonical v1.0 launch.
+- **npm distribution**: Ready for `@gateflow/tokens`, `@gateflow/theme`, `@gateflow/ui`, `@gateflow/components`, and `@gateflow/ai`.
+- **Documentation**: Professional docs site at [design.gateflow.site](https://design.gateflow.site) with RTL, search, and galleries.
+- **MENA Regional Parity**: Standardized logical properties and Arabic localization foundations.
+- **AI UI Excellence**: Glassmorphism and agentic patterns in `@gateflow/ai`.
+
 ## [Unreleased]
 
 ### Workspace
+
+- **[Gateflow Design System]** complete phase 10 (npm & CI)
+- **[Gateflow Design System]** complete phase 9 (RTL & Search)
+- **[Gateflow Design System]** complete phase 7 & 8 (Foundations & Galleries)
+- **[Gateflow Design System]** complete phase 6
 
 - **[Gateflow Design System]** complete phase 5
 
