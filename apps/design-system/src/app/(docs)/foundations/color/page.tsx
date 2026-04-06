@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { PageHeader } from '@gateflow/components';
 import { Info, Palette, ShieldCheck, SunMoon } from 'lucide-react';
-import { cn } from '@gateflow/ui';
+import { cn } from '@gateflow/ui/utils';
 
 const colorPrinciples = [
   {

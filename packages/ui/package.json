@@ -26,6 +26,11 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
     },
+    "./utils": {
+      "types": "./dist/utils.d.ts",
+      "import": "./dist/utils.mjs",
+      "require": "./dist/utils.js"
+    },
     "./globals.css": "./src/globals.css",
     "./components/*": "./dist/components/*.js"
   },

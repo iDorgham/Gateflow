@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { PageHeader } from '@gateflow/components';
 import { Type, Ruler, ArrowRightLeft } from 'lucide-react';
-import { cn } from '@gateflow/ui';
+import { cn } from '@gateflow/ui/utils';
 
 const typographyPrinciples = [
   {

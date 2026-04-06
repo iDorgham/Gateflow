@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import { ThemeProvider } from '@gateflow/theme';
-import { cn } from '@gateflow/ui';
+import { cn } from '@gateflow/ui/utils';
 
 const inter = Inter({
   subsets: ['latin'],
