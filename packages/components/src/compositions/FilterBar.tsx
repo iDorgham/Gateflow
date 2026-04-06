@@ -2,7 +2,8 @@
 
 import * as React from 'react';
 import { Search, Filter, X } from 'lucide-react';
-import { cn, Input, Button } from '@gateflow/ui';
+import { cn } from '@gateflow/ui/utils';
+import { Input, Button } from '@gateflow/ui';
 
 export interface FilterBarProps extends React.HTMLAttributes<HTMLDivElement> {
   onSearchChange?: (value: string) => void;

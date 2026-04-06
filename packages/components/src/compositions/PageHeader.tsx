@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { cn } from '@gateflow/ui';
+import { cn } from '@gateflow/ui/utils';
 import { Breadcrumbs, BreadcrumbItem } from './Breadcrumbs';
 
 export interface PageHeaderProps extends React.HTMLAttributes<HTMLDivElement> {

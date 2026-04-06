@@ -1,7 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import { cn, Card, CardContent, Badge } from '@gateflow/ui';
+import { cn } from '@gateflow/ui/utils';
+import { Card, CardContent, Badge } from '@gateflow/ui';
 import { LucideIcon } from 'lucide-react';
 
 export interface EntityCardProps extends React.HTMLAttributes<HTMLDivElement> {

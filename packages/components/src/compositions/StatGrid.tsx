@@ -2,7 +2,8 @@
 
 import * as React from 'react';
 import { TrendingUp, TrendingDown, LucideIcon } from 'lucide-react';
-import { cn, Card, CardContent } from '@gateflow/ui';
+import { cn } from '@gateflow/ui/utils';
+import { Card, CardContent } from '@gateflow/ui';
 
 export interface StatItem {
   label: string;

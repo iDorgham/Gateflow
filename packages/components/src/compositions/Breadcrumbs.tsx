@@ -3,7 +3,7 @@
 import * as React from 'react';
 import Link from 'next/link';
 import { ChevronRight, Home } from 'lucide-react';
-import { cn } from '@gateflow/ui';
+import { cn } from '@gateflow/ui/utils';
 
 export interface BreadcrumbItem {
   label: string;
