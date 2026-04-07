@@ -39,7 +39,7 @@ on:
       skip_migration:
         description: 'Skip database migration (use when migration is already resolved)'
         required: false
-        default: 'false'
+        default: false
         type: boolean
 
 concurrency:
@@ -126,7 +126,7 @@ jobs:
           ACCELERATE_URL: 'false'
 
       - name: Build all web apps
-        run: pnpm turbo build --filter=@gateflow/design-system
+        run: pnpm turbo build
         env:
           ACCELERATE_URL: 'false'
           DATABASE_URL: 'postgresql://placeholder:placeholder@localhost:5432/placeholder'
@@ -179,8 +179,7 @@ jobs:
       !failure() &&
       (needs.db-migrate.result == 'success' || needs.db-migrate.result == 'skipped') &&
       (github.event.inputs.app == '' || github.event.inputs.app == 'client-dashboard') &&
-      needs.changes.outputs.client == 'true' &&
-      false
+      needs.changes.outputs.client == 'true'
     environment:
       name: "${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && 'production' || 'preview' }}"
       url: '${{ steps.deploy.outputs.url }}'
@@ -243,8 +242,7 @@ jobs:
       !failure() &&
       (needs.db-migrate.result == 'success' || needs.db-migrate.result == 'skipped') &&
       (github.event.inputs.app == '' || github.event.inputs.app == 'admin-dashboard') &&
-      needs.changes.outputs.admin == 'true' &&
-      false
+      needs.changes.outputs.admin == 'true'
     environment:
       name: "${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && 'production' || 'preview' }}"
       url: '${{ steps.deploy.outputs.url }}'
@@ -307,8 +305,7 @@ jobs:
       !failure() &&
       (needs.db-migrate.result == 'success' || needs.db-migrate.result == 'skipped') &&
       (github.event.inputs.app == '' || github.event.inputs.app == 'marketing') &&
-      needs.changes.outputs.marketing == 'true' &&
-      false
+      needs.changes.outputs.marketing == 'true'
     environment:
       name: "${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && 'production' || 'preview' }}"
       url: '${{ steps.deploy.outputs.url }}'
@@ -371,8 +368,7 @@ jobs:
       !failure() &&
       (needs.db-migrate.result == 'success' || needs.db-migrate.result == 'skipped') &&
       (github.event.inputs.app == '' || github.event.inputs.app == 'resident-portal') &&
-      needs.changes.outputs.resident == 'true' &&
-      false
+      needs.changes.outputs.resident == 'true'
     environment:
       name: "${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && 'production' || 'preview' }}"
       url: '${{ steps.deploy.outputs.url }}'

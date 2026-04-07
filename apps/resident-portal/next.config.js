@@ -15,11 +15,7 @@ const path = require('path');
 const nextConfig = {
   outputFileTracingRoot: path.join(__dirname, '../../'),
   reactStrictMode: true,
-  transpilePackages: [
-    '@gate-access/ui',
-    '@gate-access/db',
-    '@gate-access/types',
-  ],
+  transpilePackages: ['@gateflow/ui', '@gate-access/db', '@gate-access/types'],
   async headers() {
     return [{ source: '/(.*)', headers: securityHeaders }];
   },
