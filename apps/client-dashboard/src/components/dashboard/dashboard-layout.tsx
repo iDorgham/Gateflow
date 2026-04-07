@@ -343,14 +343,14 @@ function LeftSidebar({
   isCollapsed,
   onToggleCollapse,
   isRtl,
-  _onOpenChat,
+  onOpenChat,
   isSuperAdmin,
 }: {
   locale: Locale;
   isCollapsed: boolean;
   onToggleCollapse: () => void;
   isRtl: boolean;
-  _onOpenChat: () => void;
+  onOpenChat: () => void;
   isSuperAdmin: boolean;
 }) {
   const pathname = usePathname();
@@ -792,14 +792,14 @@ function MobileSidebar({
   isOpen,
   onOpenChange,
   isRtl,
-  _onOpenChat,
+  onOpenChat,
   isSuperAdmin,
 }: {
   locale: Locale;
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   isRtl: boolean;
-  _onOpenChat: () => void;
+  onOpenChat: () => void;
   isSuperAdmin: boolean;
 }) {
   const pathname = usePathname();
