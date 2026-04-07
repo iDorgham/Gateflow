@@ -157,7 +157,15 @@ export default async function FeaturesPage(props: {
   );
 }
 
-function FeatureDetail({ icon, title, desc }: any) {
+function FeatureDetail({
+  icon,
+  title,
+  desc,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  desc: string;
+}) {
   return (
     <div className="p-8 bg-card border rounded-2xl hover:border-primary transition-colors group">
       <div className="bg-primary/5 text-primary p-3 rounded-xl w-fit mb-6 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
@@ -169,7 +177,15 @@ function FeatureDetail({ icon, title, desc }: any) {
   );
 }
 
-function TechItem({ icon, title, desc }: any) {
+function TechItem({
+  icon,
+  title,
+  desc,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  desc: string;
+}) {
   return (
     <div className="flex gap-4">
       <div className="text-primary mt-1">{icon}</div>

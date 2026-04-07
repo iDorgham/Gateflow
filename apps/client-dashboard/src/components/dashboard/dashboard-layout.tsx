@@ -115,27 +115,27 @@ function ProjectSwitcher({
         onValueChange={handleProjectSwitch}
         disabled={isPending}
       >
-        <SelectTrigger className="h-9 w-[160px] bg-[var(--ds-background-neutral-subtle)] border-none text-xs font-semibold hover:bg-[var(--ds-background-neutral)] transition-colors rounded-lg px-3">
+        <SelectTrigger className="h-8 w-[180px] bg-ds-surface-raised border border-ds-border-selected/10 text-[11px] font-black uppercase tracking-tighter hover:bg-ds-surface-raised/80 transition-all rounded-lg px-3 shadow-sm">
           <div className="flex items-center gap-2 overflow-hidden">
             <Stack
-              weight="bold"
-              className="h-3.5 w-3.5 shrink-0 text-[var(--ds-icon-subtle)]"
+              weight="fill"
+              className="h-3.5 w-3.5 shrink-0 text-ds-icon-brand"
             />
             <SelectValue placeholder="Project" />
           </div>
         </SelectTrigger>
-        <SelectContent align="start">
-          <SelectItem value="all" className="text-xs">
+        <SelectContent align="start" className="bg-ds-surface border-ds-border">
+          <SelectItem value="all" className="text-xs font-bold">
             All Projects
           </SelectItem>
           {projects.map((p) => (
-            <SelectItem key={p.id} value={p.id} className="text-xs">
+            <SelectItem key={p.id} value={p.id} className="text-xs font-medium">
               {p.name}
             </SelectItem>
           ))}
         </SelectContent>
       </Select>
-      <div className="h-5 w-px bg-[var(--ds-border,#DFE1E6)] mx-1 shrink-0" />
+      <div className="h-4 w-px bg-ds-border mx-1 shrink-0" />
     </div>
   );
 }
@@ -165,7 +165,7 @@ function SearchHeader({
 
   return (
     <div
-      className="flex h-16 shrink-0 items-center justify-between gap-4 border-b border-border/40 bg-background/80 px-4 backdrop-blur-md sticky top-0 z-30"
+      className="flex h-14 shrink-0 items-center justify-between gap-4 border-b border-ds-border bg-ds-surface/60 px-4 backdrop-blur-xl sticky top-0 z-30"
       role="search"
     >
       <div className="flex flex-1 items-center max-w-2xl gap-2">
@@ -183,29 +183,33 @@ function SearchHeader({
           <DropdownMenuTrigger asChild>
             <button
               type="button"
-              className="flex items-center gap-1 rounded-sm p-1 transition-colors hover:bg-[var(--ds-background-subtle)] focus-visible:ring-2 focus-visible:ring-[var(--ds-border-selected)] outline-none"
+              className="flex items-center gap-1 rounded-lg p-1 transition-all hover:bg-ds-surface-raised border border-transparent hover:border-ds-border-selected/20 focus-visible:ring-2 focus-visible:ring-ds-border-brand outline-none"
               aria-label="Open user menu"
             >
-              <Avatar className="h-8 w-8">
-                <AvatarFallback className="bg-primary/10 text-primary text-xs font-bold">
+              <Avatar className="h-8 w-8 border-2 border-ds-background ring-1 ring-ds-border-brand/10">
+                <AvatarFallback className="bg-ds-background-brand-bold text-ds-text-inverse text-[10px] font-black">
                   {initials}
                 </AvatarFallback>
               </Avatar>
-              <ChevronDown className="h-3 w-3 text-[var(--ds-icon-subtle)]" />
+              <ChevronDown className="h-3 w-3 text-ds-icon-subtlest" />
             </button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" sideOffset={8} className="w-56 p-2">
+          <DropdownMenuContent
+            align="end"
+            sideOffset={8}
+            className="w-56 p-2 bg-ds-surface border-ds-border shadow-ds-shadow-overlay"
+          >
             <DropdownMenuLabel className="font-normal px-2 py-3">
               <div className="flex flex-col gap-0.5">
-                <p className="text-sm font-semibold text-[var(--ds-text,#172B4D)]">
+                <p className="text-sm font-black text-ds-text-heading tracking-tight">
                   {user.name}
                 </p>
-                <p className="text-xs text-[var(--ds-text-subtle,#42526E)] truncate">
+                <p className="text-[10px] font-bold text-ds-text-subtle uppercase tracking-widest truncate">
                   {user.email}
                 </p>
               </div>
             </DropdownMenuLabel>
-            <DropdownMenuSeparator className="bg-[var(--ds-border,#DFE1E6)]" />
+            <DropdownMenuSeparator className="bg-ds-border" />
             <DropdownMenuItem asChild>
               <Link
                 href={`/${locale}/dashboard/settings`}
@@ -224,9 +228,9 @@ function SearchHeader({
                 <span>Billing</span>
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuSeparator className="bg-[var(--ds-border,#DFE1E6)]" />
+            <DropdownMenuSeparator className="bg-ds-border" />
             <DropdownMenuItem
-              className="flex items-center gap-2 text-[var(--ds-text-danger,#DE350B)] focus:text-[var(--ds-text-danger,#DE350B)] cursor-pointer py-2"
+              className="flex items-center gap-2 text-ds-text-danger focus:text-ds-text-danger focus:bg-ds-background-danger-subtle cursor-pointer py-2 font-bold"
               onClick={() => (window.location.href = `/${locale}/logout`)}
             >
               <Power className="h-4 w-4" />
@@ -411,7 +415,7 @@ function LeftSidebar({
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.15 }}
-                    className="relative z-10 overflow-hidden whitespace-nowrap"
+                    className="relative z-10 overflow-hidden whitespace-nowrap font-black tracking-tight"
                   >
                     {label}
                   </motion.span>
@@ -433,23 +437,23 @@ function LeftSidebar({
     <motion.aside
       animate={{ width: isCollapsed ? 72 : 256 }}
       transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-      className="hidden md:flex h-full flex-col border-e border-border/40 bg-sidebar/80 backdrop-blur-md text-[var(--ds-text)] shrink-0 relative overflow-hidden"
+      className="hidden md:flex h-full flex-col border-e border-ds-border bg-ds-surface/60 backdrop-blur-xl text-ds-text shrink-0 relative overflow-hidden"
       role="navigation"
       aria-label="Main navigation"
     >
       <div
         className={cn(
-          'flex h-16 shrink-0 items-center border-b border-border/20 px-6',
+          'flex h-14 shrink-0 items-center border-b border-ds-border/20 px-6',
           isCollapsed && 'justify-center px-0'
         )}
       >
         <Link
           href={`/${locale}`}
-          className="flex items-center gap-3 rounded-lg transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-primary/50"
+          className="flex items-center gap-3 rounded-lg transition-transform hover:scale-[1.02] active:scale-[0.98] outline-none"
           aria-label="GateFlow home"
         >
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-primary text-white shadow-sm">
-            <ShieldCheck className="h-5 w-5" />
+          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-ds-background-brand-bold text-ds-text-inverse shadow-lg shadow-ds-background-brand-bold/20">
+            <ShieldCheck className="h-4.5 w-4.5" />
           </div>
           <AnimatePresence mode="wait" initial={false}>
             {!isCollapsed && (
@@ -459,7 +463,7 @@ function LeftSidebar({
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.15 }}
-                className="text-lg font-bold tracking-tight text-[var(--ds-text,#FAFAFA)] whitespace-nowrap"
+                className="text-base font-black tracking-tighter text-ds-text-heading whitespace-nowrap uppercase"
               >
                 GateFlow
               </motion.span>
@@ -480,7 +484,7 @@ function LeftSidebar({
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.1 }}
-                    className="px-3 text-[10px] font-bold uppercase tracking-widest text-[var(--ds-text-subtlest,#A1A1AA)] mb-2"
+                    className="px-3 text-[9px] font-black uppercase tracking-[0.3em] text-ds-text-subtlest mb-2"
                   >
                     {t('sidebar.groupMain', 'Main')}
                   </motion.p>
@@ -604,7 +608,7 @@ function LeftSidebar({
         </LayoutGroup>
       </ScrollArea>
 
-      <div className="shrink-0 p-4 mt-auto border-t border-border/20">
+      <div className="shrink-0 p-4 mt-auto border-t border-ds-border/10">
         <div className="flex items-center gap-1">
           <div className="flex-1 min-w-0">
             <NavItem
@@ -692,7 +696,7 @@ function RightSidePanel({
 
       <div
         className={cn(
-          'hidden md:flex h-full flex-col border-border/40 bg-sidebar text-sidebar-foreground transition-all duration-300 ease-in-out overflow-hidden',
+          'hidden md:flex h-full flex-col border-ds-border bg-ds-surface transition-all duration-300 ease-in-out overflow-hidden',
           isOpen ? 'w-[360px] border-l' : 'w-0 border-l-0'
         )}
       >
@@ -702,8 +706,8 @@ function RightSidePanel({
             onValueChange={onTabChange}
             className="flex flex-col h-full min-w-0"
           >
-            <div className="shrink-0 flex items-center h-16 border-b border-border/40 px-3 gap-2">
-              <TabsList className="grid grid-cols-3 h-9 bg-sidebar-accent flex-1">
+            <div className="shrink-0 flex items-center h-14 border-b border-ds-border px-3 gap-2">
+              <TabsList className="grid grid-cols-3 h-8 bg-ds-surface-sunken flex-1">
                 <TabsTrigger value="assistant" className="gap-2 text-xs">
                   <Sparkles className="h-3.5 w-3.5" />
                   {isRtl ? 'المساعد' : 'AI'}
@@ -759,8 +763,8 @@ function RightSidePanel({
                     <label
                       key={task.id}
                       className={cn(
-                        'flex items-center gap-3 rounded-lg border border-border bg-card px-3 py-2 cursor-pointer transition-colors hover:bg-muted/50',
-                        task.done && 'opacity-60 line-through'
+                        'flex items-center gap-3 rounded-xl border border-ds-border bg-ds-surface-raised px-3 py-2.5 cursor-pointer transition-all hover:border-ds-border-selected/40',
+                        task.done && 'opacity-60 grayscale'
                       )}
                     >
                       <input
@@ -862,13 +866,13 @@ function MobileSidebar({
         <div className="flex flex-col h-full">
           <Link
             href={`/${locale}`}
-            className="flex h-16 shrink-0 items-center gap-3 px-6 border-b border-border/50"
+            className="flex h-14 shrink-0 items-center gap-3 px-6 border-b border-ds-border bg-ds-surface/60 backdrop-blur-xl"
             onClick={() => onOpenChange(false)}
           >
-            <div className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-white">
-              <ShieldCheck className="h-5 w-5" />
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-ds-background-brand-bold text-ds-text-inverse shadow-lg shadow-ds-background-brand-bold/20">
+              <ShieldCheck className="h-4 w-4" />
             </div>
-            <span className="text-lg font-bold tracking-tight text-foreground">
+            <span className="text-base font-black tracking-tighter text-ds-text-heading uppercase">
               GateFlow
             </span>
           </Link>
@@ -1011,7 +1015,7 @@ export function DashboardLayout({
 
   return (
     <div
-      className="flex h-dvh flex-col overflow-hidden bg-background"
+      className="flex h-dvh flex-col overflow-hidden bg-ds-surface-sunken"
       dir={isRtl ? 'rtl' : 'ltr'}
       lang={locale}
     >
@@ -1026,7 +1030,7 @@ export function DashboardLayout({
         />
 
         <div className="flex flex-1 min-w-0 flex-col min-h-0 overflow-hidden">
-          <div className="flex h-16 shrink-0 items-center gap-2 border-b border-border bg-background px-4 md:hidden">
+          <div className="flex h-14 shrink-0 items-center gap-2 border-b border-ds-border bg-ds-surface px-4 md:hidden">
             <Button
               variant="ghost"
               size="icon"
@@ -1060,7 +1064,7 @@ export function DashboardLayout({
           </div>
 
           <main
-            className={`flex-1 min-h-0 bg-[var(--ds-surface-sunken,#FAFBFC)] ${!isFullBleed ? 'p-6 lg:p-10 overflow-y-auto' : isAiPage ? 'overflow-hidden flex flex-col' : 'overflow-y-auto flex flex-col'}`}
+            className={`flex-1 min-h-0 bg-ds-surface-sunken ${!isFullBleed ? 'p-5 lg:p-8 overflow-y-auto' : isAiPage ? 'overflow-hidden flex flex-col' : 'overflow-y-auto flex flex-col'}`}
             role="main"
           >
             <ProjectFilterProvider
@@ -1068,7 +1072,7 @@ export function DashboardLayout({
               projects={projects}
             >
               <div
-                className={`animate-in fade-in slide-in-from-bottom-2 duration-500 ${!isFullBleed ? 'max-w-[1400px] mx-auto' : 'flex-1 flex flex-col h-full'}`}
+                className={`animate-in fade-in slide-in-from-bottom-2 duration-500 ${!isFullBleed ? 'max-w-[1600px] mx-auto' : 'flex-1 flex flex-col h-full'}`}
               >
                 {children}
               </div>

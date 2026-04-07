@@ -1,19 +1,15 @@
 'use client';
 
 import * as React from 'react';
-import { motion, AnimatePresence, Reorder } from 'framer-motion';
+import { Reorder } from 'framer-motion';
 import {
   Type,
   Layout,
-  Image as ImageIcon,
   Plus,
   Box,
   Sparkles,
-  ChevronRight,
   Globe,
   Send,
-  Monitor,
-  Smartphone,
   CheckCircle2,
   AlertCircle,
   Eye,
@@ -29,14 +25,6 @@ import {
   Label,
   cn,
   ScrollArea,
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
   Separator,
 } from '@gateflow/ui';
 import { toast } from 'sonner';
@@ -45,8 +33,26 @@ import { toast } from 'sonner';
  * AI Landing Page Builder
  * Block-based Headless CMS for GateFlow marketing.
  */
-export function PageBuilder({ pageId }: { pageId?: string }) {
-  const [sections, setSections] = React.useState<any[]>([]);
+interface PageSection {
+  id: string;
+  type: string;
+  contentEn: {
+    headline: string;
+    body: string;
+    ctaText: string;
+    ctaLink: string;
+  };
+  contentAr: {
+    headline: string;
+    body: string;
+    ctaText: string;
+    ctaLink: string;
+  };
+  aiGenerated?: boolean;
+}
+
+export function PageBuilder({ pageId: _pageId }: { pageId?: string }) {
+  const [sections, setSections] = React.useState<PageSection[]>([]);
   const [activeLocale, setActiveLocale] = React.useState<'en' | 'ar'>('en');
   const [isGenerating, setIsGenerating] = React.useState(false);
   const [prompt, setPrompt] = React.useState('');

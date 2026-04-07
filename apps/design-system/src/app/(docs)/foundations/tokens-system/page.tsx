@@ -307,7 +307,13 @@ const data = [
                   >
                     <TableCell>
                       <Badge
-                        variant={row.status as any}
+                        variant={
+                          row.status as
+                            | 'default'
+                            | 'secondary'
+                            | 'danger'
+                            | 'outline'
+                        }
                         className="uppercase text-[9px] font-black border-none rounded-md px-1.5 py-0"
                       >
                         {row.status}

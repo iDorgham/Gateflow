@@ -19,6 +19,10 @@ export interface PageHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
   installCommand?: string;
 }
 
+/**
+ * PageHeader - Premium Redesign Component
+ * Uses semantic tokens for typography and layout.
+ */
 export function PageHeader({
   title,
   subtitle,
@@ -38,8 +42,8 @@ export function PageHeader({
       className={cn('flex flex-col gap-6 mb-12 relative', className)}
       {...props}
     >
-      {/* Decorative background accent */}
-      <div className="absolute -top-12 -left-12 h-64 w-64 bg-[var(--ds-background-brand-bold)]/5 rounded-full blur-[100px] pointer-events-none opacity-0 dark:opacity-100 dark:bg-purple-500/10 transition-all duration-1000" />
+      {/* Decorative background accent — uses dynamic accent profile */}
+      <div className="absolute -top-12 -left-12 h-64 w-64 bg-[var(--ds-primary-accent)]/5 rounded-full blur-[100px] pointer-events-none opacity-100 transition-all duration-1000" />
 
       {breadcrumbs && (
         <Breadcrumbs
@@ -59,7 +63,7 @@ export function PageHeader({
             >
               <h1
                 className={cn(
-                  'text-3xl md:text-4xl font-black tracking-tight text-[var(--ds-text)] dark:text-white truncate py-0.5',
+                  'text-3xl md:text-4xl font-black tracking-tight text-[var(--ds-text-primary)] truncate py-0.5',
                   titleClassName
                 )}
               >

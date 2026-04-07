@@ -55,7 +55,7 @@ export function EntityCard({
                 </h3>
                 {status && (
                   <Badge
-                    variant={statusVariant as any}
+                    variant={statusVariant}
                     className="h-5 px-1.5 text-[10px] font-black uppercase tracking-wider"
                   >
                     {status}

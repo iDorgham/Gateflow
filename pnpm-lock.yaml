@@ -470,6 +470,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      framer-motion:
+        specifier: ^11.18.2
+        version: 11.18.2(react-dom@19.2.4)(react@19.2.4)
       lucide-react:
         specifier: ^0.344.0
         version: 0.344.0(react@19.2.4)
@@ -482,6 +485,9 @@ importers:
       react-dom:
         specifier: ^19.0.0
         version: 19.2.4(react@19.2.4)
+      recharts:
+        specifier: ^2.15.4
+        version: 2.15.4(react-dom@19.2.4)(react@19.2.4)
       tailwind-merge:
         specifier: ^2.6.1
         version: 2.6.1
@@ -966,6 +972,9 @@ importers:
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
+      framer-motion:
+        specifier: ^11.18.2
+        version: 11.18.2(react-dom@19.2.4)(react@19.2.4)
       tailwind-merge:
         specifier: ^2.6.1
         version: 2.6.1
@@ -1270,6 +1279,9 @@ importers:
       cmdk:
         specifier: ^1.1.1
         version: 1.1.1(@types/react-dom@19.2.3)(@types/react@19.2.14)(react-dom@19.2.4)(react@19.2.4)
+      framer-motion:
+        specifier: ^11.18.2
+        version: 11.18.2(react-dom@19.2.4)(react@19.2.4)
       react:
         specifier: '>=18.0.0'
         version: 19.2.4
@@ -1295,9 +1307,6 @@ importers:
       autoprefixer:
         specifier: ^10.4.24
         version: 10.4.27(postcss@8.5.8)
-      framer-motion:
-        specifier: ^11.18.2
-        version: 11.18.2(react-dom@19.2.4)(react@19.2.4)
       lucide-react:
         specifier: ^0.344.0
         version: 0.344.0(react@19.2.4)
@@ -14762,6 +14771,7 @@ packages:
       react: 19.2.4
       react-dom: 19.2.4(react@19.2.4)
       tslib: 2.8.1
+    dev: false
 
   /framer-motion@6.5.1(react-dom@19.2.4)(react@19.1.0):
     resolution:
@@ -19607,12 +19617,14 @@ packages:
       }
     dependencies:
       motion-utils: 11.18.1
+    dev: false
 
   /motion-utils@11.18.1:
     resolution:
       {
         integrity: sha512-49Kt+HKjtbJKLtgO/LKj9Ld+6vw9BjH5d9sc40R/kVyH8GLAXgT42M2NnuPcJNuA3s9ZfZBUcwIgpmZWGEE+hA==,
       }
+    dev: false
 
   /mrmime@2.0.1:
     resolution:

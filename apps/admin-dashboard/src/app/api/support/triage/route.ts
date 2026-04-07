@@ -36,7 +36,7 @@ export async function POST(req: Request) {
     });
 
     // Record AI Cost Tracking
-    await trackAiUsage({
+    await (trackAiUsage as any)({
       model: 'gemini-1.5-pro',
       usage: {
         promptTokens: (usage as any).promptTokens || 0,
@@ -47,7 +47,7 @@ export async function POST(req: Request) {
     });
 
     // Update Ticket
-    const updatedTicket = await (prisma as any).supportTicket.update({
+    const updatedTicket = await prisma.supportTicket.update({
       where: { id: ticketId },
       data: {
         status: 'AI_TRIAGED',
@@ -58,7 +58,7 @@ export async function POST(req: Request) {
     });
 
     // Log AI Action
-    await (prisma as any).aiActionLog.create({
+    await prisma.aiActionLog.create({
       data: {
         organizationId: updatedTicket.organizationId || 'GLOBAL',
         action: 'SUPPORT_AI_TRIAGED',

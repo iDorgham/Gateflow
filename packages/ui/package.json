@@ -32,6 +32,11 @@
       "require": "./dist/utils.js"
     },
     "./globals.css": "./src/globals.css",
+    "./tokens": {
+      "types": "./dist/tokens.d.ts",
+      "import": "./dist/tokens.mjs",
+      "require": "./dist/tokens.js"
+    },
     "./components/*": "./dist/components/*.js"
   },
   "scripts": {

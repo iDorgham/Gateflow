@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Animated } from 'react-native';
 import { CheckCircle, XCircle, AlertTriangle } from 'lucide-react-native';
-import { nativeTokens } from '@gateflow/ui/tokens';
+import { nativeTokensNewEra as nativeTokens } from '../../../../packages/ui/src/tokens';
 
 export type ScanResult = 'success' | 'denied' | 'invalid';
 
@@ -18,28 +18,15 @@ export function ScanResultOverlay({
   visitorName,
   visible,
 }: ScanResultOverlayProps) {
-  const [opacity] = React.useState(new Animated.Value(0));
+  const opacity = React.useRef(new Animated.Value(0)).current;
 
   React.useEffect(() => {
-    if (visible) {
-      Animated.timing(opacity, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-      }).start();
-    } else {
-      Animated.timing(opacity, {
-        toValue: 0,
-        duration: 250,
-        useNativeDriver: true,
-      }).start();
-    }
+    Animated.timing(opacity, {
+      toValue: visible ? 1 : 0,
+      duration: visible ? 300 : 250,
+      useNativeDriver: true,
+    }).start();
   }, [visible, opacity]);
-
-  if (!visible && opacity.addListener(() => {}) === undefined) {
-    // Note: In a real app we'd unmount after animation completes,
-    // but returning null immediately is fine for a simple implementation.
-  }
 
   const config = {
     success: {
@@ -69,8 +56,8 @@ export function ScanResultOverlay({
       <View style={styles.content}>
         <Icon
           size={80}
-          color={nativeTokens.colors.background}
-          strokeWidth={nativeTokens.borderRadius.sm / 2}
+          color={nativeTokens.colors.textInverse}
+          strokeWidth={3}
         />
         <Text style={styles.title}>{config.title}</Text>
         {visitorName && <Text style={styles.visitorName}>{visitorName}</Text>}
@@ -86,34 +73,37 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 1000,
-    padding: nativeTokens.spacing['4xl'],
+    padding: nativeTokens.spacing['space-400'],
   },
   content: {
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.15)',
-    padding: nativeTokens.spacing['3xl'],
-    borderRadius: nativeTokens.borderRadius.xl,
+    backgroundColor: nativeTokens.colors.surfaceGlass,
+    padding: nativeTokens.spacing['space-300'],
+    borderRadius: 24,
     width: '100%',
+    borderWidth: 1,
+    borderColor: nativeTokens.colors.borderGlass,
   },
   title: {
-    ...nativeTokens.typography['3xl'],
-    color: nativeTokens.colors.background,
-    fontWeight: 'bold',
-    marginTop: nativeTokens.spacing.lg,
+    fontFamily: 'Cairo_700Bold',
+    fontSize: 32,
+    color: nativeTokens.colors.textInverse,
+    marginTop: nativeTokens.spacing['space-200'],
     textAlign: 'center',
+    letterSpacing: nativeTokens.typography.headerTracking,
   },
   visitorName: {
-    ...nativeTokens.typography.xl,
-    color: nativeTokens.colors.background,
-    fontWeight: '600',
-    marginTop: nativeTokens.spacing.sm,
+    fontFamily: 'Cairo_600SemiBold',
+    fontSize: 20,
+    color: nativeTokens.colors.textInverse,
+    marginTop: nativeTokens.spacing['space-100'],
     textAlign: 'center',
-    opacity: 0.9,
   },
   message: {
-    ...nativeTokens.typography.base,
-    color: nativeTokens.colors.background,
-    marginTop: nativeTokens.spacing.md,
+    fontFamily: 'Cairo_400Regular',
+    fontSize: 16,
+    color: nativeTokens.colors.textInverse,
+    marginTop: nativeTokens.spacing['space-150'],
     textAlign: 'center',
     opacity: 0.9,
   },

@@ -17,6 +17,7 @@ import {
   Sun,
   Laptop,
   Globe,
+  Layout,
 } from 'lucide-react';
 import { useLocale } from '../../components/providers/LocaleProvider';
 import { Search } from '../../components/navigation/Search';
@@ -33,18 +34,36 @@ import {
 } from '@gateflow/ui';
 import { useGateFlowColorMode } from '@gateflow/theme';
 
-const sidebarItems = (t: Record<string, any>) => [
+const sidebarItems = (t: Record<string, string>) => [
   {
     label: t.foundations,
     href: '/foundations',
     icon: Library,
     subItems: [
       { label: t.foundations, href: '/foundations' },
+      { label: t.color, href: '/foundations/color' },
+      { label: t.typography, href: '/foundations/typography' },
+      { label: t.iconography, href: '/foundations/iconography' },
+      { label: t.spacing, href: '/foundations/spacing' },
+      { label: t.layering, href: '/foundations/layering' },
+      { label: t.motion, href: '/foundations/motion' },
       { label: t.tokenMaster, href: '/foundations/tokens-system' },
-      { label: t.tokens, href: '/foundations/color' },
     ],
   },
   { label: t.tokens, href: '/tokens', icon: Palette },
+  {
+    label: t.patterns,
+    href: '/patterns',
+    icon: Layout,
+    subItems: [
+      { label: t.aiUi, href: '/patterns/ai-ui' },
+      { label: t.analytics, href: '/patterns/analytics' },
+      { label: t.forms, href: '/patterns/forms' },
+      { label: t.complexUi, href: '/patterns/complex-ui' },
+      { label: t.authBranding, href: '/patterns/auth-branding' },
+      { label: t.calendar, href: '/patterns/calendar' },
+    ],
+  },
 
   { label: t.accessibility, href: '/accessibility', icon: Accessibility },
   {

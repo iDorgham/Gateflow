@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@gate-access/db';
+import type { Department, TaskPriority } from '@gate-access/db';
 import { isAdminAuthorized } from '@/lib/admin-auth';
 import { generateObject } from 'ai';
 import { google } from '@ai-sdk/google';
@@ -30,7 +31,7 @@ export async function POST(req: Request) {
 
     // 1. Fetch Department Board
     const board = await prisma.taskBoard.findFirst({
-      where: { organizationId: orgId, department: department as any },
+      where: { organizationId: orgId, department: department as Department },
     });
 
     if (!board) {
@@ -68,13 +69,13 @@ export async function POST(req: Request) {
     });
 
     // Record AI Cost Tracking
-    await trackAiUsage({
+    await (trackAiUsage as any)({
       model: 'gemini-1.5-pro',
       usage: {
         promptTokens: (usage as any).promptTokens || 0,
         completionTokens: (usage as any).completionTokens || 0,
       },
-      department: department as any,
+      department: department as Department,
       action: 'TASK_AI_GENERATED',
     });
 
@@ -92,7 +93,7 @@ export async function POST(req: Request) {
     }
 
     const createdTasks = await Promise.all(
-      object.tasks.map(async (t: any) => {
+      object.tasks.map(async (t) => {
         const dueDate = t.daysToComplete
           ? new Date(Date.now() + t.daysToComplete * 24 * 60 * 60 * 1000)
           : undefined;
@@ -101,9 +102,9 @@ export async function POST(req: Request) {
           data: {
             title: t.title,
             description: t.description,
-            priority: t.priority,
+            priority: t.priority as TaskPriority,
             status: 'TODO',
-            department: department as any,
+            department: department as Department,
             organizationId: orgId,
             boardId: board.id,
             createdById: adminUser.id,

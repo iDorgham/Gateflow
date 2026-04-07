@@ -375,4 +375,100 @@ export const nativeTokensRealEstate = {
   },
 };
 
+/**
+ * React-Native tokens for the "New Era" - Satin-Charcoal & Kimchi Profile.
+ * Aligned with Phase 7 Mobile Optimization.
+ */
+export const nativeTokensNewEra = {
+  colors: {
+    // Satin-Charcoal Depth (L8-L22)
+    background: '#0c0d10', // oklch(8% 0.015 250)
+    surfaceSubtle: '#131418', // oklch(11% 0.015 250)
+    surfaceRaised: '#1a1c21', // oklch(14% 0.02 250)
+    surfaceOverlay: '#2d3037', // oklch(22% 0.02 250)
+    surfaceGlass: 'rgba(255, 255, 255, 0.03)',
+    borderGlass: 'rgba(255, 255, 255, 0.08)',
+    backdropGlass: 'rgba(0, 0, 0, 0.85)',
+
+    // Accents (Kimchi Default)
+    primary: '#ed4b00', // oklch(62% 0.22 35)
+    primarySubtle: 'rgba(237, 75, 0, 0.15)',
+    primaryBold: '#ff5c0a',
+
+    // Accents (Secondary Profiles)
+    cobalt: '#0052cc',
+    emerald: '#00875a',
+
+    // Text & Icons
+    textHeading: '#f1f5f9',
+    textPrimary: '#cbd5e1',
+    textSubtle: '#94a3b8',
+    textSubtlest: '#64748b',
+    textInverse: '#ffffff',
+    textBrand: '#ff5c0a',
+
+    // Border & UI
+    border: '#2d3037',
+    borderSubtle: '#1e293b',
+    borderBold: '#475569',
+    input: '#131418',
+    ring: '#ed4b00',
+
+    // Status
+    success: '#22c55e',
+    warning: '#f59e0b',
+    danger: '#ef4444',
+    info: '#3b82f6',
+
+    // Status Subtle (Translucents)
+    successSubtle: 'rgba(34, 197, 94, 0.1)',
+    warningSubtle: 'rgba(245, 158, 11, 0.1)',
+    dangerSubtle: 'rgba(239, 68, 68, 0.1)',
+    infoSubtle: 'rgba(59, 130, 246, 0.1)',
+  },
+  spacing: {
+    'space-050': 4,
+    'space-100': 8,
+    'space-150': 12,
+    'space-200': 16,
+    'space-300': 24,
+    'space-400': 32,
+    'space-500': 40,
+    'space-600': 48,
+  },
+  shadows: {
+    brandGlow: {
+      shadowColor: '#ed4b00',
+      shadowOffset: { width: 0, height: 0 },
+      shadowOpacity: 0.25,
+      shadowRadius: 15,
+      elevation: 10,
+    },
+    satinRaised: {
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 8 },
+      shadowOpacity: 0.4,
+      shadowRadius: 12,
+      elevation: 6,
+    },
+    satinOverlay: {
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 16 },
+      shadowOpacity: 0.5,
+      shadowRadius: 24,
+      elevation: 12,
+    },
+  },
+  typography: {
+    // Sentinel Style Tracking (0.4em mapped to approx letterSpacing)
+    headerTracking: 3.5,
+    subtitleTracking: 1.5,
+    fontFamily: {
+      sans: 'System', // Fallback, apps will map to Cairo/Inter
+      heading: 'System',
+      mono: 'Courier',
+    },
+  },
+};
+
 export type DesignTokens = typeof tokens;

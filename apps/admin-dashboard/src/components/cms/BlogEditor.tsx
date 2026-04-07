@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+
 import {
   FileText,
   Sparkles,
@@ -9,15 +9,11 @@ import {
   Globe,
   Search,
   CheckCircle2,
-  AlertCircle,
   Image as ImageIcon,
-  Save,
   Send,
   Eye,
   History,
-  Layout,
   Type,
-  ChevronDown,
   Info,
 } from 'lucide-react';
 import {
@@ -30,10 +26,6 @@ import {
   cn,
   ScrollArea,
   Separator,
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
 } from '@gateflow/ui';
 import { toast } from 'sonner';
 
@@ -41,7 +33,7 @@ import { toast } from 'sonner';
  * Premium AI Blog Editor
  * Studio-grade writing environment with bi-lingual parity.
  */
-export function BlogEditor({ postId }: { postId?: string }) {
+export function BlogEditor({ postId: _postId }: { postId?: string }) {
   const [activeLocale, setActiveLocale] = React.useState<'en' | 'ar'>('en');
   const [isGenerating, setIsGenerating] = React.useState(false);
   const [topic, setTopic] = React.useState('');

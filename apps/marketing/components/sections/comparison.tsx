@@ -88,7 +88,8 @@ export function ComparisonSection({ _locale }: { _locale: Locale }) {
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="overflow-hidden border border-ds-border-bold rounded-[32px] bg-ds-surface-raised shadow-[0_64px_128px_rgba(0,0,0,0.12)]"
+          className="overflow-hidden border border-ds-border-bold rounded-[32px] bg-ds-surface-raised"
+          style={{ boxShadow: 'var(--ds-shadow-deep)' }}
         >
           <div className="overflow-x-auto">
             <table className="w-full min-w-[800px] border-collapse">
@@ -98,7 +99,10 @@ export function ComparisonSection({ _locale }: { _locale: Locale }) {
                     {t('comparison.features_col')}
                   </th>
                   <th className="py-12 px-8 text-center bg-ds-background-brand-subtle/30">
-                    <div className="inline-flex items-center gap-3 px-6 py-2.5 bg-ds-background-brand-bold text-white text-[13px] font-black rounded-xl uppercase tracking-[0.2em] shadow-xl shadow-ds-background-brand-bold/20">
+                    <div
+                      className="inline-flex items-center gap-3 px-6 py-2.5 bg-ds-background-brand-bold text-white text-[13px] font-black rounded-xl uppercase tracking-[0.2em]"
+                      style={{ boxShadow: 'var(--ds-glow-accent)' }}
+                    >
                       <ShieldCheck size={16} />
                       GateFlow
                     </div>
@@ -124,7 +128,8 @@ export function ComparisonSection({ _locale }: { _locale: Locale }) {
                       <div className="flex justify-center">
                         <motion.div
                           whileHover={{ scale: 1.2 }}
-                          className="w-10 h-10 rounded-2xl bg-ds-background-brand-bold text-white flex items-center justify-center shadow-lg shadow-ds-background-brand-bold/30"
+                          className="w-10 h-10 rounded-2xl bg-ds-background-brand-bold text-white flex items-center justify-center"
+                          style={{ boxShadow: 'var(--ds-glow-accent)' }}
                         >
                           <Check size={22} strokeWidth={3} />
                         </motion.div>

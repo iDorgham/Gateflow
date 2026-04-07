@@ -12,6 +12,7 @@ import {
   View,
 } from 'react-native';
 import { getValidAccessToken } from '../lib/auth-client';
+import { nativeTokensNewEra as nativeTokens } from '../../../../packages/ui/src/tokens';
 
 const TOP_OFFSET =
   Platform.OS === 'android' ? (StatusBar.currentHeight ?? 24) + 20 : 60;
@@ -187,7 +188,7 @@ export function ChatTab() {
 
       {loading ? (
         <View style={s.center}>
-          <ActivityIndicator size="large" color="var(--ds-text-information)" />
+          <ActivityIndicator size="large" color={nativeTokens.colors.primary} />
         </View>
       ) : messages.length === 0 ? (
         <View style={s.content}>
@@ -214,7 +215,7 @@ export function ChatTab() {
           value={inputText}
           onChangeText={setInputText}
           placeholder="Type a message..."
-          placeholderTextColor="var(--ds-text-subtle)"
+          placeholderTextColor={nativeTokens.colors.textSubtlest}
           multiline
           maxLength={1000}
           editable={!sending}
@@ -228,7 +229,10 @@ export function ChatTab() {
           disabled={!inputText.trim() || sending}
         >
           {sending ? (
-            <ActivityIndicator size="small" color="var(--ds-text-inverse)" />
+            <ActivityIndicator
+              size="small"
+              color={nativeTokens.colors.textInverse}
+            />
           ) : (
             <Text style={s.sendButtonText}>Send</Text>
           )}
@@ -242,7 +246,7 @@ export function ChatTab() {
 const s = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: 'var(--ds-background-neutral)',
+    backgroundColor: nativeTokens.colors.background,
     paddingTop: TOP_OFFSET,
   },
   header: {
@@ -252,17 +256,17 @@ const s = StyleSheet.create({
     paddingHorizontal: 24,
     paddingBottom: 16,
     borderBottomWidth: 1,
-    borderColor: 'var(--ds-border)',
+    borderColor: nativeTokens.colors.border,
   },
   title: {
+    fontFamily: 'Cairo_700Bold',
     fontSize: 24,
-    fontWeight: '700',
-    color: 'var(--ds-text-inverse)',
+    color: nativeTokens.colors.textHeading,
   },
   subtitle: {
+    fontFamily: 'Cairo_600SemiBold',
     fontSize: 13,
-    color: 'var(--ds-text-subtle)',
-    fontWeight: '500',
+    color: nativeTokens.colors.textSubtle,
   },
   center: {
     flex: 1,
@@ -278,28 +282,29 @@ const s = StyleSheet.create({
     fontSize: 48,
   },
   emptyTitle: {
+    fontFamily: 'Cairo_700Bold',
     fontSize: 18,
-    fontWeight: '600',
-    color: 'var(--ds-text-subtle)',
+    color: nativeTokens.colors.textHeading,
     textAlign: 'center',
   },
   emptySub: {
+    fontFamily: 'Cairo_400Regular',
     fontSize: 14,
-    color: 'var(--ds-text-subtle)',
+    color: nativeTokens.colors.textSubtle,
     textAlign: 'center',
     lineHeight: 20,
     maxWidth: 260,
   },
   listContent: {
-    paddingBottom: 16,
+    paddingBottom: 24,
     paddingTop: 16,
-    paddingHorizontal: 12,
+    paddingHorizontal: 16,
   },
 
   // Message bubble
   messageContainer: {
     flexDirection: 'row',
-    marginBottom: 12,
+    marginBottom: 16,
     maxWidth: '85%',
   },
   ownContainer: {
@@ -309,90 +314,97 @@ const s = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   avatar: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    backgroundColor: 'var(--ds-border)',
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: nativeTokens.colors.surfaceRaised,
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 8,
+    marginRight: 10,
+    borderWidth: 1,
+    borderColor: nativeTokens.colors.border,
   },
   avatarText: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: 'var(--ds-text-subtlest)',
+    fontFamily: 'Cairo_700Bold',
+    fontSize: 12,
+    color: nativeTokens.colors.textPrimary,
   },
   messageBubble: {
-    borderRadius: 16,
-    paddingVertical: 10,
-    paddingHorizontal: 14,
+    borderRadius: 20,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
     maxWidth: '100%',
   },
   ownBubble: {
-    backgroundColor: 'var(--ds-text-information)',
+    backgroundColor: nativeTokens.colors.primary,
     borderBottomRightRadius: 4,
   },
   otherBubble: {
-    backgroundColor: 'var(--ds-background-neutral)',
+    backgroundColor: nativeTokens.colors.surfaceSubtle,
     borderBottomLeftRadius: 4,
+    borderWidth: 1,
+    borderColor: nativeTokens.colors.border,
   },
   senderName: {
+    fontFamily: 'Cairo_700Bold',
     fontSize: 12,
-    fontWeight: '600',
-    color: 'var(--ds-text-subtle)',
-    marginBottom: 2,
+    color: nativeTokens.colors.textHeading,
+    marginBottom: 4,
   },
   messageText: {
-    fontSize: 15,
-    lineHeight: 20,
+    fontFamily: 'Cairo_400Regular',
+    fontSize: 16,
+    lineHeight: 22,
   },
   ownText: {
-    color: 'var(--ds-text-inverse)',
+    color: nativeTokens.colors.textInverse,
   },
   otherText: {
-    color: 'var(--ds-text-subtle)',
+    color: nativeTokens.colors.textPrimary,
   },
   timestamp: {
+    fontFamily: 'Cairo_400Regular',
     fontSize: 10,
-    marginTop: 4,
+    marginTop: 6,
   },
   ownTimestamp: {
-    color: 'rgba(255,255,255,0.6)',
+    color: nativeTokens.colors.textSubtle,
     textAlign: 'right',
   },
   otherTimestamp: {
-    color: 'var(--ds-text-subtle)',
+    color: nativeTokens.colors.textSubtlest,
   },
 
   // Input
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'flex-end',
-    paddingHorizontal: 12,
-    paddingVertical: 12,
-    gap: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+    gap: 12,
     borderTopWidth: 1,
-    borderColor: 'var(--ds-border)',
-    backgroundColor: 'var(--ds-background-neutral)',
+    borderColor: nativeTokens.colors.border,
+    backgroundColor: nativeTokens.colors.surfaceSubtle,
   },
   input: {
     flex: 1,
-    backgroundColor: 'var(--ds-background-neutral)',
-    borderRadius: 20,
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    fontSize: 15,
-    color: 'var(--ds-text-inverse)',
-    maxHeight: 100,
+    backgroundColor: nativeTokens.colors.background,
+    borderRadius: 24,
+    paddingHorizontal: 18,
+    paddingVertical: 12,
+    fontFamily: 'Cairo_400Regular',
+    fontSize: 16,
+    color: nativeTokens.colors.textPrimary,
+    maxHeight: 120,
     borderWidth: 1,
-    borderColor: 'var(--ds-border)',
+    borderColor: nativeTokens.colors.border,
   },
   sendButton: {
-    backgroundColor: 'var(--ds-text-information)',
-    borderRadius: 20,
+    backgroundColor: nativeTokens.colors.primary,
+    borderRadius: 24,
     paddingHorizontal: 20,
-    paddingVertical: 10,
-    minWidth: 70,
+    paddingVertical: 12,
+    minWidth: 80,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -400,8 +412,8 @@ const s = StyleSheet.create({
     opacity: 0.5,
   },
   sendButtonText: {
-    color: 'var(--ds-text-inverse)',
+    fontFamily: 'Cairo_700Bold',
+    color: nativeTokens.colors.textInverse,
     fontSize: 15,
-    fontWeight: '600',
   },
 });

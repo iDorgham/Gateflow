@@ -8,9 +8,6 @@ import type { Locale } from '../../i18n-config';
 import { useTranslation } from '../../hooks/use-translation';
 import { ShieldCheck, ArrowRight, ArrowLeft, Lock, Zap } from 'lucide-react';
 
-/* Brand color — centralized so it's easy to update */
-const BRAND_RGB = '237, 75, 0';
-
 function GridBackdrop() {
   return (
     <>

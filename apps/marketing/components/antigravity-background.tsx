@@ -32,9 +32,10 @@ const GRID_SIZE_Z = 35;
 const SPACING_X = 140;
 const SPACING_Z = 110;
 
-const COLOR_ORANGE = '#ED4B00'; // Kimchi Orange
-const COLOR_GRAY_LIGHT = '#64748b'; // Slate 500
-const COLOR_WHITE_DARK = '#FFFFFF';
+// Tokens resolved dynamically via getComputedStyle in useTokenColors hook
+const TOKEN_PRIMARY_ACCENT = '--ds-primary-accent';
+const TOKEN_TEXT_SUBTLE = '--ds-text-subtle';
+const TOKEN_TEXT_PRIMARY = '--ds-text-primary';
 
 export const AntigravityBackground: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -70,9 +71,21 @@ export const AntigravityBackground: React.FC = () => {
     };
   }, []);
 
+  const getResolvedColor = (variable: string) => {
+    if (typeof window === 'undefined') return 'black';
+    return (
+      getComputedStyle(document.documentElement)
+        .getPropertyValue(variable)
+        .trim() || 'black'
+    );
+  };
+
   const initGrid = () => {
     const nodes: GridNode[] = [];
-    const baseColor = isDark ? COLOR_WHITE_DARK : COLOR_GRAY_LIGHT;
+    const accentColor = getResolvedColor(TOKEN_PRIMARY_ACCENT);
+    const baseColor = isDark
+      ? getResolvedColor(TOKEN_TEXT_PRIMARY)
+      : getResolvedColor(TOKEN_TEXT_SUBTLE);
 
     for (let z = 0; z < GRID_SIZE_Z; z++) {
       for (let x = 0; x < GRID_SIZE_X; x++) {
@@ -89,7 +102,7 @@ export const AntigravityBackground: React.FC = () => {
           vx: 0,
           vy: 0,
           vz: 0,
-          color: isOrange ? COLOR_ORANGE : baseColor,
+          color: isOrange ? accentColor : baseColor,
           isOrange,
         });
       }
@@ -176,7 +189,10 @@ export const AntigravityBackground: React.FC = () => {
     const cx = width / 2;
     const cy = height / 2;
     const focalLength = 1000;
-    const baseColor = isDark ? COLOR_WHITE_DARK : COLOR_GRAY_LIGHT;
+    const accentColor = getResolvedColor(TOKEN_PRIMARY_ACCENT);
+    const baseColor = isDark
+      ? getResolvedColor(TOKEN_TEXT_PRIMARY)
+      : getResolvedColor(TOKEN_TEXT_SUBTLE);
 
     for (let z = 0; z < GRID_SIZE_Z; z++) {
       for (let x = 0; x < GRID_SIZE_X; x++) {
@@ -226,9 +242,9 @@ export const AntigravityBackground: React.FC = () => {
         if (p1.isOrange) {
           const pulse = Math.sin(Date.now() / 300) * 0.3 + 0.7;
           ctx.globalAlpha = opacity * 3 * pulse;
-          ctx.fillStyle = COLOR_ORANGE;
+          ctx.fillStyle = accentColor;
           if (isDark) {
-            ctx.shadowColor = COLOR_ORANGE;
+            ctx.shadowColor = accentColor;
             ctx.shadowBlur = 12 * scale1;
           }
           ctx.beginPath();

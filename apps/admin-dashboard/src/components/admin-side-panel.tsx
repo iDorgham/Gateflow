@@ -8,13 +8,7 @@ import {
   TabsContent,
   Button,
 } from '@gateflow/ui';
-import {
-  Sparkles,
-  ScrollText,
-  MessageSquare,
-  X,
-  ChevronRight,
-} from 'lucide-react';
+import { Sparkles, ScrollText, MessageSquare, X } from 'lucide-react';
 import type { Locale } from '@/lib/i18n/i18n-config';
 import { AdminAIAssistant } from './admin-ai-assistant';
 

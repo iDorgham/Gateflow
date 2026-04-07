@@ -136,11 +136,15 @@ export default async function RootLayout(props: {
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         <link rel="preconnect" href="https://www.google-analytics.com" />
         <link rel="preconnect" href="https://connect.facebook.net" />
-        <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
         <OrganizationJsonLd locale={castLocale} />
         <WebSiteJsonLd locale={castLocale} />
-        <meta name="theme-color" content="#ED4B00" />
+        <meta name="theme-color" content="var(--ds-primary-accent)" />
         <link rel="manifest" href="/manifest.json" />
         <MarketingScripts
           metaPixelId={process.env.NEXT_PUBLIC_META_PIXEL_ID}

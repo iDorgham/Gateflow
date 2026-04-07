@@ -1,136 +1,95 @@
 import * as React from 'react';
 import { PageHeader } from '@gateflow/components';
-import { Info, Palette, ShieldCheck, SunMoon } from 'lucide-react';
+import { ShieldCheck, Palette, SunMoon, Info } from 'lucide-react';
 import { cn } from '@gateflow/ui/utils';
+import { AccentProfileLab } from '../../../../components/foundations/AccentProfileLab';
 
 const colorPrinciples = [
   {
-    title: 'Accessible Contrast',
+    title: 'Perceptual Uniformity',
     description:
-      'We meet WCAG 2.1 AA (4.5:1) for all critical UI text and iconography.',
+      'Using OKLCH, we maintain consistent lightness (L) across all hues. This ensures that Kimchi, Cobalt, and Emerald feel equally bright and readable.',
+    icon: SunMoon,
+  },
+  {
+    title: 'Satin-Charcoal Depth',
+    description:
+      'We use a warm-charcoal base (Hue 250) for all dark mode surfaces. Lightness tiers (8-22%) create "Satin" depth without the harshness of pure black.',
     icon: ShieldCheck,
   },
   {
-    title: 'Semantic-First',
+    title: 'Semantic Mapping',
     description:
-      'Design with purpose, not hex codes. Usage dictates naming (background, brand, information).',
+      'All UI is built using semantic --ds- tokens. If you change a profile, every component updates instantly without a build step.',
     icon: Palette,
   },
+];
+
+const neutralSwatches = [
+  { name: 'Neutral-10', var: '--gf-color-neutral-10', label: 'Canvas / Deep' },
+  { name: 'Neutral-20', var: '--gf-color-neutral-20', label: 'Sidebar / Nav' },
+  { name: 'Neutral-30', var: '--gf-color-neutral-30', label: 'Surface / Card' },
+  { name: 'Neutral-40', var: '--gf-color-neutral-40', label: 'Raised / Hover' },
   {
-    title: 'Color Mode Harmony',
-    description:
-      'Tokens map symmetrically across Light and Dark modes using OKLCH for perceptual uniformity.',
-    icon: SunMoon,
+    name: 'Neutral-50',
+    var: '--gf-color-neutral-50',
+    label: 'Overlay / Modal',
   },
 ];
 
-const brandSwatches = [
-  { name: 'Brand 50', var: '--gf-color-brand-50', label: 'Tint' },
-  { name: 'Brand 100', var: '--gf-color-brand-100', label: 'Light' },
-  { name: 'Brand 200', var: '--gf-color-brand-200', label: 'Soft' },
-  { name: 'Brand 300', var: '--gf-color-brand-300', label: 'Muted' },
+const semanticSwatches = [
   {
-    name: 'Brand 400',
-    var: '--gf-color-brand-400',
-    label: 'Dark mode primary',
+    name: 'Background',
+    var: '--ds-background-default',
+    label: 'Institutional Base',
   },
-  { name: 'Brand 500', var: '--gf-color-brand-500', label: 'Kimchi #ED4B00' },
-  { name: 'Brand 600', var: '--gf-color-brand-600', label: 'Hover' },
-  { name: 'Brand 700', var: '--gf-color-brand-700', label: 'Bold' },
-  { name: 'Brand 800', var: '--gf-color-brand-800', label: 'Deep' },
-  { name: 'Brand 900', var: '--gf-color-brand-900', label: 'Dark' },
-];
-
-const surfaceSwatches = [
-  { name: 'BG Page', var: '--gf-color-bg-page', label: 'Page canvas' },
-  { name: 'BG Subtle', var: '--gf-color-bg-subtle', label: 'Sidebar / inset' },
-  { name: 'BG Default', var: '--gf-color-bg-default', label: 'Cards' },
   {
-    name: 'BG Raised',
-    var: '--gf-color-bg-raised',
-    label: 'Dropdowns / popovers',
+    name: 'Surface Subtle',
+    var: '--ds-surface-subtle',
+    label: 'Inset / Sidebar',
   },
-  { name: 'BG Overlay', var: '--gf-color-bg-overlay', label: 'Modals' },
+  {
+    name: 'Surface Raised',
+    var: '--ds-surface-raised',
+    label: 'Component Base',
+  },
+  {
+    name: 'Surface Overlay',
+    var: '--ds-surface-overlay',
+    label: 'Elevated UI',
+  },
+  { name: 'Surface Glass', var: '--ds-surface-glass', label: 'Glassmorphism' },
 ];
 
 const textSwatches = [
-  { name: 'Text', var: '--gf-color-text', label: 'Primary body' },
-  { name: 'Text Subtle', var: '--gf-color-text-subtle', label: 'Secondary' },
+  { name: 'Text Primary', var: '--ds-text-primary', label: 'High contrast' },
+  { name: 'Text Subtle', var: '--ds-text-subtle', label: 'Secondary body' },
+  { name: 'Text Inverse', var: '--ds-text-inverse', label: 'On light bg' },
   {
-    name: 'Text Subtlest',
-    var: '--gf-color-text-subtlest',
-    label: 'Placeholder',
-  },
-  { name: 'Text Brand', var: '--gf-color-text-brand', label: 'Kimchi links' },
-  { name: 'Text Inverse', var: '--gf-color-text-inverse', label: 'On dark bg' },
-];
-
-const borderSwatches = [
-  { name: 'Border', var: '--gf-color-border', label: 'Default' },
-  { name: 'Border Subtle', var: '--gf-color-border-subtle', label: 'Hairline' },
-  { name: 'Border Bold', var: '--gf-color-border-bold', label: 'Emphasis' },
-  {
-    name: 'Border Focused',
-    var: '--gf-color-border-focused',
-    label: 'Focus ring',
+    name: 'Text Accent',
+    var: '--ds-text-accent',
+    label: 'Primary brand links',
   },
 ];
 
-const statusSwatches = [
+const accentSwatches = [
+  { name: 'Kimchi Core', var: '--ds-primary-accent', label: 'Energy / Brand' },
+  { name: 'Accent Bold', var: '--ds-accent-bold', label: 'Interactive Base' },
+  { name: 'Accent Hover', var: '--ds-accent-hover', label: 'Pressed State' },
   {
-    name: 'Success Subtle',
-    var: '--gf-color-success-subtle',
-    label: 'Background',
+    name: 'Accent Subtle',
+    var: '--ds-accent-subtle',
+    label: 'Translucent fill',
   },
-  { name: 'Success', var: '--gf-color-success', label: 'Default' },
-  {
-    name: 'Success Bold',
-    var: '--gf-color-success-bold',
-    label: 'Text / icon',
-  },
-  {
-    name: 'Warning Subtle',
-    var: '--gf-color-warning-subtle',
-    label: 'Background',
-  },
-  { name: 'Warning', var: '--gf-color-warning', label: 'Default' },
-  {
-    name: 'Warning Bold',
-    var: '--gf-color-warning-bold',
-    label: 'Text / icon',
-  },
-  {
-    name: 'Danger Subtle',
-    var: '--gf-color-danger-subtle',
-    label: 'Background',
-  },
-  { name: 'Danger', var: '--gf-color-danger', label: 'Default' },
-  { name: 'Danger Bold', var: '--gf-color-danger-bold', label: 'Text / icon' },
-  { name: 'Info', var: '--gf-color-info', label: 'Default' },
-  { name: 'Info Bold', var: '--gf-color-info-bold', label: 'Text / icon' },
-];
-
-const analyticSwatches = [
-  { name: 'Chart 1', var: '--gf-color-chart-1', label: 'Primary (Kimchi)' },
-  { name: 'Chart 2', var: '--gf-color-chart-2', label: 'Secondary (Blue)' },
-  { name: 'Chart 3', var: '--gf-color-chart-3', label: 'Emerald' },
-  { name: 'Chart 4', var: '--gf-color-chart-4', label: 'Amber' },
-  { name: 'Chart 5', var: '--gf-color-chart-5', label: 'Plum' },
-];
-
-const aiSwatches = [
-  { name: 'AI Surface', var: '--gf-color-ai-surface', label: 'Glow canvas' },
-  { name: 'AI Accent', var: '--gf-color-ai-accent', label: 'Orchid' },
 ];
 
 export default function ColorFoundationsPage() {
   return (
-    <div className="flex flex-col gap-12">
+    <div className="flex flex-col gap-12 max-w-5xl mx-auto py-10 px-6">
       <PageHeader
-        title="Color"
-        subtitle="Our color system is built on warm OKLCH neutrals, Kimchi brand, and a 5-level surface hierarchy for light and dark modes."
+        title="Color Foundations"
+        subtitle="The GateFlow color system is built on institutional OKLCH foundations, emphasizing depth, serious professionalism, and high contrast."
         breadcrumbs={[
-          { label: 'Documentation', href: '/' },
           { label: 'Foundations', href: '/foundations' },
           { label: 'Color' },
         ]}
@@ -140,83 +99,75 @@ export default function ColorFoundationsPage() {
         {colorPrinciples.map((p) => (
           <div
             key={p.title}
-            className="flex flex-col gap-4 p-6 rounded-2xl border border-[var(--gf-color-border)] bg-[var(--gf-color-bg-subtle)]"
+            className="flex flex-col gap-4 p-6 rounded-2xl border border-[var(--ds-border-bold)] bg-[var(--ds-surface-subtle)] shadow-sm hover:shadow-md hover:-translate-y-1 transition-all group"
           >
-            <div className="p-2 w-fit rounded-lg bg-[var(--gf-color-primary)] text-white shadow-sm">
-              <p.icon size={20} />
+            <div className="p-2 w-fit rounded-lg bg-[var(--ds-accent-bold)] text-white shadow-lg transition-transform group-hover:rotate-6">
+              <p.icon size={22} strokeWidth={2.5} />
             </div>
-            <h3 className="text-lg font-black uppercase tracking-tight text-[var(--gf-color-text)]">
+            <h3 className="text-sm font-black uppercase tracking-widest text-[var(--ds-text-primary)]">
               {p.title}
             </h3>
-            <p className="text-sm text-[var(--gf-color-text-subtle)] leading-relaxed">
+            <p className="text-xs text-[var(--ds-text-subtle)] leading-relaxed font-medium">
               {p.description}
             </p>
           </div>
         ))}
       </section>
 
+      <div className="flex flex-col gap-8">
+        <h2 className="text-2xl font-black uppercase tracking-tight text-[var(--ds-text-primary)]">
+          Accent Profile Lab
+        </h2>
+        <AccentProfileLab />
+      </div>
+
       <SwatchSection
-        title="Brand — Kimchi"
-        description="Primary brand palette derived from Kimchi #ED4B00. Brand-500 is used as the primary action color in light mode; Brand-400 in dark mode."
+        title="Satin-Charcoal Neutrals"
+        description="The backbone of the design system. These tier-based ramps provide the deep institutional depth characteristic of GateFlow."
       >
-        <SwatchGrid swatches={brandSwatches} />
+        <SwatchGrid swatches={neutralSwatches} bordered />
       </SwatchSection>
 
       <SwatchSection
-        title="Surfaces"
-        description="Five-level background hierarchy. Each level adds visual elevation. Page is the canvas; Overlay sits atop everything."
+        title="Semantic Surface Layer"
+        description="Every component is built using these semantic mappings. This ensures theme-shifting works automatically across light/dark and accent profiles."
       >
-        <SwatchGrid swatches={surfaceSwatches} bordered />
+        <SwatchGrid swatches={semanticSwatches} bordered glass />
       </SwatchSection>
 
       <SwatchSection
-        title="Text"
-        description="Semantic text tokens that automatically invert in dark mode."
+        title="Institutional Typography"
+        description="Semantic text tones ensure that readability is prioritized, with dedicated inverse and accent variants for brand expression."
       >
-        <SwatchGrid swatches={textSwatches} bordered />
+        <SwatchGrid swatches={textSwatches} />
       </SwatchSection>
 
       <SwatchSection
-        title="Borders"
-        description="Border tokens for structure, focus states, and emphasis."
+        title="Active Accent Mapping"
+        description="These tokens reflect the currently active accent profile (Kimchi, Cobalt, or Emerald). Switch the lab above to see them in action."
       >
-        <SwatchGrid swatches={borderSwatches} bordered />
+        <SwatchGrid swatches={accentSwatches} />
       </SwatchSection>
 
-      <SwatchSection
-        title="Status"
-        description="Success, Warning, Danger, and Info each have three levels: subtle (background), default (icon/badge), and bold (text on light bg)."
-      >
-        <SwatchGrid swatches={statusSwatches} />
-      </SwatchSection>
-
-      <SwatchSection
-        title="Predictive & AI (Virtual Lab)"
-        description="Specialized orchid and violet tones for Artificial Intelligence features. AI Surface uses a unique glow palette."
-      >
-        <SwatchGrid swatches={aiSwatches} bordered />
-      </SwatchSection>
-
-      <SwatchSection
-        title="Analytics & Data Viz"
-        description="A curated 5-color palette for charts, trends, and performance metrics, optimized for both light and dark backgrounds."
-      >
-        <SwatchGrid swatches={analyticSwatches} />
-      </SwatchSection>
-
-      <section className="rounded-3xl border border-[var(--gf-color-info-subtle)] bg-[var(--gf-color-info-subtle)] p-8">
-        <div className="flex gap-4">
-          <Info className="text-[var(--gf-color-info)] shrink-0" size={24} />
+      <section className="p-8 rounded-3xl border border-[var(--ds-accent-bold)]/20 bg-gradient-to-br from-[var(--ds-accent-subtle)] to-transparent relative overflow-hidden group">
+        <div className="absolute top-2 right-2 p-2 opacity-10 scale-150 rotate-12 group-hover:rotate-0 transition-all duration-700">
+          <Palette size={120} />
+        </div>
+        <div className="flex gap-4 relative z-10">
+          <div className="p-2 w-fit rounded-lg bg-[var(--ds-accent-bold)] text-white shadow-md">
+            <Info size={18} />
+          </div>
           <div className="flex flex-col gap-2">
-            <h4 className="text-lg font-bold text-[var(--gf-color-text)] leading-none uppercase tracking-tight">
-              Why OKLCH?
+            <h4 className="text-lg font-black uppercase tracking-tight text-[var(--ds-text-primary)]">
+              Institutional OKLCH Protocol
             </h4>
-            <p className="text-sm text-[var(--gf-color-text-subtle)] leading-relaxed">
-              Unlike HSL or RGB, the OKLCH color space is perceptually uniform.
-              Adjusting lightness by 10% looks like 10% to the human eye,
-              regardless of hue. This lets us build the dark mode palette
-              mathematically — charcoal surfaces at 12–20% lightness with
-              consistent chroma, ensuring readability without manual tuning.
+            <p className="text-sm text-[var(--ds-text-subtle)] leading-relaxed max-w-2xl font-medium">
+              We leverage OKLCH for institutional stability. By locking Chrome
+              (C) and Hue (H) while strictly managing Lightness (L), we generate
+              accessible palettes that look identical in contrast across
+              different browser engines. This prevents the
+              &quot;flickering&quot; contrast issues common in traditional
+              HEX/HSL systems.
             </p>
           </div>
         </div>
@@ -237,10 +188,10 @@ function SwatchSection({
   return (
     <section className="flex flex-col gap-4">
       <div className="flex flex-col gap-1">
-        <h2 className="text-2xl font-black uppercase tracking-tight text-[var(--gf-color-text)]">
+        <h2 className="text-2xl font-black uppercase tracking-tight text-[var(--ds-text-primary)] leading-none">
           {title}
         </h2>
-        <p className="text-sm text-[var(--gf-color-text-subtle)] max-w-2xl">
+        <p className="text-xs font-bold text-[var(--ds-text-subtle)] max-w-2xl opacity-60">
           {description}
         </p>
       </div>
@@ -252,14 +203,16 @@ function SwatchSection({
 function SwatchGrid({
   swatches,
   bordered = false,
+  glass = false,
 }: {
   swatches: { name: string; var: string; label: string }[];
   bordered?: boolean;
+  glass?: boolean;
 }) {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+    <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
       {swatches.map((s) => (
-        <Swatch key={s.var} {...s} bordered={bordered} />
+        <Swatch key={s.var} {...s} bordered={bordered} glass={glass} />
       ))}
     </div>
   );
@@ -270,29 +223,39 @@ function Swatch({
   var: cssVar,
   label,
   bordered,
+  glass,
 }: {
   name: string;
   var: string;
   label: string;
   bordered?: boolean;
+  glass?: boolean;
 }) {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-3 group/swatch">
       <div
         className={cn(
-          'h-16 w-full rounded-xl shadow-sm',
-          bordered && 'border border-[var(--gf-color-border)]'
+          'h-20 w-full rounded-2xl shadow-sm relative overflow-hidden transition-all duration-300 group-hover/swatch:scale-[1.03] group-hover/swatch:shadow-md',
+          bordered && 'border border-[var(--ds-border-bold)]',
+          glass && 'glass shadow-inner'
         )}
-        style={{ backgroundColor: `var(${cssVar})` }}
-      />
-      <div className="flex flex-col">
-        <span className="text-xs font-bold text-[var(--gf-color-text)]">
+        style={{
+          backgroundColor: glass ? undefined : `var(${cssVar})`,
+        }}
+      >
+        {/* Subtle grid pattern for transparency preview on glass */}
+        {glass && (
+          <div className="absolute inset-0 opacity-[0.2] -z-10 bg-[radial-gradient(var(--ds-text-primary)_0.5px,transparent_0.5px)] bg-[length:12px_12px]" />
+        )}
+      </div>
+      <div className="flex flex-col gap-1 px-1">
+        <span className="text-xs font-black uppercase tracking-widest text-[var(--ds-text-primary)]">
           {name}
         </span>
-        <code className="text-[10px] font-mono text-[var(--gf-color-text-subtlest)] truncate">
+        <code className="text-[9px] font-mono font-bold text-[var(--ds-text-accent)] truncate bg-[var(--ds-accent-subtle)] px-1 py-0.5 rounded w-fit">
           {cssVar}
         </code>
-        <span className="text-[10px] uppercase font-semibold tracking-tight text-[var(--gf-color-text-subtle)]">
+        <span className="text-[9px] font-black uppercase tracking-tight text-[var(--ds-text-subtle)] opacity-50">
           {label}
         </span>
       </div>

@@ -4,17 +4,6 @@ import * as React from 'react';
 import { ShieldCheck, Shield } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
-/* ─── Design tokens (Atlassian inspired) ─────────────────────────────────── */
-const T = {
-  primary: 'hsl(var(--primary))',
-  neutral: 'hsl(var(--foreground))',
-  surface: 'hsl(var(--background))',
-  border: 'hsl(var(--border))',
-  muted: 'hsl(var(--muted-foreground))',
-  cardShadow:
-    '0 8px 16px -4px rgba(9, 30, 66, 0.25), 0 0 1px rgba(9, 30, 66, 0.31)',
-} as const;
-
 /* ─── Keyframes injected once ────────────────────────────────────────────── */
 const KEYFRAME_STYLES = `
 @keyframes login-logo-float {
@@ -62,6 +51,10 @@ const DEFAULT_ADMIN_HEADING = 'Platform Administration';
 const DEFAULT_ADMIN_SUBTITLE =
   'Super-admin panel for global GateFlow operations.';
 
+/**
+ * LoginShell - Specialized Auth Container
+ * Migrated to semantic tokens.
+ */
 export function LoginShell({
   variant = 'client',
   appName,
@@ -97,24 +90,20 @@ export function LoginShell({
     <>
       <style dangerouslySetInnerHTML={{ __html: KEYFRAME_STYLES }} />
 
-      <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[var(--ds-surface-sunken,#F4F5F7)] transition-colors duration-300">
+      <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[var(--ds-surface-sunken)] transition-colors duration-300">
         {/* Main Content Area: Centered layout for Atlassian feel */}
         <main className="relative z-10 flex w-full max-w-[480px] flex-col px-6">
           <div
             className={cn(
-              'flex flex-col rounded-sm bg-[var(--ds-surface-raised,#FFFFFF)] p-8 shadow-xl transition-all duration-300',
+              'flex flex-col rounded-sm bg-[var(--ds-surface-raised)] p-8 border border-[var(--ds-border)] shadow-[var(--ds-shadow-overlay)] transition-all duration-300',
               shaking && 'animate-login-shake'
             )}
-            style={{
-              boxShadow: T.cardShadow,
-              border: `1px solid ${T.border}`,
-            }}
           >
             {/* Branding Header */}
             <div className="mb-10 flex flex-col items-center text-center">
               <div
                 className={cn(
-                  'login-logo mb-6 flex h-12 w-12 items-center justify-center rounded-sm bg-primary text-primary-foreground shadow-lg transition-all duration-300',
+                  'login-logo mb-6 flex h-12 w-12 items-center justify-center rounded-sm bg-[var(--ds-background-brand-bold)] text-[var(--ds-text-inverse)] shadow-[var(--ds-shadow-raised)] transition-all duration-300',
                   isSuccess && 'login-logo-success'
                 )}
               >
@@ -125,7 +114,7 @@ export function LoginShell({
                 )}
               </div>
 
-              <h1 className="text-2xl font-semibold tracking-tight text-[var(--ds-text)]">
+              <h1 className="text-2xl font-semibold tracking-tight text-[var(--ds-text-primary)]">
                 {displayHeading}
               </h1>
               <p className="mt-2 text-sm text-[var(--ds-text-subtle)]">
@@ -141,13 +130,13 @@ export function LoginShell({
                 </div>
               ) : (
                 <div className="flex flex-col items-center justify-center py-10 animate-in fade-in zoom-in-95 duration-300">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-500/10 text-green-500">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--ds-background-success-bold)]/10 text-[var(--ds-text-success)]">
                     <ShieldCheck className="h-10 w-10" />
                   </div>
                   <p
                     className={cn(
                       'mt-4 font-medium',
-                      'text-[var(--ds-text,#172B4D)]'
+                      'text-[var(--ds-text-primary)]'
                     )}
                   >
                     Authenticated Successfully
@@ -158,7 +147,7 @@ export function LoginShell({
           </div>
 
           {/* Footer Copyright */}
-          <div className="mt-8 text-center text-[12px] text-[var(--ds-text-subtlest)]">
+          <div className="mt-8 text-center text-[12px] text-[var(--ds-text-subtlest)] opacity-50">
             © {new Date().getFullYear()} {displayName} • Secure Infrastructure
             Access
           </div>
@@ -179,3 +168,5 @@ export function LoginShell({
     </>
   );
 }
+
+LoginShell.displayName = 'LoginShell';

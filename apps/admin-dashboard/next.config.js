@@ -15,8 +15,8 @@ const nextConfig = {
   outputFileTracingRoot: path.join(__dirname, '../../'),
   transpilePackages: [
     '@gate-access/types',
+    '@gateflow/ui',
     '@gate-access/db',
-    '@gate-access/ui',
     '@gate-access/i18n',
   ],
   serverExternalPackages: [

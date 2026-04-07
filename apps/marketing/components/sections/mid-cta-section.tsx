@@ -26,7 +26,8 @@ export function MidCtaSection({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="relative isolate overflow-hidden rounded-[40px] border border-ds-border-bold bg-[#0B0C0E] p-12 lg:p-32 shadow-[0_48px_96px_rgba(0,0,0,0.3)]"
+          className="relative isolate overflow-hidden rounded-[40px] border border-ds-border-bold bg-ds-surface-overlay p-12 lg:p-32"
+          style={{ boxShadow: 'var(--ds-shadow-deep)' }}
         >
           <div className="absolute top-0 end-0 -z-10 w-[600px] h-[600px] bg-ds-background-brand-bold/20 blur-[120px] rounded-full translate-x-1/3 -translate-y-1/3" />
 
@@ -87,7 +88,8 @@ export function MidCtaSection({
                     initial={{ width: 0 }}
                     whileInView={{ width: '92%' }}
                     transition={{ duration: 2, delay: 0.5 }}
-                    className="h-full bg-ds-background-brand-bold shadow-[0_0_15px_rgba(var(--ds-background-brand-bold),0.8)]"
+                    className="h-full bg-ds-background-brand-bold"
+                    style={{ boxShadow: 'var(--ds-glow-accent)' }}
                   />
                 </div>
                 <div className="flex justify-between text-xs font-black uppercase tracking-[0.3em] text-white/40">

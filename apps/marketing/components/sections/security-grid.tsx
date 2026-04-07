@@ -13,7 +13,7 @@ import {
 import type { Locale } from '../../i18n-config';
 import { useTranslation } from '../../hooks/use-translation';
 
-export function SecurityGrid({ locale }: { locale: Locale }) {
+export function SecurityGrid({ _locale }: { _locale: Locale }) {
   const { t } = useTranslation('landing');
 
   const securityItems = [
@@ -92,7 +92,11 @@ export function SecurityGrid({ locale }: { locale: Locale }) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="group p-12 rounded-[32px] border border-ds-border bg-ds-surface-raised hover:border-ds-border-bold transition-all duration-500 hover:shadow-[0_48px_96px_rgba(0,0,0,0.1)] hover:-translate-y-3"
+              whileHover={{
+                boxShadow: 'var(--ds-shadow-overlay)',
+                y: -12,
+              }}
+              className="group p-12 rounded-[32px] border border-ds-border bg-ds-surface-raised hover:border-ds-border-bold transition-all duration-500"
             >
               <div className="h-20 w-20 bg-ds-background-brand-subtle rounded-2xl flex items-center justify-center text-ds-text-brand mb-10 group-hover:scale-110 transition-transform shadow-inner ring-1 ring-ds-border-brand/10">
                 <item.icon size={36} strokeWidth={1.5} />

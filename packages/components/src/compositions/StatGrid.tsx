@@ -31,6 +31,10 @@ const colSpanMap = {
   5: 'grid-cols-2 lg:grid-cols-5',
 };
 
+/**
+ * StatGrid - Optimized for ADS Monorepo
+ * Uses semantic tokens for status and depth.
+ */
 export function StatGrid({
   stats,
   columns = 4,
@@ -50,11 +54,11 @@ export function StatGrid({
           <CardContent className="p-5">
             <div className="flex items-start justify-between gap-4">
               <div className="flex flex-col gap-1.5 min-w-0">
-                <span className="text-[11px] font-black uppercase tracking-wider text-[var(--ds-text-subtle)] group-hover:text-[var(--ds-text)] transition-colors">
+                <span className="text-[11px] font-black uppercase tracking-wider text-[var(--ds-text-subtle)] group-hover:text-[var(--ds-text-primary)] transition-colors">
                   {stat.label}
                 </span>
                 <div className="flex items-baseline gap-2">
-                  <h4 className="text-3xl font-black tracking-tight text-[var(--ds-text)]">
+                  <h4 className="text-3xl font-black tracking-tight text-[var(--ds-text-primary)]">
                     {stat.value}
                   </h4>
                   {stat.trend && (
@@ -62,9 +66,9 @@ export function StatGrid({
                       className={cn(
                         'flex items-center gap-0.5 text-[11px] font-bold px-1.5 py-0.5 rounded-full',
                         stat.trend.direction === 'up' &&
-                          'text-[var(--gf-color-success)] bg-[var(--ds-background-success-subtle)]',
+                          'text-[var(--ds-text-success)] bg-[var(--ds-background-success-subtle)]',
                         stat.trend.direction === 'down' &&
-                          'text-[var(--gf-color-danger)] bg-[var(--ds-background-danger-subtle)]',
+                          'text-[var(--ds-text-danger)] bg-[var(--ds-background-danger-subtle)]',
                         stat.trend.direction === 'neutral' &&
                           'text-[var(--ds-text-subtle)] bg-[var(--ds-background-neutral-subtle)]'
                       )}
@@ -80,13 +84,13 @@ export function StatGrid({
                   )}
                 </div>
                 {stat.description && (
-                  <p className="text-xs text-[var(--ds-text-subtlest)] leading-relaxed line-clamp-1">
+                  <p className="text-xs text-[var(--ds-text-subtle)] leading-relaxed line-clamp-1 opacity-70">
                     {stat.description}
                   </p>
                 )}
               </div>
               {stat.icon && (
-                <div className="shrink-0 p-2.5 rounded-xl bg-[var(--ds-background-neutral-subtle)] text-[var(--ds-icon-subtle)] group-hover:bg-[var(--ds-background-primary-subtle)] group-hover:text-[var(--ds-icon-brand)] transition-colors">
+                <div className="shrink-0 p-2.5 rounded-xl bg-[var(--ds-background-neutral-subtle)] text-[var(--ds-text-subtle)] group-hover:bg-[var(--ds-background-selected)] group-hover:text-[var(--ds-primary-accent)] transition-colors">
                   <stat.icon size={22} strokeWidth={2.5} />
                 </div>
               )}

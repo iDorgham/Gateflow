@@ -51,11 +51,11 @@ export function Pagination({
     children: React.ReactNode;
   }) => {
     const commonClass = cn(
-      'inline-flex items-center justify-center rounded-[var(--ds-border-radius-100,#3px)] text-sm font-semibold transition-all duration-150',
+      'inline-flex items-center justify-center rounded-[var(--ds-border-radius-100)] text-sm font-semibold transition-all duration-150',
       'min-w-[32px] h-8 px-2',
       active
-        ? 'bg-[var(--ds-background-selected,#DEEBFF)] text-[var(--ds-text-selected,#0747A6)]'
-        : 'text-[var(--ds-text-subtle,#42526E)] hover:bg-[var(--ds-background-neutral-subtle-hovered,#EBECF0)] active:bg-[var(--ds-background-neutral-subtle-pressed,#DFE1E6)]',
+        ? 'bg-[var(--ds-background-selected)] text-[var(--ds-text-selected)]'
+        : 'text-[var(--ds-text-subtle)] hover:bg-[var(--ds-background-neutral-subtle-hovered)] active:bg-[var(--ds-background-neutral-subtle-pressed)]',
       disabled && 'opacity-30 pointer-events-none cursor-not-allowed'
     );
 
@@ -98,7 +98,7 @@ export function Pagination({
           ) : (
             <span
               key={i}
-              className="px-2 text-[var(--ds-text-subtle,#6B778C)] opacity-50 font-black"
+              className="px-2 text-[var(--ds-text-subtle)] opacity-50 font-black"
             >
               &bull;&bull;&bull;
             </span>

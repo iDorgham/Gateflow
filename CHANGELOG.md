@@ -20,6 +20,25 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Client-Dashboard]** resolve onOpenChat type mismatch in DashboardLayout
+
+- **[Deployment]** resolve build blockers and lint warnings across design-system and admin-dashboard
+
+- **[Deploy]** remove invalid ignoreBuildCommand from all apps
+
+- **[Deploy]** remove invalid ignoreBuildCommand property and fix workflow schema
+
+- **[Design-System]** complete redesign and polish (Phases 1-8)
+
+- **[Design-System-Redesign]** completes phase 4 - monorepo enforcement
+- **[Design-System-Redesign]** finalize phase 2 foundations
+
+- **[Design-System-Redesign]** complete phase 2
+
+- **[Design-System-Redesign]** complete phase 1
+
+- **[Monorepo]** add framer-motion dependencies to @gateflow/ui, @gateflow/components, and design-system
+
 - **[Ui]** resolve AISidePanel type mismatch with framer-motion
 
 - **[Design-System]** standardized gateflow token architecture and in-depth manifesto

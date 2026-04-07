@@ -4,7 +4,6 @@ import React from 'react';
 import QRCode from 'react-qr-code';
 import {
   ShieldCheck,
-  MapPin,
   Clock,
   Navigation,
   ExternalLink,
@@ -15,7 +14,6 @@ import {
 } from 'lucide-react';
 import { Card, CardContent, Badge, Button, Separator } from '@gateflow/ui';
 import { useTranslation } from '../../hooks/use-translation';
-import { cn } from '../../lib/utils';
 import { updateVisitorName } from '@/lib/actions/invitation';
 
 interface BrandedPassProps {
@@ -42,7 +40,7 @@ export const BrandedPass: React.FC<BrandedPassProps> = ({
   unitName,
   coordinates,
   isVerified,
-  delegateToAi,
+  delegateToAi: _,
   lang,
 }) => {
   const { t } = useTranslation('invitation');
@@ -144,8 +142,8 @@ export const BrandedPass: React.FC<BrandedPassProps> = ({
           </div>
 
           <div className="relative bg-ds-surface-sunken rounded-3xl p-8 flex flex-col items-center justify-center border-2 border-dashed border-ds-border aspect-square">
-            <div className="p-4 bg-ds-surface rounded-2xl shadow-xl flex items-center justify-center">
-              <div className="w-[200px] h-[200px] bg-slate-200" />
+            <div className="p-4 bg-white rounded-2xl shadow-xl flex items-center justify-center">
+              <QRCode value={qrCode} size={200} />
             </div>
             <div className="mt-6 flex flex-col items-center gap-2">
               <p className="text-xs font-medium text-slate-500 uppercase tracking-widest">

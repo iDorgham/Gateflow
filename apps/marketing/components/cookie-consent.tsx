@@ -57,7 +57,10 @@ export function CookieConsent({ locale }: { locale: Locale }) {
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           className="fixed bottom-8 inset-x-8 z-[100] flex justify-center pointer-events-none"
         >
-          <div className="pointer-events-auto max-w-4xl w-full bg-ds-surface/80 backdrop-blur-2xl border border-ds-border-bold shadow-[0_32px_64px_rgba(0,0,0,0.2)] rounded-[32px] p-6 md:p-8 flex flex-col md:flex-row items-center gap-6 md:gap-10">
+          <div
+            className="pointer-events-auto max-w-4xl w-full bg-ds-surface/80 backdrop-blur-2xl border border-ds-border-bold rounded-[32px] p-6 md:p-8 flex flex-col md:flex-row items-center gap-6 md:gap-10"
+            style={{ boxShadow: 'var(--ds-shadow-deep)' }}
+          >
             <div className="flex items-center gap-6 flex-grow">
               <div className="h-16 w-16 rounded-2xl bg-ds-background-brand-subtle flex items-center justify-center text-ds-text-brand flex-shrink-0 shadow-inner">
                 <Cookie size={32} />
@@ -86,7 +89,8 @@ export function CookieConsent({ locale }: { locale: Locale }) {
               <Button
                 variant="brand"
                 onClick={handleAccept}
-                className="flex-grow md:flex-none h-12 px-10 font-black uppercase tracking-widest text-[11px] shadow-lg shadow-ds-background-brand-bold/20 hover:-translate-y-0.5 transition-all"
+                className="flex-grow md:flex-none h-12 px-10 font-black uppercase tracking-widest text-[11px] hover:-translate-y-0.5 transition-all"
+                style={{ boxShadow: 'var(--ds-glow-accent)' }}
               >
                 {t.accept}
               </Button>
