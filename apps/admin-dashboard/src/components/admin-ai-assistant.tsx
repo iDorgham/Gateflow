@@ -9,7 +9,6 @@ import {
   isReasoningUIPart,
   isTextUIPart,
   isToolUIPart,
-  type DataUIPart,
 } from 'ai';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
@@ -27,7 +26,7 @@ import {
   Wand2,
   Terminal,
   Activity,
-  History,
+  History as HistoryIcon,
   Info,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -165,6 +164,7 @@ function ThinkingBubble() {
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function ToolInvocCard({ part }: { part: any }) {
   const toolName = getToolName(part);
   const state = part.state;
@@ -202,9 +202,10 @@ function ToolInvocCard({ part }: { part: any }) {
         {isComplete && <Check className="h-3 w-3 text-ds-text-accent-green" />}
       </div>
 
-      {isDataUIPart(part) && (part as DataUIPart<any>).data && (
+      {isDataUIPart(part) && (part as any).data && (
         <div className="mt-2 text-[10px] bg-ds-surface-sunken/40 rounded-md p-2 font-mono overflow-x-auto border border-ds-border/20 text-ds-text-subtle max-h-32">
-          <pre>{JSON.stringify(part.data, null, 2)}</pre>
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+          <pre>{JSON.stringify((part as any).data, null, 2)}</pre>
         </div>
       )}
     </div>
@@ -315,7 +316,7 @@ export function AdminAIAssistant({ locale: _locale }: AdminAIAssistantProps) {
 
   const EXAMPLES = [
     { key: 'metrics', icon: Activity },
-    { key: 'orgs', icon: History },
+    { key: 'orgs', icon: HistoryIcon },
     { key: 'scans', icon: Wand2 },
     { key: 'plans', icon: Info },
   ];
@@ -444,6 +445,7 @@ export function AdminAIAssistant({ locale: _locale }: AdminAIAssistantProps) {
                           textContent && 'pt-3 border-t border-ds-border/40'
                         )}
                       >
+                        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                         {otherParts.map((part: any, i) => {
                           if (isToolUIPart(part))
                             return <ToolInvocCard key={i} part={part} />;

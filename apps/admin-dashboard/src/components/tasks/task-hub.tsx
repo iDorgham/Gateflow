@@ -8,7 +8,6 @@ import {
   Filter,
   Calendar,
   Columns3,
-  List,
   Sparkles,
   MoreHorizontal,
   Clock,
@@ -29,7 +28,6 @@ import {
   Avatar,
   cn,
   Tabs,
-  TabsContent,
   TabsList,
   TabsTrigger,
   Sheet,
@@ -47,15 +45,26 @@ import { toast } from 'sonner';
  * The central Operating System for GateFlow departments.
  * Features: AI Task Drafter, Departmental Kanban, and Cross-linking.
  */
+interface Task {
+  id: string;
+  title: string;
+  description?: string;
+  status: string;
+  priority: string;
+  department: string;
+  dueDate?: string;
+  linkedType?: string;
+  linkedId?: string;
+}
+
 export function TaskHub() {
-  const { t } = useTranslation();
   const { orgId } = useOrganization();
   const [activeBoard, setActiveBoard] = React.useState<string>('SALES');
-  const [tasks, setTasks] = React.useState<any[]>([]);
+  const [tasks, setTasks] = React.useState<Task[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [draftPrompt, setDraftPrompt] = React.useState('');
   const [isDrafting, setIsDrafting] = React.useState(false);
-  const [selectedTask, setSelectedTask] = React.useState<any>(null);
+  const [selectedTask, setSelectedTask] = React.useState<Task | null>(null);
 
   React.useEffect(() => {
     async function fetchTasks() {

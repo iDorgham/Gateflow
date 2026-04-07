@@ -8,7 +8,6 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-  Separator,
   Badge,
   // ADS-compliant components...
 } from '@gateflow/ui';
@@ -27,11 +26,24 @@ import { formatDistanceToNow } from 'date-fns';
  * ## EmulationHub (v4)
  * Advanced traffic simulation and stress testing control center.
  */
+interface EmulationLog {
+  id: string;
+  status: 'EXECUTED' | 'FAILED';
+  actionType: string;
+  createdAt: string;
+  intentJson?: {
+    scenario: string;
+    totalScans?: number;
+    pastDays?: number;
+  };
+  metadata?: {
+    totalScans?: number;
+  };
+}
+
 export function EmulationHub() {
-  const [organizationId, setOrganizationId] = useState(
-    'clkz88m7v000008l4f6d8h7d3'
-  ); // TODO: Context-driven or selector
-  const [history, setHistory] = useState<any[]>([]);
+  const organizationId = 'clkz88m7v000008l4f6d8h7d3'; // TODO: Context-driven or selector
+  const [history, setHistory] = useState<EmulationLog[]>([]);
   const [loading, setLoading] = useState(false);
 
   const fetchHistory = React.useCallback(async () => {
@@ -43,7 +55,9 @@ export function EmulationHub() {
       const data = await res.json();
       if (data.success) {
         setHistory(
-          data.data.filter((l: any) => l.actionType === 'EMULATE_TRAFFIC')
+          data.data.filter(
+            (l: EmulationLog) => l.actionType === 'EMULATE_TRAFFIC'
+          )
         );
       }
     } catch (err) {
