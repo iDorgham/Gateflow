@@ -8,20 +8,22 @@ FRONTEND | CREATIVE
 
 ### Tool Selection (Quality vs Cost)
 
-|                            | Tool           | Why                                     |
-| -------------------------- | -------------- | --------------------------------------- |
-| **Tool 1** (best quality)  | Cursor         | Complex UI animations and layout        |
-| **Tool 2** (free fallback) | OpenCode CLI   | Standard component refactors (semantic) |
+|                            | Tool         | Why                                     |
+| -------------------------- | ------------ | --------------------------------------- |
+| **Tool 1** (best quality)  | Cursor       | Complex UI animations and layout        |
+| **Tool 2** (free fallback) | OpenCode CLI | Standard component refactors (semantic) |
 
 ### Skills to load
 
 **Process skills:**
+
 - [x] `using-superpowers` — always: check skills before any response
 - [x] `verification-before-completion` — before claiming done, committing, or PR
 - [x] `executing-plans` — disciplined batch execution with checkpoints
 - [x] `gf-uiux-animator` — for premium Framer Motion work
 
 **Domain skills:**
+
 - [x] `ui-ux-pro-max` — new pages, redesigns, components
 - [x] `gf-ads-core-tokens` — foundations of the Atlassian Design System tokens
 - [x] `gf-creative-ui-animation` — CSS/Tailwind animations and performance
