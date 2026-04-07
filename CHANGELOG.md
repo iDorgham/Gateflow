@@ -20,6 +20,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Deploy]** remove invalid ignoreBuildCommand property and fix workflow schema
+
 - **[Design-System]** complete redesign and polish (Phases 1-8)
 
 - **[Design-System-Redesign]** completes phase 4 - monorepo enforcement
