@@ -47,7 +47,7 @@ export async function POST(req: Request) {
     });
 
     // Record AI Cost Tracking
-    await trackAiUsage({
+    await (trackAiUsage as any)({
       model: 'gemini-1.5-pro',
       usage: {
         promptTokens: (usage as any).promptTokens || 0,
@@ -58,7 +58,7 @@ export async function POST(req: Request) {
     });
 
     // Log AI Action (HiTL)
-    await (prisma as any).aiActionLog.create({
+    await prisma.aiActionLog.create({
       data: {
         organizationId: orgId || 'GLOBAL',
         action: 'CMS_SECTION_GENERATED',

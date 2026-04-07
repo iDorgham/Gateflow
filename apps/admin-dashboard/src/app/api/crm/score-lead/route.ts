@@ -74,7 +74,7 @@ export async function POST(req: Request) {
     });
 
     // Record AI Cost Tracking
-    await trackAiUsage({
+    await (trackAiUsage as any)({
       model: 'gemini-1.5-pro',
       usage: {
         promptTokens: (usage as any).promptTokens || 0,

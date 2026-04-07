@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@gate-access/db';
+import type { BlogPost, BlogCategory, User } from '@gate-access/db';
 import { isAdminAuthorized } from '@/lib/admin-auth';
 
 /**
@@ -16,7 +17,7 @@ export async function GET(req: Request) {
   try {
     if (slug) {
       // Fetch single post by slug (check both EN and AR columns)
-      const post = await (prisma as any).blogPost.findFirst({
+      const post = (await prisma.blogPost.findFirst({
         where: {
           OR: [{ slugEn: slug }, { slugAr: slug }],
           status: 'PUBLISHED',
@@ -25,7 +26,12 @@ export async function GET(req: Request) {
           author: { select: { name: true, avatarUrl: true } },
           categories: true,
         },
-      });
+      })) as
+        | (BlogPost & {
+            author: Pick<User, 'name' | 'avatarUrl'>;
+            categories: BlogCategory[];
+          })
+        | null;
 
       if (!post)
         return NextResponse.json({ error: 'Post not found' }, { status: 404 });
@@ -42,7 +48,7 @@ export async function GET(req: Request) {
           metaDesc: locale === 'ar' ? post.metaDescAr : post.metaDescEn,
           publishedAt: post.publishedAt,
           author: post.author,
-          categories: post.categories.map((c: any) => ({
+          categories: post.categories.map((c: BlogCategory) => ({
             name: locale === 'ar' ? c.nameAr : c.nameEn,
             slug: c.slug,
           })),
@@ -51,13 +57,16 @@ export async function GET(req: Request) {
     }
 
     // List all published posts
-    const posts = await (prisma as any).blogPost.findMany({
+    const posts = (await prisma.blogPost.findMany({
       where: { status: 'PUBLISHED' },
       orderBy: { publishedAt: 'desc' },
       include: { author: { select: { name: true } }, categories: true },
-    });
+    })) as (BlogPost & {
+      author: Pick<User, 'name'>;
+      categories: BlogCategory[];
+    })[];
 
-    const localizedPosts = posts.map((p: any) => ({
+    const localizedPosts = posts.map((p) => ({
       id: p.id,
       slug: locale === 'ar' ? p.slugAr : p.slugEn,
       title: locale === 'ar' ? p.titleAr : p.titleEn,
@@ -83,7 +92,7 @@ export async function POST(req: Request) {
   const { id, status } = await req.json();
 
   try {
-    const updated = await (prisma as any).blogPost.update({
+    const updated = await prisma.blogPost.update({
       where: { id },
       data: {
         status,
@@ -92,7 +101,7 @@ export async function POST(req: Request) {
     });
 
     // Log AI Action
-    await (prisma as any).aiActionLog.create({
+    await prisma.aiActionLog.create({
       data: {
         organizationId: updated.organizationId || 'GLOBAL',
         action: 'BLOG_POST_PUBLISHED',

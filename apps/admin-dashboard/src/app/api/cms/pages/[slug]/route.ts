@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@gate-access/db';
+import type { LandingPage, LandingPageSection } from '@gate-access/db';
 import { isAdminAuthorized } from '@/lib/admin-auth';
 
 /**
@@ -17,21 +18,21 @@ export async function GET(
   const locale = searchParams.get('locale') || 'en';
 
   try {
-    const page = await (prisma as any).landingPage.findUnique({
+    const page = (await prisma.landingPage.findUnique({
       where: { slug, status: 'PUBLISHED' },
       include: {
         sections: {
           orderBy: { order: 'asc' },
         },
       },
-    });
+    })) as (LandingPage & { sections: LandingPageSection[] }) | null;
 
     if (!page) {
       return NextResponse.json({ error: 'Page not found' }, { status: 404 });
     }
 
     // Transform content based on locale
-    const localizedSections = page.sections.map((s: any) => ({
+    const localizedSections = page.sections.map((s: LandingPageSection) => ({
       id: s.id,
       type: s.type,
       content: locale === 'ar' ? s.contentAr : s.contentEn,
@@ -65,7 +66,7 @@ export async function PATCH(
   const body = await req.json();
 
   try {
-    const updatedPage = await (prisma as any).landingPage.update({
+    const updatedPage = await prisma.landingPage.update({
       where: { slug },
       data: {
         status: body.status,
@@ -74,7 +75,7 @@ export async function PATCH(
     });
 
     // Trigger AI Action Log
-    await (prisma as any).aiActionLog.create({
+    await prisma.aiActionLog.create({
       data: {
         organizationId: updatedPage.organizationId || 'GLOBAL',
         action: 'CMS_PAGE_PUBLISHED',
