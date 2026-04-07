@@ -118,18 +118,18 @@ export default async function CompanyPage(props: {
           aria-hidden="true"
         >
           <div
-            className="relative left-1/2 w-[64rem] -translate-x-1/2 bg-gradient-to-r from-indigo-600/20 to-[#00C9A7]/20 opacity-50"
+            className="relative left-1/2 w-[64rem] -translate-x-1/2 bg-gradient-to-r from-ds-background-brand-subtle/20 to-ds-background-success-subtle/20 opacity-50"
             style={{ height: 600, borderRadius: '50%' }}
           />
         </div>
         <div className="mx-auto max-w-3xl text-center">
-          <p className="mb-4 text-sm font-bold uppercase tracking-widest text-indigo-600">
+          <p className="mb-4 text-sm font-black uppercase tracking-widest text-ds-text-brand">
             ABOUT GATEFLOW
           </p>
           <h1 className="text-5xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-6xl">
             We built what we needed but couldn&apos;t find
           </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-slate-500 dark:text-slate-400">
+          <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-ds-text-subtle font-medium">
             GateFlow was founded by people who managed actual gates — and lived
             the daily reality of paper books, WhatsApp chaos, and zero audit
             trail. We built the platform we always wanted.
@@ -164,7 +164,7 @@ export default async function CompanyPage(props: {
                 <Mail size={15} className="text-indigo-600" />
                 <a
                   href="mailto:hello@gateflow.site"
-                  className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
+                  className="hover:text-ds-text-brand transition-colors"
                 >
                   hello@gateflow.site
                 </a>
@@ -181,7 +181,7 @@ export default async function CompanyPage(props: {
                   key={stat.label}
                   className="rounded-2xl border border-ds-border bg-ds-surface p-6 text-center shadow-sm"
                 >
-                  <p className="text-3xl font-extrabold text-indigo-700 dark:text-indigo-400">
+                  <p className="text-3xl font-extrabold text-ds-text-brand">
                     {stat.value}
                   </p>
                   <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">

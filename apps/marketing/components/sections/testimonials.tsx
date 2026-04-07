@@ -73,7 +73,10 @@ const TESTIMONIALS: Testimonial[] = [
 
 function TestimonialCard({ item }: { item: Testimonial }) {
   return (
-    <div className="flex-shrink-0 w-[450px] mx-space-200 bg-ds-surface-overlay p-space-400 rounded-[24px] border border-ds-border-bold hover:border-ds-border-brand transition-all duration-300 group shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_24px_rgba(0,0,0,0.4)]">
+    <div
+      className="flex-shrink-0 w-[450px] mx-space-200 bg-ds-surface-overlay p-space-400 rounded-[24px] border border-ds-border-bold hover:border-ds-border-brand transition-all duration-300 group"
+      style={{ boxShadow: 'var(--ds-shadow-overlay)' }}
+    >
       {/* Official ID Header */}
       <div className="flex items-center gap-space-200 mb-space-300">
         <div className="relative">
@@ -85,7 +88,10 @@ function TestimonialCard({ item }: { item: Testimonial }) {
             />
           </div>
           {/* Official Verification Badge */}
-          <div className="absolute -bottom-1.5 -right-1.5 w-6 h-6 bg-ds-background-success-bold rounded-full border-2 border-ds-surface-overlay flex items-center justify-center shadow-lg">
+          <div
+            className="absolute -bottom-1.5 -right-1.5 w-6 h-6 bg-ds-background-success-bold rounded-full border-2 border-ds-surface-overlay flex items-center justify-center"
+            style={{ boxShadow: 'var(--ds-shadow-raised)' }}
+          >
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}

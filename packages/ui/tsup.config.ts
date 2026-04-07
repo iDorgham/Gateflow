@@ -26,4 +26,11 @@ export default defineConfig([
     splitting: false,
     external,
   },
+  {
+    entry: { tokens: 'src/tokens.ts' },
+    format: ['cjs', 'esm'],
+    dts: true,
+    splitting: false,
+    external,
+  },
 ]);

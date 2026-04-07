@@ -13,9 +13,9 @@ interface FAQ {
 interface ComponentsDictionary {
   chatWidget?: {
     faqs?: FAQ[];
-    [key: string]: any;
+    [key: string]: unknown;
   };
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 interface Message {
@@ -75,11 +75,12 @@ export function ChatWidget() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className={`fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-ds-background-brand-bold text-ds-text-inverse shadow-[0_8px_24px_rgba(237,75,0,0.3)] hover:opacity-90 hover:scale-105 transition-all duration-200 ${
+        className={`fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-ds-background-brand-bold text-ds-text-inverse hover:opacity-90 hover:scale-105 transition-all duration-200 ${
           open
             ? 'opacity-0 pointer-events-none scale-90'
             : 'opacity-100 scale-100'
         }`}
+        style={{ boxShadow: 'var(--ds-glow-accent)' }}
         aria-label={t('chatWidget.ariaOpen')}
       >
         <MessageCircle size={24} />

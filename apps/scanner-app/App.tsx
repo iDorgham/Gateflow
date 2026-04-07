@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState, lazy, Suspense } from 'react';
-import { nativeTokens } from '@gateflow/ui/tokens';
+import { nativeTokensNewEra as nativeTokens } from '../../packages/ui/src/tokens';
 import {
   ActivityIndicator,
   Dimensions,
   KeyboardAvoidingView,
-  Modal,
   Platform,
   Pressable,
   StatusBar,
@@ -109,7 +108,9 @@ type ScannerPhase =
 // ─── Viewfinder with L-shaped corner markers ─────────────────────────────────
 
 function Viewfinder({ processing }: { processing: boolean }) {
-  const c = processing ? '#f59e0b' : '#3b82f6';
+  const c = processing
+    ? nativeTokens.colors.warning
+    : nativeTokens.colors.primary;
   return (
     <View style={{ width: FRAME_SIZE, height: FRAME_SIZE }}>
       {/* Top-left */}
@@ -130,7 +131,7 @@ function Viewfinder({ processing }: { processing: boolean }) {
             width: CORNER_LEN,
             height: CORNER_W,
             backgroundColor: c,
-            borderTopLeftRadius: 2,
+            borderRadius: 2,
           }}
         />
         <View
@@ -141,7 +142,7 @@ function Viewfinder({ processing }: { processing: boolean }) {
             width: CORNER_W,
             height: CORNER_LEN,
             backgroundColor: c,
-            borderTopLeftRadius: 2,
+            borderRadius: 2,
           }}
         />
       </View>
@@ -163,7 +164,7 @@ function Viewfinder({ processing }: { processing: boolean }) {
             width: CORNER_LEN,
             height: CORNER_W,
             backgroundColor: c,
-            borderTopRightRadius: 2,
+            borderRadius: 2,
           }}
         />
         <View
@@ -174,7 +175,7 @@ function Viewfinder({ processing }: { processing: boolean }) {
             width: CORNER_W,
             height: CORNER_LEN,
             backgroundColor: c,
-            borderTopRightRadius: 2,
+            borderRadius: 2,
           }}
         />
       </View>
@@ -196,7 +197,7 @@ function Viewfinder({ processing }: { processing: boolean }) {
             width: CORNER_LEN,
             height: CORNER_W,
             backgroundColor: c,
-            borderBottomLeftRadius: 2,
+            borderRadius: 2,
           }}
         />
         <View
@@ -207,7 +208,7 @@ function Viewfinder({ processing }: { processing: boolean }) {
             width: CORNER_W,
             height: CORNER_LEN,
             backgroundColor: c,
-            borderBottomLeftRadius: 2,
+            borderRadius: 2,
           }}
         />
       </View>
@@ -229,7 +230,7 @@ function Viewfinder({ processing }: { processing: boolean }) {
             width: CORNER_LEN,
             height: CORNER_W,
             backgroundColor: c,
-            borderBottomRightRadius: 2,
+            borderRadius: 2,
           }}
         />
         <View
@@ -240,7 +241,7 @@ function Viewfinder({ processing }: { processing: boolean }) {
             width: CORNER_W,
             height: CORNER_LEN,
             backgroundColor: c,
-            borderBottomRightRadius: 2,
+            borderRadius: 2,
           }}
         />
       </View>
@@ -279,14 +280,27 @@ export default function App() {
 
   if (appPhase === 'initializing') {
     return (
-      <View style={styles.center}>
-        <StatusBar barStyle="light-content" backgroundColor="#0f172a" />
+      <View
+        style={[
+          styles.center,
+          { backgroundColor: nativeTokens.colors.background },
+        ]}
+      >
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor={nativeTokens.colors.background}
+        />
         <View style={styles.splashLogo}>
-          <View style={styles.splashInner} />
+          <View
+            style={[
+              styles.splashInner,
+              { borderColor: nativeTokens.colors.primary },
+            ]}
+          />
         </View>
         <ActivityIndicator
           size="large"
-          color="#3b82f6"
+          color={nativeTokens.colors.primary}
           style={{ marginTop: 32 }}
         />
         <Text style={styles.initBrand}>GateFlow</Text>
@@ -336,7 +350,10 @@ function LoginScreen({ onSuccess }: { onSuccess: () => void }) {
 
   return (
     <View style={styles.loginRoot}>
-      <StatusBar barStyle="light-content" backgroundColor="#0f172a" />
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor={nativeTokens.colors.background}
+      />
       <KeyboardAvoidingView
         style={styles.loginKAV}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -362,7 +379,7 @@ function LoginScreen({ onSuccess }: { onSuccess: () => void }) {
                 clearError();
               }}
               placeholder="operator@company.com"
-              placeholderTextColor="#475569"
+              placeholderTextColor={nativeTokens.colors.textSubtlest}
               autoCapitalize="none"
               autoCorrect={false}
               keyboardType="email-address"
@@ -379,7 +396,7 @@ function LoginScreen({ onSuccess }: { onSuccess: () => void }) {
                 clearError();
               }}
               placeholder="••••••••"
-              placeholderTextColor="#475569"
+              placeholderTextColor={nativeTokens.colors.textSubtlest}
               secureTextEntry
               returnKeyType="done"
               onSubmitEditing={handleLogin}
@@ -399,7 +416,10 @@ function LoginScreen({ onSuccess }: { onSuccess: () => void }) {
               disabled={isLoading}
             >
               {isLoading ? (
-                <ActivityIndicator size="small" color="#fff" />
+                <ActivityIndicator
+                  size="small"
+                  color={nativeTokens.colors.textInverse}
+                />
               ) : (
                 <Text style={styles.loginButtonText}>Sign In</Text>
               )}
@@ -813,8 +833,11 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
   if (!permission) {
     return (
       <View style={styles.center}>
-        <StatusBar barStyle="light-content" backgroundColor="#0f172a" />
-        <ActivityIndicator size="large" color="#3b82f6" />
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor={nativeTokens.colors.background}
+        />
+        <ActivityIndicator size="large" color={nativeTokens.colors.primary} />
       </View>
     );
   }
@@ -822,7 +845,10 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
   if (!permission.granted) {
     return (
       <View style={styles.center}>
-        <StatusBar barStyle="light-content" backgroundColor="#0f172a" />
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor={nativeTokens.colors.background}
+        />
         <View style={styles.permIcon}>
           <Text style={styles.permIconText}>⬡</Text>
         </View>
@@ -905,7 +931,10 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
               disabled={isLoggingOut}
             >
               {isLoggingOut ? (
-                <ActivityIndicator size="small" color="#94a3b8" />
+                <ActivityIndicator
+                  size="small"
+                  color={nativeTokens.colors.textSubtle}
+                />
               ) : (
                 <Text style={styles.logoutText}>Sign out</Text>
               )}
@@ -925,7 +954,10 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
           {/* Processing spinner */}
           {ui.phase === 'processing' && (
             <View style={styles.feedbackLayer}>
-              <ActivityIndicator size="large" color="#fff" />
+              <ActivityIndicator
+                size="large"
+                color={nativeTokens.colors.textInverse}
+              />
               <Text style={styles.feedbackTitle}>Verifying…</Text>
             </View>
           )}
@@ -962,10 +994,13 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
               style={[
                 StyleSheet.absoluteFill,
                 styles.center,
-                { backgroundColor: '#0f172a' },
+                { backgroundColor: nativeTokens.colors.background },
               ]}
             >
-              <ActivityIndicator size="large" color="#3b82f6" />
+              <ActivityIndicator
+                size="large"
+                color={nativeTokens.colors.primary}
+              />
             </View>
           }
         >
@@ -980,10 +1015,13 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
               style={[
                 StyleSheet.absoluteFill,
                 styles.center,
-                { backgroundColor: '#0f172a' },
+                { backgroundColor: nativeTokens.colors.background },
               ]}
             >
-              <ActivityIndicator size="large" color="#3b82f6" />
+              <ActivityIndicator
+                size="large"
+                color={nativeTokens.colors.primary}
+              />
             </View>
           }
         >
@@ -998,10 +1036,13 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
               style={[
                 StyleSheet.absoluteFill,
                 styles.center,
-                { backgroundColor: '#0f172a' },
+                { backgroundColor: nativeTokens.colors.background },
               ]}
             >
-              <ActivityIndicator size="large" color="#3b82f6" />
+              <ActivityIndicator
+                size="large"
+                color={nativeTokens.colors.primary}
+              />
             </View>
           }
         >
@@ -1016,10 +1057,13 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
               style={[
                 StyleSheet.absoluteFill,
                 styles.center,
-                { backgroundColor: '#0f172a' },
+                { backgroundColor: nativeTokens.colors.background },
               ]}
             >
-              <ActivityIndicator size="large" color="#3b82f6" />
+              <ActivityIndicator
+                size="large"
+                color={nativeTokens.colors.primary}
+              />
             </View>
           }
         >
@@ -1219,7 +1263,12 @@ function DecisionDialog({
       <Text style={styles.feedbackTitle}>Approve Entry?</Text>
 
       {!!result.message && (
-        <Text style={[styles.feedbackSub, { color: '#cbd5e1' }]}>
+        <Text
+          style={[
+            styles.feedbackSub,
+            { color: nativeTokens.colors.textPrimary },
+          ]}
+        >
           {result.message}
         </Text>
       )}
@@ -1233,7 +1282,7 @@ function DecisionDialog({
         <Pressable
           style={[decision.btn, decision.passBtn]}
           onPress={onPass}
-          android_ripple={{ color: 'rgba(255,255,255,0.15)' }}
+          android_ripple={{ color: nativeTokens.colors.primarySubtle }}
         >
           <Text style={decision.passIcon}>✓</Text>
           <Text style={decision.btnLabel}>Pass</Text>
@@ -1242,7 +1291,7 @@ function DecisionDialog({
         <Pressable
           style={[decision.btn, decision.denyBtn]}
           onPress={onDeny}
-          android_ripple={{ color: 'rgba(255,255,255,0.15)' }}
+          android_ripple={{ color: nativeTokens.colors.surfaceGlass }}
         >
           <Text style={decision.denyIcon}>✗</Text>
           <Text style={decision.btnLabel}>Deny</Text>
@@ -1258,6 +1307,7 @@ function ResultOverlay({
   result,
   onScanAgain,
   onRequestOverride,
+  onReportIssue,
 }: {
   result: ScanResult;
   onScanAgain: () => void;
@@ -1270,7 +1320,11 @@ function ResultOverlay({
     <View
       style={[
         styles.feedbackLayer,
-        { backgroundColor: ok ? '#16a34aee' : '#dc2626ee' },
+        {
+          backgroundColor: ok
+            ? nativeTokens.colors.success
+            : nativeTokens.colors.danger,
+        },
       ]}
     >
       <Text style={styles.feedbackIcon}>{ok ? '✓' : '✗'}</Text>
@@ -1335,58 +1389,56 @@ const TOP_OFFSET =
   Platform.OS === 'android' ? (StatusBar.currentHeight ?? 24) + 20 : 60;
 
 const styles = StyleSheet.create({
-  // ── Shared ────────────────────────────────────────────────────────────────
   center: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#0f172a',
-    padding: 32,
-    gap: 8,
+    justifyContent: 'center',
+    backgroundColor: nativeTokens.colors.background,
   },
-
-  // ── Initializing splash ───────────────────────────────────────────────────
   splashLogo: {
-    width: 64,
-    height: 64,
-    borderRadius: nativeTokens.borderRadius.lg,
-    backgroundColor: '#3b82f6',
+    width: 100,
+    height: 100,
+    borderRadius: 24,
+    backgroundColor: nativeTokens.colors.surfaceRaised,
     justifyContent: 'center',
     alignItems: 'center',
+    ...nativeTokens.shadows.satinRaised,
   },
   splashInner: {
-    width: 32,
-    height: 32,
-    borderRadius: 8,
-    borderWidth: 3,
-    borderColor: 'rgba(255,255,255,0.6)',
+    width: 50,
+    height: 50,
+    borderRadius: 12,
+    borderWidth: 4,
+    borderColor: nativeTokens.colors.primary,
   },
   initBrand: {
-    fontSize: 22,
-    fontWeight: '700',
-    color: '#f1f5f9',
-    letterSpacing: 1,
-    marginTop: 8,
+    marginTop: 24,
+    fontSize: 32,
+    fontFamily: 'Cairo_700Bold',
+    color: nativeTokens.colors.textHeading,
+    letterSpacing: nativeTokens.typography.headerTracking,
+    textTransform: 'uppercase',
   },
   initSub: {
-    fontSize: 11,
-    color: '#64748b',
-    letterSpacing: 3,
+    fontSize: 12,
+    fontFamily: 'Cairo_400Regular',
+    color: nativeTokens.colors.textSubtlest,
+    letterSpacing: 4,
+    marginTop: 4,
   },
 
-  // ── Login screen ──────────────────────────────────────────────────────────
+  // ── Login styles ──────────────────────────────────────────────────────────
   loginRoot: {
     flex: 1,
-    backgroundColor: '#0f172a',
+    backgroundColor: nativeTokens.colors.background,
   },
   loginKAV: {
     flex: 1,
   },
   loginInner: {
     flex: 1,
+    paddingHorizontal: 32,
     justifyContent: 'center',
-    paddingHorizontal: 28,
-    paddingBottom: 40,
   },
   loginHeader: {
     alignItems: 'center',
@@ -1395,28 +1447,31 @@ const styles = StyleSheet.create({
   logoMark: {
     width: 64,
     height: 64,
-    borderRadius: nativeTokens.borderRadius.lg,
-    backgroundColor: '#3b82f6',
-    marginBottom: 14,
+    borderRadius: 16,
+    backgroundColor: nativeTokens.colors.surfaceRaised,
+    marginBottom: 16,
     justifyContent: 'center',
     alignItems: 'center',
+    ...nativeTokens.shadows.satinRaised,
   },
   logoMarkInner: {
     width: 30,
     height: 30,
     borderRadius: 7,
     borderWidth: 3,
-    borderColor: 'rgba(255,255,255,0.65)',
+    borderColor: nativeTokens.colors.primary,
   },
   logoTitle: {
     fontSize: 30,
-    fontWeight: '800',
-    color: '#f1f5f9',
-    letterSpacing: 0.5,
+    fontFamily: 'Cairo_700Bold',
+    color: nativeTokens.colors.textHeading,
+    letterSpacing: nativeTokens.typography.headerTracking,
+    textTransform: 'uppercase',
   },
   logoLabel: {
     fontSize: 12,
-    color: '#64748b',
+    fontFamily: 'Cairo_400Regular',
+    color: nativeTokens.colors.textSubtlest,
     letterSpacing: 3,
     marginTop: 4,
   },
@@ -1425,57 +1480,64 @@ const styles = StyleSheet.create({
   },
   fieldLabel: {
     fontSize: 13,
-    fontWeight: '600',
-    color: '#94a3b8',
+    fontFamily: 'Cairo_600SemiBold',
+    color: nativeTokens.colors.textSubtle,
     marginBottom: 6,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
   },
   fieldInput: {
-    backgroundColor: '#1e293b',
+    backgroundColor: nativeTokens.colors.surfaceSubtle,
     borderWidth: 1,
-    borderColor: '#334155',
-    borderRadius: nativeTokens.borderRadius.md,
+    borderColor: nativeTokens.colors.border,
+    borderRadius: 12,
     paddingVertical: 14,
     paddingHorizontal: 16,
     fontSize: 16,
-    color: '#f1f5f9',
+    fontFamily: 'Cairo_400Regular',
+    color: nativeTokens.colors.textHeading,
   },
   errorBox: {
     marginTop: 12,
     flexDirection: 'row',
     alignItems: 'flex-start',
     gap: 8,
-    backgroundColor: 'rgba(127,29,29,0.3)',
+    backgroundColor: nativeTokens.colors.primarySubtle,
     borderWidth: 1,
-    borderColor: 'rgba(239,68,68,0.4)',
-    borderRadius: nativeTokens.borderRadius.md,
+    borderColor: nativeTokens.colors.danger,
+    borderRadius: 12,
     paddingVertical: 10,
     paddingHorizontal: 14,
   },
   errorIcon: {
     fontSize: 14,
-    color: '#fca5a5',
+    color: nativeTokens.colors.danger,
     lineHeight: 20,
   },
   errorText: {
     flex: 1,
-    color: '#fca5a5',
+    color: nativeTokens.colors.danger,
     fontSize: 14,
+    fontFamily: 'Cairo_400Regular',
     lineHeight: 20,
   },
   loginButton: {
     marginTop: 24,
-    backgroundColor: '#3b82f6',
-    borderRadius: nativeTokens.borderRadius.md,
-    paddingVertical: 15,
+    backgroundColor: nativeTokens.colors.primary,
+    borderRadius: 12,
+    paddingVertical: 16,
     alignItems: 'center',
+    ...nativeTokens.shadows.brandGlow,
   },
   loginButtonBusy: {
     opacity: 0.6,
   },
   loginButtonText: {
-    color: '#fff',
-    fontSize: 17,
-    fontWeight: '700',
+    color: nativeTokens.colors.textInverse,
+    fontSize: 16,
+    fontFamily: 'Cairo_700Bold',
+    textTransform: 'uppercase',
+    letterSpacing: 1,
   },
   forgotWrap: {
     marginTop: 18,
@@ -1483,14 +1545,15 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   forgotText: {
-    color: '#475569',
+    color: nativeTokens.colors.textSubtlest,
     fontSize: 14,
+    fontFamily: 'Cairo_400Regular',
   },
 
   // ── Scanner camera view ───────────────────────────────────────────────────
   root: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: nativeTokens.colors.background,
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
@@ -1502,19 +1565,20 @@ const styles = StyleSheet.create({
   scannerHeader: {
     fontSize: 20,
     fontFamily: 'Cairo_700Bold',
-    color: '#fff',
-    letterSpacing: 0.3,
-    textShadowColor: 'rgba(0,0,0,0.6)',
-    textShadowOffset: { width: 0, height: 1 },
-    textShadowRadius: 4,
+    color: nativeTokens.colors.textHeading,
+    letterSpacing: nativeTokens.typography.headerTracking,
+    textTransform: 'uppercase',
+    textShadowColor: nativeTokens.colors.backdropGlass,
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 6,
   },
   scannerHint: {
     fontSize: 14,
     fontFamily: 'Cairo_400Regular',
-    color: '#cbd5e1',
+    color: nativeTokens.colors.textPrimary,
     textAlign: 'center',
     paddingHorizontal: 24,
-    textShadowColor: 'rgba(0,0,0,0.6)',
+    textShadowColor: nativeTokens.colors.backdropGlass,
     textShadowOffset: { width: 0, height: 1 },
     textShadowRadius: 4,
   },
@@ -1533,107 +1597,120 @@ const styles = StyleSheet.create({
     right: 16,
   },
   topBarBtn: {
-    backgroundColor: 'rgba(0,0,0,0.6)',
-    borderRadius: nativeTokens.borderRadius.md,
+    backgroundColor: nativeTokens.colors.background,
+    borderRadius: 12,
     paddingVertical: 10,
     paddingHorizontal: 14,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.15)',
-    maxWidth: 150,
+    borderColor: nativeTokens.colors.border,
+    maxWidth: 160,
   },
   topBarBtnText: {
-    color: '#e2e8f0',
-    fontSize: 13,
-    fontFamily: 'Cairo_400Regular',
+    color: nativeTokens.colors.textHeading,
+    fontSize: 12,
+    fontFamily: 'Cairo_600SemiBold',
+    textTransform: 'uppercase',
+    letterSpacing: 1,
   },
   logoutButton: {
-    backgroundColor: 'rgba(0,0,0,0.6)',
-    borderRadius: nativeTokens.borderRadius.md,
+    backgroundColor: nativeTokens.colors.background,
+    borderRadius: 12,
     paddingVertical: 10,
     paddingHorizontal: 16,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.15)',
+    borderColor: nativeTokens.colors.border,
     minWidth: 88,
     alignItems: 'center',
   },
   logoutText: {
-    color: '#e2e8f0',
-    fontSize: 13,
-    fontFamily: 'Cairo_400Regular',
+    color: nativeTokens.colors.textHeading,
+    fontSize: 12,
+    fontFamily: 'Cairo_600SemiBold',
+    textTransform: 'uppercase',
+    letterSpacing: 1,
   },
 
   // ── Feedback layers (processing + result) ─────────────────────────────────
   feedbackLayer: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: '#000c',
+    backgroundColor: nativeTokens.colors.surfaceSubtle,
     alignItems: 'center',
     justifyContent: 'center',
     gap: 12,
   },
   feedbackIcon: {
     fontSize: 80,
-    color: '#fff',
+    color: nativeTokens.colors.textHeading,
     lineHeight: 88,
   },
   feedbackTitle: {
     fontSize: 28,
     fontFamily: 'Cairo_700Bold',
-    color: '#fff',
+    color: nativeTokens.colors.textHeading,
+    textTransform: 'uppercase',
+    letterSpacing: nativeTokens.typography.headerTracking,
   },
   feedbackSub: {
     fontSize: 16,
     fontFamily: 'Cairo_400Regular',
-    color: '#f1f5f9',
+    color: nativeTokens.colors.textPrimary,
     textAlign: 'center',
     paddingHorizontal: 40,
     lineHeight: 22,
   },
   offlineBadge: {
     fontSize: 13,
-    color: '#fde68a',
+    color: nativeTokens.colors.warning,
+    fontFamily: 'Cairo_600SemiBold',
     marginTop: 4,
+    textTransform: 'uppercase',
   },
   overrideButton: {
-    marginTop: 8,
-    backgroundColor: 'rgba(245,158,11,0.25)',
-    paddingVertical: 12,
+    marginTop: 12,
+    backgroundColor: nativeTokens.colors.warningSubtle,
+    paddingVertical: 14,
     paddingHorizontal: 36,
-    borderRadius: nativeTokens.borderRadius.md,
-    borderWidth: 1,
-    borderColor: 'rgba(245,158,11,0.6)',
+    borderRadius: 12,
+    borderWidth: 1.5,
+    borderColor: nativeTokens.colors.warning,
   },
   overrideButtonText: {
-    fontSize: 15,
-    fontFamily: 'Cairo_600SemiBold',
-    color: '#fde68a',
+    fontSize: 14,
+    fontFamily: 'Cairo_700Bold',
+    color: nativeTokens.colors.warning,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
   },
   scanAgainButton: {
-    marginTop: 8,
-    backgroundColor: 'rgba(255,255,255,0.18)',
-    paddingVertical: 12,
+    marginTop: 12,
+    backgroundColor: nativeTokens.colors.surfaceRaised,
+    paddingVertical: 14,
     paddingHorizontal: 36,
-    borderRadius: nativeTokens.borderRadius.md,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.35)',
+    borderRadius: 12,
+    borderWidth: 1.5,
+    borderColor: nativeTokens.colors.borderBold,
   },
   scanAgainText: {
-    fontSize: 17,
-    fontFamily: 'Cairo_600SemiBold',
-    color: '#fff',
+    fontSize: 16,
+    fontFamily: 'Cairo_700Bold',
+    color: nativeTokens.colors.textHeading,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
   },
   maintenanceButton: {
     marginTop: 8,
-    backgroundColor: 'rgba(234,179,8,0.15)',
-    paddingVertical: 12,
+    backgroundColor: nativeTokens.colors.warningSubtle,
+    paddingVertical: 14,
     paddingHorizontal: 36,
-    borderRadius: nativeTokens.borderRadius.md,
+    borderRadius: 12,
     borderWidth: 1,
-    borderColor: 'rgba(234,179,8,0.4)',
+    borderColor: nativeTokens.colors.warning,
   },
   maintenanceButtonText: {
-    fontSize: 15,
-    fontFamily: 'Cairo_600SemiBold',
-    color: '#fde68a',
+    fontSize: 14,
+    fontFamily: 'Cairo_700Bold',
+    color: nativeTokens.colors.warning,
+    textTransform: 'uppercase',
   },
 
   // ── Bottom navigation bar ─────────────────────────────────────────────────
@@ -1643,79 +1720,87 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     flexDirection: 'row',
-    backgroundColor: 'rgba(0,0,0,0.82)',
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: 'rgba(255,255,255,0.12)',
-    paddingBottom: Platform.OS === 'ios' ? 26 : 10,
-    paddingTop: 10,
+    backgroundColor: nativeTokens.colors.background,
+    borderTopWidth: 1,
+    borderTopColor: nativeTokens.colors.border,
+    paddingBottom: Platform.OS === 'ios' ? 32 : 12,
+    paddingTop: 12,
   },
   navTab: {
     flex: 1,
     alignItems: 'center',
-    gap: 3,
-    opacity: 0.4,
+    gap: 4,
+    opacity: 0.3,
   },
   navTabActive: {
     opacity: 1,
   },
   navTabIcon: {
-    fontSize: 20,
-    color: '#94a3b8',
+    fontSize: 22,
+    color: nativeTokens.colors.textSubtle,
   },
   navTabIconActive: {
-    color: '#3b82f6',
+    color: nativeTokens.colors.primary,
   },
   navTabLabel: {
     fontSize: 10,
-    color: '#94a3b8',
-    fontWeight: '500',
-    letterSpacing: 0.3,
+    fontFamily: 'Cairo_600SemiBold',
+    color: nativeTokens.colors.textSubtlest,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
   },
   navTabLabelActive: {
-    color: '#3b82f6',
-    fontWeight: '600',
+    color: nativeTokens.colors.primary,
   },
 
   // ── Permission screens ────────────────────────────────────────────────────
   permIcon: {
-    width: 72,
-    height: 72,
-    borderRadius: nativeTokens.borderRadius.lg,
-    backgroundColor: 'rgba(59,130,246,0.15)',
-    borderWidth: 1,
-    borderColor: 'rgba(59,130,246,0.3)',
+    width: 80,
+    height: 80,
+    borderRadius: 20,
+    backgroundColor: nativeTokens.colors.surfaceRaised,
+    borderWidth: 2,
+    borderColor: nativeTokens.colors.primarySubtle,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 8,
+    marginBottom: 16,
+    ...nativeTokens.shadows.satinRaised,
   },
   permIconText: {
-    fontSize: 32,
-    color: '#3b82f6',
+    fontSize: 36,
+    color: nativeTokens.colors.primary,
   },
   permTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#f1f5f9',
+    fontSize: 24,
+    fontFamily: 'Cairo_700Bold',
+    color: nativeTokens.colors.textHeading,
     textAlign: 'center',
+    textTransform: 'uppercase',
+    letterSpacing: 2,
   },
   permSub: {
     fontSize: 15,
-    color: '#94a3b8',
+    fontFamily: 'Cairo_400Regular',
+    color: nativeTokens.colors.textPrimary,
     textAlign: 'center',
     lineHeight: 22,
     maxWidth: 280,
+    marginTop: 8,
   },
   permButton: {
-    backgroundColor: '#3b82f6',
-    paddingVertical: 13,
-    paddingHorizontal: 32,
-    borderRadius: nativeTokens.borderRadius.md,
-    marginTop: 8,
+    backgroundColor: nativeTokens.colors.primary,
+    paddingVertical: 16,
+    paddingHorizontal: 48,
+    borderRadius: 14,
+    marginTop: 24,
+    ...nativeTokens.shadows.brandGlow,
   },
   permButtonText: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#fff',
+    fontFamily: 'Cairo_700Bold',
+    color: nativeTokens.colors.textInverse,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
   },
 });
 
@@ -1723,69 +1808,72 @@ const styles = StyleSheet.create({
 
 const decision = StyleSheet.create({
   backdrop: {
-    backgroundColor: 'rgba(15,23,42,0.93)',
+    backgroundColor: nativeTokens.colors.backdropGlass,
   },
   iconWrap: {
-    width: 72,
-    height: 72,
-    borderRadius: nativeTokens.borderRadius.full,
-    backgroundColor: 'rgba(59,130,246,0.2)',
-    borderWidth: 2,
-    borderColor: 'rgba(59,130,246,0.5)',
+    width: 88,
+    height: 88,
+    borderRadius: 44,
+    backgroundColor: nativeTokens.colors.surfaceRaised,
+    borderWidth: 3,
+    borderColor: nativeTokens.colors.primarySubtle,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 4,
+    marginBottom: 12,
+    ...nativeTokens.shadows.satinRaised,
   },
   icon: {
-    fontSize: 36,
-    color: '#60a5fa',
-    fontWeight: '700',
-    lineHeight: 42,
+    fontSize: 40,
+    color: nativeTokens.colors.primary,
+    fontFamily: 'Cairo_700Bold',
+    lineHeight: 48,
   },
   hint: {
-    fontSize: 13,
-    color: '#64748b',
+    fontSize: 14,
+    fontFamily: 'Cairo_400Regular',
+    color: nativeTokens.colors.textSubtlest,
     textAlign: 'center',
     paddingHorizontal: 40,
-    marginTop: -4,
+    marginTop: 4,
   },
   buttonRow: {
     flexDirection: 'row',
     gap: 16,
-    marginTop: 12,
-    paddingHorizontal: 32,
+    marginTop: 24,
+    paddingHorizontal: 24,
   },
   btn: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 18,
-    borderRadius: nativeTokens.borderRadius.lg,
-    gap: 4,
-    borderWidth: 1.5,
+    paddingVertical: 20,
+    borderRadius: 16,
+    gap: 6,
+    borderWidth: 2,
   },
   passBtn: {
-    backgroundColor: 'rgba(22,163,74,0.2)',
-    borderColor: 'rgba(34,197,94,0.6)',
+    backgroundColor: nativeTokens.colors.successSubtle,
+    borderColor: nativeTokens.colors.success,
   },
   denyBtn: {
-    backgroundColor: 'rgba(220,38,38,0.2)',
-    borderColor: 'rgba(239,68,68,0.6)',
+    backgroundColor: nativeTokens.colors.dangerSubtle,
+    borderColor: nativeTokens.colors.danger,
   },
   passIcon: {
-    fontSize: 28,
-    color: '#4ade80',
-    lineHeight: 32,
+    fontSize: 32,
+    color: nativeTokens.colors.success,
+    lineHeight: 36,
   },
   denyIcon: {
-    fontSize: 28,
-    color: '#f87171',
-    lineHeight: 32,
+    fontSize: 32,
+    color: nativeTokens.colors.danger,
+    lineHeight: 36,
   },
   btnLabel: {
-    fontSize: 16,
+    fontSize: 15,
     fontFamily: 'Cairo_700Bold',
-    color: '#f1f5f9',
-    letterSpacing: 0.3,
+    color: nativeTokens.colors.textHeading,
+    textTransform: 'uppercase',
+    letterSpacing: 1.5,
   },
 });

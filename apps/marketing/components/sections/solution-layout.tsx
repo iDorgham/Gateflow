@@ -53,13 +53,13 @@ export function SolutionLayout({
         </div>
 
         <div className="max-w-3xl">
-          <p className="text-primary font-bold uppercase tracking-widest mb-4">
+          <p className="text-ds-text-brand font-black uppercase tracking-widest mb-4">
             {subtitle}
           </p>
           <h1 className="text-5xl lg:text-7xl font-black tracking-tight mb-6">
             {title}
           </h1>
-          <p className="text-xl text-muted-foreground leading-relaxed mb-10">
+          <p className="text-xl text-ds-text-subtle leading-relaxed mb-10 font-medium">
             {description}
           </p>
 
@@ -106,9 +106,9 @@ export function SolutionLayout({
               {painPoints.map((point, i) => (
                 <div
                   key={i}
-                  className="flex items-start gap-3 p-5 rounded-2xl bg-destructive/5 border border-destructive/20"
+                  className="flex items-start gap-3 p-5 rounded-2xl bg-ds-background-danger-subtle border border-ds-border-danger/20"
                 >
-                  <AlertTriangle className="h-5 w-5 text-destructive shrink-0 mt-0.5" />
+                  <AlertTriangle className="h-5 w-5 text-ds-text-danger shrink-0 mt-0.5" />
                   <p className="text-sm font-semibold leading-snug">{point}</p>
                 </div>
               ))}
@@ -127,14 +127,16 @@ export function SolutionLayout({
             {benefits.map((b, i) => (
               <div
                 key={i}
-                className="flex gap-4 p-6 rounded-2xl border bg-card hover:bg-muted/50 transition-colors"
+                className="flex gap-4 p-6 rounded-2xl border border-ds-border bg-ds-surface-raised hover:bg-ds-surface-sunken transition-colors"
               >
-                <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                <div className="h-10 w-10 rounded-lg bg-ds-background-brand-subtle flex items-center justify-center text-ds-text-brand shrink-0">
                   <CheckCircle2 size={20} />
                 </div>
                 <div>
-                  <h4 className="font-bold text-lg mb-1">{b.title}</h4>
-                  <p className="text-muted-foreground text-sm leading-relaxed">
+                  <h4 className="font-bold text-lg mb-1 text-ds-text-heading">
+                    {b.title}
+                  </h4>
+                  <p className="text-ds-text-subtle text-sm leading-relaxed">
                     {b.desc}
                   </p>
                 </div>
@@ -168,8 +170,11 @@ export function SolutionLayout({
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((f, i) => (
               <div key={i} className="flex items-center gap-3">
-                <div className="h-2 w-2 bg-primary rounded-full shadow-[0_0_8px_rgba(var(--primary-rgb),1)]" />
-                <span className="font-bold uppercase tracking-widest text-xs">
+                <div
+                  className="h-2 w-2 bg-ds-background-brand-bold rounded-full"
+                  style={{ boxShadow: 'var(--ds-glow-accent)' }}
+                />
+                <span className="font-black uppercase tracking-widest text-xs">
                   {f}
                 </span>
               </div>

@@ -7,11 +7,11 @@ import { motion } from 'framer-motion';
  * Brand Tokens - Adaptive to light/dark via CSS variables
  */
 const tokens = {
-  accent: '#ED4B00', // Kimchi Orange
-  cyan: '#00F2FF', // GateFlow Cyan (Technology Lifeblood)
-  success: '#00C853',
-  border: 'rgba(255, 255, 255, 0.1)',
-  glass: 'rgba(255, 255, 255, 0.03)',
+  accent: 'var(--ds-primary-accent)',
+  cyan: 'var(--ds-information-bold)',
+  success: 'var(--ds-background-success-bold)',
+  border: 'var(--ds-border)',
+  glass: 'var(--ds-surface-sunken)',
 };
 
 const GlowFilter = ({ id }: { id: string }) => (
@@ -22,7 +22,7 @@ const GlowFilter = ({ id }: { id: string }) => (
     </filter>
     <linearGradient id="brandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stopColor={tokens.accent} />
-      <stop offset="100%" stopColor="#FF8C00" />
+      <stop offset="100%" stopColor="oklch(54% 0.20 35)" />
     </linearGradient>
     <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="0%" y2="100%">
       <stop offset="0%" stopColor={tokens.cyan} stopOpacity="0.4" />
@@ -195,7 +195,7 @@ export const DashboardIllustration = () => (
       stroke="currentColor"
       strokeOpacity="0.1"
     />
-    {[450, 485, 520].map((y, i) => (
+    {[450, 485, 520].map((y) => (
       <g key={y}>
         <rect
           x="240"

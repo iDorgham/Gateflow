@@ -1,17 +1,3 @@
-/**
- * QueueStatus
- *
- * A modal screen showing the offline scan queue state:
- *   • Pending count (unsynced, retry < MAX_RETRIES)
- *   • Failed count (exceeded retry limit)
- *   • Total items in storage
- *   • Last successful sync timestamp
- *
- * Actions:
- *   • "Sync Now" — triggers syncManager.triggerSync()
- *   • "Clear Failed" — removes max-retry items via scanQueue.clearSynced()
- */
-
 import { useState, useEffect, useCallback } from 'react';
 import {
   Modal,
@@ -25,7 +11,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { scanQueue, syncManager } from '../lib/offline-queue';
 import { maintenanceQueue } from '../lib/maintenance-queue';
-import { nativeTokens } from '@gateflow/ui/tokens';
+import { nativeTokensNewEra as nativeTokens } from '../../../../packages/ui/src/tokens';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -189,7 +175,7 @@ export function QueueStatus({ visible, onClose }: QueueStatusProps) {
                 <StatCard
                   label="Failed"
                   value={stats.failed}
-                  color={nativeTokens.colors.destructive}
+                  color={nativeTokens.colors.danger}
                 />
               </View>
 
@@ -227,7 +213,7 @@ export function QueueStatus({ visible, onClose }: QueueStatusProps) {
                 {isSyncing ? (
                   <ActivityIndicator
                     size="small"
-                    color={nativeTokens.colors.primaryForeground}
+                    color={nativeTokens.colors.textInverse}
                   />
                 ) : (
                   <Text style={s.syncBtnText}>↑ Sync Now</Text>
@@ -244,7 +230,7 @@ export function QueueStatus({ visible, onClose }: QueueStatusProps) {
                   {isClearing ? (
                     <ActivityIndicator
                       size="small"
-                      color={nativeTokens.colors.destructive}
+                      color={nativeTokens.colors.danger}
                     />
                   ) : (
                     <Text style={s.clearBtnText}>
@@ -280,7 +266,7 @@ function StatCard({
   color: string;
 }) {
   return (
-    <View style={[s.statCard, { borderColor: color + '55' }]}>
+    <View style={[s.statCard, { borderColor: color }]}>
       <Text style={[s.statValue, { color }]}>{value}</Text>
       <Text style={s.statLabel}>{label}</Text>
     </View>
@@ -302,42 +288,42 @@ function formatDate(iso: string | null): string {
 const s = StyleSheet.create({
   backdrop: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.6)',
+    backgroundColor: nativeTokens.colors.backdropGlass,
     justifyContent: 'flex-end',
   },
   sheet: {
-    backgroundColor: nativeTokens.colors.neutral700,
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
-    maxHeight: '80%',
+    backgroundColor: nativeTokens.colors.surfaceSubtle,
+    borderTopLeftRadius: 32,
+    borderTopRightRadius: 32,
+    maxHeight: '90%',
     borderTopWidth: 1,
-    borderColor: nativeTokens.colors.neutral700,
+    borderColor: nativeTokens.colors.border,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
-    paddingTop: 20,
-    paddingBottom: 14,
+    paddingTop: 24,
+    paddingBottom: 16,
     borderBottomWidth: 1,
-    borderColor: nativeTokens.colors.neutral700,
+    borderColor: nativeTokens.colors.border,
   },
   title: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: nativeTokens.colors.primaryForeground,
+    fontFamily: 'Cairo_700Bold',
+    fontSize: 20,
+    color: nativeTokens.colors.textHeading,
   },
   doneBtn: {
     paddingVertical: 6,
-    paddingHorizontal: 14,
-    backgroundColor: nativeTokens.colors.neutral700,
+    paddingHorizontal: 16,
+    backgroundColor: nativeTokens.colors.surfaceRaised,
     borderRadius: 8,
   },
   doneBtnText: {
+    fontFamily: 'Cairo_600SemiBold',
     color: nativeTokens.colors.primary,
     fontSize: 15,
-    fontWeight: '600',
   },
   doneBtnDisabled: {
     opacity: 0.4,
@@ -345,64 +331,68 @@ const s = StyleSheet.create({
   loadingWrap: {
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 48,
+    padding: 64,
     gap: 16,
   },
   loadingText: {
-    color: nativeTokens.colors.mutedForeground,
+    fontFamily: 'Cairo_400Regular',
+    color: nativeTokens.colors.textSubtle,
     fontSize: 14,
   },
   body: {
-    padding: 20,
-    paddingBottom: 40,
-    gap: 12,
+    padding: 24,
+    paddingBottom: 48,
+    gap: 16,
   },
   statsRow: {
     flexDirection: 'row',
-    gap: 10,
+    gap: 12,
   },
   statCard: {
     flex: 1,
-    backgroundColor: nativeTokens.colors.neutral700,
-    borderRadius: 12,
+    backgroundColor: nativeTokens.colors.background,
+    borderRadius: 16,
     borderWidth: 1,
-    paddingVertical: 14,
+    paddingVertical: 16,
     alignItems: 'center',
     gap: 4,
   },
   statValue: {
-    fontSize: 28,
-    fontWeight: '800',
+    fontFamily: 'Cairo_700Bold',
+    fontSize: 32,
   },
   statLabel: {
+    fontFamily: 'Cairo_600SemiBold',
     fontSize: 12,
-    color: nativeTokens.colors.mutedForeground,
-    fontWeight: '500',
+    color: nativeTokens.colors.textSubtlest,
+    textTransform: 'uppercase',
   },
   syncTime: {
+    fontFamily: 'Cairo_400Regular',
     fontSize: 13,
-    color: nativeTokens.colors.mutedForeground,
+    color: nativeTokens.colors.textSubtlest,
     textAlign: 'center',
   },
   syncTimeValue: {
-    color: nativeTokens.colors.mutedForeground,
-    fontWeight: '500',
+    fontFamily: 'Cairo_600SemiBold',
+    color: nativeTokens.colors.textSubtle,
   },
   statusBox: {
-    borderRadius: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 14,
+    borderRadius: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
     borderWidth: 1,
   },
   statusBoxOk: {
-    backgroundColor: 'rgba(22,163,74,0.12)',
-    borderColor: 'rgba(22,163,74,0.35)',
+    backgroundColor: nativeTokens.colors.successSubtle,
+    borderColor: nativeTokens.colors.success,
   },
   statusBoxErr: {
-    backgroundColor: 'rgba(127,29,29,0.2)',
-    borderColor: 'rgba(239,68,68,0.35)',
+    backgroundColor: nativeTokens.colors.dangerSubtle,
+    borderColor: nativeTokens.colors.danger,
   },
   statusText: {
+    fontFamily: 'Cairo_600SemiBold',
     fontSize: 14,
     textAlign: 'center',
   },
@@ -410,39 +400,41 @@ const s = StyleSheet.create({
     color: nativeTokens.colors.success,
   },
   statusTextErr: {
-    color: nativeTokens.colors.destructive,
+    color: nativeTokens.colors.danger,
   },
   syncBtn: {
     backgroundColor: nativeTokens.colors.primary,
-    borderRadius: 12,
-    paddingVertical: 14,
+    borderRadius: 14,
+    paddingVertical: 16,
     alignItems: 'center',
   },
   syncBtnText: {
-    color: nativeTokens.colors.primaryForeground,
+    fontFamily: 'Cairo_700Bold',
+    color: nativeTokens.colors.textInverse,
     fontSize: 16,
-    fontWeight: '600',
   },
   clearBtn: {
     backgroundColor: 'transparent',
-    borderRadius: 12,
+    borderRadius: 14,
     borderWidth: 1,
-    borderColor: 'rgba(239,68,68,0.45)',
-    paddingVertical: 13,
+    borderColor: nativeTokens.colors.borderBold,
+    paddingVertical: 15,
     alignItems: 'center',
   },
   clearBtnText: {
-    color: nativeTokens.colors.destructive,
+    fontFamily: 'Cairo_600SemiBold',
+    color: nativeTokens.colors.danger,
     fontSize: 15,
-    fontWeight: '600',
   },
   btnBusy: {
     opacity: 0.5,
   },
   note: {
+    fontFamily: 'Cairo_400Regular',
     fontSize: 12,
-    color: nativeTokens.colors.mutedForeground,
+    color: nativeTokens.colors.textSubtlest,
     lineHeight: 18,
     textAlign: 'center',
+    marginTop: 8,
   },
 });

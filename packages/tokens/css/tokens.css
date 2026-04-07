@@ -109,6 +109,7 @@
   /* Shadows (Institutional Depth) */
   --ds-shadow-raised:               0 1px 1px oklch(0% 0 0 / 0.25), 0 0 0 1px oklch(0% 0 0 / 0.08);
   --ds-shadow-overlay:              0 8px 16px -4px oklch(0% 0 0 / 0.25), 0 0 0 1px oklch(0% 0 0 / 0.08);
+  --ds-shadow-deep:                 0 32px 64px -12px oklch(0% 0 0 / 0.35);
 
   /* Icons */
   --ds-icon-subtle:                 var(--gf-color-neutral-70);

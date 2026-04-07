@@ -51,13 +51,15 @@ export default async function InvitationPage(props: InvitationPageProps) {
   if (!shortLink) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] px-4 text-center">
-        <div className="w-20 h-20 bg-red-50 rounded-full flex items-center justify-center mb-6">
-          <AlertCircle className="w-10 h-10 text-red-500" />
+        <div className="w-20 h-20 bg-ds-background-danger-subtle rounded-full flex items-center justify-center mb-6">
+          <AlertCircle className="w-10 h-10 text-ds-text-danger" />
         </div>
-        <h1 className="text-2xl font-bold text-slate-900 mb-2">
+        <h1 className="text-2xl font-black text-ds-text-heading mb-2 tracking-tight">
           {t('unauthorizedTitle')}
         </h1>
-        <p className="text-slate-500 max-w-sm mb-8">{t('unauthorizedDesc')}</p>
+        <p className="text-ds-text-subtle max-w-sm mb-8 font-medium leading-relaxed">
+          {t('unauthorizedDesc')}
+        </p>
         <I18nLink locale={castLocale} href="/">
           <Button variant="outline">{t('common:backHome')}</Button>
         </I18nLink>
@@ -78,15 +80,15 @@ export default async function InvitationPage(props: InvitationPageProps) {
   const org = shortLink.qrCode.organization;
 
   return (
-    <div className="flex-1 bg-[var(--ds-background-subtle,#F4F5F7)] pt-24 pb-32">
+    <div className="flex-1 bg-ds-surface-sunken pt-24 pb-32">
       <div className="container px-4 mx-auto">
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
-            <h1 className="text-sm font-bold uppercase tracking-widest text-primary mb-4 opacity-80">
+            <h1 className="text-sm font-black uppercase tracking-[0.4em] text-ds-text-brand mb-4">
               {t('welcome')}
             </h1>
             <div className="flex items-center justify-center gap-4 mb-2">
-              <h2 className="text-3xl font-black tracking-tight text-slate-900">
+              <h2 className="text-3xl font-black tracking-tight text-ds-text-heading leading-tight">
                 {project?.name || org.name}
               </h2>
             </div>
@@ -95,14 +97,14 @@ export default async function InvitationPage(props: InvitationPageProps) {
           <div className="grid lg:grid-cols-2 gap-12 items-start">
             {/* INLINED PASS UI TO BYPASS BUILD CRASH */}
             <div className="w-full max-w-md mx-auto space-y-6">
-              <div className="bg-ds-surface rounded-[2rem] border-2 border-primary/10 shadow-2xl overflow-hidden p-8 space-y-8">
+              <div className="bg-ds-surface rounded-[2rem] border border-ds-border-brand/10 shadow-2xl overflow-hidden p-8 space-y-8">
                 <div className="flex justify-between items-start">
                   <div className="space-y-1">
-                    <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest flex items-center gap-1.5">
+                    <p className="text-xs font-black text-ds-text-subtle uppercase tracking-widest flex items-center gap-1.5">
                       <Building className="w-3 h-3" />
                       {org.name}
                     </p>
-                    <h2 className="text-2xl font-bold tracking-tight text-foreground">
+                    <h2 className="text-2xl font-black tracking-tight text-ds-text-heading">
                       {project?.name || 'GateFlow Access'}
                     </h2>
                   </div>
@@ -114,9 +116,9 @@ export default async function InvitationPage(props: InvitationPageProps) {
                   )}
                 </div>
 
-                <div className="aspect-square bg-ds-surface-sunken rounded-3xl p-8 flex flex-col items-center justify-center border-2 border-dashed">
-                  <div className="w-48 h-48 bg-slate-200 rounded-xl" />
-                  <p className="mt-4 text-[10px] uppercase font-bold text-slate-400">
+                <div className="aspect-square bg-ds-surface-sunken rounded-3xl p-8 flex flex-col items-center justify-center border-2 border-dashed border-ds-border">
+                  <div className="w-48 h-48 bg-ds-surface-sunken rounded-xl" />
+                  <p className="mt-4 text-[10px] uppercase font-black text-ds-text-subtlest tracking-widest">
                     {t('verificationDesc')}
                   </p>
                 </div>

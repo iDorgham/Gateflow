@@ -22,26 +22,29 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   return (
     <aside
       className={cn(
-        'sticky top-0 hidden h-screen border-e border-slate-200 bg-white p-3 transition-all md:block',
+        'sticky top-0 hidden h-screen border-e border-ds-border bg-ds-surface/60 backdrop-blur-xl p-3 transition-all md:block',
         collapsed ? 'w-20' : 'w-64'
       )}
     >
       <div className="mb-6 flex items-center justify-between px-2">
         <span
-          className={cn('font-semibold text-slate-900', collapsed && 'sr-only')}
+          className={cn(
+            'font-black uppercase tracking-widest text-[11px] text-ds-text-heading',
+            collapsed && 'sr-only'
+          )}
         >
           Resident Portal
         </span>
         <button
           onClick={onToggle}
           type="button"
-          className="rounded-md p-2 text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-700"
+          className="rounded-md p-2 text-ds-icon-subtle transition-colors hover:bg-ds-surface-raised hover:text-ds-text"
           aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
           {collapsed ? (
-            <PanelLeftOpen className="h-5 w-5" />
+            <PanelLeftOpen className="h-4 w-4" />
           ) : (
-            <PanelLeftClose className="h-5 w-5" />
+            <PanelLeftClose className="h-4 w-4" />
           )}
         </button>
       </div>
@@ -55,14 +58,21 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
               key={item.href}
               href={item.href}
               className={cn(
-                'flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors',
+                'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all',
                 active
-                  ? 'bg-blue-50 text-blue-700'
-                  : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                  ? 'bg-ds-background-selected text-ds-text-selected shadow-sm'
+                  : 'text-ds-text-subtle hover:bg-ds-surface-raised hover:text-ds-text'
               )}
             >
-              <Icon className="h-5 w-5 shrink-0" />
-              <span className={cn(collapsed && 'hidden')}>{item.label}</span>
+              <Icon className="h-4.5 w-4.5 shrink-0" />
+              <span
+                className={cn(
+                  'font-bold tracking-tight',
+                  collapsed && 'hidden'
+                )}
+              >
+                {item.label}
+              </span>
             </Link>
           );
         })}

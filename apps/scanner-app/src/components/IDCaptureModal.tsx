@@ -1,8 +1,3 @@
-/**
- * IDCaptureModal — prompts guard to capture ID photo when required identity level is 1+.
- * Uses expo-image-picker for camera capture. Uploads to /api/artifacts and links to scan.
- */
-
 import { useState } from 'react';
 import {
   Modal,
@@ -14,7 +9,7 @@ import {
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { getValidAccessToken } from '../lib/auth-client';
-import { nativeTokens } from '@gateflow/ui/tokens';
+import { nativeTokensNewEra as nativeTokens } from '../../../../packages/ui/src/tokens';
 
 const API_BASE_URL =
   process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:3001/api';
@@ -133,7 +128,7 @@ export function IDCaptureModal({
             {isCapturing ? (
               <ActivityIndicator
                 size="small"
-                color={nativeTokens.colors.primaryForeground}
+                color={nativeTokens.colors.textInverse}
               />
             ) : (
               <Text style={s.captureBtnText}>Take Photo</Text>
@@ -158,61 +153,73 @@ export function IDCaptureModal({
 const s = StyleSheet.create({
   backdrop: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.6)',
+    backgroundColor: nativeTokens.colors.backdropGlass,
     justifyContent: 'flex-end',
   },
   sheet: {
-    backgroundColor: nativeTokens.colors.neutral700,
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
+    backgroundColor: nativeTokens.colors.background,
+    borderTopLeftRadius: 32,
+    borderTopRightRadius: 32,
     padding: 24,
-    paddingBottom: 40,
+    paddingBottom: 48,
+    borderTopWidth: 1,
+    borderColor: nativeTokens.colors.border,
   },
   title: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: nativeTokens.colors.primaryForeground,
+    fontFamily: 'Cairo_700Bold',
+    fontSize: 22,
+    color: nativeTokens.colors.textHeading,
     marginBottom: 8,
   },
   subtitle: {
-    fontSize: 14,
-    color: nativeTokens.colors.mutedForeground,
-    marginBottom: 24,
-    lineHeight: 20,
+    fontFamily: 'Cairo_400Regular',
+    fontSize: 15,
+    color: nativeTokens.colors.textSubtle,
+    marginBottom: 32,
+    lineHeight: 22,
   },
   errorBox: {
-    backgroundColor: 'rgba(239,68,68,0.15)',
+    backgroundColor: nativeTokens.colors.dangerSubtle,
     borderWidth: 1,
-    borderColor: 'rgba(239,68,68,0.4)',
-    borderRadius: 8,
-    padding: 12,
-    marginBottom: 16,
+    borderColor: nativeTokens.colors.danger,
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 24,
   },
   errorText: {
-    color: nativeTokens.colors.destructive,
+    fontFamily: 'Cairo_600SemiBold',
+    color: nativeTokens.colors.danger,
     fontSize: 14,
   },
   captureBtn: {
     backgroundColor: nativeTokens.colors.primary,
-    borderRadius: 12,
-    paddingVertical: 16,
+    borderRadius: 16,
+    paddingVertical: 18,
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 16,
+    shadowColor: nativeTokens.colors.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+    elevation: 4,
   },
   captureBtnDisabled: {
-    opacity: 0.6,
+    opacity: 0.5,
   },
   captureBtnText: {
-    color: nativeTokens.colors.primaryForeground,
+    fontFamily: 'Cairo_700Bold',
+    color: nativeTokens.colors.textInverse,
     fontSize: 17,
-    fontWeight: '600',
   },
   skipBtn: {
-    paddingVertical: 12,
+    paddingVertical: 14,
     alignItems: 'center',
+    backgroundColor: nativeTokens.colors.surfaceRaised,
+    borderRadius: 16,
   },
   skipBtnText: {
-    color: nativeTokens.colors.mutedForeground,
+    fontFamily: 'Cairo_600SemiBold',
+    color: nativeTokens.colors.textSubtle,
     fontSize: 15,
   },
 });

@@ -16,7 +16,7 @@ export function PortalShell({ children }: { children: React.ReactNode }) {
 
   if (isMd) {
     return (
-      <div className="flex min-h-screen bg-slate-50">
+      <div className="flex min-h-screen bg-ds-surface-sunken">
         <Sidebar
           collapsed={sidebarCollapsed}
           onToggle={() => setSidebarCollapsed((prev) => !prev)}
@@ -39,7 +39,7 @@ export function PortalShell({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-ds-surface-sunken">
       <main>
         <AnimatePresence mode="wait" initial={false}>
           <motion.div

@@ -17,7 +17,6 @@ import {
   Home,
   DollarSign,
   LayoutTemplate,
-  Compass,
 } from 'lucide-react';
 import { LanguageSwitcher } from './language-switcher';
 import { ThemeToggle } from './theme-toggle';
@@ -343,7 +342,8 @@ export function Nav({ locale }: { locale: Locale }) {
                 if (closeTimeout.current) clearTimeout(closeTimeout.current);
               }}
               onMouseLeave={handleMouseLeave}
-              className="absolute inset-x-0 top-20 z-40 overflow-hidden border-b border-ds-border bg-ds-surface shadow-[0_32px_64px_-12px_rgba(0,0,0,0.14)] dark:shadow-[0_32px_64px_-20px_rgba(0,0,0,0.6)] before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-white/5 before:shadow-[0_8px_24px_rgba(0,0,0,0.2)]"
+              className="absolute inset-x-0 top-20 z-40 overflow-hidden border-b border-ds-border bg-ds-surface before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-white/5"
+              style={{ boxShadow: 'var(--ds-shadow-deep)' }}
             >
               <div className="mx-auto flex max-w-[1536px] min-h-[320px] items-center">
                 {navLinks.find((l) => l.href === activeMenu)?.hasMega && (
@@ -455,6 +455,7 @@ export function Nav({ locale }: { locale: Locale }) {
                                   <div className="w-20 h-20 shrink-0 rounded-xl overflow-hidden border border-ds-border">
                                     <img
                                       src={post.image}
+                                      alt={post.title}
                                       className="w-full h-full object-cover group-hover/post:scale-110 transition-transform"
                                     />
                                   </div>
