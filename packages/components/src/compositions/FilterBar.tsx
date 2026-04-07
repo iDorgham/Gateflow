@@ -22,7 +22,6 @@ export function FilterBar({
   filters,
   actions,
   onClear,
-  isLoading = false,
   className,
   ...props
 }: FilterBarProps) {

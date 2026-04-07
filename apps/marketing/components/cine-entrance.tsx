@@ -70,8 +70,9 @@ export function StaggerContainer({
     <div className={className}>
       {React.Children.map(children, (child, index) => {
         if (React.isValidElement(child)) {
-          return React.cloneElement(child as React.ReactElement<any>, {
-            delay: (child.props.delay || 0) + index * staggerDelay,
+          const typedChild = child as React.ReactElement<{ delay?: number }>;
+          return React.cloneElement(typedChild, {
+            delay: (typedChild.props.delay || 0) + index * staggerDelay,
           });
         }
         return child;

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { PageHeader } from '@gateflow/components';
-import { Bot, Sparkles, MessageSquare, Send, Zap, Info, Wand2 } from 'lucide-react';
+import { Bot, Sparkles, Send, Zap, Info, Wand2 } from 'lucide-react';
 import { cn } from '@gateflow/ui/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button, Input, ScrollArea } from '@gateflow/ui';
@@ -8,17 +8,20 @@ import { Button, Input, ScrollArea } from '@gateflow/ui';
 const aiPrinciples = [
   {
     title: 'Orchid Glow Protocol',
-    description: 'AI surfaces use a unique violet/orchid accent (--gf-color-ai-accent) to distinguish intelligence from standard UI tokens.',
+    description:
+      'AI surfaces use a unique violet/orchid accent (--gf-color-ai-accent) to distinguish intelligence from standard UI tokens.',
     icon: Wand2,
   },
   {
     title: 'Staggered Entrances',
-    description: 'AI-generated content should never "pop" in. Use 0.3s spring transitions with 10px Y-offsets for organic message delivery.',
+    description:
+      'AI-generated content should never "pop" in. Use 0.3s spring transitions with 10px Y-offsets for organic message delivery.',
     icon: Zap,
   },
   {
     title: 'Glassmorphic Intelligence',
-    description: 'AI panels use heavy backdrop blurring (3xl) and subtle mesh overlays to feel like a superior cognitive layer over the application.',
+    description:
+      'AI panels use heavy backdrop blurring (3xl) and subtle mesh overlays to feel like a superior cognitive layer over the application.',
     icon: Sparkles,
   },
 ];
@@ -60,7 +63,8 @@ export default function AIElementsPage() {
             GateAI Chat Lab
           </h2>
           <p className="text-sm font-bold text-[var(--ds-text-subtle)] opacity-60">
-            Interactive demonstration of AI surface depth and message animation protocols.
+            Interactive demonstration of AI surface depth and message animation
+            protocols.
           </p>
         </div>
         <AIChatLab />
@@ -79,7 +83,11 @@ export default function AIElementsPage() {
               The Cognitive Layer
             </h4>
             <p className="text-sm text-[var(--ds-text-subtle)] leading-relaxed max-w-2xl font-medium">
-              AI elements should feel like they exist "above" the standard application. This is achieved through the use of <strong>--gf-color-ai-surface</strong> (an ultra-deep charcoal with violet tint) and the <strong>shadow-ai-glow</strong> class, which provides a soft atmospheric purple bloom.
+              AI elements should feel like they exist &quot;above&quot; the
+              standard application. This is achieved through the use of{' '}
+              <strong>--gf-color-ai-surface</strong> (an ultra-deep charcoal
+              with violet tint) and the <strong>shadow-ai-glow</strong> class,
+              which provides a soft atmospheric purple bloom.
             </p>
           </div>
         </div>
@@ -90,27 +98,33 @@ export default function AIElementsPage() {
 
 function AIChatLab() {
   const [messages, setMessages] = React.useState([
-    { role: 'assistant', content: 'Ready to optimize your gate access protocols. What should we analyze today?', timestamp: 'Just now' },
+    {
+      role: 'assistant',
+      content:
+        'Ready to optimize your gate access protocols. What should we analyze today?',
+      timestamp: 'Just now',
+    },
   ]);
   const [input, setInput] = React.useState('');
   const [isThinking, setIsThinking] = React.useState(false);
 
   const sendMessage = () => {
     if (!input.trim() || isThinking) return;
-    
+
     const userMsg = { role: 'user', content: input, timestamp: 'Just now' };
-    setMessages(prev => [...prev, userMsg]);
+    setMessages((prev) => [...prev, userMsg]);
     setInput('');
     setIsThinking(true);
 
     // Simulate AI logic
     setTimeout(() => {
-      const response = { 
-        role: 'assistant', 
-        content: 'I have analyzed the South Gate logs. There is a frequent bottleneck at 08:45 AM. I recommend predictive lanes for pre-verified residents.',
-        timestamp: 'Just now'
+      const response = {
+        role: 'assistant',
+        content:
+          'I have analyzed the South Gate logs. There is a frequent bottleneck at 08:45 AM. I recommend predictive lanes for pre-verified residents.',
+        timestamp: 'Just now',
       };
-      setMessages(prev => [...prev, response]);
+      setMessages((prev) => [...prev, response]);
       setIsThinking(false);
     }, 1500);
   };
@@ -133,7 +147,7 @@ function AIChatLab() {
           </div>
         </div>
         <div className="flex gap-1">
-          {[1, 2, 3].map(i => (
+          {[1, 2, 3].map((i) => (
             <div key={i} className="h-1.5 w-1.5 rounded-full bg-white/20" />
           ))}
         </div>
@@ -149,16 +163,18 @@ function AIChatLab() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ type: 'spring', damping: 20, stiffness: 100 }}
                 className={cn(
-                  "flex flex-col gap-2 max-w-[85%]",
-                  msg.role === 'user' ? 'ml-auto items-end' : 'mr-auto items-start'
+                  'flex flex-col gap-2 max-w-[85%]',
+                  msg.role === 'user'
+                    ? 'ml-auto items-end'
+                    : 'mr-auto items-start'
                 )}
               >
                 <div
                   className={cn(
-                    "px-4 py-3 rounded-2xl text-sm font-medium leading-relaxed shadow-sm",
+                    'px-4 py-3 rounded-2xl text-sm font-medium leading-relaxed shadow-sm',
                     msg.role === 'user'
-                      ? "bg-[var(--ds-background-brand-bold)] text-white"
-                      : "bg-white/5 border border-white/10 text-white/90 backdrop-blur-md"
+                      ? 'bg-[var(--ds-background-brand-bold)] text-white'
+                      : 'bg-white/5 border border-white/10 text-white/90 backdrop-blur-md'
                   )}
                 >
                   {msg.content}
@@ -168,12 +184,14 @@ function AIChatLab() {
                     {msg.role === 'user' ? 'Resident ID-42' : 'GateAI Bot'}
                   </span>
                   <span className="text-[8px] text-white"></span>
-                  <span className="text-[8px] font-medium text-white">{msg.timestamp}</span>
+                  <span className="text-[8px] font-medium text-white">
+                    {msg.timestamp}
+                  </span>
                 </div>
               </motion.div>
             ))}
           </AnimatePresence>
-          
+
           {isThinking && (
             <motion.div
               initial={{ opacity: 0 }}
@@ -181,11 +199,15 @@ function AIChatLab() {
               className="mr-auto flex gap-2 items-center px-4 py-2 bg-white/5 rounded-full border border-white/10"
             >
               <div className="flex gap-1">
-                {[0, 1, 2].map(i => (
+                {[0, 1, 2].map((i) => (
                   <motion.div
                     key={i}
                     animate={{ opacity: [0.3, 1, 0.3] }}
-                    transition={{ repeat: Infinity, duration: 1, delay: i * 0.2 }}
+                    transition={{
+                      repeat: Infinity,
+                      duration: 1,
+                      delay: i * 0.2,
+                    }}
                     className="h-1 w-1 rounded-full bg-[var(--gf-color-ai-accent)]"
                   />
                 ))}
@@ -200,15 +222,15 @@ function AIChatLab() {
 
       <div className="p-6 border-t border-white/10 bg-white/5 mt-auto">
         <div className="flex gap-2 relative">
-          <Input 
-            placeholder="Instruct the engine..." 
+          <Input
+            placeholder="Instruct the engine..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
             className="bg-black/40 border-white/10 rounded-xl text-white placeholder:text-white/20 px-4 h-11 text-sm focus-visible:ring-[var(--gf-color-ai-accent)] focus-visible:ring-offset-0"
           />
-          <Button 
-            size="icon" 
+          <Button
+            size="icon"
             onClick={sendMessage}
             disabled={isThinking}
             className="absolute right-1 top-1 bottom-1 h-9 w-9 bg-[var(--gf-color-ai-accent)] text-white rounded-lg hover:scale-[1.02] shadow-lg shadow-[var(--gf-color-ai-accent)]/20 transition-all active:scale-95"
