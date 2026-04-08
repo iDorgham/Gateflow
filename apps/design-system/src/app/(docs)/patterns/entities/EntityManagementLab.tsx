@@ -118,7 +118,7 @@ export default function EntityManagementLab() {
                   size="sm"
                   className="h-8 text-[10px] font-black uppercase tracking-widest border border-[var(--ds-border-bold)] opacity-70 hover:opacity-100"
                 >
-                  {f} <ArrowUpDown size={10} className="ml-2 opacity-40" />
+                  {f} <ArrowUpDown size={10} className="ms-2 opacity-40" />
                 </Button>
               ))}
             </div>
@@ -130,7 +130,7 @@ export default function EntityManagementLab() {
                 size="sm"
                 className="h-8 border border-[var(--ds-border-bold)]"
               >
-                <Download size={14} className="mr-2" />{' '}
+                <Download size={14} className="me-2" />{' '}
                 <span className="text-[10px] font-black uppercase tracking-widest">
                   Export
                 </span>
@@ -139,7 +139,7 @@ export default function EntityManagementLab() {
                 size="sm"
                 className="h-8 bg-[var(--ds-background-brand-bold)] text-white shadow-xl shadow-[var(--ds-background-brand-bold)]/30 transition-shadow"
               >
-                <PlusCircle size={14} className="mr-2" />{' '}
+                <PlusCircle size={14} className="me-2" />{' '}
                 <span className="text-[10px] font-black uppercase tracking-widest">
                   Add Member
                 </span>
@@ -211,7 +211,7 @@ export default function EntityManagementLab() {
                     <td className="px-5 py-3 text-[10px] font-bold text-[var(--ds-text-subtlest)]">
                       {r.last}
                     </td>
-                    <td className="px-5 py-3 text-right">
+                    <td className="px-5 py-3 text-inline-end">
                       <Button
                         variant="ghost"
                         size="icon"

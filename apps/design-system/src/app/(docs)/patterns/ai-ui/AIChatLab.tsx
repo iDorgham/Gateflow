@@ -72,8 +72,8 @@ export default function AIChatLab() {
     <div className="w-full max-w-4xl mx-auto rounded-[2.5rem] border border-[var(--ds-border-bold)] bg-[var(--gf-color-ai-surface)] shadow-ai-glow overflow-hidden flex flex-col h-[650px] relative">
       {/* Abstract Cognitive Background */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-20">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[var(--gf-color-ai-accent)] blur-[120px] rounded-full mix-blend-screen" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-500 blur-[120px] rounded-full mix-blend-screen opacity-50" />
+        <div className="absolute top-[-10%] inset-inline-start-[-10%] w-[40%] h-[40%] bg-[var(--gf-color-ai-accent)] blur-[120px] rounded-full mix-blend-screen" />
+        <div className="absolute bottom-[-10%] inset-inline-end-[-10%] w-[40%] h-[40%] bg-blue-500 blur-[120px] rounded-full mix-blend-screen opacity-50" />
       </div>
 
       {/* Lab Header */}
@@ -132,7 +132,7 @@ export default function AIChatLab() {
                 transition={{ type: 'spring', damping: 25, stiffness: 120 }}
                 className={cn(
                   'flex flex-col gap-3',
-                  msg.role === 'user' ? 'items-end ml-12' : 'items-start mr-12'
+                  msg.role === 'user' ? 'items-end ms-12' : 'items-start me-12'
                 )}
               >
                 {msg.type === 'tool' ? (
@@ -153,7 +153,7 @@ export default function AIChatLab() {
                     )}
                   >
                     {msg.role === 'assistant' && (
-                      <div className="absolute top-0 left-0 w-1 h-full bg-[var(--gf-color-ai-accent)] shadow-[2px_0_10px_var(--gf-color-ai-accent)] shadow-ai-glow opacity-50" />
+                      <div className="absolute top-0 inset-inline-start-0 w-1 h-full bg-[var(--gf-color-ai-accent)] shadow-[2px_0_10px_var(--gf-color-ai-accent)] shadow-ai-glow opacity-50" />
                     )}
                     {msg.content}
                   </div>
@@ -175,7 +175,7 @@ export default function AIChatLab() {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              className="mr-auto flex gap-3 items-center px-5 py-3 bg-white/[0.05] rounded-full border border-white/10 backdrop-blur-md shadow-xl"
+              className="me-auto flex gap-3 items-center px-5 py-3 bg-white/[0.05] rounded-full border border-white/10 backdrop-blur-md shadow-xl"
             >
               <div className="flex gap-1.5">
                 {[0, 1, 2].map((i) => (
@@ -212,7 +212,7 @@ export default function AIChatLab() {
             size="icon"
             onClick={sendMessage}
             disabled={isThinking}
-            className="absolute right-1.5 top-1.5 bottom-1.5 h-11 w-11 bg-[var(--gf-color-ai-accent)] text-white rounded-xl shadow-2xl shadow-[var(--gf-color-ai-accent)]/40 hover:scale-[1.05] transition-all active:scale-95 group"
+            className="absolute inset-inline-end-1.5 top-1.5 bottom-1.5 h-11 w-11 bg-[var(--gf-color-ai-accent)] text-white rounded-xl shadow-2xl shadow-[var(--gf-color-ai-accent)]/40 hover:scale-[1.05] transition-all active:scale-95 group"
           >
             <Send
               size={18}

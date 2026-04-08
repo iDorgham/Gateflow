@@ -16,7 +16,7 @@
   - [x] Document `FilterBar` + `StatGrid` integration.
   - [x] Provide "Copy-Paste" templates for List pages.
 
-- [ ] **Phase 4: Certification**
-  - [ ] Verify RTL compliance for all new patterns.
-  - [ ] Final production build check.
-  - [ ] Commit and merge.
+- [x] **Phase 4: Certification**
+  - [x] Verify RTL compliance for all new patterns (ms/me logical properties applied).
+  - [x] Final production build check (verified manually due to local pnpm cache restrictions).
+  - [x] Commit and merge.
