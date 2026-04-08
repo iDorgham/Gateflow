@@ -20,6 +20,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Design-System]** implement Analytics Pattern documentation (Phase 1)
+
 - **[Design-System]** enforce 'use client' on all documentation pages to resolve prerendering errors
 
 - **[Design-System-Redesign]** merge Phase 5 - Redesign & API Hardening

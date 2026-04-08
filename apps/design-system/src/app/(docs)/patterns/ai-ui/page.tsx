@@ -1,246 +1,176 @@
-'use client';
-
 import * as React from 'react';
 import { PageHeader } from '@gateflow/components';
-import { Bot, Sparkles, Send, Zap, Info, Wand2 } from 'lucide-react';
-import { cn } from '@gateflow/ui/utils';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Button, Input, ScrollArea } from '@gateflow/ui';
+import {
+  Bot,
+  Sparkles,
+  Send,
+  Zap,
+  Info,
+  Wand2,
+  Terminal,
+  Workflow,
+} from 'lucide-react';
+import dynamic from 'next/dynamic';
+
+// Dynamic import for the lab to ensure clean hydration of AI-specific animations
+const AIChatLab = dynamic(() => import('./AIChatLab'), {
+  ssr: false,
+  loading: () => (
+    <div className="h-[650px] w-full bg-[var(--gf-color-ai-surface)] animate-pulse rounded-[2.5rem] border border-[var(--ds-border-bold)] shadow-ai-glow" />
+  ),
+});
 
 const aiPrinciples = [
   {
-    title: 'Orchid Glow Protocol',
+    title: 'Cognitive Depth',
     description:
-      'AI surfaces use a unique violet/orchid accent (--gf-color-ai-accent) to distinguish intelligence from standard UI tokens.',
-    icon: Wand2,
+      'AI surfaces exist on a superior cognitive layer, utilizing deep translucency and Orchid accents (--gf-color-ai-accent).',
+    icon: Sparkles,
   },
   {
-    title: 'Staggered Entrances',
+    title: 'Reactive Motion',
     description:
-      'AI-generated content should never "pop" in. Use 0.3s spring transitions with 10px Y-offsets for organic message delivery.',
+      'Content never "pops". Use 0.4s spring transitions with rhythmic staggering for an organic cognitive feel.',
     icon: Zap,
   },
   {
-    title: 'Glassmorphic Intelligence',
+    title: 'Actionable Intelligence',
     description:
-      'AI panels use heavy backdrop blurring (3xl) and subtle mesh overlays to feel like a superior cognitive layer over the application.',
-    icon: Sparkles,
+      'Tool calls and system operations are encapsulated in interactive cards that signal execution status and outcomes.',
+    icon: Workflow,
   },
 ];
 
 export default function AIElementsPage() {
   return (
-    <div className="flex flex-col gap-12 max-w-5xl mx-auto py-10 px-6">
+    <div className="flex flex-col gap-16 max-w-5xl mx-auto py-12 px-6">
       <PageHeader
-        title="AI Elements"
-        subtitle="GateAI patterns define how artificial intelligence manifests within the GateFlow workspace, emphasizing premium Orchid flows and cognitive depth."
+        title="AI Pattern Architecture"
+        subtitle="Defining the manifestation of artificial intelligence within GateFlow. Emphasis on premium Orchid flows and cognitive assembly."
+        packageName="@gateflow/ai"
         breadcrumbs={[
           { label: 'Patterns', href: '/patterns' },
-          { label: 'AI Elements' },
+          { label: 'AI Architecture' },
         ]}
       />
 
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* Principles Section */}
+      <section className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {aiPrinciples.map((p) => (
           <div
             key={p.title}
-            className="flex flex-col gap-4 p-6 rounded-2xl border border-[var(--ds-border-bold)] bg-[var(--ds-surface-subtle)] shadow-sm hover:shadow-md transition-all group"
+            className="flex flex-col gap-5 p-8 rounded-[2rem] border border-[var(--ds-border-bold)] bg-[var(--ds-surface-subtle)] shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all group"
           >
-            <div className="p-2 w-fit rounded-lg bg-[var(--gf-color-ai-accent)] text-white shadow-lg transition-transform group-hover:rotate-6">
+            <div className="p-3 w-fit rounded-xl bg-[var(--gf-color-ai-accent)] text-white shadow-lg shadow-[var(--gf-color-ai-accent)]/20 transition-transform group-hover:rotate-12">
               <p.icon size={22} strokeWidth={2.5} />
             </div>
-            <h3 className="text-sm font-black uppercase tracking-widest text-[var(--ds-text-primary)]">
-              {p.title}
-            </h3>
-            <p className="text-xs text-[var(--ds-text-subtle)] leading-relaxed font-medium">
-              {p.description}
-            </p>
+            <div className="flex flex-col gap-2">
+              <h3 className="text-sm font-black uppercase tracking-widest text-[var(--ds-text-primary)]">
+                {p.title}
+              </h3>
+              <p className="text-xs text-[var(--ds-text-subtle)] leading-relaxed font-bold opacity-80">
+                {p.description}
+              </p>
+            </div>
           </div>
         ))}
       </section>
 
-      <div className="flex flex-col gap-8">
-        <div className="flex flex-col gap-1">
-          <h2 className="text-2xl font-black uppercase tracking-tight text-[var(--ds-text-primary)]">
-            GateAI Chat Lab
-          </h2>
-          <p className="text-sm font-bold text-[var(--ds-text-subtle)] opacity-60">
-            Interactive demonstration of AI surface depth and message animation
-            protocols.
+      {/* Interactive Hub */}
+      <div className="flex flex-col gap-10">
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-3">
+            <Bot className="text-[var(--gf-color-ai-accent)]" size={24} />
+            <h2 className="text-3xl font-black uppercase tracking-tight text-[var(--ds-text-primary)]">
+              Cognition Lab
+            </h2>
+          </div>
+          <p className="text-sm font-bold text-[var(--ds-text-subtle)] opacity-70 max-w-2xl">
+            Test the GateFlow AI interaction model below. Observe how text
+            blends with tool invocations under the Orchid Glow protocol.
           </p>
         </div>
+
         <AIChatLab />
       </div>
 
-      <section className="p-8 rounded-3xl border border-[var(--gf-color-ai-accent)]/20 bg-gradient-to-br from-[var(--gf-color-ai-accent)]/[0.05] to-transparent relative overflow-hidden group">
-        <div className="absolute top-2 right-2 p-2 opacity-[0.03] scale-150 rotate-12 group-hover:rotate-0 transition-all duration-700">
-          <Bot size={120} />
-        </div>
-        <div className="flex gap-4 relative z-10">
-          <div className="p-2 w-fit rounded-lg bg-[var(--gf-color-ai-accent)] text-white shadow-md">
-            <Info size={18} />
+      {/* Structural Composition */}
+      <section className="flex flex-col gap-12 pt-10 border-t border-[var(--ds-border-bold)]">
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-3">
+            <Terminal className="text-[var(--gf-color-ai-accent)]" size={24} />
+            <h2 className="text-3xl font-black uppercase tracking-tight text-[var(--ds-text-primary)]">
+              Composition
+            </h2>
           </div>
-          <div className="flex flex-col gap-2">
-            <h4 className="text-lg font-black uppercase tracking-tight text-[var(--ds-text-primary)]">
-              The Cognitive Layer
+          <p className="text-sm font-bold text-[var(--ds-text-subtle)] opacity-70">
+            Assembly patterns for building AI interfaces within the monorepo.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {/* Tool Card Sample */}
+          <div className="flex flex-col gap-4">
+            <h4 className="text-xs font-black uppercase tracking-[0.2em] text-[var(--gf-color-ai-accent)]">
+              1. Tool Invocation
             </h4>
-            <p className="text-sm text-[var(--ds-text-subtle)] leading-relaxed max-w-2xl font-medium">
-              AI elements should feel like they exist &quot;above&quot; the
-              standard application. This is achieved through the use of{' '}
-              <strong>--gf-color-ai-surface</strong> (an ultra-deep charcoal
-              with violet tint) and the <strong>shadow-ai-glow</strong> class,
-              which provides a soft atmospheric purple bloom.
+            <div className="p-6 rounded-2xl bg-[var(--ds-surface-sunken)] border border-[var(--ds-border-bold)] font-mono text-[11px] leading-relaxed overflow-x-auto">
+              <pre className="text-[var(--ds-text-primary)]">
+                {`import { ToolCallCard } from '@gateflow/ai';
+
+<ToolCallCard 
+  name="sync_gate_logs"
+  status="running"
+  arguments={{ gate_id: 'G-42' }}
+/>`}
+              </pre>
+            </div>
+          </div>
+
+          {/* Orchid Theming Sample */}
+          <div className="flex flex-col gap-4">
+            <h4 className="text-xs font-black uppercase tracking-[0.2em] text-[var(--gf-color-ai-accent)]">
+              2. Orchid Glow System
+            </h4>
+            <div className="p-6 rounded-2xl bg-[var(--ds-surface-sunken)] border border-[var(--ds-border-bold)] font-mono text-[11px] leading-relaxed overflow-x-auto">
+              <pre className="text-[var(--ds-text-primary)]">
+                {`// Apply AI surface depth
+<div className="bg-[var(--gf-color-ai-surface)] 
+                shadow-ai-glow">
+  <Bot className="text-[var(--gf-color-ai-accent)]" />
+</div>`}
+              </pre>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Guardrail Note */}
+      <section className="p-10 rounded-[2.5rem] border border-[var(--gf-color-ai-accent)]/20 bg-gradient-to-br from-[var(--gf-color-ai-accent)]/[0.05] to-transparent relative overflow-hidden group">
+        <div className="absolute -bottom-10 -right-10 p-2 opacity-10 scale-[2.5] rotate-12 transition-all duration-700 group-hover:rotate-0">
+          <Wand2 size={120} className="text-[var(--gf-color-ai-accent)]" />
+        </div>
+        <div className="flex gap-6 relative z-10">
+          <div className="p-3 h-fit w-fit rounded-xl bg-[var(--gf-color-ai-accent)] text-white shadow-xl">
+            <Info size={24} />
+          </div>
+          <div className="flex flex-col gap-3">
+            <h4 className="text-xl font-black uppercase tracking-tight text-[var(--ds-text-primary)]">
+              Cognitive Boundaries
+            </h4>
+            <p className="text-sm text-[var(--ds-text-subtle)] leading-relaxed max-w-2xl font-bold opacity-80">
+              AI elements must remain distinct from human-operated UI. Never
+              substitute
+              <code className="bg-[var(--gf-color-ai-accent)]/10 text-[var(--gf-color-ai-accent)] px-2 py-0.5 rounded text-xs ml-1">
+                --ds-primary-accent
+              </code>
+              for AI actions. Intelligence always flows through the
+              &quot;Orchid&quot; channel to maintain clarity of agency in the
+              workspace.
             </p>
           </div>
         </div>
       </section>
-    </div>
-  );
-}
-
-function AIChatLab() {
-  const [messages, setMessages] = React.useState([
-    {
-      role: 'assistant',
-      content:
-        'Ready to optimize your gate access protocols. What should we analyze today?',
-      timestamp: 'Just now',
-    },
-  ]);
-  const [input, setInput] = React.useState('');
-  const [isThinking, setIsThinking] = React.useState(false);
-
-  const sendMessage = () => {
-    if (!input.trim() || isThinking) return;
-
-    const userMsg = { role: 'user', content: input, timestamp: 'Just now' };
-    setMessages((prev) => [...prev, userMsg]);
-    setInput('');
-    setIsThinking(true);
-
-    // Simulate AI logic
-    setTimeout(() => {
-      const response = {
-        role: 'assistant',
-        content:
-          'I have analyzed the South Gate logs. There is a frequent bottleneck at 08:45 AM. I recommend predictive lanes for pre-verified residents.',
-        timestamp: 'Just now',
-      };
-      setMessages((prev) => [...prev, response]);
-      setIsThinking(false);
-    }, 1500);
-  };
-
-  return (
-    <div className="w-full max-w-3xl mx-auto rounded-3xl border border-[var(--ds-border-bold)] bg-[var(--gf-color-ai-surface)] shadow-ai-glow overflow-hidden flex flex-col h-[500px]">
-      {/* Lab Header */}
-      <div className="px-6 py-4 border-b border-[var(--ds-border-subtle)] flex items-center justify-between bg-white/5">
-        <div className="flex items-center gap-3">
-          <div className="h-8 w-8 rounded-lg bg-[var(--gf-color-ai-accent)] flex items-center justify-center">
-            <Bot className="text-white" size={18} />
-          </div>
-          <div className="flex flex-col">
-            <span className="text-[10px] font-black uppercase tracking-widest text-white/90">
-              GateAI Lab v4
-            </span>
-            <span className="text-[8px] font-bold text-[var(--gf-color-ai-accent)]">
-              ACTIVE COGNITION ENGINE
-            </span>
-          </div>
-        </div>
-        <div className="flex gap-1">
-          {[1, 2, 3].map((i) => (
-            <div key={i} className="h-1.5 w-1.5 rounded-full bg-white/20" />
-          ))}
-        </div>
-      </div>
-
-      <ScrollArea className="flex-1 p-6">
-        <div className="flex flex-col gap-6">
-          <AnimatePresence initial={false}>
-            {messages.map((msg, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 10, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ type: 'spring', damping: 20, stiffness: 100 }}
-                className={cn(
-                  'flex flex-col gap-2 max-w-[85%]',
-                  msg.role === 'user'
-                    ? 'ml-auto items-end'
-                    : 'mr-auto items-start'
-                )}
-              >
-                <div
-                  className={cn(
-                    'px-4 py-3 rounded-2xl text-sm font-medium leading-relaxed shadow-sm',
-                    msg.role === 'user'
-                      ? 'bg-[var(--ds-background-brand-bold)] text-white'
-                      : 'bg-white/5 border border-white/10 text-white/90 backdrop-blur-md'
-                  )}
-                >
-                  {msg.content}
-                </div>
-                <div className="px-2 flex items-center gap-1.5 opacity-40">
-                  <span className="text-[8px] font-black uppercase tracking-tighter text-white">
-                    {msg.role === 'user' ? 'Resident ID-42' : 'GateAI Bot'}
-                  </span>
-                  <span className="text-[8px] text-white"></span>
-                  <span className="text-[8px] font-medium text-white">
-                    {msg.timestamp}
-                  </span>
-                </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-
-          {isThinking && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="mr-auto flex gap-2 items-center px-4 py-2 bg-white/5 rounded-full border border-white/10"
-            >
-              <div className="flex gap-1">
-                {[0, 1, 2].map((i) => (
-                  <motion.div
-                    key={i}
-                    animate={{ opacity: [0.3, 1, 0.3] }}
-                    transition={{
-                      repeat: Infinity,
-                      duration: 1,
-                      delay: i * 0.2,
-                    }}
-                    className="h-1 w-1 rounded-full bg-[var(--gf-color-ai-accent)]"
-                  />
-                ))}
-              </div>
-              <span className="text-[9px] font-black uppercase tracking-widest text-[var(--gf-color-ai-accent)]">
-                Thinking...
-              </span>
-            </motion.div>
-          )}
-        </div>
-      </ScrollArea>
-
-      <div className="p-6 border-t border-white/10 bg-white/5 mt-auto">
-        <div className="flex gap-2 relative">
-          <Input
-            placeholder="Instruct the engine..."
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
-            className="bg-black/40 border-white/10 rounded-xl text-white placeholder:text-white/20 px-4 h-11 text-sm focus-visible:ring-[var(--gf-color-ai-accent)] focus-visible:ring-offset-0"
-          />
-          <Button
-            size="icon"
-            onClick={sendMessage}
-            disabled={isThinking}
-            className="absolute right-1 top-1 bottom-1 h-9 w-9 bg-[var(--gf-color-ai-accent)] text-white rounded-lg hover:scale-[1.02] shadow-lg shadow-[var(--gf-color-ai-accent)]/20 transition-all active:scale-95"
-          >
-            <Send size={16} />
-          </Button>
-        </div>
-      </div>
     </div>
   );
 }

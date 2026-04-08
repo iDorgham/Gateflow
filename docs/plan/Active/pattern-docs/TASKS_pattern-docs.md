@@ -6,10 +6,10 @@
   - [x] Add `StatGrid` snippets.
   - [x] Verify build health (verified syntax and composition).
 
-- [ ] **Phase 2: AI UI Pattern**
-  - [ ] Implement `GateAILab` component.
-  - [ ] Showcase `MessageAvatar` and `ToolCallCard`.
-  - [ ] Document the AI Cortex design tokens.
+- [x] **Phase 2: AI UI Pattern**
+  - [x] Implement `GateAILab` component (renamed to `AIChatLab`).
+  - [x] Showcase `MessageAvatar` and `ToolCallCard` integration.
+  - [x] Document the AI Cortex design tokens (Orchid Glow).
 
 - [ ] **Phase 3: Entity compositions**
   - [ ] Implement `EntityManagementLab`.
