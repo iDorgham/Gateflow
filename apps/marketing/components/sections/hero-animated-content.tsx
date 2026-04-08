@@ -11,7 +11,6 @@ import { Button } from '@gateflow/ui';
 import { IntentLink } from '../intent-link';
 import type { Locale } from '../../i18n-config';
 import {
-  ArrowLeft,
   ArrowRight,
   Shield,
   ShieldCheck,
@@ -24,7 +23,6 @@ import {
   Home,
   TrendingUp,
   QrCode,
-  Users,
 } from 'lucide-react';
 import { useTranslation } from '../../hooks/use-translation';
 import { AntigravityBackground } from '../antigravity-background';
@@ -43,10 +41,12 @@ function PhoneFrame({
   children,
   width = 224,
   className = '',
+  style = {},
 }: {
   children: React.ReactNode;
   width?: number;
   className?: string;
+  style?: React.CSSProperties;
 }) {
   const h = Math.round(width * 2.16);
   const r = Math.round(width * 0.138);
@@ -54,7 +54,7 @@ function PhoneFrame({
   return (
     <div
       className={`relative flex-shrink-0 ${className}`}
-      style={{ width, height: h }}
+      style={{ width, height: h, ...style }}
     >
       {/* SVG bezel - hardware stays dark regardless of theme */}
       <svg
@@ -587,7 +587,7 @@ function VisitorArtwork({ isRtl }: { isRtl: boolean }) {
 }
 
 /* ─── Artwork 3: Analytics Dashboard (Laptop) ─────────────────────────────── */
-function AnalyticsArtwork({ isRtl }: { isRtl: boolean }) {
+function AnalyticsArtwork() {
   const bars = [55, 72, 48, 88, 76, 95, 68];
   const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
@@ -888,7 +888,7 @@ export function HeroAnimatedContent({ locale }: { locale: Locale }) {
     {
       id: 'hub',
       slideLabel: 'Analytics Hub',
-      artwork: <AnalyticsArtwork isRtl={isRtl} />,
+      artwork: <AnalyticsArtwork />,
     },
   ];
 
