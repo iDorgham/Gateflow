@@ -11,6 +11,19 @@
 `PLAN_gateflow_design_system.md`  
 **Status:** ✅ Completed (2026-04-06)
 
+### pattern_docs — GateFlow Design System Pattern Documentation (Phase 9)
+
+**IDEA:** `docs/development/initiatives/IDEA_pattern-docs.md`  
+**PLAN:** `docs/plan/Draft/pattern-docs/`  
+`PLAN_pattern-docs.md`  
+**Status:** 🆕 Draft (Planning)  
+**Target:** Q2 2026
+
+- [ ] Phase 1 — Analytics Documentation (StatGrid + ChartLab)
+- [ ] Phase 2 — AI UI Documentation (GateAI + ToolCards)
+- [ ] Phase 3 — Entity Management Documentation (List/CRUD layouts)
+- [ ] Phase 4 — Certification & Hardening
+
 - [x] Phase 1 — `@gateflow/tokens` (OKLCH, tokens.css, @theme)
 - [x] Phase 2 — `@gateflow/theme` (data-color-mode, next-themes)
 - [x] Phase 3 — `@gateflow/ui` upgrade (successor to @gate-access/ui)
