@@ -20,6 +20,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Patterns]** resolve build failures and finalize RTL certification
+
 - **[Design-System]** certify and finalize Pattern Documentation (Phase 4)
 
 - **[Design-System]** implement Entity Composition documentation (Phase 3)
