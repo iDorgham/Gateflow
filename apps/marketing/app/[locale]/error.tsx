@@ -16,10 +16,9 @@ export default function ErrorPage({
   const params = useParams();
   const locale = (params?.locale as string) || 'en';
   const dict = locale === 'ar-EG' ? arErrors : enErrors;
-  const t = ((dict as Record<string, any>)?.['500'] as Record<
-    string,
-    string
-  >) || {
+  const t = ((dict as Record<string, Record<string, string>>)?.[
+    '500'
+  ] as Record<string, string>) || {
     title: '500',
     headline: 'Error',
     description: 'Something went wrong',

@@ -20,6 +20,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Design-System-Redesign]** merge Phase 5 - Redesign & API Hardening
+
 - **[Client-Dashboard]** resolve onOpenChat type mismatch in DashboardLayout
 
 - **[Deployment]** resolve build blockers and lint warnings across design-system and admin-dashboard

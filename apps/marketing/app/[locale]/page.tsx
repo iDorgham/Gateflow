@@ -83,7 +83,7 @@ export default async function HomePage({
       <TestimonialsSection locale={locale} />
 
       {/* Security Grid */}
-      <SecurityGrid locale={locale} />
+      <SecurityGrid _locale={locale} />
 
       {/* Mid-page CTA */}
       <MidCtaSection

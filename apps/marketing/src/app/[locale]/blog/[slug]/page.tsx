@@ -19,9 +19,9 @@ async function getBlogPost(slug: string, locale: string) {
 export default async function BlogPostPage({
   params,
 }: {
-  params: { locale: string; slug: string };
+  params: Promise<{ locale: string; slug: string }>;
 }) {
-  const { locale, slug } = params;
+  const { locale, slug } = await params;
   const post = await getBlogPost(slug, locale);
 
   if (!post) notFound();
@@ -39,7 +39,7 @@ export default async function BlogPostPage({
             <span className="opacity-30">•</span>
             <span>{new Date(post.publishedAt).toLocaleDateString()}</span>
             <span className="opacity-30">•</span>
-            {post.categories.map((c: any) => (
+            {post.categories.map((c: { slug: string; name: string }) => (
               <span
                 key={c.slug}
                 className="bg-primary/10 px-3 py-1 rounded-full"

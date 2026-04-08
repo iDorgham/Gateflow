@@ -19,7 +19,7 @@ export default async function InvitationPage(props: InvitationPageProps) {
   const { t } = await getTranslation(castLocale, 'invitation');
 
   // 1. Fetch the Short Link record
-  const shortLink = await (prisma.qrShortLink as any).findFirst({
+  const shortLink = await prisma.qrShortLink.findFirst({
     where: {
       shortId,
       expiresAt: {
