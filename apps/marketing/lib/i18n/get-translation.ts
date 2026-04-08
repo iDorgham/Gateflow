@@ -1,6 +1,11 @@
 import 'server-only';
 import type { Locale } from '../../i18n-config';
 
+type TranslationValue =
+  | string
+  | { [key: string]: TranslationValue }
+  | TranslationValue[];
+
 // Load translation JSON file for a specific namespace
 export const fetchTranslations = async (locale: string, namespace: string) => {
   try {
@@ -21,9 +26,11 @@ export async function getTranslation(locale: Locale, namespace: string) {
       returnObjects?: boolean;
       [key: string]: string | number | boolean | undefined;
     }
-  ): string | any => {
+  ): string | TranslationValue => {
     // Navigate dot notation (e.g. "hero.headline")
-    let text = key.split('.').reduce((obj, k) => (obj || {})[k], dict);
+    let text: TranslationValue = key
+      .split('.')
+      .reduce((obj: any, k) => (obj || {})[k], dict);
 
     // Pluralization simple support: check if count is 1 or other
     if (
@@ -42,11 +49,16 @@ export async function getTranslation(locale: Locale, namespace: string) {
 
     // Interpolation
     if (options && typeof text === 'string') {
+      let interpolated = text as string;
       Object.keys(options).forEach((v) => {
         if (v !== 'returnObjects') {
-          text = text.replace(new RegExp(`{{${v}}}`, 'g'), String(options[v]));
+          interpolated = interpolated.replace(
+            new RegExp(`{{${v}}}`, 'g'),
+            String(options[v])
+          );
         }
       });
+      return interpolated;
     }
     return text;
   };

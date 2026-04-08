@@ -588,9 +588,6 @@ function VisitorArtwork({ isRtl }: { isRtl: boolean }) {
 
 /* ─── Artwork 3: Analytics Dashboard (Laptop) ─────────────────────────────── */
 function AnalyticsArtwork() {
-  const bars = [55, 72, 48, 88, 76, 95, 68];
-  const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-
   return (
     <div
       className="scale-100 lg:scale-[1.05] origin-bottom lg:translate-x-12 rtl:lg:-translate-x-12 transition-transform duration-700 rounded-xl w-full lg:w-[125%] max-w-[1200px] ms-auto z-50 relative"

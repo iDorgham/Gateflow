@@ -107,6 +107,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Apps
 
+- **[Marketing]** resolve PhoneFrame style type error and cleanup unused icons
+
 - **[Marketing]** resolve SecurityGrid prop mismatch and harden CMS route types
 
 - **[Client]** migrate PageHeader import from @gateflow/ui to @gateflow/components

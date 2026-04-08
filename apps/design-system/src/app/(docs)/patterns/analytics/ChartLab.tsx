@@ -10,7 +10,6 @@ import {
   Tooltip,
   ResponsiveContainer,
   Cell,
-  PieChart,
 } from 'recharts';
 import { PieChart as PieChartIcon } from 'lucide-react';
 

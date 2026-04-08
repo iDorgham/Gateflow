@@ -1,3 +1,5 @@
+'use client';
+
 import * as React from 'react';
 import { PageHeader, EntityCard } from '@gateflow/components';
 import { Keyboard, Eye, Move, Globe, ShieldCheck } from 'lucide-react';
