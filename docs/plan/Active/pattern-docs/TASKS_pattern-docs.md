@@ -11,10 +11,10 @@
   - [x] Showcase `MessageAvatar` and `ToolCallCard` integration.
   - [x] Document the AI Cortex design tokens (Orchid Glow).
 
-- [ ] **Phase 3: Entity compositions**
-  - [ ] Implement `EntityManagementLab`.
-  - [ ] Document `FilterBar` + `StatGrid` integration.
-  - [ ] Provide "Copy-Paste" templates for List pages.
+- [x] **Phase 3: Entity compositions**
+  - [x] Implement `EntityManagementLab`.
+  - [x] Document `FilterBar` + `StatGrid` integration.
+  - [x] Provide "Copy-Paste" templates for List pages.
 
 - [ ] **Phase 4: Certification**
   - [ ] Verify RTL compliance for all new patterns.
