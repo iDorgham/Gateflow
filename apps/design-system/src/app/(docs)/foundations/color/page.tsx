@@ -1,3 +1,5 @@
+'use client';
+
 import * as React from 'react';
 import { PageHeader } from '@gateflow/components';
 import { ShieldCheck, Palette, SunMoon, Info } from 'lucide-react';

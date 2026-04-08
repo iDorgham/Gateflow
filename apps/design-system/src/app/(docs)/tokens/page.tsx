@@ -1,3 +1,5 @@
+'use client';
+
 import { PageHeader } from '@gateflow/components';
 import { TokenExplorer } from '../../../components/token-explorer/TokenExplorer';
 import { useLocale } from '../../../components/providers/LocaleProvider';

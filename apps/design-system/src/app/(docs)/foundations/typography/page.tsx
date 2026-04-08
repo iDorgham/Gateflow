@@ -1,3 +1,5 @@
+'use client';
+
 import * as React from 'react';
 import { PageHeader } from '@gateflow/components';
 import { Type, Ruler, ArrowRightLeft, Languages, Info } from 'lucide-react';

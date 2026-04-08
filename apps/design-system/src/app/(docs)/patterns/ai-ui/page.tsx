@@ -1,3 +1,5 @@
+'use client';
+
 import * as React from 'react';
 import { PageHeader } from '@gateflow/components';
 import { Bot, Sparkles, Send, Zap, Info, Wand2 } from 'lucide-react';
