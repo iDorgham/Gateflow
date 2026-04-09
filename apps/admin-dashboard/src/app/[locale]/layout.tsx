@@ -11,24 +11,24 @@ export const metadata: Metadata = {
   title: { default: 'GateFlow Admin', template: '%s | GateFlow Admin' },
   description: 'Super-admin management dashboard',
   icons: {
-    icon: '/icon.png',
+    icon: [{ url: '/icon.png', sizes: '32x32', type: 'image/png' }],
+    apple: [{ url: '/apple-icon', sizes: '180x180', type: 'image/png' }],
+    shortcut: '/icon.png',
   },
 };
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
-const cairo = Cairo({ 
-  subsets: ['arabic', 'latin-ext'], 
+const cairo = Cairo({
+  subsets: ['arabic', 'latin-ext'],
   weight: ['300', '400', '500', '600', '700'],
   variable: '--font-cairo',
-  display: 'swap'
+  display: 'swap',
 });
 
-export default async function RootLayout(
-  props: { 
-    children: React.ReactNode;
-    params: Promise<{ locale: string }>;
-  }
-) {
+export default async function RootLayout(props: {
+  children: React.ReactNode;
+  params: Promise<{ locale: string }>;
+}) {
   const params = await props.params;
   const locale = params.locale as Locale;
 
@@ -40,7 +40,9 @@ export default async function RootLayout(
 
   return (
     <html lang={locale} dir={rtl ? 'rtl' : 'ltr'} suppressHydrationWarning>
-      <body className={`bg-background text-foreground antialiased ${inter.variable} ${cairo.variable} ${rtl ? 'font-arabic' : 'font-sans'}`}>
+      <body
+        className={`bg-background text-foreground antialiased ${inter.variable} ${cairo.variable} ${rtl ? 'font-arabic' : 'font-sans'}`}
+      >
         <I18nProvider locale={locale}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             {props.children}

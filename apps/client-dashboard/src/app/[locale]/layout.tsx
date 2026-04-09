@@ -6,7 +6,9 @@ export const metadata: Metadata = {
   title: { template: '%s | GateFlow', default: 'GateFlow' },
   description: 'QR Access Control Platform',
   icons: {
-    icon: '/icon.png',
+    icon: [{ url: '/icon.png', sizes: '32x32', type: 'image/png' }],
+    apple: [{ url: '/apple-icon', sizes: '180x180', type: 'image/png' }],
+    shortcut: '/icon.png',
   },
 };
 
@@ -29,17 +31,13 @@ const cairo = Cairo({
   display: 'swap',
 });
 
-export default async function RootLayout(
-  props: {
-    children: React.ReactNode;
-    params: Promise<{ locale: Locale }>;
-  }
-) {
+export default async function RootLayout(props: {
+  children: React.ReactNode;
+  params: Promise<{ locale: Locale }>;
+}) {
   const params = await props.params;
 
-  const {
-    children
-  } = props;
+  const { children } = props;
 
   if (!i18n.locales.includes(params.locale)) {
     notFound();
