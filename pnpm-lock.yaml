@@ -26,6 +26,7 @@ overrides:
   '@types/react': 19.2.14
   '@types/react-dom': 19.2.3
   '@xmldom/xmldom': '>=0.8.12'
+  basic-ftp: '>=5.2.1'
 
 patchedDependencies:
   expo-router@6.0.23:
@@ -10996,10 +10997,10 @@ packages:
     engines: { node: '>=6.0.0' }
     hasBin: true
 
-  /basic-ftp@5.2.0:
+  /basic-ftp@5.2.1:
     resolution:
       {
-        integrity: sha512-VoMINM2rqJwJgfdHq6RiUudKt2BV+FY5ZFezP/ypmwayk68+NzzAQy4XXLlqsGD4MCzq3DrmNFD/uUmBJuGoXw==,
+        integrity: sha512-0yaL8JdxTknKDILitVpfYfV2Ob6yb3udX/hK97M7I3jOeznBNxQPtVvTUtnhUkyHlxFWyr5Lvknmgzoc7jf+1Q==,
       }
     engines: { node: '>=10.0.0' }
     dev: true
@@ -14992,7 +14993,7 @@ packages:
       }
     engines: { node: '>= 14' }
     dependencies:
-      basic-ftp: 5.2.0
+      basic-ftp: 5.2.1
       data-uri-to-buffer: 6.0.2
       debug: 4.4.3
     transitivePeerDependencies:
