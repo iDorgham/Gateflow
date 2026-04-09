@@ -11,7 +11,7 @@ export async function generateMetadata(props: {
   const { locale } = params;
   const { t } = await getTranslation(locale, 'legal');
   return {
-    title: absoluteMarketingTitle(t('cookies.title')),
+    title: absoluteMarketingTitle(t('cookies.title') as string),
   };
 }
 

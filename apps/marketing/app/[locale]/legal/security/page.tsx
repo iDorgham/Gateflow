@@ -12,7 +12,7 @@ export async function generateMetadata(props: {
   const { locale } = params;
   const { t } = await getTranslation(locale, 'legal');
   return {
-    title: absoluteMarketingTitle(t('security.title')),
+    title: absoluteMarketingTitle(t('security.title') as string),
   };
 }
 

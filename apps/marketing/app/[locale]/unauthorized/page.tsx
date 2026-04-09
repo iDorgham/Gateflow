@@ -11,7 +11,7 @@ export async function generateMetadata(props: {
   const { locale } = params;
   const { t } = await getTranslation(locale, 'errors');
   return {
-    title: absoluteMarketingTitle(t('401.headline')),
+    title: absoluteMarketingTitle(t('401.headline') as string),
   };
 }
 
