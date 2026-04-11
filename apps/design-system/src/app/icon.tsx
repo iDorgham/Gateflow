@@ -1,4 +1,5 @@
 import { ImageResponse } from 'next/og';
+import { BRAND_COLORS } from '@gateflow/ui/tokens';
 
 export const size = { width: 32, height: 32 };
 export const contentType = 'image/png';
@@ -10,7 +11,7 @@ export default function Icon() {
         width: 32,
         height: 32,
         borderRadius: 8,
-        background: '#1e2d4a',
+        background: BRAND_COLORS.navy,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -48,7 +49,7 @@ export default function Icon() {
           style={{
             width: 3,
             height: 3,
-            background: '#4f8ef7',
+            background: BRAND_COLORS.gridBlue,
             borderRadius: 1,
           }}
         />
@@ -56,7 +57,7 @@ export default function Icon() {
           style={{
             width: 3,
             height: 3,
-            background: '#a855f7',
+            background: BRAND_COLORS.gridPurple,
             borderRadius: 1,
           }}
         />
@@ -64,7 +65,7 @@ export default function Icon() {
           style={{
             width: 3,
             height: 3,
-            background: '#22c55e',
+            background: BRAND_COLORS.gridGreen,
             borderRadius: 1,
           }}
         />
@@ -72,7 +73,7 @@ export default function Icon() {
           style={{
             width: 3,
             height: 3,
-            background: '#f59e0b',
+            background: BRAND_COLORS.gridAmber,
             borderRadius: 1,
           }}
         />

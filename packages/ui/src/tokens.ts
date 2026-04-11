@@ -7,6 +7,20 @@
  * React-Native apps use the `nativeTokens` export directly.
  */
 
+/* ── Brand Colors (Static) ──────────────────────────────────────────────── */
+
+export const BRAND_COLORS = {
+  navy: '#1e2d4a',
+  blue: '#0052CC',
+  white: '#FFFFFF',
+  kimchi: '#ed4b00',
+  gridBlue: '#4f8ef7',
+  gridPurple: '#a855f7',
+  gridGreen: '#22c55e',
+  gridAmber: '#f59e0b',
+  surfaceNeutral: '#F4F5F7',
+};
+
 /* ── Web tokens (consumed by Tailwind theme.extend.colors) ──────────────── */
 
 export const tokens = {

@@ -1,4 +1,5 @@
 import { ImageResponse } from 'next/og';
+import { BRAND_COLORS } from '@gateflow/ui/tokens';
 
 export const size = { width: 180, height: 180 };
 export const contentType = 'image/png';
@@ -10,7 +11,7 @@ export default function AppleIcon() {
         width: 180,
         height: 180,
         borderRadius: 40,
-        background: '#1e2d4a',
+        background: BRAND_COLORS.navy,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -48,7 +49,7 @@ export default function AppleIcon() {
           style={{
             width: 20,
             height: 20,
-            background: '#4f8ef7',
+            background: BRAND_COLORS.gridBlue,
             borderRadius: 4,
           }}
         />
@@ -56,7 +57,7 @@ export default function AppleIcon() {
           style={{
             width: 20,
             height: 20,
-            background: '#a855f7',
+            background: BRAND_COLORS.gridPurple,
             borderRadius: 4,
           }}
         />
@@ -64,7 +65,7 @@ export default function AppleIcon() {
           style={{
             width: 20,
             height: 20,
-            background: '#22c55e',
+            background: BRAND_COLORS.gridGreen,
             borderRadius: 4,
           }}
         />
@@ -72,7 +73,7 @@ export default function AppleIcon() {
           style={{
             width: 20,
             height: 20,
-            background: '#f59e0b',
+            background: BRAND_COLORS.gridAmber,
             borderRadius: 4,
           }}
         />

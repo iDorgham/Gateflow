@@ -19,6 +19,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 ## [Unreleased]
 
 ### Workspace
+- **[Deps]** override basic-ftp >=5.2.1 to clear GHSA-chqc-8p9q-pq6q
+- **[Ui]** add favicons and apple-touch-icons to all portal apps
 
 - **[Design-System]** add missing /patterns index page to resolve 404
 
@@ -120,6 +122,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 - **[Admin AI]** refine UI/UX with premium animations and hybrid message parts.
 
 ### Apps
+- **[Marketing]** cast t() to string in generateMetadata to fix TS2345
 
 - **[Marketing]** resolve PhoneFrame style type error and cleanup unused icons
 

@@ -20,8 +20,10 @@ import {
   Label,
   cn,
   ScrollArea,
+  nativeTokens,
 } from '@gateflow/ui';
 import { toast } from 'sonner';
+import { BRAND_COLORS } from '@gateflow/ui/tokens';
 
 /**
  * Style Editor (Power User Tool)
@@ -29,12 +31,7 @@ import { toast } from 'sonner';
  * Features: Live Iframe Preview, WCAG Validation, Version Rollback.
  */
 export function StyleEditor({ orgId }: { orgId: string }) {
-  const [tokens, setTokens] = React.useState<Record<string, string>>({
-    '--gf-color-primary': '#0052CC',
-    '--gf-color-primary-foreground': '#FFFFFF',
-    '--gf-color-background': '#FFFFFF',
-    '--gf-color-surface': '#F4F5F7',
-  });
+  const [tokens, setTokens] = React.useState<Record<string, string>>({});
   const [fontFamily, setFontFamily] = React.useState('Inter');
   const [previewMode, setPreviewMode] = React.useState<'desktop' | 'mobile'>(
     'desktop'
@@ -148,31 +145,41 @@ export function StyleEditor({ orgId }: { orgId: string }) {
                     },
                     { label: 'Background', key: '--gf-color-background' },
                     { label: 'Surface/Cards', key: '--gf-color-surface' },
-                  ].map((item) => (
-                    <div
-                      key={item.key}
-                      className="flex items-center justify-between gap-4 group"
-                    >
-                      <div className="space-y-1">
-                        <p className="text-xs font-black uppercase tracking-tight leading-none">
-                          {item.label}
-                        </p>
-                        <p className="text-[9px] font-bold text-ds-text-subtler font-mono">
-                          {tokens[item.key]}
-                        </p>
+                  ].map((item) => {
+                    const defaultValue = 
+                      item.key === '--gf-color-primary' ? BRAND_COLORS.blue : 
+                      item.key === '--gf-color-primary-foreground' ? BRAND_COLORS.white :
+                      item.key === '--gf-color-background' ? BRAND_COLORS.white :
+                      item.key === '--gf-color-surface' ? BRAND_COLORS.surfaceNeutral : BRAND_COLORS.navy;
+                    
+                    const currentValue = tokens[item.key] || defaultValue;
+
+                    return (
+                      <div
+                        key={item.key}
+                        className="flex items-center justify-between gap-4 group"
+                      >
+                        <div className="space-y-1">
+                          <p className="text-xs font-black uppercase tracking-tight leading-none">
+                            {item.label}
+                          </p>
+                          <p className="text-[9px] font-bold text-ds-text-subtler font-mono">
+                            {tokens[item.key] ? tokens[item.key] : 'System Default'}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Input
+                            type="color"
+                            value={currentValue}
+                            onChange={(e) =>
+                              handleTokenChange(item.key, e.target.value)
+                            }
+                            className="h-8 w-12 p-0 border-none bg-transparent cursor-pointer"
+                          />
+                        </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Input
-                          type="color"
-                          value={tokens[item.key]}
-                          onChange={(e) =>
-                            handleTokenChange(item.key, e.target.value)
-                          }
-                          className="h-8 w-12 p-0 border-none bg-transparent cursor-pointer"
-                        />
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
 
