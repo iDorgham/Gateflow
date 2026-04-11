@@ -22,7 +22,7 @@
     "@gateflow/components": "workspace:*",
     "@gateflow/ai": "workspace:*",
     "framer-motion": "^11.18.2",
-    "recharts": "^2.15.4"
+    "recharts": "^3.8.1"
   },
   "devDependencies": {
     "@gate-access/config": "workspace:*",
