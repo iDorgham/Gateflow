@@ -37,7 +37,7 @@ export function MidCtaSection({
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2 }}
-                className="mb-10 text-4xl lg:text-5xl font-black leading-[0.9] tracking-tighter text-white"
+                className="mb-10 text-4xl lg:text-5xl font-black leading-[0.9] tracking-tighter text-ds-text-heading"
               >
                 {headline}
               </motion.h2>
@@ -45,7 +45,7 @@ export function MidCtaSection({
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.3 }}
-                className="mb-12 max-w-lg text-2xl lg:text-3xl text-white/60 font-medium leading-relaxed tracking-tight"
+                className="mb-12 max-w-lg text-2xl lg:text-3xl text-ds-text-subtle font-medium leading-relaxed tracking-tight"
               >
                 {subHeadline}
               </motion.p>
@@ -75,24 +75,23 @@ export function MidCtaSection({
               <motion.div
                 initial={{ opacity: 0, scale: 0.9, rotate: 5 }}
                 whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
-                className="rounded-[32px] border border-white/10 bg-white/5 p-12 shadow-2xl backdrop-blur-xl"
+                className="rounded-[32px] border border-ds-border-bold bg-ds-surface-subtle p-12 shadow-2xl backdrop-blur-xl"
               >
                 <div className="mb-8 p-4 bg-ds-background-brand-bold rounded-2xl w-fit text-white shadow-xl">
                   <Zap className="w-10 h-10" fill="currentColor" />
                 </div>
-                <h3 className="mb-8 text-3xl font-black text-white tracking-tight">
+                <h3 className="mb-8 text-3xl font-black text-ds-text-heading tracking-tight">
                   Upgrade your perimeter intelligence today.
                 </h3>
-                <div className="h-3 w-full overflow-hidden rounded-full bg-white/10 mb-6">
+                <div className="h-3 w-full overflow-hidden rounded-full bg-ds-border-bold/20 mb-6">
                   <motion.div
                     initial={{ width: 0 }}
                     whileInView={{ width: '92%' }}
                     transition={{ duration: 2, delay: 0.5 }}
                     className="h-full bg-ds-background-brand-bold"
-                    style={{ boxShadow: 'var(--ds-glow-accent)' }}
                   />
                 </div>
-                <div className="flex justify-between text-xs font-black uppercase tracking-[0.3em] text-white/40">
+                <div className="flex justify-between text-xs font-black uppercase tracking-[0.3em] text-ds-text-subtle">
                   <span>Performance Efficiency</span>
                   <span className="text-ds-text-brand">92% Optimized</span>
                 </div>

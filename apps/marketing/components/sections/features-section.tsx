@@ -47,7 +47,7 @@ export function FeaturesSection({
   features: Feature[];
 }) {
   return (
-    <section className="relative overflow-hidden py-32 md:py-64 bg-ds-surface">
+    <section className="relative overflow-hidden py-32 md:py-64">
       {/* Brand-orange radial glow from top */}
       <div
         className="absolute inset-0 bg-ds-background-brand-bold opacity-[0.03]"

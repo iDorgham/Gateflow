@@ -32,6 +32,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from '@gateflow/ui';
+import { GateFlowLogo } from '../../../../../packages/ui/src/components/ui/gateflow-logo';
 import { useGateFlowColorMode } from '@gateflow/theme';
 
 const sidebarItems = (t: Record<string, string>) => [
@@ -88,10 +89,15 @@ export default function DocsLayout({
 }) {
   const pathname = usePathname();
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
+  const [mounted, setMounted] = React.useState(false);
   const { theme: colorMode, setTheme: setColorMode } = useGateFlowColorMode();
   const { locale, setLocale, isRTL } = useLocale();
   const t = translations[locale as keyof typeof translations];
   const items = sidebarItems(t.sidebar);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <div
@@ -126,17 +132,12 @@ export default function DocsLayout({
             </Button>
             <Link
               href="/"
-              className="flex items-center gap-2.5 group"
+              className="flex items-center gap-2 group"
               dir={isRTL ? 'rtl' : 'ltr'}
             >
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--ds-background-brand-bold)] text-white shadow-md font-black group-hover:scale-110 transition-all duration-300 ring-2 ring-[var(--ds-border-brand)]/20 ring-offset-2 ring-offset-background">
-                G
-              </div>
-              <span className="hidden font-black tracking-tight text-xl md:inline-block">
-                GateFlow{' '}
-                <span className="text-[var(--ds-text-brand)] font-semibold transition-opacity duration-300 group-hover:opacity-100">
-                  Design
-                </span>
+              <GateFlowLogo size={32} />
+              <span className="hidden font-semibold tracking-tighter text-lg md:inline-block text-ds-text-subtle/60 ms-[-4px]">
+                Design
               </span>
             </Link>
           </div>
@@ -185,7 +186,7 @@ export default function DocsLayout({
                   size="icon"
                   className="h-9 w-9 rounded-md"
                 >
-                  {colorMode === 'dark' ? (
+                  {!mounted ? null : colorMode === 'dark' ? (
                     <Moon size={18} />
                   ) : colorMode === 'light' ? (
                     <Sun size={18} />

@@ -12,41 +12,31 @@
     --ds-font-family-mono: "Fira Code", monospace;
 
     /* ─── Radius (8pt Grid) ─── */
-    /* Mapped from tokens or hardcoded and then moved to tokens later */
     --ds-border-radius-sm: 4px;
     --ds-border-radius-md: 8px;
     --ds-border-radius-lg: 12px;
     
-    /* ─── Background Aliases (Mapping v2 to v3) ─── */
-    --ds-background-default:            var(--ds-background-default);
-    --ds-background-neutral-subtle:     var(--ds-surface-subtle);
-    --ds-background-neutral-subtle-hovered: var(--ds-surface-raised);
-    --ds-background-neutral:            var(--ds-surface-raised);
-    --ds-background-neutral-hovered:    var(--ds-surface-overlay);
-    
-    --ds-background-brand-bold:         var(--ds-accent-bold);
-    --ds-background-brand-bold-hovered: var(--ds-accent-hover);
-    --ds-background-brand-subtle:       var(--ds-accent-subtle);
-    
-    --ds-background-danger-bold:        var(--gf-color-danger);
-    --ds-background-success-bold:       var(--gf-color-success);
-    --ds-background-warning-bold:       var(--gf-color-warning);
-    --ds-background-information-bold:   var(--gf-color-info);
+    /* ─── Typography (Premium Overrides) ─── */
+    --ds-font-family-sans: var(--ds-font-primary);
+    --ds-font-family-heading: var(--ds-font-display);
+    --ds-font-family-mono: "Fira Code", monospace;
+
+    /* ─── Background Aliases (Mapping v2 to v3 compatibility) ─── */
+    --gf-color-bg-page:    var(--ds-background-default);
+    --gf-color-bg-default: var(--ds-surface-raised);
+    --gf-color-bg-subtle:  var(--ds-surface-subtle);
+    --gf-color-bg-raised:  var(--ds-surface-raised);
+    --gf-color-bg-overlay: var(--ds-surface-overlay);
 
     /* ─── Text Aliases ─── */
-    --ds-text:          var(--ds-text-primary);
-    --ds-text-subtle:   var(--ds-text-subtle);
-    --ds-text-inverse:  var(--ds-text-inverse);
-    --ds-text-accent:   var(--ds-text-accent);
+    --gf-color-text:       var(--ds-text-primary);
+    --gf-color-text-subtle: var(--ds-text-subtle);
+    --gf-color-text-inverse: var(--ds-text-inverse);
     
     /* ─── Border Aliases ─── */
-    --ds-border:         var(--ds-border);
-    --ds-border-subtle:  var(--ds-border-subtle);
-    --ds-border-bold:    var(--ds-border-bold);
-    --ds-border-focused: var(--ds-border-focused);
-    --ds-border-accent:  var(--ds-accent-bold);
+    --gf-color-border:     var(--ds-border);
 
-    /* ─── Layout & Scaling ─── */
+    /* ─── Scaling ─── */
     --ds-grid-gutter:    var(--ds-space-gap-md);
     --ds-section-inset:  var(--ds-space-inset-md);
   }
@@ -71,10 +61,21 @@
   .ds-elevation-raised  { background: var(--ds-surface-raised); border: 1px solid var(--ds-border-subtle); box-shadow: var(--ds-shadow-md); }
   .ds-elevation-overlay { background: var(--ds-surface-overlay); border: 1px solid var(--ds-border); box-shadow: var(--ds-shadow-lg); }
   
-  /* ─── Glassmorphism Utilities ─── */
+  /* ─── Modern Clean Utilities ─── */
   .glass {
+    @apply backdrop-blur-xl border border-white/5;
     background: var(--ds-surface-glass);
-    backdrop-filter: blur(16px);
-    border: 1px solid oklch(100% 0 0 / 0.05);
+  }
+
+  .ds-elevation-raised {
+    background: var(--ds-surface-raised);
+    border: 1px solid var(--ds-border-subtle);
+    box-shadow: var(--ds-shadow-raised);
+  }
+
+  .ds-elevation-overlay {
+    background: var(--ds-surface-overlay);
+    border: 1px solid var(--ds-border);
+    box-shadow: var(--ds-shadow-overlay);
   }
 }

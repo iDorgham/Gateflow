@@ -25,48 +25,48 @@ export const BRAND_COLORS = {
 
 export const tokens = {
   colors: {
-    border: 'var(--gf-color-border)',
-    input: 'var(--gf-color-border)',
-    ring: 'var(--gf-color-primary)',
-    background: 'var(--gf-color-bg-page)',
-    foreground: 'var(--gf-color-text)',
+    border: 'var(--ds-border)',
+    input: 'var(--ds-border)',
+    ring: 'var(--ds-border-focused)',
+    background: 'var(--ds-background-default)',
+    foreground: 'var(--ds-text)',
 
     primary: {
-      DEFAULT: 'var(--gf-color-primary)',
-      foreground: 'var(--gf-color-primary-foreground)',
-      subtle: 'var(--gf-color-primary-subtle)',
+      DEFAULT: 'var(--ds-accent-bold)',
+      foreground: 'var(--ds-text-inverse)',
+      subtle: 'var(--ds-accent-subtle)',
     },
     secondary: {
-      DEFAULT: 'var(--gf-color-bg-raised)',
-      foreground: 'var(--gf-color-text)',
+      DEFAULT: 'var(--ds-surface-subtle)',
+      foreground: 'var(--ds-text)',
     },
     destructive: {
       DEFAULT: 'var(--gf-color-danger)',
-      foreground: 'var(--gf-color-neutral-0)',
+      foreground: 'oklch(100% 0 0)',
     },
     muted: {
-      DEFAULT: 'var(--gf-color-muted)',
-      foreground: 'var(--gf-color-muted-foreground)',
+      DEFAULT: 'var(--ds-surface-subtle)',
+      foreground: 'var(--ds-text-subtle)',
     },
     accent: {
-      DEFAULT: 'var(--gf-color-bg-raised)',
-      foreground: 'var(--gf-color-text)',
+      DEFAULT: 'var(--ds-background-selected)',
+      foreground: 'var(--ds-text-selected)',
     },
     popover: {
-      DEFAULT: 'var(--gf-color-bg-raised)',
-      foreground: 'var(--gf-color-text)',
+      DEFAULT: 'var(--ds-surface-overlay)',
+      foreground: 'var(--ds-text)',
     },
     card: {
-      DEFAULT: 'var(--gf-color-bg-default)',
-      foreground: 'var(--gf-color-text)',
+      DEFAULT: 'var(--ds-surface-raised)',
+      foreground: 'var(--ds-text)',
     },
     // Semantic surface levels
     surface: {
-      page: 'var(--gf-color-bg-page)',
-      subtle: 'var(--gf-color-bg-subtle)',
-      default: 'var(--gf-color-bg-default)',
-      raised: 'var(--gf-color-bg-raised)',
-      overlay: 'var(--gf-color-bg-overlay)',
+      page: 'var(--ds-background-default)',
+      subtle: 'var(--ds-surface-subtle)',
+      default: 'var(--ds-surface-raised)',
+      raised: 'var(--ds-surface-raised)',
+      overlay: 'var(--ds-surface-overlay)',
     },
     // Status
     success: {
@@ -98,69 +98,69 @@ export const tokens = {
         'neutral-subtle': 'var(--ds-background-neutral-subtle)',
         'neutral-hovered': 'var(--ds-background-neutral-hovered)',
         selected: 'var(--ds-background-selected)',
-        card: 'var(--gf-color-bg-default)',
+        card: 'var(--ds-surface-raised)',
         brand: {
           bold: 'var(--ds-background-brand-bold)',
           subtle: 'var(--ds-background-brand-subtle)',
         },
         danger: {
           bold: 'var(--ds-background-danger-bold)',
-          subtle: 'var(--ds-background-danger-subtle)',
+          subtle: 'oklch(60% 0.25 25 / 0.15)',
         },
         warning: {
           bold: 'var(--ds-background-warning-bold)',
-          subtle: 'var(--gf-color-warning-subtle)',
+          subtle: 'oklch(74% 0.18 75 / 0.15)',
         },
         success: {
           bold: 'var(--ds-background-success-bold)',
-          subtle: 'var(--gf-color-success-subtle)',
+          subtle: 'oklch(65% 0.15 155 / 0.15)',
         },
         information: {
           bold: 'var(--ds-background-information-bold)',
-          subtle: 'var(--gf-color-info-subtle)',
+          subtle: 'oklch(62% 0.18 250 / 0.15)',
         },
-        input: 'var(--gf-color-bg-default)',
+        input: 'var(--ds-surface-raised)',
       },
       text: {
         DEFAULT: 'var(--ds-text)',
         heading: 'var(--ds-text)',
         subtle: 'var(--ds-text-subtle)',
         subtlest: 'var(--ds-text-subtlest)',
-        disabled: 'var(--gf-color-neutral-400)',
+        disabled: 'var(--gf-color-neutral-60)',
         inverse: 'var(--ds-text-inverse)',
         selected: 'var(--ds-text-selected)',
-        brand: 'var(--ds-text-brand)',
+        brand: 'var(--ds-text-accent)',
         danger: 'var(--ds-text-danger)',
-        warning: 'var(--gf-color-text-warning)',
-        success: 'var(--gf-color-text-success)',
-        information: 'var(--gf-color-info)',
+        warning: 'var(--ds-text-warning)',
+        success: 'var(--ds-text-success)',
+        information: 'var(--ds-text-information)',
       },
       border: {
         DEFAULT: 'var(--ds-border)',
         bold: 'var(--ds-border-bold)',
         subtle: 'var(--ds-border-subtle)',
         focused: 'var(--ds-border-focused)',
-        selected: 'var(--gf-color-primary)',
-        brand: 'var(--ds-border-brand)',
-        danger: 'var(--gf-color-danger)',
-        warning: 'var(--gf-color-warning)',
-        success: 'var(--gf-color-success)',
-        input: 'var(--gf-color-border)',
+        selected: 'var(--ds-border-selected)',
+        brand: 'var(--ds-border-accent)',
+        danger: 'var(--ds-text-danger)',
+        warning: 'var(--ds-text-warning)',
+        success: 'var(--ds-text-success)',
+        input: 'var(--ds-border)',
       },
       icon: {
-        DEFAULT: 'var(--gf-color-text)',
-        subtle: 'var(--gf-color-text-subtle)',
-        inverse: 'var(--gf-color-text-inverse)',
-        brand: 'var(--gf-color-text-brand)',
-        danger: 'var(--gf-color-danger)',
-        warning: 'var(--gf-color-warning)',
-        success: 'var(--gf-color-success)',
+        DEFAULT: 'var(--ds-text)',
+        subtle: 'var(--ds-text-subtle)',
+        inverse: 'var(--ds-text-inverse)',
+        brand: 'var(--ds-text-accent)',
+        danger: 'var(--ds-text-danger)',
+        warning: 'var(--ds-text-warning)',
+        success: 'var(--ds-text-success)',
       },
       surface: {
-        DEFAULT: 'var(--gf-color-bg-default)',
-        sunken: 'var(--gf-color-bg-subtle)',
-        raised: 'var(--gf-color-bg-raised)',
-        overlay: 'var(--gf-color-bg-overlay)',
+        DEFAULT: 'var(--ds-surface-raised)',
+        sunken: 'var(--ds-surface-sunken)',
+        raised: 'var(--ds-surface-raised)',
+        overlay: 'var(--ds-surface-overlay)',
       },
       sidebar: {
         DEFAULT: 'hsl(var(--sidebar))',
@@ -243,41 +243,41 @@ export const nativeTokens = {
     neutral700: 'rgb(23, 43, 77)',
     neutral800: 'rgb(9, 30, 66)',
 
-    // Semantic
-    background: 'rgb(255, 255, 255)',
-    foreground: 'rgb(23, 43, 77)', // Neutral 700
-    card: 'rgb(255, 255, 255)',
-    cardForeground: 'rgb(23, 43, 77)',
-    primary: 'rgb(0, 82, 204)', // Atlassian Blue
-    primaryForeground: 'rgb(255, 255, 255)',
-    secondary: 'rgb(235, 236, 240)', // Neutral 30
-    secondaryForeground: 'rgb(66, 82, 110)',
-    muted: 'rgb(244, 245, 247)', // Neutral 20
-    mutedForeground: 'rgb(107, 119, 140)', // Neutral 100
-    neutral: 'rgb(107, 119, 140)',
-    accent: 'rgb(222, 235, 255)', // Blue 50
-    accentForeground: 'rgb(0, 82, 204)',
-    destructive: 'rgb(222, 53, 11)', // Red
-    destructiveForeground: 'rgb(255, 255, 255)',
-    border: 'rgb(223, 225, 230)', // Neutral 40
-    input: 'rgb(223, 225, 230)',
-    ring: 'rgb(76, 154, 255)', // Blue 200
+    // v7 Titanium-Elite (High Contrast Dark)
+    background: '#1a1a1e', // oklch(13% 0.01 250)
+    foreground: '#fcfcfc', // oklch(96% 0 0)
+    card: '#27272a',       // oklch(20% 0.015 250)
+    cardForeground: '#a1a1aa',
+    primary: '#ff4400',
+    primaryForeground: '#ffffff',
+    secondary: '#1e1e21', // oklch(10% 0.012 250)
+    secondaryForeground: '#71717a',
+    muted: '#202023',
+    mutedForeground: '#52525b',
+    neutral: '#3f3f46',
+    accent: '#ff4400',
+    accentForeground: '#ffffff',
+    destructive: '#ef4444',
+    destructiveForeground: '#ffffff',
+    border: '#2a2a2e',
+    input: '#1a1a1e',
+    ring: '#ff4400',
 
     // Extended semantic
-    success: 'rgb(54, 179, 126)',
-    successForeground: 'rgb(255, 255, 255)',
-    warning: 'rgb(255, 171, 0)',
-    warningForeground: 'rgb(23, 43, 77)',
-    info: 'rgb(0, 184, 217)',
-    infoForeground: 'rgb(255, 255, 255)',
-    danger: 'rgb(255, 86, 48)',
-    dangerForeground: 'rgb(255, 255, 255)',
+    success: '#10b981',
+    successForeground: '#ffffff',
+    warning: '#f59e0b',
+    warningForeground: '#1a1a1e',
+    info: '#2563eb',
+    infoForeground: '#ffffff',
+    danger: '#ef4444',
+    dangerForeground: '#ffffff',
 
-    // Sidebar (Atlassian Blue)
-    sidebar: 'rgb(7, 71, 166)',
-    sidebarForeground: 'rgb(222, 235, 255)',
-    sidebarAccent: 'rgb(0, 82, 204)',
-    sidebarBorder: 'rgb(0, 82, 204)',
+    // Sidebar (Titanium Sunken)
+    sidebar: '#1e1e21',
+    sidebarForeground: '#fcfcfc',
+    sidebarAccent: '#ff4400',
+    sidebarBorder: '#2a2a2e',
   },
   spacing: {
     xs: 4,
@@ -485,4 +485,51 @@ export const nativeTokensNewEra = {
   },
 };
 
+/**
+ * React-Native tokens for the "Universal New Era" — Light Profile (Crystal-Alabaster).
+ */
+export const nativeTokensCrystal = {
+  ...nativeTokens,
+  colors: {
+    ...nativeTokens.colors,
+    background: '#fbfcfe', // oklch(99.5% 0.001 250)
+    surfaceSubtle: '#f5f7fa', // oklch(97.8% 0.005 250)
+    surfaceRaised: '#ffffff',
+    surfaceOverlay: '#ffffff',
+    
+    textHeading: '#0d0d10', // oklch(10% 0.03 250)
+    textPrimary: '#1a1a1e',
+    textSubtle: '#4c4c54',
+    textSubtlest: '#787881',
+    textInverse: '#ffffff',
+    
+    border: '#ebeef2', // oklch(94% 0.01 250)
+    borderSubtle: '#f5f7fa',
+    borderBold: '#dfe2e6',
+    input: '#ffffff',
+    
+    successSubtle: 'rgba(16, 185, 129, 0.08)',
+    warningSubtle: 'rgba(245, 158, 11, 0.08)',
+    dangerSubtle: 'rgba(239, 68, 68, 0.08)',
+    infoSubtle: 'rgba(37, 99, 235, 0.08)',
+  },
+  shadows: {
+    satinRaised: {
+      shadowColor: '#1a1a1e',
+      shadowOffset: { width: 0, height: 1 },
+      shadowOpacity: 0.03,
+      shadowRadius: 2,
+      elevation: 2,
+    },
+    satinOverlay: {
+      shadowColor: '#1a1a1e',
+      shadowOffset: { width: 0, height: 12 },
+      shadowOpacity: 0.12,
+      shadowRadius: 24,
+      elevation: 8,
+    },
+  },
+};
+
 export type DesignTokens = typeof tokens;
+

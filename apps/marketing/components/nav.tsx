@@ -3,6 +3,7 @@
 import * as React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@gateflow/ui';
+import { GateFlowLogo } from '../../../packages/ui/src/components/ui/gateflow-logo';
 import {
   Menu,
   X,
@@ -25,9 +26,7 @@ import Link from 'next/link';
 import type { Locale } from '../i18n-config';
 import { useTranslation } from '../hooks/use-translation';
 
-const GateFlowLogo = () => (
-  <Shield size={26} strokeWidth={2.2} fill="currentColor" fillOpacity={0.15} />
-);
+
 
 const panelVariants = {
   exit: {
@@ -221,12 +220,7 @@ export function Nav({ locale }: { locale: Locale }) {
             href="/"
             className="flex items-center gap-3 group"
           >
-            <div className="text-ds-text-brand transition-transform duration-300 group-hover:scale-110">
-              <GateFlowLogo />
-            </div>
-            <span className="text-[20px] font-black tracking-tighter text-ds-text-heading">
-              Gate<span className="text-ds-text-brand">Flow</span>
-            </span>
+            <GateFlowLogo size={26} />
           </I18nLink>
 
           {/* Desktop Nav */}

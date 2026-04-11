@@ -7,37 +7,37 @@
   --font-mono: var(--font-mono, monospace);
 
   /* Surfaces */
-  --color-background: var(--gf-color-bg-page);
-  --color-foreground: var(--gf-color-text);
-  --color-border:     var(--gf-color-border);
+  --color-background: var(--ds-background-default);
+  --color-foreground: var(--ds-text-primary);
+  --color-border:     var(--ds-border);
 
   /* Brand / Primary */
-  --color-primary:             var(--gf-color-primary);
-  --color-primary-foreground:  var(--gf-color-primary-foreground);
+  --color-primary:             var(--ds-background-brand-bold);
+  --color-primary-foreground:  var(--ds-text-inverse);
 
   /* Muted */
-  --color-muted:            var(--gf-color-muted);
-  --color-muted-foreground: var(--gf-color-muted-foreground);
+  --color-muted:            var(--ds-surface-subtle);
+  --color-muted-foreground: var(--ds-text-subtle);
 
   /* Surface hierarchy */
-  --color-surface-page:    var(--gf-color-bg-page);
-  --color-surface-subtle:  var(--gf-color-bg-subtle);
-  --color-surface-default: var(--gf-color-bg-default);
-  --color-surface-raised:  var(--gf-color-bg-raised);
-  --color-surface-overlay: var(--gf-color-bg-overlay);
-  --color-surface-glass:   var(--gf-color-bg-glass);
+  --color-surface-page:    var(--ds-background-default);
+  --color-surface-subtle:  var(--ds-surface-subtle);
+  --color-surface-default: var(--ds-background-default);
+  --color-surface-raised:  var(--ds-surface-raised);
+  --color-surface-overlay: var(--ds-surface-overlay);
+  --color-surface-glass:   var(--ds-surface-glass);
 
   /* Semantic UI aliases */
-  --color-ds-background:         var(--gf-color-bg-page);
-  --color-ds-background-subtle:  var(--gf-color-bg-subtle);
-  --color-ds-surface:            var(--gf-color-bg-default);
-  --color-ds-surface-raised:     var(--gf-color-bg-raised);
-  --color-ds-surface-overlay:    var(--gf-color-bg-overlay);
-  --color-ds-surface-glass:      var(--gf-color-bg-glass);
-  --color-ds-border-subtle:      var(--gf-color-border-subtle);
-  --color-ds-text:               var(--gf-color-text);
-  --color-ds-text-subtle:        var(--gf-color-text-subtle);
-  --color-ds-text-brand:         var(--gf-color-text-brand);
+  --color-ds-background:         var(--ds-background-default);
+  --color-ds-background-subtle:  var(--ds-surface-subtle);
+  --color-ds-surface:            var(--ds-surface-raised);
+  --color-ds-surface-raised:     var(--ds-surface-raised);
+  --color-ds-surface-overlay:    var(--ds-surface-overlay);
+  --color-ds-surface-glass:      var(--ds-surface-glass);
+  --color-ds-border-subtle:      var(--ds-border-subtle);
+  --color-ds-text:               var(--ds-text-primary);
+  --color-ds-text-subtle:        var(--ds-text-subtle);
+  --color-ds-text-brand:         var(--ds-primary-accent);
   
   /* ─── Premium Brand Effects ──────────────────────────────────── */
   --color-ds-glow-bold:          var(--gf-glow-brand);

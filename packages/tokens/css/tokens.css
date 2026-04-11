@@ -1,160 +1,139 @@
 /**
- * @gateflow/tokens — tokens.css v3 (Premium Redesign)
- * 2026 Enterprise System: Satin-Charcoal hierarchy, Multi-Accent Profiles.
- * All values use OKLCH for perceptual uniformity and institutional depth.
+ * @gateflow/tokens — tokens.css v10 (Institutional-Platinum Unified Edition)
+ * "Titanium-Elite" (Dark) & "Platinum-Silk" (Light).
+ * Unified Theme Selector Protocol for Monorepo Synchronization.
  */
 
+/* ─── Primitives & Global (Light Mode First Architecture) ────────── */
 :root {
-  /* ─── Primitives: Neutrals (Satin-Charcoal, Hue 250) ───────────── */
-  /* These tiers provide the "Satin" depth hierarchy. */
-  --gf-color-neutral-10:    oklch(8% 0.015 250);     /* Canvas / Deep Base */
-  --gf-color-neutral-20:    oklch(11% 0.015 250);    /* Sidebar / Subpage Nav */
-  --gf-color-neutral-30:    oklch(14% 0.02 250);     /* Surface / Default Card */
-  --gf-color-neutral-40:    oklch(18% 0.02 250);     /* Raised / Hover State */
-  --gf-color-neutral-50:    oklch(22% 0.02 250);     /* Overlay / Modal */
-  --gf-color-neutral-60:    oklch(35% 0.025 250);    /* Borders / Muted */
-  --gf-color-neutral-70:    oklch(50% 0.02 250);     /* Secondary Text */
-  --gf-color-neutral-80:    oklch(65% 0.015 250);    /* Subtle Text */
-  --gf-color-neutral-90:    oklch(85% 0.01 250);     /* High Contrast Text */
-  --gf-color-neutral-100:   oklch(100% 0 0);         /* Purest White */
+  /* Dynamic Accents: Electric Kimchi */
+  --ds-primary-accent:      oklch(62% 0.25 32); 
+  --ds-accent-hover:        oklch(55% 0.22 32);
+  --ds-accent-subtle:       oklch(62% 0.25 32 / 0.1);
 
-  /* ─── Accent Profiles (Dynamic Switching) ─────────────────────── */
-  /* Default Profile: Kimchi (#ED4B00) */
-  --ds-primary-accent:      oklch(62% 0.22 35);      /* Kimchi Core */
-  --ds-accent-hover:        oklch(54% 0.20 35);
-  --ds-accent-subtle:       oklch(20% 0.04 35);
-  --ds-accent-contrast:     oklch(100% 0 0);
+  /* Status Primitives */
+  --gf-color-success:       oklch(65% 0.18 150);
+  --gf-color-warning:       oklch(76% 0.15 85);
+  --gf-color-danger:        oklch(60% 0.22 28);
+  --gf-color-info:          oklch(65% 0.20 255);
 
-  /* ─── Status Primitives ───────────────────────────────────────── */
-  --gf-color-success:       oklch(65% 0.15 155);     /* Emerald */
-  --gf-color-warning:       oklch(74% 0.18 75);      /* Gold */
-  --gf-color-danger:        oklch(60% 0.25 25);      /* Ruby */
-  --gf-color-info:          oklch(62% 0.18 250);     /* Cobalt-derived */
+  /* Foundations */
+  --ds-font-primary:        "Inter", ui-sans-serif, system-ui;
+  --ds-font-display:        "Cairo", sans-serif;
+  --ds-space-block:         8px;
+  --ds-border-radius-400:   16px;
+  --ds-border-radius-full:  9999px;
 
-  /* ─── Semantic Layer: Dark Mode (Institutional Default) ────────── */
-  /* Backgrounds */
+  /* Baseline: Platinum-Silk (Light Mode DEFAULT) */
+  --gf-color-neutral-10:    oklch(99.5% 0.001 250);
+  --gf-color-neutral-20:    oklch(97.8% 0.005 250);
+  --gf-color-neutral-30:    oklch(100% 0 0);
+  --gf-color-neutral-40:    oklch(96% 0.01 250);
+  --gf-color-neutral-50:    oklch(100% 0 0);
+  --gf-color-neutral-60:    oklch(82% 0.02 250);
+  --gf-color-neutral-70:    oklch(55% 0.02 250);
+  --gf-color-neutral-80:    oklch(35% 0.025 250);
+  --gf-color-neutral-90:    oklch(10% 0.03 250);
+  --gf-color-neutral-100:   oklch(0% 0 0);
+
   --ds-background-default:  var(--gf-color-neutral-10);
+  --ds-background-neutral:  var(--gf-color-neutral-20);
+  --ds-background-neutral-hovered: var(--gf-color-neutral-30);
+  --ds-background-neutral-pressed: var(--gf-color-neutral-40);
   --ds-surface-subtle:      var(--gf-color-neutral-20);
-  --ds-surface-sunken:      var(--gf-color-neutral-20);
   --ds-surface-raised:      var(--gf-color-neutral-30);
   --ds-surface-overlay:     var(--gf-color-neutral-50);
-  --ds-surface-glass:       oklch(100% 0 0 / 0.03);
+  --ds-surface-glass:       oklch(100% 0 0 / 0.92);
 
-  /* Text */
   --ds-text-primary:        var(--gf-color-neutral-90);
   --ds-text-subtle:         var(--gf-color-neutral-70);
-  --ds-text-inverse:        var(--gf-color-neutral-10);
+  --ds-text-subtlest:       var(--gf-color-neutral-60);
+  --ds-text-inverse:        oklch(100% 0 0);
+  
+  --ds-border:              oklch(94% 0.01 250);
+  --ds-border-bold:         oklch(88% 0.02 250);
+  --ds-border-subtle:       oklch(97% 0.005 250);
+
+  --ds-shadow-raised:       0px 1px 3px oklch(250 15% 10% / 0.04), 0px 0px 0px 1px oklch(250 10% 10% / 0.01);
+  --ds-shadow-overlay:      0px 16px 32px -8px oklch(250 20% 10% / 0.12), 0px 0px 0px 1px oklch(250 10% 10% / 0.03);
+  --ds-shadow-deep:         0px 64px 128px -32px oklch(250 30% 10% / 0.16);
+
+  /* Shared Mappings */
   --ds-text-accent:         var(--ds-primary-accent);
+  --ds-border-focused:      var(--ds-primary-accent);
+  --ds-text-selected:       var(--ds-primary-accent);
+  --ds-background-selected: oklch(62% 0.25 32 / 0.1);
+  --ds-icon-brand:          var(--ds-primary-accent);
+  --ds-background-brand-bold: var(--ds-primary-accent);
+  --ds-background-brand-bold-hovered: var(--ds-accent-hover);
+  --ds-background-brand-bold-pressed: oklch(50% 0.20 32);
+  
   --ds-text-success:        var(--gf-color-success);
   --ds-text-danger:         var(--gf-color-danger);
   --ds-text-warning:        var(--gf-color-warning);
   --ds-text-information:     var(--gf-color-info);
-
-  /* Borders */
-  --ds-border:              oklch(24% 0.02 250);     /* Custom tier for clarity */
-  --ds-border-subtle:       oklch(18% 0.015 250);
-  --ds-border-bold:         oklch(35% 0.025 250);
-  --ds-border-focused:      var(--ds-primary-accent);
-
-  /* Interactive / Accent */
-  --ds-accent-bold:         var(--ds-primary-accent);
-  --ds-accent-subtle:       oklch(100% 0 0 / 0.05);
-
-  /* ─── Special Effects (Depth) ─────────────────────────────────── */
-  --ds-glow-accent:         0 0 20px -5px var(--ds-primary-accent);
-  --ds-surface-mesh:        radial-gradient(at 0% 0%, var(--gf-color-neutral-20) 0%, transparent 50%),
-                           radial-gradient(at 100% 0%, oklch(18% 0.02 30) 0%, transparent 50%);
-
-  /* ─── Extended Semantic Layer (Components) ─────────────────────── */
-  /* Interaction Tiers (Neutral) */
-  --ds-background-neutral:          var(--gf-color-neutral-20);
-  --ds-background-neutral-hovered:  var(--gf-color-neutral-30);
-  --ds-background-neutral-pressed:  var(--gf-color-neutral-40);
-  --ds-background-neutral-subtle:   transparent;
-  --ds-background-neutral-subtle-hovered: var(--gf-color-neutral-20);
-  --ds-background-neutral-subtle-pressed: var(--gf-color-neutral-30);
-
-  /* Selecting */
-  --ds-background-selected:         oklch(62% 0.22 35 / 0.15); /* Default Kimchi tinte */
-  --ds-background-selected-hovered: oklch(62% 0.22 35 / 0.25);
-  --ds-background-selected-pressed: oklch(62% 0.22 35 / 0.35);
-  --ds-text-selected:               var(--ds-primary-accent);
-  --ds-border-selected:             var(--ds-primary-accent);
-
-  /* Bold Status Backgrounds */
-  --ds-background-brand-bold:       var(--ds-primary-accent);
-  --ds-background-brand-bold-hovered: var(--ds-accent-hover);
-  --ds-background-brand-bold-pressed: var(--ds-accent-hover);
-
-  --ds-background-success-bold:     var(--gf-color-success);
-  --ds-background-success-bold-hovered: oklch(60% 0.12 155);
   
-  --ds-background-danger-bold:      var(--gf-color-danger);
-  --ds-background-danger-bold-hovered: oklch(55% 0.22 25);
+  --ds-background-success-bold:             var(--gf-color-success);
+  --ds-background-success-bold-hovered:     oklch(60% 0.16 150);
+  --ds-background-danger-bold:              var(--gf-color-danger);
+  --ds-background-danger-bold-hovered:      oklch(55% 0.20 28);
+  --ds-background-warning-bold:             var(--gf-color-warning);
+  --ds-background-warning-bold-hovered:     oklch(70% 0.12 85);
+  --ds-background-information-bold:         var(--gf-color-info);
+  --ds-background-information-bold-hovered: oklch(60% 0.16 255);
 
-  --ds-background-warning-bold:     var(--gf-color-warning);
-  --ds-background-warning-bold-hovered: oklch(68% 0.16 75);
-  --ds-text-warning-inverse:        var(--gf-color-neutral-10);
-
-  --ds-background-information-bold: var(--gf-color-info);
-  --ds-background-information-bold-hovered: oklch(58% 0.16 250);
-
-  /* Discovery (Purple/Indigo flavor) */
-  --ds-background-discovery-bold:   oklch(65% 0.20 300);
-  --ds-background-discovery-bold-hovered: oklch(58% 0.18 300);
-  --ds-background-discovery-subtle: oklch(65% 0.20 300 / 0.1);
-  --ds-text-discovery:              oklch(75% 0.15 300);
-  --ds-border-discovery:            oklch(65% 0.20 300 / 0.3);
-
-  /* Shadows (Institutional Depth) */
-  --ds-shadow-raised:               0 1px 1px oklch(0% 0 0 / 0.25), 0 0 0 1px oklch(0% 0 0 / 0.08);
-  --ds-shadow-overlay:              0 8px 16px -4px oklch(0% 0 0 / 0.25), 0 0 0 1px oklch(0% 0 0 / 0.08);
-  --ds-shadow-deep:                 0 32px 64px -12px oklch(0% 0 0 / 0.35);
-
-  /* Icons */
-  --ds-icon-subtle:                 var(--gf-color-neutral-70);
-  --ds-icon-brand:                  var(--ds-primary-accent);
-  --ds-icon-selected:               var(--ds-primary-accent);
-
-  /* AI Elements (Orchid/Glow flavor) */
-  --ds-ai-accent:                   oklch(70% 0.18 310);
-  --ds-ai-surface:                  oklch(15% 0.02 250);
-  --ds-ai-glow:                     0 0 25px -5px oklch(70% 0.18 310 / 0.4);
-  --ds-pattern-sentinel:            radial-gradient(oklch(70% 0.18 310 / 0.15) 1px, transparent 1px);
-
-  /* UI Specifics */
-  --ds-border-radius-100:           3px;
-  --ds-border-radius-200:           4px;
-  --ds-border-radius-400:           8px;
-
-  /* ─── Motion & Easing (Cine-Serious) ──────────────────────────── */
-  --ds-motion-duration-fast:   150ms;
-  --ds-motion-duration-base:   300ms;
-  --ds-motion-easing-entrance: cubic-bezier(0.22, 1, 0.36, 1);
-  --ds-motion-stagger-base:    50ms;
-
-  /* ─── Typography & Scale (Cairo / Inter) ───────────────────────── */
-  --ds-font-primary:        "Inter", ui-sans-serif, system-ui;
-  --ds-font-display:        "Cairo", sans-serif;
+  /* Legacy Aliases for Design System App Compatibility */
+  --gf-color-bg-page:       var(--gf-color-neutral-10);
+  --gf-color-bg-subtle:     var(--gf-color-neutral-20);
+  --gf-color-bg-default:    var(--gf-color-neutral-10);
+  --gf-color-bg-raised:     var(--gf-color-neutral-30);
+  --gf-color-bg-overlay:    var(--gf-color-neutral-50);
+  --gf-color-bg-glass:      var(--ds-surface-glass);
+  --gf-color-text:          var(--ds-text-primary);
+  --gf-color-text-subtle:   var(--ds-text-subtle);
+  --gf-color-text-brand:    var(--ds-primary-accent);
+  --gf-color-border:        var(--ds-border);
+  --gf-color-border-subtle: var(--ds-border-subtle);
+  --gf-color-primary:       var(--ds-primary-accent);
+  --gf-color-primary-foreground: var(--ds-text-inverse);
 }
 
-/* ─── Accent Profile Overrides ────────────────────────────────────── */
-[data-accent-profile="cobalt"] {
-  --ds-primary-accent:      oklch(50% 0.18 250);     /* Professional Blue */
-  --ds-accent-hover:        oklch(42% 0.16 250);
-  --ds-accent-subtle:       oklch(15% 0.03 250);
+/* ─── Theme: Titanium-Elite (Dark Overrides) ─────────────────────── */
+[data-color-mode="dark"],
+.dark {
+  --gf-color-neutral-10:    oklch(13% 0.01 250);
+  --gf-color-neutral-20:    oklch(11% 0.012 250);
+  --gf-color-neutral-30:    oklch(22% 0.018 250);
+  --gf-color-neutral-40:    oklch(26% 0.02 250);
+  --gf-color-neutral-50:    oklch(32% 0.025 250);
+  --gf-color-neutral-60:    oklch(45% 0.015 250);
+  --gf-color-neutral-70:    oklch(72% 0.01 250);
+  --gf-color-neutral-80:    oklch(88% 0.005 250);
+  --gf-color-neutral-90:    oklch(97% 0 0);
+  --gf-color-neutral-100:   oklch(100% 0 0);
+
+  --ds-background-default:  var(--gf-color-neutral-10);
+  --ds-background-neutral:  var(--gf-color-neutral-20);
+  --ds-background-neutral-hovered: var(--gf-color-neutral-30);
+  --ds-background-neutral-pressed: var(--gf-color-neutral-40);
+  --ds-surface-subtle:      var(--gf-color-neutral-20);
+  --ds-surface-raised:      var(--gf-color-neutral-30);
+  --ds-surface-overlay:     var(--gf-color-neutral-50);
+  --ds-surface-glass:       oklch(100% 0 0 / 0.05);
+
+  --ds-text-primary:        var(--gf-color-neutral-90);
+  --ds-text-subtle:         var(--gf-color-neutral-70);
+  --ds-text-subtlest:       var(--gf-color-neutral-60);
+  --ds-text-inverse:        var(--gf-color-neutral-10);
+  
+  --ds-border:              oklch(22% 0.02 250);
+  --ds-border-bold:         oklch(35% 0.025 250);
+  --ds-border-subtle:       oklch(18% 0.01 250);
+
+  --ds-shadow-raised:       0 4px 6px -1px oklch(0% 0 0 / 0.4), 0 0 0 1px oklch(100% 0 0 / 0.05);
 }
 
-[data-accent-profile="emerald"] {
-  --ds-primary-accent:      oklch(65% 0.15 155);     /* Safety Green */
-  --ds-accent-hover:        oklch(58% 0.12 155);
-  --ds-accent-subtle:       oklch(18% 0.02 155);
-}
-
-/* ─── Layout & Density ────────────────────────────────────────────── */
-:root {
-  --ds-space-block:         8px;
-  --ds-space-gap-md:        16px;
-  --ds-space-inset-md:      16px;
-  --ds-container-max:       1280px;
+/* ─── Force-Explicit Selector Fallbacks ────────────────────────── */
+[data-color-mode="light"], .light {
+  /* Inherits from :root, but ensures priority if clashing with .dark */
 }

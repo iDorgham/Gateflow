@@ -83,7 +83,7 @@ export function TrustBar({ locale: _locale }: { locale: Locale }) {
 
   return (
     <section
-      className="relative z-30 border-y border-ds-border bg-ds-surface-sunken py-10 md:py-12 overflow-hidden"
+      className="relative z-30 border-y border-ds-border-bold/50 bg-ds-surface-sunken/50 py-10 md:py-14 overflow-hidden"
       aria-label="Trusted by leading communities"
     >
       {/* ── Section label ── */}
