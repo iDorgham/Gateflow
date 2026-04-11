@@ -11,9 +11,9 @@ export const metadata: Metadata = {
   title: { default: 'GateFlow Admin', template: '%s | GateFlow Admin' },
   description: 'Super-admin management dashboard',
   icons: {
-    icon: [{ url: '/icon.png', sizes: '32x32', type: 'image/png' }],
+    icon: [{ url: '/icon', sizes: '32x32', type: 'image/png' }],
     apple: [{ url: '/apple-icon', sizes: '180x180', type: 'image/png' }],
-    shortcut: '/icon.png',
+    shortcut: '/icon',
   },
 };
 

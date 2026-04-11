@@ -6,7 +6,7 @@ import { QrCode, ScanLine, FileCheck } from 'lucide-react';
 import type { Locale } from '../../i18n-config';
 import { useTranslation } from '../../hooks/use-translation';
 
-export function HowItWorksSection({ locale }: { locale: Locale }) {
+export function HowItWorksSection({ locale: _locale }: { locale: Locale }) {
   const { t } = useTranslation('landing');
 
   const steps = [

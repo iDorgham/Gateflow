@@ -25,7 +25,7 @@ export default async function SecurityPage(props: {
 
   return (
     <LegalLayout
-      title={t('security.title')}
+      title={t('security.title') as string}
       lastUpdated={`${t('layout.lastUpdated')} ${t('security.lastUpdatedValue')}`}
     >
       <section className="mb-12">

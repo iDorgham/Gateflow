@@ -24,7 +24,7 @@ export default async function PrivacyPage(props: {
 
   return (
     <LegalLayout
-      title={t('privacy.title')}
+      title={t('privacy.title') as string}
       lastUpdated={`${t('layout.lastUpdated')} ${t('privacy.lastUpdatedValue')}`}
     >
       <section>

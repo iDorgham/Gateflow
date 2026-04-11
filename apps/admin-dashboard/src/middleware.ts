@@ -153,6 +153,8 @@ export async function middleware(request: NextRequest) {
   if (
     pathname.startsWith('/_next') ||
     pathname.startsWith('/favicon') ||
+    pathname.startsWith('/icon') ||
+    pathname.startsWith('/apple-icon') ||
     /\.(ico|png|jpg|jpeg|gif|webp|svg|txt|xml)$/i.test(pathname)
   ) {
     return NextResponse.next();
@@ -164,6 +166,8 @@ export async function middleware(request: NextRequest) {
     !hasLocale &&
     !pathname.startsWith('/api') &&
     !pathname.startsWith('/_next') &&
+    !pathname.startsWith('/icon') &&
+    !pathname.startsWith('/apple-icon') &&
     !pathname.includes('.')
   ) {
     const locale = getLocale(request);
@@ -186,7 +190,11 @@ export async function middleware(request: NextRequest) {
 
   const effectivePath = pathWithoutLocale === '' ? '/' : pathWithoutLocale;
 
-  if (PUBLIC_ROUTES.some((route) => effectivePath.startsWith(route))) {
+  if (
+    PUBLIC_ROUTES.some((route) => effectivePath.startsWith(route)) ||
+    effectivePath === '/icon' ||
+    effectivePath === '/apple-icon'
+  ) {
     return NextResponse.next();
   }
 
@@ -236,6 +244,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml).*)',
+    '/((?!_next/static|_next/image|favicon.ico|icon|apple-icon|robots.txt|sitemap.xml).*)',
   ],
 };

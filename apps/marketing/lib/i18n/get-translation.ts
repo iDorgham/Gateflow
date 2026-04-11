@@ -26,11 +26,11 @@ export async function getTranslation(locale: Locale, namespace: string) {
       returnObjects?: boolean;
       [key: string]: string | number | boolean | undefined;
     }
-  ): string | TranslationValue => {
+  ): any => {
     // Navigate dot notation (e.g. "hero.headline")
     let text: TranslationValue = key
       .split('.')
-      .reduce((obj: any, k) => (obj || {})[k], dict);
+      .reduce((obj: Record<string, any>, k) => (obj || {})[k], dict);
 
     // Pluralization simple support: check if count is 1 or other
     if (

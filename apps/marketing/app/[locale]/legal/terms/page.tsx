@@ -24,7 +24,7 @@ export default async function TermsPage(props: {
 
   return (
     <LegalLayout
-      title={t('terms.title')}
+      title={t('terms.title') as string}
       lastUpdated={`${t('layout.lastUpdated')} ${t('terms.lastUpdatedValue')}`}
     >
       <section>

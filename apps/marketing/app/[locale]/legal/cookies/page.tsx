@@ -24,7 +24,7 @@ export default async function CookiesPage(props: {
 
   return (
     <LegalLayout
-      title={t('cookies.title')}
+      title={t('cookies.title') as string}
       lastUpdated={`${t('layout.lastUpdated')} ${t('cookies.lastUpdatedValue')}`}
     >
       <section>

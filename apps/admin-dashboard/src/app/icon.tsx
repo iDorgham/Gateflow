@@ -4,6 +4,7 @@ import { BRAND_COLORS } from '@gateflow/ui/tokens';
 export const size = { width: 32, height: 32 };
 export const contentType = 'image/png';
 
+// Admin Dashboard favicon/icon (32x32)
 export default function Icon() {
   return new ImageResponse(
     <div
@@ -17,10 +18,18 @@ export default function Icon() {
         justifyContent: 'center',
       }}
     >
-      {/* House silhouette */}
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
-      </svg>
+      <div
+        style={{
+          color: 'white',
+          fontSize: 22,
+          fontWeight: 900,
+          fontFamily: 'serif',
+          letterSpacing: '-1px',
+          lineHeight: 1,
+        }}
+      >
+        G
+      </div>
     </div>,
     { ...size }
   );

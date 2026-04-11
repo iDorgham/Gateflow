@@ -1,4 +1,5 @@
 import { ImageResponse } from 'next/og';
+import { BRAND_COLORS } from '@gateflow/ui/tokens';
 
 export const size = { width: 180, height: 180 };
 export const contentType = 'image/png';
@@ -10,7 +11,7 @@ export default function AppleIcon() {
         width: 180,
         height: 180,
         borderRadius: 44,
-        background: '#1e2d4a',
+        background: BRAND_COLORS.navy,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
