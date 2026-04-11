@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@ai-sdk/google": "^3.0.53",
-    "@ai-sdk/react": "^3.0.139",
+    "@ai-sdk/react": "^3.0.160",
     "@atlaskit/tokens": "^11.1.1",
     "@formatjs/intl-localematcher": "^0.8.1",
     "@gate-access/api-client": "workspace:*",
