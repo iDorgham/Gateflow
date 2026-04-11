@@ -14,7 +14,7 @@
     "@gate-access/db": "^0.1.0",
     "@gate-access/types": "^0.1.0",
     "@gateflow/ui": "workspace:^",
-    "@hugeicons/core-free-icons": "^3.1.1",
+    "@hugeicons/core-free-icons": "^4.1.1",
     "@hugeicons/react": "^1.1.5",
     "ai": "5.0.52",
     "clsx": "^2.1.1",
