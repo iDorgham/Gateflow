@@ -33,7 +33,7 @@ interface Organization {
 }
 
 export function OrgSwitcher({ isCollapsed }: { isCollapsed?: boolean }) {
-  const { orgId } = useOrganization();
+  const { orgId, setOrgId } = useOrganization();
   const router = useRouter();
   const { t, i18n } = useTranslation();
   const [open, setOpen] = React.useState(false);
@@ -129,6 +129,7 @@ export function OrgSwitcher({ isCollapsed }: { isCollapsed?: boolean }) {
                   key={org.id}
                   onSelect={() => {
                     setOpen(false);
+                    setOrgId(org.id);
                     router.push(`/${i18n.language}/organizations/${org.id}`);
                   }}
                   className="flex items-center justify-between gap-2 px-3 py-2.5 aria-selected:bg-primary/5 transition-colors cursor-pointer"

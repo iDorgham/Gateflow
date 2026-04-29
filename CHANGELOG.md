@@ -20,6 +20,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Design-System]** fix hardcoded hex values
+
 - **[Token System V2]** complete phase 3
 
 - **[Token System V2]** complete phase 2

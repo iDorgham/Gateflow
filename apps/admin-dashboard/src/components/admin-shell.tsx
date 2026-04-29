@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Button, Avatar, AvatarFallback, cn } from '@gateflow/ui';
-import { Sidebar } from './Sidebar';
+import { AdminSidebar } from './admin-sidebar';
 import { AdminSidePanel } from './admin-side-panel';
 import { LanguageSwitcher } from './language-switcher';
 import { ThemeToggle } from './theme-toggle';
@@ -24,7 +24,7 @@ export function AdminShell({ children, locale: _locale }: AdminShellProps) {
     <div className="flex h-screen w-full bg-ds-surface-sunken overflow-hidden selection:bg-ds-background-selected/30 selection:text-ds-text-selected sm:antialiased">
       {/* Left/Right Sidebar */}
       <div className="flex h-full shrink-0 border-inline-end border-ds-border bg-ds-surface/40 shadow-sm z-30 ltr:border-r rtl:border-l backdrop-blur-xl">
-        <Sidebar />
+        <AdminSidebar />
       </div>
 
       {/* Main Content Area */}
