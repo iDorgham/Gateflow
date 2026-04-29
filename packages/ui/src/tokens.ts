@@ -25,48 +25,48 @@ export const BRAND_COLORS = {
 
 export const tokens = {
   colors: {
-    border: 'var(--ds-border)',
-    input: 'var(--ds-border)',
-    ring: 'var(--ds-border-focused)',
-    background: 'var(--ds-background-default)',
-    foreground: 'var(--ds-text)',
+    border: 'var(--gf-color-border)',
+    input: 'var(--gf-color-border)',
+    ring: 'var(--gf-color-primary)',
+    background: 'var(--gf-color-bg-page)',
+    foreground: 'var(--gf-color-text)',
 
     primary: {
-      DEFAULT: 'var(--ds-accent-bold)',
-      foreground: 'var(--ds-text-inverse)',
-      subtle: 'var(--ds-accent-subtle)',
+      DEFAULT: 'var(--gf-color-primary)',
+      foreground: 'var(--gf-color-primary-foreground)',
+      subtle: 'var(--gf-color-primary-subtle)',
     },
     secondary: {
-      DEFAULT: 'var(--ds-surface-subtle)',
-      foreground: 'var(--ds-text)',
+      DEFAULT: 'var(--gf-color-bg-raised)',
+      foreground: 'var(--gf-color-text)',
     },
     destructive: {
       DEFAULT: 'var(--gf-color-danger)',
-      foreground: 'oklch(100% 0 0)',
+      foreground: 'var(--gf-color-neutral-0)',
     },
     muted: {
-      DEFAULT: 'var(--ds-surface-subtle)',
-      foreground: 'var(--ds-text-subtle)',
+      DEFAULT: 'var(--gf-color-muted)',
+      foreground: 'var(--gf-color-muted-foreground)',
     },
     accent: {
-      DEFAULT: 'var(--ds-background-selected)',
-      foreground: 'var(--ds-text-selected)',
+      DEFAULT: 'var(--gf-color-bg-raised)',
+      foreground: 'var(--gf-color-text)',
     },
     popover: {
-      DEFAULT: 'var(--ds-surface-overlay)',
-      foreground: 'var(--ds-text)',
+      DEFAULT: 'var(--gf-color-bg-raised)',
+      foreground: 'var(--gf-color-text)',
     },
     card: {
-      DEFAULT: 'var(--ds-surface-raised)',
-      foreground: 'var(--ds-text)',
+      DEFAULT: 'var(--gf-color-bg-default)',
+      foreground: 'var(--gf-color-text)',
     },
     // Semantic surface levels
     surface: {
-      page: 'var(--ds-background-default)',
-      subtle: 'var(--ds-surface-subtle)',
-      default: 'var(--ds-surface-raised)',
-      raised: 'var(--ds-surface-raised)',
-      overlay: 'var(--ds-surface-overlay)',
+      page: 'var(--gf-color-bg-page)',
+      subtle: 'var(--gf-color-bg-subtle)',
+      default: 'var(--gf-color-bg-default)',
+      raised: 'var(--gf-color-bg-raised)',
+      overlay: 'var(--gf-color-bg-overlay)',
     },
     // Status
     success: {
@@ -89,7 +89,7 @@ export const tokens = {
       subtle: 'var(--gf-color-info-subtle)',
       bold: 'var(--gf-color-info-bold)',
     },
-    // DS namespace — all resolve from --gf-* via globals.css aliases
+    // DS namespace (for components using ds.background.x etc.)
     ds: {
       background: {
         default: 'var(--ds-background-default)',
@@ -97,80 +97,25 @@ export const tokens = {
         neutral: 'var(--ds-background-neutral)',
         'neutral-subtle': 'var(--ds-background-neutral-subtle)',
         'neutral-hovered': 'var(--ds-background-neutral-hovered)',
-        selected: 'var(--ds-background-selected)',
-        card: 'var(--ds-surface-raised)',
         brand: {
           bold: 'var(--ds-background-brand-bold)',
           subtle: 'var(--ds-background-brand-subtle)',
         },
-        danger: {
-          bold: 'var(--ds-background-danger-bold)',
-          subtle: 'oklch(60% 0.25 25 / 0.15)',
-        },
-        warning: {
-          bold: 'var(--ds-background-warning-bold)',
-          subtle: 'oklch(74% 0.18 75 / 0.15)',
-        },
-        success: {
-          bold: 'var(--ds-background-success-bold)',
-          subtle: 'oklch(65% 0.15 155 / 0.15)',
-        },
-        information: {
-          bold: 'var(--ds-background-information-bold)',
-          subtle: 'oklch(62% 0.18 250 / 0.15)',
-        },
-        input: 'var(--ds-surface-raised)',
       },
       text: {
         DEFAULT: 'var(--ds-text)',
-        heading: 'var(--ds-text)',
         subtle: 'var(--ds-text-subtle)',
         subtlest: 'var(--ds-text-subtlest)',
-        disabled: 'var(--gf-color-neutral-60)',
-        inverse: 'var(--ds-text-inverse)',
+        brand: 'var(--ds-text-brand)',
         selected: 'var(--ds-text-selected)',
-        brand: 'var(--ds-text-accent)',
         danger: 'var(--ds-text-danger)',
-        warning: 'var(--ds-text-warning)',
-        success: 'var(--ds-text-success)',
-        information: 'var(--ds-text-information)',
+        inverse: 'var(--ds-text-inverse)',
       },
       border: {
         DEFAULT: 'var(--ds-border)',
-        bold: 'var(--ds-border-bold)',
         subtle: 'var(--ds-border-subtle)',
-        focused: 'var(--ds-border-focused)',
-        selected: 'var(--ds-border-selected)',
-        brand: 'var(--ds-border-accent)',
-        danger: 'var(--ds-text-danger)',
-        warning: 'var(--ds-text-warning)',
-        success: 'var(--ds-text-success)',
-        input: 'var(--ds-border)',
-      },
-      icon: {
-        DEFAULT: 'var(--ds-text)',
-        subtle: 'var(--ds-text-subtle)',
-        inverse: 'var(--ds-text-inverse)',
-        brand: 'var(--ds-text-accent)',
-        danger: 'var(--ds-text-danger)',
-        warning: 'var(--ds-text-warning)',
-        success: 'var(--ds-text-success)',
-      },
-      surface: {
-        DEFAULT: 'var(--ds-surface-raised)',
-        sunken: 'var(--ds-surface-sunken)',
-        raised: 'var(--ds-surface-raised)',
-        overlay: 'var(--ds-surface-overlay)',
-      },
-      sidebar: {
-        DEFAULT: 'hsl(var(--sidebar))',
-        foreground: 'hsl(var(--sidebar-foreground))',
-        primary: 'hsl(var(--sidebar-primary))',
-        'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
-        accent: 'hsl(var(--sidebar-accent))',
-        'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
-        border: 'hsl(var(--sidebar-border))',
-        ring: 'hsl(var(--sidebar-ring))',
+        bold: 'var(--ds-border-bold)',
+        brand: 'var(--ds-border-brand)',
       },
     },
   },
@@ -246,7 +191,7 @@ export const nativeTokens = {
     // v7 Titanium-Elite (High Contrast Dark)
     background: '#1a1a1e', // oklch(13% 0.01 250)
     foreground: '#fcfcfc', // oklch(96% 0 0)
-    card: '#27272a',       // oklch(20% 0.015 250)
+    card: '#27272a', // oklch(20% 0.015 250)
     cardForeground: '#a1a1aa',
     primary: '#ff4400',
     primaryForeground: '#ffffff',
@@ -496,18 +441,18 @@ export const nativeTokensCrystal = {
     surfaceSubtle: '#f5f7fa', // oklch(97.8% 0.005 250)
     surfaceRaised: '#ffffff',
     surfaceOverlay: '#ffffff',
-    
+
     textHeading: '#0d0d10', // oklch(10% 0.03 250)
     textPrimary: '#1a1a1e',
     textSubtle: '#4c4c54',
     textSubtlest: '#787881',
     textInverse: '#ffffff',
-    
+
     border: '#ebeef2', // oklch(94% 0.01 250)
     borderSubtle: '#f5f7fa',
     borderBold: '#dfe2e6',
     input: '#ffffff',
-    
+
     successSubtle: 'rgba(16, 185, 129, 0.08)',
     warningSubtle: 'rgba(245, 158, 11, 0.08)',
     dangerSubtle: 'rgba(239, 68, 68, 0.08)',
@@ -532,4 +477,3 @@ export const nativeTokensCrystal = {
 };
 
 export type DesignTokens = typeof tokens;
-
