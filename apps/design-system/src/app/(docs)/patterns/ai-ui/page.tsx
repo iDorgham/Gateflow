@@ -5,7 +5,6 @@ import { PageHeader } from '@gateflow/components';
 import {
   Bot,
   Sparkles,
-  Send,
   Zap,
   Info,
   Wand2,
@@ -45,7 +44,7 @@ const aiPrinciples = [
 
 export default function AIElementsPage() {
   return (
-    <div className="flex flex-col gap-16 max-w-5xl mx-auto py-12 px-6">
+    <div className="flex flex-col gap-16 max-w-7xl mx-auto py-12 px-6">
       <PageHeader
         title="AI Pattern Architecture"
         subtitle="Defining the manifestation of artificial intelligence within GateFlow. Emphasis on premium Orchid flows and cognitive assembly."

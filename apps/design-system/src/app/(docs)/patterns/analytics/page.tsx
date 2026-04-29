@@ -44,7 +44,7 @@ const analyticsPrinciples = [
 
 export default function AnalyticsPatternsPage() {
   return (
-    <div className="flex flex-col gap-16 max-w-5xl mx-auto py-12 px-6">
+    <div className="flex flex-col gap-16 max-w-7xl mx-auto py-12 px-6">
       <PageHeader
         title="Analytics Patterns"
         subtitle="High-density, institutional-grade data visualization for gated community management. Built for deep telemetry and rapid scanning."

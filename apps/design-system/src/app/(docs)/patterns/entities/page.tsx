@@ -44,7 +44,7 @@ const entityPrinciples = [
 
 export default function EntityPatternsPage() {
   return (
-    <div className="flex flex-col gap-16 max-w-5xl mx-auto py-12 px-6">
+    <div className="flex flex-col gap-16 max-w-7xl mx-auto py-12 px-6">
       <PageHeader
         title="Entity Compositions"
         subtitle="Standardized assembly patterns for managing high-scale entities like Residents, Visitors, and Gates. Built for speed and predictability."

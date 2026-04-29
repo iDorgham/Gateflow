@@ -40,7 +40,7 @@ const calendarPrinciples = [
 
 export default function CalendarPatternsPage() {
   return (
-    <div className="flex flex-col gap-12 max-w-5xl mx-auto py-10 px-6">
+    <div className="flex flex-col gap-12 max-w-7xl mx-auto py-10 px-6">
       <PageHeader
         title="Calendar & Scheduling"
         subtitle="Custom patterns for booking, schedule rotation, and temporal management across the GateFlow ecosystem."

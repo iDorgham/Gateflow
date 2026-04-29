@@ -50,7 +50,7 @@ export default function MotionFoundationsPage() {
   const restart = () => setIsPlaying((c) => c + 1);
 
   return (
-    <div className="flex flex-col gap-12 max-w-5xl mx-auto py-10 px-6 overflow-hidden">
+    <div className="flex flex-col gap-12 max-w-7xl mx-auto py-10 px-6 overflow-hidden">
       <PageHeader
         title="Motion & Easing"
         subtitle="GateFlow isn't static. It's an intentional interface that uses motion to express weight, focus, and institutional speed."

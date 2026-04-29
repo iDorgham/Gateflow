@@ -38,7 +38,7 @@ const formPrinciples = [
 
 export default function FormsPatternsPage() {
   return (
-    <div className="flex flex-col gap-12 max-w-5xl mx-auto py-10 px-6">
+    <div className="flex flex-col gap-12 max-w-7xl mx-auto py-10 px-6">
       <PageHeader
         title="Forms & Validation"
         subtitle="GateFlow forms are designed for high-stakes enterprise data entry, emphasizing clarity, institutional validation, and cinematic transitions."

@@ -61,7 +61,7 @@ const zStack = [
 
 export default function LayeringFoundationsPage() {
   return (
-    <div className="flex flex-col gap-12 max-w-5xl mx-auto py-10 px-6">
+    <div className="flex flex-col gap-12 max-w-7xl mx-auto py-10 px-6">
       <PageHeader
         title="Layering & Depth"
         subtitle="Depth provides information architecture. By using standardized Z-stack tokens and premium elevation effects, we manage interface complexity."

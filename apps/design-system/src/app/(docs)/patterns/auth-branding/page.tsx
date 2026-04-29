@@ -42,7 +42,7 @@ export default function AuthBrandingPatternsPage() {
   const [profile, setProfile] = React.useState('kimchi');
 
   return (
-    <div className="flex flex-col gap-12 max-w-5xl mx-auto py-10 px-6">
+    <div className="flex flex-col gap-12 max-w-7xl mx-auto py-10 px-6">
       <PageHeader
         title="Auth & Tenant Branding"
         subtitle="Gateway patterns that establish trust, security, and institutional identity from the very first interaction."

@@ -8,7 +8,7 @@ const profiles = [
   {
     id: 'kimchi',
     name: 'Kimchi',
-    color: 'oklch(62% 0.22 35)',
+    color: 'oklch(62% 0.25 32)',
     description: 'Energetic brand default',
   },
   {
@@ -22,6 +22,18 @@ const profiles = [
     name: 'Emerald',
     color: 'oklch(65% 0.15 155)',
     description: 'Safety & reliability',
+  },
+  {
+    id: 'amethyst',
+    name: 'Amethyst',
+    color: 'oklch(60% 0.20 300)',
+    description: 'Elite creative depth',
+  },
+  {
+    id: 'amber',
+    name: 'Amber',
+    color: 'oklch(78% 0.18 85)',
+    description: 'Executive gold standard',
   },
 ];
 
@@ -62,7 +74,7 @@ export function AccentProfileLab() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 relative z-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 relative z-10">
         {profiles.map((profile) => (
           <button
             key={profile.id}

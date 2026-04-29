@@ -45,6 +45,8 @@ After a task or phase was executed **using a CLI** (Claude CLI, Gemini CLI, Open
 | 2026-04-02 | Cursor       | Marketing useRef + eslint-config-next 15 + push master         | success | `pnpm`/git only; pre-push preflight passed; Dependabot `ai-6.0.138` already contained merged master on remote.          |
 | 2026-04-02 | Cursor       | Commit `fix/admin-access-key-hardening` (admin key, turbo, CI) | success | `pnpm docs:changelog:check`; `turbo typecheck lint --filter=admin-dashboard`.                                           |
 | 2026-04-02 | Vercel CLI   | Redeploy admin-dashboard render-boundary fix                   | partial | `vercel redeploy` completed; local `/en/admins` verified 200. Remote smoke check requires Vercel protection bypass/SSO. |
+| 2026-04-29 | Antigravity  | Phase 1 token_system_v2                                        | success | Fixed dark mode wiring across tailwind configs and tokens.css.                                                          |
+| 2026-04-29 | Antigravity  | Phase 2 token_system_v2                                        | success | Redesigned palette to Kimchi brand and warm neutrals in tokens.css.                                                     |
 
 - **Refactor Team Audit (ADS Tokens):**
   - **`qrcodes/page.tsx`**: Replaced 10+ raw hex violations with ADS tokens. Removed manual `dark:` background/border classes, relying on global token definitions.

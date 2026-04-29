@@ -74,7 +74,7 @@ const typographySpecimen = [
 
 export default function TypographyFoundationsPage() {
   return (
-    <div className="flex flex-col gap-12 max-w-5xl mx-auto py-10 px-6">
+    <div className="flex flex-col gap-12 max-w-7xl mx-auto py-10 px-6">
       <PageHeader
         title="Typography"
         subtitle="Our typographic system balances institutional authority (Cairo) with functional speed (Inter), using a fluid Major Third scale for ultimate clarity."
