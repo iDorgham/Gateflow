@@ -200,7 +200,7 @@ export default function PackagesPage() {
                         Unified install command for stable monorepo releases.
                       </p>
                     </div>
-                    <div className="p-3 bg-[#09090b] rounded-xl flex items-center justify-between group shadow-sm">
+                    <div className="p-3 bg-zinc-950 dark:bg-[var(--ds-surface-overlay)] rounded-xl flex items-center justify-between group shadow-sm">
                       <code className="text-[11px] font-mono text-blue-300 truncate mr-2">
                         {pkg.install}
                       </code>

@@ -172,7 +172,7 @@ export default function GuidelinesPage() {
 
       <section className="flex flex-col gap-6">
         <div className="flex flex-col md:flex-row gap-6">
-          <Card className="flex-1 rounded-[2.5rem] p-10 border-[var(--ds-border-subtle)] bg-[#09090b] text-white shadow-2xl relative overflow-hidden group">
+          <Card className="flex-1 rounded-[2.5rem] p-10 border-[var(--ds-border-subtle)] bg-zinc-950 text-white shadow-2xl relative overflow-hidden group">
             <div className="absolute top-0 right-0 p-10 opacity-5 group-hover:scale-110 group-hover:opacity-10 transition-all duration-700">
               <Palette size={200} />
             </div>

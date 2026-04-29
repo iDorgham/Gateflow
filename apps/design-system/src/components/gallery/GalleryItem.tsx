@@ -140,7 +140,7 @@ export function GalleryItem({
           value="code"
           className="mt-0 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         >
-          <div className="rounded-3xl border border-[var(--ds-border-subtle)] bg-[#09090b] overflow-hidden">
+          <div className="rounded-3xl border border-[var(--ds-border-subtle)] bg-zinc-950 overflow-hidden">
             <div className="flex items-center justify-between px-4 py-2 border-b border-white/10 bg-white/5">
               <span className="text-[10px] font-black uppercase tracking-widest text-white/40">
                 TSX Snippet
