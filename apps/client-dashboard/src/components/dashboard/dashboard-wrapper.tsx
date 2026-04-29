@@ -5,6 +5,8 @@ import { prisma } from '@gate-access/db';
 import { DashboardLayout as DashboardLayoutClient } from '@/components/dashboard/dashboard-layout';
 import { Locale } from '@/lib/i18n';
 import { isSuperAdmin } from '@/lib/super-admin';
+import { OrganizationFeaturesProvider } from '@/context/OrganizationFeaturesContext';
+import { OrganizationType } from '@gate-access/types';
 
 function getRoleName(user: { role: { name: string } | string }): string {
   return typeof user.role === 'object' ? user.role.name : user.role;
@@ -51,21 +53,23 @@ export async function DashboardWrapper({
   }
 
   return (
-    <DashboardLayoutClient
-      user={{
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: claims.roleName ?? getRoleName(user),
-      }}
-      org={org ? { id: org.id, name: org.name, plan: org.plan } : null}
-      projects={projects}
-      currentProjectId={currentProjectId}
-      locale={locale}
-      permissions={claims.permissions as Record<string, boolean>}
-      isSuperAdmin={isSuperAdmin(claims)}
-    >
-      {children}
-    </DashboardLayoutClient>
+    <OrganizationFeaturesProvider type={org?.type ?? OrganizationType.REAL_ESTATE}>
+      <DashboardLayoutClient
+        user={{
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          role: claims.roleName ?? getRoleName(user),
+        }}
+        org={org ? { id: org.id, name: org.name, plan: org.plan, type: org.type } : null}
+        projects={projects}
+        currentProjectId={currentProjectId}
+        locale={locale}
+        permissions={claims.permissions as Record<string, boolean>}
+        isSuperAdmin={isSuperAdmin(claims)}
+      >
+        {children}
+      </DashboardLayoutClient>
+    </OrganizationFeaturesProvider>
   );
 }

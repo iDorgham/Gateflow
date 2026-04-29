@@ -1,7 +1,7 @@
 # PLAN: Organization Types — Client Dashboard Experience
 
 **Slug:** `org_types_dashboard`  
-**Status:** Planned — canonical layout: `TASKS_*.md`, `CONTEXT_*.md`, `context/`, `phase_logs/`, `phases/NN_*/PROMPT_phase_NN.md` (see `docs/development/plan-templates/PLAN_FOLDER_STRUCTURE.md`).  
+**Status:** In Progress — canonical layout: `TASKS_*.md`, `CONTEXT_*.md`, `context/`, `phase_logs/`, `phases/NN_*/PROMPT_phase_NN.md` (see `docs/development/plan-templates/PLAN_FOLDER_STRUCTURE.md`).  
 **Primary app:** `apps/client-dashboard`  
 **Supporting:** `packages/db`, `packages/types`, `packages/i18n`, seeds
 
@@ -9,15 +9,15 @@
 
 ## Summary — seven phases
 
-| Phase | Title                                 | Primary role                                           | Outcome                                                                                                      |
-| ----- | ------------------------------------- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
-| **1** | Backend foundation                    | **BACKEND** (+ **SECURITY** for auth/session surfaces) | `OrganizationType` in DB, migration, seeds, `type` on org in APIs and session/token claims where appropriate |
-| **2** | Organization context & feature config | **FRONTEND** / **ARCHITECTURE**                        | Canonical `ORGANIZATION_FEATURES` module + `useOrganizationFeatures()` + provider wired from loaded org      |
-| **3** | Dynamic sidebar & layout              | **FRONTEND**                                           | Sidebar/nav groups driven entirely by config for all five types                                              |
-| **4** | Dashboard home adaptation             | **FRONTEND**                                           | Type-specific KPIs, chart priority, widgets, empty states (REAL_ESTATE first-class)                          |
-| **5** | Contextual modules                    | **FRONTEND**                                           | Units/Students/Members/VIPs labeling & visibility; QR flows; Contacts/Guests; maintenance (REAL_ESTATE)      |
-| **6** | Settings page integration             | **FRONTEND**                                           | Advanced Settings (v6) tabs/sections contextual per type                                                     |
-| **7** | Arabic i18n & RTL                     | **FRONTEND** + **i18n**                                | All new copy in `en` + `ar-EG`, RTL verified per type                                                        |
+| Phase | Title                                 | Status | Primary role                                           | Outcome                                                                                                      |
+| ----- | ------------------------------------- | ------ | ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------ |
+| **1** | Backend foundation                    | [X]    | **BACKEND** (+ **SECURITY** for auth/session surfaces) | `OrganizationType` in DB, migration, seeds, `type` on org in APIs and session/token claims where appropriate |
+| **2** | Organization context & feature config | [X]    | **FRONTEND** / **ARCHITECTURE**                        | Canonical `ORGANIZATION_FEATURES` module + `useOrganizationFeatures()` + provider wired from loaded org      |
+| **3** | Dynamic sidebar & layout              | [X]    | **FRONTEND**                                           | Sidebar/nav groups driven entirely by config for all five types                                              |
+| **4** | Dashboard home adaptation             | [X]    | **FRONTEND**                                           | Type-specific KPIs, chart priority, widgets, empty states (REAL_ESTATE first-class)                          |
+| **5** | Contextual modules                    | [ ]    | **FRONTEND**                                           | Units/Students/Members/VIPs labeling & visibility; QR flows; Contacts/Guests; maintenance (REAL_ESTATE)      |
+| **6** | Settings page integration             | [ ]    | **FRONTEND**                                           | Advanced Settings (v6) tabs/sections contextual per type                                                     |
+| **7** | Arabic i18n & RTL                     | [ ]    | **FRONTEND** + **i18n**                                | All new copy in `en` + `ar-EG`, RTL verified per type                                                        |
 
 ---
 
@@ -26,6 +26,16 @@
 Deliver a **single client-dashboard codebase** where **`Organization.type`** selects a **professional, MENA-aware experience** (terminology, navigation density, KPI emphasis, and module labels). **REAL_ESTATE** (gated compounds) is the reference quality bar.
 
 **Supported types:** `REAL_ESTATE`, `SCHOOL`, `CLUB`, `NIGHTCLUB`, `EVENT_ORGANISER`.
+
+---
+
+## Phase 1: Backend Foundation [X] — DONE
+**Goal**: Enforce `OrganizationType` and propagate throughout auth/db.
+
+- [X] **Schema verification**: `Organization` has `type` field (OrganizationType enum).
+- [X] **Auth Integration**: Update `requireAuth` and `DashboardSession` to include `type`.
+- [X] **Propagation**: Update `DashboardWrapper` and `DashboardLayoutProps`.
+- [X] **Seeds**: Update `legacy-dev-seed.ts` with multi-tenant vertical test data.
 
 ---
 

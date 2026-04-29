@@ -545,6 +545,31 @@
         "MAX_USES_REACHED": "Max Uses",
         "INACTIVE": "Inactive",
         "DENIED": "Denied"
+      },
+      "openMaintenance": "Open Requests",
+      "securityIncidents": "Incidents",
+      "currentCapacity": "Current Capacity",
+      "guestListCount": "Guest List",
+      "vipArrivals": "VIP Arrivals",
+      "totalTickets": "Total Tickets",
+      "checkedIn": "Checked In",
+      "sub": {
+        "activeQRs": "Across all gates",
+        "scansToday": "Last 24 hours",
+        "activeGates": "Currently operational",
+        "teamMembers": "In your organization",
+        "activeResidents": "With linked units",
+        "activeStudents": "Enrolled",
+        "openMaintenance": "Pending action",
+        "securityIncidents": "Requires attention",
+        "currentCapacity": "Live occupancy"
+      },
+      "emptyState": {
+        "REAL_ESTATE": "Add residents and units to start tracking compound access.",
+        "SCHOOL": "Upload your student roster to issue parent pickup codes.",
+        "CLUB": "Link your membership database to verify entry at the gate.",
+        "NIGHTCLUB": "Import your guest list or VIP tables for tonight's event.",
+        "EVENT_ORGANISER": "Synchronize your ticket sales to start scanning attendees."
       }
     },
     "maintenance": {
@@ -1639,6 +1664,53 @@
       "errors": {
         "failed": "Failed to send invitation via {{provider}}."
       }
+    }
+  },
+  "orgType": {
+    "realEstate": {
+      "orgLabel": "Compound Overview",
+      "unitLabel": "Unit",
+      "unitLabelPlural": "Units",
+      "contactLabel": "Resident",
+      "contactLabelPlural": "Residents",
+      "visitorLabel": "Visitor",
+      "projectLabel": "Compound"
+    },
+    "school": {
+      "orgLabel": "Campus Overview",
+      "unitLabel": "Classroom",
+      "unitLabelPlural": "Classrooms",
+      "contactLabel": "Student",
+      "contactLabelPlural": "Students",
+      "visitorLabel": "Parent/Driver",
+      "projectLabel": "School"
+    },
+    "club": {
+      "orgLabel": "Club Overview",
+      "unitLabel": "Facility",
+      "unitLabelPlural": "Facilities",
+      "contactLabel": "Member",
+      "contactLabelPlural": "Members",
+      "visitorLabel": "Guest",
+      "projectLabel": "Club"
+    },
+    "nightclub": {
+      "orgLabel": "Venue Overview",
+      "unitLabel": "Zone",
+      "unitLabelPlural": "Zones",
+      "contactLabel": "VIP",
+      "contactLabelPlural": "VIPs",
+      "visitorLabel": "Guest",
+      "projectLabel": "Venue"
+    },
+    "event": {
+      "orgLabel": "Event Overview",
+      "unitLabel": "Section",
+      "unitLabelPlural": "Sections",
+      "contactLabel": "Attendee",
+      "contactLabelPlural": "Attendees",
+      "visitorLabel": "Guest",
+      "projectLabel": "Event"
     }
   }
 }

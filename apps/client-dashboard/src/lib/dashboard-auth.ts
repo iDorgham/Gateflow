@@ -17,6 +17,7 @@ export interface DashboardSession {
     name: string;
     email: string;
     plan: string;
+    type: string;
     stripeCustomerId: string | null;
     maskResidentNameOnLandingPage: boolean;
     showUnitOnLandingPage: boolean;
@@ -61,6 +62,7 @@ export async function requireAuth(): Promise<DashboardSession> {
           name: true,
           email: true,
           plan: true,
+          type: true,
           stripeCustomerId: true,
           maskResidentNameOnLandingPage: true,
           showUnitOnLandingPage: true,

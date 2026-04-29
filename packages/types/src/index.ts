@@ -10,4 +10,5 @@ export * from './qr-validate';
 export * from './auth';
 export * from './crm';
 export * from './maintenance';
+export * from './organization-features';
 export * from './base';

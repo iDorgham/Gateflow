@@ -5,28 +5,28 @@
 
 ## Phase 1: Backend foundation
 
-- [ ] Prisma `OrganizationType` + `Organization.type` + migration (default `REAL_ESTATE`)
-- [ ] Seeds: at least one org per type
-- [ ] APIs / session expose `type`; JWT optional per plan
-- [ ] `pnpm turbo lint` / `pnpm turbo typecheck` (affected); tests updated if claims change
-- [ ] `phase_logs/PHASE_LOG_phase_01.md` updated (errors, commands, fixes)
+- [X] Prisma `OrganizationType` + `Organization.type` + migration (default `REAL_ESTATE`)
+- [X] Seeds: at least one org per type
+- [X] APIs / session expose `type`; JWT optional per plan
+- [X] `pnpm turbo lint` / `pnpm turbo typecheck` (affected); tests updated if claims change
+- [X] `phase_logs/PHASE_LOG_phase_01.md` updated (errors, commands, fixes)
 
 ## Phase 2: Organization context & feature config
 
-- [ ] `ORGANIZATION_FEATURES` + provider + `useOrganizationFeatures()`
-- [ ] Unit tests for config resolution
-- [ ] `phase_logs/PHASE_LOG_phase_02.md` updated
+- [X] `ORGANIZATION_FEATURES` + provider + `useOrganizationFeatures()`
+- [X] Unit tests for config resolution
+- [X] `phase_logs/PHASE_LOG_phase_02.md` updated
 
 ## Phase 3: Dynamic sidebar & layout
 
-- [ ] Config-driven sidebar (desktop + mobile)
-- [ ] Tests for `buildSidebarNav` (or equivalent)
-- [ ] `phase_logs/PHASE_LOG_phase_03.md` updated
+- [X] Config-driven sidebar (desktop + mobile)
+- [X] Tests for `buildSidebarNav` (or equivalent)
+- [X] `phase_logs/PHASE_LOG_phase_03.md` updated
 
 ## Phase 4: Dashboard home adaptation
 
-- [ ] KPI/chart order + empty states from config
-- [ ] `phase_logs/PHASE_LOG_phase_04.md` updated
+- [X] KPI/chart order + empty states from config
+- [X] `phase_logs/PHASE_LOG_phase_04.md` updated
 
 ## Phase 5: Contextual modules
 
