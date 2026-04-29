@@ -20,7 +20,6 @@ import {
   Label,
   cn,
   ScrollArea,
-  nativeTokens,
 } from '@gateflow/ui';
 import { toast } from 'sonner';
 import { BRAND_COLORS } from '@gateflow/ui/tokens';
@@ -146,12 +145,17 @@ export function StyleEditor({ orgId }: { orgId: string }) {
                     { label: 'Background', key: '--gf-color-background' },
                     { label: 'Surface/Cards', key: '--gf-color-surface' },
                   ].map((item) => {
-                    const defaultValue = 
-                      item.key === '--gf-color-primary' ? BRAND_COLORS.blue : 
-                      item.key === '--gf-color-primary-foreground' ? BRAND_COLORS.white :
-                      item.key === '--gf-color-background' ? BRAND_COLORS.white :
-                      item.key === '--gf-color-surface' ? BRAND_COLORS.surfaceNeutral : BRAND_COLORS.navy;
-                    
+                    const defaultValue =
+                      item.key === '--gf-color-primary'
+                        ? BRAND_COLORS.blue
+                        : item.key === '--gf-color-primary-foreground'
+                          ? BRAND_COLORS.white
+                          : item.key === '--gf-color-background'
+                            ? BRAND_COLORS.white
+                            : item.key === '--gf-color-surface'
+                              ? BRAND_COLORS.surfaceNeutral
+                              : BRAND_COLORS.navy;
+
                     const currentValue = tokens[item.key] || defaultValue;
 
                     return (
@@ -164,7 +168,9 @@ export function StyleEditor({ orgId }: { orgId: string }) {
                             {item.label}
                           </p>
                           <p className="text-[9px] font-bold text-ds-text-subtler font-mono">
-                            {tokens[item.key] ? tokens[item.key] : 'System Default'}
+                            {tokens[item.key]
+                              ? tokens[item.key]
+                              : 'System Default'}
                           </p>
                         </div>
                         <div className="flex items-center gap-2">

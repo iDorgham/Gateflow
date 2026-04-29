@@ -2,17 +2,8 @@
 
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { Card, CardContent, Button, Input, Label, Badge } from '@gateflow/ui';
 import {
-  Card,
-  CardContent,
-  Button,
-  Input,
-  Label,
-  Badge,
-  cn,
-} from '@gateflow/ui';
-import {
-  Database,
   Building2,
   Box,
   Loader2,
@@ -21,8 +12,11 @@ import {
   ShieldAlert,
 } from 'lucide-react';
 
-export function SeedingClient({ locale }: { locale: string }) {
-  const { t } = useTranslation('admin');
+export function SeedingClient() {
+  // locale and t are unused, removing them if not strictly needed or fixing usage
+  // For now, I'll just remove the Destructuring if it's not used.
+  // Actually, t is used in translations if I add them, but here it's unused.
+  useTranslation('admin');
   const [loading, setLoading] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);

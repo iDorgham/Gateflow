@@ -9,7 +9,6 @@ import {
   CheckCircle2,
   AlertCircle,
   ChevronRight,
-  MoreVertical,
   Plus,
   Target,
   Sparkles,
@@ -49,7 +48,15 @@ import { toast } from 'sonner';
 export function CrmDashboard() {
   const { t } = useTranslation();
   const { orgId } = useOrganization();
-  const [leads, setLeads] = React.useState<any[]>([]);
+  const [leads, setLeads] = React.useState<
+    {
+      id: string;
+      status: string;
+      source?: string;
+      score?: number;
+      organization?: { type: string };
+    }[]
+  >([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [activeTab, setActiveTab] = React.useState('pipeline');
 

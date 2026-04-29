@@ -31,11 +31,34 @@ import {
   FileText,
 } from 'lucide-react';
 import { format } from 'date-fns';
+import { TemplatePicker } from './templates/template-picker';
+import { useRouter } from 'next/navigation';
+import { PageTemplate } from './templates/page-templates';
 
-export function CmsPagesClient({ initialPages }: { initialPages: any[] }) {
+export function CmsPagesClient({
+  initialPages,
+}: {
+  initialPages: {
+    id: string;
+    title: string;
+    slug: string;
+    status: string;
+    author: { name: string };
+    updatedAt: string;
+  }[];
+}) {
+  const router = useRouter();
   const { t } = useTranslation();
   const [pages, setPages] = useState(initialPages);
   const [search, setSearch] = useState('');
+  const [isTemplatePickerOpen, setIsTemplatePickerOpen] = useState(false);
+
+  const handleSelectTemplate = (template: PageTemplate) => {
+    setIsTemplatePickerOpen(false);
+    // In a real app, this would call an API to create the page
+    // For now, we redirect to the editor with template info
+    router.push(`/en/cms/pages/new?template=${template.id}`);
+  };
 
   const filteredPages = pages.filter(
     (p) =>
@@ -57,11 +80,20 @@ export function CmsPagesClient({ initialPages }: { initialPages: any[] }) {
             )}
           </p>
         </div>
-        <Button className="gap-2 bg-ds-background-brand-bold text-ds-text-inverse hover:bg-ds-background-brand-bold/90">
+        <Button
+          onClick={() => setIsTemplatePickerOpen(true)}
+          className="gap-2 bg-ds-background-brand-bold text-ds-text-inverse hover:bg-ds-background-brand-bold/90"
+        >
           <Plus className="h-4 w-4" />
           {t('cms:pages.create', 'Create New Page')}
         </Button>
       </div>
+
+      <TemplatePicker
+        isOpen={isTemplatePickerOpen}
+        onClose={() => setIsTemplatePickerOpen(false)}
+        onSelect={handleSelectTemplate}
+      />
 
       <Card className="border-ds-border shadow-sm">
         <CardContent className="p-0">

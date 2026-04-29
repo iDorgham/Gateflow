@@ -120,7 +120,7 @@ export default async function UsersPage(props: {
           role: t('users.securityRole'),
           status: t('users.status'),
         },
-        addUser: t('addUser', { returnObjects: true }),
+        addUser: t('addUser', { returnObjects: true }) as any,
       }}
     />
   );

@@ -5,12 +5,7 @@ import { motion } from 'framer-motion';
 import {
   Shield,
   Search,
-  Filter,
-  Clock,
-  User as UserIcon,
   Building,
-  Settings,
-  ChevronRight,
   Download,
   Eye,
   AlertTriangle,
@@ -27,7 +22,6 @@ import {
   Card,
   CardContent,
   Badge,
-  Input,
   Label,
   cn,
   ScrollArea,
@@ -45,8 +39,11 @@ import { format } from 'date-fns';
  * Consumes AiActionLog and AuditLog tables.
  */
 export function AuditTrailViewer() {
-  const [logs, setLogs] = React.useState<any[]>([]);
-  const [selectedLog, setSelectedLog] = React.useState<any>(null);
+  const [logs, setLogs] = React.useState<Record<string, any>[]>([]);
+  const [selectedLog, setSelectedLog] = React.useState<Record<
+    string,
+    any
+  > | null>(null);
   const [search, setSearch] = React.useState('');
   const [filterType, setFilterType] = React.useState('ALL');
 

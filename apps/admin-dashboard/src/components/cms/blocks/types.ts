@@ -16,6 +16,7 @@ export interface BlockStyles {
   marginBlock?: string;
   textAlign?: 'start' | 'center' | 'end';
   textColor?: string;
+  backgroundImage?: string;
 }
 
 export interface BlockContent {
@@ -36,6 +37,10 @@ export interface Block {
     ar: BlockContent;
   };
   styles: BlockStyles;
+  metadata?: {
+    aiGenerated?: boolean;
+    [key: string]: any;
+  };
 }
 
 export interface BlockProps {

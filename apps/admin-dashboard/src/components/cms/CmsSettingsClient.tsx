@@ -37,7 +37,20 @@ import {
 export function CmsSettingsClient({
   initialSettings,
 }: {
-  initialSettings: any;
+  initialSettings: {
+    siteName: string;
+    siteDescription: string;
+    defaultLanguage: string;
+    timezone: string;
+    seo: { metaTitleTemplate: string; ogImageUrl: string };
+    headers: { gtmId: string; metaPixelId: string; customCss: string };
+    security: { httpsEnforced: boolean; cspEnabled: boolean };
+    performance: {
+      imageOptimization: boolean;
+      lazyLoading: boolean;
+      cdnUrl: string;
+    };
+  };
 }) {
   const { t } = useTranslation();
   const [settings, setSettings] = useState(initialSettings);

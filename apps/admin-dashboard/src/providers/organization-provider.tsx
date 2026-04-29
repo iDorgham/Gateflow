@@ -7,7 +7,7 @@ import React, {
   useState,
   useCallback,
 } from 'react';
-import { useParams, useRouter, usePathname } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { OrganizationType } from '@gate-access/types';
 
 // We may define a minimal Organization type locally or import it.
@@ -39,8 +39,6 @@ export function OrganizationProvider({
   orgId?: string; // Optional prop to force an org ID (used in nested layouts)
 }) {
   const params = useParams();
-  const router = useRouter();
-  const pathname = usePathname();
 
   // URL param takes precedence, then props, then state
   const urlOrgId = params?.orgId as string | undefined;

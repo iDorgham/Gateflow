@@ -20,6 +20,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Admin-Dashboard]** implement cms front builder core and 9 blocks
+
 - **[Admin Dashboard Evolution]** complete phase 2
 
 - **[Admin Dashboard Evolution]** complete phase 1

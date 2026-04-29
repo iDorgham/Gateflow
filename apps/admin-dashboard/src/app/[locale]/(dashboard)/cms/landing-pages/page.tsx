@@ -1,53 +1,134 @@
-import { CmsLandingPagesClient } from '@/components/cms/CmsLandingPagesClient';
+import React from 'react';
+import { Button } from '@gateflow/ui';
+import {
+  Plus,
+  LayoutTemplate,
+  MoreVertical,
+  Edit2,
+  Copy,
+  Trash,
+  Globe,
+  CheckCircle2,
+} from 'lucide-react';
+import Link from 'next/link';
 import { Locale } from '@/lib/i18n/i18n-config';
 
-export const metadata = { title: 'Landing Pages' };
+export const metadata = { title: 'Landing Pages | CMS' };
 
-export default async function CmsLandingPagesPage(props: {
+// Mock data
+const MOCK_PAGES = [
+  {
+    id: 'home',
+    title: 'Main Homepage',
+    slug: '/',
+    status: 'PUBLISHED',
+    locale: 'en',
+    aiContent: 3,
+    updatedAt: '2 hours ago',
+  },
+  {
+    id: 'enterprise',
+    title: 'Enterprise Security',
+    slug: '/enterprise',
+    status: 'DRAFT',
+    locale: 'en',
+    aiContent: 8,
+    updatedAt: '1 day ago',
+  },
+  {
+    id: 'home-ar',
+    title: 'الرئيسية',
+    slug: '/ar',
+    status: 'PUBLISHED',
+    locale: 'ar',
+    aiContent: 3,
+    updatedAt: '2 days ago',
+  },
+];
+
+export default async function LandingPagesPage(props: {
   params: Promise<{ locale: Locale }>;
 }) {
-  const params = await props.params;
-  const { locale } = params;
+  const { locale } = await props.params;
 
-  // Mock data
-  const initialPages = [
-    {
-      id: 'lp_1',
-      title: 'Summer Gate Access Promo',
-      campaign: 'Summer 2026',
-      status: 'published',
-      updatedAt: '2026-05-01T10:00:00Z',
-      visits: 12450,
-      thumbnail: null,
-    },
-    {
-      id: 'lp_2',
-      title: 'Enterprise Webinar Registration',
-      campaign: 'Q2 Webinars',
-      status: 'published',
-      updatedAt: '2026-04-15T09:15:00Z',
-      visits: 3200,
-      thumbnail: null,
-    },
-    {
-      id: 'lp_3',
-      title: 'New Feature Launch: AI Scanner',
-      campaign: 'Product Launch V7',
-      status: 'draft',
-      updatedAt: '2026-04-28T16:45:00Z',
-      visits: 0,
-      thumbnail: null,
-    },
-    {
-      id: 'lp_4',
-      title: 'Holiday Discount - 20% Off',
-      campaign: 'Winter 2025',
-      status: 'archived',
-      updatedAt: '2025-12-01T08:00:00Z',
-      visits: 45800,
-      thumbnail: null,
-    },
-  ];
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight text-ds-text">
+            Landing Pages
+          </h1>
+          <p className="text-sm text-ds-text-subtle mt-1">
+            Build and manage high-converting marketing pages
+          </p>
+        </div>
+        <Button className="gap-2 bg-ds-background-brand-bold text-ds-text-inverse hover:bg-ds-background-brand-bold/90">
+          <Plus className="h-4 w-4" /> Create Page
+        </Button>
+      </div>
 
-  return <CmsLandingPagesClient initialPages={initialPages} />;
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {MOCK_PAGES.map((page) => (
+          <div
+            key={page.id}
+            className="group relative bg-ds-surface border border-ds-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all"
+          >
+            {/* Thumbnail Placeholder */}
+            <div className="h-40 bg-ds-surface-subtle border-b border-ds-border relative overflow-hidden flex items-center justify-center">
+              <LayoutTemplate className="h-12 w-12 text-ds-icon-subtle opacity-20" />
+              <div className="absolute top-3 right-3 flex gap-2">
+                {page.status === 'PUBLISHED' && (
+                  <span className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-ds-background-success-subtle text-ds-text-success border border-ds-border-success">
+                    <CheckCircle2 className="h-3 w-3" /> Published
+                  </span>
+                )}
+                {page.status === 'DRAFT' && (
+                  <span className="inline-flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-ds-surface-neutral-hovered text-ds-text-subtle border border-ds-border-subtle">
+                    Draft
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <div className="p-4">
+              <h3 className="font-semibold text-ds-text text-lg leading-tight mb-1">
+                {page.title}
+              </h3>
+              <p className="text-sm text-ds-text-subtle mb-4">{page.slug}</p>
+
+              <div className="flex items-center justify-between mt-4">
+                <div className="flex items-center gap-3 text-xs text-ds-text-subtle">
+                  <span className="flex items-center gap-1 bg-ds-surface-subtle px-1.5 py-0.5 rounded border border-ds-border">
+                    <Globe className="h-3 w-3" /> {page.locale.toUpperCase()}
+                  </span>
+                  <span>{page.aiContent} AI Sections</span>
+                </div>
+                <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Link href={`/${locale}/cms/pages/${page.id}`}>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 text-ds-text-brand"
+                    >
+                      <Edit2 className="h-4 w-4" />
+                    </Button>
+                  </Link>
+                  <Button variant="ghost" size="icon" className="h-8 w-8">
+                    <Copy className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-8 w-8 text-ds-text-danger"
+                  >
+                    <Trash className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 }

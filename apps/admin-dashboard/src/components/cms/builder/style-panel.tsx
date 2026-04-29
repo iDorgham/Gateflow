@@ -7,8 +7,10 @@ import {
   SelectValue,
   SelectContent,
   SelectItem,
+  Button,
 } from '@gateflow/ui';
 import { token } from '../blocks/types';
+import { Sparkles, X } from 'lucide-react';
 
 interface StylePanelProps {
   block: Block;
@@ -101,6 +103,63 @@ export function StylePanel({ block, onUpdateStyle }: StylePanelProps) {
           <h3 className="font-semibold text-sm uppercase tracking-wider text-ds-text-subtle">
             Layout
           </h3>
+          <div className="space-y-2">
+            <Label className="text-xs">Background Image</Label>
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex-1 text-xs h-8"
+              >
+                Upload
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex-1 text-xs h-8 text-ds-text-brand border-ds-border-brand/30 hover:bg-ds-background-brand-subtle"
+                onClick={async () => {
+                  const prompt = window.prompt(
+                    'Describe the background image you want to generate:'
+                  );
+                  if (prompt) {
+                    try {
+                      const res = await fetch('/api/cms/generate-image', {
+                        method: 'POST',
+                        body: JSON.stringify({ prompt }),
+                      });
+                      const data = await res.json();
+                      if (data.imageUrl) {
+                        onUpdateStyle(
+                          'backgroundImage',
+                          `url(${data.imageUrl})`
+                        );
+                      }
+                    } catch (e) {
+                      console.error(e);
+                    }
+                  }
+                }}
+              >
+                <Sparkles className="h-3 w-3 mr-1" /> AI Generate
+              </Button>
+            </div>
+            {styles.backgroundImage && (
+              <div className="mt-2 relative h-20 rounded-md overflow-hidden border border-ds-border">
+                <div
+                  className="absolute inset-0 bg-cover bg-center"
+                  style={{ backgroundImage: styles.backgroundImage }}
+                />
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  className="absolute top-1 right-1 h-6 w-6 p-0 rounded-full"
+                  onClick={() => onUpdateStyle('backgroundImage', '')}
+                >
+                  <X className="h-3 w-3" />
+                </Button>
+              </div>
+            )}
+          </div>
           <div className="space-y-2">
             <Label className="text-xs">Text Align</Label>
             <Select

@@ -27,15 +27,33 @@ import {
   Edit,
   Eye,
   Trash2,
-  Sparkles,
   BookOpen,
 } from 'lucide-react';
 import { format } from 'date-fns';
+import { AITopicSuggester, TopicSuggestion } from './blog/ai-topic-suggester';
+import { useRouter } from 'next/navigation';
 
-export function CmsBlogClient({ initialPosts }: { initialPosts: any[] }) {
+export function CmsBlogClient({
+  initialPosts,
+}: {
+  initialPosts: {
+    id: string;
+    title: string;
+    status: string;
+    author: string;
+    publishedAt: string | null;
+    views: number;
+  }[];
+}) {
+  const router = useRouter();
   const { t } = useTranslation();
   const [posts, setPosts] = useState(initialPosts);
   const [search, setSearch] = useState('');
+
+  const handleTopicSelect = (topic: TopicSuggestion) => {
+    // Navigate to editor with topic pre-selected
+    router.push(`/en/cms/blog/new?topic=${encodeURIComponent(topic.title)}`);
+  };
 
   const filteredPosts = posts.filter((p) =>
     p.title.toLowerCase().includes(search.toLowerCase())
@@ -56,14 +74,11 @@ export function CmsBlogClient({ initialPosts }: { initialPosts: any[] }) {
           </p>
         </div>
         <div className="flex items-center gap-3">
+          <AITopicSuggester onSelect={handleTopicSelect} />
           <Button
-            variant="outline"
-            className="gap-2 text-ds-text-brand border-ds-border hover:bg-ds-background-brand-subtle"
+            onClick={() => router.push('/en/cms/blog/new')}
+            className="gap-2 bg-ds-background-brand-bold text-ds-text-inverse hover:bg-ds-background-brand-bold/90"
           >
-            <Sparkles className="h-4 w-4" />
-            {t('cms:blog.ai_suggest', 'AI Topic Suggestion')}
-          </Button>
-          <Button className="gap-2 bg-ds-background-brand-bold text-ds-text-inverse hover:bg-ds-background-brand-bold/90">
             <Plus className="h-4 w-4" />
             {t('cms:blog.create', 'Write Post')}
           </Button>
@@ -114,7 +129,14 @@ export function CmsBlogClient({ initialPosts }: { initialPosts: any[] }) {
               ) : (
                 filteredPosts.map((post) => (
                   <TableRow key={post.id} className="border-ds-border group">
-                    <TableCell className="font-medium">{post.title}</TableCell>
+                    <TableCell className="font-medium">
+                      <button
+                        onClick={() => router.push(`/en/cms/blog/${post.id}`)}
+                        className="hover:text-ds-text-brand hover:underline transition-colors text-left"
+                      >
+                        {post.title}
+                      </button>
+                    </TableCell>
                     <TableCell>
                       {post.status === 'published' ? (
                         <Badge
@@ -122,6 +144,13 @@ export function CmsBlogClient({ initialPosts }: { initialPosts: any[] }) {
                           className="bg-ds-background-success text-ds-text-success font-bold px-2.5 py-0.5 rounded-md"
                         >
                           Published
+                        </Badge>
+                      ) : post.status === 'scheduled' ? (
+                        <Badge
+                          variant="outline"
+                          className="bg-ds-background-brand-subtle text-ds-text-brand border-ds-border-brand/30 font-bold px-2.5 py-0.5 rounded-md"
+                        >
+                          Scheduled
                         </Badge>
                       ) : (
                         <Badge
@@ -158,7 +187,12 @@ export function CmsBlogClient({ initialPosts }: { initialPosts: any[] }) {
                           align="end"
                           className="w-[160px] border-ds-border shadow-md"
                         >
-                          <DropdownMenuItem className="gap-2 cursor-pointer">
+                          <DropdownMenuItem
+                            onClick={() =>
+                              router.push(`/en/cms/blog/${post.id}`)
+                            }
+                            className="gap-2 cursor-pointer"
+                          >
                             <Edit className="h-4 w-4 text-ds-icon-subtle" />{' '}
                             Edit
                           </DropdownMenuItem>

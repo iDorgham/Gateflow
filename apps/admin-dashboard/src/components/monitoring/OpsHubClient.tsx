@@ -4,9 +4,6 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
   Badge,
   cn,
   DynamicTable,
@@ -41,9 +38,9 @@ interface EmulationLog {
   status: string;
   organizationId: string;
   createdAt: string;
-  result: any;
-  metadata: any;
-  intentJson: any;
+  result: Record<string, any> | null;
+  metadata: Record<string, any> | null;
+  intentJson: Record<string, any> | null;
 }
 
 function EmulationDetailDrawer({

@@ -12,11 +12,6 @@ import {
   Activity,
   ArrowUpRight,
   Cpu,
-  Layers,
-  FileText,
-  MousePointer2,
-  Calendar,
-  Rocket,
 } from 'lucide-react';
 import {
   Button,
@@ -27,8 +22,6 @@ import {
   Badge,
   Progress,
   cn,
-  ScrollArea,
-  Separator,
 } from '@gateflow/ui';
 import {
   BarChart,
@@ -40,11 +33,6 @@ import {
   ResponsiveContainer,
   AreaChart,
   Area,
-  PieChart,
-  Pie,
-  Cell,
-  LineChart,
-  Line,
 } from 'recharts';
 import { toast } from 'sonner';
 

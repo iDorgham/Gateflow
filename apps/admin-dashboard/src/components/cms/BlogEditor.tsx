@@ -68,7 +68,7 @@ export function BlogEditor({ postId: _postId }: { postId?: string }) {
       }).then((res) => res.json()),
       {
         loading: 'Drafting multi-lingual blog content...',
-        success: (data) => {
+        success: (data: { draft: { en: any; ar: any } }) => {
           setContent({
             en: data.draft.en,
             ar: data.draft.ar,

@@ -1,11 +1,19 @@
 import { prisma } from '@gate-access/db';
 
+interface BotContext {
+  organizationId: string;
+  linkedType: string;
+  linkedId: string;
+  userId: string;
+  metadata?: Record<string, unknown>;
+}
+
 /**
  * Task Bot Reactor
  * Handles automated task creation triggered by platform events.
  * Implements HiTL (Human-in-the-Loop) as requested in Phase 3.
  */
-export async function reactToBotEvent(event: string, context: any) {
+export async function reactToBotEvent(event: string, context: BotContext) {
   try {
     // 1. Fetch matching active rules for this department/event
     const rules = await (prisma as any).taskBotRule.findMany({
@@ -22,7 +30,7 @@ export async function reactToBotEvent(event: string, context: any) {
       // 2. Apply Conditions logic (Stub - assumes basic match for now)
       // In a real app, evaluate rule.conditions against context.metadata
 
-      const actionTemplate = rule.actionTemplate as any;
+      const actionTemplate = rule.actionTemplate as Record<string, any>;
       const deptBoard = await (prisma as any).taskBoard.findFirst({
         where: {
           organizationId: context.organizationId,

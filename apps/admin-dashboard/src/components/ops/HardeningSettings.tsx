@@ -7,17 +7,14 @@ import {
   Lock,
   Zap,
   RefreshCcw,
-  Settings2,
   AlertCircle,
   Activity,
   Database,
   Key,
-  Globe,
-  Smartphone,
-  Monitor,
   Server,
   Fingerprint,
   ChevronRight as ChevronRightIcon,
+  Globe,
 } from 'lucide-react';
 import {
   Button,
@@ -42,7 +39,6 @@ import { toast } from 'sonner';
  */
 export function HardeningSettings() {
   const [rateLimit, setRateLimit] = React.useState([60]);
-  const [activeProfiles, setActiveProfiles] = React.useState(['STRICT']);
 
   const handleApplyHardening = () => {
     toast.success(

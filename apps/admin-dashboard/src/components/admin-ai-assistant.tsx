@@ -9,6 +9,7 @@ import {
   isReasoningUIPart,
   isTextUIPart,
   isToolUIPart,
+  DynamicToolUIPart,
 } from 'ai';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
@@ -164,8 +165,7 @@ function ThinkingBubble() {
   );
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function ToolInvocCard({ part }: { part: any }) {
+function ToolInvocCard({ part }: { part: DynamicToolUIPart }) {
   const toolName = getToolName(part);
   const state = part.state;
   const isComplete =
@@ -202,10 +202,15 @@ function ToolInvocCard({ part }: { part: any }) {
         {isComplete && <Check className="h-3 w-3 text-ds-text-accent-green" />}
       </div>
 
-      {isDataUIPart(part) && (part as any).data && (
+      {isDataUIPart(part) && 'data' in part && (
         <div className="mt-2 text-[10px] bg-ds-surface-sunken/40 rounded-md p-2 font-mono overflow-x-auto border border-ds-border/20 text-ds-text-subtle max-h-32">
-          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-          <pre>{JSON.stringify((part as any).data, null, 2)}</pre>
+          <pre>
+            {JSON.stringify(
+              (part as unknown as { data: unknown }).data,
+              null,
+              2
+            )}
+          </pre>
         </div>
       )}
     </div>
@@ -445,10 +450,14 @@ export function AdminAIAssistant({ locale: _locale }: AdminAIAssistantProps) {
                           textContent && 'pt-3 border-t border-ds-border/40'
                         )}
                       >
-                        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                        {otherParts.map((part: any, i) => {
+                        {otherParts.map((part, i) => {
                           if (isToolUIPart(part))
-                            return <ToolInvocCard key={i} part={part} />;
+                            return (
+                              <ToolInvocCard
+                                key={i}
+                                part={part as DynamicToolUIPart}
+                              />
+                            );
                           if (isReasoningUIPart(part))
                             return (
                               <details

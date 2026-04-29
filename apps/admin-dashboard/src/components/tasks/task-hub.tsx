@@ -19,6 +19,10 @@ import {
   XCircle,
   Link2,
 } from 'lucide-react';
+import { TaskBotsPanel } from './task-bots-panel';
+import { BlogWriterBot } from './bots/blog-writer-bot';
+import { LandingPageBot } from './bots/landing-page-bot';
+import { ReviewDialog } from './bots/review-dialog';
 import {
   Button,
   Input,
@@ -36,7 +40,6 @@ import {
   SheetTitle,
   Skeleton,
 } from '@gateflow/ui';
-import { useTranslation } from 'react-i18next';
 import { useOrganization } from '@/providers/organization-provider';
 import { toast } from 'sonner';
 
@@ -65,6 +68,9 @@ export function TaskHub() {
   const [draftPrompt, setDraftPrompt] = React.useState('');
   const [isDrafting, setIsDrafting] = React.useState(false);
   const [selectedTask, setSelectedTask] = React.useState<Task | null>(null);
+  const [activeBotId, setActiveBotId] = React.useState<string | null>(null);
+  const [isReviewOpen, setIsReviewOpen] = React.useState(false);
+  const [reviewData, setReviewData] = React.useState<any>(null);
 
   React.useEffect(() => {
     async function fetchTasks() {
@@ -228,139 +234,194 @@ export function TaskHub() {
         </div>
       </div>
 
-      {/* Kanban Board */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 overflow-x-auto pb-4 custom-scrollbar min-h-[600px]">
-        {columns.map((col) => (
-          <div key={col.id} className="flex flex-col gap-4 min-w-[280px]">
-            <div className="flex items-center justify-between px-2">
-              <h4
-                className={cn(
-                  'text-[10px] font-black uppercase tracking-[0.25em] flex items-center gap-2',
-                  col.color
-                )}
-              >
-                <span className="h-1.5 w-1.5 rounded-full bg-current" />
-                {col.label} ({tasks.filter((t) => t.status === col.id).length})
-              </h4>
+      <div className="flex flex-col lg:flex-row gap-6">
+        <div className="flex-1 space-y-6">
+          {activeBotId === 'blog-writer' ? (
+            <Card className="border-ds-border bg-card/40 backdrop-blur-md p-6 relative overflow-hidden">
               <Button
                 variant="ghost"
-                size="icon"
-                className="h-7 w-7 text-ds-text-subtler"
+                size="sm"
+                className="absolute right-4 top-4 text-[10px] font-black uppercase tracking-widest text-ds-text-subtler"
+                onClick={() => setActiveBotId(null)}
               >
-                <MoreHorizontal className="h-4 w-4" />
+                Close Bot
               </Button>
-            </div>
+              <BlogWriterBot />
+            </Card>
+          ) : activeBotId === 'lp-generator' ? (
+            <Card className="border-ds-border bg-card/40 backdrop-blur-md p-6 relative overflow-hidden">
+              <Button
+                variant="ghost"
+                size="sm"
+                className="absolute right-4 top-4 text-[10px] font-black uppercase tracking-widest text-ds-text-subtler"
+                onClick={() => setActiveBotId(null)}
+              >
+                Close Bot
+              </Button>
+              <LandingPageBot />
+            </Card>
+          ) : null}
 
-            <div className="flex flex-col gap-3 h-full rounded-2xl bg-muted/20 p-2 border border-border/30">
-              {isLoading ? (
-                Array(2)
-                  .fill(0)
-                  .map((_, i) => (
-                    <Skeleton key={i} className="h-32 w-full rounded-xl" />
-                  ))
-              ) : (
-                <AnimatePresence>
-                  {tasks
-                    .filter((t) => t.status === col.id)
-                    .map((task) => (
-                      <motion.div
-                        key={task.id}
-                        layout
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.95 }}
-                        whileHover={{ y: -2 }}
-                        transition={{
-                          type: 'spring',
-                          stiffness: 300,
-                          damping: 30,
-                        }}
-                        onClick={() => setSelectedTask(task)}
-                      >
-                        <Card className="border-border/50 bg-card/60 backdrop-blur-sm cursor-pointer hover:border-primary/40 transition-colors shadow-sm group">
-                          <CardContent className="p-4 space-y-3">
-                            <div className="flex justify-between items-start gap-2">
-                              <div className="flex flex-col gap-1 min-w-0">
-                                <h5 className="text-[13px] font-black leading-tight text-ds-text truncate group-hover:text-primary transition-colors uppercase tracking-tight">
-                                  {task.title}
-                                </h5>
-                                <div className="flex items-center gap-2">
-                                  <Badge
-                                    variant="outline"
-                                    className={cn(
-                                      'text-[8px] font-black uppercase tracking-widest h-4 ring-0 border-0 bg-muted/50',
-                                      task.priority === 'URGENT'
-                                        ? 'text-rose-500 bg-rose-500/10'
-                                        : task.priority === 'HIGH'
-                                          ? 'text-amber-500 bg-amber-500/10'
-                                          : 'text-ds-text-subtler'
-                                    )}
-                                  >
-                                    {task.priority}
-                                  </Badge>
-                                  {task.linkedType && (
-                                    <Badge className="bg-primary/5 text-primary border-primary/20 text-[8px] font-black h-4 gap-1">
-                                      <Link2 className="h-2 w-2" />
-                                      {task.linkedType}
-                                    </Badge>
-                                  )}
+          {/* Kanban Board */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 overflow-x-auto pb-4 custom-scrollbar min-h-[600px]">
+            {columns.map((col) => (
+              <div key={col.id} className="flex flex-col gap-4 min-w-[280px]">
+                <div className="flex items-center justify-between px-2">
+                  <h4
+                    className={cn(
+                      'text-[10px] font-black uppercase tracking-[0.25em] flex items-center gap-2',
+                      col.color
+                    )}
+                  >
+                    <span className="h-1.5 w-1.5 rounded-full bg-current" />
+                    {col.label} (
+                    {tasks.filter((t) => t.status === col.id).length})
+                  </h4>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-7 w-7 text-ds-text-subtler"
+                  >
+                    <MoreHorizontal className="h-4 w-4" />
+                  </Button>
+                </div>
+
+                <div className="flex flex-col gap-3 h-full rounded-2xl bg-muted/20 p-2 border border-border/30">
+                  {isLoading ? (
+                    Array(2)
+                      .fill(0)
+                      .map((_, i) => (
+                        <Skeleton key={i} className="h-32 w-full rounded-xl" />
+                      ))
+                  ) : (
+                    <AnimatePresence>
+                      {tasks
+                        .filter((t) => t.status === col.id)
+                        .map((task) => (
+                          <motion.div
+                            key={task.id}
+                            layout
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95 }}
+                            whileHover={{ y: -2 }}
+                            transition={{
+                              type: 'spring',
+                              stiffness: 300,
+                              damping: 30,
+                            }}
+                            onClick={() => {
+                              if (
+                                task.linkedType === 'BLOG_POST' ||
+                                task.linkedType === 'LANDING_PAGE'
+                              ) {
+                                setReviewData({
+                                  title: task.title,
+                                  type: task.linkedType,
+                                  content: [], // Would fetch this based on linkedId
+                                });
+                                setIsReviewOpen(true);
+                              } else {
+                                setSelectedTask(task);
+                              }
+                            }}
+                          >
+                            <Card className="border-border/50 bg-card/60 backdrop-blur-sm cursor-pointer hover:border-primary/40 transition-colors shadow-sm group">
+                              <CardContent className="p-4 space-y-3">
+                                <div className="flex justify-between items-start gap-2">
+                                  <div className="flex flex-col gap-1 min-w-0">
+                                    <h5 className="text-[13px] font-black leading-tight text-ds-text truncate group-hover:text-primary transition-colors uppercase tracking-tight">
+                                      {task.title}
+                                    </h5>
+                                    <div className="flex items-center gap-2">
+                                      <Badge
+                                        variant="outline"
+                                        className={cn(
+                                          'text-[8px] font-black uppercase tracking-widest h-4 ring-0 border-0 bg-muted/50',
+                                          task.priority === 'URGENT'
+                                            ? 'text-rose-500 bg-rose-500/10'
+                                            : task.priority === 'HIGH'
+                                              ? 'text-amber-500 bg-amber-500/10'
+                                              : 'text-ds-text-subtler'
+                                        )}
+                                      >
+                                        {task.priority}
+                                      </Badge>
+                                      {task.linkedType && (
+                                        <Badge className="bg-primary/5 text-primary border-primary/20 text-[8px] font-black h-4 gap-1">
+                                          <Link2 className="h-2 w-2" />
+                                          {task.linkedType}
+                                        </Badge>
+                                      )}
+                                    </div>
+                                  </div>
+                                  <Avatar className="h-6 w-6 border-none ring-1 ring-border shadow-sm">
+                                    <User className="h-3 w-3" />
+                                  </Avatar>
                                 </div>
-                              </div>
-                              <Avatar className="h-6 w-6 border-none ring-1 ring-border shadow-sm">
-                                <User className="h-3 w-3" />
-                              </Avatar>
-                            </div>
 
-                            <p className="text-[11px] text-ds-text-subtle font-bold line-clamp-2 leading-relaxed italic opacity-80">
-                              {task.description || 'No description provided.'}
-                            </p>
+                                <p className="text-[11px] text-ds-text-subtle font-bold line-clamp-2 leading-relaxed italic opacity-80">
+                                  {task.description ||
+                                    'No description provided.'}
+                                </p>
 
-                            <div className="flex items-center justify-between pt-2 border-t border-border/30">
-                              <div className="flex items-center gap-1.5 text-[10px] font-black text-ds-text-subtler uppercase tracking-tight">
-                                <Clock className="h-3 w-3" />
-                                {task.dueDate
-                                  ? new Date(task.dueDate).toLocaleDateString()
-                                  : 'No Due Date'}
-                              </div>
-                              <Button
-                                variant="ghost"
-                                size="icon"
-                                className="h-6 w-6 text-ds-text-brand hover:bg-ds-background-brand-subtle rounded-full"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  const nextCol =
-                                    columns[
-                                      (columns.findIndex(
-                                        (c) => c.id === task.status
-                                      ) +
-                                        1) %
-                                        columns.length
-                                    ];
-                                  updateTaskStatus(task.id, nextCol.id);
-                                }}
-                              >
-                                <ArrowRight className="h-3 w-3" />
-                              </Button>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      </motion.div>
-                    ))}
-                </AnimatePresence>
-              )}
+                                <div className="flex items-center justify-between pt-2 border-t border-border/30">
+                                  <div className="flex items-center gap-1.5 text-[10px] font-black text-ds-text-subtler uppercase tracking-tight">
+                                    <Clock className="h-3 w-3" />
+                                    {task.dueDate
+                                      ? new Date(
+                                          task.dueDate
+                                        ).toLocaleDateString()
+                                      : 'No Due Date'}
+                                  </div>
+                                  <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="h-6 w-6 text-ds-text-brand hover:bg-ds-background-brand-subtle rounded-full"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      const nextCol =
+                                        columns[
+                                          (columns.findIndex(
+                                            (c) => c.id === task.status
+                                          ) +
+                                            1) %
+                                            columns.length
+                                        ];
+                                      updateTaskStatus(task.id, nextCol.id);
+                                    }}
+                                  >
+                                    <ArrowRight className="h-3 w-3" />
+                                  </Button>
+                                </div>
+                              </CardContent>
+                            </Card>
+                          </motion.div>
+                        ))}
+                    </AnimatePresence>
+                  )}
 
-              {!isLoading &&
-                tasks.filter((t) => t.status === col.id).length === 0 && (
-                  <div className="flex-1 flex flex-col items-center justify-center p-8 opacity-20 filter grayscale">
-                    <Columns3 className="h-8 w-8 mb-2" />
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em]">
-                      Empty
-                    </span>
-                  </div>
-                )}
-            </div>
+                  {!isLoading &&
+                    tasks.filter((t) => t.status === col.id).length === 0 && (
+                      <div className="flex-1 flex flex-col items-center justify-center p-8 opacity-20 filter grayscale">
+                        <Columns3 className="h-8 w-8 mb-2" />
+                        <span className="text-[10px] font-black uppercase tracking-[0.2em]">
+                          Empty
+                        </span>
+                      </div>
+                    )}
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
+
+        <div className="w-full lg:w-80 shrink-0">
+          <TaskBotsPanel
+            activeBotId={activeBotId || undefined}
+            onSelectBot={(id) => setActiveBotId(activeBotId === id ? null : id)}
+          />
+        </div>
       </div>
 
       {/* Task Details & Linked Entity Sheet */}
@@ -481,6 +542,22 @@ export function TaskHub() {
           )}
         </SheetContent>
       </Sheet>
+
+      <ReviewDialog
+        isOpen={isReviewOpen}
+        onClose={() => setIsReviewOpen(false)}
+        title={reviewData?.title || ''}
+        content={reviewData?.content || []}
+        type={reviewData?.type || 'BLOG_POST'}
+        onApprove={async (_feedback) => {
+          toast.success('Content approved and published!');
+          setIsReviewOpen(false);
+        }}
+        onReject={async (_feedback) => {
+          toast.error('Draft rejected and archived.');
+          setIsReviewOpen(false);
+        }}
+      />
     </div>
   );
 }

@@ -62,7 +62,25 @@ interface UsersClientProps {
       role: string;
       status: string;
     };
-    addUser: any;
+    addUser: {
+      title: string;
+      subtitle: string;
+      description: string;
+      nameLabel: string;
+      namePlaceholder: string;
+      emailLabel: string;
+      emailPlaceholder: string;
+      accessControl: string;
+      assignRole: string;
+      orgLabel: string;
+      orgPlaceholder: string;
+      passwordNotice: string;
+      submitLabel: string;
+      cancelLabel: string;
+      success: string;
+      error: string;
+      requiredFields: string;
+    };
   };
 }
 

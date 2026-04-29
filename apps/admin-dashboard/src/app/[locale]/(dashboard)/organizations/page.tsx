@@ -78,9 +78,7 @@ export default async function OrganizationsPage(props: {
     where: { scannedAt: { gte: thirtyDaysAgo } },
     _count: true,
   });
-  const gateIds = scansByGate.map(
-    (s: { gateId: string; _count: number }) => s.gateId
-  );
+  const gateIds = scansByGate.map((s: { gateId: string }) => s.gateId);
   // skip-organization-check (Global Admin Fetch)
   const gates = await prisma.gate.findMany({
     where: { id: { in: gateIds } },
@@ -103,8 +101,8 @@ export default async function OrganizationsPage(props: {
     (o: {
       id: string;
       name: string;
-      email: string | null;
-      plan: string | null;
+      email: string;
+      plan: string;
       deletedAt: Date | null;
       createdAt: Date;
       _count: { users: number; qrCodes: number; gates: number };
@@ -150,7 +148,7 @@ export default async function OrganizationsPage(props: {
         },
         addOrganization: t('addOrganization', {
           returnObjects: true,
-        }) as unknown as any,
+        }) as any, // Cast to any for the nested object from i18n
       }}
     />
   );

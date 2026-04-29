@@ -35,7 +35,15 @@ import { format } from 'date-fns';
 export function CmsLandingPagesClient({
   initialPages,
 }: {
-  initialPages: any[];
+  initialPages: {
+    id: string;
+    title: string;
+    campaign: string;
+    status: string;
+    thumbnail?: string;
+    updatedAt: string;
+    visits: number;
+  }[];
 }) {
   const { t } = useTranslation();
   const [pages, setPages] = useState(initialPages);

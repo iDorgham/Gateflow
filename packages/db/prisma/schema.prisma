@@ -249,6 +249,7 @@ model Task {
   assignee     User?        @relation("AssignedTasks", fields: [assigneeId], references: [id])
   creator      User         @relation("CreatedTasks", fields: [createdById], references: [id])
   notifications Notification[]
+  botRuns       TaskBotRun[]
 
   @@index([organizationId])
   @@index([boardId])
@@ -1349,6 +1350,8 @@ model TaskBotRule {
   triggerEvent   String       // e.g. 'LEAD_SCORE_ABOVE_80', 'DEAL_STAGE_CHANGED'
   conditions     Json         // { field: 'score', operator: 'gt', value: 80 }
   actionTemplate Json         // { title: 'Follow up', department: 'SALES', priority: 'HIGH' }
+  botId          String?
+  bot            TaskBot?     @relation(fields: [botId], references: [id])
   createdById    String
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
@@ -1474,36 +1477,43 @@ enum SectionType {
   LEAD_FORM
 }
 model BlogPost {
-  id               String   @id @default(cuid())
-  status           BlogPostStatus @default(DRAFT)
+  id                  String      @id @default(cuid())
+  titleEn             String
+  titleAr             String
+  slugEn              String      @unique
+  slugAr              String      @unique
+  excerptEn           String?     @db.Text
+  excerptAr           String?     @db.Text
+  contentJson         Json?       // Block-based content (Hero, Text, etc.)
+  contentEn           String?     @db.Text // Legacy/Fulltext support
+  contentAr           String?     @db.Text // Legacy/Fulltext support
   
-  titleEn          String
-  titleAr          String
-  slugEn           String   @unique
-  slugAr           String   @unique
+  coverImageUrl       String?
+  metaTitleEn         String?
+  metaTitleAr         String?
+  metaDescEn          String?
+  metaDescAr          String?
   
-  contentEn        String   @db.Text
-  contentAr        String   @db.Text
-  excerptEn        String?  @db.Text
-  excerptAr        String?  @db.Text
+  organizationId      String?
+  authorId            String
+  categoryId          String?
   
-  metaTitleEn      String?
-  metaTitleAr      String?
-  metaDescEn       String?
-  metaDescAr       String?
-  canonicalUrl     String?
+  status              BlogPostStatus @default(DRAFT)
+  publishedAt         DateTime?
+  scheduledAt         DateTime?
   
-  featuredImageId  String?
-  organizationId   String?  // null = global marketing blog
-  authorId         String
+  aiTopicSuggestion   String?     // AI-generated topic title
+  aiDraftContent     Json?       // AI-generated draft blocks
+  aiGenerated        Boolean     @default(false)
   
-  publishedAt      DateTime?
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  views               Int         @default(0)
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
 
-  organization     Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  author           User          @relation(fields: [authorId], references: [id])
-  categories       BlogCategory[]
+  organization        Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  author              User          @relation(fields: [authorId], references: [id])
+  category            BlogCategory? @relation(fields: [categoryId], references: [id])
+  tags                BlogTag[]
 
   @@index([organizationId])
   @@index([slugEn])
@@ -1512,11 +1522,21 @@ model BlogPost {
 }
 
 model BlogCategory {
-  id               String   @id @default(cuid())
-  nameEn           String
-  nameAr           String
-  slug             String   @unique
-  posts            BlogPost[]
+  id          String      @id @default(cuid())
+  nameEn      String
+  nameAr      String
+  slug        String      @unique
+  description String?
+  posts       BlogPost[]
+
+  @@index([slug])
+}
+
+model BlogTag {
+  id    String     @id @default(cuid())
+  name  String
+  slug  String     @unique
+  posts BlogPost[]
 
   @@index([slug])
 }
@@ -1570,6 +1590,48 @@ model AiUsageLog {
   createdAt      DateTime @default(now())
 }
 
+model TaskBot {
+  id             String        @id @default(cuid())
+  name           String        // "Blog Writer", "Landing Page Generator"
+  description    String?
+  type           TaskBotType   // BLOG_WRITER, LANDING_PAGE_GENERATOR
+  promptTemplate String       @db.Text // Template for AI prompts
+  isActive       Boolean       @default(true)
+  organizationId String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  runs           TaskBotRun[]
+  rules          TaskBotRule[]
+}
+
+model TaskBotRun {
+  id          String      @id @default(cuid())
+  botId       String
+  taskId      String?
+  input       Json        // User input
+  output      Json?       // Generated content
+  status      BotRunStatus @default(PENDING)
+  error       String?
+  createdAt   DateTime    @default(now())
+  completedAt DateTime?
+
+  bot         TaskBot    @relation(fields: [botId], references: [id])
+  task        Task?      @relation(fields: [taskId], references: [id])
+}
+
+enum TaskBotType {
+  BLOG_WRITER
+  LANDING_PAGE_GENERATOR
+}
+
+enum BotRunStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+}
+
 enum TicketStatus {
   OPEN
   AI_TRIAGED
@@ -1589,7 +1651,7 @@ enum TicketPriority {
 enum BlogPostStatus {
   DRAFT
   IN_REVIEW
-  READY_TO_PUBLISH
+  SCHEDULED
   PUBLISHED
   ARCHIVED
 }

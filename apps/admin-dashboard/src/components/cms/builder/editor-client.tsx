@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { Button } from '@gateflow/ui';
 import { ArrowLeft, Save, Eye, Globe } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 import { Block, BlockType } from '../blocks/types';
@@ -13,6 +12,9 @@ import { BlockLibrary } from './block-library';
 import { Canvas } from './canvas';
 import { StylePanel } from './style-panel';
 import { BreakpointControls } from './breakpoint-controls';
+import { AISectionGenerator } from './ai-section-generator';
+import { PreviewModal } from './preview-modal';
+import { PublishDialog } from './publish-dialog';
 
 export function EditorClient({
   initialBlocks = [],
@@ -31,6 +33,8 @@ export function EditorClient({
     'desktop'
   );
   const [isSaving, setIsSaving] = useState(false);
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [isPublishOpen, setIsPublishOpen] = useState(false);
 
   const handleAddBlock = (type: BlockType) => {
     const config = BLOCK_REGISTRY[type];
@@ -111,16 +115,30 @@ export function EditorClient({
             <Globe className="h-3 w-3" />
             {locale === 'en' ? 'English' : 'Arabic'}
           </div>
-          <Button variant="outline" size="sm" className="gap-2">
+          <Button
+            variant="outline"
+            size="sm"
+            className="gap-2"
+            onClick={() => setIsPreviewOpen(true)}
+          >
             <Eye className="h-4 w-4" /> Preview
           </Button>
           <Button
+            variant="outline"
             size="sm"
             onClick={handleSave}
             disabled={isSaving}
+            className="gap-2"
+          >
+            <Save className="h-4 w-4" /> Save Draft
+          </Button>
+          <Button
+            size="sm"
+            onClick={() => setIsPublishOpen(true)}
+            disabled={isSaving}
             className="gap-2 bg-ds-background-brand-bold text-ds-text-inverse hover:bg-ds-background-brand-bold/90"
           >
-            <Save className="h-4 w-4" /> Save
+            Publish
           </Button>
         </div>
       </div>
@@ -128,7 +146,28 @@ export function EditorClient({
       {/* Main Workspace */}
       <div className="flex flex-1 overflow-hidden">
         {/* Left Sidebar - Block Library */}
-        <BlockLibrary onAddBlock={handleAddBlock} />
+        <div className="w-72 shrink-0 flex flex-col border-r border-ds-border bg-ds-surface h-full">
+          <div className="flex-1 overflow-y-auto">
+            <BlockLibrary onAddBlock={handleAddBlock} />
+          </div>
+          <div className="p-4 border-t border-ds-border">
+            <AISectionGenerator
+              blockType="HERO" // Defaulting to HERO for now, could be dynamic
+              onInsert={(content) => {
+                const newBlock: Block = {
+                  id: `AI_${Date.now()}`,
+                  type: 'HERO',
+                  content,
+                  styles: {},
+                  metadata: { aiGenerated: true },
+                };
+                setBlocks([...blocks, newBlock]);
+                setSelectedBlockId(newBlock.id);
+                toast.success('AI section added!');
+              }}
+            />
+          </div>
+        </div>
 
         {/* Center Canvas */}
         <div
@@ -156,6 +195,37 @@ export function EditorClient({
           />
         )}
       </div>
+
+      <PreviewModal
+        blocks={blocks}
+        isOpen={isPreviewOpen}
+        onClose={() => setIsPreviewOpen(false)}
+        locale={locale}
+      />
+
+      <PublishDialog
+        isOpen={isPublishOpen}
+        onClose={() => setIsPublishOpen(false)}
+        aiGeneratedCount={blocks.filter((b) => b.metadata?.aiGenerated).length}
+        onConfirm={async () => {
+          setIsSaving(true);
+          try {
+            const res = await fetch(`/api/cms/landing-pages/${pageId}`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ confirmed: true, blocks }),
+            });
+            if (res.ok) {
+              toast.success('Landing page published successfully!');
+              setIsPublishOpen(false);
+            } else {
+              toast.error('Failed to publish');
+            }
+          } finally {
+            setIsSaving(false);
+          }
+        }}
+      />
     </div>
   );
 }

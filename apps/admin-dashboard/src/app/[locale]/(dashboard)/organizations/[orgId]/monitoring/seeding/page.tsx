@@ -21,7 +21,7 @@ export default async function SeedingPage(props: {
         subtitle="Large-scale organizational hierarchy generation and tenant setup"
       />
 
-      <SeedingClient locale={locale} />
+      <SeedingClient />
     </div>
   );
 }
