@@ -1674,7 +1674,9 @@
       "contactLabel": "Resident",
       "contactLabelPlural": "Residents",
       "visitorLabel": "Visitor",
-      "projectLabel": "Compound"
+      "projectLabel": "Compound",
+      "unitDescription": "Manage residential and commercial units, track property quotas, and monitor occupant density.",
+      "contactDescription": "Manage compound residents, families, and authorized occupants."
     },
     "school": {
       "orgLabel": "Campus Overview",
@@ -1683,7 +1685,9 @@
       "contactLabel": "Student",
       "contactLabelPlural": "Students",
       "visitorLabel": "Parent/Driver",
-      "projectLabel": "School"
+      "projectLabel": "School",
+      "unitDescription": "Organize classrooms and learning zones; track student density and room allocation.",
+      "contactDescription": "Monitor student records, guardian links, and daily attendance status."
     },
     "club": {
       "orgLabel": "Club Overview",
@@ -1692,7 +1696,9 @@
       "contactLabel": "Member",
       "contactLabelPlural": "Members",
       "visitorLabel": "Guest",
-      "projectLabel": "Club"
+      "projectLabel": "Club",
+      "unitDescription": "Manage club facilities, courts, and activity zones.",
+      "contactDescription": "Maintain member profiles, subscription tiers, and family links."
     },
     "nightclub": {
       "orgLabel": "Venue Overview",
@@ -1701,7 +1707,9 @@
       "contactLabel": "VIP",
       "contactLabelPlural": "VIPs",
       "visitorLabel": "Guest",
-      "projectLabel": "Venue"
+      "projectLabel": "Venue",
+      "unitDescription": "Manage VIP booths, tables, and designated venue zones.",
+      "contactDescription": "Curate guest lists, VIP profiles, and entrance priority."
     },
     "event": {
       "orgLabel": "Event Overview",
@@ -1710,7 +1718,9 @@
       "contactLabel": "Attendee",
       "contactLabelPlural": "Attendees",
       "visitorLabel": "Guest",
-      "projectLabel": "Event"
+      "projectLabel": "Event",
+      "unitDescription": "Manage event sections, gate assignments, and seating zones.",
+      "contactDescription": "Track ticket holders, registration data, and check-in history."
     }
   }
 }

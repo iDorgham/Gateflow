@@ -78,6 +78,7 @@ import {
   type TableViewState,
 } from '@/lib/residents/table-views';
 import { useUserPreferences } from '@/lib/residents/use-user-preferences';
+import { useOrganizationFeatures } from '@/context/OrganizationFeaturesContext';
 
 interface Unit {
   id: string;
@@ -121,6 +122,7 @@ export default function ContactsPage() {
   const [inviteTarget, setInviteTarget] = useState<ContactRow | null>(null);
   const [isPending, startTransition] = useTransition();
   const { t } = useTranslation('dashboard');
+  const { terminology } = useOrganizationFeatures();
 
   const { preferences, updatePreferences } = useUserPreferences();
   const savedTableView = (preferences.tableViews?.contacts ??
@@ -292,7 +294,11 @@ export default function ContactsPage() {
     { id: 'phone', label: t('contacts.table.phone', 'Phone'), canHide: true },
     { id: 'email', label: t('contacts.table.email', 'Email'), canHide: true },
     { id: 'tags', label: t('contacts.table.tags', 'Tags'), canHide: true },
-    { id: 'units', label: t('contacts.table.units', 'Units'), canHide: true },
+    {
+      id: 'units',
+      label: t(terminology.unitLabelPlural, 'Units'),
+      canHide: true,
+    },
     {
       id: 'invitation',
       label: t('crm.invitations.status', 'Invite'),
@@ -942,14 +948,21 @@ export default function ContactsPage() {
   return (
     <div className="pb-20 animate-in fade-in duration-500">
       <PageHeader
-        title={t('contacts.title', { defaultValue: 'Residents' })}
-        subtitle={t('contacts.description', {
-          defaultValue:
-            'Manage residents, occupants, and visitors for your organisation.',
+        title={t(terminology.contactLabelPlural, {
+          defaultValue: 'Contacts & Residents',
         })}
+        subtitle={t(
+          `orgType.${terminology.orgLabel.split('.')[1]}.contactDescription`,
+          {
+            defaultValue: t(
+              'contacts.description',
+              'Manage residents, occupants, and visitors for your organisation.'
+            ),
+          }
+        )}
         badge={
           <div className="bg-[var(--ds-background-selected)] text-[var(--ds-text-selected)] font-bold h-6 px-3 rounded-full flex items-center text-xs">
-            {total.toLocaleString()} {t('residents.total', 'Contacts')}
+            {total.toLocaleString()} {t(terminology.contactLabelPlural)}
           </div>
         }
         actions={[

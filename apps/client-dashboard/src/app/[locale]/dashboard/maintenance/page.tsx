@@ -4,7 +4,12 @@ import { redirect } from 'next/navigation';
 import { getTranslation, Locale } from '@/lib/i18n';
 import { PageHeader } from '@gate-access/ui';
 import { MaintenanceClient } from './maintenance-client';
-import { WorkOrderWithRelations, BUILT_IN_ROLES } from '@gate-access/types';
+import {
+  WorkOrderWithRelations,
+  BUILT_IN_ROLES,
+  OrganizationType,
+  getOrganizationFeatures,
+} from '@gate-access/types';
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: Locale }>;
@@ -43,6 +48,11 @@ export default async function MaintenancePage(props: {
 
   const isResident = claims.roleName === 'RESIDENT';
 
+  const features = getOrganizationFeatures(
+    (claims.orgType as OrganizationType) || OrganizationType.REAL_ESTATE
+  );
+  const { terminology } = features;
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -56,12 +66,20 @@ export default async function MaintenancePage(props: {
         subtitle={
           isResident
             ? t('maintenance.resident_description', {
-                defaultValue:
-                  'Report and track maintenance issues for your unit and property.',
+                defaultValue: t(
+                  `orgType.${terminology.orgLabel.split('.')[1]}.maintenanceDescriptionResident`,
+                  {
+                    defaultValue: `Report and track maintenance issues for your ${t(terminology.unitLabel).toLowerCase()} and property.`,
+                  }
+                ),
               })
             : t('maintenance.description', {
-                defaultValue:
-                  'Manage and track facility maintenance requests across gates, units, and projects.',
+                defaultValue: t(
+                  `orgType.${terminology.orgLabel.split('.')[1]}.maintenanceDescription`,
+                  {
+                    defaultValue: `Manage and track facility maintenance requests across gates, ${t(terminology.unitLabelPlural).toLowerCase()}, and ${t(terminology.projectLabel).toLowerCase()}.`,
+                  }
+                ),
               })
         }
       />

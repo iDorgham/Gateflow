@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Org Types]** complete phase 4 - config-driven dashboard home
+
 - **[Client-Dashboard]** resolve type error with LanguageSwitcher variant prop
 
 - **[Dashboards]** fix audit logs runtime error, sync theme/locale across all apps, and fix RTL/sidebar layout

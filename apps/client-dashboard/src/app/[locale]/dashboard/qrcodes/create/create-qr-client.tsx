@@ -72,23 +72,33 @@ function defaultExpiry() {
   return d.toISOString().slice(0, 16);
 }
 
+import { useOrganizationFeatures } from '@/context/OrganizationFeaturesContext';
+import { useTranslation } from 'react-i18next';
+
 // ─── StepIndicator ────────────────────────────────────────────────────────────
 
-const STEPS = [
-  { label: 'Access Type' },
-  { label: 'Gate & Schedule' },
-  { label: 'Guest Details' },
-  { label: 'Review & Generate' },
-];
-
 function StepIndicator({ current }: { current: number }) {
+  const { terminology } = useOrganizationFeatures();
+  const { t } = useTranslation('dashboard');
+
+  const steps = [
+    { label: t('qr.wizard.stepAccess', 'Access Type') },
+    { label: t('qr.wizard.stepSchedule', 'Gate & Schedule') },
+    {
+      label: t('qr.wizard.stepDetails', {
+        defaultValue: t(terminology.contactLabel) + ' Details',
+      }),
+    },
+    { label: t('qr.wizard.stepReview', 'Review & Generate') },
+  ];
+
   return (
     <div
       className="flex items-center w-full mb-8"
       role="list"
       aria-label="Wizard steps"
     >
-      {STEPS.map((step, idx) => {
+      {steps.map((step, idx) => {
         const n = idx + 1;
         const isCompleted = n < current;
         const isActive = n === current;
@@ -129,7 +139,7 @@ function StepIndicator({ current }: { current: number }) {
                 {step.label}
               </span>
             </div>
-            {idx < STEPS.length - 1 && (
+            {idx < steps.length - 1 && (
               <div
                 className={cn(
                   'flex-1 h-0.5 mx-2 mt-[-1rem] sm:mt-[-1.4rem] transition-colors duration-300',
@@ -457,6 +467,8 @@ function Step3({
   onBack: () => void;
   onNext: () => void;
 }) {
+  const { terminology } = useOrganizationFeatures();
+  const { t } = useTranslation('dashboard');
   const [search, setSearch] = useState('');
 
   const filtered = contacts.filter((c) => {
@@ -487,10 +499,20 @@ function Step3({
     <div className="space-y-6">
       <div>
         <h2 className="text-lg font-black uppercase tracking-tight">
-          Guest Details
+          {t('qr.wizard.guestDetails', {
+            defaultValue: t(terminology.contactLabel) + ' Details',
+          })}
         </h2>
         <p className="text-sm text-muted-foreground mt-1">
-          Optionally link this code to a guest. You can skip this step.
+          {t(
+            `orgType.${terminology.orgLabel.split('.')[1]}.contactDescriptionShort`,
+            {
+              defaultValue: t(
+                'qr.wizard.guestDetailsSub',
+                `Optionally link this code to a ${t(terminology.contactLabel).toLowerCase()}. You can skip this step.`
+              ),
+            }
+          )}
         </p>
       </div>
 
@@ -508,7 +530,9 @@ function Step3({
           )}
         >
           <User className="h-3.5 w-3.5" aria-hidden="true" />
-          From Contact
+          {t('qr.wizard.fromContact', {
+            defaultValue: 'From ' + t(terminology.contactLabel),
+          })}
         </button>
         <button
           type="button"
@@ -636,7 +660,7 @@ function Step3({
               htmlFor="guest-name"
               className="text-[11px] font-black uppercase tracking-widest text-muted-foreground"
             >
-              Guest Name
+              {t(terminology.contactLabel)} Name
             </Label>
             <Input
               id="guest-name"

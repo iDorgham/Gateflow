@@ -15,7 +15,7 @@
 | **2** | Organization context & feature config | [X]    | **FRONTEND** / **ARCHITECTURE**                        | Canonical `ORGANIZATION_FEATURES` module + `useOrganizationFeatures()` + provider wired from loaded org      |
 | **3** | Dynamic sidebar & layout              | [X]    | **FRONTEND**                                           | Sidebar/nav groups driven entirely by config for all five types                                              |
 | **4** | Dashboard home adaptation             | [X]    | **FRONTEND**                                           | Type-specific KPIs, chart priority, widgets, empty states (REAL_ESTATE first-class)                          |
-| **5** | Contextual modules                    | [ ]    | **FRONTEND**                                           | Units/Students/Members/VIPs labeling & visibility; QR flows; Contacts/Guests; maintenance (REAL_ESTATE)      |
+| **5** | Contextual modules                    | [X]    | **FRONTEND**                                           | Units/Students/Members/VIPs labeling & visibility; QR flows; Contacts/Guests; maintenance (REAL_ESTATE)      |
 | **6** | Settings page integration             | [ ]    | **FRONTEND**                                           | Advanced Settings (v6) tabs/sections contextual per type                                                     |
 | **7** | Arabic i18n & RTL                     | [ ]    | **FRONTEND** + **i18n**                                | All new copy in `en` + `ar-EG`, RTL verified per type                                                        |
 
@@ -30,12 +30,13 @@ Deliver a **single client-dashboard codebase** where **`Organization.type`** sel
 ---
 
 ## Phase 1: Backend Foundation [X] — DONE
+
 **Goal**: Enforce `OrganizationType` and propagate throughout auth/db.
 
-- [X] **Schema verification**: `Organization` has `type` field (OrganizationType enum).
-- [X] **Auth Integration**: Update `requireAuth` and `DashboardSession` to include `type`.
-- [X] **Propagation**: Update `DashboardWrapper` and `DashboardLayoutProps`.
-- [X] **Seeds**: Update `legacy-dev-seed.ts` with multi-tenant vertical test data.
+- [x] **Schema verification**: `Organization` has `type` field (OrganizationType enum).
+- [x] **Auth Integration**: Update `requireAuth` and `DashboardSession` to include `type`.
+- [x] **Propagation**: Update `DashboardWrapper` and `DashboardLayoutProps`.
+- [x] **Seeds**: Update `legacy-dev-seed.ts` with multi-tenant vertical test data.
 
 ---
 
