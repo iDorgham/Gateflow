@@ -47,7 +47,7 @@ export default function AIElementsPage() {
     <div className="flex flex-col gap-16 max-w-7xl mx-auto py-12 px-6">
       <PageHeader
         title="AI Pattern Architecture"
-        subtitle="Defining the manifestation of artificial intelligence within GateFlow. Emphasis on premium Orchid flows and cognitive assembly."
+        subtitle="Defining the manifestation of artificial intelligence within GateFlow. Emphasis on premium Orchid flows and cognitive agency."
         packageName="@gateflow/ai"
         breadcrumbs={[
           { label: 'Patterns', href: '/patterns' },
@@ -109,37 +109,58 @@ export default function AIElementsPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Tool Card Sample */}
-          <div className="flex flex-col gap-4">
-            <h4 className="text-xs font-black uppercase tracking-[0.2em] text-[var(--gf-color-ai-accent)]">
-              1. Tool Invocation
-            </h4>
-            <div className="p-6 rounded-2xl bg-[var(--ds-surface-sunken)] border border-[var(--ds-border-bold)] font-mono text-[11px] leading-relaxed overflow-x-auto">
+        <div className="grid grid-cols-1 gap-8">
+          {/* Message Assembly */}
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-2">
+              <h4 className="text-xs font-black uppercase tracking-[0.2em] text-[var(--gf-color-ai-accent)]">
+                1. Cognitive Message Flow
+              </h4>
+              <p className="text-xs font-bold text-[var(--ds-text-subtle)] opacity-60">
+                AI messages use specific glassmorphism tokens and rhythmic entry
+                animations. Always use MessageAvatar for clear agency.
+              </p>
+            </div>
+            <div className="p-8 rounded-[2rem] bg-[var(--ds-surface-sunken)] border border-[var(--ds-border-bold)] font-mono text-[12px] leading-relaxed overflow-x-auto shadow-inner">
               <pre className="text-[var(--ds-text-primary)]">
-                {`import { ToolCallCard } from '@gateflow/ai';
+                {`import { MessageAvatar, StreamingIndicator } from '@gateflow/ai';
 
-<ToolCallCard 
-  name="sync_gate_logs"
-  status="running"
-  arguments={{ gate_id: 'G-42' }}
-/>`}
+export function AIChat() {
+  return (
+    <div className="flex gap-4">
+      <MessageAvatar role="assistant" />
+      <div className="bg-[var(--gf-color-ai-surface)] p-4 rounded-3xl border border-white/10 shadow-ai-glow">
+        <p>Processing your request...</p>
+        <StreamingIndicator variant="pulse" className="mt-2" />
+      </div>
+    </div>
+  );
+}`}
               </pre>
             </div>
           </div>
 
-          {/* Orchid Theming Sample */}
-          <div className="flex flex-col gap-4">
-            <h4 className="text-xs font-black uppercase tracking-[0.2em] text-[var(--gf-color-ai-accent)]">
-              2. Orchid Glow System
-            </h4>
-            <div className="p-6 rounded-2xl bg-[var(--ds-surface-sunken)] border border-[var(--ds-border-bold)] font-mono text-[11px] leading-relaxed overflow-x-auto">
+          {/* Tool Card Composition */}
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-2">
+              <h4 className="text-xs font-black uppercase tracking-[0.2em] text-[var(--gf-color-ai-accent)]">
+                2. Autonomous Tool Invocation
+              </h4>
+              <p className="text-xs font-bold text-[var(--ds-text-subtle)] opacity-60">
+                Tool calls are encapsulated primitives that signal execution
+                status. They should be used for all background operations.
+              </p>
+            </div>
+            <div className="p-8 rounded-[2rem] bg-[var(--ds-surface-sunken)] border border-[var(--ds-border-bold)] font-mono text-[12px] leading-relaxed overflow-x-auto shadow-inner">
               <pre className="text-[var(--ds-text-primary)]">
-                {`// Apply AI surface depth
-<div className="bg-[var(--gf-color-ai-surface)] 
-                shadow-ai-glow">
-  <Bot className="text-[var(--gf-color-ai-accent)]" />
-</div>`}
+                {`import { ToolCallCard } from '@gateflow/ai';
+
+<ToolCallCard 
+  name="provision_lane"
+  status="running" // 'running' | 'success' | 'error'
+  arguments={{ lane_id: 'G-42' }}
+  collapsible={true}
+/>`}
               </pre>
             </div>
           </div>

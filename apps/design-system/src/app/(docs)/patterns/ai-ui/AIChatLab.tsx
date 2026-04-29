@@ -8,27 +8,28 @@ import {
   Terminal,
   Database,
   Workflow,
+  Fingerprint,
 } from 'lucide-react';
 import { cn } from '@gateflow/ui/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button, Input, ScrollArea } from '@gateflow/ui';
-import { ToolCallCard } from '@gateflow/ai/components/ToolCallCard';
+import { ToolCallCard, MessageAvatar, StreamingIndicator } from '@gateflow/ai';
 
 const INITIAL_MESSAGES = [
   {
-    role: 'assistant',
+    role: 'assistant' as const,
     content:
       'GateAI Cognitive Engine v7 initialized. How can I assist with your workspace protocols today?',
     type: 'text',
   },
   {
-    role: 'user',
+    role: 'user' as const,
     content:
       'Analyze the access patterns for the North Gate for the last 48 hours.',
     type: 'text',
   },
   {
-    role: 'assistant',
+    role: 'assistant' as const,
     name: 'database_query',
     status: 'success' as const,
     arguments: { gate: 'North', range: '48h', metric: 'access_count' },
@@ -36,10 +37,18 @@ const INITIAL_MESSAGES = [
     type: 'tool',
   },
   {
-    role: 'assistant',
+    role: 'assistant' as const,
     content:
-      'I have analyzed the patterns. There is a 15% increase in visitor traffic between 07:00 and 09:00. Should I provision an additional guest lane?',
+      'Analysis complete. There is a 15% increase in visitor traffic between 07:00 and 09:00. I recommend provisioning an additional guest lane. Shall I proceed?',
     type: 'text',
+  },
+  {
+    role: 'assistant' as const,
+    name: 'lane_provisioning',
+    status: 'pending' as const,
+    arguments: { lane_id: 'G-NORTH-4', action: 'activate' },
+    type: 'tool',
+    requiresConfirmation: true,
   },
 ];
 
@@ -51,16 +60,16 @@ export default function AIChatLab() {
   const sendMessage = () => {
     if (!input.trim() || isThinking) return;
 
-    const userMsg = { role: 'user', content: input, type: 'text' };
+    const userMsg = { role: 'user' as const, content: input, type: 'text' };
     setMessages((prev) => [...prev, userMsg]);
     setInput('');
     setIsThinking(true);
 
     setTimeout(() => {
       const response = {
-        role: 'assistant',
+        role: 'assistant' as const,
         content:
-          'I have synchronized your request with the security controller. The additional lane has been scheduled for tomorrow morning.',
+          'Request acknowledged. I have synchronized with the security controller. The North Gate configurations have been updated.',
         type: 'text',
       };
       setMessages((prev) => [...prev, response]);
@@ -131,41 +140,79 @@ export default function AIChatLab() {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ type: 'spring', damping: 25, stiffness: 120 }}
                 className={cn(
-                  'flex flex-col gap-3',
-                  msg.role === 'user' ? 'items-end ms-12' : 'items-start me-12'
+                  'flex gap-4 w-full',
+                  msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'
                 )}
               >
-                {msg.type === 'tool' ? (
-                  <ToolCallCard
-                    name={msg.name || ''}
-                    status={msg.status || 'success'}
-                    arguments={msg.arguments}
-                    result={msg.result}
-                    className="w-full bg-white/[0.03] border-white/10 text-white/90 backdrop-blur-md"
-                  />
-                ) : (
-                  <div
-                    className={cn(
-                      'px-5 py-4 rounded-3xl text-sm font-bold leading-relaxed shadow-xl',
-                      msg.role === 'user'
-                        ? 'bg-[var(--ds-background-brand-bold)] text-white'
-                        : 'bg-white/[0.05] border border-white/10 text-white/90 backdrop-blur-md relative overflow-hidden group'
-                    )}
-                  >
-                    {msg.role === 'assistant' && (
-                      <div className="absolute top-0 inset-inline-start-0 w-1 h-full bg-[var(--gf-color-ai-accent)] shadow-[2px_0_10px_var(--gf-color-ai-accent)] shadow-ai-glow opacity-50" />
-                    )}
-                    {msg.content}
+                <MessageAvatar
+                  role={msg.role}
+                  className="mt-1 shadow-lg border-white/10"
+                />
+
+                <div
+                  className={cn(
+                    'flex flex-col gap-2 max-w-[85%]',
+                    msg.role === 'user' ? 'items-end' : 'items-start'
+                  )}
+                >
+                  {msg.type === 'tool' ? (
+                    <div className="w-full relative group">
+                      <ToolCallCard
+                        name={msg.name || ''}
+                        status={msg.status || 'success'}
+                        arguments={msg.arguments}
+                        result={msg.result}
+                        className="bg-white/[0.03] border-white/10 text-white/90 backdrop-blur-md"
+                      />
+                      {msg.requiresConfirmation && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className="mt-2 p-4 rounded-2xl bg-[var(--gf-color-ai-accent)]/10 border border-[var(--gf-color-ai-accent)]/30 backdrop-blur-xl flex flex-col gap-3"
+                        >
+                          <div className="flex items-center gap-2">
+                            <Fingerprint
+                              size={14}
+                              className="text-[var(--gf-color-ai-accent)]"
+                            />
+                            <span className="text-[10px] font-black uppercase tracking-widest text-white">
+                              Biometric Authorization Required
+                            </span>
+                          </div>
+                          <Button
+                            size="sm"
+                            className="bg-[var(--gf-color-ai-accent)] text-white font-black uppercase text-[10px] tracking-widest h-8 shadow-lg shadow-[var(--gf-color-ai-accent)]/20"
+                          >
+                            Authorize Execution
+                          </Button>
+                        </motion.div>
+                      )}
+                    </div>
+                  ) : (
+                    <div
+                      className={cn(
+                        'px-5 py-4 rounded-3xl text-sm font-bold leading-relaxed shadow-xl',
+                        msg.role === 'user'
+                          ? 'bg-[var(--ds-background-brand-bold)] text-white'
+                          : 'bg-white/[0.05] border border-white/10 text-white/90 backdrop-blur-md relative overflow-hidden group'
+                      )}
+                    >
+                      {msg.role === 'assistant' && (
+                        <div className="absolute top-0 inset-inline-start-0 w-1 h-full bg-[var(--gf-color-ai-accent)] shadow-[2px_0_10px_var(--gf-color-ai-accent)] shadow-ai-glow opacity-50" />
+                      )}
+                      {msg.content}
+                    </div>
+                  )}
+
+                  <div className="px-2 flex items-center gap-2 opacity-30 group-hover:opacity-60 transition-opacity">
+                    <span className="text-[9px] font-black uppercase tracking-tighter text-white">
+                      {msg.role === 'user' ? 'Operator X-9' : 'GateAI Unit'}
+                    </span>
+                    <div className="h-1 w-1 rounded-full bg-white/20" />
+                    <span className="text-[9px] font-medium text-white">
+                      0.0{i}s
+                    </span>
                   </div>
-                )}
-                <div className="px-2 flex items-center gap-2 opacity-50">
-                  <span className="text-[9px] font-black uppercase tracking-tighter text-white">
-                    {msg.role === 'user' ? 'Operator X-9' : 'GateAI Unit'}
-                  </span>
-                  <div className="h-1 w-1 rounded-full bg-white/20" />
-                  <span className="text-[9px] font-medium text-white">
-                    0.0{i}s
-                  </span>
                 </div>
               </motion.div>
             ))}
@@ -173,27 +220,22 @@ export default function AIChatLab() {
 
           {isThinking && (
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="me-auto flex gap-3 items-center px-5 py-3 bg-white/[0.05] rounded-full border border-white/10 backdrop-blur-md shadow-xl"
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="flex gap-4 items-start"
             >
-              <div className="flex gap-1.5">
-                {[0, 1, 2].map((i) => (
-                  <motion.div
-                    key={i}
-                    animate={{ opacity: [0.3, 1, 0.3], scale: [1, 1.2, 1] }}
-                    transition={{
-                      repeat: Infinity,
-                      duration: 1,
-                      delay: i * 0.2,
-                    }}
-                    className="h-1.5 w-1.5 rounded-full bg-[var(--gf-color-ai-accent)] shadow-[0_0_8px_var(--gf-color-ai-accent)]"
-                  />
-                ))}
+              <MessageAvatar
+                role="assistant"
+                className="animate-pulse shadow-[0_0_15px_var(--gf-color-ai-accent)]/30"
+              />
+              <div className="flex flex-col gap-2">
+                <div className="px-5 py-3 bg-white/[0.05] rounded-full border border-white/10 backdrop-blur-md shadow-xl flex items-center gap-3">
+                  <StreamingIndicator variant="pulse" />
+                  <span className="text-[10px] font-black uppercase tracking-widest text-[var(--gf-color-ai-accent)]">
+                    Synthesizing...
+                  </span>
+                </div>
               </div>
-              <span className="text-[10px] font-black uppercase tracking-widest text-[var(--gf-color-ai-accent)]">
-                Synthesizing Response...
-              </span>
             </motion.div>
           )}
         </div>
