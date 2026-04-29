@@ -1,199 +1,159 @@
 'use client';
 
-import React, { useState } from 'react';
+import * as React from 'react';
+import { useState } from 'react';
 import {
-  History,
-  RotateCcw,
-  Eye,
-  Sparkles,
-  ChevronRight,
-  GitBranch,
-} from 'lucide-react';
-import {
-  Button,
   Card,
   CardContent,
+  Button,
   Badge,
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-  cn,
   ScrollArea,
   Separator,
 } from '@gateflow/ui';
+import {
+  History,
+  Sparkles,
+  User,
+  RotateCcw,
+  Eye,
+  ArrowRight,
+  Clock,
+} from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { format } from 'date-fns';
 
-interface Version {
+export interface Version {
   id: string;
   version: number;
-  createdAt: string;
+  createdAt: Date;
   createdBy: {
+    id: string;
     name: string;
-    avatar?: string;
   };
   changes: string[];
   isAiGenerated: boolean;
+  content: any;
 }
 
 interface VersionHistoryProps {
   contentId: string;
-  versions?: Version[];
+  versions: Version[];
   onRestore: (version: Version) => void;
-  onPreview: (version: Version) => void;
+  onView: (version: Version) => void;
 }
 
 export function VersionHistory({
-  contentId: _contentId,
-  versions = [
-    {
-      id: 'v4',
-      version: 4,
-      createdAt: '2026-04-28T14:20:00Z',
-      createdBy: { name: 'Dorgham' },
-      changes: [
-        'Updated HERO section CTA',
-        'Fixed Arabic typography alignment',
-      ],
-      isAiGenerated: false,
-    },
-    {
-      id: 'v3',
-      version: 3,
-      createdAt: '2026-04-28T10:00:00Z',
-      createdBy: { name: 'GateAI OMEGA' },
-      changes: ['Generated SEO meta tags', 'Optimized landing page copy'],
-      isAiGenerated: true,
-    },
-    {
-      id: 'v2',
-      version: 2,
-      createdAt: '2026-04-27T16:45:00Z',
-      createdBy: { name: 'Sarah Jenkins' },
-      changes: ['Initial structure setup'],
-      isAiGenerated: false,
-    },
-  ],
+  contentId,
+  versions,
   onRestore,
-  onPreview,
+  onView,
 }: VersionHistoryProps) {
-  const [selectedVersion, setSelectedVersion] = useState<string | null>(null);
+  const { t } = useTranslation('admin');
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-ds-text-subtler flex items-center gap-2">
-          <History className="h-4 w-4" /> Trajectory History
+    <div className="flex flex-col h-full bg-ds-background-neutral-subtle rounded-xl border border-ds-border overflow-hidden">
+      <div className="p-4 bg-ds-background border-b border-ds-border flex items-center gap-2">
+        <History className="h-4 w-4 text-primary" />
+        <h3 className="font-bold text-sm">
+          {t('cms.versionHistory', 'Version History')}
         </h3>
-        <Badge
-          variant="outline"
-          className="text-[8px] font-black uppercase border-ds-border"
-        >
-          {versions.length} Version{versions.length > 1 ? 's' : ''}
-        </Badge>
       </div>
 
-      <ScrollArea className="h-[400px] pr-4">
-        <div className="space-y-4">
-          {versions.map((version, i) => (
-            <Card
-              key={version.id}
-              className={cn(
-                'border-ds-border bg-card/40 border-dashed overflow-hidden transition-all group cursor-pointer',
-                selectedVersion === version.id
-                  ? 'border-ds-border-brand/40 bg-ds-background-brand-subtle/20 shadow-lg'
-                  : 'hover:border-ds-border-brand/20'
-              )}
-              onClick={() => setSelectedVersion(version.id)}
-            >
-              <CardContent className="p-4 space-y-4">
-                <div className="flex justify-between items-start">
-                  <div className="flex items-center gap-3">
-                    <div className="flex flex-col items-center">
-                      <div className="text-[10px] font-black text-ds-text-subtler">
-                        V
-                      </div>
-                      <div className="text-lg font-black leading-none">
-                        {version.version}
-                      </div>
+      <ScrollArea className="flex-1">
+        <div className="p-3 space-y-3">
+          {versions.length === 0 ? (
+            <div className="py-10 text-center space-y-2">
+              <Clock className="h-8 w-8 text-ds-text-subtle mx-auto opacity-20" />
+              <p className="text-xs text-ds-text-subtle">
+                {t('cms.noVersions', 'No versions found')}
+              </p>
+            </div>
+          ) : (
+            versions.map((version, index) => (
+              <Card
+                key={version.id}
+                className="border-ds-border hover:border-primary/30 transition-colors shadow-none bg-ds-background"
+              >
+                <CardContent className="p-3">
+                  <div className="flex justify-between items-start mb-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-black text-primary">
+                        v{version.version}
+                      </span>
+                      {index === 0 && (
+                        <Badge
+                          variant="outline"
+                          className="text-[10px] h-4 bg-green-500/10 text-green-600 border-green-500/20"
+                        >
+                          {t('cms.current', 'Current')}
+                        </Badge>
+                      )}
+                      {version.isAiGenerated && (
+                        <Badge
+                          variant="outline"
+                          className="text-[10px] h-4 bg-primary/10 text-primary border-primary/20 flex items-center gap-1"
+                        >
+                          <Sparkles className="h-2 w-2" />
+                          AI
+                        </Badge>
+                      )}
                     </div>
-                    <Separator
-                      orientation="vertical"
-                      className="h-8 bg-border/30"
-                    />
-                    <div className="flex flex-col">
-                      <div className="flex items-center gap-2">
-                        <span className="text-[11px] font-black uppercase tracking-tight">
-                          {version.createdBy.name}
-                        </span>
-                        {version.isAiGenerated && (
-                          <Badge className="h-4 px-1 bg-ds-background-brand-bold text-ds-icon-inverse text-[7px] font-black uppercase border-none">
-                            <Sparkles className="h-2 w-2 mr-1" /> AI
-                          </Badge>
+                  </div>
+
+                  <div className="space-y-1.5 mb-3">
+                    <div className="flex items-center gap-1.5 text-[11px] text-ds-text-subtle">
+                      <User className="h-3 w-3" />
+                      <span>{version.createdBy.name}</span>
+                    </div>
+                    <div className="flex items-center gap-1.5 text-[11px] text-ds-text-subtle">
+                      <Clock className="h-3 w-3" />
+                      <span>
+                        {format(
+                          new Date(version.createdAt),
+                          'MMM d, yyyy HH:mm'
                         )}
-                      </div>
-                      <span className="text-[9px] font-bold text-ds-text-subtler uppercase tracking-widest">
-                        {new Date(version.createdAt).toLocaleString()}
                       </span>
                     </div>
                   </div>
-                  <div className="flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8 rounded-lg bg-muted/30 hover:bg-ds-background-brand-subtle hover:text-ds-text-brand"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onPreview(version);
-                      }}
-                    >
-                      <Eye className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8 rounded-lg bg-muted/30 hover:bg-ds-background-brand-subtle hover:text-ds-text-brand"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onRestore(version);
-                      }}
-                    >
-                      <RotateCcw className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
 
-                {version.changes.length > 0 && (
-                  <div className="space-y-1.5">
-                    {version.changes.map((change, idx) => (
-                      <div
-                        key={idx}
-                        className="flex items-start gap-2 text-[10px] font-bold text-ds-text-subtle leading-tight"
-                      >
-                        <ChevronRight className="h-3 w-3 mt-0.5 text-ds-text-brand" />
-                        <span>{change}</span>
-                      </div>
-                    ))}
+                  {version.changes && version.changes.length > 0 && (
+                    <div className="mb-3">
+                      <ul className="text-[10px] text-ds-text-subtle space-y-0.5 list-disc list-inside">
+                        {version.changes.map((change, i) => (
+                          <li key={i} className="truncate">
+                            {change}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex-1 h-7 text-[11px] gap-1"
+                      onClick={() => onView(version)}
+                    >
+                      <Eye className="h-3 w-3" />
+                      {t('common.view', 'View')}
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="flex-1 h-7 text-[11px] gap-1 hover:bg-primary/5 hover:text-primary"
+                      onClick={() => onRestore(version)}
+                    >
+                      <RotateCcw className="h-3 w-3" />
+                      {t('common.restore', 'Restore')}
+                    </Button>
                   </div>
-                )}
-              </CardContent>
-            </Card>
-          ))}
+                </CardContent>
+              </Card>
+            ))
+          )}
         </div>
       </ScrollArea>
-
-      <div className="p-4 rounded-xl bg-ds-background-brand-subtle/10 border border-ds-border-brand/10 flex items-center gap-4">
-        <div className="h-10 w-10 rounded-xl bg-ds-background-brand-bold flex items-center justify-center text-ds-icon-inverse shrink-0">
-          <GitBranch className="h-5 w-5" />
-        </div>
-        <div>
-          <p className="text-[10px] font-black uppercase tracking-tight">
-            Delta Synchronization Active
-          </p>
-          <p className="text-[9px] font-bold text-ds-text-subtler uppercase tracking-widest leading-relaxed">
-            All structural mutations are snapshotted to the neural ledger for
-            audit integrity.
-          </p>
-        </div>
-      </div>
     </div>
   );
 }

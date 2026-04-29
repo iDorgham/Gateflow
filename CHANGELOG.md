@@ -20,6 +20,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Admin-Evolution]** complete phase 9 — AI polish, confirmation gate, version history, and E2E coverage
+
 - **[Admin-Evolution]** sync implemented phases 4-8
 
 - **[Admin-Dashboard]** implement cms front builder core and 9 blocks

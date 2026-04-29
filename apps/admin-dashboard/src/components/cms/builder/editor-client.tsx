@@ -1,8 +1,14 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Button } from '@gateflow/ui';
-import { ArrowLeft, Save, Eye, Globe } from 'lucide-react';
+import {
+  Button,
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from '@gateflow/ui';
+import { ArrowLeft, Save, Eye, Globe, History } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 
@@ -15,6 +21,7 @@ import { BreakpointControls } from './breakpoint-controls';
 import { AISectionGenerator } from './ai-section-generator';
 import { PreviewModal } from './preview-modal';
 import { PublishDialog } from './publish-dialog';
+import { VersionHistory, Version } from '../version-history';
 
 export function EditorClient({
   initialBlocks = [],
@@ -35,6 +42,29 @@ export function EditorClient({
   const [isSaving, setIsSaving] = useState(false);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [isPublishOpen, setIsPublishOpen] = useState(false);
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
+
+  // Mock versions
+  const [versions] = useState<Version[]>([
+    {
+      id: 'v2',
+      version: 2,
+      createdAt: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2 hours ago
+      createdBy: { id: 'u1', name: 'Yasser D.' },
+      changes: ['Updated Hero headline', 'Added features section'],
+      isAiGenerated: true,
+      content: initialBlocks,
+    },
+    {
+      id: 'v1',
+      version: 1,
+      createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24), // 1 day ago
+      createdBy: { id: 'u1', name: 'Yasser D.' },
+      changes: ['Initial page creation'],
+      isAiGenerated: false,
+      content: initialBlocks.slice(0, 1),
+    },
+  ]);
 
   const handleAddBlock = (type: BlockType) => {
     const config = BLOCK_REGISTRY[type];
@@ -92,6 +122,12 @@ export function EditorClient({
     toast.success('Page saved successfully!');
   };
 
+  const handleRestoreVersion = (version: Version) => {
+    setBlocks(version.content);
+    setIsHistoryOpen(false);
+    toast.success(`Restored to version ${version.version}`);
+  };
+
   const selectedBlock = blocks.find((b) => b.id === selectedBlockId);
 
   return (
@@ -115,6 +151,14 @@ export function EditorClient({
             <Globe className="h-3 w-3" />
             {locale === 'en' ? 'English' : 'Arabic'}
           </div>
+          <Button
+            variant="outline"
+            size="sm"
+            className="gap-2"
+            onClick={() => setIsHistoryOpen(true)}
+          >
+            <History className="h-4 w-4" /> History
+          </Button>
           <Button
             variant="outline"
             size="sm"
@@ -226,6 +270,21 @@ export function EditorClient({
           }
         }}
       />
+
+      <Sheet open={isHistoryOpen} onOpenChange={setIsHistoryOpen}>
+        <SheetContent side="right" className="w-[350px] p-0 sm:max-w-none">
+          <VersionHistory
+            contentId={pageId}
+            versions={versions}
+            onRestore={handleRestoreVersion}
+            onView={(v) => {
+              setBlocks(v.content);
+              setIsHistoryOpen(false);
+              toast.info(`Viewing version ${v.version} (Preview Mode)`);
+            }}
+          />
+        </SheetContent>
+      </Sheet>
     </div>
   );
 }

@@ -489,6 +489,23 @@
       "success": "تم إنشاء المستخدم بنجاح",
       "error": "فشل إنشاء المستخدم",
       "requiredFields": "يرجى ملء جميع الحقول المطلوبة"
+    },
+    "cms": {
+      "publishConfirmation": "تأكيد النشر",
+      "publishConfirmationDesc": "يرجى مراجعة المحتوى الذي تم إنشاؤه بواسطة الذكاء الاصطناعي قبل نشره.",
+      "landingPageItems": "عناصر صفحات الهبوط",
+      "blogItems": "عناصر المدونة",
+      "sectionItems": "عناصر القسم",
+      "emailItems": "عناصر البريد الإلكتروني",
+      "aiReviewRequired": "يحتوي هذا المحتوى على عناصر تم إنشاؤها بواسطة الذكاء الاصطناعي وتتطلب مراجعة بشرية.",
+      "reviewChecklist": "قائمة المراجعة",
+      "confirmAndPublish": "تأكيد ونشر",
+      "reviewText": "لقد قمت بمراجعة جميع النصوص",
+      "reviewImages": "لقد قمت بمراجعة جميع الصور",
+      "verifyLinks": "لقد قمت بالتأكد من جميع الروابط",
+      "versionHistory": "تاريخ النسخ",
+      "noVersions": "لا توجد نسخ سابقة",
+      "current": "الحالية"
     }
   },
   "solutions": {

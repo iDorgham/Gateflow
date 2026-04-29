@@ -487,6 +487,23 @@
       "success": "User created successfully",
       "error": "Failed to create user",
       "requiredFields": "Please fill in all required fields"
+    },
+    "cms": {
+      "publishConfirmation": "Publish Confirmation",
+      "publishConfirmationDesc": "Please review the AI-generated content before making it public.",
+      "landingPageItems": "Landing Page items",
+      "blogItems": "Blog items",
+      "sectionItems": "Section items",
+      "emailItems": "Email items",
+      "aiReviewRequired": "This content contains AI-generated elements that require human verification.",
+      "reviewChecklist": "Review Checklist",
+      "confirmAndPublish": "Confirm & Publish",
+      "reviewText": "I have reviewed all text content",
+      "reviewImages": "I have reviewed all images",
+      "verifyLinks": "I have verified all links work",
+      "versionHistory": "Version History",
+      "noVersions": "No versions found",
+      "current": "Current"
     }
   },
   "solutions": {

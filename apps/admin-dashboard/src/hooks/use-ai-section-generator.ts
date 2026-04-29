@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useAIOperation } from './use-ai-operation';
 import { BlockType } from '../components/cms/blocks/types';
 
 interface GenerateSectionParams {
@@ -7,26 +7,29 @@ interface GenerateSectionParams {
 }
 
 export function useAISectionGenerator() {
-  const [isLoading, setIsLoading] = useState(false);
-
-  const generateSection = async ({
-    prompt,
-    blockType,
-  }: GenerateSectionParams) => {
-    setIsLoading(true);
-    try {
+  const { execute, isLoading, error, retryCount } = useAIOperation<
+    any,
+    GenerateSectionParams
+  >(
+    async ({ prompt, blockType }) => {
       const response = await fetch('/api/cms/generate-section', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt, blockType }),
       });
-      if (!response.ok) throw new Error('Failed to generate section');
+
+      if (!response.ok) {
+        const errData = await response.json().catch(() => ({}));
+        throw new Error(errData.error || 'Failed to generate section');
+      }
+
       const data = await response.json();
       return data.section;
-    } finally {
-      setIsLoading(false);
+    },
+    {
+      maxRetries: 3,
     }
-  };
+  );
 
-  return { generateSection, isLoading };
+  return { generateSection: execute, isLoading, error, retryCount };
 }
