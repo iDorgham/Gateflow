@@ -64,7 +64,7 @@ export function ChatHistorySidebar({
       <div className="p-4 flex flex-col gap-3">
         <Button
           onClick={onNewChat}
-          className="w-full justify-start gap-2 bg-background hover:bg-[var(--ds-background-neutral-subtle-hovered)] hover:bg-accent text-foreground dark:text-zinc-100 border border-border border-border shadow-sm px-3"
+          className="w-full justify-start gap-2 bg-background hover:bg-[var(--ds-background-neutral-subtle-hovered)] hover:bg-accent text-foreground border border-border border-border shadow-sm px-3"
           variant="outline"
           size="sm"
         >

@@ -48,6 +48,7 @@ After a task or phase was executed **using a CLI** (Claude CLI, Gemini CLI, Open
 | 2026-04-29 | Antigravity  | Phase 1 token_system_v2                                        | success | Fixed dark mode wiring across tailwind configs and tokens.css.                                                          |
 | 2026-04-29 | Antigravity  | Phase 2 token_system_v2                                        | success | Redesigned palette to Kimchi brand and warm neutrals in tokens.css.                                                     |
 | 2026-04-29 | Antigravity  | Phase 3 token_system_v2                                        | success | Unified token architecture by removing dual definitions in globals.css and tokens.ts.                                   |
+| 2026-04-29 | Antigravity  | Phase 4 token_system_v2                                        | success | Completed app integration: updated design-system color page, scrubbed hardcoded hex in layouts, and verified dark mode. |
 
 - **Refactor Team Audit (ADS Tokens):**
   - **`qrcodes/page.tsx`**: Replaced 10+ raw hex violations with ADS tokens. Removed manual `dark:` background/border classes, relying on global token definitions.

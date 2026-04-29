@@ -20,6 +20,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Token System V2]** complete phase 3
+
 - **[Token System V2]** complete phase 2
 - **[Deps]** override basic-ftp >=5.2.1 to clear GHSA-chqc-8p9q-pq6q
 - **[Ui]** add favicons and apple-touch-icons to all portal apps

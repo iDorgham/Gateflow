@@ -151,6 +151,41 @@ export default function ColorFoundationsPage() {
         <SwatchGrid swatches={accentSwatches} />
       </SwatchSection>
 
+      <SwatchSection
+        title="Phase 2 GF Tokens"
+        description="The newly mapped tokens from Phase 2 for direct reference."
+      >
+        <SwatchGrid
+          swatches={[
+            { name: 'Brand 50', var: '--gf-color-brand-50', label: '' },
+            { name: 'Brand 300', var: '--gf-color-brand-300', label: '' },
+            {
+              name: 'Brand 500 (Kimchi)',
+              var: '--gf-color-brand-500',
+              label: '',
+            },
+            { name: 'Brand 700', var: '--gf-color-brand-700', label: '' },
+            { name: 'BG Page', var: '--gf-color-bg-page', label: '' },
+            { name: 'BG Subtle', var: '--gf-color-bg-subtle', label: '' },
+            {
+              name: 'BG Default (Card)',
+              var: '--gf-color-bg-default',
+              label: '',
+            },
+            { name: 'BG Raised', var: '--gf-color-bg-raised', label: '' },
+            { name: 'BG Overlay', var: '--gf-color-bg-overlay', label: '' },
+            { name: 'Text', var: '--gf-color-text', label: '' },
+            { name: 'Text Subtle', var: '--gf-color-text-subtle', label: '' },
+            { name: 'Border', var: '--gf-color-border', label: '' },
+            { name: 'Success', var: '--gf-color-success', label: '' },
+            { name: 'Warning', var: '--gf-color-warning', label: '' },
+            { name: 'Danger', var: '--gf-color-danger', label: '' },
+            { name: 'Info', var: '--gf-color-info', label: '' },
+          ]}
+          bordered
+        />
+      </SwatchSection>
+
       <section className="p-8 rounded-3xl border border-[var(--ds-accent-bold)]/20 bg-gradient-to-br from-[var(--ds-accent-subtle)] to-transparent relative overflow-hidden group">
         <div className="absolute top-2 right-2 p-2 opacity-10 scale-150 rotate-12 group-hover:rotate-0 transition-all duration-700">
           <Palette size={120} />
