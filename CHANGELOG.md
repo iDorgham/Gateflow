@@ -139,6 +139,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Apps
 
+- **[Admin]** complete evolution phase 9
+
 - **[Marketing]** cast t() to string in generateMetadata to fix TS2345
 
 - **[Marketing]** resolve PhoneFrame style type error and cleanup unused icons
