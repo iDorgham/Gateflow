@@ -229,7 +229,7 @@ export function PageBuilder({ pageId, initialSections, pageSlug }: PageBuilderPr
                 <CardHeader className="bg-ds-background-neutral-subtle/20 border-b border-ds-border/10 py-3">
                   <CardTitle className="text-[9px] font-black uppercase tracking-widest text-ds-text-subtle flex items-center gap-2">
                     SECTION {idx + 1}: {section.type}
-                  </Badge>
+                  </CardTitle>
                 </CardHeader>
                 <CardContent className="p-8">
                   <div className="space-y-4">

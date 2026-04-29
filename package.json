@@ -126,7 +126,9 @@
       "zod": "3.25.76",
       "@types/react": "19.2.14",
       "@types/react-dom": "19.2.3",
-      "@xmldom/xmldom": ">=0.8.12"
+      "@xmldom/xmldom": ">=0.9.10",
+      "next": "^15.5.15",
+      "basic-ftp": ">=5.3.0"
     }
   },
   "dependencies": {

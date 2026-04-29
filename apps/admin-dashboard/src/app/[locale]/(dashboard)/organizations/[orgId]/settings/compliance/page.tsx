@@ -32,7 +32,7 @@ export default async function ComplianceSettingsPage(props: {
              <ShieldCheck className="h-8 w-8 text-ds-text-brand opacity-80" />
              <div className="space-y-1">
                <h3 className="text-sm font-black uppercase tracking-tight">Compliance Score: 98/100</h3>
-               <p className="text-[11px] text-ds-text-subtle font-medium italic">"The platform meets all GDPR and Law 151 residency requirements as of the last automated audit."</p>
+               <p className="text-[11px] text-ds-text-subtle font-medium italic">&quot;The platform meets all GDPR and Law 151 residency requirements as of the last automated audit.&quot;</p>
              </div>
              <Badge className="ml-auto bg-ds-background-success-subtle text-ds-text-success border-ds-border-success font-black text-[10px] uppercase">Active</Badge>
            </div>

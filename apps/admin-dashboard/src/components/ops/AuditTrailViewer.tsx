@@ -30,7 +30,8 @@ import {
   AlertCircle,
   FileJson,
   User as UserIcon,
-  ChevronRight
+  ChevronRight,
+  Plus
 } from 'lucide-react';
 import { format } from 'date-fns';
 
@@ -132,7 +133,7 @@ export function AuditTrailViewer({ logs }: { logs: AuditLogEntry[] }) {
                       </Badge>
                     </TableCell>
                     <TableCell className="max-w-[300px] truncate text-[11px] text-ds-text-subtle font-medium italic">
-                      "{log.reasoning}"
+                      &quot;{log.reasoning}&quot;
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">
@@ -181,7 +182,7 @@ export function AuditTrailViewer({ logs }: { logs: AuditLogEntry[] }) {
               <div className="space-y-3">
                 <label className="text-[10px] font-black uppercase tracking-widest text-ds-text-subtle">AI Reasoning</label>
                 <div className="p-4 rounded-xl bg-white border border-ds-border/20 text-xs leading-relaxed font-medium italic">
-                  "{selectedLog.reasoning}"
+                  &quot;{selectedLog.reasoning}&quot;
                 </div>
               </div>
 

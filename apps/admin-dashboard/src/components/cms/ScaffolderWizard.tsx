@@ -11,7 +11,8 @@ import {
   Layout,
   Type,
   Globe,
-  Loader2
+  Loader2,
+  Monitor
 } from 'lucide-react';
 import { 
   Card, 

@@ -95,7 +95,7 @@ export function IntelligenceHubClient({ orgId, initialSources }: IntelligenceHub
             Intelligence Hub
           </h2>
           <p className="text-sm text-ds-text-subtle">
-            Train your organization's AI assistant with private knowledge and operational docs.
+            Train your organization&apos;s AI assistant with private knowledge and operational docs.
           </p>
         </div>
         <Button className="bg-indigo-600 hover:bg-indigo-700 shadow-lg shadow-indigo-500/20 gap-2">
@@ -209,7 +209,7 @@ export function IntelligenceHubClient({ orgId, initialSources }: IntelligenceHub
                     <div>
                       <h4 className="font-bold text-slate-800">Ready to assist</h4>
                       <p className="text-sm text-ds-text-subtle max-w-xs mx-auto">
-                        Ask questions about your organization's rules, policies, or complex-specific procedures.
+                        Ask questions about your organization&apos;s rules, policies, or complex-specific procedures.
                       </p>
                     </div>
                   </div>

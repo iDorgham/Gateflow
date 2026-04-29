@@ -40,7 +40,7 @@ export default async function SettingsOverviewPage(props: {
       icon: Database, 
       color: 'text-blue-500 bg-blue-500/10',
       desc: 'Masked connection strings, pooling status, and persistence health.',
-      status: !!process.env.DATABASE_URL ? 'Connected' : 'Error'
+      status: process.env.DATABASE_URL ? 'Connected' : 'Error'
     },
     { 
       title: 'Authentication', 
@@ -48,7 +48,7 @@ export default async function SettingsOverviewPage(props: {
       icon: ShieldCheck, 
       color: 'text-emerald-500 bg-emerald-500/10',
       desc: 'NextAuth secrets, admin access keys, and session strategies.',
-      status: !!process.env.NEXTAUTH_SECRET ? 'Secured' : 'Missing Keys'
+      status: process.env.NEXTAUTH_SECRET ? 'Secured' : 'Missing Keys'
     },
     { 
       title: 'Security & QR', 
@@ -56,7 +56,7 @@ export default async function SettingsOverviewPage(props: {
       icon: Lock, 
       color: 'text-rose-500 bg-rose-500/10',
       desc: 'QR signing algorithms, token lifespans, and hashing policies.',
-      status: !!process.env.QR_SIGNING_SECRET ? 'Validated' : 'Action Required'
+      status: process.env.QR_SIGNING_SECRET ? 'Validated' : 'Action Required'
     },
     { 
       title: 'Infrastructure', 
@@ -64,7 +64,7 @@ export default async function SettingsOverviewPage(props: {
       icon: Globe, 
       color: 'text-cyan-500 bg-cyan-500/10',
       desc: 'Public URLs, API endpoints, and rate limiting connectivity.',
-      status: !!process.env.NEXT_PUBLIC_APP_URL ? 'Active' : 'Unconfigured'
+      status: process.env.NEXT_PUBLIC_APP_URL ? 'Active' : 'Unconfigured'
     },
     { 
       title: 'Style Hub', 
