@@ -9,17 +9,7 @@
 
 - [x] Phase 1: Analytics Pattern Documentation
 
-## Phase 2: AI UI Pattern Documentation
-
-- **Goal:** Document the GateAI chat interface and tool patterns.
-- **Primary Role:** `frontend`
-- **Steps:**
-  1. Update `apps/design-system/src/app/(docs)/patterns/ai-ui/page.tsx`.
-  2. Implement a `GateAILab` using components from `@gateflow/ai`.
-  3. Document the "Cortex" design language for AI interactions.
-- **Acceptance Criteria:**
-  - `MessageAvatar` and `ToolCallCard` are showcased with live examples.
-  - Mobile responsiveness of the chat shell is verified.
+- [x] Phase 2: AI UI Pattern Documentation
 
 ## Phase 3: Entity & Composition Documentation
 
