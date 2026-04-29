@@ -92,8 +92,8 @@ export function ConfirmationGate({
                 <Checkbox
                   id={item}
                   checked={checkedItems.includes(item)}
-                  onCheckedChange={(checked) => {
-                    if (checked) {
+                  onChange={(e) => {
+                    if (e.target.checked) {
                       setCheckedItems([...checkedItems, item]);
                     } else {
                       setCheckedItems(checkedItems.filter((i) => i !== item));

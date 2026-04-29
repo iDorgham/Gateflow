@@ -29,37 +29,71 @@ const ChartLab = dynamic(() => import('./ChartLab'), {
 });
 
 export default function AnalyticsDashboardLab() {
+  const [mode, setMode] = React.useState<'real-time' | 'historical'>(
+    'real-time'
+  );
   const [period, setPeriod] = React.useState('Last 7 Days');
   const [isRefreshing, setIsRefreshing] = React.useState(false);
 
-  const mockStats: StatItem[] = [
+  const realTimeStats: StatItem[] = [
     {
-      label: 'Active Residents',
-      value: '2,842',
-      trend: { value: '+12%', direction: 'up' },
+      label: 'Live Concurrent Users',
+      value: '482',
+      trend: { value: '+42', direction: 'up' },
       icon: Users,
       variant: 'primary',
     },
     {
-      label: 'Verified Scans',
-      value: '45.2k',
-      trend: { value: '+4.5%', direction: 'up' },
+      label: 'Active Scanners',
+      value: '24',
+      trend: { value: 'Stable', direction: 'neutral' },
       icon: ShieldCheck,
       variant: 'success',
     },
     {
-      label: 'System Latency',
-      value: '142ms',
-      trend: { value: '-8ms', direction: 'down' },
+      label: 'Avg. Scan Speed',
+      value: '1.2s',
+      trend: { value: '-0.2s', direction: 'up' },
       icon: Zap,
       variant: 'info',
     },
     {
-      label: 'Security incidents',
-      value: '12',
-      trend: { value: '+2', direction: 'neutral' },
+      label: 'Open Alerts',
+      value: '3',
+      trend: { value: '+1', direction: 'down' },
       icon: Activity,
       variant: 'danger',
+    },
+  ];
+
+  const historicalStats: StatItem[] = [
+    {
+      label: 'Total Residents',
+      value: '12.4k',
+      trend: { value: '+8%', direction: 'up' },
+      icon: Users,
+      variant: 'primary',
+    },
+    {
+      label: 'Total Scans (30d)',
+      value: '142k',
+      trend: { value: '+12%', direction: 'up' },
+      icon: ShieldCheck,
+      variant: 'success',
+    },
+    {
+      label: 'Peak Latency',
+      value: '450ms',
+      trend: { value: '-20ms', direction: 'up' },
+      icon: Zap,
+      variant: 'info',
+    },
+    {
+      label: 'Resolved Issues',
+      value: '1,240',
+      trend: { value: '98%', direction: 'neutral' },
+      icon: Activity,
+      variant: 'success',
     },
   ];
 
@@ -73,21 +107,63 @@ export default function AnalyticsDashboardLab() {
       {/* Dashboard Sub-Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-8 bg-[var(--ds-surface-subtle)] border-b border-[var(--ds-border-bold)]">
         <div className="flex flex-col gap-1">
-          <h3 className="text-xl font-black uppercase tracking-tight text-[var(--ds-text-primary)]">
-            Intelligence Hub
-          </h3>
+          <div className="flex items-center gap-2">
+            <h3 className="text-xl font-black uppercase tracking-tight text-[var(--ds-text-primary)]">
+              Intelligence Hub
+            </h3>
+            <span
+              className={cn(
+                'px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-widest transition-all',
+                mode === 'real-time'
+                  ? 'bg-[var(--ds-background-success-subtle)] text-[var(--ds-text-success)]'
+                  : 'bg-[var(--ds-background-neutral-subtle)] text-[var(--ds-text-subtle)]'
+              )}
+            >
+              {mode}
+            </span>
+          </div>
           <p className="text-sm font-bold text-[var(--ds-text-subtle)] opacity-70">
-            Real-time telemetry and access patterns for the current community.
+            {mode === 'real-time'
+              ? 'Live telemetry and access patterns for the current session.'
+              : 'Historical trends and archival data analysis.'}
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
+          {/* Mode Switcher */}
+          <div className="flex p-1 rounded-xl bg-[var(--ds-background-neutral-subtle)] border border-[var(--ds-border-bold)]">
+            <button
+              onClick={() => setMode('real-time')}
+              className={cn(
+                'px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all',
+                mode === 'real-time'
+                  ? 'bg-[var(--ds-background-brand-bold)] text-white shadow-lg'
+                  : 'text-[var(--ds-text-subtle)] hover:text-[var(--ds-text-primary)]'
+              )}
+            >
+              Real-time
+            </button>
+            <button
+              onClick={() => setMode('historical')}
+              className={cn(
+                'px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all',
+                mode === 'historical'
+                  ? 'bg-[var(--ds-background-brand-bold)] text-white shadow-lg'
+                  : 'text-[var(--ds-text-subtle)] hover:text-[var(--ds-text-primary)]'
+              )}
+            >
+              Historical
+            </button>
+          </div>
+
+          <div className="h-6 w-px bg-[var(--ds-border-bold)]" />
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="subtle"
                 size="sm"
-                className="bg-[var(--ds-background-neutral-subtle)] border border-[var(--ds-border-bold)] hover:bg-[var(--ds-background-selected)]"
+                className="bg-[var(--ds-background-neutral-subtle)] border border-[var(--ds-border-bold)] hover:bg-[var(--ds-background-selected)] h-9"
               >
                 <Calendar size={14} className="mr-2 opacity-60" />
                 <span className="text-[11px] font-black uppercase tracking-wider">
@@ -115,7 +191,7 @@ export default function AnalyticsDashboardLab() {
             variant="subtle"
             size="sm"
             onClick={handleRefresh}
-            className="h-8 w-8 p-0"
+            className="h-9 w-9 p-0 bg-[var(--ds-background-neutral-subtle)] border border-[var(--ds-border-bold)]"
           >
             <RefreshCcw
               size={14}
@@ -127,17 +203,22 @@ export default function AnalyticsDashboardLab() {
 
       <div className="flex flex-col gap-8 p-8">
         {/* Stat Grid Section */}
-        <StatGrid stats={mockStats} columns={4} />
+        <StatGrid
+          stats={mode === 'real-time' ? realTimeStats : historicalStats}
+          columns={4}
+        />
 
         {/* Chart Section */}
         <div className="flex flex-col gap-4">
           <div className="flex items-center gap-2">
             <Activity size={14} className="text-[var(--ds-primary-accent)]" />
             <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-[var(--ds-text-primary)]">
-              Traffic Density Analysis
+              {mode === 'real-time'
+                ? 'Live Traffic Density'
+                : 'Archival Traffic Analysis'}
             </h4>
           </div>
-          <ChartLab />
+          <ChartLab mode={mode} />
         </div>
       </div>
     </div>

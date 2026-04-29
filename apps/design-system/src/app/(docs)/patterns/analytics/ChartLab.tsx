@@ -13,15 +13,32 @@ import {
 } from 'recharts';
 import { PieChart as PieChartIcon } from 'lucide-react';
 
-const chartData = [
-  { name: 'Mon', value: 400, color: 'var(--ds-primary-accent)' },
-  { name: 'Tue', value: 300, color: 'var(--gf-color-info)' },
-  { name: 'Wed', value: 500, color: 'var(--gf-color-success)' },
-  { name: 'Thu', value: 280, color: 'var(--gf-color-warning)' },
-  { name: 'Fri', value: 590, color: 'var(--gf-color-danger)' },
+const realTimeData = [
+  { name: '09:00', value: 420, color: 'var(--ds-primary-accent)' },
+  { name: '10:00', value: 380, color: 'var(--ds-primary-accent)' },
+  { name: '11:00', value: 510, color: 'var(--ds-primary-accent)' },
+  { name: '12:00', value: 450, color: 'var(--ds-primary-accent)' },
+  { name: '13:00', value: 590, color: 'var(--ds-primary-accent)' },
+  { name: '14:00', value: 540, color: 'var(--ds-primary-accent)' },
+  { name: '15:00', value: 620, color: 'var(--ds-primary-accent)' },
 ];
 
-export default function ChartLab() {
+const historicalData = [
+  { name: 'Mon', value: 4000, color: 'var(--ds-primary-accent)' },
+  { name: 'Tue', value: 3200, color: 'var(--gf-color-info)' },
+  { name: 'Wed', value: 5500, color: 'var(--gf-color-success)' },
+  { name: 'Thu', value: 2800, color: 'var(--gf-color-warning)' },
+  { name: 'Fri', value: 5900, color: 'var(--gf-color-danger)' },
+  { name: 'Sat', value: 4800, color: 'var(--ds-primary-accent)' },
+  { name: 'Sun', value: 3900, color: 'var(--ds-primary-accent)' },
+];
+
+interface ChartLabProps {
+  mode?: 'real-time' | 'historical';
+}
+
+export default function ChartLab({ mode = 'real-time' }: ChartLabProps) {
+  const chartData = mode === 'real-time' ? realTimeData : historicalData;
   return (
     <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div className="lg:col-span-2 p-8 rounded-3xl border border-[var(--ds-border-bold)] bg-[var(--ds-background-default)] shadow-2xl relative overflow-hidden">

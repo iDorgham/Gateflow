@@ -98,51 +98,90 @@ export default function AnalyticsPatternsPage() {
 
       {/* Assembly Documentation */}
       <section className="flex flex-col gap-12 pt-10 border-t border-[var(--ds-border-bold)]">
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-4">
           <div className="flex items-center gap-3">
             <Code2 className="text-[var(--ds-primary-accent)]" size={24} />
             <h2 className="text-3xl font-black uppercase tracking-tight text-[var(--ds-text-primary)]">
-              Implementation
+              Institutional Assembly
             </h2>
           </div>
-          <p className="text-sm font-bold text-[var(--ds-text-subtle)] opacity-70">
-            Analytics patterns are assembled using the `StatGrid` and `ChartLab`
-            compositions.
+          <p className="text-sm font-bold text-[var(--ds-text-subtle)] opacity-70 max-w-3xl leading-relaxed">
+            Analytics dashboards in GateFlow are not built from scratch. They
+            are composed using standard primitives from `@gateflow/components`
+            to ensure absolute parity in data density and token synchronization.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="flex flex-col gap-4">
-            <h4 className="text-xs font-black uppercase tracking-[0.2em] text-[var(--ds-primary-accent)]">
-              1. Stat Grid Assembly
-            </h4>
-            <div className="p-6 rounded-2xl bg-[var(--ds-surface-sunken)] border border-[var(--ds-border-bold)] font-mono text-[11px] leading-relaxed overflow-x-auto">
+        <div className="grid grid-cols-1 gap-8">
+          {/* StatGrid Assembly */}
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-2">
+              <h4 className="text-xs font-black uppercase tracking-[0.2em] text-[var(--ds-primary-accent)]">
+                1. StatGrid Configuration
+              </h4>
+              <p className="text-xs font-bold text-[var(--ds-text-subtle)] opacity-60">
+                StatGrid automatically handles responsive column spans and
+                semantic status variants (primary, success, danger, etc.).
+              </p>
+            </div>
+            <div className="p-8 rounded-[2rem] bg-[var(--ds-surface-sunken)] border border-[var(--ds-border-bold)] font-mono text-[12px] leading-relaxed overflow-x-auto shadow-inner">
               <pre className="text-[var(--ds-text-primary)]">
                 {`import { StatGrid } from '@gateflow/components';
+import { Users, Zap } from 'lucide-react';
 
-<StatGrid 
-  columns={4}
-  stats={[
-    { label: 'Active', value: '2k', trend: { value: '+5%', direction: 'up' } },
-    { label: 'Latency', value: '14ms', variant: 'primary' }
-  ]} 
-/>`}
+export function MyDashboard() {
+  return (
+    <StatGrid 
+      columns={4}
+      stats={[
+        { 
+          label: 'Active Residents', 
+          value: '2,842', 
+          trend: { value: '+12%', direction: 'up' },
+          icon: Users,
+          variant: 'primary' 
+        },
+        { 
+          label: 'Live Latency', 
+          value: '142ms', 
+          trend: { value: '-8ms', direction: 'up' },
+          icon: Zap,
+          variant: 'info' 
+        }
+      ]} 
+    />
+  );
+}`}
               </pre>
             </div>
           </div>
 
-          <div className="flex flex-col gap-4">
-            <h4 className="text-xs font-black uppercase tracking-[0.2em] text-[var(--ds-primary-accent)]">
-              2. Chart Theming
-            </h4>
-            <div className="p-6 rounded-2xl bg-[var(--ds-surface-sunken)] border border-[var(--ds-border-bold)] font-mono text-[11px] leading-relaxed overflow-x-auto">
+          {/* Chart Composition */}
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-2">
+              <h4 className="text-xs font-black uppercase tracking-[0.2em] text-[var(--ds-primary-accent)]">
+                2. Data Visualization Sync
+              </h4>
+              <p className="text-xs font-bold text-[var(--ds-text-subtle)] opacity-60">
+                GateFlow uses Recharts mapped to CSS variables. Never hardcode
+                hex values in charts.
+              </p>
+            </div>
+            <div className="p-8 rounded-[2rem] bg-[var(--ds-surface-sunken)] border border-[var(--ds-border-bold)] font-mono text-[12px] leading-relaxed overflow-x-auto shadow-inner">
               <pre className="text-[var(--ds-text-primary)]">
-                {`// Always use CSS variables for Recharts
+                {`// Example: Binding a BarChart to the Accent Profile
 <Bar 
   dataKey="value" 
-  fill="var(--ds-primary-accent)" 
   radius={[6, 6, 0, 0]} 
-/>`}
+  barSize={40}
+>
+  {data.map((entry, index) => (
+    <Cell 
+      key={\`cell-\${index}\`} 
+      fill={index === 0 ? "var(--ds-primary-accent)" : "var(--ds-border-bold)"} 
+    />
+  ))}
+</Bar>`}
               </pre>
             </div>
           </div>
