@@ -20,6 +20,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Admin Dashboard Evolution]** complete phase 2
+
 - **[Admin Dashboard Evolution]** complete phase 1
 
 - **[Design-System]** fix hardcoded hex values
