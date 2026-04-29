@@ -56,11 +56,11 @@ const patternSections = [
     color: 'bg-rose-500',
   },
   {
-    href: '/patterns/entities',
+    href: '/patterns/entity-management',
     icon: Users,
-    title: 'Entities',
+    title: 'Entity Management',
     description:
-      'Resident profiles, visitor cards, unit records, staff management lists, and compound entity displays.',
+      'Resident profiles, visitor records, staff management lists, and high-density compound project views.',
     color: 'bg-cyan-500',
   },
   {

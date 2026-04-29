@@ -59,6 +59,7 @@ const sidebarItems = (t: Record<string, string>) => [
     subItems: [
       { label: t.aiUi, href: '/patterns/ai-ui' },
       { label: t.analytics, href: '/patterns/analytics' },
+      { label: t.entityManagement, href: '/patterns/entity-management' },
       { label: t.forms, href: '/patterns/forms' },
       { label: t.complexUi, href: '/patterns/complex-ui' },
       { label: t.authBranding, href: '/patterns/auth-branding' },

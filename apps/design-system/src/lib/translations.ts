@@ -23,6 +23,7 @@ export const translations = {
       complexUi: 'Complex UI',
       authBranding: 'Auth & Branding',
       calendar: 'Calendar & Dates',
+      entityManagement: 'Entities',
     },
 
     header: {
@@ -97,6 +98,7 @@ export const translations = {
       complexUi: 'واجهة معقدة (Complex UI)',
       authBranding: 'الهوية والدخول',
       calendar: 'التقويم والتواريخ',
+      entityManagement: 'إدارة الكيانات',
     },
 
     header: {

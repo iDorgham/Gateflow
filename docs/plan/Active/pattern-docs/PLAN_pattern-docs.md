@@ -11,16 +11,7 @@
 
 - [x] Phase 2: AI UI Pattern Documentation
 
-## Phase 3: Entity & Composition Documentation
-
-- **Goal:** Document high-level composition patterns for management UI.
-- **Primary Role:** `frontend`
-- **Steps:**
-  1. Create or update `apps/design-system/src/app/(docs)/patterns/entity-management/page.tsx`.
-  2. Showcase the `EntityCard` and `FilterBar` combined with `StatGrid`.
-  3. Document "The Project View" pattern (Project/CRM/Resident lists).
-- **Acceptance Criteria:**
-  - Reusable code snippets for a "Standard List Page" are provided.
+- [x] Phase 3: Entity & Composition Documentation
 
 ## Phase 4: Final Certification & Hardening
 
