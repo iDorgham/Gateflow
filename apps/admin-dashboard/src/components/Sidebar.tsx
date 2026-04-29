@@ -21,7 +21,11 @@ import {
   FolderOpen,
   DoorOpen,
   Zap,
-  Database,
+  Target,
+  Briefcase,
+  Monitor,
+  PenTool,
+  BrainCircuit,
 } from 'lucide-react';
 import {
   cn,
@@ -44,75 +48,93 @@ interface NavGroupData {
 
 const getNavGroups = (t: TFunction): NavGroupData[] => [
   {
-    label: t('admin:nav.management', 'Management'),
+    label: t('admin:nav.management', 'Core Platform'),
     items: [
       {
         href: '/',
-        label: t('admin:nav.overview'),
+        label: t('admin:nav.overview', 'Overview'),
         icon: LayoutDashboard,
         exact: true,
       },
       {
         href: '/organizations',
-        label: t('admin:nav.organizations'),
+        label: t('admin:nav.organizations', 'Organizations'),
         icon: Building2,
       },
-      { href: '/users', label: t('admin:nav.users'), icon: Users },
-      { href: '/projects', label: t('admin:nav.projects'), icon: FolderOpen },
-      { href: '/gates', label: t('admin:nav.gates'), icon: DoorOpen },
+      { href: '/users', label: t('admin:nav.users', 'Users'), icon: Users },
+      { href: '/projects', label: t('admin:nav.projects', 'Projects'), icon: FolderOpen },
+      { href: '/gates', label: t('admin:nav.gates', 'Gates'), icon: DoorOpen },
+      { 
+        href: '/intelligence', 
+        label: t('admin:nav.intelligence_hub', 'Intelligence Hub'), 
+        icon: BrainCircuit 
+      },
     ],
   },
   {
-    label: t('admin:nav.intelligence', 'Intelligence'),
+    label: t('admin:nav.intelligence', 'Ops & Analytics'),
     items: [
-      { href: '/analytics', label: t('admin:nav.analytics'), icon: BarChart3 },
-      { href: '/scans', label: t('admin:nav.scans'), icon: ScanLine },
-      { href: '/audit-logs', label: t('admin:nav.audit'), icon: ScrollText },
+      { href: '/analytics', label: t('admin:nav.analytics', 'Performance'), icon: BarChart3 },
+      { href: '/scans', label: t('admin:nav.scans', 'Scan Traffic'), icon: ScanLine },
+      { href: '/monitoring/hub', label: t('admin:nav.ops_hub', 'Ops Control'), icon: Activity },
+      { href: '/audit-logs', label: t('admin:nav.audit', 'Audit Trail'), icon: ScrollText },
     ],
   },
   {
-    label: t('admin:nav.infrastructure', 'Infrastructure'),
+    label: t('admin:nav.sales_crm', 'Sales & CRM'),
     items: [
-      {
-        href: '/monitoring/hub',
-        label: t('admin:nav.ops_hub'),
-        icon: Activity,
-      },
-      {
-        href: '/monitoring/emulation',
-        label: t('admin:nav.emulation'),
-        icon: Zap,
-      },
-      {
-        href: '/monitoring/seeding',
-        label: t('admin:nav.seeding'),
-        icon: Database,
-      },
+      { href: '/crm', label: t('admin:nav.crm_dashboard', 'Lead CRM'), icon: Target },
+      { href: '/crm/deals', label: t('admin:nav.deals', 'Deal Pipeline'), icon: Briefcase },
+    ],
+  },
+  {
+    label: t('admin:nav.cms', 'Content & CMS'),
+    items: [
+      { href: '/cms/pages', label: t('admin:nav.landing_pages', 'Landing Pages'), icon: Monitor },
+      { href: '/cms/blog', label: t('admin:nav.blog_posts', 'Blog Studio'), icon: PenTool },
     ],
   },
   {
     label: t('admin:nav.governance', 'Governance'),
     items: [
-      { href: '/monitoring', label: t('admin:nav.monitoring'), icon: Activity },
+      {
+        href: '/monitoring/emulation',
+        label: t('admin:nav.emulation', 'Emulation'),
+        icon: Zap,
+      },
       {
         href: '/authorization-keys',
         label: t('admin:nav.authKeys', 'Auth Keys'),
         icon: KeyRound,
       },
-      { href: '/settings', label: t('admin:nav.settings'), icon: Settings },
-      { href: '/admins', label: t('admin:nav.admins'), icon: Shield },
+      { href: '/settings', label: t('admin:nav.settings', 'Settings'), icon: Settings },
+      { href: '/admins', label: t('admin:nav.admins', 'Admins'), icon: Shield },
     ],
   },
 ];
 
+import { OrgSwitcher } from './organizations/OrgSwitcher';
+
 export function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
-  const { t, i18n } = useTranslation();
+  const { t, i18n: i18nInstance } = useTranslation();
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const { orgId } = useOrganization();
 
   const navGroups = getNavGroups(t);
-  const localePrefix = `/${i18n.language}`;
+  const localePrefix = `/${i18nInstance.language}`;
+
+  const getScopedHref = (href: string) => {
+    // These paths remain global (or special)
+    const globalPaths = ['/organizations', '/admins', '/settings', '/authorization-keys', '/monitoring/emulation'];
+    
+    if (orgId && !globalPaths.includes(href)) {
+      return `${localePrefix}/organizations/${orgId}${href === '/' ? '' : href}`;
+    }
+    
+    return `${localePrefix}${href === '/' ? '' : href}`;
+  };
 
   async function handleSignOut() {
     await fetch('/api/admin/login', { method: 'DELETE' });
@@ -124,28 +146,7 @@ export function Sidebar() {
     <div className="relative h-full transition-all duration-300">
       <SideNavigationShell
         isCollapsed={isCollapsed}
-        header={
-          <div
-            className={cn(
-              'flex h-16 items-center px-4 gap-3 border-b border-border/40 mb-2',
-              isCollapsed && 'justify-center border-none'
-            )}
-          >
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-ds-background-brand-bold text-white shadow-lg shadow-primary/25 ring-2 ring-sidebar/20 transition-transform hover:scale-105 active:scale-95 cursor-default">
-              <Shield className="h-5 w-5" fill="currentColor" />
-            </div>
-            {!isCollapsed && (
-              <div className="flex flex-col min-w-0">
-                <span className="text-sm font-black italic tracking-tighter text-ds-text uppercase">
-                  GateFlow
-                </span>
-                <span className="text-[10px] font-black text-ds-text-brand tracking-widest uppercase opacity-90">
-                  Global Admin
-                </span>
-              </div>
-            )}
-          </div>
-        }
+        header={<OrgSwitcher isCollapsed={isCollapsed} />}
         footer={
           <div className="flex flex-col gap-0.5 p-2">
             <SideNavItem
@@ -167,7 +168,7 @@ export function Sidebar() {
             isCollapsed={isCollapsed}
           >
             {group.items.map((item) => {
-              const itemHref = `${localePrefix}${item.href === '/' ? '' : item.href}`;
+              const itemHref = getScopedHref(item.href);
               const active = item.exact
                 ? pathname === itemHref || pathname === `${itemHref}/`
                 : pathname.startsWith(itemHref);
@@ -200,7 +201,7 @@ export function Sidebar() {
             'h-3.5 w-3.5 text-ds-icon-subtle transition-transform group-hover:text-ds-icon',
             // Default: points left. If collapsed: points right.
             // But in RTL: default should point right. If collapsed: points left.
-            i18n.language === 'ar-EG'
+            i18nInstance.language === 'ar-EG'
               ? isCollapsed
                 ? 'rotate-0'
                 : 'rotate-180'

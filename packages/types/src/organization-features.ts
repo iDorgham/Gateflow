@@ -25,11 +25,16 @@ export interface DashboardConfig {
   quickActions: string[];
 }
 
+export interface SettingsConfig {
+  visibleTabs: string[];
+}
+
 export interface OrganizationFeatures {
   type: OrganizationType;
   terminology: OrganizationTerminology;
   sidebar: SidebarConfig;
   dashboard: DashboardConfig;
+  settings: SettingsConfig;
   flags: {
     maintenanceModule: boolean;
     rushHourAnalytics: boolean;
@@ -71,6 +76,9 @@ export const ORGANIZATION_FEATURES: Record<OrganizationType, OrganizationFeature
       chartIds: ['scans-by-hour', 'scans-by-gate', 'maintenance-status'],
       quickActions: ['create-qr', 'add-resident', 'report-incident'],
     },
+    settings: {
+      visibleTabs: ['workspace', 'projects', 'team', 'roles', 'notifications', 'api-keys', 'webhooks', 'integrations', 'billing'],
+    },
     flags: {
       maintenanceModule: true,
       rushHourAnalytics: true,
@@ -104,6 +112,9 @@ export const ORGANIZATION_FEATURES: Record<OrganizationType, OrganizationFeature
       kpiIds: ['total-scans', 'active-qr', 'active-students', 'security-incidents'],
       chartIds: ['attendance-trend', 'scans-by-gate', 'incident-summary'],
       quickActions: ['create-qr', 'log-attendance', 'report-incident'],
+    },
+    settings: {
+      visibleTabs: ['workspace', 'residents', 'team', 'roles', 'notifications', 'integrations', 'billing'],
     },
     flags: {
       maintenanceModule: false,
@@ -139,6 +150,9 @@ export const ORGANIZATION_FEATURES: Record<OrganizationType, OrganizationFeature
       chartIds: ['capacity-trend', 'scans-by-hour', 'membership-types'],
       quickActions: ['create-qr', 'check-in-member', 'issue-day-pass'],
     },
+    settings: {
+      visibleTabs: ['workspace', 'residents', 'team', 'roles', 'notifications', 'api-keys', 'integrations', 'billing', 'marketing'],
+    },
     flags: {
       maintenanceModule: true,
       rushHourAnalytics: false,
@@ -173,6 +187,9 @@ export const ORGANIZATION_FEATURES: Record<OrganizationType, OrganizationFeature
       chartIds: ['entry-velocity', 'capacity-gauge', 'guest-demographics'],
       quickActions: ['add-to-guest-list', 'check-in-vip', 'view-blacklist'],
     },
+    settings: {
+      visibleTabs: ['workspace', 'residents', 'team', 'roles', 'notifications', 'api-keys', 'integrations', 'billing', 'marketing'],
+    },
     flags: {
       maintenanceModule: false,
       rushHourAnalytics: false,
@@ -205,6 +222,9 @@ export const ORGANIZATION_FEATURES: Record<OrganizationType, OrganizationFeature
       kpiIds: ['total-tickets', 'checked-in', 'active-gates', 'conversion-rate'],
       chartIds: ['check-in-velocity', 'tickets-by-type', 'marketing-attribution'],
       quickActions: ['create-event', 'bulk-invite', 'export-attendees'],
+    },
+    settings: {
+      visibleTabs: ['workspace', 'projects', 'team', 'roles', 'notifications', 'api-keys', 'webhooks', 'integrations', 'billing', 'marketing'],
     },
     flags: {
       maintenanceModule: false,

@@ -72,6 +72,7 @@ import { TeamSidebarChat } from './team/TeamSidebarChat';
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import { useOrganizationFeatures } from '@/context/OrganizationFeaturesContext';
 import { buildSidebarNav, NavItemDef } from '@/lib/navigation-builder';
+import { OrgSwitcher } from './org-switcher';
 
 export interface DashboardLayoutProps {
   user: { id: string; name: string; email: string; role: string };
@@ -333,16 +334,15 @@ function LeftSidebar({
 }: {
   locale: Locale;
   isCollapsed: boolean;
-  onToggleCollapse: () => void;
-  isRtl: boolean;
   onOpenChat: () => void;
   isSuperAdmin: boolean;
   permissions?: Record<string, boolean>;
+  org: DashboardLayoutProps['org'];
 }) {
   const { t } = useTranslation('dashboard');
   const features = useOrganizationFeatures();
   
-  const navGroups = buildSidebarNav(features, permissions, t, isSuperAdmin);
+  const navGroups = buildSidebarNav(features, permissions, t, isSuperAdmin, org?.id);
 
   return (
     <motion.aside
@@ -354,33 +354,14 @@ function LeftSidebar({
     >
       <div
         className={cn(
-          'flex h-16 shrink-0 items-center border-b border-border/20 px-6',
+          'flex h-16 shrink-0 items-center border-b border-border/20 px-4',
           isCollapsed && 'justify-center px-0'
         )}
       >
-        <Link
-          href={`/${locale}`}
-          className="flex items-center gap-3 rounded-lg transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-primary/50"
-          aria-label="GateFlow home"
-        >
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-primary text-white shadow-sm">
-            <ShieldCheck className="h-5 w-5" />
-          </div>
-          <AnimatePresence mode="wait" initial={false}>
-            {!isCollapsed && (
-              <motion.span
-                key="brand-name"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.15 }}
-                className="text-lg font-bold tracking-tight text-[var(--ds-text,#FAFAFA)] whitespace-nowrap"
-              >
-                GateFlow
-              </motion.span>
-            )}
-          </AnimatePresence>
-        </Link>
+        <OrgSwitcher 
+          currentOrg={org} 
+          collapsed={isCollapsed} 
+        />
       </div>
 
       <ScrollArea className="flex-1">
@@ -619,10 +600,11 @@ function MobileSidebar({
   onOpenChat: () => void;
   isSuperAdmin: boolean;
   permissions?: Record<string, boolean>;
+  org: DashboardLayoutProps['org'];
 }) {
   const { t } = useTranslation('dashboard');
   const features = useOrganizationFeatures();
-  const navGroups = buildSidebarNav(features, permissions, t, isSuperAdmin);
+  const navGroups = buildSidebarNav(features, permissions, t, isSuperAdmin, org?.id);
 
   const NavItem = ({
     item,
@@ -788,6 +770,7 @@ export function DashboardLayout({
           onOpenChat={onOpenChat}
           isSuperAdmin={isSuperAdmin}
           permissions={_permissions as Record<string, boolean>}
+          org={_org}
         />
 
         <div className="flex flex-1 min-w-0 flex-col min-h-0 overflow-hidden">
@@ -859,6 +842,7 @@ export function DashboardLayout({
         onOpenChat={onOpenChat}
         isSuperAdmin={isSuperAdmin}
         permissions={_permissions as Record<string, boolean>}
+        org={_org}
       />
 
       <SecurityNotifier />

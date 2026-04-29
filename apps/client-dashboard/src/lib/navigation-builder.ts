@@ -155,10 +155,10 @@ export function buildSidebarNav(
   features: OrganizationFeatures,
   permissions: Record<string, boolean>,
   t: TFunction,
-  isSuperAdmin: boolean
+  isSuperAdmin: boolean,
+  orgId?: string
 ): SidebarGroup[] {
   const groups: SidebarGroup[] = [];
-
   for (const groupConfig of features.sidebar.moduleGroups) {
     const groupItems: NavItemDef[] = [];
 
@@ -172,6 +172,16 @@ export function buildSidebarNav(
       // Filter by permission
       if (def.permission && !permissions[def.permission]) continue;
 
+      // Inject orgId into href
+      let href = def.href;
+      if (orgId) {
+        if (def.id === 'overview') {
+          href = `/dashboard/organizations/${orgId}`;
+        } else if (href.startsWith('/dashboard')) {
+          href = `/dashboard/organizations/${orgId}${href.replace('/dashboard', '')}`;
+        }
+      }
+
       // Apply terminology override to label if applicable
       let label = t(def.i18nKey, def.label);
       if (itemId === 'units') {
@@ -183,6 +193,7 @@ export function buildSidebarNav(
       groupItems.push({
         ...def,
         label,
+        href,
       });
     }
 
@@ -197,10 +208,15 @@ export function buildSidebarNav(
 
   // Add SuperAdmin group if applicable
   if (isSuperAdmin) {
+    const emulationDef = { ...NAV_REGISTRY.emulation };
+    if (orgId) {
+      emulationDef.href = `/dashboard/organizations/${orgId}/emulation`;
+    }
+    
     groups.push({
       id: 'platform',
       label: t('sidebar.groupPlatform', 'Platform'),
-      items: [NAV_REGISTRY.emulation],
+      items: [emulationDef],
     });
   }
 

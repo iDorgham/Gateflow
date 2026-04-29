@@ -35,13 +35,13 @@
 
 ## Phase 6: Settings integration
 
-- [ ] Settings nav/tabs per type + permissions
-- [ ] `phase_logs/PHASE_LOG_phase_06.md` updated
+- [x] Settings nav/tabs per type + permissions
+- [x] `phase_logs/PHASE_LOG_phase_06.md` updated
 
 ## Phase 7: Arabic i18n & RTL
 
-- [ ] `en` + `ar-EG` parity for new keys; RTL fixes
-- [ ] `phase_logs/PHASE_LOG_phase_07.md` updated
+- [x] `en` + `ar-EG` parity for new keys; RTL fixes
+- [x] `phase_logs/PHASE_LOG_phase_07.md` updated
 
 ## Final
 

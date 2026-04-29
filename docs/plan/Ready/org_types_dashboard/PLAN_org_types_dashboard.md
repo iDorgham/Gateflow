@@ -16,8 +16,8 @@
 | **3** | Dynamic sidebar & layout              | [X]    | **FRONTEND**                                           | Sidebar/nav groups driven entirely by config for all five types                                              |
 | **4** | Dashboard home adaptation             | [X]    | **FRONTEND**                                           | Type-specific KPIs, chart priority, widgets, empty states (REAL_ESTATE first-class)                          |
 | **5** | Contextual modules                    | [X]    | **FRONTEND**                                           | Units/Students/Members/VIPs labeling & visibility; QR flows; Contacts/Guests; maintenance (REAL_ESTATE)      |
-| **6** | Settings page integration             | [ ]    | **FRONTEND**                                           | Advanced Settings (v6) tabs/sections contextual per type                                                     |
-| **7** | Arabic i18n & RTL                     | [ ]    | **FRONTEND** + **i18n**                                | All new copy in `en` + `ar-EG`, RTL verified per type                                                        |
+| **6** | Settings page integration             | [X]    | **FRONTEND**                                           | Advanced Settings (v6) tabs/sections contextual per type                                                     |
+| **7** | Arabic i18n & RTL                     | [X]    | **FRONTEND** + **i18n**                                | All new copy in `en` + `ar-EG`, RTL verified per type                                                        |
 
 ---
 

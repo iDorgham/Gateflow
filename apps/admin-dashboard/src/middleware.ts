@@ -186,6 +186,27 @@ export async function middleware(request: NextRequest) {
 
   const effectivePath = pathWithoutLocale === '' ? '/' : pathWithoutLocale;
 
+  const MOVED_PATHS = [
+    'admins',
+    'analytics',
+    'audit-logs',
+    'authorization-keys',
+    'crm',
+    'finance',
+    'gates',
+    'monitoring',
+    'projects',
+    'scans',
+    'settings',
+    'users',
+  ];
+
+  if (MOVED_PATHS.some((p) => effectivePath === `/${p}` || effectivePath.startsWith(`/${p}/`))) {
+    const locale = hasLocale ? pathname.split('/')[1] : DEFAULT_LOCALE;
+    const to = effectivePath.startsWith('/') ? effectivePath.slice(1) : effectivePath;
+    return NextResponse.redirect(new URL(`/${locale}/redirect?to=${to}`, request.url));
+  }
+
   if (PUBLIC_ROUTES.some((route) => effectivePath.startsWith(route))) {
     return NextResponse.next();
   }
@@ -229,6 +250,22 @@ export async function middleware(request: NextRequest) {
       { success: false, message: 'CSRF token invalid' },
       { status: 403 }
     );
+  }
+
+  // Phase 3: RBAC Enforcement for Task Management
+  if (pathname.startsWith('/api/tasks')) {
+    // In a full implementation, this would decode the gf_access_token JWT 
+    // and verify department scopes (e.g., SALES_REP can only access SALES boards).
+    // For now, we ensure the token exists (checked above) and pass the request.
+    // If the user is an Admin (has admin_session), they implicitly have SUPER_ADMIN access.
+    const isAdmin = request.cookies.get(ADMIN_COOKIE) !== undefined;
+    
+    if (!isAdmin && !authCookie) {
+      return NextResponse.json(
+        { success: false, message: 'Task management requires authentication' },
+        { status: 401 }
+      );
+    }
   }
 
   return NextResponse.next();

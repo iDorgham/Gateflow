@@ -252,7 +252,7 @@ export async function DashboardOverview({
         </div>
         <Button asChild className="shrink-0">
           <Link href="/dashboard/qrcodes/create">
-            <Plus className="mr-1.5 h-4 w-4" aria-hidden="true" />
+            <Plus className="me-1.5 h-4 w-4" aria-hidden="true" />
             {t('overview.createQr', { defaultValue: 'Create QR Code' })}
           </Link>
         </Button>
@@ -274,7 +274,7 @@ export async function DashboardOverview({
                     <Button variant="ghost" size="sm" asChild>
                       <Link href="/dashboard/scans" className="text-primary hover:text-primary/80">
                         {t('overview.viewAll', { defaultValue: 'View all' })}
-                        <ArrowRight className="ml-1 h-3.5 w-3.5" aria-hidden="true" />
+                        <ArrowRight className="ms-1 h-3.5 w-3.5 rtl:rotate-180" aria-hidden="true" />
                       </Link>
                     </Button>
                   </div>

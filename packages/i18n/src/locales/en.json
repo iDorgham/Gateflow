@@ -503,7 +503,34 @@
     "title": "Simple, transparent pricing",
     "subtitle": "Prices in EGP & AED. No per-gate fees. No hidden charges. Cancel any time.",
     "starter": "Starter",
-    "pro": "Pro"
+    "pro": "Pro",
+    "crm": "Lead CRM",
+    "tasks": "Team Tasks"
+  },
+  "tasks": {
+    "status": {
+      "TODO": "To Do",
+      "IN_PROGRESS": "In Progress",
+      "IN_REVIEW": "In Review",
+      "DONE": "Done",
+      "BLOCKED": "Blocked"
+    },
+    "priority": {
+      "LOW": "Low",
+      "MEDIUM": "Medium",
+      "HIGH": "High",
+      "URGENT": "Urgent"
+    },
+    "actions": {
+      "generate": "Generate Plan",
+      "approve": "Approve",
+      "dismiss": "Dismiss"
+    }
+  },
+  "bot": {
+    "title": "AI Assistant",
+    "placeholder": "Ask about scans, residents, or security logs...",
+    "thinking": "AI is thinking..."
   },
   "home": {
     "heroTitle": "Managing gate security has never been easier.",
@@ -781,6 +808,7 @@
     "settings": {
       "title": "System Control",
       "description": "Global configuration and administrative nodes for <1>{{orgName}}</1>.",
+      "gateflowDescription": "Core operational parameters and administrative nodes for <1>{{orgName}}</1>.",
       "tabs": {
         "general": "General",
         "profile": "Profile",
@@ -790,8 +818,11 @@
         "apiKeys": "API Keys",
         "webhooks": "Webhooks",
         "integrations": "Integrations",
-        "billing": "Billing"
+        "billing": "Billing",
+        "marketing": "Marketing"
       },
+      "titleSuffix": "Settings",
+      "gateflowTitleSuffix": "Setup",
       "profile": {
         "identity": "Identity",
         "memberSince": "Member since {{date}}",
@@ -835,6 +866,19 @@
           "passwordMismatch": "Passwords do not match.",
           "updateFailed": "Failed to update name.",
           "changeFailed": "Failed to change password."
+        }
+      },
+      "residents": {
+        "title": "{{orgName}} — {{unitLabel}} & {{contactLabel}}",
+        "description": "Manage {{unitLabel}} types, quotas, and global {{contactLabel}} privacy settings.",
+        "tabs": {
+          "overview": "Overview",
+          "types": "Unit Types",
+          "settings": "Settings"
+        },
+        "quotaLogic": {
+          "title": "Quota Logic",
+          "description": "Units default to their type's quota. Overriding at the unit level takes precedence. Active keys are counted against the monthly limit."
         }
       },
       "workspace": {

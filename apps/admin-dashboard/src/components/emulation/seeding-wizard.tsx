@@ -221,7 +221,7 @@ export function SeedingWizard({ organizationId }: { organizationId: string }) {
             <div className="border rounded-lg p-6 bg-accent/50 space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <LayoutGrid className="w-5 h-5 text-blue-500" />
+                  <LayoutGrid className="w-5 h-5 text-ds-text-information" />
                   <span className="font-semibold text-lg">
                     Configuration Summary
                   </span>
@@ -280,7 +280,7 @@ export function SeedingWizard({ organizationId }: { organizationId: string }) {
 
             <div className="space-y-2">
               <Label className="flex items-center gap-2">
-                <Users className="w-4 h-4 text-purple-500" />
+                <Users className="w-4 h-4 text-ds-text-brand" />
                 Rich Personas Integration
               </Label>
               <p className="text-xs text-muted-foreground p-3 border rounded bg-muted/30">
@@ -294,8 +294,8 @@ export function SeedingWizard({ organizationId }: { organizationId: string }) {
       case 4:
         return (
           <div className="py-12 flex flex-col items-center justify-center space-y-4 animate-in fade-in-0 slide-in-from-bottom-4 duration-500">
-            <div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center">
-              <CheckCircle2 className="w-10 h-10 text-green-500" />
+            <div className="w-16 h-16 rounded-full bg-ds-background-success-subtle flex items-center justify-center">
+              <CheckCircle2 className="w-10 h-10 text-ds-text-success" />
             </div>
             <div className="text-center space-y-2">
               <h3 className="text-2xl font-bold">Seeding Successful</h3>
@@ -338,7 +338,7 @@ export function SeedingWizard({ organizationId }: { organizationId: string }) {
           <div className="space-y-1">
             <CardTitle className="text-2xl flex items-center gap-3">
               Structural Seeding Wizard
-              <span className="text-[10px] bg-blue-500/10 text-blue-500 px-2 py-0.5 rounded-full border border-blue-500/20 font-mono uppercase tracking-tighter shadow-sm">
+              <span className="text-[10px] bg-ds-background-information-subtle text-ds-text-information px-2 py-0.5 rounded-full border border-ds-border-information font-mono uppercase tracking-tighter shadow-sm">
                 Advanced Engine v4
               </span>
             </CardTitle>
@@ -355,7 +355,7 @@ export function SeedingWizard({ organizationId }: { organizationId: string }) {
             {[1, 2, 3].map((i) => (
               <div
                 key={i}
-                className={`h-1.5 flex-1 rounded-full transition-all duration-500 ${step >= i ? 'bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]' : 'bg-muted'}`}
+                className={`h-1.5 flex-1 rounded-full transition-all duration-500 ${step >= i ? 'bg-ds-background-information-bold shadow-md' : 'bg-ds-background-neutral-subtle'}`}
               />
             ))}
           </div>
@@ -383,7 +383,7 @@ export function SeedingWizard({ organizationId }: { organizationId: string }) {
             </Button>
             {step < 3 ? (
               <Button
-                className="min-w-[120px] bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg shadow-blue-500/20"
+                className="min-w-[120px] bg-ds-background-information-bold hover:bg-ds-background-information-bold/90 shadow-lg shadow-ds-background-information-bold/20"
                 onClick={() => setStep(step + 1)}
               >
                 Advance Configuration

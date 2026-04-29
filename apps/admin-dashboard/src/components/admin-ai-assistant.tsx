@@ -323,7 +323,7 @@ export function AdminAIAssistant({ locale: _locale }: AdminAIAssistantProps) {
   return (
     <div className="flex h-full flex-col bg-background relative border-none">
       {/* Background decoration */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_-20%,rgba(access-brand-colors)/0.03,transparent)] opacity-30 pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_-20%,var(--ds-background-brand-subtle),transparent)] opacity-30 pointer-events-none" />
 
       {/* Messages */}
       <div className="flex-1 space-y-6 overflow-y-auto px-4 py-6 scrollbar-hide relative z-10">

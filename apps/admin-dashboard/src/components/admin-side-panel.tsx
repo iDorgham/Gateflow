@@ -34,8 +34,10 @@ export function AdminSidePanel({
   return (
     <div
       className={cn(
-        'relative flex h-full flex-col border-l border-ds-border bg-sidebar transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] overflow-hidden',
-        isOpen ? 'w-[420px] min-w-[420px] shadow-xl' : 'w-0 min-w-0 border-l-0'
+        'relative flex h-full flex-col border-ds-border bg-sidebar transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] overflow-hidden',
+        isOpen
+          ? 'w-[420px] min-w-[420px] shadow-xl ltr:border-l rtl:border-r'
+          : 'w-0 min-w-0 ltr:border-l-0 rtl:border-r-0'
       )}
     >
       <div className={cn('flex h-full flex-col', !isOpen && 'hidden')}>
@@ -43,7 +45,6 @@ export function AdminSidePanel({
           {/* Tab bar */}
           <div
             className="flex h-16 shrink-0 items-center justify-between border-b border-border px-3 py-2 bg-card"
-            dir={isRtl ? 'rtl' : 'ltr'}
           >
             <TabsList className="bg-muted/50 h-11 p-1 gap-1 rounded-xl w-full">
               <TabsTrigger
@@ -74,7 +75,7 @@ export function AdminSidePanel({
             <Button
               variant="ghost"
               size="icon"
-              className="ml-2 h-8 w-8 shrink-0 hover:bg-ds-surface-sunken"
+              className="h-8 w-8 shrink-0 hover:bg-ds-surface-sunken ltr:ml-2 rtl:mr-2"
               onClick={onToggle}
               aria-label="Close panel"
             >

@@ -89,7 +89,7 @@ export function GlobalScansTable({ scans, locale }: GlobalScansTableProps) {
             {scan.qrCode?.organization?.name ?? 'System Admin'}
           </span>
           <div className="flex items-center gap-2 text-[10px] text-ds-text-subtle font-medium">
-             <span className="w-1.5 h-1.5 rounded-full bg-ds-background-brand-bold/20 shadow-[0_0_0_1px_rgba(var(--ds-background-brand-bold-rgb),0.1)]" />
+             <span className="w-1.5 h-1.5 rounded-full bg-ds-background-brand-subtle shadow-[0_0_0_1px_var(--ds-border-brand)]" />
              {scan.gate?.name ?? 'Admin Portal'}
           </div>
         </div>

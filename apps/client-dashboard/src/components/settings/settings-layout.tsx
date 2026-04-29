@@ -20,48 +20,87 @@ import {
   CreditCard,
 } from 'lucide-react';
 import { cn, ScrollArea, Input } from '@gate-access/ui';
+import { useTranslation } from 'react-i18next';
+import { useOrganizationFeatures } from '@/context/OrganizationFeaturesContext';
+import { OrganizationType } from '@gate-access/types';
 
 interface SettingsTab {
   id: string;
   label: string;
   icon: React.ElementType;
   href: string;
+  permission?: string;
 }
 
-const SETTINGS_TABS: SettingsTab[] = [
-  { id: 'general', label: 'General', icon: User, href: '/dashboard/settings' },
-  { id: 'workspace', label: 'Workspace', icon: Building, href: '/dashboard/settings/workspace' },
-  { id: 'projects', label: 'Projects', icon: Layers, href: '/dashboard/settings/projects' },
-  { id: 'residents', label: 'Units & Residents', icon: LayoutGrid, href: '/dashboard/settings/residents' },
-  { id: 'team', label: 'Team', icon: Users, href: '/dashboard/settings/team' },
-  { id: 'rbac', label: 'Roles & Permissions', icon: ShieldCheck, href: '/dashboard/settings/rbac' },
-  { id: 'gates', label: 'Gates & Scanners', icon: DoorOpen, href: '/dashboard/settings/gates' },
-  { id: 'notifications', label: 'Notifications', icon: Bell, href: '/dashboard/settings/notifications' },
-  { id: 'api', label: 'API & Webhooks', icon: Code, href: '/dashboard/settings/api' },
-  { id: 'integrations', label: 'Integrations', icon: Globe, href: '/dashboard/settings/integrations' },
-  { id: 'billing', label: 'Billing & Quotas', icon: CreditCard, href: '/dashboard/settings/billing' },
-  { id: 'danger', label: 'Danger Zone', icon: Trash2, href: '/dashboard/settings/danger' },
+const SETTINGS_TABS_DEFS: Omit<SettingsTab, 'label'>[] = [
+  { id: 'general', icon: User, href: '/dashboard/settings' },
+  { id: 'workspace', icon: Building, href: '/dashboard/settings/workspace', permission: 'workspace:manage' },
+  { id: 'projects', icon: Layers, href: '/dashboard/settings/projects', permission: 'projects:view' },
+  { id: 'residents', icon: LayoutGrid, href: '/dashboard/settings/residents', permission: 'units:view' },
+  { id: 'team', icon: Users, href: '/dashboard/settings/team', permission: 'users:view' },
+  { id: 'rbac', icon: ShieldCheck, href: '/dashboard/settings/rbac', permission: 'roles:manage' },
+  { id: 'gates', icon: DoorOpen, href: '/dashboard/settings/gates', permission: 'gates:view' },
+  { id: 'notifications', icon: Bell, href: '/dashboard/settings/notifications' },
+  { id: 'api', icon: Code, href: '/dashboard/settings/api', permission: 'api_keys:manage' },
+  { id: 'integrations', icon: Globe, href: '/dashboard/settings/integrations', permission: 'workspace:manage' },
+  { id: 'billing', icon: CreditCard, href: '/dashboard/settings/billing', permission: 'billing:view' },
+  { id: 'danger', icon: Trash2, href: '/dashboard/settings/danger', permission: 'workspace:manage' },
 ];
 
-export function SettingsLayout({ children }: { children: React.ReactNode }) {
+export function SettingsLayout({ 
+  children,
+  permissions = {} 
+}: { 
+  children: React.ReactNode;
+  permissions?: Record<string, boolean>;
+}) {
   const pathname = usePathname();
   const [search, setSearch] = useState('');
+  const { t } = useTranslation('dashboard');
+  const features = useOrganizationFeatures();
 
-  const activeTab = SETTINGS_TABS.find((tab) => pathname === tab.href || pathname.startsWith(tab.href + '/')) || SETTINGS_TABS[0];
+  const tabs: SettingsTab[] = useMemo(() => {
+    return SETTINGS_TABS_DEFS
+      .filter((def) => {
+        // Filter by vertical config
+        if (!features.settings.visibleTabs.includes(def.id)) return false;
+        // Filter by permissions
+        if (def.permission && !permissions[def.permission]) return false;
+        return true;
+      })
+      .map((def) => {
+        let label = t(`settings.tabs.${def.id}`, def.id.charAt(0).toUpperCase() + def.id.slice(1));
+        
+        // Terminology overrides
+        if (def.id === 'residents') {
+          label = `${t(features.terminology.unitLabelPlural)} & ${t(features.terminology.contactLabelPlural)}`;
+        } else if (def.id === 'projects') {
+          label = t(features.terminology.projectLabel);
+        }
+
+        return { ...def, label };
+      });
+  }, [features, permissions, t]);
+
+  const activeTab = tabs.find((tab) => pathname === tab.href || pathname.startsWith(tab.href + '/')) || tabs[0] || { id: 'none', label: 'Settings', href: '#', icon: User };
 
   const visibleTabs = useMemo(() => {
-    if (!search.trim()) return SETTINGS_TABS;
+    if (!search.trim()) return tabs;
     const q = search.toLowerCase();
-    return SETTINGS_TABS.filter((t) => t.label.toLowerCase().includes(q) || t.id.toLowerCase().includes(q));
-  }, [search]);
+    return tabs.filter((t) => t.label.toLowerCase().includes(q) || t.id.toLowerCase().includes(q));
+  }, [search, tabs]);
 
   return (
     <div className="flex flex-col gap-6">
       {/* Header with Global Search Placeholder */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">Settings</h1>
-          <p className="text-sm text-muted-foreground">Manage your workspace preferences, team, and security.</p>
+          <h1 className="text-2xl font-bold text-foreground">
+            {t(features.terminology.orgLabel)} {t('settings.titleSuffix', 'Settings')}
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            {t('settings.description', 'Manage your workspace preferences, team, and security.')}
+          </p>
         </div>
         <div className="relative w-full max-w-sm sm:w-72">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />

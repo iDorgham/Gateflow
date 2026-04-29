@@ -43,6 +43,7 @@ model Organization {
   pixelMetaId                   String?
   adminAuthKeys                 AdminAuthorizationKey[]
   aiActionLogs                  AiActionLog[]
+  aiGeneratedAssets             AiGeneratedAsset[]
   aiAutomations                 AiAutomation[]
   aiTasks                       AiTask[]
   apiKeys                       ApiKey[]
@@ -66,6 +67,20 @@ model Organization {
   watchlistEntries              WatchlistEntry[]
   webhooks                      Webhook[]
   shortLinkClicks               ShortLinkClick[]
+  leads                         Lead[]
+  deals                         Deal[]
+  taskBoards                    TaskBoard[]
+  taskBotRules                  TaskBotRule[]
+  notifications                 Notification[]
+  branding                      OrganizationBranding?
+  activeStyleId                 String?                 @unique
+  activeStyle                   StyleSnapshot?          @relation("ActiveStyle", fields: [activeStyleId], references: [id])
+  styleSnapshots                StyleSnapshot[]         @relation("StyleSnapshots")
+  themeVariables                ThemeVariable[]
+  landingPages                  LandingPage[]
+  blogPosts                     BlogPost[]
+  supportTickets                SupportTicket[]
+  aiUsageLogs                   AiUsageLog[]
   communicationConfig           OrganizationCommunicationConfig?
   communicationLogs             CommunicationLog[]
   workOrders                    WorkOrder[]
@@ -75,8 +90,221 @@ model Organization {
   services          Service[]
   serviceBookings  ServiceBooking[]
   shiftLogs         ShiftLog[]
+  knowledgeSources  KnowledgeSource[]
+  knowledgeItems    KnowledgeItem[]
 
   @@index([deletedAt])
+}
+
+model OrganizationBranding {
+  id               String   @id @default(cuid())
+  organizationId   String   @unique
+  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  // Token overrides stored as JSON
+  tokenOverrides   Json     // { '--gf-color-primary': 'oklch(...)' }
+  fontFamily       String?  // Google Font name (EN)
+  fontFamilyArabic String?  // Google Font name (AR)
+  logoUrl          String?  // Vercel Blob URL
+  faviconUrl       String?  // Vercel Blob URL
+  isActive         Boolean  @default(true)
+  version          Int      @default(1)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([organizationId])
+}
+
+model StyleSnapshot {
+  id               String   @id @default(cuid())
+  name             String
+  organizationId   String
+  organization     Organization @relation("StyleSnapshots", fields: [organizationId], references: [id], onDelete: Cascade)
+  cssTokens        Json     // { "--ds-background": "#...", ... }
+  createdById      String
+  createdAt        DateTime @default(now())
+  activeFor        Organization? @relation("ActiveStyle")
+
+  @@index([organizationId])
+}
+
+model ThemeVariable {
+  id               String   @id @default(cuid())
+  organizationId   String
+  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  key              String   // e.g. "--ds-background-brand-bold"
+  value            String
+  category         String?  // COLORS, TYPOGRAPHY, SPACING
+  updatedAt        DateTime @updatedAt
+
+  @@unique([organizationId, key])
+}
+
+model LandingPage {
+  id               String               @id @default(cuid())
+  slug             String               @unique
+  titleEn          String
+  titleAr          String
+  status           LandingPageStatus    @default(DRAFT)
+  publishedAt      DateTime?
+  organizationId   String?              // null = GateFlow global
+  organization     Organization?        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdById      String
+  createdBy        User                 @relation(fields: [createdById], references: [id])
+  sections         LandingPageSection[]
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+
+  @@index([organizationId])
+  @@index([slug])
+}
+
+model LandingPageSection {
+  id               String                  @id @default(cuid())
+  pageId           String
+  page             LandingPage             @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  type             LandingPageSectionType
+  order            Int
+  contentEn        Json                    // { heroTitle, heroSubtitle, ... }
+  contentAr        Json
+  aiGenerated      Boolean                 @default(false)
+  assets           AiGeneratedAsset[]
+  createdAt        DateTime                @default(now())
+  updatedAt        DateTime                @updatedAt
+
+  @@index([pageId])
+}
+
+enum LandingPageStatus {
+  DRAFT
+  IN_REVIEW
+  PUBLISHED
+}
+
+enum LandingPageSectionType {
+  HERO
+  FEATURES
+  SOCIAL_PROOF
+  CTA
+  PRICING
+  FAQ
+  LEAD_FORM
+}
+
+model BlogPost {
+  id               String               @id @default(cuid())
+  status           BlogPostStatus       @default(DRAFT)
+  titleEn          String
+  titleAr          String
+  slugEn           String               @unique
+  slugAr           String               @unique
+  contentEn        String               @db.Text
+  contentAr        String               @db.Text
+  excerptEn        String?              @db.Text
+  excerptAr        String?              @db.Text
+  metaTitleEn      String?
+  metaTitleAr      String?
+  metaDescEn       String?
+  metaDescAr       String?
+  canonicalUrl     String?
+  featuredImageId  String?
+  featuredImage    AiGeneratedAsset?    @relation(fields: [featuredImageId], references: [id])
+  authorId         String
+  author           User                 @relation(fields: [authorId], references: [id])
+  organizationId   String?              // null = GateFlow global
+  organization     Organization?        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  categories       BlogCategory[]       @relation("BlogPostToCategory")
+  publishedAt      DateTime?
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+
+  @@index([organizationId])
+  @@index([slugEn])
+  @@index([slugAr])
+  @@index([status])
+}
+
+model BlogCategory {
+  id               String               @id @default(cuid())
+  nameEn           String
+  nameAr           String
+  slug             String               @unique
+  posts            BlogPost[]           @relation("BlogPostToCategory")
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+
+  @@index([slug])
+}
+
+enum BlogPostStatus {
+  DRAFT
+  IN_REVIEW
+  READY_TO_PUBLISH
+  PUBLISHED
+}
+
+model SupportTicket {
+  id               String         @id @default(cuid())
+  organizationId   String?        // null = general inquiry
+  organization     Organization?  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  subject          String
+  status           TicketStatus   @default(OPEN)
+  priority         TicketPriority @default(MEDIUM)
+  assigneeId       String?        // GateFlow support agent
+  assignee         User?          @relation("AssignedTickets", fields: [assigneeId], references: [id])
+  aiTriageSummary  String?        @db.Text
+  aiSuggestedAction String?
+  source           String         // 'client_dashboard' | 'marketing_site' | 'email' | 'manual'
+  messages         SupportMessage[]
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  resolvedAt       DateTime?
+  deletedAt        DateTime?
+
+  @@index([organizationId])
+  @@index([status])
+}
+
+model SupportMessage {
+  id           String        @id @default(cuid())
+  ticketId     String
+  ticket       SupportTicket @relation(fields: [ticketId], references: [id])
+  senderId     String?       // null = AI
+  sender       User?         @relation(fields: [senderId], references: [id])
+  senderType   String        // 'USER' | 'AGENT' | 'AI'
+  content      String        @db.Text
+  createdAt    DateTime      @default(now())
+}
+
+model AiUsageLog {
+  id             String   @id @default(cuid())
+  model          String   // 'gpt-4o', 'gemini-1.5-flash', etc.
+  inputTokens    Int
+  outputTokens   Int
+  estimatedCost  Float    // USD
+  department     String   // 'SALES', 'MARKETING', 'DEV', 'SUPPORT'
+  action         String   // 'LEAD_SCORED', 'BLOG_DRAFTED', 'TASK_GENERATED', 'SUPPORT_TRIAGED'
+  organizationId String?
+  organization   Organization? @relation(fields: [organizationId], references: [id])
+  createdAt      DateTime @default(now())
+
+  @@index([organizationId])
+  @@index([department])
+}
+
+enum TicketStatus {
+  OPEN
+  AI_TRIAGED
+  ASSIGNED
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+enum TicketPriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
 }
 
 model Project {
@@ -150,7 +378,7 @@ model User {
   email           String           @unique
   name            String
   passwordHash    String
-  organizationId  String?
+  organizationId  String
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
   deletedAt       DateTime?
@@ -173,7 +401,7 @@ model User {
   refreshTokens   RefreshToken[]
   scanLogs        ScanLog[]
   unit            Unit?
-  organization    Organization?    @relation(fields: [organizationId], references: [id])
+  organization    Organization    @relation(fields: [organizationId], references: [id])
   role            Role             @relation(fields: [roleId], references: [id])
   communicationLogs CommunicationLog[]
   reportedWorkOrders WorkOrder[] @relation("ReportedWorkOrders")
@@ -181,6 +409,14 @@ model User {
 
   serviceBookings ServiceBooking[]
   shiftLogs       ShiftLog[]
+  assignedTasks   Task[]           @relation("AssignedTasks")
+  createdTasks    Task[]           @relation("CreatedTasks")
+  notifications   Notification[]
+  landingPages      LandingPage[]
+  blogPosts         BlogPost[]
+  assignedTickets   SupportTicket[] @relation("AssignedTickets")
+  supportMessages   SupportMessage[]
+  assignedLeads     Lead[]
 
   @@index([organizationId])
   @@index([roleId])
@@ -205,22 +441,84 @@ model Invitation {
   @@index([token])
 }
 
+model TaskBoard {
+  id           String     @id @default(cuid())
+  name         String
+  department   Department
+  organizationId String
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  tasks        Task[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@index([organizationId])
+}
+
 model Task {
   id             String       @id @default(cuid())
   title          String
-  description    String?
+  description    String?      @db.Text
   status         TaskStatus   @default(TODO)
+  priority       TaskPriority @default(MEDIUM)
+  department     Department
+  boardId        String
+  board          TaskBoard    @relation(fields: [boardId], references: [id], onDelete: Cascade)
+  assigneeId     String?
+  assignee       User?        @relation("AssignedTasks", fields: [assigneeId], references: [id])
   dueDate        DateTime?
+  // Polymorphic linking to CRM/CMS entities
+  linkedType     String?      // 'LEAD' | 'DEAL' | 'BLOG_POST' | 'LANDING_PAGE'
+  linkedId       String?
   organizationId String
-  createdBy      String?
-  assignedTo     String?
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdById    String
+  createdBy      User         @relation("CreatedTasks", fields: [createdById], references: [id])
   createdAt      DateTime     @default(now())
   updatedAt      DateTime     @updatedAt
   deletedAt      DateTime?
-  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  notifications  Notification[]
 
   @@index([organizationId])
+  @@index([boardId])
+  @@index([assigneeId])
+  @@index([createdById])
   @@index([deletedAt])
+}
+
+model TaskBotRule {
+  id            String     @id @default(cuid())
+  name          String
+  department    Department
+  enabled       Boolean    @default(false)
+  autoExecute   Boolean    @default(false)  // false = HiTL required
+  triggerEvent  String     // e.g. 'LEAD_SCORE_ABOVE_80', 'DEAL_STAGE_CHANGED', 'BLOG_PUBLISHED'
+  conditions    Json       // { field: 'score', operator: 'gt', value: 80 }
+  actionTemplate Json      // { title: 'Follow up with {{lead.company}}', department: 'SALES', priority: 'HIGH' }
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdById    String
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  @@index([organizationId])
+}
+
+model Notification {
+  id             String       @id @default(cuid())
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  type           String       // 'TASK_ASSIGNED', 'BOT_APPROVAL_REQUIRED', 'TASK_DUE_SOON', 'TASK_STATUS_CHANGED'
+  message        String
+  read           Boolean      @default(false)
+  linkedTaskId   String?
+  linkedTask     Task?        @relation(fields: [linkedTaskId], references: [id])
+  createdAt      DateTime     @default(now())
+
+  @@index([userId])
+  @@index([organizationId])
+  @@index([read])
 }
 
 model ChatMessage {
@@ -790,10 +1088,12 @@ model AiActionLog {
   id               String         @id @default(cuid())
   organizationId   String
   userId           String?
-  actionType       String
+  action           String
   prompt           String
   intentJson       Json?
-  status           AiActionStatus @default(PENDING)
+  status           AiActionStatus @default(PENDING_CONFIRMATION)
+  payload          Json?
+  reasoning        String?
   result           String?
   metadata         Json?
   promptTokens     Int?
@@ -806,9 +1106,29 @@ model AiActionLog {
   organization     Organization   @relation(fields: [organizationId], references: [id])
   user             User?          @relation(fields: [userId], references: [id])
   tags             AiContentTag[]
+  assets           AiGeneratedAsset[]
+  leadId           String?
+  lead             Lead?          @relation(fields: [leadId], references: [id])
 
   @@index([organizationId])
   @@index([userId])
+  @@index([leadId])
+}
+
+model AiGeneratedAsset {
+  id             String       @id @default(cuid())
+  organizationId String
+  aiActionLogId  String
+  url            String
+  type           String
+  createdAt      DateTime     @default(now())
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  aiActionLog    AiActionLog  @relation(fields: [aiActionLogId], references: [id], onDelete: Cascade)
+  landingPageSections LandingPageSection[]
+  blogPosts           BlogPost[]
+
+  @@index([organizationId])
+  @@index([aiActionLogId])
 }
 
 model AiAutomation {
@@ -838,7 +1158,23 @@ model AiAutomation {
 enum TaskStatus {
   TODO
   IN_PROGRESS
+  IN_REVIEW
   DONE
+  BLOCKED
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum Department {
+  SALES
+  MARKETING
+  DEV
+  SUPPORT
 }
 
 enum AiTaskStatus {
@@ -849,9 +1185,9 @@ enum AiTaskStatus {
 }
 
 enum AiActionStatus {
-  PENDING
+  PENDING_CONFIRMATION
   CONFIRMED
-  CANCELLED
+  REJECTED
   EXECUTED
   FAILED
 }
@@ -1188,4 +1524,124 @@ enum MaintenanceLocationType {
   GATE
   UNIT
   PROJECT
+}
+
+enum CrmLeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  NEGOTIATION
+  CLOSED_WON
+  CLOSED_LOST
+}
+
+enum CrmDealStage {
+  PROSPECTING
+  DISCOVERY
+  PROPOSAL
+  NEGOTIATION
+  CLOSING
+  WON
+  LOST
+}
+
+model Lead {
+  id               String         @id @default(cuid())
+  organizationId   String
+  status           CrmLeadStatus  @default(NEW)
+  score            Int?
+  source           String?
+  notes            String?        @db.Text
+  consentGiven     Boolean        @default(false)
+  purgeAfterDays   Int            @default(365)
+  firstName        String?
+  lastName         String?
+  company          String?
+  encryptedEmail   String?
+  encryptedPhone   String?
+  
+  deletedAt        DateTime?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  
+  organization     Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  deals            Deal[]
+  aiActionLogs     AiActionLog[]
+  assignedToId     String?
+  assignedTo       User?          @relation(fields: [assignedToId], references: [id])
+
+  @@index([organizationId])
+  @@index([status])
+  @@index([deletedAt])
+}
+
+model Deal {
+  id                String       @id @default(cuid())
+  organizationId    String
+  leadId            String
+  name              String
+  value             Decimal      @db.Decimal(15, 2)
+  stage             CrmDealStage @default(PROSPECTING)
+  forecastCloseDate DateTime?
+  
+  deletedAt         DateTime?
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+  
+  organization      Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  lead              Lead         @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([leadId])
+  @@index([stage])
+  @@index([deletedAt])
+}
+
+model KnowledgeSource {
+  id               String               @id @default(cuid())
+  organizationId   String
+  organization     Organization         @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  type             KnowledgeSourceType
+  name             String
+  url              String?
+  fileUrl          String?
+  status           KnowledgeSourceStatus @default(PENDING)
+  lastSyncedAt     DateTime?
+  knowledgeItems   KnowledgeItem[]
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+
+  @@index([organizationId])
+}
+
+model KnowledgeItem {
+  id               String               @id @default(cuid())
+  sourceId         String
+  source           KnowledgeSource      @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+  organizationId   String
+  organization     Organization         @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  content          String               @db.Text
+  metadata         Json?                // { pageNumber, chunkIndex, title, ... }
+  embedding        Json?                // Store as JSON for cross-platform compatibility
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+
+  @@index([organizationId])
+  @@index([sourceId])
+}
+
+enum KnowledgeSourceType {
+  WEBSITE
+  PDF
+  DOCX
+  TXT
+  INTERNAL_PAGE
+  DATABASE_TABLE
+}
+
+enum KnowledgeSourceStatus {
+  PENDING
+  INDEXING
+  SYNCED
+  FAILED
 }
