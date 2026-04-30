@@ -27,7 +27,7 @@ export default async function OrganizationLayout(props: {
   return (
     <OrganizationProvider organization={organization}>
       <BrandingStyles orgId={orgId} />
-      {children}
+      {props.children}
     </OrganizationProvider>
   );
 }

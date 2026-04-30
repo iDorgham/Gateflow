@@ -8,15 +8,20 @@ import { OrganizationType } from '@gate-access/types';
 import { Suspense } from 'react';
 import { DashboardLoading } from '@/components/dashboard/dashboard-loading';
 
-export async function generateMetadata(
-  props: {
-    params: Promise<{ locale: Locale }>;
-  }
-) {
+export async function generateMetadata(props: {
+  params: Promise<{ locale: Locale }>;
+}) {
   const params = await props.params;
   const { t } = await getTranslation(params.locale, 'dashboard');
   return { title: t('overview.title', { defaultValue: 'Dashboard' }) };
 }
+
+export default async function DashboardPage(props: {
+  params: Promise<{ locale: Locale }>;
+}) {
+  const params = await props.params;
+  const claims = await getSessionClaims();
+  if (!claims?.sub) redirect(`/${params.locale}/login`);
 
   const org = await prisma.organization.findUnique({
     where: { id: claims.orgId },
@@ -28,9 +33,9 @@ export async function generateMetadata(
   return (
     <DashboardWrapper locale={params.locale}>
       <Suspense fallback={<DashboardLoading />}>
-        <DashboardOverview 
-          locale={params.locale} 
-          orgId={claims.orgId} 
+        <DashboardOverview
+          locale={params.locale}
+          orgId={claims.orgId}
           orgType={org.type}
         />
       </Suspense>

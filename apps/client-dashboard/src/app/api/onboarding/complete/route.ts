@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
     }
 
     const { name, orgName, orgEmail } = validation.data;
-    
+
     // 1. Ensure the TENANT_ADMIN role exists (built-in)
     let tenantAdminRole = await prisma.role.findFirst({
       where: { name: 'TENANT_ADMIN', organizationId: null },
@@ -71,7 +71,6 @@ export async function POST(request: NextRequest) {
         },
       });
     }
-
 
     // 2. Transaction to create org, default project, and update user
     const { org, user, defaultProject } = await prisma.$transaction(
@@ -111,7 +110,8 @@ export async function POST(request: NextRequest) {
     const newAccessToken = await signAccessToken(
       user.id,
       user.email,
-      user.organizationId, // Now has the org.id
+      user.organizationId,
+      null, // New org has no type yet
       {
         id: user.role.id,
         name: user.role.name,

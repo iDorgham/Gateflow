@@ -1,7 +1,6 @@
 import { requireAdmin } from '@/lib/admin-auth';
-import { prisma } from '@gate-access/db';
+import { prisma, type Department } from '@gate-access/db';
 import { TaskManagerClient } from '@/components/tasks/TaskManagerClient';
-import { Department } from '@prisma/client';
 
 export default async function TasksPage({
   params,

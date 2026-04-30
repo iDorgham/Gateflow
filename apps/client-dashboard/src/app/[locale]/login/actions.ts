@@ -48,6 +48,7 @@ export async function loginAction(
         passwordHash: true,
         role: true,
         organizationId: true,
+        organization: { select: { type: true } },
       },
     })
     .catch(() => null);
@@ -60,7 +61,13 @@ export async function loginAction(
 
   // Issue tokens
   const [accessToken, refreshToken] = await Promise.all([
-    signAccessToken(user.id, user.email, user.organizationId, user.role),
+    signAccessToken(
+      user.id,
+      user.email,
+      user.organizationId,
+      user.organization?.type ?? null,
+      user.role
+    ),
     Promise.resolve(generateRefreshToken()),
   ]);
 

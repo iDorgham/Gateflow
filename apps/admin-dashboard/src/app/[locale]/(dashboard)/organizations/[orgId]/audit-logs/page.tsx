@@ -51,13 +51,13 @@ interface SearchParams {
 const PAGE_SIZE = 40;
 
 export default async function AuditLogsPage(props: {
-  params: Promise<{ locale: Locale }>;
+  params: Promise<{ locale: Locale; orgId?: string }>;
   searchParams: Promise<SearchParams>;
 }) {
   const searchParams = await props.searchParams;
   const params = await props.params;
 
-  const { locale } = params;
+  const { locale, orgId } = params;
 
   await requireAdmin(locale);
   const { t } = (await getTranslation(locale, 'admin')) as {
@@ -87,7 +87,10 @@ export default async function AuditLogsPage(props: {
       ...(toDate ? { lte: toDate } : {}),
     };
   }
-  if (orgFilter) {
+
+  if (orgId) {
+    where.gate = { organizationId: orgId };
+  } else if (orgFilter) {
     where.qrCode = {
       organization: { name: { contains: orgFilter, mode: 'insensitive' } },
     };

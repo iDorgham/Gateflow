@@ -16,7 +16,7 @@ import {
 } from '@gate-access/ui';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
-import { updateResidentDefaults } from '../../../app/[locale]/dashboard/settings/residents/actions';
+import { updateResidentDefaults } from '@/app/[locale]/dashboard/organizations/[orgId]/settings/residents/actions';
 import { Shield, Eye, EyeOff } from 'lucide-react';
 
 const residentSettingsSchema = z.object({
@@ -30,7 +30,9 @@ interface ResidentSettingsFormProps {
   initialData: ResidentSettingsValues;
 }
 
-export function ResidentSettingsForm({ initialData }: ResidentSettingsFormProps) {
+export function ResidentSettingsForm({
+  initialData,
+}: ResidentSettingsFormProps) {
   const { t } = useTranslation('dashboard');
   const [isPending, startTransition] = useTransition();
 
@@ -43,9 +45,17 @@ export function ResidentSettingsForm({ initialData }: ResidentSettingsFormProps)
     startTransition(async () => {
       const result = await updateResidentDefaults(values);
       if (result.success) {
-        toast.success(t('settings.residents.updated', 'Resident settings updated successfully'));
+        toast.success(
+          t(
+            'settings.residents.updated',
+            'Resident settings updated successfully'
+          )
+        );
       } else {
-        toast.error(result.error || t('settings.residents.updateError', 'Failed to update settings'));
+        toast.error(
+          result.error ||
+            t('settings.residents.updateError', 'Failed to update settings')
+        );
       }
     });
   };
@@ -58,7 +68,10 @@ export function ResidentSettingsForm({ initialData }: ResidentSettingsFormProps)
           {t('settings.residents.privacyTitle', 'Resident Privacy & Defaults')}
         </CardTitle>
         <CardDescription>
-          {t('settings.residents.privacyDesc', 'Control how resident information is displayed on public landing pages and scan results.')}
+          {t(
+            'settings.residents.privacyDesc',
+            'Control how resident information is displayed on public landing pages and scan results.'
+          )}
         </CardDescription>
       </CardHeader>
       <CardContent className="px-0 space-y-6">
@@ -71,12 +84,17 @@ export function ResidentSettingsForm({ initialData }: ResidentSettingsFormProps)
                   {t('settings.residents.maskName', 'Mask Resident Name')}
                 </Label>
                 <p className="text-sm text-muted-foreground">
-                  {t('settings.residents.maskNameDesc', 'Hide the resident name on the temporary access landing page.')}
+                  {t(
+                    'settings.residents.maskNameDesc',
+                    'Hide the resident name on the temporary access landing page.'
+                  )}
                 </p>
               </div>
               <Switch
                 checked={form.watch('maskResidentNameOnLandingPage')}
-                onCheckedChange={(checked) => form.setValue('maskResidentNameOnLandingPage', checked)}
+                onCheckedChange={(checked) =>
+                  form.setValue('maskResidentNameOnLandingPage', checked)
+                }
               />
             </div>
 
@@ -87,19 +105,30 @@ export function ResidentSettingsForm({ initialData }: ResidentSettingsFormProps)
                   {t('settings.residents.showUnit', 'Show Unit Number')}
                 </Label>
                 <p className="text-sm text-muted-foreground">
-                  {t('settings.residents.showUnitDesc', 'Display the unit number/name on scan success pages for guards.')}
+                  {t(
+                    'settings.residents.showUnitDesc',
+                    'Display the unit number/name on scan success pages for guards.'
+                  )}
                 </p>
               </div>
               <Switch
                 checked={form.watch('showUnitOnLandingPage')}
-                onCheckedChange={(checked) => form.setValue('showUnitOnLandingPage', checked)}
+                onCheckedChange={(checked) =>
+                  form.setValue('showUnitOnLandingPage', checked)
+                }
               />
             </div>
           </div>
 
           <div className="flex justify-end pt-4">
-            <Button type="submit" disabled={isPending || !form.formState.isDirty} className="gap-2">
-              {isPending ? t('common.saving', 'Saving...') : t('common.save', 'Save Preferences')}
+            <Button
+              type="submit"
+              disabled={isPending || !form.formState.isDirty}
+              className="gap-2"
+            >
+              {isPending
+                ? t('common.saving', 'Saving...')
+                : t('common.save', 'Save Preferences')}
             </Button>
           </div>
         </form>

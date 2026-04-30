@@ -4,6 +4,12 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTransition } from 'react';
+import { ProjectFilterProvider } from '@/context/ProjectFilterContext';
+import { Toaster } from 'sonner';
+import { SecurityNotifier } from './realtime/SecurityNotifier';
+import { useRealtimeEvents } from '@/lib/realtime/use-realtime-events';
+import { getCsrfToken } from '@/lib/csrf';
+import type { Locale } from '@/lib/i18n-config';
 import {
   ShieldCheck,
   ChevronLeft,
@@ -243,7 +249,6 @@ function SearchHeader({
   );
 }
 
-
 function SidebarNavItem({
   item,
   collapsed,
@@ -260,7 +265,7 @@ function SidebarNavItem({
   const { t } = useTranslation('dashboard');
   const pathname = usePathname();
   const Icon = item.icon;
-  
+
   const isActive = (href: string, exact?: boolean) => {
     const localized = `/${locale}${href}`;
     return exact
@@ -331,9 +336,12 @@ function LeftSidebar({
   onOpenChat,
   isSuperAdmin,
   permissions = {},
+  org,
 }: {
   locale: Locale;
   isCollapsed: boolean;
+  onToggleCollapse: () => void;
+  isRtl: boolean;
   onOpenChat: () => void;
   isSuperAdmin: boolean;
   permissions?: Record<string, boolean>;
@@ -341,8 +349,14 @@ function LeftSidebar({
 }) {
   const { t } = useTranslation('dashboard');
   const features = useOrganizationFeatures();
-  
-  const navGroups = buildSidebarNav(features, permissions, t, isSuperAdmin, org?.id);
+
+  const navGroups = buildSidebarNav(
+    features,
+    permissions,
+    t,
+    isSuperAdmin,
+    org?.id
+  );
 
   return (
     <motion.aside
@@ -358,10 +372,7 @@ function LeftSidebar({
           isCollapsed && 'justify-center px-0'
         )}
       >
-        <OrgSwitcher 
-          currentOrg={org} 
-          collapsed={isCollapsed} 
-        />
+        <OrgSwitcher currentOrg={org} collapsed={isCollapsed} />
       </div>
 
       <ScrollArea className="flex-1">
@@ -402,13 +413,17 @@ function LeftSidebar({
         <div className="flex items-center gap-1">
           <div className="flex-1 min-w-0">
             <SidebarNavItem
-              item={buildSidebarNav(features, permissions, t, false)[0]?.items.find(i => i.id === 'settings') || {
-                id: 'settings',
-                label: 'Settings',
-                href: '/dashboard/settings',
-                icon: Gear,
-                i18nKey: 'sidebar.settings'
-              }}
+              item={
+                buildSidebarNav(features, permissions, t, false)[0]?.items.find(
+                  (i) => i.id === 'settings'
+                ) || {
+                  id: 'settings',
+                  label: 'Settings',
+                  href: '/dashboard/settings',
+                  icon: Gear,
+                  i18nKey: 'sidebar.settings',
+                }
+              }
               collapsed={isCollapsed}
               locale={locale}
               isRtl={isRtl}
@@ -592,6 +607,7 @@ function MobileSidebar({
   isRtl,
   isSuperAdmin,
   permissions = {},
+  org,
 }: {
   locale: Locale;
   isOpen: boolean;
@@ -604,7 +620,13 @@ function MobileSidebar({
 }) {
   const { t } = useTranslation('dashboard');
   const features = useOrganizationFeatures();
-  const navGroups = buildSidebarNav(features, permissions, t, isSuperAdmin, org?.id);
+  const navGroups = buildSidebarNav(
+    features,
+    permissions,
+    t,
+    isSuperAdmin,
+    org?.id
+  );
 
   const NavItem = ({
     item,
@@ -684,13 +706,15 @@ function MobileSidebar({
 
               <div className="mt-auto border-t border-border/50 pt-4">
                 <NavItem
-                  item={navGroups[0]?.items.find(i => i.id === 'settings') || {
-                    id: 'settings',
-                    label: 'Settings',
-                    href: '/dashboard/settings',
-                    icon: Gear,
-                    i18nKey: 'sidebar.settings'
-                  }}
+                  item={
+                    navGroups[0]?.items.find((i) => i.id === 'settings') || {
+                      id: 'settings',
+                      label: 'Settings',
+                      href: '/dashboard/settings',
+                      icon: Gear,
+                      i18nKey: 'sidebar.settings',
+                    }
+                  }
                   onClick={() => onOpenChange(false)}
                 />
               </div>

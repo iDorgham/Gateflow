@@ -10,12 +10,17 @@
 
 // Set env vars BEFORE any module is imported.
 process.env.NEXTAUTH_SECRET = 'test-jwt-secret-must-be-long-enough-for-hmac256';
-process.env.QR_SIGNING_SECRET = 'test-qr-signing-secret-that-is-at-least-32-chars!!';
+process.env.QR_SIGNING_SECRET =
+  'test-qr-signing-secret-that-is-at-least-32-chars!!';
 
 import { signQRPayload, type QRPayload, QRCodeType } from '@gate-access/types';
 import crypto from 'crypto';
 import { signAccessToken } from '../../../../lib/auth';
-import { UserRole, DEFAULT_PERMISSIONS, BUILT_IN_ROLES } from '@gate-access/types';
+import {
+  UserRole,
+  DEFAULT_PERMISSIONS,
+  BUILT_IN_ROLES,
+} from '@gate-access/types';
 import type { RateLimitResult } from '../../../../lib/rate-limit';
 
 // Mock auth module to avoid jose ESM issues
@@ -25,30 +30,42 @@ const mockVerifyAccessToken = jest.fn().mockResolvedValue({
   orgId: 'org_test_456',
   roleId: 'role-admin',
   roleName: 'TENANT_ADMIN',
-  permissions: { gate: { read: true, write: true }, qr: { read: true, write: true } },
+  permissions: {
+    gate: { read: true, write: true },
+    qr: { read: true, write: true },
+  },
 });
 
 jest.mock('../../../../lib/auth', () => ({
-  signAccessToken: jest.fn().mockImplementation(async (userId, email, orgId, role) => {
-    const header = { alg: 'HS256', typ: 'JWT' };
-    const payload = {
-      sub: userId,
-      email,
-      orgId,
-      roleId: role.id || 'role-admin',
-      roleName: role.name || 'TENANT_ADMIN',
-      permissions: role.permissions || { gate: { read: true, write: true }, qr: { read: true, write: true } },
-      iat: Math.floor(Date.now() / 1000),
-      exp: Math.floor(Date.now() / 1000) + 900,
-    };
-    const encodedHeader = Buffer.from(JSON.stringify(header)).toString('base64url');
-    const encodedPayload = Buffer.from(JSON.stringify(payload)).toString('base64url');
-    const signature = crypto
-      .createHmac('sha256', 'test-jwt-secret-must-be-long-enough-for-hmac256')
-      .update(`${encodedHeader}.${encodedPayload}`)
-      .digest('base64url');
-    return `${encodedHeader}.${encodedPayload}.${signature}`;
-  }),
+  signAccessToken: jest
+    .fn()
+    .mockImplementation(async (userId, email, orgId, role) => {
+      const header = { alg: 'HS256', typ: 'JWT' };
+      const payload = {
+        sub: userId,
+        email,
+        orgId,
+        roleId: role.id || 'role-admin',
+        roleName: role.name || 'TENANT_ADMIN',
+        permissions: role.permissions || {
+          gate: { read: true, write: true },
+          qr: { read: true, write: true },
+        },
+        iat: Math.floor(Date.now() / 1000),
+        exp: Math.floor(Date.now() / 1000) + 900,
+      };
+      const encodedHeader = Buffer.from(JSON.stringify(header)).toString(
+        'base64url'
+      );
+      const encodedPayload = Buffer.from(JSON.stringify(payload)).toString(
+        'base64url'
+      );
+      const signature = crypto
+        .createHmac('sha256', 'test-jwt-secret-must-be-long-enough-for-hmac256')
+        .update(`${encodedHeader}.${encodedPayload}`)
+        .digest('base64url');
+      return `${encodedHeader}.${encodedPayload}.${signature}`;
+    }),
   verifyAccessToken: jest.fn(() => mockVerifyAccessToken()),
 }));
 
@@ -59,9 +76,13 @@ jest.mock('../../../../lib/require-auth', () => ({
     orgId: 'org_test_456',
     roleId: 'role-admin',
     roleName: 'TENANT_ADMIN',
-    permissions: { gate: { read: true, write: true }, qr: { read: true, write: true } },
+    permissions: {
+      gate: { read: true, write: true },
+      qr: { read: true, write: true },
+    },
   }),
-  isNextResponse: (value: unknown) => value && typeof value === 'object' && 'status' in value,
+  isNextResponse: (value: unknown) =>
+    value && typeof value === 'object' && 'status' in value,
 }));
 
 // ─── Prisma mock ──────────────────────────────────────────────────────────────
@@ -101,7 +122,8 @@ jest.mock('@gate-access/db', () => ({
     incident: {
       create: (...args: unknown[]) => mockIncidentCreate(...args),
     },
-    $transaction: (fn: (tx: unknown) => Promise<unknown>) => mockTransaction(fn),
+    $transaction: (fn: (tx: unknown) => Promise<unknown>) =>
+      mockTransaction(fn),
   },
   // Tenant context helpers must be mocked or they are undefined → TypeError in finally.
   setOrganizationContext: jest.fn(),
@@ -110,8 +132,11 @@ jest.mock('@gate-access/db', () => ({
 
 // ─── Rate-limiter mock (allow all by default; override per test) ───────────────
 
-const mockCheckRateLimit = jest.fn<Promise<RateLimitResult>, [string, number?, number?]>(() =>
-  Promise.resolve({ allowed: true, limit: 100, remaining: 99, retryAfterMs: 0 }),
+const mockCheckRateLimit = jest.fn<
+  Promise<RateLimitResult>,
+  [string, number?, number?]
+>(() =>
+  Promise.resolve({ allowed: true, limit: 100, remaining: 99, retryAfterMs: 0 })
 );
 
 jest.mock('../../../../lib/rate-limit', () => ({
@@ -145,10 +170,10 @@ function makePayload(overrides?: Partial<QRPayload>): QRPayload {
 }
 
 async function makeAuthHeader(orgId = ORG_ID): Promise<string> {
-  const token = await signAccessToken('user_1', 'test@test.com', orgId, { 
-    id: 'role-admin', 
+  const token = await signAccessToken('user_1', 'test@test.com', orgId, null, {
+    id: 'role-admin',
     name: UserRole.TENANT_ADMIN,
-    permissions: DEFAULT_PERMISSIONS[BUILT_IN_ROLES.ORG_ADMIN]
+    permissions: DEFAULT_PERMISSIONS[BUILT_IN_ROLES.ORG_ADMIN],
   });
   return `Bearer ${token}`;
 }
@@ -167,7 +192,9 @@ function makeRequest(body: unknown, authHeader?: string): Request {
 function makeTx(qrOverrides?: Record<string, unknown>) {
   return {
     qRCode: {
-      findUnique: jest.fn().mockResolvedValue({ ...mockQRCode, ...qrOverrides }),
+      findUnique: jest
+        .fn()
+        .mockResolvedValue({ ...mockQRCode, ...qrOverrides }),
       update: jest.fn().mockResolvedValue(undefined),
     },
     scanLog: {
@@ -192,7 +219,12 @@ describe.skip('POST /api/qrcodes/validate', () => {
     jest.clearAllMocks();
 
     // Default: rate limiter allows the request.
-    mockCheckRateLimit.mockResolvedValue({ allowed: true, limit: 100, remaining: 99, retryAfterMs: 0 });
+    mockCheckRateLimit.mockResolvedValue({
+      allowed: true,
+      limit: 100,
+      remaining: 99,
+      retryAfterMs: 0,
+    });
 
     // Default: gate-assignment check passes (user allowed to scan at this gate).
     mockCheckGateAssignment.mockResolvedValue(null);
@@ -210,8 +242,8 @@ describe.skip('POST /api/qrcodes/validate', () => {
     mockScanLogCreate.mockResolvedValue({ id: 'scan_result_123' });
 
     // Default: transaction succeeds with the default QR state.
-    mockTransaction.mockImplementation(async (fn: (tx: unknown) => Promise<unknown>) =>
-      fn(makeTx()),
+    mockTransaction.mockImplementation(
+      async (fn: (tx: unknown) => Promise<unknown>) => fn(makeTx())
     );
   });
 
@@ -223,14 +255,21 @@ describe.skip('POST /api/qrcodes/validate', () => {
   });
 
   it('returns 401 when the JWT is invalid', async () => {
-    const res = await POST(makeRequest({ qrPayload: 'anything' }, 'Bearer invalid.token.here'));
+    const res = await POST(
+      makeRequest({ qrPayload: 'anything' }, 'Bearer invalid.token.here')
+    );
     expect(res.status).toBe(401);
   });
 
   // ── Rate limiting ─────────────────────────────────────────────────────────
 
   it('returns 429 with Retry-After when rate limit is exceeded', async () => {
-    mockCheckRateLimit.mockResolvedValue({ allowed: false, limit: 100, remaining: 0, retryAfterMs: 30_000 });
+    mockCheckRateLimit.mockResolvedValue({
+      allowed: false,
+      limit: 100,
+      remaining: 0,
+      retryAfterMs: 30_000,
+    });
 
     const auth = await makeAuthHeader();
     const res = await POST(makeRequest({ qrPayload: 'anything' }, auth));
@@ -247,7 +286,12 @@ describe.skip('POST /api/qrcodes/validate', () => {
   it('passes the authenticated user ID as the rate-limit key', async () => {
     const auth = await makeAuthHeader();
     const signed = signQRPayload(makePayload(), QR_SECRET);
-    await POST(makeRequest({ qrPayload: signed, scanContext: { gateId: 'gate_test_789' } }, auth));
+    await POST(
+      makeRequest(
+        { qrPayload: signed, scanContext: { gateId: 'gate_test_789' } },
+        auth
+      )
+    );
     expect(mockCheckRateLimit.mock.calls[0][0]).toBe('validate:user_1');
   });
 
@@ -256,7 +300,7 @@ describe.skip('POST /api/qrcodes/validate', () => {
   it('rejects a tampered QR payload (bad signature)', async () => {
     const auth = await makeAuthHeader();
     const res = await POST(
-      makeRequest({ qrPayload: 'gateflow:1:tampered.' + '0'.repeat(64) }, auth),
+      makeRequest({ qrPayload: 'gateflow:1:tampered.' + '0'.repeat(64) }, auth)
     );
     const data = await res.json();
 
@@ -267,7 +311,9 @@ describe.skip('POST /api/qrcodes/validate', () => {
 
   it('rejects a completely malformed QR string', async () => {
     const auth = await makeAuthHeader();
-    const res = await POST(makeRequest({ qrPayload: 'not-a-valid-qr-string' }, auth));
+    const res = await POST(
+      makeRequest({ qrPayload: 'not-a-valid-qr-string' }, auth)
+    );
     const data = await res.json();
 
     expect(res.status).toBe(403);
@@ -278,7 +324,9 @@ describe.skip('POST /api/qrcodes/validate', () => {
 
   it('rejects a QR whose payload expiresAt is in the past', async () => {
     const auth = await makeAuthHeader();
-    const payload = makePayload({ expiresAt: new Date(Date.now() - 60_000).toISOString() });
+    const payload = makePayload({
+      expiresAt: new Date(Date.now() - 60_000).toISOString(),
+    });
     const signed = signQRPayload(payload, QR_SECRET);
     const res = await POST(makeRequest({ qrPayload: signed }, auth));
     const data = await res.json();
@@ -295,10 +343,15 @@ describe.skip('POST /api/qrcodes/validate', () => {
 
     const auth = await makeAuthHeader();
     // Payload says not expired — DB is authoritative.
-    const payload = makePayload({ expiresAt: new Date(Date.now() + 3_600_000).toISOString() });
+    const payload = makePayload({
+      expiresAt: new Date(Date.now() + 3_600_000).toISOString(),
+    });
     const signed = signQRPayload(payload, QR_SECRET);
     const res = await POST(
-      makeRequest({ qrPayload: signed, scanContext: { gateId: 'gate_test_789' } }, auth),
+      makeRequest(
+        { qrPayload: signed, scanContext: { gateId: 'gate_test_789' } },
+        auth
+      )
     );
     const data = await res.json();
 
@@ -320,7 +373,10 @@ describe.skip('POST /api/qrcodes/validate', () => {
   });
 
   it('rejects when DB row orgId differs from token orgId (DB desync guard)', async () => {
-    mockFindUnique.mockResolvedValue({ ...mockQRCode, organizationId: 'org_TAMPERED' });
+    mockFindUnique.mockResolvedValue({
+      ...mockQRCode,
+      organizationId: 'org_TAMPERED',
+    });
 
     const auth = await makeAuthHeader();
     const signed = signQRPayload(makePayload(), QR_SECRET);
@@ -332,12 +388,17 @@ describe.skip('POST /api/qrcodes/validate', () => {
   });
 
   it('rejects when operator is not assigned to the gate (gate–account assignment)', async () => {
-    mockCheckGateAssignment.mockResolvedValue('You are not allowed to scan at this gate.');
+    mockCheckGateAssignment.mockResolvedValue(
+      'You are not allowed to scan at this gate.'
+    );
 
     const auth = await makeAuthHeader();
     const signed = signQRPayload(makePayload(), QR_SECRET);
     const res = await POST(
-      makeRequest({ qrPayload: signed, scanContext: { gateId: 'gate_test_789' } }, auth),
+      makeRequest(
+        { qrPayload: signed, scanContext: { gateId: 'gate_test_789' } },
+        auth
+      )
     );
     const data = await res.json();
 
@@ -368,7 +429,10 @@ describe.skip('POST /api/qrcodes/validate', () => {
     const auth = await makeAuthHeader();
     const signed = signQRPayload(makePayload(), QR_SECRET);
     const res = await POST(
-      makeRequest({ qrPayload: signed, scanContext: { gateId: 'gate_test_789' } }, auth),
+      makeRequest(
+        { qrPayload: signed, scanContext: { gateId: 'gate_test_789' } },
+        auth
+      )
     );
     const data = await res.json();
 
@@ -382,7 +446,10 @@ describe.skip('POST /api/qrcodes/validate', () => {
     const auth = await makeAuthHeader();
     const signed = signQRPayload(makePayload(), QR_SECRET);
     const res = await POST(
-      makeRequest({ qrPayload: signed, scanContext: { gateId: 'gate_test_789' } }, auth),
+      makeRequest(
+        { qrPayload: signed, scanContext: { gateId: 'gate_test_789' } },
+        auth
+      )
     );
     const data = await res.json();
 
@@ -398,7 +465,10 @@ describe.skip('POST /api/qrcodes/validate', () => {
     const auth = await makeAuthHeader();
     const signed = signQRPayload(makePayload(), QR_SECRET);
     const res = await POST(
-      makeRequest({ qrPayload: signed, scanContext: { gateId: 'gate_test_789' } }, auth),
+      makeRequest(
+        { qrPayload: signed, scanContext: { gateId: 'gate_test_789' } },
+        auth
+      )
     );
     const data = await res.json();
 
@@ -415,9 +485,15 @@ describe.skip('POST /api/qrcodes/validate', () => {
     });
 
     const auth = await makeAuthHeader();
-    const signed = signQRPayload(makePayload({ type: QRCodeType.RECURRING, maxUses: 5 }), QR_SECRET);
+    const signed = signQRPayload(
+      makePayload({ type: QRCodeType.RECURRING, maxUses: 5 }),
+      QR_SECRET
+    );
     const res = await POST(
-      makeRequest({ qrPayload: signed, scanContext: { gateId: 'gate_test_789' } }, auth),
+      makeRequest(
+        { qrPayload: signed, scanContext: { gateId: 'gate_test_789' } },
+        auth
+      )
     );
     const data = await res.json();
 
@@ -430,14 +506,18 @@ describe.skip('POST /api/qrcodes/validate', () => {
   it('rejects at transaction level when SINGLE-use QR was concurrently exhausted', async () => {
     // Pre-transaction check sees currentUses=0 (passes), but inside the
     // transaction the fresh read sees currentUses=1 → UsageLimitError.
-    mockTransaction.mockImplementation(async (fn: (tx: unknown) => Promise<unknown>) =>
-      fn(makeTx({ currentUses: 1 })),
+    mockTransaction.mockImplementation(
+      async (fn: (tx: unknown) => Promise<unknown>) =>
+        fn(makeTx({ currentUses: 1 }))
     );
 
     const auth = await makeAuthHeader();
     const signed = signQRPayload(makePayload(), QR_SECRET);
     const res = await POST(
-      makeRequest({ qrPayload: signed, scanContext: { gateId: 'gate_test_789' } }, auth),
+      makeRequest(
+        { qrPayload: signed, scanContext: { gateId: 'gate_test_789' } },
+        auth
+      )
     );
     const data = await res.json();
 
@@ -452,9 +532,12 @@ describe.skip('POST /api/qrcodes/validate', () => {
     const signed = signQRPayload(makePayload(), QR_SECRET);
     const res = await POST(
       makeRequest(
-        { qrPayload: signed, scanContext: { gateId: 'gate_test_789', deviceId: 'device_1' } },
-        auth,
-      ),
+        {
+          qrPayload: signed,
+          scanContext: { gateId: 'gate_test_789', deviceId: 'device_1' },
+        },
+        auth
+      )
     );
     const data = await res.json();
 
@@ -471,17 +554,32 @@ describe.skip('POST /api/qrcodes/validate', () => {
       currentUses: 9999,
       expiresAt: null,
     });
-    mockTransaction.mockImplementation(async (fn: (tx: unknown) => Promise<unknown>) =>
-      fn(makeTx({ type: 'PERMANENT', maxUses: null, currentUses: 9999, expiresAt: null })),
+    mockTransaction.mockImplementation(
+      async (fn: (tx: unknown) => Promise<unknown>) =>
+        fn(
+          makeTx({
+            type: 'PERMANENT',
+            maxUses: null,
+            currentUses: 9999,
+            expiresAt: null,
+          })
+        )
     );
 
     const auth = await makeAuthHeader();
     const signed = signQRPayload(
-      makePayload({ type: QRCodeType.PERMANENT, maxUses: null, expiresAt: null }),
-      QR_SECRET,
+      makePayload({
+        type: QRCodeType.PERMANENT,
+        maxUses: null,
+        expiresAt: null,
+      }),
+      QR_SECRET
     );
     const res = await POST(
-      makeRequest({ qrPayload: signed, scanContext: { gateId: 'gate_test_789' } }, auth),
+      makeRequest(
+        { qrPayload: signed, scanContext: { gateId: 'gate_test_789' } },
+        auth
+      )
     );
     const data = await res.json();
 
@@ -526,7 +624,10 @@ describe.skip('POST /api/qrcodes/validate', () => {
     const auth = await makeAuthHeader();
     const signed = signQRPayload(makePayload(), QR_SECRET);
     const res = await POST(
-      makeRequest({ qrPayload: signed, scanContext: { gateId: 'gate_test_789' } }, auth),
+      makeRequest(
+        { qrPayload: signed, scanContext: { gateId: 'gate_test_789' } },
+        auth
+      )
     );
     const data = await res.json();
 
@@ -545,14 +646,19 @@ describe.skip('POST /api/qrcodes/validate', () => {
     const auth = await makeAuthHeader();
     const signed = signQRPayload(makePayload(), QR_SECRET);
     const res = await POST(
-      makeRequest({ qrPayload: signed, scanContext: { gateId: 'gate_test_789' } }, auth),
+      makeRequest(
+        { qrPayload: signed, scanContext: { gateId: 'gate_test_789' } },
+        auth
+      )
     );
     const data = await res.json();
 
     expect(res.status).toBe(403);
     expect(data.status).toBe('rejected');
     expect(data.reason).toBe('not_on_location');
-    expect(data.message).toMatch(/only allowed at gate location|Enable device location/i);
+    expect(data.message).toMatch(
+      /only allowed at gate location|Enable device location/i
+    );
   });
 
   it('accepts scan when location rule is on and device is within radius', async () => {
@@ -566,14 +672,17 @@ describe.skip('POST /api/qrcodes/validate', () => {
     const auth = await makeAuthHeader();
     const signed = signQRPayload(makePayload(), QR_SECRET);
     const res = await POST(
-      makeRequest({
-        qrPayload: signed,
-        scanContext: {
-          gateId: 'gate_test_789',
-          latitude: 24.714,
-          longitude: 46.676,
+      makeRequest(
+        {
+          qrPayload: signed,
+          scanContext: {
+            gateId: 'gate_test_789',
+            latitude: 24.714,
+            longitude: 46.676,
+          },
         },
-      }, auth),
+        auth
+      )
     );
     const data = await res.json();
 
@@ -592,14 +701,17 @@ describe.skip('POST /api/qrcodes/validate', () => {
     const auth = await makeAuthHeader();
     const signed = signQRPayload(makePayload(), QR_SECRET);
     const res = await POST(
-      makeRequest({
-        qrPayload: signed,
-        scanContext: {
-          gateId: 'gate_test_789',
-          latitude: 30.0,
-          longitude: 31.0,
+      makeRequest(
+        {
+          qrPayload: signed,
+          scanContext: {
+            gateId: 'gate_test_789',
+            latitude: 30.0,
+            longitude: 31.0,
+          },
         },
-      }, auth),
+        auth
+      )
     );
     const data = await res.json();
 

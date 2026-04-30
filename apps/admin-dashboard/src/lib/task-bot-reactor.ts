@@ -1,5 +1,10 @@
-import { prisma } from '@gate-access/db';
-import { type Department, type TaskPriority, type TaskStatus } from '@prisma/client';
+import {
+  prisma,
+  Prisma,
+  type Department,
+  type TaskPriority,
+  type TaskStatus,
+} from '@gate-access/db';
 
 interface BotTriggerEvent {
   type: 'LEAD_SCORE_UPDATE' | 'DEAL_STAGE_CHANGE' | 'BLOG_POST_PUBLISHED';
@@ -9,8 +14,8 @@ interface BotTriggerEvent {
 
 /**
  * Task Bot Reactor
- * 
- * An event-driven automation engine that evaluates TaskBotRules 
+ *
+ * An event-driven automation engine that evaluates TaskBotRules
  * and generates tasks with optional HiTL confirmation gates.
  */
 export async function reactToEvent(event: BotTriggerEvent) {
@@ -20,7 +25,7 @@ export async function reactToEvent(event: BotTriggerEvent) {
         organizationId: event.organizationId,
         triggerEvent: event.type,
         enabled: true,
-      }
+      },
     });
 
     for (const rule of rules) {
@@ -45,15 +50,17 @@ export async function reactToEvent(event: BotTriggerEvent) {
           createdAt: { gte: oneHourAgo },
           // We can track which rule created it via metadata or a specific field
           // For now, we'll use a specific description pattern or just count all bot tasks
-          description: { contains: `[BOT_RULE:${rule.id}]` }
-        }
+          description: { contains: `[BOT_RULE:${rule.id}]` },
+        },
       });
 
       if (recentTasksCount >= 10) {
-        console.warn(`[TASK_BOT] Rate limit exceeded for rule ${rule.id}. Disabling rule.`);
+        console.warn(
+          `[TASK_BOT] Rate limit exceeded for rule ${rule.id}. Disabling rule.`
+        );
         await prisma.taskBotRule.update({
           where: { id: rule.id },
-          data: { enabled: false }
+          data: { enabled: false },
         });
         continue;
       }
@@ -61,15 +68,21 @@ export async function reactToEvent(event: BotTriggerEvent) {
       // 3. Create Task with optional HiTL status
       const actionTemplate = rule.actionTemplate as any;
       const board = await prisma.taskBoard.findFirst({
-        where: { organizationId: event.organizationId, department: rule.department }
+        where: {
+          organizationId: event.organizationId,
+          department: rule.department,
+        },
       });
 
       if (!board) continue;
 
-      await prisma.$transaction(async (tx) => {
+      await prisma.$transaction(async (tx: typeof prisma) => {
         const task = await tx.task.create({
           data: {
-            title: actionTemplate.title.replace('{{lead.company}}', event.data.companyName || 'Lead'),
+            title: actionTemplate.title.replace(
+              '{{lead.company}}',
+              event.data.companyName || 'Lead'
+            ),
             description: `${actionTemplate.description || 'Automated task created by bot.'} [BOT_RULE:${rule.id}]`,
             department: rule.department,
             priority: (actionTemplate.priority || 'MEDIUM') as TaskPriority,
@@ -77,9 +90,13 @@ export async function reactToEvent(event: BotTriggerEvent) {
             boardId: board.id,
             organizationId: event.organizationId,
             createdById: 'system',
-            linkedType: event.type.startsWith('LEAD') ? 'LEAD' : event.type.startsWith('DEAL') ? 'DEAL' : 'BLOG_POST',
+            linkedType: event.type.startsWith('LEAD')
+              ? 'LEAD'
+              : event.type.startsWith('DEAL')
+                ? 'DEAL'
+                : 'BLOG_POST',
             linkedId: event.data.id,
-          }
+          },
         });
 
         await tx.aiActionLog.create({
@@ -92,8 +109,8 @@ export async function reactToEvent(event: BotTriggerEvent) {
             metadata: {
               ruleId: rule.id,
               taskId: task.id,
-            }
-          }
+            },
+          },
         });
 
         // 4. Notification
@@ -102,12 +119,14 @@ export async function reactToEvent(event: BotTriggerEvent) {
             data: {
               userId: task.assigneeId,
               organizationId: event.organizationId,
-              type: rule.autoExecute ? 'TASK_ASSIGNED' : 'BOT_APPROVAL_REQUIRED',
-              message: rule.autoExecute 
+              type: rule.autoExecute
+                ? 'TASK_ASSIGNED'
+                : 'BOT_APPROVAL_REQUIRED',
+              message: rule.autoExecute
                 ? `Bot created a new task: ${task.title}`
                 : `Bot suggested a new task: ${task.title} (Requires Approval)`,
               linkedTaskId: task.id,
-            }
+            },
           });
         }
       });

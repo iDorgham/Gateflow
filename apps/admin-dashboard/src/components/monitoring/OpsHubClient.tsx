@@ -194,7 +194,13 @@ function EmulationDetailDrawer({
   );
 }
 
-export function OpsHubClient({ locale }: { locale: string }) {
+export function OpsHubClient({
+  locale,
+  organizationId,
+}: {
+  locale: string;
+  organizationId?: string;
+}) {
   const { t } = useTranslation('admin');
   const [logs, setLogs] = React.useState<EmulationLog[]>([]);
   const [loading, setLoading] = React.useState(true);
@@ -207,7 +213,16 @@ export function OpsHubClient({ locale }: { locale: string }) {
     if (isInitial) setLoading(true);
     setIsRefreshing(true);
     try {
-      const res = await fetch(`/api/admin/emulation-history?limit=50`);
+      const url = new URL(
+        '/api/admin/emulation-history',
+        window.location.origin
+      );
+      url.searchParams.set('limit', '50');
+      if (organizationId) {
+        url.searchParams.set('organizationId', organizationId);
+      }
+
+      const res = await fetch(url.toString());
       const data = await res.json();
       if (data.success) {
         setLogs(data.data);

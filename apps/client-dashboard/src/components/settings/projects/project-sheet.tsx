@@ -23,7 +23,7 @@ import {
   createProject,
   updateProject,
   getResources,
-} from '@/app/[locale]/dashboard/settings/projects/actions';
+} from '@/app/[locale]/dashboard/organizations/[orgId]/settings/projects/actions';
 import type { GateMode } from '@gate-access/db/prisma';
 import { useRouter } from 'next/navigation';
 

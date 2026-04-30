@@ -1,21 +1,21 @@
 'use client';
 
 import * as React from 'react';
-import { 
-  Monitor, 
-  Plus, 
-  Search, 
-  MoreHorizontal, 
-  ExternalLink, 
-  Eye, 
+import {
+  Monitor,
+  Plus,
+  Search,
+  MoreHorizontal,
+  ExternalLink,
+  Eye,
   Trash2,
   Rocket,
   Clock,
-  CheckCircle2
+  CheckCircle2,
 } from 'lucide-react';
-import { 
-  Card, 
-  CardContent, 
+import {
+  Card,
+  CardContent,
   Button,
   Input,
   Badge,
@@ -23,7 +23,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-  cn
+  cn,
 } from '@gate-access/ui';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
@@ -42,12 +42,17 @@ interface LandingPageListProps {
   orgId: string;
 }
 
-export function LandingPageList({ initialPages, locale, orgId }: LandingPageListProps) {
+export function LandingPageList({
+  initialPages,
+  locale,
+  orgId,
+}: LandingPageListProps) {
   const [search, setSearch] = React.useState('');
-  
-  const filteredPages = initialPages.filter(p => 
-    p.titleEn.toLowerCase().includes(search.toLowerCase()) || 
-    p.slug.toLowerCase().includes(search.toLowerCase())
+
+  const filteredPages = initialPages.filter(
+    (p) =>
+      p.titleEn.toLowerCase().includes(search.toLowerCase()) ||
+      p.slug.toLowerCase().includes(search.toLowerCase())
   );
 
   return (
@@ -59,7 +64,7 @@ export function LandingPageList({ initialPages, locale, orgId }: LandingPageList
             Landing Pages
           </h2>
           <p className="text-sm text-ds-text-subtle">
-            Manage your organization's high-conversion marketing pages.
+            Manage your organization&apos;s high-conversion marketing pages.
           </p>
         </div>
         <Link href={`/${locale}/organizations/${orgId}/cms/pages/new`}>
@@ -73,7 +78,7 @@ export function LandingPageList({ initialPages, locale, orgId }: LandingPageList
       <div className="flex gap-4">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-ds-text-subtle" />
-          <Input 
+          <Input
             placeholder="Search pages by title or slug..."
             className="pl-10 h-11 bg-white border-ds-border/40"
             value={search}
@@ -84,35 +89,45 @@ export function LandingPageList({ initialPages, locale, orgId }: LandingPageList
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredPages.map((page) => (
-          <Card key={page.id} className="group border-ds-border/40 hover:border-blue-500/40 hover:shadow-xl hover:shadow-blue-500/5 transition-all overflow-hidden bg-white">
+          <Card
+            key={page.id}
+            className="group border-ds-border/40 hover:border-blue-500/40 hover:shadow-xl hover:shadow-blue-500/5 transition-all overflow-hidden bg-white"
+          >
             <div className="h-32 bg-slate-50 border-b border-ds-border/40 relative flex items-center justify-center overflow-hidden">
-               <div className="absolute inset-0 bg-grid-slate-200 [mask-image:linear-gradient(0deg,#fff,rgba(255,255,255,0.6))] -z-10" />
-               <Monitor className="w-12 h-12 text-slate-200 group-hover:scale-110 transition-transform duration-500" />
-               <div className="absolute top-3 right-3">
-                 <Badge 
-                   className={cn(
-                     "text-[9px] font-black uppercase tracking-widest px-2 py-0.5",
-                     page.status === 'PUBLISHED' ? "bg-green-500/10 text-green-600 border-green-500/20" :
-                     page.status === 'IN_REVIEW' ? "bg-amber-500/10 text-amber-600 border-amber-500/20" :
-                     "bg-slate-500/10 text-slate-600 border-slate-500/20"
-                   )}
-                 >
-                   {page.status}
-                 </Badge>
-               </div>
+              <div className="absolute inset-0 bg-grid-slate-200 [mask-image:linear-gradient(0deg,#fff,rgba(255,255,255,0.6))] -z-10" />
+              <Monitor className="w-12 h-12 text-slate-200 group-hover:scale-110 transition-transform duration-500" />
+              <div className="absolute top-3 right-3">
+                <Badge
+                  className={cn(
+                    'text-[9px] font-black uppercase tracking-widest px-2 py-0.5',
+                    page.status === 'PUBLISHED'
+                      ? 'bg-green-500/10 text-green-600 border-green-500/20'
+                      : page.status === 'IN_REVIEW'
+                        ? 'bg-amber-500/10 text-amber-600 border-amber-500/20'
+                        : 'bg-slate-500/10 text-slate-600 border-slate-500/20'
+                  )}
+                >
+                  {page.status}
+                </Badge>
+              </div>
             </div>
             <CardContent className="p-5">
               <div className="flex justify-between items-start mb-4">
                 <div>
-                  <h3 className="font-bold text-sm mb-1 group-hover:text-blue-600 transition-colors">{page.titleEn}</h3>
+                  <h3 className="font-bold text-sm mb-1 group-hover:text-blue-600 transition-colors">
+                    {page.titleEn}
+                  </h3>
                   <div className="flex items-center gap-1.5 text-[10px] text-ds-text-subtle font-mono">
-                    <ExternalLink className="w-3 h-3" />
-                    /{page.slug}
+                    <ExternalLink className="w-3 h-3" />/{page.slug}
                   </div>
                 </div>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" className="h-8 w-8 rounded-lg">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-8 w-8 rounded-lg"
+                    >
                       <MoreHorizontal className="w-4 h-4" />
                     </Button>
                   </DropdownMenuTrigger>
@@ -135,8 +150,14 @@ export function LandingPageList({ initialPages, locale, orgId }: LandingPageList
                   <Clock className="w-3 h-3" />
                   {new Date(page.updatedAt).toLocaleDateString()}
                 </div>
-                <Link href={`/${locale}/organizations/${orgId}/cms/pages/${page.id}`}>
-                  <Button variant="outline" size="sm" className="h-8 text-[10px] font-black uppercase tracking-widest border-ds-border/40 hover:bg-slate-50">
+                <Link
+                  href={`/${locale}/organizations/${orgId}/cms/pages/${page.id}`}
+                >
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="h-8 text-[10px] font-black uppercase tracking-widest border-ds-border/40 hover:bg-slate-50"
+                  >
                     Edit Page
                   </Button>
                 </Link>
@@ -153,7 +174,8 @@ export function LandingPageList({ initialPages, locale, orgId }: LandingPageList
             <div>
               <h3 className="font-bold">No landing pages found</h3>
               <p className="text-sm text-ds-text-subtle max-w-xs mx-auto">
-                Get started by creating your first AI-generated landing page to drive more leads.
+                Get started by creating your first AI-generated landing page to
+                drive more leads.
               </p>
             </div>
             <Link href={`/${locale}/organizations/${orgId}/cms/pages/new`}>

@@ -33,6 +33,7 @@ import {
   SideNavItem,
   NavGroup,
 } from '@gate-access/ui';
+import { useOrganization } from './providers/OrganizationProvider';
 
 interface NavItemData {
   href: string;
@@ -62,36 +63,72 @@ const getNavGroups = (t: TFunction): NavGroupData[] => [
         icon: Building2,
       },
       { href: '/users', label: t('admin:nav.users', 'Users'), icon: Users },
-      { href: '/projects', label: t('admin:nav.projects', 'Projects'), icon: FolderOpen },
+      {
+        href: '/projects',
+        label: t('admin:nav.projects', 'Projects'),
+        icon: FolderOpen,
+      },
       { href: '/gates', label: t('admin:nav.gates', 'Gates'), icon: DoorOpen },
-      { 
-        href: '/intelligence', 
-        label: t('admin:nav.intelligence_hub', 'Intelligence Hub'), 
-        icon: BrainCircuit 
+      {
+        href: '/intelligence',
+        label: t('admin:nav.intelligence_hub', 'Intelligence Hub'),
+        icon: BrainCircuit,
       },
     ],
   },
   {
     label: t('admin:nav.intelligence', 'Ops & Analytics'),
     items: [
-      { href: '/analytics', label: t('admin:nav.analytics', 'Performance'), icon: BarChart3 },
-      { href: '/scans', label: t('admin:nav.scans', 'Scan Traffic'), icon: ScanLine },
-      { href: '/monitoring/hub', label: t('admin:nav.ops_hub', 'Ops Control'), icon: Activity },
-      { href: '/audit-logs', label: t('admin:nav.audit', 'Audit Trail'), icon: ScrollText },
+      {
+        href: '/analytics',
+        label: t('admin:nav.analytics', 'Performance'),
+        icon: BarChart3,
+      },
+      {
+        href: '/scans',
+        label: t('admin:nav.scans', 'Scan Traffic'),
+        icon: ScanLine,
+      },
+      {
+        href: '/monitoring/hub',
+        label: t('admin:nav.ops_hub', 'Ops Control'),
+        icon: Activity,
+      },
+      {
+        href: '/audit-logs',
+        label: t('admin:nav.audit', 'Audit Trail'),
+        icon: ScrollText,
+      },
     ],
   },
   {
     label: t('admin:nav.sales_crm', 'Sales & CRM'),
     items: [
-      { href: '/crm', label: t('admin:nav.crm_dashboard', 'Lead CRM'), icon: Target },
-      { href: '/crm/deals', label: t('admin:nav.deals', 'Deal Pipeline'), icon: Briefcase },
+      {
+        href: '/crm',
+        label: t('admin:nav.crm_dashboard', 'Lead CRM'),
+        icon: Target,
+      },
+      {
+        href: '/crm/deals',
+        label: t('admin:nav.deals', 'Deal Pipeline'),
+        icon: Briefcase,
+      },
     ],
   },
   {
     label: t('admin:nav.cms', 'Content & CMS'),
     items: [
-      { href: '/cms/pages', label: t('admin:nav.landing_pages', 'Landing Pages'), icon: Monitor },
-      { href: '/cms/blog', label: t('admin:nav.blog_posts', 'Blog Studio'), icon: PenTool },
+      {
+        href: '/cms/pages',
+        label: t('admin:nav.landing_pages', 'Landing Pages'),
+        icon: Monitor,
+      },
+      {
+        href: '/cms/blog',
+        label: t('admin:nav.blog_posts', 'Blog Studio'),
+        icon: PenTool,
+      },
     ],
   },
   {
@@ -107,7 +144,11 @@ const getNavGroups = (t: TFunction): NavGroupData[] => [
         label: t('admin:nav.authKeys', 'Auth Keys'),
         icon: KeyRound,
       },
-      { href: '/settings', label: t('admin:nav.settings', 'Settings'), icon: Settings },
+      {
+        href: '/settings',
+        label: t('admin:nav.settings', 'Settings'),
+        icon: Settings,
+      },
       { href: '/admins', label: t('admin:nav.admins', 'Admins'), icon: Shield },
     ],
   },
@@ -126,13 +167,41 @@ export function Sidebar() {
   const localePrefix = `/${i18nInstance.language}`;
 
   const getScopedHref = (href: string) => {
-    // These paths remain global (or special)
-    const globalPaths = ['/organizations', '/admins', '/settings', '/authorization-keys', '/monitoring/emulation'];
-    
-    if (orgId && !globalPaths.includes(href)) {
+    // Truly global platform-level features that NEVER depend on an organization context
+    const globalOnlyPaths = [
+      '/organizations',
+      '/admins',
+      '/settings',
+      '/authorization-keys',
+    ];
+
+    const isGlobalOnly = globalOnlyPaths.some(
+      (p) => href === p || href.startsWith(p + '/')
+    );
+
+    // If we have an org selected, use the scoped path UNLESS it's a global-only management page
+    if (orgId && !isGlobalOnly) {
       return `${localePrefix}/organizations/${orgId}${href === '/' ? '' : href}`;
     }
-    
+
+    // If no org is selected and trying to access a scoped feature, fallback to organizations list
+    // (Except for the root dashboard which has its own redirect)
+    if (!orgId && !isGlobalOnly && href !== '/') {
+      // Special case: some pages might have a global version we want to allow
+      const hasGlobalVersion = [
+        '/analytics',
+        '/audit-logs',
+        '/finance',
+        '/monitoring',
+        '/intelligence',
+        '/cms',
+      ].some((p) => href === p || href.startsWith(p + '/'));
+
+      if (!hasGlobalVersion) {
+        return `${localePrefix}/organizations`;
+      }
+    }
+
     return `${localePrefix}${href === '/' ? '' : href}`;
   };
 

@@ -14,30 +14,36 @@ export async function GET(
 
   try {
     const page = await prisma.landingPage.findUnique({
-      where: { 
+      where: {
         slug,
-        status: 'PUBLISHED' // Only serve published pages via public API
+        status: 'PUBLISHED', // Only serve published pages via public API
       },
       include: {
         sections: {
-          orderBy: { order: 'asc' }
+          orderBy: { order: 'asc' },
         },
         organization: {
           select: {
             name: true,
-            activeStyle: true
-          }
-        }
-      }
+            activeStyle: true,
+          },
+        },
+      },
     });
 
     if (!page) {
-      return NextResponse.json({ error: 'Page not found or not published' }, { status: 404 });
+      return NextResponse.json(
+        { error: 'Page not found or not published' },
+        { status: 404 }
+      );
     }
 
     return NextResponse.json(page);
   } catch (error) {
     console.error('[CMS_PAGE_GET_ERROR]', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal Server Error' },
+      { status: 500 }
+    );
   }
 }

@@ -20,7 +20,7 @@ import {
 import { Mail, Shield } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
-import { inviteTeamMember } from '../../../app/[locale]/dashboard/settings/team/actions';
+import { inviteTeamMember } from '@/app/[locale]/dashboard/organizations/[orgId]/settings/team/actions';
 
 interface Role {
   id: string;
@@ -41,12 +41,17 @@ export function InviteMemberSheet({ roles, children }: InviteMemberSheetProps) {
 
   const handleInvite = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email || !roleId) return toast.error(t('settings.team.fieldsRequired', 'Email and Role are required.'));
+    if (!email || !roleId)
+      return toast.error(
+        t('settings.team.fieldsRequired', 'Email and Role are required.')
+      );
 
     startTransition(async () => {
       const res = await inviteTeamMember(email, roleId);
       if (res.success) {
-        toast.success(t('settings.team.inviteSent', 'Invitation sent successfully.'));
+        toast.success(
+          t('settings.team.inviteSent', 'Invitation sent successfully.')
+        );
         setOpen(false);
         setEmail('');
         setRoleId('');
@@ -58,9 +63,7 @@ export function InviteMemberSheet({ roles, children }: InviteMemberSheetProps) {
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger asChild>
-        {children}
-      </SheetTrigger>
+      <SheetTrigger asChild>{children}</SheetTrigger>
       <SheetContent className="w-full sm:max-w-md p-0 border-l border-primary/10 flex flex-col">
         <SheetHeader className="p-8 bg-primary/5 space-y-2">
           <div className="h-12 w-12 rounded-2xl bg-primary/10 flex items-center justify-center mb-2">
@@ -70,14 +73,23 @@ export function InviteMemberSheet({ roles, children }: InviteMemberSheetProps) {
             {t('settings.team.inviteTitle', 'Invite Member')}
           </SheetTitle>
           <SheetDescription className="text-sm text-muted-foreground font-medium">
-            {t('settings.team.inviteDesc', 'Send an invitation email to a new team member.')}
+            {t(
+              'settings.team.inviteDesc',
+              'Send an invitation email to a new team member.'
+            )}
           </SheetDescription>
         </SheetHeader>
 
-        <form onSubmit={handleInvite} className="flex-1 flex flex-col p-8 space-y-8">
+        <form
+          onSubmit={handleInvite}
+          className="flex-1 flex flex-col p-8 space-y-8"
+        >
           <div className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="invite-email" className="text-[11px] font-black uppercase tracking-widest text-muted-foreground ml-1">
+              <Label
+                htmlFor="invite-email"
+                className="text-[11px] font-black uppercase tracking-widest text-muted-foreground ml-1"
+              >
                 {t('common.email', 'Email Address')}
               </Label>
               <Input
@@ -92,16 +104,31 @@ export function InviteMemberSheet({ roles, children }: InviteMemberSheetProps) {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="invite-role" className="text-[11px] font-black uppercase tracking-widest text-muted-foreground ml-1">
+              <Label
+                htmlFor="invite-role"
+                className="text-[11px] font-black uppercase tracking-widest text-muted-foreground ml-1"
+              >
                 {t('settings.team.selectRole', 'Select Role')}
               </Label>
               <Select value={roleId} onValueChange={setRoleId} required>
-                <SelectTrigger id="invite-role" className="h-12 rounded-xl border-border focus:ring-primary/20">
-                  <SelectValue placeholder={t('settings.team.rolePlaceholder', 'Choose a role')} />
+                <SelectTrigger
+                  id="invite-role"
+                  className="h-12 rounded-xl border-border focus:ring-primary/20"
+                >
+                  <SelectValue
+                    placeholder={t(
+                      'settings.team.rolePlaceholder',
+                      'Choose a role'
+                    )}
+                  />
                 </SelectTrigger>
                 <SelectContent className="rounded-xl border-primary/10">
                   {roles.map((role) => (
-                    <SelectItem key={role.id} value={role.id} className="rounded-lg text-xs font-bold py-2.5">
+                    <SelectItem
+                      key={role.id}
+                      value={role.id}
+                      className="rounded-lg text-xs font-bold py-2.5"
+                    >
                       <div className="flex items-center gap-2">
                         <Shield className="h-3.5 w-3.5 opacity-50" />
                         {role.name}
@@ -119,7 +146,9 @@ export function InviteMemberSheet({ roles, children }: InviteMemberSheetProps) {
               disabled={isPending}
               className="flex-1 h-12 rounded-xl bg-primary text-xs font-black uppercase tracking-widest transition-all hover:shadow-lg hover:shadow-primary/20 active:scale-95"
             >
-              {isPending ? t('common.sending', 'Sending...') : t('settings.team.sendInvite', 'Send Invitation')}
+              {isPending
+                ? t('common.sending', 'Sending...')
+                : t('settings.team.sendInvite', 'Send Invitation')}
             </Button>
             <Button
               type="button"

@@ -1,7 +1,7 @@
 import { prisma } from '@gate-access/db';
 import { redirect } from 'next/navigation';
-import { requireAdmin } from '../../../lib/admin-auth';
-import { Locale } from '../../../lib/i18n/i18n-config';
+import { requireAdmin } from '@/lib/admin-auth';
+import { Locale } from '@/lib/i18n/i18n-config';
 
 export default async function LegacyRedirectPage(props: {
   params: Promise<{ locale: Locale }>;

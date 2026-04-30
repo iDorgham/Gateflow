@@ -7,7 +7,7 @@ import { notFound } from 'next/navigation';
 export const metadata = { title: 'Style Hub | Design Orchestration' };
 
 export default async function StyleHubPage(props: {
-  params: Promise<{ locale: Locale, orgId: string }>;
+  params: Promise<{ locale: Locale; orgId: string }>;
 }) {
   const params = await props.params;
   const { locale, orgId } = params;
@@ -19,11 +19,11 @@ export default async function StyleHubPage(props: {
     include: {
       styleSnapshots: {
         orderBy: { createdAt: 'desc' },
-        take: 10
+        take: 10,
       },
       themeVariables: true,
-      activeStyle: true
-    }
+      activeStyle: true,
+    },
   });
 
   if (!organization) {
@@ -32,10 +32,10 @@ export default async function StyleHubPage(props: {
 
   return (
     <div className="max-w-7xl mx-auto py-8">
-      <StyleHubClient 
-        orgId={orgId} 
-        initialVariables={organization.themeVariables} 
-        snapshots={organization.styleSnapshots} 
+      <StyleHubClient
+        orgId={orgId}
+        initialVariables={organization.themeVariables}
+        snapshots={organization.styleSnapshots}
       />
     </div>
   );

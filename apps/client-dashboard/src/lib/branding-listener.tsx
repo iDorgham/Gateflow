@@ -1,23 +1,12 @@
 'use client';
 
-import * as React from 'react';
-import { useEffect } from 'react';
+import { useEffect, ReactNode } from 'react';
 
-/**
- * Branding PostMessage Listener
- * 
- * Injected into the Client Dashboard to listen for real-time 
- * theme overrides from the Admin Style Hub.
- */
 export function useBrandingPreview() {
   useEffect(() => {
-    // Only active in iframe
     if (typeof window === 'undefined' || window.parent === window) return;
 
     const handleMessage = (event: MessageEvent) => {
-      // Security: Validate origin in production
-      // For dev, we'll allow all while testing
-      
       if (event.data?.type === 'BRANDING_OVERRIDE') {
         const { tokens } = event.data;
         const root = document.documentElement;
@@ -35,10 +24,7 @@ export function useBrandingPreview() {
   }, []);
 }
 
-/**
- * Global component that can be included in the root layout
- */
-export function BrandingPreviewProvider({ children }: { children: React.ReactNode }) {
+export function BrandingPreviewProvider({ children }: { children: ReactNode }) {
   useBrandingPreview();
   return <>{children}</>;
 }

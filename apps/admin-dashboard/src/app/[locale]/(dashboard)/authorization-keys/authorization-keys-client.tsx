@@ -78,7 +78,7 @@ export function AuthKeysClient() {
       } catch {
         // Keep empty on error
       }
-    };
+    }
     fetchKeys();
   }, []);
 
@@ -91,7 +91,11 @@ export function AuthKeysClient() {
     setError('');
     startCreate(async () => {
       try {
-        const payload: Record<string, unknown> = { name, type: type.toUpperCase(), expiresAt };
+        const payload: Record<string, unknown> = {
+          name,
+          type: type.toUpperCase(),
+          expiresAt,
+        };
         if (type === 'service' && organizationId) {
           payload.organizationId = organizationId;
         }
@@ -481,7 +485,12 @@ function CreateAuthKeyModal({
       setOrgError('Organization is required for service keys.');
       return;
     }
-    onSubmit(name.trim(), type, expiresAt || null, organizationId.trim() || undefined);
+    onSubmit(
+      name.trim(),
+      type,
+      expiresAt || null,
+      organizationId.trim() || undefined
+    );
   }
 
   const minDate = new Date(Date.now() + 86_400_000).toISOString().slice(0, 10);

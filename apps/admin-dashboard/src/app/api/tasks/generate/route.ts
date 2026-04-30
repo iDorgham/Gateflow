@@ -3,7 +3,7 @@ import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { z } from 'zod';
 import { type NextRequest, NextResponse } from 'next/server';
 import { isAdminAuthorized } from '@/lib/admin-auth';
-import { prisma } from '@gate-access/db';
+import { prisma, Prisma } from '@gate-access/db';
 
 export const runtime = 'nodejs';
 export const maxDuration = 45;
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
 
     if (!prompt || !organizationId || !boardId) {
       return NextResponse.json(
-        { error: 'prompt, organizationId, and boardId are required' }, 
+        { error: 'prompt, organizationId, and boardId are required' },
         { status: 400 }
       );
     }
@@ -44,7 +44,10 @@ export async function POST(request: NextRequest) {
     });
 
     if (!board) {
-      return NextResponse.json({ error: 'Task board not found' }, { status: 404 });
+      return NextResponse.json(
+        { error: 'Task board not found' },
+        { status: 404 }
+      );
     }
 
     const google = createGoogleGenerativeAI({ apiKey });
@@ -52,13 +55,15 @@ export async function POST(request: NextRequest) {
     const result = await generateObject({
       model: google('gemini-1.5-flash'),
       schema: z.object({
-        tasks: z.array(z.object({
-          title: z.string(),
-          description: z.string(),
-          priority: z.enum(['LOW', 'MEDIUM', 'HIGH', 'URGENT']),
-          estimatedMinutes: z.number().optional(),
-          department: z.enum(['SALES', 'MARKETING', 'DEV', 'SUPPORT']),
-        })),
+        tasks: z.array(
+          z.object({
+            title: z.string(),
+            description: z.string(),
+            priority: z.enum(['LOW', 'MEDIUM', 'HIGH', 'URGENT']),
+            estimatedMinutes: z.number().optional(),
+            department: z.enum(['SALES', 'MARKETING', 'DEV', 'SUPPORT']),
+          })
+        ),
         strategy: z.string(),
       }),
       prompt: `Plan a series of tasks for the following initiative on the GateFlow platform:
@@ -76,39 +81,43 @@ Guidelines:
     });
 
     // Create the tasks in the database and log the AI action
-    const createdTasks = await prisma.$transaction(async (tx) => {
-      const tasks = await Promise.all(result.object.tasks.map(task => 
-        tx.task.create({
+    const createdTasks = await prisma.$transaction(
+      async (tx: typeof prisma) => {
+        const tasks = await Promise.all(
+          result.object.tasks.map((task) =>
+            tx.task.create({
+              data: {
+                title: task.title,
+                description: task.description,
+                priority: task.priority,
+                department: task.department,
+                status: 'TODO',
+                boardId: board.id,
+                organizationId,
+                createdById: 'system', // In a real app, this would be the session user ID
+              },
+            })
+          )
+        );
+
+        await tx.aiActionLog.create({
           data: {
-            title: task.title,
-            description: task.description,
-            priority: task.priority,
-            department: task.department,
-            status: 'TODO',
-            boardId: board.id,
             organizationId,
-            createdById: 'system', // In a real app, this would be the session user ID
-          }
-        })
-      ));
+            action: 'TASK_AI_GENERATED',
+            prompt,
+            reasoning: result.object.strategy,
+            result: JSON.stringify(result.object.tasks),
+            status: 'CONFIRMED',
+            metadata: {
+              taskCount: tasks.length,
+              boardId: board.id,
+            },
+          },
+        });
 
-      await tx.aiActionLog.create({
-        data: {
-          organizationId,
-          action: 'TASK_AI_GENERATED',
-          prompt,
-          reasoning: result.object.strategy,
-          result: JSON.stringify(result.object.tasks),
-          status: 'CONFIRMED',
-          metadata: {
-            taskCount: tasks.length,
-            boardId: board.id,
-          }
-        }
-      });
-
-      return tasks;
-    });
+        return tasks;
+      }
+    );
 
     return NextResponse.json({
       success: true,

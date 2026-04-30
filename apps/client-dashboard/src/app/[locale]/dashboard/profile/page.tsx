@@ -1,12 +1,14 @@
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma } from '@gate-access/db';
 import { redirect } from 'next/navigation';
-import { ProfileTab } from '../settings/tabs/profile-tab';
+import { ProfileTab } from '../organizations/[orgId]/settings/tabs/profile-tab';
 import { Locale } from '@/lib/i18n-config';
 
 export const metadata = { title: 'Profile | GateFlow' };
 
-export default async function ProfilePage(props: { params: Promise<{ locale: Locale }> }) {
+export default async function ProfilePage(props: {
+  params: Promise<{ locale: Locale }>;
+}) {
   const params = await props.params;
   const claims = await getSessionClaims();
   if (!claims?.sub) redirect(`/${params.locale}/login`);
@@ -38,7 +40,8 @@ export default async function ProfilePage(props: { params: Promise<{ locale: Loc
           Profile
         </h1>
         <p className="text-sm text-muted-foreground">
-          Your account and identity. For organization settings, use GateFlow settings from the header menu.
+          Your account and identity. For organization settings, use GateFlow
+          settings from the header menu.
         </p>
       </div>
       <ProfileTab

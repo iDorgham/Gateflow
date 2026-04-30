@@ -74,11 +74,14 @@ function getLocale(request: NextRequest): string {
 }
 
 function getJwtSecret(): Uint8Array {
-  const secret = process.env.NEXTAUTH_SECRET ?? process.env.JWT_SECRET ?? 'dev-insecure-fallback-change-me';
+  const secret =
+    process.env.NEXTAUTH_SECRET ??
+    process.env.JWT_SECRET ??
+    'dev-insecure-fallback-change-me';
   return new TextEncoder().encode(secret);
 }
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // 1. Check if there is any supported locale in the pathname
@@ -170,11 +173,22 @@ export function middleware(request: NextRequest) {
   // 9. Redirect legacy dashboard routes to organizational scope
   // Matches /[locale]/dashboard/[module] but NOT /[locale]/dashboard/organizations or onboarding/profile
   const LEGACY_MODULES = [
-    'ai', 'ai-hub', 'analytics', 'emulation', 'gateai', 'gates', 
-    'maintenance', 'projects', 'qrcodes', 'residents', 'scans', 
-    'settings', 'team', 'workspace'
+    'ai',
+    'ai-hub',
+    'analytics',
+    'emulation',
+    'gateai',
+    'gates',
+    'maintenance',
+    'projects',
+    'qrcodes',
+    'residents',
+    'scans',
+    'settings',
+    'team',
+    'workspace',
   ];
-  
+
   const segments = pathWithoutLocale.split('/').filter(Boolean);
   if (segments[0] === 'dashboard' && LEGACY_MODULES.includes(segments[1])) {
     try {
@@ -185,10 +199,10 @@ export function middleware(request: NextRequest) {
       const orgId = payload.orgId as string;
       if (orgId) {
         const locale = pathnameHasLocale ? pathname.split('/')[1] : 'en';
-        const module = segments[1];
+        const moduleSegment = segments[1];
         const rest = segments.slice(2).join('/');
         const newUrl = new URL(
-          `/${locale}/dashboard/organizations/${orgId}/${module}${rest ? '/' + rest : ''}`,
+          `/${locale}/dashboard/organizations/${orgId}/${moduleSegment}${rest ? '/' + rest : ''}`,
           request.url
         );
         newUrl.search = request.nextUrl.search;

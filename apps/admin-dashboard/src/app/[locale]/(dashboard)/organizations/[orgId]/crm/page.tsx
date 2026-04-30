@@ -31,7 +31,7 @@ export default async function CrmPage(props: {
   });
 
   // 3. Serialization for Client Components
-  const serializedLeads = leads.map((l) => ({
+  const serializedLeads = leads.map((l: (typeof leads)[number]) => ({
     id: l.id,
     status: l.status,
     score: l.score,
@@ -51,7 +51,10 @@ export default async function CrmPage(props: {
       locale={locale}
       translations={{
         title: t('crm.title', 'Lead Intelligence'),
-        subtitle: t('crm.subtitle', 'Predictive AI scoring and nurturing for GateFlow leads.'),
+        subtitle: t(
+          'crm.subtitle',
+          'Predictive AI scoring and nurturing for GateFlow leads.'
+        ),
         columns: {
           lead: t('crm.columns.lead', 'Lead'),
           status: t('crm.columns.status', 'Status'),

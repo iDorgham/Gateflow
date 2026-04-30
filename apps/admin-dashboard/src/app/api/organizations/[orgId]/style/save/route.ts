@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isAdminAuthorized } from '@/lib/admin-auth';
-import { prisma } from '@gate-access/db';
+import { prisma, Prisma } from '@gate-access/db';
 
 export async function POST(
   req: NextRequest,
@@ -17,23 +17,23 @@ export async function POST(
     const { variables } = await req.json();
 
     // 1. Transaction to update variables and create snapshot
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx: typeof prisma) => {
       // Update individual theme variables
       for (const v of variables) {
         await tx.themeVariable.upsert({
           where: {
             organizationId_key: {
               organizationId: orgId,
-              key: v.key
-            }
+              key: v.key,
+            },
           },
           update: { value: v.value },
           create: {
             organizationId: orgId,
             key: v.key,
             value: v.value,
-            category: 'UI'
-          }
+            category: 'UI',
+          },
         });
       }
 
@@ -49,13 +49,13 @@ export async function POST(
           name: `Snapshot ${new Date().toISOString()}`,
           cssTokens,
           createdById: 'SYSTEM', // TODO: Get actual user ID
-        }
+        },
       });
 
       // Update active style
       await tx.organization.update({
         where: { id: orgId },
-        data: { activeStyleId: snapshot.id }
+        data: { activeStyleId: snapshot.id },
       });
 
       return snapshot;
@@ -64,6 +64,9 @@ export async function POST(
     return NextResponse.json(result);
   } catch (error) {
     console.error('[STYLE_SAVE_ERROR]', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal Server Error' },
+      { status: 500 }
+    );
   }
 }

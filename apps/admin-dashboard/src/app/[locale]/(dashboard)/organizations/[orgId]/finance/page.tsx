@@ -13,11 +13,11 @@ export const metadata = { title: 'Finance' };
 const PLAN_PRICES: Record<string, number> = { FREE: 0, PRO: 99 };
 
 export default async function FinancePage(props: {
-  params: Promise<{ locale: Locale }>;
+  params: Promise<{ locale: Locale; orgId?: string }>;
 }) {
   const params = await props.params;
 
-  const { locale } = params;
+  const { locale, orgId } = params;
 
   await requireAdmin(locale);
 
@@ -28,11 +28,11 @@ export default async function FinancePage(props: {
   const [planGroups, orgs] = await Promise.all([
     prisma.organization.groupBy({
       by: ['plan'],
-      where: { deletedAt: null },
+      where: { deletedAt: null, ...(orgId ? { id: orgId } : {}) },
       _count: { id: true },
     }),
     prisma.organization.findMany({
-      where: { deletedAt: null },
+      where: { deletedAt: null, ...(orgId ? { id: orgId } : {}) },
       orderBy: [{ plan: 'desc' }, { createdAt: 'desc' }],
       select: {
         id: true,
@@ -47,9 +47,13 @@ export default async function FinancePage(props: {
   // Scans this month per org
   const scansByGate = await prisma.scanLog.groupBy({
     by: ['gateId'],
-    where: { scannedAt: { gte: monthStart } },
+    where: {
+      scannedAt: { gte: monthStart },
+      ...(orgId ? { gate: { organizationId: orgId } } : {}),
+    },
     _count: true,
   });
+
   const gateIds = scansByGate.map(
     (s: { gateId: string; _count: number }) => s.gateId
   );

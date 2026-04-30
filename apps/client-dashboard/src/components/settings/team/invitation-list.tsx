@@ -11,15 +11,10 @@ import {
   Button,
   Badge,
 } from '@gate-access/ui';
-import { 
-  Trash2, 
-  Clock,
-  XCircle,
-  Mail
-} from 'lucide-react';
+import { Trash2, Clock, XCircle, Mail } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
-import { revokeInvitation } from '../../../app/[locale]/dashboard/settings/team/actions';
+import { revokeInvitation } from '../../../app/[locale]/dashboard/organizations/[orgId]/settings/team/actions';
 
 interface Role {
   id: string;
@@ -43,12 +38,22 @@ export function InvitationList({ invitations }: InvitationListProps) {
   const [isPending, startTransition] = useTransition();
 
   const handleRevoke = async (id: string) => {
-    if (!confirm(t('settings.team.revokeInviteConfirm', 'Are you sure you want to revoke this invitation?'))) return;
+    if (
+      !confirm(
+        t(
+          'settings.team.revokeInviteConfirm',
+          'Are you sure you want to revoke this invitation?'
+        )
+      )
+    )
+      return;
 
     startTransition(async () => {
       const res = await revokeInvitation(id);
       if (res.success) {
-        toast.success(t('settings.team.inviteRevoked', 'Invitation revoked successfully.'));
+        toast.success(
+          t('settings.team.inviteRevoked', 'Invitation revoked successfully.')
+        );
       } else {
         toast.error(res.error || t('common.error', 'An error occurred.'));
       }
@@ -68,29 +73,42 @@ export function InvitationList({ invitations }: InvitationListProps) {
               <TableHead>{t('settings.team.email', 'Email Address')}</TableHead>
               <TableHead>{t('settings.team.role', 'Role')}</TableHead>
               <TableHead>{t('settings.team.status', 'Status')}</TableHead>
-              <TableHead className="text-right">{t('common.actions', 'Actions')}</TableHead>
+              <TableHead className="text-right">
+                {t('common.actions', 'Actions')}
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {invitations.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={4} className="h-40 text-center text-muted-foreground italic">
+                <TableCell
+                  colSpan={4}
+                  className="h-40 text-center text-muted-foreground italic"
+                >
                   {t('settings.team.noInvitations', 'No pending invitations.')}
                 </TableCell>
               </TableRow>
             ) : (
               invitations.map((invite) => (
-                <TableRow key={invite.id} className="group hover:bg-muted/30 transition-colors">
+                <TableRow
+                  key={invite.id}
+                  className="group hover:bg-muted/30 transition-colors"
+                >
                   <TableCell>
                     <div className="flex items-center gap-3">
                       <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
                         <Mail className="h-4 w-4 text-primary" />
                       </div>
-                      <span className="font-bold text-sm text-foreground">{invite.email}</span>
+                      <span className="font-bold text-sm text-foreground">
+                        {invite.email}
+                      </span>
                     </div>
                   </TableCell>
                   <TableCell>
-                    <Badge variant="outline" className="font-black uppercase tracking-widest text-[10px] px-2 py-0.5 bg-muted/50">
+                    <Badge
+                      variant="outline"
+                      className="font-black uppercase tracking-widest text-[10px] px-2 py-0.5 bg-muted/50"
+                    >
                       {invite.role.name}
                     </Badge>
                   </TableCell>

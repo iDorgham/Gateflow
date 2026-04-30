@@ -20,10 +20,12 @@ export async function POST(req: NextRequest) {
     // In a real scenario, this would use a vector similarity search (e.g., pgvector or Pinecone)
     const knowledgeItems = await prisma.knowledgeItem.findMany({
       where: { organizationId: orgId },
-      take: 5 // Get the latest/top items for context
+      take: 5, // Get the latest/top items for context
     });
 
-    const context = knowledgeItems.map(item => item.content).join("\n\n---\n\n");
+    const context = knowledgeItems
+      .map((item: (typeof knowledgeItems)[number]) => item.content)
+      .join('\n\n---\n\n');
 
     // 2. Generate response with context
     const { text } = await generateText({
@@ -34,7 +36,7 @@ export async function POST(req: NextRequest) {
       Your personality is professional, efficient, and domain-aware.
       
       CONTEXT FROM ORGANIZATION KNOWLEDGE BASE:
-      ${context || "No specific local knowledge found for this query."}
+      ${context || 'No specific local knowledge found for this query.'}
       
       Instructions:
       1. Prioritize information from the provided context.
@@ -46,6 +48,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ response: text });
   } catch (error) {
     console.error('[INTEL_CHAT_ERROR]', error);
-    return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal Server Error' },
+      { status: 500 }
+    );
   }
 }

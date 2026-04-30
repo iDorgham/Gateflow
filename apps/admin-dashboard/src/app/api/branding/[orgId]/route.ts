@@ -1,10 +1,10 @@
 import { type NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@gate-access/db';
+import { prisma, Prisma } from '@gate-access/db';
 import { isAdminAuthorized } from '@/lib/admin-auth';
 
 /**
  * Organization Branding API
- * 
+ *
  * Manages theme overrides and visual identity for a specific organization.
  * Supports GET (retrieve), PATCH (update), and versioned snapshots.
  */
@@ -24,9 +24,9 @@ export async function GET(
       where: { organizationId: orgId },
       include: {
         organization: {
-          select: { name: true }
-        }
-      }
+          select: { name: true },
+        },
+      },
     });
 
     const snapshots = await prisma.brandingSnapshot.findMany({
@@ -38,7 +38,10 @@ export async function GET(
     return NextResponse.json({ branding, snapshots });
   } catch (error) {
     console.error('[BRANDING_GET_ERROR]', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }
 
@@ -61,7 +64,7 @@ export async function PATCH(
     });
 
     // 2. Perform update and snapshot creation in a transaction
-    const result = await prisma.$transaction(async (tx) => {
+    const result = await prisma.$transaction(async (tx: typeof prisma) => {
       // Create snapshot if current branding exists
       if (current) {
         await tx.brandingSnapshot.create({
@@ -112,6 +115,9 @@ export async function PATCH(
     return NextResponse.json(result);
   } catch (error) {
     console.error('[BRANDING_PATCH_ERROR]', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }
