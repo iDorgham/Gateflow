@@ -88,9 +88,15 @@ export default async function ScopedAnalyticsPage(props: {
     _count: { id: true },
   });
   const statusMap = Object.fromEntries(
-    statusGroups.map((s) => [s.status, s._count.id])
+    statusGroups.map((s: { status: string; _count: { id: number } }) => [
+      s.status,
+      s._count.id,
+    ])
   );
-  const totalScans30 = statusGroups.reduce((a, b) => a + b._count.id, 0);
+  const totalScans30 = statusGroups.reduce(
+    (a: number, b: { _count: { id: number } }) => a + b._count.id,
+    0
+  );
 
   // ── KPI summary (Scoped) ──────────────────────────────────────────────────
   const [totalUsersCount, totalQRCount] = await Promise.all([
