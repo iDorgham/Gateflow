@@ -94,15 +94,15 @@
 ## Phase 5: AI Landing Page Builder
 
 - [x] **Schema**: `LandingPage` and `LandingPageSection` with `LandingPageStatus` enum.
-- [ ] **Headless CMS API**:
-  - [ ] `GET /api/cms/pages/[slug]` consumed by `apps/marketing`.
-  - [ ] `POST` publish triggers ISR revalidation webhook.
-- [ ] **AI Composer**: Section JSON generation via Vercel AI SDK v6.
-- [ ] **Block-Based Builder UI**: Section library, drag-to-reorder, AI generate.
-- [ ] **HiTL**: Publish blocked until all AI assets approved.
-- [ ] **Marketing Site Route**: `apps/marketing/[locale]/[slug]/page.tsx` (ISR).
-- [ ] **Target URLs**: `gateflow.site/en/[slug]` and `gateflow.site/ar/[slug]`.
-- [ ] **RBAC**: `MARKETING_EDITOR` / `SUPER_ADMIN` only.
+- [x] **Headless CMS API**:
+  - [x] `GET /api/cms/pages/[slug]` consumed by `apps/marketing`.
+  - [x] `POST` publish triggers ISR revalidation webhook.
+- [x] **AI Composer**: Section JSON generation via Vercel AI SDK v6.
+- [x] **Block-Based Builder UI**: Section library, drag-to-reorder, AI generate.
+- [x] **HiTL**: Publish blocked until all AI assets approved.
+- [x] **Marketing Site Route**: `apps/marketing/[locale]/[slug]/page.tsx` (ISR).
+- [x] **Target URLs**: `gateflow.site/en/[slug]` and `gateflow.site/ar/[slug]`.
+- [x] **RBAC**: `MARKETING_EDITOR` / `SUPER_ADMIN` only.
 
 ## Phase 6: AI Blog Content Engine
 

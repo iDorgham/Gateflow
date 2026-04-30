@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Platform Evolution]** finalize phase 1c org provisioning infrastructure
+
 - **[Routing]** stabilize admin dashboard routing and fix reference errors
 - **[Org Types Dashboard]** complete phase 5 - contextual modules terminology and visibility
 
