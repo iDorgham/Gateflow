@@ -32,6 +32,7 @@ interface OrgDetail {
   name: string;
   email: string;
   plan: string;
+  type: string;
   deletedAt: string | null;
   createdAt: string;
   _count: { users: number; qrCodes: number; gates: number };
@@ -233,6 +234,18 @@ export function OrgDetailSheet({ orgId, onClose }: OrgDetailSheetProps) {
                         )}
                       >
                         {suspended ? 'Suspended' : 'Verified'}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-1 pr-4 border-r border-ds-border/50">
+                    <span className="text-[10px] font-bold text-ds-text-subtlest uppercase tracking-widest">
+                      Organization Type
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <Building2 className="h-3.5 w-3.5 text-ds-text-brand" />
+                      <span className="text-sm font-bold text-ds-text">
+                        {org.type.replace('_', ' ')}
                       </span>
                     </div>
                   </div>

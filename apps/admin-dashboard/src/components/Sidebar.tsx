@@ -195,6 +195,11 @@ export function Sidebar() {
         '/monitoring',
         '/intelligence',
         '/cms',
+        '/crm',
+        '/scans',
+        '/projects',
+        '/users',
+        '/gates',
       ].some((p) => href === p || href.startsWith(p + '/'));
 
       if (!hasGlobalVersion) {

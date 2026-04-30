@@ -36,6 +36,11 @@
 - [ ] Phase 4 — Responsive Pages: History, Maintenance, Profile
 - [ ] Phase 5 — Polish: Transitions, Gestures, RTL
 
+### org_types_dashboard — Organization Types: Client Dashboard Experience
+
+**PLAN:** `docs/plan/Complete/org_types_dashboard/`  
+**Status:** ✅ Done (2026-04-30)
+
 ### scanner_onboarding_session — Scanner App: Onboarding & Session Management
 
 **IDEA:** `docs/development/initiatives/IDEA_scanner_onboarding_session.md`  
@@ -64,9 +69,9 @@
 
 ### platform_evolution — GateFlow Platform Evolution (OS for Access)
 
-**PLAN:** `docs/plan/Ready/platform_evolution/`  
+**PLAN:** `docs/plan/Active/platform_evolution/`  
 `PLAN_platform_evolution.md`  
-**Status:** 🆕 Draft (Planning Phase)  
+**Status:** 🏗️ Active (In Progress)  
 **Target:** Q2-Q3 2026
 
 - [ ] Phase 1 — Nested Organizational Hierarchy (Users, Projects, Gates inside Org)

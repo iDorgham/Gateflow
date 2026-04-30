@@ -61,6 +61,7 @@ interface OrgsClientProps {
     auditLogNotice: string;
     columns: {
       org: string;
+      type: string;
       plan: string;
       metrics: string;
       status: string;
@@ -75,6 +76,8 @@ interface OrgsClientProps {
       emailPlaceholder: string;
       planLabel: string;
       planHelper: string;
+      typeLabel: string;
+      typePlaceholder: string;
       notice: string;
       submitLabel: string;
       cancelLabel: string;
@@ -123,6 +126,18 @@ export function OrgsClient({
                 {org.email}
               </span>
             </div>
+          </div>
+        ),
+      },
+      {
+        key: 'type',
+        label: translations.columns.type,
+        render: (org: any) => (
+          <div className="flex items-center gap-2">
+            <Building2 className="h-3.5 w-3.5 text-ds-text-subtlest" />
+            <span className="text-[10px] font-black uppercase text-ds-text-subtle tracking-tighter">
+              {org.type?.replace('_', ' ') || 'REAL ESTATE'}
+            </span>
           </div>
         ),
       },
@@ -319,9 +334,9 @@ export function OrgsClient({
                   {translations.emptySubtitle}
                 </p>
               </div>
-              <Button 
-                variant="subtle" 
-                size="sm" 
+              <Button
+                variant="subtle"
+                size="sm"
                 onClick={() => setIsAddSheetOpen(true)}
                 className="h-9 px-6 font-black uppercase tracking-widest text-[10px] border border-ds-border hover:bg-ds-background-neutral-subtle transition-all"
               >

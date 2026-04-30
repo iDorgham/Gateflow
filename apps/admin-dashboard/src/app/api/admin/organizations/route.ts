@@ -53,6 +53,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         name: true,
         email: true,
         plan: true,
+        type: true,
         deletedAt: true,
         createdAt: true,
         _count: { select: { users: true, qrCodes: true, gates: true } },
@@ -93,7 +94,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
   try {
     const body = await request.json();
-    const { name, email, plan = 'FREE' } = body;
+    const { name, email, plan = 'FREE', type = 'REAL_ESTATE' } = body;
 
     if (!name || !email) {
       return NextResponse.json(
@@ -122,8 +123,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         name,
         email,
         plan: plan as 'FREE' | 'PRO',
-        // Default to Real Estate for now
-        type: 'REAL_ESTATE',
+        type: type as any,
       },
     });
 

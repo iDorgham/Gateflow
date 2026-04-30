@@ -35,6 +35,8 @@ interface AddOrganizationSheetProps {
     emailPlaceholder: string;
     planLabel: string;
     planHelper: string;
+    typeLabel: string;
+    typePlaceholder: string;
     notice: string;
     submitLabel: string;
     cancelLabel: string;
@@ -54,6 +56,7 @@ export function AddOrganizationSheet({
     name: '',
     email: '',
     plan: 'FREE',
+    type: 'REAL_ESTATE',
   });
 
   function handleSubmit(e: React.FormEvent) {
@@ -73,7 +76,12 @@ export function AddOrganizationSheet({
           toast.success(translations.success);
           router.refresh();
           onClose();
-          setFormData({ name: '', email: '', plan: 'FREE' });
+          setFormData({
+            name: '',
+            email: '',
+            plan: 'FREE',
+            type: 'REAL_ESTATE',
+          });
         } else {
           toast.error(data.message || translations.error);
         }
@@ -173,6 +181,31 @@ export function AddOrganizationSheet({
                   </NativeSelect>
                   <p className="text-[10px] text-ds-text-subtlest mt-1 italic">
                     {translations.planHelper}
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <Building2 className="h-3.5 w-3.5 text-ds-text-brand" />
+                    <label className="text-[11px] font-black text-ds-text-subtle uppercase tracking-widest">
+                      {translations.typeLabel}
+                    </label>
+                  </div>
+                  <NativeSelect
+                    className="h-11 rounded-xl bg-ds-background-neutral-subtle border-ds-border focus:bg-ds-background-default transition-all"
+                    value={formData.type}
+                    onChange={(e) =>
+                      setFormData({ ...formData, type: e.target.value })
+                    }
+                  >
+                    <option value="REAL_ESTATE">🏠 REAL ESTATE</option>
+                    <option value="SCHOOL">🏫 SCHOOL / ACADEMY</option>
+                    <option value="CLUB">🏟️ PRIVATE CLUB</option>
+                    <option value="NIGHTCLUB">🍸 NIGHTCLUB / LOUNGE</option>
+                    <option value="EVENT_ORGANISER">🎫 EVENT ORGANIZER</option>
+                  </NativeSelect>
+                  <p className="text-[10px] text-ds-text-subtlest mt-1 italic">
+                    {translations.typePlaceholder}
                   </p>
                 </div>
               </div>

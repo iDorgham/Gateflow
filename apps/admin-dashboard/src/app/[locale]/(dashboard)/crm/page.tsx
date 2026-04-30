@@ -1,12 +1,12 @@
 import { requireAdmin } from '@/lib/admin-auth';
 import { Locale } from '@/lib/i18n/i18n-config';
 import { PageHeader, Button, Badge } from '@gate-access/ui';
-import { Zap, Building2, ArrowRight } from 'lucide-react';
+import { Target, Building2, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
-export const metadata = { title: 'Traffic Emulation | Global' };
+export const metadata = { title: 'Lead CRM | Global' };
 
-export default async function GlobalEmulationPage(props: {
+export default async function GlobalCRMPage(props: {
   params: Promise<{ locale: Locale }>;
 }) {
   const params = await props.params;
@@ -19,18 +19,18 @@ export default async function GlobalEmulationPage(props: {
       <div className="relative">
         <div className="absolute -inset-4 bg-ds-background-brand-bold/10 rounded-full blur-2xl animate-pulse" />
         <div className="relative bg-ds-background-default border-2 border-ds-border p-8 rounded-[2.5rem] shadow-xl">
-          <Zap className="h-20 w-20 text-ds-text-brand" />
+          <Target className="h-20 w-20 text-ds-text-brand" />
         </div>
       </div>
 
       <div className="max-w-md space-y-4">
         <PageHeader
-          title="Traffic Emulation"
-          subtitle="Load simulation and traffic emulation protocols must be executed against a target organization context."
+          title="Lead CRM"
+          subtitle="Sales activity, lead tracking, and conversion metrics are scoped to specific organizations."
           className="text-center"
         />
         <p className="text-sm text-ds-text-subtlest font-medium uppercase tracking-widest">
-          Select an organization to initialize emulation protocols.
+          Select an organization to manage its sales pipeline and leads.
         </p>
       </div>
 

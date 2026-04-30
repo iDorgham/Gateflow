@@ -2,12 +2,7 @@
 
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
-import {
-  Building2,
-  Check,
-  ChevronsUpDown,
-  PlusCircle,
-} from 'lucide-react';
+import { Building2, Check, ChevronsUpDown, PlusCircle } from 'lucide-react';
 import {
   Button,
   Command,
@@ -48,8 +43,43 @@ export function OrgSwitcher({ isCollapsed }: { isCollapsed?: boolean }) {
   }, [open, orgs.length]);
 
   const onSelect = (id: string) => {
+    setOpen(true); // Keep loading state visual
+
+    // 1. Set sticky cookie for global persistence
+    document.cookie = `gf_active_org_id=${id}; path=/; max-age=${60 * 60 * 24 * 30}; SameSite=Lax`;
+
+    // 2. Smart Redirection: Preserve current sub-path if it exists
+    const currentPath = window.location.pathname;
+    const locale = i18n.language;
+    const segments = currentPath.split('/').filter(Boolean);
+
+    // If we are already in an organization-scoped path, replace the ID
+    if (segments.length >= 3 && segments[1] === 'organizations') {
+      const subPath = segments.slice(3).join('/');
+      router.push(
+        `/${locale}/organizations/${id}${subPath ? `/${subPath}` : ''}`
+      );
+    } else {
+      // If we are on a global page, try to go to the scoped version of that same page
+      // e.g. /ar-EG/users -> /ar-EG/organizations/[id]/users
+      const pathWithoutLocale = currentPath.replace(
+        new RegExp(`^/${locale}`),
+        ''
+      );
+      const cleanPath =
+        pathWithoutLocale === '' || pathWithoutLocale === '/'
+          ? ''
+          : pathWithoutLocale;
+
+      // Don't redirect to org-scoped version of generic pages like /organizations list itself
+      if (cleanPath === '/organizations' || cleanPath === '/redirect') {
+        router.push(`/${locale}/organizations/${id}`);
+      } else {
+        router.push(`/${locale}/organizations/${id}${cleanPath}`);
+      }
+    }
+
     setOpen(false);
-    router.push(`/${i18n.language}/organizations/${id}`);
   };
 
   if (isCollapsed) {
