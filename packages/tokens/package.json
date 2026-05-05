@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "@gate-access/config": "workspace:*",
-    "typescript": "^5.9.3",
+    "typescript": "^6.0.3",
     "tsup": "^8.3.6"
   }
 }
