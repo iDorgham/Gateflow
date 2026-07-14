@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
 import { createHash, timingSafeEqual } from 'crypto';
-
-const COOKIE_NAME = 'admin_session';
-const SECURE = process.env.NODE_ENV === 'production';
+import { setAdminSession, clearAdminSession } from '@/lib/admin-auth';
 
 function sha256(message: string) {
   return createHash('sha256').update(message).digest('hex');
@@ -51,14 +48,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    const sessionToken = sha256(expectedKey);
-    (await cookies()).set(COOKIE_NAME, sessionToken, {
-      httpOnly: true,
-      secure: SECURE,
-      sameSite: 'lax',
-      path: '/',
-      maxAge: 60 * 60 * 12, // 12 hours
-    });
+    await setAdminSession();
 
     return NextResponse.json({ success: true });
   } catch (e: unknown) {
@@ -71,6 +61,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 }
 
 export async function DELETE(): Promise<NextResponse> {
-  (await cookies()).delete(COOKIE_NAME);
+  await clearAdminSession();
   return NextResponse.json({ success: true });
 }
