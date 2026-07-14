@@ -106,38 +106,38 @@
 
 ## Phase 6: AI Blog Content Engine
 
-- [ ] **Schema**: `BlogPost`, `BlogCategory` with multi-language fields.
-- [ ] **Headless CMS API**:
-  - [ ] `GET /api/cms/blog/[slug]` and list endpoint.
-  - [ ] Publish triggers ISR + sitemap update.
-- [ ] **AI Drafting**: Full draft from title, `translateContent` tool (EN → AR).
-- [ ] **Premium Editor**: Tiptap rich text, side-by-side EN/AR, SEO panel.
-- [ ] **Review Checklist**: SEO verified, Arabic tone, featured image, categories.
-- [ ] **Marketing Site Routes**: `/en/blog/[slug]`, `/ar/blog/[slug]`, sitemap.
-- [ ] **RBAC**: `MARKETING_EDITOR` / `SUPER_ADMIN` only.
+- [x] **Schema**: `BlogPost`, `BlogCategory` with multi-language fields.
+- [x] **Headless CMS API**:
+  - [x] `GET /api/cms/blog/[slug]` and list endpoint.
+  - [x] Publish triggers ISR + sitemap update.
+- [x] **AI Drafting**: Full draft from title, `translateContent` tool (EN → AR).
+- [x] **Premium Editor**: Tiptap rich text, side-by-side EN/AR, SEO panel.
+- [x] **Review Checklist**: SEO verified, Arabic tone, featured image, categories.
+- [x] **Marketing Site Routes**: `/en/blog/[slug]`, `/ar/blog/[slug]`, sitemap.
+- [x] **RBAC**: `MARKETING_EDITOR` / `SUPER_ADMIN` only.
 
 ## Phase 7: Support Hub, Audit Trail, Analytics & Hardening
 
-- [ ] **Module A — Support Hub**:
-  - [ ] `SupportTicket` and `SupportMessage` schema.
-  - [ ] AI triage: summary, priority, suggested action.
-  - [ ] Escalation creates linked Task (Phase 3) + notification.
-  - [ ] HiTL: AI auto-resolution requires human confirm.
-- [ ] **Module B — Audit Trail Viewer**:
-  - [ ] Searchable `AiActionLog` UI with filters (date, type, department, status).
-  - [ ] Detail side panel with full payload and reasoning.
-  - [ ] CSV/XLSX export for PDPL/GDPR compliance.
-  - [ ] Scoped access: admins see all, others see own department.
-- [ ] **Module C — Predictive Analytics**:
-  - [ ] Lead funnel chart (Recharts).
-  - [ ] Deal pipeline value bar chart.
-  - [ ] CMS performance (views, conversions).
-  - [ ] AI usage cost tracker (`AiUsageLog` table + interceptor).
-  - [ ] AI weekly summary generator.
-- [ ] **Module D — Platform Hardening**:
-  - [ ] Rate limiting sliders per API route group.
-  - [ ] Force ISR revalidation button.
-  - [ ] Session TTL profiles (Strict/Standard/Demo).
-  - [ ] Status indicator gauges.
-- [ ] **RTL**: Arabic chart labels, audit trail columns, support inbox.
-- [ ] **Final QA**: Full MENA accessibility audit. Core Web Vitals ≥ 100%.
+- [x] **Module A — Support Hub**:
+  - [x] `SupportTicket` and `SupportMessage` schema.
+  - [x] AI triage: summary, priority, suggested action.
+  - [x] Escalation creates linked Task (Phase 3) + notification.
+  - [x] HiTL: AI auto-resolution requires human confirm.
+- [x] **Module B — Audit Trail Viewer**:
+  - [x] Searchable `AiActionLog` UI with filters (date, type, department, status).
+  - [x] Detail side panel with full payload and reasoning.
+  - [x] CSV/XLSX export for PDPL/GDPR compliance.
+  - [x] Scoped access: admins see all, others see own department.
+- [x] **Module C — Predictive Analytics**:
+  - [x] Lead funnel chart (Recharts).
+  - [x] Deal pipeline value bar chart.
+  - [x] CMS performance (views, conversions).
+  - [x] AI usage cost tracker (`AiUsageLog` table + interceptor).
+  - [x] AI weekly summary generator.
+- [x] **Module D — Platform Hardening**:
+  - [x] Rate limiting sliders per API route group.
+  - [x] Force ISR revalidation button.
+  - [x] Session TTL profiles (Strict/Standard/Demo).
+  - [x] Status indicator gauges.
+- [x] **RTL**: Arabic chart labels, audit trail columns, support inbox.
+- [x] **Final QA**: Full MENA accessibility audit. Core Web Vitals ≥ 100%.

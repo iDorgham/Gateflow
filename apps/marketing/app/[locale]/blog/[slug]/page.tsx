@@ -14,16 +14,19 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  const posts = await getAllPosts();
   const locales: Locale[] = ['en', 'ar-EG'];
-  return locales.flatMap((locale) =>
-    posts.map((p) => ({ locale, slug: p.slug }))
+  const params = await Promise.all(
+    locales.map(async (locale) => {
+      const posts = await getAllPosts(locale);
+      return posts.map((p) => ({ locale, slug: p.slug }));
+    })
   );
+  return params.flat();
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
-  const { slug } = await props.params;
-  const post = await getPostBySlug(slug);
+  const { slug, locale } = await props.params;
+  const post = await getPostBySlug(slug, locale);
   if (!post) return {};
   return {
     title: absoluteMarketingTitle(`${post.title} — GateFlow Blog`),
@@ -33,25 +36,27 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 
 export default async function BlogPostPage(props: Props) {
   const params = await props.params;
-  const post = await getPostBySlug(params.slug);
+  const post = await getPostBySlug(params.slug, params.locale);
 
   if (!post) notFound();
 
-  const allPosts = await getAllPosts();
+  const allPosts = await getAllPosts(params.locale);
   const related = allPosts
     .filter(
       (p) => p.slug !== params.slug && p.tags.some((t) => post.tags.includes(t))
     )
     .slice(0, 2);
 
-  const formattedDate = new Date(post.date).toLocaleDateString(
-    params.locale === 'ar-EG' ? 'ar-EG' : 'en-US',
-    {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    }
-  );
+  const formattedDate = post.date
+    ? new Date(post.date).toLocaleDateString(
+        params.locale === 'ar-EG' ? 'ar-EG' : 'en-US',
+        {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        }
+      )
+    : 'Recently Published';
 
   const initials = post.author
     .split(' ')
@@ -116,10 +121,17 @@ export default async function BlogPostPage(props: Props) {
         <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent" />
       </div>
 
-      {/* MDX Content */}
+      {/* Content */}
       <article className="px-6 py-12">
-        <div className="prose prose-slate dark:prose-invert prose-headings:font-black prose-h2:text-2xl prose-a:text-primary prose-code:bg-muted prose-code:px-1 prose-code:rounded mx-auto max-w-2xl">
-          <MDXRemote source={post.content} />
+        <div
+          className={`prose prose-slate dark:prose-invert prose-headings:font-black prose-h2:text-2xl prose-a:text-primary prose-code:bg-muted prose-code:px-1 prose-code:rounded mx-auto max-w-2xl ${params.locale === 'ar-EG' ? 'font-arabic' : ''}`}
+          dir={params.locale === 'ar-EG' ? 'rtl' : 'ltr'}
+        >
+          {post.isCms ? (
+            <div dangerouslySetInnerHTML={{ __html: post.content }} />
+          ) : (
+            <MDXRemote source={post.content} />
+          )}
         </div>
       </article>
 

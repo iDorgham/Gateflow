@@ -59,3 +59,104 @@ export async function getLandingPage(
     return null;
   }
 }
+
+export interface BlogPostData {
+  id: string;
+  slug: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  publishedAt: Date | null;
+  author: {
+    name: string;
+    avatarUrl: string | null;
+  };
+  categories: Array<{
+    id: string;
+    name: string;
+    slug: string;
+  }>;
+}
+
+/**
+ * Fetches published blog posts.
+ */
+export async function getBlogPosts(
+  locale: string,
+  limit = 10
+): Promise<BlogPostData[]> {
+  try {
+    const posts = await prisma.blogPost.findMany({
+      where: { status: 'PUBLISHED' },
+      include: {
+        categories: true,
+        author: {
+          select: { name: true, avatarUrl: true },
+        },
+      },
+      orderBy: { publishedAt: 'desc' },
+      take: limit,
+    });
+
+    return posts.map((p) => ({
+      id: p.id,
+      slug: locale === 'ar' ? p.slugAr : p.slugEn,
+      title: locale === 'ar' ? p.titleAr : p.titleEn,
+      excerpt: (locale === 'ar' ? p.excerptAr : p.excerptEn) || '',
+      content: locale === 'ar' ? p.contentAr : p.contentEn,
+      publishedAt: p.publishedAt,
+      author: p.author,
+      categories: p.categories.map((c) => ({
+        id: c.id,
+        name: locale === 'ar' ? c.nameAr : c.nameEn,
+        slug: c.slug,
+      })),
+    }));
+  } catch (error) {
+    console.error('[CMS_LIB] Error fetching blog posts:', error);
+    return [];
+  }
+}
+
+/**
+ * Fetches a single published blog post by slug.
+ */
+export async function getBlogPost(
+  slug: string,
+  locale: string
+): Promise<BlogPostData | null> {
+  try {
+    const post = await prisma.blogPost.findFirst({
+      where: {
+        OR: [{ slugEn: slug }, { slugAr: slug }],
+        status: 'PUBLISHED',
+      },
+      include: {
+        categories: true,
+        author: {
+          select: { name: true, avatarUrl: true },
+        },
+      },
+    });
+
+    if (!post) return null;
+
+    return {
+      id: post.id,
+      slug: locale === 'ar' ? post.slugAr : post.slugEn,
+      title: locale === 'ar' ? post.titleAr : post.titleEn,
+      excerpt: (locale === 'ar' ? post.excerptAr : post.excerptEn) || '',
+      content: locale === 'ar' ? post.contentAr : post.contentEn,
+      publishedAt: post.publishedAt,
+      author: post.author,
+      categories: post.categories.map((c) => ({
+        id: c.id,
+        name: locale === 'ar' ? c.nameAr : c.nameEn,
+        slug: c.slug,
+      })),
+    };
+  } catch (error) {
+    console.error('[CMS_LIB] Error fetching blog post:', error);
+    return null;
+  }
+}
