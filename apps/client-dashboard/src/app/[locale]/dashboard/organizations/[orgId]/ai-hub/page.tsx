@@ -3,13 +3,13 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import {
-  PageHeader,
   Card,
   CardHeader,
   CardTitle,
   CardContent,
   CardDescription,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
+import { PageHeader } from '@gateflow/components';
 import {
   MaintenanceHubTable,
   MaintenanceHubRow,

@@ -6,6 +6,16 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ---
 
+## [1.0.0] - 2026-04-06
+
+### Added
+
+- **GateFlow Design System**: Canonical v1.0 launch.
+- **npm distribution**: Ready for `@gateflow/tokens`, `@gateflow/theme`, `@gateflow/ui`, `@gateflow/components`, and `@gateflow/ai`.
+- **Documentation**: Professional docs site at [design.gateflow.site](https://design.gateflow.site) with RTL, search, and galleries.
+- **MENA Regional Parity**: Standardized logical properties and Arabic localization foundations.
+- **AI UI Excellence**: Glassmorphism and agentic patterns in `@gateflow/ai`.
+
 ## [Unreleased]
 
 ### Workspace
@@ -18,6 +28,111 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 - **[Org Types Dashboard]** complete phase 5 - contextual modules terminology and visibility
 
 - **[Org Types]** complete phase 4 - config-driven dashboard home
+
+- **[Design-System]** finalize pattern-docs initiative — certification and hardening
+
+- **[Design-System]** complete pattern-docs phase 3 — Entity & Composition Patterns
+
+- **[Design-System]** complete pattern-docs phase 2 — AI UI & Cortex Patterns
+
+- **[Design-System]** complete pattern-docs phase 1 — Analytics Pattern Documentation
+
+- **[Admin-Evolution]** complete phase 9 — AI polish, confirmation gate, version history, and E2E coverage
+
+- **[Admin-Evolution]** sync implemented phases 4-8
+
+- **[Admin-Dashboard]** implement cms front builder core and 9 blocks
+
+- **[Admin Dashboard Evolution]** complete phase 2
+
+- **[Admin Dashboard Evolution]** complete phase 1
+
+- **[Design-System]** fix hardcoded hex values
+
+- **[Token System V2]** complete phase 3
+
+- **[Token System V2]** complete phase 2
+- **[Deps]** override basic-ftp >=5.2.1 to clear GHSA-chqc-8p9q-pq6q
+- **[Ui]** add favicons and apple-touch-icons to all portal apps
+
+- **[Design-System]** add missing /patterns index page to resolve 404
+
+- **[Patterns]** resolve build failures and finalize RTL certification
+
+- **[Design-System]** certify and finalize Pattern Documentation (Phase 4)
+
+- **[Design-System]** implement Entity Composition documentation (Phase 3)
+
+- **[Design-System]** implement AI UI Pattern documentation (Phase 2)
+
+- **[Design-System]** implement Analytics Pattern documentation (Phase 1)
+
+- **[Design-System]** enforce 'use client' on all documentation pages to resolve prerendering errors
+
+- **[Design-System-Redesign]** merge Phase 5 - Redesign & API Hardening
+
+- **[Client-Dashboard]** resolve onOpenChat type mismatch in DashboardLayout
+
+- **[Deployment]** resolve build blockers and lint warnings across design-system and admin-dashboard
+
+- **[Deploy]** remove invalid ignoreBuildCommand from all apps
+
+- **[Deploy]** remove invalid ignoreBuildCommand property and fix workflow schema
+
+- **[Design-System]** complete redesign and polish (Phases 1-8)
+
+- **[Design-System-Redesign]** completes phase 4 - monorepo enforcement
+- **[Design-System-Redesign]** finalize phase 2 foundations
+
+- **[Design-System-Redesign]** complete phase 2
+
+- **[Design-System-Redesign]** complete phase 1
+
+- **[Monorepo]** add framer-motion dependencies to @gateflow/ui, @gateflow/components, and design-system
+
+- **[Ui]** resolve AISidePanel type mismatch with framer-motion
+
+- **[Design-System]** standardized gateflow token architecture and in-depth manifesto
+
+- **[Tokens]** remove unused @ts-expect-error in client-dashboard tailwind config
+- **[Tokens]** remove unused @ts-expect-error in resident-portal tailwind config
+- **[Tokens]** token system v2 — Kimchi palette, dark mode fix, unified architecture
+- **[Ci]** run vercel commands from repo root for design-system deploy
+- **[Ci]** add skip_migration input to unblock deploys during stuck migration
+- **[Ui]** add ToastProvider to design-system layout
+- **[Components]** import cn from @gateflow/ui/utils in all compositions
+- **[Ui]** inject 'use client' via postbuild to preserve server-safe utils entry
+- **[Ui]** isolate cn utility to @gateflow/ui/utils for server component safety
+- **[Ui]** remove global 'use client' banner to allow universal utility usage
+
+- **[Ops]** remove invalid vercel property and fix turbo filters
+
+- **[Vercel]** implement ignore-build script to skip dependabot builds
+
+- **[Ui]** preserve "use client" and externalize react-hook-form in tsup build
+- **[Admin-Dashboard]** migrate PageHeader import from @gateflow/ui to @gateflow/components
+
+- **[Design-System]** typecheck, lint, and build fixes for all @gateflow/\* packages
+
+- **[Design-System]** primitives patterns ai galleries and packages catalog
+
+- **[Gateflow Design System]** complete phase 10 (npm & CI)
+- **[Gateflow Design System]** complete phase 9 (RTL & Search)
+- **[Gateflow Design System]** complete phase 7 & 8 (Foundations & Galleries)
+- **[Gateflow Design System]** complete phase 6
+
+- **[Gateflow Design System]** complete phase 5
+
+- **[Gateflow Design System]** complete phase 4
+- **[Gateflow Design System]** complete phase 3
+
+- **[Gateflow Design System]** complete phase 2
+
+- **[Auth]** fix client-dashboard signAccessToken arg mismatch and resolve TS errors
+
+- **[Gateflow Design System]** complete phase 1
+
+- **[Org Types]** add OrganizationType to schema and auth tokens
 
 - **[Client-Dashboard]** resolve type error with LanguageSwitcher variant prop
 
@@ -42,6 +157,16 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 ### Apps
 
 - **[Admin]** resolve implicit any type errors in analytics page
+
+- **[Admin]** complete evolution phase 9
+
+- **[Marketing]** cast t() to string in generateMetadata to fix TS2345
+
+- **[Marketing]** resolve PhoneFrame style type error and cleanup unused icons
+
+- **[Marketing]** resolve SecurityGrid prop mismatch and harden CMS route types
+
+- **[Client]** migrate PageHeader import from @gateflow/ui to @gateflow/components
 
 - **[Marketing]** merge marketing_growth_engine_q3_2026 worktree into master
 

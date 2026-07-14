@@ -21,7 +21,7 @@ import {
 import { clearHistory } from '../lib/scan-history';
 import { scanQueue } from '../lib/offline-queue';
 import { clearNonceCache } from '../lib/qr-verify';
-import { nativeTokens } from '@gate-access/ui/tokens';
+import { nativeTokensNewEra as nativeTokens } from '../../../../packages/ui/src/tokens';
 
 const SUPERVISOR_PIN_KEY = 'supervisor_pin';
 
@@ -73,13 +73,15 @@ function ToggleRow({
         onValueChange={onValueChange}
         disabled={disabled}
         trackColor={{
-          false: nativeTokens.colors.neutral500,
+          false: nativeTokens.colors.border,
           true: nativeTokens.colors.primary,
         }}
         thumbColor={
-          value ? nativeTokens.colors.ring : nativeTokens.colors.mutedForeground
+          value
+            ? nativeTokens.colors.textInverse
+            : nativeTokens.colors.textSubtle
         }
-        ios_backgroundColor={nativeTokens.colors.neutral500}
+        ios_backgroundColor={nativeTokens.colors.surfaceSubtle}
       />
     </View>
   );
@@ -113,7 +115,7 @@ function ActionRow({
       {busy ? (
         <ActivityIndicator
           size="small"
-          color={nativeTokens.colors.mutedForeground}
+          color={nativeTokens.colors.textSubtlest}
         />
       ) : (
         <Text style={[s.chevron, danger && s.chevronDanger]}>›</Text>
@@ -431,7 +433,7 @@ export function SettingsTab({ onLogout }: SettingsTabProps) {
                     setPinError('');
                   }}
                   placeholder="New PIN"
-                  placeholderTextColor={nativeTokens.colors.mutedForeground}
+                  placeholderTextColor={nativeTokens.colors.textSubtlest}
                   secureTextEntry
                   keyboardType="number-pad"
                   maxLength={6}
@@ -444,7 +446,7 @@ export function SettingsTab({ onLogout }: SettingsTabProps) {
                     setPinError('');
                   }}
                   placeholder="Confirm PIN"
-                  placeholderTextColor={nativeTokens.colors.mutedForeground}
+                  placeholderTextColor={nativeTokens.colors.textSubtlest}
                   secureTextEntry
                   keyboardType="number-pad"
                   maxLength={6}
@@ -465,7 +467,7 @@ export function SettingsTab({ onLogout }: SettingsTabProps) {
                     {pinBusy ? (
                       <ActivityIndicator
                         size="small"
-                        color={nativeTokens.colors.primaryForeground}
+                        color={nativeTokens.colors.textInverse}
                       />
                     ) : (
                       <Text style={s.pinBtnSaveText}>Save PIN</Text>
@@ -552,19 +554,19 @@ export function SettingsTab({ onLogout }: SettingsTabProps) {
 const s = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: nativeTokens.colors.neutral800,
+    backgroundColor: nativeTokens.colors.background,
     paddingTop: TOP_OFFSET,
   },
   header: {
     paddingHorizontal: 24,
     paddingBottom: 16,
     borderBottomWidth: 1,
-    borderColor: nativeTokens.colors.neutral700,
+    borderColor: nativeTokens.colors.border,
   },
   title: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: nativeTokens.colors.primaryForeground,
+    fontFamily: 'Cairo_700Bold',
+    fontSize: 28,
+    color: nativeTokens.colors.textHeading,
   },
   center: {
     flex: 1,
@@ -582,19 +584,19 @@ const s = StyleSheet.create({
     marginBottom: 24,
   },
   sectionTitle: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: nativeTokens.colors.mutedForeground,
-    letterSpacing: 0.8,
+    fontFamily: 'Cairo_700Bold',
+    fontSize: 12,
+    color: nativeTokens.colors.textSubtlest,
+    letterSpacing: 1,
     textTransform: 'uppercase',
     marginBottom: 8,
     paddingHorizontal: 4,
   },
   sectionCard: {
-    backgroundColor: nativeTokens.colors.neutral700,
-    borderRadius: 14,
+    backgroundColor: nativeTokens.colors.surfaceSubtle,
+    borderRadius: 18,
     borderWidth: 1,
-    borderColor: nativeTokens.colors.neutral700,
+    borderColor: nativeTokens.colors.border,
     overflow: 'hidden',
   },
 
@@ -603,52 +605,55 @@ const s = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 18,
-    paddingVertical: 14,
+    paddingVertical: 16,
   },
   rowPressed: {
-    backgroundColor: 'rgba(255,255,255,0.04)',
+    backgroundColor: nativeTokens.colors.surfaceGlass,
   },
   rowText: {
     flex: 1,
     gap: 2,
   },
   rowLabel: {
-    fontSize: 15,
-    color: nativeTokens.colors.neutral30,
-    fontWeight: '500',
+    fontFamily: 'Cairo_600SemiBold',
+    fontSize: 16,
+    color: nativeTokens.colors.textPrimary,
   },
   rowLabelDanger: {
-    color: nativeTokens.colors.destructive,
+    color: nativeTokens.colors.danger,
   },
   rowSub: {
-    fontSize: 12,
-    color: nativeTokens.colors.mutedForeground,
+    fontFamily: 'Cairo_400Regular',
+    fontSize: 13,
+    color: nativeTokens.colors.textSubtle,
   },
   rowValue: {
+    fontFamily: 'Cairo_400Regular',
     fontSize: 14,
-    color: nativeTokens.colors.mutedForeground,
-    fontVariant: ['tabular-nums'],
+    color: nativeTokens.colors.textSubtle,
   },
   chevron: {
     fontSize: 22,
-    color: nativeTokens.colors.neutral500,
+    color: nativeTokens.colors.textSubtlest,
     lineHeight: 26,
   },
   chevronDanger: {
-    color: 'rgba(248,113,113,0.4)',
+    color: nativeTokens.colors.dangerSubtle,
   },
 
   // Divider
   divider: {
     marginLeft: 18,
-    height: StyleSheet.hairlineWidth,
-    backgroundColor: nativeTokens.colors.neutral700,
+    height: 1,
+    backgroundColor: nativeTokens.colors.border,
+    opacity: 0.5,
   },
 
   // Footer
   footer: {
+    fontFamily: 'Cairo_400Regular',
     fontSize: 12,
-    color: nativeTokens.colors.neutral500,
+    color: nativeTokens.colors.textSubtlest,
     textAlign: 'center',
     marginTop: 8,
   },
@@ -659,53 +664,56 @@ const s = StyleSheet.create({
     gap: 4,
   },
   pinInputLabel: {
-    fontSize: 13,
-    color: nativeTokens.colors.mutedForeground,
+    fontFamily: 'Cairo_400Regular',
+    fontSize: 14,
+    color: nativeTokens.colors.textSubtle,
     marginBottom: 10,
   },
   pinInput: {
-    backgroundColor: nativeTokens.colors.neutral700,
+    backgroundColor: nativeTokens.colors.background,
     borderWidth: 1,
-    borderColor: nativeTokens.colors.neutral500,
-    borderRadius: 10,
-    paddingVertical: 11,
-    paddingHorizontal: 14,
-    fontSize: 16,
-    color: nativeTokens.colors.primaryForeground,
-    letterSpacing: 4,
+    borderColor: nativeTokens.colors.border,
+    borderRadius: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    fontSize: 20,
+    color: nativeTokens.colors.textHeading,
+    letterSpacing: 8,
+    textAlign: 'center',
   },
   pinError: {
+    fontFamily: 'Cairo_400Regular',
     fontSize: 13,
-    color: nativeTokens.colors.destructive,
+    color: nativeTokens.colors.danger,
     marginTop: 6,
   },
   pinBtnRow: {
     flexDirection: 'row',
-    gap: 10,
-    marginTop: 14,
+    gap: 12,
+    marginTop: 16,
   },
   pinBtn: {
     flex: 1,
-    paddingVertical: 12,
-    borderRadius: 10,
+    paddingVertical: 14,
+    borderRadius: 12,
     alignItems: 'center',
   },
   pinBtnCancel: {
-    backgroundColor: nativeTokens.colors.neutral700,
+    backgroundColor: nativeTokens.colors.surfaceSubtle,
     borderWidth: 1,
-    borderColor: nativeTokens.colors.neutral500,
+    borderColor: nativeTokens.colors.border,
   },
   pinBtnCancelText: {
-    color: nativeTokens.colors.mutedForeground,
-    fontWeight: '600',
+    fontFamily: 'Cairo_600SemiBold',
+    color: nativeTokens.colors.textSubtle,
     fontSize: 14,
   },
   pinBtnSave: {
     backgroundColor: nativeTokens.colors.primary,
   },
   pinBtnSaveText: {
-    color: nativeTokens.colors.primaryForeground,
-    fontWeight: '600',
+    fontFamily: 'Cairo_600SemiBold',
+    color: nativeTokens.colors.textInverse,
     fontSize: 14,
   },
 });

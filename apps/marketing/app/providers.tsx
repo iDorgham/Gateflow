@@ -5,10 +5,10 @@ import { ThemeProvider } from 'next-themes';
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ThemeProvider
-      attribute="class"
+      attribute="data-color-mode"
       defaultTheme="light"
-      enableSystem={false}
-      disableTransitionOnChange={false}
+      enableSystem={true}
+      disableTransitionOnChange={true}
     >
       {children}
     </ThemeProvider>

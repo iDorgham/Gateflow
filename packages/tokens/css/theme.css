@@ -1,0 +1,27 @@
+@theme {
+  --color-gf-primary: var(--gf-color-primary);
+  --color-gf-primary-foreground: var(--gf-color-primary-foreground);
+  --color-gf-background: var(--gf-color-theme-background);
+  --color-gf-foreground: var(--gf-color-theme-foreground);
+  --color-gf-surface: var(--gf-color-surface);
+  --color-gf-surface-raised: var(--gf-color-surface-raised);
+  --color-gf-border: var(--gf-color-border);
+  --color-gf-muted: var(--gf-color-muted);
+  --color-gf-muted-foreground: var(--gf-color-muted-foreground);
+  
+  /* Semantic Status */
+  --color-gf-success: var(--gf-color-success);
+  --color-gf-warning: var(--gf-color-warning);
+  --color-gf-danger: var(--gf-color-danger);
+  --color-gf-info: var(--gf-color-info);
+
+  /* shadcn/ui overrides */
+  --color-background: var(--gf-color-theme-background);
+  --color-foreground: var(--gf-color-theme-foreground);
+  --color-card: var(--gf-color-surface);
+  --color-card-foreground: var(--gf-color-theme-foreground);
+  --color-popover: var(--gf-color-surface-overlay);
+  --color-popover-foreground: var(--gf-color-theme-foreground);
+  --color-primary: var(--gf-color-primary);
+  --color-primary-foreground: var(--gf-color-primary-foreground);
+}

@@ -492,6 +492,23 @@
       "success": "تم إنشاء المستخدم بنجاح",
       "error": "فشل إنشاء المستخدم",
       "requiredFields": "يرجى ملء جميع الحقول المطلوبة"
+    },
+    "cms": {
+      "publishConfirmation": "تأكيد النشر",
+      "publishConfirmationDesc": "يرجى مراجعة المحتوى الذي تم إنشاؤه بواسطة الذكاء الاصطناعي قبل نشره.",
+      "landingPageItems": "عناصر صفحات الهبوط",
+      "blogItems": "عناصر المدونة",
+      "sectionItems": "عناصر القسم",
+      "emailItems": "عناصر البريد الإلكتروني",
+      "aiReviewRequired": "يحتوي هذا المحتوى على عناصر تم إنشاؤها بواسطة الذكاء الاصطناعي وتتطلب مراجعة بشرية.",
+      "reviewChecklist": "قائمة المراجعة",
+      "confirmAndPublish": "تأكيد ونشر",
+      "reviewText": "لقد قمت بمراجعة جميع النصوص",
+      "reviewImages": "لقد قمت بمراجعة جميع الصور",
+      "verifyLinks": "لقد قمت بالتأكد من جميع الروابط",
+      "versionHistory": "تاريخ النسخ",
+      "noVersions": "لا توجد نسخ سابقة",
+      "current": "الحالية"
     }
   },
   "solutions": {
@@ -1713,62 +1730,127 @@
         "failed": "فشل إرسال الدعوة عبر {{provider}}."
       }
     },
-    "orgType": {
-      "realEstate": {
-        "orgLabel": "نظرة عامة على المجمع",
-        "unitLabel": "وحدة",
-        "unitLabelPlural": "وحدات",
-        "contactLabel": "مقيم",
-        "contactLabelPlural": "سكان",
-        "visitorLabel": "زائر",
-        "projectLabel": "مجمع سكني",
-        "unitDescription": "إدارة الوحدات السكنية والتجارية، وتتبع حصص العقارات، ومراقبة كثافة المشغلين.",
-        "contactDescription": "إدارة سكان المجمع والعائلات وجهات الاتصال المصرح بها."
-      },
-      "school": {
-        "orgLabel": "نظرة عامة على الحرم",
-        "unitLabel": "فصل دراسي",
-        "unitLabelPlural": "فصول دراسية",
-        "contactLabel": "طالب",
-        "contactLabelPlural": "طلاب",
-        "visitorLabel": "ولي أمر/سائق",
-        "projectLabel": "مدرسة",
-        "unitDescription": "تنظيم الفصول الدراسية والمناطق التعليمية؛ وتتبع كثافة الطلاب وتوزيع القاعات.",
-        "contactDescription": "مراقبة سجلات الطلاب وروابط أولياء الأمور وحالة الحضور اليومي."
-      },
-      "club": {
-        "orgLabel": "نظرة عامة على النادي",
-        "unitLabel": "مرفق",
-        "unitLabelPlural": "مرافق",
-        "contactLabel": "عضو",
-        "contactLabelPlural": "أعضاء",
-        "visitorLabel": "ضيف",
-        "projectLabel": "نادي",
-        "unitDescription": "إدارة مرافق النادي والملاعب ومناطق الأنشطة.",
-        "contactDescription": "الحفاظ على ملفات الأعضاء وفئات الاشتراك وروابط العائلة."
-      },
-      "nightclub": {
-        "orgLabel": "نظرة عامة على المكان",
-        "unitLabel": "منطقة",
-        "unitLabelPlural": "مناطق",
-        "contactLabel": "VIP",
-        "contactLabelPlural": "VIPs",
-        "visitorLabel": "ضيف",
-        "projectLabel": "مكان سهر",
-        "unitDescription": "إدارة طاولات VIP والأقسام ومناطق المكان المحددة.",
-        "contactDescription": "تنظيم قوائم الضيوف وملفات VIP وأولوية الدخول."
-      },
-      "event": {
-        "orgLabel": "نظرة عامة على الفعالية",
-        "unitLabel": "قسم",
-        "unitLabelPlural": "أقسام",
-        "contactLabel": "حاضر",
-        "contactLabelPlural": "حاضرون",
-        "visitorLabel": "ضيف",
-        "projectLabel": "فعالية",
-        "unitDescription": "إدارة أقسام الفعالية وتعيينات البوابات ومناطق الجلوس.",
-        "contactDescription": "تتبع حاملي التذاكر وبيانات التسجيل وسجل تسجيل الوصول."
-      }
+    "deals": {
+      "title": "الصفقات والفرص",
+      "pipeline": "أنبوب المبيعات",
+      "lead": "عميل محتمل",
+      "qualified": "مؤهل",
+      "proposal": "عرض سعر",
+      "negotiation": "تفاوض",
+      "closed": "مغلق",
+      "probability": "الاحتمالية",
+      "score": "التقييم الذكي"
+    },
+    "companies": {
+      "title": "الشركات والمنظمات",
+      "contactsCount": "عدد جهات الاتصال",
+      "health": "حالة الحساب",
+      "industry": "القطاع"
+    }
+  },
+  "orgType": {
+    "realEstate": {
+      "orgLabel": "نظرة عامة على المجمع",
+      "unitLabel": "وحدة",
+      "unitLabelPlural": "وحدات",
+      "contactLabel": "مقيم",
+      "contactLabelPlural": "سكان",
+      "visitorLabel": "زائر",
+      "projectLabel": "مجمع سكني",
+      "unitDescription": "إدارة الوحدات السكنية والتجارية، وتتبع حصص العقارات، ومراقبة كثافة المشغلين.",
+      "contactDescription": "إدارة سكان المجمع والعائلات وجهات الاتصال المصرح بها."
+    },
+    "school": {
+      "orgLabel": "نظرة عامة على الحرم",
+      "unitLabel": "فصل دراسي",
+      "unitLabelPlural": "فصول دراسية",
+      "contactLabel": "طالب",
+      "contactLabelPlural": "طلاب",
+      "visitorLabel": "ولي أمر/سائق",
+      "projectLabel": "مدرسة",
+      "unitDescription": "تنظيم الفصول الدراسية والمناطق التعليمية؛ وتتبع كثافة الطلاب وتوزيع القاعات.",
+      "contactDescription": "مراقبة سجلات الطلاب وروابط أولياء الأمور وحالة الحضور اليومي."
+    },
+    "club": {
+      "orgLabel": "نظرة عامة على النادي",
+      "unitLabel": "مرفق",
+      "unitLabelPlural": "مرافق",
+      "contactLabel": "عضو",
+      "contactLabelPlural": "أعضاء",
+      "visitorLabel": "ضيف",
+      "projectLabel": "نادي",
+      "unitDescription": "إدارة مرافق النادي والملاعب ومناطق الأنشطة.",
+      "contactDescription": "الحفاظ على ملفات الأعضاء وفئات الاشتراك وروابط العائلة."
+    },
+    "nightclub": {
+      "orgLabel": "نظرة عامة على المكان",
+      "unitLabel": "منطقة",
+      "unitLabelPlural": "مناطق",
+      "contactLabel": "VIP",
+      "contactLabelPlural": "VIPs",
+      "visitorLabel": "ضيف",
+      "projectLabel": "مكان سهر",
+      "unitDescription": "إدارة طاولات VIP والأقسام ومناطق المكان المحددة.",
+      "contactDescription": "تنظيم قوائم الضيوف وملفات VIP وأولوية الدخول."
+    },
+    "event": {
+      "orgLabel": "نظرة عامة على الفعالية",
+      "unitLabel": "قسم",
+      "unitLabelPlural": "أقسام",
+      "contactLabel": "حاضر",
+      "contactLabelPlural": "حاضرون",
+      "visitorLabel": "ضيف",
+      "projectLabel": "فعالية",
+      "unitDescription": "إدارة أقسام الفعالية وتعيينات البوابات ومناطق الجلوس.",
+      "contactDescription": "تتبع حاملي التذاكر وبيانات التسجيل وسجل تسجيل الوصول."
+    }
+  },
+  "support": {
+    "tickets": {
+      "title": "تذاكر الدعم",
+      "newTicket": "تذكرة جديدة",
+      "priority": "الأولوية",
+      "category": "الفئة",
+      "assignee": "المسؤول",
+      "status": "الحالة",
+      "triage": "التصنيف الذكي",
+      "resolution": "الحل المقترح"
+    },
+    "knowledgeBase": {
+      "title": "قاعدة المعرفة",
+      "search": "بحث في المقالات",
+      "categories": "التصنيفات",
+      "views": "المشاهدات",
+      "author": "الكاتب",
+      "aiGen": "توليد ذكي"
+    }
+  },
+  "analytics": {
+    "dashboard": {
+      "title": "لوحة التحليلات",
+      "insights": "رؤى ذكية",
+      "trajectory": "مسار البيانات",
+      "conversion": "معدل التحويل",
+      "revenue": "الإيرادات",
+      "growth": "معدل النمو"
+    }
+  },
+  "team": {
+    "roles": {
+      "title": "أدوار الفريق",
+      "permissions": "الصلاحيات",
+      "members": "الأعضاء",
+      "matrix": "مصفوفة الصلاحيات",
+      "builtIn": "أساسي",
+      "custom": "مخصص"
+    }
+  },
+  "ai": {
+    "confirmation": {
+      "title": "تأكيد النشر الذكي",
+      "checklist": "قائمة المراجعة",
+      "confirm": "تأكيد ونشر",
+      "audit": "تم تسجيل العملية في سجل التدقيق"
     }
   }
 }

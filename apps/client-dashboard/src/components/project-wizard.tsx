@@ -11,7 +11,7 @@ import {
   Input,
   Label,
   Textarea,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import {
   Check,
   ArrowRight,

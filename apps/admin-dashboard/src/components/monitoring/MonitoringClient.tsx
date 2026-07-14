@@ -9,7 +9,7 @@ import {
   CardTitle,
   Badge,
   cn,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import {
   Database,
   Zap,
@@ -227,8 +227,90 @@ export function MonitoringClient({
 
       {/* Webhook health */}
       <Card className="shadow-md">
-        <CardContent className="p-4 text-sm text-muted-foreground">
-          Webhook failures: {totalWebhookFailed}
+        <CardHeader className="border-b border-border pb-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="text-sm font-black uppercase tracking-widest flex items-center gap-2">
+                <Globe className="h-4 w-4 text-primary" />
+                Webhook Health
+              </CardTitle>
+              <p className="text-xs text-muted-foreground mt-1">
+                Recent failed webhook deliveries
+              </p>
+            </div>
+            <Badge
+              className={cn(
+                'font-bold text-[11px] border-none',
+                totalWebhookFailed === 0
+                  ? 'bg-emerald-500 text-white'
+                  : 'bg-red-500 text-white'
+              )}
+            >
+              {totalWebhookFailed === 0 ? (
+                <span className="flex items-center gap-1">
+                  <CheckCircle2 className="h-3 w-3" /> All healthy
+                </span>
+              ) : (
+                <span className="flex items-center gap-1">
+                  <AlertCircle className="h-3 w-3" /> {totalWebhookFailed}{' '}
+                  failed
+                </span>
+              )}
+            </Badge>
+          </div>
+        </CardHeader>
+        <CardContent className="p-0">
+          {webhookFailures.length === 0 ? (
+            <div className="flex flex-col items-center gap-2 py-10 text-muted-foreground">
+              <CheckCircle2 className="h-8 w-8 text-emerald-500 opacity-60" />
+              <p className="font-medium text-sm">No webhook failures</p>
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="bg-muted/50 text-muted-foreground text-[10px] font-bold uppercase tracking-widest border-b border-border">
+                    <th className="px-5 py-3 text-left">Organization</th>
+                    <th className="px-5 py-3 text-left">Event</th>
+                    <th className="px-5 py-3 text-left">Endpoint</th>
+                    <th className="px-5 py-3 text-center">Attempts</th>
+                    <th className="px-5 py-3 text-right">Last Attempt</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {webhookFailures.map((d) => (
+                    <tr
+                      key={d.id}
+                      className="hover:bg-red-500/5 transition-colors"
+                    >
+                      <td className="px-5 py-3 text-xs font-bold text-foreground">
+                        {d.orgName}
+                      </td>
+                      <td className="px-5 py-3">
+                        <Badge
+                          variant="secondary"
+                          className="text-[10px] font-bold uppercase"
+                        >
+                          {d.event}
+                        </Badge>
+                      </td>
+                      <td className="px-5 py-3 text-xs text-muted-foreground font-mono truncate max-w-[180px]">
+                        {d.url}
+                      </td>
+                      <td className="px-5 py-3 text-center text-xs font-black text-red-600 dark:text-red-400">
+                        {d.attemptCount}
+                      </td>
+                      <td className="px-5 py-3 text-right text-xs text-muted-foreground">
+                        {d.lastAttemptAt
+                          ? new Date(d.lastAttemptAt).toLocaleDateString(locale)
+                          : '—'}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </CardContent>
       </Card>
 

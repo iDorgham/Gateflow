@@ -3,9 +3,16 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Layers, DoorOpen, Search, Download, X, User as UserIcon } from 'lucide-react';
+import {
+  Layers,
+  DoorOpen,
+  Search,
+  Download,
+  X,
+  User as UserIcon,
+} from 'lucide-react';
 import { FilterBar } from '@/components/dashboard/filter-bar';
-import { Button, cn, DatePicker } from '@gate-access/ui';
+import { Button, cn, DatePicker } from '@gateflow/ui';
 
 export interface Gate {
   id: string;
@@ -33,12 +40,18 @@ const STATUSES = [
 ] as const;
 
 const STATUS_CHIP: Record<string, string> = {
-  SUCCESS: 'bg-[var(--ds-background-success-subtle)] text-[var(--ds-text-success)] border-[var(--ds-border-success)]/20',
-  FAILED: 'bg-[var(--ds-background-danger-subtle)] text-[var(--ds-text-danger)] border-[var(--ds-border-danger)]/20',
-  EXPIRED: 'bg-[var(--ds-background-warning-subtle)] text-[var(--ds-text-warning)] border-[var(--ds-border-warning)]/20',
-  MAX_USES_REACHED: 'bg-[var(--ds-background-neutral-subtle)] text-[var(--ds-text)] border-[var(--ds-border)]',
-  INACTIVE: 'bg-[var(--ds-background-neutral-subtle)] text-[var(--ds-text-subtle)] border-[var(--ds-border)]',
-  DENIED: 'bg-[var(--ds-background-danger-subtle)] text-[var(--ds-text-danger)] border-[var(--ds-border-danger)]/20',
+  SUCCESS:
+    'bg-[var(--ds-background-success-subtle)] text-[var(--ds-text-success)] border-[var(--ds-border-success)]/20',
+  FAILED:
+    'bg-[var(--ds-background-danger-subtle)] text-[var(--ds-text-danger)] border-[var(--ds-border-danger)]/20',
+  EXPIRED:
+    'bg-[var(--ds-background-warning-subtle)] text-[var(--ds-text-warning)] border-[var(--ds-border-warning)]/20',
+  MAX_USES_REACHED:
+    'bg-[var(--ds-background-neutral-subtle)] text-[var(--ds-text)] border-[var(--ds-border)]',
+  INACTIVE:
+    'bg-[var(--ds-background-neutral-subtle)] text-[var(--ds-text-subtle)] border-[var(--ds-border)]',
+  DENIED:
+    'bg-[var(--ds-background-danger-subtle)] text-[var(--ds-text-danger)] border-[var(--ds-border-danger)]/20',
 };
 
 interface Props {
@@ -104,28 +117,84 @@ export function ScansFilters({
   const sp = searchParams;
   const urlProject = sp.get('project');
   const activeFilters: { label: string; key: string }[] = [
-    sp.get('q') ? { label: t('scans.filters.labels.q', { value: sp.get('q'), defaultValue: `QR: "${sp.get('q')}"` }), key: 'q' } : null,
+    sp.get('q')
+      ? {
+          label: t('scans.filters.labels.q', {
+            value: sp.get('q'),
+            defaultValue: `QR: "${sp.get('q')}"`,
+          }),
+          key: 'q',
+        }
+      : null,
     sp.get('status')
-      ? { label: t('scans.filters.labels.status', { value: t(`scans.status.${sp.get('status')}`, { defaultValue: sp.get('status') }), defaultValue: `Status: ${sp.get('status')}` }), key: 'status' }
+      ? {
+          label: t('scans.filters.labels.status', {
+            value: t(`scans.status.${sp.get('status')}`, {
+              defaultValue: sp.get('status'),
+            }),
+            defaultValue: `Status: ${sp.get('status')}`,
+          }),
+          key: 'status',
+        }
       : null,
     urlProject && urlProject !== 'all'
       ? {
-          label: t('scans.filters.labels.project', { value: projects.find((p) => p.id === urlProject)?.name ?? urlProject, defaultValue: `Project: ${urlProject}` }),
+          label: t('scans.filters.labels.project', {
+            value:
+              projects.find((p) => p.id === urlProject)?.name ?? urlProject,
+            defaultValue: `Project: ${urlProject}`,
+          }),
           key: 'project',
         }
       : null,
     sp.get('gate')
-      ? { label: t('scans.filters.labels.gate', { value: gates.find((g) => g.id === sp.get('gate'))?.name ?? sp.get('gate'), defaultValue: `Gate: ${sp.get('gate')}` }), key: 'gate' }
+      ? {
+          label: t('scans.filters.labels.gate', {
+            value:
+              gates.find((g) => g.id === sp.get('gate'))?.name ??
+              sp.get('gate'),
+            defaultValue: `Gate: ${sp.get('gate')}`,
+          }),
+          key: 'gate',
+        }
       : null,
     sp.get('userId')
       ? {
-          label: t('scans.filters.labels.operator', { value: operators.find((u) => u.id === sp.get('userId'))?.name ?? 'User', defaultValue: `Operator: ${sp.get('userId')}` }),
+          label: t('scans.filters.labels.operator', {
+            value:
+              operators.find((u) => u.id === sp.get('userId'))?.name ?? 'User',
+            defaultValue: `Operator: ${sp.get('userId')}`,
+          }),
           key: 'userId',
         }
       : null,
-    sp.get('deviceId') ? { label: t('scans.filters.labels.device', { value: sp.get('deviceId'), defaultValue: `Device: ${sp.get('deviceId')}` }), key: 'deviceId' } : null,
-    sp.get('dateFrom') ? { label: t('scans.filters.labels.dateFrom', { value: sp.get('dateFrom'), defaultValue: `From: ${sp.get('dateFrom')}` }), key: 'dateFrom' } : null,
-    sp.get('dateTo') ? { label: t('scans.filters.labels.dateTo', { value: sp.get('dateTo'), defaultValue: `To: ${sp.get('dateTo')}` }), key: 'dateTo' } : null,
+    sp.get('deviceId')
+      ? {
+          label: t('scans.filters.labels.device', {
+            value: sp.get('deviceId'),
+            defaultValue: `Device: ${sp.get('deviceId')}`,
+          }),
+          key: 'deviceId',
+        }
+      : null,
+    sp.get('dateFrom')
+      ? {
+          label: t('scans.filters.labels.dateFrom', {
+            value: sp.get('dateFrom'),
+            defaultValue: `From: ${sp.get('dateFrom')}`,
+          }),
+          key: 'dateFrom',
+        }
+      : null,
+    sp.get('dateTo')
+      ? {
+          label: t('scans.filters.labels.dateTo', {
+            value: sp.get('dateTo'),
+            defaultValue: `To: ${sp.get('dateTo')}`,
+          }),
+          key: 'dateTo',
+        }
+      : null,
   ].filter(Boolean) as { label: string; key: string }[];
 
   function clearFilter(key: string) {
@@ -144,7 +213,8 @@ export function ScansFilters({
     setQ('');
     setDeviceId('');
     const params = new URLSearchParams();
-    if (searchParams.get('project')) params.set('project', searchParams.get('project')!);
+    if (searchParams.get('project'))
+      params.set('project', searchParams.get('project')!);
     const s = params.toString();
     router.push(`/dashboard/scans${s ? '?' + s : ''}`);
   }
@@ -164,7 +234,9 @@ export function ScansFilters({
         <div className="flex-1 min-w-[280px] relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[var(--ds-text-subtle)] pointer-events-none" />
           <FilterBar.Search
-            placeholder={t('scans.filters.searchPlaceholder', { defaultValue: 'Search QR code…' })}
+            placeholder={t('scans.filters.searchPlaceholder', {
+              defaultValue: 'Search QR code…',
+            })}
             value={q}
             onChange={(e) => {
               setQ(e.target.value);
@@ -182,7 +254,9 @@ export function ScansFilters({
             className="h-10 bg-[var(--ds-background-default)] border-[var(--ds-border)] text-[var(--ds-text-subtle)] font-bold rounded-lg hover:border-primary transition-colors"
             icon={<Layers className="h-4 w-4" />}
           >
-            <option value="">{t('scans.filters.allStatuses', { defaultValue: 'All Statuses' })}</option>
+            <option value="">
+              {t('scans.filters.allStatuses', { defaultValue: 'All Statuses' })}
+            </option>
             {STATUSES.map((s) => (
               <option key={s} value={s}>
                 {t(`scans.status.${s}`, { defaultValue: s.replace(/_/g, ' ') })}
@@ -195,9 +269,15 @@ export function ScansFilters({
               value={currentProjectId}
               onChange={(e) => immediate('project', e.target.value)}
               className="h-10 bg-[var(--ds-background-default)] border-[var(--ds-border)] text-[var(--ds-text-subtle)] font-bold rounded-lg hover:border-primary transition-colors"
-              aria-label={t('scans.filters.allProjects', { defaultValue: 'All projects' })}
+              aria-label={t('scans.filters.allProjects', {
+                defaultValue: 'All projects',
+              })}
             >
-              <option value="all">{t('scans.filters.allProjects', { defaultValue: 'All Projects' })}</option>
+              <option value="all">
+                {t('scans.filters.allProjects', {
+                  defaultValue: 'All Projects',
+                })}
+              </option>
               {projects.map((p) => (
                 <option key={p.id} value={p.id}>
                   {p.name}
@@ -212,7 +292,9 @@ export function ScansFilters({
             className="h-10 bg-[var(--ds-background-default)] border-[var(--ds-border)] text-[var(--ds-text-subtle)] font-bold rounded-lg hover:border-primary transition-colors"
             icon={<DoorOpen className="h-4 w-4" />}
           >
-            <option value="">{t('scans.filters.allGates', { defaultValue: 'All Gates' })}</option>
+            <option value="">
+              {t('scans.filters.allGates', { defaultValue: 'All Gates' })}
+            </option>
             {gates.map((g) => (
               <option key={g.id} value={g.id}>
                 {g.name}
@@ -226,7 +308,11 @@ export function ScansFilters({
             className="h-10 bg-[var(--ds-background-default)] border-[var(--ds-border)] text-[var(--ds-text-subtle)] font-bold rounded-lg hover:border-primary transition-colors"
             icon={<UserIcon className="h-4 w-4" />}
           >
-            <option value="">{t('scans.filters.allOperators', { defaultValue: 'All Operators' })}</option>
+            <option value="">
+              {t('scans.filters.allOperators', {
+                defaultValue: 'All Operators',
+              })}
+            </option>
             {operators.map((u) => (
               <option key={u.id} value={u.id}>
                 {u.name}
@@ -258,15 +344,19 @@ export function ScansFilters({
 
         <div className="space-y-2 flex-1 min-w-[200px]">
           <label className="text-[11px] font-black text-[var(--ds-text-subtle)] uppercase tracking-widest block ml-1">
-            {t('scans.filters.deviceIdPlaceholder', { defaultValue: 'Hardware Device' })}
+            {t('scans.filters.deviceIdPlaceholder', {
+              defaultValue: 'Hardware Device',
+            })}
           </label>
           <div className="relative">
             <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center gap-2 pointer-events-none">
-               <div className="h-1.5 w-1.5 rounded-full bg-[var(--ds-text-success)] animate-pulse" />
+              <div className="h-1.5 w-1.5 rounded-full bg-[var(--ds-text-success)] animate-pulse" />
             </div>
             <input
               type="text"
-              placeholder={t('scans.filters.deviceIdPlaceholder', { defaultValue: 'Filter by Device ID…' })}
+              placeholder={t('scans.filters.deviceIdPlaceholder', {
+                defaultValue: 'Filter by Device ID…',
+              })}
               value={deviceId}
               onChange={(e) => {
                 setDeviceId(e.target.value);
@@ -293,17 +383,20 @@ export function ScansFilters({
         <div className="flex flex-wrap items-center gap-2">
           {activeFilters.length > 0 ? (
             <>
-              <span className="text-[11px] font-black text-[var(--ds-text-subtlest)] uppercase tracking-widest mr-2">Active Filters:</span>
+              <span className="text-[11px] font-black text-[var(--ds-text-subtlest)] uppercase tracking-widest mr-2">
+                Active Filters:
+              </span>
               {activeFilters.map((f) => (
                 <span
                   key={f.key}
                   className={cn(
-                    "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-bold shadow-sm transition-all animate-in zoom-in-95 duration-200",
+                    'inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-bold shadow-sm transition-all animate-in zoom-in-95 duration-200',
                     f.key === 'status' && currentStatus
-                      ? (STATUS_CHIP[currentStatus] ?? 'bg-[var(--ds-background-neutral-subtle)] text-[var(--ds-text-subtle)] border-[var(--ds-border)]')
+                      ? (STATUS_CHIP[currentStatus] ??
+                          'bg-[var(--ds-background-neutral-subtle)] text-[var(--ds-text-subtle)] border-[var(--ds-border)]')
                       : f.key === 'project'
-                      ? 'bg-[var(--ds-background-brand-subtle)] text-[var(--ds-text-brand)] border-[var(--ds-border-brand)]/30'
-                      : 'bg-[var(--ds-background-neutral-subtle)] text-[var(--ds-text)] border-[var(--ds-border)]'
+                        ? 'bg-[var(--ds-background-brand-subtle)] text-[var(--ds-text-brand)] border-[var(--ds-border-brand)]/30'
+                        : 'bg-[var(--ds-background-neutral-subtle)] text-[var(--ds-text)] border-[var(--ds-border)]'
                   )}
                 >
                   {f.label}
@@ -325,15 +418,22 @@ export function ScansFilters({
               </Button>
             </>
           ) : (
-             <div className="flex items-center gap-2 text-[var(--ds-text-subtlest)] opacity-50">
-               <div className="h-1 w-1 rounded-full bg-[var(--ds-text-subtlest)]" />
-               <span className="text-[10px] font-black uppercase tracking-[0.2em]">{t('scans.filters.noFilters', { defaultValue: 'Live Audit Trail' })}</span>
-             </div>
+            <div className="flex items-center gap-2 text-[var(--ds-text-subtlest)] opacity-50">
+              <div className="h-1 w-1 rounded-full bg-[var(--ds-text-subtlest)]" />
+              <span className="text-[10px] font-black uppercase tracking-[0.2em]">
+                {t('scans.filters.noFilters', {
+                  defaultValue: 'Live Audit Trail',
+                })}
+              </span>
+            </div>
           )}
         </div>
 
         <p className="text-[11px] font-black text-[var(--ds-text-subtle)] uppercase tracking-widest">
-           {filteredCount.toLocaleString()} {t('scans.filters.showingResultsSimple', { defaultValue: 'Entries Found' })}
+          {filteredCount.toLocaleString()}{' '}
+          {t('scans.filters.showingResultsSimple', {
+            defaultValue: 'Entries Found',
+          })}
         </p>
       </div>
     </div>

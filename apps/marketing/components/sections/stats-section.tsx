@@ -63,8 +63,8 @@ export async function StatsSection({ locale }: { locale: Locale }) {
               className="group flex flex-col px-8 py-10 lg:py-0 first:ps-0 last:pe-0 relative"
             >
               {/* Icon */}
-              <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-ds-surface-raised border border-ds-border text-ds-text-subtle group-hover:border-ds-border-bold group-hover:text-ds-text transition-all duration-300 shadow-sm">
-                <stat.icon size={24} strokeWidth={1.5} />
+              <div className="mb-10 inline-flex h-16 w-16 items-center justify-center rounded-3xl bg-ds-surface-raised border border-ds-border-bold/20 text-ds-text-subtle group-hover:border-ds-accent-bold/40 group-hover:text-ds-accent-bold transition-all duration-500 shadow-xl shadow-black/5 ring-1 ring-white/10">
+                <stat.icon size={28} strokeWidth={1} />
               </div>
 
               {/* Value + badge */}

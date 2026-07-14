@@ -13,11 +13,39 @@ import {
   Loader2,
   Settings2,
 } from 'lucide-react';
-import { Button } from '@gate-access/ui/components/ui/button';
-import { Badge } from '@gate-access/ui/components/ui/badge';
-import { Slider } from '@gate-access/ui/components/ui/slider';
-import { Switch } from '@gate-access/ui/components/ui/switch';
+import { Button, Badge, Switch } from '@gateflow/ui';
 import { toast } from 'sonner';
+
+function Slider({
+  value,
+  onValueChange,
+  onValueCommit,
+  max,
+  step,
+  className,
+}: {
+  value: number[];
+  onValueChange: (value: number[]) => void;
+  onValueCommit?: (value: number[]) => void;
+  max: number;
+  step: number;
+  className?: string;
+}) {
+  return (
+    <input
+      type="range"
+      role="slider"
+      min={0}
+      max={max}
+      step={step}
+      value={value[0]}
+      onChange={(e) => onValueChange([Number(e.target.value)])}
+      onMouseUp={(e) => onValueCommit?.([Number(e.currentTarget.value)])}
+      onTouchEnd={(e) => onValueCommit?.([Number(e.currentTarget.value)])}
+      className={className}
+    />
+  );
+}
 
 export function HardeningPanel() {
   const [isRevalidating, setIsRevalidating] = useState(false);

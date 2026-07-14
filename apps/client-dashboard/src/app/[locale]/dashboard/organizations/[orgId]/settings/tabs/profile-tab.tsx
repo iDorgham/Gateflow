@@ -16,7 +16,7 @@ import {
   Badge,
   Textarea,
   NativeSelect,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import {
   updateProfile,
   changePassword,

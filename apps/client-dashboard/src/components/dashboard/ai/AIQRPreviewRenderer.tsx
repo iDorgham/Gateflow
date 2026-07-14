@@ -1,16 +1,15 @@
-
 'use client';
 
 import * as React from 'react';
-import { 
-  Table, 
-  TableBody, 
-  TableHead, 
+import {
+  Table,
+  TableBody,
+  TableHead,
   TableRow,
   TableCell,
   TableHeader,
-  Badge
-} from '@gate-access/ui';
+  Badge,
+} from '@gateflow/ui';
 import { QrCode, Calendar, Tag, User } from 'lucide-react';
 
 interface QRIntent {
@@ -26,7 +25,9 @@ interface AIQRPreviewRendererProps {
   intent: QRIntent;
 }
 
-export const AIQRPreviewRenderer: React.FC<AIQRPreviewRendererProps> = ({ intent }) => {
+export const AIQRPreviewRenderer: React.FC<AIQRPreviewRendererProps> = ({
+  intent,
+}) => {
   const formatDate = (dateStr?: string) => {
     if (!dateStr) return 'No limit';
     try {
@@ -54,7 +55,8 @@ export const AIQRPreviewRenderer: React.FC<AIQRPreviewRendererProps> = ({ intent
         <TableBody>
           <TableRow className="hover:bg-background border-none py-1 h-10">
             <TableCell className="text-xs py-1 h-10">
-              <span className="font-bold text-slate-900">{intent.count}</span> codes
+              <span className="font-bold text-slate-900">{intent.count}</span>{' '}
+              codes
             </TableCell>
             <TableCell className="text-xs py-1 h-10">
               <Badge variant="outline" className="text-[10px] h-5 py-0">
@@ -95,16 +97,16 @@ export const AIQRPreviewRenderer: React.FC<AIQRPreviewRendererProps> = ({ intent
 };
 
 const AlertCircle = ({ className }: { className?: string }) => (
-  <svg 
-    xmlns="http://www.w3.org/2000/svg" 
-    width="24" 
-    height="24" 
-    viewBox="0 0 24 24" 
-    fill="none" 
-    stroke="currentColor" 
-    strokeWidth="2" 
-    strokeLinecap="round" 
-    strokeLinejoin="round" 
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
     className={className}
   >
     <circle cx="12" cy="12" r="10" />

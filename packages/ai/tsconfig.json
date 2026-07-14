@@ -1,0 +1,10 @@
+{
+  "extends": "@gate-access/config/tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src",
+    "jsx": "react-jsx",
+    "incremental": false
+  },
+  "include": ["src"]
+}

@@ -14,15 +14,15 @@ import {
   Loader2,
   Sparkles,
 } from 'lucide-react';
-import { Button } from '@gate-access/ui/components/ui/button';
-import { Input } from '@gate-access/ui/components/ui/input';
 import {
+  Button,
+  Input,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@gate-access/ui/components/ui/dropdown-menu';
-import { Badge } from '@gate-access/ui/components/ui/badge';
+  Badge,
+} from '@gateflow/ui';
 import { toast } from 'sonner';
 import { BlogEditor } from '@/components/cms/BlogEditor';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -73,18 +73,7 @@ export default function BlogStudioPage(props: {
   };
 
   if (editingPost || isCreating) {
-    return (
-      <BlogEditor
-        post={editingPost}
-        orgId={orgId}
-        locale={locale}
-        onClose={() => {
-          setEditingPost(null);
-          setIsCreating(false);
-          fetchPosts();
-        }}
-      />
-    );
+    return <BlogEditor postId={editingPost?.id} />;
   }
 
   return (

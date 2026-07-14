@@ -2,10 +2,21 @@
 
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@gate-access/ui';
-import { cn } from '@gate-access/ui';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from '@gateflow/ui';
+import { cn } from '@gateflow/ui';
 import { motion } from 'framer-motion';
-import { TrendingUp, MousePointer2, UserCheck, CheckCircle2 } from 'lucide-react';
+import {
+  TrendingUp,
+  MousePointer2,
+  UserCheck,
+  CheckCircle2,
+} from 'lucide-react';
 import type { AnalyticsFilters } from '@/lib/analytics/analytics-filters';
 
 interface FunnelStage {
@@ -20,9 +31,9 @@ interface MarketingFunnelProps {
 }
 
 const STAGE_ICONS = [
-  UserCheck,      // QR Created
-  MousePointer2,  // Landing Page Opens
-  CheckCircle2,   // QR Scanned / Arrived
+  UserCheck, // QR Created
+  MousePointer2, // Landing Page Opens
+  CheckCircle2, // QR Scanned / Arrived
 ];
 
 export function MarketingFunnel({ filters, className }: MarketingFunnelProps) {
@@ -83,7 +94,7 @@ export function MarketingFunnel({ filters, className }: MarketingFunnelProps) {
     );
   }
 
-  const maxCount = Math.max(...stages.map(s => s.count), 1);
+  const maxCount = Math.max(...stages.map((s) => s.count), 1);
 
   return (
     <Card className={cn('overflow-hidden', className)}>
@@ -94,7 +105,10 @@ export function MarketingFunnel({ filters, className }: MarketingFunnelProps) {
             {t('analytics.funnelTitle', 'Conversion Funnel')}
           </CardTitle>
           <CardDescription>
-            {t('analytics.funnelDesc', 'Marketing-to-Arrival conversion analysis')}
+            {t(
+              'analytics.funnelDesc',
+              'Marketing-to-Arrival conversion analysis'
+            )}
           </CardDescription>
         </div>
       </CardHeader>
@@ -104,8 +118,14 @@ export function MarketingFunnel({ filters, className }: MarketingFunnelProps) {
             const Icon = STAGE_ICONS[idx] || CheckCircle2;
             const widthPct = (stage.count / maxCount) * 100;
             const prevStage = stages[idx - 1];
-            const dropoffVal = prevStage ? Math.round(((prevStage.count - stage.count) / prevStage.count) * 100) : 0;
-            const conversionPct = prevStage ? Math.round((stage.count / prevStage.count) * 100) : 0;
+            const dropoffVal = prevStage
+              ? Math.round(
+                  ((prevStage.count - stage.count) / prevStage.count) * 100
+                )
+              : 0;
+            const conversionPct = prevStage
+              ? Math.round((stage.count / prevStage.count) * 100)
+              : 0;
 
             return (
               <div key={stage.name} className="relative">
@@ -132,7 +152,9 @@ export function MarketingFunnel({ filters, className }: MarketingFunnelProps) {
                       </span>
                     </div>
                     <div className="text-right">
-                      <span className="text-2xl font-black">{stage.count.toLocaleString()}</span>
+                      <span className="text-2xl font-black">
+                        {stage.count.toLocaleString()}
+                      </span>
                       <span className="block text-[10px] text-muted-foreground uppercase font-bold tracking-wider">
                         {t('analytics.total', 'Total Items')}
                       </span>
@@ -144,12 +166,16 @@ export function MarketingFunnel({ filters, className }: MarketingFunnelProps) {
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${widthPct}%` }}
-                      transition={{ duration: 0.8, delay: idx * 0.1, ease: 'easeOut' }}
+                      transition={{
+                        duration: 0.8,
+                        delay: idx * 0.1,
+                        ease: 'easeOut',
+                      }}
                       className="absolute inset-y-0 left-0 bg-gradient-to-r from-primary/80 to-primary shadow-[0_0_20px_-5px_hsl(var(--primary))]"
                     >
                       <div className="absolute inset-0 bg-[linear-gradient(45deg,rgba(255,255,255,0.1)_25%,transparent_25%,transparent_50%,rgba(255,255,255,0.1)_50%,rgba(255,255,255,0.1)_75%,transparent_75%,transparent)] bg-[length:24px_24px] opacity-20" />
                     </motion.div>
-                    
+
                     {/* Glass glare */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/5 to-white/10 pointer-events-none" />
                   </div>
@@ -170,7 +196,10 @@ export function MarketingFunnel({ filters, className }: MarketingFunnelProps) {
                 {t('analytics.overallConversion', 'Overall Arrival Rate')}
               </p>
               <p className="text-xs text-muted-foreground max-w-[200px]">
-                {t('analytics.overallConversionDesc', 'From initial creation to physical gate entry.')}
+                {t(
+                  'analytics.overallConversionDesc',
+                  'From initial creation to physical gate entry.'
+                )}
               </p>
             </div>
             <div className="text-right relative z-10">

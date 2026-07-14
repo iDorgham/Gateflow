@@ -1,7 +1,13 @@
 'use client';
 
-import { ScanLine, Users, GraduationCap, Ticket, GlassWater } from 'lucide-react';
-import { Button } from '@gate-access/ui';
+import {
+  ScanLine,
+  Users,
+  GraduationCap,
+  Ticket,
+  GlassWater,
+} from 'lucide-react';
+import { Button } from '@gateflow/ui';
 import Link from 'next/link';
 import { OrganizationType } from '@gate-access/types';
 
@@ -30,8 +36,11 @@ export function DashboardEmptyState({ orgType, t }: DashboardEmptyStateProps) {
         {t('overview.noScans', { defaultValue: 'No activity yet' })}
       </h3>
       <p className="mt-2 max-w-sm text-sm text-muted-foreground">
-        {t(`overview.emptyState.${orgType}`, { 
-          defaultValue: t('overview.noScansDesc', 'Create and share a QR code to see activity here.') 
+        {t(`overview.emptyState.${orgType}`, {
+          defaultValue: t(
+            'overview.noScansDesc',
+            'Create and share a QR code to see activity here.'
+          ),
         })}
       </p>
       <div className="mt-6 flex gap-3">
@@ -43,7 +52,9 @@ export function DashboardEmptyState({ orgType, t }: DashboardEmptyStateProps) {
         {orgType === OrganizationType.REAL_ESTATE && (
           <Button variant="outline" asChild>
             <Link href="/dashboard/residents/units">
-              {t('orgType.realEstate.unitLabelPlural', { defaultValue: 'Add Units' })}
+              {t('orgType.realEstate.unitLabelPlural', {
+                defaultValue: 'Add Units',
+              })}
             </Link>
           </Button>
         )}

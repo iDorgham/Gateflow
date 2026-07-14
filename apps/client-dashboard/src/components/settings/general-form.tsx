@@ -26,7 +26,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { toast } from 'sonner';
 import { Globe, Moon, Sun, Monitor, Clock, Calendar } from 'lucide-react';
 
@@ -61,11 +61,16 @@ export function GeneralSettingsForm() {
 
     // 2. Language update (requires route change for Next.js [locale] structure)
     if (data.language !== i18n.language) {
-      const newPathname = pathname.replace(`/${i18n.language}`, `/${data.language}`);
+      const newPathname = pathname.replace(
+        `/${i18n.language}`,
+        `/${data.language}`
+      );
       router.push(newPathname);
     }
 
-    toast.success(t('settings.general.success', 'General settings saved successfully'));
+    toast.success(
+      t('settings.general.success', 'General settings saved successfully')
+    );
   }
 
   return (
@@ -88,7 +93,10 @@ export function GeneralSettingsForm() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Interface Theme</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
                     <FormControl>
                       <SelectTrigger className="bg-background/50 border-border/50">
                         <SelectValue placeholder="Select a theme" />
@@ -142,7 +150,10 @@ export function GeneralSettingsForm() {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Preferred Language</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
                     <FormControl>
                       <SelectTrigger className="bg-background/50 border-border/50">
                         <SelectValue placeholder="Select a language" />
@@ -171,7 +182,10 @@ export function GeneralSettingsForm() {
                       <Clock className="h-4 w-4 text-muted-foreground" />
                       Timezone
                     </FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger className="bg-background/50 border-border/50">
                           <SelectValue placeholder="Select timezone" />
@@ -179,9 +193,15 @@ export function GeneralSettingsForm() {
                       </FormControl>
                       <SelectContent>
                         <SelectItem value="UTC">UTC (GMT+0)</SelectItem>
-                        <SelectItem value="Africa/Cairo">Cairo (GMT+2)</SelectItem>
-                        <SelectItem value="Asia/Dubai">Dubai (GMT+4)</SelectItem>
-                        <SelectItem value="Europe/London">London (GMT+1)</SelectItem>
+                        <SelectItem value="Africa/Cairo">
+                          Cairo (GMT+2)
+                        </SelectItem>
+                        <SelectItem value="Asia/Dubai">
+                          Dubai (GMT+4)
+                        </SelectItem>
+                        <SelectItem value="Europe/London">
+                          London (GMT+1)
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -198,7 +218,10 @@ export function GeneralSettingsForm() {
                       <Calendar className="h-4 w-4 text-muted-foreground" />
                       Date Format
                     </FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger className="bg-background/50 border-border/50">
                           <SelectValue placeholder="Select format" />
@@ -219,7 +242,10 @@ export function GeneralSettingsForm() {
         </Card>
 
         <div className="flex justify-end">
-          <Button type="submit" className="px-8 rounded-xl shadow-lg shadow-primary/20">
+          <Button
+            type="submit"
+            className="px-8 rounded-xl shadow-lg shadow-primary/20"
+          >
             Save Changes
           </Button>
         </div>

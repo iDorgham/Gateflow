@@ -1,33 +1,23 @@
-import { prisma } from '@gate-access/db';
-import { notFound } from 'next/navigation';
-import { OrganizationProvider } from '@/components/providers/OrganizationProvider';
-import { BrandingStyles } from '@/components/branding/BrandingStyles';
+import React from 'react';
+import { OrganizationProvider } from '@/providers/organization-provider';
+import { OrgNestedNav } from '@/components/organizations/org-nested-nav';
 
-export default async function OrganizationLayout(props: {
+export default async function OrgLayout({
+  children,
+  params,
+}: {
   children: React.ReactNode;
   params: Promise<{ orgId: string }>;
 }) {
-  const params = await props.params;
-  const { orgId } = params;
-
-  const organization = await prisma.organization.findUnique({
-    where: { id: orgId, deletedAt: null },
-    select: {
-      id: true,
-      name: true,
-      type: true,
-      plan: true,
-    },
-  });
-
-  if (!organization) {
-    notFound();
-  }
-
+  const { orgId } = await params;
   return (
-    <OrganizationProvider organization={organization}>
-      <BrandingStyles orgId={orgId} />
-      {props.children}
+    <OrganizationProvider orgId={orgId}>
+      <div className="flex flex-col md:flex-row gap-6 w-full">
+        <div className="w-full md:w-64 shrink-0">
+          <OrgNestedNav orgId={orgId} />
+        </div>
+        <div className="flex-1 min-w-0">{children}</div>
+      </div>
     </OrganizationProvider>
   );
 }

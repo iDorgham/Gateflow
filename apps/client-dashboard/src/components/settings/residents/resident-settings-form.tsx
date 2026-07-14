@@ -13,7 +13,7 @@ import {
   Button,
   Switch,
   Label,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { updateResidentDefaults } from '@/app/[locale]/dashboard/organizations/[orgId]/settings/residents/actions';

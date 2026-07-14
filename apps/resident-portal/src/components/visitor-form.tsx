@@ -10,7 +10,7 @@ import {
   Tabs,
   TabsList,
   TabsTrigger,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import {
   captureUtmParams,
   getPersistedUtmParams,

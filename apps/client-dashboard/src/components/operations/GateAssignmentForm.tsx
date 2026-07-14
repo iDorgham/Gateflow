@@ -18,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
   Button,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { useQuery } from '@tanstack/react-query';
 
 const GateAssignmentSchema = z.object({
@@ -38,7 +38,11 @@ interface GateAssignmentFormProps {
   onSubmit: (values: GateAssignmentValues) => Promise<void>;
 }
 
-export function GateAssignmentForm({ projectId, initialData, onSubmit }: GateAssignmentFormProps) {
+export function GateAssignmentForm({
+  projectId,
+  initialData,
+  onSubmit,
+}: GateAssignmentFormProps) {
   const form = useForm<GateAssignmentValues>({
     resolver: zodResolver(GateAssignmentSchema),
     defaultValues: {
@@ -46,8 +50,12 @@ export function GateAssignmentForm({ projectId, initialData, onSubmit }: GateAss
       gateId: initialData?.gateId || '',
       shiftStart: initialData?.shiftStart || '',
       shiftEnd: initialData?.shiftEnd || '',
-      startTime: initialData?.startTime ? new Date(initialData.startTime).toISOString().slice(0, 16) : '',
-      endTime: initialData?.endTime ? new Date(initialData.endTime).toISOString().slice(0, 16) : '',
+      startTime: initialData?.startTime
+        ? new Date(initialData.startTime).toISOString().slice(0, 16)
+        : '',
+      endTime: initialData?.endTime
+        ? new Date(initialData.endTime).toISOString().slice(0, 16)
+        : '',
     },
   });
 
@@ -74,14 +82,22 @@ export function GateAssignmentForm({ projectId, initialData, onSubmit }: GateAss
 
   return (
     <Form {...form}>
-      <form id="gate-assignment-form" onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      <form
+        id="gate-assignment-form"
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-6"
+      >
         <FormField
           control={form.control}
           name="userId"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Team Member</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value} disabled={!!initialData}>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={field.value}
+                disabled={!!initialData}
+              >
                 <FormControl>
                   <SelectTrigger className="h-11 rounded-xl">
                     <SelectValue placeholder="Select a user" />
@@ -89,7 +105,9 @@ export function GateAssignmentForm({ projectId, initialData, onSubmit }: GateAss
                 </FormControl>
                 <SelectContent>
                   {users.map((u: any) => (
-                    <SelectItem key={u.id} value={u.id}>{u.name} ({u.email})</SelectItem>
+                    <SelectItem key={u.id} value={u.id}>
+                      {u.name} ({u.email})
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -104,7 +122,11 @@ export function GateAssignmentForm({ projectId, initialData, onSubmit }: GateAss
           render={({ field }) => (
             <FormItem>
               <FormLabel>Assigned Gate</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value} disabled={!!initialData}>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={field.value}
+                disabled={!!initialData}
+              >
                 <FormControl>
                   <SelectTrigger className="h-11 rounded-xl">
                     <SelectValue placeholder="Select a gate" />
@@ -112,7 +134,9 @@ export function GateAssignmentForm({ projectId, initialData, onSubmit }: GateAss
                 </FormControl>
                 <SelectContent>
                   {gates.map((g: any) => (
-                    <SelectItem key={g.id} value={g.id}>{g.name}</SelectItem>
+                    <SelectItem key={g.id} value={g.id}>
+                      {g.name}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -129,7 +153,11 @@ export function GateAssignmentForm({ projectId, initialData, onSubmit }: GateAss
               <FormItem>
                 <FormLabel>Shift Start (HH:mm)</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder="08:00" className="h-11 rounded-xl" />
+                  <Input
+                    {...field}
+                    placeholder="08:00"
+                    className="h-11 rounded-xl"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -142,7 +170,11 @@ export function GateAssignmentForm({ projectId, initialData, onSubmit }: GateAss
               <FormItem>
                 <FormLabel>Shift End (HH:mm)</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder="17:00" className="h-11 rounded-xl" />
+                  <Input
+                    {...field}
+                    placeholder="17:00"
+                    className="h-11 rounded-xl"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -158,7 +190,11 @@ export function GateAssignmentForm({ projectId, initialData, onSubmit }: GateAss
               <FormItem>
                 <FormLabel>Valid From (Optional)</FormLabel>
                 <FormControl>
-                  <Input {...field} type="datetime-local" className="h-11 rounded-xl" />
+                  <Input
+                    {...field}
+                    type="datetime-local"
+                    className="h-11 rounded-xl"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -171,7 +207,11 @@ export function GateAssignmentForm({ projectId, initialData, onSubmit }: GateAss
               <FormItem>
                 <FormLabel>Valid Until (Optional)</FormLabel>
                 <FormControl>
-                  <Input {...field} type="datetime-local" className="h-11 rounded-xl" />
+                  <Input
+                    {...field}
+                    type="datetime-local"
+                    className="h-11 rounded-xl"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

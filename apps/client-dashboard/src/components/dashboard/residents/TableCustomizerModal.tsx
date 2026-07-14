@@ -11,7 +11,7 @@ import {
   Button,
   Checkbox,
   Label,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { GripVertical, ChevronUp, ChevronDown } from 'lucide-react';
 import type { TableViewState } from '@/lib/residents/table-views';
 
@@ -42,7 +42,9 @@ export function TableCustomizerModal({
 }: TableCustomizerModalProps) {
   const { t } = useTranslation('dashboard');
   const [columnOrder, setColumnOrder] = useState<string[]>(view.columnOrder);
-  const [columnVisibility, setColumnVisibility] = useState<Record<string, boolean>>(view.columnVisibility);
+  const [columnVisibility, setColumnVisibility] = useState<
+    Record<string, boolean>
+  >(view.columnVisibility);
 
   useEffect(() => {
     if (open) {
@@ -52,8 +54,13 @@ export function TableCustomizerModal({
   }, [open, view.columnOrder, view.columnVisibility]);
 
   const orderSet = new Set(columnOrder);
-  const missingFromOrder = columns.filter((c) => !orderSet.has(c.id)).map((c) => c.id);
-  const fullOrder = [...columnOrder.filter((id) => columns.some((c) => c.id === id)), ...missingFromOrder];
+  const missingFromOrder = columns
+    .filter((c) => !orderSet.has(c.id))
+    .map((c) => c.id);
+  const fullOrder = [
+    ...columnOrder.filter((id) => columns.some((c) => c.id === id)),
+    ...missingFromOrder,
+  ];
 
   const move = (index: number, dir: 1 | -1) => {
     const next = [...fullOrder];
@@ -65,7 +72,8 @@ export function TableCustomizerModal({
 
   const handleToggle = (id: string, checked: boolean) => {
     const col = columns.find((c) => c.id === id);
-    if (col?.canHide) setColumnVisibility((prev) => ({ ...prev, [id]: checked }));
+    if (col?.canHide)
+      setColumnVisibility((prev) => ({ ...prev, [id]: checked }));
   };
 
   const handlePreset = (preset: string) => {
@@ -80,7 +88,10 @@ export function TableCustomizerModal({
   };
 
   const handleApply = () => {
-    onSave({ columnOrder: fullOrder, columnVisibility: { ...columnVisibility } });
+    onSave({
+      columnOrder: fullOrder,
+      columnVisibility: { ...columnVisibility },
+    });
     onOpenChange(false);
   };
 
@@ -88,7 +99,9 @@ export function TableCustomizerModal({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle>{t('residents.customizeColumns', 'Customize columns')}</DialogTitle>
+          <DialogTitle>
+            {t('residents.customizeColumns', 'Customize columns')}
+          </DialogTitle>
         </DialogHeader>
         <div className="space-y-4 py-2">
           {presetNames.length > 0 && (
@@ -144,7 +157,9 @@ export function TableCustomizerModal({
                   <Label className="flex-1 text-sm">{col.label}</Label>
                   <Checkbox
                     checked={columnVisibility[id] !== false}
-                    onChange={(e) => handleToggle(id, (e.target as HTMLInputElement).checked)}
+                    onChange={(e) =>
+                      handleToggle(id, (e.target as HTMLInputElement).checked)
+                    }
                     disabled={!col.canHide}
                     aria-label={col.label}
                   />
@@ -157,7 +172,9 @@ export function TableCustomizerModal({
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             {t('common.cancel', 'Cancel')}
           </Button>
-          <Button onClick={handleApply}>{t('residents.applyColumns', 'Apply')}</Button>
+          <Button onClick={handleApply}>
+            {t('residents.applyColumns', 'Apply')}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -18,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
   MultiSelect,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { toast } from 'sonner';
 import { Loader2, Plus } from 'lucide-react';
 import { csrfFetch } from '@/lib/csrf';

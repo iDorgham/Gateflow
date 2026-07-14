@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 
 export interface AnalyticsChartProps {
   title: string;

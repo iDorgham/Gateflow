@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Modal, TouchableOpacity } from 'react-native';
-import { nativeTokens } from '@gate-access/ui/tokens';
+import { nativeTokensNewEra as nativeTokens } from '../../../../packages/ui/src/tokens';
 import { AlertCircle } from 'lucide-react-native';
 
 export interface PassCancelDialogProps {
@@ -10,7 +10,12 @@ export interface PassCancelDialogProps {
   onCancel: () => void;
 }
 
-export function PassCancelDialog({ visible, visitorName, onConfirm, onCancel }: PassCancelDialogProps) {
+export function PassCancelDialog({
+  visible,
+  visitorName,
+  onConfirm,
+  onCancel,
+}: PassCancelDialogProps) {
   return (
     <Modal visible={visible} transparent animationType="fade">
       <View style={styles.backdrop}>
@@ -20,13 +25,21 @@ export function PassCancelDialog({ visible, visitorName, onConfirm, onCancel }: 
           </View>
           <Text style={styles.title}>Cancel Visitor Pass?</Text>
           <Text style={styles.message}>
-            Are you sure you want to cancel the pass for <Text style={{fontWeight: 'bold'}}>{visitorName}</Text>? They will no longer be able to access the property.
+            Are you sure you want to cancel the pass for{' '}
+            <Text style={{ fontWeight: 'bold' }}>{visitorName}</Text>? They will
+            no longer be able to access the property.
           </Text>
           <View style={styles.actions}>
-            <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={onCancel}>
+            <TouchableOpacity
+              style={[styles.button, styles.cancelButton]}
+              onPress={onCancel}
+            >
               <Text style={styles.cancelButtonText}>Keep Pass</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={[styles.button, styles.confirmButton]} onPress={onConfirm}>
+            <TouchableOpacity
+              style={[styles.button, styles.confirmButton]}
+              onPress={onConfirm}
+            >
               <Text style={styles.confirmButtonText}>Cancel Pass</Text>
             </TouchableOpacity>
           </View>
@@ -39,65 +52,68 @@ export function PassCancelDialog({ visible, visitorName, onConfirm, onCancel }: 
 const styles = StyleSheet.create({
   backdrop: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: nativeTokens.colors.backdropGlass,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: nativeTokens.spacing.lg,
+    padding: 24,
   },
   container: {
-    backgroundColor: nativeTokens.colors.card,
-    borderRadius: nativeTokens.borderRadius.lg,
-    padding: nativeTokens.spacing['2xl'],
+    backgroundColor: nativeTokens.colors.surfaceSubtle,
+    borderRadius: 24,
+    padding: 24,
     width: '100%',
     maxWidth: 400,
     alignItems: 'center',
-    ...nativeTokens.shadows.lg,
+    borderWidth: 1,
+    borderColor: nativeTokens.colors.border,
   },
   iconContainer: {
-    backgroundColor: `${nativeTokens.colors.danger}20`, // 20% opacity hex
-    padding: nativeTokens.spacing.md,
-    borderRadius: nativeTokens.borderRadius.full,
-    marginBottom: nativeTokens.spacing.lg,
+    backgroundColor: nativeTokens.colors.dangerSubtle,
+    padding: 16,
+    borderRadius: 32,
+    marginBottom: 16,
   },
   title: {
-    ...nativeTokens.typography.xl,
-    fontWeight: 'bold',
-    color: nativeTokens.colors.foreground,
-    marginBottom: nativeTokens.spacing.sm,
+    fontFamily: 'Cairo_700Bold',
+    fontSize: 20,
+    color: nativeTokens.colors.textHeading,
+    marginBottom: 8,
     textAlign: 'center',
   },
   message: {
-    ...nativeTokens.typography.base,
-    color: nativeTokens.colors.neutral,
+    fontFamily: 'Cairo_400Regular',
+    fontSize: 14,
+    color: nativeTokens.colors.textSubtle,
     textAlign: 'center',
-    marginBottom: nativeTokens.spacing['2xl'],
+    marginBottom: 24,
+    lineHeight: 20,
   },
   actions: {
     flexDirection: 'row',
-    gap: nativeTokens.spacing.md,
+    gap: 12,
     width: '100%',
   },
   button: {
     flex: 1,
-    paddingVertical: nativeTokens.spacing.md,
-    borderRadius: nativeTokens.borderRadius.md,
+    paddingVertical: 12,
+    borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
   },
   cancelButton: {
-    backgroundColor: nativeTokens.colors.secondary,
+    backgroundColor: nativeTokens.colors.surfaceRaised,
   },
   cancelButtonText: {
-    ...nativeTokens.typography.base,
-    fontWeight: '600',
-    color: nativeTokens.colors.foreground,
+    fontFamily: 'Cairo_600SemiBold',
+    fontSize: 15,
+    color: nativeTokens.colors.textPrimary,
   },
   confirmButton: {
     backgroundColor: nativeTokens.colors.danger,
   },
   confirmButtonText: {
-    ...nativeTokens.typography.base,
-    fontWeight: '600',
-    color: nativeTokens.colors.background,
+    fontFamily: 'Cairo_700Bold',
+    fontSize: 15,
+    color: nativeTokens.colors.textInverse,
   },
 });

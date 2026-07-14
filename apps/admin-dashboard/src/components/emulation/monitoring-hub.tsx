@@ -23,7 +23,7 @@ import {
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import {
   Search,
   Clock,

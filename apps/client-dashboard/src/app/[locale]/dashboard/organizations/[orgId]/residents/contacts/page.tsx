@@ -26,8 +26,8 @@ import {
   AvatarImage,
   AvatarFallback,
   Textarea,
-} from '@gate-access/ui';
-import { PageHeader } from '@gate-access/ui';
+} from '@gateflow/ui';
+import { PageHeader } from '@gateflow/components';
 import { useTranslation } from 'react-i18next';
 import {
   type ColumnDef,
@@ -57,7 +57,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import {
   mergeFilters,
   parseResidentsFiltersFromSearchParams,

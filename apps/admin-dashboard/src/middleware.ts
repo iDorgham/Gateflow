@@ -1,5 +1,5 @@
 /**
- * Admin portal session (ADMIN_ACCESS_KEY + admin_session cookie), locale redirect,
+ * Admin portal session (signed admin_session cookie), locale redirect,
  * and CSRF protection (double-submit cookie vs x-csrf-token for gf_* session).
  */
 
@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { match } from '@formatjs/intl-localematcher';
 import Negotiator from 'negotiator';
 import { i18n, LOCALE_COOKIE } from './lib/i18n/i18n-config';
+import { verifySessionToken } from './lib/admin-session';
 
 const ADMIN_COOKIE = 'admin_session';
 const CSRF_COOKIE = 'gf_csrf_token';
@@ -96,13 +97,6 @@ function isAdminAccessKeyConfigured(): boolean {
   return Boolean(key && key.length >= MIN_ADMIN_KEY_LENGTH);
 }
 
-async function sha256Hex(message: string): Promise<string> {
-  const data = new TextEncoder().encode(message);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
-}
-
 async function enforceAdminPortalSession(
   request: NextRequest,
   pathname: string
@@ -129,9 +123,9 @@ async function enforceAdminPortalSession(
   }
 
   const key = process.env.ADMIN_ACCESS_KEY!;
-  const expected = await sha256Hex(key);
   const session = request.cookies.get(ADMIN_COOKIE)?.value;
-  if (session !== expected) {
+  const payload = session ? await verifySessionToken(session, key) : null;
+  if (!payload) {
     if (pathname.startsWith('/api/')) {
       return NextResponse.json(
         { success: false, message: 'Admin session required.' },
@@ -153,6 +147,8 @@ export async function middleware(request: NextRequest) {
   if (
     pathname.startsWith('/_next') ||
     pathname.startsWith('/favicon') ||
+    pathname.startsWith('/icon') ||
+    pathname.startsWith('/apple-icon') ||
     /\.(ico|png|jpg|jpeg|gif|webp|svg|txt|xml)$/i.test(pathname)
   ) {
     return NextResponse.next();
@@ -164,6 +160,8 @@ export async function middleware(request: NextRequest) {
     !hasLocale &&
     !pathname.startsWith('/api') &&
     !pathname.startsWith('/_next') &&
+    !pathname.startsWith('/icon') &&
+    !pathname.startsWith('/apple-icon') &&
     !pathname.includes('.')
   ) {
     const locale = getLocale(request);
@@ -234,7 +232,11 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  if (PUBLIC_ROUTES.some((route) => effectivePath.startsWith(route))) {
+  if (
+    PUBLIC_ROUTES.some((route) => effectivePath.startsWith(route)) ||
+    effectivePath === '/icon' ||
+    effectivePath === '/apple-icon'
+  ) {
     return NextResponse.next();
   }
 
@@ -313,6 +315,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml).*)',
+    '/((?!_next/static|_next/image|favicon.ico|icon|apple-icon|robots.txt|sitemap.xml).*)',
   ],
 };

@@ -2,8 +2,15 @@
 
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, Skeleton } from '@gate-access/ui';
-import { cn } from '@gate-access/ui';
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  Skeleton,
+} from '@gateflow/ui';
+import { cn } from '@gateflow/ui';
 import type { AnalyticsFilters } from '@/lib/analytics/analytics-filters';
 
 const DOW_LABELS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'] as const;
@@ -29,7 +36,11 @@ function buildHeatmapUrl(filters: AnalyticsFilters): string {
   return `/api/analytics/heatmap?${sp.toString()}`;
 }
 
-export function AnalyticsHeatmapChart({ filters, locale: _locale, className }: AnalyticsHeatmapChartProps) {
+export function AnalyticsHeatmapChart({
+  filters,
+  locale: _locale,
+  className,
+}: AnalyticsHeatmapChartProps) {
   const { t } = useTranslation('dashboard');
   const [data, setData] = useState<HeatmapCell[]>([]);
   const [loading, setLoading] = useState(true);
@@ -66,7 +77,9 @@ export function AnalyticsHeatmapChart({ filters, locale: _locale, className }: A
   return (
     <Card className={cn(className)}>
       <CardHeader>
-        <CardTitle className="text-base">{t('analytics.peakHoursHeatmap')}</CardTitle>
+        <CardTitle className="text-base">
+          {t('analytics.peakHoursHeatmap')}
+        </CardTitle>
         <CardDescription>{t('analytics.peakHoursDesc')}</CardDescription>
       </CardHeader>
       <CardContent className="overflow-x-auto">
@@ -96,7 +109,9 @@ export function AnalyticsHeatmapChart({ filters, locale: _locale, className }: A
                   {t(`analytics.daysOfWeek.${dayKey}`)}
                 </div>
                 {Array.from({ length: 24 }, (_, hour) => {
-                  const cell = data.find((c) => c.dow === dow && c.hour === hour);
+                  const cell = data.find(
+                    (c) => c.dow === dow && c.hour === hour
+                  );
                   const intensity = cell ? cell.count / maxCount : 0;
                   const dayLabel = t(`analytics.daysOfWeek.${dayKey}`);
                   return (

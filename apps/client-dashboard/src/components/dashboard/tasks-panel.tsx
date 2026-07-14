@@ -1,8 +1,15 @@
 'use client';
 
 import { useState, useEffect, useTransition } from 'react';
-import { Button, Input, Badge, cn } from '@gate-access/ui';
-import { CheckSquare, Square, Plus, Trash2, Loader2, ClipboardList } from 'lucide-react';
+import { Button, Input, Badge, cn } from '@gateflow/ui';
+import {
+  CheckSquare,
+  Square,
+  Plus,
+  Trash2,
+  Loader2,
+  ClipboardList,
+} from 'lucide-react';
 import { toast } from 'sonner';
 import { csrfFetch } from '@/lib/csrf';
 
@@ -54,13 +61,16 @@ export function TasksPanel() {
       .finally(() => setLoading(false));
   }, []);
 
-  const filtered = filter === 'ALL' ? tasks : tasks.filter((t) => t.status === filter);
+  const filtered =
+    filter === 'ALL' ? tasks : tasks.filter((t) => t.status === filter);
 
   // Toggle task status (TODO ↔ DONE)
   const toggleTask = (task: Task) => {
     const nextStatus: TaskStatus = task.status === 'DONE' ? 'TODO' : 'DONE';
     // Optimistic update
-    setTasks((prev) => prev.map((t) => t.id === task.id ? { ...t, status: nextStatus } : t));
+    setTasks((prev) =>
+      prev.map((t) => (t.id === task.id ? { ...t, status: nextStatus } : t))
+    );
 
     startTransition(async () => {
       const res = await csrfFetch(`/api/tasks/${task.id}`, {
@@ -69,7 +79,11 @@ export function TasksPanel() {
       });
       if (!res.ok) {
         // Revert on failure
-        setTasks((prev) => prev.map((t) => t.id === task.id ? { ...t, status: task.status } : t));
+        setTasks((prev) =>
+          prev.map((t) =>
+            t.id === task.id ? { ...t, status: task.status } : t
+          )
+        );
         toast.error('Failed to update task');
       }
     });
@@ -87,7 +101,11 @@ export function TasksPanel() {
         method: 'POST',
         body: JSON.stringify({ title }),
       });
-      const data = (await res.json()) as { success: boolean; data?: Task; error?: string };
+      const data = (await res.json()) as {
+        success: boolean;
+        data?: Task;
+        error?: string;
+      };
       if (data.success && data.data) {
         setTasks((prev) => [data.data!, ...prev]);
       } else {
@@ -106,7 +124,7 @@ export function TasksPanel() {
         toast.error('Failed to delete task');
         // Re-fetch to restore
         const r = await fetch('/api/tasks');
-        const j = await r.json() as { success: boolean; data?: Task[] };
+        const j = (await r.json()) as { success: boolean; data?: Task[] };
         if (j.success && j.data) setTasks(j.data);
       }
     });
@@ -114,14 +132,18 @@ export function TasksPanel() {
 
   return (
     <div className="flex h-full flex-col bg-card" aria-label="Tasks panel">
-
       {/* Header */}
       <div className="flex shrink-0 items-center justify-between border-b border-border px-4 py-3 bg-muted/20">
         <div className="flex items-center gap-2">
           <ClipboardList className="h-4 w-4 text-primary" aria-hidden="true" />
-          <span className="text-xs font-black uppercase tracking-widest">Tasks</span>
+          <span className="text-xs font-black uppercase tracking-widest">
+            Tasks
+          </span>
           {tasks.filter((t) => t.status !== 'DONE').length > 0 && (
-            <Badge variant="outline" className="text-[9px] font-black px-1.5 py-0 border-primary/20 bg-primary/10 text-primary">
+            <Badge
+              variant="outline"
+              className="text-[9px] font-black px-1.5 py-0 border-primary/20 bg-primary/10 text-primary"
+            >
               {tasks.filter((t) => t.status !== 'DONE').length} open
             </Badge>
           )}
@@ -156,10 +178,15 @@ export function TasksPanel() {
         ) : filtered.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-center">
             <div className="h-12 w-12 rounded-2xl bg-muted/50 flex items-center justify-center mb-3">
-              <ClipboardList className="h-6 w-6 text-muted-foreground/40" aria-hidden="true" />
+              <ClipboardList
+                className="h-6 w-6 text-muted-foreground/40"
+                aria-hidden="true"
+              />
             </div>
             <p className="text-sm font-bold text-foreground">
-              {filter === 'ALL' ? 'No tasks yet' : `No ${STATUS_LABEL[filter as TaskStatus]} tasks`}
+              {filter === 'ALL'
+                ? 'No tasks yet'
+                : `No ${STATUS_LABEL[filter as TaskStatus]} tasks`}
             </p>
             <p className="text-[11px] text-muted-foreground mt-0.5">
               Add a task below to get started.
@@ -182,26 +209,45 @@ export function TasksPanel() {
                 onClick={() => toggleTask(task)}
                 disabled={isPending}
                 className="shrink-0 mt-0.5 text-muted-foreground hover:text-primary transition-colors"
-                aria-label={task.status === 'DONE' ? 'Mark as to do' : 'Mark as done'}
-              >
-                {task.status === 'DONE'
-                  ? <CheckSquare className="h-4 w-4 text-success" />
-                  : <Square className="h-4 w-4" />
+                aria-label={
+                  task.status === 'DONE' ? 'Mark as to do' : 'Mark as done'
                 }
+              >
+                {task.status === 'DONE' ? (
+                  <CheckSquare className="h-4 w-4 text-success" />
+                ) : (
+                  <Square className="h-4 w-4" />
+                )}
               </button>
 
               {/* Title + meta */}
               <div className="flex-1 min-w-0 space-y-1">
-                <p className={cn('text-xs font-bold leading-snug', task.status === 'DONE' && 'line-through text-muted-foreground')}>
+                <p
+                  className={cn(
+                    'text-xs font-bold leading-snug',
+                    task.status === 'DONE' &&
+                      'line-through text-muted-foreground'
+                  )}
+                >
                   {task.title}
                 </p>
                 <div className="flex items-center gap-1.5">
-                  <Badge variant="outline" className={cn('text-[9px] font-black px-1.5 py-0', STATUS_BADGE[task.status])}>
+                  <Badge
+                    variant="outline"
+                    className={cn(
+                      'text-[9px] font-black px-1.5 py-0',
+                      STATUS_BADGE[task.status]
+                    )}
+                  >
                     {STATUS_LABEL[task.status]}
                   </Badge>
                   {task.dueDate && (
                     <span className="text-[10px] text-muted-foreground">
-                      Due {new Date(task.dueDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                      Due{' '}
+                      {new Date(task.dueDate).toLocaleDateString(undefined, {
+                        month: 'short',
+                        day: 'numeric',
+                      })}
                     </span>
                   )}
                 </div>
@@ -242,7 +288,11 @@ export function TasksPanel() {
             className="h-9 w-9 rounded-xl shrink-0"
             aria-label="Add task"
           >
-            {isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Plus className="h-3.5 w-3.5" />}
+            {isPending ? (
+              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+            ) : (
+              <Plus className="h-3.5 w-3.5" />
+            )}
           </Button>
         </div>
       </form>

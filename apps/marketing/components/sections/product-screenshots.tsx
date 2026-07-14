@@ -38,22 +38,23 @@ function MockupPanel({
     >
       {/* Device frame */}
       <div
-        className={`relative w-full overflow-hidden transition-all duration-500 bg-[#0B0C0E] shadow-[0_48px_96px_rgba(0,0,0,0.12)] group-hover:shadow-[0_64px_128px_rgba(var(--ds-background-brand-bold),0.12)] border border-ds-border-bold group-hover:border-ds-border-brand/40 ${
+        className={`relative w-full overflow-hidden transition-all duration-500 bg-ds-surface-overlay border border-ds-border-bold group-hover:border-ds-border-brand/40 ${
           isMobile
-            ? 'aspect-[9/19.5] max-w-[280px] mx-auto rounded-[52px] border-[10px] border-black'
+            ? 'aspect-[9/19.5] max-w-[280px] mx-auto rounded-[52px] border-[10px] border-ds-border-bold'
             : 'aspect-[2/1] rounded-[24px]'
         }`}
+        style={{ boxShadow: 'var(--ds-shadow-deep)' }}
       >
         {/* Mobile Dynamic Island */}
         {isMobile && (
-          <div className="absolute top-4 left-1/2 -translate-x-1/2 w-20 h-6 bg-black rounded-full z-20 flex items-center justify-center">
+          <div className="absolute top-4 left-1/2 -translate-x-1/2 w-20 h-6 bg-ds-surface-overlay rounded-full z-20 flex items-center justify-center">
             <div className="w-1.5 h-1.5 rounded-full bg-ds-background-brand-bold animate-pulse opacity-40 ml-auto mr-4" />
           </div>
         )}
 
         {/* Window Status Bar (Desktop) */}
         {!isMobile && (
-          <div className="bg-[#141517] px-5 py-3 flex items-center justify-between border-b border-white/5">
+          <div className="bg-ds-surface-overlay px-5 py-3 flex items-center justify-between border-b border-white/5">
             <div className="flex gap-1.5">
               <div className="w-2 h-2 rounded-full bg-ds-background-danger-bold/30" />
               <div className="w-2 h-2 rounded-full bg-ds-background-warning-bold/30" />
@@ -72,7 +73,14 @@ function MockupPanel({
         {/* Illustration Area */}
         <div className="relative w-full h-full">
           {illustration}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none" />
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                'linear-gradient(to top, var(--ds-surface-overlay) 0%, transparent 100%)',
+              opacity: 0.3,
+            }}
+          />
         </div>
       </div>
 

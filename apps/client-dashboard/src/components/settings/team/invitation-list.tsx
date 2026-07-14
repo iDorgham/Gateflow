@@ -10,7 +10,7 @@ import {
   TableRow,
   Button,
   Badge,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { Trash2, Clock, XCircle, Mail } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';

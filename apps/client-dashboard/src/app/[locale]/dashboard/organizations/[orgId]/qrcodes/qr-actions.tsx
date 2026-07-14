@@ -3,7 +3,7 @@
 import { useTransition, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useQueryClient } from '@tanstack/react-query';
-import { Button } from '@gate-access/ui';
+import { Button } from '@gateflow/ui';
 import { toast } from 'sonner';
 import { toggleQRActive, deleteQR } from './actions';
 import { Copy, Check, PowerOff, Power, Trash2 } from 'lucide-react';
@@ -51,7 +51,10 @@ export function QRCodeActions({
     if (!window.confirm('Delete this QR code? This cannot be undone.')) return;
 
     // Optimistic: remove row from all ['qrcodes', *] caches immediately
-    const snapshot = queryClient.getQueriesData<{ data: unknown[]; total?: number }>({ queryKey: ['qrcodes'] });
+    const snapshot = queryClient.getQueriesData<{
+      data: unknown[];
+      total?: number;
+    }>({ queryKey: ['qrcodes'] });
     queryClient.setQueriesData<{ data: unknown[]; total?: number }>(
       { queryKey: ['qrcodes'] },
       (old) => {
@@ -71,14 +74,20 @@ export function QRCodeActions({
         router.refresh();
       } catch {
         // Rollback optimistic update on error
-        snapshot.forEach(([key, value]) => queryClient.setQueryData(key, value));
+        snapshot.forEach(([key, value]) =>
+          queryClient.setQueryData(key, value)
+        );
         toast.error('Failed to delete QR code');
       }
     });
   }
 
   return (
-    <div className="flex items-center gap-1" role="group" aria-label="QR code actions">
+    <div
+      className="flex items-center gap-1"
+      role="group"
+      aria-label="QR code actions"
+    >
       {/* Copy */}
       <Button
         variant="ghost"
@@ -106,7 +115,11 @@ export function QRCodeActions({
         disabled={isPending || !canManage}
         aria-label={isActive ? 'Deactivate QR code' : 'Activate QR code'}
         title={isActive ? 'Deactivate' : 'Activate'}
-        className={isActive ? 'text-slate-500 hover:text-amber-700' : 'text-slate-500 hover:text-green-700'}
+        className={
+          isActive
+            ? 'text-slate-500 hover:text-amber-700'
+            : 'text-slate-500 hover:text-green-700'
+        }
       >
         {isActive ? (
           <PowerOff className="h-3.5 w-3.5" aria-hidden="true" />

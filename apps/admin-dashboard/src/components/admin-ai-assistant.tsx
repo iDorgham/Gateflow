@@ -9,7 +9,7 @@ import {
   isReasoningUIPart,
   isTextUIPart,
   isToolUIPart,
-  type DataUIPart,
+  DynamicToolUIPart,
 } from 'ai';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
@@ -27,11 +27,11 @@ import {
   Wand2,
   Terminal,
   Activity,
-  History,
+  History as HistoryIcon,
   Info,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { cn, Button } from '@gate-access/ui';
+import { cn, Button } from '@gateflow/ui';
 import type { Locale } from '@/lib/i18n/i18n-config';
 import { useTranslation } from 'react-i18next';
 
@@ -165,7 +165,7 @@ function ThinkingBubble() {
   );
 }
 
-function ToolInvocCard({ part }: { part: any }) {
+function ToolInvocCard({ part }: { part: DynamicToolUIPart }) {
   const toolName = getToolName(part);
   const state = part.state;
   const isComplete =
@@ -202,9 +202,15 @@ function ToolInvocCard({ part }: { part: any }) {
         {isComplete && <Check className="h-3 w-3 text-ds-text-accent-green" />}
       </div>
 
-      {isDataUIPart(part) && (part as DataUIPart<any>).data && (
+      {isDataUIPart(part) && 'data' in part && (
         <div className="mt-2 text-[10px] bg-ds-surface-sunken/40 rounded-md p-2 font-mono overflow-x-auto border border-ds-border/20 text-ds-text-subtle max-h-32">
-          <pre>{JSON.stringify(part.data, null, 2)}</pre>
+          <pre>
+            {JSON.stringify(
+              (part as unknown as { data: unknown }).data,
+              null,
+              2
+            )}
+          </pre>
         </div>
       )}
     </div>
@@ -315,7 +321,7 @@ export function AdminAIAssistant({ locale: _locale }: AdminAIAssistantProps) {
 
   const EXAMPLES = [
     { key: 'metrics', icon: Activity },
-    { key: 'orgs', icon: History },
+    { key: 'orgs', icon: HistoryIcon },
     { key: 'scans', icon: Wand2 },
     { key: 'plans', icon: Info },
   ];
@@ -444,9 +450,14 @@ export function AdminAIAssistant({ locale: _locale }: AdminAIAssistantProps) {
                           textContent && 'pt-3 border-t border-ds-border/40'
                         )}
                       >
-                        {otherParts.map((part: any, i) => {
+                        {otherParts.map((part, i) => {
                           if (isToolUIPart(part))
-                            return <ToolInvocCard key={i} part={part} />;
+                            return (
+                              <ToolInvocCard
+                                key={i}
+                                part={part as DynamicToolUIPart}
+                              />
+                            );
                           if (isReasoningUIPart(part))
                             return (
                               <details

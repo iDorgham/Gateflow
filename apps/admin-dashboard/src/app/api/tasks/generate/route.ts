@@ -1,133 +1,142 @@
-import { generateObject } from 'ai';
-import { createGoogleGenerativeAI } from '@ai-sdk/google';
-import { z } from 'zod';
-import { type NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
+import { prisma } from '@gate-access/db';
+import type { Department, TaskPriority } from '@gate-access/db';
 import { isAdminAuthorized } from '@/lib/admin-auth';
-import { prisma, Prisma } from '@gate-access/db';
-
-export const runtime = 'nodejs';
-export const maxDuration = 45;
+import { generateObject } from 'ai';
+import { google } from '@ai-sdk/google';
+import { z } from 'zod';
+import { trackAiUsage } from '@/lib/ai-usage-tracker';
 
 /**
- * AI Task Generation Endpoint
- *
- * Converts natural language descriptions into structured task lists
- * across multiple GateFlow departments.
+ * AI Task Generation API
+ * POST /api/tasks/generate
+ * Body: { prompt: string, orgId: string, department: string }
  */
-export async function POST(request: NextRequest) {
+export async function POST(req: Request) {
+  if (!(await isAdminAuthorized(req))) {
+    return new NextResponse('Unauthorized', { status: 401 });
+  }
+
   try {
-    if (!(await isAdminAuthorized(request))) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+    const { prompt, orgId, department } = await req.json();
 
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) {
+    if (!prompt || !orgId || !department) {
       return NextResponse.json(
-        { error: 'GEMINI_API_KEY not configured' },
-        { status: 503 }
-      );
-    }
-
-    const body = await request.json();
-    const { prompt, organizationId, boardId } = body;
-
-    if (!prompt || !organizationId || !boardId) {
-      return NextResponse.json(
-        { error: 'prompt, organizationId, and boardId are required' },
+        {
+          error: 'Missing required fields (prompt, orgId, department)',
+        },
         { status: 400 }
       );
     }
 
-    // Verify board exists and belongs to the organization
+    // 1. Fetch Department Board
     const board = await prisma.taskBoard.findFirst({
-      where: { id: boardId, organizationId },
+      where: { organizationId: orgId, department: department as Department },
     });
 
     if (!board) {
       return NextResponse.json(
-        { error: 'Task board not found' },
+        {
+          error: `No TaskBoard found for department: ${department}`,
+        },
         { status: 404 }
       );
     }
 
-    const google = createGoogleGenerativeAI({ apiKey });
-
-    const result = await generateObject({
-      model: google('gemini-1.5-flash'),
+    // 2. Generate Structured Tasks (Vercel AI SDK v6)
+    const { object, usage } = await generateObject({
+      model: google('gemini-1.5-pro'),
       schema: z.object({
-        tasks: z.array(
-          z.object({
-            title: z.string(),
-            description: z.string(),
-            priority: z.enum(['LOW', 'MEDIUM', 'HIGH', 'URGENT']),
-            estimatedMinutes: z.number().optional(),
-            department: z.enum(['SALES', 'MARKETING', 'DEV', 'SUPPORT']),
-          })
-        ),
-        strategy: z.string(),
-      }),
-      prompt: `Plan a series of tasks for the following initiative on the GateFlow platform:
-      
-"${prompt}"
-
-GateFlow is a MENA-focused access control and marketing intelligence platform.
-Departments: SALES, MARKETING, DEV, SUPPORT.
-
-Guidelines:
-- Breakdown the initiative into 5-10 actionable tasks.
-- Assign appropriate priorities.
-- The strategy should explain the reasoning for this task breakdown in English.
-- Do not include any PII.`,
-    });
-
-    // Create the tasks in the database and log the AI action
-    const createdTasks = await prisma.$transaction(
-      async (tx: typeof prisma) => {
-        const tasks = await Promise.all(
-          result.object.tasks.map((task) =>
-            tx.task.create({
-              data: {
-                title: task.title,
-                description: task.description,
-                priority: task.priority,
-                department: task.department,
-                status: 'TODO',
-                boardId: board.id,
-                organizationId,
-                createdById: 'system', // In a real app, this would be the session user ID
-              },
+        tasks: z
+          .array(
+            z.object({
+              title: z.string(),
+              description: z.string(),
+              priority: z.enum(['LOW', 'MEDIUM', 'HIGH', 'URGENT']),
+              suggestedAssignee: z.string().optional(),
+              daysToComplete: z.number().optional(), // Days from now
             })
           )
-        );
+          .min(1)
+          .max(10),
+      }),
+      system: `
+        You are a GateFlow Productivity AI. 
+        Transform a project request into a structured list of tasks for the ${department} department.
+        Keep tasks concise and professional.
+      `,
+      prompt: `Project: ${prompt}`,
+    });
 
-        await tx.aiActionLog.create({
+    // Record AI Cost Tracking
+    await (trackAiUsage as any)({
+      model: 'gemini-1.5-pro',
+      usage: {
+        promptTokens: (usage as any).promptTokens || 0,
+        completionTokens: (usage as any).completionTokens || 0,
+      },
+      department: department as Department,
+      action: 'TASK_AI_GENERATED',
+    });
+
+    // 3. Create Tasks in DB
+    // For simplicity, we find the first user in the org to own/assign if not specified
+    const adminUser = await prisma.user.findFirst({
+      where: { organizationId: orgId, role: { name: 'SUPER_ADMIN' } },
+    });
+
+    if (!adminUser) {
+      return NextResponse.json(
+        { error: 'No admin user found to assign tasks' },
+        { status: 400 }
+      );
+    }
+
+    const createdTasks = await Promise.all(
+      object.tasks.map(async (t) => {
+        const dueDate = t.daysToComplete
+          ? new Date(Date.now() + t.daysToComplete * 24 * 60 * 60 * 1000)
+          : undefined;
+
+        return prisma.task.create({
           data: {
-            organizationId,
-            action: 'TASK_AI_GENERATED',
-            prompt,
-            reasoning: result.object.strategy,
-            result: JSON.stringify(result.object.tasks),
-            status: 'CONFIRMED',
-            metadata: {
-              taskCount: tasks.length,
-              boardId: board.id,
-            },
+            title: t.title,
+            description: t.description,
+            priority: t.priority as TaskPriority,
+            status: 'TODO',
+            department: department as Department,
+            organizationId: orgId,
+            boardId: board.id,
+            createdById: adminUser.id,
+            dueDate,
           },
         });
-
-        return tasks;
-      }
+      })
     );
+
+    // 4. Log AI Action
+    await prisma.aiActionLog.create({
+      data: {
+        organizationId: orgId,
+        action: 'TASK_AI_GENERATED',
+        status: 'CONFIRMED',
+        prompt: prompt,
+        result: `Generated ${createdTasks.length} tasks.`,
+        metadata: JSON.stringify({
+          boardId: board.id,
+          taskIds: createdTasks.map((t: { id: string }) => t.id),
+        }),
+      },
+    });
 
     return NextResponse.json({
       success: true,
-      strategy: result.object.strategy,
       tasks: createdTasks,
     });
   } catch (error) {
     console.error('[TASK_GENERATE_ERROR]', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Internal Server Error' },
       { status: 500 }
     );
   }

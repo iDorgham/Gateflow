@@ -3,13 +3,7 @@ import { getTranslation } from '@/lib/i18n/i18n';
 import { Locale } from '@/lib/i18n/i18n-config';
 import { prisma } from '@gate-access/db';
 import { Search, X } from 'lucide-react';
-import {
-  Card,
-  CardContent,
-  Button,
-  Input,
-  NativeSelect,
-} from '@gate-access/ui';
+import { Card, CardContent, Button, Input, NativeSelect } from '@gateflow/ui';
 import Link from 'next/link';
 import { GatesClient, type Gate } from './GatesClient';
 
@@ -32,7 +26,7 @@ export default async function GatesPage(props: {
   const searchParams = await props.searchParams;
   const params = await props.params;
 
-  const { locale } = params;
+  const { locale, orgId } = params as any;
 
   await requireAdmin(locale);
   const { t } = await getTranslation(locale, 'admin');
@@ -43,6 +37,7 @@ export default async function GatesPage(props: {
 
   const gates = await prisma.gate.findMany({
     where: {
+      organizationId: orgId,
       ...(search ? { name: { contains: search, mode: 'insensitive' } } : {}),
       ...(orgFilter
         ? {

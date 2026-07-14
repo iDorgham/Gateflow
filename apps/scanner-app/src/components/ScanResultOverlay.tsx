@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Animated } from 'react-native';
 import { CheckCircle, XCircle, AlertTriangle } from 'lucide-react-native';
-import { nativeTokens } from '@gate-access/ui/tokens';
+import { nativeTokensNewEra as nativeTokens } from '../../../../packages/ui/src/tokens';
 
 export type ScanResult = 'success' | 'denied' | 'invalid';
 
@@ -12,42 +12,53 @@ export interface ScanResultOverlayProps {
   visible: boolean;
 }
 
-export function ScanResultOverlay({ result, message, visitorName, visible }: ScanResultOverlayProps) {
-  const [opacity] = React.useState(new Animated.Value(0));
+export function ScanResultOverlay({
+  result,
+  message,
+  visitorName,
+  visible,
+}: ScanResultOverlayProps) {
+  const opacity = React.useRef(new Animated.Value(0)).current;
 
   React.useEffect(() => {
-    if (visible) {
-      Animated.timing(opacity, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true,
-      }).start();
-    } else {
-      Animated.timing(opacity, {
-        toValue: 0,
-        duration: 250,
-        useNativeDriver: true,
-      }).start();
-    }
+    Animated.timing(opacity, {
+      toValue: visible ? 1 : 0,
+      duration: visible ? 300 : 250,
+      useNativeDriver: true,
+    }).start();
   }, [visible, opacity]);
 
-  if (!visible && opacity.addListener(() => {}) === undefined) {
-    // Note: In a real app we'd unmount after animation completes,
-    // but returning null immediately is fine for a simple implementation.
-  }
-
   const config = {
-    success: { bg: nativeTokens.colors.success, icon: CheckCircle, title: 'Access Granted' },
-    denied: { bg: nativeTokens.colors.danger, icon: XCircle, title: 'Access Denied' },
-    invalid: { bg: nativeTokens.colors.warning, icon: AlertTriangle, title: 'Invalid QR' },
+    success: {
+      bg: nativeTokens.colors.success,
+      icon: CheckCircle,
+      title: 'Access Granted',
+    },
+    denied: {
+      bg: nativeTokens.colors.danger,
+      icon: XCircle,
+      title: 'Access Denied',
+    },
+    invalid: {
+      bg: nativeTokens.colors.warning,
+      icon: AlertTriangle,
+      title: 'Invalid QR',
+    },
   }[result];
 
   const Icon = config.icon;
 
   return (
-    <Animated.View style={[styles.overlay, { opacity, backgroundColor: config.bg }]} pointerEvents={visible ? 'auto' : 'none'}>
+    <Animated.View
+      style={[styles.overlay, { opacity, backgroundColor: config.bg }]}
+      pointerEvents={visible ? 'auto' : 'none'}
+    >
       <View style={styles.content}>
-        <Icon size={80} color={nativeTokens.colors.background} strokeWidth={nativeTokens.borderRadius.sm / 2} />
+        <Icon
+          size={80}
+          color={nativeTokens.colors.textInverse}
+          strokeWidth={3}
+        />
         <Text style={styles.title}>{config.title}</Text>
         {visitorName && <Text style={styles.visitorName}>{visitorName}</Text>}
         <Text style={styles.message}>{message}</Text>
@@ -62,34 +73,37 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     zIndex: 1000,
-    padding: nativeTokens.spacing['4xl'],
+    padding: nativeTokens.spacing['space-400'],
   },
   content: {
     alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.15)',
-    padding: nativeTokens.spacing['3xl'],
-    borderRadius: nativeTokens.borderRadius.xl,
+    backgroundColor: nativeTokens.colors.surfaceGlass,
+    padding: nativeTokens.spacing['space-300'],
+    borderRadius: 24,
     width: '100%',
+    borderWidth: 1,
+    borderColor: nativeTokens.colors.borderGlass,
   },
   title: {
-    ...nativeTokens.typography['3xl'],
-    color: nativeTokens.colors.background,
-    fontWeight: 'bold',
-    marginTop: nativeTokens.spacing.lg,
+    fontFamily: 'Cairo_700Bold',
+    fontSize: 32,
+    color: nativeTokens.colors.textInverse,
+    marginTop: nativeTokens.spacing['space-200'],
     textAlign: 'center',
+    letterSpacing: nativeTokens.typography.headerTracking,
   },
   visitorName: {
-    ...nativeTokens.typography.xl,
-    color: nativeTokens.colors.background,
-    fontWeight: '600',
-    marginTop: nativeTokens.spacing.sm,
+    fontFamily: 'Cairo_600SemiBold',
+    fontSize: 20,
+    color: nativeTokens.colors.textInverse,
+    marginTop: nativeTokens.spacing['space-100'],
     textAlign: 'center',
-    opacity: 0.9,
   },
   message: {
-    ...nativeTokens.typography.base,
-    color: nativeTokens.colors.background,
-    marginTop: nativeTokens.spacing.md,
+    fontFamily: 'Cairo_400Regular',
+    fontSize: 16,
+    color: nativeTokens.colors.textInverse,
+    marginTop: nativeTokens.spacing['space-150'],
     textAlign: 'center',
     opacity: 0.9,
   },

@@ -14,13 +14,9 @@ const path = require('path');
 
 const nextConfig = {
   outputFileTracingRoot: path.join(__dirname, '../../'),
-  transpilePackages: ['@gate-access/ui', '@gate-access/i18n', 'framer-motion'],
+  transpilePackages: ['@gateflow/ui', '@gate-access/i18n', 'framer-motion'],
   experimental: {
-    optimizePackageImports: [
-      'lucide-react',
-      '@gate-access/ui',
-      'framer-motion',
-    ],
+    optimizePackageImports: ['lucide-react', '@gateflow/ui', 'framer-motion'],
     nextScriptWorkers: true,
   },
   async headers() {

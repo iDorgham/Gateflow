@@ -1,13 +1,3 @@
-/**
- * GateSelector
- *
- * A bottom-sheet modal that lets the operator pick which gate they are
- * scanning at. The selected gate (id + name) is:
- *   • Persisted in AsyncStorage so it survives app restarts.
- *   • Fetched fresh from the API on every open; falls back to cache when
- *     offline.
- */
-
 import { useState, useEffect, useCallback } from 'react';
 import {
   Modal,
@@ -20,6 +10,7 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getValidAccessToken } from '../lib/auth-client';
+import { nativeTokensNewEra as nativeTokens } from '../../../../packages/ui/src/tokens';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -213,7 +204,7 @@ export function GateSelector({
             <View style={s.loadingWrap}>
               <ActivityIndicator
                 size="large"
-                color="var(--ds-text-information)"
+                color={nativeTokens.colors.primary}
               />
               <Text style={s.loadingText}>Loading gates…</Text>
             </View>
@@ -277,127 +268,131 @@ export function GateSelector({
 const s = StyleSheet.create({
   backdrop: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.6)',
+    backgroundColor: nativeTokens.colors.backdropGlass,
     justifyContent: 'flex-end',
   },
   sheet: {
-    backgroundColor: 'var(--ds-background-neutral)',
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
-    maxHeight: '75%',
+    backgroundColor: nativeTokens.colors.background,
+    borderTopLeftRadius: 32,
+    borderTopRightRadius: 32,
+    maxHeight: '90%',
     borderTopWidth: 1,
-    borderColor: 'var(--ds-border)',
+    borderColor: nativeTokens.colors.border,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
-    paddingTop: 20,
-    paddingBottom: 14,
+    paddingTop: 24,
+    paddingBottom: 16,
     borderBottomWidth: 1,
-    borderColor: 'var(--ds-border)',
+    borderColor: nativeTokens.colors.border,
   },
   title: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: 'var(--ds-text-inverse)',
+    fontFamily: 'Cairo_700Bold',
+    fontSize: 20,
+    color: nativeTokens.colors.textHeading,
   },
   doneBtn: {
     paddingVertical: 6,
-    paddingHorizontal: 14,
-    backgroundColor: 'var(--ds-background-neutral)',
+    paddingHorizontal: 16,
+    backgroundColor: nativeTokens.colors.surfaceRaised,
     borderRadius: 8,
   },
   doneBtnText: {
-    color: 'var(--ds-text-subtle)',
+    fontFamily: 'Cairo_600SemiBold',
+    color: nativeTokens.colors.textSubtle,
     fontSize: 15,
-    fontWeight: '600',
   },
   loadingWrap: {
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 48,
+    padding: 64,
     gap: 16,
   },
   loadingText: {
-    color: 'var(--ds-text-subtle)',
+    fontFamily: 'Cairo_400Regular',
+    color: nativeTokens.colors.textSubtle,
     fontSize: 14,
   },
   errorBox: {
-    backgroundColor: 'rgba(245,158,11,0.1)',
+    backgroundColor: nativeTokens.colors.warningSubtle,
     borderBottomWidth: 1,
-    borderColor: 'rgba(245,158,11,0.3)',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    borderColor: nativeTokens.colors.warning,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
   },
   errorText: {
-    color: 'var(--ds-text-warning)',
+    fontFamily: 'Cairo_600SemiBold',
+    color: nativeTokens.colors.warning,
     fontSize: 13,
   },
   list: {
     flexShrink: 1,
   },
   listContent: {
-    paddingBottom: 8,
+    paddingBottom: 16,
   },
   gateRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 14,
-    paddingHorizontal: 20,
+    paddingVertical: 16,
+    paddingHorizontal: 24,
   },
   gateRowSelected: {
-    backgroundColor: 'rgba(59,130,246,0.1)',
+    backgroundColor: nativeTokens.colors.infoSubtle,
   },
   gateRowPressed: {
-    backgroundColor: 'var(--ds-background-neutral)',
+    backgroundColor: nativeTokens.colors.surfaceRaised,
   },
   gateInfo: {
     flex: 1,
     gap: 2,
   },
   gateName: {
-    fontSize: 16,
-    color: 'var(--ds-text-inverse)',
-    fontWeight: '500',
+    fontFamily: 'Cairo_600SemiBold',
+    fontSize: 17,
+    color: nativeTokens.colors.textPrimary,
   },
   gateNameSelected: {
-    color: 'var(--ds-text-information)',
-    fontWeight: '600',
+    color: nativeTokens.colors.primary,
+    fontFamily: 'Cairo_700Bold',
   },
   gateLocation: {
-    fontSize: 13,
-    color: 'var(--ds-text-subtle)',
+    fontFamily: 'Cairo_400Regular',
+    fontSize: 14,
+    color: nativeTokens.colors.textSubtlest,
   },
   checkmark: {
-    fontSize: 18,
-    color: 'var(--ds-text-information)',
+    fontSize: 20,
+    color: nativeTokens.colors.primary,
     fontWeight: '700',
     marginLeft: 12,
   },
   separator: {
     height: 1,
-    backgroundColor: 'var(--ds-border)',
-    marginHorizontal: 20,
+    backgroundColor: nativeTokens.colors.border,
+    marginHorizontal: 24,
   },
   emptyText: {
-    padding: 24,
+    padding: 32,
     textAlign: 'center',
-    color: 'var(--ds-text-subtle)',
+    fontFamily: 'Cairo_400Regular',
+    color: nativeTokens.colors.textSubtle,
     fontSize: 14,
     lineHeight: 20,
   },
   refreshBtn: {
-    paddingVertical: 14,
+    paddingVertical: 18,
     alignItems: 'center',
     borderTopWidth: 1,
-    borderColor: 'var(--ds-border)',
+    borderColor: nativeTokens.colors.border,
   },
   refreshBtnText: {
-    color: 'var(--ds-text-information)',
-    fontSize: 15,
-    fontWeight: '600',
+    fontFamily: 'Cairo_700Bold',
+    color: nativeTokens.colors.primary,
+    fontSize: 16,
   },
 });

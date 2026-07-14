@@ -27,7 +27,7 @@ export default async function EditLandingPage(props: {
 
   return (
     <div className="h-full">
-      <PageBuilder initialPage={page as any} orgId={orgId} />
+      <PageBuilder pageId={id} />
     </div>
   );
 }

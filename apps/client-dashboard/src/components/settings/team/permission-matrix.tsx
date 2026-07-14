@@ -8,10 +8,10 @@ import {
   TooltipTrigger,
   Badge,
   cn,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { ShieldAlert } from 'lucide-react';
 import type { Permission } from '@gate-access/types';
-import { Button } from '@gate-access/ui';
+import { Button } from '@gateflow/ui';
 
 export interface PermissionGroup {
   id: string;
@@ -29,68 +29,161 @@ const PERMISSION_GROUPS: PermissionGroup[] = [
     id: 'gates',
     label: 'Gates',
     permissions: [
-      { id: 'gates:view', label: 'View Gates', description: 'Can see list of gates and their status' },
-      { id: 'gates:manage', label: 'Manage Gates', description: 'Can create, edit, and delete gates', isSensitive: true },
-      { id: 'gates:assignments', label: 'Manage Assignments', description: 'Can assign members to specific gates', isSensitive: true },
-    ]
+      {
+        id: 'gates:view',
+        label: 'View Gates',
+        description: 'Can see list of gates and their status',
+      },
+      {
+        id: 'gates:manage',
+        label: 'Manage Gates',
+        description: 'Can create, edit, and delete gates',
+        isSensitive: true,
+      },
+      {
+        id: 'gates:assignments',
+        label: 'Manage Assignments',
+        description: 'Can assign members to specific gates',
+        isSensitive: true,
+      },
+    ],
   },
   {
     id: 'qr',
     label: 'QR Codes',
     permissions: [
-      { id: 'qr:view', label: 'View QR Codes', description: 'Can see all generated QR codes' },
-      { id: 'qr:create', label: 'Create QR Codes', description: 'Can generate new scan passes' },
-      { id: 'qr:manage', label: 'Manage QR Codes', description: 'Can revoke or modify existing passes', isSensitive: true },
-    ]
+      {
+        id: 'qr:view',
+        label: 'View QR Codes',
+        description: 'Can see all generated QR codes',
+      },
+      {
+        id: 'qr:create',
+        label: 'Create QR Codes',
+        description: 'Can generate new scan passes',
+      },
+      {
+        id: 'qr:manage',
+        label: 'Manage QR Codes',
+        description: 'Can revoke or modify existing passes',
+        isSensitive: true,
+      },
+    ],
   },
   {
     id: 'projects',
     label: 'Projects',
     permissions: [
-      { id: 'projects:view', label: 'View Projects', description: 'Can see mapped projects and buildings' },
-      { id: 'projects:manage', label: 'Manage Projects', description: 'Can create and map projects to resources', isSensitive: true },
-    ]
+      {
+        id: 'projects:view',
+        label: 'View Projects',
+        description: 'Can see mapped projects and buildings',
+      },
+      {
+        id: 'projects:manage',
+        label: 'Manage Projects',
+        description: 'Can create and map projects to resources',
+        isSensitive: true,
+      },
+    ],
   },
   {
     id: 'units',
     label: 'Units & Residents',
     permissions: [
-      { id: 'units:view', label: 'View Units', description: 'Can see unit roster and resident connections' },
-      { id: 'units:manage', label: 'Manage Units', description: 'Can update unit details and quotas', isSensitive: true },
-      { id: 'residents:manage', label: 'Manage Residents', description: 'Can approve or remove resident access', isSensitive: true },
-    ]
+      {
+        id: 'units:view',
+        label: 'View Units',
+        description: 'Can see unit roster and resident connections',
+      },
+      {
+        id: 'units:manage',
+        label: 'Manage Units',
+        description: 'Can update unit details and quotas',
+        isSensitive: true,
+      },
+      {
+        id: 'residents:manage',
+        label: 'Manage Residents',
+        description: 'Can approve or remove resident access',
+        isSensitive: true,
+      },
+    ],
   },
   {
     id: 'team',
     label: 'Team & RBAC',
     permissions: [
-      { id: 'users:view', label: 'View Team', description: 'Can see team roster and invitations' },
-      { id: 'users:manage', label: 'Manage Team', description: 'Can invite and remove members', isSensitive: true },
-      { id: 'roles:manage', label: 'Manage Roles', description: 'Can create and edit permission matrices', isSensitive: true },
-    ]
+      {
+        id: 'users:view',
+        label: 'View Team',
+        description: 'Can see team roster and invitations',
+      },
+      {
+        id: 'users:manage',
+        label: 'Manage Team',
+        description: 'Can invite and remove members',
+        isSensitive: true,
+      },
+      {
+        id: 'roles:manage',
+        label: 'Manage Roles',
+        description: 'Can create and edit permission matrices',
+        isSensitive: true,
+      },
+    ],
   },
   {
     id: 'analytics',
     label: 'Analytics & Logs',
     permissions: [
-      { id: 'scans:view', label: 'View Scan Logs', description: 'Can see real-time entry history' },
-      { id: 'scans:override', label: 'System Override', description: 'Can manually trigger gate open from dashboard', isSensitive: true },
-      { id: 'scans:export', label: 'Export Data', description: 'Can download CSV reports of scans', isSensitive: true },
-      { id: 'analytics:view', label: 'View Analytics', description: 'Can see traffic patterns and trends' },
-    ]
+      {
+        id: 'scans:view',
+        label: 'View Scan Logs',
+        description: 'Can see real-time entry history',
+      },
+      {
+        id: 'scans:override',
+        label: 'System Override',
+        description: 'Can manually trigger gate open from dashboard',
+        isSensitive: true,
+      },
+      {
+        id: 'scans:export',
+        label: 'Export Data',
+        description: 'Can download CSV reports of scans',
+        isSensitive: true,
+      },
+      {
+        id: 'analytics:view',
+        label: 'View Analytics',
+        description: 'Can see traffic patterns and trends',
+      },
+    ],
   },
   {
     id: 'workspace',
     label: 'Workspace',
     permissions: [
-      { id: 'workspace:manage', label: 'Workspace Settings', description: 'Can manage branding, billing, and API keys', isSensitive: true },
-      { id: 'contacts:manage', label: 'Global Contacts', description: 'Can manage shared emergency and staff contacts' },
-    ]
-  }
+      {
+        id: 'workspace:manage',
+        label: 'Workspace Settings',
+        description: 'Can manage branding, billing, and API keys',
+        isSensitive: true,
+      },
+      {
+        id: 'contacts:manage',
+        label: 'Global Contacts',
+        description: 'Can manage shared emergency and staff contacts',
+      },
+    ],
+  },
 ];
 
 // Helper to find permissions not mapped to groups
-const ALL_MAPPED_IDS = new Set(PERMISSION_GROUPS.flatMap(g => g.permissions.map(p => p.id)));
+const ALL_MAPPED_IDS = new Set(
+  PERMISSION_GROUPS.flatMap((g) => g.permissions.map((p) => p.id))
+);
 
 interface PermissionMatrixProps {
   permissions: Record<string, boolean>;
@@ -98,7 +191,11 @@ interface PermissionMatrixProps {
   disabled?: boolean;
 }
 
-export function PermissionMatrix({ permissions, onChange, disabled }: PermissionMatrixProps) {
+export function PermissionMatrix({
+  permissions,
+  onChange,
+  disabled,
+}: PermissionMatrixProps) {
   const togglePermission = (id: string) => {
     if (disabled) return;
     const newPerms = { ...permissions };
@@ -110,43 +207,57 @@ export function PermissionMatrix({ permissions, onChange, disabled }: Permission
     <TooltipProvider>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {PERMISSION_GROUPS.map((group) => (
-          <div key={group.id} className="space-y-4 p-5 rounded-2xl border border-border bg-card/50">
+          <div
+            key={group.id}
+            className="space-y-4 p-5 rounded-2xl border border-border bg-card/50"
+          >
             <div className="flex items-center justify-between border-b border-border/50 pb-3 mb-2">
               <h3 className="text-xs font-black uppercase tracking-widest text-muted-foreground">
                 {group.label}
               </h3>
               <div className="flex items-center gap-2">
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
+                <Button
+                  variant="ghost"
+                  size="sm"
                   className="h-6 px-2 text-[9px] font-black uppercase tracking-widest text-muted-foreground hover:text-primary"
                   onClick={() => {
                     const newPerms = { ...permissions };
-                    const allSelected = group.permissions.every(p => permissions[p.id]);
-                    group.permissions.forEach(p => newPerms[p.id] = !allSelected);
+                    const allSelected = group.permissions.every(
+                      (p) => permissions[p.id]
+                    );
+                    group.permissions.forEach(
+                      (p) => (newPerms[p.id] = !allSelected)
+                    );
                     onChange(newPerms);
                   }}
                   disabled={disabled}
                 >
-                  {group.permissions.every(p => permissions[p.id]) ? 'Deselect All' : 'Select All'}
+                  {group.permissions.every((p) => permissions[p.id])
+                    ? 'Deselect All'
+                    : 'Select All'}
                 </Button>
-                <Badge variant="outline" className="text-[10px] font-bold border-none bg-muted/50">
+                <Badge
+                  variant="outline"
+                  className="text-[10px] font-bold border-none bg-muted/50"
+                >
                   {group.permissions.length} keys
                 </Badge>
               </div>
             </div>
-            
+
             <div className="space-y-2">
               {group.permissions.map((perm) => (
-                <div 
-                  key={perm.id} 
+                <div
+                  key={perm.id}
                   className={cn(
-                    "flex items-start space-x-3 p-3 rounded-xl border border-transparent transition-all",
-                    permissions[perm.id] ? "bg-primary/5 border-primary/10" : "hover:bg-muted/50",
-                    disabled && "opacity-50 grayscale cursor-not-allowed"
+                    'flex items-start space-x-3 p-3 rounded-xl border border-transparent transition-all',
+                    permissions[perm.id]
+                      ? 'bg-primary/5 border-primary/10'
+                      : 'hover:bg-muted/50',
+                    disabled && 'opacity-50 grayscale cursor-not-allowed'
                   )}
                 >
-                  <Checkbox 
+                  <Checkbox
                     id={`perm-${perm.id}`}
                     checked={permissions[perm.id] || false}
                     onChange={() => togglePermission(perm.id)}
@@ -154,7 +265,7 @@ export function PermissionMatrix({ permissions, onChange, disabled }: Permission
                     className="mt-0.5"
                   />
                   <div className="flex-1 space-y-1">
-                    <label 
+                    <label
                       htmlFor={`perm-${perm.id}`}
                       className="text-xs font-bold uppercase tracking-tight cursor-pointer flex items-center gap-2"
                     >
@@ -188,17 +299,24 @@ export function PermissionMatrix({ permissions, onChange, disabled }: Permission
             System Debug: Unmapped Permissions
           </p>
           <div className="flex flex-wrap gap-2">
-            {Object.keys(permissions).filter(k => !ALL_MAPPED_IDS.has(k as Permission)).length > 0 ? (
+            {Object.keys(permissions).filter(
+              (k) => !ALL_MAPPED_IDS.has(k as Permission)
+            ).length > 0 ? (
               Object.keys(permissions)
-                .filter(k => !ALL_MAPPED_IDS.has(k as Permission))
-                .map(k => (
-                  <Badge key={k} variant="danger" className="text-[9px] font-black uppercase">
+                .filter((k) => !ALL_MAPPED_IDS.has(k as Permission))
+                .map((k) => (
+                  <Badge
+                    key={k}
+                    variant="danger"
+                    className="text-[9px] font-black uppercase"
+                  >
                     {k}
                   </Badge>
                 ))
             ) : (
               <span className="text-[10px] font-medium text-muted-foreground italic">
-                All permissions present in the role are currently mapped to the UI groups.
+                All permissions present in the role are currently mapped to the
+                UI groups.
               </span>
             )}
           </div>
@@ -207,4 +325,3 @@ export function PermissionMatrix({ permissions, onChange, disabled }: Permission
     </TooltipProvider>
   );
 }
-

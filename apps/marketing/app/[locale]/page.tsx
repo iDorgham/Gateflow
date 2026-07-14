@@ -51,7 +51,7 @@ export default async function HomePage({
   ];
 
   return (
-    <div className="flex flex-col w-full overflow-clip bg-ds-surface selection:bg-ds-background-brand-bold selection:text-white">
+    <div className="flex flex-col w-full overflow-clip bg-background selection:bg-ds-background-brand-bold selection:text-white">
       <IntentLandingTracker locale={locale} surface="home_page" intent="demo" />
 
       {/* Hero — full viewport, py handled internally */}
@@ -83,7 +83,7 @@ export default async function HomePage({
       <TestimonialsSection locale={locale} />
 
       {/* Security Grid */}
-      <SecurityGrid locale={locale} />
+      <SecurityGrid _locale={locale} />
 
       {/* Mid-page CTA */}
       <MidCtaSection

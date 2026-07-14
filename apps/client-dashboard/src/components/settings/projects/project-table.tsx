@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import {
   MoreHorizontal,
   Pencil,

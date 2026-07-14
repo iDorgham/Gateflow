@@ -8,8 +8,8 @@ import {
   DialogTitle,
   DialogDescription,
   DialogFooter,
-  Button
-} from '@gate-access/ui';
+  Button,
+} from '@gateflow/ui';
 import { useTranslation } from 'react-i18next';
 
 interface ChatSettingsDialogProps {
@@ -19,20 +19,24 @@ interface ChatSettingsDialogProps {
 }
 
 const PREDEFINED_RULES = [
-  "Always respond in Arabic.",
-  "Keep responses under 2 paragraphs.",
-  "Format all data as Markdown tables.",
-  "Act as a strict security auditor.",
+  'Always respond in Arabic.',
+  'Keep responses under 2 paragraphs.',
+  'Format all data as Markdown tables.',
+  'Act as a strict security auditor.',
 ];
 
-export function ChatSettingsDialog({ open, onOpenChange, chatTitle }: ChatSettingsDialogProps) {
+export function ChatSettingsDialog({
+  open,
+  onOpenChange,
+  chatTitle,
+}: ChatSettingsDialogProps) {
   const { t } = useTranslation('dashboard');
   const [selectedRules, setSelectedRules] = React.useState<string[]>([]);
   const [customRule, setCustomRule] = React.useState('');
 
   const toggleRule = (rule: string) => {
-    setSelectedRules(prev => 
-      prev.includes(rule) ? prev.filter(r => r !== rule) : [...prev, rule]
+    setSelectedRules((prev) =>
+      prev.includes(rule) ? prev.filter((r) => r !== rule) : [...prev, rule]
     );
   };
 
@@ -47,7 +51,9 @@ export function ChatSettingsDialog({ open, onOpenChange, chatTitle }: ChatSettin
         <DialogHeader>
           <DialogTitle>{t('ai.chatSettings', 'Chat Settings')}</DialogTitle>
           <DialogDescription>
-            {t('ai.chatSettingsDesc', 'Set custom rules or instructions for "')} {chatTitle}{t('ai.chatSettingsDescEnd', '".')}
+            {t('ai.chatSettingsDesc', 'Set custom rules or instructions for "')}{' '}
+            {chatTitle}
+            {t('ai.chatSettingsDescEnd', '".')}
           </DialogDescription>
         </DialogHeader>
 
@@ -58,9 +64,12 @@ export function ChatSettingsDialog({ open, onOpenChange, chatTitle }: ChatSettin
             </label>
             <div className="flex flex-col gap-2">
               {PREDEFINED_RULES.map((rule, idx) => (
-                <label key={idx} className="flex items-center gap-2 text-sm text-muted-foreground dark:text-zinc-400 cursor-pointer">
-                  <input 
-                    type="checkbox" 
+                <label
+                  key={idx}
+                  className="flex items-center gap-2 text-sm text-muted-foreground dark:text-zinc-400 cursor-pointer"
+                >
+                  <input
+                    type="checkbox"
                     checked={selectedRules.includes(rule)}
                     onChange={() => toggleRule(rule)}
                     className="rounded border-border text-primary focus:ring-primary/40"
@@ -77,7 +86,10 @@ export function ChatSettingsDialog({ open, onOpenChange, chatTitle }: ChatSettin
             </label>
             <textarea
               className="min-h-[100px] w-full bg-background border border-border rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none"
-              placeholder={t('ai.customRulePlaceholder', 'E.g., "Only use data from the North Gate..."')}
+              placeholder={t(
+                'ai.customRulePlaceholder',
+                'E.g., "Only use data from the North Gate..."'
+              )}
               value={customRule}
               onChange={(e) => setCustomRule(e.target.value)}
             />

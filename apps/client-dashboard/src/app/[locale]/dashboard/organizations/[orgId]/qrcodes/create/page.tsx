@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Button } from '@gate-access/ui';
+import { Button } from '@gateflow/ui';
 import { ArrowLeft } from 'lucide-react';
 import { requireAuth } from '@/lib/dashboard-auth';
 import { prisma } from '@gate-access/db';
@@ -54,12 +54,18 @@ export default async function CreateQRCodePage() {
     <div className="space-y-6 max-w-2xl mx-auto">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-black tracking-tight text-foreground uppercase">Create QR Code</h1>
+          <h1 className="text-2xl font-black tracking-tight text-foreground uppercase">
+            Create QR Code
+          </h1>
           <p className="text-sm text-muted-foreground mt-1">
             Generate a signed access pass for your gates.
           </p>
         </div>
-        <Button variant="outline" asChild className="rounded-xl h-10 px-5 font-bold text-xs">
+        <Button
+          variant="outline"
+          asChild
+          className="rounded-xl h-10 px-5 font-bold text-xs"
+        >
           <Link href="./">
             <ArrowLeft className="mr-1.5 h-4 w-4" />
             Back to QR Codes

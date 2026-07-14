@@ -15,7 +15,7 @@
 const { spawnSync } = require('child_process');
 const path = require('path');
 
-const ROOT = path.resolve(__dirname, '..');
+const ROOT = path.resolve(__dirname, '../..');
 const failMode = process.argv.includes('--fail');
 const envArg = process.argv.includes('--env')
   ? process.argv[process.argv.indexOf('--env') + 1]
@@ -37,7 +37,7 @@ function runCheck({ name, script, args = [], warnOnly = false }) {
 
   const result = spawnSync(
     'node',
-    [path.join(ROOT, 'scripts', script), ...args],
+    [path.join(ROOT, 'scripts', 'check', script), ...args],
     {
       cwd: ROOT,
       encoding: 'utf8',

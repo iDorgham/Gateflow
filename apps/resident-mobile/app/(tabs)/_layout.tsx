@@ -1,27 +1,46 @@
 import { Tabs } from 'expo-router';
 import { Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { theme } from '../../lib/theme';
-
-const { colors } = theme;
+import { nativeTokensNewEra as nativeTokens } from '../../../../packages/ui/src/tokens';
 
 export default function TabsLayout() {
   return (
     <Tabs
       screenOptions={{
+        headerShown: true,
         headerTitleAlign: 'center',
-        tabBarActiveTintColor: colors.primary,
-        tabBarInactiveTintColor: colors.mutedForeground,
+        headerStyle: {
+          backgroundColor: nativeTokens.colors.background,
+          elevation: 0,
+          shadowOpacity: 0,
+          borderBottomWidth: 1,
+          borderBottomColor: nativeTokens.colors.borderSubtle,
+        },
+        headerTitleStyle: {
+          fontFamily: 'Cairo_700Bold',
+          fontSize: 18,
+          color: nativeTokens.colors.textHeading,
+        },
+        headerTintColor: nativeTokens.colors.primary,
+        tabBarActiveTintColor: nativeTokens.colors.primary,
+        tabBarInactiveTintColor: nativeTokens.colors.textSubtle,
         tabBarStyle: {
-          backgroundColor: colors.card,
-          borderTopColor: colors.border,
-          height: Platform.OS === 'ios' ? 88 : 64,
-          paddingTop: 8,
-          paddingBottom: Platform.OS === 'ios' ? 24 : 10,
+          backgroundColor: nativeTokens.colors.surfaceSubtle,
+          borderTopColor: nativeTokens.colors.borderSubtle,
+          borderTopWidth: 1,
+          height: Platform.OS === 'ios' ? 90 : 70,
+          paddingTop: 10,
+          paddingBottom: Platform.OS === 'ios' ? 30 : 12,
+          elevation: 8,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: -4 },
+          shadowOpacity: 0.1,
+          shadowRadius: 10,
         },
         tabBarLabelStyle: {
-          fontSize: 12,
-          fontWeight: '600',
+          fontFamily: 'Cairo_600SemiBold',
+          fontSize: 11,
+          marginTop: 2,
         },
       }}
     >

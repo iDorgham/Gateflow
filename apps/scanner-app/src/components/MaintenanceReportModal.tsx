@@ -16,8 +16,9 @@ import {
   Wrench,
   Building2,
   HelpCircle,
+  LucideIcon,
 } from 'lucide-react-native';
-import { nativeTokens } from '@gate-access/ui/tokens';
+import { nativeTokensNewEra as nativeTokens } from '../../../../packages/ui/src/tokens';
 import { createMaintenanceRequest } from '../lib/scanner';
 
 export interface MaintenanceReportModalProps {
@@ -76,7 +77,7 @@ export function MaintenanceReportModal({
     }
   };
 
-  const categories: { id: Category; label: string; icon: any }[] = [
+  const categories: { id: Category; label: string; icon: LucideIcon }[] = [
     { id: 'HARDWARE', label: 'Hardware', icon: Wrench },
     { id: 'FACILITY', label: 'Facility', icon: Building2 },
     { id: 'OTHER', label: 'Other', icon: HelpCircle },
@@ -122,8 +123,8 @@ export function MaintenanceReportModal({
                     size={20}
                     color={
                       active
-                        ? nativeTokens.colors.primaryForeground
-                        : nativeTokens.colors.mutedForeground
+                        ? nativeTokens.colors.textInverse
+                        : nativeTokens.colors.textSubtle
                     }
                   />
                   <Text
@@ -142,7 +143,7 @@ export function MaintenanceReportModal({
             value={title}
             onChangeText={setTitle}
             placeholder="e.g., Gate won't open, Scanner blurry"
-            placeholderTextColor={nativeTokens.colors.mutedForeground}
+            placeholderTextColor={nativeTokens.colors.textSubtlest}
             autoFocus
           />
 
@@ -152,7 +153,7 @@ export function MaintenanceReportModal({
             value={description}
             onChangeText={setDescription}
             placeholder="Provide more details if needed..."
-            placeholderTextColor={nativeTokens.colors.mutedForeground}
+            placeholderTextColor={nativeTokens.colors.textSubtlest}
             multiline
             numberOfLines={3}
           />
@@ -166,7 +167,7 @@ export function MaintenanceReportModal({
               {isSubmitting ? (
                 <ActivityIndicator
                   size="small"
-                  color={nativeTokens.colors.primaryForeground}
+                  color={nativeTokens.colors.textInverse}
                 />
               ) : (
                 <Text style={s.submitBtnText}>Submit Report</Text>
@@ -190,15 +191,17 @@ export function MaintenanceReportModal({
 const s = StyleSheet.create({
   backdrop: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.6)',
+    backgroundColor: nativeTokens.colors.backdropGlass,
     justifyContent: 'flex-end',
   },
   sheet: {
-    backgroundColor: nativeTokens.colors.neutral700,
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
+    backgroundColor: nativeTokens.colors.surfaceSubtle,
+    borderTopLeftRadius: 32,
+    borderTopRightRadius: 32,
     padding: 24,
-    paddingBottom: Platform.OS === 'ios' ? 44 : 24,
+    paddingBottom: Platform.OS === 'ios' ? 48 : 24,
+    borderTopWidth: 1,
+    borderColor: nativeTokens.colors.border,
   },
   header: {
     flexDirection: 'row',
@@ -210,33 +213,37 @@ const s = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 12,
-    backgroundColor: 'rgba(245,158,11,0.15)',
+    backgroundColor: nativeTokens.colors.warningSubtle,
     justifyContent: 'center',
     alignItems: 'center',
   },
   title: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: nativeTokens.colors.primaryForeground,
+    fontFamily: 'Cairo_700Bold',
+    fontSize: 22,
+    color: nativeTokens.colors.textHeading,
   },
   subtitle: {
+    fontFamily: 'Cairo_400Regular',
     fontSize: 14,
-    color: nativeTokens.colors.mutedForeground,
+    color: nativeTokens.colors.textSubtle,
   },
   label: {
+    fontFamily: 'Cairo_600SemiBold',
     fontSize: 13,
-    fontWeight: '600',
-    color: nativeTokens.colors.mutedForeground,
+    color: nativeTokens.colors.textSubtlest,
     marginBottom: 8,
     marginTop: 16,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   input: {
-    backgroundColor: nativeTokens.colors.neutral800,
+    backgroundColor: nativeTokens.colors.background,
     borderWidth: 1,
-    borderColor: nativeTokens.colors.neutral600,
+    borderColor: nativeTokens.colors.border,
     borderRadius: 12,
     padding: 14,
-    color: nativeTokens.colors.primaryForeground,
+    color: nativeTokens.colors.textPrimary,
+    fontFamily: 'Cairo_400Regular',
     fontSize: 16,
   },
   textArea: {
@@ -253,34 +260,35 @@ const s = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 6,
-    paddingVertical: 10,
-    backgroundColor: nativeTokens.colors.neutral800,
-    borderRadius: 8,
+    paddingVertical: 12,
+    backgroundColor: nativeTokens.colors.background,
+    borderRadius: 12,
     borderWidth: 1,
-    borderColor: nativeTokens.colors.neutral600,
+    borderColor: nativeTokens.colors.border,
   },
   categoryBtnActive: {
     backgroundColor: nativeTokens.colors.primary,
     borderColor: nativeTokens.colors.primary,
   },
   categoryLabel: {
-    color: nativeTokens.colors.mutedForeground,
+    fontFamily: 'Cairo_600SemiBold',
+    color: nativeTokens.colors.textSubtle,
     fontSize: 13,
-    fontWeight: '600',
   },
   categoryLabelActive: {
-    color: nativeTokens.colors.primaryForeground,
+    color: nativeTokens.colors.textInverse,
   },
   errorBox: {
-    backgroundColor: 'rgba(239,68,68,0.15)',
+    backgroundColor: nativeTokens.colors.dangerSubtle,
     borderWidth: 1,
-    borderColor: 'rgba(239,68,68,0.4)',
-    borderRadius: 8,
+    borderColor: nativeTokens.colors.danger,
+    borderRadius: 12,
     padding: 12,
     marginBottom: 16,
   },
   errorText: {
-    color: nativeTokens.colors.destructive,
+    fontFamily: 'Cairo_600SemiBold',
+    color: nativeTokens.colors.danger,
     fontSize: 14,
   },
   footer: {
@@ -288,7 +296,7 @@ const s = StyleSheet.create({
     gap: 12,
   },
   btn: {
-    borderRadius: 12,
+    borderRadius: 14,
     paddingVertical: 16,
     alignItems: 'center',
   },
@@ -302,12 +310,13 @@ const s = StyleSheet.create({
     opacity: 0.6,
   },
   submitBtnText: {
-    color: nativeTokens.colors.primaryForeground,
-    fontSize: 17,
-    fontWeight: '700',
+    fontFamily: 'Cairo_700Bold',
+    color: nativeTokens.colors.textInverse,
+    fontSize: 16,
   },
   cancelBtnText: {
-    color: nativeTokens.colors.mutedForeground,
+    fontFamily: 'Cairo_600SemiBold',
+    color: nativeTokens.colors.textSubtlest,
     fontSize: 15,
   },
 });

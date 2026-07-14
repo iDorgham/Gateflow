@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
-import { AdvancedTable, Button, cn, Badge } from '@gate-access/ui';
+import { AdvancedTable, Button, cn, Badge } from '@gateflow/ui';
 import { useDataTable } from '@/hooks/use-data-table';
 import { useUserPreferences } from '@/lib/residents/use-user-preferences';
 import { Building, Download, Trash2, Pencil, Maximize2 } from 'lucide-react';

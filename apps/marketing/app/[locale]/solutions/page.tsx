@@ -14,7 +14,7 @@ import {
   CheckCircle2,
   type LucideIcon,
 } from 'lucide-react';
-import { Button } from '@gate-access/ui';
+import { Button } from '@gateflow/ui';
 import { IntentLink } from '../../../components/intent-link';
 import { IntentLandingTracker } from '../../../components/intent-landing-tracker';
 
@@ -144,7 +144,8 @@ export default async function SolutionsPage(props: {
             </div>
 
             <div
-              className={`relative aspect-square overflow-hidden rounded-[2.5rem] border bg-ds-surface-sunken lg:aspect-video shadow-[0_30px_60px_rgba(0,0,0,0.15)] group ${i % 2 === 0 ? 'lg:order-2' : 'lg:order-1'}`}
+              className={`relative aspect-square overflow-hidden rounded-[2.5rem] border bg-ds-surface-sunken lg:aspect-video group ${i % 2 === 0 ? 'lg:order-2' : 'lg:order-1'}`}
+              style={{ boxShadow: 'var(--ds-shadow-overlay)' }}
             >
               <Image
                 src={v.imageSrc}

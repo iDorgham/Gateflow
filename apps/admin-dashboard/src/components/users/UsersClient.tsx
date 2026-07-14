@@ -10,8 +10,8 @@ import {
   Column,
   NativeSelect,
   Input,
-  PageHeader,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
+import { PageHeader } from '@gateflow/components';
 import {
   Users,
   Search,
@@ -62,7 +62,25 @@ interface UsersClientProps {
       role: string;
       status: string;
     };
-    addUser: any;
+    addUser: {
+      title: string;
+      subtitle: string;
+      description: string;
+      nameLabel: string;
+      namePlaceholder: string;
+      emailLabel: string;
+      emailPlaceholder: string;
+      accessControl: string;
+      assignRole: string;
+      orgLabel: string;
+      orgPlaceholder: string;
+      passwordNotice: string;
+      submitLabel: string;
+      cancelLabel: string;
+      success: string;
+      error: string;
+      requiredFields: string;
+    };
   };
 }
 
@@ -295,9 +313,9 @@ export function UsersClient({
                   {translations.emptySubtitle}
                 </p>
               </div>
-              <Button 
-                variant="subtle" 
-                size="sm" 
+              <Button
+                variant="subtle"
+                size="sm"
                 onClick={() => setIsAddSheetOpen(true)}
                 className="h-9 px-6 font-black uppercase tracking-widest text-[10px] border border-ds-border hover:bg-ds-background-neutral-subtle transition-all"
               >

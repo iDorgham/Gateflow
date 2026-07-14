@@ -12,8 +12,8 @@ export async function generateMetadata(props: {
   const { locale } = params;
   const { t } = await getTranslation(locale, 'solutions');
   return {
-    title: templatedMarketingTitle(t('compounds.hero.headline')),
-    description: t('compounds.description'),
+    title: templatedMarketingTitle(t('compounds.hero.headline') as string),
+    description: t('compounds.description') as string,
   };
 }
 
@@ -27,12 +27,12 @@ export default async function CompoundsPage(props: {
   return (
     <SolutionLayout
       locale={locale}
-      title={t('compounds.hero.headline')}
-      subtitle={t('compounds.subtitle')}
-      description={t('compounds.hero.sub')}
+      title={t('compounds.hero.headline') as string}
+      subtitle={t('compounds.subtitle') as string}
+      description={t('compounds.hero.sub') as string}
       icon={<Building2 />}
-      ctaText={t('cta')}
-      secondaryCtaText={t('compounds.seePricing')}
+      ctaText={t('cta') as string}
+      secondaryCtaText={t('compounds.seePricing') as string}
       painPoints={
         t('compounds.painPoints', { returnObjects: true }) as string[]
       }
@@ -41,22 +41,22 @@ export default async function CompoundsPage(props: {
       }
       benefits={[
         {
-          title: t('compounds.benefits.items.residents.title'),
-          desc: t('compounds.benefits.items.residents.description'),
+          title: t('compounds.benefits.items.residents.title') as string,
+          desc: t('compounds.benefits.items.residents.description') as string,
         },
         {
-          title: t('compounds.benefits.items.trades.title'),
-          desc: t('compounds.benefits.items.trades.description'),
+          title: t('compounds.benefits.items.trades.title') as string,
+          desc: t('compounds.benefits.items.trades.description') as string,
         },
         {
-          title: t('compounds.benefits.items.complaints.title'),
-          desc: t('compounds.benefits.items.complaints.description'),
+          title: t('compounds.benefits.items.complaints.title') as string,
+          desc: t('compounds.benefits.items.complaints.description') as string,
         },
       ]}
       quote={{
-        text: t('compounds.quote.text'),
-        author: t('compounds.quote.author'),
-        role: t('compounds.quote.role'),
+        text: t('compounds.quote.text') as string,
+        author: t('compounds.quote.author') as string,
+        role: t('compounds.quote.role') as string,
       }}
       intent="migration"
       surfacePrefix="solutions_compounds"

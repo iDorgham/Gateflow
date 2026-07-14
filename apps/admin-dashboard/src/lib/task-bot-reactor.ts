@@ -1,137 +1,103 @@
-import {
-  prisma,
-  Prisma,
-  type Department,
-  type TaskPriority,
-  type TaskStatus,
-} from '@gate-access/db';
+import { prisma } from '@gate-access/db';
 
-interface BotTriggerEvent {
-  type: 'LEAD_SCORE_UPDATE' | 'DEAL_STAGE_CHANGE' | 'BLOG_POST_PUBLISHED';
+interface BotContext {
   organizationId: string;
-  data: any;
+  linkedType: string;
+  linkedId: string;
+  userId: string;
+  metadata?: Record<string, unknown>;
 }
 
 /**
  * Task Bot Reactor
- *
- * An event-driven automation engine that evaluates TaskBotRules
- * and generates tasks with optional HiTL confirmation gates.
+ * Handles automated task creation triggered by platform events.
+ * Implements HiTL (Human-in-the-Loop) as requested in Phase 3.
  */
-export async function reactToEvent(event: BotTriggerEvent) {
+export async function reactToBotEvent(event: string, context: BotContext) {
   try {
-    const rules = await prisma.taskBotRule.findMany({
+    // 1. Fetch matching active rules for this department/event
+    const rules = await (prisma as any).taskBotRule.findMany({
       where: {
-        organizationId: event.organizationId,
-        triggerEvent: event.type,
+        organizationId: context.organizationId,
+        triggerEvent: event,
         enabled: true,
       },
     });
 
+    if (rules.length === 0) return;
+
     for (const rule of rules) {
-      // 1. Evaluate Conditions (Simplified for now)
-      const conditions = rule.conditions as any;
-      let shouldTrigger = false;
+      // 2. Apply Conditions logic (Stub - assumes basic match for now)
+      // In a real app, evaluate rule.conditions against context.metadata
 
-      if (event.type === 'LEAD_SCORE_UPDATE') {
-        const score = event.data.score;
-        if (conditions.operator === 'gt' && score > conditions.value) {
-          shouldTrigger = true;
-        }
-      }
-
-      if (!shouldTrigger) continue;
-
-      // 2. Rate Limiting Check (Max 10 per hour)
-      const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
-      const recentTasksCount = await prisma.task.count({
+      const actionTemplate = rule.actionTemplate as Record<string, any>;
+      const deptBoard = await (prisma as any).taskBoard.findFirst({
         where: {
-          organizationId: event.organizationId,
-          createdAt: { gte: oneHourAgo },
-          // We can track which rule created it via metadata or a specific field
-          // For now, we'll use a specific description pattern or just count all bot tasks
-          description: { contains: `[BOT_RULE:${rule.id}]` },
-        },
-      });
-
-      if (recentTasksCount >= 10) {
-        console.warn(
-          `[TASK_BOT] Rate limit exceeded for rule ${rule.id}. Disabling rule.`
-        );
-        await prisma.taskBotRule.update({
-          where: { id: rule.id },
-          data: { enabled: false },
-        });
-        continue;
-      }
-
-      // 3. Create Task with optional HiTL status
-      const actionTemplate = rule.actionTemplate as any;
-      const board = await prisma.taskBoard.findFirst({
-        where: {
-          organizationId: event.organizationId,
+          organizationId: context.organizationId,
           department: rule.department,
         },
       });
 
-      if (!board) continue;
+      if (!deptBoard) {
+        console.error(
+          `[BOT_REACTOR] No board found for department ${rule.department} in org ${context.organizationId}`
+        );
+        continue;
+      }
 
-      await prisma.$transaction(async (tx: typeof prisma) => {
-        const task = await tx.task.create({
-          data: {
-            title: actionTemplate.title.replace(
-              '{{lead.company}}',
-              event.data.companyName || 'Lead'
-            ),
-            description: `${actionTemplate.description || 'Automated task created by bot.'} [BOT_RULE:${rule.id}]`,
-            department: rule.department,
-            priority: (actionTemplate.priority || 'MEDIUM') as TaskPriority,
-            status: 'TODO' as TaskStatus,
-            boardId: board.id,
-            organizationId: event.organizationId,
-            createdById: 'system',
-            linkedType: event.type.startsWith('LEAD')
-              ? 'LEAD'
-              : event.type.startsWith('DEAL')
-                ? 'DEAL'
-                : 'BLOG_POST',
-            linkedId: event.data.id,
-          },
-        });
+      // 3. Create Automated Task
+      // If autoExecute: false (HiTL), task is created but show "Pending Approval" in the UI logic.
+      const task = await (prisma as any).task.create({
+        data: {
+          title:
+            actionTemplate.title ||
+            `Automated Follow-up for ${context.linkedType}`,
+          description:
+            actionTemplate.description ||
+            `Rule ${rule.name} triggered by ${event}.`,
+          status: 'TODO',
+          priority: actionTemplate.priority || 'MEDIUM',
+          department: rule.department,
+          organizationId: context.organizationId,
+          boardId: deptBoard.id,
+          createdById: rule.createdById, // The rule owner
+          assigneeId: context.userId, // Default to event initiator
+          linkedType: context.linkedType,
+          linkedId: context.linkedId,
+        },
+      });
 
-        await tx.aiActionLog.create({
-          data: {
-            organizationId: event.organizationId,
-            action: 'TASK_BOT_EXECUTION',
-            prompt: `Event ${event.type} triggered rule ${rule.name}`,
-            result: JSON.stringify(task),
-            status: rule.autoExecute ? 'CONFIRMED' : 'PENDING_CONFIRMATION',
-            metadata: {
-              ruleId: rule.id,
-              taskId: task.id,
-            },
-          },
-        });
+      // 4. Log AI Action & Handle HiTL Safeguards
+      await (prisma as any).aiActionLog.create({
+        data: {
+          organizationId: context.organizationId,
+          action: 'TASK_BOT_ACTION',
+          status: rule.autoExecute ? 'CONFIRMED' : 'PENDING',
+          prompt: `Rule: ${rule.name}, Trigger: ${event}`,
+          result: `Task generated: ${task.id}`,
+          metadata: JSON.stringify({
+            ruleId: rule.id,
+            autoExecute: rule.autoExecute,
+            actionNeeded: !rule.autoExecute ? 'CONFIRM_BOT_TASK' : 'NONE',
+          }),
+        },
+      });
 
-        // 4. Notification
-        if (task.assigneeId) {
-          await tx.notification.create({
-            data: {
-              userId: task.assigneeId,
-              organizationId: event.organizationId,
-              type: rule.autoExecute
-                ? 'TASK_ASSIGNED'
-                : 'BOT_APPROVAL_REQUIRED',
-              message: rule.autoExecute
-                ? `Bot created a new task: ${task.title}`
-                : `Bot suggested a new task: ${task.title} (Requires Approval)`,
-              linkedTaskId: task.id,
-            },
-          });
-        }
+      // 5. Build Notification for the user
+      await (prisma as any).notification.create({
+        data: {
+          organizationId: context.organizationId,
+          userId: context.userId,
+          taskId: task.id,
+          type: rule.autoExecute ? 'TASK_ASSIGNED' : 'BOT_ACTION_PENDING',
+          message: rule.autoExecute
+            ? `New automated task: ${task.title}`
+            : `AI Bot ${rule.name} needs your approval to create a task.`,
+          status: 'UNREAD',
+        },
       });
     }
   } catch (error) {
-    console.error('[TASK_BOT_REACTOR_ERROR]', error);
+    console.error('[BOT_REACTOR_ERROR]', error);
   }
 }

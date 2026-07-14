@@ -4,11 +4,7 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import {
-  Input,
-  Label,
-  MultiSelect,
-} from '@gate-access/ui';
+import { Input, Label, MultiSelect } from '@gateflow/ui';
 import { useTranslation } from 'react-i18next';
 
 const contactSchema = z.object({
@@ -59,10 +55,16 @@ export function ContactForm({
   const selectedUnits = watch('unitIds') || [];
 
   return (
-    <form id="contact-form" onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    <form
+      id="contact-form"
+      onSubmit={handleSubmit(onSubmit)}
+      className="space-y-6"
+    >
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="firstName">{t('crm.contacts.firstName', 'First Name')}</Label>
+          <Label htmlFor="firstName">
+            {t('crm.contacts.firstName', 'First Name')}
+          </Label>
           <Input
             id="firstName"
             {...register('firstName')}
@@ -70,11 +72,15 @@ export function ContactForm({
             className={errors.firstName ? 'border-destructive' : ''}
           />
           {errors.firstName && (
-            <p className="text-xs text-destructive">{errors.firstName.message}</p>
+            <p className="text-xs text-destructive">
+              {errors.firstName.message}
+            </p>
           )}
         </div>
         <div className="space-y-2">
-          <Label htmlFor="lastName">{t('crm.contacts.lastName', 'Last Name')}</Label>
+          <Label htmlFor="lastName">
+            {t('crm.contacts.lastName', 'Last Name')}
+          </Label>
           <Input
             id="lastName"
             {...register('lastName')}
@@ -82,13 +88,17 @@ export function ContactForm({
             className={errors.lastName ? 'border-destructive' : ''}
           />
           {errors.lastName && (
-            <p className="text-xs text-destructive">{errors.lastName.message}</p>
+            <p className="text-xs text-destructive">
+              {errors.lastName.message}
+            </p>
           )}
         </div>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="email">{t('crm.contacts.email', 'Email Address')}</Label>
+        <Label htmlFor="email">
+          {t('crm.contacts.email', 'Email Address')}
+        </Label>
         <Input
           id="email"
           type="email"
@@ -103,16 +113,14 @@ export function ContactForm({
 
       <div className="space-y-2">
         <Label htmlFor="phone">{t('crm.contacts.phone', 'Phone Number')}</Label>
-        <Input
-          id="phone"
-          {...register('phone')}
-          placeholder="+1 234 567 890"
-        />
+        <Input id="phone" {...register('phone')} placeholder="+1 234 567 890" />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="jobTitle">{t('crm.contacts.jobTitle', 'Job Title')}</Label>
+          <Label htmlFor="jobTitle">
+            {t('crm.contacts.jobTitle', 'Job Title')}
+          </Label>
           <Input
             id="jobTitle"
             {...register('jobTitle')}
@@ -120,7 +128,9 @@ export function ContactForm({
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="company">{t('crm.contacts.company', 'Company')}</Label>
+          <Label htmlFor="company">
+            {t('crm.contacts.company', 'Company')}
+          </Label>
           <Input
             id="company"
             {...register('company')}

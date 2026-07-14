@@ -10,7 +10,7 @@ import {
   TableRow,
   Badge,
   Input,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { useTranslation } from 'react-i18next';
 import type { UnitType } from '@gate-access/db/prisma';
 import { Search, MapPin, LayoutGrid } from 'lucide-react';

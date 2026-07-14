@@ -12,10 +12,17 @@ import {
   SelectTrigger,
   SelectValue,
   MultiSelect,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { EditPanel } from '@/components/dashboard/EditPanel';
 import { csrfFetch } from '@/lib/csrf';
-import { Pencil, UserPlus, Building2, DoorOpen, UsersRound, ShieldAlert } from 'lucide-react';
+import {
+  Pencil,
+  UserPlus,
+  Building2,
+  DoorOpen,
+  UsersRound,
+  ShieldAlert,
+} from 'lucide-react';
 import { toast } from 'sonner';
 
 const UNIT_TYPES = [
@@ -71,12 +78,13 @@ interface ProjectDetailActionsProps {
   canManageGates: boolean;
 }
 
-export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectDetailActionsProps>(function ProjectDetailActions({
-  project,
-  gates,
-  locale: _locale,
-  canManageGates,
-}, ref) {
+export const ProjectDetailActions = forwardRef<
+  ProjectDetailActionsRef,
+  ProjectDetailActionsProps
+>(function ProjectDetailActions(
+  { project, gates, locale: _locale, canManageGates },
+  ref
+) {
   const router = useRouter();
 
   const openGateEdit = useCallback((gate: Gate) => {
@@ -90,9 +98,13 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
     setPanelOpen(true);
   }, []);
 
-  useImperativeHandle(ref, () => ({
-    openGateEdit,
-  }), [openGateEdit]);
+  useImperativeHandle(
+    ref,
+    () => ({
+      openGateEdit,
+    }),
+    [openGateEdit]
+  );
   const [panelOpen, setPanelOpen] = useState(false);
   const [panelMode, setPanelMode] = useState<PanelMode>(null);
   const [isSaving, setIsSaving] = useState(false);
@@ -106,7 +118,7 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
     coverUrl: project.coverUrl ?? '',
     website: project.website ?? '',
     externalUrl: project.externalUrl ?? '',
-    galleryJson: project.galleryJson ?? [] as string[],
+    galleryJson: project.galleryJson ?? ([] as string[]),
     gateMode: project.gateMode ?? ('SINGLE' as const),
   });
 
@@ -134,19 +146,40 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
 
   // Form state: gate edit
   const [gateEditId, setGateEditId] = useState<string | null>(null);
-  const [gateEditForm, setGateEditForm] = useState({ name: '', location: '', isActive: true });
+  const [gateEditForm, setGateEditForm] = useState({
+    name: '',
+    location: '',
+    isActive: true,
+  });
 
   // Form state: gate assignments
-  const [users, setUsers] = useState<{ id: string; name: string; email: string }[]>([]);
-  const [assignments, setAssignments] = useState<
-    { id: string; userId: string; gateId: string; user: { id: string; name: string | null; email: string }; gate: { id: string; name: string } }[]
+  const [users, setUsers] = useState<
+    { id: string; name: string; email: string }[]
   >([]);
-  const [assignForm, setAssignForm] = useState({ userId: '', gateIds: [] as string[] });
+  const [assignments, setAssignments] = useState<
+    {
+      id: string;
+      userId: string;
+      gateId: string;
+      user: { id: string; name: string | null; email: string };
+      gate: { id: string; name: string };
+    }[]
+  >([]);
+  const [assignForm, setAssignForm] = useState({
+    userId: '',
+    gateIds: [] as string[],
+  });
   const [allOrgGates, setAllOrgGates] = useState<Gate[]>([]);
 
   // Form state: watchlist
   const [watchlistEntries, setWatchlistEntries] = useState<
-    { id: string; name: string; idNumber?: string | null; phone?: string | null; notes?: string | null }[]
+    {
+      id: string;
+      name: string;
+      idNumber?: string | null;
+      phone?: string | null;
+      notes?: string | null;
+    }[]
   >([]);
   const [watchlistForm, setWatchlistForm] = useState({
     name: '',
@@ -170,11 +203,17 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
         coverUrl: project.coverUrl ?? '',
         website: project.website ?? '',
         externalUrl: project.externalUrl ?? '',
-        galleryJson: project.galleryJson ?? [] as string[],
+        galleryJson: project.galleryJson ?? ([] as string[]),
         gateMode: project.gateMode ?? 'SINGLE',
       });
     } else if (mode === 'contact') {
-      setContactForm({ firstName: '', lastName: '', email: '', phone: '', company: '' });
+      setContactForm({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        company: '',
+      });
     } else if (mode === 'unit') {
       setUnitForm({ name: '', type: 'STUDIO' });
     } else if (mode === 'gate') {
@@ -185,7 +224,9 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
       setAssignForm({ userId: '', gateIds: [] });
       Promise.all([
         fetch('/api/users').then((r) => r.json()),
-        fetch(`/api/gates/assignments?project=${project.id}`).then((r) => r.json()),
+        fetch(`/api/gates/assignments?project=${project.id}`).then((r) =>
+          r.json()
+        ),
         fetch('/api/gates').then((r) => r.json()),
       ]).then(([uRes, aRes, gRes]) => {
         if (uRes.success && Array.isArray(uRes.data)) setUsers(uRes.data);
@@ -201,7 +242,8 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
         fetch('/api/watchlist')
           .then((r) => r.json())
           .then((res) => {
-            if (res.success && Array.isArray(res.data)) setWatchlistEntries(res.data);
+            if (res.success && Array.isArray(res.data))
+              setWatchlistEntries(res.data);
             setWatchlistLoaded(true);
           });
       }
@@ -209,8 +251,13 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
     setPanelOpen(true);
   };
 
-
-  const openWatchlistEdit = (entry: { id: string; name: string; idNumber?: string | null; phone?: string | null; notes?: string | null }) => {
+  const openWatchlistEdit = (entry: {
+    id: string;
+    name: string;
+    idNumber?: string | null;
+    phone?: string | null;
+    notes?: string | null;
+  }) => {
     setWatchlistEditId(entry.id);
     setWatchlistForm({
       name: entry.name,
@@ -235,7 +282,8 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
           coverUrl: projForm.coverUrl || null,
           website: projForm.website || null,
           externalUrl: projForm.externalUrl || null,
-          galleryJson: projForm.galleryJson.length > 0 ? projForm.galleryJson : null,
+          galleryJson:
+            projForm.galleryJson.length > 0 ? projForm.galleryJson : null,
           gateMode: projForm.gateMode,
         }),
       });
@@ -381,7 +429,8 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
       fetch(`/api/gates/assignments?project=${project.id}`)
         .then((r) => r.json())
         .then((aRes) => {
-          if (aRes.success && Array.isArray(aRes.data)) setAssignments(aRes.data);
+          if (aRes.success && Array.isArray(aRes.data))
+            setAssignments(aRes.data);
         });
       refresh();
     } catch (e) {
@@ -403,7 +452,9 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
         throw new Error(data.message || 'Failed to unassign');
       }
       toast.success('Unassigned');
-      const aRes = await fetch(`/api/gates/assignments?project=${project.id}`).then((r) => r.json());
+      const aRes = await fetch(
+        `/api/gates/assignments?project=${project.id}`
+      ).then((r) => r.json());
       if (aRes.success && Array.isArray(aRes.data)) setAssignments(aRes.data);
       refresh();
     } catch (e) {
@@ -444,7 +495,8 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
       setWatchlistForm({ name: '', idNumber: '', phone: '', notes: '' });
       setWatchlistEditId(null);
       const wRes = await fetch('/api/watchlist').then((r) => r.json());
-      if (wRes.success && Array.isArray(wRes.data)) setWatchlistEntries(wRes.data);
+      if (wRes.success && Array.isArray(wRes.data))
+        setWatchlistEntries(wRes.data);
       refresh();
     } catch (e) {
       toast.error((e as Error).message);
@@ -464,7 +516,9 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
             <div className="space-y-6">
               {/* Basics */}
               <section className="space-y-4 rounded-lg border border-border p-4">
-                <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-tight">Project Basics</h3>
+                <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-tight">
+                  Project Basics
+                </h3>
                 <div className="space-y-4">
                   <div>
                     <Label htmlFor="proj-name" className="text-foreground">
@@ -473,7 +527,9 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
                     <Input
                       id="proj-name"
                       value={projForm.name}
-                      onChange={(e) => setProjForm((p) => ({ ...p, name: e.target.value }))}
+                      onChange={(e) =>
+                        setProjForm((p) => ({ ...p, name: e.target.value }))
+                      }
                       className="mt-1 border-border bg-background text-foreground"
                     />
                   </div>
@@ -484,7 +540,12 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
                     <textarea
                       id="proj-desc"
                       value={projForm.description}
-                      onChange={(e) => setProjForm((p) => ({ ...p, description: e.target.value }))}
+                      onChange={(e) =>
+                        setProjForm((p) => ({
+                          ...p,
+                          description: e.target.value,
+                        }))
+                      }
                       className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-foreground text-sm"
                       rows={3}
                     />
@@ -496,7 +557,9 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
                     <Input
                       id="proj-location"
                       value={projForm.location}
-                      onChange={(e) => setProjForm((p) => ({ ...p, location: e.target.value }))}
+                      onChange={(e) =>
+                        setProjForm((p) => ({ ...p, location: e.target.value }))
+                      }
                       className="mt-1 border-border bg-background text-foreground"
                     />
                   </div>
@@ -505,7 +568,9 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
 
               {/* Branding & Media */}
               <section className="space-y-4 rounded-lg border border-border p-4">
-                <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-tight">Branding & Media</h3>
+                <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-tight">
+                  Branding & Media
+                </h3>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="proj-logo" className="text-foreground">
@@ -515,7 +580,9 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
                       id="proj-logo"
                       type="url"
                       value={projForm.logoUrl}
-                      onChange={(e) => setProjForm((p) => ({ ...p, logoUrl: e.target.value }))}
+                      onChange={(e) =>
+                        setProjForm((p) => ({ ...p, logoUrl: e.target.value }))
+                      }
                       className="mt-1 border-border bg-background text-foreground h-9"
                     />
                   </div>
@@ -527,7 +594,9 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
                       id="proj-cover"
                       type="url"
                       value={projForm.coverUrl}
-                      onChange={(e) => setProjForm((p) => ({ ...p, coverUrl: e.target.value }))}
+                      onChange={(e) =>
+                        setProjForm((p) => ({ ...p, coverUrl: e.target.value }))
+                      }
                       className="mt-1 border-border bg-background text-foreground h-9"
                     />
                   </div>
@@ -540,7 +609,9 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
                     id="proj-website"
                     type="url"
                     value={projForm.website}
-                    onChange={(e) => setProjForm((p) => ({ ...p, website: e.target.value }))}
+                    onChange={(e) =>
+                      setProjForm((p) => ({ ...p, website: e.target.value }))
+                    }
                     className="mt-1 border-border bg-background text-foreground"
                   />
                 </div>
@@ -552,7 +623,12 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
                     id="proj-external"
                     type="url"
                     value={projForm.externalUrl}
-                    onChange={(e) => setProjForm((p) => ({ ...p, externalUrl: e.target.value }))}
+                    onChange={(e) =>
+                      setProjForm((p) => ({
+                        ...p,
+                        externalUrl: e.target.value,
+                      }))
+                    }
                     className="mt-1 border-border bg-background text-foreground"
                     placeholder="e.g. Booking page or Info portal"
                   />
@@ -591,7 +667,10 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
                             e.preventDefault();
                             const val = e.currentTarget.value;
                             if (val && !projForm.galleryJson.includes(val)) {
-                              setProjForm((p) => ({ ...p, galleryJson: [...projForm.galleryJson, val] }));
+                              setProjForm((p) => ({
+                                ...p,
+                                galleryJson: [...projForm.galleryJson, val],
+                              }));
                               e.currentTarget.value = '';
                             }
                           }
@@ -602,9 +681,20 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
                         size="sm"
                         className="h-9"
                         onClick={() => {
-                          const input = document.getElementById('new-gallery-url') as HTMLInputElement;
-                          if (input.value && !projForm.galleryJson.includes(input.value)) {
-                            setProjForm((p) => ({ ...p, galleryJson: [...projForm.galleryJson, input.value] }));
+                          const input = document.getElementById(
+                            'new-gallery-url'
+                          ) as HTMLInputElement;
+                          if (
+                            input.value &&
+                            !projForm.galleryJson.includes(input.value)
+                          ) {
+                            setProjForm((p) => ({
+                              ...p,
+                              galleryJson: [
+                                ...projForm.galleryJson,
+                                input.value,
+                              ],
+                            }));
                             input.value = '';
                           }
                         }}
@@ -618,23 +708,40 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
 
               {/* System Settings */}
               <section className="space-y-4 rounded-lg border border-border p-4">
-                <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-tight">System Settings</h3>
+                <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-tight">
+                  System Settings
+                </h3>
                 <div>
-                  <Label htmlFor="gate-mode" className="text-foreground">Gate Topology</Label>
+                  <Label htmlFor="gate-mode" className="text-foreground">
+                    Gate Topology
+                  </Label>
                   <Select
                     value={projForm.gateMode}
-                    onValueChange={(v) => setProjForm((p) => ({ ...p, gateMode: v as 'SINGLE' | 'MULTI' }))}
+                    onValueChange={(v) =>
+                      setProjForm((p) => ({
+                        ...p,
+                        gateMode: v as 'SINGLE' | 'MULTI',
+                      }))
+                    }
                   >
-                    <SelectTrigger id="gate-mode" className="mt-1 border-border bg-background text-foreground">
+                    <SelectTrigger
+                      id="gate-mode"
+                      className="mt-1 border-border bg-background text-foreground"
+                    >
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="SINGLE">Single Gate (Default)</SelectItem>
-                      <SelectItem value="MULTI">Multi-Gate Hierarchy</SelectItem>
+                      <SelectItem value="SINGLE">
+                        Single Gate (Default)
+                      </SelectItem>
+                      <SelectItem value="MULTI">
+                        Multi-Gate Hierarchy
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                   <p className="mt-2 text-[11px] text-muted-foreground leading-tight">
-                    Single Gate ignores sub-gate names in most views. Multi-Gate allows distinct names and assignments for multiple entries.
+                    Single Gate ignores sub-gate names in most views. Multi-Gate
+                    allows distinct names and assignments for multiple entries.
                   </p>
                 </div>
               </section>
@@ -642,11 +749,15 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
               {/* Data Import */}
               <section className="space-y-4 rounded-lg border border-border p-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-tight">Bulk Data Import</h3>
+                  <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-tight">
+                    Bulk Data Import
+                  </h3>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div className="space-y-2">
-                    <Label className="text-xs text-muted-foreground">Units CSV</Label>
+                    <Label className="text-xs text-muted-foreground">
+                      Units CSV
+                    </Label>
                     <div className="relative">
                       <Input
                         type="file"
@@ -655,14 +766,21 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
                         onChange={async (e) => {
                           const file = e.target.files?.[0];
                           if (!file) return;
-                          toast.loading('Importing units...', { id: 'import-units' });
+                          toast.loading('Importing units...', {
+                            id: 'import-units',
+                          });
                           const reader = new FileReader();
                           reader.onload = async (ev) => {
                             const text = ev.target?.result as string;
-                            const lines = text.split('\n').slice(1).filter(Boolean);
+                            const lines = text
+                              .split('\n')
+                              .slice(1)
+                              .filter(Boolean);
                             let imported = 0;
                             for (const line of lines) {
-                              const cols = line.split(',').map((c) => c.replace(/^"|"$/g, '').trim());
+                              const cols = line
+                                .split(',')
+                                .map((c) => c.replace(/^"|"$/g, '').trim());
                               const [name, type, qrQuota] = cols;
                               if (!name || !type) continue;
                               try {
@@ -678,7 +796,10 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
                                 if (res.ok) imported++;
                               } catch {}
                             }
-                            toast.success(`Imported ${imported} units to ${project.name}`, { id: 'import-units' });
+                            toast.success(
+                              `Imported ${imported} units to ${project.name}`,
+                              { id: 'import-units' }
+                            );
                             e.target.value = '';
                           };
                           reader.readAsText(file);
@@ -687,7 +808,9 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
                     </div>
                   </div>
                   <div className="space-y-2">
-                    <Label className="text-xs text-muted-foreground">Contacts CSV</Label>
+                    <Label className="text-xs text-muted-foreground">
+                      Contacts CSV
+                    </Label>
                     <div className="relative">
                       <Input
                         type="file"
@@ -696,14 +819,21 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
                         onChange={async (e) => {
                           const file = e.target.files?.[0];
                           if (!file) return;
-                          toast.loading('Importing contacts...', { id: 'import-contacts' });
+                          toast.loading('Importing contacts...', {
+                            id: 'import-contacts',
+                          });
                           const reader = new FileReader();
                           reader.onload = async (ev) => {
                             const text = ev.target?.result as string;
-                            const lines = text.split('\n').slice(1).filter(Boolean);
+                            const lines = text
+                              .split('\n')
+                              .slice(1)
+                              .filter(Boolean);
                             let imported = 0;
                             for (const line of lines) {
-                              const cols = line.split(',').map((c) => c.replace(/^"|"$/g, '').trim());
+                              const cols = line
+                                .split(',')
+                                .map((c) => c.replace(/^"|"$/g, '').trim());
                               if (cols.length < 2) continue;
                               try {
                                 const res = await csrfFetch('/api/contacts', {
@@ -718,7 +848,9 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
                                 if (res.ok) imported++;
                               } catch {}
                             }
-                            toast.success(`Imported ${imported} contacts`, { id: 'import-contacts' });
+                            toast.success(`Imported ${imported} contacts`, {
+                              id: 'import-contacts',
+                            });
                             e.target.value = '';
                           };
                           reader.readAsText(file);
@@ -728,7 +860,8 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
                   </div>
                 </div>
                 <p className="text-[10px] text-muted-foreground italic">
-                  Note: CSV format should be Name,Type,Quota for Units; and FirstName,LastName,Email,Phone for Contacts.
+                  Note: CSV format should be Name,Type,Quota for Units; and
+                  FirstName,LastName,Email,Phone for Contacts.
                 </p>
               </section>
             </div>
@@ -748,7 +881,12 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
                   <Input
                     id="cont-first"
                     value={contactForm.firstName}
-                    onChange={(e) => setContactForm((c) => ({ ...c, firstName: e.target.value }))}
+                    onChange={(e) =>
+                      setContactForm((c) => ({
+                        ...c,
+                        firstName: e.target.value,
+                      }))
+                    }
                     className="mt-1 border-border bg-background text-foreground"
                   />
                 </div>
@@ -759,7 +897,12 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
                   <Input
                     id="cont-last"
                     value={contactForm.lastName}
-                    onChange={(e) => setContactForm((c) => ({ ...c, lastName: e.target.value }))}
+                    onChange={(e) =>
+                      setContactForm((c) => ({
+                        ...c,
+                        lastName: e.target.value,
+                      }))
+                    }
                     className="mt-1 border-border bg-background text-foreground"
                   />
                 </div>
@@ -772,7 +915,9 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
                   id="cont-email"
                   type="email"
                   value={contactForm.email}
-                  onChange={(e) => setContactForm((c) => ({ ...c, email: e.target.value }))}
+                  onChange={(e) =>
+                    setContactForm((c) => ({ ...c, email: e.target.value }))
+                  }
                   className="mt-1 border-border bg-background text-foreground"
                 />
               </div>
@@ -783,7 +928,9 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
                 <Input
                   id="cont-phone"
                   value={contactForm.phone}
-                  onChange={(e) => setContactForm((c) => ({ ...c, phone: e.target.value }))}
+                  onChange={(e) =>
+                    setContactForm((c) => ({ ...c, phone: e.target.value }))
+                  }
                   className="mt-1 border-border bg-background text-foreground"
                 />
               </div>
@@ -794,7 +941,9 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
                 <Input
                   id="cont-company"
                   value={contactForm.company}
-                  onChange={(e) => setContactForm((c) => ({ ...c, company: e.target.value }))}
+                  onChange={(e) =>
+                    setContactForm((c) => ({ ...c, company: e.target.value }))
+                  }
                   className="mt-1 border-border bg-background text-foreground"
                 />
               </div>
@@ -814,7 +963,9 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
                 <Input
                   id="unit-name"
                   value={unitForm.name}
-                  onChange={(e) => setUnitForm((u) => ({ ...u, name: e.target.value }))}
+                  onChange={(e) =>
+                    setUnitForm((u) => ({ ...u, name: e.target.value }))
+                  }
                   className="mt-1 border-border bg-background text-foreground"
                 />
               </div>
@@ -824,9 +975,17 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
                 </Label>
                 <Select
                   value={unitForm.type}
-                  onValueChange={(v) => setUnitForm((u) => ({ ...u, type: v as (typeof UNIT_TYPES)[number] }))}
+                  onValueChange={(v) =>
+                    setUnitForm((u) => ({
+                      ...u,
+                      type: v as (typeof UNIT_TYPES)[number],
+                    }))
+                  }
                 >
-                  <SelectTrigger id="unit-type" className="mt-1 border-border bg-background text-foreground">
+                  <SelectTrigger
+                    id="unit-type"
+                    className="mt-1 border-border bg-background text-foreground"
+                  >
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -854,7 +1013,9 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
                 <Input
                   id="gate-name"
                   value={gateForm.name}
-                  onChange={(e) => setGateForm((g) => ({ ...g, name: e.target.value }))}
+                  onChange={(e) =>
+                    setGateForm((g) => ({ ...g, name: e.target.value }))
+                  }
                   className="mt-1 border-border bg-background text-foreground"
                 />
               </div>
@@ -865,7 +1026,9 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
                 <Input
                   id="gate-location"
                   value={gateForm.location}
-                  onChange={(e) => setGateForm((g) => ({ ...g, location: e.target.value }))}
+                  onChange={(e) =>
+                    setGateForm((g) => ({ ...g, location: e.target.value }))
+                  }
                   className="mt-1 border-border bg-background text-foreground"
                 />
               </div>
@@ -874,7 +1037,9 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
                   type="checkbox"
                   id="gate-active"
                   checked={gateForm.isActive}
-                  onChange={(e) => setGateForm((g) => ({ ...g, isActive: e.target.checked }))}
+                  onChange={(e) =>
+                    setGateForm((g) => ({ ...g, isActive: e.target.checked }))
+                  }
                   className="rounded border-border"
                 />
                 <Label htmlFor="gate-active" className="text-foreground">
@@ -897,7 +1062,9 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
                 <Input
                   id="gate-edit-name"
                   value={gateEditForm.name}
-                  onChange={(e) => setGateEditForm((g) => ({ ...g, name: e.target.value }))}
+                  onChange={(e) =>
+                    setGateEditForm((g) => ({ ...g, name: e.target.value }))
+                  }
                   className="mt-1 border-border bg-background text-foreground"
                 />
               </div>
@@ -908,7 +1075,9 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
                 <Input
                   id="gate-edit-location"
                   value={gateEditForm.location}
-                  onChange={(e) => setGateEditForm((g) => ({ ...g, location: e.target.value }))}
+                  onChange={(e) =>
+                    setGateEditForm((g) => ({ ...g, location: e.target.value }))
+                  }
                   className="mt-1 border-border bg-background text-foreground"
                 />
               </div>
@@ -917,7 +1086,12 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
                   type="checkbox"
                   id="gate-edit-active"
                   checked={gateEditForm.isActive}
-                  onChange={(e) => setGateEditForm((g) => ({ ...g, isActive: e.target.checked }))}
+                  onChange={(e) =>
+                    setGateEditForm((g) => ({
+                      ...g,
+                      isActive: e.target.checked,
+                    }))
+                  }
                   className="rounded border-border"
                 />
                 <Label htmlFor="gate-edit-active" className="text-foreground">
@@ -936,7 +1110,12 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
               <div>
                 <Label className="text-foreground">Assign user to gates</Label>
                 <div className="mt-2 flex gap-2">
-                  <Select value={assignForm.userId} onValueChange={(v) => setAssignForm((a) => ({ ...a, userId: v }))}>
+                  <Select
+                    value={assignForm.userId}
+                    onValueChange={(v) =>
+                      setAssignForm((a) => ({ ...a, userId: v }))
+                    }
+                  >
                     <SelectTrigger className="flex-1 border-border bg-background text-foreground">
                       <SelectValue placeholder="Select user" />
                     </SelectTrigger>
@@ -949,9 +1128,13 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
                     </SelectContent>
                   </Select>
                   <MultiSelect
-                    options={(allOrgGates.length ? allOrgGates : gates).map((g) => ({ label: g.name, value: g.id }))}
+                    options={(allOrgGates.length ? allOrgGates : gates).map(
+                      (g) => ({ label: g.name, value: g.id })
+                    )}
                     selected={assignForm.gateIds}
-                    onChange={(ids) => setAssignForm((a) => ({ ...a, gateIds: ids }))}
+                    onChange={(ids) =>
+                      setAssignForm((a) => ({ ...a, gateIds: ids }))
+                    }
                     placeholder="Select gates"
                   />
                 </div>
@@ -987,33 +1170,38 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
       case 'watchlist':
       case 'watchlist-edit':
         return {
-          title: watchlistEditId ? 'Edit watchlist entry' : 'Add watchlist entry',
+          title: watchlistEditId
+            ? 'Edit watchlist entry'
+            : 'Add watchlist entry',
           onSave: handleSaveWatchlist,
           children: (
             <div className="space-y-4">
-              {panelMode === 'watchlist-edit' && watchlistEntries.length > 0 && (
-                <div>
-                  <Label className="text-foreground">Or select another entry to edit</Label>
-                  <Select
-                    value={watchlistEditId ?? ''}
-                    onValueChange={(v) => {
-                      const entry = watchlistEntries.find((e) => e.id === v);
-                      if (entry) openWatchlistEdit(entry);
-                    }}
-                  >
-                    <SelectTrigger className="mt-1 border-border bg-background text-foreground">
-                      <SelectValue placeholder="Select entry" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {watchlistEntries.map((e) => (
-                        <SelectItem key={e.id} value={e.id}>
-                          {e.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              )}
+              {panelMode === 'watchlist-edit' &&
+                watchlistEntries.length > 0 && (
+                  <div>
+                    <Label className="text-foreground">
+                      Or select another entry to edit
+                    </Label>
+                    <Select
+                      value={watchlistEditId ?? ''}
+                      onValueChange={(v) => {
+                        const entry = watchlistEntries.find((e) => e.id === v);
+                        if (entry) openWatchlistEdit(entry);
+                      }}
+                    >
+                      <SelectTrigger className="mt-1 border-border bg-background text-foreground">
+                        <SelectValue placeholder="Select entry" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {watchlistEntries.map((e) => (
+                          <SelectItem key={e.id} value={e.id}>
+                            {e.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
               <div>
                 <Label htmlFor="wl-name" className="text-foreground">
                   Name
@@ -1021,7 +1209,9 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
                 <Input
                   id="wl-name"
                   value={watchlistForm.name}
-                  onChange={(e) => setWatchlistForm((w) => ({ ...w, name: e.target.value }))}
+                  onChange={(e) =>
+                    setWatchlistForm((w) => ({ ...w, name: e.target.value }))
+                  }
                   className="mt-1 border-border bg-background text-foreground"
                 />
               </div>
@@ -1032,7 +1222,12 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
                 <Input
                   id="wl-id"
                   value={watchlistForm.idNumber}
-                  onChange={(e) => setWatchlistForm((w) => ({ ...w, idNumber: e.target.value }))}
+                  onChange={(e) =>
+                    setWatchlistForm((w) => ({
+                      ...w,
+                      idNumber: e.target.value,
+                    }))
+                  }
                   className="mt-1 border-border bg-background text-foreground"
                 />
               </div>
@@ -1043,7 +1238,9 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
                 <Input
                   id="wl-phone"
                   value={watchlistForm.phone}
-                  onChange={(e) => setWatchlistForm((w) => ({ ...w, phone: e.target.value }))}
+                  onChange={(e) =>
+                    setWatchlistForm((w) => ({ ...w, phone: e.target.value }))
+                  }
                   className="mt-1 border-border bg-background text-foreground"
                 />
               </div>
@@ -1054,7 +1251,9 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
                 <textarea
                   id="wl-notes"
                   value={watchlistForm.notes}
-                  onChange={(e) => setWatchlistForm((w) => ({ ...w, notes: e.target.value }))}
+                  onChange={(e) =>
+                    setWatchlistForm((w) => ({ ...w, notes: e.target.value }))
+                  }
                   className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-2 text-foreground"
                   rows={2}
                 />
@@ -1144,7 +1343,6 @@ export const ProjectDetailActions = forwardRef<ProjectDetailActionsRef, ProjectD
           {config.children}
         </EditPanel>
       )}
-
     </>
   );
 });

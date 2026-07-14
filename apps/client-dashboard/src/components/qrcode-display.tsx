@@ -1,7 +1,15 @@
-import * as React from "react";
-import { Download, Copy, Share2 } from "lucide-react";
+import * as React from 'react';
+import { Download, Copy, Share2 } from 'lucide-react';
 
-import { Card, CardContent, CardFooter, CardHeader, CardTitle, Button, cn } from "@gate-access/ui";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  Button,
+  cn,
+} from '@gateflow/ui';
 
 export interface QRCodeDisplayProps extends React.HTMLAttributes<HTMLDivElement> {
   qrValue: string;
@@ -23,7 +31,7 @@ export function QRCodeDisplay({
   ...props
 }: QRCodeDisplayProps) {
   return (
-    <Card className={cn("max-w-sm overflow-hidden", className)} {...props}>
+    <Card className={cn('max-w-sm overflow-hidden', className)} {...props}>
       <CardHeader className="text-center bg-muted/50 pb-4">
         <CardTitle className="text-lg">Visitor Pass</CardTitle>
         <p className="text-sm text-muted-foreground">{visitorName}</p>
@@ -46,7 +54,12 @@ export function QRCodeDisplay({
         </div>
       </CardContent>
       <CardFooter className="flex justify-between gap-2 bg-muted/20 border-t p-4">
-        <Button variant="outline" size="sm" className="w-full" onClick={onDownload}>
+        <Button
+          variant="outline"
+          size="sm"
+          className="w-full"
+          onClick={onDownload}
+        >
           <Download className="w-4 h-4 mr-2" />
           Save
         </Button>
@@ -54,7 +67,12 @@ export function QRCodeDisplay({
           <Copy className="w-4 h-4 mr-2" />
           Copy
         </Button>
-        <Button variant="default" size="sm" className="w-full" onClick={onShare}>
+        <Button
+          variant="default"
+          size="sm"
+          className="w-full"
+          onClick={onShare}
+        >
           <Share2 className="w-4 h-4 mr-2" />
           Share
         </Button>

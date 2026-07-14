@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
-import { AdvancedTable, Button, Badge, cn } from '@gate-access/ui';
+import { AdvancedTable, Button, Badge, cn } from '@gateflow/ui';
 import { useDataTable } from '@/hooks/use-data-table';
 import { useUserPreferences } from '@/lib/residents/use-user-preferences';
 import {

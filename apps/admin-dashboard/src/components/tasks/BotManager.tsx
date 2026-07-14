@@ -18,7 +18,7 @@ import {
   TableHeader,
   TableRow,
   cn,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import {
   Bot,
   Play,

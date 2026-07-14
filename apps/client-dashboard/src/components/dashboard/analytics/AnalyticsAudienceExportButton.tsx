@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@gate-access/ui';
+import { Button } from '@gateflow/ui';
 import { Download } from 'lucide-react';
 import type { AnalyticsFilters } from '@/lib/analytics/analytics-filters';
 
@@ -21,8 +21,11 @@ function buildExportUrl(filters: AnalyticsFilters): string {
   if (filters.gateId) sp.set('gateId', filters.gateId);
   if (filters.unitType) sp.set('unitType', filters.unitType);
   if (filters.search) sp.set('search', filters.search);
-  
-  const base = filters.mode === 'marketing' ? '/api/analytics/export/marketing' : '/api/analytics/export';
+
+  const base =
+    filters.mode === 'marketing'
+      ? '/api/analytics/export/marketing'
+      : '/api/analytics/export';
   return `${base}?${sp.toString()}`;
 }
 

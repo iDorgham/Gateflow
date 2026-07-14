@@ -12,7 +12,7 @@ export async function generateMetadata(props: {
   const { locale } = params;
   const { t } = await getTranslation(locale, 'legal');
   return {
-    title: absoluteMarketingTitle(t('security.title')),
+    title: absoluteMarketingTitle(t('security.title') as string),
   };
 }
 
@@ -25,7 +25,7 @@ export default async function SecurityPage(props: {
 
   return (
     <LegalLayout
-      title={t('security.title')}
+      title={t('security.title') as string}
       lastUpdated={`${t('layout.lastUpdated')} ${t('security.lastUpdatedValue')}`}
     >
       <section className="mb-12">

@@ -45,6 +45,13 @@ After a task or phase was executed **using a CLI** (Claude CLI, Gemini CLI, Open
 | 2026-04-02 | Cursor       | Marketing useRef + eslint-config-next 15 + push master         | success | `pnpm`/git only; pre-push preflight passed; Dependabot `ai-6.0.138` already contained merged master on remote.          |
 | 2026-04-02 | Cursor       | Commit `fix/admin-access-key-hardening` (admin key, turbo, CI) | success | `pnpm docs:changelog:check`; `turbo typecheck lint --filter=admin-dashboard`.                                           |
 | 2026-04-02 | Vercel CLI   | Redeploy admin-dashboard render-boundary fix                   | partial | `vercel redeploy` completed; local `/en/admins` verified 200. Remote smoke check requires Vercel protection bypass/SSO. |
+| 2026-04-29 | Antigravity  | Phase 1 token_system_v2                                        | success | Fixed dark mode wiring across tailwind configs and tokens.css.                                                          |
+| 2026-04-29 | Antigravity  | Phase 2 token_system_v2                                        | success | Redesigned palette to Kimchi brand and warm neutrals in tokens.css.                                                     |
+| 2026-04-29 | Antigravity  | Phase 3 token_system_v2                                        | success | Unified token architecture by removing dual definitions in globals.css and tokens.ts.                                   |
+| 2026-04-29 | Antigravity  | Phase 4 token_system_v2                                        | success | Completed app integration: updated design-system color page, scrubbed hardcoded hex in layouts, and verified dark mode. |
+| 2026-04-29 | Antigravity  | fix_hex_violations                                             | success | Replaced hardcoded #09090b with semantic bg-zinc-950 in design-system docs to meet 100% skill compliance.               |
+| 2026-04-29 | Antigravity  | Phase 1 admin_dashboard_evolution                              | success | Reorganized admin sidebar, established org nested routing, and added skeleton layouts for CMS, CRM, and Analytics.      |
+| 2026-04-29 | Antigravity  | Phase 2 admin_dashboard_evolution                              | success | Implemented CMS nested navigation and comprehensive settings, pages, landing pages, blog, and menu views.               |
 
 - **Refactor Team Audit (ADS Tokens):**
   - **`qrcodes/page.tsx`**: Replaced 10+ raw hex violations with ADS tokens. Removed manual `dark:` background/border classes, relying on global token definitions.
@@ -70,3 +77,6 @@ When reviewing this log (e.g. weekly or before planning):
 - Which CLI is used most for which task type? Prefer that in the task-to-tool matrix or GUIDE_PREFERENCES.
 - Are paid CLIs (Claude, Gemini) often near limit? Prefer suggesting free-tier (Kiro, Kilo, Qwen) earlier in the day or for non-critical tasks.
 - Any repeated partial/fail outcomes for a given CLI+task? Consider a different primary tool for that task in `docs/guides/TOOL_AND_CLI_REFERENCE.md`.
+- **Date**: 2026-04-29
+- **Command**: `/dev admin_dashboard_evolution 3`
+- **Result**: Successfully implemented the Front Builder Core for the Admin Dashboard evolution. Scaffolded 9 CMS blocks, `BLOCK_REGISTRY`, `Canvas` with framer-motion `Reorder`, `StylePanel` with ADS token presets, and full `PageEditorPage` integration. Type checking and linting passed without errors.

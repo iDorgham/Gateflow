@@ -7,14 +7,8 @@ import {
   TabsTrigger,
   TabsContent,
   Button,
-} from '@gate-access/ui';
-import {
-  Sparkles,
-  ScrollText,
-  MessageSquare,
-  X,
-  ChevronRight,
-} from 'lucide-react';
+} from '@gateflow/ui';
+import { Sparkles, ScrollText, MessageSquare, X } from 'lucide-react';
 import type { Locale } from '@/lib/i18n/i18n-config';
 import { AdminAIAssistant } from './admin-ai-assistant';
 
@@ -43,9 +37,7 @@ export function AdminSidePanel({
       <div className={cn('flex h-full flex-col', !isOpen && 'hidden')}>
         <Tabs defaultValue="ai" className="flex h-full flex-col">
           {/* Tab bar */}
-          <div
-            className="flex h-16 shrink-0 items-center justify-between border-b border-border px-3 py-2 bg-card"
-          >
+          <div className="flex h-16 shrink-0 items-center justify-between border-b border-border px-3 py-2 bg-card">
             <TabsList className="bg-muted/50 h-11 p-1 gap-1 rounded-xl w-full">
               <TabsTrigger
                 value="ai"

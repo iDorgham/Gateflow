@@ -70,12 +70,11 @@ export async function acceptInvitation(
     // Check if user already exists
     let user = await prisma.user.findUnique({
       where: { email: invitation.email },
+      include: { organization: true },
     });
 
     if (user) {
-      // If user exists, just update their role and org (assuming they are new or switching?)
-      // PRD multi-tenancy rules: one user per org for now? Or join another?
-      // In GateFlow, user belongs to one org at a time.
+      // If user exists, just update their role and org
       await prisma.user.update({
         where: { id: user.id },
         data: {
@@ -95,6 +94,7 @@ export async function acceptInvitation(
           organizationId: invitation.organizationId,
           roleId: invitation.roleId,
         },
+        include: { organization: true },
       });
     }
 
@@ -120,7 +120,7 @@ export async function acceptInvitation(
       user.id,
       user.email,
       user.organizationId,
-      user.organizationType,
+      invitation.organization.type,
       {
         id: invitation.roleId,
         name: invitation.role.name,

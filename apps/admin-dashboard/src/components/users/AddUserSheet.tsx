@@ -9,7 +9,7 @@ import {
   Input,
   NativeSelect,
   ScrollArea,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import {
   Loader2,
   X,

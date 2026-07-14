@@ -9,7 +9,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import { nativeTokens } from '@gate-access/ui/tokens';
+import { nativeTokensNewEra as nativeTokens } from '../../../../packages/ui/src/tokens';
 import {
   getHistory,
   type HistoryEntry,
@@ -27,26 +27,26 @@ const OUTCOME_CONFIG: Record<
 > = {
   pass: {
     label: 'Pass',
-    bg: 'rgba(22,163,74,0.18)',
+    bg: nativeTokens.colors.successSubtle,
     text: nativeTokens.colors.success,
     icon: '✓',
   },
   deny: {
     label: 'Deny',
-    bg: 'rgba(220,38,38,0.18)',
-    text: nativeTokens.colors.destructive,
+    bg: nativeTokens.colors.dangerSubtle,
+    text: nativeTokens.colors.danger,
     icon: '✗',
   },
   offline: {
     label: 'Offline',
-    bg: 'rgba(245,158,11,0.18)',
+    bg: nativeTokens.colors.warningSubtle,
     text: nativeTokens.colors.warning,
     icon: '⚡',
   },
   rejected: {
     label: 'Rejected',
-    bg: 'rgba(100,116,139,0.22)',
-    text: nativeTokens.colors.mutedForeground,
+    bg: nativeTokens.colors.surfaceRaised,
+    text: nativeTokens.colors.textSubtlest,
     icon: '✗',
   },
 };
@@ -223,7 +223,7 @@ export function LogTab() {
 const s = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: nativeTokens.colors.neutral800,
+    backgroundColor: nativeTokens.colors.background,
     paddingTop: TOP_OFFSET,
   },
   header: {
@@ -233,17 +233,17 @@ const s = StyleSheet.create({
     paddingHorizontal: 24,
     paddingBottom: 16,
     borderBottomWidth: 1,
-    borderColor: nativeTokens.colors.neutral700,
+    borderColor: nativeTokens.colors.border,
   },
   title: {
+    fontFamily: 'Cairo_700Bold',
     fontSize: 24,
-    fontWeight: '700',
-    color: nativeTokens.colors.primaryForeground,
+    color: nativeTokens.colors.textHeading,
   },
   count: {
+    fontFamily: 'Cairo_600SemiBold',
     fontSize: 13,
-    color: nativeTokens.colors.mutedForeground,
-    fontWeight: '500',
+    color: nativeTokens.colors.textSubtle,
   },
   center: {
     flex: 1,
@@ -256,14 +256,15 @@ const s = StyleSheet.create({
     fontSize: 48,
   },
   emptyTitle: {
+    fontFamily: 'Cairo_700Bold',
     fontSize: 18,
-    fontWeight: '600',
-    color: nativeTokens.colors.neutral30,
+    color: nativeTokens.colors.textHeading,
     textAlign: 'center',
   },
   emptySub: {
+    fontFamily: 'Cairo_400Regular',
     fontSize: 14,
-    color: nativeTokens.colors.mutedForeground,
+    color: nativeTokens.colors.textSubtle,
     textAlign: 'center',
     lineHeight: 20,
     maxWidth: 260,
@@ -274,15 +275,15 @@ const s = StyleSheet.create({
 
   // Day header
   dayHeader: {
-    paddingHorizontal: 20,
-    paddingTop: 20,
+    paddingHorizontal: 24,
+    paddingTop: 24,
     paddingBottom: 8,
   },
   dayLabel: {
+    fontFamily: 'Cairo_700Bold',
     fontSize: 12,
-    fontWeight: '700',
-    color: nativeTokens.colors.mutedForeground,
-    letterSpacing: 0.5,
+    color: nativeTokens.colors.textSubtlest,
+    letterSpacing: 1,
     textTransform: 'uppercase',
   },
 
@@ -290,11 +291,11 @@ const s = StyleSheet.create({
   item: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    gap: 12,
+    paddingHorizontal: 24,
+    paddingVertical: 14,
+    gap: 14,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderColor: nativeTokens.colors.neutral700,
+    borderColor: nativeTokens.colors.border,
   },
   badge: {
     flexDirection: 'row',
@@ -307,35 +308,39 @@ const s = StyleSheet.create({
     justifyContent: 'center',
   },
   badgeIcon: {
+    fontFamily: 'Cairo_700Bold',
     fontSize: 13,
-    fontWeight: '700',
     lineHeight: 16,
   },
   badgeLabel: {
+    fontFamily: 'Cairo_600SemiBold',
     fontSize: 12,
-    fontWeight: '600',
   },
   details: {
     flex: 1,
     gap: 2,
   },
   qrText: {
-    fontFamily: Platform.OS === 'ios' ? 'Courier New' : 'monospace',
+    fontFamily: Platform.OS === 'ios' ? 'Menlo' : 'monospace',
     fontSize: 12,
-    color: nativeTokens.colors.mutedForeground,
+    color: nativeTokens.colors.textPrimary,
+    fontWeight: '600',
   },
   gateName: {
+    fontFamily: 'Cairo_400Regular',
     fontSize: 12,
-    color: nativeTokens.colors.mutedForeground,
+    color: nativeTokens.colors.textSubtle,
   },
   message: {
+    fontFamily: 'Cairo_400Regular',
     fontSize: 11,
-    color: nativeTokens.colors.mutedForeground,
+    color: nativeTokens.colors.textSubtlest,
     fontStyle: 'italic',
   },
   time: {
+    fontFamily: 'Cairo_600SemiBold',
     fontSize: 12,
-    color: nativeTokens.colors.mutedForeground,
+    color: nativeTokens.colors.textSubtlest,
     fontVariant: ['tabular-nums'],
   },
 });

@@ -1,5 +1,5 @@
-import * as React from "react";
-import { Building2, ChevronsUpDown, Check, PlusCircle } from "lucide-react";
+import * as React from 'react';
+import { Building2, ChevronsUpDown, Check, PlusCircle } from 'lucide-react';
 
 import {
   cn,
@@ -14,7 +14,7 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "@gate-access/ui";
+} from '@gateflow/ui';
 
 export type Project = {
   id: string;
@@ -47,11 +47,13 @@ export function ProjectSwitcher({
           role="combobox"
           aria-expanded={open}
           aria-label="Select a project"
-          className={cn("w-[250px] justify-between", className)}
+          className={cn('w-[250px] justify-between', className)}
         >
           <div className="flex items-center gap-2 truncate">
             <Building2 className="h-4 w-4 shrink-0 text-muted-foreground" />
-            <span className="truncate font-semibold">{selectedProject.name}</span>
+            <span className="truncate font-semibold">
+              {selectedProject.name}
+            </span>
           </div>
           <ChevronsUpDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
         </Button>
@@ -73,12 +75,16 @@ export function ProjectSwitcher({
                 >
                   <div className="flex flex-col">
                     <span className="font-medium">{project.name}</span>
-                    <span className="text-xs text-muted-foreground">{project.role}</span>
+                    <span className="text-xs text-muted-foreground">
+                      {project.role}
+                    </span>
                   </div>
                   <Check
                     className={cn(
-                      "h-4 w-4",
-                      selectedProject.id === project.id ? "opacity-100" : "opacity-0"
+                      'h-4 w-4',
+                      selectedProject.id === project.id
+                        ? 'opacity-100'
+                        : 'opacity-0'
                     )}
                   />
                 </CommandItem>

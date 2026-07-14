@@ -9,16 +9,13 @@ import {
   Database,
   Mail,
   Globe,
-  Settings,
-  Bell,
   Key,
-  Trash2,
   Search,
-  LayoutGrid,
   Activity,
   UserCheck,
 } from 'lucide-react';
-import { cn, ScrollArea, Input, PageHeader, Badge } from '@gate-access/ui';
+import { cn, Input, Badge } from '@gateflow/ui';
+import { PageHeader } from '@gateflow/components';
 
 interface SettingsTab {
   id: string;

@@ -1,122 +1,110 @@
-import { type NextRequest, NextResponse } from 'next/server';
-import { prisma, Prisma } from '@gate-access/db';
+import { NextResponse } from 'next/server';
+import { prisma } from '@gate-access/db';
 import { isAdminAuthorized } from '@/lib/admin-auth';
 
 /**
  * Organization Branding API
- *
- * Manages theme overrides and visual identity for a specific organization.
- * Supports GET (retrieve), PATCH (update), and versioned snapshots.
+ * GET /api/branding/[orgId] - Get current branding and snapshots
+ * PATCH /api/branding/[orgId] - Update branding (versioned)
  */
-
 export async function GET(
-  request: NextRequest,
-  { params }: { params: { orgId: string } }
+  req: Request,
+  props: { params: Promise<{ orgId: string }> }
 ) {
+  const params = await props.params;
+  if (!(await isAdminAuthorized(req))) {
+    return new NextResponse('Unauthorized', { status: 401 });
+  }
+
+  const { orgId } = params;
+
   try {
-    if (!(await isAdminAuthorized(request))) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const { orgId } = params;
-
-    const branding = await prisma.organizationBranding.findUnique({
+    const branding = await (prisma as any).organizationBranding.findUnique({
       where: { organizationId: orgId },
-      include: {
-        organization: {
-          select: { name: true },
-        },
-      },
     });
 
-    const snapshots = await prisma.brandingSnapshot.findMany({
+    const snapshots = await (prisma as any).brandingSnapshot.findMany({
       where: { organizationId: orgId },
       orderBy: { createdAt: 'desc' },
       take: 10,
     });
 
-    return NextResponse.json({ branding, snapshots });
+    return NextResponse.json({ success: true, branding, snapshots });
   } catch (error) {
-    console.error('[BRANDING_GET_ERROR]', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed' }, { status: 500 });
   }
 }
 
 export async function PATCH(
-  request: NextRequest,
-  { params }: { params: { orgId: string } }
+  req: Request,
+  props: { params: Promise<{ orgId: string }> }
 ) {
+  const params = await props.params;
+  if (!(await isAdminAuthorized(req))) {
+    return new NextResponse('Unauthorized', { status: 401 });
+  }
+
+  const { orgId } = params;
+  const body = await req.json();
+
   try {
-    if (!(await isAdminAuthorized(request))) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const { orgId } = params;
-    const body = await request.json();
-    const { tokenOverrides, fontFamily, fontFamilyArabic, logoUrl } = body;
-
-    // 1. Get current branding to create snapshot
-    const current = await prisma.organizationBranding.findUnique({
+    // 1. Current state for snapshot
+    const current = await (prisma as any).organizationBranding.findUnique({
       where: { organizationId: orgId },
     });
 
-    // 2. Perform update and snapshot creation in a transaction
-    const result = await prisma.$transaction(async (tx: typeof prisma) => {
-      // Create snapshot if current branding exists
-      if (current) {
-        await tx.brandingSnapshot.create({
-          data: {
-            organizationId: orgId,
-            version: current.version,
-            tokenOverrides: current.tokenOverrides || {},
-            fontFamily: current.fontFamily,
-            fontFamilyArabic: current.fontFamilyArabic,
-            logoUrl: current.logoUrl,
-            createdById: 'system', // Should be session user ID
-          },
-        });
-      }
-
-      // Upsert branding
-      return tx.organizationBranding.upsert({
-        where: { organizationId: orgId },
-        update: {
-          tokenOverrides: tokenOverrides || {},
-          fontFamily,
-          fontFamilyArabic,
-          logoUrl,
-          version: { increment: 1 },
-        },
-        create: {
+    if (current) {
+      // Create Snapshot before update
+      await (prisma as any).brandingSnapshot.create({
+        data: {
           organizationId: orgId,
-          tokenOverrides: tokenOverrides || {},
-          fontFamily,
-          fontFamilyArabic,
-          logoUrl,
-          version: 1,
+          version: current.version,
+          tokenOverrides: current.tokenOverrides,
+          fontFamily: current.fontFamily,
+          fontFamilyArabic: current.fontFamilyArabic,
+          logoUrl: current.logoUrl,
+          createdById: 'SYSTEM', // In a real app, track the session user
         },
       });
-    });
+    }
 
-    // 3. Log the action
-    await prisma.aiActionLog.create({
-      data: {
+    // 2. Update/Create branding
+    const updatedBranding = await (prisma as any).organizationBranding.upsert({
+      where: { organizationId: orgId },
+      update: {
+        tokenOverrides: body.tokens,
+        fontFamily: body.fontFamily,
+        fontFamilyArabic: body.fontFamilyArabic,
+        logoUrl: body.logoUrl,
+        version: { increment: 1 },
+      },
+      create: {
         organizationId: orgId,
-        action: 'BRANDING_UPDATED',
-        prompt: `Branding updated to version ${result.version}`,
-        result: JSON.stringify(result),
-        status: 'CONFIRMED',
+        tokenOverrides: body.tokens || {},
+        fontFamily: body.fontFamily,
+        fontFamilyArabic: body.fontFamilyArabic,
+        logoUrl: body.logoUrl,
+        version: 1,
       },
     });
 
-    return NextResponse.json(result);
+    // 3. Log AI Action
+    await (prisma as any).aiActionLog.create({
+      data: {
+        organizationId: orgId,
+        action: 'BRANDING_UPDATED',
+        status: 'CONFIRMED',
+        prompt: `Branding update for org ${orgId}`,
+        result: `New version: ${updatedBranding.version}`,
+        metadata: JSON.stringify({ brandingId: updatedBranding.id }),
+      },
+    });
+
+    return NextResponse.json({ success: true, branding: updatedBranding });
   } catch (error) {
     console.error('[BRANDING_PATCH_ERROR]', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Failed to update branding' },
       { status: 500 }
     );
   }

@@ -3,33 +3,34 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils';
 
 /**
- * Card — ADS Phase 6
+ * GateFlow Card — ADS-inspired monorepo component
+ * Uses semantic tokens only.
  */
 const cardVariants = cva(
   [
-    'rounded-[var(--ds-border-radius-400,8px)]',
-    'text-[var(--ds-text,#172B4D)]',
+    'rounded-[var(--ds-border-radius-400)]',
+    'text-[var(--ds-text-primary)]',
     'transition-shadow',
   ].join(' '),
   {
     variants: {
       variant: {
         default: [
-          'bg-[var(--ds-surface-raised,#FFFFFF)]',
-          'border border-[var(--ds-border,#DFE1E6)]',
-          'shadow-[var(--ds-shadow-raised,0_1px_1px_rgba(9,30,66,.25),0_0_0_1px_rgba(9,30,66,.08))]',
+          'bg-[var(--ds-surface-raised)]',
+          'border border-[var(--ds-border)]',
+          'shadow-[var(--ds-shadow-raised)]',
         ].join(' '),
         sunken: [
-          'bg-[var(--ds-surface-sunken,#F4F5F7)]',
-          'border border-[var(--ds-border-subtle,#EBECF0)]',
+          'bg-[var(--ds-surface-sunken)]',
+          'border border-[var(--ds-border-subtle)]',
         ].join(' '),
         overlay: [
-          'bg-[var(--ds-surface-overlay,#FFFFFF)]',
-          'border border-[var(--ds-border,#DFE1E6)]',
-          'shadow-[var(--ds-shadow-overlay,0_8px_16px_-4px_rgba(9,30,66,.25),0_0_0_1px_rgba(9,30,66,.08))]',
+          'bg-[var(--ds-surface-overlay)]',
+          'border border-[var(--ds-border)]',
+          'shadow-[var(--ds-shadow-overlay)]',
         ].join(' '),
         ghost: 'bg-transparent border-transparent',
-        outline: 'bg-transparent border-2 border-[var(--ds-border,#DFE1E6)]',
+        outline: 'bg-transparent border-2 border-[var(--ds-border)]',
       },
     },
     defaultVariants: {
@@ -72,7 +73,7 @@ export function CardTitle({
   return (
     <h3
       className={cn(
-        'text-lg font-semibold leading-none tracking-tight text-[var(--ds-text,#172B4D)]',
+        'text-lg font-semibold leading-none tracking-tight text-[var(--ds-text-primary)]',
         className
       )}
       {...props}
@@ -88,7 +89,7 @@ export function CardDescription({
 }: React.HTMLAttributes<HTMLParagraphElement>) {
   return (
     <p
-      className={cn('text-sm text-[var(--ds-text-subtle,#42526E)]', className)}
+      className={cn('text-sm text-[var(--ds-text-subtle)]', className)}
       {...props}
     />
   );

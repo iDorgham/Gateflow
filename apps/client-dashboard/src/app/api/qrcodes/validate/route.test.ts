@@ -39,12 +39,13 @@ const mockVerifyAccessToken = jest.fn().mockResolvedValue({
 jest.mock('../../../../lib/auth', () => ({
   signAccessToken: jest
     .fn()
-    .mockImplementation(async (userId, email, orgId, role) => {
+    .mockImplementation(async (userId, email, orgId, orgType, role) => {
       const header = { alg: 'HS256', typ: 'JWT' };
       const payload = {
         sub: userId,
         email,
         orgId,
+        orgType,
         roleId: role.id || 'role-admin',
         roleName: role.name || 'TENANT_ADMIN',
         permissions: role.permissions || {
@@ -170,11 +171,17 @@ function makePayload(overrides?: Partial<QRPayload>): QRPayload {
 }
 
 async function makeAuthHeader(orgId = ORG_ID): Promise<string> {
-  const token = await signAccessToken('user_1', 'test@test.com', orgId, null, {
-    id: 'role-admin',
-    name: UserRole.TENANT_ADMIN,
-    permissions: DEFAULT_PERMISSIONS[BUILT_IN_ROLES.ORG_ADMIN],
-  });
+  const token = await signAccessToken(
+    'user_1',
+    'test@test.com',
+    orgId,
+    'RESIDENTIAL',
+    {
+      id: 'role-admin',
+      name: UserRole.TENANT_ADMIN,
+      permissions: DEFAULT_PERMISSIONS[BUILT_IN_ROLES.ORG_ADMIN],
+    }
+  );
   return `Bearer ${token}`;
 }
 

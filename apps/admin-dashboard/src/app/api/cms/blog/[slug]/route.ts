@@ -67,7 +67,7 @@ export async function GET(
     status: post.status,
     publishedAt: post.publishedAt,
     author: post.author,
-    categories: post.categories.map((c) => ({
+    categories: post.categories.map((c: any) => ({
       id: c.id,
       name: locale === 'ar' ? c.nameAr : c.nameEn,
       slug: c.slug,

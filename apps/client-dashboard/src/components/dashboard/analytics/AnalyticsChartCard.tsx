@@ -1,12 +1,6 @@
 'use client';
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  Skeleton,
-  cn,
-} from '@gate-access/ui';
+import { Card, CardContent, CardHeader, Skeleton, cn } from '@gateflow/ui';
 import { Info } from 'lucide-react';
 
 interface AnalyticsChartCardProps {
@@ -27,7 +21,12 @@ export function AnalyticsChartCard({
   contentClassName,
 }: AnalyticsChartCardProps) {
   return (
-    <Card className={cn('flex flex-col rounded-2xl border-border shadow-none hover:shadow-md hover:border-primary/20 transition-all duration-300', className)}>
+    <Card
+      className={cn(
+        'flex flex-col rounded-2xl border-border shadow-none hover:shadow-md hover:border-primary/20 transition-all duration-300',
+        className
+      )}
+    >
       <CardHeader className="flex flex-row items-center justify-between space-y-0 px-5 pt-5 pb-3">
         <h3 className="text-[11px] font-black uppercase tracking-widest text-muted-foreground leading-none">
           {title}

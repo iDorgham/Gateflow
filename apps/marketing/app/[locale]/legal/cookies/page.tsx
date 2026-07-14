@@ -11,7 +11,7 @@ export async function generateMetadata(props: {
   const { locale } = params;
   const { t } = await getTranslation(locale, 'legal');
   return {
-    title: absoluteMarketingTitle(t('cookies.title')),
+    title: absoluteMarketingTitle(t('cookies.title') as string),
   };
 }
 
@@ -24,7 +24,7 @@ export default async function CookiesPage(props: {
 
   return (
     <LegalLayout
-      title={t('cookies.title')}
+      title={t('cookies.title') as string}
       lastUpdated={`${t('layout.lastUpdated')} ${t('cookies.lastUpdatedValue')}`}
     >
       <section>

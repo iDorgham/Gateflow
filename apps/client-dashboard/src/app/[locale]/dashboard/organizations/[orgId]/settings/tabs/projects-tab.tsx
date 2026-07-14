@@ -15,7 +15,7 @@ import {
   DialogContent,
   DialogTitle,
   DialogDescription,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import Link from 'next/link';
 import {
   Plus,
@@ -338,7 +338,9 @@ export function ProjectsTab({
                           {project.location && (
                             <p className="mt-2 text-xs font-semibold text-muted-foreground/80 flex items-center gap-1.5 bg-muted/30 w-fit px-2 py-0.5 rounded-full">
                               <MapPin className="h-3 w-3 text-primary/60" />
-                              <span className="truncate">{project.location}</span>
+                              <span className="truncate">
+                                {project.location}
+                              </span>
                             </p>
                           )}
                         </div>

@@ -7,7 +7,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 
 const GlobeIcon = () => (
   <svg
@@ -70,7 +70,8 @@ export function LanguageSwitcher({ currentLocale }: { currentLocale: Locale }) {
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="end"
-        className="min-w-[160px] overflow-hidden rounded-2xl border border-ds-border bg-ds-surface p-1.5 shadow-[0_20px_60px_rgba(0,0,0,0.15)]"
+        className="min-w-[160px] overflow-hidden rounded-2xl border border-ds-border bg-ds-surface p-1.5"
+        style={{ boxShadow: 'var(--ds-shadow-overlay)' }}
       >
         {i18n.locales.map((locale) => {
           const info = localeLabels[locale];

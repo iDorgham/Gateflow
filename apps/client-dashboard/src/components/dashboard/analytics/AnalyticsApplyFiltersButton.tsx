@@ -2,7 +2,7 @@
 
 import { useTranslation } from 'react-i18next';
 import Link from 'next/link';
-import { cn } from '@gate-access/ui';
+import { cn } from '@gateflow/ui';
 import { buildContactsUrl, buildUnitsUrl } from '@/lib/analytics';
 import type { AnalyticsFilters } from '@/lib/analytics/analytics-filters';
 
@@ -12,7 +12,11 @@ interface AnalyticsApplyFiltersButtonProps {
   className?: string;
 }
 
-export function AnalyticsApplyFiltersButton({ locale, filters, className }: AnalyticsApplyFiltersButtonProps) {
+export function AnalyticsApplyFiltersButton({
+  locale,
+  filters,
+  className,
+}: AnalyticsApplyFiltersButtonProps) {
   const { t } = useTranslation('dashboard');
 
   const contactsHref = buildContactsUrl(locale, filters);

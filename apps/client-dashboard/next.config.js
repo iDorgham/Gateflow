@@ -20,7 +20,7 @@ const nextConfig = {
   outputFileTracingRoot: path.join(__dirname, '../../'),
   transpilePackages: [
     '@gate-access/types',
-    '@gate-access/ui',
+    '@gateflow/ui',
     '@gate-access/db',
     '@gate-access/i18n',
   ],
@@ -29,7 +29,7 @@ const nextConfig = {
     optimizePackageImports: [
       '@phosphor-icons/react',
       'lucide-react',
-      '@gate-access/ui',
+      '@gateflow/ui',
     ],
   },
   async headers() {

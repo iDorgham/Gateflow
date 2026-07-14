@@ -1,8 +1,8 @@
 import { requireAdmin } from '@/lib/admin-auth';
 import { Locale } from '@/lib/i18n/i18n-config';
 import { prisma } from '@gate-access/db';
-import { Card, CardContent, CardHeader, CardTitle } from '@gate-access/ui';
-import { PageHeader } from '@gate-access/ui';
+import { Card, CardContent, CardHeader, CardTitle } from '@gateflow/ui';
+import { PageHeader } from '@gateflow/components';
 import { RevenueSummaryCards } from '@/components/finance/RevenueSummaryCards';
 import { PlanTrendChart } from '@/components/finance/PlanTrendChart';
 import { SubscriptionTable } from '@/components/finance/SubscriptionTable';
@@ -13,11 +13,11 @@ export const metadata = { title: 'Finance' };
 const PLAN_PRICES: Record<string, number> = { FREE: 0, PRO: 99 };
 
 export default async function FinancePage(props: {
-  params: Promise<{ locale: Locale; orgId?: string }>;
+  params: Promise<{ locale: Locale }>;
 }) {
   const params = await props.params;
 
-  const { locale, orgId } = params;
+  const { locale } = params;
 
   await requireAdmin(locale);
 
@@ -28,11 +28,11 @@ export default async function FinancePage(props: {
   const [planGroups, orgs] = await Promise.all([
     prisma.organization.groupBy({
       by: ['plan'],
-      where: { deletedAt: null, ...(orgId ? { id: orgId } : {}) },
+      where: { deletedAt: null },
       _count: { id: true },
     }),
     prisma.organization.findMany({
-      where: { deletedAt: null, ...(orgId ? { id: orgId } : {}) },
+      where: { deletedAt: null },
       orderBy: [{ plan: 'desc' }, { createdAt: 'desc' }],
       select: {
         id: true,
@@ -47,13 +47,9 @@ export default async function FinancePage(props: {
   // Scans this month per org
   const scansByGate = await prisma.scanLog.groupBy({
     by: ['gateId'],
-    where: {
-      scannedAt: { gte: monthStart },
-      ...(orgId ? { gate: { organizationId: orgId } } : {}),
-    },
+    where: { scannedAt: { gte: monthStart } },
     _count: true,
   });
-
   const gateIds = scansByGate.map(
     (s: { gateId: string; _count: number }) => s.gateId
   );

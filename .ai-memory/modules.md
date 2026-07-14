@@ -95,3 +95,29 @@ Only `/api/analytics/heatmap` is Redis-cached (10 min TTL).
 16 other analytics endpoints are uncached — all candidates.
 Helper: `apps/client-dashboard/src/lib/analytics-cache.ts`
 Functions: `getCached<T>`, `setCached<T>`, `cacheKey(prefix, parts)`
+
+---
+
+## GateFlow Design System (ADS Successor)
+
+Packages:
+- `@gateflow/tokens` — Foundations (Color, Space, Typography)
+- `@gateflow/theme` — Multi-mode (Light/Dark/System)
+- `@gateflow/ui` — Atomic components
+- `@gateflow/components` — Molecule/Pattern components
+- `@gateflow/ai` — Agentic UI specifically for chat/streaming
+
+App: `apps/design-system` (Port 3003)
+Stack: Tailwind v4 (experimental) + Next.js 15
+
+---
+
+## Admin Dashboard Evolution (2026-04-06)
+
+Context: `docs/plan/Ready/admin_dashboard_evolution/`
+
+Key areas:
+- Organizations rebuild (nested sets)
+- Side menu reorganization (dynamic icons)
+- CMS Front Builder (Webflow-like core)
+- AI Task Automation for Blog/Landing Page generation

@@ -2,7 +2,8 @@
 
 import * as React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Button } from '@gate-access/ui';
+import { Button } from '@gateflow/ui';
+import { GateFlowLogo } from '../../../packages/ui/src/components/ui/gateflow-logo';
 import {
   Menu,
   X,
@@ -17,7 +18,6 @@ import {
   Home,
   DollarSign,
   LayoutTemplate,
-  Compass,
 } from 'lucide-react';
 import { LanguageSwitcher } from './language-switcher';
 import { ThemeToggle } from './theme-toggle';
@@ -25,10 +25,6 @@ import { I18nLink } from './i18n-link';
 import Link from 'next/link';
 import type { Locale } from '../i18n-config';
 import { useTranslation } from '../hooks/use-translation';
-
-const GateFlowLogo = () => (
-  <Shield size={26} strokeWidth={2.2} fill="currentColor" fillOpacity={0.15} />
-);
 
 const panelVariants = {
   exit: {
@@ -222,12 +218,7 @@ export function Nav({ locale }: { locale: Locale }) {
             href="/"
             className="flex items-center gap-3 group"
           >
-            <div className="text-ds-text-brand transition-transform duration-300 group-hover:scale-110">
-              <GateFlowLogo />
-            </div>
-            <span className="text-[20px] font-black tracking-tighter text-ds-text-heading">
-              Gate<span className="text-ds-text-brand">Flow</span>
-            </span>
+            <GateFlowLogo size={26} />
           </I18nLink>
 
           {/* Desktop Nav */}
@@ -343,7 +334,8 @@ export function Nav({ locale }: { locale: Locale }) {
                 if (closeTimeout.current) clearTimeout(closeTimeout.current);
               }}
               onMouseLeave={handleMouseLeave}
-              className="absolute inset-x-0 top-20 z-40 overflow-hidden border-b border-ds-border bg-ds-surface shadow-[0_32px_64px_-12px_rgba(0,0,0,0.14)] dark:shadow-[0_32px_64px_-20px_rgba(0,0,0,0.6)] before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-white/5 before:shadow-[0_8px_24px_rgba(0,0,0,0.2)]"
+              className="absolute inset-x-0 top-20 z-40 overflow-hidden border-b border-ds-border bg-ds-surface before:absolute before:inset-x-0 before:top-0 before:h-px before:bg-white/5"
+              style={{ boxShadow: 'var(--ds-shadow-deep)' }}
             >
               <div className="mx-auto flex max-w-[1536px] min-h-[320px] items-center">
                 {navLinks.find((l) => l.href === activeMenu)?.hasMega && (
@@ -455,6 +447,7 @@ export function Nav({ locale }: { locale: Locale }) {
                                   <div className="w-20 h-20 shrink-0 rounded-xl overflow-hidden border border-ds-border">
                                     <img
                                       src={post.image}
+                                      alt={post.title}
                                       className="w-full h-full object-cover group-hover/post:scale-110 transition-transform"
                                     />
                                   </div>

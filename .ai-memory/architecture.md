@@ -6,26 +6,31 @@ pnpm workspaces + Turborepo 2. Full snapshot: `docs/cache/WORKSPACE_INDEX.md`
 
 ## Apps
 
-| App                     | Port | Framework             | Purpose               |
-| ----------------------- | ---- | --------------------- | --------------------- |
-| `apps/client-dashboard` | 3001 | Next.js 15 App Router | Main SaaS portal      |
-| `apps/admin-dashboard`  | 3002 | Next.js 15 App Router | Super-admin panel     |
-| `apps/scanner-app`      | 8081 | Expo SDK 54           | Mobile QR scanner     |
-| `apps/resident-mobile`  | —    | Expo SDK 54           | Resident mobile app   |
-| `apps/resident-portal`  | 3004 | Next.js 15 App Router | Resident web portal   |
-| `apps/marketing`        | 3000 | Next.js 15 App Router | Public marketing site |
+| App                     | Port | Framework             | Purpose                    |
+| ----------------------- | ---- | --------------------- | -------------------------- |
+| `apps/client-dashboard` | 3001 | Next.js 15 App Router | Main SaaS portal           |
+| `apps/admin-dashboard`  | 3002 | Next.js 15 App Router | Super-admin panel          |
+| `apps/design-system`    | 3003 | Next.js 15 + Tailwind | Token & Component Explorer |
+| `apps/scanner-app`      | 8081 | Expo SDK 54           | Mobile QR scanner          |
+| `apps/resident-mobile`  | —    | Expo SDK 54           | Resident mobile app        |
+| `apps/resident-portal`  | 3004 | Next.js 15 App Router | Resident web portal        |
+| `apps/marketing`        | 3000 | Next.js 15 App Router | Public marketing site      |
 
 ## Packages
 
-| Package               | Alias                     | Purpose                                                           |
-| --------------------- | ------------------------- | ----------------------------------------------------------------- |
-| `packages/db`         | `@gate-access/db`         | Prisma 5 + schema + auth helpers; re-exports all `@prisma/client` |
-| `packages/types`      | `@gate-access/types`      | Shared TS types + Zod schemas + QR verify                         |
-| `packages/ui`         | `@gate-access/ui`         | shadcn/ui + Radix + Tailwind components                           |
-| `packages/i18n`       | `@gate-access/i18n`       | i18next, en + ar-EG locales                                       |
-| `packages/api-client` | `@gate-access/api-client` | HTTP client SDK                                                   |
-| `packages/stripe`     | `@gate-access/stripe`     | Stripe billing                                                    |
-| `packages/config`     | `@gate-access/config`     | Shared ESLint + TS configs                                        |
+| Package               | Alias                     | Purpose                                                                |
+| --------------------- | ------------------------- | ---------------------------------------------------------------------- |
+| `packages/tokens`     | `@gateflow/tokens`        | Core ADS tokens (OKLCH, Scale, Grid)                                   |
+| `packages/theme`      | `@gateflow/theme`         | Multi-mode theme engine (data-color-mode, light/dark/high-contrast)    |
+| `packages/ui`         | `@gateflow/ui`            | Fundamental atom components (Tailwind v4 ready)                        |
+| `packages/components` | `@gateflow/components`     | Composed patterns & molecular components                               |
+| `packages/ai`         | `@gateflow/ai`            | Agentic UI kit: chat, streaming components, & tool-calling visuals     |
+| `packages/db`         | `@gate-access/db`         | Prisma 5 + schema + auth helpers; re-exports all `@prisma/client`      |
+| `packages/types`      | `@gate-access/types`      | Shared TS types + Zod schemas + QR verify                              |
+| `packages/i18n`       | `@gate-access/i18n`       | i18next, en + ar-EG locales                                            |
+| `packages/api-client` | `@gate-access/api-client` | HTTP client SDK                                                        |
+| `packages/stripe`     | `@gate-access/stripe`     | Stripe billing                                                         |
+| `packages/config`     | `@gate-access/config`     | Shared ESLint + TS configs                                             |
 
 ## Key Dep Versions (client-dashboard)
 

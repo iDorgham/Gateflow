@@ -1,10 +1,3 @@
-/**
- * DiagnosticsOverlay
- *
- * A high-density health monitor for the Scanner App.
- * Shows real-time device stats, queue health, and hardware connection status.
- */
-
 import React, { useState, useEffect } from 'react';
 import {
   View,
@@ -14,7 +7,7 @@ import {
   Animated,
   Dimensions,
 } from 'react-native';
-import { nativeTokens } from '@gate-access/ui/tokens';
+import { nativeTokensNewEra as nativeTokens } from '../../../../packages/ui/src/tokens';
 import { scanQueue } from '../lib/offline-queue';
 import {
   Activity,
@@ -119,8 +112,8 @@ export function DiagnosticsOverlay({
                 size={16}
                 color={
                   stats.queueDepth > 10
-                    ? nativeTokens.colors.destructive
-                    : nativeTokens.colors.mutedForeground
+                    ? nativeTokens.colors.danger
+                    : nativeTokens.colors.textSubtlest
                 }
               />
             }
@@ -170,98 +163,99 @@ const s = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0,0,0,0.4)',
+    backgroundColor: nativeTokens.colors.backdropGlass,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
+    padding: 24,
     zIndex: 1000,
   },
   panel: {
-    width: Math.min(width - 40, 360),
-    backgroundColor: nativeTokens.colors.neutral700,
-    borderRadius: 16,
+    width: Math.min(width - 48, 380),
+    backgroundColor: nativeTokens.colors.surfaceSubtle,
+    borderRadius: 24,
     borderWidth: 1,
-    borderColor: nativeTokens.colors.neutral700,
+    borderColor: nativeTokens.colors.border,
     overflow: 'hidden',
-    shadowColor: nativeTokens.colors.foreground,
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.3,
-    shadowRadius: 15,
-    elevation: 10,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 16,
+    padding: 18,
     borderBottomWidth: 1,
-    borderColor: nativeTokens.colors.neutral700,
+    borderColor: nativeTokens.colors.border,
   },
   headerTitleRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    gap: 10,
   },
   title: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: nativeTokens.colors.primaryForeground,
+    fontFamily: 'Cairo_700Bold',
+    fontSize: 16,
+    color: nativeTokens.colors.textHeading,
   },
   closeBtn: {
-    padding: 4,
+    paddingVertical: 4,
+    paddingHorizontal: 12,
+    backgroundColor: nativeTokens.colors.surfaceRaised,
+    borderRadius: 8,
   },
   closeBtnText: {
+    fontFamily: 'Cairo_600SemiBold',
     fontSize: 13,
     color: nativeTokens.colors.primary,
-    fontWeight: '600',
   },
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    padding: 12,
+    padding: 16,
     gap: 12,
   },
   card: {
-    width: '48%',
-    backgroundColor: nativeTokens.colors.neutral700, // sunken
-    borderRadius: 12,
-    padding: 12,
+    flex: 1,
+    minWidth: '45%',
+    backgroundColor: nativeTokens.colors.background,
+    borderRadius: 16,
+    padding: 16,
     borderWidth: 1,
-    borderColor: nativeTokens.colors.neutral700,
+    borderColor: nativeTokens.colors.border,
   },
   cardHeader: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
-    marginBottom: 4,
+    gap: 8,
+    marginBottom: 6,
   },
   cardLabel: {
+    fontFamily: 'Cairo_600SemiBold',
     fontSize: 10,
-    fontWeight: '700',
-    color: nativeTokens.colors.mutedForeground,
+    color: nativeTokens.colors.textSubtlest,
     textTransform: 'uppercase',
-    letterSpacing: 0.5,
+    letterSpacing: 1,
   },
   cardValue: {
-    fontSize: 20,
-    fontWeight: '800',
-    color: nativeTokens.colors.primaryForeground,
+    fontFamily: 'Cairo_700Bold',
+    fontSize: 22,
+    color: nativeTokens.colors.textPrimary,
   },
   cardSubValue: {
-    fontSize: 10,
-    color: nativeTokens.colors.mutedForeground,
+    fontFamily: 'Cairo_400Regular',
+    fontSize: 11,
+    color: nativeTokens.colors.textSubtlest,
     marginTop: 2,
   },
   footer: {
-    padding: 12,
-    backgroundColor: 'rgba(0,0,0,0.1)',
+    padding: 16,
+    backgroundColor: nativeTokens.colors.surfaceRaised,
     borderTopWidth: 1,
-    borderColor: nativeTokens.colors.neutral700,
+    borderColor: nativeTokens.colors.border,
   },
   footerText: {
-    fontSize: 10,
-    color: nativeTokens.colors.mutedForeground,
+    fontFamily: 'Cairo_400Regular',
+    fontSize: 11,
+    color: nativeTokens.colors.textSubtle,
     textAlign: 'center',
-    lineHeight: 14,
+    lineHeight: 16,
   },
 });

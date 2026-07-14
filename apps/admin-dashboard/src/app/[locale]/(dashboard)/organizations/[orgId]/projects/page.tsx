@@ -4,13 +4,7 @@ import { Locale } from '@/lib/i18n/i18n-config';
 import { prisma } from '@gate-access/db';
 import { revalidatePath } from 'next/cache';
 import { Search, Building2, X } from 'lucide-react';
-import {
-  Card,
-  CardContent,
-  Button,
-  Input,
-  NativeSelect,
-} from '@gate-access/ui';
+import { Card, CardContent, Button, Input, NativeSelect } from '@gateflow/ui';
 import Link from 'next/link';
 import { ProjectsClient } from './ProjectsClient';
 
@@ -64,7 +58,7 @@ export default async function ProjectsPage(props: {
   const searchParams = await props.searchParams;
   const params = await props.params;
 
-  const { locale } = params;
+  const { locale, orgId } = params as any;
 
   await requireAdmin(locale);
   const { t } = await getTranslation(locale, 'admin');
@@ -76,6 +70,7 @@ export default async function ProjectsPage(props: {
   // skip-organization-check (Global Admin List)
   const projects = await prisma.project.findMany({
     where: {
+      organizationId: orgId,
       ...(search ? { name: { contains: search, mode: 'insensitive' } } : {}),
       ...(orgFilter
         ? {

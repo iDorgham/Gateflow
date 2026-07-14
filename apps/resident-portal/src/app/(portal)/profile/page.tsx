@@ -10,7 +10,7 @@ import {
 } from 'lucide-react';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma } from '@gate-access/db';
-import { Button, Input } from '@gate-access/ui';
+import { Button, Input } from '@gateflow/ui';
 import { PageHeader } from '@/components/layout/page-header';
 
 export default async function ProfilePage() {

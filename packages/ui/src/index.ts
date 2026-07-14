@@ -1,3 +1,4 @@
+export { GateFlowLogo } from './components/ui/gateflow-logo';
 export * from './components/ui/button';
 export * from './components/ui/input';
 export * from './components/ui/card';
@@ -31,16 +32,17 @@ export * from './components/ui/tooltip';
 export * from './components/ui/dynamic-table';
 export * from './components/ui/pagination';
 export * from './components/ui/date-picker';
+export * from './components/ui/progress';
+export * from './components/ui/alert';
 
 export * from './components/auth/login-shell';
 export * from './components/auth/squares-background';
-export * from './components/layout/breadcrumbs';
-export * from './components/layout/page-header';
 export * from './components/layout/side-navigation';
 export * from './components/layout/page-container';
 export * from './components/shared/atlassian-navigation';
 export * from './components/shared/maintenance-status-badge';
 export * from './components/panels/EditPanel';
 export * from './components/tables/AdvancedTable';
+export * from './components/ai/AISidePanel';
 export { cn } from './lib/utils';
 export * from './tokens';

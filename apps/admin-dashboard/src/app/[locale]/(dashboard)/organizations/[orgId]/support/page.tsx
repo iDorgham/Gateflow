@@ -19,10 +19,7 @@ import {
   Plus,
   Loader2,
 } from 'lucide-react';
-import { Button } from '@gate-access/ui/components/ui/button';
-import { Input } from '@gate-access/ui/components/ui/input';
-import { Badge } from '@gate-access/ui/components/ui/badge';
-import { ScrollArea } from '@gate-access/ui/components/ui/scroll-area';
+import { Button, Input, Badge, ScrollArea } from '@gateflow/ui';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -362,7 +359,9 @@ export default function SupportHubPage(props: {
                       placeholder="Type your response here..."
                       className="pr-16 py-4 bg-ds-background-neutral-subtle/30 border-ds-border/20 rounded-2xl min-h-[100px] resize-none focus-visible:ring-blue-600"
                       value={newMsg}
-                      onChange={(e) => setNewMsg(e.target.value)}
+                      onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+                        setNewMsg(e.target.value)
+                      }
                     />
                     <Button
                       className="absolute bottom-4 right-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl w-10 h-10 p-0"

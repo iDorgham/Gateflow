@@ -19,7 +19,8 @@ export default async function UsersPage(props: {
   const searchParams = await props.searchParams;
   const params = await props.params;
 
-  const { locale } = params;
+  // We read orgId from params in this Server Component
+  const { locale, orgId } = params as any;
 
   await requireAdmin(locale);
   const { t } = (await getTranslation(locale, 'admin')) as {
@@ -31,6 +32,7 @@ export default async function UsersPage(props: {
   const statusFilter = searchParams.status ?? 'active';
 
   const where = {
+    organizationId: orgId,
     ...(search
       ? {
           OR: [
@@ -118,7 +120,7 @@ export default async function UsersPage(props: {
           role: t('users.securityRole'),
           status: t('users.status'),
         },
-        addUser: t('addUser', { returnObjects: true }),
+        addUser: t('addUser', { returnObjects: true }) as any,
       }}
     />
   );

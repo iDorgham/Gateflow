@@ -24,7 +24,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
   cn,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 

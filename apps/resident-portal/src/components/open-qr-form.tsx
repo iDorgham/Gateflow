@@ -3,19 +3,18 @@
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import { Users, Shield, AlertCircle, Info } from 'lucide-react';
-import { 
-  Button, 
-  Input, 
-  Label, 
-} from '@gate-access/ui';
-import { captureUtmParams, getPersistedUtmParams } from '@gate-access/api-client';
+import { Button, Input, Label } from '@gateflow/ui';
+import {
+  captureUtmParams,
+  getPersistedUtmParams,
+} from '@gate-access/api-client';
 import { queueVisitorRequest } from '@/lib/pending-sync';
 
 export function OpenQRForm({ unitId }: { unitId: string }) {
   const router = useRouter();
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
-  
+
   const [formData, setFormData] = React.useState({
     isOpenQR: true,
     maxUses: 10,
@@ -78,7 +77,9 @@ export function OpenQRForm({ unitId }: { unitId: string }) {
       )}
 
       <div className="space-y-4">
-        <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider">Usage Limit</h3>
+        <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider">
+          Usage Limit
+        </h3>
         <div className="space-y-3 p-4 bg-white border border-slate-200 rounded-xl">
           <div className="space-y-1.5">
             <Label htmlFor="maxUses">Max Visitors Allowed</Label>
@@ -92,35 +93,47 @@ export function OpenQRForm({ unitId }: { unitId: string }) {
                 className="pl-9"
                 required
                 value={formData.maxUses}
-                onChange={(e) => setFormData({ ...formData, maxUses: parseInt(e.target.value) })}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    maxUses: parseInt(e.target.value),
+                  })
+                }
               />
             </div>
             <p className="text-[11px] text-slate-500 flex items-start gap-1 mt-1">
               <Info className="h-3 w-3 mt-0.5 shrink-0" />
-              Total number of successful entries allowed with this single QR code.
+              Total number of successful entries allowed with this single QR
+              code.
             </p>
           </div>
         </div>
       </div>
 
       <div className="space-y-4 pt-2">
-        <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider">Time Constraints</h3>
+        <h3 className="text-sm font-semibold text-slate-900 uppercase tracking-wider">
+          Time Constraints
+        </h3>
         <div className="space-y-4 p-4 bg-white border border-slate-200 rounded-xl">
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
               <Label>Start Date</Label>
-              <Input 
-                type="date" 
+              <Input
+                type="date"
                 value={formData.startDate}
-                onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, startDate: e.target.value })
+                }
               />
             </div>
             <div className="space-y-1.5">
               <Label>End Date</Label>
-              <Input 
-                type="date" 
+              <Input
+                type="date"
                 value={formData.endDate}
-                onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, endDate: e.target.value })
+                }
               />
             </div>
           </div>
@@ -128,18 +141,22 @@ export function OpenQRForm({ unitId }: { unitId: string }) {
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
               <Label>Entry From</Label>
-              <Input 
-                type="time" 
+              <Input
+                type="time"
                 value={formData.startTime}
-                onChange={(e) => setFormData({ ...formData, startTime: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, startTime: e.target.value })
+                }
               />
             </div>
             <div className="space-y-1.5">
               <Label>Entry Until</Label>
-              <Input 
-                type="time" 
+              <Input
+                type="time"
                 value={formData.endTime}
-                onChange={(e) => setFormData({ ...formData, endTime: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, endTime: e.target.value })
+                }
               />
             </div>
           </div>
@@ -149,14 +166,21 @@ export function OpenQRForm({ unitId }: { unitId: string }) {
       <div className="p-4 bg-amber-50 border border-amber-100 rounded-xl flex items-start gap-3">
         <Shield className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
         <div>
-          <p className="text-sm font-semibold text-amber-900">Security Warning</p>
+          <p className="text-sm font-semibold text-amber-900">
+            Security Warning
+          </p>
           <p className="text-xs text-amber-700 leading-tight mt-1">
-            Open QRs do not track individual visitor identities. Use them only for trusted groups or public events.
+            Open QRs do not track individual visitor identities. Use them only
+            for trusted groups or public events.
           </p>
         </div>
       </div>
 
-      <Button type="submit" className="w-full h-12 text-base font-semibold bg-slate-900 hover:bg-slate-800" disabled={loading}>
+      <Button
+        type="submit"
+        className="w-full h-12 text-base font-semibold bg-slate-900 hover:bg-slate-800"
+        disabled={loading}
+      >
         {loading ? 'Generating QR...' : 'Create Open QR'}
       </Button>
     </form>

@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Button } from '@gate-access/ui';
+import { Button } from '@gateflow/ui';
 import { FileText } from 'lucide-react';
 import type { AnalyticsFilters } from '@/lib/analytics/analytics-filters';
 import { downloadAnalyticsPdf } from '@/lib/analytics/pdf-export-client';

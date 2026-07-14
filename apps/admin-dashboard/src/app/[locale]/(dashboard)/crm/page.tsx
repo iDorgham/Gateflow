@@ -1,6 +1,7 @@
 import { requireAdmin } from '@/lib/admin-auth';
 import { Locale } from '@/lib/i18n/i18n-config';
-import { PageHeader, Button, Badge } from '@gate-access/ui';
+import { Button, Badge } from '@gateflow/ui';
+import { PageHeader } from '@gateflow/components';
 import { Target, Building2, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 

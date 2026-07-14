@@ -1,10 +1,9 @@
 import type { Config } from 'tailwindcss';
 
-// @ts-ignore – relative import for jiti (Tailwind's TS loader)
 import { tokens } from '../../packages/ui/src/tokens';
 
 const config: Config = {
-  darkMode: ['class'],
+  darkMode: ['selector', '[data-color-mode="dark"]'],
   content: [
     './src/**/*.{js,ts,jsx,tsx,mdx}',
     '../../packages/ui/src/**/*.{js,ts,jsx,tsx,mdx}',

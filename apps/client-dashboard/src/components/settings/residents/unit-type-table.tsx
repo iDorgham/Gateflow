@@ -19,7 +19,7 @@ import {
   Input,
   Label,
   Switch,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { upsertResidentLimit } from '@/app/[locale]/dashboard/organizations/[orgId]/settings/residents/actions';

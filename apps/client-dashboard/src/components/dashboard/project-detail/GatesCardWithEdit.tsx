@@ -1,6 +1,6 @@
 'use client';
 
-import { Card, CardContent, CardHeader, Badge, Button } from '@gate-access/ui';
+import { Card, CardContent, CardHeader, Badge, Button } from '@gateflow/ui';
 import { Pencil } from 'lucide-react';
 import type { ProjectDetailActionsRef } from './ProjectDetailActions';
 

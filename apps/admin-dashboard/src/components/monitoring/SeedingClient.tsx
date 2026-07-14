@@ -2,17 +2,8 @@
 
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
+import { Card, CardContent, Button, Input, Label, Badge } from '@gateflow/ui';
 import {
-  Card,
-  CardContent,
-  Button,
-  Input,
-  Label,
-  Badge,
-  cn,
-} from '@gate-access/ui';
-import {
-  Database,
   Building2,
   Box,
   Loader2,
@@ -22,13 +13,11 @@ import {
 } from 'lucide-react';
 
 export function SeedingClient({
-  locale,
   orgId,
 }: {
-  locale: string;
   orgId?: string;
-}) {
-  const { t } = useTranslation('admin');
+} = {}) {
+  useTranslation('admin');
   const [loading, setLoading] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);

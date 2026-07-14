@@ -11,7 +11,7 @@ export async function generateMetadata(props: {
   const { locale } = params;
   const { t } = await getTranslation(locale, 'legal');
   return {
-    title: absoluteMarketingTitle(t('terms.title')),
+    title: absoluteMarketingTitle(t('terms.title') as string),
   };
 }
 
@@ -24,7 +24,7 @@ export default async function TermsPage(props: {
 
   return (
     <LegalLayout
-      title={t('terms.title')}
+      title={t('terms.title') as string}
       lastUpdated={`${t('layout.lastUpdated')} ${t('terms.lastUpdatedValue')}`}
     >
       <section>

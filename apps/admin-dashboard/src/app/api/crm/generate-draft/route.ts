@@ -1,41 +1,32 @@
-import { generateText } from 'ai';
-import { createGoogleGenerativeAI } from '@ai-sdk/google';
-import { type NextRequest, NextResponse } from 'next/server';
-import { isAdminAuthorized } from '@/lib/admin-auth';
+import { NextResponse } from 'next/server';
 import { prisma } from '@gate-access/db';
-
-export const runtime = 'nodejs';
-export const maxDuration = 30;
+import { isAdminAuthorized } from '@/lib/admin-auth';
+import { generateText } from 'ai';
+import { google } from '@ai-sdk/google';
 
 /**
- * AI CRM Follow-up Draft Generator
- *
- * Generates a draft follow-up email/message for a lead.
- * Implements strict HiTL: Creates a PENDING_CONFIRMATION log entry.
+ * AI Lead Follow-up Draft API
+ * POST /api/crm/generate-draft
+ * Body: { leadId: string }
  */
-export async function POST(request: NextRequest) {
-  try {
-    if (!(await isAdminAuthorized(request))) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
+export async function POST(req: Request) {
+  if (!(await isAdminAuthorized(req))) {
+    return new NextResponse('Unauthorized', { status: 401 });
+  }
 
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) {
+  try {
+    const { leadId } = await req.json();
+
+    if (!leadId) {
       return NextResponse.json(
-        { error: 'GEMINI_API_KEY not configured' },
-        { status: 503 }
+        { error: 'leadId is required' },
+        { status: 400 }
       );
     }
 
-    const body = await request.json();
-    const { leadId, tone = 'professional', language = 'en' } = body;
-
-    if (!leadId) {
-      return NextResponse.json({ error: 'leadId is required' }, { status: 400 });
-    }
-
+    // 1. Fetch Lead
     const lead = await prisma.lead.findUnique({
-      where: { id: leadId },
+      where: { id: leadId, deletedAt: null },
       include: { organization: true },
     });
 
@@ -43,74 +34,65 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Lead not found' }, { status: 404 });
     }
 
-    // Security Gate: Consent is mandatory for automated outreach drafting
     if (!lead.consentGiven) {
       return NextResponse.json(
-        { error: 'Lead has not given consent for outreach. AI drafting blocked.' },
+        {
+          error: 'No consent given for AI follow-up',
+        },
         { status: 403 }
       );
     }
 
-    const google = createGoogleGenerativeAI({ apiKey });
+    // 2. Generate Draft (No PII in prompt)
+    const systemPrompt = `
+      You are a senior sales representative for GateFlow. 
+      Generate a professional follow-up email draft for a lead.
+      The organization type is ${lead.organization.type}.
+      The current status is ${lead.status}.
+      The AI score for this lead is ${lead.score || 'Not calculated'}.
+      
+      Requirements:
+      - Tone: Professional, helpful, security-focused.
+      - Length: Concise (max 150 words).
+      - Language: Matches the organization locale (assume English for now).
+      - Content: Mention how GateFlow solves access control problems for ${lead.organization.type}.
+      
+      IMPORTANT: Use [Lead Name] and [Lead Email] as placeholders. Do not include real names or PII.
+    `;
 
-    // We do NOT send PII to the LLM. We use placeholders.
-    const result = await generateText({
-      model: google('gemini-1.5-flash'),
-      system: `You are an expert sales representative for GateFlow, the leading MENA access control platform.
-Your goal is to draft a compelling follow-up email for a high-value lead.
-Tone: ${tone}
-Language: ${language}
-
-Key Selling Points of GateFlow:
-1. Seamless QR-based visitor entry (RTL support, WhatsApp integration).
-2. Hardware-agnostic scanner app for security guards.
-3. White-label resident portal for community management.
-4. Compliant with regional data privacy laws (PDPL/PDPPL).
-
-Instructions:
-- Use [Lead Name] and [My Name] as placeholders.
-- Do NOT include any specific PII from the prompt.
-- Focus on the ${lead.organization.type} vertical needs.
-- Keep the call to action clear: "Schedule a 15-minute demo".`,
-      prompt: `Lead context: Inbound inquiry from ${lead.organization.type} sector.
-Source: ${lead.source ?? 'Direct inquiry'}.
-Notes: ${lead.notes ?? 'Interested in modernizing community access'}.
-Lead Score: ${lead.score ?? 'Warm'}.`,
+    const { text } = await generateText({
+      model: google('gemini-1.5-pro'),
+      system: systemPrompt,
+      prompt: 'Draft a compelling follow-up email based on the lead metadata.',
     });
 
-    // Create a PENDING_CONFIRMATION log entry for HiTL review
-    // The UI will display this draft and wait for a human to confirm/edit before sending.
-    const logEntry = await prisma.aiActionLog.create({
+    // 3. Log to AiActionLog as PENDING (HiTL requirement)
+    await prisma.aiActionLog.create({
       data: {
         organizationId: lead.organizationId,
-        leadId: lead.id,
-        action: 'CRM_FOLLOWUP_DRAFT',
-        prompt: `Generate ${tone} follow-up in ${language}`,
-        result: result.text,
-        status: 'PENDING_CONFIRMATION',
-        payload: {
-          leadId: lead.id,
-          tone,
-          language,
-          vertical: lead.organization.type,
-        },
-        metadata: {
-          model: 'gemini-1.5-flash',
-          finishReason: result.finishReason,
-          usage: result.usage,
-        },
+        action: 'CRM_DRAFT_FOLLOWUP',
+        status: 'PENDING',
+        prompt: systemPrompt,
+        result: text,
+        metadata: JSON.stringify({
+          leadId,
+          actionNeeded: 'CONFIRM_EMAIL_SEND',
+        }),
       },
     });
 
     return NextResponse.json({
-      draft: result.text,
-      logId: logEntry.id,
-      status: 'PENDING_CONFIRMATION',
+      success: true,
+      draft: text,
+      metadata: {
+        leadId,
+        status: 'PENDING_CONFIRMATION',
+      },
     });
   } catch (error) {
     console.error('[CRM_GENERATE_DRAFT_ERROR]', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Internal Server Error' },
       { status: 500 }
     );
   }

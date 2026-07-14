@@ -11,7 +11,7 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { formatDistanceToNow } from 'date-fns';
 import {
   Shield,

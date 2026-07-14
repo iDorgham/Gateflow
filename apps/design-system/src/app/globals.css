@@ -1,0 +1,116 @@
+@import "tailwindcss";
+
+@import "../../../../packages/tokens/css/tokens.css";
+
+@theme {
+  --font-sans: var(--font-inter, ui-sans-serif, system-ui);
+  --font-mono: var(--font-mono, monospace);
+
+  /* Surfaces */
+  --color-background: var(--ds-background-default);
+  --color-foreground: var(--ds-text-primary);
+  --color-border:     var(--ds-border);
+
+  /* Brand / Primary */
+  --color-primary:             var(--ds-background-brand-bold);
+  --color-primary-foreground:  var(--ds-text-inverse);
+
+  /* Muted */
+  --color-muted:            var(--ds-surface-subtle);
+  --color-muted-foreground: var(--ds-text-subtle);
+
+  /* Surface hierarchy */
+  --color-surface-page:    var(--ds-background-default);
+  --color-surface-subtle:  var(--ds-surface-subtle);
+  --color-surface-default: var(--ds-background-default);
+  --color-surface-raised:  var(--ds-surface-raised);
+  --color-surface-overlay: var(--ds-surface-overlay);
+  --color-surface-glass:   var(--ds-surface-glass);
+
+  /* Semantic UI aliases */
+  --color-ds-background:         var(--ds-background-default);
+  --color-ds-background-subtle:  var(--ds-surface-subtle);
+  --color-ds-surface:            var(--ds-surface-raised);
+  --color-ds-surface-raised:     var(--ds-surface-raised);
+  --color-ds-surface-overlay:    var(--ds-surface-overlay);
+  --color-ds-surface-glass:      var(--ds-surface-glass);
+  --color-ds-border-subtle:      var(--ds-border-subtle);
+  --color-ds-text:               var(--ds-text-primary);
+  --color-ds-text-subtle:        var(--ds-text-subtle);
+  --color-ds-text-brand:         var(--ds-primary-accent);
+  
+  /* ─── Premium Brand Effects ──────────────────────────────────── */
+  --color-ds-glow-bold:          var(--gf-glow-brand);
+  --color-ds-surface-mesh:       var(--gf-surface-mesh);
+  --color-ds-surface-accent:     var(--gf-surface-accent);
+  --color-ds-pattern-sentinel:   var(--gf-pattern-sentinel);
+
+  /* ─── AI & Specialized ────────────────────────────────────────── */
+  --color-ai-surface:            var(--gf-color-ai-surface);
+  --color-ai-accent:             var(--gf-color-ai-accent);
+  --shadow-ai-glow:              var(--gf-color-ai-glow);
+
+  /* ─── Analytics ──────────────────────────────────────────────── */
+  --color-chart-1:               var(--gf-color-chart-1);
+  --color-chart-2:               var(--gf-color-chart-2);
+  --color-chart-3:               var(--gf-color-chart-3);
+  --color-chart-4:               var(--gf-color-chart-4);
+  --color-chart-5:               var(--gf-color-chart-5);
+
+  /* ─── High Density ────────────────────────────────────────────── */
+  --color-table-header:          var(--ds-table-header-bg);
+  --color-table-row-hover:       var(--ds-table-row-hover);
+  --color-sidebar:               var(--ds-sidebar-bg);
+  --color-sidebar-active:        var(--ds-sidebar-item-active);
+
+  /* ─── Motion ───────────────────────────────────────────────────── */
+  --animate-ds-fade-in:         fade-in var(--gf-motion-duration-base) var(--gf-motion-easing-expressive);
+  --animate-ds-slide-up:        slide-up var(--gf-motion-duration-slow) var(--gf-motion-easing-expressive);
+
+  /* Status */
+  --color-success: var(--gf-color-success);
+  --color-warning: var(--gf-color-warning);
+  --color-danger:  var(--gf-color-danger);
+  --color-info:    var(--gf-color-info);
+
+  --radius-lg:   var(--gf-radius-lg);
+  --radius-md:   var(--gf-radius-md);
+  --radius-sm:   var(--gf-radius-sm);
+
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+/* Premium Global Animations & Interactions */
+@layer components {
+  .ds-card-premium {
+    @apply transition-all duration-500 hover:scale-[1.01] hover:shadow-[var(--ds-glow-premium)] border-[var(--ds-border-subtle)] hover:border-[var(--ds-border-brand)]/40;
+  }
+
+  
+  .ds-glass-glow {
+    @apply relative overflow-hidden;
+  }
+  
+  .ds-glass-glow::after {
+    content: '';
+    @apply absolute inset-0 bg-gradient-to-tr from-white/5 to-transparent opacity-0 transition-opacity duration-700;
+  }
+  
+  .ds-glass-glow:hover::after {
+    @apply opacity-100;
+  }
+}
+
+
+/* Dark mode variant — matches ThemeProvider's data-color-mode attribute */
+@custom-variant dark (&:where([data-color-mode="dark"], [data-color-mode="dark"] *));
+@custom-variant data-color-mode-dark (&:where([data-color-mode="dark"], [data-color-mode="dark"] *));

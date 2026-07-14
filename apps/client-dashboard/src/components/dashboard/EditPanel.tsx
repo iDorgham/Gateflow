@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { Button, ScrollArea } from '@gate-access/ui';
+import { Button, ScrollArea } from '@gateflow/ui';
 import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -125,7 +125,10 @@ export function EditPanel({
         {/* Header */}
         <div className="flex shrink-0 items-center justify-between border-b border-border px-8 py-5">
           <div className="flex flex-col gap-1">
-            <h2 id="edit-panel-title" className="text-[20px] font-semibold text-foreground dark:text-zinc-100 tracking-tight">
+            <h2
+              id="edit-panel-title"
+              className="text-[20px] font-semibold text-foreground dark:text-zinc-100 tracking-tight"
+            >
               {title}
             </h2>
           </div>
@@ -150,17 +153,17 @@ export function EditPanel({
 
         {/* Footer */}
         <div className="flex shrink-0 justify-end items-center gap-3 border-t border-border px-8 py-5 bg-background">
-          <Button 
-            variant="ghost" 
-            onClick={handleQuit} 
+          <Button
+            variant="ghost"
+            onClick={handleQuit}
             className="text-muted-foreground hover:bg-accent font-semibold"
           >
             Cancel
           </Button>
           {onSave && (
-            <Button 
-              onClick={handleSave} 
-              disabled={isSaving} 
+            <Button
+              onClick={handleSave}
+              disabled={isSaving}
               className="bg-primary hover:bg-primary/90 text-primary-foreground px-6 font-semibold shadow-sm transition-all active:scale-95"
             >
               {isSaving ? (
@@ -168,7 +171,9 @@ export function EditPanel({
                   <div className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/20 border-t-white" />
                   Saving...
                 </div>
-              ) : saveLabel}
+              ) : (
+                saveLabel
+              )}
             </Button>
           )}
         </div>

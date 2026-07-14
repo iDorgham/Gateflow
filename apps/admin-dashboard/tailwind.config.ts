@@ -1,11 +1,10 @@
 import type { Config } from 'tailwindcss';
-import animate from 'tailwindcss-animate';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 import { tokens } from '../../packages/ui/src/tokens';
 
 const config: Config = {
-  darkMode: ['class'],
+  darkMode: ['selector', '[data-color-mode="dark"]'],
   content: [
     './src/**/*.{js,ts,jsx,tsx,mdx}',
     '../../packages/ui/src/**/*.{js,ts,jsx,tsx,mdx}',

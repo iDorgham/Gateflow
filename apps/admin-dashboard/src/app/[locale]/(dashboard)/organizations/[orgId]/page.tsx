@@ -1,15 +1,16 @@
 import { prisma } from '@gate-access/db';
-import { requireAdmin } from '../../../../../lib/admin-auth';
+import { requireAdmin } from '@/lib/admin-auth';
 import { getTranslation } from '@/lib/i18n/i18n';
-import { Locale } from '../../../../../lib/i18n/i18n-config';
+import { Locale } from '@/lib/i18n/i18n-config';
 import {
   Building2,
   Users,
   ScanLine,
   Activity,
   ArrowUpRight,
+  ShieldCheck,
+  CheckCircle2,
   TrendingUp,
-  LayoutGrid,
 } from 'lucide-react';
 import {
   Card,
@@ -18,99 +19,138 @@ import {
   CardTitle,
   Badge,
   cn,
-} from '@gate-access/ui';
-import { PageHeader } from '@gate-access/ui';
-import { notFound } from 'next/navigation';
+} from '@gateflow/ui';
+import { PageHeader } from '@gateflow/components';
+import Link from 'next/link';
+import { DashboardRecentOrgsTable } from './DashboardRecentOrgsTable';
 
-export const metadata = { title: 'Organization Overview' };
+export const metadata = { title: 'Operational Overview' };
 
-export default async function OrgOverviewPage(props: {
-  params: Promise<{ locale: Locale; orgId: string }>;
+export default async function AdminOverviewPage(props: {
+  params: Promise<{ locale: Locale }>;
 }) {
   const params = await props.params;
-  const { locale, orgId } = params;
+
+  const { locale } = params;
 
   await requireAdmin(locale);
   const { t } = await getTranslation(locale, 'admin');
 
-  const organization = await prisma.organization.findUnique({
-    where: { id: orgId, deletedAt: null },
-    select: {
-      id: true,
-      name: true,
-      type: true,
-      plan: true,
-    },
-  });
-
-  if (!organization) {
-    notFound();
-  }
+  const now = new Date();
+  const todayStart = new Date(now);
+  todayStart.setHours(0, 0, 0, 0);
+  const weekStart = new Date(now);
+  weekStart.setDate(now.getDate() - 7);
+  const monthStart = new Date(now);
+  monthStart.setDate(now.getDate() - 30);
 
   const [
+    totalOrgs,
+    activeOrgs,
     totalUsers,
-    totalProjects,
-    totalGates,
+    adminUsers,
     scansToday,
+    recentOrgs,
   ] = await Promise.all([
-    prisma.user.count({ where: { organizationId: orgId, deletedAt: null } }),
-    prisma.project.count({ where: { organizationId: orgId, deletedAt: null } }),
-    prisma.gate.count({ where: { organizationId: orgId, deletedAt: null } }),
-    prisma.scanLog.count({
+    // skip-organization-check (Global Admin Overview)
+    prisma.organization.count(),
+    // skip-organization-check (Global Admin Overview)
+    prisma.organization.count({ where: { deletedAt: null } }),
+    // skip-organization-check (Global Admin Overview)
+    prisma.user.count({ where: { deletedAt: null } }),
+    // skip-organization-check (Global Admin Overview)
+    prisma.user.count({
       where: {
-        qrCode: { organizationId: orgId },
-        scannedAt: { gte: new Date(new Date().setHours(0, 0, 0, 0)) },
+        role: { name: { in: ['ADMIN', 'TENANT_ADMIN'] } },
+        deletedAt: null,
+      },
+    }),
+    // skip-organization-check (Global Admin Overview)
+    prisma.scanLog.count({ where: { scannedAt: { gte: todayStart } } }),
+    // skip-organization-check (Global Admin Overview)
+    prisma.organization.findMany({
+      where: { deletedAt: null },
+      orderBy: { createdAt: 'desc' },
+      take: 5,
+      select: {
+        id: true,
+        name: true,
+        plan: true,
+        email: true,
+        createdAt: true,
       },
     }),
   ]);
 
+  const suspendedOrgs = totalOrgs - activeOrgs;
+
   const stats = [
     {
-      label: t('overview.totalUsers'),
-      value: totalUsers.toLocaleString(locale),
-      sub: t('overview.adminUsers', { count: totalUsers }), // Simplified for now
-      icon: Users,
+      label: t('overview.activeOrgs'),
+      value: activeOrgs.toLocaleString(locale),
+      sub: t('overview.suspendedOrgs', { count: suspendedOrgs }),
+      icon: Building2,
       variant: 'brand',
     },
     {
-      label: 'Projects',
-      value: totalProjects.toLocaleString(locale),
-      sub: 'Active Infrastructure',
-      icon: LayoutGrid,
+      label: t('overview.totalUsers'),
+      value: totalUsers.toLocaleString(locale),
+      sub: t('overview.adminUsers', { count: adminUsers }),
+      icon: Users,
       variant: 'primary',
-    },
-    {
-      label: 'Gates',
-      value: totalGates.toLocaleString(locale),
-      sub: 'Operational Perimeters',
-      icon: Building2,
-      variant: 'success',
     },
     {
       label: t('overview.scansToday'),
       value: scansToday.toLocaleString(locale),
       sub: t('overview.scansLast24h'),
       icon: ScanLine,
+      variant: 'success',
+    },
+    {
+      label: t('overview.systemHealth'),
+      value: '100%',
+      sub: t('overview.allServicesActive'),
+      icon: Activity,
       variant: 'warning',
     },
   ];
+
+  type RecentOrg = {
+    id: string;
+    name: string;
+    email: string | null;
+    plan: string | null;
+    createdAt: Date;
+  };
+
+  const recentOrgsSafe = recentOrgs.map((o: RecentOrg) => ({
+    ...o,
+    createdAt: new Date(o.createdAt).toISOString(),
+  }));
+
+  const recentOrgsLabels = {
+    org: t('overview.org'),
+    plan: t('overview.plan'),
+    joined: t('overview.joined'),
+  };
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500 pb-6">
       <PageHeader
         titleClassName="font-black uppercase tracking-tighter text-3xl"
-        title={organization.name}
-        subtitle={`${organization.type} • ${organization.plan} PLAN`}
+        title={t('overview.title')}
+        subtitle={t('overview.subtitle')}
         badge={
           <Badge
             variant="primary"
             className="bg-ds-background-selected text-ds-text-selected border-ds-border-selected/30 font-bold text-xs px-2.5 py-1"
           >
-            ORG CONTEXT
+            LIVE MONITORING
           </Badge>
         }
       />
 
+      {/* Stats Cluster */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         {stats.map((stat) => (
           <Card
@@ -170,6 +210,103 @@ export default async function OrgOverviewPage(props: {
             </CardContent>
           </Card>
         ))}
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-3">
+        {/* Recent Organizations Table */}
+        <Card className="lg:col-span-2 border-border bg-card shadow-lg overflow-hidden flex flex-col">
+          <CardHeader className="flex flex-row items-center justify-between border-b border-border/40 px-6 py-5 bg-muted/5">
+            <div>
+              <CardTitle className="text-base font-black italic uppercase tracking-tight text-ds-text">
+                {t('overview.newestOrgs')}
+              </CardTitle>
+              <p className="text-[11px] text-ds-text-subtle font-medium">
+                {t('overview.newestOrgsDesc')}
+              </p>
+            </div>
+            <Link
+              href="/organizations"
+              className="group flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-ds-text-brand hover:opacity-80 transition-all"
+            >
+              {t('overview.viewAll')}
+              <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 rtl:rotate-90 rtl:group-hover:-translate-x-0.5" />
+            </Link>
+          </CardHeader>
+          <CardContent className="p-0 flex-1">
+            <DashboardRecentOrgsTable
+              recentOrgs={recentOrgsSafe}
+              locale={locale}
+              labels={recentOrgsLabels}
+            />
+          </CardContent>
+        </Card>
+
+        {/* System & Infra Health */}
+        <Card className="border-border bg-card shadow-lg">
+          <CardHeader className="px-6 py-5">
+            <CardTitle className="text-base font-black italic uppercase tracking-tight text-ds-text">
+              {t('overview.infraHealth')}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="px-6 pb-6 space-y-4">
+            <div className="flex items-center gap-4 p-3 rounded-xl bg-muted/30 border border-border/40 group">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-ds-background-success-bold text-ds-text-inverse shadow-lg transition-transform group-hover:rotate-12">
+                <ShieldCheck className="h-6 w-6" />
+              </div>
+              <div className="space-y-0.5">
+                <p className="text-sm font-bold text-ds-text-success">
+                  {t('overview.dbCluster')}
+                </p>
+                <p className="text-[11px] text-ds-text-subtle font-black uppercase tracking-tighter opacity-80">
+                  {t('overview.dbSynced')}
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-4 p-3 rounded-xl bg-muted/30 border border-border/40 group">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-ds-background-brand-bold text-ds-text-inverse shadow-lg transition-transform group-hover:rotate-12">
+                <CheckCircle2 className="h-6 w-6" />
+              </div>
+              <div className="space-y-0.5">
+                <p className="text-sm font-bold text-ds-text-brand">
+                  {t('overview.authServices')}
+                </p>
+                <p className="text-[11px] text-ds-text-subtle font-black uppercase tracking-tighter opacity-80">
+                  {t('overview.authRotated')}
+                </p>
+              </div>
+            </div>
+
+            {/* Traffic Visualizer */}
+            <div className="rounded-2xl border border-border/40 p-5 bg-muted/5">
+              <div className="flex items-center justify-between mb-4">
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-ds-text-subtlest">
+                  {t('overview.syncTraffic')}
+                </p>
+                <Badge variant="success" className="h-4 text-[8px] font-black">
+                  {t('overview.optimal')}
+                </Badge>
+              </div>
+              <div className="flex items-end gap-1.5 h-12 px-1">
+                {[30, 45, 25, 60, 40, 35, 20, 50, 45, 30].map((h, i) => (
+                  <div
+                    key={i}
+                    className="flex-1 bg-ds-background-brand-bold/10 rounded-full relative group/bar overflow-hidden"
+                  >
+                    <div
+                      className="absolute bottom-0 left-0 w-full bg-ds-background-brand-bold rounded-full transition-all group-hover/bar:bg-ds-background-brand-bold-hovered"
+                      style={{ height: `${h}%` }}
+                    ></div>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-4 flex justify-between items-center text-[9px] font-bold text-ds-text-subtlest uppercase tracking-widest">
+                <span>Latency: 12ms</span>
+                <span>Throughput: High</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

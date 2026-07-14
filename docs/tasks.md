@@ -42,6 +42,17 @@ This document tracks unfinished tasks and a complete feature inventory across th
 
 ---
 
+### 🚀 Evolution & Growth
+
+#### 🛡️ Admin Dashboard Evolution
+
+- [ ] Phase 1: Reorganize side menu with dynamic token-based icons.
+- [ ] Phase 1: Rebuild Organization management with nested hierarchy support.
+- [ ] Phase 2: Scaffold CMS Shell and settings for gateflow.site.
+- [ ] Phase 3: Core implementation of the Webflow-like page builder.
+
+---
+
 ### 🤳 Scanner App (`apps/scanner-app`)
 
 #### 🖥️ Scanner Frontend

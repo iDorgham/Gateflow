@@ -31,7 +31,7 @@ import {
   Separator,
   ScrollArea,
   cn,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { validateContrast } from '@/../../packages/utils/src/contrast';
 import { OVERRIDABLE_TOKENS } from '@/lib/branding-css-generator';
 

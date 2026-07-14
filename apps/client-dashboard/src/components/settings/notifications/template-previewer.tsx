@@ -13,7 +13,7 @@ import {
   SelectContent,
   SelectItem,
   Badge,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { Mail, Eye } from 'lucide-react';
 
 interface Template {

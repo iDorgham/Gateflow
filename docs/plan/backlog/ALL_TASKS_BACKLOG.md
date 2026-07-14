@@ -7,20 +7,32 @@
 ### gateflow_design_system — GateFlow Design System (tokens, theme, UI)
 
 **IDEA:** `docs/development/initiatives/IDEA_atlassian_ui_remake.md`  
-**PLAN:** `docs/plan/Ready/gateflow_design_system/`  
+**PLAN:** `docs/plan/Complete/gateflow_design_system/`  
 `PLAN_gateflow_design_system.md`  
-**Status:** 🆕 Planned (Ready for Phase 1)  
-**Target:** Q2-Q3 2026
+**Status:** ✅ Completed (2026-04-06)
 
-- [ ] Phase 1 — `@gateflow/tokens` (OKLCH, tokens.css, @theme)
-- [ ] Phase 2 — `@gateflow/theme` (data-color-mode, next-themes)
-- [ ] Phase 3 — `@gateflow/ui` upgrade (successor to @gate-access/ui)
-- [ ] Phase 4 — `@gateflow/components` (composed patterns)
-- [ ] Phase 5 — `@gateflow/ai` (AI UI kit: chat, streaming, tools)
-- [ ] Phase 6 — `apps/design-system` scaffold (Tailwind v4)
-- [ ] Phase 7 — Foundations + Token Explorer
-- [ ] Phase 8 — Primitives + Patterns + AI galleries
-- [ ] Phase 9 — RTL, search, polish, design.gateflow.site
+### pattern_docs — GateFlow Design System Pattern Documentation (Phase 9)
+
+**IDEA:** `docs/development/initiatives/IDEA_pattern-docs.md`  
+**PLAN:** `docs/plan/Complete/pattern-docs/`  
+**Status:** ✅ Completed (2026-04-29)  
+**Target:** Q2 2026
+
+- [x] Phase 1 — Analytics Documentation (StatGrid + ChartLab)
+- [x] Phase 2 — AI UI Documentation (GateAI + ToolCards)
+- [x] Phase 3 — Entity Management Documentation (List/CRUD layouts)
+- [x] Phase 4 — Certification & Hardening
+
+- [x] Phase 1 — `@gateflow/tokens` (OKLCH, tokens.css, @theme)
+- [x] Phase 2 — `@gateflow/theme` (data-color-mode, next-themes)
+- [x] Phase 3 — `@gateflow/ui` upgrade (successor to @gate-access/ui)
+- [x] Phase 4 — `@gateflow/components` (composed patterns)
+- [x] Phase 5 — `@gateflow/ai` (AI UI kit: chat, streaming, tools)
+- [x] Phase 6 — `apps/design-system` scaffold (Tailwind v4)
+- [x] Phase 7 — Foundations & Token Explorer
+- [x] Phase 8 — Galleries & package catalog
+- [x] Phase 9 — RTL, search, polish, Vercel
+- [x] Phase 10 — npm publishing & CI/CD
 
 ### resident_portal_responsive — Resident Portal: Responsive & Mobile Experience
 
@@ -55,6 +67,21 @@
 - [ ] Phase 4 — Home Redesign: Master Scan Dashboard
 - [ ] Phase 5 — Polish: Animation, Security Guard, & RTL
 
+### admin_dashboard_evolution — Admin Dashboard Evolution
+
+**PLAN:** `docs/plan/Complete/admin_dashboard_evolution/`  
+**Status:** ✅ Completed (2026-04-29)
+
+- [x] Phase 1 — Side Menu Reorganization & Organizations Rebuild
+- [x] Phase 2 — CMS Section Shell + Settings for www.gateflow.site
+- [x] Phase 3 — Advanced Webflow-like Front Builder Core
+- [x] Phase 4 — Landing Pages with AI Content & Image Generation
+- [x] Phase 5 — Pages & Menus Builder
+- [x] Phase 6 — Blog Management with AI Topic Suggestion & Drafting
+- [x] Phase 7 — Task Manager AI Automation for Blog & Landing Page Creation
+- [x] Phase 8 — CRM, Support System, Analytics Dashboard & Team Roles
+- [x] Phase 9 — AI Polish, Review Workflows, Multi-Language & Final Testing
+
 ### admin_emulation_hub — Admin Emulation Hub & Advanced Seeding
 
 **IDEA:** `docs/development/initiatives/IDEA_admin_emulation_hub.md`  
@@ -81,9 +108,22 @@
 - [x] Phase 6 — AI Blog Content Engine
 - [x] Phase 7 — Support Hub, Audit Trail, Analytics & Hardening
 
----
+### design_system_redesign — GateFlow Design System Redesign (Premium Enterprise)
 
-## 🏛️ Archived & Completed (2026)
+**IDEA:** `docs/development/initiatives/IDEA_design_system_redesign.md`  
+**PLAN:** `docs/plan/Active/design-system-redesign/`  
+`PLAN_design-system-redesign.md`  
+**Status:** 🔵 In-Progress (Phase 3)  
+**Target:** Q2 2026
+
+- [x] Phase 1 — Foundation Token Overhaul (Colors, Typography, Icons, Spacing, Grid)
+- [x] Phase 2 — Core Foundation Pages (1-6) (Colors to Motion)
+- [ ] Phase 3 — Pattern Documentation (7-12) (AI to Date Pickers)
+- [ ] Phase 4 — Monorepo Enforcement & Migration (enforce-ads-design.js)
+- [ ] Phase 5 — Marketing & Auth Redesign (High-flair premium gateway)
+- [ ] Phase 6 — Dashboards & Portal Redesign (High-density operational focus)
+- [ ] Phase 7 — Mobile Optimization (Scanner & Resident compact refinement)
+- [ ] Phase 8 — Final Polish & Certification (Accessibility audit)
 
 ### admin_dashboard_redesign — Admin Dashboard Redesign (v10 Match)
 

@@ -1,12 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { 
-  Card, 
-  CardContent, 
-  Button, 
-  cn 
-} from '@gate-access/ui';
+import { Card, CardContent, Button, cn } from '@gateflow/ui';
 import { FileText, Download, FileSpreadsheet, Loader2 } from 'lucide-react';
 
 export interface ReportDataBlock {
@@ -69,15 +64,17 @@ export function AIReportRenderer({ config, isRtl }: AIReportRendererProps) {
   return (
     <Card className="my-4 border-[var(--ds-border-discovery,#998DD9)]/30 bg-background/80 shadow-sm overflow-hidden group">
       <CardContent className="p-4 flex items-center gap-4">
-        <div className={cn(
-          "h-12 w-12 rounded-lg flex items-center justify-center shrink-0 transition-colors",
-          reportType === 'pdf' 
-            ? "bg-red-50 text-red-600 group-hover:bg-red-100" 
-            : "bg-green-50 text-green-600 group-hover:bg-green-100"
-        )}>
+        <div
+          className={cn(
+            'h-12 w-12 rounded-lg flex items-center justify-center shrink-0 transition-colors',
+            reportType === 'pdf'
+              ? 'bg-red-50 text-red-600 group-hover:bg-red-100'
+              : 'bg-green-50 text-green-600 group-hover:bg-green-100'
+          )}
+        >
           <Icon size={24} />
         </div>
-        
+
         <div className="flex-1 min-w-0">
           <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-0.5">
             {typeLabel} {t('Report', 'تقرير')}
@@ -105,7 +102,9 @@ export function AIReportRenderer({ config, isRtl }: AIReportRendererProps) {
             <Download size={14} />
           )}
           <span className="hidden sm:inline">
-            {isDownloading ? t('Generating...', 'جاري الإنشاء...') : t('Download', 'تحميل')}
+            {isDownloading
+              ? t('Generating...', 'جاري الإنشاء...')
+              : t('Download', 'تحميل')}
           </span>
         </Button>
       </CardContent>

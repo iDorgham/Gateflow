@@ -4,7 +4,7 @@ import React, { useRef } from 'react';
 import { useParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import dynamic from 'next/dynamic';
-import { Skeleton } from '@gate-access/ui';
+import { Skeleton } from '@gateflow/ui';
 
 const ChartSkeleton = () => <Skeleton className="h-full w-full rounded-2xl" />;
 
@@ -131,7 +131,7 @@ import {
   type KPIData,
 } from '@/components/dashboard/analytics';
 import { useAnalyticsFilters, useAnalyticsSummary } from '@/lib/analytics';
-import { PageHeader } from '@gate-access/ui';
+import { PageHeader } from '@gateflow/components';
 import { PrintButton } from './print-button';
 import { ExportChartButton } from './export-chart-button';
 import { CopyLinkButton } from './copy-link-button';

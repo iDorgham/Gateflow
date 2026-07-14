@@ -17,14 +17,16 @@ Real-time status of the engineering pipeline.
 
 _Plan folders use lifecycle layout: `Draft/` → `Ready/` → `Active/` → `Complete/` (see `docs/development/PLAN_LIFECYCLE.md`)._
 
-| Initiative                    | Goal                                   | Phase / note                                                                                                                     | Plan                                                  |
-| :---------------------------- | :------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------- |
-| **GitHub Security Hardening** | Environment validation & secrets guard | Follow-up on phase 2 (secret inventory) per [PLAN](../plan/Complete/github_security_hardening/PLAN_github_security_hardening.md) | [Folder](../plan/Complete/github_security_hardening/) |
+| Initiative                    | Goal                        | Phase / note                                                                                                              | Plan                                               |
+| :---------------------------- | :-------------------------- | :------------------------------------------------------------------------------------------------------------------------ | :------------------------------------------------- |
+| **Admin Dashboard Evolution** | Side menu, CMS, & builder   | Phase 1 — Side Menu & Organizations per [PLAN](../plan/Ready/admin_dashboard_evolution/PLAN_admin_dashboard_evolution.md) | [Folder](../plan/Ready/admin_dashboard_evolution/) |
+| **Admin Dashboard Redesign**  | V10 alignment & token audit | Phase 1 — Foundation & Token Audit per [PLAN](../plan/Active/admin_dashboard_redesign/PLAN_admin_dashboard_redesign.md)   | [Folder](../plan/Active/admin_dashboard_redesign/) |
 
 ### 🟡 In Planning
 
+- **Resident Portal Responsive**: PWA, mobile navigation, and offline QR cache.
+- **Scanner Onboarding**: Securing scanner sessions and multi-step ADS wizards.
 - **WhatsApp/SMS Gateway**: Mobile-first pass delivery for MENA regions.
-- **Hierarchical Seeding v2**: High-density tenant management.
 
 ---
 
@@ -33,7 +35,12 @@ _Plan folders use lifecycle layout: `Draft/` → `Ready/` → `Active/` → `Com
 Accomplishments from the last two sprints.
 
 > [!TIP]
-> **AI SDK v6 Migration** — _Completed 2026-03-27_ — [Plan archive](../plan/Complete/ai_sdk_v6_migration/PLAN_ai_sdk_v6_migration.md)
+> **GateFlow Design System [v1.0]** — _Completed 2026-04-06_ — [Plan archive](../plan/Complete/gateflow_design_system/PLAN_gateflow_design_system.md)
+>
+> - New `@gateflow/ui` component library (Tailwind v4 ready).
+> - Token-driven architecture for multi-theme scaling.
+> - `@gateflow/ai` UI library for agentic chat and streaming.
+> - Full RTL & LTR layout parity.
 
 > [!TIP]
 > **Admin Emulation Hub [v4.0]** — _Shipped 2026-04-02_
@@ -41,7 +48,6 @@ Accomplishments from the last two sprints.
 > - Real-time SSE Monitoring Hub for operational oversight.
 > - Advanced Seeding Wizard for high-density hierarchies.
 > - Global Emulation Mode for platform-wide traffic simulation.
-> - Full ADS Design Token compliance.
 
 > [!NOTE]
 > **Marketing Suite Foundation** — _Shipped 2026-03-23_

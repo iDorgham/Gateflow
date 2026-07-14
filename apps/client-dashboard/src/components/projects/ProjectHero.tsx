@@ -1,7 +1,15 @@
 'use client';
 
-import { Pencil, Share2, MapPin, Globe, ExternalLink, ArrowLeft, Building } from 'lucide-react';
-import { Button } from '@gate-access/ui';
+import {
+  Pencil,
+  Share2,
+  MapPin,
+  Globe,
+  ExternalLink,
+  ArrowLeft,
+  Building,
+} from 'lucide-react';
+import { Button } from '@gateflow/ui';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { motion } from 'framer-motion';
@@ -44,7 +52,7 @@ export function ProjectHero({ project }: ProjectHeroProps) {
           </div>
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-        
+
         {/* Back Button — start-6 for RTL flip */}
         <Link
           href={`/${locale}/dashboard/projects`}
@@ -83,9 +91,9 @@ export function ProjectHero({ project }: ProjectHeroProps) {
                 </div>
               )}
               {project.website && (
-                <a 
-                  href={project.website} 
-                  target="_blank" 
+                <a
+                  href={project.website}
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-1.5 hover:text-primary transition-colors hover:underline"
                 >
@@ -94,9 +102,9 @@ export function ProjectHero({ project }: ProjectHeroProps) {
                 </a>
               )}
               {project.externalUrl && (
-                <a 
-                  href={project.externalUrl} 
-                  target="_blank" 
+                <a
+                  href={project.externalUrl}
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-1.5 hover:text-primary transition-colors hover:underline"
                 >

@@ -111,7 +111,7 @@ export async function POST(request: NextRequest) {
       user.id,
       user.email,
       user.organizationId,
-      null, // New org has no type yet
+      org.type,
       {
         id: user.role.id,
         name: user.role.name,

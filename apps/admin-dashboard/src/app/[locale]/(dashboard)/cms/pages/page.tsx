@@ -1,60 +1,53 @@
-import { requireAdmin } from '@/lib/admin-auth';
+import { CmsPagesClient } from '@/components/cms/CmsPagesClient';
 import { Locale } from '@/lib/i18n/i18n-config';
-import { PageHeader, Button, Badge } from '@gate-access/ui';
-import { Monitor, Building2, ArrowRight } from 'lucide-react';
-import Link from 'next/link';
 
-export const metadata = { title: 'Landing Pages | CMS' };
+export const metadata = { title: 'CMS Pages' };
 
-export default async function GlobalCMSPagesPage(props: {
+export default async function CmsPagesPage(props: {
   params: Promise<{ locale: Locale }>;
 }) {
   const params = await props.params;
   const { locale } = params;
 
-  await requireAdmin(locale);
+  // Mock pages data since Prisma models do not exist yet.
+  const initialPages = [
+    {
+      id: 'page_1',
+      title: 'Home',
+      slug: '/',
+      status: 'published',
+      publishedAt: '2026-04-01T10:00:00Z',
+      updatedAt: '2026-04-20T14:30:00Z',
+      author: { id: 'usr_1', name: 'Admin User' },
+    },
+    {
+      id: 'page_2',
+      title: 'About Us',
+      slug: '/about',
+      status: 'published',
+      publishedAt: '2026-04-05T09:15:00Z',
+      updatedAt: '2026-04-18T11:20:00Z',
+      author: { id: 'usr_1', name: 'Admin User' },
+    },
+    {
+      id: 'page_3',
+      title: 'Services',
+      slug: '/services',
+      status: 'draft',
+      publishedAt: null,
+      updatedAt: '2026-04-28T16:45:00Z',
+      author: { id: 'usr_2', name: 'Content Editor' },
+    },
+    {
+      id: 'page_4',
+      title: 'Contact',
+      slug: '/contact',
+      status: 'published',
+      publishedAt: '2026-04-10T08:00:00Z',
+      updatedAt: '2026-04-10T08:00:00Z',
+      author: { id: 'usr_1', name: 'Admin User' },
+    },
+  ];
 
-  return (
-    <div className="flex flex-col items-center justify-center min-h-[60vh] text-center px-4 space-y-8 animate-in fade-in duration-700">
-      <div className="relative">
-        <div className="absolute -inset-4 bg-ds-background-brand-bold/10 rounded-full blur-2xl animate-pulse" />
-        <div className="relative bg-ds-background-default border-2 border-ds-border p-8 rounded-[2.5rem] shadow-xl">
-          <Monitor className="h-20 w-20 text-ds-text-brand" />
-        </div>
-      </div>
-
-      <div className="max-w-md space-y-4">
-        <PageHeader
-          title="Landing Pages"
-          subtitle="CMS content and landing page management is scoped to specific organizations."
-          className="text-center"
-        />
-        <p className="text-sm text-ds-text-subtlest font-medium uppercase tracking-widest">
-          Select an organization to manage its unique digital presence.
-        </p>
-      </div>
-
-      <Button
-        size="lg"
-        variant="primary"
-        className="h-14 px-10 rounded-full font-black italic shadow-lg shadow-ds-background-brand-bold/20 group"
-        asChild
-      >
-        <Link href={`/${locale}/organizations`}>
-          CHOOSE ORGANIZATION
-          <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-        </Link>
-      </Button>
-
-      <div className="flex gap-4 pt-8">
-        <Badge
-          variant="subtle"
-          className="h-8 px-4 font-bold border-ds-border bg-ds-background-neutral text-ds-text-subtle"
-        >
-          <Building2 className="mr-2 h-3.5 w-3.5" />
-          CONTEXT REQUIRED
-        </Badge>
-      </div>
-    </div>
-  );
+  return <CmsPagesClient initialPages={initialPages} />;
 }

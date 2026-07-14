@@ -13,7 +13,7 @@ import {
   TabsContent,
   TabsList,
   TabsTrigger,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
 import {

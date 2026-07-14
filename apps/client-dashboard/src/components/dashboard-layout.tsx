@@ -12,7 +12,7 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 import { LanguageSwitcher } from './language-switcher';

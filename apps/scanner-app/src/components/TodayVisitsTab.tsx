@@ -11,6 +11,7 @@ import {
   Pressable,
 } from 'react-native';
 import { getValidAccessToken } from '../lib/auth-client';
+import { nativeTokensNewEra as nativeTokens } from '../../../../packages/ui/src/tokens';
 
 const TOP_OFFSET =
   Platform.OS === 'android' ? (StatusBar.currentHeight ?? 24) + 20 : 60;
@@ -32,20 +33,20 @@ const STATUS_CONFIG: Record<
 > = {
   pending: {
     label: 'Pending',
-    bg: 'rgba(59,130,246,0.18)',
-    text: 'var(--ds-text-information)',
+    bg: nativeTokens.colors.infoSubtle,
+    text: nativeTokens.colors.info,
     icon: '⏳',
   },
   used: {
     label: 'Used',
-    bg: 'rgba(22,163,74,0.18)',
-    text: 'var(--ds-text-success)',
+    bg: nativeTokens.colors.successSubtle,
+    text: nativeTokens.colors.success,
     icon: '✓',
   },
   expired: {
     label: 'Expired',
-    bg: 'rgba(100,116,139,0.22)',
-    text: 'var(--ds-text-subtlest)',
+    bg: nativeTokens.colors.surfaceSubtle,
+    text: nativeTokens.colors.textSubtlest,
     icon: '✗',
   },
 };
@@ -184,7 +185,7 @@ export function TodayVisitsTab() {
 
       {loading ? (
         <View style={s.center}>
-          <ActivityIndicator size="large" color="var(--ds-text-information)" />
+          <ActivityIndicator size="large" color={nativeTokens.colors.info} />
         </View>
       ) : visits.length === 0 ? (
         <EmptyState />
@@ -198,8 +199,8 @@ export function TodayVisitsTab() {
             <RefreshControl
               refreshing={refreshing}
               onRefresh={() => load(true)}
-              tintColor="var(--ds-text-information)"
-              colors={['var(--ds-text-information)']}
+              tintColor={nativeTokens.colors.info}
+              colors={[nativeTokens.colors.info]}
             />
           }
           renderItem={({ item }) => <VisitItem item={item} />}
@@ -213,7 +214,7 @@ export function TodayVisitsTab() {
 const s = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: 'var(--ds-background-neutral)',
+    backgroundColor: nativeTokens.colors.background,
     paddingTop: TOP_OFFSET,
   },
   header: {
@@ -223,17 +224,19 @@ const s = StyleSheet.create({
     paddingHorizontal: 24,
     paddingBottom: 16,
     borderBottomWidth: 1,
-    borderColor: 'var(--ds-border)',
+    borderColor: nativeTokens.colors.border,
   },
   title: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: 'var(--ds-text-inverse)',
+    fontFamily: 'Cairo_700Bold',
+    fontSize: 28,
+    color: nativeTokens.colors.textInverse,
   },
   subtitle: {
+    fontFamily: 'Cairo_600SemiBold',
     fontSize: 13,
-    color: 'var(--ds-text-subtle)',
-    fontWeight: '500',
+    color: nativeTokens.colors.textSubtle,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   center: {
     flex: 1,
@@ -246,14 +249,15 @@ const s = StyleSheet.create({
     fontSize: 48,
   },
   emptyTitle: {
+    fontFamily: 'Cairo_700Bold',
     fontSize: 18,
-    fontWeight: '600',
-    color: 'var(--ds-text-subtle)',
+    color: nativeTokens.colors.textSubtle,
     textAlign: 'center',
   },
   emptySub: {
+    fontFamily: 'Cairo_400Regular',
     fontSize: 14,
-    color: 'var(--ds-text-subtle)',
+    color: nativeTokens.colors.textSubtlest,
     textAlign: 'center',
     lineHeight: 20,
     maxWidth: 260,
@@ -268,10 +272,10 @@ const s = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 16,
     gap: 12,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderColor: 'var(--ds-border)',
+    borderColor: nativeTokens.colors.border,
   },
   badge: {
     flexDirection: 'row',
@@ -289,37 +293,40 @@ const s = StyleSheet.create({
     lineHeight: 16,
   },
   badgeLabel: {
-    fontSize: 12,
-    fontWeight: '600',
+    fontFamily: 'Cairo_700Bold',
+    fontSize: 10,
+    textTransform: 'uppercase',
   },
   details: {
     flex: 1,
     gap: 2,
   },
   visitorName: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: 'var(--ds-text-subtle)',
+    fontFamily: 'Cairo_700Bold',
+    fontSize: 16,
+    color: nativeTokens.colors.textHeading,
   },
   gateName: {
+    fontFamily: 'Cairo_400Regular',
     fontSize: 12,
-    color: 'var(--ds-text-subtle)',
+    color: nativeTokens.colors.textSubtle,
   },
   time: {
+    fontFamily: 'Cairo_400Regular',
     fontSize: 12,
-    color: 'var(--ds-text-subtle)',
+    color: nativeTokens.colors.textSubtlest,
   },
   actionButton: {
-    backgroundColor: 'rgba(59,130,246,0.18)',
+    backgroundColor: nativeTokens.colors.infoSubtle,
     borderRadius: 8,
     paddingVertical: 8,
-    paddingHorizontal: 16,
+    paddingHorizontal: 12,
     borderWidth: 1,
-    borderColor: 'rgba(59,130,246,0.3)',
+    borderColor: nativeTokens.colors.infoSubtle,
   },
   actionText: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: 'var(--ds-text-information)',
+    fontFamily: 'Cairo_600SemiBold',
+    fontSize: 12,
+    color: nativeTokens.colors.info,
   },
 });

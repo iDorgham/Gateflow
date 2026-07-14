@@ -23,7 +23,7 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { toast } from 'sonner';
 import { token } from '@atlaskit/tokens';
 import {

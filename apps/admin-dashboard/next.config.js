@@ -15,8 +15,8 @@ const nextConfig = {
   outputFileTracingRoot: path.join(__dirname, '../../'),
   transpilePackages: [
     '@gate-access/types',
+    '@gateflow/ui',
     '@gate-access/db',
-    '@gate-access/ui',
     '@gate-access/i18n',
   ],
   serverExternalPackages: [
@@ -29,6 +29,18 @@ const nextConfig = {
   ],
   async headers() {
     return [{ source: '/(.*)', headers: securityHeaders }];
+  },
+  async redirects() {
+    return [
+      // Old overview -> root of organizations (picker)
+      {
+        source: '/dashboard',
+        destination: '/organizations',
+        permanent: true,
+      },
+      // Note: We cannot statically know the orgId here,
+      // Middleware or the /organizations page handles the "auto-select" logic.
+    ];
   },
   images: {
     // No remote images needed in the admin dashboard.

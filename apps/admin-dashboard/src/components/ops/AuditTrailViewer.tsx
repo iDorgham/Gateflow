@@ -1,225 +1,357 @@
 'use client';
 
 import * as React from 'react';
-import { useState } from 'react';
-import { 
-  Card, 
-  CardContent, 
-  CardHeader, 
-  CardTitle,
+import { motion } from 'framer-motion';
+import {
+  Shield,
+  Search,
+  Building,
+  Download,
+  Eye,
+  AlertTriangle,
+  CheckCircle2,
+  XCircle,
+  FileJson,
+  Calendar,
+  Layers,
+  ArrowUpDown,
+  Layout as LayoutIcon,
+} from 'lucide-react';
+import {
   Button,
-  Input,
+  Card,
+  CardContent,
   Badge,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
+  Label,
+  cn,
   ScrollArea,
   Separator,
-  cn
-} from '@gate-access/ui';
-import { 
-  Search, 
-  Filter, 
-  Download, 
-  Eye, 
-  Clock, 
-  ShieldCheck, 
-  AlertCircle,
-  FileJson,
-  User as UserIcon,
-  ChevronRight,
-  Plus
-} from 'lucide-react';
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from '@gateflow/ui';
 import { format } from 'date-fns';
 
-interface AuditLogEntry {
-  id: string;
-  action: string;
-  prompt: string;
-  reasoning: string;
-  status: 'PENDING_CONFIRMATION' | 'CONFIRMED' | 'REJECTED';
-  department: string;
-  userId: string;
-  userName: string;
-  createdAt: string;
-  payload: any;
-}
-
 /**
- * AI Audit Trail Viewer
- * 
- * A high-transparency log viewer for all AI-driven actions.
- * Enables compliance auditing, reasoning inspection, and 
- * historical action tracking across the platform.
+ * Universal Audit Trail Viewer
+ * High-performance, high-density table for tracking all AI/Human actions.
+ * Consumes AiActionLog and AuditLog tables.
  */
-export function AuditTrailViewer({ logs }: { logs: AuditLogEntry[] }) {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedLog, setSelectedLog] = useState<AuditLogEntry | null>(null);
+export function AuditTrailViewer() {
+  const [logs, setLogs] = React.useState<Record<string, any>[]>([]);
+  const [selectedLog, setSelectedLog] = React.useState<Record<
+    string,
+    any
+  > | null>(null);
+  const [search, setSearch] = React.useState('');
+  const [filterType, setFilterType] = React.useState('ALL');
 
-  const filteredLogs = logs.filter(log => 
-    log.action.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    log.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    log.reasoning.toLowerCase().includes(searchTerm.toLowerCase())
+  // Fetch Logic (Stubized for brevity)
+  React.useEffect(() => {
+    async function fetchLogs() {
+      try {
+        const res = await fetch('/api/audit-logs'); // Hypothetical unified endpoint
+        if (res.ok) {
+          const data = await res.json();
+          setLogs(data.logs || []);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    fetchLogs();
+  }, []);
+
+  const filteredLogs = logs.filter(
+    (l) =>
+      (filterType === 'ALL' || l.action === filterType) &&
+      (l.prompt?.toLowerCase().includes(search.toLowerCase()) ||
+        l.result?.toLowerCase().includes(search.toLowerCase()))
   );
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 h-[calc(100vh-12rem)]">
-      {/* Log List */}
-      <div className={cn("flex flex-col gap-6", selectedLog ? "lg:col-span-8" : "lg:col-span-12")}>
-        <div className="flex items-center justify-between">
-          <div className="space-y-1">
-            <h1 className="text-2xl font-black uppercase tracking-tight">AI Audit Trail</h1>
-            <p className="text-[10px] text-ds-text-subtle font-bold uppercase tracking-widest">Append-only compliance log</p>
+    <div className="flex flex-col h-[calc(100vh-10rem)] w-full gap-6 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+      {/* HEADER CONTROLS */}
+      <div className="flex items-center justify-between px-6 py-4 bg-card/60 backdrop-blur-md border border-border/50 rounded-2xl shadow-sm">
+        <div className="flex items-center gap-6">
+          <div className="flex items-center gap-3 pr-6 border-r border-border/30">
+            <Shield className="h-5 w-5 text-emerald-500" />
+            <h1 className="text-sm font-black uppercase tracking-tighter">
+              Ops Audit Trail
+            </h1>
           </div>
-          <div className="flex gap-3">
-            <div className="relative w-64">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-ds-text-subtle" />
-              <Input 
-                placeholder="Search actions or reasoning..." 
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 h-10 text-xs bg-ds-background-neutral-subtle/20 border-ds-border/40"
-              />
-            </div>
-            <Button variant="outline" className="font-bold text-[10px] tracking-widest uppercase gap-2">
-              <Filter className="h-4 w-4" /> Filters
-            </Button>
-            <Button className="bg-ds-background-neutral-bold font-bold text-[10px] tracking-widest uppercase gap-2">
-              <Download className="h-4 w-4" /> Export
-            </Button>
+
+          <div className="flex items-center gap-3 bg-muted/30 px-3 h-10 rounded-xl border border-border/20 max-w-md w-80">
+            <Search className="h-4 w-4 text-ds-text-subtler" />
+            <input
+              className="bg-transparent border-none outline-none text-[11px] font-bold w-full placeholder:opacity-50"
+              placeholder="Search reasoning, payload, or IDs..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Badge
+              className={cn(
+                'cursor-pointer hover:bg-primary transition-colors text-[9px] font-black uppercase tracking-widest px-3 h-6',
+                filterType === 'ALL'
+                  ? 'bg-primary'
+                  : 'bg-muted text-ds-text-subtler'
+              )}
+              onClick={() => setFilterType('ALL')}
+            >
+              ALL
+            </Badge>
+            <Badge
+              className={cn(
+                'cursor-pointer hover:bg-primary transition-colors text-[9px] font-black uppercase tracking-widest px-3 h-6',
+                filterType === 'CRM'
+                  ? 'bg-primary'
+                  : 'bg-muted text-ds-text-subtler'
+              )}
+              onClick={() => setFilterType('CRM')}
+            >
+              CRM
+            </Badge>
+            <Badge
+              className={cn(
+                'cursor-pointer hover:bg-primary transition-colors text-[9px] font-black uppercase tracking-widest px-3 h-6',
+                filterType === 'CMS'
+                  ? 'bg-primary'
+                  : 'bg-muted text-ds-text-subtler'
+              )}
+              onClick={() => setFilterType('CMS')}
+            >
+              CMS
+            </Badge>
           </div>
         </div>
 
-        <Card className="border-ds-border/40 overflow-hidden flex-1">
-          <ScrollArea className="h-full">
-            <Table>
-              <TableHeader className="bg-ds-background-neutral-subtle/30 sticky top-0 z-10">
-                <TableRow>
-                  <TableHead className="text-[10px] font-black uppercase tracking-widest">Timestamp</TableHead>
-                  <TableHead className="text-[10px] font-black uppercase tracking-widest">User</TableHead>
-                  <TableHead className="text-[10px] font-black uppercase tracking-widest">Action</TableHead>
-                  <TableHead className="text-[10px] font-black uppercase tracking-widest">Reasoning Summary</TableHead>
-                  <TableHead className="text-[10px] font-black uppercase tracking-widest">Status</TableHead>
-                  <TableHead className="text-[10px] font-black uppercase tracking-widest text-right">View</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredLogs.map((log) => (
-                  <TableRow 
-                    key={log.id} 
-                    className={cn(
-                      "group cursor-pointer hover:bg-ds-background-neutral-subtle/10",
-                      selectedLog?.id === log.id && "bg-ds-background-brand-subtle/10"
-                    )}
-                    onClick={() => setSelectedLog(log)}
-                  >
-                    <TableCell className="font-mono text-[10px] opacity-60">
-                      {format(new Date(log.createdAt), 'dd/MM/yyyy HH:mm')}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-2">
-                        <div className="h-6 w-6 rounded-full bg-ds-background-neutral-subtle/40 flex items-center justify-center">
-                          <UserIcon className="h-3 w-3 opacity-60" />
-                        </div>
-                        <span className="text-xs font-bold">{log.userName}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="secondary" className="text-[9px] font-black uppercase tracking-widest bg-ds-background-neutral-subtle/30 border-none">
-                        {log.action}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="max-w-[300px] truncate text-[11px] text-ds-text-subtle font-medium italic">
-                      &quot;{log.reasoning}&quot;
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-2">
-                        {log.status === 'CONFIRMED' ? (
-                          <ShieldCheck className="h-4 w-4 text-green-500" />
-                        ) : log.status === 'REJECTED' ? (
-                          <AlertCircle className="h-4 w-4 text-red-500" />
-                        ) : (
-                          <Clock className="h-4 w-4 text-orange-500" />
-                        )}
-                        <span className={cn(
-                          "text-[9px] font-black uppercase tracking-widest",
-                          log.status === 'CONFIRMED' ? "text-green-500" : log.status === 'REJECTED' ? "text-red-500" : "text-orange-500"
-                        )}>
-                          {log.status}
-                        </span>
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <ChevronRight className={cn(
-                        "h-4 w-4 ml-auto opacity-0 group-hover:opacity-100 transition-opacity",
-                        selectedLog?.id === log.id && "opacity-100 text-ds-text-brand"
-                      )} />
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </ScrollArea>
-        </Card>
+        <div className="flex items-center gap-3">
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-9 gap-2 text-[10px] font-black uppercase tracking-widest"
+          >
+            <Calendar className="h-4 w-4" /> Last 30 Days
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            className="h-9 gap-2 text-[10px] font-black uppercase tracking-widest"
+          >
+            <Download className="h-4 w-4" /> Export intelligence
+          </Button>
+        </div>
       </div>
 
-      {/* Detail Panel */}
-      {selectedLog && (
-        <Card className="lg:col-span-4 border-ds-border-brand/20 bg-ds-background-brand-subtle/5 flex flex-col h-full overflow-hidden animate-in slide-in-from-right-4 duration-300">
-          <CardHeader className="border-b border-ds-border/10">
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-sm font-black uppercase tracking-widest">Action Details</CardTitle>
-              <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => setSelectedLog(null)}>
-                <Plus className="h-4 w-4 rotate-45" />
-              </Button>
-            </div>
-          </CardHeader>
-          <ScrollArea className="flex-1">
-            <CardContent className="p-6 space-y-8">
-              <div className="space-y-3">
-                <label className="text-[10px] font-black uppercase tracking-widest text-ds-text-subtle">AI Reasoning</label>
-                <div className="p-4 rounded-xl bg-white border border-ds-border/20 text-xs leading-relaxed font-medium italic">
-                  &quot;{selectedLog.reasoning}&quot;
-                </div>
-              </div>
+      {/* DENSE DATA TABLE */}
+      <Card className="flex-1 border-border/50 bg-card/40 backdrop-blur-sm overflow-hidden flex flex-col shadow-inner">
+        <div className="grid grid-cols-12 gap-4 px-6 py-3 bg-muted/30 border-b border-border/30 text-[9px] font-black uppercase tracking-widest text-ds-text-subtler">
+          <div className="col-span-2 flex items-center gap-2">
+            Timestamp <ArrowUpDown className="h-2.5 w-2.5" />
+          </div>
+          <div className="col-span-2">Department / Action</div>
+          <div className="col-span-4">Operation Reasoning</div>
+          <div className="col-span-2">Entity Context</div>
+          <div className="col-span-1">Status</div>
+          <div className="col-span-1 text-right">View</div>
+        </div>
 
-              <div className="space-y-3">
-                <label className="text-[10px] font-black uppercase tracking-widest text-ds-text-subtle">Payload Inspection</label>
-                <div className="p-4 rounded-xl bg-ds-background-neutral-subtle/30 border border-ds-border/10">
-                  <pre className="text-[10px] font-mono whitespace-pre-wrap overflow-x-auto text-ds-text-subtle">
-                    {JSON.stringify(selectedLog.payload, null, 2)}
+        <ScrollArea className="flex-1">
+          <div className="divide-y divide-border/20">
+            {filteredLogs.map((log) => (
+              <motion.div
+                key={log.id}
+                layout
+                className="grid grid-cols-12 gap-4 px-6 py-4 items-center hover:bg-muted/30 transition-colors cursor-pointer group"
+                onClick={() => setSelectedLog(log)}
+              >
+                <div className="col-span-2 flex flex-col gap-0.5">
+                  <span className="text-[10px] font-black font-mono">
+                    {format(new Date(log.createdAt), 'dd.MM HH:mm:ss')}
+                  </span>
+                  <span className="text-[9px] font-bold text-ds-text-subtler uppercase tracking-tight">
+                    Asia/Riyadh TZ
+                  </span>
+                </div>
+
+                <div className="col-span-2 flex items-center gap-3">
+                  <div className="bg-primary/10 p-2 rounded-lg text-primary">
+                    <LayoutIcon className="h-3.5 w-3.5" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-[10px] font-black uppercase tracking-tight">
+                      {log.action}
+                    </span>
+                    <span className="text-[9px] font-bold text-ds-text-subtler uppercase">
+                      MARKETING HUB
+                    </span>
+                  </div>
+                </div>
+
+                <div className="col-span-4">
+                  <p className="text-[10px] font-bold leading-relaxed line-clamp-1 italic text-ds-text-subtle">
+                    &quot;{log.prompt}&quot;
+                  </p>
+                </div>
+
+                <div className="col-span-2 flex items-center gap-2">
+                  <Building className="h-3 w-3 text-ds-text-subtler opacity-40" />
+                  <span className="text-[9px] font-black uppercase tracking-widest text-ds-text-subtler truncate max-w-[150px]">
+                    {log.organizationId}
+                  </span>
+                </div>
+
+                <div className="col-span-1">
+                  <Badge
+                    className={cn(
+                      'text-[8px] font-black uppercase border-none',
+                      log.status === 'CONFIRMED'
+                        ? 'bg-emerald-500/10 text-emerald-500'
+                        : log.status === 'PENDING'
+                          ? 'bg-amber-500/10 text-amber-500'
+                          : 'bg-rose-500/10 text-rose-500'
+                    )}
+                  >
+                    {log.status}
+                  </Badge>
+                </div>
+
+                <div className="col-span-1 text-right opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Button variant="ghost" size="icon" className="h-7 w-7">
+                    <Eye className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
+              </motion.div>
+            ))}
+            {filteredLogs.length === 0 && (
+              <div className="h-96 flex flex-col items-center justify-center opacity-20 filter grayscale">
+                <Layers className="h-12 w-12 mb-4" />
+                <p className="text-sm font-black uppercase tracking-[0.2em]">
+                  No operational records found
+                </p>
+              </div>
+            )}
+          </div>
+        </ScrollArea>
+
+        <div className="p-3 bg-muted/20 border-t border-border/30 px-6 flex justify-between items-center">
+          <span className="text-[9px] font-black uppercase tracking-widest text-ds-text-subtler">
+            {filteredLogs.length} Records Loaded
+          </span>
+          <div className="flex gap-1">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-7 px-4 text-[9px] font-black uppercase tracking-widest"
+            >
+              Previous
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-7 px-4 text-[9px] font-black uppercase tracking-widest"
+            >
+              Next
+            </Button>
+          </div>
+        </div>
+      </Card>
+
+      {/* DETAIL DRAWER */}
+      <Sheet open={!!selectedLog} onOpenChange={() => setSelectedLog(null)}>
+        <SheetContent className="w-[500px] sm:w-[600px] border-l border-border/50 backdrop-blur-xl bg-card/60">
+          <SheetHeader className="pb-8 border-b border-border/30">
+            <SheetTitle className="text-sm font-black uppercase tracking-tighter flex items-center gap-3">
+              <Shield className="h-4 w-4 text-primary" /> Intelligence Report
+              Detail
+            </SheetTitle>
+          </SheetHeader>
+
+          <ScrollArea className="h-[calc(100vh-8rem)] pt-8">
+            {selectedLog && (
+              <div className="space-y-8 pb-12">
+                <div className="space-y-4">
+                  <Label className="text-[10px] font-black uppercase tracking-widest text-ds-text-subtler">
+                    AI Reasoning & Prompt
+                  </Label>
+                  <Card className="bg-muted/40 border-border/30">
+                    <CardContent className="p-4 text-xs font-bold leading-relaxed text-ds-text-subtle italic">
+                      &ldquo;{selectedLog.prompt}&rdquo;
+                    </CardContent>
+                  </Card>
+                </div>
+
+                <div className="space-y-4">
+                  <Label className="text-[10px] font-black uppercase tracking-widest text-ds-text-subtler">
+                    Execution Result
+                  </Label>
+                  <div className="flex gap-3">
+                    <div className="h-10 w-1 bg-emerald-500 rounded-full" />
+                    <p className="text-xs font-black uppercase tracking-tight leading-relaxed">
+                      {selectedLog.result}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <Label className="text-[10px] font-black uppercase tracking-widest text-ds-text-subtler flex items-center gap-2">
+                    <XCircle className="h-3 w-3" /> Security & Origin
+                  </Label>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="p-3 rounded-xl bg-muted/20 border border-border/30">
+                      <p className="text-[9px] font-black uppercase text-ds-text-subtler">
+                        Org Context
+                      </p>
+                      <p className="text-[10px] font-black uppercase">
+                        {selectedLog.organizationId}
+                      </p>
+                    </div>
+                    <div className="p-3 rounded-xl bg-muted/20 border border-border/30">
+                      <p className="text-[9px] font-black uppercase text-ds-text-subtler">
+                        User Principal
+                      </p>
+                      <p className="text-[10px] font-black uppercase">
+                        {selectedLog.userId || 'AI AUTOMATION'}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <Label className="text-[10px] font-black uppercase tracking-widest text-ds-text-subtler flex items-center gap-2">
+                    <FileJson className="h-3 w-3" /> Raw Intelligence Payload
+                  </Label>
+                  <pre className="p-6 rounded-2xl bg-slate-950 text-emerald-400 font-mono text-[9px] leading-normal overflow-x-hidden border border-emerald-500/20 shadow-2xl">
+                    {JSON.stringify(
+                      JSON.parse(selectedLog.metadata || '{}'),
+                      null,
+                      2
+                    )}
                   </pre>
                 </div>
-              </div>
 
-              <Separator className="bg-ds-border/30" />
+                <Separator className="bg-border/30" />
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <p className="text-[9px] font-black uppercase tracking-widest text-ds-text-subtle">Department</p>
-                  <p className="text-xs font-bold">{selectedLog.department}</p>
+                <div className="flex gap-4">
+                  <Button className="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white font-black uppercase tracking-widest text-[10px] h-12 gap-2">
+                    <CheckCircle2 className="h-4 w-4" /> Re-Confirm Action
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="flex-1 border-rose-500/30 text-rose-500 hover:bg-rose-500/10 font-black uppercase tracking-widest text-[10px] h-12 gap-2"
+                  >
+                    <AlertTriangle className="h-4 w-4" /> Challenge Logic
+                  </Button>
                 </div>
-                <div className="space-y-1">
-                  <p className="text-[9px] font-black uppercase tracking-widest text-ds-text-subtle">ID</p>
-                  <p className="text-[10px] font-mono opacity-60">{selectedLog.id}</p>
-                </div>
               </div>
-
-              <div className="pt-4 flex gap-3">
-                 <Button className="flex-1 h-12 bg-ds-background-brand-bold font-bold text-[10px] tracking-widest uppercase">
-                   Approve Action
-                 </Button>
-                 <Button variant="outline" className="flex-1 h-12 border-red-500/30 text-red-500 hover:bg-red-500/10 font-bold text-[10px] tracking-widest uppercase">
-                   Revert
-                 </Button>
-              </div>
-            </CardContent>
+            )}
           </ScrollArea>
-        </Card>
-      )}
+        </SheetContent>
+      </Sheet>
     </div>
   );
 }

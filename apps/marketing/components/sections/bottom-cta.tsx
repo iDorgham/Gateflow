@@ -2,14 +2,11 @@
 
 import * as React from 'react';
 import { motion } from 'framer-motion';
-import { Button } from '@gate-access/ui';
+import { Button } from '@gateflow/ui';
 import { IntentLink } from '../intent-link';
 import type { Locale } from '../../i18n-config';
 import { useTranslation } from '../../hooks/use-translation';
 import { ShieldCheck, ArrowRight, ArrowLeft, Lock, Zap } from 'lucide-react';
-
-/* Brand color — centralized so it's easy to update */
-const BRAND_RGB = '237, 75, 0';
 
 function GridBackdrop() {
   return (

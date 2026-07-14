@@ -2,13 +2,7 @@ import { requireAdmin } from '@/lib/admin-auth';
 import { getTranslation } from '@/lib/i18n/i18n';
 import { Locale } from '@/lib/i18n/i18n-config';
 import { FileText, CheckCircle2, ShieldCheck } from 'lucide-react';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  Badge,
-} from '@gate-access/ui';
+import { Card, CardContent, CardHeader, CardTitle, Badge } from '@gateflow/ui';
 import { CompliancePlaceholder } from '@/components/settings/CompliancePlaceholder';
 
 export const metadata = { title: 'Settings | Compliance' };

@@ -163,6 +163,23 @@ Gemini CLI supports the following slash commands by following the workflows defi
   4. Apply & verify: Cursor/user applies changes; run `pnpm preflight`.
   5. Log: Append entries to `CLI_USAGE_AND_RESULTS.md`.
 
+### `/deploy [<app>] [<subcommand>]`
+
+**Purpose:** Manually orchestrate deployments to Vercel with pre-flight safety checks and error memory.
+
+- **Workflow:**
+  1. Load `.ai-memory/deployment_errors.md` and check for recurring pitfalls.
+  2. Perform pre-flight: `pnpm turbo lint typecheck --filter=<app>`.
+  3. Ensure branch is committed and pushed to `origin`.
+  4. Trigger manual dispatch: `gh workflow run deploy.yml -f app=<app>`.
+  5. Monitor Vercel logs via `browser-use` if build fails; propose fix and update memory.
+- **Subcommands:**
+  - `/deploy <app>`: Forces a production deploy for a specific app (marketing, client, admin, resident, design-system).
+  - `/deploy fix`: Analyzes last failed build and implements a fix.
+  - `/deploy status`: Fetches current deployment status.
+  - `/deploy check`: Run pre-deployment checks WITHOUT deploying.
+- **Usage:** `/deploy design-system`, `/deploy fix`.
+
 ---
 
 ## Skills System
@@ -237,6 +254,11 @@ Gemini CLI supports the following slash commands by following the workflows defi
 8. **Performance Guard/100% Mandate:** Every major command must assess if performance is impacted. Trigger `/clis team perf` if score drops < 100.
 9. **Plan Lifecycle:** Respect folder transitions: `planning/` (draft) → `planned/` (ready) → `in-progress/` (active) → `done/` (complete).
 10. **Role + Tool Alignment:** Adopt the phase's **Primary role** from `SUBAGENT_HIERARCHY.md` and respect **Preferred tool** (Cursor, Claude CLI, Gemini CLI, Opencode, Kiro, Kilo, Qwen).
+11. **Deployment Guard**: Automatic deployments on `push` are DISABLED. Use `/deploy` for all production releases.
+    - **Auto-Trigger**: `/dev` automatically triggers `/deploy` after the final phase merge.
+    - **Tracking**: All deployments MUST be logged in `.ai-memory/deployment_tracker.md`.
+    - **Guide Suggestions**: `/guide` will proactively suggest `/deploy` if apps are out of sync with production.
+12. **Role + Tool Alignment**: Adopt the phase's **Primary role** from `SUBAGENT_HIERARCHY.md` and respect **Preferred tool**.
 
 ---
 

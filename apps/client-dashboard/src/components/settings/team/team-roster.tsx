@@ -21,7 +21,7 @@ import {
   Input,
   cn,
   Checkbox,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import {
   MoreHorizontal,
   UserCog,

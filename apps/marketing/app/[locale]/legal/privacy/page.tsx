@@ -11,7 +11,7 @@ export async function generateMetadata(props: {
   const { locale } = params;
   const { t } = await getTranslation(locale, 'legal');
   return {
-    title: absoluteMarketingTitle(t('privacy.title')),
+    title: absoluteMarketingTitle(t('privacy.title') as string),
   };
 }
 
@@ -24,7 +24,7 @@ export default async function PrivacyPage(props: {
 
   return (
     <LegalLayout
-      title={t('privacy.title')}
+      title={t('privacy.title') as string}
       lastUpdated={`${t('layout.lastUpdated')} ${t('privacy.lastUpdatedValue')}`}
     >
       <section>

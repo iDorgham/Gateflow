@@ -25,7 +25,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import {
   Send,
   User,

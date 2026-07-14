@@ -1,7 +1,14 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Modal, TouchableOpacity, TextInput } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Modal,
+  TouchableOpacity,
+  TextInput,
+} from 'react-native';
 import { KeyRound } from 'lucide-react-native';
-import { nativeTokens } from '@gate-access/ui/tokens';
+import { nativeTokensNewEra as nativeTokens } from '../../../../packages/ui/src/tokens';
 
 export interface SupervisorOverrideModalProps {
   visible: boolean;
@@ -10,7 +17,12 @@ export interface SupervisorOverrideModalProps {
   error?: string;
 }
 
-export function SupervisorOverrideModal({ visible, onOverride, onCancel, error }: SupervisorOverrideModalProps) {
+export function SupervisorOverrideModal({
+  visible,
+  onOverride,
+  onCancel,
+  error,
+}: SupervisorOverrideModalProps) {
   const [pin, setPin] = useState('');
 
   const handleConfirm = () => {
@@ -40,18 +52,25 @@ export function SupervisorOverrideModal({ visible, onOverride, onCancel, error }
               keyboardType="number-pad"
               maxLength={6}
               placeholder="Enter PIN"
-              placeholderTextColor={nativeTokens.colors.neutral}
+              placeholderTextColor={nativeTokens.colors.textSubtlest}
               autoFocus
             />
             {error ? <Text style={styles.errorText}>{error}</Text> : null}
           </View>
 
           <View style={styles.actions}>
-            <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={onCancel}>
+            <TouchableOpacity
+              style={[styles.button, styles.cancelButton]}
+              onPress={onCancel}
+            >
               <Text style={styles.cancelButtonText}>Cancel</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[styles.button, styles.confirmButton, pin.length < 4 && styles.buttonDisabled]}
+              style={[
+                styles.button,
+                styles.confirmButton,
+                pin.length < 4 && styles.buttonDisabled,
+              ]}
               onPress={handleConfirm}
               disabled={pin.length < 4}
             >
@@ -67,67 +86,70 @@ export function SupervisorOverrideModal({ visible, onOverride, onCancel, error }
 const styles = StyleSheet.create({
   backdrop: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.6)',
+    backgroundColor: nativeTokens.colors.backdropGlass,
     justifyContent: 'flex-end',
   },
   container: {
-    backgroundColor: nativeTokens.colors.card,
-    borderTopLeftRadius: nativeTokens.borderRadius.xl,
-    borderTopRightRadius: nativeTokens.borderRadius.xl,
-    padding: nativeTokens.spacing['3xl'],
-    paddingBottom: nativeTokens.spacing['4xl'], // Extra padding for safe area
+    backgroundColor: nativeTokens.colors.surfaceSubtle,
+    borderTopLeftRadius: 32,
+    borderTopRightRadius: 32,
+    padding: 24,
+    paddingBottom: 40,
     width: '100%',
-    ...nativeTokens.shadows.xl,
+    borderTopWidth: 1,
+    borderColor: nativeTokens.colors.border,
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: nativeTokens.spacing.md,
-    gap: nativeTokens.spacing.sm,
+    marginBottom: 12,
+    gap: 8,
   },
   title: {
-    ...nativeTokens.typography.xl,
-    fontWeight: 'bold',
-    color: nativeTokens.colors.foreground,
+    fontFamily: 'Cairo_700Bold',
+    fontSize: 20,
+    color: nativeTokens.colors.textHeading,
   },
   description: {
-    ...nativeTokens.typography.sm,
-    color: nativeTokens.colors.neutral,
-    marginBottom: nativeTokens.spacing.xl,
+    fontFamily: 'Cairo_400Regular',
+    fontSize: 14,
+    color: nativeTokens.colors.textSubtle,
+    marginBottom: 24,
   },
   inputContainer: {
-    marginBottom: nativeTokens.spacing['2xl'],
+    marginBottom: 24,
   },
   input: {
-    backgroundColor: nativeTokens.colors.secondary,
-    borderRadius: nativeTokens.borderRadius.md,
-    padding: nativeTokens.spacing.lg,
-    ...nativeTokens.typography.lg,
-    color: nativeTokens.colors.foreground,
+    backgroundColor: nativeTokens.colors.background,
+    borderRadius: 12,
+    padding: 16,
+    fontFamily: 'Cairo_700Bold',
+    fontSize: 18,
+    color: nativeTokens.colors.textPrimary,
     textAlign: 'center',
-    fontWeight: 'bold',
     letterSpacing: 8,
-    borderWidth: 2,
-    borderColor: 'transparent',
+    borderWidth: 1,
+    borderColor: nativeTokens.colors.border,
   },
   inputError: {
     borderColor: nativeTokens.colors.danger,
-    backgroundColor: `${nativeTokens.colors.danger}10`,
+    backgroundColor: nativeTokens.colors.dangerSubtle,
   },
   errorText: {
-    ...nativeTokens.typography.xs,
+    fontFamily: 'Cairo_600SemiBold',
+    fontSize: 12,
     color: nativeTokens.colors.danger,
-    marginTop: nativeTokens.spacing.sm,
+    marginTop: 8,
     textAlign: 'center',
   },
   actions: {
     flexDirection: 'row',
-    gap: nativeTokens.spacing.md,
+    gap: 12,
   },
   button: {
     flex: 1,
-    paddingVertical: nativeTokens.spacing.lg,
-    borderRadius: nativeTokens.borderRadius.md,
+    paddingVertical: 14,
+    borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -135,19 +157,19 @@ const styles = StyleSheet.create({
     opacity: 0.5,
   },
   cancelButton: {
-    backgroundColor: nativeTokens.colors.secondary,
+    backgroundColor: nativeTokens.colors.surfaceRaised,
   },
   cancelButtonText: {
-    ...nativeTokens.typography.base,
-    fontWeight: '600',
-    color: nativeTokens.colors.foreground,
+    fontFamily: 'Cairo_600SemiBold',
+    fontSize: 16,
+    color: nativeTokens.colors.textPrimary,
   },
   confirmButton: {
-    backgroundColor: nativeTokens.colors.warning,
+    backgroundColor: nativeTokens.colors.primary,
   },
   confirmButtonText: {
-    ...nativeTokens.typography.base,
-    fontWeight: '600',
-    color: nativeTokens.colors.background,
+    fontFamily: 'Cairo_700Bold',
+    fontSize: 16,
+    color: nativeTokens.colors.textInverse,
   },
 });

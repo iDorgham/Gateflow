@@ -1,0 +1,12 @@
+node:internal/process/promises:391
+    triggerUncaughtException(err, true /* fromPromise */);
+    ^
+
+[Error: EPERM: operation not permitted, opendir '/Users/Dorgham/.cache/node/corepack/v1/pnpm'] {
+  errno: -1,
+  code: 'EPERM',
+  syscall: 'opendir',
+  path: '/Users/Dorgham/.cache/node/corepack/v1/pnpm'
+}
+
+Node.js v20.19.0

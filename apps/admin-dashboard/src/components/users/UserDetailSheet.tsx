@@ -10,7 +10,7 @@ import {
   NativeSelect,
   cn,
   ScrollArea,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import {
   Building2,
   CalendarDays,

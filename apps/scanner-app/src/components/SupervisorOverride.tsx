@@ -1,17 +1,3 @@
-/**
- * SupervisorOverride
- *
- * Shown when a scan is rejected. Allows an authorised supervisor to grant
- * access by entering their PIN (stored in expo-secure-store as 'supervisor_pin').
- *
- * Flow:
- *   1. Operator taps "Request Override" on the rejected-scan overlay.
- *   2. Supervisor enters reason + PIN (4–6 digits).
- *   3. Up to 3 attempts; on exhaustion a force-override becomes available.
- *   4. Every override attempt (succeeded or forced) is appended to the
- *      AsyncStorage audit log ('supervisor_overrides').
- */
-
 import { useState, useCallback, useEffect } from 'react';
 import {
   Modal,
@@ -26,7 +12,7 @@ import {
 import * as SecureStore from 'expo-secure-store';
 import * as Haptics from 'expo-haptics';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { nativeTokens } from '@gate-access/ui/tokens';
+import { nativeTokensNewEra as nativeTokens } from '../../../../packages/ui/src/tokens';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -220,7 +206,7 @@ export function SupervisorOverride({
                 setError('');
               }}
               placeholder="e.g. Emergency access — ID verified manually"
-              placeholderTextColor={nativeTokens.colors.mutedForeground}
+              placeholderTextColor={nativeTokens.colors.textSubtlest}
               multiline
               maxLength={200}
               returnKeyType="done"
@@ -265,7 +251,7 @@ export function SupervisorOverride({
                           {key === '✓' && isValidating ? (
                             <ActivityIndicator
                               size="small"
-                              color={nativeTokens.colors.primaryForeground}
+                              color={nativeTokens.colors.textInverse}
                             />
                           ) : (
                             <Text
@@ -334,64 +320,67 @@ async function haptic(type: Haptics.NotificationFeedbackType): Promise<void> {
 const s = StyleSheet.create({
   backdrop: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.7)',
+    backgroundColor: nativeTokens.colors.backdropGlass,
     justifyContent: 'flex-end',
   },
   sheet: {
-    backgroundColor: nativeTokens.colors.neutral700,
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
-    maxHeight: '92%',
+    backgroundColor: nativeTokens.colors.surfaceSubtle,
+    borderTopLeftRadius: 32,
+    borderTopRightRadius: 32,
+    maxHeight: '94%',
     borderTopWidth: 1,
-    borderColor: nativeTokens.colors.neutral700,
+    borderColor: nativeTokens.colors.border,
   },
   scrollContent: {
     padding: 24,
-    paddingBottom: 40,
+    paddingBottom: 48,
   },
   title: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: nativeTokens.colors.primaryForeground,
+    fontFamily: 'Cairo_700Bold',
+    fontSize: 24,
+    color: nativeTokens.colors.textHeading,
     marginBottom: 8,
   },
   sub: {
+    fontFamily: 'Cairo_400Regular',
     fontSize: 14,
-    color: nativeTokens.colors.mutedForeground,
+    color: nativeTokens.colors.textSubtle,
     lineHeight: 20,
-    marginBottom: 20,
+    marginBottom: 24,
   },
   label: {
+    fontFamily: 'Cairo_600SemiBold',
     fontSize: 13,
-    fontWeight: '600',
-    color: nativeTokens.colors.mutedForeground,
-    marginBottom: 8,
+    color: nativeTokens.colors.textSubtlest,
+    marginBottom: 10,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   reasonInput: {
-    backgroundColor: nativeTokens.colors.neutral700,
+    backgroundColor: nativeTokens.colors.background,
     borderWidth: 1,
-    borderColor: nativeTokens.colors.neutral500,
-    borderRadius: 12,
-    paddingVertical: 12,
-    paddingHorizontal: 14,
-    fontSize: 15,
-    color: nativeTokens.colors.primaryForeground,
-    minHeight: 72,
+    borderColor: nativeTokens.colors.border,
+    borderRadius: 16,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    fontSize: 16,
+    color: nativeTokens.colors.textPrimary,
+    minHeight: 100,
     textAlignVertical: 'top',
-    marginBottom: 20,
+    marginBottom: 24,
   },
   dotRow: {
     flexDirection: 'row',
-    gap: 10,
-    marginBottom: 20,
+    gap: 12,
+    marginBottom: 24,
     justifyContent: 'center',
   },
   dot: {
-    width: 14,
-    height: 14,
-    borderRadius: 7,
-    borderWidth: 1.5,
-    borderColor: nativeTokens.colors.mutedForeground,
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    borderWidth: 2,
+    borderColor: nativeTokens.colors.borderBold,
     backgroundColor: 'transparent',
   },
   dotFilled: {
@@ -399,25 +388,25 @@ const s = StyleSheet.create({
     borderColor: nativeTokens.colors.primary,
   },
   dotOptional: {
-    borderColor: nativeTokens.colors.neutral500,
-    opacity: 0.5,
+    borderColor: nativeTokens.colors.textSubtlest,
+    opacity: 0.3,
   },
   pad: {
-    gap: 10,
-    marginBottom: 16,
+    gap: 12,
+    marginBottom: 20,
   },
   padRow: {
     flexDirection: 'row',
-    gap: 10,
+    gap: 12,
     justifyContent: 'center',
   },
   padKey: {
-    width: 76,
-    height: 56,
-    backgroundColor: nativeTokens.colors.neutral700,
-    borderRadius: 12,
+    width: 80,
+    height: 60,
+    backgroundColor: nativeTokens.colors.background,
+    borderRadius: 16,
     borderWidth: 1,
-    borderColor: nativeTokens.colors.neutral500,
+    borderColor: nativeTokens.colors.border,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -426,58 +415,60 @@ const s = StyleSheet.create({
     borderColor: nativeTokens.colors.primary,
   },
   padKeyPressed: {
-    opacity: 0.6,
+    opacity: 0.4,
   },
   padKeyText: {
-    fontSize: 22,
-    color: nativeTokens.colors.primaryForeground,
-    fontWeight: '500',
+    fontFamily: 'Cairo_600SemiBold',
+    fontSize: 24,
+    color: nativeTokens.colors.textHeading,
   },
   padConfirmText: {
-    fontWeight: '700',
+    color: nativeTokens.colors.textInverse,
   },
   noPinBox: {
-    backgroundColor: 'rgba(245,158,11,0.12)',
+    backgroundColor: nativeTokens.colors.warningSubtle,
     borderWidth: 1,
-    borderColor: 'rgba(245,158,11,0.4)',
-    borderRadius: 10,
-    paddingVertical: 12,
-    paddingHorizontal: 14,
-    marginBottom: 16,
+    borderColor: nativeTokens.colors.warning,
+    borderRadius: 12,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    marginBottom: 20,
   },
   noPinText: {
+    fontFamily: 'Cairo_400Regular',
     color: nativeTokens.colors.warning,
     fontSize: 14,
     lineHeight: 20,
   },
   error: {
-    color: nativeTokens.colors.destructive,
+    fontFamily: 'Cairo_600SemiBold',
+    color: nativeTokens.colors.danger,
     fontSize: 14,
     textAlign: 'center',
-    marginBottom: 12,
+    marginBottom: 16,
     lineHeight: 20,
   },
   forceBtn: {
-    backgroundColor: 'rgba(239,68,68,0.12)',
+    backgroundColor: nativeTokens.colors.dangerSubtle,
     borderWidth: 1,
-    borderColor: 'rgba(239,68,68,0.4)',
-    borderRadius: 12,
-    paddingVertical: 14,
+    borderColor: nativeTokens.colors.danger,
+    borderRadius: 16,
+    paddingVertical: 16,
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: 12,
   },
   forceBtnText: {
-    color: nativeTokens.colors.destructive,
+    fontFamily: 'Cairo_700Bold',
+    color: nativeTokens.colors.danger,
     fontSize: 15,
-    fontWeight: '600',
   },
   cancelBtn: {
     paddingVertical: 14,
     alignItems: 'center',
   },
   cancelText: {
-    color: nativeTokens.colors.mutedForeground,
+    fontFamily: 'Cairo_600SemiBold',
+    color: nativeTokens.colors.textSubtlest,
     fontSize: 15,
-    fontWeight: '500',
   },
 });

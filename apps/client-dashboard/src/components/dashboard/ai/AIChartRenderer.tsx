@@ -15,7 +15,7 @@ import {
   Cell,
   CartesianGrid,
 } from 'recharts';
-import { Card, CardContent, CardHeader, CardTitle } from '@gate-access/ui';
+import { Card, CardContent, CardHeader, CardTitle } from '@gateflow/ui';
 import { getChartColor } from '@/lib/analytics/chart-colors';
 
 export interface ChartDataBlock {

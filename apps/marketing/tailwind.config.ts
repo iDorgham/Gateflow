@@ -2,11 +2,10 @@ import type { Config } from 'tailwindcss';
 import animate from 'tailwindcss-animate';
 import typography from '@tailwindcss/typography';
 
-// @ts-ignore – relative import for jiti (Tailwind's TS loader)
 import { tokens } from '../../packages/ui/src/tokens';
 
 const config: Config = {
-  darkMode: ['class'],
+  darkMode: ['selector', '[data-color-mode="dark"]'],
   content: [
     './app/**/*.{ts,tsx,js,jsx}',
     './components/**/*.{ts,tsx,js,jsx}',
@@ -37,4 +36,3 @@ const config: Config = {
 };
 
 export default config;
-

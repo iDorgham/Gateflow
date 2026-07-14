@@ -11,7 +11,7 @@ import {
   Badge,
   Input,
   Label,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import {
   Shield,
   Users,

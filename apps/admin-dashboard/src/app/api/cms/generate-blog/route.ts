@@ -1,100 +1,84 @@
-import { generateObject } from 'ai';
-import { createGoogleGenerativeAI } from '@ai-sdk/google';
-import { z } from 'zod';
 import { NextResponse } from 'next/server';
 import { isAdminAuthorized } from '@/lib/admin-auth';
+import { generateObject } from 'ai';
+import { google } from '@ai-sdk/google';
+import { z } from 'zod';
 import { prisma } from '@gate-access/db';
-
-export const runtime = 'nodejs';
-export const maxDuration = 60;
+import { trackAiUsage } from '@/lib/ai-usage-tracker';
 
 /**
+ * AI Blog Draft Generator API
+ * Generates full blog post Markdown, SEO, and slugs (EN & AR).
  * POST /api/cms/generate-blog
- *
- * Generates a full multi-lingual blog post draft based on a topic.
  */
-export async function POST(request: Request) {
+export async function POST(req: Request) {
+  if (!(await isAdminAuthorized(req))) {
+    return new NextResponse('Unauthorized', { status: 401 });
+  }
+
+  const { title, topic, orgId } = await req.json();
+
   try {
-    if (!(await isAdminAuthorized(request))) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey) {
-      return NextResponse.json(
-        { error: 'GEMINI_API_KEY not configured' },
-        { status: 503 }
-      );
-    }
-
-    const body = await request.json();
-    const { topic, organizationId } = body;
-
-    if (!topic || !organizationId) {
-      return NextResponse.json(
-        { error: 'topic and organizationId are required' },
-        { status: 400 }
-      );
-    }
-
-    const google = createGoogleGenerativeAI({ apiKey });
-
-    const blogSchema = z.object({
-      titleEn: z.string(),
-      titleAr: z.string(),
-      slugEn: z.string(),
-      slugAr: z.string(),
-      excerptEn: z.string(),
-      excerptAr: z.string(),
-      contentEn: z.string(), // Clean HTML
-      contentAr: z.string(),
-      metaTitleEn: z.string(),
-      metaTitleAr: z.string(),
-      metaDescEn: z.string(),
-      metaDescAr: z.string(),
+    const { object, usage } = await generateObject({
+      model: google('gemini-1.5-pro'),
+      schema: z.object({
+        en: z.object({
+          title: z.string(),
+          slug: z.string(),
+          content: z.string(), // Markdown
+          excerpt: z.string(),
+          metaTitle: z.string(),
+          metaDesc: z.string(),
+        }),
+        ar: z.object({
+          title: z.string(),
+          slug: z.string(),
+          content: z.string(), // Markdown
+          excerpt: z.string(),
+          metaTitle: z.string(),
+          metaDesc: z.string(),
+        }),
+      }),
+      system: `
+        You are a Senior Content Strategist for GateFlow.
+        Generate industry-leading, SEO-optimized blog posts for the community management and access control sector.
+        Market: Saudi Arabia / UAE / MENA.
+        Tone: Authoritative, Visionary, Smart.
+        Provide full drafts in both English and Arabic.
+        Enable Markdown structure (H2, H3, bold, lists).
+        Arabic version must be culturally localized, not just translated.
+      `,
+      prompt: `Title Suggestion: ${title}. Topic: ${topic}`,
     });
 
-    const systemPrompt = `You are an expert SaaS content writer and SEO specialist. 
-    Generate a high-quality, long-form blog post for "GateFlow" (a premium smart gate access and facility management platform).
-    
-    Topic: ${topic}
-    
-    Requirements:
-    1. Generate mirror versions in English (Premium SaaS tone) and Arabic (Modern Standard Arabic for MENA business market).
-    2. Provide a compelling title and a concise excerpt for both.
-    3. Content must be rich, informative, and formatted in clean HTML (h2, p, ul, li, strong). Avoid h1 as it's reserved for the page title.
-    4. Include SEO metadata (meta title and meta description) optimized for high-volume keywords related to the topic.
-    5. Generate short, clean slugs for both languages.
-    6. Ensure technical accuracy regarding facility management and gate access security.`;
-
-    const result = await generateObject({
-      model: google('gemini-1.5-flash'),
-      schema: blogSchema,
-      prompt: systemPrompt,
+    // Record AI Cost Tracking
+    await (trackAiUsage as any)({
+      model: 'gemini-1.5-pro',
+      usage: {
+        promptTokens: (usage as any).promptTokens || 0,
+        completionTokens: (usage as any).completionTokens || 0,
+      },
+      department: 'MARKETING',
+      action: 'BLOG_DRAFT_GENERATED',
     });
 
-    // Log the AI action to the database for audit and HiTL
+    // Log AI Action (HiTL)
     await prisma.aiActionLog.create({
       data: {
-        organizationId,
-        action: 'BLOG_POST_GENERATED',
-        prompt: topic,
-        result: JSON.stringify(result.object),
-        status: 'PENDING_CONFIRMATION',
-        metadata: {
-          topic,
-        },
+        organizationId: orgId || 'GLOBAL',
+        action: 'BLOG_DRAFT_GENERATED',
+        status: 'PENDING',
+        prompt: `Title: ${title}, Topic: ${topic}`,
+        result: 'Full draft ready for review.',
+        metadata: JSON.stringify(object),
       },
     });
 
-    return NextResponse.json({
-      success: true,
-      post: result.object,
-    });
-  } catch (error: any) {
-    console.error('[CMS_GENERATE_BLOG_ERROR]', error);
+    return NextResponse.json({ success: true, draft: object });
+  } catch (error) {
+    console.error('[BLOG_GENERATE_ERROR]', error);
     return NextResponse.json(
-      { error: 'Internal server error', details: error.message },
+      { error: 'AI generation failed' },
       { status: 500 }
     );
   }

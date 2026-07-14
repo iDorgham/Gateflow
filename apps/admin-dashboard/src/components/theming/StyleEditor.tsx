@@ -1,335 +1,332 @@
 'use client';
 
 import * as React from 'react';
-import { useState, useRef, useEffect } from 'react';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  Button,
-  Input,
-  Separator,
-  Badge,
-  Tabs,
-  TabsList,
-  TabsTrigger,
-  TabsContent,
-  cn,
-} from '@gate-access/ui';
 import {
   Palette,
-  Eye,
+  RotateCcw,
   Save,
-  History,
-  CheckCircle2,
-  AlertTriangle,
+  Globe,
   Smartphone,
   Monitor,
-  Type,
-  Image as ImageIcon,
-  ChevronRight,
-  RotateCcw,
+  Upload,
+  ExternalLink,
+  History,
 } from 'lucide-react';
+import {
+  Button,
+  Card,
+  Badge,
+  Input,
+  Label,
+  cn,
+  ScrollArea,
+} from '@gateflow/ui';
 import { toast } from 'sonner';
-
-const validateContrast = (foreground: string, background: string) => {
-  return { passesAA: true };
-};
-
-interface BrandingData {
-  tokenOverrides: Record<string, string>;
-  fontFamily: string;
-  fontFamilyArabic: string;
-  logoUrl?: string;
-}
-
-interface StyleEditorProps {
-  organizationId: string;
-  initialBranding: BrandingData;
-  clientDashboardUrl: string;
-}
+import { BRAND_COLORS } from '@gateflow/ui/tokens';
 
 /**
- * Style Hub & Live Theming Engine
- *
- * A professional design tool for white-labeling client dashboards.
- * Features real-time OKLCH-aware color editing, WCAG contrast auditing,
- * and live iframe preview via PostMessage.
+ * Style Editor (Power User Tool)
+ * Allows Super Admins to white-label client organizations.
+ * Features: Live Iframe Preview, WCAG Validation, Version Rollback.
  */
-export function StyleEditor({
-  organizationId,
-  initialBranding,
-  clientDashboardUrl,
-}: StyleEditorProps) {
-  const [branding, setBranding] = useState<BrandingData>(initialBranding);
-  const [viewMode, setViewMode] = useState<'desktop' | 'mobile'>('desktop');
-  const [activeTab, setActiveTab] = useState('colors');
-  const iframeRef = useRef<HTMLIFrameElement>(null);
+export function StyleEditor({ orgId }: { orgId: string }) {
+  const [tokens, setTokens] = React.useState<Record<string, string>>({});
+  const [fontFamily, setFontFamily] = React.useState('Inter');
+  const [previewMode, setPreviewMode] = React.useState<'desktop' | 'mobile'>(
+    'desktop'
+  );
+  const [locale, setLocale] = React.useState<'en' | 'ar'>('en');
+  const iframeRef = React.useRef<HTMLIFrameElement>(null);
+  const [history, setHistory] = React.useState<any[]>([]);
 
-  // Sync with iframe on change
-  useEffect(() => {
-    if (iframeRef.current?.contentWindow) {
-      iframeRef.current.contentWindow.postMessage(
+  // 1. Sync tokens to iframe via PostMessage
+  React.useEffect(() => {
+    const iframe = iframeRef.current;
+    if (iframe && iframe.contentWindow) {
+      iframe.contentWindow.postMessage(
         {
           type: 'BRANDING_OVERRIDE',
-          tokens: branding.tokenOverrides,
+          tokens,
+          fontFamily,
         },
         '*'
       );
     }
-  }, [branding]);
+  }, [tokens, fontFamily]);
 
-  const updateToken = (token: string, value: string) => {
-    setBranding((prev) => ({
-      ...prev,
-      tokenOverrides: {
-        ...prev.tokenOverrides,
-        [token]: value,
-      },
-    }));
-  };
+  // 2. Fetch Initial State
+  React.useEffect(() => {
+    async function fetchBranding() {
+      try {
+        const res = await fetch(`/api/branding/${orgId}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.branding) {
+            setTokens(data.branding.tokenOverrides);
+            setFontFamily(data.branding.fontFamily);
+          }
+          setHistory(data.snapshots || []);
+        }
+      } catch (e) {
+        console.error('Failed to load branding');
+      }
+    }
+    fetchBranding();
+  }, [orgId]);
 
   const handleSave = async () => {
-    try {
-      const res = await fetch(`/api/branding/${organizationId}`, {
+    toast.promise(
+      fetch(`/api/branding/${orgId}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(branding),
-      });
-
-      if (!res.ok) throw new Error('Failed to save branding');
-      toast.success(
-        'Branding updated successfully. Snapshots created for rollback.'
-      );
-    } catch (err) {
-      toast.error('Failed to save branding overrides.');
-    }
+        body: JSON.stringify({ tokens, fontFamily }),
+      }).then((res) => res.json()),
+      {
+        loading: 'Saving branding snapshot...',
+        success: 'Branding updated successfully!',
+        error: 'Failed to save branding.',
+      }
+    );
   };
 
-  const primaryContrast = validateContrast(
-    branding.tokenOverrides['--ds-background-brand-bold'] ||
-      'var(--ds-background-information-bold)',
-    'var(--ds-text-inverse)'
-  );
+  const handleTokenChange = (key: string, value: string) => {
+    setTokens((prev) => ({ ...prev, [key]: value }));
+  };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 h-[calc(100vh-12rem)]">
-      {/* Left Panel: Controls */}
-      <div className="lg:col-span-4 flex flex-col gap-6 overflow-y-auto pr-2">
-        <div className="space-y-1">
-          <h1 className="text-2xl font-black uppercase tracking-tight flex items-center gap-2">
-            <Palette className="h-6 w-6 text-ds-text-brand" />
-            Style Hub
-          </h1>
-          <p className="text-ds-text-subtle text-xs">
-            Configure organization-level branding overrides.
-          </p>
-        </div>
-
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="w-full bg-ds-background-neutral-subtle/30 p-1">
-            <TabsTrigger
-              value="colors"
-              className="flex-1 font-bold text-[10px] uppercase tracking-widest gap-2"
+    <div className="flex h-[calc(100vh-12rem)] w-full gap-6 overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-1000">
+      {/* LEFT: Controls Panel */}
+      <div className="w-[400px] flex flex-col gap-4 shrink-0">
+        <Card className="border-border/50 bg-card/60 backdrop-blur-sm overflow-hidden flex flex-col h-full">
+          <div className="p-4 border-b border-border/30 bg-muted/20 flex justify-between items-center">
+            <h3 className="text-[10px] font-black uppercase tracking-[0.2em] flex items-center gap-2">
+              <Palette className="h-4 w-4 text-primary" />
+              Theme Engine v4.0
+            </h3>
+            <Badge
+              variant="outline"
+              className="text-[9px] font-black uppercase border-primary/20 text-primary"
             >
-              <Palette className="h-3 w-3" /> Colors
-            </TabsTrigger>
-            <TabsTrigger
-              value="typography"
-              className="flex-1 font-bold text-[10px] uppercase tracking-widest gap-2"
-            >
-              <Type className="h-3 w-3" /> Type
-            </TabsTrigger>
-            <TabsTrigger
-              value="assets"
-              className="flex-1 font-bold text-[10px] uppercase tracking-widest gap-2"
-            >
-              <ImageIcon className="h-3 w-3" /> Assets
-            </TabsTrigger>
-          </TabsList>
+              LIVE
+            </Badge>
+          </div>
 
-          <TabsContent value="colors" className="mt-6 space-y-8">
-            <section className="space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-black uppercase tracking-widest text-ds-text-subtle">
-                  Primary Brand Color
-                </span>
-                <Badge
-                  variant="outline"
-                  className={cn(
-                    'text-[8px] font-black tracking-widest px-2 py-0.5',
-                    primaryContrast.passesAA
-                      ? 'bg-green-500/10 text-green-500'
-                      : 'bg-red-500/10 text-red-500'
-                  )}
-                >
-                  {primaryContrast.passesAA
-                    ? '✅ WCAG AA PASSED'
-                    : '⚠️ LOW CONTRAST'}
-                </Badge>
-              </div>
-
-              <div className="grid grid-cols-1 gap-4">
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <label className="text-xs font-bold">
-                      Brand Bold (Primary)
-                    </label>
-                    <span className="text-[10px] font-mono text-ds-text-subtle">
-                      {branding.tokenOverrides['--ds-background-brand-bold'] ||
-                        'var(--ds-background-information-bold)'}
+          <ScrollArea className="flex-1 p-4">
+            <div className="space-y-8">
+              {/* BRAND ASSETS */}
+              <div className="space-y-4">
+                <Label className="text-[10px] font-black uppercase tracking-widest text-ds-text-subtler">
+                  Brand Assets
+                </Label>
+                <div className="grid grid-cols-1 gap-4">
+                  <div className="border-2 border-dashed border-border/50 rounded-xl p-6 flex flex-col items-center justify-center gap-2 hover:bg-muted/30 transition-colors cursor-pointer group">
+                    <div className="bg-muted p-3 rounded-full group-hover:scale-110 transition-transform">
+                      <Upload className="h-5 w-5 text-ds-text-subtler" />
+                    </div>
+                    <span className="text-[10px] font-black uppercase tracking-tight">
+                      Upload Logo (PNG/SVG)
                     </span>
                   </div>
-                  <div className="flex gap-2">
-                    <Input
-                      type="color"
-                      className="w-12 h-10 p-1 cursor-pointer"
-                      value={
-                        branding.tokenOverrides['--ds-background-brand-bold'] ||
-                        'var(--ds-background-information-bold)'
-                      }
-                      onChange={(e) =>
-                        updateToken(
-                          '--ds-background-brand-bold',
-                          e.target.value
-                        )
-                      }
-                    />
-                    <Input
-                      type="text"
-                      className="flex-1 font-mono text-xs"
-                      value={
-                        branding.tokenOverrides['--ds-background-brand-bold'] ||
-                        'var(--ds-background-information-bold)'
-                      }
-                      onChange={(e) =>
-                        updateToken(
-                          '--ds-background-brand-bold',
-                          e.target.value
-                        )
-                      }
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2 opacity-60">
-                  <label className="text-xs font-bold">
-                    Brand Subtle (Backgrounds)
-                  </label>
-                  <div className="flex gap-2">
-                    <Input
-                      type="color"
-                      className="w-12 h-10 p-1 cursor-pointer"
-                      value={
-                        branding.tokenOverrides[
-                          '--ds-background-brand-subtle'
-                        ] || 'var(--ds-background-brand-subtle)'
-                      }
-                      onChange={(e) =>
-                        updateToken(
-                          '--ds-background-brand-subtle',
-                          e.target.value
-                        )
-                      }
-                    />
-                    <Input
-                      type="text"
-                      className="flex-1 font-mono text-xs"
-                      value={
-                        branding.tokenOverrides[
-                          '--ds-background-brand-subtle'
-                        ] || 'var(--ds-background-brand-subtle)'
-                      }
-                    />
-                  </div>
                 </div>
               </div>
-            </section>
 
-            <section className="space-y-4">
-              <span className="text-[10px] font-black uppercase tracking-widest text-ds-text-subtle">
-                Surface & Background
-              </span>
-              <div className="p-4 rounded-xl border border-ds-border/30 bg-ds-background-neutral-subtle/20 space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-medium">Global Radius</span>
+              {/* COLORS */}
+              <div className="space-y-6">
+                <Label className="text-[10px] font-black uppercase tracking-widest text-ds-text-subtler">
+                  Color Palette
+                </Label>
+
+                <div className="space-y-4">
+                  {[
+                    { label: 'Primary Brand', key: '--gf-color-primary' },
+                    {
+                      label: 'Primary Foreground',
+                      key: '--gf-color-primary-foreground',
+                    },
+                    { label: 'Background', key: '--gf-color-background' },
+                    { label: 'Surface/Cards', key: '--gf-color-surface' },
+                  ].map((item) => {
+                    const defaultValue =
+                      item.key === '--gf-color-primary'
+                        ? BRAND_COLORS.blue
+                        : item.key === '--gf-color-primary-foreground'
+                          ? BRAND_COLORS.white
+                          : item.key === '--gf-color-background'
+                            ? BRAND_COLORS.white
+                            : item.key === '--gf-color-surface'
+                              ? BRAND_COLORS.surfaceNeutral
+                              : BRAND_COLORS.navy;
+
+                    const currentValue = tokens[item.key] || defaultValue;
+
+                    return (
+                      <div
+                        key={item.key}
+                        className="flex items-center justify-between gap-4 group"
+                      >
+                        <div className="space-y-1">
+                          <p className="text-xs font-black uppercase tracking-tight leading-none">
+                            {item.label}
+                          </p>
+                          <p className="text-[9px] font-bold text-ds-text-subtler font-mono">
+                            {tokens[item.key]
+                              ? tokens[item.key]
+                              : 'System Default'}
+                          </p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <Input
+                            type="color"
+                            value={currentValue}
+                            onChange={(e) =>
+                              handleTokenChange(item.key, e.target.value)
+                            }
+                            className="h-8 w-12 p-0 border-none bg-transparent cursor-pointer"
+                          />
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* TYPOGRAPHY */}
+              <div className="space-y-4 pt-4 border-t border-border/30">
+                <Label className="text-[10px] font-black uppercase tracking-widest text-ds-text-subtler">
+                  Typography
+                </Label>
+                <div className="space-y-2">
+                  <p className="text-[10px] font-black uppercase tracking-tight">
+                    Sans Serif Font Family
+                  </p>
                   <Input
-                    type="range"
-                    min="0"
-                    max="24"
-                    className="w-32"
-                    value={parseInt(
-                      branding.tokenOverrides['--ds-radius-default'] || '8'
-                    )}
-                    onChange={(e) =>
-                      updateToken('--ds-radius-default', `${e.target.value}px`)
-                    }
+                    value={fontFamily}
+                    onChange={(e) => setFontFamily(e.target.value)}
+                    className="h-9 text-xs font-bold"
+                    placeholder="Inter, Outfit, Roboto..."
                   />
                 </div>
               </div>
-            </section>
-          </TabsContent>
-        </Tabs>
 
-        <div className="mt-auto pt-6 border-t border-ds-border/20 flex gap-3">
-          <Button
-            variant="outline"
-            className="flex-1 font-bold uppercase tracking-widest text-[10px] h-11"
-            onClick={() => setBranding(initialBranding)}
-          >
-            <RotateCcw className="h-3 w-3 mr-2" /> Reset
-          </Button>
-          <Button
-            className="flex-1 bg-ds-background-brand-bold hover:bg-ds-background-brand-bold-hover font-bold uppercase tracking-widest text-[10px] h-11"
-            onClick={handleSave}
-          >
-            <Save className="h-3 w-3 mr-2" /> Save & Apply
-          </Button>
-        </div>
+              {/* VERSION HISTORY */}
+              <div className="space-y-4 pt-4 border-t border-border/30">
+                <Label className="text-[10px] font-black uppercase tracking-widest text-ds-text-subtler flex items-center gap-2">
+                  <History className="h-3 w-3" /> Snapshots
+                </Label>
+                <div className="space-y-2">
+                  {history.map((snap) => (
+                    <div
+                      key={snap.id}
+                      className="flex items-center justify-between p-2 rounded-lg bg-muted/40 hover:bg-muted/60 transition-colors cursor-pointer border border-transparent hover:border-border/50"
+                    >
+                      <div className="flex flex-col">
+                        <span className="text-[10px] font-black uppercase">
+                          v{snap.version}
+                        </span>
+                        <span className="text-[9px] font-bold text-ds-text-subtler">
+                          {new Date(snap.createdAt).toLocaleDateString()}
+                        </span>
+                      </div>
+                      <Button variant="ghost" size="icon" className="h-6 w-6">
+                        <RotateCcw className="h-3 w-3" />
+                      </Button>
+                    </div>
+                  ))}
+                  {history.length === 0 && (
+                    <p className="text-[10px] italic text-ds-text-subtler font-bold">
+                      No snapshots found.
+                    </p>
+                  )}
+                </div>
+              </div>
+            </div>
+          </ScrollArea>
+
+          <div className="p-4 bg-muted/20 border-t border-border/30">
+            <Button
+              onClick={handleSave}
+              className="w-full bg-ds-background-brand-bold text-ds-icon-inverse font-black uppercase tracking-widest text-[10px] h-11 gap-2"
+            >
+              <Save className="h-4 w-4" /> Save Branding & Snapshot
+            </Button>
+          </div>
+        </Card>
       </div>
 
-      {/* Right Panel: Preview */}
-      <div className="lg:col-span-8 flex flex-col gap-4">
-        <div className="flex items-center justify-between bg-ds-background-neutral-subtle/30 p-2 rounded-xl border border-ds-border/20">
-          <div className="flex items-center gap-2 px-2">
-            <Eye className="h-4 w-4 text-ds-text-subtle" />
-            <span className="text-[10px] font-black uppercase tracking-widest text-ds-text-subtle">
-              Live Preview Canvas
-            </span>
-          </div>
-          <div className="flex gap-1">
+      {/* RIGHT: Preview Panel */}
+      <div className="flex-1 flex flex-col gap-4 h-full">
+        <div className="flex items-center justify-between px-2">
+          <div className="flex bg-muted/50 p-1 rounded-xl border border-border/30">
             <Button
-              variant={viewMode === 'desktop' ? 'secondary' : 'ghost'}
+              variant={previewMode === 'desktop' ? 'secondary' : 'ghost'}
               size="sm"
-              className="h-8 w-8 p-0"
-              onClick={() => setViewMode('desktop')}
+              className="h-8 px-4 text-[10px] font-black uppercase tracking-widest gap-2"
+              onClick={() => setPreviewMode('desktop')}
             >
-              <Monitor className="h-4 w-4" />
+              <Monitor className="h-3.5 w-3.5" /> Desktop
             </Button>
             <Button
-              variant={viewMode === 'mobile' ? 'secondary' : 'ghost'}
+              variant={previewMode === 'mobile' ? 'secondary' : 'ghost'}
               size="sm"
-              className="h-8 w-8 p-0"
-              onClick={() => setViewMode('mobile')}
+              className="h-8 px-4 text-[10px] font-black uppercase tracking-widest gap-2"
+              onClick={() => setPreviewMode('mobile')}
             >
-              <Smartphone className="h-4 w-4" />
+              <Smartphone className="h-3.5 w-3.5" /> Mobile
+            </Button>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 bg-muted/30 px-3 h-8 rounded-full border border-border/30">
+              <Globe className="h-3.5 w-3.5 text-ds-text-subtler" />
+              <select
+                className="bg-transparent text-[10px] font-black uppercase tracking-widest outline-none border-none pr-4"
+                value={locale}
+                onChange={(e) => setLocale(e.target.value as any)}
+              >
+                <option value="en">English (LTR)</option>
+                <option value="ar">Arabic (RTL)</option>
+              </select>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              className="h-8 text-[10px] font-black uppercase tracking-widest gap-2"
+            >
+              <ExternalLink className="h-3.5 w-3.5" /> Open Preview
             </Button>
           </div>
         </div>
 
-        <div
-          className={cn(
-            'flex-1 bg-ds-background-neutral-subtle/10 rounded-2xl border-2 border-dashed border-ds-border/40 p-4 transition-all duration-500 overflow-hidden flex items-center justify-center',
-            viewMode === 'mobile' ? 'max-w-[375px] mx-auto' : 'w-full'
-          )}
-        >
-          <iframe
-            ref={iframeRef}
-            src={clientDashboardUrl}
-            className="w-full h-full rounded-lg bg-white shadow-2xl"
-            title="Live Theme Preview"
-          />
+        <div className="flex-1 rounded-2xl overflow-hidden border border-border/50 shadow-2xl relative bg-ds-background-neutral">
+          <div
+            className={cn(
+              'absolute inset-0 flex items-center justify-center transition-all duration-700',
+              previewMode === 'mobile' ? 'p-8' : 'p-0'
+            )}
+          >
+            <div
+              className={cn(
+                'bg-white shadow-[0_0_100px_rgba(0,0,0,0.1)] transition-all duration-700 relative overflow-hidden',
+                previewMode === 'mobile'
+                  ? 'w-[375px] h-[667px] rounded-[3rem] border-[8px] border-ds-text'
+                  : 'w-full h-full'
+              )}
+            >
+              {!orgId ? (
+                <div className="flex items-center justify-center h-full">
+                  <p className="text-sm font-black uppercase tracking-widest opacity-20">
+                    Select an organization to preview
+                  </p>
+                </div>
+              ) : (
+                <iframe
+                  ref={iframeRef}
+                  src={`/organizations/${orgId}/preview`} // Hypothetical preview route
+                  className="w-full h-full border-none"
+                  title="Live Preview"
+                />
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>

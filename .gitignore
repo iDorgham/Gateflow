@@ -49,3 +49,4 @@ docs/cache
 .worktrees
 .vercel
 .pnpm-store/
+.env*.local

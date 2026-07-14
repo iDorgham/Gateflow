@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Building2 } from 'lucide-react';
-import { Button } from '@gate-access/ui';
+import { Button } from '@gateflow/ui';
 
 export default function NoUnitLinkedPage() {
   return (
@@ -12,8 +12,9 @@ export default function NoUnitLinkedPage() {
         <div>
           <h1 className="text-2xl font-bold">No unit linked to your account</h1>
           <p className="mt-2 text-muted-foreground">
-            Your account has the Resident role but is not linked to any unit yet. Please contact your
-            organization administrator to link your account to a unit from the Units page.
+            Your account has the Resident role but is not linked to any unit
+            yet. Please contact your organization administrator to link your
+            account to a unit from the Units page.
           </p>
         </div>
         <Button asChild variant="outline">

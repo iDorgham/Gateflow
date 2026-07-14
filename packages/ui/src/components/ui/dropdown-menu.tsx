@@ -152,7 +152,7 @@ export function DropdownMenuContent({
   return (
     <div
       className={cn(
-        'absolute z-50 min-w-[8rem] overflow-hidden rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-1 text-slate-950 dark:text-slate-100 shadow-md animate-in fade-in zoom-in-95',
+        'absolute z-50 min-w-[8rem] overflow-hidden rounded-xl border border-[var(--ds-border-subtle)] bg-[var(--ds-surface-raised)] p-1 text-[var(--ds-text)] shadow-lg animate-in fade-in zoom-in-95',
         sideClass,
         alignClass,
         className
@@ -182,7 +182,7 @@ export function DropdownMenuItem({
   return (
     <Comp
       className={cn(
-        'relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-slate-100 dark:hover:bg-slate-700 focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+        'relative flex cursor-default select-none items-center rounded-lg px-3 py-2 text-sm outline-none transition-all hover:bg-[var(--ds-background-neutral-subtle)] focus:bg-[var(--ds-background-selected)] focus:text-[var(--ds-text-selected)] data-[disabled]:pointer-events-none data-[disabled]:opacity-50 group-hover:bg-[var(--ds-background-neutral-subtle)]',
         inset && 'pl-8',
         className
       )}

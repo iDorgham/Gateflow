@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { cn, DynamicTable, Column, Badge } from '@gate-access/ui';
+import { cn, DynamicTable, Column, Badge } from '@gateflow/ui';
 import { Smartphone, Monitor, History } from 'lucide-react';
 
 interface AuditLog {

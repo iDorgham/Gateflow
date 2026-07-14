@@ -2,7 +2,7 @@ import { requireAdmin } from '@/lib/admin-auth';
 import { getTranslation } from '@/lib/i18n/i18n';
 import { Locale } from '@/lib/i18n/i18n-config';
 import { Globe, CheckCircle2, AlertCircle } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@gate-access/ui';
+import { Card, CardContent, CardHeader, CardTitle } from '@gateflow/ui';
 
 export const metadata = { title: 'Settings | Infrastructure' };
 

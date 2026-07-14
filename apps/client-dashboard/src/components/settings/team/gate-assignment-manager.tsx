@@ -28,7 +28,7 @@ import {
   SelectValue,
   Checkbox,
   Label,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import {
   ShieldAlert,
   Trash2,

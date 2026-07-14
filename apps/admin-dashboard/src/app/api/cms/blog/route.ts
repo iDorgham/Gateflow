@@ -1,168 +1,119 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@gate-access/db';
+import type { BlogPost, BlogCategory, User } from '@gate-access/db';
 import { isAdminAuthorized } from '@/lib/admin-auth';
 
 /**
- * GET /api/cms/blog
- *
- * List blog posts.
- * Query params:
- * - locale: 'en' | 'ar' (default: 'en')
- * - status: 'DRAFT' | 'PUBLISHED' | ...
- * - orgId: string (optional)
- * - limit: number
+ * Blog CMS API
+ * GET /api/cms/blog - List published posts
+ * GET /api/cms/blog?slug=... - Fetch post by slug (EN or AR)
+ * POST /api/cms/blog/publish - Publish post
  */
-export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
+export async function GET(req: Request) {
+  const { searchParams } = new URL(req.url);
+  const slug = searchParams.get('slug');
   const locale = searchParams.get('locale') || 'en';
-  const status = searchParams.get('status');
-  const orgId = searchParams.get('orgId');
-  const limit = parseInt(searchParams.get('limit') || '10');
-
-  // If status is not PUBLISHED, require admin authorization
-  if (status !== 'PUBLISHED') {
-    const isAuth = await isAdminAuthorized(request);
-    if (!isAuth) {
-      // If not auth, we can only return PUBLISHED posts
-      const posts = await prisma.blogPost.findMany({
-        where: {
-          status: 'PUBLISHED',
-          organizationId: orgId || null,
-        },
-        include: {
-          categories: true,
-          author: {
-            select: {
-              name: true,
-              avatarUrl: true,
-            },
-          },
-        },
-        orderBy: {
-          publishedAt: 'desc',
-        },
-        take: limit,
-      });
-
-      return NextResponse.json({
-        success: true,
-        posts: posts.map((p) => transformPost(p, locale as 'en' | 'ar')),
-      });
-    }
-  }
-
-  // Admin request or authorized list
-  const posts = await prisma.blogPost.findMany({
-    where: {
-      status: status ? (status as any) : undefined,
-      organizationId: orgId || undefined,
-    },
-    include: {
-      categories: true,
-      author: {
-        select: {
-          name: true,
-          avatarUrl: true,
-        },
-      },
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
-    take: limit,
-  });
-
-  return NextResponse.json({
-    success: true,
-    posts: posts.map((p) => transformPost(p, locale as 'en' | 'ar')),
-  });
-}
-
-/**
- * POST /api/cms/blog
- *
- * Create a new blog post draft.
- */
-export async function POST(request: Request) {
-  const isAuth = await isAdminAuthorized(request);
-  if (!isAuth) {
-    return NextResponse.json(
-      { success: false, message: 'Unauthorized' },
-      { status: 401 }
-    );
-  }
-
-  const body = await request.json();
-  const { titleEn, titleAr, organizationId, authorId } = body;
-
-  if (!titleEn || !titleAr) {
-    return NextResponse.json(
-      { success: false, message: 'Titles required' },
-      { status: 400 }
-    );
-  }
-
-  // Generate unique slugs
-  const baseSlugEn = slugify(titleEn);
-  const baseSlugAr = slugify(titleAr);
-
-  // Basic collision avoidance (should be more robust in production)
-  const slugEn = `${baseSlugEn}-${Math.random().toString(36).substring(2, 7)}`;
-  const slugAr = `${baseSlugAr}-${Math.random().toString(36).substring(2, 7)}`;
 
   try {
-    const post = await prisma.blogPost.create({
-      data: {
-        titleEn,
-        titleAr,
-        slugEn,
-        slugAr,
-        contentEn: '',
-        contentAr: '',
-        status: 'DRAFT',
-        authorId: authorId, // This should come from session usually
-        organizationId: organizationId || null,
-      },
-    });
+    if (slug) {
+      // Fetch single post by slug (check both EN and AR columns)
+      const post = (await prisma.blogPost.findFirst({
+        where: {
+          OR: [{ slugEn: slug }, { slugAr: slug }],
+          status: 'PUBLISHED',
+        },
+        include: {
+          author: { select: { name: true, avatarUrl: true } },
+          categories: true,
+        },
+      })) as
+        | (BlogPost & {
+            author: Pick<User, 'name' | 'avatarUrl'>;
+            categories: BlogCategory[];
+          })
+        | null;
 
-    return NextResponse.json({ success: true, post });
-  } catch (error: any) {
+      if (!post)
+        return NextResponse.json({ error: 'Post not found' }, { status: 404 });
+
+      // Localize
+      return NextResponse.json({
+        success: true,
+        post: {
+          id: post.id,
+          title: locale === 'ar' ? post.titleAr : post.titleEn,
+          content: locale === 'ar' ? post.contentAr : post.contentEn,
+          excerpt: locale === 'ar' ? post.excerptAr : post.excerptEn,
+          metaTitle: locale === 'ar' ? post.metaTitleAr : post.metaTitleEn,
+          metaDesc: locale === 'ar' ? post.metaDescAr : post.metaDescEn,
+          publishedAt: post.publishedAt,
+          author: post.author,
+          categories: post.categories.map((c: BlogCategory) => ({
+            name: locale === 'ar' ? c.nameAr : c.nameEn,
+            slug: c.slug,
+          })),
+        },
+      });
+    }
+
+    // List all published posts
+    const posts = (await prisma.blogPost.findMany({
+      where: { status: 'PUBLISHED' },
+      orderBy: { publishedAt: 'desc' },
+      include: { author: { select: { name: true } }, categories: true },
+    })) as (BlogPost & {
+      author: Pick<User, 'name'>;
+      categories: BlogCategory[];
+    })[];
+
+    const localizedPosts = posts.map((p) => ({
+      id: p.id,
+      slug: locale === 'ar' ? p.slugAr : p.slugEn,
+      title: locale === 'ar' ? p.titleAr : p.titleEn,
+      excerpt: locale === 'ar' ? p.excerptAr : p.excerptEn,
+      publishedAt: p.publishedAt,
+      author: p.author.name,
+    }));
+
+    return NextResponse.json({ success: true, posts: localizedPosts });
+  } catch (error) {
     return NextResponse.json(
-      { success: false, message: error.message },
+      { error: 'Failed to fetch blog content' },
       { status: 500 }
     );
   }
 }
 
-function transformPost(post: any, locale: 'en' | 'ar') {
-  return {
-    id: post.id,
-    title: locale === 'ar' ? post.titleAr : post.titleEn,
-    slug: locale === 'ar' ? post.slugAr : post.slugEn,
-    excerpt: locale === 'ar' ? post.excerptAr : post.excerptEn,
-    content: locale === 'ar' ? post.contentAr : post.contentEn,
-    status: post.status,
-    publishedAt: post.publishedAt,
-    createdAt: post.createdAt,
-    author: post.author,
-    categories: post.categories.map((c: any) => ({
-      id: c.id,
-      name: locale === 'ar' ? c.nameAr : c.nameEn,
-      slug: c.slug,
-    })),
-    metaTitle: locale === 'ar' ? post.metaTitleAr : post.metaTitleEn,
-    metaDesc: locale === 'ar' ? post.metaDescAr : post.metaDescEn,
-  };
-}
+export async function POST(req: Request) {
+  if (!(await isAdminAuthorized(req))) {
+    return new NextResponse('Unauthorized', { status: 401 });
+  }
 
-function slugify(text: string) {
-  return text
-    .toString()
-    .toLowerCase()
-    .trim()
-    .replace(/\s+/g, '-') // Replace spaces with -
-    .replace(/[^\w\u0621-\u064A-]+/g, '') // Remove all non-word chars (support Arabic)
-    .replace(/--+/g, '-') // Replace multiple - with single -
-    .replace(/^-+/, '') // Trim - from start of text
-    .replace(/-+$/, ''); // Trim - from end of text
+  const { id, status } = await req.json();
+
+  try {
+    const updated = await prisma.blogPost.update({
+      where: { id },
+      data: {
+        status,
+        publishedAt: status === 'PUBLISHED' ? new Date() : undefined,
+      },
+    });
+
+    // Log AI Action
+    await prisma.aiActionLog.create({
+      data: {
+        organizationId: updated.organizationId || 'GLOBAL',
+        action: 'BLOG_POST_PUBLISHED',
+        status: 'CONFIRMED',
+        prompt: `Publish request for post ID: ${id}`,
+        result: `New status: ${status}`,
+        metadata: JSON.stringify({ slug: updated.slugEn }),
+      },
+    });
+
+    return NextResponse.json({ success: true, post: updated });
+  } catch (error) {
+    return NextResponse.json({ error: 'Publish failed' }, { status: 500 });
+  }
 }

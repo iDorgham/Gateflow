@@ -1,5 +1,5 @@
 import { requireAuth } from '@/lib/dashboard-auth';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@gate-access/ui';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@gateflow/ui';
 import { getUnitsWithStats, getResidentLimits } from './actions';
 import { UnitsOverview } from '@/components/settings/residents/units-overview';
 import { UnitTypeTable } from '@/components/settings/residents/unit-type-table';
@@ -8,7 +8,9 @@ import { LayoutGrid, ListTree, Cog } from 'lucide-react';
 import { getOrganizationFeatures, OrganizationType } from '@gate-access/types';
 import { getTranslation, Locale } from '@/lib/i18n';
 
-export default async function ResidentsSettings(props: { params: Promise<{ locale: Locale }> }) {
+export default async function ResidentsSettings(props: {
+  params: Promise<{ locale: Locale }>;
+}) {
   const { locale } = await props.params;
   const { org } = await requireAuth();
 
@@ -26,31 +28,40 @@ export default async function ResidentsSettings(props: { params: Promise<{ local
     <div className="space-y-6">
       <div className="flex flex-col gap-1">
         <h1 className="text-xl font-black uppercase tracking-tight">
-          {t('settings.residents.title', { 
-            orgName: org.name, 
+          {t('settings.residents.title', {
+            orgName: org.name,
             unitLabel: t(features.terminology.unitLabelPlural),
-            contactLabel: t(features.terminology.contactLabelPlural)
+            contactLabel: t(features.terminology.contactLabelPlural),
           })}
         </h1>
         <p className="text-sm text-muted-foreground">
           {t('settings.residents.description', {
             unitLabel: t(features.terminology.unitLabel).toLowerCase(),
-            contactLabel: t(features.terminology.contactLabel).toLowerCase()
+            contactLabel: t(features.terminology.contactLabel).toLowerCase(),
           })}
         </p>
       </div>
 
       <Tabs defaultValue="overview" className="space-y-6">
         <TabsList className="bg-muted/50 p-1 rounded-xl w-fit h-auto flex-wrap">
-          <TabsTrigger value="overview" className="rounded-lg gap-2 data-[state=active]:bg-background data-[state=active]:shadow-sm py-2 px-4">
+          <TabsTrigger
+            value="overview"
+            className="rounded-lg gap-2 data-[state=active]:bg-background data-[state=active]:shadow-sm py-2 px-4"
+          >
             <LayoutGrid className="h-4 w-4" />
             {t('settings.residents.tabs.overview')}
           </TabsTrigger>
-          <TabsTrigger value="types" className="rounded-lg gap-2 data-[state=active]:bg-background data-[state=active]:shadow-sm py-2 px-4">
+          <TabsTrigger
+            value="types"
+            className="rounded-lg gap-2 data-[state=active]:bg-background data-[state=active]:shadow-sm py-2 px-4"
+          >
             <ListTree className="h-4 w-4" />
             {t('settings.residents.tabs.types')}
           </TabsTrigger>
-          <TabsTrigger value="settings" className="rounded-lg gap-2 data-[state=active]:bg-background data-[state=active]:shadow-sm py-2 px-4">
+          <TabsTrigger
+            value="settings"
+            className="rounded-lg gap-2 data-[state=active]:bg-background data-[state=active]:shadow-sm py-2 px-4"
+          >
             <Cog className="h-4 w-4" />
             {t('settings.residents.tabs.settings')}
           </TabsTrigger>
@@ -65,7 +76,7 @@ export default async function ResidentsSettings(props: { params: Promise<{ local
         </TabsContent>
 
         <TabsContent value="settings">
-          <ResidentSettingsForm 
+          <ResidentSettingsForm
             initialData={{
               maskResidentNameOnLandingPage: org.maskResidentNameOnLandingPage,
               showUnitOnLandingPage: org.showUnitOnLandingPage,
@@ -73,9 +84,11 @@ export default async function ResidentsSettings(props: { params: Promise<{ local
           />
         </TabsContent>
       </Tabs>
-      
+
       <div className="p-4 rounded-xl border border-primary/20 bg-primary/5 text-primary/80 text-xs">
-        <p className="font-bold uppercase tracking-widest mb-1">{t('settings.residents.quotaLogic.title')}</p>
+        <p className="font-bold uppercase tracking-widest mb-1">
+          {t('settings.residents.quotaLogic.title')}
+        </p>
         <p>{t('settings.residents.quotaLogic.description')}</p>
       </div>
     </div>

@@ -1,13 +1,7 @@
 import Link from 'next/link';
 import { prisma } from '@gate-access/db';
 import { getTranslation, Locale } from '@/lib/i18n';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  Button,
-} from '@gate-access/ui';
+import { Card, CardContent, CardHeader, CardTitle, Button } from '@gateflow/ui';
 import { AnimatedKpiGrid } from './animated-kpi-grid';
 import { OrganizationType, getOrganizationFeatures } from '@gate-access/types';
 import {
@@ -118,7 +112,7 @@ export async function DashboardOverview({
       take: 5,
     }),
     // Maintenance stats
-    prisma.maintenanceRequest.groupBy({
+    prisma.workOrder.groupBy({
       by: ['status'],
       where: { organizationId: orgId, deletedAt: null },
       _count: { _all: true },
@@ -154,10 +148,10 @@ export async function DashboardOverview({
   }
 
   if (features.flags.maintenanceModule) {
-    maintenanceCount = await prisma.maintenanceRequest.count({
+    maintenanceCount = await prisma.workOrder.count({
       where: {
         organizationId: orgId,
-        status: { not: 'COMPLETED' },
+        status: { notIn: ['RESOLVED', 'CLOSED', 'CANCELLED'] },
         deletedAt: null,
       },
     });

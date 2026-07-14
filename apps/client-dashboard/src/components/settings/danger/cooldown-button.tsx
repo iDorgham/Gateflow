@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { Button } from '@gate-access/ui';
-import { cn } from '@gate-access/ui';
+import { Button } from '@gateflow/ui';
+import { cn } from '@gateflow/ui';
 import { Timer } from 'lucide-react';
 
 interface CooldownButtonProps {

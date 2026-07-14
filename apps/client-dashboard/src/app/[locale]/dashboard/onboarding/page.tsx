@@ -11,9 +11,15 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { csrfFetch } from '@/lib/csrf';
-import { AlertCircle, ArrowRight, Building2, CheckCircle2, User } from 'lucide-react';
+import {
+  AlertCircle,
+  ArrowRight,
+  Building2,
+  CheckCircle2,
+  User,
+} from 'lucide-react';
 
 type Step = 1 | 2 | 3;
 
@@ -38,7 +44,8 @@ export default function OnboardingPage() {
       if (!name.trim()) return setError('Please enter your name.');
       setStep(2);
     } else if (step === 2) {
-      if (!orgName.trim()) return setError('Please enter an organization name.');
+      if (!orgName.trim())
+        return setError('Please enter an organization name.');
       if (!orgEmail.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(orgEmail))
         return setError('Please enter a valid organization email.');
       setStep(3);
@@ -56,7 +63,9 @@ export default function OnboardingPage() {
             router.push('/dashboard');
             router.refresh();
           } else {
-            setError(json?.message || 'Something went wrong. Please try again.');
+            setError(
+              json?.message || 'Something went wrong. Please try again.'
+            );
           }
         } catch (err) {
           console.error('Fetch error:', err);
@@ -81,7 +90,6 @@ export default function OnboardingPage() {
   return (
     <div className="flex flex-1 min-h-full w-full items-center justify-center bg-gradient-to-br from-slate-50 via-white to-blue-50 px-4 py-10 md:py-20 lg:py-24">
       <div className="w-full max-w-md space-y-6">
-
         {/* Step indicators */}
         <div className="flex items-center justify-center gap-0">
           {STEPS.map((s, idx) => {
@@ -96,19 +104,26 @@ export default function OnboardingPage() {
                       done
                         ? 'border-blue-600 bg-blue-600 text-white'
                         : active
-                        ? 'border-blue-600 bg-white text-blue-600'
-                        : 'border-slate-200 bg-white text-slate-400'
+                          ? 'border-blue-600 bg-white text-blue-600'
+                          : 'border-slate-200 bg-white text-slate-400'
                     }`}
                   >
                     {done ? (
-                      <CheckCircle2 className="h-4.5 w-4.5" aria-hidden="true" />
+                      <CheckCircle2
+                        className="h-4.5 w-4.5"
+                        aria-hidden="true"
+                      />
                     ) : (
                       <Icon className="h-4 w-4" aria-hidden="true" />
                     )}
                   </div>
                   <span
                     className={`text-xs font-medium ${
-                      active ? 'text-blue-600' : done ? 'text-slate-600' : 'text-slate-400'
+                      active
+                        ? 'text-blue-600'
+                        : done
+                          ? 'text-slate-600'
+                          : 'text-slate-400'
                     }`}
                   >
                     {s.label}
@@ -134,7 +149,10 @@ export default function OnboardingPage() {
           <CardContent className="space-y-4">
             {error && (
               <div className="flex items-start gap-2.5 rounded-lg border border-red-200 bg-red-50 px-3 py-2.5 text-sm text-red-700">
-                <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
+                <AlertCircle
+                  className="mt-0.5 h-4 w-4 shrink-0"
+                  aria-hidden="true"
+                />
                 <span>
                   {error === 'CSRF token missing' ? (
                     <>
@@ -204,7 +222,10 @@ export default function OnboardingPage() {
                   { label: 'Organization', value: orgName, icon: Building2 },
                   { label: 'Org email', value: orgEmail, icon: Building2 },
                 ].map(({ label, value, icon: Icon }) => (
-                  <div key={label} className="flex items-center justify-between px-4 py-3">
+                  <div
+                    key={label}
+                    className="flex items-center justify-between px-4 py-3"
+                  >
                     <span className="flex items-center gap-2 text-slate-500">
                       <Icon className="h-3.5 w-3.5" aria-hidden="true" />
                       {label}
@@ -226,7 +247,11 @@ export default function OnboardingPage() {
                   Back
                 </Button>
               )}
-              <Button className="flex-1 gap-2" onClick={next} disabled={isPending}>
+              <Button
+                className="flex-1 gap-2"
+                onClick={next}
+                disabled={isPending}
+              >
                 {step === 3 ? (
                   isPending ? (
                     <>

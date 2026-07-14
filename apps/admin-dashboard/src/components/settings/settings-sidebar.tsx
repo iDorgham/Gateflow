@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import {
-  Settings,
   ShieldCheck,
   Database,
   Key,
@@ -16,7 +15,7 @@ import {
   KeyRound,
   LayoutDashboard,
 } from 'lucide-react';
-import { cn } from '@gate-access/ui';
+import { cn } from '@gateflow/ui';
 
 interface SettingsSidebarProps {
   locale: string;

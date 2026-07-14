@@ -2,13 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import {
-  Contact2,
-  Building,
-  QrCode,
-  Shield,
-  Loader2,
-} from 'lucide-react';
+import { Contact2, Building, QrCode, Shield, Loader2 } from 'lucide-react';
 import {
   Command,
   CommandGroup,
@@ -17,7 +11,7 @@ import {
   CommandEmpty,
   CommandItem,
   cn,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 
 interface SearchContact {
   id: string;
@@ -104,20 +98,20 @@ export function GlobalSearch({ locale }: { locale: string }) {
 
   return (
     <div className="relative w-full">
-      <Command 
+      <Command
         className={cn(
-          "rounded-lg overflow-visible bg-transparent",
-          "[&_[cmdk-input-wrapper]]:border-2 [&_[cmdk-input-wrapper]]:border-transparent",
-          "[&_[cmdk-input-wrapper]]:bg-[var(--ds-background-neutral)]",
-          "dark:[&_[cmdk-input-wrapper]]:bg-[var(--ds-background-neutral)]",
-          "[&_[cmdk-input-wrapper]]:rounded-lg",
-          "hover:[&_[cmdk-input-wrapper]]:bg-[var(--ds-background-neutral-hovered)]",
-          "dark:hover:[&_[cmdk-input-wrapper]]:bg-[var(--ds-background-neutral-hovered)]",
-          "focus-within:[&_[cmdk-input-wrapper]]:bg-[var(--ds-background-input)]",
-          "dark:focus-within:[&_[cmdk-input-wrapper]]:bg-[var(--ds-background-input)]",
-          "focus-within:[&_[cmdk-input-wrapper]]:border-[var(--ds-border-focused)]",
-          "dark:focus-within:[&_[cmdk-input-wrapper]]:border-[var(--ds-border-focused)]",
-          "[&_[cmdk-input-wrapper]]:transition-colors"
+          'rounded-lg overflow-visible bg-transparent',
+          '[&_[cmdk-input-wrapper]]:border-2 [&_[cmdk-input-wrapper]]:border-transparent',
+          '[&_[cmdk-input-wrapper]]:bg-[var(--ds-background-neutral)]',
+          'dark:[&_[cmdk-input-wrapper]]:bg-[var(--ds-background-neutral)]',
+          '[&_[cmdk-input-wrapper]]:rounded-lg',
+          'hover:[&_[cmdk-input-wrapper]]:bg-[var(--ds-background-neutral-hovered)]',
+          'dark:hover:[&_[cmdk-input-wrapper]]:bg-[var(--ds-background-neutral-hovered)]',
+          'focus-within:[&_[cmdk-input-wrapper]]:bg-[var(--ds-background-input)]',
+          'dark:focus-within:[&_[cmdk-input-wrapper]]:bg-[var(--ds-background-input)]',
+          'focus-within:[&_[cmdk-input-wrapper]]:border-[var(--ds-border-focused)]',
+          'dark:focus-within:[&_[cmdk-input-wrapper]]:border-[var(--ds-border-focused)]',
+          '[&_[cmdk-input-wrapper]]:transition-colors'
         )}
       >
         <CommandInput
@@ -136,105 +130,105 @@ export function GlobalSearch({ locale }: { locale: string }) {
           }}
           className="h-9 outline-none border-none bg-transparent focus:bg-transparent dark:focus:bg-transparent focus:ring-0 w-full"
         />
-        
+
         {open && (
           <div className="absolute top-full left-0 right-0 z-50 mt-2 bg-popover rounded-xl border border-border/60 shadow-2xl overflow-hidden">
             <CommandList className="max-h-[50vh] sm:max-h-[400px]">
-            <CommandEmpty>
-              {loading ? (
-                <div className="flex items-center justify-center py-6 text-sm text-muted-foreground">
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Searching...
-                </div>
-              ) : debouncedQuery.trim().length < 2 ? (
-                'Type at least 2 characters to search.'
-              ) : (
-                'No results found.'
-              )}
-            </CommandEmpty>
+              <CommandEmpty>
+                {loading ? (
+                  <div className="flex items-center justify-center py-6 text-sm text-muted-foreground">
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Searching...
+                  </div>
+                ) : debouncedQuery.trim().length < 2 ? (
+                  'Type at least 2 characters to search.'
+                ) : (
+                  'No results found.'
+                )}
+              </CommandEmpty>
 
-            {!loading && results && (
-              <>
-                {results.contacts?.length > 0 && (
-                  <CommandGroup heading="Contacts">
-                    {results.contacts.map((c) => (
-                      <CommandItem
-                        key={c.id}
-                        onSelect={() =>
-                          handleSelect(
-                            `/${locale}/dashboard/residents/contacts?search=${encodeURIComponent(c.name)}`
-                          )
-                        }
-                      >
-                        <Contact2 className="mr-2 h-4 w-4 text-blue-500" />
-                        <span>{c.name}</span>
-                        {c.email && (
-                          <span className="ml-2 text-xs text-muted-foreground truncate max-w-[150px]">
-                            — {c.email}
+              {!loading && results && (
+                <>
+                  {results.contacts?.length > 0 && (
+                    <CommandGroup heading="Contacts">
+                      {results.contacts.map((c) => (
+                        <CommandItem
+                          key={c.id}
+                          onSelect={() =>
+                            handleSelect(
+                              `/${locale}/dashboard/residents/contacts?search=${encodeURIComponent(c.name)}`
+                            )
+                          }
+                        >
+                          <Contact2 className="mr-2 h-4 w-4 text-blue-500" />
+                          <span>{c.name}</span>
+                          {c.email && (
+                            <span className="ml-2 text-xs text-muted-foreground truncate max-w-[150px]">
+                              — {c.email}
+                            </span>
+                          )}
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  )}
+                  {results.units?.length > 0 && (
+                    <CommandGroup heading="Units">
+                      {results.units.map((u) => (
+                        <CommandItem
+                          key={u.id}
+                          onSelect={() =>
+                            handleSelect(
+                              `/${locale}/dashboard/residents/units?search=${encodeURIComponent(u.identifier)}`
+                            )
+                          }
+                        >
+                          <Building className="mr-2 h-4 w-4 text-emerald-500" />
+                          <span>Unit {u.identifier}</span>
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  )}
+                  {results.qrs?.length > 0 && (
+                    <CommandGroup heading="QR Codes">
+                      {results.qrs.map((q) => (
+                        <CommandItem
+                          key={q.id}
+                          onSelect={() =>
+                            handleSelect(
+                              `/${locale}/dashboard/qrcodes?q=${encodeURIComponent(q.code)}`
+                            )
+                          }
+                        >
+                          <QrCode className="mr-2 h-4 w-4 text-purple-500" />
+                          <span>{q.guestName || q.code}</span>
+                          <span className="ml-2 text-xs text-muted-foreground capitalize">
+                            — {q.status.toLowerCase()}
                           </span>
-                        )}
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
-                )}
-                {results.units?.length > 0 && (
-                  <CommandGroup heading="Units">
-                    {results.units.map((u) => (
-                      <CommandItem
-                        key={u.id}
-                        onSelect={() =>
-                          handleSelect(
-                            `/${locale}/dashboard/residents/units?search=${encodeURIComponent(u.identifier)}`
-                          )
-                        }
-                      >
-                        <Building className="mr-2 h-4 w-4 text-emerald-500" />
-                        <span>Unit {u.identifier}</span>
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
-                )}
-                {results.qrs?.length > 0 && (
-                  <CommandGroup heading="QR Codes">
-                    {results.qrs.map((q) => (
-                      <CommandItem
-                        key={q.id}
-                        onSelect={() =>
-                          handleSelect(
-                            `/${locale}/dashboard/qrcodes?q=${encodeURIComponent(q.code)}`
-                          )
-                        }
-                      >
-                        <QrCode className="mr-2 h-4 w-4 text-purple-500" />
-                        <span>{q.guestName || q.code}</span>
-                        <span className="ml-2 text-xs text-muted-foreground capitalize">
-                          — {q.status.toLowerCase()}
-                        </span>
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
-                )}
-                {results.gates?.length > 0 && (
-                  <CommandGroup heading="Gates">
-                    {results.gates.map((g) => (
-                      <CommandItem
-                        key={g.id}
-                        onSelect={() =>
-                          handleSelect(`/${locale}/dashboard/gates`)
-                        }
-                      >
-                        <Shield className="mr-2 h-4 w-4 text-orange-500" />
-                        <span>{g.name}</span>
-                        <span className="ml-2 text-xs text-muted-foreground capitalize">
-                          — {g.status.toLowerCase()}
-                        </span>
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
-                )}
-              </>
-            )}
-          </CommandList>
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  )}
+                  {results.gates?.length > 0 && (
+                    <CommandGroup heading="Gates">
+                      {results.gates.map((g) => (
+                        <CommandItem
+                          key={g.id}
+                          onSelect={() =>
+                            handleSelect(`/${locale}/dashboard/gates`)
+                          }
+                        >
+                          <Shield className="mr-2 h-4 w-4 text-orange-500" />
+                          <span>{g.name}</span>
+                          <span className="ml-2 text-xs text-muted-foreground capitalize">
+                            — {g.status.toLowerCase()}
+                          </span>
+                        </CommandItem>
+                      ))}
+                    </CommandGroup>
+                  )}
+                </>
+              )}
+            </CommandList>
           </div>
         )}
       </Command>

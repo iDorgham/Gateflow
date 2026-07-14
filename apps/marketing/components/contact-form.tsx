@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Button, Input, Label, Textarea } from '@gate-access/ui';
+import { Button, Input, Label, Textarea } from '@gateflow/ui';
 import { CheckCircle2, Loader2, Send, AlertCircle } from 'lucide-react';
 import {
   buildMarketingEvent,
@@ -12,7 +12,23 @@ import {
 } from '../lib/marketing-intent';
 import type { Locale } from '../i18n-config';
 
-export function ContactForm({ dict, locale }: { dict: any; locale: Locale }) {
+export function ContactForm({
+  dict,
+  locale,
+}: {
+  dict: {
+    form: {
+      labels: Record<string, string>;
+      placeholders: Record<string, string>;
+      options: Record<string, string>;
+      status: Record<string, string>;
+      error?: string;
+      privacyPrefix: string;
+      privacyLink: string;
+    };
+  };
+  locale: Locale;
+}) {
   const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>(
     'idle'
   );

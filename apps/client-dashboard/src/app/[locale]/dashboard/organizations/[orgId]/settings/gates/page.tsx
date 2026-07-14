@@ -1,6 +1,6 @@
 import { requireAuth } from '@/lib/dashboard-auth';
 import { prisma } from '@gate-access/db';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@gate-access/ui';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@gateflow/ui';
 import { GateTable } from '@/components/settings/gates/gate-table';
 import { ScannerRulesForm } from '@/components/settings/gates/scanner-rules-form';
 import { DoorOpen, Settings2 } from 'lucide-react';
@@ -30,7 +30,8 @@ export default async function GatesSettings() {
     }),
   ]);
 
-  const scannerConfig = (orgRow?.scannerConfig ?? null) as unknown as ScannerConfig | null;
+  const scannerConfig = (orgRow?.scannerConfig ??
+    null) as unknown as ScannerConfig | null;
 
   const gateRows = gates.map((g) => ({
     id: g.id,
@@ -50,7 +51,9 @@ export default async function GatesSettings() {
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-1">
-        <h1 className="text-xl font-black uppercase tracking-tight">Gates & Scanners</h1>
+        <h1 className="text-xl font-black uppercase tracking-tight">
+          Gates & Scanners
+        </h1>
         <p className="text-sm text-muted-foreground">
           Manage physical access points, GPS rules, and global scanner behavior.
         </p>

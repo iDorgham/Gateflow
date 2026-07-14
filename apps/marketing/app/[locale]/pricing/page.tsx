@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { getTranslation } from '../../../lib/i18n/get-translation';
 import type { Locale } from '../../../i18n-config';
-import { Button } from '@gate-access/ui';
+import { Button } from '@gateflow/ui';
 import { CheckCircle2, Zap, Shield, Globe } from 'lucide-react';
 import { templatedMarketingTitle } from '../../../lib/metadata-title';
 import { IntentLink } from '../../../components/intent-link';
@@ -14,7 +14,9 @@ export async function generateMetadata(props: {
   const castLocale = locale as Locale;
   const { t } = await getTranslation(castLocale, 'navigation');
   return {
-    title: templatedMarketingTitle(t('header.dropdowns.pricing.label')),
+    title: templatedMarketingTitle(
+      t('header.dropdowns.pricing.label') as string
+    ),
   };
 }
 
@@ -27,36 +29,36 @@ export default async function PricingPage(props: {
 
   const plans = [
     {
-      name: t('tiers.starter.name'),
-      price: t('tiers.starter.price.monthly'),
-      description: t('tiers.starter.description'),
+      name: t('tiers.starter.name') as string,
+      price: t('tiers.starter.price.monthly') as string,
+      description: t('tiers.starter.description') as string,
       features: t('tiers.starter.features', {
         returnObjects: true,
       }) as string[],
-      cta: t('tiers.starter.cta'),
+      cta: t('tiers.starter.cta') as string,
       variant: 'outline' as const,
       intent: 'demo' as const,
       surface: 'pricing_starter_cta',
     },
     {
-      name: t('tiers.pro.name'),
-      price: t('tiers.pro.price.monthly'),
-      description: t('tiers.pro.description'),
+      name: t('tiers.pro.name') as string,
+      price: t('tiers.pro.price.monthly') as string,
+      description: t('tiers.pro.description') as string,
       features: t('tiers.pro.features', { returnObjects: true }) as string[],
-      cta: t('tiers.pro.cta'),
+      cta: t('tiers.pro.cta') as string,
       variant: 'brand' as const,
       highlight: true,
       intent: 'pilot' as const,
       surface: 'pricing_pro_cta',
     },
     {
-      name: t('tiers.enterprise.name'),
-      price: t('tiers.enterprise.price.custom'),
-      description: t('tiers.enterprise.description'),
+      name: t('tiers.enterprise.name') as string,
+      price: t('tiers.enterprise.price.custom') as string,
+      description: t('tiers.enterprise.description') as string,
       features: t('tiers.enterprise.features', {
         returnObjects: true,
       }) as string[],
-      cta: t('tiers.enterprise.cta'),
+      cta: t('tiers.enterprise.cta') as string,
       variant: 'outline' as const,
       intent: 'consult' as const,
       surface: 'pricing_enterprise_cta',
@@ -73,10 +75,10 @@ export default async function PricingPage(props: {
       {/* Hero */}
       <section className="pt-48 pb-32 text-center container px-6">
         <h1 className="text-4xl lg:text-7xl font-black tracking-tight mb-6">
-          {t('hero.headline')}
+          {t('hero.headline') as string}
         </h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          {t('hero.subHeadline')}
+          {t('hero.subHeadline') as string}
         </p>
       </section>
 
@@ -138,27 +140,31 @@ export default async function PricingPage(props: {
               <div className="mx-auto w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
                 <Shield size={24} />
               </div>
-              <h4 className="font-bold">{t('trust.security.title')}</h4>
+              <h4 className="font-bold">
+                {t('trust.security.title') as string}
+              </h4>
               <p className="text-sm text-muted-foreground">
-                {t('trust.security.description')}
+                {t('trust.security.description') as string}
               </p>
             </div>
             <div className="space-y-4">
               <div className="mx-auto w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
                 <Globe size={24} />
               </div>
-              <h4 className="font-bold">{t('trust.support.title')}</h4>
+              <h4 className="font-bold">
+                {t('trust.support.title') as string}
+              </h4>
               <p className="text-sm text-muted-foreground">
-                {t('trust.support.description')}
+                {t('trust.support.description') as string}
               </p>
             </div>
             <div className="space-y-4">
               <div className="mx-auto w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
                 <Zap size={24} />
               </div>
-              <h4 className="font-bold">{t('trust.uptime.title')}</h4>
+              <h4 className="font-bold">{t('trust.uptime.title') as string}</h4>
               <p className="text-sm text-muted-foreground">
-                {t('trust.uptime.description')}
+                {t('trust.uptime.description') as string}
               </p>
             </div>
           </div>

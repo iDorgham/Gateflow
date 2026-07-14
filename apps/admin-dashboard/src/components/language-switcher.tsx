@@ -7,7 +7,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 
 const GlobeIcon = () => (
   <svg

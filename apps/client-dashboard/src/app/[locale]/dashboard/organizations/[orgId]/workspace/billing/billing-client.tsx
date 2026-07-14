@@ -8,9 +8,12 @@ import {
   CardHeader,
   CardTitle,
   Badge,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { PlanCards } from './plan-cards';
-import { WorkspacePageLayout, SidebarSection } from '@/components/dashboard/workspace-page-layout';
+import {
+  WorkspacePageLayout,
+  SidebarSection,
+} from '@/components/dashboard/workspace-page-layout';
 import { CreditCard, Activity, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -29,7 +32,12 @@ const PLANS = [
     name: 'FREE',
     price: '$0',
     period: 'forever',
-    features: ['3 gates', '100 QR codes/month', '1,000 scans/month', 'Email support'],
+    features: [
+      '3 gates',
+      '100 QR codes/month',
+      '1,000 scans/month',
+      'Email support',
+    ],
   },
   {
     name: 'PRO',
@@ -110,7 +118,8 @@ export function BillingClient({ org, gateCount, qrCount }: BillingClientProps) {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to open billing portal');
+      if (!res.ok)
+        throw new Error(data.error || 'Failed to open billing portal');
 
       if (data.url) {
         window.location.href = data.url;
@@ -128,26 +137,38 @@ export function BillingClient({ org, gateCount, qrCount }: BillingClientProps) {
         <div className="space-y-6 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 shadow-sm ring-1 ring-slate-100/50 dark:ring-slate-700/50">
           <div className="space-y-2">
             <div className="flex items-center justify-between text-[11px] font-bold">
-              <span className="text-slate-500 dark:text-slate-400 uppercase">Gates Created</span>
-              <span className="text-slate-900 dark:text-white">{gateCount} / {limits.gates === Infinity ? '∞' : limits.gates}</span>
+              <span className="text-slate-500 dark:text-slate-400 uppercase">
+                Gates Created
+              </span>
+              <span className="text-slate-900 dark:text-white">
+                {gateCount} / {limits.gates === Infinity ? '∞' : limits.gates}
+              </span>
             </div>
             <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-700">
-              <div 
-                className="h-full bg-blue-600 transition-all duration-500" 
-                style={{ width: `${Math.min(100, (gateCount / (limits.gates === Infinity ? 1 : limits.gates)) * 100)}%` }} 
+              <div
+                className="h-full bg-blue-600 transition-all duration-500"
+                style={{
+                  width: `${Math.min(100, (gateCount / (limits.gates === Infinity ? 1 : limits.gates)) * 100)}%`,
+                }}
               />
             </div>
           </div>
 
           <div className="space-y-2">
             <div className="flex items-center justify-between text-[11px] font-bold">
-              <span className="text-slate-500 dark:text-slate-400 uppercase">QR Code Usage</span>
-              <span className="text-slate-900 dark:text-white">{qrCount} / {limits.qr === Infinity ? '∞' : limits.qr}</span>
+              <span className="text-slate-500 dark:text-slate-400 uppercase">
+                QR Code Usage
+              </span>
+              <span className="text-slate-900 dark:text-white">
+                {qrCount} / {limits.qr === Infinity ? '∞' : limits.qr}
+              </span>
             </div>
             <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-700">
-              <div 
-                className="h-full bg-blue-600 transition-all duration-500" 
-                style={{ width: `${Math.min(100, (qrCount / (limits.qr === Infinity ? 1 : limits.qr)) * 100)}%` }} 
+              <div
+                className="h-full bg-blue-600 transition-all duration-500"
+                style={{
+                  width: `${Math.min(100, (qrCount / (limits.qr === Infinity ? 1 : limits.qr)) * 100)}%`,
+                }}
               />
             </div>
           </div>
@@ -163,20 +184,26 @@ export function BillingClient({ org, gateCount, qrCount }: BillingClientProps) {
           {org.stripeCustomerId ? (
             <>
               <div className="flex items-center gap-3">
-                 <div className="h-8 w-12 rounded bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 flex items-center justify-center font-bold text-[10px] text-slate-400">
-                    STRIPE
-                 </div>
-                 <div>
-                   <p className="text-xs font-bold text-slate-900 dark:text-white">Active Account</p>
-                   <p className="text-[10px] text-slate-500 font-medium">Managed via portal</p>
-                 </div>
+                <div className="h-8 w-12 rounded bg-slate-100 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 flex items-center justify-center font-bold text-[10px] text-slate-400">
+                  STRIPE
+                </div>
+                <div>
+                  <p className="text-xs font-bold text-slate-900 dark:text-white">
+                    Active Account
+                  </p>
+                  <p className="text-[10px] text-slate-500 font-medium">
+                    Managed via portal
+                  </p>
+                </div>
               </div>
-              <button 
+              <button
                 onClick={handleManageBilling}
                 disabled={isPortalLoading}
                 className="mt-4 w-full flex items-center justify-center gap-2 rounded-xl text-[11px] font-bold border border-slate-200 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 py-2 transition-colors dark:text-slate-300 disabled:opacity-50"
               >
-                {isPortalLoading && <Loader2 className="h-3 w-3 animate-spin" />}
+                {isPortalLoading && (
+                  <Loader2 className="h-3 w-3 animate-spin" />
+                )}
                 Manage in Stripe
               </button>
             </>
@@ -194,8 +221,12 @@ export function BillingClient({ org, gateCount, qrCount }: BillingClientProps) {
     <WorkspacePageLayout
       header={
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Billing & Subscription</h1>
-          <p className="text-sm font-medium text-slate-500 dark:text-slate-400">Manage your subscription plan, invoices, and billing details.</p>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+            Billing & Subscription
+          </h1>
+          <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
+            Manage your subscription plan, invoices, and billing details.
+          </p>
         </div>
       }
       sidebar={sidebar}
@@ -206,16 +237,20 @@ export function BillingClient({ org, gateCount, qrCount }: BillingClientProps) {
           <CardHeader className="pb-4">
             <div className="flex items-center justify-between">
               <div>
-                <CardTitle className="text-lg font-bold">Current Plan</CardTitle>
-                <CardDescription className="text-slate-500 font-medium">{org.name}</CardDescription>
+                <CardTitle className="text-lg font-bold">
+                  Current Plan
+                </CardTitle>
+                <CardDescription className="text-slate-500 font-medium">
+                  {org.name}
+                </CardDescription>
               </div>
               <Badge
                 className={`rounded-full px-3 py-1 text-xs font-bold shadow-sm ${
                   org.plan === 'PRO'
                     ? 'bg-blue-100 text-blue-700'
                     : org.plan === 'ENTERPRISE'
-                    ? 'bg-violet-100 text-violet-700'
-                    : 'bg-slate-100 text-slate-700'
+                      ? 'bg-violet-100 text-violet-700'
+                      : 'bg-slate-100 text-slate-700'
                 }`}
               >
                 {org.plan}
@@ -232,9 +267,9 @@ export function BillingClient({ org, gateCount, qrCount }: BillingClientProps) {
         </Card>
 
         {/* Plan cards */}
-        <PlanCards 
-          plans={PLANS} 
-          currentPlan={org.plan} 
+        <PlanCards
+          plans={PLANS}
+          currentPlan={org.plan}
           onUpgrade={handleUpgrade}
           loadingPlan={loadingPlan}
         />
@@ -242,7 +277,7 @@ export function BillingClient({ org, gateCount, qrCount }: BillingClientProps) {
         {/* Invoice history - Hide if FREE, or redirect to portal if PRO */}
         {org.plan !== 'FREE' && org.stripeCustomerId && (
           <div className="flex justify-center py-4">
-            <button 
+            <button
               onClick={handleManageBilling}
               className="text-sm font-bold text-blue-600 hover:text-blue-700 transition-colors flex items-center gap-2"
             >

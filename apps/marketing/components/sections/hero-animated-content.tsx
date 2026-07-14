@@ -7,11 +7,10 @@ import {
   useScroll,
   useTransform,
 } from 'framer-motion';
-import { Button } from '@gate-access/ui';
+import { Button } from '@gateflow/ui';
 import { IntentLink } from '../intent-link';
 import type { Locale } from '../../i18n-config';
 import {
-  ArrowLeft,
   ArrowRight,
   Shield,
   ShieldCheck,
@@ -24,7 +23,6 @@ import {
   Home,
   TrendingUp,
   QrCode,
-  Users,
 } from 'lucide-react';
 import { useTranslation } from '../../hooks/use-translation';
 import { AntigravityBackground } from '../antigravity-background';
@@ -43,10 +41,12 @@ function PhoneFrame({
   children,
   width = 224,
   className = '',
+  style = {},
 }: {
   children: React.ReactNode;
   width?: number;
   className?: string;
+  style?: React.CSSProperties;
 }) {
   const h = Math.round(width * 2.16);
   const r = Math.round(width * 0.138);
@@ -54,7 +54,7 @@ function PhoneFrame({
   return (
     <div
       className={`relative flex-shrink-0 ${className}`}
-      style={{ width, height: h }}
+      style={{ width, height: h, ...style }}
     >
       {/* SVG bezel - hardware stays dark regardless of theme */}
       <svg
@@ -69,8 +69,8 @@ function PhoneFrame({
           width={width - 2}
           height={h - 2}
           rx={r}
-          fill="#141517"
-          stroke="#2a2a2d"
+          fill="var(--ds-surface-overlay)"
+          stroke="var(--ds-border-bold)"
           strokeWidth="1.5"
         />
         {/* Screen glass */}
@@ -89,7 +89,7 @@ function PhoneFrame({
           width="44"
           height="11"
           rx="5.5"
-          fill="#141517"
+          fill="var(--ds-surface-overlay)"
         />
         {/* Volume buttons */}
         <rect
@@ -98,7 +98,7 @@ function PhoneFrame({
           width="3"
           height={h * 0.06}
           rx="1.5"
-          fill="#2a2a2d"
+          fill="var(--ds-border-bold)"
         />
         <rect
           x="0"
@@ -106,7 +106,7 @@ function PhoneFrame({
           width="3"
           height={h * 0.06}
           rx="1.5"
-          fill="#2a2a2d"
+          fill="var(--ds-border-bold)"
         />
         {/* Power button */}
         <rect
@@ -115,7 +115,7 @@ function PhoneFrame({
           width="3"
           height={h * 0.09}
           rx="1.5"
-          fill="#2a2a2d"
+          fill="var(--ds-border-bold)"
         />
         {/* Home pill */}
         <rect
@@ -170,13 +170,16 @@ function LaptopFrame({ children }: { children: React.ReactNode }) {
   return (
     <div className="relative w-full select-none">
       {/* Screen bezel */}
-      <div className="relative rounded-t-2xl overflow-hidden border border-ds-border-bold shadow-[0_0_60px_rgba(0,0,0,0.1)] dark:shadow-[0_0_60px_rgba(0,0,0,0.6)] bg-ds-surface-sunken">
+      <div
+        className="relative rounded-t-2xl overflow-hidden border border-ds-border-bold bg-ds-surface-sunken"
+        style={{ boxShadow: 'var(--ds-shadow-deep)' }}
+      >
         {/* Browser chrome */}
         <div className="flex items-center gap-2.5 px-3.5 py-2.5 border-b border-ds-border bg-ds-surface-raised">
           <div className="flex gap-1.5 flex-shrink-0">
-            <div className="w-3 h-3 rounded-full bg-red-400" />
-            <div className="w-3 h-3 rounded-full bg-amber-400" />
-            <div className="w-3 h-3 rounded-full bg-green-400" />
+            <div className="w-3 h-3 rounded-full bg-ds-background-danger-bold" />
+            <div className="w-3 h-3 rounded-full bg-ds-background-warning-bold" />
+            <div className="w-3 h-3 rounded-full bg-ds-background-success-bold" />
           </div>
           {/* URL bar */}
           <div className="flex-1 mx-2 overflow-hidden px-2.5 py-1 rounded-md text-ds-text-subtle text-[9px] font-medium flex items-center gap-1.5 border border-ds-border bg-ds-surface">
@@ -232,7 +235,11 @@ function ScannerArtwork({ isRtl }: { isRtl: boolean }) {
 
   return (
     <div className="relative mx-auto w-fit flex justify-center items-end scale-125 sm:scale-150 lg:scale-[1.7] origin-bottom translate-y-24 lg:-translate-x-12 rtl:lg:translate-x-12 lg:translate-y-[170px] transition-transform duration-700">
-      <PhoneFrame width={260} className="relative z-20 shadow-2xl">
+      <PhoneFrame
+        width={260}
+        className="relative z-20"
+        style={{ boxShadow: 'var(--ds-shadow-overlay)' }}
+      >
         <div className="flex items-center justify-between px-4 py-2.5 border-b border-ds-border bg-ds-surface">
           <div className="flex items-center gap-2">
             <QrCode size={12} className="text-ds-text-brand" />
@@ -386,7 +393,8 @@ function ScannerArtwork({ isRtl }: { isRtl: boolean }) {
         initial={{ opacity: 0, x: isRtl ? -40 : 40, y: 20 }}
         animate={{ opacity: 1, x: 0, y: 0 }}
         transition={{ delay: 0.9, ...SPRING }}
-        className="absolute bottom-20 -end-12 z-30 rounded-2xl p-4 shadow-[0_8px_30px_rgba(0,0,0,0.12)] min-w-[165px] border border-ds-border-bold bg-ds-surface-raised"
+        className="absolute bottom-20 -end-12 z-30 rounded-2xl p-4 min-w-[165px] border border-ds-border-bold bg-ds-surface-raised"
+        style={{ boxShadow: 'var(--ds-shadow-overlay)' }}
       >
         <div className="flex items-center gap-3 mb-2.5">
           <div className="w-8 h-8 rounded-xl flex items-center justify-center bg-ds-background-brand-bold">
@@ -417,7 +425,8 @@ function ScannerArtwork({ isRtl }: { isRtl: boolean }) {
         initial={{ opacity: 0, y: -20, x: isRtl ? 20 : -20 }}
         animate={{ opacity: 1, y: 0, x: 0 }}
         transition={{ delay: 1.1, ...SPRING }}
-        className="absolute top-12 -start-8 z-30 rounded-2xl px-3.5 py-2.5 shadow-[0_8px_30px_rgba(0,0,0,0.12)] flex items-center gap-2.5 border border-ds-border bg-ds-surface-raised"
+        className="absolute top-12 -start-8 z-30 rounded-2xl px-3.5 py-2.5 flex items-center gap-2.5 border border-ds-border bg-ds-surface-raised"
+        style={{ boxShadow: 'var(--ds-shadow-overlay)' }}
       >
         <div className="w-7 h-7 rounded-xl bg-ds-background-information-subtle flex items-center justify-center">
           <Home size={13} className="text-ds-text-information" />
@@ -445,7 +454,11 @@ function VisitorArtwork({ isRtl }: { isRtl: boolean }) {
 
   return (
     <div className="flex justify-center scale-125 sm:scale-150 lg:scale-[1.7] origin-bottom translate-y-24 lg:-translate-x-12 rtl:lg:translate-x-12 lg:translate-y-[170px] transition-transform duration-700">
-      <PhoneFrame width={260} className="shadow-2xl relative z-20">
+      <PhoneFrame
+        width={260}
+        className="relative z-20"
+        style={{ boxShadow: 'var(--ds-shadow-deep)' }}
+      >
         {/* App header */}
         <div className="flex items-center justify-between px-4 py-2.5 border-b border-ds-border bg-ds-surface">
           <div className="flex items-center gap-2">
@@ -474,7 +487,7 @@ function VisitorArtwork({ isRtl }: { isRtl: boolean }) {
             <div
               className="w-11 h-11 rounded-xl flex items-center justify-center text-white text-[15px] font-black flex-shrink-0"
               style={{
-                background: 'linear-gradient(135deg, #7c3aed, #4f46e5)',
+                background: 'var(--ds-background-brand-bold)',
               }}
             >
               A
@@ -574,18 +587,18 @@ function VisitorArtwork({ isRtl }: { isRtl: boolean }) {
 }
 
 /* ─── Artwork 3: Analytics Dashboard (Laptop) ─────────────────────────────── */
-function AnalyticsArtwork({ isRtl }: { isRtl: boolean }) {
-  const bars = [55, 72, 48, 88, 76, 95, 68];
-  const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-
+function AnalyticsArtwork() {
   return (
-    <div className="scale-100 lg:scale-[1.05] origin-bottom lg:translate-x-12 rtl:lg:-translate-x-12 transition-transform duration-700 shadow-[20px_40px_80px_rgba(0,0,0,0.25)] rounded-xl w-full lg:w-[125%] max-w-[1200px] ms-auto z-50 relative">
+    <div
+      className="scale-100 lg:scale-[1.05] origin-bottom lg:translate-x-12 rtl:lg:-translate-x-12 transition-transform duration-700 rounded-xl w-full lg:w-[125%] max-w-[1200px] ms-auto z-50 relative"
+      style={{ boxShadow: 'var(--ds-shadow-deep)' }}
+    >
       <LaptopFrame>
         <div className="px-4 py-3.5 bg-ds-surface h-full min-h-[480px]">
           {/* Dashboard toolbar */}
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-ds-background-brand-bold w-fit p-1.5">
+              <div className="w-7 h-7 rounded-lg flex items-center justify-center bg-ds-background-brand-bold p-1.5">
                 <LayoutDashboard size={13} className="text-ds-text-inverse" />
               </div>
               <span className="text-ds-text-heading text-[10px] font-black uppercase tracking-[0.18em]">
@@ -872,7 +885,7 @@ export function HeroAnimatedContent({ locale }: { locale: Locale }) {
     {
       id: 'hub',
       slideLabel: 'Analytics Hub',
-      artwork: <AnalyticsArtwork isRtl={isRtl} />,
+      artwork: <AnalyticsArtwork />,
     },
   ];
 

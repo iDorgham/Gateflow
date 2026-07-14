@@ -2,13 +2,12 @@
 
 import * as React from 'react';
 import { motion } from 'framer-motion';
-import { QrCode, ScanLine, FileCheck, ArrowRight } from 'lucide-react';
+import { QrCode, ScanLine, FileCheck } from 'lucide-react';
 import type { Locale } from '../../i18n-config';
 import { useTranslation } from '../../hooks/use-translation';
 
-export function HowItWorksSection({ locale }: { locale: Locale }) {
+export function HowItWorksSection({ locale: _locale }: { locale: Locale }) {
   const { t } = useTranslation('landing');
-  const isRtl = locale.startsWith('ar');
 
   const steps = [
     {

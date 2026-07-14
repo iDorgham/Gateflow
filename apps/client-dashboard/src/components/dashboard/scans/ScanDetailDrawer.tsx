@@ -2,10 +2,13 @@
 
 import { AnimatePresence, motion } from 'framer-motion';
 import { X, QrCode, DoorOpen, User, Hash } from 'lucide-react';
-import { cn } from '@gate-access/ui';
+import { cn } from '@gateflow/ui';
 import type { ScanLog } from './ScansTable';
 
-const STATUS_CONFIG: Record<string, { bg: string; text: string; dot: string; label: string }> = {
+const STATUS_CONFIG: Record<
+  string,
+  { bg: string; text: string; dot: string; label: string }
+> = {
   SUCCESS: {
     bg: 'bg-[var(--ds-background-success-subtle)]',
     text: 'text-[var(--ds-text-success)]',
@@ -62,7 +65,10 @@ function Field({
   return (
     <div className="flex flex-col gap-1">
       <div className="flex items-center gap-1.5">
-        <Icon className="h-3 w-3 text-[var(--ds-icon-subtle)]" aria-hidden="true" />
+        <Icon
+          className="h-3 w-3 text-[var(--ds-icon-subtle)]"
+          aria-hidden="true"
+        />
         <dt className="text-[10px] font-black uppercase tracking-widest text-[var(--ds-text-subtlest)]">
           {label}
         </dt>
@@ -72,7 +78,11 @@ function Field({
   );
 }
 
-export function ScanDetailDrawer({ scan, locale, onClose }: ScanDetailDrawerProps) {
+export function ScanDetailDrawer({
+  scan,
+  locale,
+  onClose,
+}: ScanDetailDrawerProps) {
   return (
     <AnimatePresence>
       {scan && (
@@ -125,10 +135,13 @@ export function ScanDetailDrawer({ scan, locale, onClose }: ScanDetailDrawerProp
                     className={cn(
                       'inline-flex items-center gap-1.5 rounded-[3px] px-2 py-0.5 text-xs font-bold uppercase tracking-wider',
                       s.bg,
-                      s.text,
+                      s.text
                     )}
                   >
-                    <span className={cn('h-1.5 w-1.5 rounded-full shrink-0', s.dot)} aria-hidden="true" />
+                    <span
+                      className={cn('h-1.5 w-1.5 rounded-full shrink-0', s.dot)}
+                      aria-hidden="true"
+                    />
                     {s.label}
                   </div>
                 );
@@ -171,7 +184,9 @@ export function ScanDetailDrawer({ scan, locale, onClose }: ScanDetailDrawerProp
                       <span className="text-sm font-semibold text-[var(--ds-text)]">
                         {scan.user.name}
                       </span>
-                      <span className="text-xs text-[var(--ds-text-subtle)]">{scan.user.email}</span>
+                      <span className="text-xs text-[var(--ds-text-subtle)]">
+                        {scan.user.email}
+                      </span>
                     </div>
                   </Field>
                 )}

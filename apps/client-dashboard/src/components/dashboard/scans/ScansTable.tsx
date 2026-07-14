@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { cn, DynamicTable, type Column } from '@gate-access/ui';
+import { cn, DynamicTable, type Column } from '@gateflow/ui';
 import { useTranslation } from 'react-i18next';
 import { QrCode, Building, DoorOpen } from 'lucide-react';
 import dynamic from 'next/dynamic';

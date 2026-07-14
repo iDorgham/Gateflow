@@ -13,7 +13,9 @@ export async function generateMetadata(props: {
   const { locale } = params;
   const { t } = await getTranslation(locale, 'navigation');
   return {
-    title: templatedMarketingTitle(t('header.dropdowns.company.contact.label')),
+    title: templatedMarketingTitle(
+      t('header.dropdowns.company.contact.label') as string
+    ),
     description: 'Get in touch with the GateFlow team in Cairo and Dubai.',
   };
 }
@@ -30,10 +32,10 @@ export default async function ContactPage(props: {
       {/* Header */}
       <section className="pt-48 pb-32 text-center container px-6">
         <h1 className="text-4xl lg:text-7xl font-black tracking-tight mb-6">
-          {t('hero.headline')}
+          {t('hero.headline') as string}
         </h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          {t('hero.subHeadline')}
+          {t('hero.subHeadline') as string}
         </p>
       </section>
 
@@ -42,23 +44,23 @@ export default async function ContactPage(props: {
         <div className="lg:col-span-2 space-y-8">
           <ContactCard
             icon={<MessageSquare className="text-success" />}
-            title={t('cards.whatsapp.title')}
-            detail={t('cards.whatsapp.detail')}
-            desc={t('cards.whatsapp.desc')}
+            title={t('cards.whatsapp.title') as string}
+            detail={t('cards.whatsapp.detail') as string}
+            desc={t('cards.whatsapp.desc') as string}
             link="https://wa.me/201000000000"
-            linkBtn={t('cards.whatsapp.linkBtn')}
+            linkBtn={t('cards.whatsapp.linkBtn') as string}
           />
           <ContactCard
             icon={<Mail className="text-indigo-500" />}
-            title={t('cards.email.title')}
-            detail={t('cards.email.detail')}
-            desc={t('cards.email.desc')}
+            title={t('cards.email.title') as string}
+            detail={t('cards.email.detail') as string}
+            desc={t('cards.email.desc') as string}
           />
           <ContactCard
             icon={<Phone className="text-primary" />}
-            title={t('cards.sales.title')}
-            detail={t('cards.sales.detail')}
-            desc={t('cards.sales.desc')}
+            title={t('cards.sales.title') as string}
+            detail={t('cards.sales.detail') as string}
+            desc={t('cards.sales.desc') as string}
           />
 
           <div className="p-1 rounded-[2rem] bg-gradient-to-br from-primary/10 to-indigo-500/10 border overflow-hidden">
@@ -66,7 +68,7 @@ export default async function ContactPage(props: {
               <div className="flex items-center gap-3 mb-6">
                 <MapPin className="text-primary" />
                 <h3 className="font-bold text-lg">
-                  {t('cards.regional.title')}
+                  {t('cards.regional.title') as string}
                 </h3>
               </div>
               <div className="space-y-6">
@@ -74,10 +76,10 @@ export default async function ContactPage(props: {
                   <span className="text-2xl">🇪🇬</span>
                   <div>
                     <p className="font-bold">
-                      {t('cards.regional.cairo.name')}
+                      {t('cards.regional.cairo.name') as string}
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      {t('cards.regional.cairo.desc')}
+                      {t('cards.regional.cairo.desc') as string}
                     </p>
                   </div>
                 </div>
@@ -85,10 +87,10 @@ export default async function ContactPage(props: {
                   <span className="text-2xl">🇦🇪</span>
                   <div>
                     <p className="font-bold">
-                      {t('cards.regional.dubai.name')}
+                      {t('cards.regional.dubai.name') as string}
                     </p>
                     <p className="text-sm text-muted-foreground">
-                      {t('cards.regional.dubai.desc')}
+                      {t('cards.regional.dubai.desc') as string}
                     </p>
                   </div>
                 </div>

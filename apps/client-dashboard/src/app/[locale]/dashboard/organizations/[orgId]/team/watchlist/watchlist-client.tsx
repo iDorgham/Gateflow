@@ -24,7 +24,7 @@ import {
   SheetDescription,
   SheetFooter,
   cn,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import {
@@ -65,7 +65,10 @@ function EmptyState({ isFiltered }: { isFiltered: boolean }) {
   return (
     <div className="flex flex-col items-center justify-center py-20 rounded-2xl border-2 border-dashed border-border bg-muted/20 text-center">
       <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-destructive/10 mb-4">
-        <ShieldAlert className="h-8 w-8 text-destructive/60" aria-hidden="true" />
+        <ShieldAlert
+          className="h-8 w-8 text-destructive/60"
+          aria-hidden="true"
+        />
       </div>
       <p className="text-lg font-black uppercase tracking-tight text-foreground">
         {isFiltered ? 'No matches found' : 'Watchlist is empty'}
@@ -106,7 +109,11 @@ export function WatchlistClient() {
   const searchTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Stats (computed from the initial full load, not from search results)
-  const [stats, setStats] = useState({ total: 0, thisMonth: 0, lastAdded: null as string | null });
+  const [stats, setStats] = useState({
+    total: 0,
+    thisMonth: 0,
+    lastAdded: null as string | null,
+  });
 
   // Sort state
   const [sortBy, setSortBy] = useState<'name' | 'createdAt'>('createdAt');
@@ -133,7 +140,8 @@ export function WatchlistClient() {
     const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
     setStats({
       total: data.length,
-      thisMonth: data.filter((e) => new Date(e.createdAt) >= startOfMonth).length,
+      thisMonth: data.filter((e) => new Date(e.createdAt) >= startOfMonth)
+        .length,
       lastAdded: data.length > 0 ? data[0].createdAt : null,
     });
   }
@@ -147,9 +155,11 @@ export function WatchlistClient() {
           computeStats(res.data);
         }
       })
-      .catch(() => toast.error(t('watchlist.loadError', 'Failed to load watchlist')))
+      .catch(() =>
+        toast.error(t('watchlist.loadError', 'Failed to load watchlist'))
+      )
       .finally(() => setLoading(false));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // ── Server-side search (debounced 300ms) ────────────────────────────────────
@@ -159,7 +169,9 @@ export function WatchlistClient() {
     searchTimerRef.current = setTimeout(() => {
       const q = search.trim();
       setSearchLoading(true);
-      const url = q ? `/api/watchlist?search=${encodeURIComponent(q)}` : '/api/watchlist';
+      const url = q
+        ? `/api/watchlist?search=${encodeURIComponent(q)}`
+        : '/api/watchlist';
       fetch(url)
         .then((r) => r.json())
         .then((res: { success: boolean; data?: Entry[] }) => {
@@ -169,11 +181,15 @@ export function WatchlistClient() {
             if (!q) computeStats(res.data);
           }
         })
-        .catch(() => {/* silent */})
+        .catch(() => {
+          /* silent */
+        })
         .finally(() => setSearchLoading(false));
     }, 300);
-    return () => { if (searchTimerRef.current) clearTimeout(searchTimerRef.current); };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    return () => {
+      if (searchTimerRef.current) clearTimeout(searchTimerRef.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [search]);
 
   // ── Sorted entries ──────────────────────────────────────────────────────────
@@ -200,10 +216,13 @@ export function WatchlistClient() {
   }
 
   function SortIcon({ col }: { col: 'name' | 'createdAt' }) {
-    if (sortBy !== col) return <ArrowUpDown className="h-3 w-3 ml-1 text-muted-foreground/40" />;
-    return sortDir === 'asc'
-      ? <ArrowUp className="h-3 w-3 ml-1 text-primary" />
-      : <ArrowDown className="h-3 w-3 ml-1 text-primary" />;
+    if (sortBy !== col)
+      return <ArrowUpDown className="h-3 w-3 ml-1 text-muted-foreground/40" />;
+    return sortDir === 'asc' ? (
+      <ArrowUp className="h-3 w-3 ml-1 text-primary" />
+    ) : (
+      <ArrowDown className="h-3 w-3 ml-1 text-primary" />
+    );
   }
 
   // ── Sheet helpers ───────────────────────────────────────────────────────────
@@ -254,7 +273,11 @@ export function WatchlistClient() {
         });
       }
 
-      const data = (await res.json()) as { success: boolean; data?: Entry; message?: string };
+      const data = (await res.json()) as {
+        success: boolean;
+        data?: Entry;
+        message?: string;
+      };
 
       if (data.success) {
         if (editingEntry) {
@@ -281,9 +304,12 @@ export function WatchlistClient() {
     if (!deletingEntry) return;
     setIsDeleting(true);
     try {
-      const res = await csrfFetch(`/api/watchlist?id=${encodeURIComponent(deletingEntry.id)}`, {
-        method: 'DELETE',
-      });
+      const res = await csrfFetch(
+        `/api/watchlist?id=${encodeURIComponent(deletingEntry.id)}`,
+        {
+          method: 'DELETE',
+        }
+      );
       const data = (await res.json()) as { success: boolean; message?: string };
       if (data.success) {
         setEntries((prev) => prev.filter((e) => e.id !== deletingEntry.id));
@@ -291,7 +317,9 @@ export function WatchlistClient() {
         setDeletingEntry(null);
         setConfirmText('');
       } else {
-        toast.error(data.message ?? t('watchlist.removeError', 'Failed to remove'));
+        toast.error(
+          data.message ?? t('watchlist.removeError', 'Failed to remove')
+        );
       }
     } finally {
       setIsDeleting(false);
@@ -302,7 +330,6 @@ export function WatchlistClient() {
 
   return (
     <div className="space-y-6">
-
       {/* Page header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
@@ -311,11 +338,17 @@ export function WatchlistClient() {
               {t('watchlist.title', 'Watchlist')}
             </h1>
             <p className="text-sm text-muted-foreground mt-0.5">
-              {t('watchlist.description', 'People on this list will be flagged at scan.')}
+              {t(
+                'watchlist.description',
+                'People on this list will be flagged at scan.'
+              )}
             </p>
           </div>
           {!loading && (
-            <Badge variant="outline" className="font-black text-sm px-2.5 py-1 border-destructive/30 bg-destructive/5 text-destructive shrink-0">
+            <Badge
+              variant="outline"
+              className="font-black text-sm px-2.5 py-1 border-destructive/30 bg-destructive/5 text-destructive shrink-0"
+            >
               {stats.total}
             </Badge>
           )}
@@ -335,21 +368,29 @@ export function WatchlistClient() {
           <div className="rounded-2xl border border-border bg-card p-4 flex flex-col gap-1">
             <div className="flex items-center gap-1.5 text-muted-foreground mb-1">
               <Users className="h-3.5 w-3.5" />
-              <span className="text-[10px] font-bold uppercase tracking-widest">Total</span>
+              <span className="text-[10px] font-bold uppercase tracking-widest">
+                Total
+              </span>
             </div>
             <p className="text-2xl font-black text-foreground">{stats.total}</p>
           </div>
           <div className="rounded-2xl border border-border bg-card p-4 flex flex-col gap-1">
             <div className="flex items-center gap-1.5 text-muted-foreground mb-1">
               <CalendarDays className="h-3.5 w-3.5" />
-              <span className="text-[10px] font-bold uppercase tracking-widest">This Month</span>
+              <span className="text-[10px] font-bold uppercase tracking-widest">
+                This Month
+              </span>
             </div>
-            <p className="text-2xl font-black text-foreground">{stats.thisMonth}</p>
+            <p className="text-2xl font-black text-foreground">
+              {stats.thisMonth}
+            </p>
           </div>
           <div className="rounded-2xl border border-border bg-card p-4 flex flex-col gap-1">
             <div className="flex items-center gap-1.5 text-muted-foreground mb-1">
               <Clock className="h-3.5 w-3.5" />
-              <span className="text-[10px] font-bold uppercase tracking-widest">Last Added</span>
+              <span className="text-[10px] font-bold uppercase tracking-widest">
+                Last Added
+              </span>
             </div>
             <p className="text-sm font-black text-foreground">
               {stats.lastAdded ? relativeTime(stats.lastAdded) : '—'}
@@ -360,7 +401,10 @@ export function WatchlistClient() {
 
       {/* Search */}
       <div className="relative max-w-sm">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" aria-hidden="true" />
+        <Search
+          className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground"
+          aria-hidden="true"
+        />
         <Input
           placeholder={t('watchlist.search', 'Search by name, phone, ID…')}
           value={search}
@@ -393,9 +437,15 @@ export function WatchlistClient() {
                     Name <SortIcon col="name" />
                   </span>
                 </TableHead>
-                <TableHead className="font-bold text-[10px] uppercase tracking-[0.2em]">Phone</TableHead>
-                <TableHead className="font-bold text-[10px] uppercase tracking-[0.2em]">ID Number</TableHead>
-                <TableHead className="font-bold text-[10px] uppercase tracking-[0.2em]">Notes</TableHead>
+                <TableHead className="font-bold text-[10px] uppercase tracking-[0.2em]">
+                  Phone
+                </TableHead>
+                <TableHead className="font-bold text-[10px] uppercase tracking-[0.2em]">
+                  ID Number
+                </TableHead>
+                <TableHead className="font-bold text-[10px] uppercase tracking-[0.2em]">
+                  Notes
+                </TableHead>
                 <TableHead
                   className="font-bold text-[10px] uppercase tracking-[0.2em] cursor-pointer select-none hover:text-foreground"
                   onClick={() => toggleSort('createdAt')}
@@ -404,18 +454,28 @@ export function WatchlistClient() {
                     Added <SortIcon col="createdAt" />
                   </span>
                 </TableHead>
-                <TableHead className="text-right font-bold text-[10px] uppercase tracking-[0.2em]">Actions</TableHead>
+                <TableHead className="text-right font-bold text-[10px] uppercase tracking-[0.2em]">
+                  Actions
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {sorted.map((entry) => (
-                <TableRow key={entry.id} className="group hover:bg-muted/30 transition-colors border-b border-border/20 last:border-0">
+                <TableRow
+                  key={entry.id}
+                  className="group hover:bg-muted/30 transition-colors border-b border-border/20 last:border-0"
+                >
                   <TableCell>
                     <div className="flex flex-col gap-0.5">
                       <div className="flex items-center gap-1.5">
-                        <span className="font-bold text-foreground">{entry.name}</span>
+                        <span className="font-bold text-foreground">
+                          {entry.name}
+                        </span>
                         {entry.idNumber && (
-                          <Badge variant="outline" className="text-[9px] font-bold px-1.5 py-0 border-amber-300/50 bg-amber-50 text-amber-700 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-700/40">
+                          <Badge
+                            variant="outline"
+                            className="text-[9px] font-bold px-1.5 py-0 border-amber-300/50 bg-amber-50 text-amber-700 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-700/40"
+                          >
                             <ShieldCheck className="h-2.5 w-2.5 mr-0.5" />
                             ID Verified
                           </Badge>
@@ -423,7 +483,10 @@ export function WatchlistClient() {
                       </div>
                       {entry.createdBy && (
                         <span className="text-[10px] text-muted-foreground/60">
-                          by {entry.createdBy.length > 16 ? `${entry.createdBy.slice(0, 16)}…` : entry.createdBy}
+                          by{' '}
+                          {entry.createdBy.length > 16
+                            ? `${entry.createdBy.slice(0, 16)}…`
+                            : entry.createdBy}
                         </span>
                       )}
                     </div>
@@ -431,43 +494,68 @@ export function WatchlistClient() {
                   <TableCell>
                     {entry.phone ? (
                       <span className="flex items-center gap-1.5 text-sm text-foreground">
-                        <Phone className="h-3 w-3 text-muted-foreground/60 shrink-0" aria-hidden="true" />
+                        <Phone
+                          className="h-3 w-3 text-muted-foreground/60 shrink-0"
+                          aria-hidden="true"
+                        />
                         {entry.phone}
                       </span>
                     ) : (
-                      <span className="text-muted-foreground/40 italic text-xs">—</span>
+                      <span className="text-muted-foreground/40 italic text-xs">
+                        —
+                      </span>
                     )}
                   </TableCell>
                   <TableCell>
                     {entry.idNumber ? (
                       <span className="flex items-center gap-1.5 text-sm text-foreground">
-                        <CreditCard className="h-3 w-3 text-muted-foreground/60 shrink-0" aria-hidden="true" />
+                        <CreditCard
+                          className="h-3 w-3 text-muted-foreground/60 shrink-0"
+                          aria-hidden="true"
+                        />
                         {entry.idNumber}
                       </span>
                     ) : (
-                      <span className="text-muted-foreground/40 italic text-xs">—</span>
+                      <span className="text-muted-foreground/40 italic text-xs">
+                        —
+                      </span>
                     )}
                   </TableCell>
                   <TableCell>
                     {entry.notes ? (
                       <span className="flex items-center gap-1.5 text-xs text-muted-foreground line-clamp-1 max-w-[160px]">
-                        <StickyNote className="h-3 w-3 shrink-0" aria-hidden="true" />
+                        <StickyNote
+                          className="h-3 w-3 shrink-0"
+                          aria-hidden="true"
+                        />
                         {entry.notes}
                       </span>
                     ) : (
-                      <span className="text-muted-foreground/40 italic text-xs">—</span>
+                      <span className="text-muted-foreground/40 italic text-xs">
+                        —
+                      </span>
                     )}
                   </TableCell>
                   <TableCell className="text-xs text-muted-foreground">
                     <div className="flex flex-col gap-0.5">
                       <span>
-                        {new Date(entry.createdAt).toLocaleDateString(undefined, {
-                          month: 'short',
-                          day: 'numeric',
-                          year: 'numeric',
-                        })}
+                        {new Date(entry.createdAt).toLocaleDateString(
+                          undefined,
+                          {
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric',
+                          }
+                        )}
                       </span>
-                      <span className={cn('text-[10px]', entry.createdBy ? 'text-muted-foreground/50' : 'hidden')}>
+                      <span
+                        className={cn(
+                          'text-[10px]',
+                          entry.createdBy
+                            ? 'text-muted-foreground/50'
+                            : 'hidden'
+                        )}
+                      >
                         {relativeTime(entry.createdAt)}
                       </span>
                     </div>
@@ -509,20 +597,34 @@ export function WatchlistClient() {
         <SheetContent className="w-full sm:max-w-md p-0 flex flex-col">
           <SheetHeader className="p-8 bg-destructive/5 shrink-0">
             <div className="h-12 w-12 rounded-2xl bg-destructive/10 flex items-center justify-center mb-2">
-              <ShieldAlert className="h-6 w-6 text-destructive" aria-hidden="true" />
+              <ShieldAlert
+                className="h-6 w-6 text-destructive"
+                aria-hidden="true"
+              />
             </div>
             <SheetTitle className="text-xl font-black uppercase tracking-tight">
-              {editingEntry ? t('watchlist.editEntry', 'Edit Entry') : t('watchlist.addEntry', 'Add Entry')}
+              {editingEntry
+                ? t('watchlist.editEntry', 'Edit Entry')
+                : t('watchlist.addEntry', 'Add Entry')}
             </SheetTitle>
             <SheetDescription>
-              {t('watchlist.sheetDesc', 'Entries are matched against visitor identity at scan time.')}
+              {t(
+                'watchlist.sheetDesc',
+                'Entries are matched against visitor identity at scan time.'
+              )}
             </SheetDescription>
           </SheetHeader>
 
-          <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-y-auto">
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col flex-1 overflow-y-auto"
+          >
             <div className="p-8 space-y-5 flex-1">
               <div className="space-y-2">
-                <Label htmlFor="wl-name" className="text-[11px] font-black uppercase tracking-widest text-muted-foreground">
+                <Label
+                  htmlFor="wl-name"
+                  className="text-[11px] font-black uppercase tracking-widest text-muted-foreground"
+                >
                   {t('watchlist.name', 'Name')} *
                 </Label>
                 <Input
@@ -537,7 +639,10 @@ export function WatchlistClient() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="wl-phone" className="text-[11px] font-black uppercase tracking-widest text-muted-foreground">
+                <Label
+                  htmlFor="wl-phone"
+                  className="text-[11px] font-black uppercase tracking-widest text-muted-foreground"
+                >
                   {t('watchlist.phone', 'Phone')}
                 </Label>
                 <Input
@@ -545,33 +650,48 @@ export function WatchlistClient() {
                   type="tel"
                   value={fieldPhone}
                   onChange={(e) => setFieldPhone(e.target.value)}
-                  placeholder={t('watchlist.phonePlaceholder', '+971 50 000 0000')}
+                  placeholder={t(
+                    'watchlist.phonePlaceholder',
+                    '+971 50 000 0000'
+                  )}
                   className="h-11 rounded-xl"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="wl-id" className="text-[11px] font-black uppercase tracking-widest text-muted-foreground">
+                <Label
+                  htmlFor="wl-id"
+                  className="text-[11px] font-black uppercase tracking-widest text-muted-foreground"
+                >
                   {t('watchlist.idNumber', 'ID / Document Number')}
                 </Label>
                 <Input
                   id="wl-id"
                   value={fieldIdNumber}
                   onChange={(e) => setFieldIdNumber(e.target.value)}
-                  placeholder={t('watchlist.idPlaceholder', 'Passport, Emirates ID…')}
+                  placeholder={t(
+                    'watchlist.idPlaceholder',
+                    'Passport, Emirates ID…'
+                  )}
                   className="h-11 rounded-xl font-mono"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="wl-notes" className="text-[11px] font-black uppercase tracking-widest text-muted-foreground">
+                <Label
+                  htmlFor="wl-notes"
+                  className="text-[11px] font-black uppercase tracking-widest text-muted-foreground"
+                >
                   {t('watchlist.notes', 'Notes')}
                 </Label>
                 <Textarea
                   id="wl-notes"
                   value={fieldNotes}
                   onChange={(e) => setFieldNotes(e.target.value)}
-                  placeholder={t('watchlist.notesPlaceholder', 'Reason for watchlist, incident reference…')}
+                  placeholder={t(
+                    'watchlist.notesPlaceholder',
+                    'Reason for watchlist, incident reference…'
+                  )}
                   className="rounded-xl resize-none"
                   rows={3}
                 />
@@ -585,7 +705,10 @@ export function WatchlistClient() {
                 className="w-full h-12 rounded-xl font-black uppercase tracking-widest text-[11px]"
               >
                 {isPending ? (
-                  <><Loader2 className="h-4 w-4 animate-spin mr-2" />{t('common.saving', 'Saving…')}</>
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                    {t('common.saving', 'Saving…')}
+                  </>
                 ) : editingEntry ? (
                   t('common.saveChanges', 'Save Changes')
                 ) : (
@@ -616,7 +739,8 @@ export function WatchlistClient() {
               Remove from Watchlist
             </DialogTitle>
             <DialogDescription className="text-sm text-muted-foreground">
-              This cannot be undone. The entry will be soft-deleted and no longer matched at scan.
+              This cannot be undone. The entry will be soft-deleted and no
+              longer matched at scan.
             </DialogDescription>
           </div>
 
@@ -642,7 +766,10 @@ export function WatchlistClient() {
               <Button
                 variant="outline"
                 className="flex-1 h-11 rounded-xl font-bold"
-                onClick={() => { setDeletingEntry(null); setConfirmText(''); }}
+                onClick={() => {
+                  setDeletingEntry(null);
+                  setConfirmText('');
+                }}
                 disabled={isDeleting}
               >
                 Cancel
@@ -650,10 +777,16 @@ export function WatchlistClient() {
               <Button
                 variant="destructive"
                 className="flex-1 h-11 rounded-xl font-black"
-                disabled={confirmText !== `${deletingEntry?.name} remove` || isDeleting}
+                disabled={
+                  confirmText !== `${deletingEntry?.name} remove` || isDeleting
+                }
                 onClick={handleDelete}
               >
-                {isDeleting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Remove'}
+                {isDeleting ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  'Remove'
+                )}
               </Button>
             </div>
           </div>

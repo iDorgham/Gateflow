@@ -1,7 +1,16 @@
-import * as React from "react";
-import { QrCode, Infinity, RefreshCw } from "lucide-react";
+import * as React from 'react';
+import { QrCode, Infinity, RefreshCw } from 'lucide-react';
 
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter, Button, cn } from "@gate-access/ui";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardFooter,
+  Button,
+  cn,
+} from '@gateflow/ui';
 
 export interface OpenQRCardProps {
   propertyName: string;
@@ -19,7 +28,12 @@ export function OpenQRCard({
   className,
 }: OpenQRCardProps) {
   return (
-    <Card className={cn("overflow-hidden border-primary/20 max-w-sm bg-gradient-to-br from-background to-primary/5 shadow-md", className)}>
+    <Card
+      className={cn(
+        'overflow-hidden border-primary/20 max-w-sm bg-gradient-to-br from-background to-primary/5 shadow-md',
+        className
+      )}
+    >
       <CardHeader className="text-center pb-2">
         <div className="mx-auto bg-primary/10 w-12 h-12 rounded-full flex items-center justify-center mb-4 ring-4 ring-background">
           <Infinity className="h-6 w-6 text-primary" />
@@ -47,7 +61,11 @@ export function OpenQRCard({
         </div>
       </CardContent>
       <CardFooter className="justify-center pt-2 pb-6">
-        <Button variant="outline" className="w-full text-primary border-primary/20 hover:bg-primary/5 font-semibold" onClick={onRegenerate}>
+        <Button
+          variant="outline"
+          className="w-full text-primary border-primary/20 hover:bg-primary/5 font-semibold"
+          onClick={onRegenerate}
+        >
           <RefreshCw className="mr-2 h-4 w-4" /> Regenerate Pass
         </Button>
       </CardFooter>

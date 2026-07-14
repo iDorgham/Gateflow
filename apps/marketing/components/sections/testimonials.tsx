@@ -73,22 +73,24 @@ const TESTIMONIALS: Testimonial[] = [
 
 function TestimonialCard({ item }: { item: Testimonial }) {
   return (
-    <div className="flex-shrink-0 w-[450px] mx-space-200 bg-ds-surface-overlay p-space-400 rounded-[24px] border border-ds-border-bold hover:border-ds-border-brand transition-all duration-300 group shadow-[0_4px_12px_rgba(0,0,0,0.08)] dark:shadow-[0_8px_24px_rgba(0,0,0,0.4)]">
+    <div className="flex-shrink-0 w-[420px] mx-4 bg-ds-surface-overlay p-8 rounded-[32px] border border-ds-border-bold hover:border-ds-accent-bold/30 transition-all duration-500 group relative overflow-hidden">
+      <div className="absolute inset-0 bg-gradient-to-br from-ds-accent-bold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
       {/* Official ID Header */}
-      <div className="flex items-center gap-space-200 mb-space-300">
+      <div className="flex items-center gap-4 mb-6 relative z-10">
         <div className="relative">
-          <div className="w-16 h-16 rounded-2xl overflow-hidden bg-ds-surface-sunken border border-ds-border-bold p-0.5">
+          <div className="w-14 h-14 rounded-2xl overflow-hidden bg-ds-surface-sunken border border-ds-border-subtle p-0.5">
             <img
               src={item.avatar}
               alt={item.author}
-              className="w-full h-full object-cover rounded-[14px]"
+              className="w-full h-full object-cover rounded-[14px] grayscale-[0.2] group-hover:grayscale-0 transition-all duration-500"
             />
           </div>
           {/* Official Verification Badge */}
-          <div className="absolute -bottom-1.5 -right-1.5 w-6 h-6 bg-ds-background-success-bold rounded-full border-2 border-ds-surface-overlay flex items-center justify-center shadow-lg">
+          <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-ds-background-success-bold rounded-full border-2 border-ds-background-default flex items-center justify-center">
             <motion.div
               initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
+              whileInView={{ scale: 1 }}
               className="text-white"
             >
               <svg
@@ -96,7 +98,7 @@ function TestimonialCard({ item }: { item: Testimonial }) {
                 fill="none"
                 stroke="currentColor"
                 strokeWidth="4"
-                className="w-3 h-3"
+                className="w-2.5 h-2.5"
               >
                 <path
                   d="M20 6L9 17L4 12"
@@ -110,45 +112,45 @@ function TestimonialCard({ item }: { item: Testimonial }) {
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-0.5">
-            <span className="font-black text-ds-text-heading text-[18px] tracking-tight truncate">
+            <span className="font-bold text-ds-text-heading text-[17px] tracking-tight truncate leading-tight">
               {item.author}
             </span>
-            <div className="px-1.5 py-0.5 rounded-[4px] bg-ds-background-brand-subtle text-ds-text-brand text-[9px] font-black uppercase tracking-widest whitespace-nowrap">
+            <div className="px-1.5 py-0.5 rounded-[4px] bg-ds-accent-bold/10 text-ds-accent-bold text-[8px] font-black uppercase tracking-widest whitespace-nowrap">
               OFFICIAL
             </div>
           </div>
-          <div className="text-[11px] font-bold text-ds-text-subtle uppercase tracking-[0.1em] truncate">
+          <div className="text-[10px] font-bold text-ds-text-subtle uppercase tracking-[0.12em] truncate">
             {item.role}
           </div>
         </div>
       </div>
 
       {/* Quote Body */}
-      <div className="relative mb-space-300">
+      <div className="relative mb-8 min-h-[80px] z-10">
         <Quote
-          size={20}
-          className="text-ds-text-brand opacity-20 absolute -top-2 -left-2"
+          size={32}
+          className="text-ds-accent-bold opacity-[0.08] absolute -top-4 -left-4"
         />
-        <p className="text-[17px] font-medium text-ds-text-heading leading-[1.6] tracking-tight relative z-10 px-space-100 italic">
+        <p className="text-[16px] font-medium text-ds-text-heading leading-[1.6] tracking-tight relative z-10 px-1">
           &ldquo;{item.quote}&rdquo;
         </p>
       </div>
 
       {/* Footer / Company Badge */}
-      <div className="flex items-center justify-between pt-space-250 border-t border-ds-border-bold">
-        <div className="flex items-center gap-space-100">
-          <div className="w-2 h-2 rounded-full bg-ds-background-brand-bold animate-pulse" />
-          <span className="text-[12px] font-black tracking-widest text-ds-text-heading uppercase">
+      <div className="flex items-center justify-between pt-5 border-t border-ds-border-subtle/50 relative z-10">
+        <div className="flex items-center gap-2">
+          <div className="w-1.5 h-1.5 rounded-full bg-ds-accent-bold group-hover:animate-pulse" />
+          <span className="text-[11px] font-black tracking-[0.1em] text-ds-text-heading uppercase">
             {item.company}
           </span>
         </div>
 
-        <div className="flex gap-px">
+        <div className="flex gap-0.5">
           {[...Array(5)].map((_, i) => (
             <Star
               key={i}
-              size={11}
-              className="text-ds-background-warning-bold"
+              size={12}
+              className="text-ds-text-warning"
               fill="currentColor"
             />
           ))}
@@ -242,8 +244,8 @@ export function TestimonialsSection({ locale }: { locale: Locale }) {
         <MarqueeRow items={row2} direction="right" locale={locale} />
 
         {/* Gradual edge fading mask */}
-        <div className="absolute inset-y-0 left-0 w-40 bg-gradient-to-r from-ds-surface to-transparent z-20 pointer-events-none" />
-        <div className="absolute inset-y-0 right-0 w-40 bg-gradient-to-l from-ds-surface to-transparent z-20 pointer-events-none" />
+        <div className="absolute inset-y-0 left-0 w-64 bg-gradient-to-r from-ds-surface-sunken to-transparent z-20 pointer-events-none" />
+        <div className="absolute inset-y-0 right-0 w-64 bg-gradient-to-l from-ds-surface-sunken to-transparent z-20 pointer-events-none" />
       </div>
 
       <div className="absolute bottom-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-ds-border to-transparent" />

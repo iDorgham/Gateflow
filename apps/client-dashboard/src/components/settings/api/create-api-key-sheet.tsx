@@ -13,18 +13,42 @@ import {
   Input,
   Label,
   Checkbox,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { Plus, Key, Copy, CheckCircle2, AlertTriangle } from 'lucide-react';
 import { toast } from 'sonner';
 import { csrfFetch } from '@/lib/csrf';
 
 const SCOPES = [
-  { id: 'QR_CREATE', label: 'QR: Create', description: 'Generate new access QR codes' },
-  { id: 'QR_READ', label: 'QR: Read', description: 'List and retrieve QR codes' },
-  { id: 'QR_VALIDATE', label: 'QR: Validate', description: 'Validate scanned QR codes' },
-  { id: 'SCANS_READ', label: 'Scans: Read', description: 'Access scan history and logs' },
-  { id: 'ANALYTICS_READ', label: 'Analytics: Read', description: 'Retrieve analytics data' },
-  { id: 'WEBHOOK_WRITE', label: 'Webhook: Write', description: 'Manage webhook configurations' },
+  {
+    id: 'QR_CREATE',
+    label: 'QR: Create',
+    description: 'Generate new access QR codes',
+  },
+  {
+    id: 'QR_READ',
+    label: 'QR: Read',
+    description: 'List and retrieve QR codes',
+  },
+  {
+    id: 'QR_VALIDATE',
+    label: 'QR: Validate',
+    description: 'Validate scanned QR codes',
+  },
+  {
+    id: 'SCANS_READ',
+    label: 'Scans: Read',
+    description: 'Access scan history and logs',
+  },
+  {
+    id: 'ANALYTICS_READ',
+    label: 'Analytics: Read',
+    description: 'Retrieve analytics data',
+  },
+  {
+    id: 'WEBHOOK_WRITE',
+    label: 'Webhook: Write',
+    description: 'Manage webhook configurations',
+  },
 ];
 
 interface CreateApiKeySheetProps {
@@ -56,13 +80,20 @@ export function CreateApiKeySheet({ onSuccess }: CreateApiKeySheetProps) {
   const handleCreate = (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim()) return toast.error('Key name is required');
-    if (selectedScopes.length === 0) return toast.error('Select at least one scope');
+    if (selectedScopes.length === 0)
+      return toast.error('Select at least one scope');
 
     startTransition(async () => {
-      const body: Record<string, unknown> = { name: name.trim(), scopes: selectedScopes };
+      const body: Record<string, unknown> = {
+        name: name.trim(),
+        scopes: selectedScopes,
+      };
       if (expiresAt) body.expiresAt = new Date(expiresAt).toISOString();
 
-      const res = await csrfFetch('/api/api-keys', { method: 'POST', body: JSON.stringify(body) });
+      const res = await csrfFetch('/api/api-keys', {
+        method: 'POST',
+        body: JSON.stringify(body),
+      });
       const data = (await res.json()) as { key?: string; error?: string };
       if (res.ok && data.key) {
         setRevealedKey(data.key);
@@ -81,7 +112,13 @@ export function CreateApiKeySheet({ onSuccess }: CreateApiKeySheetProps) {
   };
 
   return (
-    <Sheet open={open} onOpenChange={(o) => { setOpen(o); if (!o) reset(); }}>
+    <Sheet
+      open={open}
+      onOpenChange={(o) => {
+        setOpen(o);
+        if (!o) reset();
+      }}
+    >
       <SheetTrigger asChild>
         <Button className="gap-2 rounded-xl h-10 px-6 font-bold uppercase tracking-widest text-[11px]">
           <Plus className="h-4 w-4" />
@@ -108,7 +145,8 @@ export function CreateApiKeySheet({ onSuccess }: CreateApiKeySheetProps) {
             <div className="p-4 rounded-2xl border border-warning/30 bg-warning/5 flex items-start gap-3">
               <AlertTriangle className="h-5 w-5 text-warning shrink-0 mt-0.5" />
               <p className="text-xs font-medium text-warning leading-relaxed">
-                This key will not be shown again. Store it securely — treat it like a password.
+                This key will not be shown again. Store it securely — treat it
+                like a password.
               </p>
             </div>
 
@@ -137,7 +175,10 @@ export function CreateApiKeySheet({ onSuccess }: CreateApiKeySheetProps) {
 
             <SheetFooter className="mt-auto">
               <Button
-                onClick={() => { setOpen(false); reset(); }}
+                onClick={() => {
+                  setOpen(false);
+                  reset();
+                }}
                 className="w-full h-12 rounded-xl font-black uppercase tracking-widest text-[11px]"
               >
                 Done — I&apos;ve Saved the Key
@@ -145,10 +186,16 @@ export function CreateApiKeySheet({ onSuccess }: CreateApiKeySheetProps) {
             </SheetFooter>
           </div>
         ) : (
-          <form onSubmit={handleCreate} className="flex flex-col flex-1 overflow-y-auto">
+          <form
+            onSubmit={handleCreate}
+            className="flex flex-col flex-1 overflow-y-auto"
+          >
             <div className="p-8 space-y-6 flex-1">
               <div className="space-y-2">
-                <Label htmlFor="key-name" className="text-[11px] font-black uppercase tracking-widest text-muted-foreground">
+                <Label
+                  htmlFor="key-name"
+                  className="text-[11px] font-black uppercase tracking-widest text-muted-foreground"
+                >
                   Key Name *
                 </Label>
                 <Input
@@ -182,8 +229,12 @@ export function CreateApiKeySheet({ onSuccess }: CreateApiKeySheetProps) {
                         className="mt-0.5 shrink-0"
                       />
                       <div>
-                        <p className="text-xs font-black uppercase tracking-tight">{scope.label}</p>
-                        <p className="text-[10px] text-muted-foreground mt-0.5">{scope.description}</p>
+                        <p className="text-xs font-black uppercase tracking-tight">
+                          {scope.label}
+                        </p>
+                        <p className="text-[10px] text-muted-foreground mt-0.5">
+                          {scope.description}
+                        </p>
                       </div>
                     </div>
                   ))}
@@ -191,7 +242,10 @@ export function CreateApiKeySheet({ onSuccess }: CreateApiKeySheetProps) {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="key-expiry" className="text-[11px] font-black uppercase tracking-widest text-muted-foreground">
+                <Label
+                  htmlFor="key-expiry"
+                  className="text-[11px] font-black uppercase tracking-widest text-muted-foreground"
+                >
                   Expiry Date (optional)
                 </Label>
                 <Input

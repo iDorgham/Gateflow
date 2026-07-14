@@ -16,7 +16,7 @@ import {
   SelectValue,
   SelectContent,
   SelectItem,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { Mail, Shield } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';

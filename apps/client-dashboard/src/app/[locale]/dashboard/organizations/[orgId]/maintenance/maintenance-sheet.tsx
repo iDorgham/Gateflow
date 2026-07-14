@@ -18,7 +18,7 @@ import {
   SelectValue,
   SelectContent,
   SelectItem,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import { useTranslation } from 'react-i18next';
 import {
   MaintenanceStatus,

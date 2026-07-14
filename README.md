@@ -9,26 +9,17 @@
   <i>Multi-tenant Next.js dashboards, Expo field apps, signed QR flows, and Arabic/English RTL—built for high-trust PropTech (including MENA).</i>
 </p>
 
-<!-- Release, automation, activity -->
 <p align="center">
   <a href="https://github.com/iDorgham/Gateflow/blob/master/package.json"><img src="https://img.shields.io/badge/Release-v0.1.0-0ea5e9?style=for-the-badge&logo=github" alt="Release v0.1.0"></a>
   <a href="https://github.com/iDorgham/Gateflow/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/iDorgham/Gateflow/ci.yml?branch=master&label=CI&logo=github&style=for-the-badge" alt="CI status"></a>
   <a href="https://github.com/iDorgham/Gateflow/actions/workflows/lighthouse.yml"><img src="https://img.shields.io/github/actions/workflow/status/iDorgham/Gateflow/lighthouse.yml?branch=master&label=Lighthouse&logo=lighthouse&style=for-the-badge" alt="Lighthouse workflow"></a>
   <a href="https://github.com/iDorgham/Gateflow/actions/workflows/codeql-analysis.yml"><img src="https://img.shields.io/github/actions/workflow/status/iDorgham/Gateflow/codeql-analysis.yml?branch=master&label=CodeQL&logo=github&style=for-the-badge" alt="CodeQL"></a>
   <img src="https://img.shields.io/github/commit-activity/m/iDorgham/Gateflow?style=for-the-badge&color=blueviolet&logo=github" alt="Commit activity">
-</p>
-
-<!-- Runtime, package manager, posture -->
-<p align="center">
   <img src="https://img.shields.io/badge/node.js-≥20-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js 20+">
   <img src="https://img.shields.io/badge/pnpm-8.15-F69220?style=for-the-badge&logo=pnpm&logoColor=white" alt="pnpm 8.15">
   <img src="https://img.shields.io/badge/TypeScript-5.9-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript 5.9">
   <img src="https://img.shields.io/badge/Status-Production--ready-success?style=for-the-badge" alt="Status">
   <img src="https://img.shields.io/badge/QR_signing-HMAC--SHA256-critical?style=for-the-badge" alt="HMAC-SHA256 QR signing">
-</p>
-
-<!-- Application stack (pinned to repo) -->
-<p align="center">
   <img src="https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js 15">
   <img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React 19">
   <img src="https://img.shields.io/badge/Prisma-5.22-2D3748?style=for-the-badge&logo=prisma&logoColor=white" alt="Prisma 5.22">
@@ -87,7 +78,7 @@ GateFlow is a technical monorepo orchestrating six specialized applications, uni
 
 The README does **not** duplicate that document. Open **UPCOMING.md** for tables, sprint status, and initiative detail; refresh this section only when you want a new high-level teaser line here.
 
-> **Snapshot (see UPCOMING.md for live status):** GitHub security hardening follow-ups · WhatsApp/SMS gateway · Hierarchical seeding v2 · Q3 focus: Lighthouse initiative, offline HMAC hardening, self-serve billing.
+> **Snapshot (see UPCOMING.md for live status):** GateFlow Design System completed · Admin Dashboard Evolution (Side Menu & CMS) · resident-portal responsive overhaul · scanner-app onboarding wizards.
 
 ---
 

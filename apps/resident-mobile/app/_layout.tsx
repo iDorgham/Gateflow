@@ -1,10 +1,26 @@
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { nativeTokensNewEra as nativeTokens } from '../../../packages/ui/src/tokens';
 
 export default function RootLayout() {
   return (
     <>
-      <Stack>
+      <Stack
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: nativeTokens.colors.background,
+          },
+          headerTintColor: nativeTokens.colors.textHeading,
+          headerTitleStyle: {
+            fontFamily: 'Cairo_700Bold',
+            fontSize: 18,
+          },
+          headerShadowVisible: false,
+          contentStyle: {
+            backgroundColor: nativeTokens.colors.background,
+          },
+        }}
+      >
         <Stack.Screen
           name="index"
           options={{
@@ -20,18 +36,18 @@ export default function RootLayout() {
         <Stack.Screen
           name="login"
           options={{
-            title: 'Sign in',
+            title: 'SIGN IN',
+            headerShown: false,
           }}
         />
         <Stack.Screen
           name="visitors/[id]"
           options={{
-            title: 'Visitor pass',
+            title: 'VISITOR PASS',
           }}
         />
       </Stack>
-      <StatusBar style="dark" />
+      <StatusBar style="light" />
     </>
   );
 }
-

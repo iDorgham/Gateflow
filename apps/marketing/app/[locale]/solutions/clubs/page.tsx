@@ -12,8 +12,8 @@ export async function generateMetadata(props: {
   const { locale } = params;
   const { t } = await getTranslation(locale, 'solutions');
   return {
-    title: templatedMarketingTitle(t('clubs.hero.headline')),
-    description: t('clubs.description'),
+    title: templatedMarketingTitle(t('clubs.hero.headline') as string),
+    description: t('clubs.description') as string,
   };
 }
 
@@ -27,32 +27,32 @@ export default async function ClubsPage(props: {
   return (
     <SolutionLayout
       locale={locale}
-      title={t('clubs.hero.headline')}
-      subtitle={t('clubs.subtitle')}
-      description={t('clubs.hero.sub')}
+      title={t('clubs.hero.headline') as string}
+      subtitle={t('clubs.subtitle') as string}
+      description={t('clubs.hero.sub') as string}
       icon={<Anchor />}
-      ctaText={t('cta')}
-      secondaryCtaText={t('clubs.seePricing')}
+      ctaText={t('cta') as string}
+      secondaryCtaText={t('clubs.seePricing') as string}
       painPoints={t('clubs.painPoints', { returnObjects: true }) as string[]}
       features={t('clubs.bulletPoints', { returnObjects: true }) as string[]}
       benefits={[
         {
-          title: t('clubs.benefits.items.vip.title'),
-          desc: t('clubs.benefits.items.vip.description'),
+          title: t('clubs.benefits.items.vip.title') as string,
+          desc: t('clubs.benefits.items.vip.description') as string,
         },
         {
-          title: t('clubs.benefits.items.discreet.title'),
-          desc: t('clubs.benefits.items.discreet.description'),
+          title: t('clubs.benefits.items.discreet.title') as string,
+          desc: t('clubs.benefits.items.discreet.description') as string,
         },
         {
-          title: t('clubs.benefits.items.revocation.title'),
-          desc: t('clubs.benefits.items.revocation.description'),
+          title: t('clubs.benefits.items.revocation.title') as string,
+          desc: t('clubs.benefits.items.revocation.description') as string,
         },
       ]}
       quote={{
-        text: t('clubs.quote.text'),
-        author: t('clubs.quote.author'),
-        role: t('clubs.quote.role'),
+        text: t('clubs.quote.text') as string,
+        author: t('clubs.quote.author') as string,
+        role: t('clubs.quote.role') as string,
       }}
       intent="demo"
       surfacePrefix="solutions_clubs"

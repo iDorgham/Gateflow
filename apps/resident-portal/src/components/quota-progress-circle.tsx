@@ -1,5 +1,5 @@
-import * as React from "react";
-import { cn, Card, CardContent } from "@gate-access/ui";
+import * as React from 'react';
+import { cn, Card, CardContent } from '@gateflow/ui';
 
 export interface QuotaProgressCircleProps {
   used: number;
@@ -27,13 +27,18 @@ export function QuotaProgressCircle({
   const isAtLimit = percent >= 1;
 
   const colorClass = isAtLimit
-    ? "text-danger"
+    ? 'text-danger'
     : isNearingLimit
-    ? "text-warning"
-    : "text-primary";
+      ? 'text-warning'
+      : 'text-primary';
 
   return (
-    <Card className={cn("inline-flex flex-col items-center justify-center border-none shadow-none bg-transparent", className)}>
+    <Card
+      className={cn(
+        'inline-flex flex-col items-center justify-center border-none shadow-none bg-transparent',
+        className
+      )}
+    >
       <CardContent className="p-0 relative flex items-center justify-center">
         <svg height={size} width={size} className="transform -rotate-90">
           <circle
@@ -49,13 +54,13 @@ export function QuotaProgressCircle({
             stroke="currentColor"
             fill="transparent"
             strokeWidth={strokeWidth}
-            strokeDasharray={circumference + " " + circumference}
+            strokeDasharray={circumference + ' ' + circumference}
             style={{ strokeDashoffset }}
             strokeLinecap="round"
             r={radius}
             cx={size / 2}
             cy={size / 2}
-            className={cn("transition-all duration-1000 ease-out", colorClass)}
+            className={cn('transition-all duration-1000 ease-out', colorClass)}
           />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center">

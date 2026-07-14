@@ -1,1 +1,1 @@
-export { cn } from '@gate-access/ui';
+export { cn } from '@gateflow/ui';

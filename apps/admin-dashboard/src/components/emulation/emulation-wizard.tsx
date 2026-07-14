@@ -11,7 +11,7 @@ import {
   NativeSelect,
   Badge,
   cn,
-} from '@gate-access/ui';
+} from '@gateflow/ui';
 import {
   ArrowLeft,
   ArrowRight,
