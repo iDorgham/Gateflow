@@ -1,4 +1,4 @@
-import { requireAdmin, expectedSessionToken } from '@/lib/admin-auth';
+import { requireAdmin, adminKeyFingerprint } from '@/lib/admin-auth';
 import { getTranslation } from '@/lib/i18n/i18n';
 import { Locale } from '@/lib/i18n/i18n-config';
 import { prisma } from '@gate-access/db';
@@ -33,11 +33,11 @@ export default async function AdminsPage(props: {
   await requireAdmin(locale);
   const { t } = await getTranslation(locale, 'admin');
 
-  // Key fingerprint — first 8 chars of the session token hash (safe to show)
+  // Key fingerprint — first 8 chars of sha256(access key) (safe to show)
   let keyFingerprint = '— not configured —';
   let keyConfigured = false;
   try {
-    const token = expectedSessionToken();
+    const token = adminKeyFingerprint();
     keyFingerprint = token.slice(0, 8) + '…';
     keyConfigured = true;
   } catch {

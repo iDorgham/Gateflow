@@ -2,26 +2,22 @@
  * Admin authentication helpers.
  *
  * Strategy: single ADMIN_ACCESS_KEY environment variable (a long random
- * secret set at deploy time). When the admin enters it on the login page,
- * the server stores sha256(key) in an httpOnly cookie. On every request the
- * middleware compares the cookie against sha256(env key).
- *
- * No JWT libraries required — standard Node.js crypto is sufficient for
- * an internal single-admin tool.
+ * secret set at deploy time). On login the server issues a signed session
+ * cookie (HMAC-SHA256, unique jti + expiry). Middleware and server checks
+ * verify the signature — never store a static hash of the access key.
  */
 
 import { createHash } from 'crypto';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { i18n, type Locale } from '@/lib/i18n/i18n-config';
+import { generateSessionToken, verifySessionToken } from './admin-session';
 
 const COOKIE_NAME = 'admin_session';
 const SECURE = process.env.NODE_ENV === 'production';
+const SESSION_MAX_AGE_SEC = 60 * 60 * 12; // 12 hours
 
-// ─── Public helpers ───────────────────────────────────────────────────────────
-
-/** Returns the expected cookie value for the configured access key. */
-export function expectedSessionToken(): string {
+function getAdminAccessKey(): string {
   const key = process.env.ADMIN_ACCESS_KEY;
   if (!key || key.length < 32) {
     throw new Error(
@@ -29,15 +25,33 @@ export function expectedSessionToken(): string {
         'Set it to a random string (at least 32 chars) in your .env file.'
     );
   }
-  return createHash('sha256').update(key).digest('hex');
+  return key;
 }
 
-/** True if the request's admin_session cookie is valid. */
+/**
+ * Stable fingerprint of the configured access key (for UI display only).
+ * Not used as a session cookie value.
+ */
+export function adminKeyFingerprint(): string {
+  return createHash('sha256').update(getAdminAccessKey()).digest('hex');
+}
+
+/** @deprecated Use adminKeyFingerprint() — session cookies are no longer static hashes. */
+export function expectedSessionToken(): string {
+  return adminKeyFingerprint();
+}
+
+/** True if the request's admin_session cookie is a valid signed token. */
 export async function isAdminAuthenticated(): Promise<boolean> {
   try {
     const jar = await cookies();
     const sessionCookie = jar.get(COOKIE_NAME)?.value;
-    return sessionCookie === expectedSessionToken();
+    if (!sessionCookie) return false;
+    const payload = await verifySessionToken(
+      sessionCookie,
+      getAdminAccessKey()
+    );
+    return payload !== null;
   } catch {
     return false;
   }
@@ -103,15 +117,16 @@ export async function requireAdmin(locale?: Locale): Promise<void> {
   }
 }
 
-/** Sets the admin session cookie. */
+/** Sets a signed admin session cookie (unique per login). */
 export async function setAdminSession(): Promise<void> {
   const jar = await cookies();
-  jar.set(COOKIE_NAME, expectedSessionToken(), {
+  const token = await generateSessionToken(getAdminAccessKey());
+  jar.set(COOKIE_NAME, token, {
     httpOnly: true,
     secure: SECURE,
     sameSite: 'lax',
     path: '/',
-    maxAge: 60 * 60 * 12, // 12 hours
+    maxAge: SESSION_MAX_AGE_SEC,
   });
 }
 
