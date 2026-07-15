@@ -22,6 +22,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 - **[Platform Evolution]** implement phase 5 AI landing page builder
 
+- **[Admin-Dashboard]** enforce locale-aware admin session access
+
+- **[Admin-Dashboard]** ADMIN_ACCESS_KEY min length and locale-aware auth
+
 - **[Platform Evolution]** finalize phase 1c org provisioning infrastructure
 
 - **[Routing]** stabilize admin dashboard routing and fix reference errors
