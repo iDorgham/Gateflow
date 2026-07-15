@@ -18,6 +18,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
+  cn,
 } from '@gateflow/ui';
 
 // Lazy load ChartLab to match documentation pattern
