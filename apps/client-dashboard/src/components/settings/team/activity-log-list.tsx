@@ -22,7 +22,7 @@ import {
   History,
   FileText,
 } from 'lucide-react';
-import type { ActivityLog } from '../../../app/[locale]/dashboard/settings/team/actions';
+import type { ActivityLog } from '@/app/[locale]/dashboard/organizations/[orgId]/settings/team/actions';
 
 interface ActivityLogListProps {
   logs: ActivityLog[];

@@ -133,7 +133,7 @@ export default async function AdminsPage(props: {
               {t('admins.shareSecurely')}
             </p>
             <div className="relative group max-w-md">
-              <code className="block w-full rounded-2xl bg-white/80 border-2 border-ds-border-warning px-8 py-5 font-mono text-2xl font-black tracking-[0.3em] text-ds-text-subtle text-center shadow-[inset_0_2px_10px_rgba(0,0,0,0.05)] ltr:tracking-[0.3em] rtl:tracking-normal group-hover:bg-white transition-colors">
+              <code className="block w-full rounded-2xl bg-white/80 border-2 border-ds-border-warning px-8 py-5 font-mono text-2xl font-black tracking-[0.3em] text-ds-text-subtle text-center shadow-[inset_0_2px_10px_var(--ds-border-subtle)] ltr:tracking-[0.3em] rtl:tracking-normal group-hover:bg-white transition-colors">
                 {pwFlash.pw}
               </code>
               <Badge

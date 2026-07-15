@@ -46,7 +46,7 @@ import {
   GateAssignment,
   LiteGate,
   TeamMember,
-} from '../../../app/[locale]/dashboard/settings/team/actions';
+} from '../../../app/[locale]/dashboard/organizations/[orgId]/settings/team/actions';
 
 interface GateAssignmentManagerProps {
   assignments: GateAssignment[];

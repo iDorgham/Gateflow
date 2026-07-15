@@ -24,7 +24,10 @@ export function GateFlowLogo({
 }: GateFlowLogoProps) {
   return (
     <div
-      className={cn('flex items-center gap-3 group/logo select-none', className)}
+      className={cn(
+        'flex items-center gap-3 group/logo select-none',
+        className
+      )}
       {...props}
     >
       <div className="text-ds-text-brand transition-transform duration-300 group-hover/logo:scale-110 shrink-0">
@@ -35,9 +38,9 @@ export function GateFlowLogo({
           fillOpacity={0.15}
         />
       </div>
-      
+
       {showText && !iconOnly && (
-        <span 
+        <span
           className="font-black tracking-tighter text-ds-text-heading leading-none"
           style={{ fontSize: Math.max(16, size * 0.8) }}
         >

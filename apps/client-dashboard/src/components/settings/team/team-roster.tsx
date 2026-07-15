@@ -36,7 +36,7 @@ import {
   removeMember,
   updateMemberRole,
   revokeUserSessions,
-} from '../../../app/[locale]/dashboard/settings/team/actions';
+} from '@/app/[locale]/dashboard/organizations/[orgId]/settings/team/actions';
 import { InviteMemberSheet } from './invite-member-sheet';
 
 interface Role {

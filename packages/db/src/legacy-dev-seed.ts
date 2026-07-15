@@ -36,27 +36,6 @@ export async function runLegacyDevSeed(): Promise<void> {
     },
   });
 
-  // Additional orgs to seed all OrganizationTypes
-  const orgTypes = [
-    { name: 'Gateway Academy', email: 'admin@gateway-school.com', type: 'SCHOOL' as const },
-    { name: 'Albatross Country Club', email: 'admin@albatross-club.com', type: 'CLUB' as const },
-    { name: 'Nebula Nightclub', email: 'admin@nebula-nightclub.com', type: 'NIGHTCLUB' as const },
-    { name: 'Apex Event Organizers', email: 'admin@apex-events.com', type: 'EVENT_ORGANISER' as const },
-  ];
-
-  for (const t of orgTypes) {
-    await prisma.organization.upsert({
-      where: { email: t.email },
-      update: { type: t.type },
-      create: {
-        name: t.name,
-        email: t.email,
-        plan: 'PRO',
-        type: t.type,
-      },
-    });
-  }
-
   const tenantAdminRole = await prisma.role.upsert({
     where: { id: 'role-tenant-admin' },
     update: {
@@ -102,6 +81,92 @@ export async function runLegacyDevSeed(): Promise<void> {
       organizationId: org.id,
     },
   });
+
+  // Additional orgs to seed all OrganizationTypes
+  const orgTypes = [
+    { name: 'Gateway Academy', email: 'admin@gateway-school.com', type: 'SCHOOL' as const },
+    { name: 'Albatross Country Club', email: 'admin@albatross-club.com', type: 'CLUB' as const },
+    { name: 'Nebula Nightclub', email: 'admin@nebula-nightclub.com', type: 'NIGHTCLUB' as const },
+    { name: 'Apex Event Organizers', email: 'admin@apex-events.com', type: 'EVENT_ORGANISER' as const },
+  ];
+
+  for (const t of orgTypes) {
+    const seededOrg = await prisma.organization.upsert({
+      where: { email: t.email },
+      update: { type: t.type },
+      create: {
+        name: t.name,
+        email: t.email,
+        plan: 'PRO',
+        type: t.type,
+      },
+    });
+
+    // Create default "Main" project per org
+    const project = await prisma.project.upsert({
+      where: { id: `proj-${t.type.toLowerCase()}` },
+      update: {},
+      create: {
+        id: `proj-${t.type.toLowerCase()}`,
+        name: 'Main',
+        organizationId: seededOrg.id,
+      },
+    });
+
+    // Create a few gates per org
+    for (let i = 1; i <= 2; i++) {
+      await prisma.gate.upsert({
+        where: { id: `gate-${t.type.toLowerCase()}-${i}` },
+        update: {},
+        create: {
+          id: `gate-${t.type.toLowerCase()}-${i}`,
+          name: `Gate ${i}`,
+          organizationId: seededOrg.id,
+          projectId: project.id,
+        },
+      });
+    }
+
+    // Create a few units per org with type-appropriate naming
+    const unitNames = {
+      REAL_ESTATE: ['Villa 101', 'Apartment 202'],
+      SCHOOL: ['Classroom 1A', 'Classroom 2B'],
+      CLUB: ['Zone A', 'Locker Room'],
+      NIGHTCLUB: ['VIP Table 1', 'Bar Section'],
+      EVENT_ORGANISER: ['Booth 10', 'Stage A'],
+    }[t.type];
+
+    for (const name of unitNames) {
+      await prisma.unit.upsert({
+        where: { organizationId_name: { organizationId: seededOrg.id, name } },
+        update: {},
+        create: {
+          name,
+          type: 'COMMERCIAL', // Default for now
+          organizationId: seededOrg.id,
+          projectId: project.id,
+        },
+      });
+    }
+
+    // Create an admin user per org
+    const orgAdminEmail = `admin@${t.type.toLowerCase()}.demo`;
+    await prisma.user.upsert({
+      where: { email: orgAdminEmail },
+      update: {
+        passwordHash,
+        organizationId: seededOrg.id,
+        roleId: tenantAdminRole.id,
+      },
+      create: {
+        email: orgAdminEmail,
+        name: `${t.name} Admin`,
+        passwordHash,
+        roleId: tenantAdminRole.id,
+        organizationId: seededOrg.id,
+      },
+    });
+  }
 
   await prisma.project.upsert({
     where: { id: 'default-proj' },

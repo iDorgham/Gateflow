@@ -38,6 +38,7 @@ export * from './components/ui/alert';
 export * from './components/auth/login-shell';
 export * from './components/auth/squares-background';
 export * from './components/layout/side-navigation';
+export * from './components/layout/page-container';
 export * from './components/shared/atlassian-navigation';
 export * from './components/shared/maintenance-status-badge';
 export * from './components/panels/EditPanel';

@@ -28,7 +28,7 @@ import {
   createRole,
   updateRole,
   deleteRole,
-} from '../../../app/[locale]/dashboard/settings/team/actions';
+} from '@/app/[locale]/dashboard/organizations/[orgId]/settings/team/actions';
 
 interface Role {
   id: string;

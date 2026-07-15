@@ -61,6 +61,7 @@ interface OrgsClientProps {
     auditLogNotice: string;
     columns: {
       org: string;
+      type: string;
       plan: string;
       metrics: string;
       status: string;
@@ -75,6 +76,8 @@ interface OrgsClientProps {
       emailPlaceholder: string;
       planLabel: string;
       planHelper: string;
+      typeLabel: string;
+      typePlaceholder: string;
       notice: string;
       submitLabel: string;
       cancelLabel: string;
@@ -123,6 +126,18 @@ export function OrgsClient({
                 {org.email}
               </span>
             </div>
+          </div>
+        ),
+      },
+      {
+        key: 'type',
+        label: translations.columns.type,
+        render: (org: any) => (
+          <div className="flex items-center gap-2">
+            <Building2 className="h-3.5 w-3.5 text-ds-text-subtlest" />
+            <span className="text-[10px] font-black uppercase text-ds-text-subtle tracking-tighter">
+              {org.type?.replace('_', ' ') || 'REAL ESTATE'}
+            </span>
           </div>
         ),
       },
@@ -233,7 +248,7 @@ export function OrgsClient({
         actions={
           <Button
             variant="primary"
-            className="h-10 px-6 font-bold rounded-full shadow-sm gap-2 uppercase tracking-tighter"
+            className="h-10 px-6 font-black uppercase tracking-widest rounded-full shadow-lg shadow-ds-background-brand-bold/20 transition-all hover:scale-[1.02] active:scale-[0.98] gap-2"
             onClick={() => setIsAddSheetOpen(true)}
           >
             <Plus className="h-4 w-4" />
@@ -307,18 +322,26 @@ export function OrgsClient({
           items={orgs}
           onRowClick={(org) => setSelectedOrgId(org.id)}
           emptyState={
-            <div className="flex flex-col items-center justify-center p-20 gap-4 text-center">
-              <div className="h-20 w-20 rounded-full bg-ds-background-neutral-subtle flex items-center justify-center">
-                <Building2 className="h-10 w-10 text-ds-text-subtlest" />
+            <div className="flex flex-col items-center justify-center p-24 gap-6 text-center animate-in fade-in zoom-in-95 duration-500">
+              <div className="h-24 w-24 rounded-3xl bg-ds-background-neutral-subtle flex items-center justify-center shadow-inner rotate-3 transition-transform hover:rotate-0">
+                <Building2 className="h-12 w-12 text-ds-text-subtlest" />
               </div>
-              <div>
-                <h3 className="text-lg font-bold text-ds-text">
+              <div className="space-y-2">
+                <h3 className="text-xl font-black uppercase tracking-tighter text-ds-text">
                   {translations.emptyTitle}
                 </h3>
-                <p className="text-sm text-ds-text-subtle">
+                <p className="text-xs text-ds-text-subtle max-w-[280px] leading-relaxed mx-auto">
                   {translations.emptySubtitle}
                 </p>
               </div>
+              <Button
+                variant="subtle"
+                size="sm"
+                onClick={() => setIsAddSheetOpen(true)}
+                className="h-9 px-6 font-black uppercase tracking-widest text-[10px] border border-ds-border hover:bg-ds-background-neutral-subtle transition-all"
+              >
+                Create First Organization
+              </Button>
             </div>
           }
         />

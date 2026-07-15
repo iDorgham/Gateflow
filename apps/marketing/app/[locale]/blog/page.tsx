@@ -30,7 +30,7 @@ export default async function BlogPage(props: {
   const { locale } = await props.params;
   const searchParams = await props.searchParams;
   const castLocale = locale as Locale;
-  const allPosts = await getAllPosts();
+  const allPosts = await getAllPosts(locale);
   const activeTag = (searchParams?.tag as string) ?? '';
   const posts = activeTag
     ? allPosts.filter((p) => p.tags.includes(activeTag))

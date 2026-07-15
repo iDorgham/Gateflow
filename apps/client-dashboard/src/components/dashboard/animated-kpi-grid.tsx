@@ -98,7 +98,7 @@ export function AnimatedKpiGrid({ cards }: AnimatedKpiGridProps) {
                     </p>
                   </div>
                   <ArrowRight
-                    className="h-4 w-4 text-[var(--ds-icon-subtle)] transition-transform group-hover:translate-x-0.5 group-hover:text-[var(--ds-text)]"
+                    className="h-4 w-4 text-[var(--ds-icon-subtle)] transition-transform group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5 group-hover:text-[var(--ds-text)] rtl:rotate-180"
                     aria-hidden="true"
                   />
                 </div>

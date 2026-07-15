@@ -12,17 +12,19 @@ import {
   ShieldAlert,
 } from 'lucide-react';
 
-export function SeedingClient() {
-  // locale and t are unused, removing them if not strictly needed or fixing usage
-  // For now, I'll just remove the Destructuring if it's not used.
-  // Actually, t is used in translations if I add them, but here it's unused.
+export function SeedingClient({
+  orgId,
+}: {
+  orgId?: string;
+} = {}) {
   useTranslation('admin');
   const [loading, setLoading] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
 
   // Form State
-  const [organizationId, setOrganizationId] = React.useState('');
+  const [organizationId, setOrganizationId] = React.useState(orgId || '');
+
   const [projectId, setProjectId] = React.useState('');
 
   const [minPhases, setMinPhases] = React.useState(1);

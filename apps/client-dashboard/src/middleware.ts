@@ -18,6 +18,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { match } from '@formatjs/intl-localematcher';
 import Negotiator from 'negotiator';
 import { i18n, LOCALE_COOKIE } from './lib/i18n';
+import { jwtVerify } from 'jose';
 
 const CSRF_COOKIE = 'gf_csrf_token';
 const CSRF_HEADER = 'x-csrf-token';
@@ -72,7 +73,15 @@ function getLocale(request: NextRequest): string {
   }
 }
 
-export function middleware(request: NextRequest) {
+function getJwtSecret(): Uint8Array {
+  const secret =
+    process.env.NEXTAUTH_SECRET ??
+    process.env.JWT_SECRET ??
+    'dev-insecure-fallback-change-me';
+  return new TextEncoder().encode(secret);
+}
+
+export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   // 1. Check if there is any supported locale in the pathname
@@ -159,6 +168,49 @@ export function middleware(request: NextRequest) {
       { success: false, message: 'CSRF token invalid' },
       { status: 403 }
     );
+  }
+
+  // 9. Redirect legacy dashboard routes to organizational scope
+  // Matches /[locale]/dashboard/[module] but NOT /[locale]/dashboard/organizations or onboarding/profile
+  const LEGACY_MODULES = [
+    'ai',
+    'ai-hub',
+    'analytics',
+    'emulation',
+    'gateai',
+    'gates',
+    'maintenance',
+    'projects',
+    'qrcodes',
+    'residents',
+    'scans',
+    'settings',
+    'team',
+    'workspace',
+  ];
+
+  const segments = pathWithoutLocale.split('/').filter(Boolean);
+  if (segments[0] === 'dashboard' && LEGACY_MODULES.includes(segments[1])) {
+    try {
+      const { payload } = await jwtVerify(authCookie.value, getJwtSecret(), {
+        issuer: 'gateflow',
+        audience: 'gateflow-api',
+      });
+      const orgId = payload.orgId as string;
+      if (orgId) {
+        const locale = pathnameHasLocale ? pathname.split('/')[1] : 'en';
+        const moduleSegment = segments[1];
+        const rest = segments.slice(2).join('/');
+        const newUrl = new URL(
+          `/${locale}/dashboard/organizations/${orgId}/${moduleSegment}${rest ? '/' + rest : ''}`,
+          request.url
+        );
+        newUrl.search = request.nextUrl.search;
+        return NextResponse.redirect(newUrl, 301);
+      }
+    } catch (e) {
+      // Token invalid or no orgId, fall through
+    }
   }
 
   return NextResponse.next();

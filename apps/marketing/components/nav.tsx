@@ -26,8 +26,6 @@ import Link from 'next/link';
 import type { Locale } from '../i18n-config';
 import { useTranslation } from '../hooks/use-translation';
 
-
-
 const panelVariants = {
   exit: {
     opacity: 0,

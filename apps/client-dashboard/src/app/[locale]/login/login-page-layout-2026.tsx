@@ -57,7 +57,7 @@ function LoginControls2026({ locale }: { locale: Locale }) {
         <button
           type="button"
           onClick={() => setLangOpen((v) => !v)}
-          className="inline-flex h-10 min-w-[4rem] items-center justify-center gap-1.5 rounded-lg border px-3 text-sm font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ds-border-focused,#EB4A00)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f172a] dark:focus-visible:ring-offset-[#0f172a]"
+          className="inline-flex h-10 min-w-[4rem] items-center justify-center gap-1.5 rounded-lg border px-3 text-sm font-semibold transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ds-border-focused)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0f172a] dark:focus-visible:ring-offset-[#0f172a]"
           style={{
             color: 'rgba(255,255,255,0.9)',
             borderColor: 'rgba(255,255,255,0.2)',
@@ -94,11 +94,11 @@ function LoginControls2026({ locale }: { locale: Locale }) {
                   type="button"
                   onClick={() => switchLocale(l)}
                   className="flex w-full items-center justify-between gap-2 px-3 py-2.5 text-sm font-medium transition-colors hover:bg-white/10"
-                  style={{ color: 'var(--ds-text-inverse,#FFFFFF)' }}
+                  style={{ color: 'var(--ds-text-inverse)' }}
                 >
                   {LOCALE_LABELS[l]}
                   {l === locale && (
-                    <Check className="h-4 w-4 text-[var(--ds-icon-brand,#EB4A00)]" />
+                    <Check className="h-4 w-4 text-[var(--ds-icon-brand)]" />
                   )}
                 </button>
               ))}
@@ -117,7 +117,7 @@ function LoginControls2026({ locale }: { locale: Locale }) {
             350
           );
         }}
-        className="inline-flex h-10 w-10 items-center justify-center rounded-lg border transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ds-border-focused,#EB4A00)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#020E73] dark:focus-visible:ring-offset-[#0f172a]"
+        className="inline-flex h-10 w-10 items-center justify-center rounded-lg border transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ds-border-focused)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#020E73] dark:focus-visible:ring-offset-[#0f172a]"
         style={{
           color: 'rgba(255,255,255,0.9)',
           borderColor: 'rgba(255,255,255,0.2)',
@@ -155,18 +155,18 @@ function GatePattern({ className }: { className?: string }) {
           height="40"
           patternUnits="userSpaceOnUse"
         >
-          <circle cx="20" cy="20" r="1.5" fill="var(--ds-icon-brand,#EB4A00)" />
-          <circle cx="0" cy="0" r="0.5" fill="var(--ds-text-inverse,#FFFFFF)" />
+          <circle cx="20" cy="20" r="1.5" fill="var(--ds-icon-brand)" />
+          <circle cx="0" cy="0" r="0.5" fill="var(--ds-text-inverse)" />
         </pattern>
         <linearGradient id="gate-line" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop
             offset="0%"
-            stopColor="var(--ds-background-brand-bold,#EB4A00)"
+            stopColor="var(--ds-background-brand-bold)"
             stopOpacity="0.3"
           />
           <stop
             offset="100%"
-            stopColor="var(--ds-background-brand-bold,#EB4A00)"
+            stopColor="var(--ds-background-brand-bold)"
             stopOpacity="0"
           />
         </linearGradient>
@@ -253,8 +253,8 @@ export function LoginPageLayout2026({
           isRtl ? 'md:order-2' : 'md:order-1'
         )}
         style={{
-          backgroundColor: 'var(--ds-background-information-bold,#020E73)',
-          color: 'var(--ds-text-inverse,#FFFFFF)',
+          backgroundColor: 'var(--ds-background-information-bold)',
+          color: 'var(--ds-text-inverse)',
         }}
       >
         {/* Subtle orange orb (animated mesh) */}
@@ -262,14 +262,14 @@ export function LoginPageLayout2026({
           className="login-orb absolute -top-1/2 -start-1/2 h-full w-full rounded-full opacity-10 blur-3xl"
           style={{
             background:
-              'radial-gradient(circle, var(--ds-background-brand-bold,#EB4A00) 0%, transparent 70%)',
+              'radial-gradient(circle, var(--ds-background-brand-bold) 0%, transparent 70%)',
           }}
         />
         <div
           className="login-orb login-orb-delay absolute bottom-0 end-0 h-2/3 w-2/3 rounded-full opacity-[0.07] blur-3xl"
           style={{
             background:
-              'radial-gradient(circle, var(--ds-background-brand-bold,#EB4A00) 0%, transparent 70%)',
+              'radial-gradient(circle, var(--ds-background-brand-bold) 0%, transparent 70%)',
           }}
         />
 
@@ -298,7 +298,7 @@ export function LoginPageLayout2026({
                 border: '1px solid rgba(235, 74, 0, 0.4)',
               }}
             >
-              <ShieldCheck className="h-8 w-8 text-[var(--ds-icon-brand,#EB4A00)]" />
+              <ShieldCheck className="h-8 w-8 text-[var(--ds-icon-brand)]" />
             </div>
             <div>
               <h1 className="text-2xl font-extrabold tracking-tight text-white md:text-3xl">

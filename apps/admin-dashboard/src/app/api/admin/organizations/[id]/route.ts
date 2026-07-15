@@ -4,10 +4,16 @@ import { prisma } from '@gate-access/db';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET(request: NextRequest, props: { params: Promise<{ id: string }> }): Promise<NextResponse> {
+export async function GET(
+  request: NextRequest,
+  props: { params: Promise<{ id: string }> }
+): Promise<NextResponse> {
   const params = await props.params;
   if (!(await isAdminAuthorized(request))) {
-    return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json(
+      { success: false, message: 'Unauthorized' },
+      { status: 401 }
+    );
   }
 
   const org = await prisma.organization.findUnique({
@@ -17,6 +23,7 @@ export async function GET(request: NextRequest, props: { params: Promise<{ id: s
       name: true,
       email: true,
       plan: true,
+      type: true,
       deletedAt: true,
       createdAt: true,
       _count: { select: { users: true, qrCodes: true, gates: true } },
@@ -24,7 +31,10 @@ export async function GET(request: NextRequest, props: { params: Promise<{ id: s
   });
 
   if (!org) {
-    return NextResponse.json({ success: false, message: 'Not found' }, { status: 404 });
+    return NextResponse.json(
+      { success: false, message: 'Not found' },
+      { status: 404 }
+    );
   }
 
   // Scans this month
@@ -56,24 +66,42 @@ export async function GET(request: NextRequest, props: { params: Promise<{ id: s
   });
 }
 
-export async function PATCH(request: NextRequest, props: { params: Promise<{ id: string }> }): Promise<NextResponse> {
+export async function PATCH(
+  request: NextRequest,
+  props: { params: Promise<{ id: string }> }
+): Promise<NextResponse> {
   const params = await props.params;
   if (!(await isAdminAuthorized(request))) {
-    return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json(
+      { success: false, message: 'Unauthorized' },
+      { status: 401 }
+    );
   }
 
   let body: unknown;
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ success: false, message: 'Invalid JSON' }, { status: 400 });
+    return NextResponse.json(
+      { success: false, message: 'Invalid JSON' },
+      { status: 400 }
+    );
   }
 
-  const { action, plan } = body as { action?: string; plan?: string };
+  const { action, plan, type } = body as {
+    action?: string;
+    plan?: string;
+    type?: string;
+  };
 
-  const org = await prisma.organization.findUnique({ where: { id: params.id } });
+  const org = await prisma.organization.findUnique({
+    where: { id: params.id },
+  });
   if (!org) {
-    return NextResponse.json({ success: false, message: 'Not found' }, { status: 404 });
+    return NextResponse.json(
+      { success: false, message: 'Not found' },
+      { status: 404 }
+    );
   }
 
   if (action === 'suspend') {
@@ -100,5 +128,16 @@ export async function PATCH(request: NextRequest, props: { params: Promise<{ id:
     return NextResponse.json({ success: true, action: 'plan_changed', plan });
   }
 
-  return NextResponse.json({ success: false, message: 'Invalid action' }, { status: 400 });
+  if (type) {
+    await prisma.organization.update({
+      where: { id: params.id },
+      data: { type: type as any },
+    });
+    return NextResponse.json({ success: true, action: 'type_changed', type });
+  }
+
+  return NextResponse.json(
+    { success: false, message: 'Invalid action' },
+    { status: 400 }
+  );
 }

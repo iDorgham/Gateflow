@@ -54,11 +54,7 @@ export async function loginAction(
           },
         },
         organizationId: true,
-        organization: {
-          select: {
-            type: true,
-          },
-        },
+        organization: { select: { type: true } },
       },
     })
     .catch(() => null);

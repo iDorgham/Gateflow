@@ -13,10 +13,6 @@ import {
 
 export const metadata = { title: 'Settings | Database' };
 
-function envPresent(name: string): boolean {
-  return !!process.env[name];
-}
-
 function envMasked(name: string, chars = 6): string {
   const val = process.env[name];
   if (!val) return '— not set —';
@@ -43,82 +39,58 @@ export default async function DatabaseSettingsPage(props: {
         try {
           return new URL(dbUrl).hostname;
         } catch {
-          return t('settings.notSet');
+          return 'not-set';
         }
       })()
-    : t('settings.notSet');
+    : 'not-set';
 
   const items = [
     {
-      label: t('settings.host'),
+      label: 'Database Host',
       value: dbHost,
-      ok: !!dbHost && dbHost !== t('settings.notSet'),
-      description: 'The hostname of your primary PostgreSQL cluster.',
+      ok: !!dbHost && dbHost !== 'not-set',
     },
     {
       label: 'DATABASE_URL',
       value: envMasked('DATABASE_URL'),
-      ok: envPresent('DATABASE_URL'),
-      description: 'The full connection string used by Prisma.',
+      ok: !!process.env.DATABASE_URL,
     },
     {
       label: 'DIRECT_DATABASE_URL',
       value: envMasked('DIRECT_DATABASE_URL'),
-      ok: envPresent('DIRECT_DATABASE_URL'),
-      description:
-        'Connection string for direct migrations (bypassing pgBouncer/Data Proxy).',
+      ok: !!process.env.DIRECT_DATABASE_URL,
     },
+    { label: 'Database Type', value: 'PostgreSQL (Prisma)', ok: true },
+    { label: 'Connection Pooling', value: 'Enabled (Accelerate)', ok: true },
   ];
 
   return (
-    <div className="flex flex-col gap-8 animate-in fade-in slide-in-from-right-4 duration-500">
-      <div className="flex flex-col gap-1">
-        <h2 className="text-sm font-black uppercase tracking-tight text-ds-text">
-          {t('settings.database')}
-        </h2>
-        <p className="text-xs text-ds-text-subtlest">
-          Manage your connection to the primary and direct database clusters.
-        </p>
-      </div>
-
-      <Card className="shadow-sm border border-ds-border">
-        <CardHeader className="border-b border-ds-border/50 pb-4 bg-ds-background-subtle/30">
-          <CardTitle className="text-xs font-black uppercase tracking-wider flex items-center gap-2.5 text-ds-text">
-            <div className="p-1.5 rounded-lg text-blue-600 bg-blue-500/10">
-              <Database className="h-3.5 w-3.5" />
+    <div className="space-y-6">
+      <Card className="border-ds-border/40">
+        <CardHeader className="bg-ds-background-subtle/20 border-b border-ds-border/10">
+          <CardTitle className="text-sm font-black uppercase tracking-widest flex items-center gap-3">
+            <div className="p-2 rounded-xl bg-blue-500/10 text-blue-600">
+              <Database className="h-5 w-5" />
             </div>
-            Connection Details
+            Persistence Layer
           </CardTitle>
         </CardHeader>
-        <CardContent className="pt-6 flex flex-col gap-6">
+        <CardContent className="p-6 space-y-4">
           {items.map((item) => (
             <div
               key={item.label}
-              className="flex flex-col md:flex-row md:items-center justify-between gap-4 py-2 first:pt-0 border-b border-ds-border/30 last:border-none last:pb-0"
+              className="flex items-center justify-between py-3 border-b border-ds-border/10 last:border-none"
             >
-              <div className="flex flex-col gap-1">
-                <span className="text-[10px] font-black uppercase tracking-widest text-ds-text">
-                  {item.label}
-                </span>
-                <span className="text-[10px] text-ds-text-subtlest">
-                  {item.description}
-                </span>
-              </div>
-
-              <div className="flex items-center gap-2 min-w-0">
+              <p className="text-[10px] font-black uppercase tracking-widest text-ds-text-subtle">
+                {item.label}
+              </p>
+              <div className="flex items-center gap-3">
                 {item.ok ? (
-                  <CheckCircle2 className="h-3.5 w-3.5 text-ds-text-success shrink-0" />
+                  <CheckCircle2 className="h-4 w-4 text-green-500" />
                 ) : (
-                  <AlertCircle className="h-3.5 w-3.5 text-ds-text-warning shrink-0" />
+                  <AlertCircle className="h-4 w-4 text-orange-500" />
                 )}
-                <code
-                  className={cn(
-                    'text-[10px] font-mono truncate px-2 py-1 rounded bg-ds-background-subtle border border-ds-border/50',
-                    item.ok
-                      ? 'text-ds-text font-bold'
-                      : 'text-ds-text-warning font-bold'
-                  )}
-                >
+                <code className="text-xs font-mono font-bold bg-ds-background-subtle/50 px-2 py-1 rounded border border-ds-border/10">
                   {item.value}
                 </code>
               </div>
@@ -126,21 +98,6 @@ export default async function DatabaseSettingsPage(props: {
           ))}
         </CardContent>
       </Card>
-
-      <div className="rounded-lg border border-ds-border-brand/30 bg-ds-background-brand-subtle/10 p-4">
-        <div className="flex items-start gap-3">
-          <Badge className="bg-ds-background-brand text-ds-text-brand-bold text-[8px] font-black uppercase h-5">
-            Pro Tip
-          </Badge>
-          <div className="space-y-1">
-            <p className="text-[11px] text-ds-text leading-relaxed font-bold">
-              Database changes require a platform restart to take effect. If
-              using a data proxy, ensure `DIRECT_DATABASE_URL` is set for
-              migrations.
-            </p>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

@@ -73,11 +73,9 @@ const TESTIMONIALS: Testimonial[] = [
 
 function TestimonialCard({ item }: { item: Testimonial }) {
   return (
-    <div
-      className="flex-shrink-0 w-[420px] mx-4 bg-ds-surface-overlay p-8 rounded-[32px] border border-ds-border-bold hover:border-ds-accent-bold/30 transition-all duration-500 group relative overflow-hidden"
-    >
+    <div className="flex-shrink-0 w-[420px] mx-4 bg-ds-surface-overlay p-8 rounded-[32px] border border-ds-border-bold hover:border-ds-accent-bold/30 transition-all duration-500 group relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-ds-accent-bold/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-      
+
       {/* Official ID Header */}
       <div className="flex items-center gap-4 mb-6 relative z-10">
         <div className="relative">
@@ -89,9 +87,7 @@ function TestimonialCard({ item }: { item: Testimonial }) {
             />
           </div>
           {/* Official Verification Badge */}
-          <div
-            className="absolute -bottom-1 -right-1 w-5 h-5 bg-ds-background-success-bold rounded-full border-2 border-ds-background-default flex items-center justify-center"
-          >
+          <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-ds-background-success-bold rounded-full border-2 border-ds-background-default flex items-center justify-center">
             <motion.div
               initial={{ scale: 0 }}
               whileInView={{ scale: 1 }}

@@ -17,9 +17,11 @@ import {
   CheckCircle2,
   AlertCircle,
   RefreshCw,
+  ShieldCheck,
 } from 'lucide-react';
 import { ServiceStatusCard } from './ServiceStatusCard';
 import { LiveMetricsGrid } from './LiveMetricsGrid';
+import { HardeningPanel } from './HardeningPanel';
 
 interface HealthData {
   timestamp: string;
@@ -311,6 +313,15 @@ export function MonitoringClient({
           )}
         </CardContent>
       </Card>
+
+      {/* Platform Hardening */}
+      <div className="space-y-3 pt-6">
+        <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground flex items-center gap-2">
+          <ShieldCheck className="h-3.5 w-3.5 text-blue-600" />
+          Infrastructure Hardening & Maintenance
+        </p>
+        <HardeningPanel />
+      </div>
     </div>
   );
 }

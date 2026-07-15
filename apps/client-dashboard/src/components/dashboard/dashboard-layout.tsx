@@ -4,6 +4,12 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTransition } from 'react';
+import { ProjectFilterProvider } from '@/context/ProjectFilterContext';
+import { Toaster } from 'sonner';
+import { SecurityNotifier } from './realtime/SecurityNotifier';
+import { useRealtimeEvents } from '@/lib/realtime/use-realtime-events';
+import { getCsrfToken } from '@/lib/csrf';
+import type { Locale } from '@/lib/i18n-config';
 import {
   ShieldCheck,
   ChevronLeft,
@@ -69,17 +75,14 @@ import { AIAssistant } from './ai-assistant';
 import { LanguageSwitcher } from '../language-switcher';
 import { ThemeToggle } from './theme-toggle';
 import { TeamSidebarChat } from './team/TeamSidebarChat';
-import { ProjectFilterProvider } from '@/context/ProjectFilterContext';
-import { Locale } from '@/lib/i18n-config';
-import { useRealtimeEvents } from '@/lib/realtime/use-realtime-events';
-import { SecurityNotifier } from './realtime/SecurityNotifier';
-import { Toaster } from 'sonner';
-import { getCsrfToken } from '@/lib/csrf';
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
+import { useOrganizationFeatures } from '@/context/OrganizationFeaturesContext';
+import { buildSidebarNav, NavItemDef } from '@/lib/navigation-builder';
+import { OrgSwitcher } from './org-switcher';
 
 export interface DashboardLayoutProps {
   user: { id: string; name: string; email: string; role: string };
-  org: { id: string; name: string; plan: string } | null;
+  org: { id: string; name: string; plan: string; type: string } | null;
   projects: { id: string; name: string }[];
   currentProjectId: string | null;
   locale: Locale;
@@ -250,93 +253,84 @@ function SearchHeader({
   );
 }
 
-const NAV_ITEMS = [
-  {
-    label: 'Dashboard',
-    href: '/',
-    icon: SquaresFour,
-    exact: true,
-    i18nKey: 'sidebar.overview',
-  },
-  {
-    label: 'AI assistant',
-    href: '/dashboard/ai',
-    icon: Sparkle,
-    i18nKey: 'sidebar.gateAi',
-  },
-  {
-    label: 'Projects',
-    href: '/dashboard/projects',
-    icon: Stack,
-    i18nKey: 'sidebar.projects',
-  },
-  {
-    label: 'QR Codes',
-    href: '/dashboard/qrcodes',
-    icon: QrCodeIcon,
-    i18nKey: 'sidebar.qrCodes',
-  },
-  {
-    label: 'Scan Logs',
-    href: '/dashboard/scans',
-    icon: Record,
-    i18nKey: 'sidebar.scanLogs',
-  },
-  {
-    label: 'Gates',
-    href: '/dashboard/gates',
-    icon: House,
-    i18nKey: 'sidebar.gates',
-  },
-  {
-    label: 'Team',
-    href: '/dashboard/team',
-    icon: Users,
-    i18nKey: 'sidebar.team',
-  },
-  {
-    label: 'Analytics',
-    href: '/dashboard/analytics',
-    icon: ChartLineUp,
-    i18nKey: 'sidebar.analytics',
-  },
-  {
-    label: 'Maintenance',
-    href: '/dashboard/maintenance',
-    icon: Wrench,
-    i18nKey: 'sidebar.maintenance',
-  },
-  {
-    label: 'Settings',
-    href: '/dashboard/settings',
-    icon: Gear,
-    i18nKey: 'sidebar.settings',
-  },
-];
+function SidebarNavItem({
+  item,
+  collapsed,
+  onClick,
+  locale,
+  isRtl,
+}: {
+  item: NavItemDef;
+  collapsed: boolean;
+  onClick?: () => void;
+  locale: string;
+  isRtl: boolean;
+}) {
+  const { t } = useTranslation('dashboard');
+  const pathname = usePathname();
+  const Icon = item.icon;
 
-const RESIDENTS_ITEMS = [
-  {
-    label: 'Contacts',
-    href: '/dashboard/residents/contacts',
-    icon: Users,
-    i18nKey: 'sidebar.contacts',
-  },
-  {
-    label: 'Units',
-    href: '/dashboard/residents/units',
-    icon: Buildings,
-    i18nKey: 'sidebar.units',
-  },
-];
+  const isActive = (href: string, exact?: boolean) => {
+    const localized = `/${locale}${href}`;
+    return exact
+      ? pathname === localized
+      : pathname === localized || pathname.startsWith(localized + '/');
+  };
 
-const SUPER_ADMIN_NAV = [
-  {
-    label: 'Traffic emulation',
-    href: '/dashboard/emulation',
-    icon: Pulse,
-    i18nKey: 'sidebar.emulation',
-  },
-] as const;
+  const active = isActive(item.href, item.exact);
+  const label = item.label;
+
+  return (
+    <TooltipProvider delayDuration={300}>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Link
+            href={`/${locale}${item.href}`}
+            onClick={onClick}
+            className={cn(
+              'relative flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium mb-1 outline-none focus-visible:ring-2 focus-visible:ring-primary/50',
+              active
+                ? 'text-primary'
+                : 'text-[var(--ds-text-subtle)] hover:bg-[var(--ds-background-neutral-subtle)] hover:bg-accent/50',
+              collapsed && 'justify-center px-0'
+            )}
+          >
+            {active && (
+              <motion.span
+                layoutId="active-nav-indicator"
+                className="absolute inset-0 rounded-md bg-primary/10"
+                transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+              />
+            )}
+            <Icon
+              weight={active ? 'fill' : 'regular'}
+              className="relative z-10 h-5 w-5 shrink-0"
+            />
+            <AnimatePresence mode="wait" initial={false}>
+              {!collapsed && (
+                <motion.span
+                  key={`label-${item.href}`}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                  className="relative z-10 overflow-hidden whitespace-nowrap"
+                >
+                  {label}
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </Link>
+        </TooltipTrigger>
+        {collapsed && (
+          <TooltipContent side={isRtl ? 'left' : 'right'} sideOffset={10}>
+            {label}
+          </TooltipContent>
+        )}
+      </Tooltip>
+    </TooltipProvider>
+  );
+}
 
 function LeftSidebar({
   locale,
@@ -345,6 +339,8 @@ function LeftSidebar({
   isRtl,
   onOpenChat,
   isSuperAdmin,
+  permissions = {},
+  org,
 }: {
   locale: Locale;
   isCollapsed: boolean;
@@ -352,86 +348,19 @@ function LeftSidebar({
   isRtl: boolean;
   onOpenChat: () => void;
   isSuperAdmin: boolean;
+  permissions?: Record<string, boolean>;
+  org: DashboardLayoutProps['org'];
 }) {
-  const pathname = usePathname();
   const { t } = useTranslation('dashboard');
-  const isActive = (href: string, exact?: boolean) => {
-    const localized = `/${locale}${href}`;
-    return exact
-      ? pathname === localized
-      : pathname === localized || pathname.startsWith(localized + '/');
-  };
+  const features = useOrganizationFeatures();
 
-  const NavItem = ({
-    item,
-    collapsed,
-    onClick,
-  }: {
-    item: {
-      label: string;
-      href: string;
-      icon: React.ElementType;
-      exact?: boolean;
-      i18nKey?: string;
-    };
-    collapsed: boolean;
-    onClick?: () => void;
-  }) => {
-    const Icon = item.icon;
-    const active = isActive(item.href, item.exact);
-    const label = item.i18nKey ? t(item.i18nKey, item.label) : item.label;
-
-    return (
-      <TooltipProvider delayDuration={300}>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Link
-              href={`/${locale}${item.href}`}
-              onClick={onClick}
-              className={cn(
-                'relative flex items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium mb-1 outline-none focus-visible:ring-2 focus-visible:ring-primary/50',
-                active
-                  ? 'text-primary'
-                  : 'text-[var(--ds-text-subtle)] hover:bg-[var(--ds-background-neutral-subtle)] hover:bg-accent/50',
-                collapsed && 'justify-center px-0'
-              )}
-            >
-              {active && (
-                <motion.span
-                  layoutId="active-nav-indicator"
-                  className="absolute inset-0 rounded-md bg-primary/10"
-                  transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-                />
-              )}
-              <Icon
-                weight={active ? 'fill' : 'regular'}
-                className="relative z-10 h-5 w-5 shrink-0"
-              />
-              <AnimatePresence mode="wait" initial={false}>
-                {!collapsed && (
-                  <motion.span
-                    key={`label-${item.href}`}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.15 }}
-                    className="relative z-10 overflow-hidden whitespace-nowrap font-black tracking-tight"
-                  >
-                    {label}
-                  </motion.span>
-                )}
-              </AnimatePresence>
-            </Link>
-          </TooltipTrigger>
-          {collapsed && (
-            <TooltipContent side={isRtl ? 'left' : 'right'} sideOffset={10}>
-              {label}
-            </TooltipContent>
-          )}
-        </Tooltip>
-      </TooltipProvider>
-    );
-  };
+  const navGroups = buildSidebarNav(
+    features,
+    permissions,
+    t,
+    isSuperAdmin,
+    org?.id
+  );
 
   return (
     <motion.aside
@@ -443,167 +372,43 @@ function LeftSidebar({
     >
       <div
         className={cn(
-          'flex h-14 shrink-0 items-center border-b border-ds-border/20 px-6',
+          'flex h-16 shrink-0 items-center border-b border-border/20 px-4',
           isCollapsed && 'justify-center px-0'
         )}
       >
-        <Link
-          href={`/${locale}`}
-          className="flex items-center gap-3 rounded-lg transition-transform hover:scale-[1.02] active:scale-[0.98] outline-none"
-          aria-label="GateFlow home"
-        >
-          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-ds-background-brand-bold text-ds-text-inverse shadow-lg shadow-ds-background-brand-bold/20">
-            <ShieldCheck className="h-4.5 w-4.5" />
-          </div>
-          <AnimatePresence mode="wait" initial={false}>
-            {!isCollapsed && (
-              <motion.span
-                key="brand-name"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.15 }}
-                className="text-base font-black tracking-tighter text-ds-text-heading whitespace-nowrap uppercase"
-              >
-                GateFlow
-              </motion.span>
-            )}
-          </AnimatePresence>
-        </Link>
+        <OrgSwitcher currentOrg={org} collapsed={isCollapsed} />
       </div>
 
       <ScrollArea className="flex-1">
         <LayoutGroup id="sidebar-nav">
           <nav className="flex flex-col gap-8 py-6 px-4">
-            <div className="flex flex-col gap-1.5">
-              <AnimatePresence mode="wait" initial={false}>
-                {!isCollapsed && (
-                  <motion.p
-                    key="label-main"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.1 }}
-                    className="px-3 text-[9px] font-black uppercase tracking-[0.3em] text-ds-text-subtlest mb-2"
-                  >
-                    {t('sidebar.groupMain', 'Main')}
-                  </motion.p>
-                )}
-              </AnimatePresence>
-              <NavItem item={NAV_ITEMS[0]} collapsed={isCollapsed} />
-              <NavItem item={NAV_ITEMS[1]} collapsed={isCollapsed} />
-            </div>
-
-            {isSuperAdmin ? (
-              <div className="flex flex-col gap-1.5">
+            {navGroups.map((group) => (
+              <div key={group.id} className="flex flex-col gap-1.5">
                 <AnimatePresence mode="wait" initial={false}>
                   {!isCollapsed && (
                     <motion.p
-                      key="label-platform"
+                      key={`group-label-${group.id}`}
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                       transition={{ duration: 0.1 }}
                       className="px-3 text-[10px] font-bold uppercase tracking-widest text-[var(--ds-text-subtlest,#A1A1AA)] mb-2"
                     >
-                      {t('sidebar.groupPlatform', 'Platform')}
+                      {group.label}
                     </motion.p>
                   )}
                 </AnimatePresence>
-                {SUPER_ADMIN_NAV.map((item) => (
-                  <NavItem
-                    key={item.href}
+                {group.items.map((item) => (
+                  <SidebarNavItem
+                    key={item.id}
                     item={item}
                     collapsed={isCollapsed}
+                    locale={locale}
+                    isRtl={isRtl}
                   />
                 ))}
               </div>
-            ) : null}
-
-            <div className="flex flex-col gap-1.5">
-              <AnimatePresence mode="wait" initial={false}>
-                {!isCollapsed && (
-                  <motion.p
-                    key="label-residents"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.1 }}
-                    className="px-3 text-[10px] font-bold uppercase tracking-widest text-[var(--ds-text-subtlest,#A1A1AA)] mb-2"
-                  >
-                    {t('sidebar.groupResidents', 'Residents')}
-                  </motion.p>
-                )}
-              </AnimatePresence>
-              <Collapsible defaultOpen className="space-y-1">
-                <CollapsibleTrigger
-                  className={cn(
-                    'flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-sm font-medium text-[var(--ds-text-subtle,#A1A1AA)] hover:bg-[var(--ds-background-neutral-subtle)] hover:bg-accent transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary/50',
-                    isCollapsed && 'justify-center px-0'
-                  )}
-                >
-                  <Users className="h-5 w-5 shrink-0" />
-                  <AnimatePresence mode="wait" initial={false}>
-                    {!isCollapsed && (
-                      <motion.span
-                        key="residents-trigger"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.15 }}
-                        className="flex flex-1 items-center gap-1 overflow-hidden whitespace-nowrap"
-                      >
-                        <span className="flex-1 text-left">
-                          {t('sidebar.groupResidents', 'Residents')}
-                        </span>
-                        <ChevronDown className="h-4 w-4 shrink-0 transition-transform [[data-state=open]_&]:rotate-180" />
-                      </motion.span>
-                    )}
-                  </AnimatePresence>
-                </CollapsibleTrigger>
-                <CollapsibleContent>
-                  <div
-                    className={cn(
-                      'space-y-1.5',
-                      isCollapsed ? 'mt-1' : 'ml-4 mt-1'
-                    )}
-                  >
-                    {RESIDENTS_ITEMS.map((item) => (
-                      <NavItem
-                        key={item.href}
-                        item={item}
-                        collapsed={isCollapsed}
-                      />
-                    ))}
-                  </div>
-                </CollapsibleContent>
-              </Collapsible>
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-              <AnimatePresence mode="wait" initial={false}>
-                {!isCollapsed && (
-                  <motion.p
-                    key="label-access"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.1 }}
-                    className="px-3 text-[10px] font-bold uppercase tracking-widest text-[var(--ds-text-subtlest,#A1A1AA)] mb-2"
-                  >
-                    {t('sidebar.groupAccess', 'Access')}
-                  </motion.p>
-                )}
-              </AnimatePresence>
-              {NAV_ITEMS.filter(
-                (item) =>
-                  !['/', '/dashboard/ai', '/dashboard/settings'].includes(
-                    item.href
-                  )
-              ).map((item) => (
-                <NavItem key={item.href} item={item} collapsed={isCollapsed} />
-              ))}
-            </div>
+            ))}
           </nav>
         </LayoutGroup>
       </ScrollArea>
@@ -611,9 +416,21 @@ function LeftSidebar({
       <div className="shrink-0 p-4 mt-auto border-t border-ds-border/10">
         <div className="flex items-center gap-1">
           <div className="flex-1 min-w-0">
-            <NavItem
-              item={NAV_ITEMS.find((n) => n.href === '/dashboard/settings')!}
+            <SidebarNavItem
+              item={
+                buildSidebarNav(features, permissions, t, false)[0]?.items.find(
+                  (i) => i.id === 'settings'
+                ) || {
+                  id: 'settings',
+                  label: 'Settings',
+                  href: '/dashboard/settings',
+                  icon: Gear,
+                  i18nKey: 'sidebar.settings',
+                }
+              }
               collapsed={isCollapsed}
+              locale={locale}
+              isRtl={isRtl}
             />
           </div>
           <TooltipProvider delayDuration={300}>
@@ -792,8 +609,9 @@ function MobileSidebar({
   isOpen,
   onOpenChange,
   isRtl,
-  onOpenChat,
   isSuperAdmin,
+  permissions = {},
+  org,
 }: {
   locale: Locale;
   isOpen: boolean;
@@ -801,39 +619,37 @@ function MobileSidebar({
   isRtl: boolean;
   onOpenChat: () => void;
   isSuperAdmin: boolean;
+  permissions?: Record<string, boolean>;
+  org: DashboardLayoutProps['org'];
 }) {
-  const pathname = usePathname();
-
   const { t } = useTranslation('dashboard');
-  useEffect(() => {
-    onOpenChange(false);
-  }, [pathname, onOpenChange]);
-
-  const isActive = (href: string, exact?: boolean) => {
-    const localized = `/${locale}${href}`;
-    return exact
-      ? pathname === localized
-      : pathname === localized || pathname.startsWith(localized + '/');
-  };
+  const features = useOrganizationFeatures();
+  const navGroups = buildSidebarNav(
+    features,
+    permissions,
+    t,
+    isSuperAdmin,
+    org?.id
+  );
 
   const NavItem = ({
     item,
-    collapsed,
     onClick,
   }: {
-    item: {
-      label: string;
-      href: string;
-      icon: React.ElementType;
-      exact?: boolean;
-      i18nKey?: string;
-    };
-    collapsed: boolean;
+    item: NavItemDef;
     onClick?: () => void;
   }) => {
-    const Icon = item.icon;
+    const pathname = usePathname();
+    const isActive = (href: string, exact?: boolean) => {
+      const localized = `/${locale}${href}`;
+      return exact
+        ? pathname === localized
+        : pathname === localized || pathname.startsWith(localized + '/');
+    };
+
     const active = isActive(item.href, item.exact);
-    const label = item.i18nKey ? t(item.i18nKey, item.label) : item.label;
+    const Icon = item.icon;
+    const label = item.label;
 
     return (
       <Link
@@ -843,15 +659,14 @@ function MobileSidebar({
           'flex items-center gap-3 rounded-md px-3 py-3 text-sm font-medium transition-colors mb-1',
           active
             ? 'bg-primary/10 text-primary'
-            : 'text-[var(--ds-text-subtle)] hover:bg-[var(--ds-background-neutral-subtle)] hover:bg-accent/50',
-          collapsed && 'justify-center px-0'
+            : 'text-[var(--ds-text-subtle)] hover:bg-[var(--ds-background-neutral-subtle)] hover:bg-accent/50'
         )}
       >
         <Icon
           weight={active ? 'fill' : 'regular'}
           className="h-6 w-6 shrink-0"
         />
-        {!collapsed && <span>{label}</span>}
+        <span>{label}</span>
       </Link>
     );
   };
@@ -878,77 +693,32 @@ function MobileSidebar({
           </Link>
           <ScrollArea className="flex-1 py-4">
             <nav className="flex flex-col gap-8 py-4 px-3">
-              <div className="flex flex-col gap-1.5">
-                <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[var(--ds-text-subtle)] mb-2">
-                  {t('sidebar.groupMain', 'Main')}
-                </p>
-                <NavItem
-                  item={NAV_ITEMS[0]}
-                  collapsed={false}
-                  onClick={() => onOpenChange(false)}
-                />
-                <NavItem
-                  item={NAV_ITEMS[1]}
-                  collapsed={false}
-                  onClick={() => onOpenChange(false)}
-                />
-              </div>
-
-              {isSuperAdmin ? (
-                <div className="flex flex-col gap-1.5">
-                  <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[var(--ds-text-subtle)] mb-2">
-                    {t('sidebar.groupPlatform', 'Platform')}
+              {navGroups.map((group) => (
+                <div key={group.id} className="flex flex-col gap-1.5">
+                  <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[var(--ds-text-subtlest,#A1A1AA)] mb-2">
+                    {group.label}
                   </p>
-                  {SUPER_ADMIN_NAV.map((item) => (
+                  {group.items.map((item) => (
                     <NavItem
-                      key={item.href}
+                      key={item.id}
                       item={item}
-                      collapsed={false}
                       onClick={() => onOpenChange(false)}
                     />
                   ))}
                 </div>
-              ) : null}
-
-              <div className="flex flex-col gap-1.5">
-                <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[var(--ds-text-subtle)] mb-2">
-                  {t('sidebar.groupResidents', 'Residents')}
-                </p>
-                {RESIDENTS_ITEMS.map((item) => (
-                  <NavItem
-                    key={item.href}
-                    item={item}
-                    collapsed={false}
-                    onClick={() => onOpenChange(false)}
-                  />
-                ))}
-              </div>
-
-              <div className="flex flex-col gap-1.5">
-                <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[var(--ds-text-subtle)] mb-2">
-                  {t('sidebar.groupAccess', 'Access')}
-                </p>
-                {NAV_ITEMS.filter(
-                  (item) =>
-                    !['/', '/dashboard/ai', '/dashboard/settings'].includes(
-                      item.href
-                    )
-                ).map((item) => (
-                  <NavItem
-                    key={item.href}
-                    item={item}
-                    collapsed={false}
-                    onClick={() => onOpenChange(false)}
-                  />
-                ))}
-              </div>
+              ))}
 
               <div className="mt-auto border-t border-border/50 pt-4">
                 <NavItem
                   item={
-                    NAV_ITEMS.find((n) => n.href === '/dashboard/settings')!
+                    navGroups[0]?.items.find((i) => i.id === 'settings') || {
+                      id: 'settings',
+                      label: 'Settings',
+                      href: '/dashboard/settings',
+                      icon: Gear,
+                      i18nKey: 'sidebar.settings',
+                    }
                   }
-                  collapsed={false}
                   onClick={() => onOpenChange(false)}
                 />
               </div>
@@ -1027,6 +797,8 @@ export function DashboardLayout({
           isRtl={isRtl}
           onOpenChat={onOpenChat}
           isSuperAdmin={isSuperAdmin}
+          permissions={_permissions as Record<string, boolean>}
+          org={_org}
         />
 
         <div className="flex flex-1 min-w-0 flex-col min-h-0 overflow-hidden">
@@ -1097,6 +869,8 @@ export function DashboardLayout({
         isRtl={isRtl}
         onOpenChat={onOpenChat}
         isSuperAdmin={isSuperAdmin}
+        permissions={_permissions as Record<string, boolean>}
+        org={_org}
       />
 
       <SecurityNotifier />

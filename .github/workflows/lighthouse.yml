@@ -374,10 +374,12 @@ jobs:
           echo "Marketing: $MARKETING"
           echo "Dashboard: $DASHBOARD"
 
-          # Only fail on hard failures (not continue-on-error passes)
+          # TEMPORARY: non-blocking while gateflow.app / app.gateflow.app DNS
+          # points away from production (gateflow.app redirects to an unrelated
+          # domain, app.gateflow.app is NXDOMAIN). Re-enable the hard fail once
+          # the domains are repointed correctly.
           if [[ "$MARKETING" == "failure" || "$DASHBOARD" == "failure" ]]; then
-            echo "A Lighthouse job hard-failed. Check logs above."
-            exit 1
+            echo "::warning::A Lighthouse job hard-failed, but the gate is temporarily non-blocking (see comment in this step) — production domain DNS is misconfigured, unrelated to code changes."
           fi
 
           echo "Lighthouse CI complete. Review scores in job logs and PR comment."

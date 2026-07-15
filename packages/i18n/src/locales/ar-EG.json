@@ -107,6 +107,7 @@
       "filter": "تصفية",
       "clear": "مسح",
       "org": "المنظمة",
+      "vertical": "القطاع",
       "plan": "الخطة",
       "metrics": "المقاييس",
       "status": "الحالة",
@@ -465,6 +466,8 @@
       "emailPlaceholder": "billing@acme.com",
       "planLabel": "خطة الاشتراك",
       "planHelper": "تتحكم الخطط في حدود الحصص ومستويات الوصول للمميزات.",
+      "typeLabel": "تخصص المنظمة",
+      "typePlaceholder": "اختر النشاط الأساسي لتخصيص الواجهة والمميزات.",
       "notice": "سيؤدي إنشاء المنظمة إلى توفير مشروع إدارة جذري وسياسات أمان افتراضية تلقائياً.",
       "submitLabel": "إنشاء المنظمة",
       "cancelLabel": "إلغاء",
@@ -522,7 +525,28 @@
     "title": "خطط بسيطة وشفافة",
     "subtitle": "أسعار بالجنيه المصري والدرهم الإماراتي. لا رسوم على البوابات. لا تكاليف خفية.",
     "starter": "البداية",
-    "pro": "برو"
+    "crm": "CRM ليدز",
+    "tasks": "مهام الفريق"
+  },
+  "tasks": {
+    "status": {
+      "TODO": "مهام جديدة",
+      "IN_PROGRESS": "قيد التنفيذ",
+      "IN_REVIEW": "قيد المراجعة",
+      "DONE": "مكتمل",
+      "BLOCKED": "متوقف"
+    },
+    "priority": {
+      "LOW": "منخفض",
+      "MEDIUM": "متوسط",
+      "HIGH": "عالي",
+      "URGENT": "عاجل"
+    },
+    "actions": {
+      "generate": "توليد الخطة",
+      "approve": "موافقة",
+      "dismiss": "تجاهل"
+    }
   },
   "home": {
     "heroTitle": "إدارة أمن البوابات لم تكن بهذه السهولة من قبل.",
@@ -539,11 +563,30 @@
       "scansToday": "عمليات المسح اليوم",
       "activeGates": "البوابات النشطة",
       "teamMembers": "أعضاء الفريق",
+      "openMaintenance": "طلبات المفتوحة",
+      "securityIncidents": "الحوادث الأمنية",
+      "currentCapacity": "السعة الحالية",
+      "guestListCount": "قائمة الضيوف",
+      "vipArrivals": "وصول VIP",
+      "totalTickets": "إجمالي التذاكر",
+      "checkedIn": "تم تسجيل الدخول",
       "sub": {
         "activeQRs": "عبر جميع البوابات",
         "scansToday": "آخر 24 ساعة",
         "activeGates": "تعمل حالياً",
-        "teamMembers": "في مؤسستك"
+        "teamMembers": "في مؤسستك",
+        "activeResidents": "مع وحدات مرتبطة",
+        "activeStudents": "مسجلون",
+        "openMaintenance": "قيد المراجعة",
+        "securityIncidents": "تتطلب اهتماماً",
+        "currentCapacity": "الإشغال المباشر"
+      },
+      "emptyState": {
+        "REAL_ESTATE": "أضف السكان والوحدات لبدء تتبع الوصول إلى الكومباوند.",
+        "SCHOOL": "قم برفع قائمة الطلاب لإصدار رموز استلام الوالدين.",
+        "CLUB": "اربط قاعدة بيانات العضوية للتحقق من الدخول عند البوابة.",
+        "NIGHTCLUB": "استورد قائمة الضيوف أو طاولات VIP لفعالية الليلة.",
+        "EVENT_ORGANISER": "قم بمزامنة مبيعات التذاكر لبدء مسح الحضور."
       },
       "createQr": "إنشاء كود QR",
       "quickActions": {
@@ -775,6 +818,7 @@
     "settings": {
       "title": "التحكم في النظام",
       "description": "التكوينات العامة والوحدات الإدارية لـ <1>{{orgName}}</1>.",
+      "gateflowDescription": "المعايير التشغيلية الأساسية والعقد الإدارية لـ <1>{{orgName}}</1>.",
       "tabs": {
         "general": "الإعدادات العامة",
         "profile": "الملف الشخصي",
@@ -784,8 +828,11 @@
         "apiKeys": "مفاتيح API",
         "webhooks": "الـ Webhooks",
         "integrations": "التكاملات",
-        "billing": "الفواتير"
+        "billing": "الفواتير",
+        "marketing": "التسويق"
       },
+      "titleSuffix": "إعدادات",
+      "gateflowTitleSuffix": "إعداد",
       "profile": {
         "identity": "الهوية",
         "memberSince": "عضو منذ {{date}}",
@@ -829,6 +876,19 @@
           "passwordMismatch": "كلمات المرور غير متطابقة.",
           "updateFailed": "فشل تحديث الاسم.",
           "changeFailed": "فشل تغيير كلمة المرور."
+        }
+      },
+      "residents": {
+        "title": "{{orgName}} — {{unitLabel}} و {{contactLabel}}",
+        "description": "إدارة أنواع {{unitLabel}}، والحصص، وإعدادات خصوصية {{contactLabel}} العامة.",
+        "tabs": {
+          "overview": "نظرة عامة",
+          "types": "أنواع الوحدات",
+          "settings": "الإعدادات"
+        },
+        "quotaLogic": {
+          "title": "منطق الحصص",
+          "description": "تعتمد الوحدات افتراضياً على حصة نوعها. التجاوز على مستوى الوحدة له الأولوية. يتم احتساب المفاتيح النشطة ضمن الحد الشهري."
         }
       },
       "workspace": {
@@ -1686,6 +1746,63 @@
       "contactsCount": "عدد جهات الاتصال",
       "health": "حالة الحساب",
       "industry": "القطاع"
+    }
+  },
+  "orgType": {
+    "realEstate": {
+      "orgLabel": "نظرة عامة على المجمع",
+      "unitLabel": "وحدة",
+      "unitLabelPlural": "وحدات",
+      "contactLabel": "مقيم",
+      "contactLabelPlural": "سكان",
+      "visitorLabel": "زائر",
+      "projectLabel": "مجمع سكني",
+      "unitDescription": "إدارة الوحدات السكنية والتجارية، وتتبع حصص العقارات، ومراقبة كثافة المشغلين.",
+      "contactDescription": "إدارة سكان المجمع والعائلات وجهات الاتصال المصرح بها."
+    },
+    "school": {
+      "orgLabel": "نظرة عامة على الحرم",
+      "unitLabel": "فصل دراسي",
+      "unitLabelPlural": "فصول دراسية",
+      "contactLabel": "طالب",
+      "contactLabelPlural": "طلاب",
+      "visitorLabel": "ولي أمر/سائق",
+      "projectLabel": "مدرسة",
+      "unitDescription": "تنظيم الفصول الدراسية والمناطق التعليمية؛ وتتبع كثافة الطلاب وتوزيع القاعات.",
+      "contactDescription": "مراقبة سجلات الطلاب وروابط أولياء الأمور وحالة الحضور اليومي."
+    },
+    "club": {
+      "orgLabel": "نظرة عامة على النادي",
+      "unitLabel": "مرفق",
+      "unitLabelPlural": "مرافق",
+      "contactLabel": "عضو",
+      "contactLabelPlural": "أعضاء",
+      "visitorLabel": "ضيف",
+      "projectLabel": "نادي",
+      "unitDescription": "إدارة مرافق النادي والملاعب ومناطق الأنشطة.",
+      "contactDescription": "الحفاظ على ملفات الأعضاء وفئات الاشتراك وروابط العائلة."
+    },
+    "nightclub": {
+      "orgLabel": "نظرة عامة على المكان",
+      "unitLabel": "منطقة",
+      "unitLabelPlural": "مناطق",
+      "contactLabel": "VIP",
+      "contactLabelPlural": "VIPs",
+      "visitorLabel": "ضيف",
+      "projectLabel": "مكان سهر",
+      "unitDescription": "إدارة طاولات VIP والأقسام ومناطق المكان المحددة.",
+      "contactDescription": "تنظيم قوائم الضيوف وملفات VIP وأولوية الدخول."
+    },
+    "event": {
+      "orgLabel": "نظرة عامة على الفعالية",
+      "unitLabel": "قسم",
+      "unitLabelPlural": "أقسام",
+      "contactLabel": "حاضر",
+      "contactLabelPlural": "حاضرون",
+      "visitorLabel": "ضيف",
+      "projectLabel": "فعالية",
+      "unitDescription": "إدارة أقسام الفعالية وتعيينات البوابات ومناطق الجلوس.",
+      "contactDescription": "تتبع حاملي التذاكر وبيانات التسجيل وسجل تسجيل الوصول."
     }
   },
   "support": {

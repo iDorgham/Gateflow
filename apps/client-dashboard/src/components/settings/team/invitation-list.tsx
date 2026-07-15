@@ -14,7 +14,7 @@ import {
 import { Trash2, Clock, XCircle, Mail } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
-import { revokeInvitation } from '../../../app/[locale]/dashboard/settings/team/actions';
+import { revokeInvitation } from '../../../app/[locale]/dashboard/organizations/[orgId]/settings/team/actions';
 
 interface Role {
   id: string;

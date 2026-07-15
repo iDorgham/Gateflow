@@ -184,6 +184,54 @@ export async function middleware(request: NextRequest) {
 
   const effectivePath = pathWithoutLocale === '' ? '/' : pathWithoutLocale;
 
+  const MOVED_PATHS = ['admins', 'authorization-keys', 'settings'];
+
+  if (
+    MOVED_PATHS.some(
+      (p) => effectivePath === `/${p}` || effectivePath.startsWith(`/${p}/`)
+    )
+  ) {
+    const locale = hasLocale ? pathname.split('/')[1] : DEFAULT_LOCALE;
+    const to = effectivePath.startsWith('/')
+      ? effectivePath.slice(1)
+      : effectivePath;
+    return NextResponse.redirect(
+      new URL(`/${locale}/redirect?to=${to}`, request.url)
+    );
+  }
+
+  // Aggressive Sticky Redirection: If we have a sticky org, auto-scope global paths
+  const stickyOrgId = request.cookies.get('gf_active_org_id')?.value;
+  if (stickyOrgId && !pathname.includes('/organizations/')) {
+    const AUTO_SCOPE_PATHS = [
+      'analytics',
+      'audit-logs',
+      'crm',
+      'finance',
+      'monitoring',
+      'intelligence',
+      'cms',
+      'scans',
+      'projects',
+      'users',
+      'gates',
+    ];
+
+    if (
+      AUTO_SCOPE_PATHS.some(
+        (p) => effectivePath === `/${p}` || effectivePath.startsWith(`/${p}/`)
+      )
+    ) {
+      const locale = hasLocale ? pathname.split('/')[1] : DEFAULT_LOCALE;
+      return NextResponse.redirect(
+        new URL(
+          `/${locale}/organizations/${stickyOrgId}${effectivePath}`,
+          request.url
+        )
+      );
+    }
+  }
+
   if (
     PUBLIC_ROUTES.some((route) => effectivePath.startsWith(route)) ||
     effectivePath === '/icon' ||
@@ -231,6 +279,35 @@ export async function middleware(request: NextRequest) {
       { success: false, message: 'CSRF token invalid' },
       { status: 403 }
     );
+  }
+
+  // Phase 3: RBAC Enforcement for Task Management
+  if (pathname.startsWith('/api/tasks')) {
+    // In a full implementation, this would decode the gf_access_token JWT
+    // and verify department scopes (e.g., SALES_REP can only access SALES boards).
+    // For now, we ensure the token exists (checked above) and pass the request.
+    // If the user is an Admin (has admin_session), they implicitly have SUPER_ADMIN access.
+    const isAdmin = request.cookies.get(ADMIN_COOKIE) !== undefined;
+
+    if (!isAdmin && !authCookie) {
+      return NextResponse.json(
+        { success: false, message: 'Task management requires authentication' },
+        { status: 401 }
+      );
+    }
+  }
+
+  // Sync Sticky Org Context
+  const orgIdMatch = pathname.match(/^\/([^/]+)\/organizations\/([^/]+)/);
+  if (orgIdMatch && orgIdMatch[2]) {
+    const orgId = orgIdMatch[2];
+    const response = NextResponse.next();
+    response.cookies.set('gf_active_org_id', orgId, {
+      path: '/',
+      maxAge: 60 * 60 * 24 * 30,
+      sameSite: 'lax',
+    });
+    return response;
   }
 
   return NextResponse.next();

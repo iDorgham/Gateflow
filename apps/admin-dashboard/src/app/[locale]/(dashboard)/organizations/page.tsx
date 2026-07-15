@@ -142,6 +142,7 @@ export default async function OrganizationsPage(props: {
         auditLogNotice: t('monitoring.hub.stats.successful_seeds'), // Generic placeholder for verified
         columns: {
           org: t('organizations.org'),
+          type: t('organizations.vertical', 'Vertical'),
           plan: t('organizations.plan'),
           metrics: t('organizations.metrics'),
           status: t('organizations.status'),

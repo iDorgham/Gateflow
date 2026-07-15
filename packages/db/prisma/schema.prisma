@@ -86,6 +86,8 @@ model Organization {
   landingPages      LandingPage[]
   blogPosts         BlogPost[]
   supportTickets    SupportTicket[]
+  knowledgeSources  KnowledgeSource[]
+  knowledgeItems    KnowledgeItem[]
 
   @@index([deletedAt])
 }
@@ -1305,6 +1307,55 @@ model Deal {
   @@index([leadId])
   @@index([stage])
   @@index([deletedAt])
+}
+
+model KnowledgeSource {
+  id               String               @id @default(cuid())
+  organizationId   String
+  organization     Organization         @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  type             KnowledgeSourceType
+  name             String
+  url              String?
+  fileUrl          String?
+  status           KnowledgeSourceStatus @default(PENDING)
+  lastSyncedAt     DateTime?
+  knowledgeItems   KnowledgeItem[]
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+
+  @@index([organizationId])
+}
+
+model KnowledgeItem {
+  id               String               @id @default(cuid())
+  sourceId         String
+  source           KnowledgeSource      @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+  organizationId   String
+  organization     Organization         @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  content          String               @db.Text
+  metadata         Json?                // { pageNumber, chunkIndex, title, ... }
+  embedding        Json?                // Store as JSON for cross-platform compatibility
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
+
+  @@index([organizationId])
+  @@index([sourceId])
+}
+
+enum KnowledgeSourceType {
+  WEBSITE
+  PDF
+  DOCX
+  TXT
+  INTERNAL_PAGE
+  DATABASE_TABLE
+}
+
+enum KnowledgeSourceStatus {
+  PENDING
+  INDEXING
+  SYNCED
+  FAILED
 }
 
 enum LeadStatus {

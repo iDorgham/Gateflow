@@ -20,6 +20,15 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Platform Evolution]** implement phase 5 AI landing page builder
+
+- **[Platform Evolution]** finalize phase 1c org provisioning infrastructure
+
+- **[Routing]** stabilize admin dashboard routing and fix reference errors
+- **[Org Types Dashboard]** complete phase 5 - contextual modules terminology and visibility
+
+- **[Org Types]** complete phase 4 - config-driven dashboard home
+
 - **[Design-System]** finalize pattern-docs initiative — certification and hardening
 
 - **[Design-System]** complete pattern-docs phase 3 — Entity & Composition Patterns
@@ -146,6 +155,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 - **[Admin AI]** refine UI/UX with premium animations and hybrid message parts.
 
 ### Apps
+
+- **[Admin]** resolve implicit any type errors in analytics page
 
 - **[Admin]** complete evolution phase 9
 

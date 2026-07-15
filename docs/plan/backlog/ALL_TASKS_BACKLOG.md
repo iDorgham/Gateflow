@@ -48,6 +48,11 @@
 - [ ] Phase 4 — Responsive Pages: History, Maintenance, Profile
 - [ ] Phase 5 — Polish: Transitions, Gestures, RTL
 
+### org_types_dashboard — Organization Types: Client Dashboard Experience
+
+**PLAN:** `docs/plan/Complete/org_types_dashboard/`  
+**Status:** ✅ Done (2026-04-30)
+
 ### scanner_onboarding_session — Scanner App: Onboarding & Session Management
 
 **IDEA:** `docs/development/initiatives/IDEA_scanner_onboarding_session.md`  
@@ -89,36 +94,19 @@
 - [x] Phase 3 — Traffic Emulation & Monitoring Hub (UI)
 - [x] Phase 4 — Platform-Wide Operations & Stress Testing
 
-### admin_dashboard_redesign — Admin Dashboard Redesign (v10 Match)
+### platform_evolution — GateFlow Platform Evolution (The Operating System Hub v3.0)
 
-**IDEA:** `docs/development/initiatives/IDEA_admin_dashboard_redesign.md`  
-**PLAN:** `docs/plan/Active/admin_dashboard_redesign/`  
-`PLAN_admin_dashboard_redesign.md`  
-**Status:** 🔵 In-Progress (Phase 1)  
-**Target:** Q2 2026
-
-- [ ] Phase 1 — Foundation & Token Audit
-- [ ] Phase 2 — Header & Sidebar Refinement
-- [ ] Phase 3 — Settings: Multi-Page & Sidebar Navigation
-- [ ] Phase 4 — Wide-Format Operational Hub
-- [ ] Phase 5 — CRUD Refinement: Add, Edit, Remove
-- [ ] Phase 6 — Organization Panel Fix (OrgDetailSheet)
-- [ ] Phase 7 — i18n & RTL Mastery
-- [ ] Phase 8 — Global Polish & Dark Mode Review
-
-### platform_evolution — GateFlow Platform Evolution (OS for Access)
-
-**PLAN:** `docs/plan/Ready/platform_evolution/`  
+**PLAN:** `docs/plan/Complete/platform_evolution/`  
 `PLAN_platform_evolution.md`  
-**Status:** 🆕 Draft (Planning Phase)  
-**Target:** Q2-Q3 2026
+**Status:** ✅ Done (2026-04-30)
 
-- [ ] Phase 1 — Nested Organizational Hierarchy (Users, Projects, Gates inside Org)
-- [ ] Phase 2 — Settings v6: Teams, Roles, Integrations, Tracking Tags
-- [ ] Phase 3 — Marketing Suite: Blog CMS, Webflow-style Landing Page Builder
-- [ ] Phase 4 — Support & Operational Hub: AI Chat, Task Manager, Feature Flags
-- [ ] Phase 5 — UI/UX Unification: Dynamic Theming, Global Style Sync
-- [ ] Phase 6 — Growth Optimization: A/B Testing & Lead Attribution
+- [x] Phase 1 — Nested Organizational Hierarchy & Routing
+- [x] Phase 2 — GateFlow Lead CRM with AI Intelligence
+- [x] Phase 3 — AI Task Manager & Rule-Based Automation Bots
+- [x] Phase 4 — Style Editing & Live Theming Hub
+- [x] Phase 5 — AI Landing Page Builder
+- [x] Phase 6 — AI Blog Content Engine
+- [x] Phase 7 — Support Hub, Audit Trail, Analytics & Hardening
 
 ### design_system_redesign — GateFlow Design System Redesign (Premium Enterprise)
 
@@ -136,6 +124,10 @@
 - [ ] Phase 6 — Dashboards & Portal Redesign (High-density operational focus)
 - [ ] Phase 7 — Mobile Optimization (Scanner & Resident compact refinement)
 - [ ] Phase 8 — Final Polish & Certification (Accessibility audit)
+
+### admin_dashboard_redesign — Admin Dashboard Redesign (v10 Match)
+
+**Status:** ✅ Done (2026-04-29) | **Assets:** `docs/plan/Complete/admin_dashboard_redesign/`
 
 ### security_isolation_fix — High-Risk Security Hardening
 

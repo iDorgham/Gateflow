@@ -9,7 +9,8 @@ import { ThemeToggle } from './theme-toggle';
 import type { Locale } from '@/lib/i18n/i18n-config';
 import { useTranslation } from 'react-i18next';
 import { GlobalSearch } from './GlobalSearch';
-import { PanelRight } from 'lucide-react';
+import { PanelRight, Shield, Building2 } from 'lucide-react';
+import { useOrganization } from '@/providers/organization-provider';
 
 interface AdminShellProps {
   locale: Locale;
@@ -19,6 +20,7 @@ interface AdminShellProps {
 export function AdminShell({ children, locale: _locale }: AdminShellProps) {
   const [isSidePanelOpen, setIsSidePanelOpen] = useState(true);
   const { t } = useTranslation();
+  const { org } = useOrganization();
 
   return (
     <div className="flex h-screen w-full bg-ds-surface-sunken overflow-hidden selection:bg-ds-background-selected/30 selection:text-ds-text-selected sm:antialiased">
@@ -32,8 +34,20 @@ export function AdminShell({ children, locale: _locale }: AdminShellProps) {
         {/* Top Header */}
         <header className="flex h-14 shrink-0 items-center justify-between border-b border-ds-border bg-ds-surface/60 px-6 backdrop-blur-xl sticky top-0 z-20 shadow-sm">
           <div className="flex items-center gap-1.5 min-w-0">
-            <h1 className="text-[10px] font-black uppercase tracking-[0.4em] text-ds-text-subtlest truncate">
-              {t('admin:shell.core_platform', 'Core Platform')}
+            <h1 className="text-[10px] font-black uppercase tracking-[0.4em] text-ds-text-subtlest truncate flex items-center gap-2">
+              {org ? (
+                <>
+                  <Building2 className="h-4 w-4 text-ds-text-brand" />
+                  <span className="text-ds-text-brand">{org.name}</span>
+                  <span className="opacity-30">/</span>
+                  <span>{t('admin:shell.org_dashboard', 'Organization')}</span>
+                </>
+              ) : (
+                <>
+                  <Shield className="h-4 w-4 text-ds-text-subtlest" />
+                  <span>{t('admin:shell.core_platform', 'Core Platform')}</span>
+                </>
+              )}
             </h1>
           </div>
 
