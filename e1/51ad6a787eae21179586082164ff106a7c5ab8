@@ -1,0 +1,21 @@
+apps/design-system/src/app/(docs)/patterns/analytics/AnalyticsDashboardLab.tsx
+  s_fb3aaa025af736::t_298ecd1ba6d380 21
+.github/workflows/lighthouse.yml
+  s_fb3aaa025af736::t_79192fe3531e18 377-380,382
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "e151ad6a787eae21179586082164ff106a7c5ab8",
+  "prompts": {},
+  "sessions": {
+    "s_fb3aaa025af736": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ed195998-de0b-4634-8303-e659f13fd2c8",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
