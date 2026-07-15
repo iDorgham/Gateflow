@@ -388,8 +388,8 @@ importers:
         specifier: ^0.4.6
         version: 0.4.6(react-dom@18.3.1)(react@18.3.1)
       nodemailer:
-        specifier: ^8.0.3
-        version: 8.0.4
+        specifier: ^9.0.1
+        version: 9.0.3
       pdfkit:
         specifier: ^0.15.0
         version: 0.15.2
@@ -20022,10 +20022,10 @@ packages:
         integrity: sha512-TdC8FSgHz8Mwtw9g5L4gR/Sh9XhSP/0DEkQxfEFXOpiul5IiHgHan2VhYYb6agDSfp4KuvltmGApc8HMgUrIkA==,
       }
 
-  /nodemailer@8.0.4:
+  /nodemailer@9.0.3:
     resolution:
       {
-        integrity: sha512-k+jf6N8PfQJ0Fe8ZhJlgqU5qJU44Lpvp2yvidH3vp1lPnVQMgi4yEEMPXg5eJS1gFIJTVq1NHBk7Ia9ARdSBdQ==,
+        integrity: sha512-n+YP+NKwR5zRWa60k3GiQ6Q3B4KXCoAw40dAKeCtYn020iNN74aWK2liXIC3ZEATeGql7we3tE3t8QwhY0eskw==,
       }
     engines: { node: '>=6.0.0' }
     dev: false
