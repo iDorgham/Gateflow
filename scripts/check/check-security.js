@@ -16,14 +16,11 @@
  *   pnpm check:security
  */
 
-const fs = require('fs');
-const path = require('path');
-const { parse: parseYaml } = require('yaml');
+const {
+  loadInstalledVersions,
+  queryBulkAdvisories,
+} = require('../lib/npm-advisories');
 
-const BULK_ADVISORY_URL =
-  'https://registry.npmjs.org/-/npm/v1/security/advisories/bulk';
-const LOCKFILE_PATH = path.join(process.cwd(), 'pnpm-lock.yaml');
-const CHUNK_SIZE = 300;
 const SEVERITY_RANK = { low: 0, moderate: 1, high: 2, critical: 3 };
 
 const args = process.argv.slice(2);
@@ -40,82 +37,6 @@ if (!(auditLevel in SEVERITY_RANK)) {
 }
 
 console.log(`🔍 Checking vulnerabilities (level: ${auditLevel})...`);
-
-// Parse pnpm-lock.yaml into a flat { packageName: Set<version> } map.
-// Package keys look like "/name@version" or "/@scope/name@version", with an
-// optional "(peerDep@version)(...)" suffix for peer-resolved variants — we
-// only need the bare name + version, not the peer suffix.
-function loadInstalledVersions() {
-  if (!fs.existsSync(LOCKFILE_PATH)) {
-    console.error(
-      `\x1b[31m  ✗ Lockfile not found at ${LOCKFILE_PATH}\x1b[0m\n`
-    );
-    process.exit(1);
-  }
-
-  const lockfile = parseYaml(fs.readFileSync(LOCKFILE_PATH, 'utf8'));
-  const packages = lockfile.packages || {};
-  const versionsByName = new Map();
-
-  for (const key of Object.keys(packages)) {
-    const withoutLeadingSlash = key.startsWith('/') ? key.slice(1) : key;
-    const withoutPeerSuffix = withoutLeadingSlash.replace(/\(.+\)$/, '');
-    const lastAt = withoutPeerSuffix.lastIndexOf('@');
-    if (lastAt <= 0) continue; // malformed or scope-only entry, skip
-
-    const name = withoutPeerSuffix.slice(0, lastAt);
-    const version = withoutPeerSuffix.slice(lastAt + 1);
-    if (!name || !version) continue;
-
-    if (!versionsByName.has(name)) versionsByName.set(name, new Set());
-    versionsByName.get(name).add(version);
-  }
-
-  return versionsByName;
-}
-
-function chunk(entries, size) {
-  const chunks = [];
-  for (let i = 0; i < entries.length; i += size) {
-    chunks.push(entries.slice(i, i + size));
-  }
-  return chunks;
-}
-
-async function queryBulkAdvisories(versionsByName) {
-  const entries = [...versionsByName.entries()];
-  const chunks = chunk(entries, CHUNK_SIZE);
-  const advisoriesByPackage = {};
-
-  for (const batch of chunks) {
-    const body = Object.fromEntries(
-      batch.map(([name, versions]) => [name, [...versions]])
-    );
-
-    const response = await fetch(BULK_ADVISORY_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    });
-
-    if (!response.ok) {
-      const text = await response.text().catch(() => '');
-      throw new Error(
-        `Bulk advisory endpoint responded ${response.status}: ${text}`
-      );
-    }
-
-    const result = await response.json();
-    for (const [name, advisories] of Object.entries(result)) {
-      if (!advisories || advisories.length === 0) continue;
-      advisoriesByPackage[name] = (advisoriesByPackage[name] || []).concat(
-        advisories
-      );
-    }
-  }
-
-  return advisoriesByPackage;
-}
 
 async function main() {
   const versionsByName = loadInstalledVersions();
