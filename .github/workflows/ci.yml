@@ -96,6 +96,17 @@ jobs:
           restore-keys: |
             pnpm-${{ runner.os }}-
 
+      - name: Install dependencies (if cache missed)
+        run: pnpm install --frozen-lockfile
+
+      - name: Generate Prisma client
+        run: pnpm --filter @gate-access/db db:generate
+        env:
+          DATABASE_URL: 'postgresql://placeholder:placeholder@localhost:5432/placeholder'
+
+      - name: Lint
+        run: pnpm turbo lint
+
   # ── 3. Security Scan ──────────────────────────────────────────────────────
   security:
     name: Security Scan
@@ -123,6 +134,9 @@ jobs:
           key: pnpm-${{ runner.os }}-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             pnpm-${{ runner.os }}-
+
+      - name: Install dependencies (if cache missed)
+        run: pnpm install --frozen-lockfile
 
       - name: Scan for secrets
         run: pnpm check:secrets
