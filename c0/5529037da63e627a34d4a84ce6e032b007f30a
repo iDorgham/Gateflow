@@ -1,0 +1,24 @@
+scripts/dev/security-fix.js
+  s_b5bf027814a268::t_f9c162d527d95e 18-21
+scripts/lib/npm-advisories.js
+  s_b5bf027814a268::t_a3473066ed9cca 1-107
+scripts/check/check-security.js
+  s_b5bf027814a268::t_b7afcc4c1a1575 19
+  s_b5bf027814a268::t_3229588e8dc37c 20-22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "c05529037da63e627a34d4a84ce6e032b007f30a",
+  "prompts": {},
+  "sessions": {
+    "s_b5bf027814a268": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9aee878b-faa1-4b70-8765-265fa3556821",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
