@@ -3,8 +3,9 @@ import { getLandingPage } from '@/lib/cms';
 import { Metadata } from 'next';
 import { Hero } from '@/components/sections/hero';
 import { FeaturesSection } from '@/components/sections/features-section';
-import { BottomCta } from '@/components/sections/bottom-cta';
+import { BottomCTA } from '@/components/sections/bottom-cta';
 import { SocialProof } from '@/components/sections/social-proof';
+import type { Locale } from '@/i18n-config';
 
 export async function generateMetadata(props: {
   params: Promise<{ locale: string; slug: string }>;
@@ -44,38 +45,20 @@ export default async function LandingPage(props: {
 
         switch (type) {
           case 'HERO':
-            return (
-              <Hero
-                key={id}
-                title={content.heroTitle}
-                subtitle={content.heroSubtitle}
-                ctaText={content.ctaText}
-              />
-            );
+            return <Hero key={id} locale={params.locale as Locale} />;
           case 'FEATURES':
             return (
               <FeaturesSection
                 key={id}
-                title={content.title}
+                sectionTitle={content.title}
+                featuresTitle={content.title}
                 features={content.features}
               />
             );
           case 'CTA':
-            return (
-              <BottomCta
-                key={id}
-                title={content.title}
-                subtitle={content.subtitle}
-                ctaText={content.buttonText}
-              />
-            );
+            return <BottomCTA key={id} locale={params.locale as Locale} />;
           case 'SOCIAL_PROOF':
-            return (
-              <SocialProof
-                key={id}
-                // Mapping depends on component props
-              />
-            );
+            return <SocialProof key={id} locale={params.locale as Locale} />;
           default:
             return (
               <div key={id} className="py-20 text-center text-slate-400">

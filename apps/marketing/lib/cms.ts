@@ -1,4 +1,4 @@
-import { prisma } from '@gate-access/db';
+import { prisma, Prisma } from '@gate-access/db';
 
 export interface LandingPageData {
   id: string;
@@ -47,7 +47,7 @@ export async function getLandingPage(
       title: locale === 'ar' ? page.titleAr : page.titleEn,
       status: page.status,
       publishedAt: page.publishedAt,
-      sections: page.sections.map((section) => ({
+      sections: page.sections.map((section: any) => ({
         id: section.id,
         type: section.type,
         order: section.order,
@@ -71,11 +71,11 @@ export interface BlogPostData {
     name: string;
     avatarUrl: string | null;
   };
-  categories: Array<{
+  category: {
     id: string;
     name: string;
     slug: string;
-  }>;
+  } | null;
 }
 
 /**
@@ -89,7 +89,7 @@ export async function getBlogPosts(
     const posts = await prisma.blogPost.findMany({
       where: { status: 'PUBLISHED' },
       include: {
-        categories: true,
+        category: true,
         author: {
           select: { name: true, avatarUrl: true },
         },
@@ -98,19 +98,21 @@ export async function getBlogPosts(
       take: limit,
     });
 
-    return posts.map((p) => ({
+    return posts.map((p: any) => ({
       id: p.id,
       slug: locale === 'ar' ? p.slugAr : p.slugEn,
       title: locale === 'ar' ? p.titleAr : p.titleEn,
       excerpt: (locale === 'ar' ? p.excerptAr : p.excerptEn) || '',
-      content: locale === 'ar' ? p.contentAr : p.contentEn,
+      content: (locale === 'ar' ? p.contentAr : p.contentEn) || '',
       publishedAt: p.publishedAt,
       author: p.author,
-      categories: p.categories.map((c) => ({
-        id: c.id,
-        name: locale === 'ar' ? c.nameAr : c.nameEn,
-        slug: c.slug,
-      })),
+      category: p.category
+        ? {
+            id: p.category.id,
+            name: locale === 'ar' ? p.category.nameAr : p.category.nameEn,
+            slug: p.category.slug,
+          }
+        : null,
     }));
   } catch (error) {
     console.error('[CMS_LIB] Error fetching blog posts:', error);
@@ -132,12 +134,12 @@ export async function getBlogPost(
         status: 'PUBLISHED',
       },
       include: {
-        categories: true,
+        category: true,
         author: {
           select: { name: true, avatarUrl: true },
         },
       },
-    });
+    } satisfies Prisma.BlogPostFindFirstArgs);
 
     if (!post) return null;
 
@@ -146,14 +148,16 @@ export async function getBlogPost(
       slug: locale === 'ar' ? post.slugAr : post.slugEn,
       title: locale === 'ar' ? post.titleAr : post.titleEn,
       excerpt: (locale === 'ar' ? post.excerptAr : post.excerptEn) || '',
-      content: locale === 'ar' ? post.contentAr : post.contentEn,
+      content: (locale === 'ar' ? post.contentAr : post.contentEn) || '',
       publishedAt: post.publishedAt,
       author: post.author,
-      categories: post.categories.map((c) => ({
-        id: c.id,
-        name: locale === 'ar' ? c.nameAr : c.nameEn,
-        slug: c.slug,
-      })),
+      category: post.category
+        ? {
+            id: post.category.id,
+            name: locale === 'ar' ? post.category.nameAr : post.category.nameEn,
+            slug: post.category.slug,
+          }
+        : null,
     };
   } catch (error) {
     console.error('[CMS_LIB] Error fetching blog post:', error);
