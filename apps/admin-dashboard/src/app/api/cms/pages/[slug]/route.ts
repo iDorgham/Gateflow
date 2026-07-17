@@ -78,7 +78,7 @@ export async function PATCH(
     await prisma.aiActionLog.create({
       data: {
         organizationId: updatedPage.organizationId || 'GLOBAL',
-        action: 'CMS_PAGE_PUBLISHED',
+        actionType: 'CMS_PAGE_PUBLISHED',
         status: 'CONFIRMED',
         prompt: `Publish request for slug: ${slug}`,
         result: `New status: ${updatedPage.status}`,

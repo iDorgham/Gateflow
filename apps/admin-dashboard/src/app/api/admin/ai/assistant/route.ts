@@ -119,7 +119,7 @@ Never make up data — use tools to fetch real information.`,
           query: z.string().describe('Organization name (partial) or ID'),
         }),
         execute: async ({ query }: { query: string }) => {
-          const org = await prisma.organization.findFirst({
+          const org = (await prisma.organization.findFirst({
             where: {
               OR: [
                 { name: { contains: query, mode: 'insensitive' } },
@@ -137,7 +137,17 @@ Never make up data — use tools to fetch real information.`,
               qrCodes: { select: { id: true } },
               gates: { select: { id: true } },
             },
-          });
+          })) as {
+            id: string;
+            name: string;
+            plan: string | null;
+            email: string;
+            createdAt: Date;
+            deletedAt: Date | null;
+            users: Array<{ id: string }>;
+            qrCodes: Array<{ id: string }>;
+            gates: Array<{ id: string }>;
+          } | null;
           if (!org) return { error: 'Organization not found' };
           const scansTotal = await prisma.scanLog.count({
             where: { qrCode: { organizationId: org.id } },

@@ -24,12 +24,12 @@ export async function GET(req: Request) {
         },
         include: {
           author: { select: { name: true, avatarUrl: true } },
-          categories: true,
+          category: true,
         },
       })) as
         | (BlogPost & {
             author: Pick<User, 'name' | 'avatarUrl'>;
-            categories: BlogCategory[];
+            category: BlogCategory | null;
           })
         | null;
 
@@ -48,10 +48,17 @@ export async function GET(req: Request) {
           metaDesc: locale === 'ar' ? post.metaDescAr : post.metaDescEn,
           publishedAt: post.publishedAt,
           author: post.author,
-          categories: post.categories.map((c: BlogCategory) => ({
-            name: locale === 'ar' ? c.nameAr : c.nameEn,
-            slug: c.slug,
-          })),
+          categories: post.category
+            ? [
+                {
+                  name:
+                    locale === 'ar'
+                      ? post.category.nameAr
+                      : post.category.nameEn,
+                  slug: post.category.slug,
+                },
+              ]
+            : [],
         },
       });
     }
@@ -60,10 +67,10 @@ export async function GET(req: Request) {
     const posts = (await prisma.blogPost.findMany({
       where: { status: 'PUBLISHED' },
       orderBy: { publishedAt: 'desc' },
-      include: { author: { select: { name: true } }, categories: true },
+      include: { author: { select: { name: true } }, category: true },
     })) as (BlogPost & {
       author: Pick<User, 'name'>;
-      categories: BlogCategory[];
+      category: BlogCategory | null;
     })[];
 
     const localizedPosts = posts.map((p) => ({
@@ -104,7 +111,7 @@ export async function POST(req: Request) {
     await prisma.aiActionLog.create({
       data: {
         organizationId: updated.organizationId || 'GLOBAL',
-        action: 'BLOG_POST_PUBLISHED',
+        actionType: 'BLOG_POST_PUBLISHED',
         status: 'CONFIRMED',
         prompt: `Publish request for post ID: ${id}`,
         result: `New status: ${status}`,

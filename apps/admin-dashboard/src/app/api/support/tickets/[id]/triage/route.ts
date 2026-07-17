@@ -89,8 +89,8 @@ export async function POST(
     // Log AI action
     await prisma.aiActionLog.create({
       data: {
-        organizationId: ticket.organizationId,
-        action: 'SUPPORT_TICKET_TRIAGED',
+        organizationId: ticket.organizationId || 'GLOBAL',
+        actionType: 'SUPPORT_TICKET_TRIAGED',
         prompt: firstMessage,
         result: JSON.stringify(result.object),
         status: 'CONFIRMED', // Triage is automatic in this flow

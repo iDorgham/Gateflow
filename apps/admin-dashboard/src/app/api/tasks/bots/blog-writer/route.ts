@@ -77,7 +77,8 @@ export async function POST(req: Request) {
     // 2. Create the Draft Blog Post
     const blogPost = await prisma.blogPost.create({
       data: {
-        title: mockResult.title,
+        titleEn: mockResult.title,
+        titleAr: mockResult.title,
         slugEn: (
           mockResult.title.toLowerCase().replace(/ /g, '-') +
           '-' +

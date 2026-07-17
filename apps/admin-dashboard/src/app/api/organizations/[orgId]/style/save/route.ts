@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isAdminAuthorized } from '@/lib/admin-auth';
-import { prisma, Prisma } from '@gate-access/db';
+import { prisma } from '@gate-access/db';
 
 export async function POST(
   req: NextRequest,
@@ -16,49 +16,48 @@ export async function POST(
   try {
     const { variables } = await req.json();
 
-    // 1. Transaction to update variables and create snapshot
-    const result = await prisma.$transaction(async (tx: typeof prisma) => {
-      // Update individual theme variables
+    // 1. Transaction to update branding token overrides and create a versioned snapshot
+    const result = await prisma.$transaction(async (tx) => {
+      const current = await (tx as any).organizationBranding.findUnique({
+        where: { organizationId: orgId },
+      });
+
+      const tokenOverrides = {
+        ...((current?.tokenOverrides as Record<string, string>) ?? {}),
+      };
       for (const v of variables) {
-        await tx.themeVariable.upsert({
-          where: {
-            organizationId_key: {
-              organizationId: orgId,
-              key: v.key,
-            },
-          },
-          update: { value: v.value },
-          create: {
+        tokenOverrides[v.key] = v.value;
+      }
+
+      if (current) {
+        // Snapshot the pre-update state
+        await (tx as any).brandingSnapshot.create({
+          data: {
             organizationId: orgId,
-            key: v.key,
-            value: v.value,
-            category: 'UI',
+            version: current.version,
+            tokenOverrides: current.tokenOverrides,
+            fontFamily: current.fontFamily,
+            fontFamilyArabic: current.fontFamilyArabic,
+            logoUrl: current.logoUrl,
+            createdById: 'SYSTEM', // TODO: Get actual user ID
           },
         });
       }
 
-      // Create snapshot
-      const cssTokens = variables.reduce((acc: any, v: any) => {
-        acc[v.key] = v.value;
-        return acc;
-      }, {});
-
-      const snapshot = await tx.styleSnapshot.create({
-        data: {
+      const branding = await (tx as any).organizationBranding.upsert({
+        where: { organizationId: orgId },
+        update: {
+          tokenOverrides,
+          version: { increment: 1 },
+        },
+        create: {
           organizationId: orgId,
-          name: `Snapshot ${new Date().toISOString()}`,
-          cssTokens,
-          createdById: 'SYSTEM', // TODO: Get actual user ID
+          tokenOverrides,
+          version: 1,
         },
       });
 
-      // Update active style
-      await tx.organization.update({
-        where: { id: orgId },
-        data: { activeStyleId: snapshot.id },
-      });
-
-      return snapshot;
+      return branding;
     });
 
     return NextResponse.json(result);

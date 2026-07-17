@@ -2,7 +2,7 @@ import { prisma } from '@gate-access/db';
 
 /**
  * Notifications Engine
- * 
+ *
  * Centralized utility for creating and managing in-app notifications
  * for the GateFlow Admin Dashboard.
  */
@@ -15,13 +15,17 @@ export const notifications = {
     organizationId,
     type,
     message,
-    linkedTaskId,
+    taskId,
   }: {
     userId: string;
     organizationId: string;
-    type: 'TASK_ASSIGNED' | 'BOT_APPROVAL_REQUIRED' | 'TASK_DUE_SOON' | 'TASK_STATUS_CHANGED';
+    type:
+      | 'TASK_ASSIGNED'
+      | 'BOT_APPROVAL_REQUIRED'
+      | 'TASK_DUE_SOON'
+      | 'TASK_STATUS_CHANGED';
     message: string;
-    linkedTaskId?: string;
+    taskId?: string;
   }) {
     return prisma.notification.create({
       data: {
@@ -29,9 +33,9 @@ export const notifications = {
         organizationId,
         type,
         message,
-        linkedTaskId,
-        read: false,
-      }
+        taskId,
+        status: 'UNREAD',
+      },
     });
   },
 
@@ -41,7 +45,7 @@ export const notifications = {
   async markAsRead(id: string) {
     return prisma.notification.update({
       where: { id },
-      data: { read: true }
+      data: { status: 'READ' },
     });
   },
 
@@ -52,12 +56,12 @@ export const notifications = {
     return prisma.notification.findMany({
       where: {
         userId,
-        read: false,
+        status: 'UNREAD',
       },
       orderBy: {
-        createdAt: 'desc'
+        createdAt: 'desc',
       },
-      take: 20
+      take: 20,
     });
   },
 
@@ -66,8 +70,8 @@ export const notifications = {
    */
   async markAllAsRead(userId: string) {
     return prisma.notification.updateMany({
-      where: { userId, read: false },
-      data: { read: true }
+      where: { userId, status: 'UNREAD' },
+      data: { status: 'READ' },
     });
-  }
+  },
 };

@@ -16,26 +16,39 @@ export default async function StyleHubPage(props: {
 
   const organization = await prisma.organization.findUnique({
     where: { id: orgId },
-    include: {
-      styleSnapshots: {
-        orderBy: { createdAt: 'desc' },
-        take: 10,
-      },
-      themeVariables: true,
-      activeStyle: true,
-    },
   });
 
   if (!organization) {
     notFound();
   }
 
+  const branding = await (prisma as any).organizationBranding.findUnique({
+    where: { organizationId: orgId },
+  });
+  const snapshots = await (prisma as any).brandingSnapshot.findMany({
+    where: { organizationId: orgId },
+    orderBy: { createdAt: 'desc' },
+    take: 10,
+  });
+
+  const tokenOverrides =
+    (branding?.tokenOverrides as Record<string, string> | undefined) ?? {};
+  const initialVariables = Object.entries(tokenOverrides).map(
+    ([key, value]) => ({ key, value })
+  );
+  const formattedSnapshots = snapshots.map((s: any) => ({
+    id: s.id,
+    name: `Snapshot v${s.version}`,
+    createdAt: s.createdAt,
+    cssTokens: s.tokenOverrides ?? {},
+  }));
+
   return (
     <div className="max-w-7xl mx-auto py-8">
       <StyleHubClient
         orgId={orgId}
-        initialVariables={organization.themeVariables}
-        snapshots={organization.styleSnapshots}
+        initialVariables={initialVariables}
+        snapshots={formattedSnapshots}
       />
     </div>
   );

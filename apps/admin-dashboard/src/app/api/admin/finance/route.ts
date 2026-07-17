@@ -13,14 +13,17 @@ const PLAN_PRICES: Record<string, number> = {
 
 export async function GET(request: NextRequest): Promise<NextResponse> {
   if (!(await isAdminAuthorized(request))) {
-    return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json(
+      { success: false, message: 'Unauthorized' },
+      { status: 401 }
+    );
   }
 
   const monthStart = new Date();
   monthStart.setDate(1);
   monthStart.setHours(0, 0, 0, 0);
 
-  const [planGroups, orgsWithPlans] = await Promise.all([
+  const [planGroupsRaw, orgsWithPlansRaw] = await Promise.all([
     prisma.organization.groupBy({
       by: ['plan'],
       where: { deletedAt: null },
@@ -38,19 +41,37 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       },
     }),
   ]);
+  const planGroups = planGroupsRaw as unknown as {
+    plan: string | null;
+    _count: { id: number };
+  }[];
+  const orgsWithPlans = orgsWithPlansRaw as unknown as {
+    id: string;
+    name: string;
+    plan: string;
+    createdAt: Date;
+    _count: { users: number };
+  }[];
 
   // Scans this month per org
-  const scansByGate = await prisma.scanLog.groupBy({
+  const scansByGate = (await prisma.scanLog.groupBy({
     by: ['gateId'],
     where: { scannedAt: { gte: monthStart } },
     _count: true,
-  });
-  const gateIds = scansByGate.map((s: { gateId: string; _count: number }) => s.gateId);
-  const gates = await prisma.gate.findMany({
+  })) as { gateId: string; _count: number }[];
+  const gateIds = scansByGate.map(
+    (s: { gateId: string; _count: number }) => s.gateId
+  );
+  const gates = (await prisma.gate.findMany({
     where: { id: { in: gateIds } },
     select: { id: true, organizationId: true },
-  });
-  const gateOrgMap = new Map<string, string>(gates.map((g: { id: string; organizationId: string }) => [g.id, g.organizationId]));
+  })) as { id: string; organizationId: string }[];
+  const gateOrgMap = new Map<string, string>(
+    gates.map((g: { id: string; organizationId: string }) => [
+      g.id,
+      g.organizationId,
+    ])
+  );
   const orgScanMap = new Map<string, number>();
   for (const s of scansByGate) {
     const orgId = gateOrgMap.get(s.gateId);
@@ -72,15 +93,23 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       planCounts,
       mrr,
       planPrices: PLAN_PRICES,
-      orgsWithPlans: orgsWithPlans.map((o: { id: string; name: string; plan: string; createdAt: Date; _count: { users: number } }) => ({
-        id: o.id,
-        name: o.name,
-        plan: o.plan,
-        userCount: o._count.users,
-        scansThisMonth: orgScanMap.get(o.id) ?? 0,
-        createdAt: o.createdAt.toISOString(),
-        mrr: o.plan ? (PLAN_PRICES[o.plan] ?? 0) : 0,
-      })),
+      orgsWithPlans: orgsWithPlans.map(
+        (o: {
+          id: string;
+          name: string;
+          plan: string;
+          createdAt: Date;
+          _count: { users: number };
+        }) => ({
+          id: o.id,
+          name: o.name,
+          plan: o.plan,
+          userCount: o._count.users,
+          scansThisMonth: orgScanMap.get(o.id) ?? 0,
+          createdAt: o.createdAt.toISOString(),
+          mrr: o.plan ? (PLAN_PRICES[o.plan] ?? 0) : 0,
+        })
+      ),
     },
   });
 }

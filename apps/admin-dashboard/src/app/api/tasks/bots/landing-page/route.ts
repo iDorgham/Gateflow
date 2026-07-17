@@ -66,18 +66,34 @@ export async function POST(req: Request) {
     };
 
     // 2. Create the Draft Landing Page
+    // LandingPage stores content as ordered LandingPageSection rows rather
+    // than a single JSON blob — map each mock block to a section.
+    const SECTION_TYPE_MAP: Record<string, 'HERO' | 'FEATURES' | 'CTA'> = {
+      hero: 'HERO',
+      features: 'FEATURES',
+      cta: 'CTA',
+    };
+
     const landingPage = await prisma.landingPage.create({
       data: {
-        title: mockResult.title,
+        titleEn: mockResult.title,
+        titleAr: mockResult.title,
         slug: (
           mockResult.title.toLowerCase().replace(/ /g, '-') +
           '-' +
           Date.now()
         ).substring(0, 50),
-        contentJson: mockResult.blocks,
         status: 'DRAFT',
-        aiGenerated: true,
         organizationId: targetOrgId,
+        createdById: adminUser.id,
+        sections: {
+          create: mockResult.blocks.map((block, i) => ({
+            type: SECTION_TYPE_MAP[block.type],
+            order: i,
+            contentEn: block.content,
+            contentAr: block.content,
+          })),
+        },
       },
     });
 

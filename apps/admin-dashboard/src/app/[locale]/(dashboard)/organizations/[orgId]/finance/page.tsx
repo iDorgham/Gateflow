@@ -25,7 +25,7 @@ export default async function FinancePage(props: {
   monthStart.setDate(1);
   monthStart.setHours(0, 0, 0, 0);
 
-  const [planGroups, orgs] = await Promise.all([
+  const [planGroupsRaw, orgsRaw] = await Promise.all([
     prisma.organization.groupBy({
       by: ['plan'],
       where: { deletedAt: null },
@@ -43,20 +43,31 @@ export default async function FinancePage(props: {
       },
     }),
   ]);
+  const planGroups = planGroupsRaw as unknown as {
+    plan: string;
+    _count: { id: number };
+  }[];
+  const orgs = orgsRaw as unknown as {
+    id: string;
+    name: string;
+    plan: string;
+    createdAt: Date;
+    _count: { users: number };
+  }[];
 
   // Scans this month per org
-  const scansByGate = await prisma.scanLog.groupBy({
+  const scansByGate = (await prisma.scanLog.groupBy({
     by: ['gateId'],
     where: { scannedAt: { gte: monthStart } },
     _count: true,
-  });
+  })) as { gateId: string; _count: number }[];
   const gateIds = scansByGate.map(
     (s: { gateId: string; _count: number }) => s.gateId
   );
-  const gates = await prisma.gate.findMany({
+  const gates = (await prisma.gate.findMany({
     where: { id: { in: gateIds } },
     select: { id: true, organizationId: true },
-  });
+  })) as { id: string; organizationId: string }[];
   const gateOrgMap = new Map<string, string>(
     gates.map((g: { id: string; organizationId: string }) => [
       g.id,

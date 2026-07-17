@@ -25,7 +25,7 @@ export async function GET(
         organization: {
           select: {
             name: true,
-            activeStyle: true,
+            branding: true,
           },
         },
       },

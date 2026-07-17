@@ -21,9 +21,9 @@ export async function GET(request: Request) {
 
   try {
     // 1. Scans over time
-    const scans = await prisma.scan.findMany({
-      where: { organizationId: orgId || undefined },
-      orderBy: { createdAt: 'desc' },
+    const scans = await prisma.scanLog.findMany({
+      where: { gate: { organizationId: orgId || undefined } },
+      orderBy: { scannedAt: 'desc' },
       take: 100,
     });
 
@@ -31,7 +31,7 @@ export async function GET(request: Request) {
     const leads = await prisma.lead.count({
       where: { organizationId: orgId || undefined },
     });
-    const opportunities = await prisma.opportunity.count({
+    const opportunities = await prisma.deal.count({
       where: { organizationId: orgId || undefined },
     });
 

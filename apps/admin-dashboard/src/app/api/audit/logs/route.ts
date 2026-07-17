@@ -26,7 +26,7 @@ export async function GET(request: Request) {
     const logs = await prisma.aiActionLog.findMany({
       where: {
         organizationId: orgId || undefined,
-        action: action || undefined,
+        actionType: action || undefined,
         status: status ? (status as any) : undefined,
       },
       include: {

@@ -2,29 +2,15 @@ import { prisma } from '@gate-access/db';
 import { generateBrandingCss } from '@/lib/branding-css-generator';
 
 export async function BrandingStyles({ orgId }: { orgId: string }) {
-  const organization = await prisma.organization.findUnique({
-    where: { id: orgId },
-    select: {
-      activeStyle: true,
-      themeVariables: true,
-    },
+  const branding = await (prisma as any).organizationBranding.findUnique({
+    where: { organizationId: orgId },
   });
 
-  if (!organization) return null;
+  if (!branding) return null;
 
-  // Use variables or active style snapshot
-  const tokens: Record<string, string> = {};
-
-  if (organization.activeStyle) {
-    Object.assign(tokens, organization.activeStyle.cssTokens);
-  }
-
-  // Overrides from individual theme variables
-  (organization.themeVariables as { key: string; value: string }[]).forEach(
-    (v) => {
-      tokens[v.key] = v.value;
-    }
-  );
+  const tokens: Record<string, string> = {
+    ...((branding.tokenOverrides as Record<string, string>) ?? {}),
+  };
 
   if (Object.keys(tokens).length === 0) return null;
 

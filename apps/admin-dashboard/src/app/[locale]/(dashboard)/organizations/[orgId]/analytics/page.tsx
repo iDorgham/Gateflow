@@ -88,11 +88,11 @@ export default async function AnalyticsPage(props: {
   );
 
   // ── Status breakdown (30 days) ─────────────────────────────────────────────
-  const statusGroups = await prisma.scanLog.groupBy({
+  const statusGroups = (await prisma.scanLog.groupBy({
     by: ['status'],
     where: { scannedAt: { gte: thirtyDaysAgo } },
     _count: { id: true },
-  });
+  })) as { status: string; _count: { id: number } }[];
   const statusMap = Object.fromEntries(
     statusGroups.map((s: { status: string; _count: { id: number } }) => [
       s.status,
@@ -105,13 +105,13 @@ export default async function AnalyticsPage(props: {
   );
 
   // ── Top orgs by scan volume (7 days) ──────────────────────────────────────
-  const recentGateScans = await prisma.scanLog.groupBy({
+  const recentGateScans = (await prisma.scanLog.groupBy({
     by: ['gateId'],
     where: { scannedAt: { gte: sevenDaysAgo } },
     _count: { id: true },
     orderBy: { _count: { id: 'desc' } },
     take: 50,
-  });
+  })) as { gateId: string; _count: { id: number } }[];
   const gateIds = recentGateScans.map(
     (g: { gateId: string; _count: { id: number } }) => g.gateId
   );
@@ -149,11 +149,11 @@ export default async function AnalyticsPage(props: {
   const maxOrgCount = topOrgs[0]?.count ?? 1;
 
   // ── Plan distribution ──────────────────────────────────────────────────────
-  const planGroups = await prisma.organization.groupBy({
+  const planGroups = (await prisma.organization.groupBy({
     by: ['plan'],
     where: { deletedAt: null },
     _count: { id: true },
-  });
+  })) as { plan: string | null; _count: { id: number } }[];
   const planMap = Object.fromEntries(
     planGroups.map((p: { plan: string | null; _count: { id: number } }) => [
       p.plan,
@@ -166,11 +166,11 @@ export default async function AnalyticsPage(props: {
   }));
 
   // ── QR type distribution ────────────────────────────────────────────────────
-  const qrTypeGroups = await prisma.qRCode.groupBy({
+  const qrTypeGroups = (await prisma.qRCode.groupBy({
     by: ['type'],
     where: { deletedAt: null },
     _count: { id: true },
-  });
+  })) as { type: string; _count: { id: number } }[];
   const qrTypeMap = Object.fromEntries(
     qrTypeGroups.map((q: { type: string; _count: { id: number } }) => [
       q.type,

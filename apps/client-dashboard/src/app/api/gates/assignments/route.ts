@@ -17,23 +17,34 @@ export async function GET(request?: NextRequest): Promise<NextResponse> {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized' },
+        { status: 401 }
+      );
     }
     if (!hasPermission(claims, ASSIGN_PERMISSION)) {
-      return NextResponse.json({ success: false, message: 'Forbidden' }, { status: 403 });
+      return NextResponse.json(
+        { success: false, message: 'Forbidden' },
+        { status: 403 }
+      );
     }
 
-    const rawProjectId = request?.nextUrl?.searchParams?.get('project') ?? undefined;
+    const rawProjectId =
+      request?.nextUrl?.searchParams?.get('project') ?? undefined;
     let projectId: string | undefined;
     if (rawProjectId) {
       const project = await prisma.project.findFirst({
-        where: { id: rawProjectId, organizationId: claims.orgId, deletedAt: null },
+        where: {
+          id: rawProjectId,
+          organizationId: claims.orgId,
+          deletedAt: null,
+        },
         select: { id: true },
       });
       if (project) projectId = project.id;
     }
 
-    const assignments = await prisma.gateAssignment.findMany({
+    const assignments = (await prisma.gateAssignment.findMany({
       where: {
         organizationId: claims.orgId,
         deletedAt: null,
@@ -44,7 +55,16 @@ export async function GET(request?: NextRequest): Promise<NextResponse> {
         gate: { select: { id: true, name: true, location: true } },
       },
       orderBy: [{ userId: 'asc' }, { gateId: 'asc' }],
-    });
+    })) as unknown as {
+      id: string;
+      userId: string;
+      gateId: string;
+      shiftStart: string | null;
+      shiftEnd: string | null;
+      createdAt: Date;
+      user: { id: string; email: string; name: string | null };
+      gate: { id: string; name: string; location: string | null };
+    }[];
 
     const data = assignments.map((a) => ({
       id: a.id,
@@ -60,7 +80,10 @@ export async function GET(request?: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ success: true, data });
   } catch (err) {
     console.error('GET /api/gates/assignments error:', err);
-    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }
 
@@ -68,7 +91,10 @@ export async function GET(request?: NextRequest): Promise<NextResponse> {
 // Assign a user to one or more gates. User and gates must belong to the same org.
 
 // Optional shift time HH:mm (24h)
-const timeString = z.string().regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/).optional();
+const timeString = z
+  .string()
+  .regex(/^([01]?[0-9]|2[0-3]):[0-5][0-9]$/)
+  .optional();
 
 const AssignSchema = z.object({
   userId: z.string().min(1),
@@ -81,23 +107,36 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized' },
+        { status: 401 }
+      );
     }
     if (!hasPermission(claims, ASSIGN_PERMISSION)) {
-      return NextResponse.json({ success: false, message: 'Forbidden' }, { status: 403 });
+      return NextResponse.json(
+        { success: false, message: 'Forbidden' },
+        { status: 403 }
+      );
     }
 
     let body: unknown;
     try {
       body = await request.json();
     } catch {
-      return NextResponse.json({ success: false, message: 'Invalid JSON' }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: 'Invalid JSON' },
+        { status: 400 }
+      );
     }
 
     const parsed = AssignSchema.safeParse(body);
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, message: 'Validation failed', error: parsed.error.flatten() },
+        {
+          success: false,
+          message: 'Validation failed',
+          error: parsed.error.flatten(),
+        },
         { status: 400 }
       );
     }
@@ -111,7 +150,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       select: { id: true },
     });
     if (!user) {
-      return NextResponse.json({ success: false, message: 'User not found' }, { status: 404 });
+      return NextResponse.json(
+        { success: false, message: 'User not found' },
+        { status: 404 }
+      );
     }
 
     // Ensure all gates belong to org and are not deleted
@@ -123,7 +165,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const missing = gateIds.filter((id) => !foundIds.has(id));
     if (missing.length > 0) {
       return NextResponse.json(
-        { success: false, message: 'One or more gates not found', gateIds: missing },
+        {
+          success: false,
+          message: 'One or more gates not found',
+          gateIds: missing,
+        },
         { status: 404 }
       );
     }
@@ -161,10 +207,16 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       }
     }
 
-    return NextResponse.json({ success: true, data: { assigned: created } }, { status: 201 });
+    return NextResponse.json(
+      { success: true, data: { assigned: created } },
+      { status: 201 }
+    );
   } catch (err) {
     console.error('POST /api/gates/assignments error:', err);
-    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }
 
@@ -180,23 +232,36 @@ export async function DELETE(request: NextRequest): Promise<NextResponse> {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized' },
+        { status: 401 }
+      );
     }
     if (!hasPermission(claims, ASSIGN_PERMISSION)) {
-      return NextResponse.json({ success: false, message: 'Forbidden' }, { status: 403 });
+      return NextResponse.json(
+        { success: false, message: 'Forbidden' },
+        { status: 403 }
+      );
     }
 
     let body: unknown;
     try {
       body = await request.json();
     } catch {
-      return NextResponse.json({ success: false, message: 'Invalid JSON' }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: 'Invalid JSON' },
+        { status: 400 }
+      );
     }
 
     const parsed = UnassignSchema.safeParse(body);
     if (!parsed.success) {
       return NextResponse.json(
-        { success: false, message: 'Validation failed', error: parsed.error.flatten() },
+        {
+          success: false,
+          message: 'Validation failed',
+          error: parsed.error.flatten(),
+        },
         { status: 400 }
       );
     }
@@ -214,7 +279,10 @@ export async function DELETE(request: NextRequest): Promise<NextResponse> {
     });
 
     if (!assignment) {
-      return NextResponse.json({ success: false, message: 'Assignment not found' }, { status: 404 });
+      return NextResponse.json(
+        { success: false, message: 'Assignment not found' },
+        { status: 404 }
+      );
     }
 
     await prisma.gateAssignment.update({
@@ -225,6 +293,9 @@ export async function DELETE(request: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error('DELETE /api/gates/assignments error:', err);
-    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }

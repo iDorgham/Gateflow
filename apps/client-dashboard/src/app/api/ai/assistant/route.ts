@@ -595,13 +595,30 @@ Rules:
           }),
           execute: async ({ title, description, dueDate }) => {
             log('createTask', { title });
+            // Client-dashboard tasks aren't organized into boards by the user; lazily
+            // provision a single default board per org to satisfy Task's required boardId/department.
+            let board = await prisma.taskBoard.findFirst({
+              where: { organizationId: claims.orgId, department: 'SUPPORT' },
+            });
+            if (!board) {
+              board = await prisma.taskBoard.create({
+                data: {
+                  organizationId: claims.orgId,
+                  name: 'General Tasks',
+                  department: 'SUPPORT',
+                },
+              });
+            }
+
             const task = await prisma.task.create({
               data: {
                 title,
                 description: description ?? null,
                 dueDate: dueDate ? new Date(dueDate) : null,
                 organizationId: claims.orgId,
-                createdBy: claims.sub ?? null,
+                createdById: claims.sub,
+                boardId: board.id,
+                department: board.department,
                 status: TaskStatus.TODO,
               },
               select: { id: true, title: true, status: true },

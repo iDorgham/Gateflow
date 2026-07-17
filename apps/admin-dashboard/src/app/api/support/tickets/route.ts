@@ -6,7 +6,7 @@ export async function GET(req: Request) {
   const orgId = searchParams.get('orgId');
 
   try {
-    const tickets = await prisma.ticket?.findMany({
+    const tickets = await prisma.supportTicket.findMany({
       where: orgId ? { organizationId: orgId } : undefined,
       orderBy: { createdAt: 'desc' },
     });

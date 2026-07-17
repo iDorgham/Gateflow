@@ -66,7 +66,7 @@ export async function POST(req: Request) {
     await prisma.aiActionLog.create({
       data: {
         organizationId: orgId || 'GLOBAL',
-        action: 'BLOG_DRAFT_GENERATED',
+        actionType: 'BLOG_DRAFT_GENERATED',
         status: 'PENDING',
         prompt: `Title: ${title}, Topic: ${topic}`,
         result: 'Full draft ready for review.',

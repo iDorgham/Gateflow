@@ -108,7 +108,7 @@ export async function DashboardOverview({
       by: ['gateId'],
       where: { qrCode: { organizationId: orgId } },
       _count: { _all: true },
-      orderBy: { _count: { _all: 'desc' } },
+      orderBy: { _count: { gateId: 'desc' } },
       take: 5,
     }),
     // Maintenance stats

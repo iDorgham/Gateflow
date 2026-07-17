@@ -49,7 +49,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const gates =
       gateIds.length > 0 && orgId
         ? await prisma.gate.findMany({
-            where: { id: { in: gateIds }, organizationId: orgId, deletedAt: null },
+            where: {
+              id: { in: gateIds },
+              organizationId: orgId,
+              deletedAt: null,
+            },
             select: {
               id: true,
               latitude: true,
@@ -59,7 +63,9 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
             },
           })
         : [];
-    const gateMap = new Map<string, GateLocationConfig>(gates.map((g) => [g.id, g]));
+    const gateMap = new Map<string, GateLocationConfig>(
+      gates.map((g) => [g.id, g])
+    );
     const locationFailed: Array<{ id: string; error: string }> = [];
     const scansPassingLocation = scans.filter((scan) => {
       const gate = gateMap.get(scan.gateId);
@@ -70,7 +76,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
           : null;
       const result = checkLocationForGate(gate, deviceLocation);
       if (!result.allowed) {
-        const errMsg = 'message' in result ? result.message : 'Scan only allowed at gate location.';
+        const errMsg =
+          'message' in result
+            ? result.message
+            : 'Scan only allowed at gate location.';
         locationFailed.push({ id: scan.id, error: errMsg });
         return false;
       }
@@ -91,17 +100,27 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         if (!visitor.name && !visitor.phone && !visitor.idNumber) return true;
         const match = findWatchlistMatch(entries, visitor);
         if (match) {
-          watchlistFailed.push({ id: scan.id, error: 'Blocked person on security list.' });
-          void prisma.incident.create({
-            data: {
-              organizationId: orgId,
-              gateId: scan.gateId,
-              userId: authResult.sub ?? null,
-              reason: 'watchlist_match',
-              status: 'UNDER_REVIEW',
-              notes: `Watchlist entry ${match.entryId} matched on ${match.matchedField} (bulk sync).`,
-            },
-          }).catch((err) => console.error('[scans/bulk] Failed to create watchlist incident:', err));
+          watchlistFailed.push({
+            id: scan.id,
+            error: 'Blocked person on security list.',
+          });
+          void prisma.incident
+            .create({
+              data: {
+                organizationId: orgId,
+                gateId: scan.gateId,
+                userId: authResult.sub ?? null,
+                reason: 'watchlist_match',
+                status: 'UNDER_REVIEW',
+                notes: `Watchlist entry ${match.entryId} matched on ${match.matchedField} (bulk sync).`,
+              },
+            })
+            .catch((err) =>
+              console.error(
+                '[scans/bulk] Failed to create watchlist incident:',
+                err
+              )
+            );
           return false;
         }
         return true;
@@ -154,7 +173,10 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     const results = await prisma.$transaction(async (tx) => {
-      return processBulkScans(scansForSync as import('@/lib/scans/bulk-sync').ScanInput[], tx);
+      return processBulkScans(
+        scansForSync as import('@/lib/scans/bulk-sync').ScanInput[],
+        tx as unknown as import('@gate-access/db').Prisma.TransactionClient
+      );
     });
 
     const response = {

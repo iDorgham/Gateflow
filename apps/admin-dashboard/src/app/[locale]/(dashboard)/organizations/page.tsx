@@ -50,7 +50,7 @@ export default async function OrganizationsPage(props: {
         : {}),
   };
 
-  const [orgs, total] = await Promise.all([
+  const [orgsRaw, total] = await Promise.all([
     // skip-organization-check (Global Admin List)
     prisma.organization.findMany({
       where,
@@ -69,21 +69,30 @@ export default async function OrganizationsPage(props: {
     // skip-organization-check (Global Admin Count)
     prisma.organization.count({ where }),
   ]);
+  const orgs = orgsRaw as unknown as {
+    id: string;
+    name: string;
+    email: string;
+    plan: string;
+    deletedAt: Date | null;
+    createdAt: Date;
+    _count: { users: number; qrCodes: number; gates: number };
+  }[];
 
   // Scans last 30 days per org
   const thirtyDaysAgo = new Date(Date.now() - 30 * 86_400_000);
   // skip-organization-check (Global Admin Aggregation)
-  const scansByGate = await prisma.scanLog.groupBy({
+  const scansByGate = (await prisma.scanLog.groupBy({
     by: ['gateId'],
     where: { scannedAt: { gte: thirtyDaysAgo } },
     _count: true,
-  });
+  })) as { gateId: string; _count: number }[];
   const gateIds = scansByGate.map((s: { gateId: string }) => s.gateId);
   // skip-organization-check (Global Admin Fetch)
-  const gates = await prisma.gate.findMany({
+  const gates = (await prisma.gate.findMany({
     where: { id: { in: gateIds } },
     select: { id: true, organizationId: true },
-  });
+  })) as { id: string; organizationId: string }[];
   const gateOrgMap = new Map<string, string>(
     gates.map((g: { id: string; organizationId: string }) => [
       g.id,
