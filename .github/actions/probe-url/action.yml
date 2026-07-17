@@ -26,7 +26,13 @@ runs:
       run: |
         set -euo pipefail
 
-        HOST="$(node -e 'console.log(new URL(process.argv[1]).hostname)' "$URL")"
+        HOST="$(node -e 'try{console.log(new URL(process.argv[1]).hostname)}catch{console.log("")}' "$URL")"
+        if [ -z "$HOST" ]; then
+          echo "skip=true" >> "$GITHUB_OUTPUT"
+          echo "skip_reason=malformed URL ($URL)" >> "$GITHUB_OUTPUT"
+          echo "::warning::Skipping Lighthouse — $URL is not a valid URL."
+          exit 0
+        fi
         if ! getent hosts "$HOST" >/dev/null 2>&1; then
           echo "skip=true" >> "$GITHUB_OUTPUT"
           echo "skip_reason=DNS for $HOST does not resolve" >> "$GITHUB_OUTPUT"

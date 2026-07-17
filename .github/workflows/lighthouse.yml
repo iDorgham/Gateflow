@@ -78,9 +78,11 @@ jobs:
 
       - name: Determine target URL
         id: url
+        env:
+          INPUT_URL: ${{ github.event.inputs.marketing_url }}
         run: |
           set -euo pipefail
-          URL="${{ github.event.inputs.marketing_url }}"
+          URL="$INPUT_URL"
           if [ -z "$URL" ]; then
             # On PRs: use Vercel preview URL if available, else production
             URL="${VERCEL_PREVIEW_URL:-https://gateflow.app}"
@@ -96,8 +98,10 @@ jobs:
 
       - name: Skip notice
         if: steps.probe.outputs.skip == 'true'
+        env:
+          SKIP_REASON: ${{ steps.probe.outputs.skip_reason }}
         run: |
-          echo "::notice::Marketing Lighthouse skipped: ${{ steps.probe.outputs.skip_reason }}"
+          echo "::notice::Marketing Lighthouse skipped: $SKIP_REASON"
           echo "Re-run with a healthy workflow_dispatch URL or fix DNS for gateflow.app."
 
       - name: Install @lhci/cli
@@ -234,12 +238,15 @@ jobs:
       - name: Comment Lighthouse scores on PR
         if: always() && github.event_name == 'pull_request'
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        env:
+          SKIP: ${{ steps.probe.outputs.skip }}
+          SKIP_REASON: ${{ steps.probe.outputs.skip_reason }}
         with:
           script: |
             const fs = require('fs');
             const path = require('path');
-            const skipped = '${{ steps.probe.outputs.skip }}' === 'true';
-            const skipReason = `${{ steps.probe.outputs.skip_reason }}` || 'target URL unreachable';
+            const skipped = process.env.SKIP === 'true';
+            const skipReason = process.env.SKIP_REASON || 'target URL unreachable';
 
             function getScores(dir) {
               if (!fs.existsSync(dir)) return null;
@@ -326,9 +333,11 @@ jobs:
 
       - name: Determine dashboard URL
         id: url
+        env:
+          INPUT_URL: ${{ github.event.inputs.dashboard_url }}
         run: |
           set -euo pipefail
-          URL="${{ github.event.inputs.dashboard_url }}"
+          URL="$INPUT_URL"
           if [ -z "$URL" ]; then
             URL="${VERCEL_PREVIEW_URL:-https://app.gateflow.app}"
           fi
@@ -343,8 +352,10 @@ jobs:
 
       - name: Skip notice
         if: steps.probe.outputs.skip == 'true'
+        env:
+          SKIP_REASON: ${{ steps.probe.outputs.skip_reason }}
         run: |
-          echo "::notice::Dashboard Lighthouse skipped: ${{ steps.probe.outputs.skip_reason }}"
+          echo "::notice::Dashboard Lighthouse skipped: $SKIP_REASON"
           echo "Re-run with a healthy workflow_dispatch URL or fix DNS for app.gateflow.app."
 
       - name: Install @lhci/cli

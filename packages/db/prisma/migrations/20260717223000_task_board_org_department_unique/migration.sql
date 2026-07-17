@@ -1,6 +1,12 @@
 -- Consolidate duplicate TaskBoard rows per (organizationId, department)
 -- before adding the unique constraint. Keep the oldest board; reassign tasks;
 -- drop extras.
+--
+-- Lock TaskBoard for the duration of this migration transaction so a
+-- concurrent INSERT can't land between the dedup snapshot and the unique
+-- index build (which would otherwise either escape the CTEs above or make
+-- CREATE UNIQUE INDEX fail on a fresh duplicate).
+LOCK TABLE "TaskBoard" IN SHARE ROW EXCLUSIVE MODE;
 
 WITH ranked AS (
   SELECT

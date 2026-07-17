@@ -57,16 +57,21 @@ export async function POST(
         });
       }
 
+      // Saving always (re)activates branding — a save on a record that was
+      // previously deactivated should make it visible to BrandingStyles.tsx
+      // (which reads isActive: true) again, not stay silently invisible.
       return (tx as any).organizationBranding.upsert({
         where: { organizationId: orgId },
         update: {
           tokenOverrides,
           version: { increment: 1 },
+          isActive: true,
         },
         create: {
           organizationId: orgId,
           tokenOverrides,
           version: 1,
+          isActive: true,
         },
       });
     });
