@@ -1,0 +1,20 @@
+apps/client-dashboard/src/app/api/gates/route.test.ts
+  s_1ce240c2eda30d::t_26392fecbbccb7 114-117
+  s_1ce240c2eda30d::t_a4d1d040a95d57 53-56,68-72,103-107
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "b5975ba9cc008d3d6a8003128f39c7fcf7761ac6",
+  "prompts": {},
+  "sessions": {
+    "s_1ce240c2eda30d": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "246dfd2b-6899-4c56-a9c9-d0cb7bd97d78",
+        "model": "grok-4.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
