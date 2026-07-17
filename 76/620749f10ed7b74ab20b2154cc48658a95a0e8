@@ -1,0 +1,87 @@
+packages/db/src/serialization-retry.ts
+  s_edf5df462eee0c::t_688239412acf22 34-35
+  s_edf5df462eee0c::t_04546ff72cc2a7 1-33,36
+  s_edf5df462eee0c::t_7a4329d7001b70 37-39
+  s_1ce240c2eda30d::t_8e026889068f3f 40-41
+apps/client-dashboard/src/lib/ensure-support-board.ts
+  s_edf5df462eee0c::t_5a00a6e2826b80 1,3-5
+apps/admin-dashboard/src/app/api/analytics/overview/route.ts
+  s_1ce240c2eda30d::t_bdb49c97116bdd 22-28,30,32,39,42,45,47
+apps/admin-dashboard/src/app/api/tasks/bots/blog-writer/route.ts
+  s_edf5df462eee0c::t_4a9bd3d05df063 103
+  s_edf5df462eee0c::t_b25b08fed0612e 2
+  s_1ce240c2eda30d::t_61d3f0cdacb3c0 81-83
+apps/admin-dashboard/src/app/api/organizations/[orgId]/style/save/route.ts
+  s_edf5df462eee0c::t_d98489da4b9c29 3
+  s_edf5df462eee0c::t_68d113441199ae 19,23-28,30-41,43-55,57,60-72
+.github/workflows/lighthouse.yml
+  s_edf5df462eee0c::t_1662a67b3de6c3 338-342
+  s_edf5df462eee0c::t_c3c624c5d04176 98,100,104,114,118,129,162,187,196,226,241-242,345,347,351,355,359,367,390,410
+  s_edf5df462eee0c::t_7140a46bc47c8d 91-95
+apps/client-dashboard/src/components/dashboard/dashboard-overview.tsx
+  s_1ce240c2eda30d::t_571e75dc79a37f 111
+apps/admin-dashboard/src/app/api/audit/logs/route.ts
+  s_1ce240c2eda30d::t_70dc4865b3b681 25-31,35
+apps/admin-dashboard/src/app/api/admin/ai/assistant/route.ts
+  s_1ce240c2eda30d::t_b1cca2dec766a3 124
+packages/db/src/index.ts
+  s_edf5df462eee0c::t_125549bb94030f 11-12
+apps/admin-dashboard/src/app/[locale]/(dashboard)/settings/style-hub/page.tsx
+  s_1ce240c2eda30d::t_1feb4abe2e0651 11-12,14-15,19-25,32
+apps/admin-dashboard/src/app/[locale]/(dashboard)/organizations/[orgId]/analytics/page.tsx
+  s_1ce240c2eda30d::t_ca746a84ce0b9c 112,115,124
+  s_1ce240c2eda30d::t_50473727019224 32,36,44,55-58
+  s_1ce240c2eda30d::t_a22d262331b3e2 98
+  s_1ce240c2eda30d::t_543053989d772d 70,72
+  s_1ce240c2eda30d::t_9143f954c73f2e 156,159
+  s_1ce240c2eda30d::t_9b66eba6c54624 191,193-195
+  s_1ce240c2eda30d::t_6841675bbc2a65 176
+apps/admin-dashboard/src/app/api/tasks/bots/landing-page/route.ts
+  s_1ce240c2eda30d::t_6e9b10f8810fb4 80,82-86,107,122-123
+  s_edf5df462eee0c::t_28d0a24da84c09 133
+  s_edf5df462eee0c::t_cde0630ea41d75 2
+apps/admin-dashboard/src/app/api/cms/blog/route.ts
+  s_1ce240c2eda30d::t_52f5159ee131d1 54
+apps/client-dashboard/src/app/api/scans/export/route.ts
+  s_1ce240c2eda30d::t_acdf74864781c0 102
+apps/client-dashboard/src/app/api/gates/route.ts
+  s_1ce240c2eda30d::t_c231dc43e7761c 56
+apps/client-dashboard/src/app/api/gates/assignments/route.ts
+  s_1ce240c2eda30d::t_6fcef248c447f2 179-184
+packages/db/src/board.ts
+  s_1ce240c2eda30d::t_abc7d7a01c7836 6-8,16-21
+  s_edf5df462eee0c::t_2ffcd3e346ae6f 1-5,9-15,22-24
+packages/db/prisma/migrations/20260717223000_task_board_org_department_unique/migration.sql
+  s_1ce240c2eda30d::t_f7ad06935854c7 1-49
+apps/admin-dashboard/src/app/api/support/tickets/route.ts
+  s_1ce240c2eda30d::t_866ef3e8e06672 8-14,17
+.github/actions/probe-url/action.yml
+  s_edf5df462eee0c::t_239edd3a87798c 1-23,26-69
+  s_edf5df462eee0c::t_4b075cb764059d 24-25
+packages/db/prisma/schema.prisma
+  s_1ce240c2eda30d::t_d9044bc44f4667 1390
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "76620749f10ed7b74ab20b2154cc48658a95a0e8",
+  "prompts": {},
+  "sessions": {
+    "s_1ce240c2eda30d": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "246dfd2b-6899-4c56-a9c9-d0cb7bd97d78",
+        "model": "grok-4.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_edf5df462eee0c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "19b31a1d-d3ca-40fd-8988-e714bc3b44d9",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
