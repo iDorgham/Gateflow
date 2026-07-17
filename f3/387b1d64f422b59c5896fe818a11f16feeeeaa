@@ -1,0 +1,80 @@
+apps/admin-dashboard/src/app/api/cms/generate-blog/route.ts
+  s_edf5df462eee0c::t_fb6f7f76bd9e7f 68-69,71-77
+  s_43d83ced1b63a9::t_42067a9ca110fb 65-67,70,78
+apps/admin-dashboard/src/app/api/cms/blog/route.ts
+  s_edf5df462eee0c::t_e84e2bce330147 110-123
+apps/admin-dashboard/src/app/api/tasks/bots/blog-writer/route.ts
+  s_edf5df462eee0c::t_d727ef2efdcdd5 99-117,127
+apps/admin-dashboard/src/app/api/admin/reset-tenant/route.ts
+  s_edf5df462eee0c::t_76eb9b310789fb 147
+apps/admin-dashboard/src/lib/notifications.ts
+  s_edf5df462eee0c::t_0fe4244432ffa9 43,45-47,53,55,59,70,72,74
+apps/admin-dashboard/src/app/api/support/tickets/[id]/triage/route.ts
+  s_edf5df462eee0c::t_bb1a0998590fe0 89-101
+apps/admin-dashboard/src/components/tasks/bots/landing-page-bot.tsx
+  s_edf5df462eee0c::t_34d3bd561b5da5 225
+  s_edf5df462eee0c::t_472488aeab5e7e 237
+apps/admin-dashboard/src/app/api/cms/pages/[slug]/route.ts
+  s_edf5df462eee0c::t_866c46a40056bd 80-81,83-89
+  s_43d83ced1b63a9::t_e76f58ae3ea22c 77-79,82,90
+apps/admin-dashboard/src/components/tasks/bots/blog-writer-bot.tsx
+  s_edf5df462eee0c::t_58e31ad4a9a48c 210
+apps/admin-dashboard/src/components/branding/BrandingStyles.tsx
+  s_edf5df462eee0c::t_89410d77fb8e61 5-6
+  s_edf5df462eee0c::t_8bb5b8c56222a2 11-17
+apps/admin-dashboard/src/app/api/tasks/bots/landing-page/route.ts
+  s_edf5df462eee0c::t_58437e8e122b7d 123
+  s_edf5df462eee0c::t_e3ea6375bfccfe 70-72,79-98,112-120,126-144,154
+apps/client-dashboard/src/app/api/analytics/operators/route.ts
+  s_4f3ad5c70c76a7::t_1dbc06f429285c 96-97,99,121
+.github/workflows/lighthouse.yml
+  s_43d83ced1b63a9::t_e8afb0d941627b 21-25,40,79-136,138,148,152,163,196,221,230,260,275-276,297-333,361-416,418,421-423,426,434,457,477,499-500,502-503
+apps/client-dashboard/src/app/api/tasks/route.ts
+  s_43d83ced1b63a9::t_59e6a75c3146c4 5,74
+apps/client-dashboard/src/lib/ensure-support-board.ts
+  s_43d83ced1b63a9::t_e2ff03db17d290 1-53
+apps/admin-dashboard/src/app/api/organizations/[orgId]/style/save/route.ts
+  s_b60e1aa20482a5::t_afed95fbd04edc 5-15,35-36,38-44,46-57,59-87,89-102,104
+apps/client-dashboard/src/app/api/ai/assistant/route.ts
+  s_b60e1aa20482a5::t_1eeefe8cd481e0 21,601
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "f3387b1d64f422b59c5896fe818a11f16feeeeaa",
+  "prompts": {},
+  "sessions": {
+    "s_43d83ced1b63a9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9d800842-375d-476b-b25e-c08c56aa6cd6",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_4f3ad5c70c76a7": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f71de-daac-7a41-85b7-e45891e115c9",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_b60e1aa20482a5": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "0e6ac2d0-a570-416c-9b60-0f0da4073c81",
+        "model": "unknown"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_edf5df462eee0c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "19b31a1d-d3ca-40fd-8988-e714bc3b44d9",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
