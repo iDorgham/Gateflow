@@ -13,9 +13,12 @@ export function isSerializationFailure(error: unknown): boolean {
  * Run `fn` inside a Serializable-isolation transaction, retrying on Prisma
  * P2034 (serialization failure) so a losing concurrent transaction gets a
  * second attempt instead of surfacing as a 500 to the caller.
+ *
+ * `client` is loosely typed because the app's Prisma client is Accelerate-
+ * extended and its `$transaction` signature does not match stock PrismaClient.
  */
 export async function withSerializableRetry<T>(
-  transactionClient: {
+  client: {
     $transaction: (
       fn: (tx: any) => Promise<T>,
       opts: { isolationLevel: 'Serializable' }
@@ -24,18 +27,20 @@ export async function withSerializableRetry<T>(
   fn: (tx: any) => Promise<T>,
   maxRetries: number = MAX_SERIALIZATION_RETRIES
 ): Promise<T> {
+  let lastError: unknown;
+
   for (let attempt = 0; attempt < maxRetries; attempt++) {
     try {
-      return await transactionClient.$transaction(fn, {
+      return await client.$transaction(fn, {
         isolationLevel: 'Serializable',
       });
     } catch (error) {
+      lastError = error;
       if (!isSerializationFailure(error) || attempt === maxRetries - 1) {
         throw error;
       }
     }
   }
 
-  // Unreachable: the loop above always returns or throws.
-  throw new Error('withSerializableRetry: exhausted retries unexpectedly');
+  throw lastError;
 }

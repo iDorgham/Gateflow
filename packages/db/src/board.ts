@@ -13,13 +13,13 @@ export async function ensureBoard(
   department: 'SALES' | 'MARKETING' | 'DEV' | 'SUPPORT',
   name: string
 ): Promise<TaskBoard> {
-  return withSerializableRetry(prisma, async (tx) => {
-    return tx.taskBoard.upsert({
+  return withSerializableRetry<TaskBoard>(prisma, (tx) =>
+    tx.taskBoard.upsert({
       where: {
         organizationId_department: { organizationId, department },
       },
       create: { organizationId, name, department },
       update: {},
-    }) as Promise<TaskBoard>;
-  });
+    })
+  );
 }
