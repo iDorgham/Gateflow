@@ -51,6 +51,7 @@ export async function GET(req: Request) {
           categories: post.category
             ? [
                 {
+                  id: post.category.id,
                   name:
                     locale === 'ar'
                       ? post.category.nameAr

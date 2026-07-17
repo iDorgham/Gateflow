@@ -121,6 +121,7 @@ Never make up data — use tools to fetch real information.`,
         execute: async ({ query }: { query: string }) => {
           const org = (await prisma.organization.findFirst({
             where: {
+              deletedAt: null,
               OR: [
                 { name: { contains: query, mode: 'insensitive' } },
                 { id: query },

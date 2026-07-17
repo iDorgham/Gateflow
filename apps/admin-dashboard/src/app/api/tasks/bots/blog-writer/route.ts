@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@gate-access/db';
+import { prisma, ensureBoard } from '@gate-access/db';
 import { isAdminAuthorized } from '@/lib/admin-auth';
 
 export async function POST(req: Request) {
@@ -78,7 +78,9 @@ export async function POST(req: Request) {
     const blogPost = await prisma.blogPost.create({
       data: {
         titleEn: mockResult.title,
-        titleAr: mockResult.title,
+        // Schema requires titleAr; leave empty until a real AR translation exists
+        // so Arabic surfaces don't show mislabeled English.
+        titleAr: '',
         slugEn: (
           mockResult.title.toLowerCase().replace(/ /g, '-') +
           '-' +
@@ -98,22 +100,7 @@ export async function POST(req: Request) {
 
     // Lazily provision a default MARKETING board per org — there's no
     // board-management UI, so no real board is guaranteed to exist.
-    const board = await prisma.$transaction(
-      async (tx) => {
-        const existing = await tx.taskBoard.findFirst({
-          where: { organizationId: targetOrgId, department: 'MARKETING' },
-        });
-        if (existing) return existing;
-        return tx.taskBoard.create({
-          data: {
-            organizationId: targetOrgId,
-            name: 'Marketing',
-            department: 'MARKETING',
-          },
-        });
-      },
-      { isolationLevel: 'Serializable' }
-    );
+    const board = await ensureBoard(targetOrgId, 'MARKETING', 'Marketing');
 
     // 3. Create the Task for Review
     const task = await prisma.task.create({

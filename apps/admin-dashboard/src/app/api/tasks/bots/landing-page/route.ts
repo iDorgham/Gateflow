@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@gate-access/db';
+import { prisma, ensureBoard } from '@gate-access/db';
 import { isAdminAuthorized } from '@/lib/admin-auth';
 
 export async function POST(req: Request) {
@@ -77,8 +77,13 @@ export async function POST(req: Request) {
     };
 
     type MockBlock = (typeof mockResult.blocks)[number];
-    const toSectionContent = (block: MockBlock) => {
+    const toSectionContent = (block: MockBlock, locale: 'en' | 'ar') => {
       const c = block.content as Record<string, unknown>;
+      // Arabic fields stay empty until a real translation is produced —
+      // do not copy English into contentAr (fallback contract).
+      if (locale === 'ar') {
+        return { headline: '', body: '', ctaText: '', ctaLink: '#' };
+      }
       const body =
         typeof c.subtitleEn === 'string'
           ? c.subtitleEn
@@ -99,7 +104,7 @@ export async function POST(req: Request) {
     const landingPage = await prisma.landingPage.create({
       data: {
         titleEn: mockResult.title,
-        titleAr: mockResult.title,
+        titleAr: '',
         slug: (
           mockResult.title.toLowerCase().replace(/ /g, '-') +
           '-' +
@@ -114,8 +119,8 @@ export async function POST(req: Request) {
             .map((block, i) => ({
               type: SECTION_TYPE_MAP[block.type],
               order: i,
-              contentEn: toSectionContent(block),
-              contentAr: toSectionContent(block),
+              contentEn: toSectionContent(block, 'en'),
+              contentAr: toSectionContent(block, 'ar'),
               aiGenerated: true,
             })),
         },
@@ -125,22 +130,7 @@ export async function POST(req: Request) {
 
     // Lazily provision a default MARKETING board per org — there's no
     // board-management UI, so no real board is guaranteed to exist.
-    const board = await prisma.$transaction(
-      async (tx) => {
-        const existing = await tx.taskBoard.findFirst({
-          where: { organizationId: targetOrgId, department: 'MARKETING' },
-        });
-        if (existing) return existing;
-        return tx.taskBoard.create({
-          data: {
-            organizationId: targetOrgId,
-            name: 'Marketing',
-            department: 'MARKETING',
-          },
-        });
-      },
-      { isolationLevel: 'Serializable' }
-    );
+    const board = await ensureBoard(targetOrgId, 'MARKETING', 'Marketing');
 
     // 3. Create the Task for Review
     const task = await prisma.task.create({

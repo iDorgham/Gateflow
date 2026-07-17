@@ -176,8 +176,12 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     const created: Array<{ id: string; userId: string; gateId: string }> = [];
     for (const gateId of gateIds) {
-      const existing = await prisma.gateAssignment.findUnique({
-        where: { userId_gateId: { userId, gateId } },
+      const existing = await prisma.gateAssignment.findFirst({
+        where: {
+          userId,
+          gateId,
+          organizationId: orgId,
+        },
       });
       if (existing) {
         if (existing.deletedAt) {

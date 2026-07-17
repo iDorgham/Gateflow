@@ -8,21 +8,28 @@ import { notFound } from 'next/navigation';
 export const metadata = { title: 'Style Hub | Design Orchestration' };
 
 export default async function StyleHubPage(props: {
-  params: Promise<{ locale: Locale; orgId: string }>;
+  params: Promise<{ locale: Locale }>;
+  searchParams: Promise<{ orgId?: string }>;
 }) {
-  const params = await props.params;
-  const { locale, orgId } = params;
+  const { locale } = await props.params;
+  const { orgId } = await props.searchParams;
 
   await requireAdmin(locale);
 
-  const organization = await prisma.organization.findUnique({
-    where: { id: orgId },
+  // Route is /settings/style-hub (no [orgId] segment) — org comes from ?orgId=
+  if (!orgId) {
+    notFound();
+  }
+
+  const organization = await prisma.organization.findFirst({
+    where: { id: orgId, deletedAt: null },
   });
 
   if (!organization) {
     notFound();
   }
 
+  // OrganizationBranding / BrandingSnapshot have no deletedAt field
   const branding = await (prisma as any).organizationBranding.findUnique({
     where: { organizationId: orgId },
   });

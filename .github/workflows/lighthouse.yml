@@ -88,54 +88,20 @@ jobs:
           echo "url=$URL" >> "$GITHUB_OUTPUT"
           echo "Auditing marketing: $URL"
 
-          HOST="$(node -e 'console.log(new URL(process.argv[1]).hostname)' "$URL")"
-          if ! getent hosts "$HOST" >/dev/null 2>&1; then
-            echo "skip=true" >> "$GITHUB_OUTPUT"
-            echo "skip_reason=DNS for $HOST does not resolve" >> "$GITHUB_OUTPUT"
-            echo "::warning::Skipping marketing Lighthouse — DNS for $HOST does not resolve."
-            exit 0
-          fi
-
-          # Probe without following redirects so off-host 301s are caught.
-          HEAD_OUT="$(curl -sS -o /dev/null -w '%{http_code} %{redirect_url}' --max-time 10 "$URL" || true)"
-          CODE="$(echo "$HEAD_OUT" | awk '{print $1}')"
-          REDIRECT="$(echo "$HEAD_OUT" | awk '{print $2}')"
-          if [ -z "$CODE" ] || [ "$CODE" = "000" ]; then
-            echo "skip=true" >> "$GITHUB_OUTPUT"
-            echo "skip_reason=unreachable ($URL)" >> "$GITHUB_OUTPUT"
-            echo "::warning::Skipping marketing Lighthouse — $URL is unreachable."
-            exit 0
-          fi
-          if [ -n "$REDIRECT" ]; then
-            REDIR_HOST="$(node -e 'try{console.log(new URL(process.argv[1]).hostname)}catch{console.log("")}' "$REDIRECT")"
-            if [ -n "$REDIR_HOST" ] && [ "$REDIR_HOST" != "$HOST" ]; then
-              echo "skip=true" >> "$GITHUB_OUTPUT"
-              echo "skip_reason=redirects to $REDIR_HOST (expected $HOST)" >> "$GITHUB_OUTPUT"
-              echo "::warning::Skipping marketing Lighthouse — $HOST redirects to unrelated host $REDIR_HOST."
-              exit 0
-            fi
-          fi
-
-          FINAL_CODE="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 15 -L "$URL" || echo 000)"
-          case "$FINAL_CODE" in
-            2*|3*)
-              echo "skip=false" >> "$GITHUB_OUTPUT"
-              ;;
-            *)
-              echo "skip=true" >> "$GITHUB_OUTPUT"
-              echo "skip_reason=HTTP $FINAL_CODE from $URL" >> "$GITHUB_OUTPUT"
-              echo "::warning::Skipping marketing Lighthouse — $URL returned HTTP $FINAL_CODE."
-              ;;
-          esac
+      - name: Probe reachability
+        id: probe
+        uses: ./.github/actions/probe-url
+        with:
+          url: ${{ steps.url.outputs.url }}
 
       - name: Skip notice
-        if: steps.url.outputs.skip == 'true'
+        if: steps.probe.outputs.skip == 'true'
         run: |
-          echo "::notice::Marketing Lighthouse skipped: ${{ steps.url.outputs.skip_reason }}"
+          echo "::notice::Marketing Lighthouse skipped: ${{ steps.probe.outputs.skip_reason }}"
           echo "Re-run with a healthy workflow_dispatch URL or fix DNS for gateflow.app."
 
       - name: Install @lhci/cli
-        if: steps.url.outputs.skip != 'true'
+        if: steps.probe.outputs.skip != 'true'
         run: |
           npm install -g @lhci/cli@${{ env.LHCI_VERSION }} || {
             echo "❌ LHCI CLI installation failed"
@@ -145,11 +111,11 @@ jobs:
           which lhci
 
       - name: Install Chrome
-        if: steps.url.outputs.skip != 'true'
+        if: steps.probe.outputs.skip != 'true'
         uses: browser-actions/setup-chrome@4f8e94349a351df0f048634f25fec36c3c91eded # v2.1.1
 
       - name: Verify Chrome installation
-        if: steps.url.outputs.skip != 'true'
+        if: steps.probe.outputs.skip != 'true'
         run: |
           which google-chrome || which chrome || which chromium || which chromium-browser || {
             echo "❌ Chrome not found in PATH"
@@ -160,7 +126,7 @@ jobs:
 
       # ── Mobile audit ──
       - name: Run Lighthouse — Mobile
-        if: steps.url.outputs.skip != 'true'
+        if: steps.probe.outputs.skip != 'true'
         id: lh_mobile
         run: |
           set +e
@@ -193,7 +159,7 @@ jobs:
 
       # ── Desktop audit ──
       - name: Run Lighthouse — Desktop
-        if: steps.url.outputs.skip != 'true'
+        if: steps.probe.outputs.skip != 'true'
         id: lh_desktop
         run: |
           set +e
@@ -218,7 +184,7 @@ jobs:
 
       # ── Debug — List artifacts ──
       - name: Debug — List artifacts
-        if: always() && steps.url.outputs.skip != 'true'
+        if: always() && steps.probe.outputs.skip != 'true'
         run: |
           echo "=== lhci-reports structure ==="
           find lhci-reports -type f 2>/dev/null || echo "lhci-reports directory not found"
@@ -227,7 +193,7 @@ jobs:
 
       # ── Print CWV metrics to step summary ──
       - name: Print score summary
-        if: always() && steps.url.outputs.skip != 'true'
+        if: always() && steps.probe.outputs.skip != 'true'
         run: |
           node - <<'EOF'
           const fs = require('fs');
@@ -257,7 +223,7 @@ jobs:
 
       # ── Upload HTML reports as artifact ──
       - name: Upload Lighthouse reports
-        if: always() && steps.url.outputs.skip != 'true'
+        if: always() && steps.probe.outputs.skip != 'true'
         uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.0
         with:
           name: lighthouse-marketing-${{ github.run_number }}
@@ -272,8 +238,8 @@ jobs:
           script: |
             const fs = require('fs');
             const path = require('path');
-            const skipped = '${{ steps.url.outputs.skip }}' === 'true';
-            const skipReason = `${{ steps.url.outputs.skip_reason }}` || 'target URL unreachable';
+            const skipped = '${{ steps.probe.outputs.skip }}' === 'true';
+            const skipReason = `${{ steps.probe.outputs.skip_reason }}` || 'target URL unreachable';
 
             function getScores(dir) {
               if (!fs.existsSync(dir)) return null;
@@ -369,61 +335,28 @@ jobs:
           echo "url=$URL" >> "$GITHUB_OUTPUT"
           echo "Auditing dashboard: $URL"
 
-          HOST="$(node -e 'console.log(new URL(process.argv[1]).hostname)' "$URL")"
-          if ! getent hosts "$HOST" >/dev/null 2>&1; then
-            echo "skip=true" >> "$GITHUB_OUTPUT"
-            echo "skip_reason=DNS for $HOST does not resolve" >> "$GITHUB_OUTPUT"
-            echo "::warning::Skipping dashboard Lighthouse — DNS for $HOST does not resolve."
-            exit 0
-          fi
-
-          HEAD_OUT="$(curl -sS -o /dev/null -w '%{http_code} %{redirect_url}' --max-time 10 "$URL" || true)"
-          CODE="$(echo "$HEAD_OUT" | awk '{print $1}')"
-          REDIRECT="$(echo "$HEAD_OUT" | awk '{print $2}')"
-          if [ -z "$CODE" ] || [ "$CODE" = "000" ]; then
-            echo "skip=true" >> "$GITHUB_OUTPUT"
-            echo "skip_reason=unreachable ($URL)" >> "$GITHUB_OUTPUT"
-            echo "::warning::Skipping dashboard Lighthouse — $URL is unreachable."
-            exit 0
-          fi
-          if [ -n "$REDIRECT" ]; then
-            REDIR_HOST="$(node -e 'try{console.log(new URL(process.argv[1]).hostname)}catch{console.log("")}' "$REDIRECT")"
-            if [ -n "$REDIR_HOST" ] && [ "$REDIR_HOST" != "$HOST" ]; then
-              echo "skip=true" >> "$GITHUB_OUTPUT"
-              echo "skip_reason=redirects to $REDIR_HOST (expected $HOST)" >> "$GITHUB_OUTPUT"
-              echo "::warning::Skipping dashboard Lighthouse — $HOST redirects to unrelated host $REDIR_HOST."
-              exit 0
-            fi
-          fi
-
-          FINAL_CODE="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 15 -L "$URL" || echo 000)"
-          case "$FINAL_CODE" in
-            2*|3*)
-              echo "skip=false" >> "$GITHUB_OUTPUT"
-              ;;
-            *)
-              echo "skip=true" >> "$GITHUB_OUTPUT"
-              echo "skip_reason=HTTP $FINAL_CODE from $URL" >> "$GITHUB_OUTPUT"
-              echo "::warning::Skipping dashboard Lighthouse — $URL returned HTTP $FINAL_CODE."
-              ;;
-          esac
+      - name: Probe reachability
+        id: probe
+        uses: ./.github/actions/probe-url
+        with:
+          url: ${{ steps.url.outputs.url }}
 
       - name: Skip notice
-        if: steps.url.outputs.skip == 'true'
+        if: steps.probe.outputs.skip == 'true'
         run: |
-          echo "::notice::Dashboard Lighthouse skipped: ${{ steps.url.outputs.skip_reason }}"
+          echo "::notice::Dashboard Lighthouse skipped: ${{ steps.probe.outputs.skip_reason }}"
           echo "Re-run with a healthy workflow_dispatch URL or fix DNS for app.gateflow.app."
 
       - name: Install @lhci/cli
-        if: steps.url.outputs.skip != 'true'
+        if: steps.probe.outputs.skip != 'true'
         run: npm install -g @lhci/cli@${{ env.LHCI_VERSION }}
 
       - name: Install Chrome
-        if: steps.url.outputs.skip != 'true'
+        if: steps.probe.outputs.skip != 'true'
         uses: browser-actions/setup-chrome@4f8e94349a351df0f048634f25fec36c3c91eded # v2.1.1
 
       - name: Verify Chrome installation
-        if: steps.url.outputs.skip != 'true'
+        if: steps.probe.outputs.skip != 'true'
         run: |
           which google-chrome || which chrome || which chromium || which chromium-browser || {
             echo "❌ Chrome not found in PATH"
@@ -431,7 +364,7 @@ jobs:
           }
 
       - name: Run Lighthouse — Desktop
-        if: steps.url.outputs.skip != 'true'
+        if: steps.probe.outputs.skip != 'true'
         run: |
           set +e
           lhci autorun \
@@ -454,7 +387,7 @@ jobs:
           exit $EXIT_CODE
 
       - name: Print score summary
-        if: always() && steps.url.outputs.skip != 'true'
+        if: always() && steps.probe.outputs.skip != 'true'
         run: |
           node - <<'EOF'
           const fs = require('fs'), path = require('path');
@@ -474,7 +407,7 @@ jobs:
           EOF
 
       - name: Upload Dashboard reports
-        if: always() && steps.url.outputs.skip != 'true'
+        if: always() && steps.probe.outputs.skip != 'true'
         uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.0
         with:
           name: lighthouse-dashboard-${{ github.run_number }}

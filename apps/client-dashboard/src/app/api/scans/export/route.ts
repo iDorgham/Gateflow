@@ -99,6 +99,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const where = {
       qrCode: {
         organizationId: orgId,
+        deletedAt: null,
         ...(projectFilter ? { projectId: projectFilter } : {}),
         ...(qFilter ? { code: { contains: qFilter } } : {}),
       },

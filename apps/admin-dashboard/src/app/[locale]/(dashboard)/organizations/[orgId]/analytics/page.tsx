@@ -29,11 +29,11 @@ import { PlanDistributionChart } from '@/components/analytics/PlanDistributionCh
 export const metadata = { title: 'Analytics' };
 
 export default async function AnalyticsPage(props: {
-  params: Promise<{ locale: Locale }>;
+  params: Promise<{ locale: Locale; orgId: string }>;
 }) {
   const params = await props.params;
 
-  const { locale } = params;
+  const { locale, orgId } = params;
 
   await requireAdmin(locale);
   const { t } = await getTranslation(locale, 'admin');
@@ -41,6 +41,7 @@ export default async function AnalyticsPage(props: {
   const now = new Date();
   const thirtyDaysAgo = new Date(now.getTime() - 30 * 86_400_000);
   const sevenDaysAgo = new Date(now.getTime() - 7 * 86_400_000);
+  const orgGateScope = { organizationId: orgId, deletedAt: null as null };
 
   // ── 14-day daily scan trend ────────────────────────────────────────────────
   const scanTrendData = await Promise.all(
@@ -51,7 +52,10 @@ export default async function AnalyticsPage(props: {
       const dayEnd = new Date(day);
       dayEnd.setHours(23, 59, 59, 999);
       const count = await prisma.scanLog.count({
-        where: { scannedAt: { gte: day, lte: dayEnd } },
+        where: {
+          scannedAt: { gte: day, lte: dayEnd },
+          gate: orgGateScope,
+        },
       });
       return {
         label: day.toLocaleDateString(locale, {
@@ -63,8 +67,9 @@ export default async function AnalyticsPage(props: {
     })
   );
 
-  // ── Org growth (30 days) — cumulative total ────────────────────────────────
+  // ── Org growth (30 days) — cumulative total for this tenant ────────────────
   const orgsAll = await prisma.organization.findMany({
+    where: { id: orgId, deletedAt: null },
     select: { createdAt: true },
     orderBy: { createdAt: 'asc' },
   });
@@ -90,7 +95,7 @@ export default async function AnalyticsPage(props: {
   // ── Status breakdown (30 days) ─────────────────────────────────────────────
   const statusGroups = (await prisma.scanLog.groupBy({
     by: ['status'],
-    where: { scannedAt: { gte: thirtyDaysAgo } },
+    where: { scannedAt: { gte: thirtyDaysAgo }, gate: orgGateScope },
     _count: { id: true },
   })) as { status: string; _count: { id: number } }[];
   const statusMap = Object.fromEntries(
@@ -104,10 +109,10 @@ export default async function AnalyticsPage(props: {
     0
   );
 
-  // ── Top orgs by scan volume (7 days) ──────────────────────────────────────
+  // ── Top gates by scan volume (7 days) for this org ─────────────────────────
   const recentGateScans = (await prisma.scanLog.groupBy({
     by: ['gateId'],
-    where: { scannedAt: { gte: sevenDaysAgo } },
+    where: { scannedAt: { gte: sevenDaysAgo }, gate: orgGateScope },
     _count: { id: true },
     orderBy: { _count: { id: 'desc' } },
     take: 50,
@@ -116,7 +121,7 @@ export default async function AnalyticsPage(props: {
     (g: { gateId: string; _count: { id: number } }) => g.gateId
   );
   const gateOrgs = await prisma.gate.findMany({
-    where: { id: { in: gateIds } },
+    where: { id: { in: gateIds }, organizationId: orgId, deletedAt: null },
     select: {
       id: true,
       organizationId: true,
@@ -148,10 +153,10 @@ export default async function AnalyticsPage(props: {
     .slice(0, 8);
   const maxOrgCount = topOrgs[0]?.count ?? 1;
 
-  // ── Plan distribution ──────────────────────────────────────────────────────
+  // ── Plan distribution (this org) ───────────────────────────────────────────
   const planGroups = (await prisma.organization.groupBy({
     by: ['plan'],
-    where: { deletedAt: null },
+    where: { id: orgId, deletedAt: null },
     _count: { id: true },
   })) as { plan: string | null; _count: { id: number } }[];
   const planMap = Object.fromEntries(
@@ -168,7 +173,7 @@ export default async function AnalyticsPage(props: {
   // ── QR type distribution ────────────────────────────────────────────────────
   const qrTypeGroups = (await prisma.qRCode.groupBy({
     by: ['type'],
-    where: { deletedAt: null },
+    where: { organizationId: orgId, deletedAt: null },
     _count: { id: true },
   })) as { type: string; _count: { id: number } }[];
   const qrTypeMap = Object.fromEntries(
@@ -183,11 +188,11 @@ export default async function AnalyticsPage(props: {
       0
     ) || 1;
 
-  // ── KPI summary ────────────────────────────────────────────────────────────
+  // ── KPI summary (tenant-scoped) ────────────────────────────────────────────
   const [totalOrgsCount, totalUsersCount, totalQRCount] = await Promise.all([
-    prisma.organization.count({ where: { deletedAt: null } }),
-    prisma.user.count({ where: { deletedAt: null } }),
-    prisma.qRCode.count({ where: { deletedAt: null } }),
+    prisma.organization.count({ where: { id: orgId, deletedAt: null } }),
+    prisma.user.count({ where: { organizationId: orgId, deletedAt: null } }),
+    prisma.qRCode.count({ where: { organizationId: orgId, deletedAt: null } }),
   ]);
 
   const statusInfo: Record<
