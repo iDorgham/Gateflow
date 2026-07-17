@@ -1,0 +1,150 @@
+apps/client-dashboard/src/app/api/scans/bulk/route.ts
+  s_edf5df462eee0c::t_5e99338ce53e4c 176-179
+  s_edf5df462eee0c::t_457ea4ef02b39f 52-56,66-68,79-82,103-123
+apps/admin-dashboard/src/app/api/cms/pages/public/[slug]/route.ts
+  s_edf5df462eee0c::t_72188b37e9b723 28
+apps/admin-dashboard/src/app/api/cms/pages/[slug]/route.ts
+  s_edf5df462eee0c::t_8e0dec23dede4e 81
+packages/db/src/tenant.ts
+  s_edf5df462eee0c::t_22862a9416bdc4 122
+  s_edf5df462eee0c::t_71873d39971035 137
+  s_edf5df462eee0c::t_1007089bab3ca6 85
+  s_edf5df462eee0c::t_69497153927107 63
+  s_edf5df462eee0c::t_ffd6b24c66175e 148
+  s_edf5df462eee0c::t_5e42e01e2d36aa 159
+  s_edf5df462eee0c::t_3c5e9c13cd1a1d 174
+  s_edf5df462eee0c::t_761f5d6d09a0af 45,50,55
+  s_edf5df462eee0c::t_781c9c82ed1f25 111
+  s_edf5df462eee0c::t_df55d81b12e5a5 74
+  s_edf5df462eee0c::t_a4c3bf1b1876e3 100
+apps/admin-dashboard/src/app/api/analytics/overview/route.ts
+  s_edf5df462eee0c::t_27d826b331375a 24-26,34
+apps/client-dashboard/src/app/api/scans/export/route.ts
+  s_edf5df462eee0c::t_898d8510e8e7cf 139,161-173
+  s_edf5df462eee0c::t_55c276d6add90b 160
+apps/admin-dashboard/src/components/cms/LandingPageList.tsx
+  s_edf5df462eee0c::t_2a38aead117291 35
+apps/admin-dashboard/src/app/api/admin/finance/route.ts
+  s_edf5df462eee0c::t_b6744f8829669a 57,61-63
+  s_edf5df462eee0c::t_7958ba5af2f8f8 26,44-54
+  s_edf5df462eee0c::t_e6c216bd686828 16-19,64-65,68-74,96-112
+apps/admin-dashboard/src/app/api/tasks/bots/landing-page/route.ts
+  s_edf5df462eee0c::t_0ed019051f0a8a 69-76,79-80,88-96
+apps/admin-dashboard/src/app/api/crm/generate-draft/route.ts
+  s_edf5df462eee0c::t_4153806568ba0c 73
+apps/client-dashboard/src/app/api/gates/route.ts
+  s_edf5df462eee0c::t_ef027a549d3a06 44,62-65
+apps/client-dashboard/src/components/dashboard/dashboard-overview.tsx
+  s_edf5df462eee0c::t_ec65fb36b00af7 111
+apps/admin-dashboard/src/app/api/tasks/bots/blog-writer/route.ts
+  s_edf5df462eee0c::t_2398469f4bc99b 80-81
+apps/client-dashboard/src/app/api/analytics/export/route.ts
+  s_edf5df462eee0c::t_e1e985ea256305 164,172-179
+  s_edf5df462eee0c::t_2abf3606ea3141 171
+apps/admin-dashboard/src/app/[locale]/(dashboard)/organizations/page.tsx
+  s_edf5df462eee0c::t_c43d21b5f5bd79 53,72-80
+  s_edf5df462eee0c::t_b85f20003707c4 85,89,92,95
+apps/client-dashboard/src/app/api/analytics/export-pdf/route.ts
+  s_edf5df462eee0c::t_f99746cb235d21 106,112
+apps/admin-dashboard/src/app/api/support/tickets/[id]/triage/route.ts
+  s_edf5df462eee0c::t_8fda824d7b81ec 92-93
+apps/admin-dashboard/src/lib/notifications.ts
+  s_edf5df462eee0c::t_6c6f1713bbc76d 18,22-26,28,36-38,48,59,62,64,73-74
+  s_edf5df462eee0c::t_88933e926730d2 5,76
+apps/client-dashboard/src/app/api/gates/assigned/route.ts
+  s_edf5df462eee0c::t_40721dc15ac41f 76-79
+  s_edf5df462eee0c::t_7db1a84a8754b7 55
+  s_edf5df462eee0c::t_6f597eaa36be50 12-15,23-26,81-83,113-116
+apps/client-dashboard/src/app/api/ai/assistant/route.ts
+  s_edf5df462eee0c::t_58b2bcb5e16170 598-612,619-621
+apps/admin-dashboard/src/app/[locale]/(dashboard)/organizations/[orgId]/finance/page.tsx
+  s_edf5df462eee0c::t_eeb3cafe14a980 59,63,67,70
+  s_edf5df462eee0c::t_79798409ecb094 28,46-56
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/gates/page.tsx
+  s_edf5df462eee0c::t_c21a6d72f06154 36,55-58
+apps/admin-dashboard/src/components/branding/BrandingStyles.tsx
+  s_edf5df462eee0c::t_05a1a4dca3f64e 5-6,9,11-13
+apps/admin-dashboard/src/app/api/cms/blog/[slug]/route.ts
+  s_edf5df462eee0c::t_52be2f6f27a887 36
+  s_edf5df462eee0c::t_e3729bc5b46901 31,45-50
+  s_edf5df462eee0c::t_fc762b6d24f286 3
+  s_edf5df462eee0c::t_41516f53f4e52d 76-84
+apps/client-dashboard/src/app/api/analytics/visitor-type/route.ts
+  s_edf5df462eee0c::t_ea7a861d9890ac 59,63
+  s_edf5df462eee0c::t_6513afb68bba1d 9-14,23-26,38-41,44-47,50-53,70-72,80-85,90-93
+apps/admin-dashboard/src/app/api/admin/ai/assistant/route.ts
+  s_edf5df462eee0c::t_0b4415ee7e9c7f 122,140-150
+apps/client-dashboard/src/app/api/qrcodes/validate/route.ts
+  s_edf5df462eee0c::t_a3ee92991f6c34 548
+apps/admin-dashboard/src/app/api/organizations/[orgId]/style/save/route.ts
+  s_edf5df462eee0c::t_f3b925f6daf4e9 3,19-27,29-35,37-42,47-53,55-56,60
+apps/client-dashboard/src/app/api/analytics/scan-outcome/route.ts
+  s_edf5df462eee0c::t_20cc84e4ff55f8 59,63
+  s_edf5df462eee0c::t_ae7dc619fed47f 9-14,23-26,38-41,44-47,50-53,73-76
+apps/admin-dashboard/src/app/api/audit/logs/route.ts
+  s_edf5df462eee0c::t_68beadb33e7410 29
+apps/admin-dashboard/src/app/api/cms/blog/route.ts
+  s_edf5df462eee0c::t_d1aeea6720f4e4 27,32
+  s_edf5df462eee0c::t_36a69b69c44721 51-58
+  s_edf5df462eee0c::t_457eee522e395e 70
+  s_edf5df462eee0c::t_8bcf7f7e7d43f6 59-61,73,114
+apps/admin-dashboard/src/app/api/admin/reset-tenant/route.ts
+  s_edf5df462eee0c::t_a62e154c9b4daf 72
+  s_edf5df462eee0c::t_a721c51deb824a 84-87
+apps/admin-dashboard/src/app/api/admin/analytics/route.ts
+  s_edf5df462eee0c::t_4b25431ea8b7b5 55,59-63
+  s_edf5df462eee0c::t_8ee32b8861cbbb 75
+  s_edf5df462eee0c::t_d87eac52a4786a 9-12,26-32,37-40,45-51,64-65,68,74,76-78,80-89,92-98,101-108,110-112,114-120
+apps/admin-dashboard/src/app/[locale]/(dashboard)/settings/style-hub/page.tsx
+  s_edf5df462eee0c::t_ace51a4fb66a7a 25-45,50-51
+apps/admin-dashboard/src/app/api/cms/generate-blog/route.ts
+  s_edf5df462eee0c::t_e2fe842572d219 69
+apps/client-dashboard/src/app/[locale]/page.tsx
+  s_edf5df462eee0c::t_98b36c4062f62d 39
+apps/admin-dashboard/src/app/api/tasks/generate/route.ts
+  s_edf5df462eee0c::t_c85d9347ab9422 121
+apps/admin-dashboard/src/app/[locale]/(dashboard)/organizations/[orgId]/cms/pages/page.tsx
+  s_edf5df462eee0c::t_93404f7d6e71a0 22-29,32-35
+  s_edf5df462eee0c::t_3a3f9a375289ae 10,19
+apps/admin-dashboard/src/lib/bot-reactor.ts
+  s_edf5df462eee0c::t_0310811668367a 81
+  s_edf5df462eee0c::t_573b5a01f01d40 143,145-150
+  s_edf5df462eee0c::t_92dd2934f54aa6 78,85,92,96,100-102,115-117,151-153,156-163
+apps/client-dashboard/src/app/api/tasks/route.ts
+  s_edf5df462eee0c::t_4fa06948818740 52-64,72,74-76
+  s_edf5df462eee0c::t_ed8bc43382bf82 18-19,40-41,46-51,80-91
+apps/client-dashboard/src/app/api/gates/assignments/route.ts
+  s_edf5df462eee0c::t_96458f40f13354 47,59-67
+  s_edf5df462eee0c::t_2a3439118d7cea 58
+  s_edf5df462eee0c::t_88937e3c3f62f3 20-23,26-29,32-33,37-41,83-86,94-97,110-113,116-119,126-129,135-139,153-156,168-172,210-213,216-219,235-238,241-244,251-254,260-264,282-285,296-299
+apps/admin-dashboard/src/app/[locale]/(dashboard)/organizations/[orgId]/analytics/page.tsx
+  s_edf5df462eee0c::t_68fab7eda979a6 169,173
+  s_edf5df462eee0c::t_4015eeb8d8bd89 152,156
+  s_edf5df462eee0c::t_cd2667bde8edef 108,114
+  s_edf5df462eee0c::t_6c26655e7196e8 91,95
+apps/admin-dashboard/src/app/api/support/tickets/route.ts
+  s_edf5df462eee0c::t_239763bf8f066c 9
+apps/client-dashboard/src/app/api/analytics/operators/route.ts
+  s_edf5df462eee0c::t_825d69c690ca1e 93,99
+  s_edf5df462eee0c::t_cfaeb3d5f8c23c 19-22,35-38,51-54,69-74,110-113,128-131
+packages/db/package.json
+  s_edf5df462eee0c::t_432e35bf181e77 35
+pnpm-lock.yaml
+  s_edf5df462eee0c::t_756f7f4936af7d 1076-1077,6018,6021,6023
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "c6a4664cfbca30e7f5fd5529d344a283a891b172",
+  "prompts": {},
+  "sessions": {
+    "s_edf5df462eee0c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "19b31a1d-d3ca-40fd-8988-e714bc3b44d9",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
