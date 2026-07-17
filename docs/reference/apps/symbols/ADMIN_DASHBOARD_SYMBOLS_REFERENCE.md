@@ -459,7 +459,7 @@ Auto-generated symbol index for planning and impact analysis.
 
 - Exports (1): `BotManager`
 
-## `apps/admin-dashboard/src/components/tasks/TaskHub.tsx`
+## `apps/admin-dashboard/src/components/tasks/task-hub.tsx`
 
 - Exports (1): `TaskHub`
 
