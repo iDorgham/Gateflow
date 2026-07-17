@@ -1,0 +1,31 @@
+packages/db/src/serialization-retry.ts
+  s_1ce240c2eda30d::t_ae32be00b49451 30-31,34,38,45
+  s_1ce240c2eda30d::t_97a89286f7453c 16-18,21
+packages/db/src/board.ts
+  s_1ce240c2eda30d::t_145ef08d289417 17,23-24
+  s_edf5df462eee0c::t_68496648472207 16
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "80b51977fd3192ffef17c5bb726b15f09a14ad9e",
+  "prompts": {},
+  "sessions": {
+    "s_1ce240c2eda30d": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "246dfd2b-6899-4c56-a9c9-d0cb7bd97d78",
+        "model": "grok-4.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_edf5df462eee0c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "19b31a1d-d3ca-40fd-8988-e714bc3b44d9",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
