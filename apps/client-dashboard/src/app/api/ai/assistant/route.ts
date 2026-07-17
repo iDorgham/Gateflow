@@ -597,18 +597,28 @@ Rules:
             log('createTask', { title });
             // Client-dashboard tasks aren't organized into boards by the user; lazily
             // provision a single default board per org to satisfy Task's required boardId/department.
-            let board = await prisma.taskBoard.findFirst({
-              where: { organizationId: claims.orgId, department: 'SUPPORT' },
-            });
-            if (!board) {
-              board = await prisma.taskBoard.create({
-                data: {
-                  organizationId: claims.orgId,
-                  name: 'General Tasks',
-                  department: 'SUPPORT',
-                },
-              });
-            }
+            // Wrapped in a serializable transaction to close (not eliminate — TaskBoard
+            // has no unique(organizationId, department) constraint) the race where two
+            // concurrent first-time requests both create a "General Tasks" board.
+            const board = await prisma.$transaction(
+              async (tx) => {
+                const existing = await tx.taskBoard.findFirst({
+                  where: {
+                    organizationId: claims.orgId,
+                    department: 'SUPPORT',
+                  },
+                });
+                if (existing) return existing;
+                return tx.taskBoard.create({
+                  data: {
+                    organizationId: claims.orgId,
+                    name: 'General Tasks',
+                    department: 'SUPPORT',
+                  },
+                });
+              },
+              { isolationLevel: 'Serializable' }
+            );
 
             const task = await prisma.task.create({
               data: {

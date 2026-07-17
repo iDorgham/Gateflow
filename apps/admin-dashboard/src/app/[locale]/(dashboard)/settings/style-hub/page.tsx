@@ -2,6 +2,7 @@ import { requireAdmin } from '@/lib/admin-auth';
 import { Locale } from '@/lib/i18n/i18n-config';
 import { prisma } from '@gate-access/db';
 import { StyleHubClient } from '@/components/settings/StyleHubClient';
+import { OVERRIDABLE_TOKENS } from '@/lib/branding-css-generator';
 import { notFound } from 'next/navigation';
 
 export const metadata = { title: 'Style Hub | Design Orchestration' };
@@ -33,9 +34,13 @@ export default async function StyleHubPage(props: {
 
   const tokenOverrides =
     (branding?.tokenOverrides as Record<string, string> | undefined) ?? {};
-  const initialVariables = Object.entries(tokenOverrides).map(
-    ([key, value]) => ({ key, value })
-  );
+  // Seed every overridable token, not just ones already customized —
+  // StyleHubClient.updateVariable() only updates existing entries and
+  // can't append new ones, so a missing entry would silently drop edits.
+  const initialVariables = OVERRIDABLE_TOKENS.map((key) => ({
+    key,
+    value: tokenOverrides[key] ?? '',
+  }));
   const formattedSnapshots = snapshots.map((s: any) => ({
     id: s.id,
     name: `Snapshot v${s.version}`,

@@ -16,49 +16,56 @@ export async function POST(
   try {
     const { variables } = await req.json();
 
-    // 1. Transaction to update branding token overrides and create a versioned snapshot
-    const result = await prisma.$transaction(async (tx) => {
-      const current = await (tx as any).organizationBranding.findUnique({
-        where: { organizationId: orgId },
-      });
+    // 1. Transaction to update branding token overrides and create a versioned snapshot.
+    // Serializable isolation so two concurrent saves can't both read the same
+    // pre-update `current` and silently overwrite each other's token changes —
+    // Postgres aborts the losing transaction with a retryable serialization error
+    // instead of a lost update / duplicate snapshot version.
+    const result = await prisma.$transaction(
+      async (tx) => {
+        const current = await (tx as any).organizationBranding.findUnique({
+          where: { organizationId: orgId },
+        });
 
-      const tokenOverrides = {
-        ...((current?.tokenOverrides as Record<string, string>) ?? {}),
-      };
-      for (const v of variables) {
-        tokenOverrides[v.key] = v.value;
-      }
+        const tokenOverrides = {
+          ...((current?.tokenOverrides as Record<string, string>) ?? {}),
+        };
+        for (const v of variables) {
+          tokenOverrides[v.key] = v.value;
+        }
 
-      if (current) {
-        // Snapshot the pre-update state
-        await (tx as any).brandingSnapshot.create({
-          data: {
+        if (current) {
+          // Snapshot the pre-update state
+          await (tx as any).brandingSnapshot.create({
+            data: {
+              organizationId: orgId,
+              version: current.version,
+              tokenOverrides: current.tokenOverrides,
+              fontFamily: current.fontFamily,
+              fontFamilyArabic: current.fontFamilyArabic,
+              logoUrl: current.logoUrl,
+              createdById: 'SYSTEM', // TODO: Get actual user ID
+            },
+          });
+        }
+
+        const branding = await (tx as any).organizationBranding.upsert({
+          where: { organizationId: orgId },
+          update: {
+            tokenOverrides,
+            version: { increment: 1 },
+          },
+          create: {
             organizationId: orgId,
-            version: current.version,
-            tokenOverrides: current.tokenOverrides,
-            fontFamily: current.fontFamily,
-            fontFamilyArabic: current.fontFamilyArabic,
-            logoUrl: current.logoUrl,
-            createdById: 'SYSTEM', // TODO: Get actual user ID
+            tokenOverrides,
+            version: 1,
           },
         });
-      }
 
-      const branding = await (tx as any).organizationBranding.upsert({
-        where: { organizationId: orgId },
-        update: {
-          tokenOverrides,
-          version: { increment: 1 },
-        },
-        create: {
-          organizationId: orgId,
-          tokenOverrides,
-          version: 1,
-        },
-      });
-
-      return branding;
-    });
+        return branding;
+      },
+      { isolationLevel: 'Serializable' }
+    );
 
     return NextResponse.json(result);
   } catch (error) {
