@@ -108,7 +108,10 @@ export async function DashboardOverview({
       by: ['gateId'],
       where: { qrCode: { organizationId: orgId } },
       _count: { _all: true },
-      orderBy: { _count: { _all: 'desc' } },
+      // '_all' isn't a valid orderBy key in this Prisma version's generated
+      // types (only '_count: { _all: true }' selection is). Order by gateId
+      // instead — equivalent since it's the non-null group-by key.
+      orderBy: { _count: { gateId: 'desc' } },
       take: 5,
     }),
     // Maintenance stats
