@@ -1,0 +1,19 @@
+packages/db/src/board.ts
+  s_e38bf3726b6c9b::t_0abb235dd57941 1,15,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "22725f016943152bb8099968c85d493f0232369f",
+  "prompts": {},
+  "sessions": {
+    "s_e38bf3726b6c9b": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "b58107bb-7048-4d5a-93b4-181e0c96ae1a",
+        "model": "unknown"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
