@@ -1,10 +1,10 @@
 import { notFound } from 'next/navigation';
 import { getLandingPage } from '@/lib/cms';
 import { Metadata } from 'next';
-import { Hero } from '@/components/sections/hero';
-import { FeaturesSection } from '@/components/sections/features-section';
-import { BottomCTA } from '@/components/sections/bottom-cta';
-import { SocialProof } from '@/components/sections/social-proof';
+import { HeroCmsBlock } from '@/components/cms-blocks/hero-block';
+import { FeaturesCmsBlock } from '@/components/cms-blocks/features-block';
+import { CtaCmsBlock } from '@/components/cms-blocks/cta-block';
+import { SocialProofCmsBlock } from '@/components/cms-blocks/social-proof-block';
 import type { Locale } from '@/i18n-config';
 
 export async function generateMetadata(props: {
@@ -22,7 +22,7 @@ export async function generateMetadata(props: {
       canonical: `/${params.locale}/${params.slug}`,
       languages: {
         en: `/en/${params.slug}`,
-        ar: `/ar/${params.slug}`,
+        ar: `/ar-EG/${params.slug}`,
       },
     },
   };
@@ -45,20 +45,37 @@ export default async function LandingPage(props: {
 
         switch (type) {
           case 'HERO':
-            return <Hero key={id} locale={params.locale as Locale} />;
+            return (
+              <HeroCmsBlock
+                key={id}
+                content={content}
+                locale={params.locale as Locale}
+              />
+            );
           case 'FEATURES':
             return (
-              <FeaturesSection
+              <FeaturesCmsBlock
                 key={id}
-                sectionTitle={content.title}
-                featuresTitle={content.title}
-                features={content.features}
+                content={content}
+                locale={params.locale as Locale}
               />
             );
           case 'CTA':
-            return <BottomCTA key={id} locale={params.locale as Locale} />;
+            return (
+              <CtaCmsBlock
+                key={id}
+                content={content}
+                locale={params.locale as Locale}
+              />
+            );
           case 'SOCIAL_PROOF':
-            return <SocialProof key={id} locale={params.locale as Locale} />;
+            return (
+              <SocialProofCmsBlock
+                key={id}
+                content={content}
+                locale={params.locale as Locale}
+              />
+            );
           default:
             return (
               <div key={id} className="py-20 text-center text-slate-400">
