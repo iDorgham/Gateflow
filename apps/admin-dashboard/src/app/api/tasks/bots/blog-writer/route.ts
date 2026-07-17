@@ -96,6 +96,25 @@ export async function POST(req: Request) {
       },
     });
 
+    // Lazily provision a default MARKETING board per org — there's no
+    // board-management UI, so no real board is guaranteed to exist.
+    const board = await prisma.$transaction(
+      async (tx) => {
+        const existing = await tx.taskBoard.findFirst({
+          where: { organizationId: targetOrgId, department: 'MARKETING' },
+        });
+        if (existing) return existing;
+        return tx.taskBoard.create({
+          data: {
+            organizationId: targetOrgId,
+            name: 'Marketing',
+            department: 'MARKETING',
+          },
+        });
+      },
+      { isolationLevel: 'Serializable' }
+    );
+
     // 3. Create the Task for Review
     const task = await prisma.task.create({
       data: {
@@ -105,7 +124,7 @@ export async function POST(req: Request) {
         priority: 'MEDIUM',
         department: 'MARKETING',
         organizationId: targetOrgId,
-        boardId: 'marketing-board', // Assuming a board exists or handling dynamically
+        boardId: board.id,
         createdById: adminUser.id,
         linkedType: 'BLOG_POST',
         linkedId: blogPost.id,

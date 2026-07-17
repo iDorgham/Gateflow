@@ -62,17 +62,20 @@ export async function POST(req: Request) {
       action: 'BLOG_DRAFT_GENERATED',
     });
 
-    // Log AI Action (HiTL)
-    await prisma.aiActionLog.create({
-      data: {
-        organizationId: orgId || 'GLOBAL',
-        actionType: 'BLOG_DRAFT_GENERATED',
-        status: 'PENDING',
-        prompt: `Title: ${title}, Topic: ${topic}`,
-        result: 'Full draft ready for review.',
-        metadata: JSON.stringify(object),
-      },
-    });
+    // Log AI Action (HiTL) — skip for global (org-less) drafts since AiActionLog.organizationId
+    // is a required FK and no 'GLOBAL' Organization row exists to satisfy it.
+    if (orgId) {
+      await prisma.aiActionLog.create({
+        data: {
+          organizationId: orgId,
+          actionType: 'BLOG_DRAFT_GENERATED',
+          status: 'PENDING',
+          prompt: `Title: ${title}, Topic: ${topic}`,
+          result: 'Full draft ready for review.',
+          metadata: JSON.stringify(object),
+        },
+      });
+    }
 
     return NextResponse.json({ success: true, draft: object });
   } catch (error) {

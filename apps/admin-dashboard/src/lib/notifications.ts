@@ -40,22 +40,23 @@ export const notifications = {
   },
 
   /**
-   * Mark a notification as read
+   * Mark a notification as read (scoped to the caller's organization)
    */
-  async markAsRead(id: string) {
-    return prisma.notification.update({
-      where: { id },
+  async markAsRead(id: string, organizationId: string) {
+    return prisma.notification.updateMany({
+      where: { id, organizationId },
       data: { status: 'READ' },
     });
   },
 
   /**
-   * Get unread notifications for a user
+   * Get unread notifications for a user within their organization
    */
-  async getUnread(userId: string) {
+  async getUnread(userId: string, organizationId: string) {
     return prisma.notification.findMany({
       where: {
         userId,
+        organizationId,
         status: 'UNREAD',
       },
       orderBy: {
@@ -66,11 +67,11 @@ export const notifications = {
   },
 
   /**
-   * Mark all notifications as read for a user
+   * Mark all notifications as read for a user within their organization
    */
-  async markAllAsRead(userId: string) {
+  async markAllAsRead(userId: string, organizationId: string) {
     return prisma.notification.updateMany({
-      where: { userId, status: 'UNREAD' },
+      where: { userId, organizationId, status: 'UNREAD' },
       data: { status: 'READ' },
     });
   },

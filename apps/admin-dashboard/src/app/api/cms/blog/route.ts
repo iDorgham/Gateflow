@@ -107,17 +107,20 @@ export async function POST(req: Request) {
       },
     });
 
-    // Log AI Action
-    await prisma.aiActionLog.create({
-      data: {
-        organizationId: updated.organizationId || 'GLOBAL',
-        actionType: 'BLOG_POST_PUBLISHED',
-        status: 'CONFIRMED',
-        prompt: `Publish request for post ID: ${id}`,
-        result: `New status: ${status}`,
-        metadata: JSON.stringify({ slug: updated.slugEn }),
-      },
-    });
+    // Log AI Action — skip for global (org-less) posts since AiActionLog.organizationId
+    // is a required FK and no 'GLOBAL' Organization row exists to satisfy it.
+    if (updated.organizationId) {
+      await prisma.aiActionLog.create({
+        data: {
+          organizationId: updated.organizationId,
+          actionType: 'BLOG_POST_PUBLISHED',
+          status: 'CONFIRMED',
+          prompt: `Publish request for post ID: ${id}`,
+          result: `New status: ${status}`,
+          metadata: JSON.stringify({ slug: updated.slugEn }),
+        },
+      });
+    }
 
     return NextResponse.json({ success: true, post: updated });
   } catch (error) {

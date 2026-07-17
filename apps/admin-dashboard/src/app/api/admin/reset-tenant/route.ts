@@ -144,7 +144,7 @@ export async function POST(request: NextRequest) {
             qrCodesSoftDeleted: stats[1].count,
             unitsSoftDeleted: stats[2].count,
             contactsSoftDeleted: stats[3].count,
-            incidentsSoftDeleted: stats[4].count,
+            incidentsRemoved: stats[4].count,
             reSeeded: seededResults ? seededResults.unitsCreated : 0,
           },
         },

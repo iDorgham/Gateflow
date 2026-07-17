@@ -67,11 +67,33 @@ export async function POST(req: Request) {
 
     // 2. Create the Draft Landing Page
     // LandingPage stores content as ordered LandingPageSection rows rather
-    // than a single JSON blob — map each mock block to a section.
+    // than a single JSON blob — map each mock block to a section using the
+    // flat { headline, body, ctaText, ctaLink } shape PageBuilder.tsx expects
+    // uniformly across all section types.
     const SECTION_TYPE_MAP: Record<string, 'HERO' | 'FEATURES' | 'CTA'> = {
       hero: 'HERO',
       features: 'FEATURES',
       cta: 'CTA',
+    };
+
+    type MockBlock = (typeof mockResult.blocks)[number];
+    const toSectionContent = (block: MockBlock) => {
+      const c = block.content as Record<string, unknown>;
+      const body =
+        typeof c.subtitleEn === 'string'
+          ? c.subtitleEn
+          : Array.isArray(c.features)
+            ? (c.features as { descriptionEn?: string }[])
+                .map((f) => f.descriptionEn)
+                .filter(Boolean)
+                .join(' ')
+            : '';
+      return {
+        headline: typeof c.titleEn === 'string' ? c.titleEn : '',
+        body,
+        ctaText: typeof c.buttonTextEn === 'string' ? c.buttonTextEn : '',
+        ctaLink: '#',
+      };
     };
 
     const landingPage = await prisma.landingPage.create({
@@ -87,15 +109,38 @@ export async function POST(req: Request) {
         organizationId: targetOrgId,
         createdById: adminUser.id,
         sections: {
-          create: mockResult.blocks.map((block, i) => ({
-            type: SECTION_TYPE_MAP[block.type],
-            order: i,
-            contentEn: block.content,
-            contentAr: block.content,
-          })),
+          create: mockResult.blocks
+            .filter((block) => SECTION_TYPE_MAP[block.type])
+            .map((block, i) => ({
+              type: SECTION_TYPE_MAP[block.type],
+              order: i,
+              contentEn: toSectionContent(block),
+              contentAr: toSectionContent(block),
+              aiGenerated: true,
+            })),
         },
       },
+      include: { sections: true },
     });
+
+    // Lazily provision a default MARKETING board per org — there's no
+    // board-management UI, so no real board is guaranteed to exist.
+    const board = await prisma.$transaction(
+      async (tx) => {
+        const existing = await tx.taskBoard.findFirst({
+          where: { organizationId: targetOrgId, department: 'MARKETING' },
+        });
+        if (existing) return existing;
+        return tx.taskBoard.create({
+          data: {
+            organizationId: targetOrgId,
+            name: 'Marketing',
+            department: 'MARKETING',
+          },
+        });
+      },
+      { isolationLevel: 'Serializable' }
+    );
 
     // 3. Create the Task for Review
     const task = await prisma.task.create({
@@ -106,7 +151,7 @@ export async function POST(req: Request) {
         priority: 'HIGH',
         department: 'MARKETING',
         organizationId: targetOrgId,
-        boardId: 'marketing-board',
+        boardId: board.id,
         createdById: adminUser.id,
         linkedType: 'LANDING_PAGE',
         linkedId: landingPage.id,

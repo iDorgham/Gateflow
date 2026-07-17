@@ -207,7 +207,7 @@ export function BlogWriterBot() {
                 <div className="flex-1 p-6 space-y-6 overflow-y-auto custom-scrollbar">
                   <div className="space-y-2">
                     <h3 className="text-xl font-black uppercase tracking-tight leading-tight">
-                      {generatedDraft.draft.title}
+                      {generatedDraft.draft.titleEn}
                     </h3>
                     <div className="flex flex-wrap gap-2">
                       {

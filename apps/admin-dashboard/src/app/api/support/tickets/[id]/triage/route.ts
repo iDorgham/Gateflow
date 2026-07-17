@@ -86,16 +86,19 @@ export async function POST(
       },
     });
 
-    // Log AI action
-    await prisma.aiActionLog.create({
-      data: {
-        organizationId: ticket.organizationId || 'GLOBAL',
-        actionType: 'SUPPORT_TICKET_TRIAGED',
-        prompt: firstMessage,
-        result: JSON.stringify(result.object),
-        status: 'CONFIRMED', // Triage is automatic in this flow
-      },
-    });
+    // Log AI action — skip for general-inquiry tickets (organizationId: null) since
+    // AiActionLog.organizationId is a required FK and no 'GLOBAL' Organization row exists.
+    if (ticket.organizationId) {
+      await prisma.aiActionLog.create({
+        data: {
+          organizationId: ticket.organizationId,
+          actionType: 'SUPPORT_TICKET_TRIAGED',
+          prompt: firstMessage,
+          result: JSON.stringify(result.object),
+          status: 'CONFIRMED', // Triage is automatic in this flow
+        },
+      });
+    }
 
     return NextResponse.json({
       success: true,

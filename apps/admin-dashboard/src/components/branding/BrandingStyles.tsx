@@ -2,15 +2,19 @@ import { prisma } from '@gate-access/db';
 import { generateBrandingCss } from '@/lib/branding-css-generator';
 
 export async function BrandingStyles({ orgId }: { orgId: string }) {
-  const branding = await (prisma as any).organizationBranding.findUnique({
-    where: { organizationId: orgId },
+  const branding = await (prisma as any).organizationBranding.findFirst({
+    where: { organizationId: orgId, isActive: true },
   });
 
   if (!branding) return null;
 
-  const tokens: Record<string, string> = {
-    ...((branding.tokenOverrides as Record<string, string>) ?? {}),
-  };
+  const rawTokens =
+    (branding.tokenOverrides as Record<string, string> | null) ?? {};
+  const tokens = Object.fromEntries(
+    Object.entries(rawTokens).filter(
+      ([, value]) => typeof value === 'string' && value.trim().length > 0
+    )
+  );
 
   if (Object.keys(tokens).length === 0) return null;
 

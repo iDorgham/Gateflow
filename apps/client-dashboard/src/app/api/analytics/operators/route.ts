@@ -93,10 +93,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const groups = (await prisma.scanLog.groupBy({
       by: ['userId'],
       where: scanFilter,
-      _count: true,
-      orderBy: { _count: { userId: 'desc' } },
+      _count: { id: true },
+      orderBy: { _count: { id: 'desc' } },
       take: 10,
-    })) as { userId: string | null; _count: number }[];
+    })) as { userId: string | null; _count: { id: number } }[];
 
     if (groups.length === 0) {
       return NextResponse.json({ success: true, data: [] });
@@ -118,7 +118,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         userId: g.userId,
         name: u?.name ?? 'Unknown',
         email: u?.email ?? '',
-        scanCount: g._count,
+        scanCount: g._count.id,
       };
     });
 

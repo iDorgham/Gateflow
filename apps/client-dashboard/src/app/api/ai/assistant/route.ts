@@ -18,6 +18,7 @@ import {
 } from '@gate-access/db';
 import { signQRPayload, QRCodeType } from '@gate-access/types';
 import { getSessionClaims } from '@/lib/auth-cookies';
+import { ensureSupportBoard } from '@/lib/ensure-support-board';
 
 export const runtime = 'nodejs';
 export const maxDuration = 30;
@@ -597,28 +598,7 @@ Rules:
             log('createTask', { title });
             // Client-dashboard tasks aren't organized into boards by the user; lazily
             // provision a single default board per org to satisfy Task's required boardId/department.
-            // Wrapped in a serializable transaction to close (not eliminate — TaskBoard
-            // has no unique(organizationId, department) constraint) the race where two
-            // concurrent first-time requests both create a "General Tasks" board.
-            const board = await prisma.$transaction(
-              async (tx) => {
-                const existing = await tx.taskBoard.findFirst({
-                  where: {
-                    organizationId: claims.orgId,
-                    department: 'SUPPORT',
-                  },
-                });
-                if (existing) return existing;
-                return tx.taskBoard.create({
-                  data: {
-                    organizationId: claims.orgId,
-                    name: 'General Tasks',
-                    department: 'SUPPORT',
-                  },
-                });
-              },
-              { isolationLevel: 'Serializable' }
-            );
+            const board = await ensureSupportBoard(claims.orgId);
 
             const task = await prisma.task.create({
               data: {
