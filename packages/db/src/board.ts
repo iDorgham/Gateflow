@@ -1,3 +1,4 @@
+import type { TaskBoard } from '@prisma/client';
 import { prisma } from './client';
 import { withSerializableRetry } from './serialization-retry';
 
@@ -11,7 +12,7 @@ export async function ensureBoard(
   organizationId: string,
   department: 'SALES' | 'MARKETING' | 'DEV' | 'SUPPORT',
   name: string
-) {
+): Promise<TaskBoard> {
   return withSerializableRetry(prisma, async (tx) => {
     return tx.taskBoard.upsert({
       where: {
@@ -19,6 +20,6 @@ export async function ensureBoard(
       },
       create: { organizationId, name, department },
       update: {},
-    });
+    }) as Promise<TaskBoard>;
   });
 }
