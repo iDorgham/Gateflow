@@ -86,7 +86,7 @@ export async function DashboardOverview({
     }),
     prisma.scanLog.count({
       where: {
-        qrCode: { organizationId: orgId },
+        qrCode: { organizationId: orgId, deletedAt: null },
         scannedAt: { gte: todayStart },
       },
     }),
@@ -95,7 +95,7 @@ export async function DashboardOverview({
     }),
     prisma.user.count({ where: { organizationId: orgId, deletedAt: null } }),
     prisma.scanLog.findMany({
-      where: { qrCode: { organizationId: orgId } },
+      where: { qrCode: { organizationId: orgId, deletedAt: null } },
       orderBy: { scannedAt: 'desc' },
       take: 8,
       include: {
@@ -106,7 +106,7 @@ export async function DashboardOverview({
     // Top gates data
     prisma.scanLog.groupBy({
       by: ['gateId'],
-      where: { qrCode: { organizationId: orgId } },
+      where: { qrCode: { organizationId: orgId, deletedAt: null } },
       _count: { _all: true },
       // '_all' isn't a valid orderBy key in this Prisma version's generated
       // types (only '_count: { _all: true }' selection is). Order by gateId
