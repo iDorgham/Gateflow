@@ -1,0 +1,38 @@
+apps/marketing/components/cms-blocks/social-proof-block.tsx
+  s_43d83ced1b63a9::t_35ad5d415b2820 1-33
+apps/marketing/app/[locale]/[slug]/page.tsx
+  s_43d83ced1b63a9::t_4782d31773f7a7 48-54,57,59-60,64-70,72-78
+  s_43d83ced1b63a9::t_a839fdac5a1dec 4-7,25
+apps/marketing/components/cms-blocks/hero-block.tsx
+  s_43d83ced1b63a9::t_ca74cc3c343857 1-48
+apps/marketing/lib/cms.ts
+  s_43d83ced1b63a9::t_93665032c8f72a 44
+  s_43d83ced1b63a9::t_b13491599798d4 50-51,55,58,62,87-91,106,115-117,119-122,128,132,155,164-165,168-171,177,181
+  s_43d83ced1b63a9::t_2c121aec6ffe5b 3-8
+apps/marketing/lib/blog.ts
+  s_43d83ced1b63a9::t_c6f61ce0e42636 56
+  s_43d83ced1b63a9::t_cede6601661fa3 83
+apps/marketing/components/cms-blocks/features-block.tsx
+  s_43d83ced1b63a9::t_bf379cbcf4d0b4 1-44
+  s_43d83ced1b63a9::t_60c07cc5b7e1b7 45-47
+apps/marketing/components/cms-blocks/cta-block.tsx
+  s_43d83ced1b63a9::t_7c39e4e9178383 1-46
+apps/marketing/components/cms-blocks/types.ts
+  s_43d83ced1b63a9::t_2c6f7f020a4755 1-12
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "bb8448d9b1e8056ac79e3f3d4aa4e22f9c899139",
+  "prompts": {},
+  "sessions": {
+    "s_43d83ced1b63a9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9d800842-375d-476b-b25e-c08c56aa6cd6",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
