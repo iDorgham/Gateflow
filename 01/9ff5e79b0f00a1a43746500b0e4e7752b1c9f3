@@ -1,0 +1,42 @@
+.github/workflows/lighthouse.yml
+  s_43d83ced1b63a9::t_3852956374d824 108-112,115-116,118-119
+  s_43d83ced1b63a9::t_57d24c3e7e5394 333-334,336-337
+apps/marketing/components/cms-blocks/hero-block.tsx
+  s_43d83ced1b63a9::t_cd9de1b8d2f88b 30-34,36-40,43-44
+package.json
+  s_43d83ced1b63a9::t_c1b28da47b1a20 130,134,136
+apps/marketing/components/cms-blocks/social-proof-block.tsx
+  s_43d83ced1b63a9::t_a2bb79edc9ed55 12,24-38
+apps/marketing/components/cms-blocks/features-block.tsx
+  s_43d83ced1b63a9::t_7a3bb4df95f559 30,32
+scratch/consolidate_refs.js
+  s_43d83ced1b63a9::t_0bc7be8caf8ac3 38-41,46
+apps/marketing/components/cms-blocks/cta-block.tsx
+  s_edf5df462eee0c::t_ab3025a9674b75 28-32,34-38,41-42
+docs/development/learning/CLI_TOOL_MEMORY.md
+  s_43d83ced1b63a9::t_9d6c3adb6d9cf9 16-17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "019ff5e79b0f00a1a43746500b0e4e7752b1c9f3",
+  "prompts": {},
+  "sessions": {
+    "s_43d83ced1b63a9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9d800842-375d-476b-b25e-c08c56aa6cd6",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_edf5df462eee0c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "19b31a1d-d3ca-40fd-8988-e714bc3b44d9",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
