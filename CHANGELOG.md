@@ -20,6 +20,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Ci]** detect cross-domain redirect in Lighthouse reachability check
+
 - **[Db]** correct extension-accelerate pin, restore tenant.ts type casts
 - **[Security]** patch 16 high/critical npm advisories via pnpm overrides
 
