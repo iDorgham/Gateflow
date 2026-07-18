@@ -1,0 +1,25 @@
+.github/actions/probe-url/action.yml
+  s_edf5df462eee0c::t_d2992823086ae1 66-68,70
+packages/db/src/serialization-retry.ts
+  s_edf5df462eee0c::t_aefd6164fb76c5 30-33,35,41,47-48
+apps/admin-dashboard/src/app/[locale]/(dashboard)/organizations/[orgId]/analytics/page.tsx
+  s_edf5df462eee0c::t_2d1b0e36d074e8 70-72,74
+packages/db/src/board.ts
+  s_edf5df462eee0c::t_df6e2ce5b67147 13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "fdeae94ba6a5305441507f7d4bc533e1aaedaf27",
+  "prompts": {},
+  "sessions": {
+    "s_edf5df462eee0c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "19b31a1d-d3ca-40fd-8988-e714bc3b44d9",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
