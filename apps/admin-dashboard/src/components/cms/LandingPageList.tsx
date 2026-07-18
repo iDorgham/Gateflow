@@ -32,7 +32,7 @@ interface LandingPage {
   id: string;
   slug: string;
   titleEn: string;
-  status: 'DRAFT' | 'IN_REVIEW' | 'PUBLISHED';
+  status: 'DRAFT' | 'IN_REVIEW' | 'PUBLISHED' | 'ARCHIVED';
   updatedAt: string;
 }
 

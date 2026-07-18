@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@gate-access/db';
+import type { BlogPost, BlogCategory, User } from '@gate-access/db';
 import { isAdminAuthorized } from '@/lib/admin-auth';
 
 /**
@@ -27,12 +28,12 @@ export async function GET(
     }
   }
 
-  const post = await prisma.blogPost.findFirst({
+  const post = (await prisma.blogPost.findFirst({
     where: {
       OR: [{ slugEn: slug }, { slugAr: slug }],
     },
     include: {
-      categories: true,
+      category: true,
       author: {
         select: {
           name: true,
@@ -41,7 +42,12 @@ export async function GET(
         },
       },
     },
-  });
+  })) as
+    | (BlogPost & {
+        category: BlogCategory | null;
+        author: Pick<User, 'name' | 'avatarUrl' | 'bio'>;
+      })
+    | null;
 
   if (!post) {
     return NextResponse.json(
@@ -67,17 +73,19 @@ export async function GET(
     status: post.status,
     publishedAt: post.publishedAt,
     author: post.author,
-    categories: post.categories.map((c: any) => ({
-      id: c.id,
-      name: locale === 'ar' ? c.nameAr : c.nameEn,
-      slug: c.slug,
-    })),
+    categories: post.category
+      ? [
+          {
+            id: post.category.id,
+            name: locale === 'ar' ? post.category.nameAr : post.category.nameEn,
+            slug: post.category.slug,
+          },
+        ]
+      : [],
     meta: {
       title: locale === 'ar' ? post.metaTitleAr : post.metaTitleEn,
       description: locale === 'ar' ? post.metaDescAr : post.metaDescEn,
-      canonical: post.canonicalUrl,
     },
-    featuredImageId: post.featuredImageId,
   };
 
   return NextResponse.json(response);

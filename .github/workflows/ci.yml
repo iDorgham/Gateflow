@@ -178,13 +178,7 @@ jobs:
           DATABASE_URL: 'postgresql://placeholder:placeholder@localhost:5432/placeholder'
 
       - name: Typecheck
-        # admin-dashboard and client-dashboard are temporarily excluded:
-        # fixing the broken @prisma/extension-accelerate pin (see
-        # packages/db/package.json) unmasked ~50 and ~18 pre-existing type
-        # errors there, respectively, spanning several unrelated features.
-        # Tracked as follow-up work — run `pnpm typecheck:all` locally to
-        # see the full, unscoped state.
-        run: pnpm turbo typecheck --filter=!admin-dashboard --filter=!client-dashboard
+        run: pnpm turbo typecheck
 
   # ── 4. Test ───────────────────────────────────────────────────────────────
   test:

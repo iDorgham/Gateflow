@@ -42,17 +42,17 @@ export const db = {
     findFirst: async (
       ...args: Parameters<typeof prisma.organization.findFirst>
     ) => {
-      return prisma.organization.findFirst(...(args as [any]));
+      return (prisma.organization.findFirst as any)(...args);
     },
     findUnique: async (
       ...args: Parameters<typeof prisma.organization.findUnique>
     ) => {
-      return prisma.organization.findUnique(...(args as [any]));
+      return (prisma.organization.findUnique as any)(...args);
     },
     findMany: async (
       ...args: Parameters<typeof prisma.organization.findMany>
     ) => {
-      return prisma.organization.findMany(...(args as [any]));
+      return (prisma.organization.findMany as any)(...args);
     },
   },
 

@@ -1387,6 +1387,7 @@ model TaskBoard {
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   tasks          Task[]
 
+  @@unique([organizationId, department])
   @@index([organizationId])
   @@index([department])
 }

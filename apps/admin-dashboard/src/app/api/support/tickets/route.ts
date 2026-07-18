@@ -5,9 +5,16 @@ export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const orgId = searchParams.get('orgId');
 
+  if (!orgId) {
+    return NextResponse.json(
+      { error: 'orgId query parameter is required' },
+      { status: 400 }
+    );
+  }
+
   try {
-    const tickets = await prisma.ticket?.findMany({
-      where: orgId ? { organizationId: orgId } : undefined,
+    const tickets = await prisma.supportTicket.findMany({
+      where: { organizationId: orgId, deletedAt: null },
       orderBy: { createdAt: 'desc' },
     });
 

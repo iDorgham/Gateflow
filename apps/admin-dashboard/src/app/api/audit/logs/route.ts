@@ -22,11 +22,18 @@ export async function GET(request: Request) {
   const status = searchParams.get('status');
   const limit = parseInt(searchParams.get('limit') || '50');
 
+  if (!orgId) {
+    return NextResponse.json(
+      { success: false, message: 'orgId query parameter is required' },
+      { status: 400 }
+    );
+  }
+
   try {
     const logs = await prisma.aiActionLog.findMany({
       where: {
-        organizationId: orgId || undefined,
-        action: action || undefined,
+        organizationId: orgId,
+        actionType: action || undefined,
         status: status ? (status as any) : undefined,
       },
       include: {

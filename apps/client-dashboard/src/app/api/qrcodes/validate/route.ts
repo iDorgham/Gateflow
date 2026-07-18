@@ -545,7 +545,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
           utmCampaign: fresh.utmCampaign,
           utmContent: fresh.utmContent,
           utmTerm: fresh.utmTerm,
-          auditTrail: [auditEntry] as unknown as Prisma.JsonValue,
+          auditTrail: [auditEntry] as unknown as Prisma.InputJsonValue[],
         },
       });
     });

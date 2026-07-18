@@ -103,13 +103,13 @@ async function fetchSummary(
     totalVisits > 0 ? Math.round((successCount / totalVisits) * 100) : 0;
 
   // Approximate peak hour from ScanLog (optional; keep simple)
-  const peakHourRow = await prisma.scanLog.groupBy({
+  const peakHourRow = (await prisma.scanLog.groupBy({
     by: ['scannedAt'],
     where: scanFilter,
     _count: { id: true },
     orderBy: { _count: { id: 'desc' } },
     take: 1,
-  });
+  })) as { scannedAt: Date; _count: { id: number } }[];
   const peakHour =
     peakHourRow.length > 0 ? new Date(peakHourRow[0].scannedAt).getHours() : -1;
 

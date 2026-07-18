@@ -19,25 +19,32 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const orgId = searchParams.get('orgId');
 
+  if (!orgId) {
+    return NextResponse.json(
+      { success: false, message: 'orgId query parameter is required' },
+      { status: 400 }
+    );
+  }
+
   try {
-    // 1. Scans over time
-    const scans = await prisma.scan.findMany({
-      where: { organizationId: orgId || undefined },
-      orderBy: { createdAt: 'desc' },
+    // 1. Scans over time (ScanLog has no deletedAt — scope via gate)
+    const scans = await prisma.scanLog.findMany({
+      where: { gate: { organizationId: orgId, deletedAt: null } },
+      orderBy: { scannedAt: 'desc' },
       take: 100,
     });
 
     // 2. Lead Conversion (mocking funnel based on CRM leads)
     const leads = await prisma.lead.count({
-      where: { organizationId: orgId || undefined },
+      where: { organizationId: orgId, deletedAt: null },
     });
-    const opportunities = await prisma.opportunity.count({
-      where: { organizationId: orgId || undefined },
+    const opportunities = await prisma.deal.count({
+      where: { organizationId: orgId, deletedAt: null },
     });
 
-    // 3. AI Usage (based on logs)
+    // 3. AI Usage (based on logs — AiActionLog has no deletedAt)
     const aiActions = await prisma.aiActionLog.count({
-      where: { organizationId: orgId || undefined },
+      where: { organizationId: orgId },
     });
 
     // Mocking a time series for Recharts

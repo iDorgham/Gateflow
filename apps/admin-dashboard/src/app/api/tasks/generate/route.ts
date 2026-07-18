@@ -118,7 +118,7 @@ export async function POST(req: Request) {
     await prisma.aiActionLog.create({
       data: {
         organizationId: orgId,
-        action: 'TASK_AI_GENERATED',
+        actionType: 'TASK_AI_GENERATED',
         status: 'CONFIRMED',
         prompt: prompt,
         result: `Generated ${createdTasks.length} tasks.`,

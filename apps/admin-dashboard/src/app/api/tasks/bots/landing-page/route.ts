@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@gate-access/db';
+import { prisma, ensureBoard } from '@gate-access/db';
 import { isAdminAuthorized } from '@/lib/admin-auth';
 
 export async function POST(req: Request) {
@@ -66,20 +66,71 @@ export async function POST(req: Request) {
     };
 
     // 2. Create the Draft Landing Page
+    // LandingPage stores content as ordered LandingPageSection rows rather
+    // than a single JSON blob — map each mock block to a section using the
+    // flat { headline, body, ctaText, ctaLink } shape PageBuilder.tsx expects
+    // uniformly across all section types.
+    const SECTION_TYPE_MAP: Record<string, 'HERO' | 'FEATURES' | 'CTA'> = {
+      hero: 'HERO',
+      features: 'FEATURES',
+      cta: 'CTA',
+    };
+
+    type MockBlock = (typeof mockResult.blocks)[number];
+    const toSectionContent = (block: MockBlock, locale: 'en' | 'ar') => {
+      const c = block.content as Record<string, unknown>;
+      // Arabic fields stay empty until a real translation is produced —
+      // do not copy English into contentAr (fallback contract).
+      if (locale === 'ar') {
+        return { headline: '', body: '', ctaText: '', ctaLink: '#' };
+      }
+      const body =
+        typeof c.subtitleEn === 'string'
+          ? c.subtitleEn
+          : Array.isArray(c.features)
+            ? (c.features as { descriptionEn?: string }[])
+                .map((f) => f.descriptionEn)
+                .filter(Boolean)
+                .join(' ')
+            : '';
+      return {
+        headline: typeof c.titleEn === 'string' ? c.titleEn : '',
+        body,
+        ctaText: typeof c.buttonTextEn === 'string' ? c.buttonTextEn : '',
+        ctaLink: '#',
+      };
+    };
+
     const landingPage = await prisma.landingPage.create({
       data: {
-        title: mockResult.title,
+        titleEn: mockResult.title,
+        titleAr: '',
         slug: (
           mockResult.title.toLowerCase().replace(/ /g, '-') +
           '-' +
           Date.now()
         ).substring(0, 50),
-        contentJson: mockResult.blocks,
         status: 'DRAFT',
-        aiGenerated: true,
         organizationId: targetOrgId,
+        createdById: adminUser.id,
+        sections: {
+          create: mockResult.blocks
+            .filter((block) => SECTION_TYPE_MAP[block.type])
+            .map((block, i) => ({
+              type: SECTION_TYPE_MAP[block.type],
+              order: i,
+              contentEn: toSectionContent(block, 'en'),
+              contentAr: toSectionContent(block, 'ar'),
+              aiGenerated: true,
+            })),
+        },
       },
+      include: { sections: true },
     });
+
+    // Lazily provision a default MARKETING board per org — there's no
+    // board-management UI, so no real board is guaranteed to exist.
+    const board = await ensureBoard(targetOrgId, 'MARKETING', 'Marketing');
 
     // 3. Create the Task for Review
     const task = await prisma.task.create({
@@ -90,7 +141,7 @@ export async function POST(req: Request) {
         priority: 'HIGH',
         department: 'MARKETING',
         organizationId: targetOrgId,
-        boardId: 'marketing-board',
+        boardId: board.id,
         createdById: adminUser.id,
         linkedType: 'LANDING_PAGE',
         linkedId: landingPage.id,

@@ -1,0 +1,78 @@
+name: 'Probe URL reachability'
+description: >
+  Checks whether a target URL is safe to Lighthouse-audit: DNS resolves,
+  the URL is reachable, and — critically — following the full redirect
+  chain (not just the first hop) still lands on the same host. Outputs
+  skip=true with a reason when any of those checks fail, so callers can
+  soft-skip instead of auditing an unrelated/misconfigured domain.
+inputs:
+  url:
+    description: 'Target URL to probe'
+    required: true
+outputs:
+  skip:
+    description: "'true' if the URL should not be audited"
+    value: ${{ steps.probe.outputs.skip }}
+  skip_reason:
+    description: 'Human-readable reason for skipping (empty if not skipped)'
+    value: ${{ steps.probe.outputs.skip_reason }}
+runs:
+  using: 'composite'
+  steps:
+    - id: probe
+      shell: bash
+      env:
+        URL: ${{ inputs.url }}
+      run: |
+        set -euo pipefail
+
+        HOST="$(node -e 'try{console.log(new URL(process.argv[1]).hostname)}catch{console.log("")}' "$URL")"
+        if [ -z "$HOST" ]; then
+          echo "skip=true" >> "$GITHUB_OUTPUT"
+          echo "skip_reason=malformed URL ($URL)" >> "$GITHUB_OUTPUT"
+          echo "::warning::Skipping Lighthouse — $URL is not a valid URL."
+          exit 0
+        fi
+        if ! getent hosts "$HOST" >/dev/null 2>&1; then
+          echo "skip=true" >> "$GITHUB_OUTPUT"
+          echo "skip_reason=DNS for $HOST does not resolve" >> "$GITHUB_OUTPUT"
+          echo "::warning::Skipping Lighthouse — DNS for $HOST does not resolve."
+          exit 0
+        fi
+
+        # Follow the FULL redirect chain (not just hop one) and capture both
+        # the final HTTP status and the final effective URL, so a multi-hop
+        # redirect that only leaves the original host on a later hop is still
+        # caught.
+        PROBE_OUT="$(curl -sS -o /dev/null -w '%{http_code} %{url_effective}' --max-time 15 -L "$URL" || true)"
+        FINAL_CODE="$(echo "$PROBE_OUT" | awk '{print $1}')"
+        FINAL_URL="$(echo "$PROBE_OUT" | awk '{print $2}')"
+
+        if [ -z "$FINAL_CODE" ] || [ "$FINAL_CODE" = "000" ]; then
+          echo "skip=true" >> "$GITHUB_OUTPUT"
+          echo "skip_reason=unreachable ($URL)" >> "$GITHUB_OUTPUT"
+          echo "::warning::Skipping Lighthouse — $URL is unreachable."
+          exit 0
+        fi
+
+        FINAL_HOST="$(node -e 'try{console.log(new URL(process.argv[1]).hostname)}catch{console.log("")}' "$FINAL_URL")"
+        if [ -n "$FINAL_HOST" ] && [ "$FINAL_HOST" != "$HOST" ]; then
+          echo "skip=true" >> "$GITHUB_OUTPUT"
+          echo "skip_reason=redirects to $FINAL_HOST (expected $HOST)" >> "$GITHUB_OUTPUT"
+          echo "::warning::Skipping Lighthouse — $HOST redirects to unrelated host $FINAL_HOST."
+          exit 0
+        fi
+
+        # -L already follows redirects to their target; a final 3xx here means
+        # the chain didn't resolve (redirect loop, missing Location, or
+        # --max-redirs hit), not a healthy page to audit.
+        case "$FINAL_CODE" in
+          2*)
+            echo "skip=false" >> "$GITHUB_OUTPUT"
+            ;;
+          *)
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "skip_reason=HTTP $FINAL_CODE from $URL" >> "$GITHUB_OUTPUT"
+            echo "::warning::Skipping Lighthouse — $URL returned HTTP $FINAL_CODE."
+            ;;
+        esac

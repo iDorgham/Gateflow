@@ -33,7 +33,7 @@ export default async function GatesPage(props: {
     ? { organizationId: orgId, projectId, deletedAt: null as null }
     : { organizationId: orgId, deletedAt: null as null };
 
-  const [gates, scansTodayGroups] = await Promise.all([
+  const [gates, scansTodayGroupsRaw] = await Promise.all([
     prisma.gate.findMany({
       // ignore-security-guard — organizationId in gateFilter (lines above)
       where: gateFilter,
@@ -52,6 +52,10 @@ export default async function GatesPage(props: {
       _count: true,
     }),
   ]);
+  const scansTodayGroups = scansTodayGroupsRaw as unknown as {
+    gateId: string;
+    _count: number;
+  }[];
 
   const scansTodayMap = new Map(
     scansTodayGroups.map((g) => [g.gateId, g._count])

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isAdminAuthorized } from '@/lib/admin-auth';
-import { prisma, Prisma } from '@gate-access/db';
+import { prisma, withSerializableRetry } from '@gate-access/db';
 
 export async function POST(
   req: NextRequest,
@@ -16,49 +16,64 @@ export async function POST(
   try {
     const { variables } = await req.json();
 
-    // 1. Transaction to update variables and create snapshot
-    const result = await prisma.$transaction(async (tx: typeof prisma) => {
-      // Update individual theme variables
-      for (const v of variables) {
-        await tx.themeVariable.upsert({
-          where: {
-            organizationId_key: {
-              organizationId: orgId,
-              key: v.key,
-            },
-          },
-          update: { value: v.value },
-          create: {
+    // Transaction to update branding token overrides and create a versioned snapshot.
+    // Serializable isolation so two concurrent saves can't both read the same
+    // pre-update `current` and silently overwrite each other's token changes —
+    // Postgres aborts the losing transaction with a retryable serialization error
+    // instead of a lost update / duplicate snapshot version. withSerializableRetry
+    // retries that error a bounded number of times instead of surfacing a 500.
+    const result = await withSerializableRetry(prisma, async (tx) => {
+      const current = await (tx as any).organizationBranding.findUnique({
+        where: { organizationId: orgId },
+      });
+
+      const tokenOverrides: Record<string, string> = {
+        ...((current?.tokenOverrides as Record<string, string>) ?? {}),
+      };
+      for (const v of variables ?? []) {
+        const value = typeof v?.value === 'string' ? v.value.trim() : '';
+        // Empty UI seeds must not persist as CSS resets (`--token: ;`).
+        if (!value) {
+          delete tokenOverrides[v.key];
+        } else {
+          tokenOverrides[v.key] = value;
+        }
+      }
+
+      if (current) {
+        // Snapshot the pre-update state
+        await (tx as any).brandingSnapshot.create({
+          data: {
             organizationId: orgId,
-            key: v.key,
-            value: v.value,
-            category: 'UI',
+            version: current.version,
+            tokenOverrides: current.tokenOverrides,
+            fontFamily: current.fontFamily,
+            fontFamilyArabic: current.fontFamilyArabic,
+            logoUrl: current.logoUrl,
+            // Admin auth is key-based (no User row); BrandingSnapshot.createdById
+            // is a plain string with no FK constraint.
+            createdById: 'ADMIN',
           },
         });
       }
 
-      // Create snapshot
-      const cssTokens = variables.reduce((acc: any, v: any) => {
-        acc[v.key] = v.value;
-        return acc;
-      }, {});
-
-      const snapshot = await tx.styleSnapshot.create({
-        data: {
+      // Saving always (re)activates branding — a save on a record that was
+      // previously deactivated should make it visible to BrandingStyles.tsx
+      // (which reads isActive: true) again, not stay silently invisible.
+      return (tx as any).organizationBranding.upsert({
+        where: { organizationId: orgId },
+        update: {
+          tokenOverrides,
+          version: { increment: 1 },
+          isActive: true,
+        },
+        create: {
           organizationId: orgId,
-          name: `Snapshot ${new Date().toISOString()}`,
-          cssTokens,
-          createdById: 'SYSTEM', // TODO: Get actual user ID
+          tokenOverrides,
+          version: 1,
+          isActive: true,
         },
       });
-
-      // Update active style
-      await tx.organization.update({
-        where: { id: orgId },
-        data: { activeStyleId: snapshot.id },
-      });
-
-      return snapshot;
     });
 
     return NextResponse.json(result);
