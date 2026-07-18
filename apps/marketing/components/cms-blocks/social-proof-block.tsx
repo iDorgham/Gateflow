@@ -9,6 +9,7 @@ export function SocialProofCmsBlock({
   locale: Locale;
 }) {
   const isRtl = locale.startsWith('ar');
+  const items = content.items?.length ? content.items : null;
 
   return (
     <section
@@ -20,12 +21,21 @@ export function SocialProofCmsBlock({
           {content.headline || 'Trusted by innovative companies'}
         </p>
         <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-60 grayscale">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <div
-              key={i}
-              className="h-10 w-28 rounded-lg bg-ds-surface-raised border border-ds-border"
-            />
-          ))}
+          {items
+            ? items.map((item) => (
+                <div
+                  key={item.title}
+                  className="h-10 w-28 rounded-lg bg-ds-surface-raised border border-ds-border flex items-center justify-center text-xs font-semibold text-ds-text-subtle"
+                >
+                  {item.title}
+                </div>
+              ))
+            : Array.from({ length: 4 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="h-10 w-28 rounded-lg bg-ds-surface-raised border border-ds-border"
+                />
+              ))}
         </div>
       </div>
     </section>

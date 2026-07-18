@@ -25,20 +25,21 @@ export function CtaCmsBlock({
           <p className="text-lg md:text-xl opacity-90">{content.subheadline}</p>
         )}
         <div className="mt-4">
-          <IntentLink
-            locale={locale}
-            href={content.ctaLink || '/contact'}
-            intent="consult"
-            surface="cms_cta"
+          <Button
+            asChild
+            variant="secondary"
+            size="lg"
+            className="h-16 px-10 text-[14px] font-black uppercase tracking-[0.18em] bg-ds-surface text-ds-text hover:bg-ds-surface/90"
           >
-            <Button
-              variant="secondary"
-              size="lg"
-              className="h-16 px-10 text-[14px] font-black uppercase tracking-[0.18em] bg-ds-surface text-ds-text hover:bg-ds-surface/90"
+            <IntentLink
+              locale={locale}
+              href={content.ctaLink || '/contact'}
+              intent="consult"
+              surface="cms_cta"
             >
               {content.ctaText || 'Sign Up Now'}
-            </Button>
-          </IntentLink>
+            </IntentLink>
+          </Button>
         </div>
       </div>
     </section>

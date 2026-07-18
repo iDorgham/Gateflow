@@ -35,12 +35,15 @@ files.forEach((file) => {
     const fileContent = fs.readFileSync(filePath, 'utf-8');
     // Remove title if it's the first line
     const lines = fileContent.split('\n');
-    const filteredLines = lines.filter((line) => !line.startsWith('# '));
+    if (lines[0]?.startsWith('# ')) {
+      lines.shift();
+    }
+    const filteredLines = lines;
 
     content += `\n## ${file.replace('_REFERENCE.md', '').replace(/_/g, ' ')}\n\n`;
     content += filteredLines
       .join('\n')
-      .replace(/\[([^\]]+)\]\(file:\/\/\/[^\)]+\)/g, '$1'); // Strip file links
+      .replace(/\[([^\]]+)\]\(file:\/\/\/[^)]+\)/g, '$1'); // Strip file links
     content += '\n\n---\n';
   }
 });

@@ -27,20 +27,21 @@ export function HeroCmsBlock({
           </p>
         )}
         <div className="mt-4">
-          <IntentLink
-            locale={locale}
-            href={content.ctaLink || '/contact'}
-            intent="demo"
-            surface="cms_hero"
+          <Button
+            asChild
+            variant="brand"
+            size="lg"
+            className="h-16 px-10 text-[14px] font-black uppercase tracking-[0.18em]"
           >
-            <Button
-              variant="brand"
-              size="lg"
-              className="h-16 px-10 text-[14px] font-black uppercase tracking-[0.18em]"
+            <IntentLink
+              locale={locale}
+              href={content.ctaLink || '/contact'}
+              intent="demo"
+              surface="cms_hero"
             >
               {content.ctaText || 'Get Started'}
-            </Button>
-          </IntentLink>
+            </IntentLink>
+          </Button>
         </div>
       </div>
     </section>

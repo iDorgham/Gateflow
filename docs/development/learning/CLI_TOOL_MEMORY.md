@@ -13,8 +13,8 @@ Lightweight tally by task category. Update when reviewing the usage log (e.g. we
 | Schema / DB / Prisma          | 0/0/0  | 0/0/0    | 0/0/0 | 0/0/0 | 0/0/0 | Gemini   |
 | Refactor / TDD                | 1/0/0  | 0/0/0    | 0/0/0 | 0/0/0 | 0/0/0 | Gemini   |
 | Content / SEO draft           | 0/0/0  | 0/0/0    | 0/0/0 | 0/0/0 | 0/0/0 | Gemini   |
-| Quick structural check        | 3/0/0  | 1/0/0    | 0/0/0 | 0/0/0 | 0/1/0 | Gemini   |
-| Free-tier agentic             | 0/0/0  | 0/0/0    | 0/0/0 | 0/0/0 | 0/0/0 | Gemini   |
+| Quick structural check        | 3/0/0  | 1/0/0    | 0/0/0 | 0/0/0 | 0/0/0 | Gemini   |
+| Free-tier agentic             | 0/0/0  | 0/0/0    | 0/0/0 | 0/0/0 | 0/1/0 | Qwen     |
 | Free-tier fast terminal tasks | 0/0/0  | 0/0/0    | 0/0/0 | 0/0/0 | 0/0/0 | Gemini   |
 | Docs sync from code           | 0/0/0  | 0/0/0    | 0/0/0 | 0/0/0 | 0/0/0 | Gemini   |
 | CI / headless automation      | 0/0/0  | 0/0/0    | 0/0/0 | 0/0/0 | 0/0/0 | Gemini   |
