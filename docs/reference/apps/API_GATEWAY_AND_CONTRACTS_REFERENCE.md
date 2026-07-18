@@ -27,7 +27,7 @@ Primary API-producing apps:
 
 - `client-dashboard`: 124 route files
 - `admin-dashboard`: 46 route files
-- `marketing`: 4 route files
+- `marketing`: 3 route files
 - `resident-portal`: 2 route files
 
 ## 3) Domain Group Distribution (Top-Level API Segment)
