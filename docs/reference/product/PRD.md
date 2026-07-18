@@ -1,223 +1,411 @@
-# GateFlow — Master Product Requirements Document (PRD)
+# GateFlow - Master Product Requirements Document (PRD)
 
-**Document Version:** 11.0 (Enterprise Automation Edition)  
-**Status:** Active / Production-Ready  
-**Last Updated:** 2026-04-06  
-**Confidentiality:** Internal Engineering & Product
+**Document Version:** 12.0 (Ultra Detailed Unified Edition)  
+**Status:** Active / Production  
+**Last Updated:** 2026-04-30  
+**Confidentiality:** Internal Engineering, Product, Operations
 
 ---
 
 ## 1. Executive Summary
 
-GateFlow is a unified, Stripe-level infrastructure platform for physical access control and marketing intelligence. Designed specifically for the high-growth MENA PropTech market, it transforms traditional, siloed security operations into a data-driven ecosystem.
+GateFlow is a multi-tenant physical-access and operational intelligence platform for gated communities, compounds, and real-estate projects. It unifies:
 
-GateFlow bridges the gap between digital marketing attribution and physical estate entry. By assigning cryptographic identities to every guest interaction, it allows developers and property managers to track the full lifecycle of a visitor—from the initial marketing click to the physical gate scan.
+- secure perimeter access control,
+- resident and visitor lifecycle management,
+- marketing-to-physical attribution,
+- admin-grade governance and compliance,
+- AI-assisted operations and automation.
 
----
-
-## 2. Strategic Vision & Objectives
-
-### 2.1 Mission Statement
-
-To provide absolute security and absolute measurement at every physical perimeter, while delivering a frictionless, native experience for residents and guests.
-
-### 2.2 Key Business Objectives
-
-- Security Perfection: Eliminate unauthorized access via HMAC-SHA256 offline-first verification.
-- Marketing ROI: Provide 1:1 attribution between marketing spend (Meta/GA4) and physical site visits.
-- Operational Efficiency: Reduce manual guard intervention by 80% through resident-led guest management and QR autonomy.
-- Monolithic Scale: Support multi-tenant, multi-project architectures from a single unified codebase.
+GateFlow's core differentiator is full-lifecycle traceability from first digital touchpoint to physical gate event while preserving strict tenant isolation and security invariants.
 
 ---
 
-## 3. User Personas
+## 2. Product Vision, Mission, and Business Outcomes
 
-### 3.1 Omar — The Property Manager (Operations)
+### 2.1 Vision
 
-- Goals: Maintain safety, visibility into traffic, and minimize resident complaints.
-- Pain Points: Paper-based logs, slow peak-hour entry, lack of data on "who is actually inside."
-- Primary Tool: Client Dashboard (Web).
+Become the default operating system for secure access, resident operations, and physical conversion intelligence across MENA real estate ecosystems.
 
-### 3.2 Sarah — The Marketing Manager (Growth)
+### 2.2 Mission
 
-- Goals: Track which campaigns (Facebook vs. SMS) drive the most site visits for new property sales.
-- Pain Points: "Dark traffic"—visitors show up at the gate, but their digital source is lost.
-- Primary Tool: Marketing Intelligence Suite within the Client Dashboard.
+Deliver high-trust, low-friction access experiences with measurable operational and growth outcomes for every stakeholder: developer, operator, guard, resident, and platform admin.
 
-### 3.3 Ahmed — The Security Guard (Field)
+### 2.3 Business Outcomes
 
-- Goals: Verify guests in under 2 seconds and handle residents efficiently.
-- Pain Points: Bad network at the gate, complicated software, aggressive drivers.
-- Primary Tool: Scanner App (Mobile).
-
-### 3.4 Yasmine — The Resident (End User)
-
-- Goals: Invite friends via WhatsApp quickly and receive arrival notifications.
-- Pain Points: Calling security to "let someone in," lost guest passwords.
-- Primary Tool: Resident Mobile (iOS/Android).
-
-### 3.5 System Admin (The Architect)
-
-- Goals: Maintain platform uptime, manage tenants, and audit system integrity.
-- Pain Points: Database drift, secret exposure, tenant data leakage.
-- Primary Tool: Admin Dashboard & The Ralph Loop.
+- Security integrity: near-zero unauthorized entry events.
+- Guard throughput: materially lower check-in latency at peak.
+- Resident autonomy: high self-service invite/pass usage.
+- Marketing attribution: reliable digital-to-physical conversion tracking.
+- Platform operability: stable, auditable multi-tenant operations at scale.
 
 ---
 
-## 4. The 6-App Ecosystem
+## 3. Scope Definition
 
-### 4.1 Client Dashboard (`apps/client-dashboard`)
+### 3.1 In Scope
 
-The administrative hub for property managers. Includes real-time KPI metrics, resident CRM, project gallery management, team RBAC, and marketing suite.
+- Web admin products (`client-dashboard`, `admin-dashboard`, `marketing`, `resident-portal`).
+- Mobile products (`scanner-app`, `resident-mobile`).
+- Shared platform packages (`db`, `types`, `ui`, `api-client`, `i18n`, `config`, `utils`).
+- Security model, data model, API contracts, and planning lifecycle governance.
+- AI-assisted operations features and automation support.
 
-### 4.2 Admin Dashboard (`apps/admin-dashboard`)
+### 3.2 Out of Scope
 
-The "God-mode" panel for platform owners. Manages organizations (tenants), authorization keys, and cross-tenant health logs.
-
-### 4.3 Scanner App (`apps/scanner-app`)
-
-A high-performance React Native application for field staff. Features high-speed camera scanning, offline HMAC verification, and encrypted sync queues.
-
-### 4.4 Resident Mobile (`apps/resident-mobile`)
-
-The native resident experience. Built with Expo, it allows one-tap pass creation, WhatsApp sharing, and real-time push alerts.
-
-### 4.5 Resident Portal (`apps/resident-portal`)
-
-A web-based alternative to the mobile app, providing residents with desktop access to guest logs and pass management.
-
-### 4.6 Marketing Website (`apps/marketing`)
-
-The customer-facing growth engine. Features SSR for SEO, dynamic vertical solutions, and pricing calculators.
+- Non-GateFlow third-party product roadmaps not integrated via defined APIs.
+- Hard-delete data lifecycle strategy as default model.
+- Uncontrolled cross-tenant analytics/querying bypassing org boundaries.
 
 ---
 
-## 5. Functional Requirements (Deep-Dive Feature Inventory)
+## 4. Personas and Jobs-to-be-Done
 
-### 5.1 Access Control & Security System
+### 4.1 Property Manager (Operations Lead)
 
-This module is the core engine of the platform, responsible for creating, signing, and verifying the multi-tier QR passes.
+- JTBD: run safe and efficient property access and resident operations.
+- Success metrics: fewer manual overrides, faster gate flow, lower incident rates.
 
-- Cryptographic HMAC-SHA256 Signing: Every QR pass link contains a unique payload and a signature. The server signs the payload with a secret known only to the GateFlow instances. This prevents "ID incrementing" or "link tampering" attacks.
-- Offline-First Verification Protocol: The Scanner App downloads a periodically rotated signing secret (AES-encrypted at rest). This allows the guard to verify a guest's pass even in basement parking or during ISP outages, with zero latency.
-- Multi-Tier Identity Verification:
-  - Tier 0 (Guest): Standard name/phone collection.
-  - Tier 1 (Verified): Requires a photo of a government-issued ID, OCR-scanned and validated.
-  - Tier 2 (Biometric): Requires facial recognition matching between the live visitor and their submitted ID.
-- Intelligent Pass Types:
-  - Single-Use: One entry/exit cycle; expires immediately after successful use.
-  - Recurring: Time-boxed access (e.g., "Every Monday 8 AM - 5 PM") for household staff.
-  - Permanent: Infinite usage until revoked (reserved for residents and staff).
-  - Open Link: Registration-based passes where guests provide their details at the gate.
+### 4.2 Marketing Manager (Growth)
 
-### 5.2 Marketing & Attribution Intelligence
+- JTBD: map marketing spend to physical visits and lead quality.
+- Success metrics: trusted CPV and channel-level physical attribution.
 
-Unlike standard security tools, GateFlow captures the full marketing funnel of a physical visit.
+### 4.3 Security Guard (Field Operator)
 
-- Attribution Persistence Logic: When a prospective resident clicks an ad (e.g., "Visit our demo villa"), the UTM parameters are stored in their session. When they generate a visitor pass, these params are bound to the `QrCode` record in the database.
-- Physical Conversion Firing: The moment the security guard scans the pass at the gate, GateFlow triggers a server-side event to Meta Pixel and Google Analytics 4. This markers the visitor as a "Physical Lead," closing the loop on digital spend.
-- CRM Data Sync (HubSpot/Salesforce): GateFlow pushes a payload containing the guest's name, phone, and **marketing source** to the developer's CRM the moment they are scanned.
-- Cost-per-Visit (CPV) Analytics: Property developers can see exactly which channel (Snapchat, Instagram, Google) is driving real people to their site, not just "website clicks."
+- JTBD: verify visitors quickly, reliably, and safely in unstable network conditions.
+- Success metrics: low verification time, low false deny/allow friction.
 
-### 5.3 CRM & Residential Operations
+### 4.4 Resident (End User)
 
-Manages the human elements of the gated community.
+- JTBD: create and share guest access with minimal effort.
+- Success metrics: invite completion rate, low support dependency.
 
-- Tenant/Resident Lifecycle: Onboarding residents, managing their unit associations (Apartments, Villas, Berths), and handling move-in/move-out lockouts.
-- Contact Source Tagging: Categorizes every person in the system by their origin (e.g., "Imported from CSV," "Captured from QR," "Manual Entry").
-- Bulk Infrastructure Seeding: Allows admins to generate 1000s of units and QR codes in seconds for new projects using the Seeding Wizard.
+### 4.5 Platform Admin (Governance)
 
-### 5.4 AI Operational Hub (GateAI)
-
-An agentic AI layer built directly into the administrative workflow.
-
-- Natural Language Infrastructure: Instead of clicking 10 buttons to "Create a new gate for Project X," managers can type it into the GateAI panel.
-- Real-time Intelligence Requests: Managers can ask: "Who is the most frequent visitor at Gate 4?" or "Show me all denied scans from yesterday," and the AI executes the database query securely and returns formatted results.
+- JTBD: keep platform healthy, secure, compliant, and auditable.
+- Success metrics: uptime, security posture, low operational drift.
 
 ---
 
-## 6. Technical Architecture
+## 5. Product Surfaces and Responsibilities
 
-### 6.1 The Stack
+### 5.1 Client Dashboard (`apps/client-dashboard`)
 
-- Monorepo: Turborepo + pnpm.
-- Backend: Next.js App Router (RSC), Prisma ORM, PostgreSQL.
-- Mobile: React Native / Expo 54.
-- Styles: Tailwind CSS + ADS (Atlassian Design System) token architecture.
-- i18n: Full AR/EN RTL support via logical CSS properties.
+Primary operator console for property organizations:
 
-### 6.2 Security Model
+- analytics and operational KPIs,
+- resident and contact management,
+- gates, scans, incidents, and watchlist operations,
+- workspace configuration (keys, webhooks, billing, settings),
+- embedded AI workflows and automations.
 
-- **Tenant Isolation**: Prisma middleware enforces `organizationId` scoping on every query.
-- **Secret Management**: Pre-commit hooks block 12+ patterns of sensitive data.
-- **Auth**: Argon2id hashing + 15-minute JWT rotation + 30-day encrypted refresh tokens.
+### 5.2 Admin Dashboard (`apps/admin-dashboard`)
 
----
+Platform control plane:
 
-## 7. The Ralph Loop (Autonomous Governance)
+- tenant and organization governance,
+- admin tools (auth keys, health, reset/seed operations),
+- CMS and support tooling,
+- intelligence and monitoring workflows,
+- audit and compliance controls.
 
-The Ralph Loop is GateFlow’s proprietary automation engine that ensures no code ships without meeting the 2026 Engineering Standard.
+### 5.3 Scanner App (`apps/scanner-app`)
 
-- **Pre-flight**: Automated lint, type-check, and unit testing before every push.
-- **Sync-Bot**: Automated propagation of AI instructions and skills across the monorepo.
-- **Doc-Bot**: Continuous updates to CHANGELOG and PRD based on Git history.
+Mobile field execution surface:
 
----
+- high-speed QR scan verification,
+- offline-first verification and queued sync patterns,
+- guard-focused, low-latency interaction loop.
 
-## 8. Roadmap & Upcoming Features
+### 5.4 Resident Mobile (`apps/resident-mobile`)
 
-### Q3 2026 — The "Intelligence" Release
+Native resident self-service:
 
-- **WhatsApp Bot**: Direct PASS delivery and creation via WhatsApp Business API.
-- **LPR Integration**: License Plate Recognition camera sync for vehicle-based pass validation.
-- **Predictive Staffing**: AI-generated reports on when to increase gate staff based on historical seasonality.
+- invitation and pass creation,
+- pass history and resident actions,
+- push-first resident updates.
 
-### 2027 — The "Ecosystem" Release
+### 5.5 Resident Portal (`apps/resident-portal`)
 
-- **GateFlow SDK**: Allowing 3rd-party developers to build "Apps" inside the GateFlow ecosystem.
-- **Blockchain Audit**: Moving the `ScanLog` to an immutable private ledger for financial-grade transparency.
+Web resident experience:
 
----
+- visitor and pass workflows,
+- resident profile and notification controls,
+- browser/PWA-compatible flows.
 
-## 9. Non-Functional Requirements
+### 5.6 Marketing Site (`apps/marketing`)
 
-### 9.1 Performance
+Acquisition and conversion web surface:
 
-- Scanner Verify Time: < 100ms.
-- Lighthouse Performance: > 98 across all web applications.
-- API P95 Response: < 200ms.
-
-### 9.2 Accessibility & Localization
-
-- Full WCAG 2.1 compliance.
-- Bi-directional (RTL/LTR) support with 100% Arabic translation coverage for field staff.
+- SEO and localized pages,
+- lead capture and intent event collection,
+- marketing performance signal flow to platform.
 
 ---
 
-## 10. Glossary
+## 6. Functional Requirements
 
-- **HMAC**: Hash-based Message Authentication Code.
-- **LWW**: Last-Write-Wins (Conflict resolution).
-- **ADS**: Atlassian Design System.
-- **The Ralph Loop**: GateFlow's internal autonomous CI/CD governance system.
+### 6.1 Access Control and Pass Lifecycle
+
+- Generate pass artifacts for multiple access models (single-use, recurring, permanent, open flows).
+- Bind pass lifecycle to policy and tenant constraints.
+- Support validation and deny/override workflows with full traceability.
+
+### 6.2 Scan Verification and Event Integrity
+
+- Validate access artifacts securely and deterministically.
+- Support degraded network operation for field workflows.
+- Log scan outcomes, metadata, and decision pathways for audit.
+
+### 6.3 Resident and Contact Operations
+
+- Manage resident-unit mappings and invite lifecycle.
+- Maintain contact and unit domain quality with operational tooling.
+- Support lifecycle operations for active/inactive resident states.
+
+### 6.4 Gates, Incidents, and Watchlist Operations
+
+- Manage gate definitions and assignments.
+- Record and resolve incidents with operational context.
+- Apply watchlist checks and enforcement workflows.
+
+### 6.5 Analytics and Intelligence
+
+- Deliver operational and growth analytics with practical segmentation.
+- Support export/reporting flows and management visibility.
+- Provide AI-assisted query/insight workflows with governed access.
+
+### 6.6 Marketing Attribution and Conversion
+
+- Persist campaign context to pass/visit domain entities.
+- Emit conversion signals tied to physical scan outcomes.
+- Enable CRM synchronization with attribution context.
+
+### 6.7 Admin Governance and Platform Controls
+
+- Tenant-level management and diagnostics.
+- Authorization key and admin access controls.
+- Platform health, audit, and support capabilities.
+
+### 6.8 AI Operations Layer
+
+- Assistant-driven operational requests in dashboard contexts.
+- Action logging and traceability for AI-triggered operations.
+- Automation policies for repetitive operational tasks.
 
 ---
 
-> This document is the primary source of truth for all GateFlow engineering and product decisions.
-> Developed by the GateFlow Global Engineering Team.
+## 7. Data and Domain Model Requirements
 
-### Org Types Dashboard
+Primary source of truth: `packages/db/prisma/schema.prisma`.
 
-**Status:** Phase 1 Complete | Last updated: 2026-04-05
+### 7.1 Core Domain Clusters
 
-### Gateflow Design System
+- Identity and tenancy: organizations, users, roles, invitations, auth tokens.
+- Access domain: gates, QR artifacts, scan logs, incidents, watchlist entries.
+- CRM/resident domain: contacts, units, tags, project and lead/deal flows.
+- AI domain: tasks, action logs, automations, generated assets, usage logs.
+- Integration domain: webhooks, deliveries, communication config and logs.
+- Content domain: landing pages, blog posts/categories, style/theming entities.
 
-**Status:** ✅ Completed | Last updated: 2026-04-06
+### 7.2 Data Integrity Requirements
 
-### Admin Dashboard Evolution
+- Tenant isolation via `organizationId` in tenant-scoped reads/writes.
+- Soft-delete semantics respected where applicable (`deletedAt` model behavior).
+- No default hard-delete dependence for operational data lifecycle.
+- Auditability for sensitive operations (security, admin, access outcomes).
 
-**Status:** 🆕 Ready (Phase 1) | Last updated: 2026-04-06
+---
 
-### Platform Evolution
+## 8. API Requirements and Contract Expectations
 
-**Status:** 🆕 Draft | Last updated: 2026-04-05
+GateFlow uses app-local API handlers (`app/api/**/route.ts`) as a distributed API gateway model.
+
+### 8.1 API Surface Responsibilities
+
+- Client dashboard APIs: largest operational domain footprint.
+- Admin dashboard APIs: governance and control plane APIs.
+- Marketing APIs: contact and intent event ingestion.
+- Resident portal APIs: resident notifications/push flows.
+
+### 8.2 Contract Requirements
+
+- Explicit auth enforcement and permission boundaries.
+- Stable response/error contract shape per route family.
+- Input validation and error status consistency.
+- Tenant-safe data access in all scoped operations.
+
+---
+
+## 9. Security and Compliance Requirements
+
+### 9.1 Security Invariants
+
+- Multi-tenant isolation is mandatory and non-negotiable.
+- Sensitive credential material must never be committed.
+- Access/session controls must follow secure token lifecycle principles.
+- QR/access integrity protections must be maintained end-to-end.
+
+### 9.2 Operational Security Requirements
+
+- Security checks integrated into CI and preflight loops.
+- Governance visibility for critical admin and access operations.
+- Reproducible audit trail for high-risk actions.
+
+---
+
+## 10. UX, Accessibility, and Localization Requirements
+
+- Arabic and English support with RTL/LTR correctness.
+- Accessible interaction patterns for web and mobile surfaces.
+- High-density operational UI without sacrificing usability.
+- Clear, fast guard/resident critical-path interactions.
+
+---
+
+## 11. Non-Functional Requirements
+
+### 11.1 Performance
+
+- Fast scan verification and low perceived latency for guard flows.
+- Responsive dashboard performance under operational load.
+- Predictable API latency envelopes for critical user journeys.
+
+### 11.2 Reliability
+
+- Resilient operation across network instability (especially field/mobile).
+- Graceful degradation for non-critical subsystems.
+- Queue/retry patterns for eventual sync domains.
+
+### 11.3 Scalability
+
+- Support for multi-org, multi-project deployments from one codebase.
+- Maintain performance under growth in scans, contacts, and analytics volume.
+
+### 11.4 Maintainability
+
+- Strong package boundaries and shared-contract governance.
+- Phased plan execution and documentation-backed development lifecycle.
+
+---
+
+## 12. Platform and Engineering Governance
+
+### 12.1 Development Lifecycle
+
+- Canonical plan lifecycle: `Draft -> Ready -> Active -> Complete`.
+- Phase-driven execution with verification gates.
+- Task, phase-log, and session-memory continuity for long-running initiatives.
+
+### 12.2 Quality Gates
+
+- Lint, typecheck, and tests required in preflight workflows.
+- Security and invariant checks integrated into automation loops.
+- Documentation updates required for behavior/contract changes.
+
+### 12.3 AI-Assisted Delivery Governance
+
+- AI context sources are documented under `docs/reference/apps`.
+- Planning and execution should consume structured references before coding.
+- Symbol-level references available for function-impact precision.
+
+---
+
+## 13. KPIs and Success Metrics
+
+### 13.1 Security and Access
+
+- Unauthorized/invalid access event rate.
+- Override rate and override resolution timing.
+- Incident rate and closure SLA.
+
+### 13.2 Operations
+
+- Scan throughput and median verification time.
+- Guard task completion efficiency.
+- Resident self-service completion rate.
+
+### 13.3 Growth and Attribution
+
+- Physical conversion events by campaign/source.
+- Cost per physical visit and conversion quality trend.
+- Marketing-to-CRM signal integrity.
+
+### 13.4 Platform Health
+
+- API reliability and error rates by domain.
+- CI/preflight pass rates.
+- Tenant health and support ticket resolution metrics.
+
+---
+
+## 14. Release Strategy and Rollout Model
+
+- Use phased feature delivery with explicit scope boundaries.
+- Prefer domain-isolated rollouts for high-risk changes (DB/API/UI split).
+- Require rollback strategy and verification checklist for risky deployments.
+- Keep roadmap alignment with `docs/reference/product/UPCOMING.md`.
+
+---
+
+## 15. Risks and Mitigations
+
+### 15.1 Core Risks
+
+- Cross-tenant leakage from unscoped queries.
+- API contract drift across fast-changing route surfaces.
+- Operational regressions in scan and guard-critical flows.
+- Documentation drift between implementation and planning references.
+
+### 15.2 Mitigations
+
+- Mandatory invariant checks and scoped review.
+- Contract-aware phased execution and verification.
+- Symbol-level impact analysis for refactors.
+- Continuous doc updates tied to lifecycle/automation.
+
+---
+
+## 16. Traceability Matrix (Reference Sources)
+
+Use these as authoritative context packs during planning and execution:
+
+- `docs/reference/apps/GATEFLOW_COMPLETE_CONTEXT_REFERENCE.md`
+- `docs/reference/apps/PLANNING_AND_PLAN_LIFECYCLE_REFERENCE.md`
+- `docs/reference/apps/FILES_AND_STRUCTURE_REFERENCE.md`
+- `docs/reference/apps/DATABASE_BACKEND_AND_TECH_REFERENCE.md`
+- `docs/reference/apps/API_GATEWAY_AND_CONTRACTS_REFERENCE.md`
+- `docs/reference/apps/FUNCTIONS_AND_SERVICES_INDEX_REFERENCE.md`
+- `docs/reference/apps/PAGES_AND_ROUTES_INDEX_REFERENCE.md`
+- `docs/reference/apps/UI_UX_AND_DESIGN_REFERENCE.md`
+- `docs/reference/apps/WORKSPACE_AI_ENVIRONMENT_REFERENCE.md`
+- `docs/reference/apps/MEMORY_AND_LEARNED_DATA_REFERENCE.md`
+- `docs/reference/apps/AI_CONTEXT_BLOCK_REFERENCE.md`
+- `docs/reference/apps/symbols/README.md`
+
+App-specific deep references:
+
+- `docs/reference/apps/CLIENT_DASHBOARD_REFERENCE.md`
+- `docs/reference/apps/ADMIN_DASHBOARD_REFERENCE.md`
+- `docs/reference/apps/SCANNER_APP_REFERENCE.md`
+- `docs/reference/apps/RESIDENT_PORTAL_REFERENCE.md`
+- `docs/reference/apps/MARKETING_APP_REFERENCE.md`
+- `docs/reference/apps/DESIGN_SYSTEM_REFERENCE.md`
+
+---
+
+## 17. Glossary
+
+- HMAC: Hash-based Message Authentication Code.
+- RBAC: Role-Based Access Control.
+- PWA: Progressive Web App.
+- KPI: Key Performance Indicator.
+- CPV: Cost Per Visit.
+- RTL/LTR: Right-to-Left / Left-to-Right layout direction.
+- Ralph Loop: GateFlow autonomous quality/governance loop.
+
+---
+
+This PRD is the strategic and execution-level source of truth for GateFlow product and engineering decisions.  
+All major plan proposals, implementation phases, and release decisions should trace back to this document and the linked reference matrix.

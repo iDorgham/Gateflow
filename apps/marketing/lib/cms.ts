@@ -1,4 +1,10 @@
-import { prisma } from '@gate-access/db';
+import { prisma, Prisma } from '@gate-access/db';
+
+// `i18n-config.ts` declares 'ar-EG', never bare 'ar' — a `=== 'ar'` check is
+// always false and silently falls back to English content on Arabic routes.
+function isArabic(locale: string): boolean {
+  return locale.toLowerCase().startsWith('ar');
+}
 
 export interface LandingPageData {
   id: string;
@@ -35,23 +41,25 @@ export async function getLandingPage(
           orderBy: { order: 'asc' },
         },
       },
-    });
+    } satisfies Prisma.LandingPageFindUniqueArgs);
 
     if (!page || page.status !== 'PUBLISHED') {
       return null;
     }
 
+    const arabic = isArabic(locale);
+
     return {
       id: page.id,
       slug: page.slug,
-      title: locale === 'ar' ? page.titleAr : page.titleEn,
+      title: arabic ? page.titleAr : page.titleEn,
       status: page.status,
       publishedAt: page.publishedAt,
       sections: page.sections.map((section) => ({
         id: section.id,
         type: section.type,
         order: section.order,
-        content: locale === 'ar' ? section.contentAr : section.contentEn,
+        content: arabic ? section.contentAr : section.contentEn,
       })),
     };
   } catch (error) {
@@ -71,7 +79,12 @@ export interface BlogPostData {
     name: string;
     avatarUrl: string | null;
   };
-  categories: Array<{
+  category: {
+    id: string;
+    name: string;
+    slug: string;
+  } | null;
+  tags: Array<{
     id: string;
     name: string;
     slug: string;
@@ -89,7 +102,8 @@ export async function getBlogPosts(
     const posts = await prisma.blogPost.findMany({
       where: { status: 'PUBLISHED' },
       include: {
-        categories: true,
+        category: true,
+        tags: true,
         author: {
           select: { name: true, avatarUrl: true },
         },
@@ -98,19 +112,24 @@ export async function getBlogPosts(
       take: limit,
     });
 
+    const arabic = isArabic(locale);
+
     return posts.map((p) => ({
       id: p.id,
-      slug: locale === 'ar' ? p.slugAr : p.slugEn,
-      title: locale === 'ar' ? p.titleAr : p.titleEn,
-      excerpt: (locale === 'ar' ? p.excerptAr : p.excerptEn) || '',
-      content: locale === 'ar' ? p.contentAr : p.contentEn,
+      slug: arabic ? p.slugAr : p.slugEn,
+      title: arabic ? p.titleAr : p.titleEn,
+      excerpt: (arabic ? p.excerptAr : p.excerptEn) || '',
+      content: (arabic ? p.contentAr : p.contentEn) || '',
       publishedAt: p.publishedAt,
       author: p.author,
-      categories: p.categories.map((c) => ({
-        id: c.id,
-        name: locale === 'ar' ? c.nameAr : c.nameEn,
-        slug: c.slug,
-      })),
+      category: p.category
+        ? {
+            id: p.category.id,
+            name: arabic ? p.category.nameAr : p.category.nameEn,
+            slug: p.category.slug,
+          }
+        : null,
+      tags: p.tags.map((t) => ({ id: t.id, name: t.name, slug: t.slug })),
     }));
   } catch (error) {
     console.error('[CMS_LIB] Error fetching blog posts:', error);
@@ -132,28 +151,34 @@ export async function getBlogPost(
         status: 'PUBLISHED',
       },
       include: {
-        categories: true,
+        category: true,
+        tags: true,
         author: {
           select: { name: true, avatarUrl: true },
         },
       },
-    });
+    } satisfies Prisma.BlogPostFindFirstArgs);
 
     if (!post) return null;
 
+    const arabic = isArabic(locale);
+
     return {
       id: post.id,
-      slug: locale === 'ar' ? post.slugAr : post.slugEn,
-      title: locale === 'ar' ? post.titleAr : post.titleEn,
-      excerpt: (locale === 'ar' ? post.excerptAr : post.excerptEn) || '',
-      content: locale === 'ar' ? post.contentAr : post.contentEn,
+      slug: arabic ? post.slugAr : post.slugEn,
+      title: arabic ? post.titleAr : post.titleEn,
+      excerpt: (arabic ? post.excerptAr : post.excerptEn) || '',
+      content: (arabic ? post.contentAr : post.contentEn) || '',
       publishedAt: post.publishedAt,
       author: post.author,
-      categories: post.categories.map((c) => ({
-        id: c.id,
-        name: locale === 'ar' ? c.nameAr : c.nameEn,
-        slug: c.slug,
-      })),
+      category: post.category
+        ? {
+            id: post.category.id,
+            name: arabic ? post.category.nameAr : post.category.nameEn,
+            slug: post.category.slug,
+          }
+        : null,
+      tags: post.tags.map((t) => ({ id: t.id, name: t.name, slug: t.slug })),
     };
   } catch (error) {
     console.error('[CMS_LIB] Error fetching blog post:', error);

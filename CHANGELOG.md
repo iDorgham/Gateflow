@@ -20,6 +20,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Ci]** detect cross-domain redirect in Lighthouse reachability check
+
+- **[Db]** correct extension-accelerate pin, restore tenant.ts type casts
+- **[Security]** patch 16 high/critical npm advisories via pnpm overrides
+
 - **[Platform Evolution]** implement phase 5 AI landing page builder
 
 - **[Admin-Dashboard]** enforce locale-aware admin session access
@@ -159,6 +164,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 - **[Admin AI]** refine UI/UX with premium animations and hybrid message parts.
 
 ### Apps
+
+- **[Marketing]** use composite index+title React keys in CMS blocks
+
+- **[Marketing]** make CMS-driven landing/blog content reflect editor content
 
 - **[Admin]** resolve implicit any type errors in analytics page
 

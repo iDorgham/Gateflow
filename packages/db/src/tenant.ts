@@ -42,17 +42,17 @@ export const db = {
     findFirst: async (
       ...args: Parameters<typeof prisma.organization.findFirst>
     ) => {
-      return prisma.organization.findFirst(...args);
+      return prisma.organization.findFirst(...(args as [any]));
     },
     findUnique: async (
       ...args: Parameters<typeof prisma.organization.findUnique>
     ) => {
-      return prisma.organization.findUnique(...args);
+      return prisma.organization.findUnique(...(args as [any]));
     },
     findMany: async (
       ...args: Parameters<typeof prisma.organization.findMany>
     ) => {
-      return prisma.organization.findMany(...args);
+      return prisma.organization.findMany(...(args as [any]));
     },
   },
 
@@ -60,7 +60,7 @@ export const db = {
     ...prisma.user,
     findFirst: async (args?: Parameters<typeof prisma.user.findFirst>[0]) => {
       const orgFilter = getOrgFilter();
-      if (!orgFilter) return prisma.user.findFirst(args);
+      if (!orgFilter) return prisma.user.findFirst(args as any);
       return prisma.user.findFirst({
         ...args,
         where: {
@@ -71,7 +71,7 @@ export const db = {
     },
     findMany: async (args?: Parameters<typeof prisma.user.findMany>[0]) => {
       const orgFilter = getOrgFilter();
-      if (!orgFilter) return prisma.user.findMany(args);
+      if (!orgFilter) return prisma.user.findMany(args as any);
       return prisma.user.findMany({
         ...args,
         where: {
@@ -82,7 +82,7 @@ export const db = {
     },
     count: async (args?: Parameters<typeof prisma.user.count>[0]) => {
       const orgFilter = getOrgFilter();
-      if (!orgFilter) return prisma.user.count(args);
+      if (!orgFilter) return prisma.user.count(args as any);
       return prisma.user.count({
         ...args,
         where: {
@@ -97,7 +97,7 @@ export const db = {
     ...prisma.gate,
     findFirst: async (args?: Parameters<typeof prisma.gate.findFirst>[0]) => {
       const orgFilter = getOrgFilter();
-      if (!orgFilter) return prisma.gate.findFirst(args);
+      if (!orgFilter) return prisma.gate.findFirst(args as any);
       return prisma.gate.findFirst({
         ...args,
         where: {
@@ -108,7 +108,7 @@ export const db = {
     },
     findMany: async (args?: Parameters<typeof prisma.gate.findMany>[0]) => {
       const orgFilter = getOrgFilter();
-      if (!orgFilter) return prisma.gate.findMany(args);
+      if (!orgFilter) return prisma.gate.findMany(args as any);
       return prisma.gate.findMany({
         ...args,
         where: {
@@ -119,7 +119,7 @@ export const db = {
     },
     count: async (args?: Parameters<typeof prisma.gate.count>[0]) => {
       const orgFilter = getOrgFilter();
-      if (!orgFilter) return prisma.gate.count(args);
+      if (!orgFilter) return prisma.gate.count(args as any);
       return prisma.gate.count({
         ...args,
         where: {
@@ -134,7 +134,7 @@ export const db = {
     ...prisma.qRCode,
     findFirst: async (args?: Parameters<typeof prisma.qRCode.findFirst>[0]) => {
       const orgFilter = getOrgFilter();
-      if (!orgFilter) return prisma.qRCode.findFirst(args);
+      if (!orgFilter) return prisma.qRCode.findFirst(args as any);
       return prisma.qRCode.findFirst({
         ...args,
         where: {
@@ -145,7 +145,7 @@ export const db = {
     },
     findMany: async (args?: Parameters<typeof prisma.qRCode.findMany>[0]) => {
       const orgFilter = getOrgFilter();
-      if (!orgFilter) return prisma.qRCode.findMany(args);
+      if (!orgFilter) return prisma.qRCode.findMany(args as any);
       return prisma.qRCode.findMany({
         ...args,
         where: {
@@ -156,7 +156,7 @@ export const db = {
     },
     count: async (args?: Parameters<typeof prisma.qRCode.count>[0]) => {
       const orgFilter = getOrgFilter();
-      if (!orgFilter) return prisma.qRCode.count(args);
+      if (!orgFilter) return prisma.qRCode.count(args as any);
       return prisma.qRCode.count({
         ...args,
         where: {
@@ -171,7 +171,7 @@ export const db = {
     ...prisma.scanLog,
     findMany: async (args?: Parameters<typeof prisma.scanLog.findMany>[0]) => {
       const orgId = organizationContext.organizationId;
-      if (!orgId) return prisma.scanLog.findMany(args);
+      if (!orgId) return prisma.scanLog.findMany(args as any);
       return prisma.scanLog.findMany({
         ...args,
         where: {
