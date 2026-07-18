@@ -1,7 +1,7 @@
 import { requireAdmin } from '@/lib/admin-auth';
 import { getTranslation } from '@/lib/i18n/i18n';
 import { Locale } from '@/lib/i18n/i18n-config';
-import { prisma } from '@gate-access/db';
+import { prisma, Prisma } from '@gate-access/db';
 import {
   BarChart3,
   TrendingUp,
@@ -101,15 +101,9 @@ export default async function AnalyticsPage(props: {
     _count: { id: true },
   })) as { status: string; _count: { id: number } }[];
   const statusMap = Object.fromEntries(
-    statusGroups.map((s: { status: string; _count: { id: number } }) => [
-      s.status,
-      s._count.id,
-    ])
+    statusGroups.map((s) => [s.status, s._count.id])
   );
-  const totalScans30 = statusGroups.reduce(
-    (a: number, b: { _count: { id: number } }) => a + b._count.id,
-    0
-  );
+  const totalScans30 = statusGroups.reduce((a, b) => a + b._count.id, 0);
 
   // ── Top gates by scan volume (7 days) for this org ─────────────────────────
   const recentGateScans = (await prisma.scanLog.groupBy({

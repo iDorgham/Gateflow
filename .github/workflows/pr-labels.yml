@@ -146,7 +146,7 @@ jobs:
           done <<< "$CHANGED"
 
           # Deduplicate
-          UNIQUE=$(echo -e "$PACKAGES" | sort -u | grep -v '^$')
+          UNIQUE=$(echo -e "$PACKAGES" | sort -u | grep -v '^$' || true)
           echo "packages<<EOF" >> $GITHUB_OUTPUT
           echo "$UNIQUE" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT

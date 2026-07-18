@@ -8,16 +8,16 @@
 
 Lightweight tally by task category. Update when reviewing the usage log (e.g. weekly).
 
-| Task type                     | Gemini | Opencode | Kiro  | Kilo  | Qwen  | Best for                     |
-| ----------------------------- | ------ | -------- | ----- | ----- | ----- | ---------------------------- |
-| Schema / DB / Prisma          | 0/0/0  | 0/0/0    | 0/0/0 | 0/0/0 | 0/0/0 | Gemini                       |
-| Refactor / TDD                | 0/0/0  | 0/0/0    | 0/0/0 | 0/0/0 | 0/0/0 | Opencode                     |
-| Content / SEO draft           | 0/0/0  | 0/0/0    | 0/0/0 | 0/0/0 | 0/0/0 | Kiro or Qwen                 |
-| Quick structural check        | 0/0/0  | 0/0/0    | 0/0/0 | 0/0/0 | 0/0/0 | Gemini                       |
-| Free-tier agentic             | 0/0/0  | 0/0/0    | 0/0/0 | 0/0/0 | 0/0/0 | Kiro or Qwen                 |
-| Free-tier fast terminal tasks | 0/0/0  | 0/0/0    | 0/0/0 | 0/0/0 | 0/0/0 | Kilo or Kiro                 |
-| Docs sync from code           | 0/0/0  | 0/0/0    | 0/0/0 | 0/0/0 | 0/0/0 | Opencode                     |
-| CI / headless automation      | 0/0/0  | 0/0/0    | 0/0/0 | 0/0/0 | 0/0/0 | Opencode (Claude escalation) |
+| Task type                     | Gemini | Opencode | Kiro  | Kilo  | Qwen  | Best for |
+| ----------------------------- | ------ | -------- | ----- | ----- | ----- | -------- |
+| Schema / DB / Prisma          | 0/0/0  | 0/0/0    | 0/0/0 | 0/0/0 | 0/0/0 | Gemini   |
+| Refactor / TDD                | 1/0/0  | 0/0/0    | 0/0/0 | 0/0/0 | 0/0/0 | Gemini   |
+| Content / SEO draft           | 0/0/0  | 0/0/0    | 0/0/0 | 0/0/0 | 0/0/0 | Gemini   |
+| Quick structural check        | 3/0/0  | 1/0/0    | 0/0/0 | 0/0/0 | 0/0/0 | Gemini   |
+| Free-tier agentic             | 0/0/0  | 0/0/0    | 0/0/0 | 0/0/0 | 0/1/0 | Qwen     |
+| Free-tier fast terminal tasks | 0/0/0  | 0/0/0    | 0/0/0 | 0/0/0 | 0/0/0 | Gemini   |
+| Docs sync from code           | 0/0/0  | 0/0/0    | 0/0/0 | 0/0/0 | 0/0/0 | Gemini   |
+| CI / headless automation      | 0/0/0  | 0/0/0    | 0/0/0 | 0/0/0 | 0/0/0 | Gemini   |
 
 _(Counts are `wins/partials/fails`. Current rows are baseline defaults from `TOOL_AND_CLI_REFERENCE.md` until real usage rows are logged in `CLI_USAGE_AND_RESULTS.md`.)_
 
