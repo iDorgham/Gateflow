@@ -165,6 +165,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Apps
 
+- **[Marketing]** use composite index+title React keys in CMS blocks
+
 - **[Marketing]** make CMS-driven landing/blog content reflect editor content
 
 - **[Admin]** resolve implicit any type errors in analytics page
