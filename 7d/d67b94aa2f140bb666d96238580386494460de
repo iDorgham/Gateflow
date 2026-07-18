@@ -1,0 +1,21 @@
+apps/client-dashboard/src/components/dashboard/dashboard-overview.tsx
+  s_edf5df462eee0c::t_0e3d85125974fa 89
+  s_edf5df462eee0c::t_4fc95865f73be1 98
+  s_edf5df462eee0c::t_6be221765aa05d 109
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "7dd67b94aa2f140bb666d96238580386494460de",
+  "prompts": {},
+  "sessions": {
+    "s_edf5df462eee0c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "19b31a1d-d3ca-40fd-8988-e714bc3b44d9",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
