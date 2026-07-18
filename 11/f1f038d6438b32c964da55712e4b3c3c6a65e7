@@ -1,0 +1,19 @@
+.github/workflows/ci.yml
+  s_edf5df462eee0c::t_7b18fcb458ade4 181
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "11f1f038d6438b32c964da55712e4b3c3c6a65e7",
+  "prompts": {},
+  "sessions": {
+    "s_edf5df462eee0c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "19b31a1d-d3ca-40fd-8988-e714bc3b44d9",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
