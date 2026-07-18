@@ -101,11 +101,25 @@ jobs:
           fi
           echo "url=$URL" >> $GITHUB_OUTPUT
           echo "Auditing marketing: $URL"
-          curl -I "$URL" || echo "⚠ Warning: URL may be unreachable"
+
+          # Preflight reachability check — Lighthouse can't distinguish "site is
+          # actually broken" from "DNS/redirect misconfigured", it just reports
+          # a cryptic CHROME_INTERSTITIAL_ERROR either way. Check first so a
+          # known-unreachable target produces a clear warning + skip instead of
+          # a confusing hard failure.
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" -L --max-time 15 "$URL" || echo "000")
+          echo "http_status=$STATUS" >> $GITHUB_OUTPUT
+          if [[ "$STATUS" =~ ^(2|3)[0-9][0-9]$ ]]; then
+            echo "reachable=true" >> $GITHUB_OUTPUT
+          else
+            echo "::warning::$URL returned HTTP $STATUS — skipping Lighthouse runs (DNS/deploy issue, not a code problem)."
+            echo "reachable=false" >> $GITHUB_OUTPUT
+          fi
 
       # ── Mobile audit ──
       - name: Run Lighthouse — Mobile
         id: lh_mobile
+        if: steps.url.outputs.reachable == 'true'
         run: |
           set +e
           lhci autorun \
@@ -138,6 +152,7 @@ jobs:
       # ── Desktop audit ──
       - name: Run Lighthouse — Desktop
         id: lh_desktop
+        if: steps.url.outputs.reachable == 'true'
         run: |
           set +e
           lhci autorun \
@@ -307,9 +322,20 @@ jobs:
           fi
           echo "url=$URL" >> $GITHUB_OUTPUT
           echo "Auditing dashboard: $URL"
-          curl -I "$URL" || echo "⚠ Warning: URL may be unreachable"
+
+          # Preflight reachability check — see comment in the marketing job's
+          # "Determine target URL" step for why this exists.
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" -L --max-time 15 "$URL" || echo "000")
+          echo "http_status=$STATUS" >> $GITHUB_OUTPUT
+          if [[ "$STATUS" =~ ^(2|3)[0-9][0-9]$ ]]; then
+            echo "reachable=true" >> $GITHUB_OUTPUT
+          else
+            echo "::warning::$URL returned HTTP $STATUS — skipping Lighthouse run (DNS/deploy issue, not a code problem)."
+            echo "reachable=false" >> $GITHUB_OUTPUT
+          fi
 
       - name: Run Lighthouse — Desktop
+        if: steps.url.outputs.reachable == 'true'
         run: |
           set +e
           lhci autorun \
@@ -374,12 +400,16 @@ jobs:
           echo "Marketing: $MARKETING"
           echo "Dashboard: $DASHBOARD"
 
-          # TEMPORARY: non-blocking while gateflow.app / app.gateflow.app DNS
-          # points away from production (gateflow.app redirects to an unrelated
-          # domain, app.gateflow.app is NXDOMAIN). Re-enable the hard fail once
-          # the domains are repointed correctly.
+          # The marketing/dashboard jobs now preflight-check target URL
+          # reachability and skip (not fail) their Lighthouse steps when the
+          # target is unreachable — see "Determine target URL" /
+          # "Determine dashboard URL" steps. A "failure" result here is a
+          # genuine Lighthouse problem (threshold violation, crash while the
+          # target WAS reachable), not DNS/deploy noise, so it's safe to gate
+          # on again.
           if [[ "$MARKETING" == "failure" || "$DASHBOARD" == "failure" ]]; then
-            echo "::warning::A Lighthouse job hard-failed, but the gate is temporarily non-blocking (see comment in this step) — production domain DNS is misconfigured, unrelated to code changes."
+            echo "::error::A Lighthouse job failed. Review scores in job logs and PR comment."
+            exit 1
           fi
 
           echo "Lighthouse CI complete. Review scores in job logs and PR comment."
