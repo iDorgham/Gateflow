@@ -27,9 +27,9 @@ export function FeaturesCmsBlock({
           {content.headline || 'Our Features'}
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {items.map((item) => (
+          {items.map((item, i) => (
             <div
-              key={item.title}
+              key={`${i}-${item.title}`}
               className="flex flex-col gap-3 p-6 rounded-xl bg-ds-surface-raised border border-ds-border"
             >
               <h3 className="text-xl font-bold text-ds-text-heading">

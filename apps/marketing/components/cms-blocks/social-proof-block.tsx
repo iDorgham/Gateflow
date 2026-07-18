@@ -22,9 +22,9 @@ export function SocialProofCmsBlock({
         </p>
         <div className="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-60 grayscale">
           {items
-            ? items.map((item) => (
+            ? items.map((item, i) => (
                 <div
-                  key={item.title}
+                  key={`${i}-${item.title}`}
                   className="h-10 w-28 rounded-lg bg-ds-surface-raised border border-ds-border flex items-center justify-center text-xs font-semibold text-ds-text-subtle"
                 >
                   {item.title}
