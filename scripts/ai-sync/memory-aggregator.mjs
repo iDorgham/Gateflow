@@ -108,36 +108,44 @@ function tallyResults(data) {
     );
     if (!matchedCli) return;
 
-    // Map task to category (simplistic mapping for now)
+    // Map task to category (simplistic mapping for now). Checked in priority
+    // order via else-if so the first, most-specific match wins — a chain of
+    // independent `if`s would let a later, less-specific match silently
+    // overwrite an earlier correct one (e.g. "fix docs prisma schema" would
+    // land in Docs sync instead of Schema / DB / Prisma).
+    const task = entry.task.toLowerCase();
     let matchedType = 'Quick structural check'; // Default
     if (
-      entry.task.toLowerCase().includes('prisma') ||
-      entry.task.toLowerCase().includes('schema') ||
-      entry.task.toLowerCase().includes('db')
-    )
+      task.includes('prisma') ||
+      task.includes('schema') ||
+      task.includes('db')
+    ) {
       matchedType = 'Schema / DB / Prisma';
-    if (
-      entry.task.toLowerCase().includes('refactor') ||
-      entry.task.toLowerCase().includes('fix')
-    )
+    } else if (task.includes('refactor') || task.includes('fix')) {
       matchedType = 'Refactor / TDD';
-    if (
-      entry.task.toLowerCase().includes('seo') ||
-      entry.task.toLowerCase().includes('content') ||
-      entry.task.toLowerCase().includes('blog')
-    )
+    } else if (
+      task.includes('seo') ||
+      task.includes('content') ||
+      task.includes('blog')
+    ) {
       matchedType = 'Content / SEO draft';
-    if (
-      entry.task.toLowerCase().includes('docs') ||
-      entry.task.toLowerCase().includes('readme')
-    )
+    } else if (task.includes('docs') || task.includes('readme')) {
       matchedType = 'Docs sync from code';
-    if (
-      entry.task.toLowerCase().includes('ci') ||
-      entry.task.toLowerCase().includes('deploy') ||
-      entry.task.toLowerCase().includes('turbo')
-    )
+    } else if (
+      task.includes('ci') ||
+      task.includes('deploy') ||
+      task.includes('turbo')
+    ) {
       matchedType = 'CI / headless automation';
+    } else if (
+      task.includes('agent') ||
+      task.includes('autonomous') ||
+      task.includes('multi-step')
+    ) {
+      matchedType = 'Free-tier agentic';
+    } else if (task.includes('terminal') || task.includes('cli')) {
+      matchedType = 'Free-tier fast terminal tasks';
+    }
 
     const counts = scoreboard[matchedType][matchedCli];
     if (entry.outcome === 'success') counts.wins++;
@@ -193,6 +201,7 @@ async function run() {
   try {
     if (!fs.existsSync(USAGE_LOG_PATH)) {
       console.error('❌ Usage log not found at:', USAGE_LOG_PATH);
+      process.exitCode = 1;
       return;
     }
 
@@ -224,6 +233,7 @@ async function run() {
     console.log('🏁 Memory Aggregation Complete.');
   } catch (error) {
     console.error('❌ Error during aggregation:', error);
+    process.exitCode = 1;
   }
 }
 
