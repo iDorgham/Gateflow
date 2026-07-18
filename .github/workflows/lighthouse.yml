@@ -104,16 +104,41 @@ jobs:
 
           # Preflight reachability check — Lighthouse can't distinguish "site is
           # actually broken" from "DNS/redirect misconfigured", it just reports
-          # a cryptic CHROME_INTERSTITIAL_ERROR either way. Check first so a
-          # network-level failure (curl can't even connect: DNS/timeout/refused,
-          # reported as "000") produces a clear warning + skip instead of a
-          # confusing hard failure. A real HTTP response — including 4xx/5xx —
-          # means the target IS reachable and a Lighthouse failure there is
-          # genuine, so it must still fail the job, not skip.
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" -L --max-time 15 "$URL" || echo "000")
+          # a cryptic CHROME_INTERSTITIAL_ERROR either way. Two distinct
+          # failure modes need to skip (not hard-fail) here, since neither is
+          # a code problem:
+          #   1. Network-level failure — curl can't connect at all (DNS,
+          #      timeout, refused), reported as status "000".
+          #   2. Cross-domain redirect — gateflow.app currently 301s to an
+          #      unrelated WordPress site (gateflow.com.co), which happily
+          #      returns 200 for "/" but 404s any real app path. That's a
+          #      genuine HTTP response, so a status-code-only check can't
+          #      catch it; comparing the final resolved hostname against the
+          #      one we asked for can.
+          # Any OTHER response — including a real 4xx/5xx served by the
+          # correct host — means the target IS our app and a Lighthouse
+          # failure there is genuine, so it must still fail the job.
+          # Single curl call for both the status and the final resolved URL —
+          # curl still writes its default "%{http_code}" ("000") on a hard
+          # failure, so relying on `|| echo "000"` on top of that doubles up
+          # to a non-matching "000000"; check the exit code explicitly instead.
+          REQUESTED_HOST=$(echo "$URL" | sed -E 's#^https?://([^/]+).*#\1#')
+          CURL_EXIT=0
+          CURL_OUT=$(curl -s -o /dev/null -w "%{http_code}|%{url_effective}" -L --max-time 20 "$URL") || CURL_EXIT=$?
+          if [[ $CURL_EXIT -ne 0 ]]; then
+            STATUS="000"
+            FINAL_HOST=""
+          else
+            STATUS="${CURL_OUT%%|*}"
+            FINAL_URL="${CURL_OUT#*|}"
+            FINAL_HOST=$(echo "$FINAL_URL" | sed -E 's#^https?://([^/]+).*#\1#')
+          fi
           echo "http_status=$STATUS" >> $GITHUB_OUTPUT
           if [[ "$STATUS" == "000" ]]; then
             echo "::warning::$URL was unreachable (no HTTP response) — skipping Lighthouse runs (DNS/deploy issue, not a code problem)."
+            echo "reachable=false" >> $GITHUB_OUTPUT
+          elif [[ -n "$FINAL_HOST" && "$FINAL_HOST" != "$REQUESTED_HOST" ]]; then
+            echo "::warning::$URL redirected to a different host ($FINAL_HOST) — skipping Lighthouse runs (domain misconfigured, not a code problem)."
             echo "reachable=false" >> $GITHUB_OUTPUT
           else
             echo "reachable=true" >> $GITHUB_OUTPUT
@@ -327,11 +352,25 @@ jobs:
           echo "Auditing dashboard: $URL"
 
           # Preflight reachability check — see comment in the marketing job's
-          # "Determine target URL" step for why this exists.
-          STATUS=$(curl -s -o /dev/null -w "%{http_code}" -L --max-time 15 "$URL" || echo "000")
+          # "Determine target URL" step for why this exists (both network
+          # failures and cross-domain redirects need to skip, not hard-fail).
+          REQUESTED_HOST=$(echo "$URL" | sed -E 's#^https?://([^/]+).*#\1#')
+          CURL_EXIT=0
+          CURL_OUT=$(curl -s -o /dev/null -w "%{http_code}|%{url_effective}" -L --max-time 20 "$URL") || CURL_EXIT=$?
+          if [[ $CURL_EXIT -ne 0 ]]; then
+            STATUS="000"
+            FINAL_HOST=""
+          else
+            STATUS="${CURL_OUT%%|*}"
+            FINAL_URL="${CURL_OUT#*|}"
+            FINAL_HOST=$(echo "$FINAL_URL" | sed -E 's#^https?://([^/]+).*#\1#')
+          fi
           echo "http_status=$STATUS" >> $GITHUB_OUTPUT
           if [[ "$STATUS" == "000" ]]; then
             echo "::warning::$URL was unreachable (no HTTP response) — skipping Lighthouse run (DNS/deploy issue, not a code problem)."
+            echo "reachable=false" >> $GITHUB_OUTPUT
+          elif [[ -n "$FINAL_HOST" && "$FINAL_HOST" != "$REQUESTED_HOST" ]]; then
+            echo "::warning::$URL redirected to a different host ($FINAL_HOST) — skipping Lighthouse run (domain misconfigured, not a code problem)."
             echo "reachable=false" >> $GITHUB_OUTPUT
           else
             echo "reachable=true" >> $GITHUB_OUTPUT

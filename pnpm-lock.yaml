@@ -21,13 +21,13 @@ overrides:
   brace-expansion: '>=2.0.2'
   glob: '>=10.5.0'
   jsondiffpatch: '>=0.7.2'
-  tmp: '>=0.2.6'
+  tmp: '>=0.2.6 <1.0.0'
   zod: 3.25.76
   '@types/react': 19.2.14
   '@types/react-dom': 19.2.3
-  '@xmldom/xmldom': '>=0.9.10'
+  '@xmldom/xmldom': '>=0.9.10 <1.0.0'
   next: ^15.5.18
-  basic-ftp: '>=5.3.0'
+  basic-ftp: '>=5.3.0 <6.0.0'
   fast-uri: '>=3.1.2 <4.0.0'
   linkify-it: '>=5.0.1 <6.0.0'
   shell-quote: '>=1.8.4 <2.0.0'
@@ -11043,10 +11043,10 @@ packages:
     engines: { node: '>=6.0.0' }
     hasBin: true
 
-  /basic-ftp@6.0.1:
+  /basic-ftp@5.3.1:
     resolution:
       {
-        integrity: sha512-3ilxa3n4276wGQp/ImRAuz4ALdsj/2Wd3FqoZBZlajDYnByCZ0JMb4+26Rde0wGXIbM0G2HWSfr/Fi8b21KX8g==,
+        integrity: sha512-bopVNp6ugyA150DDuZfPFdt1KZ5a94ZDiwX4hMgZDzF+GttD80lEy8kj98kbyhLXnPvhtIo93mdnLIjpCAeeOw==,
       }
     engines: { node: '>=10.0.0' }
     dev: true
@@ -15039,7 +15039,7 @@ packages:
       }
     engines: { node: '>= 14' }
     dependencies:
-      basic-ftp: 6.0.1
+      basic-ftp: 5.3.1
       data-uri-to-buffer: 6.0.2
       debug: 4.4.3
     transitivePeerDependencies:
