@@ -10,7 +10,7 @@ import { withSerializableRetry } from './serialization-retry';
  */
 export async function ensureBoard(
   organizationId: string,
-  department: 'SALES' | 'MARKETING' | 'DEV' | 'SUPPORT',
+  department: TaskBoard['department'],
   name: string
 ): Promise<TaskBoard> {
   return withSerializableRetry<TaskBoard>(prisma, (tx) =>

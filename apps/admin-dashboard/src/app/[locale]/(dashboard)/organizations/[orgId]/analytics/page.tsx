@@ -67,9 +67,11 @@ export default async function AnalyticsPage(props: {
     })
   );
 
-  // ── Org growth (30 days) — cumulative total for this tenant ────────────────
+  // ── Org growth (30 days) — cumulative total across the platform ────────────
+  // Scoping this to `id: orgId` would return at most one row, making the
+  // chart a meaningless 0→1 step — this card is a platform-wide metric.
   const orgsAll = await prisma.organization.findMany({
-    where: { id: orgId, deletedAt: null },
+    where: { deletedAt: null },
     select: { createdAt: true },
     orderBy: { createdAt: 'asc' },
   });

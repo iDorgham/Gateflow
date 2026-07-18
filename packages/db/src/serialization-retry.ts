@@ -27,20 +27,23 @@ export async function withSerializableRetry<T>(
   fn: (tx: any) => Promise<T>,
   maxRetries: number = MAX_SERIALIZATION_RETRIES
 ): Promise<T> {
-  let lastError: unknown;
+  // Normalize so a caller passing 0 (or a bad value) still gets one real
+  // attempt instead of skipping the transaction entirely.
+  const attempts =
+    Number.isFinite(maxRetries) && maxRetries > 0 ? Math.trunc(maxRetries) : 1;
 
-  for (let attempt = 0; attempt < maxRetries; attempt++) {
+  for (let attempt = 0; attempt < attempts; attempt++) {
     try {
       return await client.$transaction(fn, {
         isolationLevel: 'Serializable',
       });
     } catch (error) {
-      lastError = error;
-      if (!isSerializationFailure(error) || attempt === maxRetries - 1) {
+      if (!isSerializationFailure(error) || attempt === attempts - 1) {
         throw error;
       }
     }
   }
 
-  throw lastError;
+  // Unreachable: the loop above always returns or throws.
+  throw new Error('withSerializableRetry: exhausted retries unexpectedly');
 }

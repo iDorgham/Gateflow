@@ -63,8 +63,11 @@ runs:
           exit 0
         fi
 
+        # -L already follows redirects to their target; a final 3xx here means
+        # the chain didn't resolve (redirect loop, missing Location, or
+        # --max-redirs hit), not a healthy page to audit.
         case "$FINAL_CODE" in
-          2*|3*)
+          2*)
             echo "skip=false" >> "$GITHUB_OUTPUT"
             ;;
           *)
