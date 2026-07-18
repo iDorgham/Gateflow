@@ -132,7 +132,6 @@ jobs:
       - name: Run Lighthouse — Mobile
         if: steps.probe.outputs.skip != 'true'
         id: lh_mobile
-        if: steps.url.outputs.reachable == 'true'
         run: |
           set +e
           lhci autorun \
@@ -166,7 +165,6 @@ jobs:
       - name: Run Lighthouse — Desktop
         if: steps.probe.outputs.skip != 'true'
         id: lh_desktop
-        if: steps.url.outputs.reachable == 'true'
         run: |
           set +e
           lhci autorun \
