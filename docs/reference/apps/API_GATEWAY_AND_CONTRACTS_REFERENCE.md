@@ -26,7 +26,7 @@ Primary API-producing apps:
 ## 2) Live API Route Counts (Current Snapshot)
 
 - `client-dashboard`: 124 route files
-- `admin-dashboard`: 46 route files
+- `admin-dashboard`: 61 route files
 - `marketing`: 3 route files
 - `resident-portal`: 2 route files
 
