@@ -20,6 +20,9 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Ci]** migrate Next apps off removed `next lint` to ESLint CLI (Next 16)
+- **[Ci]** unify React 19 via pnpm overrides to fix react-hook-form dual-peer typecheck
+- **[Ci]** await cookies() in client-dashboard (drop removed UnsafeUnwrappedCookies)
 - **[Ci]** detect cross-domain redirect in Lighthouse reachability check
 
 - **[Db]** correct extension-accelerate pin, restore tenant.ts type casts

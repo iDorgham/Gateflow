@@ -6,7 +6,7 @@
     "dev": "next dev --port 3002",
     "build": "next build",
     "start": "next start --port 3002",
-    "lint": "next lint",
+    "lint": "eslint src",
     "typecheck": "tsc --noEmit",
     "test": "jest"
   },
@@ -51,12 +51,14 @@
     "zod": "3.25.76"
   },
   "devDependencies": {
+    "@gate-access/config": "workspace:*",
     "@types/jest": "^30.0.0",
     "@types/negotiator": "^0.6.4",
     "@types/node": "^20.19.33",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "autoprefixer": "^10.4.24",
+    "eslint": "8.57.1",
     "jest": "^30.3.0",
     "jest-environment-jsdom": "^30.2.0",
     "jest-environment-node": "^30.3.0",

@@ -79,7 +79,7 @@ describe('auth-cookies', () => {
       const { getRefreshToken } = await import('./auth-cookies');
       mockCookiesObj.get.mockReturnValue({ value: 'refresh-token-value' });
 
-      const result = getRefreshToken();
+      const result = await getRefreshToken();
 
       expect(mockCookiesObj.get).toHaveBeenCalledWith('gf_refresh_token');
       expect(result).toBe('refresh-token-value');
@@ -89,7 +89,7 @@ describe('auth-cookies', () => {
       const { getRefreshToken } = await import('./auth-cookies');
       mockCookiesObj.get.mockReturnValue(undefined);
 
-      const result = getRefreshToken();
+      const result = await getRefreshToken();
 
       expect(mockCookiesObj.get).toHaveBeenCalledWith('gf_refresh_token');
       expect(result).toBeUndefined();
