@@ -20,6 +20,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Ci]** unblock master after Next 16 bump
+
 - **[Ci]** migrate Next apps off removed `next lint` to ESLint CLI (Next 16)
 - **[Ci]** unify React 19 via pnpm overrides to fix react-hook-form dual-peer typecheck
 - **[Ci]** await cookies() in client-dashboard (drop removed UnsafeUnwrappedCookies)
