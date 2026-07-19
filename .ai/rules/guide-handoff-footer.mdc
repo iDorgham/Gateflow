@@ -1,0 +1,72 @@
+---
+description: Plain-language next steps and one copyable prompt or terminal line
+alwaysApply: true
+---
+
+# Guide-style handoff footer (every reply)
+
+End **every** substantive assistant message with a **short** closing block so the user knows what to do next. Write for **new or non-developer** readers building with AI: **simple words**, **clear order**, no duplicate “idea lists.”
+
+## When to include (exceptions)
+
+- **Skip** the footer if the user explicitly asks for no follow-ups, no suggestions, or “answer only”.
+- **Skip** if the reply is a **single** tool raw dump with **no** prose and no reasonable next action (rare).
+- **Do not duplicate** the footer if the message already ends with the same `###` sections below.
+
+## Format (strict order)
+
+1. A horizontal rule: `---` on its own line (separates answer from handoff).
+
+2. **`### What to do next`** — **2–4** bullets only:
+   - **Plain English** (avoid jargon unless the user already used it).
+   - **Only what matters for their current task** in this chat (what they asked, what you changed, what’s still broken). **Do not** add a second heading with more “repo chores” — one list is enough.
+   - Short, imperative lines (“Open…”, “Run…”, “Try…”). If you name a file, say what it’s for in a few words.
+   - **If the next step is a terminal command (section 3 uses `### Next terminal command`):** include **at least one bullet** that states in simple terms **what that command will do** (what runs, what it checks, or what output to expect) — **not** by paraphrasing the flags inside the fence; the explanation lives **only** in these bullets.
+
+3. **Exactly one** of the following (pick the one that matches the best *single* next step). **Do not** show both unless the user clearly needs a chat step *and* a terminal step in one reply (rare).
+
+   - **`### Next prompt`** — Use when the best next step is something they **paste into this AI chat** (slash command).  
+     One fenced block, language `text`, **one line only** inside, starting with `/` (real command from `.cursor/commands/` or `.ai/commands/`). No prose inside the fence.
+
+   - **`### Next terminal command`** — Use when the best next step is something they **run in the terminal** (install, test, git, script).  
+     **Before** the fence, the **`### What to do next`** bullets must already explain what the command does (see above).  
+     One fenced block, language `bash` or `text`, **one line only** inside, full real command (no `...`). **No prose inside the fence** — copy button stays a clean command line.
+
+If neither a slash command nor a single terminal line is helpful, you may omit section 3 entirely (keep only `### What to do next`).
+
+## Style
+
+- **Indie / beginner friendly:** explain *why* the step matters in the bullet text when it helps, not in the code fence.
+- **One focus:** the footer continues the same thread as the answer — not a generic workspace roadmap.
+- Slash commands in **Next prompt** must be **valid** per the command registries; do not invent flags.
+
+## Example (AI prompt as next step)
+
+---
+
+### What to do next
+
+- Open the file we just mentioned and check the section matches what you want.
+- If anything errors, paste the exact error message in your next message.
+
+### Next prompt
+
+```text
+/guide help
+```
+
+## Example (terminal as next step)
+
+---
+
+### What to do next
+
+- Stay in the project folder you already opened in Terminal.
+- **`pnpm run validate`** runs the repo’s validation script (lint + checks configured in `package.json`); it should finish in under a minute if dependencies are installed.
+- If it fails, send the last 10 lines of output here.
+
+### Next terminal command
+
+```bash
+pnpm run validate
+```
