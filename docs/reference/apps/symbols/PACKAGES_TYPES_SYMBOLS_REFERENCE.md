@@ -37,8 +37,8 @@ Auto-generated symbol index for planning and impact analysis.
 
 - Exports (4): `QRPayload`, `QRRejectReason`, `QRVerificationResult`, `SignedQRString`
 
-## `packages/types/src/qr-signing.ts`
-
+- Exports (2): `signQRPayload`, `verifyQRSignature`
++ Exports (4): `base64urlDecode`, `base64urlEncode`, `signQRPayload`, `verifyQRSignature`
 - Exports (2): `signQRPayload`, `verifyQRSignature`
 
 ## `packages/types/src/qr-validate.ts`
