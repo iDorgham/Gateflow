@@ -1,0 +1,19 @@
+CHANGELOG.md
+  s_37f85a350cf61a::t_508c84b56b97a6 23-24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "4983436890fc1cb8c9c396b31ff7277ccb11b8a3",
+  "prompts": {},
+  "sessions": {
+    "s_37f85a350cf61a": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "7f884a87-7763-4b17-b9bb-71ef97075161",
+        "model": "unknown"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
