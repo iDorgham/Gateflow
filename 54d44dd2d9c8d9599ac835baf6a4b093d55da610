@@ -1,0 +1,36 @@
+apps/admin-dashboard/src/app/[locale]/(dashboard)/organizations/[orgId]/admins/page.tsx
+  s_896b16a9453fed::t_6d532553268682 1
+  s_896b16a9453fed::t_f571ac0e341b5e 36,40
+apps/admin-dashboard/src/middleware.ts
+  s_896b16a9453fed::t_e43e26dfda23c9 127-128
+  s_896b16a9453fed::t_d9ad84705ef107 2
+  s_896b16a9453fed::t_ec3afbcde93329 10
+apps/admin-dashboard/src/lib/admin-session.ts
+  s_896b16a9453fed::t_573553d673abe8 17-18
+  s_896b16a9453fed::t_76292100873fbd 39
+  s_896b16a9453fed::t_2ad7b411ef77c4 1-16,19-38,40-128
+  s_896b16a9453fed::t_e79a31f73a6d52 129-140
+apps/admin-dashboard/src/lib/admin-session.test.ts
+  s_896b16a9453fed::t_400eae18d66a31 1-53
+apps/admin-dashboard/src/app/api/admin/login/route.ts
+  s_896b16a9453fed::t_0d98f74115effc 3,51,64
+apps/admin-dashboard/src/lib/admin-auth.ts
+  s_896b16a9453fed::t_3e92b2efa3a525 5-7,14,18,20,28,31-44,49-54,120
+  s_896b16a9453fed::t_f13605f600cc84 123-124,129
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "54d44dd2d9c8d9599ac835baf6a4b093d55da610",
+  "prompts": {},
+  "sessions": {
+    "s_896b16a9453fed": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "2e5204c3-288d-42eb-936b-d48abf2f7517",
+        "model": "default"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}

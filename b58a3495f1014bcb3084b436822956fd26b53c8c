@@ -1,0 +1,110 @@
+apps/admin-dashboard/src/components/monitoring/MonitoringClient.tsx
+  s_896b16a9453fed::t_1515dcb4b399e7 20,24,30-34,71-75,86-89,108-164,169-174,197-202,211-213,221-223,230-231
+  s_896b16a9453fed::t_c727a8e9de22a1 5-12,234-242
+apps/admin-dashboard/src/app/[locale]/(dashboard)/organizations/[orgId]/support/page.tsx
+  s_896b16a9453fed::t_3a5b8950f2beee 19-334,339
+  s_896b16a9453fed::t_cb7789dea546b8 16-18
+  s_896b16a9453fed::t_179f1670b08a89 335-338
+  s_896b16a9453fed::t_3a4eb562da8a7a 340-342
+  s_896b16a9453fed::t_2e009066fa9361 1-15,343-525
+apps/admin-dashboard/src/app/api/monitoring/hardening/route.ts
+  s_896b16a9453fed::t_e8a2854714f713 20-29
+  s_896b16a9453fed::t_f448d9a5efead6 17-19
+  s_896b16a9453fed::t_cf31a21fc18c17 30-32
+  s_896b16a9453fed::t_865435fb738f78 1-16,33-66
+apps/admin-dashboard/src/app/[locale]/(dashboard)/organizations/[orgId]/analytics/page.tsx
+  s_896b16a9453fed::t_f0ca2d0dd18f32 214-264
+  s_896b16a9453fed::t_4587e1d3126460 211-213
+  s_896b16a9453fed::t_f606430ad4775e 265-267
+  s_896b16a9453fed::t_ac10b3e53d37ca 1-3,7-18,21-39,41-42,44-45,47-48,50-52,54-67,69,71-80,83-106,108-109,112-120,122-123,126-130,133-137,139-151,153-162,164-165,167-168,172-210,268-307,309-391,394-416,418-425
+CHANGELOG.md
+  s_896b16a9453fed::t_6b882f3a31249a 13-14
+apps/admin-dashboard/package.json
+  s_896b16a9453fed::t_44bb01a1eaa1c4 30-34
+apps/admin-dashboard/src/app/[locale]/(dashboard)/organizations/[orgId]/audit-logs/page.tsx
+  s_896b16a9453fed::t_6d701634607ced 1-3,5,7,9-19,21-26,28-29,31-32,34-37,39-41,43-55,58-62,65-94,96-97,100,102,104-105,107-138,141-234,236,238-245,247-264,266-282,284-302,304-312,314-331,333-358,360-367
+apps/admin-dashboard/src/app/[locale]/(dashboard)/organizations/[orgId]/cms/blog/page.tsx
+  s_896b16a9453fed::t_a499b8fe7b119f 1-28,36-59,61-95,98-99,102-109,111-119,121-138,140-146,148-244
+apps/admin-dashboard/src/app/api/analytics/overview/route.ts
+  s_896b16a9453fed::t_6f4e53f2dd19b6 1-73
+apps/admin-dashboard/src/app/api/audit/logs/route.ts
+  s_896b16a9453fed::t_58e397c81d5c6b 1-48
+apps/admin-dashboard/src/app/api/cms/blog/[slug]/route.ts
+  s_896b16a9453fed::t_5258301f07c72f 1-223
+apps/admin-dashboard/src/app/api/cms/blog/route.ts
+  s_896b16a9453fed::t_8fa28a646e1fbd 1-168
+apps/admin-dashboard/src/app/api/cms/generate-blog/route.ts
+  s_896b16a9453fed::t_63c210d5714c24 4,12-14,16,24-27,33-37,42-69,72-73,76,79-80,84-87,90-99
+apps/admin-dashboard/src/app/api/support/tickets/[id]/escalate/route.ts
+  s_896b16a9453fed::t_a6947670887160 1-83
+apps/admin-dashboard/src/app/api/support/tickets/[id]/messages/route.ts
+  s_896b16a9453fed::t_000543f60e978a 1-76
+apps/admin-dashboard/src/app/api/support/tickets/[id]/triage/route.ts
+  s_896b16a9453fed::t_438a9daaee5f30 1-112
+apps/admin-dashboard/src/app/api/support/tickets/route.ts
+  s_896b16a9453fed::t_6b43418366dd48 1-98
+apps/admin-dashboard/src/components/cms/BlogEditor.tsx
+  s_896b16a9453fed::t_e385852e20de3f 3-23,25,28,30,32-35,38-41,44-61,63-64,66-98,104,106,108-118,125-146,148,150-181,183-204,206-213,215-226,228-242,244-269,271-286,288-301,303-313,315,317-318,320-329,331-457,459
+apps/admin-dashboard/src/components/monitoring/HardeningPanel.tsx
+  s_896b16a9453fed::t_576d0f0df12a32 1-195
+apps/marketing/README.md
+  s_896b16a9453fed::t_6c09a03b43ec7d 3,9-12,23,36,45,55,97
+apps/marketing/app/[locale]/blog/[slug]/page.tsx
+  s_896b16a9453fed::t_88b27f00051248 18-22,24,28-29,39,43,50-59,124,126-134
+apps/marketing/app/[locale]/blog/page.tsx
+  s_896b16a9453fed::t_ca9ce430c7d726 33
+apps/marketing/lib/blog.ts
+  s_896b16a9453fed::t_5612066eb002c9 5,17,36,40-65,70-92
+apps/marketing/lib/cms.ts
+  s_896b16a9453fed::t_dff0d00b7e114a 62-162
+docs/plan/Complete/platform_evolution/PLAN_platform_evolution.md
+  s_896b16a9453fed::t_ff563d37f0d296 4
+docs/plan/Complete/platform_evolution/TASKS_platform_evolution.md
+  s_896b16a9453fed::t_286ae517b79a85 109-117,121-143
+docs/plan/backlog/ALL_TASKS_BACKLOG.md
+  s_896b16a9453fed::t_4c37907c6cdb34 70,72,74,76-82
+docs/reference/README.md
+  s_896b16a9453fed::t_f0ac26ead3f4d7 7-13
+docs/reference/apps/ADMIN_DASHBOARD_REFERENCE.md
+  s_896b16a9453fed::t_fed1ed795ff558 1-214
+docs/reference/apps/CLIENT_DASHBOARD_REFERENCE.md
+  s_896b16a9453fed::t_0aa50ede4852f5 1-296
+docs/reference/apps/DESIGN_SYSTEM_REFERENCE.md
+  s_896b16a9453fed::t_5a254ac98158a2 1-124
+docs/reference/apps/MARKETING_APP_REFERENCE.md
+  s_896b16a9453fed::t_72eacc68680ed3 1-163
+docs/reference/apps/MEMORY_AND_LEARNED_DATA_REFERENCE.md
+  s_896b16a9453fed::t_06c23bcafbdda2 1-144
+docs/reference/apps/OTHER_REPO_DEVELOPMENTS_REFERENCE.md
+  s_896b16a9453fed::t_e389aa3e06e7d6 1-120
+docs/reference/apps/PLANNING_AND_PLAN_LIFECYCLE_REFERENCE.md
+  s_896b16a9453fed::t_a59d45f4212319 1-343
+docs/reference/apps/README.md
+  s_896b16a9453fed::t_9889e39697d83b 1-27
+docs/reference/apps/RESIDENT_PORTAL_REFERENCE.md
+  s_896b16a9453fed::t_5b2c10feb8e4fa 1-132
+docs/reference/apps/SCANNER_APP_REFERENCE.md
+  s_896b16a9453fed::t_1b02ee3a388566 1-130
+docs/reference/apps/UI_UX_AND_DESIGN_REFERENCE.md
+  s_896b16a9453fed::t_4710ec72dfb285 1-223
+docs/reference/apps/WORKSPACE_AI_ENVIRONMENT_REFERENCE.md
+  s_896b16a9453fed::t_2e393ea76f64a4 1-276
+packages/db/prisma/migrations/20260430110903_platform_evolution_5/migration.sql
+  s_896b16a9453fed::t_128184048840c8 1-590
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.13",
+  "base_commit_sha": "b58a3495f1014bcb3084b436822956fd26b53c8c",
+  "prompts": {},
+  "sessions": {
+    "s_896b16a9453fed": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "2e5204c3-288d-42eb-936b-d48abf2f7517",
+        "model": "default"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}

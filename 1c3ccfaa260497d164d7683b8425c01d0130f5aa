@@ -1,0 +1,57 @@
+docs/plan/Draft/security_hotfix_v1/CONTEXT_security_hotfix_v1.md
+  s_43d83ced1b63a9::t_54435d9fbdce25 1-46
+docs/plan/Draft/security_hotfix_v1/PLAN_FEEDBACK.md
+  s_43d83ced1b63a9::t_ba595177631bd6 1-18
+docs/plan/Draft/security_hotfix_v1/PLAN_security_hotfix_v1.md
+  s_43d83ced1b63a9::t_634eb7bca0e8a3 1-59
+docs/plan/Draft/security_hotfix_v1/PROMPT_security_hotfix_v1_phase_1.md
+  s_43d83ced1b63a9::t_ca64d4440be9f0 1-54
+docs/plan/Draft/security_hotfix_v1/PROMPT_security_hotfix_v1_phase_2.md
+  s_43d83ced1b63a9::t_3862a27017b250 1-54
+docs/plan/Draft/security_hotfix_v1/PROMPT_security_hotfix_v1_phase_3.md
+  s_43d83ced1b63a9::t_73430f6e2c7baf 1-54
+docs/plan/Draft/security_hotfix_v1/SESSION_MEMORY.md
+  s_43d83ced1b63a9::t_47bf3e5df62fb1 1-37
+docs/plan/Draft/security_hotfix_v1/TASKS_security_hotfix_v1.md
+  s_43d83ced1b63a9::t_c1c1440399d0ac 1-37
+docs/plan/Draft/security_hotfix_v1/assets/README.md
+  s_43d83ced1b63a9::t_c95e19cd015b5b 1-7
+docs/plan/Draft/security_hotfix_v1/context/README.md
+  s_43d83ced1b63a9::t_c1fed92bd96cb1 1-8
+docs/plan/Draft/security_hotfix_v1/context/api.md
+  s_43d83ced1b63a9::t_60b0ff48c5916e 1-17
+docs/plan/Draft/security_hotfix_v1/context/contracts.md
+  s_43d83ced1b63a9::t_87c2045da5a2c5 1-32
+docs/plan/Draft/security_hotfix_v1/context/database.md
+  s_43d83ced1b63a9::t_6647c388cbcff4 1-13
+docs/plan/Draft/security_hotfix_v1/context/design.md
+  s_43d83ced1b63a9::t_2f9b068edf9262 1-11
+docs/plan/Draft/security_hotfix_v1/context/documentation.md
+  s_43d83ced1b63a9::t_125afdd78bdbe0 1-14
+docs/plan/Draft/security_hotfix_v1/context/structure.md
+  s_43d83ced1b63a9::t_203f2ee0a74d40 1-16
+docs/plan/Draft/security_hotfix_v1/phase_logs/README.md
+  s_43d83ced1b63a9::t_69f25bfb235aef 1-15
+docs/plan/Draft/security_hotfix_v1/phases/01_api_scans_bulk_auth_tenant/PROMPT_phase_01.md
+  s_43d83ced1b63a9::t_702e0c5a8c5ddf 1-62
+docs/plan/Draft/security_hotfix_v1/phases/02_crypto_native_aes_gcm/PROMPT_phase_02.md
+  s_43d83ced1b63a9::t_07997441188139 1-58
+docs/plan/Draft/security_hotfix_v1/phases/03_http_security_headers/PROMPT_phase_03.md
+  s_43d83ced1b63a9::t_9a59d569ecc55d 1-55
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "1c3ccfaa260497d164d7683b8425c01d0130f5aa",
+  "prompts": {},
+  "sessions": {
+    "s_43d83ced1b63a9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9d800842-375d-476b-b25e-c08c56aa6cd6",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}

@@ -1,0 +1,26 @@
+.github/workflows/lighthouse.yml
+  s_43d83ced1b63a9::t_e395b25dd21746 355-357,372-373
+  s_43d83ced1b63a9::t_f98fc6299452c7 121-124,126-135
+  s_43d83ced1b63a9::t_1bf60b34fd3f9c 107-120,125,140-141
+  s_43d83ced1b63a9::t_31998217caa7f2 358-367
+  s_43d83ced1b63a9::t_82799b466efd88 142
+  s_43d83ced1b63a9::t_7dc751820a067e 374
+pnpm-lock.yaml
+  s_43d83ced1b63a9::t_3c59c0b3202751 24,28,30,11046,11049,15042
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "53bd8065374efbc3599c1280a0c269f37b6540a0",
+  "prompts": {},
+  "sessions": {
+    "s_43d83ced1b63a9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9d800842-375d-476b-b25e-c08c56aa6cd6",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}

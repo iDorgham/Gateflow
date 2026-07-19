@@ -1,0 +1,36 @@
+apps/client-dashboard/src/app/api/ai/assistant/route.ts
+  s_edf5df462eee0c::t_1b95c23ebebb41 600-618
+  s_edf5df462eee0c::t_6a0bd1132bf95f 619-621
+apps/admin-dashboard/src/app/api/organizations/[orgId]/style/save/route.ts
+  s_edf5df462eee0c::t_b4c6b852eb361c 26-35,37-50,52-58,60-61,65-68
+  s_edf5df462eee0c::t_940643735b8c71 19-25
+apps/client-dashboard/src/app/api/tasks/route.ts
+  s_edf5df462eee0c::t_2c35b3a243bdaf 52-57,59,61,63-68,71-91
+  s_43d83ced1b63a9::t_50f486fcd65454 92
+apps/admin-dashboard/src/app/[locale]/(dashboard)/settings/style-hub/page.tsx
+  s_edf5df462eee0c::t_856f5316461853 5,37-43
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "58b68685a4bc49dd061db72054db7bd6ea37ca4f",
+  "prompts": {},
+  "sessions": {
+    "s_43d83ced1b63a9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9d800842-375d-476b-b25e-c08c56aa6cd6",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_edf5df462eee0c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "19b31a1d-d3ca-40fd-8988-e714bc3b44d9",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}

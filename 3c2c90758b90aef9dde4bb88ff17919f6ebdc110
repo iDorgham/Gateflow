@@ -1,0 +1,43 @@
+.github/workflows/ci.yml
+  s_43d83ced1b63a9::t_bbf303e17cbc60 181-187
+apps/client-dashboard/next.config.js
+  s_43d83ced1b63a9::t_bc36386d89d3d8 21-29
+packages/db/package.json
+  s_43d83ced1b63a9::t_04d3d854cdb9ad 35
+apps/admin-dashboard/src/app/[locale]/(dashboard)/organizations/[orgId]/analytics/page.tsx
+  s_43d83ced1b63a9::t_9fcc299eacbeba 4
+  s_43d83ced1b63a9::t_afbc9bf0295286 95,97,99
+package.json
+  s_43d83ced1b63a9::t_d9948c7da2f9b4 14,16
+  s_43d83ced1b63a9::t_ad1aed75db001f 15
+packages/db/src/tenant.ts
+  s_43d83ced1b63a9::t_a2eb22927d64b6 45,50,55,63,74,85,100,111,122,137,148,159,174
+apps/admin-dashboard/next.config.js
+  s_edf5df462eee0c::t_b77ad6cc4490c6 16-25
+pnpm-lock.yaml
+  s_43d83ced1b63a9::t_da85f34068590f 1081-1082,6023,6026,6028
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "3c2c90758b90aef9dde4bb88ff17919f6ebdc110",
+  "prompts": {},
+  "sessions": {
+    "s_43d83ced1b63a9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9d800842-375d-476b-b25e-c08c56aa6cd6",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_edf5df462eee0c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "19b31a1d-d3ca-40fd-8988-e714bc3b44d9",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}

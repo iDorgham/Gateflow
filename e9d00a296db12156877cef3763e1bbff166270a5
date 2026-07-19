@@ -1,0 +1,21 @@
+apps/marketing/components/cms-blocks/social-proof-block.tsx
+  s_43d83ced1b63a9::t_169f4f4005439a 25,27
+apps/marketing/components/cms-blocks/features-block.tsx
+  s_43d83ced1b63a9::t_fc38980282500b 30,32
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "e9d00a296db12156877cef3763e1bbff166270a5",
+  "prompts": {},
+  "sessions": {
+    "s_43d83ced1b63a9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9d800842-375d-476b-b25e-c08c56aa6cd6",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}

@@ -1,0 +1,30 @@
+package.json
+  s_56aef2068b103e::t_6a418404d77d74 91-92
+scripts/check/check-security.js
+  s_56aef2068b103e::t_6a418404d77d74 5-9,13-15,19-27,35-41,44-71,74-75,77-82,85-88,90-93,95-173,175-176
+scripts/dev/security-fix.js
+  s_56aef2068b103e::t_6a418404d77d74 5-10,13,17-18,20,22-25,27-44,46-48,50-51,53-54,57-62,65-68,70-72,74-94,96-97,100-144,146-193,195-196
+apps/client-dashboard/package.json
+  s_56aef2068b103e::t_6a418404d77d74 57
+.github/workflows/ci.yml
+  s_56aef2068b103e::t_6a418404d77d74 99-109,138-139
+  s_56aef2068b103e::t_69a9a00473a2e0 140
+pnpm-lock.yaml
+  s_56aef2068b103e::t_bc428784d0141a 106,116-118,260,394-395,647,957,960,1025,1028,1198,1210,1338,1341,8493,18027,18722,18743,20028,20031,20921,20946,23959,23961,23986,24528,24560,25270,25799,25802
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "2cbfebe26967e636abf62baf4e3b1fd81930952b",
+  "prompts": {},
+  "sessions": {
+    "s_56aef2068b103e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d67ce1f6-db39-4e19-893c-f013c8ecb54d",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}

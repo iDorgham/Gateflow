@@ -1,0 +1,29 @@
+.github/actions/probe-url/action.yml
+  s_edf5df462eee0c::t_11cf6d75a85510 29-35
+apps/admin-dashboard/src/app/api/organizations/[orgId]/style/save/route.ts
+  s_edf5df462eee0c::t_19558537c13ffd 60-62,68,74
+.github/workflows/lighthouse.yml
+  s_edf5df462eee0c::t_70200a001b2215 101-102,104
+  s_edf5df462eee0c::t_f9a088668aee7b 241-243,248-249
+  s_edf5df462eee0c::t_5e00bad79c3dcc 336-337,340
+  s_edf5df462eee0c::t_8f38b10e1e5ed7 81-82,85
+  s_edf5df462eee0c::t_50049777343be8 355-356,358
+packages/db/prisma/migrations/20260717223000_task_board_org_department_unique/migration.sql
+  s_edf5df462eee0c::t_932f4de41e3935 4-9
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "fa2781161e438fb3c7767fbd7a83b1d3de79c02d",
+  "prompts": {},
+  "sessions": {
+    "s_edf5df462eee0c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "19b31a1d-d3ca-40fd-8988-e714bc3b44d9",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
