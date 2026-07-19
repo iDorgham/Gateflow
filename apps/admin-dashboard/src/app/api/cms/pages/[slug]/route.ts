@@ -74,17 +74,20 @@ export async function PATCH(
       },
     });
 
-    // Trigger AI Action Log
-    await prisma.aiActionLog.create({
-      data: {
-        organizationId: updatedPage.organizationId || 'GLOBAL',
-        action: 'CMS_PAGE_PUBLISHED',
-        status: 'CONFIRMED',
-        prompt: `Publish request for slug: ${slug}`,
-        result: `New status: ${updatedPage.status}`,
-        metadata: JSON.stringify({ pageId: updatedPage.id }),
-      },
-    });
+    // Trigger AI Action Log — skip for global (org-less) pages since AiActionLog.organizationId
+    // is a required FK and no 'GLOBAL' Organization row exists to satisfy it.
+    if (updatedPage.organizationId) {
+      await prisma.aiActionLog.create({
+        data: {
+          organizationId: updatedPage.organizationId,
+          actionType: 'CMS_PAGE_PUBLISHED',
+          status: 'CONFIRMED',
+          prompt: `Publish request for slug: ${slug}`,
+          result: `New status: ${updatedPage.status}`,
+          metadata: JSON.stringify({ pageId: updatedPage.id }),
+        },
+      });
+    }
 
     return NextResponse.json({ success: true, page: updatedPage });
   } catch (error) {

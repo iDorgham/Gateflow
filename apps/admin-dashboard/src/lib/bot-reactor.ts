@@ -75,30 +75,31 @@ export async function processBotRules(event: BotEvent) {
           where: { id: rule.id },
           data: { enabled: false },
         });
-        
+
         await prisma.notification.create({
           data: {
-            title: 'Bot Rule Auto-Disabled',
-            message: `Rule "${rule.name}" exceeded the rate limit of 10 tasks/hour and was disabled.`,
+            message: `Bot Rule Auto-Disabled: "${rule.name}" exceeded the rate limit of 10 tasks/hour and was disabled.`,
             type: 'WARNING',
             userId: event.userId || 'system',
             organizationId,
-          }
+          },
         });
         continue;
       }
 
       // 3. Prepare Task Action
       const template = rule.actionTemplate as Record<string, any>;
-      
+
       // Basic templating replacement (e.g. {{lead.company}})
       let title = template.title || `Bot Task: ${rule.name}`;
       let description = (template.description || '') + `\n\n[Rule:${rule.id}]`;
-      
+
       // Simple regex to replace {{key}} with payload[key]
       const replaceVars = (str: string) => {
         return str.replace(/{{([^}]+)}}/g, (match, key) => {
-          return payload[key.trim()] !== undefined ? String(payload[key.trim()]) : match;
+          return payload[key.trim()] !== undefined
+            ? String(payload[key.trim()])
+            : match;
         });
       };
 
@@ -111,7 +112,9 @@ export async function processBotRules(event: BotEvent) {
       });
 
       if (!board) {
-        console.warn(`[BOT_REACTOR] No board found for department ${rule.department} in org ${organizationId}`);
+        console.warn(
+          `[BOT_REACTOR] No board found for department ${rule.department} in org ${organizationId}`
+        );
         continue;
       }
 
@@ -137,20 +140,29 @@ export async function processBotRules(event: BotEvent) {
         const log = await prisma.aiActionLog.create({
           data: {
             organizationId,
-            action: 'BOT_TASK_APPROVAL',
+            actionType: 'BOT_TASK_APPROVAL',
             prompt: `Bot Rule "${rule.name}" triggered task creation.`,
-            reasoning: `Condition met: ${JSON.stringify(conditions)}`,
-            result: JSON.stringify({ title, description, priority: template.priority, department: rule.department, boardId: board.id }),
-            status: 'PENDING_CONFIRMATION',
-            payload: { ruleId: rule.id, ...payload },
+            intentJson: { ruleId: rule.id, ...payload },
+            result: JSON.stringify({
+              title,
+              description,
+              priority: template.priority,
+              department: rule.department,
+              boardId: board.id,
+            }),
+            status: 'PENDING',
             metadata: {
               requiresHiTL: true,
-            }
-          }
+              reasoning: `Condition met: ${JSON.stringify(conditions)}`,
+            },
+          },
         });
-        results.push({ ruleId: rule.id, status: 'PENDING_CONFIRMATION', logId: log.id });
+        results.push({
+          ruleId: rule.id,
+          status: 'PENDING_CONFIRMATION',
+          logId: log.id,
+        });
       }
-
     } catch (err) {
       console.error(`[BOT_REACTOR] Error processing rule ${rule.id}:`, err);
     }

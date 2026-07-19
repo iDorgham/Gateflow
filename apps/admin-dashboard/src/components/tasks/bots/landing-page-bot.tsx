@@ -222,7 +222,7 @@ export function LandingPageBot() {
                 <div className="flex-1 p-6 space-y-6 overflow-y-auto custom-scrollbar">
                   <div className="space-y-2">
                     <h3 className="text-xl font-black uppercase tracking-tight leading-tight">
-                      {generatedDraft.draft.title}
+                      {generatedDraft.draft.titleEn}
                     </h3>
                     <p className="text-[11px] font-bold text-ds-text-subtle uppercase tracking-tight opacity-70">
                       Conversion-optimized landing page blueprint generated.
@@ -234,7 +234,7 @@ export function LandingPageBot() {
                       Block Stack Preview
                     </h4>
                     <div className="space-y-2">
-                      {JSON.parse(generatedDraft.draft.blocks).map(
+                      {generatedDraft.draft.sections.map(
                         (block: { type: string }, i: number) => (
                           <div
                             key={i}

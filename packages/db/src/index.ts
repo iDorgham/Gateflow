@@ -8,6 +8,8 @@ export * from './tenant';
 export * from './queries/projects';
 export * from './queries/qr';
 export * from './crypto';
+export * from './serialization-retry';
+export { ensureBoard } from './board';
 export type { OrganizationContext, DbClient } from './tenant';
 export {
   createSecureInviteSignature,

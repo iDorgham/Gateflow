@@ -36,7 +36,7 @@ export default async function DashboardPage(props: {
         <DashboardOverview
           locale={params.locale}
           orgId={claims.orgId}
-          orgType={org.type}
+          orgType={org.type as OrganizationType}
         />
       </Suspense>
     </DashboardWrapper>

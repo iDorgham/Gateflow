@@ -50,7 +50,10 @@ describe('GET /api/gates', () => {
   });
 
   it('returns 401 when session has no orgId', async () => {
-    mockGetSessionClaims.mockResolvedValue({ sub: 'user_1', email: 'test@test.com' });
+    mockGetSessionClaims.mockResolvedValue({
+      sub: 'user_1',
+      email: 'test@test.com',
+    });
 
     const res = await GET();
     const data = await res.json();
@@ -62,7 +65,11 @@ describe('GET /api/gates', () => {
 
   it('scopes gate list by organizationId and excludes soft-deleted gates', async () => {
     const orgId = 'org_secure_123';
-    mockGetSessionClaims.mockResolvedValue({ orgId, sub: 'user_1', email: 'a@b.com' });
+    mockGetSessionClaims.mockResolvedValue({
+      orgId,
+      sub: 'user_1',
+      email: 'a@b.com',
+    });
     mockGateFindMany.mockResolvedValue([
       {
         id: 'gate_1',
@@ -93,13 +100,20 @@ describe('GET /api/gates', () => {
 
   it('scopes scanLog.groupBy by gate.organizationId', async () => {
     const orgId = 'org_secure_456';
-    mockGetSessionClaims.mockResolvedValue({ orgId, sub: 'user_2', email: 'b@c.com' });
+    mockGetSessionClaims.mockResolvedValue({
+      orgId,
+      sub: 'user_2',
+      email: 'b@c.com',
+    });
     mockGateFindMany.mockResolvedValue([]);
 
     await GET();
 
     expect(mockScanLogGroupBy).toHaveBeenCalledTimes(1);
     const groupByCall = mockScanLogGroupBy.mock.calls[0][0];
-    expect(groupByCall.where.gate).toEqual({ organizationId: orgId });
+    expect(groupByCall.where.gate).toEqual({
+      organizationId: orgId,
+      deletedAt: null,
+    });
   });
 });

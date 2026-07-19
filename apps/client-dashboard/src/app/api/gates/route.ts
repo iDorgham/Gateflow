@@ -41,7 +41,7 @@ export async function GET(request?: NextRequest): Promise<NextResponse> {
       ...(projectId ? { projectId } : {}),
     };
 
-    const [gates, scansTodayGroups] = await Promise.all([
+    const [gates, scansTodayGroupsRaw] = await Promise.all([
       prisma.gate.findMany({
         // ignore-security-guard — organizationId in gateWhere (line above)
         where: gateWhere,
@@ -53,12 +53,16 @@ export async function GET(request?: NextRequest): Promise<NextResponse> {
       prisma.scanLog.groupBy({
         by: ['gateId'],
         where: {
-          gate: { organizationId: orgId },
+          gate: { organizationId: orgId, deletedAt: null },
           scannedAt: { gte: todayStart },
         },
         _count: true,
       }),
     ]);
+    const scansTodayGroups = scansTodayGroupsRaw as unknown as {
+      gateId: string;
+      _count: number;
+    }[];
 
     const scansTodayMap = new Map<string | null, number>(
       scansTodayGroups.map((g) => [g.gateId, g._count])

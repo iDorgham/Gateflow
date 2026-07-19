@@ -9,7 +9,10 @@
 import { NextResponse } from 'next/server';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { prisma } from '@gate-access/db';
-import { orgHasAssignments, getUserAssignedGateIds } from '@/lib/gate-assignment';
+import {
+  orgHasAssignments,
+  getUserAssignedGateIds,
+} from '@/lib/gate-assignment';
 
 export const dynamic = 'force-dynamic';
 
@@ -17,7 +20,10 @@ export async function GET(): Promise<NextResponse> {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized' },
+        { status: 401 }
+      );
     }
 
     const orgId = claims.orgId;
@@ -46,7 +52,7 @@ export async function GET(): Promise<NextResponse> {
       gateIdsFilter = { in: Array.from(assignedIds) };
     }
 
-    const [gates, scansTodayGroups] = await Promise.all([
+    const [gates, scansTodayGroupsRaw] = await Promise.all([
       prisma.gate.findMany({
         where: {
           organizationId: orgId,
@@ -67,8 +73,14 @@ export async function GET(): Promise<NextResponse> {
         _count: true,
       }),
     ]);
+    const scansTodayGroups = scansTodayGroupsRaw as unknown as {
+      gateId: string;
+      _count: number;
+    }[];
 
-    const scansTodayMap = new Map<string | null, number>(scansTodayGroups.map((g) => [g.gateId, g._count]));
+    const scansTodayMap = new Map<string | null, number>(
+      scansTodayGroups.map((g) => [g.gateId, g._count])
+    );
 
     const data = gates.map((gate) => {
       const scansToday = scansTodayMap.get(gate.id) ?? 0;
@@ -98,6 +110,9 @@ export async function GET(): Promise<NextResponse> {
     });
   } catch (err) {
     console.error('GET /api/gates/assigned error:', err);
-    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }

@@ -161,14 +161,22 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         : {}),
     };
 
-    const contacts = await prisma.contact.findMany({
+    const contacts = (await prisma.contact.findMany({
       // ignore-security-guard — organizationId in where variable (line 123)
       where,
       include: {
         units: { include: { unit: { select: { id: true, name: true } } } },
       },
       orderBy: [{ lastName: 'asc' }, { firstName: 'asc' }],
-    });
+    })) as unknown as {
+      firstName: string;
+      lastName: string;
+      birthday: Date | null;
+      company: string | null;
+      phone: string | null;
+      email: string | null;
+      units: { unit: { id: string; name: string } }[];
+    }[];
 
     const header = [
       'First Name',

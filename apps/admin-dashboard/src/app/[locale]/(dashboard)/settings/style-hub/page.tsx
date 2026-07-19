@@ -2,40 +2,65 @@ import { requireAdmin } from '@/lib/admin-auth';
 import { Locale } from '@/lib/i18n/i18n-config';
 import { prisma } from '@gate-access/db';
 import { StyleHubClient } from '@/components/settings/StyleHubClient';
+import { OVERRIDABLE_TOKENS } from '@/lib/branding-css-generator';
 import { notFound } from 'next/navigation';
 
 export const metadata = { title: 'Style Hub | Design Orchestration' };
 
 export default async function StyleHubPage(props: {
-  params: Promise<{ locale: Locale; orgId: string }>;
+  params: Promise<{ locale: Locale }>;
+  searchParams: Promise<{ orgId?: string }>;
 }) {
-  const params = await props.params;
-  const { locale, orgId } = params;
+  const { locale } = await props.params;
+  const { orgId } = await props.searchParams;
 
   await requireAdmin(locale);
 
-  const organization = await prisma.organization.findUnique({
-    where: { id: orgId },
-    include: {
-      styleSnapshots: {
-        orderBy: { createdAt: 'desc' },
-        take: 10,
-      },
-      themeVariables: true,
-      activeStyle: true,
-    },
+  // Route is /settings/style-hub (no [orgId] segment) — org comes from ?orgId=
+  if (!orgId) {
+    notFound();
+  }
+
+  const organization = await prisma.organization.findFirst({
+    where: { id: orgId, deletedAt: null },
   });
 
   if (!organization) {
     notFound();
   }
 
+  // OrganizationBranding / BrandingSnapshot have no deletedAt field
+  const branding = await (prisma as any).organizationBranding.findUnique({
+    where: { organizationId: orgId },
+  });
+  const snapshots = await (prisma as any).brandingSnapshot.findMany({
+    where: { organizationId: orgId },
+    orderBy: { createdAt: 'desc' },
+    take: 10,
+  });
+
+  const tokenOverrides =
+    (branding?.tokenOverrides as Record<string, string> | undefined) ?? {};
+  // Seed every overridable token, not just ones already customized —
+  // StyleHubClient.updateVariable() only updates existing entries and
+  // can't append new ones, so a missing entry would silently drop edits.
+  const initialVariables = OVERRIDABLE_TOKENS.map((key) => ({
+    key,
+    value: tokenOverrides[key] ?? '',
+  }));
+  const formattedSnapshots = snapshots.map((s: any) => ({
+    id: s.id,
+    name: `Snapshot v${s.version}`,
+    createdAt: s.createdAt,
+    cssTokens: s.tokenOverrides ?? {},
+  }));
+
   return (
     <div className="max-w-7xl mx-auto py-8">
       <StyleHubClient
         orgId={orgId}
-        initialVariables={organization.themeVariables}
-        snapshots={organization.styleSnapshots}
+        initialVariables={initialVariables}
+        snapshots={formattedSnapshots}
       />
     </div>
   );

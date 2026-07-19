@@ -16,7 +16,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized' },
+        { status: 401 }
+      );
     }
     const orgId = claims.orgId;
 
@@ -29,7 +32,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     });
 
     if (!parsed.success) {
-      return NextResponse.json({ success: false, message: 'Invalid query params' }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: 'Invalid query params' },
+        { status: 400 }
+      );
     }
 
     const { dateFrom, dateTo, projectId, gateId } = parsed.data;
@@ -42,7 +48,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         select: { id: true },
       });
       if (!proj) {
-        return NextResponse.json({ success: false, message: 'Invalid project' }, { status: 400 });
+        return NextResponse.json(
+          { success: false, message: 'Invalid project' },
+          { status: 400 }
+        );
       }
     }
     if (gateId) {
@@ -57,7 +66,12 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       });
       if (!gate) {
         return NextResponse.json(
-          { success: false, message: projectId ? 'Gate must belong to the selected project' : 'Invalid gate' },
+          {
+            success: false,
+            message: projectId
+              ? 'Gate must belong to the selected project'
+              : 'Invalid gate',
+          },
           { status: 400 }
         );
       }
@@ -76,13 +90,13 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       ...(gateId ? { gateId } : {}),
     };
 
-    const groups = await prisma.scanLog.groupBy({
+    const groups = (await prisma.scanLog.groupBy({
       by: ['userId'],
       where: scanFilter,
-      _count: true,
-      orderBy: { _count: { userId: 'desc' } },
+      _count: { id: true },
+      orderBy: { _count: { id: 'desc' } },
       take: 10,
-    });
+    })) as { userId: string | null; _count: { id: number } }[];
 
     if (groups.length === 0) {
       return NextResponse.json({ success: true, data: [] });
@@ -93,7 +107,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       where: { id: { in: userIds }, organizationId: orgId },
       select: { id: true, name: true, email: true },
     });
-    const userMap = new Map<string, { id: string; name: string | null; email: string }>(users.map((u) => [u.id, u]));
+    const userMap = new Map<
+      string,
+      { id: string; name: string | null; email: string }
+    >(users.map((u) => [u.id, u]));
 
     const data = groups.map((g) => {
       const u = userMap.get(g.userId!);
@@ -101,13 +118,16 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         userId: g.userId,
         name: u?.name ?? 'Unknown',
         email: u?.email ?? '',
-        scanCount: g._count,
+        scanCount: g._count.id,
       };
     });
 
     return NextResponse.json({ success: true, data });
   } catch (error) {
     console.error('GET /api/analytics/operators error:', error);
-    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }

@@ -70,7 +70,7 @@ export async function POST(req: Request) {
     await prisma.aiActionLog.create({
       data: {
         organizationId: lead.organizationId,
-        action: 'CRM_DRAFT_FOLLOWUP',
+        actionType: 'CRM_DRAFT_FOLLOWUP',
         status: 'PENDING',
         prompt: systemPrompt,
         result: text,

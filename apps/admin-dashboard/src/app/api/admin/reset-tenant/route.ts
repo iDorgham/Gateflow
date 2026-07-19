@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
           gate: { organizationId, ...projectFilter },
         },
       }),
-      prisma.qrCode.updateMany({
+      prisma.qRCode.updateMany({
         where: { organizationId, ...projectFilter, deletedAt: null },
         data: { deletedAt },
       }),
@@ -81,9 +81,10 @@ export async function POST(request: NextRequest) {
         where: { organizationId, deletedAt: null },
         data: { deletedAt },
       }),
-      prisma.incident.updateMany({
-        where: { organizationId, deletedAt: null },
-        data: { deletedAt },
+      // Incident has no soft-delete column — hard-delete, consistent with
+      // the ScanLog handling above for this destructive reset utility.
+      prisma.incident.deleteMany({
+        where: { organizationId },
       }),
     ]);
 
@@ -143,7 +144,7 @@ export async function POST(request: NextRequest) {
             qrCodesSoftDeleted: stats[1].count,
             unitsSoftDeleted: stats[2].count,
             contactsSoftDeleted: stats[3].count,
-            incidentsSoftDeleted: stats[4].count,
+            incidentsRemoved: stats[4].count,
             reSeeded: seededResults ? seededResults.unitsCreated : 0,
           },
         },

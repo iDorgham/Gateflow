@@ -24,12 +24,12 @@ export async function GET(req: Request) {
         },
         include: {
           author: { select: { name: true, avatarUrl: true } },
-          categories: true,
+          category: true,
         },
       })) as
         | (BlogPost & {
             author: Pick<User, 'name' | 'avatarUrl'>;
-            categories: BlogCategory[];
+            category: BlogCategory | null;
           })
         | null;
 
@@ -48,10 +48,18 @@ export async function GET(req: Request) {
           metaDesc: locale === 'ar' ? post.metaDescAr : post.metaDescEn,
           publishedAt: post.publishedAt,
           author: post.author,
-          categories: post.categories.map((c: BlogCategory) => ({
-            name: locale === 'ar' ? c.nameAr : c.nameEn,
-            slug: c.slug,
-          })),
+          categories: post.category
+            ? [
+                {
+                  id: post.category.id,
+                  name:
+                    locale === 'ar'
+                      ? post.category.nameAr
+                      : post.category.nameEn,
+                  slug: post.category.slug,
+                },
+              ]
+            : [],
         },
       });
     }
@@ -60,10 +68,10 @@ export async function GET(req: Request) {
     const posts = (await prisma.blogPost.findMany({
       where: { status: 'PUBLISHED' },
       orderBy: { publishedAt: 'desc' },
-      include: { author: { select: { name: true } }, categories: true },
+      include: { author: { select: { name: true } }, category: true },
     })) as (BlogPost & {
       author: Pick<User, 'name'>;
-      categories: BlogCategory[];
+      category: BlogCategory | null;
     })[];
 
     const localizedPosts = posts.map((p) => ({
@@ -100,17 +108,20 @@ export async function POST(req: Request) {
       },
     });
 
-    // Log AI Action
-    await prisma.aiActionLog.create({
-      data: {
-        organizationId: updated.organizationId || 'GLOBAL',
-        action: 'BLOG_POST_PUBLISHED',
-        status: 'CONFIRMED',
-        prompt: `Publish request for post ID: ${id}`,
-        result: `New status: ${status}`,
-        metadata: JSON.stringify({ slug: updated.slugEn }),
-      },
-    });
+    // Log AI Action — skip for global (org-less) posts since AiActionLog.organizationId
+    // is a required FK and no 'GLOBAL' Organization row exists to satisfy it.
+    if (updated.organizationId) {
+      await prisma.aiActionLog.create({
+        data: {
+          organizationId: updated.organizationId,
+          actionType: 'BLOG_POST_PUBLISHED',
+          status: 'CONFIRMED',
+          prompt: `Publish request for post ID: ${id}`,
+          result: `New status: ${status}`,
+          metadata: JSON.stringify({ slug: updated.slugEn }),
+        },
+      });
+    }
 
     return NextResponse.json({ success: true, post: updated });
   } catch (error) {

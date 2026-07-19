@@ -99,6 +99,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     const where = {
       qrCode: {
         organizationId: orgId,
+        deletedAt: null,
         ...(projectFilter ? { projectId: projectFilter } : {}),
         ...(qFilter ? { code: { contains: qFilter } } : {}),
       },
@@ -136,7 +137,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       let cursor: string | undefined;
 
       while (true) {
-        const batch = await prisma.scanLog.findMany({
+        const batch = (await prisma.scanLog.findMany({
           // ignore-security-guard — scoped via qrCode.organizationId (ScanLog has no direct orgId field)
           take: BATCH_SIZE,
           skip: cursor ? 1 : 0,
@@ -157,7 +158,20 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
             gate: { select: { name: true } },
             user: { select: { name: true, email: true } },
           },
-        });
+        })) as unknown as {
+          id: string;
+          scanUuid: string | null;
+          scannedAt: Date;
+          status: ScanStatus;
+          deviceId: string | null;
+          qrCode: {
+            code: string;
+            type: string;
+            project: { name: string } | null;
+          };
+          gate: { name: string };
+          user: { name: string; email: string } | null;
+        }[];
 
         if (batch.length === 0) break;
 

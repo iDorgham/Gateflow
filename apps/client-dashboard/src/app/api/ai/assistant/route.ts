@@ -18,6 +18,7 @@ import {
 } from '@gate-access/db';
 import { signQRPayload, QRCodeType } from '@gate-access/types';
 import { getSessionClaims } from '@/lib/auth-cookies';
+import { ensureSupportBoard } from '@/lib/ensure-support-board';
 
 export const runtime = 'nodejs';
 export const maxDuration = 30;
@@ -595,13 +596,19 @@ Rules:
           }),
           execute: async ({ title, description, dueDate }) => {
             log('createTask', { title });
+            // Client-dashboard tasks aren't organized into boards by the user; lazily
+            // provision a single default board per org to satisfy Task's required boardId/department.
+            const board = await ensureSupportBoard(claims.orgId);
+
             const task = await prisma.task.create({
               data: {
                 title,
                 description: description ?? null,
                 dueDate: dueDate ? new Date(dueDate) : null,
                 organizationId: claims.orgId,
-                createdBy: claims.sub ?? null,
+                createdById: claims.sub,
+                boardId: board.id,
+                department: board.department,
                 status: TaskStatus.TODO,
               },
               select: { id: true, title: true, status: true },
