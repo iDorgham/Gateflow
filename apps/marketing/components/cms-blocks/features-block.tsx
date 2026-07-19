@@ -1,6 +1,25 @@
 import type { Locale } from '../../i18n-config';
 import type { BlockContent } from './types';
 
+const FALLBACKS = {
+  en: {
+    headline: 'Our Features',
+    items: [
+      { title: 'Feature 1', description: 'Description for feature 1' },
+      { title: 'Feature 2', description: 'Description for feature 2' },
+      { title: 'Feature 3', description: 'Description for feature 3' },
+    ],
+  },
+  ar: {
+    headline: 'مميزاتنا',
+    items: [
+      { title: 'ميزة 1', description: 'وصف الميزة 1' },
+      { title: 'ميزة 2', description: 'وصف الميزة 2' },
+      { title: 'ميزة 3', description: 'وصف الميزة 3' },
+    ],
+  },
+} as const;
+
 export function FeaturesCmsBlock({
   content,
   locale,
@@ -8,14 +27,11 @@ export function FeaturesCmsBlock({
   content: BlockContent;
   locale: Locale;
 }) {
+  if (!content) return null;
+
   const isRtl = locale.startsWith('ar');
-  const items = content.items?.length
-    ? content.items
-    : [
-        { title: 'Feature 1', description: 'Description for feature 1' },
-        { title: 'Feature 2', description: 'Description for feature 2' },
-        { title: 'Feature 3', description: 'Description for feature 3' },
-      ];
+  const fallback = isRtl ? FALLBACKS.ar : FALLBACKS.en;
+  const items = content.items?.length ? content.items : [...fallback.items];
 
   return (
     <section
@@ -24,7 +40,7 @@ export function FeaturesCmsBlock({
     >
       <div className="container px-8 mx-auto max-w-6xl">
         <h2 className="text-3xl font-black tracking-tight mb-10 text-center text-ds-text-heading">
-          {content.headline || 'Our Features'}
+          {content.headline || fallback.headline}
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {items.map((item, i) => (

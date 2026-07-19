@@ -12,6 +12,6 @@
 ## Contract Expectations
 
 - Session-derived `organizationId` must be present for writes.
-- Role check must allow `scanner_app` and `property_manager`.
+- Role check must allow users with scans write permission (`Gate Operator`, `Security Manager` per `BUILT_IN_ROLES` in `packages/types/src/user.ts`).
 - Payload must be array and capped at 500 items.
 - Insert path should use `skipDuplicates: true`.

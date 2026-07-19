@@ -26,7 +26,7 @@ Primary API-producing apps:
 ## 2) Live API Route Counts (Current Snapshot)
 
 - `client-dashboard`: 124 route files
-- `admin-dashboard`: 46 route files
+- `admin-dashboard`: 61 route files
 - `marketing`: 3 route files
 - `resident-portal`: 2 route files
 
@@ -45,16 +45,16 @@ Primary API-producing apps:
 
 ### Admin Dashboard API groups
 
-- `admin` (21)
-- `cms` (8)
-- `support` (4)
+- `admin` (17)
+- `cms` (13)
+- `support` (5)
 - `organizations` (3)
 - plus `crm`, `intelligence`, `monitoring`, `auth`, `analytics`, `audit`, `branding`, `tasks`
 
 ### Marketing API groups
 
 - `contact` (1)
-- `marketing` (2)
+- `marketing` (1)
 - `revalidate` (1)
 
 ### Resident Portal API groups

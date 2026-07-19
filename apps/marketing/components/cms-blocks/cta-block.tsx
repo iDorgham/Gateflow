@@ -1,5 +1,6 @@
 import { Button } from '@gateflow/ui';
 import { IntentLink } from '../intent-link';
+import { safeHref } from '../../lib/safe-href';
 import type { Locale } from '../../i18n-config';
 import type { BlockContent } from './types';
 
@@ -10,7 +11,10 @@ export function CtaCmsBlock({
   content: BlockContent;
   locale: Locale;
 }) {
+  if (!content) return null;
+
   const isRtl = locale.startsWith('ar');
+  const supporting = content.subheadline || content.body;
 
   return (
     <section
@@ -21,8 +25,8 @@ export function CtaCmsBlock({
         <h2 className="text-3xl md:text-5xl font-black tracking-tighter">
           {content.headline || 'Ready to get started?'}
         </h2>
-        {content.subheadline && (
-          <p className="text-lg md:text-xl opacity-90">{content.subheadline}</p>
+        {supporting && (
+          <p className="text-lg md:text-xl opacity-90">{supporting}</p>
         )}
         <div className="mt-4">
           <Button
@@ -33,7 +37,7 @@ export function CtaCmsBlock({
           >
             <IntentLink
               locale={locale}
-              href={content.ctaLink || '/contact'}
+              href={safeHref(content.ctaLink, '/contact')}
               intent="consult"
               surface="cms_cta"
             >

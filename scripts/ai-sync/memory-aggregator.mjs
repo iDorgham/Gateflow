@@ -113,37 +113,35 @@ function tallyResults(data) {
     // independent `if`s would let a later, less-specific match silently
     // overwrite an earlier correct one (e.g. "fix docs prisma schema" would
     // land in Docs sync instead of Schema / DB / Prisma).
+    // Short tokens (db/ci/cli) use word-boundary matching so "policy" ≠ "ci".
     const task = entry.task.toLowerCase();
+    const hasWord = (word) => new RegExp(`\\b${word}\\b`, 'i').test(task);
     let matchedType = 'Quick structural check'; // Default
-    if (
-      task.includes('prisma') ||
-      task.includes('schema') ||
-      task.includes('db')
-    ) {
+    if (hasWord('prisma') || hasWord('schema') || hasWord('db')) {
       matchedType = 'Schema / DB / Prisma';
-    } else if (task.includes('refactor') || task.includes('fix')) {
-      matchedType = 'Refactor / TDD';
     } else if (
-      task.includes('seo') ||
-      task.includes('content') ||
-      task.includes('blog')
+      hasWord('ci') ||
+      hasWord('deploy') ||
+      hasWord('turbo') ||
+      hasWord('github') ||
+      hasWord('workflow')
     ) {
+      // CI markers must beat generic "fix" so deploy/CI outcomes don't land
+      // in Refactor / TDD.
+      matchedType = 'CI / headless automation';
+    } else if (hasWord('refactor') || hasWord('fix') || hasWord('tdd')) {
+      matchedType = 'Refactor / TDD';
+    } else if (hasWord('seo') || hasWord('content') || hasWord('blog')) {
       matchedType = 'Content / SEO draft';
-    } else if (task.includes('docs') || task.includes('readme')) {
+    } else if (hasWord('docs') || hasWord('readme')) {
       matchedType = 'Docs sync from code';
     } else if (
-      task.includes('ci') ||
-      task.includes('deploy') ||
-      task.includes('turbo')
-    ) {
-      matchedType = 'CI / headless automation';
-    } else if (
-      task.includes('agent') ||
-      task.includes('autonomous') ||
-      task.includes('multi-step')
+      hasWord('agent') ||
+      hasWord('autonomous') ||
+      hasWord('multi-step')
     ) {
       matchedType = 'Free-tier agentic';
-    } else if (task.includes('terminal') || task.includes('cli')) {
+    } else if (hasWord('terminal') || hasWord('cli')) {
       matchedType = 'Free-tier fast terminal tasks';
     }
 
@@ -156,41 +154,64 @@ function tallyResults(data) {
   return scoreboard;
 }
 
+// Category defaults from CLI_TOOL_MEMORY.md / TOOL_AND_CLI_REFERENCE.md when
+// a row has no scored observations yet.
+const CATEGORY_DEFAULTS = {
+  'Schema / DB / Prisma': 'Gemini',
+  'Refactor / TDD': 'Opencode',
+  'Content / SEO draft': 'Kiro',
+  'Quick structural check': 'Gemini',
+  'Free-tier agentic': 'Qwen',
+  'Free-tier fast terminal tasks': 'Kilo',
+  'Docs sync from code': 'Opencode',
+  'CI / headless automation': 'Opencode',
+};
+
 function updateMemoryFile(scoreboard) {
   let content = fs.readFileSync(TOOL_MEMORY_PATH, 'utf8');
 
   // Replace the scoreboard table
   const lines = content.split('\n');
   const startIdx = lines.findIndex((l) => l.includes('| Task type'));
-  const endIdx = lines.findIndex((l, i) => i > startIdx && l.trim() === '');
-
-  if (startIdx !== -1 && endIdx !== -1) {
-    const header = lines[startIdx];
-    const divider = lines[startIdx + 1];
-    const newRows = Object.entries(scoreboard).map(([type, clis]) => {
-      const g = `${clis.Gemini.wins}/${clis.Gemini.partials}/${clis.Gemini.fails}`;
-      const o = `${clis.Opencode.wins}/${clis.Opencode.partials}/${clis.Opencode.fails}`;
-      const kr = `${clis.Kiro.wins}/${clis.Kiro.partials}/${clis.Kiro.fails}`;
-      const kl = `${clis.Kilo.wins}/${clis.Kilo.partials}/${clis.Kilo.fails}`;
-      const q = `${clis.Qwen.wins}/${clis.Qwen.partials}/${clis.Qwen.fails}`;
-
-      // Determine Best for
-      let best = 'Gemini'; // Fallback
-      const scores = Object.entries(clis).map(([name, s]) => ({
-        name,
-        score: s.wins * 2 + s.partials,
-      }));
-      scores.sort((a, b) => b.score - a.score);
-      if (scores[0].score > 0) best = scores[0].name;
-
-      return `| ${type.padEnd(29)} | ${g.padEnd(5)} | ${o.padEnd(8)} | ${kr.padEnd(5)} | ${kl.padEnd(5)} | ${q.padEnd(5)} | ${best.padEnd(28)} |`;
-    });
-
-    lines.splice(startIdx + 2, endIdx - (startIdx + 2), ...newRows);
-    content = lines.join('\n');
+  let endIdx = lines.findIndex((l, i) => i > startIdx && l.trim() === '');
+  if (startIdx !== -1 && endIdx === -1) {
+    console.warn(
+      '⚠ Scoreboard table has no trailing blank line; writing through EOF.'
+    );
+    endIdx = lines.length;
   }
 
+  if (startIdx === -1 || endIdx === -1) {
+    console.warn(
+      '⚠ Could not locate scoreboard table in CLI_TOOL_MEMORY.md; skipped write.'
+    );
+    return false;
+  }
+
+  const newRows = Object.entries(scoreboard).map(([type, clis]) => {
+    const g = `${clis.Gemini.wins}/${clis.Gemini.partials}/${clis.Gemini.fails}`;
+    const o = `${clis.Opencode.wins}/${clis.Opencode.partials}/${clis.Opencode.fails}`;
+    const kr = `${clis.Kiro.wins}/${clis.Kiro.partials}/${clis.Kiro.fails}`;
+    const kl = `${clis.Kilo.wins}/${clis.Kilo.partials}/${clis.Kilo.fails}`;
+    const q = `${clis.Qwen.wins}/${clis.Qwen.partials}/${clis.Qwen.fails}`;
+
+    // Determine Best for — use category-specific default when no evidence.
+    let best = CATEGORY_DEFAULTS[type] || 'Gemini';
+    const scores = Object.entries(clis).map(([name, s]) => ({
+      name,
+      score: s.wins * 2 + s.partials,
+    }));
+    scores.sort((a, b) => b.score - a.score);
+    if (scores[0].score > 0) best = scores[0].name;
+
+    // Pad to header widths: Gemini=6, Best for=8
+    return `| ${type.padEnd(29)} | ${g.padEnd(6)} | ${o.padEnd(8)} | ${kr.padEnd(5)} | ${kl.padEnd(5)} | ${q.padEnd(5)} | ${best.padEnd(8)} |`;
+  });
+
+  lines.splice(startIdx + 2, endIdx - (startIdx + 2), ...newRows);
+  content = lines.join('\n');
   fs.writeFileSync(TOOL_MEMORY_PATH, content, 'utf8');
+  return true;
 }
 
 // --- Main Execution ---
@@ -210,8 +231,13 @@ async function run() {
     console.log(`📊 Found ${logData.length} entries in usage log.`);
 
     const scoreboard = tallyResults(logData);
-    updateMemoryFile(scoreboard);
-    console.log('✅ Updated CLI_TOOL_MEMORY.md scoreboard.');
+    const updated = updateMemoryFile(scoreboard);
+    if (updated) {
+      console.log('✅ Updated CLI_TOOL_MEMORY.md scoreboard.');
+    } else {
+      console.error('❌ Failed to update CLI_TOOL_MEMORY.md scoreboard.');
+      process.exitCode = 1;
+    }
 
     // Update Index
     if (fs.existsSync(INDEX_PATH)) {
