@@ -1,0 +1,113 @@
+apps/client-dashboard/next.config.js
+  s_e4db65a582247d::t_6b6e22b6258a67 22,29
+scripts/ai-sync/memory-aggregator.mjs
+  s_e4db65a582247d::t_451019455ada7e 184,188,191-212,214
+  s_e4db65a582247d::t_38b97f1cbdcc15 116,118,120,123-127,129-134,136,139-141,144
+  s_e4db65a582247d::t_9d47327252725c 157-169,176-182,185-187
+  s_e4db65a582247d::t_cb0bb6d9f9daa5 234-240
+docs/reference/apps/symbols/PACKAGES_API_CLIENT_SYMBOLS_REFERENCE.md
+  s_0571b4f64f600e::t_0febfd1f1f69ed 10
+docs/reference/apps/symbols/ADMIN_DASHBOARD_SYMBOLS_REFERENCE.md
+  s_0571b4f64f600e::t_2f49c5d1088d41 164-165
+docs/reference/apps/FILES_AND_STRUCTURE_REFERENCE.md
+  s_0571b4f64f600e::t_26130faabe71e7 74-81
+  s_0571b4f64f600e::t_4e774d059ca605 122-123
+docs/plan/Draft/security_hotfix_v1/PROMPT_security_hotfix_v1_phase_1.md
+  s_dcb9c386d9c680::t_291e25f2b26873 1,5,9,27,31,35-43,47-48,52-62,66-72
+docs/reference/apps/GATEFLOW_COMPLETE_CONTEXT_REFERENCE.md
+  s_0571b4f64f600e::t_74bbe74b2b92bc 2722
+  s_0571b4f64f600e::t_e10e1b9d499db9 2808
+  s_0571b4f64f600e::t_a21f179898fe69 1846,1848-1849,1851,1853,1857
+  s_0571b4f64f600e::t_c683caa7d04833 298-300
+  s_0571b4f64f600e::t_dd410d92c3ad9e 1886
+  s_0571b4f64f600e::t_c6de5613c8068b 307
+  s_0571b4f64f600e::t_bddf1790bf0005 2627,2629
+  s_0571b4f64f600e::t_dac16162785ad3 279-280
+docs/reference/apps/symbols/MARKETING_SYMBOLS_REFERENCE.md
+  s_0571b4f64f600e::t_ef040e2599a3e9 8
+docs/reference/apps/PAGES_AND_ROUTES_INDEX_REFERENCE.md
+  s_0571b4f64f600e::t_f4d68c4fed85d2 15
+  s_0571b4f64f600e::t_92b9d1c06884ed 13
+docs/reference/apps/FUNCTIONS_AND_SERVICES_INDEX_REFERENCE.md
+  s_0571b4f64f600e::t_67e0f87c6aa279 19-20
+docs/reference/apps/symbols/PACKAGES_DB_SYMBOLS_REFERENCE.md
+  s_0571b4f64f600e::t_ae3260baec9f62 5-6
+docs/reference/apps/API_GATEWAY_AND_CONTRACTS_REFERENCE.md
+  s_0571b4f64f600e::t_12098573028a22 57
+  s_0571b4f64f600e::t_5c4bbc965be42b 48-50
+  s_0571b4f64f600e::t_d0229291574cd7 29
+docs/plan/Draft/security_hotfix_v1/phases/02_crypto_native_aes_gcm/PROMPT_phase_02.md
+  s_dcb9c386d9c680::t_4b07dd7e6c816e 37-38
+  s_dcb9c386d9c680::t_9db486a889fa3c 33
+  s_dcb9c386d9c680::t_fd1573e0df6c5f 53-54
+  s_dcb9c386d9c680::t_8ef76d87ebfb22 18-20
+docs/reference/apps/symbols/PACKAGES_TYPES_SYMBOLS_REFERENCE.md
+  s_0571b4f64f600e::t_6764e42d55603c 36-39
+  s_0571b4f64f600e::t_2cc831372cd249 30
+  s_0571b4f64f600e::t_aaf760cc0a8498 14
+  s_0571b4f64f600e::t_aa196f816d3bf7 46
+package.json
+  s_e4db65a582247d::t_25508e4f8ed87d 130
+docs/plan/Draft/security_hotfix_v1/TASKS_security_hotfix_v1.md
+  s_dcb9c386d9c680::t_9de41db0f9ee1f 16-17
+  s_dcb9c386d9c680::t_0b23e3fb978c52 6
+docs/plan/Draft/security_hotfix_v1/PROMPT_security_hotfix_v1_phase_2.md
+  s_dcb9c386d9c680::t_a781f8d81e4008 1,5,9,27,31,35-43,47-49,53-60,64-70
+docs/plan/Draft/security_hotfix_v1/PROMPT_security_hotfix_v1_phase_3.md
+  s_dcb9c386d9c680::t_1677c49da4ddd0 1,5,9,24,27,31,35-46,50-51,55-60,64-68
+apps/marketing/lib/cms.ts
+  s_e4db65a582247d::t_0e09a5f4b07858 24-26,33-38,44,46,95,103-106,144,155
+docs/reference/apps/DATABASE_BACKEND_AND_TECH_REFERENCE.md
+  s_0571b4f64f600e::t_ad477536469cf4 15-16
+  s_0571b4f64f600e::t_07363822a01560 23
+docs/plan/Draft/security_hotfix_v1/phases/01_api_scans_bulk_auth_tenant/PROMPT_phase_01.md
+  s_dcb9c386d9c680::t_892a6ba3c7f82a 19
+docs/plan/Draft/security_hotfix_v1/context/api.md
+  s_dcb9c386d9c680::t_e128f2e7e81843 15
+.github/actions/probe-url/action.yml
+  s_e4db65a582247d::t_20d98683e658e7 59-71
+apps/admin-dashboard/next.config.js
+  s_e4db65a582247d::t_6b8db24a0d8ec2 17
+apps/marketing/components/cms-blocks/cta-block.tsx
+  s_dcb9c386d9c680::t_80d1fff9ec3e3a 3,14-15,17,28-29,40
+apps/marketing/components/cms-blocks/features-block.tsx
+  s_dcb9c386d9c680::t_636bb39810204d 4-22,30-31,33-34,43
+apps/marketing/components/cms-blocks/hero-block.tsx
+  s_dcb9c386d9c680::t_98836263517816 3,14-15,17,28,30,42
+apps/marketing/lib/safe-href.ts
+  s_dcb9c386d9c680::t_3f03e046e8a4bf 1-26
+pnpm-lock.yaml
+  s_dcb9c386d9c680::t_66557425b4a5a4 24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "ad8e15c341ada3e77468f417bc44548a03d95aff",
+  "prompts": {},
+  "sessions": {
+    "s_0571b4f64f600e": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "b524c1d3-fcf9-4239-a444-dd5509c59247",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_dcb9c386d9c680": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "5afe1fe7-4c17-490c-86ca-9781d462c54f",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_e4db65a582247d": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "dd450db3-6e6a-40ec-9140-c4c4be143a0c",
+        "model": "grok-4.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
