@@ -9,8 +9,8 @@ Auto-generated symbol index for planning and impact analysis.
 
 - Exports (6): `AuthUser`, `JwtPayload`, `LoginPayload`, `RefreshTokenPayload`, `RegisterPayload`, `TokenResponse`
 
-## `packages/types/src/base.ts`
-
+- Exports (19): `Gate`, `MaintenanceCategory`, `MaintenanceLocationType`, `MaintenancePriority`, `MaintenanceStatus`, `Organization`, `OrganizationType`, `Permission`, `Plan`, `Project`, `QRCode`, `QRCodeType`, `Role`, `ScanLog`, `ScanStatus`, `User`, `UserRoleType`, `WorkOrder`, `WorkOrderWithRelations`
++ Exports (20): `Gate`, `MaintenanceCategory`, `MaintenanceLocationType`, `MaintenancePriority`, `MaintenanceStatus`, `Organization`, `OrganizationType`, `Permission`, `Plan`, `Project`, `QRCode`, `QRCodeType`, `Role`, `ScanLog`, `ScanStatus`, `User`, `UserRole`, `UserRoleType`, `WorkOrder`, `WorkOrderWithRelations`
 - Exports (19): `Gate`, `MaintenanceCategory`, `MaintenanceLocationType`, `MaintenancePriority`, `MaintenanceStatus`, `Organization`, `OrganizationType`, `Permission`, `Plan`, `Project`, `QRCode`, `QRCodeType`, `Role`, `ScanLog`, `ScanStatus`, `User`, `UserRoleType`, `WorkOrder`, `WorkOrderWithRelations`
 
 ## `packages/types/src/crm.ts`
