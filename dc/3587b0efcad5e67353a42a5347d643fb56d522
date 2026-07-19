@@ -1,0 +1,26 @@
+apps/client-dashboard/src/lib/project-cookie.ts
+  s_02603335d906e8::t_a2bacca00d3510 1,11-12,15-16,32
+apps/client-dashboard/src/lib/auth-cookies.test.ts
+  s_02603335d906e8::t_a7718ea7e09f9c 82,92
+  s_02603335d906e8::t_dc526b002d4e80 15-16
+apps/client-dashboard/src/lib/auth-cookies.ts
+  s_02603335d906e8::t_0a46f16ae2d4d2 1,36-37,47,64
+apps/client-dashboard/src/app/[locale]/logout/route.ts
+  s_02603335d906e8::t_a176b223dfb02d 7,14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "dc3587b0efcad5e67353a42a5347d643fb56d522",
+  "prompts": {},
+  "sessions": {
+    "s_02603335d906e8": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "28ee0f79-d468-4856-acb6-77a98f73d3a6",
+        "model": "default"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
