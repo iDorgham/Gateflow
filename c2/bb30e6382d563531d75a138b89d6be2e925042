@@ -1,0 +1,97 @@
+.ai/commands/audit.md
+  s_37f85a350cf61a::t_3835d25b040240 1-27
+.ai/commands/commands.md
+  s_37f85a350cf61a::t_5c2d33b3c61bc6 1-389
+.ai/commands/create.md
+  s_37f85a350cf61a::t_2c2b27577f206f 1-27
+.ai/commands/dev.md
+  s_37f85a350cf61a::t_eebdc7aa820bbb 1-27
+.ai/commands/do.md
+  s_37f85a350cf61a::t_5e0058c930a66f 1-27
+.ai/commands/factory.md
+  s_37f85a350cf61a::t_3b8b19eb3fb098 1-37
+.ai/commands/git.md
+  s_37f85a350cf61a::t_ba3f52e2f33d71 1-34
+.ai/commands/guide.md
+  s_37f85a350cf61a::t_be1c35879e31a6 1-555
+.ai/commands/library.md
+  s_37f85a350cf61a::t_a9f0ec932a4e6a 1-35
+.ai/commands/mat.md
+  s_37f85a350cf61a::t_a37d8d56bba9b2 1-45
+.ai/commands/plan.md
+  s_37f85a350cf61a::t_23981dff95a3d5 1-37
+.ai/commands/templates/blog_post.md
+  s_37f85a350cf61a::t_6089f0507de480 1-29
+.ai/commands/templates/campaign_landing_variant.md
+  s_37f85a350cf61a::t_d7e74e3b3239a4 1-22
+.ai/commands/templates/competitor_comparison_page.md
+  s_37f85a350cf61a::t_86795c81719602 1-22
+.ai/commands/templates/design.md
+  s_37f85a350cf61a::t_738a206fbc92dc 1-29
+.ai/commands/templates/landing_page.md
+  s_37f85a350cf61a::t_f25c0a33666d25 1-23
+.ai/commands/templates/opportunity_gap_blog.md
+  s_37f85a350cf61a::t_26483fd2ba1253 1-23
+.ai/commands/templates/project_page.md
+  s_37f85a350cf61a::t_ec3e6c03b0c839 1-22
+.ai/commands/templates/website_page.md
+  s_37f85a350cf61a::t_f750f2f4516cb2 1-22
+.ai/rules/README.md
+  s_37f85a350cf61a::t_ac8be87b714ddd 1-36
+.ai/rules/antigravity.md
+  s_37f85a350cf61a::t_db2710ba812eed 1-14
+.ai/rules/approve.md
+  s_37f85a350cf61a::t_1a5130e139712f 1-6
+.ai/rules/archive.md
+  s_37f85a350cf61a::t_6272c52f949c09 1-5
+.ai/rules/brand.md
+  s_37f85a350cf61a::t_a30a0ca8ad128e 1-7
+.ai/rules/budget.md
+  s_37f85a350cf61a::t_c9619acf517cb2 1-5
+.ai/rules/compare.md
+  s_37f85a350cf61a::t_1e6d23e1e3401a 1-7
+.ai/rules/create.md
+  s_37f85a350cf61a::t_8e38158a3eb574 1-11
+.ai/rules/export.md
+  s_37f85a350cf61a::t_bc6784456355bb 1-8
+.ai/rules/guide-handoff-footer.mdc
+  s_37f85a350cf61a::t_afa7545ff2dfae 1-72
+.ai/rules/guide-response-style.mdc
+  s_37f85a350cf61a::t_cd81e1a54f2f5d 1-50
+.ai/rules/intel.md
+  s_37f85a350cf61a::t_0c324ad94cedd6 1-9
+.ai/rules/memory.md
+  s_37f85a350cf61a::t_656d34812f2f15 1-8
+.ai/rules/optimize.md
+  s_37f85a350cf61a::t_de37fbf1e20a06 1-7
+.ai/rules/polish.md
+  s_37f85a350cf61a::t_36d2466efbe2bc 1-7
+.ai/rules/research.md
+  s_37f85a350cf61a::t_1e7ce33cb6434e 1-7
+.ai/rules/review.md
+  s_37f85a350cf61a::t_e4e2c171d9d4e1 1-6
+.ai/rules/revise.md
+  s_37f85a350cf61a::t_6d2af1a7a6e155 1-6
+.ai/rules/scrape.md
+  s_37f85a350cf61a::t_62cd42befb2cd0 1-11
+.ai/rules/sync.md
+  s_37f85a350cf61a::t_af4fbd41eced39 1-7
+.ai/rules/voice.md
+  s_37f85a350cf61a::t_8962d175f45cd6 1-8
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "c2bb30e6382d563531d75a138b89d6be2e925042",
+  "prompts": {},
+  "sessions": {
+    "s_37f85a350cf61a": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "7f884a87-7763-4b17-b9bb-71ef97075161",
+        "model": "unknown"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
