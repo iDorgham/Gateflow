@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Security]** request-local fail-closed tenant isolation
+
 - **[Deploy]** wire Vercel `ignoreCommand` to skip Dependabot and automatic Preview builds (Hobby quota)
 
 - **[Db]** unblock production migrate after failed platform_evolution
