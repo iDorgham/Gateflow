@@ -1,0 +1,41 @@
+packages/types/src/security/branding-tokens.ts
+  s_5bd70770834e0a::t_fa2a63844bf8a7 90
+scripts/check/check-bootstrap-routes.js
+  s_5bd70770834e0a::t_40e046d09606de 46-47,49-50
+docs/workspace/SKILLS_GUIDE.md
+  s_5bd70770834e0a::t_3302f8bc842b2a 5-7
+  s_5bd70770834e0a::t_28ebca0908d49f 56
+.github/workflows/ci.yml
+  s_5bd70770834e0a::t_b9b9ee19e82ad7 144-146
+apps/client-dashboard/src/app/api/setup/bootstrap-routes.test.ts
+  s_5bd70770834e0a::t_517e9ae066995a 6
+  s_5bd70770834e0a::t_e8744857d79e50 7
+docs/workspace/WORKSPACE_GUIDE.md
+  s_5bd70770834e0a::t_6c3ab47953528a 11,13,17
+  s_5bd70770834e0a::t_7840877692f76f 53,58
+  s_5bd70770834e0a::t_361abede366fa4 87,102
+  s_5bd70770834e0a::t_5fa6b42ebc2fe1 18
+docs/tools/antigravity/commands/guide.md
+  s_5bd70770834e0a::t_eb3e8fe8e67d37 3,5
+packages/types/src/security/sanitize-cms-html.ts
+  s_5bd70770834e0a::t_138c783ebd22e3 20-21,57-58
+  s_5bd70770834e0a::t_cf7db8a02f506f 59-60
+packages/types/src/security/security.test.ts
+  s_5bd70770834e0a::t_9035f8f933388e 7,10-15,31-39,58-84,107-111
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "b98ada294307a8516f3560b0ce31ec423654643f",
+  "prompts": {},
+  "sessions": {
+    "s_5bd70770834e0a": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "a9f9974f-12ef-4c2f-9b35-9517306254fb",
+        "model": "grok-4.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
