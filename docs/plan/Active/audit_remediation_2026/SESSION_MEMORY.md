@@ -3,8 +3,8 @@
 ## Active state
 
 - **Phase:** 2 complete (tenant isolation ALS + fail-closed `db`)
-- **Branch:** `fix/audit-remediation-phase-2`
-- **Last focus:** `packages/db/src/tenant.ts`, validate route, `TENANT_PRISMA_ALLOWLIST.md`
+- **Branch:** `fix/audit-remediation-phase-2` (pushed)
+- **Last commits:** `ddab9a43f` (tenant isolation), `3c23d4885` (brace-expansion override for pre-push)
 - **Next action:** Phase 3 — Trustworthy CI (`PROMPT_audit_remediation_2026_phase_3.md`); ops still owes Phase 1 credential-rotation receipt
 
 ## Cross-session decisions
