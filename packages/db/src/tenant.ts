@@ -286,7 +286,9 @@ function applyScanLogGuards(
     organizationId: orgId,
   };
   where.gate = gate;
-  next.where = where;
+  if (READ_OPS.has(operation) || WRITE_WHERE_OPS.has(operation)) {
+    next.where = where;
+  }
   return next;
 }
 
