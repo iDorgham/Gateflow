@@ -62,10 +62,14 @@ export function filterValidBrandingTokens(
   return result;
 }
 
-/** Escape org id for use inside a CSS attribute selector. */
+/**
+ * Sanitize org id for use inside a CSS attribute selector.
+ * Allowlist only — no CSS.escape (browser-only; unavailable in Node/Jest).
+ * Characters outside [a-zA-Z0-9_-] are rejected, so the value is safe as-is.
+ */
 export function sanitizeOrgIdForCss(orgId: string): string | null {
   if (!/^[a-zA-Z0-9_-]{1,64}$/.test(orgId)) return null;
-  return CSS.escape(orgId);
+  return orgId;
 }
 
 export function generateBrandingCss(
