@@ -10,11 +10,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
-- **[Ci]** restore trustworthy scanners and full typecheck
-
 - **[CI]** restore trustworthy repo scanners (root resolution, nonzero coverage, history secrets, advisory unavailable≠clean)
 - **[CI]** restore full dashboard typecheck in preflight/CI; add skipped-test/--forceExit budgets
 - **[Deps]** pin js-yaml overrides to patched 3.15.0 / 4.3.0 (GHSA-52cp-r559-cp3m)
+- **[Deps]** pin tar override to >=7.5.19 (node-tar DoS advisories)
 - **[Deps]** bump brace-expansion override to patched 5.0.7+
 
 - **[Security]** request-local fail-closed tenant isolation
