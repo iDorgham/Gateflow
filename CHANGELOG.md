@@ -20,7 +20,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
-- **[Docs]** triage PR #137 review feedback — MD041 on AIWF `/guide`, align `/guide all` with `/ralph`
+- **[Docs]** triage PR #137 review feedback — MD041 on AIWF `/guide`, `/guide` shorthand, COMMAND_GUIDE link/casing
 
 - **[Security]** address audit PR review findings
 

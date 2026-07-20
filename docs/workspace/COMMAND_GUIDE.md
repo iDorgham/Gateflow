@@ -4,7 +4,7 @@ Compact inventory of **GateFlow slash commands**. Canonical workflows live in **
 
 For lifecycle context see [WORKSPACE_GUIDE.md](./WORKSPACE_GUIDE.md). For skills see [SKILLS_GUIDE.md](./SKILLS_GUIDE.md).
 
-**Not GateFlow:** [`.ai/commands/`](../.ai/commands/) is the Sovereign / AIWF content-factory surface (brand, scrape, etc.) — separate from the phased dev loop below.
+**Not GateFlow:** [`.ai/commands/`](../../.ai/commands/) is the Sovereign / AIWF content-factory surface (brand, scrape, etc.) — separate from the phased dev loop below.
 
 ---
 
@@ -68,7 +68,7 @@ Plan folders: `docs/plan/{Draft,Ready,Active,Complete}/`. Update `docs/plan/back
 | `/guide phase 2`  | `/prompt phase 2`                          |
 | `/guide develop`  | develop workflow                           |
 | `/guide test`     | `pnpm preflight`                           |
-| `/guide github`   | git add/commit/push flow                   |
+| `/guide github`   | GitHub flow                                |
 | `/guide security` | security review                            |
 | `/guide all`      | `/ralph` (recursive phases; not `/run all`) |
 
