@@ -17,8 +17,9 @@
 
 const fs = require('fs');
 const path = require('path');
+const { getRepoRoot } = require('./repo-root');
 
-const ROOT = path.resolve(__dirname, '..');
+const ROOT = getRepoRoot(__dirname);
 
 const SCAN_ROOTS = [
   path.join(ROOT, 'apps', 'client-dashboard', 'src'),
@@ -156,6 +157,19 @@ const roots = appArg
 
 const allFilesArr = roots.flatMap((r) => collectFiles(r));
 const allFiles = new Set(allFilesArr);
+
+const existingRoots = roots.filter((r) => fs.existsSync(r));
+if (existingRoots.length === 0 || allFilesArr.length === 0) {
+  console.error(
+    `✗ Import check: unexpected empty scan (mode=${appArg || 'all'} roots=${roots.length} files=0). ` +
+      `Repository root resolved to ${ROOT}. Refusing false-green.`
+  );
+  process.exit(1);
+}
+
+console.log(
+  `Import check: mode=${appArg || 'all'} scope=${existingRoots.length} roots files=${allFilesArr.length}`
+);
 
 // Build dependency graph
 const graph = new Map();

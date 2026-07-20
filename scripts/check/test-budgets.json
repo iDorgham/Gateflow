@@ -1,0 +1,14 @@
+{
+  "skippedTests": {
+    "max": 1,
+    "owner": "platform",
+    "reason": "client-dashboard validate route suite temporarily skipped pending fixture rewrite",
+    "expiry": "2026-09-30"
+  },
+  "forceExitScripts": {
+    "max": 2,
+    "owner": "platform",
+    "reason": "Jest open-handle cleanup deferred to Phase 4 API certification (client-dashboard, scanner-app)",
+    "expiry": "2026-09-30"
+  }
+}

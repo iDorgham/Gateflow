@@ -10,6 +10,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Ci]** restore trustworthy scanners and full typecheck
+
+- **[CI]** restore trustworthy repo scanners (root resolution, nonzero coverage, history secrets, advisory unavailable≠clean)
+- **[CI]** restore full dashboard typecheck in preflight/CI; add skipped-test/--forceExit budgets
+- **[Deps]** pin js-yaml overrides to patched 3.15.0 / 4.3.0 (GHSA-52cp-r559-cp3m)
 - **[Deps]** bump brace-expansion override to patched 5.0.7+
 
 - **[Security]** request-local fail-closed tenant isolation
@@ -26,6 +31,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Apps
 
+- **[Security]** audit remediation phase 3 — trustworthy CI scanners + full typecheck
 - **[Security]** audit remediation phase 2 — request-local fail-closed tenant `db` (ALS)
 
 - **[Admin]** publish CMS pages by id or slug

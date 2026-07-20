@@ -19,12 +19,17 @@
 const fs = require('fs');
 const path = require('path');
 const { parse: parseYaml } = require('yaml');
+const { getRepoRoot } = require('./repo-root');
 
 const BULK_ADVISORY_URL =
+  process.env.GATEFLOW_ADVISORY_URL ||
   'https://registry.npmjs.org/-/npm/v1/security/advisories/bulk';
-const LOCKFILE_PATH = path.join(process.cwd(), 'pnpm-lock.yaml');
+const ROOT = getRepoRoot(__dirname);
+const LOCKFILE_PATH = path.join(ROOT, 'pnpm-lock.yaml');
 const CHUNK_SIZE = 300;
 const SEVERITY_RANK = { low: 0, moderate: 1, high: 2, critical: 3 };
+/** Exit code for registry/network/unavailable — distinct from clean (0) and vulns (1). */
+const EXIT_UNAVAILABLE = 2;
 
 const args = process.argv.slice(2);
 const failMode = args.includes('--fail');
@@ -120,16 +125,22 @@ async function queryBulkAdvisories(versionsByName) {
 async function main() {
   const versionsByName = loadInstalledVersions();
 
+  console.log(
+    `Dependency scan: mode=bulk scope=lockfile packages=${versionsByName.size} lockfile=${path.relative(ROOT, LOCKFILE_PATH) || 'pnpm-lock.yaml'}`
+  );
+
   let advisoriesByPackage;
   try {
     advisoriesByPackage = await queryBulkAdvisories(versionsByName);
   } catch (err) {
     console.error(
-      `\x1b[31m  ✗ Failed to query the npm advisory API: ${err.message}\x1b[0m\n`
+      `\x1b[31m  ✗ Dependency scan UNAVAILABLE (not clean): ${err.message}\x1b[0m`
     );
-    // A network/registry problem isn't the same as a real vulnerability —
-    // surface it distinctly rather than silently reporting "clean".
-    process.exit(failMode ? 1 : 0);
+    console.error(
+      `  status=unavailable exit=${EXIT_UNAVAILABLE} — distinct from a clean advisory result.\n`
+    );
+    // Never treat registry/network failure as a clean scan.
+    process.exit(EXIT_UNAVAILABLE);
   }
 
   const relevant = [];
@@ -144,7 +155,7 @@ async function main() {
 
   if (relevant.length === 0) {
     console.log(
-      `\x1b[32m  ✓ No ${auditLevel}+ vulnerabilities found (${versionsByName.size} packages checked).\x1b[0m\n`
+      `\x1b[32m  ✓ No ${auditLevel}+ vulnerabilities found (status=clean packages=${versionsByName.size}).\x1b[0m\n`
     );
     process.exit(0);
   }
@@ -163,11 +174,13 @@ async function main() {
   } found`;
 
   if (failMode) {
-    console.error(`\x1b[31m  ✗ ${summary} — fix before deploying.\x1b[0m\n`);
+    console.error(
+      `\x1b[31m  ✗ ${summary} — fix before deploying. (status=vulnerabilities)\x1b[0m\n`
+    );
     process.exit(1);
   } else {
     console.warn(
-      `\x1b[33m  ⚠️  ${summary} — consider updating dependencies.\x1b[0m\n`
+      `\x1b[33m  ⚠️  ${summary} — consider updating dependencies. (status=vulnerabilities)\x1b[0m\n`
     );
     process.exit(0);
   }
