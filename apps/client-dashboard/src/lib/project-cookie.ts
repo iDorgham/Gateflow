@@ -1,4 +1,4 @@
-import { cookies, type UnsafeUnwrappedCookies } from 'next/headers';
+import { cookies } from 'next/headers';
 import { prisma } from '@gate-access/db';
 
 const PROJECT_COOKIE = 'gf_current_project';
@@ -8,12 +8,12 @@ const SECURE = process.env.NODE_ENV === 'production';
 export const ALL_PROJECTS_VALUE = 'all';
 
 /** Returns the raw cookie value (may be ALL_PROJECTS_VALUE, a project id, or null). */
-export function getCurrentProjectCookie(): string | null {
-  return (cookies() as unknown as UnsafeUnwrappedCookies).get(PROJECT_COOKIE)?.value ?? null;
+export async function getCurrentProjectCookie(): Promise<string | null> {
+  return (await cookies()).get(PROJECT_COOKIE)?.value ?? null;
 }
 
-export function setProjectCookie(projectId: string): void {
-  (cookies() as unknown as UnsafeUnwrappedCookies).set(PROJECT_COOKIE, projectId, {
+export async function setProjectCookie(projectId: string): Promise<void> {
+  (await cookies()).set(PROJECT_COOKIE, projectId, {
     httpOnly: true,
     secure: SECURE,
     sameSite: 'lax',
@@ -29,7 +29,7 @@ export function setProjectCookie(projectId: string): void {
  * Falls back to the first project when no cookie is set.
  */
 export async function getValidatedProjectId(orgId: string): Promise<string | null> {
-  const cookieVal = getCurrentProjectCookie();
+  const cookieVal = await getCurrentProjectCookie();
 
   // Explicit "All Projects" selection → no filter
   if (cookieVal === ALL_PROJECTS_VALUE) return null;

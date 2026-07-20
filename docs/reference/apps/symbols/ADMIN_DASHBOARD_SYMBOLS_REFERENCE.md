@@ -161,8 +161,8 @@ Auto-generated symbol index for planning and impact analysis.
 
 ## `apps/admin-dashboard/src/app/api/cms/pages/[slug]/route.ts`
 
-- API methods: `GET`, `POST`
-- Exports (2): `GET`, `POST`
+- API methods: `GET`, `PATCH`
+- Exports (2): `GET`, `PATCH`
 
 ## `apps/admin-dashboard/src/app/api/cms/pages/public/[slug]/route.ts`
 

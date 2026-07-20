@@ -21,29 +21,29 @@ export interface LandingPageData {
 }
 
 /**
- * Fetches a published landing page from the shared database.
- * Used for ISR rendering in apps/marketing.
+ * Fetches a published GateFlow marketing landing page from the shared database.
+ * Marketing pages are global (`organizationId: null`). Soft-delete is not modeled
+ * on LandingPage / LandingPageSection — publication status is the gate.
  */
 export async function getLandingPage(
   slug: string,
   locale: string
 ): Promise<LandingPageData | null> {
   try {
-    const page = await prisma.landingPage.findUnique({
-      where: { slug },
+    const page = await prisma.landingPage.findFirst({
+      where: {
+        slug,
+        organizationId: null,
+        status: 'PUBLISHED',
+      },
       include: {
         sections: {
-          where: {
-            // In production, we might want to ensure only sections with
-            // approved AI assets are shown, but here we assume the
-            // 'PUBLISHED' status on the page is the source of truth.
-          },
           orderBy: { order: 'asc' },
         },
       },
-    } satisfies Prisma.LandingPageFindUniqueArgs);
+    } satisfies Prisma.LandingPageFindFirstArgs);
 
-    if (!page || page.status !== 'PUBLISHED') {
+    if (!page) {
       return null;
     }
 
@@ -92,7 +92,7 @@ export interface BlogPostData {
 }
 
 /**
- * Fetches published blog posts.
+ * Fetches published GateFlow marketing blog posts (`organizationId: null`).
  */
 export async function getBlogPosts(
   locale: string,
@@ -100,7 +100,10 @@ export async function getBlogPosts(
 ): Promise<BlogPostData[]> {
   try {
     const posts = await prisma.blogPost.findMany({
-      where: { status: 'PUBLISHED' },
+      where: {
+        status: 'PUBLISHED',
+        organizationId: null,
+      },
       include: {
         category: true,
         tags: true,
@@ -138,7 +141,7 @@ export async function getBlogPosts(
 }
 
 /**
- * Fetches a single published blog post by slug.
+ * Fetches a single published marketing blog post by slug.
  */
 export async function getBlogPost(
   slug: string,
@@ -149,6 +152,7 @@ export async function getBlogPost(
       where: {
         OR: [{ slugEn: slug }, { slugAr: slug }],
         status: 'PUBLISHED',
+        organizationId: null,
       },
       include: {
         category: true,

@@ -1,0 +1,50 @@
+---
+description: Antigravity /guide reply body — scannable layout, layered teaching, SDD guardian checks (inert outside /guide)
+alwaysApply: true
+---
+
+# Guide response body (Antigravity `/guide` only)
+
+**When to apply:** Use this structure **only** when the user message is a **`/guide`** trigger (including `g/`, `guide>`, `>>guide`, `[guide]` aliases per `.ai/commands/guide.md`). For normal assistant turns, **skip** this rule entirely.
+
+## Body layout (scannable)
+
+- Use **short headings** (`##` / `###`) so non-developers can scan.
+- Prefer **bullets** and **short paragraphs**; avoid long unbroken prose.
+- Put the **main answer first**, then detail — especially for beginners and ESL readers.
+
+## Language
+
+- **Simple, warm English.** Define jargon on first use.
+- Offer to restate or give **Arabic side-notes** only when the user asks or `AGENTS.md` / skills say bilingual output is desired; default stays clear English.
+
+## Layered explanation (default for instructor + most `/guide` answers)
+
+Use **four layers** when teaching or reviewing process (collapse layers if the question is trivial):
+
+| Layer | Purpose |
+|-------|---------|
+| **L0 — Big picture** | One short paragraph: what we are doing in AIWF terms (SDD, phase, risk). |
+| **L1 — Simple** | Plain-language definition or verdict (“pass / gap / risk”). |
+| **L2 — Practical** | What to do next: files to open, commands, checklist. |
+| **L3 — Technical** | Exact paths, gate commands, manifest keys, contract names — only as much as needed. |
+
+## SDD Guardian (when plans, phases, specs, or implementation health are in scope)
+
+In the **main body** (before the global footer), include a compact **guardian block** when relevant:
+
+- **Alignment:** Does the work match stated `planning_type` and phase intent?
+- **Density:** ≥12 phase files? `phase.spec.json`, C4 context + containers, `regional_compliance.md` present where required?
+- **Gaps / risks:** Missing contracts, unclear acceptance criteria, mirror drift?
+- **Compliance:** Law 151/2020, secrets hygiene, `/deploy` policy — note only what applies.
+
+If the user did not share paths, **ask one clarifying question** or point to `/guide plan status` / `.ai/plan/_manifest.yaml` instead of inventing file lists.
+
+## Footer
+
+Handoff footer (`---`, `### What to do next`, optional `### Next prompt` or `### Next terminal command`) stays governed by **`.cursor/rules/guide-handoff-footer.mdc`** — do not duplicate conflicting footer rules here.
+
+## Skills (deeper playbooks)
+
+- **`.ai/skills/guide_teaching/skill.md`** — layered teaching, patience, ESL-friendly patterns.
+- **`.ai/skills/guide_sdd_mastery/skill.md`** — SDD, density gate, C4, manifests, Omega gate vocabulary.

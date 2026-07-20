@@ -14,6 +14,7 @@ const path = require('path');
 const nextConfig = {
   outputFileTracingRoot: path.join(__dirname, '../../'),
   typescript: {
+    // TODO(ts-reeable): re-enable typechecking for admin-dashboard builds.
     // TEMPORARY: fixing the broken @prisma/extension-accelerate pin (see
     // packages/db/package.json) unmasked ~50 pre-existing type errors here
     // spanning several unrelated features (Style Hub, Notifications, AI

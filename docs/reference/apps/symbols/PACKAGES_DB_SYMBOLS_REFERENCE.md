@@ -2,6 +2,8 @@
 
 Auto-generated symbol index for planning and impact analysis.
 
+> **Accuracy note:** File and export counts may drift from source. Verify live inventory under `packages/db/src` (currently ~39 source files).
+
 - Base path: `packages/db/src`
 - Source files indexed: 36
 

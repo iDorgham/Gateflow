@@ -1,4 +1,4 @@
-import { cookies, headers, type UnsafeUnwrappedCookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 import { verifyAccessToken, type AccessTokenClaims } from './auth';
 
 const ACCESS_COOKIE = 'gf_access_token';
@@ -33,9 +33,8 @@ export async function clearAuthCookies(): Promise<void> {
   jar.delete('gf_csrf_token');
 }
 
-export function getRefreshToken(): string | undefined {
-  return (cookies() as unknown as UnsafeUnwrappedCookies).get(REFRESH_COOKIE)
-    ?.value;
+export async function getRefreshToken(): Promise<string | undefined> {
+  return (await cookies()).get(REFRESH_COOKIE)?.value;
 }
 
 export async function getSessionClaims(): Promise<AccessTokenClaims | null> {
@@ -45,7 +44,7 @@ export async function getSessionClaims(): Promise<AccessTokenClaims | null> {
     const reqHeaders = await headers();
     authHeaderStr =
       reqHeaders.get('authorization') || reqHeaders.get('Authorization');
-  } catch (e) {
+  } catch {
     // Context where headers() might not be available, continue to cookies
   }
 
@@ -62,7 +61,7 @@ export async function getSessionClaims(): Promise<AccessTokenClaims | null> {
   let token: string | undefined;
   try {
     token = (await cookies()).get(ACCESS_COOKIE)?.value;
-  } catch (e) {
+  } catch {
     // Context where cookies() might not be available
   }
 

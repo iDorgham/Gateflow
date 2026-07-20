@@ -41,8 +41,8 @@
     "build": "tsup && node -e \"const fs=require('fs');['dist/index.js','dist/index.mjs'].forEach(f=>{const c=fs.readFileSync(f,'utf8');if(!c.startsWith('\\\"use client\\\";'))fs.writeFileSync(f,'\\\"use client\\\";\\n'+c);})\""
   },
   "peerDependencies": {
-    "react": ">=18.0.0",
-    "react-dom": ">=18.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "framer-motion": ">=10.0.0",
     "lucide-react": ">=0.300.0"
   },
@@ -79,6 +79,8 @@
     "autoprefixer": "^10.4.24",
     "lucide-react": "^0.344.0",
     "postcss": "^8.5.6",
+    "react": "19.2.4",
+    "react-dom": "19.2.4",
     "tailwindcss": "^3.4.19",
     "typescript": "^5.9.3",
     "tsup": "^8.3.6"

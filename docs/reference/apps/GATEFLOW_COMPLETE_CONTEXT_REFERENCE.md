@@ -276,8 +276,8 @@ Primary API-producing apps:
 ## 2) Live API Route Counts (Current Snapshot)
 
 - `client-dashboard`: 124 route files
-- `admin-dashboard`: 46 route files
-- `marketing`: 4 route files
+- `admin-dashboard`: 61 route files
+- `marketing`: 3 route files
 - `resident-portal`: 2 route files
 
 ## 3) Domain Group Distribution (Top-Level API Segment)
@@ -295,16 +295,16 @@ Primary API-producing apps:
 
 ### Admin Dashboard API groups
 
-- `admin` (21)
-- `cms` (8)
-- `support` (4)
+- `admin` (17)
+- `cms` (13)
+- `support` (5)
 - `organizations` (3)
 - plus `crm`, `intelligence`, `monitoring`, `auth`, `analytics`, `audit`, `branding`, `tasks`
 
 ### Marketing API groups
 
 - `contact` (1)
-- `marketing` (2)
+- `marketing` (1)
 - `revalidate` (1)
 
 ### Resident Portal API groups
@@ -1843,17 +1843,18 @@ A plan is considered execution-ready when all are true:
 
 Snapshot based on current `docs/plan` directory contents.
 
-### Draft
+### Draft (2)
 
-- No `docs/plan/Draft` folder currently present.
+- `design-system-redesign`
+- `security_hotfix_v1`
 
-### Active (1)
+### Active (0)
 
-- `admin_dashboard_redesign`
+- _(empty — no plans currently in `docs/plan/Active`)_
 
 ### Ready (3)
 
-- `gateflow_design_system`
+- `org_types_dashboard`
 - `resident_portal_responsive`
 - `scanner_onboarding_session`
 
@@ -1882,13 +1883,13 @@ Snapshot based on current `docs/plan` directory contents.
 - `domain_migration_2026`
 - `gateai`
 - `gateai_hub_v2`
+- `gateflow_design_system`
 - `gateflow_v9_autonomy`
 - `github_security_hardening`
 - `maintenance_management`
 - `marketing_growth_engine_q3_2026`
 - `marketing_suite`
 - `marketing_website`
-- `org_types_dashboard`
 - `pagespeed_100`
 - `platform_evolution`
 - `project_dashboard`
@@ -2623,9 +2624,9 @@ This file is the route/page inventory anchor for planning and UI impact analysis
 
 ## 1) Live Page Counts (Current Snapshot)
 
-- `admin-dashboard`: 57 `page.tsx` routes
+- `admin-dashboard`: 61 `page.tsx` routes
 - `client-dashboard`: 44 `page.tsx` routes
-- `marketing`: 25 `page.tsx` routes
+- `marketing`: 28 `page.tsx` routes
 - `resident-portal`: 11 `page.tsx` routes
 
 Notes:
@@ -2718,7 +2719,7 @@ Not duplicated here:
 
 Major cross-repo progress from `CHANGELOG.md` and workspace docs:
 
-- Platform evolution initiatives are actively staged in `docs/plan/Active/platform_evolution`.
+- Platform evolution initiatives are documented in `docs/plan/Complete/platform_evolution`.
 - Plan lifecycle automation is mature (`plan:new` to `plan:done` workflow ecosystem).
 - Changelog/plan/documentation automation has been expanded and normalized.
 - Routing stabilization and theme/locale synchronization work has been applied across dashboards.
@@ -2804,7 +2805,7 @@ For future AI planning context, include:
 - `docs/reference/architecture/PROJECT_STRUCTURE.md`
 - `docs/reference/product/PRD.md`
 - `docs/reference/product/UPCOMING.md`
-- `docs/plan/Active/platform_evolution/*`
+- `docs/plan/Complete/platform_evolution/*`
 - `docs/plan/backlog/ALL_TASKS_BACKLOG.md`
 
 ## Practical Guidance for AI Planning Tools
