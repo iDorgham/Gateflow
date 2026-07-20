@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Db]** unblock production migrate after failed platform_evolution
+
 - **[DB]** clear production P3009 on `20260405135145_platform_evolution` (no-op migration + `db-migrate` workflow)
 
 - **[Workspace]** tracking next changes after v0.2.0
