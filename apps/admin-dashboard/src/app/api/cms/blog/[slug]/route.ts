@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@gate-access/db';
 import type { BlogPost, BlogCategory, User } from '@gate-access/db';
+import { sanitizeBlogHtmlFields } from '@gate-access/types';
 import { isAdminAuthorized } from '@/lib/admin-auth';
 
 /**
@@ -109,7 +110,7 @@ export async function PATCH(
   }
 
   const { slug } = params;
-  const body = await request.json();
+  const body = sanitizeBlogHtmlFields(await request.json());
 
   try {
     const existingPost = await prisma.blogPost.findFirst({

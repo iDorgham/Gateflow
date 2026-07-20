@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isAdminAuthorized } from '@/lib/admin-auth';
+import { filterValidBrandingTokens } from '@gate-access/types';
 import { prisma, withSerializableRetry } from '@gate-access/db';
 
 export async function POST(
@@ -27,18 +28,21 @@ export async function POST(
         where: { organizationId: orgId },
       });
 
-      const tokenOverrides: Record<string, string> = {
+      const tokenOverrides: Record<string, string> = filterValidBrandingTokens({
         ...((current?.tokenOverrides as Record<string, string>) ?? {}),
-      };
+      });
       for (const v of variables ?? []) {
+        const key = typeof v?.key === 'string' ? v.key : '';
         const value = typeof v?.value === 'string' ? v.value.trim() : '';
-        // Empty UI seeds must not persist as CSS resets (`--token: ;`).
+        if (!key) continue;
         if (!value) {
-          delete tokenOverrides[v.key];
+          delete tokenOverrides[key];
         } else {
-          tokenOverrides[v.key] = value;
+          tokenOverrides[key] = value;
         }
       }
+
+      const validatedOverrides = filterValidBrandingTokens(tokenOverrides);
 
       if (current) {
         // Snapshot the pre-update state
@@ -63,13 +67,13 @@ export async function POST(
       return (tx as any).organizationBranding.upsert({
         where: { organizationId: orgId },
         update: {
-          tokenOverrides,
+          tokenOverrides: validatedOverrides,
           version: { increment: 1 },
           isActive: true,
         },
         create: {
           organizationId: orgId,
-          tokenOverrides,
+          tokenOverrides: validatedOverrides,
           version: 1,
           isActive: true,
         },

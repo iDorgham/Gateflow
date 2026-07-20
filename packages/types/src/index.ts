@@ -12,3 +12,4 @@ export * from './crm';
 export * from './maintenance';
 export * from './organization-features';
 export * from './base';
+export * from './security';
