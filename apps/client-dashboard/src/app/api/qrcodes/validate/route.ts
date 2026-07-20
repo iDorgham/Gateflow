@@ -527,7 +527,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       }
 
       await tx.qRCode.update({
-        where: { id: qrCode.id, organizationId: claims.orgId },
+        where: {
+          id: qrCode.id,
+          organizationId: claims.orgId,
+          deletedAt: null,
+        },
         data: { currentUses: { increment: 1 } },
       });
 
