@@ -20,6 +20,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Security]** address audit PR review findings
+
 - **[Security]** harden phase-1 follow-ups and sync workspace guides
 
 - **[Security]** audit remediation phase 1 — P0 containment
