@@ -21,13 +21,13 @@
 
 ## Phase 3 — Trustworthy CI
 
-- [ ] Audit/fix root resolution across check scripts and same-family defects.
-- [ ] Report mode/scope/count; fail unexpected zero-file and unavailable scans.
-- [ ] Add scanner smoke tests and mature full-tree/history secret scanning.
-- [ ] Harden dependency scan state handling.
-- [ ] Restore dashboard typecheck enforcement or an approved decreasing ratchet.
-- [ ] Add warning/skipped-test budgets and resolve/document pnpm runtime drift.
-- [ ] Run scanner gates/preflight and write phase 3 log.
+- [x] Audit/fix root resolution across check scripts and same-family defects.
+- [x] Report mode/scope/count; fail unexpected zero-file and unavailable scans.
+- [x] Add scanner smoke tests and mature full-tree/history secret scanning.
+- [x] Harden dependency scan state handling.
+- [x] Restore dashboard typecheck enforcement or an approved decreasing ratchet.
+- [x] Add warning/skipped-test budgets and resolve/document pnpm runtime drift.
+- [x] Run scanner gates/preflight and write phase 3 log.
 
 ## Phase 4 — API certification
 

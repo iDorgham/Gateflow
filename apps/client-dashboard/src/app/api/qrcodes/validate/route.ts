@@ -468,6 +468,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       if (match) {
         await db.incident.create({
           data: {
+            organizationId: claims.orgId,
             gateId,
             userId: claims.sub,
             reason: 'watchlist_match',
