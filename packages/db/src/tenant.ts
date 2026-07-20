@@ -1,203 +1,375 @@
-import { prisma } from './client';
-import type { Prisma } from '@prisma/client';
+/**
+ * Request-local tenant isolation for Prisma access.
+ *
+ * - Context lives in AsyncLocalStorage (no process-global bleed).
+ * - Tenant `db` fails closed when organization context is missing.
+ * - Soft-deletable models default to `deletedAt: null` on reads.
+ * - Use `privilegedDb` / `runPrivileged*` only for reviewed global admin paths.
+ *
+ * PostgreSQL RLS is intentionally deferred; see phase log RLS decision.
+ */
+import { AsyncLocalStorage } from 'node:async_hooks';
+import { prisma as basePrisma } from './client';
 
 export type OrganizationContext = {
   organizationId: string | null;
 };
 
-// WARNING: This is module-level mutable state shared across all requests in the same
-// Node.js process. Under concurrent Server Component rendering, one request's
-// setOrganizationContext() can bleed into another's DB queries before
-// clearOrganizationContext() runs.
-//
-// Callers MUST call clearOrganizationContext() in a finally block.
-// For a safer alternative, consider Node.js AsyncLocalStorage.
-const organizationContext: OrganizationContext = {
-  organizationId: null,
+export class TenantContextError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'TenantContextError';
+  }
+}
+
+type AlsStore = {
+  organizationId: string | null;
+  mode: 'tenant' | 'privileged';
 };
 
+const als = new AsyncLocalStorage<AlsStore>();
+
+/** Prisma client delegate keys for models with organizationId. */
+const TENANT_MODELS = new Set([
+  'project',
+  'vendor',
+  'role',
+  'user',
+  'invitation',
+  'task',
+  'chatMessage',
+  'gateAssignment',
+  'shiftLog',
+  'gate',
+  'watchlistEntry',
+  'incident',
+  'scanAttachment',
+  'qRCode',
+  'auditLog',
+  'webhook',
+  'apiKey',
+  'adminAuthorizationKey',
+  'qrShortLink',
+  'shortLinkClick',
+  'tag',
+  'contact',
+  'unit',
+  'residentLimit',
+  'eventLog',
+  'aiTask',
+  'aiActionLog',
+  'aiAutomation',
+  'organizationCommunicationConfig',
+  'communicationLog',
+  'workOrder',
+  'merchant',
+  'service',
+  'serviceBooking',
+  'aiGeneratedAsset',
+  'lead',
+  'deal',
+  'knowledgeSource',
+  'knowledgeItem',
+  'taskBoard',
+  'taskBotRule',
+  'notification',
+  'organizationBranding',
+  'brandingSnapshot',
+  'landingPage',
+  'blogPost',
+  'supportTicket',
+  'taskBot',
+]);
+
+/** Prisma client delegate keys for models with deletedAt. */
+const SOFT_DELETE_MODELS = new Set([
+  'organization',
+  'project',
+  'vendor',
+  'user',
+  'task',
+  'gateAssignment',
+  'gate',
+  'watchlistEntry',
+  'qRCode',
+  'webhook',
+  'tag',
+  'contact',
+  'unit',
+  'aiAutomation',
+  'workOrder',
+  'merchant',
+  'service',
+  'serviceBooking',
+  'lead',
+  'deal',
+  'supportTicket',
+]);
+
+const READ_OPS = new Set([
+  'findUnique',
+  'findUniqueOrThrow',
+  'findFirst',
+  'findFirstOrThrow',
+  'findMany',
+  'count',
+  'aggregate',
+  'groupBy',
+]);
+
+const WRITE_WHERE_OPS = new Set([
+  'update',
+  'updateMany',
+  'delete',
+  'deleteMany',
+  'upsert',
+]);
+
+function currentStore(): AlsStore | undefined {
+  return als.getStore();
+}
+
+export function runWithOrganization<T>(organizationId: string, fn: () => T): T {
+  if (!organizationId) {
+    throw new TenantContextError('organizationId is required');
+  }
+  return als.run({ organizationId, mode: 'tenant' }, fn);
+}
+
+export function runWithOrganizationAsync<T>(
+  organizationId: string,
+  fn: () => Promise<T>
+): Promise<T> {
+  if (!organizationId) {
+    return Promise.reject(new TenantContextError('organizationId is required'));
+  }
+  return als.run({ organizationId, mode: 'tenant' }, fn);
+}
+
+export function runPrivileged<T>(fn: () => T): T {
+  return als.run({ organizationId: null, mode: 'privileged' }, fn);
+}
+
+export function runPrivilegedAsync<T>(fn: () => Promise<T>): Promise<T> {
+  return als.run({ organizationId: null, mode: 'privileged' }, fn);
+}
+
+/**
+ * Middleware-friendly enterWith. Prefer `runWithOrganization*` when possible.
+ * Clearing / null org puts the async context in fail-closed tenant mode.
+ */
 export function setOrganizationContext(context: OrganizationContext): void {
-  organizationContext.organizationId = context.organizationId;
+  als.enterWith({
+    organizationId: context.organizationId,
+    mode: 'tenant',
+  });
 }
 
 export function getOrganizationContext(): OrganizationContext {
-  return organizationContext;
+  const store = currentStore();
+  return { organizationId: store?.organizationId ?? null };
 }
 
 export function clearOrganizationContext(): void {
-  organizationContext.organizationId = null;
+  als.enterWith({ organizationId: null, mode: 'tenant' });
 }
 
-function getOrgFilter(): Prisma.StringFilter | undefined {
-  const orgId = organizationContext.organizationId;
-  if (!orgId) return undefined;
-  return { equals: orgId };
+export function isPrivilegedContext(): boolean {
+  return currentStore()?.mode === 'privileged';
 }
 
-export const db = {
-  ...prisma,
+function requireOrgId(model: string, operation: string): string {
+  const store = currentStore();
+  if (!store?.organizationId) {
+    throw new TenantContextError(
+      `Missing organization context for ${model}.${operation}`
+    );
+  }
+  return store.organizationId;
+}
 
-  organization: {
-    ...prisma.organization,
-    findFirst: async (
-      ...args: Parameters<typeof prisma.organization.findFirst>
-    ) => {
-      return prisma.organization.findFirst(...(args as [any]));
-    },
-    findUnique: async (
-      ...args: Parameters<typeof prisma.organization.findUnique>
-    ) => {
-      return prisma.organization.findUnique(...(args as [any]));
-    },
-    findMany: async (
-      ...args: Parameters<typeof prisma.organization.findMany>
-    ) => {
-      return prisma.organization.findMany(...(args as [any]));
-    },
-  },
+function mergeWhere(
+  existing: Record<string, unknown> | undefined,
+  extra: Record<string, unknown>
+): Record<string, unknown> {
+  return { ...(existing ?? {}), ...extra };
+}
 
-  user: {
-    ...prisma.user,
-    findFirst: async (args?: Parameters<typeof prisma.user.findFirst>[0]) => {
-      const orgFilter = getOrgFilter();
-      if (!orgFilter) return prisma.user.findFirst(args as any);
-      return prisma.user.findFirst({
-        ...args,
-        where: {
-          ...args?.where,
-          organizationId: orgFilter,
-        },
-      } as any);
-    },
-    findMany: async (args?: Parameters<typeof prisma.user.findMany>[0]) => {
-      const orgFilter = getOrgFilter();
-      if (!orgFilter) return prisma.user.findMany(args as any);
-      return prisma.user.findMany({
-        ...args,
-        where: {
-          ...args?.where,
-          organizationId: orgFilter,
-        },
-      } as any);
-    },
-    count: async (args?: Parameters<typeof prisma.user.count>[0]) => {
-      const orgFilter = getOrgFilter();
-      if (!orgFilter) return prisma.user.count(args as any);
-      return prisma.user.count({
-        ...args,
-        where: {
-          ...args?.where,
-          organizationId: orgFilter,
-        },
-      } as any);
-    },
-  },
+function applyTenantGuards(
+  model: string,
+  operation: string,
+  args: Record<string, unknown> | undefined
+): Record<string, unknown> | undefined {
+  const orgId = requireOrgId(model, operation);
+  const next: Record<string, unknown> = { ...(args ?? {}) };
 
-  gate: {
-    ...prisma.gate,
-    findFirst: async (args?: Parameters<typeof prisma.gate.findFirst>[0]) => {
-      const orgFilter = getOrgFilter();
-      if (!orgFilter) return prisma.gate.findFirst(args as any);
-      return prisma.gate.findFirst({
-        ...args,
-        where: {
-          ...args?.where,
-          organizationId: orgFilter,
-        },
-      } as any);
-    },
-    findMany: async (args?: Parameters<typeof prisma.gate.findMany>[0]) => {
-      const orgFilter = getOrgFilter();
-      if (!orgFilter) return prisma.gate.findMany(args as any);
-      return prisma.gate.findMany({
-        ...args,
-        where: {
-          ...args?.where,
-          organizationId: orgFilter,
-        },
-      } as any);
-    },
-    count: async (args?: Parameters<typeof prisma.gate.count>[0]) => {
-      const orgFilter = getOrgFilter();
-      if (!orgFilter) return prisma.gate.count(args as any);
-      return prisma.gate.count({
-        ...args,
-        where: {
-          ...args?.where,
-          organizationId: orgFilter,
-        },
-      } as any);
-    },
-  },
+  if (READ_OPS.has(operation) || WRITE_WHERE_OPS.has(operation)) {
+    const whereExtra: Record<string, unknown> = { organizationId: orgId };
+    if (
+      SOFT_DELETE_MODELS.has(model) &&
+      READ_OPS.has(operation) &&
+      (next.where as Record<string, unknown> | undefined)?.deletedAt ===
+        undefined
+    ) {
+      whereExtra.deletedAt = null;
+    }
+    next.where = mergeWhere(
+      next.where as Record<string, unknown> | undefined,
+      whereExtra
+    );
+  }
 
-  qRCode: {
-    ...prisma.qRCode,
-    findFirst: async (args?: Parameters<typeof prisma.qRCode.findFirst>[0]) => {
-      const orgFilter = getOrgFilter();
-      if (!orgFilter) return prisma.qRCode.findFirst(args as any);
-      return prisma.qRCode.findFirst({
-        ...args,
-        where: {
-          ...args?.where,
-          organizationId: orgFilter,
-        },
-      } as any);
-    },
-    findMany: async (args?: Parameters<typeof prisma.qRCode.findMany>[0]) => {
-      const orgFilter = getOrgFilter();
-      if (!orgFilter) return prisma.qRCode.findMany(args as any);
-      return prisma.qRCode.findMany({
-        ...args,
-        where: {
-          ...args?.where,
-          organizationId: orgFilter,
-        },
-      } as any);
-    },
-    count: async (args?: Parameters<typeof prisma.qRCode.count>[0]) => {
-      const orgFilter = getOrgFilter();
-      if (!orgFilter) return prisma.qRCode.count(args as any);
-      return prisma.qRCode.count({
-        ...args,
-        where: {
-          ...args?.where,
-          organizationId: orgFilter,
-        },
-      } as any);
-    },
-  },
+  if (operation === 'create') {
+    const data = { ...((next.data as Record<string, unknown>) ?? {}) };
+    if (
+      typeof data.organizationId === 'string' &&
+      data.organizationId !== orgId
+    ) {
+      throw new TenantContextError(
+        `Cross-tenant create rejected for ${model} (got ${data.organizationId}, expected ${orgId})`
+      );
+    }
+    data.organizationId = orgId;
+    next.data = data;
+  }
 
-  scanLog: {
-    ...prisma.scanLog,
-    findMany: async (args?: Parameters<typeof prisma.scanLog.findMany>[0]) => {
-      const orgId = organizationContext.organizationId;
-      if (!orgId) return prisma.scanLog.findMany(args as any);
-      return prisma.scanLog.findMany({
-        ...args,
-        where: {
-          ...args?.where,
-          gate: {
-            ...(args?.where?.gate as any),
-            organizationId: orgId,
-          },
-        },
-      } as any);
+  if (operation === 'createMany') {
+    const data = next.data;
+    if (Array.isArray(data)) {
+      next.data = data.map((row) => {
+        const r = { ...(row as Record<string, unknown>) };
+        if (
+          typeof r.organizationId === 'string' &&
+          r.organizationId !== orgId
+        ) {
+          throw new TenantContextError(
+            `Cross-tenant createMany rejected for ${model}`
+          );
+        }
+        r.organizationId = orgId;
+        return r;
+      });
+    }
+  }
+
+  if (operation === 'upsert') {
+    const create = {
+      ...((next.create as Record<string, unknown>) ?? {}),
+    };
+    if (
+      typeof create.organizationId === 'string' &&
+      create.organizationId !== orgId
+    ) {
+      throw new TenantContextError(`Cross-tenant upsert rejected for ${model}`);
+    }
+    create.organizationId = orgId;
+    next.create = create;
+    next.where = mergeWhere(next.where as Record<string, unknown> | undefined, {
+      organizationId: orgId,
+    });
+  }
+
+  return next;
+}
+
+function applyScanLogGuards(
+  operation: string,
+  args: Record<string, unknown> | undefined
+): Record<string, unknown> | undefined {
+  const orgId = requireOrgId('scanLog', operation);
+  const next: Record<string, unknown> = { ...(args ?? {}) };
+  const where = {
+    ...((next.where as Record<string, unknown>) ?? {}),
+  };
+  const gate = {
+    ...((where.gate as Record<string, unknown>) ?? {}),
+    organizationId: orgId,
+  };
+  where.gate = gate;
+  next.where = where;
+  return next;
+}
+
+function wrapDelegate(model: string, delegate: object): object {
+  return new Proxy(delegate, {
+    get(target, prop, receiver) {
+      const value = Reflect.get(target, prop, receiver);
+      if (typeof prop !== 'string' || typeof value !== 'function') {
+        return value;
+      }
+      return (...fnArgs: unknown[]) => {
+        try {
+          const [first, ...rest] = fnArgs;
+          const guarded = applyTenantGuards(
+            model,
+            prop,
+            first as Record<string, unknown> | undefined
+          );
+          return (value as (...a: unknown[]) => unknown).apply(target, [
+            guarded,
+            ...rest,
+          ]);
+        } catch (err) {
+          return Promise.reject(err);
+        }
+      };
     },
-    count: async (args?: Parameters<typeof prisma.scanLog.count>[0]) => {
-      const orgId = organizationContext.organizationId;
-      if (!orgId) return prisma.scanLog.count(args as any);
-      return prisma.scanLog.count({
-        ...args,
-        where: {
-          ...args?.where,
-          gate: {
-            ...(args?.where?.gate as any),
-            organizationId: orgId,
-          },
-        },
-      } as any);
+  });
+}
+
+function wrapScanLogDelegate(delegate: object): object {
+  return new Proxy(delegate, {
+    get(target, prop, receiver) {
+      const value = Reflect.get(target, prop, receiver);
+      if (typeof prop !== 'string' || typeof value !== 'function') {
+        return value;
+      }
+      return (...fnArgs: unknown[]) => {
+        try {
+          const [first, ...rest] = fnArgs;
+          const guarded = applyScanLogGuards(
+            prop,
+            first as Record<string, unknown> | undefined
+          );
+          return (value as (...a: unknown[]) => unknown).apply(target, [
+            guarded,
+            ...rest,
+          ]);
+        } catch (err) {
+          return Promise.reject(err);
+        }
+      };
     },
-  },
-};
+  });
+}
+
+/** Build a tenant-scoped client over any Prisma-like object (used in tests). */
+export function createTenantScopedClient<T extends object>(client: T): T {
+  return new Proxy(client, {
+    get(target, prop, receiver) {
+      const value = Reflect.get(target, prop, receiver);
+      if (typeof prop !== 'string') return value;
+
+      if (prop === 'scanLog' && value && typeof value === 'object') {
+        return wrapScanLogDelegate(value);
+      }
+
+      if (TENANT_MODELS.has(prop) && value && typeof value === 'object') {
+        return wrapDelegate(prop, value);
+      }
+
+      return value;
+    },
+  }) as T;
+}
+
+/**
+ * Tenant-scoped Prisma client. Requires organization context for tenant models.
+ * Does not wrap `$transaction` / `$queryRaw` — those stay privileged-only.
+ */
+export const db = createTenantScopedClient(basePrisma);
+
+/** Explicit privileged / platform-admin client (no automatic tenant filter). */
+export const privilegedDb = basePrisma;
 
 export type DbClient = typeof db;

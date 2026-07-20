@@ -123,12 +123,33 @@ jest.mock('@gate-access/db', () => ({
     incident: {
       create: (...args: unknown[]) => mockIncidentCreate(...args),
     },
+    contact: {
+      findUnique: jest.fn(),
+      findFirst: jest.fn(),
+    },
     $transaction: (fn: (tx: unknown) => Promise<unknown>) =>
       mockTransaction(fn),
+  },
+  // Tenant-scoped client — validate route uses `db` for org-bound reads/writes.
+  db: {
+    qRCode: {
+      findUnique: (...args: unknown[]) => mockFindUnique(...args),
+    },
+    gate: {
+      findFirst: (...args: unknown[]) => mockGateFindFirst(...args),
+    },
+    incident: {
+      create: (...args: unknown[]) => mockIncidentCreate(...args),
+    },
+    contact: {
+      findFirst: jest.fn(),
+      findUnique: jest.fn(),
+    },
   },
   // Tenant context helpers must be mocked or they are undefined → TypeError in finally.
   setOrganizationContext: jest.fn(),
   clearOrganizationContext: jest.fn(),
+  isAccessAllowed: jest.fn(() => ({ allowed: true })),
 }));
 
 // ─── Rate-limiter mock (allow all by default; override per test) ───────────────

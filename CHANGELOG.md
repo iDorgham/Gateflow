@@ -22,6 +22,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Apps
 
+- **[Security]** audit remediation phase 2 — request-local fail-closed tenant `db` (ALS)
+
 - **[Admin]** publish CMS pages by id or slug
 
 ---

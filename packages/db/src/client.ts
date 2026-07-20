@@ -45,6 +45,7 @@ const globalForPrisma = globalThis as unknown as {
 
 export const prisma = globalForPrisma.prisma ?? createPrismaClient();
 
+/** @deprecated Use `privilegedDb` or migrate to tenant `db` from `./tenant`. */
 export const db = prisma;
 
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;

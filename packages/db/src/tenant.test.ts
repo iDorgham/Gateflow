@@ -1,44 +1,55 @@
-// Define mocks for Prisma methods
 const mockPrisma = {
   user: {
-    findFirst: jest.fn(() => Promise.resolve(null)),
-    findMany: jest.fn(() => Promise.resolve([])),
-    count: jest.fn(() => Promise.resolve(0)),
+    findFirst: jest.fn(async (_args?: unknown) => null),
+    findUnique: jest.fn(async (_args?: unknown) => null),
+    findMany: jest.fn(async (_args?: unknown) => []),
+    count: jest.fn(async (_args?: unknown) => 0),
+    create: jest.fn(async (_args?: unknown) => ({ id: 'u1' })),
+    update: jest.fn(async (_args?: unknown) => ({ id: 'u1' })),
+    delete: jest.fn(async (_args?: unknown) => ({ id: 'u1' })),
   },
   organization: {
-    findFirst: jest.fn(() => Promise.resolve(null)),
-    findUnique: jest.fn(() => Promise.resolve(null)),
-    findMany: jest.fn(() => Promise.resolve([])),
+    findFirst: jest.fn(async (_args?: unknown) => null),
+    findUnique: jest.fn(async (_args?: unknown) => null),
+    findMany: jest.fn(async (_args?: unknown) => []),
   },
   gate: {
-    findFirst: jest.fn(() => Promise.resolve(null)),
-    findMany: jest.fn(() => Promise.resolve([])),
-    count: jest.fn(() => Promise.resolve(0)),
+    findFirst: jest.fn(async (_args?: unknown) => null),
+    findMany: jest.fn(async (_args?: unknown) => []),
+    count: jest.fn(async (_args?: unknown) => 0),
   },
   qRCode: {
-    findFirst: jest.fn(() => Promise.resolve(null)),
-    findMany: jest.fn(() => Promise.resolve([])),
-    count: jest.fn(() => Promise.resolve(0)),
+    findFirst: jest.fn(async (_args?: unknown) => null),
+    findMany: jest.fn(async (_args?: unknown) => []),
+    count: jest.fn(async (_args?: unknown) => 0),
   },
   scanLog: {
-    findMany: jest.fn(() => Promise.resolve([])),
-    count: jest.fn(() => Promise.resolve(0)),
+    findMany: jest.fn(async (_args?: unknown) => []),
+    count: jest.fn(async (_args?: unknown) => 0),
+  },
+  project: {
+    findMany: jest.fn(async (_args?: unknown) => []),
+    create: jest.fn(async (_args?: unknown) => ({ id: 'p1' })),
   },
 };
 
-// Mock the ./client module
-jest.mock('./client', () => ({
-  prisma: mockPrisma,
-  db: mockPrisma, // Assuming db export is just prisma in client.ts
-}));
+import {
+  setOrganizationContext,
+  getOrganizationContext,
+  clearOrganizationContext,
+  runWithOrganization,
+  runWithOrganizationAsync,
+  runPrivileged,
+  createTenantScopedClient,
+  TenantContextError,
+} from './tenant';
 
-// Import the module under test AFTER mocking
-import { setOrganizationContext, getOrganizationContext, clearOrganizationContext, db } from "./tenant";
+const db = createTenantScopedClient(mockPrisma);
+const privilegedDb = mockPrisma;
 
-describe("Organization Context Isolation", () => {
+describe('Organization Context Isolation (ALS)', () => {
   beforeEach(() => {
     clearOrganizationContext();
-    // Reset mocks
     Object.values(mockPrisma).forEach((model) => {
       Object.values(model).forEach((fn) => {
         if (typeof fn === 'function') {
@@ -52,92 +63,187 @@ describe("Organization Context Isolation", () => {
     clearOrganizationContext();
   });
 
-  describe("Context Management", () => {
-    it("should set and get organization context", () => {
-      const orgId = "org-123";
-      setOrganizationContext({ organizationId: orgId });
-      expect(getOrganizationContext()).toEqual({ organizationId: orgId });
+  describe('Context Management', () => {
+    it('sets and gets organization context', () => {
+      setOrganizationContext({ organizationId: 'org-123' });
+      expect(getOrganizationContext()).toEqual({ organizationId: 'org-123' });
     });
 
-    it("should clear organization context", () => {
-      setOrganizationContext({ organizationId: "org-123" });
+    it('clears organization context', () => {
+      setOrganizationContext({ organizationId: 'org-123' });
       clearOrganizationContext();
       expect(getOrganizationContext()).toEqual({ organizationId: null });
     });
+
+    it('isolates concurrent organizations via AsyncLocalStorage', async () => {
+      const seen: string[] = [];
+      await Promise.all([
+        runWithOrganizationAsync('org-a', async () => {
+          await new Promise((r) => setTimeout(r, 20));
+          seen.push(`a:${getOrganizationContext().organizationId}`);
+          expect(getOrganizationContext().organizationId).toBe('org-a');
+        }),
+        runWithOrganizationAsync('org-b', async () => {
+          await new Promise((r) => setTimeout(r, 5));
+          seen.push(`b:${getOrganizationContext().organizationId}`);
+          expect(getOrganizationContext().organizationId).toBe('org-b');
+        }),
+      ]);
+      expect(seen).toEqual(expect.arrayContaining(['a:org-a', 'b:org-b']));
+    });
   });
 
-  describe("DB Proxy with Context", () => {
-    const orgId = "org-123";
+  describe('Fail-closed tenant db', () => {
+    it('rejects user.findFirst when context is missing', async () => {
+      await expect(
+        db.user.findFirst({ where: { email: 'test@example.com' } })
+      ).rejects.toBeInstanceOf(TenantContextError);
+      expect(mockPrisma.user.findFirst).not.toHaveBeenCalled();
+    });
 
-    it("should filter user.findFirst by organizationId when context is set", async () => {
-      setOrganizationContext({ organizationId: orgId });
-      await db.user.findFirst({ where: { email: "test@example.com" } });
+    it('rejects scanLog.findMany when context is missing', async () => {
+      await expect(db.scanLog.findMany()).rejects.toBeInstanceOf(
+        TenantContextError
+      );
+    });
+
+    it('filters user.findFirst by organizationId and soft-delete', async () => {
+      setOrganizationContext({ organizationId: 'org-123' });
+      await db.user.findFirst({ where: { email: 'test@example.com' } });
 
       expect(mockPrisma.user.findFirst).toHaveBeenCalledWith({
         where: {
-          email: "test@example.com",
-          organizationId: { equals: orgId },
+          email: 'test@example.com',
+          organizationId: 'org-123',
+          deletedAt: null,
         },
       });
     });
 
-    it("should NOT filter user.findFirst when context is NOT set", async () => {
-      await db.user.findFirst({ where: { email: "test@example.com" } });
-
-      expect(mockPrisma.user.findFirst).toHaveBeenCalledWith({
-        where: { email: "test@example.com" },
-      });
-    });
-
-    it("should filter user.findMany by organizationId when context is set", async () => {
-      setOrganizationContext({ organizationId: orgId });
+    it('filters user.findMany by organizationId and soft-delete', async () => {
+      setOrganizationContext({ organizationId: 'org-123' });
       await db.user.findMany();
 
       expect(mockPrisma.user.findMany).toHaveBeenCalledWith({
         where: {
-          organizationId: { equals: orgId },
+          organizationId: 'org-123',
+          deletedAt: null,
         },
       });
     });
 
-    it("should filter gate.findMany by organizationId when context is set", async () => {
-      setOrganizationContext({ organizationId: orgId });
-      await db.gate.findMany();
+    it('injects organizationId on create and rejects cross-tenant create', async () => {
+      setOrganizationContext({ organizationId: 'org-123' });
+      await db.user.create({
+        data: { email: 'a@b.com', name: 'A', passwordHash: 'x' },
+      });
+      expect(mockPrisma.user.create).toHaveBeenCalledWith(
+        expect.objectContaining({
+          data: expect.objectContaining({ organizationId: 'org-123' }),
+        })
+      );
 
-      expect(mockPrisma.gate.findMany).toHaveBeenCalledWith({
+      await expect(
+        db.user.create({
+          data: {
+            email: 'a@b.com',
+            organizationId: 'other-org',
+          },
+        })
+      ).rejects.toBeInstanceOf(TenantContextError);
+    });
+
+    it('scopes updates to organizationId', async () => {
+      setOrganizationContext({ organizationId: 'org-123' });
+      await db.user.update({
+        where: { id: 'u1' },
+        data: { name: 'n' },
+      });
+
+      expect(mockPrisma.user.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: expect.objectContaining({
+            id: 'u1',
+            organizationId: 'org-123',
+          }),
+        })
+      );
+    });
+
+    it('scopes findUnique with organizationId and soft-delete', async () => {
+      setOrganizationContext({ organizationId: 'org-123' });
+      await db.user.findUnique({ where: { id: 'u1' } });
+
+      expect(mockPrisma.user.findUnique).toHaveBeenCalledWith({
         where: {
-          organizationId: { equals: orgId },
+          id: 'u1',
+          organizationId: 'org-123',
+          deletedAt: null,
         },
       });
     });
 
-    it("should filter qRCode.count by organizationId when context is set", async () => {
-      setOrganizationContext({ organizationId: orgId });
-      await db.qRCode.count();
+    it('rejects cross-tenant update when record is outside org', async () => {
+      setOrganizationContext({ organizationId: 'org-123' });
+      mockPrisma.user.update.mockRejectedValueOnce(
+        Object.assign(new Error('Record to update not found.'), {
+          code: 'P2025',
+        })
+      );
 
-      expect(mockPrisma.qRCode.count).toHaveBeenCalledWith({
-        where: {
-          organizationId: { equals: orgId },
-        },
-      });
+      await expect(
+        db.user.update({
+          where: { id: 'other-org-user' },
+          data: { name: 'n' },
+        })
+      ).rejects.toMatchObject({ code: 'P2025' });
+
+      expect(mockPrisma.user.update).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: expect.objectContaining({
+            id: 'other-org-user',
+            organizationId: 'org-123',
+          }),
+        })
+      );
     });
 
-    it("should filter scanLog.findMany by gate.organizationId when context is set", async () => {
-      setOrganizationContext({ organizationId: orgId });
+    it('filters scanLog via gate.organizationId', async () => {
+      setOrganizationContext({ organizationId: 'org-123' });
       await db.scanLog.findMany();
 
       expect(mockPrisma.scanLog.findMany).toHaveBeenCalledWith({
         where: {
           gate: {
-            organizationId: orgId,
+            organizationId: 'org-123',
           },
         },
       });
     });
+  });
 
-    it("should NOT filter scanLog.findMany when context is NOT set", async () => {
-      await db.scanLog.findMany();
-      expect(mockPrisma.scanLog.findMany).toHaveBeenCalled();
+  describe('Privileged client', () => {
+    it('allows privilegedDb without organization context', async () => {
+      await privilegedDb.user.findMany();
+      expect(mockPrisma.user.findMany).toHaveBeenCalled();
+    });
+
+    it('runPrivileged does not enable tenant db without org', async () => {
+      await expect(
+        runPrivileged(() => db.user.findMany())
+      ).rejects.toBeInstanceOf(TenantContextError);
+    });
+
+    it('runWithOrganization enables scoped queries', async () => {
+      await runWithOrganization('org-xyz', async () => {
+        await db.gate.findMany();
+      });
+      expect(mockPrisma.gate.findMany).toHaveBeenCalledWith({
+        where: {
+          organizationId: 'org-xyz',
+          deletedAt: null,
+        },
+      });
     });
   });
 });

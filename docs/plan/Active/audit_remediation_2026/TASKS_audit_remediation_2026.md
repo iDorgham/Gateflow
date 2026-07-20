@@ -12,12 +12,12 @@
 
 ## Phase 2 — Tenant isolation
 
-- [ ] Inventory tenant models, Prisma operations/imports, and privileged exceptions.
-- [ ] Replace global state with request-local context; fail closed when absent.
-- [ ] Enforce organization scope and soft deletes on reads/writes/transactions.
-- [ ] Add an explicit privileged client and migrate unjustified raw Prisma callers.
-- [ ] Add concurrent, cross-tenant, missing-context, and soft-delete tests.
-- [ ] Document the RLS decision; run checks/preflight and write phase 2 log.
+- [x] Inventory tenant models, Prisma operations/imports, and privileged exceptions.
+- [x] Replace global state with request-local context; fail closed when absent.
+- [x] Enforce organization scope and soft deletes on reads/writes/transactions.
+- [x] Add an explicit privileged client and migrate unjustified raw Prisma callers.
+- [x] Add concurrent, cross-tenant, missing-context, and soft-delete tests.
+- [x] Document the RLS decision; run checks/preflight and write phase 2 log.
 
 ## Phase 3 — Trustworthy CI
 
