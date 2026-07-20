@@ -1,15 +1,9 @@
+/* @import must precede @tailwind — Tailwind expands into real CSS rules */
+@import "@gateflow/ui/globals.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import "@gateflow/ui/globals.css";
-
-@layer base {
-  html {
-    zoom: 0.95;
-  }
-}
-
 
 @layer base {
   html {

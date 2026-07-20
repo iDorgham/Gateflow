@@ -35,7 +35,14 @@ const nextConfig = {
     '@gate-access/db',
     '@gate-access/i18n',
   ],
-  serverExternalPackages: ['@node-rs/argon2', '@prisma/client', 'prisma'],
+  // pdfkit/fontkit pull broken ESM helpers under Turbopack; keep them Node externals
+  serverExternalPackages: [
+    '@node-rs/argon2',
+    '@prisma/client',
+    'prisma',
+    'pdfkit',
+    'fontkit',
+  ],
   experimental: {
     optimizePackageImports: [
       '@phosphor-icons/react',

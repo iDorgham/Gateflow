@@ -1,8 +1,9 @@
+/* @import must precede @tailwind — Tailwind expands into real CSS rules */
+@import '../../tokens/css/tokens.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import '../../tokens/css/tokens.css';
 
 @layer base {
   :root {

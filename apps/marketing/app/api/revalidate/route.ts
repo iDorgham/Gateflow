@@ -20,7 +20,8 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    revalidateTag(tag);
+    // Next.js 16 requires a cacheLife profile (e.g. "max" = stale-while-revalidate)
+    revalidateTag(tag, 'max');
     return NextResponse.json({ revalidated: true, now: Date.now() });
   } catch (err) {
     return NextResponse.json(
