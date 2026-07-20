@@ -1,5 +1,6 @@
 {
   "framework": "nextjs",
+  "ignoreCommand": "bash ../../scripts/ignore-build.sh",
   "buildCommand": "cd ../.. && pnpm turbo build --filter=marketing",
   "installCommand": "cd ../.. && pnpm install --frozen-lockfile",
   "outputDirectory": ".next",

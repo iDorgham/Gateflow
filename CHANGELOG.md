@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Deploy]** wire Vercel `ignoreCommand` to skip Dependabot and automatic Preview builds (Hobby quota)
+
 - **[Db]** unblock production migrate after failed platform_evolution
 
 - **[DB]** clear production P3009 on `20260405135145_platform_evolution` (no-op migration + `db-migrate` workflow)
