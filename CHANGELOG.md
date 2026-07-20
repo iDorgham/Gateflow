@@ -19,6 +19,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 ## [Unreleased]
 
 ### Workspace
+- **[Admin-Dashboard]** fix unbalanced parens breaking analytics page lint
 - **[Ci]** regenerate pnpm-lock.yaml after botched master merge
 
 - **[Ci]** unblock master after Next 16 bump

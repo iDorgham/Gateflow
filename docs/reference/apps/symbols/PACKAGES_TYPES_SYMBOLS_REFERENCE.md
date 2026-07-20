@@ -9,9 +9,9 @@ Auto-generated symbol index for planning and impact analysis.
 
 - Exports (6): `AuthUser`, `JwtPayload`, `LoginPayload`, `RefreshTokenPayload`, `RegisterPayload`, `TokenResponse`
 
-## `packages/types/src/base.ts`
-
-- Exports (20): `Gate`, `MaintenanceCategory`, `MaintenanceLocationType`, `MaintenancePriority`, `MaintenanceStatus`, `Organization`, `OrganizationType`, `Permission`, `Plan`, `Project`, `QRCode`, `QRCodeType`, `Role`, `ScanLog`, `ScanStatus`, `User`, `UserRole`, `UserRoleType`, `WorkOrder`, `WorkOrderWithRelations`
+- Exports (19): `Gate`, `MaintenanceCategory`, `MaintenanceLocationType`, `MaintenancePriority`, `MaintenanceStatus`, `Organization`, `OrganizationType`, `Permission`, `Plan`, `Project`, `QRCode`, `QRCodeType`, `Role`, `ScanLog`, `ScanStatus`, `User`, `UserRoleType`, `WorkOrder`, `WorkOrderWithRelations`
++ Exports (20): `Gate`, `MaintenanceCategory`, `MaintenanceLocationType`, `MaintenancePriority`, `MaintenanceStatus`, `Organization`, `OrganizationType`, `Permission`, `Plan`, `Project`, `QRCode`, `QRCodeType`, `Role`, `ScanLog`, `ScanStatus`, `User`, `UserRole`, `UserRoleType`, `WorkOrder`, `WorkOrderWithRelations`
+- Exports (19): `Gate`, `MaintenanceCategory`, `MaintenanceLocationType`, `MaintenancePriority`, `MaintenanceStatus`, `Organization`, `OrganizationType`, `Permission`, `Plan`, `Project`, `QRCode`, `QRCodeType`, `Role`, `ScanLog`, `ScanStatus`, `User`, `UserRoleType`, `WorkOrder`, `WorkOrderWithRelations`
 
 ## `packages/types/src/crm.ts`
 
@@ -41,9 +41,9 @@ Auto-generated symbol index for planning and impact analysis.
 
 - Exports (4): `QRPayload`, `QRRejectReason`, `QRVerificationResult`, `SignedQRString`
 
-## `packages/types/src/qr-signing.ts`
-
-- Exports (4): `base64urlDecode`, `base64urlEncode`, `signQRPayload`, `verifyQRSignature`
+- Exports (2): `signQRPayload`, `verifyQRSignature`
++ Exports (4): `base64urlDecode`, `base64urlEncode`, `signQRPayload`, `verifyQRSignature`
+- Exports (2): `signQRPayload`, `verifyQRSignature`
 
 ## `packages/types/src/qr-validate.ts`
 

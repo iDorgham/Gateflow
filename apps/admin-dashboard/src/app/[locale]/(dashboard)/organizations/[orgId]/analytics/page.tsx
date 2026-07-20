@@ -95,11 +95,11 @@ export default async function AnalyticsPage(props: {
   );
 
   // ── Status breakdown (30 days) ─────────────────────────────────────────────
-  const statusGroups = (await prisma.scanLog.groupBy({
+  const statusGroups = await prisma.scanLog.groupBy({
     by: ['status'],
     where: { scannedAt: { gte: thirtyDaysAgo }, gate: orgGateScope },
     _count: { id: true },
-  })) as { status: string; _count: { id: number } }[];
+  } satisfies Prisma.ScanLogGroupByArgs);
   const statusMap = Object.fromEntries(
     statusGroups.map((s) => [s.status, s._count.id])
   );
