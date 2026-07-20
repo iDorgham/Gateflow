@@ -1,0 +1,23 @@
+package.json
+  s_c5dbb0fe1b2eea::t_2663499422c4ff 134
+CHANGELOG.md
+  s_c5dbb0fe1b2eea::t_f955f3a09a59f4 16
+pnpm-lock.yaml
+  s_c5dbb0fe1b2eea::t_82db847a3de168 24,4742,24909,24912
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "7382d3e708eafb7f55a6bee5d5e503b844cfff83",
+  "prompts": {},
+  "sessions": {
+    "s_c5dbb0fe1b2eea": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "6314b267-cd8e-47f9-9730-b01eba4390a8",
+        "model": "grok-4.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
