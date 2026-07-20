@@ -1,0 +1,24 @@
+packages/db/prisma/migrations/20260405135145_platform_evolution/migration.sql
+  s_71b3a080c67906::t_ba7e9e96036460 1-6
+.github/workflows/db-migrate.yml
+  s_71b3a080c67906::t_cbd042bd37460b 1-102,115-132
+  s_71b3a080c67906::t_d592073a8a76c0 103-114
+CHANGELOG.md
+  s_71b3a080c67906::t_64f4341b30c1c0 13-14,21-22
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "946689a19ef94d7afeffab3e0e8e5430c32eed09",
+  "prompts": {},
+  "sessions": {
+    "s_71b3a080c67906": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "bfd955f6-e223-4c09-9d07-c3b73b140496",
+        "model": "grok-4.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
