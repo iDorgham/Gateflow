@@ -1,0 +1,29 @@
+docs/plan/Active/audit_remediation_2026/SESSION_MEMORY.md
+  s_c5dbb0fe1b2eea::t_f7f6e06326914c 7-8
+docs/plan/backlog/ALL_TASKS_BACKLOG.md
+  s_c89e15e2e628e8::t_768f6608283c17 11,17-18,20-21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "b9c2bcbd5a42d469e2d7c4ad904b6991402f0dfc",
+  "prompts": {},
+  "sessions": {
+    "s_c5dbb0fe1b2eea": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "6314b267-cd8e-47f9-9730-b01eba4390a8",
+        "model": "grok-4.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_c89e15e2e628e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2b35f6bb-ea4d-412b-8438-8ebfc73baee1",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
