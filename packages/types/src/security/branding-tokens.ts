@@ -26,6 +26,10 @@ export type OverridableBrandingToken =
 
 const ALLOWED_TOKEN_SET = new Set<string>(OVERRIDABLE_BRANDING_TOKENS);
 
+declare const CSS: {
+  escape(value: string): string;
+};
+
 /** Reject CSS breakout constructs while allowing common color/length/font values. */
 const CSS_VALUE_PATTERN = /^[#a-zA-Z0-9(),.%\s/-]+$/;
 
@@ -61,7 +65,7 @@ export function filterValidBrandingTokens(
 /** Escape org id for use inside a CSS attribute selector. */
 export function sanitizeOrgIdForCss(orgId: string): string | null {
   if (!/^[a-zA-Z0-9_-]{1,64}$/.test(orgId)) return null;
-  return orgId.replace(/'/g, "\\'");
+  return CSS.escape(orgId);
 }
 
 export function generateBrandingCss(
