@@ -7,7 +7,7 @@ Auto-generated symbol index for planning and impact analysis.
 
 ## `packages/api-client/src/client.ts`
 
-- Exports (2): `ApiError`, `ApiResponse`
+- Exports (5): `ApiError`, `ApiResponse`, `apiClient`, `auth`, `default`
 
 ## `packages/api-client/src/utils/utm-capture.ts`
 

@@ -5,7 +5,7 @@ Auto-generated symbol index for planning and impact analysis.
 - Base path: `apps/marketing`
 - Source files indexed: 107
 
-## `apps/marketing/app/[locale/]/s/[shortId/]/actions.ts`
+## `apps/marketing/lib/actions/invitation.ts`
 
 - Exports (1): `updateVisitorName`
 
@@ -259,10 +259,6 @@ Auto-generated symbol index for planning and impact analysis.
 ## `apps/marketing/i18n-config.ts`
 
 - Exports (1): `Locale`
-
-## `apps/marketing/lib/actions/invitation.ts`
-
-- Exports (1): `updateVisitorName`
 
 ## `apps/marketing/lib/blog-data.ts`
 

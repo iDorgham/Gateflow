@@ -12,14 +12,15 @@ This file consolidates the DB model map, backend runtime architecture, and techn
 
 - Prisma schema: `packages/db/prisma/schema.prisma`
 - Migration history: `packages/db/prisma/migrations/*`
-- Seed and DB utility logic: `packages/db/src/*`, `packages/db/prisma/seed.ts`
+- Prisma seed entry (configured in `packages/db/package.json`): `packages/db/prisma/seed-entry.ts`
+- Seed helpers and DB utility logic: `packages/db/src/*`, `packages/db/prisma/seed.ts` (legacy/helper scripts)
 
 ## 2) Prisma Model Inventory (Current)
 
 Models currently defined in schema include:
 
 - Organization and branding/content:
-  - `Organization`, `OrganizationBranding`, `StyleSnapshot`, `ThemeVariable`
+  - `Organization`, `OrganizationBranding`, `BrandingSnapshot`
   - `LandingPage`, `LandingPageSection`, `BlogPost`, `BlogCategory`
 - User/auth and governance:
   - `User`, `Role`, `Invitation`, `RefreshToken`, `ApiKey`, `AdminAuthorizationKey`, `AuditLog`

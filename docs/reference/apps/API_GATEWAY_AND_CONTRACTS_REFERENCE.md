@@ -45,16 +45,16 @@ Primary API-producing apps:
 
 ### Admin Dashboard API groups
 
-- `admin` (21)
-- `cms` (8)
-- `support` (4)
+- `admin` (17)
+- `cms` (13)
+- `support` (5)
 - `organizations` (3)
 - plus `crm`, `intelligence`, `monitoring`, `auth`, `analytics`, `audit`, `branding`, `tasks`
 
 ### Marketing API groups
 
 - `contact` (1)
-- `marketing` (2)
+- `marketing` (1)
 - `revalidate` (1)
 
 ### Resident Portal API groups

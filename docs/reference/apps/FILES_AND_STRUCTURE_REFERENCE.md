@@ -71,6 +71,14 @@ This file is the filesystem map for planning agents. It answers "where should th
   - Billing integration helpers.
 - `packages/utils`
   - Utility helpers (cross-cutting).
+- `packages/ai`
+  - Agentic AI components and patterns (`@gateflow/ai`).
+- `packages/components`
+  - High-level product layouts and composed UI patterns.
+- `packages/theme`
+  - Next.js-friendly theme providers and hooks.
+- `packages/tokens`
+  - Foundational OKLCH design tokens for the design system.
 
 ## 4) Planning and Execution Folders
 
@@ -111,9 +119,8 @@ Canonical lifecycle and shape docs:
 
 ## 7) Known Structural Anomalies
 
-- There is a directory with trailing-space naming under apps listing: `apps/resident mobile `.
-- Standard active app path is `apps/resident-mobile`.
-- Automated scripts should avoid assumptions based solely on human-readable app names; always use exact filesystem paths.
+- App directories use hyphenated names (for example `resident-mobile`, `resident-portal`, `scanner-app`).
+- Automated scripts must use exact filesystem paths from `ls apps` or `find apps`; do not infer paths from display labels or human-readable names.
 
 ## 8) Fast Scan Commands
 
