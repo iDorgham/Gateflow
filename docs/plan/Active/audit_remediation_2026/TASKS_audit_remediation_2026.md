@@ -4,7 +4,7 @@
 
 - [x] Confirm reset-route exposure using non-sensitive evidence.
 - [x] Remove deployable route and fallback credentials; add local interactive bootstrap only if required.
-- [x] Rotate affected secrets/credentials and record an operational receipt. _(Ops follow-up documented in phase log — not in repo.)_
+- [ ] Rotate affected secrets/credentials and record an operational receipt. _(Pending ops receipt — see phase log Residual Risks / Operational follow-up.)_
 - [x] Sanitize CMS HTML at trust boundaries and constrain branding CSS tokens.
 - [x] Add endpoint-absence, stored-XSS, unsafe-URL/SVG, and CSS-injection tests.
 - [x] Add CI guard against production bootstrap routes/default credentials.

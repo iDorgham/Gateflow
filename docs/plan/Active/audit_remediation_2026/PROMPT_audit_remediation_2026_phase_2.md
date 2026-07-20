@@ -21,7 +21,8 @@ Inventory tenant-owned operations, replace global context with `AsyncLocalStorag
 - [ ] Targeted DB/client/admin checks and `pnpm preflight` pass.
 
 ```bash
-rg -n "setOrganizationContext|clearOrganizationContext|from '@gate-access/db'" apps packages
+# Prefer an AST inventory when available. Until then, expand ripgrep and document every unreviewed caller before treating inventory as complete.
+rg -n "setOrganizationContext|clearOrganizationContext|from ['\"]@gate-access/db['\"]|from ['\"]@gate-access/db/|from ['\"]@prisma/client['\"]|prisma\\.[A-Za-z_][A-Za-z0-9_]*\\(" apps packages
 pnpm turbo test --filter=@gate-access/db --filter=client-dashboard --filter=admin-dashboard
 pnpm preflight
 ```

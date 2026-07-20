@@ -16,16 +16,17 @@ const IGNORE_DIRS = new Set([
   '__mocks__',
 ]);
 
+// POSIX fragments — compared against forward-slash normalized paths.
 const FORBIDDEN_PATH_FRAGMENTS = [
-  path.join('api', 'setup', 'reset-admin'),
-  path.join('api', 'setup', 'reset_admin'),
+  'api/setup/reset-admin',
+  'api/setup/reset_admin',
 ];
 
 const FORBIDDEN_PATTERNS = [
-  { label: 'default setup secret', regex: /gateflow-setup-2026/g },
+  { label: 'default setup secret', regex: /gateflow-setup-2026/ },
   {
     label: 'deployable reset-admin route reference',
-    regex: /api\/setup\/reset-admin/g,
+    regex: /api\/setup\/reset-admin/,
   },
 ];
 
@@ -43,11 +44,10 @@ function walk(dir) {
 
     if (!/\.(ts|tsx|js|jsx|mjs|cjs)$/.test(entry.name)) continue;
 
-    // Match path fragments with forward slashes for consistent cross-platform checks.
+    // Match path fragments against forward-slash normalized paths.
     const posixPath = fullPath.split(path.sep).join('/');
     for (const fragment of FORBIDDEN_PATH_FRAGMENTS) {
-      const posixFragment = fragment.split(path.sep).join('/');
-      if (posixPath.includes(posixFragment)) {
+      if (posixPath.includes(fragment)) {
         violations.push(`${fullPath}: forbidden bootstrap route path`);
       }
     }
@@ -59,7 +59,6 @@ function walk(dir) {
     for (const { label, regex } of FORBIDDEN_PATTERNS) {
       if (regex.test(content)) {
         violations.push(`${fullPath}: ${label}`);
-        regex.lastIndex = 0;
       }
     }
   }

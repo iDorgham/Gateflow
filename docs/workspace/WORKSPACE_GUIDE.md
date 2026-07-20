@@ -6,15 +6,15 @@ Reference for **GateFlow phased development**: commands, agents, skills, and syn
 
 ## AI tooling layout
 
-| What             | Where                                                                   |
-| ---------------- | ----------------------------------------------------------------------- |
-| Canonical source | `.agents/` (local symlink → `.antigravity/`; gitignored)                |
-| Cursor commands  | `.cursor/commands/` (from `pnpm sync`)                                  |
-| Skills           | `.agents/skills/` (~95 skills after local sync)                         |
-| Agents           | `.agents/agents/roles/`                                                 |
-| Sync             | `pnpm sync` → Cursor, Claude, Antigravity, Gemini, Kiro, OpenCode, Qwen |
+| What               | Where                                                                                       |
+| ------------------ | ------------------------------------------------------------------------------------------- |
+| Canonical source   | `.agents/` (local symlink → `.antigravity/`; gitignored)                                    |
+| IDE slash commands | `.cursor/commands/` and synced tool surfaces (from `pnpm sync`)                             |
+| Skills             | `.agents/skills/` (~95 skills after local sync)                                             |
+| Agents             | `.agents/agents/roles/`                                                                     |
+| Sync               | `pnpm sync` → Cursor, Kiro, Antigravity, Claude CLI, Opencode CLI, Gemini CLI, and Kilo CLI |
 
-> A bare clone does not include `.agents/` / `.antigravity/` (gitignored). Restore the local AI tree on the machine, then run `pnpm sync` so Cursor/Claude mirrors match.
+> A bare clone does not include `.agents/` / `.antigravity/` (gitignored). Restore the local AI tree on the machine, then run `pnpm sync` so all synced tool mirrors match.
 
 **Sovereign / AIWF (separate):** `.ai/commands/` — content-factory commands; not the GateFlow `/dev` loop.
 

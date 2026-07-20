@@ -49,5 +49,5 @@ Produce a coach report:
 
 ## Usage
 
-1. Copy the block above into Antigravity or Gemini CLI, or run `/guide` in Cursor.
+1. Copy the block above into Antigravity, Gemini CLI, Claude CLI, Opencode CLI, Kiro, or Kilo CLI, or run `/guide` in Cursor.
 2. For routing only: `/guide phase 2`, `/guide plan my_feature`, etc.

@@ -22,7 +22,10 @@ Remove the administrator reset attack path; rotate affected credentials through 
 - [ ] `pnpm preflight` passes.
 
 ```bash
-rg -n "gateflow-setup-2026|password123|api/setup/reset-admin" apps packages scripts
+# Forbidden bootstrap markers (deployable + shared code)
+rg -n "gateflow-setup-2026|api/setup/reset-admin" apps packages scripts
+# password123: scan deployable apps + scripts only (packages/db seed is a documented local-only exception)
+rg -n "password123" apps scripts
 pnpm turbo test --filter=client-dashboard --filter=marketing --filter=admin-dashboard
 pnpm preflight
 ```

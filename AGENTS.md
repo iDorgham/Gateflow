@@ -11,7 +11,7 @@
 
 ## Learned Workspace Facts
 
-- GateFlow AI config is canonical under **`.agents/`** (same tree as `.antigravity/`). Run **`pnpm sync`** (`scripts/ai-sync/sync-ai-tools.sh`) to copy workflows, skills, agents, and rules to Cursor, Claude, Antigravity, Gemini, Kiro, OpenCode, and Qwen. Optional watch: **`pnpm sync:watch`**. Onboarding: [docs/workspace/COMMAND_GUIDE.md](docs/workspace/COMMAND_GUIDE.md) and [docs/workspace/WORKSPACE_GUIDE.md](docs/workspace/WORKSPACE_GUIDE.md).
+- GateFlow AI config is canonical under **`.agents/`** (same tree as `.antigravity/`). Run **`pnpm sync`** (`scripts/ai-sync/sync-ai-tools.sh`) to copy workflows, skills, agents, and rules to Cursor, Kiro, Antigravity, Claude CLI, Opencode CLI, Gemini CLI, and Kilo CLI. Optional watch: **`pnpm sync:watch`**. Onboarding: [docs/workspace/COMMAND_GUIDE.md](docs/workspace/COMMAND_GUIDE.md) and [docs/workspace/WORKSPACE_GUIDE.md](docs/workspace/WORKSPACE_GUIDE.md).
 - `packages/db/prisma/schema.prisma` sets `directUrl = env("DIRECT_DATABASE_URL")`. Prisma CLI operations that need a direct Postgres connection (for example `migrate deploy`, `migrate resolve`) use that variable; values in `packages/db/.env` can override a one-off shell `DATABASE_URL`. Runtime app code often uses Accelerate (`prisma+postgres://…`) while migrations need the direct URL—keep both aligned per environment.
 - Use `pnpm preflight` as defined in root `package.json` without extra flags; unsupported args can break the underlying `turbo` chain.
 - After moving a plan between `docs/plan/Draft/`, `Ready/`, `Active/`, and `Complete/`, update `docs/plan/backlog/ALL_TASKS_BACKLOG.md` (paths and status) so automation and `/guide` match filesystem layout.

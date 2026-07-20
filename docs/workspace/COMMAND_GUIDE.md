@@ -1,6 +1,6 @@
 # GateFlow — Command Guide
 
-Compact inventory of **GateFlow slash commands**. Canonical workflows live in **`.agents/workflows/`** and sync to Cursor, Claude, Antigravity, Gemini, and Kiro via **`pnpm sync`**.
+Compact inventory of **GateFlow slash commands**. Canonical workflows live in **`.agents/workflows/`** and sync to Cursor, Kiro, Antigravity, Claude CLI, Opencode CLI, Gemini CLI, and Kilo CLI via **`pnpm sync`**.
 
 For lifecycle context see [WORKSPACE_GUIDE.md](./WORKSPACE_GUIDE.md). For skills see [SKILLS_GUIDE.md](./SKILLS_GUIDE.md).
 
@@ -88,7 +88,7 @@ Detailed sub-steps (ready, develop, test, github, …): `.agents/commands-ref/`.
 - **`organizationId`** on tenant queries; **`deletedAt: null`**
 - **QR** payloads HMAC-SHA256 signed
 - **CLI 80% rule** — load `cli-limits` before suggesting paid CLIs
-- **Cursor is master** — CLIs propose; Cursor applies and verifies (`pnpm preflight`)
+- **Orchestrator is master** — CLIs propose; the active IDE/orchestrator (usually Cursor) applies and verifies (`pnpm preflight`)
 
 ---
 

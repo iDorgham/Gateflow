@@ -13,7 +13,7 @@ deprecated_for_gateflow: true
 gateflow_canonical: .agents/workflows/guide.md
 ---
 
-> **GateFlow note:** This file is the **Sovereign / AIWF** `/guide` spec (Antigravity content-factory persona). It is **not** the GateFlow phased-development `/guide`. For GateFlow, use **`.agents/workflows/guide.md`** (synced to `.cursor/commands/guide.md`) and skill **`gf-guide`**.
+> **GateFlow note:** This file is the **Sovereign / AIWF** `/guide` spec (Antigravity content-factory persona). It is **not** the GateFlow phased-development `/guide`. For GateFlow, use **`.agents/workflows/guide.md`** (synced via `pnpm sync` to Cursor, Kiro, Antigravity, Claude CLI, Opencode CLI, Gemini CLI, and Kilo CLI) and skill **`gf-guide`**.
 
 # `/guide`
 
@@ -437,7 +437,7 @@ Applied to every `/guide` response. Non-negotiable.
 
 ### `/guide ping`
 
-```
+```text
 ✅ Antigravity active — AIWF Humanization Engine v3.5 (AIWF v21.0.0)
 Guardian · Master Teacher · SDD Overseer · 8 planning types · spec_density_gate · multi-CLI · Law 151/2020
 Try: /guide what is [topic] | /guide plan status | /guide help
@@ -499,7 +499,7 @@ best matches the user's apparent intent]
 
 ### `/guide mode:[profile]`
 
-```
+```text
 ✍️ Mode → [profile]
 [One sentence written in that profile's exact style as a live demonstration.]
 Reset anytime: /guide mode:mentor
@@ -507,7 +507,7 @@ Reset anytime: /guide mode:mentor
 
 ### `/guide creativity:[level]`
 
-```
+```text
 🎛️ Creativity → [level]
 high    unexpected combinations, rule-bending, brand edge cases
 medium  balanced exploration (default)

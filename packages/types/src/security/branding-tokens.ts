@@ -26,10 +26,6 @@ export type OverridableBrandingToken =
 
 const ALLOWED_TOKEN_SET = new Set<string>(OVERRIDABLE_BRANDING_TOKENS);
 
-declare const CSS: {
-  escape(value: string): string;
-};
-
 /** Reject CSS breakout constructs while allowing common color/length/font values. */
 const CSS_VALUE_PATTERN = /^[#a-zA-Z0-9(),.%\s/-]+$/;
 
