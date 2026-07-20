@@ -7,7 +7,10 @@ export async function GET(request: Request) {
   const refreshToken = await getRefreshToken();
   if (refreshToken) {
     await prisma.refreshToken
-      .updateMany({ where: { token: refreshToken }, data: { revokedAt: new Date() } })
+      .updateMany({
+        where: { token: refreshToken },
+        data: { revokedAt: new Date() },
+      })
       .catch(() => {});
   }
 

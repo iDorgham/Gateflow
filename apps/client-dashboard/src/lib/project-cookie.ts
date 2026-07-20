@@ -28,7 +28,9 @@ export async function setProjectCookie(projectId: string): Promise<void> {
  *   - string → validated project id for the org
  * Falls back to the first project when no cookie is set.
  */
-export async function getValidatedProjectId(orgId: string): Promise<string | null> {
+export async function getValidatedProjectId(
+  orgId: string
+): Promise<string | null> {
   const cookieVal = await getCurrentProjectCookie();
 
   // Explicit "All Projects" selection → no filter
