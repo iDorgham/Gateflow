@@ -8,11 +8,13 @@ Reference for **GateFlow phased development**: commands, agents, skills, and syn
 
 | What             | Where                                                                   |
 | ---------------- | ----------------------------------------------------------------------- |
-| Canonical source | `.agents/` (symlink: `.antigravity/`, `.agents`)                        |
+| Canonical source | `.agents/` (local symlink → `.antigravity/`; gitignored)                |
 | Cursor commands  | `.cursor/commands/` (from `pnpm sync`)                                  |
-| Skills           | `.agents/skills/` (~95 skills)                                          |
+| Skills           | `.agents/skills/` (~95 skills after local sync)                         |
 | Agents           | `.agents/agents/roles/`                                                 |
 | Sync             | `pnpm sync` → Cursor, Claude, Antigravity, Gemini, Kiro, OpenCode, Qwen |
+
+> A bare clone does not include `.agents/` / `.antigravity/` (gitignored). Restore the local AI tree on the machine, then run `pnpm sync` so Cursor/Claude mirrors match.
 
 **Sovereign / AIWF (separate):** `.ai/commands/` — content-factory commands; not the GateFlow `/dev` loop.
 
@@ -48,12 +50,12 @@ Reference for **GateFlow phased development**: commands, agents, skills, and syn
 
 ## `/guide` behavior
 
-Two modes in one command (see `.agents/workflows/guide.md`):
+Two modes in one command (see local `.agents/workflows/guide.md` after sync):
 
 1. **Router** — `/guide plan|phase|ready|…` fires the matching workflow.
 2. **Coach** — bare `/guide` or “what should I do now” loads **`gf-guide`** and reports Must do / Recommended / Critical.
 
-Preferences: `docs/development/learning/GUIDE_PREFERENCES.md`. Rule: `.agents/rules/02-gateflow-guide.mdc`.
+Preferences: `docs/development/learning/GUIDE_PREFERENCES.md`. Rule: local `.agents/rules/02-gateflow-guide.mdc`.
 
 ---
 
@@ -82,7 +84,7 @@ Preferences: `docs/development/learning/GUIDE_PREFERENCES.md`. Rule: `.agents/ru
 
 ## Agents (roles)
 
-Under `.agents/agents/roles/`:
+Under local `.agents/agents/roles/` (after sync):
 
 | Role               | Focus                    |
 | ------------------ | ------------------------ |
@@ -97,7 +99,7 @@ Under `.agents/agents/roles/`:
 | `devops`           | CI/CD, deploy            |
 | `explore`          | Codebase discovery       |
 
-Scenarios: `code-review`, `security-audit`, `refactor`. Orchestrator: `.agents/agents/orchestrator.md`.
+Scenarios: `code-review`, `security-audit`, `refactor`. Orchestrator: local `.agents/agents/orchestrator.md`.
 
 ---
 

@@ -43,9 +43,11 @@ function walk(dir) {
 
     if (!/\.(ts|tsx|js|jsx|mjs|cjs)$/.test(entry.name)) continue;
 
-    const normalized = fullPath.split(path.sep).join(path.sep);
+    // Match path fragments with forward slashes for consistent cross-platform checks.
+    const posixPath = fullPath.split(path.sep).join('/');
     for (const fragment of FORBIDDEN_PATH_FRAGMENTS) {
-      if (normalized.includes(fragment)) {
+      const posixFragment = fragment.split(path.sep).join('/');
+      if (posixPath.includes(posixFragment)) {
         violations.push(`${fullPath}: forbidden bootstrap route path`);
       }
     }

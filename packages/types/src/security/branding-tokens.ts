@@ -87,7 +87,7 @@ export function generateBrandingCss(
     .join('\n');
 
   return `/* Generated Branding for Org: ${safeOrgId} */
-[data-org-id='${safeOrgId}'], :root {
+[data-org-id='${safeOrgId}'] {
 ${styles}
 }
 `;

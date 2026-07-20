@@ -2,7 +2,9 @@
 
 Index of skills under **`.agents/skills/`** (synced via **`pnpm sync`**). Each skill is a directory with `SKILL.md` and YAML frontmatter (`name`, `description`).
 
-**Count:** 94 skills (auto-indexed from disk; re-run sync after adding skills).
+> **Note:** `.agents/` (symlink to `.antigravity/`) is local AI config and is gitignored. After clone, ensure the tree exists (or restore from your machine backup) then run `pnpm sync`. Count below is approximate — re-list with `ls .agents/skills | wc -l`.
+
+**Approx. skill folders:** ~95 (verify on disk after sync).
 
 For commands see [COMMAND_GUIDE.md](./COMMAND_GUIDE.md). For `/guide` behavior see **`gf-guide`**.
 
@@ -51,7 +53,7 @@ Discovery helpers: `find-skills`, domain grep under `.agents/skills/`.
 | `source-command-version`    | `/version`    |
 | `source-command-clis-team`  | `/clis-team`  |
 
-_(Add `source-command-plan` / `source-command-idea` when created — workflows exist at `.agents/workflows/plan.md` and `idea.md`.)_
+_(Add `source-command-plan` / `source-command-idea` when created — after local sync, workflows live at `.agents/workflows/plan.md` and `idea.md`.)_
 
 ---
 

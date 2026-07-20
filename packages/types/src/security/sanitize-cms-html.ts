@@ -17,7 +17,8 @@ const CMS_WHITE_LIST: IWhiteList = {
   ul: [],
   ol: [],
   li: [],
-  a: ['href', 'title', 'target', 'rel'],
+  // No target/rel — untrusted CMS must not set window.opener via target=_blank rel=opener
+  a: ['href', 'title'],
   blockquote: [],
   code: [],
   pre: [],
@@ -51,6 +52,10 @@ const cmsFilter = new FilterXSS({
   onTagAttr(tag, name, value) {
     if (name.startsWith('on')) return '';
     if ((name === 'href' || name === 'src') && /^\s*javascript:/i.test(value)) {
+      return '';
+    }
+    // Defense in depth if target/rel ever re-enter the whitelist
+    if (tag === 'a' && (name === 'target' || name === 'rel')) {
       return '';
     }
     return undefined;

@@ -1,8 +1,8 @@
 # Antigravity /guide — GateFlow Workspace Guide
 
-**Canonical workflow:** `.agents/workflows/guide.md` (synced via `pnpm sync`).
+**Canonical workflow (local):** `.agents/workflows/guide.md` after `pnpm sync` (`.agents` → `.antigravity`, gitignored).
 
-**Skill:** `.agents/skills/gf-guide/SKILL.md`
+**Skill (local):** `.agents/skills/gf-guide/SKILL.md`
 
 ---
 

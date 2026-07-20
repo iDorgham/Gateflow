@@ -4,9 +4,15 @@ import {
   sanitizeOrgIdForCss,
   validateBrandingTokenValue,
 } from './branding-tokens';
-import { sanitizeCmsHtml } from './sanitize-cms-html';
+import { sanitizeBlogHtmlFields, sanitizeCmsHtml } from './sanitize-cms-html';
 
 describe('sanitizeCmsHtml', () => {
+  it('returns empty string for nullish input', () => {
+    expect(sanitizeCmsHtml(null)).toBe('');
+    expect(sanitizeCmsHtml(undefined)).toBe('');
+    expect(sanitizeCmsHtml('')).toBe('');
+  });
+
   it('strips script tags and event handlers', () => {
     const dirty =
       '<p>Hello</p><script>alert(1)</script><img src=x onerror=alert(1) />';
@@ -20,6 +26,15 @@ describe('sanitizeCmsHtml', () => {
     const dirty = '<a href="javascript:alert(1)">click</a>';
     const clean = sanitizeCmsHtml(dirty);
     expect(clean).not.toMatch(/javascript:/i);
+  });
+
+  it('strips target and rel so links cannot opt into window.opener', () => {
+    const dirty =
+      '<a href="https://evil.example" target="_blank" rel="opener">click</a>';
+    const clean = sanitizeCmsHtml(dirty);
+    expect(clean).not.toMatch(/target=/i);
+    expect(clean).not.toMatch(/rel=/i);
+    expect(clean).toContain('href="https://evil.example"');
   });
 
   it('blocks dangerous SVG payloads', () => {
@@ -37,6 +52,33 @@ describe('sanitizeCmsHtml', () => {
     expect(clean).toContain('<h2>');
     expect(clean).toContain('<strong>');
     expect(clean).toContain('href="https://example.com"');
+  });
+});
+
+describe('sanitizeBlogHtmlFields', () => {
+  it('sanitizes contentEn and contentAr only', () => {
+    const body = sanitizeBlogHtmlFields({
+      title: '<script>x</script>',
+      contentEn: '<p>Safe</p><script>alert(1)</script>',
+      contentAr: '<a href="https://a.test" target="_blank" rel="opener">ع</a>',
+      status: 'DRAFT',
+    });
+    expect(body.title).toBe('<script>x</script>');
+    expect(body.contentEn).toContain('Safe');
+    expect(body.contentEn).not.toMatch(/script/i);
+    expect(body.contentAr).toContain('href="https://a.test"');
+    expect(body.contentAr).not.toMatch(/target=/i);
+    expect(body.contentAr).not.toMatch(/rel=/i);
+    expect(body.status).toBe('DRAFT');
+  });
+
+  it('leaves non-string content fields untouched', () => {
+    const body = sanitizeBlogHtmlFields({
+      contentEn: null,
+      contentAr: 42,
+    });
+    expect(body.contentEn).toBeNull();
+    expect(body.contentAr).toBe(42);
   });
 });
 
@@ -62,9 +104,11 @@ describe('branding token validation', () => {
   });
 
   it('generates CSS only for safe org ids and tokens', () => {
-    expect(
-      generateBrandingCss('org-1', { '--ds-text-brand': '#0052CC' })
-    ).toContain("[data-org-id='org-1']");
+    const css = generateBrandingCss('org-1', {
+      '--ds-text-brand': '#0052CC',
+    });
+    expect(css).toContain("[data-org-id='org-1']");
+    expect(css).not.toContain(':root');
     expect(
       generateBrandingCss("'; alert(1); '", { '--ds-text-brand': '#0052CC' })
     ).toBeNull();
