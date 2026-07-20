@@ -141,6 +141,9 @@ jobs:
       - name: Scan for secrets
         run: pnpm check:secrets
 
+      - name: Guard against bootstrap / reset-admin routes
+        run: pnpm check:bootstrap-routes
+
   # ── 3. Typecheck ─────────────────────────────────────────────────────────
   typecheck:
     name: Typecheck

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { MDXRemote } from 'next-mdx-remote/rsc';
+import { sanitizeCmsHtml } from '@gate-access/types';
 import { getAllPosts, getPostBySlug } from '../../../../lib/blog';
 import { Clock, ArrowLeft, Tag } from 'lucide-react';
 import type { Locale } from '../../../../i18n-config';
@@ -128,7 +129,11 @@ export default async function BlogPostPage(props: Props) {
           dir={params.locale === 'ar-EG' ? 'rtl' : 'ltr'}
         >
           {post.isCms ? (
-            <div dangerouslySetInnerHTML={{ __html: post.content }} />
+            <div
+              dangerouslySetInnerHTML={{
+                __html: sanitizeCmsHtml(post.content),
+              }}
+            />
           ) : (
             <MDXRemote source={post.content} />
           )}

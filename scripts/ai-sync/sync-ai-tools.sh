@@ -75,11 +75,16 @@ should_sync() {
 # Array of "key|title|description|gemini_name|kiro_prompt_intro"
 COMMANDS=(
   "idea|Idea|Capture and refine GateFlow initiatives into IDEA_<slug>.md and backlog entries.|idea|Capture and refine a new idea or initiative into IDEA_<slug>.md"
+  "draft|Draft|Capture raw planning notes under docs/plan/Draft/<slug>/ before formal /plan.|draft|Capture or continue a draft plan under docs/plan/Draft"
+  "prompt|Prompt|Build FOR_PLAN_PROMPT.md from draft to feed /plan.|prompt|Write FOR_PLAN_PROMPT.md for a plan slug"
   "plan|Plan|Turn an IDEA_<slug>.md into a phased PLAN_<slug>.md plus PROMPT_<slug>_phase_<N>.md pro prompts.|plan|Turn an IDEA_<slug>.md into a multi-phase PLAN_<slug>.md with phase prompts"
   "dev|Dev|Implement exactly one plan phase end-to-end (code, tests, git).|dev|Implement exactly one phase from a plan end-to-end (code, tests, and git)"
   "ship|Ship|Execute all remaining phases of a plan sequentially via repeated /dev-style execution.|ship|Execute all remaining phases of a plan sequentially"
-  "guide|Guide|Run the GateFlow workspace guide — what should I do now?|guide|Run the GateFlow workspace guide"
+  "guide|Guide|Run the GateFlow workspace guide — router plus coach; what should I do now?|guide|Run the GateFlow workspace guide"
   "man|Man|One Man — one command, seven domains (Code, Brand, SaaS, Marketing, Business, Content, Copywrite).|man|Act as the one-man orchestrator"
+  "brainstorm|Brainstorm|Strategic brainstorming for roadmap, gaps, and release planning.|brainstorm|Run a strategic brainstorming session for GateFlow"
+  "creative|Creative|Creative direction for brand, content, and marketing assets.|creative|Run creative direction workflow"
+  "deploy|Deploy|Deploy target app or workspace apps per deploy workflow.|deploy|Deploy a GateFlow app"
   "clis-team|CLIs Team|Run a predefined CLI team (seo, refactor, audit). Cursor is master; team outputs are proposals.|clis|Run a fixed team of 2-4 CLIs in sequence"
   "docs|Docs|Automated documentation updates — changelog, version badge, PRD, feature log, README, release.|docs|Update project documentation automatically after shipping a feature or cutting a release"
   "version|Version|Semantic versioning — bump package.json, create annotated git tags, generate versioned branch names.|version|Manage semantic versioning across package.json, git tags, and branch names"
@@ -214,17 +219,16 @@ sync_cursor() {
   rsync_dir "$SRC/contracts"    "$dest/contracts"
   ok "skills ($(ls "$SRC/skills" | wc -l | tr -d ' ')) / agents / subagents / commands-ref / templates / contracts"
 
-  # rules — sync .md files only; preserve .mdc (Cursor-native, don't overwrite)
+  # rules — sync .md and .mdc from canonical .agents/rules
   if [[ -d "$SRC/rules" ]]; then
     if ! $DRY_RUN; then
       mkdir -p "$dest/rules"
-      for f in "$SRC/rules/"*.md; do
+      for f in "$SRC/rules/"*.md "$SRC/rules/"*.mdc; do
         [[ -f "$f" ]] || continue
-        name=$(basename "$f")
-        cp "$f" "$dest/rules/$name"
+        cp -f "$f" "$dest/rules/$(basename "$f")"
       done
     fi
-    ok "rules (.md synced, .mdc preserved)"
+    ok "rules (.md + .mdc synced from .agents/rules)"
   fi
 
   # hooks / mcp

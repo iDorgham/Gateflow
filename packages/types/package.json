@@ -9,16 +9,21 @@
   },
   "scripts": {
     "lint": "eslint src/",
-    "typecheck": "tsc -p tsconfig.json"
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "jest"
   },
   "dependencies": {
     "ai": "5.0.52",
     "crypto-js": "^4.2.0",
+    "xss": "^1.0.15",
     "zod": "3.25.76"
   },
   "devDependencies": {
     "@gate-access/config": "workspace:*",
     "@types/crypto-js": "^4.2.2",
+    "@types/jest": "^30.0.0",
+    "jest": "^30.3.0",
+    "ts-jest": "^29.4.6",
     "typescript": "^5.9.3"
   }
 }

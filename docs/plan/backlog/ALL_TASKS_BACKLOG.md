@@ -4,6 +4,21 @@
 
 ## 🚀 Active Initiatives (Q2-Q3 2026)
 
+### audit_remediation_2026 — 2026 Security and Engineering Audit Remediation
+
+**PLAN:** `docs/plan/Active/audit_remediation_2026/`
+
+**Status:** 🔵 Active — Phase 1 complete (2026-07-20)
+
+**Priority:** P0 containment, then P1/P2 hardening
+
+**Target:** Immediate containment; phased completion after review
+
+- [x] Phase 1 — P0 containment: bootstrap route and browser injection
+- [ ] Phase 2 — Tenant isolation: request-local, complete, fail-closed
+- [ ] Phase 3 — Trustworthy CI and repository scanners
+- [ ] Phase 4 — API hardening, coverage, and final certification
+
 ### gateflow_design_system — GateFlow Design System (tokens, theme, UI)
 
 **IDEA:** `docs/development/initiatives/IDEA_atlassian_ui_remake.md`  

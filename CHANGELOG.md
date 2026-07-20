@@ -19,6 +19,14 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 ## [Unreleased]
 
 ### Workspace
+
+- **[Docs]** triage PR #137 review feedback — MD041 on AIWF `/guide`, `/guide` shorthand, COMMAND_GUIDE link/casing
+
+- **[Security]** address audit PR review findings
+
+- **[Security]** harden phase-1 follow-ups and sync workspace guides
+
+- **[Security]** audit remediation phase 1 — P0 containment
 - **[Admin-Dashboard]** fix unbalanced parens breaking analytics page lint
 - **[Ci]** regenerate pnpm-lock.yaml after botched master merge
 

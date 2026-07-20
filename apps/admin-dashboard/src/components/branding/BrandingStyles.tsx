@@ -10,15 +10,8 @@ export async function BrandingStyles({ orgId }: { orgId: string }) {
 
   const rawTokens =
     (branding.tokenOverrides as Record<string, string> | null) ?? {};
-  const tokens = Object.fromEntries(
-    Object.entries(rawTokens).filter(
-      ([, value]) => typeof value === 'string' && value.trim().length > 0
-    )
-  );
-
-  if (Object.keys(tokens).length === 0) return null;
-
-  const css = generateBrandingCss(orgId, tokens);
+  const css = generateBrandingCss(orgId, rawTokens);
+  if (!css) return null;
 
   return <style dangerouslySetInnerHTML={{ __html: css }} />;
 }
