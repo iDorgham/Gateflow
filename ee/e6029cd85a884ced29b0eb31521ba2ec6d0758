@@ -1,0 +1,44 @@
+docs/plan/Active/audit_remediation_2026/PROMPT_audit_remediation_2026_phase_1.md
+  s_5bd70770834e0a::t_8aef86d613e2ea 25-28
+docs/workspace/COMMAND_GUIDE.md
+  s_5bd70770834e0a::t_f2489297deb26f 3
+  s_5bd70770834e0a::t_8bd15ec56e9e64 91
+docs/plan/Active/audit_remediation_2026/phase_logs/PHASE_LOG_phase_01.md
+  s_5bd70770834e0a::t_e0ab6d43bc1078 14,21,24-25,30-33,39-51
+docs/plan/Active/audit_remediation_2026/SESSION_MEMORY.md
+  s_5bd70770834e0a::t_6ff00a51c0d6f5 5,7,12,19,24-25
+docs/tools/antigravity/commands/guide.md
+  s_5bd70770834e0a::t_6b9bb368f373cd 52
+AGENTS.md
+  s_5bd70770834e0a::t_b48b4bfab11cba 14
+.ai/commands/guide.md
+  s_5bd70770834e0a::t_1f927c4d5b473c 16
+  s_5bd70770834e0a::t_cd322e62ccb26a 502,510
+  s_5bd70770834e0a::t_40eb2668566fe2 440
+docs/plan/Active/audit_remediation_2026/TASKS_audit_remediation_2026.md
+  s_5bd70770834e0a::t_07d8f54e69f472 7
+docs/plan/Active/audit_remediation_2026/PROMPT_audit_remediation_2026_phase_2.md
+  s_5bd70770834e0a::t_90364e1951bd98 24-25
+scripts/check/check-bootstrap-routes.js
+  s_5bd70770834e0a::t_8bf3a0fa6ca731 19,21-22,26,29
+  s_5bd70770834e0a::t_0ff2569b51e299 47,50
+docs/workspace/WORKSPACE_GUIDE.md
+  s_5bd70770834e0a::t_7d2f85aa5a9d53 12-17
+  s_5bd70770834e0a::t_34ed81d3af482c 9-11
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "eee6029cd85a884ced29b0eb31521ba2ec6d0758",
+  "prompts": {},
+  "sessions": {
+    "s_5bd70770834e0a": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "a9f9974f-12ef-4c2f-9b35-9517306254fb",
+        "model": "grok-4.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
