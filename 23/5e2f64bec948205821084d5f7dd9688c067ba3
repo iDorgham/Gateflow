@@ -1,0 +1,88 @@
+docs/plan/Active/audit_remediation_2026/phase_logs/PHASE_LOG_phase_03.md
+  s_c5dbb0fe1b2eea::t_6798ea2b2d0980 1-45
+scripts/check/check-bundle-size.js
+  s_c5dbb0fe1b2eea::t_7dbc39d0ed8df6 19,21
+scripts/check/check-db-drift.js
+  s_c5dbb0fe1b2eea::t_0a243e96ac4a60 22,24
+scripts/check/__tests__/check-security.test.js
+  s_c5dbb0fe1b2eea::t_bf72507bc1b256 1-14,16-23,25-29,47,49,51,53-57
+  s_c5dbb0fe1b2eea::t_bfb627ad2c14a6 15,24,30-46,50
+  s_c5dbb0fe1b2eea::t_6ff633e0c40e43 48,52
+  s_c5dbb0fe1b2eea::t_7ec4621bc304f5 58-60
+docs/plan/Active/audit_remediation_2026/SESSION_MEMORY.md
+  s_c5dbb0fe1b2eea::t_65d7a44e13c559 5-8,17-21,30-34,38,41,43,45
+scripts/check/check-security.js
+  s_c5dbb0fe1b2eea::t_d630d73a8b86e0 22,27-28,31-32
+  s_c5dbb0fe1b2eea::t_fb4e85d9c398c6 178-179,183
+  s_c5dbb0fe1b2eea::t_de98551658e76d 177
+  s_c5dbb0fe1b2eea::t_7f18a4dd455d62 25
+  s_c5dbb0fe1b2eea::t_7b044f43b65937 128-131,137-140,142-143,158
+docs/plan/Active/audit_remediation_2026/TASKS_audit_remediation_2026.md
+  s_c5dbb0fe1b2eea::t_148279038a23ce 24-30
+packages/ui/src/components/ui/progress.tsx
+  s_c5dbb0fe1b2eea::t_37591cbfd19c9a 4
+scripts/check/scan-secrets.js
+  s_c5dbb0fe1b2eea::t_e7e2189c69c991 3,5-12,15-18,23-24,74,105,112,114,130,133-134,170,172,175-176,186-189,191,194-196,198-200,202-205,207,209-215,217-225,228-236,239-266,268-273,275-278,280-287,290-294,307-327,349-357,361-379
+  s_c5dbb0fe1b2eea::t_a430febcea1672 124-127
+  s_c5dbb0fe1b2eea::t_9a14e9147213c1 295-306,328-348,360
+docs/development/learning/PNPM_RUNTIME_DRIFT.md
+  s_c5dbb0fe1b2eea::t_dae50f2be4cce5 1-37
+apps/client-dashboard/src/app/api/qrcodes/validate/route.ts
+  s_c5dbb0fe1b2eea::t_e834d3c759700d 471
+package.json
+  s_c5dbb0fe1b2eea::t_8b37d0b0b57cdc 132-133
+  s_c5dbb0fe1b2eea::t_399f90e982019c 14,16-19
+.github/workflows/ci.yml
+  s_c5dbb0fe1b2eea::t_a3b04dc2911e16 164
+  s_c5dbb0fe1b2eea::t_b3127bf31a89c7 141,144-146,150-163
+  s_c5dbb0fe1b2eea::t_b3131b496e3614 202-203
+scripts/check/test-budgets.json
+  s_c5dbb0fe1b2eea::t_da71c12d82c2da 1-14
+scripts/check/check-env.js
+  s_c5dbb0fe1b2eea::t_44fdd941090262 20,22
+scripts/check/repo-root.js
+  s_c5dbb0fe1b2eea::t_3073b356e93542 1-27
+pnpm-lock.yaml
+  s_c89e15e2e628e8::t_e007e7c845c601 22-23,4642,5214,5745,6434,9681,12781,14275,15884,18256,18259,18266,18269
+scripts/check/check-imports.js
+  s_c5dbb0fe1b2eea::t_86dee9daec8196 161-173
+  s_c5dbb0fe1b2eea::t_20f0b4965047a4 20,22
+scripts/check/check-test-budgets.js
+  s_c5dbb0fe1b2eea::t_1722ce4d97a740 1-131
+CHANGELOG.md
+  s_c5dbb0fe1b2eea::t_9d3c0c89444bce 15-17,34
+  s_c5dbb0fe1b2eea::t_2715aa145b3935 13-14
+scripts/check/__tests__/repo-root.test.js
+  s_c5dbb0fe1b2eea::t_3e1768e94a9429 41-45
+  s_c5dbb0fe1b2eea::t_14abcace369104 75-85
+  s_c5dbb0fe1b2eea::t_8a00176919adf6 1-40,46-74
+scripts/check/todos.js
+  s_c5dbb0fe1b2eea::t_a2882209263a1e 21,23
+  s_c5dbb0fe1b2eea::t_c187ec9b644ab4 133-144
+AGENTS.md
+  s_c5dbb0fe1b2eea::t_37b9f7f74f894a 17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "235e2f64bec948205821084d5f7dd9688c067ba3",
+  "prompts": {},
+  "sessions": {
+    "s_c5dbb0fe1b2eea": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "6314b267-cd8e-47f9-9730-b01eba4390a8",
+        "model": "grok-4.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_c89e15e2e628e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2b35f6bb-ea4d-412b-8438-8ebfc73baee1",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
