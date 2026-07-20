@@ -1,0 +1,69 @@
+scripts/setup-github-environments.sh
+  s_71b3a080c67906::t_b8ac60ab8754ce 1-22,26-112
+  s_71b3a080c67906::t_c567bfc72148e7 23-25
+.github/workflows/lighthouse.yml
+  s_71b3a080c67906::t_ed08a045ff4e3d 2,14-16,39,43,75,77,94,99,246-247,270,295,305,307,324,328,343
+package.json
+  s_71b3a080c67906::t_778a6b19dc059a 3
+.github/workflows/sync-ai-tools.yml
+  s_71b3a080c67906::t_bc4039ca4c76ce 50-54
+AGENTS.md
+  s_b0957d47d746a9::t_d8d4d639014a33 11,15,17,20-22
+.github/workflows/publish-gateflow.yml
+  s_71b3a080c67906::t_97958cc312f16d 14,18-26,35,40,43-49,51,58,64
+.github/workflows/deploy.yml
+  s_71b3a080c67906::t_47bd8cb535483a 347
+  s_71b3a080c67906::t_51482b9414298f 409
+  s_71b3a080c67906::t_e63dab180b1f59 471
+  s_71b3a080c67906::t_e25d2cfbcc0a15 2,4-7,9,16-20,26,35-36,38-42,47-50,58,70,78-80,83-109,185,189,221-222,224,226-227,249,256,265,267,283-284,286,288-289,311,318,327,329,345-346,348,350-351,373,380,389,391,407-408,410,412-413,435,442,451,453,469-470,472,474-475,495,502,511,513
+  s_71b3a080c67906::t_42faca06e18265 32,34,37
+  s_71b3a080c67906::t_011faaea5ddb2a 285
+  s_71b3a080c67906::t_ea0c2f9f2323b4 223
+scripts/version/ralph-version.js
+  s_71b3a080c67906::t_888acfeee4959c 17
+README.md
+  s_d50eadb4b332b3::t_3cff9d7961205b 1,8-9,38,40,48
+  s_d50eadb4b332b3::t_c5b61d126807ab 4,33,35-37,39,41-47,49-61,67-75,81-104,106,108-111,113,115-128
+  s_71b3a080c67906::t_2f4fe117d26000 13
+scripts/docs/ralph-docs.js
+  s_71b3a080c67906::t_2392fe6c7a3a5b 212-216,219-223,228,231,234
+  s_71b3a080c67906::t_9a3e06c75d8cc3 217-218
+  s_71b3a080c67906::t_3597967992913e 250,252-258
+CHANGELOG.md
+  s_71b3a080c67906::t_b03b957c447d2c 25-27
+  s_71b3a080c67906::t_f734ea6d2f9e3b 13
+  s_71b3a080c67906::t_67c33307506e32 28-29
+  s_71b3a080c67906::t_699e0b7575f385 9,11,15-21,38,40,42-45,47,87,124,131-133,135-137,143,176-177,229-238
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "12e7edf0e2e92c1749c88a517993a1a4efa68274",
+  "prompts": {},
+  "sessions": {
+    "s_71b3a080c67906": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "bfd955f6-e223-4c09-9d07-c3b73b140496",
+        "model": "grok-4.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_b0957d47d746a9": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "86c09c00-81ea-4491-bbbe-5864c5f37712",
+        "model": "cursor-grok-4.5-high-fast"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_d50eadb4b332b3": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f7fb4-e98d-7340-9b95-e11e915908ac",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
