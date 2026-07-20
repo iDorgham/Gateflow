@@ -83,8 +83,8 @@ importers:
         specifier: ^1.13.4
         version: 1.13.4(@types/node@20.19.37)(typescript@5.9.3)
       '@types/faker':
-        specifier: 5.5.3
-        version: 5.5.3
+        specifier: 6.6.11
+        version: 6.6.11
       '@types/jest':
         specifier: ^30.0.0
         version: 30.0.0
@@ -101,8 +101,8 @@ importers:
         specifier: 8.57.1
         version: 8.57.1
       faker:
-        specifier: 5.5.3
-        version: 5.5.3
+        specifier: 6.6.6
+        version: 6.6.6
       lint-staged:
         specifier: ^15.5.2
         version: 15.5.2
@@ -1145,8 +1145,8 @@ importers:
         specifier: ^4.2.2
         version: 4.2.2
       '@types/faker':
-        specifier: ^5.5.3
-        version: 5.5.3
+        specifier: ^6.6.11
+        version: 6.6.11
       '@types/node':
         specifier: ^20.19.33
         version: 20.19.37
@@ -1154,8 +1154,8 @@ importers:
         specifier: ^8.18.0
         version: 8.20.0
       faker:
-        specifier: ^5.5.3
-        version: 5.5.3
+        specifier: ^6.6.6
+        version: 6.6.6
       prisma:
         specifier: ^5.22.0
         version: 5.22.0
@@ -7938,8 +7938,11 @@ packages:
   /@types/estree@1.0.8:
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
 
-  /@types/faker@5.5.3:
-    resolution: {integrity: sha512-InxkM6sCFQTI6YQl29M/XGlO19ecv/EHH5X5zLEFdge2/qya8oIT0XkJUKTqheVYWJtGi+FBAfP7hbbunDiOmg==}
+  /@types/faker@6.6.11:
+    resolution: {integrity: sha512-/m/YZdfPXeM3dnSBz4JDbbYXelBm+onjsX2+LZV1XPJjIOpdhoc8ngws67iyXdLJwLiigOcejBufaDdjuVWy3Q==}
+    deprecated: This is a stub types definition. faker provides its own type definitions, so you do not need this installed.
+    dependencies:
+      faker: 6.6.6
     dev: true
 
   /@types/glob@7.2.0:
@@ -11817,8 +11820,8 @@ packages:
       - supports-color
     dev: true
 
-  /faker@5.5.3:
-    resolution: {integrity: sha512-wLTv2a28wjUyWkbnX7u/ABZBkUkIF2fCd73V6P2oFqEGEktDfzWx4UxrSqtPRw0xPRAcjeAOIiJWqZm3pP4u3g==}
+  /faker@6.6.6:
+    resolution: {integrity: sha512-9tCqYEDHI5RYFQigXFwF1hnCwcWCOJl/hmll0lr5D2Ljjb0o4wphb69wikeJDz5qCEzXCoPvG6ss5SDP6IfOdg==}
     dev: true
 
   /fast-deep-equal@3.1.3:
