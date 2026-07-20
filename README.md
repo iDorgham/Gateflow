@@ -1,7 +1,7 @@
 <h1 align="center">GateFlow</h1>
 
 <p align="center">
-  <img src="assets/Images/gateflow-compound-access-cover-v8.png" alt="A couple presenting a mobile access pass from a convertible aligned with the entrance of a gated Red Sea compound" width="100%">
+  <img src="assets/Images/gateflow-compound-access-cover-v10.png" alt="A young driver and happy golden-brown dog presenting a mobile access pass at a Red Sea residential compound" width="100%">
 </p>
 
 <p align="center">
@@ -10,22 +10,20 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/iDorgham/Gateflow/blob/master/package.json"><img src="https://img.shields.io/badge/Release-v0.2.0-0ea5e9?style=for-the-badge&logo=github" alt="Release v0.2.0"></a>
-  <a href="https://github.com/iDorgham/Gateflow/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/iDorgham/Gateflow/ci.yml?branch=master&label=CI&logo=github&style=for-the-badge" alt="CI status"></a>
-  <a href="https://github.com/iDorgham/Gateflow/actions/workflows/lighthouse.yml"><img src="https://img.shields.io/github/actions/workflow/status/iDorgham/Gateflow/lighthouse.yml?branch=master&label=Lighthouse&logo=lighthouse&style=for-the-badge" alt="Lighthouse workflow"></a>
-  <a href="https://github.com/iDorgham/Gateflow/actions/workflows/codeql-analysis.yml"><img src="https://img.shields.io/github/actions/workflow/status/iDorgham/Gateflow/codeql-analysis.yml?branch=master&label=CodeQL&logo=github&style=for-the-badge" alt="CodeQL"></a>
-  <img src="https://img.shields.io/github/commit-activity/m/iDorgham/Gateflow?style=for-the-badge&color=blueviolet&logo=github" alt="Commit activity">
-  <img src="https://img.shields.io/badge/node.js-≥20-339933?style=for-the-badge&logo=nodedotjs&logoColor=white" alt="Node.js 20+">
-  <img src="https://img.shields.io/badge/pnpm-8.15-F69220?style=for-the-badge&logo=pnpm&logoColor=white" alt="pnpm 8.15">
-  <img src="https://img.shields.io/badge/TypeScript-5.9-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript 5.9">
-  <img src="https://img.shields.io/badge/Status-Production--ready-success?style=for-the-badge" alt="Status">
-  <img src="https://img.shields.io/badge/QR_signing-HMAC--SHA256-critical?style=for-the-badge" alt="HMAC-SHA256 QR signing">
-  <img src="https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js&logoColor=white" alt="Next.js 15">
-  <img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React 19">
-  <img src="https://img.shields.io/badge/Prisma-5.22-2D3748?style=for-the-badge&logo=prisma&logoColor=white" alt="Prisma 5.22">
-  <img src="https://img.shields.io/badge/PostgreSQL-16+-336791?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL 16+">
-  <img src="https://img.shields.io/badge/Expo-54-4630EB?style=for-the-badge&logo=expo&logoColor=white" alt="Expo 54">
-  <img src="https://img.shields.io/badge/Turborepo-2.8-EF4444?style=for-the-badge&logo=turborepo&logoColor=white" alt="Turborepo 2.8">
+  <a href="https://github.com/iDorgham/Gateflow/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/iDorgham/Gateflow/ci.yml?branch=master&label=CI&style=flat-square" alt="CI status"></a>
+  <a href="https://github.com/iDorgham/Gateflow/actions/workflows/codeql-analysis.yml"><img src="https://img.shields.io/github/actions/workflow/status/iDorgham/Gateflow/codeql-analysis.yml?branch=master&label=CodeQL&style=flat-square" alt="CodeQL status"></a>
+  <a href="package.json"><img src="https://img.shields.io/badge/release-0.2.0-6366f1?style=flat-square" alt="Release 0.2.0"></a>
+  <img src="https://img.shields.io/badge/Node.js-20+-339933?style=flat-square&logo=nodedotjs&logoColor=white" alt="Node.js 20 or later">
+  <img src="https://img.shields.io/badge/pnpm-8.15-F69220?style=flat-square&logo=pnpm&logoColor=white" alt="pnpm 8.15">
+  <img src="https://img.shields.io/badge/license-proprietary-lightgrey?style=flat-square" alt="Proprietary license">
+</p>
+
+<p align="center">
+  <a href="#what-is-gateflow">Product</a> ·
+  <a href="#-application-ecosystem">Applications</a> ·
+  <a href="#-quick-start--local-development">Quick start</a> ·
+  <a href="#-master-architecture">Architecture</a> ·
+  <a href="docs/INDEX.md">Documentation</a>
 </p>
 
 ---
@@ -35,6 +33,16 @@
 **GateFlow is a multi-tenant access-management platform for gated compounds, residential communities, resorts, and other controlled properties.** It replaces phone calls, handwritten visitor lists, and disconnected gate tools with one secure flow shared by residents, visitors, security teams, and property operators.
 
 A resident creates a guest pass from the mobile app or web portal. The visitor receives a signed QR credential. At arrival, security validates that credential with the scanner app—even during an internet outage. The property team sees the result immediately in its operational dashboard, with a complete audit trail.
+
+| At a glance  | GateFlow                                                                     |
+| :----------- | :--------------------------------------------------------------------------- |
+| **Product**  | Multi-tenant physical-access and visitor-management platform                 |
+| **Surfaces** | Six product applications plus an internal design-system application          |
+| **Web**      | Next.js, React, TypeScript, and Tailwind CSS                                 |
+| **Mobile**   | Expo and React Native for residents and gate security                        |
+| **Data**     | PostgreSQL, Prisma, and a tenant-scoped domain model                         |
+| **Security** | Signed QR credentials, RBAC, encrypted offline queues, and audited overrides |
+| **Markets**  | Arabic and English, LTR and RTL, designed for MENA operations                |
 
 ### Who it serves
 
@@ -62,19 +70,22 @@ The apps do not operate as separate products. They share the same organizations,
 
 ---
 
-## 🗂️ Table of Contents
+<details>
+<summary><b>Table of contents</b></summary>
 
-1. [Application Ecosystem](#-application-ecosystem)
-2. [Upcoming features](#-upcoming-features)
-3. [Quick Start & Local Development](#-quick-start--local-development)
-4. [Master Architecture](#-master-architecture)
-5. [Strategic Core Pillars](#-strategic-core-pillars)
-6. [Security & Compliance](#-security--compliance)
-7. [Analytics & Intelligence](#-analytics--intelligence)
-8. [Localization & i18n](#-localization--i18n)
-9. [The Ralph Loop Automation](#-the-ralph-loop-automation)
-10. [Performance & Governance](#-performance--governance)
-11. [Documentation & Support](#-documentation--support)
+- [Application Ecosystem](#-application-ecosystem)
+- [Upcoming features](#-upcoming-features)
+- [Quick Start & Local Development](#-quick-start--local-development)
+- [Master Architecture](#-master-architecture)
+- [Strategic Core Pillars](#-strategic-core-pillars)
+- [Security & Compliance](#-security--compliance)
+- [Analytics & Intelligence](#-analytics--intelligence)
+- [Localization & i18n](#-localization--i18n)
+- [The Ralph Loop Automation](#-the-ralph-loop-automation)
+- [Performance & Governance](#-performance--governance)
+- [Documentation & Support](#-documentation--support)
+
+</details>
 
 ---
 
