@@ -95,7 +95,7 @@ export default async function AnalyticsPage(props: {
   );
 
   // ── Status breakdown (30 days) ─────────────────────────────────────────────
-  const statusGroups = (await prisma.scanLog.groupBy({
+  const statusGroups = await prisma.scanLog.groupBy({
     by: ['status'],
     where: { scannedAt: { gte: thirtyDaysAgo }, gate: orgGateScope },
     _count: { id: true },
