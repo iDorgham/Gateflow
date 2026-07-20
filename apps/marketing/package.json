@@ -6,7 +6,7 @@
     "dev": "next dev -p 3000",
     "build": "pnpm partytown:copy && next build",
     "start": "next start",
-    "lint": "eslint .",
+    "lint": "eslint app components lib hooks",
     "partytown:copy": "partytown copylib public/~partytown"
   },
   "dependencies": {
@@ -39,11 +39,13 @@
     "zod": "3.25.76"
   },
   "devDependencies": {
+    "@gate-access/config": "workspace:*",
     "@types/negotiator": "^0.6.4",
     "@types/node": "^20.19.33",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "autoprefixer": "^10.4.24",
+    "eslint": "8.57.1",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.19",
     "typescript": "^5.9.3"
