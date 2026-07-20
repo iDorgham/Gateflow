@@ -12,7 +12,7 @@ Reference for **GateFlow phased development**: commands, agents, skills, and syn
 | IDE slash commands | `.cursor/commands/` and synced tool surfaces (from `pnpm sync`)                             |
 | Skills             | `.agents/skills/` (~95 skills after local sync)                                             |
 | Agents             | `.agents/agents/roles/`                                                                     |
-| Sync               | `pnpm sync` → Cursor, Kiro, Antigravity, Claude CLI, Opencode CLI, Gemini CLI, and Kilo CLI |
+| Sync               | `pnpm sync` → Cursor, Kiro, Antigravity, Claude CLI, Opencode CLI, Gemini CLI, Kilo CLI, and Qwen CLI |
 
 > A bare clone does not include `.agents/` / `.antigravity/` (gitignored). Restore the local AI tree on the machine, then run `pnpm sync` so all synced tool mirrors match.
 
