@@ -19,6 +19,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 ## [Unreleased]
 
 ### Workspace
+- **[Ci]** regenerate pnpm-lock.yaml after botched master merge
 
 - **[Ci]** detect cross-domain redirect in Lighthouse reachability check
 
