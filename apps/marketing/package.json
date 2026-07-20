@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@builder.io/partytown": "^0.10.3",
-    "@formatjs/intl-localematcher": "^0.8.1",
+    "@formatjs/intl-localematcher": "^0.8.13",
     "@gate-access/db": "workspace:^0.1.0",
     "@gate-access/types": "workspace:^0.1.0",
     "@gateflow/ui": "workspace:^",
