@@ -1,0 +1,21 @@
+packages/db/src/tenant.test.ts
+  s_c89e15e2e628e8::t_099bc098da4693 33-34
+  s_c89e15e2e628e8::t_1e9d63e9baf64d 229-347
+  s_c89e15e2e628e8::t_a93ca9245a6db4 8,10-11,13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "e388ea62b7c07a961ec7515615698eabeb11aecb",
+  "prompts": {},
+  "sessions": {
+    "s_c89e15e2e628e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2b35f6bb-ea4d-412b-8438-8ebfc73baee1",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
