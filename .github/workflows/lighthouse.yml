@@ -101,7 +101,7 @@ jobs:
 
       - name: Install Chrome
         if: steps.probe.outputs.skip != 'true'
-        uses: browser-actions/setup-chrome@4f8e94349a351df0f048634f25fec36c3c91eded # v2.1.1
+        uses: browser-actions/setup-chrome@2e1d749697dd1612b833dba4a722266286fbefcd # v2.1.2
 
       - name: Verify Chrome installation
         if: steps.probe.outputs.skip != 'true'
@@ -197,7 +197,7 @@ jobs:
 
       - name: Upload Lighthouse reports
         if: always() && steps.probe.outputs.skip != 'true'
-        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v4.6.0
         with:
           name: lighthouse-marketing-${{ github.run_number }}
           path: lhci-reports/
@@ -205,7 +205,7 @@ jobs:
 
       - name: Comment Lighthouse scores on PR
         if: always() && github.event_name == 'pull_request'
-        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         env:
           SKIP: ${{ steps.probe.outputs.skip }}
           SKIP_REASON: ${{ steps.probe.outputs.skip_reason }}
@@ -329,7 +329,7 @@ jobs:
 
       - name: Install Chrome
         if: steps.probe.outputs.skip != 'true'
-        uses: browser-actions/setup-chrome@4f8e94349a351df0f048634f25fec36c3c91eded # v2.1.1
+        uses: browser-actions/setup-chrome@2e1d749697dd1612b833dba4a722266286fbefcd # v2.1.2
 
       - name: Verify Chrome installation
         if: steps.probe.outputs.skip != 'true'
@@ -384,7 +384,7 @@ jobs:
 
       - name: Upload Dashboard reports
         if: always() && steps.probe.outputs.skip != 'true'
-        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.0
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v4.6.0
         with:
           name: lighthouse-dashboard-${{ github.run_number }}
           path: lhci-reports/
