@@ -209,22 +209,29 @@ function closeUnreleased(newVersion) {
   ensureChangelog();
   let content = fs.readFileSync(CHANGELOG, 'utf8');
   const hasUnreleased = content.includes('## [Unreleased]');
+  const emptyUnreleased = [
+    '## [Unreleased]',
+    '',
+    '### Workspace',
+    '',
+    '- **[Workspace]** tracking next changes',
+    '',
+    '### AI Tools',
+    '',
+    '### Apps',
+    '',
+  ].join('\n');
 
   if (!hasUnreleased) {
-    // Prepend a new versioned section
     content = content.replace(
       /^(# Changelog[\s\S]*?---\n)/,
-      `$1\n## [${newVersion}] — ${today()}\n\n*(See commits for full details)*\n\n---\n`
+      `$1\n${emptyUnreleased}\n---\n\n## [${newVersion}] — ${today()}\n\n*(See commits for full details)*\n\n---\n`
     );
   } else {
+    // Close current Unreleased body under the new version header, keep required stubs.
     content = content.replace(
       '## [Unreleased]',
-      `## [Unreleased]\n\n*(next release notes go here)*\n\n---\n\n## [${newVersion}] — ${today()}`
-    );
-    // Remove the placeholder under the new Unreleased block
-    content = content.replace(
-      /## \[Unreleased\]\n\n\*\(next release notes go here\)\*\n\n---\n\n## \[Unreleased\]/,
-      '## [Unreleased]'
+      `${emptyUnreleased}\n---\n\n## [${newVersion}] — ${today()}`
     );
   }
   fs.writeFileSync(CHANGELOG, content);
@@ -240,9 +247,15 @@ function refreshReadme(slug, description) {
   let content = fs.readFileSync(README, 'utf8');
   const ver = version();
 
-  // Update / add version badge
+  // Update / add version badge (supports both version-* and Release-v* styles)
   const versionBadge = `<img src="https://img.shields.io/badge/version-${ver}-blue?style=for-the-badge" alt="version">`;
-  if (content.includes('img.shields.io/badge/version-')) {
+  const releaseBadge = `<img src="https://img.shields.io/badge/Release-v${ver}-0ea5e9?style=for-the-badge&logo=github" alt="Release v${ver}">`;
+  if (content.includes('img.shields.io/badge/Release-v')) {
+    content = content.replace(
+      /<img src="https:\/\/img\.shields\.io\/badge\/Release-v[^"]*"[^>]*>/,
+      releaseBadge
+    );
+  } else if (content.includes('img.shields.io/badge/version-')) {
     content = content.replace(
       /<img src="https:\/\/img\.shields\.io\/badge\/version-[^"]*"[^>]*>/,
       versionBadge

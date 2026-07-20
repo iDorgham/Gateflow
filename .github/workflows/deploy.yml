@@ -1,41 +1,53 @@
 # =============================================================================
-# deploy.yml — GateFlow Vercel Deployment
+# deploy.yml — GateFlow Vercel Deployment (manual /deploy only)
 #
-# Deploys all web apps to Vercel:
-#   - client-dashboard  (production / preview)
-#   - admin-dashboard   (production / preview)
-#   - marketing         (production / preview)
-#   - resident-portal   (production / preview)
+# Deploys web apps to Vercel via workflow_dispatch (no push auto-deploy).
+# Each app uses a GitHub Environment matching Vercel naming so Deployments
+# UI and protection rules stay per-app:
+#   Production – gateflow-<app> | Preview – gateflow-<app>
 #
-# Triggers:
-#   - Push to main/master → production deploy
-#   - Pull request        → preview deploy
-#   - Manual dispatch
-#
-# Required secrets (set in GitHub → Settings → Secrets):
+# Required secrets (repo → Settings → Secrets):
 #   VERCEL_TOKEN
 #   VERCEL_ORG_ID
 #   VERCEL_PROJECT_ID_CLIENT_DASHBOARD
 #   VERCEL_PROJECT_ID_ADMIN_DASHBOARD
 #   VERCEL_PROJECT_ID_MARKETING
 #   VERCEL_PROJECT_ID_RESIDENT_PORTAL
+#   VERCEL_PROJECT_ID_DESIGN_SYSTEM
+#   DATABASE_URL / DIRECT_DATABASE_URL (db-migrate only)
+#
+# IMPORTANT: All Vercel projects set Root Directory to apps/<name>.
+# Run vercel CLI from the monorepo root (never working-directory: apps/...).
 # =============================================================================
 name: Deploy
 
 permissions:
   contents: read
+  deployments: write
 
 on:
   workflow_dispatch:
     inputs:
       app:
-        description: 'App to deploy (leave empty for all)'
+        description: 'App to deploy (all = changed apps only)'
         required: false
-        default: ''
+        default: all
+        type: choice
+        options:
+          - all
+          - client-dashboard
+          - admin-dashboard
+          - marketing
+          - resident-portal
+          - design-system
       environment:
         description: 'Environment (production | preview)'
         required: false
         default: 'production'
+        type: choice
+        options:
+          - production
+          - preview
       skip_migration:
         description: 'Skip database migration (use when migration is already resolved)'
         required: false
@@ -43,7 +55,7 @@ on:
         type: boolean
 
 concurrency:
-  group: deploy-${{ github.ref }}
+  group: deploy-${{ github.ref }}-${{ inputs.app || 'all' }}
   cancel-in-progress: false
 
 env:
@@ -55,9 +67,7 @@ jobs:
   changes:
     name: Detect Changes
     runs-on: ubuntu-latest
-    if: |
-      github.actor != 'dependabot[bot]' &&
-      vars.DEPLOY_DISABLED != 'true'
+    if: vars.DEPLOY_DISABLED != 'true'
     outputs:
       client: ${{ steps.filter.outputs.client }}
       admin: ${{ steps.filter.outputs.admin }}
@@ -65,8 +75,38 @@ jobs:
       resident: ${{ steps.filter.outputs.resident }}
       design_system: ${{ steps.filter.outputs.design_system }}
       db: ${{ steps.filter.outputs.db }}
+      is_prod: ${{ steps.env.outputs.is_prod }}
+      vercel_env: ${{ steps.env.outputs.vercel_env }}
+      gh_env_prefix: ${{ steps.env.outputs.gh_env_prefix }}
     steps:
       - uses: actions/checkout@v6
+
+      - name: Resolve environment
+        id: env
+        run: |
+          set -euo pipefail
+          INPUT_ENV="${{ github.event.inputs.environment }}"
+          # Explicit preview input wins; otherwise production only on main/master
+          if [[ "$INPUT_ENV" == "preview" ]]; then
+            echo "is_prod=false" >> "$GITHUB_OUTPUT"
+            echo "vercel_env=preview" >> "$GITHUB_OUTPUT"
+            echo "gh_env_prefix=Preview" >> "$GITHUB_OUTPUT"
+          elif [[ "${{ github.ref }}" == "refs/heads/main" || "${{ github.ref }}" == "refs/heads/master" ]]; then
+            if [[ "$INPUT_ENV" == "production" || -z "$INPUT_ENV" ]]; then
+              echo "is_prod=true" >> "$GITHUB_OUTPUT"
+              echo "vercel_env=production" >> "$GITHUB_OUTPUT"
+              echo "gh_env_prefix=Production" >> "$GITHUB_OUTPUT"
+            else
+              echo "is_prod=false" >> "$GITHUB_OUTPUT"
+              echo "vercel_env=preview" >> "$GITHUB_OUTPUT"
+              echo "gh_env_prefix=Preview" >> "$GITHUB_OUTPUT"
+            fi
+          else
+            echo "is_prod=false" >> "$GITHUB_OUTPUT"
+            echo "vercel_env=preview" >> "$GITHUB_OUTPUT"
+            echo "gh_env_prefix=Preview" >> "$GITHUB_OUTPUT"
+          fi
+
       - uses: dorny/paths-filter@v3
         id: filter
         with:
@@ -142,11 +182,11 @@ jobs:
     needs: [changes, build-check]
     runs-on: ubuntu-latest
     if: |
-      (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') &&
+      needs.changes.outputs.is_prod == 'true' &&
       needs.changes.outputs.db == 'true' &&
       github.event.inputs.skip_migration != 'true'
     environment:
-      name: production
+      name: Production
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
@@ -178,11 +218,13 @@ jobs:
       !cancelled() &&
       !failure() &&
       (needs.db-migrate.result == 'success' || needs.db-migrate.result == 'skipped') &&
-      (github.event.inputs.app == '' || github.event.inputs.app == 'client-dashboard') &&
-      needs.changes.outputs.client == 'true'
+      (
+        github.event.inputs.app == 'client-dashboard' ||
+        ((github.event.inputs.app == 'all' || github.event.inputs.app == '') && needs.changes.outputs.client == 'true')
+      )
     environment:
-      name: "${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && 'production' || 'preview' }}"
-      url: '${{ steps.deploy.outputs.url }}'
+      name: ${{ needs.changes.outputs.gh_env_prefix }} – gateflow-client-dashboard
+      url: ${{ steps.deploy.outputs.url }}
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
@@ -204,16 +246,14 @@ jobs:
       - name: Pull Vercel environment
         run: |
           vercel pull --yes \
-            --environment=${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && 'production' || 'preview' }} \
+            --environment=${{ needs.changes.outputs.vercel_env }} \
             --token=${{ secrets.VERCEL_TOKEN }}
-        working-directory: apps/client-dashboard
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_CLIENT_DASHBOARD }}
 
       - name: Build for Vercel
-        run: "vercel build ${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && '--prod' || '' }} --token=${{ secrets.VERCEL_TOKEN }}"
-        working-directory: apps/client-dashboard
+        run: vercel build ${{ needs.changes.outputs.is_prod == 'true' && '--prod' || '' }} --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_CLIENT_DASHBOARD }}
@@ -222,11 +262,10 @@ jobs:
         id: deploy
         run: |
           URL=$(vercel deploy --prebuilt \
-            ${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && '--prod' || '' }} \
+            ${{ needs.changes.outputs.is_prod == 'true' && '--prod' || '' }} \
             --token=${{ secrets.VERCEL_TOKEN }})
-          echo "url=$URL" >> $GITHUB_OUTPUT
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
           echo "Deployed to: $URL"
-        working-directory: apps/client-dashboard
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_CLIENT_DASHBOARD }}
@@ -241,11 +280,13 @@ jobs:
       !cancelled() &&
       !failure() &&
       (needs.db-migrate.result == 'success' || needs.db-migrate.result == 'skipped') &&
-      (github.event.inputs.app == '' || github.event.inputs.app == 'admin-dashboard') &&
-      needs.changes.outputs.admin == 'true'
+      (
+        github.event.inputs.app == 'admin-dashboard' ||
+        ((github.event.inputs.app == 'all' || github.event.inputs.app == '') && needs.changes.outputs.admin == 'true')
+      )
     environment:
-      name: "${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && 'production' || 'preview' }}"
-      url: '${{ steps.deploy.outputs.url }}'
+      name: ${{ needs.changes.outputs.gh_env_prefix }} – gateflow-admin-dashboard
+      url: ${{ steps.deploy.outputs.url }}
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
@@ -267,16 +308,14 @@ jobs:
       - name: Pull Vercel environment
         run: |
           vercel pull --yes \
-            --environment=${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && 'production' || 'preview' }} \
+            --environment=${{ needs.changes.outputs.vercel_env }} \
             --token=${{ secrets.VERCEL_TOKEN }}
-        working-directory: apps/admin-dashboard
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_ADMIN_DASHBOARD }}
 
       - name: Build for Vercel
-        run: "vercel build ${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && '--prod' || '' }} --token=${{ secrets.VERCEL_TOKEN }}"
-        working-directory: apps/admin-dashboard
+        run: vercel build ${{ needs.changes.outputs.is_prod == 'true' && '--prod' || '' }} --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_ADMIN_DASHBOARD }}
@@ -285,11 +324,10 @@ jobs:
         id: deploy
         run: |
           URL=$(vercel deploy --prebuilt \
-            ${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && '--prod' || '' }} \
+            ${{ needs.changes.outputs.is_prod == 'true' && '--prod' || '' }} \
             --token=${{ secrets.VERCEL_TOKEN }})
-          echo "url=$URL" >> $GITHUB_OUTPUT
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
           echo "Deployed to: $URL"
-        working-directory: apps/admin-dashboard
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_ADMIN_DASHBOARD }}
@@ -304,11 +342,13 @@ jobs:
       !cancelled() &&
       !failure() &&
       (needs.db-migrate.result == 'success' || needs.db-migrate.result == 'skipped') &&
-      (github.event.inputs.app == '' || github.event.inputs.app == 'marketing') &&
-      needs.changes.outputs.marketing == 'true'
+      (
+        github.event.inputs.app == 'marketing' ||
+        ((github.event.inputs.app == 'all' || github.event.inputs.app == '') && needs.changes.outputs.marketing == 'true')
+      )
     environment:
-      name: "${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && 'production' || 'preview' }}"
-      url: '${{ steps.deploy.outputs.url }}'
+      name: ${{ needs.changes.outputs.gh_env_prefix }} – gateflow-marketing
+      url: ${{ steps.deploy.outputs.url }}
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
@@ -330,16 +370,14 @@ jobs:
       - name: Pull Vercel environment
         run: |
           vercel pull --yes \
-            --environment=${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && 'production' || 'preview' }} \
+            --environment=${{ needs.changes.outputs.vercel_env }} \
             --token=${{ secrets.VERCEL_TOKEN }}
-        working-directory: apps/marketing
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_MARKETING }}
 
       - name: Build for Vercel
-        run: "vercel build ${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && '--prod' || '' }} --token=${{ secrets.VERCEL_TOKEN }}"
-        working-directory: apps/marketing
+        run: vercel build ${{ needs.changes.outputs.is_prod == 'true' && '--prod' || '' }} --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_MARKETING }}
@@ -348,11 +386,10 @@ jobs:
         id: deploy
         run: |
           URL=$(vercel deploy --prebuilt \
-            ${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && '--prod' || '' }} \
+            ${{ needs.changes.outputs.is_prod == 'true' && '--prod' || '' }} \
             --token=${{ secrets.VERCEL_TOKEN }})
-          echo "url=$URL" >> $GITHUB_OUTPUT
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
           echo "Deployed to: $URL"
-        working-directory: apps/marketing
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_MARKETING }}
@@ -367,11 +404,13 @@ jobs:
       !cancelled() &&
       !failure() &&
       (needs.db-migrate.result == 'success' || needs.db-migrate.result == 'skipped') &&
-      (github.event.inputs.app == '' || github.event.inputs.app == 'resident-portal') &&
-      needs.changes.outputs.resident == 'true'
+      (
+        github.event.inputs.app == 'resident-portal' ||
+        ((github.event.inputs.app == 'all' || github.event.inputs.app == '') && needs.changes.outputs.resident == 'true')
+      )
     environment:
-      name: "${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && 'production' || 'preview' }}"
-      url: '${{ steps.deploy.outputs.url }}'
+      name: ${{ needs.changes.outputs.gh_env_prefix }} – gateflow-resident-portal
+      url: ${{ steps.deploy.outputs.url }}
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
@@ -393,16 +432,14 @@ jobs:
       - name: Pull Vercel environment
         run: |
           vercel pull --yes \
-            --environment=${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && 'production' || 'preview' }} \
+            --environment=${{ needs.changes.outputs.vercel_env }} \
             --token=${{ secrets.VERCEL_TOKEN }}
-        working-directory: apps/resident-portal
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_RESIDENT_PORTAL }}
 
       - name: Build for Vercel
-        run: "vercel build ${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && '--prod' || '' }} --token=${{ secrets.VERCEL_TOKEN }}"
-        working-directory: apps/resident-portal
+        run: vercel build ${{ needs.changes.outputs.is_prod == 'true' && '--prod' || '' }} --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_RESIDENT_PORTAL }}
@@ -411,11 +448,10 @@ jobs:
         id: deploy
         run: |
           URL=$(vercel deploy --prebuilt \
-            ${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && '--prod' || '' }} \
+            ${{ needs.changes.outputs.is_prod == 'true' && '--prod' || '' }} \
             --token=${{ secrets.VERCEL_TOKEN }})
-          echo "url=$URL" >> $GITHUB_OUTPUT
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
           echo "Deployed to: $URL"
-        working-directory: apps/resident-portal
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_RESIDENT_PORTAL }}
@@ -430,11 +466,13 @@ jobs:
       !cancelled() &&
       !failure() &&
       (needs.db-migrate.result == 'success' || needs.db-migrate.result == 'skipped') &&
-      (github.event.inputs.app == '' || github.event.inputs.app == 'design-system') &&
-      needs.changes.outputs.design_system == 'true'
+      (
+        github.event.inputs.app == 'design-system' ||
+        ((github.event.inputs.app == 'all' || github.event.inputs.app == '') && needs.changes.outputs.design_system == 'true')
+      )
     environment:
-      name: "${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && 'production' || 'preview' }}"
-      url: '${{ steps.deploy.outputs.url }}'
+      name: ${{ needs.changes.outputs.gh_env_prefix }} – gateflow-design-system
+      url: ${{ steps.deploy.outputs.url }}
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
       - uses: pnpm/action-setup@v4
@@ -454,14 +492,14 @@ jobs:
       - name: Pull Vercel environment
         run: |
           vercel pull --yes \
-            --environment=${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && 'production' || 'preview' }} \
+            --environment=${{ needs.changes.outputs.vercel_env }} \
             --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_DESIGN_SYSTEM }}
 
       - name: Build for Vercel
-        run: "vercel build ${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && '--prod' || '' }} --token=${{ secrets.VERCEL_TOKEN }}"
+        run: vercel build ${{ needs.changes.outputs.is_prod == 'true' && '--prod' || '' }} --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID_DESIGN_SYSTEM }}
@@ -470,9 +508,9 @@ jobs:
         id: deploy
         run: |
           URL=$(vercel deploy --prebuilt \
-            ${{ (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master') && '--prod' || '' }} \
+            ${{ needs.changes.outputs.is_prod == 'true' && '--prod' || '' }} \
             --token=${{ secrets.VERCEL_TOKEN }})
-          echo "url=$URL" >> $GITHUB_OUTPUT
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
           echo "Deployed to: $URL"
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}

@@ -1,7 +1,5 @@
 # =============================================================================
-# lighthouse.yml — GateFlow Lighthouse CI (Target: 100/100)
-#
-# Plan: pagespeed_100 — Phase 1 infrastructure
+# lighthouse.yml — GateFlow Lighthouse CI
 #
 # Jobs:
 #   lighthouse-marketing   → audit marketing site (Mobile + Desktop)
@@ -13,16 +11,9 @@
 #   - Daily at 06:00 UTC (regression guard)
 #   - Manual dispatch with URL + strategy override
 #
-# Reports:
-#   - Scores posted as PR comment (updated, not duplicated)
-#   - HTML report uploaded as artifact (7-day retention)
-#   - Fails CI if any category < threshold in .lighthouserc.js
-#   - CWV metrics printed to step summary
-#
-# Reachability:
-#   Jobs soft-skip (success + warning) when the target host is NXDOMAIN,
-#   unreachable, or redirects off-host. Real audits still hard-fail when the
-#   URL is healthy but scores miss thresholds.
+# Soft-skips when the target host is NXDOMAIN, unreachable, or redirects
+# off-host. Real audits still hard-fail when the URL is healthy but scores
+# miss thresholds.
 # =============================================================================
 name: Lighthouse CI
 
@@ -45,11 +36,11 @@ on:
       marketing_url:
         description: 'Marketing site URL to audit'
         required: false
-        default: 'https://gateflow.app'
+        default: 'https://www.gateflow.site'
       dashboard_url:
         description: 'Dashboard URL to audit'
         required: false
-        default: 'https://app.gateflow.app'
+        default: 'https://app.gateflow.site'
       strategy:
         description: 'mobile or desktop'
         required: false
@@ -65,7 +56,6 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
 
 jobs:
-  # ── 1. Audit Marketing Site ────────────────────────────────────────────────
   lighthouse-marketing:
     name: Lighthouse — Marketing (Mobile + Desktop)
     runs-on: ubuntu-latest
@@ -82,10 +72,9 @@ jobs:
           INPUT_URL: ${{ github.event.inputs.marketing_url }}
         run: |
           set -euo pipefail
-          URL="$INPUT_URL"
+          URL="${INPUT_URL:-}"
           if [ -z "$URL" ]; then
-            # On PRs: use Vercel preview URL if available, else production
-            URL="${VERCEL_PREVIEW_URL:-https://gateflow.app}"
+            URL="${VERCEL_PREVIEW_URL:-https://www.gateflow.site}"
           fi
           echo "url=$URL" >> "$GITHUB_OUTPUT"
           echo "Auditing marketing: $URL"
@@ -102,17 +91,13 @@ jobs:
           SKIP_REASON: ${{ steps.probe.outputs.skip_reason }}
         run: |
           echo "::notice::Marketing Lighthouse skipped: $SKIP_REASON"
-          echo "Re-run with a healthy workflow_dispatch URL or fix DNS for gateflow.app."
+          echo "Re-run with a healthy workflow_dispatch URL or fix DNS for www.gateflow.site."
 
       - name: Install @lhci/cli
         if: steps.probe.outputs.skip != 'true'
         run: |
-          npm install -g @lhci/cli@${{ env.LHCI_VERSION }} || {
-            echo "❌ LHCI CLI installation failed"
-            exit 1
-          }
+          npm install -g "@lhci/cli@${{ env.LHCI_VERSION }}"
           lhci --version
-          which lhci
 
       - name: Install Chrome
         if: steps.probe.outputs.skip != 'true'
@@ -125,67 +110,10 @@ jobs:
             echo "❌ Chrome not found in PATH"
             exit 1
           }
-          # Try to get version from whatever we found
-          (google-chrome --version || chrome --version || chromium --version || chromium-browser --version) 2>/dev/null || echo "Could not determine version"
 
-      - name: Determine target URL
-        id: url
-        run: |
-          URL="${{ github.event.inputs.marketing_url }}"
-          if [ -z "$URL" ]; then
-            # On PRs: use Vercel preview URL if available, else production
-            URL="${VERCEL_PREVIEW_URL:-https://gateflow.app}"
-          fi
-          echo "url=$URL" >> $GITHUB_OUTPUT
-          echo "Auditing marketing: $URL"
-
-          # Preflight reachability check — Lighthouse can't distinguish "site is
-          # actually broken" from "DNS/redirect misconfigured", it just reports
-          # a cryptic CHROME_INTERSTITIAL_ERROR either way. Two distinct
-          # failure modes need to skip (not hard-fail) here, since neither is
-          # a code problem:
-          #   1. Network-level failure — curl can't connect at all (DNS,
-          #      timeout, refused), reported as status "000".
-          #   2. Cross-domain redirect — gateflow.app currently 301s to an
-          #      unrelated WordPress site (gateflow.com.co), which happily
-          #      returns 200 for "/" but 404s any real app path. That's a
-          #      genuine HTTP response, so a status-code-only check can't
-          #      catch it; comparing the final resolved hostname against the
-          #      one we asked for can.
-          # Any OTHER response — including a real 4xx/5xx served by the
-          # correct host — means the target IS our app and a Lighthouse
-          # failure there is genuine, so it must still fail the job.
-          # Single curl call for both the status and the final resolved URL —
-          # curl still writes its default "%{http_code}" ("000") on a hard
-          # failure, so relying on `|| echo "000"` on top of that doubles up
-          # to a non-matching "000000"; check the exit code explicitly instead.
-          REQUESTED_HOST=$(echo "$URL" | sed -E 's#^https?://([^/]+).*#\1#')
-          CURL_EXIT=0
-          CURL_OUT=$(curl -s -o /dev/null -w "%{http_code}|%{url_effective}" -L --max-time 20 "$URL") || CURL_EXIT=$?
-          if [[ $CURL_EXIT -ne 0 ]]; then
-            STATUS="000"
-            FINAL_HOST=""
-          else
-            STATUS="${CURL_OUT%%|*}"
-            FINAL_URL="${CURL_OUT#*|}"
-            FINAL_HOST=$(echo "$FINAL_URL" | sed -E 's#^https?://([^/]+).*#\1#')
-          fi
-          echo "http_status=$STATUS" >> $GITHUB_OUTPUT
-          if [[ "$STATUS" == "000" ]]; then
-            echo "::warning::$URL was unreachable (no HTTP response) — skipping Lighthouse runs (DNS/deploy issue, not a code problem)."
-            echo "reachable=false" >> $GITHUB_OUTPUT
-          elif [[ -n "$FINAL_HOST" && "$FINAL_HOST" != "$REQUESTED_HOST" ]]; then
-            echo "::warning::$URL redirected to a different host ($FINAL_HOST) — skipping Lighthouse runs (domain misconfigured, not a code problem)."
-            echo "reachable=false" >> $GITHUB_OUTPUT
-          else
-            echo "reachable=true" >> $GITHUB_OUTPUT
-          fi
-
-      # ── Mobile audit ──
       - name: Run Lighthouse — Mobile
         if: steps.probe.outputs.skip != 'true'
         id: lh_mobile
-        if: steps.url.outputs.reachable == 'true'
         run: |
           set +e
           lhci autorun \
@@ -209,17 +137,14 @@ jobs:
           mkdir -p lhci-reports/marketing-mobile
           if [ -d ".lighthouseci" ]; then
             cp -r .lighthouseci/* lhci-reports/marketing-mobile/
-            ls -la lhci-reports/marketing-mobile/
           else
             echo "⚠ Warning: .lighthouseci directory not created"
           fi
           exit $EXIT_CODE
 
-      # ── Desktop audit ──
       - name: Run Lighthouse — Desktop
         if: steps.probe.outputs.skip != 'true'
         id: lh_desktop
-        if: steps.url.outputs.reachable == 'true'
         run: |
           set +e
           lhci autorun \
@@ -241,16 +166,6 @@ jobs:
           fi
           exit $EXIT_CODE
 
-      # ── Debug — List artifacts ──
-      - name: Debug — List artifacts
-        if: always() && steps.probe.outputs.skip != 'true'
-        run: |
-          echo "=== lhci-reports structure ==="
-          find lhci-reports -type f 2>/dev/null || echo "lhci-reports directory not found"
-          echo "=== .lighthouseci contents ==="
-          ls -la .lighthouseci 2>/dev/null || echo ".lighthouseci directory not found"
-
-      # ── Print CWV metrics to step summary ──
       - name: Print score summary
         if: always() && steps.probe.outputs.skip != 'true'
         run: |
@@ -280,7 +195,6 @@ jobs:
           }
           EOF
 
-      # ── Upload HTML reports as artifact ──
       - name: Upload Lighthouse reports
         if: always() && steps.probe.outputs.skip != 'true'
         uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.0
@@ -289,7 +203,6 @@ jobs:
           path: lhci-reports/
           retention-days: 7
 
-      # ── Post/update PR comment with scores ──
       - name: Comment Lighthouse scores on PR
         if: always() && github.event_name == 'pull_request'
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
@@ -330,13 +243,12 @@ jobs:
                 '',
                 `> ⚠️ Audit skipped: ${skipReason}`,
                 '',
-                'Production domain DNS is misconfigured (or the target URL is unhealthy).',
-                'Thresholds in [`.lighthouserc.js`](.lighthouserc.js) are unchanged — re-enable by fixing DNS or dispatching with a healthy URL.',
+                'Target URL unreachable or DNS misconfigured.',
+                'Thresholds in [`.lighthouserc.js`](.lighthouserc.js) are unchanged.',
               ].join('\n');
             } else {
               const mobile = getScores('lhci-reports/marketing-mobile');
               const desktop = getScores('lhci-reports/marketing-desktop');
-
               const em = s => s >= 95 ? '🟢' : s >= 80 ? '🟡' : '🔴';
               const row = (label, m, d, key) =>
                 `| ${label} | ${m ? em(m[key]) + ' **' + m[key] + '**/100' : '—'} | ${d ? em(d[key]) + ' **' + d[key] + '**/100' : '—'} |`;
@@ -355,12 +267,10 @@ jobs:
                 '**Core Web Vitals (Mobile)**',
                 mobile ? `LCP: ${mobile.lcp}ms | FCP: ${mobile.fcp}ms | TBT: ${mobile.tbt}ms | CLS: ${mobile.cls}` : '—',
                 '',
-                `> Plan: \`pagespeed_100\` — Target: 100/100 all categories`,
-                `> Thresholds in [\`.lighthouserc.js\`](.lighthouserc.js)`,
+                `> Thresholds in [\`.lighthouserc.js`](.lighthouserc.js)`,
               ].join('\n');
             }
 
-            // Find and update existing bot comment
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner, repo: context.repo.repo,
               issue_number: context.issue.number,
@@ -379,10 +289,10 @@ jobs:
               });
             }
 
-  # ── 2. Audit Client Dashboard ──────────────────────────────────────────────
   lighthouse-dashboard:
     name: Lighthouse — Client Dashboard (Desktop)
     runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]'
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
 
@@ -392,9 +302,9 @@ jobs:
           INPUT_URL: ${{ github.event.inputs.dashboard_url }}
         run: |
           set -euo pipefail
-          URL="$INPUT_URL"
+          URL="${INPUT_URL:-}"
           if [ -z "$URL" ]; then
-            URL="${VERCEL_PREVIEW_URL:-https://app.gateflow.app}"
+            URL="${VERCEL_PREVIEW_URL:-https://app.gateflow.site}"
           fi
           echo "url=$URL" >> "$GITHUB_OUTPUT"
           echo "Auditing dashboard: $URL"
@@ -411,11 +321,11 @@ jobs:
           SKIP_REASON: ${{ steps.probe.outputs.skip_reason }}
         run: |
           echo "::notice::Dashboard Lighthouse skipped: $SKIP_REASON"
-          echo "Re-run with a healthy workflow_dispatch URL or fix DNS for app.gateflow.app."
+          echo "Re-run with a healthy workflow_dispatch URL or fix DNS for app.gateflow.site."
 
       - name: Install @lhci/cli
         if: steps.probe.outputs.skip != 'true'
-        run: npm install -g @lhci/cli@${{ env.LHCI_VERSION }}
+        run: npm install -g "@lhci/cli@${{ env.LHCI_VERSION }}"
 
       - name: Install Chrome
         if: steps.probe.outputs.skip != 'true'
@@ -429,43 +339,8 @@ jobs:
             exit 1
           }
 
-      - name: Determine dashboard URL
-        id: url
-        run: |
-          URL="${{ github.event.inputs.dashboard_url }}"
-          if [ -z "$URL" ]; then
-            URL="${VERCEL_PREVIEW_URL:-https://app.gateflow.app}"
-          fi
-          echo "url=$URL" >> $GITHUB_OUTPUT
-          echo "Auditing dashboard: $URL"
-
-          # Preflight reachability check — see comment in the marketing job's
-          # "Determine target URL" step for why this exists (both network
-          # failures and cross-domain redirects need to skip, not hard-fail).
-          REQUESTED_HOST=$(echo "$URL" | sed -E 's#^https?://([^/]+).*#\1#')
-          CURL_EXIT=0
-          CURL_OUT=$(curl -s -o /dev/null -w "%{http_code}|%{url_effective}" -L --max-time 20 "$URL") || CURL_EXIT=$?
-          if [[ $CURL_EXIT -ne 0 ]]; then
-            STATUS="000"
-            FINAL_HOST=""
-          else
-            STATUS="${CURL_OUT%%|*}"
-            FINAL_URL="${CURL_OUT#*|}"
-            FINAL_HOST=$(echo "$FINAL_URL" | sed -E 's#^https?://([^/]+).*#\1#')
-          fi
-          echo "http_status=$STATUS" >> $GITHUB_OUTPUT
-          if [[ "$STATUS" == "000" ]]; then
-            echo "::warning::$URL was unreachable (no HTTP response) — skipping Lighthouse run (DNS/deploy issue, not a code problem)."
-            echo "reachable=false" >> $GITHUB_OUTPUT
-          elif [[ -n "$FINAL_HOST" && "$FINAL_HOST" != "$REQUESTED_HOST" ]]; then
-            echo "::warning::$URL redirected to a different host ($FINAL_HOST) — skipping Lighthouse run (domain misconfigured, not a code problem)."
-            echo "reachable=false" >> $GITHUB_OUTPUT
-          else
-            echo "reachable=true" >> $GITHUB_OUTPUT
-          fi
-
       - name: Run Lighthouse — Desktop
-        if: steps.url.outputs.reachable == 'true'
+        if: steps.probe.outputs.skip != 'true'
         run: |
           set +e
           lhci autorun \
@@ -515,7 +390,6 @@ jobs:
           path: lhci-reports/
           retention-days: 7
 
-  # ── 3. Required status gate ────────────────────────────────────────────────
   lhci-gate:
     name: Lighthouse Gate
     if: always()
@@ -530,13 +404,6 @@ jobs:
           echo "Marketing: $MARKETING"
           echo "Dashboard: $DASHBOARD"
 
-          # The marketing/dashboard jobs now preflight-check target URL
-          # reachability and skip (not fail) their Lighthouse steps when the
-          # target is unreachable — see "Determine target URL" /
-          # "Determine dashboard URL" steps. A "failure" result here is a
-          # genuine Lighthouse problem (threshold violation, crash while the
-          # target WAS reachable), not DNS/deploy noise, so it's safe to gate
-          # on again.
           if [[ "$MARKETING" == "failure" || "$DASHBOARD" == "failure" ]]; then
             echo "::error::A Lighthouse job failed. Review scores in job logs and PR comment."
             exit 1

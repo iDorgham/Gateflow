@@ -1,16 +1,16 @@
-# <p align="center">GateFlow — The Invisible Sentinel</p>
+<h1 align="center">GateFlow</h1>
 
 <p align="center">
-  <img src="assets/Images/gateflow_banner.png" alt="GateFlow Banner" width="100%">
+  <img src="assets/Images/gateflow-compound-access-cover-v8.png" alt="A couple presenting a mobile access pass from a convertible aligned with the entrance of a gated Red Sea compound" width="100%">
 </p>
 
 <p align="center">
-  <b>Enterprise platform for physical access control and marketing intelligence.</b><br>
-  <i>Multi-tenant Next.js dashboards, Expo field apps, signed QR flows, and Arabic/English RTL—built for high-trust PropTech (including MENA).</i>
+  <b>Secure arrivals. Connected communities. One access platform.</b><br>
+  <i>GateFlow connects residents, visitors, security teams, and property operators across every gate—from invitation to verified entry.</i>
 </p>
 
 <p align="center">
-  <a href="https://github.com/iDorgham/Gateflow/blob/master/package.json"><img src="https://img.shields.io/badge/Release-v0.1.0-0ea5e9?style=for-the-badge&logo=github" alt="Release v0.1.0"></a>
+  <a href="https://github.com/iDorgham/Gateflow/blob/master/package.json"><img src="https://img.shields.io/badge/Release-v0.2.0-0ea5e9?style=for-the-badge&logo=github" alt="Release v0.2.0"></a>
   <a href="https://github.com/iDorgham/Gateflow/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/iDorgham/Gateflow/ci.yml?branch=master&label=CI&logo=github&style=for-the-badge" alt="CI status"></a>
   <a href="https://github.com/iDorgham/Gateflow/actions/workflows/lighthouse.yml"><img src="https://img.shields.io/github/actions/workflow/status/iDorgham/Gateflow/lighthouse.yml?branch=master&label=Lighthouse&logo=lighthouse&style=for-the-badge" alt="Lighthouse workflow"></a>
   <a href="https://github.com/iDorgham/Gateflow/actions/workflows/codeql-analysis.yml"><img src="https://img.shields.io/github/actions/workflow/status/iDorgham/Gateflow/codeql-analysis.yml?branch=master&label=CodeQL&logo=github&style=for-the-badge" alt="CodeQL"></a>
@@ -30,45 +30,102 @@
 
 ---
 
-## 💎 The Vision
+## What is GateFlow?
 
-GateFlow treats **every physical arrival** as a first-class digital event: signed QR credentials, tenant-safe data, offline-capable scanners, and marketing attribution from ad click to gate entry. The monorepo delivers six coordinated apps—web dashboards, resident surfaces, and native field tools—on one shared design system, schema, and automation toolchain.
+**GateFlow is a multi-tenant access-management platform for gated compounds, residential communities, resorts, and other controlled properties.** It replaces phone calls, handwritten visitor lists, and disconnected gate tools with one secure flow shared by residents, visitors, security teams, and property operators.
+
+A resident creates a guest pass from the mobile app or web portal. The visitor receives a signed QR credential. At arrival, security validates that credential with the scanner app—even during an internet outage. The property team sees the result immediately in its operational dashboard, with a complete audit trail.
+
+### Who it serves
+
+| User                   | What GateFlow gives them                                                                               |
+| :--------------------- | :----------------------------------------------------------------------------------------------------- |
+| **Residents**          | Fast guest invitations, reusable passes, arrival alerts, and visibility into visitor quotas.           |
+| **Visitors**           | A simple digital credential that removes calls, paper lists, and uncertainty at the gate.              |
+| **Security teams**     | Fast QR verification, offline operation, shift tools, incident workflows, and auditable overrides.     |
+| **Property teams**     | Live gate activity, resident and unit management, access policies, reporting, and operational control. |
+| **Platform operators** | Tenant onboarding, subscription oversight, cross-organization governance, and infrastructure health.   |
+
+### From invitation to verified entry
+
+1. **Create** — A resident or property operator creates a time-bound or recurring visitor pass.
+2. **Share** — GateFlow delivers a cryptographically signed QR credential through the resident's preferred channel.
+3. **Verify** — The guard scans the credential and validates its signature, access window, gate, and status.
+4. **Admit or deny** — The scanner returns a clear decision and records any supervised override or incident.
+5. **Sync and monitor** — Offline scans synchronize when connectivity returns, while dashboards surface activity in real time.
+
+### What this repository contains
+
+This repository is the GateFlow product monorepo. It contains six customer- and operator-facing applications, an internal design-system application, shared TypeScript packages, the Prisma data layer, localization resources, security primitives, tests, documentation, and deployment automation.
+
+The apps do not operate as separate products. They share the same organizations, properties, units, residents, passes, gates, scan events, permissions, and design language.
 
 ---
 
 ## 🗂️ Table of Contents
 
-1.  [The 6-App Ecosystem](#-the-6-app-ecosystem)
-2.  [Upcoming features](#-upcoming-features)
-3.  [Clone, database & run (from GitHub)](#-quick-start--local-development)
-4.  [Master Architecture](#-master-architecture)
-5.  [Strategic Core Pillars](#-strategic-core-pillars)
-6.  [Security & Compliance](#-security--compliance)
-7.  [Analytics & Intelligence](#-analytics--intelligence)
-8.  [Localization & i18n](#-localization--i18n)
-9.  [The Ralph Loop Automation](#-the-ralph-loop-automation)
+1. [Application Ecosystem](#-application-ecosystem)
+2. [Upcoming features](#-upcoming-features)
+3. [Quick Start & Local Development](#-quick-start--local-development)
+4. [Master Architecture](#-master-architecture)
+5. [Strategic Core Pillars](#-strategic-core-pillars)
+6. [Security & Compliance](#-security--compliance)
+7. [Analytics & Intelligence](#-analytics--intelligence)
+8. [Localization & i18n](#-localization--i18n)
+9. [The Ralph Loop Automation](#-the-ralph-loop-automation)
 10. [Performance & Governance](#-performance--governance)
 11. [Documentation & Support](#-documentation--support)
 
 ---
 
-## 🏗️ The 6-App Ecosystem
+## 🏗️ Application Ecosystem
 
-GateFlow is a technical monorepo orchestrating six specialized applications, unified by a shared core of design tokens, cryptographic standards, and real-time data flows.
+GateFlow separates each audience into a focused application while keeping data, permissions, security rules, and UI foundations shared across the platform.
 
-<details open>
-<summary><b>View App Matrix</b></summary>
+### Property and platform operations
 
-| Application                                   | Role           | Key Capability                                    | Deployment              |
-| :-------------------------------------------- | :------------- | :------------------------------------------------ | :---------------------- |
-| **[Client Dashboard](apps/client-dashboard)** | Property Hub   | Real-time monitoring (SSE), Marketing ROI & CRM.  | Vercel                  |
-| **[Admin Dashboard](apps/admin-dashboard)**   | Platform Ops   | Multi-tenant isolation & Cloud platform health.   | Vercel                  |
-| **[Resident Mobile](apps/resident-mobile)**   | User Interface | Native iOS/Android pass creation & WhatsApp sync. | App Store/Play          |
-| **[Scanner App](apps/scanner-app)**           | Field Agent    | Offline-first HMAC validation & Haptic feedback.  | Enterprise Distribution |
-| **[Resident Portal](apps/resident-portal)**   | Web Access     | Guest management & Pass self-service utility.     | Vercel                  |
-| **[Marketing Site](apps/marketing)**          | Growth Node    | High-SEO conversion funnels & Tracking events.    | Vercel                  |
+| Application                                   | Primary users                                   | Responsibility                                                                                                                                            |
+| :-------------------------------------------- | :---------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **[Client Dashboard](apps/client-dashboard)** | Property managers, community teams, supervisors | The operational control tower for properties, projects, units, residents, gates, teams, passes, live scan activity, incidents, watchlists, and reporting. |
+| **[Admin Dashboard](apps/admin-dashboard)**   | GateFlow platform administrators                | Platform-wide tenant onboarding, organization lifecycle management, subscriptions, global analytics, administrative access, and infrastructure health.    |
 
-</details>
+### Resident and visitor experience
+
+| Application                                 | Primary users                  | Responsibility                                                                                                                                            |
+| :------------------------------------------ | :----------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **[Resident Mobile](apps/resident-mobile)** | Residents using iOS or Android | The native everyday experience for creating and sharing guest passes, managing recurring access, tracking quotas, and receiving arrival notifications.    |
+| **[Resident Portal](apps/resident-portal)** | Residents using a browser      | Web self-service for visitor and pass management, multi-unit access, detailed history, revocation, and account settings without requiring the mobile app. |
+
+### Gate operations and growth
+
+| Application                          | Primary users                      | Responsibility                                                                                                                                                         |
+| :----------------------------------- | :--------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **[Scanner App](apps/scanner-app)**  | Guards and gate supervisors        | The frontline iOS/Android tool for rapid QR scanning, offline signature validation, encrypted scan queues, shift activity, supervisor overrides, and incident capture. |
+| **[Marketing Site](apps/marketing)** | Prospective customers and partners | The public bilingual website for product education, industry solutions, pricing, lead capture, SEO content, and conversion tracking.                                   |
+
+### Product foundation
+
+| Workspace                               | Primary users           | Responsibility                                                                                                                              |
+| :-------------------------------------- | :---------------------- | :------------------------------------------------------------------------------------------------------------------------------------------ |
+| **[Design System](apps/design-system)** | Designers and engineers | Interactive documentation for GateFlow tokens, UI primitives, product patterns, accessibility behavior, and Arabic/English RTL conventions. |
+| **[Shared Packages](packages)**         | All applications        | Database access, schemas, API clients, reusable UI, types, configuration, security helpers, and localization dictionaries.                  |
+
+### How the apps connect
+
+```text
+Resident Mobile / Portal
+          │ creates and shares a signed pass
+          ▼
+     Visitor QR credential
+          │ presented at the compound entrance
+          ▼
+       Scanner App ────── offline queue and sync
+          │ records verification and entry
+          ▼
+      Client Dashboard ── live operations and reporting
+          │
+          └────────────── Admin Dashboard for platform governance
+```
 
 ---
 

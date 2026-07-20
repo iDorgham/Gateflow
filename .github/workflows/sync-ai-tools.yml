@@ -47,6 +47,11 @@ jobs:
 
       - name: Run sync script
         run: |
+          if [ ! -d ".agents" ]; then
+            echo "::notice::.agents/ is not in the git checkout (local symlink / gitignored)."
+            echo "Skipping AI tools sync on CI — run \`pnpm sync\` locally after editing .agents/."
+            exit 0
+          fi
           chmod +x scripts/ai-sync/sync-ai-tools.sh
           TOOL_ARG=""
           if [ -n "${{ github.event.inputs.tool }}" ]; then

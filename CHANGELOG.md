@@ -6,19 +6,26 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ---
 
-## [1.0.0] - 2026-04-06
-
-### Added
-
-- **GateFlow Design System**: Canonical v1.0 launch.
-- **npm distribution**: Ready for `@gateflow/tokens`, `@gateflow/theme`, `@gateflow/ui`, `@gateflow/components`, and `@gateflow/ai`.
-- **Documentation**: Professional docs site at [design.gateflow.site](https://design.gateflow.site) with RTL, search, and galleries.
-- **MENA Regional Parity**: Standardized logical properties and Arabic localization foundations.
-- **AI UI Excellence**: Glassmorphism and agentic patterns in `@gateflow/ai`.
-
 ## [Unreleased]
 
 ### Workspace
+
+- **[Workspace]** tracking next changes after v0.2.0
+
+### AI Tools
+
+### Apps
+
+---
+
+## [0.2.0] — 2026-07-20
+
+### Workspace
+
+- **[CI]** manage GitHub Environments for all apps (`Production` / `Preview` – gateflow-\*) with main/master branch policies via `scripts/setup-github-environments.sh`
+- **[CI]** harden `deploy.yml` — per-app environments, Vercel CLI from monorepo root, `app=all|…` dispatch, missing `VERCEL_PROJECT_ID_*` secrets
+- **[CI]** fix Publish (`changesets/action`), Sync AI Tools soft-skip when `.agents/` absent, and Lighthouse defaults to `*.gateflow.site`
+- **[Web]** unblock Vercel builds for Turbopack CSS and PDFKit
 
 - **[Docs]** triage PR #137 review feedback — MD041 on AIWF `/guide`, `/guide` shorthand, COMMAND_GUIDE link/casing
 
@@ -28,16 +35,16 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 - **[Security]** audit remediation phase 1 — P0 containment
 - **[Admin-Dashboard]** fix unbalanced parens breaking analytics page lint
-- **[Ci]** regenerate pnpm-lock.yaml after botched master merge
+- **[CI]** regenerate pnpm-lock.yaml after botched master merge
 
-- **[Ci]** unblock master after Next 16 bump
+- **[CI]** unblock master after Next 16 bump
 
-- **[Ci]** migrate Next apps off removed `next lint` to ESLint CLI (Next 16)
-- **[Ci]** unify React 19 via pnpm overrides to fix react-hook-form dual-peer typecheck
-- **[Ci]** await cookies() in client-dashboard (drop removed UnsafeUnwrappedCookies)
-- **[Ci]** detect cross-domain redirect in Lighthouse reachability check
+- **[CI]** migrate Next apps off removed `next lint` to ESLint CLI (Next 16)
+- **[CI]** unify React 19 via pnpm overrides to fix react-hook-form dual-peer typecheck
+- **[CI]** await cookies() in client-dashboard (drop removed UnsafeUnwrappedCookies)
+- **[CI]** detect cross-domain redirect in Lighthouse reachability check
 
-- **[Db]** correct extension-accelerate pin, restore tenant.ts type casts
+- **[DB]** correct extension-accelerate pin, restore tenant.ts type casts
 - **[Security]** patch 16 high/critical npm advisories via pnpm overrides
 
 - **[Platform Evolution]** implement phase 5 AI landing page builder
@@ -77,7 +84,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 - **[Token System V2]** complete phase 2
 - **[Deps]** override basic-ftp >=5.2.1 to clear GHSA-chqc-8p9q-pq6q
-- **[Ui]** add favicons and apple-touch-icons to all portal apps
+- **[UI]** add favicons and apple-touch-icons to all portal apps
 
 - **[Design-System]** add missing /patterns index page to resolve 404
 
@@ -114,26 +121,26 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 - **[Monorepo]** add framer-motion dependencies to @gateflow/ui, @gateflow/components, and design-system
 
-- **[Ui]** resolve AISidePanel type mismatch with framer-motion
+- **[UI]** resolve AISidePanel type mismatch with framer-motion
 
 - **[Design-System]** standardized gateflow token architecture and in-depth manifesto
 
 - **[Tokens]** remove unused @ts-expect-error in client-dashboard tailwind config
 - **[Tokens]** remove unused @ts-expect-error in resident-portal tailwind config
 - **[Tokens]** token system v2 — Kimchi palette, dark mode fix, unified architecture
-- **[Ci]** run vercel commands from repo root for design-system deploy
-- **[Ci]** add skip_migration input to unblock deploys during stuck migration
-- **[Ui]** add ToastProvider to design-system layout
+- **[CI]** run vercel commands from repo root for design-system deploy
+- **[CI]** add skip_migration input to unblock deploys during stuck migration
+- **[UI]** add ToastProvider to design-system layout
 - **[Components]** import cn from @gateflow/ui/utils in all compositions
-- **[Ui]** inject 'use client' via postbuild to preserve server-safe utils entry
-- **[Ui]** isolate cn utility to @gateflow/ui/utils for server component safety
-- **[Ui]** remove global 'use client' banner to allow universal utility usage
+- **[UI]** inject 'use client' via postbuild to preserve server-safe utils entry
+- **[UI]** isolate cn utility to @gateflow/ui/utils for server component safety
+- **[UI]** remove global 'use client' banner to allow universal utility usage
 
 - **[Ops]** remove invalid vercel property and fix turbo filters
 
 - **[Vercel]** implement ignore-build script to skip dependabot builds
 
-- **[Ui]** preserve "use client" and externalize react-hook-form in tsup build
+- **[UI]** preserve "use client" and externalize react-hook-form in tsup build
 - **[Admin-Dashboard]** migrate PageHeader import from @gateflow/ui to @gateflow/components
 
 - **[Design-System]** typecheck, lint, and build fixes for all @gateflow/\* packages
@@ -166,8 +173,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 - **[Deploy]** add outputFileTracingRoot to all Next.js apps for pnpm monorepo
 - **[Deploy]** remove prisma generate from client-dashboard and resident-portal build scripts
-- **[Db]** resolve TS2345 type error in tenant.ts scanLog.count
-- **[Ci]** standardize cache action and remove pnpm-store from cache paths
+- **[DB]** resolve TS2345 type error in tenant.ts scanLog.count
+- **[CI]** standardize cache action and remove pnpm-store from cache paths
 - **[Scripts]** ralph-docs changelog inserts under Unreleased
   tri-track format
 - **[Plan Lifecycle]** update tasks.md and document automation
@@ -218,6 +225,16 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 - **[Marketing]** finalize mega menu navigation architecture and app illustrations
 
 ---
+
+## [1.0.0] - 2026-04-06
+
+### Added
+
+- **GateFlow Design System**: Canonical v1.0 launch.
+- **npm distribution**: Ready for `@gateflow/tokens`, `@gateflow/theme`, `@gateflow/ui`, `@gateflow/components`, and `@gateflow/ai`.
+- **Documentation**: Professional docs site at [design.gateflow.site](https://design.gateflow.site) with RTL, search, and galleries.
+- **MENA Regional Parity**: Standardized logical properties and Arabic localization foundations.
+- **AI UI Excellence**: Glassmorphism and agentic patterns in `@gateflow/ai`.
 
 ## [0.1.0] — 2026-03-23
 
