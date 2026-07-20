@@ -4,8 +4,8 @@
 
 - **Phase:** 3 complete (trustworthy CI / scanners)
 - **Branch:** `fix/audit-remediation-phase-3`
-- **Last commits:** (pending phase 3 commit)
-- **Next action:** Phase 4 — API certification (`PROMPT_audit_remediation_2026_phase_4.md`); ops still owes Phase 1 credential-rotation receipt
+- **Last commits:** `7382d3e70` (tar pin), `235e2f64b` (scanners + typecheck)
+- **Next action:** Phase 4 — API certification (`PROMPT_audit_remediation_2026_phase_4.md`); ops still owes Phase 1 credential-rotation receipt; branch pushed — open PR or continue `/dev audit_remediation_2026 4`
 
 ## Cross-session decisions
 

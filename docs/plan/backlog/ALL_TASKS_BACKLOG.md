@@ -8,15 +8,17 @@
 
 **PLAN:** `docs/plan/Active/audit_remediation_2026/`
 
-**Status:** 🔵 Active — Phase 1 complete (2026-07-20)
+**Status:** 🔵 Active — Phase 3 complete (2026-07-21); next Phase 4
 
 **Priority:** P0 containment, then P1/P2 hardening
 
 **Target:** Immediate containment; phased completion after review
 
+**Branch:** `fix/audit-remediation-phase-3` (phases 1–3)
+
 - [x] Phase 1 — P0 containment: bootstrap route and browser injection
-- [ ] Phase 2 — Tenant isolation: request-local, complete, fail-closed
-- [ ] Phase 3 — Trustworthy CI and repository scanners
+- [x] Phase 2 — Tenant isolation: request-local, complete, fail-closed
+- [x] Phase 3 — Trustworthy CI and repository scanners
 - [ ] Phase 4 — API hardening, coverage, and final certification
 
 ### gateflow_design_system — GateFlow Design System (tokens, theme, UI)
