@@ -1,0 +1,132 @@
+# =============================================================================
+# db-migrate.yml — Production / preview Prisma migration ops (manual only)
+#
+# Use to resolve stuck failed migrations (P3009/P3018) then run migrate deploy.
+# Secrets: DATABASE_URL, DIRECT_DATABASE_URL (repo or Production environment)
+# =============================================================================
+name: DB Migrate
+
+permissions:
+  contents: read
+
+on:
+  workflow_dispatch:
+    inputs:
+      resolve_migration:
+        description: 'Failed migration folder name to resolve (optional)'
+        required: false
+        default: ''
+      resolve_as:
+        description: 'Mark migration as applied (skip SQL) or rolled-back'
+        required: false
+        default: applied
+        type: choice
+        options:
+          - applied
+          - rolled-back
+      run_deploy:
+        description: 'Run prisma migrate deploy after resolve'
+        required: false
+        default: true
+        type: boolean
+
+concurrency:
+  group: db-migrate-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  PNPM_VERSION: '8.15.0'
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
+jobs:
+  migrate:
+    name: Resolve / migrate
+    runs-on: ubuntu-latest
+    environment:
+      name: Production
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Inspect failed migration state
+        working-directory: packages/db
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_DATABASE_URL: ${{ secrets.DIRECT_DATABASE_URL }}
+        run: |
+          set -euo pipefail
+          pnpm exec prisma migrate status || true
+          echo "---- join / blog tables (if any) ----"
+          pnpm exec prisma db execute --stdin <<'SQL' || true
+          SELECT tablename FROM pg_tables
+          WHERE schemaname = 'public'
+            AND tablename IN (
+              '_BlogPostToBlogCategory',
+              '_BlogCategoryToBlogPost',
+              '_BlogPostToCategory',
+              'BlogPost',
+              'BlogCategory'
+            )
+          ORDER BY 1;
+          SQL
+          echo "---- failed rows in _prisma_migrations ----"
+          pnpm exec prisma db execute --stdin <<'SQL' || true
+          SELECT migration_name, finished_at, rolled_back_at, logs
+          FROM "_prisma_migrations"
+          WHERE rolled_back_at IS NOT NULL
+             OR finished_at IS NULL
+             OR migration_name LIKE '%platform_evolution%'
+          ORDER BY started_at;
+          SQL
+
+      - name: Resolve failed migration
+        if: ${{ github.event.inputs.resolve_migration != '' }}
+        working-directory: packages/db
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_DATABASE_URL: ${{ secrets.DIRECT_DATABASE_URL }}
+          MIG_NAME: ${{ github.event.inputs.resolve_migration }}
+          RESOLVE_AS: ${{ github.event.inputs.resolve_as }}
+        run: |
+          set -euo pipefail
+          if [[ ! "$MIG_NAME" =~ ^[0-9]{14}_[a-z0-9_]+$ ]]; then
+            echo "::error::Invalid migration name: $MIG_NAME"
+            exit 1
+          fi
+          if [[ "$RESOLVE_AS" != "applied" && "$RESOLVE_AS" != "rolled-back" ]]; then
+            echo "::error::resolve_as must be applied or rolled-back"
+            exit 1
+          fi
+          if [[ ! -d "prisma/migrations/$MIG_NAME" ]]; then
+            echo "::error::Migration folder not found: prisma/migrations/$MIG_NAME"
+            exit 1
+          fi
+          echo "Resolving $MIG_NAME as --$RESOLVE_AS"
+          pnpm exec prisma migrate resolve "--$RESOLVE_AS" "$MIG_NAME"
+
+      - name: prisma migrate deploy
+        if: ${{ github.event.inputs.run_deploy == 'true' }}
+        working-directory: packages/db
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_DATABASE_URL: ${{ secrets.DIRECT_DATABASE_URL }}
+        run: pnpm exec prisma migrate deploy
+
+      - name: Final migrate status
+        if: always()
+        working-directory: packages/db
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DIRECT_DATABASE_URL: ${{ secrets.DIRECT_DATABASE_URL }}
+        run: pnpm exec prisma migrate status || true
