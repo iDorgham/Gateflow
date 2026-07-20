@@ -13,9 +13,9 @@ deprecated_for_gateflow: true
 gateflow_canonical: .agents/workflows/guide.md
 ---
 
-> **GateFlow note:** This file is the **Sovereign / AIWF** `/guide` spec (Antigravity content-factory persona). It is **not** the GateFlow phased-development `/guide`. For GateFlow, use **`.agents/workflows/guide.md`** (synced via `pnpm sync` to Cursor, Kiro, Antigravity, Claude CLI, Opencode CLI, Gemini CLI, and Kilo CLI) and skill **`gf-guide`**.
-
 # `/guide`
+
+> **GateFlow note:** This file is the **Sovereign / AIWF** `/guide` spec (Antigravity content-factory persona). It is **not** the GateFlow phased-development `/guide`. For GateFlow, use **`.agents/workflows/guide.md`** (synced via `pnpm sync` to Cursor, Kiro, Antigravity, Claude CLI, Opencode CLI, Gemini CLI, and Kilo CLI) and skill **`gf-guide`**.
 
 Intelligence, strategy, and autonomous ecosystem evolution
 

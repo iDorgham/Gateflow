@@ -61,16 +61,16 @@ Plan folders: `docs/plan/{Draft,Ready,Active,Complete}/`. Update `docs/plan/back
 
 ### `/guide` shorthand
 
-| You type          | Routes to                |
-| ----------------- | ------------------------ |
-| `/guide ready`    | `/ready`                 |
-| `/guide plan X`   | `/plan X`                |
-| `/guide phase 2`  | `/prompt phase 2`        |
-| `/guide develop`  | develop workflow         |
-| `/guide test`     | `pnpm preflight`         |
-| `/guide github`   | git add/commit/push flow |
-| `/guide security` | security review          |
-| `/guide all`      | `/run all`               |
+| You type          | Routes to                                  |
+| ----------------- | ------------------------------------------ |
+| `/guide ready`    | `/ready` (preflight; not `/plan ready`)    |
+| `/guide plan X`   | `/plan X`                                  |
+| `/guide phase 2`  | `/prompt phase 2`                          |
+| `/guide develop`  | develop workflow                           |
+| `/guide test`     | `pnpm preflight`                           |
+| `/guide github`   | git add/commit/push flow                   |
+| `/guide security` | security review                            |
+| `/guide all`      | `/ralph` (recursive phases; not `/run all`) |
 
 Bare **`/guide`** or **“what should I do now”** loads **`gf-guide`** skill: Situation → Teach → Ask → Action → Motivate, plus Must do / Recommended / Critical.
 
