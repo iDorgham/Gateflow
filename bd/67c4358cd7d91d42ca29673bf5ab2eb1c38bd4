@@ -1,0 +1,57 @@
+scripts/ai-sync/sync-ai-tools.sh
+  s_17bf0c48eea317::t_e0d6674997bb19 78-79,83,85-87,222,226,228,231
+AGENTS.md
+  s_17bf0c48eea317::t_8dd6cd3736296b 14
+apps/client-dashboard/src/app/api/setup/bootstrap-routes.test.ts
+  s_6abc5daf59a86a::t_de669a18bd3609 1-12
+docs/tools/antigravity/commands/guide.md
+  s_17bf0c48eea317::t_3761873dad12f0 1,3-5,9,11-13,15,17-20,22,24,26-35,37-41,43,45,52-53
+.ai/commands/guide.md
+  s_53ad66e83e2b7b::t_a0bdba01d56cc4 12-13,16-17,44,50-51,60-67,70,77,84,93,97,105-109,145,162,172-186,193,206-209,227,229-231,234,237,245,247,253,268,282,288,293,304,316-323,325,333-335,337-339,345-349,351,354,368-374,391-396,399,407,409,439,447,485,501,509,555-566,570-578,582
+CHANGELOG.md
+  s_53ad66e83e2b7b::t_ffff529c3f0cd2 22-23
+apps/admin-dashboard/src/app/api/organizations/[orgId]/style/save/route.ts
+  s_53ad66e83e2b7b::t_d570bde365e9cf 3-7,40,44
+docs/workspace/COMMAND_GUIDE.md
+  s_53ad66e83e2b7b::t_eff1061a3b6804 1-100
+docs/workspace/SKILLS_GUIDE.md
+  s_53ad66e83e2b7b::t_452f4dad6d9cf3 1,3-7,11,13-15,17,21-35,39,41-52,54,56,58-71,73,75,77-87,89,91,93-99,103-110,112,114-116,120
+docs/workspace/WORKSPACE_GUIDE.md
+  s_53ad66e83e2b7b::t_b4f56937cf47e0 1,3,7,9-15,17,19,21,23,25-27,29,31-33,35,37-40,42,44-45,47,49,51,53-54,56,60-79,83,85,87-98,100,104,106-116,120,122-127,131,133-137,141
+package.json
+  s_53ad66e83e2b7b::t_20318456daba28 62
+scripts/check/check-bootstrap-routes.js
+  s_53ad66e83e2b7b::t_9046a24b4010de 53-55
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "bd67c4358cd7d91d42ca29673bf5ab2eb1c38bd4",
+  "prompts": {},
+  "sessions": {
+    "s_17bf0c48eea317": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f7e28-9ddd-7cf2-aa01-915b906ff317",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_53ad66e83e2b7b": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "ea82a92c-62aa-40e5-8133-8882e6e54b32",
+        "model": "unknown"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_6abc5daf59a86a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6ec758bb-dbfd-4b61-bce0-37879d1ad07a",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
