@@ -21,14 +21,18 @@ overrides:
   brace-expansion: '>=2.0.2'
   glob: '>=10.5.0'
   jsondiffpatch: '>=0.7.2'
-  tmp: '>=0.2.6 <1.0.0'
+  tmp: '>=0.2.7 <1.0.0'
   zod: 3.25.76
   '@types/react': 19.2.14
   '@types/react-dom': 19.2.3
   '@xmldom/xmldom': '>=0.9.10 <1.0.0'
-  react: ^19.2.4
-  react-dom: ^19.2.4
   next: ^16.2.10
+  react: 19.2.4
+  react-dom: 19.2.4
+  resident-mobile>react: 19.1.0
+  resident-mobile>react-dom: 19.1.0
+  scanner-app>react: 19.1.0
+  scanner-app>react-dom: 19.1.0
   basic-ftp: '>=5.3.0 <6.0.0'
   fast-uri: '>=3.1.2 <4.0.0'
   linkify-it: '>=5.0.1 <6.0.0'
@@ -622,10 +626,10 @@ importers:
         specifier: ^1.5.4
         version: 1.5.4
       react:
-        specifier: ^19.2.4
+        specifier: 19.2.4
         version: 19.2.4
       react-dom:
-        specifier: ^19.2.4
+        specifier: 19.2.4
         version: 19.2.4(react@19.2.4)
       react-qr-code:
         specifier: ^2.0.18
@@ -1367,6 +1371,12 @@ importers:
       postcss:
         specifier: ^8.5.6
         version: 8.5.8
+      react:
+        specifier: 19.2.4
+        version: 19.2.4
+      react-dom:
+        specifier: 19.2.4
+        version: 19.2.4(react@19.2.4)
       tailwindcss:
         specifier: ^3.4.19
         version: 3.4.19(tsx@4.21.0)(yaml@2.9.0)
@@ -22633,8 +22643,6 @@ packages:
         integrity: sha512-AXJdLo8kgMbimY95O2aKQqsz2iWi9jMgKJhRBAxECE4IFxfcazB2LmzloIoibJI3C12IlY20+KFaLv+71bUJeQ==,
       }
     peerDependencies:
-      react: ^19.2.4
-    dependencies:
       react: 19.2.4
       scheduler: 0.27.0
     dev: false

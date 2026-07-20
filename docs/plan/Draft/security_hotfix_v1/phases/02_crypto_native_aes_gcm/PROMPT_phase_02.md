@@ -15,11 +15,9 @@ Replace `crypto-js` usage with native Node.js `crypto` utilities and standardize
 
 ## Scope (in)
 
-- Create `packages/utils/src/crypto.ts` with:
-  - `encryptField()`
-  - `decryptField()`
-- Use `aes-256-gcm`, 12-byte IV, auth tag handling.
-- Persist encoded form as `IV:ENC:TAG`.
+- Extend/consolidate `packages/db/src/lib/crypto.ts` (`encryptField`, `decryptField`).
+- Use `aes-256-gcm`, 12-byte IV, auth tag handling (already implemented).
+- Preserve existing payload layout `iv:tag:encrypted` (hex segments); document in module comments; do not introduce a competing format without a compatibility shim.
 - Replace `crypto-js` imports in:
   - `apps/scanner-app/src/lib/security/secure-pin.ts`
   - any other active encryption paths discovered during scan
@@ -32,11 +30,12 @@ Replace `crypto-js` usage with native Node.js `crypto` utilities and standardize
 
 - No non-security behavior refactors.
 - No algorithm change beyond approved AES-256-GCM migration.
+- No new `packages/utils/src/crypto.ts` module.
 
 ## Steps
 
-1. Implement native crypto helpers in `packages/utils/src/crypto.ts`.
-2. Update scanner and related consumers to use new helper.
+1. Review and extend `packages/db/src/lib/crypto.ts`; confirm `iv:tag:encrypted` roundtrip behavior.
+2. Update scanner and related consumers to import from existing db crypto exports.
 3. Search and remove remaining `crypto-js` imports.
 4. Remove dependency entries where needed.
 5. Delete `packages/types/test_qr.js`.
@@ -51,7 +50,8 @@ Replace `crypto-js` usage with native Node.js `crypto` utilities and standardize
 
 ## Acceptance criteria
 
-- [ ] `encryptField` / `decryptField` implemented with native Node crypto.
+- [ ] `encryptField` / `decryptField` consolidated in `packages/db/src/lib/crypto.ts` using native Node crypto.
+- [ ] Payload format remains `iv:tag:encrypted` (documented).
 - [ ] AES-256-GCM path validated with tests.
 - [ ] No remaining active `crypto-js` source imports.
 - [ ] `packages/types/test_qr.js` deleted.

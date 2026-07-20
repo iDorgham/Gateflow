@@ -17,17 +17,9 @@ Auto-generated symbol index for planning and impact analysis.
 
 - Exports (2): `SquaresBackground`, `SquaresBackgroundProps`
 
-## `packages/ui/src/components/layout/breadcrumbs.tsx`
-
-- Exports (3): `BreadcrumbItem`, `Breadcrumbs`, `BreadcrumbsProps`
-
 ## `packages/ui/src/components/layout/page-container.tsx`
 
 - Exports (1): `PageContainer`
-
-## `packages/ui/src/components/layout/page-header.tsx`
-
-- Exports (2): `PageHeader`, `PageHeaderProps`
 
 ## `packages/ui/src/components/layout/side-navigation.tsx`
 

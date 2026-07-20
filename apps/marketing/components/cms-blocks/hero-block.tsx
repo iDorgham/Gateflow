@@ -1,5 +1,6 @@
 import { Button } from '@gateflow/ui';
 import { IntentLink } from '../intent-link';
+import { safeHref } from '../../lib/safe-href';
 import type { Locale } from '../../i18n-config';
 import type { BlockContent } from './types';
 
@@ -10,7 +11,10 @@ export function HeroCmsBlock({
   content: BlockContent;
   locale: Locale;
 }) {
+  if (!content) return null;
+
   const isRtl = locale.startsWith('ar');
+  const supporting = content.subheadline || content.body;
 
   return (
     <section
@@ -21,9 +25,9 @@ export function HeroCmsBlock({
         <h1 className="text-4xl md:text-6xl font-black tracking-tighter leading-[0.94] text-ds-text-heading">
           {content.headline || 'Welcome to GateFlow'}
         </h1>
-        {content.subheadline && (
+        {supporting && (
           <p className="text-lg md:text-xl text-ds-text-subtle max-w-2xl leading-relaxed">
-            {content.subheadline}
+            {supporting}
           </p>
         )}
         <div className="mt-4">
@@ -35,7 +39,7 @@ export function HeroCmsBlock({
           >
             <IntentLink
               locale={locale}
-              href={content.ctaLink || '/contact'}
+              href={safeHref(content.ctaLink, '/contact')}
               intent="demo"
               surface="cms_hero"
             >

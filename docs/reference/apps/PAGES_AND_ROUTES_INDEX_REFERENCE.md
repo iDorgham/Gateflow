@@ -10,9 +10,9 @@ This file is the route/page inventory anchor for planning and UI impact analysis
 
 ## 1) Live Page Counts (Current Snapshot)
 
-- `admin-dashboard`: 57 `page.tsx` routes
+- `admin-dashboard`: 61 `page.tsx` routes
 - `client-dashboard`: 44 `page.tsx` routes
-- `marketing`: 25 `page.tsx` routes
+- `marketing`: 28 `page.tsx` routes
 - `resident-portal`: 11 `page.tsx` routes
 
 Notes:

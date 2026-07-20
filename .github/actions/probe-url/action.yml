@@ -56,12 +56,19 @@ runs:
         fi
 
         FINAL_HOST="$(node -e 'try{console.log(new URL(process.argv[1]).hostname)}catch{console.log("")}' "$FINAL_URL")"
-        if [ -n "$FINAL_HOST" ] && [ "$FINAL_HOST" != "$HOST" ]; then
-          echo "skip=true" >> "$GITHUB_OUTPUT"
-          echo "skip_reason=redirects to $FINAL_HOST (expected $HOST)" >> "$GITHUB_OUTPUT"
-          echo "::warning::Skipping Lighthouse — $HOST redirects to unrelated host $FINAL_HOST."
-          exit 0
-        fi
+        # Soft-skip cross-host redirects only for the documented GateFlow
+        # production DNS-misrouting hosts. Preview/staging URLs that redirect
+        # (e.g. auth bounce) should still proceed into Lighthouse.
+        case "$HOST" in
+          gateflow.app|www.gateflow.app|app.gateflow.app)
+            if [ -n "$FINAL_HOST" ] && [ "$FINAL_HOST" != "$HOST" ]; then
+              echo "skip=true" >> "$GITHUB_OUTPUT"
+              echo "skip_reason=redirects to $FINAL_HOST (expected $HOST)" >> "$GITHUB_OUTPUT"
+              echo "::warning::Skipping Lighthouse — $HOST redirects to unrelated host $FINAL_HOST."
+              exit 0
+            fi
+            ;;
+        esac
 
         # -L already follows redirects to their target; a final 3xx here means
         # the chain didn't resolve (redirect loop, missing Location, or

@@ -16,6 +16,8 @@ This file defines where functional logic lives and how to inventory it quickly.
 - `apps/admin-dashboard/src/lib/**`
 - `apps/marketing/lib/**`
 - `apps/resident-portal/src/lib/**` (where present)
+- `apps/scanner-app/src/lib/**`
+- `apps/resident-mobile/lib/**`
 
 These own feature-domain logic closest to each app.
 

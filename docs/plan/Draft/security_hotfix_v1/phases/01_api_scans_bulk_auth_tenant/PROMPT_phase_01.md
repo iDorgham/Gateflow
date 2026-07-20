@@ -16,7 +16,7 @@ Harden `apps/client-dashboard/src/app/api/scans/bulk/route.ts` so the endpoint i
 ## Scope (in)
 
 - Add auth guard (`requireAuth` or equivalent existing guard utility).
-- Enforce role check: `scanner_app` or `property_manager`.
+- Enforce scans write permission (allow roles with write access: `Gate Operator`, `Security Manager` per `BUILT_IN_ROLES` in `packages/types/src/user.ts`).
 - Resolve `organizationId` from authenticated session context.
 - Validate request payload:
   - must be array

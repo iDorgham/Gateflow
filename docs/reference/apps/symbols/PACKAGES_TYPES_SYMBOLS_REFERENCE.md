@@ -11,7 +11,7 @@ Auto-generated symbol index for planning and impact analysis.
 
 ## `packages/types/src/base.ts`
 
-- Exports (19): `Gate`, `MaintenanceCategory`, `MaintenanceLocationType`, `MaintenancePriority`, `MaintenanceStatus`, `Organization`, `OrganizationType`, `Permission`, `Plan`, `Project`, `QRCode`, `QRCodeType`, `Role`, `ScanLog`, `ScanStatus`, `User`, `UserRoleType`, `WorkOrder`, `WorkOrderWithRelations`
+- Exports (20): `Gate`, `MaintenanceCategory`, `MaintenanceLocationType`, `MaintenancePriority`, `MaintenanceStatus`, `Organization`, `OrganizationType`, `Permission`, `Plan`, `Project`, `QRCode`, `QRCodeType`, `Role`, `ScanLog`, `ScanStatus`, `User`, `UserRole`, `UserRoleType`, `WorkOrder`, `WorkOrderWithRelations`
 
 ## `packages/types/src/crm.ts`
 
@@ -27,11 +27,15 @@ Auto-generated symbol index for planning and impact analysis.
 
 ## `packages/types/src/organization-features.ts`
 
-- Exports (6): `DashboardConfig`, `OrganizationFeatures`, `OrganizationTerminology`, `SettingsConfig`, `SidebarConfig`, `getOrganizationFeatures`
+- Exports (7): `DashboardConfig`, `ORGANIZATION_FEATURES`, `OrganizationFeatures`, `OrganizationTerminology`, `SettingsConfig`, `SidebarConfig`, `getOrganizationFeatures`
 
 ## `packages/types/src/organization.ts`
 
 - Exports (1): `OrganizationWithRelations`
+
+## `packages/types/src/user.ts`
+
+- Exports (3): `BUILT_IN_ROLES`, `DEFAULT_PERMISSIONS`, `UserWithOrganization`
 
 ## `packages/types/src/qr-payload.ts`
 
@@ -39,7 +43,7 @@ Auto-generated symbol index for planning and impact analysis.
 
 ## `packages/types/src/qr-signing.ts`
 
-- Exports (2): `signQRPayload`, `verifyQRSignature`
+- Exports (4): `base64urlDecode`, `base64urlEncode`, `signQRPayload`, `verifyQRSignature`
 
 ## `packages/types/src/qr-validate.ts`
 
@@ -56,7 +60,3 @@ Auto-generated symbol index for planning and impact analysis.
 ## `packages/types/src/scan-log.ts`
 
 - Exports (1): `ScanLogWithRelations`
-
-## `packages/types/src/user.ts`
-
-- Exports (1): `UserWithOrganization`

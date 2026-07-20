@@ -12,8 +12,8 @@ const mockHeadersObj = {
 };
 
 jest.mock('next/headers', () => ({
-  cookies: jest.fn(() => mockCookiesObj),
-  headers: jest.fn(() => mockHeadersObj),
+  cookies: jest.fn(async () => mockCookiesObj),
+  headers: jest.fn(async () => mockHeadersObj),
 }));
 
 const mockVerifyAccessToken = jest.fn();

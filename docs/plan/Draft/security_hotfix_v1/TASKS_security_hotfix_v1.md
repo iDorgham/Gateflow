@@ -3,7 +3,7 @@
 ## Phase 1: Enforce auth and tenant scoping for scans bulk API
 
 - [ ] Add auth guard to `apps/client-dashboard/src/app/api/scans/bulk/route.ts`
-- [ ] Enforce allowed roles: `scanner_app` or `property_manager`
+- [ ] Enforce scans write permission (roles with write access: `Gate Operator`, `Security Manager` per `BUILT_IN_ROLES` in `packages/types/src/user.ts`)
 - [ ] Scope all writes using session `organizationId`
 - [ ] Validate payload shape and max size (`<= 500`)
 - [ ] Use `createMany({ skipDuplicates: true })` safely
@@ -13,8 +13,8 @@
 
 ## Phase 2: Migrate CryptoJS to native AES-256-GCM
 
-- [ ] Create `packages/utils/src/crypto.ts` with `encryptField` and `decryptField`
-- [ ] Use AES-256-GCM with 12-byte IV and auth tag (`IV:ENC:TAG`)
+- [ ] Extend/consolidate `packages/db/src/lib/crypto.ts` (`encryptField` / `decryptField`, AES-256-GCM)
+- [ ] Preserve existing payload layout `iv:tag:encrypted` (hex segments); do not introduce a competing format without a compatibility shim
 - [ ] Replace `crypto-js` usage in scanner security and related encryption paths
 - [ ] Remove `crypto-js` dependency from workspace where present
 - [ ] Delete `packages/types/test_qr.js`
