@@ -1,0 +1,50 @@
+apps/admin-dashboard/src/app/api/cms/pages/[slug]/publish/route.ts
+  s_0ac6e24df0e48b::t_089d3fa8bd21e6 5-51,55
+  s_0ac6e24df0e48b::t_4d3c2116fe348f 60-63
+apps/design-system/package.json
+  s_0ac6e24df0e48b::t_ee6b993853e5a4 6
+apps/admin-dashboard/tsconfig.json
+  s_71b3a080c67906::t_03b81b5902893d 14,35-36
+apps/client-dashboard/tsconfig.json
+  s_71b3a080c67906::t_53f21eba05a9a0 14,38-39
+apps/design-system/tsconfig.json
+  s_71b3a080c67906::t_f14b5f171c7b48 16-21,26-32
+apps/marketing/tsconfig.json
+  s_71b3a080c67906::t_c10b993f921e02 14,30-31
+apps/resident-portal/tsconfig.json
+  s_71b3a080c67906::t_27982321a19169 14,33-34
+apps/admin-dashboard/next-env.d.ts
+  s_0ac6e24df0e48b::t_09b1283382cfc6 3
+apps/client-dashboard/next-env.d.ts
+  s_0ac6e24df0e48b::t_8c4700e038150e 3
+apps/design-system/next-env.d.ts
+  s_0ac6e24df0e48b::t_fffd73c56ddb75 3
+apps/marketing/next-env.d.ts
+  s_0ac6e24df0e48b::t_91c92df4186093 3
+apps/resident-portal/next-env.d.ts
+  s_0ac6e24df0e48b::t_25bbb45af7ca91 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "ff6a7a6e5b5120941f1ed2f3ad7d09327c9f1288",
+  "prompts": {},
+  "sessions": {
+    "s_0ac6e24df0e48b": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "deb8ce9b-1dbd-4777-93f0-fada52d5d33a",
+        "model": "grok-4.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_71b3a080c67906": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "bfd955f6-e223-4c09-9d07-c3b73b140496",
+        "model": "grok-4.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
