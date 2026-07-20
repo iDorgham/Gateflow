@@ -1,0 +1,20 @@
+README.md
+  s_d50eadb4b332b3::t_663303fe4a6824 13-26
+  s_d50eadb4b332b3::t_7a74aa190acd22 4,37-46,73-88
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "7cd4ad35903c9aaae142b0850fbf72f6803dbd52",
+  "prompts": {},
+  "sessions": {
+    "s_d50eadb4b332b3": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f7fb4-e98d-7340-9b95-e11e915908ac",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
