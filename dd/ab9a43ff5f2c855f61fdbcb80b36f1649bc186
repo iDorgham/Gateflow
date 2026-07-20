@@ -1,0 +1,52 @@
+docs/plan/Active/audit_remediation_2026/phase_logs/PHASE_LOG_phase_02.md
+  s_71b3a080c67906::t_5bb8c264002d14 1-28,30-41
+  s_71b3a080c67906::t_8f9e03e2e31b7c 29
+apps/client-dashboard/src/app/api/qrcodes/validate/route.ts
+  s_71b3a080c67906::t_048952e48ef6a2 198-199
+  s_71b3a080c67906::t_79bfa503466a04 240
+  s_71b3a080c67906::t_15eba5a6706a66 156
+  s_71b3a080c67906::t_870c71c5e564da 469
+  s_71b3a080c67906::t_f894b812d5360e 412-413
+  s_71b3a080c67906::t_6d07f5b65dca6d 603-607
+  s_71b3a080c67906::t_61bf66d9f377d5 500,502,530
+  s_71b3a080c67906::t_0b9e7d0a61d26a 11
+apps/client-dashboard/src/app/api/qrcodes/validate/route.test.ts
+  s_71b3a080c67906::t_b3b2c5364c1b59 126-129,133-148,152
+docs/plan/Active/audit_remediation_2026/TASKS_audit_remediation_2026.md
+  s_71b3a080c67906::t_26fc02551d17ca 15-20
+packages/db/src/client.ts
+  s_71b3a080c67906::t_b3387414e7b367 48
+docs/plan/Active/audit_remediation_2026/TENANT_PRISMA_ALLOWLIST.md
+  s_71b3a080c67906::t_ee6e397e2767c7 1-71
+packages/db/src/index.ts
+  s_71b3a080c67906::t_a42f28628d8bf4 2,7-10,12-22
+  s_71b3a080c67906::t_7e6833b05ac30c 11
+packages/db/src/tenant.ts
+  s_71b3a080c67906::t_fa7dd4732d326d 1-12,18-27,30-160,162-165,169-170,174,177-178,181-189,191-308,323-335,349-353
+  s_71b3a080c67906::t_53faf7dfe090ab 309-315,317-322,336-341,343-348,354-361,363-373
+packages/db/src/tenant.test.ts
+  s_71b3a080c67906::t_2044596044052a 29-30,36-42,44-46,50,66-69,72-73,78-91,93-94,96-102,104-107,110-112,115-119,123-124,129-130,135-137,139-150,152-154,156-160,162-170,211-212,218,223,225-246
+  s_71b3a080c67906::t_9908fb4d492b2d 173-175,177,179-181,186-210
+  s_71b3a080c67906::t_859c7323f844e0 3-9,12-14,17-19,22-24,27-28,31-32
+  s_71b3a080c67906::t_8eb38803d19f9c 43,47-49,92,138,151
+docs/plan/Active/audit_remediation_2026/SESSION_MEMORY.md
+  s_71b3a080c67906::t_500bb9fe4b5464 5-8,15-16,23-25,29-32,34,36
+CHANGELOG.md
+  s_71b3a080c67906::t_43584c0a571bd8 25-26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "ddab9a43ff5f2c855f61fdbcb80b36f1649bc186",
+  "prompts": {},
+  "sessions": {
+    "s_71b3a080c67906": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "bfd955f6-e223-4c09-9d07-c3b73b140496",
+        "model": "grok-4.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
