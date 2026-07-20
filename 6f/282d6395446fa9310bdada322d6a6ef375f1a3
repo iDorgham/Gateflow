@@ -1,0 +1,19 @@
+apps/admin-dashboard/src/app/[locale]/(dashboard)/organizations/[orgId]/analytics/page.tsx
+  s_59f7202f7083c9::t_fa619eac3fdc20 98
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "6f282d6395446fa9310bdada322d6a6ef375f1a3",
+  "prompts": {},
+  "sessions": {
+    "s_59f7202f7083c9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "553895df-ca28-44e3-a086-cf9e446b8754",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
