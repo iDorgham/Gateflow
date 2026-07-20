@@ -59,6 +59,7 @@
     "check:db-drift": "node scripts/check/check-db-drift.js",
     "check:db-drift:schema": "node scripts/check/check-db-drift.js --schema",
     "check:bootstrap-routes": "node scripts/check/check-bootstrap-routes.js",
+    "check:security": "node scripts/check/check-security.js",
     "check:security:fail": "node scripts/check/check-security.js --fail",
     "check:security:fix": "node scripts/dev/security-fix.js",
     "docs:release:dry": "node scripts/docs/ralph-docs.js release --dry-run",

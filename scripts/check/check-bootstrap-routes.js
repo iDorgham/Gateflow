@@ -50,6 +50,9 @@ function walk(dir) {
       }
     }
 
+    // Tests may mention forbidden paths when asserting containment; skip content scan.
+    if (/\.(test|spec)\.(ts|tsx|js|jsx|mjs|cjs)$/.test(entry.name)) continue;
+
     const content = fs.readFileSync(fullPath, 'utf8');
     for (const { label, regex } of FORBIDDEN_PATTERNS) {
       if (regex.test(content)) {

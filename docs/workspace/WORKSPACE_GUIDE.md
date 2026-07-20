@@ -1,192 +1,141 @@
-# GateFlow Workspace — Master Commands & Workflow Guide
+# GateFlow Workspace — Commands & Workflow Guide
 
-Welcome to the **GateFlow** workspace. This document is your comprehensive
-reference for the commands, agents, skills, and workflows that drive our
-phased development lifecycle.
+Reference for **GateFlow phased development**: commands, agents, skills, and sync. For a compact command list see [COMMAND_GUIDE.md](./COMMAND_GUIDE.md).
 
 ---
 
-## 🚀 The Development Lifecycle (The Ralph Loop)
+## AI tooling layout
 
-We use a **Phased Development Workflow** to ensure high quality, traceability,
-and autonomous execution. The flow moves through these stages:
+| What             | Where                                                                   |
+| ---------------- | ----------------------------------------------------------------------- |
+| Canonical source | `.agents/` (symlink: `.antigravity/`, `.agents`)                        |
+| Cursor commands  | `.cursor/commands/` (from `pnpm sync`)                                  |
+| Skills           | `.agents/skills/` (~95 skills)                                          |
+| Agents           | `.agents/agents/roles/`                                                 |
+| Sync             | `pnpm sync` → Cursor, Claude, Antigravity, Gemini, Kiro, OpenCode, Qwen |
 
-### 1. Discovery & Intent (`/idea` & `/draft`)
-
-- **`/idea <slug>`**: Capture high-level initiatives. Creates
-  `docs/development/initiatives/IDEA_<slug>.md`.
-- **`/draft <slug>`**: Iterate on raw planning notes. Creates
-  `docs/plan/Draft/<slug>/DRAFT_<slug>.md`.
-- **`/draft <slug> c`**: Refine the draft into structured goals, constraints,
-  and a phase sketch.
-
-### 2. Planning (`/prompt` & `/plan`)
-
-- **`/prompt <slug>`**: Generates `FOR_PLAN_PROMPT.md`—a comprehensive prompt
-  optimized for the `/plan` command.
-- **`/plan <slug>`**: Turns a draft/prompt into a formal, phased plan.
-  - Creates `PLAN_<slug>.md` and `TASKS_<slug>.md` in `docs/plan/Draft/<slug>/`.
-  - Generates per-phase prompts in `phases/NN_title/PROMPT_phase_NN.md`.
-- **`/plan ready <slug>`**: Moves the plan from `Draft/` to `Ready/` for
-  execution.
-
-### 3. Execution (`/dev` & `/ship`)
-
-- **`/dev`**: Executes the **next incomplete phase** of the active plan.
-  - Moves plan to `Active/`.
-  - Implements code, writes tests (TDD), runs enforcers, and commits/tags phase.
-- **`/dev <n>`**: Executes a specific phase number.
-- **`/ship <slug>`**: Runs the entire plan from start to finish via `/dev` loop.
-- **`/dev ralph`**: Activates recursive autopilot to finish all phases.
-
-### 4. Guidance & Maintenance (`/guide` & `/man`)
-
-- **`/guide`**: "What should I do now?" Assess git state, plan progress, and
-  provide a "Must do" vs "Recommended" report.
-- **`/man`**: The "One Man" orchestrator. High-level command for managing tasks,
-  settings, and mindset across 7 domains (Code, Brand, SaaS, etc.).
+**Sovereign / AIWF (separate):** `.ai/commands/` — content-factory commands; not the GateFlow `/dev` loop.
 
 ---
 
-## 🛠 Command Reference (Slash Commands)
+## Development lifecycle
 
-| Command          | Sub-commands               | Description                              |
-| :--------------- | :------------------------- | :--------------------------------------- |
-| **`/idea`**      | `new`, `<slug>`            | Initiative capture and backlog entry.    |
-| **`/draft`**     | `c`, `<slug>`              | Iterate on raw specs before planning.    |
-| **`/prompt`**    | `<slug>`                   | Build the "big prompt" for `/plan`.      |
-| **`/plan`**      | `ready`, `phase <n>`       | Create or transition phased plans.       |
-| **`/dev`**       | `ralph`, `<n>`             | Implement one phase (code + test + git). |
-| **`/ship`**      | `<slug>`, `all`            | Full automated execution of a plan.      |
-| **`/guide`**     | `what to do`               | Workspace status and next steps.         |
-| **`/man`**       | `tasks`, `run`, `ship`     | Seven-domain management orchestrator.    |
-| **`/docs`**      | `changelog`, `readme`      | Automated documentation sync.            |
-| **`/version`**   | `bump`, `tag`              | Semantic versioning and git tagging.     |
-| **`/clis-team`** | `seo`, `refactor`, `audit` | Run multi-model agent teams.             |
+### 1. Discovery & intent
 
----
+- **`/idea <slug>`** — `docs/development/initiatives/IDEA_<slug>.md`
+- **`/draft <slug>`** — `docs/plan/Draft/<slug>/DRAFT_<slug>.md`
+- **`/draft <slug> c`** — refine draft in place (additive)
 
-## 🧠 Agent & Skill Hierarchy
+### 2. Planning
 
-### Agents (Roles)
+- **`/prompt <slug>`** — `FOR_PLAN_PROMPT.md`
+- **`/plan <slug>`** — `PLAN_*.md`, `TASKS_*.md`, `phases/NN_*/PROMPT_*.md`
+- **`/plan ready <slug>`** — Draft → Ready
 
-Our agents adopt specific personas based on the task:
+### 3. Execution
 
-- **`frontend.md`**: UI/UX, ADS components, animations.
-- **`backend-api.md`**: API routes, auth, validation.
-- **`backend-database.md`**: Prisma, migrations, performance.
-- **`architecture.md`**: System design, monorepo patterns.
-- **`security.md`**: RBAC, data privacy, audits.
+- **`/dev`** — next incomplete phase (Ready → Active on start)
+- **`/dev <n>`** — specific phase
+- **`/ship <slug>`** — all remaining phases
+- **`/ralph`** — recursive autopilot until plan complete
 
-### Skills (Capabilities)
+### 4. Guidance
 
-We have **83 specialized skills** in `.agents/skills/`. Key skills include:
-
-- **`gf-ads-*`**: Design system tokens and patterns.
-- **`gf-uiux-animator`**: Premium Framer Motion and Tailwind animations.
-- **`gateflow-database`**: Complex Prisma queries and multi-tenancy.
-- **`gf-cli-limits`**: Tracking and respecting AI tool quotas (80% rule).
-- **`gf-guide`**: The brain behind `/guide` and state assessment.
-
-### Sub-agents (Tools)
-
-- **`browser-use`**: High-fidelity web browsing and research.
-- **`explore`**: Deep codebase search and relationship mapping.
-- **`shell`**: Autonomous terminal execution and verification.
+- **`/guide`** — **router + coach** (Situation → Teach → Ask → Action → Motivate). Directs only; use **`/dev`** to execute.
+- **`/man`** — seven-domain orchestrator (tasks, settings, mindset)
 
 ---
 
-## 📜 Operational Rules & Best Practices
+## `/guide` behavior
 
-1. **The 80% Rule**: Before using a paid CLI, check `CLI_LIMITS_TRACKING.md`.
-   If at 80%+, ask for permission.
-2. **TDD Iron Law**: No production code without a failing (red) test first.
-3. **Multi-tenancy Mandate**: Every DB query MUST include `organizationId`
-   and `deletedAt: null`.
-4. **Auto-Sync**: Planning happens on `master`. Execution happens on `feat/`
-   branches. Commands auto-commit and push when checks pass.
-5. **ADS Compliance**: Every color must be a `token()` from `@atlaskit/tokens`.
-   Hardcoded hex codes are strictly forbidden.
-6. **Session Memory**: `/dev` and `/ship` use `SESSION_MEMORY.md` to persist
-   state across context resets.
+Two modes in one command (see `.agents/workflows/guide.md`):
+
+1. **Router** — `/guide plan|phase|ready|…` fires the matching workflow.
+2. **Coach** — bare `/guide` or “what should I do now” loads **`gf-guide`** and reports Must do / Recommended / Critical.
+
+Preferences: `docs/development/learning/GUIDE_PREFERENCES.md`. Rule: `.agents/rules/02-gateflow-guide.mdc`.
 
 ---
 
-## 💻 Terminal Scripts & Commands
+## Command table (synced set)
 
-| Command                                           | Description                                   |
-| :------------------------------------------------ | :-------------------------------------------- |
-| **`pnpm preflight`**                              | Run lint, typecheck, and tests monorepo-wide. |
-| **`pnpm turbo dev`**                              | Start all apps in development mode.           |
-| **`pnpm workspace:install`**                      | Initialize workspace and sync AI tools.       |
-| **`node scripts/ralph-git.js branch`**            | Automated branching for phases.               |
-| **`node scripts/enforce-ads-design.js`**          | UI audit for ADS compliance.                  |
-| **`node scripts/enforce-security-invariants.js`** | Backend audit for RBAC.                       |
-| **`pnpm docs:changelog:format`**                  | Normalize changelog casing/spacing.           |
-
----
-
-## 🎭 Agents (Core Roles)
-
-| Agent                     | Description         | Primary Responsibility                |
-| :------------------------ | :------------------ | :------------------------------------ |
-| **`frontend.md`**         | UI/UX Specialist    | ADS components, RSCs, and RTL layout. |
-| **`backend-api.md`**      | API & Auth Guru     | Next.js API, Zod, and org scoping.    |
-| **`backend-database.md`** | Database Architect  | Prisma, migrations, and performance.  |
-| **`architecture.md`**     | Systems Architect   | Monorepo structure and packages.      |
-| **`security.md`**         | Security Auditor    | RBAC, GDPR, and QR security.          |
-| **`mobile.md`**           | Expo/RN Specialist  | Scanner app and offline sync.         |
-| **`qa.md`**               | Testing Engineer    | Jest, Playwright, and quality gates.  |
-| **`planning.md`**         | Roadmap Specialist  | Phased plans and feasibility.         |
-| **`i18n.md`**             | Localization Expert | Arabic/English flows and MENA market. |
-| **`explore.md`**          | Discovery Agent     | Deep codebase investigation.          |
-| **`devops.md`**           | Infrastructure Lead | CI/CD and Vercel deployments.         |
+| Command       | Purpose                  |
+| ------------- | ------------------------ |
+| `/idea`       | Capture initiative       |
+| `/draft`      | Pre-plan notes           |
+| `/prompt`     | Handoff file for `/plan` |
+| `/plan`       | Phased plan generation   |
+| `/dev`        | One phase implementation |
+| `/ship`       | Full plan execution      |
+| `/guide`      | Router + coach           |
+| `/man`        | One Man orchestrator     |
+| `/brainstorm` | Strategic roadmap        |
+| `/creative`   | Creative direction       |
+| `/deploy`     | Deploy apps              |
+| `/docs`       | Documentation sync       |
+| `/version`    | Versioning / tags        |
+| `/organize`   | Docs cleanup             |
+| `/clis-team`  | Multi-CLI teams          |
+| `/ralph`      | Phase autopilot          |
 
 ---
 
-## 🤖 Sub-agents (Specialized Tools)
+## Agents (roles)
 
-| Sub-agent                    | Description        | Best For                               |
-| :--------------------------- | :----------------- | :------------------------------------- |
-| **`browser-use.md`**         | Autonomous Browser | Market research and scraping.          |
-| **`explore.md`**             | Code Finder        | Tracing cross-app dependencies.        |
-| **`shell.md`**               | CLI Lead           | Build scripts and terminal benchmarks. |
-| **`ads-ux.md`**              | Design Auditor     | 100% ADS token compliance.             |
-| **`visual-storytelling.md`** | Content Architect  | Scripting cinematic content.           |
-| **`ads-animation.md`**       | Motion Designer    | Framer/CSS micro-interactions.         |
+Under `.agents/agents/roles/`:
 
----
+| Role               | Focus                    |
+| ------------------ | ------------------------ |
+| `planning`         | Phased plans             |
+| `architecture`     | Monorepo / system design |
+| `frontend`         | UI, ADS, i18n            |
+| `backend-api`      | API routes, auth, Zod    |
+| `backend-database` | Prisma, migrations       |
+| `security`         | RBAC, QR, tenant scope   |
+| `mobile`           | Expo / scanner           |
+| `qa`               | Tests                    |
+| `devops`           | CI/CD, deploy            |
+| `explore`          | Codebase discovery       |
 
-## ⚡ Skills (Domain Capabilities)
-
-| Skill Category         | Key Capabilities & Descriptions                                                                                                                                           |
-| :--------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Core Workflow**      | **`gf-guide`**: Workspace guidance. <br> **`gf-planner`**: Phased planning. <br> **`prompt-writer`**: Prompt engineering.                                                 |
-| **UI & Design**        | **`gf-ads-core`**: ADS foundations. <br> **`uiux-animator`**: SaaS animations. <br> **`framer-motion`**: Motion patterns. <br> **`shadcn-composables`**: Widget patterns. |
-| **Backend & Data**     | **`gateflow-api`**: API security. <br> **`database`**: Prisma performance. <br> **`rbac`**: Permission logic. <br> **`qr-crypto`**: Secure QR logic.                      |
-| **Mobile & Offline**   | **`expo-mobile-optimization`**: Performance. <br> **`expo-offline-sync`**: Offline logic. <br> **`mobile`**: Hardware access.                                             |
-| **Marketing & SEO**    | **`creative-director`**: Brand DNA. <br> **`seo-content`**: Copywriting. <br> **`seo-planning`**: Search strategy.                                                        |
-| **Ops & Verification** | **`github-ci-cd`**: Pipeline mgmt. <br> **`testing`**: Jest/E2E setup. <br> **`cli-limits`**: Quota tracking.                                                             |
+Scenarios: `code-review`, `security-audit`, `refactor`. Orchestrator: `.agents/agents/orchestrator.md`.
 
 ---
 
-## 📏 Workspace Rules & Guardrails
+## Key skills
 
-We enforce strict **system invariants** for safety and consistency:
+| Skill                  | Role                             |
+| ---------------------- | -------------------------------- |
+| **`gf-guide`**         | Workspace guide — `/guide` brain |
+| **`source-command-*`** | Per-command workflow helpers     |
+| **`cli-limits`**       | 80% CLI quota rule               |
+| **`security`**         | Auth, RBAC, QR                   |
+| **`api`**              | Next.js API patterns             |
+| **`database`**         | Prisma, multi-tenancy            |
+| **`one-man`**          | `/man` orchestrator              |
 
-1. **Multi-tenancy Isolation**: Every query MUST scope to `organizationId`.
-2. **RTL/LTR Standard**: UI must support Arabic/English (use `ms-`/`me-`).
-3. **Soft-Deletes Only**: Never delete; update `deletedAt`.
-4. **TDD Lifecycle**: Feature code requires unit/integration tests.
-5. **ADS Compliance**: Use `token()`. No hardcoded hex codes.
-6. **AI Budgeting**: Respect the **80% Rule** (see `CLI_LIMITS_TRACKING.md`).
-7. **Atomic Commits**: Commits tagged by phase (e.g., `v1.2.0-phase-3`).
+Full index: [SKILLS_GUIDE.md](./SKILLS_GUIDE.md).
 
 ---
 
-> [!TIP]
-> Use **`/guide`** for next steps. It scans the filesystem and outputs
-> the exact command you need.
+## Operational rules
 
-> [!IMPORTANT]
-> Always check **`docs/CLAUDE.md`** for up-to-date project nuances.
+1. **80% CLI rule** — check `CLI_LIMITS_TRACKING.md` before paid CLIs.
+2. **Multi-tenancy** — `organizationId` + `deletedAt: null` on tenant data.
+3. **QR security** — HMAC-SHA256 signed payloads only.
+4. **Verification** — `pnpm preflight` before considering work done.
+5. **Plan moves** — update `docs/plan/backlog/ALL_TASKS_BACKLOG.md`.
+6. **Sync after AI edits** — change `.agents/` then `pnpm sync`.
+
+---
+
+## Terminal essentials
+
+| Command          | Purpose                              |
+| ---------------- | ------------------------------------ |
+| `pnpm sync`      | Propagate `.agents/` to all AI tools |
+| `pnpm preflight` | Lint + typecheck + test              |
+| `pnpm turbo dev` | Dev all apps                         |
+
+---
+
+> Use **`/guide`** when unsure of the next step. It scans plan folders and git state, then gives one copy-ready command.

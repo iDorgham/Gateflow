@@ -19,6 +19,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 ## [Unreleased]
 
 ### Workspace
+
+- **[Security]** harden phase-1 follow-ups and sync workspace guides
+
+- **[Security]** audit remediation phase 1 — P0 containment
 - **[Admin-Dashboard]** fix unbalanced parens breaking analytics page lint
 - **[Ci]** regenerate pnpm-lock.yaml after botched master merge
 

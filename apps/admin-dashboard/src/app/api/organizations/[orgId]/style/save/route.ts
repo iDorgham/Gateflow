@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { isAdminAuthorized } from '@/lib/admin-auth';
-import { filterValidBrandingTokens } from '@gate-access/types';
+import {
+  filterValidBrandingTokens,
+  isValidBrandingTokenKey,
+  validateBrandingTokenValue,
+} from '@gate-access/types';
 import { prisma, withSerializableRetry } from '@gate-access/db';
 
 export async function POST(
@@ -33,11 +37,11 @@ export async function POST(
       });
       for (const v of variables ?? []) {
         const key = typeof v?.key === 'string' ? v.key : '';
+        if (!isValidBrandingTokenKey(key)) continue;
         const value = typeof v?.value === 'string' ? v.value.trim() : '';
-        if (!key) continue;
         if (!value) {
           delete tokenOverrides[key];
-        } else {
+        } else if (validateBrandingTokenValue(value)) {
           tokenOverrides[key] = value;
         }
       }

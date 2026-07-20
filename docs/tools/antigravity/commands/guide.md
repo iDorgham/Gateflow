@@ -1,47 +1,53 @@
-# Antigravity /guide — Workspace Guide Prompt
+# Antigravity /guide — GateFlow Workspace Guide
 
-Copy this prompt into Antigravity (or Gemini CLI) to get the same "what should I do now?" output as Cursor `/guide`. Wire it as a macro or command if your IDE supports it.
+**Canonical workflow:** `.agents/workflows/guide.md` (synced via `pnpm sync`).
+
+**Skill:** `.agents/skills/gf-guide/SKILL.md`
 
 ---
 
-## Copy-paste prompt
+## What `/guide` does
+
+- **Router:** `/guide plan|phase|ready|develop|test|github|security|all` → fires the matching GateFlow command.
+- **Coach:** bare `/guide` or “what should I do now” → Situation → Teach → Ask → Action → Motivate, plus Must do / Recommended / Critical.
+- **Does not execute phases** — use `/dev` or `/ship` for that.
+
+---
+
+## Copy-paste prompt (Antigravity / Gemini CLI)
 
 ```text
-**Command:** /guide (workspace guide)
+**Command:** /guide (GateFlow workspace guide)
 
-**Request:** Act as the GateFlow workspace guide. Produce a report in this format:
+**Request:** Act as the GateFlow workspace guide. Load `.agents/skills/gf-guide/SKILL.md` and `docs/development/learning/GUIDE_PREFERENCES.md`.
 
-### Must do
-- [Actions that unblock the project or keep it healthy]
+Produce a coach report:
 
-### Recommended
-- [High-value next steps]
+### Situation
+### Teach
+### Ask
+### Action
+#### Must do
+#### Recommended
+#### Critical
+### Motivate
+### Next command
+(one copy-ready /dev, /plan, /prompt, or shell line)
 
-### Critical
-- [Security or compliance items, or "None"]
+**Context to load:**
+- `docs/plan/` — Active / Ready / Draft plans and next phase
+- `docs/plan/backlog/ALL_TASKS_BACKLOG.md`
+- `docs/development/learning/GUIDE_PREFERENCES.md`
+- Git status; preflight green/unknown/red
 
-### Improvements
-- [1–3 concrete ideas]
+**Rules:** pnpm only; organizationId scope; deletedAt null; QR HMAC-SHA256. Ref: `docs/CLAUDE.md`.
 
-**Context to load (read these files):**
-- `GATEFLOW_CONFIG.md` (repo root) — commands, plans, security, agents, skills
-- `docs/PRD.md` — product status and roadmap
-- `docs/plan/` — latest IDEA, PLAN, and which phase is next
-- `docs/development/learning/GUIDE_PREFERENCES.md` (if present) — user preferences
-- `docs/guides/TOOL_AND_CLI_REFERENCE.md` — task-to-tool matrix for CLI suggestions
-
-**State to assess:**
-- Git status (branch, uncommitted changes)
-- Whether preflight (lint/typecheck/test) is green or unknown
-- Active plan and next incomplete phase
-
-**Rules:** pnpm only; multi-tenant (organizationId); soft deletes (deletedAt null); QR HMAC-SHA256. Ref: CLAUDE.md.
+**Not GateFlow:** `.ai/commands/guide.md` is Sovereign/AIWF — ignore for this repo’s phased loop.
 ```
 
 ---
 
 ## Usage
 
-1. Copy the block above (from `**Command:**` to the end).
-2. Paste into Antigravity chat or Gemini CLI.
-3. The model will read the referenced files and produce the report.
+1. Copy the block above into Antigravity or Gemini CLI, or run `/guide` in Cursor.
+2. For routing only: `/guide phase 2`, `/guide plan my_feature`, etc.
