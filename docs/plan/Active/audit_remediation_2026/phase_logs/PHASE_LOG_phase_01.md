@@ -46,6 +46,6 @@ Forbidden string scan: no `gateflow-setup-2026` or `api/setup/reset-admin` under
 
 ## Rollback / Containment
 
-1. **Code rollback:** Revert this branch / PR commits on `fix/audit-remediation-phase-1` (or revert merge commit on `master`) to restore prior behavior; do **not** reintroduce `api/setup/reset-admin` without a time-boxed local-only alternative.
+1. **Code rollback:** Do not revert to a revision that restores `api/setup/reset-admin`; use a forward-fix or containment patch that preserves route removal. If a full revert is unavoidable, immediately re-apply the route-removal commit and confirm CI `check:bootstrap-routes` passes on the deployed revision.
 2. **Containment if route was ever live:** Immediately rotate `SETUP_SECRET`, admin passwords, and session/JWT secrets; invalidate sessions; confirm CI `check:bootstrap-routes` and `check:secrets` pass on the deployed revision.
 3. **Sanitizer rollback:** If CMS/branding sanitization blocks legitimate content, tighten allowlists via `@gate-access/types` security helpers rather than removing sanitization at trust boundaries.
