@@ -220,7 +220,7 @@ const trustBadgeVariants = {
       : {
           delay: 0.4 + opts.i * 0.1,
           duration: 0.4,
-          type: 'spring',
+          type: 'spring' as const,
           stiffness: 350,
           damping: 30,
         },
