@@ -1,6 +1,10 @@
 import { NextResponse } from 'next/server';
+import { requireAdminApi } from '@/lib/require-admin-api';
 
-export async function POST() {
+export async function POST(req: Request) {
+  const denied = await requireAdminApi(req);
+  if (denied) return denied;
+
   // Simulate AI processing delay
   await new Promise((resolve) => setTimeout(resolve, 1500));
 

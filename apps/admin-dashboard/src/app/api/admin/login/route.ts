@@ -6,12 +6,44 @@ function sha256(message: string) {
   return createHash('sha256').update(message).digest('hex');
 }
 
+/** Simple sliding-window limiter for login brute-force (per IP). */
+const loginAttempts = new Map<string, number[]>();
+const LOGIN_LIMIT = 10;
+const LOGIN_WINDOW_MS = 60_000;
+
+function allowLoginAttempt(ip: string): boolean {
+  const now = Date.now();
+  const windowStart = now - LOGIN_WINDOW_MS;
+  const prior = (loginAttempts.get(ip) ?? []).filter((t) => t > windowStart);
+  if (prior.length >= LOGIN_LIMIT) {
+    loginAttempts.set(ip, prior);
+    return false;
+  }
+  prior.push(now);
+  loginAttempts.set(ip, prior);
+  return true;
+}
+
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
+    const ip =
+      request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+      request.headers.get('x-real-ip') ||
+      'unknown';
+    if (!allowLoginAttempt(ip)) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Too many login attempts. Try again later.',
+        },
+        { status: 429 }
+      );
+    }
+
     const body = await request.json().catch(() => null);
     const key: string = body?.key ?? '';
 
-    if (!key) {
+    if (!key || typeof key !== 'string') {
       return NextResponse.json(
         { success: false, message: 'Access key required.' },
         { status: 400 }

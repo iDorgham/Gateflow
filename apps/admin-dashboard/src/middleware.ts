@@ -76,9 +76,24 @@ function loginPathForRequest(request: NextRequest, pathname: string): string {
   return `/${DEFAULT_LOCALE}/login`;
 }
 
+/** API paths that must remain reachable without an admin session. */
+const PUBLIC_API_PREFIXES = [
+  '/api/admin/login',
+  '/api/auth/login',
+  '/api/auth/refresh',
+  '/api/auth/logout',
+  '/api/cms/pages/public/',
+];
+
+function isPublicApiPath(pathname: string): boolean {
+  return PUBLIC_API_PREFIXES.some((prefix) => pathname.startsWith(prefix));
+}
+
 function requiresAdminPortalAuth(pathname: string): boolean {
-  if (pathname.startsWith('/api/admin/')) {
-    return !pathname.startsWith('/api/admin/login');
+  // Defense in depth: all admin API surfaces require a session except public prefixes.
+  // Previously only `/api/admin/*` was gated — CMS/CRM/support/team leaked.
+  if (pathname.startsWith('/api/')) {
+    return !isPublicApiPath(pathname);
   }
   if (!pathnameHasLocale(pathname)) {
     return false;
@@ -253,9 +268,11 @@ export async function middleware(request: NextRequest) {
   }
 
   const authCookie = request.cookies.get(AUTH_COOKIE);
+  const adminSessionCookie = request.cookies.get(ADMIN_COOKIE);
   const csrfCookie = request.cookies.get(CSRF_COOKIE);
 
-  if (!authCookie) {
+  // CSRF for cookie-authenticated mutations (gf_access_token OR admin_session).
+  if (!authCookie && !adminSessionCookie) {
     return NextResponse.next();
   }
 

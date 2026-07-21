@@ -2,6 +2,7 @@ import { google } from '@ai-sdk/google';
 import { generateObject } from 'ai';
 import { z } from 'zod';
 import { NextResponse } from 'next/server';
+import { requireAdminApi } from '@/lib/require-admin-api';
 
 const sectionSchema = z.object({
   en: z.object({
@@ -37,6 +38,9 @@ const sectionSchema = z.object({
 });
 
 export async function POST(req: Request) {
+  const denied = await requireAdminApi(req);
+  if (denied) return denied;
+
   try {
     const { prompt, blockType } = await req.json();
 

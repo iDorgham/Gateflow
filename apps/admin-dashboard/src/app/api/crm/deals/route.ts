@@ -1,18 +1,29 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@gate-access/db';
+import { requireAdminApi } from '@/lib/require-admin-api';
 
 export async function GET(req: Request) {
+  const denied = await requireAdminApi(req);
+  if (denied) return denied;
+
   const { searchParams } = new URL(req.url);
   const orgId = searchParams.get('orgId');
 
+  if (!orgId) {
+    return NextResponse.json(
+      { error: 'orgId query parameter is required' },
+      { status: 400 }
+    );
+  }
+
   try {
-    const deals = await prisma.deal?.findMany({
-      where: orgId ? { organizationId: orgId } : undefined,
+    const deals = await prisma.deal.findMany({
+      where: { organizationId: orgId, deletedAt: null },
       orderBy: { createdAt: 'desc' },
     });
 
     return NextResponse.json({ deals: deals || [] });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: 'Internal Server Error' },
       { status: 500 }
