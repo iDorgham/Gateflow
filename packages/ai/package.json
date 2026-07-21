@@ -41,8 +41,8 @@
   },
   "dependencies": {
     "clsx": "^2.1.1",
-    "tailwind-merge": "^2.6.1",
-    "lucide-react": "^0.344.0",
+    "tailwind-merge": "^3.6.0",
+    "lucide-react": "^1.25.0",
     "@gateflow/tokens": "workspace:*",
     "@gateflow/theme": "workspace:*",
     "@gateflow/ui": "workspace:*"
