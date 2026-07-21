@@ -1,0 +1,20 @@
+apps/design-system/src/app/(docs)/foundations/motion/page.tsx
+  s_5b18009333d04d::t_1bacb93c9171ea 7-19
+  s_5b18009333d04d::t_77559a42ab4531 138
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "a8e806886ad9d83d8c5a3d6e2a151281442dbe2b",
+  "prompts": {},
+  "sessions": {
+    "s_5b18009333d04d": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "3ce028f1-4fde-4a32-9be7-ea7018c8d4b8",
+        "model": "grok-4.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
