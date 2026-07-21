@@ -1,0 +1,21 @@
+scripts/check/.bundle-baseline.json
+  s_c89e15e2e628e8::t_01e2290cf44290 3-4,6-181,184-185,189-320,322-323,327-365,367-368
+CHANGELOG.md
+  s_c89e15e2e628e8::t_6d7558a5aa48ca 13-14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "d291071b9e3d7f44b06a76e6ca2c1fd74a802830",
+  "prompts": {},
+  "sessions": {
+    "s_c89e15e2e628e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2b35f6bb-ea4d-412b-8438-8ebfc73baee1",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
