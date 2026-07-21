@@ -43,7 +43,7 @@ const panelVariants = {
       ease: [0.22, 1, 0.36, 1],
     },
   },
-};
+} as const;
 
 export function Nav({ locale }: { locale: Locale }) {
   const { t } = useTranslation('navigation');

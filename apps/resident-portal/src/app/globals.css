@@ -1,9 +1,5 @@
-/* @import must precede @tailwind — Tailwind expands into real CSS rules */
+/* @import must precede other imports — Tailwind expands into real CSS rules */
 @import "@gateflow/ui/globals.css";
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 @layer base {
   html {
