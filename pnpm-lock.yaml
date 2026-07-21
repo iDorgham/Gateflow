@@ -21298,6 +21298,7 @@ packages:
     engines: { node: 18 || 20 || >=22 }
     dependencies:
       brace-expansion: 5.0.7
+    dev: true
 
   /minimist@1.2.8:
     resolution:
