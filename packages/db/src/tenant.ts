@@ -243,7 +243,10 @@ function applyTenantGuards(
     next.data = data;
   }
 
-  if (operation === 'createMany') {
+  if (
+    operation === 'createMany' ||
+    operation === 'createManyAndReturn'
+  ) {
     // Prisma's createMany `data` accepts a single object or an array
     // (Enumerable<T>) — guard both shapes, not just the array case.
     const isArray = Array.isArray(next.data);
