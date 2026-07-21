@@ -16,7 +16,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 - **[Security]** harden Phase 4 high-risk APIs and HTTP headers
 
-- **[Ci]** fix broken template literal in Lighthouse PR-comment script
+- **[CI]** fix broken template literal in Lighthouse PR-comment script
 
 - **[CI]** restore trustworthy repo scanners (root resolution, nonzero coverage, history secrets, advisory unavailable≠clean)
 - **[CI]** restore full dashboard typecheck in preflight/CI; add skipped-test/--forceExit budgets
