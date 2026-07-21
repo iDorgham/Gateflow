@@ -1,0 +1,27 @@
+apps/marketing/package.json
+  s_c89e15e2e628e8::t_797645a9be1c1b 51
+packages/ai/package.json
+  s_c89e15e2e628e8::t_d2d44747e5a5e4 59
+packages/components/package.json
+  s_c89e15e2e628e8::t_fd2832f414d430 57
+package.json
+  s_c89e15e2e628e8::t_2f0e0a478fad10 90
+packages/ui/package.json
+  s_c89e15e2e628e8::t_4913aafa52a394 84
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "a0c907027dae493606d7c019dde44dd11dde6dae",
+  "prompts": {},
+  "sessions": {
+    "s_c89e15e2e628e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2b35f6bb-ea4d-412b-8438-8ebfc73baee1",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
