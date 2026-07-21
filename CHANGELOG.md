@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Client-Dashboard]** fix typecheck breaks from lucide-react/framer-motion bumps
+
 - **[Ui]** type cubic-bezier easing for design-system motion demo
 - **[Deps]** finish js-yaml/tar/tailwindcss lockfile reconciliation
 
