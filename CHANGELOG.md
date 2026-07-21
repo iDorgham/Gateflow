@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Security]** address PR #155 review findings
+
 - **[Client-Dashboard]** fix typecheck breaks from lucide-react/framer-motion bumps
 
 - **[Deps]** replace faker and restore working ESLint toolchain
