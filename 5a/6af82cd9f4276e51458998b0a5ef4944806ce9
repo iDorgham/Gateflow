@@ -1,0 +1,21 @@
+package.json
+  s_c89e15e2e628e8::t_bd222dd36d70f0 129-131
+CHANGELOG.md
+  s_c89e15e2e628e8::t_d9bb1699a861e7 13-14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "5a6af82cd9f4276e51458998b0a5ef4944806ce9",
+  "prompts": {},
+  "sessions": {
+    "s_c89e15e2e628e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2b35f6bb-ea4d-412b-8438-8ebfc73baee1",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
