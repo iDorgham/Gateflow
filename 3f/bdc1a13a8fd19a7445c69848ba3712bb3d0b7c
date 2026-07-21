@@ -1,0 +1,41 @@
+CHANGELOG.md
+  s_43f45e6b2c9adb::t_77c6f5791251b8 13-16,19-20,24,33,36
+docs/reference/README.md
+  s_43f45e6b2c9adb::t_115fd04366a189 10
+docs/reference/product/PRD.md
+  s_43f45e6b2c9adb::t_12ae1db7bbcc0c 3,5
+  s_43f45e6b2c9adb::t_b4e3527a1ad88a 246-249,251,255-257,261-272
+  s_43f45e6b2c9adb::t_5c6c8d46e5c21c 273
+apps/admin-dashboard/README.md
+  s_43f45e6b2c9adb::t_1da1b883b691f5 32
+  s_43f45e6b2c9adb::t_18d522c53b62a0 26-31
+docs/plan/backlog/ALL_TASKS_BACKLOG.md
+  s_43f45e6b2c9adb::t_76a852c68c674f 11,13,15,17,22
+docs/README.md
+  s_43f45e6b2c9adb::t_51c0e705706ef2 36
+docs/reference/product/FEATURE_LOG.md
+  s_43f45e6b2c9adb::t_a81fa39e32be77 9
+  s_43f45e6b2c9adb::t_43a0c83133f68c 7-8,10-12
+README.md
+  s_43f45e6b2c9adb::t_0cbead07561d88 373,375-387
+  s_43f45e6b2c9adb::t_8b5a81c6cb4c21 82
+  s_43f45e6b2c9adb::t_08c30551b5bddd 150
+docs/reference/product/UPCOMING.md
+  s_43f45e6b2c9adb::t_b1a0d16eff8aed 4-5,20-22,24-32,35-36,45,47-50,53,55-58,71-74
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "3fbdc1a13a8fd19a7445c69848ba3712bb3d0b7c",
+  "prompts": {},
+  "sessions": {
+    "s_43f45e6b2c9adb": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "387081c2-248a-43fe-9a20-7756fc3b9246",
+        "model": "grok-4.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
