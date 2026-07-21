@@ -1,0 +1,91 @@
+apps/admin-dashboard/src/middleware.ts
+  s_5b18009333d04d::t_f53b8c0b62d3ee 79-91,93-96
+  s_5b18009333d04d::t_99caed8afd33ca 271,274-275
+apps/admin-dashboard/src/app/api/cms/generate-section/route.test.ts
+  s_5b18009333d04d::t_413a2988dcd1d9 1-48
+packages/config/security-headers.test.js
+  s_5b18009333d04d::t_787246ec7cb641 1-11
+  s_5b18009333d04d::t_1f4a046ece7853 12-14
+apps/client-dashboard/src/app/api/cron/ai-tasks/route.ts
+  s_5b18009333d04d::t_c6b83d21ec2251 15-26
+  s_5b18009333d04d::t_ecfe7eaa1d48af 55-57,64,95-98
+apps/admin-dashboard/src/lib/require-admin-api.ts
+  s_5b18009333d04d::t_b86d529cf28d38 1-19
+apps/admin-dashboard/src/app/api/cms/generate-image/route.ts
+  s_5b18009333d04d::t_5a085f43e02af1 2,5-7
+apps/admin-dashboard/src/app/api/cms/blog/suggest-topics/route.ts
+  s_5b18009333d04d::t_18372362ee6924 2-6
+apps/admin-dashboard/src/app/api/crm/deals/route.ts
+  s_5b18009333d04d::t_00646ab435316d 3,6-8,12-18,20,26
+  s_5b18009333d04d::t_b8c19ccb4efae0 21
+packages/config/security-headers.js
+  s_5b18009333d04d::t_00e138cac86888 1-35
+apps/admin-dashboard/src/app/api/cms/generate-section/route.ts
+  s_5b18009333d04d::t_43013e4b1e5afd 5
+  s_5b18009333d04d::t_34ba1cfde30d86 41-43
+apps/admin-dashboard/src/app/api/admin/login/route.ts
+  s_5b18009333d04d::t_a34cff031e8bc3 9-26,29-39
+  s_5b18009333d04d::t_3698bcb0b1b8dd 40-42
+  s_5b18009333d04d::t_d005b7c98070cf 46
+apps/marketing/next.config.js
+  s_5b18009333d04d::t_b1952c89523636 2
+apps/admin-dashboard/src/app/api/crm/contacts/route.ts
+  s_5b18009333d04d::t_0c45bfab57058d 3,6-8,12-18,20-21,26
+apps/client-dashboard/src/lib/api-guards.ts
+  s_5b18009333d04d::t_fb090b07cfd7ca 1-3,6-16,18-46,48,50-83
+  s_5b18009333d04d::t_1dbec66b1dc885 4-5,17,47,49
+apps/client-dashboard/src/app/api/danger/delete-workspace/route.ts
+  s_5b18009333d04d::t_08e6bfa6ecb922 31,36-39,42
+  s_5b18009333d04d::t_5e1d13b42cc41e 4,21-26,28
+  s_5b18009333d04d::t_034b20b526f97e 43-45
+  s_5b18009333d04d::t_226dfaba1af232 46,54-55,63,67-70
+apps/resident-portal/next.config.js
+  s_5b18009333d04d::t_f65fbbc647050e 2
+apps/admin-dashboard/src/app/api/crm/companies/route.test.ts
+  s_5b18009333d04d::t_9a78e5c521badf 1-36
+apps/client-dashboard/src/app/api/danger/delete-workspace/route.test.ts
+  s_5b18009333d04d::t_c9e6ec28b34029 1-65
+  s_5b18009333d04d::t_a5a4fc04369774 66-68
+  s_5b18009333d04d::t_624193b6f13300 69-70
+docs/plan/Active/audit_remediation_2026/HIGH_RISK_ROUTES.md
+  s_5b18009333d04d::t_68bc0632d6aee1 1-46
+apps/admin-dashboard/src/app/api/team/roles/route.ts
+  s_5b18009333d04d::t_e1102c1467d075 3,6-8,10,15
+apps/client-dashboard/src/app/api/danger/export/route.ts
+  s_5b18009333d04d::t_c2fa81231e3d9d 1,3,8-13,15,17-102,106-108,137
+  s_5b18009333d04d::t_e76af783ff120e 109-111
+  s_5b18009333d04d::t_013d15bd9b403e 138
+  s_5b18009333d04d::t_625b447e120acc 112-121
+apps/client-dashboard/src/app/api/cron/ai-tasks/route.test.ts
+  s_5b18009333d04d::t_99242ce59cba5d 1-59
+apps/admin-dashboard/src/app/api/support/tickets/route.ts
+  s_5b18009333d04d::t_5d85f5b53ff617 3,6-8,26
+apps/client-dashboard/next.config.js
+  s_5b18009333d04d::t_65a1395d1c40b0 6
+apps/admin-dashboard/src/app/api/cms/blog/generate-draft/route.ts
+  s_5b18009333d04d::t_681ff3c6827979 2,5-7
+apps/admin-dashboard/src/app/api/crm/companies/route.ts
+  s_5b18009333d04d::t_10dfceb25d91d9 3,6-8,13-14,19
+apps/admin-dashboard/next.config.js
+  s_5b18009333d04d::t_4443eebb9048bc 1
+apps/admin-dashboard/src/app/api/cms/landing-pages/[id]/route.ts
+  s_5b18009333d04d::t_a2ce3306b1e324 2,8-10,28-30
+apps/admin-dashboard/src/app/api/cms/menus/route.ts
+  s_5b18009333d04d::t_e30d5514f1a6a8 2-6,36-38
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "8714e02126dccfb3c84249d2ba004bdd298c58c9",
+  "prompts": {},
+  "sessions": {
+    "s_5b18009333d04d": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "3ce028f1-4fde-4a32-9be7-ea7018c8d4b8",
+        "model": "grok-4.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
