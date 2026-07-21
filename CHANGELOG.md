@@ -18,21 +18,15 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 - **[Security]** harden Phase 4 high-risk APIs and HTTP headers
 
-- **[Ci]** fix broken template literal in Lighthouse PR-comment script
+- **[CI]** fix broken template literal in Lighthouse PR-comment script
+
 - **[CI]** restore trustworthy repo scanners (root resolution, nonzero coverage, history secrets, advisory unavailable≠clean)
 - **[CI]** restore full dashboard typecheck in preflight/CI; add skipped-test/--forceExit budgets
+- **[Deps]** pin js-yaml overrides to patched 3.15.0 / 4.3.0 (GHSA-52cp-r559-cp3m)
+- **[Deps]** pin tar override to >=7.5.19 (node-tar DoS advisories)
 - **[Deps]** bump brace-expansion override to patched 5.0.7+
 
 - **[Security]** request-local fail-closed tenant isolation
-- **[Security]** close tenant-isolation gaps from PR review (createMany, org reassignment, scanLog create, soft-delete writes)
-
-- **[Client-Dashboard]** fix typecheck breaks from lucide-react/framer-motion bumps
-- **[Ui]** type cubic-bezier easing for design-system motion demo
-- **[Deps]** finish js-yaml/tar/tailwindcss lockfile reconciliation
-- **[Deps]** replace faker and restore working ESLint toolchain
-- **[Deps]** pin js-yaml and tar overrides for advisory gate
-- **[Ci]** remove baseUrl from tsconfigs for TypeScript 7 compat
-- **[Ci]** align tailwindcss specifier with the already-resolved v4 lockfile
 
 - **[Deploy]** wire Vercel `ignoreCommand` to skip Dependabot and automatic Preview builds (Hobby quota)
 
