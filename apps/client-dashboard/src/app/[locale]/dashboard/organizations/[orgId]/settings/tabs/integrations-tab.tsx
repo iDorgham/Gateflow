@@ -11,7 +11,7 @@ import {
   Badge,
 } from '@gateflow/ui';
 import {
-  Slack,
+  Hash,
   Zap,
   MessageSquare,
   Database,
@@ -35,7 +35,7 @@ export function IntegrationsTab() {
       name: 'Slack',
       description:
         'Stream scan alerts and daily gate summaries to your Slack channels.',
-      icon: Slack,
+      icon: Hash,
       category: 'Messaging',
       status: 'Connected',
       accent: 'emerald',

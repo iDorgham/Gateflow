@@ -14,13 +14,12 @@
     "isolatedModules": true,
     "incremental": true,
     "jsx": "react-jsx",
-    "baseUrl": ".",
     "paths": {
-      "@gate-access/ui": ["packages/ui/src"],
-      "@gate-access/api-client": ["packages/api-client/src"],
-      "@gate-access/types": ["packages/types/src"],
-      "@gate-access/i18n": ["packages/i18n/src"],
-      "@gate-access/config": ["packages/config"]
+      "@gate-access/ui": ["./packages/ui/src"],
+      "@gate-access/api-client": ["./packages/api-client/src"],
+      "@gate-access/types": ["./packages/types/src"],
+      "@gate-access/i18n": ["./packages/i18n/src"],
+      "@gate-access/config": ["./packages/config"]
     },
     "types": ["jest"]
   },
