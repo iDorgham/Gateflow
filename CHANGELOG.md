@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Client-Dashboard]** fix typecheck breaks from lucide-react/framer-motion bumps
+
 - **[Deps]** replace faker and restore working ESLint toolchain
 
 - **[Security]** harden Phase 4 high-risk APIs and HTTP headers
