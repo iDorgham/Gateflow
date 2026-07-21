@@ -10,6 +10,9 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Deps]** replace faker and restore working ESLint toolchain
+- **[Deps]** pin js-yaml and tar overrides for advisory gate
+
 - **[Ci]** remove baseUrl from tsconfigs for TypeScript 7 compat
 
 - **[Ci]** align tailwindcss specifier with the already-resolved v4 lockfile
