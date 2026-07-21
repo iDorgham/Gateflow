@@ -5,8 +5,12 @@ const mockPrisma = {
     findMany: jest.fn(async (_args?: unknown) => []),
     count: jest.fn(async (_args?: unknown) => 0),
     create: jest.fn(async (_args?: unknown) => ({ id: 'u1' })),
+    createMany: jest.fn(async (_args?: unknown) => ({ count: 1 })),
     update: jest.fn(async (_args?: unknown) => ({ id: 'u1' })),
+    updateMany: jest.fn(async (_args?: unknown) => ({ count: 1 })),
+    upsert: jest.fn(async (_args?: unknown) => ({ id: 'u1' })),
     delete: jest.fn(async (_args?: unknown) => ({ id: 'u1' })),
+    deleteMany: jest.fn(async (_args?: unknown) => ({ count: 1 })),
   },
   organization: {
     findFirst: jest.fn(async (_args?: unknown) => null),
@@ -26,6 +30,8 @@ const mockPrisma = {
   scanLog: {
     findMany: jest.fn(async (_args?: unknown) => []),
     count: jest.fn(async (_args?: unknown) => 0),
+    create: jest.fn(async (_args?: unknown) => ({ id: 's1' })),
+    createMany: jest.fn(async (_args?: unknown) => ({ count: 1 })),
   },
   project: {
     findMany: jest.fn(async (_args?: unknown) => []),
@@ -219,6 +225,125 @@ describe('Organization Context Isolation (ALS)', () => {
           },
         },
       });
+    });
+
+    it('rejects scanLog.create and scanLog.createMany on the tenant client', async () => {
+      setOrganizationContext({ organizationId: 'org-123' });
+
+      await expect(
+        db.scanLog.create({ data: { gateId: 'g1' } })
+      ).rejects.toBeInstanceOf(TenantContextError);
+      expect(mockPrisma.scanLog.create).not.toHaveBeenCalled();
+
+      await expect(
+        db.scanLog.createMany({ data: [{ gateId: 'g1' }] })
+      ).rejects.toBeInstanceOf(TenantContextError);
+      expect(mockPrisma.scanLog.createMany).not.toHaveBeenCalled();
+    });
+
+    it('injects organizationId on createMany given a single object (Enumerable<T>)', async () => {
+      setOrganizationContext({ organizationId: 'org-123' });
+      await db.user.createMany({ data: { email: 'a@b.com' } });
+
+      expect(mockPrisma.user.createMany).toHaveBeenCalledWith({
+        data: { email: 'a@b.com', organizationId: 'org-123' },
+      });
+    });
+
+    it('injects organizationId on every row of createMany given an array', async () => {
+      setOrganizationContext({ organizationId: 'org-123' });
+      await db.user.createMany({
+        data: [{ email: 'a@b.com' }, { email: 'b@b.com' }],
+      });
+
+      expect(mockPrisma.user.createMany).toHaveBeenCalledWith({
+        data: [
+          { email: 'a@b.com', organizationId: 'org-123' },
+          { email: 'b@b.com', organizationId: 'org-123' },
+        ],
+      });
+    });
+
+    it('rejects createMany with a cross-tenant organizationId in any row', async () => {
+      setOrganizationContext({ organizationId: 'org-123' });
+      await expect(
+        db.user.createMany({
+          data: [
+            { email: 'a@b.com' },
+            { email: 'b@b.com', organizationId: 'other-org' },
+          ],
+        })
+      ).rejects.toBeInstanceOf(TenantContextError);
+      expect(mockPrisma.user.createMany).not.toHaveBeenCalled();
+    });
+
+    it('rejects update attempting to reassign organizationId', async () => {
+      setOrganizationContext({ organizationId: 'org-123' });
+      await expect(
+        db.user.update({
+          where: { id: 'u1' },
+          data: { organizationId: 'other-org' },
+        })
+      ).rejects.toBeInstanceOf(TenantContextError);
+      expect(mockPrisma.user.update).not.toHaveBeenCalled();
+    });
+
+    it('strips a no-op same-org organizationId from update data', async () => {
+      setOrganizationContext({ organizationId: 'org-123' });
+      await db.user.update({
+        where: { id: 'u1' },
+        data: { name: 'n', organizationId: 'org-123' },
+      });
+      expect(mockPrisma.user.update).toHaveBeenCalledWith({
+        where: { id: 'u1', organizationId: 'org-123', deletedAt: null },
+        data: { name: 'n' },
+      });
+    });
+
+    it('rejects updateMany attempting to reassign organizationId', async () => {
+      setOrganizationContext({ organizationId: 'org-123' });
+      await expect(
+        db.user.updateMany({
+          where: {},
+          data: { organizationId: 'other-org' },
+        })
+      ).rejects.toBeInstanceOf(TenantContextError);
+      expect(mockPrisma.user.updateMany).not.toHaveBeenCalled();
+    });
+
+    it('rejects upsert update-branch attempting to reassign organizationId', async () => {
+      setOrganizationContext({ organizationId: 'org-123' });
+      await expect(
+        db.user.upsert({
+          where: { id: 'u1' },
+          create: { email: 'a@b.com' },
+          update: { organizationId: 'other-org' },
+        })
+      ).rejects.toBeInstanceOf(TenantContextError);
+      expect(mockPrisma.user.upsert).not.toHaveBeenCalled();
+    });
+
+    it('adds deletedAt: null to update/delete where on soft-delete models', async () => {
+      setOrganizationContext({ organizationId: 'org-123' });
+      await db.user.update({ where: { id: 'u1' }, data: { name: 'n' } });
+      expect(mockPrisma.user.update).toHaveBeenCalledWith({
+        where: { id: 'u1', organizationId: 'org-123', deletedAt: null },
+        data: { name: 'n' },
+      });
+    });
+
+    it('rejects hard delete on soft-delete models', async () => {
+      setOrganizationContext({ organizationId: 'org-123' });
+
+      await expect(
+        db.user.delete({ where: { id: 'u1' } })
+      ).rejects.toBeInstanceOf(TenantContextError);
+      expect(mockPrisma.user.delete).not.toHaveBeenCalled();
+
+      await expect(db.user.deleteMany({ where: {} })).rejects.toBeInstanceOf(
+        TenantContextError
+      );
+      expect(mockPrisma.user.deleteMany).not.toHaveBeenCalled();
     });
   });
 
