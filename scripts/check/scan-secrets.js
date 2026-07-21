@@ -337,9 +337,7 @@ function scanHistory(maxCommits) {
           name,
           severity,
           line: i + 1,
-          preview: line
-            .trim()
-            .replace(re, (m) => m.slice(0, 6) + '***REDACTED***'),
+          preview: '[REDACTED]',
           file: `git-history(last-${maxCommits})`,
         });
       }
