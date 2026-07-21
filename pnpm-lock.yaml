@@ -134,8 +134,8 @@ importers:
         specifier: ^3.0.139
         version: 3.0.140(react@19.2.7)(zod@3.25.76)
       '@formatjs/intl-localematcher':
-        specifier: ^0.8.1
-        version: 0.8.2
+        specifier: ^0.8.13
+        version: 0.8.13
       '@gate-access/db':
         specifier: ^0.1.0
         version: link:../../packages/db
@@ -294,8 +294,8 @@ importers:
         specifier: ^11.1.1
         version: 11.2.0(react@19.2.7)
       '@formatjs/intl-localematcher':
-        specifier: ^0.8.1
-        version: 0.8.2
+        specifier: ^0.8.13
+        version: 0.8.13
       '@gate-access/api-client':
         specifier: workspace:*
         version: link:../../packages/api-client
@@ -569,8 +569,8 @@ importers:
         specifier: ^0.10.3
         version: 0.10.3
       '@formatjs/intl-localematcher':
-        specifier: ^0.8.1
-        version: 0.8.2
+        specifier: ^0.8.13
+        version: 0.8.13
       '@gate-access/db':
         specifier: workspace:^0.1.0
         version: link:../../packages/db
@@ -4426,8 +4426,8 @@ packages:
       tslib: 2.8.1
     dev: true
 
-  /@formatjs/fast-memoize@3.1.1:
-    resolution: {integrity: sha512-CbNbf+tlJn1baRnPkNePnBqTLxGliG6DDgNa/UtV66abwIjwsliPMOt0172tzxABYzSuxZBZfcp//qI8AvBWPg==}
+  /@formatjs/fast-memoize@3.1.7:
+    resolution: {integrity: sha512-zXfhLpvA6T7+efdt9JLbBwZ00tT7NsBMDVnDu8rpHeNNv8KfRZAMo2gkG0k9lK/Nzc//3kJ9pImsfuJxk3KhUA==}
     dev: false
 
   /@formatjs/icu-messageformat-parser@2.11.4:
@@ -4451,10 +4451,10 @@ packages:
       tslib: 2.8.1
     dev: true
 
-  /@formatjs/intl-localematcher@0.8.2:
-    resolution: {integrity: sha512-q05KMYGJLyqFNFtIb8NhWLF5X3aK/k0wYt7dnRFuy6aLQL+vUwQ1cg5cO4qawEiINybeCPXAWlprY2mSBjSXAQ==}
+  /@formatjs/intl-localematcher@0.8.13:
+    resolution: {integrity: sha512-kHEAFOkeJSPNi7c5PaKaRjxcBrJwzzt81ifUu+8uve1EDW/VJl83KsxmqgqNZLzcFEhSliZGvx3+pk/RH0IOmg==}
     dependencies:
-      '@formatjs/fast-memoize': 3.1.1
+      '@formatjs/fast-memoize': 3.1.7
     dev: false
 
   /@hookform/resolvers@5.2.2(react-hook-form@7.82.0):
