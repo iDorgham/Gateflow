@@ -10,39 +10,30 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
-- **[Security]** address PR #155 review findings
-
-- **[Client-Dashboard]** fix typecheck breaks from lucide-react/framer-motion bumps
-
-- **[Deps]** replace faker and restore working ESLint toolchain
-
-- **[Security]** harden Phase 4 high-risk APIs and HTTP headers
-
-- **[CI]** fix broken template literal in Lighthouse PR-comment script
-
+- **[Security]** complete audit remediation 2026 (phases 1–4) — P0 containment, request-local fail-closed tenant isolation, trustworthy CI scanners, high-risk API guards + shared security headers
+- **[Security]** address PR #155 review findings (CMS public GET exception, bearer-key API access, bounded admin-login throttle)
+- **[Security]** harden Phase 4 high-risk APIs and HTTP headers (`withApiGuards`, `requireAdminApi`, cron fail-closed)
+- **[Security]** request-local fail-closed tenant isolation (AsyncLocalStorage `db`)
 - **[CI]** restore trustworthy repo scanners (root resolution, nonzero coverage, history secrets, advisory unavailable≠clean)
 - **[CI]** restore full dashboard typecheck in preflight/CI; add skipped-test/--forceExit budgets
+- **[CI]** fix broken template literal in Lighthouse PR-comment script
+- **[Deps]** replace faker and restore working ESLint toolchain
 - **[Deps]** pin js-yaml overrides to patched 3.15.0 / 4.3.0 (GHSA-52cp-r559-cp3m)
 - **[Deps]** pin tar override to >=7.5.19 (node-tar DoS advisories)
 - **[Deps]** bump brace-expansion override to patched 5.0.7+
-
-- **[Security]** request-local fail-closed tenant isolation
-
+- **[Client-Dashboard]** fix typecheck breaks from lucide-react/framer-motion bumps
 - **[Deploy]** wire Vercel `ignoreCommand` to skip Dependabot and automatic Preview builds (Hobby quota)
-
 - **[Db]** unblock production migrate after failed platform_evolution
-
 - **[DB]** clear production P3009 on `20260405135145_platform_evolution` (no-op migration + `db-migrate` workflow)
-
-- **[Workspace]** tracking next changes after v0.2.0
 
 ### AI Tools
 
 ### Apps
 
+- **[Security]** audit remediation phase 4 — admin/CMS/CRM API auth, rate limits, shared HSTS+CSP headers
 - **[Security]** audit remediation phase 3 — trustworthy CI scanners + full typecheck
 - **[Security]** audit remediation phase 2 — request-local fail-closed tenant `db` (ALS)
-
+- **[Security]** audit remediation phase 1 — remove bootstrap reset route; sanitize CMS HTML/branding CSS
 - **[Admin]** publish CMS pages by id or slug
 
 ---

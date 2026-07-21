@@ -1,8 +1,8 @@
 # <p align="center">GateFlow — Feature Pipeline & Roadmap</p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Status-Reviewing_Backlog-blueviolet?style=for-the-badge" alt="Status">
-  <img src="https://img.shields.io/badge/Next_Sprint-AI_&_Performance-blue?style=for-the-badge" alt="Next Sprint">
+  <img src="https://img.shields.io/badge/Status-Security_Shipped_Ready_Next-blueviolet?style=for-the-badge" alt="Status">
+  <img src="https://img.shields.io/badge/Next_Sprint-Resident_%26_Scanner-blue?style=for-the-badge" alt="Next Sprint">
 </p>
 
 ---
@@ -17,16 +17,23 @@ Real-time status of the engineering pipeline.
 
 _Plan folders use lifecycle layout: `Draft/` → `Ready/` → `Active/` → `Complete/` (see `docs/development/PLAN_LIFECYCLE.md`)._
 
-| Initiative                    | Goal                        | Phase / note                                                                                                              | Plan                                               |
-| :---------------------------- | :-------------------------- | :------------------------------------------------------------------------------------------------------------------------ | :------------------------------------------------- |
-| **Admin Dashboard Evolution** | Side menu, CMS, & builder   | Phase 1 — Side Menu & Organizations per [PLAN](../plan/Ready/admin_dashboard_evolution/PLAN_admin_dashboard_evolution.md) | [Folder](../plan/Ready/admin_dashboard_evolution/) |
-| **Admin Dashboard Redesign**  | V10 alignment & token audit | Phase 1 — Foundation & Token Audit per [PLAN](../plan/Active/admin_dashboard_redesign/PLAN_admin_dashboard_redesign.md)   | [Folder](../plan/Active/admin_dashboard_redesign/) |
+| Initiative                 | Goal                          | Phase / note                                                      | Plan                                                |
+| :------------------------- | :---------------------------- | :---------------------------------------------------------------- | :-------------------------------------------------- |
+| **Audit Remediation 2026** | P0–P2 security + CI hardening | Phases 1–4 code shipped; residual ops credential-rotation receipt | [Folder](../../plan/Active/audit_remediation_2026/) |
 
-### 🟡 In Planning
+### 🟡 In Planning (Ready)
 
-- **Resident Portal Responsive**: PWA, mobile navigation, and offline QR cache.
-- **Scanner Onboarding**: Securing scanner sessions and multi-step ADS wizards.
+| Initiative                          | Goal                                             | Plan                                                   |
+| :---------------------------------- | :----------------------------------------------- | :----------------------------------------------------- |
+| **Resident Portal Responsive**      | PWA, mobile navigation, offline QR cache         | [Folder](../../plan/Ready/resident_portal_responsive/) |
+| **Scanner Onboarding Session**      | Secure scanner sessions + multi-step ADS wizards | [Folder](../../plan/Ready/scanner_onboarding_session/) |
+| **Org Types Dashboard (follow-up)** | Config-driven modules / terminology polish       | [Folder](../../plan/Ready/org_types_dashboard/)        |
+
+### ⚪ Draft / backlog ideas
+
 - **WhatsApp/SMS Gateway**: Mobile-first pass delivery for MENA regions.
+- **Self-serve billing**: Tenant onboarding and subscription portal.
+- **gateflow_readiness_market_leadership_2026**: Broader readiness initiative (reconcile with audit outcomes).
 
 ---
 
@@ -35,19 +42,20 @@ _Plan folders use lifecycle layout: `Draft/` → `Ready/` → `Active/` → `Com
 Accomplishments from the last two sprints.
 
 > [!TIP]
-> **GateFlow Design System [v1.0]** — _Completed 2026-04-06_ — [Plan archive](../plan/Complete/gateflow_design_system/PLAN_gateflow_design_system.md)
+> **Audit Remediation 2026** — _Phases 1–4 shipped 2026-07-20 → 2026-07-21_ — [Plan](../../plan/Active/audit_remediation_2026/)
 >
-> - New `@gateflow/ui` component library (Tailwind v4 ready).
-> - Token-driven architecture for multi-theme scaling.
-> - `@gateflow/ai` UI library for agentic chat and streaming.
-> - Full RTL & LTR layout parity.
+> - Removed production bootstrap/reset-admin surface; CMS HTML + branding CSS sanitization.
+> - Request-local fail-closed tenant `db` (AsyncLocalStorage).
+> - Trustworthy CI scanners + full dashboard typecheck in preflight.
+> - High-risk API guards, admin login throttle, shared HSTS+CSP headers.
 
 > [!TIP]
-> **Admin Emulation Hub [v4.0]** — _Shipped 2026-04-02_
+> **Platform / Admin / Design System (Q2 2026)**
 >
-> - Real-time SSE Monitoring Hub for operational oversight.
-> - Advanced Seeding Wizard for high-density hierarchies.
-> - Global Emulation Mode for platform-wide traffic simulation.
+> - GateFlow Design System [v1.0] — [archive](../../plan/Complete/gateflow_design_system/)
+> - Admin Dashboard Evolution (side menu, CMS, builder) — [archive](../../plan/Complete/admin_dashboard_evolution/)
+> - Org Types Dashboard — [archive](../../plan/Complete/org_types_dashboard/)
+> - Platform Evolution (AI CMS page builder) — [archive](../../plan/Complete/platform_evolution/)
 
 > [!NOTE]
 > **Marketing Suite Foundation** — _Shipped 2026-03-23_
@@ -60,9 +68,10 @@ Accomplishments from the last two sprints.
 
 ## 📈 Strategic Goals (Q3 2026)
 
-1.  **Lighthouse Perfection**: Achieving consistent 100/100 performance across all apps via [pagespeed_100] initiative.
-2.  **Zero-Trust Hardening**: Expanding offline HMAC capabilities for multi-gate projects.
-3.  **Revenue & Billing**: Launching the [self-serve-billing] portal for rapid tenant onboarding.
+1. **Zero-Trust Hardening**: Hold audit remediation gains; finish ops credential rotation; expand offline HMAC for multi-gate projects.
+2. **Resident & Scanner UX**: Ship Ready plans for responsive resident portal and scanner onboarding.
+3. **Lighthouse Perfection**: Consistent performance across marketing and dashboards (`*.gateflow.site`).
+4. **Revenue & Billing**: Self-serve billing portal for rapid tenant onboarding.
 
 ---
 

@@ -23,12 +23,13 @@ The **GateFlow Admin Dashboard** is the command center for the platform provider
 
 ### Core Capabilities
 
-| Capability                 | Description                                                |
-| :------------------------- | :--------------------------------------------------------- |
-| **Organization Lifecycle** | Onboard, suspend, and configure tenant properties          |
-| **Global Insights**        | Track platform-wide scan volume, active users, and revenue |
-| **AI-Powered Admin**       | Natural language interface for generating platform reports |
-| **System Guard**           | Live monitoring of database latency and Redis cache health |
+| Capability                 | Description                                                             |
+| :------------------------- | :---------------------------------------------------------------------- |
+| **Organization Lifecycle** | Onboard, suspend, and configure tenant properties                       |
+| **Global Insights**        | Track platform-wide scan volume, active users, and revenue              |
+| **AI-Powered Admin**       | Natural language interface for generating platform reports              |
+| **System Guard**           | Live monitoring of database latency and Redis cache health              |
+| **Hardened Admin APIs**    | Auth/RBAC + rate limits on CMS/CRM/support/team routes; shared HSTS+CSP |
 
 ---
 

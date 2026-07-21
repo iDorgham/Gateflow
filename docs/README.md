@@ -33,7 +33,7 @@ _Enterprise-grade architecture with 6 interconnected applications_
 
 | Document                                                                | Purpose                               |
 | :---------------------------------------------------------------------- | :------------------------------------ |
-| [Master PRD (v9)](reference/product/PRD.md)                             | Source of truth for scope and roadmap |
+| [Master PRD (v12.1)](reference/product/PRD.md)                          | Source of truth for scope and roadmap |
 | [Marketing suite](reference/product/MARKETING_SUITE.md)                 | CRM webhooks, UTM, pixels             |
 | [Upcoming](reference/product/UPCOMING.md)                               | Near-term initiatives                 |
 | [Progress dashboard](reference/workspace/PROJECT_PROGRESS_DASHBOARD.md) | Milestones and epics                  |

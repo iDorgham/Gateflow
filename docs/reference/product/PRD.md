@@ -1,8 +1,8 @@
 # GateFlow - Master Product Requirements Document (PRD)
 
-**Document Version:** 12.0 (Ultra Detailed Unified Edition)  
+**Document Version:** 12.1 (Ultra Detailed Unified Edition)  
 **Status:** Active / Production  
-**Last Updated:** 2026-04-30  
+**Last Updated:** 2026-07-21  
 **Confidentiality:** Internal Engineering, Product, Operations
 
 ---
@@ -243,15 +243,33 @@ GateFlow uses app-local API handlers (`app/api/**/route.ts`) as a distributed AP
 ### 9.1 Security Invariants
 
 - Multi-tenant isolation is mandatory and non-negotiable.
-- Sensitive credential material must never be committed.
+- Tenant-owned reads/writes use request-local context (`AsyncLocalStorage`) and **fail closed** when organization context is missing.
+- Soft-deletable reads include `deletedAt: null` unless an explicit privileged path opts out.
+- Sensitive credential material must never be committed; no production bootstrap reset routes or fallback secrets.
+- Untrusted CMS HTML and branding CSS must be allowlist-validated before browser sinks.
 - Access/session controls must follow secure token lifecycle principles.
-- QR/access integrity protections must be maintained end-to-end.
+- QR/access integrity protections must be maintained end-to-end (HMAC-SHA256 signed payloads; `scanUuid` offline dedup).
 
 ### 9.2 Operational Security Requirements
 
-- Security checks integrated into CI and preflight loops.
+- Security checks integrated into CI and preflight loops (repo scanners fail on zero-file / unavailable advisory results).
+- High-risk admin/API routes enforce auth, RBAC, validation, and rate limits; shared HSTS + CSP headers across Next.js apps.
+- Cron and privileged automation fail closed without strong secrets.
 - Governance visibility for critical admin and access operations.
 - Reproducible audit trail for high-risk actions.
+
+### 9.3 Audit Remediation 2026
+
+**Status:** ✅ Complete (phases 1–4 shipped 2026-07-20 → 2026-07-21) | Plan: `docs/plan/Active/audit_remediation_2026/`
+
+| Phase                 | Outcome                                                                                                        |
+| :-------------------- | :------------------------------------------------------------------------------------------------------------- |
+| 1 — P0 containment    | Removed deployable admin reset/bootstrap route; CMS HTML + branding CSS sanitization; CI bootstrap-route guard |
+| 2 — Tenant isolation  | Request-local fail-closed tenant `db`; privileged client for explicit cross-tenant ops                         |
+| 3 — Trustworthy CI    | Scanner root resolution, nonzero coverage, history secrets, full dashboard typecheck in preflight              |
+| 4 — API certification | High-risk API guards, admin login throttle, shared security headers, cron fail-closed                          |
+
+Residual ops follow-up (non-blocking for code ship): credential-rotation receipt for Phase 1 secrets.
 
 ---
 

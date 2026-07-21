@@ -79,6 +79,7 @@ The apps do not operate as separate products. They share the same organizations,
 - [Master Architecture](#-master-architecture)
 - [Strategic Core Pillars](#-strategic-core-pillars)
 - [Security & Compliance](#-security--compliance)
+- [Recent Engineering Activity](#-recent-engineering-activity)
 - [Analytics & Intelligence](#-analytics--intelligence)
 - [Localization & i18n](#-localization--i18n)
 - [The Ralph Loop Automation](#-the-ralph-loop-automation)
@@ -146,7 +147,7 @@ Resident Mobile / Portal
 
 The README does **not** duplicate that document. Open **UPCOMING.md** for tables, sprint status, and initiative detail; refresh this section only when you want a new high-level teaser line here.
 
-> **Snapshot (see UPCOMING.md for live status):** GateFlow Design System completed · Admin Dashboard Evolution (Side Menu & CMS) · resident-portal responsive overhaul · scanner-app onboarding wizards.
+> **Snapshot (see UPCOMING.md for live status):** Audit remediation 2026 phases 1–4 shipped · Design System + Admin Evolution complete · next Ready: resident-portal responsive · scanner onboarding.
 
 ---
 
@@ -369,9 +370,21 @@ A global design token architecture ensures that brand identity, typography, and 
 GateFlow is built with a "Security-by-Design" philosophy.
 
 - **HMAC-SHA256 Signing**: Every QR pass is cryptographically signed and immutable.
-- **Tenant Isolation**: Prisma middleware enforces `organizationId` scoping on every database query.
+- **Fail-closed Tenant Isolation**: Request-local Prisma tenant context (`AsyncLocalStorage`) scopes `organizationId` and fails closed when context is missing.
 - **AES-256 Encryption**: Native encryption for sensitive offline scan queues.
-- **RBAC Enforcement**: Granular Role-Based Access Control across all dashboards.
+- **RBAC + API Guards**: Granular Role-Based Access Control; high-risk admin APIs use auth, validation, and rate limits.
+- **Shared Security Headers**: HSTS + CSP applied across Next.js apps; CMS HTML/CSS sanitized at trust boundaries.
+- **Trustworthy CI**: Repo scanners fail on zero-file or unavailable advisory results; full dashboard typecheck in preflight.
+
+See **[PRD §9](docs/reference/product/PRD.md)** and **[CHANGELOG](CHANGELOG.md)** for the 2026 audit remediation outcomes.
+
+---
+
+## 📅 Recent Engineering Activity
+
+- **[Audit Remediation 2026]:** Phases 1–4 shipped — P0 containment, fail-closed tenancy, CI scanners, API guards + security headers (PRs #153–#155)
+- **[Deploy]:** Vercel `ignoreCommand` skips Dependabot and automatic Preview builds (Hobby quota)
+- **[DB]:** Production migrate unblock for stuck `platform_evolution` migration
 
 ---
 
