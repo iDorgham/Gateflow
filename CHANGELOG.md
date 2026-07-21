@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Build]** complete Tailwind v4 migration — production builds were broken
+
 - **[Security]** complete audit remediation 2026 (phases 1–4) — P0 containment, request-local fail-closed tenant isolation, trustworthy CI scanners, high-risk API guards + shared security headers
 - **[Security]** address PR #155 review findings (CMS public GET exception, bearer-key API access, bounded admin-login throttle)
 - **[Security]** harden Phase 4 high-risk APIs and HTTP headers (`withApiGuards`, `requireAdminApi`, cron fail-closed)
