@@ -1,0 +1,24 @@
+apps/admin-dashboard/src/middleware.ts
+  s_c89e15e2e628e8::t_3393a5764089df 130-140
+  s_c89e15e2e628e8::t_3fcf70ef3abec6 88-100,103,107
+apps/admin-dashboard/src/app/api/admin/login/route.ts
+  s_c89e15e2e628e8::t_b51d211091d831 9-16,20,25-35,39-46
+.github/workflows/ci.yml
+  s_c89e15e2e628e8::t_3c77488e4db985 117-118
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "dfa11f6ed42aee0ea85edd8fef67e4cbef33ff06",
+  "prompts": {},
+  "sessions": {
+    "s_c89e15e2e628e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2b35f6bb-ea4d-412b-8438-8ebfc73baee1",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
