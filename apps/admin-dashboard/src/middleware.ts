@@ -85,15 +85,26 @@ const PUBLIC_API_PREFIXES = [
   '/api/cms/pages/public/',
 ];
 
-function isPublicApiPath(pathname: string): boolean {
-  return PUBLIC_API_PREFIXES.some((prefix) => pathname.startsWith(prefix));
+/** Single-segment `/api/cms/pages/[slug]` — public GET, admin-only PATCH. */
+const CMS_PAGE_SLUG_PATTERN = /^\/api\/cms\/pages\/[^/]+$/;
+
+function isPublicApiPath(pathname: string, method: string): boolean {
+  if (PUBLIC_API_PREFIXES.some((prefix) => pathname.startsWith(prefix))) {
+    return true;
+  }
+  // Consumed by apps/marketing and partner sites without an admin session;
+  // PATCH on the same route must stay behind the session gate.
+  if (method === 'GET' && CMS_PAGE_SLUG_PATTERN.test(pathname)) {
+    return true;
+  }
+  return false;
 }
 
-function requiresAdminPortalAuth(pathname: string): boolean {
+function requiresAdminPortalAuth(pathname: string, method: string): boolean {
   // Defense in depth: all admin API surfaces require a session except public prefixes.
   // Previously only `/api/admin/*` was gated — CMS/CRM/support/team leaked.
   if (pathname.startsWith('/api/')) {
-    return !isPublicApiPath(pathname);
+    return !isPublicApiPath(pathname, method);
   }
   if (!pathnameHasLocale(pathname)) {
     return false;
@@ -116,7 +127,17 @@ async function enforceAdminPortalSession(
   request: NextRequest,
   pathname: string
 ): Promise<NextResponse | null> {
-  if (!requiresAdminPortalAuth(pathname)) {
+  if (!requiresAdminPortalAuth(pathname, request.method)) {
+    return null;
+  }
+
+  // Bearer-authenticated API access (adminAuthorizationKey) is validated by
+  // the route handler itself via `isAdminAuthorized` — this gate only
+  // enforces the cookie session, so let bearer requests through to it.
+  if (
+    pathname.startsWith('/api/') &&
+    request.headers.get('authorization')?.startsWith('Bearer ')
+  ) {
     return null;
   }
 

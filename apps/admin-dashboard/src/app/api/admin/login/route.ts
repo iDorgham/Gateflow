@@ -6,19 +6,44 @@ function sha256(message: string) {
   return createHash('sha256').update(message).digest('hex');
 }
 
-/** Simple sliding-window limiter for login brute-force (per IP). */
+/**
+ * Simple sliding-window limiter for login brute-force (per IP).
+ *
+ * Bounded: stale keys are swept on every call, and a hard size cap evicts
+ * the least-recently-active entry so an attacker sending unique
+ * x-forwarded-for/x-real-ip values per request can't grow this map
+ * unboundedly within a single window.
+ */
 const loginAttempts = new Map<string, number[]>();
 const LOGIN_LIMIT = 10;
 const LOGIN_WINDOW_MS = 60_000;
+const MAX_TRACKED_KEYS = 5_000;
 
 function allowLoginAttempt(ip: string): boolean {
   const now = Date.now();
   const windowStart = now - LOGIN_WINDOW_MS;
-  const prior = (loginAttempts.get(ip) ?? []).filter((t) => t > windowStart);
+
+  for (const [key, timestamps] of loginAttempts) {
+    const fresh = timestamps.filter((t) => t > windowStart);
+    if (fresh.length === 0) {
+      loginAttempts.delete(key);
+    } else if (fresh.length !== timestamps.length) {
+      loginAttempts.set(key, fresh);
+    }
+  }
+
+  const prior = loginAttempts.get(ip) ?? [];
   if (prior.length >= LOGIN_LIMIT) {
-    loginAttempts.set(ip, prior);
     return false;
   }
+
+  if (!loginAttempts.has(ip) && loginAttempts.size >= MAX_TRACKED_KEYS) {
+    const oldestKey = loginAttempts.keys().next().value;
+    if (oldestKey !== undefined) {
+      loginAttempts.delete(oldestKey);
+    }
+  }
+
   prior.push(now);
   loginAttempts.set(ip, prior);
   return true;
