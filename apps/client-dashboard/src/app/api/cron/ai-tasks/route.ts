@@ -12,9 +12,18 @@ export async function GET(req: NextRequest) {
   const authHeader = req.headers.get('authorization');
   const cronSecret = process.env.CRON_SECRET;
 
-  // Simple security check
-  if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
-    return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+  // Fail closed: missing CRON_SECRET must not expose the runner publicly.
+  if (!cronSecret || cronSecret.length < 16) {
+    return NextResponse.json(
+      { success: false, message: 'Cron endpoint misconfigured' },
+      { status: 503 }
+    );
+  }
+  if (authHeader !== `Bearer ${cronSecret}`) {
+    return NextResponse.json(
+      { success: false, message: 'Unauthorized' },
+      { status: 401 }
+    );
   }
 
   try {
@@ -43,14 +52,16 @@ export async function GET(req: NextRequest) {
         // 2. Execute Task Logic
         // For now, we only support REPORT_GEN
         if (task.type === 'REPORT_GEN') {
-          console.log(`>>> [GateAI Cron] Executing Report Gen for ${task.title}`);
+          console.log(
+            `>>> [GateAI Cron] Executing Report Gen for ${task.title}`
+          );
           // Logic would go here: e.g. generate report and email/store it.
           // Since this is a skeleton phase, we just log and succeed.
         }
 
         // 3. Update task status and next run
         const nextRun = AiTaskService.calculateNextRun(task.cron || undefined);
-        
+
         await (prisma as any).aiTask.update({
           where: { id: task.id },
           data: {
@@ -81,6 +92,9 @@ export async function GET(req: NextRequest) {
     });
   } catch (error) {
     console.error('>>> [GateAI Cron] Fatal Error:', error);
-    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }

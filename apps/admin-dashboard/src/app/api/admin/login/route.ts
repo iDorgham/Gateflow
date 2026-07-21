@@ -6,12 +6,69 @@ function sha256(message: string) {
   return createHash('sha256').update(message).digest('hex');
 }
 
+/**
+ * Simple sliding-window limiter for login brute-force (per IP).
+ *
+ * Bounded: stale keys are swept on every call, and a hard size cap evicts
+ * the least-recently-active entry so an attacker sending unique
+ * x-forwarded-for/x-real-ip values per request can't grow this map
+ * unboundedly within a single window.
+ */
+const loginAttempts = new Map<string, number[]>();
+const LOGIN_LIMIT = 10;
+const LOGIN_WINDOW_MS = 60_000;
+const MAX_TRACKED_KEYS = 5_000;
+
+function allowLoginAttempt(ip: string): boolean {
+  const now = Date.now();
+  const windowStart = now - LOGIN_WINDOW_MS;
+
+  for (const [key, timestamps] of loginAttempts) {
+    const fresh = timestamps.filter((t) => t > windowStart);
+    if (fresh.length === 0) {
+      loginAttempts.delete(key);
+    } else if (fresh.length !== timestamps.length) {
+      loginAttempts.set(key, fresh);
+    }
+  }
+
+  const prior = loginAttempts.get(ip) ?? [];
+  if (prior.length >= LOGIN_LIMIT) {
+    return false;
+  }
+
+  if (!loginAttempts.has(ip) && loginAttempts.size >= MAX_TRACKED_KEYS) {
+    const oldestKey = loginAttempts.keys().next().value;
+    if (oldestKey !== undefined) {
+      loginAttempts.delete(oldestKey);
+    }
+  }
+
+  prior.push(now);
+  loginAttempts.set(ip, prior);
+  return true;
+}
+
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
+    const ip =
+      request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+      request.headers.get('x-real-ip') ||
+      'unknown';
+    if (!allowLoginAttempt(ip)) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Too many login attempts. Try again later.',
+        },
+        { status: 429 }
+      );
+    }
+
     const body = await request.json().catch(() => null);
     const key: string = body?.key ?? '';
 
-    if (!key) {
+    if (!key || typeof key !== 'string') {
       return NextResponse.json(
         { success: false, message: 'Access key required.' },
         { status: 400 }

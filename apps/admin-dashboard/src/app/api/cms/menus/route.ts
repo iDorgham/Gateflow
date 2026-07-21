@@ -1,6 +1,10 @@
 import { NextResponse } from 'next/server';
+import { requireAdminApi } from '@/lib/require-admin-api';
 
-export async function GET() {
+export async function GET(req: Request) {
+  const denied = await requireAdminApi(req);
+  if (denied) return denied;
+
   // Mock data for menus
   const menus = [
     {
@@ -29,6 +33,9 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
+  const denied = await requireAdminApi(req);
+  if (denied) return denied;
+
   try {
     const body = await req.json();
     // Mock create logic

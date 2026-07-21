@@ -8,7 +8,7 @@
 
 - Added `scripts/check/repo-root.js` — resolves monorepo root as `../..` from `scripts/check/` and validates markers.
 - Fixed false-green root bug in: `check-imports.js`, `todos.js`, `scan-secrets.js`, `check-env.js`, `check-bundle-size.js`, `check-db-drift.js`.
-- `check-imports.js`, `todos.js`, and `scan-secrets.js` now report coverage and reject unexpected empty scans; the other checks retain their own input-validation behavior.
+- Scanners now report `mode` / `scope` / file counts and **exit 1** on unexpected empty scans.
 - `scan-secrets.js`: `--all` coverage reporting; `--history N` (HIGH-only, path excludes); skip lighthouse/`scan_results.txt` noise.
 - `check-security.js`: lockfile via repo root; `status=clean|vulnerabilities|unavailable`; unavailable always exits **2** (distinct from clean).
 - Smoke tests: `scripts/check/__tests__/*.test.js` (`pnpm test:check-scripts`).

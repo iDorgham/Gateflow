@@ -44,9 +44,9 @@ See `CONTEXT_audit_remediation_2026.md` for evidence and source paths.
 | #   | Phase                                                  | Tool   | Status |
 | --- | ------------------------------------------------------ | ------ | ------ |
 | 1   | P0 containment: bootstrap route and browser injection  | claude | [x]    |
-| 2   | Tenant isolation: request-local, complete, fail-closed | claude | [ ]    |
-| 3   | Trustworthy CI and repository scanners                 | gemini | [ ]    |
-| 4   | API hardening, coverage, and certification             | claude | [ ]    |
+| 2   | Tenant isolation: request-local, complete, fail-closed | claude | [x]    |
+| 3   | Trustworthy CI and repository scanners                 | gemini | [x]    |
+| 4   | API hardening, coverage, and certification             | claude | [x]    |
 
 Dependencies: Phase 1 precedes Phases 2–3; Phase 4 follows Phases 2–3.
 

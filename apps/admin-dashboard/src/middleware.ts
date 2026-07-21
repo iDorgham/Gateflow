@@ -76,9 +76,35 @@ function loginPathForRequest(request: NextRequest, pathname: string): string {
   return `/${DEFAULT_LOCALE}/login`;
 }
 
-function requiresAdminPortalAuth(pathname: string): boolean {
-  if (pathname.startsWith('/api/admin/')) {
-    return !pathname.startsWith('/api/admin/login');
+/** API paths that must remain reachable without an admin session. */
+const PUBLIC_API_PREFIXES = [
+  '/api/admin/login',
+  '/api/auth/login',
+  '/api/auth/refresh',
+  '/api/auth/logout',
+  '/api/cms/pages/public/',
+];
+
+/** Single-segment `/api/cms/pages/[slug]` — public GET, admin-only PATCH. */
+const CMS_PAGE_SLUG_PATTERN = /^\/api\/cms\/pages\/[^/]+$/;
+
+function isPublicApiPath(pathname: string, method: string): boolean {
+  if (PUBLIC_API_PREFIXES.some((prefix) => pathname.startsWith(prefix))) {
+    return true;
+  }
+  // Consumed by apps/marketing and partner sites without an admin session;
+  // PATCH on the same route must stay behind the session gate.
+  if (method === 'GET' && CMS_PAGE_SLUG_PATTERN.test(pathname)) {
+    return true;
+  }
+  return false;
+}
+
+function requiresAdminPortalAuth(pathname: string, method: string): boolean {
+  // Defense in depth: all admin API surfaces require a session except public prefixes.
+  // Previously only `/api/admin/*` was gated — CMS/CRM/support/team leaked.
+  if (pathname.startsWith('/api/')) {
+    return !isPublicApiPath(pathname, method);
   }
   if (!pathnameHasLocale(pathname)) {
     return false;
@@ -101,7 +127,17 @@ async function enforceAdminPortalSession(
   request: NextRequest,
   pathname: string
 ): Promise<NextResponse | null> {
-  if (!requiresAdminPortalAuth(pathname)) {
+  if (!requiresAdminPortalAuth(pathname, request.method)) {
+    return null;
+  }
+
+  // Bearer-authenticated API access (adminAuthorizationKey) is validated by
+  // the route handler itself via `isAdminAuthorized` — this gate only
+  // enforces the cookie session, so let bearer requests through to it.
+  if (
+    pathname.startsWith('/api/') &&
+    request.headers.get('authorization')?.startsWith('Bearer ')
+  ) {
     return null;
   }
 
@@ -253,9 +289,11 @@ export async function middleware(request: NextRequest) {
   }
 
   const authCookie = request.cookies.get(AUTH_COOKIE);
+  const adminSessionCookie = request.cookies.get(ADMIN_COOKIE);
   const csrfCookie = request.cookies.get(CSRF_COOKIE);
 
-  if (!authCookie) {
+  // CSRF for cookie-authenticated mutations (gf_access_token OR admin_session).
+  if (!authCookie && !adminSessionCookie) {
     return NextResponse.next();
   }
 
