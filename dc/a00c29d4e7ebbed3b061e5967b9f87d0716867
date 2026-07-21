@@ -1,0 +1,47 @@
+apps/scanner-app/tsconfig.json
+  s_c89e15e2e628e8::t_e58ac5b30067ca 4,17-20,22,24-25
+apps/client-dashboard/src/app/api/qrcodes/validate/route.ts
+  s_c89e15e2e628e8::t_e58ac5b30067ca 531-535
+apps/marketing/package.json
+  s_c89e15e2e628e8::t_e58ac5b30067ca 51
+tsconfig.json
+  s_c89e15e2e628e8::t_e58ac5b30067ca 18-22
+packages/components/package.json
+  s_c89e15e2e628e8::t_e58ac5b30067ca 57
+packages/ai/package.json
+  s_c89e15e2e628e8::t_e58ac5b30067ca 59
+package.json
+  s_c89e15e2e628e8::t_e58ac5b30067ca 91
+scripts/check/scan-secrets.js
+  s_c89e15e2e628e8::t_e58ac5b30067ca 298
+packages/db/src/tenant.ts
+  s_c89e15e2e628e8::t_e58ac5b30067ca 213-214,223-231,246-273,288-293,302-322,328-340,350-352,415-424
+packages/db/src/tenant.test.ts
+  s_c89e15e2e628e8::t_e58ac5b30067ca 8,10-11,13,33-34,229-347
+packages/ui/package.json
+  s_c89e15e2e628e8::t_e58ac5b30067ca 84
+CHANGELOG.md
+  s_c89e15e2e628e8::t_7081159bb67545 27-35
+docs/plan/Active/audit_remediation_2026/SESSION_MEMORY.md
+  s_c89e15e2e628e8::t_b87acfd36cb1d9 7-8
+docs/plan/Active/audit_remediation_2026/phase_logs/PHASE_LOG_phase_03.md
+  s_c89e15e2e628e8::t_89a6425f8a4c0d 11
+pnpm-lock.yaml
+  s_c89e15e2e628e8::t_b1fa99e79b3bdf 109-110,674-675,990-991,1058-1059,1380-1381,21301
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "dca00c29d4e7ebbed3b061e5967b9f87d0716867",
+  "prompts": {},
+  "sessions": {
+    "s_c89e15e2e628e8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2b35f6bb-ea4d-412b-8438-8ebfc73baee1",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
