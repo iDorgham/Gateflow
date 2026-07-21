@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Deps]** replace faker and restore working ESLint toolchain
+
 - **[Security]** harden Phase 4 high-risk APIs and HTTP headers
 
 - **[Ci]** fix broken template literal in Lighthouse PR-comment script
