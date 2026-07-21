@@ -17,8 +17,9 @@
 
 const fs = require('fs');
 const path = require('path');
+const { getRepoRoot } = require('./repo-root');
 
-const ROOT = path.resolve(__dirname, '..');
+const ROOT = getRepoRoot(__dirname);
 
 // ── Required vars manifest ────────────────────────────────────────────────────
 // Format: { var, apps, secret, description }

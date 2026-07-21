@@ -1,16 +1,30 @@
 export * from '@prisma/client';
+/** Raw / privileged Prisma client — no automatic tenant isolation. Prefer `db` + org context. */
 export { prisma } from './client';
-export { db } from './client';
 export { default as prismaClient } from './client';
 export * from './quota';
 export * from './access';
-export * from './tenant';
+/** Tenant-scoped client (`db`) + ALS helpers; also re-exports `privilegedDb`. */
+export {
+  db,
+  privilegedDb,
+  createTenantScopedClient,
+  setOrganizationContext,
+  getOrganizationContext,
+  clearOrganizationContext,
+  runWithOrganization,
+  runWithOrganizationAsync,
+  runPrivileged,
+  runPrivilegedAsync,
+  isPrivilegedContext,
+  TenantContextError,
+} from './tenant';
+export type { OrganizationContext, DbClient } from './tenant';
 export * from './queries/projects';
 export * from './queries/qr';
 export * from './crypto';
 export * from './serialization-retry';
 export { ensureBoard } from './board';
-export type { OrganizationContext, DbClient } from './tenant';
 export {
   createSecureInviteSignature,
   verifySecureInviteSignature,

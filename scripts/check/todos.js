@@ -18,8 +18,9 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
+const { getRepoRoot } = require('./repo-root');
 
-const ROOT = path.resolve(__dirname, '..');
+const ROOT = getRepoRoot(__dirname);
 
 const SCAN_DIRS = [
   'apps/client-dashboard/src',
@@ -128,6 +129,18 @@ if (appFilter) {
 
 const files = scanDirs.flatMap((d) => collectFiles(d));
 const results = [];
+
+if (files.length === 0) {
+  console.error(
+    `✗ TODO check: unexpected empty scan (mode=${appFilter || 'all'} dirs=${scanDirs.length} files=0). ` +
+      `Repository root resolved to ${ROOT}. Refusing false-green.`
+  );
+  process.exit(1);
+}
+
+console.log(
+  `TODO check: mode=${appFilter || 'all'} scope=${scanDirs.length} dirs files=${files.length}`
+);
 
 for (const relFile of files) {
   let lines;

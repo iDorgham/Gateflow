@@ -12,22 +12,22 @@
 
 ## Phase 2 — Tenant isolation
 
-- [ ] Inventory tenant models, Prisma operations/imports, and privileged exceptions.
-- [ ] Replace global state with request-local context; fail closed when absent.
-- [ ] Enforce organization scope and soft deletes on reads/writes/transactions.
-- [ ] Add an explicit privileged client and migrate unjustified raw Prisma callers.
-- [ ] Add concurrent, cross-tenant, missing-context, and soft-delete tests.
-- [ ] Document the RLS decision; run checks/preflight and write phase 2 log.
+- [x] Inventory tenant models, Prisma operations/imports, and privileged exceptions.
+- [x] Replace global state with request-local context; fail closed when absent.
+- [x] Enforce organization scope and soft deletes on reads/writes/transactions.
+- [x] Add an explicit privileged client and migrate unjustified raw Prisma callers.
+- [x] Add concurrent, cross-tenant, missing-context, and soft-delete tests.
+- [x] Document the RLS decision; run checks/preflight and write phase 2 log.
 
 ## Phase 3 — Trustworthy CI
 
-- [ ] Audit/fix root resolution across check scripts and same-family defects.
-- [ ] Report mode/scope/count; fail unexpected zero-file and unavailable scans.
-- [ ] Add scanner smoke tests and mature full-tree/history secret scanning.
-- [ ] Harden dependency scan state handling.
-- [ ] Restore dashboard typecheck enforcement or an approved decreasing ratchet.
-- [ ] Add warning/skipped-test budgets and resolve/document pnpm runtime drift.
-- [ ] Run scanner gates/preflight and write phase 3 log.
+- [x] Audit/fix root resolution across check scripts and same-family defects.
+- [x] Report mode/scope/count; fail unexpected zero-file and unavailable scans.
+- [x] Add scanner smoke tests and mature full-tree/history secret scanning.
+- [x] Harden dependency scan state handling.
+- [x] Restore dashboard typecheck enforcement or an approved decreasing ratchet.
+- [x] Add warning/skipped-test budgets and resolve/document pnpm runtime drift.
+- [x] Run scanner gates/preflight and write phase 3 log.
 
 ## Phase 4 — API certification
 

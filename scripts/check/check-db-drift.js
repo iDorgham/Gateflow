@@ -19,8 +19,9 @@
 const fs = require('fs');
 const path = require('path');
 const { execSync, spawnSync } = require('child_process');
+const { getRepoRoot } = require('./repo-root');
 
-const ROOT = path.resolve(__dirname, '..');
+const ROOT = getRepoRoot(__dirname);
 const SCHEMA_FILE = path.join(
   ROOT,
   'packages',

@@ -8,6 +8,7 @@ import {
 import {
   Prisma,
   prisma,
+  db,
   setOrganizationContext,
   clearOrganizationContext,
   isAccessAllowed,
@@ -152,7 +153,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    // Step 3 — Set tenant context for downstream DB helpers.
+    // Step 3 — Request-local tenant ALS context (enterWith) for scoped `db` helpers.
     setOrganizationContext({ organizationId: claims.orgId });
 
     // Step 4 — Parse & validate request body.
@@ -194,8 +195,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    // Step 7 — DB lookup: record must exist.
-    const qrCode = await prisma.qRCode.findUnique({
+    // Step 7 — DB lookup: tenant-scoped record must exist (soft-delete excluded).
+    const qrCode = await db.qRCode.findUnique({
       where: { id: payload.qrId },
       include: {
         visitorQR: {
@@ -236,10 +237,9 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       watchlistStatus: string;
     } | null = null;
     if (qrCode.contactId) {
-      const contact = await prisma.contact.findFirst({
+      const contact = await db.contact.findFirst({
         where: {
           id: qrCode.contactId,
-          organizationId: claims.orgId,
           deletedAt: null,
         },
         select: { firstName: true, lastName: true, watchlistStatus: true },
@@ -409,8 +409,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     // Step 11c — Location rule: when gate has locationEnforced, require device location within radius.
-    const gateForLocation = await prisma.gate.findFirst({
-      where: { id: gateId, organizationId: claims.orgId, deletedAt: null },
+    const gateForLocation = await db.gate.findFirst({
+      where: { id: gateId, deletedAt: null },
       select: {
         latitude: true,
         longitude: true,
@@ -466,7 +466,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         idNumber: visitorIdNumber,
       });
       if (match) {
-        await prisma.incident.create({
+        await db.incident.create({
           data: {
             organizationId: claims.orgId,
             gateId,
@@ -498,9 +498,9 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     });
 
     const scanLog = await prisma.$transaction(async (tx) => {
-      // Re-read inside the transaction to prevent races.
+      // Re-read inside the transaction to prevent races (explicit org — tx is unscoped).
       const fresh = await tx.qRCode.findUnique({
-        where: { id: qrCode.id },
+        where: { id: qrCode.id, organizationId: claims.orgId, deletedAt: null },
         include: { visitorQR: { include: { accessRule: true } } },
       });
       if (!fresh) throw new Error('QR code disappeared during transaction');
@@ -528,7 +528,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       }
 
       await tx.qRCode.update({
-        where: { id: qrCode.id },
+        where: {
+          id: qrCode.id,
+          organizationId: claims.orgId,
+          deletedAt: null,
+        },
         data: { currentUses: { increment: 1 } },
       });
 
@@ -601,7 +605,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         let contactData = null;
         if (fullScan.qrCode.contactId) {
           contactData = await prisma.contact.findUnique({
-            where: { id: fullScan.qrCode.contactId },
+            where: {
+              id: fullScan.qrCode.contactId,
+              organizationId: claims.orgId!,
+              deletedAt: null,
+            },
             select: {
               id: true,
               firstName: true,

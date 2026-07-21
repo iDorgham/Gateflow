@@ -1,21 +1,28 @@
 #!/usr/bin/env node
 /**
- * scan-secrets.js — Lightweight secret scanner for staged files
+ * scan-secrets.js — Lightweight secret scanner
  *
- * Scans git-staged files for common secret patterns before commit.
- * Blocks commit on HIGH severity; warns on MEDIUM.
+ * Modes:
+ *   (default)           scan git-staged files (pre-commit)
+ *   --all               scan entire tracked tree (CI)
+ *   --file <path>       scan one file
+ *   --history [N]       scan patches from the last N commits (default 100)
+ *
+ * HIGH findings exit 1. Unexpected empty --all / --history scans exit 1.
+ * Never prints raw secret values (redacted previews only).
  *
  * Usage:
- *   node scripts/scan-secrets.js          # scan staged files (pre-commit)
- *   node scripts/scan-secrets.js --all    # scan entire repo
- *   node scripts/scan-secrets.js --file <path>  # scan one file
+ *   node scripts/check/scan-secrets.js
+ *   node scripts/check/scan-secrets.js --all
+ *   node scripts/check/scan-secrets.js --history 200
+ *   node scripts/check/scan-secrets.js --file path/to/file
  */
 
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
+const { execFileSync } = require('child_process');
+const { getRepoRoot } = require('./repo-root');
 
-// ── Secret patterns ───────────────────────────────────────────────────────────
 const PATTERNS = [
   // HIGH — will block commit
   { name: 'AWS Access Key', severity: 'HIGH', re: /AKIA[0-9A-Z]{16}/ },
@@ -64,7 +71,7 @@ const PATTERNS = [
   {
     name: 'Hardcoded DB Password',
     severity: 'HIGH',
-    re: /postgresql:\/\/[^:]+:[^@]{12,}@/, // require 12+ chars to avoid common 8-char dev passwords
+    re: /postgresql:\/\/[^:]+:[^@]{12,}@/,
   },
 
   // MEDIUM — warn only
@@ -90,21 +97,21 @@ const PATTERNS = [
   },
 ];
 
-// Files/dirs to always skip
 const SKIP_PATTERNS = [
   /\.env\.example$/,
   /\.env\.sample$/,
   /\.env\.template$/,
   /scan-secrets\.js$/,
+  /repo-root\.test\.js$/,
   /\/node_modules\//,
   /\/\.next\//,
   /\/dist\//,
   /\/build\//,
   /pnpm-lock\.yaml$/,
   /package-lock\.json$/,
-  /\.github\/workflows\//, // CI yml files use placeholder values, not real secrets
+  /\.github\/workflows\//,
   /\.github\/actions\//,
-  /\.test\.(ts|tsx|js)$/, // test files set process.env.X = 'test-value' intentionally
+  /\.test\.(ts|tsx|js)$/,
   /\.spec\.(ts|tsx|js)$/,
   /__tests__\//,
   /__mocks__\//,
@@ -114,18 +121,22 @@ const SKIP_PATTERNS = [
   /packages\/db\/prisma\//,
   /\/\.github\/prompts\//,
   /\/~partytown\//,
+  /scan_results\.txt$/,
+  /\.lighthouseci\//,
+  /lighthouse.*\.json$/i,
+  /\/coverage\//,
 ];
 
-const ROOT = path.resolve(__dirname, '..');
+const ROOT = getRepoRoot(__dirname);
 
 function shouldSkip(filePath) {
-  return SKIP_PATTERNS.some((p) => p.test(filePath));
+  const normalized = filePath.split(path.sep).join('/');
+  return SKIP_PATTERNS.some((p) => p.test(normalized));
 }
 
 function isBinary(filePath) {
   try {
     const buf = fs.readFileSync(filePath);
-    // Check first 8000 bytes for null bytes (binary indicator)
     const slice = buf.slice(0, 8000);
     return slice.includes(0);
   } catch {
@@ -140,7 +151,6 @@ function scanContent(content, filePath) {
     const line = lines[i];
     for (const { name, severity, re } of PATTERNS) {
       if (re.test(line)) {
-        // Redact match in output
         const redacted = line
           .trim()
           .replace(re, (m) => m.slice(0, 6) + '***REDACTED***');
@@ -157,12 +167,13 @@ function scanContent(content, filePath) {
   return findings;
 }
 
-function getStagedFiles() {
+function gitLines(args) {
   try {
-    return execSync('git diff --cached --name-only --diff-filter=ACMR', {
+    return execFileSync('git', args, {
       cwd: ROOT,
       encoding: 'utf8',
-      stdio: 'pipe',
+      stdio: ['ignore', 'pipe', 'pipe'],
+      maxBuffer: 64 * 1024 * 1024,
     })
       .trim()
       .split('\n')
@@ -172,89 +183,198 @@ function getStagedFiles() {
   }
 }
 
+function getStagedFiles() {
+  return gitLines(['diff', '--cached', '--name-only', '--diff-filter=ACMR']);
+}
+
 function getAllFiles() {
-  try {
-    return execSync('git ls-files', {
-      cwd: ROOT,
-      encoding: 'utf8',
-      stdio: 'pipe',
-    })
-      .trim()
-      .split('\n')
-      .filter(Boolean);
-  } catch {
-    return [];
+  return gitLines(['ls-files']);
+}
+
+function reportAndExit(mode, considered, scanned, allFindings) {
+  const highs = allFindings.filter((f) => f.severity === 'HIGH');
+  const mediums = allFindings.filter((f) => f.severity === 'MEDIUM');
+
+  console.log(
+    `Secret scan: mode=${mode} files_considered=${considered} files_scanned=${scanned} findings=${allFindings.length}`
+  );
+
+  if (allFindings.length === 0) {
+    console.log(`✓ Secret scan: no secrets detected (${mode}).`);
+    process.exit(0);
   }
+
+  console.error('\n🚨 Secret Scanner Results\n');
+
+  for (const f of allFindings) {
+    const icon = f.severity === 'HIGH' ? '🔴' : '🟡';
+    console.error(`${icon} [${f.severity}] ${f.name}`);
+    console.error(`   File: ${f.file}:${f.line}`);
+    console.error(`   ${f.preview}`);
+    console.error('');
+  }
+
+  if (highs.length > 0) {
+    console.error(
+      `❌ ${highs.length} HIGH severity secret(s) detected — commit BLOCKED.`
+    );
+    console.error(
+      '   Remove the secrets, use environment variables, or add to .gitignore.'
+    );
+    console.error('   To bypass (NOT recommended): git commit --no-verify\n');
+    process.exit(1);
+  }
+
+  if (mediums.length > 0) {
+    console.error(
+      `⚠️  ${mediums.length} MEDIUM severity potential secret(s) — review before pushing.`
+    );
+    console.error(
+      '   Commit allowed. Verify these are not real credentials.\n'
+    );
+    process.exit(0);
+  }
+}
+
+function scanFileList(relFiles, mode) {
+  const absolute = relFiles.map((f) =>
+    path.isAbsolute(f) ? f : path.join(ROOT, f)
+  );
+  const considered = absolute.length;
+
+  if (mode === 'all' && considered === 0) {
+    console.error(
+      `✗ Secret scan: unexpected empty tree (mode=all). Root=${ROOT}. Refusing false-green.`
+    );
+    process.exit(1);
+  }
+
+  if (mode === 'staged' && considered === 0) {
+    console.log(
+      'Secret scan: mode=staged files_considered=0 files_scanned=0 findings=0'
+    );
+    console.log('✓ Secret scan: nothing staged.');
+    process.exit(0);
+  }
+
+  const allFindings = [];
+  let scanned = 0;
+
+  for (const filePath of absolute) {
+    if (shouldSkip(filePath)) continue;
+    if (!fs.existsSync(filePath)) continue;
+    if (isBinary(filePath)) continue;
+
+    let content;
+    try {
+      content = fs.readFileSync(filePath, 'utf8');
+    } catch {
+      continue;
+    }
+
+    scanned += 1;
+    const findings = scanContent(content, path.relative(ROOT, filePath));
+    allFindings.push(...findings);
+  }
+
+  if ((mode === 'all' || mode === 'file') && scanned === 0) {
+    console.error(
+      `✗ Secret scan: unexpected zero files scanned (mode=${mode} considered=${considered}). Root=${ROOT}. Refusing false-green.`
+    );
+    process.exit(1);
+  }
+
+  reportAndExit(mode, considered, scanned, allFindings);
+}
+
+function scanHistory(maxCommits) {
+  let patch;
+  try {
+    patch = execFileSync(
+      'git',
+      [
+        'log',
+        '-p',
+        `-n${maxCommits}`,
+        '--pretty=format:===COMMIT %H===',
+        '--',
+        '.',
+        ':(exclude).lighthouseci',
+        ':(exclude)scan_results.txt',
+        ':(exclude)pnpm-lock.yaml',
+        ':(exclude)**/node_modules/**',
+      ],
+      {
+        cwd: ROOT,
+        encoding: 'utf8',
+        stdio: ['ignore', 'pipe', 'pipe'],
+        maxBuffer: 128 * 1024 * 1024,
+      }
+    );
+  } catch (err) {
+    console.error(
+      `✗ Secret scan: history unavailable (${err.message}). Root=${ROOT}.`
+    );
+    process.exit(1);
+  }
+
+  if (!patch || patch.trim().length === 0) {
+    console.error(
+      `✗ Secret scan: unexpected empty history (mode=history commits=${maxCommits}). Root=${ROOT}. Refusing false-green.`
+    );
+    process.exit(1);
+  }
+
+  // History mode: HIGH only — MEDIUM patterns are too noisy on historical diffs.
+  const highOnly = PATTERNS.filter((p) => p.severity === 'HIGH');
+  const findings = [];
+  const lines = patch.split('\n');
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    for (const { name, severity, re } of highOnly) {
+      if (re.test(line)) {
+        findings.push({
+          name,
+          severity,
+          line: i + 1,
+          preview: line
+            .trim()
+            .replace(re, (m) => m.slice(0, 6) + '***REDACTED***'),
+          file: `git-history(last-${maxCommits})`,
+        });
+      }
+    }
+  }
+
+  const seen = new Set();
+  const unique = findings.filter((f) => {
+    const key = `${f.severity}|${f.name}|${f.preview}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+
+  reportAndExit(`history:${maxCommits}`, maxCommits, lines.length, unique);
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────────
 const args = process.argv.slice(2);
-const mode = args[0];
 
-let files;
-if (mode === '--all') {
-  files = getAllFiles().map((f) => path.join(ROOT, f));
-} else if (mode === '--file') {
-  files = [path.resolve(args[1])];
-} else {
-  files = getStagedFiles().map((f) => path.join(ROOT, f));
-}
-
-if (files.length === 0) {
-  process.exit(0); // nothing staged
-}
-
-const allFindings = [];
-
-for (const filePath of files) {
-  if (shouldSkip(filePath)) continue;
-  if (!fs.existsSync(filePath)) continue;
-  if (isBinary(filePath)) continue;
-
-  let content;
-  try {
-    content = fs.readFileSync(filePath, 'utf8');
-  } catch {
-    continue;
+if (args[0] === '--all') {
+  scanFileList(getAllFiles(), 'all');
+} else if (args[0] === '--file') {
+  if (!args[1]) {
+    console.error('Usage: scan-secrets.js --file <path>');
+    process.exit(1);
   }
-
-  const findings = scanContent(content, path.relative(ROOT, filePath));
-  allFindings.push(...findings);
-}
-
-if (allFindings.length === 0) {
-  console.log('✓ Secret scan: no secrets detected in staged files.');
-  process.exit(0);
-}
-
-const highs = allFindings.filter((f) => f.severity === 'HIGH');
-const mediums = allFindings.filter((f) => f.severity === 'MEDIUM');
-
-console.error('\n🚨 Secret Scanner Results\n');
-
-for (const f of allFindings) {
-  const icon = f.severity === 'HIGH' ? '🔴' : '🟡';
-  console.error(`${icon} [${f.severity}] ${f.name}`);
-  console.error(`   File: ${f.file}:${f.line}`);
-  console.error(`   ${f.preview}`);
-  console.error('');
-}
-
-if (highs.length > 0) {
-  console.error(
-    `❌ ${highs.length} HIGH severity secret(s) detected — commit BLOCKED.`
-  );
-  console.error(
-    '   Remove the secrets, use environment variables, or add to .gitignore.'
-  );
-  console.error('   To bypass (NOT recommended): git commit --no-verify\n');
-  process.exit(1);
-}
-
-if (mediums.length > 0) {
-  console.error(
-    `⚠️  ${mediums.length} MEDIUM severity potential secret(s) — review before pushing.`
-  );
-  console.error('   Commit allowed. Verify these are not real credentials.\n');
-  process.exit(0);
+  scanFileList([path.resolve(args[1])], 'file');
+} else if (args[0] === '--history') {
+  const n = args[1] ? parseInt(args[1], 10) : 100;
+  if (!Number.isFinite(n) || n < 1) {
+    console.error('Usage: scan-secrets.js --history [N]');
+    process.exit(1);
+  }
+  scanHistory(n);
+} else {
+  scanFileList(getStagedFiles(), 'staged');
 }

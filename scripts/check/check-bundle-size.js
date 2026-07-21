@@ -16,8 +16,9 @@
 
 const fs = require('fs');
 const path = require('path');
+const { getRepoRoot } = require('./repo-root');
 
-const ROOT = path.resolve(__dirname, '..');
+const ROOT = getRepoRoot(__dirname);
 const BASELINE = path.join(__dirname, '.bundle-baseline.json');
 
 // Apps with Next.js builds to check
