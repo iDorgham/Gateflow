@@ -4,7 +4,19 @@ import * as React from 'react';
 import { PageHeader } from '@gateflow/components';
 import { Activity, Zap, Play, RotateCcw, Sparkles } from 'lucide-react';
 import { Button } from '@gateflow/ui';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, type Easing } from 'framer-motion';
+
+function curveToEasing(curve: string): Easing {
+  const nums = curve
+    .split('(')[1]
+    ?.split(')')[0]
+    ?.split(',')
+    .map((n) => Number(n.trim()));
+  if (nums?.length === 4 && nums.every((n) => Number.isFinite(n))) {
+    return nums as [number, number, number, number];
+  }
+  return 'linear';
+}
 
 const motionPrinciples = [
   {
@@ -123,12 +135,7 @@ export default function MotionFoundationsPage() {
                   animate={{ x: 'calc(100% - 32px)' }}
                   transition={{
                     duration: 0.8,
-                    ease:
-                      ease.curve
-                        .split('(')[1]
-                        ?.split(')')[0]
-                        ?.split(',')
-                        .map(Number) || 'linear',
+                    ease: curveToEasing(ease.curve),
                   }}
                   className="h-8 w-8 rounded-lg bg-[var(--ds-accent-bold)] shadow-[var(--ds-glow-accent)] relative z-10"
                 />
