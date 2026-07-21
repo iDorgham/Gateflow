@@ -10,6 +10,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Ci]** fix broken template literal in Lighthouse PR-comment script
 - **[CI]** restore trustworthy repo scanners (root resolution, nonzero coverage, history secrets, advisory unavailable≠clean)
 - **[CI]** restore full dashboard typecheck in preflight/CI; add skipped-test/--forceExit budgets
 - **[Deps]** bump brace-expansion override to patched 5.0.7+

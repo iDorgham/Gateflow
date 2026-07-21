@@ -267,7 +267,7 @@ jobs:
                 '**Core Web Vitals (Mobile)**',
                 mobile ? `LCP: ${mobile.lcp}ms | FCP: ${mobile.fcp}ms | TBT: ${mobile.tbt}ms | CLS: ${mobile.cls}` : '—',
                 '',
-                `> Thresholds in [\`.lighthouserc.js`](.lighthouserc.js)`,
+                '> Thresholds in [`.lighthouserc.js`](.lighthouserc.js)',
               ].join('\n');
             }
 

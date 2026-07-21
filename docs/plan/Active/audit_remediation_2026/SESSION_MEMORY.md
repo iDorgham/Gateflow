@@ -4,8 +4,8 @@
 
 - **Phase:** 3 complete (trustworthy CI / scanners)
 - **Branch:** `fix/audit-remediation-phase-3`
-- **Last commits:** (pending phase 3 commit)
-- **Next action:** Phase 4 — API certification (`PROMPT_audit_remediation_2026_phase_4.md`); ops still owes Phase 1 credential-rotation receipt
+- **Last commits:** `7382d3e70` (tar pin), `235e2f64b` (scanners + typecheck), `d92b862eb` (Lighthouse comment-script fix)
+- **Next action:** Phase 4 — API certification (`PROMPT_audit_remediation_2026_phase_4.md`); ops still owes Phase 1 credential-rotation receipt; PR merged into master
 
 ## Cross-session decisions
 

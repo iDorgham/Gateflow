@@ -295,6 +295,7 @@ function scanHistory(maxCommits) {
       [
         'log',
         '-p',
+        '-m',
         `-n${maxCommits}`,
         '--pretty=format:===COMMIT %H===',
         '--',

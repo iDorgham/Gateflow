@@ -243,7 +243,10 @@ function applyTenantGuards(
     next.data = data;
   }
 
-  if (operation === 'createMany') {
+  if (
+    operation === 'createMany' ||
+    operation === 'createManyAndReturn'
+  ) {
     // Prisma's createMany `data` accepts a single object or an array
     // (Enumerable<T>) — guard both shapes, not just the array case.
     const isArray = Array.isArray(next.data);
@@ -412,6 +415,16 @@ export function createTenantScopedClient<T extends object>(client: T): T {
     get(target, prop, receiver) {
       const value = Reflect.get(target, prop, receiver);
       if (typeof prop !== 'string') return value;
+      if (
+        prop === '$transaction' ||
+        prop === '$queryRaw' ||
+        prop === '$executeRaw' ||
+        prop === '$queryRawUnsafe' ||
+        prop === '$executeRawUnsafe' ||
+        prop === '$extends'
+      ) {
+        throw new TenantContextError(`${prop} is privileged-only`);
+      }
 
       if (prop === 'scanLog' && value && typeof value === 'object') {
         return wrapScanLogDelegate(value);
