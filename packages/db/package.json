@@ -44,10 +44,10 @@
   "devDependencies": {
     "@types/crypto-js": "^4.2.2",
     "@gate-access/config": "workspace:*",
-    "@types/faker": "^5.5.3",
+    "@types/faker": "^6.6.11",
     "@types/node": "^20.19.33",
     "@types/pg": "^8.18.0",
-    "faker": "^5.5.3",
+    "faker": "^6.6.6",
     "prisma": "^5.22.0",
     "tsx": "^4.7.1",
     "typescript": "^7.0.2"
