@@ -1,0 +1,87 @@
+apps/admin-dashboard/src/middleware.ts
+  s_96fc20ef3d3de6::t_539d8ce3c2f3b6 79-91,93-96,271,274-275
+CHANGELOG.md
+  s_5b18009333d04d::t_9af4272dbd2661 13-14
+apps/admin-dashboard/next.config.js
+  s_5b18009333d04d::t_b7fba48f6ad1af 1
+apps/admin-dashboard/src/app/api/admin/login/route.ts
+  s_5b18009333d04d::t_9236736c0f8e29 9-26,29-42,46
+apps/admin-dashboard/src/app/api/cms/blog/generate-draft/route.ts
+  s_5b18009333d04d::t_cad870b126a23a 2,5-7
+apps/admin-dashboard/src/app/api/cms/blog/suggest-topics/route.ts
+  s_5b18009333d04d::t_91db0796fa0362 2-6
+apps/admin-dashboard/src/app/api/cms/generate-image/route.ts
+  s_5b18009333d04d::t_df2dd107b6f98a 2,5-7
+apps/admin-dashboard/src/app/api/cms/generate-section/route.test.ts
+  s_5b18009333d04d::t_7f9001d7c5e9a7 1-48
+apps/admin-dashboard/src/app/api/cms/generate-section/route.ts
+  s_5b18009333d04d::t_3d15f573e86f11 5,41-43
+apps/admin-dashboard/src/app/api/cms/landing-pages/[id]/route.ts
+  s_5b18009333d04d::t_d48333bd63d8d5 2,8-10,28-30
+apps/admin-dashboard/src/app/api/cms/menus/route.ts
+  s_5b18009333d04d::t_f7f5d7f0080c40 2-6,36-38
+apps/admin-dashboard/src/app/api/crm/companies/route.test.ts
+  s_5b18009333d04d::t_e802dd39a99b8e 1-36
+apps/admin-dashboard/src/app/api/crm/companies/route.ts
+  s_5b18009333d04d::t_19f5ee397aa12d 3,6-8,13-14,19
+apps/admin-dashboard/src/app/api/crm/contacts/route.ts
+  s_5b18009333d04d::t_fdf282d2b1b75c 3,6-8,12-18,20-21,26
+apps/admin-dashboard/src/app/api/crm/deals/route.ts
+  s_5b18009333d04d::t_d15ee759912d3e 3,6-8,12-18,20-21,26
+apps/admin-dashboard/src/app/api/support/tickets/route.ts
+  s_5b18009333d04d::t_4a1583c76e8444 3,6-8,26
+apps/admin-dashboard/src/app/api/team/roles/route.ts
+  s_5b18009333d04d::t_a906ae49d0b7d3 3,6-8,10,15
+apps/admin-dashboard/src/lib/require-admin-api.ts
+  s_5b18009333d04d::t_88444dbe535e44 1-19
+apps/client-dashboard/next.config.js
+  s_5b18009333d04d::t_aa62a756153d70 6
+apps/client-dashboard/src/app/api/cron/ai-tasks/route.test.ts
+  s_5b18009333d04d::t_0877ace5cd2aa0 1-59
+apps/client-dashboard/src/app/api/cron/ai-tasks/route.ts
+  s_5b18009333d04d::t_149307bc13c359 15-26,55-57,64,95-98
+apps/client-dashboard/src/app/api/danger/delete-workspace/route.test.ts
+  s_5b18009333d04d::t_89e5bd2f3aeaed 1-70
+apps/client-dashboard/src/app/api/danger/delete-workspace/route.ts
+  s_5b18009333d04d::t_aa890b12c11b9e 4,21-26,28,31,36-39,42-46,54-55,63,67-70
+apps/client-dashboard/src/app/api/danger/export/route.ts
+  s_5b18009333d04d::t_44d71d29360c6a 1,3,8-13,15,17-102,106-121,137-138
+apps/client-dashboard/src/lib/api-guards.ts
+  s_5b18009333d04d::t_a5b7edfcf5582c 1-83
+apps/marketing/next.config.js
+  s_5b18009333d04d::t_132161554ae15e 2
+apps/resident-portal/next.config.js
+  s_5b18009333d04d::t_ca0cbf76bc51e5 2
+docs/plan/Active/audit_remediation_2026/HIGH_RISK_ROUTES.md
+  s_5b18009333d04d::t_6d7ccf83469c79 1-46
+docs/plan/Active/audit_remediation_2026/PLAN_audit_remediation_2026.md
+  s_5b18009333d04d::t_a29bf62d8b854b 49
+packages/config/security-headers.js
+  s_5b18009333d04d::t_f1322faa9ceeae 1-35
+packages/config/security-headers.test.js
+  s_5b18009333d04d::t_fd64d68b260e08 1-14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.14",
+  "base_commit_sha": "39dfd6e7a7df89df6a150bd8d40974a6e1947127",
+  "prompts": {},
+  "sessions": {
+    "s_5b18009333d04d": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "3ce028f1-4fde-4a32-9be7-ea7018c8d4b8",
+        "model": "unknown"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_96fc20ef3d3de6": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f815f-9574-7903-b10c-d8763ad3bfe0",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
