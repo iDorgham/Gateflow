@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Ci]** remove baseUrl from tsconfigs for TypeScript 7 compat
+
 - **[Ci]** align tailwindcss specifier with the already-resolved v4 lockfile
 
 - **[Deploy]** wire Vercel `ignoreCommand` to skip Dependabot and automatic Preview builds (Hobby quota)
