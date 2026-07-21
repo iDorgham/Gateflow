@@ -4,10 +4,6 @@
  */
 @import "@gateflow/ui/globals.css";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 @layer base {
   html {
     scroll-behavior: smooth;

@@ -33,7 +33,7 @@
     "eslint": "10.7.0",
     "postcss": "^8.4.49",
     "tailwindcss": "4.3.3",
-    "@tailwindcss/postcss": "4.0.0-beta.8",
+    "@tailwindcss/postcss": "4.3.3",
     "typescript": "^7.0.2"
   }
 }

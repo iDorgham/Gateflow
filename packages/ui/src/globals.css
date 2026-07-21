@@ -1,9 +1,62 @@
-/* @import must precede @tailwind — Tailwind expands into real CSS rules */
+/* @import must precede other imports — Tailwind expands into real CSS rules */
 @import '../../tokens/css/tokens.css';
+@import 'tailwindcss';
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@theme {
+  --color-border: var(--gf-color-border);
+  --color-input: var(--gf-color-border);
+  --color-ring: var(--gf-color-primary);
+  --color-background: var(--gf-color-bg-page);
+  --color-foreground: var(--gf-color-text);
+
+  --color-primary: var(--gf-color-primary);
+  --color-primary-foreground: var(--gf-color-primary-foreground);
+  --color-primary-subtle: var(--gf-color-primary-subtle);
+
+  --color-secondary: var(--gf-color-bg-raised);
+  --color-secondary-foreground: var(--gf-color-text);
+
+  --color-destructive: var(--gf-color-danger);
+  --color-destructive-foreground: var(--gf-color-neutral-0);
+
+  --color-muted: var(--gf-color-muted);
+  --color-muted-foreground: var(--gf-color-muted-foreground);
+
+  --color-accent: var(--gf-color-bg-raised);
+  --color-accent-foreground: var(--gf-color-text);
+
+  --color-popover: var(--gf-color-bg-raised);
+  --color-popover-foreground: var(--gf-color-text);
+
+  --color-card: var(--gf-color-bg-default);
+  --color-card-foreground: var(--gf-color-text);
+
+  --color-surface-page: var(--gf-color-bg-page);
+  --color-surface-subtle: var(--gf-color-bg-subtle);
+  --color-surface-default: var(--gf-color-bg-default);
+  --color-surface-raised: var(--gf-color-bg-raised);
+  --color-surface-overlay: var(--gf-color-bg-overlay);
+
+  --color-success: var(--gf-color-success);
+  --color-success-subtle: var(--gf-color-success-subtle);
+  --color-success-bold: var(--gf-color-success-bold);
+  --color-warning: var(--gf-color-warning);
+  --color-warning-subtle: var(--gf-color-warning-subtle);
+  --color-warning-bold: var(--gf-color-warning-bold);
+  --color-danger: var(--gf-color-danger);
+  --color-danger-subtle: var(--gf-color-danger-subtle);
+  --color-danger-bold: var(--gf-color-danger-bold);
+  --color-info: var(--gf-color-info);
+  --color-info-subtle: var(--gf-color-info-subtle);
+  --color-info-bold: var(--gf-color-info-bold);
+
+  --radius-DEFAULT: var(--ds-border-radius);
+  --radius-xsmall: var(--ds-radius-xsmall);
+  --radius-small: var(--ds-radius-small);
+  --radius-medium: var(--ds-radius-medium);
+  --radius-large: var(--ds-radius-large);
+  --radius-circle: var(--ds-radius-circle);
+}
 
 @layer base {
   :root {
