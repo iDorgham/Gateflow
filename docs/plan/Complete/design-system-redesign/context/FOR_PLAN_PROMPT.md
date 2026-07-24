@@ -28,13 +28,13 @@
 
 1.  **Phase 1: Foundation Token Overhaul** (Primitive ramps & semantic layer).
 2.  **Phase 2: Core Documentation (1-6)** (Foundation pages & accent profiles).
-3.  **Phase 4: Monorepo Enforcement** (enforce-ads-design.js & preflight).
-4.  **Phase 3: Pattern Documentation (7-12)** (Components & surface hierarchy).
-5.  **Phase 5: Marketing & Auth Redesign** (High-flair premium gateway).
-6.  **Phase 6: Dashboards & Portal Redesign** (High-density operational refinement).
-7.  **Phase 7: Mobile Optimization** (Scanner & Resident compact refinement).
-8.  **Phase 8: Final Polish** (Accessibility audit & PRD sync).
+3. **Phase 3: Pattern Documentation (7-12)** (Components & surface hierarchy).
+4. **Phase 4: Monorepo Enforcement** (enforce-ads-design.js & preflight).
+5. **Phase 5: Marketing & Auth Redesign** (High-flair premium gateway).
+6. **Phase 6: Dashboards & Portal Redesign** (High-density operational refinement).
+7. **Phase 7: Mobile Optimization** (Scanner & Resident compact refinement).
+8. **Phase 8: Final Polish** (Accessibility audit & PRD sync).
 
 ## Reference Document
 
-Fully detailed blueprint available at: [DRAFT_design-system-redesign.md](file:///Users/Dorgham/Documents/Work/Devleopment/Gate-Access/docs/plan/Draft/design-system-redesign/DRAFT_design-system-redesign.md)
+Fully detailed blueprint available at: [DRAFT_design-system-redesign.md](DRAFT_design-system-redesign.md)

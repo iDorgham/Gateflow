@@ -5,7 +5,22 @@ const path = require('path');
 
 const nextConfig = {
   outputFileTracingRoot: path.join(__dirname, '../../'),
-  transpilePackages: ['@gateflow/ui', '@gate-access/i18n', 'framer-motion'],
+  transpilePackages: [
+    '@gateflow/ui',
+    '@gate-access/i18n',
+    'framer-motion',
+  ],
+  // Keep Prisma out of the Turbopack/webpack bundle so the native query engine
+  // (rhel-openssl-3.0.x on Vercel) is resolved from node_modules at runtime.
+  serverExternalPackages: ['@prisma/client', 'prisma', '@gate-access/db'],
+  outputFileTracingIncludes: {
+    '/**': [
+      './node_modules/.pnpm/@prisma+client@*/node_modules/.prisma/client/**',
+      './node_modules/.pnpm/@prisma+client@*/node_modules/@prisma/client/**',
+      '../../node_modules/.pnpm/@prisma+client@*/node_modules/.prisma/client/**',
+      '../../node_modules/.pnpm/@prisma+client@*/node_modules/@prisma/client/**',
+    ],
+  },
   experimental: {
     optimizePackageImports: ['lucide-react', '@gateflow/ui', 'framer-motion'],
     nextScriptWorkers: true,

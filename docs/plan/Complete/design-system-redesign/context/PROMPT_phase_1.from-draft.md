@@ -1,7 +1,7 @@
 # PHASE 1: GateFlow Design System Redesign — Foundation Tokens Overhaul
 
 **Role:** Design Technologist / UI Specialist  
-**Preferred Tool:** Cursor / Antigravity
+**Preferred Tool:** Cursor, Antigravity, Claude CLI, Opencode CLI, Gemini CLI, Kiro CLI, Kilo CLI, Qwen CLI
 
 ---
 
@@ -71,5 +71,5 @@ Spacing, Grid, Layering, and Motion primitives.
 
 - All new tokens are defined semantically in `tokens.css`.
 - Accent profiles (Kimchi/Cobalt/Emerald) are correctly defined.
-- `pnpm preflight` passes in `packages/tokens`.
+- `pnpm preflight` passes when executed from the repository root.
 - Foundations are set for the 12+ documentation pages.

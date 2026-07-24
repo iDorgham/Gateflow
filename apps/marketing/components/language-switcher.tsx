@@ -53,7 +53,7 @@ export function LanguageSwitcher({ currentLocale }: { currentLocale: Locale }) {
     router.push(segments.join('/'));
   };
 
-  const current = localeLabels[currentLocale];
+  const current = localeLabels[currentLocale] ?? localeLabels.en;
 
   return (
     <DropdownMenu>

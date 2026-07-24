@@ -9,15 +9,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 ## [Unreleased]
 
 ### Workspace
-- **[Scripts]** harden workflow-v2 guide parsing and docs alignment
 
 - **[Scripts]** harden workflow-v2 guide parsing and docs alignment
-
 - **[Workflow-V2]** bootstrap guide status/next/prompt/delivery
-
 - **[Build]** complete Tailwind v4 migration — production builds were broken
-
-- **[Security]** complete audit remediation 2026 (phases 1–4) — P0 containment, request-local fail-closed tenant isolation, trustworthy CI scanners, high-risk API guards + shared security headers
+- **[Security]** complete audit remediation 2026 (phases 1–3 shipped; Phase 4 still open in Active plan TASKS) — P0 containment, request-local fail-closed tenant isolation, trustworthy CI scanners
 - **[Security]** address PR #155 review findings (CMS public GET exception, bearer-key API access, bounded admin-login throttle)
 - **[Security]** harden Phase 4 high-risk APIs and HTTP headers (`withApiGuards`, `requireAdminApi`, cron fail-closed)
 - **[Security]** request-local fail-closed tenant isolation (AsyncLocalStorage `db`)
@@ -30,7 +26,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 - **[Deps]** bump brace-expansion override to patched 5.0.7+
 - **[Client-Dashboard]** fix typecheck breaks from lucide-react/framer-motion bumps
 - **[Deploy]** wire Vercel `ignoreCommand` to skip Dependabot and automatic Preview builds (Hobby quota)
-- **[Db]** unblock production migrate after failed platform_evolution
+- **[DB]** unblock production migrate after failed platform_evolution
 - **[DB]** clear production P3009 on `20260405135145_platform_evolution` (no-op migration + `db-migrate` workflow)
 
 ### AI Tools
@@ -51,6 +47,25 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 - **[Security]** audit remediation phase 2 — request-local fail-closed tenant `db` (ALS)
 - **[Security]** audit remediation phase 1 — remove bootstrap reset route; sanitize CMS HTML/branding CSS
 - **[Admin]** publish CMS pages by id or slug
+
+---
+
+## [0.3.0] — 2026-07-24
+
+### Workspace
+
+- **[Hygiene]** remove tracked root dumps, untrack `.lighthouseci`, prune unused `assets/Images` dumps, tighten `.gitignore`
+- **[Plans]** reconcile `design-system-redesign` / `org_types_dashboard` lifecycle twins; correct audit remediation backlog Phase 4 status
+- **[Deps]** override Dependabot floors — `qs>=6.15.2`, `uuid>=11.1.1`, `ip-address>=10.1.1`, `markdown-it>=14.2.0`, `@babel/core>=7.29.6`, `esbuild>=0.28.1`, `@ai-sdk/provider-utils>=4.0.21` (alerts #82 #81 #64 #93 #108 #91 #87)
+- **[Docs]** align README/CLAUDE stack to Next.js 16; Workflow v2 guide pointer
+
+### AI Tools
+
+- **[Docs]** document Workflow v2 guide/state paths in root README for pilot onboarding
+
+### Apps
+
+- **[Marketing]** null-safe language switcher locale labels; Prisma engine packaging for Vercel serverless
 
 ---
 

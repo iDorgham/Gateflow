@@ -2,8 +2,8 @@
 
 **Product:** GateFlow — Modern Digital Gate Infrastructure & Access Control
 **Version:** 1.0.0 (Production)
-**Status:** MVP 100% Complete | Unified Ecosystem
-**Stack:** Next.js 14 · Expo SDK 54 · PostgreSQL 15 · Prisma 5 · pnpm 8 · Turborepo 2
+**Status:** Production MVP · Workflow v2 Client Dashboard pilot focus  
+**Stack:** Next.js 16 · Expo SDK 54 · PostgreSQL 15 · Prisma 5 · pnpm 8 · Turborepo 2
 
 ---
 
@@ -14,12 +14,12 @@ GateFlow is a **Turborepo monorepo** with 6 apps and 6 shared packages. It is ha
 ```
 Gate-Access/
 ├── apps/
-│   ├── client-dashboard/    # Main SaaS portal (Next.js 14, Port 3001)
-│   ├── admin-dashboard/     # Super-admin panel (Next.js 14, Port 3002)
+│   ├── client-dashboard/    # Main SaaS portal (Next.js 16, Port 3001)
+│   ├── admin-dashboard/     # Super-admin panel (Next.js 16, Port 3002)
 │   ├── scanner-app/         # Mobile QR scanner (Expo SDK 54, Port 8081)
 │   ├── resident-mobile/     # Resident app (Expo SDK 54)
-│   ├── resident-portal/     # Resident web portal (Next.js 14, Port 3004)
-│   └── marketing/           # Public marketing site (Next.js 14, Port 3000)
+│   ├── resident-portal/     # Resident web portal (Next.js 16, Port 3004)
+│   └── marketing/           # Public marketing site (Next.js 16, Port 3000)
 ├── packages/
 │   ├── db/                  # Prisma schema, client, migrations, seed
 │   ├── types/               # Shared TypeScript types
