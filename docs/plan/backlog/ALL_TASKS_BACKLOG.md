@@ -6,11 +6,11 @@
 
 ### gateflow_workflow_bootstrap — Workflow v2 bootstrap (Client Dashboard pilot)
 
-**PLAN:** `docs/plan/Draft/gateflow_workflow_bootstrap/`  
-`PLAN_gateflow_workflow_bootstrap.md`  
-**Status:** 🟢 Draft — Phase 00 complete (local; awaiting commit/PR)  
-**Priority:** P0 — required before Client Dashboard audit/pilot loop  
-**Target:** Phase 00 exit → `/audit all`  
+**PLAN:** `docs/plan/Draft/gateflow_workflow_bootstrap/`
+`PLAN_gateflow_workflow_bootstrap.md`
+**Status:** 🟡 Draft — Phase 00 complete (local)
+**Priority:** P0 — required before Client Dashboard audit/pilot loop
+**Target:** Phase 00 exit → `/audit all`
 **Branch:** `codex/gateflow-workflow-bootstrap`
 
 - [x] Phase 00 — Workflow bootstrap (guide status/next/prompt/delivery, state schema, gateflow-guide)
