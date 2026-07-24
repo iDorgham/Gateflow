@@ -1,0 +1,21 @@
+CHANGELOG.md
+  s_28aa16f7cf041a::t_037179f307e162 13-14
+README.md
+  s_28aa16f7cf041a::t_520a0bb37e47b4 385
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "74397e6f8b370742b3a8882b1de3d146520f9541",
+  "prompts": {},
+  "sessions": {
+    "s_28aa16f7cf041a": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "66832d43-c819-474f-806c-bd9a95920720",
+        "model": "unknown"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
