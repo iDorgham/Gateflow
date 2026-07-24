@@ -1,0 +1,157 @@
+scripts/workflow-v2/delivery.js
+  s_7961eaa8c3fe94::t_ac62e3b00c6663 1-110
+scripts/workflow-v2/loop-scope.js
+  s_7961eaa8c3fe94::t_d79cde14064e35 37,44-53
+  s_7961eaa8c3fe94::t_c8fb79c50ab7c3 1-36,38-43,54-96
+scripts/workflow-v2/__tests__/loop-cli.test.js
+  s_7961eaa8c3fe94::t_0237f21b402421 1-40
+scripts/workflow-v2/__tests__/git-safe.test.js
+  s_7961eaa8c3fe94::t_8d79d9f0ef3d9e 1-9,11,13-42,56-65,67-88
+  s_7961eaa8c3fe94::t_deea4b633469ae 66
+  s_7961eaa8c3fe94::t_f8294eca64e224 10,12,43-55
+scripts/workflow-v2/state.schema.json
+  s_7961eaa8c3fe94::t_6eb533d7e89107 1-47
+scripts/workflow-v2/loop-cli.js
+  s_7961eaa8c3fe94::t_ea4ef5530f9ad7 45,210,237,244,285,300-303,307,331,397,434-439,442
+  s_7961eaa8c3fe94::t_f8294eca64e224 24-25,27-31,33,82,161-164,198-209,212-216,218-225,345-349,351-359,361-365,367-368
+  s_7961eaa8c3fe94::t_ab796fd4f63a76 13,168,217
+  s_7961eaa8c3fe94::t_c99af76f34c296 350,360,366,423
+  s_7961eaa8c3fe94::t_67f45585876539 383-387,390
+  s_7961eaa8c3fe94::t_9f662a28e0b964 399-414
+  s_7961eaa8c3fe94::t_6fde54a0fdd568 1-12,14-23,32,34-44,46-57,59-81,83-142,146-156,159-160,165-167,169-194,197,211,226-236,238-243,245-271,273-284,286-299,304-306,308-330,332-344,369-382,388-389,391-396,398,415-422,432-433,440-441,443-451
+  s_7961eaa8c3fe94::t_a244702ffa0397 26,58,143-145,157-158,195-196,272,424-431
+.ai/workflow-v2/tasks/README.md
+  s_7961eaa8c3fe94::t_6fde54a0fdd568 1-6
+scripts/workflow-v2/guide.js
+  s_cab1fc1958c0c0::t_37de3ec974ed7c 1-205
+docs/development/WORKFLOW_V2_ADR.md
+  s_7961eaa8c3fe94::t_b0c978019d2f5e 19-23,42-48,56-59
+  s_7961eaa8c3fe94::t_4220d05ecc3c43 1-18,24-41,49-55
+.ai/workflow-v2/loops/README.md
+  s_7961eaa8c3fe94::t_6fde54a0fdd568 1-8
+docs/workspace/README.md
+  s_7961eaa8c3fe94::t_4220d05ecc3c43 1-13
+docs/workspace/COMMAND_GUIDE.md
+  s_7961eaa8c3fe94::t_b0c978019d2f5e 38-39,41,59-61,67
+  s_cab1fc1958c0c0::t_918cf1044471af 28-29
+  s_7961eaa8c3fe94::t_4220d05ecc3c43 26-27,30,49-58
+docs/workspace/WORKSPACE_GUIDE.md
+  s_7961eaa8c3fe94::t_4220d05ecc3c43 25-30
+  s_7961eaa8c3fe94::t_4450f4e5708062 47-48,50,89
+package.json
+  s_cab1fc1958c0c0::t_37de3ec974ed7c 34
+  s_7961eaa8c3fe94::t_a7cd2079503a22 33,35-37
+  s_7961eaa8c3fe94::t_f5ca6d8c3cebac 38-40
+scripts/workflow-v2/support-cli.js
+  s_7961eaa8c3fe94::t_2506b1fbb69cb1 1-9,11-32,34-67,73-79
+  s_7961eaa8c3fe94::t_d98c8daff5693e 10,33,68-72
+scripts/workflow-v2/__tests__/delivery.test.js
+  s_7961eaa8c3fe94::t_ac62e3b00c6663 1-85
+scripts/workflow-v2/__tests__/workflow-v2.test.js
+  s_7961eaa8c3fe94::t_8b236a66d9fb90 1-15,18-77,79-90,99
+  s_7961eaa8c3fe94::t_6eb533d7e89107 78
+  s_7961eaa8c3fe94::t_d98c8daff5693e 16-17,91-98
+scripts/workflow-v2/__tests__/fixtures/task-contract-input.json
+  s_7961eaa8c3fe94::t_0237f21b402421 1-29
+scripts/workflow-v2/loop-lib.js
+  s_7961eaa8c3fe94::t_c8fb79c50ab7c3 1-36,44-322,324-335
+  s_7961eaa8c3fe94::t_ab796fd4f63a76 37-43,323
+docs/workspace/CHANGELOG.md
+  s_7961eaa8c3fe94::t_4220d05ecc3c43 1-11,18-22
+  s_7961eaa8c3fe94::t_b0c978019d2f5e 12-14,23-25
+  s_cab1fc1958c0c0::t_37de3ec974ed7c 15-17
+.ai/workflow-v2/README.md
+  s_7961eaa8c3fe94::t_6eb533d7e89107 1-9
+scripts/workflow-v2/registry.json
+  s_7961eaa8c3fe94::t_2506b1fbb69cb1 1-23
+scripts/ai-sync/sync-ai-tools.sh
+  s_7961eaa8c3fe94::t_a7cd2079503a22 77-96
+  s_8c571d2c0b4228::t_4d445306ba19a8 101,112
+scripts/workflow-v2/__tests__/loop-scope.test.js
+  s_7961eaa8c3fe94::t_8d79d9f0ef3d9e 1-54
+  s_7961eaa8c3fe94::t_d79cde14064e35 55-67
+docs/workspace/WORKFLOW_V2.md
+  s_cab1fc1958c0c0::t_37de3ec974ed7c 16-26
+  s_7961eaa8c3fe94::t_b0c978019d2f5e 59-98
+  s_7961eaa8c3fe94::t_4220d05ecc3c43 1-15,27-58,99-103
+scripts/workflow-v2/operations.js
+  s_7961eaa8c3fe94::t_6e7c7e4724d1f3 1-118
+.ai/workflow-v2/state.json
+  s_7961eaa8c3fe94::t_6eb533d7e89107 1-42
+CHANGELOG.md
+  s_7961eaa8c3fe94::t_b0c978019d2f5e 36-38
+  s_7961eaa8c3fe94::t_4220d05ecc3c43 33-35,41
+  s_cab1fc1958c0c0::t_37de3ec974ed7c 39-40
+scripts/workflow-v2/git-safe.js
+  s_7961eaa8c3fe94::t_f8294eca64e224 41-67,102,104
+  s_7961eaa8c3fe94::t_c8fb79c50ab7c3 1-40,68-101,103,105-108
+scripts/workflow-v2/lib.js
+  s_7961eaa8c3fe94::t_8b236a66d9fb90 1-164,184-195,198
+  s_7961eaa8c3fe94::t_d98c8daff5693e 165-183,196-197
+scripts/workflow-v2/operations-cli.js
+  s_7961eaa8c3fe94::t_6e7c7e4724d1f3 1-16,20-77
+  s_7961eaa8c3fe94::t_d98c8daff5693e 17-19
+scripts/workflow-v2/cli.js
+  s_7961eaa8c3fe94::t_d98c8daff5693e 12-13,28-29,122-130
+  s_7961eaa8c3fe94::t_6eb533d7e89107 1-11,14-27,30-121,131-141
+scripts/workflow-v2/support.js
+  s_7961eaa8c3fe94::t_d98c8daff5693e 104-115,123
+  s_7961eaa8c3fe94::t_2506b1fbb69cb1 1-103,116-122,124
+scripts/workflow-v2/__tests__/loop.test.js
+  s_7961eaa8c3fe94::t_5712939b7ee444 130-131
+  s_7961eaa8c3fe94::t_8d79d9f0ef3d9e 1-19,21-46,55-129,132-164
+  s_7961eaa8c3fe94::t_ab796fd4f63a76 20,47-54
+scripts/workflow-v2/delivery-cli.js
+  s_7961eaa8c3fe94::t_ac62e3b00c6663 1-18,20-29,31-56
+  s_7961eaa8c3fe94::t_ea4ef5530f9ad7 19,30
+scripts/workflow-v2/__tests__/operations.test.js
+  s_7961eaa8c3fe94::t_6e7c7e4724d1f3 1-41
+scripts/workflow-v2/__tests__/guide.test.js
+  s_cab1fc1958c0c0::t_37de3ec974ed7c 1-59
+docs/workspace/SKILLS_GUIDE.md
+  s_7961eaa8c3fe94::t_4220d05ecc3c43 25-29
+  s_7961eaa8c3fe94::t_4450f4e5708062 30-35
+scripts/workflow-v2/loop-state.schema.json
+  s_7961eaa8c3fe94::t_ea0d3e76927a58 12-17,19-20,23,25,40-50
+  s_7961eaa8c3fe94::t_4450f4e5708062 38-39,51-62
+  s_7961eaa8c3fe94::t_6fde54a0fdd568 1-11,18,21-22,24,26-37,63-87
+scripts/workflow-v2/guide-cli.js
+  s_cab1fc1958c0c0::t_37de3ec974ed7c 1-30
+scripts/workflow-v2/task-contract.schema.json
+  s_7961eaa8c3fe94::t_6fde54a0fdd568 1-46
+scripts/workflow-v2/__tests__/support.test.js
+  s_7961eaa8c3fe94::t_2506b1fbb69cb1 1-12,14-81,91
+  s_7961eaa8c3fe94::t_d98c8daff5693e 13,82-90
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "55bbeb7c140a93f77585be34eff28278326c6301",
+  "prompts": {},
+  "sessions": {
+    "s_7961eaa8c3fe94": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f9188-aa29-74c3-a2c0-a1f29699358b",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_8c571d2c0b4228": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f91a8-60da-7112-83ad-653012634f2d",
+        "model": "unknown"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_cab1fc1958c0c0": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f91bc-3fe9-7942-b3e0-c544ab2713ee",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
