@@ -8,7 +8,6 @@ const nextConfig = {
   transpilePackages: [
     '@gateflow/ui',
     '@gate-access/i18n',
-    '@gate-access/db',
     'framer-motion',
   ],
   // Keep Prisma out of the Turbopack/webpack bundle so the native query engine
