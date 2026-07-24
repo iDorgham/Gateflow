@@ -8,7 +8,9 @@
 
 - `pnpm workflow:v2:check` — 54 pass / 0 fail
 - `node scripts/workflow-v2/guide-cli.js --json` — next `/audit all`
-- `node scripts/workflow-v2/guide-cli.js next|prompt|delivery`
+- `node scripts/workflow-v2/guide-cli.js next`
+- `node scripts/workflow-v2/guide-cli.js prompt`
+- `node scripts/workflow-v2/guide-cli.js delivery`
 - `codex doctor` — binary `/usr/local/bin/codex` OK (v0.137.0)
 - `node scripts/urbrain/dispatch/td.mjs doctor` (Dorgham) — `codex ✓`
 
