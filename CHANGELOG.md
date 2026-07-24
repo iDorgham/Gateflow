@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Workflow-V2]** bootstrap guide status/next/prompt/delivery
+
 - **[Build]** complete Tailwind v4 migration — production builds were broken
 
 - **[Security]** complete audit remediation 2026 (phases 1–4) — P0 containment, request-local fail-closed tenant isolation, trustworthy CI scanners, high-risk API guards + shared security headers
