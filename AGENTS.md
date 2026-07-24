@@ -9,10 +9,14 @@
 - Prefer development guidance and docs to cover a multi-tool stack (Cursor, Kiro, Antigravity, Claude CLI, Opencode CLI, Gemini CLI, and Kilo CLI) instead of Cursor-only instructions.
 - Prefer phased execution workflows: plan/tasks first, then apply prompts phase-by-phase with testing and incremental enhancements after each phase.
 - Prefer comprehensive per-app and cross-cutting references under `docs/reference/apps/` when packing context for other AI tools or planning.
+- Keep UrBrain planning and `pnpm brain` dispatch in the Dorgham workspace; run GateFlow product development and verification only in Gate-Access—do not assume `pnpm brain` exists inside Gate-Access.
+- Prefer one primary writer per GateFlow workflow phase; use parallel reviewers or CI investigators for failing checks rather than multiple concurrent writers on the same phase.
 
 ## Learned Workspace Facts
 
 - GateFlow AI config is canonical under **`.agents/`** (symlink to `.antigravity/`, gitignored). Run **`pnpm sync`** (`scripts/ai-sync/sync-ai-tools.sh`) locally to copy workflows, skills, agents, and rules to Cursor, Kiro, Antigravity, Claude CLI, Opencode CLI, Gemini CLI, and Kilo CLI. Optional watch: **`pnpm sync:watch`**. CI `sync-ai-tools` soft-skips when `.agents/` is absent from the checkout. Onboarding: [docs/workspace/COMMAND_GUIDE.md](docs/workspace/COMMAND_GUIDE.md) and [docs/workspace/WORKSPACE_GUIDE.md](docs/workspace/WORKSPACE_GUIDE.md).
+- Workflow v2 canonical runtime state is `.ai/workflow-v2/state.json` (not `.gateflow/`); use `pnpm workflow:v2:guide` and `pnpm workflow:v2:check` for guide status and verification.
+- Husky pre-push requires branch names matching `^(feat|fix|chore|hotfix|refactor|docs|test|perf|ci|security)(/…)?$`; non-conventional prefixes such as `codex/…` are rejected and must be renamed before push.
 - `packages/db/prisma/schema.prisma` sets `directUrl = env("DIRECT_DATABASE_URL")`. Prisma CLI operations that need a direct Postgres connection (for example `migrate deploy`, `migrate resolve`) use that variable; values in `packages/db/.env` can override a one-off shell `DATABASE_URL`. Runtime app code often uses Accelerate (`prisma+postgres://…`) while migrations need the direct URL—keep both aligned per environment.
 - Use `pnpm preflight` as defined in root `package.json` without extra flags; unsupported args can break the underlying `turbo` chain. Root preflight/typecheck include all workspaces (dashboards restored in audit_remediation_2026 Phase 3).
 - After moving a plan between `docs/plan/Draft/`, `Ready/`, `Active/`, and `Complete/`, update `docs/plan/backlog/ALL_TASKS_BACKLOG.md` (paths and status) so automation and `/guide` match filesystem layout.
