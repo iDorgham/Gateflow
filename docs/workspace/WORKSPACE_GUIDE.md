@@ -22,6 +22,12 @@ Reference for **GateFlow phased development**: commands, agents, skills, and syn
 
 ## Development lifecycle
 
+### Workflow v2 pilot focus
+
+Workflow v2 wraps the plan lifecycle with a fixed single-app state machine.
+See [WORKFLOW_V2.md](./WORKFLOW_V2.md). A parked app cannot be planned or
+developed while another app is uncertified.
+
 ### 1. Discovery & intent
 
 - **`/idea <slug>`** — `docs/development/initiatives/IDEA_<slug>.md`
@@ -38,8 +44,10 @@ Reference for **GateFlow phased development**: commands, agents, skills, and syn
 
 - **`/dev`** — next incomplete phase (Ready → Active on start)
 - **`/dev <n>`** — specific phase
+- **`/dev loop`** — bounded approved plan-phase or task-contract controller
+- **`/pilot loop`** — stricter pilot profile with certification and next-app gates
 - **`/ship <slug>`** — all remaining phases
-- **`/ralph`** — recursive autopilot until plan complete
+- **`/ralph`** — compatibility alias for bounded local `/dev loop --all`
 
 ### 4. Guidance
 
@@ -78,7 +86,7 @@ Preferences: `docs/development/learning/GUIDE_PREFERENCES.md`. Rule: local `.age
 | `/version`    | Versioning / tags        |
 | `/organize`   | Docs cleanup             |
 | `/clis-team`  | Multi-CLI teams          |
-| `/ralph`      | Phase autopilot          |
+| `/ralph`      | Bounded all-phase alias  |
 
 ---
 

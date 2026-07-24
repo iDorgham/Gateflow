@@ -1,0 +1,103 @@
+# GateFlow Workflow v2
+
+Workflow v2 develops and certifies one pilot application at a time:
+
+1. `apps/client-dashboard`
+2. `apps/resident-portal`
+3. `apps/scanner-app`
+4. integrated residential-compound certification
+
+State lives at `.ai/workflow-v2/state.json`. Inspect it with:
+
+```bash
+pnpm workflow:v2 status --json
+```
+
+Render the workspace-aware control-center response with:
+
+```bash
+pnpm workflow:v2:guide
+```
+
+The guide reads live local state, routes, plan/evidence metadata, scores,
+pilot-flow coverage, and Git status. It emits a restrained status table, one
+safe next command, and a complete prompt for the next agent or CLI. JSON is
+available with `pnpm workflow:v2:guide --json`.
+
+The legal app stages are:
+
+`parked → focused → audited → planned → developing → checking → pilot-ready → certified`
+
+Only the state CLI writes focus/stage. Certification requires fresh evidence and
+creates a write-once hash-bound receipt. `/next-app` recommends the fixed
+successor and requires confirmation before changing focus.
+
+## Command groups
+
+- Focus and evidence: `/focus`, `/audit`, `/progress`, `/page-map`, `/page`,
+  `/components`, `/usability`
+- Delivery: `/plan`, `/dev`, `/check`, `/design`, `/api`, `/database`,
+  `/security`, `/test`, `/observe`
+- Operations: `/github`, `/vercel`, `/release`
+- Pilot gates: `/pilot`, `/certify`, `/next-app`, `/guide`
+
+## Deterministic tools
+
+```bash
+pnpm workflow:v2:check
+node scripts/workflow-v2/support-cli.js routes client-dashboard --json
+node scripts/workflow-v2/support-cli.js scope-diff client-dashboard --json
+node scripts/workflow-v2/operations-cli.js verify client-dashboard
+node scripts/workflow-v2/operations-cli.js env-check client-dashboard --json
+```
+
+These tools are local-only by default. Environment checks report variable names,
+never values. Verification prints its plan unless `--run` is explicitly passed.
+GitHub, Vercel, deployment, migration, release, and remote mutations require
+separate authorization.
+
+## Bounded development loops
+
+Use `/dev loop` for an approved plan phase or task contract:
+
+```text
+/dev loop start <plan-slug> --phase=1 --delivery=local
+/dev loop start <plan-slug> --all --delivery=draft-pr
+/dev loop task draft <task-slug> --from <contract-input.json>
+/dev loop task approve <task-slug>
+/dev loop start task:<task-slug> --delivery=local
+```
+
+`/pilot loop` delegates to the same controller with the pilot profile, retaining
+page-score, flow-coverage, certification, and fixed app-sequence gates.
+
+Each run records an atomic checkpoint under `.ai/workflow-v2/loops/`. A batch
+contains at most three tasks and a distinct failure receives at most three
+automatic repairs. Pause/stop releases the workdir lock; resume revalidates the
+focus and approved target hash.
+
+Delivery authorization is cumulative but narrow:
+
+- `local`: branch/worktree only; `/dev loop ship-phase` is required before
+  staging or committing loop-owned files.
+- `draft-pr`: focused commits, feature-branch push, draft PR, inspection, and
+  bounded fixes.
+- `approve-merge`: current PR number and head SHA only.
+- `approve-release`: release-plan ID and target commit only.
+- Deployment, promotion, and database migration are always separate commands.
+
+`/ralph <slug>` is now a compatibility alias for a bounded local all-phase run.
+The Workflow v2 loop never calls the legacy `ralph-git.js` mutation paths.
+
+Controller help:
+
+```bash
+pnpm dev:loop --help
+pnpm workflow:v2:delivery --help
+```
+
+## Result contract
+
+Every task returns artifacts, fresh verification, risks/blockers, and exactly
+one handoff. Static review is labeled `static-review-only`; it cannot substitute
+for browser, E2E, visual, or device evidence.

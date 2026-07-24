@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gateflow.site/schemas/workflow-v2-task-contract.schema.json",
+  "title": "GateFlow Workflow v2 task contract",
+  "type": "object",
+  "required": [
+    "version",
+    "slug",
+    "target",
+    "scope",
+    "acceptanceCriteria",
+    "securityBoundaries",
+    "checks",
+    "rollback",
+    "prohibitedActions",
+    "createdAt",
+    "updatedAt",
+    "approval"
+  ],
+  "properties": {
+    "version": { "const": 1 },
+    "slug": { "type": "string", "pattern": "^[a-z0-9][a-z0-9_-]*$" },
+    "target": {
+      "type": "object",
+      "required": ["type", "id"],
+      "properties": {
+        "type": { "enum": ["app", "workspace"] },
+        "id": { "type": "string", "minLength": 1 }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "required": ["include", "exclude"],
+      "properties": {
+        "include": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+        "exclude": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "acceptanceCriteria": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+    "securityBoundaries": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+    "checks": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+    "rollback": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+    "prohibitedActions": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+    "approval": { "type": ["object", "null"] }
+  }
+}

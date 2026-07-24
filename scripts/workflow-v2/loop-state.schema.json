@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gateflow.site/schemas/workflow-v2-loop-state.schema.json",
+  "title": "GateFlow Workflow v2 bounded loop",
+  "type": "object",
+  "required": [
+    "version",
+    "runId",
+    "profile",
+    "delivery",
+    "target",
+    "targetType",
+    "focusedApp",
+    "phase",
+    "taskBatch",
+    "verificationAttempt",
+    "repairAttempts",
+    "status",
+    "branch",
+    "worktree",
+    "startCommit",
+    "ownedFiles",
+    "preExistingDirty",
+    "evidence",
+    "blockers",
+    "approvals",
+    "permissions",
+    "limits",
+    "nextAction",
+    "createdAt",
+    "updatedAt"
+  ],
+  "properties": {
+    "version": { "const": 1 },
+    "runId": { "type": "string", "minLength": 1 },
+    "profile": { "enum": ["phase", "task", "pilot"] },
+    "delivery": { "enum": ["local", "draft-pr"] },
+    "targetType": { "enum": ["app", "workspace"] },
+    "focusedApp": { "type": ["string", "null"] },
+    "phase": { "type": ["integer", "null"], "minimum": 1 },
+    "allPhases": { "type": "boolean" },
+    "taskBatch": { "type": "integer", "minimum": 1, "maximum": 3 },
+    "verificationAttempt": { "type": "integer", "minimum": 0, "maximum": 3 },
+    "repairAttempts": { "type": "object" },
+    "branch": { "type": ["string", "null"] },
+    "worktree": { "type": ["string", "null"] },
+    "ownedFiles": { "type": "array", "items": { "type": "string" } },
+    "preExistingDirty": { "type": "array", "items": { "type": "string" } },
+    "evidence": { "type": "array" },
+    "blockers": { "type": "array" },
+    "contractScope": {
+      "type": ["object", "null"],
+      "properties": {
+        "include": { "type": "array", "items": { "type": "string" } },
+        "exclude": { "type": "array", "items": { "type": "string" } }
+      },
+      "required": ["include", "exclude"]
+    },
+    "prohibitedActions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "target": {
+      "type": "object",
+      "required": ["type", "id", "hash"],
+      "properties": {
+        "type": { "enum": ["plan", "task"] },
+        "id": { "type": "string", "minLength": 1 },
+        "hash": { "type": "string", "minLength": 1 }
+      }
+    },
+    "status": {
+      "enum": ["running", "paused", "stopped", "blocked", "phase-green", "shipped"]
+    },
+    "limits": {
+      "const": { "taskBatch": 3, "repairAttempts": 3 }
+    },
+    "permissions": {
+      "type": "object",
+      "properties": {
+        "merge": { "const": false },
+        "deploy": { "const": false },
+        "migrate": { "const": false }
+      }
+    }
+  }
+}

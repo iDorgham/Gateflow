@@ -22,6 +22,17 @@ Discovery helpers: `find-skills`, domain grep under `.agents/skills/`.
 
 ## Tier 1 — Workflow & safety (load often)
 
+Workflow v2 skills use a shared result/evidence contract and cover app focus,
+audits, page inventory/scoring, pilot certification, product/domain modeling,
+frontend/API/database/security, testing, observability, GitHub, Vercel, and
+release rollback. Load only the smallest set needed for the focused task.
+
+Bounded-loop delivery skills cover branch/worktree lifecycle, focused diff
+ownership, atomic conventional commits, draft PRs, CI and review repairs,
+hash-bound merge approval, version/release planning, deployment readiness,
+post-release verification, and rollback. They never independently grant merge,
+tag, release, deploy, or migration authority.
+
 | Folder                     | Description                                                        |
 | -------------------------- | ------------------------------------------------------------------ |
 | **`gf-guide`**             | Workspace guide — pre-flight, coach format, “what should I do now” |

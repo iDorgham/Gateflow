@@ -23,6 +23,11 @@ After editing workflows, skills, agents, or rules under `.agents/`, run **`pnpm 
 
 ## Discovery → execution
 
+Workflow v2 adds a single-app pilot gate before this lifecycle. Start with
+`/focus status`; use `/audit`, `/progress`, and `/page-map` before `/plan`.
+All Workflow v2 responses share the status → evidence → action → copy-ready
+prompt → one-next-command contract.
+
 | Stage          | Command              | Output / effect                               |
 | -------------- | -------------------- | --------------------------------------------- |
 | Initiative     | `/idea <slug>`       | `docs/development/initiatives/IDEA_<slug>.md` |
@@ -30,9 +35,10 @@ After editing workflows, skills, agents, or rules under `.agents/`, run **`pnpm 
 | Handoff prompt | `/prompt <slug>`     | `FOR_PLAN_PROMPT.md`                          |
 | Plan           | `/plan <slug>`       | `PLAN_*.md`, `TASKS_*.md`, phase prompts      |
 | Ready          | `/plan ready <slug>` | Move Draft → Ready                            |
-| Execute phase  | `/dev` or `/dev <n>` | One phase (code, tests, git)                  |
+| Execute phase  | `/dev` or `/dev <n>` | One phase with focused checks                 |
+| Bounded loop   | `/dev loop start …`  | Approved plan phase(s) or task contract       |
 | Execute all    | `/ship <slug>`       | All remaining phases                          |
-| Autopilot      | `/ralph`             | Recursive phase loop                          |
+| Compatibility  | `/ralph <slug>`      | Bounded local all-phase `/dev loop` alias     |
 
 Plan folders: `docs/plan/{Draft,Ready,Active,Complete}/`. Update `docs/plan/backlog/ALL_TASKS_BACKLOG.md` when moving plans.
 
@@ -40,12 +46,25 @@ Plan folders: `docs/plan/{Draft,Ready,Active,Complete}/`. Update `docs/plan/back
 
 ## Command reference
 
+| Workflow v2 command | When to use |
+| ------------------- | ----------- |
+| `/focus` | Inspect/select the one active pilot app |
+| `/audit` | Collect read-only app/page/security/pilot evidence |
+| `/progress` | Report stage, scores, coverage, blockers, one next command |
+| `/page-map`, `/page`, `/components`, `/usability` | Plan and review focused pages |
+| `/check`, `/test`, `/security` | Produce deterministic dated evidence |
+| `/design`, `/api`, `/database`, `/observe` | Apply cross-cutting contracts |
+| `/github`, `/vercel`, `/release` | Inspect readiness; mutations need authorization |
+| `/pilot`, `/certify`, `/next-app` | Orchestrate, certify, and unlock the sequence |
+| `/dev loop` | Run approved phases/tasks in bounded batches |
+| `/pilot loop` | Run the bounded controller with pilot gates |
+
 | Command           | When to use                                                   |
 | ----------------- | ------------------------------------------------------------- |
 | **`/guide`**      | Router + coach — what to do next; **does not execute phases** |
 | **`/dev`**        | Implement exactly one plan phase                              |
 | **`/ship`**       | Run full plan via repeated `/dev`-style execution             |
-| **`/ralph`**      | Autopilot all remaining phases of active plan                 |
+| **`/ralph`**      | Compatibility alias for bounded local all-phase execution     |
 | **`/idea`**       | Capture new initiative                                        |
 | **`/draft`**      | Raw planning notes before `/plan`                             |
 | **`/prompt`**     | Build `FOR_PLAN_PROMPT.md` for `/plan`                        |

@@ -1,0 +1,42 @@
+{
+  "version": 2,
+  "sequence": [
+    "client-dashboard",
+    "resident-portal",
+    "scanner-app"
+  ],
+  "focusedApp": "client-dashboard",
+  "integratedPilot": {
+    "stage": "parked",
+    "certificationReceipt": null
+  },
+  "apps": {
+    "client-dashboard": {
+      "stage": "focused",
+      "currentPlan": null,
+      "baseline": null,
+      "evidence": [],
+      "certificationReceipt": null,
+      "updatedAt": "2026-07-24T00:00:00.000Z"
+    },
+    "resident-portal": {
+      "stage": "parked",
+      "currentPlan": null,
+      "baseline": null,
+      "evidence": [],
+      "certificationReceipt": null,
+      "updatedAt": "2026-07-24T00:00:00.000Z"
+    },
+    "scanner-app": {
+      "stage": "parked",
+      "currentPlan": null,
+      "baseline": null,
+      "evidence": [],
+      "certificationReceipt": null,
+      "updatedAt": "2026-07-24T00:00:00.000Z"
+    }
+  },
+  "workdirLock": null,
+  "createdAt": "2026-07-24T00:00:00.000Z",
+  "updatedAt": "2026-07-24T00:00:00.000Z"
+}

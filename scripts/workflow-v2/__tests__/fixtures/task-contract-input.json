@@ -1,0 +1,29 @@
+{
+  "target": {
+    "type": "workspace",
+    "id": "workspace"
+  },
+  "scope": {
+    "include": [
+      "docs/workspace/"
+    ],
+    "exclude": [
+      "apps/"
+    ]
+  },
+  "acceptanceCriteria": [
+    "The bounded loop command is documented."
+  ],
+  "securityBoundaries": [
+    "Do not expose secrets or weaken repository protections."
+  ],
+  "checks": [
+    "Run the Workflow v2 tests."
+  ],
+  "rollback": [
+    "Revert only loop-owned documentation changes."
+  ],
+  "prohibitedActions": [
+    "Do not deploy, migrate, merge, tag, or release."
+  ]
+}

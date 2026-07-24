@@ -30,6 +30,15 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### AI Tools
 
+- **[Workflow v2]** add single-app pilot focus, evidence-based page scoring,
+  deterministic local gates, specialist contracts, composable skills, and
+  certification-locked app sequencing
+- **[Workflow v2]** add bounded `/dev loop` plan/task execution, `/pilot loop`
+  profile, durable task approvals/checkpoints, ownership-safe local delivery,
+  and SHA/commit-bound merge and release gates
+- **[Workflow v2]** add a workspace-aware Guide renderer with live evidence,
+  one safe next command, and complete agent/CLI handoff prompts
+
 ### Apps
 
 - **[Security]** audit remediation phase 4 — admin/CMS/CRM API auth, rate limits, shared HSTS+CSP headers

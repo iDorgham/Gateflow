@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://gateflow.site/schemas/workflow-v2-state.schema.json",
+  "title": "GateFlow Workflow v2 state",
+  "type": "object",
+  "required": ["version", "sequence", "focusedApp", "apps", "integratedPilot", "createdAt", "updatedAt"],
+  "properties": {
+    "version": { "const": 2 },
+    "sequence": {
+      "const": ["client-dashboard", "resident-portal", "scanner-app"]
+    },
+    "focusedApp": {
+      "type": ["string", "null"],
+      "enum": ["client-dashboard", "resident-portal", "scanner-app", null]
+    },
+    "apps": {
+      "type": "object",
+      "required": ["client-dashboard", "resident-portal", "scanner-app"],
+      "additionalProperties": false,
+      "properties": {
+        "client-dashboard": { "$ref": "#/$defs/app" },
+        "resident-portal": { "$ref": "#/$defs/app" },
+        "scanner-app": { "$ref": "#/$defs/app" }
+      }
+    },
+    "integratedPilot": { "type": "object" },
+    "workdirLock": { "type": ["object", "null"] },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "updatedAt": { "type": "string", "format": "date-time" }
+  },
+  "$defs": {
+    "app": {
+      "type": "object",
+      "required": ["stage", "evidence", "updatedAt"],
+      "properties": {
+        "stage": {
+          "enum": ["parked", "focused", "audited", "planned", "developing", "checking", "pilot-ready", "certified"]
+        },
+        "currentPlan": { "type": ["string", "null"] },
+        "baseline": { "type": ["object", "null"] },
+        "evidence": { "type": "array" },
+        "certificationReceipt": { "type": ["object", "null"] },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      }
+    }
+  }
+}

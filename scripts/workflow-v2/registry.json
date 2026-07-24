@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "apps": {
+    "client-dashboard": {
+      "path": "apps/client-dashboard",
+      "package": "client-dashboard",
+      "type": "nextjs",
+      "order": 1
+    },
+    "resident-portal": {
+      "path": "apps/resident-portal",
+      "package": "resident-portal",
+      "type": "nextjs",
+      "order": 2
+    },
+    "scanner-app": {
+      "path": "apps/scanner-app",
+      "package": "scanner-app",
+      "type": "expo",
+      "order": 3
+    }
+  }
+}
