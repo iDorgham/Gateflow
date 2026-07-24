@@ -1,0 +1,26 @@
+.github/workflows/lighthouse.yml
+  s_28aa16f7cf041a::t_a309e0f3a78837 15-17
+  s_28aa16f7cf041a::t_11c53fd9698ed4 181-188,190
+  s_28aa16f7cf041a::t_e175e0f748c8fd 448
+  s_28aa16f7cf041a::t_014a357809678a 151,153,388-395,397
+  s_28aa16f7cf041a::t_6495caafad5275 150
+  s_28aa16f7cf041a::t_29533ff1228b24 147-149
+  s_28aa16f7cf041a::t_fdf0c8131a780f 152
+  s_28aa16f7cf041a::t_3e085f52dfa84b 146,155
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "9987088ae92d84dc913ecbf2cfc355949505e936",
+  "prompts": {},
+  "sessions": {
+    "s_28aa16f7cf041a": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "66832d43-c819-474f-806c-bd9a95920720",
+        "model": "default"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
