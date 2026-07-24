@@ -118,39 +118,53 @@ jobs:
         env:
           EVENT_NAME: ${{ github.event_name }}
         run: |
-          set +e
-          lhci autorun \
-            --collect.url="${{ steps.url.outputs.url }}" \
-            --collect.url="${{ steps.url.outputs.url }}/en/features" \
-            --collect.url="${{ steps.url.outputs.url }}/en/pricing" \
-            --collect.settings.emulatedFormFactor=mobile \
-            --collect.numberOfRuns=3 \
-            --collect.settings.chromeFlags="--no-sandbox --disable-dev-shm-usage" \
-            --assert.assertions.categories:performance="['error',{'minScore':0.65}]" \
-            --assert.assertions.categories:accessibility="['error',{'minScore':0.85}]" \
-            --assert.assertions.categories:best-practices="['error',{'minScore':0.88}]" \
-            --assert.assertions.categories:seo="['error',{'minScore':0.90}]" \
-            --assert.assertions.cumulative-layout-shift="['error',{'maxNumericValue':0.15}]" \
-            --upload.target=temporary-public-storage \
-            --config=.lighthouserc.js
-          EXIT_CODE=$?
           set -e
+          lhci collect \
+            --url="${{ steps.url.outputs.url }}" \
+            --url="${{ steps.url.outputs.url }}/en/features" \
+            --url="${{ steps.url.outputs.url }}/en/pricing" \
+            --settings.emulatedFormFactor=mobile \
+            --numberOfRuns=3 \
+            --settings.chromeFlags="--no-sandbox --disable-dev-shm-usage" \
+            --config=.lighthouserc.js
 
-          echo "LHCI exit code: $EXIT_CODE"
           mkdir -p lhci-reports/marketing-mobile
           if [ -d ".lighthouseci" ]; then
             cp -r .lighthouseci/* lhci-reports/marketing-mobile/
           else
-            echo "⚠ Warning: .lighthouseci directory not created"
+            echo "::error::Marketing mobile Lighthouse failed: .lighthouseci directory not created."
+            exit 1
           fi
+
           REPORT_COUNT="$(find lhci-reports/marketing-mobile -name 'lhr-*.json' 2>/dev/null | wc -l | tr -d ' ')"
-          if [ "$EXIT_CODE" -ne 0 ]; then
-            if [ "$EVENT_NAME" != "schedule" ] && [ "${REPORT_COUNT:-0}" -gt 0 ]; then
+          if [ "${REPORT_COUNT:-0}" -eq 0 ]; then
+            echo "::error::Marketing mobile Lighthouse failed: no LHR reports collected."
+            exit 1
+          fi
+
+          lhci upload \
+            --target=temporary-public-storage \
+            --config=.lighthouserc.js
+
+          set +e
+          lhci assert \
+            --assertions.categories:performance="['error',{'minScore':0.65}]" \
+            --assertions.categories:accessibility="['error',{'minScore':0.85}]" \
+            --assertions.categories:best-practices="['error',{'minScore':0.88}]" \
+            --assertions.categories:seo="['error',{'minScore':0.90}]" \
+            --assertions.cumulative-layout-shift="['error',{'maxNumericValue':0.15}]" \
+            --config=.lighthouserc.js
+          ASSERT_EXIT_CODE=$?
+          set -e
+
+          echo "LHCI assert exit code: $ASSERT_EXIT_CODE"
+          if [ "$ASSERT_EXIT_CODE" -ne 0 ]; then
+            if [ "$EVENT_NAME" != "schedule" ]; then
               echo "::warning::Marketing mobile Lighthouse assertion miss on production URL ($REPORT_COUNT reports). Soft-passing for $EVENT_NAME (thresholds unchanged)."
               exit 0
             fi
-            echo "::error::Marketing mobile Lighthouse failed without usable reports (collect/config/upload). Exit $EXIT_CODE."
-            exit "$EXIT_CODE"
+            echo "::error::Marketing mobile Lighthouse assertion failed on schedule. Exit $ASSERT_EXIT_CODE."
+            exit "$ASSERT_EXIT_CODE"
           fi
           exit 0
 
@@ -160,32 +174,46 @@ jobs:
         env:
           EVENT_NAME: ${{ github.event_name }}
         run: |
-          set +e
-          lhci autorun \
-            --collect.url="${{ steps.url.outputs.url }}" \
-            --collect.settings.emulatedFormFactor=desktop \
-            --collect.numberOfRuns=3 \
-            --collect.settings.chromeFlags="--no-sandbox --disable-dev-shm-usage" \
-            --upload.target=temporary-public-storage \
-            --config=.lighthouserc.js
-          EXIT_CODE=$?
           set -e
+          lhci collect \
+            --url="${{ steps.url.outputs.url }}" \
+            --settings.emulatedFormFactor=desktop \
+            --numberOfRuns=3 \
+            --settings.chromeFlags="--no-sandbox --disable-dev-shm-usage" \
+            --config=.lighthouserc.js
 
-          echo "LHCI exit code: $EXIT_CODE"
           mkdir -p lhci-reports/marketing-desktop
           if [ -d ".lighthouseci" ]; then
             cp -r .lighthouseci/* lhci-reports/marketing-desktop/
           else
-            echo "⚠ Warning: .lighthouseci directory not created"
+            echo "::error::Marketing desktop Lighthouse failed: .lighthouseci directory not created."
+            exit 1
           fi
+
           REPORT_COUNT="$(find lhci-reports/marketing-desktop -name 'lhr-*.json' 2>/dev/null | wc -l | tr -d ' ')"
-          if [ "$EXIT_CODE" -ne 0 ]; then
-            if [ "$EVENT_NAME" != "schedule" ] && [ "${REPORT_COUNT:-0}" -gt 0 ]; then
+          if [ "${REPORT_COUNT:-0}" -eq 0 ]; then
+            echo "::error::Marketing desktop Lighthouse failed: no LHR reports collected."
+            exit 1
+          fi
+
+          lhci upload \
+            --target=temporary-public-storage \
+            --config=.lighthouserc.js
+
+          set +e
+          lhci assert \
+            --config=.lighthouserc.js
+          ASSERT_EXIT_CODE=$?
+          set -e
+
+          echo "LHCI assert exit code: $ASSERT_EXIT_CODE"
+          if [ "$ASSERT_EXIT_CODE" -ne 0 ]; then
+            if [ "$EVENT_NAME" != "schedule" ]; then
               echo "::warning::Marketing desktop Lighthouse assertion miss on production URL ($REPORT_COUNT reports). Soft-passing for $EVENT_NAME (thresholds unchanged)."
               exit 0
             fi
-            echo "::error::Marketing desktop Lighthouse failed without usable reports (collect/config/upload). Exit $EXIT_CODE."
-            exit "$EXIT_CODE"
+            echo "::error::Marketing desktop Lighthouse assertion failed on schedule. Exit $ASSERT_EXIT_CODE."
+            exit "$ASSERT_EXIT_CODE"
           fi
           exit 0
 
@@ -367,32 +395,46 @@ jobs:
         env:
           EVENT_NAME: ${{ github.event_name }}
         run: |
-          set +e
-          lhci autorun \
-            --collect.url="${{ steps.url.outputs.url }}/en" \
-            --collect.settings.emulatedFormFactor=desktop \
-            --collect.numberOfRuns=3 \
-            --collect.settings.chromeFlags="--no-sandbox --disable-dev-shm-usage" \
-            --upload.target=temporary-public-storage \
-            --config=.lighthouserc.js
-          EXIT_CODE=$?
           set -e
+          lhci collect \
+            --url="${{ steps.url.outputs.url }}/en" \
+            --settings.emulatedFormFactor=desktop \
+            --numberOfRuns=3 \
+            --settings.chromeFlags="--no-sandbox --disable-dev-shm-usage" \
+            --config=.lighthouserc.js
 
-          echo "LHCI exit code: $EXIT_CODE"
           mkdir -p lhci-reports/dashboard-desktop
           if [ -d ".lighthouseci" ]; then
             cp -r .lighthouseci/* lhci-reports/dashboard-desktop/
           else
-            echo "⚠ Warning: .lighthouseci directory not created"
+            echo "::error::Dashboard desktop Lighthouse failed: .lighthouseci directory not created."
+            exit 1
           fi
+
           REPORT_COUNT="$(find lhci-reports/dashboard-desktop -name 'lhr-*.json' 2>/dev/null | wc -l | tr -d ' ')"
-          if [ "$EXIT_CODE" -ne 0 ]; then
-            if [ "$EVENT_NAME" != "schedule" ] && [ "${REPORT_COUNT:-0}" -gt 0 ]; then
+          if [ "${REPORT_COUNT:-0}" -eq 0 ]; then
+            echo "::error::Dashboard desktop Lighthouse failed: no LHR reports collected."
+            exit 1
+          fi
+
+          lhci upload \
+            --target=temporary-public-storage \
+            --config=.lighthouserc.js
+
+          set +e
+          lhci assert \
+            --config=.lighthouserc.js
+          ASSERT_EXIT_CODE=$?
+          set -e
+
+          echo "LHCI assert exit code: $ASSERT_EXIT_CODE"
+          if [ "$ASSERT_EXIT_CODE" -ne 0 ]; then
+            if [ "$EVENT_NAME" != "schedule" ]; then
               echo "::warning::Dashboard desktop Lighthouse assertion miss on production URL ($REPORT_COUNT reports). Soft-passing for $EVENT_NAME (thresholds unchanged)."
               exit 0
             fi
-            echo "::error::Dashboard desktop Lighthouse failed without usable reports (collect/config/upload). Exit $EXIT_CODE."
-            exit "$EXIT_CODE"
+            echo "::error::Dashboard desktop Lighthouse assertion failed on schedule. Exit $ASSERT_EXIT_CODE."
+            exit "$ASSERT_EXIT_CODE"
           fi
           exit 0
 
