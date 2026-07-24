@@ -264,7 +264,7 @@ function validateSelection(selection) {
   const errors = [];
   if (selection.command && !KNOWN_COMMANDS.has(selection.command)) {
     errors.push(
-      `unknown command: ${selection.command} — must be one of the known workflow commands`
+      `unknown command: ${selection.command}`
     );
   }
   if (selection.agent && !KNOWN_AGENTS.has(selection.agent)) {
