@@ -12,7 +12,10 @@ export async function POST(req: Request) {
     // 1. Mock Audit Logging
     // In production, this would write to the Prisma auditLog model
     console.log(
-      `[AUDIT_LOG] Admin performed ${action} on ${entityType}:${entityId}`,
+      '[AUDIT_LOG] Admin performed %s on %s:%s',
+      action,
+      entityType,
+      entityId,
       metadata
     );
 
