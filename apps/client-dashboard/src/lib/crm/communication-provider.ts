@@ -55,7 +55,10 @@ export async function sendCommunication(options: SendMessageOptions) {
 
     // For Phase 1, we simulate the provider dispatch
     console.log(
-      `[CommunicationProvider] Sending ${type} via ${provider} to ${recipient}`
+      '[CommunicationProvider] Sending %s via %s to %s',
+      type,
+      provider,
+      recipient
     );
 
     // Update log to SENT
@@ -67,7 +70,9 @@ export async function sendCommunication(options: SendMessageOptions) {
     return { success: true, logId: log.id };
   } catch (error) {
     console.error(
-      `[CommunicationProvider] Failed to send ${type} via ${provider}:`,
+      '[CommunicationProvider] Failed to send %s via %s:',
+      type,
+      provider,
       error
     );
 
