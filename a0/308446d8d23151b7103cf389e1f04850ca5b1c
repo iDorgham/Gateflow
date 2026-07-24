@@ -1,19 +1,37 @@
 .ai/workflow-v2/state.json
   s_28aa16f7cf041a::t_783320d210b85a 50
+  s_28aa16f7cf041a::t_95a093c02f5895 50
 CHANGELOG.md
   s_28aa16f7cf041a::t_1e28ef87be47d9 12
 docs/development/learning/CLI_USAGE_AND_RESULTS.md
   s_28aa16f7cf041a::t_ce5626277593b1 11
+  s_28aa16f7cf041a::t_eb0f3277954475 11
 docs/plan/Draft/gateflow_workflow_bootstrap/phases/00_workflow_bootstrap/PROMPT_phase_00.md
   s_28aa16f7cf041a::t_c79d3047f4c71c 7,9,11-24,30,35,45-47,49-54,56,60
+  s_28aa16f7cf041a::t_5ececb280e2e2c 49-54
+  s_28aa16f7cf041a::t_c24da0578ca6a0 3,7,9,11-24,30,35,45-47,56,60
 docs/plan/backlog/ALL_TASKS_BACKLOG.md
   s_28aa16f7cf041a::t_0e8ea324fe0cb5 9-14
+  s_28aa16f7cf041a::t_c0d56e8aa20b41 11,14
 scripts/workflow-v2/__tests__/guide.test.js
   s_28aa16f7cf041a::t_2c34d2a45373f9 7,13,91,104-107,110-113,125-177
+  s_28aa16f7cf041a::t_64dc8eeb9e67d8 13
+  s_28aa16f7cf041a::t_0302c10611bd9c 131-177
+  s_28aa16f7cf041a::t_834e0e947fe016 7
+  s_28aa16f7cf041a::t_5472c16f27fc45 91,104-107,110-113,125-130
 scripts/workflow-v2/guide-cli.js
   s_28aa16f7cf041a::t_89f16def023ab8 7,12,25,32
+  s_28aa16f7cf041a::t_faf5069571c1a9 12,32
+  s_28aa16f7cf041a::t_76ee9c2dac72c3 7,25
 scripts/workflow-v2/guide.js
   s_28aa16f7cf041a::t_33d201329c6d88 18-31,68-96,156-163,173,175-183,186,265-268,276-278,308,346,371,383,556,562,565,567
+  s_28aa16f7cf041a::t_bb82de3c0deb3e 156-163,173,175-182
+  s_28aa16f7cf041a::t_f784bc08d6bf70 276,371
+  s_28aa16f7cf041a::t_fcdcf6dba31e63 68-96
+  s_28aa16f7cf041a::t_ff55bb03ceb6ac 18-31,183
+  s_28aa16f7cf041a::t_e42d8f23085816 186,265,277-278,308,346,383,556,562,565,567
+docs/plan/Draft/gateflow_workflow_bootstrap/phase_logs/PHASE_LOG_phase_00.md
+  s_28aa16f7cf041a::t_559e89a7be3278 11-13
 ---
 {
   "schema_version": "authorship/3.0.0",

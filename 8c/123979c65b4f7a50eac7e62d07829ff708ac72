@@ -1,0 +1,19 @@
+CHANGELOG.md
+  s_28aa16f7cf041a::t_ab0362d2dfe2b1 14-15
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "8c123979c65b4f7a50eac7e62d07829ff708ac72",
+  "prompts": {},
+  "sessions": {
+    "s_28aa16f7cf041a": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "66832d43-c819-474f-806c-bd9a95920720",
+        "model": "default"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
