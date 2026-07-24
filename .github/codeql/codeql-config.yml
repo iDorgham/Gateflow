@@ -1,0 +1,9 @@
+# CodeQL config — ignore vendored third-party assets that create noisy/false
+# "new" alerts when fingerprints shift (e.g. Partytown debug bundles).
+name: GateFlow CodeQL
+paths-ignore:
+  - 'apps/marketing/public/~partytown/**'
+  - '**/node_modules/**'
+  - '**/.next/**'
+  - '**/dist/**'
+  - '**/coverage/**'

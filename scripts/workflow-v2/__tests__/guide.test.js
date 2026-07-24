@@ -1,4 +1,5 @@
 const assert = require('node:assert/strict');
+const path = require('node:path');
 const test = require('node:test');
 const { createInitialState } = require('../lib');
 const {
@@ -14,6 +15,8 @@ const {
   summarizeEvidence,
   validateSelection,
 } = require('../guide');
+
+const REPO_ROOT = path.resolve(__dirname, '../../..');
 
 test('fresh focused workspace routes to audit', () => {
   const state = createInitialState();
@@ -88,7 +91,7 @@ test('guide next renderer prints exactly one next command', () => {
 test('guide prompt validates known agent and skills', () => {
   const prompt = renderGuidePrompt({
     generatedAt: '2026-07-24T00:00:00.000Z',
-    workspaceRoot: '/Users/Dorgham/Documents/Work/Devleopment/Gate-Access',
+    workspaceRoot: REPO_ROOT,
     activeApplication: 'client-dashboard',
     currentStage: 'focused',
     currentPlan: 'gateflow_workflow_bootstrap',
@@ -101,16 +104,10 @@ test('guide prompt validates known agent and skills', () => {
     },
   });
   assert.equal(prompt.validated, true);
-  assert.equal(
-    prompt.workdir,
-    '/Users/Dorgham/Documents/Work/Devleopment/Gate-Access'
-  );
+  assert.equal(prompt.workdir, REPO_ROOT);
   assert.match(prompt.text, /\[AGENT\] gateflow-guide/);
   assert.match(prompt.text, /\[COMMAND\] \/audit all/);
-  assert.match(
-    prompt.text,
-    /\[WORKDIR\] \/Users\/Dorgham\/Documents\/Work\/Devleopment\/Gate-Access/
-  );
+  assert.ok(prompt.text.includes(`[WORKDIR] ${REPO_ROOT}`));
   assert.deepEqual(
     validateSelection({
       command: prompt.command,
