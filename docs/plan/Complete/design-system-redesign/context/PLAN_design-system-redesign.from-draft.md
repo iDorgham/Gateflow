@@ -121,11 +121,13 @@ Glassmorphism, 8pt Grid, Perceptually Uniform OKLCH colors, Expressive Motion.
 **Goal:** Conduct final cross-platform audits and synchronize product documentation.
 
 - [ ] **Step 8.1: Accessibility & Performance Profiling**
-  - Complete WCAG AA accessibility audit and animation frame-rate profiling.
-  - Confirm WCAG 2.1 AA compliance, meet defined LCP and CLS thresholds, and complete GPU profiling.
+  - Complete WCAG 2.1 AA compliance verification.
+  - Meet defined LCP and CLS thresholds.
+  - Complete GPU profiling for animation frame-rate validation.
 - [ ] **Step 8.2: PRD Alignment & Version Lock**
-  - Sync implementation state with `docs/PRD.md` and lock design system version baseline.
-  - Run scripts/enforce-ads-design.js and update docs/PRD.md with the locked design-system version.
+  - Run `scripts/enforce-ads-design.js` to verify zero hardcoded values.
+  - Update `docs/PRD.md` with the locked design-system version.
+  - Sync implementation state with product documentation.
 
 ---
 
