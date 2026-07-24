@@ -109,8 +109,10 @@ Glassmorphism, 8pt Grid, Perceptually Uniform OKLCH colors, Expressive Motion.
 
 - [ ] **Step 7.1: Mobile Primitives & Touch Targets**
   - High-performance touch controls and compact surface hierarchy for mobile devices.
+  - All mobile touch controls must provide at least 44px touch targets.
 - [ ] **Step 7.2: Mobile RTL & Language Parity**
   - Verify complete Arabic RTL and locale switching across Scanner and Resident apps.
+  - Scanner and Resident must achieve 100% Arabic RTL and locale-switching parity.
 
 ---
 
@@ -120,8 +122,10 @@ Glassmorphism, 8pt Grid, Perceptually Uniform OKLCH colors, Expressive Motion.
 
 - [ ] **Step 8.1: Accessibility & Performance Profiling**
   - Complete WCAG AA accessibility audit and animation frame-rate profiling.
+  - Confirm WCAG 2.1 AA compliance, meet defined LCP and CLS thresholds, and complete GPU profiling.
 - [ ] **Step 8.2: PRD Alignment & Version Lock**
   - Sync implementation state with `docs/PRD.md` and lock design system version baseline.
+  - Run scripts/enforce-ads-design.js and update docs/PRD.md with the locked design-system version.
 
 ---
 

@@ -26,14 +26,14 @@
 
 ## Phased Implementation Roadmap
 
-1.  **Phase 1: Foundation Token Overhaul** (Primitive ramps & semantic layer).
-2.  **Phase 2: Core Documentation (1-6)** (Foundation pages & accent profiles).
-3.  **Phase 3: Pattern Documentation (7-12)** (Components & surface hierarchy).
-4.  **Phase 4: Monorepo Enforcement** (enforce-ads-design.js & preflight).
-5.  **Phase 5: Marketing & Auth Redesign** (High-flair premium gateway).
-6.  **Phase 6: Dashboards & Portal Redesign** (High-density operational refinement).
-7.  **Phase 7: Mobile Optimization** (Scanner & Resident compact refinement).
-8.  **Phase 8: Final Polish** (Accessibility audit & PRD sync).
+1. **Phase 1: Foundation Token Overhaul** (Primitive ramps & semantic layer).
+2. **Phase 2: Core Documentation (1-6)** (Foundation pages & accent profiles).
+3. **Phase 3: Pattern Documentation (7-12)** (Components & surface hierarchy).
+4. **Phase 4: Monorepo Enforcement** (enforce-ads-design.js & preflight).
+5. **Phase 5: Marketing & Auth Redesign** (High-flair premium gateway).
+6. **Phase 6: Dashboards & Portal Redesign** (High-density operational refinement).
+7. **Phase 7: Mobile Optimization** (Scanner & Resident compact refinement).
+8. **Phase 8: Final Polish** (Accessibility audit & PRD sync).
 
 ## Reference Document
 
