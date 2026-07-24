@@ -103,6 +103,28 @@ Glassmorphism, 8pt Grid, Perceptually Uniform OKLCH colors, Expressive Motion.
 
 ---
 
+## 📱 Phase 7: Mobile Optimization
+
+**Goal:** Redesign Scanner & Resident apps with compact, performant touch primitives.
+
+- [ ] **Step 7.1: Mobile Primitives & Touch Targets**
+  - High-performance touch controls and compact surface hierarchy for mobile devices.
+- [ ] **Step 7.2: Mobile RTL & Language Parity**
+  - Verify complete Arabic RTL and locale switching across Scanner and Resident apps.
+
+---
+
+## 🏁 Phase 8: Final Polish & PRD Sync
+
+**Goal:** Conduct final cross-platform audits and synchronize product documentation.
+
+- [ ] **Step 8.1: Accessibility & Performance Profiling**
+  - Complete WCAG AA accessibility audit and animation frame-rate profiling.
+- [ ] **Step 8.2: PRD Alignment & Version Lock**
+  - Sync implementation state with `docs/PRD.md` and lock design system version baseline.
+
+---
+
 ## ✅ Acceptance Criteria (AC)
 
 - **Token Discipline**: 100% semantic token usage across all 12+ pages.

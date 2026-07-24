@@ -52,9 +52,9 @@ docs/cache
 .env*.local
 
 # Repo hygiene — prevent root dumps / accidental app folders
-scan_results.txt
-lint_output.txt
-scratch/
+/scan_results.txt
+/lint_output.txt
+/scratch/
 /admin-dashboard/
-check-users.ts
-test_server_only.ts
+/check-users.ts
+/test_server_only.ts

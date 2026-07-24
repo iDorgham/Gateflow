@@ -8,7 +8,7 @@
 
 **PLAN:** `docs/plan/Draft/repo_hygiene/`  
 `PLAN_repo_hygiene.md`  
-**Status:** 🟢 Draft — phases complete locally; awaiting push/PR + annotated tag  
+**Status:** ✅ Complete — all phases complete; v0.3.0 tagged  
 **Priority:** P0 — pre-audit gate after Workflow Phase 00  
 **Target:** Cleanup + Dependabot overrides + docs + marketing P0 → tag `v0.3.0` → `/audit all`  
 **Branch:** `chore/repo-hygiene-v0.3.0`
@@ -19,7 +19,7 @@
 - [x] Phase 02 — Plan lifecycle + backlog
 - [x] Phase 03 — Docs refresh
 - [x] Phase 05 — Marketing production P0
-- [x] Phase 04 — Version `0.3.0` + CHANGELOG (tag/push when authorized)
+- [x] Phase 04 — Version `0.3.0` + CHANGELOG + annotated tag `v0.3.0`
 
 ### gateflow_workflow_bootstrap — Workflow v2 bootstrap (Client Dashboard pilot)
 

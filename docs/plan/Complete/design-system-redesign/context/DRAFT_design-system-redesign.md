@@ -38,7 +38,7 @@ Transform the current UI into a **serious, premium, high-trust enterprise-grade 
 
 **Specialized Palettes**:
 
-- **Glassmorphism**: `--ds-surface-glass`: `oklch(100% 0 0 / 0.03)` + `backdrop-blur(16px)`.
+- **Glassmorphism**: `--ds-surface-glass`: `oklch(100% 0 0 / 0.03)` + `backdrop-filter: blur(16px)`.
 - **Premium Glow**: `--ds-glow-accent`: `box-shadow: 0 0 20px -5px var(--ds-accent-subtle)`.
 - **Data Viz**: 8-color sequential palette (Series 1-8) for Recharts.
 
@@ -110,16 +110,16 @@ Transform the current UI into a **serious, premium, high-trust enterprise-grade 
 
 ## 🛡️ Enforcement & Implementation Strategy
 
-- **Token Discipline**: No hardcoded values outside of `tokens.css`.
-- **The Ralph Loop**: Update `enforce-ads-design.js` to block primitive hex/rgb/px values monorepo-wide.
-- **Preflight Checks**: `pnpm preflight` must verify 100% token usage and theme parity.
+- **Token Discipline**: No hardcoded values outside of `tokens.css` within component packages (`packages/ui`, `packages/components`).
+- **The Ralph Loop**: Use `enforce-ads-design.js` (`pnpm check:ads`) to block primitive hex/rgb/px values across UI component libraries.
+- **Preflight Checks**: `pnpm preflight` verifies token usage via `check:ads` and theme parity.
 - **GPU Mandate**: Critical animations must be GPU-accelerated.
 
 ---
 
 ## ✅ Success Criteria
 
-- 100% token usage across all apps.
+- 100% token usage across targeted component packages.
 - Premium, serious, cohesive visual identity that feels institutional.
 - Perfect light/dark parity, RTL support, and WCAG AA accessibility.
 - Zero design system drift during organization context switching.

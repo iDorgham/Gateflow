@@ -1,13 +1,13 @@
 # PLAN — repo_hygiene
 
-**Status:** Draft  
+**Status:** Complete  
 **Date:** 2026-07-24  
 **Branch:** `chore/repo-hygiene-v0.3.0`  
-**Tag target:** `v0.3.0`
+**Tag target:** `v0.3.0` (tagged)
 
 ## Outcome
 
-Clean repository baseline before Client Dashboard `/audit all`: remove tracked clutter, reconcile plan lifecycle, refresh authority docs, close Dependabot alerts via `pnpm.overrides`, land minimal marketing production P0s, then annotate tag `v0.3.0`.
+Clean repository baseline before Client Dashboard `/audit all`: remove tracked clutter, reconcile plan lifecycle, refresh authority docs, close Dependabot alerts via `pnpm.overrides`, land minimal marketing production P0s, and annotated tag `v0.3.0`.
 
 ## Scope
 
@@ -23,8 +23,8 @@ Clean repository baseline before Client Dashboard `/audit all`: remove tracked c
 | 01    | Cleanup               |
 | 02    | Plan lifecycle        |
 | 03    | Docs refresh          |
-| 05    | Marketing prod P0     |
 | 04    | Release tag + handoff |
+| 05    | Marketing prod P0     |
 
 ## Exit handoff
 
