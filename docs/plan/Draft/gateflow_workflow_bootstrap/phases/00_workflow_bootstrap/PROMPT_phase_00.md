@@ -26,7 +26,7 @@ Do **not** change `apps/client-dashboard` product behavior.
 
 1. Confirm focus is `client-dashboard` via `pnpm workflow:v2 status --json`.
 2. Confirm `guide-cli.js` already exposes `status|next|prompt|delivery` subcommands (verified existing).
-3. Extend state schema for optional `pageScoresFile`, `pilotFlowCoverage`, `selection`, `delivery`.
+3. Confirm state schema already includes optional `pageScoresFile`, `pilotFlowCoverage`, `selection`, `delivery` (verified present).
 4. Add `gateflow-guide` agent pointing at `pnpm workflow:v2:guide`.
 5. Update `docs/workspace/WORKFLOW_V2.md` and guide workflow for new subcommands.
 6. In Dorgham control workspace: run Codex doctor; add `codex` adapter using proven `codex exec -C {workdir}` only.
