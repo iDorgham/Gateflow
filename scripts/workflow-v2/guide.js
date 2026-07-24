@@ -15,6 +15,20 @@ const NEXT_COMMAND = {
 const PILOT_ORDER =
   'Client Dashboard → Resident Portal → Scanner App → integrated pilot';
 
+const GUIDE_SUBCOMMANDS = new Set(['status', 'next', 'prompt', 'delivery']);
+
+function resolveGuideSubcommand(argv) {
+  for (let index = 0; index < argv.length; index += 1) {
+    const arg = argv[index];
+    if (arg === '--state') {
+      index += 1; // skip the state-file path so it cannot be read as a subcommand
+      continue;
+    }
+    if (GUIDE_SUBCOMMANDS.has(arg)) return arg;
+  }
+  return 'status';
+}
+
 const KNOWN_COMMANDS = new Set([
   '/audit all',
   '/page-map',
@@ -50,6 +64,35 @@ const KNOWN_SKILLS = new Set([
   'testing',
   'visual-qa',
 ]);
+
+const KNOWN_CLIS = new Set([
+  'cursor',
+  'claude',
+  'codex',
+  'opencode',
+  'antigravity',
+  'kiro',
+  'kilo',
+  'gemini',
+  'qwen',
+]);
+
+const GIT_TIMEOUT_MS = 5_000;
+
+function formatGuideUsage() {
+  return `GateFlow workspace-aware guide
+
+Usage:
+  workflow-v2-guide [--json] [--state <file>]
+  workflow-v2-guide status|next|prompt|delivery [--json] [--state <file>]
+
+Reads local workspace evidence and prints one safe next command. No mutations.
+Subcommands:
+  status    Full guide snapshot (default)
+  next      First-incomplete-gate selector (nextCommand only)
+  prompt    Registry-validated tagged prompt for the next agent/CLI
+  delivery  Local Git + optional GitHub PR/check evidence for current HEAD`;
+}
 
 function readJson(file, fallback = null) {
   if (!file || !fs.existsSync(file)) return fallback;
@@ -110,18 +153,14 @@ function nextCommandFor(state, evidence) {
 
 function gitSnapshot(root) {
   try {
-    const branch = execFileSync('git', ['branch', '--show-current'], {
-      cwd: root,
-      encoding: 'utf8',
-    }).trim();
-    const commit = execFileSync('git', ['rev-parse', 'HEAD'], {
-      cwd: root,
-      encoding: 'utf8',
-    }).trim();
-    const lines = execFileSync('git', ['status', '--short'], {
-      cwd: root,
-      encoding: 'utf8',
-    })
+    const gitOpts = { cwd: root, encoding: 'utf8', timeout: GIT_TIMEOUT_MS };
+    const branch = execFileSync(
+      'git',
+      ['branch', '--show-current'],
+      gitOpts
+    ).trim();
+    const commit = execFileSync('git', ['rev-parse', 'HEAD'], gitOpts).trim();
+    const lines = execFileSync('git', ['status', '--short'], gitOpts)
       .trim()
       .split(/\r?\n/)
       .filter(Boolean);
@@ -131,21 +170,20 @@ function gitSnapshot(root) {
       upstream = execFileSync(
         'git',
         ['rev-parse', '--abbrev-ref', '@{upstream}'],
-        {
-          cwd: root,
-          encoding: 'utf8',
-        }
+        gitOpts
       ).trim();
-      aheadBehind = execFileSync(
-        'git',
-        ['rev-list', '--left-right', '--count', `${upstream}...HEAD`],
-        {
-          cwd: root,
-          encoding: 'utf8',
-        }
-      ).trim();
+      try {
+        aheadBehind = execFileSync(
+          'git',
+          ['rev-list', '--left-right', '--count', `${upstream}...HEAD`],
+          gitOpts
+        ).trim();
+      } catch {
+        aheadBehind = null;
+      }
     } catch {
       upstream = null;
+      aheadBehind = null;
     }
     return {
       branch: branch || 'detached',
@@ -224,19 +262,19 @@ function selectionFrom(appState) {
 
 function validateSelection(selection) {
   const errors = [];
-  if (
-    selection.command &&
-if (
-    selection.command &&
-    !KNOWN_COMMANDS.has(selection.command)
-  ) {
-    errors.push(`unknown command: ${selection.command} — must be one of the known workflow commands`);
+  if (selection.command && !KNOWN_COMMANDS.has(selection.command)) {
+    errors.push(
+      `unknown command: ${selection.command} — must be one of the known workflow commands`
+    );
   }
   if (selection.agent && !KNOWN_AGENTS.has(selection.agent)) {
     errors.push(`unknown agent: ${selection.agent}`);
   }
   for (const skill of selection.skills || []) {
     if (!KNOWN_SKILLS.has(skill)) errors.push(`unknown skill: ${skill}`);
+  }
+  if (selection.cli && !KNOWN_CLIS.has(selection.cli)) {
+    errors.push(`unknown cli: ${selection.cli}`);
   }
   return errors;
 }
@@ -267,6 +305,7 @@ function buildGuideSnapshot({ root, state, now = new Date().toISOString() }) {
       : null;
   return {
     generatedAt: now,
+    workspaceRoot: root,
     activeApplication: focusedApp,
     currentStage: appState?.stage || 'between-apps',
     currentPlan: appState?.currentPlan || null,
@@ -304,7 +343,7 @@ function renderGuidePrompt(snapshot) {
   const agent = snapshot.selection?.agent || 'gateflow-guide';
   const skills = (snapshot.selection?.skills || ['gf-guide']).join(', ');
   const cli = snapshot.selection?.cli || 'cursor';
-  const workdir = process.cwd();
+  const workdir = snapshot.workspaceRoot || process.cwd();
   const text = [
     `[COMMAND] ${snapshot.nextCommand}`,
     `[CLI] ${cli}`,
@@ -329,6 +368,7 @@ function renderGuidePrompt(snapshot) {
     app: snapshot.activeApplication,
     plan: snapshot.currentPlan,
     stage: snapshot.currentStage,
+    workdir,
     validated: validateSelection(snapshot.selection || {}).length === 0,
     text,
   };
@@ -340,6 +380,7 @@ function safeGhJson(root, args) {
       cwd: root,
       encoding: 'utf8',
       stdio: ['ignore', 'pipe', 'ignore'],
+      timeout: GIT_TIMEOUT_MS,
     });
     return JSON.parse(stdout);
   } catch {
@@ -512,14 +553,18 @@ module.exports = {
   buildGuideSnapshot,
   collectDeliveryEvidence,
   copyPrompt,
+  formatGuideUsage,
   nextCommandFor,
   renderGuide,
   renderGuideDelivery,
   renderGuideNext,
   renderGuidePrompt,
+  resolveGuideSubcommand,
   summarizeEvidence,
   validateSelection,
+  GUIDE_SUBCOMMANDS,
   KNOWN_AGENTS,
+  KNOWN_CLIS,
   KNOWN_COMMANDS,
   KNOWN_SKILLS,
 };

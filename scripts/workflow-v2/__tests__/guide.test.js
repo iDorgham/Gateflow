@@ -4,11 +4,13 @@ const { createInitialState } = require('../lib');
 const {
   collectDeliveryEvidence,
   copyPrompt,
+  formatGuideUsage,
   nextCommandFor,
   renderGuide,
   renderGuideDelivery,
   renderGuideNext,
   renderGuidePrompt,
+  resolveGuideSubcommand,
   summarizeEvidence,
   validateSelection,
 } = require('../guide');
@@ -86,6 +88,7 @@ test('guide next renderer prints exactly one next command', () => {
 test('guide prompt validates known agent and skills', () => {
   const prompt = renderGuidePrompt({
     generatedAt: '2026-07-24T00:00:00.000Z',
+    workspaceRoot: '/Users/Dorgham/Documents/Work/Devleopment/Gate-Access',
     activeApplication: 'client-dashboard',
     currentStage: 'focused',
     currentPlan: 'gateflow_workflow_bootstrap',
@@ -98,8 +101,16 @@ test('guide prompt validates known agent and skills', () => {
     },
   });
   assert.equal(prompt.validated, true);
+  assert.equal(
+    prompt.workdir,
+    '/Users/Dorgham/Documents/Work/Devleopment/Gate-Access'
+  );
   assert.match(prompt.text, /\[AGENT\] gateflow-guide/);
   assert.match(prompt.text, /\[COMMAND\] \/audit all/);
+  assert.match(
+    prompt.text,
+    /\[WORKDIR\] \/Users\/Dorgham\/Documents\/Work\/Devleopment\/Gate-Access/
+  );
   assert.deepEqual(
     validateSelection({
       command: prompt.command,
@@ -108,6 +119,59 @@ test('guide prompt validates known agent and skills', () => {
       cli: prompt.cli,
     }),
     []
+  );
+});
+
+test('guide subcommand parser skips --state file values', () => {
+  assert.equal(resolveGuideSubcommand(['--state', 'next', 'status']), 'status');
+  assert.equal(resolveGuideSubcommand(['--state', 'prompt']), 'status');
+  assert.equal(
+    resolveGuideSubcommand(['delivery', '--state', 'next']),
+    'delivery'
+  );
+});
+
+test('guide subcommand parser resolves each subcommand and defaults to status', () => {
+  assert.equal(resolveGuideSubcommand(['status']), 'status');
+  assert.equal(resolveGuideSubcommand(['next', '--json']), 'next');
+  assert.equal(resolveGuideSubcommand(['prompt']), 'prompt');
+  assert.equal(resolveGuideSubcommand(['delivery']), 'delivery');
+  assert.equal(resolveGuideSubcommand([]), 'status');
+  assert.equal(resolveGuideSubcommand(['--json']), 'status');
+  assert.equal(resolveGuideSubcommand(['unknown']), 'status');
+});
+
+test('guide usage documents invocation and subcommands', () => {
+  const text = formatGuideUsage();
+  assert.match(text, /workflow-v2-guide/);
+  assert.match(text, /--state <file>/);
+  for (const name of ['status', 'next', 'prompt', 'delivery']) {
+    assert.match(text, new RegExp(`\\b${name}\\b`));
+  }
+  assert.match(text, /Full guide snapshot/);
+  assert.match(text, /First-incomplete-gate/);
+  assert.match(text, /Registry-validated tagged prompt/);
+  assert.match(text, /Local Git \+ optional GitHub/);
+});
+
+test('validateSelection rejects unknown slash commands and CLIs', () => {
+  assert.deepEqual(
+    validateSelection({
+      command: '/audit al',
+      agent: 'gateflow-guide',
+      skills: ['gf-guide'],
+      cli: 'cursor',
+    }),
+    ['unknown command: /audit al']
+  );
+  assert.deepEqual(
+    validateSelection({
+      command: '/audit all',
+      agent: 'gateflow-guide',
+      skills: ['gf-guide'],
+      cli: 'not-a-cli',
+    }),
+    ['unknown cli: not-a-cli']
   );
 });
 
