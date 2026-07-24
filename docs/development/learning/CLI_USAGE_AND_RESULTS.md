@@ -8,7 +8,7 @@
 
 ## How to record (for agents)
 
-After a task or phase was executed **using a CLI** (Claude CLI, Gemini CLI, Opencode CLI, Kiro CLI, Kilo CLI, Qwen CLI):
+After a task or phase was executed **using a CLI** (Cursor, Codex CLI, Claude CLI, Gemini CLI (Antigravity), Opencode CLI, Kiro CLI, Kilo CLI, Qwen CLI):
 
 1. Append one line to the **Log entries** section in this file (or add a new row to the table).
 2. Include: **Date**, **CLI**, **Task/phase** (e.g. phase 1 of core_security_v6, or "ad-hoc: review auth.ts"), **Outcome** (success / partial / fail), **Notes** (optional: limit impact, quality, or "near daily limit").
