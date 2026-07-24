@@ -1,0 +1,35 @@
+pnpm-lock.yaml
+  s_28aa16f7cf041a::t_a21a1077a976f4 34,101,205-206,258,272-273,404-405,522-523,554,559-560,596,599,619-620,675,680-681,732,744,810-811,920,990-991,1003,1058-1059,1071,1181,1238,1250,1375,1380-1381,1393,1477,4746,5047,5065,6613,6616,6628,6631,6638,6641,6648,6651,6658,6661,6668,6671,6678,6681,6688,6691,6698,6701,7207,7225,7230,7333-7368,7428-7454,7564-7588,7763-7786,7811-7834,7881-7903,7981,7998,8003,8009,8216,8236-8238,8243,8999,9669,11421,11429,11453,11464,11471,11493,11989,12003,12021,12537-12544,12690,15710,15747,15750,15766,15779,15869,16332,16346,18536,21531,21539,21613,21740,21743,21764,21766,21773-21780,22741,22763,22790,22848-22859,23451-23462,23517-23539,23858-23865,26158,26189-26190,26237-26238,26904,26913,26915
+apps/admin-dashboard/package.json
+  s_28aa16f7cf041a::t_6bfc13a0878192 42,66
+apps/client-dashboard/package.json
+  s_28aa16f7cf041a::t_615cbd19edac6f 55
+apps/design-system/package.json
+  s_28aa16f7cf041a::t_511206486ba3c6 13,34
+apps/marketing/package.json
+  s_28aa16f7cf041a::t_84dd0c75d2ef2f 29,51
+apps/resident-portal/package.json
+  s_28aa16f7cf041a::t_109061d97cc6a1 25
+packages/ai/package.json
+  s_28aa16f7cf041a::t_d90ca9cbd2cbcd 56
+packages/components/package.json
+  s_28aa16f7cf041a::t_fe2853ea46b19e 54
+packages/ui/package.json
+  s_28aa16f7cf041a::t_45fe605475bb7b 81
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "21575c82fc17d22054707bab86468ba1aaffa50c",
+  "prompts": {},
+  "sessions": {
+    "s_28aa16f7cf041a": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "66832d43-c819-474f-806c-bd9a95920720",
+        "model": "default"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
