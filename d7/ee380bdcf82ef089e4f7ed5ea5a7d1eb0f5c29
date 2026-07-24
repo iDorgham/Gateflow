@@ -1,0 +1,56 @@
+docs/plan/backlog/ALL_TASKS_BACKLOG.md
+  s_28aa16f7cf041a::t_c49694d778ad7d 7-15,17-24
+  s_28aa16f7cf041a::t_962022fd74b259 16
+scripts/workflow-v2/guide.js
+  s_28aa16f7cf041a::t_0b88d724eff045 15-53,65-69,92-97,100-105,113-157,159-166,180-186,207-242,248-252,254,256-266,274-275,296,302-406,408-414,418-421,465-484
+  s_28aa16f7cf041a::t_0215c55d919ab2 485-509,512,516-518,520-523
+docs/workspace/WORKFLOW_V2.md
+  s_28aa16f7cf041a::t_7d07f619d3fffc 20-23,26-32,36-38
+docs/plan/Draft/gateflow_workflow_bootstrap/phase_logs/PHASE_LOG_phase_00.md
+  s_28aa16f7cf041a::t_b35f33bd025a9a 1-32
+scripts/workflow-v2/guide-cli.js
+  s_28aa16f7cf041a::t_9591249cb87bae 4-11,21-24,28,30-47,49-72,76
+  s_28aa16f7cf041a::t_b864d951302097 73-75,77-79
+docs/plan/Draft/gateflow_workflow_bootstrap/phases/00_workflow_bootstrap/PROMPT_phase_00.md
+  s_28aa16f7cf041a::t_4fefdbae0b22a7 1-52
+docs/plan/Draft/gateflow_workflow_bootstrap/PLAN_gateflow_workflow_bootstrap.md
+  s_28aa16f7cf041a::t_1f4c0d543ff222 62-67
+  s_28aa16f7cf041a::t_d64d636570c2dd 1-61,68-73
+docs/plan/Draft/gateflow_workflow_bootstrap/TASKS_gateflow_workflow_bootstrap.md
+  s_28aa16f7cf041a::t_b492b047049d80 1-6,12-21
+  s_28aa16f7cf041a::t_fb287e1675e3be 7-11
+scripts/workflow-v2/state.schema.json
+  s_28aa16f7cf041a::t_7cb8336eec1774 43,46-55,61-114
+  s_28aa16f7cf041a::t_bee3ac0127d75e 6-14
+docs/plan/Draft/gateflow_workflow_bootstrap/SESSION_MEMORY.md
+  s_28aa16f7cf041a::t_f2fbb6685bacbc 10,12-13,22-23,29-31,37-38,40,46-48
+  s_28aa16f7cf041a::t_af79a411cfc35d 1-9,11,14-21,24-28,32-36,39,41-45
+docs/development/learning/CLI_USAGE_AND_RESULTS.md
+  s_28aa16f7cf041a::t_d2ce390e05c2c4 35
+  s_28aa16f7cf041a::t_f7c2276a54a957 24-27
+.ai/workflow-v2/state.json
+  s_28aa16f7cf041a::t_3c34a04c3b2e24 12,16-29
+  s_28aa16f7cf041a::t_2524991298c76e 3
+scripts/workflow-v2/__tests__/guide.test.js
+  s_28aa16f7cf041a::t_07e37f00ef07d8 5,9-11,13,30-39,66-67,69-99,106-129
+  s_28aa16f7cf041a::t_0cb298ed5d796a 100-105
+  s_28aa16f7cf041a::t_98d2261d44011c 130-135
+.ai/workflow-v2/README.md
+  s_28aa16f7cf041a::t_183524cde0e1f6 7-14,18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "d7ee380bdcf82ef089e4f7ed5ea5a7d1eb0f5c29",
+  "prompts": {},
+  "sessions": {
+    "s_28aa16f7cf041a": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "66832d43-c819-474f-806c-bd9a95920720",
+        "model": "grok-4.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
