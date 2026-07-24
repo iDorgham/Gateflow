@@ -42,6 +42,13 @@ _Plan folders use lifecycle layout: `Draft/` → `Ready/` → `Active/` → `Com
 Accomplishments from the last two sprints.
 
 > [!TIP]
+> **Repo Hygiene & Security Baseline (v0.3.0)** — _Shipped 2026-07-24_ — [Plan](../../plan/Draft/repo_hygiene/)
+>
+> - Dependency security overrides (`qs`, `uuid`, `ip-address`, `markdown-it`, `@babel/core`, `esbuild`, `@ai-sdk/provider-utils`).
+> - Reconciled design system blueprints, markdownlint MD024 configuration, and root-anchored hygiene rules.
+> - Client Dashboard null-safe locale label guard & Vercel Prisma engine packaging.
+
+> [!TIP]
 > **Audit Remediation 2026** — _Phases 1–4 shipped 2026-07-20 → 2026-07-21_ — [Plan](../../plan/Active/audit_remediation_2026/)
 >
 > - Removed production bootstrap/reset-admin surface; CMS HTML + branding CSS sanitization.
