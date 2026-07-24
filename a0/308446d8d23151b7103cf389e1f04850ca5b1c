@@ -1,0 +1,33 @@
+.ai/workflow-v2/state.json
+  s_28aa16f7cf041a::t_783320d210b85a 50
+CHANGELOG.md
+  s_28aa16f7cf041a::t_1e28ef87be47d9 12
+docs/development/learning/CLI_USAGE_AND_RESULTS.md
+  s_28aa16f7cf041a::t_ce5626277593b1 11
+docs/plan/Draft/gateflow_workflow_bootstrap/phases/00_workflow_bootstrap/PROMPT_phase_00.md
+  s_28aa16f7cf041a::t_c79d3047f4c71c 7,9,11-24,30,35,45-47,49-54,56,60
+docs/plan/backlog/ALL_TASKS_BACKLOG.md
+  s_28aa16f7cf041a::t_0e8ea324fe0cb5 9-14
+scripts/workflow-v2/__tests__/guide.test.js
+  s_28aa16f7cf041a::t_2c34d2a45373f9 7,13,91,104-107,110-113,125-177
+scripts/workflow-v2/guide-cli.js
+  s_28aa16f7cf041a::t_89f16def023ab8 7,12,25,32
+scripts/workflow-v2/guide.js
+  s_28aa16f7cf041a::t_33d201329c6d88 18-31,68-96,156-163,173,175-183,186,265-268,276-278,308,346,371,383,556,562,565,567
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "a0308446d8d23151b7103cf389e1f04850ca5b1c",
+  "prompts": {},
+  "sessions": {
+    "s_28aa16f7cf041a": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "66832d43-c819-474f-806c-bd9a95920720",
+        "model": "unknown"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
