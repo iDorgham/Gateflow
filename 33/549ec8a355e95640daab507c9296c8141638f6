@@ -1,0 +1,64 @@
+apps/marketing/components/language-switcher.tsx
+  s_eff37389c015ab::t_3aca509a738e5f 56,77
+docs/plan/Complete/design-system-redesign/context/PROMPT_phase_1.from-draft.md
+  s_eff37389c015ab::t_eb2d0a1d2ec9e4 1-75
+docs/plan/Complete/design-system-redesign/context/FOR_PLAN_PROMPT.md
+  s_eff37389c015ab::t_ccbcc055bc468f 1-40
+docs/plan/backlog/ALL_TASKS_BACKLOG.md
+  s_eff37389c015ab::t_a94b76a800da52 7-10,12-17,23
+  s_eff37389c015ab::t_780a7d0d576401 11,18-22
+  s_eff37389c015ab::t_8e540dfe110375 46,48,50,57
+  s_eff37389c015ab::t_de4aa7786014f0 166,168,173-178
+README.md
+  s_eff37389c015ab::t_cf235b7bc02352 15
+  s_eff37389c015ab::t_8e808636e35c48 332-334,336
+  s_eff37389c015ab::t_d3dd4c8ac4adab 279
+docs/plan/Draft/repo_hygiene/SESSION_MEMORY.md
+  s_eff37389c015ab::t_bab51aae81f976 1-22
+CHANGELOG.md
+  s_eff37389c015ab::t_9e05fed73bd413 53-68
+  s_eff37389c015ab::t_fa511f5bb8c8af 69-71
+  s_eff37389c015ab::t_7aa7738dfb8023 16
+  s_eff37389c015ab::t_2e71cb82490102 29
+docs/plan/Complete/design-system-redesign/context/DRAFT_design-system-redesign.md
+  s_eff37389c015ab::t_92f5c01f2e95bf 1-177
+package.json
+  s_eff37389c015ab::t_ea6f5ca63d388a 3
+  s_eff37389c015ab::t_a43763cb052708 160-167
+docs/INDEX.md
+  s_eff37389c015ab::t_e9ee5bc1dd5e7e 3,74-77
+docs/archive/hygiene-2026-07/README.md
+  s_eff37389c015ab::t_870e55e7167d42 1-3
+docs/reference/workspace/CLAUDE.md
+  s_eff37389c015ab::t_fdeffda2f447c6 5-6
+  s_eff37389c015ab::t_52df6044483af1 17-18,21-22
+.gitignore
+  s_eff37389c015ab::t_c42d007d2b6b09 53-60
+docs/plan/Draft/repo_hygiene/TASKS_repo_hygiene.md
+  s_eff37389c015ab::t_a9125b0ecd4938 1-27,31-33,36-38,41
+  s_eff37389c015ab::t_b2eebc08c010f6 28-30,34-35,39-40
+docs/plan/Draft/repo_hygiene/PLAN_repo_hygiene.md
+  s_eff37389c015ab::t_2059b6e2367dfa 1-33
+apps/marketing/next.config.js
+  s_eff37389c015ab::t_f5033cc63b7cc9 8-24
+pnpm-lock.yaml
+  s_eff37389c015ab::t_12b82aa04fc04c 43-49,1430,1458,1648,1751,1773,1794,1815,1830,1844,1862,1908,1929,1946,1997,2014,2031,2048,2191,2208,2221,2233,2244,2255,2267,2279,2291,2304,2317,2330,2343,2356,2367,2378,2390,2402,2413,2424,2435,2446,2457,2468,2480,2492,2504,2516,2528,2541,2554,2571,2588,2605,2622,2635,2648,2664,2680,2696,2716,2736,2750,2766,2782,2795,2809,2823,2839,2855,2872,2885,2898,2914,2930,2944,2958,2971,2984,2997,3016,3029,3042,3058,3074,3087,3103,3119,3136,3153,3166,3179,3194,3207,3220,3233,3246,3265,3284,3298,3311,3324,3344,3364,3377,3390,3406,3419,3432,3451,3470,3484,3498,3518,3537,3592,3621,4077,4080,4088,4091,4099,4102,4110,4113,4121,4124,4132,4135,4143,4146,4154,4157,4165,4168,4176,4179,4187,4190,4198,4201,4209,4212,4220,4223,4231,4234,4242,4245,4253,4256,4264,4267,4275,4278,4286,4289,4297,4300,4308,4311,4319,4322,4330,4333,4341,4344,4352,4355,4742,6186,8377,8435,8481,8499,8602,11365,11822,11842,11915,11931,11946,12005,12076,12089,12293,12443,12450,12452,14445,14448,14453-14478,15611,17047,17050,17867,17871,18513,18515-18516,18521,19669,19672,19931,20422,20473,20553,22769,23002,23005,23009-23010,23300,24465,24514,24656,25120,25712,25756,25873,25878,25907,26500,26503,26991
+docs/plan/Complete/design-system-redesign/context/PLAN_design-system-redesign.from-draft.md
+  s_eff37389c015ab::t_27de7d057e4a03 1-112
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "33549ec8a355e95640daab507c9296c8141638f6",
+  "prompts": {},
+  "sessions": {
+    "s_eff37389c015ab": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "a2e1d063-001d-4841-9ac4-91246ae8d214",
+        "model": "default"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
