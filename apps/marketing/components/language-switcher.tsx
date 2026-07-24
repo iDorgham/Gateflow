@@ -74,7 +74,7 @@ export function LanguageSwitcher({ currentLocale }: { currentLocale: Locale }) {
         style={{ boxShadow: 'var(--ds-shadow-overlay)' }}
       >
         {i18n.locales.map((locale) => {
-          const info = localeLabels[locale] ?? localeLabels.en;
+          const info = localeLabels[locale];
           const isActive = currentLocale === locale;
           return (
             <DropdownMenuItem
