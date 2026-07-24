@@ -1,0 +1,19 @@
+AGENTS.md
+  s_92b9e22fc6354b::t_c17e30f57f8516 12-13,18-19
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "44dbfb113594cf3d7758d37e67ed09634a6ec129",
+  "prompts": {},
+  "sessions": {
+    "s_92b9e22fc6354b": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "0b626919-3424-444c-9bed-6ea9c876a640",
+        "model": "default"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
