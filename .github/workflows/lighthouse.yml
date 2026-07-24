@@ -12,9 +12,9 @@
 #   - Manual dispatch with URL + strategy override
 #
 # Soft-skips when the target host is NXDOMAIN, unreachable, or redirects
-# off-host. Score misses still hard-fail audit jobs on schedule; on
-# pull_request / workflow_dispatch the jobs and Lighthouse Gate soft-pass
-# (production URLs are not the PR preview) so thresholds stay unchanged.
+# off-host. On schedule, score misses hard-fail. On pull_request /
+# workflow_dispatch, soft-pass only when LHCI produced report artifacts
+# (assertion miss on production URLs); collect/config/upload failures still fail.
 # =============================================================================
 name: Lighthouse CI
 
@@ -143,11 +143,16 @@ jobs:
           else
             echo "⚠ Warning: .lighthouseci directory not created"
           fi
-          if [ "$EXIT_CODE" -ne 0 ] && [ "$EVENT_NAME" != "schedule" ]; then
-            echo "::warning::Marketing mobile Lighthouse missed thresholds on production URL. Soft-passing for $EVENT_NAME (thresholds unchanged)."
-            exit 0
+          REPORT_COUNT="$(find lhci-reports/marketing-mobile -name 'lhr-*.json' 2>/dev/null | wc -l | tr -d ' ')"
+          if [ "$EXIT_CODE" -ne 0 ]; then
+            if [ "$EVENT_NAME" != "schedule" ] && [ "${REPORT_COUNT:-0}" -gt 0 ]; then
+              echo "::warning::Marketing mobile Lighthouse assertion miss on production URL ($REPORT_COUNT reports). Soft-passing for $EVENT_NAME (thresholds unchanged)."
+              exit 0
+            fi
+            echo "::error::Marketing mobile Lighthouse failed without usable reports (collect/config/upload). Exit $EXIT_CODE."
+            exit "$EXIT_CODE"
           fi
-          exit $EXIT_CODE
+          exit 0
 
       - name: Run Lighthouse — Desktop
         if: always() && steps.probe.outputs.skip != 'true'
@@ -173,11 +178,16 @@ jobs:
           else
             echo "⚠ Warning: .lighthouseci directory not created"
           fi
-          if [ "$EXIT_CODE" -ne 0 ] && [ "$EVENT_NAME" != "schedule" ]; then
-            echo "::warning::Marketing desktop Lighthouse missed thresholds on production URL. Soft-passing for $EVENT_NAME (thresholds unchanged)."
-            exit 0
+          REPORT_COUNT="$(find lhci-reports/marketing-desktop -name 'lhr-*.json' 2>/dev/null | wc -l | tr -d ' ')"
+          if [ "$EXIT_CODE" -ne 0 ]; then
+            if [ "$EVENT_NAME" != "schedule" ] && [ "${REPORT_COUNT:-0}" -gt 0 ]; then
+              echo "::warning::Marketing desktop Lighthouse assertion miss on production URL ($REPORT_COUNT reports). Soft-passing for $EVENT_NAME (thresholds unchanged)."
+              exit 0
+            fi
+            echo "::error::Marketing desktop Lighthouse failed without usable reports (collect/config/upload). Exit $EXIT_CODE."
+            exit "$EXIT_CODE"
           fi
-          exit $EXIT_CODE
+          exit 0
 
       - name: Print score summary
         if: always() && steps.probe.outputs.skip != 'true'
@@ -375,11 +385,16 @@ jobs:
           else
             echo "⚠ Warning: .lighthouseci directory not created"
           fi
-          if [ "$EXIT_CODE" -ne 0 ] && [ "$EVENT_NAME" != "schedule" ]; then
-            echo "::warning::Dashboard desktop Lighthouse missed thresholds on production URL. Soft-passing for $EVENT_NAME (thresholds unchanged)."
-            exit 0
+          REPORT_COUNT="$(find lhci-reports/dashboard-desktop -name 'lhr-*.json' 2>/dev/null | wc -l | tr -d ' ')"
+          if [ "$EXIT_CODE" -ne 0 ]; then
+            if [ "$EVENT_NAME" != "schedule" ] && [ "${REPORT_COUNT:-0}" -gt 0 ]; then
+              echo "::warning::Dashboard desktop Lighthouse assertion miss on production URL ($REPORT_COUNT reports). Soft-passing for $EVENT_NAME (thresholds unchanged)."
+              exit 0
+            fi
+            echo "::error::Dashboard desktop Lighthouse failed without usable reports (collect/config/upload). Exit $EXIT_CODE."
+            exit "$EXIT_CODE"
           fi
-          exit $EXIT_CODE
+          exit 0
 
       - name: Print score summary
         if: always() && steps.probe.outputs.skip != 'true'
@@ -430,7 +445,7 @@ jobs:
               echo "::error::Scheduled Lighthouse regression failed. Review job logs."
               exit 1
             fi
-            echo "::warning::Lighthouse score thresholds missed on production URLs. Soft-passing Gate for $EVENT_NAME — thresholds in .lighthouserc.js unchanged."
+            echo "::warning::A Lighthouse job failed. Soft-passing Gate for $EVENT_NAME — audit jobs already soft-pass assertion-only misses; collect/config failures remain red on those jobs."
             exit 0
           fi
 
