@@ -4,6 +4,24 @@
 
 ## 🚀 Active Initiatives (Q2-Q3 2026)
 
+### gateflow_workflow_bootstrap — Workflow v2 bootstrap (Client Dashboard pilot)
+
+**PLAN:** `docs/plan/Draft/gateflow_workflow_bootstrap/`  
+`PLAN_gateflow_workflow_bootstrap.md`  
+**Status:** 🟡 Draft — Phase 00 in progress  
+**Priority:** P0 — required before Client Dashboard audit/pilot loop  
+**Target:** Phase 00 exit → `/audit all`  
+**Branch:** `codex/gateflow-workflow-bootstrap`
+
+- [x] Phase 00 — Workflow bootstrap (guide status/next/prompt/delivery, state schema, gateflow-guide)
+- [ ] Phase 01 — Product and route lock
+- [ ] Phase 02 — Shared contract lock
+- [ ] Phase 03 — Contacts and invitations
+- [ ] Phase 04 — Permissions
+- [ ] Phase 05 — Gates and access logs
+- [ ] Phase 06 — Client Dashboard certification
+- [ ] Phase 07 — Focus transition (Resident Portal)
+
 ### audit_remediation_2026 — 2026 Security and Engineering Audit Remediation
 
 **PLAN:** `docs/plan/Active/audit_remediation_2026/`

@@ -3,7 +3,15 @@
   "$id": "https://gateflow.site/schemas/workflow-v2-state.schema.json",
   "title": "GateFlow Workflow v2 state",
   "type": "object",
-  "required": ["version", "sequence", "focusedApp", "apps", "integratedPilot", "createdAt", "updatedAt"],
+  "required": [
+    "version",
+    "sequence",
+    "focusedApp",
+    "apps",
+    "integratedPilot",
+    "createdAt",
+    "updatedAt"
+  ],
   "properties": {
     "version": { "const": 2 },
     "sequence": {
@@ -32,14 +40,78 @@
     "app": {
       "type": "object",
       "required": ["stage", "evidence", "updatedAt"],
+      "additionalProperties": false,
       "properties": {
         "stage": {
-          "enum": ["parked", "focused", "audited", "planned", "developing", "checking", "pilot-ready", "certified"]
+          "enum": [
+            "parked",
+            "focused",
+            "audited",
+            "planned",
+            "developing",
+            "checking",
+            "pilot-ready",
+            "certified"
+          ]
         },
         "currentPlan": { "type": ["string", "null"] },
         "baseline": { "type": ["object", "null"] },
         "evidence": { "type": "array" },
         "certificationReceipt": { "type": ["object", "null"] },
+        "pageScoresFile": {
+          "type": ["string", "null"],
+          "description": "Repo-relative path to a page-score JSON report"
+        },
+        "pilotFlowCoverage": {
+          "description": "Pilot journey coverage array or {covered,total} summary",
+          "oneOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "properties": {
+                "covered": { "type": "number" },
+                "total": { "type": "number" },
+                "status": { "type": "string" }
+              },
+              "additionalProperties": true
+            },
+            {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": { "type": "string" },
+                  "status": { "type": "string" }
+                },
+                "additionalProperties": true
+              }
+            }
+          ]
+        },
+        "selection": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "properties": {
+            "command": { "type": ["string", "null"] },
+            "agent": { "type": ["string", "null"] },
+            "skills": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "cli": { "type": ["string", "null"] }
+          }
+        },
+        "delivery": {
+          "type": ["object", "null"],
+          "additionalProperties": false,
+          "properties": {
+            "branch": { "type": ["string", "null"] },
+            "commit": { "type": ["string", "null"] },
+            "upstream": { "type": ["string", "null"] },
+            "pr": { "type": ["number", "string", "null"] },
+            "previewSha": { "type": ["string", "null"] }
+          }
+        },
         "updatedAt": { "type": "string", "format": "date-time" }
       }
     }

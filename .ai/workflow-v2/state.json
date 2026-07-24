@@ -1,10 +1,6 @@
 {
   "version": 2,
-  "sequence": [
-    "client-dashboard",
-    "resident-portal",
-    "scanner-app"
-  ],
+  "sequence": ["client-dashboard", "resident-portal", "scanner-app"],
   "focusedApp": "client-dashboard",
   "integratedPilot": {
     "stage": "parked",
@@ -13,11 +9,24 @@
   "apps": {
     "client-dashboard": {
       "stage": "focused",
-      "currentPlan": null,
+      "currentPlan": "gateflow_workflow_bootstrap",
       "baseline": null,
       "evidence": [],
       "certificationReceipt": null,
-      "updatedAt": "2026-07-24T00:00:00.000Z"
+      "selection": {
+        "command": "/audit all",
+        "agent": "gateflow-guide",
+        "skills": ["gf-guide"],
+        "cli": "cursor"
+      },
+      "pilotFlowCoverage": {
+        "covered": 0,
+        "total": 9,
+        "status": "not-started"
+      },
+      "delivery": null,
+      "pageScoresFile": null,
+      "updatedAt": "2026-07-24T03:10:00.000Z"
     },
     "resident-portal": {
       "stage": "parked",

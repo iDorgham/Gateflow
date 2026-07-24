@@ -12,6 +12,45 @@ const NEXT_COMMAND = {
   'pilot-ready': '/certify',
 };
 
+const PILOT_ORDER =
+  'Client Dashboard → Resident Portal → Scanner App → integrated pilot';
+
+const KNOWN_COMMANDS = new Set([
+  '/audit all',
+  '/page-map',
+  '/dev',
+  '/check all',
+  '/pilot',
+  '/certify',
+  '/certify integrated-pilot',
+  '/next-app',
+  '/progress',
+  '/focus',
+  '/plan',
+]);
+
+const KNOWN_AGENTS = new Set([
+  'gateflow-guide',
+  'gateflow-build',
+  'gateflow-conductor',
+  'evidence-verifier',
+  'ci-fixer',
+  'schema-architect',
+  'security-reviewer',
+  'visual-qa',
+  'dashboard-ux',
+  'test-writer',
+]);
+
+const KNOWN_SKILLS = new Set([
+  'gf-guide',
+  'gateflow',
+  'cli-limits',
+  'security',
+  'testing',
+  'visual-qa',
+]);
+
 function readJson(file, fallback = null) {
   if (!file || !fs.existsSync(file)) return fallback;
   return JSON.parse(fs.readFileSync(file, 'utf8'));
@@ -23,7 +62,11 @@ function ageInHours(value, now) {
   return Number(((Date.parse(now) - timestamp) / 3_600_000).toFixed(1));
 }
 
-function summarizeEvidence(items = [], now = new Date().toISOString(), maxAgeHours = 24) {
+function summarizeEvidence(
+  items = [],
+  now = new Date().toISOString(),
+  maxAgeHours = 24
+) {
   const normalized = items.map((item) => {
     const createdAt = item.createdAt || item.generatedAt || item.date || null;
     const ageHours = ageInHours(createdAt, now);
@@ -46,12 +89,20 @@ function summarizeEvidence(items = [], now = new Date().toISOString(), maxAgeHou
 function nextCommandFor(state, evidence) {
   const app = state.focusedApp;
   if (!app) {
-    const certified = state.sequence.filter((id) => state.apps[id].stage === 'certified');
-    return certified.length === state.sequence.length ? '/certify integrated-pilot' : '/next-app';
+    const certified = state.sequence.filter(
+      (id) => state.apps[id].stage === 'certified'
+    );
+    return certified.length === state.sequence.length
+      ? '/certify integrated-pilot'
+      : '/next-app';
   }
   const stage = state.apps[app].stage;
-  if (['audited', 'planned', 'developing', 'checking', 'pilot-ready'].includes(stage)
-    && evidence.count === 0) {
+  if (
+    ['audited', 'planned', 'developing', 'checking', 'pilot-ready'].includes(
+      stage
+    ) &&
+    evidence.count === 0
+  ) {
     return '/audit all';
   }
   return NEXT_COMMAND[stage] || '/progress';
@@ -59,12 +110,60 @@ function nextCommandFor(state, evidence) {
 
 function gitSnapshot(root) {
   try {
-    const branch = execFileSync('git', ['branch', '--show-current'], { cwd: root, encoding: 'utf8' }).trim();
-    const lines = execFileSync('git', ['status', '--short'], { cwd: root, encoding: 'utf8' })
-      .trim().split(/\r?\n/).filter(Boolean);
-    return { branch: branch || 'detached', dirty: lines.length > 0, changedFiles: lines.length };
+    const branch = execFileSync('git', ['branch', '--show-current'], {
+      cwd: root,
+      encoding: 'utf8',
+    }).trim();
+    const commit = execFileSync('git', ['rev-parse', 'HEAD'], {
+      cwd: root,
+      encoding: 'utf8',
+    }).trim();
+    const lines = execFileSync('git', ['status', '--short'], {
+      cwd: root,
+      encoding: 'utf8',
+    })
+      .trim()
+      .split(/\r?\n/)
+      .filter(Boolean);
+    let upstream = null;
+    let aheadBehind = null;
+    try {
+      upstream = execFileSync(
+        'git',
+        ['rev-parse', '--abbrev-ref', '@{upstream}'],
+        {
+          cwd: root,
+          encoding: 'utf8',
+        }
+      ).trim();
+      aheadBehind = execFileSync(
+        'git',
+        ['rev-list', '--left-right', '--count', `${upstream}...HEAD`],
+        {
+          cwd: root,
+          encoding: 'utf8',
+        }
+      ).trim();
+    } catch {
+      upstream = null;
+    }
+    return {
+      branch: branch || 'detached',
+      commit,
+      dirty: lines.length > 0,
+      changedFiles: lines.length,
+      upstream,
+      aheadBehind,
+    };
   } catch {
-    return { branch: 'unknown', dirty: null, changedFiles: null };
+    return {
+      branch: 'unknown',
+      commit: null,
+      dirty: null,
+      changedFiles: null,
+      upstream: null,
+      aheadBehind: null,
+    };
   }
 }
 
@@ -78,7 +177,13 @@ function pageScoreSummary(root, appState) {
   const values = pages.map((page) => page.score).filter(Number.isFinite);
   const average = Number.isFinite(report.average)
     ? report.average
-    : values.length ? Number((values.reduce((sum, value) => sum + value, 0) / values.length).toFixed(2)) : null;
+    : values.length
+      ? Number(
+          (
+            values.reduce((sum, value) => sum + value, 0) / values.length
+          ).toFixed(2)
+        )
+      : null;
   return { status: 'recorded', average, pages: pages.length };
 }
 
@@ -99,16 +204,66 @@ function pilotCoverage(appState) {
   };
 }
 
+function selectionFrom(appState) {
+  const selection = appState?.selection || null;
+  if (!selection || typeof selection !== 'object') {
+    return {
+      command: null,
+      agent: 'gateflow-guide',
+      skills: ['gf-guide'],
+      cli: null,
+    };
+  }
+  return {
+    command: selection.command || null,
+    agent: selection.agent || 'gateflow-guide',
+    skills: Array.isArray(selection.skills) ? selection.skills : ['gf-guide'],
+    cli: selection.cli || null,
+  };
+}
+
+function validateSelection(selection) {
+  const errors = [];
+  if (
+    selection.command &&
+    !KNOWN_COMMANDS.has(selection.command) &&
+    !selection.command.startsWith('/')
+  ) {
+    errors.push(`unknown command: ${selection.command}`);
+  }
+  if (selection.agent && !KNOWN_AGENTS.has(selection.agent)) {
+    errors.push(`unknown agent: ${selection.agent}`);
+  }
+  for (const skill of selection.skills || []) {
+    if (!KNOWN_SKILLS.has(skill)) errors.push(`unknown skill: ${skill}`);
+  }
+  return errors;
+}
+
 function buildGuideSnapshot({ root, state, now = new Date().toISOString() }) {
   const focusedApp = state.focusedApp;
   const appState = focusedApp ? state.apps[focusedApp] : null;
   const evidence = summarizeEvidence(appState?.evidence, now);
   const routes = focusedApp
-    ? inventoryRoutes(root, resolveApp(focusedApp).path, resolveApp(focusedApp).type)
+    ? inventoryRoutes(
+        root,
+        resolveApp(focusedApp).path,
+        resolveApp(focusedApp).type
+      )
     : [];
+  const selection = selectionFrom(appState);
   const blockers = [];
-  if (state.workdirLock) blockers.push(`Workdir is locked by ${state.workdirLock.owner}`);
-  if (evidence.stale > 0) blockers.push(`${evidence.stale} evidence item(s) are stale or undated`);
+  if (state.workdirLock)
+    blockers.push(`Workdir is locked by ${state.workdirLock.owner}`);
+  if (evidence.stale > 0)
+    blockers.push(`${evidence.stale} evidence item(s) are stale or undated`);
+  const selectionErrors = validateSelection(selection);
+  if (selectionErrors.length)
+    blockers.push(...selectionErrors.map((error) => `Selection: ${error}`));
+  const deliveryCache =
+    appState?.delivery && typeof appState.delivery === 'object'
+      ? appState.delivery
+      : null;
   return {
     generatedAt: now,
     activeApplication: focusedApp,
@@ -116,6 +271,8 @@ function buildGuideSnapshot({ root, state, now = new Date().toISOString() }) {
     currentPlan: appState?.currentPlan || null,
     pilotFlowCoverage: pilotCoverage(appState || {}),
     pageScoreSummary: pageScoreSummary(root, appState || {}),
+    selection,
+    deliveryCache,
     routeInventory: { count: routes.length },
     evidence,
     blockers,
@@ -136,23 +293,132 @@ function copyPrompt(snapshot) {
     `Continue GateFlow Workflow v2 for ${app}.`,
     `Current stage: ${snapshot.currentStage}.`,
     `Run ${snapshot.nextCommand} as the only next workflow command.`,
-    'Read live workspace state first. Preserve the fixed pilot order: Client Dashboard → Resident Portal → Scanner App → integrated pilot.',
+    `Read live workspace state first. Preserve the fixed pilot order: ${PILOT_ORDER}.`,
     'Use dated evidence, report blockers honestly, do not claim browser/device verification from static review, and do not perform remote mutations without explicit authorization.',
     'Return artifacts, verification, risks/blockers, and exactly one next command.',
   ].join('\n');
 }
 
+function renderGuidePrompt(snapshot) {
+  const agent = snapshot.selection?.agent || 'gateflow-guide';
+  const skills = (snapshot.selection?.skills || ['gf-guide']).join(', ');
+  const cli = snapshot.selection?.cli || 'cursor';
+  const workdir = process.cwd();
+  const text = [
+    `[COMMAND] ${snapshot.nextCommand}`,
+    `[CLI] ${cli}`,
+    `[AGENT] ${agent}`,
+    `[SKILLS] ${skills}`,
+    `[APP] ${snapshot.activeApplication || 'none'}`,
+    `[PLAN] ${snapshot.currentPlan || 'none'}`,
+    `[STAGE] ${snapshot.currentStage}`,
+    `[WORKDIR] ${workdir}`,
+    `[PILOT_ORDER] ${PILOT_ORDER}`,
+    '[MUTATION] Local evidence and docs only unless separately authorized. No deploy/migrate/merge.',
+    '[EVIDENCE] Prefer dated source-linked findings. Mark static-review-only when browser evidence is absent.',
+    '[SCOPE]',
+    copyPrompt(snapshot),
+  ].join('\n');
+  return {
+    generatedAt: snapshot.generatedAt,
+    command: snapshot.nextCommand,
+    agent,
+    skills: snapshot.selection?.skills || ['gf-guide'],
+    cli,
+    app: snapshot.activeApplication,
+    plan: snapshot.currentPlan,
+    stage: snapshot.currentStage,
+    validated: validateSelection(snapshot.selection || {}).length === 0,
+    text,
+  };
+}
+
+function safeGhJson(root, args) {
+  try {
+    const stdout = execFileSync('gh', args, {
+      cwd: root,
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'ignore'],
+    });
+    return JSON.parse(stdout);
+  } catch {
+    return null;
+  }
+}
+
+function collectDeliveryEvidence({ root, snapshot }) {
+  const git = snapshot.git || gitSnapshot(root);
+  const pr =
+    git.branch && git.branch !== 'unknown'
+      ? safeGhJson(root, [
+          'pr',
+          'view',
+          '--json',
+          'number,url,state,isDraft,headRefOid,statusCheckRollup,reviews',
+        ])
+      : null;
+  const checks = Array.isArray(pr?.statusCheckRollup)
+    ? pr.statusCheckRollup.map((item) => ({
+        name: item.name || item.context || 'check',
+        status: item.status || item.state || 'UNKNOWN',
+        conclusion: item.conclusion || null,
+      }))
+    : [];
+  const reviews = Array.isArray(pr?.reviews)
+    ? pr.reviews.map((item) => ({
+        author: item.author?.login || item.author || null,
+        state: item.state || null,
+      }))
+    : [];
+  return {
+    generatedAt: snapshot.generatedAt || new Date().toISOString(),
+    activeApplication: snapshot.activeApplication,
+    currentStage: snapshot.currentStage,
+    git: {
+      branch: git.branch,
+      commit: git.commit,
+      dirty: git.dirty,
+      changedFiles: git.changedFiles,
+      upstream: git.upstream,
+      aheadBehind: git.aheadBehind,
+    },
+    pr: pr
+      ? {
+          number: pr.number,
+          url: pr.url,
+          state: pr.state,
+          isDraft: pr.isDraft,
+          headRefOid: pr.headRefOid,
+          headMatchesLocal: Boolean(
+            pr.headRefOid && git.commit && pr.headRefOid === git.commit
+          ),
+        }
+      : null,
+    checks,
+    reviews,
+    preview: snapshot.deliveryCache?.previewSha
+      ? { sourceSha: snapshot.deliveryCache.previewSha }
+      : null,
+    cachedDelivery: snapshot.deliveryCache || null,
+    nextCommand: snapshot.nextCommand,
+  };
+}
+
 function renderGuide(snapshot) {
-  const blockers = snapshot.blockers.length ? snapshot.blockers.join('; ') : 'None';
-  const score = snapshot.pageScoreSummary.average === null
-    ? 'Not recorded'
-    : `${snapshot.pageScoreSummary.average}/100 across ${snapshot.pageScoreSummary.pages} page(s)`;
+  const blockers = snapshot.blockers.length
+    ? snapshot.blockers.join('; ')
+    : 'None';
+  const score =
+    snapshot.pageScoreSummary.average === null
+      ? 'Not recorded'
+      : `${snapshot.pageScoreSummary.average}/100 across ${snapshot.pageScoreSummary.pages} page(s)`;
   const coverage = snapshot.pilotFlowCoverage.total
     ? `${snapshot.pilotFlowCoverage.covered}/${snapshot.pilotFlowCoverage.total}`
     : 'Not recorded';
-  const git = snapshot.git.dirty === null
-    ? 'Unknown'
-    : `${snapshot.git.branch}; ${snapshot.git.dirty ? `${snapshot.git.changedFiles} changed file(s)` : 'clean'}`;
+  const git =
+    snapshot.git.dirty === null
+      ? 'Unknown'
+      : `${snapshot.git.branch}; ${snapshot.git.dirty ? `${snapshot.git.changedFiles} changed file(s)` : 'clean'}`;
   return `# GateFlow Guide
 
 Status: [${statusLabel(snapshot)}]
@@ -196,10 +462,63 @@ ${snapshot.nextCommand}
 \`\`\``;
 }
 
+function renderGuideNext(payload) {
+  const blockers = payload.blockers?.length
+    ? payload.blockers.join('; ')
+    : 'None';
+  return `# GateFlow Guide — next
+
+Active application: ${payload.activeApplication || 'None'}
+Current stage: ${payload.currentStage}
+Blockers: ${blockers}
+
+## Next command
+
+\`\`\`text
+${payload.nextCommand}
+\`\`\``;
+}
+
+function renderGuideDelivery(delivery) {
+  const prLine = delivery.pr
+    ? `#${delivery.pr.number} ${delivery.pr.state}${delivery.pr.isDraft ? ' (draft)' : ''} headMatch=${delivery.pr.headMatchesLocal}`
+    : 'None (no PR for this branch, or gh unavailable)';
+  const checks = delivery.checks.length
+    ? delivery.checks
+        .map((item) => `${item.name}:${item.conclusion || item.status}`)
+        .join(', ')
+    : 'None';
+  return `# GateFlow Guide — delivery
+
+| Signal | Evidence |
+| --- | --- |
+| Branch | ${delivery.git.branch} |
+| Commit | ${delivery.git.commit || 'unknown'} |
+| Dirty | ${delivery.git.dirty} |
+| Upstream | ${delivery.git.upstream || 'none'} |
+| PR | ${prLine} |
+| Checks | ${checks} |
+| Preview SHA | ${delivery.preview?.sourceSha || 'not recorded'} |
+
+## Next command
+
+\`\`\`text
+${delivery.nextCommand}
+\`\`\``;
+}
+
 module.exports = {
   buildGuideSnapshot,
+  collectDeliveryEvidence,
   copyPrompt,
   nextCommandFor,
   renderGuide,
+  renderGuideDelivery,
+  renderGuideNext,
+  renderGuidePrompt,
   summarizeEvidence,
+  validateSelection,
+  KNOWN_AGENTS,
+  KNOWN_COMMANDS,
+  KNOWN_SKILLS,
 };

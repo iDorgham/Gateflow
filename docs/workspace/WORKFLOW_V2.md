@@ -17,12 +17,25 @@ Render the workspace-aware control-center response with:
 
 ```bash
 pnpm workflow:v2:guide
+pnpm workflow:v2:guide status --json
+pnpm workflow:v2:guide next --json
+pnpm workflow:v2:guide prompt
+pnpm workflow:v2:guide delivery --json
 ```
+
+| Subcommand         | Purpose                                                   |
+| ------------------ | --------------------------------------------------------- |
+| `status` (default) | Full guide snapshot and response contract                 |
+| `next`             | First-incomplete-gate selector (`nextCommand` only)       |
+| `prompt`           | Registry-validated tagged prompt for the next agent/CLI   |
+| `delivery`         | Local Git plus optional GitHub PR/check evidence for HEAD |
 
 The guide reads live local state, routes, plan/evidence metadata, scores,
 pilot-flow coverage, and Git status. It emits a restrained status table, one
 safe next command, and a complete prompt for the next agent or CLI. JSON is
-available with `pnpm workflow:v2:guide --json`.
+available with `--json` on each subcommand. Optional app-state pointers
+(`pageScoresFile`, `pilotFlowCoverage`, `selection`, `delivery`) live on
+`.ai/workflow-v2/state.json` — never invent a second store under `.gateflow/`.
 
 The legal app stages are:
 
