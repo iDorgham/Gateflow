@@ -4,6 +4,23 @@
 
 ## 🚀 Active Initiatives (Q2-Q3 2026)
 
+### repo_hygiene — Repo hygiene + security baseline (v0.3.0)
+
+**PLAN:** `docs/plan/Draft/repo_hygiene/`  
+`PLAN_repo_hygiene.md`  
+**Status:** 🟢 Draft — phases complete locally; awaiting push/PR + annotated tag  
+**Priority:** P0 — pre-audit gate after Workflow Phase 00  
+**Target:** Cleanup + Dependabot overrides + docs + marketing P0 → tag `v0.3.0` → `/audit all`  
+**Branch:** `chore/repo-hygiene-v0.3.0`
+
+- [x] Phase 00 — CI / deploy triage
+- [x] Phase 00b — Dependabot vulnerability overrides
+- [x] Phase 01 — Root/docs cleanup
+- [x] Phase 02 — Plan lifecycle + backlog
+- [x] Phase 03 — Docs refresh
+- [x] Phase 05 — Marketing production P0
+- [x] Phase 04 — Version `0.3.0` + CHANGELOG (tag/push when authorized)
+
 ### gateflow_workflow_bootstrap — Workflow v2 bootstrap (Client Dashboard pilot)
 
 **PLAN:** `docs/plan/Draft/gateflow_workflow_bootstrap/`  
@@ -26,18 +43,18 @@
 
 **PLAN:** `docs/plan/Active/audit_remediation_2026/`
 
-**Status:** 🟢 Phases 1–4 code shipped (2026-07-21); residual ops credential-rotation receipt
+**Status:** 🟢 Active — Phases 1–3 mostly complete; Phase 4 + Final still open in TASKS (ops credential-rotation receipt pending)
 
-**Priority:** P0 containment complete; P1/P2 hardening shipped
+**Priority:** P0 containment complete; P1/P2 hardening in progress
 
-**Target:** Hold security posture; close ops receipt; then move plan to `Complete/`
+**Target:** Finish Phase 4 + ops receipt; then move plan to `Complete/`
 
 **Branches:** `fix/audit-remediation-phase-*` (PRs #153–#155)
 
 - [x] Phase 1 — P0 containment: bootstrap route and browser injection
 - [x] Phase 2 — Tenant isolation: request-local, complete, fail-closed
 - [x] Phase 3 — Trustworthy CI and repository scanners
-- [x] Phase 4 — API hardening, coverage, and final certification
+- [ ] Phase 4 — API hardening, coverage, and final certification
 
 ### gateflow_design_system — GateFlow Design System (tokens, theme, UI)
 
@@ -146,19 +163,19 @@
 ### design_system_redesign — GateFlow Design System Redesign (Premium Enterprise)
 
 **IDEA:** `docs/development/initiatives/IDEA_design_system_redesign.md`  
-**PLAN:** `docs/plan/Active/design-system-redesign/`  
+**PLAN:** `docs/plan/Complete/design-system-redesign/`  
 `PLAN_design-system-redesign.md`  
-**Status:** 🔵 In-Progress (Phase 3)  
+**Status:** ✅ Complete (phases 1–8)  
 **Target:** Q2 2026
 
 - [x] Phase 1 — Foundation Token Overhaul (Colors, Typography, Icons, Spacing, Grid)
 - [x] Phase 2 — Core Foundation Pages (1-6) (Colors to Motion)
-- [ ] Phase 3 — Pattern Documentation (7-12) (AI to Date Pickers)
-- [ ] Phase 4 — Monorepo Enforcement & Migration (enforce-ads-design.js)
-- [ ] Phase 5 — Marketing & Auth Redesign (High-flair premium gateway)
-- [ ] Phase 6 — Dashboards & Portal Redesign (High-density operational focus)
-- [ ] Phase 7 — Mobile Optimization (Scanner & Resident compact refinement)
-- [ ] Phase 8 — Final Polish & Certification (Accessibility audit)
+- [x] Phase 3 — Pattern Documentation (7-12) (AI to Date Pickers)
+- [x] Phase 4 — Monorepo Enforcement & Migration (enforce-ads-design.js)
+- [x] Phase 5 — Marketing & Auth Redesign (High-flair premium gateway)
+- [x] Phase 6 — Dashboards & Portal Redesign (High-density operational focus)
+- [x] Phase 7 — Mobile Optimization (Scanner & Resident compact refinement)
+- [x] Phase 8 — Final Polish & Certification (Accessibility audit)
 
 ### admin_dashboard_redesign — Admin Dashboard Redesign (v10 Match)
 

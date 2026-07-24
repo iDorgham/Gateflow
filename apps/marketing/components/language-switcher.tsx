@@ -53,7 +53,7 @@ export function LanguageSwitcher({ currentLocale }: { currentLocale: Locale }) {
     router.push(segments.join('/'));
   };
 
-  const current = localeLabels[currentLocale];
+  const current = localeLabels[currentLocale] ?? localeLabels.en;
 
   return (
     <DropdownMenu>
@@ -74,7 +74,7 @@ export function LanguageSwitcher({ currentLocale }: { currentLocale: Locale }) {
         style={{ boxShadow: 'var(--ds-shadow-overlay)' }}
       >
         {i18n.locales.map((locale) => {
-          const info = localeLabels[locale];
+          const info = localeLabels[locale] ?? localeLabels.en;
           const isActive = currentLocale === locale;
           return (
             <DropdownMenuItem

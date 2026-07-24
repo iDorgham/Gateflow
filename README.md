@@ -12,7 +12,7 @@
 <p align="center">
   <a href="https://github.com/iDorgham/Gateflow/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/iDorgham/Gateflow/ci.yml?branch=master&label=CI&style=flat-square" alt="CI status"></a>
   <a href="https://github.com/iDorgham/Gateflow/actions/workflows/codeql-analysis.yml"><img src="https://img.shields.io/github/actions/workflow/status/iDorgham/Gateflow/codeql-analysis.yml?branch=master&label=CodeQL&style=flat-square" alt="CodeQL status"></a>
-  <a href="package.json"><img src="https://img.shields.io/badge/release-0.2.0-6366f1?style=flat-square" alt="Release 0.2.0"></a>
+  <a href="package.json"><img src="https://img.shields.io/badge/release-0.3.0-6366f1?style=flat-square" alt="Release 0.3.0"></a>
   <img src="https://img.shields.io/badge/Node.js-20+-339933?style=flat-square&logo=nodedotjs&logoColor=white" alt="Node.js 20 or later">
   <img src="https://img.shields.io/badge/pnpm-8.15-F69220?style=flat-square&logo=pnpm&logoColor=white" alt="pnpm 8.15">
   <img src="https://img.shields.io/badge/license-proprietary-lightgrey?style=flat-square" alt="Proprietary license">
@@ -276,6 +276,7 @@ pnpm db:studio
 pnpm check:env              # all configured apps
 pnpm check:env:client       # client dashboard only
 pnpm preflight              # changelog + lint + typecheck + tests (slower CI-like gate)
+pnpm workflow:v2:guide      # Workflow v2 status / next command (state: `.ai/workflow-v2/state.json`)
 ```
 
 ### 7. Run development servers
@@ -328,11 +329,11 @@ high-speed delivery paths.
 ```text
 /GateFlow (Root)
 ├── /apps                          # Mission-Critical Applications
-│   ├── admin-dashboard            # Internal Platform Operations (Next.js 15)
-│   ├── client-dashboard           # B2B Property Manager Portal (Next.js 15)
-│   ├── marketing                  # Public Landing & SEO Funnels (Next.js 15)
+│   ├── admin-dashboard            # Internal Platform Operations (Next.js 16)
+│   ├── client-dashboard           # B2B Property Manager Portal (Next.js 16)
+│   ├── marketing                  # Public Landing & SEO Funnels (Next.js 16)
 │   ├── resident-mobile            # Native iOS/Android Apps (Expo 54)
-│   ├── resident-portal            # Web-based Resident Utility (Next.js 15)
+│   ├── resident-portal            # Web-based Resident Utility (Next.js 16)
 │   └── scanner-app               # Field Verification (React Native, Offline-First)
 ├── /packages                      # Shared Core Infrastructure
 │   ├── db                         # Prisma + Multi-tenant middleware + Seeding
