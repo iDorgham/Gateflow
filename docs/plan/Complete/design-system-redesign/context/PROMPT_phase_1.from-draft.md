@@ -1,7 +1,7 @@
 # PHASE 1: GateFlow Design System Redesign — Foundation Tokens Overhaul
 
 **Role:** Design Technologist / UI Specialist  
-**Preferred Tool:** Cursor, Kiro, Antigravity, Claude CLI, Opencode CLI, Gemini CLI, Kilo CLI
+**Preferred Tool:** Cursor, Antigravity, Claude CLI, Opencode CLI, Gemini CLI, Kiro CLI, Kilo CLI, Qwen CLI
 
 ---
 
