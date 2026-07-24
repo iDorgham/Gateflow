@@ -8,7 +8,7 @@
 
 ## How to record (for agents)
 
-After a task or phase was executed **using a CLI** (Claude CLI, Gemini CLI, Opencode CLI, Kiro CLI, Kilo CLI, Qwen CLI):
+After a task or phase was executed **using a CLI** (Cursor, Claude CLI, Codex CLI, Gemini CLI, OpenCode CLI, Antigravity, Kiro CLI, Kilo CLI, Qwen CLI):
 
 1. Append one line to the **Log entries** section in this file (or add a new row to the table).
 2. Include: **Date**, **CLI**, **Task/phase** (e.g. phase 1 of core_security_v6, or "ad-hoc: review auth.ts"), **Outcome** (success / partial / fail), **Notes** (optional: limit impact, quality, or "near daily limit").
@@ -21,9 +21,10 @@ After a task or phase was executed **using a CLI** (Claude CLI, Gemini CLI, Open
 ```
 
 **Template table row:**
-| Date | CLI | Task / phase | Outcome | Notes |
-|------|-----|--------------|---------|-------|
-| YYYY-MM-DD | Claude CLI | phase 1 core_security_v6 | success | — |
+
+| Date       | CLI        | Task / phase             | Outcome | Notes |
+| ---------- | ---------- | ------------------------ | ------- | ----- |
+| YYYY-MM-DD | Claude CLI | phase 1 core_security_v6 | success | —     |
 
 ---
 
@@ -31,6 +32,7 @@ After a task or phase was executed **using a CLI** (Claude CLI, Gemini CLI, Open
 
 | Date       | CLI          | Task / phase                                                   | Outcome | Notes                                                                                                                   |
 | ---------- | ------------ | -------------------------------------------------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------- |
+| 2026-07-24 | Codex CLI    | Phase 00 gateflow_workflow_bootstrap (doctor + adapter)        | success | `codex doctor` OK; adapter `codex exec -C {workdir}`; td doctor shows codex ✓                                           |
 | 2026-03-17 | Gemini CLI   | Phase 5 atlassian_ui_remake                                    | success | Standardized Organizations, Users, Scans and Audit Logs.                                                                |
 | 2026-03-17 | Antigravity  | Phase 5 gateai_hub_v2                                          | success | Unified motion tokens and RTL logical properties.                                                                       |
 | 2026-03-22 | Gemini CLI   | Audit: Broad scan for multi-tenant leaks                       | success | Found several un-scoped queries.                                                                                        |

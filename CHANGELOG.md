@@ -9,6 +9,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 ## [Unreleased]
 
 ### Workspace
+- **[Scripts]** harden workflow-v2 guide parsing and docs alignment
+
+- **[Scripts]** harden workflow-v2 guide parsing and docs alignment
+
+- **[Workflow-V2]** bootstrap guide status/next/prompt/delivery
 
 - **[Build]** complete Tailwind v4 migration — production builds were broken
 

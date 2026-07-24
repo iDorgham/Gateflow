@@ -382,6 +382,7 @@ See **[PRD §9](docs/reference/product/PRD.md)** and **[CHANGELOG](CHANGELOG.md)
 
 ## 📅 Recent Engineering Activity
 
+- **[Workflow-V2]:** bootstrap guide status/next/prompt/delivery
 - **[Audit Remediation 2026]:** Phases 1–4 shipped — P0 containment, fail-closed tenancy, CI scanners, API guards + security headers (PRs #153–#155)
 - **[Deploy]:** Vercel `ignoreCommand` skips Dependabot and automatic Preview builds (Hobby quota)
 - **[DB]:** Production migrate unblock for stuck `platform_evolution` migration
