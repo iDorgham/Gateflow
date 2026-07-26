@@ -1,3 +1,5 @@
+'use client';
+
 export * from './compositions/Breadcrumbs';
 export * from './compositions/PageHeader';
 export * from './compositions/EntityCard';

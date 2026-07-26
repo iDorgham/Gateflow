@@ -51,6 +51,7 @@ export default async function RootLayout(props: {
     >
       <body
         className={`min-h-dvh bg-background antialiased ${poppins.variable} ${cairo.variable} ${isRtl ? 'font-arabic' : 'font-sans'}`}
+        suppressHydrationWarning
       >
         <I18nProvider locale={params.locale}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
