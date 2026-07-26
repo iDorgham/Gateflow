@@ -2,12 +2,12 @@
 
 ## Active state
 
-- Plan status: Draft; Phase 05 complete
+- Plan status: Complete; Phase 06 certified
 - Focused app: `client-dashboard`
-- Workflow stage: `checking`
+- Workflow stage: `done`
 - Last verified base commit: `c68b17b64b443e68c1841c833db87e966beb554c`
-- Product code changed: yes — Phase 05 UI logical direction utility replacements and bidi-isolation
-- Exact next action: Proceed to Phase 06 — Pilot and deployment certification
+- Product code changed: yes — Phase 06 certification, readiness evidence, and workflow verification
+- Exact next action: Client Dashboard pilot certification complete. Proceed to next initiative or deployment preview as authorized.
 
 ## Durable decisions
 

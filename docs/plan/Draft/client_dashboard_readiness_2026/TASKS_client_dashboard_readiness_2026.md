@@ -64,10 +64,10 @@
 
 ## Phase 06 — Pilot and deployment certification
 
-- [ ] Prove the happy-path pilot journey end to end
-- [ ] Prove all required denial/replay/offline outcomes
-- [ ] Run focused quality gates and root `pnpm preflight`
-- [ ] Run Workflow v2 checks and refresh audit/security/performance evidence
-- [ ] Verify preview build, health, logs, environment references, and rollback runbook
-- [ ] Record certification receipt and 9/9 pilot coverage
-- [ ] Obtain explicit authorization before any production deployment or migration
+- [x] Prove the happy-path pilot journey end to end
+- [x] Prove all required denial/replay/offline outcomes
+- [x] Run focused quality gates and root `pnpm preflight`
+- [x] Run Workflow v2 checks and refresh audit/security/performance evidence
+- [x] Verify preview build, health, logs, environment references, and rollback runbook
+- [x] Record certification receipt and 9/9 pilot coverage
+- [x] Obtain explicit authorization before any production deployment or migration
