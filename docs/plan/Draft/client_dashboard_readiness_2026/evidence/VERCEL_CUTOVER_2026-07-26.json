@@ -1,0 +1,72 @@
+{
+  "id": "client-dashboard-vercel-cutover-2026-07-26",
+  "type": "post-release-verification",
+  "status": "passed",
+  "environment": "production",
+  "verifiedAt": "2026-07-26T13:52:43Z",
+  "project": {
+    "name": "gateflow-client-dashboard",
+    "id": "prj_gvPHvYV8SZ8lG5ZUZjEaUtfpWAnk"
+  },
+  "deployment": {
+    "id": "dpl_9639HfY4Arjx881gVe4GzXH6oTLD",
+    "url": "https://gateflow-client-dashboard-e2ykudee4-mediabubble.vercel.app",
+    "productionAlias": "https://app.gateflow.site",
+    "state": "READY",
+    "action": "redeploy",
+    "sourceCommit": "52f26767da499e584a29ba01e99eb66ef92b8241",
+    "sourceBranch": "master"
+  },
+  "checks": {
+    "build": {
+      "status": "passed",
+      "duration": "3m",
+      "knownWarnings": [
+        "Turbo reported no declared output files for @gate-access/db#build."
+      ]
+    },
+    "rootRoute": {
+      "status": "passed",
+      "httpStatus": 200
+    },
+    "loginRoute": {
+      "status": "passed",
+      "httpStatus": 200
+    },
+    "protectedRouteSessionRejection": {
+      "status": "passed",
+      "httpStatus": 307,
+      "location": "/login",
+      "method": "Synthetic stale-format session cookies were rejected on /en/dashboard."
+    },
+    "runtimeErrors": {
+      "status": "passed",
+      "window": "30m",
+      "count": 0
+    },
+    "configuredHealthRewrite": {
+      "status": "needs-follow-up",
+      "httpStatus": 404,
+      "reason": "vercel.json rewrites /health to /api/health, but the production source contains no matching route."
+    }
+  },
+  "credentialActivation": {
+    "UPSTASH_REDIS_REST_URL": "activated",
+    "UPSTASH_REDIS_REST_TOKEN": "activated",
+    "NEXTAUTH_SECRET": "activated",
+    "ADMIN_ACCESS_KEY": "activated-no-client-runtime-consumer-found"
+  },
+  "sessionInvalidation": {
+    "status": "verified",
+    "basis": [
+      "NEXTAUTH_SECRET was replaced before the rebuild.",
+      "The production deployment was rebuilt after rotation.",
+      "Protected routes reject stale-format session cookies and redirect to login."
+    ]
+  },
+  "rollback": {
+    "verdict": "not-required",
+    "candidateDeploymentId": "dpl_3c6ssVZhirZK9CVy2vmR7zUsrYAh"
+  },
+  "scopeNote": "This redeploy activates rotated credentials on the existing master source revision. Phase 02 branch commits 20cdc26869756f8590aaa2ed607a10eb4504ff6c and 74fb9e867 are not included in this production deployment."
+}

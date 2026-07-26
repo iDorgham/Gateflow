@@ -24,15 +24,19 @@ export function getDefaultMonthlyQuota(unitType: UnitType): number {
   return quotas[unitType] ?? 5;
 }
 
-export async function checkAndConsumeQuota(unitId: string): Promise<QuotaCheckResult> {
-  const unit = await prisma.unit.findUnique({
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function checkAndConsumeQuota(
+  unitId: string,
+  db: any = prisma
+): Promise<QuotaCheckResult> {
+  const unit = await db.unit.findUnique({
     where: { id: unitId },
-    include: { 
-      organization: { 
-        include: { 
-          residentLimits: true 
-        } 
-      } 
+    include: {
+      organization: {
+        include: {
+          residentLimits: true,
+        },
+      },
     },
   });
 
@@ -41,22 +45,29 @@ export async function checkAndConsumeQuota(unitId: string): Promise<QuotaCheckRe
   }
 
   const organizationLimit = unit.organization.residentLimits.find(
-    (r: { unitType: UnitType, canCreateOpenQR: boolean, monthlyQuota: number }) => r.unitType === unit.type
+    (r: {
+      unitType: UnitType;
+      canCreateOpenQR: boolean;
+      monthlyQuota: number;
+    }) => r.unitType === unit.type
   );
 
-  const quota = unit.qrQuota ?? organizationLimit?.monthlyQuota ?? getDefaultMonthlyQuota(unit.type);
+  const quota =
+    unit.qrQuota ??
+    organizationLimit?.monthlyQuota ??
+    getDefaultMonthlyQuota(unit.type);
 
   const now = new Date();
   const start = startOfMonth(now);
   const end = endOfMonth(now);
 
-  const used = await prisma.visitorQR.count({
+  const used = await db.visitorQR.count({
     where: {
       unitId,
       createdAt: { gte: start, lte: end },
-      qrCode: { 
+      qrCode: {
         isActive: true,
-        deletedAt: null
+        deletedAt: null,
       },
     },
   });
@@ -73,19 +84,23 @@ export async function checkAndConsumeQuota(unitId: string): Promise<QuotaCheckRe
 export async function canCreateOpenQR(unitId: string): Promise<boolean> {
   const unit = await prisma.unit.findUnique({
     where: { id: unitId },
-    include: { 
-      organization: { 
-        include: { 
-          residentLimits: true 
-        } 
-      } 
+    include: {
+      organization: {
+        include: {
+          residentLimits: true,
+        },
+      },
     },
   });
 
   if (!unit) return false;
 
   const organizationLimit = unit.organization.residentLimits.find(
-    (r: { unitType: UnitType, canCreateOpenQR: boolean, monthlyQuota: number }) => r.unitType === unit.type
+    (r: {
+      unitType: UnitType;
+      canCreateOpenQR: boolean;
+      monthlyQuota: number;
+    }) => r.unitType === unit.type
   );
 
   return organizationLimit?.canCreateOpenQR ?? false;

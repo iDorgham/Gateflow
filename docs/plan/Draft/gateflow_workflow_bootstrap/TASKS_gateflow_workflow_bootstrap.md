@@ -12,6 +12,9 @@
 
 ## Phase 01–07 (not started)
 
+> Phases 01–06 are superseded by `client_dashboard_readiness_2026` and must not
+> run concurrently. Phase 07 remains gated on Client Dashboard certification.
+
 - [ ] Phase 01 — Route lock
 - [ ] Phase 02 — Contracts
 - [ ] Phase 03 — Contacts / invitations

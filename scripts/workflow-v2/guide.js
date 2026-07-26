@@ -263,9 +263,7 @@ function selectionFrom(appState) {
 function validateSelection(selection) {
   const errors = [];
   if (selection.command && !KNOWN_COMMANDS.has(selection.command)) {
-    errors.push(
-      `unknown command: ${selection.command}`
-    );
+    errors.push(`unknown command: ${selection.command}`);
   }
   if (selection.agent && !KNOWN_AGENTS.has(selection.agent)) {
     errors.push(`unknown agent: ${selection.agent}`);
@@ -296,6 +294,14 @@ function buildGuideSnapshot({ root, state, now = new Date().toISOString() }) {
     blockers.push(`Workdir is locked by ${state.workdirLock.owner}`);
   if (evidence.stale > 0)
     blockers.push(`${evidence.stale} evidence item(s) are stale or undated`);
+  const gates = Array.isArray(appState?.externalGates) ? appState.externalGates : [];
+  for (const gate of gates) {
+    if (!['passed', 'closed', 'complete'].includes(gate.status)) {
+      blockers.push(
+        `External gate ${gate.id}: ${gate.summary || `status is ${gate.status}`}`
+      );
+    }
+  }
   const selectionErrors = validateSelection(selection);
   if (selectionErrors.length)
     blockers.push(...selectionErrors.map((error) => `Selection: ${error}`));

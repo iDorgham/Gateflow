@@ -5,13 +5,28 @@ import { prisma } from '@gate-access/db';
 import QRCode from 'qrcode';
 import { getTransporter, buildEmailHtml } from '@/lib/email';
 import nodemailer from 'nodemailer';
+import { checkRateLimit } from '@/lib/rate-limit';
 
-const SendEmailRequestSchema = z.object({
-  qrString: z.string().min(1, 'QR string is required'),
-  qrId: z.string().min(1, 'QR ID is required'),
-  recipientEmail: z.string().email('Invalid recipient email'),
-  recipientName: z.string().optional(),
-});
+const SendEmailRequestSchema = z
+  .object({
+    qrId: z.string().min(1, 'QR ID is required'),
+    recipientEmail: z.string().email('Invalid recipient email').optional(),
+    email: z.string().email('Invalid recipient email').optional(),
+    recipientName: z.string().optional(),
+  })
+  .refine((value) => value.recipientEmail || value.email, {
+    message: 'Recipient email is required',
+    path: ['recipientEmail'],
+  })
+  .transform((value) => ({
+    qrId: value.qrId,
+    recipientEmail: value.recipientEmail ?? value.email!,
+    recipientName: value.recipientName,
+  }));
+
+function errorType(error: unknown): string {
+  return error instanceof Error ? error.name : 'UnknownError';
+}
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
@@ -20,6 +35,21 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       return NextResponse.json(
         { success: false, message: 'Unauthorized' },
         { status: 401 }
+      );
+    }
+
+    const rateLimit = await checkRateLimit(
+      `qr-email:${claims.orgId}:${claims.sub}`,
+      10,
+      60_000
+    );
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Too many email delivery requests. Please retry shortly.',
+        },
+        { status: 429 }
       );
     }
 
@@ -45,7 +75,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    const { qrString, qrId, recipientEmail, recipientName } = validation.data;
+    const { qrId, recipientEmail, recipientName } = validation.data;
 
     // Verify QR belongs to this org
     const qrRecord = await prisma.qRCode.findFirst({
@@ -54,7 +84,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         organizationId: claims.orgId,
         deletedAt: null,
       },
-      select: { id: true, expiresAt: true },
+      select: { id: true, code: true, expiresAt: true },
     });
 
     if (!qrRecord) {
@@ -74,7 +104,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     // Generate QR code PNG buffer
     let qrBuffer: Buffer;
     try {
-      qrBuffer = await QRCode.toBuffer(qrString, {
+      qrBuffer = await QRCode.toBuffer(qrRecord.code, {
         width: 400,
         margin: 2,
         color: {
@@ -84,7 +114,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         errorCorrectionLevel: 'M',
       });
     } catch (err) {
-      console.error('QR generation error:', err);
+      console.error('QR generation error:', { type: errorType(err) });
       return NextResponse.json(
         { success: false, message: 'Failed to generate QR code image' },
         { status: 500 }
@@ -96,7 +126,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     try {
       transporter = getTransporter();
     } catch (err) {
-      console.error('SMTP config error:', err);
+      console.error('SMTP config error:', { type: errorType(err) });
       return NextResponse.json(
         { success: false, message: 'Email service not configured' },
         { status: 503 }
@@ -105,12 +135,24 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     const fromAddress =
       process.env.SMTP_FROM ?? `"GateFlow" <noreply@gateflow.site>`;
-    const displayName = recipientName || recipientEmail;
+    const attemptReceipt = await prisma.auditLog.create({
+      data: {
+        action: 'QR_EMAIL_DELIVERY_ATTEMPTED',
+        entityType: 'QRCode',
+        entityId: qrId,
+        organizationId: claims.orgId,
+        userId: claims.sub,
+        metadata: { channel: 'email' },
+      },
+    });
 
     try {
       await transporter.sendMail({
         from: fromAddress,
-        to: `"${displayName}" <${recipientEmail}>`,
+        to: {
+          name: recipientName || recipientEmail,
+          address: recipientEmail,
+        },
         subject: `Your Access QR Code — ${orgName}`,
         html: buildEmailHtml(recipientName ?? '', orgName, qrRecord.expiresAt),
         attachments: [
@@ -123,22 +165,56 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         ],
       });
     } catch (err) {
-      console.error('Email send error:', err);
+      console.error('Email send error:', { type: errorType(err) });
+      await prisma.auditLog.create({
+        data: {
+          action: 'QR_EMAIL_DELIVERY_FAILED',
+          entityType: 'QRCode',
+          entityId: qrId,
+          organizationId: claims.orgId,
+          userId: claims.sub,
+          metadata: {
+            attemptAuditId: attemptReceipt.id,
+            channel: 'email',
+            errorType: errorType(err),
+          },
+        },
+      });
       return NextResponse.json(
         {
           success: false,
-          message: `Email delivery failed: ${(err as Error).message}`,
+          message: 'Email delivery failed',
         },
         { status: 502 }
       );
     }
 
+    try {
+      await prisma.auditLog.create({
+        data: {
+          action: 'QR_EMAIL_DELIVERY_SUCCEEDED',
+          entityType: 'QRCode',
+          entityId: qrId,
+          organizationId: claims.orgId,
+          userId: claims.sub,
+          metadata: {
+            attemptAuditId: attemptReceipt.id,
+            channel: 'email',
+          },
+        },
+      });
+    } catch (auditError) {
+      console.error('Failed to log email delivery success receipt:', {
+        type: errorType(auditError),
+      });
+    }
+
     return NextResponse.json({
       success: true,
-      data: { sentTo: recipientEmail },
+      data: { sent: true },
     });
   } catch (error) {
-    console.error('Send email error:', error);
+    console.error('Send email error:', { type: errorType(error) });
     return NextResponse.json(
       { success: false, message: 'Internal server error' },
       { status: 500 }

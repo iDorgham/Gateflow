@@ -58,6 +58,7 @@ jest.mock('@/lib/auth-cookies', () => ({
 const mockContactCreate = jest.fn();
 const mockContactFindMany = jest.fn();
 const mockContactCount = jest.fn();
+const mockUnitFindMany = jest.fn();
 const mockProjectFindFirst = jest.fn();
 const mockGateFindFirst = jest.fn();
 const mockAuditLogCreate = jest.fn();
@@ -67,6 +68,9 @@ jest.mock('@gate-access/db', () => ({
       create: (...args: unknown[]) => mockContactCreate(...args),
       findMany: (...args: unknown[]) => mockContactFindMany(...args),
       count: (...args: unknown[]) => mockContactCount(...args),
+    },
+    unit: {
+      findMany: (...args: unknown[]) => mockUnitFindMany(...args),
     },
     project: {
       findFirst: (...args: unknown[]) => mockProjectFindFirst(...args),
@@ -86,7 +90,12 @@ jest.mock('@gate-access/db', () => ({
     },
     $queryRaw: jest.fn().mockResolvedValue([]),
   },
-  Prisma: { sql: jest.fn(), empty: '', raw: jest.fn(), InputJsonObject: {} as any },
+  Prisma: {
+    sql: jest.fn(),
+    empty: '',
+    raw: jest.fn(),
+    InputJsonObject: {},
+  },
   ContactSource: {
     MANUAL: 'MANUAL',
     IMPORT: 'IMPORT',
@@ -233,6 +242,34 @@ describe('POST /api/contacts — CRM fields', () => {
     );
 
     expect(res.status).toBe(400);
+    expect(mockContactCreate).not.toHaveBeenCalled();
+  });
+
+  it('rejects foreign-tenant unit IDs before creating a contact', async () => {
+    mockGetSessionClaims.mockResolvedValue({
+      orgId: 'org_1',
+      sub: 'u1',
+      email: 'a@b.com',
+    });
+    mockUnitFindMany.mockResolvedValue([{ id: 'unit_owned' }]);
+
+    const res = await POST(
+      makePostRequest({
+        firstName: 'X',
+        lastName: 'Y',
+        unitIds: ['unit_owned', 'unit_foreign'],
+      })
+    );
+
+    expect(res.status).toBe(400);
+    expect(mockUnitFindMany).toHaveBeenCalledWith({
+      where: {
+        id: { in: ['unit_owned', 'unit_foreign'] },
+        organizationId: 'org_1',
+        deletedAt: null,
+      },
+      select: { id: true },
+    });
     expect(mockContactCreate).not.toHaveBeenCalled();
   });
 });

@@ -149,17 +149,22 @@ export function ScanDetailDrawer({
 
               <dl className="space-y-4">
                 <Field icon={Hash} label="Timestamp">
-                  <span className="text-sm font-semibold text-[var(--ds-text)]">
-                    {new Date(scan.scannedAt).toLocaleString(locale, {
-                      dateStyle: 'medium',
-                      timeStyle: 'medium',
-                    })}
+                  <span
+                    className="text-sm font-semibold text-[var(--ds-text)]"
+                    dir="ltr"
+                  >
+                    <span className="[unicode-bidi:isolate]">
+                      {new Date(scan.scannedAt).toLocaleString(locale, {
+                        dateStyle: 'medium',
+                        timeStyle: 'medium',
+                      })}
+                    </span>
                   </span>
                 </Field>
 
                 <Field icon={QrCode} label="QR Code">
-                  <div className="flex flex-col gap-0.5">
-                    <span className="font-mono text-xs font-bold text-[var(--ds-text-brand)] break-all">
+                  <div className="flex flex-col gap-0.5" dir="ltr">
+                    <span className="font-mono text-xs font-bold text-[var(--ds-text-brand)] break-all [unicode-bidi:isolate]">
                       {scan.qrCode?.code ?? '—'}
                     </span>
                     {scan.qrCode?.type && (
@@ -184,16 +189,24 @@ export function ScanDetailDrawer({
                       <span className="text-sm font-semibold text-[var(--ds-text)]">
                         {scan.user.name}
                       </span>
-                      <span className="text-xs text-[var(--ds-text-subtle)]">
-                        {scan.user.email}
+                      <span
+                        className="text-xs text-[var(--ds-text-subtle)]"
+                        dir="ltr"
+                      >
+                        <span className="[unicode-bidi:isolate]">
+                          {scan.user.email}
+                        </span>
                       </span>
                     </div>
                   </Field>
                 )}
 
                 <Field icon={Hash} label="Scan ID">
-                  <span className="font-mono text-xs text-[var(--ds-text-subtlest)] break-all">
-                    {scan.id}
+                  <span
+                    className="font-mono text-xs text-[var(--ds-text-subtlest)] break-all"
+                    dir="ltr"
+                  >
+                    <span className="[unicode-bidi:isolate]">{scan.id}</span>
                   </span>
                 </Field>
               </dl>

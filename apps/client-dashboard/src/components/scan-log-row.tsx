@@ -37,7 +37,11 @@ export function ScanLogRow({
     <TableRow>
       <TableCell className="font-medium">{visitorName}</TableCell>
       <TableCell>{gateName}</TableCell>
-      <TableCell className="text-muted-foreground">{timestamp}</TableCell>
+      <TableCell className="text-muted-foreground">
+        <span dir="ltr" className="inline-block [unicode-bidi:isolate]">
+          {timestamp}
+        </span>
+      </TableCell>
       <TableCell>
         <Badge
           variant={badgeVariant}
@@ -49,7 +53,7 @@ export function ScanLogRow({
           {status}
         </Badge>
       </TableCell>
-      <TableCell className="text-right text-muted-foreground">
+      <TableCell className="text-end text-muted-foreground">
         {operatorName || '-'}
       </TableCell>
     </TableRow>

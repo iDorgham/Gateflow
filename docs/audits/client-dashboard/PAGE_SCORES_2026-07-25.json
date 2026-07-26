@@ -1,0 +1,231 @@
+{
+  "generatedAt": "2026-07-25T19:24:29.940Z",
+  "average": 49,
+  "pages": [
+    {
+      "route": "/[locale]/login",
+      "date": "2026-07-25",
+      "commit": "52f26767da499e584a29ba01e99eb66ef92b8241",
+      "locale": "en/ar",
+      "viewport": "source-only",
+      "environment": "production-source",
+      "reviewMode": "static-review-only",
+      "evidence": [
+        "apps/client-dashboard/src/app/[locale]/login/page.tsx",
+        "apps/client-dashboard/src/middleware.ts"
+      ],
+      "categories": {
+        "purpose": 12,
+        "task": 14,
+        "hierarchy": 8,
+        "states": 8,
+        "design": 8,
+        "accessibility": 5,
+        "responsiveRtl": 5,
+        "performance": 3,
+        "security": 2
+      },
+      "securityBoundaryProven": false
+    },
+    {
+      "route": "/[locale]/dashboard",
+      "date": "2026-07-25",
+      "commit": "52f26767da499e584a29ba01e99eb66ef92b8241",
+      "locale": "en/ar",
+      "viewport": "source-only",
+      "environment": "production-source",
+      "reviewMode": "static-review-only",
+      "evidence": [
+        "apps/client-dashboard/src/app/[locale]/dashboard/page.tsx",
+        "apps/client-dashboard/src/components/dashboard/dashboard-layout.tsx"
+      ],
+      "categories": {
+        "purpose": 12,
+        "task": 14,
+        "hierarchy": 7,
+        "states": 7,
+        "design": 8,
+        "accessibility": 5,
+        "responsiveRtl": 4,
+        "performance": 3,
+        "security": 2
+      },
+      "securityBoundaryProven": false
+    },
+    {
+      "route": "/[locale]/dashboard/organizations/[orgId]/residents/contacts",
+      "date": "2026-07-25",
+      "commit": "52f26767da499e584a29ba01e99eb66ef92b8241",
+      "locale": "en/ar",
+      "viewport": "source-only",
+      "environment": "production-source",
+      "reviewMode": "static-review-only",
+      "evidence": [
+        "apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/residents/contacts/page.tsx",
+        "apps/client-dashboard/src/app/api/contacts/route.ts"
+      ],
+      "categories": {
+        "purpose": 12,
+        "task": 15,
+        "hierarchy": 7,
+        "states": 8,
+        "design": 7,
+        "accessibility": 4,
+        "responsiveRtl": 3,
+        "performance": 2,
+        "security": 1
+      },
+      "securityBoundaryProven": false
+    },
+    {
+      "route": "/[locale]/join",
+      "date": "2026-07-25",
+      "commit": "52f26767da499e584a29ba01e99eb66ef92b8241",
+      "locale": "en/ar",
+      "viewport": "source-only",
+      "environment": "production-source",
+      "reviewMode": "static-review-only",
+      "evidence": [
+        "apps/client-dashboard/src/app/[locale]/join/page.tsx",
+        "apps/client-dashboard/src/app/[locale]/join/join-client.tsx"
+      ],
+      "categories": {
+        "purpose": 12,
+        "task": 14,
+        "hierarchy": 8,
+        "states": 8,
+        "design": 8,
+        "accessibility": 5,
+        "responsiveRtl": 5,
+        "performance": 3,
+        "security": 2
+      },
+      "securityBoundaryProven": false
+    },
+    {
+      "route": "/[locale]/dashboard/organizations/[orgId]/qrcodes",
+      "date": "2026-07-25",
+      "commit": "52f26767da499e584a29ba01e99eb66ef92b8241",
+      "locale": "en/ar",
+      "viewport": "source-only",
+      "environment": "production-source",
+      "reviewMode": "static-review-only",
+      "evidence": [
+        "apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/qrcodes/page.tsx",
+        "apps/client-dashboard/src/app/api/qrcodes/validate/route.ts"
+      ],
+      "categories": {
+        "purpose": 13,
+        "task": 14,
+        "hierarchy": 7,
+        "states": 8,
+        "design": 7,
+        "accessibility": 4,
+        "responsiveRtl": 4,
+        "performance": 2,
+        "security": 1
+      },
+      "securityBoundaryProven": false
+    },
+    {
+      "route": "/[locale]/dashboard/organizations/[orgId]/gates",
+      "date": "2026-07-25",
+      "commit": "52f26767da499e584a29ba01e99eb66ef92b8241",
+      "locale": "en/ar",
+      "viewport": "source-only",
+      "environment": "production-source",
+      "reviewMode": "static-review-only",
+      "evidence": [
+        "apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/gates/page.tsx",
+        "apps/client-dashboard/src/app/api/gates/route.ts"
+      ],
+      "categories": {
+        "purpose": 12,
+        "task": 14,
+        "hierarchy": 7,
+        "states": 8,
+        "design": 7,
+        "accessibility": 4,
+        "responsiveRtl": 3,
+        "performance": 3,
+        "security": 1
+      },
+      "securityBoundaryProven": false
+    },
+    {
+      "route": "/[locale]/dashboard/organizations/[orgId]/scans",
+      "date": "2026-07-25",
+      "commit": "52f26767da499e584a29ba01e99eb66ef92b8241",
+      "locale": "en/ar",
+      "viewport": "source-only",
+      "environment": "production-source",
+      "reviewMode": "static-review-only",
+      "evidence": [
+        "apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/scans/page.tsx",
+        "apps/client-dashboard/src/app/api/scans/bulk/route.ts"
+      ],
+      "categories": {
+        "purpose": 13,
+        "task": 14,
+        "hierarchy": 7,
+        "states": 7,
+        "design": 7,
+        "accessibility": 4,
+        "responsiveRtl": 3,
+        "performance": 2,
+        "security": 1
+      },
+      "securityBoundaryProven": false
+    },
+    {
+      "route": "/[locale]/dashboard/organizations/[orgId]/settings/rbac",
+      "date": "2026-07-25",
+      "commit": "52f26767da499e584a29ba01e99eb66ef92b8241",
+      "locale": "en/ar",
+      "viewport": "source-only",
+      "environment": "production-source",
+      "reviewMode": "static-review-only",
+      "evidence": [
+        "apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/settings/rbac/page.tsx",
+        "apps/client-dashboard/src/app/api/team/roles/route.ts"
+      ],
+      "categories": {
+        "purpose": 12,
+        "task": 13,
+        "hierarchy": 7,
+        "states": 7,
+        "design": 7,
+        "accessibility": 4,
+        "responsiveRtl": 3,
+        "performance": 3,
+        "security": 1
+      },
+      "securityBoundaryProven": false
+    },
+    {
+      "route": "/[locale]/dashboard/organizations/[orgId]/analytics",
+      "date": "2026-07-25",
+      "commit": "52f26767da499e584a29ba01e99eb66ef92b8241",
+      "locale": "en/ar",
+      "viewport": "source-only",
+      "environment": "production-source",
+      "reviewMode": "static-review-only",
+      "evidence": [
+        "apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/analytics/page.tsx",
+        "apps/client-dashboard/src/components/dashboard/analytics"
+      ],
+      "categories": {
+        "purpose": 12,
+        "task": 13,
+        "hierarchy": 7,
+        "states": 7,
+        "design": 8,
+        "accessibility": 4,
+        "responsiveRtl": 3,
+        "performance": 2,
+        "security": 1
+      },
+      "securityBoundaryProven": false
+    }
+  ]
+}

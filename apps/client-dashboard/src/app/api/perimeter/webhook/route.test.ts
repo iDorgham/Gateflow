@@ -56,9 +56,28 @@ const mockScanLogFindFirst = jest.fn();
 const mockIncidentFindFirst = jest.fn();
 const mockIncidentCreate = jest.fn();
 const mockEventLogCreate = jest.fn();
+const mockAuditLogFindFirst = jest.fn();
+const mockAuditLogCreate = jest.fn();
+const mockExecuteRaw = jest.fn();
+const mockTransaction = jest.fn(async (callback: (tx: unknown) => unknown) =>
+  callback({
+    $executeRaw: mockExecuteRaw,
+    auditLog: {
+      findFirst: mockAuditLogFindFirst,
+      create: mockAuditLogCreate,
+    },
+    scanLog: { findFirst: mockScanLogFindFirst },
+    incident: {
+      findFirst: mockIncidentFindFirst,
+      create: mockIncidentCreate,
+    },
+    eventLog: { create: mockEventLogCreate },
+  })
+);
 
 jest.mock('@gate-access/db', () => ({
   prisma: {
+    $transaction: (...args: unknown[]) => mockTransaction(...args),
     scanLog: {
       findFirst: (...args: unknown[]) => mockScanLogFindFirst(...args),
     },
@@ -67,6 +86,10 @@ jest.mock('@gate-access/db', () => ({
       create: (...args: unknown[]) => mockIncidentCreate(...args),
     },
     eventLog: { create: (...args: unknown[]) => mockEventLogCreate(...args) },
+    auditLog: {
+      findFirst: (...args: unknown[]) => mockAuditLogFindFirst(...args),
+      create: (...args: unknown[]) => mockAuditLogCreate(...args),
+    },
   },
   EventType: {
     WATCHLIST_ALERT: 'WATCHLIST_ALERT',
@@ -107,10 +130,14 @@ describe('POST /api/perimeter/webhook', () => {
       reason: args?.data?.reason ?? 'test reason',
     }));
     mockEventLogCreate.mockResolvedValue({ id: 'evt_test' });
+    mockAuditLogFindFirst.mockResolvedValue(null);
+    mockAuditLogCreate.mockResolvedValue({ id: 'audit_test' });
+    mockExecuteRaw.mockResolvedValue(1);
   });
 
   it('returns 401 when signature headers are missing', async () => {
-    process.env.PERIMETER_WEBHOOK_SECRET = 'test_secret';
+    process.env.PERIMETER_WEBHOOK_SECRET =
+      'test_secret_that_is_at_least_32_characters';
 
     const rawBody = JSON.stringify({
       organizationId: 'org_1',
@@ -133,9 +160,11 @@ describe('POST /api/perimeter/webhook', () => {
   });
 
   it('returns 401 for an invalid signature', async () => {
-    process.env.PERIMETER_WEBHOOK_SECRET = 'test_secret';
+    process.env.PERIMETER_WEBHOOK_SECRET =
+      'test_secret_that_is_at_least_32_characters';
 
-    const headerTimestamp = '2026-03-30T00:00:00.000Z';
+    const headerTimestamp = new Date().toISOString();
+    const eventId = 'evt_invalid_123';
     const rawBody = JSON.stringify({
       organizationId: 'org_1',
       projectId: 'proj_1',
@@ -147,15 +176,17 @@ describe('POST /api/perimeter/webhook', () => {
 
     const expectedSigHex = crypto
       .createHmac('sha256', process.env.PERIMETER_WEBHOOK_SECRET as string)
-      .update(`${headerTimestamp}.${rawBody}`)
+      .update(`${headerTimestamp}.${eventId}.${rawBody}`)
       .digest('hex');
 
-    const invalidSigHex = `${expectedSigHex.slice(0, -1)}0`;
+    const replacement = expectedSigHex.endsWith('0') ? '1' : '0';
+    const invalidSigHex = `${expectedSigHex.slice(0, -1)}${replacement}`;
 
     const res = await POST(
       makePostRequest(rawBody, {
         'x-gf-signature': invalidSigHex,
         'x-gf-timestamp': headerTimestamp,
+        'x-gf-event-id': eventId,
       })
     );
 
@@ -164,12 +195,44 @@ describe('POST /api/perimeter/webhook', () => {
     expect(json.message).toBe('Invalid signature');
   });
 
+  it('returns 401 for a correctly signed stale event', async () => {
+    process.env.PERIMETER_WEBHOOK_SECRET =
+      'test_secret_that_is_at_least_32_characters';
+    const headerTimestamp = new Date(Date.now() - 10 * 60_000).toISOString();
+    const eventId = 'evt_stale_123';
+    const rawBody = JSON.stringify({
+      organizationId: 'org_1',
+      projectId: 'proj_1',
+      gateId: 'gate_1',
+      type: PerimeterEventType.TAILGATING,
+      payload: { foo: 'bar' },
+      timestamp: headerTimestamp,
+    });
+    const signature = crypto
+      .createHmac('sha256', process.env.PERIMETER_WEBHOOK_SECRET)
+      .update(`${headerTimestamp}.${rawBody}`)
+      .digest('hex');
+
+    const res = await POST(
+      makePostRequest(rawBody, {
+        'x-gf-event-id': eventId,
+        'x-gf-signature': signature,
+        'x-gf-timestamp': headerTimestamp,
+      })
+    );
+
+    expect(res.status).toBe(401);
+    expect(mockEventLogCreate).not.toHaveBeenCalled();
+  });
+
   it('creates an incident + emits SSE alert on tailgating anomaly', async () => {
-    process.env.PERIMETER_WEBHOOK_SECRET = 'test_secret';
+    process.env.PERIMETER_WEBHOOK_SECRET =
+      'test_secret_that_is_at_least_32_characters';
 
     const orgId = 'org_1';
     const gateId = 'gate_1';
-    const headerTimestamp = '2026-03-30T00:00:00.000Z';
+    const headerTimestamp = new Date().toISOString();
+    const eventId = 'evt_tailgate_123';
 
     const body = {
       organizationId: orgId,
@@ -184,7 +247,7 @@ describe('POST /api/perimeter/webhook', () => {
 
     const sigHex = crypto
       .createHmac('sha256', process.env.PERIMETER_WEBHOOK_SECRET as string)
-      .update(`${headerTimestamp}.${rawBody}`)
+      .update(`${headerTimestamp}.${eventId}.${rawBody}`)
       .digest('hex');
 
     // Tailgating anomaly: no recent success scan.
@@ -195,6 +258,7 @@ describe('POST /api/perimeter/webhook', () => {
       makePostRequest(rawBody, {
         'x-gf-signature': sigHex,
         'x-gf-timestamp': headerTimestamp,
+        'x-gf-event-id': eventId,
       })
     );
 
@@ -222,11 +286,13 @@ describe('POST /api/perimeter/webhook', () => {
   });
 
   it('suppresses duplicate incidents within 10 seconds', async () => {
-    process.env.PERIMETER_WEBHOOK_SECRET = 'test_secret';
+    process.env.PERIMETER_WEBHOOK_SECRET =
+      'test_secret_that_is_at_least_32_characters';
 
     const orgId = 'org_1';
     const gateId = 'gate_1';
-    const headerTimestamp = '2026-03-30T00:00:00.000Z';
+    const headerTimestamp = new Date().toISOString();
+    const eventId = 'evt_duplicate_123';
 
     const body = {
       organizationId: orgId,
@@ -241,7 +307,7 @@ describe('POST /api/perimeter/webhook', () => {
 
     const sigHex = crypto
       .createHmac('sha256', process.env.PERIMETER_WEBHOOK_SECRET as string)
-      .update(`${headerTimestamp}.${rawBody}`)
+      .update(`${headerTimestamp}.${eventId}.${rawBody}`)
       .digest('hex');
 
     mockScanLogFindFirst.mockResolvedValue(null);
@@ -251,6 +317,7 @@ describe('POST /api/perimeter/webhook', () => {
       makePostRequest(rawBody, {
         'x-gf-signature': sigHex,
         'x-gf-timestamp': headerTimestamp,
+        'x-gf-event-id': eventId,
       })
     );
 
@@ -261,5 +328,46 @@ describe('POST /api/perimeter/webhook', () => {
     expect(mockEventLogCreate).toHaveBeenCalledTimes(1);
     const event = mockEventLogCreate.mock.calls[0]?.[0]?.data as any;
     expect(event.type).toBe('SCAN_RECORDED');
+  });
+
+  it('acknowledges a replayed event without repeating any business writes', async () => {
+    process.env.PERIMETER_WEBHOOK_SECRET =
+      'test_secret_that_is_at_least_32_characters';
+    mockAuditLogFindFirst.mockResolvedValue({ id: 'audit_existing' });
+    const headerTimestamp = new Date().toISOString();
+    const eventId = 'evt_replayed_123';
+    const rawBody = JSON.stringify({
+      organizationId: 'org_1',
+      projectId: 'proj_1',
+      gateId: 'gate_1',
+      type: PerimeterEventType.TAILGATING,
+      payload: { foo: 'bar' },
+      timestamp: headerTimestamp,
+    });
+    const signature = crypto
+      .createHmac('sha256', process.env.PERIMETER_WEBHOOK_SECRET)
+      .update(`${headerTimestamp}.${eventId}.${rawBody}`)
+      .digest('hex');
+
+    const response = await POST(
+      makePostRequest(rawBody, {
+        'x-gf-event-id': eventId,
+        'x-gf-signature': signature,
+        'x-gf-timestamp': headerTimestamp,
+      })
+    );
+    const json = (await response.json()) as {
+      duplicate: boolean;
+      success: boolean;
+    };
+
+    expect(response.status).toBe(200);
+    expect(json).toEqual(
+      expect.objectContaining({ duplicate: true, success: true })
+    );
+    expect(mockScanLogFindFirst).not.toHaveBeenCalled();
+    expect(mockIncidentCreate).not.toHaveBeenCalled();
+    expect(mockEventLogCreate).not.toHaveBeenCalled();
+    expect(mockAuditLogCreate).not.toHaveBeenCalled();
   });
 });

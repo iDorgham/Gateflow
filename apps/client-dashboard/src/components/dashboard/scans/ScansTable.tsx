@@ -75,15 +75,15 @@ export function ScansTable({
         label: t('scans.table.dateTime', 'Timestamp'),
         isSortable: true,
         render: (item) => (
-          <div className="flex flex-col">
-            <span className="text-[13px] font-bold text-[var(--ds-text)]">
+          <div className="flex flex-col" dir="ltr">
+            <span className="text-[13px] font-bold text-[var(--ds-text)] [unicode-bidi:isolate]">
               {new Date(item.scannedAt).toLocaleDateString(locale, {
                 month: 'short',
                 day: 'numeric',
                 year: 'numeric',
               })}
             </span>
-            <span className="text-[10px] font-black text-[var(--ds-text-subtle)] uppercase tracking-tighter">
+            <span className="text-[10px] font-black text-[var(--ds-text-subtle)] uppercase tracking-tighter [unicode-bidi:isolate]">
               {new Date(item.scannedAt).toLocaleTimeString(locale, {
                 hour: '2-digit',
                 minute: '2-digit',
@@ -102,8 +102,8 @@ export function ScansTable({
             <div className="h-8 w-8 rounded-lg bg-[var(--ds-background-neutral-subtle)] flex items-center justify-center shrink-0">
               <QrCode className="h-4 w-4 text-[var(--ds-text-subtle)]" />
             </div>
-            <div className="flex flex-col">
-              <span className="font-mono text-xs font-black text-[var(--ds-text-brand)] tracking-wider">
+            <div className="flex flex-col" dir="ltr">
+              <span className="font-mono text-xs font-black text-[var(--ds-text-brand)] tracking-wider [unicode-bidi:isolate]">
                 {item.qrCode?.code?.slice(0, 12)}...
               </span>
               {item.qrCode?.type && (
@@ -165,8 +165,13 @@ export function ScansTable({
                 <span className="text-[13px] font-bold text-[var(--ds-text)]">
                   {item.user.name}
                 </span>
-                <span className="text-[10px] font-bold text-[var(--ds-text-subtle)] lowercase">
-                  {item.user.email}
+                <span
+                  className="text-[10px] font-bold text-[var(--ds-text-subtle)] lowercase"
+                  dir="ltr"
+                >
+                  <span className="[unicode-bidi:isolate]">
+                    {item.user.email}
+                  </span>
                 </span>
               </div>
             </div>

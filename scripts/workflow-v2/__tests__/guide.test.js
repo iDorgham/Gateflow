@@ -3,6 +3,7 @@ const path = require('node:path');
 const test = require('node:test');
 const { createInitialState } = require('../lib');
 const {
+  buildGuideSnapshot,
   collectDeliveryEvidence,
   copyPrompt,
   formatGuideUsage,
@@ -43,6 +44,29 @@ test('checking with evidence routes to the pilot gate', () => {
     '2026-07-24T01:00:00.000Z'
   );
   assert.equal(nextCommandFor(state, evidence), '/pilot');
+});
+
+test('pending external gates are surfaced as guide blockers', () => {
+  const state = createInitialState();
+  state.apps['client-dashboard'].externalGates = [
+    {
+      id: 'credential-rotation-receipt',
+      status: 'pending',
+      summary: 'Credential rotation/revocation receipt is not recorded',
+      artifact:
+        'docs/plan/Draft/client_dashboard_readiness_2026/evidence/PHASE_02_SECURITY_SCAN_2026-07-26.md',
+    },
+  ];
+
+  const snapshot = buildGuideSnapshot({
+    root: REPO_ROOT,
+    state,
+    now: '2026-07-26T00:00:00.000Z',
+  });
+
+  assert.deepEqual(snapshot.blockers, [
+    'External gate credential-rotation-receipt: Credential rotation/revocation receipt is not recorded',
+  ]);
 });
 
 test('renderer includes required fields and exactly one next-command block', () => {

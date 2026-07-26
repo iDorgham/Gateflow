@@ -214,7 +214,7 @@ export default async function ScansPage(props: {
             variant="outline"
             className="h-9 px-4 border-[var(--ds-border)] text-[var(--ds-text-subtle)] font-bold hover:bg-[var(--ds-background-neutral-subtle-hovered)] rounded-lg shadow-sm group"
           >
-            <Download className="h-4 w-4 mr-2 group-hover:text-[var(--ds-icon-brand)] transition-colors" />
+            <Download className="h-4 w-4 me-2 group-hover:text-[var(--ds-icon-brand)] transition-colors" />
             {t('common.export', { defaultValue: 'Export Logs' })}
           </Button>,
         ]}

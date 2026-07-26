@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
-import crypto, { randomUUID } from 'crypto';
+import { randomUUID } from 'crypto';
 
 import {
   prisma,
@@ -10,17 +10,16 @@ import {
 import { signQRPayload, QRCodeType } from '@gate-access/types';
 import { checkAndConsumeQuota } from '@gate-access/db/quota';
 import { emitEvent, EventType } from '@/lib/realtime/emit-event';
+import {
+  runReplayProtectedWebhook,
+  verifyWebhookEnvelope,
+} from '@/lib/webhook-replay';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
-// HMAC signing format: `${timestamp}.${rawBody}` (shared with other webhooks).
-function computeHmac(secret: string, timestamp: string, rawBody: string) {
-  return crypto
-    .createHmac('sha256', secret)
-    .update(`${timestamp}.${rawBody}`)
-    .digest('hex');
-}
+// Signed envelope: HMAC-SHA256(`${timestamp}.${eventId}.${rawBody}`), ±5 minutes.
+// Durable provider/org/event replay consumption shares the business transaction.
 
 const WhatsAppGuestRegistrationSchema = z.object({
   organizationId: z.string().min(1),
@@ -143,19 +142,22 @@ export async function POST(req: NextRequest) {
 
   const signature = req.headers.get('x-gf-signature');
   const timestamp = req.headers.get('x-gf-timestamp');
-  if (!signature || !timestamp) {
+  const eventId = req.headers.get('x-gf-event-id');
+  if (!signature || !timestamp || !eventId) {
     return NextResponse.json(
       { success: false, message: 'Missing signature headers' },
       { status: 401 }
     );
   }
 
-  const expectedHex = computeHmac(secret, timestamp, rawBody);
-  const expectedBuf = Buffer.from(expectedHex, 'hex');
-  const sigBuf = Buffer.from(signature, 'hex');
   if (
-    sigBuf.length !== expectedBuf.length ||
-    !crypto.timingSafeEqual(sigBuf, expectedBuf)
+    !verifyWebhookEnvelope({
+      eventId,
+      rawBody,
+      secret,
+      signature,
+      timestamp,
+    })
   ) {
     return NextResponse.json(
       { success: false, message: 'Invalid signature' },
@@ -179,33 +181,6 @@ export async function POST(req: NextRequest) {
   const body = parsed.data;
   const { organizationId, unitId } = body;
 
-  // ── 4. Resolve resident + enforce tenant scoping ────────────────────────
-  const unit = await prisma.unit.findFirst({
-    where: { id: unitId, organizationId, deletedAt: null },
-    select: { userId: true },
-  });
-
-  if (!unit?.userId) {
-    return NextResponse.json(
-      { success: false, message: 'Unit not found or has no resident' },
-      { status: 403 }
-    );
-  }
-
-  // ── 5. Quota check (reuses existing visitor QR quota rules) ────────────
-  const quota = await checkAndConsumeQuota(unitId);
-  if (!quota.allowed) {
-    return NextResponse.json(
-      {
-        success: false,
-        message: 'Monthly visitor quota reached',
-        quotaStatus: quota,
-      },
-      { status: 403 }
-    );
-  }
-
-  // ── 6. Create pending VisitorQR + underlying QRCode ─────────────────────
   const qrSecret = process.env.QR_SIGNING_SECRET ?? '';
   if (!qrSecret || qrSecret.length < 32) {
     return NextResponse.json(
@@ -214,82 +189,125 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const qrId = randomUUID();
-  const nonce = randomUUID();
-  const expiresAt = body.endDate ? new Date(body.endDate) : null;
-  const maxUses = body.type === 'ONETIME' ? 1 : null;
+  let replay;
+  try {
+    replay = await runReplayProtectedWebhook(
+      { eventId, organizationId, provider: 'whatsapp' },
+      async (tx) => {
+        // ── 4. Resolve resident + enforce tenant scoping ────────────────────
+        const unit = await tx.unit.findFirst({
+          where: { id: unitId, organizationId, deletedAt: null },
+          select: { userId: true },
+        });
+        if (!unit?.userId) {
+          throw new WebhookRequestError(
+            403,
+            'Unit not found or has no resident'
+          );
+        }
 
-  const prismaType: PrismaQRCodeType =
-    body.type === 'ONETIME'
-      ? PrismaQRCodeType.VISITOR
-      : body.type === 'PERMANENT'
-        ? PrismaQRCodeType.OPEN
-        : PrismaQRCodeType.RECURRING;
+        // ── 5. Quota check (read-only; writes remain in this transaction) ───
+        const quota = await checkAndConsumeQuota(unitId, tx);
+        if (!quota.allowed) {
+          throw new WebhookRequestError(
+            403,
+            'Monthly visitor quota reached',
+            quota
+          );
+        }
 
-  const signedTypesType: QRCodeType =
-    body.type === 'ONETIME'
-      ? QRCodeType.VISITOR
-      : body.type === 'PERMANENT'
-        ? QRCodeType.OPEN
-        : QRCodeType.RECURRING;
+        // ── 6. Create pending VisitorQR + underlying QRCode ─────────────────
+        const qrId = randomUUID();
+        const nonce = randomUUID();
+        const expiresAt = body.endDate ? new Date(body.endDate) : null;
+        const maxUses = body.type === 'ONETIME' ? 1 : null;
+        const prismaType: PrismaQRCodeType =
+          body.type === 'ONETIME'
+            ? PrismaQRCodeType.VISITOR
+            : body.type === 'PERMANENT'
+              ? PrismaQRCodeType.OPEN
+              : PrismaQRCodeType.RECURRING;
+        const signedTypesType: QRCodeType =
+          body.type === 'ONETIME'
+            ? QRCodeType.VISITOR
+            : body.type === 'PERMANENT'
+              ? QRCodeType.OPEN
+              : QRCodeType.RECURRING;
 
-  const visitorQR = await prisma.$transaction(async (tx) => {
-    const accessRule = await tx.accessRule.create({
-      data: {
-        type: body.type as AccessRuleType,
-        startDate: body.startDate ? new Date(body.startDate) : null,
-        endDate: expiresAt,
-        recurringDays: body.recurringDays ?? [],
-        startTime: body.startTime ?? null,
-        endTime: body.endTime ?? null,
-      },
-    });
-
-    const qrCode = await tx.qRCode.create({
-      data: {
-        id: qrId,
-        code: signQRPayload(
-          {
-            qrId,
-            organizationId,
-            type: signedTypesType,
-            maxUses,
-            expiresAt: expiresAt?.toISOString() ?? null,
-            issuedAt: new Date().toISOString(),
-            nonce,
+        const accessRule = await tx.accessRule.create({
+          data: {
+            type: body.type as AccessRuleType,
+            startDate: body.startDate ? new Date(body.startDate) : null,
+            endDate: expiresAt,
+            recurringDays: body.recurringDays ?? [],
+            startTime: body.startTime ?? null,
+            endTime: body.endTime ?? null,
           },
-          qrSecret
-        ),
-        type: prismaType,
-        organizationId,
-        gateId: body.gateId ?? null,
-        maxUses,
-        expiresAt: expiresAt?.toISOString() ? expiresAt : null,
-        isActive: false, // pending resident approval
-        utmSource: null,
-        utmMedium: null,
-        utmCampaign: null,
-        utmContent: null,
-        utmTerm: null,
-        guestName: body.visitorName ?? null,
-        guestPhone: body.visitorPhone ?? null,
-        guestEmail: body.visitorEmail ?? null,
-      },
-    });
+        });
+        const qrCode = await tx.qRCode.create({
+          data: {
+            id: qrId,
+            code: signQRPayload(
+              {
+                qrId,
+                organizationId,
+                type: signedTypesType,
+                maxUses,
+                expiresAt: expiresAt?.toISOString() ?? null,
+                issuedAt: new Date().toISOString(),
+                nonce,
+              },
+              qrSecret
+            ),
+            type: prismaType,
+            organizationId,
+            gateId: body.gateId ?? null,
+            maxUses,
+            expiresAt,
+            isActive: false,
+            utmSource: null,
+            utmMedium: null,
+            utmCampaign: null,
+            utmContent: null,
+            utmTerm: null,
+            guestName: body.visitorName ?? null,
+            guestPhone: body.visitorPhone ?? null,
+            guestEmail: body.visitorEmail ?? null,
+          },
+        });
 
-    return tx.visitorQR.create({
-      data: {
-        qrCodeId: qrCode.id,
-        unitId,
-        visitorName: body.visitorName ?? null,
-        visitorPhone: body.visitorPhone ?? null,
-        visitorEmail: body.visitorEmail ?? null,
-        isOpenQR: false,
-        accessRuleId: accessRule.id,
-        createdBy: unit.userId!,
-      },
-    });
-  });
+        return tx.visitorQR.create({
+          data: {
+            qrCodeId: qrCode.id,
+            unitId,
+            visitorName: body.visitorName ?? null,
+            visitorPhone: body.visitorPhone ?? null,
+            visitorEmail: body.visitorEmail ?? null,
+            isOpenQR: false,
+            accessRuleId: accessRule.id,
+            createdBy: unit.userId,
+          },
+        });
+      }
+    );
+  } catch (error: unknown) {
+    if (error instanceof WebhookRequestError) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: error.message,
+          ...(error.details ? { quotaStatus: error.details } : {}),
+        },
+        { status: error.status }
+      );
+    }
+    throw error;
+  }
+
+  if (replay.duplicate === true) {
+    return NextResponse.json({ success: true, duplicate: true });
+  }
+  const visitorQR = replay.value;
 
   // ── 7. Notify dashboard timeline (optional but useful) ────────────────
   void emitEvent(organizationId, EventType.QR_CREATED, {
@@ -325,4 +343,14 @@ export async function POST(req: NextRequest) {
       status: 'PENDING_APPROVAL',
     },
   });
+}
+
+class WebhookRequestError extends Error {
+  constructor(
+    readonly status: number,
+    message: string,
+    readonly details?: unknown
+  ) {
+    super(message);
+  }
 }

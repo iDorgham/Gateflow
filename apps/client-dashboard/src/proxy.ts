@@ -81,8 +81,13 @@ function getJwtSecret(): Uint8Array {
   return new TextEncoder().encode(secret);
 }
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // Vercel rewrites this public liveness path to /api/health after Proxy.
+  if (pathname === '/health') {
+    return NextResponse.next();
+  }
 
   // 1. Check if there is any supported locale in the pathname
   const pathnameHasLocale = i18n.locales.some(
@@ -113,7 +118,12 @@ export async function middleware(request: NextRequest) {
   const effectivePath = pathWithoutLocale === '' ? '/' : pathWithoutLocale;
 
   // 2. Public / unauthenticated routes — always allow
-  if (PUBLIC_ROUTES.some((route) => effectivePath.startsWith(route))) {
+  if (
+    PUBLIC_ROUTES.some(
+      (route) =>
+        effectivePath === route || effectivePath.startsWith(`${route}/`)
+    )
+  ) {
     return NextResponse.next();
   }
 
@@ -123,13 +133,16 @@ export async function middleware(request: NextRequest) {
   }
 
   // 3. Next.js Server Actions carry a same-origin origin check built-in
-  if (request.headers.has('next-action')) {
+  if (
+    !effectivePath.startsWith('/api/') &&
+    request.headers.has('next-action')
+  ) {
     return NextResponse.next();
   }
 
   // 4. Bearer-token requests (scanner app, API clients) — CSRF exempt because
   //    cross-origin attackers cannot obtain or inject a Bearer token.
-  if (request.headers.get('authorization')?.startsWith('Bearer ')) {
+  if (/^Bearer\s+\S+$/i.test(request.headers.get('authorization') ?? '')) {
     return NextResponse.next();
   }
 
@@ -144,28 +157,39 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // 6. Authenticated but CSRF cookie absent — reject (prevents CSRF on sessions
-  //    where the token was never issued or was manually cleared).
-  if (!csrfCookie) {
-    return NextResponse.json(
-      { success: false, message: 'CSRF token missing' },
-      { status: 403 }
-    );
-  }
-
-  // 7. CSRF header must be present
+  // 6. Prefer strict double-submit validation whenever the caller sends a token.
   const requestToken = request.headers.get(CSRF_HEADER);
-  if (!requestToken) {
-    return NextResponse.json(
-      { success: false, message: 'CSRF token missing' },
-      { status: 403 }
-    );
+  if (requestToken) {
+    if (!csrfCookie || !timingSafeEqual(requestToken, csrfCookie.value)) {
+      return NextResponse.json(
+        { success: false, message: 'CSRF token invalid' },
+        { status: 403 }
+      );
+    }
+  } else {
+    // Compatibility bridge for existing raw same-origin fetch calls. Explicit
+    // invalid tokens never fall back to Origin validation.
+    const origin = request.headers.get('origin');
+    let sameOrigin = false;
+    try {
+      sameOrigin = Boolean(
+        origin && new URL(origin).origin === request.nextUrl.origin
+      );
+    } catch {
+      sameOrigin = false;
+    }
+    if (!sameOrigin) {
+      return NextResponse.json(
+        { success: false, message: 'CSRF token missing' },
+        { status: 403 }
+      );
+    }
   }
 
-  // 8. Timing-safe comparison
-  if (!timingSafeEqual(requestToken, csrfCookie.value)) {
+  // 7. Never accept a CSRF cookie alone without a matching header or Origin.
+  if (!requestToken && csrfCookie && !request.headers.get('origin')) {
     return NextResponse.json(
-      { success: false, message: 'CSRF token invalid' },
+      { success: false, message: 'CSRF token missing' },
       { status: 403 }
     );
   }
@@ -221,6 +245,6 @@ export const config = {
     /*
      * Match all paths except Next.js internals and static assets.
      */
-    '/((?!api|_next/static|_next/image|favicon.ico|manifest.json|robots.txt|sitemap.xml).*)',
+    '/((?!_next/static|_next/image|favicon.ico|manifest.json|robots.txt|sitemap.xml).*)',
   ],
 };

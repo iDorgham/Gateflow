@@ -762,7 +762,7 @@ export const ProjectDetailActions = forwardRef<
                       <Input
                         type="file"
                         accept=".csv"
-                        className="text-xs pr-10 curser-pointer h-9 file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
+                        className="text-xs pr-10 cursor-pointer h-9 file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
                         onChange={async (e) => {
                           const file = e.target.files?.[0];
                           if (!file) return;
@@ -794,7 +794,9 @@ export const ProjectDetailActions = forwardRef<
                                   }),
                                 });
                                 if (res.ok) imported++;
-                              } catch {}
+                              } catch {
+                                // Continue importing remaining rows.
+                              }
                             }
                             toast.success(
                               `Imported ${imported} units to ${project.name}`,
@@ -815,7 +817,7 @@ export const ProjectDetailActions = forwardRef<
                       <Input
                         type="file"
                         accept=".csv"
-                        className="text-xs pr-10 curser-pointer h-9 file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
+                        className="text-xs pr-10 cursor-pointer h-9 file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-primary file:text-primary-foreground hover:file:bg-primary/90"
                         onChange={async (e) => {
                           const file = e.target.files?.[0];
                           if (!file) return;
@@ -846,7 +848,9 @@ export const ProjectDetailActions = forwardRef<
                                   }),
                                 });
                                 if (res.ok) imported++;
-                              } catch {}
+                              } catch {
+                                // Continue importing remaining rows.
+                              }
                             }
                             toast.success(`Imported ${imported} contacts`, {
                               id: 'import-contacts',

@@ -8,25 +8,65 @@
   },
   "apps": {
     "client-dashboard": {
-      "stage": "focused",
-      "currentPlan": "gateflow_workflow_bootstrap",
+      "stage": "checking",
+      "currentPlan": "client_dashboard_readiness_2026",
       "baseline": null,
-      "evidence": [],
+      "evidence": [
+        {
+          "id": "client-dashboard-audit-2026-07-25",
+          "type": "application-audit",
+          "status": "blocked",
+          "valid": true,
+          "createdAt": "2026-07-25T19:22:27.000Z",
+          "commit": "52f26767da499e584a29ba01e99eb66ef92b8241",
+          "reviewMode": "static-review-only",
+          "artifact": "docs/audits/client-dashboard/AUDIT_2026-07-25.md"
+        },
+        {
+          "id": "client-dashboard-check-2026-07-26",
+          "type": "focused-check",
+          "status": "passed",
+          "valid": true,
+          "createdAt": "2026-07-26T14:13:02Z",
+          "commit": "901631d621284975359ac12d171c95f6eeba6bbb",
+          "artifact": "docs/plan/Draft/client_dashboard_readiness_2026/evidence/CHECK_ALL_2026-07-26.json"
+        }
+      ],
+      "externalGates": [
+        {
+          "id": "credential-rotation-receipt",
+          "status": "complete",
+          "summary": "Credential rotation, production activation, and session invalidation verification are recorded",
+          "owner": "operations",
+          "artifact": "docs/plan/Draft/client_dashboard_readiness_2026/evidence/CREDENTIAL_ROTATION_RECEIPT_2026-07-26.json",
+          "lastCheckedAt": "2026-07-26T13:52:43Z",
+          "affectedCredentialNames": [
+            "SETUP_SECRET",
+            "administrator credentials",
+            "NEXTAUTH_SECRET/JWT signing secret",
+            "UPSTASH_REDIS_REST_URL",
+            "UPSTASH_REDIS_REST_TOKEN"
+          ],
+          "environments": ["production", "preview"]
+        }
+      ],
       "certificationReceipt": null,
       "selection": {
-        "command": "/audit all",
+        "command": "/plan",
         "agent": "gateflow-guide",
-        "skills": ["gf-guide"],
+        "skills": ["gf-guide", "security", "testing"],
         "cli": "cursor"
       },
       "pilotFlowCoverage": {
         "covered": 0,
         "total": 9,
-        "status": "not-started"
+        "status": "blocked",
+        "artifact": "docs/plan/Draft/client_dashboard_readiness_2026/evidence/PILOT_GATE_2026-07-26.json",
+        "lastCheckedAt": "2026-07-26T14:30:05Z"
       },
       "delivery": null,
-      "pageScoresFile": null,
-      "updatedAt": "2026-07-24T03:10:00.000Z"
+      "pageScoresFile": "docs/audits/client-dashboard/PAGE_SCORES_2026-07-25.json",
+      "updatedAt": "2026-07-26T14:13:43.007Z"
     },
     "resident-portal": {
       "stage": "parked",
@@ -47,5 +87,5 @@
   },
   "workdirLock": null,
   "createdAt": "2026-07-24T00:00:00.000Z",
-  "updatedAt": "2026-07-24T03:10:00.000Z"
+  "updatedAt": "2026-07-26T14:13:43.007Z"
 }
