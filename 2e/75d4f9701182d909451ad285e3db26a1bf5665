@@ -1,0 +1,33 @@
+docs/plan/Draft/client_dashboard_readiness_2026/TASKS_client_dashboard_readiness_2026.md
+  s_4c93fd7a12aac2::t_aa11916bed7b41 33-34
+docs/plan/Draft/client_dashboard_readiness_2026/phase_logs/PHASE_LOG_phase_02.md
+  s_4c93fd7a12aac2::t_aa11916bed7b41 4,156-160,164-165
+docs/plan/Draft/client_dashboard_readiness_2026/SESSION_MEMORY.md
+  s_4c93fd7a12aac2::t_aa11916bed7b41 5,7-8,10,143-147,151-152
+scripts/workflow-v2/__tests__/support.test.js
+  s_4c93fd7a12aac2::t_b84d0ff1897528 105
+docs/plan/Draft/client_dashboard_readiness_2026/evidence/CHECK_ALL_2026-07-26.json
+  s_4c93fd7a12aac2::t_aa11916bed7b41 4,6,55-57,76
+scripts/workflow-v2/support.js
+  s_4c93fd7a12aac2::t_bf6d0d1f3cbd48 135
+.ai/workflow-v2/state.json
+  s_4c93fd7a12aac2::t_b33a1d65b5575c 11,67,88
+CHANGELOG.md
+  s_4c93fd7a12aac2::t_f5f6e7a7623c29 13-14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "2e75d4f9701182d909451ad285e3db26a1bf5665",
+  "prompts": {},
+  "sessions": {
+    "s_4c93fd7a12aac2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f9aab-c7a9-7493-936e-402709ad76fd",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": null
+    }
+  }
+}
