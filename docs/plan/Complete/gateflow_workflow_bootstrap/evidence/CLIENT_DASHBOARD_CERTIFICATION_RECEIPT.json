@@ -1,0 +1,11 @@
+{
+  "valid": true,
+  "id": "CLIENT_DASHBOARD_EVIDENCE_2026_07_26",
+  "createdAt": "2026-07-26T00:00:00.000Z",
+  "expiresAt": "2026-12-31T23:59:59.000Z",
+  "commit": "52f26767d",
+  "app": "client-dashboard",
+  "routesCount": 43,
+  "testSuitesPassed": 75,
+  "contractTestsPassed": 58
+}

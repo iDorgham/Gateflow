@@ -1,15 +1,15 @@
 {
   "version": 2,
   "sequence": ["client-dashboard", "resident-portal", "scanner-app"],
-  "focusedApp": "client-dashboard",
+  "focusedApp": null,
   "integratedPilot": {
     "stage": "parked",
     "certificationReceipt": null
   },
   "apps": {
     "client-dashboard": {
-      "stage": "checking",
-      "currentPlan": "client_dashboard_readiness_2026",
+      "stage": "certified",
+      "currentPlan": "gateflow_workflow_bootstrap",
       "baseline": null,
       "evidence": [
         {
@@ -50,7 +50,14 @@
           "environments": ["production", "preview"]
         }
       ],
-      "certificationReceipt": null,
+      "certificationReceipt": {
+        "version": 1,
+        "app": "client-dashboard",
+        "certifiedAt": "2026-07-26T22:28:37.932Z",
+        "evidenceId": "CLIENT_DASHBOARD_EVIDENCE_2026_07_26",
+        "evidenceCommit": "52f26767d",
+        "sha256": "ab4678e559a4d61115779ab5cc55e9aff359db7aac7ad6e66898f7391d6902d6"
+      },
       "selection": {
         "command": "/plan",
         "agent": "gateflow-guide",
@@ -66,7 +73,7 @@
       },
       "delivery": null,
       "pageScoresFile": "docs/audits/client-dashboard/PAGE_SCORES_2026-07-25.json",
-      "updatedAt": "2026-07-26T14:13:43.007Z"
+      "updatedAt": "2026-07-26T22:28:37.932Z"
     },
     "resident-portal": {
       "stage": "parked",
@@ -87,5 +94,5 @@
   },
   "workdirLock": null,
   "createdAt": "2026-07-24T00:00:00.000Z",
-  "updatedAt": "2026-07-26T14:13:43.007Z"
+  "updatedAt": "2026-07-26T22:28:37.932Z"
 }
