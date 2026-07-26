@@ -515,7 +515,7 @@ const CreateContactSchema = z.object({
   source: z.nativeEnum(ContactSource).optional().nullable(),
   companyWebsite: z.string().url().optional().nullable(),
   notes: z.string().max(2000).optional().nullable(),
-  unitIds: z.array(z.string()).optional(),
+  unitIds: z.array(z.string().min(1)).max(100).optional(),
 });
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
@@ -564,6 +564,25 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       notes,
       unitIds,
     } = validation.data;
+    const requestedUnitIds =
+      unitIds === undefined ? undefined : [...new Set(unitIds)];
+
+    if (requestedUnitIds?.length) {
+      const ownedUnits = await prisma.unit.findMany({
+        where: {
+          id: { in: requestedUnitIds },
+          organizationId: claims.orgId,
+          deletedAt: null,
+        },
+        select: { id: true },
+      });
+      if (ownedUnits.length !== requestedUnitIds.length) {
+        return NextResponse.json(
+          { success: false, message: 'Invalid unit selection' },
+          { status: 400 }
+        );
+      }
+    }
 
     const contact = await prisma.contact.create({
       data: {
@@ -579,8 +598,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         companyWebsite: companyWebsite?.trim() ?? null,
         notes: notes?.trim() ?? null,
         organizationId: claims.orgId,
-        units: unitIds?.length
-          ? { create: unitIds.map((unitId) => ({ unitId })) }
+        units: requestedUnitIds?.length
+          ? { create: requestedUnitIds.map((unitId) => ({ unitId })) }
           : undefined,
       },
       include: {

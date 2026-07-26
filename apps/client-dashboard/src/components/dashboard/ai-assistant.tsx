@@ -32,10 +32,9 @@ import {
   TooltipTrigger,
 } from '@gateflow/ui';
 import type { Locale } from '@/lib/i18n-config';
+import { clearLegacyAiTranscript } from '@/lib/ai/transcript-privacy';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
-
-const STORAGE_KEY = 'gateflow-ai-chat-v1';
 
 const WELCOME_EN: UIMessage = {
   id: 'welcome',
@@ -65,20 +64,6 @@ function isArabic(text: string): boolean {
   return /[\u0600-\u06FF]/.test(text);
 }
 
-function loadMessages(isRtl: boolean): UIMessage[] {
-  if (typeof window === 'undefined') return [];
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw) as UIMessage[];
-      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-    }
-  } catch {
-    // ignore
-  }
-  return [isRtl ? WELCOME_AR : WELCOME_EN];
-}
-
 // ─── Example prompts ──────────────────────────────────────────────────────────
 
 const EXAMPLE_PROMPTS_EN = [
@@ -104,8 +89,6 @@ export interface AIAssistantProps {
 }
 
 export function AIAssistant({ locale }: AIAssistantProps) {
-  const [hydrated, setHydrated] = useState(false);
-  const [storedMessages, setStoredMessages] = useState<UIMessage[]>([]);
   const [input, setInput] = useState('');
   const [taggedItems, setTaggedItems] = useState<
     { id: string; label: string; type: 'resident' | 'unit' }[]
@@ -118,11 +101,10 @@ export function AIAssistant({ locale }: AIAssistantProps) {
   const isRtl = locale.startsWith('ar');
   const prompts = isRtl ? EXAMPLE_PROMPTS_AR : EXAMPLE_PROMPTS_EN;
 
-  // Hydrate from localStorage on mount
+  // Conversations are memory-only; clear data persisted by older releases.
   useEffect(() => {
-    setStoredMessages(loadMessages(isRtl));
-    setHydrated(true);
-  }, [isRtl]);
+    clearLegacyAiTranscript(window.localStorage);
+  }, []);
 
   const { messages, sendMessage, status, setMessages } = useChat({
     transport: new DefaultChatTransport({ api: '/api/ai/assistant' }),
@@ -151,29 +133,6 @@ export function AIAssistant({ locale }: AIAssistantProps) {
     void sendMessage({ text: trimmed });
   };
 
-  useEffect(() => {
-    console.log('AI Assistant: Messages updated', messages);
-  }, [messages]);
-
-  // Sync stored messages into useChat after hydration
-  useEffect(() => {
-    if (hydrated && storedMessages.length > 0) {
-      setMessages(storedMessages);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hydrated]);
-
-  // Persist to localStorage on change
-  useEffect(() => {
-    if (hydrated && messages.length > 0) {
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
-      } catch {
-        // ignore
-      }
-    }
-  }, [messages, hydrated]);
-
   // Auto-scroll to bottom
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -189,11 +148,7 @@ export function AIAssistant({ locale }: AIAssistantProps) {
   const clearChat = () => {
     const welcome = isRtl ? WELCOME_AR : WELCOME_EN;
     setMessages([welcome]);
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify([welcome]));
-    } catch {
-      // ignore
-    }
+    clearLegacyAiTranscript(window.localStorage);
   };
 
   const sendExample = (prompt: string) => {
@@ -637,8 +592,8 @@ export function AIAssistant({ locale }: AIAssistantProps) {
               </div>
               <span className="text-[10px] text-[var(--ds-text-subtlest,#71717A)]">
                 {isRtl
-                  ? 'مدعوم بواسطة mediaBubble AI Intelligence'
-                  : 'Powered by mediaBubble AI Intelligence'}
+                  ? 'لا يتم حفظ سجل المحادثة على هذا الجهاز؛ تتم إزالته عند إعادة التحميل.'
+                  : 'Chat history is not saved on this device and clears on reload.'}
               </span>
             </div>
           </div>

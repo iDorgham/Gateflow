@@ -88,18 +88,18 @@ function ExportCard() {
   );
 }
 
-// ─── Purge Scans Section ─────────────────────────────────────────────────────
+// ─── Scan metadata retention section ─────────────────────────────────────────
 
-function PurgeScansCard() {
+function RedactScanMetadataCard() {
   const [open, setOpen] = useState(false);
   const [confirmation, setConfirmation] = useState('');
   const [olderThanDays, setOlderThanDays] = useState(90);
   const [isPending, startTransition] = useTransition();
-  const [result, setResult] = useState<{ deletedCount: number } | null>(null);
+  const [result, setResult] = useState<{ redactedCount: number } | null>(null);
 
-  const handlePurge = () => {
-    if (confirmation !== 'PURGE SCANS') {
-      toast.error('Type PURGE SCANS exactly to confirm.');
+  const handleRedaction = () => {
+    if (confirmation !== 'REDACT SCAN METADATA') {
+      toast.error('Type REDACT SCAN METADATA exactly to confirm.');
       return;
     }
 
@@ -110,14 +110,16 @@ function PurgeScansCard() {
       });
       const data = (await res.json()) as {
         success?: boolean;
-        deletedCount?: number;
+        redactedCount?: number;
         error?: string;
       };
       if (res.ok && data.success) {
-        setResult({ deletedCount: data.deletedCount ?? 0 });
-        toast.success(`${data.deletedCount} scan records deleted.`);
+        setResult({ redactedCount: data.redactedCount ?? 0 });
+        toast.success(
+          `${data.redactedCount ?? 0} scan records had attribution metadata redacted.`
+        );
       } else {
-        toast.error(data.error ?? 'Purge failed.');
+        toast.error(data.error ?? 'Metadata redaction failed.');
       }
     });
   };
@@ -138,19 +140,19 @@ function PurgeScansCard() {
             </div>
             <div>
               <CardTitle className="text-sm font-black uppercase tracking-tight text-warning">
-                Purge Historical Scan Data
+                Redact Historical Scan Metadata
               </CardTitle>
               <CardDescription className="text-xs mt-1">
-                Permanently delete scan logs older than a chosen number of days.
-                This frees up storage but removes your audit history. This
-                action is irreversible.
+                Remove expired marketing-attribution metadata while preserving
+                scan decisions, timestamps, operators, gates, notes, and audit
+                history.
               </CardDescription>
             </div>
           </div>
         </CardHeader>
         <CardContent className="pt-0">
           <CooldownButton
-            label="Purge Scan Data…"
+            label="Redact Scan Metadata…"
             cooldownSeconds={10}
             onClick={() => setOpen(true)}
             variant="destructive"
@@ -171,10 +173,11 @@ function PurgeScansCard() {
               <AlertTriangle className="h-8 w-8 text-warning" />
             </div>
             <DialogTitle className="text-lg font-black text-foreground mb-1">
-              Purge Scan History
+              Redact Scan Metadata
             </DialogTitle>
             <DialogDescription className="text-sm text-muted-foreground">
-              This permanently deletes scan records. It cannot be undone.
+              Scan evidence is preserved. Only optional UTM attribution fields
+              older than the selected retention window are cleared.
             </DialogDescription>
           </div>
 
@@ -184,7 +187,7 @@ function PurgeScansCard() {
                 <CheckCircle2 className="h-12 w-12 text-success" />
               </div>
               <p className="font-bold text-foreground">
-                {result.deletedCount} scan records deleted.
+                {result.redactedCount} scan records redacted.
               </p>
               <Button
                 onClick={reset}
@@ -197,7 +200,7 @@ function PurgeScansCard() {
             <div className="p-6 space-y-5">
               <div className="space-y-2">
                 <Label className="text-[11px] font-black uppercase tracking-widest text-muted-foreground">
-                  Delete records older than (days)
+                  Redact attribution older than (days)
                 </Label>
                 <Input
                   type="number"
@@ -215,14 +218,14 @@ function PurgeScansCard() {
                 <Label className="text-[11px] font-black uppercase tracking-widest text-muted-foreground">
                   Type{' '}
                   <span className="font-mono bg-warning/10 text-warning px-1.5 py-0.5 rounded">
-                    PURGE SCANS
+                    REDACT SCAN METADATA
                   </span>{' '}
                   to confirm
                 </Label>
                 <Input
                   value={confirmation}
                   onChange={(e) => setConfirmation(e.target.value)}
-                  placeholder="PURGE SCANS"
+                  placeholder="REDACT SCAN METADATA"
                   className="h-11 rounded-xl text-center font-bold border-warning/30 focus-visible:ring-warning/30"
                   autoComplete="off"
                 />
@@ -238,11 +241,13 @@ function PurgeScansCard() {
                   Cancel
                 </Button>
                 <Button
-                  onClick={handlePurge}
-                  disabled={confirmation !== 'PURGE SCANS' || isPending}
+                  onClick={handleRedaction}
+                  disabled={
+                    confirmation !== 'REDACT SCAN METADATA' || isPending
+                  }
                   className="flex-1 h-11 rounded-xl font-black bg-warning hover:bg-warning/90 border-warning text-white"
                 >
-                  {isPending ? 'Purging…' : 'Confirm Purge'}
+                  {isPending ? 'Redacting…' : 'Confirm Redaction'}
                 </Button>
               </div>
             </div>
@@ -428,7 +433,7 @@ export function DangerZone({ orgName }: DangerZoneProps) {
       </div>
 
       <ExportCard />
-      <PurgeScansCard />
+      <RedactScanMetadataCard />
       <DeleteWorkspaceCard orgName={orgName} />
     </div>
   );

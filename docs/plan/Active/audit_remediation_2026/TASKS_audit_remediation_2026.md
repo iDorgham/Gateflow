@@ -1,5 +1,10 @@
 # Tasks — audit_remediation_2026
 
+> **Ownership freeze (2026-07-25):** This plan is historical evidence only for
+> Client Dashboard. All remaining Phase 4 implementation and final certification
+> are owned by `client_dashboard_readiness_2026`; do not run a concurrent writer.
+> The operations-owned credential-rotation receipt remains an external gate.
+
 ## Phase 1 — P0 containment
 
 - [x] Confirm reset-route exposure using non-sensitive evidence.

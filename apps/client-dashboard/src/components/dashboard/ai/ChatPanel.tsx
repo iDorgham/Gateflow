@@ -221,11 +221,7 @@ export function ChatPanel({
       const execRes = await fetch('/api/ai/actions/execute', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          actionId,
-          actionType: data.actionType,
-          intentJson: data.intentJson,
-        }),
+        body: JSON.stringify({ actionId }),
       });
 
       if (!execRes.ok) {

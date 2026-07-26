@@ -1,0 +1,71 @@
+{
+  "id": "client-dashboard-check-2026-07-26",
+  "type": "focused-check",
+  "status": "blocked",
+  "valid": true,
+  "createdAt": "2026-07-26T11:52:04Z",
+  "commit": "52f26767da499e584a29ba01e99eb66ef92b8241",
+  "application": "client-dashboard",
+  "checks": {
+    "lint": {
+      "status": "passed-with-baseline",
+      "errors": 0,
+      "warnings": 278
+    },
+    "typecheck": {
+      "status": "passed"
+    },
+    "tests": {
+      "status": "passed",
+      "suitesPassed": 73,
+      "suitesSkipped": 1,
+      "testsPassed": 391,
+      "testsSkipped": 25
+    },
+    "build": {
+      "status": "passed",
+      "knownWarnings": [
+        "Next.js middleware convention deprecation",
+        "Prisma CommonJS export warning"
+      ]
+    },
+    "workflowV2": {
+      "status": "passed",
+      "testsPassed": 59
+    },
+    "bootstrapRouteGuard": {
+      "status": "passed"
+    },
+    "secretScan": {
+      "status": "reviewed",
+      "mediumFalsePositives": 3
+    },
+    "dependencyAdvisory": {
+      "status": "passed",
+      "packagesScanned": 1742,
+      "highOrCriticalFindings": 0
+    },
+    "pageEvidence": {
+      "status": "passed",
+      "pages": 9,
+      "ageHours": 16.4
+    },
+    "focusedDiff": {
+      "status": "passed",
+      "paths": ["package.json", "pnpm-lock.yaml"],
+      "reason": "Root dependency manifests are explicitly permitted for focused dependency remediation; arbitrary root files remain rejected."
+    },
+    "rootPreflight": {
+      "status": "passed",
+      "verifiedAt": "2026-07-26T12:23:44Z",
+      "scope": ["changelog", "policy", "lint", "typecheck", "tests"]
+    }
+  },
+  "repairs": [
+    {
+      "path": "apps/client-dashboard/src/app/api/perimeter/webhook/route.test.ts",
+      "reason": "Made invalid-signature mutation deterministic; the prior test had a 1-in-16 chance of leaving a valid signature unchanged."
+    }
+  ],
+  "blockers": ["Credential rotation/revocation receipt is not recorded."]
+}

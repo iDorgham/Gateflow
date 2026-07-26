@@ -29,7 +29,8 @@ function resolveApp(id) {
 }
 
 function routeFrom(relative) {
-  const segments = relative.split(path.sep)
+  const segments = relative
+    .split(path.sep)
     .filter((segment) => !segment.startsWith('(') && !segment.startsWith('_'))
     .map((segment) => segment.replace(/\.(tsx|ts|jsx|js)$/, ''));
   const last = segments.at(-1);
@@ -38,13 +39,16 @@ function routeFrom(relative) {
 }
 
 function inventoryRoutes(root, appPath, type) {
-  const base = type === 'expo'
-    ? path.join(root, appPath, 'app')
-    : path.join(root, appPath, 'src', 'app');
+  const base =
+    type === 'expo'
+      ? path.join(root, appPath, 'app')
+      : path.join(root, appPath, 'src', 'app');
   return walk(base)
-    .filter((file) => type === 'expo'
-      ? /\.(tsx|jsx)$/.test(file) && !path.basename(file).startsWith('_')
-      : /^page\.(tsx|ts|jsx|js)$/.test(path.basename(file)))
+    .filter((file) =>
+      type === 'expo'
+        ? /\.(tsx|jsx)$/.test(file) && !path.basename(file).startsWith('_')
+        : /^page\.(tsx|ts|jsx|js)$/.test(path.basename(file))
+    )
     .filter((file) => !file.includes(`${path.sep}api${path.sep}`))
     .map((file) => ({
       route: routeFrom(path.relative(base, file)),
@@ -64,41 +68,94 @@ function classify(score) {
 
 function validatePageScore(input) {
   const errors = [];
-  for (const key of ['route', 'date', 'commit', 'locale', 'viewport', 'environment', 'reviewMode']) {
-    if (input?.[key] === undefined || input[key] === '') errors.push(`missing ${key}`);
+  for (const key of [
+    'route',
+    'date',
+    'commit',
+    'locale',
+    'viewport',
+    'environment',
+    'reviewMode',
+  ]) {
+    if (input?.[key] === undefined || input[key] === '')
+      errors.push(`missing ${key}`);
   }
-  if (!Array.isArray(input?.evidence) || input.evidence.length === 0) errors.push('evidence is required');
+  if (!Array.isArray(input?.evidence) || input.evidence.length === 0)
+    errors.push('evidence is required');
   let score = 0;
   for (const [key, max] of Object.entries(CATEGORY_MAX)) {
     const value = input?.categories?.[key];
-    if (!Number.isFinite(value) || value < 0 || value > max) errors.push(`${key} must be 0-${max}`);
+    if (!Number.isFinite(value) || value < 0 || value > max)
+      errors.push(`${key} must be 0-${max}`);
     else score += value;
   }
-  if (input?.reviewMode !== 'browser-verified' && input?.reviewMode !== 'static-review-only') {
+  if (
+    input?.reviewMode !== 'browser-verified' &&
+    input?.reviewMode !== 'static-review-only'
+  ) {
     errors.push('reviewMode must be browser-verified or static-review-only');
   }
   if (input?.securityBoundaryProven === false) score = Math.min(score, 49);
-  return { valid: errors.length === 0, errors, score, classification: classify(score) };
+  return {
+    valid: errors.length === 0,
+    errors,
+    score,
+    classification: classify(score),
+  };
 }
 
 function aggregatePageScores(scores) {
   const pages = scores.map((score) => {
     const result = validatePageScore(score);
-    if (!result.valid) throw new Error(`Invalid page score for ${score.route || 'unknown'}: ${result.errors.join(', ')}`);
-    return { route: score.route, score: result.score, classification: result.classification, reviewMode: score.reviewMode };
+    if (!result.valid)
+      throw new Error(
+        `Invalid page score for ${score.route || 'unknown'}: ${result.errors.join(', ')}`
+      );
+    return {
+      route: score.route,
+      score: result.score,
+      classification: result.classification,
+      reviewMode: score.reviewMode,
+    };
   });
-  const average = pages.length ? pages.reduce((sum, page) => sum + page.score, 0) / pages.length : 0;
-  return { pages, average: Number(average.toFixed(2)), generatedAt: new Date().toISOString() };
+  const average = pages.length
+    ? pages.reduce((sum, page) => sum + page.score, 0) / pages.length
+    : 0;
+  return {
+    pages,
+    average: Number(average.toFixed(2)),
+    generatedAt: new Date().toISOString(),
+  };
 }
 
 function validateScopeDiff(focusedApp, files) {
   const app = resolveApp(focusedApp);
-  const allowed = [app.path, 'packages/', 'docs/', '.agents/', '.antigravity/', '.ai/workflow-v2/', 'scripts/'];
+  const allowed = [
+    app.path,
+    'package.json',
+    'pnpm-lock.yaml',
+    'packages/',
+    'docs/',
+    '.agents/',
+    '.antigravity/',
+    '.ai/workflow-v2/',
+    'scripts/',
+  ];
   return files
-    .filter((file) => file.startsWith('apps/') && !file.startsWith(`${app.path}/`))
+    .filter(
+      (file) => file.startsWith('apps/') && !file.startsWith(`${app.path}/`)
+    )
     .map((file) => `${file} is outside focused app ${focusedApp}`)
-    .concat(files.filter((file) => !allowed.some((prefix) => file === prefix || file.startsWith(prefix)))
-      .map((file) => `${file} is outside Workflow v2 scope`));
+    .concat(
+      files
+        .filter(
+          (file) =>
+            !allowed.some(
+              (prefix) => file === prefix || file.startsWith(prefix)
+            )
+        )
+        .map((file) => `${file} is outside Workflow v2 scope`)
+    );
 }
 
 function aggregateEvidence(items) {
@@ -108,7 +165,12 @@ function aggregateEvidence(items) {
   return {
     ready: items.length > 0 && blockers.length === 0,
     blockers,
-    steps: items.map(({ step, priority, status, createdAt }) => ({ step, priority, status, createdAt })),
+    steps: items.map(({ step, priority, status, createdAt }) => ({
+      step,
+      priority,
+      status,
+      createdAt,
+    })),
     generatedAt: new Date().toISOString(),
   };
 }

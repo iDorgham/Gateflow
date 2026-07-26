@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma, EventType, IncidentStatus } from '@gate-access/db';
-import crypto from 'crypto';
+import { EventType, IncidentStatus } from '@gate-access/db';
 import { z } from 'zod';
+import {
+  runReplayProtectedWebhook,
+  verifyWebhookEnvelope,
+} from '@/lib/webhook-replay';
 import {
   PerimeterEventType,
   PerimeterWebhookPayload,
@@ -12,25 +15,10 @@ import {
  *
  * Ingest real-time visual AI events (Tailgating, LPR, Forced Entry).
  *
- * Security: HMAC-SHA256 fail-closed — missing secret or invalid signature → 401.
+ * Security: HMAC-SHA256 covers timestamp + event ID + raw body; ±5m freshness.
  * Multi-tenancy: all DB reads/writes are scoped to webhook `organizationId`.
- * Idempotency: duplicate incidents within a 10-second window are suppressed.
+ * Replay: provider/org/event ID is atomically consumed with business writes.
  */
-
-/** HMAC signing format: `${timestamp}.${rawBody}` (same as sender convention). */
-function computeHmac(
-  secret: string,
-  timestamp: string,
-  rawBody: string
-): Buffer {
-  return Buffer.from(
-    crypto
-      .createHmac('sha256', secret)
-      .update(`${timestamp}.${rawBody}`)
-      .digest('hex'),
-    'hex'
-  );
-}
 
 const PerimeterWebhookSchema = z.object({
   organizationId: z.string().min(1),
@@ -86,30 +74,23 @@ export async function POST(req: NextRequest) {
 
   const signature = req.headers.get('x-gf-signature');
   const timestamp = req.headers.get('x-gf-timestamp');
+  const eventId = req.headers.get('x-gf-event-id');
 
-  if (!signature || !timestamp) {
+  if (!signature || !timestamp || !eventId) {
     return NextResponse.json(
       { success: false, message: 'Missing signature headers' },
       { status: 401 }
     );
   }
 
-  const expectedBuf = computeHmac(secret, timestamp, rawBody);
-  let sigBuf: Buffer;
-  try {
-    sigBuf = Buffer.from(signature, 'hex');
-  } catch {
-    return NextResponse.json(
-      { success: false, message: 'Invalid signature encoding' },
-      { status: 401 }
-    );
-  }
-
-  // timingSafeEqual requires equal-length buffers — a length mismatch is itself
-  // an invalid signature so we can safely short-circuit here.
   if (
-    sigBuf.length !== expectedBuf.length ||
-    !crypto.timingSafeEqual(sigBuf, expectedBuf)
+    !verifyWebhookEnvelope({
+      eventId,
+      rawBody,
+      secret,
+      signature,
+      timestamp,
+    })
   ) {
     return NextResponse.json(
       { success: false, message: 'Invalid signature' },
@@ -118,97 +99,110 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    // ── 4. Detect anomalies: Tailgating or Forced Entry ─────────────────────
-    if (
-      body.type === PerimeterEventType.TAILGATING ||
-      body.type === PerimeterEventType.LPR_MATCH ||
-      body.type === PerimeterEventType.BARRIER_FORCED
-    ) {
-      const fiveSecondsAgo = new Date(Date.now() - 5_000);
-
-      // Org-scoped scan cross-reference: filter via qrCode.organizationId so
-      // a gateId from another tenant cannot satisfy this check.
-      const recentValidScan = await prisma.scanLog.findFirst({
-        where: {
-          gateId: body.gateId,
-          scannedAt: { gte: fiveSecondsAgo },
-          status: 'SUCCESS',
-          qrCode: { organizationId: body.organizationId },
-        },
-      });
-
-      const isAnomaly =
-        body.type === PerimeterEventType.BARRIER_FORCED ||
-        (body.type === PerimeterEventType.TAILGATING && !recentValidScan) ||
-        body.type === PerimeterEventType.LPR_MATCH;
-
-      if (isAnomaly) {
-        // ── 5. Idempotency guard ─────────────────────────────────────────────
-        // Suppress duplicate incidents for the same gate + type within 10 seconds.
-        const tenSecondsAgo = new Date(Date.now() - 10_000);
-        const existingIncident = await prisma.incident.findFirst({
-          where: {
-            organizationId: body.organizationId,
-            gateId: body.gateId,
-            reason: { startsWith: `${body.type}:` },
-            createdAt: { gte: tenSecondsAgo },
-          },
-          select: { id: true },
-        });
-
-        if (!existingIncident) {
-          const reason =
-            body.type === PerimeterEventType.BARRIER_FORCED
-              ? `${body.type}: Sudden force detected without authorised scan.`
-              : body.type === PerimeterEventType.TAILGATING
-                ? `${body.type}: Vehicle entered without an active scan.`
-                : `${body.type}: Licence plate flagged by perimeter camera.`;
-
-          // Attempt to link the triggering scan when available
-          const triggeringScan = recentValidScan ?? null;
-
-          const incident = await prisma.incident.create({
-            data: {
-              organizationId: body.organizationId,
-              gateId: body.gateId,
-              reason,
-              status: IncidentStatus.UNDER_REVIEW,
-              notes: `AI camera detection at ${body.timestamp}. Metadata: ${JSON.stringify(body.payload)}`,
-              ...(triggeringScan ? { scanLogId: triggeringScan.id } : {}),
-            },
-          });
-
-          // ── 6. Emit SSE alert via EventLog ──────────────────────────────────
-          await prisma.eventLog.create({
-            data: {
-              organizationId: body.organizationId,
-              type: EventType.WATCHLIST_ALERT,
-              payload: {
-                incidentId: incident.id,
-                gateId: body.gateId,
-                severity: 'CRITICAL',
-                reason: incident.reason,
-              },
-            },
-          });
-        }
-      }
-    }
-
-    // ── 7. Generic analytics event log ──────────────────────────────────────
-    await prisma.eventLog.create({
-      data: {
+    const replay = await runReplayProtectedWebhook(
+      {
+        eventId,
         organizationId: body.organizationId,
-        type: EventType.SCAN_RECORDED,
-        payload: {
-          type: body.type,
-          gateId: body.gateId,
-          ...body.payload,
-        },
+        provider: 'perimeter',
       },
-    });
+      async (tx) => {
+        // ── 4. Detect anomalies: Tailgating or Forced Entry ─────────────────
+        if (
+          body.type === PerimeterEventType.TAILGATING ||
+          body.type === PerimeterEventType.LPR_MATCH ||
+          body.type === PerimeterEventType.BARRIER_FORCED
+        ) {
+          const fiveSecondsAgo = new Date(Date.now() - 5_000);
 
-    return NextResponse.json({ success: true, message: 'Event ingested' });
+          // Org-scoped scan cross-reference: filter via qrCode.organizationId so
+          // a gateId from another tenant cannot satisfy this check.
+          const recentValidScan = await tx.scanLog.findFirst({
+            where: {
+              gateId: body.gateId,
+              scannedAt: { gte: fiveSecondsAgo },
+              status: 'SUCCESS',
+              qrCode: { organizationId: body.organizationId },
+            },
+          });
+
+          const isAnomaly =
+            body.type === PerimeterEventType.BARRIER_FORCED ||
+            (body.type === PerimeterEventType.TAILGATING && !recentValidScan) ||
+            body.type === PerimeterEventType.LPR_MATCH;
+
+          if (isAnomaly) {
+            // ── 5. Idempotency guard ─────────────────────────────────────────────
+            // Suppress duplicate incidents for the same gate + type within 10 seconds.
+            const tenSecondsAgo = new Date(Date.now() - 10_000);
+            const existingIncident = await tx.incident.findFirst({
+              where: {
+                organizationId: body.organizationId,
+                gateId: body.gateId,
+                reason: { startsWith: `${body.type}:` },
+                createdAt: { gte: tenSecondsAgo },
+              },
+              select: { id: true },
+            });
+
+            if (!existingIncident) {
+              const reason =
+                body.type === PerimeterEventType.BARRIER_FORCED
+                  ? `${body.type}: Sudden force detected without authorised scan.`
+                  : body.type === PerimeterEventType.TAILGATING
+                    ? `${body.type}: Vehicle entered without an active scan.`
+                    : `${body.type}: Licence plate flagged by perimeter camera.`;
+
+              // Attempt to link the triggering scan when available
+              const triggeringScan = recentValidScan ?? null;
+
+              const incident = await tx.incident.create({
+                data: {
+                  organizationId: body.organizationId,
+                  gateId: body.gateId,
+                  reason,
+                  status: IncidentStatus.UNDER_REVIEW,
+                  notes: `AI camera detection at ${body.timestamp}. Metadata: ${JSON.stringify(body.payload)}`,
+                  ...(triggeringScan ? { scanLogId: triggeringScan.id } : {}),
+                },
+              });
+
+              // ── 6. Emit SSE alert via EventLog ──────────────────────────────────
+              await tx.eventLog.create({
+                data: {
+                  organizationId: body.organizationId,
+                  type: EventType.WATCHLIST_ALERT,
+                  payload: {
+                    incidentId: incident.id,
+                    gateId: body.gateId,
+                    severity: 'CRITICAL',
+                    reason: incident.reason,
+                  },
+                },
+              });
+            }
+          }
+        }
+
+        // ── 7. Generic analytics event log ──────────────────────────────────
+        await tx.eventLog.create({
+          data: {
+            organizationId: body.organizationId,
+            type: EventType.SCAN_RECORDED,
+            payload: {
+              type: body.type,
+              gateId: body.gateId,
+              ...body.payload,
+            },
+          },
+        });
+      }
+    );
+
+    return NextResponse.json({
+      success: true,
+      message: replay.duplicate ? 'Event already processed' : 'Event ingested',
+      duplicate: replay.duplicate,
+    });
   } catch (error) {
     console.error('[perimeter/webhook] error:', error);
     return NextResponse.json(

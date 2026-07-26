@@ -4,6 +4,26 @@
 
 ## 🚀 Active Initiatives (Q2-Q3 2026)
 
+### client_dashboard_readiness_2026 — Client Dashboard development readiness
+
+**PLAN:** `docs/plan/Draft/client_dashboard_readiness_2026/`
+`PLAN_client_dashboard_readiness_2026.md`
+**Status:** 🟡 Developing — Phase 01 complete; Phase 02 retention/revocation batch green
+**Priority:** P0 — security and pilot certification blockers
+**Target:** Safe development baseline → measured performance → 9/9 pilot certification
+**Branch:** `fix/client-dashboard-readiness-phase-02`
+
+- [x] Phase 01 — Scope, ownership, and risk classification
+- [ ] Phase 02 — Security and data invariants
+- [ ] Phase 03 — Development and test reliability
+- [ ] Phase 04 — Performance and runtime readiness
+- [ ] Phase 05 — Accessibility, RTL, and page readiness
+- [ ] Phase 06 — Pilot and deployment certification
+
+Ownership note: this plan supersedes the unstarted Client Dashboard implementation
+phases in `gateflow_workflow_bootstrap` and must reconcile the remaining Phase 4
+work in `audit_remediation_2026` before implementation begins.
+
 ### repo_hygiene — Repo hygiene + security baseline (v0.3.0)
 
 **PLAN:** `docs/plan/Draft/repo_hygiene/`  
@@ -25,7 +45,7 @@
 
 **PLAN:** `docs/plan/Draft/gateflow_workflow_bootstrap/`  
 `PLAN_gateflow_workflow_bootstrap.md`  
-**Status:** 🟢 Draft — Phase 00 complete (local); next `/audit all`  
+**Status:** ⏸️ Draft — Phase 00 complete; Phases 01–06 superseded by `client_dashboard_readiness_2026`
 **Priority:** P0 — required before Client Dashboard audit/pilot loop  
 **Target:** Phase 00 exit → `/audit all`  
 **Branch:** `feat/gateflow-workflow-bootstrap`
@@ -43,7 +63,7 @@
 
 **PLAN:** `docs/plan/Active/audit_remediation_2026/`
 
-**Status:** 🟢 Active — Phases 1–3 mostly complete; Phase 4 + Final still open in TASKS (ops credential-rotation receipt pending)
+**Status:** ⏸️ Active evidence-only — remaining work migrated to `client_dashboard_readiness_2026`; ops credential receipt pending
 
 **Priority:** P0 containment complete; P1/P2 hardening in progress
 

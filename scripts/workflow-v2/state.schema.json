@@ -57,6 +57,32 @@
         "currentPlan": { "type": ["string", "null"] },
         "baseline": { "type": ["object", "null"] },
         "evidence": { "type": "array" },
+        "externalGates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "status", "summary"],
+            "additionalProperties": false,
+            "properties": {
+              "id": { "type": "string", "minLength": 1 },
+              "status": {
+                "enum": ["pending", "blocked", "passed", "closed", "complete"]
+              },
+              "summary": { "type": "string", "minLength": 1 },
+              "owner": { "type": "string" },
+              "artifact": { "type": "string" },
+              "lastCheckedAt": { "type": "string", "format": "date-time" },
+              "affectedCredentialNames": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "environments": {
+                "type": "array",
+                "items": { "type": "string" }
+              }
+            }
+          }
+        },
         "certificationReceipt": { "type": ["object", "null"] },
         "pageScoresFile": {
           "type": ["string", "null"],

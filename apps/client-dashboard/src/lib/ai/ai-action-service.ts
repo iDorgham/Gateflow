@@ -1,5 +1,6 @@
 import { prisma } from '@gate-access/db';
 import { AiActionStatus } from '@gate-access/db';
+import { redactSensitiveAiText } from './transcript-privacy';
 
 export interface CreateAiActionParams {
   organizationId: string;
@@ -16,36 +17,7 @@ export class AiActionService {
    * Redact sensitive information from text (Emails, Phones, etc.)
    */
   static maskPII(text: string | null | undefined): string {
-    if (!text) return '';
-
-    // Mask emails: test@example.com -> t***@example.com
-    // ReDoS-resistant pattern using non-backtracking structure
-    let masked = text.replace(
-      /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b/g,
-      (match) => {
-        const atIdx = match.indexOf('@');
-        if (atIdx <= 1) return match[0] + '***' + match.slice(atIdx);
-        return match[0] + '***' + match.slice(atIdx);
-      }
-    );
-
-    // Mask phone numbers: +961 70 123 456 -> +961 70 *** 456
-    // Simplified pattern to avoid nested quantifiers and polynomial backtracking
-    masked = masked.replace(
-      /(?:\+?\d{1,3}[-.\s]?)?\(?\d{2,4}\)?[-.\s]?\d{3,4}[-.\s]?\d{3,9}/g,
-      (match) => {
-        if (match.length < 8) return match;
-        // Basic masking strategy: keep first part, mask middle, keep last 4
-        const visible = Math.max(3, match.length - 8);
-        return (
-          match.substring(0, visible) +
-          '***' +
-          match.substring(match.length - 4)
-        );
-      }
-    );
-
-    return masked;
+    return redactSensitiveAiText(text);
   }
 
   /**
@@ -97,14 +69,77 @@ export class AiActionService {
   /**
    * Submit feedback for an action
    */
-  static async submitFeedback(
-    actionId: string,
-    feedback: 'THUMBS_UP' | 'THUMBS_DOWN'
-  ) {
-    return await prisma.aiActionLog.update({
-      where: { id: actionId },
-      data: { feedback },
+  static async submitFeedback(params: {
+    actionId: string;
+    organizationId: string;
+    userId: string;
+    feedback: 'THUMBS_UP' | 'THUMBS_DOWN';
+  }): Promise<boolean> {
+    const result = await prisma.aiActionLog.updateMany({
+      where: {
+        id: params.actionId,
+        organizationId: params.organizationId,
+        userId: params.userId,
+        feedback: null,
+      },
+      data: { feedback: params.feedback },
     });
+    return result.count === 1;
+  }
+
+  static async claimPendingAction(params: {
+    actionId: string;
+    organizationId: string;
+    userId: string;
+  }) {
+    const action = await prisma.aiActionLog.findFirst({
+      where: {
+        id: params.actionId,
+        organizationId: params.organizationId,
+        userId: params.userId,
+        status: 'PENDING',
+      },
+      select: {
+        id: true,
+        actionType: true,
+        intentJson: true,
+      },
+    });
+    if (!action) return null;
+
+    const claimed = await prisma.aiActionLog.updateMany({
+      where: {
+        id: params.actionId,
+        organizationId: params.organizationId,
+        userId: params.userId,
+        status: 'PENDING',
+      },
+      data: { status: 'CONFIRMED' },
+    });
+    return claimed.count === 1 ? action : null;
+  }
+
+  static async completeClaimedAction(params: {
+    actionId: string;
+    organizationId: string;
+    userId: string;
+    status: 'EXECUTED' | 'FAILED';
+    result?: string;
+  }): Promise<boolean> {
+    const updated = await prisma.aiActionLog.updateMany({
+      where: {
+        id: params.actionId,
+        organizationId: params.organizationId,
+        userId: params.userId,
+        status: 'CONFIRMED',
+      },
+      data: {
+        status: params.status,
+        result: params.result ? this.maskPII(params.result) : undefined,
+        updatedAt: new Date(),
+      },
+    });
+    return updated.count === 1;
   }
 
   /**

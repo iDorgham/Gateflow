@@ -8,15 +8,53 @@
   },
   "apps": {
     "client-dashboard": {
-      "stage": "focused",
-      "currentPlan": "gateflow_workflow_bootstrap",
+      "stage": "developing",
+      "currentPlan": "client_dashboard_readiness_2026",
       "baseline": null,
-      "evidence": [],
+      "evidence": [
+        {
+          "id": "client-dashboard-audit-2026-07-25",
+          "type": "application-audit",
+          "status": "blocked",
+          "valid": true,
+          "createdAt": "2026-07-25T19:22:27.000Z",
+          "commit": "52f26767da499e584a29ba01e99eb66ef92b8241",
+          "reviewMode": "static-review-only",
+          "artifact": "docs/audits/client-dashboard/AUDIT_2026-07-25.md"
+        },
+        {
+          "id": "client-dashboard-check-2026-07-26",
+          "type": "focused-check",
+          "status": "blocked",
+          "valid": true,
+          "createdAt": "2026-07-26T11:52:04Z",
+          "commit": "52f26767da499e584a29ba01e99eb66ef92b8241",
+          "artifact": "docs/plan/Draft/client_dashboard_readiness_2026/evidence/CHECK_ALL_2026-07-26.json"
+        }
+      ],
+      "externalGates": [
+        {
+          "id": "credential-rotation-receipt",
+          "status": "pending",
+          "summary": "Credential rotation/revocation receipt is not recorded",
+          "owner": "operations",
+          "artifact": "docs/plan/Draft/client_dashboard_readiness_2026/evidence/PHASE_02_SECURITY_SCAN_2026-07-26.md",
+          "lastCheckedAt": "2026-07-26T01:17:44.878Z",
+          "affectedCredentialNames": [
+            "SETUP_SECRET",
+            "administrator credentials",
+            "NEXTAUTH_SECRET/JWT signing secret",
+            "UPSTASH_REDIS_REST_URL",
+            "UPSTASH_REDIS_REST_TOKEN"
+          ],
+          "environments": ["production", "preview"]
+        }
+      ],
       "certificationReceipt": null,
       "selection": {
-        "command": "/audit all",
+        "command": "/plan",
         "agent": "gateflow-guide",
-        "skills": ["gf-guide"],
+        "skills": ["gf-guide", "security", "testing"],
         "cli": "cursor"
       },
       "pilotFlowCoverage": {
@@ -25,8 +63,8 @@
         "status": "not-started"
       },
       "delivery": null,
-      "pageScoresFile": null,
-      "updatedAt": "2026-07-24T03:10:00.000Z"
+      "pageScoresFile": "docs/audits/client-dashboard/PAGE_SCORES_2026-07-25.json",
+      "updatedAt": "2026-07-25T19:48:08.125Z"
     },
     "resident-portal": {
       "stage": "parked",
@@ -47,5 +85,5 @@
   },
   "workdirLock": null,
   "createdAt": "2026-07-24T00:00:00.000Z",
-  "updatedAt": "2026-07-24T03:10:00.000Z"
+  "updatedAt": "2026-07-25T20:33:31.025Z"
 }

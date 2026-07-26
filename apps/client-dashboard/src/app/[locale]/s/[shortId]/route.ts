@@ -1,6 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@gate-access/db';
 import { token } from '@atlaskit/tokens';
+import { createArrivalCapability } from '@/lib/arrival-capability';
+import {
+  buildShortLinkAttribution,
+  getAttributionRateLimitKey,
+} from '@/lib/utm-attribution';
+import { checkRateLimit } from '@/lib/rate-limit';
 
 /**
  * Short-link resolver for compact QR codes.
@@ -49,38 +55,36 @@ export async function GET(
 
   // Log landing page visit (Marketing ROI tracking)
   const { searchParams: urlParams } = new URL(request.url);
-  const utmSource = urlParams.get('utm_source');
-  const utmMedium = urlParams.get('utm_medium');
-  const utmCampaign = urlParams.get('utm_campaign');
-  const utmContent = urlParams.get('utm_content');
-  const utmTerm = urlParams.get('utm_term');
+  const networkIdentifier =
+    request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
+    request.headers.get('x-real-ip') ||
+    'unknown';
 
-  // Background fire-and-forget logging
-  void prisma.shortLinkClick
-    .create({
-      data: {
-        shortLinkId: link.id,
-        organizationId: link.organizationId,
-        projectId: link.projectId,
-        utmSource,
-        utmMedium,
-        utmCampaign,
-        utmContent,
-        utmTerm,
-        deviceInfo: {
-          userAgent: request.headers.get('user-agent'),
-          ip:
-            request.headers.get('x-forwarded-for') ||
-            request.headers.get('x-real-ip'),
-        },
-      },
-    })
-    .catch((err) => console.error('Failed to log ShortLinkClick:', err));
+  try {
+    const rateLimit = await checkRateLimit(
+      getAttributionRateLimitKey(link.id, networkIdentifier),
+      60,
+      60_000
+    );
+    if (rateLimit.allowed) {
+      await prisma.shortLinkClick.create({
+        data: buildShortLinkAttribution(
+          link,
+          urlParams,
+          request.headers.get('user-agent')
+        ),
+      });
+    }
+  } catch (error) {
+    console.error('Failed to log ShortLinkClick:', {
+      type: error instanceof Error ? error.name : 'UnknownError',
+    });
+  }
 
   // Browser request — look up VisitorQR + Unit coordinates for GPS guide
   let lat: number | null = null;
   let lng: number | null = null;
-  let visitorQRId: string | null = null;
+  let arrivalCapability: string | null = null;
   let visitorName: string | null = null;
   let pixelMetaId: string | null = null;
   let pixelGtmId: string | null = null;
@@ -107,7 +111,10 @@ export async function GET(
     ]);
 
     if (visitorQR) {
-      visitorQRId = visitorQR.id;
+      const secret = process.env.QR_SIGNING_SECRET ?? '';
+      if (secret.length >= 32) {
+        arrivalCapability = createArrivalCapability(visitorQR.id, secret);
+      }
       visitorName = visitorQR.visitorName;
       lat = visitorQR.unit?.lat ?? null;
       lng = visitorQR.unit?.lng ?? null;
@@ -270,7 +277,7 @@ export async function GET(
     }
 
     ${
-      visitorQRId
+      arrivalCapability
         ? `
     <button class="btn btn-secondary" id="arrivedBtn" onclick="notifyArrival()">
       I've arrived
@@ -282,11 +289,11 @@ export async function GET(
   </div>
 
   ${
-    visitorQRId
+    arrivalCapability
       ? `
   <script>
     var apiBase = ${JSON.stringify(apiBase)};
-    var visitorQRId = ${JSON.stringify(visitorQRId)};
+    var arrivalCapability = ${JSON.stringify(arrivalCapability)};
     var btn = document.getElementById('arrivedBtn');
 
     function notifyArrival() {
@@ -297,7 +304,7 @@ export async function GET(
       fetch(apiBase + '/api/resident/arrived', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ visitorQRId: visitorQRId }),
+        body: JSON.stringify({ capability: arrivalCapability }),
       })
       .then(function(res) { return res.json(); })
       .then(function(data) {

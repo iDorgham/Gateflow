@@ -18,47 +18,84 @@ const UpdateContactSchema = z.object({
   source: z.nativeEnum(ContactSource).optional().nullable(),
   companyWebsite: z.string().url().optional().nullable(),
   notes: z.string().max(2000).optional().nullable(),
-  unitIds: z.array(z.string()).optional(),
+  unitIds: z.array(z.string().min(1)).max(100).optional(),
 });
 
-export async function PATCH(request: NextRequest, props: { params: Promise<{ id: string }> }): Promise<NextResponse> {
+class InvalidUnitSelectionError extends Error {}
+
+export async function PATCH(
+  request: NextRequest,
+  props: { params: Promise<{ id: string }> }
+): Promise<NextResponse> {
   const params = await props.params;
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized' },
+        { status: 401 }
+      );
     }
 
     const existing = await prisma.contact.findFirst({
       where: { id: params.id, organizationId: claims.orgId, deletedAt: null },
     });
     if (!existing) {
-      return NextResponse.json({ success: false, message: 'Contact not found' }, { status: 404 });
+      return NextResponse.json(
+        { success: false, message: 'Contact not found' },
+        { status: 404 }
+      );
     }
 
     let body: unknown;
     try {
       body = await request.json();
     } catch {
-      return NextResponse.json({ success: false, message: 'Invalid JSON body' }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: 'Invalid JSON body' },
+        { status: 400 }
+      );
     }
 
     const validation = UpdateContactSchema.safeParse(body);
     if (!validation.success) {
       return NextResponse.json(
-        { success: false, message: 'Invalid request body', error: validation.error.flatten() },
+        {
+          success: false,
+          message: 'Invalid request body',
+          error: validation.error.flatten(),
+        },
         { status: 400 }
       );
     }
 
     const { unitIds, ...fields } = validation.data;
+    const requestedUnitIds =
+      unitIds === undefined ? undefined : [...new Set(unitIds)];
 
     const updated = await prisma.$transaction(async (tx) => {
-      if (unitIds !== undefined) {
+      if (requestedUnitIds !== undefined) {
+        if (requestedUnitIds.length > 0) {
+          const ownedUnits = await tx.unit.findMany({
+            where: {
+              id: { in: requestedUnitIds },
+              organizationId: claims.orgId,
+              deletedAt: null,
+            },
+            select: { id: true },
+          });
+          if (ownedUnits.length !== requestedUnitIds.length) {
+            throw new InvalidUnitSelectionError();
+          }
+        }
+
         await tx.contactUnit.deleteMany({ where: { contactId: params.id } });
-        if (unitIds.length > 0) {
+        if (requestedUnitIds.length > 0) {
           await tx.contactUnit.createMany({
-            data: unitIds.map((unitId) => ({ contactId: params.id, unitId })),
+            data: requestedUnitIds.map((unitId) => ({
+              contactId: params.id,
+              unitId,
+            })),
           });
         }
       }
@@ -66,17 +103,39 @@ export async function PATCH(request: NextRequest, props: { params: Promise<{ id:
       return tx.contact.update({
         where: { id: params.id },
         data: {
-          ...(fields.firstName !== undefined ? { firstName: fields.firstName.trim() } : {}),
-          ...(fields.lastName !== undefined ? { lastName: fields.lastName.trim() } : {}),
-          ...(fields.birthday !== undefined ? { birthday: fields.birthday ? new Date(fields.birthday) : null } : {}),
-          ...(fields.company !== undefined ? { company: fields.company?.trim() ?? null } : {}),
-          ...(fields.phone !== undefined ? { phone: fields.phone?.trim() ?? null } : {}),
-          ...(fields.email !== undefined ? { email: fields.email?.trim() ?? null } : {}),
-          ...(fields.avatarUrl !== undefined ? { avatarUrl: fields.avatarUrl?.trim() ?? null } : {}),
-          ...(fields.jobTitle !== undefined ? { jobTitle: fields.jobTitle?.trim() ?? null } : {}),
-          ...(fields.source !== undefined ? { source: fields.source ?? null } : {}),
-          ...(fields.companyWebsite !== undefined ? { companyWebsite: fields.companyWebsite?.trim() ?? null } : {}),
-          ...(fields.notes !== undefined ? { notes: fields.notes?.trim() ?? null } : {}),
+          ...(fields.firstName !== undefined
+            ? { firstName: fields.firstName.trim() }
+            : {}),
+          ...(fields.lastName !== undefined
+            ? { lastName: fields.lastName.trim() }
+            : {}),
+          ...(fields.birthday !== undefined
+            ? { birthday: fields.birthday ? new Date(fields.birthday) : null }
+            : {}),
+          ...(fields.company !== undefined
+            ? { company: fields.company?.trim() ?? null }
+            : {}),
+          ...(fields.phone !== undefined
+            ? { phone: fields.phone?.trim() ?? null }
+            : {}),
+          ...(fields.email !== undefined
+            ? { email: fields.email?.trim() ?? null }
+            : {}),
+          ...(fields.avatarUrl !== undefined
+            ? { avatarUrl: fields.avatarUrl?.trim() ?? null }
+            : {}),
+          ...(fields.jobTitle !== undefined
+            ? { jobTitle: fields.jobTitle?.trim() ?? null }
+            : {}),
+          ...(fields.source !== undefined
+            ? { source: fields.source ?? null }
+            : {}),
+          ...(fields.companyWebsite !== undefined
+            ? { companyWebsite: fields.companyWebsite?.trim() ?? null }
+            : {}),
+          ...(fields.notes !== undefined
+            ? { notes: fields.notes?.trim() ?? null }
+            : {}),
         },
         include: {
           units: { include: { unit: { select: { id: true, name: true } } } },
@@ -84,7 +143,9 @@ export async function PATCH(request: NextRequest, props: { params: Promise<{ id:
       });
     });
 
-    emitEvent(claims.orgId, EventType.CONTACT_UPDATED, { contactId: updated.id }).catch(() => {});
+    emitEvent(claims.orgId, EventType.CONTACT_UPDATED, {
+      contactId: updated.id,
+    }).catch(() => {});
 
     return NextResponse.json({
       success: true,
@@ -101,30 +162,51 @@ export async function PATCH(request: NextRequest, props: { params: Promise<{ id:
         source: updated.source ?? null,
         companyWebsite: updated.companyWebsite ?? null,
         notes: updated.notes ?? null,
-        units: updated.units.map((cu) => ({ id: cu.unit.id, name: cu.unit.name })),
+        units: updated.units.map((cu) => ({
+          id: cu.unit.id,
+          name: cu.unit.name,
+        })),
       },
     });
   } catch (error) {
+    if (error instanceof InvalidUnitSelectionError) {
+      return NextResponse.json(
+        { success: false, message: 'Invalid unit selection' },
+        { status: 400 }
+      );
+    }
     console.error('PATCH /api/contacts/[id] error:', error);
-    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }
 
 // ─── DELETE /api/contacts/[id] ────────────────────────────────────────────────
 
-export async function DELETE(_request: NextRequest, props: { params: Promise<{ id: string }> }): Promise<NextResponse> {
+export async function DELETE(
+  _request: NextRequest,
+  props: { params: Promise<{ id: string }> }
+): Promise<NextResponse> {
   const params = await props.params;
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized' },
+        { status: 401 }
+      );
     }
 
     const existing = await prisma.contact.findFirst({
       where: { id: params.id, organizationId: claims.orgId, deletedAt: null },
     });
     if (!existing) {
-      return NextResponse.json({ success: false, message: 'Contact not found' }, { status: 404 });
+      return NextResponse.json(
+        { success: false, message: 'Contact not found' },
+        { status: 404 }
+      );
     }
 
     await prisma.contact.update({
@@ -135,6 +217,9 @@ export async function DELETE(_request: NextRequest, props: { params: Promise<{ i
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('DELETE /api/contacts/[id] error:', error);
-    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }
