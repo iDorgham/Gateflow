@@ -1,0 +1,32 @@
+.ai/workflow-v2/state.json
+  s_4c93fd7a12aac2::t_48e4f724bf6d6b 39
+  s_4c93fd7a12aac2::t_6c451fbd8f8b75 41-42
+docs/plan/Draft/client_dashboard_readiness_2026/evidence/CREDENTIAL_ROTATION_RECEIPT_2026-07-26.json
+  s_4c93fd7a12aac2::t_6c451fbd8f8b75 1-52,55,62-67,70
+  s_4c93fd7a12aac2::t_48e4f724bf6d6b 53-54,56-60,68-69
+  s_4c93fd7a12aac2::t_962501f99c3a64 61
+docs/plan/Draft/client_dashboard_readiness_2026/SESSION_MEMORY.md
+  s_4c93fd7a12aac2::t_48e4f724bf6d6b 126-130
+  s_4c93fd7a12aac2::t_6c451fbd8f8b75 120-122
+  s_4c93fd7a12aac2::t_962501f99c3a64 123-125
+docs/plan/Draft/client_dashboard_readiness_2026/evidence/PHASE_02_SECURITY_SCAN_2026-07-26.md
+  s_4c93fd7a12aac2::t_6c451fbd8f8b75 17,70-76,88
+  s_4c93fd7a12aac2::t_48e4f724bf6d6b 77-82,85-87
+  s_4c93fd7a12aac2::t_f34bb2f0c1f3e0 8-16
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "74fb9e86700c7f5799f55975d30ec618ab3aa8f0",
+  "prompts": {},
+  "sessions": {
+    "s_4c93fd7a12aac2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f9aab-c7a9-7493-936e-402709ad76fd",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
