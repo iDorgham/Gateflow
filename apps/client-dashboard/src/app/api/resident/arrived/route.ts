@@ -58,7 +58,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       .update(capability)
       .digest('hex');
     const rateLimit = await checkRateLimit(
-      `resident-arrived:${visitorQRId}:${ip}:${capabilityHash}`,
+      `resident-arrived:${visitorQRId}:${ip}`,
       5,
       60_000
     );

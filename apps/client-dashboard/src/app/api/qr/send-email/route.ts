@@ -189,19 +189,25 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
-    await prisma.auditLog.create({
-      data: {
-        action: 'QR_EMAIL_DELIVERY_SUCCEEDED',
-        entityType: 'QRCode',
-        entityId: qrId,
-        organizationId: claims.orgId,
-        userId: claims.sub,
-        metadata: {
-          attemptAuditId: attemptReceipt.id,
-          channel: 'email',
+    try {
+      await prisma.auditLog.create({
+        data: {
+          action: 'QR_EMAIL_DELIVERY_SUCCEEDED',
+          entityType: 'QRCode',
+          entityId: qrId,
+          organizationId: claims.orgId,
+          userId: claims.sub,
+          metadata: {
+            attemptAuditId: attemptReceipt.id,
+            channel: 'email',
+          },
         },
-      },
-    });
+      });
+    } catch (auditError) {
+      console.error('Failed to log email delivery success receipt:', {
+        type: errorType(auditError),
+      });
+    }
 
     return NextResponse.json({
       success: true,

@@ -53,6 +53,12 @@ export function verifyArrivalCapability(
   try {
     const [encodedPayload, suppliedSignature, extra] = token.split('.');
     if (!encodedPayload || !suppliedSignature || extra) return null;
+    if (
+      !/^[A-Za-z0-9_-]+$/.test(encodedPayload) ||
+      !/^[A-Za-z0-9_-]+$/.test(suppliedSignature)
+    ) {
+      return null;
+    }
 
     const expectedSignature = sign(encodedPayload, secret);
     const supplied = Buffer.from(suppliedSignature, 'base64url');

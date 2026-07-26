@@ -26,6 +26,7 @@ export function verifyWebhookEnvelope({
 }: WebhookEnvelope): boolean {
   if (
     !secret ||
+    secret.length < 32 ||
     !EVENT_ID_PATTERN.test(eventId) ||
     !/^[a-f0-9]{64}$/i.test(signature)
   ) {

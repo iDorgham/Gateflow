@@ -24,7 +24,7 @@ export function redactSensitiveAiText(text: string | null | undefined): string {
       '[REDACTED]'
     )
     .replace(/\bgflv_[A-Fa-f0-9]{16,}\b/g, '[REDACTED]')
-    .replace(/\bBearer\s+[A-Za-z0-9._~+/-]+/gi, 'Bearer [REDACTED]')
+    .replace(/\bBearer\s+[A-Za-z0-9._~+/\-_=]+/gi, 'Bearer [REDACTED]')
     .replace(
       /\b(api[_-]?key|access[_-]?token|secret)\s*([=:])\s*[^\s,;]+/gi,
       '$1$2[REDACTED]'
@@ -35,9 +35,10 @@ export function redactSensitiveAiText(text: string | null | undefined): string {
     (match) => `${match[0]}***${match.slice(match.indexOf('@'))}`
   );
 
+  // Redact phone numbers (with optional separators or contiguous E.164 formats)
   redacted = redacted.replace(
-    /(\+?\d{1,3}[-.\s]+\d{2,4})[-.\s]+\d{3,4}[-.\s]+(\d{3,4})\b/g,
-    '$1 *** $2'
+    /(\+?\d{1,3}[-.\s]?)?(\(?\d{2,4}\)?[-.\s]?)(\d{3,4})[-.\s]?(\d{3,4})\b/g,
+    (match, p1 = '', p2 = '', _p3 = '', p4 = '') => `${p1}${p2}*** ${p4}`
   );
 
   return redacted;

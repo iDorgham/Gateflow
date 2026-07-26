@@ -430,7 +430,7 @@ export function ScansFilters({
         </div>
 
         <p className="text-[11px] font-black text-[var(--ds-text-subtle)] uppercase tracking-widest">
-          <span dir="ltr" className="unicode-bidi-isolate">
+          <span dir="ltr" className="[unicode-bidi:isolate]">
             {filteredCount.toLocaleString()}
           </span>{' '}
           {t('scans.filters.showingResultsSimple', {

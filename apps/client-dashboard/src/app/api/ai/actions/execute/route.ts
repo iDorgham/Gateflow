@@ -25,7 +25,13 @@ const BulkQrIntentSchema = z.object({
   type: z
     .enum(['SINGLE', 'RECURRING', 'PERMANENT', 'VISITOR', 'OPEN'])
     .default('SINGLE'),
-  validUntil: z.string().datetime().optional(),
+  validUntil: z
+    .string()
+    .datetime()
+    .refine((val) => new Date(val).getTime() > Date.now(), {
+      message: 'validUntil must be in the future',
+    })
+    .optional(),
   tag: z.string().trim().max(100).optional(),
   assignTo: z.string().trim().max(200).optional(),
   projectId: z.string().min(1).optional(),

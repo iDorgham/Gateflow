@@ -119,4 +119,24 @@ describe('POST /api/ai/actions/execute ownership and intent', () => {
     expect(response.status).toBe(403);
     expect(mockQrCreateMany).not.toHaveBeenCalled();
   });
+
+  it('rejects execution when stored intent has a validUntil timestamp in the past', async () => {
+    const pastIso = new Date(Date.now() - 60_000).toISOString();
+    mockClaimPendingAction.mockResolvedValue({
+      id: 'action_1',
+      actionType: 'BULK_QR_CREATE',
+      intentJson: { count: 1, type: 'SINGLE', validUntil: pastIso },
+    });
+
+    const response = await POST(request({ actionId: 'action_1' }));
+
+    expect(response.status).toBe(422);
+    expect(mockCompleteClaimedAction).toHaveBeenCalledWith(
+      expect.objectContaining({
+        actionId: 'action_1',
+        status: 'FAILED',
+      })
+    );
+    expect(mockQrCreateMany).not.toHaveBeenCalled();
+  });
 });

@@ -97,7 +97,7 @@ jest.mock('@/lib/realtime/emit-event', () => ({
 import { POST } from './route';
 import { NextRequest } from 'next/server';
 
-const SECRET = 'whatsapp-webhook-secret';
+const SECRET = 'whatsapp-webhook-secret-at-least-32-chars';
 const EVENT_ID = 'wa_event_12345';
 const BODY = {
   organizationId: 'org-1',
@@ -183,6 +183,7 @@ describe('POST /api/webhooks/whatsapp', () => {
         status: 'PENDING_APPROVAL',
       },
     });
+    expect(mockCheckQuota).toHaveBeenCalledWith('unit-1', expect.anything());
     expect(mockVisitorQRCreate).toHaveBeenCalledTimes(1);
     expect(mockAuditCreate).toHaveBeenCalledWith({
       data: expect.objectContaining({

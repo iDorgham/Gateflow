@@ -56,40 +56,44 @@ export async function POST(request: NextRequest) {
   const cutoff = new Date();
   cutoff.setDate(cutoff.getDate() - parsed.data.olderThanDays);
 
-  const { count } = await prisma.scanLog.updateMany({
-    where: {
-      gate: { organizationId: claims.orgId },
-      scannedAt: { lt: cutoff },
-      OR: [
-        { utmCampaign: { not: null } },
-        { utmContent: { not: null } },
-        { utmMedium: { not: null } },
-        { utmSource: { not: null } },
-        { utmTerm: { not: null } },
-      ],
-    },
-    data: {
-      utmCampaign: null,
-      utmContent: null,
-      utmMedium: null,
-      utmSource: null,
-      utmTerm: null,
-    },
-  });
-
-  await prisma.auditLog.create({
-    data: {
-      action: 'SCAN_LOG_METADATA_REDACTED',
-      entityType: 'ScanLog',
-      organizationId: claims.orgId,
-      userId: claims.sub,
-      metadata: {
-        cutoff: cutoff.toISOString(),
-        fields: [...REDACTED_FIELDS],
-        olderThanDays: parsed.data.olderThanDays,
-        redactedCount: count,
+  const { count } = await prisma.$transaction(async (tx) => {
+    const result = await tx.scanLog.updateMany({
+      where: {
+        gate: { organizationId: claims.orgId },
+        scannedAt: { lt: cutoff },
+        OR: [
+          { utmCampaign: { not: null } },
+          { utmContent: { not: null } },
+          { utmMedium: { not: null } },
+          { utmSource: { not: null } },
+          { utmTerm: { not: null } },
+        ],
       },
-    },
+      data: {
+        utmCampaign: null,
+        utmContent: null,
+        utmMedium: null,
+        utmSource: null,
+        utmTerm: null,
+      },
+    });
+
+    await tx.auditLog.create({
+      data: {
+        action: 'SCAN_LOG_METADATA_REDACTED',
+        entityType: 'ScanLog',
+        organizationId: claims.orgId,
+        userId: claims.sub,
+        metadata: {
+          cutoff: cutoff.toISOString(),
+          fields: [...REDACTED_FIELDS],
+          olderThanDays: parsed.data.olderThanDays,
+          redactedCount: result.count,
+        },
+      },
+    });
+
+    return result;
   });
 
   return NextResponse.json({ success: true, redactedCount: count });

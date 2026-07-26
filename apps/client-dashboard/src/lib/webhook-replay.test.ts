@@ -27,7 +27,7 @@ import {
 } from './webhook-replay';
 
 const NOW = new Date('2026-07-25T12:00:00.000Z');
-const SECRET = 'webhook-test-secret';
+const SECRET = 'webhook-test-secret-at-least-32-chars';
 const RAW_BODY = '{"organizationId":"org-1"}';
 const EVENT_ID = 'evt_12345678';
 

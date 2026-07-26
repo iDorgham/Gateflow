@@ -60,26 +60,28 @@ export async function GET(
     request.headers.get('x-real-ip') ||
     'unknown';
 
-  try {
-    const rateLimit = await checkRateLimit(
-      getAttributionRateLimitKey(link.id, networkIdentifier),
-      60,
-      60_000
-    );
-    if (rateLimit.allowed) {
-      await prisma.shortLinkClick.create({
-        data: buildShortLinkAttribution(
-          link,
-          urlParams,
-          request.headers.get('user-agent')
-        ),
+  void (async () => {
+    try {
+      const rateLimit = await checkRateLimit(
+        getAttributionRateLimitKey(link.id, networkIdentifier),
+        60,
+        60_000
+      );
+      if (rateLimit.allowed) {
+        await prisma.shortLinkClick.create({
+          data: buildShortLinkAttribution(
+            link,
+            urlParams,
+            request.headers.get('user-agent')
+          ),
+        });
+      }
+    } catch (error) {
+      console.error('Failed to log ShortLinkClick:', {
+        type: error instanceof Error ? error.name : 'UnknownError',
       });
     }
-  } catch (error) {
-    console.error('Failed to log ShortLinkClick:', {
-      type: error instanceof Error ? error.name : 'UnknownError',
-    });
-  }
+  })();
 
   // Browser request — look up VisitorQR + Unit coordinates for GPS guide
   let lat: number | null = null;

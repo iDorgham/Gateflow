@@ -6,6 +6,7 @@ export const REQUIRED_ENVIRONMENT_NAMES = [
   'DATABASE_URL',
   'ENCRYPTION_MASTER_KEY',
   'NEXTAUTH_SECRET',
+  'NEXTAUTH_URL',
   'NEXT_PUBLIC_APP_URL',
   'QR_SIGNING_SECRET',
   'UPSTASH_REDIS_REST_TOKEN',
@@ -59,14 +60,23 @@ export async function checkRedisConnectivity(environment, fetchImpl = fetch) {
   const token = environment.UPSTASH_REDIS_REST_TOKEN;
   if (!url || !token) return { status: 'not_configured' };
 
-  const response = await fetchImpl(`${url.replace(/\/$/, '')}/ping`, {
-    headers: { Authorization: `Bearer ${token}` },
-    signal: AbortSignal.timeout(5_000),
-  });
-  if (!response.ok) return { status: 'failed', httpStatus: response.status };
+  try {
+    const response = await fetchImpl(`${url.replace(/\/$/, '')}/ping`, {
+      headers: { Authorization: `Bearer ${token}` },
+      signal: AbortSignal.timeout(5_000),
+    });
+    if (!response.ok) return { status: 'failed', httpStatus: response.status };
 
-  const body = await response.json();
-  return { status: body?.result === 'PONG' ? 'passed' : 'unexpected_response' };
+    const body = await response.json();
+    return {
+      status: body?.result === 'PONG' ? 'passed' : 'unexpected_response',
+    };
+  } catch (error) {
+    return {
+      status: 'failed',
+      error: error instanceof Error ? error.message : String(error),
+    };
+  }
 }
 
 export async function runLocalReadiness(repositoryRoot, fetchImpl = fetch) {
@@ -100,7 +110,9 @@ if (isDirectRun) {
       JSON.stringify({
         valid: false,
         error:
-          error instanceof Error ? error.name : 'Unknown local readiness error',
+          error instanceof Error
+            ? error.message
+            : 'Unknown local readiness error',
       })
     );
     process.exitCode = 1;

@@ -38,7 +38,7 @@ export function ScanLogRow({
       <TableCell className="font-medium">{visitorName}</TableCell>
       <TableCell>{gateName}</TableCell>
       <TableCell className="text-muted-foreground">
-        <span dir="ltr" className="inline-block" style={{ unicodeBidi: 'isolate' }}>
+        <span dir="ltr" className="inline-block [unicode-bidi:isolate]">
           {timestamp}
         </span>
       </TableCell>

@@ -243,7 +243,7 @@ describe('POST /api/qr/send-email', () => {
       request({ qrId: 'qr-1', recipientEmail: 'resident@example.com' })
     );
 
-    expect(response.status).toBe(500);
+    expect(response.status).toBe(200);
     expect(mockSendMail).toHaveBeenCalledTimes(1);
     expect(
       mockAuditCreate.mock.calls.some(

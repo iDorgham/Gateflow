@@ -32,8 +32,11 @@ jest.mock('@/lib/auth-cookies', () => ({
 const mockScanLogDeleteMany = jest.fn();
 const mockScanLogUpdateMany = jest.fn();
 const mockAuditLogCreate = jest.fn();
-jest.mock('@gate-access/db', () => ({
-  prisma: {
+jest.mock('@gate-access/db', () => {
+  const dbMock = {
+    $transaction: jest.fn(async (callback: (tx: unknown) => unknown) =>
+      callback(dbMock)
+    ),
     scanLog: {
       deleteMany: (...args: unknown[]) => mockScanLogDeleteMany(...args),
       updateMany: (...args: unknown[]) => mockScanLogUpdateMany(...args),
@@ -41,8 +44,9 @@ jest.mock('@gate-access/db', () => ({
     auditLog: {
       create: (...args: unknown[]) => mockAuditLogCreate(...args),
     },
-  },
-}));
+  };
+  return { prisma: dbMock };
+});
 
 import { POST } from './route';
 import { NextRequest } from 'next/server';

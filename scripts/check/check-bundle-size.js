@@ -201,9 +201,18 @@ if (Object.keys(current).length === 0) {
 }
 
 if (isUpdate) {
-  fs.writeFileSync(BASELINE, JSON.stringify(current, null, 2));
+  let updatedBaseline = current;
+  if (fs.existsSync(BASELINE)) {
+    try {
+      const existing = JSON.parse(fs.readFileSync(BASELINE, 'utf8'));
+      updatedBaseline = { ...existing, ...current };
+    } catch {
+      // Degrade gracefully if existing file is invalid JSON
+    }
+  }
+  fs.writeFileSync(BASELINE, JSON.stringify(updatedBaseline, null, 2));
   console.log(`✓ Bundle baseline updated:`);
-  for (const [app, s] of Object.entries(current)) {
+  for (const [app, s] of Object.entries(updatedBaseline)) {
     console.log(`   ${app}: ${s.totalKb} KB (${s.chunkCount} chunks)`);
   }
   process.exit(0);

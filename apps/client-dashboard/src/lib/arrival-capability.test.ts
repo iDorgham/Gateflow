@@ -1,6 +1,7 @@
 import {
   createArrivalCapability,
   verifyArrivalCapability,
+  ARRIVAL_CAPABILITY_TTL_MS,
 } from './arrival-capability';
 
 const SECRET = 'test-arrival-capability-secret-at-least-32-characters';
@@ -30,7 +31,7 @@ describe('arrival capability', () => {
 
   it('rejects expired capabilities', () => {
     const token = createArrivalCapability('visitor-1', SECRET, NOW);
-    const expiredAt = new Date(NOW.getTime() + 5 * 60_000 + 1);
+    const expiredAt = new Date(NOW.getTime() + ARRIVAL_CAPABILITY_TTL_MS + 1);
 
     expect(verifyArrivalCapability(token, SECRET, expiredAt)).toBeNull();
   });

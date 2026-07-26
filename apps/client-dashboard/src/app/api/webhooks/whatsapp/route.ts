@@ -207,7 +207,7 @@ export async function POST(req: NextRequest) {
         }
 
         // ── 5. Quota check (read-only; writes remain in this transaction) ───
-        const quota = await checkAndConsumeQuota(unitId);
+        const quota = await checkAndConsumeQuota(unitId, tx);
         if (!quota.allowed) {
           throw new WebhookRequestError(
             403,

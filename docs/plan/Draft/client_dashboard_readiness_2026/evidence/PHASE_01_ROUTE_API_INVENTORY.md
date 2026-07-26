@@ -16,7 +16,7 @@
 - 123 source `/api/**/route.ts` files.
 - 123 matching build-manifest API paths.
 - Zero source-only or manifest-only API paths.
-- 170 exported handlers: 69 GET, 63 POST, 20 DELETE, 15 PATCH, and 3 PUT.
+- 171 exported handlers: 70 GET, 63 POST, 20 DELETE, 15 PATCH, and 3 PUT.
 
 ## Lexical control signals
 
@@ -65,7 +65,7 @@ method-level decisions are recorded in
 ## Final reconciliation
 
 - Matrix: `PHASE_01_API_CONTROL_MATRIX.md`
-- 170 rows and 170 unique route/method keys.
+- 171 rows and 171 unique route/method keys.
 - Zero `needs-review` or implicit-gap results.
 - Nine contained route/finding rows; GF-CD-SEC-003 applies globally through
   middleware.

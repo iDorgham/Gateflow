@@ -139,6 +139,9 @@ describe('PATCH /api/contacts/[id] unit tenant isolation', () => {
     const response = await PATCH(makeRequest(['unit_1', 'unit_2']), params);
 
     expect(response.status).toBe(200);
+    expect(mockContactUnitDeleteMany).toHaveBeenCalledWith({
+      where: { contactId: 'contact_1' },
+    });
     expect(mockContactUnitCreateMany).toHaveBeenCalledWith({
       data: [
         { contactId: 'contact_1', unitId: 'unit_1' },
@@ -161,8 +164,22 @@ describe('PATCH /api/contacts/[id] unit tenant isolation', () => {
       },
       select: { id: true },
     });
+    expect(mockContactUnitDeleteMany).toHaveBeenCalledWith({
+      where: { contactId: 'contact_1' },
+    });
     expect(mockContactUnitCreateMany).toHaveBeenCalledWith({
       data: [{ contactId: 'contact_1', unitId: 'unit_1' }],
     });
+  });
+
+  it('clears all relations when unitIds is empty without querying units or creating relations', async () => {
+    const response = await PATCH(makeRequest([]), params);
+
+    expect(response.status).toBe(200);
+    expect(mockUnitFindMany).not.toHaveBeenCalled();
+    expect(mockContactUnitDeleteMany).toHaveBeenCalledWith({
+      where: { contactId: 'contact_1' },
+    });
+    expect(mockContactUnitCreateMany).not.toHaveBeenCalled();
   });
 });

@@ -49,12 +49,12 @@ export function QRCodeDisplay({
           className="text-xs font-mono text-muted-foreground mt-4 tracking-wider"
           dir="ltr"
         >
-          <span className="unicode-bidi-isolate">{qrValue}</span>
+          <span className="[unicode-bidi:isolate]">{qrValue}</span>
         </p>
         <div className="mt-4 text-center">
           <p className="text-xs font-medium text-danger">Valid Until</p>
           <p className="text-sm font-semibold text-foreground" dir="ltr">
-            <span className="unicode-bidi-isolate">{validUntil}</span>
+            <span className="[unicode-bidi:isolate]">{validUntil}</span>
           </p>
         </div>
       </CardContent>

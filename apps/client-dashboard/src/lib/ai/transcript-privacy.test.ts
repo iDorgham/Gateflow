@@ -15,7 +15,9 @@ describe('AI transcript privacy', () => {
   it.each([
     ['email', 'Contact jane@example.com', 'Contact j***@example.com'],
     ['phone', 'Call +961 70 123 456', 'Call +961 70 *** 456'],
+    ['contiguous phone', 'Call +96170123456', 'Call +96170*** 456'],
     ['bearer token', 'Bearer abc.def-123_SECRET', 'Bearer [REDACTED]'],
+    ['padded bearer token', 'Bearer abc.def-123_SECRET==', 'Bearer [REDACTED]'],
     ['API key assignment', 'api_key=super-secret-value', 'api_key=[REDACTED]'],
     ['GateFlow credential', 'Use gflv_0123456789abcdef', 'Use [REDACTED]'],
     [

@@ -11,7 +11,7 @@ const outputPath = path.join(
 );
 
 const methodPattern =
-  /export\s+(?:async\s+function|const)\s+(GET|POST|PUT|PATCH|DELETE)\b/g;
+  /export\s+(?:async\s+)?(?:function|const)\s+(GET|POST|PUT|PATCH|DELETE)\b/g;
 
 function walk(directory) {
   return fs.readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
@@ -206,7 +206,7 @@ rows.sort((left, right) =>
 
 const keys = rows.map((row) => `${row.route} ${row.method}`);
 const errors = [];
-if (rows.length !== 170) errors.push(`expected 170 rows, found ${rows.length}`);
+if (rows.length !== 171) errors.push(`expected 171 rows, found ${rows.length}`);
 if (new Set(keys).size !== rows.length)
   errors.push('route/method keys are not unique');
 if (rows.some((row) => Object.values(row).includes('needs-review'))) {
@@ -221,7 +221,7 @@ const legend = `# Phase 01 API control matrix
 
 **Generated:** 2026-07-26
 **Scope:** \`apps/client-dashboard/src/app/api/**/route.ts\`
-**Invariant:** exactly 170 unique route/method rows; no \`needs-review\`
+**Invariant:** exactly 171 unique route/method rows; no \`needs-review\`
 
 This is a decision register, not a helper-count assertion. Each row links to the
 reviewed route source. Codes distinguish verified controls, scoped ownership,

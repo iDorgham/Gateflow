@@ -136,7 +136,8 @@ describe('POST /api/perimeter/webhook', () => {
   });
 
   it('returns 401 when signature headers are missing', async () => {
-    process.env.PERIMETER_WEBHOOK_SECRET = 'test_secret';
+    process.env.PERIMETER_WEBHOOK_SECRET =
+      'test_secret_that_is_at_least_32_characters';
 
     const rawBody = JSON.stringify({
       organizationId: 'org_1',
@@ -159,7 +160,8 @@ describe('POST /api/perimeter/webhook', () => {
   });
 
   it('returns 401 for an invalid signature', async () => {
-    process.env.PERIMETER_WEBHOOK_SECRET = 'test_secret';
+    process.env.PERIMETER_WEBHOOK_SECRET =
+      'test_secret_that_is_at_least_32_characters';
 
     const headerTimestamp = new Date().toISOString();
     const eventId = 'evt_invalid_123';
@@ -194,7 +196,8 @@ describe('POST /api/perimeter/webhook', () => {
   });
 
   it('returns 401 for a correctly signed stale event', async () => {
-    process.env.PERIMETER_WEBHOOK_SECRET = 'test_secret';
+    process.env.PERIMETER_WEBHOOK_SECRET =
+      'test_secret_that_is_at_least_32_characters';
     const headerTimestamp = new Date(Date.now() - 10 * 60_000).toISOString();
     const eventId = 'evt_stale_123';
     const rawBody = JSON.stringify({
@@ -223,7 +226,8 @@ describe('POST /api/perimeter/webhook', () => {
   });
 
   it('creates an incident + emits SSE alert on tailgating anomaly', async () => {
-    process.env.PERIMETER_WEBHOOK_SECRET = 'test_secret';
+    process.env.PERIMETER_WEBHOOK_SECRET =
+      'test_secret_that_is_at_least_32_characters';
 
     const orgId = 'org_1';
     const gateId = 'gate_1';
@@ -282,7 +286,8 @@ describe('POST /api/perimeter/webhook', () => {
   });
 
   it('suppresses duplicate incidents within 10 seconds', async () => {
-    process.env.PERIMETER_WEBHOOK_SECRET = 'test_secret';
+    process.env.PERIMETER_WEBHOOK_SECRET =
+      'test_secret_that_is_at_least_32_characters';
 
     const orgId = 'org_1';
     const gateId = 'gate_1';
@@ -326,7 +331,8 @@ describe('POST /api/perimeter/webhook', () => {
   });
 
   it('acknowledges a replayed event without repeating any business writes', async () => {
-    process.env.PERIMETER_WEBHOOK_SECRET = 'test_secret';
+    process.env.PERIMETER_WEBHOOK_SECRET =
+      'test_secret_that_is_at_least_32_characters';
     mockAuditLogFindFirst.mockResolvedValue({ id: 'audit_existing' });
     const headerTimestamp = new Date().toISOString();
     const eventId = 'evt_replayed_123';
