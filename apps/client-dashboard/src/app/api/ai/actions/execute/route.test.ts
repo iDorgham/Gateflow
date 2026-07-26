@@ -81,10 +81,7 @@ describe('POST /api/ai/actions/execute ownership and intent', () => {
     });
     mockCreateTask.mockResolvedValue({ id: 'task_1' });
 
-    const response = await POST(
-    const response = await POST(
-      request({ actionId: 'action_1' })
-    );
+    const response = await POST(request({ actionId: 'action_1' }));
 
     expect(response.status).toBe(200);
     expect(mockClaimPendingAction).toHaveBeenCalledWith({
