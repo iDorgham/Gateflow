@@ -2,12 +2,13 @@
 
 ## Active state
 
-- Plan status: Draft; Phase 02 complete
+- Plan status: Draft; Phase 03 complete
 - Focused app: `client-dashboard`
 - Workflow stage: `checking`
-- Last commit: `9e80c86ebf33c6ae365a8bfbffea508047e88023`
-- Product code changed: yes — Phase 02 security/privacy invariants
-- Exact next action: commit the Phase 02 focused-diff repair and inspect `/guide`
+- Last verified base commit: `7082ec230540989e59f1a45ac1ec35bf3fd9e0c1`
+- Product code changed: yes — Phase 03 test/reliability hardening
+- Exact next action: inspect the Phase 04 performance/runtime prompt; do not
+  begin it without a new `/dev client_dashboard_readiness_2026 4` command
 
 ## Durable decisions
 
@@ -151,11 +152,25 @@
   activation, permission visibility, optional scan notes, and access-log
   visibility. Phases 03–05 and cross-app integration evidence must precede
   certification.
+- Jest exits naturally in parallel and under `--runInBand
+--detectOpenHandles`; the stale `--forceExit` flag is removed.
+- The QR validation suite is active: 25/25 tests pass. The full app inventory
+  is 74/74 suites and 416/416 Jest tests with zero skips/todos, plus two local
+  readiness tool tests.
+- Client Dashboard lint is ratcheted at 261 warnings, down from the inherited
+  278-warning baseline. Risk-path casts, dead state, and empty blocks were
+  removed without disabling rules.
+- `pnpm --filter client-dashboard env:check` reports required names only and a
+  read-only Upstash Redis PING status. The live check passed without exposing
+  values.
+- Focused lint, typecheck, natural-exit tests, and the production build pass.
+  The known middleware convention and Prisma CommonJS warnings remain Phase 04
+  work.
 
 ## Handoff
 
-Resume with Phase 03 development/test reliability. Preserve the pilot gate at
-0/9 until fresh independent browser/integration evidence exists.
+Inspect the Phase 04 performance/runtime prompt. Preserve the pilot gate at 0/9
+until fresh independent browser/integration evidence exists.
 
 ## Context budget
 
@@ -163,4 +178,4 @@ Resume with Phase 03 development/test reliability. Preserve the pilot gate at
   Phase 02 prompt, SESSION_MEMORY, Phase 02 ledger/log, inherited remediation
   rotation requirements, secret/tenant/bootstrap scanners, workflow checks,
   archived candidate evidence, and operations receipt policy.
-- Phase log updated: `phase_logs/PHASE_LOG_phase_02.md`.
+- Phase log updated: `phase_logs/PHASE_LOG_phase_03.md`.

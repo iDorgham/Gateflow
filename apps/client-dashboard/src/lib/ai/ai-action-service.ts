@@ -1,4 +1,4 @@
-import { prisma } from '@gate-access/db';
+import { Prisma, prisma } from '@gate-access/db';
 import { AiActionStatus } from '@gate-access/db';
 import { redactSensitiveAiText } from './transcript-privacy';
 
@@ -32,9 +32,15 @@ export class AiActionService {
         userId: params.userId,
         actionType: params.actionType,
         prompt: this.maskPII(params.prompt),
-        intentJson: (params.intentJson as any) || null,
+        intentJson:
+          params.intentJson == null
+            ? Prisma.JsonNull
+            : (params.intentJson as Prisma.InputJsonValue),
         status: (params.status as AiActionStatus) || 'PENDING',
-        metadata: params.metadata as any,
+        metadata:
+          params.metadata == null
+            ? Prisma.JsonNull
+            : (params.metadata as Prisma.InputJsonValue),
       },
     });
   }

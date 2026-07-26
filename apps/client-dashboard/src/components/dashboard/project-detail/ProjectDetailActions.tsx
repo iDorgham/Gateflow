@@ -794,7 +794,9 @@ export const ProjectDetailActions = forwardRef<
                                   }),
                                 });
                                 if (res.ok) imported++;
-                              } catch {}
+                              } catch {
+                                // Continue importing remaining rows.
+                              }
                             }
                             toast.success(
                               `Imported ${imported} units to ${project.name}`,
@@ -846,7 +848,9 @@ export const ProjectDetailActions = forwardRef<
                                   }),
                                 });
                                 if (res.ok) imported++;
-                              } catch {}
+                              } catch {
+                                // Continue importing remaining rows.
+                              }
                             }
                             toast.success(`Imported ${imported} contacts`, {
                               id: 'import-contacts',

@@ -8,14 +8,14 @@
 
 **PLAN:** `docs/plan/Draft/client_dashboard_readiness_2026/`
 `PLAN_client_dashboard_readiness_2026.md`
-**Status:** 🟡 Developing — Phase 01 complete; Phase 02 retention/revocation batch green
+**Status:** 🟡 Developing — Phases 01–03 complete; Phase 04 next
 **Priority:** P0 — security and pilot certification blockers
 **Target:** Safe development baseline → measured performance → 9/9 pilot certification
 **Branch:** `fix/client-dashboard-readiness-phase-02`
 
 - [x] Phase 01 — Scope, ownership, and risk classification
-- [ ] Phase 02 — Security and data invariants
-- [ ] Phase 03 — Development and test reliability
+- [x] Phase 02 — Security and data invariants
+- [x] Phase 03 — Development and test reliability
 - [ ] Phase 04 — Performance and runtime readiness
 - [ ] Phase 05 — Accessibility, RTL, and page readiness
 - [ ] Phase 06 — Pilot and deployment certification

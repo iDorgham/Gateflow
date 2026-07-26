@@ -580,26 +580,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       })
       .then(async (fullScan) => {
         if (!fullScan) return;
-        const scan = fullScan as {
-          id: string;
-          scannedAt: Date;
-          status: string;
-          utmSource: string | null;
-          utmMedium: string | null;
-          utmCampaign: string | null;
-          utmContent: string | null;
-          utmTerm: string | null;
-          deviceId: string | null;
-          gate: { id: string; name: string; location: string | null };
-          qrCode: {
-            id: string;
-            type: string;
-            contactId: string | null;
-            visitorQR?: {
-              unit?: { id: string; name: string; building: string | null };
-            } | null;
-          };
-        };
 
         // Manually fetch contact if present (no explicit Prisma relation on QRCode model)
         let contactData = null;
@@ -702,18 +682,25 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     // Agentic Maintenance Trigger: If scan fails due to an "Internal Error"
     // or specifically simulated "hardware failure" from the Scanner client.
     if (claims?.orgId) {
+      const scanContext =
+        isRecord(body) && isRecord(body.scanContext)
+          ? body.scanContext
+          : undefined;
       const isHardwareError =
-        (body as Record<string, any>)?.scanContext?.status ===
-          'hardware_error' ||
-        (error as Record<string, any>)?.code === 'HARDWARE_TIMEOUT';
+        scanContext?.status === 'hardware_error' ||
+        (isRecord(error) && error.code === 'HARDWARE_TIMEOUT');
 
       if (isHardwareError) {
         void MaintenanceExecutor.handleScanFailure({
           organizationId: claims.orgId,
           gateId:
-            (body as Record<string, any>)?.scanContext?.gateId || 'unknown',
+            typeof scanContext?.gateId === 'string'
+              ? scanContext.gateId
+              : 'unknown',
           projectId:
-            (body as Record<string, any>)?.scanContext?.projectId || undefined,
+            typeof scanContext?.projectId === 'string'
+              ? scanContext.projectId
+              : undefined,
           reason: (error as Error)?.message || 'Hardware/Timeout Failure',
         }).catch((err) =>
           console.error('[qr/validate] MaintenanceExecutor failed:', err)
@@ -746,6 +733,10 @@ class UsageLimitError extends Error {
 
 function json<T>(data: T, status: number): NextResponse {
   return NextResponse.json(data, { status });
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
 }
 
 const REJECTION_STATUS_MAP: Record<
@@ -842,7 +833,7 @@ async function logRejection(
             reason,
             deviceId: scanContext?.deviceId ?? null,
           }),
-        ] as any,
+        ] as unknown as Prisma.InputJsonValue[],
       },
     });
   } catch (err) {

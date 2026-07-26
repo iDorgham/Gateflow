@@ -6,8 +6,9 @@
     "dev": "next dev -p 3001 -H 0.0.0.0",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint src",
-    "test": "jest --forceExit",
+    "env:check": "node scripts/check-local-readiness.mjs",
+    "lint": "eslint src --max-warnings 261",
+    "test": "jest && node --test scripts/*.test.mjs",
     "typecheck": "tsc --noEmit"
   },
   "engines": {

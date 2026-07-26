@@ -63,6 +63,9 @@ global.Request = function (url, init) {
   this.headers = new Map(Object.entries((init && init.headers) || {}));
   this.body = init && init.body;
 };
+global.Request.prototype.json = function () {
+  return Promise.resolve(JSON.parse(this.body || '{}'));
+};
 
 jest.mock('next/server', () => ({
   __esModule: true,

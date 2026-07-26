@@ -129,7 +129,7 @@ interface ChatPanelProps {
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   isLoading: boolean;
   isRtl: boolean;
-  streamData?: any[];
+  streamData?: Array<{ actionId?: string }>;
   onSuggestedPromptClick?: (prompt: string) => void;
 }
 
@@ -233,10 +233,14 @@ export function ChatPanel({
       toast.success(
         t('Action executed successfully', 'تم تنفيذ الإجراء بنجاح')
       );
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('>>> [ChatPanel] Action failed:', err);
       setActionStates((prev) => ({ ...prev, [actionKey]: 'failed' }));
-      toast.error(err.message || t('Action failed', 'فشل تنفيذ الإجراء'));
+      toast.error(
+        err instanceof Error
+          ? err.message
+          : t('Action failed', 'فشل تنفيذ الإجراء')
+      );
     } finally {
       setExecutingActions((prev) => ({ ...prev, [actionKey]: false }));
     }

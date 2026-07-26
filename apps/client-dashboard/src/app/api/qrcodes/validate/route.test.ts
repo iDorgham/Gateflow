@@ -35,6 +35,7 @@ const mockVerifyAccessToken = jest.fn().mockResolvedValue({
     qr: { read: true, write: true },
   },
 });
+const mockRequireAuth = jest.fn();
 
 jest.mock('../../../../lib/auth', () => ({
   signAccessToken: jest
@@ -71,19 +72,25 @@ jest.mock('../../../../lib/auth', () => ({
 }));
 
 jest.mock('../../../../lib/require-auth', () => ({
-  requireAuth: jest.fn().mockResolvedValue({
-    sub: 'user_1',
-    email: 'test@test.com',
-    orgId: 'org_test_456',
-    roleId: 'role-admin',
-    roleName: 'TENANT_ADMIN',
-    permissions: {
-      gate: { read: true, write: true },
-      qr: { read: true, write: true },
-    },
-  }),
+  requireAuth: (...args: unknown[]) => mockRequireAuth(...args),
   isNextResponse: (value: unknown) =>
     value && typeof value === 'object' && 'status' in value,
+}));
+
+jest.mock('../../../../lib/realtime/emit-event', () => ({
+  emitEvent: jest.fn().mockResolvedValue(undefined),
+  EventType: {
+    SCAN_RECORDED: 'SCAN_RECORDED',
+    WATCHLIST_ALERT: 'WATCHLIST_ALERT',
+  },
+}));
+
+jest.mock('../../../../lib/webhook-delivery', () => ({
+  deliverWebhookEvent: jest.fn().mockResolvedValue(undefined),
+}));
+
+jest.mock('../../../../lib/integrations/hubspot', () => ({
+  triggerHubSpotSync: jest.fn().mockResolvedValue(undefined),
 }));
 
 // ─── Prisma mock ──────────────────────────────────────────────────────────────
@@ -119,6 +126,7 @@ jest.mock('@gate-access/db', () => ({
     },
     scanLog: {
       create: (...args: unknown[]) => mockScanLogCreate(...args),
+      findUnique: jest.fn().mockResolvedValue(null),
     },
     incident: {
       create: (...args: unknown[]) => mockIncidentCreate(...args),
@@ -126,6 +134,9 @@ jest.mock('@gate-access/db', () => ({
     contact: {
       findUnique: jest.fn(),
       findFirst: jest.fn(),
+    },
+    unit: {
+      findFirst: jest.fn().mockResolvedValue(null),
     },
     $transaction: (fn: (tx: unknown) => Promise<unknown>) =>
       mockTransaction(fn),
@@ -241,10 +252,20 @@ beforeAll(async () => {
 
 // ─── Tests ────────────────────────────────────────────────────────────────────
 
-// Skipping these tests due to jose ESM mocking complexity - needs dedicated fix
-describe.skip('POST /api/qrcodes/validate', () => {
+describe('POST /api/qrcodes/validate', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mockRequireAuth.mockResolvedValue({
+      sub: 'user_1',
+      email: 'test@test.com',
+      orgId: 'org_test_456',
+      roleId: 'role-admin',
+      roleName: 'TENANT_ADMIN',
+      permissions: {
+        gate: { read: true, write: true },
+        qr: { read: true, write: true },
+      },
+    });
 
     // Default: rate limiter allows the request.
     mockCheckRateLimit.mockResolvedValue({
@@ -278,11 +299,19 @@ describe.skip('POST /api/qrcodes/validate', () => {
   // ── Authentication ────────────────────────────────────────────────────────
 
   it('returns 401 when Authorization header is missing', async () => {
+    mockRequireAuth.mockResolvedValueOnce({
+      status: 401,
+      json: async () => ({ error: 'Unauthorized' }),
+    });
     const res = await POST(makeRequest({ qrPayload: 'anything' }));
     expect(res.status).toBe(401);
   });
 
   it('returns 401 when the JWT is invalid', async () => {
+    mockRequireAuth.mockResolvedValueOnce({
+      status: 401,
+      json: async () => ({ error: 'Unauthorized' }),
+    });
     const res = await POST(
       makeRequest({ qrPayload: 'anything' }, 'Bearer invalid.token.here')
     );

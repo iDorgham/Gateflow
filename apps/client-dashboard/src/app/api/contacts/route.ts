@@ -263,7 +263,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       sort === 'visitsInRange' ||
       sort === 'passesInRange' ||
       sort === 'lastVisitInRange';
-    const orderBy =
+    const orderBy: Prisma.ContactOrderByWithRelationInput[] =
       sort === 'lastName'
         ? [{ lastName: dir }, { firstName: 'asc' }]
         : sortByVisitMetric
@@ -286,7 +286,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
             select: { status: true, createdAt: true, provider: true },
           },
         },
-        orderBy: orderBy as any,
+        orderBy,
         skip: format === 'csv' ? 0 : (page - 1) * pageSize,
         take: format === 'csv' ? 10_000 : pageSize,
       }),
@@ -451,9 +451,9 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         visitsInRange,
         passesInRange,
         lastVisitInRange,
-        invitationStatus: (c as any).communicationLogs?.[0]?.status ?? null,
-        lastInvitationAt: (c as any).communicationLogs?.[0]?.createdAt ?? null,
-        invitationProvider: (c as any).communicationLogs?.[0]?.provider ?? null,
+        invitationStatus: c.communicationLogs?.[0]?.status ?? null,
+        lastInvitationAt: c.communicationLogs?.[0]?.createdAt ?? null,
+        invitationProvider: c.communicationLogs?.[0]?.provider ?? null,
       };
     });
 

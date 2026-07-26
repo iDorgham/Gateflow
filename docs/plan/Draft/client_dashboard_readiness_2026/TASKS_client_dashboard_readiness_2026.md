@@ -35,12 +35,12 @@
 
 ## Phase 03 — Development and test reliability
 
-- [ ] Identify and close Jest open handles; remove `--forceExit`
-- [ ] Restore QR validation coverage and classify every remaining skip
-- [ ] Establish lint-warning baseline and ratchet below 282 without blanket disables
-- [ ] Replace unsafe `any`, dead imports, and empty blocks in touched risk paths
-- [ ] Document reproducible local environment checks without exposing secrets
-- [ ] Keep focused lint, typecheck, test, and build green
+- [x] Identify and close Jest open handles; remove `--forceExit`
+- [x] Restore QR validation coverage and classify every remaining skip
+- [x] Establish lint-warning baseline and ratchet below 282 without blanket disables
+- [x] Replace unsafe `any`, dead imports, and empty blocks in touched risk paths
+- [x] Document reproducible local environment checks without exposing secrets
+- [x] Keep focused lint, typecheck, test, and build green
 
 ## Phase 04 — Performance and runtime readiness
 

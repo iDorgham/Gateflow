@@ -94,7 +94,7 @@ jest.mock('@gate-access/db', () => ({
     sql: jest.fn(),
     empty: '',
     raw: jest.fn(),
-    InputJsonObject: {} as any,
+    InputJsonObject: {},
   },
   ContactSource: {
     MANUAL: 'MANUAL',
