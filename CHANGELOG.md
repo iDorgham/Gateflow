@@ -10,13 +10,6 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
-- **[Workflow]** certify client-dashboard and complete workflow bootstrap
-- **[Client-Dashboard]** remove duplicate POST response call in execute route test
-- **[Client-Dashboard]** resolve 26 audit violations across security, bidi, scripts, and tests
-- **[Client Dashboard Readiness 2026]** complete phase 5
-- **[Scripts]** allow required changelog evidence
-- **[Client-Dashboard]** harden phase 2 security boundaries
-
 - **[Scripts]** harden workflow-v2 guide parsing and docs alignment
 - **[Workflow-V2]** bootstrap guide status/next/prompt/delivery
 - **[Build]** complete Tailwind v4 migration — production builds were broken
