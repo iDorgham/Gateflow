@@ -1,0 +1,23 @@
+.ai/workflow-v2/state.json
+  s_4c93fd7a12aac2::t_f7114e4b79d7f3 63-65
+docs/plan/Draft/client_dashboard_readiness_2026/SESSION_MEMORY.md
+  s_4c93fd7a12aac2::t_f7114e4b79d7f3 148-153,157-158
+docs/plan/Draft/client_dashboard_readiness_2026/evidence/PILOT_GATE_2026-07-26.json
+  s_4c93fd7a12aac2::t_f7114e4b79d7f3 1-65
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "7082ec230540989e59f1a45ac1ec35bf3fd9e0c1",
+  "prompts": {},
+  "sessions": {
+    "s_4c93fd7a12aac2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f9aab-c7a9-7493-936e-402709ad76fd",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
