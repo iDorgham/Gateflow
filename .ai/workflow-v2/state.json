@@ -60,7 +60,9 @@
       "pilotFlowCoverage": {
         "covered": 0,
         "total": 9,
-        "status": "not-started"
+        "status": "blocked",
+        "artifact": "docs/plan/Draft/client_dashboard_readiness_2026/evidence/PILOT_GATE_2026-07-26.json",
+        "lastCheckedAt": "2026-07-26T14:30:05Z"
       },
       "delivery": null,
       "pageScoresFile": "docs/audits/client-dashboard/PAGE_SCORES_2026-07-25.json",

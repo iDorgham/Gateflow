@@ -1,0 +1,65 @@
+[
+  {
+    "step": "Create or import resident contact",
+    "priority": "P0",
+    "status": "partial",
+    "createdAt": "2026-07-26T14:30:05Z",
+    "reason": "Security and API regression coverage exists; fresh English/Arabic browser evidence and import proof are missing."
+  },
+  {
+    "step": "Send invitation or access code",
+    "priority": "P0",
+    "status": "partial",
+    "createdAt": "2026-07-26T14:30:05Z",
+    "reason": "The current access-code delivery seam is not resident account activation; fresh delivery and retry evidence are missing."
+  },
+  {
+    "step": "Resident activation",
+    "priority": "P0",
+    "status": "missing",
+    "createdAt": "2026-07-26T14:30:05Z",
+    "reason": "No matching Client Dashboard activation route exists; cross-app contract evidence is required."
+  },
+  {
+    "step": "Resident creates guest permission",
+    "priority": "P0",
+    "status": "partial",
+    "createdAt": "2026-07-26T14:30:05Z",
+    "reason": "API regression coverage exists, but Resident Portal UI and cross-app integration evidence are missing."
+  },
+  {
+    "step": "Permission appears in Client Dashboard",
+    "priority": "P0",
+    "status": "missing",
+    "createdAt": "2026-07-26T14:30:05Z",
+    "reason": "Only static-review page evidence exists; fresh server-truth browser proof is missing."
+  },
+  {
+    "step": "Security scans the QR",
+    "priority": "P0",
+    "status": "partial",
+    "createdAt": "2026-07-26T14:30:05Z",
+    "reason": "Validation tests exist, but assigned-operator Scanner App integration evidence is missing."
+  },
+  {
+    "step": "Scanner accepts or denies deterministically",
+    "priority": "P0",
+    "status": "partial",
+    "createdAt": "2026-07-26T14:30:05Z",
+    "reason": "Security regressions cover important decisions; the complete required denial/offline matrix has not been certified."
+  },
+  {
+    "step": "Security adds an optional note",
+    "priority": "P0",
+    "status": "missing",
+    "createdAt": "2026-07-26T14:30:05Z",
+    "reason": "No general optional scan-note UI or API contract is implemented."
+  },
+  {
+    "step": "Event appears in Client Dashboard access log",
+    "priority": "P0",
+    "status": "missing",
+    "createdAt": "2026-07-26T14:30:05Z",
+    "reason": "Fresh browser, realtime/refresh, tenant-denial, and export-parity evidence are missing."
+  }
+]

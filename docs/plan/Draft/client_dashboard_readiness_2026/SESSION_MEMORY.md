@@ -145,11 +145,17 @@
   arbitrary root `turbo.json` and parked application code. The real 79-file
   Phase 02 diff, all 59 Workflow v2 tests, and root preflight are green; Phase
   02 is complete.
+- `/pilot` remains blocked at 0/9. The deterministic gate records partial
+  evidence for contact creation, invitation delivery, guest permission,
+  scanning, and decision behavior; it records missing evidence for resident
+  activation, permission visibility, optional scan notes, and access-log
+  visibility. Phases 03–05 and cross-app integration evidence must precede
+  certification.
 
 ## Handoff
 
-Commit the focused-diff repair and Phase 02 completion evidence, then run
-`/guide`. Do not start Phase 03 in the same delivery batch.
+Resume with Phase 03 development/test reliability. Preserve the pilot gate at
+0/9 until fresh independent browser/integration evidence exists.
 
 ## Context budget
 
