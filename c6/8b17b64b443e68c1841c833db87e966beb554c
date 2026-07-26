@@ -1,0 +1,53 @@
+docs/plan/Draft/client_dashboard_readiness_2026/TASKS_client_dashboard_readiness_2026.md
+  s_4c93fd7a12aac2::t_ab2fa2c60a56a6 38-43
+docs/plan/Draft/client_dashboard_readiness_2026/phase_logs/PHASE_LOG_phase_03.md
+  s_4c93fd7a12aac2::t_ab2fa2c60a56a6 1-68
+apps/client-dashboard/src/components/dashboard/ai/ChatPanel.tsx
+  s_4c93fd7a12aac2::t_731db1b153aa58 236,239-243
+  s_4c93fd7a12aac2::t_8b0fe2960f7dc9 132
+docs/plan/Draft/client_dashboard_readiness_2026/SESSION_MEMORY.md
+  s_4c93fd7a12aac2::t_ab2fa2c60a56a6 5,8-11,155-168,172-173,181
+docs/plan/backlog/ALL_TASKS_BACKLOG.md
+  s_4c93fd7a12aac2::t_ab2fa2c60a56a6 11,17-18
+apps/client-dashboard/src/app/api/contacts/route.ts
+  s_4c93fd7a12aac2::t_731db1b153aa58 266,289
+  s_4c93fd7a12aac2::t_0213aa86d2c23e 454-456
+apps/client-dashboard/jest.setup.ts
+  s_4c93fd7a12aac2::t_5f4ccb1e5992cc 66-68
+apps/client-dashboard/package.json
+  s_4c93fd7a12aac2::t_173ec83f2c0063 10
+  s_4c93fd7a12aac2::t_657a0d18165352 9,11
+apps/client-dashboard/src/app/api/qrcodes/validate/route.test.ts
+  s_4c93fd7a12aac2::t_00a667f34bf6c7 38,75,80-95,129,138-140,255,258-268,302-305,311
+  s_4c93fd7a12aac2::t_163a4c31722486 312-314
+apps/client-dashboard/src/lib/ai/ai-action-service.ts
+  s_4c93fd7a12aac2::t_731db1b153aa58 1,35-38,40-43
+apps/client-dashboard/src/components/dashboard/project-detail/ProjectDetailActions.tsx
+  s_4c93fd7a12aac2::t_731db1b153aa58 797-799,851-853
+apps/client-dashboard/scripts/check-local-readiness.mjs
+  s_4c93fd7a12aac2::t_657a0d18165352 1-108
+apps/client-dashboard/scripts/check-local-readiness.test.mjs
+  s_4c93fd7a12aac2::t_657a0d18165352 1-43
+apps/client-dashboard/docs/LOCAL_READINESS.md
+  s_4c93fd7a12aac2::t_657a0d18165352 1-20
+apps/client-dashboard/src/app/api/qrcodes/validate/route.ts
+  s_4c93fd7a12aac2::t_731db1b153aa58 685-688,690-691,697-699,701-703,738-741,836
+apps/client-dashboard/src/app/api/contacts/route.test.ts
+  s_4c93fd7a12aac2::t_731db1b153aa58 97
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "c68b17b64b443e68c1841c833db87e966beb554c",
+  "prompts": {},
+  "sessions": {
+    "s_4c93fd7a12aac2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f9aab-c7a9-7493-936e-402709ad76fd",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
