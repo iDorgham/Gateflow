@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Client-Dashboard]** remove duplicate POST response call in execute route test
+
 - **[Client-Dashboard]** resolve 26 audit violations across security, bidi, scripts, and tests
 
 - **[Client Dashboard Readiness 2026]** complete phase 5
