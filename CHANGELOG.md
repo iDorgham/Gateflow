@@ -9,6 +9,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 ## [Unreleased]
 
 ### Workspace
+
 - **[Client Dashboard Readiness 2026]** complete phase 5
 
 - **[Scripts]** allow required changelog evidence
