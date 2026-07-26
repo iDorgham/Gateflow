@@ -127,13 +127,20 @@
   generated in process memory and installed across the same Vercel targets.
   Structural verification passed. Vercel stores each as one shared variable
   targeting all three environments. Redeployment and session invalidation
-  verification remain pending.
+  verification completed on production deployment
+  `dpl_9639HfY4Arjx881gVe4GzXH6oTLD`. Root/login returned 200, stale-format
+  session cookies were redirected to login, and Vercel reported no runtime
+  errors. The credential-rotation external gate is complete.
+- The production redeploy used existing master source commit
+  `52f26767da499e584a29ba01e99eb66ef92b8241`. Phase 02 branch commits are not
+  deployed yet. `/health` returns 404 because the configured rewrite targets a
+  route absent from that source; track this as development reliability work.
 
 ## Handoff
 
-Resume Phase 02 when the approved non-sensitive credential-rotation receipt is
-available. Read
-`evidence/PHASE_01_SECURITY_CLASSIFICATION.md` and the Phase 01 log first.
+Resume Phase 02 by rerunning `/check all`, then continue only after its current
+evidence is green. Read `evidence/PHASE_01_SECURITY_CLASSIFICATION.md` and the
+Phase 01 log first.
 
 ## Context budget
 

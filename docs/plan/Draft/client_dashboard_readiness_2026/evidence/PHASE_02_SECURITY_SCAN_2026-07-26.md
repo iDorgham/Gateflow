@@ -1,7 +1,7 @@
 # Phase 02 fresh security scan — 2026-07-26
 
-**Status:** PARTIAL — code, dependency, and local containment gates are green;
-the operations receipt remains open.
+**Status:** PASS — code, dependency, local containment, and credential-rotation
+operations evidence are green.
 
 ## Results
 
@@ -14,7 +14,7 @@ the operations receipt remains open.
 | API method register               | PASS     | 170 unique methods, zero `needs-review`, zero explicit carried gaps                                                                                    |
 | Tenant heuristic                  | REVIEWED | 70 candidates; no new route family outside the existing manually dispositioned register                                                                |
 | High-severity dependency advisory | PASS     | `pnpm check:security:fail` reports no high+ vulnerabilities across 1,742 lockfile packages after upgrading the `brace-expansion` override to `>=5.0.8` |
-| Credential rotation receipt       | PARTIAL  | Upstash deletion and replacement Vercel configuration are recorded; authentication/session credentials remain pending                                  |
+| Credential rotation receipt       | PASS     | Upstash deletion, credential replacement, production activation, and session invalidation verification are recorded                                    |
 
 ## Containment finding
 
@@ -78,15 +78,16 @@ New high-entropy `NEXTAUTH_SECRET` and `ADMIN_ACCESS_KEY` values were generated
 in memory and installed in the same three Vercel environments. Temporary pulls
 verified presence and minimum length without recording values. Vercel stores
 each as one shared variable targeting all three environments. Activation and
-session invalidation remain pending until redeployment.
+session invalidation were verified by production redeployment
+`dpl_9639HfY4Arjx881gVe4GzXH6oTLD`; see
+`VERCEL_CUTOVER_2026-07-26.json`.
 
 ## Exit blockers
 
-1. Redeploy affected environments and verify old sessions are invalid.
-2. Verify the replaced `ADMIN_ACCESS_KEY` is rejected wherever an external
-   consumer exists.
-3. Finalize the approved non-sensitive operations receipt.
+None. The credential-rotation external gate is complete. The stale `/health`
+rewrite remains a development-reliability follow-up because no matching
+`/api/health` route exists in the deployed source.
 
 The dependency advisory and fresh tenant reconciliation gates are complete.
-Phase 02 remains open solely because the potentially exposed credentials cannot
-be considered remediated until operations records rotation/revocation.
+The credential containment and rotation requirement is complete. Phase 02 may
+continue with its remaining workflow checks.
