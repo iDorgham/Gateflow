@@ -294,7 +294,8 @@ function buildGuideSnapshot({ root, state, now = new Date().toISOString() }) {
     blockers.push(`Workdir is locked by ${state.workdirLock.owner}`);
   if (evidence.stale > 0)
     blockers.push(`${evidence.stale} evidence item(s) are stale or undated`);
-  for (const gate of appState?.externalGates || []) {
+  const gates = Array.isArray(appState?.externalGates) ? appState.externalGates : [];
+  for (const gate of gates) {
     if (!['passed', 'closed', 'complete'].includes(gate.status)) {
       blockers.push(
         `External gate ${gate.id}: ${gate.summary || `status is ${gate.status}`}`
