@@ -54,7 +54,12 @@ export default async function RootLayout(props: {
         suppressHydrationWarning
       >
         <I18nProvider locale={params.locale}>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            scriptProps={{ suppressHydrationWarning: true }}
+          >
             <QueryProvider>{children}</QueryProvider>
           </ThemeProvider>
         </I18nProvider>
