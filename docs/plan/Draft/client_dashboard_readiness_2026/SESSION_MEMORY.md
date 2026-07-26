@@ -135,6 +135,11 @@
   `52f26767da499e584a29ba01e99eb66ef92b8241`. Phase 02 branch commits are not
   deployed yet. `/health` returns 404 because the configured rewrite targets a
   route absent from that source; track this as development reliability work.
+- Fresh `/check all` at commit `901631d621284975359ac12d171c95f6eeba6bbb`
+  passed every functional, security, build, page, and operations gate. The sole
+  blocker is Workflow v2 focused-diff rejecting root `CHANGELOG.md`, which the
+  commit hook required and generated. Reconcile that narrow documentation
+  exception before closing Phase 02.
 
 ## Handoff
 

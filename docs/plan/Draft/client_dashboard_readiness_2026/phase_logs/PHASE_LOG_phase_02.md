@@ -149,8 +149,12 @@
 - Production build passed; known middleware and Prisma warnings remain.
 - Root `pnpm preflight` passed on 2026-07-26 after focused-diff reconciliation,
   covering changelog and policy checks, lint, typecheck, and workspace tests.
+- Fresh `/check all` after the credential cutover passed lint, typecheck, all
+  391 active tests, production build, Workflow v2, bootstrap, secret/advisory,
+  page-evidence, and operations-evidence gates. It remains blocked only because
+  focused-diff rejects the commit-hook-required root `CHANGELOG.md` entry.
 
 ## Resume
 
-Resume after the approved credential-rotation receipt is available. Do not mark
-Phase 02 complete until that operations evidence is green.
+Reconcile the narrow `CHANGELOG.md` focused-diff exception, rerun `/check all`,
+and do not mark Phase 02 complete until the resulting evidence is green.
