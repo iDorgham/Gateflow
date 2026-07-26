@@ -30,8 +30,8 @@
 - [x] Fix confirmed tenant-isolation and privileged-scope gaps
 - [x] Close validation, CSRF, abuse-control, and audit gaps from Phase 01
 - [x] Add negative, cross-tenant, replay, revocation, and retention tests
-- [ ] Close credential-rotation evidence without recording secret values
-- [ ] Run a fresh security scan and resolve all P0/P1 findings
+- [x] Close credential-rotation evidence without recording secret values
+- [x] Run a fresh security scan and resolve all P0/P1 findings
 
 ## Phase 03 — Development and test reliability
 

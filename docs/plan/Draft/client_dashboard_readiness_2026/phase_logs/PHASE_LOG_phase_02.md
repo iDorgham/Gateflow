@@ -1,7 +1,7 @@
 # Phase log — Phase 02
 
 **Started:** 2026-07-26
-**Status:** IN PROGRESS
+**Status:** COMPLETE
 **Product code changed:** yes — test-first security/data invariants
 
 ## Batch 01
@@ -153,8 +153,13 @@
   391 active tests, production build, Workflow v2, bootstrap, secret/advisory,
   page-evidence, and operations-evidence gates. It remains blocked only because
   focused-diff rejects the commit-hook-required root `CHANGELOG.md` entry.
+- Added a red-first regression expectation for the required root
+  `CHANGELOG.md`, then narrowly allowed that exact file while preserving
+  arbitrary root and parked-app rejection.
+- Re-ran the real 79-file Phase 02 scope diff: zero errors.
+- Re-ran all 59 Workflow v2 tests and root `pnpm preflight`: passed.
 
 ## Resume
 
-Reconcile the narrow `CHANGELOG.md` focused-diff exception, rerun `/check all`,
-and do not mark Phase 02 complete until the resulting evidence is green.
+Phase 02 is complete. Do not begin Phase 03 until this focused commit is
+recorded and `/guide` confirms the `checking` stage.

@@ -1,9 +1,9 @@
 {
   "id": "client-dashboard-check-2026-07-26",
   "type": "focused-check",
-  "status": "blocked",
+  "status": "passed",
   "valid": true,
-  "createdAt": "2026-07-26T14:06:11Z",
+  "createdAt": "2026-07-26T14:13:02Z",
   "commit": "901631d621284975359ac12d171c95f6eeba6bbb",
   "application": "client-dashboard",
   "checks": {
@@ -52,9 +52,9 @@
       "reviewMode": "static-review-only"
     },
     "focusedDiff": {
-      "status": "blocked",
-      "rejectedPaths": ["CHANGELOG.md"],
-      "reason": "The required commit-hook changelog entry is outside the current focused-diff allowlist."
+      "status": "passed",
+      "permittedRootPaths": ["CHANGELOG.md", "package.json", "pnpm-lock.yaml"],
+      "reason": "Required changelog and dependency manifests are explicitly permitted; arbitrary root files and parked application code remain rejected."
     },
     "operationsEvidence": {
       "status": "passed",
@@ -73,7 +73,5 @@
       "reason": "Made invalid-signature mutation deterministic; the prior test had a 1-in-16 chance of leaving a valid signature unchanged."
     }
   ],
-  "blockers": [
-    "Workflow v2 focused-diff rejects the required root CHANGELOG.md entry."
-  ]
+  "blockers": []
 }

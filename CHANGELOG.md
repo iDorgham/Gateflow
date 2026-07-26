@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Scripts]** allow required changelog evidence
+
 - **[Client-Dashboard]** harden phase 2 security boundaries
 
 - **[Scripts]** harden workflow-v2 guide parsing and docs alignment

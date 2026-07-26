@@ -132,6 +132,7 @@ function validateScopeDiff(focusedApp, files) {
   const app = resolveApp(focusedApp);
   const allowed = [
     app.path,
+    'CHANGELOG.md',
     'package.json',
     'pnpm-lock.yaml',
     'packages/',

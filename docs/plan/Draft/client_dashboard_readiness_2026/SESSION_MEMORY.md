@@ -2,12 +2,12 @@
 
 ## Active state
 
-- Plan status: Draft; Phase 02 in progress
+- Plan status: Draft; Phase 02 complete
 - Focused app: `client-dashboard`
-- Workflow stage: `developing`
-- Last commit: `52f26767da499e584a29ba01e99eb66ef92b8241`
+- Workflow stage: `checking`
+- Last commit: `9e80c86ebf33c6ae365a8bfbffea508047e88023`
 - Product code changed: yes — Phase 02 security/privacy invariants
-- Exact next action: obtain and verify the non-sensitive ops rotation receipt
+- Exact next action: commit the Phase 02 focused-diff repair and inspect `/guide`
 
 ## Durable decisions
 
@@ -140,12 +140,16 @@
   blocker is Workflow v2 focused-diff rejecting root `CHANGELOG.md`, which the
   commit hook required and generated. Reconcile that narrow documentation
   exception before closing Phase 02.
+- The exact root `CHANGELOG.md` path is now permitted by Workflow v2 because
+  repository commit hooks require it. Regression coverage continues to reject
+  arbitrary root `turbo.json` and parked application code. The real 79-file
+  Phase 02 diff, all 59 Workflow v2 tests, and root preflight are green; Phase
+  02 is complete.
 
 ## Handoff
 
-Resume Phase 02 by rerunning `/check all`, then continue only after its current
-evidence is green. Read `evidence/PHASE_01_SECURITY_CLASSIFICATION.md` and the
-Phase 01 log first.
+Commit the focused-diff repair and Phase 02 completion evidence, then run
+`/guide`. Do not start Phase 03 in the same delivery batch.
 
 ## Context budget
 
