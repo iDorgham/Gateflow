@@ -16,7 +16,7 @@ jest.mock('./lib/i18n', () => ({
   LOCALE_COOKIE: 'gf_locale',
 }));
 
-import { config, middleware } from './middleware';
+import { config, proxy } from './proxy';
 
 function request(
   path: string,
@@ -62,20 +62,25 @@ function request(
   } as never;
 }
 
-describe('client dashboard CSRF middleware', () => {
+describe('client dashboard CSRF proxy', () => {
   it('matches API routes in production configuration', () => {
     expect(config.matcher[0]).not.toContain('(?!api|');
   });
 
+  it('allows the exact public health path without locale redirection', async () => {
+    const response = await proxy(request('/health', { method: 'GET' }));
+    expect(response.status).toBe(200);
+  });
+
   it('rejects a cross-origin cookie-authenticated mutation', async () => {
-    const response = await middleware(
+    const response = await proxy(
       request('/api/projects', { origin: 'https://evil.example' })
     );
     expect(response.status).toBe(403);
   });
 
   it('allows an exact double-submit token without Origin', async () => {
-    const response = await middleware(
+    const response = await proxy(
       request('/api/projects', {
         csrfCookie: 'csrf-value',
         csrfHeader: 'csrf-value',
@@ -85,7 +90,7 @@ describe('client dashboard CSRF middleware', () => {
   });
 
   it('does not let same-origin fallback hide an invalid explicit token', async () => {
-    const response = await middleware(
+    const response = await proxy(
       request('/api/projects', {
         origin: 'http://localhost',
         csrfCookie: 'expected',
@@ -96,14 +101,14 @@ describe('client dashboard CSRF middleware', () => {
   });
 
   it('allows a same-origin compatibility request with no token header', async () => {
-    const response = await middleware(
+    const response = await proxy(
       request('/api/projects', { origin: 'http://localhost' })
     );
     expect(response.status).toBe(200);
   });
 
   it('does not treat API requests as Next Server Actions', async () => {
-    const response = await middleware(
+    const response = await proxy(
       request('/api/projects', {
         origin: 'https://evil.example',
         nextAction: true,
@@ -113,7 +118,7 @@ describe('client dashboard CSRF middleware', () => {
   });
 
   it('requires a non-empty bearer credential for exemption', async () => {
-    const response = await middleware(
+    const response = await proxy(
       request('/api/projects', {
         origin: 'https://evil.example',
         authorization: 'Bearer ',

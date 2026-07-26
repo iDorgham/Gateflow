@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "plan": "client_dashboard_readiness_2026",
+  "phase": 4,
+  "status": "blocked",
+  "measuredAt": "2026-07-26",
+  "baseCommit": "c68b17b64b443e68c1841c833db87e966beb554c",
+  "environment": {
+    "kind": "local-production-build",
+    "node": "v26.5.0",
+    "pnpm": "8.15.0",
+    "os": "macOS 15.7.1",
+    "architecture": "x86_64",
+    "hardwareClass": "Intel Core i7, 4 cores, 16 GB",
+    "cacheState": "warm",
+    "dataset": "unauthenticated-login-only"
+  },
+  "before": {
+    "lighthouseRuns": 3,
+    "performanceMedian": 66,
+    "lcpMedianMs": 4719,
+    "tbtMedianMs": 777,
+    "clsMedian": 0,
+    "unusedJavaScriptMedianBytes": 164306,
+    "clientBundleAggregateKb": 5502
+  },
+  "after": {
+    "lighthouseRuns": 3,
+    "performanceMedian": 85,
+    "lcpMedianMs": 3584,
+    "tbtMedianMs": 272,
+    "clsMedian": 0,
+    "unusedJavaScriptMedianBytes": 26081,
+    "clientBundleAggregateKb": 5491,
+    "healthWarmSamples": 10,
+    "healthP50Ms": 4.45,
+    "healthP95Ms": 9.13,
+    "buildDurationSeconds": 82.21
+  },
+  "regressionBudgets": {
+    "clientBundleAggregateMaxKb": 5600,
+    "healthWarmP95MaxMs": 100,
+    "lighthouseTarget": {
+      "performanceMin": 65,
+      "lcpMaxMs": 2500,
+      "tbtMaxMs": 200,
+      "clsMax": 0.15
+    }
+  },
+  "acceptedWarnings": [
+    {
+      "id": "prisma-commonjs-wildcard",
+      "status": "accepted",
+      "reason": "Removal requires a broad shared-package export migration without measured Phase 04 user impact"
+    }
+  ],
+  "blockers": [
+    "No explicitly authorized same-commit Vercel preview measurement",
+    "Local Node 26 runtime is not comparable to Vercel Node 24",
+    "No fixed authenticated dataset and role for P0 page, API, or database query sampling",
+    "No vetted local Poppins and Cairo assets for network-independent builds",
+    "LCP and TBT remain above product targets"
+  ]
+}

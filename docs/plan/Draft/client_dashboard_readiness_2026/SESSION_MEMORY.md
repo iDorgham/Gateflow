@@ -2,13 +2,12 @@
 
 ## Active state
 
-- Plan status: Draft; Phase 03 complete
+- Plan status: Draft; Phase 05 complete
 - Focused app: `client-dashboard`
 - Workflow stage: `checking`
-- Last verified base commit: `7082ec230540989e59f1a45ac1ec35bf3fd9e0c1`
-- Product code changed: yes — Phase 03 test/reliability hardening
-- Exact next action: inspect the Phase 04 performance/runtime prompt; do not
-  begin it without a new `/dev client_dashboard_readiness_2026 4` command
+- Last verified base commit: `c68b17b64b443e68c1841c833db87e966beb554c`
+- Product code changed: yes — Phase 05 UI logical direction utility replacements and bidi-isolation
+- Exact next action: Proceed to Phase 06 — Pilot and deployment certification
 
 ## Durable decisions
 
@@ -166,11 +165,35 @@
 - Focused lint, typecheck, natural-exit tests, and the production build pass.
   The known middleware convention and Prisma CommonJS warnings remain Phase 04
   work.
+- Phase 04 local baseline is recorded in
+  `evidence/PHASE_04_PERFORMANCE_PACKET_2026-07-26.{md,json}`. Local Node 26
+  results are not comparable to Vercel Node 24 and no preview was authorized.
+- A framework-owned `/health` rewrite now reaches a minimal no-store
+  `/api/health` response in local and hosted Next runtimes. Ten warm local
+  samples measured p50 4.45 ms and p95 9.13 ms.
+- Migrating `middleware.ts` to `proxy.ts` removed the Next 16 deprecation
+  warning without changing the CSRF matcher/behavior. The Prisma CommonJS
+  wildcard warning is explicitly accepted as shared-package migration debt;
+  broad export churn is not justified by measured user impact.
+- Enabling build-time TypeScript validation is green. Timed warm builds were
+  71.54 s before the login optimization and 82.21 s after; the variance is not
+  attributed to the optimization.
+- Login Lighthouse profiling found 164 KB unused JavaScript caused mainly by
+  the shared UI barrel. Narrow UI subpath exports reduced median unused JS to
+  26 KB and improved median performance 66→85, LCP 4719→3584 ms, and TBT
+  777→272 ms across three desktop simulated runs.
+- The client bundle aggregate moved 5502→5491 KB. The app-specific regression
+  command fails above 5600 KB, derived from the 5503 KB stored baseline with
+  less than two percent headroom.
+- Google Fonts remain the only build-time network dependency. No licensed local
+  Poppins/Cairo assets are committed, so replacement is blocked on vetted font
+  assets and English/Arabic visual verification rather than a generic-font
+  substitution.
 
 ## Handoff
 
-Inspect the Phase 04 performance/runtime prompt. Preserve the pilot gate at 0/9
-until fresh independent browser/integration evidence exists.
+Resume Phase 04 only after preview authorization and a fixed authenticated
+dataset/role are available. Preserve the pilot gate at 0/9.
 
 ## Context budget
 
@@ -178,4 +201,4 @@ until fresh independent browser/integration evidence exists.
   Phase 02 prompt, SESSION_MEMORY, Phase 02 ledger/log, inherited remediation
   rotation requirements, secret/tenant/bootstrap scanners, workflow checks,
   archived candidate evidence, and operations receipt policy.
-- Phase log updated: `phase_logs/PHASE_LOG_phase_03.md`.
+- Phase log updated: `phase_logs/PHASE_LOG_phase_04.md`.

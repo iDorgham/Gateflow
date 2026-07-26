@@ -45,12 +45,17 @@ export function QRCodeDisplay({
             </span>
           </div>
         </div>
-        <p className="text-xs font-mono text-muted-foreground mt-4 tracking-wider">
-          {qrValue}
+        <p
+          className="text-xs font-mono text-muted-foreground mt-4 tracking-wider"
+          dir="ltr"
+        >
+          <span className="unicode-bidi-isolate">{qrValue}</span>
         </p>
         <div className="mt-4 text-center">
           <p className="text-xs font-medium text-danger">Valid Until</p>
-          <p className="text-sm font-semibold text-foreground">{validUntil}</p>
+          <p className="text-sm font-semibold text-foreground" dir="ltr">
+            <span className="unicode-bidi-isolate">{validUntil}</span>
+          </p>
         </div>
       </CardContent>
       <CardFooter className="flex justify-between gap-2 bg-muted/20 border-t p-4">
@@ -60,11 +65,11 @@ export function QRCodeDisplay({
           className="w-full"
           onClick={onDownload}
         >
-          <Download className="w-4 h-4 mr-2" />
+          <Download className="w-4 h-4 me-2" />
           Save
         </Button>
         <Button variant="outline" size="sm" className="w-full" onClick={onCopy}>
-          <Copy className="w-4 h-4 mr-2" />
+          <Copy className="w-4 h-4 me-2" />
           Copy
         </Button>
         <Button
@@ -73,7 +78,7 @@ export function QRCodeDisplay({
           className="w-full"
           onClick={onShare}
         >
-          <Share2 className="w-4 h-4 mr-2" />
+          <Share2 className="w-4 h-4 me-2" />
           Share
         </Button>
       </CardFooter>

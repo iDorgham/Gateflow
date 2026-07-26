@@ -8,7 +8,7 @@
 
 **PLAN:** `docs/plan/Draft/client_dashboard_readiness_2026/`
 `PLAN_client_dashboard_readiness_2026.md`
-**Status:** 🟡 Developing — Phases 01–03 complete; Phase 04 next
+**Status:** 🟠 Developing — Phase 04 partial; preview/dataset evidence blocked
 **Priority:** P0 — security and pilot certification blockers
 **Target:** Safe development baseline → measured performance → 9/9 pilot certification
 **Branch:** `fix/client-dashboard-readiness-phase-02`

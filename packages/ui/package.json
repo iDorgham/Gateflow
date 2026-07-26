@@ -22,6 +22,12 @@
   "types": "./src/index.ts",
   "exports": {
     ".": "./src/index.ts",
+    "./button": "./src/components/ui/button.tsx",
+    "./card": "./src/components/ui/card.tsx",
+    "./cn": "./src/lib/utils.ts",
+    "./input": "./src/components/ui/input.tsx",
+    "./label": "./src/components/ui/label.tsx",
+    "./login-shell": "./src/components/auth/login-shell.tsx",
     "./utils": {
       "types": "./dist/utils.d.ts",
       "import": "./dist/utils.mjs",

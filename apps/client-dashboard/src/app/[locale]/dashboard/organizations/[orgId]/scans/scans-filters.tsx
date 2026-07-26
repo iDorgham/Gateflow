@@ -247,7 +247,7 @@ export function ScansFilters({
           />
         </div>
 
-        <div className="flex flex-wrap items-center gap-3 ml-auto">
+        <div className="flex flex-wrap items-center gap-3 ms-auto">
           <FilterBar.Select
             value={currentStatus}
             onChange={(e) => immediate('status', e.target.value)}
@@ -343,13 +343,13 @@ export function ScansFilters({
         </div>
 
         <div className="space-y-2 flex-1 min-w-[200px]">
-          <label className="text-[11px] font-black text-[var(--ds-text-subtle)] uppercase tracking-widest block ml-1">
+          <label className="text-[11px] font-black text-[var(--ds-text-subtle)] uppercase tracking-widest block ms-1">
             {t('scans.filters.deviceIdPlaceholder', {
               defaultValue: 'Hardware Device',
             })}
           </label>
           <div className="relative">
-            <div className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center gap-2 pointer-events-none">
+            <div className="absolute ltr:left-3 rtl:right-3 top-1/2 -translate-y-1/2 flex items-center gap-2 pointer-events-none">
               <div className="h-1.5 w-1.5 rounded-full bg-[var(--ds-text-success)] animate-pulse" />
             </div>
             <input
@@ -362,17 +362,17 @@ export function ScansFilters({
                 setDeviceId(e.target.value);
                 debounced(debounceDevice, 'deviceId', e.target.value);
               }}
-              className="h-10 w-full pl-7 bg-[var(--ds-background-default)] border-[var(--ds-border)] rounded-lg text-sm font-mono font-bold text-[var(--ds-text)] placeholder-[var(--ds-text-subtle)] shadow-sm focus:ring-2 focus:ring-[var(--ds-border-focused)] transition-all"
+              className="h-10 w-full ltr:pl-7 rtl:pr-7 bg-[var(--ds-background-default)] border-[var(--ds-border)] rounded-lg text-sm font-mono font-bold text-[var(--ds-text)] placeholder-[var(--ds-text-subtle)] shadow-sm focus:ring-2 focus:ring-[var(--ds-border-focused)] transition-all"
             />
           </div>
         </div>
 
-        <div className="ml-auto">
+        <div className="ms-auto">
           <Button
             onClick={() => window.open(exportHref, '_blank')}
             className="bg-[var(--ds-background-default)] border border-[var(--ds-border)] text-[var(--ds-text-subtle)] font-bold h-10 px-5 rounded-lg shadow-sm hover:bg-[var(--ds-background-neutral-subtle-hovered)] transition-all active:scale-95 group"
           >
-            <Download className="h-4 w-4 mr-2 group-hover:text-primary transition-colors" />
+            <Download className="h-4 w-4 me-2 group-hover:text-primary transition-colors" />
             {t('scans.filters.exportCsv', { defaultValue: 'Export CSV' })}
           </Button>
         </div>
@@ -383,7 +383,7 @@ export function ScansFilters({
         <div className="flex flex-wrap items-center gap-2">
           {activeFilters.length > 0 ? (
             <>
-              <span className="text-[11px] font-black text-[var(--ds-text-subtlest)] uppercase tracking-widest mr-2">
+              <span className="text-[11px] font-black text-[var(--ds-text-subtlest)] uppercase tracking-widest me-2">
                 Active Filters:
               </span>
               {activeFilters.map((f) => (
@@ -402,7 +402,7 @@ export function ScansFilters({
                   {f.label}
                   <button
                     onClick={() => clearFilter(f.key)}
-                    className="ml-1 rounded-full hover:bg-black/10 p-0.5 transition-colors"
+                    className="ms-1 rounded-full hover:bg-black/10 p-0.5 transition-colors"
                   >
                     <X className="h-3 w-3" />
                   </button>
@@ -430,7 +430,9 @@ export function ScansFilters({
         </div>
 
         <p className="text-[11px] font-black text-[var(--ds-text-subtle)] uppercase tracking-widest">
-          {filteredCount.toLocaleString()}{' '}
+          <span dir="ltr" className="unicode-bidi-isolate">
+            {filteredCount.toLocaleString()}
+          </span>{' '}
           {t('scans.filters.showingResultsSimple', {
             defaultValue: 'Entries Found',
           })}

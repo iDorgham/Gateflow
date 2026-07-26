@@ -8,6 +8,7 @@
     "start": "next start",
     "env:check": "node scripts/check-local-readiness.mjs",
     "lint": "eslint src --max-warnings 261",
+    "perf:bundle": "node ../../scripts/check/check-bundle-size.js --app client-dashboard",
     "test": "jest && node --test scripts/*.test.mjs",
     "typecheck": "tsc --noEmit"
   },

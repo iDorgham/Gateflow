@@ -6,15 +6,12 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useTheme } from 'next-themes';
 import { useTranslation } from 'react-i18next';
 import { loginAction } from './actions';
-import {
-  Button,
-  Input,
-  Label,
-  Card,
-  CardContent,
-  LoginShell,
-  cn,
-} from '@gateflow/ui';
+import { Button } from '@gateflow/ui/button';
+import { Card, CardContent } from '@gateflow/ui/card';
+import { cn } from '@gateflow/ui/cn';
+import { Input } from '@gateflow/ui/input';
+import { Label } from '@gateflow/ui/label';
+import { LoginShell } from '@gateflow/ui/login-shell';
 import {
   AlertCircle,
   Eye,

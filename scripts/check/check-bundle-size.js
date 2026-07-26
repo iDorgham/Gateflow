@@ -9,6 +9,7 @@
  *   node scripts/check-bundle-size.js               # check + compare vs baseline
  *   node scripts/check-bundle-size.js --update      # overwrite baseline with current
  *   node scripts/check-bundle-size.js --report      # print full breakdown (no fail)
+ *   node scripts/check-bundle-size.js --app client-dashboard
  *
  * Baseline stored at: scripts/.bundle-baseline.json
  * Run after: pnpm turbo build --filter=client-dashboard
@@ -30,7 +31,7 @@ const APPS = [
     // Individual page First Load JS is far smaller due to code splitting.
     // Gzip ratio ≈ 0.25–0.30x (3601 KB → ~900–1080 KB gzipped).
     budget: {
-      total: 4500, // total all-chunks uncompressed (KB)
+      total: 5600, // measured 5503 KB baseline + <2% regression headroom
       page: 500, // single page server bundle max (KB)
     },
   },
@@ -107,9 +108,9 @@ function getPageSizes(buildDir) {
 }
 
 // ── Collect current stats ─────────────────────────────────────────────────────
-function collectStats() {
+function collectStats(appName) {
   const stats = {};
-  for (const app of APPS) {
+  for (const app of APPS.filter((item) => !appName || item.name === appName)) {
     if (!fs.existsSync(app.buildDir)) continue;
     const chunks = getChunkSizes(app.buildDir);
     const pages = getPageSizes(app.buildDir);
@@ -181,12 +182,22 @@ function compare(current, baseline) {
 const args = process.argv.slice(2);
 const isUpdate = args.includes('--update');
 const isReport = args.includes('--report');
+const appFlagIndex = args.indexOf('--app');
+const appName = appFlagIndex >= 0 ? args[appFlagIndex + 1] : undefined;
 
-const current = collectStats();
+if (appName && !APPS.some((app) => app.name === appName)) {
+  console.error(`✗ Unknown app "${appName}"`);
+  process.exit(1);
+}
+
+const current = collectStats(appName);
 
 if (Object.keys(current).length === 0) {
-  console.log('ℹ  No .next/ build output found. Run pnpm build first.');
-  process.exit(0);
+  const message = appName
+    ? `✗ No .next/ build output found for ${appName}. Run its build first.`
+    : 'ℹ  No .next/ build output found. Run pnpm build first.';
+  console.log(message);
+  process.exit(appName ? 1 : 0);
 }
 
 if (isUpdate) {

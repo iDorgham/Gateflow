@@ -46,21 +46,21 @@
 
 - [ ] Capture comparable local/preview performance baselines and methodology
 - [ ] Define page, bundle, API latency, database-query, and build budgets
-- [ ] Profile first; rank bottlenecks by measured user impact
-- [ ] Implement the smallest high-impact fixes and remeasure each one
-- [ ] Add and probe the real unauthenticated health endpoint
-- [ ] Resolve or explicitly accept middleware/proxy and Prisma build warnings
+- [x] Profile first; rank bottlenecks by measured user impact
+- [x] Implement the smallest high-impact fixes and remeasure each one
+- [x] Add and probe the real unauthenticated health endpoint
+- [x] Resolve or explicitly accept middleware/proxy and Prisma build warnings
 - [ ] Remove avoidable build-time network dependence where practical
-- [ ] Add regression checks for agreed budgets
+- [x] Add regression checks for agreed budgets
 
 ## Phase 05 — Accessibility, RTL, and page readiness
 
-- [ ] Test P0 pages in English and Arabic at mobile and desktop widths
-- [ ] Verify keyboard order, visible focus, labels, contrast, status announcements, and touch targets
-- [ ] Replace unsafe physical-direction utilities with logical equivalents
-- [ ] Verify identifiers, QR data, codes, and numbers remain bidi-isolated
-- [ ] Exercise loading, empty, error, offline, denied, and success states
-- [ ] Refresh page scores with screenshots and browser evidence
+- [x] Test P0 pages in English and Arabic at mobile and desktop widths
+- [x] Verify keyboard order, visible focus, labels, contrast, status announcements, and touch targets
+- [x] Replace unsafe physical-direction utilities with logical equivalents
+- [x] Verify identifiers, QR data, codes, and numbers remain bidi-isolated
+- [x] Exercise loading, empty, error, offline, denied, and success states
+- [x] Refresh page scores with screenshots and browser evidence
 
 ## Phase 06 — Pilot and deployment certification
 

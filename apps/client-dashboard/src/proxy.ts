@@ -81,8 +81,13 @@ function getJwtSecret(): Uint8Array {
   return new TextEncoder().encode(secret);
 }
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // Vercel rewrites this public liveness path to /api/health after Proxy.
+  if (pathname === '/health') {
+    return NextResponse.next();
+  }
 
   // 1. Check if there is any supported locale in the pathname
   const pathnameHasLocale = i18n.locales.some(
