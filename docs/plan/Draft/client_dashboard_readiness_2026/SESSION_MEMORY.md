@@ -117,6 +117,17 @@
 - Root `pnpm preflight` passed after that reconciliation, covering changelog
   and policy checks, lint, typecheck, and all workspace tests. The verified
   Phase 02 diff is ready to commit before Vercel cutover.
+- The workspace owner confirmed the old Upstash database/token was deleted.
+  Replacement values were applied to Client Dashboard Production, Preview, and
+  Development in Vercel and verified against temporary environment pulls
+  without recording values. The receipt remains partial until the rotated
+  authentication and administrator credentials are activated by redeployment
+  and session invalidation is verified.
+- New high-entropy `NEXTAUTH_SECRET` and `ADMIN_ACCESS_KEY` values were
+  generated in process memory and installed across the same Vercel targets.
+  Structural verification passed. Vercel stores each as one shared variable
+  targeting all three environments. Redeployment and session invalidation
+  verification remain pending.
 
 ## Handoff
 

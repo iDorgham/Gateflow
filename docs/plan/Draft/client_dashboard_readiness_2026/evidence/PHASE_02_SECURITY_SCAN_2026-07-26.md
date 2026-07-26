@@ -5,16 +5,16 @@ the operations receipt remains open.
 
 ## Results
 
-| Gate                              | Result      | Evidence                                                                                                                                               |
-| --------------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Bootstrap/reset route             | PASS        | `pnpm check:bootstrap-routes` reports clean                                                                                                            |
-| Current-tree secret scan          | REVIEWED    | 3 medium false positives remain: one scanner test mock and two archived documentation placeholders                                                     |
-| Recent-history secret scan        | PASS        | `pnpm check:secrets:history` reports zero findings across the configured 100-commit window                                                             |
-| Workflow v2 contract              | PASS        | 58 tests passed                                                                                                                                        |
-| API method register               | PASS        | 170 unique methods, zero `needs-review`, zero explicit carried gaps                                                                                    |
-| Tenant heuristic                  | REVIEWED    | 70 candidates; no new route family outside the existing manually dispositioned register                                                                |
-| High-severity dependency advisory | PASS        | `pnpm check:security:fail` reports no high+ vulnerabilities across 1,742 lockfile packages after upgrading the `brace-expansion` override to `>=5.0.8` |
-| Credential rotation receipt       | PENDING OPS | approved operational receipt has not been provided                                                                                                     |
+| Gate                              | Result   | Evidence                                                                                                                                               |
+| --------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Bootstrap/reset route             | PASS     | `pnpm check:bootstrap-routes` reports clean                                                                                                            |
+| Current-tree secret scan          | REVIEWED | 3 medium false positives remain: one scanner test mock and two archived documentation placeholders                                                     |
+| Recent-history secret scan        | PASS     | `pnpm check:secrets:history` reports zero findings across the configured 100-commit window                                                             |
+| Workflow v2 contract              | PASS     | 58 tests passed                                                                                                                                        |
+| API method register               | PASS     | 170 unique methods, zero `needs-review`, zero explicit carried gaps                                                                                    |
+| Tenant heuristic                  | REVIEWED | 70 candidates; no new route family outside the existing manually dispositioned register                                                                |
+| High-severity dependency advisory | PASS     | `pnpm check:security:fail` reports no high+ vulnerabilities across 1,742 lockfile packages after upgrading the `brace-expansion` override to `>=5.0.8` |
+| Credential rotation receipt       | PARTIAL  | Upstash deletion and replacement Vercel configuration are recorded; authentication/session credentials remain pending                                  |
 
 ## Containment finding
 
@@ -67,9 +67,25 @@ Local configuration verification confirms `.env` and
 Upstash REST entries, and pass a live read-only Redis `PING`. No values were
 printed or recorded. This does not update or verify Vercel environments.
 
+The workspace owner subsequently confirmed deletion of the old Upstash
+database/token. The tested replacement URL/token were applied to Client
+Dashboard Production, Preview, and Development in Vercel and compared locally
+against temporary environment pulls without printing values. The temporary
+files were deleted immediately. Machine-readable partial evidence is recorded
+in `CREDENTIAL_ROTATION_RECEIPT_2026-07-26.json`.
+
+New high-entropy `NEXTAUTH_SECRET` and `ADMIN_ACCESS_KEY` values were generated
+in memory and installed in the same three Vercel environments. Temporary pulls
+verified presence and minimum length without recording values. Vercel stores
+each as one shared variable targeting all three environments. Activation and
+session invalidation remain pending until redeployment.
+
 ## Exit blockers
 
-1. Receive the approved non-sensitive operations receipt.
+1. Redeploy affected environments and verify old sessions are invalid.
+2. Verify the replaced `ADMIN_ACCESS_KEY` is rejected wherever an external
+   consumer exists.
+3. Finalize the approved non-sensitive operations receipt.
 
 The dependency advisory and fresh tenant reconciliation gates are complete.
 Phase 02 remains open solely because the potentially exposed credentials cannot
