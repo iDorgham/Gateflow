@@ -82,11 +82,8 @@ describe('POST /api/ai/actions/execute ownership and intent', () => {
     mockCreateTask.mockResolvedValue({ id: 'task_1' });
 
     const response = await POST(
-      request({
-        actionId: 'action_1',
-        actionType: 'BULK_QR_CREATE',
-        intentJson: { count: 9999 },
-      })
+    const response = await POST(
+      request({ actionId: 'action_1' })
     );
 
     expect(response.status).toBe(200);
