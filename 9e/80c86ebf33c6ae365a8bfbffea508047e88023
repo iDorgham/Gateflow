@@ -1,0 +1,26 @@
+docs/plan/Draft/client_dashboard_readiness_2026/phase_logs/PHASE_LOG_phase_02.md
+  s_4c93fd7a12aac2::t_ee5dceb84a0510 152-155,159-160
+docs/plan/Draft/client_dashboard_readiness_2026/evidence/CHECK_ALL_2026-07-26.json
+  s_4c93fd7a12aac2::t_ee5dceb84a0510 6-7,51-52,55-59,61-62,77
+  s_4c93fd7a12aac2::t_11bc3367c27943 76,78
+.ai/workflow-v2/state.json
+  s_4c93fd7a12aac2::t_ee5dceb84a0510 30-31
+docs/plan/Draft/client_dashboard_readiness_2026/SESSION_MEMORY.md
+  s_4c93fd7a12aac2::t_ee5dceb84a0510 138-142
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "9e80c86ebf33c6ae365a8bfbffea508047e88023",
+  "prompts": {},
+  "sessions": {
+    "s_4c93fd7a12aac2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f9aab-c7a9-7493-936e-402709ad76fd",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
