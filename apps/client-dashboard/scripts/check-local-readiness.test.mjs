@@ -11,6 +11,7 @@ test('environment result reports names without secret values', () => {
     DATABASE_URL: secret,
     ENCRYPTION_MASTER_KEY: secret,
     NEXTAUTH_SECRET: secret,
+    NEXTAUTH_URL: 'http://localhost:3001',
     NEXT_PUBLIC_APP_URL: 'http://localhost:3001',
     QR_SIGNING_SECRET: secret,
     UPSTASH_REDIS_REST_TOKEN: secret,

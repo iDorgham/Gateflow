@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@gate-access/db';
-import { createHash } from 'crypto';
 import { verifyArrivalCapability } from '@/lib/arrival-capability';
 import { checkRateLimit } from '@/lib/rate-limit';
 
@@ -54,9 +53,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       forwardedFor?.split(',')[0]?.trim() ||
       request.headers.get('x-real-ip') ||
       'unknown';
-    const capabilityHash = createHash('sha256')
-      .update(capability)
-      .digest('hex');
     const rateLimit = await checkRateLimit(
       `resident-arrived:${visitorQRId}:${ip}`,
       5,
