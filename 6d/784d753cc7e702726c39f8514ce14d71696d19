@@ -1,0 +1,322 @@
+apps/client-dashboard/src/app/api/qr/send-email/route.test.ts
+  s_4c93fd7a12aac2::t_3b87a6b1a7aac4 233-253
+  s_4c93fd7a12aac2::t_a7820845f017a7 1-154,161-232,254
+  s_4c93fd7a12aac2::t_1f700cc2bafb5e 155-160
+  s_4c93fd7a12aac2::t_3c4fc9a39dfa11 255-256
+apps/client-dashboard/src/app/api/resident/push/send/route.test.ts
+  s_4c93fd7a12aac2::t_9483a777c43e48 1-39
+docs/plan/Draft/gateflow_workflow_bootstrap/TASKS_gateflow_workflow_bootstrap.md
+  s_4c93fd7a12aac2::t_5e91768443e577 15-17
+docs/audits/client-dashboard/AUDIT_2026-07-25.md
+  s_4c93fd7a12aac2::t_f5dd6ea7bd3138 1-207
+apps/client-dashboard/src/lib/webhook-replay.test.ts
+  s_4c93fd7a12aac2::t_23b765c2624246 15,50,72,92,114,138,156-157
+  s_4c93fd7a12aac2::t_2c1c8c74009f3d 1-2,5-14,16-36,38-49,51-58,60-71,73-78,80-91,93-113,115-137,139-155,158-162
+  s_4c93fd7a12aac2::t_28c0f8cec5ea66 3-4,37,59,79
+apps/client-dashboard/src/app/api/marketing/utm-track/route.ts
+  s_4c93fd7a12aac2::t_36e4fe1d2cf250 1,7-14
+docs/plan/Draft/client_dashboard_readiness_2026/phase_logs/PHASE_LOG_phase_01.md
+  s_4c93fd7a12aac2::t_a5ddc8d1e9b513 21-23,77-79
+  s_4c93fd7a12aac2::t_5e91768443e577 1-3,6-14,33-40,51-61,66-68,91,93
+  s_4c93fd7a12aac2::t_87116ee7df0611 18-20,75-76
+  s_4c93fd7a12aac2::t_28f16965a56c7b 4,30-32,62-63,92,94-96
+  s_4c93fd7a12aac2::t_d9cce8428a9903 24-25,80-84
+  s_4c93fd7a12aac2::t_503829cc3e1fae 5,15-17,41-43,64-65,69-74
+  s_4c93fd7a12aac2::t_61dc8398915a58 26-29,44-46,85-90
+  s_4c93fd7a12aac2::t_3a2ca1f986c5d2 47-50
+docs/plan/Draft/client_dashboard_readiness_2026/phases/03_development_reliability/PROMPT_phase_03.md
+  s_4c93fd7a12aac2::t_f3b7c399de2037 1-28
+apps/client-dashboard/src/app/[locale]/s/[shortId]/route.test.ts
+  s_4c93fd7a12aac2::t_4043cb602d5467 5-14
+  s_4c93fd7a12aac2::t_4ef47bfe8cd1bb 1-4,15-135
+  s_4c93fd7a12aac2::t_48cb75b206843e 136-137
+docs/plan/Draft/client_dashboard_readiness_2026/phases/02_security_invariants/PROMPT_phase_02.md
+  s_4c93fd7a12aac2::t_f3b7c399de2037 1-28
+apps/client-dashboard/src/middleware.ts
+  s_4c93fd7a12aac2::t_d115179471da62 116-121,131-134,140,155,157-180
+  s_4c93fd7a12aac2::t_878d5d71d96c2e 181,184-185,187,243
+docs/plan/Draft/client_dashboard_readiness_2026/phase_logs/PHASE_LOG_phase_02.md
+  s_4c93fd7a12aac2::t_8d57472a78235e 1-2,5-27,44,139-143,149,152-154
+  s_4c93fd7a12aac2::t_11bc3367c27943 122-134,138
+  s_4c93fd7a12aac2::t_0a214021c1f665 105-121
+  s_4c93fd7a12aac2::t_304332b32929ac 3-4,150-151
+  s_4c93fd7a12aac2::t_f52b088ee80afe 70-83
+  s_4c93fd7a12aac2::t_2330b6d69d58e8 135-137
+  s_4c93fd7a12aac2::t_065f53d0f40d94 84-94,155-156
+  s_4c93fd7a12aac2::t_f456ad77e8d3ce 30-31,57-69,146-147
+  s_4c93fd7a12aac2::t_95647fce2cdbf0 28-29,32-43,144
+  s_4c93fd7a12aac2::t_86eddb800bf7e3 45-56,145,148
+  s_4c93fd7a12aac2::t_edecec9b38abc9 95-104
+docs/plan/Draft/client_dashboard_readiness_2026/CONTEXT_client_dashboard_readiness_2026.md
+  s_4c93fd7a12aac2::t_f3b7c399de2037 1-41
+apps/client-dashboard/src/app/api/danger/purge-scans/route.ts
+  s_4c93fd7a12aac2::t_1d15b7058b1d7e 8-9,13-26,33-41,45,47-53,59,63-76,82,86-88
+  s_4c93fd7a12aac2::t_0ddf456c515ed4 89-91,95
+apps/client-dashboard/src/app/api/resident/arrived/route.ts
+  s_4c93fd7a12aac2::t_aa333c08ec0654 3-5,8,14,21-27,30-76,89-92,97-100,105,107-111,117-120,126-129,133-135,138
+  s_4c93fd7a12aac2::t_5f8594c14ed221 136-137,141-146,150-151,169-171,177-180
+docs/plan/Draft/client_dashboard_readiness_2026/phases/06_pilot_certification/PROMPT_phase_06.md
+  s_4c93fd7a12aac2::t_f3b7c399de2037 1-33
+docs/plan/Draft/client_dashboard_readiness_2026/phases/04_performance_runtime/PROMPT_phase_04.md
+  s_4c93fd7a12aac2::t_f3b7c399de2037 1-27
+apps/client-dashboard/src/app/api/ai/actions/execute/route.test.ts
+  s_4c93fd7a12aac2::t_2a687a24128122 1-124
+  s_4c93fd7a12aac2::t_7a635b42bf0859 125
+docs/archive/legacy-plans/operations/SECURITY_PERFORMANCE_AUDIT.md
+  s_4c93fd7a12aac2::t_09bb376abdad11 54-55
+  s_4c93fd7a12aac2::t_5d89b12fe85bad 11-21,31-32,34,42,52,66-75,82,96,115,117,121,123,157,161,171,179-182,197,206,213-216,255-260,269,272-274,281,296,298,329,334,341,348
+apps/client-dashboard/src/app/api/resident/push/send/route.ts
+  s_4c93fd7a12aac2::t_d115179471da62 3-7,9-10
+apps/client-dashboard/src/components/settings/danger/danger-zone.tsx
+  s_4c93fd7a12aac2::t_a6bc6fac300c73 436
+  s_4c93fd7a12aac2::t_1d15b7058b1d7e 91,93,98,100-102,113,117-120,122,143,146-148,155,176,179-180,190,203,221,228,244-247,250
+scripts/workflow-v2/__tests__/guide.test.js
+  s_4c93fd7a12aac2::t_7fe12db02c3d1a 6,49-69
+  s_4c93fd7a12aac2::t_c5c71e337fbe8f 70-71
+apps/client-dashboard/src/lib/arrival-capability.test.ts
+  s_4c93fd7a12aac2::t_57c0010df88af8 1-42
+scripts/workflow-v2/__tests__/support.test.js
+  s_4c93fd7a12aac2::t_b6937931d6be75 104-113
+  s_4c93fd7a12aac2::t_c2ea441306d474 32-45,47-51,60-63,77-85,95-98,102-103,114-120,125-136
+docs/plan/backlog/ALL_TASKS_BACKLOG.md
+  s_4c93fd7a12aac2::t_952327ff19491d 14
+  s_4c93fd7a12aac2::t_8d57472a78235e 11
+  s_4c93fd7a12aac2::t_ffa6ecc2e0308d 9-10,12-13
+  s_4c93fd7a12aac2::t_28f16965a56c7b 16
+  s_4c93fd7a12aac2::t_2b608c5bfd4fa7 48
+  s_4c93fd7a12aac2::t_5e91768443e577 66
+  s_4c93fd7a12aac2::t_f3b7c399de2037 7-8,15,17-26
+apps/client-dashboard/src/app/api/contacts/route.test.ts
+  s_4c93fd7a12aac2::t_c9987a1702a952 269
+  s_4c93fd7a12aac2::t_2f050cd25323d0 61,72-74,93-98,247-268,270-272
+  s_4c93fd7a12aac2::t_a2a921b4610d37 273-274
+apps/client-dashboard/src/middleware.test.ts
+  s_4c93fd7a12aac2::t_dea7efb653065d 14-17
+  s_4c93fd7a12aac2::t_9483a777c43e48 19-42,48,55,63-66,68-124
+  s_4c93fd7a12aac2::t_e0be9cde2eaa88 1-13,18,43-47,49-54,56-62,67
+package.json
+  s_4c93fd7a12aac2::t_b2f3f2dfbf452a 139
+docs/plan/Draft/client_dashboard_readiness_2026/evidence/PHASE_01_PILOT_AND_OWNERSHIP.md
+  s_4c93fd7a12aac2::t_5e91768443e577 1-15,24-46
+  s_4c93fd7a12aac2::t_28f16965a56c7b 16-23
+docs/plan/Draft/client_dashboard_readiness_2026/PLAN_client_dashboard_readiness_2026.md
+  s_4c93fd7a12aac2::t_f3b7c399de2037 1-118
+apps/client-dashboard/src/lib/webhook-replay.ts
+  s_4c93fd7a12aac2::t_13289dc971b7ba 79
+  s_4c93fd7a12aac2::t_f839fa5ce5de83 1-27,31-36,39-46,50-59,61-78,80-92
+  s_4c93fd7a12aac2::t_23b765c2624246 28-30,37-38,47-49,60
+apps/client-dashboard/src/app/api/marketing/utm-track/route.test.ts
+  s_4c93fd7a12aac2::t_39d2cfd3b241a4 1-42
+apps/client-dashboard/src/lib/ai/transcript-privacy.test.ts
+  s_4c93fd7a12aac2::t_9316c8a67979bc 1-16,18-34
+  s_4c93fd7a12aac2::t_884f31655991a4 17
+apps/client-dashboard/src/app/api/ai/actions/execute/route.ts
+  s_4c93fd7a12aac2::t_530d91a49588a7 2,4,9-34,42-44,46-51,53-55,58-74,76,78-79,82-85,88-115,117-121,127,135,142-146
+  s_4c93fd7a12aac2::t_22c2e5397654fe 148-158,160,162-165
+docs/plan/Draft/client_dashboard_readiness_2026/phases/01_scope_and_risk/PROMPT_phase_01.md
+  s_4c93fd7a12aac2::t_f3b7c399de2037 1-34
+docs/plan/Draft/client_dashboard_readiness_2026/phases/05_accessibility_rtl/PROMPT_phase_05.md
+  s_4c93fd7a12aac2::t_f3b7c399de2037 1-23
+apps/client-dashboard/src/app/api/webhooks/whatsapp/route.ts
+  s_4c93fd7a12aac2::t_b62a2f18f93c7d 3,13-16,145-146,208,218,236,278,308-310,347-351,353-355
+  s_4c93fd7a12aac2::t_23b765c2624246 154-160,197-207,209-217,219-235,237-262,264,266-275,277,279-291,301,352
+  s_4c93fd7a12aac2::t_80fc8f47a79119 21-22
+  s_4c93fd7a12aac2::t_13289dc971b7ba 192-196,293-300,302-305,307
+  s_95aa7135444d6b::t_771eb098b2750d 292,356
+apps/client-dashboard/src/lib/ai/ai-action-service.ts
+  s_4c93fd7a12aac2::t_530d91a49588a7 72-140,142
+  s_4c93fd7a12aac2::t_0bcec4daa8bdd1 3,20
+apps/client-dashboard/src/app/api/danger/purge-scans/route.test.ts
+  s_4c93fd7a12aac2::t_2eb5b25f456183 1-161
+apps/client-dashboard/src/app/api/perimeter/webhook/route.test.ts
+  s_4c93fd7a12aac2::t_2c4674d6d27784 327-366
+  s_4c93fd7a12aac2::t_23b765c2624246 75,218
+  s_4c93fd7a12aac2::t_2868a5b4682c64 180-181
+  s_4c93fd7a12aac2::t_f839fa5ce5de83 59-74,76,80,89-92,133-135,164-165,177,187,230-231,246,257,289-290,305,315
+  s_4c93fd7a12aac2::t_2c1c8c74009f3d 196-217,219-224
+docs/plan/Active/audit_remediation_2026/TASKS_audit_remediation_2026.md
+  s_4c93fd7a12aac2::t_5e91768443e577 3-7
+apps/client-dashboard/src/app/api/contacts/[id]/route.ts
+  s_4c93fd7a12aac2::t_c9987a1702a952 21,24-29,34-37,44-47,54-57,63-67,73-74,77-91,93,95-98,106-138,146-148,165-168,172
+  s_4c93fd7a12aac2::t_940a4ed022821a 173-177,179-182,188-191,196-199,206-209,220-223
+apps/client-dashboard/src/components/dashboard/ai/ChatPanel.tsx
+  s_4c93fd7a12aac2::t_530d91a49588a7 224
+apps/client-dashboard/src/lib/ai/transcript-privacy.ts
+  s_4c93fd7a12aac2::t_0bcec4daa8bdd1 1-44
+apps/client-dashboard/src/components/dashboard/ai-assistant.tsx
+  s_4c93fd7a12aac2::t_884f31655991a4 595-596
+  s_4c93fd7a12aac2::t_0bcec4daa8bdd1 35,104,106-107,151
+apps/client-dashboard/src/app/api/qr/send-email/route.ts
+  s_4c93fd7a12aac2::t_0cfcea0ee073d9 186,192-203,208
+  s_4c93fd7a12aac2::t_1f700cc2bafb5e 8,10-29,41-55,78,87,107,117,129,138-147,152-155,168-182
+  s_4c93fd7a12aac2::t_79371b009fb4c0 204-205,211
+apps/client-dashboard/src/app/api/ai/actions/[id]/feedback/route.test.ts
+  s_4c93fd7a12aac2::t_2a687a24128122 1-65
+docs/plan/Draft/client_dashboard_readiness_2026/evidence/PHASE_02_SECURITY_SCAN_2026-07-26.md
+  s_4c93fd7a12aac2::t_f52b088ee80afe 1-2,5-15,17-41,70-72
+  s_4c93fd7a12aac2::t_065f53d0f40d94 3-4,16,73-76
+  s_4c93fd7a12aac2::t_0a214021c1f665 42-64
+  s_4c93fd7a12aac2::t_d77f6683f5904e 65-69
+apps/client-dashboard/src/app/api/ai/actions/[id]/feedback/route.ts
+  s_4c93fd7a12aac2::t_530d91a49588a7 2,6-13,21-26,29-37
+  s_4c93fd7a12aac2::t_966f5c34544938 40,42-45
+scripts/workflow-v2/guide.js
+  s_4c93fd7a12aac2::t_05693721a184ce 297-303
+  s_4c93fd7a12aac2::t_2bc54523395d50 266
+scripts/workflow-v2/state.schema.json
+  s_4c93fd7a12aac2::t_05693721a184ce 60-85
+apps/client-dashboard/src/lib/utm-attribution.test.ts
+  s_4c93fd7a12aac2::t_39d2cfd3b241a4 1-52
+docs/plan/Draft/client_dashboard_readiness_2026/evidence/PHASE_01_ROUTE_API_INVENTORY.md
+  s_4c93fd7a12aac2::t_5e91768443e577 1-3,5-49,53
+  s_4c93fd7a12aac2::t_503829cc3e1fae 54-58,61-64
+  s_4c93fd7a12aac2::t_28f16965a56c7b 4,50-52,65-71
+  s_4c93fd7a12aac2::t_61dc8398915a58 59-60
+  s_4c93fd7a12aac2::t_8d57472a78235e 72-74
+apps/client-dashboard/src/app/api/contacts/[id]/route.test.ts
+  s_4c93fd7a12aac2::t_3f352c21f71cf5 130,132-133
+  s_4c93fd7a12aac2::t_2f050cd25323d0 1-103,105-125,127-129,131,134-151,160
+  s_4c93fd7a12aac2::t_c9987a1702a952 104,126,152-159,161-168
+apps/client-dashboard/src/app/api/scans/[scanId]/deny/route.test.ts
+  s_4c93fd7a12aac2::t_2f050cd25323d0 1-43,45-48,50-55,67-79,81,83-87,90-97,99-103,115-118,120-128,140-143
+  s_4c93fd7a12aac2::t_c9987a1702a952 44,49,56-66,80,82,88-89,98,104-114,119,129-139
+apps/client-dashboard/src/app/api/webhooks/whatsapp/route.test.ts
+  s_4c93fd7a12aac2::t_23b765c2624246 12,56
+  s_4c93fd7a12aac2::t_0e0560d0da02ff 1-11,13-55,57-115,117-195
+  s_4c93fd7a12aac2::t_28c0f8cec5ea66 116
+apps/client-dashboard/src/app/api/resident/arrived/route.test.ts
+  s_4c93fd7a12aac2::t_57c0010df88af8 7-11,14-20,35-37,40-42,45,49-51,57,60-62,66,73-81,84-88,92,100-101,105,125-129,136,138-199,203-205,208-213
+  s_4c93fd7a12aac2::t_c1f8ce27743365 97
+  s_4c93fd7a12aac2::t_2bb4492b11bb82 95-96,98-99,112,118,214-216,218,229-231,236
+apps/client-dashboard/src/lib/arrival-capability.ts
+  s_4c93fd7a12aac2::t_aa333c08ec0654 1-71,73-81
+  s_4c93fd7a12aac2::t_c1f8ce27743365 72
+  s_4c93fd7a12aac2::t_f5e677e3f37d4b 82-86
+docs/plan/Draft/client_dashboard_readiness_2026/evidence/CHECK_ALL_2026-07-26.json
+  s_4c93fd7a12aac2::t_2330b6d69d58e8 54,59
+  s_4c93fd7a12aac2::t_304332b32929ac 60-70
+  s_4c93fd7a12aac2::t_11bc3367c27943 1-53,55-58,71
+apps/client-dashboard/src/app/api/contacts/route.ts
+  s_4c93fd7a12aac2::t_c9987a1702a952 518,567-585,601-602
+docs/plan/Draft/client_dashboard_readiness_2026/TASKS_client_dashboard_readiness_2026.md
+  s_4c93fd7a12aac2::t_28f16965a56c7b 10-11
+  s_4c93fd7a12aac2::t_1867220fae1585 18-19
+  s_4c93fd7a12aac2::t_95647fce2cdbf0 29
+  s_4c93fd7a12aac2::t_f3b7c399de2037 1-4,12,25-26,33-73
+  s_4c93fd7a12aac2::t_5e91768443e577 5-9,13-14,24
+  s_4c93fd7a12aac2::t_d9cce8428a9903 23
+  s_4c93fd7a12aac2::t_6ab83b6e74a37a 30-32
+  s_4c93fd7a12aac2::t_a5ddc8d1e9b513 20-21
+  s_4c93fd7a12aac2::t_61dc8398915a58 22
+  s_4c93fd7a12aac2::t_503829cc3e1fae 15-17
+  s_4c93fd7a12aac2::t_8d57472a78235e 27-28
+apps/client-dashboard/src/app/[locale]/s/[shortId]/route.ts
+  s_4c93fd7a12aac2::t_aa333c08ec0654 4,87,114-117,280,292,296,307
+  s_4c93fd7a12aac2::t_36e4fe1d2cf250 5-9,58-61,63-82
+apps/client-dashboard/src/lib/utm-attribution.ts
+  s_4c93fd7a12aac2::t_e0e66f9c70da28 15-18,22
+  s_4c93fd7a12aac2::t_36e4fe1d2cf250 1-14,19-21,23-57
+docs/plan/Draft/client_dashboard_readiness_2026/evidence/PHASE_01_SECURITY_CLASSIFICATION.md
+  s_4c93fd7a12aac2::t_28f16965a56c7b 5,164-166
+  s_4c93fd7a12aac2::t_5e91768443e577 1-4,6-20,22-33,37,39-49,74,106-153,155,160-162
+  s_4c93fd7a12aac2::t_d9cce8428a9903 91-96
+  s_4c93fd7a12aac2::t_503829cc3e1fae 21,34-36,38,50-53,55-73
+  s_4c93fd7a12aac2::t_a5ddc8d1e9b513 84-90
+  s_4c93fd7a12aac2::t_61dc8398915a58 97-104,163
+  s_4c93fd7a12aac2::t_87116ee7df0611 54,75-83,105
+  s_4c93fd7a12aac2::t_206462a67aa221 154,156-159
+apps/client-dashboard/src/app/api/scans/[scanId]/deny/route.ts
+  s_4c93fd7a12aac2::t_c9987a1702a952 3-5,15-18,26-29,36-49,52-55,58,60,64-71,74-78,83-86,89-94
+  s_4c93fd7a12aac2::t_bb3a313acbb4ba 100-104,115-117
+apps/client-dashboard/src/app/api/perimeter/webhook/route.ts
+  s_4c93fd7a12aac2::t_80fc8f47a79119 18,20
+  s_4c93fd7a12aac2::t_f839fa5ce5de83 5-7,77,79,102-114,185-197,199,201-204
+  s_4c93fd7a12aac2::t_4fbdb4e7b92a48 2
+  s_4c93fd7a12aac2::t_23b765c2624246 87-93,115-120,122-124,128-139,141-142,144-183
+  s_4c93fd7a12aac2::t_76d85290ecba0e 4
+.ai/workflow-v2/state.json
+  s_4c93fd7a12aac2::t_ffa6ecc2e0308d 55,57
+  s_4c93fd7a12aac2::t_f3b7c399de2037 11
+  s_4c93fd7a12aac2::t_05693721a184ce 34-52
+  s_4c93fd7a12aac2::t_11bc3367c27943 23-31
+  s_4c93fd7a12aac2::t_6efc6d258185aa 14-22,32-33,67
+  s_4c93fd7a12aac2::t_7cca082d3d77f7 12,66,88
+scripts/audit/client-dashboard-api-control-matrix.mjs
+  s_4c93fd7a12aac2::t_236b28d0747863 33-38,69-74,103-108,121-126,138,165-167,269-274
+  s_4c93fd7a12aac2::t_e31d88965e4c9d 228-229
+  s_4c93fd7a12aac2::t_a0f09f709254b3 174-176
+  s_4c93fd7a12aac2::t_599161c7f2ca10 168-170,172
+  s_4c93fd7a12aac2::t_afb2a8f132748a 129-133,137
+  s_4c93fd7a12aac2::t_1294d1ac1724a6 1-32,39-68,75-102,109-120,127,139-164,171,173,180-227,230-268,275-278
+  s_4c93fd7a12aac2::t_d411a46b2ac5c0 128,134-136
+  s_4c93fd7a12aac2::t_263e7622e6c278 177-179
+apps/client-dashboard/src/app/api/api-keys/[id]/route.test.ts
+  s_4c93fd7a12aac2::t_fab9d0059cb249 1-128
+docs/plan/Draft/client_dashboard_readiness_2026/evidence/PHASE_02_SECURITY_LEDGER.md
+  s_4c93fd7a12aac2::t_8d57472a78235e 1-34,81-84,94,96-101
+  s_4c93fd7a12aac2::t_95647fce2cdbf0 35-47,85,90
+  s_4c93fd7a12aac2::t_6ab83b6e74a37a 62-80,87-89,92-93
+  s_4c93fd7a12aac2::t_86eddb800bf7e3 48-61,86,91,95
+  s_4c93fd7a12aac2::t_f52b088ee80afe 102-104
+  s_4c93fd7a12aac2::t_065f53d0f40d94 105-110
+scripts/workflow-v2/support.js
+  s_4c93fd7a12aac2::t_6cd914b9abc0b4 133-143
+  s_4c93fd7a12aac2::t_4345866b1010c3 32-33,42-45,47-51,71-81,83-84,88-89,92-95,99-104,110-119,121-128,145-147,149-158,168-173
+apps/client-dashboard/src/app/api/api-keys/[id]/route.ts
+  s_4c93fd7a12aac2::t_1f3a9a930ba0d7 9,11-14,19-28,31-66,69
+  s_4c93fd7a12aac2::t_454d0e5ffd3d8b 70-74,80-83
+docs/plan/Draft/client_dashboard_readiness_2026/SESSION_MEMORY.md
+  s_4c93fd7a12aac2::t_d77f6683f5904e 108-110
+  s_4c93fd7a12aac2::t_11bc3367c27943 111-114
+  s_4c93fd7a12aac2::t_ae62dac981b8d8 76-78,129
+  s_4c93fd7a12aac2::t_a5ddc8d1e9b513 44-45
+  s_4c93fd7a12aac2::t_065f53d0f40d94 10,90-93,123-124
+  s_4c93fd7a12aac2::t_28f16965a56c7b 57-59
+  s_4c93fd7a12aac2::t_f456ad77e8d3ce 79-83
+  s_4c93fd7a12aac2::t_f3b7c399de2037 1-2,4,6,11-20,26,121,126,128
+  s_4c93fd7a12aac2::t_f52b088ee80afe 84-89
+  s_4c93fd7a12aac2::t_503829cc3e1fae 36-39
+  s_4c93fd7a12aac2::t_8d57472a78235e 5,60-65,133
+  s_4c93fd7a12aac2::t_61dc8398915a58 53-56
+  s_4c93fd7a12aac2::t_304332b32929ac 117-119
+  s_4c93fd7a12aac2::t_d9cce8428a9903 46-52
+  s_4c93fd7a12aac2::t_86eddb800bf7e3 71-75
+  s_4c93fd7a12aac2::t_95647fce2cdbf0 9,66-70
+  s_4c93fd7a12aac2::t_5e91768443e577 3,7-8,21-25,27-35,120,122,125,127
+  s_4c93fd7a12aac2::t_87116ee7df0611 40-43
+  s_4c93fd7a12aac2::t_edecec9b38abc9 94-96
+  s_4c93fd7a12aac2::t_0a214021c1f665 97-107
+  s_4c93fd7a12aac2::t_2330b6d69d58e8 115-116
+  s_4c93fd7a12aac2::t_9776918dd01108 130-132
+docs/audits/client-dashboard/PAGE_SCORES_2026-07-25.json
+  s_4c93fd7a12aac2::t_0ff6109767aaae 1-4,230-231
+  s_4c93fd7a12aac2::t_f5dd6ea7bd3138 5-229
+docs/plan/Draft/client_dashboard_readiness_2026/evidence/PHASE_01_API_CONTROL_MATRIX.md
+  s_4c93fd7a12aac2::t_e590377b307ae9 1-209
+pnpm-lock.yaml
+  s_4c93fd7a12aac2::t_473c1133319390 21,12337,12340,12342,21140,21150
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "6d784d753cc7e702726c39f8514ce14d71696d19",
+  "prompts": {},
+  "sessions": {
+    "s_4c93fd7a12aac2": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f9aab-c7a9-7493-936e-402709ad76fd",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_95aa7135444d6b": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f9b16-3741-72d2-a210-fe9f51a7445f",
+        "model": "gpt-5.6-terra"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
