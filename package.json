@@ -86,7 +86,7 @@
   },
   "devDependencies": {
     "@commitlint/cli": "^20.5.0",
-    "@commitlint/config-conventional": "^20.5.0",
+    "@commitlint/config-conventional": "^21.2.0",
     "@gate-access/config": "workspace:*",
     "@lhci/cli": "^0.15.1",
     "@turbo/gen": "^1.13.4",
@@ -96,7 +96,7 @@
     "@tailwindcss/postcss": "^4.3.3",
     "autoprefixer": "^10.4.24",
     "eslint": "8.57.1",
-    "lint-staged": "^15.5.2",
+    "lint-staged": "^17.2.0",
     "prettier": "^3.9.5",
     "tailwindcss": "^4.3.3",
     "tsx": "^4.7.0",
