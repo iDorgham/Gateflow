@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Deps]** repair pnpm-lock.yaml broken by CodeRabbit autofix merge
+
 - **[Ui]** register packages/ui as a Tailwind v4 source
 - **[Ui]** enforce items-center on login shell flexbox container to fix full-width stretching
 - **[Security]** update tar override in pnpm.overrides to >=7.5.21
