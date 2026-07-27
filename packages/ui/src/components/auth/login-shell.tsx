@@ -89,7 +89,7 @@ export function LoginShell({
     <>
       <style dangerouslySetInnerHTML={{ __html: KEYFRAME_STYLES }} />
 
-      <div className="fixed inset-0 z-[100] flex items-center justify-center bg-background dark:bg-[var(--gf-color-bg-page,#09090b)] transition-colors duration-300 p-4 sm:p-6 overflow-y-auto">
+      <div className="fixed inset-0 z-[100] flex items-center justify-center bg-background transition-colors duration-300 p-4 sm:p-6 overflow-y-auto">
         {/* Subtle background glow */}
         <div
           className="pointer-events-none absolute h-[320px] w-[320px] rounded-full bg-primary/10 blur-[100px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
