@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Ui]** encapsulate ThemeProvider in client component to prevent RSC script warning
+
 - **[Ui]** pass scriptProps to ThemeProvider to silence script hydration warning
 
 - **[Ui]** add use client directive to components index and suppress layout hydration warning
