@@ -13,10 +13,15 @@ import { OrganizationType } from '@gate-access/types';
 
 interface DashboardEmptyStateProps {
   orgType: OrganizationType;
+  orgId?: string;
   t: (key: string, options?: any) => string;
 }
 
-export function DashboardEmptyState({ orgType, t }: DashboardEmptyStateProps) {
+export function DashboardEmptyState({
+  orgType,
+  orgId,
+  t,
+}: DashboardEmptyStateProps) {
   const ICON_MAP: Record<string, any> = {
     [OrganizationType.REAL_ESTATE]: ScanLine,
     [OrganizationType.SCHOOL]: GraduationCap,
@@ -26,6 +31,13 @@ export function DashboardEmptyState({ orgType, t }: DashboardEmptyStateProps) {
   };
 
   const Icon = ICON_MAP[orgType] || ScanLine;
+
+  const createQrHref = orgId
+    ? `/dashboard/organizations/${orgId}/qrcodes/create`
+    : '/dashboard/qrcodes/create';
+  const unitsHref = orgId
+    ? `/dashboard/organizations/${orgId}/residents/units`
+    : '/dashboard/residents/units';
 
   return (
     <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-border bg-muted/30 py-12 text-center animate-in fade-in zoom-in duration-300">
@@ -45,13 +57,13 @@ export function DashboardEmptyState({ orgType, t }: DashboardEmptyStateProps) {
       </p>
       <div className="mt-6 flex gap-3">
         <Button asChild>
-          <Link href="/dashboard/qrcodes/create">
+          <Link href={createQrHref}>
             {t('overview.createFirst', { defaultValue: 'Create QR Code' })}
           </Link>
         </Button>
         {orgType === OrganizationType.REAL_ESTATE && (
           <Button variant="outline" asChild>
-            <Link href="/dashboard/residents/units">
+            <Link href={unitsHref}>
               {t('orgType.realEstate.unitLabelPlural', {
                 defaultValue: 'Add Units',
               })}

@@ -166,7 +166,7 @@ export async function DashboardOverview({
       value: scansToday,
       sub: t('overview.sub.scansToday', { defaultValue: 'Last 24 hours' }),
       icon: <ScanLine className="h-4 w-4 text-success" aria-hidden="true" />,
-      href: '/dashboard/scans',
+      href: `/dashboard/organizations/${orgId}/scans`,
       iconBg: 'bg-success/10',
       valueColor: 'text-success',
     },
@@ -175,7 +175,7 @@ export async function DashboardOverview({
       value: totalQRs,
       sub: t('overview.sub.activeQRs', { defaultValue: 'Across all gates' }),
       icon: <QrCode className="h-4 w-4 text-primary" aria-hidden="true" />,
-      href: '/dashboard/qrcodes',
+      href: `/dashboard/organizations/${orgId}/qrcodes`,
       iconBg: 'bg-primary/10',
       valueColor: 'text-primary',
     },
@@ -186,7 +186,7 @@ export async function DashboardOverview({
         defaultValue: 'Currently operational',
       }),
       icon: <Shield className="h-4 w-4 text-chart-2" aria-hidden="true" />,
-      href: '/dashboard/gates',
+      href: `/dashboard/organizations/${orgId}/gates`,
       iconBg: 'bg-chart-2/10',
       valueColor: 'text-chart-2',
     },
@@ -197,7 +197,7 @@ export async function DashboardOverview({
         defaultValue: 'In your organization',
       }),
       icon: <Users className="h-4 w-4 text-warning" aria-hidden="true" />,
-      href: '/dashboard/team',
+      href: `/dashboard/organizations/${orgId}/team`,
       iconBg: 'bg-warning/10',
       valueColor: 'text-warning',
     },
@@ -210,7 +210,7 @@ export async function DashboardOverview({
         defaultValue: 'With linked units',
       }),
       icon: <Users className="h-4 w-4 text-indigo-500" aria-hidden="true" />,
-      href: '/dashboard/residents/contacts',
+      href: `/dashboard/organizations/${orgId}/residents/contacts`,
       iconBg: 'bg-indigo-500/10',
       valueColor: 'text-indigo-500',
     },
@@ -221,7 +221,7 @@ export async function DashboardOverview({
       value: residentsCount,
       sub: t('overview.sub.activeStudents', { defaultValue: 'Enrolled' }),
       icon: <Users className="h-4 w-4 text-indigo-500" aria-hidden="true" />,
-      href: '/dashboard/residents/contacts',
+      href: `/dashboard/organizations/${orgId}/residents/contacts`,
       iconBg: 'bg-indigo-500/10',
       valueColor: 'text-indigo-500',
     },
@@ -232,7 +232,7 @@ export async function DashboardOverview({
         defaultValue: 'Pending action',
       }),
       icon: <Wrench className="h-4 w-4 text-orange-500" aria-hidden="true" />,
-      href: '/dashboard/maintenance',
+      href: `/dashboard/organizations/${orgId}/maintenance`,
       iconBg: 'bg-orange-500/10',
       valueColor: 'text-orange-500',
     },
@@ -243,7 +243,7 @@ export async function DashboardOverview({
         defaultValue: 'Requires attention',
       }),
       icon: <Shield className="h-4 w-4 text-red-500" aria-hidden="true" />,
-      href: '/dashboard/team/incidents',
+      href: `/dashboard/organizations/${orgId}/team/incidents`,
       iconBg: 'bg-red-500/10',
       valueColor: 'text-red-500',
     },
@@ -256,7 +256,7 @@ export async function DashboardOverview({
         defaultValue: 'Live occupancy',
       }),
       icon: <Users className="h-4 w-4 text-pink-500" aria-hidden="true" />,
-      href: '/dashboard/analytics',
+      href: `/dashboard/organizations/${orgId}/analytics`,
       iconBg: 'bg-pink-500/10',
       valueColor: 'text-pink-500',
     },
@@ -283,7 +283,7 @@ export async function DashboardOverview({
           </p>
         </div>
         <Button asChild className="shrink-0">
-          <Link href="/dashboard/qrcodes/create">
+          <Link href={`/dashboard/organizations/${orgId}/qrcodes/create`}>
             <Plus className="me-1.5 h-4 w-4" aria-hidden="true" />
             {t('overview.createQr', { defaultValue: 'Create QR Code' })}
           </Link>
@@ -315,7 +315,7 @@ export async function DashboardOverview({
                     </div>
                     <Button variant="ghost" size="sm" asChild>
                       <Link
-                        href="/dashboard/scans"
+                        href={`/dashboard/organizations/${orgId}/scans`}
                         className="text-primary hover:text-primary/80"
                       >
                         {t('overview.viewAll', { defaultValue: 'View all' })}
@@ -329,7 +329,11 @@ export async function DashboardOverview({
                 </CardHeader>
                 <CardContent className="pt-0">
                   {recentScans.length === 0 ? (
-                    <DashboardEmptyState orgType={orgType} t={t} />
+                    <DashboardEmptyState
+                      orgType={orgType}
+                      orgId={orgId}
+                      t={t}
+                    />
                   ) : (
                     <div
                       className="divide-y divide-border"
@@ -476,7 +480,7 @@ export async function DashboardOverview({
         {features.dashboard.chartIds.length === 0 && (
           <Card className="border border-[var(--ds-border)] bg-background">
             <CardContent className="pt-6">
-              <DashboardEmptyState orgType={orgType} t={t} />
+              <DashboardEmptyState orgType={orgType} orgId={orgId} t={t} />
             </CardContent>
           </Card>
         )}
