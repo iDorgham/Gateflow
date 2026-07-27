@@ -9,6 +9,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 ## [Unreleased]
 
 ### Workspace
+
+- **[Deps]** bump @prisma/client to ^6.19.3 to match prisma CLI
 - **[Security]** update tar override in pnpm.overrides to >=7.5.21
 
 - **[Ui]** redesign login page with clean modern SaaS web app layout
