@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Ui]** redesign login page with clean modern SaaS web app layout
+
 - **[Ui]** use semantic bg-background token in login-shell to pass ADS check
 
 - **[Ui]** constrain login shell container to compact 380px width
