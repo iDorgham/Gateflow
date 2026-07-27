@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Ui]** create organization dashboard overview page at /dashboard/organizations/[orgId]
+
 - **[Ui]** suppress React 19 DEV script warning for next-themes in theme-provider
 
 - **[Ui]** add client mounted guard to ThemeProvider to prevent React 19 SSR script warning
