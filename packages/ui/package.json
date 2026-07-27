@@ -85,8 +85,8 @@
     "autoprefixer": "^10.4.24",
     "lucide-react": "^1.27.0",
     "postcss": "^8.5.12",
-    "react": "19.2.7",
-    "react-dom": "19.2.7",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",
     "tsup": "^8.3.6"
