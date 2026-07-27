@@ -739,7 +739,7 @@ importers:
         version: 55.0.13(expo@54.0.33)(react-native@0.86.2)(react@19.2.7)(typescript@5.9.3)
       expo-router:
         specifier: ~6.0.23
-        version: 6.0.23(patch_hash=7eaj6gfinv6kjzw2mqhfv7lvkm)(@expo/metro-runtime@6.1.2)(@types/react-dom@19.2.3)(@types/react@19.2.17)(expo-constants@18.0.13)(expo-linking@8.0.12)(expo@54.0.33)(react-dom@19.2.8)(react-native-gesture-handler@2.30.0)(react-native-reanimated@4.2.3)(react-native-safe-area-context@5.8.0)(react-native-screens@4.26.2)(react-native@0.86.2)(react@19.2.7)
+        version: 6.0.23(patch_hash=7eaj6gfinv6kjzw2mqhfv7lvkm)(@expo/metro-runtime@6.1.2)(@types/react-dom@19.2.3)(@types/react@19.2.17)(expo-constants@18.0.13)(expo-linking@8.0.12)(expo@54.0.33)(react-dom@19.2.8)(react-native-gesture-handler@3.1.0)(react-native-reanimated@4.2.3)(react-native-safe-area-context@5.8.0)(react-native-screens@4.26.2)(react-native@0.81.5)(react@19.2.7)
       expo-secure-store:
         specifier: ~15.0.8
         version: 15.0.8(expo@57.0.8)
@@ -759,8 +759,8 @@ importers:
         specifier: 0.86.2
         version: 0.86.2(@babel/core@8.0.1)(@react-native/metro-config@0.86.2)(@types/react@19.2.17)(react@19.2.7)
       react-native-gesture-handler:
-        specifier: ^2.30.0
-        version: 2.30.0(react-native@0.86.2)(react@19.2.7)
+        specifier: ^3.1.0
+        version: 3.1.0(react-native@0.81.5)(react@19.2.7)
       react-native-reanimated:
         specifier: ^4.2.3
         version: 4.2.3(react-native-worklets@0.8.3)(react-native@0.86.2)(react@19.2.7)
@@ -927,7 +927,7 @@ importers:
         version: 8.0.8(expo@57.0.8)(react@19.2.7)
       expo-router:
         specifier: ~6.0.23
-        version: 6.0.23(patch_hash=7eaj6gfinv6kjzw2mqhfv7lvkm)(@expo/metro-runtime@6.1.2)(@types/react-dom@19.2.3)(@types/react@19.2.17)(expo-constants@18.0.13)(expo-linking@8.0.12)(expo@54.0.33)(react-dom@19.2.8)(react-native-gesture-handler@2.30.0)(react-native-reanimated@4.2.3)(react-native-safe-area-context@5.8.0)(react-native-screens@4.26.2)(react-native@0.86.2)(react@19.2.7)
+        version: 6.0.23(patch_hash=7eaj6gfinv6kjzw2mqhfv7lvkm)(@expo/metro-runtime@6.1.2)(@types/react-dom@19.2.3)(@types/react@19.2.17)(expo-constants@18.0.13)(expo-linking@8.0.12)(expo@54.0.33)(react-dom@19.2.8)(react-native-gesture-handler@3.1.0)(react-native-reanimated@4.2.3)(react-native-safe-area-context@5.8.0)(react-native-screens@4.26.2)(react-native@0.81.5)(react@19.2.7)
       expo-secure-store:
         specifier: ~15.0.8
         version: 15.0.8(expo@57.0.8)
@@ -3273,13 +3273,6 @@ packages:
     engines: {node: '>=10.0.0'}
     dev: true
 
-  /@egjs/hammerjs@2.0.17:
-    resolution: {integrity: sha512-XQsZgjm2EcVUiZQf11UBJQfmZeEmOW8DpI1gsFeln6w0ae0ii4dMQEQ0kjl6DspdWX1aGY1/loyXnP0JS06e/A==}
-    engines: {node: '>=0.8.0'}
-    dependencies:
-      '@types/hammerjs': 2.0.46
-    dev: false
-
   /@emnapi/core@1.10.0:
     resolution: {integrity: sha512-yq6OkJ4p82CAfPl0u9mQebQHKPJkY7WrIuk205cTYnYe+k2Z8YBh11FrbRG/H6ihirqcacOgl2BIO8oyMQLeXw==}
     dependencies:
@@ -3629,8 +3622,8 @@ packages:
       connect: 3.7.0
       debug: 4.4.3
       env-editor: 0.4.2
-      expo: 54.0.33(@babel/core@8.0.1)(@expo/metro-runtime@6.1.2)(expo-router@6.0.23)(react-native@0.86.2)(react@19.2.7)
-      expo-router: 6.0.23(patch_hash=7eaj6gfinv6kjzw2mqhfv7lvkm)(@expo/metro-runtime@6.1.2)(@types/react-dom@19.2.3)(@types/react@19.2.17)(expo-constants@18.0.13)(expo-linking@8.0.12)(expo@54.0.33)(react-dom@19.2.8)(react-native-gesture-handler@2.30.0)(react-native-reanimated@4.2.3)(react-native-safe-area-context@5.8.0)(react-native-screens@4.26.2)(react-native@0.86.2)(react@19.2.7)
+      expo: 54.0.33(@babel/core@8.0.1)(@expo/metro-runtime@6.1.2)(expo-router@6.0.23)(react-native@0.81.5)(react@19.2.7)
+      expo-router: 6.0.23(patch_hash=7eaj6gfinv6kjzw2mqhfv7lvkm)(@expo/metro-runtime@6.1.2)(@types/react-dom@19.2.3)(@types/react@19.2.17)(expo-constants@18.0.13)(expo-linking@8.0.12)(expo@54.0.33)(react-dom@19.2.8)(react-native-gesture-handler@3.1.0)(react-native-reanimated@4.2.3)(react-native-safe-area-context@5.8.0)(react-native-screens@4.26.2)(react-native@0.81.5)(react@19.2.7)
       expo-server: 1.0.5
       freeport-async: 2.0.0
       getenv: 2.0.0
@@ -8503,10 +8496,6 @@ packages:
       '@types/node': 22.19.17
     dev: true
 
-  /@types/hammerjs@2.0.46:
-    resolution: {integrity: sha512-ynRvcq6wvqexJ9brDMS4BnBLzmr0e14d6ZJTEShTBWKymQiHwlAyGu0ZPEFI2Fh1U53F7tN9ufClWM5KvqkKOw==}
-    dev: false
-
   /@types/hast@3.0.4:
     resolution: {integrity: sha512-WPs+bbQw5aCj+x6laNGWLH3wviHtoCv/P3+otBhbOhJgG8qtpdAMlTCxLtsTWA7LH1Oh/bFCHsBn0TPS5m30EQ==}
     dependencies:
@@ -8641,6 +8630,12 @@ packages:
       '@types/react': 19.2.17
     dependencies:
       '@types/react': 19.2.17
+
+  /@types/react-test-renderer@19.1.0:
+    resolution: {integrity: sha512-XD0WZrHqjNrxA/MaR9O22w/RNidWR9YZmBdRGI7wcnWGrv/3dA8wKCJ8m63Sn+tLJhcjmuhOi629N66W6kgWzQ==}
+    dependencies:
+      '@types/react': 19.2.17
+    dev: false
 
   /@types/react@19.2.17:
     resolution: {integrity: sha512-MXfmqaVPEVgkBT/aY0aGCkRWWtByiYQXo3xdQ8r5RzuFrPiRn8Gar2tQdXSUQ2GKV3bkXckek89V8wQBY2Q/Aw==}
@@ -12320,7 +12315,7 @@ packages:
       - typescript
     dev: false
 
-  /expo-router@6.0.23(patch_hash=7eaj6gfinv6kjzw2mqhfv7lvkm)(@expo/metro-runtime@6.1.2)(@types/react-dom@19.2.3)(@types/react@19.2.17)(expo-constants@18.0.13)(expo-linking@8.0.12)(expo@54.0.33)(react-dom@19.2.8)(react-native-gesture-handler@2.30.0)(react-native-reanimated@4.2.3)(react-native-safe-area-context@5.8.0)(react-native-screens@4.26.2)(react-native@0.86.2)(react@19.2.7):
+  /expo-router@6.0.23(patch_hash=7eaj6gfinv6kjzw2mqhfv7lvkm)(@expo/metro-runtime@6.1.2)(@types/react-dom@19.2.3)(@types/react@19.2.17)(expo-constants@18.0.13)(expo-linking@8.0.12)(expo@54.0.33)(react-dom@19.2.8)(react-native-gesture-handler@3.1.0)(react-native-reanimated@4.2.3)(react-native-safe-area-context@5.8.0)(react-native-screens@4.26.2)(react-native@0.81.5)(react@19.2.7):
     resolution: {integrity: sha512-qCxVAiCrCyu0npky6azEZ6dJDMt77OmCzEbpF6RbUTlfkaCA417LvY14SBkk0xyGruSxy/7pvJOI6tuThaUVCA==}
     peerDependencies:
       '@expo/metro-runtime': ^6.1.2
@@ -12375,12 +12370,12 @@ packages:
       react: 19.2.7
       react-dom: 19.2.8(react@19.2.7)
       react-fast-compare: 3.2.2
-      react-native: 0.86.2(@babel/core@8.0.1)(@react-native/metro-config@0.86.2)(@types/react@19.2.17)(react@19.2.7)
-      react-native-gesture-handler: 2.30.0(react-native@0.86.2)(react@19.2.7)
-      react-native-is-edge-to-edge: 1.3.1(react-native@0.86.2)(react@19.2.7)
-      react-native-reanimated: 4.2.3(react-native-worklets@0.8.3)(react-native@0.86.2)(react@19.2.7)
-      react-native-safe-area-context: 5.8.0(react-native@0.86.2)(react@19.2.7)
-      react-native-screens: 4.26.2(react-native@0.86.2)(react@19.2.7)
+      react-native: 0.81.5(@babel/core@8.0.1)(@react-native/metro-config@0.86.2)(@types/react@19.2.17)(react@19.2.7)
+      react-native-gesture-handler: 3.1.0(react-native@0.81.5)(react@19.2.7)
+      react-native-is-edge-to-edge: 1.3.1(react-native@0.81.5)(react@19.2.7)
+      react-native-reanimated: 4.2.3(react-native-worklets@0.8.3)(react-native@0.81.5)(react@19.2.7)
+      react-native-safe-area-context: 5.8.0(react-native@0.81.5)(react@19.2.7)
+      react-native-screens: 4.26.2(react-native@0.81.5)(react@19.2.7)
       semver: 7.6.3
       server-only: 0.0.1
       sf-symbols-typescript: 2.2.0
@@ -13298,12 +13293,6 @@ packages:
 
   /hey-listen@1.0.8:
     resolution: {integrity: sha512-COpmrF2NOg4TBWUJ5UVyaCU2A88wEMkUPK4hNqyCkqHbxT92BbvfjoSozkAIIm6XhicGlJHhFdullInrdhwU8Q==}
-    dev: false
-
-  /hoist-non-react-statics@3.3.2:
-    resolution: {integrity: sha512-/gGivxi8JPKWNm/W0jSmzcMPpfpPLc3dY/6GxhX2hQ9iGj3aDfklV4ET7NjKpSinLpJ5vafa9iiGIEZg10SfBw==}
-    dependencies:
-      react-is: 16.13.1
     dev: false
 
   /hosted-git-info@7.0.2:
@@ -18155,14 +18144,13 @@ packages:
   /react-is@19.2.8:
     resolution: {integrity: sha512-s5un28nYxKJw5gvUHyW5PCC28CvBqLu9r3cWgzHT4Vo/5fqqkFcdRYsGcKf50WMPpjjFZS5d76fn3YCo2njKwQ==}
 
-  /react-native-gesture-handler@2.30.0(react-native@0.86.2)(react@19.2.7):
-    resolution: {integrity: sha512-5YsnKHGa0X9C8lb5oCnKm0fLUPM6CRduvUUw2Bav4RIj/C3HcFh4RIUnF8wgG6JQWCL1//gRx4v+LVWgcIQdGA==}
+  /react-native-gesture-handler@3.1.0(react-native@0.81.5)(react@19.2.7):
+    resolution: {integrity: sha512-+kWVyZ6vLdtyFa1/aOc/sZncLAVPUKxhji/ttbiLI7hOaSU44bLjhI7p+Ns+pMl2r3RqPXssl5qHReYet9G77g==}
     peerDependencies:
       react: ^19.2.4
       react-native: '*'
     dependencies:
-      '@egjs/hammerjs': 2.0.17
-      hoist-non-react-statics: 3.3.2
+      '@types/react-test-renderer': 19.1.0
       invariant: 2.2.4
       react: 19.2.7
       react-native: 0.86.2(@babel/core@8.0.1)(@react-native/metro-config@0.86.2)(@types/react@19.2.17)(react@19.2.7)
