@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Ui]** constrain login shell container to compact 380px width
+
 - **[Ui]** elevate design tokens and login page layout
 
 - **[Ui]** update create QR code button and KPI card links to use org-scoped paths
