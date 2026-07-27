@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Ui]** add client mounted guard to ThemeProvider to prevent React 19 SSR script warning
+
 - **[Ui]** pass scriptProps to ThemeProvider inside theme-provider client component
 
 - **[Ui]** encapsulate ThemeProvider in client component to prevent RSC script warning
