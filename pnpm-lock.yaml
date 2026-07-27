@@ -1120,8 +1120,8 @@ importers:
         specifier: ^2.0.0
         version: 2.0.2
       '@prisma/adapter-pg':
-        specifier: ^5.22.0
-        version: 5.22.0(pg@8.20.0)
+        specifier: ^7.9.1
+        version: 7.9.1
       '@prisma/client':
         specifier: ^5.22.0
         version: 5.22.0(prisma@5.22.0)
@@ -2722,7 +2722,7 @@ packages:
     dependencies:
       '@babel/core': 8.0.1
       '@babel/helper-plugin-utils': 7.29.7
-      '@babel/template': 7.28.6
+      '@babel/template': 7.29.7
     dev: false
 
   /@babel/plugin-transform-destructuring@7.28.5(@babel/core@8.0.1):
@@ -5867,14 +5867,15 @@ packages:
     resolution: {integrity: sha512-wwQAWhWSuHaag8c4q/KN/vCoeOJYshAIvMQwD4GpSb3OiZklFfvAgmj0VCBBImRpuF/aFgIRzllXlVX93Jevww==}
     dev: true
 
-  /@prisma/adapter-pg@5.22.0(pg@8.20.0):
-    resolution: {integrity: sha512-feLMrZtHD4qSG/Kk+GSQKyLsIpukDhMc4xucNz268NDiYxx0oviI9SA9M8dWX5BSPt2Qhr7Hqt8AVB6V/zvR1g==}
-    peerDependencies:
-      pg: ^8.11.3
+  /@prisma/adapter-pg@7.9.1:
+    resolution: {integrity: sha512-Ho2RK1KanQxLNSC0sR5bpiiVep10sWPLXCcxK+KXfI/Q69TMRbiafSvLPv3V9snimX72rMCqGlyJ4sBO4lKTAw==}
     dependencies:
-      '@prisma/driver-adapter-utils': 5.22.0
+      '@prisma/driver-adapter-utils': 7.9.1
+      '@types/pg': 8.20.0
       pg: 8.20.0
-      postgres-array: 3.0.2
+      postgres-array: 3.0.4
+    transitivePeerDependencies:
+      - pg-native
     dev: false
 
   /@prisma/client@5.22.0(prisma@5.22.0):
@@ -5893,10 +5894,14 @@ packages:
   /@prisma/debug@5.22.0:
     resolution: {integrity: sha512-AUt44v3YJeggO2ZU5BkXI7M4hu9BF2zzH2iF2V5pyXT/lRTyWiElZ7It+bRH1EshoMRxHgpYg4VB6rCM+mG5jQ==}
 
-  /@prisma/driver-adapter-utils@5.22.0:
-    resolution: {integrity: sha512-Y8msGZl9unmVflXoqdxTejv99UD02Gp4VoIvkyw+YxNUIj7nRz35O7yf5D87qNmTiPMGCS1WjUucG9ZuNq8+tw==}
+  /@prisma/debug@7.9.1:
+    resolution: {integrity: sha512-/cpVZ4itxtcgB8GHBvZtcmuEjq+lWsLrRJxFMbwZrT1RIdtuKmUm7PPGo/wzfbYpBrk+9WmmBE8CHJw2rybKDQ==}
+    dev: false
+
+  /@prisma/driver-adapter-utils@7.9.1:
+    resolution: {integrity: sha512-vmHehG7nn/heW32DXXpp13DxxAxVVe6n250oEt3dOL2E/4bt3olktKZN0mzSuxMMronyMSkbeW2uCOn3F4g8RQ==}
     dependencies:
-      '@prisma/debug': 5.22.0
+      '@prisma/debug': 7.9.1
     dev: false
 
   /@prisma/engines-version@5.22.0-44.605197351a3c8bdd595af2d2a9bc3025bca48ea2:
@@ -8765,7 +8770,6 @@ packages:
       '@types/node': 20.19.37
       pg-protocol: 1.13.0
       pg-types: 2.2.0
-    dev: true
 
   /@types/qrcode@1.5.6:
     resolution: {integrity: sha512-te7NQcV2BOvdj2b1hCAHzAoMNuj65kNBMz0KBaxM6c3VGBOhU0dURQKOtH8CFNI/dsKkwlv32p26qYQTWoB5bw==}
@@ -10159,8 +10163,8 @@ packages:
     engines: {node: '>=6.0.0'}
     hasBin: true
 
-  /baseline-browser-mapping@2.11.4:
-    resolution: {integrity: sha512-s4+sLr9mZ/CyqeRritFeYV/Zx73OAtmaHn6kkBS1XRoJn1hrg3xIDUcpicAEX68tkcIN0iBCgti31C8zxtkhsQ==}
+  /baseline-browser-mapping@2.11.5:
+    resolution: {integrity: sha512-xJo6a6YZnwZfnyGmQKWMbVOcii7XRibjOskRh+WJ9UHQoX16xrQrcIgAMQOzfvs8XiLMx6ih/fsLPF73iY2D1A==}
     engines: {node: '>=6.0.0'}
     hasBin: true
 
@@ -10287,7 +10291,7 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      baseline-browser-mapping: 2.11.4
+      baseline-browser-mapping: 2.11.5
       caniuse-lite: 1.0.30001806
       electron-to-chromium: 1.5.396
       node-releases: 2.0.51
@@ -16242,8 +16246,8 @@ packages:
     engines: {node: '>=20.19.4'}
     dependencies:
       '@babel/core': 7.29.7
-      '@babel/generator': 7.29.1
-      '@babel/template': 7.28.6
+      '@babel/generator': 7.29.7
+      '@babel/template': 7.29.7
       '@babel/traverse': 7.29.7
       flow-enums-runtime: 0.0.6
       nullthrows: 1.1.1
@@ -16293,7 +16297,7 @@ packages:
     engines: {node: '>=20.19.4'}
     dependencies:
       '@babel/core': 7.29.7
-      '@babel/generator': 7.29.1
+      '@babel/generator': 7.29.7
       '@babel/parser': 7.29.7
       '@babel/types': 7.29.7
       flow-enums-runtime: 0.0.6
@@ -17828,8 +17832,8 @@ packages:
     resolution: {integrity: sha512-VpZrUqU5A69eQyW2c5CA1jtLecCsN2U/bD6VilrFDWq5+5UIEVO7nazS3TEcHf1zuPYO/sqGvUvW62g86RXZuA==}
     engines: {node: '>=4'}
 
-  /postgres-array@3.0.2:
-    resolution: {integrity: sha512-6faShkdFugNQCLwucjPcY5ARoW1SlbnrZjmGl0IrrqewpvxvhSLHimCVzqeuULCbG0fQv7Dtk1yDbG3xv7Veog==}
+  /postgres-array@3.0.4:
+    resolution: {integrity: sha512-nAUSGfSDGOaOAEGwqsRY27GPOea7CNipJPOA7lPbdEpx5Kg3qzdP0AaWC5MlhTWV9s4hFX39nomVZ+C4tnGOJQ==}
     engines: {node: '>=12'}
     dev: false
 
