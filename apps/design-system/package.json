@@ -10,9 +10,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "next": "^16.2.11",
-    "react": "19.2.7",
-    "react-dom": "19.2.7",
+    "next": "^16.2.12",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
     "lucide-react": "^1.25.0",
     "clsx": "^2.1.1",
     "tailwind-merge": "^3.6.0",
