@@ -107,7 +107,7 @@ jobs:
             echo "gh_env_prefix=Preview" >> "$GITHUB_OUTPUT"
           fi
 
-      - uses: dorny/paths-filter@v3
+      - uses: dorny/paths-filter@v4
         id: filter
         with:
           filters: |
