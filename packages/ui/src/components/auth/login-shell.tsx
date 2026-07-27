@@ -46,13 +46,13 @@ export interface LoginShellProps {
 
 const DEFAULT_CLIENT_HEADING = 'Sign in to continue';
 const DEFAULT_CLIENT_SUBTITLE =
-  'Securely manage your gated infrastructure with Atlassian-grade precision.';
+  'Manage gates, QR codes, and scans from anywhere.';
 const DEFAULT_ADMIN_HEADING = 'Platform Administration';
 const DEFAULT_ADMIN_SUBTITLE =
   'Super-admin panel for global GateFlow operations.';
 
 /**
- * LoginShell - Specialized Auth Container
+ * LoginShell - Clean Modern Auth Container
  */
 export function LoginShell({
   variant = 'client',
@@ -89,40 +89,57 @@ export function LoginShell({
     <>
       <style dangerouslySetInnerHTML={{ __html: KEYFRAME_STYLES }} />
 
-      <div className="fixed inset-0 z-[100] flex items-center justify-center bg-background transition-colors duration-300 p-4 sm:p-6 overflow-y-auto">
-        {/* Subtle background glow */}
-        <div
-          className="pointer-events-none absolute h-[320px] w-[320px] rounded-full bg-primary/10 blur-[100px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-          aria-hidden="true"
-        />
+      <div className="fixed inset-0 z-[100] flex flex-col justify-between bg-background transition-colors duration-300 p-4 sm:p-6 overflow-y-auto">
+        {/* Top Header Navigation */}
+        <header className="relative z-10 flex items-center justify-between w-full max-w-5xl mx-auto py-2">
+          <div className="flex items-center gap-2">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground font-bold shadow-md shadow-primary/20">
+              <ShieldCheck className="h-5 w-5" />
+            </div>
+            <span className="text-base font-bold tracking-tight text-foreground">
+              {displayName}
+            </span>
+          </div>
 
-        {/* Main Content Area */}
-        <main className="relative z-10 flex w-full max-w-[380px] mx-auto flex-col">
           <div
             className={cn(
-              'flex flex-col rounded-2xl bg-card border border-border/80 shadow-2xl dark:shadow-none dark:border-border p-6 sm:p-8 transition-all duration-300',
+              'transition-opacity duration-300',
+              mounted && !isSuccess
+                ? 'opacity-100'
+                : 'opacity-0 pointer-events-none'
+            )}
+          >
+            {topRight}
+          </div>
+        </header>
+
+        {/* Center Form Container */}
+        <main className="relative z-10 flex w-full max-w-[400px] mx-auto flex-col my-auto py-6">
+          <div
+            className={cn(
+              'flex flex-col rounded-2xl bg-card border border-border shadow-xl dark:shadow-none p-7 sm:p-9 transition-all duration-300',
               shaking && 'animate-login-shake'
             )}
           >
             {/* Branding Header */}
-            <div className="mb-8 flex flex-col items-center text-center">
+            <div className="mb-6 flex flex-col items-center text-center">
               <div
                 className={cn(
-                  'login-logo mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-lg shadow-primary/25 transition-all duration-300',
+                  'login-logo mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary shadow-sm transition-all duration-300',
                   isSuccess && 'login-logo-success'
                 )}
               >
                 {isAdmin ? (
-                  <Shield className="h-7 w-7" />
+                  <Shield className="h-6 w-6" />
                 ) : (
-                  <ShieldCheck className="h-8 w-8" />
+                  <ShieldCheck className="h-6 w-6" />
                 )}
               </div>
 
-              <h1 className="text-2xl font-bold tracking-tight text-foreground">
+              <h1 className="text-xl font-bold tracking-tight text-foreground">
                 {displayHeading}
               </h1>
-              <p className="mt-2 text-sm text-muted-foreground leading-relaxed max-w-sm">
+              <p className="mt-1 text-xs text-muted-foreground leading-relaxed">
                 {displaySubtitle}
               </p>
             </div>
@@ -134,36 +151,24 @@ export function LoginShell({
                   {children}
                 </div>
               ) : (
-                <div className="flex flex-col items-center justify-center py-8 animate-in fade-in zoom-in-95 duration-300">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-success/15 text-success">
-                    <ShieldCheck className="h-10 w-10" />
+                <div className="flex flex-col items-center justify-center py-6 animate-in fade-in zoom-in-95 duration-300">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-full bg-success/15 text-success">
+                    <ShieldCheck className="h-8 w-8" />
                   </div>
-                  <p className="mt-4 font-semibold text-foreground">
+                  <p className="mt-3 text-sm font-semibold text-foreground">
                     Authenticated Successfully
                   </p>
                 </div>
               )}
             </div>
           </div>
-
-          {/* Footer Copyright */}
-          <div className="mt-6 text-center text-xs text-muted-foreground/60 font-medium">
-            © {new Date().getFullYear()} {displayName} • Secure Infrastructure
-            Access
-          </div>
         </main>
 
-        {/* Top-right controls (Theme/Locales) */}
-        <div
-          className={cn(
-            'fixed top-6 end-6 z-[110] transition-opacity duration-300',
-            mounted && !isSuccess
-              ? 'opacity-100'
-              : 'opacity-0 pointer-events-none'
-          )}
-        >
-          {topRight}
-        </div>
+        {/* Footer Copyright */}
+        <footer className="relative z-10 py-3 text-center text-xs text-muted-foreground/60 font-medium">
+          © {new Date().getFullYear()} {displayName} • Secure Infrastructure
+          Access
+        </footer>
       </div>
     </>
   );

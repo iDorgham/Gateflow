@@ -22,10 +22,12 @@ import {
   Moon,
   Globe,
   Check,
+  Mail,
+  Lock,
 } from 'lucide-react';
 import type { Locale } from '@/lib/i18n-config';
 
-// ─── Locale helpers ────────────────────────────────────────────────────────────
+// ─── Locale & Theme helpers ──────────────────────────────────────────────────
 
 const LOCALE_LABELS: Record<string, string> = {
   en: 'English',
@@ -51,12 +53,12 @@ function LoginControls({ locale }: { locale: Locale }) {
   };
 
   return (
-    <div className="flex items-center gap-1.5 rounded-full border border-border/80 bg-card/80 p-1 backdrop-blur-md shadow-sm">
+    <div className="flex items-center gap-2">
       {/* Language picker */}
       <div className="relative">
         <button
           onClick={() => setLangOpen((v) => !v)}
-          className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold text-muted-foreground hover:bg-muted hover:text-foreground transition-colors focus-visible:outline-none"
+          className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-card px-3 py-1.5 text-xs font-semibold text-muted-foreground hover:bg-muted hover:text-foreground transition-colors focus-visible:outline-none shadow-sm"
           aria-label="Switch language"
         >
           <Globe className="h-3.5 w-3.5 text-primary" />
@@ -86,8 +88,6 @@ function LoginControls({ locale }: { locale: Locale }) {
         )}
       </div>
 
-      <div className="h-3.5 w-px bg-border" />
-
       {/* Theme toggle */}
       <button
         onClick={() => {
@@ -99,7 +99,7 @@ function LoginControls({ locale }: { locale: Locale }) {
             350
           );
         }}
-        className="rounded-full p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors focus-visible:outline-none"
+        className="rounded-xl border border-border bg-card p-2 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors focus-visible:outline-none shadow-sm"
         aria-label="Toggle theme"
       >
         {mounted && theme === 'dark' ? (
@@ -131,7 +131,7 @@ function SubmitButton({ isRtl }: { isRtl: boolean }) {
             isRtl && 'flex-row-reverse'
           )}
         >
-          Sign in
+          {isRtl ? 'تسجيل الدخول' : 'Sign in to Dashboard'}
           <ArrowRight className={cn('h-4 w-4', isRtl && 'rotate-180')} />
         </span>
       )}
@@ -178,10 +178,10 @@ export default function LoginPage() {
     <LoginShell
       variant="client"
       appName="GateFlow"
-      heading={t('heading', 'Sign in')}
+      heading={t('heading', 'Welcome back')}
       subtitle={t(
         'subtitle',
-        'Manage gates, QR codes, and scans from anywhere. Zero-trust digital access.'
+        'Enter your credentials to access your organization dashboard.'
       )}
       topRight={<LoginControls locale={locale} />}
       errorKey={errorKey}
@@ -191,33 +191,44 @@ export default function LoginPage() {
         <CardContent className="p-0">
           <form
             action={formAction}
-            className="space-y-5"
+            className="space-y-4"
             dir={isRtl ? 'rtl' : 'ltr'}
           >
             {state?.error && (
-              <div className="rounded-xl border border-destructive/30 bg-destructive/10 px-4 py-3 text-xs font-semibold text-destructive flex items-center gap-2.5 animate-in fade-in duration-200">
+              <div className="rounded-xl border border-destructive/30 bg-destructive/10 px-3.5 py-2.5 text-xs font-semibold text-destructive flex items-center gap-2 animate-in fade-in duration-200">
                 <AlertCircle className="h-4 w-4 shrink-0" />
                 {state.error}
               </div>
             )}
 
-            <div className="space-y-4">
+            <div className="space-y-3.5">
               <div className="space-y-1.5">
                 <Label
                   htmlFor="email"
                   className="text-xs font-semibold text-foreground/90"
                 >
-                  {isRtl ? 'البريد الإلكتروني' : 'Email'}
+                  {isRtl ? 'البريد الإلكتروني' : 'Email address'}
                 </Label>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  placeholder="name@company.com"
-                  autoComplete="email"
-                  required
-                  className="h-10 rounded-xl border-input bg-background/50 hover:border-primary/40 focus:border-primary focus:ring-2 focus:ring-primary/20 text-sm font-medium transition-all"
-                />
+                <div className="relative">
+                  <Mail
+                    className={cn(
+                      'absolute top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/60',
+                      isRtl ? 'right-3' : 'left-3'
+                    )}
+                  />
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder="name@company.com"
+                    autoComplete="email"
+                    required
+                    className={cn(
+                      'h-10 rounded-xl border-input bg-background/50 hover:border-primary/40 focus:border-primary focus:ring-2 focus:ring-primary/20 text-sm font-medium transition-all',
+                      isRtl ? 'pr-9 pl-3' : 'pl-9 pr-3'
+                    )}
+                  />
+                </div>
               </div>
 
               <div className="space-y-1.5">
@@ -237,6 +248,12 @@ export default function LoginPage() {
                   </a>
                 </div>
                 <div className="relative">
+                  <Lock
+                    className={cn(
+                      'absolute top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/60',
+                      isRtl ? 'right-3' : 'left-3'
+                    )}
+                  />
                   <Input
                     id="password"
                     name="password"
@@ -246,7 +263,7 @@ export default function LoginPage() {
                     required
                     className={cn(
                       'h-10 rounded-xl border-input bg-background/50 hover:border-primary/40 focus:border-primary focus:ring-2 focus:ring-primary/20 text-sm font-medium transition-all',
-                      isRtl ? 'pl-10 pr-3' : 'pr-10 pl-3'
+                      isRtl ? 'pr-9 pl-9' : 'pl-9 pr-9'
                     )}
                   />
                   <button
@@ -269,7 +286,7 @@ export default function LoginPage() {
 
             <SubmitButton isRtl={isRtl} />
 
-            <div className="mt-6 pt-5 border-t border-border/60 text-center">
+            <div className="pt-4 border-t border-border/60 text-center">
               <p className="text-xs text-muted-foreground font-medium">
                 {isRtl ? 'ليس لديك حساب؟' : "Don't have an account?"}{' '}
                 <a
