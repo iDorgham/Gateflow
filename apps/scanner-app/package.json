@@ -28,7 +28,7 @@
     "expo-haptics": "~15.0.8",
     "expo-image-picker": "^55.0.10",
     "expo-jwt": "^1.8.2",
-    "expo-local-authentication": "~15.0.2",
+    "expo-local-authentication": "~57.0.2",
     "expo-location": "~19.0.8",
     "expo-network": "~8.0.8",
     "expo-router": "~6.0.23",
