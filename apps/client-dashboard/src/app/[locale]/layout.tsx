@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { ThemeProvider } from 'next-themes';
+import { ThemeProvider } from '@/components/theme-provider';
 import '../globals.css';
 
 export const metadata: Metadata = {
@@ -54,12 +54,7 @@ export default async function RootLayout(props: {
         suppressHydrationWarning
       >
         <I18nProvider locale={params.locale}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            scriptProps={{ suppressHydrationWarning: true }}
-          >
+          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <QueryProvider>{children}</QueryProvider>
           </ThemeProvider>
         </I18nProvider>
