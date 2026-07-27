@@ -53,7 +53,7 @@
     "lucide-react": ">=0.300.0"
   },
   "dependencies": {
-    "@atlaskit/tokens": "^11.1.1",
+    "@atlaskit/tokens": "^16.3.0",
     "@gateflow/tokens": "workspace:*",
     "@gateflow/theme": "workspace:*",
     "@gate-access/types": "workspace:*",
