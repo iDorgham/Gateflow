@@ -599,8 +599,8 @@ importers:
         specifier: ^1.1.9
         version: 1.1.9(react@19.2.7)
       '@tailwindcss/typography':
-        specifier: ^0.5.19
-        version: 0.5.19(tailwindcss@4.3.3)
+        specifier: ^0.5.20
+        version: 0.5.20(tailwindcss@4.3.3)
       '@vercel/analytics':
         specifier: ^2.0.1
         version: 2.0.1(next@16.2.11)(react@19.2.7)
@@ -7912,10 +7912,10 @@ packages:
       tailwindcss: 4.3.3
     dev: true
 
-  /@tailwindcss/typography@0.5.19(tailwindcss@4.3.3):
-    resolution: {integrity: sha512-w31dd8HOx3k9vPtcQh5QHP9GwKcgbMp87j58qi6xgiBnFFtKEAgCWnDw4qUT8aHwkCp8bKvb/KGKWWHedP0AAg==}
+  /@tailwindcss/typography@0.5.20(tailwindcss@4.3.3):
+    resolution: {integrity: sha512-hwbzQuNUfcPvbegQFatVPl/MY/tcM9KLl963hQ5laJKPh81TEZ1+dNG9PirGvcaDBkp+BCshExAyKVPW91dozw==}
     peerDependencies:
-      tailwindcss: '>=3.0.0 || insiders || >=4.0.0-alpha.20 || >=4.0.0-beta.1'
+      tailwindcss: '>=3.0.0 || >=4.0.0 || insiders'
     dependencies:
       postcss-selector-parser: 6.0.10
       tailwindcss: 4.3.3
