@@ -1,0 +1,24 @@
+apps/client-dashboard/src/app/[locale]/login/actions.ts
+  s_754aa0856fd65a::t_c6439b67b0f70e 23,35-36,38,40
+  s_754aa0856fd65a::t_1beb51f122c61c 69
+packages/ui/src/globals.css
+  s_754aa0856fd65a::t_2ecef7851f7485 4-9
+apps/client-dashboard/src/app/[locale]/login/page.tsx
+  s_754aa0856fd65a::t_60081fb3fc88d0 224
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "141554c0c7d50b38a81f59b3d10c43ab839e489d",
+  "prompts": {},
+  "sessions": {
+    "s_754aa0856fd65a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "409b4b3b-54fa-4344-a354-ea767f7fcd82",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
