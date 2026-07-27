@@ -13,7 +13,7 @@
     "next": "^16.2.11",
     "react": "19.2.7",
     "react-dom": "19.2.7",
-    "lucide-react": "^1.25.0",
+    "lucide-react": "^1.27.0",
     "clsx": "^2.1.1",
     "tailwind-merge": "^3.6.0",
     "@gateflow/tokens": "workspace:*",
