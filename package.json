@@ -86,7 +86,7 @@
   },
   "devDependencies": {
     "@commitlint/cli": "^20.5.0",
-    "@commitlint/config-conventional": "^20.5.0",
+    "@commitlint/config-conventional": "^21.2.0",
     "@gate-access/config": "workspace:*",
     "@lhci/cli": "^0.15.1",
     "@turbo/gen": "^1.13.4",
