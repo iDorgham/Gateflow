@@ -29,7 +29,7 @@
     "@gateflow/ui": "workspace:^",
     "@hookform/resolvers": "^5.2.2",
     "@hugeicons/core-free-icons": "^3.1.1",
-    "@hugeicons/react": "^1.1.5",
+    "@hugeicons/react": "^1.1.9",
     "@node-rs/argon2": "^2.0.0",
     "@paralleldrive/cuid2": "^3.3.0",
     "@phosphor-icons/react": "^2.1.10",
