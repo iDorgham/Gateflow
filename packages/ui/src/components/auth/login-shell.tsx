@@ -97,10 +97,10 @@ export function LoginShell({
         />
 
         {/* Main Content Area */}
-        <main className="relative z-10 flex w-full max-w-[440px] flex-col">
+        <main className="relative z-10 flex w-full max-w-[380px] mx-auto flex-col">
           <div
             className={cn(
-              'flex flex-col rounded-2xl bg-card border border-border/80 shadow-2xl dark:shadow-none dark:border-border p-8 sm:p-10 transition-all duration-300',
+              'flex flex-col rounded-2xl bg-card border border-border/80 shadow-2xl dark:shadow-none dark:border-border p-6 sm:p-8 transition-all duration-300',
               shaking && 'animate-login-shake'
             )}
           >
