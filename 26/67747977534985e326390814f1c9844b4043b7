@@ -1,0 +1,19 @@
+CHANGELOG.md
+  s_754aa0856fd65a::t_e44a73fe41ea15 12-13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "2667747977534985e326390814f1c9844b4043b7",
+  "prompts": {},
+  "sessions": {
+    "s_754aa0856fd65a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "409b4b3b-54fa-4344-a354-ea767f7fcd82",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
