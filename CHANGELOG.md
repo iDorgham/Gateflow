@@ -10,7 +10,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
-- **[Ui]** register packages/ui as a Tailwind v4 source and preserve email on failed login
+- **[Ui]** register packages/ui as a Tailwind v4 source
 - **[Ui]** enforce items-center on login shell flexbox container to fix full-width stretching
 - **[Security]** update tar override in pnpm.overrides to >=7.5.21
 
@@ -70,6 +70,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Apps
 
+- **[Client-Dashboard]** preserve email on failed login
 - **[Security]** audit remediation phase 4 — admin/CMS/CRM API auth, rate limits, shared HSTS+CSP headers
 - **[Security]** audit remediation phase 3 — trustworthy CI scanners + full typecheck
 - **[Security]** audit remediation phase 2 — request-local fail-closed tenant `db` (ALS)
