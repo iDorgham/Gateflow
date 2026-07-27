@@ -170,8 +170,8 @@ importers:
         specifier: ^3.1.1
         version: 3.3.0
       '@hugeicons/react':
-        specifier: ^1.1.5
-        version: 1.1.6(react@19.2.7)
+        specifier: ^1.1.9
+        version: 1.1.9(react@19.2.7)
       '@node-rs/argon2':
         specifier: ^2.0.0
         version: 2.0.2
@@ -336,8 +336,8 @@ importers:
         specifier: ^3.1.1
         version: 3.3.0
       '@hugeicons/react':
-        specifier: ^1.1.5
-        version: 1.1.6(react@19.2.7)
+        specifier: ^1.1.9
+        version: 1.1.9(react@19.2.7)
       '@node-rs/argon2':
         specifier: ^2.0.0
         version: 2.0.2
@@ -596,8 +596,8 @@ importers:
         specifier: ^3.1.1
         version: 3.3.0
       '@hugeicons/react':
-        specifier: ^1.1.5
-        version: 1.1.6(react@19.2.7)
+        specifier: ^1.1.9
+        version: 1.1.9(react@19.2.7)
       '@tailwindcss/typography':
         specifier: ^0.5.19
         version: 0.5.19(tailwindcss@4.3.3)
@@ -796,8 +796,8 @@ importers:
         specifier: ^3.1.1
         version: 3.3.0
       '@hugeicons/react':
-        specifier: ^1.1.5
-        version: 1.1.6(react@19.2.7)
+        specifier: ^1.1.9
+        version: 1.1.9(react@19.2.7)
       ai:
         specifier: 5.0.52
         version: 5.0.52(zod@3.25.76)
@@ -1314,8 +1314,8 @@ importers:
         specifier: ^3.1.1
         version: 3.3.0
       '@hugeicons/react':
-        specifier: ^1.1.5
-        version: 1.1.6(react@19.2.7)
+        specifier: ^1.1.9
+        version: 1.1.9(react@19.2.7)
       '@radix-ui/react-collapsible':
         specifier: ^1.1.17
         version: 1.1.17(@types/react-dom@19.2.3)(@types/react@19.2.17)(react-dom@19.2.7)(react@19.2.7)
@@ -4393,8 +4393,8 @@ packages:
     resolution: {integrity: sha512-qYyr4JQ2eQIHTSTbITvnJvs6ERNK64D9gpwZnf2IyuG0exzqfyABLO/oTB71FB3RZPfu1GbwycdiGSo46apjMQ==}
     dev: false
 
-  /@hugeicons/react@1.1.6(react@19.2.7):
-    resolution: {integrity: sha512-c2LhXJMAW5wN1pC/smBXG0YPqUON6ceR/ZdXHCjEI9KvB+hjtqYjmzIxok5hAQOeXGz0WtORgCQMzqewFKAZwg==}
+  /@hugeicons/react@1.1.9(react@19.2.7):
+    resolution: {integrity: sha512-O+lWSWjbijoAvMCxn4K2bQWCGN5+mP1y5j+X99j23mXMj+s0X25fs71T6t9YJLaBodwmZdaewD27dzS/PiboQw==}
     peerDependencies:
       react: ^19.2.4
     dependencies:
