@@ -9,6 +9,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 ## [Unreleased]
 
 ### Workspace
+
+- **[Ui]** register packages/ui as a Tailwind v4 source and preserve email on failed login
 - **[Ui]** enforce items-center on login shell flexbox container to fix full-width stretching
 - **[Security]** update tar override in pnpm.overrides to >=7.5.21
 
