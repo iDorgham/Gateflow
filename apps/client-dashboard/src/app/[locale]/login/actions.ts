@@ -20,6 +20,7 @@ export type LoginState = {
   error?: string;
   success?: boolean;
   locale?: string;
+  email?: string;
 } | null;
 
 export async function loginAction(
@@ -31,11 +32,12 @@ export async function loginAction(
     .toLowerCase();
   const password = String(formData.get('password') ?? '');
 
-  if (!email || !password) return { error: 'Email and password are required.' };
+  if (!email || !password)
+    return { error: 'Email and password are required.', email };
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
-    return { error: 'Enter a valid email address.' };
+    return { error: 'Enter a valid email address.', email };
   if (password.length < 8)
-    return { error: 'Password must be at least 8 characters.' };
+    return { error: 'Password must be at least 8 characters.', email };
 
   // Fetch user — constant-time error path regardless of existence
   const userData = await prisma.user
@@ -64,7 +66,7 @@ export async function loginAction(
     : false;
 
   if (!userData || !passwordValid)
-    return { error: 'Invalid email or password.' };
+    return { error: 'Invalid email or password.', email };
 
   // Issue tokens
   const [accessToken, refreshToken] = await Promise.all([

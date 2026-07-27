@@ -221,6 +221,7 @@ export default function LoginPage() {
                     name="email"
                     type="email"
                     placeholder="name@company.com"
+                    defaultValue={state?.email ?? ''}
                     autoComplete="email"
                     required
                     className={cn(
