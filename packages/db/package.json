@@ -30,7 +30,7 @@
     "crypto-js": "^4.2.0",
     "@gate-access/types": "workspace:*",
     "@node-rs/argon2": "^2.0.0",
-    "@prisma/adapter-pg": "^5.22.0",
+    "@prisma/adapter-pg": "^7.9.1",
     "@prisma/client": "^5.22.0",
     "@prisma/extension-accelerate": "^2.0.2",
     "ai": "5.0.52",
@@ -47,7 +47,7 @@
     "@faker-js/faker": "^9.9.0",
     "@types/node": "^20.19.33",
     "@types/pg": "^8.18.0",
-    "prisma": "^5.22.0",
+    "prisma": "^6.19.3",
     "tsx": "^4.7.1",
     "typescript": "^7.0.2"
   },
