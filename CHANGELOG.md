@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Ui]** pass scriptProps to ThemeProvider to silence script hydration warning
+
 - **[Ui]** add use client directive to components index and suppress layout hydration warning
 
 - **[Scripts]** harden workflow-v2 guide parsing and docs alignment
