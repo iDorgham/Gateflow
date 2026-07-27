@@ -11,7 +11,7 @@ const KEYFRAME_STYLES = `
   50%      { transform: translateY(-4px); }
 }
 @keyframes login-entrance {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(12px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 @keyframes login-shake {
@@ -23,8 +23,8 @@ const KEYFRAME_STYLES = `
   animation: login-shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
 }
 .login-logo-success {
-  transform: scale(0.8);
-  opacity: 0.8;
+  transform: scale(0.85);
+  opacity: 0.85;
   transition: all 0.3s ease;
 }
 @media (prefers-reduced-motion: reduce) {
@@ -53,7 +53,6 @@ const DEFAULT_ADMIN_SUBTITLE =
 
 /**
  * LoginShell - Specialized Auth Container
- * Migrated to semantic tokens.
  */
 export function LoginShell({
   variant = 'client',
@@ -90,20 +89,26 @@ export function LoginShell({
     <>
       <style dangerouslySetInnerHTML={{ __html: KEYFRAME_STYLES }} />
 
-      <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[var(--ds-surface-sunken)] transition-colors duration-300">
-        {/* Main Content Area: Centered layout for Atlassian feel */}
-        <main className="relative z-10 flex w-full max-w-[480px] flex-col px-6">
+      <div className="fixed inset-0 z-[100] flex items-center justify-center bg-background dark:bg-[var(--gf-color-bg-page,#09090b)] transition-colors duration-300 p-4 sm:p-6 overflow-y-auto">
+        {/* Subtle background glow */}
+        <div
+          className="pointer-events-none absolute h-[320px] w-[320px] rounded-full bg-primary/10 blur-[100px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+          aria-hidden="true"
+        />
+
+        {/* Main Content Area */}
+        <main className="relative z-10 flex w-full max-w-[440px] flex-col">
           <div
             className={cn(
-              'flex flex-col rounded-sm bg-[var(--ds-surface-raised)] p-8 border border-[var(--ds-border)] shadow-[var(--ds-shadow-overlay)] transition-all duration-300',
+              'flex flex-col rounded-2xl bg-card border border-border/80 shadow-2xl dark:shadow-none dark:border-border p-8 sm:p-10 transition-all duration-300',
               shaking && 'animate-login-shake'
             )}
           >
             {/* Branding Header */}
-            <div className="mb-10 flex flex-col items-center text-center">
+            <div className="mb-8 flex flex-col items-center text-center">
               <div
                 className={cn(
-                  'login-logo mb-6 flex h-12 w-12 items-center justify-center rounded-sm bg-[var(--ds-background-brand-bold)] text-[var(--ds-text-inverse)] shadow-[var(--ds-shadow-raised)] transition-all duration-300',
+                  'login-logo mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-lg shadow-primary/25 transition-all duration-300',
                   isSuccess && 'login-logo-success'
                 )}
               >
@@ -114,10 +119,10 @@ export function LoginShell({
                 )}
               </div>
 
-              <h1 className="text-2xl font-semibold tracking-tight text-[var(--ds-text-primary)]">
+              <h1 className="text-2xl font-bold tracking-tight text-foreground">
                 {displayHeading}
               </h1>
-              <p className="mt-2 text-sm text-[var(--ds-text-subtle)]">
+              <p className="mt-2 text-sm text-muted-foreground leading-relaxed max-w-sm">
                 {displaySubtitle}
               </p>
             </div>
@@ -129,16 +134,11 @@ export function LoginShell({
                   {children}
                 </div>
               ) : (
-                <div className="flex flex-col items-center justify-center py-10 animate-in fade-in zoom-in-95 duration-300">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-[var(--ds-background-success-bold)]/10 text-[var(--ds-text-success)]">
+                <div className="flex flex-col items-center justify-center py-8 animate-in fade-in zoom-in-95 duration-300">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-success/15 text-success">
                     <ShieldCheck className="h-10 w-10" />
                   </div>
-                  <p
-                    className={cn(
-                      'mt-4 font-medium',
-                      'text-[var(--ds-text-primary)]'
-                    )}
-                  >
+                  <p className="mt-4 font-semibold text-foreground">
                     Authenticated Successfully
                   </p>
                 </div>
@@ -147,7 +147,7 @@ export function LoginShell({
           </div>
 
           {/* Footer Copyright */}
-          <div className="mt-8 text-center text-[12px] text-[var(--ds-text-subtlest)] opacity-50">
+          <div className="mt-6 text-center text-xs text-muted-foreground/60 font-medium">
             © {new Date().getFullYear()} {displayName} • Secure Infrastructure
             Access
           </div>

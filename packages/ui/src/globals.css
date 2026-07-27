@@ -1,5 +1,4 @@
 /* @import must precede other imports — Tailwind expands into real CSS rules */
-@import '../../tokens/css/tokens.css';
 @import 'tailwindcss';
 
 @theme {
@@ -60,6 +59,53 @@
 
 @layer base {
   :root {
+    /* Base GateFlow Brand & System Palette (Light) */
+    --gf-color-primary: #ed4b00;
+    --gf-color-primary-hover: #dc3e00;
+    --gf-color-primary-foreground: #ffffff;
+    --gf-color-primary-subtle: rgba(237, 75, 0, 0.08);
+
+    --gf-color-bg-page: #f8fafc;
+    --gf-color-bg-subtle: #f1f5f9;
+    --gf-color-bg-default: #ffffff;
+    --gf-color-bg-raised: #ffffff;
+    --gf-color-bg-overlay: #ffffff;
+
+    --gf-color-text: #0f172a;
+    --gf-color-text-subtle: #475569;
+    --gf-color-text-subtlest: #94a3b8;
+    --gf-color-text-inverse: #ffffff;
+    --gf-color-text-brand: #ed4b00;
+
+    --gf-color-border: #e2e8f0;
+    --gf-color-border-subtle: #f1f5f9;
+    --gf-color-border-bold: #cbd5e1;
+    --gf-color-border-focused: #ed4b00;
+
+    --gf-color-muted: #f1f5f9;
+    --gf-color-muted-foreground: #64748b;
+    --gf-color-neutral-0: #ffffff;
+    --gf-color-neutral-200: #e2e8f0;
+    --gf-color-neutral-300: #cbd5e1;
+    --gf-color-neutral-400: #94a3b8;
+    --gf-color-brand-100: rgba(237, 75, 0, 0.12);
+
+    --gf-color-success: #16a34a;
+    --gf-color-success-subtle: rgba(22, 163, 74, 0.08);
+    --gf-color-success-bold: #15803d;
+    --gf-color-warning: #f59e0b;
+    --gf-color-warning-subtle: rgba(245, 158, 11, 0.08);
+    --gf-color-warning-bold: #d97706;
+    --gf-color-danger: #ef4444;
+    --gf-color-danger-subtle: rgba(239, 68, 68, 0.08);
+    --gf-color-danger-bold: #dc2626;
+    --gf-color-info: #3b82f6;
+    --gf-color-info-subtle: rgba(59, 130, 246, 0.08);
+    --gf-color-info-bold: #2563eb;
+
+    --gf-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --gf-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+
     /* Typography */
     --ds-font-family-sans: var(
       --font-sans,
@@ -69,7 +115,7 @@
     --ds-font-family-mono: var(--font-mono, monospace);
 
     /* Radius */
-    --ds-border-radius: 0.5rem;
+    --ds-border-radius: 0.75rem;
     --ds-radius-xsmall: 0.125rem;
     --ds-radius-small: 0.25rem;
     --ds-radius-medium: 0.5rem;
@@ -77,7 +123,12 @@
     --ds-radius-xlarge: 1rem;
     --ds-radius-circle: 50%;
 
-    /* DS Background aliases → gf tokens */
+    /* DS Surface aliases */
+    --ds-surface-sunken: var(--gf-color-bg-page);
+    --ds-surface-raised: var(--gf-color-bg-raised);
+    --ds-surface-overlay: var(--gf-color-bg-overlay);
+
+    /* DS Background aliases */
     --ds-background-default: var(--gf-color-bg-page);
     --ds-background-neutral-subtle: var(--gf-color-bg-subtle);
     --ds-background-neutral: var(--gf-color-neutral-200);
@@ -110,8 +161,48 @@
     --ds-border-focused: var(--gf-color-border-focused);
     --ds-border-brand: var(--gf-color-primary);
 
-    /* DS Shadow */
-    --ds-shadow-raised: var(--gf-shadow-sm);
+    /* DS Shadows */
+    --ds-shadow-raised: 0 1px 3px 0 rgba(15, 23, 42, 0.08), 0 1px 2px -1px rgba(15, 23, 42, 0.08);
+    --ds-shadow-overlay: 0 20px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+  }
+
+  .dark {
+    --gf-color-primary: #ed4b00;
+    --gf-color-primary-hover: #ff5c0a;
+    --gf-color-primary-foreground: #ffffff;
+    --gf-color-primary-subtle: rgba(237, 75, 0, 0.15);
+
+    --gf-color-bg-page: #09090b;
+    --gf-color-bg-subtle: #18181b;
+    --gf-color-bg-default: #18181b;
+    --gf-color-bg-raised: #18181b;
+    --gf-color-bg-overlay: #27272a;
+
+    --gf-color-text: #f8fafc;
+    --gf-color-text-subtle: #94a3b8;
+    --gf-color-text-subtlest: #64748b;
+    --gf-color-text-inverse: #09090b;
+    --gf-color-text-brand: #ff5c0a;
+
+    --gf-color-border: #27272a;
+    --gf-color-border-subtle: #18181b;
+    --gf-color-border-bold: #3f3f46;
+    --gf-color-border-focused: #ed4b00;
+
+    --gf-color-muted: #27272a;
+    --gf-color-muted-foreground: #94a3b8;
+    --gf-color-neutral-0: #09090b;
+    --gf-color-neutral-200: #27272a;
+    --gf-color-neutral-300: #3f3f46;
+    --gf-color-neutral-400: #71717a;
+    --gf-color-brand-100: rgba(237, 75, 0, 0.2);
+
+    --ds-surface-sunken: #09090b;
+    --ds-surface-raised: #18181b;
+    --ds-surface-overlay: #27272a;
+
+    --ds-shadow-raised: 0 1px 3px 0 rgba(0, 0, 0, 0.4);
+    --ds-shadow-overlay: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
   }
 
   * {

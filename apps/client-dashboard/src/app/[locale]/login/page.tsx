@@ -51,15 +51,15 @@ function LoginControls({ locale }: { locale: Locale }) {
   };
 
   return (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center gap-1.5 rounded-full border border-border/80 bg-card/80 p-1 backdrop-blur-md shadow-sm">
       {/* Language picker */}
       <div className="relative">
         <button
           onClick={() => setLangOpen((v) => !v)}
-          className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-muted-foreground hover:bg-black/5 dark:hover:bg-white/10 hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold text-muted-foreground hover:bg-muted hover:text-foreground transition-colors focus-visible:outline-none"
           aria-label="Switch language"
         >
-          <Globe className="h-3.5 w-3.5" />
+          <Globe className="h-3.5 w-3.5 text-primary" />
           {LOCALE_LABELS[locale] ?? locale}
         </button>
         {langOpen && (
@@ -68,21 +68,25 @@ function LoginControls({ locale }: { locale: Locale }) {
               className="fixed inset-0 z-10"
               onClick={() => setLangOpen(false)}
             />
-            <div className="absolute end-0 top-full mt-1 z-20 min-w-[120px] rounded-xl border border-border bg-card shadow-xl py-1 overflow-hidden">
+            <div className="absolute end-0 top-full mt-2 z-20 min-w-[130px] rounded-xl border border-border bg-popover shadow-xl py-1 overflow-hidden animate-in fade-in zoom-in-95 duration-150">
               {LOCALES.map((l) => (
                 <button
                   key={l}
                   onClick={() => switchLocale(l)}
-                  className="flex w-full items-center justify-between gap-2 px-3 py-2 text-xs font-medium hover:bg-accent transition-colors"
+                  className="flex w-full items-center justify-between gap-2 px-3.5 py-2 text-xs font-medium hover:bg-muted transition-colors"
                 >
                   {LOCALE_LABELS[l]}
-                  {l === locale && <Check className="h-3 w-3 text-primary" />}
+                  {l === locale && (
+                    <Check className="h-3.5 w-3.5 text-primary" />
+                  )}
                 </button>
               ))}
             </div>
           </>
         )}
       </div>
+
+      <div className="h-3.5 w-px bg-border" />
 
       {/* Theme toggle */}
       <button
@@ -95,13 +99,13 @@ function LoginControls({ locale }: { locale: Locale }) {
             350
           );
         }}
-        className="rounded-lg p-2 text-muted-foreground hover:bg-black/5 dark:hover:bg-white/10 hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="rounded-full p-1.5 text-muted-foreground hover:bg-muted hover:text-foreground transition-colors focus-visible:outline-none"
         aria-label="Toggle theme"
       >
         {mounted && theme === 'dark' ? (
-          <Sun className="h-3.5 w-3.5" />
+          <Sun className="h-3.5 w-3.5 text-amber-500" />
         ) : (
-          <Moon className="h-3.5 w-3.5" />
+          <Moon className="h-3.5 w-3.5 text-slate-700 dark:text-slate-300" />
         )}
       </button>
     </div>
@@ -116,15 +120,14 @@ function SubmitButton({ isRtl }: { isRtl: boolean }) {
     <Button
       type="submit"
       disabled={pending}
-      className="w-full h-10 font-medium transition-all duration-200"
-      variant="default"
+      className="w-full h-11 rounded-xl bg-primary text-primary-foreground font-semibold shadow-md shadow-primary/20 hover:bg-primary/90 hover:shadow-lg active:scale-[0.99] transition-all duration-200"
     >
       {pending ? (
-        <Loader2 className="h-4 w-4 animate-spin mx-auto" />
+        <Loader2 className="h-5 w-5 animate-spin mx-auto text-primary-foreground" />
       ) : (
         <span
           className={cn(
-            'flex items-center justify-center gap-2',
+            'flex items-center justify-center gap-2 text-sm font-semibold',
             isRtl && 'flex-row-reverse'
           )}
         >
@@ -158,7 +161,7 @@ export default function LoginPage() {
       // Wait for animation, then redirect
       const timer = setTimeout(() => {
         router.push(`/${state.locale || locale}/dashboard`);
-      }, 2000);
+      }, 1500);
       return () => clearTimeout(timer);
     }
   }, [state?.success, state?.locale, locale, router]);
@@ -185,24 +188,24 @@ export default function LoginPage() {
       isSuccess={isSuccess}
     >
       <Card className="border-none shadow-none bg-transparent">
-        <CardContent className="px-0 pb-0">
+        <CardContent className="p-0">
           <form
             action={formAction}
-            className="space-y-6"
+            className="space-y-5"
             dir={isRtl ? 'rtl' : 'ltr'}
           >
             {state?.error && (
-              <div className="rounded-xl border border-destructive/20 bg-destructive/5 px-4 py-3 text-sm text-destructive font-semibold flex items-center gap-2">
+              <div className="rounded-xl border border-destructive/30 bg-destructive/10 px-4 py-3 text-xs font-semibold text-destructive flex items-center gap-2.5 animate-in fade-in duration-200">
                 <AlertCircle className="h-4 w-4 shrink-0" />
                 {state.error}
               </div>
             )}
 
             <div className="space-y-4">
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 <Label
                   htmlFor="email"
-                  className="text-xs font-semibold text-[var(--ds-text-subtle,#42526E)] dark:text-[var(--ds-text-subtlest,#97A0AF)]"
+                  className="text-xs font-semibold text-foreground/90"
                 >
                   {isRtl ? 'البريد الإلكتروني' : 'Email'}
                 </Label>
@@ -213,21 +216,21 @@ export default function LoginPage() {
                   placeholder="name@company.com"
                   autoComplete="email"
                   required
-                  className="h-9 focus:ring-0 focus:border-primary transition-all duration-200"
+                  className="h-10 rounded-xl border-input bg-background/50 hover:border-primary/40 focus:border-primary focus:ring-2 focus:ring-primary/20 text-sm font-medium transition-all"
                 />
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 <div className="flex items-center justify-between">
                   <Label
                     htmlFor="password"
-                    className="text-xs font-semibold text-[var(--ds-text-subtle,#42526E)] dark:text-[var(--ds-text-subtlest,#97A0AF)]"
+                    className="text-xs font-semibold text-foreground/90"
                   >
                     {isRtl ? 'كلمة المرور' : 'Password'}
                   </Label>
                   <a
                     href="#"
-                    className="text-xs font-medium text-primary hover:underline transition-opacity"
+                    className="text-xs font-medium text-primary hover:underline hover:text-primary/80 transition-colors"
                     tabIndex={-1}
                   >
                     {isRtl ? 'نسيت كلمة المرور؟' : "Can't log in?"}
@@ -242,7 +245,7 @@ export default function LoginPage() {
                     autoComplete="current-password"
                     required
                     className={cn(
-                      'h-9 focus:ring-0 focus:border-primary transition-all duration-200',
+                      'h-10 rounded-xl border-input bg-background/50 hover:border-primary/40 focus:border-primary focus:ring-2 focus:ring-primary/20 text-sm font-medium transition-all',
                       isRtl ? 'pl-10 pr-3' : 'pr-10 pl-3'
                     )}
                   />
@@ -250,14 +253,14 @@ export default function LoginPage() {
                     type="button"
                     onClick={() => setShowPassword((v) => !v)}
                     className={cn(
-                      'absolute top-1/2 -translate-y-1/2 text-muted-foreground/50 hover:text-primary transition-colors focus:outline-none',
+                      'absolute top-1/2 -translate-y-1/2 text-muted-foreground/60 hover:text-foreground transition-colors focus:outline-none',
                       isRtl ? 'left-3' : 'right-3'
                     )}
                   >
                     {showPassword ? (
-                      <EyeOff className="h-5 w-5" />
+                      <EyeOff className="h-4 w-4" />
                     ) : (
-                      <Eye className="h-5 w-5" />
+                      <Eye className="h-4 w-4" />
                     )}
                   </button>
                 </div>
@@ -266,7 +269,7 @@ export default function LoginPage() {
 
             <SubmitButton isRtl={isRtl} />
 
-            <div className="mt-8 pt-6 border-t border-border text-center">
+            <div className="mt-6 pt-5 border-t border-border/60 text-center">
               <p className="text-xs text-muted-foreground font-medium">
                 {isRtl ? 'ليس لديك حساب؟' : "Don't have an account?"}{' '}
                 <a
