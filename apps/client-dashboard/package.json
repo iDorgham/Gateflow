@@ -42,7 +42,7 @@
     "@tiptap/starter-kit": "^3.20.4",
     "@types/crypto-js": "^4.2.2",
     "@upstash/ratelimit": "^2.0.5",
-    "@upstash/redis": "^1.36.2",
+    "@upstash/redis": "^1.38.0",
     "ai": "^6.0.138",
     "clsx": "^2.1.1",
     "crypto-js": "^4.2.0",
