@@ -1,0 +1,27 @@
+packages/ui/src/globals.css
+  s_d037c8c3d22135::t_ee399692f91eb0 194,200,212,216,218,220,242,251-254,257-261,275
+  s_d037c8c3d22135::t_149960f27df4e8 202
+  s_d037c8c3d22135::t_bb16630885bf66 58-106
+  s_d037c8c3d22135::t_863b58b19a6ef7 276-281,286-304
+  s_d037c8c3d22135::t_92d845e3c85545 160-162
+  s_d037c8c3d22135::t_888610b9344fce 184-191
+  s_d037c8c3d22135::t_0a5975b9305816 221-237,241,245,247,250,255,262-267
+  s_d037c8c3d22135::t_2e028768e8b23e 192
+  s_d037c8c3d22135::t_686e871781e0a0 256
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "cf1a09aae7448a610e7710df2e28ad934074dd8e",
+  "prompts": {},
+  "sessions": {
+    "s_d037c8c3d22135": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "02906ab6-47a6-46ba-88a5-f41390f87b72",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
