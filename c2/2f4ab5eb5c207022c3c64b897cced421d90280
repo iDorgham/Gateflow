@@ -1,0 +1,39 @@
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/workspace/api-keys/page.tsx
+  s_d037c8c3d22135::t_24f8c06ad47977 4-8
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/workspace/settings/page.tsx
+  s_d037c8c3d22135::t_7f99bff85d6e77 2,4-8
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/workspace/webhooks/page.tsx
+  s_d037c8c3d22135::t_b9b55b5af134d7 4-8
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/workspace/billing/page.tsx
+  s_d037c8c3d22135::t_4c8498b592b1e0 4-8
+apps/client-dashboard/src/app/[locale]/dashboard/settings/page.tsx
+  s_66199c67786fd1::t_e537282a599967 1-17
+apps/client-dashboard/src/proxy.ts
+  s_66199c67786fd1::t_ec6d9834dc6903 130-182,187,195,206,212,241
+apps/client-dashboard/src/app/[locale]/dashboard/settings/[...slug]/page.tsx
+  s_66199c67786fd1::t_704493d80469dd 1-18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "c22f4ab5eb5c207022c3c64b897cced421d90280",
+  "prompts": {},
+  "sessions": {
+    "s_66199c67786fd1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "81d23a45-2fed-4e06-aaa6-9272e2babfb9",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_d037c8c3d22135": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "02906ab6-47a6-46ba-88a5-f41390f87b72",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
