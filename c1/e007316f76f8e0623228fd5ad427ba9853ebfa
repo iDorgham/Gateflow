@@ -1,0 +1,32 @@
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/maintenance/page.tsx
+  s_d037c8c3d22135::t_31d5fe25e80987 78
+  s_d037c8c3d22135::t_66c6785cfdcd31 70
+apps/client-dashboard/src/components/i18n-provider.tsx
+  s_d037c8c3d22135::t_b850535aa69315 19,27,36
+packages/types/src/organization-features.ts
+  s_66199c67786fd1::t_d0d6877c499fba 54-57,61-67,70-82,84-106,110-115,120-130,145-151,154-164,166-180,184-189,194-202,217-223,226-236,238-252,256-261,266-276,291-297,300-310,312-326,330-335,340-350,365-371,374-384,386-395,399-409,413-424,438-444
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "c1e007316f76f8e0623228fd5ad427ba9853ebfa",
+  "prompts": {},
+  "sessions": {
+    "s_66199c67786fd1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "81d23a45-2fed-4e06-aaa6-9272e2babfb9",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_d037c8c3d22135": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "02906ab6-47a6-46ba-88a5-f41390f87b72",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
