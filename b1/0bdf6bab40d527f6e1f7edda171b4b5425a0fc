@@ -1,0 +1,24 @@
+packages/ui/src/components/ui/command.tsx
+  s_66199c67786fd1::t_22805668e3c754 29
+apps/client-dashboard/src/components/dashboard/global-search.tsx
+  s_66199c67786fd1::t_9ea183b6ae0299 111-112,115,125-161
+  s_66199c67786fd1::t_0c1f8774180780 55-61
+  s_66199c67786fd1::t_0f660163170503 3,5
+  s_66199c67786fd1::t_9f73428691ec32 192,214,231,249
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "b10bdf6bab40d527f6e1f7edda171b4b5425a0fc",
+  "prompts": {},
+  "sessions": {
+    "s_66199c67786fd1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "81d23a45-2fed-4e06-aaa6-9272e2babfb9",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
