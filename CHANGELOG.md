@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Resident-Portal]** Phase 06 auth session and tenant containment
+
 - **[Workspace]** tracking next changes
 
 ### AI Tools

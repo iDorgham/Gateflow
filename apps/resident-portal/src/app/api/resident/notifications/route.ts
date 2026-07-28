@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@gate-access/db';
 import { getSessionClaims } from '@/lib/auth-cookies';
+import { resolveOrganizationId } from '@/lib/session-claims';
 
 type NotificationPreferences = {
   pushVisitorArrival: boolean;
@@ -44,7 +45,7 @@ export async function GET() {
     );
   }
 
-  const organizationId = (claims.org as string) || (claims.orgId as string);
+  const organizationId = resolveOrganizationId(claims);
   if (!organizationId) {
     return NextResponse.json(
       { success: false, error: 'Organization missing' },
@@ -83,7 +84,7 @@ export async function PATCH(request: NextRequest) {
     );
   }
 
-  const organizationId = (claims.org as string) || (claims.orgId as string);
+  const organizationId = resolveOrganizationId(claims);
   if (!organizationId) {
     return NextResponse.json(
       { success: false, error: 'Organization missing' },

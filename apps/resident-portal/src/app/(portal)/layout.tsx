@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import { getSessionClaims } from '@/lib/auth-cookies';
+import { resolveOrganizationId } from '@/lib/session-claims';
 import { prisma } from '@gate-access/db';
 import { PortalShell } from '@/components/layout/portal-shell';
 import type { Metadata, Viewport } from 'next';
@@ -27,7 +28,7 @@ export default async function PortalLayout({
 }) {
   const claims = await getSessionClaims();
   if (!claims?.sub) {
-    return <>{children}</>;
+    redirect('/login');
   }
 
   const isResident =
@@ -38,7 +39,11 @@ export default async function PortalLayout({
     return <>{children}</>;
   }
 
-  const organizationId = (claims.org as string) || (claims.orgId as string);
+  const organizationId = resolveOrganizationId(claims);
+  if (!organizationId) {
+    redirect('/login');
+  }
+
   const unit = await prisma.unit.findFirst({
     where: {
       userId: claims.sub,

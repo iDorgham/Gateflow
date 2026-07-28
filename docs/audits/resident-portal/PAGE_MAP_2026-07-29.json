@@ -1,0 +1,151 @@
+{
+  "generatedAt": "2026-07-28T21:55:00.000Z",
+  "app": "resident-portal",
+  "commit": "e77e378a93450fee7af27547411e1d17d999f182",
+  "reviewMode": "static-review-only",
+  "inventorySource": "scripts/workflow-v2/support-cli.js routes resident-portal",
+  "routeCount": 11,
+  "emptyFoldersCreated": 0,
+  "routes": [
+    {
+      "route": "/login",
+      "file": "apps/resident-portal/src/app/login/page.tsx",
+      "class": "P0",
+      "pilotSteps": ["Resident activation"],
+      "evidenceStatus": "missing",
+      "notes": "External CD login handoff only"
+    },
+    {
+      "route": "/no-unit-linked",
+      "file": "apps/resident-portal/src/app/no-unit-linked/page.tsx",
+      "class": "P0",
+      "pilotSteps": ["Resident activation"],
+      "evidenceStatus": "partial",
+      "notes": "Unit-link precondition gate"
+    },
+    {
+      "route": "/visitors/new",
+      "file": "apps/resident-portal/src/app/(portal)/visitors/new/page.tsx",
+      "class": "P0",
+      "pilotSteps": ["Resident creates guest permission"],
+      "evidenceStatus": "partial",
+      "notes": "Named visitor create; auth/org/rewrite blockers"
+    },
+    {
+      "route": "/open-qr/new",
+      "file": "apps/resident-portal/src/app/(portal)/open-qr/new/page.tsx",
+      "class": "P0",
+      "pilotSteps": ["Resident creates guest permission"],
+      "evidenceStatus": "partial",
+      "notes": "Open QR create; keep alongside visitors/new"
+    },
+    {
+      "route": "/visitors/[id]",
+      "file": "apps/resident-portal/src/app/(portal)/visitors/[id]/page.tsx",
+      "class": "P0",
+      "pilotSteps": ["Permission QR display in Resident Portal"],
+      "evidenceStatus": "partial",
+      "notes": "QR card is text placeholder"
+    },
+    {
+      "route": "/visitors",
+      "file": "apps/resident-portal/src/app/(portal)/visitors/page.tsx",
+      "class": "P0",
+      "pilotSteps": ["Permission QR display in Resident Portal"],
+      "evidenceStatus": "partial",
+      "notes": "List entry to detail"
+    },
+    {
+      "route": "/history",
+      "file": "apps/resident-portal/src/app/(portal)/history/page.tsx",
+      "class": "P0",
+      "pilotSteps": ["Resident-facing denial/offline QR"],
+      "evidenceStatus": "partial",
+      "notes": "Cookie-less RSC fetch"
+    },
+    {
+      "route": "/",
+      "file": "apps/resident-portal/src/app/(portal)/page.tsx",
+      "class": "P1",
+      "pilotSteps": [],
+      "evidenceStatus": "partial",
+      "notes": "Hub; not a named nine-step seam"
+    },
+    {
+      "route": "/profile",
+      "file": "apps/resident-portal/src/app/(portal)/profile/page.tsx",
+      "class": "P1",
+      "pilotSteps": [],
+      "evidenceStatus": "weak",
+      "notes": "Dead privacy/help links; inert sign-out"
+    },
+    {
+      "route": "/settings/notifications",
+      "file": "apps/resident-portal/src/app/(portal)/settings/notifications/page.tsx",
+      "class": "P2",
+      "pilotSteps": [],
+      "evidenceStatus": "stronger-api",
+      "notes": "Not pilot-blocking"
+    },
+    {
+      "route": "/maintenance",
+      "file": "apps/resident-portal/src/app/(portal)/maintenance/page.tsx",
+      "class": "P2",
+      "pilotSteps": [],
+      "evidenceStatus": "partial",
+      "notes": "Adjacent product surface"
+    }
+  ],
+  "linkedWithoutPages": [
+    {
+      "href": "/settings/privacy",
+      "from": "/profile",
+      "class": "remove/hide",
+      "action": "Remove link or defer; do not create empty page folder"
+    },
+    {
+      "href": "/settings/help",
+      "from": "/profile",
+      "class": "remove/hide",
+      "action": "Remove link or defer; do not create empty page folder"
+    }
+  ],
+  "duplicateMerge": [
+    {
+      "routes": ["/visitors/new", "/open-qr/new"],
+      "verdict": "keep-both",
+      "reason": "Different permission shapes; share auth/API hardening"
+    }
+  ],
+  "counts": {
+    "P0": 7,
+    "P1": 2,
+    "P2": 2,
+    "remove/hide": 2,
+    "internal/test-only": 0,
+    "duplicate/merge-drop": 0
+  },
+  "pilotP0Coverage": {
+    "Resident activation": {
+      "routes": ["/login", "/no-unit-linked"],
+      "status": "missing"
+    },
+    "Resident creates guest permission": {
+      "routes": ["/visitors/new", "/open-qr/new"],
+      "status": "partial"
+    },
+    "Permission QR display in Resident Portal": {
+      "routes": ["/visitors", "/visitors/[id]"],
+      "status": "partial"
+    },
+    "Resident-facing denial/offline QR": {
+      "routes": ["/history"],
+      "status": "partial"
+    }
+  },
+  "artifacts": {
+    "markdown": "docs/audits/resident-portal/PAGE_MAP_2026-07-29.md",
+    "audit": "docs/audits/resident-portal/AUDIT_2026-07-29.md",
+    "pilotGate": "docs/audits/resident-portal/PILOT_GATE_2026-07-29.json"
+  }
+}

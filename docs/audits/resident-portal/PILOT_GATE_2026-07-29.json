@@ -1,0 +1,65 @@
+[
+  {
+    "step": "Resident activation",
+    "priority": "P0",
+    "status": "missing",
+    "createdAt": "2026-07-28T21:45:00.000Z",
+    "reason": "No activate/invite-token flow in resident-portal; /login is external handoff only."
+  },
+  {
+    "step": "Resident creates guest permission",
+    "priority": "P0",
+    "status": "partial",
+    "createdAt": "2026-07-28T21:45:00.000Z",
+    "reason": "UI forms exist at /visitors/new and /open-qr/new; blocked by auth/org fallbacks and localhost API rewrite."
+  },
+  {
+    "step": "Permission QR display in Resident Portal",
+    "priority": "P0",
+    "status": "partial",
+    "createdAt": "2026-07-28T21:45:00.000Z",
+    "reason": "Detail page shows code string; VisitorQRCard is a placeholder box, not a scannable QR."
+  },
+  {
+    "step": "Resident-facing denial/offline QR",
+    "priority": "P0",
+    "status": "partial",
+    "createdAt": "2026-07-28T21:45:00.000Z",
+    "reason": "Offline banner and IndexedDB write exist; getCachedQrPayload unused; history fetch lacks cookie forwarding."
+  },
+  {
+    "step": "Create or import resident contact",
+    "priority": "P0",
+    "status": "n/a",
+    "createdAt": "2026-07-28T21:45:00.000Z",
+    "reason": "Client Dashboard owned."
+  },
+  {
+    "step": "Send invitation or access code",
+    "priority": "P0",
+    "status": "n/a",
+    "createdAt": "2026-07-28T21:45:00.000Z",
+    "reason": "Client Dashboard owned."
+  },
+  {
+    "step": "Permission appears in Client Dashboard",
+    "priority": "P0",
+    "status": "n/a",
+    "createdAt": "2026-07-28T21:45:00.000Z",
+    "reason": "Client Dashboard owned."
+  },
+  {
+    "step": "Security scans the QR",
+    "priority": "P0",
+    "status": "n/a",
+    "createdAt": "2026-07-28T21:45:00.000Z",
+    "reason": "Scanner App owned."
+  },
+  {
+    "step": "Event appears in Client Dashboard access log",
+    "priority": "P0",
+    "status": "n/a",
+    "createdAt": "2026-07-28T21:45:00.000Z",
+    "reason": "Client Dashboard owned."
+  }
+]

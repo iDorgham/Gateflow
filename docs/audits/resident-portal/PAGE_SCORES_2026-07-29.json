@@ -1,0 +1,336 @@
+{
+  "generatedAt": "2026-07-28T21:45:00.000Z",
+  "commit": "e77e378a93450fee7af27547411e1d17d999f182",
+  "reviewMode": "static-review-only",
+  "average": 48.73,
+  "classificationNote": "securityBoundaryProven=false caps each page score at 49 per Workflow v2 support.validatePageScore",
+  "pages": [
+    {
+      "date": "2026-07-29",
+      "commit": "e77e378a93450fee7af27547411e1d17d999f182",
+      "locale": "en-only",
+      "viewport": "source-only",
+      "environment": "production-source",
+      "reviewMode": "static-review-only",
+      "securityBoundaryProven": false,
+      "route": "/",
+      "evidence": [
+        "apps/resident-portal/src/app/(portal)/page.tsx",
+        "apps/resident-portal/src/app/(portal)/layout.tsx"
+      ],
+      "categories": {
+        "purpose": 12,
+        "task": 12,
+        "hierarchy": 8,
+        "states": 8,
+        "design": 7,
+        "accessibility": 4,
+        "responsiveRtl": 5,
+        "performance": 3,
+        "security": 1
+      }
+    },
+    {
+      "date": "2026-07-29",
+      "commit": "e77e378a93450fee7af27547411e1d17d999f182",
+      "locale": "en-only",
+      "viewport": "source-only",
+      "environment": "production-source",
+      "reviewMode": "static-review-only",
+      "securityBoundaryProven": false,
+      "route": "/login",
+      "evidence": ["apps/resident-portal/src/app/login/page.tsx"],
+      "categories": {
+        "purpose": 10,
+        "task": 8,
+        "hierarchy": 8,
+        "states": 5,
+        "design": 6,
+        "accessibility": 4,
+        "responsiveRtl": 3,
+        "performance": 4,
+        "security": 2
+      }
+    },
+    {
+      "date": "2026-07-29",
+      "commit": "e77e378a93450fee7af27547411e1d17d999f182",
+      "locale": "en-only",
+      "viewport": "source-only",
+      "environment": "production-source",
+      "reviewMode": "static-review-only",
+      "securityBoundaryProven": false,
+      "route": "/no-unit-linked",
+      "evidence": ["apps/resident-portal/src/app/no-unit-linked/page.tsx"],
+      "categories": {
+        "purpose": 12,
+        "task": 10,
+        "hierarchy": 9,
+        "states": 7,
+        "design": 7,
+        "accessibility": 5,
+        "responsiveRtl": 4,
+        "performance": 4,
+        "security": 3
+      }
+    },
+    {
+      "date": "2026-07-29",
+      "commit": "e77e378a93450fee7af27547411e1d17d999f182",
+      "locale": "en-only",
+      "viewport": "source-only",
+      "environment": "production-source",
+      "reviewMode": "static-review-only",
+      "securityBoundaryProven": false,
+      "route": "/visitors",
+      "evidence": ["apps/resident-portal/src/app/(portal)/visitors/page.tsx"],
+      "categories": {
+        "purpose": 12,
+        "task": 14,
+        "hierarchy": 8,
+        "states": 8,
+        "design": 7,
+        "accessibility": 4,
+        "responsiveRtl": 6,
+        "performance": 3,
+        "security": 1
+      }
+    },
+    {
+      "date": "2026-07-29",
+      "commit": "e77e378a93450fee7af27547411e1d17d999f182",
+      "locale": "en-only",
+      "viewport": "source-only",
+      "environment": "production-source",
+      "reviewMode": "static-review-only",
+      "securityBoundaryProven": false,
+      "route": "/visitors/new",
+      "evidence": [
+        "apps/resident-portal/src/app/(portal)/visitors/new/page.tsx",
+        "apps/resident-portal/src/components/visitor-form.tsx"
+      ],
+      "categories": {
+        "purpose": 13,
+        "task": 15,
+        "hierarchy": 8,
+        "states": 9,
+        "design": 7,
+        "accessibility": 6,
+        "responsiveRtl": 4,
+        "performance": 3,
+        "security": 1
+      }
+    },
+    {
+      "date": "2026-07-29",
+      "commit": "e77e378a93450fee7af27547411e1d17d999f182",
+      "locale": "en-only",
+      "viewport": "source-only",
+      "environment": "production-source",
+      "reviewMode": "static-review-only",
+      "securityBoundaryProven": false,
+      "route": "/visitors/[id]",
+      "evidence": [
+        "apps/resident-portal/src/app/(portal)/visitors/[id]/page.tsx",
+        "apps/resident-portal/src/components/visitor-qr-card.tsx"
+      ],
+      "categories": {
+        "purpose": 12,
+        "task": 8,
+        "hierarchy": 8,
+        "states": 6,
+        "design": 6,
+        "accessibility": 4,
+        "responsiveRtl": 4,
+        "performance": 3,
+        "security": 1
+      }
+    },
+    {
+      "date": "2026-07-29",
+      "commit": "e77e378a93450fee7af27547411e1d17d999f182",
+      "locale": "en-only",
+      "viewport": "source-only",
+      "environment": "production-source",
+      "reviewMode": "static-review-only",
+      "securityBoundaryProven": false,
+      "route": "/open-qr/new",
+      "evidence": [
+        "apps/resident-portal/src/app/(portal)/open-qr/new/page.tsx",
+        "apps/resident-portal/src/components/open-qr-form.tsx"
+      ],
+      "categories": {
+        "purpose": 12,
+        "task": 14,
+        "hierarchy": 8,
+        "states": 8,
+        "design": 7,
+        "accessibility": 5,
+        "responsiveRtl": 4,
+        "performance": 3,
+        "security": 1
+      }
+    },
+    {
+      "date": "2026-07-29",
+      "commit": "e77e378a93450fee7af27547411e1d17d999f182",
+      "locale": "en-only",
+      "viewport": "source-only",
+      "environment": "production-source",
+      "reviewMode": "static-review-only",
+      "securityBoundaryProven": false,
+      "route": "/history",
+      "evidence": ["apps/resident-portal/src/app/(portal)/history/page.tsx"],
+      "categories": {
+        "purpose": 11,
+        "task": 9,
+        "hierarchy": 7,
+        "states": 7,
+        "design": 6,
+        "accessibility": 3,
+        "responsiveRtl": 6,
+        "performance": 2,
+        "security": 2
+      }
+    },
+    {
+      "date": "2026-07-29",
+      "commit": "e77e378a93450fee7af27547411e1d17d999f182",
+      "locale": "en-only",
+      "viewport": "source-only",
+      "environment": "production-source",
+      "reviewMode": "static-review-only",
+      "securityBoundaryProven": false,
+      "route": "/maintenance",
+      "evidence": [
+        "apps/resident-portal/src/app/(portal)/maintenance/page.tsx"
+      ],
+      "categories": {
+        "purpose": 11,
+        "task": 12,
+        "hierarchy": 8,
+        "states": 8,
+        "design": 7,
+        "accessibility": 5,
+        "responsiveRtl": 6,
+        "performance": 2,
+        "security": 2
+      }
+    },
+    {
+      "date": "2026-07-29",
+      "commit": "e77e378a93450fee7af27547411e1d17d999f182",
+      "locale": "en-only",
+      "viewport": "source-only",
+      "environment": "production-source",
+      "reviewMode": "static-review-only",
+      "securityBoundaryProven": false,
+      "route": "/profile",
+      "evidence": ["apps/resident-portal/src/app/(portal)/profile/page.tsx"],
+      "categories": {
+        "purpose": 10,
+        "task": 6,
+        "hierarchy": 7,
+        "states": 5,
+        "design": 6,
+        "accessibility": 3,
+        "responsiveRtl": 5,
+        "performance": 3,
+        "security": 1
+      }
+    },
+    {
+      "date": "2026-07-29",
+      "commit": "e77e378a93450fee7af27547411e1d17d999f182",
+      "locale": "en-only",
+      "viewport": "source-only",
+      "environment": "production-source",
+      "reviewMode": "static-review-only",
+      "securityBoundaryProven": false,
+      "route": "/settings/notifications",
+      "evidence": [
+        "apps/resident-portal/src/app/(portal)/settings/notifications/page.tsx",
+        "apps/resident-portal/src/app/api/resident/notifications/route.ts"
+      ],
+      "categories": {
+        "purpose": 11,
+        "task": 12,
+        "hierarchy": 8,
+        "states": 7,
+        "design": 6,
+        "accessibility": 3,
+        "responsiveRtl": 4,
+        "performance": 3,
+        "security": 4
+      }
+    }
+  ],
+  "aggregated": [
+    {
+      "route": "/",
+      "score": 49,
+      "classification": "major gaps",
+      "reviewMode": "static-review-only"
+    },
+    {
+      "route": "/login",
+      "score": 49,
+      "classification": "major gaps",
+      "reviewMode": "static-review-only"
+    },
+    {
+      "route": "/no-unit-linked",
+      "score": 49,
+      "classification": "major gaps",
+      "reviewMode": "static-review-only"
+    },
+    {
+      "route": "/visitors",
+      "score": 49,
+      "classification": "major gaps",
+      "reviewMode": "static-review-only"
+    },
+    {
+      "route": "/visitors/new",
+      "score": 49,
+      "classification": "major gaps",
+      "reviewMode": "static-review-only"
+    },
+    {
+      "route": "/visitors/[id]",
+      "score": 49,
+      "classification": "major gaps",
+      "reviewMode": "static-review-only"
+    },
+    {
+      "route": "/open-qr/new",
+      "score": 49,
+      "classification": "major gaps",
+      "reviewMode": "static-review-only"
+    },
+    {
+      "route": "/history",
+      "score": 49,
+      "classification": "major gaps",
+      "reviewMode": "static-review-only"
+    },
+    {
+      "route": "/maintenance",
+      "score": 49,
+      "classification": "major gaps",
+      "reviewMode": "static-review-only"
+    },
+    {
+      "route": "/profile",
+      "score": 46,
+      "classification": "major gaps",
+      "reviewMode": "static-review-only"
+    },
+    {
+      "route": "/settings/notifications",
+      "score": 49,
+      "classification": "major gaps",
+      "reviewMode": "static-review-only"
+    }
+  ]
+}

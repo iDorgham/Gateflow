@@ -1,19 +1,19 @@
 import { UserPlus } from 'lucide-react';
 import { getSessionClaims } from '@/lib/auth-cookies';
+import { requirePortalSession } from '@/lib/require-portal-session';
 import { prisma } from '@gate-access/db';
 import { VisitorForm } from '@/components/visitor-form';
 import { PageHeader } from '@/components/layout/page-header';
 
 export default async function NewVisitorPage() {
   const claims = await getSessionClaims();
-  const userId = claims?.sub || 'dev-resident-id';
-  const orgId = claims?.org || 'dev-org-id';
+  const { userId, organizationId: orgId } = requirePortalSession(claims);
 
   const unit = await prisma.unit.findFirst({
-    where: { 
-      userId, 
+    where: {
+      userId,
       organizationId: orgId,
-      deletedAt: null 
+      deletedAt: null,
     },
   });
 
@@ -33,8 +33,8 @@ export default async function NewVisitorPage() {
           <div>
             <p className="font-semibold text-slate-900">New Guest Pass</p>
             <p className="text-xs text-slate-600 leading-tight">
-              A temporary QR code will be generated for your visitor. You can share it via WhatsApp
-              or Email.
+              A temporary QR code will be generated for your visitor. You can
+              share it via WhatsApp or Email.
             </p>
           </div>
         </div>

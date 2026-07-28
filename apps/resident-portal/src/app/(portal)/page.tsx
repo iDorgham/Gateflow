@@ -9,6 +9,7 @@ import {
   ChevronRight,
 } from 'lucide-react';
 import { getSessionClaims } from '@/lib/auth-cookies';
+import { requirePortalSession } from '@/lib/require-portal-session';
 import {
   prisma,
   checkAndConsumeQuota,
@@ -21,8 +22,7 @@ import { PullToRefresh } from '@/components/common/pull-to-refresh';
 
 export default async function HomePage() {
   const claims = await getSessionClaims();
-  const userId = claims?.sub || 'dev-resident-id';
-  const orgId = claims?.org || 'dev-org-id';
+  const { userId, organizationId: orgId } = requirePortalSession(claims);
 
   const unit = await prisma.unit.findFirst({
     where: {

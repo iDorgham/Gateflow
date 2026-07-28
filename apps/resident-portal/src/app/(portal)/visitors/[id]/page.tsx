@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { Share2, Download, Trash2, Shield } from 'lucide-react';
 import { getSessionClaims } from '@/lib/auth-cookies';
+import { requirePortalSession } from '@/lib/require-portal-session';
 import { prisma } from '@gate-access/db';
 import { Button, Badge } from '@gateflow/ui';
 import { VisitorQRCard } from '@/components/visitor-qr-card';
@@ -13,8 +14,7 @@ export default async function VisitorDetailPage(props: {
 }) {
   const params = await props.params;
   const claims = await getSessionClaims();
-  const userId = claims?.sub || 'dev-resident-id';
-  const orgId = claims?.org || 'dev-org-id';
+  const { userId, organizationId: orgId } = requirePortalSession(claims);
 
   const visitor = await prisma.visitorQR.findFirst({
     where: {
