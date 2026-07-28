@@ -85,6 +85,7 @@
     "ralph:short": "node scripts/ralph/ralph.js --short"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.31.1",
     "@commitlint/cli": "^20.5.0",
     "@commitlint/config-conventional": "^21.2.0",
     "@gate-access/config": "workspace:*",
