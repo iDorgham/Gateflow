@@ -1,0 +1,59 @@
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/maintenance/loading.tsx
+  s_d037c8c3d22135::t_6ec0559d1f56d7 1-28
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/residents/contacts/loading.tsx
+  s_d037c8c3d22135::t_d1c0812ea293b0 1-30
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/projects/[projectId]/loading.tsx
+  s_d037c8c3d22135::t_31c6a5b0624da2 1-19
+  s_66199c67786fd1::t_0de40f1bd68ca0 20-25
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/team/incidents/loading.tsx
+  s_d037c8c3d22135::t_9dccba05934a41 1-22
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/qrcodes/bulk/loading.tsx
+  s_d037c8c3d22135::t_371a398ea6003f 1-8
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/residents/units/loading.tsx
+  s_d037c8c3d22135::t_634e6e9e6ee0c2 1-30
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/team/watchlist/loading.tsx
+  s_d037c8c3d22135::t_349ffd042ef978 1-36
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/team/gate-assignments/loading.tsx
+  s_d037c8c3d22135::t_c88eed5c5642b5 1-30
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/projects/[projectId]/crm/loading.tsx
+  s_d037c8c3d22135::t_cab76efe1e5753 1-18
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/qrcodes/create/loading.tsx
+  s_d037c8c3d22135::t_5ba8e73c6cdc93 1-19
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/projects/loading.tsx
+  s_d037c8c3d22135::t_fdc030b5513447 1-26
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/ai-hub/loading.tsx
+  s_d037c8c3d22135::t_eb10cc6598c0c0 1-18
+  s_66199c67786fd1::t_8114d1e4e45f6e 19-21
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/gates/loading.tsx
+  s_66199c67786fd1::t_a0124754a3ef24 7-8,14-15,17,23-26,31-32,34,36,40,42-47,54-55
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/qrcodes/loading.tsx
+  s_66199c67786fd1::t_b4d5dee1986253 8-9,12-13,18,21,23,25-29,36,38-43,45-47
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/scans/loading.tsx
+  s_66199c67786fd1::t_92e76db4a92e5c 6-7,14,19,23-24,29,31,33-37,47-52,59,62
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/team/loading.tsx
+  s_66199c67786fd1::t_9bebd21b909dd1 4,7-8,10-11,16-18,21-24,26,28-29,33-34
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "80406074565bd6099cb882872a2444a582f82947",
+  "prompts": {},
+  "sessions": {
+    "s_66199c67786fd1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "81d23a45-2fed-4e06-aaa6-9272e2babfb9",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_d037c8c3d22135": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "02906ab6-47a6-46ba-88a5-f41390f87b72",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
