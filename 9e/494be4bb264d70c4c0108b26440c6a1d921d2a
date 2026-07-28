@@ -1,0 +1,23 @@
+apps/client-dashboard/src/components/dashboard/org-switcher.tsx
+  s_d037c8c3d22135::t_b0d2fbea943866 113
+apps/client-dashboard/src/app/[locale]/dashboard/error.tsx
+  s_d037c8c3d22135::t_ae21280c7ee2b7 1-4,6-15,19-42,44-51
+  s_d037c8c3d22135::t_d195e28fa5efc7 43
+  s_d037c8c3d22135::t_fa0e7b31b08377 5,16-18
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "9e494be4bb264d70c4c0108b26440c6a1d921d2a",
+  "prompts": {},
+  "sessions": {
+    "s_d037c8c3d22135": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "02906ab6-47a6-46ba-88a5-f41390f87b72",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
