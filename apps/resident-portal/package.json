@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint src",
     "typecheck": "tsc --noEmit",
-    "test": "node --experimental-strip-types --test src/lib/session-claims.test.ts"
+    "test": "node --experimental-strip-types --test src/lib/session-claims.test.ts src/lib/phase07.test.ts"
   },
   "dependencies": {
     "@gate-access/api-client": "workspace:*",

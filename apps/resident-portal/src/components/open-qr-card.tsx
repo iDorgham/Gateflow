@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { QrCode, Infinity, RefreshCw } from 'lucide-react';
+import { Infinity, RefreshCw } from 'lucide-react';
+import QRCode from 'react-qr-code';
 
 import {
   Card,
@@ -18,6 +19,7 @@ export interface OpenQRCardProps {
   qrValue: string;
   onRegenerate?: () => void;
   className?: string;
+  offlineCached?: boolean;
 }
 
 export function OpenQRCard({
@@ -26,6 +28,7 @@ export function OpenQRCard({
   qrValue,
   onRegenerate,
   className,
+  offlineCached = false,
 }: OpenQRCardProps) {
   return (
     <Card
@@ -41,6 +44,7 @@ export function OpenQRCard({
         <CardTitle className="text-xl">Open House Pass</CardTitle>
         <CardDescription className="text-sm font-medium mt-1 text-foreground">
           {propertyName} - Unit {unitId}
+          {offlineCached ? ' · offline copy' : ''}
         </CardDescription>
         <p className="text-xs text-muted-foreground mt-2">
           Unlimited scans. Valid today only.
@@ -50,12 +54,20 @@ export function OpenQRCard({
         <div className="relative group">
           <div className="absolute -inset-1 bg-gradient-to-r from-primary to-accent rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
           <div className="relative bg-white p-4 rounded-xl border border-border shadow-sm">
-            {/* Placeholder for QR Code */}
-            <div className="bg-muted w-48 h-48 flex items-center justify-center rounded flex-col">
-              <QrCode className="h-10 w-10 text-muted-foreground/30 mb-2" />
-              <span className="text-[10px] text-muted-foreground font-mono tracking-widest text-center px-4 w-full truncate">
-                {qrValue}
-              </span>
+            <div
+              className="bg-white w-48 h-48 flex items-center justify-center rounded p-2"
+              data-testid="open-qr-code"
+            >
+              {qrValue ? (
+                <QRCode
+                  value={qrValue}
+                  size={176}
+                  style={{ height: 'auto', maxWidth: '100%', width: '100%' }}
+                  viewBox="0 0 176 176"
+                />
+              ) : (
+                <span className="text-xs text-muted-foreground">No QR</span>
+              )}
             </div>
           </div>
         </div>

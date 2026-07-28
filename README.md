@@ -383,6 +383,7 @@ See **[PRD §9](docs/reference/product/PRD.md)** and **[CHANGELOG](CHANGELOG.md)
 
 ## 📅 Recent Engineering Activity
 
+- **[Resident-Portal]:** Phase 07 API upstream, scannable QR, offline read
 - **[Client-Dashboard]:** add loading skeletons for routes that lacked one
 - **[Client-Dashboard]:** show next billing date on the billing settings page
 - **[Ui]:** register ds-* design tokens as real Tailwind utilities
@@ -390,10 +391,6 @@ See **[PRD §9](docs/reference/product/PRD.md)** and **[CHANGELOG](CHANGELOG.md)
 - **[Ui]:** redesign login page with clean modern SaaS web app layout
 - **[Client Dashboard Readiness 2026]:** complete phase 5
 - **[Workflow]:** certify client-dashboard and complete workflow bootstrap
-- **[Workflow-V2]:** bootstrap guide status/next/prompt/delivery
-- **[Audit Remediation 2026]:** Phases 1–4 shipped — P0 containment, fail-closed tenancy, CI scanners, API guards + security headers (PRs #153–#155)
-- **[Deploy]:** Vercel `ignoreCommand` skips Dependabot and automatic Preview builds (Hobby quota)
-- **[DB]:** Production migrate unblock for stuck `platform_evolution` migration
 
 ---
 

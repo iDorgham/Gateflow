@@ -4,10 +4,9 @@ import { getSessionClaims } from '@/lib/auth-cookies';
 import { requirePortalSession } from '@/lib/require-portal-session';
 import { prisma } from '@gate-access/db';
 import { Button, Badge } from '@gateflow/ui';
-import { VisitorQRCard } from '@/components/visitor-qr-card';
 import { format } from 'date-fns';
 import { PageHeader } from '@/components/layout/page-header';
-import { OfflineQrCacheClient } from '@/components/pwa/offline-qr-cache-client';
+import { OfflineAwareVisitorQr } from '@/components/pwa/offline-aware-visitor-qr';
 
 export default async function VisitorDetailPage(props: {
   params: Promise<{ id: string }>;
@@ -64,7 +63,7 @@ export default async function VisitorDetailPage(props: {
       />
 
       <main className="mx-auto flex w-full max-w-md flex-col items-center space-y-8 px-4 py-8 pb-24 md:max-w-3xl">
-        <OfflineQrCacheClient
+        <OfflineAwareVisitorQr
           payload={{
             id: visitor.id,
             code: visitor.qrCode.code,
@@ -72,12 +71,9 @@ export default async function VisitorDetailPage(props: {
             accessType: visitor.accessRule?.type ?? 'PERMANENT',
             cachedAt: new Date().toISOString(),
           }}
-        />
-        <VisitorQRCard
           visitorName={visitor.visitorName || 'Open Access Pass'}
           date={dateStr}
           timeWindow={timeStr}
-          qrValue={visitor.qrCode.code}
           status={isActive ? 'active' : 'expired'}
           className="w-full shadow-lg border-2 border-slate-200"
         />
