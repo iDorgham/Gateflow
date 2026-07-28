@@ -10,12 +10,19 @@ context from cached snapshots instead of re-scanning files every session.
 | File                 | Contents                                                 | Update trigger                 |
 | -------------------- | -------------------------------------------------------- | ------------------------------ |
 | `WORKSPACE_INDEX.md` | Ports, packages, deps, env vars, commands, auth patterns | Dep bump, new app, port change |
-| `API_ROUTES_MAP.md`  | All 95+ API routes with methods + auth                   | Route added/removed            |
-| `SCHEMA_SNAPSHOT.md` | All 40 Prisma models + enums + gotchas                   | Schema model/field change      |
+| `API_ROUTES_MAP.md`  | All 187 API routes with methods + auth (heuristic)       | Route added/removed            |
+| `SCHEMA_SNAPSHOT.md` | All 63 Prisma models + 41 enums + gotchas                | Schema model/field change      |
 
 **How AI agents use this:**
 Load the relevant snapshot at conversation start instead of globbing
 `app/api/**` or reading `schema.prisma`. Saves 5–15 file reads per session.
+
+**Regenerating:** run `node scripts/cache-build.js` from repo root — it rebuilds
+all three files above from the live repo state (package.json files, `app/api/**`,
+`schema.prisma`). Previously this script was referenced but didn't exist, so the
+cache silently went stale (last hand-written 2026-03-28, drifted to ~2x the
+routes/models listed). It's now a real script — re-run it after the triggers
+in the table above instead of hand-editing these files.
 
 ---
 
