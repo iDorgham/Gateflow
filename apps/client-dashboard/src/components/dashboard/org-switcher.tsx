@@ -110,7 +110,7 @@ export function OrgSwitcher({
       <DropdownMenuContent
         align="start"
         sideOffset={8}
-        className="w-64 p-2 bg-sidebar/95 backdrop-blur-lg border-border/40"
+        className="w-64 p-2 bg-popover/95 backdrop-blur-lg border-border/40"
       >
         <DropdownMenuLabel className="px-2 py-1.5 text-[10px] font-bold uppercase tracking-widest text-[var(--ds-text-subtlest)]">
           Organizations
