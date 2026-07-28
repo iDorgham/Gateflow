@@ -43,11 +43,24 @@ export const AntigravityBackground: React.FC = () => {
   const nodesRef = useRef<GridNode[]>([]);
   const requestRef = useRef<number | undefined>(undefined);
   const scrollRef = useRef(0);
+  // Cache resolved CSS colors here so draw() never touches getComputedStyle —
+  // calling it every animation frame forces a style/layout flush 60x/sec.
+  const colorsRef = useRef({ accent: 'black', base: 'black' });
   const [isDark, setIsDark] = useState(false);
 
+  const refreshColors = (dark: boolean) => {
+    colorsRef.current = {
+      accent: getResolvedColor(TOKEN_PRIMARY_ACCENT),
+      base: getResolvedColor(dark ? TOKEN_TEXT_PRIMARY : TOKEN_TEXT_SUBTLE),
+    };
+  };
+
   useEffect(() => {
-    const checkDark = () =>
-      setIsDark(document.documentElement.classList.contains('dark'));
+    const checkDark = () => {
+      const dark = document.documentElement.classList.contains('dark');
+      setIsDark(dark);
+      refreshColors(dark);
+    };
     checkDark();
     const observer = new MutationObserver(checkDark);
     observer.observe(document.documentElement, {
@@ -69,7 +82,7 @@ export const AntigravityBackground: React.FC = () => {
       window.removeEventListener('mouseenter', handleMouseEnter);
       window.removeEventListener('mouseleave', handleMouseLeave);
     };
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const getResolvedColor = (variable: string) => {
     if (typeof window === 'undefined') return 'black';
@@ -189,10 +202,7 @@ export const AntigravityBackground: React.FC = () => {
     const cx = width / 2;
     const cy = height / 2;
     const focalLength = 1000;
-    const accentColor = getResolvedColor(TOKEN_PRIMARY_ACCENT);
-    const baseColor = isDark
-      ? getResolvedColor(TOKEN_TEXT_PRIMARY)
-      : getResolvedColor(TOKEN_TEXT_SUBTLE);
+    const { accent: accentColor, base: baseColor } = colorsRef.current;
 
     for (let z = 0; z < GRID_SIZE_Z; z++) {
       for (let x = 0; x < GRID_SIZE_X; x++) {
@@ -276,20 +286,53 @@ export const AntigravityBackground: React.FC = () => {
       initGrid();
     };
 
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    const prefersReducedMotion =
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (prefersReducedMotion) {
+      // Draw a single static frame instead of a continuous 60fps loop.
+      const ctx = canvas.getContext('2d');
+      if (ctx) draw(ctx, canvas.width, canvas.height);
+      return () => window.removeEventListener('resize', handleResize);
+    }
+
     const handleMouseMove = (e: MouseEvent) => {
       mouseRef.current.x = e.clientX;
       mouseRef.current.y = e.clientY;
     };
-
-    window.addEventListener('resize', handleResize);
     window.addEventListener('mousemove', handleMouseMove);
-    handleResize();
-    requestRef.current = requestAnimationFrame(animate);
+
+    // Defer the animation loop's start until the browser is idle so this
+    // decorative background never competes with hydration/TTI for main-thread
+    // time — it's below-the-fold-equivalent (pointer-events: none, z-0).
+    const win = window as Window & {
+      requestIdleCallback?: (
+        cb: () => void,
+        opts?: { timeout: number }
+      ) => number;
+      cancelIdleCallback?: (id: number) => void;
+    };
+    const startAnimation = () => {
+      requestRef.current = requestAnimationFrame(animate);
+    };
+    let idleId: number | undefined;
+    let timeoutId: number | undefined;
+    if (typeof win.requestIdleCallback === 'function') {
+      idleId = win.requestIdleCallback(startAnimation, { timeout: 1000 });
+    } else {
+      timeoutId = window.setTimeout(startAnimation, 200);
+    }
 
     return () => {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handleMouseMove);
       if (requestRef.current) cancelAnimationFrame(requestRef.current);
+      if (idleId !== undefined) win.cancelIdleCallback?.(idleId);
+      if (timeoutId !== undefined) window.clearTimeout(timeoutId);
     };
   }, [isDark]); // eslint-disable-line react-hooks/exhaustive-deps
 
