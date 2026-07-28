@@ -1,0 +1,62 @@
+apps/resident-portal/src/lib/api-upstream.ts
+  s_708501bd875fa7::t_66baf0c652751a 1-4,8-25,31
+  s_708501bd875fa7::t_3efdfe1eb6afd6 5-7,26-30,32
+apps/resident-portal/src/app/api/resident/push/register/route.ts
+  s_708501bd875fa7::t_49ae305ee0c85a 4,24-32
+apps/resident-portal/next.config.js
+  s_708501bd875fa7::t_f05d2fd4647a0b 4,17
+apps/resident-portal/src/components/visitor-qr-card.tsx
+  s_708501bd875fa7::t_9ed221658baafd 3,26-27,39,60,73-86
+apps/resident-portal/src/lib/qr-display.ts
+  s_708501bd875fa7::t_6ac84f380e76e2 1-30
+apps/resident-portal/src/app/(portal)/history/page.tsx
+  s_708501bd875fa7::t_dcf5331b9850cc 7,10-17,24-31
+apps/resident-portal/src/lib/resident-api-fetch.ts
+  s_708501bd875fa7::t_ce4d36514aaa27 1-48
+apps/resident-portal/src/app/(portal)/visitors/[id]/page.tsx
+  s_708501bd875fa7::t_994790a99eb2e2 9
+  s_708501bd875fa7::t_43a40eae059615 66
+docs/plan/Active/resident_portal_responsive/SESSION_MEMORY.md
+  s_708501bd875fa7::t_2c8ac458e99634 5,8,20-22,29-31,35-39,41-45,49
+  s_708501bd875fa7::t_fb3bd3b68df1e7 9
+apps/resident-portal/api-upstream.cjs
+  s_708501bd875fa7::t_eeb552c1abf6f3 1-40
+apps/resident-portal/src/app/(portal)/maintenance/page.tsx
+  s_708501bd875fa7::t_278fa684434bbd 9,11-25,27-30,39,59-66
+apps/resident-portal/src/components/open-qr-card.tsx
+  s_708501bd875fa7::t_2e01d3e7d842f8 2-3,22,31,47,57-70
+apps/resident-portal/package.json
+  s_708501bd875fa7::t_8c86e08d436bce 11
+docs/plan/Active/resident_portal_responsive/phase_logs/PHASE_LOG_phase_07.md
+  s_708501bd875fa7::t_5caa758f68f9f4 5
+  s_708501bd875fa7::t_a3e2d9c17264d3 1-4,6-43
+apps/resident-portal/src/lib/phase07.test.ts
+  s_708501bd875fa7::t_61dca84ea48d4f 6
+  s_708501bd875fa7::t_8c840bc01bd762 1-5,7-93
+docs/plan/Active/resident_portal_responsive/TASKS_resident_portal_responsive.md
+  s_708501bd875fa7::t_07dda352006856 25
+  s_708501bd875fa7::t_b74539799a5149 44
+  s_708501bd875fa7::t_05b5cf1383a205 71-76
+apps/resident-portal/src/components/pwa/offline-aware-visitor-qr.tsx
+  s_708501bd875fa7::t_c2cae29b7df4be 1-80
+.env.example
+  s_708501bd875fa7::t_4bfe8a1efc9d03 12-13
+.ai/workflow-v2/state.json
+  s_708501bd875fa7::t_7b4aba9468874a 144
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "08a1015f0f550f62a6db7bfe5bac963693ff4fd6",
+  "prompts": {},
+  "sessions": {
+    "s_708501bd875fa7": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "4153ad1e-4498-4e8f-9ae4-08f8df3fd1d6",
+        "model": "grok-4.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
