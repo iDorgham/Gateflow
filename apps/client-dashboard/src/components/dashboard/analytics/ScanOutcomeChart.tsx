@@ -141,7 +141,7 @@ export function ScanOutcomeChart({
                   value,
                   t('analytics.scans', 'Scans'),
                 ]}
-                labelFormatter={(label) => statusLabel(label)}
+                labelFormatter={(label) => statusLabel(String(label))}
                 contentStyle={{
                   backgroundColor: 'hsl(var(--card))',
                   border: '1px solid hsl(var(--border))',
