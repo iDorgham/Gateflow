@@ -76,7 +76,7 @@ describe('navigation-builder', () => {
   it('should apply terminology overrides for Units in SCHOOL', () => {
     const features = ORGANIZATION_FEATURES[OrganizationType.SCHOOL];
     const schoolT = jest.fn((key: string, fallback: string) => {
-      if (key === 'orgType.school.unitLabelPlural') return 'Classrooms';
+      if (key === 'orgType:school.unitLabelPlural') return 'Classrooms';
       return fallback;
     });
 
