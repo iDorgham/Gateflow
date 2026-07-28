@@ -10,6 +10,20 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Workspace]** tracking next changes
+
+### AI Tools
+
+### Apps
+
+---
+
+## [0.3.1] — 2026-07-28
+
+### Workspace
+
+- **[Client-Dashboard]** suppress hydration warning for password-manager DOM injection on login
+
 - **[Client-Dashboard]** add loading skeletons for routes that lacked one
 - **[Client-Dashboard]** show next billing date on the billing settings page
 - **[Client-Dashboard]** fix legacy dashboard route redirects
