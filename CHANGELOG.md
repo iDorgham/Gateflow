@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Deps]** revert eslint and typescript bumps that broke shared-package lint
+
 - **[Deps]** bump @prisma/client to ^6.19.3 to match prisma CLI
 - **[Security]** update tar override in pnpm.overrides to >=7.5.21
 
