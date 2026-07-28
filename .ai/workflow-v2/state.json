@@ -1,7 +1,7 @@
 {
   "version": 2,
   "sequence": ["client-dashboard", "resident-portal", "scanner-app"],
-  "focusedApp": null,
+  "focusedApp": "resident-portal",
   "integratedPilot": {
     "stage": "parked",
     "certificationReceipt": null
@@ -76,12 +76,59 @@
       "updatedAt": "2026-07-26T22:28:37.932Z"
     },
     "resident-portal": {
-      "stage": "parked",
-      "currentPlan": null,
+      "stage": "developing",
+      "currentPlan": "resident_portal_responsive",
       "baseline": null,
-      "evidence": [],
+      "evidence": [
+        {
+          "id": "resident-portal-audit-2026-07-29",
+          "type": "application-audit",
+          "status": "blocked",
+          "valid": true,
+          "createdAt": "2026-07-28T21:45:00.000Z",
+          "commit": "e77e378a93450fee7af27547411e1d17d999f182",
+          "reviewMode": "static-review-only",
+          "artifact": "docs/audits/resident-portal/AUDIT_2026-07-29.md"
+        },
+        {
+          "id": "resident-portal-page-map-2026-07-29",
+          "type": "page-map",
+          "status": "passed",
+          "valid": true,
+          "createdAt": "2026-07-28T21:55:00.000Z",
+          "commit": "e77e378a93450fee7af27547411e1d17d999f182",
+          "reviewMode": "static-review-only",
+          "artifact": "docs/audits/resident-portal/PAGE_MAP_2026-07-29.md"
+        },
+        {
+          "id": "resident-portal-plan-2026-07-29",
+          "type": "plan",
+          "status": "passed",
+          "valid": true,
+          "createdAt": "2026-07-28T22:14:04.849Z",
+          "commit": "e77e378a93450fee7af27547411e1d17d999f182",
+          "reviewMode": "static-review-only",
+          "artifact": "docs/plan/Ready/resident_portal_responsive/PLAN_resident_portal_responsive.md"
+        }
+      ],
       "certificationReceipt": null,
-      "updatedAt": "2026-07-24T00:00:00.000Z"
+      "updatedAt": "2026-07-28T22:25:53.823Z",
+      "pageScoresFile": "docs/audits/resident-portal/PAGE_SCORES_2026-07-29.json",
+      "pilotFlowCoverage": {
+        "covered": 0,
+        "total": 9,
+        "ownedCovered": 0,
+        "ownedTotal": 4,
+        "status": "blocked",
+        "artifact": "docs/audits/resident-portal/PILOT_GATE_2026-07-29.json",
+        "lastCheckedAt": "2026-07-28T21:45:00.000Z"
+      },
+      "selection": {
+        "command": "/dev",
+        "agent": "gateflow-guide",
+        "skills": ["gf-guide", "security", "testing"],
+        "cli": "cursor"
+      }
     },
     "scanner-app": {
       "stage": "parked",
@@ -94,5 +141,5 @@
   },
   "workdirLock": null,
   "createdAt": "2026-07-24T00:00:00.000Z",
-  "updatedAt": "2026-07-26T22:28:37.932Z"
+  "updatedAt": "2026-07-28T22:25:53.823Z"
 }

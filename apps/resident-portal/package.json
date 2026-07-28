@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint src",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "node --experimental-strip-types --test src/lib/session-claims.test.ts"
   },
   "dependencies": {
     "@gate-access/api-client": "workspace:*",

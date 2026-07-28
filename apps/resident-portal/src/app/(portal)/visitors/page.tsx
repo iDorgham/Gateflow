@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Plus } from 'lucide-react';
 import { getSessionClaims } from '@/lib/auth-cookies';
+import { requirePortalSession } from '@/lib/require-portal-session';
 import { prisma, VisitorQR, QRCode, AccessRule } from '@gate-access/db';
 import { Button } from '@gateflow/ui';
 import { PageHeader } from '@/components/layout/page-header';
@@ -9,8 +10,7 @@ import { PullToRefresh } from '@/components/common/pull-to-refresh';
 
 export default async function VisitorsPage() {
   const claims = await getSessionClaims();
-  const userId = claims?.sub || 'dev-resident-id';
-  const orgId = claims?.org || 'dev-org-id';
+  const { userId, organizationId: orgId } = requirePortalSession(claims);
 
   const visitors = await prisma.visitorQR.findMany({
     where: {
@@ -70,10 +70,7 @@ export default async function VisitorsPage() {
                 accessRule: v.accessRule?.type
                   ? {
                       type: v.accessRule.type as
-                        | 'ONETIME'
-                        | 'RECURRING'
-                        | 'PERMANENT'
-                        | 'DATERANGE',
+                        'ONETIME' | 'RECURRING' | 'PERMANENT' | 'DATERANGE',
                     }
                   : null,
               })
