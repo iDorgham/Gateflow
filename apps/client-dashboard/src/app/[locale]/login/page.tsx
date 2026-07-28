@@ -209,7 +209,7 @@ export default function LoginPage() {
                 >
                   {isRtl ? 'البريد الإلكتروني' : 'Email address'}
                 </Label>
-                <div className="relative">
+                <div className="relative" suppressHydrationWarning>
                   <Mail
                     className={cn(
                       'absolute top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/60',
@@ -248,7 +248,7 @@ export default function LoginPage() {
                     {isRtl ? 'نسيت كلمة المرور؟' : "Can't log in?"}
                   </a>
                 </div>
-                <div className="relative">
+                <div className="relative" suppressHydrationWarning>
                   <Lock
                     className={cn(
                       'absolute top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground/60',
