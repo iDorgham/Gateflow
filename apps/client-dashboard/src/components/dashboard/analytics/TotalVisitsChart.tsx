@@ -114,7 +114,7 @@ export function TotalVisitsChart({
               formatter={(value: any) => [value, t('analytics.scans', 'Scans')]}
               labelFormatter={(label) => {
                 try {
-                  return new Date(label).toLocaleDateString(undefined, {
+                  return new Date(String(label)).toLocaleDateString(undefined, {
                     weekday: 'short',
                     month: 'short',
                     day: 'numeric',

@@ -98,7 +98,7 @@ export function VisitorTypeChart({
               innerRadius={60}
               outerRadius={90}
               paddingAngle={2}
-              label={({ type }) => type}
+              label={({ name }) => name}
             >
               {data.map((_, index) => (
                 <Cell key={index} fill={getChartColor(index)} />
