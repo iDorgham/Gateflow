@@ -131,7 +131,7 @@ export function TagSidebar() {
 
       {/* Error Banner */}
       {error && (
-        <div className="m-4 p-3 rounded-md bg-red-950/40 border border-red-500/30 text-red-200 text-xs flex items-start gap-2 shrink-0">
+        <div className="m-4 p-3 rounded-md bg-danger-subtle border border-danger/30 text-danger-bold text-xs flex items-start gap-2 shrink-0">
           <AlertCircle size={14} className="shrink-0 mt-0.5" />
           <p>{error}</p>
         </div>
@@ -247,7 +247,7 @@ export function TagSidebar() {
                 <button
                   type="button"
                   onClick={() => handleDelete(tag.id)}
-                  className="opacity-0 group-hover:opacity-100 p-1.5 text-[var(--ga-text-muted)] hover:text-red-400 transition-all shrink-0"
+                  className="opacity-0 group-hover:opacity-100 p-1.5 text-[var(--ga-text-muted)] hover:text-danger transition-all shrink-0"
                   aria-label={`Delete ${tag.name}`}
                 >
                   <Trash2 size={14} />

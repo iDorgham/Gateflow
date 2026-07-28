@@ -174,23 +174,23 @@ export function ProjectsClient({ projects: initial }: { projects: Project[] }) {
   const sidebar = (
     <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
       <SidebarSection title="Project Structure" icon={Info}>
-        <div className="rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 shadow-sm ring-1 ring-slate-100/50 dark:ring-slate-700/50">
-          <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400 font-medium lowercase first-letter:uppercase">
+        <div className="rounded-2xl border border-border bg-card p-6 shadow-sm ring-1 ring-border/50">
+          <p className="text-[11px] leading-relaxed text-muted-foreground font-medium lowercase first-letter:uppercase">
             Projects help you group Gates and QR Codes by client, location, or
             campaign. This allows for separate analytics and easier management
             of large-scale deployments.
           </p>
           <div className="mt-4 flex flex-col gap-2">
-            <div className="flex items-center gap-2 text-[10px] font-bold text-slate-700 dark:text-slate-300">
-              <span className="h-1 w-1 rounded-full bg-blue-500" />
+            <div className="flex items-center gap-2 text-[10px] font-bold text-foreground">
+              <span className="h-1 w-1 rounded-full bg-info" />
               Campaign Tracking
             </div>
-            <div className="flex items-center gap-2 text-[10px] font-bold text-slate-700 dark:text-slate-300">
-              <span className="h-1 w-1 rounded-full bg-emerald-500" />
+            <div className="flex items-center gap-2 text-[10px] font-bold text-foreground">
+              <span className="h-1 w-1 rounded-full bg-success" />
               Client Segregation
             </div>
-            <div className="flex items-center gap-2 text-[10px] font-bold text-slate-700 dark:text-slate-300">
-              <span className="h-1 w-1 rounded-full bg-violet-500" />
+            <div className="flex items-center gap-2 text-[10px] font-bold text-foreground">
+              <span className="h-1 w-1 rounded-full bg-[var(--gf-color-discovery)]" />
               Regional Access
             </div>
           </div>
@@ -198,15 +198,15 @@ export function ProjectsClient({ projects: initial }: { projects: Project[] }) {
       </SidebarSection>
 
       <SidebarSection title="Resources" icon={HelpCircle}>
-        <div className="rounded-2xl border border-blue-100 dark:border-blue-900/50 bg-blue-50/20 dark:bg-blue-900/20 p-6 shadow-sm ring-1 ring-blue-500/5">
-          <p className="text-[11px] leading-relaxed text-blue-700/80 dark:text-blue-300/80 font-medium">
+        <div className="rounded-2xl border border-info/30 bg-info-subtle p-6 shadow-sm ring-1 ring-info/5">
+          <p className="text-[11px] leading-relaxed text-info-bold/80 font-medium">
             Need help organizing your workspace? Check out our best practices
             for larger teams.
           </p>
           <Button
             variant="ghost"
             size="sm"
-            className="mt-4 w-full gap-2 rounded-xl text-[11px] font-bold text-blue-700 hover:bg-blue-50 hover:text-blue-800"
+            className="mt-4 w-full gap-2 rounded-xl text-[11px] font-bold text-info-bold hover:bg-info-subtle hover:text-info-bold"
           >
             Read Best Practices
             <ExternalLink className="h-3 w-3" />
@@ -221,10 +221,10 @@ export function ProjectsClient({ projects: initial }: { projects: Project[] }) {
       header={
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+            <h1 className="text-2xl font-bold tracking-tight text-foreground">
               {t('settings.projects.title', 'Projects')}
             </h1>
-            <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
+            <p className="text-sm font-medium text-muted-foreground">
               {t(
                 'settings.projects.description',
                 'Organize your workspace resources into logical groups.'
@@ -378,7 +378,7 @@ export function ProjectsClient({ projects: initial }: { projects: Project[] }) {
                                 href={project.website}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-blue-500 hover:text-blue-600 transition-colors"
+                                className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-info hover:text-info-bold transition-colors"
                               >
                                 <Link2 className="h-3 w-3" /> Website
                               </a>
@@ -418,7 +418,7 @@ export function ProjectsClient({ projects: initial }: { projects: Project[] }) {
                         {/* Stats Clusters */}
                         <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
                           <div className="flex items-center gap-3 bg-card border border-border rounded-xl p-3 px-4 shadow-sm group-hover:border-primary/20 transition-colors w-full sm:w-auto">
-                            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-500">
+                            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-success/10 text-success">
                               <ScrollText className="h-4 w-4" />
                             </div>
                             <div className="flex flex-col">

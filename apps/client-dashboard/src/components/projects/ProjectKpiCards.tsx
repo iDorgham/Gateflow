@@ -78,11 +78,10 @@ export function ProjectKpiCards({ metrics }: ProjectKpiCardsProps) {
                 <div
                   className={cn(
                     'flex h-12 w-12 items-center justify-center rounded-xl font-bold',
-                    item.color === 'blue' && 'bg-blue-500/10 text-blue-500',
+                    item.color === 'blue' && 'bg-info/10 text-info',
                     item.color === 'indigo' &&
-                      'bg-indigo-500/10 text-indigo-500',
-                    item.color === 'emerald' &&
-                      'bg-emerald-500/10 text-emerald-500',
+                      'bg-[var(--gf-color-discovery)]/10 text-[var(--gf-color-discovery)]',
+                    item.color === 'emerald' && 'bg-success/10 text-success',
                     item.color === 'orange' && 'bg-primary/10 text-primary' // Kimchi Orange
                   )}
                 >
@@ -93,7 +92,7 @@ export function ProjectKpiCards({ metrics }: ProjectKpiCardsProps) {
                     className={cn(
                       'flex items-center gap-1 rounded-full px-2 py-1 text-[10px] font-black uppercase tracking-wider',
                       item.growth >= 0
-                        ? 'bg-emerald-500/10 text-emerald-500'
+                        ? 'bg-success/10 text-success'
                         : 'bg-destructive/10 text-destructive'
                     )}
                   >

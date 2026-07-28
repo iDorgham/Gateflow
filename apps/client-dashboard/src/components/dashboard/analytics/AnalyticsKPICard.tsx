@@ -47,7 +47,7 @@ export function AnalyticsKPICard({
     >
       <Card
         className={cn(
-          'h-full rounded-2xl border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-surface-raised,#FFFFFF)] bg-card shadow-[0_1px_1px_rgba(9,30,66,0.08),0_0_1px_rgba(9,30,66,0.08)] hover:shadow-[0_4px_8px_-2px_rgba(9,30,66,0.16),0_0_1px_rgba(9,30,66,0.08)] hover:border-[var(--ds-border-bold,#B3BAC5)] transition-all duration-200',
+          'h-full rounded-2xl border-[var(--ds-border)] bg-[var(--ds-surface-raised)] bg-card shadow-[0_1px_1px_rgba(9,30,66,0.08),0_0_1px_rgba(9,30,66,0.08)] hover:shadow-[0_4px_8px_-2px_rgba(9,30,66,0.16),0_0_1px_rgba(9,30,66,0.08)] hover:border-[var(--ds-border-bold)] transition-all duration-200',
           className
         )}
       >

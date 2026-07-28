@@ -34,14 +34,14 @@ export const AIConfirmationRenderer: React.FC<AIConfirmationRendererProps> = ({
   const isCancelled = status === 'cancelled';
 
   return (
-    <Card className="my-4 border-amber-200 bg-amber-50/30 overflow-hidden">
+    <Card className="my-4 border-warning bg-warning-subtle overflow-hidden">
       <CardContent className="p-4">
         <div className="flex items-start gap-3">
-          <div className="p-2 rounded-full bg-amber-100 text-amber-600">
+          <div className="p-2 rounded-full bg-warning-subtle text-warning-bold">
             {isConfirmed ? (
-              <ShieldCheck className="w-5 h-5 text-green-600" />
+              <ShieldCheck className="w-5 h-5 text-success-bold" />
             ) : isCancelled ? (
-              <AlertCircle className="w-5 h-5 text-gray-500" />
+              <AlertCircle className="w-5 h-5 text-muted-foreground" />
             ) : (
               <ShieldCheck className="w-5 h-5" />
             )}
@@ -49,16 +49,16 @@ export const AIConfirmationRenderer: React.FC<AIConfirmationRendererProps> = ({
 
           <div className="flex-1 space-y-2">
             <div>
-              <h4 className="text-sm font-semibold text-slate-900">
+              <h4 className="text-sm font-semibold text-foreground">
                 {isConfirmed
                   ? 'Action Confirmed'
                   : isCancelled
                     ? 'Action Cancelled'
                     : 'Confirmation Required'}
               </h4>
-              <p className="text-xs text-slate-600 mt-1">{data.title}</p>
+              <p className="text-xs text-muted-foreground mt-1">{data.title}</p>
               {data.description && (
-                <p className="text-[11px] text-slate-500 italic mt-1">
+                <p className="text-[11px] text-muted-foreground italic mt-1">
                   {data.description}
                 </p>
               )}
@@ -72,7 +72,7 @@ export const AIConfirmationRenderer: React.FC<AIConfirmationRendererProps> = ({
               <div className="flex items-center gap-2 pt-2">
                 <Button
                   size="sm"
-                  className="h-8 text-xs bg-slate-900 hover:bg-slate-800"
+                  className="h-8 text-xs bg-primary hover:bg-primary/90"
                   onClick={() => onConfirm(data)}
                   disabled={isExecuting}
                 >
@@ -88,7 +88,7 @@ export const AIConfirmationRenderer: React.FC<AIConfirmationRendererProps> = ({
                 <Button
                   size="sm"
                   variant="outline"
-                  className="h-8 text-xs border-slate-200"
+                  className="h-8 text-xs border-border"
                   onClick={() => onCancel(data)}
                   disabled={isExecuting}
                 >
@@ -98,14 +98,14 @@ export const AIConfirmationRenderer: React.FC<AIConfirmationRendererProps> = ({
             )}
 
             {isConfirmed && (
-              <p className="text-[10px] font-medium text-green-600 flex items-center gap-1">
+              <p className="text-[10px] font-medium text-success-bold flex items-center gap-1">
                 <ShieldCheck className="w-3 h-3" />
                 This action has been securely authorized and logged.
               </p>
             )}
 
             {isCancelled && (
-              <p className="text-[10px] font-medium text-slate-500 flex items-center gap-1">
+              <p className="text-[10px] font-medium text-muted-foreground flex items-center gap-1">
                 <AlertCircle className="w-3 h-3" />
                 This action was cancelled by the user.
               </p>

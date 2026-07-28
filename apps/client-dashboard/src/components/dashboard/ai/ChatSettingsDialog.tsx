@@ -59,14 +59,14 @@ export function ChatSettingsDialog({
 
         <div className="flex flex-col gap-4 py-4">
           <div className="flex flex-col gap-2">
-            <label className="text-sm font-semibold text-foreground dark:text-zinc-100">
+            <label className="text-sm font-semibold text-foreground">
               {t('ai.predefinedRules', 'Select Rules')}
             </label>
             <div className="flex flex-col gap-2">
               {PREDEFINED_RULES.map((rule, idx) => (
                 <label
                   key={idx}
-                  className="flex items-center gap-2 text-sm text-muted-foreground dark:text-zinc-400 cursor-pointer"
+                  className="flex items-center gap-2 text-sm text-muted-foreground cursor-pointer"
                 >
                   <input
                     type="checkbox"
@@ -81,7 +81,7 @@ export function ChatSettingsDialog({
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className="text-sm font-semibold text-foreground dark:text-zinc-100">
+            <label className="text-sm font-semibold text-foreground">
               {t('ai.customRule', 'Custom Instructions')}
             </label>
             <textarea

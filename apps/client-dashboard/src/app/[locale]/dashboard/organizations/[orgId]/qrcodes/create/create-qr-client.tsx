@@ -163,30 +163,29 @@ const QR_TYPES = [
     label: 'Single Use',
     desc: 'One scan only. The code is deactivated after the first successful entry.',
     icon: QrCode,
-    accent: 'border-blue-500/40 bg-blue-500/5 hover:border-blue-500/60',
-    activeAccent: 'border-blue-500 bg-blue-500/10 ring-2 ring-blue-500/30',
-    iconColor: 'text-blue-500',
+    accent: 'border-info/40 bg-info/5 hover:border-info/60',
+    activeAccent: 'border-info bg-info/10 ring-2 ring-info/30',
+    iconColor: 'text-info',
   },
   {
     value: QRCodeType.RECURRING,
     label: 'Recurring',
     desc: 'Allow a fixed number of scans. Useful for event passes or repeat visitors.',
     icon: RefreshCw,
-    accent: 'border-violet-500/40 bg-violet-500/5 hover:border-violet-500/60',
+    accent:
+      'border-[var(--gf-color-discovery)]/40 bg-[var(--gf-color-discovery)]/5 hover:border-[var(--gf-color-discovery)]/60',
     activeAccent:
-      'border-violet-500 bg-violet-500/10 ring-2 ring-violet-500/30',
-    iconColor: 'text-violet-500',
+      'border-[var(--gf-color-discovery)] bg-[var(--gf-color-discovery)]/10 ring-2 ring-[var(--gf-color-discovery)]/30',
+    iconColor: 'text-[var(--gf-color-discovery)]',
   },
   {
     value: QRCodeType.PERMANENT,
     label: 'Permanent',
     desc: 'Unlimited scans. Ideal for resident or staff access cards.',
     icon: Infinity,
-    accent:
-      'border-emerald-500/40 bg-emerald-500/5 hover:border-emerald-500/60',
-    activeAccent:
-      'border-emerald-500 bg-emerald-500/10 ring-2 ring-emerald-500/30',
-    iconColor: 'text-emerald-500',
+    accent: 'border-success/40 bg-success/5 hover:border-success/60',
+    activeAccent: 'border-success bg-success/10 ring-2 ring-success/30',
+    iconColor: 'text-success',
   },
 ];
 
@@ -505,7 +504,7 @@ function Step3({
         </h2>
         <p className="text-sm text-muted-foreground mt-1">
           {t(
-            `orgType.${terminology.orgLabel.split('.')[1]}.contactDescriptionShort`,
+            `orgType:${terminology.orgLabel.split(':')[1]?.split('.')[0]}.contactDescriptionShort`,
             {
               defaultValue: t(
                 'qr.wizard.guestDetailsSub',

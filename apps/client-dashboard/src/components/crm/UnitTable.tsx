@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
-import { AdvancedTable, Button, cn, Badge } from '@gateflow/ui';
+import { AdvancedTable, Button, cn, Badge, EmptyState } from '@gateflow/ui';
 import { useDataTable } from '@/hooks/use-data-table';
 import { useUserPreferences } from '@/lib/residents/use-user-preferences';
 import { Building, Download, Trash2, Pencil, Maximize2 } from 'lucide-react';
@@ -268,7 +268,7 @@ export function UnitTable({ projectId, locale }: UnitTableProps) {
           variant="outline"
           className={cn(
             'text-[10px] font-black tracking-widest uppercase px-2 py-0.5',
-            'border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-surface-sunken,#FAFBFC)] text-[var(--ds-text-subtle,#6B778C)]'
+            'border-[var(--ds-border)] bg-[var(--ds-surface-sunken)] text-[var(--ds-text-subtle)]'
           )}
         >
           {u.type.replace('_', ' ')}
@@ -326,7 +326,7 @@ export function UnitTable({ projectId, locale }: UnitTableProps) {
             onClick={handleCreate}
             className={cn(
               'h-10 rounded-xl font-bold gap-2 shadow-sm',
-              'bg-[var(--ds-background-success-bold,#00875A)] hover:bg-[var(--ds-background-success-bold-hover,#00875A)] text-[var(--ds-text-inverse,#FFFFFF)]'
+              'bg-[var(--ds-background-success-bold)] hover:bg-[var(--ds-background-success-bold-hover)] text-[var(--ds-text-inverse)]'
             )}
           >
             <Building className="h-4 w-4" />
@@ -381,6 +381,17 @@ export function UnitTable({ projectId, locale }: UnitTableProps) {
         density={density}
         onDensityChange={handleDensityChange}
         activeView={activeView}
+        emptyState={
+          <EmptyState
+            icon={Building}
+            title={t('crm.units.emptyTitle', 'No units yet')}
+            description={t(
+              'crm.units.emptyDescription',
+              'Add your first unit to start assigning residents.'
+            )}
+            className="min-h-[240px]"
+          />
+        }
         bulkActions={
           <Button
             variant="destructive"

@@ -15,6 +15,7 @@ import {
   Avatar,
   AvatarFallback,
   LoadingSpinner,
+  EmptyState,
 } from '@gateflow/ui';
 import { toast } from 'sonner';
 import { Trash2, User as UserIcon, Loader2, MapPin, Clock } from 'lucide-react';
@@ -113,10 +114,10 @@ export function GateAssignmentsTable({ locale: _locale }: { locale: string }) {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-bold text-slate-900 dark:text-white">
+          <h2 className="text-xl font-bold text-foreground">
             {t('gateAssignments.tableTitle', 'Current assignments')}
           </h2>
-          <p className="text-sm text-slate-500 dark:text-slate-400">
+          <p className="text-sm text-muted-foreground">
             {t(
               'gateAssignments.tableDescription',
               'Users and the gates they can scan at.'
@@ -125,7 +126,7 @@ export function GateAssignmentsTable({ locale: _locale }: { locale: string }) {
         </div>
         <Badge
           variant="outline"
-          className="text-[10px] font-bold uppercase tracking-wider bg-slate-50 dark:bg-slate-900 border-slate-200 dark:border-slate-800"
+          className="text-[10px] font-bold uppercase tracking-wider bg-muted border-border"
         >
           {entries.length} Assigned Members
         </Badge>
@@ -135,16 +136,16 @@ export function GateAssignmentsTable({ locale: _locale }: { locale: string }) {
         <Table>
           <TableHeader className="bg-[var(--ds-background-neutral-subtle)] border-b border-[var(--ds-border)]">
             <TableRow className="hover:bg-transparent">
-              <TableHead className="w-[300px] text-xs font-bold uppercase text-slate-500">
+              <TableHead className="w-[300px] text-xs font-bold uppercase text-muted-foreground">
                 {t('gateAssignments.tableUser', 'User')}
               </TableHead>
-              <TableHead className="text-xs font-bold uppercase text-slate-500">
+              <TableHead className="text-xs font-bold uppercase text-muted-foreground">
                 {t('gateAssignments.tableGate', 'Gate')}
               </TableHead>
-              <TableHead className="text-xs font-bold uppercase text-slate-500">
+              <TableHead className="text-xs font-bold uppercase text-muted-foreground">
                 {t('gateAssignments.tableShift', 'Shift')}
               </TableHead>
-              <TableHead className="text-right text-xs font-bold uppercase text-slate-500">
+              <TableHead className="text-right text-xs font-bold uppercase text-muted-foreground">
                 {t('gateAssignments.tableActions', 'Actions')}
               </TableHead>
             </TableRow>
@@ -152,18 +153,19 @@ export function GateAssignmentsTable({ locale: _locale }: { locale: string }) {
           <TableBody>
             {entries.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={4} className="h-64 text-center">
-                  <div className="flex flex-col items-center justify-center space-y-2 py-12">
-                    <div className="h-12 w-12 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center">
-                      <UserIcon className="h-6 w-6 text-slate-400" />
-                    </div>
-                    <p className="text-sm font-medium text-slate-500 max-w-[200px]">
-                      {t(
-                        'gateAssignments.noAssignments',
-                        'No assignments yet. Use the form above to assign users.'
-                      )}
-                    </p>
-                  </div>
+                <TableCell colSpan={4} className="p-0">
+                  <EmptyState
+                    icon={UserIcon}
+                    title={t(
+                      'gateAssignments.noAssignmentsTitle',
+                      'No assignments yet'
+                    )}
+                    description={t(
+                      'gateAssignments.noAssignments',
+                      'Use the form above to assign users.'
+                    )}
+                    className="min-h-[240px] border-0 rounded-none"
+                  />
                 </TableCell>
               </TableRow>
             ) : (
@@ -177,8 +179,8 @@ export function GateAssignmentsTable({ locale: _locale }: { locale: string }) {
                       <TableCell className="align-top py-4">
                         {index === 0 && (
                           <div className="flex items-center gap-3">
-                            <Avatar className="h-9 w-9 border border-blue-100 dark:border-blue-900 shadow-sm">
-                              <AvatarFallback className="bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 text-sm font-bold">
+                            <Avatar className="h-9 w-9 border border-info/30 shadow-sm">
+                              <AvatarFallback className="bg-info-subtle text-info-bold text-sm font-bold">
                                 {user.name
                                   .split(' ')
                                   .filter(Boolean)
@@ -189,10 +191,10 @@ export function GateAssignmentsTable({ locale: _locale }: { locale: string }) {
                               </AvatarFallback>
                             </Avatar>
                             <div className="flex flex-col min-w-0">
-                              <span className="text-sm font-bold text-slate-900 dark:text-white truncate">
+                              <span className="text-sm font-bold text-foreground truncate">
                                 {user.name}
                               </span>
-                              <span className="text-xs text-slate-500 dark:text-slate-400 truncate">
+                              <span className="text-xs text-muted-foreground truncate">
                                 {user.email}
                               </span>
                             </div>
@@ -202,12 +204,12 @@ export function GateAssignmentsTable({ locale: _locale }: { locale: string }) {
                       <TableCell className="align-middle py-4">
                         <div className="flex flex-col gap-1">
                           <div className="flex items-center gap-2">
-                            <Badge className="bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 border-blue-100 dark:border-blue-800 font-bold text-[11px] px-2 py-0">
+                            <Badge className="bg-info-subtle text-info-bold border-info/30 font-bold text-[11px] px-2 py-0">
                               {assignment.gate.name}
                             </Badge>
                           </div>
                           {assignment.gate.location && (
-                            <div className="flex items-center gap-1 text-[10px] text-slate-400 italic font-medium ml-1">
+                            <div className="flex items-center gap-1 text-[10px] text-muted-foreground italic font-medium ml-1">
                               <MapPin className="h-3 w-3" />
                               <span>{assignment.gate.location}</span>
                             </div>
@@ -216,14 +218,14 @@ export function GateAssignmentsTable({ locale: _locale }: { locale: string }) {
                       </TableCell>
                       <TableCell className="align-middle py-4">
                         {assignment.shiftStart && assignment.shiftEnd ? (
-                          <div className="flex items-center gap-2 text-xs font-semibold text-slate-700 dark:text-slate-300 bg-slate-100/50 dark:bg-slate-800/50 px-2 py-1 rounded-md w-fit">
-                            <Clock className="h-3.5 w-3.5 text-blue-500" />
+                          <div className="flex items-center gap-2 text-xs font-semibold text-foreground bg-muted/50 px-2 py-1 rounded-md w-fit">
+                            <Clock className="h-3.5 w-3.5 text-info-bold" />
                             <span>
                               {assignment.shiftStart} — {assignment.shiftEnd}
                             </span>
                           </div>
                         ) : (
-                          <span className="text-xs text-slate-400 font-medium">
+                          <span className="text-xs text-muted-foreground font-medium">
                             —
                           </span>
                         )}
@@ -232,7 +234,7 @@ export function GateAssignmentsTable({ locale: _locale }: { locale: string }) {
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-9 w-9 rounded-xl text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all"
+                          className="h-9 w-9 rounded-xl text-muted-foreground hover:text-danger-bold hover:bg-danger-subtle transition-all"
                           onClick={() => {
                             if (
                               window.confirm(

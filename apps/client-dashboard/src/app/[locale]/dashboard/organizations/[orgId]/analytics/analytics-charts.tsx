@@ -105,21 +105,21 @@ const DOW_LABELS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'] as const;
 // ─── ADS Tooltip style — replaces Recharts inline contentStyle objects ────────
 const ADS_TOOLTIP_STYLE: React.CSSProperties = {
   fontSize: 12,
-  borderRadius: 'var(--ds-radius-small, 3px)',
-  border: '1px solid var(--ds-border,#DFE1E6)',
-  background: 'var(--ds-surface-overlay,#FFFFFF)',
-  color: 'var(--ds-text,#172B4D)',
+  borderRadius: 'var(--ds-radius-small)',
+  border: '1px solid var(--ds-border)',
+  background: 'var(--ds-surface-overlay)',
+  color: 'var(--ds-text)',
   boxShadow: 'var(--ds-shadow-raised)',
   padding: '8px 12px',
 };
 
 const ADS_TOOLTIP_LABEL_STYLE: React.CSSProperties = {
   fontWeight: 700,
-  color: 'var(--ds-text,#172B4D)',
+  color: 'var(--ds-text)',
 };
 
 const ADS_TOOLTIP_ITEM_STYLE: React.CSSProperties = {
-  color: 'var(--ds-text-subtle,#42526E)',
+  color: 'var(--ds-text-subtle)',
 };
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────

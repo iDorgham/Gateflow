@@ -97,7 +97,7 @@ export function AutomationList() {
 
       {/* Error Banner */}
       {error && (
-        <div className="m-4 p-3 rounded-md bg-red-950/40 border border-red-500/30 text-red-200 text-xs flex items-start gap-2 shrink-0">
+        <div className="m-4 p-3 rounded-md bg-danger-subtle border border-danger/30 text-danger-bold text-xs flex items-start gap-2 shrink-0">
           <AlertCircle size={14} className="shrink-0 mt-0.5" />
           <p>{error}</p>
         </div>
@@ -128,8 +128,8 @@ export function AutomationList() {
                     className={cn(
                       'p-1.5 rounded-md',
                       item.type === 'REPORT'
-                        ? 'bg-blue-500/10 text-blue-400'
-                        : 'bg-purple-500/10 text-purple-400'
+                        ? 'bg-info/10 text-info'
+                        : 'bg-[var(--gf-color-discovery)]/10 text-[var(--gf-color-discovery)]'
                     )}
                   >
                     {item.type === 'REPORT' ? (
@@ -151,7 +151,7 @@ export function AutomationList() {
                 <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                   <button
                     onClick={() => handleDelete(item.id)}
-                    className="p-1.5 text-[var(--ga-text-muted)] hover:text-red-400 transition-colors"
+                    className="p-1.5 text-[var(--ga-text-muted)] hover:text-danger transition-colors"
                   >
                     <Trash2 size={12} />
                   </button>
@@ -175,8 +175,8 @@ export function AutomationList() {
                   className={cn(
                     'px-2 py-0.5 rounded-full font-bold uppercase tracking-tighter text-[9px]',
                     item.status === 'ACTIVE'
-                      ? 'bg-green-500/10 text-green-500'
-                      : 'bg-yellow-500/10 text-yellow-500'
+                      ? 'bg-success/10 text-success'
+                      : 'bg-warning/10 text-warning'
                   )}
                 >
                   {item.status}

@@ -20,18 +20,18 @@ import { gaLayoutSpring } from './GateAITokens';
 
 const hubStyles = `
   :root {
-    --ga-navy:          var(--ds-background-neutral-subtle,#27272A);
-    --ga-orange:        var(--primary,var(--ds-background-selected-bold,#ED4B00));
+    --ga-navy:          var(--ds-background-neutral-subtle);
+    --ga-orange:        var(--primary,var(--ds-background-selected-bold));
     --ga-navy-glass:    rgba(22, 26, 29, 0.4);
-    --ga-navy-border:   var(--ds-border,#27272A);
+    --ga-navy-border:   var(--ds-border);
     --ga-dot-color:     transparent;
     --ga-dot-size:      28px;
-    --ga-panel-bg:      var(--ds-background-default,#18191a);
-    --ga-panel-border:  var(--ds-border,#27272A);
-    --ga-highlight:     var(--primary,var(--ds-background-selected-bold,#ED4B00));
-    --ga-text-primary:  var(--ds-text,#FAFAFA);
-    --ga-text-muted:    var(--ds-text-subtle,#A1A1AA);
-    --ga-text-accent:   var(--primary,var(--ds-background-selected-bold,#ED4B00));
+    --ga-panel-bg:      var(--ds-background-default);
+    --ga-panel-border:  var(--ds-border);
+    --ga-highlight:     var(--primary,var(--ds-background-selected-bold));
+    --ga-text-primary:  var(--ds-text);
+    --ga-text-muted:    var(--ds-text-subtle);
+    --ga-text-accent:   var(--primary,var(--ds-background-selected-bold));
     --ga-scrollbar:     rgba(82, 82, 91, 0.2);
   }
 
@@ -169,7 +169,7 @@ export function GateAIHubLayout({
     <div
       dir={isRtl ? 'rtl' : 'ltr'}
       className={cn(
-        'ga-hub-root relative flex h-[calc(100vh-180px)] overflow-hidden rounded-xl border border-[var(--ds-border,#27272A)] bg-[var(--ds-background-default,#18191a)]',
+        'ga-hub-root relative flex h-[calc(100vh-180px)] overflow-hidden rounded-xl border border-[var(--ds-border)] bg-[var(--ds-background-default)]',
         className
       )}
     >

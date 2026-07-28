@@ -320,7 +320,7 @@ export function TeamRoster({ users, roles, currentUserId }: TeamRosterProps) {
                         <DropdownMenuItem
                           onClick={() => handleRevokeSessions(user.id)}
                           disabled={isPending}
-                          className="rounded-lg text-xs font-bold px-3 py-2 text-orange-600 focus:text-orange-600 focus:bg-orange-50"
+                          className="rounded-lg text-xs font-bold px-3 py-2 text-warning-bold focus:text-warning-bold focus:bg-warning-subtle"
                         >
                           <LogOut className="h-3.5 w-3.5 mr-2" />
                           {t('settings.team.revokeSessions', 'Force Logout')}
@@ -367,7 +367,7 @@ export function TeamRoster({ users, roles, currentUserId }: TeamRosterProps) {
             <Button
               size="sm"
               variant="destructive"
-              className="h-8 rounded-lg gap-2 text-[10px] font-bold uppercase tracking-widest bg-red-500 hover:bg-red-600 border-none"
+              className="h-8 rounded-lg gap-2 text-[10px] font-bold uppercase tracking-widest bg-destructive hover:bg-destructive/90 border-none"
               onClick={handleBulkRemove}
             >
               <Trash2 className="h-3 w-3" />

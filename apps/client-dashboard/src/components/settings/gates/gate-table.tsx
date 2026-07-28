@@ -17,6 +17,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
+  EmptyState,
 } from '@gateflow/ui';
 import {
   Search,
@@ -137,19 +138,27 @@ export function GateTable({ gates: initial, projects }: GateTableProps) {
           <TableBody>
             {filtered.length === 0 ? (
               <TableRow>
-                <TableCell
-                  colSpan={6}
-                  className="h-40 text-center text-muted-foreground italic"
-                >
-                  {gates.length === 0
-                    ? t(
-                        'settings.gates.empty',
-                        'No gates yet. Add your first gate.'
-                      )
-                    : t(
-                        'settings.gates.noResults',
-                        'No gates match your search.'
-                      )}
+                <TableCell colSpan={6} className="p-0">
+                  <EmptyState
+                    icon={DoorOpen}
+                    title={
+                      gates.length === 0
+                        ? t('settings.gates.empty', 'No gates yet')
+                        : t(
+                            'settings.gates.noResults',
+                            'No gates match your search'
+                          )
+                    }
+                    description={
+                      gates.length === 0
+                        ? t(
+                            'settings.gates.emptyDescription',
+                            'Add your first gate to get started.'
+                          )
+                        : undefined
+                    }
+                    className="min-h-[240px] border-0 rounded-none"
+                  />
                 </TableCell>
               </TableRow>
             ) : (

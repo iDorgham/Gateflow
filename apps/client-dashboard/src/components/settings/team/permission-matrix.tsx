@@ -273,9 +273,9 @@ export function PermissionMatrix({
                       {perm.isSensitive && (
                         <Tooltip>
                           <TooltipTrigger>
-                            <ShieldAlert className="h-3 w-3 text-red-500" />
+                            <ShieldAlert className="h-3 w-3 text-danger" />
                           </TooltipTrigger>
-                          <TooltipContent className="bg-red-500 text-white border-none font-bold text-[10px] uppercase">
+                          <TooltipContent className="bg-destructive text-destructive-foreground border-none font-bold text-[10px] uppercase">
                             Admin Level Access Required
                           </TooltipContent>
                         </Tooltip>

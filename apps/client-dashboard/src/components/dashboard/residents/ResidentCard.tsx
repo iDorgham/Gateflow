@@ -24,9 +24,9 @@ export function ResidentCard({ contact, onView, onEdit }: ResidentCardProps) {
       whileHover={{ scale: 1.01 }}
       transition={{ type: 'spring', stiffness: 400, damping: 28 }}
       className={cn(
-        'group relative flex flex-col gap-3 rounded-lg border border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-surface-raised,#FFFFFF)] p-4',
+        'group relative flex flex-col gap-3 rounded-lg border border-[var(--ds-border)] bg-[var(--ds-surface-raised)] p-4',
         'shadow-[0_1px_1px_rgba(9,30,66,0.08),0_0_1px_rgba(9,30,66,0.08)]',
-        'hover:border-[var(--ds-border-focused,#4C9AFF)] hover:shadow-[0_4px_8px_-2px_rgba(9,30,66,0.16),0_0_1px_rgba(9,30,66,0.08)]',
+        'hover:border-[var(--ds-border-focused)] hover:shadow-[0_4px_8px_-2px_rgba(9,30,66,0.16),0_0_1px_rgba(9,30,66,0.08)]',
         'transition-[border-color,box-shadow] duration-150'
       )}
     >
@@ -36,20 +36,20 @@ export function ResidentCard({ contact, onView, onEdit }: ResidentCardProps) {
           <img
             src={contact.avatarUrl}
             alt={`${contact.firstName} ${contact.lastName}`}
-            className="h-10 w-10 rounded-full object-cover shrink-0 ring-2 ring-[var(--ds-border,#DFE1E6)]"
+            className="h-10 w-10 rounded-full object-cover shrink-0 ring-2 ring-[var(--ds-border)]"
           />
         ) : (
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--ds-background-neutral,#EBECF0)] text-sm font-black text-[var(--ds-text-subtle,#42526E)]">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--ds-background-neutral)] text-sm font-black text-[var(--ds-text-subtle)]">
             {initials}
           </div>
         )}
 
         <div className="min-w-0 flex-1">
-          <p className="truncate text-sm font-bold text-[var(--ds-text,#172B4D)]">
+          <p className="truncate text-sm font-bold text-[var(--ds-text)]">
             {contact.firstName} {contact.lastName}
           </p>
           {contact.jobTitle && (
-            <p className="truncate text-[11px] text-[var(--ds-text-subtlest,#6B778C)]">
+            <p className="truncate text-[11px] text-[var(--ds-text-subtlest)]">
               {contact.jobTitle}
             </p>
           )}
@@ -60,7 +60,7 @@ export function ResidentCard({ contact, onView, onEdit }: ResidentCardProps) {
           {onView && (
             <button
               onClick={onView}
-              className="flex h-7 w-7 items-center justify-center rounded-sm hover:bg-[var(--ds-background-neutral-subtle-hovered,#EBECF0)] text-[var(--ds-icon-subtle,#6B778C)] transition-colors"
+              className="flex h-7 w-7 items-center justify-center rounded-sm hover:bg-[var(--ds-background-neutral-subtle-hovered)] text-[var(--ds-icon-subtle)] transition-colors"
               aria-label="View contact"
             >
               <Eye className="h-3.5 w-3.5" />
@@ -69,7 +69,7 @@ export function ResidentCard({ contact, onView, onEdit }: ResidentCardProps) {
           {onEdit && (
             <button
               onClick={onEdit}
-              className="flex h-7 w-7 items-center justify-center rounded-sm hover:bg-[var(--ds-background-neutral-subtle-hovered,#EBECF0)] text-[var(--ds-icon-subtle,#6B778C)] transition-colors"
+              className="flex h-7 w-7 items-center justify-center rounded-sm hover:bg-[var(--ds-background-neutral-subtle-hovered)] text-[var(--ds-icon-subtle)] transition-colors"
               aria-label="Edit contact"
             >
               <Pencil className="h-3.5 w-3.5" />
@@ -83,10 +83,10 @@ export function ResidentCard({ contact, onView, onEdit }: ResidentCardProps) {
         {contact.email && (
           <div className="flex items-center gap-2">
             <Mail
-              className="h-3 w-3 shrink-0 text-[var(--ds-icon-subtle,#6B778C)]"
+              className="h-3 w-3 shrink-0 text-[var(--ds-icon-subtle)]"
               aria-hidden="true"
             />
-            <span className="truncate text-xs text-[var(--ds-text-subtle,#42526E)]">
+            <span className="truncate text-xs text-[var(--ds-text-subtle)]">
               {contact.email}
             </span>
           </div>
@@ -94,10 +94,10 @@ export function ResidentCard({ contact, onView, onEdit }: ResidentCardProps) {
         {contact.phone && (
           <div className="flex items-center gap-2">
             <Phone
-              className="h-3 w-3 shrink-0 text-[var(--ds-icon-subtle,#6B778C)]"
+              className="h-3 w-3 shrink-0 text-[var(--ds-icon-subtle)]"
               aria-hidden="true"
             />
-            <span className="text-xs text-[var(--ds-text-subtle,#42526E)]">
+            <span className="text-xs text-[var(--ds-text-subtle)]">
               {contact.phone}
             </span>
           </div>
@@ -105,10 +105,10 @@ export function ResidentCard({ contact, onView, onEdit }: ResidentCardProps) {
         {contact.company && (
           <div className="flex items-center gap-2">
             <Building
-              className="h-3 w-3 shrink-0 text-[var(--ds-icon-subtle,#6B778C)]"
+              className="h-3 w-3 shrink-0 text-[var(--ds-icon-subtle)]"
               aria-hidden="true"
             />
-            <span className="truncate text-xs text-[var(--ds-text-subtle,#42526E)]">
+            <span className="truncate text-xs text-[var(--ds-text-subtle)]">
               {contact.company}
             </span>
           </div>
@@ -116,30 +116,30 @@ export function ResidentCard({ contact, onView, onEdit }: ResidentCardProps) {
       </div>
 
       {/* Footer: units + visits */}
-      <div className="flex items-center justify-between gap-2 border-t border-[var(--ds-border-subtle,#F4F5F7)] pt-2.5">
+      <div className="flex items-center justify-between gap-2 border-t border-[var(--ds-border-subtle)] pt-2.5">
         <div className="flex flex-wrap gap-1">
           {hasUnits ? (
             contact.units.slice(0, 2).map((unit) => (
               <span
                 key={unit.id}
-                className="inline-flex items-center rounded-[3px] bg-[var(--ds-background-brand-subtle,#DEEBFF)] px-1.5 py-0.5 text-[10px] font-semibold text-[var(--ds-text-brand,var(--primary))] uppercase tracking-tight"
+                className="inline-flex items-center rounded-[3px] bg-[var(--ds-background-brand-subtle)] px-1.5 py-0.5 text-[10px] font-semibold text-[var(--ds-text-brand)] uppercase tracking-tight"
               >
                 {unit.name}
               </span>
             ))
           ) : (
-            <span className="text-[10px] text-[var(--ds-text-subtlest,#6B778C)]">
+            <span className="text-[10px] text-[var(--ds-text-subtlest)]">
               No units
             </span>
           )}
           {contact.units.length > 2 && (
-            <span className="inline-flex items-center rounded-[3px] bg-[var(--ds-background-neutral-subtle,#F4F5F7)] px-1.5 py-0.5 text-[10px] font-bold text-[var(--ds-text-subtlest,#6B778C)]">
+            <span className="inline-flex items-center rounded-[3px] bg-[var(--ds-background-neutral-subtle)] px-1.5 py-0.5 text-[10px] font-bold text-[var(--ds-text-subtlest)]">
               +{contact.units.length - 2}
             </span>
           )}
         </div>
 
-        <span className="shrink-0 text-[10px] font-bold tabular-nums text-[var(--ds-text-subtlest,#6B778C)]">
+        <span className="shrink-0 text-[10px] font-bold tabular-nums text-[var(--ds-text-subtlest)]">
           {contact.visitsInRange} visits
         </span>
       </div>

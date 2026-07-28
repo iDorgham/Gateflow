@@ -103,9 +103,9 @@ function LoginControls({ locale }: { locale: Locale }) {
         aria-label="Toggle theme"
       >
         {mounted && theme === 'dark' ? (
-          <Sun className="h-3.5 w-3.5 text-amber-500" />
+          <Sun className="h-3.5 w-3.5 text-warning" />
         ) : (
-          <Moon className="h-3.5 w-3.5 text-slate-700 dark:text-slate-300" />
+          <Moon className="h-3.5 w-3.5 text-foreground" />
         )}
       </button>
     </div>
@@ -221,6 +221,7 @@ export default function LoginPage() {
                     name="email"
                     type="email"
                     placeholder="name@company.com"
+                    defaultValue={state?.email ?? ''}
                     autoComplete="email"
                     required
                     className={cn(

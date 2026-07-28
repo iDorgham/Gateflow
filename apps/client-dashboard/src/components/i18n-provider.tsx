@@ -8,11 +8,11 @@ import { i18n, type Locale } from '@/lib/i18n-config';
 
 // This root layout wraps every route, including the public login page, which
 // only needs `common` + `login`. Loading the full en/ar translation trees
-// (common, nav, admin, dashboard, login) via a static import forces the
-// bundler to parse and evaluate them synchronously as part of every route's
-// critical bundle. A dynamic import turns them into a separate chunk fetched
-// after mount instead, so pages that don't need admin/dashboard strings don't
-// pay to parse them before becoming interactive.
+// (common, nav, admin, dashboard, login, orgType) via a static import forces
+// the bundler to parse and evaluate them synchronously as part of every
+// route's critical bundle. A dynamic import turns them into a separate chunk
+// fetched after mount instead, so pages that don't need admin/dashboard
+// strings don't pay to parse them before becoming interactive.
 let initPromise: Promise<void> | null = null;
 
 function ensureI18next(): Promise<void> {
@@ -33,6 +33,7 @@ function ensureI18next(): Promise<void> {
               admin: enTranslations.admin,
               dashboard: enTranslations.dashboard,
               login: enTranslations.login,
+              orgType: enTranslations.orgType,
             },
             'ar-EG': {
               common: arTranslations.common,
@@ -40,12 +41,13 @@ function ensureI18next(): Promise<void> {
               admin: arTranslations.admin,
               dashboard: arTranslations.dashboard,
               login: arTranslations.login,
+              orgType: arTranslations.orgType,
             },
           },
           lng: i18n.defaultLocale,
           fallbackLng: i18n.defaultLocale,
           supportedLngs: i18n.locales,
-          ns: ['common', 'nav', 'admin', 'dashboard', 'login'],
+          ns: ['common', 'nav', 'admin', 'dashboard', 'login', 'orgType'],
           defaultNS: 'common',
           interpolation: {
             escapeValue: false, // react already safes from xss

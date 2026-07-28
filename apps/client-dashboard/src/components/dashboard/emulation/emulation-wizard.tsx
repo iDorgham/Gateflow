@@ -319,7 +319,7 @@ export function EmulationWizard({ locale }: { locale: Locale }) {
             role="group"
             aria-labelledby="emulation-step-title"
           >
-            <p className="text-sm text-[var(--ds-text-subtle,#626F86)]">
+            <p className="text-sm text-[var(--ds-text-subtle)]">
               {t('emulation.step0.intro', {
                 defaultValue:
                   'Target a tenant organization and define how many synthetic scans to place in the time window. The live run uses Phase 7 resolution rules (project, gate, unit, contact, staff user).',
@@ -397,7 +397,7 @@ export function EmulationWizard({ locale }: { locale: Locale }) {
                   onChange={(e) =>
                     patchForm({ incidentRate: Number(e.target.value) / 100 })
                   }
-                  className="w-full h-11 accent-[var(--ds-icon-accent,#0C66E4)]"
+                  className="w-full h-11 accent-[var(--ds-icon-accent)]"
                 />
               </div>
               <div className="space-y-2">
@@ -444,7 +444,7 @@ export function EmulationWizard({ locale }: { locale: Locale }) {
             role="group"
             aria-labelledby="emulation-step-title"
           >
-            <p className="text-sm text-[var(--ds-text-subtle,#626F86)]">
+            <p className="text-sm text-[var(--ds-text-subtle)]">
               {t('emulation.step1.body', {
                 defaultValue:
                   'Unit naming during advanced seeding follows the project’s Unit ID format (CRM / Phase 4). Choose a reference format for this run’s documentation; optional project ID narrows resolution when multiple projects exist.',
@@ -503,7 +503,7 @@ export function EmulationWizard({ locale }: { locale: Locale }) {
             role="group"
             aria-labelledby="emulation-step-title"
           >
-            <p className="text-sm text-[var(--ds-text-subtle,#626F86)]">
+            <p className="text-sm text-[var(--ds-text-subtle)]">
               {t('emulation.step2.body', {
                 defaultValue:
                   'Rich contacts (Phase 3) use weighted nationalities and duplicate-safe email/phone. The emulation API resolves a default contact when omitted; set an override to tie the visitor QR to a specific Contact row.',
@@ -532,7 +532,7 @@ export function EmulationWizard({ locale }: { locale: Locale }) {
             role="group"
             aria-labelledby="emulation-step-title"
           >
-            <p className="text-sm text-[var(--ds-text-subtle,#626F86)]">
+            <p className="text-sm text-[var(--ds-text-subtle)]">
               {t('emulation.step3.body', {
                 defaultValue:
                   'Phase 4 seeds phases, buildings, and floors into Units. Ranges below document the intended hierarchy density for operators; the live API still resolves gate, unit, and staff IDs unless you override them.',
@@ -608,8 +608,8 @@ export function EmulationWizard({ locale }: { locale: Locale }) {
                 </div>
               ))}
             </div>
-            <Collapsible className="rounded-lg border border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-background-neutral-subtle,#F4F5F7)] px-4 py-3">
-              <CollapsibleTrigger className="flex w-full items-center justify-between gap-2 text-sm font-medium text-[var(--ds-text,#172B4D)] outline-none focus-visible:ring-2 focus-visible:ring-primary/50 rounded-md py-1">
+            <Collapsible className="rounded-lg border border-[var(--ds-border)] bg-[var(--ds-background-neutral-subtle)] px-4 py-3">
+              <CollapsibleTrigger className="flex w-full items-center justify-between gap-2 text-sm font-medium text-[var(--ds-text)] outline-none focus-visible:ring-2 focus-visible:ring-primary/50 rounded-md py-1">
                 {t('emulation.advanced.entity_ids', {
                   defaultValue: 'Entity ID overrides',
                 })}
@@ -668,7 +668,7 @@ export function EmulationWizard({ locale }: { locale: Locale }) {
             role="radiogroup"
             aria-labelledby="emulation-step-title"
           >
-            <p className="text-sm text-[var(--ds-text-subtle,#626F86)]">
+            <p className="text-sm text-[var(--ds-text-subtle)]">
               {t('emulation.step4.intro', {
                 defaultValue:
                   'Rush-hour shaping (Phase 5) clusters scans around scenario-specific peaks.',
@@ -685,16 +685,16 @@ export function EmulationWizard({ locale }: { locale: Locale }) {
                   className={cn(
                     'rounded-lg border p-4 text-left text-sm transition-colors min-h-[72px] outline-none focus-visible:ring-2 focus-visible:ring-primary/50',
                     f.scenario === sc
-                      ? 'border-[var(--ds-border-accent,#0C66E4)] bg-[var(--ds-background-accent-subtle,#E9F2FF)]'
-                      : 'border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-surface-raised,#FFFFFF)] hover:bg-[var(--ds-background-neutral-subtle,#F4F5F7)]'
+                      ? 'border-[var(--ds-border-accent)] bg-[var(--ds-background-accent-subtle)]'
+                      : 'border-[var(--ds-border)] bg-[var(--ds-surface-raised)] hover:bg-[var(--ds-background-neutral-subtle)]'
                   )}
                 >
-                  <span className="font-semibold text-[var(--ds-text,#172B4D)] block">
+                  <span className="font-semibold text-[var(--ds-text)] block">
                     {t(`emulation.scenarios.${sc}.title`, {
                       defaultValue: sc.replace(/-/g, ' '),
                     })}
                   </span>
-                  <span className="text-[var(--ds-text-subtle,#626F86)] mt-1 block">
+                  <span className="text-[var(--ds-text-subtle)] mt-1 block">
                     {t(`emulation.scenarios.${sc}.desc`, { defaultValue: '' })}
                   </span>
                 </button>
@@ -705,7 +705,7 @@ export function EmulationWizard({ locale }: { locale: Locale }) {
       case 5:
         return (
           <div className="space-y-6">
-            <p className="text-sm text-[var(--ds-text-subtle,#626F86)]">
+            <p className="text-sm text-[var(--ds-text-subtle)]">
               {t('emulation.step5.intro', {
                 defaultValue:
                   'Confirm payload. Dry run validates resolution and timestamps only (no QR or ScanLog writes). Turn off dry run only when QR_SIGNING_SECRET is configured on the server.',
@@ -723,34 +723,28 @@ export function EmulationWizard({ locale }: { locale: Locale }) {
                   })}
                 </CardDescription>
               </CardHeader>
-              <CardContent className="text-sm space-y-2 font-mono text-[var(--ds-text,#172B4D)]">
+              <CardContent className="text-sm space-y-2 font-mono text-[var(--ds-text)]">
                 <p>
-                  <span className="text-[var(--ds-text-subtle,#626F86)]">
+                  <span className="text-[var(--ds-text-subtle)]">
                     organizationId
                   </span>{' '}
                   {f.organizationId.trim() || '—'}
                 </p>
                 <p>
-                  <span className="text-[var(--ds-text-subtle,#626F86)]">
-                    scenario
-                  </span>{' '}
+                  <span className="text-[var(--ds-text-subtle)]">scenario</span>{' '}
                   {f.scenario}
                 </p>
                 <p>
-                  <span className="text-[var(--ds-text-subtle,#626F86)]">
-                    window
-                  </span>{' '}
+                  <span className="text-[var(--ds-text-subtle)]">window</span>{' '}
                   {f.pastDays}d · {f.totalScans} scans · incident{' '}
                   {incidentPercent}%
                 </p>
                 <p>
-                  <span className="text-[var(--ds-text-subtle,#626F86)]">
+                  <span className="text-[var(--ds-text-subtle)]">
                     randomSeed
                   </span>{' '}
                   {f.randomSeed} ·{' '}
-                  <span className="text-[var(--ds-text-subtle,#626F86)]">
-                    dryRun
-                  </span>{' '}
+                  <span className="text-[var(--ds-text-subtle)]">dryRun</span>{' '}
                   {f.dryRun ? 'true' : 'false'}
                 </p>
               </CardContent>
@@ -763,7 +757,7 @@ export function EmulationWizard({ locale }: { locale: Locale }) {
                   })}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="text-sm space-y-1 text-[var(--ds-text,#172B4D)]">
+              <CardContent className="text-sm space-y-1 text-[var(--ds-text)]">
                 <p>
                   {t('emulation.summary.unit_format', {
                     defaultValue: 'Unit ID format',
@@ -788,14 +782,14 @@ export function EmulationWizard({ locale }: { locale: Locale }) {
                 aria-describedby="dry-run-hint"
               />
               <span>
-                <span className="font-medium text-[var(--ds-text,#172B4D)]">
+                <span className="font-medium text-[var(--ds-text)]">
                   {t('emulation.fields.dry_run', {
                     defaultValue: 'Dry run (no database writes for QR / scans)',
                   })}
                 </span>
                 <span
                   id="dry-run-hint"
-                  className="block text-sm text-[var(--ds-text-subtle,#626F86)] mt-1"
+                  className="block text-sm text-[var(--ds-text-subtle)] mt-1"
                 >
                   {t('emulation.fields.dry_run_hint', {
                     defaultValue:
@@ -807,17 +801,17 @@ export function EmulationWizard({ locale }: { locale: Locale }) {
             {lastSuccess ? (
               <Card
                 variant="default"
-                className="border-[var(--ds-border-success,#22A06B)]"
+                className="border-[var(--ds-border-success)]"
               >
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-base text-[var(--ds-text-success,#1F845A)]">
+                  <CardTitle className="text-base text-[var(--ds-text-success)]">
                     {t('emulation.result.title', {
                       defaultValue: 'Last response',
                     })}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <pre className="text-xs overflow-x-auto p-3 rounded-md bg-[var(--ds-surface-sunken,#F4F5F7)] max-h-64 overflow-y-auto whitespace-pre-wrap break-all">
+                  <pre className="text-xs overflow-x-auto p-3 rounded-md bg-[var(--ds-surface-sunken)] max-h-64 overflow-y-auto whitespace-pre-wrap break-all">
                     {JSON.stringify(lastSuccess, null, 2)}
                   </pre>
                 </CardContent>
@@ -851,15 +845,13 @@ export function EmulationWizard({ locale }: { locale: Locale }) {
       />
 
       <div className="mb-2" aria-hidden>
-        <div className="h-2 rounded-full bg-[var(--ds-background-neutral,#091E4224)] overflow-hidden">
+        <div className="h-2 rounded-full bg-[var(--ds-background-neutral)] overflow-hidden">
           <div
-            className="h-full bg-[var(--ds-icon-accent,#0C66E4)] transition-all duration-300"
+            className="h-full bg-[var(--ds-icon-accent)] transition-all duration-300"
             style={{ width: `${((state.step + 1) / STEP_COUNT) * 100}%` }}
           />
         </div>
-        <p className="text-xs text-[var(--ds-text-subtle,#626F86)] mt-2">
-          {stepLabel}
-        </p>
+        <p className="text-xs text-[var(--ds-text-subtle)] mt-2">{stepLabel}</p>
       </div>
 
       <Card variant="default">
@@ -868,11 +860,11 @@ export function EmulationWizard({ locale }: { locale: Locale }) {
             ref={headingRef}
             id="emulation-step-title"
             tabIndex={-1}
-            className="text-lg font-semibold text-[var(--ds-text,#172B4D)] outline-none"
+            className="text-lg font-semibold text-[var(--ds-text)] outline-none"
           >
             {stepTitle}
           </h2>
-          <CardDescription className="text-[var(--ds-text-subtle,#626F86)]">
+          <CardDescription className="text-[var(--ds-text-subtle)]">
             {t('emulation.step_help', {
               defaultValue:
                 'Use Next and Back. Fields are validated before leaving each step.',
@@ -883,13 +875,13 @@ export function EmulationWizard({ locale }: { locale: Locale }) {
           {state.stepError ? (
             <div
               role="alert"
-              className="rounded-md border border-[var(--ds-border-danger,#DE350B)] bg-[var(--ds-background-danger,#FFEBE6)] px-3 py-2 text-sm text-[var(--ds-text-danger,#DE350B)]"
+              className="rounded-md border border-[var(--ds-border-danger)] bg-[var(--ds-background-danger)] px-3 py-2 text-sm text-[var(--ds-text-danger)]"
             >
               {state.stepError}
             </div>
           ) : null}
           {renderStep()}
-          <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-between pt-4 border-t border-[var(--ds-border,#DFE1E6)]">
+          <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-between pt-4 border-t border-[var(--ds-border)]">
             <Button
               type="button"
               variant="outline"

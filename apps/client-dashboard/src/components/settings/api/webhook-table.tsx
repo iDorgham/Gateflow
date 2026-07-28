@@ -11,6 +11,7 @@ import {
   TableRow,
   Button,
   Badge,
+  EmptyState,
 } from '@gateflow/ui';
 import { Trash2, Webhook, Send, Pencil } from 'lucide-react';
 import { toast } from 'sonner';
@@ -68,29 +69,26 @@ export function WebhookTable({ webhooks: initial }: WebhookTableProps) {
       </div>
 
       <div className="rounded-xl border border-border bg-card overflow-hidden">
-        <Table>
-          <TableHeader>
-            <TableRow className="bg-muted/50">
-              <TableHead>Endpoint URL</TableHead>
-              <TableHead>Events</TableHead>
-              <TableHead className="text-center">Status</TableHead>
-              <TableHead className="text-center">Last Delivery</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {hooks.length === 0 ? (
-              <TableRow>
-                <TableCell
-                  colSpan={5}
-                  className="h-40 text-center text-muted-foreground italic"
-                >
-                  No webhooks yet. Create one to receive real-time event
-                  notifications.
-                </TableCell>
+        {hooks.length === 0 ? (
+          <EmptyState
+            icon={Webhook}
+            title="No webhooks yet"
+            description="Create one to receive real-time event notifications."
+            className="min-h-[240px]"
+          />
+        ) : (
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-muted/50">
+                <TableHead>Endpoint URL</TableHead>
+                <TableHead>Events</TableHead>
+                <TableHead className="text-center">Status</TableHead>
+                <TableHead className="text-center">Last Delivery</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
               </TableRow>
-            ) : (
-              hooks.map((hook) => {
+            </TableHeader>
+            <TableBody>
+              {hooks.map((hook) => {
                 const status = lastStatus(hook);
                 return (
                   <TableRow
@@ -196,10 +194,10 @@ export function WebhookTable({ webhooks: initial }: WebhookTableProps) {
                     </TableCell>
                   </TableRow>
                 );
-              })
-            )}
-          </TableBody>
-        </Table>
+              })}
+            </TableBody>
+          </Table>
+        )}
       </div>
     </div>
   );

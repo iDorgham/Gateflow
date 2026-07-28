@@ -392,7 +392,7 @@ function LeftSidebar({
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                       transition={{ duration: 0.1 }}
-                      className="px-3 text-[10px] font-bold uppercase tracking-widest text-[var(--ds-text-subtlest,#A1A1AA)] mb-2"
+                      className="px-3 text-[10px] font-bold uppercase tracking-widest text-[var(--ds-text-subtlest)] mb-2"
                     >
                       {group.label}
                     </motion.p>
@@ -695,7 +695,7 @@ function MobileSidebar({
             <nav className="flex flex-col gap-8 py-4 px-3">
               {navGroups.map((group) => (
                 <div key={group.id} className="flex flex-col gap-1.5">
-                  <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[var(--ds-text-subtlest,#A1A1AA)] mb-2">
+                  <p className="px-3 text-[10px] font-bold uppercase tracking-widest text-[var(--ds-text-subtlest)] mb-2">
                     {group.label}
                   </p>
                   {group.items.map((item) => (
@@ -773,9 +773,9 @@ export function DashboardLayout({
 
   const isRtl = locale === 'ar-EG';
   const pathname = usePathname();
-  const isAiPage =
-    pathname?.includes('/dashboard/ai') ||
-    pathname?.includes('/dashboard/gateai');
+  // Matches the /ai, /ai-hub, and /gateai(/...) route segments regardless of
+  // how deep they sit under /dashboard/organizations/[orgId]/.
+  const isAiPage = /\/(ai|ai-hub|gateai)(\/|$)/.test(pathname ?? '');
   const isFullBleed = isAiPage || pathname?.includes('/dashboard/onboarding');
 
   const onOpenChat = () => {

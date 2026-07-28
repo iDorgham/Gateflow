@@ -159,18 +159,18 @@ export function AIAssistant({ locale }: AIAssistantProps) {
 
   return (
     <div
-      className="flex h-full flex-col bg-[var(--ds-surface,#18191a)]"
+      className="flex h-full flex-col bg-[var(--ds-surface)]"
       dir={isRtl ? 'rtl' : 'ltr'}
     >
       {/* Messages */}
       <div className="flex-1 space-y-4 overflow-y-auto px-4 py-4">
         {/* mediaBubble AI Welcome card */}
         {hasOnlyWelcome && !isLoading && (
-          <div className="rounded-[var(--ds-border-radius-400,8px)] bg-[var(--ds-surface-raised,#1f1f21)] border border-[var(--ds-border,#27272a)] shadow-[var(--ds-shadow-raised)] p-6 text-center">
+          <div className="rounded-[var(--ds-border-radius-400)] bg-[var(--ds-surface-raised)] border border-[var(--ds-border)] shadow-[var(--ds-shadow-raised)] p-6 text-center">
             <div className="flex justify-center mb-4">
               {/* Rovo gradient avatar */}
               <div
-                className="flex h-14 w-14 items-center justify-center rounded-[var(--ds-border-radius-400,8px)] shadow-[var(--ds-shadow-overlay)]"
+                className="flex h-14 w-14 items-center justify-center rounded-[var(--ds-border-radius-400)] shadow-[var(--ds-shadow-overlay)]"
                 style={{
                   background:
                     'linear-gradient(135deg, var(--ds-surface-raised) 0%, var(--ds-surface) 50%, var(--ds-surface-sunken) 100%)',
@@ -199,19 +199,19 @@ export function AIAssistant({ locale }: AIAssistantProps) {
               </div>
             </div>
             <div className="flex items-center justify-center gap-1.5 mb-1">
-              <p className="text-sm font-bold text-[var(--ds-text,#FAFAFA)]">
+              <p className="text-sm font-bold text-[var(--ds-text)]">
                 {isRtl ? 'مساعد GateFlow' : 'GateFlow'}
               </p>
-              <span className="rounded-[var(--ds-border-radius-200,4px)] px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider bg-primary/10 text-primary border border-primary/20">
+              <span className="rounded-[var(--ds-border-radius-200)] px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider bg-primary/10 text-primary border border-primary/20">
                 AI
               </span>
             </div>
-            <p className="text-xs text-[var(--ds-text-subtle,#A1A1AA)] mb-5">
+            <p className="text-xs text-[var(--ds-text-subtle)] mb-5">
               {isRtl
                 ? 'اسألني أي شيء عن نظامك'
                 : 'Ask me anything about your system'}
             </p>
-            <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--ds-text-subtlest,#71717A)] mb-2">
+            <p className="text-[10px] font-bold uppercase tracking-wider text-[var(--ds-text-subtlest)] mb-2">
               {isRtl ? 'اقتراحات' : 'Get started'}
             </p>
             <div className="flex flex-wrap gap-2 justify-center">
@@ -219,7 +219,7 @@ export function AIAssistant({ locale }: AIAssistantProps) {
                 <button
                   key={p}
                   onClick={() => sendExample(p)}
-                  className="rounded-[var(--ds-border-radius-200,4px)] border border-[var(--ds-border)] bg-[var(--ds-surface-sunken)] px-3 py-2 text-xs text-[var(--ds-text-subtle)] transition-all hover:border-primary/50 hover:bg-primary/5 active:scale-95"
+                  className="rounded-[var(--ds-border-radius-200)] border border-[var(--ds-border)] bg-[var(--ds-surface-sunken)] px-3 py-2 text-xs text-[var(--ds-text-subtle)] transition-all hover:border-primary/50 hover:bg-primary/5 active:scale-95"
                 >
                   {p}
                 </button>
@@ -289,10 +289,10 @@ export function AIAssistant({ locale }: AIAssistantProps) {
                 </div>
                 <div
                   className={cn(
-                    'max-w-[85%] rounded-[var(--ds-border-radius-400,8px)] px-3.5 py-2.5 text-sm leading-relaxed outline-none space-y-2',
+                    'max-w-[85%] rounded-[var(--ds-border-radius-400)] px-3.5 py-2.5 text-sm leading-relaxed outline-none space-y-2',
                     isUser
                       ? 'bg-primary text-white shadow-[var(--ds-shadow-raised)]'
-                      : 'bg-[var(--ds-surface-raised,#1f1f21)] text-[var(--ds-text,#FAFAFA)] border border-[var(--ds-border,#27272a)] shadow-[var(--ds-shadow-raised)]'
+                      : 'bg-[var(--ds-surface-raised)] text-[var(--ds-text)] border border-[var(--ds-border)] shadow-[var(--ds-shadow-raised)]'
                   )}
                   dir={msgRtl ? 'rtl' : 'ltr'}
                 >
@@ -306,9 +306,9 @@ export function AIAssistant({ locale }: AIAssistantProps) {
                       <div
                         key={`extra-${i}`}
                         className={cn(
-                          'text-[11px] text-[var(--ds-text-subtle,#A1A1AA)]',
+                          'text-[11px] text-[var(--ds-text-subtle)]',
                           (text || i > 0) &&
-                            'border-t border-[var(--ds-border,#27272a)] pt-2'
+                            'border-t border-[var(--ds-border)] pt-2'
                         )}
                       >
                         {isToolUIPart(part) ? (
@@ -377,7 +377,7 @@ export function AIAssistant({ locale }: AIAssistantProps) {
             </div>
             <div
               className={cn(
-                'flex items-center gap-1 rounded-[var(--ds-border-radius-400,8px)] bg-[var(--ds-surface-raised,#1f1f21)] px-3.5 py-3 border border-[var(--ds-border,#27272a)] shadow-[var(--ds-shadow-raised)]'
+                'flex items-center gap-1 rounded-[var(--ds-border-radius-400)] bg-[var(--ds-surface-raised)] px-3.5 py-3 border border-[var(--ds-border)] shadow-[var(--ds-shadow-raised)]'
               )}
             >
               <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-primary/40 [animation-delay:0ms]" />
@@ -413,7 +413,7 @@ export function AIAssistant({ locale }: AIAssistantProps) {
       <form
         ref={formRef}
         onSubmit={handleSubmit}
-        className="shrink-0 border-t border-border/40 p-0 bg-[var(--ds-surface,#18191a)]"
+        className="shrink-0 border-t border-border/40 p-0 bg-[var(--ds-surface)]"
       >
         <TooltipProvider>
           {/* Tagged Context Area */}
@@ -491,7 +491,7 @@ export function AIAssistant({ locale }: AIAssistantProps) {
                         variant="ghost"
                         size="icon"
                         type="button"
-                        className="h-8 w-8 text-[var(--ds-icon-subtle,#A1A1AA)] hover:text-[var(--ds-text,#FAFAFA)]"
+                        className="h-8 w-8 text-[var(--ds-icon-subtle)] hover:text-[var(--ds-text)]"
                         onClick={() => fileInputRef.current?.click()}
                       >
                         <Paperclip size={16} />
@@ -508,7 +508,7 @@ export function AIAssistant({ locale }: AIAssistantProps) {
                         variant="ghost"
                         size="icon"
                         type="button"
-                        className="h-8 w-8 text-[var(--ds-icon-subtle,#A1A1AA)] hover:text-[var(--ds-text,#FAFAFA)]"
+                        className="h-8 w-8 text-[var(--ds-icon-subtle)] hover:text-[var(--ds-text)]"
                         onClick={() =>
                           toast.info(
                             isRtl
@@ -525,7 +525,7 @@ export function AIAssistant({ locale }: AIAssistantProps) {
                     </TooltipContent>
                   </Tooltip>
 
-                  <div className="w-px h-4 bg-[var(--ds-border,#27272a)] mx-1" />
+                  <div className="w-px h-4 bg-[var(--ds-border)] mx-1" />
 
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -533,7 +533,7 @@ export function AIAssistant({ locale }: AIAssistantProps) {
                         variant="ghost"
                         size="icon"
                         type="button"
-                        className="h-8 w-8 text-[var(--ds-icon-subtle,#A1A1AA)] hover:text-primary"
+                        className="h-8 w-8 text-[var(--ds-icon-subtle)] hover:text-primary"
                         onClick={() => {
                           if (!taggedItems.some((i) => i.id === 'demo-res')) {
                             setTaggedItems((prev) => [
@@ -590,7 +590,7 @@ export function AIAssistant({ locale }: AIAssistantProps) {
               <div className="px-1.5 py-0.5 rounded-sm bg-primary/10 text-primary text-[9px] font-bold uppercase tracking-wider border border-primary/20">
                 GateFlow AI
               </div>
-              <span className="text-[10px] text-[var(--ds-text-subtlest,#71717A)]">
+              <span className="text-[10px] text-[var(--ds-text-subtlest)]">
                 {isRtl
                   ? 'لا يتم حفظ سجل المحادثة على هذا الجهاز؛ تتم إزالته عند إعادة التحميل.'
                   : 'Chat history is not saved on this device and clears on reload.'}

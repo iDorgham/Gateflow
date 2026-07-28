@@ -1,6 +1,12 @@
 /* @import must precede other imports — Tailwind expands into real CSS rules */
 @import 'tailwindcss';
 
+/* Tailwind's automatic content detection uses the consuming app's CWD as its
+   scan root, so classes used only inside this package (never duplicated in
+   an app's own source) are silently dropped. Register this package's own
+   source directory explicitly so every consumer picks up its classes. */
+@source ".";
+
 @theme {
   --color-border: var(--gf-color-border);
   --color-input: var(--gf-color-border);
@@ -48,6 +54,55 @@
   --color-info: var(--gf-color-info);
   --color-info-subtle: var(--gf-color-info-subtle);
   --color-info-bold: var(--gf-color-info-bold);
+
+  /* ds-* namespaced aliases — registers rounded-[var(--ds-*)] / bg-ds-*, text-ds-*,
+     border-ds-* utility classes used throughout the app. Values point at the
+     :root/.dark --ds-* custom properties defined below, so these stay theme-correct. */
+  --color-ds-background: var(--ds-background);
+  --color-ds-background-brand-bold: var(--ds-background-brand-bold);
+  --color-ds-background-brand-bold-hovered: var(--ds-background-brand-bold-hovered);
+  --color-ds-background-brand-subtle: var(--ds-background-brand-subtle);
+  --color-ds-background-danger-bold: var(--ds-background-danger-bold);
+  --color-ds-background-danger-subtle: var(--ds-background-danger-subtle);
+  --color-ds-background-default: var(--ds-background-default);
+  --color-ds-background-information-bold: var(--ds-background-information-bold);
+  --color-ds-background-information-subtle: var(--ds-background-information-subtle);
+  --color-ds-background-neutral: var(--ds-background-neutral);
+  --color-ds-background-neutral-hovered: var(--ds-background-neutral-hovered);
+  --color-ds-background-neutral-pressed: var(--ds-background-neutral-pressed);
+  --color-ds-background-neutral-subtle: var(--ds-background-neutral-subtle);
+  --color-ds-background-selected: var(--ds-background-selected);
+  --color-ds-background-selected-bold: var(--ds-background-selected-bold);
+  --color-ds-background-selected-hovered: var(--ds-background-selected-hovered);
+  --color-ds-background-success-bold: var(--ds-background-success-bold);
+  --color-ds-background-success-subtle: var(--ds-background-success-subtle);
+  --color-ds-background-warning-bold: var(--ds-background-warning-bold);
+  --color-ds-background-warning-subtle: var(--ds-background-warning-subtle);
+  --color-ds-border: var(--ds-border);
+  --color-ds-border-bold: var(--ds-border-bold);
+  --color-ds-border-brand: var(--ds-border-brand);
+  --color-ds-border-focused: var(--ds-border-focused);
+  --color-ds-border-selected: var(--ds-border-selected);
+  --color-ds-border-subtle: var(--ds-border-subtle);
+  --color-ds-icon: var(--ds-icon);
+  --color-ds-icon-brand: var(--ds-icon-brand);
+  --color-ds-icon-subtle: var(--ds-icon-subtle);
+  --color-ds-icon-subtlest: var(--ds-icon-subtlest);
+  --color-ds-surface: var(--ds-surface);
+  --color-ds-surface-overlay: var(--ds-surface-overlay);
+  --color-ds-surface-raised: var(--ds-surface-raised);
+  --color-ds-surface-sunken: var(--ds-surface-sunken);
+  --color-ds-text: var(--ds-text);
+  --color-ds-text-brand: var(--ds-text-brand);
+  --color-ds-text-danger: var(--ds-text-danger);
+  --color-ds-text-heading: var(--ds-text-heading);
+  --color-ds-text-information: var(--ds-text-information);
+  --color-ds-text-inverse: var(--ds-text-inverse);
+  --color-ds-text-selected: var(--ds-text-selected);
+  --color-ds-text-subtle: var(--ds-text-subtle);
+  --color-ds-text-subtlest: var(--ds-text-subtlest);
+  --color-ds-text-success: var(--ds-text-success);
+  --color-ds-text-warning: var(--ds-text-warning);
 
   --radius-DEFAULT: var(--ds-border-radius);
   --radius-xsmall: var(--ds-radius-xsmall);
@@ -102,6 +157,9 @@
     --gf-color-info: #3b82f6;
     --gf-color-info-subtle: rgba(59, 130, 246, 0.08);
     --gf-color-info-bold: #2563eb;
+    --gf-color-discovery: #8b5cf6;
+    --gf-color-discovery-subtle: rgba(139, 92, 246, 0.08);
+    --gf-color-discovery-bold: #7c3aed;
 
     --gf-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
     --gf-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
@@ -123,13 +181,25 @@
     --ds-radius-xlarge: 1rem;
     --ds-radius-circle: 50%;
 
+    /* Numbered/sized radius aliases — referenced via rounded-[var(--ds-border-radius-*)]
+       by Button, Input, Card, Pagination, DatePicker. Bridged onto the scale above
+       so those components resolve to real values instead of falling back to 0px. */
+    --ds-border-radius-sm: var(--ds-radius-small);
+    --ds-border-radius-100: var(--ds-radius-medium);
+    --ds-border-radius-200: var(--ds-radius-large);
+    --ds-border-radius-lg: var(--ds-radius-xlarge);
+    --ds-border-radius-400: var(--ds-radius-xlarge);
+
     /* DS Surface aliases */
+    --ds-surface: var(--gf-color-bg-default);
     --ds-surface-sunken: var(--gf-color-bg-page);
     --ds-surface-raised: var(--gf-color-bg-raised);
     --ds-surface-overlay: var(--gf-color-bg-overlay);
 
     /* DS Background aliases */
+    --ds-background: var(--gf-color-bg-page);
     --ds-background-default: var(--gf-color-bg-page);
+    --ds-background-input: var(--gf-color-bg-default);
     --ds-background-neutral-subtle: var(--gf-color-bg-subtle);
     --ds-background-neutral: var(--gf-color-neutral-200);
     --ds-background-neutral-hovered: var(--gf-color-neutral-300);
@@ -139,20 +209,62 @@
     --ds-background-brand-subtle: var(--gf-color-primary-subtle);
     --ds-background-selected: var(--gf-color-primary-subtle);
     --ds-background-selected-hovered: var(--gf-color-brand-100);
+    --ds-background-selected-bold: var(--gf-color-primary);
     --ds-background-danger-bold: var(--gf-color-danger);
     --ds-background-danger-subtle: var(--gf-color-danger-subtle);
     --ds-background-warning-bold: var(--gf-color-warning);
+    --ds-background-warning-subtle: var(--gf-color-warning-subtle);
     --ds-background-success-bold: var(--gf-color-success);
+    --ds-background-success-subtle: var(--gf-color-success-subtle);
     --ds-background-information-bold: var(--gf-color-info);
+    --ds-background-information-subtle: var(--gf-color-info-subtle);
+    --ds-background-subtle: var(--gf-color-bg-subtle);
+    --ds-background-accent-subtle: var(--gf-color-primary-subtle);
+    --ds-background-neutral-bold: var(--gf-color-neutral-400);
+    --ds-background-neutral-subtle-hovered: var(--gf-color-neutral-200);
+    --ds-background-neutral-subtle-pressed: var(--gf-color-neutral-300);
+    --ds-background-brand-bold-pressed: #c23600;
+    --ds-background-danger: var(--gf-color-danger);
+    --ds-background-danger-subtle-hovered: rgba(239, 68, 68, 0.15);
+    --ds-background-danger-bold-hovered: #b91c1c;
+    --ds-background-warning: var(--gf-color-warning);
+    --ds-background-warning-bold-hovered: #b45309;
+    --ds-background-success-bold-hovered: #166534;
+    --ds-background-discovery: var(--gf-color-discovery);
+    --ds-background-discovery-bold: var(--gf-color-discovery-bold);
+    --ds-background-discovery-subtle: var(--gf-color-discovery-subtle);
+    --ds-background-discovery-bold-hovered: #6d28d9;
+    --ds-background-discovery-subtle-hovered: rgba(139, 92, 246, 0.15);
 
     /* DS Text aliases */
     --ds-text: var(--gf-color-text);
+    --ds-text-primary: var(--gf-color-text);
+    --ds-text-heading: var(--gf-color-text);
     --ds-text-subtle: var(--gf-color-text-subtle);
     --ds-text-subtlest: var(--gf-color-text-subtlest);
+    --ds-text-disabled: var(--gf-color-text-subtlest);
     --ds-text-inverse: var(--gf-color-text-inverse);
+    --ds-text-warning-inverse: var(--gf-color-text-inverse);
     --ds-text-selected: var(--gf-color-text-brand);
     --ds-text-brand: var(--gf-color-text-brand);
-    --ds-text-danger: var(--gf-color-text-danger);
+    --ds-text-link: var(--gf-color-text-brand);
+    --ds-text-danger: var(--gf-color-danger-bold);
+    --ds-text-success: var(--gf-color-success-bold);
+    --ds-text-warning: var(--gf-color-warning-bold);
+    --ds-text-information: var(--gf-color-info-bold);
+    --ds-text-discovery: var(--gf-color-discovery-bold);
+
+    /* DS Icon aliases */
+    --ds-icon: var(--gf-color-text);
+    --ds-icon-brand: var(--gf-color-primary);
+    --ds-icon-subtle: var(--gf-color-text-subtle);
+    --ds-icon-subtlest: var(--gf-color-text-subtlest);
+    --ds-icon-selected: var(--gf-color-primary);
+    --ds-icon-danger: var(--gf-color-danger-bold);
+    --ds-icon-success: var(--gf-color-success-bold);
+    --ds-icon-accent-blue: var(--gf-color-info);
+    --ds-icon-accent-green: var(--gf-color-success);
+    --ds-icon-accent-orange: var(--gf-color-primary);
 
     /* DS Border aliases */
     --ds-border: var(--gf-color-border);
@@ -160,10 +272,36 @@
     --ds-border-bold: var(--gf-color-border-bold);
     --ds-border-focused: var(--gf-color-border-focused);
     --ds-border-brand: var(--gf-color-primary);
+    --ds-border-selected: var(--gf-color-primary);
+    --ds-border-input: var(--gf-color-border);
+    --ds-border-danger: var(--gf-color-danger);
+    --ds-border-success: var(--gf-color-success);
+    --ds-border-warning: var(--gf-color-warning);
+    --ds-border-discovery: var(--gf-color-discovery);
+    --ds-border-accent: var(--gf-color-primary);
 
     /* DS Shadows */
     --ds-shadow-raised: 0 1px 3px 0 rgba(15, 23, 42, 0.08), 0 1px 2px -1px rgba(15, 23, 42, 0.08);
     --ds-shadow-overlay: 0 20px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+
+    /* DS Spacing scale */
+    --ds-space-050: 0.25rem;
+    --ds-space-100: 0.5rem;
+    --ds-space-150: 0.75rem;
+    --ds-space-200: 1rem;
+    --ds-space-250: 1.25rem;
+    --ds-space-300: 1.5rem;
+    --ds-space-400: 2rem;
+    --ds-space-500: 2.5rem;
+    --ds-space-600: 3rem;
+
+    /* DS misc */
+    --ds-pattern-sentinel: none;
+    --ds-surface-glass: var(--gf-color-bg-overlay);
+    --ds-primary-accent: var(--gf-color-primary);
+    --ds-ai-accent: var(--gf-color-primary);
+    --ds-ai-surface: var(--gf-color-bg-raised);
+    --ds-ai-glow: 0 0 40px rgba(237, 75, 0, 0.15);
   }
 
   .dark {

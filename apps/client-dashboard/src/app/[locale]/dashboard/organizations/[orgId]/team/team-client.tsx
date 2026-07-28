@@ -14,6 +14,7 @@ import {
   AvatarFallback,
   NativeSelect,
   cn,
+  EmptyState,
 } from '@gateflow/ui';
 import { inviteMember, removeMember, changeRole } from './actions';
 import { toast } from 'sonner';
@@ -48,14 +49,11 @@ const ROLE_LABELS: Record<string, string> = {
 };
 
 const ROLE_COLORS: Record<string, string> = {
-  ADMIN: 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400',
-  TENANT_ADMIN:
-    'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400',
-  TENANT_USER:
-    'bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300',
-  VISITOR: 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400',
-  RESIDENT:
-    'bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400',
+  ADMIN: 'bg-danger-subtle text-danger-bold',
+  TENANT_ADMIN: 'bg-info-subtle text-info-bold',
+  TENANT_USER: 'bg-muted text-foreground',
+  VISITOR: 'bg-muted text-muted-foreground',
+  RESIDENT: 'bg-success-subtle text-success-bold',
 };
 
 // ─── Remove confirm modal ─────────────────────────────────────────────────────
@@ -78,15 +76,15 @@ function RemoveConfirmModal({
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="w-full max-w-sm rounded-2xl bg-white dark:bg-slate-800 shadow-2xl ring-1 ring-slate-200 dark:ring-slate-700">
+      <div className="w-full max-w-sm rounded-2xl bg-card shadow-2xl ring-1 ring-border">
         <div className="p-6">
-          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-red-50 dark:bg-red-900/20 text-red-600">
+          <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-danger-subtle text-danger-bold">
             <AlertTriangle className="h-6 w-6" aria-hidden="true" />
           </div>
-          <h2 className="mb-1 text-xl font-bold text-slate-900 dark:text-white">
+          <h2 className="mb-1 text-xl font-bold text-foreground">
             Remove {member.name}?
           </h2>
-          <p className="text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+          <p className="text-sm leading-relaxed text-muted-foreground">
             They will lose access to your workspace immediately. This action
             cannot be undone.
           </p>
@@ -102,7 +100,7 @@ function RemoveConfirmModal({
             <Button
               onClick={onConfirm}
               disabled={isPending}
-              className="flex-1 rounded-lg bg-red-600 font-semibold text-white hover:bg-red-700 focus-visible:ring-red-500"
+              className="flex-1 rounded-lg bg-destructive font-semibold text-destructive-foreground hover:bg-destructive/90 focus-visible:ring-destructive"
             >
               {isPending ? 'Removing…' : 'Remove member'}
             </Button>
@@ -187,16 +185,16 @@ export function TeamClient({
   const sidebar = (
     <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
       <SidebarSection title="Team Capacity" icon={Users}>
-        <Card className="rounded-2xl border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 shadow-sm ring-1 ring-slate-100/50 dark:ring-slate-700/50">
+        <Card className="rounded-2xl border-border bg-card p-6 shadow-sm ring-1 ring-border/50">
           <div className="flex items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 shadow-sm">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-info-subtle text-info-bold shadow-sm">
               <UserCheck className="h-6 w-6" />
             </div>
             <div>
-              <p className="text-3xl font-black text-slate-900 dark:text-white leading-none">
+              <p className="text-3xl font-black text-foreground leading-none">
                 {members.length}
               </p>
-              <p className="mt-1 text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+              <p className="mt-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
                 Seats Occupied
               </p>
             </div>
@@ -205,37 +203,37 @@ export function TeamClient({
       </SidebarSection>
 
       <SidebarSection title="Role Definitions" icon={Shield}>
-        <div className="space-y-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 p-6 shadow-sm ring-1 ring-slate-100/50 dark:ring-slate-700/50">
+        <div className="space-y-4 rounded-2xl border border-border bg-card p-6 shadow-sm ring-1 ring-border/50">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-red-500" />
-              <p className="text-xs font-bold text-slate-900 dark:text-white capitalzie">
+              <span className="h-1.5 w-1.5 rounded-full bg-danger" />
+              <p className="text-xs font-bold text-foreground capitalzie">
                 Admin
               </p>
             </div>
-            <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400 font-medium pl-3.5">
+            <p className="text-[11px] leading-relaxed text-muted-foreground font-medium pl-3.5">
               Full access to all resources, billing, and team management.
             </p>
           </div>
-          <div className="space-y-1.5 border-t border-slate-100 dark:border-slate-700 pt-4">
+          <div className="space-y-1.5 border-t border-border pt-4">
             <div className="flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />
-              <p className="text-xs font-bold text-slate-900 dark:text-white capitalize">
+              <span className="h-1.5 w-1.5 rounded-full bg-info" />
+              <p className="text-xs font-bold text-foreground capitalize">
                 Member
               </p>
             </div>
-            <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400 font-medium pl-3.5">
+            <p className="text-[11px] leading-relaxed text-muted-foreground font-medium pl-3.5">
               Manage QR codes and gates but cannot change workspace settings.
             </p>
           </div>
-          <div className="space-y-1.5 border-t border-slate-100 dark:border-slate-700 pt-4">
+          <div className="space-y-1.5 border-t border-border pt-4">
             <div className="flex items-center gap-2">
-              <span className="h-1.5 w-1.5 rounded-full bg-slate-400" />
-              <p className="text-xs font-bold text-slate-900 dark:text-white capitalize">
+              <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground" />
+              <p className="text-xs font-bold text-foreground capitalize">
                 Viewer
               </p>
             </div>
-            <p className="text-[11px] leading-relaxed text-slate-500 dark:text-slate-400 font-medium pl-3.5">
+            <p className="text-[11px] leading-relaxed text-muted-foreground font-medium pl-3.5">
               Read-only access to analytics and scan logs.
             </p>
           </div>
@@ -248,10 +246,10 @@ export function TeamClient({
     <WorkspacePageLayout
       header={
         <div>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+          <h1 className="text-2xl font-bold tracking-tight text-foreground">
             Team
           </h1>
-          <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
+          <p className="text-sm font-medium text-muted-foreground">
             Manage your workspace members and their access levels.
           </p>
         </div>
@@ -261,7 +259,7 @@ export function TeamClient({
       <div className="space-y-6">
         {/* Header actions */}
         <div className="flex items-center justify-between">
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-muted-foreground">
             {members.length} member{members.length !== 1 ? 's' : ''}
           </p>
           <Button
@@ -285,12 +283,12 @@ export function TeamClient({
 
         {/* Invite form */}
         {showInvite && (
-          <Card className="overflow-hidden border-blue-200 dark:border-blue-800 bg-blue-50/30 dark:bg-blue-900/10 rounded-2xl shadow-sm">
+          <Card className="overflow-hidden border-info bg-info-subtle rounded-2xl shadow-sm">
             <CardHeader className="pb-4">
-              <CardTitle className="text-lg font-bold text-slate-900 dark:text-white">
+              <CardTitle className="text-lg font-bold text-foreground">
                 Invite a team member
               </CardTitle>
-              <CardDescription className="text-slate-600 dark:text-slate-400">
+              <CardDescription className="text-muted-foreground">
                 They will receive an email with instructions to set up their
                 account.
               </CardDescription>
@@ -351,77 +349,88 @@ export function TeamClient({
         )}
 
         {/* Members list */}
-        <Card className="overflow-hidden border-slate-200 dark:border-slate-700 rounded-2xl shadow-sm">
+        <Card className="overflow-hidden border-border rounded-2xl shadow-sm">
           <CardContent className="p-0">
-            <div className="divide-y divide-slate-100 dark:divide-slate-700">
-              {members.map((member) => {
-                const initials = member.name
-                  .split(' ')
-                  .filter(Boolean)
-                  .map((n) => n[0])
-                  .join('')
-                  .toUpperCase()
-                  .slice(0, 2);
-                const isCurrentUser = member.id === currentUserId;
+            {members.length === 0 ? (
+              <EmptyState
+                icon={Users}
+                title="No team members yet"
+                description="Invite your first team member to get started."
+                className="min-h-[240px] border-0 rounded-none"
+              />
+            ) : (
+              <div className="divide-y divide-border">
+                {members.map((member) => {
+                  const initials = member.name
+                    .split(' ')
+                    .filter(Boolean)
+                    .map((n) => n[0])
+                    .join('')
+                    .toUpperCase()
+                    .slice(0, 2);
+                  const isCurrentUser = member.id === currentUserId;
 
-                return (
-                  <div
-                    key={member.id}
-                    className="flex items-center gap-4 px-5 py-4"
-                  >
-                    <Avatar className="h-9 w-9 shrink-0">
-                      <AvatarFallback className="bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-sm font-semibold">
-                        {initials}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="font-medium text-slate-900 dark:text-white">
-                          {member.name}
-                        </span>
-                        {isCurrentUser && (
-                          <span className="rounded-full bg-blue-100 dark:bg-blue-900/30 px-2 py-0.5 text-xs text-blue-700 dark:text-blue-400">
-                            You
+                  return (
+                    <div
+                      key={member.id}
+                      className="flex items-center gap-4 px-5 py-4"
+                    >
+                      <Avatar className="h-9 w-9 shrink-0">
+                        <AvatarFallback className="bg-info-subtle text-info-bold text-sm font-semibold">
+                          {initials}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="font-medium text-foreground">
+                            {member.name}
                           </span>
+                          {isCurrentUser && (
+                            <span className="rounded-full bg-info-subtle px-2 py-0.5 text-xs text-info-bold">
+                              You
+                            </span>
+                          )}
+                        </div>
+                        <p className="truncate text-sm text-muted-foreground">
+                          {member.email}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <NativeSelect
+                          value={member.role}
+                          disabled={isCurrentUser || isPending}
+                          onChange={(e) =>
+                            updateRole(member.id, e.target.value)
+                          }
+                          className={cn(
+                            'h-8 text-xs font-semibold px-2 pr-7',
+                            ROLE_COLORS[member.role] ??
+                              'bg-muted text-foreground'
+                          )}
+                        >
+                          {Object.entries(ROLE_LABELS).map(([val, label]) => (
+                            <option key={val} value={val}>
+                              {label}
+                            </option>
+                          ))}
+                        </NativeSelect>
+                        {!isCurrentUser && (
+                          <button
+                            onClick={() => setRemovingMember(member)}
+                            disabled={isPending || isPendingRemove}
+                            className="flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-danger-subtle hover:text-danger-bold disabled:opacity-40"
+                            aria-label={`Remove ${member.name}`}
+                            title="Remove member"
+                          >
+                            <Trash2 className="h-4 w-4" aria-hidden="true" />
+                          </button>
                         )}
                       </div>
-                      <p className="truncate text-sm text-slate-500 dark:text-slate-400">
-                        {member.email}
-                      </p>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <NativeSelect
-                        value={member.role}
-                        disabled={isCurrentUser || isPending}
-                        onChange={(e) => updateRole(member.id, e.target.value)}
-                        className={cn(
-                          'h-8 text-xs font-semibold px-2 pr-7',
-                          ROLE_COLORS[member.role] ??
-                            'bg-slate-100 text-slate-700'
-                        )}
-                      >
-                        {Object.entries(ROLE_LABELS).map(([val, label]) => (
-                          <option key={val} value={val}>
-                            {label}
-                          </option>
-                        ))}
-                      </NativeSelect>
-                      {!isCurrentUser && (
-                        <button
-                          onClick={() => setRemovingMember(member)}
-                          disabled={isPending || isPendingRemove}
-                          className="flex h-8 w-8 items-center justify-center rounded-md text-slate-400 transition-colors hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600 disabled:opacity-40"
-                          aria-label={`Remove ${member.name}`}
-                          title="Remove member"
-                        >
-                          <Trash2 className="h-4 w-4" aria-hidden="true" />
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
+            )}
           </CardContent>
         </Card>
 

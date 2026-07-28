@@ -89,10 +89,10 @@ export function LoginShell({
     <>
       <style dangerouslySetInnerHTML={{ __html: KEYFRAME_STYLES }} />
 
-      <div className="fixed inset-0 z-[100] flex flex-col justify-between bg-background transition-colors duration-300 p-4 sm:p-6 overflow-y-auto">
+      <div className="fixed inset-0 z-[100] flex flex-col items-center justify-between bg-background transition-colors duration-300 p-4 sm:p-6 overflow-y-auto">
         {/* Top Header Navigation */}
         <header className="relative z-10 flex items-center justify-between w-full max-w-5xl mx-auto py-2">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
             <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground font-bold shadow-md shadow-primary/20">
               <ShieldCheck className="h-5 w-5" />
             </div>
@@ -114,10 +114,10 @@ export function LoginShell({
         </header>
 
         {/* Center Form Container */}
-        <main className="relative z-10 flex w-full max-w-[400px] mx-auto flex-col my-auto py-6">
+        <main className="relative z-10 flex w-full max-w-[400px] flex-col my-auto py-6">
           <div
             className={cn(
-              'flex flex-col rounded-2xl bg-card border border-border shadow-xl dark:shadow-none p-7 sm:p-9 transition-all duration-300',
+              'flex flex-col rounded-2xl bg-card border border-border/80 shadow-xl dark:shadow-2xl dark:border-border p-7 sm:p-9 transition-all duration-300',
               shaking && 'animate-login-shake'
             )}
           >

@@ -67,7 +67,7 @@ export default async function MaintenancePage(props: {
           isResident
             ? t('maintenance.resident_description', {
                 defaultValue: t(
-                  `orgType.${terminology.orgLabel.split('.')[1]}.maintenanceDescriptionResident`,
+                  `orgType:${terminology.orgLabel.split(':')[1]?.split('.')[0]}.maintenanceDescriptionResident`,
                   {
                     defaultValue: `Report and track maintenance issues for your ${t(terminology.unitLabel).toLowerCase()} and property.`,
                   }
@@ -75,7 +75,7 @@ export default async function MaintenancePage(props: {
               })
             : t('maintenance.description', {
                 defaultValue: t(
-                  `orgType.${terminology.orgLabel.split('.')[1]}.maintenanceDescription`,
+                  `orgType:${terminology.orgLabel.split(':')[1]?.split('.')[0]}.maintenanceDescription`,
                   {
                     defaultValue: `Manage and track facility maintenance requests across gates, ${t(terminology.unitLabelPlural).toLowerCase()}, and ${t(terminology.projectLabel).toLowerCase()}.`,
                   }

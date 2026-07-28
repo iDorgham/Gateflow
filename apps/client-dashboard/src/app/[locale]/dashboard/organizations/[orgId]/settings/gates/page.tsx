@@ -50,15 +50,6 @@ export default async function GatesSettings() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-1">
-        <h1 className="text-xl font-black uppercase tracking-tight">
-          Gates & Scanners
-        </h1>
-        <p className="text-sm text-muted-foreground">
-          Manage physical access points, GPS rules, and global scanner behavior.
-        </p>
-      </div>
-
       <Tabs defaultValue="gates" className="space-y-6">
         <TabsList className="bg-muted/50 p-1 rounded-xl w-fit h-auto">
           <TabsTrigger

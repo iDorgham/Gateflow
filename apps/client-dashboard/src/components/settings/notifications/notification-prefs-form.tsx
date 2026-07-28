@@ -80,19 +80,19 @@ export function NotificationPrefsForm({
     {
       key: 'email',
       label: 'Email',
-      icon: <Mail className="h-4 w-4 text-blue-500" />,
+      icon: <Mail className="h-4 w-4 text-info" />,
       desc: 'Receive notifications via email',
     },
     {
       key: 'sms',
       label: 'SMS',
-      icon: <MessageSquare className="h-4 w-4 text-green-500" />,
+      icon: <MessageSquare className="h-4 w-4 text-success" />,
       desc: 'Text message alerts (carrier rates may apply)',
     },
     {
       key: 'push',
       label: 'Push Notifications',
-      icon: <Smartphone className="h-4 w-4 text-purple-500" />,
+      icon: <Smartphone className="h-4 w-4 text-[var(--gf-color-discovery)]" />,
       desc: 'In-browser and mobile app push alerts',
     },
   ];
@@ -133,7 +133,7 @@ export function NotificationPrefsForm({
     {
       key: 'systemAlerts',
       label: 'System Alerts',
-      icon: <Bell className="h-4 w-4 text-orange-500" />,
+      icon: <Bell className="h-4 w-4 text-warning" />,
       desc: 'Security advisories and platform maintenance notices',
       severity: 'high',
     },

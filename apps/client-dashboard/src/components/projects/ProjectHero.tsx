@@ -30,6 +30,7 @@ interface ProjectHeroProps {
 export function ProjectHero({ project }: ProjectHeroProps) {
   const params = useParams();
   const locale = (params?.locale as string) ?? 'en';
+  const orgId = params?.orgId as string;
 
   return (
     <motion.div
@@ -55,7 +56,7 @@ export function ProjectHero({ project }: ProjectHeroProps) {
 
         {/* Back Button — start-6 for RTL flip */}
         <Link
-          href={`/${locale}/dashboard/projects`}
+          href={`/${locale}/dashboard/organizations/${orgId}/projects`}
           className="absolute top-6 start-6 flex h-10 w-10 items-center justify-center rounded-xl bg-background/20 backdrop-blur-md text-white hover:bg-background/40 transition-all border border-white/20"
         >
           <ArrowLeft className="h-5 w-5 rtl:rotate-180" />

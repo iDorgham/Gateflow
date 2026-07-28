@@ -10,9 +10,20 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Client-Dashboard]** add loading skeletons for routes that lacked one
+- **[Client-Dashboard]** show next billing date on the billing settings page
+- **[Client-Dashboard]** fix legacy dashboard route redirects
+- **[Ui]** register ds-* design tokens as real Tailwind utilities
+- **[Client-Dashboard]** polish header search input
+
 - **[Deps]** revert eslint and typescript bumps that broke shared-package lint
 
 - **[Deps]** bump @prisma/client to ^6.19.3 to match prisma CLI
+
+- **[Deps]** repair pnpm-lock.yaml broken by CodeRabbit autofix merge
+
+- **[Ui]** register packages/ui as a Tailwind v4 source
+- **[Ui]** enforce items-center on login shell flexbox container to fix full-width stretching
 - **[Security]** update tar override in pnpm.overrides to >=7.5.21
 
 - **[Ui]** redesign login page with clean modern SaaS web app layout
@@ -60,6 +71,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### AI Tools
 
+- **[I18n]** correct orgType translation namespace lookup syntax
+
 - **[Workflow v2]** add single-app pilot focus, evidence-based page scoring,
   deterministic local gates, specialist contracts, composable skills, and
   certification-locked app sequencing
@@ -71,6 +84,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Apps
 
+- **[Client-Dashboard]** preserve email on failed login
 - **[Security]** audit remediation phase 4 — admin/CMS/CRM API auth, rate limits, shared HSTS+CSP headers
 - **[Security]** audit remediation phase 3 — trustworthy CI scanners + full typecheck
 - **[Security]** audit remediation phase 2 — request-local fail-closed tenant `db` (ALS)

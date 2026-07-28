@@ -143,7 +143,7 @@ export function GateAssignmentForm({ locale: _locale }: { locale: string }) {
               <Select value={selectedUser} onValueChange={setSelectedUser}>
                 <SelectTrigger
                   id="user-select"
-                  className="bg-white dark:bg-slate-900 border-[var(--ds-border)]"
+                  className="bg-card border-[var(--ds-border)]"
                 >
                   <SelectValue
                     placeholder={t(
@@ -152,7 +152,7 @@ export function GateAssignmentForm({ locale: _locale }: { locale: string }) {
                     )}
                   />
                 </SelectTrigger>
-                <SelectContent className="bg-white dark:bg-slate-900 border-[var(--ds-border)]">
+                <SelectContent className="bg-card border-[var(--ds-border)]">
                   {users.map((u) => (
                     <SelectItem key={u.id} value={u.id}>
                       {u.name} ({u.email})
@@ -171,7 +171,7 @@ export function GateAssignmentForm({ locale: _locale }: { locale: string }) {
                 onChange={setSelectedGates}
                 selected={selectedGates}
                 placeholder={t('gateAssignments.selectGates', 'Select gates…')}
-                className="bg-white dark:bg-slate-900 border-[var(--ds-border)] w-full"
+                className="bg-card border-[var(--ds-border)] w-full"
               />
             </div>
           </div>
@@ -186,7 +186,7 @@ export function GateAssignmentForm({ locale: _locale }: { locale: string }) {
                 type="time"
                 value={shiftStart}
                 onChange={(e) => setShiftStart(e.target.value)}
-                className="bg-white dark:bg-slate-900 border-[var(--ds-border)]"
+                className="bg-card border-[var(--ds-border)]"
               />
             </div>
             <div className="space-y-2">
@@ -198,7 +198,7 @@ export function GateAssignmentForm({ locale: _locale }: { locale: string }) {
                 type="time"
                 value={shiftEnd}
                 onChange={(e) => setShiftEnd(e.target.value)}
-                className="bg-white dark:bg-slate-900 border-[var(--ds-border)]"
+                className="bg-card border-[var(--ds-border)]"
               />
             </div>
 
@@ -208,7 +208,7 @@ export function GateAssignmentForm({ locale: _locale }: { locale: string }) {
                 disabled={
                   assignMutation.isPending || loadingUsers || loadingGates
                 }
-                className="w-full sm:w-auto min-w-[140px] bg-blue-600 hover:bg-blue-700 text-white font-semibold"
+                className="w-full sm:w-auto min-w-[140px] bg-primary hover:bg-primary/90 text-primary-foreground font-semibold"
               >
                 {assignMutation.isPending ? (
                   <>
