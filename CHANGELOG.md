@@ -10,6 +10,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Deps]** revert eslint and typescript bumps that broke shared-package lint
+
+- **[Deps]** bump @prisma/client to ^6.19.3 to match prisma CLI
+
 - **[Deps]** repair pnpm-lock.yaml broken by CodeRabbit autofix merge
 
 - **[Ui]** register packages/ui as a Tailwind v4 source

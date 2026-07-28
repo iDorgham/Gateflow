@@ -115,7 +115,7 @@ export function NewVsReturningChart({
               formatter={(value: any) => [value]}
               labelFormatter={(label) => {
                 try {
-                  return new Date(label).toLocaleDateString(undefined, {
+                  return new Date(String(label)).toLocaleDateString(undefined, {
                     weekday: 'short',
                     month: 'short',
                     day: 'numeric',

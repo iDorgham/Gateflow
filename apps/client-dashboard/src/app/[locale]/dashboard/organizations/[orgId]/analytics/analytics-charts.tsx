@@ -339,8 +339,8 @@ export function AnalyticsCharts({
                     cy="50%"
                     outerRadius={72}
                     innerRadius={36}
-                    label={({ type, percent }) =>
-                      `${String(type).charAt(0) + String(type).slice(1).toLowerCase()} ${Math.round((percent ?? 0) * 100)}%`
+                    label={({ name, percent }) =>
+                      `${String(name).charAt(0) + String(name).slice(1).toLowerCase()} ${Math.round((percent ?? 0) * 100)}%`
                     }
                     labelLine={false}
                   >

@@ -96,11 +96,11 @@
     "@tailwindcss/postcss": "^4.3.3",
     "autoprefixer": "^10.4.24",
     "eslint": "8.57.1",
-    "lint-staged": "^17.2.0",
-    "prettier": "^3.9.5",
+    "lint-staged": "^15.5.2",
+    "prettier": "^3.9.6",
     "tailwindcss": "^4.3.3",
     "tsx": "^4.7.0",
-    "turbo": "^2.10.5",
+    "turbo": "^2.10.7",
     "typescript": "5.9.3",
     "yaml": "^2.9.0"
   },
@@ -172,8 +172,8 @@
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.0.0",
     "qrcode": "^1.5.4",
-    "react": "19.2.7",
-    "react-dom": "19.2.7",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
     "react-qr-code": "^2.0.18"
   }
 }

@@ -79,7 +79,7 @@ jobs:
       vercel_env: ${{ steps.env.outputs.vercel_env }}
       gh_env_prefix: ${{ steps.env.outputs.gh_env_prefix }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Resolve environment
         id: env
@@ -147,7 +147,7 @@ jobs:
     needs: changes
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: pnpm/action-setup@0c17529a66aca453f9227af23103ed11469b1e47 # v4.0.0
         with:
           version: ${{ env.PNPM_VERSION }}
@@ -188,7 +188,7 @@ jobs:
     environment:
       name: Production
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - uses: pnpm/action-setup@0c17529a66aca453f9227af23103ed11469b1e47 # v4.0.0
         with:
@@ -226,7 +226,7 @@ jobs:
       name: ${{ needs.changes.outputs.gh_env_prefix }} – gateflow-client-dashboard
       url: ${{ steps.deploy.outputs.url }}
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - uses: pnpm/action-setup@v4
         with:
@@ -288,7 +288,7 @@ jobs:
       name: ${{ needs.changes.outputs.gh_env_prefix }} – gateflow-admin-dashboard
       url: ${{ steps.deploy.outputs.url }}
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - uses: pnpm/action-setup@v4
         with:
@@ -350,7 +350,7 @@ jobs:
       name: ${{ needs.changes.outputs.gh_env_prefix }} – gateflow-marketing
       url: ${{ steps.deploy.outputs.url }}
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - uses: pnpm/action-setup@v4
         with:
@@ -412,7 +412,7 @@ jobs:
       name: ${{ needs.changes.outputs.gh_env_prefix }} – gateflow-resident-portal
       url: ${{ steps.deploy.outputs.url }}
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - uses: pnpm/action-setup@v4
         with:
@@ -474,7 +474,7 @@ jobs:
       name: ${{ needs.changes.outputs.gh_env_prefix }} – gateflow-design-system
       url: ${{ steps.deploy.outputs.url }}
     steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: pnpm/action-setup@v4
         with:
           version: ${{ env.PNPM_VERSION }}
