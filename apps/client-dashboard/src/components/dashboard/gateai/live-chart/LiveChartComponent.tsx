@@ -103,7 +103,7 @@ export function LiveChartComponent(props: NodeViewProps) {
                 className="animate-spin text-[var(--ga-text-muted)]"
               />
             ) : (
-              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+              <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
             )}
             <span className="font-medium tracking-wide">
               {loading ? 'SYNCING' : 'LIVE'}
@@ -119,7 +119,7 @@ export function LiveChartComponent(props: NodeViewProps) {
               </span>
             </div>
           ) : error ? (
-            <div className="w-full h-full flex items-center justify-center text-red-400 text-sm">
+            <div className="w-full h-full flex items-center justify-center text-danger text-sm">
               {error}
             </div>
           ) : (

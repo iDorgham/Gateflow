@@ -137,12 +137,12 @@ export function ProjectDetailContent({
           <h2
             className={cn(
               'text-2xl font-bold tracking-tight',
-              'text-[var(--ds-text,#172B4D)]'
+              'text-[var(--ds-text)]'
             )}
           >
             Command Center
           </h2>
-          <p className={cn('text-sm', 'text-[var(--ds-text-subtle,#6B778C)]')}>
+          <p className={cn('text-sm', 'text-[var(--ds-text-subtle)]')}>
             Real-time project operations and access management.
           </p>
         </div>
@@ -192,28 +192,28 @@ export function ProjectDetailContent({
             value: aggregates.contactsCount,
             icon: Users,
             color: 'var(--primary)',
-            bg: 'var(--ds-background-selected,#DEEBFF)',
+            bg: 'var(--ds-background-selected)',
           },
           {
             label: 'Unit Types',
             value: aggregates.unitTypes.length,
             icon: Building,
-            color: 'var(--ds-text-success,#006644)',
-            bg: 'var(--ds-background-success-subtle,#E3FCEF)',
+            color: 'var(--ds-text-success)',
+            bg: 'var(--ds-background-success-subtle)',
           },
           {
             label: 'QR Codes',
             value: aggregates.qrCount,
             icon: QrCode,
-            color: 'var(--ds-text-warning,#B65C02)',
-            bg: 'var(--ds-background-warning-subtle,#FFF0B3)',
+            color: 'var(--ds-text-warning)',
+            bg: 'var(--ds-background-warning-subtle)',
           },
           {
             label: '30d Access',
             value: aggregates.access30d,
             icon: Shield,
-            color: 'var(--ds-text-danger,#AE2A19)',
-            bg: 'var(--ds-background-danger-subtle,#FFEBE6)',
+            color: 'var(--ds-text-danger)',
+            bg: 'var(--ds-background-danger-subtle)',
           },
         ].map((kpi, i) => (
           <motion.div
@@ -227,7 +227,7 @@ export function ProjectDetailContent({
             <Card
               className={cn(
                 'bg-background rounded-xl shadow-sm hover:shadow-md transition-all h-full',
-                'border-[var(--ds-border,#DFE1E6)]'
+                'border-[var(--ds-border)]'
               )}
             >
               <CardContent className="p-6">
@@ -236,7 +236,7 @@ export function ProjectDetailContent({
                     <span
                       className={cn(
                         'text-[11px] font-bold uppercase tracking-wider',
-                        'text-[var(--ds-text-subtle,#6B778C)]'
+                        'text-[var(--ds-text-subtle)]'
                       )}
                     >
                       {kpi.label}
@@ -244,7 +244,7 @@ export function ProjectDetailContent({
                     <span
                       className={cn(
                         'text-3xl font-bold tabular-nums',
-                        'text-[var(--ds-text,#172B4D)]'
+                        'text-[var(--ds-text)]'
                       )}
                     >
                       {kpi.value}
@@ -267,7 +267,7 @@ export function ProjectDetailContent({
         <TabsList
           className={cn(
             'h-12 p-1 rounded-xl mb-8',
-            'bg-[var(--ds-background-neutral-subtle,#F4F5F7)]'
+            'bg-[var(--ds-background-neutral-subtle)]'
           )}
         >
           <TabsTrigger
@@ -310,19 +310,19 @@ export function ProjectDetailContent({
               <Card
                 className={cn(
                   'bg-background rounded-2xl overflow-hidden shadow-sm',
-                  'border-[var(--ds-border,#DFE1E6)]'
+                  'border-[var(--ds-border)]'
                 )}
               >
                 <CardHeader
                   className={cn(
                     'px-6 py-4 flex flex-row items-center justify-between',
-                    'border-b border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-background-neutral-subtle,#FAFBFC)]'
+                    'border-b border-[var(--ds-border)] bg-[var(--ds-background-neutral-subtle)]'
                   )}
                 >
                   <h3
                     className={cn(
                       'text-sm font-bold uppercase tracking-widest',
-                      'text-[var(--ds-text-subtle,#6B778C)]'
+                      'text-[var(--ds-text-subtle)]'
                     )}
                   >
                     Project Resources
@@ -332,7 +332,7 @@ export function ProjectDetailContent({
                   <div
                     className={cn(
                       'p-6 space-y-4',
-                      'divide-y divide-[var(--ds-border,#DFE1E6)]'
+                      'divide-y divide-[var(--ds-border)]'
                     )}
                   >
                     <div className="flex items-center justify-between pt-4 first:pt-0">
@@ -340,7 +340,7 @@ export function ProjectDetailContent({
                         <div
                           className={cn(
                             'h-8 w-8 rounded-lg flex items-center justify-center',
-                            'bg-[var(--ds-background-selected,#DEEBFF)] text-[var(--primary)]'
+                            'bg-[var(--ds-background-selected)] text-[var(--primary)]'
                           )}
                         >
                           <Building className="h-4 w-4" />
@@ -348,7 +348,7 @@ export function ProjectDetailContent({
                         <span
                           className={cn(
                             'text-sm font-bold',
-                            'text-[var(--ds-text,#172B4D)]'
+                            'text-[var(--ds-text)]'
                           )}
                         >
                           Units
@@ -358,7 +358,7 @@ export function ProjectDetailContent({
                         variant="outline"
                         className={cn(
                           'text-[10px]',
-                          'border-[var(--ds-border,#DFE1E6)] text-[var(--ds-text-subtle,#6B778C)]'
+                          'border-[var(--ds-border)] text-[var(--ds-text-subtle)]'
                         )}
                       >
                         {units.length}
@@ -369,7 +369,7 @@ export function ProjectDetailContent({
                         <Search
                           className={cn(
                             'absolute start-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5',
-                            'text-[var(--ds-text-subtle,#6B778C)]'
+                            'text-[var(--ds-text-subtle)]'
                           )}
                         />
                         <Input
@@ -378,7 +378,7 @@ export function ProjectDetailContent({
                           onChange={(e) => setUnitSearch(e.target.value)}
                           className={cn(
                             'ps-9 h-8 text-xs bg-secondary border-none',
-                            'bg-[var(--ds-background-neutral-subtle,#F4F5F7)]'
+                            'bg-[var(--ds-background-neutral-subtle)]'
                           )}
                         />
                       </div>
@@ -390,14 +390,14 @@ export function ProjectDetailContent({
                             key={u.id}
                             className={cn(
                               'flex items-center justify-between p-2 rounded-lg transition-colors group cursor-default',
-                              'hover:bg-[var(--ds-background-neutral-subtle,#F4F5F7)]'
+                              'hover:bg-[var(--ds-background-neutral-subtle)]'
                             )}
                           >
                             <div className="min-w-0">
                               <p
                                 className={cn(
                                   'text-xs font-semibold truncate',
-                                  'text-[var(--ds-text,#172B4D)]'
+                                  'text-[var(--ds-text)]'
                                 )}
                               >
                                 {u.name}
@@ -405,7 +405,7 @@ export function ProjectDetailContent({
                               <p
                                 className={cn(
                                   'text-[10px] uppercase tracking-tighter',
-                                  'text-[var(--ds-text-subtle,#6B778C)]'
+                                  'text-[var(--ds-text-subtle)]'
                                 )}
                               >
                                 {u.type.replace('_', ' ')}
@@ -441,19 +441,19 @@ export function ProjectDetailContent({
               <Card
                 className={cn(
                   'bg-background rounded-2xl overflow-hidden shadow-sm',
-                  'border-[var(--ds-border,#DFE1E6)]'
+                  'border-[var(--ds-border)]'
                 )}
               >
                 <CardHeader
                   className={cn(
                     'px-8 py-5',
-                    'border-b border-[var(--ds-border,#DFE1E6)]'
+                    'border-b border-[var(--ds-border)]'
                   )}
                 >
                   <h2
                     className={cn(
                       'text-[18px] font-semibold',
-                      'text-[var(--ds-text,#172B4D)]'
+                      'text-[var(--ds-text)]'
                     )}
                   >
                     About Project
@@ -464,7 +464,7 @@ export function ProjectDetailContent({
                     <p
                       className={cn(
                         'text-[15px] leading-relaxed whitespace-pre-wrap font-medium',
-                        'text-[var(--ds-text-subtle,#42526E)]'
+                        'text-[var(--ds-text-subtle)]'
                       )}
                     >
                       {project.description}
@@ -473,7 +473,7 @@ export function ProjectDetailContent({
                     <div
                       className={cn(
                         'flex flex-col items-center justify-center py-6',
-                        'text-[var(--ds-text-subtle,#6B778C)]'
+                        'text-[var(--ds-text-subtle)]'
                       )}
                     >
                       <ScrollText className="h-12 w-12 opacity-10 mb-3" />
@@ -489,19 +489,19 @@ export function ProjectDetailContent({
                 <Card
                   className={cn(
                     'bg-background rounded-2xl overflow-hidden shadow-sm',
-                    'border-[var(--ds-border,#DFE1E6)]'
+                    'border-[var(--ds-border)]'
                   )}
                 >
                   <CardHeader
                     className={cn(
                       'px-8 py-5',
-                      'border-b border-[var(--ds-border,#DFE1E6)]'
+                      'border-b border-[var(--ds-border)]'
                     )}
                   >
                     <h2
                       className={cn(
                         'text-[18px] font-semibold',
-                        'text-[var(--ds-text,#172B4D)]'
+                        'text-[var(--ds-text)]'
                       )}
                     >
                       Project Gallery
@@ -514,7 +514,7 @@ export function ProjectDetailContent({
                           key={idx}
                           className={cn(
                             'group relative aspect-video rounded-xl overflow-hidden bg-muted shadow-sm transition-all hover:ring-2 hover:ring-[var(--primary)]',
-                            'border-[var(--ds-border,#DFE1E6)]'
+                            'border-[var(--ds-border)]'
                           )}
                         >
                           <img
@@ -533,19 +533,19 @@ export function ProjectDetailContent({
               <Card
                 className={cn(
                   'bg-background rounded-2xl overflow-hidden shadow-sm',
-                  'border-[var(--ds-border,#DFE1E6)]'
+                  'border-[var(--ds-border)]'
                 )}
               >
                 <CardHeader
                   className={cn(
-                    'px-6 py-4 bg-[var(--ds-background-neutral-subtle,#FAFBFC)]',
-                    'border-b border-[var(--ds-border,#DFE1E6)]'
+                    'px-6 py-4 bg-[var(--ds-background-neutral-subtle)]',
+                    'border-b border-[var(--ds-border)]'
                   )}
                 >
                   <h3
                     className={cn(
                       'text-sm font-bold uppercase tracking-widest',
-                      'text-[var(--ds-text-subtle,#6B778C)]'
+                      'text-[var(--ds-text-subtle)]'
                     )}
                   >
                     Metadata
@@ -556,7 +556,7 @@ export function ProjectDetailContent({
                     <span
                       className={cn(
                         'text-[10px] font-black uppercase',
-                        'text-[var(--ds-text-subtle,#6B778C)]'
+                        'text-[var(--ds-text-subtle)]'
                       )}
                     >
                       Location
@@ -564,7 +564,7 @@ export function ProjectDetailContent({
                     <span
                       className={cn(
                         'text-sm font-bold',
-                        'text-[var(--ds-text,#172B4D)]'
+                        'text-[var(--ds-text)]'
                       )}
                     >
                       {project.location || 'Not set'}
@@ -574,7 +574,7 @@ export function ProjectDetailContent({
                     <span
                       className={cn(
                         'text-[10px] font-black uppercase',
-                        'text-[var(--ds-text-subtle,#6B778C)]'
+                        'text-[var(--ds-text-subtle)]'
                       )}
                     >
                       Gate Mode
@@ -582,7 +582,7 @@ export function ProjectDetailContent({
                     <Badge
                       className={cn(
                         'w-fit border-none font-bold uppercase text-[9px] tracking-widest',
-                        'bg-[var(--ds-background-neutral-bold,#44546F)] text-[var(--ds-text-inverse,#FFFFFF)]'
+                        'bg-[var(--ds-background-neutral-bold)] text-[var(--ds-text-inverse)]'
                       )}
                     >
                       {project.gateMode || 'MULTI'}

@@ -37,7 +37,7 @@ export function SecurityNotifier() {
         toast.error('Perimeter Incident', {
           description: reason,
           duration: 12_000,
-          icon: <ShieldAlert className="h-5 w-5 text-red-500" />,
+          icon: <ShieldAlert className="h-5 w-5 text-danger" />,
         });
       } else if (severity === 'BLOCKED') {
         const name = detail?.contactName ?? 'Unknown visitor';
@@ -45,7 +45,7 @@ export function SecurityNotifier() {
           description:
             'Blocked visitor attempted gate access. Incident logged.',
           duration: 10_000,
-          icon: <ShieldAlert className="h-5 w-5 text-red-500" />,
+          icon: <ShieldAlert className="h-5 w-5 text-danger" />,
         });
       } else {
         // ESCORT
@@ -53,7 +53,7 @@ export function SecurityNotifier() {
         toast.warning(`Escort Required: ${name}`, {
           description: 'Visitor requires an escort. Please accompany them.',
           duration: 8_000,
-          icon: <ShieldCheck className="h-5 w-5 text-amber-500" />,
+          icon: <ShieldCheck className="h-5 w-5 text-warning" />,
         });
       }
     }

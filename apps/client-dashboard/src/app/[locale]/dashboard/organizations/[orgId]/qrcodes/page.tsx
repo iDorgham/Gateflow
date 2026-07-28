@@ -218,13 +218,13 @@ export default function QRCodesPage() {
             key="export"
             variant="outline"
             onClick={() => triggerDownload(buildExportUrl())}
-            className="h-8 px-3 border-[var(--ds-border,#DFE1E6)] text-[var(--ds-text-subtle,#42526E)] font-semibold hover:bg-[var(--ds-background-neutral-subtle-hovered,#EBECF0)] rounded-[var(--ds-border-radius-100,#3px)] transition-all flex items-center gap-2 group text-xs"
+            className="h-8 px-3 border-[var(--ds-border)] text-[var(--ds-text-subtle)] font-semibold hover:bg-[var(--ds-background-neutral-subtle-hovered)] rounded-[var(--ds-border-radius-100)] transition-all flex items-center gap-2 group text-xs"
           >
-            <Download className="h-3.5 w-3.5 text-[var(--ds-icon-subtle,#6B778C)] group-hover:text-[var(--ds-icon-brand,#0052CC)] transition-colors" />
+            <Download className="h-3.5 w-3.5 text-[var(--ds-icon-subtle)] group-hover:text-[var(--ds-icon-brand)] transition-colors" />
             {t('common.export', 'Export')}
           </Button>,
           <Link key="create" href={`/${locale}/dashboard/qrcodes/create`}>
-            <Button className="h-8 px-4 bg-[var(--ds-background-brand-bold,#0052CC)] hover:bg-[var(--ds-background-brand-bold-hovered,#004EBE)] text-[var(--ds-text-inverse,#FFFFFF)] font-semibold rounded-[var(--ds-border-radius-100,#3px)] transition-all flex items-center gap-2 text-xs">
+            <Button className="h-8 px-4 bg-[var(--ds-background-brand-bold)] hover:bg-[var(--ds-background-brand-bold-hovered)] text-[var(--ds-text-inverse)] font-semibold rounded-[var(--ds-border-radius-100)] transition-all flex items-center gap-2 text-xs">
               <Plus className="h-4 w-4" />
               {t('qrcodes.create', 'Create QR Code')}
             </Button>
@@ -458,7 +458,7 @@ export default function QRCodesPage() {
                   setLastScanTo('');
                   setSelectedIds([]);
                 }}
-                className="h-7 text-[var(--ds-text-link,#0052CC)] hover:bg-[var(--ds-background-selected,#DEEBFF)] text-[11px] font-bold uppercase tracking-tight rounded-full px-3"
+                className="h-7 text-[var(--ds-text-link)] hover:bg-[var(--ds-background-selected)] text-[11px] font-bold uppercase tracking-tight rounded-full px-3"
               >
                 <X className="h-3 w-3 mr-1.5" />
                 Clear Filters
@@ -502,17 +502,17 @@ export default function QRCodesPage() {
       </div>
 
       <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
-        <DialogContent className="max-w-md rounded-xl border-none shadow-2xl p-0 overflow-hidden bg-[var(--ds-background-default,#FFFFFF)]">
-          <div className="bg-[var(--ds-background-danger-subtle,#FFEBE6)] p-5 flex flex-col items-center gap-3 text-center">
-            <div className="h-14 w-14 rounded-full bg-[var(--ds-background-default,#FFFFFF)] flex items-center justify-center shadow-sm">
-              <Trash2 className="h-6 w-6 text-[var(--ds-text-danger,#BF2600)]" />
+        <DialogContent className="max-w-md rounded-xl border-none shadow-2xl p-0 overflow-hidden bg-[var(--ds-background-default)]">
+          <div className="bg-[var(--ds-background-danger-subtle)] p-5 flex flex-col items-center gap-3 text-center">
+            <div className="h-14 w-14 rounded-full bg-[var(--ds-background-default)] flex items-center justify-center shadow-sm">
+              <Trash2 className="h-6 w-6 text-[var(--ds-text-danger)]" />
             </div>
-            <DialogTitle className="text-xl font-bold tracking-tight text-[var(--ds-text-danger,#BF2600)] uppercase">
+            <DialogTitle className="text-xl font-bold tracking-tight text-[var(--ds-text-danger)] uppercase">
               Confirm Bulk Deletion
             </DialogTitle>
           </div>
           <div className="p-6 space-y-5">
-            <p className="text-sm font-medium text-[var(--ds-text-subtle,#42526E)] dark:text-[#A5ADBA] leading-relaxed text-center">
+            <p className="text-sm font-medium text-[var(--ds-text-subtle)] leading-relaxed text-center">
               {t(
                 'qrcodes.confirmBulkDeleteBody',
                 'You are about to deactivate and soft-delete {{count}} QR codes. This action will be logged and is irreversible for the end-users.',
@@ -524,7 +524,7 @@ export default function QRCodesPage() {
                 variant="outline"
                 onClick={() => setDeleteOpen(false)}
                 disabled={isPending}
-                className="flex-1 h-10 rounded-[var(--ds-border-radius-100,#3px)] border-[var(--ds-border,#DFE1E6)] font-semibold text-[var(--ds-text-subtle,#42526E)]"
+                className="flex-1 h-10 rounded-[var(--ds-border-radius-100)] border-[var(--ds-border)] font-semibold text-[var(--ds-text-subtle)]"
               >
                 {t('common.cancel', 'No, keep them')}
               </Button>
@@ -532,7 +532,7 @@ export default function QRCodesPage() {
                 variant="destructive"
                 onClick={deleteSelected}
                 disabled={isPending}
-                className="flex-1 h-10 rounded-[var(--ds-border-radius-100,#3px)] bg-[var(--ds-background-danger-bold,#DE350B)] hover:bg-[var(--ds-background-danger-bold-hovered,#BF2600)] font-semibold text-[var(--ds-text-inverse,#FFFFFF)]"
+                className="flex-1 h-10 rounded-[var(--ds-border-radius-100)] bg-[var(--ds-background-danger-bold)] hover:bg-[var(--ds-background-danger-bold-hovered)] font-semibold text-[var(--ds-text-inverse)]"
               >
                 {isPending ? (
                   <RefreshCw className="h-4 w-4 animate-spin mr-2" />

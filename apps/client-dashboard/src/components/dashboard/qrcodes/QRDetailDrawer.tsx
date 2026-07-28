@@ -18,21 +18,21 @@ const STATUS_CONFIG: Record<
   { bg: string; text: string; dot: string; label: string }
 > = {
   ACTIVE: {
-    bg: 'bg-[var(--ds-background-success-subtle,#E3FCEF)]',
-    text: 'text-[var(--ds-text-success,#006644)]',
-    dot: 'bg-[var(--ds-background-success-bold,#00875A)]',
+    bg: 'bg-[var(--ds-background-success-subtle)]',
+    text: 'text-[var(--ds-text-success)]',
+    dot: 'bg-[var(--ds-background-success-bold)]',
     label: 'Active',
   },
   INACTIVE: {
-    bg: 'bg-[var(--ds-background-neutral-subtle,#F4F5F7)]',
-    text: 'text-[var(--ds-text-subtlest,#6B778C)]',
-    dot: 'bg-[var(--ds-icon-subtle,#6B778C)]',
+    bg: 'bg-[var(--ds-background-neutral-subtle)]',
+    text: 'text-[var(--ds-text-subtlest)]',
+    dot: 'bg-[var(--ds-icon-subtle)]',
     label: 'Inactive',
   },
   EXPIRED: {
-    bg: 'bg-[var(--ds-background-warning-subtle,#FFF0B3)]',
-    text: 'text-[var(--ds-text-warning-inverse,#172B4D)]',
-    dot: 'bg-[var(--ds-background-warning-bold,#FF991F)]',
+    bg: 'bg-[var(--ds-background-warning-subtle)]',
+    text: 'text-[var(--ds-text-warning-inverse)]',
+    dot: 'bg-[var(--ds-background-warning-bold)]',
     label: 'Expired',
   },
   MAX_USES_REACHED: {
@@ -42,9 +42,9 @@ const STATUS_CONFIG: Record<
     label: 'Max Uses',
   },
   REVOKED: {
-    bg: 'bg-[var(--ds-background-danger-subtle,#FFEBE6)]',
-    text: 'text-[var(--ds-text-danger,#BF2600)]',
-    dot: 'bg-[var(--ds-background-danger-bold,#DE350B)]',
+    bg: 'bg-[var(--ds-background-danger-subtle)]',
+    text: 'text-[var(--ds-text-danger)]',
+    dot: 'bg-[var(--ds-background-danger-bold)]',
     label: 'Revoked',
   },
 };
@@ -68,10 +68,10 @@ function Field({
     <div className="flex flex-col gap-1">
       <div className="flex items-center gap-1.5">
         <Icon
-          className="h-3 w-3 text-[var(--ds-icon-subtle,#6B778C)]"
+          className="h-3 w-3 text-[var(--ds-icon-subtle)]"
           aria-hidden="true"
         />
-        <dt className="text-[10px] font-black uppercase tracking-widest text-[var(--ds-text-subtlest,#6B778C)]">
+        <dt className="text-[10px] font-black uppercase tracking-widest text-[var(--ds-text-subtlest)]">
           {label}
         </dt>
       </div>
@@ -104,19 +104,19 @@ export function QRDetailDrawer({ qr, locale, onClose }: QRDetailDrawerProps) {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            className="fixed inset-y-0 end-0 z-50 w-80 bg-[var(--ds-surface,#FFFFFF)] bg-background border-s border-[var(--ds-border,#DFE1E6)] shadow-xl flex flex-col overflow-hidden"
+            className="fixed inset-y-0 end-0 z-50 w-80 bg-[var(--ds-surface)] bg-background border-s border-[var(--ds-border)] shadow-xl flex flex-col overflow-hidden"
             role="dialog"
             aria-modal="true"
             aria-label="QR code details"
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--ds-border,#DFE1E6)] shrink-0 bg-[var(--ds-background-neutral-subtle,#F4F5F7)]">
-              <p className="text-[10px] font-black uppercase tracking-widest text-[var(--ds-text-subtlest,#6B778C)]">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-[var(--ds-border)] shrink-0 bg-[var(--ds-background-neutral-subtle)]">
+              <p className="text-[10px] font-black uppercase tracking-widest text-[var(--ds-text-subtlest)]">
                 QR Code Details
               </p>
               <button
                 onClick={onClose}
-                className="h-6 w-6 flex items-center justify-center rounded-sm hover:bg-[var(--ds-background-neutral,#EBECF0)] text-[var(--ds-icon-subtle,#6B778C)] transition-colors"
+                className="h-6 w-6 flex items-center justify-center rounded-sm hover:bg-[var(--ds-background-neutral)] text-[var(--ds-icon-subtle)] transition-colors"
                 aria-label="Close QR code details"
               >
                 <X className="h-3.5 w-3.5" />
@@ -151,7 +151,7 @@ export function QRDetailDrawer({ qr, locale, onClose }: QRDetailDrawerProps) {
                     <span className="font-mono text-xs font-bold text-primary break-all">
                       {qr.code}
                     </span>
-                    <span className="text-[10px] uppercase tracking-widest text-[var(--ds-text-subtlest,#6B778C)]">
+                    <span className="text-[10px] uppercase tracking-widest text-[var(--ds-text-subtlest)]">
                       {qr.type}
                     </span>
                   </div>
@@ -160,11 +160,11 @@ export function QRDetailDrawer({ qr, locale, onClose }: QRDetailDrawerProps) {
                 {qr.guestName && (
                   <Field icon={User} label="QR Holder">
                     <div className="flex flex-col gap-0.5">
-                      <span className="text-sm font-semibold text-[var(--ds-text,#172B4D)] dark:text-[#B6C2CF]">
+                      <span className="text-sm font-semibold text-[var(--ds-text)]">
                         {qr.guestName}
                       </span>
                       {qr.guestEmail && (
-                        <span className="text-xs text-[var(--ds-text-subtle,#42526E)]">
+                        <span className="text-xs text-[var(--ds-text-subtle)]">
                           {qr.guestEmail}
                         </span>
                       )}
@@ -174,7 +174,7 @@ export function QRDetailDrawer({ qr, locale, onClose }: QRDetailDrawerProps) {
 
                 {qr.gateName && (
                   <Field icon={DoorOpen} label="Gate / Entry Point">
-                    <span className="text-sm font-semibold text-[var(--ds-text,#172B4D)] dark:text-[#B6C2CF]">
+                    <span className="text-sm font-semibold text-[var(--ds-text)]">
                       {qr.gateName}
                     </span>
                   </Field>
@@ -182,11 +182,11 @@ export function QRDetailDrawer({ qr, locale, onClose }: QRDetailDrawerProps) {
 
                 <Field icon={BarChart2} label="Usage">
                   <div className="flex items-center gap-1.5">
-                    <span className="text-sm font-bold text-[var(--ds-text,#172B4D)] dark:text-[#B6C2CF]">
+                    <span className="text-sm font-bold text-[var(--ds-text)]">
                       {qr.currentUses}
                     </span>
                     {qr.maxUses !== null && (
-                      <span className="text-xs text-[var(--ds-text-subtle,#42526E)]">
+                      <span className="text-xs text-[var(--ds-text-subtle)]">
                         / {qr.maxUses} max
                       </span>
                     )}
@@ -194,7 +194,7 @@ export function QRDetailDrawer({ qr, locale, onClose }: QRDetailDrawerProps) {
                 </Field>
 
                 <Field icon={Calendar} label="Issued">
-                  <span className="text-sm font-semibold text-[var(--ds-text,#172B4D)] dark:text-[#B6C2CF]">
+                  <span className="text-sm font-semibold text-[var(--ds-text)]">
                     {new Date(qr.createdAt).toLocaleString(locale, {
                       dateStyle: 'medium',
                       timeStyle: 'short',
@@ -204,7 +204,7 @@ export function QRDetailDrawer({ qr, locale, onClose }: QRDetailDrawerProps) {
 
                 {qr.expiresAt && (
                   <Field icon={Calendar} label="Expires">
-                    <span className="text-sm font-semibold text-[var(--ds-text,#172B4D)] dark:text-[#B6C2CF]">
+                    <span className="text-sm font-semibold text-[var(--ds-text)]">
                       {new Date(qr.expiresAt).toLocaleString(locale, {
                         dateStyle: 'medium',
                         timeStyle: 'short',
@@ -214,7 +214,7 @@ export function QRDetailDrawer({ qr, locale, onClose }: QRDetailDrawerProps) {
                 )}
 
                 <Field icon={Hash} label="QR ID">
-                  <span className="font-mono text-xs text-[var(--ds-text-subtle,#42526E)] break-all">
+                  <span className="font-mono text-xs text-[var(--ds-text-subtle)] break-all">
                     {qr.id}
                   </span>
                 </Field>

@@ -119,7 +119,7 @@ export function InvitationList({ invitations }: InvitationListProps) {
                         {t('settings.team.expired', 'Expired')}
                       </div>
                     ) : (
-                      <div className="flex items-center gap-1.5 text-xs font-bold text-orange-600">
+                      <div className="flex items-center gap-1.5 text-xs font-bold text-warning">
                         <Clock className="h-3.5 w-3.5" />
                         {t('settings.team.pending', 'Pending')}
                       </div>

@@ -345,8 +345,8 @@ export function GateAssignmentManager({
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
-                      <div className="h-7 w-7 rounded-lg bg-orange-500/10 flex items-center justify-center">
-                        <MapPin className="h-3.5 w-3.5 text-orange-600" />
+                      <div className="h-7 w-7 rounded-lg bg-warning/10 flex items-center justify-center">
+                        <MapPin className="h-3.5 w-3.5 text-warning" />
                       </div>
                       <div className="flex flex-col">
                         <span className="text-sm font-bold text-foreground">

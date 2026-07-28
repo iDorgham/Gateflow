@@ -69,10 +69,10 @@ export function MaintenanceClient({
         label: t('maintenance.table.issue', { ns: 'dashboard' }),
         render: (row: WorkOrderWithRelations) => (
           <div className="flex flex-col">
-            <span className="font-medium text-[var(--ds-text,#172B4D)]">
+            <span className="font-medium text-[var(--ds-text)]">
               {row.title}
             </span>
-            <span className="text-xs text-[var(--ds-text-subtle,#42526E)]">
+            <span className="text-xs text-[var(--ds-text-subtle)]">
               {row.id.substring(0, 8).toUpperCase()} • {row.category}
             </span>
           </div>
@@ -92,10 +92,11 @@ export function MaintenanceClient({
           <span
             className={cn(
               'text-xs font-bold uppercase tracking-wider',
-              row.priority === MaintenancePriority.URGENT && 'text-red-600',
-              row.priority === MaintenancePriority.HIGH && 'text-orange-600',
-              row.priority === MaintenancePriority.MEDIUM && 'text-blue-600',
-              row.priority === MaintenancePriority.LOW && 'text-gray-600'
+              row.priority === MaintenancePriority.URGENT && 'text-danger-bold',
+              row.priority === MaintenancePriority.HIGH && 'text-warning-bold',
+              row.priority === MaintenancePriority.MEDIUM && 'text-info-bold',
+              row.priority === MaintenancePriority.LOW &&
+                'text-muted-foreground'
             )}
           >
             {row.priority}
@@ -116,7 +117,7 @@ export function MaintenanceClient({
           return (
             <div className="flex flex-col">
               <span className="text-sm">{label}</span>
-              <span className="text-[10px] text-[var(--ds-text-subtle,#42526E)] uppercase font-medium">
+              <span className="text-[10px] text-[var(--ds-text-subtle)] uppercase font-medium">
                 {type}
               </span>
             </div>
@@ -143,7 +144,7 @@ export function MaintenanceClient({
         key: 'updatedAt',
         label: t('maintenance.table.lastUpdated', { ns: 'dashboard' }),
         render: (row: WorkOrderWithRelations) => (
-          <span className="text-sm text-[var(--ds-text-subtle,#42526E)]">
+          <span className="text-sm text-[var(--ds-text-subtle)]">
             {format(new Date(row.updatedAt), 'MMM dd, HH:mm')}
           </span>
         ),
@@ -174,12 +175,12 @@ export function MaintenanceClient({
                 </DropdownMenuItem>
               )}
               {isResident && row.status === MaintenanceStatus.OPEN && (
-                <DropdownMenuItem className="text-red-600">
+                <DropdownMenuItem className="text-danger-bold">
                   {t('maintenance.actions.cancel', { ns: 'dashboard' })}
                 </DropdownMenuItem>
               )}
               {!isResident && (
-                <DropdownMenuItem className="text-red-600">
+                <DropdownMenuItem className="text-danger-bold">
                   {t('maintenance.actions.cancel', { ns: 'dashboard' })}
                 </DropdownMenuItem>
               )}

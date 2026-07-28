@@ -17,10 +17,10 @@ export default function GateAssignmentsPage(props: {
     <WorkspacePageLayout
       header={
         <div className="animate-in fade-in slide-in-from-top-4 duration-500">
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">
+          <h1 className="text-2xl font-bold tracking-tight text-[var(--ds-text)]">
             {t('gateAssignments.title', 'Gate Assignments')}
           </h1>
-          <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
+          <p className="text-sm font-medium text-muted-foreground">
             {t(
               'gateAssignments.description',
               'Manage which team members can scan at specific gates.'

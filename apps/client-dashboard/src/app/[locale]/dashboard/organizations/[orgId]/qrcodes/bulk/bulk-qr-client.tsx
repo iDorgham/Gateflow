@@ -327,10 +327,10 @@ export function BulkQRClient({ gates }: { gates: Gate[] }) {
       {/* Page header */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">
+          <h1 className="text-2xl font-bold text-foreground">
             Bulk QR Creation
           </h1>
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-muted-foreground">
             Upload a CSV file to generate multiple QR access codes at once.
           </p>
         </div>
@@ -349,13 +349,10 @@ export function BulkQRClient({ gates }: { gates: Gate[] }) {
             <CardTitle className="text-base">Upload CSV File</CardTitle>
             <CardDescription>
               Required columns:{' '}
-              <code className="rounded bg-slate-100 px-1 text-xs">name</code>
+              <code className="rounded bg-muted px-1 text-xs">name</code>
               .&ensp;Optional:{' '}
               {['email', 'phone', 'role', 'gate', 'expiresAt'].map((c) => (
-                <code
-                  key={c}
-                  className="mr-1 rounded bg-slate-100 px-1 text-xs"
-                >
+                <code key={c} className="mr-1 rounded bg-muted px-1 text-xs">
                   {c}
                 </code>
               ))}
@@ -364,20 +361,20 @@ export function BulkQRClient({ gates }: { gates: Gate[] }) {
           <CardContent className="space-y-4">
             {/* Gate reference */}
             {gateNames.length > 0 && (
-              <div className="rounded-md border border-slate-200 bg-slate-50 px-4 py-3 text-sm">
-                <p className="mb-1 font-medium text-slate-700">
+              <div className="rounded-md border border-border bg-muted px-4 py-3 text-sm">
+                <p className="mb-1 font-medium text-foreground">
                   Available gates:
                 </p>
-                <p className="text-slate-500">{gateNames.join(', ')}</p>
+                <p className="text-muted-foreground">{gateNames.join(', ')}</p>
               </div>
             )}
 
             {/* CSV format hint */}
-            <div className="rounded-md border border-slate-200 bg-slate-50 px-4 py-3">
-              <p className="mb-1 text-xs font-medium text-slate-500">
+            <div className="rounded-md border border-border bg-muted px-4 py-3">
+              <p className="mb-1 text-xs font-medium text-muted-foreground">
                 Example CSV format:
               </p>
-              <pre className="overflow-x-auto text-xs leading-relaxed text-slate-600">
+              <pre className="overflow-x-auto text-xs leading-relaxed text-muted-foreground">
                 {`name,email,phone,role,gate,expiresAt
 John Doe,john@example.com,0123456789,VIP,Main Gate,2026-12-31T23:59
 Jane Smith,jane@example.com,,,, 2026-06-15`}
@@ -392,25 +389,25 @@ Jane Smith,jane@example.com,,,, 2026-06-15`}
               onClick={() => fileInputRef.current?.click()}
               className={`flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed p-10 transition-colors ${
                 isDragOver
-                  ? 'border-blue-400 bg-blue-50'
-                  : 'border-slate-300 bg-slate-50 hover:border-slate-400 hover:bg-slate-100'
+                  ? 'border-info bg-info-subtle'
+                  : 'border-border bg-muted hover:border-muted-foreground/50 hover:bg-muted'
               }`}
             >
               {fileName ? (
                 <FileUp
-                  className="mb-3 h-10 w-10 text-blue-500"
+                  className="mb-3 h-10 w-10 text-info-bold"
                   aria-hidden="true"
                 />
               ) : (
                 <Upload
-                  className="mb-3 h-10 w-10 text-slate-400"
+                  className="mb-3 h-10 w-10 text-muted-foreground"
                   aria-hidden="true"
                 />
               )}
-              <p className="text-sm font-medium text-slate-700">
+              <p className="text-sm font-medium text-foreground">
                 {fileName ?? 'Drag & drop your CSV here, or click to browse'}
               </p>
-              <p className="mt-1 text-xs text-slate-400">
+              <p className="mt-1 text-xs text-muted-foreground">
                 Supports .csv files up to 500 rows
               </p>
             </div>
@@ -424,7 +421,7 @@ Jane Smith,jane@example.com,,,, 2026-06-15`}
 
             {/* Parse error */}
             {parseError && (
-              <div className="rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+              <div className="rounded-md border border-danger bg-danger-subtle px-3 py-2 text-sm text-danger-bold">
                 {parseError}
               </div>
             )}
@@ -439,12 +436,12 @@ Jane Smith,jane@example.com,,,, 2026-06-15`}
             <CardTitle className="text-base">
               Preview — {rows.length} row{rows.length !== 1 ? 's' : ''} parsed
               {invalidRows.length > 0 && (
-                <span className="ml-2 rounded bg-red-100 px-2 py-0.5 text-xs text-red-600">
+                <span className="ml-2 rounded bg-danger-subtle px-2 py-0.5 text-xs text-danger-bold">
                   {invalidRows.length} with errors
                 </span>
               )}
               {validRows.length > 0 && (
-                <span className="ml-2 rounded bg-green-100 px-2 py-0.5 text-xs text-green-700">
+                <span className="ml-2 rounded bg-success-subtle px-2 py-0.5 text-xs text-success-bold">
                   {validRows.length} valid
                 </span>
               )}
@@ -457,8 +454,8 @@ Jane Smith,jane@example.com,,,, 2026-06-15`}
           <CardContent className="p-0">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
-                <thead className="border-b bg-slate-50">
-                  <tr className="text-left text-xs font-medium text-slate-500">
+                <thead className="border-b bg-muted">
+                  <tr className="text-left text-xs font-medium text-muted-foreground">
                     <th className="px-3 py-2">#</th>
                     {DISPLAY_HEADERS.map((h) => (
                       <th key={h} className="px-3 py-2">
@@ -474,40 +471,40 @@ Jane Smith,jane@example.com,,,, 2026-06-15`}
                       key={row._rowIndex}
                       className={
                         row._errors.length > 0
-                          ? 'bg-red-50'
-                          : 'hover:bg-slate-50'
+                          ? 'bg-danger-subtle'
+                          : 'hover:bg-muted'
                       }
                     >
-                      <td className="px-3 py-2 text-slate-400">
+                      <td className="px-3 py-2 text-muted-foreground">
                         {row._rowIndex}
                       </td>
-                      <td className="px-3 py-2 font-medium text-slate-900">
+                      <td className="px-3 py-2 font-medium text-foreground">
                         {row.name || '—'}
                       </td>
-                      <td className="px-3 py-2 text-slate-600">
+                      <td className="px-3 py-2 text-muted-foreground">
                         {row.email || '—'}
                       </td>
-                      <td className="px-3 py-2 text-slate-600">
+                      <td className="px-3 py-2 text-muted-foreground">
                         {row.phone || '—'}
                       </td>
-                      <td className="px-3 py-2 text-slate-600">
+                      <td className="px-3 py-2 text-muted-foreground">
                         {row.role || '—'}
                       </td>
-                      <td className="px-3 py-2 text-slate-600">
+                      <td className="px-3 py-2 text-muted-foreground">
                         {row.gate || '—'}
                       </td>
-                      <td className="px-3 py-2 text-slate-600">
+                      <td className="px-3 py-2 text-muted-foreground">
                         {row.expiresAt || '—'}
                       </td>
                       <td className="px-3 py-2">
                         {row._errors.length === 0 ? (
-                          <span className="rounded bg-green-100 px-1.5 py-0.5 text-xs text-green-700">
+                          <span className="rounded bg-success-subtle px-1.5 py-0.5 text-xs text-success-bold">
                             Valid
                           </span>
                         ) : (
                           <span
                             title={row._errors.join('; ')}
-                            className="cursor-help rounded bg-red-100 px-1.5 py-0.5 text-xs text-red-600"
+                            className="cursor-help rounded bg-danger-subtle px-1.5 py-0.5 text-xs text-danger-bold"
                           >
                             {row._errors.length} error
                             {row._errors.length !== 1 ? 's' : ''}
@@ -520,7 +517,7 @@ Jane Smith,jane@example.com,,,, 2026-06-15`}
               </table>
             </div>
             {rows.length > 10 && (
-              <p className="border-t px-4 py-2 text-xs text-slate-400">
+              <p className="border-t px-4 py-2 text-xs text-muted-foreground">
                 + {rows.length - 10} more rows not shown
               </p>
             )}
@@ -546,17 +543,17 @@ Jane Smith,jane@example.com,,,, 2026-06-15`}
       {status === 'creating' && (
         <Card>
           <CardContent className="px-6 py-8">
-            <p className="mb-3 text-sm font-medium text-slate-700">
+            <p className="mb-3 text-sm font-medium text-foreground">
               Creating {validRows.length} QR code
               {validRows.length !== 1 ? 's' : ''}…
             </p>
-            <div className="h-2.5 w-full overflow-hidden rounded-full bg-slate-200">
+            <div className="h-2.5 w-full overflow-hidden rounded-full bg-muted">
               <div
-                className="h-full rounded-full bg-blue-600 transition-all duration-300"
+                className="h-full rounded-full bg-primary transition-all duration-300"
                 style={{ width: `${progress}%` }}
               />
             </div>
-            <p className="mt-2 text-xs text-slate-400">
+            <p className="mt-2 text-xs text-muted-foreground">
               {progress}% — please wait
             </p>
           </CardContent>
@@ -568,24 +565,24 @@ Jane Smith,jane@example.com,,,, 2026-06-15`}
         <>
           <Card>
             <CardHeader>
-              <CardTitle className="text-base text-slate-900">
+              <CardTitle className="text-base text-foreground">
                 Creation Complete
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
               {/* Success count */}
               {created.length > 0 && (
-                <div className="flex items-center gap-3 rounded-lg border border-green-200 bg-green-50 px-4 py-3">
+                <div className="flex items-center gap-3 rounded-lg border border-success bg-success-subtle px-4 py-3">
                   <CheckCircle2
-                    className="h-5 w-5 shrink-0 text-green-600"
+                    className="h-5 w-5 shrink-0 text-success-bold"
                     aria-hidden="true"
                   />
                   <div>
-                    <p className="text-sm font-medium text-green-800">
+                    <p className="text-sm font-medium text-success-bold">
                       {created.length} QR code{created.length !== 1 ? 's' : ''}{' '}
                       created successfully
                     </p>
-                    <p className="text-xs text-green-600">
+                    <p className="text-xs text-success-bold">
                       They are now active and visible in QR Codes list.
                     </p>
                   </div>
@@ -594,14 +591,14 @@ Jane Smith,jane@example.com,,,, 2026-06-15`}
 
               {/* Error count */}
               {bulkErrors.length > 0 && (
-                <div className="rounded-md border border-amber-200 bg-amber-50 px-4 py-3">
-                  <p className="mb-2 text-sm font-medium text-amber-800">
+                <div className="rounded-md border border-warning bg-warning-subtle px-4 py-3">
+                  <p className="mb-2 text-sm font-medium text-warning-bold">
                     {bulkErrors.length} row{bulkErrors.length !== 1 ? 's' : ''}{' '}
                     skipped:
                   </p>
                   <ul className="space-y-1">
                     {bulkErrors.map((e) => (
-                      <li key={e.index} className="text-xs text-amber-700">
+                      <li key={e.index} className="text-xs text-warning-bold">
                         Row {e.index} (<strong>{e.name}</strong>): {e.error}
                       </li>
                     ))}
@@ -637,8 +634,8 @@ Jane Smith,jane@example.com,,,, 2026-06-15`}
                 {emailResults.length > 0 && (
                   <div className="overflow-x-auto">
                     <table className="w-full text-sm">
-                      <thead className="border-b bg-slate-50">
-                        <tr className="text-left text-xs font-medium text-slate-500">
+                      <thead className="border-b bg-muted">
+                        <tr className="text-left text-xs font-medium text-muted-foreground">
                           <th className="px-3 py-2">Name</th>
                           <th className="px-3 py-2">Email</th>
                           <th className="px-3 py-2">Status</th>
@@ -646,33 +643,33 @@ Jane Smith,jane@example.com,,,, 2026-06-15`}
                       </thead>
                       <tbody className="divide-y">
                         {emailResults.map((r, i) => (
-                          <tr key={i} className="hover:bg-slate-50">
-                            <td className="px-3 py-2 font-medium text-slate-900">
+                          <tr key={i} className="hover:bg-muted">
+                            <td className="px-3 py-2 font-medium text-foreground">
                               {r.name}
                             </td>
-                            <td className="px-3 py-2 text-slate-600">
+                            <td className="px-3 py-2 text-muted-foreground">
                               {r.email}
                             </td>
                             <td className="px-3 py-2">
                               {r.status === 'pending' && (
-                                <span className="rounded bg-slate-100 px-1.5 py-0.5 text-xs text-slate-500">
+                                <span className="rounded bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">
                                   Pending
                                 </span>
                               )}
                               {r.status === 'sending' && (
-                                <span className="rounded bg-blue-100 px-1.5 py-0.5 text-xs text-blue-600">
+                                <span className="rounded bg-info-subtle px-1.5 py-0.5 text-xs text-info-bold">
                                   Sending…
                                 </span>
                               )}
                               {r.status === 'sent' && (
-                                <span className="rounded bg-green-100 px-1.5 py-0.5 text-xs text-green-700">
+                                <span className="rounded bg-success-subtle px-1.5 py-0.5 text-xs text-success-bold">
                                   Sent ✓
                                 </span>
                               )}
                               {r.status === 'failed' && (
                                 <span
                                   title={r.error}
-                                  className="cursor-help rounded bg-red-100 px-1.5 py-0.5 text-xs text-red-600"
+                                  className="cursor-help rounded bg-danger-subtle px-1.5 py-0.5 text-xs text-danger-bold"
                                 >
                                   Failed
                                 </span>

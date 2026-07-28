@@ -88,7 +88,7 @@ export default function OnboardingPage() {
   };
 
   return (
-    <div className="flex flex-1 min-h-full w-full items-center justify-center bg-gradient-to-br from-slate-50 via-white to-blue-50 px-4 py-10 md:py-20 lg:py-24">
+    <div className="flex flex-1 min-h-full w-full items-center justify-center bg-gradient-to-br from-muted via-background to-info/10 px-4 py-10 md:py-20 lg:py-24">
       <div className="w-full max-w-md space-y-6">
         {/* Step indicators */}
         <div className="flex items-center justify-center gap-0">
@@ -102,10 +102,10 @@ export default function OnboardingPage() {
                   <div
                     className={`flex h-9 w-9 items-center justify-center rounded-full border-2 transition-colors ${
                       done
-                        ? 'border-blue-600 bg-blue-600 text-white'
+                        ? 'border-primary bg-primary text-primary-foreground'
                         : active
-                          ? 'border-blue-600 bg-white text-blue-600'
-                          : 'border-slate-200 bg-white text-slate-400'
+                          ? 'border-primary bg-background text-primary'
+                          : 'border-border bg-background text-muted-foreground'
                     }`}
                   >
                     {done ? (
@@ -120,10 +120,10 @@ export default function OnboardingPage() {
                   <span
                     className={`text-xs font-medium ${
                       active
-                        ? 'text-blue-600'
+                        ? 'text-primary'
                         : done
-                          ? 'text-slate-600'
-                          : 'text-slate-400'
+                          ? 'text-foreground'
+                          : 'text-muted-foreground'
                     }`}
                   >
                     {s.label}
@@ -132,7 +132,7 @@ export default function OnboardingPage() {
                 {idx < STEPS.length - 1 && (
                   <div
                     className={`mx-2 mb-5 h-px w-12 transition-colors ${
-                      step > s.id ? 'bg-blue-600' : 'bg-slate-200'
+                      step > s.id ? 'bg-primary' : 'bg-border'
                     }`}
                   />
                 )}
@@ -141,14 +141,14 @@ export default function OnboardingPage() {
           })}
         </div>
 
-        <Card className="shadow-xl shadow-slate-200/60">
+        <Card className="shadow-xl shadow-border/60">
           <CardHeader className="pb-4">
             <CardTitle className="text-xl">{titles[step]}</CardTitle>
             <CardDescription>{descriptions[step]}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {error && (
-              <div className="flex items-start gap-2.5 rounded-lg border border-red-200 bg-red-50 px-3 py-2.5 text-sm text-red-700">
+              <div className="flex items-start gap-2.5 rounded-lg border border-danger bg-danger-subtle px-3 py-2.5 text-sm text-danger-bold">
                 <AlertCircle
                   className="mt-0.5 h-4 w-4 shrink-0"
                   aria-hidden="true"
@@ -216,7 +216,7 @@ export default function OnboardingPage() {
             )}
 
             {step === 3 && (
-              <div className="divide-y rounded-xl border border-slate-200 text-sm">
+              <div className="divide-y rounded-xl border border-border text-sm">
                 {[
                   { label: 'Your name', value: name, icon: User },
                   { label: 'Organization', value: orgName, icon: Building2 },
@@ -226,11 +226,11 @@ export default function OnboardingPage() {
                     key={label}
                     className="flex items-center justify-between px-4 py-3"
                   >
-                    <span className="flex items-center gap-2 text-slate-500">
+                    <span className="flex items-center gap-2 text-muted-foreground">
                       <Icon className="h-3.5 w-3.5" aria-hidden="true" />
                       {label}
                     </span>
-                    <span className="font-medium text-slate-900">{value}</span>
+                    <span className="font-medium text-foreground">{value}</span>
                   </div>
                 ))}
               </div>

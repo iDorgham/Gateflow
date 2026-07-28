@@ -15,22 +15,22 @@ const QRDetailDrawer = dynamic(
 const STATUS_BADGE: Record<string, { className?: string }> = {
   ACTIVE: {
     className:
-      'bg-[var(--ds-background-success-subtle,#E3FCEF)] text-[var(--ds-text-success,#006644)]',
+      'bg-[var(--ds-background-success-subtle)] text-[var(--ds-text-success)]',
   },
   INACTIVE: {
     className:
-      'bg-[var(--ds-background-neutral-subtle,#F4F5F7)] text-[var(--ds-text-subtle,#42526E)]',
+      'bg-[var(--ds-background-neutral-subtle)] text-[var(--ds-text-subtle)]',
   },
   EXPIRED: {
     className:
-      'bg-[var(--ds-background-warning-subtle,#FFF0B3)] text-[var(--ds-text-warning-inverse,#172B4D)]',
+      'bg-[var(--ds-background-warning-subtle)] text-[var(--ds-text-warning-inverse)]',
   },
   MAX_USES_REACHED: {
     className: 'bg-primary/10 text-primary border border-primary/20',
   },
   REVOKED: {
     className:
-      'bg-[var(--ds-background-danger-subtle,#FFEBE6)] text-[var(--ds-text-danger,#BF2600)]',
+      'bg-[var(--ds-background-danger-subtle)] text-[var(--ds-text-danger)]',
   },
 };
 
@@ -92,7 +92,7 @@ export function QRCodesTable({
                 {display}
               </Link>
               <div className="flex items-center gap-1.5 mt-0.5">
-                <span className="text-[10px] font-black text-[var(--ds-text-subtle,#6B778C)] uppercase tracking-widest opacity-60">
+                <span className="text-[10px] font-black text-[var(--ds-text-subtle)] uppercase tracking-widest opacity-60">
                   {t(`qrcodes.types.${item.type}`, item.type)}
                 </span>
               </div>
@@ -106,11 +106,11 @@ export function QRCodesTable({
         isSortable: true,
         render: (item) => (
           <div className="flex flex-col">
-            <span className="text-[13px] font-black text-[var(--ds-text,#172B4D)] truncate max-w-[150px]">
+            <span className="text-[13px] font-black text-[var(--ds-text)] truncate max-w-[150px]">
               {item.guestName ?? '—'}
             </span>
             {item.guestEmail && (
-              <span className="text-[10px] font-bold text-[var(--ds-text-subtle,#6B778C)] lowercase opacity-70 truncate max-w-[150px]">
+              <span className="text-[10px] font-bold text-[var(--ds-text-subtle)] lowercase opacity-70 truncate max-w-[150px]">
                 {item.guestEmail}
               </span>
             )}
@@ -127,7 +127,7 @@ export function QRCodesTable({
               {item.projectName}
             </span>
           ) : (
-            <span className="text-[var(--ds-text-subtle,#6B778C)]">—</span>
+            <span className="text-[var(--ds-text-subtle)]">—</span>
           ),
       },
       {
@@ -149,8 +149,8 @@ export function QRCodesTable({
                   className={cn(
                     'h-1.5 w-1.5 rounded-full',
                     status === 'ACTIVE'
-                      ? 'bg-[var(--ds-icon-success,#00875A)] animate-pulse'
-                      : 'bg-[var(--ds-icon-subtle,#6B778C)]'
+                      ? 'bg-[var(--ds-icon-success)] animate-pulse'
+                      : 'bg-[var(--ds-icon-subtle)]'
                   )}
                 />
                 {STATUS_LABEL[status] ?? status}
@@ -165,7 +165,7 @@ export function QRCodesTable({
         isSortable: true,
         render: (item) => (
           <div className="flex flex-col tabular-nums">
-            <span className="text-[13px] font-semibold text-[var(--ds-text,#172B4D)]">
+            <span className="text-[13px] font-semibold text-[var(--ds-text)]">
               {new Date(item.createdAt).toLocaleDateString(locale, {
                 month: 'short',
                 day: 'numeric',
@@ -182,7 +182,7 @@ export function QRCodesTable({
         align: 'right',
         render: (item) => (
           <div className="flex items-center justify-end gap-2 tabular-nums">
-            <span className="inline-flex items-center justify-center h-6 min-w-[24px] rounded-md bg-[var(--ds-background-neutral-subtle,#F4F5F7)] px-1.5 text-[11px] font-black text-[var(--ds-text,#172B4D)] shadow-inner">
+            <span className="inline-flex items-center justify-center h-6 min-w-[24px] rounded-md bg-[var(--ds-background-neutral-subtle)] px-1.5 text-[11px] font-black text-[var(--ds-text)] shadow-inner">
               {item.scansCount}
             </span>
           </div>
@@ -194,13 +194,13 @@ export function QRCodesTable({
 
   if (error) {
     return (
-      <div className="rounded-2xl border border-[var(--ds-border-danger,#FF5630)] bg-[var(--ds-background-danger-subtle,#FFEBE6)] p-8 text-center animate-in zoom-in duration-300">
-        <p className="text-sm font-black text-[var(--ds-text-danger,#DE350B)] uppercase tracking-widest">
+      <div className="rounded-2xl border border-[var(--ds-border-danger)] bg-[var(--ds-background-danger-subtle)] p-8 text-center animate-in zoom-in duration-300">
+        <p className="text-sm font-black text-[var(--ds-text-danger)] uppercase tracking-widest">
           {error.message}
         </p>
         <button
           onClick={onRefresh}
-          className="mt-6 inline-flex items-center gap-2 rounded-lg bg-background px-4 py-2 text-sm font-bold text-[var(--ds-text-danger,#DE350B)] shadow-sm hover:bg-[#F4F5F7]"
+          className="mt-6 inline-flex items-center gap-2 rounded-lg bg-background px-4 py-2 text-sm font-bold text-[var(--ds-text-danger)] shadow-sm hover:bg-[var(--ds-background-neutral-subtle-hovered)]"
         >
           <RefreshCw className="h-4 w-4" />
           {t('common.retry', 'Retry Operation')}
@@ -211,7 +211,7 @@ export function QRCodesTable({
 
   return (
     <>
-      <div className="bg-[var(--ds-background-default,#FFFFFF)] rounded-2xl border border-[var(--ds-border,#DFE1E6)] overflow-hidden shadow-sm transition-all duration-300">
+      <div className="bg-[var(--ds-background-default)] rounded-2xl border border-[var(--ds-border)] overflow-hidden shadow-sm transition-all duration-300">
         <DynamicTable
           columns={columns}
           items={data}

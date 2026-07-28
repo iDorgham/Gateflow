@@ -142,7 +142,7 @@ export function IntegrationCards({
       title: 'Google Tag Manager',
       description:
         'Fire marketing events and conversion tracking tags via GTM containers.',
-      icon: <BarChart3 className="h-5 w-5 text-blue-500" />,
+      icon: <BarChart3 className="h-5 w-5 text-info" />,
       fieldKey: 'gtmId',
       placeholder: 'GTM-XXXXXXX',
     },
@@ -150,7 +150,7 @@ export function IntegrationCards({
       title: 'Google Analytics',
       description:
         'Track user engagement and scan events in your GA4 property.',
-      icon: <BarChart3 className="h-5 w-5 text-orange-500" />,
+      icon: <BarChart3 className="h-5 w-5 text-warning" />,
       fieldKey: 'googleAnalyticsId',
       placeholder: 'G-XXXXXXXXXX',
     },
@@ -158,7 +158,7 @@ export function IntegrationCards({
       title: 'HubSpot CRM',
       description:
         'Sync visitor and contact data with your HubSpot marketing portal.',
-      icon: <MessageSquare className="h-5 w-5 text-orange-600" />,
+      icon: <MessageSquare className="h-5 w-5 text-warning" />,
       fieldKey: 'hubspotPortalId',
       placeholder: '12345678',
     },
@@ -166,7 +166,7 @@ export function IntegrationCards({
       title: 'Meta Pixel',
       description:
         'Track conversions and retarget visitors via Facebook/Instagram ads.',
-      icon: <Share2 className="h-5 w-5 text-blue-600" />,
+      icon: <Share2 className="h-5 w-5 text-info" />,
       fieldKey: 'facebookPixelId',
       placeholder: '1234567890123456',
     },

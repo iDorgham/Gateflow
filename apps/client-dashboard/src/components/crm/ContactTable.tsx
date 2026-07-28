@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
-import { AdvancedTable, Button, Badge, cn } from '@gateflow/ui';
+import { AdvancedTable, Button, Badge, cn, EmptyState } from '@gateflow/ui';
 import { useDataTable } from '@/hooks/use-data-table';
 import { useUserPreferences } from '@/lib/residents/use-user-preferences';
 import {
@@ -301,7 +301,7 @@ export function ContactTable({
                 variant="secondary"
                 className={cn(
                   'text-[10px] font-bold border-none',
-                  'bg-[var(--ds-background-selected,#DEEBFF)] text-[var(--ds-text-selected,#0052CC)]'
+                  'bg-[var(--ds-background-selected)] text-[var(--ds-text-selected)]'
                 )}
               >
                 {u.name}
@@ -389,6 +389,17 @@ export function ContactTable({
         density={density}
         onDensityChange={handleDensityChange}
         activeView={activeView}
+        emptyState={
+          <EmptyState
+            icon={UserPlus}
+            title={t('crm.contacts.emptyTitle', 'No contacts yet')}
+            description={t(
+              'crm.contacts.emptyDescription',
+              'Add your first contact to start managing residents.'
+            )}
+            className="min-h-[240px]"
+          />
+        }
         bulkActions={
           <Button
             variant="destructive"

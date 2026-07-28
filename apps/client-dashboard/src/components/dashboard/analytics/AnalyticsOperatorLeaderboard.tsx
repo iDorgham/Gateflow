@@ -90,7 +90,7 @@ export function AnalyticsOperatorLeaderboard({
                 className="flex items-center justify-between rounded-md px-2 py-1.5 hover:bg-muted"
               >
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-medium text-slate-400 w-5">
+                  <span className="text-xs font-medium text-muted-foreground w-5">
                     {i + 1}.
                   </span>
                   <span className="text-sm font-medium">

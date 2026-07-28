@@ -1,13 +1,6 @@
 import { requireAuth } from '@/lib/dashboard-auth';
 import { prisma } from '@gate-access/db';
 import { ProjectTable } from '@/components/settings/projects/project-table';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@gateflow/ui';
 
 export default async function ProjectsSettings() {
   const { org } = await requireAuth();
@@ -35,21 +28,9 @@ export default async function ProjectsSettings() {
 
   return (
     <div className="space-y-6">
-      <Card className="border-none shadow-none bg-transparent">
-        <CardHeader className="px-0 pt-0">
-          <CardTitle className="text-xl font-black uppercase tracking-tight">
-            Project Management
-          </CardTitle>
-          <CardDescription>
-            Manage logical grouping of resources and physical access points.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="px-0">
-          <ProjectTable projects={projects} />
-        </CardContent>
-      </Card>
+      <ProjectTable projects={projects} />
 
-      <div className="p-4 rounded-xl border border-amber-500/20 bg-amber-500/5 text-amber-500/80 text-xs">
+      <div className="p-4 rounded-xl border border-warning/20 bg-warning/5 text-warning/80 text-xs">
         <p className="font-bold uppercase tracking-widest mb-1">Information</p>
         <p>
           Resource mapping enables organization isolation. Any gate or unit not

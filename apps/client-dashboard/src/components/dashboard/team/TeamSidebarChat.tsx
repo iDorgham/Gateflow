@@ -117,16 +117,16 @@ export function TeamSidebarChat({
   const isRtl = locale === 'ar-EG' || locale === 'ar-SA';
 
   const Content = (
-    <div className="flex h-full flex-col overflow-hidden bg-[var(--ds-surface-sunken,#18191a)]">
+    <div className="flex h-full flex-col overflow-hidden bg-[var(--ds-surface-sunken)]">
       {/* Header (mini) for pure mode if needed, or hide */}
       {!pure && (
-        <div className="flex items-center justify-between border-b border-[var(--ds-border)] px-4 py-3 bg-[var(--ds-surface-overlay,#1f1f21)]">
+        <div className="flex items-center justify-between border-b border-[var(--ds-border)] px-4 py-3 bg-[var(--ds-surface-overlay)]">
           <div className="flex items-center gap-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-[var(--ds-background-brand-bold)] text-white">
               <MessageSquare className="h-4 w-4" />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-[var(--ds-text,#FAFAFA)]">
+              <h3 className="text-sm font-bold text-[var(--ds-text)]">
                 {t('team.chat.title', 'Team Chat')}
               </h3>
               <div className="flex items-center gap-1.5 text-[10px] text-[var(--ds-text-subtle)]">
@@ -141,7 +141,7 @@ export function TeamSidebarChat({
             <Button
               variant="ghost"
               size="icon"
-              className="h-8 w-8 text-[var(--ds-icon-subtle,#A1A1AA)] hover:bg-white/10"
+              className="h-8 w-8 text-[var(--ds-icon-subtle)] hover:bg-[var(--ds-background-neutral-subtle-hovered)]"
               onClick={() => refetchMessages()}
               disabled={loadingMessages}
             >
@@ -152,7 +152,7 @@ export function TeamSidebarChat({
             <Button
               variant="ghost"
               size="icon"
-              className="h-8 w-8 text-[var(--ds-icon-subtle,#A1A1AA)] hover:bg-white/10"
+              className="h-8 w-8 text-[var(--ds-icon-subtle)] hover:bg-[var(--ds-background-neutral-subtle-hovered)]"
               onClick={onClose}
             >
               <X className="h-4 w-4" />
@@ -170,7 +170,7 @@ export function TeamSidebarChat({
             </div>
           ) : messages.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-10 text-center">
-              <div className="mb-3 rounded-full bg-white/5 p-4">
+              <div className="mb-3 rounded-full bg-[var(--ds-background-neutral-subtle)] p-4">
                 <MessageSquare className="h-8 w-8 text-[var(--ds-text-subtle)]" />
               </div>
               <p className="text-sm font-medium text-[var(--ds-text-subtle)]">
@@ -206,7 +206,7 @@ export function TeamSidebarChat({
                         {msg.user.avatarUrl && (
                           <AvatarImage src={msg.user.avatarUrl} />
                         )}
-                        <AvatarFallback className="bg-white/10 text-[10px] text-white">
+                        <AvatarFallback className="bg-[var(--ds-background-neutral-subtle)] text-[10px] text-[var(--ds-text-subtle)]">
                           {msg.user.name.charAt(0)}
                         </AvatarFallback>
                       </Avatar>
@@ -227,8 +227,8 @@ export function TeamSidebarChat({
                       className={cn(
                         'rounded-2xl px-3 py-2 text-sm',
                         isOwn
-                          ? 'bg-[var(--ds-background-brand-bold,#ED4B00)] text-white rounded-br-none shadow-sm'
-                          : 'bg-[var(--ds-surface-overlay,#1f1f21)] text-[var(--ds-text,#FAFAFA)] rounded-bl-none border border-[var(--ds-border-bold,#27272A)]/20 shadow-sm'
+                          ? 'bg-[var(--ds-background-brand-bold)] text-white rounded-br-none shadow-sm'
+                          : 'bg-[var(--ds-surface-overlay)] text-[var(--ds-text)] rounded-bl-none border border-[var(--ds-border-bold)]/20 shadow-sm'
                       )}
                     >
                       {msg.content}
@@ -248,14 +248,14 @@ export function TeamSidebarChat({
       </ScrollArea>
 
       {/* Input Area */}
-      <div className="border-t border-[var(--ds-border)] p-4 bg-[var(--ds-surface-overlay,#1f1f21)]">
+      <div className="border-t border-[var(--ds-border)] p-4 bg-[var(--ds-surface-overlay)]">
         <div className="flex items-center gap-2">
           <Input
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
             placeholder={t('team.chat.placeholder', 'Type a message...')}
-            className="bg-[var(--ds-background-input,#18191a)] border-[var(--ds-border,#27272a)] text-[var(--ds-text,#FAFAFA)] placeholder:text-[var(--ds-text-subtlest)] focus:ring-[var(--ds-border-brand)]"
+            className="bg-[var(--ds-background-input)] border-[var(--ds-border)] text-[var(--ds-text)] placeholder:text-[var(--ds-text-subtlest)] focus:ring-[var(--ds-border-brand)]"
           />
           <Button
             size="icon"
@@ -295,7 +295,7 @@ export function TeamSidebarChat({
             exit={{ x: isRtl ? -400 : 400 }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
             className={cn(
-              'fixed inset-y-0 z-50 flex w-full flex-col border-[var(--ds-border)] bg-[var(--ds-surface-sunken,#18191a)] shadow-2xl lg:w-[380px]',
+              'fixed inset-y-0 z-50 flex w-full flex-col border-[var(--ds-border)] bg-[var(--ds-surface-sunken)] shadow-2xl lg:w-[380px]',
               isRtl ? 'left-0 border-r' : 'right-0 border-l'
             )}
           >

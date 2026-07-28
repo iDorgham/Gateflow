@@ -39,13 +39,13 @@ export function PlanCards({
             className={cn(
               'relative flex flex-col overflow-hidden rounded-2xl transition-all duration-300',
               isCurrent
-                ? 'border-blue-500 ring-2 ring-blue-500/20 shadow-lg scale-[1.02] z-10 bg-white dark:bg-slate-800'
-                : 'border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md hover:border-slate-300 dark:hover:border-slate-600 bg-white dark:bg-slate-800'
+                ? 'border-info ring-2 ring-info/20 shadow-lg scale-[1.02] z-10 bg-card'
+                : 'border-border shadow-sm hover:shadow-md hover:border-muted-foreground/30 bg-card'
             )}
           >
             {isCurrent && (
               <div className="absolute top-0 right-0">
-                <div className="bg-blue-500 text-white text-[10px] font-bold px-3 py-1 rounded-bl-lg shadow-sm">
+                <div className="bg-info text-primary-foreground text-[10px] font-bold px-3 py-1 rounded-bl-lg shadow-sm">
                   Active
                 </div>
               </div>
@@ -53,28 +53,28 @@ export function PlanCards({
 
             <CardHeader className="pb-5 pt-6">
               <div className="flex items-center justify-between mb-2">
-                <CardTitle className="text-sm font-bold tracking-wider uppercase text-slate-500">
+                <CardTitle className="text-sm font-bold tracking-wider uppercase text-muted-foreground">
                   {plan.name}
                 </CardTitle>
               </div>
               <div className="flex items-baseline gap-1">
-                <span className="text-4xl font-black text-slate-900 dark:text-white">
+                <span className="text-4xl font-black text-foreground">
                   {plan.price}
                 </span>
                 {plan.period && (
-                  <span className="text-xs font-medium text-slate-400">
+                  <span className="text-xs font-medium text-muted-foreground">
                     /{plan.period}
                   </span>
                 )}
               </div>
             </CardHeader>
             <CardContent className="flex-1 flex flex-col space-y-6 pt-0">
-              <ul className="space-y-3.5 text-sm text-slate-600 dark:text-slate-300 flex-1">
+              <ul className="space-y-3.5 text-sm text-muted-foreground flex-1">
                 {plan.features.map((f) => (
                   <li key={f} className="flex items-start gap-2.5">
-                    <div className="mt-0.5 rounded-full bg-green-100 dark:bg-green-900/30 p-0.5">
+                    <div className="mt-0.5 rounded-full bg-success-subtle p-0.5">
                       <Check
-                        className="h-3 w-3 text-green-600 font-bold"
+                        className="h-3 w-3 text-success-bold font-bold"
                         aria-hidden="true"
                       />
                     </div>
@@ -86,8 +86,8 @@ export function PlanCards({
                 className={cn(
                   'w-full rounded-xl font-bold transition-all',
                   isCurrent
-                    ? 'bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 text-blue-700 dark:text-blue-400 border-none'
-                    : 'bg-slate-900 dark:bg-slate-100 hover:bg-slate-800 dark:hover:bg-white text-white dark:text-slate-900'
+                    ? 'bg-info-subtle hover:bg-info-subtle/70 text-info-bold border-none'
+                    : 'bg-foreground hover:bg-foreground/90 text-background'
                 )}
                 variant={isCurrent ? 'outline' : 'default'}
                 disabled={isCurrent || !!loadingPlan}

@@ -62,14 +62,14 @@ export function AIReportRenderer({ config, isRtl }: AIReportRendererProps) {
   const typeLabel = reportType.toUpperCase();
 
   return (
-    <Card className="my-4 border-[var(--ds-border-discovery,#998DD9)]/30 bg-background/80 shadow-sm overflow-hidden group">
+    <Card className="my-4 border-[var(--ds-border-discovery)]/30 bg-background/80 shadow-sm overflow-hidden group">
       <CardContent className="p-4 flex items-center gap-4">
         <div
           className={cn(
             'h-12 w-12 rounded-lg flex items-center justify-center shrink-0 transition-colors',
             reportType === 'pdf'
-              ? 'bg-red-50 text-red-600 group-hover:bg-red-100'
-              : 'bg-green-50 text-green-600 group-hover:bg-green-100'
+              ? 'bg-danger-subtle text-danger-bold group-hover:bg-danger/20'
+              : 'bg-success-subtle text-success-bold group-hover:bg-success/20'
           )}
         >
           <Icon size={24} />
@@ -79,7 +79,7 @@ export function AIReportRenderer({ config, isRtl }: AIReportRendererProps) {
           <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-0.5">
             {typeLabel} {t('Report', 'تقرير')}
           </p>
-          <h4 className="text-sm font-medium text-[var(--ds-text,#172B4D)] truncate">
+          <h4 className="text-sm font-medium text-foreground truncate">
             {title}
           </h4>
           {params.dateFrom && (
@@ -92,7 +92,7 @@ export function AIReportRenderer({ config, isRtl }: AIReportRendererProps) {
         <Button
           size="sm"
           variant="outline"
-          className="shrink-0 gap-2 border-[var(--ds-border-discovery,#998DD9)]/40 hover:bg-[var(--ds-background-discovery-subtle,#EAE6FF)]/30"
+          className="shrink-0 gap-2 border-[var(--ds-border-discovery)]/40 hover:bg-[var(--ds-background-discovery-subtle)]/30"
           onClick={handleDownload}
           disabled={isDownloading}
         >

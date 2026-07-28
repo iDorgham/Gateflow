@@ -101,7 +101,7 @@ export function ProjectList({ projects }: ProjectListProps) {
             {/* Metrics Grid */}
             <div className="mt-6 grid grid-cols-2 gap-3">
               <div className="flex items-center gap-2 rounded-xl bg-muted/30 p-2.5 border border-border/50">
-                <div className="bg-blue-500/10 text-blue-500 p-1.5 rounded-lg shrink-0">
+                <div className="bg-info/10 text-info p-1.5 rounded-lg shrink-0">
                   <Users className="h-3.5 w-3.5" />
                 </div>
                 <div className="flex flex-col min-w-0">
@@ -114,7 +114,7 @@ export function ProjectList({ projects }: ProjectListProps) {
                 </div>
               </div>
               <div className="flex items-center gap-2 rounded-xl bg-muted/30 p-2.5 border border-border/50">
-                <div className="bg-indigo-500/10 text-indigo-500 p-1.5 rounded-lg shrink-0">
+                <div className="bg-[var(--gf-color-discovery)]/10 text-[var(--gf-color-discovery)] p-1.5 rounded-lg shrink-0">
                   <Building className="h-3.5 w-3.5" />
                 </div>
                 <div className="flex flex-col min-w-0">

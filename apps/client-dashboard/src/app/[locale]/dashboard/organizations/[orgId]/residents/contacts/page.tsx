@@ -26,6 +26,7 @@ import {
   AvatarImage,
   AvatarFallback,
   Textarea,
+  EmptyState,
 } from '@gateflow/ui';
 import { PageHeader } from '@gateflow/components';
 import { useTranslation } from 'react-i18next';
@@ -512,10 +513,10 @@ export default function ContactsPage() {
                 className={cn(
                   'px-1.5 py-0 text-[9px] font-black uppercase tracking-tighter border-none self-start',
                   c.invitationStatus === 'SENT'
-                    ? 'bg-emerald-500/10 text-emerald-600'
+                    ? 'bg-success/10 text-success-bold'
                     : c.invitationStatus === 'FAILED'
-                      ? 'bg-red-500/10 text-red-600'
-                      : 'bg-amber-500/10 text-amber-600'
+                      ? 'bg-danger/10 text-danger-bold'
+                      : 'bg-warning/10 text-warning-bold'
                 )}
               >
                 {c.invitationStatus}
@@ -952,7 +953,7 @@ export default function ContactsPage() {
           defaultValue: 'Contacts & Residents',
         })}
         subtitle={t(
-          `orgType.${terminology.orgLabel.split('.')[1]}.contactDescription`,
+          `orgType:${terminology.orgLabel.split(':')[1]?.split('.')[0]}.contactDescription`,
           {
             defaultValue: t(
               'contacts.description',
@@ -970,7 +971,7 @@ export default function ContactsPage() {
             <Button
               variant="outline"
               size="sm"
-              className="h-8 border-[var(--ds-border,#DFE1E6)] text-[var(--ds-text-subtle,#42526E)] font-semibold hover:bg-[var(--ds-background-neutral-subtle-hovered,#EBECF0)] rounded-[var(--ds-border-radius-100,#3px)] transition-all flex items-center gap-2 text-xs"
+              className="h-8 border-[var(--ds-border)] text-[var(--ds-text-subtle)] font-semibold hover:bg-[var(--ds-background-neutral-subtle-hovered)] rounded-[var(--ds-border-radius-100)] transition-all flex items-center gap-2 text-xs"
               asChild
             >
               <label className="cursor-pointer flex items-center">
@@ -988,7 +989,7 @@ export default function ContactsPage() {
               variant="outline"
               size="sm"
               onClick={exportCSV}
-              className="h-8 border-[var(--ds-border,#DFE1E6)] text-[var(--ds-text-subtle,#42526E)] font-semibold hover:bg-[var(--ds-background-neutral-subtle-hovered,#EBECF0)] rounded-[var(--ds-border-radius-100,#3px)] transition-all flex items-center gap-2 text-xs"
+              className="h-8 border-[var(--ds-border)] text-[var(--ds-text-subtle)] font-semibold hover:bg-[var(--ds-background-neutral-subtle-hovered)] rounded-[var(--ds-border-radius-100)] transition-all flex items-center gap-2 text-xs"
             >
               <Download className="h-3.5 w-3.5" />
               {t('common.export', 'Export')}
@@ -996,7 +997,7 @@ export default function ContactsPage() {
             <Button
               key="create"
               onClick={openCreate}
-              className="h-8 px-4 bg-[var(--ds-background-brand-bold,#0052CC)] hover:bg-[var(--ds-background-brand-bold-hovered,#004EBE)] text-[var(--ds-text-inverse,#FFFFFF)] font-semibold rounded-[var(--ds-border-radius-100,#3px)] transition-all flex items-center gap-2 text-xs"
+              className="h-8 px-4 bg-[var(--ds-background-brand-bold)] hover:bg-[var(--ds-background-brand-bold-hovered)] text-[var(--ds-text-inverse)] font-semibold rounded-[var(--ds-border-radius-100)] transition-all flex items-center gap-2 text-xs"
             >
               <Plus className="h-4 w-4" />
               {t('contacts.create', 'Create Resident')}
@@ -1017,13 +1018,13 @@ export default function ContactsPage() {
 
         {/* Bulk Actions Toolbar */}
         {selectedContactIds.length > 0 && (
-          <div className="flex items-center justify-between gap-4 p-3 bg-[var(--ds-background-neutral-subtle,#F4F5F7)] border-x border-t border-[var(--ds-border,#DFE1E6)] rounded-t-xl animate-in fade-in slide-in-from-top-2 duration-300">
+          <div className="flex items-center justify-between gap-4 p-3 bg-[var(--ds-background-neutral-subtle)] border-x border-t border-[var(--ds-border)] rounded-t-xl animate-in fade-in slide-in-from-top-2 duration-300">
             <div className="flex items-center gap-2">
-              <div className="flex items-center gap-2 px-3 py-1 bg-[var(--ds-background-default,#FFFFFF)] rounded-full border border-[var(--ds-border,#DFE1E6)] shadow-none">
-                <span className="text-[11px] font-black text-[var(--ds-text-subtle,#6B778C)] uppercase tracking-tight">
+              <div className="flex items-center gap-2 px-3 py-1 bg-[var(--ds-background-default)] rounded-full border border-[var(--ds-border)] shadow-none">
+                <span className="text-[11px] font-black text-[var(--ds-text-subtle)] uppercase tracking-tight">
                   {selectedContactIds.length} Selected
                 </span>
-                <div className="w-px h-3 bg-[var(--ds-border,#DFE1E6)] mx-1" />
+                <div className="w-px h-3 bg-[var(--ds-border)] mx-1" />
                 <Button
                   variant="ghost"
                   size="sm"
@@ -1036,7 +1037,7 @@ export default function ContactsPage() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  className="h-7 px-2.5 text-[var(--ds-text-danger,#BF2600)] hover:bg-[var(--ds-background-danger-subtle,#FFEBE6)] rounded-full text-[10px] font-bold"
+                  className="h-7 px-2.5 text-[var(--ds-text-danger)] hover:bg-[var(--ds-background-danger-subtle)] rounded-full text-[10px] font-bold"
                   onClick={() => setBulkDeleteConfirmOpen(true)}
                 >
                   <Trash2 className="h-3 w-3 mr-1.5" />
@@ -1048,7 +1049,7 @@ export default function ContactsPage() {
                 <NativeSelect
                   value={bulkTagId}
                   onChange={(e) => setBulkTagId(e.target.value)}
-                  className="h-7 w-[130px] text-[10px] border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-background-input,#F4F5F7)] focus:bg-[var(--ds-background-default,#FFFFFF)] font-semibold rounded-full"
+                  className="h-7 w-[130px] text-[10px] border-[var(--ds-border)] bg-[var(--ds-background-input)] focus:bg-[var(--ds-background-default)] font-semibold rounded-full"
                 >
                   <option value="">
                     {t('residents.selectTag', 'Apply Tag…')}
@@ -1082,10 +1083,10 @@ export default function ContactsPage() {
         )}
 
         {/* Data Table Container */}
-        <div className="bg-[var(--ds-background-default)] dark:bg-[var(--ds-background-default)] rounded-2xl border border-[var(--ds-border)] dark:border-[var(--ds-border)] overflow-hidden shadow-sm">
+        <div className="bg-[var(--ds-background-default)] rounded-2xl border border-[var(--ds-border)] overflow-hidden shadow-sm">
           <div className="overflow-x-auto min-h-[500px]">
             <Table>
-              <TableHeader className="bg-[var(--ds-background-neutral-subtle)] dark:bg-[var(--ds-background-neutral-subtle)]/20 border-b border-[var(--ds-border)] dark:border-[var(--ds-border)]">
+              <TableHeader className="bg-[var(--ds-background-neutral-subtle)]/20 border-b border-[var(--ds-border)]">
                 {contactsTable.getHeaderGroups().map((headerGroup) => (
                   <TableRow
                     key={headerGroup.id}
@@ -1097,7 +1098,7 @@ export default function ContactsPage() {
                         <TableHead
                           key={header.id}
                           className={cn(
-                            'px-6 text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtle)] text-[11px] font-black uppercase tracking-widest',
+                            'px-6 text-[var(--ds-text-subtle)] text-[11px] font-black uppercase tracking-widest',
                             (columnId === 'visitsInRange' ||
                               columnId === 'passesInRange' ||
                               columnId === 'lastVisitInRange' ||
@@ -1134,41 +1135,38 @@ export default function ContactsPage() {
                       colSpan={visibleColumns.length}
                       className="h-[400px] text-center"
                     >
-                      <div className="flex flex-col items-center justify-center gap-6 py-20 animate-in fade-in zoom-in duration-500">
-                        <div className="h-20 w-20 rounded-3xl bg-[var(--ds-background-neutral-subtle)] dark:bg-[var(--ds-background-neutral-subtle)] flex items-center justify-center shadow-inner">
-                          <Users className="h-10 w-10 text-[var(--ds-text-subtle)] opacity-20" />
-                        </div>
-                        <div className="space-y-2 max-w-sm">
-                          <h3 className="text-xl font-bold text-[var(--ds-text)] dark:text-[var(--ds-text-inverse)]">
-                            {t('residents.empty', 'No residents found')}
-                          </h3>
-                          <p className="text-sm text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtle)] leading-relaxed">
-                            {filters.search
-                              ? t(
-                                  'contacts.noMatch',
-                                  'Try adjusting your search filters or check your spelling.'
-                                )
-                              : t(
-                                  'contacts.emptyDesc',
-                                  'Start building your community database by adding your first resident profile.'
-                                )}
-                          </p>
-                        </div>
-                        <Button
-                          onClick={openCreate}
-                          className="bg-[var(--ds-background-brand-bold)] hover:bg-[var(--ds-background-brand-bold-hovered)] text-white font-bold h-10 px-6 rounded-xl shadow-lg shadow-[var(--ds-background-brand-bold)]/20 transition-all active:scale-95"
-                        >
-                          <Plus className="h-4 w-4 mr-2" />
-                          {t('contacts.create', 'Add Resident')}
-                        </Button>
-                      </div>
+                      <EmptyState
+                        icon={Users}
+                        title={t('residents.empty', 'No residents found')}
+                        description={
+                          filters.search
+                            ? t(
+                                'contacts.noMatch',
+                                'Try adjusting your search filters or check your spelling.'
+                              )
+                            : t(
+                                'contacts.emptyDesc',
+                                'Start building your community database by adding your first resident profile.'
+                              )
+                        }
+                        action={
+                          <Button
+                            onClick={openCreate}
+                            className="bg-[var(--ds-background-brand-bold)] hover:bg-[var(--ds-background-brand-bold-hovered)] text-white font-bold h-10 px-6 rounded-xl shadow-lg shadow-[var(--ds-background-brand-bold)]/20 transition-all active:scale-95"
+                          >
+                            <Plus className="h-4 w-4 mr-2" />
+                            {t('contacts.create', 'Add Resident')}
+                          </Button>
+                        }
+                        className="border-0 py-20"
+                      />
                     </TableCell>
                   </TableRow>
                 ) : (
                   contactsTable.getRowModel().rows.map((row) => (
                     <TableRow
                       key={row.id}
-                      className="hover:bg-[var(--ds-background-neutral-subtle)] dark:hover:bg-[var(--ds-background-neutral-subtle)]/10 transition-colors group h-16 border-b border-[var(--ds-border)] dark:border-[var(--ds-border)]"
+                      className="hover:bg-[var(--ds-background-neutral-subtle)] dark:hover:bg-[var(--ds-background-neutral-subtle)]/10 transition-colors group h-16 border-b border-[var(--ds-border)]"
                     >
                       {row
                         .getVisibleCells()
@@ -1186,9 +1184,9 @@ export default function ContactsPage() {
           </div>
 
           {/* Pagination Toolbar */}
-          <div className="px-6 py-4 bg-[var(--ds-background-neutral-subtle)] dark:bg-[var(--ds-background-neutral-subtle)]/10 flex items-center justify-between border-t border-[var(--ds-border)] dark:border-[var(--ds-border)]">
-            <div className="flex items-center gap-4 text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtle)] text-[11px] font-black uppercase tracking-widest">
-              <div className="flex items-center gap-2 px-3 py-1.5 bg-[var(--ds-background-default)] dark:bg-[var(--ds-background-default)] rounded-lg border border-[var(--ds-border)] dark:border-[var(--ds-border)] shadow-sm">
+          <div className="px-6 py-4 bg-[var(--ds-background-neutral-subtle)]/10 flex items-center justify-between border-t border-[var(--ds-border)]">
+            <div className="flex items-center gap-4 text-[var(--ds-text-subtle)] text-[11px] font-black uppercase tracking-widest">
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-[var(--ds-background-default)] rounded-lg border border-[var(--ds-border)] shadow-sm">
                 <span className="text-[var(--ds-text-brand)]">{page}</span>
                 <span className="opacity-30">/</span>
                 <span>{totalPages}</span>
@@ -1208,7 +1206,7 @@ export default function ContactsPage() {
               <Button
                 variant="outline"
                 size="sm"
-                className="h-9 px-4 border-[var(--ds-border)] dark:border-[var(--ds-border)] text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtle)] bg-[var(--ds-background-default)] dark:bg-[var(--ds-background-default)] font-bold rounded-lg shadow-sm disabled:opacity-30 transition-all active:scale-95"
+                className="h-9 px-4 border-[var(--ds-border)] text-[var(--ds-text-subtle)] bg-[var(--ds-background-default)] font-bold rounded-lg shadow-sm disabled:opacity-30 transition-all active:scale-95"
                 disabled={page <= 1 || isLoading}
                 onClick={() => updateFiltersAndUrl({ page: page - 1 })}
               >
@@ -1218,7 +1216,7 @@ export default function ContactsPage() {
               <Button
                 variant="outline"
                 size="sm"
-                className="h-9 px-4 border-[var(--ds-border)] dark:border-[var(--ds-border)] text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtle)] bg-[var(--ds-background-default)] dark:bg-[var(--ds-background-default)] font-bold rounded-lg shadow-sm disabled:opacity-30 transition-all active:scale-95"
+                className="h-9 px-4 border-[var(--ds-border)] text-[var(--ds-text-subtle)] bg-[var(--ds-background-default)] font-bold rounded-lg shadow-sm disabled:opacity-30 transition-all active:scale-95"
                 disabled={page >= totalPages || isLoading}
                 onClick={() => updateFiltersAndUrl({ page: page + 1 })}
               >
@@ -1397,7 +1395,7 @@ export default function ContactsPage() {
             {/* Work & Source Section */}
             <section className="space-y-6">
               <div className="flex items-center gap-2 border-b border-border pb-2">
-                <div className="h-4 w-1 bg-blue-500 rounded-full" />
+                <div className="h-4 w-1 bg-info rounded-full" />
                 <h3 className="text-sm font-black uppercase tracking-widest text-foreground/70">
                   {t('contacts.form.professional', 'Work & Source')}
                 </h3>
@@ -1488,7 +1486,7 @@ export default function ContactsPage() {
             {/* Units & Tags Section */}
             <section className="space-y-6">
               <div className="flex items-center gap-2 border-b border-border pb-2">
-                <div className="h-4 w-1 bg-emerald-500 rounded-full" />
+                <div className="h-4 w-1 bg-success rounded-full" />
                 <h3 className="text-sm font-black uppercase tracking-widest text-foreground/70">
                   {t('contacts.form.groups', 'Units & Assets')}
                 </h3>
@@ -1564,7 +1562,7 @@ export default function ContactsPage() {
             {/* Notes Section */}
             <section className="space-y-4 pb-4">
               <div className="flex items-center gap-2 border-b border-border pb-2">
-                <div className="h-4 w-1 bg-amber-500 rounded-full" />
+                <div className="h-4 w-1 bg-warning rounded-full" />
                 <h3 className="text-sm font-black uppercase tracking-widest text-foreground/70">
                   {t('contacts.form.extra', 'Notes & Narrative')}
                 </h3>
@@ -1777,8 +1775,8 @@ export default function ContactsPage() {
                     });
                   }}
                 >
-                  <div className="h-10 w-10 rounded-full bg-emerald-500/10 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <MessageCircle className="h-5 w-5 text-emerald-600" />
+                  <div className="h-10 w-10 rounded-full bg-success/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <MessageCircle className="h-5 w-5 text-success-bold" />
                   </div>
                   <span className="text-sm font-bold">
                     {t('crm.invitations.whatsapp', 'WhatsApp')}
@@ -1824,8 +1822,8 @@ export default function ContactsPage() {
                     });
                   }}
                 >
-                  <div className="h-10 w-10 rounded-full bg-blue-500/10 flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Smartphone className="h-5 w-5 text-blue-600" />
+                  <div className="h-10 w-10 rounded-full bg-info/10 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <Smartphone className="h-5 w-5 text-info-bold" />
                   </div>
                   <span className="text-sm font-bold">
                     {t('crm.invitations.sms', 'SMS Text')}

@@ -95,10 +95,10 @@ export function QRCodeActions({
         onClick={copy}
         aria-label="Copy QR code string"
         title="Copy QR string"
-        className="gap-1.5 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200"
+        className="gap-1.5 text-muted-foreground hover:text-foreground"
       >
         {copied ? (
-          <Check className="h-3.5 w-3.5 text-green-600" aria-hidden="true" />
+          <Check className="h-3.5 w-3.5 text-success-bold" aria-hidden="true" />
         ) : (
           <Copy className="h-3.5 w-3.5" aria-hidden="true" />
         )}
@@ -117,8 +117,8 @@ export function QRCodeActions({
         title={isActive ? 'Deactivate' : 'Activate'}
         className={
           isActive
-            ? 'text-slate-500 hover:text-amber-700'
-            : 'text-slate-500 hover:text-green-700'
+            ? 'text-muted-foreground hover:text-warning-bold'
+            : 'text-muted-foreground hover:text-success-bold'
         }
       >
         {isActive ? (
@@ -139,7 +139,7 @@ export function QRCodeActions({
         disabled={isPending || !canManage}
         aria-label="Delete QR code"
         title="Delete"
-        className="text-slate-500 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600"
+        className="text-muted-foreground hover:bg-danger-subtle hover:text-danger-bold"
       >
         <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
         <span className="sr-only sm:not-sr-only ml-1.5">Delete</span>

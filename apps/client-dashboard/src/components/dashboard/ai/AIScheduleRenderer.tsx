@@ -29,20 +29,20 @@ export function AIScheduleRenderer({ config, isRtl }: AIScheduleRendererProps) {
   };
 
   return (
-    <Card className="my-4 border-[var(--ds-border-discovery,#998DD9)]/30 bg-[var(--ds-background-discovery-subtle,#EAE6FF)]/10 shadow-sm overflow-hidden">
+    <Card className="my-4 border-[var(--ds-border-discovery)]/30 bg-[var(--ds-background-discovery-subtle)]/10 shadow-sm overflow-hidden">
       <CardContent className="p-4 flex items-center gap-4">
-        <div className="h-12 w-12 rounded-lg bg-[var(--ds-background-discovery-bold,#5E4DB2)] text-white flex items-center justify-center shrink-0">
+        <div className="h-12 w-12 rounded-lg bg-[var(--ds-background-discovery-bold)] text-white flex items-center justify-center shrink-0">
           <CalendarClock size={24} />
         </div>
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-0.5">
-            <p className="text-xs font-semibold text-[var(--ds-text-discovery,#5E4DB2)] uppercase tracking-wider">
+            <p className="text-xs font-semibold text-[var(--ds-text-discovery)] uppercase tracking-wider">
               {t('Scheduled', 'مجدول')}
             </p>
-            <CheckCircle2 size={12} className="text-green-500" />
+            <CheckCircle2 size={12} className="text-success" />
           </div>
-          <h4 className="text-sm font-medium text-[var(--ds-text,#172B4D)] truncate">
+          <h4 className="text-sm font-medium text-[var(--ds-text)] truncate">
             {title}
           </h4>
           <div className="flex items-center gap-1.5 mt-1 text-[10px] text-muted-foreground">

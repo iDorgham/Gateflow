@@ -143,7 +143,7 @@ export function CanvasEditor() {
         )}
         {saveState === 'saved' && (
           <>
-            <CheckCircle2 size={14} className="text-green-500" />
+            <CheckCircle2 size={14} className="text-success" />
             Saved to cloud
           </>
         )}

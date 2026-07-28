@@ -113,7 +113,7 @@ export default function AiHubPage() {
         <Card className="bg-ds-surface overflow-hidden border-ds-border shadow-sm">
           <CardHeader className="pb-2">
             <CardTitle className="text-xs flex items-center gap-2 text-ds-text-subtle">
-              <ShieldCheck size={14} className="text-green-500" />
+              <ShieldCheck size={14} className="text-success" />
               Perimeter Health
             </CardTitle>
           </CardHeader>
@@ -174,15 +174,15 @@ export default function AiHubPage() {
             <CardContent className="p-4 pt-0 space-y-3">
               <div className="flex items-center justify-between text-[11px]">
                 <span className="text-ds-text-subtle">Prisma Pool</span>
-                <span className="font-mono text-green-500">Active (12/20)</span>
+                <span className="font-mono text-success">Active (12/20)</span>
               </div>
               <div className="flex items-center justify-between text-[11px]">
                 <span className="text-ds-text-subtle">Event Bus</span>
-                <span className="font-mono text-green-500">34.2 msg/s</span>
+                <span className="font-mono text-success">34.2 msg/s</span>
               </div>
               <div className="flex items-center justify-between text-[11px]">
                 <span className="text-ds-text-subtle">Hardware Latency</span>
-                <span className="font-mono text-orange-500">142ms</span>
+                <span className="font-mono text-warning">142ms</span>
               </div>
             </CardContent>
           </Card>
