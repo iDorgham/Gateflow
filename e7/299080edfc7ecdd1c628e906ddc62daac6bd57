@@ -1,0 +1,59 @@
+pnpm-lock.yaml
+  s_754aa0856fd65a::t_cb461e02350f7b 528,629,816,820,875,884,896,899,908,929,935,940-941,1000,1064,1068,8497,8500,11179,11219,15266,15280,15283,15361,15429,15440,15451,15503,15515,15575,15586-15591,15593-15594,15599,15602,15639,15643-15645,15649-15651,15660-15665,19932,19943-19944,21614,23435,23447
+.github/workflows/ci.yml
+  s_754aa0856fd65a::t_8c637b1eb06033 40,77,116,173,222,266
+.github/workflows/codeql-analysis.yml
+  s_754aa0856fd65a::t_32f56737e57572 45
+.github/workflows/db-migrate.yml
+  s_754aa0856fd65a::t_892d79c28e5f8c 48
+.github/workflows/deploy.yml
+  s_754aa0856fd65a::t_904f1aa972f630 82,150,191,229,291,353,415,477
+.github/workflows/lighthouse.yml
+  s_754aa0856fd65a::t_085863508f37b3 68,348
+.github/workflows/pr-labels.yml
+  s_754aa0856fd65a::t_b2561f235a8677 28,120
+.github/workflows/publish-gateflow.yml
+  s_754aa0856fd65a::t_134b516514182e 33
+.github/workflows/release.yml
+  s_754aa0856fd65a::t_3acec968644a5d 31
+.github/workflows/sync-ai-tools.yml
+  s_754aa0856fd65a::t_1feee44cade1ef 38
+apps/admin-dashboard/package.json
+  s_754aa0856fd65a::t_2fed951141f2f3 42,44-45
+apps/client-dashboard/package.json
+  s_754aa0856fd65a::t_bcb1b03ccf951b 57,62-63
+apps/design-system/package.json
+  s_754aa0856fd65a::t_c28919a2fb9537 13-16
+apps/marketing/package.json
+  s_754aa0856fd65a::t_0dd9abbfad8af4 29,33-34
+apps/resident-mobile/package.json
+  s_754aa0856fd65a::t_ffcbe524f87d08 32
+apps/resident-portal/package.json
+  s_754aa0856fd65a::t_0f0116e8c7a609 24-25,28-29
+apps/scanner-app/package.json
+  s_754aa0856fd65a::t_0e257d374dcf9c 37-38
+package.json
+  s_754aa0856fd65a::t_bd3098e1c65782 175-176
+packages/ai/package.json
+  s_754aa0856fd65a::t_636879bc743354 56-58
+packages/components/package.json
+  s_754aa0856fd65a::t_2aad29a9907e5b 53-56
+packages/ui/package.json
+  s_754aa0856fd65a::t_8834262aeba473 88-89
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "e7299080edfc7ecdd1c628e906ddc62daac6bd57",
+  "prompts": {},
+  "sessions": {
+    "s_754aa0856fd65a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "409b4b3b-54fa-4344-a354-ea767f7fcd82",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
