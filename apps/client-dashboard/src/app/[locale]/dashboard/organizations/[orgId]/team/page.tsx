@@ -31,8 +31,8 @@ export default function TeamPage(props: {
           </p>
         </div>
         <div className="mt-4 lg:mt-0">
-          <Button className="bg-[var(--ds-background-brand-bold)] hover:bg-[var(--ds-background-brand-bold-hovered)]">
-            <UserPlus className="mr-2 h-4 w-4" />
+          <Button variant="primary">
+            <UserPlus className="me-2 h-4 w-4" />
             {t('team.invite', 'Invite Member')}
           </Button>
         </div>

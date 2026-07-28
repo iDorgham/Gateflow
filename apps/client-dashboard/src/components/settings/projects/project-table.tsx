@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
+  EmptyState,
 } from '@gateflow/ui';
 import {
   MoreHorizontal,
@@ -83,37 +84,34 @@ export function ProjectTable({ projects }: ProjectTableProps) {
       </div>
 
       <div className="rounded-xl border border-border bg-card overflow-hidden">
-        <Table>
-          <TableHeader>
-            <TableRow className="bg-muted/50">
-              <TableHead>{t('projects.name', 'Project Name')}</TableHead>
-              <TableHead>{t('projects.mode', 'Gate Mode')}</TableHead>
-              <TableHead className="text-center">
-                {t('projects.stats.gates', 'Gates')}
-              </TableHead>
-              <TableHead className="text-center">
-                {t('projects.stats.units', 'Units')}
-              </TableHead>
-              <TableHead className="text-right">
-                {t('common.actions', 'Actions')}
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {projects.length === 0 ? (
-              <TableRow>
-                <TableCell
-                  colSpan={5}
-                  className="h-32 text-center text-muted-foreground italic"
-                >
-                  {t(
-                    'projects.empty',
-                    'No projects found. Create one to get started.'
-                  )}
-                </TableCell>
+        {projects.length === 0 ? (
+          <EmptyState
+            icon={Layers}
+            title={t(
+              'projects.empty',
+              'No projects found. Create one to get started.'
+            )}
+            className="min-h-[240px]"
+          />
+        ) : (
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-muted/50">
+                <TableHead>{t('projects.name', 'Project Name')}</TableHead>
+                <TableHead>{t('projects.mode', 'Gate Mode')}</TableHead>
+                <TableHead className="text-center">
+                  {t('projects.stats.gates', 'Gates')}
+                </TableHead>
+                <TableHead className="text-center">
+                  {t('projects.stats.units', 'Units')}
+                </TableHead>
+                <TableHead className="text-right">
+                  {t('common.actions', 'Actions')}
+                </TableHead>
               </TableRow>
-            ) : (
-              projects.map((project) => (
+            </TableHeader>
+            <TableBody>
+              {projects.map((project) => (
                 <TableRow
                   key={project.id}
                   className="group hover:bg-muted/30 transition-colors"
@@ -184,10 +182,10 @@ export function ProjectTable({ projects }: ProjectTableProps) {
                     </DropdownMenu>
                   </TableCell>
                 </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
+              ))}
+            </TableBody>
+          </Table>
+        )}
       </div>
     </div>
   );

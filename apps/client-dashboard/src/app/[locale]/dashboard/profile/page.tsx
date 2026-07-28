@@ -35,15 +35,6 @@ export default async function ProfilePage(props: {
 
   return (
     <div className="space-y-6 pb-20">
-      <div className="flex flex-col gap-1 border-b border-border pb-6">
-        <h1 className="text-2xl font-bold tracking-tight text-foreground uppercase">
-          Profile
-        </h1>
-        <p className="text-sm text-muted-foreground">
-          Your account and identity. For organization settings, use GateFlow
-          settings from the header menu.
-        </p>
-      </div>
       <ProfileTab
         user={{
           id: user.id,
