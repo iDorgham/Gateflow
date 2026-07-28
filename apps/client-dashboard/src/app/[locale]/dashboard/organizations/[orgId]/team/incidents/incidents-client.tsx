@@ -1,9 +1,10 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { Button } from '@gateflow/ui';
+import { Button, EmptyState } from '@gateflow/ui';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
+import { ShieldAlert } from 'lucide-react';
 
 interface Incident {
   id: string;
@@ -66,7 +67,7 @@ export function IncidentsClient() {
 
   if (loading && incidents.length === 0) {
     return (
-      <p className="text-sm text-slate-500">
+      <p className="text-sm text-muted-foreground">
         {t('incidents.loading', 'Loading…')}
       </p>
     );
@@ -75,7 +76,7 @@ export function IncidentsClient() {
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center gap-2">
-        <span className="text-sm text-slate-600 dark:text-slate-400">
+        <span className="text-sm text-muted-foreground">
           {t('incidents.filterByStatus', 'Status')}:
         </span>
         {['', 'UNDER_REVIEW', 'RESOLVED', 'ESCALATED'].map((s) => (
@@ -91,23 +92,27 @@ export function IncidentsClient() {
       </div>
 
       {incidents.length === 0 ? (
-        <p className="text-sm text-slate-500">
-          {t('incidents.empty', 'No incidents.')}
-        </p>
+        <EmptyState
+          icon={ShieldAlert}
+          title={t('incidents.empty', 'No incidents')}
+          className="min-h-[240px]"
+        />
       ) : (
-        <ul className="divide-y divide-slate-200 dark:divide-slate-700 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+        <ul className="divide-y divide-border rounded-lg border border-border bg-card">
           {incidents.map((i) => (
             <li key={i.id} className="px-4 py-3">
               <div className="flex flex-wrap items-start justify-between gap-2">
                 <div>
                   <span className="font-medium">{i.gate.name}</span>
-                  <span className="ml-2 text-xs text-slate-500">
+                  <span className="ml-2 text-xs text-muted-foreground">
                     {i.reason}
                   </span>
                   {i.user && (
-                    <p className="text-xs text-slate-400">{i.user.name}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {i.user.name}
+                    </p>
                   )}
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-muted-foreground">
                     {new Date(i.createdAt).toLocaleString()}
                   </p>
                 </div>
@@ -144,7 +149,7 @@ export function IncidentsClient() {
                   )}
                 </div>
               </div>
-              <span className="inline-block mt-1 text-xs px-2 py-0.5 rounded bg-slate-100 dark:bg-slate-700">
+              <span className="inline-block mt-1 text-xs px-2 py-0.5 rounded bg-muted">
                 {i.status}
               </span>
             </li>

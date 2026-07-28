@@ -48,16 +48,6 @@ export default async function APISettings() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-1">
-        <h1 className="text-xl font-black uppercase tracking-tight">
-          API & Webhooks
-        </h1>
-        <p className="text-sm text-muted-foreground">
-          Manage programmatic access keys and real-time event delivery
-          endpoints.
-        </p>
-      </div>
-
       <Tabs defaultValue="api-keys" className="space-y-6">
         <TabsList className="bg-muted/50 p-1 rounded-xl w-fit h-auto">
           <TabsTrigger

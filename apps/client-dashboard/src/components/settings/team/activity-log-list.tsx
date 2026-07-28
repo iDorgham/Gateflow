@@ -11,6 +11,7 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
+  EmptyState,
 } from '@gateflow/ui';
 import { formatDistanceToNow } from 'date-fns';
 import {
@@ -40,54 +41,49 @@ const ACTION_MAP: Record<
   REVOKE_INVITATION: {
     label: 'Revoked Invite',
     icon: Trash2,
-    color: 'text-orange-500 bg-orange-500/10',
+    color: 'text-warning bg-warning/10',
   },
   UPDATE_MEMBER_ROLE: {
     label: 'Updated Role',
     icon: Shield,
-    color: 'text-blue-500 bg-blue-500/10',
+    color: 'text-info bg-info/10',
   },
   REMOVE_MEMBER: {
     label: 'Removed Member',
     icon: Trash2,
-    color: 'text-red-500 bg-red-500/10',
+    color: 'text-danger bg-danger/10',
   },
   REVOKE_SESSIONS: {
     label: 'Force Logout',
     icon: RefreshCw,
-    color: 'text-purple-500 bg-purple-500/10',
+    color: 'text-[var(--gf-color-discovery)] bg-[var(--gf-color-discovery)]/10',
   },
   CREATE_ROLE: {
     label: 'Created Role',
     icon: Key,
-    color: 'text-emerald-500 bg-emerald-500/10',
+    color: 'text-success bg-success/10',
   },
   UPDATE_ROLE: {
     label: 'Updated Role Def',
     icon: Key,
-    color: 'text-blue-500 bg-blue-500/10',
+    color: 'text-info bg-info/10',
   },
   DELETE_ROLE: {
     label: 'Deleted Role',
     icon: Trash2,
-    color: 'text-red-500 bg-red-500/10',
+    color: 'text-danger bg-danger/10',
   },
 };
 
 export function ActivityLogList({ logs }: ActivityLogListProps) {
   if (logs.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-12 text-center border-2 border-dashed border-border rounded-2xl bg-muted/5">
-        <div className="h-12 w-12 rounded-full bg-muted/50 flex items-center justify-center mb-4">
-          <History className="h-6 w-6 text-muted-foreground" />
-        </div>
-        <h3 className="text-sm font-bold uppercase tracking-tight">
-          No activity recorded
-        </h3>
-        <p className="text-xs text-muted-foreground mt-1 max-w-[200px]">
-          Administrative actions will appear here once they occur.
-        </p>
-      </div>
+      <EmptyState
+        icon={History}
+        title="No activity recorded"
+        description="Administrative actions will appear here once they occur."
+        className="min-h-[240px]"
+      />
     );
   }
 
@@ -115,7 +111,7 @@ export function ActivityLogList({ logs }: ActivityLogListProps) {
             const action = ACTION_MAP[log.action] || {
               label: log.action,
               icon: FileText,
-              color: 'text-gray-500 bg-gray-500/10',
+              color: 'text-muted-foreground bg-muted',
             };
             const Icon = action.icon;
 

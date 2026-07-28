@@ -97,7 +97,7 @@ function Modal({
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="w-full max-w-md rounded-xl bg-white dark:bg-slate-800 shadow-2xl">
+      <div className="w-full max-w-md rounded-xl bg-card shadow-2xl">
         {children}
       </div>
     </div>
@@ -149,17 +149,17 @@ function AddGateModal({
   return (
     <Modal onClose={onClose}>
       <div className="p-6">
-        <h2 className="mb-1 text-lg font-semibold text-slate-900 dark:text-white">
+        <h2 className="mb-1 text-lg font-semibold text-foreground">
           {t('gates.modal.add.title', 'New Gate')}
         </h2>
-        <p className="mb-5 text-sm text-slate-500 dark:text-slate-400">
+        <p className="mb-5 text-sm text-muted-foreground">
           {t(
             'gates.modal.add.desc',
             'Configure a physical or logical access point for your organisation.'
           )}
         </p>
         {error && (
-          <div className="mb-4 flex items-start gap-2 rounded-lg border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/30 px-3 py-2.5 text-sm text-red-700 dark:text-red-400">
+          <div className="mb-4 flex items-start gap-2 rounded-lg border border-danger bg-danger-subtle px-3 py-2.5 text-sm text-danger-bold">
             <AlertTriangle
               className="mt-0.5 h-4 w-4 shrink-0"
               aria-hidden="true"
@@ -188,7 +188,7 @@ function AddGateModal({
               <Label htmlFor="add-location">
                 {t('gates.modal.fields.location', 'Location')}
               </Label>
-              <span className="text-xs text-slate-400">
+              <span className="text-xs text-muted-foreground">
                 {t('gates.modal.fields.optional', 'Optional')}
               </span>
             </div>
@@ -202,7 +202,7 @@ function AddGateModal({
               onChange={(e) => setLocation(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && submit()}
             />
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-muted-foreground">
               {t(
                 'gates.modal.fields.locationDesc',
                 'Used for context in scan logs — optional'
@@ -320,14 +320,14 @@ function EditGateModal({
   return (
     <Modal onClose={onClose}>
       <div className="p-6 max-h-[90vh] overflow-y-auto">
-        <h2 className="mb-1 text-lg font-semibold text-slate-900 dark:text-white">
+        <h2 className="mb-1 text-lg font-semibold text-foreground">
           {t('gates.modal.edit.title', 'Edit Gate')}
         </h2>
-        <p className="mb-5 text-sm text-slate-500 dark:text-slate-400">
+        <p className="mb-5 text-sm text-muted-foreground">
           {t('gates.modal.edit.desc', 'Update gate name or location.')}
         </p>
         {error && (
-          <div className="mb-4 flex items-start gap-2 rounded-lg border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/30 px-3 py-2.5 text-sm text-red-700 dark:text-red-400">
+          <div className="mb-4 flex items-start gap-2 rounded-lg border border-danger bg-danger-subtle px-3 py-2.5 text-sm text-danger-bold">
             <AlertTriangle
               className="mt-0.5 h-4 w-4 shrink-0"
               aria-hidden="true"
@@ -352,7 +352,7 @@ function EditGateModal({
               <Label htmlFor="edit-location">
                 {t('gates.modal.fields.location', 'Location')}
               </Label>
-              <span className="text-xs text-slate-400">
+              <span className="text-xs text-muted-foreground">
                 {t('gates.modal.fields.optional', 'Optional')}
               </span>
             </div>
@@ -367,7 +367,7 @@ function EditGateModal({
               onKeyDown={(e) => e.key === 'Enter' && submit()}
             />
           </div>
-          <div className="border-t border-slate-200 dark:border-slate-700 pt-4 space-y-3">
+          <div className="border-t border-border pt-4 space-y-3">
             <div className="flex items-center gap-2">
               <Checkbox
                 id="edit-location-enforced"
@@ -429,7 +429,7 @@ function EditGateModal({
               </div>
             )}
           </div>
-          <div className="border-t border-slate-200 dark:border-slate-700 pt-4 space-y-2">
+          <div className="border-t border-border pt-4 space-y-2">
             <Label htmlFor="edit-identity">
               {t('gates.modal.fields.identityLevel', 'Visitor identity level')}
             </Label>
@@ -461,7 +461,7 @@ function EditGateModal({
                 )}
               </option>
             </NativeSelect>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-muted-foreground">
               {t(
                 'gates.modal.fields.identityLevelHint',
                 'When Level 1+, scanner will prompt for ID capture after scan.'
@@ -518,23 +518,26 @@ function DeleteConfirmModal({
   return (
     <Modal onClose={onClose}>
       <div className="p-6">
-        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30">
-          <AlertTriangle className="h-6 w-6 text-red-600" aria-hidden="true" />
+        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-danger-subtle">
+          <AlertTriangle
+            className="h-6 w-6 text-danger-bold"
+            aria-hidden="true"
+          />
         </div>
-        <h2 className="mb-2 text-lg font-semibold text-slate-900 dark:text-white">
+        <h2 className="mb-2 text-lg font-semibold text-foreground">
           {t('gates.modal.delete.title', {
             name: gate.name,
             defaultValue: `Delete "${gate.name}"?`,
           })}
         </h2>
-        <p className="mb-2 text-sm text-slate-600 dark:text-slate-400">
+        <p className="mb-2 text-sm text-muted-foreground">
           {t(
             'gates.modal.delete.desc',
             'This gate will be soft-deleted and removed from the active list. All existing scan logs and QR codes linked to this gate will be preserved.'
           )}
         </p>
         {gate._count.qrCodes > 0 && (
-          <p className="mb-4 rounded-md border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/30 px-3 py-2 text-xs text-amber-700 dark:text-amber-400">
+          <p className="mb-4 rounded-md border border-warning bg-warning-subtle px-3 py-2 text-xs text-warning-bold">
             {t('gates.modal.delete.warning', {
               count: gate._count.qrCodes,
               defaultValue: `Warning: ${gate._count.qrCodes} QR code is still linked to this gate.`,
@@ -548,7 +551,7 @@ function DeleteConfirmModal({
           <Button
             onClick={confirm}
             disabled={isPending}
-            className="flex-1 bg-red-600 hover:bg-red-700 focus:ring-red-500"
+            className="flex-1 bg-destructive hover:bg-destructive/90 focus:ring-destructive"
           >
             {isPending
               ? t('gates.modal.actions.deleting', 'Deleting…')
@@ -612,7 +615,7 @@ function GateActionsMenu({
       <button
         onClick={() => setOpen((v) => !v)}
         disabled={isPending}
-        className="flex h-8 w-8 items-center justify-center rounded-md text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-700 dark:hover:text-slate-200 disabled:opacity-50"
+        className="flex h-8 w-8 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground disabled:opacity-50"
         aria-label={t('gates.menu.options', 'Gate options')}
         aria-expanded={open}
       >
@@ -620,13 +623,13 @@ function GateActionsMenu({
       </button>
 
       {open && (
-        <div className="absolute right-0 z-20 mt-1 w-40 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 py-1 shadow-lg">
+        <div className="absolute right-0 z-20 mt-1 w-40 rounded-lg border border-border bg-card py-1 shadow-lg">
           <button
             onClick={() => {
               close();
               onEdit(gate);
             }}
-            className="flex w-full items-center gap-2 px-3 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700"
+            className="flex w-full items-center gap-2 px-3 py-2 text-sm text-foreground hover:bg-muted"
           >
             <Pencil className="h-4 w-4" aria-hidden="true" />
             {t('gates.menu.edit', 'Edit details')}
@@ -635,8 +638,8 @@ function GateActionsMenu({
           <button
             onClick={toggle}
             disabled={isPending}
-            className={`flex w-full items-center gap-2 px-3 py-2 text-sm hover:bg-slate-50 dark:hover:bg-slate-700 ${
-              gate.isActive ? 'text-amber-600' : 'text-green-600'
+            className={`flex w-full items-center gap-2 px-3 py-2 text-sm hover:bg-muted ${
+              gate.isActive ? 'text-warning-bold' : 'text-success-bold'
             }`}
           >
             {gate.isActive ? (
@@ -652,14 +655,14 @@ function GateActionsMenu({
             )}
           </button>
 
-          <hr className="my-1 border-slate-100 dark:border-slate-700" />
+          <hr className="my-1 border-border" />
 
           <button
             onClick={() => {
               close();
               onDelete(gate);
             }}
-            className="flex w-full items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+            className="flex w-full items-center gap-2 px-3 py-2 text-sm text-danger-bold hover:bg-danger-subtle"
           >
             <Trash2 className="h-4 w-4" aria-hidden="true" />
             {t('gates.menu.delete', 'Delete')}
@@ -693,7 +696,7 @@ function GateCard({
       )}
     >
       {/* Glow Effect on Hover */}
-      <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 to-indigo-500/20 blur opacity-0 group-hover:opacity-100 transition duration-500" />
+      <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 to-[var(--gf-color-discovery)]/20 blur opacity-0 group-hover:opacity-100 transition duration-500" />
 
       {/* Card Body */}
       <div className="relative flex flex-col h-full bg-card z-10">
@@ -705,16 +708,14 @@ function GateCard({
                 <div className="relative flex h-2.5 w-2.5 shrink-0 items-center justify-center">
                   {gate.isActive && gate.isActiveToday ? (
                     <>
-                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                      <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success opacity-75" />
+                      <span className="relative inline-flex h-2 w-2 rounded-full bg-success shadow-[0_0_10px_rgba(22,163,74,0.5)]" />
                     </>
                   ) : (
                     <span
                       className={cn(
                         'inline-flex h-2 w-2 rounded-full',
-                        gate.isActive
-                          ? 'bg-emerald-500'
-                          : 'bg-slate-300 dark:bg-slate-700'
+                        gate.isActive ? 'bg-success' : 'bg-muted-foreground'
                       )}
                     />
                   )}
@@ -805,7 +806,7 @@ function GateCard({
             <div
               className={cn(
                 'h-1.5 w-1.5 rounded-full',
-                gate.isActive ? 'bg-emerald-500' : 'bg-muted-foreground'
+                gate.isActive ? 'bg-success' : 'bg-muted-foreground'
               )}
             />
             <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">
@@ -858,14 +859,14 @@ export function GatesList({
       {/* Toolbar */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-sm text-slate-500 dark:text-slate-400">
+          <p className="text-sm text-muted-foreground">
             {t('gates.activeTotal', {
               active: activeCount,
               total: gates.length,
               defaultValue: `${activeCount} active · ${gates.length} total`,
             })}
           </p>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-muted-foreground">
             {t('gates.lastRefreshed', {
               time: lastRefreshed.toLocaleTimeString([], {
                 hour: '2-digit',
@@ -884,14 +885,17 @@ export function GatesList({
 
       {/* Grid or empty state */}
       {gates.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 dark:border-slate-600 bg-slate-50 dark:bg-slate-800/50 py-16 text-center">
-          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100 dark:bg-slate-700">
-            <MapPin className="h-8 w-8 text-slate-400" aria-hidden="true" />
+        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border bg-muted/30 py-16 text-center">
+          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-muted">
+            <MapPin
+              className="h-8 w-8 text-muted-foreground"
+              aria-hidden="true"
+            />
           </div>
-          <p className="text-base font-semibold text-slate-700 dark:text-slate-300">
+          <p className="text-base font-semibold text-foreground">
             {t('gates.empty.title', 'No gates configured')}
           </p>
-          <p className="mt-1 text-sm text-slate-400">
+          <p className="mt-1 text-sm text-muted-foreground">
             {t(
               'gates.empty.desc',
               'Add your first gate to start controlling access.'
@@ -974,7 +978,7 @@ export function GateActions({
     <Button
       variant="ghost"
       size="sm"
-      className={isActive ? 'text-slate-500' : 'text-green-600'}
+      className={isActive ? 'text-muted-foreground' : 'text-success-bold'}
       onClick={toggle}
       disabled={isPending}
     >

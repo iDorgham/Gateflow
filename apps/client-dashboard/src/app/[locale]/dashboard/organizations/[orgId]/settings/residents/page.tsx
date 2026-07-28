@@ -5,7 +5,6 @@ import { UnitsOverview } from '@/components/settings/residents/units-overview';
 import { UnitTypeTable } from '@/components/settings/residents/unit-type-table';
 import { ResidentSettingsForm } from '@/components/settings/residents/resident-settings-form';
 import { LayoutGrid, ListTree, Cog } from 'lucide-react';
-import { getOrganizationFeatures, OrganizationType } from '@gate-access/types';
 import { getTranslation, Locale } from '@/lib/i18n';
 
 export default async function ResidentsSettings(props: {
@@ -17,7 +16,6 @@ export default async function ResidentsSettings(props: {
   if (!org) return null;
 
   const { t } = await getTranslation(locale, 'dashboard');
-  const features = getOrganizationFeatures(org.type as OrganizationType);
 
   const [units, limits] = await Promise.all([
     getUnitsWithStats(),
@@ -26,22 +24,6 @@ export default async function ResidentsSettings(props: {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-1">
-        <h1 className="text-xl font-black uppercase tracking-tight">
-          {t('settings.residents.title', {
-            orgName: org.name,
-            unitLabel: t(features.terminology.unitLabelPlural),
-            contactLabel: t(features.terminology.contactLabelPlural),
-          })}
-        </h1>
-        <p className="text-sm text-muted-foreground">
-          {t('settings.residents.description', {
-            unitLabel: t(features.terminology.unitLabel).toLowerCase(),
-            contactLabel: t(features.terminology.contactLabel).toLowerCase(),
-          })}
-        </p>
-      </div>
-
       <Tabs defaultValue="overview" className="space-y-6">
         <TabsList className="bg-muted/50 p-1 rounded-xl w-fit h-auto flex-wrap">
           <TabsTrigger

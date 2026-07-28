@@ -178,8 +178,8 @@ export function CampaignFirstScanLinkage({
         </div>
 
         {diagnostics && (
-          <div className="rounded-lg border border-amber-400/30 bg-amber-500/10 p-3">
-            <div className="mb-2 flex items-center gap-2 text-amber-700 dark:text-amber-300">
+          <div className="rounded-lg border border-warning/30 bg-warning/10 p-3">
+            <div className="mb-2 flex items-center gap-2 text-warning">
               <AlertTriangle className="h-4 w-4" />
               <span className="text-xs font-black uppercase tracking-wider">
                 {t(
@@ -188,7 +188,7 @@ export function CampaignFirstScanLinkage({
                 )}
               </span>
             </div>
-            <div className="grid gap-1 text-xs text-amber-800/90 dark:text-amber-200/90">
+            <div className="grid gap-1 text-xs text-warning/90">
               <p>
                 {t(
                   'analytics.qualifiedWithoutCampaign',

@@ -71,10 +71,11 @@ const PLAN_THEMES: Record<
     text: 'text-primary',
   },
   ENTERPRISE: {
-    badge: 'bg-indigo-500/10 text-indigo-500 border-indigo-500/20',
-    border: 'border-indigo-500/20',
-    bg: 'bg-indigo-500/5',
-    text: 'text-indigo-500',
+    badge:
+      'bg-[var(--gf-color-discovery)]/10 text-[var(--gf-color-discovery)] border-[var(--gf-color-discovery)]/20',
+    border: 'border-[var(--gf-color-discovery)]/20',
+    bg: 'bg-[var(--gf-color-discovery)]/5',
+    text: 'text-[var(--gf-color-discovery)]',
   },
 };
 

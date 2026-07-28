@@ -12,17 +12,11 @@ export default async function IntegrationsSettings() {
     select: { integrationConfig: true, domain: true },
   });
 
-  const integrationConfig = (orgRow?.integrationConfig ?? {}) as unknown as IntegrationConfig;
+  const integrationConfig = (orgRow?.integrationConfig ??
+    {}) as unknown as IntegrationConfig;
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-1">
-        <h1 className="text-xl font-black uppercase tracking-tight">Integrations</h1>
-        <p className="text-sm text-muted-foreground">
-          Connect third-party marketing platforms and configure your custom domain.
-        </p>
-      </div>
-
       <IntegrationCards
         initialConfig={integrationConfig}
         domain={orgRow?.domain ?? null}

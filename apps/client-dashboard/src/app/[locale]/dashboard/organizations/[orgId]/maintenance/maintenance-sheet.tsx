@@ -319,7 +319,7 @@ export const MaintenanceSheet = React.memo(
                 <Button
                   variant="outline"
                   size="sm"
-                  className="text-red-600 border-red-200"
+                  className="text-danger-bold border-danger"
                 >
                   {t('maintenance.actions.cancel', { ns: 'dashboard' })}
                 </Button>

@@ -3,6 +3,7 @@ import { prisma } from '@gate-access/db';
 import { redirect } from 'next/navigation';
 import { ProjectList } from '@/components/projects/ProjectList';
 import { Button } from '@gateflow/ui';
+import { PageHeader } from '@gateflow/components';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
 import { Locale } from '@/lib/i18n';
@@ -56,37 +57,31 @@ export default async function ProjectsPage(props: {
 
   return (
     <div className="space-y-10">
-      {/* Page Header */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-        <div className="flex flex-col gap-1">
-          <h1 className="text-3xl font-black text-foreground tracking-tight uppercase">
-            Projects Catalog
-          </h1>
-          <p className="text-sm font-medium text-muted-foreground/80">
-            Manage your real estate access points and resource categories.
-          </p>
-        </div>
-        <div className="flex items-center gap-3 w-full sm:w-auto">
-          <Button
-            asChild
-            variant="outline"
-            className="flex-1 sm:flex-none h-12 rounded-xl font-bold bg-background shadow-sm border-border/60 hover:border-primary/20"
-          >
-            <Link href={`/${locale}/dashboard/settings?tab=projects`}>
-              Project Settings
-            </Link>
-          </Button>
-          <Button
-            asChild
-            className="flex-1 sm:flex-none h-12 rounded-xl font-bold bg-primary text-primary-foreground shadow-md hover:shadow-primary/20 gap-2"
-          >
-            <Link href={`/${locale}/dashboard/settings?tab=projects&new=true`}>
-              <Plus className="h-4 w-4" />
-              New Project
-            </Link>
-          </Button>
-        </div>
-      </div>
+      <PageHeader
+        title="Projects Catalog"
+        subtitle="Manage your real estate access points and resource categories."
+        showHome={false}
+        className="mb-0"
+        actions={
+          <div className="flex items-center gap-3 w-full sm:w-auto">
+            <Button asChild variant="outline">
+              <Link
+                href={`/${locale}/dashboard/organizations/${claims.orgId}/settings/projects`}
+              >
+                Project Settings
+              </Link>
+            </Button>
+            <Button asChild className="gap-2">
+              <Link
+                href={`/${locale}/dashboard/organizations/${claims.orgId}/settings/projects`}
+              >
+                <Plus className="h-4 w-4" />
+                New Project
+              </Link>
+            </Button>
+          </div>
+        }
+      />
 
       {/* Grid of Command Centers */}
       <ProjectList projects={projectsWithCounts} />

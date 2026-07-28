@@ -127,12 +127,64 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // 2. Non-mutating methods — no CSRF risk
+  // 3. Redirect legacy dashboard routes to organizational scope
+  // Matches /[locale]/dashboard/[module] but NOT /[locale]/dashboard/organizations or onboarding/profile
+  const LEGACY_MODULES = [
+    'ai',
+    'ai-hub',
+    'analytics',
+    'emulation',
+    'gateai',
+    'gates',
+    'maintenance',
+    'projects',
+    'qrcodes',
+    'residents',
+    'scans',
+    'settings',
+    'team',
+    'workspace',
+  ];
+
+  const segments = pathWithoutLocale.split('/').filter(Boolean);
+  if (segments[0] === 'dashboard' && LEGACY_MODULES.includes(segments[1])) {
+    const authCookie = request.cookies.get(AUTH_COOKIE);
+    let orgId: string | undefined =
+      request.cookies.get('gf_active_org_id')?.value;
+
+    if (authCookie?.value) {
+      try {
+        const { payload } = await jwtVerify(authCookie.value, getJwtSecret(), {
+          issuer: 'gateflow',
+          audience: 'gateflow-api',
+        });
+        if (payload.orgId) {
+          orgId = payload.orgId as string;
+        }
+      } catch (e) {
+        // Token invalid or decode error, fall back to cookie orgId if available
+      }
+    }
+
+    if (orgId) {
+      const locale = pathnameHasLocale ? pathname.split('/')[1] : 'en';
+      const moduleSegment = segments[1];
+      const rest = segments.slice(2).join('/');
+      const newUrl = new URL(
+        `/${locale}/dashboard/organizations/${orgId}/${moduleSegment}${rest ? '/' + rest : ''}`,
+        request.url
+      );
+      newUrl.search = request.nextUrl.search;
+      return NextResponse.redirect(newUrl, 307);
+    }
+  }
+
+  // 4. Non-mutating methods — no CSRF risk
   if (!CSRF_PROTECTED_METHODS.includes(request.method)) {
     return NextResponse.next();
   }
 
-  // 3. Next.js Server Actions carry a same-origin origin check built-in
+  // 5. Next.js Server Actions carry a same-origin origin check built-in
   if (
     !effectivePath.startsWith('/api/') &&
     request.headers.has('next-action')
@@ -140,7 +192,7 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // 4. Bearer-token requests (scanner app, API clients) — CSRF exempt because
+  // 6. Bearer-token requests (scanner app, API clients) — CSRF exempt because
   //    cross-origin attackers cannot obtain or inject a Bearer token.
   if (/^Bearer\s+\S+$/i.test(request.headers.get('authorization') ?? '')) {
     return NextResponse.next();
@@ -151,13 +203,13 @@ export async function proxy(request: NextRequest) {
   const authCookie = request.cookies.get(AUTH_COOKIE);
   const csrfCookie = request.cookies.get(CSRF_COOKIE);
 
-  // 5. Not authenticated (no session cookie) — let the route handler return 401.
+  // 7. Not authenticated (no session cookie) — let the route handler return 401.
   //    CSRF middleware only enforces token validity; auth is enforced in route handlers.
   if (!authCookie) {
     return NextResponse.next();
   }
 
-  // 6. Prefer strict double-submit validation whenever the caller sends a token.
+  // 8. Prefer strict double-submit validation whenever the caller sends a token.
   const requestToken = request.headers.get(CSRF_HEADER);
   if (requestToken) {
     if (!csrfCookie || !timingSafeEqual(requestToken, csrfCookie.value)) {
@@ -186,55 +238,12 @@ export async function proxy(request: NextRequest) {
     }
   }
 
-  // 7. Never accept a CSRF cookie alone without a matching header or Origin.
+  // 9. Never accept a CSRF cookie alone without a matching header or Origin.
   if (!requestToken && csrfCookie && !request.headers.get('origin')) {
     return NextResponse.json(
       { success: false, message: 'CSRF token missing' },
       { status: 403 }
     );
-  }
-
-  // 9. Redirect legacy dashboard routes to organizational scope
-  // Matches /[locale]/dashboard/[module] but NOT /[locale]/dashboard/organizations or onboarding/profile
-  const LEGACY_MODULES = [
-    'ai',
-    'ai-hub',
-    'analytics',
-    'emulation',
-    'gateai',
-    'gates',
-    'maintenance',
-    'projects',
-    'qrcodes',
-    'residents',
-    'scans',
-    'settings',
-    'team',
-    'workspace',
-  ];
-
-  const segments = pathWithoutLocale.split('/').filter(Boolean);
-  if (segments[0] === 'dashboard' && LEGACY_MODULES.includes(segments[1])) {
-    try {
-      const { payload } = await jwtVerify(authCookie.value, getJwtSecret(), {
-        issuer: 'gateflow',
-        audience: 'gateflow-api',
-      });
-      const orgId = payload.orgId as string;
-      if (orgId) {
-        const locale = pathnameHasLocale ? pathname.split('/')[1] : 'en';
-        const moduleSegment = segments[1];
-        const rest = segments.slice(2).join('/');
-        const newUrl = new URL(
-          `/${locale}/dashboard/organizations/${orgId}/${moduleSegment}${rest ? '/' + rest : ''}`,
-          request.url
-        );
-        newUrl.search = request.nextUrl.search;
-        return NextResponse.redirect(newUrl, 301);
-      }
-    } catch (e) {
-      // Token invalid or no orgId, fall through
-    }
   }
 
   return NextResponse.next();

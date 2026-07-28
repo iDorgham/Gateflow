@@ -402,7 +402,7 @@ export function ProjectsTab({
                   <div className="flex flex-col xl:flex-row items-end justify-between gap-6">
                     <div className="flex flex-wrap items-center gap-3 w-full xl:w-auto">
                       <div className="flex items-center gap-3 bg-card border border-border rounded-xl p-3 px-4 shadow-sm group-hover:border-primary/20 transition-colors w-full sm:w-auto">
-                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-500">
+                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-success/10 text-success">
                           <ScrollText className="h-4 w-4" />
                         </div>
                         <div className="flex flex-col">
@@ -429,8 +429,8 @@ export function ProjectsTab({
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-3 bg-card border border-border rounded-xl p-3 px-4 shadow-sm group-hover:border-blue-500/20 transition-colors w-full sm:w-auto">
-                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-500/10 text-blue-500">
+                      <div className="flex items-center gap-3 bg-card border border-border rounded-xl p-3 px-4 shadow-sm group-hover:border-info/20 transition-colors w-full sm:w-auto">
+                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-info/10 text-info">
                           <Building className="h-4 w-4" />
                         </div>
                         <div className="flex flex-col">
@@ -448,8 +448,8 @@ export function ProjectsTab({
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-3 bg-card border border-border rounded-xl p-3 px-4 shadow-sm group-hover:border-orange-500/20 transition-colors w-full sm:w-auto">
-                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-orange-500/10 text-orange-500">
+                      <div className="flex items-center gap-3 bg-card border border-border rounded-xl p-3 px-4 shadow-sm group-hover:border-warning/20 transition-colors w-full sm:w-auto">
+                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-warning/10 text-warning">
                           <Users className="h-4 w-4" />
                         </div>
                         <div className="flex flex-col">

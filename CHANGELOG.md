@@ -10,6 +10,12 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Client-Dashboard]** add loading skeletons for routes that lacked one
+- **[Client-Dashboard]** show next billing date on the billing settings page
+- **[Client-Dashboard]** fix legacy dashboard route redirects
+- **[Ui]** register ds-* design tokens as real Tailwind utilities
+- **[Client-Dashboard]** polish header search input
+
 - **[Deps]** revert eslint and typescript bumps that broke shared-package lint
 
 - **[Deps]** bump @prisma/client to ^6.19.3 to match prisma CLI
@@ -64,6 +70,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 - **[DB]** clear production P3009 on `20260405135145_platform_evolution` (no-op migration + `db-migrate` workflow)
 
 ### AI Tools
+
+- **[I18n]** correct orgType translation namespace lookup syntax
 
 - **[Workflow v2]** add single-app pilot focus, evidence-based page scoring,
   deterministic local gates, specialist contracts, composable skills, and

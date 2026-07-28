@@ -142,11 +142,11 @@ export function UTMMatrix({ filters, className }: UTMMatrixProps) {
                 const cvr = row.conversionRate;
                 const cvrColor =
                   cvr > 25
-                    ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
+                    ? 'bg-success/10 text-success'
                     : cvr > 10
-                      ? 'bg-amber-500/10 text-amber-600 dark:text-amber-400'
+                      ? 'bg-warning/10 text-warning'
                       : cvr > 0
-                        ? 'bg-blue-500/10 text-blue-600 dark:text-blue-400'
+                        ? 'bg-info/10 text-info'
                         : 'bg-muted text-muted-foreground';
 
                 return (

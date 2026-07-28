@@ -11,6 +11,7 @@ import {
   TableRow,
   Button,
   Badge,
+  EmptyState,
 } from '@gateflow/ui';
 import { Trash2, Key, Clock } from 'lucide-react';
 import { toast } from 'sonner';
@@ -65,29 +66,27 @@ export function ApiKeyTable({ apiKeys: initial }: ApiKeyTableProps) {
       </div>
 
       <div className="rounded-xl border border-border bg-card overflow-hidden">
-        <Table>
-          <TableHeader>
-            <TableRow className="bg-muted/50">
-              <TableHead>Name</TableHead>
-              <TableHead>Prefix</TableHead>
-              <TableHead>Scopes</TableHead>
-              <TableHead>Last Used</TableHead>
-              <TableHead>Expires</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {keys.length === 0 ? (
-              <TableRow>
-                <TableCell
-                  colSpan={6}
-                  className="h-40 text-center text-muted-foreground italic"
-                >
-                  No API keys yet. Generate one to get started.
-                </TableCell>
+        {keys.length === 0 ? (
+          <EmptyState
+            icon={Key}
+            title="No API keys yet"
+            description="Generate one to get started."
+            className="min-h-[240px]"
+          />
+        ) : (
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-muted/50">
+                <TableHead>Name</TableHead>
+                <TableHead>Prefix</TableHead>
+                <TableHead>Scopes</TableHead>
+                <TableHead>Last Used</TableHead>
+                <TableHead>Expires</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
               </TableRow>
-            ) : (
-              keys.map((key) => (
+            </TableHeader>
+            <TableBody>
+              {keys.map((key) => (
                 <TableRow
                   key={key.id}
                   className="group hover:bg-muted/30 transition-colors"
@@ -153,10 +152,10 @@ export function ApiKeyTable({ apiKeys: initial }: ApiKeyTableProps) {
                     </Button>
                   </TableCell>
                 </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
+              ))}
+            </TableBody>
+          </Table>
+        )}
       </div>
     </div>
   );

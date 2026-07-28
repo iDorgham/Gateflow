@@ -130,7 +130,7 @@ export function ChatHistorySidebar({
                       <Palette size={12} /> Change Color
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem className="gap-2 text-xs text-red-600 focus:text-red-600">
+                    <DropdownMenuItem className="gap-2 text-xs text-destructive focus:text-destructive">
                       <Trash2 size={12} /> Delete
                     </DropdownMenuItem>
                   </DropdownMenuContent>
@@ -254,7 +254,7 @@ function ChatItem({
             <FolderInput size={12} /> Move to Folder
           </DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="gap-2 text-xs text-red-600 focus:text-red-600">
+          <DropdownMenuItem className="gap-2 text-xs text-destructive focus:text-destructive">
             <Trash2 size={12} /> Delete Chat
           </DropdownMenuItem>
         </DropdownMenuContent>

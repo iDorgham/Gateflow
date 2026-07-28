@@ -91,7 +91,7 @@ export function UnitTypeTable({ limits }: UnitTypeTableProps) {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-2 p-3 rounded-xl border border-blue-500/20 bg-blue-500/5 text-blue-600 dark:text-blue-400 text-xs">
+      <div className="flex items-center gap-2 p-3 rounded-xl border border-info/20 bg-info/5 text-info text-xs">
         <Info className="h-4 w-4 shrink-0" />
         <p>
           {t(

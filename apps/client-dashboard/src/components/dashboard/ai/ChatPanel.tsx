@@ -295,13 +295,13 @@ export function ChatPanel({
                   <div className="h-16 w-16 rounded-2xl bg-primary/10 flex items-center justify-center shadow-lg transform rotate-3 hover:rotate-0 transition-transform duration-300">
                     <Sparkles size={32} className="text-primary" />
                   </div>
-                  <h1 className="text-3xl font-bold tracking-tight text-[var(--ds-text,#172B4D)] dark:text-white">
+                  <h1 className="text-3xl font-bold tracking-tight text-[var(--ds-text)]">
                     {t(
                       'How can I help you today?',
                       'كيف يمكنني مساعدتك اليوم؟'
                     )}
                   </h1>
-                  <p className="text-base text-[var(--ds-text-subtle)] max-w-md leading-relaxed">
+                  <p className="text-base text-muted-foreground max-w-md leading-relaxed">
                     {t(
                       'I can help you analyze scans, generate reports, or automate your gate operations in seconds.',
                       'يمكنني مساعدتك في تحليل المسحات، إنشاء التقارير، أو أتمتة عمليات بواباتك في ثوانٍ.'
@@ -321,7 +321,7 @@ export function ChatPanel({
                       >
                         <item.icon size={18} />
                       </div>
-                      <span className="text-sm font-medium text-foreground dark:text-zinc-100 group-hover:text-primary transition-colors">
+                      <span className="text-sm font-medium text-foreground group-hover:text-primary transition-colors">
                         {t(item.label, item.label)}
                       </span>
                     </button>
@@ -351,7 +351,7 @@ export function ChatPanel({
                   <Avatar
                     className={cn(
                       'h-8 w-8 shrink-0',
-                      m.role === 'user' ? 'bg-zinc-700' : 'bg-secondary'
+                      m.role === 'user' ? 'bg-muted-foreground' : 'bg-secondary'
                     )}
                   >
                     <AvatarFallback className="text-white text-[10px]">
@@ -373,8 +373,8 @@ export function ChatPanel({
                                 className={cn(
                                   'rounded-2xl px-4 py-3 text-sm leading-relaxed relative',
                                   m.role === 'user'
-                                    ? 'bg-zinc-100 bg-secondary text-foreground dark:text-zinc-100 rounded-tr-none'
-                                    : 'bg-background bg-background text-foreground dark:text-zinc-100 border border-zinc-200 border-border shadow-sm rounded-tl-none whitespace-pre-wrap'
+                                    ? 'bg-secondary text-foreground rounded-tr-none'
+                                    : 'bg-background text-foreground border border-border shadow-sm rounded-tl-none whitespace-pre-wrap'
                                 )}
                               >
                                 {/* Legacy JSON-in-text fallback for assistant */}
@@ -557,7 +557,7 @@ export function ChatPanel({
                                       )}
                                       {state === 'output-error' &&
                                         errorText && (
-                                          <pre className="text-[10px] overflow-auto text-red-600 whitespace-pre-wrap">
+                                          <pre className="text-[10px] overflow-auto text-danger-bold whitespace-pre-wrap">
                                             {errorText}
                                           </pre>
                                         )}
@@ -610,8 +610,8 @@ export function ChatPanel({
                                 className={cn(
                                   'rounded-2xl px-4 py-3 text-sm leading-relaxed relative',
                                   m.role === 'user'
-                                    ? 'bg-zinc-100 bg-secondary text-foreground dark:text-zinc-100 rounded-tr-none'
-                                    : 'bg-background bg-background text-foreground dark:text-zinc-100 border border-zinc-200 border-border shadow-sm rounded-tl-none whitespace-pre-wrap'
+                                    ? 'bg-secondary text-foreground rounded-tr-none'
+                                    : 'bg-background text-foreground border border-border shadow-sm rounded-tl-none whitespace-pre-wrap'
                                 )}
                               >
                                 {part.content}
@@ -658,9 +658,9 @@ export function ChatPanel({
                           variant="ghost"
                           size="icon"
                           className={cn(
-                            'h-6 w-6 rounded-full hover:bg-[var(--ds-background-neutral-subtle,#DFE1E6)]',
+                            'h-6 w-6 rounded-full hover:bg-[var(--ds-background-neutral-subtle)]',
                             feedbackGiven[interactionId] === 'THUMBS_UP' &&
-                              'text-green-600 bg-green-50'
+                              'text-success-bold bg-success-subtle'
                           )}
                           onClick={() =>
                             handleFeedback(interactionIdx, 'THUMBS_UP')
@@ -673,9 +673,9 @@ export function ChatPanel({
                           variant="ghost"
                           size="icon"
                           className={cn(
-                            'h-6 w-6 rounded-full hover:bg-[var(--ds-background-neutral-subtle,#DFE1E6)]',
+                            'h-6 w-6 rounded-full hover:bg-[var(--ds-background-neutral-subtle)]',
                             feedbackGiven[interactionId] === 'THUMBS_DOWN' &&
-                              'text-red-600 bg-red-50'
+                              'text-danger-bold bg-danger-subtle'
                           )}
                           onClick={() =>
                             handleFeedback(interactionIdx, 'THUMBS_DOWN')
@@ -707,7 +707,7 @@ export function ChatPanel({
         </ScrollArea>
 
         {/* Input Area */}
-        <div className="p-6 m-4 border border-[var(--ds-border,#DFE1E6)]/30 border-border bg-secondary rounded-xl shadow-lg ring-1 ring-black/5 dark:ring-white/5">
+        <div className="p-6 m-4 border border-[var(--ds-border)]/30 border-border bg-secondary rounded-xl shadow-lg ring-1 ring-black/5 dark:ring-white/5">
           <form onSubmit={handleSubmit} className="flex flex-col gap-2">
             <div className="relative">
               <input
@@ -736,7 +736,7 @@ export function ChatPanel({
                         variant="ghost"
                         size="icon"
                         type="button"
-                        className="h-8 w-8 text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtle)] hover:bg-gray-100 dark:hover:bg-gray-800"
+                        className="h-8 w-8 text-muted-foreground hover:bg-muted"
                       >
                         <Mic size={16} />
                       </Button>
@@ -754,7 +754,7 @@ export function ChatPanel({
                         variant="ghost"
                         size="icon"
                         type="button"
-                        className="h-8 w-8 text-[var(--ds-text-subtle)] dark:text-[var(--ds-text-subtle)] hover:bg-gray-100 dark:hover:bg-gray-800"
+                        className="h-8 w-8 text-muted-foreground hover:bg-muted"
                         disabled
                       >
                         <Paperclip size={16} />

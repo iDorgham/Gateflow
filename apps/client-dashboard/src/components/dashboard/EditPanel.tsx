@@ -127,7 +127,7 @@ export function EditPanel({
           <div className="flex flex-col gap-1">
             <h2
               id="edit-panel-title"
-              className="text-[20px] font-semibold text-foreground dark:text-zinc-100 tracking-tight"
+              className="text-[20px] font-semibold text-foreground tracking-tight"
             >
               {title}
             </h2>

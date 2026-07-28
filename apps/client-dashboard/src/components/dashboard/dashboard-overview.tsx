@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { prisma } from '@gate-access/db';
 import { getTranslation, Locale } from '@/lib/i18n';
 import { Card, CardContent, CardHeader, CardTitle, Button } from '@gateflow/ui';
+import { PageHeader } from '@gateflow/components';
 import { AnimatedKpiGrid } from './animated-kpi-grid';
 import { OrganizationType, getOrganizationFeatures } from '@gate-access/types';
 import {
@@ -209,10 +210,10 @@ export async function DashboardOverview({
       sub: t('overview.sub.activeResidents', {
         defaultValue: 'With linked units',
       }),
-      icon: <Users className="h-4 w-4 text-indigo-500" aria-hidden="true" />,
+      icon: <Users className="h-4 w-4 text-info" aria-hidden="true" />,
       href: `/dashboard/organizations/${orgId}/residents/contacts`,
-      iconBg: 'bg-indigo-500/10',
-      valueColor: 'text-indigo-500',
+      iconBg: 'bg-info/10',
+      valueColor: 'text-info',
     },
     'active-students': {
       title: t('orgType.school.contactLabelPlural', {
@@ -220,10 +221,10 @@ export async function DashboardOverview({
       }),
       value: residentsCount,
       sub: t('overview.sub.activeStudents', { defaultValue: 'Enrolled' }),
-      icon: <Users className="h-4 w-4 text-indigo-500" aria-hidden="true" />,
+      icon: <Users className="h-4 w-4 text-info" aria-hidden="true" />,
       href: `/dashboard/organizations/${orgId}/residents/contacts`,
-      iconBg: 'bg-indigo-500/10',
-      valueColor: 'text-indigo-500',
+      iconBg: 'bg-info/10',
+      valueColor: 'text-info',
     },
     'open-maintenance': {
       title: t('overview.openMaintenance', { defaultValue: 'Open Requests' }),
@@ -231,10 +232,10 @@ export async function DashboardOverview({
       sub: t('overview.sub.openMaintenance', {
         defaultValue: 'Pending action',
       }),
-      icon: <Wrench className="h-4 w-4 text-orange-500" aria-hidden="true" />,
+      icon: <Wrench className="h-4 w-4 text-warning" aria-hidden="true" />,
       href: `/dashboard/organizations/${orgId}/maintenance`,
-      iconBg: 'bg-orange-500/10',
-      valueColor: 'text-orange-500',
+      iconBg: 'bg-warning/10',
+      valueColor: 'text-warning',
     },
     'security-incidents': {
       title: t('overview.securityIncidents', { defaultValue: 'Incidents' }),
@@ -242,10 +243,10 @@ export async function DashboardOverview({
       sub: t('overview.sub.securityIncidents', {
         defaultValue: 'Requires attention',
       }),
-      icon: <Shield className="h-4 w-4 text-red-500" aria-hidden="true" />,
+      icon: <Shield className="h-4 w-4 text-danger" aria-hidden="true" />,
       href: `/dashboard/organizations/${orgId}/team/incidents`,
-      iconBg: 'bg-red-500/10',
-      valueColor: 'text-red-500',
+      iconBg: 'bg-danger/10',
+      valueColor: 'text-danger',
     },
     'current-capacity': {
       title: t('overview.currentCapacity', {
@@ -255,10 +256,15 @@ export async function DashboardOverview({
       sub: t('overview.sub.currentCapacity', {
         defaultValue: 'Live occupancy',
       }),
-      icon: <Users className="h-4 w-4 text-pink-500" aria-hidden="true" />,
+      icon: (
+        <Users
+          className="h-4 w-4 text-[var(--gf-color-discovery)]"
+          aria-hidden="true"
+        />
+      ),
       href: `/dashboard/organizations/${orgId}/analytics`,
-      iconBg: 'bg-pink-500/10',
-      valueColor: 'text-pink-500',
+      iconBg: 'bg-[var(--gf-color-discovery)]/10',
+      valueColor: 'text-[var(--gf-color-discovery)]',
     },
   };
 
@@ -268,27 +274,25 @@ export async function DashboardOverview({
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-foreground">
-            {t(features.terminology.orgLabel, { defaultValue: 'Dashboard' })}
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            {new Date().toLocaleDateString(locale, {
-              weekday: 'long',
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            })}
-          </p>
-        </div>
-        <Button asChild className="shrink-0">
-          <Link href={`/dashboard/organizations/${orgId}/qrcodes/create`}>
-            <Plus className="me-1.5 h-4 w-4" aria-hidden="true" />
-            {t('overview.createQr', { defaultValue: 'Create QR Code' })}
-          </Link>
-        </Button>
-      </div>
+      <PageHeader
+        title={t(features.terminology.orgLabel, { defaultValue: 'Dashboard' })}
+        subtitle={new Date().toLocaleDateString(locale, {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        })}
+        showHome={false}
+        className="mb-0"
+        actions={
+          <Button asChild className="shrink-0">
+            <Link href={`/dashboard/organizations/${orgId}/qrcodes/create`}>
+              <Plus className="me-1.5 h-4 w-4" aria-hidden="true" />
+              {t('overview.createQr', { defaultValue: 'Create QR Code' })}
+            </Link>
+          </Button>
+        }
+      />
 
       <AnimatedKpiGrid cards={STAT_CARDS} />
 
@@ -298,13 +302,13 @@ export async function DashboardOverview({
             return (
               <Card
                 key={chartId}
-                className="border border-[var(--ds-border,#DFE1E6)] bg-[var(--ds-surface-raised,#FFFFFF)] bg-background shadow-[0_1px_1px_rgba(9,30,66,0.08),0_0_1px_rgba(9,30,66,0.08)]"
+                className="border border-[var(--ds-border)] bg-[var(--ds-surface-raised)] bg-background shadow-[0_1px_1px_rgba(9,30,66,0.08),0_0_1px_rgba(9,30,66,0.08)]"
               >
                 <CardHeader className="pb-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <TrendingUp
-                        className="h-4 w-4 text-slate-400"
+                        className="h-4 w-4 text-muted-foreground"
                         aria-hidden="true"
                       />
                       <CardTitle className="text-base">

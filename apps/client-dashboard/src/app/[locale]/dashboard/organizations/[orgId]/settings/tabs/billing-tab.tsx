@@ -33,6 +33,8 @@ interface BillingTabProps {
   };
   gateCount: number;
   qrCount: number;
+  /** ISO date string for the current subscription's next renewal, or null if there is none. */
+  nextBillingDate?: string | null;
 }
 
 const PLAN_INFO = {
@@ -124,7 +126,12 @@ const MOCK_INVOICES = [
   },
 ];
 
-export function BillingTab({ org, gateCount, qrCount }: BillingTabProps) {
+export function BillingTab({
+  org,
+  gateCount,
+  qrCount,
+  nextBillingDate,
+}: BillingTabProps) {
   const { t } = useTranslation('dashboard');
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
   const [isPortalLoading, setIsPortalLoading] = useState(false);
@@ -244,7 +251,16 @@ export function BillingTab({ org, gateCount, qrCount }: BillingTabProps) {
             </span>
             <div className="flex items-center gap-2 font-bold text-foreground">
               <Calendar className="h-4 w-4 text-primary" />
-              March 01, 2026
+              {nextBillingDate
+                ? new Date(nextBillingDate).toLocaleDateString(undefined, {
+                    month: 'long',
+                    day: '2-digit',
+                    year: 'numeric',
+                  })
+                : t(
+                    'settings.billing.noActiveSubscription',
+                    'No active subscription'
+                  )}
             </div>
           </div>
           {org.stripeCustomerId && (

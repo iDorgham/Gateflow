@@ -24,6 +24,7 @@ import {
   SheetDescription,
   SheetFooter,
   cn,
+  EmptyState,
 } from '@gateflow/ui';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
@@ -57,29 +58,6 @@ interface Entry {
   notes: string | null;
   createdBy: string | null;
   createdAt: string;
-}
-
-// ─── Empty State ──────────────────────────────────────────────────────────────
-
-function EmptyState({ isFiltered }: { isFiltered: boolean }) {
-  return (
-    <div className="flex flex-col items-center justify-center py-20 rounded-2xl border-2 border-dashed border-border bg-muted/20 text-center">
-      <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-destructive/10 mb-4">
-        <ShieldAlert
-          className="h-8 w-8 text-destructive/60"
-          aria-hidden="true"
-        />
-      </div>
-      <p className="text-lg font-black uppercase tracking-tight text-foreground">
-        {isFiltered ? 'No matches found' : 'Watchlist is empty'}
-      </p>
-      <p className="mt-1 text-sm text-muted-foreground max-w-xs">
-        {isFiltered
-          ? 'Try adjusting your search terms.'
-          : 'Add people to block them at the gate. Match by name, phone, or ID number.'}
-      </p>
-    </div>
-  );
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -423,7 +401,16 @@ export function WatchlistClient() {
           <Loader2 className="h-8 w-8 animate-spin text-muted-foreground/50" />
         </div>
       ) : sorted.length === 0 ? (
-        <EmptyState isFiltered={!!search.trim()} />
+        <EmptyState
+          icon={ShieldAlert}
+          title={search.trim() ? 'No matches found' : 'Watchlist is empty'}
+          description={
+            search.trim()
+              ? 'Try adjusting your search terms.'
+              : 'Add people to block them at the gate. Match by name, phone, or ID number.'
+          }
+          className="min-h-[300px]"
+        />
       ) : (
         <div className="rounded-2xl border border-border bg-card overflow-hidden">
           <Table>
@@ -474,7 +461,7 @@ export function WatchlistClient() {
                         {entry.idNumber && (
                           <Badge
                             variant="outline"
-                            className="text-[9px] font-bold px-1.5 py-0 border-amber-300/50 bg-amber-50 text-amber-700 dark:bg-amber-900/20 dark:text-amber-400 dark:border-amber-700/40"
+                            className="text-[9px] font-bold px-1.5 py-0 border-warning/50 bg-warning-subtle text-warning-bold"
                           >
                             <ShieldCheck className="h-2.5 w-2.5 mr-0.5" />
                             ID Verified

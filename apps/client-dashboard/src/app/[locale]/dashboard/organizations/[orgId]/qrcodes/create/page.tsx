@@ -1,12 +1,14 @@
-import Link from 'next/link';
-import { Button } from '@gateflow/ui';
-import { ArrowLeft } from 'lucide-react';
+import { PageHeader } from '@gateflow/components';
 import { requireAuth } from '@/lib/dashboard-auth';
 import { prisma } from '@gate-access/db';
 import { getValidatedProjectId } from '@/lib/project-cookie';
 import { CreateQRClient } from './create-qr-client';
+import type { Locale } from '@/lib/i18n-config';
 
-export default async function CreateQRCodePage() {
+export default async function CreateQRCodePage(props: {
+  params: Promise<{ locale: Locale; orgId: string }>;
+}) {
+  const { locale, orgId } = await props.params;
   const { org } = await requireAuth();
   if (!org) return null;
 
@@ -52,26 +54,19 @@ export default async function CreateQRCodePage() {
 
   return (
     <div className="space-y-6 max-w-2xl mx-auto">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-black tracking-tight text-foreground uppercase">
-            Create QR Code
-          </h1>
-          <p className="text-sm text-muted-foreground mt-1">
-            Generate a signed access pass for your gates.
-          </p>
-        </div>
-        <Button
-          variant="outline"
-          asChild
-          className="rounded-xl h-10 px-5 font-bold text-xs"
-        >
-          <Link href="./">
-            <ArrowLeft className="mr-1.5 h-4 w-4" />
-            Back to QR Codes
-          </Link>
-        </Button>
-      </div>
+      <PageHeader
+        title="Create QR Code"
+        subtitle="Generate a signed access pass for your gates."
+        showHome={false}
+        className="mb-0"
+        breadcrumbs={[
+          {
+            label: 'QR Codes',
+            href: `/${locale}/dashboard/organizations/${orgId}/qrcodes`,
+          },
+          { label: 'Create', active: true },
+        ]}
+      />
 
       <CreateQRClient
         organizationId={org.id}

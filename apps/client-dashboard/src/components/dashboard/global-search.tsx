@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { Contact2, Building, QrCode, Shield, Loader2 } from 'lucide-react';
+import { Contact2, Building, QrCode, Shield, Loader2, X } from 'lucide-react';
 import {
   Command,
   CommandGroup,
@@ -52,6 +52,13 @@ export function GlobalSearch({ locale }: { locale: string }) {
   const [results, setResults] = useState<SearchResults | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const clearQuery = () => {
+    setQuery('');
+    setResults(null);
+    inputRef.current?.focus();
+  };
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -101,10 +108,11 @@ export function GlobalSearch({ locale }: { locale: string }) {
       <Command
         className={cn(
           'rounded-lg overflow-visible bg-transparent',
-          '[&_[cmdk-input-wrapper]]:border-2 [&_[cmdk-input-wrapper]]:border-transparent',
+          '[&_[cmdk-input-wrapper]]:h-8 [&_[cmdk-input-wrapper]]:border',
+          '[&_[cmdk-input-wrapper]]:border-[var(--ds-border-selected)]/10',
           '[&_[cmdk-input-wrapper]]:bg-[var(--ds-background-neutral)]',
           'dark:[&_[cmdk-input-wrapper]]:bg-[var(--ds-background-neutral)]',
-          '[&_[cmdk-input-wrapper]]:rounded-lg',
+          '[&_[cmdk-input-wrapper]]:rounded-lg [&_[cmdk-input-wrapper]]:shadow-sm',
           'hover:[&_[cmdk-input-wrapper]]:bg-[var(--ds-background-neutral-hovered)]',
           'dark:hover:[&_[cmdk-input-wrapper]]:bg-[var(--ds-background-neutral-hovered)]',
           'focus-within:[&_[cmdk-input-wrapper]]:bg-[var(--ds-background-input)]',
@@ -114,22 +122,43 @@ export function GlobalSearch({ locale }: { locale: string }) {
           '[&_[cmdk-input-wrapper]]:transition-colors'
         )}
       >
-        <CommandInput
-          placeholder="Search workspace..."
-          value={query}
-          onValueChange={(v) => {
-            setQuery(v);
-            if (!open && v.trim()) setOpen(true);
-          }}
-          onFocus={() => {
-            if (query.trim()) setOpen(true);
-          }}
-          onBlur={() => {
-            // small delay so clicks on the dropdown list register
-            setTimeout(() => setOpen(false), 200);
-          }}
-          className="h-9 outline-none border-none bg-transparent focus:bg-transparent dark:focus:bg-transparent focus:ring-0 w-full"
-        />
+        <div className="relative">
+          <CommandInput
+            ref={inputRef}
+            placeholder="Search workspace..."
+            value={query}
+            onValueChange={(v) => {
+              setQuery(v);
+              if (!open && v.trim()) setOpen(true);
+            }}
+            onFocus={() => {
+              if (query.trim()) setOpen(true);
+            }}
+            onBlur={() => {
+              // small delay so clicks on the dropdown list register
+              setTimeout(() => setOpen(false), 200);
+            }}
+            className="h-8 py-0 pe-10 outline-none border-none bg-transparent focus:bg-transparent dark:focus:bg-transparent focus:ring-0 w-full"
+          />
+
+          <div className="pointer-events-none absolute inset-y-0 end-3 flex items-center">
+            {query ? (
+              <button
+                type="button"
+                aria-label="Clear search"
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={clearQuery}
+                className="pointer-events-auto rounded-md p-0.5 text-muted-foreground/70 transition-colors hover:bg-[var(--ds-background-neutral-hovered)] hover:text-foreground"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            ) : (
+              <kbd className="hidden select-none items-center gap-0.5 rounded border border-[var(--ds-border-selected)]/20 bg-[var(--ds-surface-raised)] px-1.5 py-0.5 text-[10px] font-bold text-muted-foreground/70 sm:inline-flex">
+                <span className="text-[11px] leading-none">⌘</span>K
+              </kbd>
+            )}
+          </div>
+        </div>
 
         {open && (
           <div className="absolute top-full left-0 right-0 z-50 mt-2 bg-popover rounded-xl border border-border/60 shadow-2xl overflow-hidden">
@@ -160,7 +189,7 @@ export function GlobalSearch({ locale }: { locale: string }) {
                             )
                           }
                         >
-                          <Contact2 className="mr-2 h-4 w-4 text-blue-500" />
+                          <Contact2 className="mr-2 h-4 w-4 text-info" />
                           <span>{c.name}</span>
                           {c.email && (
                             <span className="ml-2 text-xs text-muted-foreground truncate max-w-[150px]">
@@ -182,7 +211,7 @@ export function GlobalSearch({ locale }: { locale: string }) {
                             )
                           }
                         >
-                          <Building className="mr-2 h-4 w-4 text-emerald-500" />
+                          <Building className="mr-2 h-4 w-4 text-success" />
                           <span>Unit {u.identifier}</span>
                         </CommandItem>
                       ))}
@@ -199,7 +228,7 @@ export function GlobalSearch({ locale }: { locale: string }) {
                             )
                           }
                         >
-                          <QrCode className="mr-2 h-4 w-4 text-purple-500" />
+                          <QrCode className="mr-2 h-4 w-4 text-[var(--gf-color-discovery)]" />
                           <span>{q.guestName || q.code}</span>
                           <span className="ml-2 text-xs text-muted-foreground capitalize">
                             — {q.status.toLowerCase()}
@@ -217,7 +246,7 @@ export function GlobalSearch({ locale }: { locale: string }) {
                             handleSelect(`/${locale}/dashboard/gates`)
                           }
                         >
-                          <Shield className="mr-2 h-4 w-4 text-orange-500" />
+                          <Shield className="mr-2 h-4 w-4 text-warning" />
                           <span>{g.name}</span>
                           <span className="ml-2 text-xs text-muted-foreground capitalize">
                             — {g.status.toLowerCase()}
