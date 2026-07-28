@@ -1,6 +1,12 @@
 /* @import must precede other imports — Tailwind expands into real CSS rules */
 @import 'tailwindcss';
 
+/* Tailwind's automatic content detection uses the consuming app's CWD as its
+   scan root, so classes used only inside this package (never duplicated in
+   an app's own source) are silently dropped. Register this package's own
+   source directory explicitly so every consumer picks up its classes. */
+@source ".";
+
 @theme {
   --color-border: var(--gf-color-border);
   --color-input: var(--gf-color-border);
