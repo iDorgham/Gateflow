@@ -1,0 +1,66 @@
+apps/client-dashboard/src/components/projects/ProjectHero.tsx
+  s_d037c8c3d22135::t_e6b20acd7f86ac 59
+  s_d037c8c3d22135::t_c77970e3fb6c92 33
+apps/client-dashboard/src/components/settings/projects/project-table.tsx
+  s_d037c8c3d22135::t_e3e655c7524a24 90-92
+  s_d037c8c3d22135::t_90601dfe8f3d08 87-89,93-110,112-113,186
+  s_d037c8c3d22135::t_08bcf1291f658e 16
+  s_d037c8c3d22135::t_f85feb00aee8c3 114,185,187-188
+apps/client-dashboard/src/components/settings/api/api-key-table.tsx
+  s_d037c8c3d22135::t_02bba17608dc44 77-85,87-89
+  s_d037c8c3d22135::t_f3f2f5d27f5964 158
+  s_d037c8c3d22135::t_e3f75754b295f6 155-157
+  s_d037c8c3d22135::t_a85e626034f193 14
+  s_d037c8c3d22135::t_1486c843b5375d 69-76
+apps/client-dashboard/src/components/settings/api/webhook-table.tsx
+  s_d037c8c3d22135::t_bc63557a301caa 72-79,91
+  s_d037c8c3d22135::t_1df5b1525e52dd 80-87,89-90,198-199
+  s_d037c8c3d22135::t_213e7ae37859ae 14
+  s_d037c8c3d22135::t_e023ada202d41d 197
+  s_d037c8c3d22135::t_d4099d233ea6ff 200
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/team/page.tsx
+  s_d037c8c3d22135::t_b9e1108970ce62 34-35
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/settings/loading.tsx
+  s_d037c8c3d22135::t_449abf256e68ff 1-32
+apps/client-dashboard/src/components/settings/gates/gate-table.tsx
+  s_d037c8c3d22135::t_8930aacd1a33c5 20
+  s_d037c8c3d22135::t_bdf0b2908e5389 141-158
+  s_66199c67786fd1::t_46b2e27fae7f37 159-161
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/qrcodes/create/page.tsx
+  s_d037c8c3d22135::t_a8fe4b871f61dc 57-69
+  s_d037c8c3d22135::t_422b2ade483f1a 1,6,8-11
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/projects/page.tsx
+  s_d037c8c3d22135::t_6a36227d954357 76
+  s_d037c8c3d22135::t_e8bdd32a8225da 60-75,77-84
+  s_d037c8c3d22135::t_0fdb95871d451c 6
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/settings/integrations/page.tsx
+  s_66199c67786fd1::t_40434181b2fc87 15-16
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/settings/notifications/page.tsx
+  s_66199c67786fd1::t_9a7950e6f41a00 17-18
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/settings/rbac/page.tsx
+  s_66199c67786fd1::t_5ae6370d5378c9 9-11,13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "d0a43885d30411a10cd77647a253ef27937cd272",
+  "prompts": {},
+  "sessions": {
+    "s_66199c67786fd1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "81d23a45-2fed-4e06-aaa6-9272e2babfb9",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_d037c8c3d22135": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "02906ab6-47a6-46ba-88a5-f41390f87b72",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
