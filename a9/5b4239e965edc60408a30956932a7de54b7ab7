@@ -1,0 +1,33 @@
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/settings/tabs/billing-tab.tsx
+  s_d037c8c3d22135::t_e987f168f2b960 254-260
+  s_d037c8c3d22135::t_9c03cd9f9694c8 129-134
+  s_d037c8c3d22135::t_2c2883957e5f69 36-37
+  s_66199c67786fd1::t_f2e2c1fe782fde 261-263
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/settings/billing/page.tsx
+  s_d037c8c3d22135::t_548b9a368fee67 3,6-20,25,32-35,38-41
+  s_66199c67786fd1::t_402f015e18ecc8 44,52
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "a95b4239e965edc60408a30956932a7de54b7ab7",
+  "prompts": {},
+  "sessions": {
+    "s_66199c67786fd1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "81d23a45-2fed-4e06-aaa6-9272e2babfb9",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_d037c8c3d22135": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "02906ab6-47a6-46ba-88a5-f41390f87b72",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
