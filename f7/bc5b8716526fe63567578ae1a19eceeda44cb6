@@ -1,0 +1,21 @@
+CHANGELOG.md
+  s_66199c67786fd1::t_f2c782d6fc099b 13-18,74-75
+README.md
+  s_66199c67786fd1::t_eeb486e4865d26 386-389
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "f7bc5b8716526fe63567578ae1a19eceeda44cb6",
+  "prompts": {},
+  "sessions": {
+    "s_66199c67786fd1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "81d23a45-2fed-4e06-aaa6-9272e2babfb9",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
