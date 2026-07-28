@@ -1,0 +1,231 @@
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/qrcodes/create/create-qr-client.tsx
+  s_d037c8c3d22135::t_57606be05112cc 507
+  s_66199c67786fd1::t_d12b1050500c16 166-168,175-176,178-179,186-188
+apps/client-dashboard/src/app/[locale]/dashboard/onboarding/page.tsx
+  s_66199c67786fd1::t_5ce117b1f85874 91,105,107-108,123,125-126,135,144,151,219,229,233
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/settings/projects/page.tsx
+  s_d037c8c3d22135::t_7812ae55cfc258 31
+  s_66199c67786fd1::t_493317c3281bc0 33
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/workspace/billing/plan-cards.tsx
+  s_66199c67786fd1::t_5d2cb85d58e299 42-43,48,56,61,65,72,75,77,89-90
+apps/client-dashboard/src/components/crm/UnitTable.tsx
+  s_d037c8c3d22135::t_7fd0bbf09f510b 4
+  s_d037c8c3d22135::t_b30243e2eb2a24 384-394
+  s_66199c67786fd1::t_197676e9b5c24f 271,329
+apps/client-dashboard/src/components/dashboard/team/gate-assignments-table.tsx
+  s_d037c8c3d22135::t_ce3bc82a43907a 18
+  s_d037c8c3d22135::t_17470eb5370bcd 156-168
+  s_66199c67786fd1::t_3ed88308d31ef5 117,120,129,182-183,194,197,207,212,221-222,228
+  s_66199c67786fd1::t_7cf94a1e99eaa3 139,142,145,148,237
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/team/incidents/incidents-client.tsx
+  s_d037c8c3d22135::t_6eb91e939a4f99 95-99
+  s_d037c8c3d22135::t_6a34cbcfaea442 4,7
+  s_66199c67786fd1::t_e839395f8a346d 70,79,101,107,111-113,115,152
+apps/client-dashboard/src/components/dashboard/emulation/emulation-wizard.tsx
+  s_66199c67786fd1::t_96194b36cb041f 322,400,447,506,535,611-612,671,688-689,692,697,708,726,728,734,738,743,747,760,785,792,804,807,814,848
+  s_66199c67786fd1::t_8f5efee6b198fa 850,854,863,867,878,884
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/team/watchlist/watchlist-client.tsx
+  s_d037c8c3d22135::t_046ab7cf96fcd4 404-413
+  s_d037c8c3d22135::t_6f74eec3cc9be4 27
+  s_66199c67786fd1::t_6cb7c9e3677201 464
+apps/client-dashboard/src/components/dashboard/gateai/AutomationList.tsx
+  s_66199c67786fd1::t_e09aefdde0a088 178-179
+  s_66199c67786fd1::t_f8b251fdcce7af 154
+  s_66199c67786fd1::t_7fd2d630ef8288 100
+  s_66199c67786fd1::t_7baddc9d598686 131-132
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/residents/units/page.tsx
+  s_d037c8c3d22135::t_a2c57e11fc6ca7 1018-1032
+  s_d037c8c3d22135::t_cdd1e79e826642 838
+  s_d037c8c3d22135::t_465c5c6a748380 24
+  s_66199c67786fd1::t_1a94b8e51f525f 349,359,371,395,415,428,449,457,468,847,856,875,883,892,905-907,910,914,923,934,944,950,962,988,1056,1067,1071,1079,1198,1208,1222,1230,1239,1251,1259,1278-1280,1283,1295,1306,1316,1341-1343,1346,1351,1353,1363,1384-1386,1389,1394,1396,1405
+apps/client-dashboard/src/components/projects/ProjectKpiCards.tsx
+  s_66199c67786fd1::t_eeba0eb1f3ba8e 81,83-84
+  s_66199c67786fd1::t_450cd92ad88bc1 95
+apps/client-dashboard/src/app/[locale]/dashboard/loading.tsx
+  s_66199c67786fd1::t_4da50fff3b4802 8-9,11,17-20,22-23,25-26,34-37,42-45,47,49-52
+  s_66199c67786fd1::t_c50f17216b2ae6 54-57,59
+apps/client-dashboard/src/components/settings/team/gate-assignment-manager.tsx
+  s_66199c67786fd1::t_e35c5048ab1715 348-349
+apps/client-dashboard/src/components/dashboard/workspace-page-layout.tsx
+  s_66199c67786fd1::t_9f73428691ec32 64-65
+  s_66199c67786fd1::t_0e8ad163bc7b66 24,28,33-37,52-60,69
+apps/client-dashboard/src/app/[locale]/dashboard/profile/loading.tsx
+  s_66199c67786fd1::t_0d8d8a34a49423 4,7,9,11-13,19-20,23-24,27,31-32,35-36,39
+apps/client-dashboard/src/components/dashboard/ai/AIReportRenderer.tsx
+  s_66199c67786fd1::t_25e31bbebadbd0 71-72
+  s_66199c67786fd1::t_7e82cdd54142fe 65,82,95
+apps/client-dashboard/src/components/crm/ContactTable.tsx
+  s_d037c8c3d22135::t_3d681d156343fd 4
+  s_d037c8c3d22135::t_4f7b23452acb33 392-402
+  s_66199c67786fd1::t_b5369f60ca227d 304
+apps/client-dashboard/src/components/dashboard/qrcodes/QRCodesTable.tsx
+  s_66199c67786fd1::t_56bb8cfce8e56d 203
+  s_66199c67786fd1::t_35ee6f12f3e089 18,22,26,33,95,109,113,130,152-153,168,185,197-198,214
+apps/client-dashboard/src/app/[locale]/not-found.tsx
+  s_66199c67786fd1::t_7c2ac64095bd13 6-8,11,14,17,23,28
+apps/client-dashboard/src/components/settings/team/invitation-list.tsx
+  s_66199c67786fd1::t_e35c5048ab1715 122
+apps/client-dashboard/src/components/dashboard/ai-assistant.tsx
+  s_66199c67786fd1::t_96194b36cb041f 162,169,173,202,205,209,214,222,292,295,309,311,380,416,494,511,528,536,593
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/qrcodes/bulk/bulk-qr-client.tsx
+  s_66199c67786fd1::t_9ebcc8c309b821 392-393,398
+  s_66199c67786fd1::t_ac4c4f0090e78e 330,333,352,355,364-365,368,373-374,377,403,407,410,424,439,444,457-458,474-475,478,481,484,487,490,493,496,501,507,520,546,550,552,556,568,575,577,581,585,594-595,601,637-638,646-647,650,655,660,665,672
+apps/client-dashboard/src/app/[locale]/login/page.tsx
+  s_66199c67786fd1::t_a85688ecd1fca5 106,108
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/team/team-client.tsx
+  s_d037c8c3d22135::t_6799666f8ba434 17
+  s_66199c67786fd1::t_6e79a569be4be7 286,288,291
+  s_66199c67786fd1::t_cc2f343fce39a5 352,362
+  s_66199c67786fd1::t_ee638d89a629b4 52-56
+  s_66199c67786fd1::t_b541c45241089b 188,190,194,197,206,209-210,214,218,220-221,225,229,231-232,236
+  s_d037c8c3d22135::t_f9bab82e3db1c5 354-361
+  s_66199c67786fd1::t_c811d19f9bc30a 411
+  s_66199c67786fd1::t_1e2da0eae58455 424
+  s_66199c67786fd1::t_8df6e90dc1eed5 79,81,84,87,103
+  s_66199c67786fd1::t_ccce7dab9fb0ab 249,252,262
+  s_66199c67786fd1::t_db30c807198853 379-386,388-396,398-401
+  s_66199c67786fd1::t_357b971b5243a3 363-371,373-378,402-409,412-423,425-428,430-433
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/team/incidents/page.tsx
+  s_d037c8c3d22135::t_ec5e52634461bc 5
+  s_d037c8c3d22135::t_7d2d16ce8fa714 29-43,45
+  s_66199c67786fd1::t_dd8583cf90e59e 8-10,16-18
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/settings/tabs/workspace-tab.tsx
+  s_66199c67786fd1::t_60db7ab8abfe51 74-78
+apps/client-dashboard/src/components/settings/team/activity-log-list.tsx
+  s_d037c8c3d22135::t_1c6b511ebea811 81-86
+  s_66199c67786fd1::t_026c73771e3333 44,49,54,59,64,69,74,114
+  s_d037c8c3d22135::t_66184732b73b47 14
+apps/client-dashboard/src/components/dashboard/dashboard-layout.tsx
+  s_66199c67786fd1::t_96194b36cb041f 395,698
+  s_d037c8c3d22135::t_19e7e7b8e8db70 776-778
+apps/client-dashboard/src/components/settings/team/permission-matrix.tsx
+  s_66199c67786fd1::t_e35c5048ab1715 276,278
+apps/client-dashboard/src/components/dashboard/dashboard-overview.tsx
+  s_d037c8c3d22135::t_1cf2ac9212a9a9 5,277-290
+  s_66199c67786fd1::t_f696d367979a7c 213,215-216,224,226-227,235,237-238,246,248-249,259-262
+  s_66199c67786fd1::t_3be02cdeecf2ea 263-264,266-267,291-295,305,311
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/residents/contacts/page.tsx
+  s_d037c8c3d22135::t_884e60e341a24b 956
+  s_d037c8c3d22135::t_a0629ee2411449 1138-1162
+  s_66199c67786fd1::t_7ebde22f4e1482 29,516,518-519,974,992,1000,1021,1023-1024,1027,1040,1052,1086,1089,1101,1169,1187-1189,1209,1219,1398,1489,1565,1778-1779,1825-1826
+apps/client-dashboard/src/components/dashboard/team/TeamSidebarChat.tsx
+  s_d037c8c3d22135::t_aeb3fd2ea10632 144,155
+  s_d037c8c3d22135::t_de5487e828d3e7 209
+  s_d037c8c3d22135::t_a029f9c157df00 173
+  s_66199c67786fd1::t_5e470207efbf41 120,123,129,230-231,251,258,298
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/settings/team/page.tsx
+  s_d037c8c3d22135::t_c500910bb4f328 19
+  s_d037c8c3d22135::t_ba08e50e62f77d 115
+  s_66199c67786fd1::t_ed13020831c8e8 71,90
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/qrcodes/qr-actions.tsx
+  s_66199c67786fd1::t_605ae017c1b73d 120-121
+  s_66199c67786fd1::t_19f2283ccf6c84 142
+  s_66199c67786fd1::t_a041088d936495 98,101
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/projects/[projectId]/crm/page.tsx
+  s_d037c8c3d22135::t_a76112db8b377a 16
+  s_d037c8c3d22135::t_c78177da031072 45-61
+  s_66199c67786fd1::t_721c9e61444d1b 90-91,94,109-110,113,125,133
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/gates/gate-client.tsx
+  s_66199c67786fd1::t_4d9ba252c6d286 888
+  s_66199c67786fd1::t_e3b185f9ae402d 370,432
+  s_66199c67786fd1::t_aa4c296bcfefeb 162,330
+  s_66199c67786fd1::t_8d0fadf3d983b3 100
+  s_66199c67786fd1::t_166212f46fa843 152,323,524
+  s_66199c67786fd1::t_fecd406b74bcac 155,326
+  s_66199c67786fd1::t_4bf0c97a5fec1c 464
+  s_66199c67786fd1::t_dc320b20e8c9aa 521-522
+  s_66199c67786fd1::t_1a5f80d688ed8d 191,205,355,891
+  s_66199c67786fd1::t_803568ad6229b3 523,525,527,533,540,554,618,626,632,641-642,658,665,699,711-712,718,809,862,869,889-890,892-893,895,898,981
+apps/client-dashboard/src/components/dashboard/analytics/UTMMatrix.tsx
+  s_66199c67786fd1::t_c5cc7180f4c577 145,147,149
+apps/client-dashboard/src/components/dashboard/team/gate-assignment-form.tsx
+  s_66199c67786fd1::t_75d978d8b45185 146,155,174,189,201,211
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/ai-hub/page.tsx
+  s_66199c67786fd1::t_f5a78e63e3c95b 116,177,181,185
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/analytics/analytics-charts.tsx
+  s_66199c67786fd1::t_b1862cb8a515cd 108-111,118,122
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/maintenance/maintenance-client.tsx
+  s_66199c67786fd1::t_94dbd767a892b9 72,75,95-99,120,147,178,183
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/maintenance/maintenance-sheet.tsx
+  s_66199c67786fd1::t_6fadc034438e58 322
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/projects/projects-client.tsx
+  s_66199c67786fd1::t_761f840f43a198 177-178,184-185,188-189,192-193,201-202,209,224,227,381,421
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/qrcodes/page.tsx
+  s_66199c67786fd1::t_e8936e5ccbde85 221,223,227,461,505-508,510,515,527,535
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/settings/tabs/projects-tab.tsx
+  s_66199c67786fd1::t_b0dccb14493335 405,432-433,451-452
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/team/gate-assignments/page.tsx
+  s_66199c67786fd1::t_6bf1f68f270edd 20,23
+apps/client-dashboard/src/components/dashboard/EditPanel.tsx
+  s_66199c67786fd1::t_18b67c443d156e 130
+apps/client-dashboard/src/components/dashboard/ai/AIConfirmationRenderer.tsx
+  s_66199c67786fd1::t_47b2d6c37fd0e9 37,40,42,44,52,59,61,75,91,101,108
+apps/client-dashboard/src/components/dashboard/ai/AIQRPreviewRenderer.tsx
+  s_66199c67786fd1::t_931ee0836d940c 42,48,58,68,72,79,89-90
+apps/client-dashboard/src/components/dashboard/ai/AIScheduleRenderer.tsx
+  s_66199c67786fd1::t_a1f3fa5d4c9efc 32,34,40,43,45
+apps/client-dashboard/src/components/dashboard/ai/ChatHistorySidebar.tsx
+  s_66199c67786fd1::t_a73d2a940db3e7 133,257
+apps/client-dashboard/src/components/dashboard/ai/ChatPanel.tsx
+  s_66199c67786fd1::t_d493ce4d992056 298,304,324,354,376-377,560,613-614,661,663,676,678,710,739,757
+apps/client-dashboard/src/components/dashboard/ai/ChatSettingsDialog.tsx
+  s_66199c67786fd1::t_30d023c2cc4625 62,69,84
+apps/client-dashboard/src/components/dashboard/analytics/AnalyticsKPICard.tsx
+  s_66199c67786fd1::t_5dfc610ca5b71b 50
+apps/client-dashboard/src/components/dashboard/analytics/AnalyticsOperatorLeaderboard.tsx
+  s_66199c67786fd1::t_2b981bdf9b9fce 93
+apps/client-dashboard/src/components/dashboard/analytics/CampaignFirstScanLinkage.tsx
+  s_66199c67786fd1::t_77ecb3a9997869 181-182,191
+apps/client-dashboard/src/components/dashboard/gateai/CanvasEditor.tsx
+  s_66199c67786fd1::t_2420eab9bc66a7 146
+apps/client-dashboard/src/components/dashboard/gateai/GateAIHubLayout.tsx
+  s_66199c67786fd1::t_a9c83e1e33824e 23-24,26,29-34,172
+apps/client-dashboard/src/components/dashboard/gateai/TagSidebar.tsx
+  s_66199c67786fd1::t_f3337e74ead615 134,250
+apps/client-dashboard/src/components/dashboard/gateai/live-chart/LiveChartComponent.tsx
+  s_66199c67786fd1::t_146395fe9778d2 106,122
+apps/client-dashboard/src/components/dashboard/project-detail/ProjectDetailContent.tsx
+  s_66199c67786fd1::t_7c32cb80840fbb 140,145,195,201-202,208-209,215-216,230,239,247,270,313,319,325,335,343,351,361,372,381,393,400,408,444,450,456,467,476,492,498,504,517,536,541-542,548,559,567,577,585
+apps/client-dashboard/src/components/dashboard/qrcodes/QRDetailDrawer.tsx
+  s_66199c67786fd1::t_4ca71ab1ad2b69 21-23,27-29,33-35,45-47,71,74,107,113-114,119,154,163,167,177,185,189,197,207,217
+apps/client-dashboard/src/components/dashboard/realtime/SecurityNotifier.tsx
+  s_66199c67786fd1::t_8baba07ff5f640 40,48,56
+apps/client-dashboard/src/components/dashboard/residents/ResidentCard.tsx
+  s_66199c67786fd1::t_04b13fe78dfad2 27,29,39,42,48,52,63,72,86,89,97,100,108,111,119,125,131,136,142
+apps/client-dashboard/src/components/projects/ProjectList.tsx
+  s_66199c67786fd1::t_ac3f71786f4e30 104,117
+apps/client-dashboard/src/components/settings/integrations/integration-cards.tsx
+  s_66199c67786fd1::t_0143cfc742d43f 145,153,161,169
+apps/client-dashboard/src/components/settings/notifications/notification-prefs-form.tsx
+  s_66199c67786fd1::t_f879c151a136df 83,89,95,136
+apps/client-dashboard/src/components/settings/residents/unit-type-table.tsx
+  s_66199c67786fd1::t_0b2158eba463c5 94
+apps/client-dashboard/src/components/settings/team/team-roster.tsx
+  s_66199c67786fd1::t_219263b8427bda 323,370
+apps/client-dashboard/src/components/dashboard/residents/ResidentsFilterBar.tsx
+  s_66199c67786fd1::t_3ad728c023d94c 159,163,165,174,181,184,189,191-192,202,204-205,212,217,219,226,231,245,262,278
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "0e6f831f716b4883f7bea967c115c58b12277e68",
+  "prompts": {},
+  "sessions": {
+    "s_66199c67786fd1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "81d23a45-2fed-4e06-aaa6-9272e2babfb9",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_d037c8c3d22135": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "02906ab6-47a6-46ba-88a5-f41390f87b72",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
