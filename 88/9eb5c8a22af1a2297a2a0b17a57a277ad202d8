@@ -1,0 +1,19 @@
+apps/client-dashboard/src/lib/navigation-builder.test.ts
+  s_66199c67786fd1::t_6292c88495e765 79
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "889eb5c8a22af1a2297a2a0b17a57a277ad202d8",
+  "prompts": {},
+  "sessions": {
+    "s_66199c67786fd1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "81d23a45-2fed-4e06-aaa6-9272e2babfb9",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
