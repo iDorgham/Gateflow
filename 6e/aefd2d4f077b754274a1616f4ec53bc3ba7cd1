@@ -1,0 +1,20 @@
+.github/workflows/deploy.yml
+  s_55e4dcfab374c2::t_e939bb66752691 168,181-182,184-197
+  s_55e4dcfab374c2::t_271c9a841afbbb 170,178-180,183
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.17",
+  "base_commit_sha": "6eaefd2d4f077b754274a1616f4ec53bc3ba7cd1",
+  "prompts": {},
+  "sessions": {
+    "s_55e4dcfab374c2": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "9eb763a1-f03d-4c6d-b6cf-d1a99923376f",
+        "model": "grok-4.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
