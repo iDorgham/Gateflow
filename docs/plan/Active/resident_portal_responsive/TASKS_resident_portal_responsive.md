@@ -77,11 +77,11 @@
 
 ### Phase 8: Pilot UX completion
 
-- [ ] Wire revoke and/or share/download on `/visitors/[id]` where APIs exist
-- [ ] Implement Sign Out on `/profile`
-- [ ] Remove or hide dead `/settings/privacy` and `/settings/help` links
-- [ ] Explicit empty/error UI when unit missing on create flows
-- [ ] `phase_logs/PHASE_LOG_phase_08.md`
+- [x] Wire revoke and/or share/download on `/visitors/[id]` where APIs exist
+- [x] Implement Sign Out on `/profile`
+- [x] Remove or hide dead `/settings/privacy` and `/settings/help` links
+- [x] Explicit empty/error UI when unit missing on create flows
+- [x] `phase_logs/PHASE_LOG_phase_08.md`
 
 ### Phase 9: i18n/RTL, tests, measurable evidence
 

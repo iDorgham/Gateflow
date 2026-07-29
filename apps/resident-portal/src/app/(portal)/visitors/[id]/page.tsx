@@ -1,12 +1,13 @@
 import { notFound } from 'next/navigation';
-import { Share2, Download, Trash2, Shield } from 'lucide-react';
+import { Shield } from 'lucide-react';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { requirePortalSession } from '@/lib/require-portal-session';
 import { prisma } from '@gate-access/db';
-import { Button, Badge } from '@gateflow/ui';
+import { Badge } from '@gateflow/ui';
 import { format } from 'date-fns';
 import { PageHeader } from '@/components/layout/page-header';
 import { OfflineAwareVisitorQr } from '@/components/pwa/offline-aware-visitor-qr';
+import { VisitorPassActions } from '@/components/visitors/visitor-pass-actions';
 
 export default async function VisitorDetailPage(props: {
   params: Promise<{ id: string }>;
@@ -49,18 +50,7 @@ export default async function VisitorDetailPage(props: {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <PageHeader
-        title="Pass Details"
-        backHref="/visitors"
-        action={
-          <button
-            type="button"
-            className="rounded-full p-2 text-red-600 hover:bg-red-50"
-          >
-            <Trash2 className="h-5 w-5" />
-          </button>
-        }
-      />
+      <PageHeader title="Pass Details" backHref="/visitors" />
 
       <main className="mx-auto flex w-full max-w-md flex-col items-center space-y-8 px-4 py-8 pb-24 md:max-w-3xl">
         <OfflineAwareVisitorQr
@@ -120,15 +110,12 @@ export default async function VisitorDetailPage(props: {
             </div>
           </div>
 
-          <div className="flex gap-3">
-            <Button className="flex-1 h-12 gap-2 text-base shadow-md">
-              <Share2 className="h-5 w-5" />
-              Share Pass
-            </Button>
-            <Button variant="outline" className="h-12 w-12 p-0 shadow-sm">
-              <Download className="h-5 w-5" />
-            </Button>
-          </div>
+          <VisitorPassActions
+            visitorId={visitor.id}
+            visitorName={visitor.visitorName || 'Guest'}
+            qrCode={visitor.qrCode.code}
+            isActive={isActive}
+          />
         </div>
       </main>
     </div>

@@ -4,6 +4,7 @@ import { requirePortalSession } from '@/lib/require-portal-session';
 import { prisma } from '@gate-access/db';
 import { OpenQRForm } from '@/components/open-qr-form';
 import { PageHeader } from '@/components/layout/page-header';
+import { UnitRequiredEmpty } from '@/components/common/unit-required-empty';
 
 export default async function NewOpenQRPage() {
   const claims = await getSessionClaims();
@@ -18,7 +19,9 @@ export default async function NewOpenQRPage() {
   });
 
   if (!unit) {
-    return null;
+    return (
+      <UnitRequiredEmpty intent="open-qr" title="Open Access QR" backHref="/" />
+    );
   }
 
   return (

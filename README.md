@@ -383,14 +383,14 @@ See **[PRD §9](docs/reference/product/PRD.md)** and **[CHANGELOG](CHANGELOG.md)
 
 ## 📅 Recent Engineering Activity
 
+- **[Resident-Portal]:** Phase 08 pilot UX revoke, share, and sign-out
+- **[Resident-Portal]:** Phase 07 API upstream, scannable QR, offline read
 - **[Resident-Portal]:** Phase 07 API upstream, scannable QR, offline read
 - **[Client-Dashboard]:** add loading skeletons for routes that lacked one
 - **[Client-Dashboard]:** show next billing date on the billing settings page
 - **[Ui]:** register ds-* design tokens as real Tailwind utilities
 - **[Client-Dashboard]:** polish header search input
 - **[Ui]:** redesign login page with clean modern SaaS web app layout
-- **[Client Dashboard Readiness 2026]:** complete phase 5
-- **[Workflow]:** certify client-dashboard and complete workflow bootstrap
 
 ---
 

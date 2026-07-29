@@ -1,18 +1,11 @@
 import Link from 'next/link';
-import {
-  User,
-  Home,
-  LogOut,
-  Bell,
-  Shield,
-  HelpCircle,
-  ChevronRight,
-} from 'lucide-react';
+import { User, Home, Bell, ChevronRight } from 'lucide-react';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { requirePortalSession } from '@/lib/require-portal-session';
 import { prisma } from '@gate-access/db';
-import { Button, Input } from '@gateflow/ui';
+import { Input } from '@gateflow/ui';
 import { PageHeader } from '@/components/layout/page-header';
+import { SignOutButton } from '@/components/profile/sign-out-button';
 
 export default async function ProfilePage() {
   const claims = await getSessionClaims();
@@ -37,7 +30,6 @@ export default async function ProfilePage() {
       <PageHeader title="Profile" backHref="/" />
 
       <main className="mx-auto w-full max-w-md space-y-6 px-4 py-6 pb-24 md:max-w-6xl">
-        {/* User Info Card */}
         <section className="grid gap-6 xl:grid-cols-3">
           <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm xl:col-span-2">
             <div className="flex items-center gap-4">
@@ -74,7 +66,6 @@ export default async function ProfilePage() {
             </div>
           </div>
 
-          {/* My Unit */}
           <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
             <div className="px-5 py-4 border-b border-slate-100">
               <h3 className="font-semibold text-slate-900">My Unit</h3>
@@ -113,7 +104,6 @@ export default async function ProfilePage() {
           </div>
         </section>
 
-        {/* Settings */}
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
           <div className="px-5 py-4 border-b border-slate-100">
             <h3 className="font-semibold text-slate-900">Settings</h3>
@@ -129,43 +119,13 @@ export default async function ProfilePage() {
               </div>
               <ChevronRight className="h-4 w-4 text-slate-400" />
             </Link>
-            <Link
-              href="/settings/privacy"
-              className="px-5 py-4 flex items-center justify-between hover:bg-slate-50"
-            >
-              <div className="flex items-center gap-3">
-                <Shield className="h-5 w-5 text-slate-400" />
-                <span className="text-sm text-slate-700">
-                  Privacy & Security
-                </span>
-              </div>
-              <ChevronRight className="h-4 w-4 text-slate-400" />
-            </Link>
-            <Link
-              href="/settings/help"
-              className="px-5 py-4 flex items-center justify-between hover:bg-slate-50"
-            >
-              <div className="flex items-center gap-3">
-                <HelpCircle className="h-5 w-5 text-slate-400" />
-                <span className="text-sm text-slate-700">Help & Support</span>
-              </div>
-              <ChevronRight className="h-4 w-4 text-slate-400" />
-            </Link>
           </div>
         </div>
 
-        {/* Logout */}
         <div className="pt-4">
-          <Button
-            variant="outline"
-            className="w-full justify-center gap-2 text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300"
-          >
-            <LogOut className="h-4 w-4" />
-            Sign Out
-          </Button>
+          <SignOutButton />
         </div>
 
-        {/* App Info */}
         <div className="text-center text-xs text-slate-400">
           <p>GateFlow Resident Portal v1.0</p>
           <p className="mt-1">Made for secure living</p>
