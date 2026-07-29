@@ -165,9 +165,9 @@ jobs:
           DATABASE_URL: 'postgresql://placeholder:placeholder@localhost:5432/placeholder'
           ACCELERATE_URL: 'false'
 
-      - name: Build all web apps
-        run: pnpm turbo build --filter=client-dashboard --filter=admin-dashboard --filter=marketing --filter=resident-portal --filter=@gateflow/design-system
+      - name: Build web apps
         env:
+          DEPLOY_APP: ${{ github.event.inputs.app }}
           ACCELERATE_URL: 'false'
           DATABASE_URL: 'postgresql://placeholder:placeholder@localhost:5432/placeholder'
           SKIP_ENV_VALIDATION: 'true'
@@ -175,6 +175,26 @@ jobs:
           STATSIG_SERVER_API_KEY: 'placeholder'
           EXPERIMENTATION_CONFIG_ITEM_KEY: 'placeholder'
           tune_EXPERIMENTATION_CONFIG_ITEM_KEY: 'placeholder'
+          # Resident Portal fail-closed upstream (needed when that app is in the build set)
+          RESIDENT_API_UPSTREAM: 'https://app.gateflow.site/api'
+          NEXT_PUBLIC_API_URL: 'https://app.gateflow.site/api'
+        run: |
+          set -euo pipefail
+          case "${DEPLOY_APP:-all}" in
+            client-dashboard) FILTERS=(--filter=client-dashboard) ;;
+            admin-dashboard) FILTERS=(--filter=admin-dashboard) ;;
+            marketing) FILTERS=(--filter=marketing) ;;
+            resident-portal) FILTERS=(--filter=resident-portal) ;;
+            design-system) FILTERS=(--filter=@gateflow/design-system) ;;
+            *) FILTERS=(
+                --filter=client-dashboard
+                --filter=admin-dashboard
+                --filter=marketing
+                --filter=resident-portal
+                --filter=@gateflow/design-system
+              ) ;;
+          esac
+          pnpm turbo build "${FILTERS[@]}"
 
   # ── Database Migration ────────────────────────────────────────────────────
   db-migrate:
