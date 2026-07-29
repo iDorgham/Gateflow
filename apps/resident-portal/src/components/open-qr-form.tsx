@@ -84,13 +84,13 @@ export function OpenQRForm({ unitId }: { unitId: string }) {
           <div className="space-y-1.5">
             <Label htmlFor="maxUses">Max Visitors Allowed</Label>
             <div className="relative">
-              <Users className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+              <Users className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
               <Input
                 id="maxUses"
                 type="number"
                 min="1"
                 max="50"
-                className="pl-9"
+                className="ps-9"
                 required
                 value={formData.maxUses}
                 onChange={(e) =>

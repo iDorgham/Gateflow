@@ -10,12 +10,13 @@ export function resolveDisplayedQrCode(options: {
   isOnline: boolean;
 }): { code: string | null; source: QrDisplaySource | null } {
   const live =
-    typeof options.liveCode === 'string' && options.liveCode.length > 0
-      ? options.liveCode
+    typeof options.liveCode === 'string' && options.liveCode.trim().length > 0
+      ? options.liveCode.trim()
       : null;
   const cached =
-    typeof options.cachedCode === 'string' && options.cachedCode.length > 0
-      ? options.cachedCode
+    typeof options.cachedCode === 'string' &&
+    options.cachedCode.trim().length > 0
+      ? options.cachedCode.trim()
       : null;
 
   if (options.isOnline) {

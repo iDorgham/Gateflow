@@ -118,11 +118,11 @@ export function VisitorForm({ unitId }: { unitId: string }) {
           <div className="space-y-1.5">
             <Label htmlFor="visitorName">Full Name</Label>
             <div className="relative">
-              <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+              <User className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
               <Input
                 id="visitorName"
                 placeholder="e.g. John Doe"
-                className="pl-9"
+                className="ps-9"
                 required
                 value={formData.visitorName}
                 onChange={(e) =>
@@ -135,11 +135,11 @@ export function VisitorForm({ unitId }: { unitId: string }) {
             <div className="space-y-1.5">
               <Label htmlFor="visitorPhone">Phone (Optional)</Label>
               <div className="relative">
-                <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                <Phone className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                 <Input
                   id="visitorPhone"
                   placeholder="+971..."
-                  className="pl-9"
+                  className="ps-9"
                   value={formData.visitorPhone}
                   onChange={(e) =>
                     setFormData({ ...formData, visitorPhone: e.target.value })
@@ -150,12 +150,12 @@ export function VisitorForm({ unitId }: { unitId: string }) {
             <div className="space-y-1.5">
               <Label htmlFor="visitorEmail">Email (Optional)</Label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                <Mail className="absolute start-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                 <Input
                   id="visitorEmail"
                   type="email"
                   placeholder="john@example.com"
-                  className="pl-9"
+                  className="ps-9"
                   value={formData.visitorEmail}
                   onChange={(e) =>
                     setFormData({ ...formData, visitorEmail: e.target.value })

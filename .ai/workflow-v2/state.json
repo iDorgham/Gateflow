@@ -76,7 +76,7 @@
       "updatedAt": "2026-07-26T22:28:37.932Z"
     },
     "resident-portal": {
-      "stage": "developing",
+      "stage": "checking",
       "currentPlan": "resident_portal_responsive",
       "baseline": null,
       "evidence": [
@@ -112,7 +112,7 @@
         }
       ],
       "certificationReceipt": null,
-      "updatedAt": "2026-07-28T22:25:53.823Z",
+      "updatedAt": "2026-07-29T14:01:54.814Z",
       "pageScoresFile": "docs/audits/resident-portal/PAGE_SCORES_2026-07-29.json",
       "pilotFlowCoverage": {
         "covered": 0,
@@ -141,5 +141,5 @@
   },
   "workdirLock": null,
   "createdAt": "2026-07-24T00:00:00.000Z",
-  "updatedAt": "2026-07-28T23:50:49.788Z"
+  "updatedAt": "2026-07-29T14:01:55.405Z"
 }

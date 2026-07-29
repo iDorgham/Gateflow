@@ -1,10 +1,11 @@
 import { cookies } from 'next/headers';
 import { resolveResidentApiBase } from '@/lib/api-upstream';
+import { joinResidentApiPath } from '@/lib/resident-api-url';
+
+export { joinResidentApiPath } from '@/lib/resident-api-url';
 
 export function buildResidentApiUrl(path: string): string {
-  const base = resolveResidentApiBase();
-  const normalized = path.startsWith('/') ? path : `/${path}`;
-  return `${base}${normalized}`;
+  return joinResidentApiPath(resolveResidentApiBase(), path);
 }
 
 export async function sessionCookieHeader(): Promise<string> {

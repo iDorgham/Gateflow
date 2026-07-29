@@ -3,6 +3,7 @@ import { Inter, Cairo } from 'next/font/google';
 import type { Metadata } from 'next';
 import { Toaster } from 'sonner';
 import { PwaBootstrap } from '@/components/pwa/pwa-bootstrap';
+import { resolveHtmlDocumentAttrs } from '@/lib/portal-i18n';
 
 export const metadata: Metadata = {
   title: 'GateFlow Resident Portal',
@@ -28,9 +29,11 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // Portal doesn't seem to have locale in params yet, but let's prepare the classes
+  // Phase 09: interim EN-only — explicit lang/dir; AR/RTL deferred (portal-i18n).
+  const { lang, dir } = resolveHtmlDocumentAttrs();
+
   return (
-    <html lang="en">
+    <html lang={lang} dir={dir}>
       <body
         className={`min-h-screen bg-background antialiased ${inter.variable} ${cairo.variable} font-sans`}
       >

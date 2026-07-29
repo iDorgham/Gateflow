@@ -29,7 +29,7 @@ function Toggle({
       className={`relative h-6 w-11 rounded-full transition ${checked ? 'bg-blue-600' : 'bg-slate-200'}`}
     >
       <span
-        className={`absolute top-1 h-4 w-4 rounded-full bg-white transition ${checked ? 'right-1' : 'left-1'}`}
+        className={`absolute top-1 h-4 w-4 rounded-full bg-white transition ${checked ? 'end-1' : 'start-1'}`}
       />
     </button>
   );

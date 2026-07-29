@@ -10,11 +10,11 @@ export type OrgClaims = {
 };
 
 export function resolveOrganizationId(claims: OrgClaims): string | null {
-  if (typeof claims.orgId === 'string' && claims.orgId.length > 0) {
-    return claims.orgId;
+  if (typeof claims.orgId === 'string' && claims.orgId.trim().length > 0) {
+    return claims.orgId.trim();
   }
-  if (typeof claims.org === 'string' && claims.org.length > 0) {
-    return claims.org;
+  if (typeof claims.org === 'string' && claims.org.trim().length > 0) {
+    return claims.org.trim();
   }
   return null;
 }
