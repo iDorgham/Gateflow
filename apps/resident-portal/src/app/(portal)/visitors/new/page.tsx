@@ -4,6 +4,7 @@ import { requirePortalSession } from '@/lib/require-portal-session';
 import { prisma } from '@gate-access/db';
 import { VisitorForm } from '@/components/visitor-form';
 import { PageHeader } from '@/components/layout/page-header';
+import { UnitRequiredEmpty } from '@/components/common/unit-required-empty';
 
 export default async function NewVisitorPage() {
   const claims = await getSessionClaims();
@@ -18,7 +19,13 @@ export default async function NewVisitorPage() {
   });
 
   if (!unit) {
-    return null;
+    return (
+      <UnitRequiredEmpty
+        intent="visitor"
+        title="Add Visitor"
+        backHref="/visitors"
+      />
+    );
   }
 
   return (
