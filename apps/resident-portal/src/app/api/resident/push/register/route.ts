@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { resolveOrganizationId } from '@/lib/session-claims';
+import { resolveResidentApiBase } from '@/lib/api-upstream';
 
 export async function POST(request: NextRequest) {
   const claims = await getSessionClaims();
@@ -20,8 +21,15 @@ export async function POST(request: NextRequest) {
   }
 
   const body = await request.json();
-  const apiBase =
-    process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+  let apiBase: string;
+  try {
+    apiBase = resolveResidentApiBase();
+  } catch {
+    return NextResponse.json(
+      { success: false, error: 'API upstream not configured' },
+      { status: 503 }
+    );
+  }
 
   const upstream = await fetch(`${apiBase}/resident/push/register`, {
     method: 'POST',

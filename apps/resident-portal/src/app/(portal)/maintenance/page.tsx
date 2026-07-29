@@ -6,20 +6,28 @@ import {
   type MaintenanceRequestItem,
 } from '@/components/maintenance/maintenance-hub';
 import { ResidentRequestForm } from '@/components/maintenance/resident-request-form';
+import { fetchResidentJson } from '@/lib/resident-api-fetch';
 
-async function fetchMyRequests(): Promise<MaintenanceRequestItem[]> {
-  const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
-  const res = await fetch(`${apiUrl}/resident/maintenance`, {
-    cache: 'no-store',
-  });
-  if (!res.ok) {
-    return [];
+async function fetchMyRequests(): Promise<{
+  requests: MaintenanceRequestItem[];
+  error: string | null;
+}> {
+  const result = await fetchResidentJson<MaintenanceRequestItem[]>(
+    '/resident/maintenance'
+  );
+  if (!result.ok) {
+    return {
+      requests: [],
+      error:
+        result.error === 'Unauthorized'
+          ? 'Sign in again to view maintenance requests.'
+          : 'Could not load maintenance requests.',
+    };
   }
-  const json = await res.json();
-  if (!json?.success || !Array.isArray(json.data)) {
-    return [];
-  }
-  return json.data as MaintenanceRequestItem[];
+  return {
+    requests: Array.isArray(result.data) ? result.data : [],
+    error: null,
+  };
 }
 
 export default async function MaintenancePage(props: {
@@ -28,7 +36,7 @@ export default async function MaintenancePage(props: {
 }) {
   const searchParams = await props.searchParams;
   const isNew = searchParams.new === 'true';
-  const requests = await fetchMyRequests();
+  const { requests, error } = await fetchMyRequests();
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -48,6 +56,14 @@ export default async function MaintenancePage(props: {
       />
 
       <main className="mx-auto w-full max-w-md space-y-6 px-4 py-6 pb-24 md:max-w-6xl">
+        {error ? (
+          <div
+            role="alert"
+            className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900"
+          >
+            {error}
+          </div>
+        ) : null}
         {isNew ? (
           <div className="space-y-6">
             <div className="flex flex-col gap-1 px-1">

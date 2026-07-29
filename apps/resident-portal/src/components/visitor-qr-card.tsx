@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { User, Calendar, Clock, Download, Share } from 'lucide-react';
+import QRCode from 'react-qr-code';
 
 import {
   Card,
@@ -22,6 +23,8 @@ export interface VisitorQRCardProps {
   onShare?: () => void;
   onDownload?: () => void;
   className?: string;
+  /** Shown when value came from IndexedDB offline cache */
+  offlineCached?: boolean;
 }
 
 export function VisitorQRCard({
@@ -33,6 +36,7 @@ export function VisitorQRCard({
   onShare,
   onDownload,
   className,
+  offlineCached = false,
 }: VisitorQRCardProps) {
   const isActive = status === 'active';
 
@@ -53,6 +57,7 @@ export function VisitorQRCard({
             </CardTitle>
             <CardDescription className="mt-1">
               One-time visitor pass
+              {offlineCached ? ' · offline copy' : ''}
             </CardDescription>
           </div>
           <Badge
@@ -65,11 +70,20 @@ export function VisitorQRCard({
       </CardHeader>
       <CardContent className="pt-6 pb-6 flex flex-col items-center border-b border-dashed">
         <div className="relative bg-white p-3 rounded-xl border-2 border-primary/10 mb-4 shadow-sm">
-          {/* Placeholder for QR Code */}
-          <div className="bg-muted w-40 h-40 flex items-center justify-center rounded">
-            <span className="text-xs text-muted-foreground font-mono truncate max-w-[120px]">
-              {qrValue}
-            </span>
+          <div
+            className="bg-white w-40 h-40 flex items-center justify-center rounded p-2"
+            data-testid="visitor-qr-code"
+          >
+            {qrValue ? (
+              <QRCode
+                value={qrValue}
+                size={144}
+                style={{ height: 'auto', maxWidth: '100%', width: '100%' }}
+                viewBox="0 0 144 144"
+              />
+            ) : (
+              <span className="text-xs text-muted-foreground">No QR</span>
+            )}
           </div>
           {!isActive && (
             <div className="absolute inset-0 bg-background/80 backdrop-blur-[1px] rounded-xl flex items-center justify-center">

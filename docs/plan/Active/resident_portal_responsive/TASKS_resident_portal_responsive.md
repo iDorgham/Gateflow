@@ -22,7 +22,7 @@
 - [x] Configure `manifest.json` and meta tags
 - [x] Setup custom SW handling
 - [x] Implement `offline-cache.ts` for QR storage (IndexedDB write)
-- [ ] Wire QR views to **read** cache when offline (moved to Phase 07 — audit gap)
+- [x] Wire QR views to **read** cache when offline (done in Phase 07)
 - [x] Add "Offline" banner/indicator
 - [x] Web Push: registration flow and server-side subscription storage
 - [ ] `phase_logs/PHASE_LOG_phase_02.md` updated (backfill if missing)
@@ -41,7 +41,7 @@
 - [x] Redesign `(portal)/maintenance/page.tsx` (Split-view List-Detail)
 - [x] Integrate maintenance form into responsive layout
 - [x] Wire notification toggles in `Profile` to API
-- [ ] Cookie-authenticated history/maintenance fetch (moved to Phase 07)
+- [x] Cookie-authenticated history/maintenance fetch (done in Phase 07)
 - [ ] `phase_logs/PHASE_LOG_phase_04.md` updated (backfill if missing)
 
 ### Phase 5: Polish & Final QA
@@ -68,12 +68,12 @@
 
 ### Phase 7: API proxy, scannable QR, offline read
 
-- [ ] Env-based `/api/resident/*` upstream (no hardcoded `localhost:3001`)
-- [ ] Render scannable QR from signed payload (`visitor-qr-card`, `open-qr-card`)
-- [ ] Offline IndexedDB **read** path for active QR
-- [ ] Forward auth for history/maintenance RSC fetches
-- [ ] Tests: QR render smoke; proxy config; offline read
-- [ ] `phase_logs/PHASE_LOG_phase_07.md`
+- [x] Env-based `/api/resident/*` upstream (no hardcoded `localhost:3001`)
+- [x] Render scannable QR from signed payload (`visitor-qr-card`, `open-qr-card`)
+- [x] Offline IndexedDB **read** path for active QR
+- [x] Forward auth for history/maintenance RSC fetches
+- [x] Tests: QR render smoke; proxy config; offline read
+- [x] `phase_logs/PHASE_LOG_phase_07.md`
 
 ### Phase 8: Pilot UX completion
 

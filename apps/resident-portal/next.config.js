@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const { securityHeaders } = require('../../packages/config/security-headers');
-
 const path = require('path');
+const { resolveResidentRewriteDestination } = require('./api-upstream.cjs');
 
 const nextConfig = {
   outputFileTracingRoot: path.join(__dirname, '../../'),
@@ -14,7 +14,7 @@ const nextConfig = {
     return [
       {
         source: '/api/resident/:path*',
-        destination: 'http://localhost:3001/api/resident/:path*',
+        destination: resolveResidentRewriteDestination(),
       },
     ];
   },
