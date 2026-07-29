@@ -160,23 +160,24 @@ function validateScopeDiff(focusedApp, files) {
     );
 }
 
-function aggregateEvidence(items) {
+function aggregateEvidence(items, focusedApp = null) {
   const blockers = items
     .filter(
       (item) =>
         item.priority === 'P0' &&
         item.status !== 'passed' &&
-        item.status !== 'n/a'
+        !(item.status === 'n/a' && item.owner && item.owner !== focusedApp)
     )
     .map((item) => item.step);
   return {
     ready: items.length > 0 && blockers.length === 0,
     blockers,
-    steps: items.map(({ step, priority, status, createdAt }) => ({
+    steps: items.map(({ step, priority, status, createdAt, owner }) => ({
       step,
       priority,
       status,
       createdAt,
+      ...(owner && { owner }),
     })),
     generatedAt: new Date().toISOString(),
   };

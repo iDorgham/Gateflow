@@ -26,11 +26,14 @@
       "status": "passed",
       "command": "pnpm --filter resident-portal lint"
     },
-    "prCi": {
+    "baselinePrCi": {
       "status": "passed",
       "pr": 200,
-      "note": "Lint/Typecheck/Test/Security Scan/CI OK green on draft PR #200"
-    }
+      "commit": "a7a9548a756f40ce6dc9f80378c1c344551f823c",
+      "note": "Lint/Typecheck/Test/Security Scan/CI OK green on baseline PR #200 (Phase 09 merge to master)"
+    },
+    "forPr": null,
+    "forCommit": "cd687e10e088dbd5ce2d459bdd40e4ac5468d28e"
   },
   "artifacts": {
     "audit": "docs/audits/resident-portal/AUDIT_2026-07-29.md",

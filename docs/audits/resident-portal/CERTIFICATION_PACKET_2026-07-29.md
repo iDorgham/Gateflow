@@ -67,5 +67,13 @@ Pointer: `PAGE_SCORES_2026-07-29.json` (`securityBoundaryProven=false`, average 
 
 ## Related phase logs
 
-`docs/plan/Complete/resident_portal_responsive/phase_logs/PHASE_LOG_phase_06.md` …
-`PHASE_LOG_phase_10.md`.
+- `docs/plan/Complete/resident_portal_responsive/phase_logs/PHASE_LOG_phase_01.md`
+- `docs/plan/Complete/resident_portal_responsive/phase_logs/PHASE_LOG_phase_02.md`
+- `docs/plan/Complete/resident_portal_responsive/phase_logs/PHASE_LOG_phase_03.md`
+- `docs/plan/Complete/resident_portal_responsive/phase_logs/PHASE_LOG_phase_04.md`
+- `docs/plan/Complete/resident_portal_responsive/phase_logs/PHASE_LOG_phase_05.md`
+- `docs/plan/Complete/resident_portal_responsive/phase_logs/PHASE_LOG_phase_06.md`
+- `docs/plan/Complete/resident_portal_responsive/phase_logs/PHASE_LOG_phase_07.md`
+- `docs/plan/Complete/resident_portal_responsive/phase_logs/PHASE_LOG_phase_08.md`
+- `docs/plan/Complete/resident_portal_responsive/phase_logs/PHASE_LOG_phase_09.md`
+- `docs/plan/Complete/resident_portal_responsive/phase_logs/PHASE_LOG_phase_10.md`

@@ -1,9 +1,9 @@
 # PLAN: Resident Portal — Responsive & Pilot Readiness
 
-**Slug:** `resident_portal_responsive`  
-**Primary app:** `apps/resident-portal` (Workflow v2 focused)  
-**Status:** Complete (2026-07-29) — Workflow app stage remains `checking` (not certified)  
-**Branch:** `feat/resident-portal-phase-09`  
+**Slug:** `resident_portal_responsive`
+**Primary app:** `apps/resident-portal` (Workflow v2 focused)
+**Status:** Complete (2026-07-29) — Workflow app stage remains `checking` (not certified)
+**Branch:** `feat/resident-portal-phase-10` (Phase 09 baseline: `feat/resident-portal-phase-09` merged as PR #200)
 **Baseline evidence:** `docs/audits/resident-portal/AUDIT_2026-07-29.md`, `PAGE_MAP_2026-07-29.md`, `PAGE_SCORES_2026-07-29.json`, `PILOT_GATE_2026-07-29-phase10.json`, `CERTIFICATION_PACKET_2026-07-29.json`
 
 ## Outcome

@@ -11,7 +11,7 @@
   "branch": "feat/resident-portal-phase-10",
   "draftPr": "https://github.com/iDorgham/Gateflow/pull/201",
   "reviewMode": "static-review-only",
-  "summary": "App lint/typecheck/test/build and CI green; pilot evidence not ready (4 owned partial steps). Certify blocked.",
+  "summary": "App lint/typecheck/test/build passed; PR CI unconfirmed; pilot evidence not ready (4 owned partial steps). Certify blocked.",
   "checks": {
     "lint": {
       "status": "passed",
@@ -51,10 +51,10 @@
       "highOrCriticalFindings": 0
     },
     "prCi": {
-      "status": "passed",
+      "status": "unconfirmed",
       "pr": 201,
       "headRefOid": "cd687e10e088dbd5ce2d459bdd40e4ac5468d28e",
-      "note": "Setup/Lint/Typecheck/Test/Security Scan/Performance Budget/CI OK/CodeQL SUCCESS"
+      "note": "PR #201 CI pending verification; do not claim green until confirmed"
     },
     "pageScores": {
       "status": "passed",

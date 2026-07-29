@@ -142,20 +142,42 @@ test('pilot evidence aggregation requires fresh passing P0 steps', () => {
 });
 
 test('pilot evidence aggregation ignores n/a steps owned by other apps', () => {
-  const result = aggregateEvidence([
-    {
-      step: 'Resident creates guest permission',
-      priority: 'P0',
-      status: 'passed',
-      createdAt: '2026-07-29T14:45:00.000Z',
-    },
-    {
-      step: 'Security scans the QR',
-      priority: 'P0',
-      status: 'n/a',
-      createdAt: '2026-07-29T14:45:00.000Z',
-    },
-  ]);
+  const result = aggregateEvidence(
+    [
+      {
+        step: 'Resident creates guest permission',
+        priority: 'P0',
+        status: 'passed',
+        owner: 'resident-portal',
+        createdAt: '2026-07-29T14:45:00.000Z',
+      },
+      {
+        step: 'Security scans the QR',
+        priority: 'P0',
+        status: 'n/a',
+        owner: 'scanner-app',
+        createdAt: '2026-07-29T14:45:00.000Z',
+      },
+    ],
+    'resident-portal'
+  );
   assert.equal(result.ready, true);
   assert.deepEqual(result.blockers, []);
+});
+
+test('pilot evidence aggregation blocks on owned P0 n/a steps', () => {
+  const result = aggregateEvidence(
+    [
+      {
+        step: 'Owned feature not yet implemented',
+        priority: 'P0',
+        status: 'n/a',
+        owner: 'resident-portal',
+        createdAt: '2026-07-29T14:45:00.000Z',
+      },
+    ],
+    'resident-portal'
+  );
+  assert.equal(result.ready, false);
+  assert.deepEqual(result.blockers, ['Owned feature not yet implemented']);
 });
