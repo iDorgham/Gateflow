@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Resident-Portal]** Phase 09 i18n interim, logical CSS, and evidence
+
 - **[Resident-Portal]** Phase 08 pilot UX revoke, share, and sign-out
 
 - **[Resident-Portal]** Phase 07 API upstream, scannable QR, offline read

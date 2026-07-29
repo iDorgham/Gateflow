@@ -78,7 +78,7 @@ export function OpenQRCard({
           className="w-full text-primary border-primary/20 hover:bg-primary/5 font-semibold"
           onClick={onRegenerate}
         >
-          <RefreshCw className="mr-2 h-4 w-4" /> Regenerate Pass
+          <RefreshCw className="me-2 h-4 w-4" /> Regenerate Pass
         </Button>
       </CardFooter>
     </Card>

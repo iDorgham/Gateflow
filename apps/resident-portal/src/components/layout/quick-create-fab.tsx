@@ -9,7 +9,7 @@ export function QuickCreateFAB() {
   const [open, setOpen] = React.useState(false);
 
   return (
-    <div className="fixed bottom-24 right-6 z-40 md:hidden">
+    <div className="fixed bottom-24 end-6 z-40 md:hidden">
       <div
         className={cn(
           'mb-4 flex flex-col items-end gap-3 transition-all duration-300 ease-[var(--ds-easing-entrance)]',

@@ -96,11 +96,11 @@ export function VisitorQRCard({
 
         <div className="w-full flex flex-col gap-2 mt-2">
           <div className="flex items-center text-sm text-foreground bg-muted/50 p-2 rounded-md">
-            <Calendar className="h-4 w-4 mr-3 text-muted-foreground" />
+            <Calendar className="h-4 w-4 me-3 text-muted-foreground" />
             <span className="font-medium">{date}</span>
           </div>
           <div className="flex items-center text-sm text-foreground bg-muted/50 p-2 rounded-md">
-            <Clock className="h-4 w-4 mr-3 text-muted-foreground" />
+            <Clock className="h-4 w-4 me-3 text-muted-foreground" />
             <span className="font-medium">{timeWindow}</span>
           </div>
         </div>
@@ -113,7 +113,7 @@ export function VisitorQRCard({
           disabled={!isActive}
           onClick={onShare}
         >
-          <Share className="h-4 w-4 mr-2" /> Share
+          <Share className="h-4 w-4 me-2" /> Share
         </Button>
         <div className="w-px h-6 bg-border mx-2" />
         <Button
@@ -123,7 +123,7 @@ export function VisitorQRCard({
           disabled={!isActive}
           onClick={onDownload}
         >
-          <Download className="h-4 w-4 mr-2" /> Save Image
+          <Download className="h-4 w-4 me-2" /> Save Image
         </Button>
       </CardFooter>
     </Card>

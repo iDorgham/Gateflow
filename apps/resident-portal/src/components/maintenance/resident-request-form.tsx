@@ -295,7 +295,7 @@ export function ResidentRequestForm() {
               onClick={prevStep}
               disabled={loading}
             >
-              <ArrowLeft className="h-4 w-4 mr-2" />
+              <ArrowLeft className="h-4 w-4 me-2" />
               Back
             </Button>
           )}
@@ -303,7 +303,7 @@ export function ResidentRequestForm() {
           {step < 3 ? (
             <Button className="flex-[2] h-12 rounded-xl" onClick={nextStep}>
               Next
-              <ArrowRight className="h-4 w-4 ml-2" />
+              <ArrowRight className="h-4 w-4 ms-2" />
             </Button>
           ) : (
             <Button
@@ -313,7 +313,7 @@ export function ResidentRequestForm() {
             >
               {loading ? (
                 <>
-                  <span className="h-4 w-4 mr-2 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                  <span className="h-4 w-4 me-2 border-2 border-white/20 border-t-white rounded-full animate-spin" />
                   Submitting...
                 </>
               ) : (
