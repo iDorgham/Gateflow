@@ -103,6 +103,7 @@ test('scope diff allows focused app, shared packages, docs, and workflow files',
     validateScopeDiff('client-dashboard', [
       'apps/client-dashboard/src/a.ts',
       'CHANGELOG.md',
+      'README.md',
       'package.json',
       'pnpm-lock.yaml',
       'packages/types/src/a.ts',

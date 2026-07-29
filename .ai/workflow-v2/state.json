@@ -130,6 +130,16 @@
           "reviewMode": "static-review-only",
           "artifact": "docs/audits/resident-portal/CERTIFICATION_PACKET_2026-07-29.json",
           "note": "Packet body sets valid=false; not certify-ready"
+        },
+        {
+          "id": "resident-portal-check-all-2026-07-29",
+          "type": "focused-check",
+          "status": "blocked",
+          "valid": true,
+          "createdAt": "2026-07-29T19:50:00.000Z",
+          "commit": "cd687e10e088dbd5ce2d459bdd40e4ac5468d28e",
+          "reviewMode": "static-review-only",
+          "artifact": "docs/audits/resident-portal/CHECK_ALL_2026-07-29.json"
         }
       ],
       "externalGates": [
@@ -144,7 +154,7 @@
         }
       ],
       "certificationReceipt": null,
-      "updatedAt": "2026-07-29T14:50:00.000Z",
+      "updatedAt": "2026-07-29T19:50:00.000Z",
       "pageScoresFile": "docs/audits/resident-portal/PAGE_SCORES_2026-07-29.json",
       "pilotFlowCoverage": {
         "covered": 0,
@@ -175,5 +185,5 @@
   },
   "workdirLock": null,
   "createdAt": "2026-07-24T00:00:00.000Z",
-  "updatedAt": "2026-07-29T14:49:58.844Z"
+  "updatedAt": "2026-07-29T19:50:00.000Z"
 }

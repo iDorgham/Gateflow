@@ -5,11 +5,12 @@
 - Plan status: **Complete** (all 10 phases done; app still Workflow `checking`)
 - Focused app: `resident-portal`
 - Branch: `feat/resident-portal-phase-10`
-- Draft PR: (set after `/github`)
+- Draft PR: https://github.com/iDorgham/Gateflow/pull/201
+- Head SHA: (update after check evidence commit)
 - Base: `origin/master` @ `a7a9548a` (PR #200 merged)
 - Last phase completed: **10 — Pilot gate & certification packet**
-- Exact next action: `/check all` (static) after this commit lands
-- **Do not `/certify`** until packet `valid:true` after browser/external gates
+- Exact next action: clear browser/session deferrals before `/pilot`; do not `/certify`
+- Check evidence: `docs/audits/resident-portal/CHECK_ALL_2026-07-29.json` (status blocked on pilot)
 
 ## Durable decisions
 
