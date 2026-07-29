@@ -1,0 +1,48 @@
+apps/client-dashboard/src/app/[locale]/login/actions.ts
+  s_55e4dcfab374c2::t_630e9bdcc6e01d 11
+  s_55e4dcfab374c2::t_f51cc2f7c0fc8c 101,103,107,110
+docs/audits/resident-portal/BROWSER_SESSION_EVIDENCE_2026-07-29.md
+  s_55e4dcfab374c2::t_dc422a6de9df0e 1-69
+docs/audits/resident-portal/CERTIFICATION_PACKET_2026-07-29.json
+  s_55e4dcfab374c2::t_2f7ed3bb3a4d58 5,8,11-12,14-22,30-35,46-47,57,77,81,87-89
+apps/client-dashboard/src/lib/auth-cookies.ts
+  s_55e4dcfab374c2::t_ca90e0a4ac5061 6,9-28,34-55,60-67
+apps/client-dashboard/src/app/api/onboarding/complete/route.ts
+  s_55e4dcfab374c2::t_f05c5c473ecaf7 3-6
+  s_55e4dcfab374c2::t_8f103f2121fa47 134
+  s_55e4dcfab374c2::t_ef652ccc0eb40a 133,141,151
+docs/audits/resident-portal/PILOT_GATE_2026-07-29-phase10.json
+  s_55e4dcfab374c2::t_e6ddfdc0a02360 7,9-11,13-17,23-24,32,34-36,38-39,41,55,57-59,61,63,77,79-81,83,85,100
+docs/audits/resident-portal/CERTIFICATION_PACKET_2026-07-29.md
+  s_55e4dcfab374c2::t_95c79d3ca8dbcb 1,5-6,8-10,14-17,19-20,22,24,26,28-34,36,38-41,45-51,55-59
+docs/plan/Complete/resident_portal_responsive/SESSION_MEMORY.md
+  s_55e4dcfab374c2::t_5d4985a4cd30ff 9,12-15,20-21,23-24,29-31,36-44
+docs/guides/ENVIRONMENT_VARIABLES.md
+  s_55e4dcfab374c2::t_de4077d5558d98 38
+  s_55e4dcfab374c2::t_54ba9e6928b185 29-37
+apps/client-dashboard/src/lib/auth-cookies.test.ts
+  s_55e4dcfab374c2::t_65ef370d1a4b7c 33-47,51-60,62,90-105,107
+  s_55e4dcfab374c2::t_e39b2f7c557f6d 28-30
+  s_55e4dcfab374c2::t_2d153869900b8a 31-32
+  s_55e4dcfab374c2::t_9c739b477b22db 106
+docs/audits/resident-portal/DEFERRALS_2026-07-29.json
+  s_55e4dcfab374c2::t_bb2491c7aa03ad 5-7,12,15-18,23,26-28,33,36-38,43,46-62,67
+docs/audits/resident-portal/PILOT_GATE_OWNED_2026-07-29-phase10.json
+  s_55e4dcfab374c2::t_54c016dce82f0c 7,9-11,13-17,23-24,32,34-36,38-40,46-47,55,57-59,61,63,68-69,77,79-81,83,85,90-91
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "920e074e57f8f36a50703400cd38eb869607ac63",
+  "prompts": {},
+  "sessions": {
+    "s_55e4dcfab374c2": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "9eb763a1-f03d-4c6d-b6cf-d1a99923376f",
+        "model": "grok-4.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
