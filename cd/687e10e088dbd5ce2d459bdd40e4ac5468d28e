@@ -1,0 +1,58 @@
+scripts/workflow-v2/support.js
+  s_55e4dcfab374c2::t_0ca2ceb52fb6d6 164-169
+docs/audits/resident-portal/LIGHTHOUSE_PWA_DEFERRAL_2026-07-29.md
+  s_55e4dcfab374c2::t_0f1e79da550ac1 26-28,33-38,42-43
+docs/audits/resident-portal/PILOT_GATE_2026-07-29.json
+  s_55e4dcfab374c2::t_fed0dff6d33788 37-44,49,51-66,71,73-81
+  s_55e4dcfab374c2::t_d7932f57ae4b46 5-21,26,28-36,82-88,93,95,101,103,109,111,117,119,125,127
+docs/audits/resident-portal/CERTIFICATION_PACKET_2026-07-29.md
+  s_55e4dcfab374c2::t_80d5b04d42426e 1-4,6-9,11-69
+  s_55e4dcfab374c2::t_0c6cd0895126d7 70-71
+  s_55e4dcfab374c2::t_41297355335fa9 5,10
+docs/audits/resident-portal/DEFERRALS_2026-07-29.json
+  s_55e4dcfab374c2::t_92076995df52f6 1-58
+docs/plan/backlog/ALL_TASKS_BACKLOG.md
+  s_55e4dcfab374c2::t_103a56ec724740 112,114,116-117,123,125-128
+.ai/workflow-v2/state.json
+  s_55e4dcfab374c2::t_49d6e0b0ef43d9 111-143,147,153,155
+  s_55e4dcfab374c2::t_5ecfa3b9d398e1 157-158,178
+docs/plan/Complete/resident_portal_responsive/SESSION_MEMORY.md
+  s_55e4dcfab374c2::t_6b05002184fe32 7-11
+  s_55e4dcfab374c2::t_051720c5f3f45c 5,12,17-23,27-30,34-41,45,49
+docs/audits/resident-portal/PILOT_GATE_2026-07-29-phase10.json
+  s_55e4dcfab374c2::t_85ddc3d82a7d3a 1-36,38-58,60-80,82-130
+  s_55e4dcfab374c2::t_d27599af00db29 37,59,81
+docs/audits/resident-portal/PILOT_GATE_OWNED_2026-07-29-phase10.json
+  s_55e4dcfab374c2::t_297140f25bf089 1-83
+scripts/workflow-v2/__tests__/support.test.js
+  s_55e4dcfab374c2::t_16affe50368b3e 142-160
+README.md
+  s_55e4dcfab374c2::t_aee51207b61dd7 386
+CHANGELOG.md
+  s_55e4dcfab374c2::t_c3ab6f904b8488 13-14
+docs/audits/resident-portal/CERTIFICATION_PACKET_2026-07-29.json
+  s_55e4dcfab374c2::t_e4c0f6fea5ce0c 7,11-13
+  s_55e4dcfab374c2::t_6008de959471c7 1-6,8-10,14-74
+docs/plan/Complete/resident_portal_responsive/PLAN_resident_portal_responsive.md
+  s_55e4dcfab374c2::t_1350118b6e0fa2 5-7,44-48
+docs/plan/Complete/resident_portal_responsive/TASKS_resident_portal_responsive.md
+  s_55e4dcfab374c2::t_ff156be1d3172f 96-100
+docs/plan/Complete/resident_portal_responsive/phase_logs/PHASE_LOG_phase_10.md
+  s_55e4dcfab374c2::t_15bd1650cc8ae4 1-47
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "cd687e10e088dbd5ce2d459bdd40e4ac5468d28e",
+  "prompts": {},
+  "sessions": {
+    "s_55e4dcfab374c2": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "9eb763a1-f03d-4c6d-b6cf-d1a99923376f",
+        "model": "grok-4.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
