@@ -1,0 +1,102 @@
+apps/resident-portal/src/lib/resident-api-fetch.ts
+  s_55e4dcfab374c2::t_d406b22919cd1a 3-5
+  s_55e4dcfab374c2::t_254051920cfdc6 8
+docs/audits/resident-portal/LIGHTHOUSE_PWA_DEFERRAL_2026-07-29.md
+  s_55e4dcfab374c2::t_866f2cd2cae4ae 1-36
+apps/resident-portal/src/app/layout.tsx
+  s_55e4dcfab374c2::t_e3dcb77af0ff7a 6,32-34,36
+apps/resident-portal/src/components/visitors/visitors-list.tsx
+  s_55e4dcfab374c2::t_8fe04517e40a26 58,150
+  s_55e4dcfab374c2::t_e0d60dba832006 63,155
+apps/resident-portal/src/components/visitor-qr-card.tsx
+  s_55e4dcfab374c2::t_fcb5651f4d76d9 126
+  s_55e4dcfab374c2::t_b376782ba7af28 99
+  s_55e4dcfab374c2::t_18464a616c3efe 116
+  s_55e4dcfab374c2::t_c11c03183b2212 103
+CHANGELOG.md
+  s_55e4dcfab374c2::t_8e2787cbf3637d 14
+  s_55e4dcfab374c2::t_94ca5dd57dfef6 13
+docs/plan/Active/resident_portal_responsive/phase_logs/PHASE_LOG_phase_04.md
+  s_55e4dcfab374c2::t_65a2cdc611e334 1-16
+apps/resident-portal/src/components/profile/notification-settings.tsx
+  s_55e4dcfab374c2::t_5bb89150057b20 32
+apps/resident-portal/src/lib/phase09.test.ts
+  s_55e4dcfab374c2::t_813a490f8b223b 1-13,15-102,112-113
+  s_55e4dcfab374c2::t_99021c8e5e99a5 14,103-111
+apps/resident-portal/src/lib/portal-i18n.ts
+  s_55e4dcfab374c2::t_3cb9ce3dcafd1e 1-78
+docs/plan/Active/resident_portal_responsive/phase_logs/PHASE_LOG_phase_03.md
+  s_55e4dcfab374c2::t_f6bfac1550a82c 1-15
+apps/resident-portal/src/components/layout/quick-create-fab.tsx
+  s_55e4dcfab374c2::t_3cbd0c8f84b4b1 12
+.ai/workflow-v2/state.json
+  s_708501bd875fa7::t_e2d02e5e0e7591 79
+  s_55e4dcfab374c2::t_124bef482544b2 115,144
+docs/plan/Active/resident_portal_responsive/phase_logs/PHASE_LOG_phase_09.md
+  s_55e4dcfab374c2::t_ec4718d8ccb878 1-29,32-33,35,40,47-48
+  s_55e4dcfab374c2::t_d48e1c596e554f 30-31,34,36-39,41-46,49
+README.md
+  s_55e4dcfab374c2::t_d62b48ed3f571e 386
+docs/plan/Active/resident_portal_responsive/TASKS_resident_portal_responsive.md
+  s_55e4dcfab374c2::t_3eb73fddc73322 28
+  s_55e4dcfab374c2::t_d0aa641e66e986 54
+  s_55e4dcfab374c2::t_88f3fc04c301d9 88-92
+  s_55e4dcfab374c2::t_bc9f57d144eaa8 36
+  s_55e4dcfab374c2::t_87e3a78cd6802f 45
+  s_55e4dcfab374c2::t_775cfe96d29137 51,53
+  s_55e4dcfab374c2::t_c6b08807df1bfc 18
+apps/resident-portal/src/lib/qr-display.ts
+  s_55e4dcfab374c2::t_46513fe70dc0b0 13-14,17-19
+apps/resident-portal/src/components/open-qr-card.tsx
+  s_55e4dcfab374c2::t_c7665d31693316 81
+docs/plan/Active/resident_portal_responsive/phase_logs/PHASE_LOG_phase_01.md
+  s_55e4dcfab374c2::t_bc6eb15609e79b 1-15
+apps/resident-portal/src/components/open-qr-form.tsx
+  s_55e4dcfab374c2::t_66fd1e90d3af5f 87
+  s_55e4dcfab374c2::t_0d143037a2eec9 93
+apps/resident-portal/package.json
+  s_55e4dcfab374c2::t_8c5cf0f6c5a3f4 11
+docs/plan/Active/resident_portal_responsive/phase_logs/PHASE_LOG_phase_02.md
+  s_55e4dcfab374c2::t_8e24f2f561d28a 1-17
+apps/resident-portal/src/lib/session-claims.ts
+  s_55e4dcfab374c2::t_30374657c6733e 13-14,16-17
+apps/resident-portal/src/components/visitor-form.tsx
+  s_55e4dcfab374c2::t_99a05f1ea5fbfa 125,142,158
+  s_55e4dcfab374c2::t_fe98cf99c0c28f 121,138,153
+docs/plan/Active/resident_portal_responsive/SESSION_MEMORY.md
+  s_55e4dcfab374c2::t_cd49f646a52489 5,9
+  s_55e4dcfab374c2::t_38139ec204fc57 57
+  s_55e4dcfab374c2::t_21e10755995f05 7-8,18-19,23-24,27-32,38-39,44-45,49-55,62,66
+apps/resident-portal/src/lib/resident-api-url.ts
+  s_55e4dcfab374c2::t_04ae2a0a3a026f 1-7
+apps/resident-portal/src/components/maintenance/resident-request-form.tsx
+  s_55e4dcfab374c2::t_0a182ef0d058c8 316
+  s_55e4dcfab374c2::t_e4fe8c53811ea9 306
+  s_55e4dcfab374c2::t_33c642ba113dae 298
+docs/plan/Active/resident_portal_responsive/phase_logs/PHASE_LOG_phase_05.md
+  s_55e4dcfab374c2::t_6a1c1fd28f8b5f 1-15
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "7cdcea745f450236a6c63454fe3debe723a5d9b2",
+  "prompts": {},
+  "sessions": {
+    "s_55e4dcfab374c2": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "9eb763a1-f03d-4c6d-b6cf-d1a99923376f",
+        "model": "grok-4.5"
+      },
+      "human_author": null
+    },
+    "s_708501bd875fa7": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "4153ad1e-4498-4e8f-9ae4-08f8df3fd1d6",
+        "model": "grok-4.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
