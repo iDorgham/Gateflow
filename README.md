@@ -383,6 +383,8 @@ See **[PRD §9](docs/reference/product/PRD.md)** and **[CHANGELOG](CHANGELOG.md)
 
 ## 📅 Recent Engineering Activity
 
+- **[Resident-Portal]:** CHECK_ALL 2026-07-29 focused check evidence (pilot blocked)
+- **[Resident-Portal]:** Phase 10 pilot gate and certification packet
 - **[Resident-Portal]:** Phase 09 i18n interim, logical CSS, and evidence
 - **[Resident-Portal]:** Phase 08 pilot UX revoke, share, and sign-out
 - **[Resident-Portal]:** Phase 07 API upstream, scannable QR, offline read

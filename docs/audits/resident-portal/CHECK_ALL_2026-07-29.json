@@ -1,0 +1,125 @@
+{
+  "id": "resident-portal-check-all-2026-07-29",
+  "type": "focused-check",
+  "status": "blocked",
+  "valid": true,
+  "createdAt": "2026-07-29T19:50:00.000Z",
+  "commit": "cd687e10e088dbd5ce2d459bdd40e4ac5468d28e",
+  "application": "resident-portal",
+  "focusedApp": "resident-portal",
+  "stage": "checking",
+  "branch": "feat/resident-portal-phase-10",
+  "draftPr": "https://github.com/iDorgham/Gateflow/pull/201",
+  "reviewMode": "static-review-only",
+  "summary": "App lint/typecheck/test/build passed; PR CI unconfirmed; pilot evidence not ready (4 owned partial steps). Certify blocked.",
+  "checks": {
+    "lint": {
+      "status": "passed",
+      "command": "pnpm --filter resident-portal lint",
+      "errors": 0
+    },
+    "typecheck": {
+      "status": "passed",
+      "command": "pnpm --filter resident-portal typecheck"
+    },
+    "tests": {
+      "status": "passed",
+      "command": "pnpm --filter resident-portal test",
+      "testsPassed": 30,
+      "suites": 11
+    },
+    "build": {
+      "status": "passed",
+      "command": "RESIDENT_API_UPSTREAM=https://app.gateflow.site/api NODE_ENV=production pnpm --filter resident-portal build",
+      "note": "Fail-closed without upstream env; production build succeeds when RESIDENT_API_UPSTREAM is set"
+    },
+    "workflowV2Support": {
+      "status": "passed",
+      "command": "node --test scripts/workflow-v2/__tests__/support.test.js",
+      "testsPassed": 8
+    },
+    "bootstrapRouteGuard": {
+      "status": "passed"
+    },
+    "changelog": {
+      "status": "passed",
+      "command": "pnpm docs:changelog:check"
+    },
+    "dependencyAdvisory": {
+      "status": "passed",
+      "packagesScanned": 1791,
+      "highOrCriticalFindings": 0
+    },
+    "prCi": {
+      "status": "unconfirmed",
+      "pr": 201,
+      "headRefOid": "cd687e10e088dbd5ce2d459bdd40e4ac5468d28e",
+      "note": "PR #201 CI pending verification; do not claim green until confirmed"
+    },
+    "pageScores": {
+      "status": "passed",
+      "artifact": "docs/audits/resident-portal/PAGE_SCORES_2026-07-29.json",
+      "pages": 11,
+      "validPages": 11,
+      "average": 48.73,
+      "reviewMode": "static-review-only",
+      "securityBoundaryProven": false,
+      "note": "Scores capped at 49 while securityBoundaryProven=false"
+    },
+    "pageScoresFreshness": {
+      "status": "passed-stale-baseline",
+      "generatedAt": "2026-07-28T21:45:00.000Z",
+      "note": "Baseline audit scores still valid as static reference; not re-scored this check"
+    },
+    "certificationPacketFreshness": {
+      "status": "passed",
+      "artifact": "docs/audits/resident-portal/CERTIFICATION_PACKET_2026-07-29.json",
+      "fresh": true,
+      "maxAgeHours": 168
+    },
+    "pilotEvidence": {
+      "status": "blocked",
+      "artifact": "docs/audits/resident-portal/PILOT_GATE_2026-07-29-phase10.json",
+      "ready": false,
+      "ownedPassed": 0,
+      "ownedPartial": 4,
+      "ownedTotal": 4,
+      "blockers": [
+        "Resident activation",
+        "Resident creates guest permission",
+        "Permission QR display in Resident Portal",
+        "Resident-facing denial/offline QR"
+      ]
+    },
+    "focusedDiff": {
+      "status": "passed",
+      "filesChangedVsMaster": 47,
+      "errors": [],
+      "note": "README.md added to validateScopeDiff allowlist (alongside CHANGELOG.md). No parked-app product code in diff."
+    },
+    "routeInventory": {
+      "status": "passed",
+      "pages": 11
+    },
+    "securityHeaders": {
+      "status": "static-review-only",
+      "note": "App uses packages/config security-headers via next.config; no live header probe this check"
+    }
+  },
+  "artifacts": {
+    "certificationPacket": "docs/audits/resident-portal/CERTIFICATION_PACKET_2026-07-29.json",
+    "pilotGate": "docs/audits/resident-portal/PILOT_GATE_2026-07-29-phase10.json",
+    "deferrals": "docs/audits/resident-portal/DEFERRALS_2026-07-29.json",
+    "pageScores": "docs/audits/resident-portal/PAGE_SCORES_2026-07-29.json",
+    "audit": "docs/audits/resident-portal/AUDIT_2026-07-29.md"
+  },
+  "blockers": [
+    "pilotEvidence.ready=false (4 owned P0 steps partial; browser/external gates open)"
+  ],
+  "certifyReady": false,
+  "nextCommands": [
+    "Clear browser/session deferrals before /pilot",
+    "Do not /certify while CERTIFICATION_PACKET valid=false",
+    "/github to land CHECK_ALL evidence + README scope allowlist if desired"
+  ]
+}

@@ -8,7 +8,7 @@ import {
   generateRefreshToken,
   getRefreshTokenExpiry,
 } from '@/lib/auth';
-import { setAuthCookies } from '@/lib/auth-cookies';
+import { resolveAuthCookieDomain, setAuthCookies } from '@/lib/auth-cookies';
 // import { UserRole } from '@gate-access/db';
 import { CSRF_COOKIE, generateCsrfToken } from '@/lib/csrf';
 // import { castUserRole } from '@/lib/types';
@@ -98,14 +98,16 @@ export async function loginAction(
   // Set httpOnly cookies — must happen before redirect()
   await setAuthCookies(accessToken, refreshToken);
 
-  // Set CSRF cookie for this session
+  // Set CSRF cookie for this session (same parent domain as auth cookies)
   const csrfToken = generateCsrfToken();
+  const cookieDomain = resolveAuthCookieDomain();
   (await cookies()).set(CSRF_COOKIE, csrfToken, {
     httpOnly: false,
     secure: SECURE,
-    sameSite: 'strict',
+    sameSite: 'lax',
     maxAge: 60 * 60 * 24, // 24 hours
     path: '/',
+    ...(cookieDomain ? { domain: cookieDomain } : {}),
   });
 
   const localeCookie = (await cookies()).get(LOCALE_COOKIE)?.value;

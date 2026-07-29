@@ -1,0 +1,91 @@
+{
+  "id": "RESIDENT_PORTAL_CERTIFICATION_PACKET_2026_07_29",
+  "valid": false,
+  "createdAt": "2026-07-29T14:45:00.000Z",
+  "updatedAt": "2026-07-29T20:45:00.000Z",
+  "expiresAt": "2026-08-31T23:59:59.000Z",
+  "app": "resident-portal",
+  "commit": "31558779c322ac194b0a4f1c4b8ec78d7a1fd786",
+  "plan": "resident_portal_responsive",
+  "planPhase": 10,
+  "reviewMode": "browser-evidence",
+  "draftPr": "https://github.com/iDorgham/Gateflow/pull/201",
+  "mergedPrPhase09": "https://github.com/iDorgham/Gateflow/pull/200",
+  "purpose": "Honest certification packet after live browser session probe. valid=false: cross-subdomain SSO failed in production; create/QR/offline not reachable; AUTH_COOKIE_DOMAIN remediation staged but not production-proven.",
+  "browserRun": {
+    "id": "RP_BROWSER_SESSION_2026_07_29",
+    "artifact": "docs/audits/resident-portal/BROWSER_SESSION_EVIDENCE_2026-07-29.md",
+    "crossSubdomainSession": "failed",
+    "createGuest": "not-run",
+    "qrScan": "not-run",
+    "offlineQr": "not-run"
+  },
+  "checks": {
+    "unitTests": {
+      "status": "passed",
+      "command": "pnpm --filter resident-portal test",
+      "testsPassed": 30,
+      "verifiedAt": "2026-07-29T14:42:00.000Z"
+    },
+    "authCookieDomainTests": {
+      "status": "passed",
+      "command": "pnpm --filter client-dashboard exec jest src/lib/auth-cookies.test.ts --no-coverage",
+      "testsPassed": 15,
+      "verifiedAt": "2026-07-29T20:45:00.000Z"
+    },
+    "typecheck": {
+      "status": "passed",
+      "command": "pnpm --filter resident-portal typecheck"
+    },
+    "lint": {
+      "status": "passed",
+      "command": "pnpm --filter resident-portal lint"
+    },
+    "prCi": {
+      "status": "passed",
+      "pr": 201,
+      "note": "Prior CHECK_ALL CI green on PR #201; cookie Domain fix still local until committed/deployed"
+    }
+  },
+  "artifacts": {
+    "audit": "docs/audits/resident-portal/AUDIT_2026-07-29.md",
+    "pageMap": "docs/audits/resident-portal/PAGE_MAP_2026-07-29.md",
+    "pageScores": "docs/audits/resident-portal/PAGE_SCORES_2026-07-29.json",
+    "pilotGateFull": "docs/audits/resident-portal/PILOT_GATE_2026-07-29-phase10.json",
+    "pilotGateOwned": "docs/audits/resident-portal/PILOT_GATE_OWNED_2026-07-29-phase10.json",
+    "deferrals": "docs/audits/resident-portal/DEFERRALS_2026-07-29.json",
+    "browserEvidence": "docs/audits/resident-portal/BROWSER_SESSION_EVIDENCE_2026-07-29.md",
+    "lighthouseDeferral": "docs/audits/resident-portal/LIGHTHOUSE_PWA_DEFERRAL_2026-07-29.md",
+    "i18nPolicy": "apps/resident-portal/src/lib/portal-i18n.ts"
+  },
+  "pilotCoverage": {
+    "fullTotal": 9,
+    "fullPassed": 0,
+    "ownedTotal": 4,
+    "ownedPassed": 0,
+    "ownedPartialWithEvidence": 4,
+    "ownedMissingUndocumented": 0,
+    "cdScannerNa": 5,
+    "status": "blocked",
+    "blockers": [
+      "Resident activation",
+      "Resident creates guest permission",
+      "Permission QR display in Resident Portal",
+      "Resident-facing denial/offline QR"
+    ]
+  },
+  "pageScoresNote": "PAGE_SCORES_2026-07-29.json remains static-review-only with securityBoundaryProven=false (score cap 49).",
+  "certifyReady": false,
+  "certifyBlockers": [
+    "cross-subdomain-session",
+    "resident-unit-fixture",
+    "browser-create-guest",
+    "browser-qr-scan",
+    "browser-offline-qr"
+  ],
+  "nextCommands": [
+    "Set AUTH_COOKIE_DOMAIN=.gateflow.site on CD production and deploy client-dashboard",
+    "Create RESIDENT + linked unit fixture (Residents currently 0)",
+    "Re-run browser: portal session → create guest → QR → offline (do not /certify until valid:true)"
+  ]
+}

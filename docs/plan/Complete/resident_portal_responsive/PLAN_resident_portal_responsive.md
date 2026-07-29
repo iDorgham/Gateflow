@@ -1,10 +1,10 @@
 # PLAN: Resident Portal — Responsive & Pilot Readiness
 
-**Slug:** `resident_portal_responsive`  
-**Primary app:** `apps/resident-portal` (Workflow v2 focused)  
-**Status:** Ready → Workflow `planned` (2026-07-29)  
-**Branch:** `feat/resident_portal_responsive`  
-**Baseline evidence:** `docs/audits/resident-portal/AUDIT_2026-07-29.md`, `PAGE_MAP_2026-07-29.md`, `PAGE_SCORES_2026-07-29.json`, `PILOT_GATE_2026-07-29.json`
+**Slug:** `resident_portal_responsive`
+**Primary app:** `apps/resident-portal` (Workflow v2 focused)
+**Status:** Complete (2026-07-29) — Workflow app stage remains `checking` (not certified)
+**Branch:** `feat/resident-portal-phase-10` (Phase 09 baseline: `feat/resident-portal-phase-09` merged as PR #200)
+**Baseline evidence:** `docs/audits/resident-portal/AUDIT_2026-07-29.md`, `PAGE_MAP_2026-07-29.md`, `PAGE_SCORES_2026-07-29.json`, `PILOT_GATE_2026-07-29-phase10.json`, `CERTIFICATION_PACKET_2026-07-29.json`
 
 ## Outcome
 
@@ -41,11 +41,11 @@ Do not re-implement shell/nav unless a phase acceptance criterion fails.
 | #      | Phase                                           | Role                   | Tool 1     | Tool 2   | Status                                |
 | ------ | ----------------------------------------------- | ---------------------- | ---------- | -------- | ------------------------------------- |
 | 01–05  | Responsive baseline (shell, PWA, pages, polish) | FRONTEND               | Cursor     | Opencode | Baseline present — backfill logs only |
-| **06** | Auth, session, tenant containment               | SECURITY               | Claude CLI | Cursor   | **Next**                              |
-| **07** | API proxy, scannable QR, offline read           | BACKEND-API + FRONTEND | Claude CLI | Cursor   | Planned                               |
-| **08** | Pilot UX completion                             | FRONTEND               | Cursor     | Opencode | Planned                               |
-| **09** | i18n/RTL, tests, PWA/Lighthouse evidence        | QA / i18n              | Cursor     | Opencode | Planned                               |
-| **10** | Pilot gate refresh & certification packet       | QA                     | Cursor     | —        | Planned                               |
+| **06** | Auth, session, tenant containment               | SECURITY               | Claude CLI | Cursor   | **Done**                              |
+| **07** | API proxy, scannable QR, offline read           | BACKEND-API + FRONTEND | Claude CLI | Cursor   | **Done**                              |
+| **08** | Pilot UX completion                             | FRONTEND               | Cursor     | Opencode | **Done**                              |
+| **09** | i18n/RTL, tests, PWA/Lighthouse evidence        | QA / i18n              | Cursor     | Opencode | **Done**                              |
+| **10** | Pilot gate refresh & certification packet       | QA                     | Cursor     | —        | **Done** (packet `valid:false`)       |
 
 ## Phase details (06–10)
 

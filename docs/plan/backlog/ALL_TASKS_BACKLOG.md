@@ -109,23 +109,23 @@ work in `audit_remediation_2026` before implementation begins.
 ### resident_portal_responsive — Resident Portal: Responsive & Pilot Readiness
 
 **IDEA:** `docs/development/initiatives/IDEA_resident_portal_responsive.md`  
-**PLAN:** `docs/plan/Active/resident_portal_responsive/`  
+**PLAN:** `docs/plan/Complete/resident_portal_responsive/`  
 `PLAN_resident_portal_responsive.md`  
-**Status:** 🟡 Ready / Workflow planned — Phases 01–05 UI baseline; **next Phase 06 auth**  
+**Status:** ✅ Complete (2026-07-29) — plan phases 01–10 done; app Workflow `checking` (packet `valid:false`, not certified)  
 **Priority:** P0 — Resident Portal pilot focus after Client Dashboard certify  
-**Target:** Auth/QR/proxy P0s → pilot evidence → `/certify`  
-**Evidence:** `docs/audits/resident-portal/AUDIT_2026-07-29.md`, `PAGE_MAP_2026-07-29.md`
+**Target:** Auth/QR/proxy P0s → pilot evidence → `/certify` (browser gates remaining)  
+**Evidence:** `docs/audits/resident-portal/AUDIT_2026-07-29.md`, `PAGE_MAP_2026-07-29.md`, `CERTIFICATION_PACKET_2026-07-29.md`
 
 - [x] Phase 1 — Foundation: Shared Layout & Navigation (baseline UI)
 - [x] Phase 2 — PWA: Manifest, Service Worker, Offline QR Cache (write path; read → Phase 07)
 - [x] Phase 3 — Responsive Pages: Home & Visitors (baseline UI)
 - [x] Phase 4 — Responsive Pages: History, Maintenance, Profile (baseline UI)
-- [~] Phase 5 — Polish: Transitions, Gestures, RTL (partial; RTL/Lighthouse → Phase 09)
+- [x] Phase 5 — Polish: Transitions, Gestures, RTL (interim EN + logical CSS; Lighthouse deferred)
 - [x] Phase 6 — Auth, session, tenant containment
-- [ ] Phase 7 — API proxy, scannable QR, offline read **← next**
-- [ ] Phase 8 — Pilot UX completion
-- [ ] Phase 9 — i18n/RTL, tests, measurable evidence
-- [ ] Phase 10 — Pilot gate & certification packet
+- [x] Phase 7 — API proxy, scannable QR, offline read
+- [x] Phase 8 — Pilot UX completion
+- [x] Phase 9 — i18n/RTL, tests, measurable evidence
+- [x] Phase 10 — Pilot gate & certification packet
 
 ### org_types_dashboard — Organization Types: Client Dashboard Experience
 

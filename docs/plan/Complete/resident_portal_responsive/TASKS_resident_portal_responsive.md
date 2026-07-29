@@ -93,8 +93,8 @@
 
 ### Phase 10: Pilot gate & certification packet
 
-- [ ] Refresh `docs/audits/resident-portal/PILOT_GATE_*.json`
-- [ ] Browser evidence for owned pilot steps (or honest static blockers)
-- [ ] Certification evidence packet for `/check` → `/pilot` → `/certify`
-- [ ] Deferrals have owner, reason, expiry
-- [ ] `phase_logs/PHASE_LOG_phase_10.md`
+- [x] Refresh `docs/audits/resident-portal/PILOT_GATE_*.json`
+- [x] Browser evidence for owned pilot steps (or honest static blockers)
+- [x] Certification evidence packet for `/check` → `/pilot` → `/certify`
+- [x] Deferrals have owner, reason, expiry
+- [x] `phase_logs/PHASE_LOG_phase_10.md`

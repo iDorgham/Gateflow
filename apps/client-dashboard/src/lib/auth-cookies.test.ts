@@ -25,13 +25,41 @@ describe('auth-cookies', () => {
   beforeEach(() => {
     mockCookiesObj.set.mockClear();
     mockCookiesObj.delete.mockClear();
-    mockCookiesObj.get.mockClear();
-    mockHeadersObj.get.mockClear();
-    mockVerifyAccessToken.mockClear();
+    mockCookiesObj.get.mockReset();
+    mockHeadersObj.get.mockReset();
+    mockVerifyAccessToken.mockReset();
+  });
+
+  describe('resolveAuthCookieDomain', () => {
+    it('returns undefined when AUTH_COOKIE_DOMAIN is unset', async () => {
+      const { resolveAuthCookieDomain } = await import('./auth-cookies');
+      expect(resolveAuthCookieDomain({})).toBeUndefined();
+    });
+
+    it('normalizes AUTH_COOKIE_DOMAIN with a leading dot', async () => {
+      const { resolveAuthCookieDomain } = await import('./auth-cookies');
+      expect(
+        resolveAuthCookieDomain({ AUTH_COOKIE_DOMAIN: 'gateflow.site' })
+      ).toBe('.gateflow.site');
+      expect(
+        resolveAuthCookieDomain({ AUTH_COOKIE_DOMAIN: '.gateflow.site' })
+      ).toBe('.gateflow.site');
+    });
   });
 
   describe('setAuthCookies', () => {
+    const originalDomain = process.env.AUTH_COOKIE_DOMAIN;
+
+    afterEach(() => {
+      if (originalDomain === undefined) {
+        delete process.env.AUTH_COOKIE_DOMAIN;
+      } else {
+        process.env.AUTH_COOKIE_DOMAIN = originalDomain;
+      }
+    });
+
     it('sets access and refresh tokens with correct options', async () => {
+      delete process.env.AUTH_COOKIE_DOMAIN;
       const { setAuthCookies } = await import('./auth-cookies');
       const accessToken = 'access-token';
       const refreshToken = 'refresh-token';
@@ -57,6 +85,24 @@ describe('auth-cookies', () => {
           sameSite: 'lax',
           path: '/',
           maxAge: 60 * 60 * 24 * 30,
+        })
+      );
+      expect(mockCookiesObj.set.mock.calls[0][2].domain).toBeUndefined();
+    });
+
+    it('sets parent Domain when AUTH_COOKIE_DOMAIN is configured', async () => {
+      process.env.AUTH_COOKIE_DOMAIN = '.gateflow.site';
+      const { setAuthCookies } = await import('./auth-cookies');
+
+      await setAuthCookies('access-token', 'refresh-token');
+
+      expect(mockCookiesObj.set).toHaveBeenCalledWith(
+        'gf_access_token',
+        'access-token',
+        expect.objectContaining({
+          domain: '.gateflow.site',
+          path: '/',
+          sameSite: 'lax',
         })
       );
     });

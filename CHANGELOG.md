@@ -10,6 +10,10 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Resident-Portal]** CHECK_ALL 2026-07-29 focused check evidence (pilot blocked)
+
+- **[Resident-Portal]** Phase 10 pilot gate and certification packet
+
 - **[Resident-Portal]** Phase 09 i18n interim, logical CSS, and evidence
 
 - **[Resident-Portal]** Phase 08 pilot UX revoke, share, and sign-out
