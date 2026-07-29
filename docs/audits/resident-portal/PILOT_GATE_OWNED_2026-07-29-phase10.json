@@ -1,0 +1,83 @@
+[
+  {
+    "step": "Resident activation",
+    "priority": "P0",
+    "ownerApp": "resident-portal",
+    "status": "partial",
+    "reviewMode": "static-review-only",
+    "createdAt": "2026-07-29T14:45:00.000Z",
+    "commit": "7cdcea745f450236a6c63454fe3debe723a5d9b2",
+    "reason": "Portal redirects unauthenticated users to /login (CD handoff). No local activate/invite-token flow. Cross-subdomain session cookie sharing with app.gateflow.site remains an external gate.",
+    "evidence": [
+      "apps/resident-portal/src/lib/require-portal-session.ts",
+      "apps/resident-portal/src/app/(portal)/layout.tsx",
+      "apps/resident-portal/src/lib/session-claims.test.ts"
+    ],
+    "externalGate": {
+      "id": "cross-subdomain-session",
+      "owner": "operations",
+      "expiry": "2026-08-31",
+      "artifact": "docs/audits/resident-portal/DEFERRALS_2026-07-29.json"
+    }
+  },
+  {
+    "step": "Resident creates guest permission",
+    "priority": "P0",
+    "ownerApp": "resident-portal",
+    "status": "partial",
+    "reviewMode": "static-review-only",
+    "createdAt": "2026-07-29T14:45:00.000Z",
+    "commit": "7cdcea745f450236a6c63454fe3debe723a5d9b2",
+    "reason": "Source+unit evidence present; fresh EN browser create proof deferred.",
+    "evidence": [
+      "apps/resident-portal/src/lib/api-upstream.ts",
+      "apps/resident-portal/src/lib/phase07.test.ts",
+      "apps/resident-portal/src/components/visitor-form.tsx"
+    ],
+    "deferral": {
+      "id": "browser-create-guest",
+      "owner": "resident-portal-pilot",
+      "expiry": "2026-08-31"
+    }
+  },
+  {
+    "step": "Permission QR display in Resident Portal",
+    "priority": "P0",
+    "ownerApp": "resident-portal",
+    "status": "partial",
+    "reviewMode": "static-review-only",
+    "createdAt": "2026-07-29T14:45:00.000Z",
+    "commit": "7cdcea745f450236a6c63454fe3debe723a5d9b2",
+    "reason": "Scannable QR source+unit evidence present; live scan proof deferred.",
+    "evidence": [
+      "apps/resident-portal/src/components/visitor-qr-card.tsx",
+      "apps/resident-portal/src/lib/qr-display.ts",
+      "apps/resident-portal/src/lib/phase07.test.ts"
+    ],
+    "deferral": {
+      "id": "browser-qr-scan",
+      "owner": "resident-portal-pilot",
+      "expiry": "2026-08-31"
+    }
+  },
+  {
+    "step": "Resident-facing denial/offline QR",
+    "priority": "P0",
+    "ownerApp": "resident-portal",
+    "status": "partial",
+    "reviewMode": "static-review-only",
+    "createdAt": "2026-07-29T14:45:00.000Z",
+    "commit": "7cdcea745f450236a6c63454fe3debe723a5d9b2",
+    "reason": "Offline QR read path source+unit evidence present; live offline matrix deferred.",
+    "evidence": [
+      "apps/resident-portal/src/components/pwa/offline-aware-visitor-qr.tsx",
+      "apps/resident-portal/src/lib/qr-display.ts",
+      "apps/resident-portal/src/lib/phase07.test.ts"
+    ],
+    "deferral": {
+      "id": "browser-offline-qr",
+      "owner": "resident-portal-pilot",
+      "expiry": "2026-08-31"
+    }
+  }
+]

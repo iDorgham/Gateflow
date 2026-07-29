@@ -108,20 +108,54 @@
           "createdAt": "2026-07-28T22:14:04.849Z",
           "commit": "e77e378a93450fee7af27547411e1d17d999f182",
           "reviewMode": "static-review-only",
-          "artifact": "docs/plan/Ready/resident_portal_responsive/PLAN_resident_portal_responsive.md"
+          "artifact": "docs/plan/Complete/resident_portal_responsive/PLAN_resident_portal_responsive.md"
+        },
+        {
+          "id": "resident-portal-pilot-gate-phase10-2026-07-29",
+          "type": "pilot-gate",
+          "status": "blocked",
+          "valid": true,
+          "createdAt": "2026-07-29T14:50:00.000Z",
+          "commit": "7cdcea745f450236a6c63454fe3debe723a5d9b2",
+          "reviewMode": "static-review-only",
+          "artifact": "docs/audits/resident-portal/PILOT_GATE_2026-07-29-phase10.json"
+        },
+        {
+          "id": "resident-portal-certification-packet-2026-07-29",
+          "type": "certification-packet",
+          "status": "blocked",
+          "valid": true,
+          "createdAt": "2026-07-29T14:50:00.000Z",
+          "commit": "7cdcea745f450236a6c63454fe3debe723a5d9b2",
+          "reviewMode": "static-review-only",
+          "artifact": "docs/audits/resident-portal/CERTIFICATION_PACKET_2026-07-29.json",
+          "note": "Packet body sets valid=false; not certify-ready"
+        }
+      ],
+      "externalGates": [
+        {
+          "id": "cross-subdomain-session",
+          "status": "pending",
+          "summary": "Prove cookie session sharing between CD login host and resident portal host",
+          "owner": "operations",
+          "artifact": "docs/audits/resident-portal/DEFERRALS_2026-07-29.json",
+          "lastCheckedAt": "2026-07-29T14:50:00.000Z",
+          "expiry": "2026-08-31"
         }
       ],
       "certificationReceipt": null,
-      "updatedAt": "2026-07-29T14:01:54.814Z",
+      "updatedAt": "2026-07-29T14:50:00.000Z",
       "pageScoresFile": "docs/audits/resident-portal/PAGE_SCORES_2026-07-29.json",
       "pilotFlowCoverage": {
         "covered": 0,
         "total": 9,
         "ownedCovered": 0,
+        "ownedPartial": 4,
         "ownedTotal": 4,
+        "ownedMissingUndocumented": 0,
         "status": "blocked",
-        "artifact": "docs/audits/resident-portal/PILOT_GATE_2026-07-29.json",
-        "lastCheckedAt": "2026-07-28T21:45:00.000Z"
+        "artifact": "docs/audits/resident-portal/PILOT_GATE_2026-07-29-phase10.json",
+        "lastCheckedAt": "2026-07-29T14:50:00.000Z"
       },
       "selection": {
         "command": "/dev",
@@ -141,5 +175,5 @@
   },
   "workdirLock": null,
   "createdAt": "2026-07-24T00:00:00.000Z",
-  "updatedAt": "2026-07-29T14:01:55.405Z"
+  "updatedAt": "2026-07-29T14:49:58.844Z"
 }

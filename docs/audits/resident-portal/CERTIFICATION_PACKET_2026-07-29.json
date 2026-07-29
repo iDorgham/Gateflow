@@ -1,0 +1,74 @@
+{
+  "id": "RESIDENT_PORTAL_CERTIFICATION_PACKET_2026_07_29",
+  "valid": false,
+  "createdAt": "2026-07-29T14:45:00.000Z",
+  "expiresAt": "2026-08-31T23:59:59.000Z",
+  "app": "resident-portal",
+  "commit": "a7a9548a756f40ce6dc9f80378c1c344551f823c",
+  "plan": "resident_portal_responsive",
+  "planPhase": 10,
+  "reviewMode": "static-review-only",
+  "draftPr": null,
+  "mergedPrPhase09": "https://github.com/iDorgham/Gateflow/pull/200",
+  "purpose": "Honest certification-ready packet for /check → /pilot → /certify. valid=false until owned P0 steps are browser-passed and external gates clear. Code baseline is master after PR #200; this commit adds evidence docs only.",
+  "checks": {
+    "unitTests": {
+      "status": "passed",
+      "command": "pnpm --filter resident-portal test",
+      "testsPassed": 30,
+      "verifiedAt": "2026-07-29T14:42:00.000Z"
+    },
+    "typecheck": {
+      "status": "passed",
+      "command": "pnpm --filter resident-portal typecheck"
+    },
+    "lint": {
+      "status": "passed",
+      "command": "pnpm --filter resident-portal lint"
+    },
+    "prCi": {
+      "status": "passed",
+      "pr": 200,
+      "note": "Lint/Typecheck/Test/Security Scan/CI OK green on draft PR #200"
+    }
+  },
+  "artifacts": {
+    "audit": "docs/audits/resident-portal/AUDIT_2026-07-29.md",
+    "pageMap": "docs/audits/resident-portal/PAGE_MAP_2026-07-29.md",
+    "pageScores": "docs/audits/resident-portal/PAGE_SCORES_2026-07-29.json",
+    "pilotGateFull": "docs/audits/resident-portal/PILOT_GATE_2026-07-29-phase10.json",
+    "pilotGateOwned": "docs/audits/resident-portal/PILOT_GATE_OWNED_2026-07-29-phase10.json",
+    "deferrals": "docs/audits/resident-portal/DEFERRALS_2026-07-29.json",
+    "lighthouseDeferral": "docs/audits/resident-portal/LIGHTHOUSE_PWA_DEFERRAL_2026-07-29.md",
+    "i18nPolicy": "apps/resident-portal/src/lib/portal-i18n.ts"
+  },
+  "pilotCoverage": {
+    "fullTotal": 9,
+    "fullPassed": 0,
+    "ownedTotal": 4,
+    "ownedPassed": 0,
+    "ownedPartialWithEvidence": 4,
+    "ownedMissingUndocumented": 0,
+    "cdScannerNa": 5,
+    "status": "blocked",
+    "blockers": [
+      "Resident activation",
+      "Resident creates guest permission",
+      "Permission QR display in Resident Portal",
+      "Resident-facing denial/offline QR"
+    ]
+  },
+  "pageScoresNote": "PAGE_SCORES_2026-07-29.json remains static-review-only with securityBoundaryProven=false (score cap 49). Refresh after browser security proof.",
+  "certifyReady": false,
+  "certifyBlockers": [
+    "cross-subdomain-session",
+    "browser-create-guest",
+    "browser-qr-scan",
+    "browser-offline-qr"
+  ],
+  "nextCommands": [
+    "/check all (static packet — do not invent browser proof)",
+    "/pilot (blocked until owned steps passed with browser evidence)",
+    "/certify (requires pilot-ready + valid dated evidence with valid:true)"
+  ]
+}

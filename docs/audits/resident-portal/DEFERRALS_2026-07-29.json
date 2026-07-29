@@ -1,0 +1,58 @@
+{
+  "id": "resident-portal-deferrals-2026-07-29",
+  "app": "resident-portal",
+  "createdAt": "2026-07-29T14:45:00.000Z",
+  "commit": "7cdcea745f450236a6c63454fe3debe723a5d9b2",
+  "deferrals": [
+    {
+      "id": "cross-subdomain-session",
+      "owner": "operations",
+      "reason": "Prove gf_access_token cookie sharing between app.gateflow.site login and resident portal host; without this, Resident activation cannot be browser-certified.",
+      "expiry": "2026-08-31",
+      "relatedSteps": ["Resident activation"],
+      "blocksCertify": true
+    },
+    {
+      "id": "browser-create-guest",
+      "owner": "resident-portal-pilot",
+      "reason": "EN browser proof of /visitors/new and /open-qr/new create flows on a session-capable preview/production host.",
+      "expiry": "2026-08-31",
+      "relatedSteps": ["Resident creates guest permission"],
+      "blocksCertify": true
+    },
+    {
+      "id": "browser-qr-scan",
+      "owner": "resident-portal-pilot",
+      "reason": "Browser evidence that rendered HMAC QR is scannable by Scanner App / gate device.",
+      "expiry": "2026-08-31",
+      "relatedSteps": ["Permission QR display in Resident Portal"],
+      "blocksCertify": true
+    },
+    {
+      "id": "browser-offline-qr",
+      "owner": "resident-portal-pilot",
+      "reason": "Live offline matrix: banner, IndexedDB QR read, denial UX while offline.",
+      "expiry": "2026-08-31",
+      "relatedSteps": ["Resident-facing denial/offline QR"],
+      "blocksCertify": true
+    },
+    {
+      "id": "lighthouse-pwa-scores",
+      "owner": "resident-portal-pilot",
+      "reason": "Fresh Lighthouse mobile ≥90 and PWA installability capture; deferred from Phase 09, still blocked on deploy authorization.",
+      "expiry": "2026-08-31",
+      "relatedSteps": [],
+      "blocksCertify": false,
+      "artifact": "docs/audits/resident-portal/LIGHTHOUSE_PWA_DEFERRAL_2026-07-29.md"
+    },
+    {
+      "id": "full-ar-rtl-content",
+      "owner": "resident-portal-pilot",
+      "reason": "Full Arabic content pack / locale routing; Phase 09 interim EN-only + logical CSS only.",
+      "expiry": "2026-08-31",
+      "relatedSteps": [],
+      "blocksCertify": false,
+      "artifact": "apps/resident-portal/src/lib/portal-i18n.ts"
+    }
+  ]
+}

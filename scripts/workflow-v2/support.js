@@ -161,7 +161,12 @@ function validateScopeDiff(focusedApp, files) {
 
 function aggregateEvidence(items) {
   const blockers = items
-    .filter((item) => item.priority === 'P0' && item.status !== 'passed')
+    .filter(
+      (item) =>
+        item.priority === 'P0' &&
+        item.status !== 'passed' &&
+        item.status !== 'n/a'
+    )
     .map((item) => item.step);
   return {
     ready: items.length > 0 && blockers.length === 0,

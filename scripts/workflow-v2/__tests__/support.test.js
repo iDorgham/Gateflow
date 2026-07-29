@@ -139,3 +139,22 @@ test('pilot evidence aggregation requires fresh passing P0 steps', () => {
   assert.equal(result.ready, false);
   assert.deepEqual(result.blockers, ['scan']);
 });
+
+test('pilot evidence aggregation ignores n/a steps owned by other apps', () => {
+  const result = aggregateEvidence([
+    {
+      step: 'Resident creates guest permission',
+      priority: 'P0',
+      status: 'passed',
+      createdAt: '2026-07-29T14:45:00.000Z',
+    },
+    {
+      step: 'Security scans the QR',
+      priority: 'P0',
+      status: 'n/a',
+      createdAt: '2026-07-29T14:45:00.000Z',
+    },
+  ]);
+  assert.equal(result.ready, true);
+  assert.deepEqual(result.blockers, []);
+});
