@@ -2,44 +2,69 @@
   "id": "resident-portal-deferrals-2026-07-29",
   "app": "resident-portal",
   "createdAt": "2026-07-29T14:45:00.000Z",
-  "commit": "7cdcea745f450236a6c63454fe3debe723a5d9b2",
+  "updatedAt": "2026-07-29T20:45:00.000Z",
+  "commit": "31558779c322ac194b0a4f1c4b8ec78d7a1fd786",
+  "browserEvidence": "docs/audits/resident-portal/BROWSER_SESSION_EVIDENCE_2026-07-29.md",
   "deferrals": [
     {
       "id": "cross-subdomain-session",
       "owner": "operations",
-      "reason": "Prove gf_access_token cookie sharing between app.gateflow.site login and resident portal host; without this, Resident activation cannot be browser-certified.",
+      "reason": "Live browser 2026-07-29: app.gateflow.site session does not reach portal.gateflow.site (host-only cookies). Code now supports AUTH_COOKIE_DOMAIN; ops must set .gateflow.site on CD production and redeploy, then re-probe.",
       "expiry": "2026-08-31",
       "relatedSteps": ["Resident activation"],
-      "blocksCertify": true
+      "blocksCertify": true,
+      "status": "open",
+      "evidenceFail": "docs/audits/resident-portal/evidence/2026-07-29-browser/01-portal-login-no-session-after-cd-login.png",
+      "codeRemediation": "apps/client-dashboard/src/lib/auth-cookies.ts"
     },
     {
       "id": "browser-create-guest",
       "owner": "resident-portal-pilot",
-      "reason": "EN browser proof of /visitors/new and /open-qr/new create flows on a session-capable preview/production host.",
+      "reason": "Blocked on portal session SSO. Also need RESIDENT with linked unit (live CD showed Residents=0).",
       "expiry": "2026-08-31",
       "relatedSteps": ["Resident creates guest permission"],
-      "blocksCertify": true
+      "blocksCertify": true,
+      "status": "open",
+      "dependsOn": ["cross-subdomain-session", "resident-unit-fixture"]
     },
     {
       "id": "browser-qr-scan",
       "owner": "resident-portal-pilot",
-      "reason": "Browser evidence that rendered HMAC QR is scannable by Scanner App / gate device.",
+      "reason": "Blocked on authenticated portal create/QR render before scanner proof.",
       "expiry": "2026-08-31",
       "relatedSteps": ["Permission QR display in Resident Portal"],
-      "blocksCertify": true
+      "blocksCertify": true,
+      "status": "open",
+      "dependsOn": ["browser-create-guest"]
     },
     {
       "id": "browser-offline-qr",
       "owner": "resident-portal-pilot",
-      "reason": "Live offline matrix: banner, IndexedDB QR read, denial UX while offline.",
+      "reason": "Blocked on authenticated portal session + rendered QR for offline matrix.",
       "expiry": "2026-08-31",
       "relatedSteps": ["Resident-facing denial/offline QR"],
-      "blocksCertify": true
+      "blocksCertify": true,
+      "status": "open",
+      "dependsOn": ["browser-qr-scan"]
+    },
+    {
+      "id": "resident-unit-fixture",
+      "owner": "resident-portal-pilot",
+      "reason": "Live mediaBubble dashboard showed Residents=0 with linked units; create a RESIDENT user linked to a unit for portal flows.",
+      "expiry": "2026-08-31",
+      "relatedSteps": [
+        "Resident creates guest permission",
+        "Permission QR display in Resident Portal",
+        "Resident-facing denial/offline QR"
+      ],
+      "blocksCertify": true,
+      "status": "open",
+      "evidence": "docs/audits/resident-portal/evidence/2026-07-29-browser/02-app-session-ok-residents-zero.png"
     },
     {
       "id": "lighthouse-pwa-scores",
       "owner": "resident-portal-pilot",
-      "reason": "Fresh Lighthouse mobile ≥90 and PWA installability capture; deferred from Phase 09, still blocked on deploy authorization.",
+      "reason": "Fresh Lighthouse mobile ≥90 and PWA installability capture; deferred from Phase 09.",
       "expiry": "2026-08-31",
       "relatedSteps": [],
       "blocksCertify": false,

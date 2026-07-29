@@ -2,21 +2,36 @@
   "id": "RESIDENT_PORTAL_CERTIFICATION_PACKET_2026_07_29",
   "valid": false,
   "createdAt": "2026-07-29T14:45:00.000Z",
+  "updatedAt": "2026-07-29T20:45:00.000Z",
   "expiresAt": "2026-08-31T23:59:59.000Z",
   "app": "resident-portal",
-  "commit": "a7a9548a756f40ce6dc9f80378c1c344551f823c",
+  "commit": "31558779c322ac194b0a4f1c4b8ec78d7a1fd786",
   "plan": "resident_portal_responsive",
   "planPhase": 10,
-  "reviewMode": "static-review-only",
-  "draftPr": null,
+  "reviewMode": "browser-evidence",
+  "draftPr": "https://github.com/iDorgham/Gateflow/pull/201",
   "mergedPrPhase09": "https://github.com/iDorgham/Gateflow/pull/200",
-  "purpose": "Honest certification-ready packet for /check → /pilot → /certify. valid=false until owned P0 steps are browser-passed and external gates clear. Code baseline is master after PR #200; this commit adds evidence docs only.",
+  "purpose": "Honest certification packet after live browser session probe. valid=false: cross-subdomain SSO failed in production; create/QR/offline not reachable; AUTH_COOKIE_DOMAIN remediation staged but not production-proven.",
+  "browserRun": {
+    "id": "RP_BROWSER_SESSION_2026_07_29",
+    "artifact": "docs/audits/resident-portal/BROWSER_SESSION_EVIDENCE_2026-07-29.md",
+    "crossSubdomainSession": "failed",
+    "createGuest": "not-run",
+    "qrScan": "not-run",
+    "offlineQr": "not-run"
+  },
   "checks": {
     "unitTests": {
       "status": "passed",
       "command": "pnpm --filter resident-portal test",
       "testsPassed": 30,
       "verifiedAt": "2026-07-29T14:42:00.000Z"
+    },
+    "authCookieDomainTests": {
+      "status": "passed",
+      "command": "pnpm --filter client-dashboard exec jest src/lib/auth-cookies.test.ts --no-coverage",
+      "testsPassed": 15,
+      "verifiedAt": "2026-07-29T20:45:00.000Z"
     },
     "typecheck": {
       "status": "passed",
@@ -26,14 +41,11 @@
       "status": "passed",
       "command": "pnpm --filter resident-portal lint"
     },
-    "baselinePrCi": {
+    "prCi": {
       "status": "passed",
-      "pr": 200,
-      "commit": "a7a9548a756f40ce6dc9f80378c1c344551f823c",
-      "note": "Lint/Typecheck/Test/Security Scan/CI OK green on baseline PR #200 (Phase 09 merge to master)"
-    },
-    "forPr": null,
-    "forCommit": "cd687e10e088dbd5ce2d459bdd40e4ac5468d28e"
+      "pr": 201,
+      "note": "Prior CHECK_ALL CI green on PR #201; cookie Domain fix still local until committed/deployed"
+    }
   },
   "artifacts": {
     "audit": "docs/audits/resident-portal/AUDIT_2026-07-29.md",
@@ -42,6 +54,7 @@
     "pilotGateFull": "docs/audits/resident-portal/PILOT_GATE_2026-07-29-phase10.json",
     "pilotGateOwned": "docs/audits/resident-portal/PILOT_GATE_OWNED_2026-07-29-phase10.json",
     "deferrals": "docs/audits/resident-portal/DEFERRALS_2026-07-29.json",
+    "browserEvidence": "docs/audits/resident-portal/BROWSER_SESSION_EVIDENCE_2026-07-29.md",
     "lighthouseDeferral": "docs/audits/resident-portal/LIGHTHOUSE_PWA_DEFERRAL_2026-07-29.md",
     "i18nPolicy": "apps/resident-portal/src/lib/portal-i18n.ts"
   },
@@ -61,17 +74,18 @@
       "Resident-facing denial/offline QR"
     ]
   },
-  "pageScoresNote": "PAGE_SCORES_2026-07-29.json remains static-review-only with securityBoundaryProven=false (score cap 49). Refresh after browser security proof.",
+  "pageScoresNote": "PAGE_SCORES_2026-07-29.json remains static-review-only with securityBoundaryProven=false (score cap 49).",
   "certifyReady": false,
   "certifyBlockers": [
     "cross-subdomain-session",
+    "resident-unit-fixture",
     "browser-create-guest",
     "browser-qr-scan",
     "browser-offline-qr"
   ],
   "nextCommands": [
-    "/check all (static packet — do not invent browser proof)",
-    "/pilot (blocked until owned steps passed with browser evidence)",
-    "/certify (requires pilot-ready + valid dated evidence with valid:true)"
+    "Set AUTH_COOKIE_DOMAIN=.gateflow.site on CD production and deploy client-dashboard",
+    "Create RESIDENT + linked unit fixture (Residents currently 0)",
+    "Re-run browser: portal session → create guest → QR → offline (do not /certify until valid:true)"
   ]
 }

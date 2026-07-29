@@ -26,15 +26,16 @@ DATABASE_URL="postgresql://user:password@host:port/gateflow"
 
 Server/runtime:
 
-| Variable                   | Required           | Description                                                        |
-| -------------------------- | ------------------ | ------------------------------------------------------------------ |
-| `DATABASE_URL`             | Yes                | DB connection (inherited from root env)                            |
-| `NEXTAUTH_SECRET`          | Yes                | JWT signing secret / session crypto                                |
-| `NEXTAUTH_URL`             | Yes                | Base URL for NextAuth callbacks (e.g. http://localhost:3001)       |
-| `QR_SIGNING_SECRET`        | Yes                | HMAC-SHA256 key for QR payload signing                             |
-| `UPSTASH_REDIS_REST_URL`   | Yes (prod)         | Redis REST URL for rate limiting                                   |
-| `UPSTASH_REDIS_REST_TOKEN` | Yes (prod)         | Redis token for rate limiting                                      |
-| `ANTHROPIC_API_KEY`        | Yes (AI assistant) | Anthropic API key for `/api/ai/assistant` (returns 503 if missing) |
+| Variable                   | Required           | Description                                                                                                                 |
+| -------------------------- | ------------------ | --------------------------------------------------------------------------------------------------------------------------- |
+| `DATABASE_URL`             | Yes                | DB connection (inherited from root env)                                                                                     |
+| `NEXTAUTH_SECRET`          | Yes                | JWT signing secret / session crypto                                                                                         |
+| `NEXTAUTH_URL`             | Yes                | Base URL for NextAuth callbacks (e.g. http://localhost:3001)                                                                |
+| `QR_SIGNING_SECRET`        | Yes                | HMAC-SHA256 key for QR payload signing                                                                                      |
+| `UPSTASH_REDIS_REST_URL`   | Yes (prod)         | Redis REST URL for rate limiting                                                                                            |
+| `UPSTASH_REDIS_REST_TOKEN` | Yes (prod)         | Redis token for rate limiting                                                                                               |
+| `ANTHROPIC_API_KEY`        | Yes (AI assistant) | Anthropic API key for `/api/ai/assistant` (returns 503 if missing)                                                          |
+| `AUTH_COOKIE_DOMAIN`       | Yes (prod SSO)     | Parent domain for `gf_access_token` / refresh (e.g. `.gateflow.site`) so `app` ↔ `portal` share session. Omit on localhost. |
 
 Public (browser-consumable, `NEXT_PUBLIC_*`):
 

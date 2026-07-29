@@ -4,20 +4,24 @@
     "priority": "P0",
     "ownerApp": "resident-portal",
     "status": "partial",
-    "reviewMode": "static-review-only",
+    "reviewMode": "browser-evidence",
     "createdAt": "2026-07-29T14:45:00.000Z",
-    "commit": "7cdcea745f450236a6c63454fe3debe723a5d9b2",
-    "reason": "Portal redirects unauthenticated users to /login (CD handoff). No local activate/invite-token flow. Cross-subdomain session cookie sharing with app.gateflow.site remains an external gate.",
+    "updatedAt": "2026-07-29T20:45:00.000Z",
+    "commit": "31558779c322ac194b0a4f1c4b8ec78d7a1fd786",
+    "reason": "Live EN browser: after successful app.gateflow.site login, portal.gateflow.site still redirects to /login. Root cause: host-only gf_access_token (no Domain). AUTH_COOKIE_DOMAIN remediation staged in client-dashboard; production env + CD deploy + re-probe required before passed.",
     "evidence": [
-      "apps/resident-portal/src/lib/require-portal-session.ts",
-      "apps/resident-portal/src/app/(portal)/layout.tsx",
-      "apps/resident-portal/src/lib/session-claims.test.ts"
+      "docs/audits/resident-portal/BROWSER_SESSION_EVIDENCE_2026-07-29.md",
+      "docs/audits/resident-portal/evidence/2026-07-29-browser/01-portal-login-no-session-after-cd-login.png",
+      "docs/audits/resident-portal/evidence/2026-07-29-browser/02-app-session-ok-residents-zero.png",
+      "apps/client-dashboard/src/lib/auth-cookies.ts",
+      "apps/resident-portal/src/lib/require-portal-session.ts"
     ],
     "externalGate": {
       "id": "cross-subdomain-session",
       "owner": "operations",
       "expiry": "2026-08-31",
-      "artifact": "docs/audits/resident-portal/DEFERRALS_2026-07-29.json"
+      "artifact": "docs/audits/resident-portal/DEFERRALS_2026-07-29.json",
+      "nextOps": "Set AUTH_COOKIE_DOMAIN=.gateflow.site on Production – gateflow-client-dashboard, deploy CD, re-login, confirm portal home without /login redirect"
     }
   },
   {
@@ -25,19 +29,22 @@
     "priority": "P0",
     "ownerApp": "resident-portal",
     "status": "partial",
-    "reviewMode": "static-review-only",
+    "reviewMode": "browser-evidence",
     "createdAt": "2026-07-29T14:45:00.000Z",
-    "commit": "7cdcea745f450236a6c63454fe3debe723a5d9b2",
-    "reason": "Source+unit evidence present; fresh EN browser create proof deferred.",
+    "updatedAt": "2026-07-29T20:45:00.000Z",
+    "commit": "31558779c322ac194b0a4f1c4b8ec78d7a1fd786",
+    "reason": "EN browser create not collected: portal session missing after CD login. Live CD dashboard shows Residents=0 with linked units; need RESIDENT+unit fixture after session SSO works.",
     "evidence": [
-      "apps/resident-portal/src/lib/api-upstream.ts",
-      "apps/resident-portal/src/lib/phase07.test.ts",
+      "docs/audits/resident-portal/BROWSER_SESSION_EVIDENCE_2026-07-29.md",
+      "docs/audits/resident-portal/evidence/2026-07-29-browser/02-app-session-ok-residents-zero.png",
+      "apps/resident-portal/src/app/(portal)/visitors/new/page.tsx",
       "apps/resident-portal/src/components/visitor-form.tsx"
     ],
     "deferral": {
       "id": "browser-create-guest",
       "owner": "resident-portal-pilot",
-      "expiry": "2026-08-31"
+      "expiry": "2026-08-31",
+      "artifact": "docs/audits/resident-portal/DEFERRALS_2026-07-29.json"
     }
   },
   {
@@ -45,19 +52,21 @@
     "priority": "P0",
     "ownerApp": "resident-portal",
     "status": "partial",
-    "reviewMode": "static-review-only",
+    "reviewMode": "browser-evidence",
     "createdAt": "2026-07-29T14:45:00.000Z",
-    "commit": "7cdcea745f450236a6c63454fe3debe723a5d9b2",
-    "reason": "Scannable QR source+unit evidence present; live scan proof deferred.",
+    "updatedAt": "2026-07-29T20:45:00.000Z",
+    "commit": "31558779c322ac194b0a4f1c4b8ec78d7a1fd786",
+    "reason": "Browser QR scan proof blocked on portal session + create path. Source QR signing still covered by unit evidence only.",
     "evidence": [
+      "docs/audits/resident-portal/BROWSER_SESSION_EVIDENCE_2026-07-29.md",
       "apps/resident-portal/src/components/visitor-qr-card.tsx",
-      "apps/resident-portal/src/lib/qr-display.ts",
-      "apps/resident-portal/src/lib/phase07.test.ts"
+      "apps/resident-portal/src/lib/qr-display.ts"
     ],
     "deferral": {
       "id": "browser-qr-scan",
       "owner": "resident-portal-pilot",
-      "expiry": "2026-08-31"
+      "expiry": "2026-08-31",
+      "artifact": "docs/audits/resident-portal/DEFERRALS_2026-07-29.json"
     }
   },
   {
@@ -65,19 +74,21 @@
     "priority": "P0",
     "ownerApp": "resident-portal",
     "status": "partial",
-    "reviewMode": "static-review-only",
+    "reviewMode": "browser-evidence",
     "createdAt": "2026-07-29T14:45:00.000Z",
-    "commit": "7cdcea745f450236a6c63454fe3debe723a5d9b2",
-    "reason": "Offline QR read path source+unit evidence present; live offline matrix deferred.",
+    "updatedAt": "2026-07-29T20:45:00.000Z",
+    "commit": "31558779c322ac194b0a4f1c4b8ec78d7a1fd786",
+    "reason": "Live offline matrix not collected; depends on authenticated portal session and a rendered QR.",
     "evidence": [
+      "docs/audits/resident-portal/BROWSER_SESSION_EVIDENCE_2026-07-29.md",
       "apps/resident-portal/src/components/pwa/offline-aware-visitor-qr.tsx",
-      "apps/resident-portal/src/lib/qr-display.ts",
-      "apps/resident-portal/src/lib/phase07.test.ts"
+      "apps/resident-portal/src/lib/qr-display.ts"
     ],
     "deferral": {
       "id": "browser-offline-qr",
       "owner": "resident-portal-pilot",
-      "expiry": "2026-08-31"
+      "expiry": "2026-08-31",
+      "artifact": "docs/audits/resident-portal/DEFERRALS_2026-07-29.json"
     }
   }
 ]

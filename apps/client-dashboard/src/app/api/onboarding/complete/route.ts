@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@gate-access/db';
-import { getSessionClaims } from '../../../../lib/auth-cookies';
+import {
+  getSessionClaims,
+  resolveAuthCookieDomain,
+} from '../../../../lib/auth-cookies';
 import { z } from 'zod';
 import { signAccessToken } from '../../../../lib/auth';
 
@@ -127,13 +130,15 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Set updated session cookie
+    // Set updated session cookie (parent domain when AUTH_COOKIE_DOMAIN is set)
+    const domain = resolveAuthCookieDomain();
     response.cookies.set(ACCESS_COOKIE, newAccessToken, {
       httpOnly: true,
       secure: SECURE,
       sameSite: 'lax',
       maxAge: 60 * 15,
       path: '/',
+      ...(domain ? { domain } : {}),
     });
 
     // Set current project cookie to the new default project
@@ -143,6 +148,7 @@ export async function POST(request: NextRequest) {
       sameSite: 'lax',
       maxAge: 60 * 60 * 24 * 365,
       path: '/',
+      ...(domain ? { domain } : {}),
     });
 
     return response;

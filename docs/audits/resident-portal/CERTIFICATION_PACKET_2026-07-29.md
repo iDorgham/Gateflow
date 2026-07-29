@@ -1,79 +1,59 @@
-# Resident Portal — Certification packet (Phase 10)
+# Resident Portal — Certification packet (Phase 10 + browser probe)
 
 **Packet ID:** `RESIDENT_PORTAL_CERTIFICATION_PACKET_2026_07_29`  
 **App:** `resident-portal`  
-**Commit:** `a7a9548a` (master after PR #200; Phase 10 adds evidence docs)  
-**Created:** 2026-07-29  
+**Commit baseline:** `31558779` (PR #201 head at probe start; cookie Domain fix may be uncommitted)  
+**Updated:** 2026-07-29T20:45:00Z  
 **Expires:** 2026-08-31  
-**`valid`:** `false` (honest — not certify-ready)  
-**Review mode:** `static-review-only`  
-**Phase 09 PR (merged):** https://github.com/iDorgham/Gateflow/pull/200
+**`valid`:** `false`  
+**Review mode:** `browser-evidence`  
+**Draft PR:** https://github.com/iDorgham/Gateflow/pull/201
 
 ## Verdict
 
-Phase 06–09 closed the **source/unit** P0 gaps from the 2026-07-29 audit
-(auth/tenant, API upstream, scannable QR, offline read, pilot UX, i18n interim).
-Owned pilot steps are no longer undocumented `missing`; each is `partial` with
-source evidence plus a dated deferral or external gate.
+Live EN browser proved **cross-subdomain session failure**: after a successful
+`app.gateflow.site` login, `portal.gateflow.site` still shows the login handoff
+page. Create guest / QR / offline flows were **not run** (no portal session).
+Dashboard also showed **Residents: 0** linked units.
 
-**Do not run `/certify`.** Workflow stage stays `checking`. Use this packet for
-`/check all` without inventing browser proof.
+`AUTH_COOKIE_DOMAIN` support was added in Client Dashboard source; production
+must set `.gateflow.site` and redeploy before SSO can pass.
 
-## Checks (app-scoped)
+**Do not run `/certify`.**
 
-| Check      | Status | Evidence                                   |
-| ---------- | ------ | ------------------------------------------ |
-| Unit tests | passed | 30/30 `pnpm --filter resident-portal test` |
-| Typecheck  | passed | `pnpm --filter resident-portal typecheck`  |
-| Lint       | passed | `pnpm --filter resident-portal lint`       |
-| PR CI      | passed | PR #200 Lint/Typecheck/Test/Security/CI OK |
+## Browser probe
+
+Artifact: `BROWSER_SESSION_EVIDENCE_2026-07-29.md`
+
+| Gate                      | Result     |
+| ------------------------- | ---------- |
+| App login session         | passed     |
+| Portal SSO after CD login | **failed** |
+| Create guest (EN)         | not-run    |
+| QR scan                   | not-run    |
+| Offline QR                | not-run    |
 
 ## Pilot coverage
 
-| Scope                        | Result                                      |
-| ---------------------------- | ------------------------------------------- |
-| Full matrix (9 steps)        | 0 passed · 4 partial · 5 n/a (CD/Scanner)   |
-| Owned (4 steps)              | 0 passed · 4 partial with evidence+deferral |
-| Undocumented owned `missing` | **0**                                       |
-
-Artifacts:
-
-- Full: `PILOT_GATE_2026-07-29-phase10.json`
-- Owned-only: `PILOT_GATE_OWNED_2026-07-29-phase10.json`
-- Deferrals: `DEFERRALS_2026-07-29.json`
+| Scope                        | Result                                        |
+| ---------------------------- | --------------------------------------------- |
+| Owned (4 steps)              | 0 passed · 4 partial (browser fail / blocked) |
+| Undocumented owned `missing` | **0**                                         |
 
 ## Deferrals blocking certify
 
-| ID                      | Owner                 | Expiry     |
-| ----------------------- | --------------------- | ---------- |
-| cross-subdomain-session | operations            | 2026-08-31 |
-| browser-create-guest    | resident-portal-pilot | 2026-08-31 |
-| browser-qr-scan         | resident-portal-pilot | 2026-08-31 |
-| browser-offline-qr      | resident-portal-pilot | 2026-08-31 |
-
-Non-blocking: Lighthouse/PWA scores; full AR content pack (same expiry).
-
-## Page scores
-
-Pointer: `PAGE_SCORES_2026-07-29.json` (`securityBoundaryProven=false`, average capped).
+| ID                      | Owner                 | Notes                                |
+| ----------------------- | --------------------- | ------------------------------------ |
+| cross-subdomain-session | operations            | Set `AUTH_COOKIE_DOMAIN` + deploy CD |
+| resident-unit-fixture   | resident-portal-pilot | Need RESIDENT + unit                 |
+| browser-create-guest    | resident-portal-pilot | After SSO + fixture                  |
+| browser-qr-scan         | resident-portal-pilot | After create                         |
+| browser-offline-qr      | resident-portal-pilot | After QR                             |
 
 ## Path to certify
 
-1. Clear cross-subdomain session gate (operations).
-2. Collect EN browser evidence for create + QR + offline on preview/prod.
-3. Refresh `PILOT_GATE` owned steps to `passed` with browser artifacts.
-4. Set packet `valid: true` bound to that commit.
-5. `/check all` → `/pilot` → `/certify` with explicit authorization.
-
-## Related phase logs
-
-- `docs/plan/Complete/resident_portal_responsive/phase_logs/PHASE_LOG_phase_01.md`
-- `docs/plan/Complete/resident_portal_responsive/phase_logs/PHASE_LOG_phase_02.md`
-- `docs/plan/Complete/resident_portal_responsive/phase_logs/PHASE_LOG_phase_03.md`
-- `docs/plan/Complete/resident_portal_responsive/phase_logs/PHASE_LOG_phase_04.md`
-- `docs/plan/Complete/resident_portal_responsive/phase_logs/PHASE_LOG_phase_05.md`
-- `docs/plan/Complete/resident_portal_responsive/phase_logs/PHASE_LOG_phase_06.md`
-- `docs/plan/Complete/resident_portal_responsive/phase_logs/PHASE_LOG_phase_07.md`
-- `docs/plan/Complete/resident_portal_responsive/phase_logs/PHASE_LOG_phase_08.md`
-- `docs/plan/Complete/resident_portal_responsive/phase_logs/PHASE_LOG_phase_09.md`
-- `docs/plan/Complete/resident_portal_responsive/phase_logs/PHASE_LOG_phase_10.md`
+1. Deploy CD with `AUTH_COOKIE_DOMAIN=.gateflow.site`.
+2. Re-login on app → open portal home without `/login` redirect.
+3. Create RESIDENT + linked unit fixture.
+4. EN browser: create guest → QR → offline; mark owned steps `passed`.
+5. Set this packet `valid: true` bound to that commit → `/check all` → `/pilot` → `/certify` (explicit auth).
