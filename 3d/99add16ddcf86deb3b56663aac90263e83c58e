@@ -1,0 +1,51 @@
+docs/plan/Active/resident_portal_responsive/TASKS_resident_portal_responsive.md
+  s_708501bd875fa7::t_f355f3bfcf483d 80-84
+docs/plan/Active/resident_portal_responsive/phase_logs/PHASE_LOG_phase_08.md
+  s_708501bd875fa7::t_909637fec8a9fd 1-39
+docs/plan/Active/resident_portal_responsive/SESSION_MEMORY.md
+  s_708501bd875fa7::t_6eb037eab085b5 5,8-11,25-26,36-37,41-44,50,54
+apps/resident-portal/src/components/common/unit-required-empty.tsx
+  s_708501bd875fa7::t_d492e93cce76d4 1-37
+apps/resident-portal/package.json
+  s_708501bd875fa7::t_8acff0c85629d2 11
+apps/resident-portal/src/lib/auth-cookies.ts
+  s_708501bd875fa7::t_e9e0ff7590f37d 5,16-22
+  s_708501bd875fa7::t_edb7439286a85a 23
+apps/resident-portal/src/app/(portal)/open-qr/new/page.tsx
+  s_708501bd875fa7::t_1b59f518b8a292 7,22-24
+apps/resident-portal/src/app/(portal)/visitors/new/page.tsx
+  s_708501bd875fa7::t_6379e4d05a07e6 7,22-28
+apps/resident-portal/src/app/(portal)/visitors/[id]/page.tsx
+  s_708501bd875fa7::t_1d8a36cc0a111d 2,6,10,53,113-118
+apps/resident-portal/src/lib/pilot-ux.ts
+  s_708501bd875fa7::t_1fff3b9c5f77cf 1-36
+apps/resident-portal/src/lib/phase08.test.ts
+  s_708501bd875fa7::t_b9c4c37c312567 1-49
+apps/resident-portal/src/app/(portal)/profile/page.tsx
+  s_708501bd875fa7::t_7c5f1cd59bc7ea 2,6,8,126
+apps/resident-portal/src/components/profile/sign-out-button.tsx
+  s_708501bd875fa7::t_836a9d585a4c1c 1-27
+apps/resident-portal/src/components/visitors/visitor-pass-actions.tsx
+  s_708501bd875fa7::t_f7d94877aec89d 1-24,26-160
+  s_708501bd875fa7::t_a89e572506b844 25
+apps/resident-portal/src/app/actions/sign-out.ts
+  s_708501bd875fa7::t_517150bed27e3a 1-9
+.ai/workflow-v2/state.json
+  s_708501bd875fa7::t_6e3b35722f42bc 144
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "3d99add16ddcf86deb3b56663aac90263e83c58e",
+  "prompts": {},
+  "sessions": {
+    "s_708501bd875fa7": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "4153ad1e-4498-4e8f-9ae4-08f8df3fd1d6",
+        "model": "grok-4.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
