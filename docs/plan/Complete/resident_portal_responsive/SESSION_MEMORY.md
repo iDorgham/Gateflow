@@ -4,8 +4,8 @@
 
 - Plan status: **Complete**
 - Focused app: `resident-portal`
-- Workflow stage: advancing `checking` → `pilot-ready` → `certified` via `/certify` (2026-07-30)
-- Exact next action after certify: `/next-app` (scanner-app) when ready — do not unlock until receipt exists
+- Workflow stage: **`certified`** (receipt `resident-portal-2026-07-30T00-40-55.310Z.json`)
+- Exact next action: `/next-app` with confirm → focus `scanner-app` (sequence locked until confirmed)
 - Browser evidence: SSO + create + QR + offline **passed** (2026-07-30)
 - Fixture: `pilot.resident@selenadev.com` / `password123` → Pilot Unit A1
 - Visitor proof: `cms6r96bw000a50gp1agjo3sh`

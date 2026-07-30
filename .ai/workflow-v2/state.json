@@ -1,7 +1,7 @@
 {
   "version": 2,
   "sequence": ["client-dashboard", "resident-portal", "scanner-app"],
-  "focusedApp": "resident-portal",
+  "focusedApp": null,
   "integratedPilot": {
     "stage": "parked",
     "certificationReceipt": null
@@ -76,7 +76,7 @@
       "updatedAt": "2026-07-26T22:28:37.932Z"
     },
     "resident-portal": {
-      "stage": "checking",
+      "stage": "certified",
       "currentPlan": "resident_portal_responsive",
       "baseline": null,
       "evidence": [
@@ -194,8 +194,15 @@
           "expiry": "2026-08-31"
         }
       ],
-      "certificationReceipt": null,
-      "updatedAt": "2026-07-30T00:22:00.000Z",
+      "certificationReceipt": {
+        "version": 1,
+        "app": "resident-portal",
+        "certifiedAt": "2026-07-30T00:40:55.310Z",
+        "evidenceId": "RESIDENT_PORTAL_EVIDENCE_2026_07_30",
+        "evidenceCommit": "ebfc99f450798d8d507ef7fd595cb63c900926d2",
+        "sha256": "68c545aca2e53b27d45a99839a38fa6ca92a6e36d581223bae6ec5261d22a18b"
+      },
+      "updatedAt": "2026-07-30T00:40:55.310Z",
       "pageScoresFile": "docs/audits/resident-portal/PAGE_SCORES_2026-07-29.json",
       "pilotFlowCoverage": {
         "covered": 4,
@@ -226,5 +233,5 @@
   },
   "workdirLock": null,
   "createdAt": "2026-07-24T00:00:00.000Z",
-  "updatedAt": "2026-07-30T00:22:00.000Z"
+  "updatedAt": "2026-07-30T00:40:55.310Z"
 }
