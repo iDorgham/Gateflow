@@ -1,0 +1,23 @@
+docs/plan/Complete/resident_portal_responsive/SESSION_MEMORY.md
+  s_55e4dcfab374c2::t_dc1bdcb1eaf97a 7-8
+.ai/workflow-v2/receipts/resident-portal-2026-07-30T00-40-55.310Z.json
+  s_55e4dcfab374c2::t_e401d65cb82dc5 1-8
+.ai/workflow-v2/state.json
+  s_55e4dcfab374c2::t_6221239d7e7b10 4,79,197-205,236
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.17",
+  "base_commit_sha": "e559d6247846864600cc3a427f28455c73de96c8",
+  "prompts": {},
+  "sessions": {
+    "s_55e4dcfab374c2": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "9eb763a1-f03d-4c6d-b6cf-d1a99923376f",
+        "model": "grok-4.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
