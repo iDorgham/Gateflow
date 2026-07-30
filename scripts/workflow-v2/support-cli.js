@@ -18,7 +18,8 @@ const value = (flag) => {
   const index = args.indexOf(flag);
   return index >= 0 ? args[index + 1] : null;
 };
-const print = (result) => console.log(json ? JSON.stringify(result, null, 2) : result);
+const print = (result) =>
+  console.log(json ? JSON.stringify(result, null, 2) : result);
 
 function help() {
   return `Workflow v2 deterministic support
@@ -49,12 +50,25 @@ try {
     return print(result);
   }
   if (command === 'score-report') {
-    return print(aggregatePageScores(JSON.parse(fs.readFileSync(path.resolve(args[1]), 'utf8'))));
+    return print(
+      aggregatePageScores(
+        JSON.parse(fs.readFileSync(path.resolve(args[1]), 'utf8'))
+      )
+    );
   }
   if (command === 'scope-diff') {
     const files = value('--files')
-      ? fs.readFileSync(path.resolve(value('--files')), 'utf8').split(/\r?\n/).filter(Boolean)
-      : require('node:child_process').execFileSync('git', ['diff', '--name-only'], { cwd: root, encoding: 'utf8' }).split(/\r?\n/).filter(Boolean);
+      ? fs
+          .readFileSync(path.resolve(value('--files')), 'utf8')
+          .split(/\r?\n/)
+          .filter(Boolean)
+      : require('node:child_process')
+          .execFileSync('git', ['diff', '--name-only'], {
+            cwd: root,
+            encoding: 'utf8',
+          })
+          .split(/\r?\n/)
+          .filter(Boolean);
     const errors = validateScopeDiff(args[1], files);
     if (errors.length) process.exitCode = 1;
     return print({ valid: errors.length === 0, errors });
@@ -62,13 +76,23 @@ try {
   if (command === 'freshness') {
     const artifact = JSON.parse(fs.readFileSync(path.resolve(args[1]), 'utf8'));
     const maxAge = Number(value('--max-age-hours') || 24) * 60 * 60 * 1000;
-    const ageMs = Date.now() - Date.parse(artifact.createdAt || artifact.generatedAt || artifact.date);
-    const result = { fresh: Number.isFinite(ageMs) && ageMs >= 0 && ageMs <= maxAge, ageMs, maxAgeMs: maxAge };
+    const ageMs =
+      Date.now() -
+      Date.parse(artifact.createdAt || artifact.generatedAt || artifact.date);
+    const result = {
+      fresh: Number.isFinite(ageMs) && ageMs >= 0 && ageMs <= maxAge,
+      ageMs,
+      maxAgeMs: maxAge,
+    };
     if (!result.fresh) process.exitCode = 1;
     return print(result);
   }
   if (command === 'pilot-evidence') {
-    const result = aggregateEvidence(JSON.parse(fs.readFileSync(path.resolve(args[1]), 'utf8')));
+    const items = JSON.parse(fs.readFileSync(path.resolve(args[1]), 'utf8'));
+    const focusedIdx = args.indexOf('--focused-app');
+    const focusedApp =
+      focusedIdx >= 0 ? args[focusedIdx + 1] : process.env.FOCUSED_APP || null;
+    const result = aggregateEvidence(items, focusedApp);
     if (!result.ready) process.exitCode = 1;
     return print(result);
   }

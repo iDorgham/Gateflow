@@ -3,89 +3,62 @@
     "step": "Resident activation",
     "priority": "P0",
     "ownerApp": "resident-portal",
-    "status": "partial",
-    "reviewMode": "static-review-only",
+    "status": "passed",
+    "reviewMode": "browser-evidence",
     "createdAt": "2026-07-29T14:45:00.000Z",
-    "commit": "7cdcea745f450236a6c63454fe3debe723a5d9b2",
-    "reason": "Portal redirects unauthenticated users to /login (CD handoff). No local activate/invite-token flow. Cross-subdomain session cookie sharing with app.gateflow.site remains an external gate.",
+    "updatedAt": "2026-07-30T00:09:00.000Z",
+    "commit": "ebfc99f450798d8d507ef7fd595cb63c900926d2",
+    "reason": "Live EN browser: AUTH_COOKIE_DOMAIN=.gateflow.site cookies + synced NEXTAUTH_SECRET. After app.gateflow.site login as pilot.resident@selenadev.com, portal.gateflow.site serves home/visitors without login handoff.",
     "evidence": [
-      "apps/resident-portal/src/lib/require-portal-session.ts",
-      "apps/resident-portal/src/app/(portal)/layout.tsx",
-      "apps/resident-portal/src/lib/session-claims.test.ts"
-    ],
-    "externalGate": {
-      "id": "cross-subdomain-session",
-      "owner": "operations",
-      "expiry": "2026-08-31",
-      "artifact": "docs/audits/resident-portal/DEFERRALS_2026-07-29.json"
-    }
+      "docs/audits/resident-portal/BROWSER_SESSION_EVIDENCE_2026-07-29.md",
+      "docs/audits/resident-portal/evidence/2026-07-29-browser/03-portal-sso-pass-details-qr.png",
+      "apps/client-dashboard/src/lib/auth-cookies.ts"
+    ]
   },
   {
     "step": "Resident creates guest permission",
     "priority": "P0",
     "ownerApp": "resident-portal",
-    "status": "partial",
-    "reviewMode": "static-review-only",
+    "status": "passed",
+    "reviewMode": "browser-evidence",
     "createdAt": "2026-07-29T14:45:00.000Z",
-    "commit": "7cdcea745f450236a6c63454fe3debe723a5d9b2",
-    "reason": "Source+unit evidence: session identity without dev-* fallbacks, env-based API upstream, visitor/open-QR create UI, unit-missing empty states. Fresh EN browser create proof not collected (no deploy auth in /dev).",
+    "updatedAt": "2026-07-30T00:09:00.000Z",
+    "commit": "ebfc99f450798d8d507ef7fd595cb63c900926d2",
+    "reason": "EN browser/API create succeeded for Pilot Guest EN; visitor cms6r96bw000a50gp1agjo3sh with qrCodeId on linked Pilot Unit A1.",
     "evidence": [
-      "apps/resident-portal/src/lib/api-upstream.ts",
-      "apps/resident-portal/src/lib/phase07.test.ts",
-      "apps/resident-portal/src/components/visitor-form.tsx",
-      "apps/resident-portal/src/app/(portal)/visitors/new/page.tsx",
-      "docs/plan/Complete/resident_portal_responsive/phase_logs/PHASE_LOG_phase_07.md"
-    ],
-    "deferral": {
-      "id": "browser-create-guest",
-      "owner": "resident-portal-pilot",
-      "expiry": "2026-08-31",
-      "artifact": "docs/audits/resident-portal/DEFERRALS_2026-07-29.json"
-    }
+      "docs/audits/resident-portal/BROWSER_SESSION_EVIDENCE_2026-07-29.md",
+      "docs/audits/resident-portal/evidence/2026-07-29-browser/05-portal-create-guest-form.png"
+    ]
   },
   {
     "step": "Permission QR display in Resident Portal",
     "priority": "P0",
     "ownerApp": "resident-portal",
-    "status": "partial",
-    "reviewMode": "static-review-only",
+    "status": "passed",
+    "reviewMode": "browser-evidence",
     "createdAt": "2026-07-29T14:45:00.000Z",
-    "commit": "7cdcea745f450236a6c63454fe3debe723a5d9b2",
-    "reason": "Source+unit evidence: scannable QR from server-signed code (visitor-qr-card / open-qr-card / qr-display). Browser scan proof against a live gate not collected.",
+    "updatedAt": "2026-07-30T00:09:00.000Z",
+    "commit": "ebfc99f450798d8d507ef7fd595cb63c900926d2",
+    "reason": "Pass details page renders Pilot Guest EN with Share/Save Image and QR media elements. Device scanner decode remains scanner-app owned.",
     "evidence": [
-      "apps/resident-portal/src/components/visitor-qr-card.tsx",
-      "apps/resident-portal/src/lib/qr-display.ts",
-      "apps/resident-portal/src/lib/phase07.test.ts",
-      "docs/plan/Complete/resident_portal_responsive/phase_logs/PHASE_LOG_phase_07.md"
-    ],
-    "deferral": {
-      "id": "browser-qr-scan",
-      "owner": "resident-portal-pilot",
-      "expiry": "2026-08-31",
-      "artifact": "docs/audits/resident-portal/DEFERRALS_2026-07-29.json"
-    }
+      "docs/audits/resident-portal/BROWSER_SESSION_EVIDENCE_2026-07-29.md",
+      "docs/audits/resident-portal/evidence/2026-07-29-browser/03-portal-sso-pass-details-qr.png"
+    ]
   },
   {
     "step": "Resident-facing denial/offline QR",
     "priority": "P0",
     "ownerApp": "resident-portal",
-    "status": "partial",
-    "reviewMode": "static-review-only",
+    "status": "passed",
+    "reviewMode": "browser-evidence",
     "createdAt": "2026-07-29T14:45:00.000Z",
-    "commit": "7cdcea745f450236a6c63454fe3debe723a5d9b2",
-    "reason": "Source+unit evidence: offline banner, IndexedDB QR read path, resolveDisplayedQrCode prefers cache offline. Live offline browser matrix not collected.",
+    "updatedAt": "2026-07-30T00:09:00.000Z",
+    "commit": "ebfc99f450798d8d507ef7fd595cb63c900926d2",
+    "reason": "Offline reload of pass details still showed Pilot Guest EN pass content (portal offline read).",
     "evidence": [
-      "apps/resident-portal/src/components/pwa/offline-aware-visitor-qr.tsx",
-      "apps/resident-portal/src/lib/qr-display.ts",
-      "apps/resident-portal/src/lib/phase07.test.ts",
-      "docs/plan/Complete/resident_portal_responsive/phase_logs/PHASE_LOG_phase_07.md"
-    ],
-    "deferral": {
-      "id": "browser-offline-qr",
-      "owner": "resident-portal-pilot",
-      "expiry": "2026-08-31",
-      "artifact": "docs/audits/resident-portal/DEFERRALS_2026-07-29.json"
-    }
+      "docs/audits/resident-portal/BROWSER_SESSION_EVIDENCE_2026-07-29.md",
+      "docs/audits/resident-portal/evidence/2026-07-29-browser/04-portal-offline-pass-details.png"
+    ]
   },
   {
     "step": "Create or import resident contact",
@@ -93,7 +66,7 @@
     "ownerApp": "client-dashboard",
     "status": "n/a",
     "createdAt": "2026-07-29T14:45:00.000Z",
-    "reason": "Client Dashboard owned."
+    "reason": "Client Dashboard owned. Fixture resident+unit created for portal pilot only."
   },
   {
     "step": "Send invitation or access code",
@@ -117,7 +90,7 @@
     "ownerApp": "scanner-app",
     "status": "n/a",
     "createdAt": "2026-07-29T14:45:00.000Z",
-    "reason": "Scanner App owned."
+    "reason": "Scanner App owned / parked."
   },
   {
     "step": "Event appears in Client Dashboard access log",

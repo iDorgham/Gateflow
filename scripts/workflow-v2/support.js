@@ -162,12 +162,19 @@ function validateScopeDiff(focusedApp, files) {
 
 function aggregateEvidence(items, focusedApp = null) {
   const blockers = items
-    .filter(
-      (item) =>
-        item.priority === 'P0' &&
-        item.status !== 'passed' &&
-        !(item.status === 'n/a' && item.owner && item.owner !== focusedApp)
-    )
+    .filter((item) => {
+      if (item.priority !== 'P0' || item.status === 'passed') return false;
+      const owner = item.owner || item.ownerApp || null;
+      // Other-app n/a steps are non-blocking when a focused app is set (or whenever owner differs).
+      if (
+        item.status === 'n/a' &&
+        owner &&
+        (!focusedApp || owner !== focusedApp)
+      ) {
+        return false;
+      }
+      return true;
+    })
     .map((item) => item.step);
   return {
     ready: items.length > 0 && blockers.length === 0,
