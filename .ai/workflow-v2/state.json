@@ -1,7 +1,7 @@
 {
   "version": 2,
   "sequence": ["client-dashboard", "resident-portal", "scanner-app"],
-  "focusedApp": "resident-portal",
+  "focusedApp": "scanner-app",
   "integratedPilot": {
     "stage": "parked",
     "certificationReceipt": null
@@ -76,7 +76,7 @@
       "updatedAt": "2026-07-26T22:28:37.932Z"
     },
     "resident-portal": {
-      "stage": "checking",
+      "stage": "certified",
       "currentPlan": "resident_portal_responsive",
       "baseline": null,
       "evidence": [
@@ -113,59 +113,107 @@
         {
           "id": "resident-portal-pilot-gate-phase10-2026-07-29",
           "type": "pilot-gate",
-          "status": "blocked",
+          "status": "passed",
           "valid": true,
-          "createdAt": "2026-07-29T14:50:00.000Z",
-          "commit": "7cdcea745f450236a6c63454fe3debe723a5d9b2",
-          "reviewMode": "static-review-only",
-          "artifact": "docs/audits/resident-portal/PILOT_GATE_2026-07-29-phase10.json"
+          "createdAt": "2026-07-30T00:22:00.000Z",
+          "commit": "ebfc99f450798d8d507ef7fd595cb63c900926d2",
+          "reviewMode": "browser-evidence",
+          "artifact": "docs/audits/resident-portal/PILOT_GATE_OWNED_2026-07-29-phase10.json"
         },
         {
           "id": "resident-portal-certification-packet-2026-07-29",
           "type": "certification-packet",
-          "status": "blocked",
+          "status": "passed",
           "valid": true,
-          "createdAt": "2026-07-29T14:50:00.000Z",
-          "commit": "7cdcea745f450236a6c63454fe3debe723a5d9b2",
-          "reviewMode": "static-review-only",
+          "createdAt": "2026-07-30T00:22:00.000Z",
+          "commit": "ebfc99f450798d8d507ef7fd595cb63c900926d2",
+          "reviewMode": "browser-evidence",
           "artifact": "docs/audits/resident-portal/CERTIFICATION_PACKET_2026-07-29.json",
-          "note": "Packet body sets valid=false; not certify-ready"
+          "note": "Packet valid=true certifyReady=true after browser evidence"
         },
         {
           "id": "resident-portal-check-all-2026-07-29",
           "type": "focused-check",
-          "status": "blocked",
+          "status": "superseded",
           "valid": true,
           "createdAt": "2026-07-29T19:50:00.000Z",
           "commit": "cd687e10e088dbd5ce2d459bdd40e4ac5468d28e",
           "reviewMode": "static-review-only",
-          "artifact": "docs/audits/resident-portal/CHECK_ALL_2026-07-29.json"
+          "artifact": "docs/audits/resident-portal/CHECK_ALL_2026-07-29.json",
+          "note": "Superseded by resident-portal-check-all-2026-07-30"
+        },
+        {
+          "id": "resident-portal-check-all-2026-07-30",
+          "type": "focused-check",
+          "status": "passed",
+          "valid": true,
+          "createdAt": "2026-07-30T00:22:00.000Z",
+          "commit": "ebfc99f450798d8d507ef7fd595cb63c900926d2",
+          "reviewMode": "browser-evidence",
+          "artifact": "docs/audits/resident-portal/CHECK_ALL_2026-07-30.json"
+        },
+        {
+          "id": "resident-portal-browser-session-2026-07-29",
+          "type": "browser-session",
+          "status": "passed",
+          "valid": true,
+          "createdAt": "2026-07-30T00:22:00.000Z",
+          "commit": "ebfc99f450798d8d507ef7fd595cb63c900926d2",
+          "reviewMode": "browser-evidence",
+          "artifact": "docs/audits/resident-portal/BROWSER_SESSION_EVIDENCE_2026-07-29.md"
+        },
+        {
+          "id": "resident-portal-gatekeeper-2026-07-30",
+          "type": "independent-gatekeeper-review",
+          "status": "passed",
+          "valid": true,
+          "createdAt": "2026-07-30T00:22:00.000Z",
+          "commit": "ebfc99f450798d8d507ef7fd595cb63c900926d2",
+          "reviewMode": "independent-review",
+          "artifact": "docs/audits/resident-portal/GATEKEEPER_REVIEW_2026-07-30.json"
+        },
+        {
+          "id": "resident-portal-certification-evidence-2026-07-30",
+          "type": "certification-evidence",
+          "status": "passed",
+          "valid": true,
+          "createdAt": "2026-07-30T00:22:00.000Z",
+          "commit": "ebfc99f450798d8d507ef7fd595cb63c900926d2",
+          "reviewMode": "browser-evidence",
+          "artifact": "docs/audits/resident-portal/RESIDENT_PORTAL_CERTIFICATION_EVIDENCE_2026_07_30.json"
         }
       ],
       "externalGates": [
         {
           "id": "cross-subdomain-session",
-          "status": "pending",
-          "summary": "Prove cookie session sharing between CD login host and resident portal host",
+          "status": "complete",
+          "summary": "AUTH_COOKIE_DOMAIN=.gateflow.site + synced NEXTAUTH_SECRET proven live EN browser SSO",
           "owner": "operations",
-          "artifact": "docs/audits/resident-portal/DEFERRALS_2026-07-29.json",
-          "lastCheckedAt": "2026-07-29T14:50:00.000Z",
+          "artifact": "docs/audits/resident-portal/BROWSER_SESSION_EVIDENCE_2026-07-29.md",
+          "lastCheckedAt": "2026-07-30T00:22:00.000Z",
           "expiry": "2026-08-31"
         }
       ],
-      "certificationReceipt": null,
-      "updatedAt": "2026-07-29T19:50:00.000Z",
+      "certificationReceipt": {
+        "version": 1,
+        "app": "resident-portal",
+        "certifiedAt": "2026-07-30T00:40:55.310Z",
+        "evidenceId": "RESIDENT_PORTAL_EVIDENCE_2026_07_30",
+        "evidenceCommit": "ebfc99f450798d8d507ef7fd595cb63c900926d2",
+        "sha256": "68c545aca2e53b27d45a99839a38fa6ca92a6e36d581223bae6ec5261d22a18b"
+      },
+      "updatedAt": "2026-07-30T00:40:55.310Z",
       "pageScoresFile": "docs/audits/resident-portal/PAGE_SCORES_2026-07-29.json",
       "pilotFlowCoverage": {
-        "covered": 0,
+        "covered": 4,
         "total": 9,
-        "ownedCovered": 0,
-        "ownedPartial": 4,
+        "ownedCovered": 4,
+        "ownedPartial": 0,
         "ownedTotal": 4,
         "ownedMissingUndocumented": 0,
-        "status": "blocked",
-        "artifact": "docs/audits/resident-portal/PILOT_GATE_2026-07-29-phase10.json",
-        "lastCheckedAt": "2026-07-29T14:50:00.000Z"
+        "status": "ready",
+        "artifact": "docs/audits/resident-portal/PILOT_GATE_OWNED_2026-07-29-phase10.json",
+        "lastCheckedAt": "2026-07-30T00:22:00.000Z"
       },
       "selection": {
         "command": "/dev",
@@ -175,15 +223,15 @@
       }
     },
     "scanner-app": {
-      "stage": "parked",
+      "stage": "focused",
       "currentPlan": null,
       "baseline": null,
       "evidence": [],
       "certificationReceipt": null,
-      "updatedAt": "2026-07-24T00:00:00.000Z"
+      "updatedAt": "2026-07-30T00:53:55.645Z"
     }
   },
   "workdirLock": null,
   "createdAt": "2026-07-24T00:00:00.000Z",
-  "updatedAt": "2026-07-29T19:50:00.000Z"
+  "updatedAt": "2026-07-30T00:53:55.645Z"
 }

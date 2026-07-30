@@ -1,0 +1,80 @@
+{
+  "id": "resident-portal-check-all-2026-07-30",
+  "type": "focused-check",
+  "status": "passed",
+  "valid": true,
+  "createdAt": "2026-07-30T00:22:00.000Z",
+  "commit": "ebfc99f450798d8d507ef7fd595cb63c900926d2",
+  "application": "resident-portal",
+  "focusedApp": "resident-portal",
+  "stage": "checking",
+  "reviewMode": "browser-evidence",
+  "summary": "Fresh check after browser SSO/create/QR/offline evidence. Unit tests 30/30; support tests 9/9; owned pilot 4/4 ready; packet valid/certifyReady.",
+  "checks": {
+    "tests": {
+      "status": "passed",
+      "command": "pnpm --filter resident-portal test",
+      "testsPassed": 30,
+      "suites": 11
+    },
+    "workflowV2Support": {
+      "status": "passed",
+      "command": "node --test scripts/workflow-v2/__tests__/support.test.js",
+      "testsPassed": 9
+    },
+    "pilotEvidence": {
+      "status": "passed",
+      "artifact": "docs/audits/resident-portal/PILOT_GATE_OWNED_2026-07-29-phase10.json",
+      "ready": true,
+      "ownedPassed": 4,
+      "ownedPartial": 0,
+      "ownedTotal": 4,
+      "blockers": []
+    },
+    "certificationPacketFreshness": {
+      "status": "passed",
+      "artifact": "docs/audits/resident-portal/CERTIFICATION_PACKET_2026-07-29.json",
+      "fresh": true,
+      "valid": true,
+      "certifyReady": true,
+      "expiresAt": "2026-08-31T23:59:59.000Z"
+    },
+    "browserEvidence": {
+      "status": "passed",
+      "artifact": "docs/audits/resident-portal/BROWSER_SESSION_EVIDENCE_2026-07-29.md",
+      "screenshots": [
+        "docs/audits/resident-portal/evidence/2026-07-29-browser/03-portal-sso-pass-details-qr.png",
+        "docs/audits/resident-portal/evidence/2026-07-29-browser/04-portal-offline-pass-details.png",
+        "docs/audits/resident-portal/evidence/2026-07-29-browser/05-portal-create-guest-form.png"
+      ]
+    },
+    "deferrals": {
+      "status": "passed",
+      "artifact": "docs/audits/resident-portal/DEFERRALS_2026-07-29.json",
+      "blockingOpen": 0,
+      "nonBlockingDeferred": ["lighthouse-pwa-scores", "full-ar-rtl-content"]
+    },
+    "deploy": {
+      "status": "passed",
+      "clientDashboard": "https://github.com/iDorgham/Gateflow/actions/runs/30494706212",
+      "residentPortal": "https://github.com/iDorgham/Gateflow/actions/runs/30498837749",
+      "productCommit": "ebfc99f450798d8d507ef7fd595cb63c900926d2"
+    },
+    "priorCheckSuperseded": {
+      "status": "superseded",
+      "artifact": "docs/audits/resident-portal/CHECK_ALL_2026-07-29.json",
+      "note": "Previous check recorded pilotEvidence blocked before browser re-probe"
+    }
+  },
+  "artifacts": {
+    "certificationPacket": "docs/audits/resident-portal/CERTIFICATION_PACKET_2026-07-29.json",
+    "pilotGateOwned": "docs/audits/resident-portal/PILOT_GATE_OWNED_2026-07-29-phase10.json",
+    "pilotGateFull": "docs/audits/resident-portal/PILOT_GATE_2026-07-29-phase10.json",
+    "deferrals": "docs/audits/resident-portal/DEFERRALS_2026-07-29.json",
+    "browserEvidence": "docs/audits/resident-portal/BROWSER_SESSION_EVIDENCE_2026-07-29.md",
+    "gatekeeperReview": "docs/audits/resident-portal/GATEKEEPER_REVIEW_2026-07-30.json"
+  },
+  "blockers": [],
+  "certifyReady": true,
+  "nextCommands": ["/certify"]
+}

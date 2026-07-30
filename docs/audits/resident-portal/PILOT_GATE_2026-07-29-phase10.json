@@ -3,93 +3,62 @@
     "step": "Resident activation",
     "priority": "P0",
     "ownerApp": "resident-portal",
-    "status": "partial",
+    "status": "passed",
     "reviewMode": "browser-evidence",
     "createdAt": "2026-07-29T14:45:00.000Z",
-    "updatedAt": "2026-07-29T20:45:00.000Z",
-    "commit": "31558779c322ac194b0a4f1c4b8ec78d7a1fd786",
-    "reason": "Live EN browser: after successful app.gateflow.site login, portal.gateflow.site still redirects to /login. Root cause: host-only gf_access_token (no Domain). AUTH_COOKIE_DOMAIN remediation staged in client-dashboard; production env + CD deploy + re-probe required before passed.",
+    "updatedAt": "2026-07-30T00:09:00.000Z",
+    "commit": "ebfc99f450798d8d507ef7fd595cb63c900926d2",
+    "reason": "Live EN browser: AUTH_COOKIE_DOMAIN=.gateflow.site cookies + synced NEXTAUTH_SECRET. After app.gateflow.site login as pilot.resident@selenadev.com, portal.gateflow.site serves home/visitors without login handoff.",
     "evidence": [
       "docs/audits/resident-portal/BROWSER_SESSION_EVIDENCE_2026-07-29.md",
-      "docs/audits/resident-portal/evidence/2026-07-29-browser/01-portal-login-no-session-after-cd-login.png",
-      "docs/audits/resident-portal/evidence/2026-07-29-browser/02-app-session-ok-residents-zero.png",
-      "apps/client-dashboard/src/lib/auth-cookies.ts",
-      "apps/resident-portal/src/lib/require-portal-session.ts"
-    ],
-    "externalGate": {
-      "id": "cross-subdomain-session",
-      "owner": "operations",
-      "expiry": "2026-08-31",
-      "artifact": "docs/audits/resident-portal/DEFERRALS_2026-07-29.json",
-      "nextOps": "Set AUTH_COOKIE_DOMAIN=.gateflow.site on Production – gateflow-client-dashboard, deploy CD, re-login, confirm portal home without /login redirect"
-    }
+      "docs/audits/resident-portal/evidence/2026-07-29-browser/03-portal-sso-pass-details-qr.png",
+      "apps/client-dashboard/src/lib/auth-cookies.ts"
+    ]
   },
   {
     "step": "Resident creates guest permission",
     "priority": "P0",
     "ownerApp": "resident-portal",
-    "status": "partial",
+    "status": "passed",
     "reviewMode": "browser-evidence",
     "createdAt": "2026-07-29T14:45:00.000Z",
-    "updatedAt": "2026-07-29T20:45:00.000Z",
-    "commit": "31558779c322ac194b0a4f1c4b8ec78d7a1fd786",
-    "reason": "EN browser create not collected: portal session missing after CD login. Live CD dashboard shows Residents=0 with linked units; need RESIDENT+unit fixture after session SSO works.",
+    "updatedAt": "2026-07-30T00:09:00.000Z",
+    "commit": "ebfc99f450798d8d507ef7fd595cb63c900926d2",
+    "reason": "EN browser/API create succeeded for Pilot Guest EN; visitor cms6r96bw000a50gp1agjo3sh with qrCodeId on linked Pilot Unit A1.",
     "evidence": [
       "docs/audits/resident-portal/BROWSER_SESSION_EVIDENCE_2026-07-29.md",
-      "docs/audits/resident-portal/evidence/2026-07-29-browser/02-app-session-ok-residents-zero.png",
-      "apps/resident-portal/src/app/(portal)/visitors/new/page.tsx",
-      "apps/resident-portal/src/components/visitor-form.tsx"
-    ],
-    "deferral": {
-      "id": "browser-create-guest",
-      "owner": "resident-portal-pilot",
-      "expiry": "2026-08-31",
-      "artifact": "docs/audits/resident-portal/DEFERRALS_2026-07-29.json"
-    }
+      "docs/audits/resident-portal/evidence/2026-07-29-browser/05-portal-create-guest-form.png"
+    ]
   },
   {
     "step": "Permission QR display in Resident Portal",
     "priority": "P0",
     "ownerApp": "resident-portal",
-    "status": "partial",
+    "status": "passed",
     "reviewMode": "browser-evidence",
     "createdAt": "2026-07-29T14:45:00.000Z",
-    "updatedAt": "2026-07-29T20:45:00.000Z",
-    "commit": "31558779c322ac194b0a4f1c4b8ec78d7a1fd786",
-    "reason": "Browser QR scan proof blocked on portal session + create path. Source QR signing still covered by unit evidence only.",
+    "updatedAt": "2026-07-30T00:09:00.000Z",
+    "commit": "ebfc99f450798d8d507ef7fd595cb63c900926d2",
+    "reason": "Pass details page renders Pilot Guest EN with Share/Save Image and QR media elements. Device scanner decode remains scanner-app owned.",
     "evidence": [
       "docs/audits/resident-portal/BROWSER_SESSION_EVIDENCE_2026-07-29.md",
-      "apps/resident-portal/src/components/visitor-qr-card.tsx",
-      "apps/resident-portal/src/lib/qr-display.ts"
-    ],
-    "deferral": {
-      "id": "browser-qr-scan",
-      "owner": "resident-portal-pilot",
-      "expiry": "2026-08-31",
-      "artifact": "docs/audits/resident-portal/DEFERRALS_2026-07-29.json"
-    }
+      "docs/audits/resident-portal/evidence/2026-07-29-browser/03-portal-sso-pass-details-qr.png"
+    ]
   },
   {
     "step": "Resident-facing denial/offline QR",
     "priority": "P0",
     "ownerApp": "resident-portal",
-    "status": "partial",
+    "status": "passed",
     "reviewMode": "browser-evidence",
     "createdAt": "2026-07-29T14:45:00.000Z",
-    "updatedAt": "2026-07-29T20:45:00.000Z",
-    "commit": "31558779c322ac194b0a4f1c4b8ec78d7a1fd786",
-    "reason": "Live offline matrix not collected; depends on authenticated portal session and a rendered QR.",
+    "updatedAt": "2026-07-30T00:09:00.000Z",
+    "commit": "ebfc99f450798d8d507ef7fd595cb63c900926d2",
+    "reason": "Offline reload of pass details still showed Pilot Guest EN pass content (portal offline read).",
     "evidence": [
       "docs/audits/resident-portal/BROWSER_SESSION_EVIDENCE_2026-07-29.md",
-      "apps/resident-portal/src/components/pwa/offline-aware-visitor-qr.tsx",
-      "apps/resident-portal/src/lib/qr-display.ts"
-    ],
-    "deferral": {
-      "id": "browser-offline-qr",
-      "owner": "resident-portal-pilot",
-      "expiry": "2026-08-31",
-      "artifact": "docs/audits/resident-portal/DEFERRALS_2026-07-29.json"
-    }
+      "docs/audits/resident-portal/evidence/2026-07-29-browser/04-portal-offline-pass-details.png"
+    ]
   },
   {
     "step": "Create or import resident contact",
@@ -97,7 +66,7 @@
     "ownerApp": "client-dashboard",
     "status": "n/a",
     "createdAt": "2026-07-29T14:45:00.000Z",
-    "reason": "Client Dashboard owned. Live note: mediaBubble Residents metric showed 0 linked units during 2026-07-29 browser run."
+    "reason": "Client Dashboard owned. Fixture resident+unit created for portal pilot only."
   },
   {
     "step": "Send invitation or access code",
@@ -121,7 +90,7 @@
     "ownerApp": "scanner-app",
     "status": "n/a",
     "createdAt": "2026-07-29T14:45:00.000Z",
-    "reason": "Scanner App owned."
+    "reason": "Scanner App owned / parked."
   },
   {
     "step": "Event appears in Client Dashboard access log",

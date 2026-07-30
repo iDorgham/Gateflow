@@ -1,0 +1,28 @@
+{
+  "valid": true,
+  "id": "RESIDENT_PORTAL_EVIDENCE_2026_07_30",
+  "createdAt": "2026-07-30T00:22:00.000Z",
+  "expiresAt": "2026-08-31T23:59:59.000Z",
+  "commit": "ebfc99f450798d8d507ef7fd595cb63c900926d2",
+  "app": "resident-portal",
+  "plan": "resident_portal_responsive",
+  "reviewMode": "browser-evidence",
+  "ownedPilotPassed": 4,
+  "ownedPilotTotal": 4,
+  "unitTestsPassed": 30,
+  "supportTestsPassed": 9,
+  "gatekeeperVerdict": "PASS",
+  "artifacts": {
+    "checkAll": "docs/audits/resident-portal/CHECK_ALL_2026-07-30.json",
+    "certificationPacket": "docs/audits/resident-portal/CERTIFICATION_PACKET_2026-07-29.json",
+    "pilotGateOwned": "docs/audits/resident-portal/PILOT_GATE_OWNED_2026-07-29-phase10.json",
+    "browserEvidence": "docs/audits/resident-portal/BROWSER_SESSION_EVIDENCE_2026-07-29.md",
+    "deferrals": "docs/audits/resident-portal/DEFERRALS_2026-07-29.json",
+    "gatekeeperReview": "docs/audits/resident-portal/GATEKEEPER_REVIEW_2026-07-30.json"
+  },
+  "deployRuns": {
+    "clientDashboard": "https://github.com/iDorgham/Gateflow/actions/runs/30494706212",
+    "residentPortal": "https://github.com/iDorgham/Gateflow/actions/runs/30498837749"
+  },
+  "nonBlockingDeferrals": ["lighthouse-pwa-scores", "full-ar-rtl-content"]
+}

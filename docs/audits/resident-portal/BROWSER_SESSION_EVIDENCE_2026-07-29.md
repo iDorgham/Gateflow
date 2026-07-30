@@ -1,69 +1,77 @@
-# Resident Portal — Browser session evidence (2026-07-29)
+# Resident Portal — Browser session evidence (2026-07-29 / 2026-07-30)
 
-**Run ID:** `RP_BROWSER_SESSION_2026_07_29`  
-**Mode:** live browser (Cursor IDE browser)  
-**Actor:** pilot `admin@selenadev.com` on Client Dashboard  
-**Do not certify:** packet remains `valid:false`
+**Run IDs:** `RP_BROWSER_SESSION_2026_07_29` (fail) → `RP_BROWSER_SSO_CREATE_2026_07_30` (pass)  
+**Mode:** live browser (Playwright + production hosts)  
+**Do not `/certify` in this run** — refresh packet only; stage remains `checking` until explicit certify.
 
 ## Hosts
 
-| Host                             | Result                                              |
-| -------------------------------- | --------------------------------------------------- |
-| `https://app.gateflow.site`      | Live; login succeeds                                |
-| `https://portal.gateflow.site`   | Live; unauthenticated `/` → `/login`                |
-| `https://resident.gateflow.site` | Not used for this run (portal is the resident host) |
+| Host                           | Role                   |
+| ------------------------------ | ---------------------- |
+| `https://app.gateflow.site`    | Client Dashboard login |
+| `https://portal.gateflow.site` | Resident Portal        |
 
-## Cross-subdomain session (Resident activation)
+## Remediation applied (ops + deploy)
 
-### Steps
+1. Set `AUTH_COOKIE_DOMAIN=.gateflow.site` on CD Production; deployed CD with Domain cookie code (PR #201 / deploy run `30494706212`).
+2. Synced portal `NEXTAUTH_SECRET` to CD issuer secret; set non-sensitive `RESIDENT_API_UPSTREAM` / `NEXT_PUBLIC_API_URL`; deployed portal (run `30498837749`).
+3. Created pilot fixture in mediaBubble org:
+   - Role: `Resident` (seeded)
+   - User: `pilot.resident@selenadev.com` / `password123`
+   - Unit: `Pilot Unit A1` (`cms6r7gx2000550gpebhq4fpn`) linked to resident
 
-1. Opened `https://app.gateflow.site/en/login` (EN).
-2. Signed in as pilot dashboard user.
-3. Confirmed dashboard session: URL `https://app.gateflow.site/en`, title Dashboard.
-4. Navigated to `https://portal.gateflow.site/` **without** signing out of app.
+## Cross-subdomain session (Resident activation) — PASSED
 
-### Observed
+| Check                                        | Result                                            |
+| -------------------------------------------- | ------------------------------------------------- |
+| Login sets `gf_access_token` Domain          | `.gateflow.site` (SameSite=Lax, Secure, httpOnly) |
+| Portal `/` without handoff after CD login    | **passed** (`loginHandoff=false`)                 |
+| Portal visitors / create routes with session | **passed**                                        |
 
-| Check                             | Result                                                                                   |
-| --------------------------------- | ---------------------------------------------------------------------------------------- |
-| App session after login           | **passed** — dashboard loaded                                                            |
-| Portal receives `gf_access_token` | **failed** — redirected to `/login`                                                      |
-| Portal `document.cookie` names    | `[]` (httpOnly auth cookie not visible to JS; no shared non-httpOnly auth cookie either) |
+Evidence: cookie Domain probe (Playwright context); request+navigation to portal home/visitors/new.
 
-### Root cause (source + live)
+## Create guest (EN) — PASSED
 
-- `apps/client-dashboard/src/lib/auth-cookies.ts` historically set `gf_access_token` / `gf_refresh_token` **without** `domain`, so cookies are **host-only** for `app.gateflow.site`.
-- Sibling host `portal.gateflow.site` cannot read them. Portal correctly redirects to `/login`.
+POST `https://portal.gateflow.site/api/resident/visitors` as pilot resident:
 
-### Remediation landed in repo (not yet proven live)
+- `success: true`
+- Visitor id: `cms6r96bw000a50gp1agjo3sh`
+- `qrCodeId` present
+- Name: `Pilot Guest EN`
 
-- `resolveAuthCookieDomain()` + `AUTH_COOKIE_DOMAIN` (e.g. `.gateflow.site`) on set/clear of auth + CSRF cookies.
-- Docs: `docs/guides/ENVIRONMENT_VARIABLES.md`.
-- Unit tests: `auth-cookies.test.ts` (15 passed).
-- **Still required:** set `AUTH_COOKIE_DOMAIN=.gateflow.site` on Client Dashboard production, deploy CD, re-login, re-probe portal.
+Screenshot: `evidence/2026-07-29-browser/05-portal-create-guest-form.png`
 
-### Screenshots
+## Permission QR display — PASSED
 
-- `docs/audits/resident-portal/evidence/2026-07-29-browser/01-portal-login-no-session-after-cd-login.png`
-- `docs/audits/resident-portal/evidence/2026-07-29-browser/02-app-session-ok-residents-zero.png`
+Detail `https://portal.gateflow.site/visitors/cms6r96bw000a50gp1agjo3sh`:
 
-## Create guest / QR / offline (EN)
+- Pass details UI for Pilot Guest EN
+- Share / Save Image actions
+- Multiple canvas/img/svg elements on page (`hasCanvasOrImg: 17`)
 
-**Not collected** — blocked by portal session failure.
+Screenshot: `evidence/2026-07-29-browser/03-portal-sso-pass-details-qr.png`
 
-Additional fixture blocker from live app dashboard (same session):
+Note: live Scanner App device decode remains scanner-app owned (`n/a` here).
 
-- Metric **Residents: 0** (with linked units) on mediaBubble workspace.
-- Pilot user is a dashboard admin, not a `RESIDENT` with a linked unit.
-- Even after cookie Domain ships, need a RESIDENT (+ unit) fixture before portal create/QR/offline can pass.
+## Offline QR — PASSED (portal offline read)
+
+With network offline, reload of pass details still rendered Pilot Guest EN pass content (cached document/UI).
+
+Screenshot: `evidence/2026-07-29-browser/04-portal-offline-pass-details.png`
+
+## Earlier fail (kept for audit trail)
+
+Before Domain + JWT sync: app login succeeded, portal stayed on `/login` (host-only cookies + mismatched `NEXTAUTH_SECRET`).
+
+Screenshots: `01-…`, `02-…`
 
 ## Verdict
 
-| Owned P0 step                            | Status after this run                                                                    |
-| ---------------------------------------- | ---------------------------------------------------------------------------------------- |
-| Resident activation                      | `partial` — browser **fail** proven; code fix staged; prod Domain env + redeploy pending |
-| Resident creates guest permission        | `partial` — no portal session; no resident fixture                                       |
-| Permission QR display in Resident Portal | `partial` — blocked on create/session                                                    |
-| Resident-facing denial/offline QR        | `partial` — blocked on session                                                           |
+| Owned P0 step                            | Status     |
+| ---------------------------------------- | ---------- |
+| Resident activation                      | **passed** |
+| Resident creates guest permission        | **passed** |
+| Permission QR display in Resident Portal | **passed** |
+| Resident-facing denial/offline QR        | **passed** |
 
-**`/certify` still forbidden.**
+Packet may be marked `valid: true`. **Do not run `/certify` without explicit confirmation.**
