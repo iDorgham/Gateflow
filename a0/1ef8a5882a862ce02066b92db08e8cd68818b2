@@ -1,0 +1,21 @@
+.ai/workflow-v2/state.json
+  s_55e4dcfab374c2::t_d85a0642031bd3 4,226,231,236
+CHANGELOG.md
+  s_55e4dcfab374c2::t_9a614872b600e9 13-14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.17",
+  "base_commit_sha": "a01ef8a5882a862ce02066b92db08e8cd68818b2",
+  "prompts": {},
+  "sessions": {
+    "s_55e4dcfab374c2": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "9eb763a1-f03d-4c6d-b6cf-d1a99923376f",
+        "model": "grok-4.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
