@@ -1,7 +1,7 @@
 {
   "version": 2,
   "sequence": ["client-dashboard", "resident-portal", "scanner-app"],
-  "focusedApp": null,
+  "focusedApp": "scanner-app",
   "integratedPilot": {
     "stage": "parked",
     "certificationReceipt": null
@@ -223,15 +223,15 @@
       }
     },
     "scanner-app": {
-      "stage": "parked",
+      "stage": "focused",
       "currentPlan": null,
       "baseline": null,
       "evidence": [],
       "certificationReceipt": null,
-      "updatedAt": "2026-07-24T00:00:00.000Z"
+      "updatedAt": "2026-07-30T00:53:55.645Z"
     }
   },
   "workdirLock": null,
   "createdAt": "2026-07-24T00:00:00.000Z",
-  "updatedAt": "2026-07-30T00:40:55.310Z"
+  "updatedAt": "2026-07-30T00:53:55.645Z"
 }
