@@ -1,0 +1,55 @@
+apps/scanner-app/src/screens/onboarding/permissions-screen.tsx
+  s_55e4dcfab374c2::t_4bfaf8b0610f1b 1-114
+  s_55e4dcfab374c2::t_59df44fe1a694a 115-119
+apps/scanner-app/src/navigators/onboarding-navigator.tsx
+  s_55e4dcfab374c2::t_d70a9e9de8a1d2 1-137
+apps/scanner-app/src/components/onboarding/StepIndicator.tsx
+  s_55e4dcfab374c2::t_62eaeac6e09c92 1-45
+apps/scanner-app/App.tsx
+  s_55e4dcfab374c2::t_e5d6adf260b736 35,37
+  s_55e4dcfab374c2::t_3306b971053211 95-100
+  s_55e4dcfab374c2::t_a00e1d80f18e68 274-278,286-290,334-342
+  s_55e4dcfab374c2::t_22f463fefce697 269,272-273
+apps/scanner-app/src/lib/security/onboarding.ts
+  s_55e4dcfab374c2::t_7ec7693061f249 1-34
+apps/scanner-app/src/screens/onboarding/security-setup-screen.tsx
+  s_55e4dcfab374c2::t_e1d840b7c838ca 1-170,172-204
+  s_55e4dcfab374c2::t_06168b5de4b2e0 171
+  s_55e4dcfab374c2::t_babdb75e48b98a 205-208
+docs/plan/backlog/ALL_TASKS_BACKLOG.md
+  s_55e4dcfab374c2::t_3adba0794873bd 140,145
+docs/plan/Active/scanner_onboarding_session/PLAN_scanner_onboarding_session.md
+  s_55e4dcfab374c2::t_ccfa6d1f39c31a 7
+docs/plan/Active/scanner_onboarding_session/SESSION_MEMORY.md
+  s_55e4dcfab374c2::t_8a0e720cfc7fd4 6,8-10,15-17,19-20,24-25,30-31,33,37-38
+docs/plan/Active/scanner_onboarding_session/TASKS_scanner_onboarding_session.md
+  s_55e4dcfab374c2::t_3518ca040adbcc 25-31
+apps/scanner-app/src/screens/onboarding/welcome-screen.tsx
+  s_55e4dcfab374c2::t_46986c92d89646 1-86
+  s_55e4dcfab374c2::t_34c541a16d176c 87-88
+docs/plan/Active/scanner_onboarding_session/phase_logs/PHASE_LOG_phase_02.md
+  s_55e4dcfab374c2::t_0cfe3c84824ec9 1-38
+apps/scanner-app/src/lib/security/onboarding.test.ts
+  s_55e4dcfab374c2::t_30363b93f114c6 1-16,26-28
+  s_55e4dcfab374c2::t_b51ccd46a7d2d4 17-25,29-48
+CHANGELOG.md
+  s_55e4dcfab374c2::t_1dd0471c2e4b06 13-14
+.ai/workflow-v2/state.json
+  s_55e4dcfab374c2::t_e008a32d3df55a 314
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.19",
+  "base_commit_sha": "6042658c9801cd005ae29ca998e47f65a397be30",
+  "prompts": {},
+  "sessions": {
+    "s_55e4dcfab374c2": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "9eb763a1-f03d-4c6d-b6cf-d1a99923376f",
+        "model": "grok-4.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
