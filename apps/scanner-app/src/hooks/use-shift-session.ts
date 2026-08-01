@@ -85,10 +85,11 @@ export function useShiftSession(options?: { enabled?: boolean }) {
         setSession(stored);
       } catch (err) {
         if (mounted) {
+          await clearShiftSession();
           setSession(null);
           setError(
             err instanceof Error
-              ? err.message
+              ? `Could not load shift session: ${err.message}`
               : 'Could not load shift session'
           );
         }
@@ -220,7 +221,7 @@ export function useShiftSession(options?: { enabled?: boolean }) {
   const disposeForLogout = useCallback(async (): Promise<boolean> => {
     genRef.current += 1;
 
-    let cleanupSucceeded = true;
+    let shiftEndedSuccessfully = true;
 
     try {
       const guardId = await getAuthSubject();
@@ -233,17 +234,17 @@ export function useShiftSession(options?: { enabled?: boolean }) {
           await finalizeLocalShiftEnd(shiftLogId);
         } else {
           await markPendingShiftEnd(shiftLogId);
-          cleanupSucceeded = false;
+          shiftEndedSuccessfully = false;
         }
       }
-    } catch (err) {
-      cleanupSucceeded = false;
+    } catch {
+      shiftEndedSuccessfully = false;
     } finally {
       setSession(null);
       setError(null);
     }
 
-    return cleanupSucceeded;
+    return shiftEndedSuccessfully;
   }, [session]);
 
   const canScan = useCallback(
