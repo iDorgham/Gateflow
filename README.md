@@ -380,13 +380,7 @@ GateFlow is built with a "Security-by-Design" philosophy.
 See **[PRD §9](docs/reference/product/PRD.md)** and **[CHANGELOG](CHANGELOG.md)** for the 2026 audit remediation outcomes.
 
 ---
-- **[Scanner]:** Phase 03 shift start/end and scan gate
-- **[Client-Dashboard]:** add loading skeletons for routes that lacked one
-- **[Client-Dashboard]:** show next billing date on the billing settings page
-- **[Ui]:** register ds-* design tokens as real Tailwind utilities
-- **[Client-Dashboard]:** polish header search input
 ## 📅 Recent Engineering Activity
-
 - **[Scanner]:** Phase 03 shift start/end and scan gate
 - **[Resident-Portal]:** CHECK_ALL 2026-07-29 focused check evidence (pilot blocked)
 - **[Resident-Portal]:** Phase 10 pilot gate and certification packet
