@@ -233,7 +233,7 @@ export async function processBulkScans(
       context,
       shiftCache
     );
-    if (!shiftResolved.ok) {
+    if (shiftResolved.ok === false) {
       failed.push({ id: scan.id, error: shiftResolved.error });
       continue;
     }

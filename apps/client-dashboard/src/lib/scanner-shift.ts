@@ -140,49 +140,52 @@ export async function startOrReuseShift(params: {
   guardId: string;
   gateId: string;
 }): Promise<{ shift: ActiveShift; reused: boolean }> {
-  return withSerializableRetry(prisma, async (tx) => {
-    const existingAtGate = await tx.shiftLog.findFirst({
-      where: {
-        organizationId: params.organizationId,
-        guardId: params.guardId,
-        gateId: params.gateId,
-        endTime: null,
-      },
-      orderBy: { startTime: 'desc' },
-    });
-    if (existingAtGate) {
-      // Keep single-active-shift: close any other open rows for this guard.
+  return withSerializableRetry<{ shift: ActiveShift; reused: boolean }>(
+    prisma,
+    async (tx) => {
+      const existingAtGate = await tx.shiftLog.findFirst({
+        where: {
+          organizationId: params.organizationId,
+          guardId: params.guardId,
+          gateId: params.gateId,
+          endTime: null,
+        },
+        orderBy: { startTime: 'desc' },
+      });
+      if (existingAtGate) {
+        // Keep single-active-shift: close any other open rows for this guard.
+        await tx.shiftLog.updateMany({
+          where: {
+            organizationId: params.organizationId,
+            guardId: params.guardId,
+            endTime: null,
+            NOT: { id: existingAtGate.id },
+          },
+          data: { endTime: new Date() },
+        });
+        return { shift: existingAtGate, reused: true };
+      }
+
+      // Close any open shift at another gate (CAS: only rows with endTime null).
       await tx.shiftLog.updateMany({
         where: {
           organizationId: params.organizationId,
           guardId: params.guardId,
           endTime: null,
-          NOT: { id: existingAtGate.id },
         },
         data: { endTime: new Date() },
       });
-      return { shift: existingAtGate, reused: true };
+
+      const created = await tx.shiftLog.create({
+        data: {
+          organizationId: params.organizationId,
+          guardId: params.guardId,
+          gateId: params.gateId,
+          startTime: new Date(),
+        },
+      });
+
+      return { shift: created, reused: false };
     }
-
-    // Close any open shift at another gate (CAS: only rows with endTime null).
-    await tx.shiftLog.updateMany({
-      where: {
-        organizationId: params.organizationId,
-        guardId: params.guardId,
-        endTime: null,
-      },
-      data: { endTime: new Date() },
-    });
-
-    const created = await tx.shiftLog.create({
-      data: {
-        organizationId: params.organizationId,
-        guardId: params.guardId,
-        gateId: params.gateId,
-        startTime: new Date(),
-      },
-    });
-
-    return { shift: created, reused: false };
-  });
+  );
 }
