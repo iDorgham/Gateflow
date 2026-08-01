@@ -260,6 +260,27 @@ describe('loadShiftSession + tombstone', () => {
     await expect(loadShiftSessionForUser('guard_a')).resolves.toBeNull();
   });
 
+  it('does not delete a newer session when an older shift is marked pending-end late', async () => {
+    (SecureStore.getItemAsync as jest.Mock).mockImplementation(
+      async (key: string) =>
+        key.includes('TOMBSTONE')
+          ? null
+          : JSON.stringify({
+              shiftLogId: 'shift_new',
+              gateId: 'gate_1',
+              startTime: '2026-08-01T13:00:00.000Z',
+              guardId: 'guard_a',
+            })
+    );
+    (SecureStore.setItemAsync as jest.Mock).mockResolvedValue(undefined);
+    (SecureStore.deleteItemAsync as jest.Mock).mockResolvedValue(undefined);
+
+    await expect(markPendingShiftEnd('shift_old', 'guard_a')).resolves.toBe(
+      true
+    );
+    expect(SecureStore.deleteItemAsync).not.toHaveBeenCalled();
+  });
+
   it('does not delete a newer session when an older shift finalizes late', async () => {
     (SecureStore.getItemAsync as jest.Mock).mockResolvedValue(
       JSON.stringify({

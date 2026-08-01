@@ -296,16 +296,17 @@ async function markPendingShiftEndLocked(
   guardId?: string
 ): Promise<boolean> {
   let ownerGuardId = guardId;
-  if (!ownerGuardId) {
-    try {
-      const stored = parseShiftSession(
-        await SecureStore.getItemAsync(SHIFT_SESSION_KEY)
-      );
-      if (stored?.shiftLogId === shiftLogId) ownerGuardId = stored.guardId;
-    } catch (error) {
-      console.error('[ShiftSession] Error reading session owner:', error);
-      return false;
-    }
+  let stored: ShiftSession | null;
+  try {
+    stored = parseShiftSession(
+      await SecureStore.getItemAsync(SHIFT_SESSION_KEY)
+    );
+  } catch (error) {
+    console.error('[ShiftSession] Error reading session owner:', error);
+    return false;
+  }
+  if (!ownerGuardId && stored?.shiftLogId === shiftLogId) {
+    ownerGuardId = stored.guardId;
   }
 
   const marked = await saveShiftTombstone({
@@ -317,6 +318,9 @@ async function markPendingShiftEndLocked(
   if (!marked) return false;
   // Once the marker is durable, failure to delete the stale session is recoverable:
   // hydration will see the marker and fail closed, and a later retry can clean up.
-  await clearShiftSession();
+  // A late pending-end for an older shift must never erase a newer active session.
+  if (!stored || stored.shiftLogId === shiftLogId) {
+    await clearShiftSession();
+  }
   return true;
 }

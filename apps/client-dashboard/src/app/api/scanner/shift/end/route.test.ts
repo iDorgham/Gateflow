@@ -90,6 +90,13 @@ describe('POST /api/scanner/shift/end', () => {
     expect(mockCloseShift).not.toHaveBeenCalled();
   });
 
+  it('returns 400 for a body with unrecognized keys instead of falling back to the open shift', async () => {
+    const res = await POST(makeRequest({ shiftLgoId: 'shift_typo' }));
+    expect(res.status).toBe(400);
+    expect(mockFindOpenShiftForGuard).not.toHaveBeenCalled();
+    expect(mockCloseShift).not.toHaveBeenCalled();
+  });
+
   it('treats whitespace-only body as empty {}', async () => {
     mockFindOpenShiftForGuard.mockResolvedValueOnce({
       id: 'shift_open',

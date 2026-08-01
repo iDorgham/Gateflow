@@ -1,4 +1,5 @@
-import { QueuedScanSchema } from './scan-event';
+import { QueuedScanSchema, ScanEventSchema } from './scan-event';
+import { ScanStatus } from './scan-log';
 
 const queuedScan = {
   id: 'scan-1',
@@ -20,6 +21,30 @@ describe('QueuedScanSchema', () => {
   it('rejects an empty shift attribution', () => {
     expect(
       QueuedScanSchema.safeParse({ ...queuedScan, shiftLogId: '' }).success
+    ).toBe(false);
+  });
+});
+
+const scanEvent = {
+  id: 'scan-1',
+  scanUuid: '123e4567-e89b-42d3-a456-426614174000',
+  qrCode: 'qr-payload',
+  gateId: 'gate-1',
+  scannedAt: '2026-08-01T12:00:00.000Z',
+  status: ScanStatus.SUCCESS,
+  retryCount: 0,
+};
+
+describe('ScanEventSchema', () => {
+  it('preserves shift attribution', () => {
+    expect(
+      ScanEventSchema.parse({ ...scanEvent, shiftLogId: 'shift-1' })
+    ).toMatchObject({ shiftLogId: 'shift-1' });
+  });
+
+  it('rejects an empty shift attribution', () => {
+    expect(
+      ScanEventSchema.safeParse({ ...scanEvent, shiftLogId: '' }).success
     ).toBe(false);
   });
 });

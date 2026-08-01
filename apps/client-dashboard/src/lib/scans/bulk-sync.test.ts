@@ -264,6 +264,118 @@ describe('processBulkScans', () => {
     expect(mockTx.scanLog.createMany).not.toHaveBeenCalled();
   });
 
+  it('scopes the shiftLog lookup to the authenticated organization and guard (IDOR)', async () => {
+    const scannedAt = new Date().toISOString();
+    const scans: ScanInput[] = [
+      {
+        id: 'scan-shift-ok',
+        scanUuid: 'uuid-shift-ok',
+        qrCode: 'qr-1',
+        scannedAt,
+        status: 'SUCCESS',
+        gateId: 'gate-1',
+        shiftLogId: 'shift-1',
+      },
+    ];
+
+    mockTx.qRCode.findMany.mockResolvedValue([
+      { id: 'qr-id-1', code: 'qr-1', scanLogs: [] },
+    ]);
+    mockTx.shiftLog.findMany.mockResolvedValue([]);
+
+    await processBulkScans(scans, mockTx as any, {
+      organizationId: 'org_1',
+      guardId: 'guard_1',
+    });
+
+    expect(mockTx.shiftLog.findMany).toHaveBeenCalledWith({
+      where: {
+        id: { in: ['shift-1'] },
+        organizationId: 'org_1',
+        guardId: 'guard_1',
+      },
+      select: { id: true, gateId: true, startTime: true, endTime: true },
+    });
+  });
+
+  it('rejects a shiftLogId that belongs to another guard/org (IDOR)', async () => {
+    const scannedAt = new Date().toISOString();
+    const scans: ScanInput[] = [
+      {
+        id: 'scan-other-guard',
+        scanUuid: 'uuid-other-guard',
+        qrCode: 'qr-1',
+        scannedAt,
+        status: 'SUCCESS',
+        gateId: 'gate-1',
+        // Real, currently-open shift — just not this guard's/org's, so the
+        // org+guard-scoped query must exclude it from the result set.
+        shiftLogId: 'shift-belongs-to-someone-else',
+      },
+    ];
+
+    mockTx.qRCode.findMany.mockResolvedValue([
+      { id: 'qr-id-1', code: 'qr-1', scanLogs: [] },
+    ]);
+    // Simulates the org/guard-scoped WHERE clause correctly excluding a real
+    // row that belongs to a different tenant/guard.
+    mockTx.shiftLog.findMany.mockResolvedValue([]);
+
+    const result = await processBulkScans(scans, mockTx as any, {
+      organizationId: 'org_1',
+      guardId: 'guard_1',
+    });
+
+    expect(result.failed).toEqual([
+      {
+        id: 'scan-other-guard',
+        error: 'Invalid or unauthorized shiftLogId for this gate',
+      },
+    ]);
+    expect(mockTx.scanLog.createMany).not.toHaveBeenCalled();
+  });
+
+  it('rejects a real shiftLogId claimed against the wrong gate', async () => {
+    const scannedAt = new Date().toISOString();
+    const scans: ScanInput[] = [
+      {
+        id: 'scan-wrong-gate',
+        scanUuid: 'uuid-wrong-gate',
+        qrCode: 'qr-1',
+        scannedAt,
+        status: 'SUCCESS',
+        // Shift is genuinely open for this guard/org, but at a different gate.
+        gateId: 'gate-2',
+        shiftLogId: 'shift-1',
+      },
+    ];
+
+    mockTx.qRCode.findMany.mockResolvedValue([
+      { id: 'qr-id-1', code: 'qr-1', scanLogs: [] },
+    ]);
+    mockTx.shiftLog.findMany.mockResolvedValue([
+      {
+        id: 'shift-1',
+        gateId: 'gate-1',
+        startTime: new Date(Date.now() - 60 * 60 * 1000),
+        endTime: null,
+      },
+    ]);
+
+    const result = await processBulkScans(scans, mockTx as any, {
+      organizationId: 'org_1',
+      guardId: 'guard_1',
+    });
+
+    expect(result.failed).toEqual([
+      {
+        id: 'scan-wrong-gate',
+        error: 'Invalid or unauthorized shiftLogId for this gate',
+      },
+    ]);
+    expect(mockTx.scanLog.createMany).not.toHaveBeenCalled();
+  });
+
   it('rejects scans without shift attribution when auth context is present', async () => {
     const scans: ScanInput[] = [
       {

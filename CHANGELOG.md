@@ -36,6 +36,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Apps
 
+- **[Scanner]** harden shift accountability against code-review findings
+
 - **[Scanner]** resolve shift typecheck errors blocking push
 - **[Scanner]** harden shift accountability and logout races
 - **[Scanner]** omit undefined shiftLogId on offline enqueue

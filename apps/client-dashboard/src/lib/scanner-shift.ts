@@ -56,7 +56,11 @@ export async function findOpenShiftForGate(params: {
   });
 }
 
-/** Any open shift for a guard in the org (any gate). */
+/**
+ * Any open shift for a guard in the org (any gate). Used as the clock-out
+ * fallback when no shiftLogId is supplied, so a deactivated/deleted gate must
+ * not block closing a shift that was opened at it.
+ */
 export async function findOpenShiftForGuard(params: {
   organizationId: string;
   guardId: string;
@@ -66,11 +70,6 @@ export async function findOpenShiftForGuard(params: {
       organizationId: params.organizationId,
       guardId: params.guardId,
       endTime: null,
-      gate: {
-        organizationId: params.organizationId,
-        isActive: true,
-        deletedAt: null,
-      },
     },
     orderBy: { startTime: 'desc' },
   });

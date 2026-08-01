@@ -95,4 +95,44 @@ describe('GET /api/scanner/shift/active', () => {
       gateId: 'gate_1',
     });
   });
+
+  it('returns 404 when the guard has no active shift at the gate', async () => {
+    mockFindOpenShiftForGate.mockResolvedValue(null);
+    const response = await GET(request());
+    const body = await response.json();
+
+    expect(response.status).toBe(404);
+    expect(body.message).toBe('No active shift');
+  });
+
+  it('returns 400 when gateId is missing', async () => {
+    const response = await GET({
+      nextUrl: new URL('http://localhost/api/scanner/shift/active'),
+    } as NextRequest);
+    const body = await response.json();
+
+    expect(response.status).toBe(400);
+    expect(body.message).toBe('gateId is required');
+    expect(mockGateFindFirst).not.toHaveBeenCalled();
+  });
+
+  it('returns 403 when the caller has no organization context', async () => {
+    mockRequireAuth.mockResolvedValue({ sub: 'guard_1', orgId: null });
+    const response = await GET(request());
+    const body = await response.json();
+
+    expect(response.status).toBe(403);
+    expect(body.message).toBe('Organization context required');
+    expect(mockGateFindFirst).not.toHaveBeenCalled();
+  });
+
+  it('returns 403 when the caller lacks scans:view', async () => {
+    mockHasPermission.mockReturnValue(false);
+    const response = await GET(request());
+    const body = await response.json();
+
+    expect(response.status).toBe(403);
+    expect(body.message).toBe('Scanner permission required');
+    expect(mockGateFindFirst).not.toHaveBeenCalled();
+  });
 });

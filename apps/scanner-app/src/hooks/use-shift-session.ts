@@ -92,10 +92,19 @@ export function useShiftSession(options?: { enabled?: boolean }) {
           // Authentication rejection is authoritative: never keep scanning on
           // a locally cached shift. The marker protects a future clock-out retry.
           setSession(null);
+          // 401 means the credentials themselves are no longer valid — re-login
+          // fixes it. 403 means the guard is authenticated but no longer
+          // permitted (permission or gate assignment revoked) — re-login will
+          // not help, so don't tell the operator their session "expired".
+          const permissionDenied = verified.status === 403;
           setError(
-            marked
-              ? 'Session expired — sign in again to resume scanning'
-              : 'Session expired — local cleanup could not be saved'
+            permissionDenied
+              ? marked
+                ? 'Not authorized to scan at this gate — contact your administrator'
+                : 'Not authorized to scan at this gate — local cleanup could not be saved'
+              : marked
+                ? 'Session expired — sign in again to resume scanning'
+                : 'Session expired — local cleanup could not be saved'
           );
           return;
         }

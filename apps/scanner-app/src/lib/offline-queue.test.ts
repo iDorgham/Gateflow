@@ -110,9 +110,12 @@ beforeEach(() => {
   Object.keys(mockAsyncStore).forEach((key) => delete mockAsyncStore[key]);
 });
 
+// Reported offline so addScan's fire-and-forget syncManager.triggerSync()
+// call (an internal self-reference the module-level jest.mock below cannot
+// intercept) never actually runs and races with these tests' own assertions.
 jest.mock('expo-network', () => ({
   getNetworkStateAsync: jest.fn(() =>
-    Promise.resolve({ isConnected: true, isInternetReachable: true })
+    Promise.resolve({ isConnected: false, isInternetReachable: false })
   ),
 }));
 
@@ -271,6 +274,23 @@ describe('Scan Queue Module', () => {
 
       const pending = await scanQueue.getPendingScans();
       expect(pending.length).toBe(0);
+    });
+  });
+
+  describe('markAsUnattributable', () => {
+    it('should park a scan as permanently failed on the first call, without exhausting retries one by one', async () => {
+      mockStore['auth_token'] = MOCK_TOKEN;
+
+      const scan = await scanQueue.addScan('qr1', 'gate1'); // no shiftLogId
+      await scanQueue.markAsUnattributable(scan.id);
+
+      const pending = await scanQueue.getPendingScans();
+      expect(pending.length).toBe(0);
+
+      const failed = await scanQueue.getFailedScans();
+      expect(failed.length).toBe(1);
+      expect(failed[0].id).toBe(scan.id);
+      expect(failed[0].error).toBe('No shift attribution — cannot sync');
     });
   });
 

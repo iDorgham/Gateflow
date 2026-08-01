@@ -76,6 +76,13 @@ function deduplicatedRefresh(refreshToken: string): Promise<AuthTokens | null> {
   return _refreshInFlight;
 }
 
+/**
+ * Bumped by logout() (and login()) so a refresh started before a sign-out
+ * cannot resurrect cleared tokens after the fact: the awaiting caller checks
+ * this before persisting anything a stale refresh returns.
+ */
+let _authGeneration = 0;
+
 // ─── Main public API ──────────────────────────────────────────────────────────
 
 /**
@@ -86,6 +93,7 @@ function deduplicatedRefresh(refreshToken: string): Promise<AuthTokens | null> {
  * in which case all stored tokens are cleared and the user must re-login.
  */
 export async function getValidAccessToken(): Promise<string | null> {
+  const startGeneration = _authGeneration;
   const accessToken = await SecureStore.getItemAsync(ACCESS_TOKEN_KEY);
   if (!accessToken) return null;
 
@@ -97,6 +105,14 @@ export async function getValidAccessToken(): Promise<string | null> {
   if (!refreshToken) return null;
 
   const newTokens = await deduplicatedRefresh(refreshToken);
+
+  if (_authGeneration !== startGeneration) {
+    // logout() (or another auth transition) ran while this refresh was in
+    // flight. Storing now would resurrect a session the user just signed
+    // out of — bail without touching SecureStore either way.
+    return null;
+  }
+
   if (!newTokens) {
     await clearTokens();
     return null;
@@ -205,6 +221,7 @@ export async function login(
       return { success: false, error: data.message || 'Login failed' };
     }
 
+    _authGeneration += 1;
     await storeTokens({
       accessToken: data.data.accessToken,
       refreshToken: data.data.refreshToken,
@@ -229,6 +246,7 @@ export async function login(
  * Revoke the refresh token on the server (best-effort) and clear local state.
  */
 export async function logout(): Promise<void> {
+  _authGeneration += 1;
   const refreshToken = await SecureStore.getItemAsync(REFRESH_TOKEN_KEY);
   if (refreshToken) {
     fetch(`${API_BASE_URL}/auth/logout`, {
@@ -267,7 +285,6 @@ export async function getAuthSubject(): Promise<string | null> {
         Date.now() < storedPayload.exp * 1000
       ) {
         return storedPayload.sub;
-      }
       }
     }
 

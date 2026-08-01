@@ -19,9 +19,11 @@ import {
 
 export const dynamic = 'force-dynamic';
 
-const BodySchema = z.object({
-  shiftLogId: z.string().min(1).optional(),
-});
+const BodySchema = z
+  .object({
+    shiftLogId: z.string().min(1).optional(),
+  })
+  .strict();
 
 /**
  * Empty / whitespace body → {}; non-empty invalid JSON → 400.

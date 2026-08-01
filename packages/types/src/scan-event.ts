@@ -16,7 +16,7 @@ export const ScanEventSchema = z.object({
   visitorPhone: z.string().max(50).optional(),
   visitorIdNumber: z.string().max(100).optional(),
   /** Active ShiftLog id when the scan was queued (accountable offline sync). */
-  shiftLogId: z.string().optional(),
+  shiftLogId: z.string().min(1).optional(),
 });
 
 export type ScanEvent = z.infer<typeof ScanEventSchema>;
