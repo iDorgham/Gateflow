@@ -17,6 +17,7 @@ import { requireAuth, isNextResponse } from '../../../../lib/require-auth';
 import { type AccessTokenClaims } from '../../../../lib/auth';
 import { checkRateLimit } from '../../../../lib/rate-limit';
 import { checkGateAssignment } from '../../../../lib/gate-assignment';
+import { findOpenShiftForGate } from '../../../../lib/scanner-shift';
 import { checkLocationForGate } from '../../../../lib/location';
 import {
   getActiveWatchlist,
@@ -408,6 +409,33 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
+    // Step 11b2 — Active shift required for accountable scanning.
+    const activeShift = await findOpenShiftForGate({
+      organizationId: claims.orgId,
+      guardId: claims.sub,
+      gateId,
+    });
+    if (!activeShift) {
+      return json<QRValidateResponse>(
+        {
+          status: 'rejected',
+          reason: 'no_active_shift',
+          message: 'Start a shift before scanning at this gate',
+        },
+        403
+      );
+    }
+    if (scanContext?.shiftLogId && scanContext.shiftLogId !== activeShift.id) {
+      return json<QRValidateResponse>(
+        {
+          status: 'rejected',
+          reason: 'no_active_shift',
+          message: 'Shift session does not match the active gate shift',
+        },
+        403
+      );
+    }
+
     // Step 11c — Location rule: when gate has locationEnforced, require device location within radius.
     const gateForLocation = await db.gate.findFirst({
       where: { id: gateId, deletedAt: null },
@@ -492,6 +520,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       qrType: qrCode.type,
       usesBeforeScan: qrCode.currentUses,
       gateId,
+      shiftLogId: activeShift.id,
       deviceId: scanContext?.deviceId ?? null,
       location: scanContext?.location ?? null,
       nonce: payload.nonce,

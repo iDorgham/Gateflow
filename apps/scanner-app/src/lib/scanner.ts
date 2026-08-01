@@ -36,12 +36,14 @@ export interface ScanResult {
  *
  * @param gateId Optional gate ID from the gate selector; used in scanContext
  *               and as the queue gateId for offline syncing.
+ * @param shiftLogId Optional active ShiftLog id for accountable scan linkage.
  */
 export async function validateOnServer(
   qrPayload: string,
   localPayload: QRPayload,
   location?: LocationContext,
-  gateId?: string
+  gateId?: string,
+  shiftLogId?: string
 ): Promise<ScanResult> {
   const token = await getValidAccessToken();
 
@@ -76,6 +78,7 @@ export async function validateOnServer(
               }
             : {}),
           ...(gateId ? { gateId } : {}),
+          ...(shiftLogId ? { shiftLogId } : {}),
         },
       }),
     });
@@ -279,6 +282,7 @@ function serverReasonMessage(reason: string): string {
     not_on_location:
       'Scanning is only allowed at the gate location. Enable device location or move closer to the gate.',
     blocked_watchlist: 'Blocked person on security list.',
+    no_active_shift: 'Start a shift before scanning',
   };
   return map[reason] ?? 'Access denied';
 }

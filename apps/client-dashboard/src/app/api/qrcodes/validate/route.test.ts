@@ -115,6 +115,7 @@ const mockGateFindFirst = jest.fn();
 const mockScanLogCreate = jest.fn();
 const mockIncidentCreate = jest.fn().mockResolvedValue({ id: 'incident_1' });
 const mockTransaction = jest.fn();
+const mockFindOpenShiftForGate = jest.fn();
 
 jest.mock('@gate-access/db', () => ({
   prisma: {
@@ -161,6 +162,11 @@ jest.mock('@gate-access/db', () => ({
   setOrganizationContext: jest.fn(),
   clearOrganizationContext: jest.fn(),
   isAccessAllowed: jest.fn(() => ({ allowed: true })),
+}));
+
+jest.mock('../../../../lib/scanner-shift', () => ({
+  findOpenShiftForGate: (...args: unknown[]) =>
+    mockFindOpenShiftForGate(...args),
 }));
 
 // ─── Rate-limiter mock (allow all by default; override per test) ───────────────
@@ -277,6 +283,16 @@ describe('POST /api/qrcodes/validate', () => {
 
     // Default: gate-assignment check passes (user allowed to scan at this gate).
     mockCheckGateAssignment.mockResolvedValue(null);
+
+    // Default: guard has an open shift at the scan gate.
+    mockFindOpenShiftForGate.mockResolvedValue({
+      id: 'shift_test_1',
+      gateId: 'gate_test_789',
+      guardId: 'user_1',
+      organizationId: 'org_test_456',
+      startTime: new Date(),
+      endTime: null,
+    });
 
     // Default: gate has no location rule (locationEnforced false).
     mockGateFindFirst.mockResolvedValue({
@@ -462,6 +478,24 @@ describe('POST /api/qrcodes/validate', () => {
     expect(res.status).toBe(403);
     expect(data.reason).toBe('denied');
     expect(data.message).toMatch(/not allowed to scan at this gate/);
+  });
+
+  it('rejects when the guard has no active shift at the gate', async () => {
+    mockFindOpenShiftForGate.mockResolvedValueOnce(null);
+
+    const auth = await makeAuthHeader();
+    const signed = signQRPayload(makePayload(), QR_SECRET);
+    const res = await POST(
+      makeRequest(
+        { qrPayload: signed, scanContext: { gateId: 'gate_test_789' } },
+        auth
+      )
+    );
+    const data = await res.json();
+
+    expect(res.status).toBe(403);
+    expect(data.reason).toBe('no_active_shift');
+    expect(mockTransaction).not.toHaveBeenCalled();
   });
 
   // ── Not found ─────────────────────────────────────────────────────────────
