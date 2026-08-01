@@ -1,0 +1,24 @@
+docs/plan/Active/scanner_onboarding_session/SESSION_MEMORY.md
+  s_a4d7ab8a472db3::t_05191b1d9fdc17 42
+  s_a4d7ab8a472db3::t_e9a890e52986d3 9
+  s_a4d7ab8a472db3::t_8e5308e0cc33fc 10
+  s_a4d7ab8a472db3::t_c7446ab939474f 40
+docs/plan/Active/scanner_onboarding_session/phase_logs/PHASE_LOG_phase_05.md
+  s_a4d7ab8a472db3::t_7271b18ff98c41 121-126
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.19",
+  "base_commit_sha": "cbeafe4d089766f69ad096030d6af2a11d3e9e79",
+  "prompts": {},
+  "sessions": {
+    "s_a4d7ab8a472db3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ea48db3b-6181-4df1-9127-d3578b427d23",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
