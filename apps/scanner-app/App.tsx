@@ -1018,7 +1018,7 @@ function ScannerScreen({
             {/* Shift start / end */}
             <Pressable
               style={styles.topBarBtn}
-              disabled={shiftLoading || shiftBusy || !selectedGate}
+              disabled={shiftLoading || shiftBusy}
               onPress={() => {
                 if (!selectedGate) {
                   setShowGateSelector(true);
