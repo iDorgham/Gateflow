@@ -1,0 +1,58 @@
+apps/scanner-app/src/lib/inactivity.ts
+  s_a4d7ab8a472db3::t_9b27bb3303aa04 1-16
+apps/scanner-app/src/navigators/onboarding-navigator.tsx
+  s_a4d7ab8a472db3::t_f72f2f863dceb9 9
+  s_a4d7ab8a472db3::t_aa68bc1538b252 59-63
+  s_a4d7ab8a472db3::t_a0ff65ec95cdca 64-67,120-122
+apps/scanner-app/src/components/common/fade-in.tsx
+  s_a4d7ab8a472db3::t_264de635fe0034 1-48
+apps/scanner-app/src/lib/inactivity.test.ts
+  s_a4d7ab8a472db3::t_d9cf24113c1b6f 1-23
+apps/scanner-app/src/screens/main/home-screen.tsx
+  s_a4d7ab8a472db3::t_1a5a8c52612372 182
+  s_a4d7ab8a472db3::t_eaa91d2639c408 109-122,124-127,129-160
+  s_a4d7ab8a472db3::t_09f4096fdeae4e 3,21-22
+  s_a4d7ab8a472db3::t_0b1ee7e2409239 53,73
+  s_a4d7ab8a472db3::t_305a1a9e6fddc2 161-163,183-185
+docs/plan/Active/scanner_onboarding_session/SESSION_MEMORY.md
+  s_a4d7ab8a472db3::t_ef349170ef7141 39,41
+  s_a4d7ab8a472db3::t_54c3de9913662a 23
+  s_a4d7ab8a472db3::t_edf4cfdbb857d5 8,10,12
+  s_a4d7ab8a472db3::t_ad288c20657556 9,11,17-18,21-22,29,31-35,40,42,46
+.ai/workflow-v2/state.json
+  s_a4d7ab8a472db3::t_f11cc522b51c76 308
+  s_a4d7ab8a472db3::t_c96c07aa4809e7 314
+apps/scanner-app/src/components/security/biometric-guard.tsx
+  s_a4d7ab8a472db3::t_a87678ca92adb9 1-50
+docs/plan/Active/scanner_onboarding_session/TASKS_scanner_onboarding_session.md
+  s_a4d7ab8a472db3::t_0fe5ea3d0eb010 53-58,60,62-65
+apps/scanner-app/App.tsx
+  s_a4d7ab8a472db3::t_d249185a0a606f 102-103
+  s_a4d7ab8a472db3::t_710d0984c7618d 305-306
+  s_a4d7ab8a472db3::t_f21418f8236666 365
+  s_a4d7ab8a472db3::t_4fa525548f6e5f 36
+  s_a4d7ab8a472db3::t_6bd3669d62415b 358,364,366-368
+docs/plan/Active/scanner_onboarding_session/phase_logs/PHASE_LOG_phase_05.md
+  s_a4d7ab8a472db3::t_d45ee0f4558cf4 1-114
+apps/scanner-app/src/hooks/use-inactivity-timer.ts
+  s_a4d7ab8a472db3::t_1325d6f9bb522c 1-72
+apps/scanner-app/src/components/common/duty-error-boundary.tsx
+  s_a4d7ab8a472db3::t_ee4996915d8103 42
+  s_a4d7ab8a472db3::t_d6d9389abcb143 1-41,43-87
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.19",
+  "base_commit_sha": "dd5b4bbc5ec1052626c8f22a88feeeb118e0493f",
+  "prompts": {},
+  "sessions": {
+    "s_a4d7ab8a472db3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ea48db3b-6181-4df1-9127-d3578b427d23",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
