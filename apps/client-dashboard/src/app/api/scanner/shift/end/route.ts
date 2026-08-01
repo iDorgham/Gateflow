@@ -30,17 +30,40 @@ function getHeader(request: NextRequest, name: string): string | null {
 }
 
 /**
- * Empty body → {}; intended JSON that fails to parse → 400.
- * Matches start-endpoint strictness without treating empty as an error.
+ * Empty / whitespace body → {}; non-empty invalid JSON → 400.
+ *
+ * Prefer `.text()` in real runtimes. Jest's NextRequest stub does not
+ * implement `.text()` (calling it throws), so fall back to `.json()`.
  */
 async function readEndBody(
   request: NextRequest
 ): Promise<
   { ok: true; body: unknown } | { ok: false; response: NextResponse }
 > {
+  if (typeof request.text === 'function') {
+    try {
+      const raw = await request.text();
+      if (!raw.trim()) {
+        return { ok: true, body: {} };
+      }
+      try {
+        return { ok: true, body: JSON.parse(raw) };
+      } catch {
+        return {
+          ok: false,
+          response: NextResponse.json(
+            { success: false, message: 'Invalid JSON body' },
+            { status: 400 }
+          ),
+        };
+      }
+    } catch {
+      // Fall through to .json() if .text() is present but unusable.
+    }
+  }
+
   const contentType = getHeader(request, 'content-type') ?? '';
   const contentLength = getHeader(request, 'content-length');
-
   const mightHaveBody =
     contentType.toLowerCase().includes('application/json') ||
     (contentLength != null && contentLength !== '0');
@@ -50,12 +73,15 @@ async function readEndBody(
   }
 
   try {
-    const text = await request.text();
-    if (text.trim() === '') {
+    const body = await request.json();
+    return { ok: true, body: body ?? {} };
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message.toLowerCase() : String(error);
+    // Whitespace-only / empty JSON payloads surface as "Unexpected end of JSON input".
+    if (message.includes('unexpected end')) {
       return { ok: true, body: {} };
     }
-    return { ok: true, body: JSON.parse(text) };
-  } catch {
     return {
       ok: false,
       response: NextResponse.json(
