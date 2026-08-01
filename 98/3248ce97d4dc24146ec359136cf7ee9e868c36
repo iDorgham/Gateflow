@@ -1,0 +1,81 @@
+docs/plan/Active/scanner_onboarding_session/phase_logs/PHASE_LOG_phase_03.md
+  s_55e4dcfab374c2::t_cf935064726dc1 21-24
+  s_55e4dcfab374c2::t_c5962f988a2af2 1-20,25-37
+docs/plan/Active/scanner_onboarding_session/TASKS_scanner_onboarding_session.md
+  s_55e4dcfab374c2::t_1bc66846b85b97 35-41
+packages/types/src/qr-validate.ts
+  s_55e4dcfab374c2::t_36a7d9852551be 40
+  s_55e4dcfab374c2::t_c63b0b134c955e 8-9
+docs/plan/Active/scanner_onboarding_session/SESSION_MEMORY.md
+  s_55e4dcfab374c2::t_baf177f485f219 6,8-10,20,22,29,33,38-39
+apps/scanner-app/src/lib/scanner.ts
+  s_55e4dcfab374c2::t_127528cc984c0b 39,45-46
+  s_55e4dcfab374c2::t_6ed0ec9ff64d57 285
+  s_55e4dcfab374c2::t_d749d20794b901 81
+apps/client-dashboard/src/app/api/scanner/shift/start/route.test.ts
+  s_55e4dcfab374c2::t_3c398ae2dd46a3 1-80,82,84-159
+  s_55e4dcfab374c2::t_8674e1dd4855ba 81,83
+apps/client-dashboard/src/app/api/scanner/shift/start/route.ts
+  s_55e4dcfab374c2::t_7f18707a955c09 1-150
+apps/client-dashboard/src/app/api/scanner/shift/end/route.ts
+  s_55e4dcfab374c2::t_1e7b56fc714d0c 1-37,39,42-43,45-95
+  s_55e4dcfab374c2::t_1be265222db8ab 38,40-41,44
+apps/scanner-app/src/hooks/use-shift-session.ts
+  s_55e4dcfab374c2::t_a3ff24a52ce845 1-80
+CHANGELOG.md
+  s_55e4dcfab374c2::t_bdae7f6c158675 41
+  s_55e4dcfab374c2::t_232f376cf2cf20 42
+  s_55e4dcfab374c2::t_8e8cf1122eb7e7 13-14
+apps/client-dashboard/src/lib/scanner-shift.ts
+  s_55e4dcfab374c2::t_a70a09f4811475 1-69
+apps/scanner-app/App.tsx
+  s_55e4dcfab374c2::t_507dee0e045b14 960-962,977-981,985,997-1021,1031-1035
+  s_55e4dcfab374c2::t_85db0cefd52cd8 38-39
+  s_55e4dcfab374c2::t_9d2c8606f3fcc9 297
+  s_55e4dcfab374c2::t_875b6feac771cd 635-645
+  s_55e4dcfab374c2::t_1b9f0d84e75e9f 482-489
+  s_55e4dcfab374c2::t_a7a01a332fea58 797-798
+  s_55e4dcfab374c2::t_80fa3f6eecf32d 1726-1743
+  s_55e4dcfab374c2::t_ad5ce40585e511 1036
+apps/client-dashboard/src/app/api/qrcodes/validate/route.test.ts
+  s_55e4dcfab374c2::t_ff9727104b5fa4 483-500
+  s_55e4dcfab374c2::t_dc0cb5eee6de90 170-171
+  s_55e4dcfab374c2::t_440d1162b0b4ce 287-296
+  s_55e4dcfab374c2::t_4d7c3aa59460f0 118,167-169
+apps/client-dashboard/src/app/api/scanner/shift/end/route.test.ts
+  s_55e4dcfab374c2::t_c61b184c1d6a96 1-104
+apps/scanner-app/src/lib/shift-session.ts
+  s_55e4dcfab374c2::t_98ec1406fe157d 1-79
+docs/plan/Active/scanner_onboarding_session/context/api.md
+  s_55e4dcfab374c2::t_6d0cda2badc753 3,5-24
+apps/client-dashboard/src/app/api/qrcodes/validate/route.ts
+  s_55e4dcfab374c2::t_bc35044c761b0a 412-438
+  s_55e4dcfab374c2::t_b8fc020222b9e5 523
+  s_55e4dcfab374c2::t_137ce529034873 20
+README.md
+  s_55e4dcfab374c2::t_987ac46f5495a1 386-387
+apps/scanner-app/src/lib/shift-session.test.ts
+  s_55e4dcfab374c2::t_7c5e01aa3f26e9 7-50
+  s_55e4dcfab374c2::t_c568c116f985e4 1-6
+apps/scanner-app/src/lib/shift-api.ts
+  s_55e4dcfab374c2::t_ee40438c2d7b16 98-99
+  s_55e4dcfab374c2::t_c24fb07103216d 1-97
+docs/plan/Active/scanner_onboarding_session/phases/03_shift_management/PROMPT_phase_03.md
+  s_55e4dcfab374c2::t_ebece9e0385c48 61-66
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.19",
+  "base_commit_sha": "983248ce97d4dc24146ec359136cf7ee9e868c36",
+  "prompts": {},
+  "sessions": {
+    "s_55e4dcfab374c2": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "9eb763a1-f03d-4c6d-b6cf-d1a99923376f",
+        "model": "grok-4.5"
+      },
+      "human_author": null
+    }
+  }
+}
