@@ -1,0 +1,20 @@
+apps/client-dashboard/src/app/api/scans/bulk/route.test.ts
+  s_42051cf56a175d::t_fafab1b8a1c6b2 186-190
+  s_42051cf56a175d::t_3a898f9e6079b5 19-22,62-64,66-69,85-86,91-96,101-104,132-142,149,161-166,178-182,198-202
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.19",
+  "base_commit_sha": "000a8ba8ca591968ace342f2900bea95361d3848",
+  "prompts": {},
+  "sessions": {
+    "s_42051cf56a175d": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "2fb85aff-c11c-4cf5-9c7c-348ed391aedb",
+        "model": "grok-4.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
