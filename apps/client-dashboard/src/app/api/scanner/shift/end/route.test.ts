@@ -90,7 +90,7 @@ describe('POST /api/scanner/shift/end', () => {
     expect(mockCloseShift).not.toHaveBeenCalled();
   });
 
-  it('treats empty JSON body with Content-Type as {}', async () => {
+  it('treats whitespace-only body as empty {}', async () => {
     mockFindOpenShiftForGuard.mockResolvedValueOnce({
       id: 'shift_open',
       gateId: 'gate_1',
