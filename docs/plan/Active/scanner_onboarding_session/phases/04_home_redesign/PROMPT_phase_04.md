@@ -16,11 +16,12 @@ FRONTEND
 
 ## Context
 
-- **Project**: GateFlow — Zero-Trust digital gate platform (Turborepo, pnpm)
-- **Apps**: scanner-app (the primary target)
-- **Packages**: db, types, ui
-- **Rules**: pnpm only; multi-tenant (`organizationId`); RTL-safe (logical CSS); ADS ONLY.
-- **Refs**: `CLAUDE.md`, `PLAN_scanner_onboarding_session.md` (plan folder root), `CONTEXT_scanner_onboarding_session.md`, `context/`, `ADS_CORE_TOKENS.md`, `PHASE_04_master_scan_fab.md`
+- **Focused app / scope:** `scanner-app` only
+- **Depends on:** Phase 03 shift session (show active shift widget)
+- **Packages:** `@gate-access/ui/tokens` (`nativeTokens` — not raw `token()` CSS vars)
+- **Rules:** pnpm only; ADS only; 8pt grid; logical layout; no new unsigned QR paths
+- **Refs:** `PLAN_scanner_onboarding_session.md`, `TASKS_*.md`,
+  `docs/audits/scanner-app/AUDIT_2026-07-30.md`
 
 ## Goal
 
