@@ -16,7 +16,10 @@ jest.mock('next/server', () => {
   return {
     NextRequest: MockNextRequest,
     NextResponse: {
-      json: (body: unknown, init?: { status?: number; headers?: Record<string, string> }) => ({
+      json: (
+        body: unknown,
+        init?: { status?: number; headers?: Record<string, string> }
+      ) => ({
         status: init?.status || 200,
         json: async () => body,
         headers: new Map(Object.entries(init?.headers || {})),
@@ -56,9 +59,14 @@ const mockIncidentCreate = jest.fn().mockResolvedValue({ id: 'inc_1' });
 jest.mock('@gate-access/db', () => ({
   prisma: {
     gate: { findMany: (...args: unknown[]) => mockGateFindMany(...args) },
-    watchlistEntry: { findMany: (...args: unknown[]) => mockWatchlistFindMany(...args) },
+    watchlistEntry: {
+      findMany: (...args: unknown[]) => mockWatchlistFindMany(...args),
+    },
     incident: { create: (...args: unknown[]) => mockIncidentCreate(...args) },
-    eventLog: { create: jest.fn().mockResolvedValue({ id: 'evt_1' }), deleteMany: jest.fn() },
+    eventLog: {
+      create: jest.fn().mockResolvedValue({ id: 'evt_1' }),
+      deleteMany: jest.fn(),
+    },
     webhook: { findMany: jest.fn().mockResolvedValue([]) },
     $transaction: (fn: (tx: unknown) => Promise<unknown>) => fn('mockTx'),
   },
@@ -74,17 +82,26 @@ const mockOrgHasAssignments = jest.fn();
 const mockGetUserAssignedGateIds = jest.fn();
 jest.mock('@/lib/gate-assignment', () => ({
   orgHasAssignments: (...args: unknown[]) => mockOrgHasAssignments(...args),
-  getUserAssignedGateIds: (...args: unknown[]) => mockGetUserAssignedGateIds(...args),
+  getUserAssignedGateIds: (...args: unknown[]) =>
+    mockGetUserAssignedGateIds(...args),
 }));
 
 import { NextRequest, NextResponse } from 'next/server';
 
-const AUTH_CLAIMS = { sub: 'user_1', email: 'test@test.com', orgId: 'org_1', role: 'TENANT_USER' };
+const AUTH_CLAIMS = {
+  sub: 'user_1',
+  email: 'test@test.com',
+  orgId: 'org_1',
+  role: 'TENANT_USER',
+};
 
 function makeRequest(body: unknown): NextRequest {
   return new NextRequest('http://localhost/api/scans/bulk', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', Authorization: 'Bearer token' },
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer token',
+    },
     body: JSON.stringify(body),
   });
 }
@@ -112,15 +129,24 @@ beforeAll(async () => {
 beforeEach(() => {
   jest.clearAllMocks();
   mockRequireAuth.mockResolvedValue(AUTH_CLAIMS);
-  mockCheckRateLimit.mockResolvedValue({ allowed: true, limit: 30, remaining: 29, retryAfterMs: 0 });
-  mockProcessBulkScans.mockResolvedValue({ synced: [], conflicted: [], failed: [] });
+  mockCheckRateLimit.mockResolvedValue({
+    allowed: true,
+    limit: 30,
+    remaining: 29,
+    retryAfterMs: 0,
+  });
+  mockProcessBulkScans.mockResolvedValue({
+    synced: [],
+    conflicted: [],
+    failed: [],
+  });
   mockOrgHasAssignments.mockResolvedValue(false); // no assignments by default
 });
 
 describe('POST /api/scans/bulk', () => {
   it('returns 401 when not authenticated', async () => {
     mockRequireAuth.mockResolvedValue(
-      NextResponse.json({ message: 'Unauthorized' }, { status: 401 }),
+      NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
     );
     const res = await POST(makeRequest({ scans: [] }));
     expect(res.status).toBe(401);
@@ -132,7 +158,12 @@ describe('POST /api/scans/bulk', () => {
   });
 
   it('returns 429 when rate-limited', async () => {
-    mockCheckRateLimit.mockResolvedValue({ allowed: false, limit: 30, remaining: 0, retryAfterMs: 30000 });
+    mockCheckRateLimit.mockResolvedValue({
+      allowed: false,
+      limit: 30,
+      remaining: 0,
+      retryAfterMs: 30000,
+    });
     const res = await POST(makeRequest({ scans: [] }));
     expect(res.status).toBe(429);
   });
@@ -144,13 +175,19 @@ describe('POST /api/scans/bulk', () => {
       failed: [],
     });
 
-    const res = await POST(makeRequest({
-      scans: [makeScan({ id: 'local_id_1' }), makeScan({ id: 'local_id_2' })]
-    }));
+    const res = await POST(
+      makeRequest({
+        scans: [makeScan({ id: 'local_id_1' }), makeScan({ id: 'local_id_2' })],
+      })
+    );
     const data = await res.json();
 
     expect(res.status).toBe(200);
-    expect(mockProcessBulkScans).toHaveBeenCalledWith(expect.any(Array), 'mockTx');
+    expect(mockProcessBulkScans).toHaveBeenCalledWith(
+      expect.any(Array),
+      'mockTx',
+      { organizationId: 'org_1', guardId: 'user_1' }
+    );
     expect(data.data.synced).toContain('local_id_1');
     expect(data.data.conflicted[0].id).toBe('local_id_2');
   });
@@ -158,9 +195,11 @@ describe('POST /api/scans/bulk', () => {
   it('returns 403 when org has assignments and user scans at unassigned gate', async () => {
     mockOrgHasAssignments.mockResolvedValue(true);
     mockGetUserAssignedGateIds.mockResolvedValue(new Set(['gate_1']));
-    const res = await POST(makeRequest({
-      scans: [makeScan({ gateId: 'gate_1' }), makeScan({ gateId: 'gate_2' })]
-    }));
+    const res = await POST(
+      makeRequest({
+        scans: [makeScan({ gateId: 'gate_1' }), makeScan({ gateId: 'gate_2' })],
+      })
+    );
     const data = await res.json();
 
     expect(res.status).toBe(403);
