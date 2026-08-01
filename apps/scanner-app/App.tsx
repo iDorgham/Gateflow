@@ -33,6 +33,7 @@ import { IDCaptureModal } from './src/components/IDCaptureModal';
 import { MaintenanceReportModal } from './src/components/MaintenanceReportModal';
 import { DeviceUnlockScreen } from './src/components/DeviceUnlockScreen';
 import { OnboardingNavigator } from './src/navigators/onboarding-navigator';
+import { BiometricGuard } from './src/components/security/biometric-guard';
 import { resolveRuntimeQrSecret } from './src/lib/security/qr-secret';
 import { hasCompletedOnboarding } from './src/lib/security/onboarding';
 import { useShiftSession } from './src/hooks/use-shift-session';
@@ -98,7 +99,8 @@ const CORNER_W = 3.5;
 // ─── App-level state machine ──────────────────────────────────────────────────
 
 /** Top-level phase of the application. */
-type AppPhase = 'initializing' | 'login' | 'onboarding' | 'unlock' | 'scanner';
+type AppPhase =
+  'initializing' | 'login' | 'onboarding' | 'unlock' | 'scanner' | 'locked';
 
 async function nextPhaseAfterAuth(): Promise<'onboarding' | 'unlock'> {
   const onboarded = await hasCompletedOnboarding();
@@ -300,6 +302,8 @@ export default function App() {
 
   const handleUnlocked = () => setAppPhase('scanner');
 
+  const handleInactivityLock = () => setAppPhase('locked');
+
   const handleLogout = async () => {
     const mayProceed = await shift.disposeForLogout();
     if (!mayProceed) return;
@@ -351,13 +355,17 @@ export default function App() {
     );
   }
 
-  if (appPhase === 'unlock') {
+  if (appPhase === 'unlock' || appPhase === 'locked') {
     return (
       <DeviceUnlockScreen onUnlocked={handleUnlocked} onLogout={handleLogout} />
     );
   }
 
-  return <ScannerScreen onLogout={handleLogout} shift={shift} />;
+  return (
+    <BiometricGuard enabled onLock={handleInactivityLock}>
+      <ScannerScreen onLogout={handleLogout} shift={shift} />
+    </BiometricGuard>
+  );
 }
 
 // ─── Login screen ─────────────────────────────────────────────────────────────

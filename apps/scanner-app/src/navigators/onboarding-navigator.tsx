@@ -6,6 +6,7 @@ import { WelcomeScreen } from '../screens/onboarding/welcome-screen';
 import { SecuritySetupScreen } from '../screens/onboarding/security-setup-screen';
 import { PermissionsScreen } from '../screens/onboarding/permissions-screen';
 import { setOnboardingComplete } from '../lib/security/onboarding';
+import { FadeIn } from '../components/common/fade-in';
 
 export type OnboardingStepId = 'welcome' | 'security' | 'permissions';
 
@@ -55,9 +56,15 @@ export function OnboardingNavigator({ onComplete, onLogout }: Props) {
       </View>
 
       <View style={styles.body}>
-        {step === 'welcome' ? <WelcomeScreen /> : null}
-        {step === 'security' ? <SecuritySetupScreen onReady={goNext} /> : null}
-        {step === 'permissions' ? <PermissionsScreen onReady={goNext} /> : null}
+        <FadeIn key={step} style={styles.stepFade}>
+          {step === 'welcome' ? <WelcomeScreen /> : null}
+          {step === 'security' ? (
+            <SecuritySetupScreen onReady={goNext} />
+          ) : null}
+          {step === 'permissions' ? (
+            <PermissionsScreen onReady={goNext} />
+          ) : null}
+        </FadeIn>
       </View>
 
       {step === 'welcome' ? (
@@ -108,6 +115,9 @@ const styles = StyleSheet.create({
     marginBottom: nativeTokens.spacing['space-200'],
   },
   body: {
+    flex: 1,
+  },
+  stepFade: {
     flex: 1,
   },
   footer: {

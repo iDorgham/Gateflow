@@ -50,11 +50,16 @@
 
 ## Phase 5: Polish, Guard, RTL, pilot evidence
 
-- [ ] Global `BiometricGuard` with inactivity timeout
-- [ ] Motion polish (Reanimated) on wizard/home transitions
-- [ ] RTL / Arabic pass for wizard + home (logical layout)
-- [ ] Error boundaries + loading states for duty widgets
+- [x] Global `BiometricGuard` with inactivity timeout
+- [x] Motion polish (built-in `Animated` API — `react-native-reanimated` not a
+      `scanner-app` dependency; see phase log) on wizard/home transitions
+- [x] RTL / Arabic pass for wizard + home (logical layout) — audited, no
+      hardcoded left/right found; visual on-device confirmation still pending
+- [x] Error boundaries + loading states for duty widgets
 - [ ] Device evidence: Security scans the QR → update pilot gate to `passed`
+      **(blocked — needs a physical device; see phase log)**
 - [ ] Device evidence: offline enqueue + sync → update pilot gate to `passed`
-- [ ] Refresh `docs/audits/scanner-app/` packet artifacts as needed
-- [ ] `phase_logs/PHASE_LOG_phase_05.md` updated
+      **(blocked — needs a physical device; see phase log)**
+- [ ] Refresh `docs/audits/scanner-app/` packet artifacts as needed (depends
+      on the two device-evidence items above)
+- [x] `phase_logs/PHASE_LOG_phase_05.md` updated

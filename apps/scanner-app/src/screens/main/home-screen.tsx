@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import {
+  ActivityIndicator,
   Platform,
   RefreshControl,
   ScrollView,
@@ -17,6 +18,8 @@ import {
   StatsGridItem,
   type StatTone,
 } from '../../components/common/stats-grid-item';
+import { DutyErrorBoundary } from '../../components/common/duty-error-boundary';
+import { FadeIn } from '../../components/common/fade-in';
 import { countScansToday, getSystemStatus } from '../../lib/duty-stats';
 import { getHistory } from '../../lib/scan-history';
 import { scanQueue } from '../../lib/offline-queue';
@@ -47,6 +50,7 @@ export function HomeScreen({ shift, onStartScanning }: HomeScreenProps) {
   const [failedCount, setFailedCount] = useState(0);
   const [online, setOnline] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(true);
 
   const loadStats = useCallback(async (isRefresh = false) => {
     if (isRefresh) setRefreshing(true);
@@ -66,6 +70,7 @@ export function HomeScreen({ shift, onStartScanning }: HomeScreenProps) {
       console.error('Failed to load stats:', error);
     } finally {
       if (isRefresh) setRefreshing(false);
+      setInitialLoading(false);
     }
   }, []);
 
@@ -101,42 +106,61 @@ export function HomeScreen({ shift, onStartScanning }: HomeScreenProps) {
         <Text style={styles.title}>Duty Home</Text>
       </View>
 
-      <ShiftInfoWidget session={shift.session} loading={shift.loading} />
+      {initialLoading ? (
+        <View style={styles.initialLoading}>
+          <ActivityIndicator size="large" color={nativeTokens.colors.primary} />
+        </View>
+      ) : (
+        <>
+          <FadeIn>
+            <DutyErrorBoundary label="shift status">
+              <ShiftInfoWidget
+                session={shift.session}
+                loading={shift.loading}
+              />
+            </DutyErrorBoundary>
+          </FadeIn>
 
-      <View style={styles.fabRow}>
-        <MasterScanFab onPress={onStartScanning} />
-        <Text style={styles.fabHint}>Tap to start scanning</Text>
-      </View>
+          <View style={styles.fabRow}>
+            <MasterScanFab onPress={onStartScanning} />
+            <Text style={styles.fabHint}>Tap to start scanning</Text>
+          </View>
 
-      <View style={styles.statsGrid}>
-        <StatsGridItem
-          icon={CheckCircle2}
-          label="Scans today"
-          value={scansToday}
-          tone="info"
-          testID="stat-scans-today"
-        />
-        <StatsGridItem
-          icon={UploadCloud}
-          label="Pending sync"
-          value={pendingCount}
-          tone={pendingCount > 0 ? 'warning' : 'default'}
-          testID="stat-pending-sync"
-        />
-        <StatsGridItem
-          icon={Activity}
-          label={systemStatus.label}
-          value={
-            systemStatus.tone === 'success'
-              ? 'OK'
-              : failedCount > 0
-                ? failedCount
-                : '—'
-          }
-          tone={STATUS_TONE[systemStatus.tone]}
-          testID="stat-system-status"
-        />
-      </View>
+          <FadeIn delayMs={80}>
+            <DutyErrorBoundary label="duty stats">
+              <View style={styles.statsGrid}>
+                <StatsGridItem
+                  icon={CheckCircle2}
+                  label="Scans today"
+                  value={scansToday}
+                  tone="info"
+                  testID="stat-scans-today"
+                />
+                <StatsGridItem
+                  icon={UploadCloud}
+                  label="Pending sync"
+                  value={pendingCount}
+                  tone={pendingCount > 0 ? 'warning' : 'default'}
+                  testID="stat-pending-sync"
+                />
+                <StatsGridItem
+                  icon={Activity}
+                  label={systemStatus.label}
+                  value={
+                    systemStatus.tone === 'success'
+                      ? 'OK'
+                      : failedCount > 0
+                        ? failedCount
+                        : '—'
+                  }
+                  tone={STATUS_TONE[systemStatus.tone]}
+                  testID="stat-system-status"
+                />
+              </View>
+            </DutyErrorBoundary>
+          </FadeIn>
+        </>
+      )}
     </ScrollView>
   );
 }
@@ -154,6 +178,10 @@ const styles = StyleSheet.create({
   },
   header: {
     gap: 2,
+  },
+  initialLoading: {
+    paddingVertical: nativeTokens.spacing['space-500'],
+    alignItems: 'center',
   },
   eyebrow: {
     fontFamily: 'Cairo_600SemiBold',
