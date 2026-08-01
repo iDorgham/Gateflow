@@ -515,18 +515,29 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       }
     }
 
-    // Step 12 — Atomic transaction: re-check usage (TOCTOU guard), increment, log.
-    const auditEntry = makeAuditEntry('validated', {
-      qrType: qrCode.type,
-      usesBeforeScan: qrCode.currentUses,
-      gateId,
-      shiftLogId: activeShift.id,
-      deviceId: scanContext?.deviceId ?? null,
-      location: scanContext?.location ?? null,
-      nonce: payload.nonce,
-    });
-
+    // Step 12 — Atomic transaction: re-check shift + usage (TOCTOU), increment, log.
+    const expectedShiftLogId = scanContext?.shiftLogId;
     const scanLog = await prisma.$transaction(async (tx) => {
+      // Re-check active shift inside the transaction so clock-out cannot race accept.
+      const shiftInTxn = await findOpenShiftForGate(
+        {
+          organizationId: claims.orgId!,
+          guardId: claims.sub,
+          gateId,
+        },
+        tx
+      );
+      if (!shiftInTxn) {
+        throw new NoActiveShiftError(
+          'Start a shift before scanning at this gate'
+        );
+      }
+      if (expectedShiftLogId && expectedShiftLogId !== shiftInTxn.id) {
+        throw new NoActiveShiftError(
+          'Shift session does not match the active gate shift'
+        );
+      }
+
       // Re-read inside the transaction to prevent races (explicit org — tx is unscoped).
       const fresh = await tx.qRCode.findUnique({
         where: { id: qrCode.id, organizationId: claims.orgId, deletedAt: null },
@@ -555,6 +566,16 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       ) {
         throw new UsageLimitError(`Max uses (${fresh.maxUses}) reached`);
       }
+
+      const auditEntry = makeAuditEntry('validated', {
+        qrType: fresh.type,
+        usesBeforeScan: fresh.currentUses,
+        gateId,
+        shiftLogId: shiftInTxn.id,
+        deviceId: scanContext?.deviceId ?? null,
+        location: scanContext?.location ?? null,
+        nonce: payload.nonce,
+      });
 
       await tx.qRCode.update({
         where: {
@@ -708,6 +729,17 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       );
     }
 
+    if (error instanceof NoActiveShiftError) {
+      return json<QRValidateResponse>(
+        {
+          status: 'rejected',
+          reason: 'no_active_shift',
+          message: error.message,
+        },
+        403
+      );
+    }
+
     // Agentic Maintenance Trigger: If scan fails due to an "Internal Error"
     // or specifically simulated "hardware failure" from the Scanner client.
     if (claims?.orgId) {
@@ -757,6 +789,13 @@ class UsageLimitError extends Error {
   constructor(msg: string) {
     super(msg);
     this.name = 'UsageLimitError';
+  }
+}
+
+class NoActiveShiftError extends Error {
+  constructor(msg: string) {
+    super(msg);
+    this.name = 'NoActiveShiftError';
   }
 }
 

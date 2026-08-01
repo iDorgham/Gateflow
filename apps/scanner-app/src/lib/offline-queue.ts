@@ -13,6 +13,8 @@ export interface QueuedScan {
   synced: boolean;
   retryCount: number;
   error?: string;
+  /** Active ShiftLog id at queue time (optional for older queued items). */
+  shiftLogId?: string;
 }
 
 export interface EncryptedQueueItem {
@@ -173,7 +175,11 @@ async function checkNetworkConnection(): Promise<boolean> {
 }
 
 export const scanQueue = {
-  async addScan(qrCode: string, gateId: string): Promise<QueuedScan> {
+  async addScan(
+    qrCode: string,
+    gateId: string,
+    shiftLogId?: string
+  ): Promise<QueuedScan> {
     const isAuth = await encryption.isAuthenticated();
     if (!isAuth) {
       throw new Error('Authentication required. Please log in first.');
@@ -186,6 +192,7 @@ export const scanQueue = {
       qrCode,
       gateId,
       scannedAt: new Date().toISOString(),
+      ...(shiftLogId ? { shiftLogId } : {}),
     });
 
     const encryptedData = await encryption.encrypt(scanData);
@@ -219,6 +226,7 @@ export const scanQueue = {
       scannedAt: newScan.scannedAt,
       synced: false,
       retryCount: 0,
+      ...(shiftLogId ? { shiftLogId } : {}),
     };
   },
 
@@ -248,6 +256,9 @@ export const scanQueue = {
           synced: item.synced,
           retryCount: item.retryCount,
           error: item.error,
+          ...(typeof parsed.shiftLogId === 'string'
+            ? { shiftLogId: parsed.shiftLogId }
+            : {}),
         });
       } catch (error) {
         console.error(`Failed to decrypt scan ${item.id}:`, error);
@@ -338,6 +349,7 @@ async function bulkSyncScans(scans: QueuedScan[]): Promise<{
         scannedAt: s.scannedAt,
         status: 'SUCCESS',
         retryCount: s.retryCount,
+        ...(s.shiftLogId ? { shiftLogId: s.shiftLogId } : {}),
       })),
     }),
   });

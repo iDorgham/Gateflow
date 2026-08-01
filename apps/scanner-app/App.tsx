@@ -36,7 +36,8 @@ import { OnboardingNavigator } from './src/navigators/onboarding-navigator';
 import { resolveRuntimeQrSecret } from './src/lib/security/qr-secret';
 import { hasCompletedOnboarding } from './src/lib/security/onboarding';
 import { useShiftSession } from './src/hooks/use-shift-session';
-import { clearShiftSession } from './src/lib/shift-session';
+import { clearShiftSession, loadShiftSession } from './src/lib/shift-session';
+import { endShiftOnServer } from './src/lib/shift-api';
 import {
   loadSelectedGate,
   saveSelectedGate,
@@ -294,6 +295,15 @@ export default function App() {
   const handleUnlocked = () => setAppPhase('scanner');
 
   const handleLogout = async () => {
+    // Best-effort: close server ShiftLog so duty does not remain open after sign-out.
+    try {
+      const active = await loadShiftSession();
+      if (active?.shiftLogId) {
+        await endShiftOnServer(active.shiftLogId);
+      }
+    } catch {
+      /* network unavailable — still clear local state */
+    }
     await clearShiftSession();
     await logout();
     setAppPhase('login');
@@ -952,16 +962,23 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
       {activeTab === 'scanner' && (
         <>
           {/* Live camera feed */}
-          <CameraView
-            style={StyleSheet.absoluteFill}
-            facing="back"
-            barcodeScannerSettings={{ barcodeTypes: ['qr'] }}
-            onBarcodeScanned={
-              ui.phase === 'scanning' && canScan(selectedGate?.id)
-                ? onBarcodeScanned
-                : undefined
-            }
-          />
+          {canScan(selectedGate?.id) ? (
+            <CameraView
+              style={StyleSheet.absoluteFill}
+              facing="back"
+              barcodeScannerSettings={{ barcodeTypes: ['qr'] }}
+              onBarcodeScanned={
+                ui.phase === 'scanning' ? onBarcodeScanned : undefined
+              }
+            />
+          ) : (
+            <View
+              style={[
+                StyleSheet.absoluteFill,
+                { backgroundColor: nativeTokens.colors.background },
+              ]}
+            />
+          )}
 
           {/* Decorative overlay — non-interactive */}
           <View style={styles.overlay} pointerEvents="none">

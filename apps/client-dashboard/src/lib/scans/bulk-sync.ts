@@ -7,7 +7,13 @@ export interface ScanInput {
   scanUuid?: string | null;
   qrCode: string;
   scannedAt: string;
-  status: 'SUCCESS' | 'FAILED' | 'EXPIRED' | 'MAX_USES_REACHED' | 'INACTIVE' | 'DENIED'; // ScanStatus
+  status:
+    | 'SUCCESS'
+    | 'FAILED'
+    | 'EXPIRED'
+    | 'MAX_USES_REACHED'
+    | 'INACTIVE'
+    | 'DENIED'; // ScanStatus
   gateId: string;
   deviceId?: string | null;
   // Optional fields from ScanEvent (passed through from validated bulk payload)
@@ -17,6 +23,7 @@ export interface ScanInput {
   visitorName?: string | null;
   visitorPhone?: string | null;
   visitorIdNumber?: string | null;
+  shiftLogId?: string | null;
 }
 
 export interface ConflictResult {
@@ -119,7 +126,10 @@ export async function processBulkScans(
   for (const scan of scans) {
     // A. Check for exact duplicate by scanUuid (idempotency guard)
     if (scan.scanUuid) {
-      if (existingUuidSet.has(scan.scanUuid) || processedBatchUuids.has(scan.scanUuid)) {
+      if (
+        existingUuidSet.has(scan.scanUuid) ||
+        processedBatchUuids.has(scan.scanUuid)
+      ) {
         synced.push(scan.id);
         continue;
       }
@@ -158,7 +168,8 @@ export async function processBulkScans(
           ...existingScan.auditTrail,
           auditEntry,
         ];
-        const newAuditTrailJson = newAuditTrailEntries as unknown as Prisma.JsonArray;
+        const newAuditTrailJson =
+          newAuditTrailEntries as unknown as Prisma.JsonArray;
 
         // Update In-Memory State
         state.latestScan = {
@@ -169,28 +180,28 @@ export async function processBulkScans(
 
         // Prepare Operation
         if (state.pendingCreate) {
-           // We are updating a pending creation from this batch
-           state.pendingCreate = {
-             ...state.pendingCreate,
-             scannedAt: new Date(scan.scannedAt),
-             status: scan.status,
-             scanUuid: scan.scanUuid ?? undefined,
-             deviceId: scan.deviceId ?? null,
-             auditTrail: newAuditTrailJson,
-           };
+          // We are updating a pending creation from this batch
+          state.pendingCreate = {
+            ...state.pendingCreate,
+            scannedAt: new Date(scan.scannedAt),
+            status: scan.status,
+            scanUuid: scan.scanUuid ?? undefined,
+            deviceId: scan.deviceId ?? null,
+            auditTrail: newAuditTrailJson,
+          };
         } else if (existingScan.id) {
-           // We are updating an existing DB record
-           state.pendingUpdate = {
-             id: existingScan.id,
-             data: {
-               scannedAt: new Date(scan.scannedAt),
-               status: scan.status,
-               scanUuid: scan.scanUuid ?? undefined,
-               deviceId: scan.deviceId ?? null,
-               auditTrail: newAuditTrailJson,
-               auditNotes: null,
-             }
-           };
+          // We are updating an existing DB record
+          state.pendingUpdate = {
+            id: existingScan.id,
+            data: {
+              scannedAt: new Date(scan.scannedAt),
+              status: scan.status,
+              scanUuid: scan.scanUuid ?? undefined,
+              deviceId: scan.deviceId ?? null,
+              auditTrail: newAuditTrailJson,
+              auditNotes: null,
+            },
+          };
         }
 
         synced.push(scan.id);
@@ -215,7 +226,8 @@ export async function processBulkScans(
           ...existingScan.auditTrail,
           auditEntry,
         ];
-        const newAuditTrailJson = newAuditTrailEntries as unknown as Prisma.JsonArray;
+        const newAuditTrailJson =
+          newAuditTrailEntries as unknown as Prisma.JsonArray;
 
         // Update In-Memory Audit Trail Only
         state.latestScan = {
@@ -237,7 +249,7 @@ export async function processBulkScans(
               id: existingScan.id,
               data: {
                 auditTrail: newAuditTrailJson,
-              }
+              },
             };
           }
         }
@@ -256,6 +268,7 @@ export async function processBulkScans(
         strategy: 'new_record',
         scanUuid: scan.scanUuid,
         deviceId: scan.deviceId ?? null,
+        ...(scan.shiftLogId ? { shiftLogId: scan.shiftLogId } : {}),
       });
 
       const auditTrailEntries: AuditTrailEntry[] = [auditEntry];
@@ -288,11 +301,13 @@ export async function processBulkScans(
 
   const updates = Array.from(qrStateMap.values())
     .filter((s) => !!s.pendingUpdate && !s.pendingCreate)
-    .map((s) => s.pendingUpdate as { id: string; data: Prisma.ScanLogUpdateInput });
-    // Note: If pendingCreate exists, it supersedes pendingUpdate (because it means we created it in this batch)
-    // Wait, if pendingCreate exists, we don't have an ID yet, so we can't have pendingUpdate for it?
-    // Correct. Logic above: if state.pendingCreate, we update state.pendingCreate.
-    // So filter is redundant but safe.
+    .map(
+      (s) => s.pendingUpdate as { id: string; data: Prisma.ScanLogUpdateInput }
+    );
+  // Note: If pendingCreate exists, it supersedes pendingUpdate (because it means we created it in this batch)
+  // Wait, if pendingCreate exists, we don't have an ID yet, so we can't have pendingUpdate for it?
+  // Correct. Logic above: if state.pendingCreate, we update state.pendingCreate.
+  // So filter is redundant but safe.
 
   if (creates.length > 0) {
     await tx.scanLog.createMany({ data: creates });

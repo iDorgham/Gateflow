@@ -14,10 +14,7 @@ import { z } from 'zod';
 import { prisma } from '@gate-access/db';
 import { requireAuth, isNextResponse } from '@/lib/require-auth';
 import { checkGateAssignment } from '@/lib/gate-assignment';
-import {
-  findOpenShiftForGate,
-  findOpenShiftForGuard,
-} from '@/lib/scanner-shift';
+import { startOrReuseShift } from '@/lib/scanner-shift';
 
 export const dynamic = 'force-dynamic';
 
@@ -106,45 +103,26 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     );
   }
 
-  const existingAtGate = await findOpenShiftForGate({
-    organizationId,
-    guardId,
-    gateId,
-  });
-  if (existingAtGate) {
-    return NextResponse.json({
-      success: true,
-      data: { ...serializeShift(existingAtGate), gateName: gate.name },
-      reused: true,
-    });
-  }
-
-  const openElsewhere = await findOpenShiftForGuard({
-    organizationId,
-    guardId,
-  });
-  if (openElsewhere) {
-    await prisma.shiftLog.update({
-      where: { id: openElsewhere.id },
-      data: { endTime: new Date() },
-    });
-  }
-
-  const created = await prisma.shiftLog.create({
-    data: {
+  try {
+    const { shift, reused } = await startOrReuseShift({
       organizationId,
       guardId,
       gateId,
-      startTime: new Date(),
-    },
-  });
+    });
 
-  return NextResponse.json(
-    {
-      success: true,
-      data: { ...serializeShift(created), gateName: gate.name },
-      reused: false,
-    },
-    { status: 201 }
-  );
+    return NextResponse.json(
+      {
+        success: true,
+        data: { ...serializeShift(shift), gateName: gate.name },
+        reused,
+      },
+      { status: reused ? 200 : 201 }
+    );
+  } catch (error) {
+    console.error('[scanner/shift/start] Failed to start shift:', error);
+    return NextResponse.json(
+      { success: false, message: 'Could not start shift — please retry' },
+      { status: 503 }
+    );
+  }
 }

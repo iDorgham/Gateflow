@@ -14,20 +14,17 @@ jest.mock('@/lib/gate-assignment', () => ({
   checkGateAssignment: (...args: unknown[]) => mockCheckGateAssignment(...args),
 }));
 
+const mockStartOrReuseShift = jest.fn();
+jest.mock('@/lib/scanner-shift', () => ({
+  startOrReuseShift: (...args: unknown[]) => mockStartOrReuseShift(...args),
+}));
+
 const mockGateFindFirst = jest.fn();
-const mockShiftFindFirst = jest.fn();
-const mockShiftCreate = jest.fn();
-const mockShiftUpdate = jest.fn();
 
 jest.mock('@gate-access/db', () => ({
   prisma: {
     gate: {
       findFirst: (...args: unknown[]) => mockGateFindFirst(...args),
-    },
-    shiftLog: {
-      findFirst: (...args: unknown[]) => mockShiftFindFirst(...args),
-      create: (...args: unknown[]) => mockShiftCreate(...args),
-      update: (...args: unknown[]) => mockShiftUpdate(...args),
     },
   },
 }));
@@ -66,14 +63,16 @@ describe('POST /api/scanner/shift/start', () => {
       name: 'Main',
       isActive: true,
     });
-    mockShiftFindFirst.mockResolvedValue(null);
-    mockShiftCreate.mockResolvedValue({
-      id: 'shift_1',
-      gateId: 'gate_1',
-      guardId: 'guard_1',
-      organizationId: 'org_1',
-      startTime: new Date('2026-08-01T10:00:00.000Z'),
-      endTime: null,
+    mockStartOrReuseShift.mockResolvedValue({
+      reused: false,
+      shift: {
+        id: 'shift_1',
+        gateId: 'gate_1',
+        guardId: 'guard_1',
+        organizationId: 'org_1',
+        startTime: new Date('2026-08-01T10:00:00.000Z'),
+        endTime: null,
+      },
     });
   });
 
@@ -84,7 +83,7 @@ describe('POST /api/scanner/shift/start', () => {
     );
     const res = await POST(makeRequest({ gateId: 'gate_1' }));
     expect(res.status).toBe(401);
-    expect(mockShiftCreate).not.toHaveBeenCalled();
+    expect(mockStartOrReuseShift).not.toHaveBeenCalled();
   });
 
   it('returns 403 when org context is missing', async () => {
@@ -94,7 +93,7 @@ describe('POST /api/scanner/shift/start', () => {
     });
     const res = await POST(makeRequest({ gateId: 'gate_1' }));
     expect(res.status).toBe(403);
-    expect(mockShiftCreate).not.toHaveBeenCalled();
+    expect(mockStartOrReuseShift).not.toHaveBeenCalled();
   });
 
   it('returns 404 when gate is outside the org', async () => {
@@ -110,7 +109,7 @@ describe('POST /api/scanner/shift/start', () => {
         }),
       })
     );
-    expect(mockShiftCreate).not.toHaveBeenCalled();
+    expect(mockStartOrReuseShift).not.toHaveBeenCalled();
   });
 
   it('returns 403 when gate assignment denies the guard', async () => {
@@ -119,7 +118,7 @@ describe('POST /api/scanner/shift/start', () => {
     );
     const res = await POST(makeRequest({ gateId: 'gate_1' }));
     expect(res.status).toBe(403);
-    expect(mockShiftCreate).not.toHaveBeenCalled();
+    expect(mockStartOrReuseShift).not.toHaveBeenCalled();
   });
 
   it('creates a ShiftLog scoped to org + guard + gate', async () => {
@@ -129,23 +128,24 @@ describe('POST /api/scanner/shift/start', () => {
     expect(res.status).toBe(201);
     expect(data.success).toBe(true);
     expect(data.data.id).toBe('shift_1');
-    expect(mockShiftCreate).toHaveBeenCalledWith({
-      data: expect.objectContaining({
-        organizationId: 'org_1',
-        guardId: 'guard_1',
-        gateId: 'gate_1',
-      }),
+    expect(mockStartOrReuseShift).toHaveBeenCalledWith({
+      organizationId: 'org_1',
+      guardId: 'guard_1',
+      gateId: 'gate_1',
     });
   });
 
   it('reuses an existing open shift at the same gate', async () => {
-    mockShiftFindFirst.mockResolvedValueOnce({
-      id: 'shift_open',
-      gateId: 'gate_1',
-      guardId: 'guard_1',
-      organizationId: 'org_1',
-      startTime: new Date('2026-08-01T09:00:00.000Z'),
-      endTime: null,
+    mockStartOrReuseShift.mockResolvedValueOnce({
+      reused: true,
+      shift: {
+        id: 'shift_open',
+        gateId: 'gate_1',
+        guardId: 'guard_1',
+        organizationId: 'org_1',
+        startTime: new Date('2026-08-01T09:00:00.000Z'),
+        endTime: null,
+      },
     });
 
     const res = await POST(makeRequest({ gateId: 'gate_1' }));
@@ -154,6 +154,37 @@ describe('POST /api/scanner/shift/start', () => {
     expect(res.status).toBe(200);
     expect(data.reused).toBe(true);
     expect(data.data.id).toBe('shift_open');
-    expect(mockShiftCreate).not.toHaveBeenCalled();
+  });
+
+  it('closes an open shift at another gate via startOrReuseShift', async () => {
+    // Behavior is owned by startOrReuseShift; route must still call it for gate switch.
+    mockStartOrReuseShift.mockResolvedValueOnce({
+      reused: false,
+      shift: {
+        id: 'shift_new',
+        gateId: 'gate_2',
+        guardId: 'guard_1',
+        organizationId: 'org_1',
+        startTime: new Date('2026-08-01T11:00:00.000Z'),
+        endTime: null,
+      },
+    });
+
+    mockGateFindFirst.mockResolvedValueOnce({
+      id: 'gate_2',
+      name: 'Side',
+      isActive: true,
+    });
+
+    const res = await POST(makeRequest({ gateId: 'gate_2' }));
+    const data = await res.json();
+
+    expect(res.status).toBe(201);
+    expect(data.data.gateId).toBe('gate_2');
+    expect(mockStartOrReuseShift).toHaveBeenCalledWith({
+      organizationId: 'org_1',
+      guardId: 'guard_1',
+      gateId: 'gate_2',
+    });
   });
 });

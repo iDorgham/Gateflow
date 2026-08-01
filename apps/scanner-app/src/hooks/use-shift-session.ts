@@ -37,9 +37,16 @@ export function useShiftSession() {
         setError(result.message);
         return false;
       }
-      await saveShiftSession(result.session);
+      const saved = await saveShiftSession(result.session);
+      if (!saved) {
+        setError('Shift started on server but could not save locally — retry');
+        return false;
+      }
       setSession(result.session);
       return true;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not start shift');
+      return false;
     } finally {
       setBusy(false);
     }
@@ -51,11 +58,35 @@ export function useShiftSession() {
     try {
       const result = await endShiftOnServer(session?.shiftLogId);
       if (!result.ok) {
-        setError(result.message);
-        return false;
+        // Offline / network: still clear local duty so scanning stops; server may reopen later.
+        const cleared = await clearShiftSession();
+        setSession(null);
+        setError(
+          cleared
+            ? `${result.message} — local shift ended; sync when online`
+            : `${result.message} — also failed to clear local shift storage`
+        );
+        return true;
       }
-      await clearShiftSession();
+
+      const cleared = await clearShiftSession();
       setSession(null);
+      if (!cleared) {
+        setError(
+          'Shift ended on server but local session could not be cleared — restart app if scan stays blocked'
+        );
+      }
+      return true;
+    } catch (err) {
+      const cleared = await clearShiftSession();
+      setSession(null);
+      setError(
+        cleared
+          ? err instanceof Error
+            ? `${err.message} — local shift ended`
+            : 'Could not end shift on server — local shift ended'
+          : 'Could not end shift; local storage clear also failed'
+      );
       return true;
     } finally {
       setBusy(false);

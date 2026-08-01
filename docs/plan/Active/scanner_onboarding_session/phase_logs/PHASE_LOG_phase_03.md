@@ -31,7 +31,17 @@ cd apps/client-dashboard && pnpm exec jest src/app/api/scanner/shift src/app/api
 - Gate Permission QR decoding deferred; clock-in uses selected `gateId` (assignment-checked).
 - Home duty UI / live timer remains Phase 04.
 
+## Review fixes (post-PR #205)
+
+- End route: invalid JSON with Content-Type → 400 (empty body still allowed)
+- Start: `startOrReuseShift` Serializable txn + retry; close elsewhere covered in helper tests
+- `closeShift`: CAS via `updateMany` (`endTime: null`)
+- Validate: re-check open shift inside scan transaction; auditTrail + mismatch tests
+- Hook: catch errors; require SecureStore save; offline local end; clear-failure messaging
+- App: best-effort server clock-out on logout; mount `CameraView` only when on duty
+- Offline queue + bulk sync carry optional `shiftLogId`
+
 ## Next
 
-- `/github` for a **new** draft PR from `feat/scanner-phase-03-shift` (do not reopen merged #204)
+- `/github` to push review fixes onto draft PR #205
 - `/dev` Phase 04 — master scan home

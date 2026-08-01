@@ -1,5 +1,5 @@
 /**
- * Unit tests for POST /api/scanner/shift/end — ownership / IDOR.
+ * Unit tests for POST /api/scanner/shift/end — ownership / IDOR / JSON body.
  */
 
 const mockRequireAuth = jest.fn();
@@ -9,28 +9,34 @@ jest.mock('@/lib/require-auth', () => ({
     Boolean(value && typeof value === 'object' && 'status' in value),
 }));
 
-const mockShiftFindFirst = jest.fn();
-const mockShiftUpdate = jest.fn();
+const mockCloseShift = jest.fn();
+const mockFindOpenShiftForGuard = jest.fn();
 
-jest.mock('@gate-access/db', () => ({
-  prisma: {
-    shiftLog: {
-      findFirst: (...args: unknown[]) => mockShiftFindFirst(...args),
-      update: (...args: unknown[]) => mockShiftUpdate(...args),
-    },
-  },
+jest.mock('@/lib/scanner-shift', () => ({
+  closeShift: (...args: unknown[]) => mockCloseShift(...args),
+  findOpenShiftForGuard: (...args: unknown[]) =>
+    mockFindOpenShiftForGuard(...args),
 }));
 
 import { NextRequest } from 'next/server';
 
-function makeRequest(body: object = {}): NextRequest {
+function makeRequest(
+  body?: object | string,
+  opts?: { raw?: boolean }
+): NextRequest {
+  const payload =
+    body === undefined
+      ? undefined
+      : opts?.raw
+        ? String(body)
+        : JSON.stringify(body);
   return new NextRequest('http://localhost/api/scanner/shift/end', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
+      ...(payload !== undefined ? { 'Content-Type': 'application/json' } : {}),
       Authorization: 'Bearer test',
     },
-    body: JSON.stringify(body),
+    ...(payload !== undefined ? { body: payload } : {}),
   });
 }
 
@@ -50,35 +56,28 @@ describe('POST /api/scanner/shift/end', () => {
     });
   });
 
+  it('returns 400 when non-empty body is not valid JSON', async () => {
+    const res = await POST(makeRequest('{not-json', { raw: true }));
+    expect(res.status).toBe(400);
+    expect(mockCloseShift).not.toHaveBeenCalled();
+  });
+
   it('returns 404 when ending another guard shift (IDOR)', async () => {
-    // closeShift looks up with guardId + orgId — foreign shift yields null
-    mockShiftFindFirst.mockResolvedValueOnce(null);
+    mockCloseShift.mockResolvedValueOnce(null);
 
     const res = await POST(makeRequest({ shiftLogId: 'shift_other' }));
     expect(res.status).toBe(404);
-    expect(mockShiftUpdate).not.toHaveBeenCalled();
-    expect(mockShiftFindFirst).toHaveBeenCalledWith(
+    expect(mockCloseShift).toHaveBeenCalledWith(
       expect.objectContaining({
-        where: expect.objectContaining({
-          id: 'shift_other',
-          organizationId: 'org_1',
-          guardId: 'guard_1',
-          endTime: null,
-        }),
+        organizationId: 'org_1',
+        guardId: 'guard_1',
+        shiftLogId: 'shift_other',
       })
     );
   });
 
   it('closes the open shift owned by the guard', async () => {
-    mockShiftFindFirst.mockResolvedValueOnce({
-      id: 'shift_1',
-      gateId: 'gate_1',
-      guardId: 'guard_1',
-      organizationId: 'org_1',
-      startTime: new Date('2026-08-01T10:00:00.000Z'),
-      endTime: null,
-    });
-    mockShiftUpdate.mockResolvedValueOnce({
+    mockCloseShift.mockResolvedValueOnce({
       id: 'shift_1',
       gateId: 'gate_1',
       guardId: 'guard_1',
@@ -93,12 +92,36 @@ describe('POST /api/scanner/shift/end', () => {
     expect(res.status).toBe(200);
     expect(data.success).toBe(true);
     expect(data.data.endTime).toBeTruthy();
-    expect(mockShiftUpdate).toHaveBeenCalled();
   });
 
   it('returns 404 when there is no active shift', async () => {
-    mockShiftFindFirst.mockResolvedValueOnce(null);
+    mockFindOpenShiftForGuard.mockResolvedValueOnce(null);
     const res = await POST(makeRequest({}));
     expect(res.status).toBe(404);
+  });
+
+  it('allows empty body and clocks out the current open shift', async () => {
+    mockFindOpenShiftForGuard.mockResolvedValueOnce({
+      id: 'shift_open',
+      gateId: 'gate_1',
+      guardId: 'guard_1',
+      organizationId: 'org_1',
+      startTime: new Date(),
+      endTime: null,
+    });
+    mockCloseShift.mockResolvedValueOnce({
+      id: 'shift_open',
+      gateId: 'gate_1',
+      guardId: 'guard_1',
+      organizationId: 'org_1',
+      startTime: new Date(),
+      endTime: new Date(),
+    });
+
+    const res = await POST(makeRequest());
+    expect(res.status).toBe(200);
+    expect(mockCloseShift).toHaveBeenCalledWith(
+      expect.objectContaining({ shiftLogId: 'shift_open' })
+    );
   });
 });

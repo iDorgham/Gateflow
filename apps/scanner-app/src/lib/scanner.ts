@@ -48,7 +48,7 @@ export async function validateOnServer(
   const token = await getValidAccessToken();
 
   if (!token) {
-    await enqueueOfflineScan(qrPayload, localPayload, gateId);
+    await enqueueOfflineScan(qrPayload, localPayload, gateId, shiftLogId);
     await haptic(Haptics.NotificationFeedbackType.Warning);
     return {
       status: 'accepted',
@@ -86,7 +86,7 @@ export async function validateOnServer(
     if (!response.ok) {
       // 5xx → true server error; queue for later retry
       if (response.status >= 500) {
-        await enqueueOfflineScan(qrPayload, localPayload, gateId);
+        await enqueueOfflineScan(qrPayload, localPayload, gateId, shiftLogId);
         await haptic(Haptics.NotificationFeedbackType.Warning);
         return {
           status: 'accepted',
@@ -143,7 +143,7 @@ export async function validateOnServer(
     };
   } catch {
     // Network-level failure (no connection, DNS failure, timeout)
-    await enqueueOfflineScan(qrPayload, localPayload, gateId);
+    await enqueueOfflineScan(qrPayload, localPayload, gateId, shiftLogId);
     await haptic(Haptics.NotificationFeedbackType.Warning);
     return {
       status: 'accepted',
@@ -240,11 +240,16 @@ export async function createMaintenanceRequest(params: {
 async function enqueueOfflineScan(
   qrPayload: string,
   localPayload: QRPayload,
-  gateId?: string
+  gateId?: string,
+  shiftLogId?: string
 ): Promise<void> {
   try {
     // Use the selected gateId when available; fall back to organizationId
-    await scanQueue.addScan(qrPayload, gateId ?? localPayload.organizationId);
+    await scanQueue.addScan(
+      qrPayload,
+      gateId ?? localPayload.organizationId,
+      shiftLogId
+    );
   } catch {
     // Queue throws if the user is not authenticated — silently ignore.
   }

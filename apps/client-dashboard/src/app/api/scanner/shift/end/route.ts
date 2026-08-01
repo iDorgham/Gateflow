@@ -30,12 +30,19 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     );
   }
 
+  // Empty / missing body is allowed (clock-out current open shift).
+  // If a Content-Type is present, body must be valid JSON (matches start endpoint).
   let body: unknown = {};
-  try {
-    body = await request.json();
-  } catch {
-    // Empty or non-JSON body → treat as {} (shiftLogId optional)
-    body = {};
+  const contentType = request.headers.get('content-type');
+  if (contentType) {
+    try {
+      body = await request.json();
+    } catch {
+      return NextResponse.json(
+        { success: false, message: 'Invalid JSON body' },
+        { status: 400 }
+      );
+    }
   }
 
   const parsed = BodySchema.safeParse(body ?? {});

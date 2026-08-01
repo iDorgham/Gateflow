@@ -498,6 +498,97 @@ describe('POST /api/qrcodes/validate', () => {
     expect(mockTransaction).not.toHaveBeenCalled();
   });
 
+  it('rejects when scanContext.shiftLogId does not match the active shift', async () => {
+    const auth = await makeAuthHeader();
+    const signed = signQRPayload(makePayload(), QR_SECRET);
+    const res = await POST(
+      makeRequest(
+        {
+          qrPayload: signed,
+          scanContext: {
+            gateId: 'gate_test_789',
+            shiftLogId: 'shift_wrong',
+          },
+        },
+        auth
+      )
+    );
+    const data = await res.json();
+
+    expect(res.status).toBe(403);
+    expect(data.reason).toBe('no_active_shift');
+    expect(mockTransaction).not.toHaveBeenCalled();
+  });
+
+  it('rejects when the shift is closed inside the scan transaction', async () => {
+    mockFindOpenShiftForGate
+      .mockResolvedValueOnce({
+        id: 'shift_test_1',
+        gateId: 'gate_test_789',
+        guardId: 'user_1',
+        organizationId: 'org_test_456',
+        startTime: new Date(),
+        endTime: null,
+      })
+      .mockResolvedValueOnce(null);
+
+    const auth = await makeAuthHeader();
+    const signed = signQRPayload(makePayload(), QR_SECRET);
+    const res = await POST(
+      makeRequest(
+        { qrPayload: signed, scanContext: { gateId: 'gate_test_789' } },
+        auth
+      )
+    );
+    const data = await res.json();
+
+    expect(res.status).toBe(403);
+    expect(data.reason).toBe('no_active_shift');
+    expect(mockTransaction).toHaveBeenCalled();
+  });
+
+  it('persists shiftLogId on ScanLog.auditTrail for accepted scans', async () => {
+    let auditTrail: Array<{ details?: { shiftLogId?: string } }> | undefined;
+    mockTransaction.mockImplementationOnce(
+      async (fn: (tx: unknown) => Promise<unknown>) => {
+        const tx = makeTx();
+        tx.scanLog.create = jest
+          .fn()
+          .mockImplementation(
+            async (args: {
+              data: {
+                auditTrail: Array<{ details?: { shiftLogId?: string } }>;
+              };
+            }) => {
+              auditTrail = args.data.auditTrail;
+              return { id: 'scan_result_123' };
+            }
+          );
+        return fn(tx);
+      }
+    );
+
+    const auth = await makeAuthHeader();
+    const signed = signQRPayload(makePayload(), QR_SECRET);
+    const res = await POST(
+      makeRequest(
+        {
+          qrPayload: signed,
+          scanContext: {
+            gateId: 'gate_test_789',
+            shiftLogId: 'shift_test_1',
+          },
+        },
+        auth
+      )
+    );
+    const data = await res.json();
+
+    expect(res.status).toBe(200);
+    expect(data.status).toBe('accepted');
+    expect(auditTrail?.[0]?.details?.shiftLogId).toBe('shift_test_1');
+  });
+
   // ── Not found ─────────────────────────────────────────────────────────────
 
   it('rejects when the QR record does not exist in the DB', async () => {
