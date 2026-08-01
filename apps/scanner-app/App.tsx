@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback, lazy, Suspense } from 'react';
+import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { nativeTokensNewEra as nativeTokens } from '../../packages/ui/src/tokens';
 import {
   ActivityIndicator,
