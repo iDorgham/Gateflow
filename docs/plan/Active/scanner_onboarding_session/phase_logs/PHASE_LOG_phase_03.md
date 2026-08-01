@@ -26,12 +26,12 @@ cd apps/client-dashboard && pnpm exec jest src/app/api/scanner/shift src/app/api
 
 ## Decisions / scope notes
 
-- TASKS naming (`start`/`end`) preferred over prompt `clock-in`/`clock-out` aliases.
-- No `ScanLog.shiftLogId` column yet — association via `auditTrail` JSON (`shiftLogId`) to avoid migration in this phase.
+- **Terminology mapping:** Prompt spec uses `clock-in`/`clock-out`; implementation uses `start`/`end` endpoints and `ShiftLog` model. The original prompt scope of "clock-in/clock-out shifts" maps to `/api/scanner/shift/start` and `/api/scanner/shift/end`.
+- **ShiftLog association:** No `ScanLog.shiftLogId` column yet — association via `auditTrail` JSON (`shiftLogId`) to avoid migration in this phase.
 - Gate Permission QR decoding deferred; clock-in uses selected `gateId` (assignment-checked).
 - Home duty UI / live timer remains Phase 04.
 
-## Review fixes (post-PR #205)
+## Hardening improvements (committed post-initial implementation)
 
 - End route: invalid JSON with Content-Type → 400 (empty body still allowed)
 - Start: `startOrReuseShift` Serializable txn + retry; close elsewhere covered in helper tests
@@ -43,5 +43,5 @@ cd apps/client-dashboard && pnpm exec jest src/app/api/scanner/shift src/app/api
 
 ## Next
 
-- `/github` to push review fixes onto draft PR #205
+- `/github` to create new draft PR for Phase 03
 - `/dev` Phase 04 — master scan home
