@@ -115,6 +115,8 @@ const mockGateFindFirst = jest.fn();
 const mockScanLogCreate = jest.fn();
 const mockIncidentCreate = jest.fn().mockResolvedValue({ id: 'incident_1' });
 const mockTransaction = jest.fn();
+const mockFindOpenShiftForGate = jest.fn();
+const mockLockOpenShiftForGate = jest.fn();
 
 jest.mock('@gate-access/db', () => ({
   prisma: {
@@ -161,6 +163,13 @@ jest.mock('@gate-access/db', () => ({
   setOrganizationContext: jest.fn(),
   clearOrganizationContext: jest.fn(),
   isAccessAllowed: jest.fn(() => ({ allowed: true })),
+}));
+
+jest.mock('../../../../lib/scanner-shift', () => ({
+  findOpenShiftForGate: (...args: unknown[]) =>
+    mockFindOpenShiftForGate(...args),
+  lockOpenShiftForGate: (...args: unknown[]) =>
+    mockLockOpenShiftForGate(...args),
 }));
 
 // ─── Rate-limiter mock (allow all by default; override per test) ───────────────
@@ -239,6 +248,10 @@ function makeTx(qrOverrides?: Record<string, unknown>) {
     scanLog: {
       create: jest.fn().mockResolvedValue({ id: 'scan_result_123' }),
     },
+    shiftLog: {
+      findFirst: (...args: unknown[]) => mockFindOpenShiftForGate(...args),
+    },
+    $queryRaw: jest.fn(),
   };
 }
 
@@ -277,6 +290,19 @@ describe('POST /api/qrcodes/validate', () => {
 
     // Default: gate-assignment check passes (user allowed to scan at this gate).
     mockCheckGateAssignment.mockResolvedValue(null);
+
+    // Default: guard has an open shift at the scan gate.
+    const openShift = {
+      id: 'shift_test_1',
+      gateId: 'gate_test_789',
+      guardId: 'user_1',
+      organizationId: 'org_test_456',
+      startTime: new Date(),
+      endTime: null,
+    };
+    mockFindOpenShiftForGate.mockResolvedValue(openShift);
+    // Inner txn lock must be independent so TOCTOU races can be simulated.
+    mockLockOpenShiftForGate.mockResolvedValue(openShift);
 
     // Default: gate has no location rule (locationEnforced false).
     mockGateFindFirst.mockResolvedValue({
@@ -462,6 +488,153 @@ describe('POST /api/qrcodes/validate', () => {
     expect(res.status).toBe(403);
     expect(data.reason).toBe('denied');
     expect(data.message).toMatch(/not allowed to scan at this gate/);
+  });
+
+  it('rejects when the guard has no active shift at the gate', async () => {
+    mockFindOpenShiftForGate.mockResolvedValueOnce(null);
+
+    const auth = await makeAuthHeader();
+    const signed = signQRPayload(makePayload(), QR_SECRET);
+    const res = await POST(
+      makeRequest(
+        { qrPayload: signed, scanContext: { gateId: 'gate_test_789' } },
+        auth
+      )
+    );
+    const data = await res.json();
+
+    expect(res.status).toBe(403);
+    expect(data.reason).toBe('no_active_shift');
+    expect(mockTransaction).not.toHaveBeenCalled();
+  });
+
+  it('rejects when scanContext.shiftLogId does not match the active shift', async () => {
+    const auth = await makeAuthHeader();
+    const signed = signQRPayload(makePayload(), QR_SECRET);
+    const res = await POST(
+      makeRequest(
+        {
+          qrPayload: signed,
+          scanContext: {
+            gateId: 'gate_test_789',
+            shiftLogId: 'shift_wrong',
+          },
+        },
+        auth
+      )
+    );
+    const data = await res.json();
+
+    expect(res.status).toBe(403);
+    expect(data.reason).toBe('no_active_shift');
+    expect(mockTransaction).not.toHaveBeenCalled();
+  });
+
+  it('rejects when the shift is closed inside the scan transaction', async () => {
+    mockFindOpenShiftForGate.mockResolvedValueOnce({
+      id: 'shift_test_1',
+      gateId: 'gate_test_789',
+      guardId: 'user_1',
+      organizationId: 'org_test_456',
+      startTime: new Date(),
+      endTime: null,
+    });
+    mockLockOpenShiftForGate.mockResolvedValueOnce(null);
+
+    const auth = await makeAuthHeader();
+    const signed = signQRPayload(makePayload(), QR_SECRET);
+    const res = await POST(
+      makeRequest(
+        { qrPayload: signed, scanContext: { gateId: 'gate_test_789' } },
+        auth
+      )
+    );
+    const data = await res.json();
+
+    expect(res.status).toBe(403);
+    expect(data.reason).toBe('no_active_shift');
+    expect(mockTransaction).toHaveBeenCalled();
+    expect(mockLockOpenShiftForGate).toHaveBeenCalled();
+  });
+
+  it('rejects when txn lock sees a different open shift than the outer check (TOCTOU)', async () => {
+    mockFindOpenShiftForGate.mockResolvedValueOnce({
+      id: 'shift_test_1',
+      gateId: 'gate_test_789',
+      guardId: 'user_1',
+      organizationId: 'org_test_456',
+      startTime: new Date(),
+      endTime: null,
+    });
+    mockLockOpenShiftForGate.mockResolvedValueOnce({
+      id: 'shift_other',
+      gateId: 'gate_test_789',
+      guardId: 'user_1',
+      organizationId: 'org_test_456',
+      startTime: new Date(),
+      endTime: null,
+    });
+
+    const auth = await makeAuthHeader();
+    const signed = signQRPayload(makePayload(), QR_SECRET);
+    const res = await POST(
+      makeRequest(
+        {
+          qrPayload: signed,
+          scanContext: {
+            gateId: 'gate_test_789',
+            shiftLogId: 'shift_test_1',
+          },
+        },
+        auth
+      )
+    );
+    const data = await res.json();
+
+    expect(res.status).toBe(403);
+    expect(data.reason).toBe('no_active_shift');
+    expect(mockTransaction).toHaveBeenCalled();
+    expect(mockLockOpenShiftForGate).toHaveBeenCalled();
+  });
+
+  it('persists shiftLogId on ScanLog.auditTrail for accepted scans', async () => {
+    let auditTrail: Array<{ details?: { shiftLogId?: string } }> | undefined;
+    mockTransaction.mockImplementationOnce(
+      async (fn: (tx: unknown) => Promise<unknown>) => {
+        const tx = makeTx();
+        tx.scanLog.create = jest.fn().mockImplementation(
+          async (args: {
+            data: {
+              auditTrail: Array<{ details?: { shiftLogId?: string } }>;
+            };
+          }) => {
+            auditTrail = args.data.auditTrail;
+            return { id: 'scan_result_123' };
+          }
+        );
+        return fn(tx);
+      }
+    );
+
+    const auth = await makeAuthHeader();
+    const signed = signQRPayload(makePayload(), QR_SECRET);
+    const res = await POST(
+      makeRequest(
+        {
+          qrPayload: signed,
+          scanContext: {
+            gateId: 'gate_test_789',
+            shiftLogId: 'shift_test_1',
+          },
+        },
+        auth
+      )
+    );
+    const data = await res.json();
+
+    expect(res.status).toBe(200);
+    expect(data.status).toBe('accepted');
+    expect(auditTrail?.[0]?.details?.shiftLogId).toBe('shift_test_1');
   });
 
   // ── Not found ─────────────────────────────────────────────────────────────

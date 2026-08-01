@@ -5,6 +5,8 @@ export const QRValidateRequestSchema = z.object({
   scanContext: z
     .object({
       gateId: z.string().optional(),
+      /** Active ShiftLog id — preferred client hint; server still verifies open shift */
+      shiftLogId: z.string().optional(),
       deviceId: z.string().optional(),
       location: z.record(z.string(), z.unknown()).optional(),
       latitude: z.number().min(-90).max(90).optional(),
@@ -35,6 +37,7 @@ export const QRValidateRejectReason = z.enum([
   'denied',
   'not_on_location',
   'blocked_watchlist',
+  'no_active_shift',
 ]);
 
 export type QRValidateRejectReason = z.infer<typeof QRValidateRejectReason>;

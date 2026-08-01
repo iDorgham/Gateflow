@@ -13,6 +13,8 @@ export interface QueuedScan {
   synced: boolean;
   retryCount: number;
   error?: string;
+  /** Active ShiftLog id at queue time (optional for older queued items). */
+  shiftLogId?: string;
 }
 
 export interface EncryptedQueueItem {
@@ -173,7 +175,11 @@ async function checkNetworkConnection(): Promise<boolean> {
 }
 
 export const scanQueue = {
-  async addScan(qrCode: string, gateId: string): Promise<QueuedScan> {
+  async addScan(
+    qrCode: string,
+    gateId: string,
+    shiftLogId?: string
+  ): Promise<QueuedScan> {
     const isAuth = await encryption.isAuthenticated();
     if (!isAuth) {
       throw new Error('Authentication required. Please log in first.');
@@ -186,6 +192,7 @@ export const scanQueue = {
       qrCode,
       gateId,
       scannedAt: new Date().toISOString(),
+      ...(shiftLogId ? { shiftLogId } : {}),
     });
 
     const encryptedData = await encryption.encrypt(scanData);
@@ -219,6 +226,7 @@ export const scanQueue = {
       scannedAt: newScan.scannedAt,
       synced: false,
       retryCount: 0,
+      ...(shiftLogId ? { shiftLogId } : {}),
     };
   },
 
@@ -248,6 +256,9 @@ export const scanQueue = {
           synced: item.synced,
           retryCount: item.retryCount,
           error: item.error,
+          ...(typeof parsed.shiftLogId === 'string'
+            ? { shiftLogId: parsed.shiftLogId }
+            : {}),
         });
       } catch (error) {
         console.error(`Failed to decrypt scan ${item.id}:`, error);
@@ -269,6 +280,9 @@ export const scanQueue = {
 
     if (index !== -1) {
       queue[index].synced = true;
+      // Clear any error from an earlier failed attempt — a scan that
+      // eventually succeeds must not still read as "failed" via its stale error.
+      delete queue[index].error;
       await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(queue));
     }
   },
@@ -288,6 +302,24 @@ export const scanQueue = {
     }
   },
 
+  /**
+   * Legacy scans queued without shift attribution can never sync — the server
+   * now rejects any bulk-synced scan missing shiftLogId. Retrying them costs
+   * a network round trip every cycle for no chance of success, so park them
+   * as failed immediately instead of burning down MAX_RETRIES.
+   */
+  async markAsUnattributable(scanId: string): Promise<void> {
+    const queue = await this.getQueue();
+    const index = queue.findIndex((scan) => scan.id === scanId);
+
+    if (index !== -1) {
+      queue[index].synced = true;
+      queue[index].retryCount = MAX_RETRIES;
+      queue[index].error = 'No shift attribution — cannot sync';
+      await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(queue));
+    }
+  },
+
   async getPendingScans(): Promise<QueuedScan[]> {
     const decrypted = await this.getDecryptedQueue();
     return decrypted.filter(
@@ -297,9 +329,10 @@ export const scanQueue = {
 
   async getFailedScans(): Promise<QueuedScan[]> {
     const decrypted = await this.getDecryptedQueue();
-    return decrypted.filter(
-      (scan) => scan.synced && scan.error === 'Max retries exceeded'
-    );
+    // synced=true with an error means "gave up", not "synced successfully" —
+    // covers both retry exhaustion and scans parked immediately (e.g. no
+    // shift attribution) without matching on a specific error string.
+    return decrypted.filter((scan) => scan.synced && !!scan.error);
   },
 
   async clearQueue(): Promise<void> {
@@ -338,6 +371,7 @@ async function bulkSyncScans(scans: QueuedScan[]): Promise<{
         scannedAt: s.scannedAt,
         status: 'SUCCESS',
         retryCount: s.retryCount,
+        ...(s.shiftLogId ? { shiftLogId: s.shiftLogId } : {}),
       })),
     }),
   });
@@ -387,7 +421,20 @@ export const syncManager = {
         return;
       }
 
-      const result = await bulkSyncScans(pendingScans);
+      // Scans queued before shift attribution existed (or captured with no
+      // active shift) can never pass the server's bulk-sync accountability
+      // check. Don't waste a retry cycle sending them.
+      const syncable = pendingScans.filter((scan) => !!scan.shiftLogId);
+      const unattributable = pendingScans.filter((scan) => !scan.shiftLogId);
+      for (const scan of unattributable) {
+        await scanQueue.markAsUnattributable(scan.id);
+      }
+
+      if (syncable.length === 0) {
+        return;
+      }
+
+      const result = await bulkSyncScans(syncable);
 
       // Mark successfully synced items
       for (const syncedId of result.synced) {

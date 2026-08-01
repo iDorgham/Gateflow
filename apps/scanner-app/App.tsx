@@ -35,6 +35,7 @@ import { DeviceUnlockScreen } from './src/components/DeviceUnlockScreen';
 import { OnboardingNavigator } from './src/navigators/onboarding-navigator';
 import { resolveRuntimeQrSecret } from './src/lib/security/qr-secret';
 import { hasCompletedOnboarding } from './src/lib/security/onboarding';
+import { useShiftSession } from './src/hooks/use-shift-session';
 import {
   loadSelectedGate,
   saveSelectedGate,
@@ -259,6 +260,9 @@ function Viewfinder({ processing }: { processing: boolean }) {
 
 export default function App() {
   const [appPhase, setAppPhase] = useState<AppPhase>('initializing');
+  const shift = useShiftSession({
+    enabled: appPhase !== 'login' && appPhase !== 'initializing',
+  });
   const [fontsLoaded] = useFonts({
     Cairo_400Regular,
     Cairo_600SemiBold,
@@ -292,6 +296,8 @@ export default function App() {
   const handleUnlocked = () => setAppPhase('scanner');
 
   const handleLogout = async () => {
+    const mayProceed = await shift.disposeForLogout();
+    if (!mayProceed) return;
     await logout();
     setAppPhase('login');
   };
@@ -346,7 +352,7 @@ export default function App() {
     );
   }
 
-  return <ScannerScreen onLogout={handleLogout} />;
+  return <ScannerScreen onLogout={handleLogout} shift={shift} />;
 }
 
 // ─── Login screen ─────────────────────────────────────────────────────────────
@@ -471,11 +477,27 @@ function LoginScreen({ onSuccess }: { onSuccess: () => void }) {
 
 // ─── Scanner screen ───────────────────────────────────────────────────────────
 
-function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
+function ScannerScreen({
+  onLogout,
+  shift,
+}: {
+  onLogout: () => Promise<void>;
+  shift: ReturnType<typeof useShiftSession>;
+}) {
   const [permission, requestPermission] = useCameraPermissions();
   const [locationPerm, requestLocationPerm] = useForegroundPermissions();
   const [ui, setUi] = useState<ScannerPhase>({ phase: 'scanning' });
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const {
+    session: shiftSession,
+    loading: shiftLoading,
+    busy: shiftBusy,
+    error: shiftError,
+    startShift,
+    endShift,
+    canScan,
+    clearLocalShift,
+  } = shift;
 
   // ── Gate state ────────────────────────────────────────────────────────────
   const [selectedGate, setSelectedGate] = useState<SelectedGate | null>(null);
@@ -539,9 +561,15 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
   // ── Logout ────────────────────────────────────────────────────────────────
 
   const handleLogout = async () => {
-    if (isLoggingOut) return;
+    if (isLoggingOut || shiftBusy) return;
     setIsLoggingOut(true);
-    await onLogout(); // navigates away — no need to reset flag
+    try {
+      await onLogout();
+    } finally {
+      // A blocked/failed logout leaves ScannerScreen mounted and must restore
+      // the control. Successful logout navigates away, making this harmless.
+      setIsLoggingOut(false);
+    }
   };
 
   // ── Gate selector ─────────────────────────────────────────────────────────
@@ -620,6 +648,18 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
       setShowGateSelector(true);
       return;
     }
+
+    // Require an active shift for the selected gate (Phase 03)
+    if (!canScan(selectedGate.id)) {
+      showResult({
+        status: 'rejected',
+        reason: 'no_active_shift',
+        message: 'Start a shift before scanning',
+        offline: false,
+      });
+      return;
+    }
+    const scanShiftLogId = shiftSession?.shiftLogId;
 
     setUi({ phase: 'processing' });
     __DEV__ &&
@@ -772,7 +812,8 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
       qrData,
       local.payload,
       location,
-      selectedGate.id
+      selectedGate.id,
+      scanShiftLogId
     );
     __DEV__ &&
       console.debug(
@@ -785,6 +826,9 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
       );
 
     if (result.status === 'rejected') {
+      if (result.reason === 'no_active_shift') {
+        await clearLocalShift(scanShiftLogId);
+      }
       lastRejectedResult.current = result;
       lastRejectedQRData.current = qrData;
       addHistoryEntry({
@@ -928,13 +972,15 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
 
       {activeTab === 'scanner' && (
         <>
-          {/* Live camera feed */}
+          {/* Keep the preview mounted while shift state hydrates; only scanning is gated. */}
           <CameraView
             style={StyleSheet.absoluteFill}
             facing="back"
             barcodeScannerSettings={{ barcodeTypes: ['qr'] }}
             onBarcodeScanned={
-              ui.phase === 'scanning' ? onBarcodeScanned : undefined
+              canScan(selectedGate?.id) && ui.phase === 'scanning'
+                ? onBarcodeScanned
+                : undefined
             }
           />
 
@@ -949,13 +995,15 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
               }
             />
             <Text style={styles.scannerHint}>
-              {selectedGate
-                ? `Gate: ${selectedGate.name}`
-                : 'Select a gate to begin scanning'}
+              {!selectedGate
+                ? 'Select a gate to begin scanning'
+                : !canScan(selectedGate.id)
+                  ? 'Start your shift to unlock scanning'
+                  : `Gate: ${selectedGate.name} · On duty`}
             </Text>
           </View>
 
-          {/* Top-left controls (gate + queue) */}
+          {/* Top-left controls (gate + queue + shift) */}
           <View style={styles.topBarLeft} pointerEvents="box-none">
             {/* Gate selector button */}
             <Pressable
@@ -967,6 +1015,31 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
               </Text>
             </Pressable>
 
+            {/* Shift start / end */}
+            <Pressable
+              style={styles.topBarBtn}
+              disabled={shiftLoading || shiftBusy}
+              onPress={() => {
+                if (!selectedGate) {
+                  setShowGateSelector(true);
+                  return;
+                }
+                if (canScan(selectedGate.id)) {
+                  void endShift();
+                  return;
+                }
+                void startShift(selectedGate.id, selectedGate.name);
+              }}
+            >
+              <Text style={styles.topBarBtnText} numberOfLines={1}>
+                {shiftLoading || shiftBusy
+                  ? '…'
+                  : canScan(selectedGate?.id)
+                    ? '■ End shift'
+                    : '▶ Start shift'}
+              </Text>
+            </Pressable>
+
             {/* Queue status button */}
             <Pressable
               style={styles.topBarBtn}
@@ -974,6 +1047,12 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
             >
               <Text style={styles.topBarBtnText}>⇅ Queue</Text>
             </Pressable>
+
+            {shiftError ? (
+              <View style={styles.shiftErrorBanner} pointerEvents="none">
+                <Text style={styles.shiftErrorText}>{shiftError}</Text>
+              </View>
+            ) : null}
           </View>
 
           {/* Top-right: Sign-out */}
@@ -981,7 +1060,7 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
             <Pressable
               style={styles.logoutButton}
               onPress={handleLogout}
-              disabled={isLoggingOut}
+              disabled={isLoggingOut || shiftBusy}
             >
               {isLoggingOut ? (
                 <ActivityIndicator
@@ -1030,7 +1109,9 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
               result={ui.result}
               onScanAgain={handleScanAgain}
               onRequestOverride={
-                ui.result.status === 'rejected' && !ui.result.offline
+                ui.result.status === 'rejected' &&
+                !ui.result.offline &&
+                ui.result.reason !== 'no_active_shift'
                   ? handleRequestOverride
                   : undefined
               }
@@ -1664,6 +1745,21 @@ const styles = StyleSheet.create({
     fontFamily: 'Cairo_600SemiBold',
     textTransform: 'uppercase',
     letterSpacing: 1,
+  },
+  shiftErrorBanner: {
+    backgroundColor: nativeTokens.colors.background,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: nativeTokens.colors.danger,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    maxWidth: 240,
+  },
+  shiftErrorText: {
+    color: nativeTokens.colors.danger,
+    fontSize: 12,
+    fontFamily: 'Cairo_600SemiBold',
+    textAlign: 'center',
   },
   logoutButton: {
     backgroundColor: nativeTokens.colors.background,

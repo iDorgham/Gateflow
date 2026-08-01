@@ -49,7 +49,7 @@ BACKEND-API
 2. Validate the incoming "Gate Permission QR" matches the guard's Site/Org.
 3. Build the `/api/scanner/shift/clock-out` endpoint.
 4. Implement `apps/scanner-app/src/hooks/use-shift-session.ts` (storage).
-5. Add `ShiftId` verification to the scan logic: block submission if the
+5. Add shift verification to the scan logic: block submission if the
    current session doesn't have an active shift.
 6. Run `pnpm turbo lint --filter=scanner-app`
 7. Run `pnpm turbo typecheck --filter=scanner-app`
@@ -64,3 +64,5 @@ BACKEND-API
 - [ ] All tests pass (`pnpm turbo test --filter=scanner-app/db`)
 - [ ] Build green (`pnpm turbo build --filter=scanner-app`)
 - [ ] 100% IDOR protection: shift queries must maintain org context.
+
+<!-- Implementation status / alias mapping: see phase_logs/PHASE_LOG_phase_03.md (do not edit criteria during execution). -->

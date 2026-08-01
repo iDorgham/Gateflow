@@ -36,17 +36,19 @@ export interface ScanResult {
  *
  * @param gateId Optional gate ID from the gate selector; used in scanContext
  *               and as the queue gateId for offline syncing.
+ * @param shiftLogId Optional active ShiftLog id for accountable scan linkage.
  */
 export async function validateOnServer(
   qrPayload: string,
   localPayload: QRPayload,
   location?: LocationContext,
-  gateId?: string
+  gateId?: string,
+  shiftLogId?: string
 ): Promise<ScanResult> {
   const token = await getValidAccessToken();
 
   if (!token) {
-    await enqueueOfflineScan(qrPayload, localPayload, gateId);
+    await enqueueOfflineScan(qrPayload, localPayload, gateId, shiftLogId);
     await haptic(Haptics.NotificationFeedbackType.Warning);
     return {
       status: 'accepted',
@@ -76,6 +78,7 @@ export async function validateOnServer(
               }
             : {}),
           ...(gateId ? { gateId } : {}),
+          ...(shiftLogId ? { shiftLogId } : {}),
         },
       }),
     });
@@ -83,7 +86,7 @@ export async function validateOnServer(
     if (!response.ok) {
       // 5xx → true server error; queue for later retry
       if (response.status >= 500) {
-        await enqueueOfflineScan(qrPayload, localPayload, gateId);
+        await enqueueOfflineScan(qrPayload, localPayload, gateId, shiftLogId);
         await haptic(Haptics.NotificationFeedbackType.Warning);
         return {
           status: 'accepted',
@@ -140,7 +143,7 @@ export async function validateOnServer(
     };
   } catch {
     // Network-level failure (no connection, DNS failure, timeout)
-    await enqueueOfflineScan(qrPayload, localPayload, gateId);
+    await enqueueOfflineScan(qrPayload, localPayload, gateId, shiftLogId);
     await haptic(Haptics.NotificationFeedbackType.Warning);
     return {
       status: 'accepted',
@@ -237,11 +240,17 @@ export async function createMaintenanceRequest(params: {
 async function enqueueOfflineScan(
   qrPayload: string,
   localPayload: QRPayload,
-  gateId?: string
+  gateId?: string,
+  shiftLogId?: string
 ): Promise<void> {
   try {
     // Use the selected gateId when available; fall back to organizationId
-    await scanQueue.addScan(qrPayload, gateId ?? localPayload.organizationId);
+    const resolvedGateId = gateId ?? localPayload.organizationId;
+    if (shiftLogId) {
+      await scanQueue.addScan(qrPayload, resolvedGateId, shiftLogId);
+    } else {
+      await scanQueue.addScan(qrPayload, resolvedGateId);
+    }
   } catch {
     // Queue throws if the user is not authenticated — silently ignore.
   }
@@ -279,6 +288,7 @@ function serverReasonMessage(reason: string): string {
     not_on_location:
       'Scanning is only allowed at the gate location. Enable device location or move closer to the gate.',
     blocked_watchlist: 'Blocked person on security list.',
+    no_active_shift: 'Start a shift before scanning',
   };
   return map[reason] ?? 'Access denied';
 }

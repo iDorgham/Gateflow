@@ -15,6 +15,8 @@ export const ScanEventSchema = z.object({
   visitorName: z.string().max(200).optional(),
   visitorPhone: z.string().max(50).optional(),
   visitorIdNumber: z.string().max(100).optional(),
+  /** Active ShiftLog id when the scan was queued (accountable offline sync). */
+  shiftLogId: z.string().min(1).optional(),
 });
 
 export type ScanEvent = z.infer<typeof ScanEventSchema>;
@@ -27,6 +29,8 @@ export const QueuedScanSchema = z.object({
   scannedAt: z.string().datetime(),
   synced: z.boolean(),
   retryCount: z.number().int().min(0),
+  /** Active ShiftLog id captured when this offline scan was queued. */
+  shiftLogId: z.string().min(1).optional(),
 });
 
 export type QueuedScan = z.infer<typeof QueuedScanSchema>;
@@ -41,10 +45,12 @@ export type SyncPayload = z.infer<typeof SyncPayloadSchema>;
 
 export const SyncResponseSchema = z.object({
   synced: z.array(z.string()),
-  failed: z.array(z.object({
-    id: z.string(),
-    error: z.string(),
-  })),
+  failed: z.array(
+    z.object({
+      id: z.string(),
+      error: z.string(),
+    })
+  ),
 });
 
 export type SyncResponse = z.infer<typeof SyncResponseSchema>;
@@ -67,14 +73,18 @@ export type AuditTrailEntry = z.infer<typeof AuditTrailEntrySchema>;
 export const BulkScanResponseSchema = z.object({
   success: z.boolean(),
   synced: z.array(z.string()),
-  conflicted: z.array(z.object({
-    id: z.string(),
-    reason: z.string(),
-  })),
-  failed: z.array(z.object({
-    id: z.string(),
-    error: z.string(),
-  })),
+  conflicted: z.array(
+    z.object({
+      id: z.string(),
+      reason: z.string(),
+    })
+  ),
+  failed: z.array(
+    z.object({
+      id: z.string(),
+      error: z.string(),
+    })
+  ),
 });
 
 export type BulkScanResponse = z.infer<typeof BulkScanResponseSchema>;

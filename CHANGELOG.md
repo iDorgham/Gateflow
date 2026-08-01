@@ -36,6 +36,19 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Apps
 
+- **[Scanner]** harden shift accountability against code-review findings
+
+- **[Scanner]** resolve shift typecheck errors blocking push
+- **[Scanner]** harden shift accountability and logout races
+- **[Scanner]** omit undefined shiftLogId on offline enqueue
+- **[Scanner]** resolve Phase 03 shift typecheck and end-body parsing
+
+- **[Client-Dashboard]** fix shift/end body parsing under Jest after CodeRabbit autofix
+
+- **[Scanner]** harden Phase 03 shift concurrency and offline linkage
+
+- **[Scanner]** Phase 03 shift start/end and scan gate
+
 - **[Scanner]** Phase 01 device unlock and QR fail-closed
 
 ---

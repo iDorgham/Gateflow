@@ -32,13 +32,13 @@
 
 ## Phase 3: Shift Management System
 
-- [ ] API: `POST /api/scanner/shift/start` (org + gate scoped; auth required)
-- [ ] API: `POST /api/scanner/shift/end`
-- [ ] Hook: `useShiftSession` (persisted local state)
-- [ ] Logic: block camera scan path if shift not active
-- [ ] Link scans to active `ShiftLog` id where API allows
-- [ ] Tests: API org isolation + client block behavior
-- [ ] `phase_logs/PHASE_LOG_phase_03.md` updated
+- [x] API: `POST /api/scanner/shift/start` (org + gate scoped; auth required)
+- [x] API: `POST /api/scanner/shift/end`
+- [x] Hook: `useShiftSession` (persisted local state)
+- [x] Logic: block camera scan path if shift not active
+- [x] Link scans to active `ShiftLog` id where API allows
+- [x] Tests: API org isolation + client block behavior
+- [x] `phase_logs/PHASE_LOG_phase_03.md` updated
 
 ## Phase 4: Master Scan Home Screen
 

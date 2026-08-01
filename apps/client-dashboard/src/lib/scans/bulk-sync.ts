@@ -7,7 +7,13 @@ export interface ScanInput {
   scanUuid?: string | null;
   qrCode: string;
   scannedAt: string;
-  status: 'SUCCESS' | 'FAILED' | 'EXPIRED' | 'MAX_USES_REACHED' | 'INACTIVE' | 'DENIED'; // ScanStatus
+  status:
+    | 'SUCCESS'
+    | 'FAILED'
+    | 'EXPIRED'
+    | 'MAX_USES_REACHED'
+    | 'INACTIVE'
+    | 'DENIED'; // ScanStatus
   gateId: string;
   deviceId?: string | null;
   // Optional fields from ScanEvent (passed through from validated bulk payload)
@@ -17,6 +23,12 @@ export interface ScanInput {
   visitorName?: string | null;
   visitorPhone?: string | null;
   visitorIdNumber?: string | null;
+  shiftLogId?: string | null;
+}
+
+export interface BulkSyncContext {
+  organizationId: string;
+  guardId: string;
 }
 
 export interface ConflictResult {
@@ -29,6 +41,10 @@ export interface SyncResult {
   conflicted: ConflictResult[];
   failed: Array<{ id: string; error: string }>;
 }
+
+// Scanner timestamps come from device clocks. This tolerance applies only
+// while a shift is open; closed shifts retain their exact historical endTime.
+const OPEN_SHIFT_CLOCK_SKEW_MS = 5 * 60 * 1000;
 
 function makeAuditEntry(
   action: string,
@@ -43,40 +59,135 @@ function makeAuditEntry(
   };
 }
 
+function shiftDetail(shiftLogId: string | null | undefined): {
+  shiftLogId?: string;
+} {
+  return shiftLogId ? { shiftLogId } : {};
+}
+
+/**
+ * Verify client-supplied shiftLogId is a real ShiftLog for this org/guard/gate
+ * and that scannedAt falls within the shift window. Open shifts allow a small
+ * device-clock skew beyond the server's current time.
+ */
+async function resolveVerifiedShiftLogId(
+  scan: ScanInput,
+  context: BulkSyncContext | undefined,
+  shiftCache: Map<string, { startTime: Date; endTime: Date | null } | null>
+): Promise<
+  { ok: true; shiftLogId: string | null } | { ok: false; error: string }
+> {
+  if (!scan.shiftLogId) {
+    return context
+      ? { ok: false, error: 'shiftLogId is required for bulk sync' }
+      : { ok: true, shiftLogId: null };
+  }
+
+  if (!context) {
+    return {
+      ok: false,
+      error:
+        'Authenticated organization context is required for shift attribution',
+    };
+  }
+
+  const cacheKey = `${scan.shiftLogId}:${scan.gateId}`;
+  const shift = shiftCache.get(cacheKey);
+  if (!shift) {
+    return {
+      ok: false,
+      error: 'Invalid or unauthorized shiftLogId for this gate',
+    };
+  }
+
+  const scannedAtMs = new Date(scan.scannedAt).getTime();
+  if (Number.isNaN(scannedAtMs)) {
+    return { ok: false, error: 'Invalid scannedAt for shift attribution' };
+  }
+  if (scannedAtMs < shift.startTime.getTime()) {
+    return {
+      ok: false,
+      error: 'Scan time is before the referenced shift start',
+    };
+  }
+  const endBound =
+    shift.endTime?.getTime() ?? Date.now() + OPEN_SHIFT_CLOCK_SKEW_MS;
+  if (scannedAtMs > endBound) {
+    return {
+      ok: false,
+      error: 'Scan time is after the referenced shift ended',
+    };
+  }
+
+  return { ok: true, shiftLogId: scan.shiftLogId };
+}
+
 export async function processBulkScans(
   scans: ScanInput[],
-  tx: Prisma.TransactionClient | PrismaClient
+  tx: Prisma.TransactionClient | PrismaClient,
+  context?: BulkSyncContext
 ): Promise<SyncResult> {
   const synced: string[] = [];
   const conflicted: ConflictResult[] = [];
   const failed: Array<{ id: string; error: string }> = [];
+  const shiftCache = new Map<
+    string,
+    { startTime: Date; endTime: Date | null } | null
+  >();
 
   // 1. Extract IDs for bulk fetching
   const scanUuids = scans
     .map((s) => s.scanUuid)
     .filter((uuid): uuid is string => !!uuid);
   const qrCodes = Array.from(new Set(scans.map((s) => s.qrCode)));
+  const shiftLogIds = Array.from(
+    new Set(scans.map((s) => s.shiftLogId).filter((id): id is string => !!id))
+  );
 
   // 2. Bulk Fetch Data
-  const [existingByUuid, qrCodesWithLatest] = await Promise.all([
-    scanUuids.length > 0
-      ? tx.scanLog.findMany({
-          where: { scanUuid: { in: scanUuids } },
-          select: { id: true, scanUuid: true },
-        })
-      : Promise.resolve([]),
-    qrCodes.length > 0
-      ? tx.qRCode.findMany({
-          where: { code: { in: qrCodes } },
-          include: {
-            scanLogs: {
-              orderBy: { scannedAt: 'desc' },
-              take: 1,
+  const [existingByUuid, qrCodesWithLatest, verifiedShifts] = await Promise.all(
+    [
+      scanUuids.length > 0
+        ? tx.scanLog.findMany({
+            where: { scanUuid: { in: scanUuids } },
+            select: { id: true, scanUuid: true },
+          })
+        : Promise.resolve([]),
+      qrCodes.length > 0
+        ? tx.qRCode.findMany({
+            where: { code: { in: qrCodes } },
+            include: {
+              scanLogs: {
+                orderBy: { scannedAt: 'desc' },
+                take: 1,
+              },
             },
-          },
-        })
-      : Promise.resolve([]),
-  ]);
+          })
+        : Promise.resolve([]),
+      context && shiftLogIds.length > 0
+        ? tx.shiftLog.findMany({
+            where: {
+              id: { in: shiftLogIds },
+              organizationId: context.organizationId,
+              guardId: context.guardId,
+            },
+            select: {
+              id: true,
+              gateId: true,
+              startTime: true,
+              endTime: true,
+            },
+          })
+        : Promise.resolve([]),
+    ]
+  );
+
+  for (const shift of verifiedShifts) {
+    shiftCache.set(`${shift.id}:${shift.gateId}`, {
+      startTime: shift.startTime,
+      endTime: shift.endTime,
+    });
+  }
 
   // 3. Build Lookup Maps
   const existingUuidSet = new Set(existingByUuid.map((s) => s.scanUuid));
@@ -89,6 +200,7 @@ export async function processBulkScans(
       id?: string; // Only if exists in DB
       scannedAt: Date;
       auditTrail: AuditTrailEntry[];
+      shiftLogId?: string | null;
     } | null;
 
     // Pending operations
@@ -117,9 +229,23 @@ export async function processBulkScans(
 
   // 4. Process Scans Sequentially
   for (const scan of scans) {
+    const shiftResolved = await resolveVerifiedShiftLogId(
+      scan,
+      context,
+      shiftCache
+    );
+    if (shiftResolved.ok === false) {
+      failed.push({ id: scan.id, error: shiftResolved.error });
+      continue;
+    }
+    const verifiedShiftLogId = shiftResolved.shiftLogId;
+
     // A. Check for exact duplicate by scanUuid (idempotency guard)
     if (scan.scanUuid) {
-      if (existingUuidSet.has(scan.scanUuid) || processedBatchUuids.has(scan.scanUuid)) {
+      if (
+        existingUuidSet.has(scan.scanUuid) ||
+        processedBatchUuids.has(scan.scanUuid)
+      ) {
         synced.push(scan.id);
         continue;
       }
@@ -152,45 +278,48 @@ export async function processBulkScans(
           existingScannedAt: existingScan.scannedAt.toISOString(),
           incomingScannedAt: scan.scannedAt,
           incomingScanUuid: scan.scanUuid,
+          ...shiftDetail(verifiedShiftLogId),
         });
 
         const newAuditTrailEntries: AuditTrailEntry[] = [
           ...existingScan.auditTrail,
           auditEntry,
         ];
-        const newAuditTrailJson = newAuditTrailEntries as unknown as Prisma.JsonArray;
+        const newAuditTrailJson =
+          newAuditTrailEntries as unknown as Prisma.JsonArray;
 
         // Update In-Memory State
         state.latestScan = {
           id: existingScan.id, // Preserve ID if it was from DB
           scannedAt: new Date(scan.scannedAt),
           auditTrail: newAuditTrailEntries,
+          shiftLogId: verifiedShiftLogId,
         };
 
         // Prepare Operation
         if (state.pendingCreate) {
-           // We are updating a pending creation from this batch
-           state.pendingCreate = {
-             ...state.pendingCreate,
-             scannedAt: new Date(scan.scannedAt),
-             status: scan.status,
-             scanUuid: scan.scanUuid ?? undefined,
-             deviceId: scan.deviceId ?? null,
-             auditTrail: newAuditTrailJson,
-           };
+          // We are updating a pending creation from this batch
+          state.pendingCreate = {
+            ...state.pendingCreate,
+            scannedAt: new Date(scan.scannedAt),
+            status: scan.status,
+            scanUuid: scan.scanUuid ?? undefined,
+            deviceId: scan.deviceId ?? null,
+            auditTrail: newAuditTrailJson,
+          };
         } else if (existingScan.id) {
-           // We are updating an existing DB record
-           state.pendingUpdate = {
-             id: existingScan.id,
-             data: {
-               scannedAt: new Date(scan.scannedAt),
-               status: scan.status,
-               scanUuid: scan.scanUuid ?? undefined,
-               deviceId: scan.deviceId ?? null,
-               auditTrail: newAuditTrailJson,
-               auditNotes: null,
-             }
-           };
+          // We are updating an existing DB record
+          state.pendingUpdate = {
+            id: existingScan.id,
+            data: {
+              scannedAt: new Date(scan.scannedAt),
+              status: scan.status,
+              scanUuid: scan.scanUuid ?? undefined,
+              deviceId: scan.deviceId ?? null,
+              auditTrail: newAuditTrailJson,
+              auditNotes: null,
+            },
+          };
         }
 
         synced.push(scan.id);
@@ -209,13 +338,15 @@ export async function processBulkScans(
           existingScannedAt: existingScan.scannedAt.toISOString(),
           incomingScannedAt: scan.scannedAt,
           incomingScanUuid: scan.scanUuid,
+          ...shiftDetail(verifiedShiftLogId),
         });
 
         const newAuditTrailEntries: AuditTrailEntry[] = [
           ...existingScan.auditTrail,
           auditEntry,
         ];
-        const newAuditTrailJson = newAuditTrailEntries as unknown as Prisma.JsonArray;
+        const newAuditTrailJson =
+          newAuditTrailEntries as unknown as Prisma.JsonArray;
 
         // Update In-Memory Audit Trail Only
         state.latestScan = {
@@ -237,7 +368,7 @@ export async function processBulkScans(
               id: existingScan.id,
               data: {
                 auditTrail: newAuditTrailJson,
-              }
+              },
             };
           }
         }
@@ -246,7 +377,7 @@ export async function processBulkScans(
           id: scan.id,
           reason:
             incomingTime === existingTime
-              ? 'Equal timestamp - server authoritative, kept existing'
+              ? 'equal timestamp - server authoritative, kept existing'
               : 'LWW resolved - existing record newer',
         });
       }
@@ -256,6 +387,7 @@ export async function processBulkScans(
         strategy: 'new_record',
         scanUuid: scan.scanUuid,
         deviceId: scan.deviceId ?? null,
+        ...shiftDetail(verifiedShiftLogId),
       });
 
       const auditTrailEntries: AuditTrailEntry[] = [auditEntry];
@@ -265,6 +397,7 @@ export async function processBulkScans(
       state.latestScan = {
         scannedAt: new Date(scan.scannedAt),
         auditTrail: auditTrailEntries,
+        shiftLogId: verifiedShiftLogId,
       };
 
       state.pendingCreate = {
@@ -288,11 +421,13 @@ export async function processBulkScans(
 
   const updates = Array.from(qrStateMap.values())
     .filter((s) => !!s.pendingUpdate && !s.pendingCreate)
-    .map((s) => s.pendingUpdate as { id: string; data: Prisma.ScanLogUpdateInput });
-    // Note: If pendingCreate exists, it supersedes pendingUpdate (because it means we created it in this batch)
-    // Wait, if pendingCreate exists, we don't have an ID yet, so we can't have pendingUpdate for it?
-    // Correct. Logic above: if state.pendingCreate, we update state.pendingCreate.
-    // So filter is redundant but safe.
+    .map(
+      (s) => s.pendingUpdate as { id: string; data: Prisma.ScanLogUpdateInput }
+    );
+  // Note: If pendingCreate exists, it supersedes pendingUpdate (because it means we created it in this batch)
+  // Wait, if pendingCreate exists, we don't have an ID yet, so we can't have pendingUpdate for it?
+  // Correct. Logic above: if state.pendingCreate, we update state.pendingCreate.
+  // So filter is redundant but safe.
 
   if (creates.length > 0) {
     await tx.scanLog.createMany({ data: creates });
