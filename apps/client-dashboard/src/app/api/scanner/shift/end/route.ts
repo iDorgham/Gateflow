@@ -50,7 +50,11 @@ async function readEndBody(
   }
 
   try {
-    return { ok: true, body: await request.json() };
+    const text = await request.text();
+    if (!text || !text.trim()) {
+      return { ok: true, body: {} };
+    }
+    return { ok: true, body: JSON.parse(text) };
   } catch {
     return {
       ok: false,
@@ -94,43 +98,51 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   const organizationId = claims.orgId;
   const guardId = claims.sub;
 
-  let shiftLogId = parsed.data.shiftLogId;
-  if (!shiftLogId) {
-    const open = await findOpenShiftForGuard({ organizationId, guardId });
-    if (!open) {
+  try {
+    let shiftLogId = parsed.data.shiftLogId;
+    if (!shiftLogId) {
+      const open = await findOpenShiftForGuard({ organizationId, guardId });
+      if (!open) {
+        return NextResponse.json(
+          { success: false, message: 'No active shift to end' },
+          { status: 404 }
+        );
+      }
+      shiftLogId = open.id;
+    }
+
+    const closed = await closeShift({
+      organizationId,
+      guardId,
+      shiftLogId,
+    });
+
+    if (!closed) {
       return NextResponse.json(
-        { success: false, message: 'No active shift to end' },
+        {
+          success: false,
+          message: 'Shift not found, already ended, or not owned by you',
+        },
         { status: 404 }
       );
     }
-    shiftLogId = open.id;
-  }
 
-  const closed = await closeShift({
-    organizationId,
-    guardId,
-    shiftLogId,
-  });
-
-  if (!closed) {
-    return NextResponse.json(
-      {
-        success: false,
-        message: 'Shift not found, already ended, or not owned by you',
+    return NextResponse.json({
+      success: true,
+      data: {
+        id: closed.id,
+        gateId: closed.gateId,
+        guardId: closed.guardId,
+        organizationId: closed.organizationId,
+        startTime: closed.startTime.toISOString(),
+        endTime: closed.endTime?.toISOString() ?? null,
       },
-      { status: 404 }
+    });
+  } catch (error) {
+    console.error('[scanner/shift/end] Failed to end shift:', error);
+    return NextResponse.json(
+      { success: false, message: 'Could not end shift — please retry' },
+      { status: 503 }
     );
   }
-
-  return NextResponse.json({
-    success: true,
-    data: {
-      id: closed.id,
-      gateId: closed.gateId,
-      guardId: closed.guardId,
-      organizationId: closed.organizationId,
-      startTime: closed.startTime.toISOString(),
-      endTime: closed.endTime?.toISOString() ?? null,
-    },
-  });
 }

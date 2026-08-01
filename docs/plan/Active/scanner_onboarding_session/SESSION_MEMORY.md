@@ -7,7 +7,7 @@
 - Plan path: `docs/plan/Active/scanner_onboarding_session/`
 - Branch: `feat/scanner-phase-03-shift` (new branch after PR #204 merged)
 - Last phase completed: **03 — Shift management**
-- Exact next action: `/github` (new draft PR) then `/dev` Phase 04
+- Exact next action: `/github` to push review fixes onto draft PR #205 then `/dev` Phase 04
 - Do not `/certify` until Phase 05 device evidence lands
 
 ## Durable decisions

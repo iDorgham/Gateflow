@@ -3,6 +3,7 @@ import type { ShiftSession } from './shift-session';
 
 const API_BASE_URL =
   process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:3001/api';
+const SHIFT_REQUEST_TIMEOUT = 15_000;
 
 type ShiftApiData = {
   id: string;
@@ -12,6 +13,33 @@ type ShiftApiData = {
   endTime: string | null;
   gateName?: string;
 };
+
+/**
+ * POST helper with bounded timeout and abort handling.
+ */
+async function postJson(
+  endpoint: string,
+  token: string,
+  payload: Record<string, unknown>
+): Promise<Response> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), SHIFT_REQUEST_TIMEOUT);
+
+  try {
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
+      signal: controller.signal,
+    });
+    return response;
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
 
 export async function startShiftOnServer(params: {
   gateId: string;
@@ -25,13 +53,8 @@ export async function startShiftOnServer(params: {
   }
 
   try {
-    const response = await fetch(`${API_BASE_URL}/scanner/shift/start`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ gateId: params.gateId }),
+    const response = await postJson('/scanner/shift/start', token, {
+      gateId: params.gateId,
     });
 
     const body = (await response.json().catch(() => ({}))) as {
@@ -71,14 +94,11 @@ export async function endShiftOnServer(
   }
 
   try {
-    const response = await fetch(`${API_BASE_URL}/scanner/shift/end`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(shiftLogId ? { shiftLogId } : {}),
-    });
+    const response = await postJson(
+      '/scanner/shift/end',
+      token,
+      shiftLogId ? { shiftLogId } : {}
+    );
 
     const body = (await response.json().catch(() => ({}))) as {
       success?: boolean;

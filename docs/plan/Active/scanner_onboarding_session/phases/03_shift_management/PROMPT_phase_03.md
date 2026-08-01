@@ -58,9 +58,9 @@ BACKEND-API
 
 ## Acceptance criteria
 
-- [x] Successful clock-in creates a `ShiftLog` record. (`POST /api/scanner/shift/start`)
-- [x] Scan logs are associated with the active `ShiftId` when submitted. (`auditTrail.shiftLogId`)
-- [x] Guards cannot scan without an active shift. (client + validate `no_active_shift`)
-- [x] All tests pass (`scanner-app` 89; shift+validate API 35)
-- [ ] Build green (`pnpm turbo build --filter=scanner-app`) — deferred to `/github` preflight
-- [x] 100% IDOR protection: shift queries must maintain org context.
+- [ ] Successful clock-in creates a `ShiftLog` record.
+- [ ] Scan logs are associated with the active `ShiftId` when submitted.
+- [ ] Guards cannot scan without an active shift.
+- [ ] All tests pass (`pnpm turbo test --filter=scanner-app/db`)
+- [ ] Build green (`pnpm turbo build --filter=scanner-app`)
+- [ ] 100% IDOR protection: shift queries must maintain org context.
