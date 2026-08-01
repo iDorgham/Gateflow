@@ -36,6 +36,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Apps
 
+- **[Scanner]** BiometricGuard inactivity lock, motion polish, error boundaries
+
 - **[Scanner]** high-density home dashboard with ADS-compliant master scan action
 
 - **[Scanner]** harden shift accountability against code-review findings
