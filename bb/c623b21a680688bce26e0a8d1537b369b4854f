@@ -1,0 +1,33 @@
+apps/client-dashboard/src/app/api/scanner/shift/end/route.ts
+  s_55e4dcfab374c2::t_4232dd7ce76f12 32-38,41-42,44-62
+  s_55e4dcfab374c2::t_0625b26dd65d03 77-78
+  s_55e4dcfab374c2::t_c243c4f6a9ba94 21-31,39-40,43
+  s_55e4dcfab374c2::t_40518b0f8eab49 63-64,79,82
+apps/client-dashboard/src/app/api/scanner/shift/end/route.test.ts
+  s_55e4dcfab374c2::t_936fa1054e3147 33,38
+  s_55e4dcfab374c2::t_72c25bbe82a747 23,27,30-32,34-36,41-48,69,130
+  s_55e4dcfab374c2::t_f69fabd9f7985b 37,39-40
+apps/client-dashboard/src/app/api/qrcodes/validate/route.test.ts
+  s_55e4dcfab374c2::t_8388238a40fc61 248-250
+  s_55e4dcfab374c2::t_30b7fc9b75c5bd 558-567
+apps/client-dashboard/src/lib/scanner-shift.ts
+  s_55e4dcfab374c2::t_4efc1494e6963b 18-23,35-39,102-110
+apps/client-dashboard/src/app/api/qrcodes/validate/route.ts
+  s_55e4dcfab374c2::t_40926ff3938a52 522-523,527,529-530
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.19",
+  "base_commit_sha": "bbc623b21a680688bce26e0a8d1537b369b4854f",
+  "prompts": {},
+  "sessions": {
+    "s_55e4dcfab374c2": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "9eb763a1-f03d-4c6d-b6cf-d1a99923376f",
+        "model": "grok-4.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
