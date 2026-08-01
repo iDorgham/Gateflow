@@ -7,6 +7,53 @@ const API_BASE_URL =
 /** Bounded wait so shift start/end cannot leave UI `busy` stuck forever. */
 const SHIFT_FETCH_TIMEOUT_MS = 15_000;
 
+type TokenResult =
+  | { ok: true; token: string }
+  | {
+      ok: false;
+      message: string;
+      status?: number;
+      retryable: boolean;
+      authFailure: boolean;
+    };
+
+async function getTokenWithTimeout(): Promise<TokenResult> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  try {
+    const token = await Promise.race([
+      getValidAccessToken(),
+      new Promise<never>((_, reject) => {
+        timer = setTimeout(
+          () => reject(new Error('Token acquisition timed out')),
+          SHIFT_FETCH_TIMEOUT_MS
+        );
+      }),
+    ]);
+    if (!token) {
+      return {
+        ok: false,
+        message: 'Not signed in',
+        status: 401,
+        retryable: false,
+        authFailure: true,
+      };
+    }
+    return { ok: true, token };
+  } catch (error) {
+    return {
+      ok: false,
+      message:
+        error instanceof Error && /timed out/i.test(error.message)
+          ? 'Authentication timed out — check connection and retry'
+          : 'Could not access authentication credentials',
+      retryable: true,
+      authFailure: false,
+    };
+  } finally {
+    if (timer) clearTimeout(timer);
+  }
+}
+
 type ShiftApiData = {
   id: string;
   gateId: string;
@@ -16,16 +63,24 @@ type ShiftApiData = {
   gateName?: string;
 };
 
+type ShiftApiFailure = {
+  ok: false;
+  message: string;
+  status?: number;
+  retryable: boolean;
+  authFailure: boolean;
+};
+
 export type EndShiftResult =
   | { ok: true }
-  | {
-      ok: false;
-      message: string;
+  | (ShiftApiFailure & {
       /** HTTP status when a response was received */
       status?: number;
-      /** True for network/5xx/timeout — local clear should leave a pending-end tombstone */
+      /** True for network/408/429/5xx/timeout — leave a pending-end tombstone */
       retryable: boolean;
-    };
+      /** Credentials are absent or the server rejected them. */
+      authFailure: boolean;
+    });
 
 async function fetchJsonWithTimeout<T>(
   url: string,
@@ -45,13 +100,12 @@ async function fetchJsonWithTimeout<T>(
 export async function startShiftOnServer(params: {
   gateId: string;
   gateName?: string;
-}): Promise<
-  { ok: true; session: ShiftSession } | { ok: false; message: string }
-> {
-  const token = await getValidAccessToken();
-  if (!token) {
-    return { ok: false, message: 'Not signed in' };
+}): Promise<{ ok: true; session: ShiftSession } | ShiftApiFailure> {
+  const tokenResult = await getTokenWithTimeout();
+  if (!tokenResult.ok) {
+    return tokenResult;
   }
+  const token = tokenResult.token;
 
   try {
     const { response, body } = await fetchJsonWithTimeout<{
@@ -71,6 +125,12 @@ export async function startShiftOnServer(params: {
       return {
         ok: false,
         message: body.message ?? `Could not start shift (${response.status})`,
+        status: response.status,
+        retryable:
+          response.status === 408 ||
+          response.status === 429 ||
+          response.status >= 500,
+        authFailure: response.status === 401 || response.status === 403,
       };
     }
 
@@ -93,6 +153,8 @@ export async function startShiftOnServer(params: {
       message: aborted
         ? 'Start shift timed out — check connection and retry'
         : 'Network error — could not start shift',
+      retryable: true,
+      authFailure: false,
     };
   }
 }
@@ -100,10 +162,11 @@ export async function startShiftOnServer(params: {
 export async function endShiftOnServer(
   shiftLogId?: string
 ): Promise<EndShiftResult> {
-  const token = await getValidAccessToken();
-  if (!token) {
-    return { ok: false, message: 'Not signed in', retryable: true };
+  const tokenResult = await getTokenWithTimeout();
+  if (!tokenResult.ok) {
+    return tokenResult;
   }
+  const token = tokenResult.token;
 
   try {
     const { response, body } = await fetchJsonWithTimeout<{
@@ -119,13 +182,19 @@ export async function endShiftOnServer(
     });
 
     if (!response.ok || !body.success) {
-      // 404 = already ended / not found — safe to clear local session.
-      const alreadyEnded = response.status === 404;
+      // Retry only failures that can reasonably recover without changing the request.
+      // Other 4xx responses (including revoked permission and validation failures)
+      // are permanent and must not be replayed on every hydration.
+      const retryable =
+        response.status === 408 ||
+        response.status === 429 ||
+        response.status >= 500;
       return {
         ok: false,
         message: body.message ?? `Could not end shift (${response.status})`,
         status: response.status,
-        retryable: !alreadyEnded,
+        retryable,
+        authFailure: response.status === 401 || response.status === 403,
       };
     }
 
@@ -140,6 +209,7 @@ export async function endShiftOnServer(
         ? 'End shift timed out — will retry when online'
         : 'Network error — could not end shift',
       retryable: true,
+      authFailure: false,
     };
   }
 }
@@ -153,12 +223,13 @@ export async function fetchActiveShiftOnServer(
 ): Promise<
   | { ok: true; active: true; session: ShiftSession }
   | { ok: true; active: false }
-  | { ok: false; message: string }
+  | ShiftApiFailure
 > {
-  const token = await getValidAccessToken();
-  if (!token) {
-    return { ok: false, message: 'Not signed in' };
+  const tokenResult = await getTokenWithTimeout();
+  if (!tokenResult.ok) {
+    return tokenResult;
   }
+  const token = tokenResult.token;
 
   try {
     const url = `${API_BASE_URL}/scanner/shift/active?gateId=${encodeURIComponent(gateId)}`;
@@ -179,6 +250,12 @@ export async function fetchActiveShiftOnServer(
       return {
         ok: false,
         message: body.message ?? `Could not verify shift (${response.status})`,
+        status: response.status,
+        retryable:
+          response.status === 408 ||
+          response.status === 429 ||
+          response.status >= 500,
+        authFailure: response.status === 401 || response.status === 403,
       };
     }
 
@@ -194,6 +271,11 @@ export async function fetchActiveShiftOnServer(
       },
     };
   } catch {
-    return { ok: false, message: 'Network error — could not verify shift' };
+    return {
+      ok: false,
+      message: 'Network error — could not verify shift',
+      retryable: true,
+      authFailure: false,
+    };
   }
 }

@@ -157,6 +157,14 @@ describe('POST /api/scans/bulk', () => {
     expect(res.status).toBe(400);
   });
 
+  it('returns 403 without organization context', async () => {
+    mockRequireAuth.mockResolvedValue({ ...AUTH_CLAIMS, orgId: undefined });
+    const res = await POST(makeRequest({ scans: [makeScan()] }));
+
+    expect(res.status).toBe(403);
+    expect(mockProcessBulkScans).not.toHaveBeenCalled();
+  });
+
   it('returns 429 when rate-limited', async () => {
     mockCheckRateLimit.mockResolvedValue({
       allowed: false,

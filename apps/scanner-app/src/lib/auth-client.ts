@@ -245,9 +245,28 @@ export async function logout(): Promise<void> {
  * Signature is NOT verified — same pattern as isTokenExpired.
  */
 export async function getAuthSubject(): Promise<string | null> {
-  const token = await getValidAccessToken();
-  if (!token) return null;
   try {
+    // Identity lookup must not force an early refresh. A token inside the
+    // rotation buffer is still cryptographically time-valid and can safely bind
+    // offline shift storage to its subject without touching the network.
+    const storedToken = await SecureStore.getItemAsync(ACCESS_TOKEN_KEY);
+    if (storedToken) {
+      const storedPayload = JWT.decode(storedToken, null) as {
+        sub?: unknown;
+        exp?: unknown;
+      };
+      if (
+        typeof storedPayload.sub === 'string' &&
+        typeof storedPayload.exp === 'number' &&
+        Date.now() < storedPayload.exp * 1000
+      ) {
+        return storedPayload.sub;
+      }
+    }
+
+    // Truly expired tokens may still be recoverable online through rotation.
+    const token = await getValidAccessToken();
+    if (!token) return null;
     const payload = JWT.decode(token, null) as { sub?: unknown };
     return typeof payload.sub === 'string' ? payload.sub : null;
   } catch {

@@ -42,6 +42,10 @@ export interface SyncResult {
   failed: Array<{ id: string; error: string }>;
 }
 
+// Scanner timestamps come from device clocks. This tolerance applies only
+// while a shift is open; closed shifts retain their exact historical endTime.
+const OPEN_SHIFT_CLOCK_SKEW_MS = 5 * 60 * 1000;
+
 function makeAuditEntry(
   action: string,
   resolvedBy: AuditTrailEntry['resolvedBy'],
@@ -63,10 +67,10 @@ function shiftDetail(shiftLogId: string | null | undefined): {
 
 /**
  * Verify client-supplied shiftLogId is a real ShiftLog for this org/guard/gate
- * and that scannedAt falls within the shift window (open shifts use now as end).
+ * and that scannedAt falls within the shift window. Open shifts allow a small
+ * device-clock skew beyond the server's current time.
  */
 async function resolveVerifiedShiftLogId(
-  tx: Prisma.TransactionClient | PrismaClient,
   scan: ScanInput,
   context: BulkSyncContext | undefined,
   shiftCache: Map<string, { startTime: Date; endTime: Date | null } | null>
@@ -74,30 +78,20 @@ async function resolveVerifiedShiftLogId(
   { ok: true; shiftLogId: string | null } | { ok: false; error: string }
 > {
   if (!scan.shiftLogId) {
-    return { ok: true, shiftLogId: null };
+    return context
+      ? { ok: false, error: 'shiftLogId is required for bulk sync' }
+      : { ok: true, shiftLogId: null };
   }
 
   if (!context) {
     return {
       ok: false,
-      error: 'Organization context required for shift attribution',
+      error:
+        'Authenticated organization context is required for shift attribution',
     };
   }
 
   const cacheKey = `${scan.shiftLogId}:${scan.gateId}`;
-  if (!shiftCache.has(cacheKey)) {
-    const row = await tx.shiftLog.findFirst({
-      where: {
-        id: scan.shiftLogId,
-        organizationId: context.organizationId,
-        guardId: context.guardId,
-        gateId: scan.gateId,
-      },
-      select: { startTime: true, endTime: true },
-    });
-    shiftCache.set(cacheKey, row);
-  }
-
   const shift = shiftCache.get(cacheKey);
   if (!shift) {
     return {
@@ -117,7 +111,7 @@ async function resolveVerifiedShiftLogId(
     };
   }
   const endBound =
-    shift.endTime?.getTime() ?? Date.now();
+    shift.endTime?.getTime() ?? Date.now() + OPEN_SHIFT_CLOCK_SKEW_MS;
   if (scannedAtMs > endBound) {
     return {
       ok: false,
@@ -146,27 +140,54 @@ export async function processBulkScans(
     .map((s) => s.scanUuid)
     .filter((uuid): uuid is string => !!uuid);
   const qrCodes = Array.from(new Set(scans.map((s) => s.qrCode)));
+  const shiftLogIds = Array.from(
+    new Set(scans.map((s) => s.shiftLogId).filter((id): id is string => !!id))
+  );
 
   // 2. Bulk Fetch Data
-  const [existingByUuid, qrCodesWithLatest] = await Promise.all([
-    scanUuids.length > 0
-      ? tx.scanLog.findMany({
-          where: { scanUuid: { in: scanUuids } },
-          select: { id: true, scanUuid: true },
-        })
-      : Promise.resolve([]),
-    qrCodes.length > 0
-      ? tx.qRCode.findMany({
-          where: { code: { in: qrCodes } },
-          include: {
-            scanLogs: {
-              orderBy: { scannedAt: 'desc' },
-              take: 1,
+  const [existingByUuid, qrCodesWithLatest, verifiedShifts] = await Promise.all(
+    [
+      scanUuids.length > 0
+        ? tx.scanLog.findMany({
+            where: { scanUuid: { in: scanUuids } },
+            select: { id: true, scanUuid: true },
+          })
+        : Promise.resolve([]),
+      qrCodes.length > 0
+        ? tx.qRCode.findMany({
+            where: { code: { in: qrCodes } },
+            include: {
+              scanLogs: {
+                orderBy: { scannedAt: 'desc' },
+                take: 1,
+              },
             },
-          },
-        })
-      : Promise.resolve([]),
-  ]);
+          })
+        : Promise.resolve([]),
+      context && shiftLogIds.length > 0
+        ? tx.shiftLog.findMany({
+            where: {
+              id: { in: shiftLogIds },
+              organizationId: context.organizationId,
+              guardId: context.guardId,
+            },
+            select: {
+              id: true,
+              gateId: true,
+              startTime: true,
+              endTime: true,
+            },
+          })
+        : Promise.resolve([]),
+    ]
+  );
+
+  for (const shift of verifiedShifts) {
+    shiftCache.set(`${shift.id}:${shift.gateId}`, {
+      startTime: shift.startTime,
+      endTime: shift.endTime,
+    });
+  }
 
   // 3. Build Lookup Maps
   const existingUuidSet = new Set(existingByUuid.map((s) => s.scanUuid));
@@ -208,6 +229,17 @@ export async function processBulkScans(
 
   // 4. Process Scans Sequentially
   for (const scan of scans) {
+    const shiftResolved = await resolveVerifiedShiftLogId(
+      scan,
+      context,
+      shiftCache
+    );
+    if (shiftResolved.ok === false) {
+      failed.push({ id: scan.id, error: shiftResolved.error });
+      continue;
+    }
+    const verifiedShiftLogId = shiftResolved.shiftLogId;
+
     // A. Check for exact duplicate by scanUuid (idempotency guard)
     if (scan.scanUuid) {
       if (
@@ -229,18 +261,6 @@ export async function processBulkScans(
       });
       continue;
     }
-
-    const shiftResolved = await resolveVerifiedShiftLogId(
-      tx,
-      scan,
-      context,
-      shiftCache
-    );
-    if (shiftResolved.ok === false) {
-      failed.push({ id: scan.id, error: shiftResolved.error });
-      continue;
-    }
-    const verifiedShiftLogId = shiftResolved.shiftLogId;
 
     // C. Resolve Conflicts / Create
     const incomingTime = new Date(scan.scannedAt).getTime();

@@ -10,8 +10,6 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
-- **[Scanner-App]** Phase 03 shift start/end API and scan gate without active shift
-
 - **[Scanner-App]** Phase 02 onboarding wizard (PIN, biometrics toggle, camera)
 
 - **[Scanner-App]** Phase 01 device unlock gate and QR secret fail-closed
@@ -37,6 +35,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 ### AI Tools
 
 ### Apps
+
+- **[Scanner]** resolve shift typecheck errors blocking push
+- **[Scanner]** harden shift accountability and logout races
+- **[Scanner]** omit undefined shiftLogId on offline enqueue
+- **[Scanner]** resolve Phase 03 shift typecheck and end-body parsing
 
 - **[Client-Dashboard]** fix shift/end body parsing under Jest after CodeRabbit autofix
 

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import * as Network from 'expo-network';
 import { getAuthSubject } from '../lib/auth-client';
 import {
   endShiftOnServer,
@@ -8,7 +9,6 @@ import {
 import {
   canScanWithShift,
   clearShiftSession,
-  clearShiftTombstone,
   finalizeLocalShiftEnd,
   loadShiftSessionForUser,
   loadShiftTombstone,
@@ -24,6 +24,37 @@ export function useShiftSession(options?: { enabled?: boolean }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const genRef = useRef(0);
+  const startOperationsRef = useRef<Set<Promise<boolean>>>(new Set());
+  const startCleanupBlockedRef = useRef<string | null>(null);
+  const pendingRetryRef = useRef<Promise<void> | null>(null);
+
+  const retryPendingEnd = useCallback((): Promise<void> => {
+    if (pendingRetryRef.current) return pendingRetryRef.current;
+
+    const retry = (async () => {
+      const guardId = await getAuthSubject();
+      if (!guardId) return;
+      const tombstone = await loadShiftTombstone();
+      if (
+        tombstone?.reason !== 'pending_end' ||
+        tombstone.guardId !== guardId
+      ) {
+        return;
+      }
+
+      const result = await endShiftOnServer(tombstone.shiftLogId);
+      if (result.ok || result.status === 404) {
+        // finalize owns both session deletion and ended-tombstone protection.
+        // A failed session delete must leave its replacement tombstone intact.
+        await finalizeLocalShiftEnd(tombstone.shiftLogId, guardId);
+      }
+    })();
+    pendingRetryRef.current = retry;
+    void retry.finally(() => {
+      if (pendingRetryRef.current === retry) pendingRetryRef.current = null;
+    });
+    return retry;
+  }, []);
 
   useEffect(() => {
     if (!enabled) {
@@ -39,14 +70,7 @@ export function useShiftSession(options?: { enabled?: boolean }) {
       try {
         const guardId = await getAuthSubject();
 
-        const tombstone = await loadShiftTombstone();
-        if (tombstone?.reason === 'pending_end') {
-          const retry = await endShiftOnServer(tombstone.shiftLogId);
-          if (retry.ok || retry.status === 404) {
-            await finalizeLocalShiftEnd(tombstone.shiftLogId);
-            await clearShiftTombstone();
-          }
-        }
+        await retryPendingEnd();
 
         const stored = await loadShiftSessionForUser(guardId);
         if (!mounted) return;
@@ -60,8 +84,24 @@ export function useShiftSession(options?: { enabled?: boolean }) {
         const verified = await fetchActiveShiftOnServer(stored.gateId);
         if (!mounted) return;
 
+        if (!verified.ok && verified.authFailure) {
+          const marked = await markPendingShiftEnd(
+            stored.shiftLogId,
+            stored.guardId
+          );
+          // Authentication rejection is authoritative: never keep scanning on
+          // a locally cached shift. The marker protects a future clock-out retry.
+          setSession(null);
+          setError(
+            marked
+              ? 'Session expired — sign in again to resume scanning'
+              : 'Session expired — local cleanup could not be saved'
+          );
+          return;
+        }
+
         if (verified.ok && verified.active === false) {
-          await finalizeLocalShiftEnd(stored.shiftLogId);
+          await finalizeLocalShiftEnd(stored.shiftLogId, guardId ?? undefined);
           setSession(null);
           setError('Previous shift ended — start a new shift to scan');
           return;
@@ -102,60 +142,145 @@ export function useShiftSession(options?: { enabled?: boolean }) {
     return () => {
       mounted = false;
     };
-  }, [enabled]);
+  }, [enabled, retryPendingEnd]);
 
-  const clearLocalShift = useCallback(async () => {
-    const shiftLogId = session?.shiftLogId;
-    if (shiftLogId) {
-      await finalizeLocalShiftEnd(shiftLogId);
-    } else {
-      await clearShiftSession();
-    }
-    setSession(null);
-    setError(null);
-  }, [session?.shiftLogId]);
+  useEffect(() => {
+    if (!enabled) return;
+    const subscription = Network.addNetworkStateListener((state) => {
+      if (state.isConnected && state.isInternetReachable !== false) {
+        void retryPendingEnd();
+      }
+    });
+    return () => subscription.remove();
+  }, [enabled, retryPendingEnd]);
 
-  const startShift = useCallback(async (gateId: string, gateName?: string) => {
-    const startGen = genRef.current;
-    setBusy(true);
-    setError(null);
-    try {
-      const guardId = await getAuthSubject();
-      if (!guardId) {
-        setError('Not signed in');
-        return false;
+  const clearLocalShift = useCallback(
+    async (expectedShiftLogId?: string) => {
+      const shiftLogId = expectedShiftLogId ?? session?.shiftLogId;
+      if (shiftLogId) {
+        await finalizeLocalShiftEnd(shiftLogId, session?.guardId);
+      } else {
+        await clearShiftSession();
       }
+      setSession((current) => {
+        if (shiftLogId && current?.shiftLogId !== shiftLogId) return current;
+        return null;
+      });
+      if (!expectedShiftLogId || expectedShiftLogId === session?.shiftLogId) {
+        setError(null);
+      }
+    },
+    [session?.guardId, session?.shiftLogId]
+  );
 
-      const result = await startShiftOnServer({ gateId, gateName });
-      if (!result.ok) {
-        setError(result.message);
-        return false;
-      }
+  const startShift = useCallback((gateId: string, gateName?: string) => {
+    const operation = (async (): Promise<boolean> => {
+      const startGen = genRef.current;
+      setBusy(true);
+      setError(null);
+      try {
+        const guardId = await getAuthSubject();
+        if (!guardId) {
+          setError('Not signed in');
+          return false;
+        }
 
-      if (genRef.current !== startGen) {
-        // Logout/dispose raced ahead — do not persist locally; best-effort close server shift.
-        void endShiftOnServer(result.session.shiftLogId);
-        return false;
-      }
+        const result = await startShiftOnServer({ gateId, gateName });
+        if (!result.ok) {
+          setError(result.message);
+          return false;
+        }
 
-      const sessionWithGuard: ShiftSession = { ...result.session, guardId };
-      const saved = await saveShiftSession(sessionWithGuard);
-      if (genRef.current !== startGen) {
-        void endShiftOnServer(result.session.shiftLogId);
+        const sessionWithGuard: ShiftSession = { ...result.session, guardId };
+        if (genRef.current !== startGen) {
+          // Logout waits for this operation before clearing auth. Persist a retry marker
+          // if the close cannot complete while credentials are still available.
+          const cleanup = await endShiftOnServer(result.session.shiftLogId);
+          if (
+            !cleanup.ok &&
+            cleanup.status !== 404 &&
+            (cleanup.retryable || cleanup.authFailure)
+          ) {
+            const marked = await markPendingShiftEnd(
+              result.session.shiftLogId,
+              guardId
+            );
+            if (!marked) {
+              startCleanupBlockedRef.current =
+                'Could not safely record the pending clock-out';
+            }
+          } else if (!cleanup.ok && cleanup.status !== 404) {
+            // Keep enough local state for disposeForLogout to block logout and
+            // surface the permanent failure instead of orphaning the server shift.
+            const savedForLogout = await saveShiftSession(sessionWithGuard);
+            if (!savedForLogout) {
+              startCleanupBlockedRef.current = cleanup.message;
+            }
+          }
+          return false;
+        }
+
+        const saved = await saveShiftSession(sessionWithGuard);
+        if (genRef.current !== startGen) {
+          const cleanup = await endShiftOnServer(result.session.shiftLogId);
+          if (cleanup.ok || cleanup.status === 404) {
+            // saveShiftSession completed before logout won the race. Remove only
+            // this exact persisted session; conditional finalize preserves a newer one.
+            await finalizeLocalShiftEnd(result.session.shiftLogId, guardId);
+          } else if (cleanup.retryable || cleanup.authFailure) {
+            const marked = await markPendingShiftEnd(
+              result.session.shiftLogId,
+              guardId
+            );
+            if (!marked) {
+              startCleanupBlockedRef.current =
+                'Could not safely record the pending clock-out';
+            }
+          }
+          return false;
+        }
+        if (!saved) {
+          // The server shift exists but cannot enable scanning without durable
+          // local state. Compensate immediately, or durably queue its clock-out.
+          const cleanup = await endShiftOnServer(result.session.shiftLogId);
+          if (cleanup.ok || cleanup.status === 404) {
+            await finalizeLocalShiftEnd(result.session.shiftLogId, guardId);
+            setError('Could not save the shift locally — start again');
+          } else if (cleanup.retryable || cleanup.authFailure) {
+            const marked = await markPendingShiftEnd(
+              result.session.shiftLogId,
+              guardId
+            );
+            if (!marked) {
+              startCleanupBlockedRef.current =
+                'Shift started but local recovery state could not be saved';
+            }
+            setError(
+              marked
+                ? 'Could not save the shift locally — clock-out queued'
+                : 'Shift started but local recovery state could not be saved'
+            );
+          } else {
+            startCleanupBlockedRef.current = cleanup.message;
+            setError(cleanup.message);
+          }
+          return false;
+        }
+        setSession(sessionWithGuard);
+        return true;
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Could not start shift');
         return false;
+      } finally {
+        setBusy(false);
       }
-      if (!saved) {
-        setError('Shift started on server but could not save locally — retry');
-        return false;
-      }
-      setSession(sessionWithGuard);
-      return true;
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not start shift');
-      return false;
-    } finally {
-      setBusy(false);
-    }
+    })();
+    startOperationsRef.current.add(operation);
+    void operation.then(
+      () => startOperationsRef.current.delete(operation),
+      () => startOperationsRef.current.delete(operation)
+    );
+    return operation;
   }, []);
 
   const endShift = useCallback(async () => {
@@ -167,7 +292,10 @@ export function useShiftSession(options?: { enabled?: boolean }) {
 
       if (result.ok) {
         if (shiftLogId) {
-          const { cleared } = await finalizeLocalShiftEnd(shiftLogId);
+          const { cleared } = await finalizeLocalShiftEnd(
+            shiftLogId,
+            session?.guardId
+          );
           setSession(null);
           if (!cleared) {
             setError(
@@ -182,37 +310,55 @@ export function useShiftSession(options?: { enabled?: boolean }) {
 
       // Confirmed already ended — clear local duty.
       if (result.status === 404 && shiftLogId) {
-        await finalizeLocalShiftEnd(shiftLogId);
+        await finalizeLocalShiftEnd(shiftLogId, session?.guardId);
         setSession(null);
         setError(null);
         return true;
       }
 
+      if (result.authFailure && shiftLogId) {
+        const marked = await markPendingShiftEnd(shiftLogId, session?.guardId);
+        setSession(null);
+        setError(
+          marked
+            ? 'Session expired — sign in again to finish clock-out'
+            : 'Session expired — local cleanup could not be saved'
+        );
+        return false;
+      }
+
       // Transport / 5xx: stop scanning but keep pending-end for retry.
       if (result.retryable && shiftLogId) {
-        await markPendingShiftEnd(shiftLogId);
-        setSession(null);
-        setError(`${result.message} — will retry clock-out when online`);
+        const marked = await markPendingShiftEnd(shiftLogId, session?.guardId);
+        if (marked) setSession(null);
+        setError(
+          marked
+            ? `${result.message} — will retry clock-out when online`
+            : `${result.message} — could not save retry state; shift remains active`
+        );
         return false;
       }
 
       setError(result.message);
       return false;
     } catch (err) {
+      let marked = false;
       if (shiftLogId) {
-        await markPendingShiftEnd(shiftLogId);
-        setSession(null);
+        marked = await markPendingShiftEnd(shiftLogId, session?.guardId);
+        if (marked) setSession(null);
       }
+      const message =
+        err instanceof Error ? err.message : 'Could not end shift';
       setError(
-        err instanceof Error
-          ? `${err.message} — will retry clock-out when online`
-          : 'Could not end shift — will retry when online'
+        marked
+          ? `${message} — will retry clock-out when online`
+          : `${message} — could not save retry state; shift remains active`
       );
       return false;
     } finally {
       setBusy(false);
     }
-  }, [session?.shiftLogId]);
+  }, [session?.guardId, session?.shiftLogId]);
 
   /**
    * Sign-out path: invalidate in-flight start, end server shift when possible,
@@ -220,31 +366,51 @@ export function useShiftSession(options?: { enabled?: boolean }) {
    */
   const disposeForLogout = useCallback(async (): Promise<boolean> => {
     genRef.current += 1;
-
-    let shiftEndedSuccessfully = true;
-
+    setBusy(true);
     try {
+      // Keep credentials alive until every server start has either persisted its
+      // session or closed/recorded the resulting server shift.
+      await Promise.allSettled([...startOperationsRef.current]);
+      if (startCleanupBlockedRef.current) {
+        setError(startCleanupBlockedRef.current);
+        return false;
+      }
+
       const guardId = await getAuthSubject();
       const stored = session ?? (await loadShiftSessionForUser(guardId));
       const shiftLogId = stored?.shiftLogId;
 
       if (shiftLogId) {
+        const owner = stored?.guardId ?? guardId ?? undefined;
         const result = await endShiftOnServer(shiftLogId);
         if (result.ok || result.status === 404) {
-          await finalizeLocalShiftEnd(shiftLogId);
+          await finalizeLocalShiftEnd(shiftLogId, owner);
+        } else if (result.retryable || result.authFailure) {
+          const marked = await markPendingShiftEnd(shiftLogId, owner);
+          if (!marked) {
+            setError('Could not safely record the pending clock-out');
+            return false;
+          }
         } else {
-          await markPendingShiftEnd(shiftLogId);
-          shiftEndedSuccessfully = false;
+          // Validation/permission failures require resolution while authenticated.
+          setError(result.message);
+          return false;
         }
       }
-    } catch {
-      shiftEndedSuccessfully = false;
-    } finally {
+
       setSession(null);
       setError(null);
+      return true;
+    } catch (error) {
+      setError(
+        error instanceof Error
+          ? `Could not prepare logout: ${error.message}`
+          : 'Could not safely prepare logout'
+      );
+      return false;
+    } finally {
+      setBusy(false);
     }
-
-    return shiftEndedSuccessfully;
   }, [session]);
 
   const canScan = useCallback(

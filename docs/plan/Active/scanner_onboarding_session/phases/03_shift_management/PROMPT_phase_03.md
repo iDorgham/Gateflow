@@ -59,8 +59,10 @@ BACKEND-API
 ## Acceptance criteria
 
 - [ ] Successful clock-in creates a `ShiftLog` record.
-- [ ] Scan logs are associated with the active shift when submitted.
+- [ ] Scan logs are associated with the active `ShiftId` when submitted.
 - [ ] Guards cannot scan without an active shift.
-- [ ] All tests pass.
-- [ ] Build green (`pnpm turbo build --filter=scanner-app`).
+- [ ] All tests pass (`pnpm turbo test --filter=scanner-app/db`)
+- [ ] Build green (`pnpm turbo build --filter=scanner-app`)
 - [ ] 100% IDOR protection: shift queries must maintain org context.
+
+<!-- Implementation status / alias mapping: see phase_logs/PHASE_LOG_phase_03.md (do not edit criteria during execution). -->

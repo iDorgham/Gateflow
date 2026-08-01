@@ -46,6 +46,11 @@ export async function findOpenShiftForGate(params: {
       guardId: params.guardId,
       gateId: params.gateId,
       endTime: null,
+      gate: {
+        organizationId: params.organizationId,
+        isActive: true,
+        deletedAt: null,
+      },
     },
     orderBy: { startTime: 'desc' },
   });
@@ -61,6 +66,11 @@ export async function findOpenShiftForGuard(params: {
       organizationId: params.organizationId,
       guardId: params.guardId,
       endTime: null,
+      gate: {
+        organizationId: params.organizationId,
+        isActive: true,
+        deletedAt: null,
+      },
     },
     orderBy: { startTime: 'desc' },
   });
@@ -113,18 +123,22 @@ export async function lockOpenShiftForGate(
 ): Promise<ActiveShift | null> {
   const rows = await tx.$queryRaw<ActiveShift[]>(Prisma.sql`
     SELECT
-      id,
-      "gateId",
-      "guardId",
-      "organizationId",
-      "startTime",
-      "endTime"
+      "ShiftLog".id,
+      "ShiftLog"."gateId",
+      "ShiftLog"."guardId",
+      "ShiftLog"."organizationId",
+      "ShiftLog"."startTime",
+      "ShiftLog"."endTime"
     FROM "ShiftLog"
-    WHERE "organizationId" = ${params.organizationId}
-      AND "guardId" = ${params.guardId}
-      AND "gateId" = ${params.gateId}
-      AND "endTime" IS NULL
-    ORDER BY "startTime" DESC
+    INNER JOIN "Gate" ON "Gate".id = "ShiftLog"."gateId"
+    WHERE "ShiftLog"."organizationId" = ${params.organizationId}
+      AND "ShiftLog"."guardId" = ${params.guardId}
+      AND "ShiftLog"."gateId" = ${params.gateId}
+      AND "ShiftLog"."endTime" IS NULL
+      AND "Gate"."organizationId" = ${params.organizationId}
+      AND "Gate"."isActive" = TRUE
+      AND "Gate"."deletedAt" IS NULL
+    ORDER BY "ShiftLog"."startTime" DESC
     LIMIT 1
     FOR UPDATE
   `);
@@ -143,15 +157,22 @@ export async function startOrReuseShift(params: {
   return withSerializableRetry<{ shift: ActiveShift; reused: boolean }>(
     prisma,
     async (tx) => {
-      const existingAtGate = await tx.shiftLog.findFirst({
+      const gate = await tx.gate.findFirst({
         where: {
+          id: params.gateId,
           organizationId: params.organizationId,
-          guardId: params.guardId,
-          gateId: params.gateId,
-          endTime: null,
+          isActive: true,
+          deletedAt: null,
         },
-        orderBy: { startTime: 'desc' },
+        select: { id: true },
       });
+      if (!gate) {
+        throw new Error('Cannot start a shift at an inactive or deleted gate');
+      }
+
+      // Coordinate reuse with scan validation and clock-out, which lock the
+      // same open row before making their decision.
+      const existingAtGate = await lockOpenShiftForGate(tx, params);
       if (existingAtGate) {
         // Keep single-active-shift: close any other open rows for this guard.
         await tx.shiftLog.updateMany({

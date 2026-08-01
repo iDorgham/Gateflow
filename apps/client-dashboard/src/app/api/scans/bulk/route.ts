@@ -44,10 +44,17 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const { scans } = validation.data;
     const orgId = authResult.orgId;
 
+    if (!orgId) {
+      return NextResponse.json(
+        { success: false, message: 'Organization context required' },
+        { status: 403 }
+      );
+    }
+
     // Location rule: when a gate has locationEnforced, reject scans without valid location or outside radius.
     const gateIds = Array.from(new Set(scans.map((s) => s.gateId)));
     const gates =
-      gateIds.length > 0 && orgId
+      gateIds.length > 0
         ? await prisma.gate.findMany({
             where: {
               id: { in: gateIds },
@@ -89,7 +96,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     // Watchlist: reject scans whose visitor identity matches org watchlist; create incidents.
     const watchlistFailed: Array<{ id: string; error: string }> = [];
     let scansForSync = scansPassingLocation;
-    if (orgId) {
+    {
       const entries = await getActiveWatchlist(orgId);
       scansForSync = scansPassingLocation.filter((scan) => {
         const visitor = {
@@ -128,7 +135,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     }
 
     // Gate–account assignment: when org uses assignments, operator must be assigned to every gate in the batch.
-    if (orgId) {
+    {
       const hasAny = await orgHasAssignments(orgId);
       if (hasAny) {
         const assignedGateIds = await getUserAssignedGateIds(
@@ -176,7 +183,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       return processBulkScans(
         scansForSync as import('@/lib/scans/bulk-sync').ScanInput[],
         tx as unknown as import('@gate-access/db').Prisma.TransactionClient,
-        orgId ? { organizationId: orgId, guardId: authResult.sub } : undefined
+        { organizationId: orgId, guardId: authResult.sub }
       );
     });
 

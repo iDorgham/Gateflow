@@ -40,33 +40,16 @@ jest.mock('@/lib/scanner-shift', () => ({
 
 import { NextRequest } from 'next/server';
 
-function makeRequest(body: object): NextRequest {
-  return new NextRequest('http://localhost/api/scanner/shift/end', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer test',
-    },
-    body: JSON.stringify(body),
-  });
+function makeRequest(body: unknown): NextRequest {
+  return makeRawRequest(JSON.stringify(body));
 }
 
 function makeRawRequest(raw: string): NextRequest {
-  return new NextRequest('http://localhost/api/scanner/shift/end', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer test',
-    },
-    body: raw,
-  });
+  return { text: async () => raw } as NextRequest;
 }
 
 function makeEmptyRequest(): NextRequest {
-  return new NextRequest('http://localhost/api/scanner/shift/end', {
-    method: 'POST',
-    headers: { Authorization: 'Bearer test' },
-  });
+  return makeRawRequest('');
 }
 
 describe('POST /api/scanner/shift/end', () => {
@@ -94,8 +77,16 @@ describe('POST /api/scanner/shift/end', () => {
   });
 
   it('returns 400 when non-empty body is not valid JSON', async () => {
-    const res = await POST(makeRawRequest('{not-json'));
+    const res = await POST(makeRawRequest('{'));
     expect(res.status).toBe(400);
+    expect(mockFindOpenShiftForGuard).not.toHaveBeenCalled();
+    expect(mockCloseShift).not.toHaveBeenCalled();
+  });
+
+  it('returns 400 for a JSON null body instead of ending the open shift', async () => {
+    const res = await POST(makeRequest(null));
+    expect(res.status).toBe(400);
+    expect(mockFindOpenShiftForGuard).not.toHaveBeenCalled();
     expect(mockCloseShift).not.toHaveBeenCalled();
   });
 

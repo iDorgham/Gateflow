@@ -25,61 +25,32 @@ const BodySchema = z.object({
 
 /**
  * Empty / whitespace body → {}; non-empty invalid JSON → 400.
- *
- * Prefer `.text()` in real runtimes. Jest's NextRequest stub does not
- * implement `.text()` (calling it throws), so fall back to `.json()`.
  */
 async function readEndBody(
   request: NextRequest
 ): Promise<
   { ok: true; body: unknown } | { ok: false; response: NextResponse }
 > {
-  let raw: string | null = null;
-
-  if (typeof request.text === 'function') {
-    try {
-      raw = await request.text();
-    } catch {
-      raw = null;
-    }
-  } else if (typeof request.arrayBuffer === 'function') {
-    try {
-      const buf = await request.arrayBuffer();
-      raw = new TextDecoder().decode(buf);
-    } catch {
-      raw = null;
-    }
+  let raw: string;
+  try {
+    raw = await request.text();
+  } catch {
+    return {
+      ok: false,
+      response: NextResponse.json(
+        { success: false, message: 'Invalid JSON body' },
+        { status: 400 }
+      ),
+    };
   }
 
-  if (raw !== null) {
-    if (!raw.trim()) {
-      return { ok: true, body: {} };
-    }
-    try {
-      return { ok: true, body: JSON.parse(raw) };
-    } catch {
-      return {
-        ok: false,
-        response: NextResponse.json(
-          { success: false, message: 'Invalid JSON body' },
-          { status: 400 }
-        ),
-      };
-    }
+  if (!raw.trim()) {
+    return { ok: true, body: {} };
   }
 
   try {
-    const body = await request.json();
-    // Some runtimes resolve empty application/json to null/undefined.
-    return { ok: true, body: body ?? {} };
-  } catch (error) {
-    const message =
-      error instanceof Error ? error.message.toLowerCase() : String(error);
-    // Whitespace-only / empty payloads surface as "Unexpected end of JSON input"
-    // under Jest's NextRequest (no `.text()`). Treat those as {}.
-    if (message.includes('unexpected end')) {
-      return { ok: true, body: {} };
-    }
+    return { ok: true, body: JSON.parse(raw) };
+  } catch {
     return {
       ok: false,
       response: NextResponse.json(

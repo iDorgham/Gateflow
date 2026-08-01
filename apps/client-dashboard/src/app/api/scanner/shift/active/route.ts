@@ -8,8 +8,10 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@gate-access/db';
 import { requireAuth, isNextResponse } from '@/lib/require-auth';
 import { hasPermission } from '@/lib/auth';
+import { checkGateAssignment } from '@/lib/gate-assignment';
 import { findOpenShiftForGate, serializeShift } from '@/lib/scanner-shift';
 
 export const dynamic = 'force-dynamic';
@@ -42,6 +44,33 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   }
 
   try {
+    const gate = await prisma.gate.findFirst({
+      where: {
+        id: gateId,
+        organizationId: claims.orgId,
+        isActive: true,
+        deletedAt: null,
+      },
+      select: { id: true },
+    });
+    if (!gate) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Active gate not found in your organization',
+        },
+        { status: 404 }
+      );
+    }
+
+    const assignmentError = await checkGateAssignment(claims, gateId);
+    if (assignmentError) {
+      return NextResponse.json(
+        { success: false, message: assignmentError },
+        { status: 403 }
+      );
+    }
+
     const open = await findOpenShiftForGate({
       organizationId: claims.orgId,
       guardId: claims.sub,

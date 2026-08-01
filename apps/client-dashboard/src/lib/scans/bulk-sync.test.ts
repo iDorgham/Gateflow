@@ -11,7 +11,7 @@ type MockTx = {
     findMany: jest.Mock<any, any>;
   };
   shiftLog: {
-    findFirst: jest.Mock<any, any>;
+    findMany: jest.Mock<any, any>;
   };
 };
 
@@ -29,9 +29,13 @@ describe('processBulkScans', () => {
         findMany: jest.fn(() => Promise.resolve([])),
       },
       shiftLog: {
-        findFirst: jest.fn(() => Promise.resolve(null)),
+        findMany: jest.fn(() => Promise.resolve([])),
       },
     };
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
   });
 
   it('should sync new scans successfully', async () => {
@@ -244,7 +248,7 @@ describe('processBulkScans', () => {
     mockTx.qRCode.findMany.mockResolvedValue([
       { id: 'qr-id-1', code: 'qr-1', scanLogs: [] },
     ]);
-    mockTx.shiftLog.findFirst.mockResolvedValue(null);
+    mockTx.shiftLog.findMany.mockResolvedValue([]);
 
     const result = await processBulkScans(scans, mockTx as any, {
       organizationId: 'org_1',
@@ -260,9 +264,155 @@ describe('processBulkScans', () => {
     expect(mockTx.scanLog.createMany).not.toHaveBeenCalled();
   });
 
+  it('rejects scans without shift attribution when auth context is present', async () => {
+    const scans: ScanInput[] = [
+      {
+        id: 'scan-no-shift',
+        qrCode: 'qr-1',
+        scannedAt: new Date().toISOString(),
+        status: 'SUCCESS',
+        gateId: 'gate-1',
+      },
+    ];
+
+    const result = await processBulkScans(scans, mockTx as any, {
+      organizationId: 'org_1',
+      guardId: 'guard_1',
+    });
+
+    expect(result.failed).toEqual([
+      {
+        id: 'scan-no-shift',
+        error: 'shiftLogId is required for bulk sync',
+      },
+    ]);
+    expect(mockTx.scanLog.createMany).not.toHaveBeenCalled();
+  });
+
+  it('rejects client shift attribution when auth context is absent', async () => {
+    const scans: ScanInput[] = [
+      {
+        id: 'scan-forged',
+        qrCode: 'qr-1',
+        scannedAt: new Date().toISOString(),
+        status: 'SUCCESS',
+        gateId: 'gate-1',
+        shiftLogId: 'shift-forged',
+      },
+    ];
+
+    const result = await processBulkScans(scans, mockTx as any);
+
+    expect(result.failed[0]?.error).toMatch(/organization context is required/);
+    expect(mockTx.shiftLog.findMany).not.toHaveBeenCalled();
+    expect(mockTx.scanLog.createMany).not.toHaveBeenCalled();
+  });
+
+  it('allows modest device clock skew for an open shift', async () => {
+    const now = Date.now();
+    jest.spyOn(Date, 'now').mockReturnValue(now);
+    mockTx.qRCode.findMany.mockResolvedValue([
+      { id: 'qr-id-1', code: 'qr-1', scanLogs: [] },
+    ]);
+    mockTx.shiftLog.findMany.mockResolvedValue([
+      {
+        id: 'shift-open',
+        gateId: 'gate-1',
+        startTime: new Date(now - 60_000),
+        endTime: null,
+      },
+    ]);
+
+    const result = await processBulkScans(
+      [
+        {
+          id: 'scan-ahead',
+          qrCode: 'qr-1',
+          scannedAt: new Date(now + 2 * 60_000).toISOString(),
+          status: 'SUCCESS',
+          gateId: 'gate-1',
+          shiftLogId: 'shift-open',
+        },
+      ],
+      mockTx as any,
+      { organizationId: 'org_1', guardId: 'guard_1' }
+    );
+
+    expect(result.synced).toEqual(['scan-ahead']);
+    expect(result.failed).toEqual([]);
+    expect(mockTx.shiftLog.findMany).toHaveBeenCalledTimes(1);
+  });
+
+  it('syncs a historical scan captured within an owned closed shift', async () => {
+    mockTx.qRCode.findMany.mockResolvedValue([
+      { id: 'qr-id-1', code: 'qr-1', scanLogs: [] },
+    ]);
+    mockTx.shiftLog.findMany.mockResolvedValue([
+      {
+        id: 'shift-closed',
+        gateId: 'gate-1',
+        startTime: new Date('2026-08-01T09:00:00.000Z'),
+        endTime: new Date('2026-08-01T17:00:00.000Z'),
+      },
+    ]);
+
+    const result = await processBulkScans(
+      [
+        {
+          id: 'scan-offline',
+          qrCode: 'qr-1',
+          scannedAt: '2026-08-01T16:59:00.000Z',
+          status: 'SUCCESS',
+          gateId: 'gate-1',
+          shiftLogId: 'shift-closed',
+        },
+      ],
+      mockTx as any,
+      { organizationId: 'org_1', guardId: 'guard_1' }
+    );
+
+    expect(result.synced).toEqual(['scan-offline']);
+    expect(result.failed).toEqual([]);
+  });
+
+  it('does not apply open-shift clock skew after a shift has closed', async () => {
+    mockTx.qRCode.findMany.mockResolvedValue([
+      { id: 'qr-id-1', code: 'qr-1', scanLogs: [] },
+    ]);
+    mockTx.shiftLog.findMany.mockResolvedValue([
+      {
+        id: 'shift-closed',
+        gateId: 'gate-1',
+        startTime: new Date('2026-08-01T09:00:00.000Z'),
+        endTime: new Date('2026-08-01T17:00:00.000Z'),
+      },
+    ]);
+
+    const result = await processBulkScans(
+      [
+        {
+          id: 'scan-after-close',
+          qrCode: 'qr-1',
+          scannedAt: '2026-08-01T17:02:00.000Z',
+          status: 'SUCCESS',
+          gateId: 'gate-1',
+          shiftLogId: 'shift-closed',
+        },
+      ],
+      mockTx as any,
+      { organizationId: 'org_1', guardId: 'guard_1' }
+    );
+
+    expect(result.synced).toEqual([]);
+    expect(result.failed[0]?.error).toBe(
+      'Scan time is after the referenced shift ended'
+    );
+  });
+
   it('records verified shiftLogId on LWW audit entries', async () => {
-    const older = new Date('2026-01-01T10:00:00.000Z');
-    const newer = new Date('2026-01-01T12:00:00.000Z');
+    const now = Date.now();
+    const older = new Date(now - 2 * 60 * 60 * 1000);
+    const newer = new Date(now - 60 * 60 * 1000);
     const scans: ScanInput[] = [
       {
         id: 'scan-lww',
@@ -295,10 +445,14 @@ describe('processBulkScans', () => {
         ],
       },
     ]);
-    mockTx.shiftLog.findFirst.mockResolvedValue({
-      startTime: new Date('2026-01-01T09:00:00.000Z'),
-      endTime: null,
-    });
+    mockTx.shiftLog.findMany.mockResolvedValue([
+      {
+        id: 'shift_ok',
+        gateId: 'gate-1',
+        startTime: new Date(now - 3 * 60 * 60 * 1000),
+        endTime: null,
+      },
+    ]);
 
     const result = await processBulkScans(scans, mockTx as any, {
       organizationId: 'org_1',

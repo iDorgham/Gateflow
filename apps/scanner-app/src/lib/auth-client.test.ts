@@ -27,7 +27,12 @@ jest.mock('expo-jwt', () => ({
 
 import * as SecureStore from 'expo-secure-store';
 import JWT from 'expo-jwt';
-import { login, logout, getValidAccessToken } from './auth-client';
+import {
+  login,
+  logout,
+  getAuthSubject,
+  getValidAccessToken,
+} from './auth-client';
 
 // ─── Typed mock helpers ───────────────────────────────────────────────────────
 
@@ -51,7 +56,7 @@ const NEW_REFRESH_TOKEN = 'new-refresh-token';
 
 // exp values (seconds since epoch)
 const FUTURE_EXP = Math.floor(Date.now() / 1000) + 3_600; // 1 h from now → not expired
-const PAST_EXP = Math.floor(Date.now() / 1000) - 200;     // 200 s ago → expired
+const PAST_EXP = Math.floor(Date.now() / 1000) - 200; // 200 s ago → expired
 
 // ─── Setup ───────────────────────────────────────────────────────────────────
 
@@ -79,7 +84,10 @@ describe('login()', () => {
     expect(result.success).toBe(true);
     expect(result.error).toBeUndefined();
     expect(mockSetItem).toHaveBeenCalledWith('auth_token', ACCESS_TOKEN);
-    expect(mockSetItem).toHaveBeenCalledWith('auth_refresh_token', REFRESH_TOKEN);
+    expect(mockSetItem).toHaveBeenCalledWith(
+      'auth_refresh_token',
+      REFRESH_TOKEN
+    );
   });
 
   it('returns error and does NOT store tokens on 401 invalid credentials', async () => {
@@ -98,7 +106,9 @@ describe('login()', () => {
   });
 
   it('returns error on network failure (fetch throws)', async () => {
-    (global.fetch as jest.Mock).mockRejectedValue(new Error('Network request failed'));
+    (global.fetch as jest.Mock).mockRejectedValue(
+      new Error('Network request failed')
+    );
 
     const result = await login('op@example.com', 'password123');
 
@@ -159,7 +169,10 @@ describe('getValidAccessToken()', () => {
       json: () =>
         Promise.resolve({
           success: true,
-          data: { accessToken: NEW_ACCESS_TOKEN, refreshToken: NEW_REFRESH_TOKEN },
+          data: {
+            accessToken: NEW_ACCESS_TOKEN,
+            refreshToken: NEW_REFRESH_TOKEN,
+          },
         }),
     });
 
@@ -167,7 +180,10 @@ describe('getValidAccessToken()', () => {
 
     expect(token).toBe(NEW_ACCESS_TOKEN);
     expect(mockSetItem).toHaveBeenCalledWith('auth_token', NEW_ACCESS_TOKEN);
-    expect(mockSetItem).toHaveBeenCalledWith('auth_refresh_token', NEW_REFRESH_TOKEN);
+    expect(mockSetItem).toHaveBeenCalledWith(
+      'auth_refresh_token',
+      NEW_REFRESH_TOKEN
+    );
   });
 
   it('returns null and clears both tokens when refresh endpoint fails', async () => {
@@ -176,10 +192,10 @@ describe('getValidAccessToken()', () => {
       .mockResolvedValueOnce(REFRESH_TOKEN);
     mockJwtDecode.mockReturnValue({ exp: PAST_EXP });
 
-    (global.fetch as jest.Mock).mockResolvedValue({ 
+    (global.fetch as jest.Mock).mockResolvedValue({
       ok: false,
       headers: { get: jest.fn() },
-      json: () => Promise.resolve({ success: false }) 
+      json: () => Promise.resolve({ success: false }),
     });
 
     const token = await getValidAccessToken();
@@ -192,13 +208,40 @@ describe('getValidAccessToken()', () => {
   it('returns null when expired but no refresh token is stored', async () => {
     mockGetItem
       .mockResolvedValueOnce(ACCESS_TOKEN) // access token found
-      .mockResolvedValueOnce(null);         // but no refresh token
+      .mockResolvedValueOnce(null); // but no refresh token
     mockJwtDecode.mockReturnValue({ exp: PAST_EXP });
 
     const token = await getValidAccessToken();
 
     expect(token).toBeNull();
     expect(global.fetch).not.toHaveBeenCalled();
+  });
+});
+
+describe('getAuthSubject()', () => {
+  it('decodes a still-valid stored token without triggering buffered refresh', async () => {
+    const nearExpiry = Math.floor(Date.now() / 1000) + 30;
+    mockGetItem.mockResolvedValueOnce(ACCESS_TOKEN);
+    mockJwtDecode.mockReturnValue({ exp: nearExpiry, sub: 'guard_offline' });
+
+    await expect(getAuthSubject()).resolves.toBe('guard_offline');
+
+    expect(mockGetItem).toHaveBeenCalledTimes(1);
+    expect(global.fetch).not.toHaveBeenCalled();
+  });
+
+  it('does not trust an expired stored token subject when refresh fails', async () => {
+    mockGetItem
+      .mockResolvedValueOnce(ACCESS_TOKEN)
+      .mockResolvedValueOnce(ACCESS_TOKEN)
+      .mockResolvedValueOnce(REFRESH_TOKEN);
+    mockJwtDecode.mockReturnValue({
+      exp: PAST_EXP,
+      sub: 'expired_guard',
+    });
+    (global.fetch as jest.Mock).mockRejectedValue(new Error('offline'));
+
+    await expect(getAuthSubject()).resolves.toBeNull();
   });
 });
 
@@ -221,7 +264,10 @@ describe('getValidAccessToken() — concurrent deduplication', () => {
       json: () =>
         Promise.resolve({
           success: true,
-          data: { accessToken: NEW_ACCESS_TOKEN, refreshToken: NEW_REFRESH_TOKEN },
+          data: {
+            accessToken: NEW_ACCESS_TOKEN,
+            refreshToken: NEW_REFRESH_TOKEN,
+          },
         }),
     });
 
@@ -236,7 +282,10 @@ describe('getValidAccessToken() — concurrent deduplication', () => {
     expect(global.fetch).toHaveBeenCalledTimes(1);
     // Both calls store the rotated tokens.
     expect(mockSetItem).toHaveBeenCalledWith('auth_token', NEW_ACCESS_TOKEN);
-    expect(mockSetItem).toHaveBeenCalledWith('auth_refresh_token', NEW_REFRESH_TOKEN);
+    expect(mockSetItem).toHaveBeenCalledWith(
+      'auth_refresh_token',
+      NEW_REFRESH_TOKEN
+    );
   });
 
   it('returns null for all concurrent callers when refresh fails', async () => {
@@ -250,7 +299,8 @@ describe('getValidAccessToken() — concurrent deduplication', () => {
     (global.fetch as jest.Mock).mockResolvedValue({
       ok: false,
       headers: { get: jest.fn().mockReturnValue(null) },
-      json: () => Promise.resolve({ success: false, message: 'Refresh token expired' }),
+      json: () =>
+        Promise.resolve({ success: false, message: 'Refresh token expired' }),
     });
 
     const [token1, token2] = await Promise.all([
@@ -273,9 +323,9 @@ describe('getValidAccessToken() — concurrent deduplication', () => {
 describe('logout()', () => {
   it('clears both secure store tokens and best-effort revokes on server', async () => {
     mockGetItem.mockResolvedValue(REFRESH_TOKEN);
-    (global.fetch as jest.Mock).mockResolvedValue({ 
+    (global.fetch as jest.Mock).mockResolvedValue({
       ok: true,
-      headers: { get: jest.fn() }
+      headers: { get: jest.fn() },
     });
 
     await logout();

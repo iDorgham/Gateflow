@@ -29,6 +29,8 @@ export const QueuedScanSchema = z.object({
   scannedAt: z.string().datetime(),
   synced: z.boolean(),
   retryCount: z.number().int().min(0),
+  /** Active ShiftLog id captured when this offline scan was queued. */
+  shiftLogId: z.string().min(1).optional(),
 });
 
 export type QueuedScan = z.infer<typeof QueuedScanSchema>;

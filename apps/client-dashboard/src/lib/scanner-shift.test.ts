@@ -41,7 +41,30 @@ jest.mock('@gate-access/db', () => {
 });
 
 import { Prisma } from '@gate-access/db';
-import { closeShift, serializeShift, startOrReuseShift } from './scanner-shift';
+import {
+  closeShift,
+  lockOpenShiftForGate,
+  serializeShift,
+  startOrReuseShift,
+} from './scanner-shift';
+
+describe('lockOpenShiftForGate', () => {
+  it('locks only shifts whose gate is active and not deleted', async () => {
+    mockQueryRaw.mockResolvedValueOnce([]);
+
+    await lockOpenShiftForGate({ $queryRaw: mockQueryRaw } as never, {
+      organizationId: 'org_1',
+      guardId: 'guard_1',
+      gateId: 'gate_1',
+    });
+
+    const query = mockQueryRaw.mock.calls[0][0] as { strings: string[] };
+    const sql = query.strings.join('?');
+    expect(sql).toContain('INNER JOIN "Gate"');
+    expect(sql).toContain('"Gate"."isActive" = TRUE');
+    expect(sql).toContain('"Gate"."deletedAt" IS NULL');
+  });
+});
 
 describe('serializeShift', () => {
   it('serializes ISO strings for API responses', () => {
@@ -125,15 +148,18 @@ describe('startOrReuseShift', () => {
     mockTransaction.mockImplementation(
       async (fn: (tx: unknown) => unknown, _opts?: unknown) => {
         const tx = {
-          shiftLog: {
-            findFirst: jest.fn().mockResolvedValue({
+          gate: { findFirst: jest.fn().mockResolvedValue({ id: 'gate_1' }) },
+          $queryRaw: jest.fn().mockResolvedValue([
+            {
               id: 'shift_open',
               gateId: 'gate_1',
               guardId: 'guard_1',
               organizationId: 'org_1',
               startTime: new Date(),
               endTime: null,
-            }),
+            },
+          ]),
+          shiftLog: {
             updateMany,
             create,
           },
@@ -176,8 +202,9 @@ describe('startOrReuseShift', () => {
     mockTransaction.mockImplementation(
       async (fn: (tx: unknown) => unknown, _opts?: unknown) => {
         const tx = {
+          gate: { findFirst: jest.fn().mockResolvedValue({ id: 'gate_2' }) },
+          $queryRaw: jest.fn().mockResolvedValue([]),
           shiftLog: {
-            findFirst: jest.fn().mockResolvedValue(null),
             updateMany,
             create,
           },
@@ -215,8 +242,9 @@ describe('startOrReuseShift', () => {
     mockTransaction.mockImplementation(
       async (fn: (tx: unknown) => unknown, _opts?: unknown) => {
         const tx = {
+          gate: { findFirst: jest.fn().mockResolvedValue({ id: 'gate_1' }) },
+          $queryRaw: jest.fn().mockResolvedValue([]),
           shiftLog: {
-            findFirst: jest.fn().mockResolvedValue(null),
             updateMany: jest.fn().mockResolvedValue({ count: 0 }),
             create: jest.fn().mockResolvedValue({
               id: 'shift_new',
@@ -259,8 +287,9 @@ describe('startOrReuseShift', () => {
           throw P2034;
         }
         const tx = {
+          gate: { findFirst: jest.fn().mockResolvedValue({ id: 'gate_1' }) },
+          $queryRaw: jest.fn().mockResolvedValue([]),
           shiftLog: {
-            findFirst: jest.fn().mockResolvedValue(null),
             updateMany: jest.fn().mockResolvedValue({ count: 0 }),
             create: jest.fn().mockResolvedValue({
               id: 'shift_retry',
@@ -298,5 +327,27 @@ describe('startOrReuseShift', () => {
     ).rejects.toThrow('boom');
 
     expect(mockTransaction).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not create or reuse a shift when the gate became inactive', async () => {
+    const findShift = jest.fn();
+    const create = jest.fn();
+    mockTransaction.mockImplementation(async (fn: (tx: unknown) => unknown) =>
+      fn({
+        gate: { findFirst: jest.fn().mockResolvedValue(null) },
+        $queryRaw: findShift,
+        shiftLog: { create },
+      })
+    );
+
+    await expect(
+      startOrReuseShift({
+        organizationId: 'org_1',
+        guardId: 'guard_1',
+        gateId: 'gate_1',
+      })
+    ).rejects.toThrow(/inactive or deleted gate/);
+    expect(findShift).not.toHaveBeenCalled();
+    expect(create).not.toHaveBeenCalled();
   });
 });

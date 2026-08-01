@@ -5,12 +5,13 @@
 - When executing an attached Cursor plan, do not edit the plan file; update todo status as work progresses and complete listed items unless blocked.
 - Enforce changelog structure in CI with `pnpm docs:changelog:check`; use `pnpm docs:changelog:format` to normalize tag casing and spacing.
 - Keep `ai:sync` and `ai:check` only in `docs/workspace/template-project/package.json`; do not add or retain those scripts on the repository root `package.json`.
-- Unless intentionally versioning them, revert transient Cursor hook state under `.cursor/hooks/state/` (e.g. `continual-learning.json`) before commits; do not commit gitignored `.ai-memory/` deployment tracker noise; and do not mix accidental hook/sync-driven `.gitignore` edits with feature or UI commits—revert or use a separate commit.
+- Unless intentionally versioning them, revert transient Cursor hook state under `.cursor/hooks/state/` (e.g. `continual-learning.json`) before commits; restore post-commit `README.md`/`CHANGELOG.md` hook duplicates after push (amend only when the commit is still unpushed); do not commit gitignored `.ai-memory/` deployment tracker noise; and do not mix accidental hook/sync-driven `.gitignore` edits with feature or UI commits—revert or use a separate commit.
 - Prefer development guidance and docs to cover a multi-tool stack (Cursor, Kiro, Antigravity, Claude CLI, Opencode CLI, Gemini CLI, and Kilo CLI) instead of Cursor-only instructions.
-- Prefer phased execution workflows: plan/tasks first, then apply prompts phase-by-phase with testing and incremental enhancements after each phase.
+- Prefer phased execution workflows: plan/tasks first, then apply prompts phase-by-phase with testing and incremental enhancements after each phase; after a phase PR merges, open a new draft PR for the next phase instead of force-pushing onto the merged PR.
 - Prefer comprehensive per-app and cross-cutting references under `docs/reference/apps/` when packing context for other AI tools or planning.
 - Keep UrBrain planning and `pnpm brain` dispatch in the Dorgham workspace; run GateFlow product development and verification only in Gate-Access—do not assume `pnpm brain` exists inside Gate-Access.
 - Prefer one primary writer per GateFlow workflow phase; use parallel reviewers or CI investigators for failing checks rather than multiple concurrent writers on the same phase.
+- Do not `/certify` until `CERTIFICATION_PACKET` is `valid:true` with owned browser/session gates proven; never treat a manual checkbox as certification evidence.
 
 ## Learned Workspace Facts
 
@@ -25,3 +26,4 @@
 - Lighthouse CI defaults to `https://www.gateflow.site` and `https://app.gateflow.site` (not `gateflow.app`); URL probes soft-skip unreachable hosts, and individual Lighthouse jobs are not required to merge—**Lighthouse Gate** soft-passes.
 - Production deploys use GitHub Environments (`Production` / `Preview` and per-app `Production – gateflow-*` / `Preview – gateflow-*`) via `.github/workflows/deploy.yml`; bootstrap with `scripts/setup-github-environments.sh` and per-app `VERCEL_PROJECT_ID_*` secrets; run the Vercel CLI from the repo root (not an `apps/` subdirectory). Vercel Hobby enforces `api-deployments-free-per-day`; each app’s `vercel.json` sets `ignoreCommand` to `scripts/ignore-build.sh` to skip Dependabot and automatic Preview builds; the GitHub Deployments sidebar can show stale Preview failures that are not live outages.
 - Production Prisma migrate unblock uses `.github/workflows/db-migrate.yml` (`prisma migrate resolve` for stuck rows such as `platform_evolution*`, then `migrate deploy`); use `skip_migration=true` on `/deploy` when P3009 blocks app deploys.
+- Cross-subdomain SSO between `app.gateflow.site` and `portal.gateflow.site` needs Production client-dashboard `AUTH_COOKIE_DOMAIN=.gateflow.site` plus matching JWT/`NEXTAUTH_SECRET` across those apps.

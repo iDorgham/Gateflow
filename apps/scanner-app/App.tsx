@@ -490,6 +490,7 @@ function ScannerScreen({
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const {
     session: shiftSession,
+    loading: shiftLoading,
     busy: shiftBusy,
     error: shiftError,
     startShift,
@@ -562,7 +563,13 @@ function ScannerScreen({
   const handleLogout = async () => {
     if (isLoggingOut || shiftBusy) return;
     setIsLoggingOut(true);
-    await onLogout(); // navigates away — no need to reset flag
+    try {
+      await onLogout();
+    } finally {
+      // A blocked/failed logout leaves ScannerScreen mounted and must restore
+      // the control. Successful logout navigates away, making this harmless.
+      setIsLoggingOut(false);
+    }
   };
 
   // ── Gate selector ─────────────────────────────────────────────────────────
@@ -652,6 +659,7 @@ function ScannerScreen({
       });
       return;
     }
+    const scanShiftLogId = shiftSession?.shiftLogId;
 
     setUi({ phase: 'processing' });
     __DEV__ &&
@@ -805,7 +813,7 @@ function ScannerScreen({
       local.payload,
       location,
       selectedGate.id,
-      shiftSession?.shiftLogId
+      scanShiftLogId
     );
     __DEV__ &&
       console.debug(
@@ -819,7 +827,7 @@ function ScannerScreen({
 
     if (result.status === 'rejected') {
       if (result.reason === 'no_active_shift') {
-        await clearLocalShift();
+        await clearLocalShift(scanShiftLogId);
       }
       lastRejectedResult.current = result;
       lastRejectedQRData.current = qrData;
@@ -964,24 +972,17 @@ function ScannerScreen({
 
       {activeTab === 'scanner' && (
         <>
-          {/* Live camera feed */}
-          {canScan(selectedGate?.id) ? (
-            <CameraView
-              style={StyleSheet.absoluteFill}
-              facing="back"
-              barcodeScannerSettings={{ barcodeTypes: ['qr'] }}
-              onBarcodeScanned={
-                ui.phase === 'scanning' ? onBarcodeScanned : undefined
-              }
-            />
-          ) : (
-            <View
-              style={[
-                StyleSheet.absoluteFill,
-                { backgroundColor: nativeTokens.colors.background },
-              ]}
-            />
-          )}
+          {/* Keep the preview mounted while shift state hydrates; only scanning is gated. */}
+          <CameraView
+            style={StyleSheet.absoluteFill}
+            facing="back"
+            barcodeScannerSettings={{ barcodeTypes: ['qr'] }}
+            onBarcodeScanned={
+              canScan(selectedGate?.id) && ui.phase === 'scanning'
+                ? onBarcodeScanned
+                : undefined
+            }
+          />
 
           {/* Decorative overlay — non-interactive */}
           <View style={styles.overlay} pointerEvents="none">
@@ -1017,7 +1018,7 @@ function ScannerScreen({
             {/* Shift start / end */}
             <Pressable
               style={styles.topBarBtn}
-disabled={shiftBusy}
+              disabled={shiftLoading || shiftBusy || !selectedGate}
               onPress={() => {
                 if (!selectedGate) {
                   setShowGateSelector(true);
@@ -1031,7 +1032,7 @@ disabled={shiftBusy}
               }}
             >
               <Text style={styles.topBarBtnText} numberOfLines={1}>
-                {shiftBusy
+                {shiftLoading || shiftBusy
                   ? '…'
                   : canScan(selectedGate?.id)
                     ? '■ End shift'
@@ -1046,13 +1047,13 @@ disabled={shiftBusy}
             >
               <Text style={styles.topBarBtnText}>⇅ Queue</Text>
             </Pressable>
-          </View>
 
-          {shiftError ? (
-            <View style={styles.shiftErrorBanner} pointerEvents="none">
-              <Text style={styles.shiftErrorText}>{shiftError}</Text>
-            </View>
-          ) : null}
+            {shiftError ? (
+              <View style={styles.shiftErrorBanner} pointerEvents="none">
+                <Text style={styles.shiftErrorText}>{shiftError}</Text>
+              </View>
+            ) : null}
+          </View>
 
           {/* Top-right: Sign-out */}
           <View style={styles.topBarRight} pointerEvents="box-none">
@@ -1746,16 +1747,13 @@ const styles = StyleSheet.create({
     letterSpacing: 1,
   },
   shiftErrorBanner: {
-    position: 'absolute',
-    top: TOP_OFFSET + 120,
-    left: 16,
-    right: 16,
     backgroundColor: nativeTokens.colors.background,
     borderRadius: 10,
     borderWidth: 1,
     borderColor: nativeTokens.colors.danger,
     paddingVertical: 8,
     paddingHorizontal: 12,
+    maxWidth: 240,
   },
   shiftErrorText: {
     color: nativeTokens.colors.danger,
