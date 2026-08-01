@@ -34,6 +34,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Apps
 
+- **[Scanner]** Phase 01 device unlock and QR fail-closed
+
 ---
 
 ## [0.3.1] — 2026-07-28
