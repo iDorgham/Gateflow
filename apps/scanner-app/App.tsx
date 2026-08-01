@@ -31,6 +31,10 @@ import {
 import { login, logout, getValidAccessToken } from './src/lib/auth-client';
 import { IDCaptureModal } from './src/components/IDCaptureModal';
 import { MaintenanceReportModal } from './src/components/MaintenanceReportModal';
+import { DeviceUnlockScreen } from './src/components/DeviceUnlockScreen';
+import { OnboardingNavigator } from './src/navigators/onboarding-navigator';
+import { resolveRuntimeQrSecret } from './src/lib/security/qr-secret';
+import { hasCompletedOnboarding } from './src/lib/security/onboarding';
 import {
   loadSelectedGate,
   saveSelectedGate,
@@ -77,9 +81,6 @@ import {
   Cairo_700Bold,
 } from '@expo-google-fonts/cairo';
 
-/** Shared HMAC secret provisioned via .env: EXPO_PUBLIC_QR_SECRET=<32+ chars> */
-const QR_SECRET = process.env.EXPO_PUBLIC_QR_SECRET ?? '';
-
 const SCAN_COOLDOWN_MS = 2_500;
 const RESULT_DISPLAY_MS = 3_000;
 const SHORT_URL_RESOLVE_TIMEOUT_MS = 5_000;
@@ -91,7 +92,12 @@ const CORNER_W = 3.5;
 // ─── App-level state machine ──────────────────────────────────────────────────
 
 /** Top-level phase of the application. */
-type AppPhase = 'initializing' | 'login' | 'scanner';
+type AppPhase = 'initializing' | 'login' | 'onboarding' | 'unlock' | 'scanner';
+
+async function nextPhaseAfterAuth(): Promise<'onboarding' | 'unlock'> {
+  const onboarded = await hasCompletedOnboarding();
+  return onboarded ? 'unlock' : 'onboarding';
+}
 
 /**
  * Camera/verification sub-phase, only active when AppPhase === 'scanner'.
@@ -260,10 +266,16 @@ export default function App() {
   });
 
   // On mount: check SecureStore for a valid (or refreshable) token.
-  // If found → skip login and go straight to scanner.
+  // First-run devices enter onboarding; otherwise the unlock gate.
   useEffect(() => {
     getValidAccessToken()
-      .then((token) => setAppPhase(token ? 'scanner' : 'login'))
+      .then(async (token) => {
+        if (!token) {
+          setAppPhase('login');
+          return;
+        }
+        setAppPhase(await nextPhaseAfterAuth());
+      })
       .catch(() => setAppPhase('login'));
   }, []);
 
@@ -271,7 +283,13 @@ export default function App() {
     return null;
   }
 
-  const handleLoginSuccess = () => setAppPhase('scanner');
+  const handleLoginSuccess = async () => {
+    setAppPhase(await nextPhaseAfterAuth());
+  };
+
+  const handleOnboardingComplete = () => setAppPhase('unlock');
+
+  const handleUnlocked = () => setAppPhase('scanner');
 
   const handleLogout = async () => {
     await logout();
@@ -311,6 +329,21 @@ export default function App() {
 
   if (appPhase === 'login') {
     return <LoginScreen onSuccess={handleLoginSuccess} />;
+  }
+
+  if (appPhase === 'onboarding') {
+    return (
+      <OnboardingNavigator
+        onComplete={handleOnboardingComplete}
+        onLogout={handleLogout}
+      />
+    );
+  }
+
+  if (appPhase === 'unlock') {
+    return (
+      <DeviceUnlockScreen onUnlocked={handleUnlocked} onLogout={handleLogout} />
+    );
   }
 
   return <ScannerScreen onLogout={handleLogout} />;
@@ -662,8 +695,28 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
       }
     }
 
-    // Step 1 — Local: signature + expiry + nonce replay
-    const local = await verifyScanQR(qrData, QR_SECRET);
+    // Step 1 — Local: signature + expiry + nonce replay (fail closed without secret)
+    const secretResolution = resolveRuntimeQrSecret();
+    if (!secretResolution.ok) {
+      const result: ScanResult = {
+        status: 'rejected',
+        reason: 'invalid',
+        message: secretResolution.message,
+        offline: false,
+      };
+      addHistoryEntry({
+        outcome: 'rejected',
+        qrPrefix: qrData.slice(0, 24),
+        gateName: selectedGate.name,
+        message: result.message,
+      }).catch(() => {});
+      if (prefs.hapticsEnabled)
+        haptic(Haptics.NotificationFeedbackType.Error).catch(() => {});
+      showResult(result);
+      return;
+    }
+
+    const local = await verifyScanQR(qrData, secretResolution.secret);
     __DEV__ &&
       console.debug(
         '[Scanner] Local verify:',

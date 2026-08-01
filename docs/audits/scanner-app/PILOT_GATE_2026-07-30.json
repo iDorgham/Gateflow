@@ -1,0 +1,111 @@
+[
+  {
+    "step": "Security scans the QR",
+    "priority": "P0",
+    "ownerApp": "scanner-app",
+    "status": "partial",
+    "reviewMode": "static-review-only",
+    "createdAt": "2026-07-30T04:15:00.000Z",
+    "commit": "a01ef8a5882a862ce02066b92db08e8cd68818b2",
+    "reason": "Source implements camera → HMAC verify → POST /qrcodes/validate with unit tests. No device/runtime pilot evidence; biometric/shift gates unwired.",
+    "evidence": [
+      "apps/scanner-app/App.tsx",
+      "apps/scanner-app/src/lib/qr-verify.ts",
+      "apps/scanner-app/src/lib/scanner.ts",
+      "apps/scanner-app/src/lib/qr-verify.test.ts",
+      "apps/scanner-app/src/lib/scanner.test.ts"
+    ]
+  },
+  {
+    "step": "Offline scan sync",
+    "priority": "P0",
+    "ownerApp": "scanner-app",
+    "status": "partial",
+    "reviewMode": "static-review-only",
+    "createdAt": "2026-07-30T04:15:00.000Z",
+    "commit": "a01ef8a5882a862ce02066b92db08e8cd68818b2",
+    "reason": "Encrypted offline queue with scanUuid dedup and POST /scans/bulk covered by unit tests; no device offline proof.",
+    "evidence": [
+      "apps/scanner-app/src/lib/offline-queue.ts",
+      "apps/scanner-app/src/lib/offline-queue.test.ts",
+      "apps/scanner-app/src/components/QueueStatus.tsx"
+    ]
+  },
+  {
+    "step": "Create or import resident contact",
+    "priority": "P0",
+    "ownerApp": "client-dashboard",
+    "status": "n/a",
+    "reviewMode": "static-review-only",
+    "createdAt": "2026-07-30T04:15:00.000Z",
+    "commit": "a01ef8a5882a862ce02066b92db08e8cd68818b2",
+    "reason": "Owned by certified client-dashboard",
+    "evidence": []
+  },
+  {
+    "step": "Send invitation or access code",
+    "priority": "P0",
+    "ownerApp": "client-dashboard",
+    "status": "n/a",
+    "reviewMode": "static-review-only",
+    "createdAt": "2026-07-30T04:15:00.000Z",
+    "commit": "a01ef8a5882a862ce02066b92db08e8cd68818b2",
+    "reason": "Owned by certified client-dashboard",
+    "evidence": []
+  },
+  {
+    "step": "Resident activation",
+    "priority": "P0",
+    "ownerApp": "resident-portal",
+    "status": "n/a",
+    "reviewMode": "static-review-only",
+    "createdAt": "2026-07-30T04:15:00.000Z",
+    "commit": "a01ef8a5882a862ce02066b92db08e8cd68818b2",
+    "reason": "Owned by certified resident-portal",
+    "evidence": []
+  },
+  {
+    "step": "Resident creates guest permission",
+    "priority": "P0",
+    "ownerApp": "resident-portal",
+    "status": "n/a",
+    "reviewMode": "static-review-only",
+    "createdAt": "2026-07-30T04:15:00.000Z",
+    "commit": "a01ef8a5882a862ce02066b92db08e8cd68818b2",
+    "reason": "Owned by certified resident-portal",
+    "evidence": []
+  },
+  {
+    "step": "Permission QR display in Resident Portal",
+    "priority": "P0",
+    "ownerApp": "resident-portal",
+    "status": "n/a",
+    "reviewMode": "static-review-only",
+    "createdAt": "2026-07-30T04:15:00.000Z",
+    "commit": "a01ef8a5882a862ce02066b92db08e8cd68818b2",
+    "reason": "Owned by certified resident-portal",
+    "evidence": []
+  },
+  {
+    "step": "Permission appears in Client Dashboard",
+    "priority": "P0",
+    "ownerApp": "client-dashboard",
+    "status": "n/a",
+    "reviewMode": "static-review-only",
+    "createdAt": "2026-07-30T04:15:00.000Z",
+    "commit": "a01ef8a5882a862ce02066b92db08e8cd68818b2",
+    "reason": "Owned by certified client-dashboard",
+    "evidence": []
+  },
+  {
+    "step": "Event appears in Client Dashboard access log",
+    "priority": "P0",
+    "ownerApp": "client-dashboard",
+    "status": "n/a",
+    "reviewMode": "static-review-only",
+    "createdAt": "2026-07-30T04:15:00.000Z",
+    "commit": "a01ef8a5882a862ce02066b92db08e8cd68818b2",
+    "reason": "Owned by certified client-dashboard; scanner writes via validate/deny APIs only",
+    "evidence": []
+  }
+]

@@ -223,15 +223,93 @@
       }
     },
     "scanner-app": {
-      "stage": "focused",
-      "currentPlan": null,
+      "stage": "checking",
+      "currentPlan": "scanner_onboarding_session",
       "baseline": null,
-      "evidence": [],
+      "evidence": [
+        {
+          "id": "scanner-app-audit-2026-07-30",
+          "type": "application-audit",
+          "status": "blocked",
+          "valid": true,
+          "createdAt": "2026-07-30T04:15:00.000Z",
+          "commit": "a01ef8a5882a862ce02066b92db08e8cd68818b2",
+          "reviewMode": "static-review-only",
+          "artifact": "docs/audits/scanner-app/AUDIT_2026-07-30.md"
+        },
+        {
+          "id": "scanner-app-page-map-2026-07-30",
+          "type": "page-map",
+          "status": "passed",
+          "valid": true,
+          "createdAt": "2026-07-30T04:15:00.000Z",
+          "commit": "a01ef8a5882a862ce02066b92db08e8cd68818b2",
+          "reviewMode": "static-review-only",
+          "artifact": "docs/audits/scanner-app/PAGE_MAP_2026-07-30.json"
+        },
+        {
+          "id": "scanner-app-page-scores-2026-07-30",
+          "type": "page-scores",
+          "status": "passed",
+          "valid": true,
+          "createdAt": "2026-07-30T04:15:00.000Z",
+          "commit": "a01ef8a5882a862ce02066b92db08e8cd68818b2",
+          "reviewMode": "static-review-only",
+          "artifact": "docs/audits/scanner-app/PAGE_SCORES_2026-07-30.json",
+          "note": "average 47.33; securityBoundaryProven=false"
+        },
+        {
+          "id": "scanner-app-pilot-gate-2026-07-30",
+          "type": "pilot-gate",
+          "status": "blocked",
+          "valid": true,
+          "createdAt": "2026-07-30T04:15:00.000Z",
+          "commit": "a01ef8a5882a862ce02066b92db08e8cd68818b2",
+          "reviewMode": "static-review-only",
+          "artifact": "docs/audits/scanner-app/PILOT_GATE_2026-07-30.json"
+        },
+        {
+          "id": "scanner-app-plan-2026-07-30",
+          "type": "plan",
+          "status": "passed",
+          "valid": true,
+          "createdAt": "2026-07-30T04:30:00.000Z",
+          "commit": "a01ef8a5882a862ce02066b92db08e8cd68818b2",
+          "reviewMode": "static-review-only",
+          "artifact": "docs/plan/Ready/scanner_onboarding_session/PLAN_scanner_onboarding_session.md",
+          "note": "Ready plan refreshed against AUDIT_2026-07-30; 5 phases"
+        }
+      ],
       "certificationReceipt": null,
-      "updatedAt": "2026-07-30T00:53:55.645Z"
+      "updatedAt": "2026-08-01T00:27:48.542Z",
+      "pageScoresFile": "docs/audits/scanner-app/PAGE_SCORES_2026-07-30.json",
+      "pilotFlowCoverage": {
+        "covered": 0,
+        "total": 9,
+        "ownedCovered": 0,
+        "ownedPartial": 2,
+        "ownedTotal": 2,
+        "ownedMissingUndocumented": 0,
+        "status": "blocked",
+        "artifact": "docs/audits/scanner-app/PILOT_GATE_2026-07-30.json",
+        "lastCheckedAt": "2026-07-30T04:15:00.000Z"
+      },
+      "selection": {
+        "command": "/dev",
+        "agent": "gateflow-guide",
+        "skills": [
+          "gf-guide",
+          "security",
+          "testing",
+          "mobile",
+          "test-driven-development"
+        ],
+        "cli": "cursor",
+        "phase": "01"
+      }
     }
   },
   "workdirLock": null,
   "createdAt": "2026-07-24T00:00:00.000Z",
-  "updatedAt": "2026-07-30T00:53:55.645Z"
+  "updatedAt": "2026-08-01T01:43:09.232Z"
 }

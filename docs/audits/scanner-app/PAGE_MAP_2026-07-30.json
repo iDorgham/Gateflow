@@ -1,0 +1,91 @@
+{
+  "generatedAt": "2026-07-30T04:15:00.000Z",
+  "app": "scanner-app",
+  "commit": "a01ef8a5882a862ce02066b92db08e8cd68818b2",
+  "reviewMode": "static-review-only",
+  "inventorySource": "manual-shell-inventory (no Expo Router app/ tree)",
+  "routeCount": 6,
+  "emptyFoldersCreated": 0,
+  "routes": [
+    {
+      "route": "/login",
+      "file": "apps/scanner-app/App.tsx",
+      "class": "P0",
+      "pilotSteps": ["Security scans the QR"],
+      "evidenceStatus": "partial",
+      "notes": "LoginScreen in App.tsx; SecureStore session via auth-client"
+    },
+    {
+      "route": "/scanner",
+      "file": "apps/scanner-app/App.tsx",
+      "class": "P0",
+      "pilotSteps": ["Security scans the QR"],
+      "evidenceStatus": "partial",
+      "notes": "Camera + HMAC verify + validateOnServer; no device evidence"
+    },
+    {
+      "route": "/today",
+      "file": "apps/scanner-app/src/components/TodayVisitsTab.tsx",
+      "class": "P1",
+      "pilotSteps": [],
+      "evidenceStatus": "weak",
+      "notes": "Operator today visits list"
+    },
+    {
+      "route": "/log",
+      "file": "apps/scanner-app/src/components/HistoryTab.tsx",
+      "class": "P1",
+      "pilotSteps": [],
+      "evidenceStatus": "partial",
+      "notes": "Local scan-history; CD access log is other-app owned"
+    },
+    {
+      "route": "/chat",
+      "file": "apps/scanner-app/src/components/ChatTab.tsx",
+      "class": "P2",
+      "pilotSteps": [],
+      "evidenceStatus": "weak",
+      "notes": "Product scope unclear for pilot"
+    },
+    {
+      "route": "/settings",
+      "file": "apps/scanner-app/src/components/SettingsTab.tsx",
+      "class": "P1",
+      "pilotSteps": [],
+      "evidenceStatus": "partial",
+      "notes": "Prefs + supervisor PIN; biometric gate not wired"
+    }
+  ],
+  "overlays": [
+    {
+      "id": "gate-selector",
+      "file": "apps/scanner-app/src/components/GateSelector.tsx",
+      "class": "P0"
+    },
+    {
+      "id": "queue-status",
+      "file": "apps/scanner-app/src/components/QueueStatus.tsx",
+      "class": "P0"
+    },
+    {
+      "id": "supervisor-override",
+      "file": "apps/scanner-app/src/components/SupervisorOverride.tsx",
+      "class": "P1"
+    },
+    {
+      "id": "id-capture",
+      "file": "apps/scanner-app/src/components/IDCaptureModal.tsx",
+      "class": "P1"
+    },
+    {
+      "id": "maintenance-report",
+      "file": "apps/scanner-app/src/components/MaintenanceReportModal.tsx",
+      "class": "P2"
+    }
+  ],
+  "artifacts": {
+    "audit": "docs/audits/scanner-app/AUDIT_2026-07-30.md",
+    "pageScores": "docs/audits/scanner-app/PAGE_SCORES_2026-07-30.json",
+    "pilotGate": "docs/audits/scanner-app/PILOT_GATE_2026-07-30.json"
+  }
+}

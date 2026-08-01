@@ -16,11 +16,14 @@ FRONTEND
 
 ## Context
 
-- **Project**: GateFlow — Zero-Trust digital gate platform (Turborepo, pnpm)
-- **Apps**: scanner-app (the primary target)
-- **Packages**: db, types, ui
-- **Rules**: pnpm only; multi-tenant (`organizationId`); RTL-safe (logical CSS); ADS ONLY.
-- **Refs**: `CLAUDE.md`, `docs/development/initiatives/IDEA_scanner_onboarding_session.md`, `PLAN_scanner_onboarding_session.md` (plan folder root), `CONTEXT_scanner_onboarding_session.md`, `context/`, `ADS_CORE_TOKENS.md`
+- **Focused app / scope:** `scanner-app` only
+- **Depends on:** Phase 01 unlock helpers (`secure-pin`, `useBiometry`) wired
+- **Audit gap:** first-run wizard missing (`AUDIT_2026-07-30`)
+- **Packages:** `@gate-access/ui/tokens` (`nativeTokens`); no web-only CSS
+- **Rules:** pnpm only; SecureStore for PIN/onboarding flags; ADS tokens only;
+  logical layout (RTL-ready). Prefer Cursor as Tool 1 (mobile).
+- **Refs:** `PLAN_scanner_onboarding_session.md`, `TASKS_*.md`, `SESSION_MEMORY.md`,
+  `docs/audits/scanner-app/AUDIT_2026-07-30.md`
 
 ## Goal
 

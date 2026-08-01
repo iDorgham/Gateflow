@@ -1,0 +1,160 @@
+{
+  "generatedAt": "2026-07-30T04:15:00.000Z",
+  "commit": "a01ef8a5882a862ce02066b92db08e8cd68818b2",
+  "reviewMode": "static-review-only",
+  "average": 47.33,
+  "classificationNote": "securityBoundaryProven=false caps each page score at 49 per Workflow v2 support.validatePageScore",
+  "pages": [
+    {
+      "date": "2026-07-30",
+      "commit": "a01ef8a5882a862ce02066b92db08e8cd68818b2",
+      "locale": "en-only",
+      "viewport": "source-only",
+      "environment": "production-source",
+      "reviewMode": "static-review-only",
+      "securityBoundaryProven": false,
+      "route": "/login",
+      "evidence": [
+        "apps/scanner-app/App.tsx",
+        "apps/scanner-app/src/lib/auth-client.ts",
+        "apps/scanner-app/src/lib/auth-client.test.ts"
+      ],
+      "categories": {
+        "purpose": 12,
+        "task": 14,
+        "hierarchy": 8,
+        "states": 10,
+        "design": 6,
+        "accessibility": 4,
+        "responsiveRtl": 2,
+        "performance": 3,
+        "security": 4
+      }
+    },
+    {
+      "date": "2026-07-30",
+      "commit": "a01ef8a5882a862ce02066b92db08e8cd68818b2",
+      "locale": "en-only",
+      "viewport": "source-only",
+      "environment": "production-source",
+      "reviewMode": "static-review-only",
+      "securityBoundaryProven": false,
+      "route": "/scanner",
+      "evidence": [
+        "apps/scanner-app/App.tsx",
+        "apps/scanner-app/src/lib/qr-verify.ts",
+        "apps/scanner-app/src/lib/scanner.ts",
+        "apps/scanner-app/src/lib/offline-queue.ts",
+        "apps/scanner-app/src/lib/qr-verify.test.ts",
+        "apps/scanner-app/src/lib/scanner.test.ts",
+        "apps/scanner-app/src/lib/offline-queue.test.ts"
+      ],
+      "categories": {
+        "purpose": 14,
+        "task": 16,
+        "hierarchy": 8,
+        "states": 12,
+        "design": 7,
+        "accessibility": 4,
+        "responsiveRtl": 2,
+        "performance": 3,
+        "security": 4
+      }
+    },
+    {
+      "date": "2026-07-30",
+      "commit": "a01ef8a5882a862ce02066b92db08e8cd68818b2",
+      "locale": "en-only",
+      "viewport": "source-only",
+      "environment": "production-source",
+      "reviewMode": "static-review-only",
+      "securityBoundaryProven": false,
+      "route": "/today",
+      "evidence": ["apps/scanner-app/src/components/TodayVisitsTab.tsx"],
+      "categories": {
+        "purpose": 10,
+        "task": 10,
+        "hierarchy": 7,
+        "states": 8,
+        "design": 5,
+        "accessibility": 3,
+        "responsiveRtl": 2,
+        "performance": 3,
+        "security": 2
+      }
+    },
+    {
+      "date": "2026-07-30",
+      "commit": "a01ef8a5882a862ce02066b92db08e8cd68818b2",
+      "locale": "en-only",
+      "viewport": "source-only",
+      "environment": "production-source",
+      "reviewMode": "static-review-only",
+      "securityBoundaryProven": false,
+      "route": "/log",
+      "evidence": [
+        "apps/scanner-app/src/components/HistoryTab.tsx",
+        "apps/scanner-app/src/lib/scan-history.ts"
+      ],
+      "categories": {
+        "purpose": 11,
+        "task": 12,
+        "hierarchy": 7,
+        "states": 8,
+        "design": 5,
+        "accessibility": 3,
+        "responsiveRtl": 2,
+        "performance": 3,
+        "security": 3
+      }
+    },
+    {
+      "date": "2026-07-30",
+      "commit": "a01ef8a5882a862ce02066b92db08e8cd68818b2",
+      "locale": "en-only",
+      "viewport": "source-only",
+      "environment": "production-source",
+      "reviewMode": "static-review-only",
+      "securityBoundaryProven": false,
+      "route": "/chat",
+      "evidence": ["apps/scanner-app/src/components/ChatTab.tsx"],
+      "categories": {
+        "purpose": 8,
+        "task": 8,
+        "hierarchy": 6,
+        "states": 5,
+        "design": 4,
+        "accessibility": 2,
+        "responsiveRtl": 2,
+        "performance": 3,
+        "security": 1
+      }
+    },
+    {
+      "date": "2026-07-30",
+      "commit": "a01ef8a5882a862ce02066b92db08e8cd68818b2",
+      "locale": "en-only",
+      "viewport": "source-only",
+      "environment": "production-source",
+      "reviewMode": "static-review-only",
+      "securityBoundaryProven": false,
+      "route": "/settings",
+      "evidence": [
+        "apps/scanner-app/src/components/SettingsTab.tsx",
+        "apps/scanner-app/src/lib/security/secure-pin.ts",
+        "apps/scanner-app/src/hooks/use-biometry.ts"
+      ],
+      "categories": {
+        "purpose": 10,
+        "task": 10,
+        "hierarchy": 7,
+        "states": 8,
+        "design": 5,
+        "accessibility": 3,
+        "responsiveRtl": 2,
+        "performance": 3,
+        "security": 3
+      }
+    }
+  ]
+}

@@ -6,21 +6,24 @@ BACKEND-API
 
 ## Preferred tool
 
-- [x] Claude CLI — security, architecture, complex reasoning
+- [ ] Claude CLI — only if under 80% limit; proposals only until Cursor verifies
 - [ ] Gemini CLI — DB/schema work, fast structural analysis
 - [ ] OpenCode CLI — code generation, scaffolds, refactors
 - [ ] Kilo CLI — free agentic, large context
 - [ ] Qwen CLI — free agentic, 480B reasoning
-- [ ] Cursor IDE — UI/visual iteration (manual)
+- [x] Cursor IDE — Tool 1 (API + client wiring; master verifies)
 - [ ] Kiro IDE — review, specs (manual)
 
 ## Context
 
-- **Project**: GateFlow — Zero-Trust digital gate platform (Turborepo, pnpm)
-- **Apps**: scanner-app (the primary target)
-- **Packages**: db, types, ui
-- **Rules**: pnpm only; multi-tenant (`organizationId`); RTL-safe (logical CSS)
-- **Refs**: `CLAUDE.md`, `PLAN_scanner_onboarding_session.md` (plan folder root), `CONTEXT_scanner_onboarding_session.md`, `context/`, `ShiftLog` schema.
+- **Focused app:** `scanner-app`; API routes may live under `apps/client-dashboard`
+  (or gateway) only for `shift/start|end` — keep diff minimal and tenant-scoped
+- **Pilot step:** enables accountable scanning (device proof still Phase 05)
+- **Packages:** `@gate-access/db` for `ShiftLog` (already migrated); types as needed
+- **Rules:** pnpm only; every query `organizationId` + `deletedAt: null` if field
+  exists; SecureStore/session for client shift state
+- **Refs:** `PLAN_scanner_onboarding_session.md`, `ShiftLog` schema,
+  `docs/audits/scanner-app/AUDIT_2026-07-30.md`
 
 ## Goal
 
