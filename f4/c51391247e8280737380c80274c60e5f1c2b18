@@ -1,0 +1,21 @@
+apps/client-dashboard/src/app/api/scanner/shift/end/route.ts
+  s_c38ecbde9e15d4::t_447decff9fe1c5 33-36,43-64,76-82
+CHANGELOG.md
+  s_c38ecbde9e15d4::t_3bbd9084c4275e 41-42
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.19",
+  "base_commit_sha": "f4c51391247e8280737380c80274c60e5f1c2b18",
+  "prompts": {},
+  "sessions": {
+    "s_c38ecbde9e15d4": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "809c09b5-59ff-498a-a916-aa53ff762a81",
+        "model": "grok-4.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
