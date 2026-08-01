@@ -1,0 +1,79 @@
+docs/audits/scanner-app/PAGE_MAP_2026-07-30.json
+  s_55e4dcfab374c2::t_4194b17b87c6ef 1-91
+apps/scanner-app/src/components/DeviceUnlockScreen.tsx
+  s_55e4dcfab374c2::t_5bfd46f8d5cd2c 1,10,32,34-37,40,50,56,59-60,67,72,85,115,123-126,136,140,168,174,186
+  s_55e4dcfab374c2::t_ce3cff674303c2 162,169,176,183-185,191,196,200-203,214,221
+  s_55e4dcfab374c2::t_519180d8426a3d 2-9,11-31,33,38-39,41-49,51-55,57-58,61-66,68-71,73-84,86-114,116-122,127-135,137-139,141-161,163-167,170-173,175,177-182,187-190,192-195,197-199,204-213,215-220
+  s_55e4dcfab374c2::t_c9b2d8867d4f77 222-225
+apps/scanner-app/App.tsx
+  s_55e4dcfab374c2::t_316a9f40d467a2 672-693
+  s_55e4dcfab374c2::t_8829773588e1b7 34-35
+  s_55e4dcfab374c2::t_db152a50516e5d 93
+  s_55e4dcfab374c2::t_7c31d5a730fc7b 262,265,273-275,317-320
+  s_55e4dcfab374c2::t_b23b1ab1ae1484 321-322
+docs/audits/scanner-app/PILOT_GATE_2026-07-30.json
+  s_55e4dcfab374c2::t_f23a24c92aa61a 1-111
+apps/scanner-app/src/lib/security/qr-secret.ts
+  s_55e4dcfab374c2::t_5cbac7dd3b40ce 1-41
+  s_55e4dcfab374c2::t_3599125443bd6f 42
+docs/plan/Active/scanner_onboarding_session/SESSION_MEMORY.md
+  s_55e4dcfab374c2::t_a45e49448bf639 6-37
+  s_55e4dcfab374c2::t_a0099904b5759c 1-5
+docs/audits/scanner-app/AUDIT_2026-07-30.md
+  s_55e4dcfab374c2::t_037662fa37de09 1-159
+docs/audits/scanner-app/PAGE_SCORES_2026-07-30.json
+  s_55e4dcfab374c2::t_ba44dc77b15071 1-160
+docs/audits/scanner-app/PAGE_MAP_2026-07-30.md
+  s_55e4dcfab374c2::t_4b232f7b8ac696 1-33
+.ai/workflow-v2/state.json
+  s_55e4dcfab374c2::t_271c1f1b40b4da 227,285
+  s_55e4dcfab374c2::t_3a92887dea5571 230-282,286-309,314
+  s_55e4dcfab374c2::t_5bfd06f7b9b21e 226,229,284
+apps/scanner-app/src/lib/security/device-unlock.ts
+  s_55e4dcfab374c2::t_b75a7edf2ddc07 1-30
+docs/plan/Active/scanner_onboarding_session/PLAN_scanner_onboarding_session.md
+  s_55e4dcfab374c2::t_448b9a5a671846 7
+  s_55e4dcfab374c2::t_aa448c0956cd28 3-6,9,11-13,17,19-26,30,32-38,42,44-47,51,53-59,61-62,66,76-77,83-96,100,102-104,108
+CHANGELOG.md
+  s_55e4dcfab374c2::t_c1ba186ef9c394 13-16
+apps/scanner-app/src/lib/security/device-unlock.test.ts
+  s_55e4dcfab374c2::t_f3dab9b46bb0fe 1-87
+docs/plan/backlog/ALL_TASKS_BACKLOG.md
+  s_55e4dcfab374c2::t_721800aa865584 138
+  s_55e4dcfab374c2::t_dd1a999ebc3428 140,144
+  s_55e4dcfab374c2::t_edf28dbb343d7a 141,146,148
+docs/plan/Active/scanner_onboarding_session/TASKS_scanner_onboarding_session.md
+  s_55e4dcfab374c2::t_d4fb0b63db67de 18-21
+  s_55e4dcfab374c2::t_546b98a9299235 15-17
+  s_55e4dcfab374c2::t_8b9627f7cd8a81 4-5,7,9-14,25-30,35,37-40,45-48,51,53-59
+docs/plan/Active/scanner_onboarding_session/phase_logs/PHASE_LOG_phase_01.md
+  s_55e4dcfab374c2::t_3e601361682690 1-38
+apps/scanner-app/src/lib/security/qr-secret.test.ts
+  s_55e4dcfab374c2::t_4d18e54cb674c8 1-41
+docs/plan/Active/scanner_onboarding_session/phases/01_security_auth/PROMPT_phase_01.md
+  s_55e4dcfab374c2::t_274d6bc9f88b32 1,5,7,9-12,16-24,28-29,33-37,41-65,69-75,79-89
+docs/plan/Active/scanner_onboarding_session/phases/05_polish_qa/PROMPT_phase_05.md
+  s_55e4dcfab374c2::t_0d278adf33a2cc 1,5,7,9-12,16-22,26-27,31-38,42-65,69-76,80-89
+docs/plan/Active/scanner_onboarding_session/phases/02_onboarding_wizard/PROMPT_phase_02.md
+  s_55e4dcfab374c2::t_e6bc5a74051e73 19-26
+docs/plan/Active/scanner_onboarding_session/phases/03_shift_management/PROMPT_phase_03.md
+  s_55e4dcfab374c2::t_46ffa5eece66d3 9,14,19-26
+docs/plan/Active/scanner_onboarding_session/phases/04_home_redesign/PROMPT_phase_04.md
+  s_55e4dcfab374c2::t_0004dbe3e43e02 19-24
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.19",
+  "base_commit_sha": "74f13c7fd533399e00be6a2f0581dec14f4b9720",
+  "prompts": {},
+  "sessions": {
+    "s_55e4dcfab374c2": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "9eb763a1-f03d-4c6d-b6cf-d1a99923376f",
+        "model": "grok-4.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
