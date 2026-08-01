@@ -163,7 +163,7 @@
       "uuid": ">=11.1.1",
       "ip-address": ">=10.1.1",
       "markdown-it": ">=14.2.0",
-      "@babel/core": ">=7.29.6",
+      "@babel/core": "^7.29.6",
       "esbuild": ">=0.28.1",
       "@ai-sdk/provider-utils": ">=4.0.21"
     }

@@ -119,8 +119,23 @@ pnpm --filter scanner-app test
   reset the inactivity clock via the effect's dependency array — fixed with
   a latest-ref pattern in `use-inactivity-timer.ts` plus `useCallback` on
   `handleInactivityLock` in `App.tsx`, placed before the component's first
-  conditional return. CodeRabbit's own beta autofix (merged separately as
-  PR #211 onto this same branch) landed the same fix independently but
-  reproduced a rules-of-hooks violation; this branch's merged version keeps
-  the corrected placement. Two documentation nits in this file and
-  `SESSION_MEMORY.md` were also fixed.
+  conditional return. CodeRabbit's beta autofix landed the same fix
+  independently across two separate autofix runs (PR #211, then PR #212
+  on top of it) but reproduced the rules-of-hooks violation both times;
+  each was reconciled by hand to keep the corrected placement. PR #212's
+  autofix additionally included a real fix for the pre-existing
+  `@babel/core` 7-vs-8 mismatch that has blocked `expo export` since
+  Phase 04 — `apps/scanner-app/package.json`'s `@babel/runtime` reverted
+  to `^7.26.0`, root `pnpm.overrides["@babel/core"]` narrowed from
+  `>=7.29.6` to `^7.29.6`, plus a full `pnpm-lock.yaml` relock. Verified
+  with `pnpm install` + the full monorepo preflight (changelog/ADS/
+  bootstrap-routes checks, `turbo lint` 25/25, `turbo typecheck` 22/22,
+  `turbo test` 13/13 — zero failures across all 18 workspace packages)
+  before pushing. `expo export` for `scanner-app` is genuinely further
+  along now — Metro bundles all 2546 modules instead of failing at
+  config-load time — but still fails, on a different, previously-masked
+  issue (`Cannot find module 'hermes-compiler/package.json'` during
+  Hermes bytecode compilation). Not a regression from this change; a
+  separate pre-existing environment gap this fix simply unblocked the
+  path to. Two documentation nits in this file and `SESSION_MEMORY.md`
+  were also fixed.
