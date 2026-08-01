@@ -28,7 +28,7 @@ export function useInactivityTimer({
   const backgroundedAtRef = useRef<number | null>(null);
   const onLockRef = useRef(onLock);
 
-  // Keep onLockRef up to date
+  // Keep onLockRef in sync with the latest onLock callback
   useEffect(() => {
     onLockRef.current = onLock;
   }, [onLock]);

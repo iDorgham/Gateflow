@@ -5,7 +5,7 @@
 - Focused app: `scanner-app`
 - Workflow stage: `checking` (app-level pilot-readiness stage; unchanged by phase work — see gotcha below)
 - Plan path: `docs/plan/Active/scanner_onboarding_session/`
-- Branch: `feat/scanner-phase-05-guard` (cut from `origin/master` @ `68a7d807`, tracks `origin/master`; PR [#210](https://github.com/iDorgham/Gateflow/pull/210))
+- Branch: `feat/scanner-phase-05-guard` (PR [#210](https://github.com/iDorgham/Gateflow/pull/210))
 - Last phase completed (code): **05 — Polish, BiometricGuard, RTL, error boundaries** (device-evidence steps explicitly deferred — see below). Committed.
 - Exact next action: capture the two device-evidence items before `/check` → `/pilot`
 - **Do not `/certify`** — blocked on device evidence for Phase 05's two owned pilot steps (signed-QR scan, offline enqueue+sync). `docs/audits/scanner-app/PILOT_GATE_*.json` has not been touched by Phase 05.
@@ -36,10 +36,10 @@
 
 ## State handoff
 
-- Phase 04: home dashboard — shipped and merged (PR #208, CI was 19/20 green, `cubic` skipping/not-required).
-- Phase 05: `BiometricGuard` + inactivity timer, motion polish (`Animated`, not Reanimated), RTL audit (no fixes needed), error boundaries + initial-loading state on Home — all shipped, tests/lint/typecheck green, committed. Device-evidence steps and `PILOT_GATE_*.json` refresh explicitly NOT done — need a real device.
+- Phase 04: home dashboard — shipped and merged (PR [#208](https://github.com/iDorgham/Gateflow/pull/208), CI was 19/20 green, `cubic` skipping/not-required).
+- Phase 05: `BiometricGuard` + inactivity timer, motion polish (`Animated`, not Reanimated), RTL audit (no fixes needed), error boundaries + initial-loading state on Home — all shipped, tests/lint/typecheck green, **committed** (PR [#210](https://github.com/iDorgham/Gateflow/pull/210)). Device-evidence steps and `PILOT_GATE_*.json` refresh explicitly NOT done — need a real device.
 - Files added this phase: `src/lib/inactivity.{ts,test.ts}`, `src/hooks/use-inactivity-timer.ts`, `src/components/security/biometric-guard.tsx`, `src/components/common/fade-in.tsx`, `src/components/common/duty-error-boundary.tsx`. Files modified: `App.tsx` (locked phase + guard wiring), `home-screen.tsx` (fade-in/error-boundary/initial-loading, reconciled with the CodeRabbit `catch`-block fix from `fb982b3c`), `onboarding-navigator.tsx` (step fade).
-- Committed and pushed to PR [#210](https://github.com/iDorgham/Gateflow/pull/210) — Phase 05 handoff complete.
+- Committed in PR [#210](https://github.com/iDorgham/Gateflow/pull/210).
 
 ## Context budget
 
