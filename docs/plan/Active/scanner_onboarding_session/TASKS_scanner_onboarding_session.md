@@ -42,11 +42,11 @@
 
 ## Phase 4: Master Scan Home Screen
 
-- [ ] Duty home layout (8pt grid, `nativeTokens`)
-- [ ] Shift time active widget (live timer)
-- [ ] Master Scan FAB (primary action)
-- [ ] Stats: today's scans / queue status / system status
-- [ ] `phase_logs/PHASE_LOG_phase_04.md` updated
+- [x] Duty home layout (8pt grid, `nativeTokens`)
+- [x] Shift time active widget (live timer)
+- [x] Master Scan FAB (primary action)
+- [x] Stats: today's scans / queue status / system status
+- [x] `phase_logs/PHASE_LOG_phase_04.md` updated
 
 ## Phase 5: Polish, Guard, RTL, pilot evidence
 
