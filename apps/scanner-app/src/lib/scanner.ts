@@ -245,11 +245,12 @@ async function enqueueOfflineScan(
 ): Promise<void> {
   try {
     // Use the selected gateId when available; fall back to organizationId
-    await scanQueue.addScan(
-      qrPayload,
-      gateId ?? localPayload.organizationId,
-      shiftLogId
-    );
+    const resolvedGateId = gateId ?? localPayload.organizationId;
+    if (shiftLogId) {
+      await scanQueue.addScan(qrPayload, resolvedGateId, shiftLogId);
+    } else {
+      await scanQueue.addScan(qrPayload, resolvedGateId);
+    }
   } catch {
     // Queue throws if the user is not authenticated — silently ignore.
   }
