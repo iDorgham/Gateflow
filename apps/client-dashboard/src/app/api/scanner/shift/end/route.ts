@@ -114,7 +114,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     return parsedBody.response;
   }
 
-  const parsed = BodySchema.safeParse(parsedBody.body ?? {});
+  const parsed = BodySchema.safeParse(parsedBody.body);
   if (!parsed.success) {
     return NextResponse.json(
       {
