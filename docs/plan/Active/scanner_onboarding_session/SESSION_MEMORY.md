@@ -6,8 +6,8 @@
 - Workflow stage: `checking` (app-level pilot-readiness stage; unchanged by phase work — see gotcha below)
 - Plan path: `docs/plan/Active/scanner_onboarding_session/`
 - Branch: `feat/scanner-phase-05-guard` (cut from `origin/master` @ `68a7d807`), PR [#210](https://github.com/iDorgham/Gateflow/pull/210), open/draft
-- Last phase completed (code): **05 — Polish, BiometricGuard, RTL, error boundaries**, committed and pushed on PR #210. A CodeRabbit review flagged a real bug (inactivity timer reset by `onLock` identity churn on every `App` re-render) — fixed with a latest-ref pattern in `use-inactivity-timer.ts` + `useCallback` on `handleInactivityLock`; two doc nits also fixed. Device-evidence steps explicitly deferred — see below.
-- Exact next action: push the CodeRabbit-review fixes onto PR #210, then capture the two device-evidence items before `/check` → `/pilot`
+- Last phase completed (code): **05 — Polish, BiometricGuard, RTL, error boundaries**, committed and pushed on PR #210. A CodeRabbit review flagged a real bug (inactivity timer reset by `onLock` identity churn on every `App` re-render) — fixed with a latest-ref pattern in `use-inactivity-timer.ts` + `useCallback` on `handleInactivityLock`, placed before the component's first conditional return. CodeRabbit's own beta autofix (merged as PR #211) landed the same fix independently but reproduced a rules-of-hooks violation (didn't relocate the hook past the early return) — this branch's version is the corrected one. Two doc nits also fixed. Device-evidence steps explicitly deferred — see below.
+- Exact next action: capture the two device-evidence items before `/check` → `/pilot`
 - **Do not `/certify`** — blocked on device evidence for Phase 05's two owned pilot steps (signed-QR scan, offline enqueue+sync). `docs/audits/scanner-app/PILOT_GATE_*.json` has not been touched by Phase 05.
 - Phase 04 (`feat/scanner-phase-04-home`) is done: PR [#208](https://github.com/iDorgham/Gateflow/pull/208) merged into `master` 2026-08-01T11:43:43Z (includes a CodeRabbit autofix, `fb982b3c`, that added error handling to `home-screen.tsx`'s `loadStats` — already reconciled into this branch's version of that file).
 
@@ -37,9 +37,9 @@
 ## State handoff
 
 - Phase 04: home dashboard — shipped and merged (PR #208, CI was 19/20 green, `cubic` skipping/not-required).
-- Phase 05: `BiometricGuard` + inactivity timer, motion polish (`Animated`, not Reanimated), RTL audit (no fixes needed), error boundaries + initial-loading state on Home — all shipped, tests/lint/typecheck green, **not committed**. Device-evidence steps and `PILOT_GATE_*.json` refresh explicitly NOT done — need a real device.
+- Phase 05: `BiometricGuard` + inactivity timer, motion polish (`Animated`, not Reanimated), RTL audit (no fixes needed), error boundaries + initial-loading state on Home — all shipped, tests/lint/typecheck green, committed. Device-evidence steps and `PILOT_GATE_*.json` refresh explicitly NOT done — need a real device.
 - Files added this phase: `src/lib/inactivity.{ts,test.ts}`, `src/hooks/use-inactivity-timer.ts`, `src/components/security/biometric-guard.tsx`, `src/components/common/fade-in.tsx`, `src/components/common/duty-error-boundary.tsx`. Files modified: `App.tsx` (locked phase + guard wiring), `home-screen.tsx` (fade-in/error-boundary/initial-loading, reconciled with the CodeRabbit `catch`-block fix from `fb982b3c`), `onboarding-navigator.tsx` (step fade).
-- **Committed and pushed** on PR #210 (`feat/scanner-phase-05-guard`); a follow-up commit for the CodeRabbit-review fixes above still needs to be pushed.
+- Committed and pushed to PR [#210](https://github.com/iDorgham/Gateflow/pull/210), including the rules-of-hooks-corrected review fixes — Phase 05 handoff complete.
 
 ## Context budget
 

@@ -26,7 +26,6 @@ export function useInactivityTimer({
 }: UseInactivityTimerOptions) {
   const lastActivityRef = useRef(Date.now());
   const backgroundedAtRef = useRef<number | null>(null);
-
   // Latest-ref: `onLock` is an inline arrow function at the call site (e.g.
   // App.tsx's `handleInactivityLock`), so its identity can change every
   // render. Reading it through a ref — instead of putting it in the effects'

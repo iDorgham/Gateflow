@@ -118,5 +118,9 @@ pnpm --filter scanner-app test
   identity churned every `App` render, so any unrelated re-render silently
   reset the inactivity clock via the effect's dependency array — fixed with
   a latest-ref pattern in `use-inactivity-timer.ts` plus `useCallback` on
-  `handleInactivityLock` in `App.tsx`. Two documentation nits in this file
-  and `SESSION_MEMORY.md` were also fixed. Follow-up commit pushed onto #210.
+  `handleInactivityLock` in `App.tsx`, placed before the component's first
+  conditional return. CodeRabbit's own beta autofix (merged separately as
+  PR #211 onto this same branch) landed the same fix independently but
+  reproduced a rules-of-hooks violation; this branch's merged version keeps
+  the corrected placement. Two documentation nits in this file and
+  `SESSION_MEMORY.md` were also fixed.
