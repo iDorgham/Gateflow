@@ -1,0 +1,23 @@
+apps/client-dashboard/src/lib/scans/bulk-sync.ts
+  s_42051cf56a175d::t_b0496d5cb76171 236
+apps/client-dashboard/src/lib/scanner-shift.ts
+  s_42051cf56a175d::t_acabab7a3b4f53 146-169,179-186,188
+  s_42051cf56a175d::t_ad6af33c34de78 143-145
+  s_42051cf56a175d::t_9524c19a13dcdb 189-190
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.19",
+  "base_commit_sha": "81677dce3723f516ad96760c7ef5ad89d184988a",
+  "prompts": {},
+  "sessions": {
+    "s_42051cf56a175d": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "2fb85aff-c11c-4cf5-9c7c-348ed391aedb",
+        "model": "grok-4.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
