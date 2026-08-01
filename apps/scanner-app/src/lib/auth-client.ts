@@ -251,16 +251,23 @@ export async function getAuthSubject(): Promise<string | null> {
     // offline shift storage to its subject without touching the network.
     const storedToken = await SecureStore.getItemAsync(ACCESS_TOKEN_KEY);
     if (storedToken) {
-      const storedPayload = JWT.decode(storedToken, null) as {
-        sub?: unknown;
-        exp?: unknown;
-      };
+      let storedPayload: { sub?: unknown; exp?: unknown } | null = null;
+      try {
+        storedPayload = JWT.decode(storedToken, null) as {
+          sub?: unknown;
+          exp?: unknown;
+        };
+      } catch {
+        // Fall through so a refresh token can recover the session.
+      }
       if (
+        storedPayload &&
         typeof storedPayload.sub === 'string' &&
         typeof storedPayload.exp === 'number' &&
         Date.now() < storedPayload.exp * 1000
       ) {
         return storedPayload.sub;
+      }
       }
     }
 
