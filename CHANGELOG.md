@@ -38,6 +38,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Apps
 
+- **[Scanner]** harden Phase 03 shift concurrency and offline linkage
+
 - **[Scanner]** Phase 03 shift start/end and scan gate
 
 - **[Scanner]** Phase 01 device unlock and QR fail-closed
