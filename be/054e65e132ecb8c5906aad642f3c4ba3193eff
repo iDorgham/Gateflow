@@ -1,0 +1,19 @@
+apps/scanner-app/src/lib/scanner.ts
+  s_55e4dcfab374c2::t_b4a04b910a9154 248-253
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.19",
+  "base_commit_sha": "be054e65e132ecb8c5906aad642f3c4ba3193eff",
+  "prompts": {},
+  "sessions": {
+    "s_55e4dcfab374c2": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "9eb763a1-f03d-4c6d-b6cf-d1a99923376f",
+        "model": "grok-4.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
