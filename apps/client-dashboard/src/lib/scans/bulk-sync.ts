@@ -116,7 +116,8 @@ async function resolveVerifiedShiftLogId(
       error: 'Scan time is before the referenced shift start',
     };
   }
-  const endBound = shift.endTime?.getTime() ?? Date.now();
+  const endBound =
+    shift.endTime?.getTime() ?? Date.now() + 5 * 60 * 1000;
   if (scannedAtMs > endBound) {
     return {
       ok: false,
