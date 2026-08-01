@@ -1,0 +1,19 @@
+CHANGELOG.md
+  s_55e4dcfab374c2::t_25b6d31ce1bc00 37-38
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.19",
+  "base_commit_sha": "5adae325b9055e88e1e903a10cd8cf39c2c9df86",
+  "prompts": {},
+  "sessions": {
+    "s_55e4dcfab374c2": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "9eb763a1-f03d-4c6d-b6cf-d1a99923376f",
+        "model": "grok-4.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
