@@ -117,7 +117,7 @@ async function resolveVerifiedShiftLogId(
     };
   }
   const endBound =
-    shift.endTime?.getTime() ?? Date.now() + 5 * 60 * 1000;
+    shift.endTime?.getTime() ?? Date.now();
   if (scannedAtMs > endBound) {
     return {
       ok: false,
