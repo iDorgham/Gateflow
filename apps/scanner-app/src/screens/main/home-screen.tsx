@@ -61,6 +61,8 @@ export function HomeScreen({ shift, onStartScanning }: HomeScreenProps) {
       setPendingCount(pending.length);
       setFailedCount(failed.length);
       setOnline(netState.isConnected ?? false);
+    } catch {
+      // Preserve last-known stats on failure; do not overwrite state
     } finally {
       if (isRefresh) setRefreshing(false);
     }

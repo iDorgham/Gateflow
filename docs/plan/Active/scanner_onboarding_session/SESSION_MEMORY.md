@@ -6,7 +6,7 @@
 - Workflow stage: `checking` (app-level pilot-readiness stage; unchanged by phase work — see gotcha below)
 - Plan path: `docs/plan/Active/scanner_onboarding_session/`
 - Branch: `feat/scanner-phase-03-shift`
-- Last phase completed: **04 — Master Scan Home Screen** (code + tests + lint + typecheck green; NOT committed)
+- Last phase completed: **04 — Master Scan Home Screen** (code + tests + lint green; typecheck: no errors in new or modified files; NOT committed)
 - Exact next action: review/commit Phase 04 work (awaiting explicit go-ahead), then `/dev` Phase 05
 - Do not `/certify` until Phase 05 device evidence lands
 
@@ -36,7 +36,7 @@
 
 - Phase 04: home dashboard (shift widget, stats grid, master scan FAB), wired as a new default tab in `App.tsx`; existing scanner/shift/security flows untouched.
 - Files added: `src/lib/duty-timer.{ts,test.ts}`, `src/lib/duty-stats.{ts,test.ts}`, `src/components/common/stats-grid-item.tsx`, `src/components/home/{shift-info-widget,master-scan-fab}.tsx`, `src/screens/main/home-screen.tsx`. File modified: `App.tsx` (activeTab union + Home render branch + bottom nav entry).
-- Test/lint/typecheck all green; `expo export` build blocked by a pre-existing environment issue (see gotchas).
+- Test, lint, and build all pass on changed files; typecheck shows no errors in new or modified files (49 pre-existing repository-wide errors remain in test files); `expo export` build blocked by a pre-existing environment issue (see gotchas).
 - **Not committed** — `/dev` governance leaves git delivery to the bounded-loop/`ship-phase` path; needs explicit authorization before `git commit`/push.
 
 ## Context budget

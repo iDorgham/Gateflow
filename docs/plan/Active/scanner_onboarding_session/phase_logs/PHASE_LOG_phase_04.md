@@ -22,7 +22,7 @@ pnpm --filter scanner-app test
 pnpm --filter scanner-app lint  # green (expo lint / legacy ESLint config)
 npx tsc --noEmit -p tsconfig.json
 # 49 pre-existing errors, all in *.test.ts files (@jest/globals / global — same
-# gotcha documented in PHASE_LOG_phase_01.md). Zero errors in any new/modified file.
+# gotcha documented in PHASE_LOG_phase_01.md). No errors in new or modified files.
 ```
 
 `pnpm turbo build --filter=scanner-app` (`expo export`) fails in this environment with
