@@ -83,6 +83,15 @@ export function useShiftSession(options?: { enabled?: boolean }) {
 
         // Network/unknown: keep local session (offline-tolerant) until first scan fails.
         setSession(stored);
+      } catch (err) {
+        if (mounted) {
+          setSession(null);
+          setError(
+            err instanceof Error
+              ? err.message
+              : 'Could not load shift session'
+          );
+        }
       } finally {
         if (mounted) setLoading(false);
       }
@@ -211,22 +220,30 @@ export function useShiftSession(options?: { enabled?: boolean }) {
   const disposeForLogout = useCallback(async (): Promise<boolean> => {
     genRef.current += 1;
 
-    const guardId = await getAuthSubject();
-    const stored = session ?? (await loadShiftSessionForUser(guardId));
-    const shiftLogId = stored?.shiftLogId;
+    let cleanupSucceeded = true;
 
-    if (shiftLogId) {
-      const result = await endShiftOnServer(shiftLogId);
-      if (result.ok || result.status === 404) {
-        await finalizeLocalShiftEnd(shiftLogId);
-      } else {
-        await markPendingShiftEnd(shiftLogId);
+    try {
+      const guardId = await getAuthSubject();
+      const stored = session ?? (await loadShiftSessionForUser(guardId));
+      const shiftLogId = stored?.shiftLogId;
+
+      if (shiftLogId) {
+        const result = await endShiftOnServer(shiftLogId);
+        if (result.ok || result.status === 404) {
+          await finalizeLocalShiftEnd(shiftLogId);
+        } else {
+          await markPendingShiftEnd(shiftLogId);
+          cleanupSucceeded = false;
+        }
       }
+    } catch (err) {
+      cleanupSucceeded = false;
+    } finally {
+      setSession(null);
+      setError(null);
     }
 
-    setSession(null);
-    setError(null);
-    return true;
+    return cleanupSucceeded;
   }, [session]);
 
   const canScan = useCallback(
