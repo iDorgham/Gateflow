@@ -3,7 +3,36 @@ import type { ShiftSession } from './shift-session';
 
 const API_BASE_URL =
   process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:3001/api';
-const SHIFT_REQUEST_TIMEOUT = 15_000;
+
+const REQUEST_TIMEOUT_MS = 15000;
+
+/**
+ * POST JSON helper with bounded timeout.
+ * Aborts on timeout and throws, reaching the network-error catch path.
+ */
+async function postJson(params: {
+  endpoint: string;
+  token: string;
+  body: Record<string, unknown>;
+}): Promise<Response> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+
+  try {
+    const response = await fetch(`${API_BASE_URL}${params.endpoint}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${params.token}`,
+      },
+      body: JSON.stringify(params.body),
+      signal: controller.signal,
+    });
+    return response;
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
 
 type ShiftApiData = {
   id: string;
@@ -13,33 +42,6 @@ type ShiftApiData = {
   endTime: string | null;
   gateName?: string;
 };
-
-/**
- * POST helper with bounded timeout and abort handling.
- */
-async function postJson(
-  endpoint: string,
-  token: string,
-  payload: Record<string, unknown>
-): Promise<Response> {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), SHIFT_REQUEST_TIMEOUT);
-
-  try {
-    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(payload),
-      signal: controller.signal,
-    });
-    return response;
-  } finally {
-    clearTimeout(timeoutId);
-  }
-}
 
 export async function startShiftOnServer(params: {
   gateId: string;
@@ -53,8 +55,10 @@ export async function startShiftOnServer(params: {
   }
 
   try {
-    const response = await postJson('/scanner/shift/start', token, {
-      gateId: params.gateId,
+    const response = await postJson({
+      endpoint: '/scanner/shift/start',
+      token,
+      body: { gateId: params.gateId },
     });
 
     const body = (await response.json().catch(() => ({}))) as {
@@ -94,11 +98,11 @@ export async function endShiftOnServer(
   }
 
   try {
-    const response = await postJson(
-      '/scanner/shift/end',
+    const response = await postJson({
+      endpoint: '/scanner/shift/end',
       token,
-      shiftLogId ? { shiftLogId } : {}
-    );
+      body: shiftLogId ? { shiftLogId } : {},
+    });
 
     const body = (await response.json().catch(() => ({}))) as {
       success?: boolean;

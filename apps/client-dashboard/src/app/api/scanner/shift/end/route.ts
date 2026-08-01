@@ -51,7 +51,7 @@ async function readEndBody(
 
   try {
     const text = await request.text();
-    if (!text || !text.trim()) {
+    if (text.trim() === '') {
       return { ok: true, body: {} };
     }
     return { ok: true, body: JSON.parse(text) };
