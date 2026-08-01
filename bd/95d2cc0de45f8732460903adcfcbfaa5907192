@@ -1,0 +1,66 @@
+apps/client-dashboard/src/app/api/scanner/shift/end/route.ts
+  s_55e4dcfab374c2::t_87fd0b3308fbd0 33-34,36-37,39
+  s_55e4dcfab374c2::t_e03a2445b2d871 38,40-45
+apps/client-dashboard/src/app/api/qrcodes/validate/route.test.ts
+  s_55e4dcfab374c2::t_266ce722345735 501-585,591
+  s_55e4dcfab374c2::t_3f1c2b6d67eb3e 586-590
+apps/client-dashboard/src/lib/scanner-shift.test.ts
+  s_55e4dcfab374c2::t_aa2d12bd12da13 1-162
+apps/client-dashboard/src/app/api/scanner/shift/end/route.test.ts
+  s_55e4dcfab374c2::t_3d95e1873bfb6f 2,12-13,15-18,23-32,36,39,59-64,66,70,72-74,80,98,102-125
+  s_55e4dcfab374c2::t_accde946d54762 126
+apps/client-dashboard/src/app/api/scanner/shift/start/route.ts
+  s_55e4dcfab374c2::t_a001884731e4ad 17,106-107,111,113-127
+apps/client-dashboard/src/app/api/qrcodes/validate/route.ts
+  s_55e4dcfab374c2::t_6cab8e2e33a70e 795-799
+  s_55e4dcfab374c2::t_d0b7919b8f0b6f 518-519,521-540,570-576
+  s_55e4dcfab374c2::t_5821bca49fd6c1 732-740
+  s_55e4dcfab374c2::t_73d032d5753426 577-579,741-742,800-801
+apps/scanner-app/src/lib/offline-queue.ts
+  s_55e4dcfab374c2::t_6771a217d816e9 229
+  s_55e4dcfab374c2::t_95fc3052a07bc3 259-261
+  s_55e4dcfab374c2::t_46b654613186b8 178-182,195
+  s_55e4dcfab374c2::t_024ea707630833 16-17
+  s_55e4dcfab374c2::t_99c5bbeb0d1e61 352
+apps/client-dashboard/src/app/api/scanner/shift/start/route.test.ts
+  s_55e4dcfab374c2::t_68a0b04b4312d6 17-21,66-75,86,96,112,121,131-134,139-148,157-188
+docs/plan/Active/scanner_onboarding_session/phase_logs/PHASE_LOG_phase_03.md
+  s_55e4dcfab374c2::t_284b6700df12b0 34-43,46
+apps/client-dashboard/src/lib/scanner-shift.ts
+  s_55e4dcfab374c2::t_af301fb374ed21 6,17-18,20-28,40-47,57-60,67-68,75,77,79-84,87-147
+apps/client-dashboard/src/lib/scans/bulk-sync.ts
+  s_55e4dcfab374c2::t_de88f620f1cc33 26
+  s_55e4dcfab374c2::t_92c43bab221b55 271
+  s_55e4dcfab374c2::t_7e90e11f25c095 10-16,129-132,171-172,183-191,193-204,229-230,252,304-310
+apps/scanner-app/src/hooks/use-shift-session.ts
+  s_55e4dcfab374c2::t_c76cd0948b8205 40-44,47-49,61-69,71-81,83-89
+apps/scanner-app/App.tsx
+  s_55e4dcfab374c2::t_319bc0f20e0f04 39-40
+  s_55e4dcfab374c2::t_6eb62311ee3447 299-306
+  s_55e4dcfab374c2::t_89a1359186089e 966-981
+  s_55e4dcfab374c2::t_f5e3e5fd7b8a6f 298,965
+packages/types/src/scan-event.ts
+  s_55e4dcfab374c2::t_9aab9eb8219e94 18-19
+  s_55e4dcfab374c2::t_66ed46d0aab620 46-51,74-85
+apps/scanner-app/src/lib/scanner.ts
+  s_55e4dcfab374c2::t_4e693c7dadb8fc 146
+  s_55e4dcfab374c2::t_defe5b2858992f 243-244,248-252
+  s_55e4dcfab374c2::t_0cb7a598ad2147 51
+  s_55e4dcfab374c2::t_4679b92cd3635a 89
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.19",
+  "base_commit_sha": "bd95d2cc0de45f8732460903adcfcbfaa5907192",
+  "prompts": {},
+  "sessions": {
+    "s_55e4dcfab374c2": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "9eb763a1-f03d-4c6d-b6cf-d1a99923376f",
+        "model": "grok-4.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
