@@ -1,7 +1,7 @@
 # Phase Log — 05 Polish, BiometricGuard, RTL, pilot evidence
 
 **Plan:** `scanner_onboarding_session`
-**Branch:** `feat/scanner-phase-04-home` (continuing — Phase 04 is PR #208, open)
+**Branch:** `feat/scanner-phase-05-guard` (Phase 04 PR #208 merged; this is PR [#210](https://github.com/iDorgham/Gateflow/pull/210))
 **App:** `scanner-app`
 
 ## Scope split (agreed with user before starting)
@@ -111,4 +111,4 @@ pnpm --filter scanner-app test
   — move `Active/scanner_onboarding_session/` → `Complete/` and the user can
   run `/check` → `/pilot` → `/certify` (not run automatically per this
   phase's own stop condition).
-- Not committed — awaiting explicit go-ahead, same as Phase 04.
+- Committed and pushed to PR [#210](https://github.com/iDorgham/Gateflow/pull/210).
