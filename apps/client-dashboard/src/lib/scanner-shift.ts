@@ -3,7 +3,7 @@
  * All queries are organization-scoped. ShiftLog has no deletedAt field.
  */
 
-import { Prisma, prisma } from '@gate-access/db';
+import { Prisma, prisma, withSerializableRetry } from '@gate-access/db';
 
 export type ActiveShift = {
   id: string;
@@ -13,6 +13,26 @@ export type ActiveShift = {
   startTime: Date;
   endTime: Date | null;
 };
+
+export type SerializedShift = {
+  id: string;
+  gateId: string;
+  guardId: string;
+  organizationId: string;
+  startTime: string;
+  endTime: string | null;
+};
+
+export function serializeShift(shift: ActiveShift): SerializedShift {
+  return {
+    id: shift.id,
+    gateId: shift.gateId,
+    guardId: shift.guardId,
+    organizationId: shift.organizationId,
+    startTime: shift.startTime.toISOString(),
+    endTime: shift.endTime?.toISOString() ?? null,
+  };
+}
 
 /** Open shift for a guard at a gate within an org (endTime is null). */
 export async function findOpenShiftForGate(params: {
@@ -77,10 +97,38 @@ export async function closeShift(params: {
   });
 }
 
-function isRetryableTxnError(error: unknown): boolean {
-  if (!(error instanceof Prisma.PrismaClientKnownRequestError)) return false;
-  // P2034 = write conflict / deadlock; serialization failures surface similarly.
-  return error.code === 'P2034';
+type TxClient = Parameters<Parameters<typeof prisma.$transaction>[0]>[0];
+
+/**
+ * Lock the open shift row for this guard+gate (FOR UPDATE) so clock-out waits
+ * for in-flight validate transactions (and vice versa under row locking).
+ */
+export async function lockOpenShiftForGate(
+  tx: TxClient,
+  params: {
+    organizationId: string;
+    guardId: string;
+    gateId: string;
+  }
+): Promise<ActiveShift | null> {
+  const rows = await tx.$queryRaw<ActiveShift[]>(Prisma.sql`
+    SELECT
+      id,
+      "gateId",
+      "guardId",
+      "organizationId",
+      "startTime",
+      "endTime"
+    FROM "ShiftLog"
+    WHERE "organizationId" = ${params.organizationId}
+      AND "guardId" = ${params.guardId}
+      AND "gateId" = ${params.gateId}
+      AND "endTime" IS NULL
+    ORDER BY "startTime" DESC
+    LIMIT 1
+    FOR UPDATE
+  `);
+  return rows[0] ?? null;
 }
 
 /**
@@ -92,56 +140,49 @@ export async function startOrReuseShift(params: {
   guardId: string;
   gateId: string;
 }): Promise<{ shift: ActiveShift; reused: boolean }> {
-  const maxAttempts = 3;
-  let lastError: unknown;
-
-  for (let attempt = 0; attempt < maxAttempts; attempt++) {
-    try {
-      return await prisma.$transaction(
-        async (tx) => {
-          const existingAtGate = await tx.shiftLog.findFirst({
-            where: {
-              organizationId: params.organizationId,
-              guardId: params.guardId,
-              gateId: params.gateId,
-              endTime: null,
-            },
-            orderBy: { startTime: 'desc' },
-          });
-          if (existingAtGate) {
-            return { shift: existingAtGate, reused: true };
-          }
-
-          // Close any open shift at another gate (CAS: only rows with endTime null).
-          await tx.shiftLog.updateMany({
-            where: {
-              organizationId: params.organizationId,
-              guardId: params.guardId,
-              endTime: null,
-            },
-            data: { endTime: new Date() },
-          });
-
-          const created = await tx.shiftLog.create({
-            data: {
-              organizationId: params.organizationId,
-              guardId: params.guardId,
-              gateId: params.gateId,
-              startTime: new Date(),
-            },
-          });
-
-          return { shift: created, reused: false };
+  return withSerializableRetry(prisma, async (tx) => {
+    const existingAtGate = await tx.shiftLog.findFirst({
+      where: {
+        organizationId: params.organizationId,
+        guardId: params.guardId,
+        gateId: params.gateId,
+        endTime: null,
+      },
+      orderBy: { startTime: 'desc' },
+    });
+    if (existingAtGate) {
+      // Keep single-active-shift: close any other open rows for this guard.
+      await tx.shiftLog.updateMany({
+        where: {
+          organizationId: params.organizationId,
+          guardId: params.guardId,
+          endTime: null,
+          NOT: { id: existingAtGate.id },
         },
-        { isolationLevel: Prisma.TransactionIsolationLevel.Serializable }
-      );
-    } catch (error) {
-      lastError = error;
-      if (!isRetryableTxnError(error) || attempt === maxAttempts - 1) {
-        throw error;
-      }
+        data: { endTime: new Date() },
+      });
+      return { shift: existingAtGate, reused: true };
     }
-  }
 
-  throw lastError;
+    // Close any open shift at another gate (CAS: only rows with endTime null).
+    await tx.shiftLog.updateMany({
+      where: {
+        organizationId: params.organizationId,
+        guardId: params.guardId,
+        endTime: null,
+      },
+      data: { endTime: new Date() },
+    });
+
+    const created = await tx.shiftLog.create({
+      data: {
+        organizationId: params.organizationId,
+        guardId: params.guardId,
+        gateId: params.gateId,
+        startTime: new Date(),
+      },
+    });
+
+    return { shift: created, reused: false };
+  });
 }

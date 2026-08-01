@@ -36,8 +36,6 @@ import { OnboardingNavigator } from './src/navigators/onboarding-navigator';
 import { resolveRuntimeQrSecret } from './src/lib/security/qr-secret';
 import { hasCompletedOnboarding } from './src/lib/security/onboarding';
 import { useShiftSession } from './src/hooks/use-shift-session';
-import { clearShiftSession, loadShiftSession } from './src/lib/shift-session';
-import { endShiftOnServer } from './src/lib/shift-api';
 import {
   loadSelectedGate,
   saveSelectedGate,
@@ -262,6 +260,9 @@ function Viewfinder({ processing }: { processing: boolean }) {
 
 export default function App() {
   const [appPhase, setAppPhase] = useState<AppPhase>('initializing');
+  const shift = useShiftSession({
+    enabled: appPhase !== 'login' && appPhase !== 'initializing',
+  });
   const [fontsLoaded] = useFonts({
     Cairo_400Regular,
     Cairo_600SemiBold,
@@ -295,16 +296,8 @@ export default function App() {
   const handleUnlocked = () => setAppPhase('scanner');
 
   const handleLogout = async () => {
-    // Best-effort: close server ShiftLog so duty does not remain open after sign-out.
-    try {
-      const active = await loadShiftSession();
-      if (active?.shiftLogId) {
-        await endShiftOnServer(active.shiftLogId);
-      }
-    } catch {
-      /* network unavailable — still clear local state */
-    }
-    await clearShiftSession();
+    const mayProceed = await shift.disposeForLogout();
+    if (!mayProceed) return;
     await logout();
     setAppPhase('login');
   };
@@ -359,7 +352,7 @@ export default function App() {
     );
   }
 
-  return <ScannerScreen onLogout={handleLogout} />;
+  return <ScannerScreen onLogout={handleLogout} shift={shift} />;
 }
 
 // ─── Login screen ─────────────────────────────────────────────────────────────
@@ -484,7 +477,13 @@ function LoginScreen({ onSuccess }: { onSuccess: () => void }) {
 
 // ─── Scanner screen ───────────────────────────────────────────────────────────
 
-function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
+function ScannerScreen({
+  onLogout,
+  shift,
+}: {
+  onLogout: () => Promise<void>;
+  shift: ReturnType<typeof useShiftSession>;
+}) {
   const [permission, requestPermission] = useCameraPermissions();
   const [locationPerm, requestLocationPerm] = useForegroundPermissions();
   const [ui, setUi] = useState<ScannerPhase>({ phase: 'scanning' });
@@ -496,7 +495,8 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
     startShift,
     endShift,
     canScan,
-  } = useShiftSession();
+    clearLocalShift,
+  } = shift;
 
   // ── Gate state ────────────────────────────────────────────────────────────
   const [selectedGate, setSelectedGate] = useState<SelectedGate | null>(null);
@@ -560,7 +560,7 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
   // ── Logout ────────────────────────────────────────────────────────────────
 
   const handleLogout = async () => {
-    if (isLoggingOut) return;
+    if (isLoggingOut || shiftBusy) return;
     setIsLoggingOut(true);
     await onLogout(); // navigates away — no need to reset flag
   };
@@ -818,6 +818,9 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
       );
 
     if (result.status === 'rejected') {
+      if (result.reason === 'no_active_shift') {
+        await clearLocalShift();
+      }
       lastRejectedResult.current = result;
       lastRejectedQRData.current = qrData;
       addHistoryEntry({
@@ -1056,7 +1059,7 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
             <Pressable
               style={styles.logoutButton}
               onPress={handleLogout}
-              disabled={isLoggingOut}
+              disabled={isLoggingOut || shiftBusy}
             >
               {isLoggingOut ? (
                 <ActivityIndicator
@@ -1105,7 +1108,9 @@ function ScannerScreen({ onLogout }: { onLogout: () => Promise<void> }) {
               result={ui.result}
               onScanAgain={handleScanAgain}
               onRequestOverride={
-                ui.result.status === 'rejected' && !ui.result.offline
+                ui.result.status === 'rejected' &&
+                !ui.result.offline &&
+                ui.result.reason !== 'no_active_shift'
                   ? handleRequestOverride
                   : undefined
               }

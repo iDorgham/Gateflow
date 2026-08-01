@@ -190,7 +190,7 @@ async function doRefresh(refreshToken: string): Promise<AuthTokens | null> {
  */
 export async function login(
   email: string,
-  password: string,
+  password: string
 ): Promise<{ success: boolean; error?: string }> {
   try {
     const response = await fetch(`${API_BASE_URL}/auth/login`, {
@@ -238,6 +238,21 @@ export async function logout(): Promise<void> {
     }).catch(() => {});
   }
   await clearTokens();
+}
+
+/**
+ * Return the authenticated subject (`sub`) from the access token JWT.
+ * Signature is NOT verified — same pattern as isTokenExpired.
+ */
+export async function getAuthSubject(): Promise<string | null> {
+  const token = await getValidAccessToken();
+  if (!token) return null;
+  try {
+    const payload = JWT.decode(token, null) as { sub?: unknown };
+    return typeof payload.sub === 'string' ? payload.sub : null;
+  } catch {
+    return null;
+  }
 }
 
 export { isTokenExpired, EXPIRY_BUFFER_MS };

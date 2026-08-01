@@ -17,7 +17,10 @@ import { requireAuth, isNextResponse } from '../../../../lib/require-auth';
 import { type AccessTokenClaims } from '../../../../lib/auth';
 import { checkRateLimit } from '../../../../lib/rate-limit';
 import { checkGateAssignment } from '../../../../lib/gate-assignment';
-import { findOpenShiftForGate } from '../../../../lib/scanner-shift';
+import {
+  findOpenShiftForGate,
+  lockOpenShiftForGate,
+} from '../../../../lib/scanner-shift';
 import { checkLocationForGate } from '../../../../lib/location';
 import {
   getActiveWatchlist,
@@ -515,18 +518,14 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       }
     }
 
-    // Step 12 — Atomic transaction: re-check shift + usage (TOCTOU), increment, log.
+    // Step 12 — Atomic transaction: lock shift row + usage (TOCTOU), increment, log.
+    // FOR UPDATE serializes against concurrent closeShift updates on the same row.
     const expectedShiftLogId = scanContext?.shiftLogId;
     const scanLog = await prisma.$transaction(async (tx) => {
-      // Re-check active shift inside the transaction so clock-out cannot race accept.
-      const shiftInTxn = await tx.shiftLog.findFirst({
-        where: {
-          organizationId: claims.orgId!,
-          guardId: claims.sub,
-          gateId,
-          endTime: null,
-        },
-        orderBy: { startTime: 'desc' },
+      const shiftInTxn = await lockOpenShiftForGate(tx, {
+        organizationId: claims.orgId!,
+        guardId: claims.sub,
+        gateId,
       });
       if (!shiftInTxn) {
         throw new NoActiveShiftError(

@@ -10,6 +10,9 @@ type MockTx = {
   qRCode: {
     findMany: jest.Mock<any, any>;
   };
+  shiftLog: {
+    findFirst: jest.Mock<any, any>;
+  };
 };
 
 describe('processBulkScans', () => {
@@ -24,6 +27,9 @@ describe('processBulkScans', () => {
       },
       qRCode: {
         findMany: jest.fn(() => Promise.resolve([])),
+      },
+      shiftLog: {
+        findFirst: jest.fn(() => Promise.resolve(null)),
       },
     };
   });
@@ -219,5 +225,88 @@ describe('processBulkScans', () => {
 
     expect(mockTx.scanLog.createMany).toHaveBeenCalledTimes(1);
     expect(mockTx.scanLog.createMany.mock.calls[0][0].data).toHaveLength(2);
+  });
+
+  it('rejects scans when shiftLogId is not owned/open for the gate (with context)', async () => {
+    const scannedAt = new Date().toISOString();
+    const scans: ScanInput[] = [
+      {
+        id: 'scan-shift-bad',
+        scanUuid: 'uuid-shift-bad',
+        qrCode: 'qr-1',
+        scannedAt,
+        status: 'SUCCESS',
+        gateId: 'gate-1',
+        shiftLogId: 'shift-forged',
+      },
+    ];
+
+    mockTx.qRCode.findMany.mockResolvedValue([
+      { id: 'qr-id-1', code: 'qr-1', scanLogs: [] },
+    ]);
+    mockTx.shiftLog.findFirst.mockResolvedValue(null);
+
+    const result = await processBulkScans(scans, mockTx as any, {
+      organizationId: 'org_1',
+      guardId: 'guard_1',
+    });
+
+    expect(result.failed).toEqual([
+      {
+        id: 'scan-shift-bad',
+        error: 'Invalid or unauthorized shiftLogId for this gate',
+      },
+    ]);
+    expect(mockTx.scanLog.createMany).not.toHaveBeenCalled();
+  });
+
+  it('records verified shiftLogId on LWW audit entries', async () => {
+    const older = new Date('2026-01-01T10:00:00.000Z');
+    const newer = new Date('2026-01-01T12:00:00.000Z');
+    const scans: ScanInput[] = [
+      {
+        id: 'scan-lww',
+        scanUuid: 'uuid-lww',
+        qrCode: 'qr-1',
+        scannedAt: newer.toISOString(),
+        status: 'SUCCESS',
+        gateId: 'gate-1',
+        shiftLogId: 'shift_ok',
+      },
+    ];
+
+    mockTx.qRCode.findMany.mockResolvedValue([
+      {
+        id: 'qr-id-1',
+        code: 'qr-1',
+        scanLogs: [
+          {
+            id: 'existing-1',
+            scannedAt: older,
+            auditTrail: [
+              {
+                timestamp: older.toISOString(),
+                action: 'sync_create',
+                resolvedBy: 'client',
+                details: {},
+              },
+            ],
+          },
+        ],
+      },
+    ]);
+    mockTx.shiftLog.findFirst.mockResolvedValue({
+      startTime: new Date('2026-01-01T09:00:00.000Z'),
+      endTime: null,
+    });
+
+    const result = await processBulkScans(scans, mockTx as any, {
+      organizationId: 'org_1',
+      guardId: 'guard_1',
+    });
+
+    expect(result.synced).toContain('scan-lww');
+    const trail = mockTx.scanLog.update.mock.calls[0][0].data.auditTrail;
+    expect(trail[trail.length - 1].details.shiftLogId).toBe('shift_ok');
   });
 });

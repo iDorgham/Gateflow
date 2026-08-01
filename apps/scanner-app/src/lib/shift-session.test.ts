@@ -4,9 +4,13 @@ jest.mock('expo-secure-store', () => ({
   deleteItemAsync: jest.fn(),
 }));
 
+import * as SecureStore from 'expo-secure-store';
 import {
   canScanWithShift,
+  loadShiftSession,
+  loadShiftSessionForUser,
   parseShiftSession,
+  parseShiftTombstone,
   type ShiftSession,
 } from './shift-session';
 
@@ -46,5 +50,84 @@ describe('canScanWithShift', () => {
 
   it('allows scanning when shift is active for the selected gate', () => {
     expect(canScanWithShift(session, 'gate_1')).toBe(true);
+  });
+});
+
+describe('loadShiftSession + tombstone', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('parses ended/pending_end tombstones', () => {
+    expect(
+      parseShiftTombstone(
+        JSON.stringify({
+          shiftLogId: 'shift_1',
+          reason: 'ended',
+          at: '2026-08-01T12:00:00.000Z',
+        })
+      )
+    ).toEqual({
+      shiftLogId: 'shift_1',
+      reason: 'ended',
+      at: '2026-08-01T12:00:00.000Z',
+    });
+    expect(parseShiftTombstone('{"shiftLogId":"x"}')).toBeNull();
+  });
+
+  it('hides a SecureStore session when an ended tombstone matches', async () => {
+    const session: ShiftSession = {
+      shiftLogId: 'shift_1',
+      gateId: 'gate_1',
+      startTime: '2026-08-01T10:00:00.000Z',
+    };
+    (SecureStore.getItemAsync as jest.Mock).mockImplementation(
+      async (key: string) => {
+        if (key.includes('TOMBSTONE')) {
+          return JSON.stringify({
+            shiftLogId: 'shift_1',
+            reason: 'ended',
+            at: '2026-08-01T12:00:00.000Z',
+          });
+        }
+        return JSON.stringify(session);
+      }
+    );
+
+    await expect(loadShiftSession()).resolves.toBeNull();
+  });
+
+  it('discards a session when guardId does not match the current user', async () => {
+    const session: ShiftSession = {
+      shiftLogId: 'shift_1',
+      gateId: 'gate_1',
+      startTime: '2026-08-01T10:00:00.000Z',
+      guardId: 'guard_a',
+    };
+    (SecureStore.getItemAsync as jest.Mock).mockImplementation(
+      async (key: string) => {
+        if (key.includes('TOMBSTONE')) return null;
+        return JSON.stringify(session);
+      }
+    );
+
+    await expect(loadShiftSessionForUser('guard_b')).resolves.toBeNull();
+    await expect(loadShiftSessionForUser('guard_a')).resolves.toEqual(session);
+  });
+
+  it('discards legacy sessions without guardId when a guard is signed in', async () => {
+    const session: ShiftSession = {
+      shiftLogId: 'shift_1',
+      gateId: 'gate_1',
+      startTime: '2026-08-01T10:00:00.000Z',
+    };
+    (SecureStore.getItemAsync as jest.Mock).mockImplementation(
+      async (key: string) => {
+        if (key.includes('TOMBSTONE')) return null;
+        return JSON.stringify(session);
+      }
+    );
+
+    await expect(loadShiftSessionForUser('guard_a')).resolves.toBeNull();
   });
 });

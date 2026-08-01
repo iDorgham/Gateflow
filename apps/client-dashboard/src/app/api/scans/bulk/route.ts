@@ -175,7 +175,8 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const results = await prisma.$transaction(async (tx) => {
       return processBulkScans(
         scansForSync as import('@/lib/scans/bulk-sync').ScanInput[],
-        tx as unknown as import('@gate-access/db').Prisma.TransactionClient
+        tx as unknown as import('@gate-access/db').Prisma.TransactionClient,
+        orgId ? { organizationId: orgId, guardId: authResult.sub } : undefined
       );
     });
 

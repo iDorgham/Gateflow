@@ -9,6 +9,11 @@ jest.mock('@/lib/require-auth', () => ({
     Boolean(value && typeof value === 'object' && 'status' in value),
 }));
 
+const mockHasPermission = jest.fn();
+jest.mock('@/lib/auth', () => ({
+  hasPermission: (...args: unknown[]) => mockHasPermission(...args),
+}));
+
 const mockCheckGateAssignment = jest.fn();
 jest.mock('@/lib/gate-assignment', () => ({
   checkGateAssignment: (...args: unknown[]) => mockCheckGateAssignment(...args),
@@ -17,6 +22,21 @@ jest.mock('@/lib/gate-assignment', () => ({
 const mockStartOrReuseShift = jest.fn();
 jest.mock('@/lib/scanner-shift', () => ({
   startOrReuseShift: (...args: unknown[]) => mockStartOrReuseShift(...args),
+  serializeShift: (shift: {
+    id: string;
+    gateId: string;
+    guardId: string;
+    organizationId: string;
+    startTime: Date;
+    endTime: Date | null;
+  }) => ({
+    id: shift.id,
+    gateId: shift.gateId,
+    guardId: shift.guardId,
+    organizationId: shift.organizationId,
+    startTime: shift.startTime.toISOString(),
+    endTime: shift.endTime?.toISOString() ?? null,
+  }),
 }));
 
 const mockGateFindFirst = jest.fn();
@@ -57,6 +77,7 @@ describe('POST /api/scanner/shift/start', () => {
       orgId: 'org_1',
       email: 'g@test.com',
     });
+    mockHasPermission.mockReturnValue(true);
     mockCheckGateAssignment.mockResolvedValue(null);
     mockGateFindFirst.mockResolvedValue({
       id: 'gate_1',
@@ -96,6 +117,17 @@ describe('POST /api/scanner/shift/start', () => {
     expect(mockStartOrReuseShift).not.toHaveBeenCalled();
   });
 
+  it('returns 403 when caller lacks scans:view', async () => {
+    mockHasPermission.mockReturnValueOnce(false);
+    const res = await POST(makeRequest({ gateId: 'gate_1' }));
+    expect(res.status).toBe(403);
+    expect(mockHasPermission).toHaveBeenCalledWith(
+      expect.anything(),
+      'scans:view'
+    );
+    expect(mockStartOrReuseShift).not.toHaveBeenCalled();
+  });
+
   it('returns 404 when gate is outside the org', async () => {
     mockGateFindFirst.mockResolvedValueOnce(null);
     const res = await POST(makeRequest({ gateId: 'other_gate' }));
@@ -112,12 +144,49 @@ describe('POST /api/scanner/shift/start', () => {
     expect(mockStartOrReuseShift).not.toHaveBeenCalled();
   });
 
+  it('returns 403 when gate is inactive', async () => {
+    mockGateFindFirst.mockResolvedValueOnce({
+      id: 'gate_1',
+      name: 'Main',
+      isActive: false,
+    });
+    const res = await POST(makeRequest({ gateId: 'gate_1' }));
+    expect(res.status).toBe(403);
+    expect(mockStartOrReuseShift).not.toHaveBeenCalled();
+  });
+
+  it('returns 400 when gateId is missing', async () => {
+    const res = await POST(makeRequest({}));
+    expect(res.status).toBe(400);
+    expect(mockStartOrReuseShift).not.toHaveBeenCalled();
+  });
+
   it('returns 403 when gate assignment denies the guard', async () => {
     mockCheckGateAssignment.mockResolvedValueOnce(
       'You are not allowed to scan at this gate.'
     );
     const res = await POST(makeRequest({ gateId: 'gate_1' }));
     expect(res.status).toBe(403);
+    expect(mockStartOrReuseShift).not.toHaveBeenCalled();
+  });
+
+  it('returns 503 when startOrReuseShift fails', async () => {
+    mockStartOrReuseShift.mockRejectedValueOnce(new Error('db down'));
+    const res = await POST(makeRequest({ gateId: 'gate_1' }));
+    expect(res.status).toBe(503);
+  });
+
+  it('returns 503 when gate lookup fails', async () => {
+    mockGateFindFirst.mockRejectedValueOnce(new Error('db down'));
+    const res = await POST(makeRequest({ gateId: 'gate_1' }));
+    expect(res.status).toBe(503);
+    expect(mockStartOrReuseShift).not.toHaveBeenCalled();
+  });
+
+  it('returns 503 when gate assignment check fails', async () => {
+    mockCheckGateAssignment.mockRejectedValueOnce(new Error('db down'));
+    const res = await POST(makeRequest({ gateId: 'gate_1' }));
+    expect(res.status).toBe(503);
     expect(mockStartOrReuseShift).not.toHaveBeenCalled();
   });
 
@@ -157,7 +226,6 @@ describe('POST /api/scanner/shift/start', () => {
   });
 
   it('closes an open shift at another gate via startOrReuseShift', async () => {
-    // Behavior is owned by startOrReuseShift; route must still call it for gate switch.
     mockStartOrReuseShift.mockResolvedValueOnce({
       reused: false,
       shift: {

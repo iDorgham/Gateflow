@@ -4,30 +4,24 @@
  * Clock-out: closes the authenticated guard's open ShiftLog.
  * Body: { shiftLogId?: string } — when omitted, closes the current open shift.
  *
- * Auth: Bearer JWT. Org + guard ownership required (IDOR-safe).
+ * Auth: Bearer JWT + scans:view. Org + guard ownership required (IDOR-safe).
  */
 
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { requireAuth, isNextResponse } from '@/lib/require-auth';
-import { closeShift, findOpenShiftForGuard } from '@/lib/scanner-shift';
+import { hasPermission } from '@/lib/auth';
+import {
+  closeShift,
+  findOpenShiftForGuard,
+  serializeShift,
+} from '@/lib/scanner-shift';
 
 export const dynamic = 'force-dynamic';
 
 const BodySchema = z.object({
   shiftLogId: z.string().min(1).optional(),
 });
-
-/** Case-insensitive header get (Jest NextRequest Headers are case-sensitive). */
-function getHeader(request: NextRequest, name: string): string | null {
-  const lower = name.toLowerCase();
-  for (const key of request.headers.keys()) {
-    if (key.toLowerCase() === lower) {
-      return request.headers.get(key);
-    }
-  }
-  return null;
-}
 
 /**
  * Empty / whitespace body → {}; non-empty invalid JSON → 400.
@@ -40,45 +34,49 @@ async function readEndBody(
 ): Promise<
   { ok: true; body: unknown } | { ok: false; response: NextResponse }
 > {
+  let raw: string | null = null;
+
   if (typeof request.text === 'function') {
     try {
-      const raw = await request.text();
-      if (!raw.trim()) {
-        return { ok: true, body: {} };
-      }
-      try {
-        return { ok: true, body: JSON.parse(raw) };
-      } catch {
-        return {
-          ok: false,
-          response: NextResponse.json(
-            { success: false, message: 'Invalid JSON body' },
-            { status: 400 }
-          ),
-        };
-      }
+      raw = await request.text();
     } catch {
-      // Fall through to .json() if .text() is present but unusable.
+      raw = null;
+    }
+  } else if (typeof request.arrayBuffer === 'function') {
+    try {
+      const buf = await request.arrayBuffer();
+      raw = new TextDecoder().decode(buf);
+    } catch {
+      raw = null;
     }
   }
 
-  const contentType = getHeader(request, 'content-type') ?? '';
-  const contentLength = getHeader(request, 'content-length');
-  const mightHaveBody =
-    contentType.toLowerCase().includes('application/json') ||
-    (contentLength != null && contentLength !== '0');
-
-  if (!mightHaveBody) {
-    return { ok: true, body: {} };
+  if (raw !== null) {
+    if (!raw.trim()) {
+      return { ok: true, body: {} };
+    }
+    try {
+      return { ok: true, body: JSON.parse(raw) };
+    } catch {
+      return {
+        ok: false,
+        response: NextResponse.json(
+          { success: false, message: 'Invalid JSON body' },
+          { status: 400 }
+        ),
+      };
+    }
   }
 
   try {
     const body = await request.json();
+    // Some runtimes resolve empty application/json to null/undefined.
     return { ok: true, body: body ?? {} };
   } catch (error) {
     const message =
       error instanceof Error ? error.message.toLowerCase() : String(error);
-    // Whitespace-only / empty JSON payloads surface as "Unexpected end of JSON input".
+    // Whitespace-only / empty payloads surface as "Unexpected end of JSON input"
+    // under Jest's NextRequest (no `.text()`). Treat those as {}.
     if (message.includes('unexpected end')) {
       return { ok: true, body: {} };
     }
@@ -100,6 +98,13 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   if (!claims.orgId) {
     return NextResponse.json(
       { success: false, message: 'Organization context required' },
+      { status: 403 }
+    );
+  }
+
+  if (!hasPermission(claims, 'scans:view')) {
+    return NextResponse.json(
+      { success: false, message: 'Scanner permission required' },
       { status: 403 }
     );
   }
@@ -155,14 +160,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     return NextResponse.json({
       success: true,
-      data: {
-        id: closed.id,
-        gateId: closed.gateId,
-        guardId: closed.guardId,
-        organizationId: closed.organizationId,
-        startTime: closed.startTime.toISOString(),
-        endTime: closed.endTime?.toISOString() ?? null,
-      },
+      data: serializeShift(closed),
     });
   } catch (error) {
     console.error('[scanner/shift/end] Failed to end shift:', error);

@@ -26,6 +26,11 @@ export interface ScanInput {
   shiftLogId?: string | null;
 }
 
+export interface BulkSyncContext {
+  organizationId: string;
+  guardId: string;
+}
+
 export interface ConflictResult {
   id: string;
   reason: string;
@@ -50,13 +55,88 @@ function makeAuditEntry(
   };
 }
 
+function shiftDetail(shiftLogId: string | null | undefined): {
+  shiftLogId?: string;
+} {
+  return shiftLogId ? { shiftLogId } : {};
+}
+
+/**
+ * Verify client-supplied shiftLogId is a real ShiftLog for this org/guard/gate
+ * and that scannedAt falls within the shift window (open shifts use now as end).
+ */
+async function resolveVerifiedShiftLogId(
+  tx: Prisma.TransactionClient | PrismaClient,
+  scan: ScanInput,
+  context: BulkSyncContext | undefined,
+  shiftCache: Map<string, { startTime: Date; endTime: Date | null } | null>
+): Promise<
+  { ok: true; shiftLogId: string | null } | { ok: false; error: string }
+> {
+  if (!scan.shiftLogId) {
+    return { ok: true, shiftLogId: null };
+  }
+
+  if (!context) {
+    // Unit tests / legacy callers without auth context — keep prior behavior.
+    return { ok: true, shiftLogId: scan.shiftLogId };
+  }
+
+  const cacheKey = `${scan.shiftLogId}:${scan.gateId}`;
+  if (!shiftCache.has(cacheKey)) {
+    const row = await tx.shiftLog.findFirst({
+      where: {
+        id: scan.shiftLogId,
+        organizationId: context.organizationId,
+        guardId: context.guardId,
+        gateId: scan.gateId,
+      },
+      select: { startTime: true, endTime: true },
+    });
+    shiftCache.set(cacheKey, row);
+  }
+
+  const shift = shiftCache.get(cacheKey);
+  if (!shift) {
+    return {
+      ok: false,
+      error: 'Invalid or unauthorized shiftLogId for this gate',
+    };
+  }
+
+  const scannedAtMs = new Date(scan.scannedAt).getTime();
+  if (Number.isNaN(scannedAtMs)) {
+    return { ok: false, error: 'Invalid scannedAt for shift attribution' };
+  }
+  if (scannedAtMs < shift.startTime.getTime()) {
+    return {
+      ok: false,
+      error: 'Scan time is before the referenced shift start',
+    };
+  }
+  const endBound = shift.endTime?.getTime() ?? Date.now();
+  if (scannedAtMs > endBound) {
+    return {
+      ok: false,
+      error: 'Scan time is after the referenced shift ended',
+    };
+  }
+
+  return { ok: true, shiftLogId: scan.shiftLogId };
+}
+
 export async function processBulkScans(
   scans: ScanInput[],
-  tx: Prisma.TransactionClient | PrismaClient
+  tx: Prisma.TransactionClient | PrismaClient,
+  context?: BulkSyncContext
 ): Promise<SyncResult> {
   const synced: string[] = [];
   const conflicted: ConflictResult[] = [];
   const failed: Array<{ id: string; error: string }> = [];
+  const shiftCache = new Map<
+    string,
+    { startTime: Date; endTime: Date | null } | null
+  >();
 
   // 1. Extract IDs for bulk fetching
   const scanUuids = scans
@@ -96,6 +176,7 @@ export async function processBulkScans(
       id?: string; // Only if exists in DB
       scannedAt: Date;
       auditTrail: AuditTrailEntry[];
+      shiftLogId?: string | null;
     } | null;
 
     // Pending operations
@@ -146,6 +227,18 @@ export async function processBulkScans(
       continue;
     }
 
+    const shiftResolved = await resolveVerifiedShiftLogId(
+      tx,
+      scan,
+      context,
+      shiftCache
+    );
+    if (!shiftResolved.ok) {
+      failed.push({ id: scan.id, error: shiftResolved.error });
+      continue;
+    }
+    const verifiedShiftLogId = shiftResolved.shiftLogId;
+
     // C. Resolve Conflicts / Create
     const incomingTime = new Date(scan.scannedAt).getTime();
     const existingScan = state.latestScan;
@@ -162,6 +255,7 @@ export async function processBulkScans(
           existingScannedAt: existingScan.scannedAt.toISOString(),
           incomingScannedAt: scan.scannedAt,
           incomingScanUuid: scan.scanUuid,
+          ...shiftDetail(verifiedShiftLogId),
         });
 
         const newAuditTrailEntries: AuditTrailEntry[] = [
@@ -176,6 +270,7 @@ export async function processBulkScans(
           id: existingScan.id, // Preserve ID if it was from DB
           scannedAt: new Date(scan.scannedAt),
           auditTrail: newAuditTrailEntries,
+          shiftLogId: verifiedShiftLogId,
         };
 
         // Prepare Operation
@@ -220,6 +315,7 @@ export async function processBulkScans(
           existingScannedAt: existingScan.scannedAt.toISOString(),
           incomingScannedAt: scan.scannedAt,
           incomingScanUuid: scan.scanUuid,
+          ...shiftDetail(verifiedShiftLogId),
         });
 
         const newAuditTrailEntries: AuditTrailEntry[] = [
@@ -258,7 +354,7 @@ export async function processBulkScans(
           id: scan.id,
           reason:
             incomingTime === existingTime
-              ? 'Equal timestamp - server authoritative, kept existing'
+              ? 'equal timestamp - server authoritative, kept existing'
               : 'LWW resolved - existing record newer',
         });
       }
@@ -268,7 +364,7 @@ export async function processBulkScans(
         strategy: 'new_record',
         scanUuid: scan.scanUuid,
         deviceId: scan.deviceId ?? null,
-        ...(scan.shiftLogId ? { shiftLogId: scan.shiftLogId } : {}),
+        ...shiftDetail(verifiedShiftLogId),
       });
 
       const auditTrailEntries: AuditTrailEntry[] = [auditEntry];
@@ -278,6 +374,7 @@ export async function processBulkScans(
       state.latestScan = {
         scannedAt: new Date(scan.scannedAt),
         auditTrail: auditTrailEntries,
+        shiftLogId: verifiedShiftLogId,
       };
 
       state.pendingCreate = {
