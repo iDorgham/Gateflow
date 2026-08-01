@@ -78,8 +78,10 @@ async function resolveVerifiedShiftLogId(
   }
 
   if (!context) {
-    // Unit tests / legacy callers without auth context — keep prior behavior.
-    return { ok: true, shiftLogId: scan.shiftLogId };
+    return {
+      ok: false,
+      error: 'Organization context required for shift attribution',
+    };
   }
 
   const cacheKey = `${scan.shiftLogId}:${scan.gateId}`;
