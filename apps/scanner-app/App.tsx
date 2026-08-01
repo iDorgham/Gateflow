@@ -42,6 +42,11 @@ import {
   type SelectedGate,
 } from './src/components/GateSelector';
 
+const HomeScreen = lazy(() =>
+  import('./src/screens/main/home-screen').then((m) => ({
+    default: m.HomeScreen,
+  }))
+);
 const GateSelector = lazy(() =>
   import('./src/components/GateSelector').then((m) => ({
     default: m.GateSelector,
@@ -510,8 +515,8 @@ function ScannerScreen({
 
   // ── Tab state ─────────────────────────────────────────────────────────────
   const [activeTab, setActiveTab] = useState<
-    'scanner' | 'today' | 'log' | 'chat' | 'settings'
-  >('scanner');
+    'home' | 'scanner' | 'today' | 'log' | 'chat' | 'settings'
+  >('home');
 
   const lastScanAt = useRef<number>(0);
   const resultTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -970,6 +975,30 @@ function ScannerScreen({
         backgroundColor="transparent"
       />
 
+      {activeTab === 'home' && (
+        <Suspense
+          fallback={
+            <View
+              style={[
+                StyleSheet.absoluteFill,
+                styles.center,
+                { backgroundColor: nativeTokens.colors.background },
+              ]}
+            >
+              <ActivityIndicator
+                size="large"
+                color={nativeTokens.colors.primary}
+              />
+            </View>
+          }
+        >
+          <HomeScreen
+            shift={shift}
+            onStartScanning={() => setActiveTab('scanner')}
+          />
+        </Suspense>
+      )}
+
       {activeTab === 'scanner' && (
         <>
           {/* Keep the preview mounted while shift state hydrates; only scanning is gated. */}
@@ -1251,6 +1280,29 @@ function ScannerScreen({
 
       {/* ── Bottom navigation ────────────────────────────────────────────── */}
       <View style={styles.bottomNav} pointerEvents="box-none">
+        {/* Home */}
+        <Pressable
+          style={[styles.navTab, activeTab === 'home' && styles.navTabActive]}
+          onPress={() => setActiveTab('home')}
+        >
+          <Text
+            style={[
+              styles.navTabIcon,
+              activeTab === 'home' && styles.navTabIconActive,
+            ]}
+          >
+            🏠
+          </Text>
+          <Text
+            style={[
+              styles.navTabLabel,
+              activeTab === 'home' && styles.navTabLabelActive,
+            ]}
+          >
+            Home
+          </Text>
+        </Pressable>
+
         {/* Scanner */}
         <Pressable
           style={[
