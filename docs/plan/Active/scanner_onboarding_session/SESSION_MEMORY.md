@@ -14,7 +14,7 @@
 
 - Keep single-shell `App.tsx` model; onboarding is a step-index navigator (no Expo Router rewrite).
 - Auth flow: login → onboarding (if needed) → unlock → scanner shell (tabs: **Home** [new, default], Scan, Today, Log, Chat, Settings).
-- Unlock gate runs only when PIN and/or biometry enrolled.
+- Unlock gate runs only when the user has enrolled a PIN, biometric authentication, or both.
 - Empty `EXPO_PUBLIC_QR_SECRET` fails closed unless `__DEV__` or `EXPO_PUBLIC_ALLOW_INSECURE_QR`.
 - Shift APIs use `/api/scanner/shift/start|end|active` (TASKS naming); association via `auditTrail.shiftLogId` (no schema migration this phase).
 - Cursor is Tool 1 for mobile phases (this session executed directly instead — no Cursor session available).
@@ -36,7 +36,7 @@
 
 - Phase 04: home dashboard (shift widget, stats grid, master scan FAB), wired as a new default tab in `App.tsx`; existing scanner/shift/security flows untouched.
 - Files added: `src/lib/duty-timer.{ts,test.ts}`, `src/lib/duty-stats.{ts,test.ts}`, `src/components/common/stats-grid-item.tsx`, `src/components/home/{shift-info-widget,master-scan-fab}.tsx`, `src/screens/main/home-screen.tsx`. File modified: `App.tsx` (activeTab union + Home render branch + bottom nav entry).
-- Test, lint, and build all pass on changed files; typecheck shows no errors in new or modified files (49 pre-existing repository-wide errors remain in test files); `expo export` build blocked by a pre-existing environment issue (see gotchas).
+- Test/lint/build all pass; changed files pass typecheck; repository-wide typecheck still reports 49 pre-existing errors (all in `*.test.ts` files); `expo export` build blocked by a pre-existing environment issue (see gotchas).
 - **Not committed** — `/dev` governance leaves git delivery to the bounded-loop/`ship-phase` path; needs explicit authorization before `git commit`/push.
 
 ## Context budget
