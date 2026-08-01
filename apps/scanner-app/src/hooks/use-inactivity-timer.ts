@@ -26,6 +26,12 @@ export function useInactivityTimer({
 }: UseInactivityTimerOptions) {
   const lastActivityRef = useRef(Date.now());
   const backgroundedAtRef = useRef<number | null>(null);
+  const onLockRef = useRef(onLock);
+
+  // Keep onLockRef up to date
+  useEffect(() => {
+    onLockRef.current = onLock;
+  }, [onLock]);
 
   const recordActivity = useCallback(() => {
     lastActivityRef.current = Date.now();
@@ -38,11 +44,11 @@ export function useInactivityTimer({
 
     const interval = setInterval(() => {
       if (shouldLock(lastActivityRef.current, Date.now(), timeoutMs)) {
-        onLock();
+        onLockRef.current();
       }
     }, checkIntervalMs);
     return () => clearInterval(interval);
-  }, [enabled, timeoutMs, onLock, checkIntervalMs, recordActivity]);
+  }, [enabled, timeoutMs, checkIntervalMs, recordActivity]);
 
   useEffect(() => {
     if (!enabled) return;
@@ -58,7 +64,7 @@ export function useInactivityTimer({
           const backgroundedSince = backgroundedAtRef.current;
           backgroundedAtRef.current = null;
           if (shouldLock(backgroundedSince, Date.now(), timeoutMs)) {
-            onLock();
+            onLockRef.current();
           } else {
             recordActivity();
           }
@@ -66,7 +72,7 @@ export function useInactivityTimer({
       }
     );
     return () => subscription.remove();
-  }, [enabled, timeoutMs, onLock, recordActivity]);
+  }, [enabled, timeoutMs, recordActivity]);
 
   return { recordActivity };
 }

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, lazy, Suspense } from 'react';
+import { useEffect, useRef, useState, useCallback, lazy, Suspense } from 'react';
 import { nativeTokensNewEra as nativeTokens } from '../../packages/ui/src/tokens';
 import {
   ActivityIndicator,
@@ -302,7 +302,7 @@ export default function App() {
 
   const handleUnlocked = () => setAppPhase('scanner');
 
-  const handleInactivityLock = () => setAppPhase('locked');
+  const handleInactivityLock = useCallback(() => setAppPhase('locked'), []);
 
   const handleLogout = async () => {
     const mayProceed = await shift.disposeForLogout();
