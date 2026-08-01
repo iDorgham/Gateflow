@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Scanner-App]** Phase 02 onboarding wizard (PIN, biometrics toggle, camera)
+
 - **[Scanner-App]** Phase 01 device unlock gate and QR secret fail-closed
 
 - **[Scanner-App]** Audit packet 2026-07-30 and Active onboarding plan

@@ -137,12 +137,12 @@ work in `audit_remediation_2026` before implementation begins.
 **IDEA:** `docs/development/initiatives/IDEA_scanner_onboarding_session.md`  
 **PLAN:** `docs/plan/Active/scanner_onboarding_session/`  
 `PLAN_scanner_onboarding_session.md`  
-**Status:** Active — Phase 01 done; next Phase 02  
+**Status:** Active — Phase 02 done; next Phase 03  
 **Audit:** `docs/audits/scanner-app/AUDIT_2026-07-30.md`  
 **Target:** Q3 2026
 
 - [x] Phase 1 — Security wiring & QR fail-closed (hooks exist; wire + fail-closed)
-- [ ] Phase 2 — Wizard UI: Multi-step ADS Onboarding
+- [x] Phase 2 — Wizard UI: Multi-step ADS Onboarding
 - [ ] Phase 3 — Shift Logic: Clock-in/out API + block scan without shift
 - [ ] Phase 4 — Home Redesign: Master Scan Dashboard
 - [ ] Phase 5 — Polish: BiometricGuard, RTL, device pilot evidence

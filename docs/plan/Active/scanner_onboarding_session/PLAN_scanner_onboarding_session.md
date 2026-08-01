@@ -4,7 +4,7 @@
 **Initiative:** Structured Onboarding + Security + Shift Logs (ADS UI/UX)  
 **Goal:** Wire device security, first-run onboarding, shift-gated scanning, and
 device-proven pilot evidence for scanner-owned P0 steps.  
-**Status:** Active — Phase 01 complete (aligned to audit `docs/audits/scanner-app/AUDIT_2026-07-30.md`)  
+**Status:** Active — Phase 02 complete (aligned to audit `docs/audits/scanner-app/AUDIT_2026-07-30.md`)  
 **Primary app:** `apps/scanner-app`  
 **App scope:** `scanner-app` only (CD/API touch only where noted in Phase 03)  
 **Target:** Q3 2026  

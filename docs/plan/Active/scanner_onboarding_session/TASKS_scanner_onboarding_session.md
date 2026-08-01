@@ -22,13 +22,13 @@
 
 ## Phase 2: Onboarding Wizard (UI/UX)
 
-- [ ] Create `OnboardingNavigator` (stack with slides)
-- [ ] Welcome slide: ADS typography + illustration
-- [ ] Security slide: PIN entry (4 or 6) + bio toggle (uses Phase 01 storage)
-- [ ] Permissions slide: Camera (+ notifications if product-required)
-- [ ] `StepIndicator` using ADS space tokens
-- [ ] Persist onboarding-complete flag (SecureStore)
-- [ ] `phase_logs/PHASE_LOG_phase_02.md` updated
+- [x] Create `OnboardingNavigator` (stack with slides)
+- [x] Welcome slide: ADS typography + illustration
+- [x] Security slide: PIN entry (4 or 6) + bio toggle (uses Phase 01 storage)
+- [x] Permissions slide: Camera (+ notifications if product-required)
+- [x] `StepIndicator` using ADS space tokens
+- [x] Persist onboarding-complete flag (SecureStore)
+- [x] `phase_logs/PHASE_LOG_phase_02.md` updated
 
 ## Phase 3: Shift Management System
 

@@ -32,7 +32,9 @@ import { login, logout, getValidAccessToken } from './src/lib/auth-client';
 import { IDCaptureModal } from './src/components/IDCaptureModal';
 import { MaintenanceReportModal } from './src/components/MaintenanceReportModal';
 import { DeviceUnlockScreen } from './src/components/DeviceUnlockScreen';
+import { OnboardingNavigator } from './src/navigators/onboarding-navigator';
 import { resolveRuntimeQrSecret } from './src/lib/security/qr-secret';
+import { hasCompletedOnboarding } from './src/lib/security/onboarding';
 import {
   loadSelectedGate,
   saveSelectedGate,
@@ -90,7 +92,12 @@ const CORNER_W = 3.5;
 // ─── App-level state machine ──────────────────────────────────────────────────
 
 /** Top-level phase of the application. */
-type AppPhase = 'initializing' | 'login' | 'unlock' | 'scanner';
+type AppPhase = 'initializing' | 'login' | 'onboarding' | 'unlock' | 'scanner';
+
+async function nextPhaseAfterAuth(): Promise<'onboarding' | 'unlock'> {
+  const onboarded = await hasCompletedOnboarding();
+  return onboarded ? 'unlock' : 'onboarding';
+}
 
 /**
  * Camera/verification sub-phase, only active when AppPhase === 'scanner'.
@@ -259,10 +266,16 @@ export default function App() {
   });
 
   // On mount: check SecureStore for a valid (or refreshable) token.
-  // Authenticated sessions enter the device unlock gate before the scanner shell.
+  // First-run devices enter onboarding; otherwise the unlock gate.
   useEffect(() => {
     getValidAccessToken()
-      .then((token) => setAppPhase(token ? 'unlock' : 'login'))
+      .then(async (token) => {
+        if (!token) {
+          setAppPhase('login');
+          return;
+        }
+        setAppPhase(await nextPhaseAfterAuth());
+      })
       .catch(() => setAppPhase('login'));
   }, []);
 
@@ -270,7 +283,11 @@ export default function App() {
     return null;
   }
 
-  const handleLoginSuccess = () => setAppPhase('unlock');
+  const handleLoginSuccess = async () => {
+    setAppPhase(await nextPhaseAfterAuth());
+  };
+
+  const handleOnboardingComplete = () => setAppPhase('unlock');
 
   const handleUnlocked = () => setAppPhase('scanner');
 
@@ -312,6 +329,15 @@ export default function App() {
 
   if (appPhase === 'login') {
     return <LoginScreen onSuccess={handleLoginSuccess} />;
+  }
+
+  if (appPhase === 'onboarding') {
+    return (
+      <OnboardingNavigator
+        onComplete={handleOnboardingComplete}
+        onLogout={handleLogout}
+      />
+    );
   }
 
   if (appPhase === 'unlock') {
