@@ -20,23 +20,32 @@ jest.mock('@/lib/scanner-shift', () => ({
 
 import { NextRequest } from 'next/server';
 
-function makeRequest(
-  body?: object | string,
-  opts?: { raw?: boolean }
-): NextRequest {
-  const payload =
-    body === undefined
-      ? undefined
-      : opts?.raw
-        ? String(body)
-        : JSON.stringify(body);
+function makeRequest(body: object): NextRequest {
   return new NextRequest('http://localhost/api/scanner/shift/end', {
     method: 'POST',
     headers: {
-      ...(payload !== undefined ? { 'Content-Type': 'application/json' } : {}),
+      'Content-Type': 'application/json',
       Authorization: 'Bearer test',
     },
-    ...(payload !== undefined ? { body: payload } : {}),
+    body: JSON.stringify(body),
+  });
+}
+
+function makeRawRequest(raw: string): NextRequest {
+  return new NextRequest('http://localhost/api/scanner/shift/end', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer test',
+    },
+    body: raw,
+  });
+}
+
+function makeEmptyRequest(): NextRequest {
+  return new NextRequest('http://localhost/api/scanner/shift/end', {
+    method: 'POST',
+    headers: { Authorization: 'Bearer test' },
   });
 }
 
@@ -57,7 +66,7 @@ describe('POST /api/scanner/shift/end', () => {
   });
 
   it('returns 400 when non-empty body is not valid JSON', async () => {
-    const res = await POST(makeRequest('{not-json', { raw: true }));
+    const res = await POST(makeRawRequest('{not-json'));
     expect(res.status).toBe(400);
     expect(mockCloseShift).not.toHaveBeenCalled();
   });
@@ -118,7 +127,7 @@ describe('POST /api/scanner/shift/end', () => {
       endTime: new Date(),
     });
 
-    const res = await POST(makeRequest());
+    const res = await POST(makeEmptyRequest());
     expect(res.status).toBe(200);
     expect(mockCloseShift).toHaveBeenCalledWith(
       expect.objectContaining({ shiftLogId: 'shift_open' })

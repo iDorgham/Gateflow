@@ -245,6 +245,9 @@ function makeTx(qrOverrides?: Record<string, unknown>) {
     scanLog: {
       create: jest.fn().mockResolvedValue({ id: 'scan_result_123' }),
     },
+    shiftLog: {
+      findFirst: (...args: unknown[]) => mockFindOpenShiftForGate(...args),
+    },
   };
 }
 
@@ -552,18 +555,16 @@ describe('POST /api/qrcodes/validate', () => {
     mockTransaction.mockImplementationOnce(
       async (fn: (tx: unknown) => Promise<unknown>) => {
         const tx = makeTx();
-        tx.scanLog.create = jest
-          .fn()
-          .mockImplementation(
-            async (args: {
-              data: {
-                auditTrail: Array<{ details?: { shiftLogId?: string } }>;
-              };
-            }) => {
-              auditTrail = args.data.auditTrail;
-              return { id: 'scan_result_123' };
-            }
-          );
+        tx.scanLog.create = jest.fn().mockImplementation(
+          async (args: {
+            data: {
+              auditTrail: Array<{ details?: { shiftLogId?: string } }>;
+            };
+          }) => {
+            auditTrail = args.data.auditTrail;
+            return { id: 'scan_result_123' };
+          }
+        );
         return fn(tx);
       }
     );

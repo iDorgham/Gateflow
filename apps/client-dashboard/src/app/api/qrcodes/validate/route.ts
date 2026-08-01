@@ -519,14 +519,15 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const expectedShiftLogId = scanContext?.shiftLogId;
     const scanLog = await prisma.$transaction(async (tx) => {
       // Re-check active shift inside the transaction so clock-out cannot race accept.
-      const shiftInTxn = await findOpenShiftForGate(
-        {
+      const shiftInTxn = await tx.shiftLog.findFirst({
+        where: {
           organizationId: claims.orgId!,
           guardId: claims.sub,
           gateId,
+          endTime: null,
         },
-        tx
-      );
+        orderBy: { startTime: 'desc' },
+      });
       if (!shiftInTxn) {
         throw new NoActiveShiftError(
           'Start a shift before scanning at this gate'

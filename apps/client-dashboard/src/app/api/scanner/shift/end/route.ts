@@ -18,6 +18,50 @@ const BodySchema = z.object({
   shiftLogId: z.string().min(1).optional(),
 });
 
+/** Case-insensitive header get (Jest NextRequest Headers are case-sensitive). */
+function getHeader(request: NextRequest, name: string): string | null {
+  const lower = name.toLowerCase();
+  for (const key of request.headers.keys()) {
+    if (key.toLowerCase() === lower) {
+      return request.headers.get(key);
+    }
+  }
+  return null;
+}
+
+/**
+ * Empty body → {}; intended JSON that fails to parse → 400.
+ * Matches start-endpoint strictness without treating empty as an error.
+ */
+async function readEndBody(
+  request: NextRequest
+): Promise<
+  { ok: true; body: unknown } | { ok: false; response: NextResponse }
+> {
+  const contentType = getHeader(request, 'content-type') ?? '';
+  const contentLength = getHeader(request, 'content-length');
+
+  const mightHaveBody =
+    contentType.toLowerCase().includes('application/json') ||
+    (contentLength != null && contentLength !== '0');
+
+  if (!mightHaveBody) {
+    return { ok: true, body: {} };
+  }
+
+  try {
+    return { ok: true, body: await request.json() };
+  } catch {
+    return {
+      ok: false,
+      response: NextResponse.json(
+        { success: false, message: 'Invalid JSON body' },
+        { status: 400 }
+      ),
+    };
+  }
+}
+
 export async function POST(request: NextRequest): Promise<NextResponse> {
   const authResult = await requireAuth(request);
   if (isNextResponse(authResult)) return authResult;
@@ -30,22 +74,12 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     );
   }
 
-  // Empty / missing body is allowed (clock-out current open shift).
-  // If a Content-Type is present, body must be valid JSON (matches start endpoint).
-  let body: unknown = {};
-  const contentType = request.headers.get('content-type');
-  if (contentType) {
-    try {
-      body = await request.json();
-    } catch {
-      return NextResponse.json(
-        { success: false, message: 'Invalid JSON body' },
-        { status: 400 }
-      );
-    }
+  const parsedBody = await readEndBody(request);
+  if (parsedBody.ok === false) {
+    return parsedBody.response;
   }
 
-  const parsed = BodySchema.safeParse(body ?? {});
+  const parsed = BodySchema.safeParse(parsedBody.body ?? {});
   if (!parsed.success) {
     return NextResponse.json(
       {

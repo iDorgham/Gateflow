@@ -14,18 +14,13 @@ export type ActiveShift = {
   endTime: Date | null;
 };
 
-type ShiftClient = Prisma.TransactionClient | typeof prisma;
-
 /** Open shift for a guard at a gate within an org (endTime is null). */
-export async function findOpenShiftForGate(
-  params: {
-    organizationId: string;
-    guardId: string;
-    gateId: string;
-  },
-  client: ShiftClient = prisma
-): Promise<ActiveShift | null> {
-  return client.shiftLog.findFirst({
+export async function findOpenShiftForGate(params: {
+  organizationId: string;
+  guardId: string;
+  gateId: string;
+}): Promise<ActiveShift | null> {
+  return prisma.shiftLog.findFirst({
     where: {
       organizationId: params.organizationId,
       guardId: params.guardId,
@@ -37,14 +32,11 @@ export async function findOpenShiftForGate(
 }
 
 /** Any open shift for a guard in the org (any gate). */
-export async function findOpenShiftForGuard(
-  params: {
-    organizationId: string;
-    guardId: string;
-  },
-  client: ShiftClient = prisma
-): Promise<ActiveShift | null> {
-  return client.shiftLog.findFirst({
+export async function findOpenShiftForGuard(params: {
+  organizationId: string;
+  guardId: string;
+}): Promise<ActiveShift | null> {
+  return prisma.shiftLog.findFirst({
     where: {
       organizationId: params.organizationId,
       guardId: params.guardId,
@@ -107,7 +99,15 @@ export async function startOrReuseShift(params: {
     try {
       return await prisma.$transaction(
         async (tx) => {
-          const existingAtGate = await findOpenShiftForGate(params, tx);
+          const existingAtGate = await tx.shiftLog.findFirst({
+            where: {
+              organizationId: params.organizationId,
+              guardId: params.guardId,
+              gateId: params.gateId,
+              endTime: null,
+            },
+            orderBy: { startTime: 'desc' },
+          });
           if (existingAtGate) {
             return { shift: existingAtGate, reused: true };
           }
