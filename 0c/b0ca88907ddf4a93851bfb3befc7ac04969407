@@ -1,0 +1,129 @@
+apps/client-dashboard/src/app/api/scanner/shift/end/route.test.ts
+  s_55e4dcfab374c2::t_d1bd7b7c6a8a49 12-16,24-38,86-93,102-126,165-168
+  s_c38ecbde9e15d4::t_effd4f38334793 169-170
+apps/scanner-app/App.tsx
+  s_35586db2130e3f::t_16cfc936f8e07a 299-300
+  s_35586db2130e3f::t_c0799373f60e49 1062
+  s_35586db2130e3f::t_61cd962b86131e 821-823
+  s_35586db2130e3f::t_a67a4e3284d495 355
+  s_35586db2130e3f::t_6bb9021ddfac32 263-265
+  s_35586db2130e3f::t_837bbf6e9c424b 563
+  s_35586db2130e3f::t_15c6275d83b535 480-486,498-499
+  s_55e4dcfab374c2::t_4ff9b96192b764 1111-1113
+apps/scanner-app/src/lib/shift-session.test.ts
+  s_55e4dcfab374c2::t_1a38f46982fd59 7,10,13
+  s_35586db2130e3f::t_0d19a5b0521218 99-132
+  s_55e4dcfab374c2::t_c2958916efc349 55-98,133
+  s_35586db2130e3f::t_624b67088ee9ef 11
+apps/client-dashboard/src/lib/scanner-shift.test.ts
+  s_69cd203d519e93::t_8d3b462e75c38a 128,142,157
+  s_69cd203d519e93::t_31ae774d8577bb 248
+  s_69cd203d519e93::t_0ebcad7b920644 11-12,15-28,30-38,40-41
+  s_69cd203d519e93::t_66c28989dc602a 13-14
+  s_55e4dcfab374c2::t_b24162e93fb00d 9,43-66,122-127,129-141,143,153,158-162,176-187,213-247,249-301
+  s_55e4dcfab374c2::t_313db9be548f73 154-156
+apps/client-dashboard/src/lib/scans/bulk-sync.test.ts
+  s_55e4dcfab374c2::t_009a1f3f269575 33,229-311
+  s_55e4dcfab374c2::t_0996dc37c4a0a3 13-15,31-32
+apps/client-dashboard/src/lib/scanner-shift.ts
+  s_69cd203d519e93::t_1f0f135f28f646 143-160,162-164,167-187
+  s_69cd203d519e93::t_fe7ac824332879 6
+  s_55e4dcfab374c2::t_9f66d6250e54fa 17-36,100-131
+apps/client-dashboard/src/app/api/scanner/shift/active/route.ts
+  s_55e4dcfab374c2::t_52bb249eb04114 1-69
+apps/client-dashboard/src/app/api/qrcodes/validate/route.ts
+  s_55e4dcfab374c2::t_85d27b1c949c9c 20-23
+  s_55e4dcfab374c2::t_b3c9c9a71d3836 521-522,525-528
+apps/client-dashboard/src/app/api/scanner/shift/start/route.ts
+  s_55e4dcfab374c2::t_146eba8ff7f541 7,14,16,36-38
+  s_69cd203d519e93::t_83f47867394afb 69-85,87-93
+  s_55e4dcfab374c2::t_15e016377c6046 39-41
+  s_55e4dcfab374c2::t_e224247a76297c 42
+apps/scanner-app/src/lib/shift-session.ts
+  s_55e4dcfab374c2::t_cded999fb4f210 6-11,22-26,58-80,87-121,124-137,163,181-209,213
+  s_35586db2130e3f::t_b8ecb8eb030edb 18-19
+  s_35586db2130e3f::t_e3df37ab7f69c7 150
+  s_35586db2130e3f::t_227542306c8e1b 145-149,151-156
+  s_35586db2130e3f::t_9f7af89ee203ac 57
+  s_55e4dcfab374c2::t_6531c16da97a71 27
+  s_55e4dcfab374c2::t_e15de07fb9ef67 138
+  s_35586db2130e3f::t_e70e2fbb401860 157-158
+  s_55e4dcfab374c2::t_f51f1a3aa46baf 210-212
+apps/client-dashboard/src/app/api/scanner/shift/start/route.test.ts
+  s_55e4dcfab374c2::t_44c1c60abb627d 12-16,25-39,80,120-130,147-163,173-176
+  s_69cd203d519e93::t_6b19d47c9010c6 177,179-192
+  s_69cd203d519e93::t_3d806b1801ac89 178
+apps/client-dashboard/src/app/api/scans/bulk/route.ts
+  s_55e4dcfab374c2::t_c062b104af6f50 178-179
+apps/client-dashboard/src/app/api/qrcodes/validate/route.test.ts
+  s_55e4dcfab374c2::t_84c2b842fbaae4 534-542,557-597
+  s_55e4dcfab374c2::t_aded3a5d7182f0 119
+  s_55e4dcfab374c2::t_33323af4da11c2 254
+  s_55e4dcfab374c2::t_50c19af4e4c2b0 171-172
+  s_55e4dcfab374c2::t_9486ad46ca3ebc 295,302-305
+apps/client-dashboard/src/lib/scans/bulk-sync.ts
+  s_55e4dcfab374c2::t_c1e4f090282519 29-33,58-127,130-131,136-139,179,230-234
+  s_55e4dcfab374c2::t_e73ad416b31e74 235-237
+  s_55e4dcfab374c2::t_ff9cf2449a8d37 238-241,258,273,318,357,367,377
+apps/scanner-app/src/hooks/use-shift-session.ts
+  s_35586db2130e3f::t_a420c672b7e44a 20-21,29-34,36
+  s_35586db2130e3f::t_44dbe0938e22c6 1-2,13,26,40-41,51,75-80,96-106,109,113-118,124-136,141,207-231,246-247
+  s_35586db2130e3f::t_7be5b272150235 95
+  s_55e4dcfab374c2::t_a409c3e511e891 4-7,11-12,14-15,37-39,42-50,52-74,81-86,88-91,154,156-175,177,181-186,188-190,192-195,197-199,201
+  s_55e4dcfab374c2::t_c6b4f450e78893 3
+apps/client-dashboard/src/app/api/scanner/shift/end/route.ts
+  s_55e4dcfab374c2::t_ae7e59c7d82b53 45
+  s_55e4dcfab374c2::t_3395e54148af93 7,13-18,47-48,105-111,163
+  s_55e4dcfab374c2::t_e7173d15165bcd 37-38,41,43-44,46,49-50,56-57
+  s_55e4dcfab374c2::t_c500983d9870e8 54-55,58-68,73
+  s_55e4dcfab374c2::t_eee1489ee7ae9a 78-79
+apps/scanner-app/src/lib/shift-api.ts
+  s_55e4dcfab374c2::t_54123a44256553 7-8,19-29,31-32,34-36,40-43,87-96,102,105,122-123,127-128,133-162,168-195,197
+  s_35586db2130e3f::t_46c290835ef88f 30,33,37-39
+  s_35586db2130e3f::t_532cff0e0d7458 57,61-68
+  s_35586db2130e3f::t_2c9cb0ed322410 109,112-119
+  s_35586db2130e3f::t_36cca4526a4bb9 163-167
+  s_55e4dcfab374c2::t_f282cf34cbe3a4 44
+apps/scanner-app/src/lib/auth-client.ts
+  s_55e4dcfab374c2::t_37e69ba702edd9 193,243-257
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.19",
+  "base_commit_sha": "0cb0ca88907ddf4a93851bfb3befc7ac04969407",
+  "prompts": {},
+  "sessions": {
+    "s_35586db2130e3f": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "9fb07723-6bf1-4c14-b837-83b82a5a2723",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_55e4dcfab374c2": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "9eb763a1-f03d-4c6d-b6cf-d1a99923376f",
+        "model": "grok-4.5"
+      },
+      "human_author": null
+    },
+    "s_69cd203d519e93": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "e1a4bada-6ea6-428d-bbc3-fed9ac739176",
+        "model": "composer-2.5-fast"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_c38ecbde9e15d4": {
+      "agent_id": {
+        "tool": "cursor",
+        "id": "809c09b5-59ff-498a-a916-aa53ff762a81",
+        "model": "grok-4.5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
