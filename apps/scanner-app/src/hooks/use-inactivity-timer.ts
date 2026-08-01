@@ -27,6 +27,16 @@ export function useInactivityTimer({
   const lastActivityRef = useRef(Date.now());
   const backgroundedAtRef = useRef<number | null>(null);
 
+  // Latest-ref: `onLock` is an inline arrow function at the call site (e.g.
+  // App.tsx's `handleInactivityLock`), so its identity can change every
+  // render. Reading it through a ref — instead of putting it in the effects'
+  // dependency arrays — means an unrelated App re-render can never re-run
+  // these effects and silently reset `lastActivityRef` via `recordActivity()`.
+  const onLockRef = useRef(onLock);
+  useEffect(() => {
+    onLockRef.current = onLock;
+  }, [onLock]);
+
   const recordActivity = useCallback(() => {
     lastActivityRef.current = Date.now();
   }, []);
@@ -38,11 +48,11 @@ export function useInactivityTimer({
 
     const interval = setInterval(() => {
       if (shouldLock(lastActivityRef.current, Date.now(), timeoutMs)) {
-        onLock();
+        onLockRef.current();
       }
     }, checkIntervalMs);
     return () => clearInterval(interval);
-  }, [enabled, timeoutMs, onLock, checkIntervalMs, recordActivity]);
+  }, [enabled, timeoutMs, checkIntervalMs, recordActivity]);
 
   useEffect(() => {
     if (!enabled) return;
@@ -58,7 +68,7 @@ export function useInactivityTimer({
           const backgroundedSince = backgroundedAtRef.current;
           backgroundedAtRef.current = null;
           if (shouldLock(backgroundedSince, Date.now(), timeoutMs)) {
-            onLock();
+            onLockRef.current();
           } else {
             recordActivity();
           }
@@ -66,7 +76,7 @@ export function useInactivityTimer({
       }
     );
     return () => subscription.remove();
-  }, [enabled, timeoutMs, onLock, recordActivity]);
+  }, [enabled, timeoutMs, recordActivity]);
 
   return { recordActivity };
 }

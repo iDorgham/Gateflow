@@ -1,7 +1,9 @@
 # Phase Log — 05 Polish, BiometricGuard, RTL, pilot evidence
 
 **Plan:** `scanner_onboarding_session`
-**Branch:** `feat/scanner-phase-04-home` (continuing — Phase 04 is PR #208, open)
+**Branch:** `feat/scanner-phase-05-guard`, cut from `master` after Phase 04's
+PR [#208](https://github.com/iDorgham/Gateflow/pull/208) merged. PR
+[#210](https://github.com/iDorgham/Gateflow/pull/210), open/draft.
 **App:** `scanner-app`
 
 ## Scope split (agreed with user before starting)
@@ -111,4 +113,10 @@ pnpm --filter scanner-app test
   — move `Active/scanner_onboarding_session/` → `Complete/` and the user can
   run `/check` → `/pilot` → `/certify` (not run automatically per this
   phase's own stop condition).
-- Not committed — awaiting explicit go-ahead, same as Phase 04.
+- Committed and pushed on PR #210. A CodeRabbit review (triggered manually
+  after an initial rate-limit) flagged a real critical bug — `onLock`'s
+  identity churned every `App` render, so any unrelated re-render silently
+  reset the inactivity clock via the effect's dependency array — fixed with
+  a latest-ref pattern in `use-inactivity-timer.ts` plus `useCallback` on
+  `handleInactivityLock` in `App.tsx`. Two documentation nits in this file
+  and `SESSION_MEMORY.md` were also fixed. Follow-up commit pushed onto #210.

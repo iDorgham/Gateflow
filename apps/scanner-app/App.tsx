@@ -1,4 +1,11 @@
-import { useEffect, useRef, useState, lazy, Suspense } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  lazy,
+  Suspense,
+} from 'react';
 import { nativeTokensNewEra as nativeTokens } from '../../packages/ui/src/tokens';
 import {
   ActivityIndicator,
@@ -290,6 +297,8 @@ export default function App() {
       .catch(() => setAppPhase('login'));
   }, []);
 
+  const handleInactivityLock = useCallback(() => setAppPhase('locked'), []);
+
   if (!fontsLoaded) {
     return null;
   }
@@ -301,8 +310,6 @@ export default function App() {
   const handleOnboardingComplete = () => setAppPhase('unlock');
 
   const handleUnlocked = () => setAppPhase('scanner');
-
-  const handleInactivityLock = () => setAppPhase('locked');
 
   const handleLogout = async () => {
     const mayProceed = await shift.disposeForLogout();
