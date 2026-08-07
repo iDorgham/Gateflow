@@ -1,0 +1,24 @@
+apps/scanner-app/src/components/SupervisorOverride.tsx
+  s_33426b1dd7e829::t_db75d11f07aed6 14
+  s_33426b1dd7e829::t_ab7268696ebaf5 90
+apps/scanner-app/src/lib/scan-history.ts
+  s_33426b1dd7e829::t_b22874842b78ae 9
+  s_33426b1dd7e829::t_ccbd361cbac84c 38
+  s_33426b1dd7e829::t_d76afaa7a29454 12-14,55
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "580661ddf2c312ce463c5602f234957112e114af",
+  "prompts": {},
+  "sessions": {
+    "s_33426b1dd7e829": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "28bf6f0c-c208-4a95-89d8-b2b8fadc6ef3",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
