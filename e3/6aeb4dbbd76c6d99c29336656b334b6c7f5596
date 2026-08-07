@@ -1,0 +1,40 @@
+packages/db/prisma/schema.prisma
+  s_2fa11826a098b7::t_4e1057822734a0 31-33
+  s_33426b1dd7e829::t_fe13498e560b45 477,489
+  s_33426b1dd7e829::t_886a82e5a631fd 387,398
+apps/admin-dashboard/src/app/api/admin/reset-tenant/route.ts
+  s_33426b1dd7e829::t_d6e93149c6acc4 146,150
+  s_33426b1dd7e829::t_5f4ecb821fd82d 67-69,72,74,88-90
+apps/admin-dashboard/src/app/api/audit/log/route.ts
+  s_33426b1dd7e829::t_6d369f2bfef03d 2-3,6-14,21-27,29-41,45-46
+apps/admin-dashboard/src/app/api/admin/reset-tenant/route.test.ts
+  s_33426b1dd7e829::t_b1855bd6ac1711 1-136
+apps/admin-dashboard/src/app/api/audit/log/route.test.ts
+  s_33426b1dd7e829::t_42a7a7730f5bbf 1-92
+packages/db/prisma/migrations/20260807120000_add_scanlog_incident_soft_delete/migration.sql
+  s_33426b1dd7e829::t_b7b5c04d7185ec 1-11
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "e36aeb4dbbd76c6d99c29336656b334b6c7f5596",
+  "prompts": {},
+  "sessions": {
+    "s_2fa11826a098b7": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019fcad3-3bdf-7510-94c1-8a41f73ac8aa",
+        "model": "gpt-5.6-sol"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_33426b1dd7e829": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "28bf6f0c-c208-4a95-89d8-b2b8fadc6ef3",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
