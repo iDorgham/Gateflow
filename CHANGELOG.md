@@ -10,6 +10,8 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) | [Semantic Ver
 
 ### Workspace
 
+- **[Ci]** commit missing pnpm patch files blocking CI Setup
+
 - **[Deps]** reconcile CodeRabbit autofix — Babel dependency fix (PR #212)
 
 - **[Scanner-App]** Phase 02 onboarding wizard (PIN, biometrics toggle, camera)
