@@ -320,7 +320,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
           JOIN "VisitorQR" vqr ON vqr."qrCodeId" = qr.id
           JOIN "Unit" u ON vqr."unitId" = u.id
           WHERE sl."scannedAt" >= ${dateFromValue} AND sl."scannedAt" <= ${dateToValue}
-            AND qr."organizationId" = ${orgId} AND qr."deletedAt" IS NULL
+            AND qr."organizationId" = ${orgId} AND qr."deletedAt" IS NULL AND sl."deletedAt" IS NULL
             AND u."organizationId" = ${orgId}
             ${gateCondition}
           GROUP BY vqr."unitId"
@@ -353,7 +353,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         JOIN "VisitorQR" vqr ON vqr."qrCodeId" = qr.id
         JOIN "Unit" u ON vqr."unitId" = u.id
         WHERE sl."scannedAt" >= ${vacancyCutoff}
-          AND qr."organizationId" = ${orgId} AND qr."deletedAt" IS NULL
+          AND qr."organizationId" = ${orgId} AND qr."deletedAt" IS NULL AND sl."deletedAt" IS NULL
           AND u."organizationId" = ${orgId}
         GROUP BY vqr."unitId"
       `;
@@ -507,6 +507,36 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     const { name, type, sizeSqm, qrQuota, projectId, contactIds, lat, lng } =
       validation.data;
     const quota = qrQuota ?? UNIT_QUOTA_DEFAULTS[type];
+
+    if (projectId) {
+      const project = await prisma.project.findFirst({
+        where: { id: projectId, organizationId: orgId, deletedAt: null },
+        select: { id: true },
+      });
+      if (!project) {
+        return NextResponse.json(
+          { success: false, message: 'Invalid projectId' },
+          { status: 400 }
+        );
+      }
+    }
+
+    if (contactIds?.length) {
+      const validContacts = await prisma.contact.findMany({
+        where: {
+          id: { in: contactIds },
+          organizationId: orgId,
+          deletedAt: null,
+        },
+        select: { id: true },
+      });
+      if (validContacts.length !== new Set(contactIds).size) {
+        return NextResponse.json(
+          { success: false, message: 'Invalid contactIds' },
+          { status: 400 }
+        );
+      }
+    }
 
     const unit = await prisma.unit.create({
       data: {

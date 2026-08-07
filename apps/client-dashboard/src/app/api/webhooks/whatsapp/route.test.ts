@@ -42,6 +42,7 @@ const mockAccessRuleCreate = jest.fn();
 const mockQRCodeCreate = jest.fn();
 const mockVisitorQRCreate = jest.fn();
 const mockUnitFindFirst = jest.fn();
+const mockCommConfigFindFirst = jest.fn();
 const mockTransaction = jest.fn(async (callback: (tx: unknown) => unknown) =>
   callback({
     $executeRaw: mockExecuteRaw,
@@ -60,6 +61,9 @@ jest.mock('@gate-access/db', () => ({
   prisma: {
     $transaction: (...args: unknown[]) => mockTransaction(...args),
     unit: { findFirst: (...args: unknown[]) => mockUnitFindFirst(...args) },
+    organizationCommunicationConfig: {
+      findFirst: (...args: unknown[]) => mockCommConfigFindFirst(...args),
+    },
   },
   QRCodeType: {
     VISITOR: 'VISITOR',
@@ -125,9 +129,9 @@ function request(timestamp: string, eventId = EVENT_ID) {
 
 beforeEach(() => {
   jest.clearAllMocks();
-  process.env.WHATSAPP_WEBHOOK_SECRET = SECRET;
   process.env.QR_SIGNING_SECRET =
     'test-qr-signing-secret-that-is-at-least-32-characters';
+  mockCommConfigFindFirst.mockResolvedValue({ apiKey: SECRET });
   mockAuditFindFirst.mockResolvedValue(null);
   mockAuditCreate.mockResolvedValue({ id: 'audit-1' });
   mockExecuteRaw.mockResolvedValue(1);
@@ -149,6 +153,26 @@ beforeEach(() => {
 });
 
 describe('POST /api/webhooks/whatsapp', () => {
+  it("rejects a payload signed with another organization's secret", async () => {
+    mockCommConfigFindFirst.mockResolvedValue({
+      apiKey: 'a-completely-different-orgs-secret-value',
+    });
+
+    const response = await POST(request(new Date().toISOString()));
+
+    expect(response.status).toBe(401);
+    expect(mockTransaction).not.toHaveBeenCalled();
+  });
+
+  it('rejects when the claimed org has no WhatsApp integration configured', async () => {
+    mockCommConfigFindFirst.mockResolvedValue(null);
+
+    const response = await POST(request(new Date().toISOString()));
+
+    expect(response.status).toBe(403);
+    expect(mockTransaction).not.toHaveBeenCalled();
+  });
+
   it('rejects a correctly signed stale event before database access', async () => {
     const stale = new Date(Date.now() - 10 * 60_000).toISOString();
 

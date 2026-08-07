@@ -131,15 +131,28 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // ── 2. Verify HMAC signature (fail-closed) ────────────────────────────────
-  const secret = process.env.WHATSAPP_WEBHOOK_SECRET;
-  if (!secret) {
+  // ── 2. Validate payload shape (organizationId is only a claim until the
+  //      signature below is verified against *that org's own* stored secret)
+  const parsed = WhatsAppGuestRegistrationSchema.safeParse(bodyUnknown);
+  if (!parsed.success) {
     return NextResponse.json(
-      { success: false, message: 'Webhook secret not configured' },
-      { status: 500 }
+      {
+        success: false,
+        message: 'Malformed payload',
+        error: parsed.error.flatten(),
+      },
+      { status: 400 }
     );
   }
 
+  const body = parsed.data;
+  const { organizationId, unitId } = body;
+
+  // ── 3. Verify HMAC signature using the claimed org's own stored secret
+  //      (fail-closed). Unlike a single shared secret, this proves the
+  //      request was produced by that specific organization's configured
+  //      WhatsApp integration — organizationId cannot be forged by a caller
+  //      who only knows another org's (or no) secret.
   const signature = req.headers.get('x-gf-signature');
   const timestamp = req.headers.get('x-gf-timestamp');
   const eventId = req.headers.get('x-gf-event-id');
@@ -147,6 +160,21 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(
       { success: false, message: 'Missing signature headers' },
       { status: 401 }
+    );
+  }
+
+  const commConfig = await prisma.organizationCommunicationConfig.findFirst({
+    where: { organizationId, provider: 'WHATSAPP' },
+    select: { apiKey: true },
+  });
+  const secret = commConfig?.apiKey ?? '';
+  if (!secret || secret.length < 32) {
+    return NextResponse.json(
+      {
+        success: false,
+        message: 'WhatsApp integration not configured for this organization',
+      },
+      { status: 403 }
     );
   }
 
@@ -164,22 +192,6 @@ export async function POST(req: NextRequest) {
       { status: 401 }
     );
   }
-
-  // ── 3. Validate payload ──────────────────────────────────────────────────
-  const parsed = WhatsAppGuestRegistrationSchema.safeParse(bodyUnknown);
-  if (!parsed.success) {
-    return NextResponse.json(
-      {
-        success: false,
-        message: 'Malformed payload',
-        error: parsed.error.flatten(),
-      },
-      { status: 400 }
-    );
-  }
-
-  const body = parsed.data;
-  const { organizationId, unitId } = body;
 
   const qrSecret = process.env.QR_SIGNING_SECRET ?? '';
   if (!qrSecret || qrSecret.length < 32) {

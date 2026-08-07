@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { WorkOrderService } from '@/lib/maintenance/work-order-service';
+import { prisma } from '@gate-access/db';
 import {
   createWorkOrderSchema,
   workOrderQuerySchema,
@@ -88,6 +89,65 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
           success: false,
           message: 'Validation failed',
           error: parsed.error.flatten(),
+        },
+        { status: 400 }
+      );
+    }
+
+    const { gateId, unitId, projectId, assigneeId } = parsed.data;
+    const [gate, unit, project, assignee] = await Promise.all([
+      gateId
+        ? prisma.gate.findFirst({
+            where: {
+              id: gateId,
+              organizationId: claims.orgId,
+              deletedAt: null,
+            },
+            select: { id: true },
+          })
+        : null,
+      unitId
+        ? prisma.unit.findFirst({
+            where: {
+              id: unitId,
+              organizationId: claims.orgId,
+              deletedAt: null,
+            },
+            select: { id: true },
+          })
+        : null,
+      projectId
+        ? prisma.project.findFirst({
+            where: {
+              id: projectId,
+              organizationId: claims.orgId,
+              deletedAt: null,
+            },
+            select: { id: true },
+          })
+        : null,
+      assigneeId
+        ? prisma.user.findFirst({
+            where: {
+              id: assigneeId,
+              organizationId: claims.orgId,
+              deletedAt: null,
+            },
+            select: { id: true },
+          })
+        : null,
+    ]);
+
+    if (
+      (gateId && !gate) ||
+      (unitId && !unit) ||
+      (projectId && !project) ||
+      (assigneeId && !assignee)
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: 'Invalid gateId, unitId, projectId, or assigneeId',
         },
         { status: 400 }
       );

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSessionClaims } from '@/lib/auth-cookies';
 import { WorkOrderService } from '@/lib/maintenance/work-order-service';
+import { prisma } from '@gate-access/db';
 import { updateWorkOrderSchema, BUILT_IN_ROLES } from '@gate-access/types';
 
 /**
@@ -94,6 +95,23 @@ export async function PATCH(
         { success: false, message: 'Forbidden' },
         { status: 403 }
       );
+    }
+
+    if (parsed.data.assigneeId) {
+      const assignee = await prisma.user.findFirst({
+        where: {
+          id: parsed.data.assigneeId,
+          organizationId: claims.orgId,
+          deletedAt: null,
+        },
+        select: { id: true },
+      });
+      if (!assignee) {
+        return NextResponse.json(
+          { success: false, message: 'Invalid assigneeId' },
+          { status: 400 }
+        );
+      }
     }
 
     const updated = await WorkOrderService.update(
