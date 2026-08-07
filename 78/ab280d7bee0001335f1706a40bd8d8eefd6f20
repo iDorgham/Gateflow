@@ -1,0 +1,81 @@
+apps/client-dashboard/src/app/api/maintenance/work-orders/[id]/route.ts
+  s_8c9a8766c4415c::t_ea7e45ec872ed0 100-110
+  s_8c9a8766c4415c::t_796756ed5ed119 4
+  s_33426b1dd7e829::t_867e233e2aa9af 111-116
+apps/client-dashboard/src/app/api/perimeter/webhook/route.ts
+  s_33426b1dd7e829::t_29db7b1500250d 121
+  s_33426b1dd7e829::t_5ef7c11c724fcb 140
+apps/client-dashboard/src/app/api/units/route.test.ts
+  s_8c9a8766c4415c::t_cdc64be2b9be12 223
+  s_33426b1dd7e829::t_35cf910a920440 27-30,34-36,119-121,140-144,159-163,181-185,199-201,222,224-227,245-254
+apps/client-dashboard/src/lib/analytics/analytics-query.test.ts
+  s_33426b1dd7e829::t_c61e02a22ba6b4 1-48
+  s_33426b1dd7e829::t_ad78b429a07698 49-53
+apps/client-dashboard/src/lib/analytics/analytics-query.ts
+  s_33426b1dd7e829::t_16275a7ddb673c 42
+  s_33426b1dd7e829::t_63cbf564e13917 56-65,90-92
+apps/client-dashboard/src/app/api/webhooks/whatsapp/route.test.ts
+  s_8c9a8766c4415c::t_24e79e08e7eaa1 134
+  s_8c9a8766c4415c::t_81074b477854e5 45,64-66
+  s_8c9a8766c4415c::t_71c4ebba220972 156-175
+apps/client-dashboard/src/app/api/projects/[id]/aggregates/route.ts
+  s_8c9a8766c4415c::t_893c8b9749699f 45,49-54,59-60,70,78
+  s_33426b1dd7e829::t_9903bf893f68f0 41,61-62,64,71-73,79-81,85-86,105,109-110
+apps/admin-dashboard/src/app/api/support/tickets/[id]/messages/route.test.ts
+  s_33426b1dd7e829::t_087a42947e6765 1-80
+apps/client-dashboard/src/app/api/workspace/restore/route.ts
+  s_8c9a8766c4415c::t_5cba5b97cdf5b9 33-52,57-60,64-67,76-79,85-89,110-113,123-126,141-143,145-149,154-158,163-168,170,177-181,186-203,208-227,232-236,241-271,275-306,320
+  s_33426b1dd7e829::t_43f8f113e49f3b 307-310,315-319,321-345,369-372
+apps/client-dashboard/src/app/api/resident/visitors/route.ts
+  s_33426b1dd7e829::t_1d1c9ba7a237a2 132-137
+apps/client-dashboard/src/app/api/units/route.ts
+  s_8c9a8766c4415c::t_eed7d9562c8b60 511-539
+  s_33426b1dd7e829::t_58df3fb2410486 323,356
+  s_8c9a8766c4415c::t_64a81fbca8569c 540
+apps/client-dashboard/src/app/api/webhooks/whatsapp/route.ts
+  s_8c9a8766c4415c::t_74a98f9688c01a 134-137,139-144,148-155,166-177
+  s_8c9a8766c4415c::t_13c7cd5f8412ef 178-180
+apps/client-dashboard/src/app/api/maintenance/work-orders/route.ts
+  s_8c9a8766c4415c::t_2d7ffed7380f85 4
+  s_8c9a8766c4415c::t_87e3122916b5eb 97-100
+  s_33426b1dd7e829::t_b3479f7f05ce7b 101-155
+apps/client-dashboard/src/app/api/units/[id]/route.test.ts
+  s_33426b1dd7e829::t_f36466a5b76b97 1-151
+  s_33426b1dd7e829::t_1e422d58437a68 152-159
+apps/client-dashboard/src/lib/scans/bulk-sync.ts
+  s_8c9a8766c4415c::t_634c8c29355a1e 162-165
+  s_33426b1dd7e829::t_7550fd76d7468d 152-155
+apps/client-dashboard/src/app/api/resident/visitors/[id]/route.ts
+  s_8c9a8766c4415c::t_8ab363c7fdd7a3 43,73,86
+  s_8c9a8766c4415c::t_2099269362984a 12
+  s_33426b1dd7e829::t_555ce58471933c 5-8,13-16,22,26-28,44-46,55-58,62-65,69-72,80,84-85,94-97,115-118
+apps/admin-dashboard/src/app/api/support/tickets/[id]/messages/route.ts
+  s_8c9a8766c4415c::t_141d0d13dd3c52 47-50
+  s_8c9a8766c4415c::t_a9ce7be9c00805 14-17
+apps/client-dashboard/src/app/api/units/[id]/route.ts
+  s_33426b1dd7e829::t_331a9cfba34f23 21-24,29-32,39-42,49-52,58-62,69-102,116-120,135-138,149-152,162-164,166-168,176-178,199-203,214-217,223-226,231-234,241-244,255-258
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "78ab280d7bee0001335f1706a40bd8d8eefd6f20",
+  "prompts": {},
+  "sessions": {
+    "s_33426b1dd7e829": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "28bf6f0c-c208-4a95-89d8-b2b8fadc6ef3",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    },
+    "s_8c9a8766c4415c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b90049f7-df9b-4702-ad48-6ee5e28ce5c4",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
