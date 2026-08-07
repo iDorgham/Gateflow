@@ -755,15 +755,25 @@ export function DashboardLayout({
     csrfFetch('/api/project/switch', {
       method: 'POST',
       body: JSON.stringify({ projectId: val }),
-    }).then(() => {
-      startTransition(() => {
-        if (val === 'all') {
-          router.push(`/${locale}`);
-        } else {
-          router.push(`/${locale}/dashboard/projects/${projectId}`);
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Failed to switch project');
         }
+        return res;
+      })
+      .then(() => {
+        startTransition(() => {
+          if (val === 'all') {
+            router.push(`/${locale}`);
+          } else {
+            router.push(`/${locale}/dashboard/projects/${projectId}`);
+          }
+        });
+      })
+      .catch((error) => {
+        console.error('Project switch failed:', error);
       });
-    });
   };
 
   const isRtl = locale === 'ar-EG';

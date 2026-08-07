@@ -90,6 +90,9 @@ export function TeamMembersTable({ locale: _locale }: { locale: string }) {
         method: 'PATCH',
         body: JSON.stringify({ id: memberId, roleId }),
       });
+      if (!res.ok) {
+        throw new Error('Failed to update role');
+      }
       return res.json();
     },
     onSuccess: () => {
@@ -103,6 +106,9 @@ export function TeamMembersTable({ locale: _locale }: { locale: string }) {
       const res = await csrfFetch(`/api/team/members?id=${id}`, {
         method: 'DELETE',
       });
+      if (!res.ok) {
+        throw new Error('Failed to remove member');
+      }
       return res.json();
     },
     onSuccess: () => {

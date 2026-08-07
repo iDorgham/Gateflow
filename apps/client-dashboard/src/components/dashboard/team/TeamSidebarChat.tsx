@@ -95,6 +95,9 @@ export function TeamSidebarChat({
         method: 'POST',
         body: JSON.stringify({ content: text }),
       });
+      if (!res.ok) {
+        throw new Error('Failed to send message');
+      }
       return res.json();
     },
     onSuccess: () => {

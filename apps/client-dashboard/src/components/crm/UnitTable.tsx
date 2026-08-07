@@ -192,9 +192,16 @@ export function UnitTable({ projectId, locale }: UnitTableProps) {
 
   const deleteMutation = useMutation({
     mutationFn: async (ids: string[]) => {
-      await Promise.all(
+      const results = await Promise.all(
         ids.map((id) => csrfFetch(`/api/crm/units/${id}`, { method: 'DELETE' }))
       );
+
+      const failures = results.filter((res) => !res.ok);
+      if (failures.length > 0) {
+        throw new Error(
+          `Failed to delete ${failures.length} of ${ids.length} units`
+        );
+      }
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['crm', 'units'] });
