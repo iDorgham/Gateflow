@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Infinity, RefreshCw } from 'lucide-react';
+import { Infinity as InfinityIcon, RefreshCw } from 'lucide-react';
 import QRCode from 'react-qr-code';
 
 import {
@@ -39,7 +39,7 @@ export function OpenQRCard({
     >
       <CardHeader className="text-center pb-2">
         <div className="mx-auto bg-primary/10 w-12 h-12 rounded-full flex items-center justify-center mb-4 ring-4 ring-background">
-          <Infinity className="h-6 w-6 text-primary" />
+          <InfinityIcon className="h-6 w-6 text-primary" />
         </div>
         <CardTitle className="text-xl">Open House Pass</CardTitle>
         <CardDescription className="text-sm font-medium mt-1 text-foreground">
