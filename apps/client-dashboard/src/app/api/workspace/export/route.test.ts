@@ -132,6 +132,7 @@ describe('GET /api/workspace/export', () => {
     expect(prisma.scanLog.findMany).toHaveBeenCalledWith(
       expect.objectContaining({
         where: expect.objectContaining({
+          deletedAt: null,
           qrCodeId: { in: [] },
           qrCode: { organizationId: 'org-1', deletedAt: null },
         }),
