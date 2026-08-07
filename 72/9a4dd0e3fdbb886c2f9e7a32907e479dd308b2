@@ -1,0 +1,51 @@
+packages/types/src/maintenance.ts
+  s_04ff6482015349::t_307f239004da6f 49-50
+apps/admin-dashboard/package.json
+  s_04ff6482015349::t_75a7078b87c3ca 51
+apps/admin-dashboard/src/components/emulation/emulation-schema.ts
+  s_04ff6482015349::t_9c626fae5f59b3 143
+apps/client-dashboard/package.json
+  s_04ff6482015349::t_508ea841f4de7b 71
+apps/client-dashboard/src/app/[locale]/dashboard/organizations/[orgId]/settings/team/actions.ts
+  s_04ff6482015349::t_48d6028dd0b470 108,398,412,456,573-575
+apps/client-dashboard/src/app/[locale]/join/actions.ts
+  s_04ff6482015349::t_e0d68177b2edbd 56
+apps/client-dashboard/src/app/api/gateai/automations/route.ts
+  s_04ff6482015349::t_014403c20e5e05 17,35-37,43-46,59-62,68,70-73,93-96,109-112,120-123,140-149,152-155
+apps/client-dashboard/src/app/api/perimeter/webhook/route.ts
+  s_04ff6482015349::t_66780be8402e6e 28
+apps/client-dashboard/src/components/dashboard/emulation/emulation-schema.ts
+  s_04ff6482015349::t_f2f35c26a38a48 106
+apps/client-dashboard/src/components/dashboard/emulation/emulation-wizard.tsx
+  s_04ff6482015349::t_6c1ac2233747f2 254
+apps/client-dashboard/src/lib/ai/tools/ui-tools.ts
+  s_04ff6482015349::t_d0b7d26294f1a9 15-17,66
+apps/marketing/package.json
+  s_04ff6482015349::t_2f5f7075a13154 40
+apps/resident-mobile/package.json
+  s_04ff6482015349::t_207ab222065fa3 37
+package.json
+  s_04ff6482015349::t_64cccceb953f47 147
+packages/db/package.json
+  s_04ff6482015349::t_ecd574ac489079 42
+packages/types/package.json
+  s_04ff6482015349::t_9337c48619402b 19
+pnpm-lock.yaml
+  s_04ff6482015349::t_370afb292658cc 28,110,143,146,197,244-245,303,306,384,458-459,614,664-665,705,708,723,773-774,805,890,988,1000,1027,1092,1135,1155-1156,1187,1209,1271,1279-1280,1356,1411,1418,1421-1422,1425,1432,1435,1437,1439,1446,1449-1450,1453,1460,1463-1464,1467,1474,1479,1510,1519-1520,3956,11187,11194,11196,11198,11200,11203,11210,11212,11214,11216,12634,27228,27231
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "729a4dd0e3fdbb886c2f9e7a32907e479dd308b2",
+  "prompts": {},
+  "sessions": {
+    "s_04ff6482015349": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "91099fe3-f499-4cbe-8196-330519c1fd3b",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
