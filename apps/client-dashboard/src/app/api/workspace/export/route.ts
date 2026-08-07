@@ -182,6 +182,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     // Scan logs (scoped via QR codes and date range)
     const scanWhere: any = {
+      deletedAt: null,
       ...(qrIds.length > 0 ? { qrCodeId: { in: qrIds } } : {}),
     };
 

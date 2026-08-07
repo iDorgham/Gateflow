@@ -70,7 +70,7 @@ export default async function AdminScansPage(props: {
     'MAX_USES_REACHED',
     'INACTIVE',
   ]);
-  const where: Record<string, unknown> = {};
+  const where: Record<string, unknown> = { deletedAt: null };
   if (statusFilter && VALID_STATUSES.has(statusFilter))
     where.status = statusFilter;
   if (fromDate || toDate) {

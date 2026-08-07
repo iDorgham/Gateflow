@@ -60,10 +60,10 @@ Never make up data — use tools to fetch real information.`,
               prisma.organization.count({ where: { deletedAt: null } }),
               prisma.user.count({ where: { deletedAt: null } }),
               prisma.scanLog.count({
-                where: { scannedAt: { gte: todayStart } },
+                where: { scannedAt: { gte: todayStart }, deletedAt: null },
               }),
               prisma.scanLog.count({
-                where: { scannedAt: { gte: monthStart } },
+                where: { scannedAt: { gte: monthStart }, deletedAt: null },
               }),
             ]);
 
@@ -151,7 +151,7 @@ Never make up data — use tools to fetch real information.`,
           } | null;
           if (!org) return { error: 'Organization not found' };
           const scansTotal = await prisma.scanLog.count({
-            where: { qrCode: { organizationId: org.id } },
+            where: { qrCode: { organizationId: org.id }, deletedAt: null },
           });
           return {
             id: org.id,
@@ -181,6 +181,7 @@ Never make up data — use tools to fetch real information.`,
         }),
         execute: async ({ limit }: { limit: number }) => {
           const scans = await prisma.scanLog.findMany({
+            where: { deletedAt: null },
             orderBy: { scannedAt: 'desc' },
             take: limit,
             select: {

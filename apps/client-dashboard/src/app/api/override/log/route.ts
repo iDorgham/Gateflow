@@ -20,7 +20,10 @@ export async function POST(request: NextRequest) {
   // Security: Only TENANT_ADMIN, TENANT_USER, or VISITOR (Scanner) can log overrides
   // Residents should not be able to log overrides for themselves.
   if (claims.roleName?.toUpperCase() === 'RESIDENT') {
-    return NextResponse.json({ error: 'Forbidden: Residents cannot log overrides' }, { status: 403 });
+    return NextResponse.json(
+      { error: 'Forbidden: Residents cannot log overrides' },
+      { status: 403 }
+    );
   }
 
   const body = await request.json();
@@ -47,6 +50,7 @@ export async function POST(request: NextRequest) {
   const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
   const scanLog = await prisma.scanLog.findFirst({
     where: {
+      deletedAt: null,
       gateId,
       qrCode: {
         code: qrCode,
@@ -77,7 +81,9 @@ export async function POST(request: NextRequest) {
     timestamp: new Date().toISOString(),
   };
 
-  const currentTrail = Array.isArray(scanLog.auditTrail) ? scanLog.auditTrail : [];
+  const currentTrail = Array.isArray(scanLog.auditTrail)
+    ? scanLog.auditTrail
+    : [];
 
   await prisma.scanLog.update({
     where: { id: scanLog.id },

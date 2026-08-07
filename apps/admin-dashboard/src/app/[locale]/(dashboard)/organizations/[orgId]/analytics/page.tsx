@@ -55,6 +55,7 @@ export default async function AnalyticsPage(props: {
         where: {
           scannedAt: { gte: day, lte: dayEnd },
           gate: orgGateScope,
+          deletedAt: null,
         },
       });
       return {
@@ -97,7 +98,11 @@ export default async function AnalyticsPage(props: {
   // ── Status breakdown (30 days) ─────────────────────────────────────────────
   const statusGroups = await prisma.scanLog.groupBy({
     by: ['status'],
-    where: { scannedAt: { gte: thirtyDaysAgo }, gate: orgGateScope },
+    where: {
+      scannedAt: { gte: thirtyDaysAgo },
+      gate: orgGateScope,
+      deletedAt: null,
+    },
     _count: { id: true },
   } satisfies Prisma.ScanLogGroupByArgs);
   const statusMap = Object.fromEntries(
@@ -108,7 +113,11 @@ export default async function AnalyticsPage(props: {
   // ── Top gates by scan volume (7 days) for this org ─────────────────────────
   const recentGateScans = (await prisma.scanLog.groupBy({
     by: ['gateId'],
-    where: { scannedAt: { gte: sevenDaysAgo }, gate: orgGateScope },
+    where: {
+      scannedAt: { gte: sevenDaysAgo },
+      gate: orgGateScope,
+      deletedAt: null,
+    },
     _count: { id: true },
     orderBy: { _count: { id: 'desc' } },
     take: 50,

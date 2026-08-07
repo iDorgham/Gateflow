@@ -21,7 +21,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     const claims = await getSessionClaims();
     if (!claims?.orgId) {
-      return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json(
+        { success: false, message: 'Unauthorized' },
+        { status: 401 }
+      );
     }
     const orgId = claims.orgId;
 
@@ -33,7 +36,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     });
 
     if (!parsed.success) {
-      return NextResponse.json({ success: false, message: 'Invalid query params' }, { status: 400 });
+      return NextResponse.json(
+        { success: false, message: 'Invalid query params' },
+        { status: 400 }
+      );
     }
 
     const { dateFrom, dateTo, projectId } = parsed.data;
@@ -46,13 +52,18 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         select: { id: true },
       });
       if (!proj) {
-        return NextResponse.json({ success: false, message: 'Invalid project' }, { status: 400 });
+        return NextResponse.json(
+          { success: false, message: 'Invalid project' },
+          { status: 400 }
+        );
       }
     }
 
     type Agg = { name: string; total: bigint; success: bigint };
-    const projectCond = projectId ? Prisma.sql`AND qr."projectId" = ${projectId}` : Prisma.empty;
-    const raw = await (prisma.$queryRaw as any)(Prisma.sql`
+    const projectCond = projectId
+      ? Prisma.sql`AND qr."projectId" = ${projectId}`
+      : Prisma.empty;
+    const raw = (await (prisma.$queryRaw as any)(Prisma.sql`
       SELECT
         COALESCE(qr."utmCampaign", '(no campaign)') AS name,
         COUNT(*)::bigint AS total,
@@ -60,13 +71,13 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       FROM "ScanLog" sl
       JOIN "QRCode" qr ON sl."qrCodeId" = qr.id
       WHERE qr."organizationId" = ${orgId}
-        AND qr."deletedAt" IS NULL
+        AND qr."deletedAt" IS NULL AND sl."deletedAt" IS NULL
         AND qr."utmCampaign" IS NOT NULL
         AND sl."scannedAt" >= ${dateFromDate} AND sl."scannedAt" <= ${dateToDate}
         ${projectCond}
       GROUP BY qr."utmCampaign"
       ORDER BY total DESC
-    `) as Agg[];
+    `)) as Agg[];
 
     const campaigns: CampaignRow[] = raw.map((r) => {
       const totalScans = Number(r.total);
@@ -75,13 +86,17 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
       return {
         name: r.name,
         scans: totalScans,
-        passRate: totalScans > 0 ? Math.round((successScans / totalScans) * 100) : 0,
+        passRate:
+          totalScans > 0 ? Math.round((successScans / totalScans) * 100) : 0,
       };
     });
 
     return NextResponse.json({ success: true, data: { campaigns } });
   } catch (error) {
     console.error('GET /api/analytics/campaigns error:', error);
-    return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 });
+    return NextResponse.json(
+      { success: false, message: 'Internal server error' },
+      { status: 500 }
+    );
   }
 }

@@ -4,10 +4,16 @@ import { prisma } from '@gate-access/db';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET(request: NextRequest, props: { params: Promise<{ id: string }> }): Promise<NextResponse> {
+export async function GET(
+  request: NextRequest,
+  props: { params: Promise<{ id: string }> }
+): Promise<NextResponse> {
   const params = await props.params;
   if (!(await isAdminAuthorized(request))) {
-    return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json(
+      { success: false, message: 'Unauthorized' },
+      { status: 401 }
+    );
   }
 
   const user = await prisma.user.findUnique({
@@ -24,16 +30,20 @@ export async function GET(request: NextRequest, props: { params: Promise<{ id: s
   });
 
   if (!user) {
-    return NextResponse.json({ success: false, message: 'Not found' }, { status: 404 });
+    return NextResponse.json(
+      { success: false, message: 'Not found' },
+      { status: 404 }
+    );
   }
 
   // Scan count
   const [scansTotal, scansThisMonth] = await Promise.all([
-    prisma.scanLog.count({ where: { userId: user.id } }),
+    prisma.scanLog.count({ where: { userId: user.id, deletedAt: null } }),
     prisma.scanLog.count({
       where: {
         userId: user.id,
         scannedAt: { gte: new Date(new Date().setDate(1)) },
+        deletedAt: null,
       },
     }),
   ]);
@@ -57,17 +67,26 @@ export async function GET(request: NextRequest, props: { params: Promise<{ id: s
   });
 }
 
-export async function PATCH(request: NextRequest, props: { params: Promise<{ id: string }> }): Promise<NextResponse> {
+export async function PATCH(
+  request: NextRequest,
+  props: { params: Promise<{ id: string }> }
+): Promise<NextResponse> {
   const params = await props.params;
   if (!(await isAdminAuthorized(request))) {
-    return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+    return NextResponse.json(
+      { success: false, message: 'Unauthorized' },
+      { status: 401 }
+    );
   }
 
   let body: unknown;
   try {
     body = await request.json();
   } catch {
-    return NextResponse.json({ success: false, message: 'Invalid JSON' }, { status: 400 });
+    return NextResponse.json(
+      { success: false, message: 'Invalid JSON' },
+      { status: 400 }
+    );
   }
 
   const { action, roleId } = body as { action?: string; roleId?: string };
@@ -77,7 +96,10 @@ export async function PATCH(request: NextRequest, props: { params: Promise<{ id:
     include: { role: true },
   });
   if (!user) {
-    return NextResponse.json({ success: false, message: 'Not found' }, { status: 404 });
+    return NextResponse.json(
+      { success: false, message: 'Not found' },
+      { status: 404 }
+    );
   }
 
   if (action === 'deactivate') {
@@ -109,11 +131,17 @@ export async function PATCH(request: NextRequest, props: { params: Promise<{ id:
     // Security: cannot elevate to ADMIN role via this endpoint
     const targetRole = await prisma.role.findUnique({ where: { id: roleId } });
     if (!targetRole) {
-      return NextResponse.json({ success: false, message: 'Role not found' }, { status: 404 });
+      return NextResponse.json(
+        { success: false, message: 'Role not found' },
+        { status: 404 }
+      );
     }
     if (targetRole.name === 'ADMIN') {
       return NextResponse.json(
-        { success: false, message: 'Cannot assign ADMIN role via this endpoint' },
+        {
+          success: false,
+          message: 'Cannot assign ADMIN role via this endpoint',
+        },
         { status: 403 }
       );
     }
@@ -121,9 +149,18 @@ export async function PATCH(request: NextRequest, props: { params: Promise<{ id:
       where: { id: params.id },
       data: { roleId },
     });
-    console.log(`[admin-audit] User ${params.id} role changed to ${targetRole.name}`);
-    return NextResponse.json({ success: true, action: 'role_changed', roleName: targetRole.name });
+    console.log(
+      `[admin-audit] User ${params.id} role changed to ${targetRole.name}`
+    );
+    return NextResponse.json({
+      success: true,
+      action: 'role_changed',
+      roleName: targetRole.name,
+    });
   }
 
-  return NextResponse.json({ success: false, message: 'Invalid action' }, { status: 400 });
+  return NextResponse.json(
+    { success: false, message: 'Invalid action' },
+    { status: 400 }
+  );
 }

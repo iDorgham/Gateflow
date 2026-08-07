@@ -58,7 +58,7 @@ export default async function FinancePage(props: {
   // Scans this month per org
   const scansByGate = (await prisma.scanLog.groupBy({
     by: ['gateId'],
-    where: { scannedAt: { gte: monthStart } },
+    where: { scannedAt: { gte: monthStart }, deletedAt: null },
     _count: true,
   })) as { gateId: string; _count: number }[];
   const gateIds = scansByGate.map(

@@ -27,9 +27,12 @@ export async function GET(request: Request) {
   }
 
   try {
-    // 1. Scans over time (ScanLog has no deletedAt — scope via gate)
+    // 1. Scans over time (scoped via gate; exclude soft-deleted scan logs)
     const scans = await prisma.scanLog.findMany({
-      where: { gate: { organizationId: orgId, deletedAt: null } },
+      where: {
+        gate: { organizationId: orgId, deletedAt: null },
+        deletedAt: null,
+      },
       orderBy: { scannedAt: 'desc' },
       take: 100,
     });

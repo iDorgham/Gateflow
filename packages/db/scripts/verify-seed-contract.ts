@@ -80,6 +80,7 @@ async function main(): Promise<void> {
   const scan = await prisma.scanLog.findFirst({
     where: {
       qrCode: { organizationId: contact.organizationId, deletedAt: null },
+      deletedAt: null,
     },
     include: {
       qrCode: { select: { organizationId: true, id: true } },

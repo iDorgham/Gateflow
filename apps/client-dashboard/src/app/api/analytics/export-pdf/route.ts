@@ -81,6 +81,7 @@ async function fetchSummary(
   };
 
   const scanFilter = {
+    deletedAt: null as null,
     qrCode: qrFilter,
     scannedAt: { gte: dateFromDate, lte: dateToDate },
     ...(gateId ? { gateId } : {}),
@@ -138,7 +139,7 @@ async function fetchVisitsSeries(
       WHERE qr."organizationId" = ${orgId}
         AND qr."projectId" = ${projectId}
         AND sl."gateId" = ${gateId}
-        AND g."deletedAt" IS NULL AND qr."deletedAt" IS NULL
+        AND g."deletedAt" IS NULL AND qr."deletedAt" IS NULL AND sl."deletedAt" IS NULL
         AND sl."scannedAt" >= ${dateFromDate} AND sl."scannedAt" <= ${dateToDate}
       GROUP BY (sl."scannedAt"::date)
       ORDER BY date
@@ -151,7 +152,7 @@ async function fetchVisitsSeries(
       JOIN "Gate" g ON sl."gateId" = g.id
       WHERE qr."organizationId" = ${orgId}
         AND qr."projectId" = ${projectId}
-        AND g."deletedAt" IS NULL AND qr."deletedAt" IS NULL
+        AND g."deletedAt" IS NULL AND qr."deletedAt" IS NULL AND sl."deletedAt" IS NULL
         AND sl."scannedAt" >= ${dateFromDate} AND sl."scannedAt" <= ${dateToDate}
       GROUP BY (sl."scannedAt"::date)
       ORDER BY date
@@ -164,7 +165,7 @@ async function fetchVisitsSeries(
       JOIN "Gate" g ON sl."gateId" = g.id
       WHERE qr."organizationId" = ${orgId}
         AND sl."gateId" = ${gateId}
-        AND g."deletedAt" IS NULL AND qr."deletedAt" IS NULL
+        AND g."deletedAt" IS NULL AND qr."deletedAt" IS NULL AND sl."deletedAt" IS NULL
         AND sl."scannedAt" >= ${dateFromDate} AND sl."scannedAt" <= ${dateToDate}
       GROUP BY (sl."scannedAt"::date)
       ORDER BY date
@@ -176,7 +177,7 @@ async function fetchVisitsSeries(
       JOIN "QRCode" qr ON sl."qrCodeId" = qr.id
       JOIN "Gate" g ON sl."gateId" = g.id
       WHERE qr."organizationId" = ${orgId}
-        AND g."deletedAt" IS NULL AND qr."deletedAt" IS NULL
+        AND g."deletedAt" IS NULL AND qr."deletedAt" IS NULL AND sl."deletedAt" IS NULL
         AND sl."scannedAt" >= ${dateFromDate} AND sl."scannedAt" <= ${dateToDate}
       GROUP BY (sl."scannedAt"::date)
       ORDER BY date

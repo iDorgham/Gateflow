@@ -98,6 +98,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
         JOIN "QRCode" qr ON sl."qrCodeId" = qr.id
         WHERE qr."organizationId" = ${orgId}
           AND qr."deletedAt" IS NULL
+          AND sl."deletedAt" IS NULL
           AND sl."scannedAt" >= ${dateFromDate}
           AND sl."scannedAt" <= ${dateToDate}
           AND qr."contactId" IS NOT NULL
@@ -129,6 +130,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     const scansWithoutCampaign = await prisma.scanLog.count({
       where: {
+        deletedAt: null,
         scannedAt: { gte: dateFromDate, lte: dateToDate },
         qrCode: {
           organizationId: orgId,

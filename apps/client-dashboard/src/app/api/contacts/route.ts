@@ -391,7 +391,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
           JOIN "VisitorQR" vqr ON vqr."qrCodeId" = qr.id
           JOIN "Unit" u ON vqr."unitId" = u.id
           WHERE sl."scannedAt" >= ${dateFromValue} AND sl."scannedAt" <= ${dateToValue}
-            AND qr."organizationId" = ${orgId} AND qr."deletedAt" IS NULL
+            AND qr."organizationId" = ${orgId} AND qr."deletedAt" IS NULL AND sl."deletedAt" IS NULL
             AND u."organizationId" = ${orgId}
             ${gateCondition}
           GROUP BY vqr."unitId"
