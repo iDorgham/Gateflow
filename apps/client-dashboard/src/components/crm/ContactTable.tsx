@@ -203,11 +203,10 @@ export function ContactTable({
           csrfFetch(`/api/crm/contacts/${id}`, { method: 'DELETE' })
         )
       );
-
       const failures = results.filter((res) => !res.ok);
       if (failures.length > 0) {
         throw new Error(
-          `Failed to delete ${failures.length} of ${ids.length} contacts`
+          `Failed to delete ${failures.length} of ${ids.length} contact(s)`
         );
       }
     },

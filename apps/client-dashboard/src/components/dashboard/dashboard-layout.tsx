@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { ProjectFilterProvider } from '@/context/ProjectFilterContext';
-import { Toaster } from 'sonner';
+import { Toaster, toast } from 'sonner';
 import { SecurityNotifier } from './realtime/SecurityNotifier';
 import { useRealtimeEvents } from '@/lib/realtime/use-realtime-events';
 import { csrfFetch } from '@/lib/csrf';
@@ -760,9 +760,6 @@ export function DashboardLayout({
         if (!res.ok) {
           throw new Error('Failed to switch project');
         }
-        return res;
-      })
-      .then(() => {
         startTransition(() => {
           if (val === 'all') {
             router.push(`/${locale}`);
@@ -771,8 +768,9 @@ export function DashboardLayout({
           }
         });
       })
-      .catch((error) => {
-        console.error('Project switch failed:', error);
+      .catch((err) => {
+        console.error('Project switch failed:', err);
+        toast.error('Failed to switch project. Please try again.');
       });
   };
 

@@ -96,7 +96,8 @@ export function TeamSidebarChat({
         body: JSON.stringify({ content: text }),
       });
       if (!res.ok) {
-        throw new Error('Failed to send message');
+        const errorText = await res.text();
+        throw new Error(errorText || 'Failed to send message');
       }
       return res.json();
     },
