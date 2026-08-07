@@ -1,0 +1,19 @@
+apps/resident-portal/package.json
+  s_33426b1dd7e829::t_ee07d96ef697a9 11
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.21",
+  "base_commit_sha": "83df905c7b41b25b9f429af0e2094871b049a937",
+  "prompts": {},
+  "sessions": {
+    "s_33426b1dd7e829": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "28bf6f0c-c208-4a95-89d8-b2b8fadc6ef3",
+        "model": "claude-sonnet-5"
+      },
+      "human_author": "iDorgham <yasser.dorgham@gmail.com>"
+    }
+  }
+}
