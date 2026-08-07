@@ -8,7 +8,10 @@ jest.mock('next/server', () => {
     url: string;
     init: { body?: string };
 
-    constructor(url: string, init?: { body?: string; headers?: Record<string, string> }) {
+    constructor(
+      url: string,
+      init?: { body?: string; headers?: Record<string, string> }
+    ) {
       this.url = url;
       this.init = init ?? {};
     }
@@ -117,5 +120,22 @@ describe('GET /api/workspace/export', () => {
     const body = (await res.json()) as { manifest: { organizationId: string } };
     expect(body.manifest.organizationId).toBe('org-1');
   });
-});
 
+  it('scopes scan logs to the org even when the org has zero QR codes', async () => {
+    // qRCode.findMany already resolves [] in beforeEach — an org/project with
+    // no matching QR codes must still get a scanLog query that can only ever
+    // match zero rows, never every organization's scan logs.
+    await GET(
+      mockRequest('http://localhost/api/workspace/export?scope=organization')
+    );
+
+    expect(prisma.scanLog.findMany).toHaveBeenCalledWith(
+      expect.objectContaining({
+        where: expect.objectContaining({
+          qrCodeId: { in: [] },
+          qrCode: { organizationId: 'org-1', deletedAt: null },
+        }),
+      })
+    );
+  });
+});
