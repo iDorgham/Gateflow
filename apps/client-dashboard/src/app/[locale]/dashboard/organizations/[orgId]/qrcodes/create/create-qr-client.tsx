@@ -16,6 +16,7 @@ import {
 import { token } from '@atlaskit/tokens';
 import { toast } from 'sonner';
 import { createQRCode } from './actions';
+import { csrfFetch } from '@/lib/csrf';
 import { QRCodeType } from '@gate-access/types';
 import {
   Check,
@@ -1202,9 +1203,8 @@ export function CreateQRClient({
     if (!sendEmail || !created) return;
     setSendingEmail(true);
     try {
-      const res = await fetch('/api/qr/send-email', {
+      const res = await csrfFetch('/api/qr/send-email', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           qrId: created.qrId,
           email: sendEmail,

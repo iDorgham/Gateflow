@@ -11,6 +11,7 @@ import { toast } from 'sonner';
 import { EditPanel } from '../dashboard/EditPanel';
 import { UnitForm } from './UnitForm';
 import { SavedViewManager } from './SavedViewManager';
+import { csrfFetch } from '@/lib/csrf';
 
 interface Unit {
   id: string;
@@ -173,7 +174,7 @@ export function UnitTable({ projectId, locale }: UnitTableProps) {
       const url = selectedUnit
         ? `/api/crm/units/${selectedUnit.id}`
         : '/api/crm/units';
-      const res = await fetch(url, {
+      const res = await csrfFetch(url, {
         method: selectedUnit ? 'PATCH' : 'POST',
         body: JSON.stringify({ ...values, projectId }),
       });
@@ -192,7 +193,7 @@ export function UnitTable({ projectId, locale }: UnitTableProps) {
   const deleteMutation = useMutation({
     mutationFn: async (ids: string[]) => {
       await Promise.all(
-        ids.map((id) => fetch(`/api/crm/units/${id}`, { method: 'DELETE' }))
+        ids.map((id) => csrfFetch(`/api/crm/units/${id}`, { method: 'DELETE' }))
       );
     },
     onSuccess: () => {
