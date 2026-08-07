@@ -99,6 +99,9 @@ export function TeamMembersTable({ locale: _locale }: { locale: string }) {
       queryClient.invalidateQueries({ queryKey: ['team-members-list'] });
       toast.success(t('team.members.roleUpdated', 'Role updated successfully'));
     },
+    onError: () => {
+      toast.error(t('team.members.roleUpdateFailed', 'Failed to update role'));
+    },
   });
 
   const deleteMutation = useMutation({
@@ -114,6 +117,9 @@ export function TeamMembersTable({ locale: _locale }: { locale: string }) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['team-members-list'] });
       toast.success(t('team.members.removed', 'Member removed from team'));
+    },
+    onError: () => {
+      toast.error(t('team.members.removeFailed', 'Failed to remove member'));
     },
   });
 

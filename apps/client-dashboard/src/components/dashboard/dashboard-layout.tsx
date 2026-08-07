@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useTransition } from 'react';
 import { ProjectFilterProvider } from '@/context/ProjectFilterContext';
-import { Toaster } from 'sonner';
+import { Toaster, toast } from 'sonner';
 import { SecurityNotifier } from './realtime/SecurityNotifier';
 import { useRealtimeEvents } from '@/lib/realtime/use-realtime-events';
 import { csrfFetch } from '@/lib/csrf';
@@ -773,6 +773,7 @@ export function DashboardLayout({
       })
       .catch((error) => {
         console.error('Project switch failed:', error);
+        toast.error('Failed to switch project. Please try again.');
       });
   };
 

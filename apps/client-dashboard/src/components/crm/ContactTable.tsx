@@ -218,6 +218,10 @@ export function ContactTable({
       );
       setSelectedIds([]);
     },
+    onError: (error: Error) => {
+      queryClient.invalidateQueries({ queryKey: ['crm', 'contacts'] });
+      toast.error(error.message);
+    },
   });
 
   const handleCreate = () => {
